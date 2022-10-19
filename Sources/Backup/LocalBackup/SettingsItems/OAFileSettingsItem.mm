@@ -16,6 +16,7 @@
 #import "OAIndexConstants.h"
 #import "OASettingsItemReader.h"
 #import "OASettingsItemWriter.h"
+#import "OAFileNameTranslationHelper.h"
 
 @implementation OAFileSettingsItemFileSubtype
 
@@ -335,6 +336,28 @@
     }
 }
 
+- (long)localModifiedTime
+{
+    NSFileManager *manager = NSFileManager.defaultManager;
+    if ([manager fileExistsAtPath:self.filePath])
+    {
+        NSError *err = nil;
+        NSDictionary *attrs = [manager attributesOfItemAtPath:self.filePath error:&err];
+        if (!err)
+            return attrs.fileModificationDate.timeIntervalSince1970;
+    }
+    return 0;
+}
+
+- (void)setLocalModifiedTime:(long)localModifiedTime
+{
+    NSFileManager *manager = NSFileManager.defaultManager;
+    if ([manager fileExistsAtPath:self.filePath])
+    {
+        [manager setAttributes:@{ NSFileModificationDate : [NSDate dateWithTimeIntervalSince1970:localModifiedTime] } ofItemAtPath:self.filePath error:nil];
+    }
+}
+
 - (EOASettingsItemType) type
 {
     return EOASettingsItemTypeFile;
@@ -343,6 +366,26 @@
 - (long)getEstimatedSize
 {
     return self.size;
+}
+
+- (NSString *)getPublicName
+{
+    if ([OAFileSettingsItemFileSubtype isMap:_subtype])
+    {
+        return [OAFileNameTranslationHelper getMapName:_filePath.lastPathComponent];
+    }
+    else if (_subtype == EOASettingsItemFileSubtypeVoiceTTS || _subtype == EOASettingsItemFileSubtypeVoice)
+    {
+        return [OAFileNameTranslationHelper getVoiceName:_filePath.lastPathComponent];
+    }
+//    else if (subtype == FileSubtype.MULTIMEDIA_NOTES) {
+//        if (file.exists()) {
+//            return new Recording(file).getName(app, true);
+//        } else {
+//            return Recording.getNameForMultimediaFile(app, file.getName(), getLastModifiedTime());
+//        }
+//    }
+    return self.name;
 }
 
 - (BOOL) exists

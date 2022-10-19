@@ -51,7 +51,6 @@
         
         QString elevation;
         QString time = QString::fromNSString([OAFavoriteItem toStringDate:[NSDate date]]);
-        QString creationTime = QString::fromNSString([OAFavoriteItem toStringDate:[NSDate date]]);
         
         QString title = QString::fromNSString(formattedTitle);
         QString address = QString::fromNSString(formattedLocation);
@@ -86,7 +85,7 @@
         auto favorite = _app.favoritesCollection->createFavoriteLocation(locationPoint,
                                                                         elevation,
                                                                         time,
-                                                                        creationTime,
+                                                                        QString(),
                                                                         title,
                                                                         description,
                                                                         address,
@@ -97,8 +96,7 @@
         
         _favorite = [[OAFavoriteItem alloc] initWithFavorite:favorite];
         [_favorite setAmenity:poi];
-        
-        [_app saveFavoritesToPermamentStorage];
+        [_favorite setAmenityOriginName:poi.toStringEn];
     }
     return self;
 }
@@ -142,6 +140,12 @@
 {
     if (_favorite)
         [OAFavoritesHelper deleteNewFavoriteItem:_favorite];
+}
+
+- (void) deleteItem:(BOOL)isNewItemAdding
+{
+    if (_favorite)
+        [OAFavoritesHelper deleteFavoriteGroups:nil andFavoritesItems:@[_favorite] isNewFavorite:isNewItemAdding];
 }
 
 - (NSDictionary *)checkDuplicates:(NSString *)name group:(NSString *)group

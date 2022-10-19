@@ -69,6 +69,8 @@
 - (BOOL) shouldShowWeatherToolbar;
 - (void) changeWeatherToolbarVisible;
 - (void) hideWeatherToolbarIfNeeded;
+- (void) updateWeatherButton;
+
 
 - (void) setToolbar:(OAToolbarViewController *)toolbarController;
 - (void) updateToolbarLayout:(BOOL)animated;

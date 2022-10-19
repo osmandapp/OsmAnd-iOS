@@ -17,7 +17,8 @@
 #define kLabelOffsetsWidth 20
 #define kLabelMinWidth 50.0
 #define kLabelMaxWidth 120.0
-#define kMargin 16
+#define kMarginSide 16.
+#define kMarginSpaceMin 8.
 
 @interface OAFoldersCollectionView() <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 
@@ -27,6 +28,7 @@
 {
     NSArray<NSDictionary *> *_data;
     NSInteger _selectionIndex;
+    BOOL _onlyIconCompact;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame collectionViewLayout:(UICollectionViewLayout*)collectionViewLayout
@@ -55,7 +57,7 @@
     self.dataSource = self;
     [self registerNib:[UINib nibWithNibName:[OAFoldersCollectionViewCell getCellIdentifier] bundle:nil]
     forCellWithReuseIdentifier:[OAFoldersCollectionViewCell getCellIdentifier]];
-    self.contentInset = UIEdgeInsetsMake(0., kMargin , 0., kMargin);
+    self.contentInset = UIEdgeInsetsMake(0., kMarginSide , 0., kMarginSide);
 
     OACollectionViewFlowLayout *layout = [[OACollectionViewFlowLayout alloc] init];
     layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
@@ -67,6 +69,11 @@
 
     _data = [NSMutableArray array];
     _selectionIndex = 0;
+}
+
+- (void)setOnlyIconCompact:(BOOL)compact
+{
+    _onlyIconCompact = compact;
 }
 
 - (void)setValues:(NSArray<NSDictionary *> *)values withSelectedIndex:(NSInteger)index
@@ -104,7 +111,7 @@
     {
         CGPoint loadedOffset = [self.state getOffsetForIndex:_cellIndex];
         if ([OAUtilities getLeftMargin] > 0)
-            loadedOffset.x -= [OAUtilities getLeftMargin] - kMargin;
+            loadedOffset.x -= [OAUtilities getLeftMargin] - kMarginSide;
         self.contentOffset = loadedOffset;
     }
 }
@@ -113,7 +120,7 @@
 {
     CGPoint offset = self.contentOffset;
     if ([OAUtilities getLeftMargin] > 0)
-        offset.x += [OAUtilities getLeftMargin] - kMargin;
+        offset.x += [OAUtilities getLeftMargin] - kMarginSide;
     [self.state setOffset:offset forIndex:_cellIndex];
 }
 
@@ -121,7 +128,7 @@
 {
     CGPoint selectedOffset = [self calculateOffsetToSelectedIndex:index];
     CGPoint fullLength = [self calculateOffsetToSelectedIndex:_data.count];
-    CGFloat maxOffset = fullLength.x - DeviceScreenWidth + kMargin;
+    CGFloat maxOffset = fullLength.x - self.frame.size.width - [OAUtilities getLeftMargin] + kMarginSide;
     if (selectedOffset.x > maxOffset)
         selectedOffset.x = maxOffset;
 
@@ -133,31 +140,41 @@
     CGFloat offset = 0;
     for (NSInteger i = 0; i < index; i++)
     {
-        offset += [self calculateCellWidth:i] + kMargin;
+        offset += [self calculateCellWidth:i] + kMarginSide;
     }
     return CGPointMake(offset, 0);
 }
 
 - (CGFloat)calculateCellWidth:(NSInteger)index
 {
-    NSDictionary *item = _data[index];
-    CGSize labelSize = [OAUtilities calculateTextBounds:item[@"title"]
-                                                  width:DeviceScreenWidth
-                                                   font:[UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold]];
-    CGFloat labelWidth = labelSize.width;
+    CGFloat cellWidth;
+    if (_onlyIconCompact)
+    {
+        cellWidth = (self.frame.size.width - [OAUtilities getLeftMargin] - (kMarginSide * 2) - (_data.count - 1) * kMarginSpaceMin) / _data.count;
+        if (cellWidth < kImageWidth)
+            cellWidth = kImageWidth;
+    }
+    else
+    {
+        NSDictionary *item = _data[index];
+        CGSize labelSize = [OAUtilities calculateTextBounds:item[@"title"]
+                                                      width:self.frame.size.width - [OAUtilities getLeftMargin]
+                                                       font:[UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold]];
+        cellWidth = labelSize.width;
 
-    NSString *iconName = item[@"img"];
-    if (iconName && iconName.length > 0)
-        labelWidth += kImageWidth;
-    else if (labelWidth < kLabelMinWidth)
-        labelWidth = kLabelMinWidth;
+        NSString *iconName = item[@"img"];
+        if (iconName && iconName.length > 0)
+            cellWidth += kImageWidth;
+        else if (cellWidth < kLabelMinWidth)
+            cellWidth = kLabelMinWidth;
 
-    labelWidth += kLabelOffsetsWidth;
+        cellWidth += kLabelOffsetsWidth;
 
-    if (labelWidth > kLabelMaxWidth)
-        labelWidth = kLabelMaxWidth;
-
-    return labelWidth;
+        if (cellWidth > kLabelMaxWidth)
+            cellWidth = kLabelMaxWidth;
+    }
+    
+    return cellWidth;
 }
 
 #pragma mark - UIScrollViewDelegate
@@ -313,6 +330,22 @@
 {
     CGFloat labelWidth = [self calculateCellWidth:indexPath.row];
     return CGSizeMake(labelWidth, kCellHeight);
+}
+
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section
+{
+    if (_onlyIconCompact)
+        return kMarginSpaceMin;
+    else
+        return ((UICollectionViewFlowLayout *) collectionViewLayout).minimumInteritemSpacing;
+}
+
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
+{
+    if (_onlyIconCompact)
+        return kMarginSpaceMin;
+    else
+        return ((UICollectionViewFlowLayout *) collectionViewLayout).minimumInteritemSpacing;
 }
 
 @end

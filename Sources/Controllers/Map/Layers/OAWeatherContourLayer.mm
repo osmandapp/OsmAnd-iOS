@@ -123,8 +123,7 @@
 
         //[self showProgressHUD];
 
-        const auto dateTime = QDateTime::fromNSDate(_date).toUTC();
-        [self initProviders:dateTime band:band];
+        [self initProviders:_date band:band];
 
         //[self hideProgressHUD];
 
@@ -133,16 +132,17 @@
     return NO;
 }
 
-- (void) initProviders:(QDateTime)dateTime band:(OsmAnd::BandIndex)band
+- (void) initProviders:(NSDate *)date band:(OsmAnd::BandIndex)band
 {
     [self deinitProviders];
     
     OAMapRendererEnvironment *env = self.mapViewController.mapRendererEnv;
     
+    int64_t dateTime = date.timeIntervalSince1970 * 1000;
     CGSize screenSize = [UIScreen mainScreen].bounds.size;
     int cacheSize = (screenSize.width * 2 / _resourcesManager->getTileSize()) * (screenSize.height * 2 / _resourcesManager->getTileSize());
     int rasterTileSize = (int) (_resourcesManager->getTileSize() * _resourcesManager->getDensityFactor());
-    _geoTileObjectsProvider = std::make_shared<OsmAnd::GeoTileObjectsProvider>(_resourcesManager, dateTime, band, cacheSize);
+    _geoTileObjectsProvider = std::make_shared<OsmAnd::GeoTileObjectsProvider>(_resourcesManager, dateTime, band, self.app.data.weatherUseOfflineData, cacheSize);
     _mapPrimitivesProvider = std::make_shared<OsmAnd::MapPrimitivesProvider>(
         _geoTileObjectsProvider,
         env.mapPrimitiviser,

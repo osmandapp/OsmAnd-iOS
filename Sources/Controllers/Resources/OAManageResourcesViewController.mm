@@ -7,7 +7,7 @@
 //
 
 #import "OAManageResourcesViewController.h"
-#import <Reachability.h>
+#import <AFNetworking/AFNetworkReachabilityManager.h>
 #import <MBProgressHUD.h>
 #import "UITableViewCell+getTableView.h"
 #import "OARootViewController.h"
@@ -41,6 +41,7 @@
 #import "OAWeatherHelper.h"
 #import "OAWeatherForecastDetailsViewController.h"
 #import "QuadRect.h"
+#import "OASearchUICore.h"
 
 #include <OsmAndCore/WorldRegions.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
@@ -57,7 +58,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 #define kAllResourcesScope 0
 #define kLocalResourcesScope 1
 
-@interface OAManageResourcesViewController () <UITableViewDelegate, UITableViewDataSource, UISearchDisplayDelegate, UISearchResultsUpdating, OASubscriptionBannerCardViewDelegate, OASubscribeEmailViewDelegate, OADownloadMultipleResourceDelegate, OAWeatherForecastDetails>
+@interface OAManageResourcesViewController () <UITableViewDelegate, UITableViewDataSource, UISearchDisplayDelegate, UISearchResultsUpdating, UISearchBarDelegate, OASubscriptionBannerCardViewDelegate, OASubscribeEmailViewDelegate, OADownloadMultipleResourceDelegate, OAWeatherForecastDetails>
 
 //@property (weak, nonatomic) IBOutlet UISegmentedControl *scopeControl;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -85,6 +86,7 @@ struct RegionResources
 {
     OsmAndAppInstance _app;
     OAIAPHelper *_iapHelper;
+    OAWeatherHelper *_weatherHelper;
 
     NSObject *_dataLock;
 
@@ -197,6 +199,7 @@ static BOOL _repositoryUpdated = NO;
     {
         _app = [OsmAndApp instance];
         _iapHelper = [OAIAPHelper sharedInstance];
+        _weatherHelper = [OAWeatherHelper sharedInstance];
 
         _dataLock = [[NSObject alloc] init];
 
@@ -282,7 +285,7 @@ static BOOL _repositoryUpdated = NO;
     _subscribeEmailView = [[OASubscribeEmailView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, 100.0)];
     _subscribeEmailView.delegate = self;
     _searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
-    _searchController.searchResultsUpdater = self;
+    _searchController.searchBar.delegate = self;
     _searchController.hidesNavigationBarDuringPresentation = NO;
     _searchController.obscuresBackgroundDuringPresentation = NO;
     self.tableView.tableHeaderView = _searchController.searchBar;
@@ -328,14 +331,14 @@ static BOOL _repositoryUpdated = NO;
     _weatherSizeCalculatedObserver =
             [[OAAutoObserverProxy alloc] initWith:self
                                       withHandler:@selector(onWeatherSizeCalculated:withKey:andValue:)
-                                       andObserve:[OAWeatherHelper sharedInstance].weatherSizeCalculatedObserver];
+                                       andObserve:_weatherHelper.weatherSizeCalculatedObserver];
     _weatherForecastDownloadingObserver =
             [[OAAutoObserverProxy alloc] initWith:self
                                       withHandler:@selector(onWeatherForecastDownloading:withKey:andValue:)
-                                       andObserve:[OAWeatherHelper sharedInstance].weatherForecastDownloadingObserver];
+                                       andObserve:_weatherHelper.weatherForecastDownloadingObserver];
 
-    if ([self shouldDisplayWeatherForecast:self.region])
-        [[OAWeatherHelper sharedInstance] calculateCacheSize:self.region onComplete:nil];
+    if ([self shouldDisplayWeatherForecast:self.region] && ![_weatherHelper isOfflineForecastSizesInfoCalculated:[OAWeatherHelper checkAndGetRegionId:self.region]])
+        [_weatherHelper calculateCacheSize:self.region onComplete:nil];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resourceInstallationFailed:) name:OAResourceInstallationFailedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRequested:) name:OAIAPProductsRequestSucceedNotification object:nil];
@@ -355,7 +358,7 @@ static BOOL _repositoryUpdated = NO;
     if (!_viewAppeared)
     {
         if (!_app.isRepositoryUpdating &&
-            [Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable && self.region == _app.worldRegion && _currentScope != kLocalResourcesScope)
+            AFNetworkReachabilityManager.sharedManager.isReachable && self.region == _app.worldRegion && _currentScope != kLocalResourcesScope)
         {
             if (!_repositoryUpdated)
             {
@@ -364,7 +367,7 @@ static BOOL _repositoryUpdated = NO;
             }
         }
         else if (self.region == _app.worldRegion &&
-                 [Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable)
+                 !AFNetworkReachabilityManager.sharedManager.isReachable)
         {
             // show no internet popup
             [OAPluginPopupViewController showNoInternetConnectionFirst];
@@ -457,8 +460,9 @@ static BOOL _repositoryUpdated = NO;
     dispatch_async(dispatch_get_main_queue(), ^{
         if (value == self.region)
         {
-            if ([OAWeatherHelper getPreferenceDownloadState:self.region.regionId] == EOAWeatherForecastDownloadStateUndefined
-                    && [[OAWeatherHelper sharedInstance] isOfflineForecastSizesInfoCalculated:self.region.regionId])
+            NSString *regionId = [OAWeatherHelper checkAndGetRegionId:self.region];
+            BOOL statusSizeCalculating = ![_weatherHelper isOfflineForecastSizesInfoCalculated:regionId];
+            if ([OAWeatherHelper getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateUndefined && !statusSizeCalculating)
                 return;
 
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow:_weatherForecastRow inSection:_regionMapSection];
@@ -471,23 +475,25 @@ static BOOL _repositoryUpdated = NO;
             }
 
             FFCircularProgressView *progressView = (FFCircularProgressView *) cell.accessoryView;
-            NSInteger progressDownloading = [[OAWeatherHelper sharedInstance] getOfflineForecastProgressInfo:self.region.regionId];
-            NSInteger progressDownloadDestination = [[OAWeatherHelper sharedInstance] getProgressDestination:self.region.regionId];
+            NSInteger progressDownloading = [_weatherHelper getOfflineForecastProgressInfo:regionId];
+            NSInteger progressDownloadDestination = [_weatherHelper getProgressDestination:regionId];
             CGFloat progressCompleted = (CGFloat) progressDownloading / progressDownloadDestination;
-            if (progressCompleted >= 0.001 && [OAWeatherHelper getPreferenceDownloadState:self.region.regionId] == EOAWeatherForecastDownloadStateInProgress)
+            EOAWeatherForecastDownloadState state = [OAWeatherHelper getPreferenceDownloadState:regionId];
+            if (progressCompleted >= 0.001 && state == EOAWeatherForecastDownloadStateInProgress)
             {
                 progressView.iconPath = nil;
                 if (progressView.isSpinning)
                     [progressView stopSpinProgressBackgroundLayer];
                 progressView.progress = progressCompleted - 0.001;
             }
-            else if ([OAWeatherHelper getPreferenceDownloadState:self.region.regionId] == EOAWeatherForecastDownloadStateFinished
-                    && [[OAWeatherHelper sharedInstance] isOfflineForecastSizesInfoCalculated:self.region.regionId])
+            else if (state == EOAWeatherForecastDownloadStateFinished && !statusSizeCalculating)
             {
                 progressView.iconPath = [OAResourcesUIHelper tickPath:progressView];
                 progressView.progress = 0.;
                 if (!progressView.isSpinning)
                     [progressView startSpinProgressBackgroundLayer];
+
+                [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
             }
             else
             {
@@ -521,7 +527,7 @@ static BOOL _repositoryUpdated = NO;
 
 - (void) reachabilityChanged:(NSNotification *)notification
 {
-    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
+    if (AFNetworkReachabilityManager.sharedManager.isReachable)
     {
         // hide no internet popup
         [OAPluginPopupViewController hideNoInternetConnection];
@@ -547,7 +553,7 @@ static BOOL _repositoryUpdated = NO;
     int freeMaps = [OAIAPHelper freeMapsAvailable];
     EOASubscriptionBannerType bannerType = freeMaps > 0 ? EOASubscriptionBannerFree : EOASubscriptionBannerNoFree;
 
-    if (_subscriptionBannerView && _subscriptionBannerView.type == bannerType)
+    if (_subscriptionBannerView && _subscriptionBannerView.type == bannerType && _subscriptionBannerView.freeMapsCount == freeMaps)
         return;
 
     if (!_subscriptionBannerView || _subscriptionBannerView.type != bannerType)
@@ -555,6 +561,8 @@ static BOOL _repositoryUpdated = NO;
         _subscriptionBannerView = [[OASubscriptionBannerCardView alloc] initWithType:bannerType];
         _subscriptionBannerView.delegate = self;
     }
+
+    _subscriptionBannerView.freeMapsCount = freeMaps;
 
     NSString *title = freeMaps > 0
             ? [NSString stringWithFormat:OALocalizedString(@"subscription_banner_free_maps_title"), freeMaps]
@@ -594,8 +602,8 @@ static BOOL _repositoryUpdated = NO;
     [self prepareContent];
     [self refreshContent:YES];
 
-    if ([self shouldDisplayWeatherForecast:self.region])
-        [[OAWeatherHelper sharedInstance] calculateCacheSize:self.region onComplete:nil];
+    if ([self shouldDisplayWeatherForecast:self.region] && ![_weatherHelper isOfflineForecastSizesInfoCalculated:[OAWeatherHelper checkAndGetRegionId:self.region]])
+        [_weatherHelper calculateCacheSize:self.region onComplete:nil];
 
     [self setupSubscriptionBanner];
 
@@ -868,7 +876,7 @@ static BOOL _repositoryUpdated = NO;
 
     if ([self shouldDisplayWeatherForecast:region])
     {
-        OAResourceItem *item = [[OAWeatherHelper sharedInstance] generateResourceItem:region];
+        OAResourceItem *item = [_weatherHelper generateResourceItem:region];
         [regionMapArray addObject:item];
     }
 
@@ -1421,7 +1429,7 @@ static BOOL _repositoryUpdated = NO;
 {
     if (item.resourceType == OsmAndResourceType::WeatherForecast && self.region == item.worldRegion)
     {
-        OAResourceItem *newItem = [[OAWeatherHelper sharedInstance] generateResourceItem:item.worldRegion];
+        OAResourceItem *newItem = [_weatherHelper generateResourceItem:item.worldRegion];
         _regionMapItems[_weatherForecastRow] = newItem;
         dispatch_async(dispatch_get_main_queue(), ^{
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow:_weatherForecastRow inSection:_regionMapSection];
@@ -1467,35 +1475,47 @@ static BOOL _repositoryUpdated = NO;
                         andSearchScope:_lastSearchScope];
 }
 
+- (void)cancelSearch
+{
+    [[OAQuickSearchHelper instance] cancelSearchCities];
+    _searchResults = @[];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.tableView reloadData];
+        [self.view removeSpinner];
+    });
+}
+
+
+// nnngrach version
 - (void) performSearchForSearchString:(NSString *)searchString
                        andSearchScope:(NSInteger)searchScope
 {
     @synchronized(_dataLock)
     {
         // If case searchString is empty, there are no results
-        if (searchString == nil || [searchString length] == 0)
+        if (searchString == nil || searchString.length == 0)
         {
-            _searchResults = @[];
+            [self cancelSearch];
             return;
         }
 
         // In case searchString has only spaces, also nothing to do here
-        if ([[searchString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] length] == 0)
+        if ([searchString stringByTrimmingCharactersInSet:NSCharacterSet.whitespaceCharacterSet].length == 0)
         {
-            _searchResults = @[];
+            [self cancelSearch];
             return;
         }
 
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.view addSpinner];
+        });
+
         // Select where to look
-        NSArray *searchableContent = _searchableWorldwideRegionItems;
+        NSArray<OAWorldRegion *> *searchableContent = _searchableWorldwideRegionItems;
 
         // Search through subregions:
-
-        NSComparator regionComparator = ^NSComparisonResult(id obj1, id obj2) {
-            OAWorldRegion *item1 = obj1;
-            OAWorldRegion *item2 = obj2;
-
-            return [item1.name localizedCaseInsensitiveCompare:item2.name];
+        NSComparator regionComparator = ^NSComparisonResult(OAWorldRegion *region1, OAWorldRegion *region2) {
+            return [region1.name localizedCaseInsensitiveCompare:region2.name];
         };
 
         // Regions that start with given name have higher priority
@@ -1565,6 +1585,110 @@ static BOOL _repositoryUpdated = NO;
         }];
     }
 }
+
+
+// Skali version
+/*
+- (void) performSearchForSearchString:(NSString *)searchString
+                       andSearchScope:(NSInteger)searchScope
+{
+    @synchronized(_dataLock)
+    {
+        // If case searchString is empty, there are no results
+        if (searchString == nil || searchString.length == 0)
+        {
+            [self cancelSearch];
+            return;
+        }
+
+        // In case searchString has only spaces, also nothing to do here
+        if ([searchString stringByTrimmingCharactersInSet:NSCharacterSet.whitespaceCharacterSet].length == 0)
+        {
+            [self cancelSearch];
+            return;
+        }
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.view addSpinner];
+        });
+
+        // Select where to look
+        NSArray<OAWorldRegion *> *searchableContent = _searchableWorldwideRegionItems;
+
+        // Search through subregions:
+        NSComparator regionComparator = ^NSComparisonResult(OAWorldRegion *region1, OAWorldRegion *region2) {
+            return [region1.name localizedCaseInsensitiveCompare:region2.name];
+        };
+
+        // Regions that start with given name have higher priority
+        NSPredicate *predicateBeginsWith = [NSPredicate predicateWithFormat:@"name BEGINSWITH[cd] %@", searchString];
+        NSMutableArray<OAWorldRegion *> *regionsBeginsWith = [NSMutableArray array];
+        [regionsBeginsWith addObjectsFromArray:[searchableContent filteredArrayUsingPredicate:predicateBeginsWith]];
+        if (regionsBeginsWith.count == 0)
+        {
+            NSPredicate *predicateAnyBeginsWithSearchString = [NSPredicate predicateWithFormat:@"ANY allNames BEGINSWITH[cd] %@", searchString];
+            [regionsBeginsWith addObjectsFromArray:[searchableContent filteredArrayUsingPredicate:predicateAnyBeginsWithSearchString]];
+        }
+        [regionsBeginsWith sortUsingComparator:regionComparator];
+
+        // Regions that only contain given string have less priority
+        NSPredicate *predicateOnlyContains = [NSPredicate predicateWithFormat:
+                                    @"(name CONTAINS[cd] %@) AND NOT (name BEGINSWITH[cd] %@)",
+                                     searchString, searchString];
+        NSMutableArray<OAWorldRegion *> *regionsOnlyContains = [NSMutableArray array];
+        [regionsOnlyContains addObjectsFromArray:[searchableContent filteredArrayUsingPredicate:predicateOnlyContains]];
+        if (regionsOnlyContains.count == 0)
+        {
+            NSPredicate *predicateAnyOnlyContains = [NSPredicate predicateWithFormat:
+                                            @"(ANY allNames CONTAINS[cd] %@) AND NOT (ANY allNames BEGINSWITH[cd] %@)",
+                                            searchString,
+                                            searchString];
+            [regionsOnlyContains addObjectsFromArray:[searchableContent filteredArrayUsingPredicate:predicateAnyOnlyContains]];
+        }
+        [regionsOnlyContains sortUsingComparator:regionComparator];
+
+        // Assemble all regions all togather
+        NSArray<OAWorldRegion *> *regions = [regionsBeginsWith arrayByAddingObjectsFromArray:regionsOnlyContains];
+        _searchResults = [self createSearchResult:regions byMapRegion:NO];
+        [_tableView reloadData];
+
+        [[OAQuickSearchHelper instance] searchCities:searchString
+                                      searchLocation:[[CLLocation alloc] initWithLatitude:_app.worldRegion.bboxTopLeft.latitude
+                                                                                longitude:_app.worldRegion.bboxBottomRight.longitude]
+                                        allowedTypes:@[@"city", @"town"]
+                                           cityLimit:kSearchCityLimit
+                                          onComplete:^(NSMutableArray *amenities)
+         {
+            NSMutableArray *citiesContainsSearchString = [NSMutableArray array];
+            for (OASearchResult *amenity in amenities)
+            {
+                OAWorldRegion *region = [_app.worldRegion findAtLat:amenity.location.coordinate.latitude
+                                                                lon:amenity.location.coordinate.longitude];
+                if (region)
+                {
+                    NSArray *searchResult = [self createSearchResult:@[region] byMapRegion:YES];
+                    if (searchResult.count == 1 && [searchResult.firstObject isKindOfClass:OAResourceItem.class])
+                    {
+                        amenity.relatedObject = searchResult.firstObject;
+                        [citiesContainsSearchString addObject:amenity];
+                    }
+                    else
+                    {
+                        [citiesContainsSearchString addObjectsFromArray:searchResult];
+                    }
+                }
+            }
+            if (citiesContainsSearchString.count > 0)
+            {
+                _searchResults = [_searchResults arrayByAddingObjectsFromArray:citiesContainsSearchString];
+                [_tableView reloadData];
+            }
+            [self.view removeSpinner];
+        }];
+    }
+}
+*/
+
 
 - (OAResourceItem *)createResourceItemResult:(std::shared_ptr<const OsmAnd::ResourcesManager::Resource>)resource_
                                      region:(OAWorldRegion *)region
@@ -1649,7 +1773,7 @@ static BOOL _repositoryUpdated = NO;
     return nil;
 }
 
-- (NSArray *)createSearchResult:(NSArray *)regions byMapRegion:(BOOL)byMapRegion
+- (NSArray *)createSearchResult:(NSArray<OAWorldRegion *> *)regions byMapRegion:(BOOL)byMapRegion
 {
     NSMutableArray *results = [NSMutableArray array];
     for (OAWorldRegion *region in regions)
@@ -1764,7 +1888,7 @@ static BOOL _repositoryUpdated = NO;
 
 - (void)onRefreshRepositoryButtonClicked
 {
-    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
+    if (AFNetworkReachabilityManager.sharedManager.isReachable)
         [self updateRepository];
     else
         [self showNoInternetAlertForCatalogUpdate];
@@ -2354,7 +2478,7 @@ static BOOL _repositoryUpdated = NO;
                 cellTypeId = hasTask ? downloadingResourceCell : repositoryResourceCell;
             }
             else if (item.downloadTask != nil
-                    || (item.resourceType == OsmAndResourceType::WeatherForecast && ([OAWeatherHelper getPreferenceDownloadState:item.worldRegion.regionId] == EOAWeatherForecastDownloadStateInProgress || ![[OAWeatherHelper sharedInstance] isOfflineForecastSizesInfoCalculated:item.worldRegion.regionId])))
+                     || (item.resourceType == OsmAndResourceType::WeatherForecast && ([OAWeatherHelper getPreferenceDownloadState:[OAWeatherHelper checkAndGetRegionId:item.worldRegion]] == EOAWeatherForecastDownloadStateInProgress || ![_weatherHelper isOfflineForecastSizesInfoCalculated:[OAWeatherHelper checkAndGetRegionId:item.worldRegion]])))
             {
                 cellTypeId = downloadingResourceCell;
             }
@@ -2426,10 +2550,10 @@ static BOOL _repositoryUpdated = NO;
             {
                 title = [OAResourceType resourceTypeLocalized:item.resourceType];
 
-                if (_sizePkg > 0)
-                    subtitle = [NSString stringWithFormat:@"%@", [NSByteCountFormatter stringFromByteCount:_sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
-                else if (item.resourceType == OsmAndResourceType::WeatherForecast && ![[OAWeatherHelper sharedInstance] isOfflineForecastSizesInfoCalculated:item.worldRegion.regionId])
-                    subtitle = OALocalizedString(@"shared_string_loading");
+                if (item.resourceType == OsmAndResourceType::WeatherForecast && ![_weatherHelper isOfflineForecastSizesInfoCalculated:[OAWeatherHelper checkAndGetRegionId:item.worldRegion]])
+                   subtitle = OALocalizedString(@"shared_string_loading");
+                else if (_sizePkg >= 0)
+                    subtitle = [NSByteCountFormatter stringFromByteCount:_sizePkg countStyle:NSByteCountFormatterCountStyleFile];
 
                 if ([item isKindOfClass:OAMultipleResourceItem.class] && ([self.region hasGroupItems] || [OAResourceType isSRTMResourceItem:item]))
                 {
@@ -2743,7 +2867,7 @@ static BOOL _repositoryUpdated = NO;
                 [progressView setNeedsDisplay];
             }
         }
-        else if (![[OAWeatherHelper sharedInstance] isOfflineForecastSizesInfoCalculated:self.region.regionId])
+        else if (![_weatherHelper isOfflineForecastSizesInfoCalculated:[OAWeatherHelper checkAndGetRegionId:self.region]])
         {
             FFCircularProgressView *progressView = (FFCircularProgressView *) cell.accessoryView;
             progressView.iconPath = [UIBezierPath bezierPath];
@@ -3023,14 +3147,6 @@ static BOOL _repositoryUpdated = NO;
 //    }
 //}
 
-- (void)updateSearchResultsForSearchController:(UISearchController *)searchController
-{
-    _lastSearchString = _searchController.searchBar.text;
-    _lastSearchScope = _searchController.searchBar.selectedScopeButtonIndex;
-    [self performSearchForSearchString:_lastSearchString
-                        andSearchScope:_lastSearchScope];
-}
-
 - (BOOL) isFiltering
 {
     return _searchController.isActive && ![self searchBarIsEmpty];
@@ -3039,6 +3155,25 @@ static BOOL _repositoryUpdated = NO;
 - (BOOL) searchBarIsEmpty
 {
     return _searchController.searchBar.text.length == 0;
+}
+
+#pragma mark - UISearchBarDelegate
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
+{
+    [searchBar resignFirstResponder];
+    _lastSearchString = @"";
+    _lastSearchScope = searchBar.selectedScopeButtonIndex;
+    [self performSearchForSearchString:_lastSearchString
+                        andSearchScope:_lastSearchScope];
+}
+
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
+{
+    _lastSearchString = searchText;
+    _lastSearchScope = searchBar.selectedScopeButtonIndex;
+    [self performSearchForSearchString:_lastSearchString
+                        andSearchScope:_lastSearchScope];
 }
 
 #pragma mark - Navigation
@@ -3366,6 +3501,11 @@ static BOOL _repositoryUpdated = NO;
 }
 
 - (void)onUpdateForecast
+{
+    [self updateDisplayItem:_regionMapItems[_weatherForecastRow]];
+}
+
+- (void)onClearForecastCache;
 {
     [self updateDisplayItem:_regionMapItems[_weatherForecastRow]];
 }

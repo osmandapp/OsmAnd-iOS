@@ -9,6 +9,8 @@
 #import "OABaseFeatureCardView.h"
 #import "OAChoosePlanViewController.h"
 
+#define kMinRowHeight 48.
+
 NS_ASSUME_NONNULL_BEGIN
 
 @class OAFeature;
@@ -41,7 +43,6 @@ typedef NS_ENUM (NSUInteger, OAFeatureCardRowType)
 - (void)updateSimpleRowInfo:(NSString *)title
                 showDivider:(BOOL)showDivider
           dividerLeftMargin:(CGFloat)dividerLeftMargin
-               dividerWidth:(CGFloat)dividerWidth
                        icon:(NSString *)icon;
 
 - (void)updateIncludeInfo:(OAFeature *)feature;

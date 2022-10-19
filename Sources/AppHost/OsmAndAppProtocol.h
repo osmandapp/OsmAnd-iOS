@@ -100,6 +100,7 @@
 - (void) showShortToastMessage:(NSString *)message;
 
 - (void)checkAndDownloadOsmAndLiveUpdates;
+- (void)checkAndDownloadWeatherForecastsUpdates;
 
 - (void) loadRoutingFiles;
 

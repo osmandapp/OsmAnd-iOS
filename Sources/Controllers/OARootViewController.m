@@ -9,6 +9,7 @@
 #import "OARootViewController.h"
 #import <SafariServices/SafariServices.h>
 #import <MBProgressHUD.h>
+#import <AFNetworking/AFNetworkReachabilityManager.h>
 #import "OAAppDelegate.h"
 #import "OAMapViewTrackingUtilities.h"
 #import "OAMenuOriginViewControllerProtocol.h"
@@ -583,7 +584,7 @@ typedef enum : NSUInteger {
 
     if (![_iapHelper productsLoaded] || reload)
     {
-        if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
+        if (AFNetworkReachabilityManager.sharedManager.isReachable)
         {
             if (showProgress)
                 [self showProgress:EOARequestProductsProgressType];
@@ -780,7 +781,7 @@ typedef enum : NSUInteger {
 
 - (void) reachabilityChanged:(NSNotification *)notification
 {
-    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
+    if (AFNetworkReachabilityManager.sharedManager.isReachable)
     {
         if (_productsRequestNeeded)
         {

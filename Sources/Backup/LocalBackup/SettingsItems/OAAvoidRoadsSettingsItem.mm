@@ -41,6 +41,16 @@
     self.existingItems = [[_specificRoads getImpassableRoads] mutableCopy];
 }
 
+- (long)localModifiedTime
+{
+    return _specificRoads.getLastModifiedTime;
+}
+
+- (void)setLocalModifiedTime:(long)localModifiedTime
+{
+    [_specificRoads setLastModifiedTime:localModifiedTime];
+}
+
 - (EOASettingsItemType) type
 {
     return EOASettingsItemTypeAvoidRoads;
@@ -49,6 +59,11 @@
 - (NSString *) name
 {
     return @"avoid_roads";
+}
+
+- (NSString *)getPublicName
+{
+    return OALocalizedString(@"avoid_road");
 }
 
 - (BOOL) isDuplicate:(OAAvoidRoadInfo *)item

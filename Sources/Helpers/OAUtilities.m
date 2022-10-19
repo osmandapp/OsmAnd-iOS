@@ -405,12 +405,17 @@
 
 - (void) removeBlurEffect
 {
+    [self removeBlurEffect:UIColor.whiteColor];
+}
+
+- (void) removeBlurEffect:(UIColor *)backgroundColor
+{
     for (UIView *subview in self.subviews)
     {
         if (subview.tag == kBlurViewTag)
         {
             [subview removeFromSuperview];
-            self.backgroundColor = UIColor.whiteColor;
+            self.backgroundColor = backgroundColor;
             break;
         }
     }
@@ -447,6 +452,18 @@
             break;
         }
     }
+}
+
+- (UIImage *) toUIImage
+{
+    UIGraphicsBeginImageContextWithOptions(self.bounds.size, self.opaque, 0.0);
+    [self.layer renderInContext:UIGraphicsGetCurrentContext()];
+
+    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
+
+    UIGraphicsEndImageContext();
+
+    return img;
 }
 
 @end
@@ -514,6 +531,16 @@
 
 @end
 
+@implementation NSMeasurementFormatter (util)
+
+- (NSString *)displayStringFromUnit:(NSUnit *)unit
+{
+    NSString *displaySymbol = unit.displaySymbol;
+    return displaySymbol != nil ? displaySymbol : [self stringFromUnit:unit];
+}
+
+@end
+
 @implementation NSUnit (util)
 
 + (NSUnit *) unitFromString:(NSString *)unitStr
@@ -571,6 +598,11 @@
     return nil;
 }
 
+- (NSString *)displaySymbol
+{
+    return nil;
+}
+
 @end
 
 @implementation NSUnitTemperature (util)
@@ -588,10 +620,19 @@
 
 - (NSString *)name
 {
-    if (self == NSUnitTemperature.celsius)
+    if ([self.symbol isEqualToString:NSUnitTemperature.celsius.symbol])
         return OALocalizedString(@"weather_temp_unit_c");
-    else if (self == NSUnitTemperature.fahrenheit)
+    else if ([self.symbol isEqualToString:NSUnitTemperature.fahrenheit.symbol])
         return OALocalizedString(@"weather_temp_unit_f");
+    return nil;
+}
+
+- (NSString *)displaySymbol
+{
+    if ([self.symbol isEqualToString:NSUnitTemperature.celsius.symbol])
+        return @"°C";
+    else if ([self.symbol isEqualToString:NSUnitTemperature.fahrenheit.symbol])
+        return @"°F";
     return nil;
 }
 
@@ -611,13 +652,13 @@
 
 - (NSString *)name
 {
-    if (self == NSUnitSpeed.metersPerSecond)
+    if ([self.symbol isEqualToString:NSUnitSpeed.metersPerSecond.symbol])
         return OALocalizedString(@"weather_wind_unit_m_s");
-    else if (self == NSUnitSpeed.kilometersPerHour)
+    else if ([self.symbol isEqualToString:NSUnitSpeed.kilometersPerHour.symbol])
         return OALocalizedString(@"weather_wind_unit_km_per_hour");
-    else if (self == NSUnitSpeed.milesPerHour)
+    else if ([self.symbol isEqualToString:NSUnitSpeed.milesPerHour.symbol])
         return OALocalizedString(@"weather_wind_unit_mi_per_hour");
-    else if (self == NSUnitSpeed.knots)
+    else if ([self.symbol isEqualToString:NSUnitSpeed.knots.symbol])
         return OALocalizedString(@"weather_wind_unit_knots");
     return nil;
 }
@@ -638,11 +679,11 @@
 
 - (NSString *)name
 {
-    if (self == NSUnitPressure.hectopascals)
+    if ([self.symbol isEqualToString:NSUnitPressure.hectopascals.symbol])
         return OALocalizedString(@"weather_pressure_unit_hpa");
-    else if (self == NSUnitPressure.millimetersOfMercury)
+    else if ([self.symbol isEqualToString:NSUnitPressure.millimetersOfMercury.symbol])
         return OALocalizedString(@"weather_pressure_unit_mmhg");
-    else if (self == NSUnitPressure.inchesOfMercury)
+    else if ([self.symbol isEqualToString:NSUnitPressure.inchesOfMercury.symbol])
         return OALocalizedString(@"weather_pressure_unit_inhg");
     return nil;
 }
@@ -663,9 +704,9 @@
 
 - (NSString *)name
 {
-    if (self == NSUnitLength.millimeters)
+    if ([self.symbol isEqualToString:NSUnitLength.millimeters.symbol])
         return OALocalizedString(@"weather_precip_unit_mm");
-    else if (self == NSUnitLength.inches)
+    else if ([self.symbol isEqualToString:NSUnitLength.inches.symbol])
         return OALocalizedString(@"weather_precip_unit_in");
     return nil;
 }
@@ -705,7 +746,7 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
 {
     if (filePath)
     {
-        if (![filePath containsString:[OsmAndApp instance].inboxPath])
+        if (![filePath containsString:[OsmAndApp instance].inboxPath] && ![filePath containsString:NSTemporaryDirectory()])
         {
             if (!_accessingSecurityScopedResource)
                 _accessingSecurityScopedResource = [NSMutableArray array];
@@ -1562,8 +1603,13 @@ static const double d180PI = 180.0 / M_PI_2;
 
 + (BOOL) isWindowed
 {
-    if (@available(iOS 13.0, *)) {
-        return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad && (DeviceScreenWidth != [[UIScreen mainScreen] bounds].size.width ||
+    BOOL isiOSAppOnMac = NO;
+    if (@available(iOS 14.0, *))
+        isiOSAppOnMac = [NSProcessInfo processInfo].isiOSAppOnMac;
+
+    if (@available(iOS 13.0, *))
+    {
+        return !isiOSAppOnMac && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad && (DeviceScreenWidth != [[UIScreen mainScreen] bounds].size.width ||
             UIApplication.sharedApplication.delegate.window.bounds.size.height != [[UIScreen mainScreen] bounds].size.height);
     }
     return NO;
@@ -1880,6 +1926,11 @@ static const double d180PI = 180.0 / M_PI_2;
 
 + (UIView *) setupTableHeaderViewWithText:(NSString *)text font:(UIFont *)font textColor:(UIColor *)textColor lineSpacing:(CGFloat)lineSpacing isTitle:(BOOL)isTitle
 {
+    return [self setupTableHeaderViewWithText:text font:font textColor:textColor lineSpacing:lineSpacing isTitle:isTitle y:12.];
+}
+
++ (UIView *) setupTableHeaderViewWithText:(NSString *)text font:(UIFont *)font textColor:(UIColor *)textColor lineSpacing:(CGFloat)lineSpacing isTitle:(BOOL)isTitle y:(CGFloat)y
+{
     CGFloat textWidth = DeviceScreenWidth - (16 + OAUtilities.getLeftMargin) * 2;
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(16 + OAUtilities.getLeftMargin, 0.0, textWidth, CGFLOAT_MAX)];
     if (!isTitle)
@@ -1897,11 +1948,10 @@ static const double d180PI = 180.0 / M_PI_2;
     label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     [label sizeToFit];
     CGRect frame = label.frame;
-    frame.size.height = label.frame.size.height + (isTitle ? 0.0 : 30.0);
     frame.size.width = textWidth;
-    frame.origin.y = 8.0;
+    frame.origin.y = isTitle ? 5. : y;
     label.frame = frame;
-    UIView *tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, label.frame.size.height + 8)];
+    UIView *tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, label.frame.size.height + label.frame.origin.y + (isTitle ? 7. : 12.))];
     [tableHeaderView addSubview:label];
     return tableHeaderView;
 }
@@ -1950,8 +2000,10 @@ static const double d180PI = 180.0 / M_PI_2;
 
 + (UIView *) setupTableHeaderViewWithText:(NSAttributedString *)text tintColor:(UIColor *)tintColor icon:(UIImage *)icon iconFrameSize:(CGFloat)iconFrameSize iconBackgroundColor:(UIColor *)iconBackgroundColor iconContentMode:(UIViewContentMode)contentMode iconYOffset:(CGFloat)iconYOffset
 {
-    CGFloat textWidth = DeviceScreenWidth - (16 + OAUtilities.getLeftMargin * 2) - 12 - iconFrameSize - 16;
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(16 + OAUtilities.getLeftMargin, 0.0, textWidth, CGFLOAT_MAX)];
+    BOOL hasIcon = iconFrameSize > 0;
+    CGFloat iconOffset = hasIcon ? 12 + iconFrameSize + 20 : 0;
+    CGFloat textWidth = DeviceScreenWidth - (20 + OAUtilities.getLeftMargin * 2) - iconOffset;
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(20 + OAUtilities.getLeftMargin, 0.0, textWidth, CGFLOAT_MAX)];
     label.attributedText = text;
     label.numberOfLines = 0;
     label.lineBreakMode = NSLineBreakByWordWrapping;
@@ -1964,20 +2016,23 @@ static const double d180PI = 180.0 / M_PI_2;
     UIView *tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, label.frame.size.height + 16)];
     [tableHeaderView addSubview:label];
     
-    CGFloat yOffset = iconYOffset == 0 ? tableHeaderView.frame.size.height / 2 - iconFrameSize / 2 : iconYOffset;
-    UIView *imageContainer = [[UIView alloc] initWithFrame:CGRectMake(DeviceScreenWidth - 20 - OAUtilities.getLeftMargin - iconFrameSize, yOffset, iconFrameSize, iconFrameSize)];
-    imageContainer.backgroundColor = iconBackgroundColor;
-    
-    UIImageView *imageView = [[UIImageView alloc] init];
-    imageView.frame = CGRectMake(iconFrameSize / 2 - 15., iconFrameSize / 2 - 15., 30, 30);
-    imageView.contentMode = contentMode;
-    [imageView setTintColor:tintColor];
-    [imageView setImage:[icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
-    
-    [imageContainer insertSubview:imageView atIndex:0];
-    imageContainer.layer.cornerRadius = iconFrameSize / 2;
-    
-    [tableHeaderView addSubview:imageContainer];
+    if (hasIcon)
+    {
+        CGFloat yOffset = iconYOffset == 0 ? tableHeaderView.frame.size.height / 2 - iconFrameSize / 2 : iconYOffset;
+        UIView *imageContainer = [[UIView alloc] initWithFrame:CGRectMake(DeviceScreenWidth - 20 - OAUtilities.getLeftMargin - iconFrameSize, yOffset, iconFrameSize, iconFrameSize)];
+        imageContainer.backgroundColor = iconBackgroundColor;
+        
+        UIImageView *imageView = [[UIImageView alloc] init];
+        imageView.frame = CGRectMake(iconFrameSize / 2 - 15., iconFrameSize / 2 - 15., 30, 30);
+        imageView.contentMode = contentMode;
+        [imageView setTintColor:tintColor];
+        [imageView setImage:[icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+        
+        [imageContainer insertSubview:imageView atIndex:0];
+        imageContainer.layer.cornerRadius = iconFrameSize / 2;
+        
+        [tableHeaderView addSubview:imageContainer];
+    }
     
     return tableHeaderView;
 }

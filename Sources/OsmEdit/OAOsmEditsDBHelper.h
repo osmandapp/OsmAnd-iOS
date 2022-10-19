@@ -26,6 +26,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void) updateEditLocation:(long long) editId newPosition:(CLLocationCoordinate2D)newPosition;
 
+- (long)getLastModifiedTime;
+- (void) setLastModifiedTime:(long)lastModified;
+
 @end
 
 NS_ASSUME_NONNULL_END

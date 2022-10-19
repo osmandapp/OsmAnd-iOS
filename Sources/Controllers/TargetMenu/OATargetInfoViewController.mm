@@ -24,7 +24,7 @@
 #import "OAMapillaryImageCard.h"
 #import "OAMapillaryContributeCard.h"
 #import "OAUrlImageCard.h"
-#import "Reachability.h"
+#import <AFNetworking/AFNetworkReachabilityManager.h>
 #import "OAPointDescription.h"
 #import "OACollapsableCoordinatesView.h"
 #import "OAIAPHelper.h"
@@ -256,6 +256,15 @@
         NSString *formattedDate = [dateFormatter stringFromDate:timestamp];
         OARowInfo *dateRowCell = [[OARowInfo alloc] initWithKey:nil icon:[OATargetInfoViewController getIcon:@"ic_custom_date"] textPrefix:nil text:formattedDate textColor:nil isText:NO needLinks:NO order:3 typeName:kTimestampRowType isPhoneNumber:NO isUrl:NO];
         [rows addObject:dateRowCell];
+    }
+}
+
+- (void) buildCommentRow:(NSMutableArray<OARowInfo *> *)rows comment:(NSString *)comment
+{
+    if (comment.length > 0)
+    {
+        OARowInfo *commentRow = [[OARowInfo alloc] initWithKey:nil icon:[UIImage imageNamed:@"ic_description"] textPrefix:nil text:comment textColor:nil isText:YES needLinks:NO order:4 typeName:kCommentRowType isPhoneNumber:NO isUrl:NO];
+        [rows addObject:commentRow];
     }
 }
 
@@ -677,7 +686,7 @@
 
 - (void) addNearbyImagesIfNeeded
 {
-    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable)
+    if (!AFNetworkReachabilityManager.sharedManager.isReachable)
         return;
 
     OARowInfo *nearbyImagesRowInfo = [[OARowInfo alloc] initWithKey:nil icon:[UIImage imageNamed:@"ic_custom_photo"] textPrefix:nil text:OALocalizedString(@"mapil_images_nearby") textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
@@ -1011,9 +1020,9 @@
         NSIndexPath *collapseDetailsCellIndex = [NSIndexPath indexPathForRow:0 inSection:0];
         [self.tableView reloadRowsAtIndexPaths:@[collapseDetailsCellIndex] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
-    else if ([info.typeName isEqualToString:kDescriptionRowType])
+    else if ([info.typeName isEqualToString:kDescriptionRowType] || [info.typeName isEqualToString:kCommentRowType])
     {
-        OAEditDescriptionViewController *editDescController = [[OAEditDescriptionViewController alloc] initWithDescription:info.text isNew:NO isEditing:NO readOnly:YES];
+        OAEditDescriptionViewController *editDescController = [[OAEditDescriptionViewController alloc] initWithDescription:info.text isNew:NO isEditing:NO isComment:[info.typeName isEqualToString:kCommentRowType] readOnly:YES];
         editDescController.delegate = self;
         [self.navController pushViewController:editDescController animated:YES];
     }

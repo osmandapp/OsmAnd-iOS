@@ -78,6 +78,7 @@
 - (void) registerLayers;
 - (BOOL) destinationReached;
 - (void) updateLocation:(CLLocation *)location;
+- (void) showInstalledScreen;
 
 
 @end

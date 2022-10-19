@@ -56,6 +56,12 @@
     return self;
 }
 
+- (void) markTrackForReload:(NSString *)filePath
+{
+    QString qPath = QString::fromNSString(filePath);
+    _activeGpx.remove(qPath);
+}
+
 - (BOOL) buildGpxList
 {
     BOOL loading = NO;

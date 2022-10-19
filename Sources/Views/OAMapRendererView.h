@@ -12,6 +12,7 @@
 #include <OsmAndCore/CommonTypes.h>
 #include <OsmAndCore/Map/MapCommonTypes.h>
 #include <OsmAndCore/Map/MapAnimator.h>
+#include <OsmAndCore/Map/MapMarkersAnimator.h>
 #include <OsmAndCore/Map/MapRendererState.h>
 #include <OsmAndCore/Map/IMapLayerProvider.h>
 #include <OsmAndCore/Map/IMapElevationDataProvider.h>
@@ -19,9 +20,15 @@
 #include <OsmAndCore/Map/IMapKeyedSymbolsProvider.h>
 #include <OsmAndCore/Map/MapRendererDebugSettings.h>
 #include <OsmAndCore/Map/IMapRenderer.h>
+#include <OsmAndCore/Map/MapRendererTypes.h>
 
 #import "OAMapRendererViewProtocol.h"
 #import "OAObservable.h"
+
+#define kSymbolsUpdateInterval 2000
+
+#define kObfRasterLayer 0
+#define kObfSymbolSection 1
 
 #define _DECLARE_ENTRY(name)                                                                                                \
     OAMapRendererViewStateEntry##name = (NSUInteger)OsmAnd::MapRendererStateChange::name
@@ -36,7 +43,6 @@ typedef NS_OPTIONS(NSUInteger, OAMapRendererViewStateEntry)
     _DECLARE_ENTRY(Viewport),
     _DECLARE_ENTRY(FieldOfView),
     _DECLARE_ENTRY(SkyColor),
-    _DECLARE_ENTRY(FogConfiguration),
     _DECLARE_ENTRY(Azimuth),
     _DECLARE_ENTRY(ElevationAngle),
     _DECLARE_ENTRY(Target),
@@ -46,6 +52,8 @@ typedef NS_OPTIONS(NSUInteger, OAMapRendererViewStateEntry)
 
 @protocol OAMapRendererDelegate
 
+- (void) frameAnimatorsUpdated;
+- (void) frameUpdated;
 - (void) frameRendered;
 
 @end
@@ -69,6 +77,7 @@ struct CLLocationCoordinate2D;
 - (QList<OsmAnd::IMapRenderer::MapSymbolInformation>)getSymbolsIn:(OsmAnd::AreaI)screenArea strict:(BOOL)strict;
 
 - (void)addTiledSymbolsProvider:(std::shared_ptr<OsmAnd::IMapTiledSymbolsProvider>)provider;
+- (void)addTiledSymbolsProvider:(int)subsectionIndex provider:(std::shared_ptr<OsmAnd::IMapTiledSymbolsProvider>)provider;
 - (void)addKeyedSymbolsProvider:(std::shared_ptr<OsmAnd::IMapKeyedSymbolsProvider>)provider;
 - (bool)removeTiledSymbolsProvider:(std::shared_ptr<OsmAnd::IMapTiledSymbolsProvider>)provider;
 - (bool)removeKeyedSymbolsProvider:(std::shared_ptr<OsmAnd::IMapKeyedSymbolsProvider>)provider;
@@ -84,6 +93,8 @@ struct CLLocationCoordinate2D;
 - (BOOL) suspendGpuWorker;
 - (BOOL) resumeGpuWorker;
 - (void) invalidateFrame;
+- (void) setSymbolsOpacity:(float)opacityFactor;
+- (void) setSymbolSubsectionConfiguration:(int)subsectionIndex configuration:(const OsmAnd::SymbolSubsectionConfiguration &)configuration;
 
 @property (nonatomic) CGFloat displayDensityFactor;
 @property (nonatomic) OsmAnd::PointI target31;
@@ -125,7 +136,8 @@ struct CLLocationCoordinate2D;
 @property (readonly) OAObservable* framePreparedObservable;
 @property (nonatomic, weak) id<OAMapRendererDelegate> rendererDelegate;
 
-@property(nonatomic, readonly, getter=getAnimator) const std::shared_ptr<OsmAnd::MapAnimator>& animator;
+@property(nonatomic, readonly, getter=getMapAnimator) const std::shared_ptr<OsmAnd::MapAnimator>& mapAnimator;
+@property(nonatomic, readonly, getter=getMapMarkersAnimator) const std::shared_ptr<OsmAnd::MapMarkersAnimator>& mapMarkersAnimator;
 
 @property (nonatomic) int maxMissingDataZoomShift;
 @property (nonatomic) int maxMissingDataUnderZoomShift;

@@ -23,7 +23,6 @@
 #define kMargin 16.
 #define kSeparatorHeight .5
 #define kNavigationBarHeight 56.
-#define kMinRowHeight 48.
 
 @interface OAChoosePlanViewController () <UIScrollViewDelegate, OAFeatureCardViewDelegate, OAFeatureCardRowDelegate, OAChoosePlanDelegate, SFSafariViewControllerDelegate>
 
@@ -57,7 +56,11 @@
     OAFeatureCardRow *_buttonPrivacyPolicy;
     UIView *_viewIncludesSeparator;
     UILabel *_labelIncludes;
+    UILabel *_labelNotIncluded;
     UIView *_lastIncludedView;
+    UIView *_backgroundAboveScrollViewContainer;
+    NSArray<OAFeatureCardRow *> *_includedRows;
+    NSArray<OAFeatureCardRow *> *_notIncludedRows;
 }
 
 - (instancetype) initWithFeature:(OAFeature *)feature;
@@ -137,7 +140,19 @@
         _subscriptionManagement.font = [UIFont systemFontOfSize:15.];
         _subscriptionManagement.textColor = UIColor.blackColor;
         _subscriptionManagement.numberOfLines = 0;
-        _subscriptionManagement.text = OALocalizedString(@"osm_live_payment_subscription_management_aid");
+
+        NSMutableAttributedString *attributedSubscriptionManagement =
+                [[NSMutableAttributedString alloc] initWithString:OALocalizedString(@"osm_live_payment_subscription_management_aid")];
+        NSMutableParagraphStyle *subscriptionManagementParagraphStyle = [[NSMutableParagraphStyle alloc] init];
+        subscriptionManagementParagraphStyle.minimumLineHeight = 21.;
+        [attributedSubscriptionManagement addAttribute:NSParagraphStyleAttributeName
+                                                 value:subscriptionManagementParagraphStyle
+                                                 range:NSMakeRange(0, attributedSubscriptionManagement.length)];
+        [attributedSubscriptionManagement addAttribute:NSFontAttributeName
+                                                 value:[UIFont systemFontOfSize:15.]
+                                                 range:NSMakeRange(0, attributedSubscriptionManagement.length)];
+        _subscriptionManagement.attributedText = attributedSubscriptionManagement;
+
         [self.scrollView insertSubview:_subscriptionManagement aboveSubview:self.buttonRestore];
 
         _buttonTermsOfUse = [self addSimpleRow:OALocalizedString(@"terms_of_use")
@@ -161,6 +176,7 @@
                 OALocalizedString(@"shared_string_includes"), @""];
         [self.scrollView insertSubview:_labelIncludes belowSubview:_viewIncludesSeparator];
 
+        NSMutableArray<OAFeatureCardRow *> *includedRows = [NSMutableArray array];
         UIView *prevView = _labelIncludes;
         BOOL isMaps = [OAIAPHelper isFullVersion:_product] || ([_product isKindOfClass:OASubscription.class] && [OAIAPHelper isMapsSubscription:(OASubscription *) _product]);
         for (OAFeature *feature in isMaps ? OAFeature.MAPS_PLUS_FEATURES : OAFeature.OSMAND_PRO_FEATURES)
@@ -171,10 +187,42 @@
                 [row updateIncludeInfo:feature];
                 [self.scrollView addSubview:row];
                 prevView = row;
+                [includedRows addObject:row];
             }
+        }
+        _includedRows = includedRows;
+
+        if (isMaps)
+        {
+            _labelNotIncluded = [[UILabel alloc] init];
+            _labelNotIncluded.font = [UIFont systemFontOfSize:17.];
+            _labelNotIncluded.textColor = UIColor.blackColor;
+            _labelNotIncluded.numberOfLines = 0;
+            _labelNotIncluded.text = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_colon"),
+                                                                OALocalizedString(@"shared_string_not_included"), @""];
+            [self.scrollView insertSubview:_labelNotIncluded belowSubview:prevView];
+
+            NSMutableArray<OAFeatureCardRow *> *notIncludedRows = [NSMutableArray array];
+            prevView = _labelNotIncluded;
+            for (OAFeature *feature in OAFeature.OSMAND_PRO_FEATURES)
+            {
+                if (feature != OAFeature.COMBINED_WIKI && ![feature isAvailableInMapsPlus])
+                {
+                    OAFeatureCardRow *row = [[OAFeatureCardRow alloc] initWithType:EOAFeatureCardRowInclude];
+                    [row updateIncludeInfo:feature];
+                    [self.scrollView addSubview:row];
+                    prevView = row;
+                    [notIncludedRows addObject:row];
+                }
+            }
+            _notIncludedRows = notIncludedRows;
         }
         _lastIncludedView = prevView;
     }
+
+    _backgroundAboveScrollViewContainer = [[UIView alloc] initWithFrame:CGRectMake(0., -self.scrollView.contentInset.top, DeviceScreenWidth, self.scrollView.contentInset.top)];
+    _backgroundAboveScrollViewContainer.backgroundColor = UIColor.whiteColor;
+    [self.scrollView insertSubview:_backgroundAboveScrollViewContainer aboveSubview:self.scrollViewContainerView];
 
     NSInteger index1 = [self.scrollView.subviews indexOfObject:_buttonTermsOfUse];
     _buttonTermsOfUse.tag = index1;
@@ -213,9 +261,18 @@
 - (UIStatusBarStyle) preferredStatusBarStyle
 {
     if (@available(iOS 13.0, *))
-        return _type == EOAChoosePlan ? UIStatusBarStyleDefault : UIStatusBarStyleLightContent;
+        return _type == EOAChoosePlan ? UIStatusBarStyleDefault : UIStatusBarStyleDarkContent;
 
     return UIStatusBarStyleDefault;
+}
+
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        CGRect backgroundFrame = _backgroundAboveScrollViewContainer.frame;
+        backgroundFrame.size.width = DeviceScreenWidth;
+        _backgroundAboveScrollViewContainer.frame = backgroundFrame;
+    } completion:nil];
 }
 
 - (void) viewWillLayoutSubviews
@@ -242,7 +299,11 @@
             [OAUtilities getBottomMargin] + 52.,
             0.
     );
-    self.scrollView.frame = CGRectMake(0., 0., self.view.frame.size.width, DeviceScreenHeight);
+    self.scrollView.frame = CGRectMake(0., 0., self.view.frame.size.width, self.view.frame.size.height);
+    CGRect backgroundFrame = _backgroundAboveScrollViewContainer.frame;
+    backgroundFrame.origin.y = -self.scrollView.contentInset.top;
+    backgroundFrame.size.height = self.scrollView.contentInset.top;
+    _backgroundAboveScrollViewContainer.frame = backgroundFrame;
 
     CGRect frame = self.buttonNavigationBack.frame;
     frame.origin.x = [OAUtilities getLeftMargin] + 10.;
@@ -285,7 +346,7 @@
         if ([view isKindOfClass:[OABaseFeatureCardView class]])
         {
             OABaseFeatureCardView *card = (OABaseFeatureCardView *) view;
-            y += [card updateFrame:y];
+            y += [card updateFrame:y width:self.view.frame.size.width];
         }
     }
     self.scrollViewContainerView.frame = CGRectMake(
@@ -307,14 +368,16 @@
                 subscriptionManagementSize.height
         );
 
-        [_buttonTermsOfUse updateFrame:_subscriptionManagement.frame.origin.y + _subscriptionManagement.frame.size.height];
-        [_buttonPrivacyPolicy updateFrame:_buttonTermsOfUse.frame.origin.y + _buttonTermsOfUse.frame.size.height];
+        [_buttonTermsOfUse updateFrame:_subscriptionManagement.frame.origin.y + _subscriptionManagement.frame.size.height
+                                 width:self.view.frame.size.width];
+        [_buttonPrivacyPolicy updateFrame:_buttonTermsOfUse.frame.origin.y + _buttonTermsOfUse.frame.size.height
+                                    width:self.view.frame.size.width];
     }
 
     self.buttonRestore.frame = CGRectMake(
             kMargin + [OAUtilities getLeftMargin],
             _type == EOAChooseSubscription
-                    ? _buttonPrivacyPolicy.frame.origin.y + _buttonPrivacyPolicy.frame.size.height
+                    ? _buttonPrivacyPolicy.frame.origin.y + _buttonPrivacyPolicy.frame.size.height + 5.
                     : self.scrollViewContainerView.frame.size.height + 20.,
             self.view.frame.size.width - kMargin * 2 - [OAUtilities getLeftMargin] * 2,
             self.buttonRestore.frame.size.height
@@ -350,12 +413,29 @@
         );
 
         y = _labelIncludes.frame.origin.y + _labelIncludes.frame.size.height;
-        for (UIView *view in self.scrollView.subviews)
+        for (OAFeatureCardRow *cardRow in _includedRows)
         {
-            if ([view isKindOfClass:[OAFeatureCardRow class]] && view != _buttonTermsOfUse && view != _buttonPrivacyPolicy)
+            y += [cardRow updateFrame:y width:self.view.frame.size.width] + 36.;
+        }
+
+        BOOL isMaps = [OAIAPHelper isFullVersion:_product] || ([_product isKindOfClass:OASubscription.class] && [OAIAPHelper isMapsSubscription:(OASubscription *) _product]);
+        if (isMaps)
+        {
+            CGSize notIncludedSize = [OAUtilities calculateTextBounds:_labelNotIncluded.text
+                                                                width:self.view.frame.size.width - (20. + [OAUtilities getLeftMargin]) * 2
+                                                                 font:_labelNotIncluded.font];
+            CGFloat notIncludedVerticalOffset = notIncludedSize.height > kMinRowHeight ? 9. : (kMinRowHeight - notIncludedSize.height) / 2;
+            _labelNotIncluded.frame = CGRectMake(
+                    20. + [OAUtilities getLeftMargin],
+                    _includedRows.lastObject.frame.origin.y + _includedRows.lastObject.frame.size.height + 32.,
+                    self.view.frame.size.width - (20. + [OAUtilities getLeftMargin]) * 2,
+                    notIncludedSize.height + notIncludedVerticalOffset * 2
+            );
+
+            y = _labelNotIncluded.frame.origin.y + _labelNotIncluded.frame.size.height;
+            for (OAFeatureCardRow *cardRow in _notIncludedRows)
             {
-                OAFeatureCardRow *card = (OAFeatureCardRow *) view;
-                y += [card updateFrame:y] + 36.;
+                y += [cardRow updateFrame:y width:self.view.frame.size.width] + 36.;
             }
         }
     }
@@ -368,9 +448,8 @@
 
 - (void)setupButton:(UIButton *)button
 {
-    button.layer.cornerRadius = 9.;
-    button.backgroundColor = UIColorFromRGB(color_route_button_inactive);
     [button setTitleColor:UIColorFromRGB(color_primary_purple) forState:UIControlStateNormal];
+    button.titleLabel.font = [UIFont systemFontOfSize:15. weight:UIFontWeightSemibold];
 }
 
 - (OAFeatureCardRow *)addSimpleRow:(NSString *)title
@@ -381,8 +460,7 @@
     OAFeatureCardRow *row = [[OAFeatureCardRow alloc] initWithType:EOAFeatureCardRowSimple];
     [row updateSimpleRowInfo:title
                  showDivider:showDivider
-           dividerLeftMargin:20. + [OAUtilities getLeftMargin]
-                dividerWidth:self.view.frame.size.width - (20. + [OAUtilities getLeftMargin]) * 2
+           dividerLeftMargin:20.
                         icon:icon];
     row.delegate = self;
     [self.scrollView insertSubview:row aboveSubview:aboveSubview];
@@ -426,9 +504,10 @@
 - (void) productPurchaseFailed:(NSNotification *)notification
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self dismissViewController];
-        if (self.delegate)
-            [self.delegate onProductNotification];
+        [OAUtilities showToast:[NSString stringWithFormat:OALocalizedString(@"prch_failed"), _product.localizedTitle]
+                       details:nil
+                      duration:4
+                        inView:self.view];
     });
 }
 
@@ -468,6 +547,11 @@
     CGFloat y = scrollView.contentOffset.y;
     if (_type == EOAChooseSubscription)
         y += [OAUtilities getTopMargin];
+
+    CGRect backgroundFrame = _backgroundAboveScrollViewContainer.frame;
+    backgroundFrame.origin.y = y < 0. ? y : -y;
+    backgroundFrame.size.height = y < 0. ? ABS(y) : 0.;
+    _backgroundAboveScrollViewContainer.frame = backgroundFrame;
 
     if (!_isHeaderBlurred && y > 0.)
     {

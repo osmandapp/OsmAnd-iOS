@@ -25,7 +25,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *imageViewTitleIcon;
 
 @property (weak, nonatomic) IBOutlet UIView *viewFeatureRowsContainer;
-@property (weak, nonatomic) IBOutlet UIView *viewChooseSubscriptionButtonsContainer;
+@property (weak, nonatomic) IBOutlet UIView *viewChooseSubscriptionButtonsBorder;
 @property (weak, nonatomic) IBOutlet UILabel *labelPurchaseDescription;
 
 @property (weak, nonatomic) IBOutlet UIView *viewBottomSeparator;
@@ -38,6 +38,8 @@
     NSInteger _buttonLearnMoreIndex;
     BOOL _buttonPressCanceled;
 
+    OAPlanTypeCardRow *_firstPlanCardRow;
+    OAPlanTypeCardRow *_secondPlanCardRow;
     OAPlanTypeCardRow *_completePurchasePlanCardRow;
 }
 
@@ -96,9 +98,9 @@
     self.labelDescription.font = [UIFont systemFontOfSize:17];
     self.labelDescription.textColor = UIColorFromRGB(color_text_footer);
     [self.labelPurchaseDescription setText:OALocalizedString(@"subscription_cancel_description")];
-    self.viewChooseSubscriptionButtonsContainer.layer.borderWidth = 1.;
-    self.viewChooseSubscriptionButtonsContainer.layer.borderColor = UIColorFromRGB(color_tint_gray).CGColor;
-    self.viewChooseSubscriptionButtonsContainer.layer.cornerRadius = 9.;
+    self.viewChooseSubscriptionButtonsBorder.layer.borderWidth = 1.;
+    self.viewChooseSubscriptionButtonsBorder.layer.borderColor = UIColorFromRGB(color_route_button_inactive).CGColor;
+    self.viewChooseSubscriptionButtonsBorder.layer.cornerRadius = 9.;
 }
 
 - (BOOL)isProPlan:(OAProduct *)subscription
@@ -140,36 +142,25 @@
         learnMoreButton.tag = [self.viewFeatureRowsContainer.subviews indexOfObject:learnMoreButton];
         _buttonLearnMoreIndex = learnMoreButton.tag;
 
-        for (UIView *view in self.viewChooseSubscriptionButtonsContainer.subviews)
-        {
-            [view removeFromSuperview];
-        }
+        OAIAPHelper *iapHelper = [OAIAPHelper sharedInstance];
+        OAProduct *selectedSubscription = [self isProPlan:subscription] ? iapHelper.proMonthly : iapHelper.mapsAnnually;
 
-        OAProduct *selectedSubscription = [self isProPlan:subscription]
-                ? [OAIAPHelper sharedInstance].proMonthly
-                : [OAIAPHelper sharedInstance].mapsAnnually;
-        [self addPlanTypeRow:EOAPlanTypeChooseSubscription
-                                            subscription:selectedSubscription
-                                                selected:YES
-                                               container:self.viewChooseSubscriptionButtonsContainer];
+        _firstPlanCardRow = [self addPlanTypeRow:EOAPlanTypeChooseSubscription
+                                    subscription:selectedSubscription
+                                        selected:YES];
 
-        [self addPlanTypeRow:EOAPlanTypeChooseSubscription
-                                                subscription:[self isProPlan:subscription]
-                                                        ? [OAIAPHelper sharedInstance].proAnnually
-                                                        : [OAIAPHelper sharedInstance].mapsFull
-                                                     selected:NO
-                                                    container:self.viewChooseSubscriptionButtonsContainer];
+        _secondPlanCardRow = [self addPlanTypeRow:EOAPlanTypeChooseSubscription
+                                     subscription:[self isProPlan:subscription] ? iapHelper.proAnnually : iapHelper.mapsFull
+                                         selected:NO];
 
         _completePurchasePlanCardRow = [self addPlanTypeRow:EOAPlanTypePurchase
                                                subscription:selectedSubscription
-                                                   selected:NO
-                                                  container:self];
+                                                   selected:NO];
     }
 }
 
-- (CGFloat)updateLayout:(CGFloat)y
+- (CGFloat)updateLayout:(CGFloat)y width:(CGFloat)width
 {
-    CGFloat width = DeviceScreenWidth;
     CGFloat leftMargin = 20. + [OAUtilities getLeftMargin];
     CGFloat titleRightMargin = leftMargin + kIconBigTitleSize + 16.;
     CGSize titleSize = [OAUtilities calculateTextBounds:self.labelTitle.text
@@ -204,7 +195,7 @@
     CGFloat yRow = 0.;
     for (OAFeatureCardRow *row in self.viewFeatureRowsContainer.subviews)
     {
-        yRow += [row updateFrame:yRow];
+        yRow += [row updateFrame:yRow width:width];
     }
     self.viewFeatureRowsContainer.frame = CGRectMake(
             0.,
@@ -213,24 +204,29 @@
             yRow
     );
 
-    yRow = 0.;
-    for (OAPlanTypeCardRow *row in self.viewChooseSubscriptionButtonsContainer.subviews)
-    {
-        yRow += [row updateFrame:yRow];
-        CGRect frame = row.frame;
-        frame.origin.x = 0.;
-        frame.size.width = width - leftMargin * 2;
-        row.frame = frame;
-    }
-    self.viewChooseSubscriptionButtonsContainer.frame = CGRectMake(
+    [_firstPlanCardRow updateFrame:self.viewFeatureRowsContainer.frame.origin.y + self.viewFeatureRowsContainer.frame.size.height + 20. width:width];
+    CGRect firstPlanFrame = _firstPlanCardRow.frame;
+    firstPlanFrame.origin.x = leftMargin;
+    firstPlanFrame.size.width = width - leftMargin * 2;
+    _firstPlanCardRow.frame = firstPlanFrame;
+    [_firstPlanCardRow updateRightIconFrameX:_firstPlanCardRow.frame.size.width - kSecondarySpaceMargin - kIconSize];
+
+    [_secondPlanCardRow updateFrame:_firstPlanCardRow.frame.origin.y + _firstPlanCardRow.frame.size.height width:width];
+    CGRect secondPlanFrame = _secondPlanCardRow.frame;
+    secondPlanFrame.origin.x = leftMargin;
+    secondPlanFrame.size.width = width - leftMargin * 2;
+    _secondPlanCardRow.frame = secondPlanFrame;
+    [_secondPlanCardRow updateRightIconFrameX:_secondPlanCardRow.frame.size.width - kSecondarySpaceMargin - kIconSize];
+
+    self.viewChooseSubscriptionButtonsBorder.frame = CGRectMake(
             leftMargin,
-            self.viewFeatureRowsContainer.frame.origin.y + self.viewFeatureRowsContainer.frame.size.height + 20.,
+            _firstPlanCardRow.frame.origin.y,
             width - leftMargin * 2,
-            yRow
+            _firstPlanCardRow.frame.size.height + _secondPlanCardRow.frame.size.height
     );
 
-    yRow = self.viewChooseSubscriptionButtonsContainer.frame.origin.y + self.viewChooseSubscriptionButtonsContainer.frame.size.height + 20.;
-    CGFloat purchaseButtonHeight = [_completePurchasePlanCardRow updateFrame:yRow];
+    yRow = self.viewChooseSubscriptionButtonsBorder.frame.origin.y + self.viewChooseSubscriptionButtonsBorder.frame.size.height + 20.;
+    CGFloat purchaseButtonHeight = [_completePurchasePlanCardRow updateFrame:yRow width:width];
     _completePurchasePlanCardRow.frame = CGRectMake(
             leftMargin,
             yRow,
@@ -273,7 +269,6 @@
     [row updateSimpleRowInfo:title
                  showDivider:showDivider
            dividerLeftMargin:0.
-                dividerWidth:DeviceScreenWidth
                         icon:icon];
     [self.viewFeatureRowsContainer addSubview:row];
     return row;
@@ -282,13 +277,12 @@
 - (OAPlanTypeCardRow *)addPlanTypeRow:(OAPlanTypeCardRowType)type
                          subscription:(OAProduct *)subscription
                              selected:(BOOL)selected
-                            container:(UIView *)container
 {
     OAPlanTypeCardRow *row = [[OAPlanTypeCardRow alloc] initWithType:type];
     [row updateInfo:subscription selectedFeature:nil selected:selected];
     row.delegate = self;
-    [container addSubview:row];
-    row.tag = [container.subviews indexOfObject:row];
+    [self addSubview:row];
+    row.tag = [self.subviews indexOfObject:row];
     if (selected)
         _selectedSubscriptionIndex = row.tag;
     return row;
@@ -310,13 +304,13 @@
               subscription:(OAProduct *)subscription
 {
     BOOL isPurchaseButton = _completePurchasePlanCardRow.tag == tag;
-    if (self.viewChooseSubscriptionButtonsContainer.subviews.count > tag || isPurchaseButton)
+    if (self.subviews.count > tag || isPurchaseButton)
     {
         if (state == UIGestureRecognizerStateChanged)
         {
             _buttonPressCanceled = YES;
             [UIView animateWithDuration:0.2 animations:^{
-                OAPlanTypeCardRow *row = isPurchaseButton ? _completePurchasePlanCardRow : self.viewChooseSubscriptionButtonsContainer.subviews[tag];
+                OAPlanTypeCardRow *row = isPurchaseButton ? _completePurchasePlanCardRow : self.subviews[tag];
                 if (type == EOAPlanTypeChooseSubscription)
                     [row updateSelected:tag == _selectedSubscriptionIndex];
                 else if (type == EOAPlanTypePurchase)
@@ -332,18 +326,18 @@
             }
 
             [UIView animateWithDuration:0.2 animations:^{
-                OAPlanTypeCardRow *row = isPurchaseButton ? _completePurchasePlanCardRow : self.viewChooseSubscriptionButtonsContainer.subviews[_selectedSubscriptionIndex];
+                OAPlanTypeCardRow *row = isPurchaseButton ? _completePurchasePlanCardRow : self.subviews[_selectedSubscriptionIndex];
                 if (type == EOAPlanTypeChooseSubscription)
                 {
                     [row updateSelected:tag == _selectedSubscriptionIndex];
                     _selectedSubscriptionIndex = tag;
                 }
-                row = isPurchaseButton ? _completePurchasePlanCardRow : self.viewChooseSubscriptionButtonsContainer.subviews[_selectedSubscriptionIndex];
+                row = isPurchaseButton ? _completePurchasePlanCardRow : self.subviews[_selectedSubscriptionIndex];
                 if (row.userInteractionEnabled)
                     row.backgroundColor = UIColorFromARGB(color_primary_purple_25);
             }                completion:^(BOOL finished) {
                 [UIView animateWithDuration:0.2 animations:^{
-                    OAPlanTypeCardRow *row = isPurchaseButton ? _completePurchasePlanCardRow : self.viewChooseSubscriptionButtonsContainer.subviews[_selectedSubscriptionIndex];
+                    OAPlanTypeCardRow *row = isPurchaseButton ? _completePurchasePlanCardRow : self.subviews[_selectedSubscriptionIndex];
                     if (type == EOAPlanTypeChooseSubscription)
                     {
                         [row updateSelected:tag == _selectedSubscriptionIndex];
@@ -363,7 +357,7 @@
         else if (state == UIGestureRecognizerStateBegan)
         {
             [UIView animateWithDuration:0.2 animations:^{
-                OAPlanTypeCardRow *row = isPurchaseButton ? _completePurchasePlanCardRow : self.viewChooseSubscriptionButtonsContainer.subviews[tag];
+                OAPlanTypeCardRow *row = isPurchaseButton ? _completePurchasePlanCardRow : self.subviews[tag];
                 if (row.userInteractionEnabled)
                     row.backgroundColor = UIColorFromARGB(color_primary_purple_25);
             }                completion:nil];

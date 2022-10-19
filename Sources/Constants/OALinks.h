@@ -65,14 +65,14 @@
 #define kUrlWikipediaOpenLocationCode  @"https://en.wikipedia.org/wiki/Open_Location_Code"
 
 #define kOsmAndPoll  @"https://osmand.net/ios-poll.html"
-#define kOsmAndFeatures  @"https://osmand.net/features"
-#define kOsmAndFeaturesContourLinesPlugin  @"https://osmand.net/features/contour-lines-plugin"
-#define kOsmAndTermsOfUse  @"https://osmand.net/help-online/terms-of-use/"
-#define kOsmAndPrivacyPolicy  @"https://osmand.net/help-online/privacy-policy"
+#define kOsmAndFeatures  @"https://osmand.net/docs/user/plugins"
+#define kOsmAndFeaturesContourLinesPlugin  @"https://osmand.net/docs/user/plugins/contour-lines"
+#define kOsmAndTermsOfUse  @"https://osmand.net/docs/legal/terms-of-use"
+#define kOsmAndPrivacyPolicy  @"https://osmand.net/docs/legal/privacy-policy"
 #define kOsmAndGiveaway  @"https://osmand.net/giveaway"
 
 #define kAppleRedeemPromoCode  @"https://support.apple.com/en-gb/HT201209"
-#define kAppleManageSubscriptions @"https://buy.itunes.apple.com/WebObjects/MZFinance.woa/wa/manageSubscriptions"
+#define kAppleManageSubscriptions @"https://apps.apple.com/account/subscriptions"
 
 #define kWeatherTilesUrlPrefix @"https://osmand.net/weather/gfs/tiff/"
 

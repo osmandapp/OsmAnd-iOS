@@ -726,6 +726,11 @@
                               [self, &limit, &phrase, &lang, transliterate, &nm, &currentResId, &resultMatcher, &ids]
                               (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
                               {
+                                
+//                                  if (phrase.getSettings().isExportObjects()) {
+//                                      resultMatcher.exportObject(phrase, object);
+//                                  }
+            
                                   if (limit++ > LIMIT)
                                       return false;
                                   
@@ -1422,7 +1427,7 @@
             }
             else
             {
-                NSString *ref = [*poi getContentLanguage:REF lang:nil defLang:@"en"];
+                NSString *ref = [*poi getContentLanguage:POI_REF lang:nil defLang:@"en"];
                 if (!ref || ![ns matches:ref])
                 {
                     return NO;

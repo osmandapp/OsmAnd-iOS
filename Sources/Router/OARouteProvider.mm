@@ -1523,7 +1523,7 @@
     NSTimeInterval time = [[NSDate date] timeIntervalSince1970];
     if (params.start && params.end)
     {
-        params.calculationProgress->routingCalculatedTime = time;
+//        params.calculationProgress->routeCalculationStartTime = time;
         NSLog(@"Start finding route from %@ to %@ using %@", params.start, params.end, [OARouteService getName:(EOARouteService)params.mode.getRouterService]);
         try
         {

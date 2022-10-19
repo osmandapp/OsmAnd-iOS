@@ -467,6 +467,15 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
 - (void) parseLocation
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        if (_isOlcCitySearchRunning)
+        {
+            [[OAQuickSearchHelper instance] cancelSearchCities];
+            _isOlcCitySearchRunning = NO;
+            [self updateDistanceAndDirection:YES];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.view removeSpinner];
+            });
+        }
         CLLocation *loc = nil;
         CLLocation *additionalLoc = nil;
         try
@@ -760,9 +769,49 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
         }
         else
         {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.view addSpinner];
+            });
             _searchLocation = mapLocation;
+            
+            //My fix
             _region = _olcSearchingCity;
-            [self startAsyncCitySearching];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self startAsyncCitySearching];
+            });
+            
+//            [self startAsyncCitySearching];
+            
+            
+            
+            
+            //Skali fix
+            /*
+            _region = cityName;
+            _isOlcCitySearchRunning = YES;
+            [[OAQuickSearchHelper instance] searchCities:cityName
+                               searchLocation:_searchLocation
+                                 allowedTypes:@[@"city", @"town", @"village"]
+                                    cityLimit:kSearchCityLimit
+                                   onComplete:^(NSMutableArray *amenities)
+                                   {
+                                       _isOlcCitySearchRunning = NO;
+                                       if (amenities && amenities.count > 0)
+                                       {
+                                           OASearchResult *firstResult = amenities[0];
+                                           if (firstResult && firstResult.location)
+                                           {
+                                               _searchLocation = firstResult.location;
+                                               [self updateDistanceAndDirection:YES];
+                                           }
+                                       }
+                                        dispatch_async(dispatch_get_main_queue(), ^{
+                                            [self.view removeSpinner];
+                                        });
+                                   }
+            ];
+            */
         }
     }
     if (codeArea)

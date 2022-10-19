@@ -11,9 +11,9 @@
 #import "OABackupInfo.h"
 #import "OABackupError.h"
 #import "OABackupHelper.h"
-#import "Reachability.h"
 #import "Localization.h"
 #import "OAColors.h"
+#import <AFNetworking/AFNetworkReachabilityManager.h>
 
 @implementation OABackupStatus
 
@@ -54,7 +54,7 @@ static OABackupStatus *ERROR;
                                                       warningIconName:nil warningTitle:nil
                                                    warningDescription:nil
                                                           actionTitle:OALocalizedString(@"cloud_backup_now")
-                                                            iconColor:-1];
+                                                            iconColor:color_support_green];
     }
     return BACKUP_COMPLETE;
 }
@@ -63,12 +63,12 @@ static OABackupStatus *ERROR;
     if (!MAKE_BACKUP)
     {
         MAKE_BACKUP = [[OABackupStatus alloc] initWithStatusTitle:OALocalizedString(@"cloud_last_backup")
-                                                   statusIconName:@"ic_custom_cloud"
+                                                   statusIconName:@"ic_custom_cloud_info"
                                                   warningIconName:@"ic_custom_alert_circle"
                                                      warningTitle:OALocalizedString(@"cloud_make_backup")
                                                warningDescription:OALocalizedString(@"cloud_make_backup_descr")
                                                       actionTitle:OALocalizedString(@"cloud_backup_now")
-                                                        iconColor:color_support_green];
+                                                        iconColor:color_primary_red];
     }
     return MAKE_BACKUP;
 }
@@ -78,7 +78,7 @@ static OABackupStatus *ERROR;
     if (!CONFLICTS)
     {
         CONFLICTS = [[OABackupStatus alloc] initWithStatusTitle:OALocalizedString(@"cloud_last_backup")
-                                                 statusIconName:@"ic_custom_cloud_alert"
+                                                 statusIconName:@"ic_custom_cloud_info"
                                                 warningIconName:@"ic_custom_alert"
                                                    warningTitle:OALocalizedString(@"cloud_conflicts")
                                              warningDescription:OALocalizedString(@"cloud_conflicts_descr")
@@ -93,12 +93,12 @@ static OABackupStatus *ERROR;
     if (!NO_INTERNET_CONNECTION)
     {
         NO_INTERNET_CONNECTION = [[OABackupStatus alloc] initWithStatusTitle:OALocalizedString(@"cloud_last_backup")
-                                                              statusIconName:@"ic_custom_cloud_alert"
+                                                              statusIconName:@"ic_custom_cloud_done"
                                                              warningIconName:@"ic_custom_wifi_off"
                                                                 warningTitle:OALocalizedString(@"no_inet_connection")
                                                           warningDescription:OALocalizedString(@"osm_upload_no_internet")
                                                                  actionTitle:OALocalizedString(@"shared_string_retry")
-                                                                   iconColor:color_osmand_orange];
+                                                                   iconColor:profile_icon_color_green_light];
     }
     return NO_INTERNET_CONNECTION;
 }
@@ -108,12 +108,12 @@ static OABackupStatus *ERROR;
     if (!SUBSCRIPTION_EXPIRED)
     {
         SUBSCRIPTION_EXPIRED = [[OABackupStatus alloc] initWithStatusTitle:OALocalizedString(@"cloud_last_backup")
-                                                            statusIconName:@"ic_custom_cloud_alert"
+                                                            statusIconName:@"ic_custom_cloud_done"
                                                            warningIconName:@"ic_custom_osmand_pro_logo_colored"
                                                               warningTitle:OALocalizedString(@"backup_error_subscription_was_expired")
                                                         warningDescription:OALocalizedString(@"backup_error_subscription_was_expired_descr")
                                                                actionTitle:OALocalizedString(@"renew_subscription")
-                                                                 iconColor:-1];
+                                                                 iconColor:profile_icon_color_green_light];
     }
     return SUBSCRIPTION_EXPIRED;
 }
@@ -157,7 +157,7 @@ static OABackupStatus *ERROR;
             return OABackupStatus.MAKE_BACKUP;
         }
     }
-    else if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable)
+    else if (!AFNetworkReachabilityManager.sharedManager.isReachable)
     {
         return OABackupStatus.NO_INTERNET_CONNECTION;
     }

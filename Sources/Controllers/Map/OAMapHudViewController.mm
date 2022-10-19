@@ -307,14 +307,20 @@
 
 -(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
-    
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         [self applyCorrectViewSize];
-        [self setupBottomContolMarginsForHeight:0];
         [self updateControlsLayout:[self getHudTopOffset]];
+        BOOL showWeatherToolbar = [self shouldShowWeatherToolbar];
+        if (showWeatherToolbar)
+        {
+            [_mapInfoController updateWeatherToolbarVisible];
+            [_weatherToolbar reloadLayersCollectionView];
+        }
+        if (!showWeatherToolbar || [OAUtilities isLandscape])
+            [self setupBottomContolMarginsForHeight:0];
     } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
         [self updateMapRulerData];
-    }  ];
+    }];
 }
 
 - (void) updateRulerPosition:(CGFloat)bottom left:(CGFloat)left
@@ -491,7 +497,7 @@
 
 - (BOOL) isLocationAvailable
 {
-    return _app.locationServices.lastKnownLocation && _app.locationServices.status == OALocationServicesStatusActive && _app.locationServices.available && !_app.locationServices.denied;
+    return _app.locationServices.lastKnownLocation && _app.locationServices.status == OALocationServicesStatusActive && !_app.locationServices.denied;
 }
 
 - (void) updateMapModeButtonIfNeeded

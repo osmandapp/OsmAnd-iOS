@@ -215,6 +215,7 @@
 #define oprUseDevUrlKey @"opr_use_dev_url"
 #define offlineEditingKey @"offline_editing"
 #define osmUseDevUrlKey @"use_dev_url"
+#define mapperLiveUpdatesExpireTimeKey @"mapper_live_updates_expire_time"
 
 #define showMapillaryKey @"show_mapillary"
 #define onlinePhotosRowCollapsedKey @"onlinePhotosRowCollapsed"
@@ -376,6 +377,7 @@
 #define favoritesTabKey @"favoritesTab"
 
 #define fluorescentOverlaysKey @"fluorescentOverlays"
+#define keepMapLabelsVisibleKey @"keepMapLabelsVisible"
 
 #define numberOfFreeDownloadsKey @"numberOfFreeDownloads"
 
@@ -385,6 +387,11 @@
 #define rateUsStateKey @"rateUsState"
 
 #define animateMyLocationKey @"animateMyLocation"
+
+#define lastGlobalSettingsModifiedTimeKey @"lastGlobalSettingsModifiedTime"
+#define lastProfileSettingsModifiedTimeKey @"lastProfileSettingsModifiedTime"
+
+#define lastUUIDChangeTimestampKey @"lastUUIDChangeTimestamp"
 
 @implementation OACompassMode
 
@@ -1332,13 +1339,56 @@
 
 - (void)setValue:(NSObject *)value mode:(OAApplicationMode *)mode
 {
+    id oldVal = [self getValue:mode];
+    oldVal = oldVal ? oldVal : value;
+    BOOL bothNil = value == nil && oldVal == nil;
+    BOOL changed = !bothNil && ![value isEqual:oldVal];
     if (self.global)
+    {
         self.cachedValue = value;
+    }
     else
+    {
         [self.cachedValues setObject:value forKey:mode];
+    }
+    if (changed)
+    {
+        if (self.global && self.shared)
+            [[NSUserDefaults standardUserDefaults] setObject:@(NSDate.date.timeIntervalSince1970) forKey:lastGlobalSettingsModifiedTimeKey];
+        else if (!self.global && mode)
+            [[NSUserDefaults standardUserDefaults] setObject:@(NSDate.date.timeIntervalSince1970) forKey:[NSString stringWithFormat:@"%@_%@", lastProfileSettingsModifiedTimeKey, mode.stringKey]];
+    }
+    if (self.lastModifiedTimeStored)
+       [self setLastModifiedTime:NSDate.date.timeIntervalSince1970];
 
     [[NSUserDefaults standardUserDefaults] setObject:value forKey:[self getKey:mode]];
     [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSetProfileSetting object:self];
+}
+
+- (BOOL) isSetForMode:(OAApplicationMode *)mode
+{
+    return [self getValue:mode] != nil;
+}
+
+- (long)lastModifiedTime
+{
+    if (self.lastModifiedTimeStored)
+        return [[[NSUserDefaults standardUserDefaults] objectForKey:self.getLastModifiedTimeId] longValue];
+    else
+        @throw [NSException exceptionWithName:@"IllegalStateException" reason:[NSString stringWithFormat:@"Setting %@  is not granted to store last modified time", self.key] userInfo:nil];
+}
+
+- (void)setLastModifiedTime:(long)lastModifiedTime
+{
+    if (self.lastModifiedTimeStored)
+        [[NSUserDefaults standardUserDefaults] setObject:@(lastModifiedTime) forKey:self.getLastModifiedTimeId];
+    else
+        @throw [NSException exceptionWithName:@"IllegalStateException" reason:[NSString stringWithFormat:@"Setting %@  is not granted to store last modified time", self.key] userInfo:nil];
+}
+
+- (NSString *) getLastModifiedTimeId
+{
+    return [self.key stringByAppendingString:@"_last_modified"];
 }
 
 - (void)setModeDefaultValue:(NSObject *)defValue mode:(OAApplicationMode *)mode
@@ -3439,6 +3489,8 @@
         _emailSubscribed = [[OACommonBoolean withKey:emailSubscribedKey defValue:NO] makeGlobal];
         _osmandProPurchased = [[OACommonBoolean withKey:osmandProPurchasedKey defValue:NO] makeGlobal];
         _osmandMapsPurchased = [[OACommonBoolean withKey:osmandMapsPurchasedKey defValue:NO] makeGlobal];
+        _mapperLiveUpdatesExpireTime = [[OACommonLong withKey:mapperLiveUpdatesExpireTimeKey defValue:0] makeGlobal];
+
         _lastReceiptValidationDate = [[NSUserDefaults standardUserDefaults] objectForKey:lastReceiptValidationDateKey] ? [NSDate dateWithTimeIntervalSince1970:[[NSUserDefaults standardUserDefaults] doubleForKey:lastReceiptValidationDateKey]] : [NSDate dateWithTimeIntervalSince1970:0];
         _eligibleForIntroductoryPrice = [[NSUserDefaults standardUserDefaults] objectForKey:eligibleForIntroductoryPriceKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:eligibleForIntroductoryPriceKey] : NO;
         _eligibleForSubscriptionOffer = [[NSUserDefaults standardUserDefaults] objectForKey:eligibleForSubscriptionOfferKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:eligibleForSubscriptionOfferKey] : NO;
@@ -3461,6 +3513,7 @@
         [_globalPreferences setObject:_emailSubscribed forKey:@"email_subscribed"];
         [_globalPreferences setObject:_osmandProPurchased forKey:@"billing_osmand_pro_purchased"];
         [_globalPreferences setObject:_osmandMapsPurchased forKey:@"billing_osmand_maps_purchased"];
+        [_globalPreferences setObject:_mapperLiveUpdatesExpireTime forKey:@"mapper_live_updates_expire_time"];
 
         _shouldShowWhatsNewScreen = [[NSUserDefaults standardUserDefaults] objectForKey:shouldShowWhatsNewScreenKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:shouldShowWhatsNewScreenKey] : YES;
 
@@ -4032,7 +4085,7 @@
         [_globalPreferences setObject:_showDownloadMapDialog forKey:@"show_download_map_dialog"];
 
         _sendAnonymousMapDownloadsData = [[[OACommonBoolean withKey:sendAnonymousMapDownloadsDataKey defValue:NO] makeGlobal] makeShared];
-        _sendAnonymousAppUsageData = [[[OACommonBoolean withKey:sendAnonymousAppUsageDataKey defValue:NO] makeGlobal] makeShared];
+        _sendAnonymousAppUsageData = [[[OACommonBoolean withKey:sendAnonymousAppUsageDataKey defValue:YES] makeGlobal] makeShared];
         _sendAnonymousDataRequestProcessed = [[[OACommonBoolean withKey:sendAnonymousDataRequestProcessedKey defValue:NO] makeGlobal] makeShared];
         _sendAnonymousDataRequestCount = [[OACommonInteger withKey:sendAnonymousDataRequestCountKey defValue:0] makeGlobal];
         _sendAnonymousDataLastRequestNs = [[OACommonInteger withKey:sendAnonymousDataLastRequestNsKey defValue:-1] makeGlobal];
@@ -4209,6 +4262,9 @@
 
         _fluorescentOverlays = [[[OACommonBoolean withKey:fluorescentOverlaysKey defValue:NO] makeGlobal] makeShared];
         [_globalPreferences setObject:_fluorescentOverlays forKey:@"fluorescent_overlays"];
+        
+        _keepMapLabelsVisible = [[[OACommonBoolean withKey:keepMapLabelsVisibleKey defValue:NO] makeGlobal] makeShared];
+        [_globalPreferences setObject:_keepMapLabelsVisible forKey:@"keep_map_labels_visible"];
 
         _numberOfFreeDownloads = [[OACommonInteger withKey:numberOfFreeDownloadsKey defValue:0] makeGlobal];
         [_globalPreferences setObject:_numberOfFreeDownloads forKey:@"free_downloads_v3"];
@@ -4222,6 +4278,8 @@
         [_globalPreferences setObject:_lastCheckedUpdates forKey:@"last_checked_updates"];
         [_globalPreferences setObject:_numberOfAppStartsOnDislikeMoment forKey:@"number_of_app_starts_on_dislike_moment"];
         [_globalPreferences setObject:_rateUsState forKey:@"rate_us_state"];
+        
+        _lastUUIDChangeTimestamp = [[OACommonLong withKey:lastUUIDChangeTimestampKey defValue:0] makeGlobal];
 
         [self fetchImpassableRoads];
 
@@ -4876,6 +4934,26 @@
     NSString *appModeKeys = self.customAppModes.get;
     NSArray<NSString *> *keysArr = [appModeKeys componentsSeparatedByString:@","];
     return [NSSet setWithArray:keysArr];
+}
+
+- (long) getLastGloblalSettingsModifiedTime
+{
+    return [[[NSUserDefaults standardUserDefaults] objectForKey:lastGlobalSettingsModifiedTimeKey] longValue];
+}
+
+- (void) setLastGlobalModifiedTime:(long)timestamp
+{
+    [[NSUserDefaults standardUserDefaults] setObject:@(timestamp) forKey:lastGlobalSettingsModifiedTimeKey];
+}
+
+- (long) getLastProfileSettingsModifiedTime:(OAApplicationMode *)mode
+{
+    return [[[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@_%@", lastProfileSettingsModifiedTimeKey, mode.stringKey]] longValue];
+}
+
+- (void) setLastProfileModifiedTime:(long)timestamp mode:(OAApplicationMode *)mode
+{
+    [[NSUserDefaults standardUserDefaults] setObject:@(timestamp) forKey:[NSString stringWithFormat:@"%@_%@", lastProfileSettingsModifiedTimeKey, mode.stringKey]];
 }
 
 @end

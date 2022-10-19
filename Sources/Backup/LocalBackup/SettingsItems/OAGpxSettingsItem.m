@@ -8,6 +8,7 @@
 
 #import "OAGpxSettingsItem.h"
 #import "OAGpxAppearanceInfo.h"
+#import "OAGPXUIHelper.h"
 
 @interface OAGpxSettingsItem()
 
@@ -59,6 +60,11 @@
 - (EOASettingsItemFileSubtype)subtype
 {
     return EOASettingsItemFileSubtypeGpx;
+}
+
+- (NSString *)getPublicName
+{
+    return [self.filePath.lastPathComponent stringByDeletingPathExtension];
 }
  
 - (void) readFromJson:(id)json error:(NSError * _Nullable __autoreleasing *)error

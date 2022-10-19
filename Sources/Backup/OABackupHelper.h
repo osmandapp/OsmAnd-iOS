@@ -45,6 +45,7 @@
 
 + (NSString *) USER_REGISTER_URL;
 + (NSString *) DEVICE_REGISTER_URL;
++ (NSString *) LIST_FILES_URL;
 + (NSString *) DELETE_FILE_VERSION_URL;
 + (NSString *) DELETE_FILE_URL;
 
@@ -53,6 +54,10 @@
 + (NSString *) getItemFileName:(OASettingsItem *)item;
 + (NSString *) getFileItemName:(OAFileSettingsItem *)fileSettingsItem;
 + (NSString *)getFileItemName:(NSString *)filePath fileSettingsItem:(OAFileSettingsItem *)fileSettingsItem;
+
++ (void) setLastModifiedTime:(NSString *)name;
++ (void) setLastModifiedTime:(NSString *)name lastModifiedTime:(long)lastModifiedTime;
++ (long) getLastModifiedTime:(NSString *)name;
 
 - (OACommonBoolean *) getBackupTypePref:(OAExportSettingsType *)type;
 - (OACommonBoolean *) getVersionHistoryTypePref:(OAExportSettingsType *)type;
@@ -63,6 +68,7 @@
 - (NSString *) getAccessToken;
 - (NSString *) getEmail;
 - (BOOL) isRegistered;
+- (NSInteger)getMaximumAccountSize;
 
 - (void) logout;
 - (void) updateOrderId:(void(^)(NSInteger status, NSString *message, NSString *error))listener;
@@ -74,6 +80,10 @@
 - (NSArray<NSString *> *) collectItemFilesForUpload:(OAFileSettingsItem *)item;
 - (void) collectLocalFiles:(id<OAOnCollectLocalFilesListener>)listener;
 - (void) downloadFileList:(void(^)(NSInteger status, NSString *message, NSArray<OARemoteFile *> *remoteFiles))onComplete;
+- (void) deleteAllFiles:(NSArray<OAExportSettingsType *> *)types;
+- (void) deleteAllFiles:(NSArray<OAExportSettingsType *> *)types listener:(id<OAOnDeleteFilesListener>)listener;
+- (void) deleteOldFiles:(NSArray<OAExportSettingsType *> *)types;
+- (void) deleteOldFiles:(NSArray<OAExportSettingsType *> *)types listener:(id<OAOnDeleteFilesListener>)listener;
 - (NSString *)downloadFile:(NSString *)filePath
                 remoteFile:(OARemoteFile *)remoteFile
                   listener:(id<OAOnDownloadFileListener>)listener;
@@ -85,6 +95,7 @@
 - (NSString *) uploadFile:(NSString *)fileName
                      type:(NSString *)type
                      data:(NSData *)data
+                     size:(int)size
                uploadTime:(NSTimeInterval)uploadTime
                  listener:(id<OAOnUploadFileListener>)listener;
 

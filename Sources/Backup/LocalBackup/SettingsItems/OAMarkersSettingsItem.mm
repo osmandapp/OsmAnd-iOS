@@ -66,6 +66,21 @@
     return @".gpx";
 }
 
+- (NSString *)getPublicName
+{
+    return OALocalizedString(@"map_markers");
+}
+
+- (long)localModifiedTime
+{
+    return [_destinationsHelper getMarkersLastModifiedTime];
+}
+
+- (void)setLocalModifiedTime:(long)localModifiedTime
+{
+    [_destinationsHelper setMarkersLastModifiedTime:localModifiedTime];
+}
+
 - (void) apply
 {
    NSArray<OADestination *> *newItems = [self getNewItems];

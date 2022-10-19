@@ -71,6 +71,7 @@
         [p setBackgroundIcon:@"circle"];
         [p setExtension:ADDRESS_EXTENSION value:@""];
         [p setAmenity:poi];
+        [p setAmenityOriginName:poi.toStringEn];
 
         wpt.color = color;
         wpt.point = p;
@@ -208,6 +209,11 @@
 {
     if (self.gpxWptDelegate)
         [self.gpxWptDelegate deleteGpxWpt:_gpxWpt docPath:_gpxFileName];
+}
+
+- (void)deleteItem:(BOOL)isNewItemAdding
+{
+    [self deleteItem];
 }
 
 - (void)savePoint:(OAPointEditingData *)data newPoint:(BOOL)newPoint

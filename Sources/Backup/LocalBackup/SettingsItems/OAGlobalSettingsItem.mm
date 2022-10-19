@@ -24,7 +24,7 @@
     return @"general_settings";
 }
 
-- (NSString *) publicName
+- (NSString *)getPublicName
 {
     return OALocalizedString(@"general_settings_2");
 }
@@ -32,6 +32,16 @@
 - (BOOL)exists
 {
     return YES;
+}
+
+- (long)localModifiedTime
+{
+    return [OAAppSettings.sharedManager getLastGloblalSettingsModifiedTime];
+}
+
+- (void)setLocalModifiedTime:(long)localModifiedTime
+{
+    [OAAppSettings.sharedManager setLastGlobalModifiedTime:localModifiedTime];
 }
 
 - (long)getEstimatedSize

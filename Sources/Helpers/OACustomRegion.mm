@@ -14,7 +14,7 @@
 #import "OADownloadDescriptionInfo.h"
 #import "OAOcbfHelper.h"
 #import "OsmAndApp.h"
-#import "Reachability.h"
+#import <AFNetworking/AFNetworkReachabilityManager.h>
 
 #import <TTTColorFormatter.h>
 
@@ -241,7 +241,7 @@
 {
     if (!_dynamicItemsJson && _dynamicDownloadItems
         && _dynamicDownloadItems.url.length > 0
-        && [Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
+        && AFNetworkReachabilityManager.sharedManager.isReachable)
     {
         NSURL *urlObj = [[NSURL alloc] initWithString:_dynamicDownloadItems.url];
         NSURLSession *aSession = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];

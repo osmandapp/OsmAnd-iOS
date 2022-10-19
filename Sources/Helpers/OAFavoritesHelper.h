@@ -47,6 +47,7 @@
 + (OAFavoriteGroup *) getOrCreateGroup:(OAFavoriteItem *)item defColor:(UIColor *)defColor;
 + (BOOL) deleteNewFavoriteItem:(OAFavoriteItem *)favoritesItem;
 + (BOOL) deleteFavoriteGroups:(NSArray<OAFavoriteGroup *> *)groupsToDelete andFavoritesItems:(NSArray<OAFavoriteItem *> *)favoritesItems;
++ (BOOL) deleteFavoriteGroups:(NSArray<OAFavoriteGroup *> *)groupsToDelete andFavoritesItems:(NSArray<OAFavoriteItem *> *)favoritesItems isNewFavorite:(BOOL)isNewFavorite;
 
 + (NSDictionary<NSString *, NSString *> *) checkDuplicates:(OAFavoriteItem *)point;
 + (NSString *) checkEmoticons:(NSString *)text;

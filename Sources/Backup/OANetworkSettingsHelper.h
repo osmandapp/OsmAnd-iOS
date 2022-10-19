@@ -8,8 +8,6 @@
 
 #import "OASettingsHelper.h"
 
-NS_ASSUME_NONNULL_BEGIN
-
 #define kBackupItemsKey @"backup_items_key"
 #define kRestoreItemsKey @"restore_items_key"
 #define kPrepareBackupKey @"prepare_backup_key"
@@ -78,5 +76,3 @@ NS_ASSUME_NONNULL_BEGIN
                listener:(id<OABackupExportListener>)listener;
 
 @end
-
-NS_ASSUME_NONNULL_END

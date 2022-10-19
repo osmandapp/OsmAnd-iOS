@@ -11,7 +11,7 @@
 #import "OAAppSettings.h"
 #import "OAIAPHelper.h"
 #include "Localization.h"
-#import "Reachability.h"
+#import <AFNetworking/AFNetworkReachabilityManager.h>
 
 #define kLiveUpdatesOnPrefix @"live_updates_on_"
 #define kLiveUpdatesWifiPrefix @"download_via_wifi_"
@@ -131,9 +131,9 @@
         NSString *regionNameStr = regionName.toNSString();
         if ([OAOsmAndLiveHelper getPreferenceEnabledForLocalIndex:regionNameStr])
         {
-            NetworkStatus status = [Reachability reachabilityForInternetConnection].currentReachabilityStatus;
+            AFNetworkReachabilityStatus status = AFNetworkReachabilityManager.sharedManager.networkReachabilityStatus;
             BOOL downloadOnlyViaWiFi = [OAOsmAndLiveHelper getPreferenceWifiForLocalIndex:regionNameStr];
-            if (status == NotReachable || (status != ReachableViaWiFi && downloadOnlyViaWiFi))
+            if (status == AFNetworkReachabilityStatusNotReachable || (status != AFNetworkReachabilityStatusReachableViaWiFi && downloadOnlyViaWiFi))
                 return;
 
             NSTimeInterval updateTime = [OAOsmAndLiveHelper getPreferenceLastUpdateForLocalIndex:regionNameStr];

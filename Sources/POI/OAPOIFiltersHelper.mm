@@ -11,6 +11,7 @@
 #import "OASearchByNameFilter.h"
 #import "Localization.h"
 #import "OAPOIHelper.h"
+#import "OABackupHelper.h"
 #import "OAUtilities.h"
 #import "OAPOIBaseType.h"
 #import "OAPOIType.h"
@@ -49,6 +50,8 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
 #define CATEGORIES_COL_CATEGORY @"category"
 #define CATEGORIES_COL_SUBCATEGORY @"subcategory"
 #define CATEGORIES_TABLE_CREATE @"CREATE TABLE categories (filter_id, category, subcategory);"
+
+#define FILTERS_LAST_MODIFIED_NAME @"poi_filters"
 
 @interface OAPOIFilterDbHelper : NSObject
 
@@ -356,6 +359,37 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
     return YES;
 }
 
+- (long)getLastModifiedTime
+{
+    long lastModifiedTime = [OABackupHelper getLastModifiedTime:FILTERS_LAST_MODIFIED_NAME];
+    if (lastModifiedTime == 0)
+    {
+        lastModifiedTime = [self getDBLastModifiedTime];
+        [OABackupHelper setLastModifiedTime:FILTERS_LAST_MODIFIED_NAME lastModifiedTime:lastModifiedTime];
+    }
+    return lastModifiedTime;
+}
+
+- (void) setLastModifiedTime:(long)lastModified
+{
+    [OABackupHelper setLastModifiedTime:FILTERS_LAST_MODIFIED_NAME lastModifiedTime:lastModified];
+}
+
+- (long) getDBLastModifiedTime
+{
+    NSFileManager *manager = NSFileManager.defaultManager;
+    if ([manager fileExistsAtPath:databasePath])
+    {
+        NSError *err = nil;
+        NSDictionary *attrs = [manager attributesOfItemAtPath:databasePath error:&err];
+        if (!err)
+        {
+            return attrs.fileModificationDate.timeIntervalSince1970;
+        }
+    }
+    return 0;
+}
+
 @end
 
 
@@ -399,6 +433,16 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
                                                               andObserve:OsmAndApp.instance.data.applicationModeChangedObservable];
     }
     return self;
+}
+
+- (long)getLastModifiedTime
+{
+    return [_helper getLastModifiedTime];
+}
+
+- (void) setLastModifiedTime:(long)lastModified
+{
+    [_helper setLastModifiedTime:lastModified];
 }
 
 - (void) onApplicationModeChanged

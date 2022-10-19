@@ -45,6 +45,16 @@
     return EOASettingsItemTypeOsmNotes;
 }
 
+- (long)localModifiedTime
+{
+    return [OAOsmBugsDBHelper sharedDatabase].getLastModifiedTime;
+}
+
+- (void)setLocalModifiedTime:(long)localModifiedTime
+{
+    [[OAOsmBugsDBHelper sharedDatabase] setLastModifiedTime:localModifiedTime];
+}
+
 - (void) apply
 {
     NSArray<OAOsmNotePoint *>*newItems = [self getNewItems];
@@ -85,7 +95,7 @@
     return @"osm_notes";
 }
 
-- (NSString *) publicName
+- (NSString *) getPublicName
 {
     return OALocalizedString(@"osm_notes");
 }

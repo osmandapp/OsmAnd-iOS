@@ -252,7 +252,7 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
                         OALog(@"Set (%@) NSURLIsExcludedFromBackupKey for %@", (res ? @"OK" : @"FAILED"), resource->localPath.toNSString());
 
                         NSString *ext = [[resource->localPath.toNSString() pathExtension] lowercaseString];
-                        NSString *type = [[[resource->localPath.toNSString() stringByDeletingPathExtension] pathExtension] lowercaseString];
+                        NSString *type = [[[nsResourceId stringByDeletingPathExtension] pathExtension] lowercaseString];
                         if ([ext isEqualToString:@"sqlitedb"] && ([type isEqualToString:@"hillshade"] || [type isEqualToString:@"slope"]))
                             [_app.data.terrainResourcesChangeObservable notifyEvent];
 

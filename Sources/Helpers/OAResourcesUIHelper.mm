@@ -7,7 +7,7 @@
 //
 
 #import "OAResourcesUIHelper.h"
-#import <Reachability.h>
+#import <AFNetworking/AFNetworkReachabilityManager.h>
 #import <MBProgressHUD.h>
 #import "OALog.h"
 #import "OAIAPHelper.h"
@@ -847,7 +847,8 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         if (localResource->origin != OsmAnd::ResourcesManager::ResourceOrigin::Installed)
             continue;
         const auto& installedResource = std::static_pointer_cast<const OsmAnd::ResourcesManager::InstalledResource>(localResource);
-        if (resourceTypes.contains(installedResource->type))
+        // Skip mini basemap since it's builtin and not installed in ios
+        if (resourceTypes.contains(installedResource->type) && installedResource->id != QStringLiteral("worldminibasemap.obf"))
         {
             [items addObject:installedResource->localPath.toNSString()];
         }
@@ -1242,7 +1243,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 + (NSString *)messageResourceStartDownload:(NSString *)resourceName stringifiedSize:(NSString *)stringifiedSize isOutdated:(BOOL)isOutdated
 {
     NSMutableString *message;
-    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == ReachableViaWWAN)
+    if (AFNetworkReachabilityManager.sharedManager.isReachableViaWWAN)
     {
         message = !isOutdated ? [[NSString stringWithFormat:OALocalizedString(@"res_inst_avail_cell_q"), resourceName, stringifiedSize] mutableCopy] : [OALocalizedString(@"res_upd_avail_q") mutableCopy];
         [message appendString:@" "];
@@ -1315,11 +1316,11 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     if (![self.class verifySpaceAvailableDownloadAndUnpackResource:spaceNeeded withResourceName:resourceName asUpdate:YES])
         return;
     
-    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable)
+    if (!AFNetworkReachabilityManager.sharedManager.isReachable)
     {
         [self showNoInternetAlert];
     }
-    else if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == ReachableViaWiFi)
+    else if (AFNetworkReachabilityManager.sharedManager.isReachableViaWiFi)
     {
         [self.class startDownloadOfItem:item onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed];
     }
@@ -1384,11 +1385,11 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     if (![self.class verifySpaceAvailableDownloadAndUnpackResource:totalSpaceNeeded withResourceName:resourceName asUpdate:YES])
         return;
     
-    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable)
+    if (!AFNetworkReachabilityManager.sharedManager.isReachable)
     {
         [self showNoInternetAlert];
     }
-    else if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == ReachableViaWiFi)
+    else if (AFNetworkReachabilityManager.sharedManager.isReachableViaWiFi)
     {
         [self.class startDownloadOfItems:items onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed];
     }
@@ -1421,11 +1422,11 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     if (![self.class verifySpaceAvailableDownloadAndUnpackResource:spaceNeeded withResourceName:resourceName asUpdate:YES])
         return;
 
-    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable)
+    if (!AFNetworkReachabilityManager.sharedManager.isReachable)
     {
         [self showNoInternetAlert];
     }
-    else if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == ReachableViaWiFi)
+    else if (AFNetworkReachabilityManager.sharedManager.isReachableViaWiFi)
     {
         [self.class startDownloadOf:resourceInRepository resourceName:resourceName onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed];
     }
@@ -1635,10 +1636,11 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         MBProgressHUD *progressHUD = [[MBProgressHUD alloc] initWithView:view];
         [view addSubview:progressHUD];
         [progressHUD showAnimated:YES whileExecutingBlock:^{
-            [[OAWeatherHelper sharedInstance] prepareToStopDownloading:item.worldRegion.regionId];
-            if ([OAWeatherHelper getPreferenceDownloadState:item.worldRegion.regionId] == EOAWeatherForecastDownloadStateUndefined)
-                [[OAWeatherHelper sharedInstance] removeLocalForecast:item.worldRegion.regionId refreshMap:NO];
-            else if ([OAWeatherHelper getPreferenceDownloadState:item.worldRegion.regionId] == EOAWeatherForecastDownloadStateFinished)
+            NSString *regionId = [OAWeatherHelper checkAndGetRegionId:item.worldRegion];
+            [[OAWeatherHelper sharedInstance] prepareToStopDownloading:regionId];
+            if ([OAWeatherHelper getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateUndefined)
+                [[OAWeatherHelper sharedInstance] removeLocalForecast:regionId refreshMap:NO];
+            else if ([OAWeatherHelper getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateFinished)
                 [[OAWeatherHelper sharedInstance] calculateCacheSize:item.worldRegion onComplete:nil];
         } completionBlock:^{
             if (onTaskStop)
@@ -1712,8 +1714,9 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         {
             if (item.resourceType == OsmAndResourceType::WeatherForecast)
             {
-                [[OAWeatherHelper sharedInstance] prepareToStopDownloading:item.worldRegion.regionId];
-                [[OAWeatherHelper sharedInstance] removeLocalForecast:item.worldRegion.regionId refreshMap:item == items.lastObject];
+                NSString *regionId = [OAWeatherHelper checkAndGetRegionId:item.worldRegion];
+                [[OAWeatherHelper sharedInstance] prepareToStopDownloading:regionId];
+                [[OAWeatherHelper sharedInstance] removeLocalForecast:regionId refreshMap:item == items.lastObject];
             }
             else if ([item isKindOfClass:[OASqliteDbResourceItem class]])
             {

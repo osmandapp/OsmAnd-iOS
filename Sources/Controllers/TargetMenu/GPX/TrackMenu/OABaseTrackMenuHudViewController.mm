@@ -68,6 +68,8 @@
 
 @implementation OAGPXTableCellData
 
+@dynamic subjects;
+
 + (instancetype)withData:(NSDictionary *)data
 {
     OAGPXTableCellData *cellData = [OAGPXTableCellData new];
@@ -110,6 +112,8 @@
 @end
 
 @implementation OAGPXTableSectionData
+
+@dynamic subjects;
 
 + (instancetype)withData:(NSDictionary *)data
 {
@@ -408,8 +412,9 @@
         _mapViewController.mapView.viewportXScale = VIEWPORT_SHIFTED_SCALE;
     else if (!landscape && _mapViewController.mapView.viewportXScale != VIEWPORT_NON_SHIFTED_SCALE)
         _mapViewController.mapView.viewportXScale = VIEWPORT_NON_SHIFTED_SCALE;
-    if (_mapViewController.mapView.viewportYScale != [self getViewHeight] / DeviceScreenHeight)
-        _mapViewController.mapView.viewportYScale = [self getViewHeight] / DeviceScreenHeight;
+    CGFloat newYScale = (DeviceScreenHeight - [self getViewHeight]) / DeviceScreenHeight;
+    if (!landscape && _mapViewController.mapView.viewportYScale != newYScale)
+        _mapViewController.mapView.viewportYScale = newYScale;
 }
 
 - (void)restoreMapViewPort

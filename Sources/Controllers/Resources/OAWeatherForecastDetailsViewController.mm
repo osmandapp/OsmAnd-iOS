@@ -8,24 +8,20 @@
 
 #import "OAWeatherForecastDetailsViewController.h"
 #import "OAWeatherCacheSettingsViewController.h"
-#import "OAMenuSimpleCellNoIcon.h"
-#import "OAIconTitleValueCell.h"
-#import "OAIconTextDividerSwitchCell.h"
-#import "OATextLineViewCell.h"
+#import "OAWeatherFrequencySettingsViewController.h"
+#import "OASimpleTableViewCell.h"
+#import "OARightIconTableViewCell.h"
+#import "OAValueTableViewCell.h"
+#import "OATableViewCellSwitch.h"
 #import "MBProgressHUD.h"
 #import "OATableViewCustomHeaderView.h"
 #import "OAResourcesUIHelper.h"
 #import "OAWeatherHelper.h"
+#import "OASizes.h"
 #import "OAColors.h"
 #import "Localization.h"
 
-@interface OAWeatherForecastDetailsViewController  () <UITableViewDelegate, UITableViewDataSource, OAWeatherCacheSettingsDelegate>
-
-@property (weak, nonatomic) IBOutlet UIView *navigationBarView;
-@property (weak, nonatomic) IBOutlet UIButton *buttonNavigationBack;
-@property (weak, nonatomic) IBOutlet UILabel *labelNavigationTitle;
-@property (weak, nonatomic) IBOutlet UIView *viewNavigationSeparator;
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@interface OAWeatherForecastDetailsViewController  () <UITableViewDelegate, UITableViewDataSource, OAWeatherCacheSettingsDelegate, OAWeatherFrequencySettingsDelegate>
 
 @end
 
@@ -33,12 +29,14 @@
 {
     OAWeatherHelper *_weatherHelper;
     OAWorldRegion *_region;
-    NSMutableArray<NSMutableDictionary<NSString *, id> *> *_data;
+    NSMutableArray<NSMutableArray<NSMutableDictionary *> *> *_data;
+    NSMutableDictionary<NSNumber *, NSString *> *_headers;
+    NSMutableDictionary<NSNumber *, NSString *> *_footers;
+    NSInteger _accuracySection;
 
     MBProgressHUD *_progressHUD;
     NSIndexPath *_sizeIndexPath;
     NSIndexPath *_updateNowIndexPath;
-    BOOL _isHeaderBlurred;
 
     OAAutoObserverProxy *_weatherSizeCalculatedObserver;
     OAAutoObserverProxy *_weatherForecastDownloadingObserver;
@@ -66,27 +64,23 @@
             [[OAAutoObserverProxy alloc] initWith:self
                                       withHandler:@selector(onWeatherForecastDownloading:withKey:andValue:)
                                        andObserve:[OAWeatherHelper sharedInstance].weatherForecastDownloadingObserver];
+    _headers = [NSMutableDictionary dictionary];
+    _footers = [NSMutableDictionary dictionary];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 
-    self.labelNavigationTitle.text = _region.name;
-    [self.buttonNavigationBack setImage:[UIImage templateImageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
-    self.buttonNavigationBack.tintColor = UIColorFromRGB(color_primary_purple);
-    [self.view bringSubviewToFront:self.navigationBarView];
-    [self.view bringSubviewToFront:self.viewNavigationSeparator];
+    self.backButton.hidden = YES;
+    self.backImageButton.hidden = NO;
+
+    self.titleLabel.text = [OAWeatherHelper checkAndGetRegionName:_region];
 
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    self.tableView.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
-    self.tableView.contentInset = UIEdgeInsetsMake(
-            self.navigationBarView.frame.size.height - [OAUtilities getTopMargin],
-            self.tableView.contentInset.left,
-            self.tableView.contentInset.bottom,
-            self.tableView.contentInset.bottom
-    );
+    self.tableView.sectionFooterHeight = 0.001;
+    self.tableView.sectionHeaderHeight = kHeaderHeightDefault;
     [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
 
     [self setupView];
@@ -98,7 +92,8 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [_weatherHelper calculateCacheSize:_region onComplete:nil];
+    if (![_weatherHelper isOfflineForecastSizesInfoCalculated:[OAWeatherHelper checkAndGetRegionId:_region]])
+        [_weatherHelper calculateCacheSize:_region onComplete:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -117,95 +112,124 @@
     }
 }
 
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    if (@available(iOS 13.0, *))
+        return UIStatusBarStyleDarkContent;
+
+    return UIStatusBarStyleDefault;
+}
+
+- (BOOL)isSeparatorHidden
+{
+    return NO;
+}
+
+- (NSString *)getTableHeaderTitle
+{
+    return [OAWeatherHelper checkAndGetRegionName:_region];
+}
+
+- (void)setTableHeaderView:(NSString *)label
+{
+    UIView *headerView = [OAUtilities setupTableHeaderViewWithText:label
+                                                              font:[UIFont systemFontOfSize:34.0 weight:UIFontWeightBold]
+                                                         textColor:UIColor.blackColor
+                                                       lineSpacing:0.0
+                                                           isTitle:YES];
+    
+    UIView *separator = [[UIView alloc] initWithFrame:CGRectMake(
+        0.,
+        headerView.layer.frame.size.height - 1.,
+        DeviceScreenWidth,
+        1.
+    )];
+    separator.backgroundColor = UIColorFromRGB(color_tint_gray);
+    [headerView addSubview:separator];
+
+    self.tableView.tableHeaderView = headerView;
+}
+
 - (void)setupView
 {
-    NSMutableArray<NSMutableDictionary<NSString *, id> *> *data = [NSMutableArray array];
-
-    NSMutableArray<NSMutableDictionary *> *titleCells = [NSMutableArray array];
-    NSMutableDictionary *titleSection = [NSMutableDictionary dictionary];
-    titleSection[@"key"] = @"title_section";
-    titleSection[@"cells"] = titleCells;
-    [data addObject:titleSection];
-
-    NSMutableDictionary *forecastData = [NSMutableDictionary dictionary];
-    forecastData[@"key"] = @"title_cell";
-    forecastData[@"type"] = [OAMenuSimpleCellNoIcon getCellIdentifier];
-    forecastData[@"title"] = _region.name;
-    [titleCells addObject:forecastData];
+    NSMutableArray<NSMutableArray<NSMutableDictionary *> *> *data = [NSMutableArray array];
+    NSString *regionId = [OAWeatherHelper checkAndGetRegionId:_region];
 
     NSMutableArray<NSMutableDictionary *> *infoCells = [NSMutableArray array];
-    NSMutableDictionary *infoSection = [NSMutableDictionary dictionary];
-    infoSection[@"key"] = @"info_section";
-    infoSection[@"header"] = [OAWeatherHelper getAccuracyDescription:_region.regionId];
-    infoSection[@"cells"] = infoCells;
-    [data addObject:infoSection];
+    [data addObject:infoCells];
+    _accuracySection = data.count - 1;
+    _headers[@(_accuracySection)] = [OAWeatherHelper getAccuracyDescription:regionId];
 
     NSMutableDictionary *updatedData = [NSMutableDictionary dictionary];
     updatedData[@"key"] = @"updated_cell";
-    updatedData[@"type"] = [OAIconTitleValueCell getCellIdentifier];
+    updatedData[@"type"] = [OAValueTableViewCell getCellIdentifier];
     updatedData[@"title"] = OALocalizedString(@"shared_string_updated");
-    updatedData[@"description"] = [OAWeatherHelper getUpdatesDateFormat:_region.regionId next:NO];
-    updatedData[@"next_screen"] = @(NO);
+    updatedData[@"value"] = [OAWeatherHelper getUpdatesDateFormat:regionId next:NO];
+    updatedData[@"value_color"] = UIColor.blackColor;
+    updatedData[@"selection_style"] = @(UITableViewCellSelectionStyleNone);
     [infoCells addObject:updatedData];
 
-    /*NSMutableDictionary *nextUpdateData = [NSMutableDictionary dictionary];
+    NSMutableDictionary *nextUpdateData = [NSMutableDictionary dictionary];
     nextUpdateData[@"key"] = @"next_update_cell";
-    nextUpdateData[@"type"] = [OAIconTitleValueCell getCellIdentifier];
+    nextUpdateData[@"type"] = [OAValueTableViewCell getCellIdentifier];
     nextUpdateData[@"title"] = OALocalizedString(@"shared_string_next_update");
-    nextUpdateData[@"description"] = [OAWeatherHelper getUpdatesDateFormat:_region.regionId next:YES];
-    nextUpdateData[@"next_screen"] = @(NO);
-    [infoCells addObject:nextUpdateData];*/
+    nextUpdateData[@"value"] = [OAWeatherHelper getUpdatesDateFormat:regionId next:YES];
+    nextUpdateData[@"value_color"] = UIColor.blackColor;
+    nextUpdateData[@"selection_style"] = @(UITableViewCellSelectionStyleNone);
+    [infoCells addObject:nextUpdateData];
 
     NSMutableDictionary *updatesSizeData = [NSMutableDictionary dictionary];
     updatesSizeData[@"key"] = @"updates_size_cell";
-    updatesSizeData[@"type"] = [OAIconTitleValueCell getCellIdentifier];
+    updatesSizeData[@"type"] = [OAValueTableViewCell getCellIdentifier];
     updatesSizeData[@"title"] = OALocalizedString(@"shared_string_updates_size");
-    updatesSizeData[@"description"] = [NSByteCountFormatter stringFromByteCount:0
-                                                                     countStyle:NSByteCountFormatterCountStyleFile];
-    updatesSizeData[@"next_screen"] = @(YES);
+    updatesSizeData[@"value"] = [NSByteCountFormatter stringFromByteCount:[[OAWeatherHelper sharedInstance]getOfflineForecastSizeInfo:_region.regionId local:YES]
+                                                               countStyle:NSByteCountFormatterCountStyleFile];
+    updatesSizeData[@"value_color"] = UIColorFromRGB(color_text_footer);
+    updatesSizeData[@"selection_style"] = @(UITableViewCellSelectionStyleDefault);
     [infoCells addObject:updatesSizeData];
     _sizeIndexPath = [NSIndexPath indexPathForRow:infoCells.count - 1 inSection:data.count - 1];
 
     NSMutableDictionary *updateNowData = [NSMutableDictionary dictionary];
     updateNowData[@"key"] = @"update_now_cell";
-    updateNowData[@"type"] = [OAIconTitleValueCell getCellIdentifier];
+    updateNowData[@"type"] = [OARightIconTableViewCell getCellIdentifier];
     updateNowData[@"title"] = OALocalizedString(@"osmand_live_update_now");
-    updateNowData[@"next_screen"] = @(NO);
+    updateNowData[@"title_color"] = UIColorFromRGB(color_primary_purple);
+    updateNowData[@"title_font"] = [UIFont systemFontOfSize:17. weight:UIFontWeightMedium];
+    updateNowData[@"right_icon"] = @"ic_custom_download";
+    updateNowData[@"right_icon_color"] = UIColorFromRGB(color_primary_purple);
     [infoCells addObject:updateNowData];
     _updateNowIndexPath = [NSIndexPath indexPathForRow:infoCells.count - 1 inSection:data.count - 1];
 
-    /*NSMutableArray<NSMutableDictionary *> *updatesCells = [NSMutableArray array];
-    NSMutableDictionary *updatesSection = [NSMutableDictionary dictionary];
-    updatesSection[@"key"] = @"updates_section";
-    updatesSection[@"header"] = OALocalizedString(@"update_parameters");
-    updatesSection[@"footer"] = OALocalizedString(@"weather_updates_automatically");
-    updatesSection[@"cells"] = updatesCells;
-    [data addObject:updatesSection];
+    NSMutableArray<NSMutableDictionary *> *updatesCells = [NSMutableArray array];
+    [data addObject:updatesCells];
+    _headers[@(data.count - 1)] = OALocalizedString(@"update_parameters");
+    _footers[@(data.count - 1)] = OALocalizedString(@"weather_updates_automatically");
 
     NSMutableDictionary *updatesFrequencyData = [NSMutableDictionary dictionary];
     updatesFrequencyData[@"key"] = @"updates_frequency_cell";
-    updatesFrequencyData[@"type"] = [OAIconTitleValueCell getCellIdentifier];
+    updatesFrequencyData[@"type"] = [OAValueTableViewCell getCellIdentifier];
     updatesFrequencyData[@"title"] = OALocalizedString(@"shared_string_updates_frequency");
-    updatesFrequencyData[@"description"] = @"12 h";
-    updatesFrequencyData[@"next_screen"] = @(YES);
+    updatesFrequencyData[@"value"] = [OAWeatherHelper getFrequencyFormat:[OAWeatherHelper getPreferenceFrequency:regionId]];
+    updatesFrequencyData[@"value_color"] = UIColorFromRGB(color_text_footer);
+    updatesFrequencyData[@"selection_style"] = @(UITableViewCellSelectionStyleDefault);
     [updatesCells addObject:updatesFrequencyData];
 
     NSMutableDictionary *updateOnlyWiFiData = [NSMutableDictionary dictionary];
     updateOnlyWiFiData[@"key"] = @"update_only_wifi_cell";
-    updateOnlyWiFiData[@"type"] = [OAIconTextDividerSwitchCell getCellIdentifier];
+    updateOnlyWiFiData[@"type"] = [OATableViewCellSwitch getCellIdentifier];
     updateOnlyWiFiData[@"title"] = OALocalizedString(@"update_only_over_wi_fi");
-    [updatesCells addObject:updateOnlyWiFiData];*/
+    [updatesCells addObject:updateOnlyWiFiData];
 
     NSMutableArray<NSMutableDictionary *> *removeCells = [NSMutableArray array];
-    NSMutableDictionary *removeSection = [NSMutableDictionary dictionary];
-    removeSection[@"key"] = @"remove_section";
-    removeSection[@"cells"] = removeCells;
-    [data addObject:removeSection];
+    [data addObject:removeCells];
 
     NSMutableDictionary *removeForecastData = [NSMutableDictionary dictionary];
     removeForecastData[@"key"] = @"remove_forecast_cell";
-    removeForecastData[@"type"] = [OATextLineViewCell getCellIdentifier];
+    removeForecastData[@"type"] = [OASimpleTableViewCell getCellIdentifier];
     removeForecastData[@"title"] = OALocalizedString(@"weather_remove_forecast");
+    removeForecastData[@"title_color"] = UIColorFromRGB(color_primary_red);
+    removeForecastData[@"title_alignment"] = @(NSTextAlignmentCenter);
+    removeForecastData[@"title_font"] = [UIFont systemFontOfSize:17. weight:UIFontWeightMedium];
     [removeCells addObject:removeForecastData];
 
     _data = data;
@@ -217,14 +241,12 @@
         if (value != _region || !_sizeIndexPath)
             return;
 
-        uint64_t sizeLocal = [_weatherHelper getOfflineForecastSizeInfo:_region.regionId local:YES];
-        NSMutableDictionary *totalSizeData = _data[_sizeIndexPath.section][@"cells"][_sizeIndexPath.row];
+        uint64_t sizeLocal = [_weatherHelper getOfflineForecastSizeInfo:[OAWeatherHelper checkAndGetRegionId:_region] local:YES];
+        NSMutableDictionary *totalSizeData = _data[_sizeIndexPath.section][_sizeIndexPath.row];
         NSString *sizeString = [NSByteCountFormatter stringFromByteCount:sizeLocal
                                                               countStyle:NSByteCountFormatterCountStyleFile];
-        totalSizeData[@"description"] = sizeString;
+        totalSizeData[@"value"] = sizeString;
         [self.tableView reloadRowsAtIndexPaths:@[_sizeIndexPath] withRowAnimation:UITableViewRowAnimationNone];
-        if (_updateNowIndexPath)
-            [self.tableView reloadRowsAtIndexPaths:@[_updateNowIndexPath] withRowAnimation:UITableViewRowAnimationNone];
     });
 }
 
@@ -233,32 +255,33 @@
     if (value != _region)
         return;
 
-    if (_updateNowIndexPath)
+    if (_updateNowIndexPath && _sizeIndexPath)
     {
-        BOOL statusSizeCalculating = ![[OAWeatherHelper sharedInstance] isOfflineForecastSizesInfoCalculated:_region.regionId];
-        if ([OAWeatherHelper getPreferenceDownloadState:_region.regionId] == EOAWeatherForecastDownloadStateUndefined && !statusSizeCalculating)
+        NSString *regionId = [OAWeatherHelper checkAndGetRegionId:_region];
+        BOOL statusSizeCalculating = ![[OAWeatherHelper sharedInstance] isOfflineForecastSizesInfoCalculated:regionId];
+        if ([OAWeatherHelper getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateUndefined && !statusSizeCalculating)
             return;
 
         dispatch_async(dispatch_get_main_queue(), ^{
-            UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:_updateNowIndexPath];
+            UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:statusSizeCalculating ? _sizeIndexPath : _updateNowIndexPath];
             if (!cell.accessoryView)
             {
-                [self.tableView reloadRowsAtIndexPaths:@[_updateNowIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-                cell = [self.tableView cellForRowAtIndexPath:_updateNowIndexPath];
+                [self.tableView reloadRowsAtIndexPaths:@[statusSizeCalculating ? _sizeIndexPath : _updateNowIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+                cell = [self.tableView cellForRowAtIndexPath:statusSizeCalculating ? _sizeIndexPath : _updateNowIndexPath];
             }
 
             FFCircularProgressView *progressView = (FFCircularProgressView *) cell.accessoryView;
-            NSInteger progressDownloading = [_weatherHelper getOfflineForecastProgressInfo:_region.regionId];
-            NSInteger progressDownloadDestination = [[OAWeatherHelper sharedInstance] getProgressDestination:_region.regionId];
+            NSInteger progressDownloading = [_weatherHelper getOfflineForecastProgressInfo:regionId];
+            NSInteger progressDownloadDestination = [[OAWeatherHelper sharedInstance] getProgressDestination:regionId];
             CGFloat progressCompleted = (CGFloat) progressDownloading / progressDownloadDestination;
-            if (progressCompleted >= 0.001 && [OAWeatherHelper getPreferenceDownloadState:_region.regionId] == EOAWeatherForecastDownloadStateInProgress)
+            if (progressCompleted >= 0.001 && [OAWeatherHelper getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateInProgress)
             {
                 progressView.iconPath = nil;
                 if (progressView.isSpinning)
                     [progressView stopSpinProgressBackgroundLayer];
                 progressView.progress = progressCompleted - 0.001;
             }
-            else if ([OAWeatherHelper getPreferenceDownloadState:_region.regionId] == EOAWeatherForecastDownloadStateFinished && !statusSizeCalculating)
+            else if ([OAWeatherHelper getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateFinished && !statusSizeCalculating)
             {
                 progressView.iconPath = [OAResourcesUIHelper tickPath:progressView];
                 progressView.progress = 0.;
@@ -268,15 +291,13 @@
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1. * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                     [self setupView];
                     [self.tableView reloadData];
-                    [_weatherHelper calculateCacheSize:_region onComplete:^{
-                        if (self.delegate)
-                            [self.delegate onUpdateForecast];
-                    }];
+                    if (self.delegate)
+                        [self.delegate onUpdateForecast];
                 });
             }
             else
             {
-                progressView.iconPath = statusSizeCalculating ? [OAResourcesUIHelper tickPath:progressView] : [UIBezierPath bezierPath];
+                progressView.iconPath = [UIBezierPath bezierPath];
                 progressView.progress = 0.;
                 if (!progressView.isSpinning)
                     [progressView startSpinProgressBackgroundLayer];
@@ -286,14 +307,17 @@
     }
 }
 
-- (NSMutableDictionary *)getItem:(NSIndexPath *)indexPath
+- (BOOL)isEnabled:(NSString *)key
 {
-    return _data[indexPath.section][@"cells"][indexPath.row];
+    if ([key isEqualToString:@"update_only_wifi_cell"])
+        return [OAWeatherHelper getPreferenceWifi:[OAWeatherHelper checkAndGetRegionId:_region]];
+
+    return NO;
 }
 
-- (IBAction)backButtonClicked:(id)sender
+- (NSMutableDictionary *)getItem:(NSIndexPath *)indexPath
 {
-    [self dismissViewController];
+    return _data[indexPath.section][indexPath.row];
 }
 
 #pragma mark - UITableViewDataSource
@@ -305,139 +329,185 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return ((NSArray *) _data[section][@"cells"]).count;
+    return _data[section].count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    UITableViewCell *outCell = nil;
-
-    if ([item[@"type"] isEqualToString:[OAMenuSimpleCellNoIcon getCellIdentifier]])
+    if ([item[@"type"] isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
     {
-        OAMenuSimpleCellNoIcon *cell = [tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCellNoIcon getCellIdentifier]];
+        OASimpleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
         if (!cell)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCellNoIcon getCellIdentifier] owner:self options:nil];
-            cell = (OAMenuSimpleCellNoIcon *) nib[0];
-            cell.backgroundColor = UIColorFromRGB(color_view_background);
-            cell.descriptionView.hidden = YES;
-            cell.textView.font = [UIFont systemFontOfSize:34 weight:UIFontWeightBold];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASimpleTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
         }
         if (cell)
         {
-            cell.textView.text = item[@"title"];
+            cell.titleLabel.text = item[@"title"];
+            cell.titleLabel.textColor = [item.allKeys containsObject:@"title_color"] ? item[@"title_color"] : UIColor.blackColor;
+            cell.titleLabel.textAlignment = [item.allKeys containsObject:@"title_alignment"] ? (NSTextAlignment) [item[@"title_alignment"] integerValue] : NSTextAlignmentNatural;
+            cell.titleLabel.font = [item.allKeys containsObject:@"title_font"] ? item[@"title_font"] : [UIFont systemFontOfSize:17.];
         }
-        outCell = cell;
+        return cell;
     }
-    else if ([item[@"type"] isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:[OARightIconTableViewCell getCellIdentifier]])
     {
-        OAIconTitleValueCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
+        OARightIconTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
         if (!cell)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
-            cell = (OAIconTitleValueCell *) nib[0];
-            [cell showLeftIcon:NO];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OARightIconTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
         }
         if (cell)
         {
-            BOOL isUpdateNow = [item[@"key"] isEqualToString:@"update_now_cell"];
+            cell.titleLabel.text = item[@"title"];
+            cell.titleLabel.textColor = [item.allKeys containsObject:@"title_color"] ? item[@"title_color"] : UIColor.blackColor;
+            cell.titleLabel.font = [item.allKeys containsObject:@"title_font"] ? item[@"title_font"] : [UIFont systemFontOfSize:17.];
 
-            cell.selectionStyle = [item[@"key"] isEqualToString:@"updated_cell"] || [item[@"key"] isEqualToString:@"next_update_cell"]
-                    ? UITableViewCellSelectionStyleNone : UITableViewCellSelectionStyleDefault;
-            BOOL hasNextScreen = [item[@"next_screen"] boolValue];
-
-            cell.textView.text = item[@"title"];
-            cell.textView.textColor = isUpdateNow ? UIColorFromRGB(color_primary_purple) : UIColor.blackColor;
-            cell.textView.font = isUpdateNow ? [UIFont systemFontOfSize:17. weight:UIFontWeightMedium] : [UIFont systemFontOfSize:17.];
-
-            cell.descriptionView.text = item[@"description"];
-            cell.descriptionView.textColor = hasNextScreen ? UIColorFromRGB(color_text_footer) : UIColor.blackColor;
-
-            if (isUpdateNow && ([OAWeatherHelper getPreferenceDownloadState:_region.regionId] == EOAWeatherForecastDownloadStateInProgress
-                    || ![_weatherHelper isOfflineForecastSizesInfoCalculated:_region.regionId]))
+            BOOL hasRightIcon = [item.allKeys containsObject:@"right_icon"];
+            if (([item[@"key"] isEqualToString:@"update_now_cell"] && [OAWeatherHelper getPreferenceDownloadState:[OAWeatherHelper checkAndGetRegionId:_region]] == EOAWeatherForecastDownloadStateInProgress))
             {
-                FFCircularProgressView *progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 25.0f, 25.0f)];
+                FFCircularProgressView *progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0., 0., 25., 25.)];
                 progressView.iconView = [[UIView alloc] init];
                 progressView.tintColor = UIColorFromRGB(color_primary_purple);
 
                 cell.accessoryView = progressView;
                 cell.rightIconView.image = nil;
+                hasRightIcon = NO;
             }
             else
             {
                 cell.accessoryView = nil;
-                [cell showRightIcon:hasNextScreen || isUpdateNow];
-                cell.rightIconView.image = [UIImage templateImageNamed:isUpdateNow ? @"ic_custom_download" : @"ic_custom_arrow_right"];
-                cell.rightIconView.tintColor = isUpdateNow ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_tint_gray);
+                cell.rightIconView.image = hasRightIcon ? [UIImage templateImageNamed:item[@"right_icon"]] : nil;
+                cell.rightIconView.tintColor = item[@"right_icon_color"];
             }
+            [cell rightIconVisibility:hasRightIcon];
         }
-        outCell = cell;
+        return cell;
     }
-    else if ([item[@"type"] isEqualToString:[OAIconTextDividerSwitchCell getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
-        OAIconTextDividerSwitchCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTextDividerSwitchCell getCellIdentifier]];
+        OAValueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         if (!cell)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextDividerSwitchCell getCellIdentifier] owner:self options:nil];
-            cell = (OAIconTextDividerSwitchCell *) nib[0];
-            [cell showIcon:NO];
-            cell.dividerView.hidden = YES;
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAValueTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
         }
         if (cell)
         {
-            BOOL isOn = NO/*[self isEnabled:item[@"key"]]*/;
+            cell.selectionStyle = (UITableViewCellSelectionStyle) [item[@"selection_style"] integerValue];
+            cell.accessoryType = cell.selectionStyle == UITableViewCellSelectionStyleDefault ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
+            cell.titleLabel.text = item[@"title"];
+            cell.valueLabel.text = item[@"value"];
+            cell.valueLabel.textColor = item[@"value_color"];
+        }
+        return cell;
+    }
+    else if ([item[@"type"] isEqualToString:[OATableViewCellSwitch getCellIdentifier]])
+    {
+        OATableViewCellSwitch *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellSwitch getCellIdentifier]];
+        if (!cell)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellSwitch getCellIdentifier] owner:self options:nil];
+            cell = (OATableViewCellSwitch *) nib[0];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
+        }
+        if (cell)
+        {
+            cell.titleLabel.text = item[@"title"];
 
-            cell.switchView.on = isOn;
-            cell.textView.text = item[@"title"];
-
+            cell.switchView.on = [self isEnabled:item[@"key"]];
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.switchView addTarget:self action:@selector(onSwitchPressed:) forControlEvents:UIControlEventValueChanged];
         }
-        outCell = cell;
-    }
-    else if ([item[@"type"] isEqualToString:[OATextLineViewCell getCellIdentifier]])
-    {
-        OATextLineViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OATextLineViewCell getCellIdentifier]];
-        if (!cell)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextLineViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OATextLineViewCell *) nib[0];
-            cell.textView.font = [UIFont systemFontOfSize:17. weight:UIFontWeightMedium];
-            cell.textView.textColor = UIColorFromRGB(color_primary_red);
-        }
-        if (cell)
-        {
-            cell.textView.textColor = UIColorFromRGB(color_primary_red);
-            cell.textView.text = item[@"title"];
-            cell.textView.textAlignment = NSTextAlignmentCenter;
-        }
-        outCell = cell;
+        return cell;
     }
 
-    if ([outCell needsUpdateConstraints])
-        [outCell setNeedsUpdateConstraints];
-
-    return outCell;
+    return nil;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return _data[section][@"header"];
+    return _headers[@(section)];
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
-    return _data[section][@"footer"];
+    return _footers[@(section)];
 }
 
 #pragma mark - UITableViewDelegate
 
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    OATableViewCustomHeaderView *customHeader = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
+    if (section == _accuracySection)
+    {
+        customHeader.label.text = _headers[@(section)];
+        customHeader.label.font = [UIFont systemFontOfSize:13];
+        [customHeader setYOffset:20.];
+        return customHeader;
+    }
+    return nil;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    NSString *header = _headers[@(section)];
+    if (header)
+    {
+        if (section == _accuracySection)
+        {
+            return [OATableViewCustomHeaderView getHeight:header
+                                                    width:tableView.bounds.size.width
+                                                  xOffset:kPaddingOnSideOfContent
+                                                  yOffset:20.
+                                                     font:[UIFont systemFontOfSize:13.]] + 15.;
+        }
+        else
+        {
+            UIFont *font = [UIFont systemFontOfSize:13.];
+            CGFloat headerHeight = [OAUtilities calculateTextBounds:header
+                                                            width:tableView.frame.size.width - (kPaddingOnSideOfContent + [OAUtilities getLeftMargin]) * 2
+                                                             font:font].height + kPaddingOnSideOfHeaderWithText;
+            return headerHeight;
+        }
+    }
+
+    return kHeaderHeightDefault;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    NSString *footer = _footers[@(section)];
+    if (footer)
+    {
+        UIFont *font = [UIFont systemFontOfSize:13.];
+        CGFloat footerHeight = [OAUtilities calculateTextBounds:[_footers objectForKey:@(section)]
+                                                        width:tableView.frame.size.width - (kPaddingOnSideOfContent + [OAUtilities getLeftMargin]) * 2
+                                                        font:font].height + kPaddingOnSideOfFooterWithText;
+
+        return footerHeight;
+    }
+
+    return 0.001;
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
+    NSString *regionId = [OAWeatherHelper checkAndGetRegionId:_region];
     if ([item[@"key"] isEqualToString:@"updates_size_cell"])
     {
         OAWeatherCacheSettingsViewController *controller = [[OAWeatherCacheSettingsViewController alloc] initWithRegion:_region];
@@ -446,9 +516,9 @@
     }
     else if ([item[@"key"] isEqualToString:@"update_now_cell"])
     {
-        if ([OAWeatherHelper getPreferenceDownloadState:_region.regionId] == EOAWeatherForecastDownloadStateInProgress)
+        if ([OAWeatherHelper getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateInProgress)
         {
-            [_weatherHelper prepareToStopDownloading:_region.regionId];
+            [_weatherHelper prepareToStopDownloading:regionId];
             [_weatherHelper calculateCacheSize:_region onComplete:nil];
         }
         else
@@ -460,7 +530,7 @@
     {
         UIAlertController *alert =
                 [UIAlertController alertControllerWithTitle:OALocalizedString(@"weather_remove_forecast")
-                                                    message:[NSString stringWithFormat:OALocalizedString(@"weather_remove_forecast_description"), _region.name]
+                                                    message:[NSString stringWithFormat:OALocalizedString(@"weather_remove_forecast_description"), [OAWeatherHelper checkAndGetRegionName:_region]]
                                              preferredStyle:UIAlertControllerStyleAlert];
 
         UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel")
@@ -472,8 +542,8 @@
                                                                  handler:^(UIAlertAction * _Nonnull action)
                                                                  {
                                                                      [_progressHUD showAnimated:YES whileExecutingBlock:^{
-                                                                         [_weatherHelper prepareToStopDownloading:_region.regionId];
-                                                                         [_weatherHelper removeLocalForecast:_region.regionId refreshMap:YES];
+                                                                         [_weatherHelper prepareToStopDownloading:regionId];
+                                                                         [_weatherHelper removeLocalForecast:regionId refreshMap:YES];
                                                                      } completionBlock:^{
                                                                          [self dismissViewController];
                                                                          if (self.delegate)
@@ -489,38 +559,15 @@
 
         [self presentViewController:alert animated:YES completion:nil];
     }
+    else if ([item[@"key"] isEqualToString:@"updates_frequency_cell"])
+    {
+        OAWeatherFrequencySettingsViewController *frequencySettingsViewController =
+                [[OAWeatherFrequencySettingsViewController alloc] initWithRegion:_region];
+        frequencySettingsViewController.frequencyDelegate = self;
+        [self presentViewController:frequencySettingsViewController animated:YES completion:nil];
+    }
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-}
-
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{
-    OATableViewCustomHeaderView *customHeader = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
-    if ([_data[section][@"key"] isEqualToString:@"info_section"])
-    {
-        customHeader.label.text = _data[section][@"header"];
-        customHeader.label.font = [UIFont systemFontOfSize:13];
-        [customHeader setYOffset:2.];
-        return customHeader;
-    }
-    return nil;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    if ([_data[section][@"key"] isEqualToString:@"title_section"])
-    {
-        return 0;
-    }
-    else if ([_data[section][@"key"] isEqualToString:@"info_section"])
-    {
-        return [OATableViewCustomHeaderView getHeight:_data[section][@"header"]
-                                                width:tableView.bounds.size.width
-                                              yOffset:2.
-                                                 font:[UIFont systemFontOfSize:13.]] + 15.;
-    }
-
-    return UITableViewAutomaticDimension;
 }
 
 #pragma mark - Selectors
@@ -532,30 +579,9 @@
     {
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:switchView.tag & 0x3FF inSection:switchView.tag >> 10];
         NSDictionary *item = [self getItem:indexPath];
-        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-    }
-}
 
-#pragma mark - UIScrollViewDelegate
-
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
-    CGFloat y = scrollView.contentOffset.y + scrollView.contentInset.top;
-
-    if (!_isHeaderBlurred && y > 0.)
-    {
-        [self.navigationBarView addBlurEffect:YES cornerRadius:0. padding:0.];
-        self.labelNavigationTitle.hidden = NO;
-        self.viewNavigationSeparator.hidden = NO;
-        _isHeaderBlurred = YES;
-    }
-    else if (_isHeaderBlurred && y <= 0.)
-    {
-        [self.navigationBarView removeBlurEffect];
-        self.navigationBarView.backgroundColor = UIColorFromRGB(color_view_background);
-        self.labelNavigationTitle.hidden = YES;
-        self.viewNavigationSeparator.hidden = YES;
-        _isHeaderBlurred = NO;
+        if ([item[@"key"] isEqualToString:@"update_only_wifi_cell"])
+            [OAWeatherHelper setPreferenceWifi:[OAWeatherHelper checkAndGetRegionId:_region] value:switchView.isOn];
     }
 }
 
@@ -564,6 +590,35 @@
 - (void)onCacheClear
 {
     [_weatherHelper calculateCacheSize:_region onComplete:nil];
+    if (self.delegate)
+        [self.delegate onClearForecastCache];
+}
+
+#pragma mark - OAWeatherFrequencySettingsDelegate
+
+- (void)onFrequencySelected
+{
+    NSString *regionId = [OAWeatherHelper checkAndGetRegionId:_region];
+    for (NSInteger i = 0; i < _data.count; i++)
+    {
+        NSArray<NSMutableDictionary *> *cells = _data[i];
+        for (NSInteger j = 0; j < cells.count; j++)
+        {
+            NSMutableDictionary *cell = cells[j];
+            if ([cell[@"key"] isEqualToString:@"next_update_cell"])
+            {
+                cell[@"value"] = [OAWeatherHelper getUpdatesDateFormat:regionId next:YES];
+                [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:j inSection:i]]
+                                      withRowAnimation:UITableViewRowAnimationAutomatic];
+            }
+            else if ([cell[@"key"] isEqualToString:@"updates_frequency_cell"])
+            {
+                cell[@"value"] = [OAWeatherHelper getFrequencyFormat:[OAWeatherHelper getPreferenceFrequency:regionId]];
+                [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:j inSection:i]]
+                                      withRowAnimation:UITableViewRowAnimationAutomatic];
+            }
+        }
+    }
 }
 
 @end

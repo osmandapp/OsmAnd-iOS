@@ -63,6 +63,7 @@
     {
         case EOASubscriptionBannerFree:
         {
+            self.titleLabel.font = [UIFont systemFontOfSize:17. weight:UIFontWeightSemibold];
             self.descriptionLabel.hidden = NO;
             self.separatorView.hidden = NO;
 
@@ -79,6 +80,7 @@
         }
         case EOASubscriptionBannerNoFree:
         {
+            self.titleLabel.font = [UIFont systemFontOfSize:17. weight:UIFontWeightSemibold];
             self.descriptionLabel.hidden = NO;
             self.separatorView.hidden = YES;
 
@@ -96,6 +98,7 @@
         }
         case EOASubscriptionBannerUpdates:
         {
+            self.titleLabel.font = [UIFont systemFontOfSize:17.];
             self.descriptionLabel.hidden = YES;
             self.separatorView.hidden = YES;
 
@@ -121,8 +124,8 @@
     if (@available(iOS 15.0, *))
     {
         CGFloat buttonTitleWidth = [OAUtilities calculateTextBounds:self.buttonView.titleLabel.attributedText
-                                                              width:self.buttonView.frame.size.width - horizontalInset * 2 - self.buttonView.imageView.frame.size.width].width;
-        CGFloat imagePadding = self.buttonView.frame.size.width - (horizontalInset * 2 + buttonTitleWidth + 30.);
+                                                              width:self.frame.size.width - (20. + [OAUtilities getLeftMargin] + horizontalInset) * 2 - 30.].width;
+        CGFloat imagePadding = self.frame.size.width - ((20. + [OAUtilities getLeftMargin] + horizontalInset) * 2 + buttonTitleWidth + 30.);
 
         UIButtonConfiguration *configuration = UIButtonConfiguration.plainButtonConfiguration;
         configuration.titleAlignment = UIButtonConfigurationTitleAlignmentLeading;

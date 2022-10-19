@@ -94,16 +94,19 @@
 - (void)commonInit
 {
     self.labelTitle.font = [UIFont systemFontOfSize:20 weight:UIFontWeightSemibold];
-    self.labelDescription.font = [UIFont systemFontOfSize:17];
-    self.labelProductIncluded.font = [UIFont systemFontOfSize:15];
-    self.labelProductIncluded.textColor = UIColorFromRGB(color_text_footer);
 }
 
 - (void)updateInfo:(OAFeature *)selectedFeature replaceFeatureRows:(BOOL)replaceFeatureRows
 {
     self.imageViewTitleIcon.image = [selectedFeature getIconBig];
     self.labelTitle.text = [selectedFeature getListTitle];
-    self.labelDescription.text = [selectedFeature getDescription];
+
+    NSMutableAttributedString *attributedDescription = [[NSMutableAttributedString alloc] initWithString:[selectedFeature getDescription]];
+    NSMutableParagraphStyle *descriptionParagraphStyle = [[NSMutableParagraphStyle alloc] init];
+    descriptionParagraphStyle.minimumLineHeight = 25.5;
+    [attributedDescription addAttribute:NSParagraphStyleAttributeName value:descriptionParagraphStyle range:NSMakeRange(0, attributedDescription.length)];
+    [attributedDescription addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:17.] range:NSMakeRange(0, attributedDescription.length)];
+    self.labelDescription.attributedText = attributedDescription;
 
     NSString *mapsPlus = OALocalizedString(@"product_title_plus");
     NSString *osmAndPro = OALocalizedString(@"product_title_pro");
@@ -120,6 +123,9 @@
     [productIncludedText addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15.] range:NSMakeRange(0, secondaryDesc.length)];
     [productIncludedText addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15. weight:UIFontWeightBold] range:[secondaryDesc rangeOfString:mapsPlus]];
     [productIncludedText addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15. weight:UIFontWeightBold] range:[secondaryDesc rangeOfString:osmAndPro]];
+    NSMutableParagraphStyle *productIncludedParagraphStyle = [[NSMutableParagraphStyle alloc] init];
+    productIncludedParagraphStyle.minimumLineHeight = 21.;
+    [productIncludedText addAttribute:NSParagraphStyleAttributeName value:productIncludedParagraphStyle range:NSMakeRange(0, secondaryDesc.length)];
 
     if (replaceFeatureRows)
     {
@@ -153,9 +159,8 @@
     self.labelProductIncluded.attributedText = productIncludedText;
 }
 
-- (CGFloat)updateLayout:(CGFloat)y
+- (CGFloat)updateLayout:(CGFloat)y width:(CGFloat)width
 {
-    CGFloat width = DeviceScreenWidth;
     CGFloat leftMargin = 20. + [OAUtilities getLeftMargin];
     CGFloat titleLeftMargin = leftMargin + kIconBigTitleSize + 16.;
     CGSize titleSize = [OAUtilities calculateTextBounds:self.labelTitle.text
@@ -177,9 +182,8 @@
             titleSize.height
     );
 
-    CGSize descriptionSize = [OAUtilities calculateTextBounds:self.labelDescription.text
-                                                        width:width - leftMargin * 2
-                                                         font:self.labelDescription.font];
+    CGSize descriptionSize = [OAUtilities calculateTextBounds:self.labelDescription.attributedText
+                                                        width:width - leftMargin * 2];
     self.labelDescription.frame = CGRectMake(
             leftMargin,
             self.viewTitleContainer.frame.size.height + 6.,
@@ -187,9 +191,8 @@
             descriptionSize.height
     );
 
-    CGSize productIncludedSize = [OAUtilities calculateTextBounds:self.labelProductIncluded.text
-                                                            width:width - leftMargin * 2
-                                                             font:self.labelProductIncluded.font];
+    CGSize productIncludedSize = [OAUtilities calculateTextBounds:self.labelProductIncluded.attributedText
+                                                            width:width - leftMargin * 2];
     self.labelProductIncluded.frame = CGRectMake(
             leftMargin,
             self.labelDescription.frame.origin.y + self.labelDescription.frame.size.height + 13.,
@@ -207,7 +210,7 @@
     CGFloat yRow = 0.;
     for (OAFeatureCardRow *row in self.viewFeatureRowsContainer.subviews)
     {
-        yRow += [row updateFrame:yRow];
+        yRow += [row updateFrame:yRow width:width];
     }
     self.viewFeatureRowsContainer.frame = CGRectMake(
             0.,
@@ -219,7 +222,7 @@
     yRow = 9.;
     for (OAPlanTypeCardRow *row in self.viewChoosePlanButtonsContainer.subviews)
     {
-        yRow += [row updateFrame:yRow] + 16.;
+        yRow += [row updateFrame:yRow width:width] + 16.;
     }
     self.viewChoosePlanButtonsContainer.frame = CGRectMake(
             0.,
@@ -298,7 +301,7 @@
                     [allFeatures removeObject:OAFeature.COMBINED_WIKI];
                     OAFeature *feature = allFeatures[tag];
                     [self updateInfo:feature replaceFeatureRows:NO];
-                    [self updateLayout:self.frame.origin.y];
+                    [self updateLayout:self.frame.origin.y width:self.frame.size.width];
                     if (self.delegate)
                         [self.delegate onFeatureSelected:feature];
 

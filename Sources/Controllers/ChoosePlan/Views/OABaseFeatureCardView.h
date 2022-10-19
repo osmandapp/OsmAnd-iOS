@@ -10,14 +10,15 @@
 
 #define kSeparatorHeight .5
 #define kIconSize 30.
-#define kSpaceMargin 16.
+#define kPrimarySpaceMargin 16.
+#define kSecondarySpaceMargin 12.
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface OABaseFeatureCardView : UIView
 
-- (CGFloat)updateLayout:(CGFloat)y;
-- (CGFloat)updateFrame:(CGFloat)y;
+- (CGFloat)updateLayout:(CGFloat)y width:(CGFloat)width;
+- (CGFloat)updateFrame:(CGFloat)y width:(CGFloat)width;
 
 @end
 

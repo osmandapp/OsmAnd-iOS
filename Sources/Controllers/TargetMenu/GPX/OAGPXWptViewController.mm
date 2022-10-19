@@ -22,6 +22,7 @@
 #import "OAColors.h"
 #import "OACollapsableCoordinatesView.h"
 #import "OATextMultiViewCell.h"
+#import "OAPOIHelper.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -95,13 +96,9 @@
 
 - (void) acquireOriginObject
 {
-    _originObject = [_wpt getAmenity];
+    _originObject = [OAPOIHelper findPOIByOriginName:_wpt.getAmenityOriginName lat:_wpt.point.getLatitude lon:_wpt.point.getLongitude];
     if (!_originObject)
-    {
-        //TODO: find poi by latlon
-        //String originObjectName = wpt.comment;
-        //originObject = findAmenityObject(originObjectName, wpt.lat, wpt.lon);
-    }
+        [_wpt getAmenity];
 }
 
 - (void) buildTopRows:(NSMutableArray<OARowInfo *> *)rows
@@ -127,6 +124,10 @@
     if ([self getTimestamp] && [[self getTimestamp] timeIntervalSince1970] > 0)
     {
         [self buildDateRow:rows timestamp:[self getTimestamp]];
+    }
+    if (self.wpt.point.comment)
+    {
+        [self buildCommentRow:rows comment:self.wpt.point.comment];
     }
     
     //TODO: add extra fields

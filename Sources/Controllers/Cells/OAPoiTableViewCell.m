@@ -49,7 +49,8 @@
     CGFloat collectionViewWidth = rect.size.width;
     int iconsPerRowCount = floor(collectionViewWidth / (_iconWidth + _minIconsSpacing));
     self.minimumInteritemSpacing = (collectionViewWidth - (_iconWidth * iconsPerRowCount)) / (iconsPerRowCount - 1);
-    NSArray *attributes = [super layoutAttributesForElementsInRect:rect];
+    NSArray *original = [super layoutAttributesForElementsInRect:rect];
+    NSArray * attributes = [[NSArray alloc] initWithArray:original copyItems:YES];
     CGFloat leftMargin = self.sectionInset.left;
     CGFloat maxY = -1.0f;
 

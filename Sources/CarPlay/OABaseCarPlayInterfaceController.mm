@@ -40,7 +40,6 @@
 {
     if (loc)
     {
-        // TODO: implement CarPlay app profile and use it instead
         [OARoutingHelper.sharedInstance setAppMode:OAApplicationMode.CAR];
         [OATargetPointsHelper.sharedInstance navigateToPoint:loc updateRoute:YES intermediate:-1];
         [OARootViewController.instance.mapPanel.mapActions enterRoutePlanningModeGivenGpx:nil from:nil fromName:nil useIntermediatePointsByDefault:NO showDialog:NO];

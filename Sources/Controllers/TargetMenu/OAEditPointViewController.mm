@@ -665,6 +665,12 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_colorRowIndex inSection:_appearenceSectionIndex]] withRowAnimation:UITableViewRowAnimationAutomatic];
+}
+
 - (void)applyLocalization
 {
     [super applyLocalization];
@@ -723,7 +729,6 @@
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"shared_string_dismiss") message:OALocalizedString(@"osm_editing_lost_changes_title") preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleDefault handler:nil]];
         [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_exit") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-
             if (_isNewItemAdding)
                 [_pointHandler deleteItem];
             [self doDismiss];
@@ -847,7 +852,7 @@
         if (_editPointType == EOAEditPointTypeWaypoint && !_pointHandler.gpxWptDelegate)
             _pointHandler.gpxWptDelegate = self.gpxWptDelegate;
 
-        [_pointHandler deleteItem];
+        [_pointHandler deleteItem:_isNewItemAdding];
         [self dismissViewControllerAnimated:YES completion:nil];
     }]];
     

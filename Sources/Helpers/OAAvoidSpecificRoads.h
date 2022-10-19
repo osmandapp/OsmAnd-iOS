@@ -32,4 +32,7 @@ struct RouteDataObject;
 - (void) addListener:(id<OAStateChangedListener>)l;
 - (void) removeListener:(id<OAStateChangedListener>)l;
 
+- (long) getLastModifiedTime;
+- (void) setLastModifiedTime:(long)lastModifiedTime;
+
 @end

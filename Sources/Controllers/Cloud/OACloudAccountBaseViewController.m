@@ -22,8 +22,6 @@
 
 @interface OACloudAccountBaseViewController () <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, MFMailComposeViewControllerDelegate>
 
-@property (weak, nonatomic) IBOutlet UILabel *footerTitleLabel;
-
 @end
 
 @implementation OACloudAccountBaseViewController
@@ -31,6 +29,8 @@
     NSString *_inputText;
     NSString *_footerFullText;
     NSString *_footerColoredText;
+    
+    UITapGestureRecognizer *_tapRecognizer;
 }
 
 - (instancetype) init
@@ -39,7 +39,6 @@
     if (self) {
         _inputText = @"";
         _errorMessage = @"";
-        [self generateData];
     }
     return self;
 }
@@ -47,6 +46,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self generateData];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
@@ -62,6 +62,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    _tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(footerButtonPressed)];
+    _tapRecognizer.numberOfTapsRequired = 1;
     [self setupTableHeaderView];
     [self setupTableFooterView];
     [self applyLocalization];
@@ -80,6 +82,7 @@
 {
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
         [self setupTableHeaderView];
+        [self setupTableFooterView];
         [self generateData];
         [self.tableView reloadData];
     } completion:nil];
@@ -106,7 +109,19 @@
     [attributedString addAttribute:NSFontAttributeName value:font range:fullRange];
     [attributedString addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(color_text_footer) range:fullRange];
     [attributedString addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(color_primary_purple) range:coloredRange];
-    self.footerTitleLabel.attributedText = attributedString;
+    UIView *footer = [OAUtilities setupTableHeaderViewWithText:attributedString tintColor:nil icon:nil iconFrameSize:0. iconBackgroundColor:nil iconContentMode:UIViewContentModeCenter];
+    [footer addGestureRecognizer:_tapRecognizer];
+    for (UIView *vw in footer.subviews)
+    {
+        if ([vw isKindOfClass:UILabel.class])
+        {
+            UILabel *label = (UILabel *) vw;
+            label.textAlignment = NSTextAlignmentCenter;
+            label.autoresizingMask = UIViewAutoresizingNone;
+            label.frame = CGRectMake(20. + OAUtilities.getLeftMargin, 0., footer.frame.size.width - 40. - (OAUtilities.getLeftMargin * 2), footer.frame.size.height);
+        }
+    }
+    self.tableView.tableFooterView = footer;
 }
 
 #pragma mark - Data section
@@ -163,7 +178,7 @@
     //override
 }
 
-- (IBAction)footerButtonPressed:(id)sender
+- (void)footerButtonPressed
 {
     [self sendEmail];
 }
@@ -200,7 +215,7 @@
             cell.contentView.backgroundColor = UIColor.clearColor;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.descriptionView.backgroundColor = UIColor.clearColor;
-            cell.textViewZeroHeightConstraint.priority = 1000;
+            cell.textViewZeroHeightConstraint.priority = UILayoutPriorityRequired;
             cell.textView.hidden = YES;
         }
         if (cell)
@@ -341,6 +356,17 @@
     return 0.001;
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSDictionary *item = [self getItem:indexPath];
+    if ([item[@"type"] isEqualToString:[OAInputCellWithTitle getCellIdentifier]])
+    {
+        OAInputCellWithTitle *cell = (OAInputCellWithTitle *) [tableView cellForRowAtIndexPath:indexPath];
+        [cell.inputField becomeFirstResponder];
+    }
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
 
 #pragma mark - UITextFieldDelegate
 
@@ -366,6 +392,11 @@
     BOOL hadError = _errorMessage.length > 0;
     self.errorMessage = @"";
     [self generateData];
+    if ([self needEmailValidation])
+    {
+        [NSObject cancelPreviousPerformRequestsWithTarget:self];
+        [self performSelector:@selector(checkEmailValidity) withObject:nil afterDelay:3];
+    }
     if (hadError)
     {
         [self.tableView performBatchUpdates:^{
@@ -376,6 +407,28 @@
     else if (needFullReload)
     {
         [self updateAllSections];
+    }
+}
+
+- (BOOL) needEmailValidation
+{
+    return YES;
+}
+
+- (void) checkEmailValidity
+{
+    if (self.errorMessage.length > 0)
+        return;
+    
+    BOOL isInvalidEmail = ![_inputText isValidEmail] && _inputText.length > 0;
+    if (isInvalidEmail)
+    {
+        self.errorMessage = OALocalizedString(@"login_error_email_invalid");
+        [self generateData];
+        [self.tableView performBatchUpdates:^{
+            [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:1]] withRowAnimation:UITableViewRowAnimationAutomatic];
+            [self updateAllSections];
+        } completion:nil];
     }
 }
 

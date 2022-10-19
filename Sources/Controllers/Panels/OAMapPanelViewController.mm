@@ -872,8 +872,9 @@ typedef enum
 
 - (void) showWeatherLayersScreen
 {
-    [self showMapSettingsScreen:EMapSettingsScreenWeather logEvent:nil];
-
+    [self showMapSettingsScreen:EMapSettingsScreenMain logEvent:nil];
+    OAMapSettingsViewController *mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenWeather];
+    [mapSettingsViewController show:_dashboard.parentViewController parentViewController:_dashboard animated:YES];
 }
 
 - (void)showMapSettingsScreen:(EMapSettingsScreen)screen logEvent:(nullable NSString *)event
@@ -3843,6 +3844,8 @@ typedef enum
     if (_carPlayActiveController && _carPlayActiveController.presentingViewController == self)
         return;
     _carPlayActiveController = [[OACarPlayActiveViewController alloc] init];
+    _carPlayActiveController.messageText = OALocalizedString(@"carplay_active_message");
+    
     _carPlayActiveController.modalPresentationStyle = UIModalPresentationFullScreen;
     [self presentViewController:_carPlayActiveController animated:YES completion:nil];
 }

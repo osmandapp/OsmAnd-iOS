@@ -17,6 +17,7 @@ typedef NS_ENUM(NSUInteger, EOAFeature)
     EOAFeatureCloud = 0,
     EOAFeatureAdvancedWidgets,
     EOAFeatureHourlyMapUpdates,
+    EOAFeatureCrossBuy,
     EOAFeatureMonthlyMapUpdates,
     EOAFeatureUnlimitedMapDownloads,
     EOAFeatureCarPlay,
@@ -54,6 +55,7 @@ typedef NS_ENUM(NSUInteger, EOAFeature)
 + (OAFeature *)OSMAND_CLOUD;
 + (OAFeature *)ADVANCED_WIDGETS;
 + (OAFeature *)HOURLY_MAP_UPDATES;
++ (OAFeature *)CROSS_BUY;
 + (OAFeature *)MONTHLY_MAP_UPDATES;
 + (OAFeature *)UNLIMITED_MAP_DOWNLOADS;
 + (OAFeature *)CARPLAY;

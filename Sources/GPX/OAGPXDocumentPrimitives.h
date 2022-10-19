@@ -17,13 +17,16 @@
 #define BACKGROUND_TYPE_EXTENSION @"background"
 #define ADDRESS_EXTENSION @"address"
 #define CALENDAR_EXTENSION @"calendar_event"
+#define PICKUP_DATE @"pickup_date"
 #define VISITED_TIME_EXTENSION @"visited_date"
 #define CREATION_TIME_EXTENSION @"creation_date"
+#define PICKUP_DATE_EXTENSION @"pickup_date"
 #define DEFAULT_ICON_NAME @"special_star"
 #define PROFILE_TYPE_EXTENSION @"profile"
 #define GAP_PROFILE_TYPE @"gap"
 #define TRKPT_INDEX_EXTENSION @"trkpt_idx"
 #define PRIVATE_PREFIX @"amenity_"
+#define AMENITY_ORIGIN_EXTENSION @"amenity_origin"
 #define OSM_PREFIX @"osm_tag_"
 
 typedef NS_ENUM(NSInteger, EOAGPXColor)
@@ -162,6 +165,9 @@ struct RouteDataBundle;
 
 - (OAPOI *) getAmenity;
 - (void) setAmenity:(OAPOI *)amenity;
+
+- (NSString *) getAmenityOriginName;
+- (void) setAmenityOriginName:(NSString *)originName;
 
 @end
 

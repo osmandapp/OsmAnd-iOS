@@ -21,8 +21,12 @@
 @property (nonatomic, readonly) OAMapRendererView *mapView;
 @property (nonatomic, readonly) BOOL nightMode;
 @property (nonatomic, readonly) CGFloat displayDensityFactor;
+@property (nonatomic, readonly) int baseOrder;
+@property (nonatomic) int pointsOrder;
 
 - (instancetype) initWithMapViewController:(OAMapViewController *)mapViewController;
+- (instancetype) initWithMapViewController:(OAMapViewController *)mapViewController baseOrder:(int)baseOrder;
+- (instancetype) initWithMapViewController:(OAMapViewController *)mapViewController baseOrder:(int)baseOrder pointsOrder:(int)pointsOrder;
 
 - (void) initLayer;
 - (void) deinitLayer;
@@ -33,6 +37,7 @@
 - (void) show;
 - (void) hide;
 
+- (void) onMapFrameAnimatorsUpdated;
 - (void) onMapFrameRendered;
 - (void) didReceiveMemoryWarning;
 

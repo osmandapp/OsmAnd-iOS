@@ -26,6 +26,10 @@
 @property (nonatomic) NSString *docPath;
 
 - (UIImage *) getCompositeIcon;
+
+- (NSString *) getAmenityOriginName;
+- (void) setAmenityOriginName:(NSString *)originName;
+
 - (OAPOI *) getAmenity;
 - (void) setAmenity:(OAPOI *)amenity;
 

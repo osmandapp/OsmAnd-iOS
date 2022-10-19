@@ -24,7 +24,7 @@
 #define WIKIMEDIA_COMMONS @"wikimedia_commons"
 #define MAPILLARY @"mapillary"
 #define DISH @"dish"
-#define REF @"ref"
+#define POI_REF @"ref"
 #define OSM_DELETE_VALUE @"delete"
 #define OSM_DELETE_TAG @"osmand_change"
 #define IMAGE_TITLE @"image_title"
@@ -86,6 +86,8 @@
 - (NSString *)getStrictTagContent:(NSString *)tag lang:(NSString *)lang;
 - (NSString *)getTagContent:(NSString *)tag lang:(NSString *)lang;
 - (NSString *)getDescription:(NSString *)lang;
+
+- (NSString *) toStringEn;
 
 - (NSDictionary<NSString *, NSString *> *) toTagValue:(NSString *)privatePrefix osmPrefix:(NSString *)osmPrefix;
 + (OAPOI *) fromTagValue:(NSDictionary<NSString *, NSString *> *)map privatePrefix:(NSString *)privatePrefix osmPrefix:(NSString *)osmPrefix;

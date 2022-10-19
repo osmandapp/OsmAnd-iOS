@@ -31,10 +31,9 @@
         [listener onFilesDeleteStarted:_remoteFiles];
 }
 
-- (id) doInBackground
+- (void) doInBackground
 {
-    [self deleteFiles:_remoteFiles];
-    return nil;
+    [self setFilesToDelete:_remoteFiles];
 }
 
 @end

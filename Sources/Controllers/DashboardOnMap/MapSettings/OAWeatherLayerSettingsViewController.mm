@@ -329,9 +329,9 @@
     NSString *result = @"";
     NSUnit *unit = [band getBandUnit];
     if (band.bandIndex == WEATHER_BAND_TEMPERATURE)
-        result = unit.name != nil ? unit.name : [formatter stringFromUnit:unit];
+        result = unit.name != nil ? unit.name : [formatter displayStringFromUnit:unit];
     else
-        result = [formatter stringFromUnit:unit];
+        result = [formatter displayStringFromUnit:unit];
     return result;
 }
 
@@ -366,7 +366,7 @@
 {
     [self hide:YES duration:.2 onComplete:^{
         if (self.delegate)
-            [self.delegate onHideWeatherLayerSettings];
+            [self.delegate onDoneWeatherLayerSettings:YES];
     }];
 }
 
@@ -374,7 +374,7 @@
 {
     [self hide:YES duration:.2 onComplete:^{
         if (self.delegate)
-            [self.delegate onDoneWeatherLayerSettings];
+            [self.delegate onDoneWeatherLayerSettings:NO];
     }];
 }
 

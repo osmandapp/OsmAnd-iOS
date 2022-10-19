@@ -12,12 +12,13 @@
 #import "Localization.h"
 #import "OAPluginPopupViewController.h"
 #import "OAPurchasesViewController.h"
-#import <Reachability.h>
+#import <AFNetworking/AFNetworkReachabilityManager.h>
 #import "OASizes.h"
 #import "OARootViewController.h"
 #import "OAChoosePlanHelper.h"
 #import "OAPlugin.h"
 #import "OAColors.h"
+#import <SafariServices/SafariServices.h>
 
 #define kPriceButtonTextInset 8.0
 #define kPriceButtonMinTextWidth 80.0
@@ -29,7 +30,7 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
     EOAPluginScreenTypeCustomPlugin
 };
 
-@interface OAPluginDetailsViewController ()
+@interface OAPluginDetailsViewController () <UITextViewDelegate, SFSafariViewControllerDelegate>
 
 @end
 
@@ -85,6 +86,8 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
     
     self.buttonDeleteCustomPlugin.hidden = _screenType != EOAPluginScreenTypeCustomPlugin;
     self.buttonDeleteCustomPlugin.userInteractionEnabled = !self.buttonDeleteCustomPlugin.hidden;
+
+    self.descTextView.delegate = self;
 
     UIImage *screenshotImage;
     if (_screenType == EOAPluginScreenTypeProduct)
@@ -219,10 +222,11 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
     }
     
     self.titleLabel.text = title;
-    self.descTextView.selectable = NO;
     
     if (desc)
+    {
         self.descTextView.text = desc;
+    }
     else if (attrDesc)
     {
         self.descTextView.attributedText = attrDesc;
@@ -329,6 +333,22 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self updatePurchaseButton];
     });
+}
+
+#pragma mark - UITextViewDelegate
+
+- (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange interaction:(UITextItemInteraction)interaction
+{
+    SFSafariViewController *safariViewController = [[SFSafariViewController alloc] initWithURL:URL];
+    [self presentViewController:safariViewController animated:YES completion:nil];
+    return NO;
+}
+
+#pragma mark - SFSafariViewControllerDelegate
+
+- (void)safariViewControllerDidFinish:(SFSafariViewController *)controller
+{
+    [controller dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end

@@ -838,7 +838,9 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 -(void)updateNavbar
 {
-    BOOL showBarActionView = _barActionType != BarActionNone && !_modalInput;
+    OASearchWord *lastWord = [self.searchUICore getPhrase].getLastSelectedWord;
+    BOOL hasLastWordWithLocation = lastWord && lastWord.getLocation;
+    BOOL showBarActionView = _barActionType != BarActionNone && (!_modalInput || hasLastWordWithLocation);
     BOOL showInputView = _barActionType != BarActionEditHistory;
     BOOL showMapCenterSearch = !showBarActionView && _searchNearMapCenter && self.searchQuery.length == 0 && _distanceFromMyLocation > 0;
     BOOL showTabs = [self tabsVisible] && _barActionType != BarActionEditHistory;

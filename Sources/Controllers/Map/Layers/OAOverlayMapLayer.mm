@@ -129,6 +129,7 @@
             OsmAnd::MapLayerConfiguration config;
             config.setOpacityFactor(self.app.data.overlayAlpha);
             [self.mapView setMapLayerConfiguration:self.layerIndex configuration:config forcedUpdate:NO];
+            [self.mapViewController updateLayerProviderAlpha];
         }];
     });
 }
@@ -141,6 +142,11 @@
             {
                 [self.mapView resetProviderFor:self.layerIndex];
                 _rasterOverlayMapProvider.reset();
+                [self.mapViewController updateLayerProviderAlpha];
+            }
+            else
+            {
+                [self.mapViewController updateLayerProviderAlpha];
             }
         }];
     });

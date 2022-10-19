@@ -13,12 +13,14 @@
 #include <OsmAndCore/Map/GeoCommonTypes.h>
 #include <OsmAndCore/Map/GeoBandSettings.h>
 
+#define kWeatherEntireWorldRegionId @"entire_world"
+
 typedef NS_ENUM(NSInteger, EOAWeatherForecastUpdatesFrequency)
 {
     EOAWeatherForecastUpdatesUndefined = -1,
-    EOAWeatherForecastUpdates12h = 0,
-    EOAWeatherForecastUpdates24h,
-    EOAWeatherForecastUpdatesWeek,
+    EOAWeatherForecastUpdatesSemiDaily = 0,
+    EOAWeatherForecastUpdatesDaily,
+    EOAWeatherForecastUpdatesWeekly,
 };
 
 typedef NS_ENUM(NSInteger, EOAWeatherForecastDownloadState)
@@ -36,6 +38,8 @@ typedef NS_ENUM(NSInteger, EOAWeatherForecastDownloadState)
 
 @property (nonatomic, readonly) NSArray<OAWeatherBand *> *bands;
 @property (nonatomic, readonly) OAMapPresentationEnvironment *mapPresentationEnvironment;
+@property (nonatomic, readonly) CGFloat offlineCacheSize;
+@property (nonatomic, readonly) CGFloat onlineCacheSize;
 
 @property (readonly) OAObservable *weatherSizeCalculatedObserver;
 @property (readonly) OAObservable *weatherForecastDownloadingObserver;
@@ -48,7 +52,10 @@ typedef NS_ENUM(NSInteger, EOAWeatherForecastDownloadState)
 - (QHash<OsmAnd::BandIndex, std::shared_ptr<const OsmAnd::GeoBandSettings>>) getBandSettings;
 
 + (BOOL)shouldHaveWeatherForecast:(OAWorldRegion *)region;
++ (NSString *)checkAndGetRegionId:(OAWorldRegion *)region;
++ (NSString *)checkAndGetRegionName:(OAWorldRegion *)region;
 
+- (void)checkAndDownloadForecastsByRegionIds:(NSArray<NSString *> *)regionIds;
 - (void)downloadForecastsByRegionIds:(NSArray<NSString *> *)regionIds;
 - (void)downloadForecastByRegion:(OAWorldRegion *)region;
 - (void)prepareToStopDownloading:(NSString *)regionId;
@@ -78,6 +85,7 @@ typedef NS_ENUM(NSInteger, EOAWeatherForecastDownloadState)
 + (NSAttributedString *)getStatusInfoDescription:(NSString *)regionId;
 + (NSString *)getAccuracyDescription:(NSString *)regionId;
 + (NSString *)getUpdatesDateFormat:(NSString *)regionId next:(BOOL)next;
++ (NSString *)getFrequencyFormat:(EOAWeatherForecastUpdatesFrequency)frequency;
 
 + (EOAWeatherForecastDownloadState)getPreferenceDownloadState:(NSString *)regionId;
 + (void)setPreferenceDownloadState:(NSString *)regionId value:(EOAWeatherForecastDownloadState)value;
@@ -95,7 +103,7 @@ typedef NS_ENUM(NSInteger, EOAWeatherForecastDownloadState)
 + (void)setPreferenceFrequency:(NSString *)regionId value:(EOAWeatherForecastUpdatesFrequency)value;
 
 + (NSArray<NSString *> *)getPreferenceKeys:(NSString *)regionId;
-+ (void)removePreferences:(NSString *)regionId excludeKeys:(NSArray<NSString *> *)excludeKeys;
++ (void)removePreferences:(NSString *)regionId;
 
 @end
 

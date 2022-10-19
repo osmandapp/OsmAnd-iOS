@@ -20,7 +20,7 @@
 
 @implementation OABaseBigTitleSettingsViewController
 {
-    UIView *_navBarBackgroundView;
+    BOOL _isHeaderBlurred;
 }
 
 - (instancetype)init
@@ -31,14 +31,14 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self setupNavBarHeight];
     _tableView.rowHeight = UITableViewAutomaticDimension;
     _tableView.estimatedRowHeight = 60.;
-    _tableView.contentInset = UIEdgeInsetsMake(defaultNavBarHeight, 0, 0, 0);
+    _tableView.contentInset = UIEdgeInsetsMake(self.navBarHeightConstraint.constant, 0, 0, 0);
     [self setTableHeaderView:self.getTableHeaderTitle];
-    
-    _navBarBackgroundView = [self createNavBarBackgroundView];
-    _navBarBackgroundView.frame = _navBarView.bounds;
-    [_navBarView insertSubview:_navBarBackgroundView atIndex:0];
+    self.titleLabel.hidden = YES;
+    self.separatorView.hidden = YES;
+    self.navBarView.backgroundColor = [self navBarBackgroundColor];
 }
 
 - (void) setTableHeaderView:(NSString *)label
@@ -54,37 +54,35 @@
     [_backButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
 }
 
+- (void)setupNavBarHeight
+{
+    self.navBarHeightConstraint.constant = [self isModal] ? [OAUtilities isLandscape] ? defaultNavBarHeight : modalNavBarHeight : defaultNavBarHeight;
+}
+
+- (BOOL)isSeparatorHidden
+{
+    return YES;
+}
+
 - (NSString *) getTableHeaderTitle
 {
     return @""; // override
-}
-
-- (UIView *) createNavBarBackgroundView
-{
-    if (!UIAccessibilityIsReduceTransparencyEnabled())
-    {
-        UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleLight]];
-        blurEffectView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        blurEffectView.alpha = 0;
-        return blurEffectView;
-    }
-    else
-    {
-        UIView *res = [[UIView alloc] init];
-        res.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        res.backgroundColor = [self navBarBackgroundColor];
-        res.alpha = 0;
-        return res;
-    }
 }
 
 - (void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        [self setupNavBarHeight];
+        _tableView.contentInset = UIEdgeInsetsMake(self.navBarHeightConstraint.constant, 0, 0, 0);
         [self setTableHeaderView:self.getTableHeaderTitle];
+        [self onRotation];
         [_tableView reloadData];
     } completion:nil];
+}
+
+- (void)onRotation
+{
 }
 
 - (CGFloat) heightForLabel:(NSString *)text
@@ -96,12 +94,12 @@
 
 - (IBAction)backImageButtonPressed:(id)sender
 {
-    [self.navigationController popViewControllerAnimated:YES];
+    [self dismissViewController];
 }
 
 - (IBAction) backButtonClicked:(id)sender
 {
-    [self.navigationController popViewControllerAnimated:YES];
+    [self dismissViewController];
 }
 
 - (UIColor *)navBarBackgroundColor
@@ -117,24 +115,66 @@
 
 - (void) scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    
-    CGFloat alpha = (_tableView.contentOffset.y + defaultNavBarHeight) < 0 ? 0 : ((_tableView.contentOffset.y + defaultNavBarHeight) / (fabs(_tableView.contentSize.height - _tableView.frame.size.height)));
-    if (alpha > 0)
+    CGFloat y = scrollView.contentOffset.y;
+    CGFloat navbarHeight = self.navBarView.frame.size.height - ([self isModal] ? 0. : [OAUtilities getTopMargin]);
+    CGFloat tableHeaderHeight = self.tableView.tableHeaderView.frame.size.height;
+    if (y > -(navbarHeight))
     {
-        [UIView animateWithDuration:.2 animations:^{
-            _titleLabel.hidden = NO;
-            _navBarView.backgroundColor = UIColor.clearColor;
-            _navBarBackgroundView.alpha = 1;
-        }];
+        if (!_isHeaderBlurred)
+        {
+            [UIView animateWithDuration:.2 animations:^{
+                [self.navBarView addBlurEffect:YES cornerRadius:0. padding:0.];
+                _isHeaderBlurred = YES;
+            }];
+        }
+        else if (y + navbarHeight > tableHeaderHeight * .75)
+        {
+            if (self.titleLabel.hidden)
+            {
+                [UIView animateWithDuration:.2 animations:^{
+                    self.titleLabel.hidden = NO;
+                }];
+            }
+
+            BOOL needToHideSeparator = y + navbarHeight <= tableHeaderHeight && !self.separatorView.hidden;
+            BOOL needToShowSeparator = y + navbarHeight >= tableHeaderHeight && self.separatorView.hidden;
+            if (![self isSeparatorHidden] && (needToHideSeparator || needToShowSeparator))
+            {
+                [UIView animateWithDuration:.2 animations:^{
+                    self.separatorView.hidden = needToHideSeparator;
+                }];
+            }
+        }
+        else if (y + navbarHeight < tableHeaderHeight * .75 && !self.titleLabel.hidden)
+        {
+            [UIView animateWithDuration:.2 animations:^{
+                self.titleLabel.hidden = YES;
+            }];
+        }
     }
-    else
+    else if (y == -(navbarHeight))
     {
-        [UIView animateWithDuration:.2 animations:^{
-            _titleLabel.hidden = YES;
-            _navBarView.backgroundColor = [self navBarBackgroundColor];
-            _navBarBackgroundView.alpha = 0;
-        }];
+        BOOL isTitleLabelHidden = self.titleLabel.hidden;
+        BOOL isSeparatorHidden = self.separatorView.hidden;
+        if (!isTitleLabelHidden || !isSeparatorHidden)
+        {
+            [UIView animateWithDuration:.2 animations:^{
+                if (!isTitleLabelHidden)
+                    self.titleLabel.hidden = YES;
+                if (!isSeparatorHidden)
+                    self.separatorView.hidden = YES;
+            }];
+        }
+
+        if (_isHeaderBlurred)
+        {
+            [UIView animateWithDuration:.2 animations:^{
+                [self.navBarView removeBlurEffect:[self navBarBackgroundColor]];
+                _isHeaderBlurred = NO;
+            }];
+        }
     }
+
     [self onScrollViewDidScroll:scrollView];
 }
 

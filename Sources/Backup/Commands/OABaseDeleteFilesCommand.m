@@ -80,6 +80,7 @@ static NSString *kQueueOperationsChanged = @"kQueueOperationsChanged";
     NSMutableSet *_itemsProgress;
     OABackupHelper *_backupHelper;
     NSOperationQueue *_executor;
+    NSArray *_filesToDelete;
 }
 
 - (instancetype)initWithVersion:(BOOL)byVersion
@@ -102,22 +103,30 @@ static NSString *kQueueOperationsChanged = @"kQueueOperationsChanged";
         _byVersion = byVersion;
         _listener = listener;
         _backupHelper = OABackupHelper.sharedInstance;
+        _itemsProgress = [NSMutableSet set];
     }
     return self;
 }
 
-- (id)doInBackground
+- (void)doInBackground
 {
-    return nil; // override
+    // override
 }
 
 - (void)main
 {
     [self onPreExecute];
-    id obj = [self doInBackground];
+    [self doInBackground];
+    if (_filesToDelete && _filesToDelete.count > 0)
+        [self deleteFiles:_filesToDelete];
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self onPostExecute:obj];
+        [self onPostExecute];
     });
+}
+
+- (void)setFilesToDelete:(NSArray *)files
+{
+    _filesToDelete = files;
 }
 
 - (void) deleteFiles:(NSArray<OARemoteFile *> *)remoteFiles
@@ -185,7 +194,7 @@ static NSString *kQueueOperationsChanged = @"kQueueOperationsChanged";
     }
 }
 
-- (void) onPostExecute:(id)obj
+- (void) onPostExecute
 {
     NSArray<id<OAOnDeleteFilesListener>> *listeners = [self getListeners];
     if (listeners.count > 0)

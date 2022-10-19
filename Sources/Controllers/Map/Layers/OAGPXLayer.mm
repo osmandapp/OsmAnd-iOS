@@ -276,9 +276,9 @@
                         {
                             points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt->position)));
                         }
-                        if (points.size() > 1 && !_cachedColors[key].isEmpty() && segStartIndex < _cachedColors[key].size() && segStartIndex + points.size() - 1 < _cachedColors[key].size())
+                        if (points.size() > 1 && !_cachedColors[key].isEmpty() && segStartIndex < _cachedColors[key].size() && segStartIndex + seg->points.size() - 1 < _cachedColors[key].size())
                         {
-                            segmentColors = _cachedColors[key].mid(segStartIndex, points.size());
+                            segmentColors.append(_cachedColors[key].mid(segStartIndex, seg->points.size()));
                         }
                         else if ([cachedTrack[@"colorization_scheme"] intValue] == COLORIZATION_NONE && segmentColors.isEmpty() && gpx.color == 0)
                         {
@@ -287,8 +287,8 @@
                             const auto colorARGB = [UIColorFromARGB([gpxTrack getColor:kDefaultTrackColor]) toFColorARGB];
                             segmentColors.push_back(colorARGB);
                         }
-                        segStartIndex += points.size() - 1;
-                        if (!gpx.joinSegments || !segmentColors.isEmpty())
+                        segStartIndex += seg->points.count();
+                        if (!gpx.joinSegments)
                         {
                             if (isCurrentTrack)
                             {
@@ -303,7 +303,7 @@
                         }
                     }
                 }
-                if (gpx.joinSegments && segmentColors.isEmpty())
+                if (gpx.joinSegments)
                 {
                     if (isCurrentTrack)
                     {
@@ -563,6 +563,8 @@ colorizationScheme:(int)colorizationScheme
                 for (int i = 0; i < segments.size(); i++)
                 {
                     const auto& seg = segments[i];
+                    if (seg->points.count() < 2)
+                        continue;
                     if (gpx.joinSegments)
                     {
                         if (i == 0)
@@ -629,7 +631,7 @@ colorizationScheme:(int)colorizationScheme
     }
     
     _startFinishProvider.reset(new OsmAnd::GpxAdditionalIconsProvider(
-        -120000, UIScreen.mainScreen.scale, startFinishPoints, splitLabels,
+                                                                      self.pointsOrder - 20000, UIScreen.mainScreen.scale, startFinishPoints, splitLabels,
         [OANativeUtilities skImageFromPngResource:@"map_track_point_start"],
         [OANativeUtilities skImageFromPngResource:@"map_track_point_finish"],
         [OANativeUtilities skImageFromPngResource:@"map_track_point_start_finish"]));
@@ -674,8 +676,8 @@ colorizationScheme:(int)colorizationScheme
         QList<OsmAnd::PointI> hiddenPoints;
         if (_hiddenPointPos31 != OsmAnd::PointI())
             hiddenPoints.append(_hiddenPointPos31);
-        
-        _waypointsMapProvider.reset(new OAWaypointsMapLayerProvider(points, self.baseOrder - points.count() - 1, hiddenPoints,
+            
+        _waypointsMapProvider.reset(new OAWaypointsMapLayerProvider(points, self.pointsOrder - points.count() - 1, hiddenPoints,
                                                                     self.showCaptions, self.captionStyle, self.captionTopSpace, rasterTileSize));
         [self.mapView addTiledSymbolsProvider:_waypointsMapProvider];
     }

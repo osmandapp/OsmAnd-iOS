@@ -27,6 +27,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void) updateOsmBugLocation:(long long)identifier newPosition:(CLLocationCoordinate2D)newPosition;
 
+- (long)getLastModifiedTime;
+- (void) setLastModifiedTime:(long)lastModified;
+
 @end
 
 NS_ASSUME_NONNULL_END

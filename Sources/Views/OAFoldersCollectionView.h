@@ -30,5 +30,6 @@
 - (void)setSelectedIndex:(NSInteger)index;
 - (NSInteger)getSelectedIndex;
 - (void)updateContentOffset;
+- (void)setOnlyIconCompact:(BOOL)compact;
 
 @end

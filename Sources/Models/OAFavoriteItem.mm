@@ -158,7 +158,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 
     QString qElevation = altitude > 0 ? QString::fromNSString([self toStringAltitude:altitude]) : QString();
     QString qTime = timestamp ? QString::fromNSString([self.class toStringDate:timestamp]) : QString();
-    QString qCreationTime = QString::fromNSString([self.class toStringDate:[NSDate date]]);
+    QString qPickupTime;
     
     QString qName = name ? QString::fromNSString(name) : QString();
     QString qDescription = description ? QString::fromNSString(description) : QString();
@@ -177,7 +177,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     std::shared_ptr<OsmAnd::IFavoriteLocation> favorite = [OsmAndApp instance].favoritesCollection->createFavoriteLocation(locationPoint,
                                                                      qElevation,
                                                                      qTime,
-                                                                     qCreationTime,
+                                                                     qPickupTime,
                                                                      qName,
                                                                      qDescription,
                                                                      qAddress,
@@ -374,6 +374,30 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     self.favorite->setColor(OsmAnd::FColorRGB(r,g,b));
 }
 
+- (NSString *) getAmenityOriginName
+{
+    if (!self.favorite->getAmenityOriginName().isNull())
+        return self.favorite->getAmenityOriginName().toNSString();
+    return nil;
+}
+
+- (void) setAmenityOriginName:(NSString *)amenityOriginName
+{
+    self.favorite->setAmenityOriginName(QString::fromNSString(amenityOriginName));
+}
+
+- (NSString *) getComment
+{
+    if (!self.favorite->getAmenityOriginName().isNull())
+        return self.favorite->getComment().toNSString();
+    return nil;
+}
+
+- (void) setComment:(NSString *)comment
+{
+    self.favorite->setComment(QString::fromNSString(comment));
+}
+
 - (OAPOI *) getAmenity
 {
     const QHash<QString, QString> extensionsToRead = self.favorite->getExtensions();
@@ -484,11 +508,11 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
         self.favorite->setTime(QString());
 }
 
-- (NSDate *) getCreationTime
+- (NSDate *) getPickupTime
 {
-    if (!self.favorite->getCreationTime().isNull())
+    if (!self.favorite->getPickupTime().isNull())
     {
-        NSString *timeString = self.favorite->getCreationTime().toNSString();
+        NSString *timeString = self.favorite->getPickupTime().toNSString();
         NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
         [dateFormat setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
         [dateFormat setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
@@ -500,13 +524,13 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     }
 }
 
-- (void) setCreationTime:(NSDate *)timestamp
+- (void) setPickupTime:(NSDate *)timestamp
 {
     NSString *savingString = [self.class toStringDate:timestamp];
     if (savingString)
-        self.favorite->setCreationTime(QString::fromNSString(savingString));
+        self.favorite->setPickupTime(QString::fromNSString(savingString));
     else
-        self.favorite->setCreationTime(QString());
+        self.favorite->setPickupTime(QString());
 }
 
 - (bool) getCalendarEvent
@@ -540,11 +564,11 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
         e.value = self.getAddress;
         [exts addObject:e];
     }
-    if (self.getCreationTime)
+    if (self.getPickupTime)
     {
         OAGpxExtension *e = [[OAGpxExtension alloc] init];
-        e.name = CREATION_TIME_EXTENSION;
-        e.value = self.favorite->getCreationTime().toNSString();
+        e.name = PICKUP_DATE_EXTENSION;
+        e.value = self.favorite->getPickupTime().toNSString();
         [exts addObject:e];
     }
     if (self.getIcon)
@@ -578,10 +602,8 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     pt.desc = self.getDescription;
     if (self.getCategory.length > 0)
         pt.type = self.getCategory;
-    // TODO: sync with Android after editing!
-//    if (getOriginObjectName().length() > 0) {
-//        pt.comment = getOriginObjectName();
-//    }
+    if (self.getAmenityOriginName.length > 0)
+        [pt setAmenityOriginName:self.getAmenityOriginName];
     return pt;
 }
 
@@ -598,10 +620,10 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
                                                     altitude:pt.elevation
                                                    timestamp:[NSDate dateWithTimeIntervalSince1970:pt.time]];
     [fp setDescription:pt.desc];
-
+    [fp setComment:pt.comment];
+    [fp setAmenityOriginName:pt.getAmenityOriginName];
+    
     // TODO: sync with Android
-//    if (pt.comment)
-//        [fp setOriginObjectName:pt.comment];
 
 //    OAGpxExtension *visitedDateExt = [pt getExtensionByKey:VISITED_TIME_EXTENSION];
 //    if (visitedDateExt)
@@ -622,7 +644,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
         [dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
 
         NSString *time = creationDateExt.value;
-        [fp setCreationTime:[dateFormatter dateFromString:time]];
+        [fp setPickupTime:[dateFormatter dateFromString:time]];
     }
 
     OAGpxExtension *calendarExt = [pt getExtensionByKey:CALENDAR_EXTENSION];

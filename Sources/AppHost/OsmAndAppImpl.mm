@@ -17,7 +17,7 @@
 #import "OAAutoObserverProxy.h"
 #import "OAUtilities.h"
 #import "OALog.h"
-#import <Reachability.h>
+#import <AFNetworking/AFNetworkReachabilityManager.h>
 #import "OAManageResourcesViewController.h"
 #import "OAAppVersionDependentConstants.h"
 #import "OAPOIHelper.h"
@@ -71,11 +71,15 @@
 
 #include <openingHoursParser.h>
 
+#define k3MonthInSeconds 60 * 60 * 24 * 90
+
 #define MILS_IN_DEGREE 17.777778f
 
 #define VERSION_3_10 3.10
 #define VERSION_3_14 3.14
 #define VERSION_4_2 4.2
+
+#define kMaxLogFiles 3
 
 #define kAppData @"app_data"
 #define kInstallDate @"install_date"
@@ -156,6 +160,7 @@
         _weatherForecastPath = [_cachePath stringByAppendingPathComponent:@"WeatherForecast"];
 
         [self buildFolders];
+        [self createLogFile];
 
         [self initOpeningHoursParser];
 
@@ -209,6 +214,28 @@
         if (!success)
             OALog(@"Error creating WeatherForecast folder: %@", error.localizedFailureReason);
     }
+}
+
+- (void) createLogFile
+{
+#if DEBUG
+    return;
+#else
+    NSFileManager *manager = NSFileManager.defaultManager;
+    NSString *logsPath = [_documentsPath stringByAppendingPathComponent:@"Logs"];
+    if (![manager fileExistsAtPath:logsPath])
+        [manager createDirectoryAtPath:logsPath withIntermediateDirectories:NO attributes:nil error:nil];
+    NSArray<NSString *> *files = [manager contentsOfDirectoryAtPath:logsPath error:nil];
+    for (NSInteger i = 0; i < files.count; i++)
+    {
+        if (i > kMaxLogFiles)
+           [manager removeItemAtPath:[logsPath stringByAppendingPathComponent:files[i]] error:nil];
+    }
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"MMM dd, yyyy HH:mm"];
+    NSString *destPath = [[logsPath stringByAppendingPathComponent:[formatter stringFromDate:NSDate.date]] stringByAppendingPathExtension:@"log"];
+    freopen([destPath fileSystemRepresentation], "a+", stderr);
+#endif
 }
 
 - (void) initOpeningHoursParser
@@ -380,7 +407,6 @@
                                                          });
 
     [self instantiateWeatherResourcesManager];
-    [[OAWeatherHelper sharedInstance] clearOutdatedCache];
 
     // Check for NSURLIsExcludedFromBackupKey and setup if needed
     const auto& localResources = _resourcesManager->getLocalResources();
@@ -517,7 +543,7 @@
     // Load resources list
     
     // If there's no repository available and there's internet connection, just update it
-    if (!self.resourcesManager->isRepositoryAvailable() && [Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
+    if (!self.resourcesManager->isRepositoryAvailable() && AFNetworkReachabilityManager.sharedManager.isReachable)
     {
         [self startRepositoryUpdateAsync:YES];
     }
@@ -526,6 +552,8 @@
     [self loadWorldRegions];
     [OAManageResourcesViewController prepareData];
     [_worldRegion buildResourceGroupItem];
+
+    [[OAWeatherHelper sharedInstance] clearOutdatedCache];
 
     _defaultRoutingConfig = [self getDefaultRoutingConfig];
     [[OAAvoidSpecificRoads instance] initRouteObjects:NO];
@@ -593,8 +621,10 @@
     OAPOIFiltersHelper *helper = [OAPOIFiltersHelper sharedInstance];
     [helper reloadAllPoiFilters];
     [helper loadSelectedPoiFilters];
-    
-    [[Reachability reachabilityForInternetConnection] startNotifier];
+    [AFNetworkReachabilityManager.sharedManager startMonitoring];
+    [AFNetworkReachabilityManager.sharedManager setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
+        [NSNotificationCenter.defaultCenter postNotificationName:kReachabilityChangedNotification object:nil];
+    }];
     [self askReview];
     
     return YES;
@@ -609,17 +639,20 @@
         [fm createDirectoryAtPath:dest withIntermediateDirectories:YES attributes:nil error:nil];
 
     NSArray *files = [fm contentsOfDirectoryAtPath:src error:nil];
-
+    BOOL tryAgain = NO;
     for (NSString *file in files)
     {
+        if ([fm fileExistsAtPath:[dest stringByAppendingPathComponent:file]])
+            continue;
         NSError *err = nil;
         [fm moveItemAtPath:[src stringByAppendingPathComponent:file]
                     toPath:[dest stringByAppendingPathComponent:file]
                      error:&err];
         if (err)
-            return NO;
+            tryAgain = YES;
     }
-    [fm removeItemAtPath:src error:nil];
+    if (!tryAgain)
+        [fm removeItemAtPath:src error:nil];
     return YES;
 }
 
@@ -693,7 +726,8 @@
             [res appendFormat:@"&nd=%ld", nd];
     }
     [res appendFormat:@"&ns=%ld", [[NSUserDefaults standardUserDefaults] integerForKey:kNumberOfStarts]];
-    [res appendFormat:@"&aid=%@", [self getUserIosId]];
+    if (self.getUserIosId.length > 0)
+        [res appendFormat:@"&aid=%@", [self getUserIosId]];
     return res;
 }
 
@@ -917,13 +951,23 @@
 
 - (void)checkAndDownloadOsmAndLiveUpdates
 {
-    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable)
+    if (!AFNetworkReachabilityManager.sharedManager.isReachable)
         return;
     QList<std::shared_ptr<const OsmAnd::IncrementalChangesManager::IncrementalUpdate> > updates;
     for (const auto& localResource : _resourcesManager->getLocalResources())
     {
         [OAOsmAndLiveHelper downloadUpdatesForRegion:QString(localResource->id).remove(QStringLiteral(".obf")) resourcesManager:_resourcesManager];
     }
+}
+
+- (void)checkAndDownloadWeatherForecastsUpdates
+{
+    if (!AFNetworkReachabilityManager.sharedManager.isReachable)
+        return;
+
+    OAWeatherHelper *weatherHelper = [OAWeatherHelper sharedInstance];
+    NSArray<NSString *> *regionIds = [weatherHelper getTempForecastsWithDownloadStates:@[@(EOAWeatherForecastDownloadStateFinished)]];
+    [weatherHelper checkAndDownloadForecastsByRegionIds:regionIds];
 }
 
 - (BOOL) installTestResource:(NSString *)filePath
@@ -1038,9 +1082,6 @@
     [userDefaults setObject:[NSKeyedArchiver archivedDataWithRootObject:_data]
                                               forKey:kAppData];
     [userDefaults synchronize];
-
-    // Favorites
-    [self saveFavoritesToPermamentStorage];
 }
 
 - (void)saveFavoritesToPermamentStorage
@@ -1179,14 +1220,14 @@
 - (NSString *) getUserIosId
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
-    NSString *userIosId = settings.userIosId.get;
+    if (![settings.sendAnonymousAppUsageData get])
+        return @"";
+    long lastRotation = [settings.lastUUIDChangeTimestamp get];
+    BOOL needRotation = NSDate.date.timeIntervalSince1970 - lastRotation > k3MonthInSeconds;
+    NSString *userIosId = needRotation ? settings.userIosId.get : @"";
     if (userIosId.length > 0)
         return userIosId;
-    userIosId = [UIDevice.currentDevice.identifierForVendor.UUIDString stringByReplacingOccurrencesOfString:@"-" withString:@""];
-    if (userIosId == nil)
-    {
-        userIosId = [[[NSUUID UUID] UUIDString] stringByReplacingOccurrencesOfString:@"-" withString:@""];
-    }
+    userIosId = [[[NSUUID UUID] UUIDString] stringByReplacingOccurrencesOfString:@"-" withString:@""];
     [settings.userIosId set:userIosId];
     return userIosId;
 }

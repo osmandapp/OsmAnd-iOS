@@ -23,7 +23,6 @@
 #include <OsmAndCore/Map/IMapRenderer.h>
 #include <OsmAndCore/Map/IAtlasMapRenderer.h>
 #include <OsmAndCore/Map/AtlasMapRendererConfiguration.h>
-#include <OsmAndCore/Map/MapAnimator.h>
 #include <OsmAndCore/Map/AtlasMapRenderer_Metrics.h>
 
 #import "OALog.h"
@@ -52,7 +51,8 @@
     OsmAnd::PointI _viewSize;
 
     std::shared_ptr<OsmAnd::IMapRenderer> _renderer;
-    std::shared_ptr<OsmAnd::MapAnimator> _animator;
+    std::shared_ptr<OsmAnd::MapAnimator> _mapAnimator;
+    std::shared_ptr<OsmAnd::MapMarkersAnimator> _mapMarkersAnimator;
 
     CGRect prevBounds;
 }
@@ -132,8 +132,13 @@
         });
 
     // Create animator for that map
-    _animator.reset(new OsmAnd::MapAnimator());
-    _animator->setMapRenderer(_renderer);
+    _mapAnimator.reset(new OsmAnd::MapAnimator());
+    _mapAnimator->setMapRenderer(_renderer);
+    _renderer->setSymbolsUpdateInterval(kSymbolsUpdateInterval);
+
+    // Create animator for map markers
+    _mapMarkersAnimator.reset(new OsmAnd::MapMarkersAnimator());
+    _mapMarkersAnimator->setMapRenderer(_renderer);
 
     auto debugSettings = [self getMapDebugSettings];
     //debugSettings->disableSymbolsFastCheckByFrustum = true;
@@ -217,6 +222,11 @@
 - (void)addTiledSymbolsProvider:(std::shared_ptr<OsmAnd::IMapTiledSymbolsProvider>)provider
 {
     _renderer->addSymbolsProvider(provider);
+}
+
+- (void)addTiledSymbolsProvider:(int)subsectionIndex provider:(std::shared_ptr<OsmAnd::IMapTiledSymbolsProvider>)provider
+{
+    _renderer->addSymbolsProvider(subsectionIndex, provider);
 }
 
 - (void)addKeyedSymbolsProvider:(std::shared_ptr<OsmAnd::IMapKeyedSymbolsProvider>)provider
@@ -307,12 +317,23 @@
 
 - (OsmAnd::PointI)target31
 {
-    return _renderer->getState().target31;
+    auto fixedPixel = _renderer->getState().fixedPixel;
+    if (fixedPixel.x >= 0 && fixedPixel.y >= 0)
+        return _renderer->getState().fixedLocation31;
+    else
+        return _renderer->getState().target31;
 }
 
 - (void)setTarget31:(OsmAnd::PointI)target31
 {
-    _renderer->setTarget(target31);
+    if (_viewSize.x > 0 && _viewSize.y > 0)
+    {
+        _renderer->setMapTargetLocation(OsmAnd::Utilities::normalizeCoordinates(target31, OsmAnd::ZoomLevel31));
+    }
+    else
+    {
+        _renderer->setTarget(target31);
+    }
 }
 
 - (float)zoom
@@ -332,7 +353,7 @@
 
 - (float)tileSizeOnScreenInPixels
 {
-    return std::dynamic_pointer_cast<OsmAnd::IAtlasMapRenderer>(_renderer)->getTileSizeOnScreenInPixels();
+    return _renderer->getTileSizeOnScreenInPixels();
 }
 
 - (float)tileSizeOnScreenInMeters
@@ -490,9 +511,14 @@
 
 @synthesize framePreparedObservable = _framePreparedObservable;
 
-- (const std::shared_ptr<OsmAnd::MapAnimator>&)getAnimator
+- (const std::shared_ptr<OsmAnd::MapAnimator>&) getMapAnimator
 {
-    return _animator;
+    return _mapAnimator;
+}
+
+- (const std::shared_ptr<OsmAnd::MapMarkersAnimator>&) getMapMarkersAnimator
+{
+    return _mapMarkersAnimator;
 }
 
 - (void)createContext
@@ -793,8 +819,9 @@
         return;
     }
 
-    // Update animator
-    _animator->update(displayLink.duration * displayLink.frameInterval);
+    // Update animators
+    _mapAnimator->update(displayLink.duration * displayLink.frameInterval);
+    _mapMarkersAnimator->update(displayLink.duration * displayLink.frameInterval);
 
     // Allocate buffers if they are not yet allocated
     if (_framebuffer == 0)
@@ -813,16 +840,17 @@
 
         // Update size of renderer window and viewport
         _renderer->setWindowSize(_viewSize);
-        BOOL isYScaleDown = _viewportYScale < 1.0;
-        BOOL isXScaleDown = _viewportXScale < 1.0;
-        float correctedX = isXScaleDown ? -_viewSize.x * _viewportXScale : 0;
-        float correctedY = isYScaleDown ? -_viewSize.y * _viewportYScale : 0;
-        _renderer->setViewport(OsmAnd::AreaI(OsmAnd::PointI(correctedX, correctedY),
-                                             OsmAnd::PointI(_viewSize.x * (isXScaleDown ? 1.0 :_viewportXScale),
-                                                            _viewSize.y * (isYScaleDown ? 1.0 :_viewportYScale))));
+        _renderer->setViewport(OsmAnd::AreaI(OsmAnd::PointI(0, 0), _viewSize));
+        _renderer->setMapTarget(
+            OsmAnd::PointI(_viewSize.x * _viewportXScale / 2.0,
+                           _viewSize.y * _viewportYScale / 2.0),
+            self.target31);
 
         _renderer->attachToRenderTarget();
     }
+
+    if (self.rendererDelegate)
+        [self.rendererDelegate frameAnimatorsUpdated];
 
     // Process update
     if (!_renderer->update())
@@ -831,6 +859,9 @@
                     format:@"Failed to update OpenGLES2+ map renderer 0x%08x", glGetError()];
         return;
     }
+
+    if (self.rendererDelegate)
+        [self.rendererDelegate frameUpdated];
 
     // Perform rendering only if frame is marked as invalidated
     bool shouldRenderFrame = false;
@@ -1026,6 +1057,16 @@
 - (BOOL) resumeGpuWorker
 {
     return _renderer->resumeGpuWorker();
+}
+
+- (void)setSymbolsOpacity:(float)opacityFactor
+{
+    _renderer->setSymbolsOpacity(opacityFactor);
+}
+
+- (void)setSymbolSubsectionConfiguration:(int)subsectionIndex configuration:(const OsmAnd::SymbolSubsectionConfiguration &)configuration
+{
+    _renderer->setSymbolSubsectionConfiguration(subsectionIndex, configuration);
 }
 
 @end

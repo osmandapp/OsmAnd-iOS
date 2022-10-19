@@ -162,7 +162,7 @@
         cachedDate = date;
 
         OsmAnd::WeatherTileResourcesManager::ValueRequest _request;
-        _request.dataTime = QDateTime::fromNSDate(date).toUTC();
+        _request.dateTime = date.timeIntervalSince1970 * 1000;
         _request.point31 = target31;
         _request.zoom = zoom;
         _request.band = (OsmAnd::BandIndex)band;
@@ -186,7 +186,7 @@
                             NSMeasurementFormatter *formatter = [NSMeasurementFormatter new];
                             formatter.locale = NSLocale.autoupdatingCurrentLocale;
 
-                            NSString *bandUnit = [formatter stringFromUnit:[[OAWeatherBand withWeatherBand:band] getBandUnit]];
+                            NSString *bandUnit = [formatter displayStringFromUnit:[[OAWeatherBand withWeatherBand:band] getBandUnit]];
 
                             BOOL unitsWithBigFont = band == WEATHER_BAND_TEMPERATURE;
                             if (unitsWithBigFont)

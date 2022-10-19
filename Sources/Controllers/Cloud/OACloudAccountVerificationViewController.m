@@ -220,6 +220,11 @@
     return value.length > 0;
 }
 
+- (BOOL) needEmailValidation
+{
+    return NO;
+}
+
 // MARK: OAOnRegisterUserListener
 
 - (void)onRegisterUser:(NSInteger)status message:(NSString *)message error:(OABackupError *)error
@@ -240,6 +245,15 @@
         {
             OACloudBackupViewController *vc = [[OACloudBackupViewController alloc] initWithSourceType:_sourceType];
             [self.navigationController pushViewController:vc animated:YES];
+            [self.navigationController.transitionCoordinator animateAlongsideTransition:nil completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+                NSMutableArray<UIViewController *> *viewControllers = [NSMutableArray arrayWithArray:self.navigationController.viewControllers];
+                if (viewControllers.count > 3)
+                {
+                    // remove previous login controllers
+                    [viewControllers removeObjectsInRange:NSMakeRange(viewControllers.count - 4, 3)];
+                }
+                self.navigationController.viewControllers = viewControllers;
+            }];
         }
         else {
             self.errorMessage = error != nil ? error.getLocalizedError : message;

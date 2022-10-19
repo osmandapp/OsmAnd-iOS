@@ -9,7 +9,7 @@
 //  git revision f5f971874f8bffbb6471d905f699874519957f4f
 
 #import "OADiscountHelper.h"
-#import <Reachability.h>
+#import <AFNetworking/AFNetworkReachabilityManager.h>
 #import "OAAppSettings.h"
 #import "OADiscountToolbarViewController.h"
 #import "OARootViewController.h"
@@ -182,7 +182,7 @@ const static NSString *URL = @"https://osmand.net/api/motd";
         [self showDiscountBanner];
     
     NSTimeInterval currentTime = [[NSDate date] timeIntervalSince1970];
-    if ([OAAppSettings sharedManager].settingDoNotShowPromotions.get || currentTime - _lastCheckTime < 60 * 60 * 24 || [Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable)
+    if ([OAAppSettings sharedManager].settingDoNotShowPromotions.get || currentTime - _lastCheckTime < 60 * 60 * 24 || !AFNetworkReachabilityManager.sharedManager.isReachable)
     {
         return;
     }
@@ -196,7 +196,12 @@ const static NSString *URL = @"https://osmand.net/api/motd";
     NSString *language = [[NSLocale preferredLanguages] objectAtIndex:0];
     NSDictionary *languageDictionary = [NSLocale componentsFromLocaleIdentifier:language];
     NSString *languageCode = [languageDictionary objectForKey:NSLocaleLanguageCode];
-    NSURL *urlObj = [NSURL URLWithString:[NSString stringWithFormat:@"%@?os=ios&version=%@&nd=%d&ns=%d&aid=%@&lang=%@", URL, ver, appInstalledDays, execCount, OsmAndApp.instance.getUserIosId, languageCode]];
+    NSString *url = [NSString stringWithFormat:@"%@?os=ios&version=%@&nd=%d&ns=%d&lang=%@", URL, ver, appInstalledDays, execCount, languageCode];
+    NSString *aid = OsmAndApp.instance.getUserIosId;
+    if (aid.length > 0)
+       url = [url stringByAppendingString:[NSString stringWithFormat:@"&aid=%@", aid]];
+    
+    NSURL *urlObj = [NSURL URLWithString:url];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:urlObj
                                                            cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
                                                        timeoutInterval:30.0];
@@ -343,7 +348,7 @@ const static NSString *URL = @"https://osmand.net/api/motd";
                         }
                         _product = product;
                         
-                        if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
+                        if (AFNetworkReachabilityManager.sharedManager.isReachable)
                         {
                             [helper requestProductsWithCompletionHandler:^(BOOL success) {
                                 

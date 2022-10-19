@@ -16,6 +16,10 @@
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UIButton *backImageButton;
+@property (weak, nonatomic) IBOutlet UIView *separatorView;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *navBarHeightConstraint;
+
+- (IBAction)backImageButtonPressed:(id)sender;
 
 - (NSString *) getTableHeaderTitle;
 - (void) setTableHeaderView:(NSString *)label;

@@ -24,6 +24,7 @@
 #import "OAMapCreatorHelper.h"
 #import "OAAutoObserverProxy.h"
 #import "OAResourcesUIHelper.h"
+#import <AFNetworking/AFNetworkReachabilityManager.h>
 
 #include <QSet>
 
@@ -51,7 +52,7 @@ static NSInteger kMapVisibilitySection = 1;
 static NSInteger kAvailableLayersSection = 2;
 static NSInteger kButtonsSection;
 
-@interface OAMapSettingsOverlayUnderlayScreen () <OAIconTextDescButtonCellDelegate, OATilesEditingViewControllerDelegate>
+@interface OAMapSettingsOverlayUnderlayScreen () <OAIconTextDescButtonCellDelegate, OATilesEditingViewControllerDelegate, UIDocumentPickerDelegate>
 
 @end
 
@@ -456,7 +457,7 @@ static NSInteger kButtonsSection;
 
 - (void) installMorePressed
 {
-    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
+    if (AFNetworkReachabilityManager.sharedManager.isReachable)
     {
         OAMapSettingsViewController *mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenOnlineSources];
         [mapSettingsViewController show:vwController.parentViewController parentViewController:vwController animated:YES];
@@ -478,7 +479,10 @@ static NSInteger kButtonsSection;
 
 - (void) importPressed
 {
-    [[OAMapCreatorHelper sharedInstance] fetchSQLiteDBFiles:YES];
+    UIDocumentPickerViewController *documentPickerVC = [[UIDocumentPickerViewController alloc] initWithDocumentTypes:@[@"net.osmand.sqlitedb"] inMode:UIDocumentPickerModeImport];
+    documentPickerVC.allowsMultipleSelection = NO;
+    documentPickerVC.delegate = self;
+    [self.vwController presentViewController:documentPickerVC animated:YES completion:nil];
 }
 
 - (void) sliderValueChanged:(id)sender
@@ -597,6 +601,7 @@ static NSInteger kButtonsSection;
     {
         return [_settings getUnderlayOpacitySliderVisibility];
     }
+    return NO;
 }
 
 - (void) setOpacitySliderVisibility: (BOOL)show
@@ -650,6 +655,17 @@ static NSInteger kButtonsSection;
 {
     [self setupView];
     [tblView reloadData];
+}
+
+#pragma mark - UIDocumentPickerDelegate
+
+- (void)documentPicker:(UIDocumentPickerViewController *)controller didPickDocumentsAtURLs:(NSArray<NSURL *> *)urls
+{
+    if (urls.count == 0)
+        return;
+    
+    NSURL *url = urls.firstObject;
+    [OARootViewController.instance handleIncomingURL:url];
 }
 
 

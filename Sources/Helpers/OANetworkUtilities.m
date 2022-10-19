@@ -8,6 +8,7 @@
 
 #import "OANetworkUtilities.h"
 #import "OAUtilities.h"
+#import "OAURLSessionProgress.h"
 
 #define BOUNDARY @"CowMooCowMooCowCowCow"
 
@@ -19,7 +20,7 @@
 
 + (void) sendRequest:(OANetworkRequest *)request async:(BOOL)async onComplete:(void (^)(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error))onComplete
 {
-    [self sendRequestWithUrl:request.url params:request.params post:request.post onComplete:onComplete];
+    [self sendRequestWithUrl:request.url params:request.params post:request.post async:async onComplete:onComplete];
 }
 
 + (void) sendRequestWithUrl:(NSString *)url params:(NSDictionary<NSString *, NSString *> *)params post:(BOOL)post onComplete:(void (^)(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error))onComplete
@@ -82,7 +83,7 @@
         dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
 }
 
-+ (void) uploadFile:(NSString *)url fileName:(NSString *)fileName params:(NSDictionary<NSString *, NSString *> *)params headers:(NSDictionary<NSString *, NSString *> *)headers data:(NSData *)data gzip:(BOOL)gzip onComplete:(void (^)(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error))onComplete
++ (void) uploadFile:(NSString *)url fileName:(NSString *)fileName params:(NSDictionary<NSString *, NSString *> *)params headers:(NSDictionary<NSString *, NSString *> *)headers data:(NSData *)data gzip:(BOOL)gzip progress:(OAURLSessionProgress *)progress onComplete:(void (^)(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error))onComplete
 {
     dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
     NSURL *urlObj;
@@ -130,7 +131,8 @@
     [request setHTTPBody:postData];
 
     __block BOOL hasFinished = NO;
-    NSURLSessionDataTask *uploadTask = [[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+    NSURLSession *urlSession = [NSURLSession sessionWithConfiguration:NSURLSessionConfiguration.defaultSessionConfiguration delegate:progress delegateQueue:nil];
+    NSURLSessionDataTask *uploadTask = [urlSession dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         hasFinished = YES;
         if (onComplete)
             onComplete(data, response, error);

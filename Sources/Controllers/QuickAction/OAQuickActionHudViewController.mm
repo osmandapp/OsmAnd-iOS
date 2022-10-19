@@ -108,7 +108,7 @@
     else
     {
         mapView.viewportXScale = VIEWPORT_NON_SHIFTED_SCALE;
-        mapView.viewportYScale = _actionsView.frame.size.height / DeviceScreenHeight;
+        mapView.viewportYScale = (DeviceScreenHeight - _actionsView.frame.size.height) / DeviceScreenHeight;
     }
 }
 

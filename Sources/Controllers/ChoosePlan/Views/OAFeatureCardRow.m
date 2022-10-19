@@ -11,8 +11,8 @@
 #import "OAColors.h"
 
 #define kSeparatorLeftInset 66.
-#define kMinRowHeight 48.
 #define kImageBackgroundSize 40.
+#define kTitleVerticalOffset 10.
 
 @interface OAFeatureCardRow ()
 
@@ -29,6 +29,7 @@
     OAFeatureCardRowType _type;
 
     UIView *_imageBackground;
+    CGFloat _dividerLeftMargin;
 
     UITapGestureRecognizer *_tapRecognizer;
     UILongPressGestureRecognizer *_longPressRecognizer;
@@ -98,12 +99,10 @@
     else if (_type == EOAFeatureCardRowInclude)
     {
         self.imageViewSecondRightIcon.hidden = YES;
-        self.labelDescription.font = [UIFont systemFontOfSize:15.];
-        self.labelDescription.textColor = UIColorFromRGB(color_text_footer);
         _imageBackground = [[UIView alloc] init];
         _imageBackground.layer.cornerRadius = 9.;
         _imageBackground.backgroundColor = UIColorFromARGB(color_primary_purple_10);
-        [self addSubview:_imageBackground];
+        [self insertSubview:_imageBackground belowSubview:self.imageViewLeftIcon];
     }
 
     if (_type != EOAFeatureCardRowInclude && _type != EOAFeatureCardRowSubscription)
@@ -132,9 +131,10 @@
 - (void)updateSimpleRowInfo:(NSString *)title
                 showDivider:(BOOL)showDivider
           dividerLeftMargin:(CGFloat)dividerLeftMargin
-               dividerWidth:(CGFloat)dividerWidth
                        icon:(NSString *)icon
 {
+    _dividerLeftMargin = dividerLeftMargin;
+
     self.backgroundColor = UIColor.whiteColor;
     self.labelTitle.text = title;
     self.labelTitle.textColor = UIColorFromRGB(color_primary_purple);
@@ -144,8 +144,13 @@
 
     self.viewBottomSeparator.hidden = !showDivider;
     CGRect viewBottomSeparatorFrame = self.viewBottomSeparator.frame;
-    viewBottomSeparatorFrame.origin.x = dividerLeftMargin;
-    viewBottomSeparatorFrame.size.width = dividerWidth;
+    viewBottomSeparatorFrame.origin.x = _dividerLeftMargin;
+    viewBottomSeparatorFrame.size.width = DeviceScreenWidth;
+    if (_dividerLeftMargin > 0.)
+    {
+        viewBottomSeparatorFrame.origin.x += [OAUtilities getLeftMargin];
+        viewBottomSeparatorFrame.size.width -= viewBottomSeparatorFrame.origin.x * 2;
+    }
     self.viewBottomSeparator.frame = viewBottomSeparatorFrame;
 }
 
@@ -153,17 +158,31 @@
 {
     self.backgroundColor = UIColor.clearColor;
     self.labelTitle.text = [feature getTitle];
-    self.labelDescription.text = [feature getDescription];
     self.imageViewLeftIcon.image = [feature getIcon];
+
+    NSMutableAttributedString *attributedDescription = [[NSMutableAttributedString alloc] initWithString:[feature getDescription]];
+    NSMutableParagraphStyle *descriptionParagraphStyle = [[NSMutableParagraphStyle alloc] init];
+    descriptionParagraphStyle.minimumLineHeight = 21.;
+    [attributedDescription addAttribute:NSParagraphStyleAttributeName
+                                  value:descriptionParagraphStyle
+                                  range:NSMakeRange(0, attributedDescription.length)];
+    [attributedDescription addAttribute:NSFontAttributeName
+                                  value:[UIFont systemFontOfSize:15.]
+                                  range:NSMakeRange(0, attributedDescription.length)];
+    [attributedDescription addAttribute:NSForegroundColorAttributeName
+                                  value:UIColorFromRGB(color_text_footer)
+                                  range:NSMakeRange(0, attributedDescription.length)];
+    self.labelDescription.attributedText = attributedDescription;
+
 }
 
-- (CGFloat)updateLayout:(CGFloat)y
+- (CGFloat)updateLayout:(CGFloat)y width:(CGFloat)width
 {
-    CGFloat width = DeviceScreenWidth;
-    CGFloat iconMargin = _type == EOAFeatureCardRowSimple || _type == EOAFeatureCardRowInclude
+    BOOL isRowInclude = _type == EOAFeatureCardRowInclude;
+    CGFloat iconMargin = _type == EOAFeatureCardRowSimple || isRowInclude
             ? 0.
-            : kIconSize + kSpaceMargin;
-    CGFloat iconMargins = _type == EOAFeatureCardRowInclude
+            : kIconSize + kPrimarySpaceMargin;
+    CGFloat iconMargins = isRowInclude
             ? 0
             : 20. + iconMargin + (self.imageViewFirstRightIcon.hidden ? iconMargin : iconMargin * 2) + 20.;
 
@@ -171,26 +190,31 @@
                                                   width:width - [OAUtilities getLeftMargin] * 2 - iconMargins
                                                    font:self.labelTitle.font];
 
-    CGFloat lineHeight = ceil(self.labelTitle.font.lineHeight);
-    CGFloat titleVerticalOffset = titleSize.height > lineHeight || _type == EOAFeatureCardRowInclude ? 9. : 13.;
-    if (_type != EOAFeatureCardRowInclude || titleSize.height + titleVerticalOffset * 2 < kMinRowHeight)
-        titleVerticalOffset = (kMinRowHeight - titleSize.height) / 2;
+    if (!isRowInclude && (titleSize.height + kTitleVerticalOffset * 2) < kMinRowHeight)
+        titleSize.height += kMinRowHeight - titleSize.height - kTitleVerticalOffset * 2;
 
     self.labelTitle.frame = CGRectMake(
             20. + iconMargin + [OAUtilities getLeftMargin],
-            _type == EOAFeatureCardRowInclude ? kImageBackgroundSize + titleVerticalOffset : titleVerticalOffset,
+            isRowInclude ? kImageBackgroundSize + kTitleVerticalOffset : kTitleVerticalOffset,
             width - [OAUtilities getLeftMargin] * 2 - iconMargins,
             titleSize.height
     );
 
-    if (_type != EOAFeatureCardRowInclude)
+    if (!isRowInclude)
     {
-        CGFloat viewBottomSeparatorY = self.labelTitle.frame.origin.y + self.labelTitle.frame.size.height + titleVerticalOffset - kSeparatorHeight;
+        CGFloat viewBottomSeparatorY = self.labelTitle.frame.origin.y + self.labelTitle.frame.size.height + kTitleVerticalOffset - kSeparatorHeight;
         if (_type == EOAFeatureCardRowSimple)
         {
             CGRect viewBottomSeparatorFrame = self.viewBottomSeparator.frame;
+            viewBottomSeparatorFrame.origin.x = _dividerLeftMargin;
             viewBottomSeparatorFrame.origin.y = viewBottomSeparatorY;
+            viewBottomSeparatorFrame.size.width = width;
             viewBottomSeparatorFrame.size.height = kSeparatorHeight;
+            if (_dividerLeftMargin > 0.)
+            {
+                viewBottomSeparatorFrame.origin.x += [OAUtilities getLeftMargin];
+                viewBottomSeparatorFrame.size.width -= viewBottomSeparatorFrame.origin.x * 2;
+            }
             self.viewBottomSeparator.frame = viewBottomSeparatorFrame;
         }
         else
@@ -205,9 +229,8 @@
     }
     else
     {
-        CGSize descriptionSize = [OAUtilities calculateTextBounds:self.labelDescription.text
-                                                            width:width - (20. + [OAUtilities getLeftMargin]) * 2
-                                                             font:self.labelDescription.font];
+        CGSize descriptionSize = [OAUtilities calculateTextBounds:self.labelDescription.attributedText
+                                                            width:width - (20. + [OAUtilities getLeftMargin]) * 2];
         self.labelDescription.frame = CGRectMake(
                 20. + [OAUtilities getLeftMargin],
                 self.labelTitle.frame.origin.y + self.labelTitle.frame.size.height + 5.,
@@ -220,19 +243,17 @@
             0.,
             y,
             width,
-            _type == EOAFeatureCardRowInclude
+            isRowInclude
                     ? self.labelDescription.frame.origin.y + self.labelDescription.frame.size.height
                     : self.viewBottomSeparator.frame.origin.y + self.viewBottomSeparator.frame.size.height
     );
 
-    if (_type != EOAFeatureCardRowInclude)
+    if (!isRowInclude)
     {
-        CGFloat iconVerticalOffset = _type == EOAFeatureCardRowInclude
-                ? 0.
-                : self.frame.size.height - self.frame.size.height / 2 - kIconSize / 2;
+        CGFloat iconVerticalOffset = self.frame.size.height - self.frame.size.height / 2 - kIconSize / 2;
         self.imageViewLeftIcon.frame = CGRectMake(20. + [OAUtilities getLeftMargin], iconVerticalOffset, kIconSize, kIconSize);
         self.imageViewSecondRightIcon.frame = CGRectMake(width - 20. - kIconSize - [OAUtilities getLeftMargin], iconVerticalOffset, kIconSize, kIconSize);
-        self.imageViewFirstRightIcon.frame = CGRectMake(self.imageViewSecondRightIcon.frame.origin.x - kSpaceMargin - kIconSize, iconVerticalOffset, kIconSize, kIconSize);
+        self.imageViewFirstRightIcon.frame = CGRectMake(self.imageViewSecondRightIcon.frame.origin.x - kPrimarySpaceMargin - kIconSize, iconVerticalOffset, kIconSize, kIconSize);
     }
     else
     {

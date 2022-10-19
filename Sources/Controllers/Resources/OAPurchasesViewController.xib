@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21225" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21207"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -18,15 +19,15 @@
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+        <view contentMode="scaleToFill" id="i5M-Pr-FkT">
             <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="j8U-NB-60c" userLabel="Navigation Bar View">
-                    <rect key="frame" x="0.0" y="0.0" width="414" height="88"/>
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="92"/>
                     <subviews>
                         <button opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kic-5D-Vbq" userLabel="Back Button">
-                            <rect key="frame" x="16" y="44" width="28" height="44"/>
+                            <rect key="frame" x="16" y="48" width="28" height="44"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="44" id="Q9t-eO-2gk"/>
                                 <constraint firstAttribute="width" constant="28" id="Rn6-vV-nnL"/>
@@ -38,19 +39,19 @@
                             </connections>
                         </button>
                         <button opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eV8-xZ-NVC" userLabel="Restore Button">
-                            <rect key="frame" x="370" y="44" width="28" height="44"/>
+                            <rect key="frame" x="370" y="48" width="28" height="44"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="28" id="jkr-Hs-niJ"/>
                                 <constraint firstAttribute="height" constant="44" id="xbL-RI-bxj"/>
                             </constraints>
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <state key="normal" image="ic_custom_reset.png"/>
+                            <state key="normal" image="ic_navbar_reset.png"/>
                             <connections>
                                 <action selector="onRestoreButtonPressed:" destination="-1" eventType="touchUpInside" id="3rX-w7-v8a"/>
                             </connections>
                         </button>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Purchases" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LqJ-Hj-D99" userLabel="Title Label">
-                            <rect key="frame" x="165" y="59" width="84" height="20"/>
+                            <rect key="frame" x="165" y="63" width="84" height="20"/>
                             <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <nil key="highlightedColor"/>
@@ -67,20 +68,18 @@
                     </constraints>
                 </view>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="P4b-42-BBD">
-                    <rect key="frame" x="0.0" y="88" width="414" height="808"/>
-                    <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    <connections>
-                        <outlet property="dataSource" destination="-1" id="SzD-F0-ARZ"/>
-                        <outlet property="delegate" destination="-1" id="Kjs-hX-cna"/>
-                    </connections>
+                    <rect key="frame" x="0.0" y="92" width="414" height="804"/>
+                    <viewLayoutGuide key="safeArea" id="iM9-nu-9bh"/>
+                    <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </tableView>
             </subviews>
-            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <viewLayoutGuide key="safeArea" id="ng5-kG-LJo"/>
+            <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
+                <constraint firstItem="j8U-NB-60c" firstAttribute="bottom" secondItem="ng5-kG-LJo" secondAttribute="top" constant="44" id="6va-J2-qit"/>
                 <constraint firstItem="P4b-42-BBD" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="BOc-Q4-Gng"/>
                 <constraint firstAttribute="trailing" secondItem="j8U-NB-60c" secondAttribute="trailing" id="HMt-N7-lzk"/>
                 <constraint firstAttribute="trailing" secondItem="P4b-42-BBD" secondAttribute="trailing" id="Qi4-0x-9wG"/>
-                <constraint firstItem="j8U-NB-60c" firstAttribute="bottom" secondItem="i5M-Pr-FkT" secondAttribute="topMargin" constant="44" id="SUT-Qx-qD4"/>
                 <constraint firstItem="j8U-NB-60c" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="WA9-RY-Dqf"/>
                 <constraint firstItem="P4b-42-BBD" firstAttribute="top" secondItem="j8U-NB-60c" secondAttribute="bottom" id="exU-hc-Kcd"/>
                 <constraint firstAttribute="bottom" secondItem="P4b-42-BBD" secondAttribute="bottom" id="lQv-ka-wTi"/>
@@ -90,7 +89,7 @@
         </view>
     </objects>
     <resources>
-        <image name="ic_custom_reset.png" width="30" height="30"/>
         <image name="ic_navbar_chevron.png" width="28" height="28"/>
+        <image name="ic_navbar_reset.png" width="28" height="28"/>
     </resources>
 </document>

@@ -230,7 +230,8 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 {
     [super viewDidLoad];
     _hudMode = EOAHudModeRoutePlanning;
-    
+    _cachedYViewPort = _mapPanel.mapViewController.mapView.viewportYScale;
+
     [_optionsButton setTitle:OALocalizedString(@"shared_string_options") forState:UIControlStateNormal];
     [_addPointButton setTitle:OALocalizedString(@"add_point") forState:UIControlStateNormal];
     _optionButtonWidthConstraint.constant = [OAUtilities calculateTextBounds:OALocalizedString(@"shared_string_options") width:DeviceScreenWidth height:44 font:[UIFont systemFontOfSize:17]].width + 16;
@@ -270,8 +271,6 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     [_doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
     _titleView.text = OALocalizedString(@"plan_route");
     
-    _layer.delegate = self;
-    
     [self adjustMapViewPort];
     [self changeMapRulerPosition];
     [self adjustActionButtonsPosition:self.getViewHeight];
@@ -301,6 +300,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (void)viewDidAppear:(BOOL)animated
 {
 	[super viewDidAppear:animated];
+    _layer.delegate = self;
 	if (_showSnapWarning)
 		[self enterApproximationMode];
 
@@ -488,17 +488,17 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     if ([self isLeftSidePresentation] && self.currentState == EOADraggableMenuStateInitial)
     {
         mapView.viewportXScale = VIEWPORT_NON_SHIFTED_SCALE;
-        mapView.viewportYScale = _landscapeHeaderContainerView.frame.size.height / DeviceScreenHeight;
+        mapView.viewportYScale = (DeviceScreenHeight - _landscapeHeaderContainerView.frame.size.height) / DeviceScreenHeight;
     }
     else if ([self isLeftSidePresentation])
     {
         mapView.viewportXScale = VIEWPORT_SHIFTED_SCALE;
-        mapView.viewportYScale = _landscapeHeaderContainerView.frame.size.height / DeviceScreenHeight;
+        mapView.viewportYScale = (DeviceScreenHeight - _landscapeHeaderContainerView.frame.size.height) / DeviceScreenHeight;
     }
     else
     {
         mapView.viewportXScale = VIEWPORT_NON_SHIFTED_SCALE;
-        mapView.viewportYScale = self.getViewHeight / DeviceScreenHeight;
+        mapView.viewportYScale = (DeviceScreenHeight - self.getViewHeight) / DeviceScreenHeight;
     }
 }
 
@@ -1635,6 +1635,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
             }
         }
         [_editingContext.commandManager execute:[[OAChangeRouteModeCommand alloc] initWithLayer:_layer appMode:mode changeRouteType:changeRouteType pointIndex:_editingContext.selectedPointPosition]];
+        [_editingContext setSelectedPointPosition:-1];
 //        updateUndoRedoButton(false, redoBtn);
 //        updateUndoRedoButton(true, undoBtn);
 //        disable(upDownBtn);

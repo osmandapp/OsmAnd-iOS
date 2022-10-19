@@ -254,7 +254,7 @@ static BOOL dataInvalidated = NO;
 - (void) offerDownloadAndInstallOf:(OARepositoryResourceItem *)item
 {
     BOOL isWeatherForecast = item.resourceType == OsmAndResourceType::WeatherForecast;
-    if (isWeatherForecast && ![[OAWeatherHelper sharedInstance] isOfflineForecastSizesInfoCalculated:item.worldRegion.regionId])
+    if (isWeatherForecast && ![[OAWeatherHelper sharedInstance] isOfflineForecastSizesInfoCalculated:[OAWeatherHelper checkAndGetRegionId:item.worldRegion]])
         return;
 
     [OAResourcesUIHelper offerDownloadAndInstallOf:item onTaskCreated:^(id<OADownloadTask> task) {
@@ -270,7 +270,7 @@ static BOOL dataInvalidated = NO;
 {
     if (item.resourceType == OsmAndResourceType::WeatherForecast)
     {
-        if (![[OAWeatherHelper sharedInstance] isOfflineForecastSizesInfoCalculated:item.worldRegion.regionId])
+        if (![[OAWeatherHelper sharedInstance] isOfflineForecastSizesInfoCalculated:[OAWeatherHelper checkAndGetRegionId:item.worldRegion]])
             return;
 
         OARepositoryResourceItem *repositoryItem = [[OARepositoryResourceItem alloc] init];
@@ -385,7 +385,7 @@ static BOOL dataInvalidated = NO;
         {
             [OAResourcesUIHelper offerCancelDownloadOf:item_];
         }
-        else if (item_.resourceType == OsmAndResourceType::WeatherForecast && [OAWeatherHelper getPreferenceDownloadState:item_.worldRegion.regionId] == EOAWeatherForecastDownloadStateInProgress)
+        else if (item_.resourceType == OsmAndResourceType::WeatherForecast && [OAWeatherHelper getPreferenceDownloadState:[OAWeatherHelper checkAndGetRegionId:item_.worldRegion]] == EOAWeatherForecastDownloadStateInProgress)
         {
             [OAResourcesUIHelper offerCancelDownloadOf:item_ onTaskStop:^(id<OADownloadTask>)
             {
@@ -520,8 +520,7 @@ static BOOL dataInvalidated = NO;
 
         if (!self.isViewLoaded || self.view.window == nil)
         {
-            if (task.progressCompleted == 1. && ((resource != nullptr && resource->type == OsmAndResourceType::MapRegion)
-                    || (resource == nullptr && [nsResourceId hasSuffix:@".live.obf"])))
+            if (task.progressCompleted == 1. && ![nsResourceId hasSuffix:@".live.obf"])
                 [_app.data.mapLayerChangeObservable notifyEvent];
 
             self.dataInvalidated = YES;

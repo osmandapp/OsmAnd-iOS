@@ -32,4 +32,7 @@
 - (NSArray *)getPointsHavingTypes:(NSArray<NSNumber *> *)types limit:(int)limit;
 - (OAHistoryItem *)getPointByName:(NSString *)name;
 
+- (long) getMarkersHistoryLastModifiedTime;
+- (void) setMarkersHistoryLastModifiedTime:(long)lastModified;
+
 @end

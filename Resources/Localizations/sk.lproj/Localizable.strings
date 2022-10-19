@@ -1562,7 +1562,7 @@
 "routing_attr_length_name" = "Limit dĺžky";
 "weight_limit_description" = "Zadajte hmotnosť vášho vozidla, pretože na trase môžu byť obmedzenia pre ťažké vozidlá.";
 "default_speed_dialog_msg" = "Odhaduječas na cestách neznámeho typu a obmedzuje rýchlosť na všetkých cestách (môže ovplyvniť trasu)";
-"width_limit_description" = "Zadajtešírku vášho vozidla, pretože na trase môžu byť obmedzenia pre široké vozidlá.";
+"width_limit_description" = "Zadajte šírku vášho vozidla, pretože na trase môžu byť obmedzenia pre široké vozidlá.";
 "height_limit_description" = "Zadajte výšku vášho vozidla, pretože na trase môžu byť obmedzenia pre vysoké vozidlá.";
 "export_profile" = "Exportovať";
 "profile_appearance" = "Vzhľad profilu";
@@ -1856,7 +1856,7 @@
 "lang_oc" = "Okcitánsky";
 "lang_ms" = "Malajsky";
 "cloud_make_backup_descr" = "Na tomto zariadení je už veľa zmien, prosím urobte zálohu týchto údajov, aby ste o ne neprišli.";
-"rendering_attr_lightRailRoutes_name" = "Trasyďiaľkových električiek";
+"rendering_attr_lightRailRoutes_name" = "Trasy diaľkových električiek";
 "lang_ja" = "Japonsky (日本の)";
 "lang_de_casual" = "Nemecky (Deutsch)úsporne";
 "lang_fy" = "Frízsky";

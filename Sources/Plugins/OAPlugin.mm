@@ -458,9 +458,6 @@ private static void checkMarketPlugin(OsmandApplication app, OsmandPlugin srtm, 
     [OAQuickActionRegistry.sharedInstance updateActionTypes];
     [plugin updateLayers];
     
-    if ([plugin isEnabled])
-        [plugin showInstalledScreen];
-    
     return YES;
 }
 

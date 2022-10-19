@@ -7,7 +7,7 @@
 //
 
 #import "OAOutdatedResourcesViewController.h"
-#import <Reachability.h>
+#import <AFNetworking/AFNetworkReachabilityManager.h>
 #import <UIAlertView+Blocks.h>
 #import "Localization.h"
 #import "OAColors.h"
@@ -15,6 +15,7 @@
 #import "OAChoosePlanHelper.h"
 #import "OAIAPHelper.h"
 #import "OAWeatherForecastViewController.h"
+#import "OAPluginPopupViewController.h"
 
 #define kRowsInUpdatesSection 2
 
@@ -271,7 +272,7 @@
                                   [items count],
                                   OALocalizedString(@"res_updates_avail_q")] mutableCopy];
     
-    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == ReachableViaWWAN)
+    if (AFNetworkReachabilityManager.sharedManager.isReachableViaWWAN)
     {
         [message appendString:@" "];
         [message appendString:[NSString stringWithFormat:OALocalizedString(@"prch_nau_q2_cell"), stringifiedSize]];
@@ -584,8 +585,10 @@
     }
     else if (indexPath.section == _updatesSection && indexPath.row == _weatherForecastsRow)
     {
-        OAWeatherForecastViewController *weatherForecastController = [[OAWeatherForecastViewController alloc] init];
-        [self showViewController:weatherForecastController];
+        if (![[OAIAPHelper sharedInstance].weather isActive])
+            [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Weather];
+        else
+            [self showViewController:[[OAWeatherForecastViewController alloc] init]];
     }
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];

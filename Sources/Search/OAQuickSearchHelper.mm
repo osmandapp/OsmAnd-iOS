@@ -232,6 +232,10 @@ static const int SEARCH_HISTORY_OBJECT_PRIORITY = 53;
     OASearchUICore *_core;
     OASearchResultCollection *_resultCollection;
     OAAutoObserverProxy* _localResourcesChangedObserver;
+
+    dispatch_queue_t _searchCitiesSerialQueue;
+    dispatch_group_t _searchCitiesGroup;
+    NSInteger _searchRequestsCount;
 }
 
 + (OAQuickSearchHelper *) instance
@@ -253,6 +257,10 @@ static const int SEARCH_HISTORY_OBJECT_PRIORITY = 53;
         NSString *lang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
         BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit.get;
         _core = [[OASearchUICore alloc] initWithLang:lang ? lang : @"" transliterate:transliterate];
+
+        _searchCitiesSerialQueue = dispatch_queue_create("quickSearch_OLCSearchQueue", DISPATCH_QUEUE_SERIAL);
+        _searchCitiesGroup = dispatch_group_create();
+        _searchRequestsCount = 0;
 
         _localResourcesChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                    withHandler:@selector(onLocalResourcesChanged:withKey:)
@@ -360,6 +368,7 @@ static const int SEARCH_HISTORY_OBJECT_PRIORITY = 53;
     });
 }
 
+//nnngrach version
 - (void) searchAmenities:(NSString *)text
           searchLocation:(CLLocation *)searchLocation
             searchBBox31:(QuadRect *)searchBBox31
@@ -410,5 +419,92 @@ static const int SEARCH_HISTORY_OBJECT_PRIORITY = 53;
         });
     });
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+//Skali version
+            - (void)cancelSearchCities
+            {
+                _searchRequestsCount = 0;
+            }
+
+            - (void)searchCities:(NSString *)text
+                  searchLocation:(CLLocation *)searchLocation
+                    allowedTypes:(NSArray<NSString *> *)allowedTypes
+                       cityLimit:(NSInteger)cityLimit
+                      onComplete:(void (^)(NSMutableArray *amenities))onComplete
+            {
+                NSInteger searchRequestsCount = ++_searchRequestsCount;
+                dispatch_block_t searchCitiesFunc = ^{
+                    dispatch_group_enter(_searchCitiesGroup);
+
+                    OANameStringMatcher *nm = [[OANameStringMatcher alloc] initWithNamePart:text mode:CHECK_STARTS_FROM_SPACE];
+                    NSString *lang = [[OAAppSettings sharedManager].settingPrefMapLanguage get];
+                    const auto qLang = QString::fromNSString(lang);
+                    BOOL transliterate = [[OAAppSettings sharedManager].settingMapLanguageTranslit get];
+                    NSMutableArray *amenities = [NSMutableArray array];
+
+                    OAQuickSearchHelper *searchHelper = [OAQuickSearchHelper instance];
+                    OASearchUICore *searchUICore = [searchHelper getCore];
+                    OASearchSettings *settings = [[searchUICore getSearchSettings] setOriginalLocation:[OsmAndApp instance].locationServices.lastKnownLocation];
+                    settings = [settings setLang:lang ? lang : @"" transliterateIfMissing:transliterate];
+                    settings = [settings setSortByName:NO];
+                    settings = [settings setAddressSearch:YES];
+                    settings = [settings setEmptyQueryAllowed:YES];
+                    settings = [settings setOriginalLocation:searchLocation];
+                    [searchUICore updateSettings:settings];
+
+                    int __block count = 0;
+
+                    [searchUICore shallowSearch:OASearchAmenityByNameAPI.class
+                                           text:text
+                                        matcher:[[OAResultMatcher alloc] initWithPublishFunc:^BOOL(OASearchResult *__autoreleasing *object) {
+                        
+                        OASearchResult *searchResult = *object;
+                        const auto& amenity = searchResult.amenity;
+                        if (!amenity)
+                            return NO;
+
+                        if (count++ > cityLimit || _searchRequestsCount > searchRequestsCount || _searchRequestsCount == 0)
+                            return NO;
+
+                        NSString *subType = amenity->subType.toNSString();
+                        NSString *localeName = amenity->getName(qLang, transliterate).toNSString();
+                        NSArray<NSString *> *otherNames = searchResult.otherNames;
+
+                        if (![allowedTypes containsObject:subType] || (![nm matches:localeName] && ![nm matchesMap:otherNames]))
+                            return NO;
+
+                        return NO;
+                    } cancelledFunc:^BOOL{
+                        return count > cityLimit || _searchRequestsCount > searchRequestsCount || _searchRequestsCount == 0;
+                    }] resortAll:YES removeDuplicates:YES];
+
+                    if (_searchRequestsCount == searchRequestsCount)
+                    {
+                        _searchRequestsCount = 0;
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            if (onComplete)
+                                onComplete(amenities);
+                        });
+                    }
+                    dispatch_group_leave(_searchCitiesGroup);
+                };
+
+                dispatch_group_notify(_searchCitiesGroup, _searchCitiesSerialQueue, ^{
+                    dispatch_async(_searchCitiesSerialQueue, searchCitiesFunc);
+                });
+            }
+
 
 @end

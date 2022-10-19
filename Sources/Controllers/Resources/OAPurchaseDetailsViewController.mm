@@ -130,7 +130,11 @@
     NSString *descr = _product.expirationDate ? [formatter stringFromDate:_product.expirationDate] : @"";
     if (_product.purchaseState == PSTATE_NOT_PURCHASED && [_product isKindOfClass:OASubscription.class])
     {
-        if (_product.purchaseCancelledTime > 0)
+        if (_product.expirationDate)
+        {
+            descr = [formatter stringFromDate:_product.expirationDate];
+        }
+        else if (_product.purchaseCancelledTime > 0)
         {
             descr = [formatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:_product.purchaseCancelledTime]];
         }
@@ -273,6 +277,8 @@
             cell = (OATitleDescriptionBigIconCell *) nib[0];
             cell.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            [cell showLeftIcon:NO];
+            [cell showRightIcon:NO];
         }
         if (cell)
         {
@@ -280,7 +286,7 @@
 
             cell.titleView.text = item[@"title"];
             cell.descriptionView.text = item[@"description"];
-            cell.iconView.image = item[@"icon"];
+            cell.rightIconView.image = item[@"icon"];
         }
         outCell = cell;
     }

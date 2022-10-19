@@ -9,11 +9,12 @@
 #import "OAWeatherSettingsViewController.h"
 #import "OAWeatherBandSettingsViewController.h"
 #import "OAWeatherCacheSettingsViewController.h"
-#import "OAIconTitleValueCell.h"
-#import "OASwitchTableViewCell.h"
+#import "OAValueTableViewCell.h"
+#import "OATableViewCellSwitch.h"
 #import "OsmAndApp.h"
 #import "Localization.h"
 #import "OAColors.h"
+#import "OASizes.h"
 #import "OAWeatherBand.h"
 #import "OAWeatherHelper.h"
 
@@ -23,6 +24,7 @@
 
 @implementation OAWeatherSettingsViewController
 {
+    OAWeatherHelper *_weatherHelper;
     NSArray<NSDictionary *> *_data;
     NSIndexPath *_selectedIndexPath;
     NSIndexPath *_onlineDataIndexPath;
@@ -45,6 +47,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    _weatherHelper = [OAWeatherHelper sharedInstance];
 
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
@@ -65,7 +68,7 @@
 {
     if ((localData && _useOfflineDataIndexPath) || (!localData && _onlineDataIndexPath))
     {
-        [[OAWeatherHelper sharedInstance] calculateFullCacheSize:localData onComplete:^(unsigned long long dbsSize)
+        [_weatherHelper calculateFullCacheSize:localData onComplete:^(unsigned long long dbsSize)
         {
             dispatch_async(dispatch_get_main_queue(), ^{
                 NSMutableArray<NSDictionary *> *cells = _data[localData ? _useOfflineDataIndexPath.section : _onlineDataIndexPath.section][@"cells"];
@@ -74,7 +77,7 @@
                         @"key": localData ? @"offline_forecast" : @"online_cache",
                         @"title": OALocalizedString(localData ? @"weather_offline_forecast" : @"shared_string_online_cache"),
                         @"value": sizeString,
-                        @"type": [OAIconTitleValueCell getCellIdentifier]
+                        @"type": [OAValueTableViewCell getCellIdentifier]
                 };
 
                 [self.tableView reloadRowsAtIndexPaths:@[localData ? _useOfflineDataIndexPath : _onlineDataIndexPath]
@@ -92,12 +95,12 @@
     NSMutableArray<NSDictionary *> *data = [NSMutableArray array];
 
     NSMutableArray<NSDictionary *> *measurementCells = [NSMutableArray array];
-    for (OAWeatherBand *band in [OAWeatherHelper sharedInstance].bands)
+    for (OAWeatherBand *band in _weatherHelper.bands)
     {
         [measurementCells addObject:@{
                 @"key": [@"band_" stringByAppendingString:[band getMeasurementName]],
                 @"band": band,
-                @"type": [OAIconTitleValueCell getCellIdentifier]
+                @"type": [OAValueTableViewCell getCellIdentifier]
         }];
     }
     [data addObject:@{
@@ -110,7 +113,7 @@
             @"key": @"offline_forecast_only",
             @"title": OALocalizedString(@"weather_offline_forecast_only"),
             @"selected": @([OsmAndApp instance].data.weatherUseOfflineData),
-            @"type": [OASwitchTableViewCell getCellIdentifier]
+            @"type": [OATableViewCellSwitch getCellIdentifier]
     }];
     [data addObject:@{
             @"cells": forecastData,
@@ -124,20 +127,27 @@
             @"footer": OALocalizedString(@"weather_data_provider")
     }];
 
-    NSString *sizeString = [NSByteCountFormatter stringFromByteCount:0 countStyle:NSByteCountFormatterCountStyleFile];
+    NSString *onlineCacheSizeString = _weatherHelper.onlineCacheSize > 0
+            ? [NSByteCountFormatter stringFromByteCount:_weatherHelper.onlineCacheSize
+                                             countStyle:NSByteCountFormatterCountStyleFile]
+            : OALocalizedString(@"calculating_progress");
     [cacheData addObject:@{
             @"key": @"online_cache",
             @"title": OALocalizedString(@"shared_string_online_cache"),
-            @"value": sizeString,
-            @"type": [OAIconTitleValueCell getCellIdentifier]
+            @"value": onlineCacheSizeString,
+            @"type": [OAValueTableViewCell getCellIdentifier]
     }];
     _onlineDataIndexPath = [NSIndexPath indexPathForRow:cacheData.count - 1 inSection:data.count - 1];
 
+    NSString *offlineCacheSizeString = _weatherHelper.offlineCacheSize > 0
+            ? [NSByteCountFormatter stringFromByteCount:_weatherHelper.offlineCacheSize
+                                             countStyle:NSByteCountFormatterCountStyleFile]
+            : OALocalizedString(@"calculating_progress");
     [cacheData addObject:@{
             @"key": @"offline_forecast",
             @"title": OALocalizedString(@"weather_offline_forecast"),
-            @"value": sizeString,
-            @"type": [OAIconTitleValueCell getCellIdentifier]
+            @"value": offlineCacheSizeString,
+            @"type": [OAValueTableViewCell getCellIdentifier]
     }];
     _useOfflineDataIndexPath = [NSIndexPath indexPathForRow:cacheData.count - 1 inSection:data.count - 1];
 
@@ -176,21 +186,21 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    UITableViewCell *outCell = nil;
-
-    if ([item[@"type"] isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
+    if ([item[@"type"] isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
-        OAIconTitleValueCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
-        if (cell == nil)
+        OAValueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
+        if (!cell)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
-            cell = (OAIconTitleValueCell *) nib[0];
-            cell.selectionStyle = UITableViewCellSelectionStyleDefault;
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAValueTableViewCell *) nib[0];
+            [cell descriptionVisibility:NO];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             cell.leftIconView.tintColor = UIColorFromRGB(color_tint_gray);
-            cell.separatorInset = UIEdgeInsetsMake(0., [item[@"key"] hasPrefix:@"band"] ? 66. : 20., 0., 0.);
         }
         if (cell)
         {
+            cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + ([item[@"key"] hasPrefix:@"band"] ? kPaddingToLeftOfContentWithIcon : kPaddingOnSideOfContent), 0., 0.);
+
             NSString *title;
             NSString *iconName;
             NSString *value;
@@ -205,9 +215,9 @@
 
                 NSUnit *unit = [band getBandUnit];
                 if (band.bandIndex == WEATHER_BAND_TEMPERATURE)
-                    value = unit.name != nil ? unit.name : [formatter stringFromUnit:unit];
+                    value = unit.name != nil ? unit.name : [formatter displayStringFromUnit:unit];
                 else
-                    value = [formatter stringFromUnit:unit];
+                    value = [formatter displayStringFromUnit:unit];
             }
             else
             {
@@ -216,40 +226,40 @@
                 value = item[@"value"];
             }
 
-            cell.textView.text = title;
-            cell.descriptionView.text = value;
-
+            cell.titleLabel.text = title;
+            cell.valueLabel.text = value;
+            
             BOOL hasLeftIcon = iconName && iconName.length > 0;
             cell.leftIconView.image = hasLeftIcon ? [UIImage templateImageNamed:iconName] : nil;
-            [cell showLeftIcon:hasLeftIcon];
+            [cell leftIconVisibility:hasLeftIcon];
         }
-        outCell = cell;
+        return cell;
     }
-    else if ([item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:[OATableViewCellSwitch getCellIdentifier]])
     {
-        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
-        if (cell == nil)
+        OATableViewCellSwitch *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellSwitch getCellIdentifier]];
+        if (!cell)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASwitchTableViewCell *) nib[0];
-            cell.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellSwitch getCellIdentifier] owner:self options:nil];
+            cell = (OATableViewCellSwitch *) nib[0];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
         }
         if (cell)
         {
-            [cell.textView setText: item[@"title"]];
-            cell.switchView.on = [item[@"selected"] boolValue];
+            cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingOnSideOfContent, 0., 0.);
 
+            cell.titleLabel.text = item[@"title"];
+
+            cell.switchView.on = [item[@"selected"] boolValue];
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.switchView addTarget:self action:@selector(onSwitchPressed:) forControlEvents:UIControlEventValueChanged];
         }
-        outCell = cell;
+        return cell;
     }
-
-    if ([outCell needsUpdateConstraints])
-        [outCell updateConstraints];
-
-    return outCell;
+    return nil;
 }
 
 #pragma mark - UITableViewDelegate

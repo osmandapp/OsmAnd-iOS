@@ -37,6 +37,12 @@
 #define commonInit _(commonInit)
 #define deinit _(deinit)
 
+#if TARGET_IPHONE_SIMULATOR
+#define kSimulatorAnimationCoef 3.0f
+#else
+#define kSimulatorAnimationCoef 1.0f
+#endif
+
 @implementation OAMapRendererView
 {
     EAGLSharegroup* _glShareGroup;
@@ -820,8 +826,8 @@
     }
 
     // Update animators
-    _mapAnimator->update(displayLink.duration * displayLink.frameInterval);
-    _mapMarkersAnimator->update(displayLink.duration * displayLink.frameInterval);
+    _mapAnimator->update(displayLink.duration * displayLink.frameInterval * kSimulatorAnimationCoef);
+    _mapMarkersAnimator->update(displayLink.duration * displayLink.frameInterval * kSimulatorAnimationCoef);
 
     // Allocate buffers if they are not yet allocated
     if (_framebuffer == 0)

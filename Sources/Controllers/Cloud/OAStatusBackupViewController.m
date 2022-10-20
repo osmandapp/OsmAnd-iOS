@@ -187,8 +187,8 @@
     [self setupBottomButtons:YES];
     if (self.delegate)
         [self.delegate onCompleteTasks];
-    [self.segmentControl.selectedSegmentIndex == 0 ? _conflictsTableViewController : _allTableViewController updateData:_backup
-                                                                                                                 status:_status];
+    [_conflictsTableViewController updateData:_backup status:_status];
+    [_allTableViewController updateData:_backup status:_status];
 }
 
 - (void)setRowIcon:(OATableViewRowData *)rowData item:(OASettingsItem *)item

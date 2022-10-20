@@ -29,10 +29,13 @@
 #import "OADeleteOldFilesCommand.h"
 #import "OARegisterUserCommand.h"
 #import "OARegisterDeviceCommand.h"
+#import "OAURLSessionProgress.h"
 
 #import <RegexKitLite.h>
 
 #define kUpdateIdOperation @"Update order id"
+
+#define kDefaultEmptyMapSize 50000 // 50 mb
 
 static NSString *INFO_EXT = @"info";
 
@@ -308,10 +311,17 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
     NSMutableArray<NSString *> *filesToUpload = [NSMutableArray array];
     OABackupInfo *info = self.backup.backupInfo;
     if (![self.class isLimitedFilesCollectionItem:item]
-        && info != nil && info.filesToUpload.count > 0)
+        && info != nil && (info.filesToUpload.count > 0 || info.filesToMerge.count > 0))
     {
         for (OALocalFile *localFile in info.filesToUpload)
         {
+            NSString *filePath = localFile.filePath;
+            if ([item isEqual:localFile.item] && filePath != nil)
+                [filesToUpload addObject:filePath];
+        }
+        for (NSArray *arr in info.filesToMerge)
+        {
+            OALocalFile *localFile = arr.firstObject;
             NSString *filePath = localFile.filePath;
             if ([item isEqual:localFile.item] && filePath != nil)
                 [filesToUpload addObject:filePath];
@@ -541,22 +551,28 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
         firstParam = NO;
     }];
     
-    const auto webClient = std::make_shared<OAWebClient>();
-    int work = 0;
-    int progress = 0;
-    int deltaProgress = 0;
-    OsmAnd::IWebClient::RequestProgressCallbackSignature callback = [listener, type, fileName, work, deltaProgress, progress](const uint64_t transferredBytes,
-                                                                                               const uint64_t totalBytes) mutable {
-        int deltaWork = transferredBytes/totalBytes;
-        deltaProgress += deltaWork;
-        if ((deltaProgress > (work / 100)) || ((progress + deltaProgress) >= work)) {
-            progress += deltaProgress;
-            [listener onFileDownloadProgress:type fileName:fileName progress:progress deltaWork:deltaProgress itemFileName:nil];
-            deltaProgress = 0;
+    OAURLSessionProgress *progress = [[OAURLSessionProgress alloc] init];
+    NSInteger sz = remoteFile.filesize / 1024;
+    if (remoteFile.item.type == EOASettingsItemTypeFile)
+    {
+        OAFileSettingsItem *flItem = (OAFileSettingsItem *) remoteFile.item;
+        if (flItem.subtype == EOASettingsItemFileSubtypeObfMap)
+        {
+            NSString *mapId = flItem.fileName.lowerCase;
+            const auto res = _app.resourcesManager->getResourceInRepository(QString::fromNSString(mapId));
+            if (res)
+            {
+                sz = res->size / 1024;
+            }
         }
-        
-    };
-    bool sucseess = webClient->downloadFile(QString::fromNSString(sb), QString::fromNSString(filePath), nullptr, callback);
+    }
+    
+    [progress setOnProgress:^(int progress, int64_t deltaWork) {
+        int prog = ((double)deltaWork / (double)sz) * 100;
+        [listener onFileDownloadProgress:type fileName:fileName progress:prog deltaWork:deltaWork itemFileName:nil];
+    }];
+    
+    bool sucseess = [OANetworkUtilities downloadFile:filePath url:sb progress:progress];
     if (!sucseess)
         error = [NSString stringWithFormat:@"Could not download remote file:%@", fileName];
     

@@ -15,6 +15,7 @@
 #import "OAFileSettingsItem.h"
 #import "OAPrepareBackupResult.h"
 #import "OARemoteFile.h"
+#import "OAConcurrentCollections.h"
 
 @interface OAExportBackupTask () <OANetworkExportProgressListener>
 
@@ -26,7 +27,7 @@
     OABackupExporter *_exporter;
     
     NSString *_key;
-    NSMutableDictionary<NSString *, OAItemProgressInfo *> *_itemsProgress;
+    OAConcurrentDictionary<NSString *, OAItemProgressInfo *> *_itemsProgress;
 }
 
 - (instancetype) initWithKey:(NSString *)key
@@ -41,7 +42,7 @@
         _helper = OANetworkSettingsHelper.sharedInstance;
         _listener = listener;
         _exporter = [[OABackupExporter alloc] initWithListener:self];
-        _itemsProgress = [NSMutableDictionary dictionary];
+        _itemsProgress = [[OAConcurrentDictionary alloc] init];
         OABackupHelper *backupHelper = OABackupHelper.sharedInstance;
         for (OASettingsItem *item in items)
         {
@@ -63,7 +64,7 @@
 
 - (OAItemProgressInfo *) getItemProgressInfo:(NSString *)type fileName:(NSString *)fileName
 {
-    return _itemsProgress[[type stringByAppendingString:fileName]];
+    return [_itemsProgress objectForKeySync:[type stringByAppendingString:fileName]];
 }
 
 - (void)main
@@ -172,7 +173,7 @@
             OAItemProgressInfo *prevInfo = [self getItemProgressInfo:info.type fileName:info.fileName];
             if (prevInfo != nil)
                 info.work = prevInfo.work;
-            _itemsProgress[[info.type stringByAppendingString:info.fileName]] = info;
+            [_itemsProgress setObjectSync:info forKey:[info.type stringByAppendingString:info.fileName]];
             
             if (info.finished)
                 [_listener onBackupExportItemFinished:info.type fileName:info.fileName];

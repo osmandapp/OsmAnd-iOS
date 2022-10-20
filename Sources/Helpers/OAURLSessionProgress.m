@@ -16,4 +16,24 @@
     _onProgress(progress, bytesSent / 1024);
 }
 
+-(void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didWriteData:(int64_t)bytesWritten totalBytesWritten:(int64_t)totalBytesWritten totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
+{
+   int progress = ((double)totalBytesWritten / (double)totalBytesExpectedToWrite) * 100;
+    _onProgress(progress, totalBytesWritten / 1024);
+}
+
+- (void)URLSession:(NSURLSession *)session
+      downloadTask:(NSURLSessionDownloadTask *)downloadTask
+didFinishDownloadingToURL:(NSURL *)location
+{
+    _onDownloadFinish(session, downloadTask, location);
+}
+
+- (void)URLSession:(NSURLSession *)session
+              task:(NSURLSessionTask *)task
+didCompleteWithError:(NSError *)error
+{
+    _onDownloadError(error);
+}
+
 @end

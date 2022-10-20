@@ -11,17 +11,14 @@
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 
-#define HALF_FRAME_BUFFER_LENGTH 20
-#define WIDGET_REFRESHING_INTERVAL_SECONDS 0.1
+#define WIDGET_REFRESHING_INTERVAL_SECONDS 1.0
 
 @implementation OAFPSTextInfoWidget
 {
     OAMapRendererView *_rendererView;
     NSTimer *_timer;
-    long _startMs;
-    int _startFrameId;
-    long _middleMs;
-    int _middleFrameId;
+    float _lastUpdatingMs;
+    int _lastUpdatingFrameId;
 }
 
 - (instancetype) init
@@ -29,10 +26,8 @@
     self = [super init];
     if (self)
     {
-        _startMs = 0;
-        _startFrameId = 0;
-        _middleMs = 0;
-        _middleFrameId = 0;
+        _lastUpdatingMs = 0;
+        _lastUpdatingFrameId = 0;
         _rendererView = [OARootViewController instance].mapPanel.mapViewController.mapView;
         
         __weak OAFPSTextInfoWidget *selfWeak = self;
@@ -56,7 +51,7 @@
 {
     if (!_timer)
     {
-        _timer = [NSTimer scheduledTimerWithTimeInterval:WIDGET_REFRESHING_INTERVAL_SECONDS target:self selector:@selector(updateInfo) userInfo:nil repeats:YES];
+        _timer = [NSTimer scheduledTimerWithTimeInterval:WIDGET_REFRESHING_INTERVAL_SECONDS target:self selector:@selector(updateWidget) userInfo:nil repeats:YES];
     }
 }
 
@@ -67,7 +62,7 @@
     _timer = nil;
 }
 
-- (BOOL) updateInfo
+- (BOOL) updateWidget
 {
     if (![self isVisible])
     {
@@ -77,23 +72,15 @@
     
     int frameId = [_rendererView getFrameId];
     NSTimeInterval now = CACurrentMediaTime();
-    NSString *fps = @"-";
+    NSString *fps = @"0";
     
-    if (frameId > _startFrameId && now > _startMs && _startMs != 0)
+    if (frameId > _lastUpdatingFrameId)
     {
-        float fpsValue = 1.0 / (now - _startMs) * (frameId - _startFrameId);
+        float fpsValue = 1.0 / (now - _lastUpdatingMs) * (frameId - _lastUpdatingFrameId);
         fps = [NSString stringWithFormat:@"%.1f", fpsValue];
     }
-    if (_startFrameId == 0 || (_middleFrameId - _startFrameId) > HALF_FRAME_BUFFER_LENGTH)
-    {
-        _startMs = _middleMs;
-        _startFrameId = _middleFrameId;
-    }
-    if (_middleFrameId == 0 || (frameId - _middleFrameId) > HALF_FRAME_BUFFER_LENGTH)
-    {
-        _middleMs = now;
-        _middleFrameId = frameId;
-    }
+    _lastUpdatingMs = now;
+    _lastUpdatingFrameId = frameId;
     
     [self setText:fps subtext:@"FPS"];
     [self setIcons:@"widget_fps_day" widgetNightIcon:@"widget_fps_night"];
@@ -102,7 +89,7 @@
 
 - (void) onWidgetClicked
 {
-    [self updateInfo];
+    [self updateWidget];
 }
 
 @end

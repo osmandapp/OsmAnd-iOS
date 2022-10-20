@@ -1477,8 +1477,9 @@ static BOOL _repositoryUpdated = NO;
             return;
         }
 
+        searchString = [searchString stringByTrimmingCharactersInSet:NSCharacterSet.whitespaceCharacterSet];
         // In case searchString has only spaces, also nothing to do here
-        if ([searchString stringByTrimmingCharactersInSet:NSCharacterSet.whitespaceCharacterSet].length == 0)
+        if (searchString.length == 0)
         {
             [self cancelSearch];
             return;

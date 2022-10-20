@@ -333,6 +333,11 @@
 
 - (void)updateCacheSize
 {
+    [self updateCacheSize:nil];
+}
+
+- (void)updateCacheSize:(void (^)())onComplete
+{
     if (!_sizeIndexPath)
         return;
 
@@ -348,6 +353,8 @@
             [UIView setAnimationsEnabled:NO];
             [self.tableView reloadRowsAtIndexPaths:@[_sizeIndexPath] withRowAnimation:UITableViewRowAnimationNone];
             [UIView setAnimationsEnabled:YES];
+            if (onComplete)
+                onComplete();
         });
     }];
 }
@@ -357,7 +364,37 @@
     if (_editMode)
         return;
 
-    [self updateCacheSize];
+    [self updateCacheSize:^{
+        OAWorldRegion *region = (OAWorldRegion *) value;
+        NSString *regionId = [OAWeatherHelper checkAndGetRegionId:region];
+        for (NSInteger i = 0; i < _data.count; i++)
+        {
+            NSDictionary *section = _data[i];
+            if ([section[@"key"] isEqualToString:@"status_section"])
+            {
+                NSIndexPath *indexPath;
+                NSMutableArray *statusCells = (NSMutableArray *) section[@"cells"];
+                for (NSInteger j = 0; j < statusCells.count; j++)
+                {
+                    NSDictionary *cell = statusCells[j];
+                    NSString *regionId_ = [OAWeatherHelper checkAndGetRegionId:((OAWorldRegion *) cell[@"region"])];
+                    if ([regionId_ isEqualToString:regionId])
+                    {
+                        indexPath = [NSIndexPath indexPathForRow:j inSection:i];
+                        break;
+                    }
+                }
+                
+                if (indexPath)
+                {
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1. * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                        statusCells[indexPath.row][@"description"] = [OAWeatherHelper getStatusInfoDescription:regionId];
+                        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+                    });
+                }
+            }
+        }
+    }];
 }
 
 - (void)onWeatherForecastDownloading:(id)sender withKey:(id)key andValue:(id)value
@@ -387,11 +424,11 @@
 
             if (indexPath)
             {
-                BOOL statusSizeCalculating = ![_weatherHelper isOfflineForecastSizesInfoCalculated:regionId];
-                if ([OAWeatherHelper getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateUndefined && !statusSizeCalculating)
-                    return;
-
                 dispatch_async(dispatch_get_main_queue(), ^{
+                    BOOL statusSizeCalculating = ![_weatherHelper isOfflineForecastSizesInfoCalculated:regionId];
+                    if ([OAWeatherHelper getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateUndefined && !statusSizeCalculating)
+                        return;
+
                     UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
                     if (!cell.accessoryView)
                     {
@@ -403,24 +440,22 @@
                     NSInteger progressDownloading = [_weatherHelper getOfflineForecastProgressInfo:regionId];
                     NSInteger progressDownloadDestination = [_weatherHelper getProgressDestination:regionId];
                     CGFloat progressCompleted = (CGFloat) progressDownloading / progressDownloadDestination;
-                    if (progressCompleted >= 0.001 && [OAWeatherHelper getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateInProgress)
+                    EOAWeatherForecastDownloadState state = [OAWeatherHelper getPreferenceDownloadState:regionId];
+                    if (progressCompleted >= 0.001 && state == EOAWeatherForecastDownloadStateInProgress)
                     {
                         progressView.iconPath = nil;
                         if (progressView.isSpinning)
                             [progressView stopSpinProgressBackgroundLayer];
                         progressView.progress = progressCompleted - 0.001;
                     }
-                    else if ([OAWeatherHelper getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateFinished && !statusSizeCalculating)
+                    else if (state == EOAWeatherForecastDownloadStateFinished && !statusSizeCalculating)
                     {
                         progressView.iconPath = [OAResourcesUIHelper tickPath:progressView];
                         progressView.progress = 0.;
                         if (!progressView.isSpinning)
                             [progressView startSpinProgressBackgroundLayer];
 
-                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1. * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                            statusCells[indexPath.row][@"description"] = [OAWeatherHelper getStatusInfoDescription:regionId];
-                            [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-                        });
+                        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
                     }
                     else
                     {

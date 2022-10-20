@@ -331,18 +331,17 @@ static BOOL dataInvalidated = NO;
             onComplete();
 
         if (isWeatherForecast)
+        {
             [self updateDisplayItem:item];
+            [[OAWeatherHelper sharedInstance] calculateCacheSize:self.region onComplete:nil];
+        }
     };
     [OAResourcesUIHelper offerDeleteResourceOf:item viewController:self progressHUD:_deleteResourceProgressHUD executeAfterSuccess:onComplete_];
 }
 
 - (void) offerDeleteResourceOf:(OALocalResourceItem *)item
 {
-    dispatch_block_t onComplete = ^{
-        if (item.resourceType == OsmAndResourceType::WeatherForecast)
-            [self updateDisplayItem:item];
-    };
-    [self offerDeleteResourceOf:item executeAfterSuccess:onComplete];
+    [self offerDeleteResourceOf:item executeAfterSuccess:nil];
 }
 
 - (void)offerSilentDeleteResourcesOf:(NSArray<OALocalResourceItem *> *)items

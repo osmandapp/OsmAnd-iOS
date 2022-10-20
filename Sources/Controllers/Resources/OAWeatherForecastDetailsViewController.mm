@@ -237,16 +237,14 @@
 
 - (void)onWeatherSizeCalculated:(id)sender withKey:(id)key andValue:(id)value
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (value != _region || !_sizeIndexPath)
-            return;
+    if (value != _region || !_sizeIndexPath)
+        return;
 
-        uint64_t sizeLocal = [_weatherHelper getOfflineForecastSizeInfo:[OAWeatherHelper checkAndGetRegionId:_region] local:YES];
-        NSMutableDictionary *totalSizeData = _data[_sizeIndexPath.section][_sizeIndexPath.row];
-        NSString *sizeString = [NSByteCountFormatter stringFromByteCount:sizeLocal
-                                                              countStyle:NSByteCountFormatterCountStyleFile];
-        totalSizeData[@"value"] = sizeString;
-        [self.tableView reloadRowsAtIndexPaths:@[_sizeIndexPath] withRowAnimation:UITableViewRowAnimationNone];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1. * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self setupView];
+        [self.tableView reloadData];
+        if (self.delegate)
+            [self.delegate onUpdateForecast];
     });
 }
 
@@ -257,43 +255,41 @@
 
     if (_updateNowIndexPath && _sizeIndexPath)
     {
-        NSString *regionId = [OAWeatherHelper checkAndGetRegionId:_region];
-        BOOL statusSizeCalculating = ![[OAWeatherHelper sharedInstance] isOfflineForecastSizesInfoCalculated:regionId];
-        if ([OAWeatherHelper getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateUndefined && !statusSizeCalculating)
-            return;
-
         dispatch_async(dispatch_get_main_queue(), ^{
-            UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:statusSizeCalculating ? _sizeIndexPath : _updateNowIndexPath];
+            NSString *regionId = [OAWeatherHelper checkAndGetRegionId:_region];
+            BOOL statusSizeCalculating = ![[OAWeatherHelper sharedInstance] isOfflineForecastSizesInfoCalculated:regionId];
+            if ([OAWeatherHelper getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateUndefined && !statusSizeCalculating)
+                return;
+
+            NSIndexPath *indexPath = statusSizeCalculating ? _sizeIndexPath : _updateNowIndexPath;
+            UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
             if (!cell.accessoryView)
             {
-                [self.tableView reloadRowsAtIndexPaths:@[statusSizeCalculating ? _sizeIndexPath : _updateNowIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-                cell = [self.tableView cellForRowAtIndexPath:statusSizeCalculating ? _sizeIndexPath : _updateNowIndexPath];
+                [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+                cell = [self.tableView cellForRowAtIndexPath:indexPath];
             }
 
             FFCircularProgressView *progressView = (FFCircularProgressView *) cell.accessoryView;
             NSInteger progressDownloading = [_weatherHelper getOfflineForecastProgressInfo:regionId];
             NSInteger progressDownloadDestination = [[OAWeatherHelper sharedInstance] getProgressDestination:regionId];
             CGFloat progressCompleted = (CGFloat) progressDownloading / progressDownloadDestination;
-            if (progressCompleted >= 0.001 && [OAWeatherHelper getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateInProgress)
+            EOAWeatherForecastDownloadState state = [OAWeatherHelper getPreferenceDownloadState:regionId];
+            if (progressCompleted >= 0.001 && state == EOAWeatherForecastDownloadStateInProgress)
             {
                 progressView.iconPath = nil;
                 if (progressView.isSpinning)
                     [progressView stopSpinProgressBackgroundLayer];
                 progressView.progress = progressCompleted - 0.001;
             }
-            else if ([OAWeatherHelper getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateFinished && !statusSizeCalculating)
+            else if (state == EOAWeatherForecastDownloadStateFinished && !statusSizeCalculating)
             {
                 progressView.iconPath = [OAResourcesUIHelper tickPath:progressView];
                 progressView.progress = 0.;
                 if (!progressView.isSpinning)
                     [progressView startSpinProgressBackgroundLayer];
 
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1. * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    [self setupView];
-                    [self.tableView reloadData];
-                    if (self.delegate)
-                        [self.delegate onUpdateForecast];
-                });
+                [self.tableView reloadRowsAtIndexPaths:@[indexPath]
+                                      withRowAnimation:UITableViewRowAnimationAutomatic];
             }
             else
             {

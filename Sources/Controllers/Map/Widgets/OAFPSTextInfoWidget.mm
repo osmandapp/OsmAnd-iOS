@@ -33,8 +33,7 @@
         _startFrameId = 0;
         _middleMs = 0;
         _middleFrameId = 0;
-        OAMapViewController *mapVC = [OARootViewController instance].mapPanel.mapViewController;
-        _rendererView = (OAMapRendererView*)mapVC.view;
+        _rendererView = [OARootViewController instance].mapPanel.mapViewController.mapView;
         
         __weak OAFPSTextInfoWidget *selfWeak = self;
         self.onClickFunction = ^(id sender) {
@@ -77,7 +76,7 @@
     }
     
     int frameId = [_rendererView getFrameId];
-    NSTimeInterval now = [[NSDate alloc] init].timeIntervalSince1970;
+    NSTimeInterval now = CACurrentMediaTime();
     NSString *fps = @"-";
     
     if (frameId > _startFrameId && now > _startMs && _startMs != 0)
@@ -97,7 +96,7 @@
     }
     
     [self setText:fps subtext:@"FPS"];
-    [self setIcons:@"widget_time_day" widgetNightIcon:@"widget_time_night"];
+    [self setIcons:@"widget_fps_day" widgetNightIcon:@"widget_fps_night"];
     return YES;
 }
 

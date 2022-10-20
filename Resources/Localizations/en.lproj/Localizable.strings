@@ -194,6 +194,7 @@
 "show_compass_ruler" = "Show compass ruler";
 "hide_compass_ruler" = "Hide compass ruler";
 "map_widget_distance_by_tap" = "Distance by tap";
+"map_widget_rendering_fps" = "Map rendering FPS";
 
 "shared_string_collapse" = "Collapse";
 "shared_string_topbar" = "Top bar";

@@ -132,6 +132,8 @@ struct CLLocationCoordinate2D;
 
 - (void)dumpResourcesInfo;
 
+- (int) getFrameId;
+
 @property (readonly) OAObservable* targetChangedObservable;
 @property (readonly) OAObservable* framePreparedObservable;
 @property (nonatomic, weak) id<OAMapRendererDelegate> rendererDelegate;

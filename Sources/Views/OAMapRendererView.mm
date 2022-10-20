@@ -61,6 +61,7 @@
     std::shared_ptr<OsmAnd::MapMarkersAnimator> _mapMarkersAnimator;
 
     CGRect prevBounds;
+    int _frameId;
 }
 
 + (Class) layerClass
@@ -472,6 +473,11 @@
 - (OsmAnd::AreaI)getVisibleBBox31
 {
     return _renderer->getVisibleBBox31();
+}
+
+- (int) getFrameId
+{
+    return _frameId;
 }
 
 - (BOOL)isPositionVisible:(OsmAnd::PointI)pos
@@ -916,6 +922,7 @@
         validateGL();
         [_glRenderContext presentRenderbuffer:GL_RENDERBUFFER];
 
+        _frameId++;        
         if (self.rendererDelegate)
             [self.rendererDelegate frameRendered];
     }

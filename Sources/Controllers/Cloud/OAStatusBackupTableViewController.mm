@@ -97,9 +97,9 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     [self generateData];
 }
 
-- (void)viewWillAppear:(BOOL)animated
+- (void)viewDidAppear:(BOOL)animated
 {
-    [super viewWillAppear:animated];
+    [super viewDidAppear:animated];
     [_settingsHelper updateExportListener:self];
     [_settingsHelper updateImportListener:self];
     [_backupHelper.backupListeners addDeleteFilesListener:self];

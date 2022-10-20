@@ -96,9 +96,9 @@
     self.tblView.rowHeight = UITableViewAutomaticDimension;
 }
 
-- (void)viewWillAppear:(BOOL)animated
+- (void)viewDidAppear:(BOOL)animated
 {
-    [super viewWillAppear:animated];
+    [super viewDidAppear:animated];
     [_settingsHelper updateExportListener:self];
     [_settingsHelper updateImportListener:self];
     [_backupHelper addPrepareBackupListener:self];
@@ -664,6 +664,7 @@
         if (_backupProgressCell && exportTask)
         {
             float progress = (float) exportTask.generalProgress / exportTask.maxProgress;
+            progress = progress > 1 ? 1 : progress;
             OAExportBackupTask *exportTask = [_settingsHelper getExportTask:kBackupItemsKey];
             _backupProgressCell.progressBar.progress = (float) exportTask.generalProgress / exportTask.maxProgress;
             _backupProgressCell.textView.text = [OALocalizedString(@"osm_edit_uploading") stringByAppendingString:[NSString stringWithFormat:@"%i%%", (int) (progress * 100)]];

@@ -35,8 +35,6 @@
 
 #define kUpdateIdOperation @"Update order id"
 
-#define kDefaultEmptyMapSize 50000 // 50 mb
-
 static NSString *INFO_EXT = @"info";
 
 static NSString *SERVER_URL = @"https://osmand.net";
@@ -526,6 +524,25 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
     [_executor addOperation:[[OADeleteOldFilesCommand alloc] initWithTypes:types listener:listener]];
 }
 
+- (NSInteger)calculateFileSize:(OARemoteFile *)remoteFile
+{
+    NSInteger sz = remoteFile.filesize / 1024;
+    if (remoteFile.item.type == EOASettingsItemTypeFile)
+    {
+        OAFileSettingsItem *flItem = (OAFileSettingsItem *) remoteFile.item;
+        if (flItem.subtype == EOASettingsItemFileSubtypeObfMap)
+        {
+            NSString *mapId = flItem.fileName.lowerCase;
+            const auto res = _app.resourcesManager->getResourceInRepository(QString::fromNSString(mapId));
+            if (res)
+            {
+                sz = res->size / 1024;
+            }
+        }
+    }
+    return sz;
+}
+
 - (NSString *)downloadFile:(NSString *)filePath
                 remoteFile:(OARemoteFile *)remoteFile
                   listener:(id<OAOnDownloadFileListener>)listener
@@ -552,20 +569,7 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
     }];
     
     OAURLSessionProgress *progress = [[OAURLSessionProgress alloc] init];
-    NSInteger sz = remoteFile.filesize / 1024;
-    if (remoteFile.item.type == EOASettingsItemTypeFile)
-    {
-        OAFileSettingsItem *flItem = (OAFileSettingsItem *) remoteFile.item;
-        if (flItem.subtype == EOASettingsItemFileSubtypeObfMap)
-        {
-            NSString *mapId = flItem.fileName.lowerCase;
-            const auto res = _app.resourcesManager->getResourceInRepository(QString::fromNSString(mapId));
-            if (res)
-            {
-                sz = res->size / 1024;
-            }
-        }
-    }
+    NSInteger sz = [self calculateFileSize:remoteFile];
     
     [progress setOnProgress:^(int progress, int64_t deltaWork) {
         int prog = ((double)deltaWork / (double)sz) * 100;

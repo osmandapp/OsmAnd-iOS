@@ -254,9 +254,10 @@
         NSCalendar *calendar = NSCalendar.autoupdatingCurrentCalendar;
         calendar.timeZone = [NSTimeZone timeZoneWithName:@"GMT"];
         NSDate *date = [calendar startOfDayForDate:[NSDate date]];
-        int64_t dateTime = date.timeIntervalSince1970 * 1000;
         for (NSInteger i = 0; i < kForecastDatesCount; i++)
         {
+            int64_t dateTime = date.timeIntervalSince1970 * 1000;
+
             OsmAnd::WeatherTileResourcesManager::DownloadGeoTileRequest request;
             request.dateTime = dateTime;
             request.topLeft = latLonTopLeft;

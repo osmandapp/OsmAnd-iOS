@@ -2715,3 +2715,4 @@
 "weather_entire_world" = "Hele verden";
 "map_download_privacy_descr" = "Ved at downloade kort accepterer du <a href='https://osmand.net/docs/legal/terms-of-use'>Brugsbetingelser</a> og <a href='https://osmand.net/docs/legal/privacy-policy'>Privatlivspolitik</a>.";
 "shared_string_profile" = "Profil";
+"map_widget_rendering_fps" = "Kortgengivelse FPS";

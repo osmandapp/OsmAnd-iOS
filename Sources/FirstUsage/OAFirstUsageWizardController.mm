@@ -15,6 +15,7 @@
 #import "OAWorldRegion.h"
 #import "Localization.h"
 #import "OAColors.h"
+#import "SafariServices/SafariServices.h"
 
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 
@@ -40,7 +41,7 @@ typedef enum
 } AlertType;
 
 
-@interface OAFirstUsageWizardController ()<UIAlertViewDelegate>
+@interface OAFirstUsageWizardController ()<UIAlertViewDelegate, UITextViewDelegate, SFSafariViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *lbTitle;
 @property (weak, nonatomic) IBOutlet UIButton *btnSkip;
@@ -172,6 +173,7 @@ typedef enum
     _bottomTextView.textContainer.lineBreakMode = NSLineBreakByWordWrapping;
     _bottomTextView.userInteractionEnabled = YES;
     _bottomTextView.editable = NO;
+    _bottomTextView.delegate = self;
     
     NSMutableAttributedString *titleStr = [[NSMutableAttributedString alloc] initWithData:[OALocalizedString(@"map_download_privacy_descr") dataUsingEncoding:NSUTF8StringEncoding]
                                                                    options:@{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType,
@@ -196,6 +198,27 @@ typedef enum
     _bottomTextView.attributedText = titleStr;
     
     [self startWizard];
+}
+
+# pragma mark - UITextViewDelegate
+
+- (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange interaction:(UITextItemInteraction)interaction
+{
+    [self openSafariWithURL:URL.absoluteString];
+    return false;
+}
+
+# pragma mark - SFSafariViewControllerDelegate
+
+- (void)openSafariWithURL:(NSString *)url
+{
+    SFSafariViewController *safariViewController = [[SFSafariViewController alloc] initWithURL:[NSURL URLWithString:url]];
+    [self presentViewController:safariViewController animated:YES completion:nil];
+}
+
+- (void)safariViewControllerDidFinish:(SFSafariViewController *)controller
+{
+    [controller dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)didReceiveMemoryWarning

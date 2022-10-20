@@ -23,7 +23,7 @@
 #define kCorrectionMinBottomSpaceBBox 20.0
 
 #define kElevationGestureMaxThreshold 50.0f
-#define kElevationMinAngle 30.0f
+#define kElevationMinAngle 5.0f
 #define kElevationGesturePointsPerDegree 3.0f
 #define kRotationGestureThresholdDegrees 5.0f
 #define kZoomDeceleration 40.0f

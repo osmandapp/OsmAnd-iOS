@@ -2723,3 +2723,7 @@
 "tts" = "TTS";
 "cloud_no_conflicts_descr" = "Los datos en el dispositivo y en OsmAnd Cloud son los mismos.";
 "dowload_cloud_version" = "Descargar la versión de la nube";
+"shared_string_profile" = "Perfil";
+"map_download_privacy_descr" = "Al descargar los mapas, aceptas las <a href='https://osmand.net/docs/legal/terms-of-use'>Condiciones de uso</a> y la <a href='https://osmand.net/docs/legal/privacy-policy'>Política de privacidad</a> .";
+"weather_forecast_entire_world" = "Pronóstico del tiempo para todo el mundo";
+"weather_entire_world" = "Todo el mundo";

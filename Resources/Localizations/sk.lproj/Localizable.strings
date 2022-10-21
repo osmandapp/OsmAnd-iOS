@@ -2115,3 +2115,7 @@
 "restore_from_osmand_cloud" = "Obnoviť z OsmAnd Cloud";
 "in_grace_period" = "V období tolerancie";
 "shared_string_always_hidden" = "Vždy skrytý";
+"map_widget_rendering_fps" = "Rýchlosť vykresľovania mapy";
+
+// Route planning
+"plan_route" = "Naplánovať trasu";

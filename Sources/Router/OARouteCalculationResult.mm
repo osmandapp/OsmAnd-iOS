@@ -18,6 +18,7 @@
 #import "OAUtilities.h"
 #import "QuadRect.h"
 #import "OAExitInfo.h"
+#import "OAMapUtils.h"
 
 #include <routeSegmentResult.h>
 
@@ -383,6 +384,21 @@
     
     return nil;
 }
+
+- (CLLocation *) getRouteLocationByDistance:(int)meters
+{
+        int increase = meters > 0 ? 1 : -1;
+        for (int i = increase; _currentRoute < _locations.count && _currentRoute + i >= 0 && _currentRoute + i < _locations.count; i = i + increase)
+        {
+            CLLocation *loc = _locations[_currentRoute + i];
+            CLLocation *curloc = _locations[_currentRoute];
+            double dist = [OAMapUtils getDistance:curloc.coordinate second:loc.coordinate];
+            if (abs(meters) >= dist) {
+                return loc;
+            }
+        }
+        return nil;
+    }
 
 - (BOOL) directionsAvailable
 {

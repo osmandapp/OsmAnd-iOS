@@ -468,8 +468,9 @@ static BOOL _isDeviatedFromRoute = false;
             int newCurrentRoute = [self.class lookAheadFindMinOrthogonalDistance:start routeNodes:routeNodes currentRoute:res.currentRoute iterations:15];
             if (newCurrentRoute + 1 < routeNodes.count)
             {
+                CLLocation *prev = [res getRouteLocationByDistance:-15];
                 // This check is valid for Online/GPX services (offline routing is aware of route direction)
-                wrongMovementDirection = [self checkWrongMovementDirection:start nextRouteLocation:routeNodes[newCurrentRoute + 1]];
+                wrongMovementDirection = [self checkWrongMovementDirection:start prevRouteLocation:prev nextRouteLocation:routeNodes[newCurrentRoute + 1]];
                 // set/reset evalWaitInterval only if new route is in forward direction
                 if (wrongMovementDirection)
                 {
@@ -590,14 +591,14 @@ static BOOL _isDeviatedFromRoute = false;
  * and bearing from currentLocation to next (current) point
  * the difference is more than 60 degrees
  */
-- (BOOL) checkWrongMovementDirection:(CLLocation *)currentLocation nextRouteLocation:(CLLocation *)nextRouteLocation
+- (BOOL) checkWrongMovementDirection:(CLLocation *)currentLocation prevRouteLocation:(CLLocation *)prevRouteLocation nextRouteLocation:(CLLocation *)nextRouteLocation
 {
     // measuring without bearing could be really error prone (with last fixed location)
     // this code has an effect on route recalculation which should be detected without mistakes
-    if (currentLocation.course >= 0 && nextRouteLocation)
+    if (currentLocation.course >= 0 && nextRouteLocation && prevRouteLocation)
     {
         float bearingMotion = currentLocation.course;
-        float bearingToRoute = [currentLocation bearingTo:nextRouteLocation];
+        float bearingToRoute = [prevRouteLocation bearingTo:nextRouteLocation];
         double diff = degreesDiff(bearingMotion, bearingToRoute);
         if (ABS(diff) > 60.0)
         {
@@ -1053,8 +1054,9 @@ static BOOL _isDeviatedFromRoute = false;
             }
             // 3. Identify wrong movement direction
             CLLocation *next = [_route getNextRouteLocation];
+            CLLocation *prev = [_route getRouteLocationByDistance:-15];
             BOOL isStraight = _route.routeProvider == DIRECT_TO || _route.routeProvider == STRAIGHT;
-            BOOL wrongMovementDirection = [self checkWrongMovementDirection:currentLocation nextRouteLocation:next];
+            BOOL wrongMovementDirection = [self checkWrongMovementDirection:currentLocation prevRouteLocation:prev nextRouteLocation:next];
             if (allowableDeviation > 0 && wrongMovementDirection && !isStraight
                 && ([currentLocation distanceFromLocation:routeNodes[currentRoute]] > allowableDeviation) && ![_settings.disableWrongDirectionRecalc get:_mode])
             {

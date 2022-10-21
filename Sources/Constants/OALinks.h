@@ -9,7 +9,7 @@
 #ifndef OAIndexConstants_h
 #define OAIndexConstants_h
 
-//#define kDocsLatestVersion @"https://docs.osmand.net/blog/osmand-ios-4-2-released"
+//#define kDocsLatestVersion @"https://docs.osmand.net/blog/osmand-ios-4-3-released"
 #define kDocsLatestVersion  @"https://docs.osmand.net/docs/versions/future-ios"
 #define kBlogGuideline  @"https://osmand.net/blog/guideline-pt"
 

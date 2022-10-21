@@ -124,13 +124,12 @@
             _currentMarkView.backgroundColor = UIColorFromRGB(color_primary_purple);
             _currentMarkView.layer.cornerRadius = kMarkWidth / 2.;
             [self addSubview:_currentMarkView];
-            [self sendSubviewToBack:_currentMarkView];
         }
         else if (!_currentMarkView.superview)
         {
             [self addSubview:_currentMarkView];
-            [self sendSubviewToBack:_currentMarkView];
         }
+        [self sendSubviewToBack:_currentMarkView];
 
         if (!_currentMarkLabel)
         {
@@ -140,15 +139,13 @@
             _currentMarkLabel.font = [UIFont systemFontOfSize:13.];
             _currentMarkLabel.text = OALocalizedString(@"shared_string_now").lowercaseString;
             _currentMarkLabel.backgroundColor = UIColor.clearColor;
-
             [self addSubview:_currentMarkLabel];
-            [self sendSubviewToBack:_currentMarkLabel];
         }
         else if (!_currentMarkLabel.superview)
         {
             [self addSubview:_currentMarkLabel];
-            [self sendSubviewToBack:_currentMarkLabel];
         }
+        [self sendSubviewToBack:_currentMarkLabel];
 
         if (!_currentLeftLineView)
         {
@@ -160,13 +157,12 @@
             )]];
             _currentLeftLineView.backgroundColor = UIColorFromRGB(color_slider_minimum);
             [self addSubview:_currentLeftLineView];
-            [self sendSubviewToBack:_currentLeftLineView];
         }
         else if (!_currentLeftLineView.superview)
         {
             [self addSubview:_currentLeftLineView];
-            [self sendSubviewToBack:_currentLeftLineView];
         }
+        [self sendSubviewToBack:_currentLeftLineView];
     }
 
     if (!_currentRightLineView)
@@ -179,13 +175,12 @@
         )]];
         _currentRightLineView.backgroundColor = UIColorFromRGB(color_tint_gray);
         [self addSubview:_currentRightLineView];
-        [self sendSubviewToBack:_currentRightLineView];
     }
     else if (!_currentRightLineView.superview)
     {
         [self addSubview:_currentRightLineView];
-        [self sendSubviewToBack:_currentRightLineView];
     }
+    [self sendSubviewToBack:_currentRightLineView];
 
     if (_currentMarkView.superview)
         [self layoutCurrentMarkLine];
@@ -314,7 +309,7 @@
         if (i == 0)
             mark.frame = CGRectMake(x, y, trackHeight, markHeight);
         else if (mark.tag >= kAdditionalMarkTag)
-            mark.frame = CGRectMake(x, y + 1.5, trackHeight / 2, kAdditionalMarkHeight);
+            mark.frame = CGRectMake(x - trackHeight / 2, y + 1.5, trackHeight / 2, kAdditionalMarkHeight);
         else
             mark.frame = CGRectMake(x - trackHeight, y, trackHeight, markHeight);
 
@@ -370,21 +365,7 @@
         _currentLeftLineView.frame = CGRectMake(inset, trackRect.origin.y, _currentMarkView.frame.origin.x - inset, trackHeight);
 
     if (_currentRightLineView)
-    {
-        if (_currentMarkX == -1)
-        {
-            _currentRightLineView.frame = CGRectMake(inset, trackRect.origin.y, trackWidth, trackHeight);
-        }
-        else
-        {
-            _currentRightLineView.frame = CGRectMake(
-                    _currentMarkView.frame.origin.x + _currentMarkView.frame.size.width,
-                    trackRect.origin.y,
-                    trackWidth - _currentMarkView.frame.origin.x,
-                    trackHeight
-            );
-        }
-    }
+        _currentRightLineView.frame = CGRectMake(inset, trackRect.origin.y, trackWidth, trackHeight);
 }
 
 - (void)layoutSelectingTitle
@@ -438,6 +419,7 @@
         _markViews[i].backgroundColor = _isCustomSlider
                 ? filled ? UIColorFromRGB(color_slider_minimum) : UIColorFromRGB(color_tint_gray)
                 : UIColorFromRGB(filled ? color_menu_button : color_slider_gray);
+        [self sendSubviewToBack:_markViews[i]];
     }
     for (UILabel *titleLabel in _titleViews)
     {

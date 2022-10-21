@@ -28,6 +28,7 @@
 {
     OsmAndAppInstance _app;
     NSMutableArray<OAAutoObserverProxy *> *_layerChangeObservers;
+    OAAutoObserverProxy* _weatherChangeObserver;
 
     NSCalendar *_currentTimezoneCalendar;
     OAWeatherToolbarLayersHandler *_layersHandler;
@@ -102,8 +103,10 @@
     [self.timeSliderView removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
     [self.timeSliderView addTarget:self action:@selector(timeChanged:) forControlEvents:UIControlEventTouchUpInside];
 
+    _weatherChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                       withHandler:@selector(onUpdateWeatherLayerSettings)
+                                                        andObserve:_app.data.weatherChangeObservable];
     _layerChangeObservers = [NSMutableArray array];
-
     for (OAWeatherBand *band in [[OAWeatherHelper sharedInstance] bands])
     {
         [_layerChangeObservers addObject:[band createSwitchObserver:self handler:@selector(onUpdateWeatherLayerSettings)]];
@@ -163,8 +166,11 @@
 
 - (BOOL)updateInfo
 {
-    BOOL visible = [[OARootViewController instance].mapPanel.hudViewController shouldShowWeatherToolbar];
+    OAMapHudViewController *hudViewController = [OARootViewController instance].mapPanel.hudViewController;
+    BOOL visible =  [hudViewController shouldShowWeatherToolbar];
     [self updateVisibility:visible];
+    [hudViewController.weatherButton setImage:[UIImage templateImageNamed:visible ? @"ic_custom_cancel" : @"ic_custom_umbrella"]
+                                     forState:UIControlStateNormal];
     return YES;
 }
 

@@ -47,31 +47,62 @@
 - (void)updateData
 {
     NSMutableArray<NSMutableDictionary *> *layersData = [NSMutableArray array];
-    [layersData addObject:[NSMutableDictionary dictionaryWithDictionary:@{
-            @"img": @"ic_custom_thermometer",
-            @"selected": @(_app.data.weatherTemp)
-    }]];
-    [layersData addObject:[NSMutableDictionary dictionaryWithDictionary:@{
-            @"img": @"ic_custom_air_pressure",
-            @"selected": @(_app.data.weatherPressure)
-    }]];
-    [layersData addObject:[NSMutableDictionary dictionaryWithDictionary:@{
-            @"img": @"ic_custom_wind",
-            @"selected": @(_app.data.weatherWind)
-    }]];
-    [layersData addObject:[NSMutableDictionary dictionaryWithDictionary:@{
-            @"img": @"ic_custom_clouds",
-            @"selected": @(_app.data.weatherCloud)
-    }]];
-    [layersData addObject:[NSMutableDictionary dictionaryWithDictionary:@{
-            @"img": @"ic_custom_precipitation",
-            @"selected": @(_app.data.weatherPrecip)
-    }]];
-    [layersData addObject:[NSMutableDictionary dictionaryWithDictionary:@{
-            @"img": @"ic_custom_contour_lines",
-            @"selected": @([[_styleSettings getParameter:WEATHER_TEMP_CONTOUR_LINES_ATTR].value isEqualToString:@"true"]
-                    || [[_styleSettings getParameter:WEATHER_PRESSURE_CONTOURS_LINES_ATTR].value isEqualToString:@"true"])
-    }]];
+    BOOL isWeatherEnabled = _app.data.weather;
+    BOOL isTempSelected = _app.data.weatherTemp;
+    BOOL isPressureSelected = _app.data.weatherPressure;
+    BOOL isWindSelected = _app.data.weatherWind;
+    BOOL isCloudSelected = _app.data.weatherCloud;
+    BOOL isPrecipitationSelected = _app.data.weatherPrecip;
+    BOOL isContourSelected = ([[_styleSettings getParameter:WEATHER_TEMP_CONTOUR_LINES_ATTR].value isEqualToString:@"true"]
+                              || [[_styleSettings getParameter:WEATHER_PRESSURE_CONTOURS_LINES_ATTR].value isEqualToString:@"true"]);
+
+    NSMutableDictionary *tempData = [NSMutableDictionary dictionaryWithDictionary:@{
+        @"img": @"ic_custom_thermometer",
+        @"selected": @(isTempSelected && isWeatherEnabled)
+    }];
+    if (isTempSelected && !isWeatherEnabled)
+        tempData[@"enabled"] = @(NO);
+    [layersData addObject:tempData];
+
+    NSMutableDictionary *pressureData = [NSMutableDictionary dictionaryWithDictionary:@{
+        @"img": @"ic_custom_air_pressure",
+        @"selected": @(isPressureSelected && isWeatherEnabled)
+    }];
+    if (isPressureSelected && !isWeatherEnabled)
+        pressureData[@"enabled"] = @(NO);
+    [layersData addObject:pressureData];
+
+    NSMutableDictionary *windData = [NSMutableDictionary dictionaryWithDictionary:@{
+        @"img": @"ic_custom_wind",
+        @"selected": @(isWindSelected && isWeatherEnabled)
+    }];
+    if (isWindSelected && !isWeatherEnabled)
+        windData[@"enabled"] = @(NO);
+    [layersData addObject:windData];
+
+    NSMutableDictionary *cloudData = [NSMutableDictionary dictionaryWithDictionary:@{
+        @"img": @"ic_custom_clouds",
+        @"selected": @(isCloudSelected && isWeatherEnabled)
+    }];
+    if (isCloudSelected && !isWeatherEnabled)
+        cloudData[@"enabled"] = @(NO);
+    [layersData addObject:cloudData];
+
+    NSMutableDictionary *precipitationData = [NSMutableDictionary dictionaryWithDictionary:@{
+        @"img": @"ic_custom_precipitation",
+        @"selected": @(isPrecipitationSelected && isWeatherEnabled)
+    }];
+    if (isPrecipitationSelected && !isWeatherEnabled)
+        precipitationData[@"enabled"] = @(NO);
+    [layersData addObject:precipitationData];
+
+    NSMutableDictionary *contourData = [NSMutableDictionary dictionaryWithDictionary:@{
+        @"img": @"ic_custom_contour_lines",
+        @"selected": @(isContourSelected && isWeatherEnabled)
+    }];
+    if (isContourSelected && !isWeatherEnabled)
+        contourData[@"enabled"] = @(NO);
+    [layersData addObject:contourData];
 
     _data = layersData;
 }
@@ -85,43 +116,53 @@
 
 - (void)onItemSelected:(NSInteger)index
 {
-    if (index == kTempIndex)
+    BOOL enabled = ![_data[index].allKeys containsObject:@"enabled"];
+    if (!_app.data.weather)
     {
-        BOOL selected = !_app.data.weatherTemp;
-        _data[kTempIndex][@"selected"] = @(selected);
-        _app.data.weatherTemp = selected;
+        _app.data.weather = YES;
+        [self updateData];
     }
-    else if (index == kPressureIndex)
+
+    if (enabled)
     {
-        BOOL selected = !_app.data.weatherPressure;
-        _data[kPressureIndex][@"selected"] = @(selected);
-        _app.data.weatherPressure = selected;
-    }
-    else if (index == kWindIndex)
-    {
-        BOOL selected = !_app.data.weatherWind;
-        _data[kWindIndex][@"selected"] = @(selected);
-        _app.data.weatherWind = selected;
-    }
-    else if (index == kCloudIndex)
-    {
-        BOOL selected = !_app.data.weatherCloud;
-        _data[kCloudIndex][@"selected"] = @(selected);
-        _app.data.weatherCloud = selected;
-    }
-    else if (index == kPrecipitationIndex)
-    {
-        BOOL selected = !_app.data.weatherPrecip;
-        _data[kPrecipitationIndex][@"selected"] = @(selected);
-        _app.data.weatherPrecip = selected;
-    }
-    else if (index == kContoursIndex)
-    {
-        BOOL selected = !([[_styleSettings getParameter:WEATHER_TEMP_CONTOUR_LINES_ATTR].value isEqualToString:@"true"]
-                || [[_styleSettings getParameter:WEATHER_PRESSURE_CONTOURS_LINES_ATTR].value isEqualToString:@"true"]);
-        _data[kContoursIndex][@"selected"] = @(selected);
-        [OAMapStyleSettings weatherContoursParamChangedToValue:selected ? WEATHER_TEMP_CONTOUR_LINES_ATTR : WEATHER_NONE_CONTOURS_LINES_VALUE
-                                                 styleSettings:_styleSettings];
+        if (index == kTempIndex)
+        {
+            BOOL selected = !_app.data.weatherTemp;
+            _data[kTempIndex][@"selected"] = @(selected);
+            _app.data.weatherTemp = selected;
+        }
+        else if (index == kPressureIndex)
+        {
+            BOOL selected = !_app.data.weatherPressure;
+            _data[kPressureIndex][@"selected"] = @(selected);
+            _app.data.weatherPressure = selected;
+        }
+        else if (index == kWindIndex)
+        {
+            BOOL selected = !_app.data.weatherWind;
+            _data[kWindIndex][@"selected"] = @(selected);
+            _app.data.weatherWind = selected;
+        }
+        else if (index == kCloudIndex)
+        {
+            BOOL selected = !_app.data.weatherCloud;
+            _data[kCloudIndex][@"selected"] = @(selected);
+            _app.data.weatherCloud = selected;
+        }
+        else if (index == kPrecipitationIndex)
+        {
+            BOOL selected = !_app.data.weatherPrecip;
+            _data[kPrecipitationIndex][@"selected"] = @(selected);
+            _app.data.weatherPrecip = selected;
+        }
+        else if (index == kContoursIndex)
+        {
+            BOOL selected = !([[_styleSettings getParameter:WEATHER_TEMP_CONTOUR_LINES_ATTR].value isEqualToString:@"true"]
+                              || [[_styleSettings getParameter:WEATHER_PRESSURE_CONTOURS_LINES_ATTR].value isEqualToString:@"true"]);
+            _data[kContoursIndex][@"selected"] = @(selected);
+            [OAMapStyleSettings weatherContoursParamChangedToValue:selected ? WEATHER_TEMP_CONTOUR_LINES_ATTR : WEATHER_NONE_CONTOURS_LINES_VALUE
+                                                     styleSettings:_styleSettings];
+        }
     }
 
     if (self.delegate)

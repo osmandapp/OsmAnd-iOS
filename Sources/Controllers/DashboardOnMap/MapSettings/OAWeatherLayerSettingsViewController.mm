@@ -380,6 +380,9 @@
 
 - (void)onSwitchValueChanged:(UISwitch *)sender
 {
+    if (!_app.data.weather)
+        _app.data.weather = YES;
+
     _layerEnabled = sender.isOn;
     if (_layerType == EOAWeatherLayerTypeTemperature)
         _app.data.weatherTemp = _layerEnabled;

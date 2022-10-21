@@ -1647,7 +1647,7 @@
 "delete_waypoints" = "Delete waypoints";
 "points_delete_multiple" = "Delete %d point(s)?";
 "delete_group_confirm_short" = "Delete group?";
-"delete_group_confirm" = "Are you sure you want to delete ”%@” group?";
+"delete_group_confirm" = "Are you sure you want to delete "%@" group?";
 "edit_waypoint_short" = "Edit waypoint";
 "replace_waypoint_confirmation" = "Are you sure you want to replace Waypoint %@?";
 "no_waypoints_found" = "No waypoints found";
@@ -2784,7 +2784,7 @@
 "purchases_feature_desc_terrain" = "Terrain contour lines, full hillshade map with dark shades and slope maps with colors to show peaks and lowlands.";
 "purchases_feature_desc_nautical" = "Vector maps appropriate for sailing routes navigation";
 "purchases_feature_weather" = "24h hourly forecast 7 days ahead coloured on the map";
-"you_can_get_feature_as_part_of_pattern" = "Get “%@” as part of the %@ plan. Comparison:";
+"you_can_get_feature_as_part_of_pattern" = "Get “%@" as part of the %@ plan. Comparison:";
 
 "monthly_subscription" = "Monthly subscription";
 "annual_subscription" = "Annual subscription";
@@ -2806,7 +2806,7 @@
 "osm_live_payment_subscription_management_aid" = "Payment will be charged to your Apple ID account at the confirmation of purchase.\n\nSubscription automatically renews unless it is canceled at least 24 hours before the end of the current period. Your account will be charged for renewal within 24 hours prior to the end of the current period.\n\nYou can manage and cancel your subscriptions by going to your account settings on the App Store after purchase";
 
 "no_purchases" = "You don’t have any purchases";
-"empty_purchases_description" = "If your purchases don\'t show up here, tap on “%@”, or contact our support team.";
+"empty_purchases_description" = "If your purchases don\'t show up here, tap on “%@", or contact our support team.";
 "explore_osmnad_plans_to_find_suitable" = "Explore OsmAnd Plans to find one suitable for you.";
 "osm_live_banner_desc" = "Get unlimited map downloads, adding weekly, daily, or even hourly updates.";
 "redeem_promo_code" = "Redeem promo code";
@@ -2944,4 +2944,18 @@
 • Fixed various crashes in the Route planning mode\n
 • Fixed crashes during Navigation\n";
 
+"ios_release_4_3" = "• Smooth animation for location changes during movement\n
+• CarPlay: added lanes, 2.5D view, fixed sound issues while connected over Bluetooth\n
+• Introducing new purchase plans: \"OsmAnd Pro\" subscriptions with access to all features and \"Maps+\" purchase with unlimited map downloads and paid plugins access.\n
+• Added Cloud backup and Offline Weather forecast for OsmAnd Pro users\n
+• New convenient \"Purchase\" screen with the list of all purchases\n
+• Benefits for active OpenStreetMap.org contributors\n
+• Tracks can now be colored by altitude, speed, or slope\n
+• Offline maps are now accessible via the Files app\n
+• Favorites: added local backups generation after each change, backups accessible from the Files app\n
+• POI saved to favorites will store and show all POI data even without an offline map\n
+• GPX added support for link, cmt, desc tags and for any custom extensions\n
+• Added mode for the Compass button\n
+• Fixed an issue with UTM Coordinates format\n
+• Fixed an issue with intermediate points in navigation\n";
 

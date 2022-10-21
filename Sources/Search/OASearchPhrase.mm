@@ -27,7 +27,7 @@
 #include <OsmAndCore/Search/CommonWords.h>
 
 static NSString *DELIMITER = @" ";
-static NSString *ALLDELIMITERS = @"\\s|,|-";
+static NSString *ALLDELIMITERS = @"\\s|,";
 static NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:ALLDELIMITERS options:0 error:nil];
 
 static NSSet<NSString *> *conjunctions;

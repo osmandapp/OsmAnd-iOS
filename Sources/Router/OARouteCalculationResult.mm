@@ -385,7 +385,8 @@
     return nil;
 }
 
-- (CLLocation *) getRouteLocationByDistance:(int)meters {
+- (CLLocation *) getRouteLocationByDistance:(int)meters
+{
         int increase = meters > 0 ? 1 : -1;
         for (int i = increase; _currentRoute < _locations.count && _currentRoute + i >= 0 && _currentRoute + i < _locations.count; i = i + increase)
         {

@@ -28,7 +28,7 @@
 "get_discount_first_few_parts" = "%@ durante los primeros %@";
 "get_discount_second_part" = "luego %@";
 "mapillary_image" = "Imagen de Mapillary";
-"shared_string_milliradians" = "Mil angular";
+"shared_string_milliradians" = "Miliradián";
 "angular_units" = "Unidades de medición angular";
 "angular_units_descr" = "Cambia las unidades de medida del acimut.";
 "allow_3d" = "Permitir vista 2.5D";
@@ -466,7 +466,7 @@
 "shared_string_time" = "Tiempo";
 "shared_string_time_of_day" = "Hora del día";
 "shared_string_distance" = "Distancia";
-"shared_string_time_span" = "Duración";
+"shared_string_time_span" = "Espacio de tiempo";
 "shared_string_start_time" = "Hora de inicio";
 "shared_string_end_time" = "Hora de fin";
 "shared_string_time_moving" = "Tiempo en movimiento";
@@ -770,7 +770,7 @@
 "sett_lang_show_trans" = "Transliterar nombres";
 "lang_af" = "Afrikáans";
 "lang_al" = "Albanés";
-"lang_als" = "Albano (Tosk)";
+"lang_als" = "Albanés (Tosk)";
 "lang_an" = "Aragonés";
 "lang_ar" = "Árabe";
 "lang_ast" = "Asturiano";
@@ -2726,3 +2726,4 @@
 "weather_entire_world" = "Todo el mundo";
 "map_download_privacy_descr" = "Al descargar los mapas, aceptas las <a href='https://osmand.net/docs/legal/terms-of-use'>Condiciones de uso</a> y la <a href='https://osmand.net/docs/legal/privacy-policy'>Política de privacidad</a> .";
 "shared_string_profile" = "Perfil";
+"map_widget_rendering_fps" = "Renderizando FPS del mapa";

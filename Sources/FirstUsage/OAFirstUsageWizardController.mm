@@ -205,7 +205,7 @@ typedef enum
 - (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange interaction:(UITextItemInteraction)interaction
 {
     [self openSafariWithURL:URL.absoluteString];
-    return false;
+    return NO;
 }
 
 # pragma mark - SFSafariViewControllerDelegate

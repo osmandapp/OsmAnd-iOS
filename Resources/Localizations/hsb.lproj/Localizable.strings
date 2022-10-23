@@ -1316,7 +1316,7 @@
 "rendering_attr_currentTrackWidth_name" = "GPX-šěrokosć";
 "rendering_attr_piste_difficulty_intermediate_name" = "přerězne";
 "rendering_attr_contourLines_description" = "Pokazać wot zoomoweje runiny (trjeba wysokostne daty):";
-"rendering_attr_roadColors_description" = "Wubjerće barbowu šemu za dróhi:";
+"rendering_attr_roadColors_description" = "Wubjer barbowu šemu za dróhi:";
 "routing_attr_avoid_stairs_name" = "Schody wobeńć";
 "rendering_attr_roadColors_name" = "Barbowašema dróhow";
 "rendering_value_yellow_name" = "žołte";
@@ -1576,3 +1576,7 @@
 "paused" = "Přetorhnjene";
 "shared_string_data" = "Daty";
 "shared_string_undefined" = "njedefinowane";
+"login_open_street_map_org" = "Přizjew so pola OpenStreetMap.org";
+"rendering_value_black_name" = "čorne";
+"select_group" = "Wubjer skupinu";
+"select_color" = "Wubjer barbu";

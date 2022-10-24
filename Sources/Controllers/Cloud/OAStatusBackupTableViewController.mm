@@ -59,24 +59,20 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
 {
     EOARecentChangesTable _tableType;
     OATableViewDataModel *_data;
-    id<OAStatusBackupTableDelegate> _delegate;
+    __weak id<OAStatusBackupTableDelegate> _delegate;
     NSIndexPath *_lastBackupIndexPath;
     NSInteger _itemsSection;
     
-    OABackupStatus *_status;
-    OAPrepareBackupResult *_backup;
     OANetworkSettingsHelper *_settingsHelper;
     OABackupHelper *_backupHelper;
 }
 
-- (instancetype)initWithTableType:(EOARecentChangesTable)type backup:(OAPrepareBackupResult *)backup status:(OABackupStatus *)status
+- (instancetype)initWithTableType:(EOARecentChangesTable)type
 {
     self = [super init];
     if (self)
     {
         _tableType = type;
-        _backup = backup;
-        _status = status;
     }
     return self;
 }
@@ -94,6 +90,11 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     _settingsHelper = [OANetworkSettingsHelper sharedInstance];
     _backupHelper = [OABackupHelper sharedInstance];
     [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
     [self generateData];
 }
 
@@ -115,12 +116,20 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     [_backupHelper removePrepareBackupListener:self];
 }
 
-- (void)updateData:(OAPrepareBackupResult *)backup status:(OABackupStatus *)status
+- (void)updateData
 {
-    _backup = backup;
-    _status = status;
     [self generateData];
     [self.tableView reloadData];
+}
+
+- (OAPrepareBackupResult *) getBackup
+{
+    return _delegate.getBackup;
+}
+
+- (OABackupStatus *) getStatus
+{
+    return _delegate.getStatus;
 }
 
 - (void)generateData
@@ -132,6 +141,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     {
         OAExportBackupTask *exportTask = [_settingsHelper getExportTask:kBackupItemsKey];
         float progress = exportTask ? (float) exportTask.generalProgress / exportTask.maxProgress : 0.;
+        progress = progress > 1 ? 1 : progress;
         OATableViewRowData *progressCell = [OATableViewRowData rowData];
         [progressCell setCellType:[OATitleIconProgressbarCell getCellIdentifier]];
         [progressCell setKey:@"lastBackup"];
@@ -146,10 +156,10 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
         [statusSection addRowFromDictionary:@{
             kCellTypeKey: [OASimpleTableViewCell getCellIdentifier],
             kCellKeyKey: @"lastBackup",
-            kCellTitleKey: _status.statusTitle,
+            kCellTitleKey: self.getStatus.statusTitle,
             kCellDescrKey: backupTime,
-            kCellIconNameKey: _status.statusIconName,
-            kCellIconTint: @(_status.iconColor)
+            kCellIconNameKey: self.getStatus.statusIconName,
+            kCellIconTint: @(self.getStatus.iconColor)
         }];
     }
     [_data addSection:statusSection];
@@ -158,16 +168,16 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     OATableViewSectionData *itemsSection = [OATableViewSectionData sectionData];
     if (_tableType == EOARecentChangesAll)
     {
-        for (OASettingsItem *item in _backup.backupInfo.itemsToUpload)
+        for (OASettingsItem *item in self.getBackup.backupInfo.itemsToUpload)
         {
             [itemsSection addRow:[self rowFromItem:item toDelete:NO]];
         }
-        for (OASettingsItem *item in _backup.backupInfo.itemsToDelete)
+        for (OASettingsItem *item in self.getBackup.backupInfo.itemsToDelete)
         {
             [itemsSection addRow:[self rowFromItem:item toDelete:YES]];
         }
     }
-    for (NSArray *items in _backup.backupInfo.filteredFilesToMerge)
+    for (NSArray *items in self.getBackup.backupInfo.filteredFilesToMerge)
     {
         [itemsSection addRow:[self rowFromConflictItems:items]];
     }
@@ -489,8 +499,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
 - (void)onBackupExportStarted
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (_delegate)
-            [_delegate updateBackupStatus:_backup];
+        [_delegate updateBackupStatus:self.getBackup];
         
         if (_lastBackupIndexPath)
         {
@@ -550,6 +559,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
             if (_lastBackupIndexPath)
             {
                 float progress = (float) exportTask.generalProgress / exportTask.maxProgress;
+                progress = progress > 1 ? 1 : progress;
                 OATableViewRowData *progressCell = [_data itemForIndexPath:_lastBackupIndexPath];
                 [progressCell setTitle:[OALocalizedString(@"osm_edit_uploading") stringByAppendingString:[NSString stringWithFormat:@"%i%%", (int) (progress * 100)]]];
                 [progressCell setObj:@(progress) forKey:@"progress"];
@@ -612,21 +622,16 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
 
 - (void)onBackupPrepared:(nonnull OAPrepareBackupResult *)backupResult
 {
-    _backup = backupResult;
-    _status = [OABackupStatus getBackupStatus:_backup];
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (_delegate)
-            [_delegate updateBackupStatus:_backup];
-        [self generateData];
-        [self.tableView reloadData];
+        [_delegate updateBackupStatus:backupResult];
+        [self updateData];
     });
 }
 
 - (void)onBackupPreparing
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (_delegate)
-            [_delegate disableBottomButtons];
+        [_delegate disableBottomButtons];
     });
 }
 

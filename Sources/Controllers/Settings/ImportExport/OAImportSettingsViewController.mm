@@ -189,6 +189,7 @@
         _settingsHelper.importTask = nil;
         [OAUtilities denyAccessToFile:_file removeFromInbox:YES];
     }
+    _settingsHelper.importTask = nil;
 }
 
 - (void) onDuplicatesChecked:(NSArray<OASettingsItem *> *)duplicates items:(NSArray<OASettingsItem *> *)items

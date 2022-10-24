@@ -74,7 +74,7 @@ static NSString * const _unitsMph = OALocalizedString(@"units_mph");
         {
             NSString *formattedDuration;
             if (duration < 60)
-                formattedDuration = [NSString stringWithFormat:@"<1 %@", OALocalizedString(@"units_min")];
+                formattedDuration = [NSString stringWithFormat:@"< 1 %@", OALocalizedString(@"units_min")];
             else
                 formattedDuration = [self getFormattedTimeInterval:duration];
             

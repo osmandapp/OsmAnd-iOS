@@ -143,9 +143,8 @@
                                                                  fileName:fileName
                                                                   summary:OALocalizedString(@"shared_string_changed")]];
 
-        [downloadCloudRow setDescr:[self.delegate getDescriptionForItemType:_remoteFile.item.type
-                                                                   fileName:fileName
-                                                                    summary:OALocalizedString(@"shared_string_changed")]];
+        [downloadCloudRow setDescr:[self.delegate generateTimeString:_remoteFile.updatetimems
+                                                             summary:OALocalizedString(@"shared_string_changed")]];
     }
     [itemInfoSection addRow:itemInfoRow];
     [itemInfoSection addRow:uploadLocalRow];

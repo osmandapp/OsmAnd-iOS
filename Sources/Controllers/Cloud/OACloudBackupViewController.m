@@ -87,13 +87,23 @@
     _settingsHelper = OANetworkSettingsHelper.sharedInstance;
     _backupHelper = OABackupHelper.sharedInstance;
     if (!_settingsHelper.isBackupExporting)
+    {
+        [_settingsHelper updateExportListener:self];
+        [_settingsHelper updateImportListener:self];
+        [_backupHelper addPrepareBackupListener:self];
         [_backupHelper prepareBackup];
-    [self generateData];
+    }
 
     self.tblView.delegate = self;
     self.tblView.dataSource = self;
     self.tblView.estimatedRowHeight = 44.;
     self.tblView.rowHeight = UITableViewAutomaticDimension;
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self generateData];
 }
 
 - (void)viewDidAppear:(BOOL)animated

@@ -79,9 +79,9 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    _allTableViewController = [[OAStatusBackupTableViewController alloc] initWithTableType:EOARecentChangesAll backup:_backup status:_status];
+    _allTableViewController = [[OAStatusBackupTableViewController alloc] initWithTableType:EOARecentChangesAll];
     [_allTableViewController setDelegate:self];
-    _conflictsTableViewController = [[OAStatusBackupTableViewController alloc] initWithTableType:EOARecentChangesConflicts backup:_backup status:_status];
+    _conflictsTableViewController = [[OAStatusBackupTableViewController alloc] initWithTableType:EOARecentChangesConflicts];
     [_conflictsTableViewController setDelegate:self];
     [self setupPageController];
     [_pageController setViewControllers:@[_allTableViewController]
@@ -187,8 +187,16 @@
     [self setupBottomButtons:YES];
     if (self.delegate)
         [self.delegate onCompleteTasks];
-    [_conflictsTableViewController updateData:_backup status:_status];
-    [_allTableViewController updateData:_backup status:_status];
+}
+
+- (OAPrepareBackupResult *)getBackup
+{
+    return _backup;
+}
+
+- (OABackupStatus *)getStatus
+{
+    return _status;
 }
 
 - (void)setRowIcon:(OATableViewRowData *)rowData item:(OASettingsItem *)item
@@ -207,12 +215,11 @@
     }
 }
 
-- (NSString *)getDescriptionForItemType:(EOASettingsItemType)type fileName:(NSString *)fileName summary:(NSString *)summary
+- (NSString *)generateTimeString:(long)timeMs summary:(NSString *)summary
 {
-    OAUploadedFileInfo *info = [[OABackupDbHelper sharedDatabase] getUploadedFileInfo:[OASettingsItemType typeName:type] name:fileName];
-    if (info)
+    if (timeMs != -1)
     {
-        NSString *time = [OAOsmAndFormatter getFormattedPassedTime:(info.uploadTime / 1000)
+        NSString *time = [OAOsmAndFormatter getFormattedPassedTime:(timeMs / 1000)
                                                                def:OALocalizedString(@"shared_string_never")];
         return [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_colon"), summary, time];
     }
@@ -220,6 +227,12 @@
     {
         return [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_colon"), summary, OALocalizedString(@"shared_string_never")];
     }
+}
+
+- (NSString *)getDescriptionForItemType:(EOASettingsItemType)type fileName:(NSString *)fileName summary:(NSString *)summary
+{
+    OAUploadedFileInfo *info = [[OABackupDbHelper sharedDatabase] getUploadedFileInfo:[OASettingsItemType typeName:type] name:fileName];
+    return [self generateTimeString:info.uploadTime summary:summary];
 }
 
 #pragma mark - UIPageViewControllerDataSource

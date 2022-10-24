@@ -513,7 +513,7 @@
 
 - (void)onSettingsImportFinished:(BOOL)succeed items:(NSArray<OASettingsItem *> *)items
 {
-    // TODO: dismiss progress
+    OASettingsHelper.sharedInstance.importTask = nil;
 }
 
 @end

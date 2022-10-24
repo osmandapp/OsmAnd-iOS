@@ -510,7 +510,12 @@
             NSData *data = [NSData dataWithContentsOfFile:filePath options:NSDataReadingMappedIfSafe error:&err];
             if (!err && data)
             {
-                [itemsJson addObject:[NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil]];
+                NSError *jsonErr = nil;
+                id json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&jsonErr];
+                if (json && ! jsonErr)
+                    [itemsJson addObject:json];
+                else
+                    NSLog(@"generateItemsJson error: filePath:%@ %@", filePath, [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
             }
             else
             {

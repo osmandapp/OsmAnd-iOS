@@ -32,7 +32,7 @@
 
 @implementation OAStatusBackupConflictDetailsViewController
 {
-    OALocalFile *_localeFile;
+    OALocalFile *_localFile;
     OARemoteFile *_remoteFile;
     OANetworkSettingsHelper *_settingsHelper;
     id _backupExportImportListener;
@@ -48,7 +48,7 @@
     self = [super init];
     if (self)
     {
-        _localeFile = localeFile;
+        _localFile = localeFile;
         _remoteFile = remoteFile;
         _backupExportImportListener = backupExportImportListener;
     }
@@ -92,10 +92,10 @@
     _data = [[OATableViewDataModel alloc] init];
     OATableViewSectionData *itemInfoSection = [OATableViewSectionData sectionData];
     
-    NSString *name = [_localeFile.item getPublicName];
-    if ([_localeFile.item isKindOfClass:OAFileSettingsItem.class])
+    NSString *name = [_localFile.item getPublicName];
+    if ([_localFile.item isKindOfClass:OAFileSettingsItem.class])
     {
-        OAFileSettingsItem *flItem = (OAFileSettingsItem *) _localeFile.item;
+        OAFileSettingsItem *flItem = (OAFileSettingsItem *) _localFile.item;
         if (flItem.subtype == EOASettingsItemFileSubtypeVoiceTTS)
             name = [NSString stringWithFormat:@"%@ (%@)", name, OALocalizedString(@"tts")];
         else if (flItem.subtype == EOASettingsItemFileSubtypeVoice)
@@ -125,7 +125,7 @@
         kCellIconTint: @(color_primary_purple)
     }];
 
-    NSString *fileName = [OABackupHelper getItemFileName:_localeFile.item];
+    NSString *fileName = [OABackupHelper getItemFileName:_localFile.item];
     OAImportBackupTask *importTask = [_settingsHelper getImportTask:fileName];
     OAExportBackupTask *exportTask = [_settingsHelper getExportTask:fileName];
     BOOL enabled = exportTask == nil && importTask == nil;
@@ -134,18 +134,17 @@
 
     if (self.delegate)
     {
-        [self.delegate setRowIcon:itemInfoRow item:_localeFile.item];
-        [itemInfoRow setDescr:[self.delegate getDescriptionForItemType:_localeFile.item.type
+        [self.delegate setRowIcon:itemInfoRow item:_localFile.item];
+        [itemInfoRow setDescr:[self.delegate getDescriptionForItemType:_localFile.item.type
                                                               fileName:fileName
                                                                summary:OALocalizedString(@"cloud_last_backup")]];
 
-        [uploadLocalRow setDescr:[self.delegate getDescriptionForItemType:_localeFile.item.type
+        [uploadLocalRow setDescr:[self.delegate getDescriptionForItemType:_localFile.item.type
                                                                  fileName:fileName
                                                                   summary:OALocalizedString(@"shared_string_changed")]];
 
-        [downloadCloudRow setDescr:[self.delegate getDescriptionForItemType:_remoteFile.item.type
-                                                                   fileName:fileName
-                                                                    summary:OALocalizedString(@"shared_string_changed")]];
+        [downloadCloudRow setDescr:[self.delegate generateTimeString:_remoteFile.updatetimems
+                                                             summary:OALocalizedString(@"shared_string_changed")]];
     }
     [itemInfoSection addRow:itemInfoRow];
     [itemInfoSection addRow:uploadLocalRow];
@@ -261,10 +260,10 @@
     if ([item boolForKey:@"enabled"])
     {
         [self hide:YES completion:^{
-            NSString *fileName = [OABackupHelper getItemFileName:_localeFile.item];
+            NSString *fileName = [OABackupHelper getItemFileName:_localFile.item];
             if ([item.key isEqualToString:@"uploadLocal"])
             {
-                [_settingsHelper exportSettings:fileName items:@[_localeFile.item] itemsToDelete:@[] listener:_backupExportImportListener];
+                [_settingsHelper exportSettings:fileName items:@[_localFile.item] itemsToDelete:@[] listener:_backupExportImportListener];
             }
             else if ([item.key isEqualToString:@"downloadCloud"])
             {

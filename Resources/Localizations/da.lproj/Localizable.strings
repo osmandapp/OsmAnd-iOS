@@ -2558,7 +2558,7 @@
 "wikipedia_and_wikivoyage_offline" = "Wikipedia og Wikivoyage offline";
 "purchases_feature_desc_osmand_cloud" = "Gem alle OsmAnd-data online. Ingen tabte data efter geninstallation. Sikkerhedskopiér og gendan alle oplysninger nemt.";
 "purchases_feature_desc_unlimited_map_download" = "Få ubegrænset download af offline kort for alle kontinenter og regioner.";
-"you_can_get_feature_as_part_of_pattern" = "Få \"%@\" som en del af %@ abonnementet. Sammenligning:";
+"you_can_get_feature_as_part_of_pattern" = "Få \"%@\" som en del af %@-abonnementet. Sammenligning:";
 "purchases_feature_desc_carplay" = "Giver dig OsmAnd offline kort og navigation på skærmen i dit køretøj og integreres med bilens betjeningselementer.";
 "purchases_feature_desc_combined_wiki" = "Udforsk Wikipedia-artikler på farten uden internetforbindelse. Offline-data opdelt efter lande og tilgængelig på alle sprog.";
 "purchases_feature_desc_wikivoyage" = "Udforsk Wikivoyage offline. Artikler er opdelt efter lande og regioner og er tilgængelige på alle sprog.";
@@ -2716,3 +2716,4 @@
 "map_download_privacy_descr" = "Ved at downloade kort accepterer du <a href='https://osmand.net/docs/legal/terms-of-use'>Brugsbetingelser</a> og <a href='https://osmand.net/docs/legal/privacy-policy'>Privatlivspolitik</a>.";
 "shared_string_profile" = "Profil";
 "map_widget_rendering_fps" = "Kortgengivelse FPS";
+"ios_release_4_3" = "• Jævn animation til ændring af placering under bevægelse\n• CarPlay: tilføjede baner, 2,5D-visning, løste lydproblemer ved forbindelse via Bluetooth\n• Introduktion af nye betalingsabonnementer: \"OsmAnd Pro\"-abonnementer med adgang til alle funktioner og \"Maps+\"-køb med ubegrænsede kortdownloads og adgang til betalte udvidelser.\n• Tilføjet Cloud-backup og Offline vejrprognose for OsmAnd Pro-brugere\n• Ny praktisk \"Køb\"-skærm med listen over alle køb\n• Fordele for aktive OpenStreetMap.org-bidragydere\n• Spor kan nu farves efter højde, hastighed eller hældning\n• Offlinekort er nu tilgængelige via appen Filer\n• Favoritter: tilføjet lokal generering af sikkerhedskopi efter hver ændring, sikkerhedskopier tilgængelige fra Files-appen\n• POI gemt til favoritter gemmer og viser alle POI-data, selv uden et offlinekort\n• GPX tilføjede understøttelse af link-, cmt- og desc-tags og for alle brugerdefinerede udvidelser\n• Tilføjet tilstand for knappen Kompas\n• Der blev rettet et problem med UTM-koordinaternes format\n• Rettet et problem med mellemliggende punkter i navigation\n";

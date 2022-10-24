@@ -2171,7 +2171,7 @@
 "ios_release_4_1" = "• Interação com trilhos completamente redesenhada: um novo menu com gráficos, estatísticas, capacidade de alterar a aparência, cor por velocidade, altura e inclinação e seleção de trilhos no mapa\n• Novo ecrã para procura por coordenadas em diferentes formatos\n• Pesquisa de coordenadas no formato OLC melhorada\n• Novo menu de fácil utilização para escolher os idiomas a usar nos artigos da Wikipédia no mapa\n• Capacidade de carregar mapas de todas as regiões de alguns países facilmente com alguns cliques\n• Adicionadas linhas de contorno na medida \"pés\" (é necessário descarregar novamente os ficheiros)\n• Adicionada a capacidade de descarregar mapas selecionando a região ou país desejado no mapa, bem como a adição de uma caixa de diálogo com a sugestão de carregar um mapa em falta de uma região exibida\n• Nova aparência os botões de controlo do mapa e a capacidade adicional de alterar a ampliação do mapa tocando duas vezes e deslizando\n• As configurações de visibilidade das rotas foram movidas para cima no ecrã \"Configurar mapa\" e foram reorganizadas para uma melhor flexibilidade.\n";
 "delete_waypoints" = "Eliminar pontos de rotas";
 "delete_group_confirm_short" = "Eliminar grupo?";
-"delete_group_confirm" = "Quer mesmo eliminar o grupo ”%@”?";
+"delete_group_confirm" = "Quer mesmo eliminar o grupo \"%@\"?";
 "shared_string_time_span" = "Período de tempo";
 "shared_string_start_time" = "Hora de início";
 "shared_string_end_time" = "Hora de fim";
@@ -2515,7 +2515,7 @@
 "purchases_feature_desc_combined_wiki" = "Explore os artigos da Wikipédia em qualquer lugar, sem uma ligação à Internet. Estes dados offline estão divididos por países e disponíveis em todos os idiomas.";
 "purchases_feature_desc_terrain" = "Veja curvas de nível do terreno, mapas em sombras de relevo com tons escuros e mapas de declive com cores para mostrar picos e planícies.";
 "purchases_feature_desc_nautical" = "Mapas vetoriais apropriados para navegação náutica";
-"you_can_get_feature_as_part_of_pattern" = "Obtenha “%@” como parte do plano: %@. Comparação:";
+"you_can_get_feature_as_part_of_pattern" = "Obtenha \"%@\" como parte do plano: %@. Comparação:";
 "monthly_subscription" = "Subscrição mensal";
 "annual_subscription" = "Subscrição anual";
 "subscriptions" = "Subscrições";
@@ -2710,3 +2710,9 @@
 "shared_string_changed" = "Alterado";
 "tts" = "TTS";
 "recorded_voice" = "Gravado";
+"shared_string_profile" = "Perfil";
+"weather_entire_world" = "Mundo inteiro";
+"map_widget_rendering_fps" = "FPS da renderização do mapa";
+"ios_release_4_3" = "- Animação suave em alterações de localização durante o movimento\n- CarPlay: adicionadas vias de trânsito (faixas), vista 2.5D; problemas de som corrigidos em conexões por Bluetooth\n- Introdução de novos planos de compra: subscrições \"OsmAnd Pro\" com acesso a todas as funcionalidades e compra \"Mapas+\" com descarregamentos ilimitados de mapas e acesso pago a complementos (plug-ins).\n- Adicionada opção de cópia de segurança na nuvem e previsão meteorológica off-line para utilizadores OsmAnd Pro\n- Novo e conveniente ecrã de \"Compra\" com a lista de todas as compras\n- Benefícios para colaboradores ativos do OpenStreetMap.org\n- Os trilhos podem agora ser coloridos por altitude, velocidade ou declive\n- Os mapas off-line estão agora acessíveis através da aplicação Ficheiros do sistema Android\n- Favoritos: adicionada opção de geração de cópias de segurança no dispositivo após cada alteração, as cópias de segurança são acessíveis a partir da aplicação Ficheiros\n- POIs guardados nos favoritos armazenam e mostram todos os dados de POI mesmo sem um mapa off-line\n- Suporte de GPX para link, cmt, desc tags e para quaisquer extensões personalizadas\n- Modo adicionado para o botão Bússola\n- Corrigido um problema com o formato coordenadas UTM\n- Corrigido um problema com pontos intermédios na navegação\n";
+"weather_forecast_entire_world" = "Previsão do tempo em todo o mundo";
+"map_download_privacy_descr" = "Ao descarregar os mapas concorda com os <a href='https://osmand.net/docs/legal/terms-of-use'>Termos de utilização</a> e a <a href='https://osmand.net/docs/legal/privacy-policy'>Política de privacidade</a>.";

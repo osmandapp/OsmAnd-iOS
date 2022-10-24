@@ -1966,7 +1966,7 @@
 "terms_of_use" = "Condiciones de uso";
 "privacy_policy" = "Política de privacidad";
 "already_has_subscription" = "Ya está suscrito a OsmAnd Live y tiene todas las características desbloqueadas.";
-"already_has_inapp" = "Ya está suscrito a %@.";
+"already_has_inapp" = "Ya se ha suscrito a %@.";
 "inapp_not_found" = "El %@ no se encuentra en OsmAnd. Probablemente ha sido cancelado.";
 "rendering_value_high_name" = "Alto";
 "routing_attr_difficulty_preference_description" = "Preferir rutas de esta dificultad, aunque el trazado sobre pistas más duras o más fáciles sigue siendo posible si son más cortas.";
@@ -2453,7 +2453,7 @@
 "wind_hide" = "Ocultar viento";
 "toggle_wind" = "Mostrar/Ocultar - Capa de viento";
 "rendering_attr_lightRailRoutes_name" = "Rutas de tren ligero";
-"rendering_attr_monorailRoutes_name" = "Rutas de monorraíl";
+"rendering_attr_monorailRoutes_name" = "Rutas de monorriel";
 "rendering_attr_funicularRoutes_name" = "Rutas funiculares";
 "cloud_hide" = "Ocultar nubes";
 "toggle_cloud" = "Mostrar/Ocultar - Capa de nubes";
@@ -2674,7 +2674,7 @@
 "backup_delete_all_data_or_versions_descr" = "Borra todos los datos en OsmAnd Cloud o sólo el historial de versiones. Los datos locales permanecerán intactos.";
 "backup_delete_all_data" = "Borrar todos mis datos";
 "backup_delete_old_data" = "Quitar versiones antiguas";
-"backup_delete_all_data_in_progress" = "Espera hasta que OsmAnd borre todos los datos de la nube. Los datos en el dispositivo permanecen intactos.";
+"backup_delete_all_data_in_progress" = "Espera mientras OsmAnd borra todos los datos de la nube. Los datos en el dispositivo permanecen intactos.";
 "backup_remove_old_versions_finished" = "Las versiones antiguas han sido borradas con éxito de OsmAnd Cloud.";
 "manage_storage" = "Gestionar almacenamiento";
 "backup_delete_data_type_description" = "Esto borrará todos los datos de «%@» en OsmAnd Cloud. Esta acción no se puede deshacer.";
@@ -2703,7 +2703,7 @@
 "enough_contributions_descr" = "¡Felicitaciones, has hecho suficientes contribuciones a OpenStreetMap y ahora puedes disfrutar de actualizaciones ilimitadas de los mapas de OsmAnd!";
 "last_two_month_total" = "Total del último bimestre";
 "auth_error" = "Error de autorización";
-"carplay_available_in_sub_plans" = "Compra OsmAnd «Pro» o «Maps+» para usar OsmAnd con CarPlay.";
+"carplay_available_in_sub_plans" = "Compra «OsmAnd Pro» o «Maps+» para usar OsmAnd con CarPlay.";
 "cloud_confirm_delete_type" = "¿Borrar «%@» de OsmAnd Cloud?";
 "cross_buy" = "Compra cruzada";
 "purchases_feature_desc_cross_buy" = "Usa todas las funciones de la suscripción en múltiples plataformas sin coste adicional. Disponible en Android/iOS/Web.";

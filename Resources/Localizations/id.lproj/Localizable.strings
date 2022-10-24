@@ -2461,3 +2461,4 @@
 "shared_string_delete_all" = "Hapus semua";
 "shared_string_data" = "Data";
 "shared_string_undefined" = "Tidak tersedia";
+"map_widget_rendering_fps" = "FPS perenderan peta";

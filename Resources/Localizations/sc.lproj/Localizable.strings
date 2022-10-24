@@ -2742,3 +2742,4 @@
 "weather_entire_world" = "Totu su mundu";
 "map_download_privacy_descr" = "Iscarrighende mapas atzetas sas <a href='https://osmand.net/docs/legal/terms-of-use'> Cunditziones de Impreu</a> e sa <a href='https://osmand.net/docs/legal/privacy-policy'>Polìtica de Riservadesa</a>.";
 "shared_string_profile" = "Profilu";
+"map_widget_rendering_fps" = "FPS de sa renderizatzione de sa mapa";

@@ -2722,3 +2722,4 @@
 "weather_entire_world" = "Весь світ";
 "map_download_privacy_descr" = "Завантажуючи мапи, ви погоджуєтесь з Умовами використання <a href='https://osmand.net/docs/legal/terms-of-use'></a> та Політикою приватності <a href='https://osmand.net/docs/legal/privacy-policy'></a> .";
 "shared_string_profile" = "Профіль";
+"map_widget_rendering_fps" = "Відображення FPS мапи";

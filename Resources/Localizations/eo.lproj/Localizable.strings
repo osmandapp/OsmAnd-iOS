@@ -1822,7 +1822,7 @@
 "free_memory" = "Libera %@";
 "first_usage_greeting" = "Get directions and discover new places without Internet connection";
 "get_started" = "Ekigi";
-"first_usage_wizard_desc" = "Bonvolu permesi al OsmAnd trovi vian pozicion por sugesti elŝuti mapojn de tiu regiono.";
+"first_usage_wizard_desc" = "Permesu al OsmAnd trovi vian pozicion por sugesti elŝuti mapojn de tiu regiono.";
 "suggested_maps" = "Proponataj mapoj";
 "suggested_maps_descr" = "Tiujĉi mapoj estas postulataj de la kromprogramo.";
 "added_profiles" = "Aldonitaj profiloj";

@@ -1874,6 +1874,10 @@
     // Detect OLC
     OAParsedOpenLocationCode *parsedCode = _cachedParsedCode;
     CLLocation *l;
+    
+    if (!parsedCode)
+        parsedCode = [OALocationParser parseOpenLocationCode:lw];
+    
     if (parsedCode != nil)
     {
         CLLocation *latLon = parsedCode.latLon;
@@ -1967,7 +1971,7 @@
         [result addObject:searchResult];
         count++;
 
-        return NO;
+        return YES;
     } cancelledFunc:^BOOL{
         return count > totalLimit || [resultMatcher isCancelled];
     }] phrase:olcPhrase request:0 requestNumber:nil totalLimit:totalLimit];
@@ -2023,58 +2027,6 @@
     }];
 
     return result.count > 0 ? result[0].location : nil;
-}
-
-+ (OASearchResult *)getBestMatchedOLCSearchResult:(NSArray<OASearchResult *> *)searchResults phraseName:(NSString *)phraseName
-{
-    int cityIndex = 0;
-    int scoreIndex = 1;
-    NSArray<NSString *> *citySubTypes = @[@"city", @"town", @"village"];
-    NSMutableArray<NSMutableArray *> *orderedCities = [NSMutableArray array];
-    
-    for (OASearchResult *searchResult in searchResults)
-    {
-        int resultScore = 0;
-        if (searchResult.location && searchResult.objectType == POI)
-        {
-            OAPOI *poi = (OAPOI *)searchResult.object;
-            if ([citySubTypes containsObject:poi.subType])
-            {
-                resultScore += 1;
-                if ([poi.subType isEqualToString:@"city"])
-                    resultScore += 1;
-                
-                if ([poi.name isEqualToString:phraseName])
-                {
-                    resultScore += 2;
-                }
-                else
-                {
-                    for (NSString *localizedName in poi.localizedNames)
-                    {
-                        if ([localizedName isEqualToString:phraseName])
-                        {
-                            resultScore += 2;
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-        [orderedCities addObject:[NSMutableArray arrayWithArray:@[searchResult, @(resultScore)]]];
-    }
-    
-    if (orderedCities.count > 0)
-    {
-        [orderedCities sortUsingComparator:^NSComparisonResult(NSMutableArray *obj1, NSMutableArray *obj2) {
-            return [obj2[scoreIndex] compare:obj1[scoreIndex]];
-        }];
-        return orderedCities.firstObject[cityIndex];
-    }
-    else
-    {
-        return nil;
-    }
 }
 
 - (BOOL) parseUrl:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher

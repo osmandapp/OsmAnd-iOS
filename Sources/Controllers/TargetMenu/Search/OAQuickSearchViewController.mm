@@ -1594,7 +1594,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
             }
         }
 
-        return true;
+        return YES;
 
     } cancelledFunc:^BOOL {
 

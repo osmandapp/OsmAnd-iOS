@@ -1485,8 +1485,6 @@ static BOOL _repositoryUpdated = NO;
     });
 }
 
-
-// nnngrach version
 - (void) performSearchForSearchString:(NSString *)searchString
                        andSearchScope:(NSInteger)searchScope
 {
@@ -1551,7 +1549,7 @@ static BOOL _repositoryUpdated = NO;
         [_tableView reloadData];
 
         [self.view addSpinner];
-        [OAQuickSearchHelper.instance searchAmenities:searchString
+        [OAQuickSearchHelper.instance searchCityLocations:searchString
                                        searchLocation:_app.locationServices.lastKnownLocation
                                          searchBBox31:[[QuadRect alloc] initWithLeft:0 top:0 right:INT_MAX bottom:INT_MAX]
                                          allowedTypes:@[@"city", @"town"]
@@ -1585,110 +1583,6 @@ static BOOL _repositoryUpdated = NO;
         }];
     }
 }
-
-
-// Skali version
-/*
-- (void) performSearchForSearchString:(NSString *)searchString
-                       andSearchScope:(NSInteger)searchScope
-{
-    @synchronized(_dataLock)
-    {
-        // If case searchString is empty, there are no results
-        if (searchString == nil || searchString.length == 0)
-        {
-            [self cancelSearch];
-            return;
-        }
-
-        // In case searchString has only spaces, also nothing to do here
-        if ([searchString stringByTrimmingCharactersInSet:NSCharacterSet.whitespaceCharacterSet].length == 0)
-        {
-            [self cancelSearch];
-            return;
-        }
-
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.view addSpinner];
-        });
-
-        // Select where to look
-        NSArray<OAWorldRegion *> *searchableContent = _searchableWorldwideRegionItems;
-
-        // Search through subregions:
-        NSComparator regionComparator = ^NSComparisonResult(OAWorldRegion *region1, OAWorldRegion *region2) {
-            return [region1.name localizedCaseInsensitiveCompare:region2.name];
-        };
-
-        // Regions that start with given name have higher priority
-        NSPredicate *predicateBeginsWith = [NSPredicate predicateWithFormat:@"name BEGINSWITH[cd] %@", searchString];
-        NSMutableArray<OAWorldRegion *> *regionsBeginsWith = [NSMutableArray array];
-        [regionsBeginsWith addObjectsFromArray:[searchableContent filteredArrayUsingPredicate:predicateBeginsWith]];
-        if (regionsBeginsWith.count == 0)
-        {
-            NSPredicate *predicateAnyBeginsWithSearchString = [NSPredicate predicateWithFormat:@"ANY allNames BEGINSWITH[cd] %@", searchString];
-            [regionsBeginsWith addObjectsFromArray:[searchableContent filteredArrayUsingPredicate:predicateAnyBeginsWithSearchString]];
-        }
-        [regionsBeginsWith sortUsingComparator:regionComparator];
-
-        // Regions that only contain given string have less priority
-        NSPredicate *predicateOnlyContains = [NSPredicate predicateWithFormat:
-                                    @"(name CONTAINS[cd] %@) AND NOT (name BEGINSWITH[cd] %@)",
-                                     searchString, searchString];
-        NSMutableArray<OAWorldRegion *> *regionsOnlyContains = [NSMutableArray array];
-        [regionsOnlyContains addObjectsFromArray:[searchableContent filteredArrayUsingPredicate:predicateOnlyContains]];
-        if (regionsOnlyContains.count == 0)
-        {
-            NSPredicate *predicateAnyOnlyContains = [NSPredicate predicateWithFormat:
-                                            @"(ANY allNames CONTAINS[cd] %@) AND NOT (ANY allNames BEGINSWITH[cd] %@)",
-                                            searchString,
-                                            searchString];
-            [regionsOnlyContains addObjectsFromArray:[searchableContent filteredArrayUsingPredicate:predicateAnyOnlyContains]];
-        }
-        [regionsOnlyContains sortUsingComparator:regionComparator];
-
-        // Assemble all regions all togather
-        NSArray<OAWorldRegion *> *regions = [regionsBeginsWith arrayByAddingObjectsFromArray:regionsOnlyContains];
-        _searchResults = [self createSearchResult:regions byMapRegion:NO];
-        [_tableView reloadData];
-
-        [[OAQuickSearchHelper instance] searchCities:searchString
-                                      searchLocation:[[CLLocation alloc] initWithLatitude:_app.worldRegion.bboxTopLeft.latitude
-                                                                                longitude:_app.worldRegion.bboxBottomRight.longitude]
-                                        allowedTypes:@[@"city", @"town"]
-                                           cityLimit:kSearchCityLimit
-                                          onComplete:^(NSMutableArray *amenities)
-         {
-            NSMutableArray *citiesContainsSearchString = [NSMutableArray array];
-            for (OASearchResult *amenity in amenities)
-            {
-                OAWorldRegion *region = [_app.worldRegion findAtLat:amenity.location.coordinate.latitude
-                                                                lon:amenity.location.coordinate.longitude];
-                if (region)
-                {
-                    NSArray *searchResult = [self createSearchResult:@[region] byMapRegion:YES];
-                    if (searchResult.count == 1 && [searchResult.firstObject isKindOfClass:OAResourceItem.class])
-                    {
-                        amenity.relatedObject = searchResult.firstObject;
-                        [citiesContainsSearchString addObject:amenity];
-                    }
-                    else
-                    {
-                        [citiesContainsSearchString addObjectsFromArray:searchResult];
-                    }
-                }
-            }
-            if (citiesContainsSearchString.count > 0)
-            {
-                _searchResults = [_searchResults arrayByAddingObjectsFromArray:citiesContainsSearchString];
-                [_tableView reloadData];
-            }
-            [self.view removeSpinner];
-        }];
-    }
-}
-*/
-
 
 - (OAResourceItem *)createResourceItemResult:(std::shared_ptr<const OsmAnd::ResourcesManager::Resource>)resource_
                                      region:(OAWorldRegion *)region

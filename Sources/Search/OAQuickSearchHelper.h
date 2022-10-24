@@ -43,7 +43,7 @@
 - (void) refreshCustomPoiFilters;
 
 
-- (void) searchAmenities:(NSString *)text
+- (void) searchCityLocations:(NSString *)text
           searchLocation:(CLLocation *)searchLocation
             searchBBox31:(QuadRect *)searchBBox31
             allowedTypes:(NSArray<NSString *> *)allowedTypes

@@ -104,8 +104,6 @@ static const double SEARCH_AMENITY_BY_NAME_TOWN_PRIORITY_DISTANCE = 0.005;
 
 - (instancetype) initWithAPI:(OASearchAmenityByNameAPI *) amenitiesAPI;
 
-+ (OASearchResult *)getBestMatchedOLCSearchResult:(NSArray<OASearchResult *> *)searchResults phraseName:(NSString *)phraseName;
-
 @end
 
 

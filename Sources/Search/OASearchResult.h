@@ -29,9 +29,6 @@
 
 @end
 
-@implementation CheckWordsMatchCount
-@end
-
 @class OASearchPhrase;
 
 @interface OASearchResult : NSObject

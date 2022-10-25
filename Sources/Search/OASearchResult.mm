@@ -6,7 +6,7 @@
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
 //  OsmAnd-java/src/net/osmand/search/core/SearchResult.java
-//  git revision 9ea32a8fb553ba22e188f6a7896b4868593ca808
+//  git revision aea6f3ff8842b91fda4b471e24015e4142c52d13
 
 #import "OASearchResult.h"
 #import "OASearchPhrase.h"
@@ -18,12 +18,17 @@
 #import "OAPOIType.h"
 #import "OAPOIFilter.h"
 #import "OAPOICategory.h"
+#import "OAMapUtils.h"
 
 #include <CommonCollections.h>
 #include <commonOsmAndCore.h>
 #include <OsmAndCore/ICU.h>
 
 #define MAX_TYPE_WEIGHT 10.0
+#define HYPHEN "-"
+#define NEAREST_METERS_LIMIT 30000
+#define ALLDELIMITERS "\\s|,"
+#define ALLDELIMITERS_WITH_HYPHEN "\\s|,|-"
 
 @implementation OASearchResult
 
@@ -41,52 +46,78 @@
 // maximum corresponds to the top entry
 - (double) unknownPhraseMatchWeight
 {
-    // if result is a complete match in the search we prioritize it higher
-    return [self getSumPhraseMatchWeight] / pow(MAX_TYPE_WEIGHT, [self getDepth] - 1);
+    // normalize number to get as power, so we get numbers > 1
+    return [self getSumPhraseMatchWeight] / pow(MAX_PHRASE_WEIGHT_TOTAL, [self getDepth] - 1);
 }
 
 - (double) getSumPhraseMatchWeight
 {
-    // if result is a complete match in the search we prioritize it higher
-    BOOL allWordsMatched = [self allWordsMatched:_localeName] || [self checkOtherNames];
-    if (_objectType == POI_TYPE)
-        allWordsMatched = NO;
-    
-    double res = allWordsMatched ? [OAObjectType getTypeWeight:_objectType] * 10 : [OAObjectType getTypeWeight:_objectType];
-    
+    double res = [OAObjectType getTypeWeight:_objectType];
     if ([_requiredSearchPhrase getUnselectedPoiType])
+    {
         // search phrase matches poi type, then we lower all POI matches and don't check allWordsMatched
-        res = [OAObjectType getTypeWeight:_objectType];
-    
+    }
+    else if (_objectType == POI_TYPE)
+    {
+        
+    }
+    else
+    {
+        CheckWordsMatchCount *completeMatchRes;
+        if ([self allWordsMatched:_localeName cnt:completeMatchRes])
+        {
+            // ignore other names
+        }
+        else if (_otherNames != nil)
+        {
+            for (NSString *otherName : _otherNames) {
+                if ([self allWordsMatched:otherName cnt:completeMatchRes])
+                    break;
+            }
+        }
+        // if all words from search phrase match (<) the search result words - we prioritize it higher
+        if (completeMatchRes.allWordsInPhraseAreInResult)
+            res = [self getPhraseWeightForCompleteMatch:completeMatchRes];
+    }
     if (_parentSearchResult)
-        res = res + [_parentSearchResult getSumPhraseMatchWeight] / MAX_TYPE_WEIGHT;
+        // parent search result should not change weight of current result, so we divide by MAX_TYPES_BASE_10^2
+        res = res + [_parentSearchResult getSumPhraseMatchWeight] / MAX_PHRASE_WEIGHT_TOTAL;
     
     return res;
 }
 
-- (BOOL) checkOtherNames
-{
-    if (_otherNames != nil) {
-        for (NSString *otherName : _otherNames)
+- (double) getPhraseWeightForCompleteMatch:(CheckWordsMatchCount *)completeMatchRes
+    {
+        double res = [OAObjectType getTypeWeight:_objectType] * MAX_TYPES_BASE_10;
+        // if all words from search phrase == the search result words - we prioritize it even higher
+        if (completeMatchRes.allWordsEqual)
         {
-            if ([self allWordsMatched:otherName])
-                return YES;
+            BOOL closeDistance = [OAMapUtils getDistance:([_requiredSearchPhrase getLastTokenLocation]).coordinate second:_location.coordinate] <= NEAREST_METERS_LIMIT;
+            if (_objectType == CITY || _objectType == VILLAGE || closeDistance)
+                res = [OAObjectType getTypeWeight:_objectType] * MAX_TYPES_BASE_10 + MAX_PHRASE_WEIGHT_TOTAL / 2;
         }
+        return res;
     }
-    return NO;
-}
 
-- (BOOL) allWordsMatched:(NSString *)name
+- (BOOL) allWordsMatched:(NSString *)name cnt:(CheckWordsMatchCount*)cnt
 {
-    NSMutableArray<NSString *> * localResultNames = [OASearchPhrase splitWords:name ws:[NSMutableArray array]];
     NSMutableArray<NSString *> * searchPhraseNames = [self getSearchPhraseNames];
-    
+    NSMutableArray<NSString *> * localResultNames;
+    if (![[_requiredSearchPhrase getFullSearchPhrase] containsString:@HYPHEN])
+    {
+        // we split '-' words in result, so user can input same without '-'
+        localResultNames = [OASearchPhrase splitWords:name ws:[NSMutableArray array] delimiters:@ALLDELIMITERS_WITH_HYPHEN];
+    }
+    else
+        localResultNames = [OASearchPhrase splitWords:name ws:[NSMutableArray array] delimiters:@ALLDELIMITERS];
+
+    BOOL wordMatched;
     if ([searchPhraseNames count] == 0)
         return NO;
     int idxMatchedWord = -1;
     for (NSString *searchPhraseName : searchPhraseNames)
     {
-        BOOL wordMatched = NO;
+        wordMatched = NO;
         for (int i = idxMatchedWord + 1; i < [localResultNames count]; i++)
         {
             int r = OsmAnd::ICU::ccompare(QString::fromNSString(searchPhraseName), QString::fromNSString(localResultNames[i]));
@@ -100,6 +131,10 @@
         if (!wordMatched)
             return NO;
     }
+    if (searchPhraseNames.count == localResultNames.count)
+        cnt.allWordsEqual = YES;
+    
+    cnt.allWordsInPhraseAreInResult = YES;
     return YES;
 }
 

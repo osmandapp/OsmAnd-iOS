@@ -16,6 +16,7 @@
 #import "OARemoteFile.h"
 #import "OASettingsHelper.h"
 #import "OAImportBackupItemsTask.h"
+#import "OASettingsImporter.h"
 
 @implementation OAItemProgressInfo
 
@@ -123,6 +124,31 @@
     });
 }
 
+- (void)fetchRemoteFileInfo:(OARemoteFile *)remoteFile itemsJson:(NSMutableArray *)itemsJson
+{
+    NSString *filePath = [[NSTemporaryDirectory() stringByAppendingPathComponent:@"backupTmp"] stringByAppendingPathComponent:remoteFile.name];
+    NSString *errStr = [OABackupHelper.sharedInstance downloadFile:filePath remoteFile:remoteFile listener:nil];
+    if (!errStr)
+    {
+        
+        NSError *err = nil;
+        NSData *data = [NSData dataWithContentsOfFile:filePath options:NSDataReadingMappedIfSafe error:&err];
+        if (!err && data)
+        {
+            NSError *jsonErr = nil;
+            id json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&jsonErr];
+            if (json && !jsonErr)
+                [itemsJson addObject:json];
+            else
+                NSLog(@"importBackupTask error: filePath:%@ %@", filePath, [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+        }
+        else
+        {
+            @throw [NSException exceptionWithName:@"IOException" reason:[NSString stringWithFormat:@"Error reading item info: %@", filePath.lastPathComponent] userInfo:nil];
+        }
+    }
+}
+
 - (NSArray<OASettingsItem *> *) doInBackground
 {
     switch (_importType) {
@@ -151,18 +177,43 @@
         {
             if (_items.count > 0)
             {
+                BOOL forceRead = _importType == EOAImportTypeImportForceRead;
                 OABackupHelper *backupHelper = OABackupHelper.sharedInstance;
                 OAPrepareBackupResult *backup = backupHelper.backup;
+                NSMutableDictionary *json = [NSMutableDictionary dictionary];
+                NSMutableArray *itemsJson = [NSMutableArray array];
+                json[@"items"] = itemsJson;
+                NSMutableArray<OASettingsItem *> *filteredItems = [NSMutableArray arrayWithArray:_items];
                 for (OASettingsItem *item in _items)
                 {
-                    [item apply];
                     NSString *fileName = item.fileName;
+                    if (forceRead)
+                    {
+                        OARemoteFile *remoteFile = [backup getRemoteFile:[OASettingsItemType typeName:item.type] fileName:[fileName stringByAppendingPathExtension:OABackupHelper.INFO_EXT]];
+                        if (remoteFile)
+                        {
+                            [filteredItems removeObject:item];
+                            [self fetchRemoteFileInfo:remoteFile itemsJson:itemsJson];
+                        }
+                    }
+                    else
+                    {
+                        [item apply];
+                    }
                     if (fileName)
                     {
                         OARemoteFile *remoteFile = [backup getRemoteFile:[OASettingsItemType typeName:item.type] fileName:fileName];
                         if (remoteFile)
                             [backupHelper updateFileUploadTime:remoteFile.type fileName:remoteFile.name uploadTime:remoteFile.clienttimems];
                     }
+                }
+                if (forceRead)
+                {
+                    OASettingsItemsFactory *itemsFactory = [[OASettingsItemsFactory alloc] initWithParsedJSON:json];
+                    NSArray<OASettingsItem *> *items = [NSArray arrayWithArray:itemsFactory.getItems];
+                    for (OASettingsItem *it in items)
+                        it.shouldReplace = YES;
+                    _items = [items arrayByAddingObjectsFromArray:filteredItems];
                 }
             }
             return _items;

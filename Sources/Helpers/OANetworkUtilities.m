@@ -10,6 +10,8 @@
 #import "OAUtilities.h"
 #import "OAURLSessionProgress.h"
 
+#define kTimeout 60.0 * 5.0 // 5 minutes
+
 #define BOUNDARY @"CowMooCowMooCowCowCow"
 
 @implementation OANetworkRequest
@@ -146,5 +148,44 @@
         dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
 }
 
++ (BOOL) downloadFile:(NSString *)fileName url:(NSString *)url progress:(OAURLSessionProgress *)progress
+{
+    BOOL success = NO;
+    if (url != nil && url.length > 0 && fileName != nil && fileName.length > 0)
+    {
+        NSURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url] cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:kTimeout];
+        
+        NSError __block *error = nil;
+        NSData __block *data = nil;
+        
+        dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+        
+        [progress setOnDownloadFinish:^(NSURLSession *session, NSURLSessionDownloadTask *downloadTask, NSURL *location) {
+            data = [NSData dataWithContentsOfURL:location];
+            dispatch_semaphore_signal(semaphore);
+        }];
+        
+        [progress setOnDownloadError:^(NSError *_error) {
+            error = _error;
+            dispatch_semaphore_signal(semaphore);
+        }];
+        
+        NSURLSession *session = [NSURLSession sessionWithConfiguration:NSURLSessionConfiguration.defaultSessionConfiguration delegate:progress delegateQueue:nil];
+        NSURLSessionDownloadTask *task = [session downloadTaskWithRequest:request];
+        [task resume];
+        
+        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+
+        NSFileManager *manager = [NSFileManager defaultManager];
+        if (![manager fileExistsAtPath:[fileName stringByDeletingLastPathComponent]])
+            success = [manager createDirectoryAtPath:[fileName stringByDeletingLastPathComponent] withIntermediateDirectories:YES attributes:nil error:nil];
+        else
+            success = YES;
+        
+        if (success)
+            success = [data writeToFile:fileName atomically:YES];
+    }
+    return success;
+}
 
 @end

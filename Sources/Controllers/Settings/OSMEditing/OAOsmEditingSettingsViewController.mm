@@ -409,6 +409,11 @@
 
         [self.tableView reloadRowsAtIndexPaths:@[_credentialIndexPath, _mappersIndexPath]
                               withRowAnimation:UITableViewRowAnimationNone];
+        if (_isLogged)
+        {
+            OAMappersViewController *benefitsViewController = [[OAMappersViewController alloc] init];
+            [self presentViewController:benefitsViewController animated:YES completion:nil];
+        }
     }
 }
 

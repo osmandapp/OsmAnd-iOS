@@ -20,19 +20,22 @@ typedef NS_ENUM(NSInteger, EOARecentChangesTable)
 
 @protocol OAStatusBackupTableDelegate
 
+- (OAPrepareBackupResult *) getBackup;
+- (OABackupStatus *) getStatus;
+
 - (void)disableBottomButtons;
 - (void)updateBackupStatus:(OAPrepareBackupResult *)backupResult;
 
 - (void)setRowIcon:(OATableViewRowData *)rowData item:(OASettingsItem *)item;
 - (NSString *)getDescriptionForItemType:(EOASettingsItemType)type fileName:(NSString *)fileName summary:(NSString *)summary;
+- (NSString *)generateTimeString:(long)timeMs summary:(NSString *)summary;
 
 @end
 
 @interface OAStatusBackupTableViewController : UITableViewController <OABackupExportListener>
 
-- (instancetype)initWithTableType:(EOARecentChangesTable)type backup:(OAPrepareBackupResult *)backup status:(OABackupStatus *)status;
+- (instancetype)initWithTableType:(EOARecentChangesTable)type;
 
 - (void)setDelegate:(id<OAStatusBackupTableDelegate>)delegate;
-- (void)updateData:(OAPrepareBackupResult *)backup status:(OABackupStatus *)status;
 
 @end

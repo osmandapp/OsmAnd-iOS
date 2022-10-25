@@ -2582,7 +2582,7 @@
 "simulate_location_movement_speed_x3_desc" = "Die Geschwindigkeit, mit der sich der Standort während der Simulation bewegt, ist um das 3-fache höher als die Geschwindigkeit in der ausgewählten Datei.";
 "simulate_location_movement_speed_original_desc" = "Die Geschwindigkeit, mit der sich der Standort während der Simulation bewegt, entspricht der Geschwindigkeit in der ausgewählten Datei.";
 "simulate_location_movement_speed_x4_desc" = "Die Geschwindigkeit, mit der sich der Standort während der Simulation bewegt, ist um das 4-fache höher als die Geschwindigkeit in der ausgewählten Datei.";
-"you_can_get_feature_as_part_of_pattern" = "Erhalten Sie „%@“ als Teil des Tarifs %@. Vergleich:";
+"you_can_get_feature_as_part_of_pattern" = "Erhalten Sie \"%@\" als Teil des Tarifs %@. Vergleich:";
 "product_title_plus" = "Maps+";
 "subscription_cancel_description" = "Jederzeit im AppStore kündbar.";
 "no_purchases" = "Sie haben keine Käufe getätigt";
@@ -2726,3 +2726,4 @@
 "weather_entire_world" = "Weltweit";
 "map_download_privacy_descr" = "Beim Herunterladen von Karten stimmen Sie den <a href='https://osmand.net/docs/legal/terms-of-use'>Nutzungsbedingen</a> und den <a href='https://osmand.net/docs/legal/privacy-policy'>Datenschutzbestimmungen zu</a>.";
 "shared_string_profile" = "Profil";
+"map_widget_rendering_fps" = "Kartendarstellung FPS";

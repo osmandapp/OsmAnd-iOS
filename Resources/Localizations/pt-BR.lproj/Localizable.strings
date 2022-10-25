@@ -2711,3 +2711,5 @@
 "upload_local_version" = "Enviar versão local";
 "weather_forecast_entire_world" = "Previsão do tempo para todo o mundo";
 "weather_entire_world" = "Mundo inteiro";
+"map_widget_rendering_fps" = "FPS da renderização do mapa";
+"shared_string_profile" = "Perfil";

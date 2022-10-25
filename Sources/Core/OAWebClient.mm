@@ -6,7 +6,7 @@
 //  Copyright © 2016 OsmAnd. All rights reserved.
 //
 
-#include "OAWebClient.h"
+#import "OAWebClient.h"
 
 #define kTimeout 60.0 * 5.0 // 5 minutes
 

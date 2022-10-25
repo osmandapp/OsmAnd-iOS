@@ -87,8 +87,12 @@
     _settingsHelper = OANetworkSettingsHelper.sharedInstance;
     _backupHelper = OABackupHelper.sharedInstance;
     if (!_settingsHelper.isBackupExporting)
+    {
+        [_settingsHelper updateExportListener:self];
+        [_settingsHelper updateImportListener:self];
+        [_backupHelper addPrepareBackupListener:self];
         [_backupHelper prepareBackup];
-    [self generateData];
+    }
 
     self.tblView.delegate = self;
     self.tblView.dataSource = self;
@@ -99,6 +103,12 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self generateData];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
     [_settingsHelper updateExportListener:self];
     [_settingsHelper updateImportListener:self];
     [_backupHelper addPrepareBackupListener:self];
@@ -664,6 +674,7 @@
         if (_backupProgressCell && exportTask)
         {
             float progress = (float) exportTask.generalProgress / exportTask.maxProgress;
+            progress = progress > 1 ? 1 : progress;
             OAExportBackupTask *exportTask = [_settingsHelper getExportTask:kBackupItemsKey];
             _backupProgressCell.progressBar.progress = (float) exportTask.generalProgress / exportTask.maxProgress;
             _backupProgressCell.textView.text = [OALocalizedString(@"osm_edit_uploading") stringByAppendingString:[NSString stringWithFormat:@"%i%%", (int) (progress * 100)]];

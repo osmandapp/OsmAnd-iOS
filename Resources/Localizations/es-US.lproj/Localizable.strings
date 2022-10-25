@@ -28,7 +28,7 @@
 "get_discount_first_few_parts" = "%@ durante los primeros %@";
 "get_discount_second_part" = "luego %@";
 "mapillary_image" = "Imagen de Mapillary";
-"shared_string_milliradians" = "Mil angular";
+"shared_string_milliradians" = "Miliradián";
 "angular_units" = "Unidades de medición angular";
 "angular_units_descr" = "Cambia las unidades de medida del acimut.";
 "allow_3d" = "Permitir vista 2.5D";
@@ -466,7 +466,7 @@
 "shared_string_time" = "Tiempo";
 "shared_string_time_of_day" = "Hora del día";
 "shared_string_distance" = "Distancia";
-"shared_string_time_span" = "Duración";
+"shared_string_time_span" = "Espacio de tiempo";
 "shared_string_start_time" = "Hora de inicio";
 "shared_string_end_time" = "Hora de fin";
 "shared_string_time_moving" = "Tiempo en movimiento";
@@ -770,7 +770,7 @@
 "sett_lang_show_trans" = "Transliterar nombres";
 "lang_af" = "Afrikáans";
 "lang_al" = "Albanés";
-"lang_als" = "Albano (Tosk)";
+"lang_als" = "Albanés (Tosk)";
 "lang_an" = "Aragonés";
 "lang_ar" = "Árabe";
 "lang_ast" = "Asturiano";
@@ -1966,7 +1966,7 @@
 "terms_of_use" = "Condiciones de uso";
 "privacy_policy" = "Política de privacidad";
 "already_has_subscription" = "Ya está suscrito a OsmAnd Live y tiene todas las características desbloqueadas.";
-"already_has_inapp" = "Ya está suscrito a %@.";
+"already_has_inapp" = "Ya se ha suscrito a %@.";
 "inapp_not_found" = "El %@ no se encuentra en OsmAnd. Probablemente ha sido cancelado.";
 "rendering_value_high_name" = "Alto";
 "routing_attr_difficulty_preference_description" = "Preferir rutas de esta dificultad, aunque el trazado sobre pistas más duras o más fáciles sigue siendo posible si son más cortas.";
@@ -2453,7 +2453,7 @@
 "rendering_attr_lightRailRoutes_name" = "Rutas de tren ligero";
 "backup_error_subscription_was_expired_descr" = "La suscripción a «OsmAnd Pro» ha caducado, renuévala para usar la copia de seguridad. Todavía se pueden restaurar los datos de la nube.";
 "backup_error_file_not_available" = "Archivo no disponible";
-"rendering_attr_monorailRoutes_name" = "Rutas de monorraíl";
+"rendering_attr_monorailRoutes_name" = "Rutas de monorriel";
 "backup_error_no_valid_subscription" = "No hay ninguna suscripción válida";
 "backup_error_subscription_was_used" = "Suscripción o promoción usada en otra cuenta %@";
 "backup_error_gzip_only_supported_upload" = "El archivo debe enviarse en formato«.gzip»";
@@ -2602,7 +2602,7 @@
 "shared_string_delete_all" = "Borrar todo";
 "restore_from_osmand_cloud" = "Restaurar desde OsmAnd Cloud";
 "shared_string_data" = "Datos";
-"carplay_available_in_sub_plans" = "Compra OsmAnd «Pro» o «Maps+» para usar OsmAnd con CarPlay.";
+"carplay_available_in_sub_plans" = "Compra «OsmAnd Pro» o «Maps+» para usar OsmAnd con CarPlay.";
 "shared_string_always_visible" = "Siempre visible";
 "shared_string_logout" = "Cerrar sesión";
 "shared_string_progress" = "Progreso";
@@ -2615,7 +2615,7 @@
 "backup_version_history" = "Historial de versiones";
 "select_backup_data_descr" = "Marca los datos y carpetas para la copia de seguridad.";
 "backup_delete_old_data_warning" = "Se borrará el historial de cambios de los datos cargados previamente.\n\nLa versión actual de los datos se guardará en el servidor, pero no podrás volver a los cambios anteriores.";
-"backup_delete_all_data_in_progress" = "Espera hasta que OsmAnd borre todos los datos de la nube. Los datos en el dispositivo permanecen intactos.";
+"backup_delete_all_data_in_progress" = "Espera mientras OsmAnd borra todos los datos de la nube. Los datos en el dispositivo permanecen intactos.";
 "backup_remove_old_versions_finished" = "Las versiones antiguas han sido borradas con éxito de OsmAnd Cloud.";
 "delete_all_confirmation" = "Sí, borrar todo";
 "manage_storage" = "Gestionar almacenamiento";
@@ -2727,3 +2727,5 @@
 "map_download_privacy_descr" = "Al descargar los mapas, aceptas las <a href='https://osmand.net/docs/legal/terms-of-use'>Condiciones de uso</a> y la <a href='https://osmand.net/docs/legal/privacy-policy'>Política de privacidad</a> .";
 "weather_forecast_entire_world" = "Pronóstico del tiempo para todo el mundo";
 "weather_entire_world" = "Todo el mundo";
+"map_widget_rendering_fps" = "Renderizando FPS del mapa";
+"ios_release_4_3" = "• Animación suave para los cambios de ubicación durante el movimiento\n• CarPlay: se han añadido carriles, vista 2.5D, se han solucionado problemas de sonido al conectarse por Bluetooth\n• Se añadieron nuevos planes de compra: suscripciones a «OsmAnd Pro» con acceso a todas las funciones y compra de «Maps+» con descargas de mapas ilimitadas y acceso a complementos de pago.\n• Se ha añadido copia de seguridad en la nube y previsión meteorológica sin conexión para los usuarios de OsmAnd Pro\n• Se ha añadido una nueva y cómoda pantalla de «Compras» con la lista de todas las compras\n• Se ha añadido beneficios para los colaboradores activos de OpenStreetMap.org\n• Las trazas ahora pueden colorearse por altitud, velocidad o pendiente\n• Se ha añadido la posibilidad de acceso a los mapas sin conexión a través del gestor de archivos\n• Favoritos: se ha añadido la generación de copias de seguridad locales después de cada cambio y copias de seguridad accesibles desde el gestor de archivos\n• Los PDI guardados en favoritos almacenarán y mostrarán todos los datos de los PDI, incluso sin un mapa sin conexión\n• GPX: se ha añadido soporte para las etiquetas link, cmt, desc y para cualquier extensión personalizada\n• Se ha añadido un modo para el botón de la brújula\n• Se ha corregido un problema con el formato de coordenadas UTM\n• Se ha corregido un problema con los puntos intermedios en la navegación\n";

@@ -883,7 +883,7 @@ static OAApplicationMode *_HORSE;
     OAApplicationModeBean *res = [[OAApplicationModeBean alloc] init];
     res.userProfileName = jsonData[@"userProfileName"];
     res.iconColor = [self parseColor:jsonData[@"iconColor"]];
-    res.iconName = jsonData[@"iconName"];
+    res.iconName = [self parseProfileIcon:jsonData[@"iconName"]];
     res.locIcon = [self parseLocationIcon:jsonData[@"locIcon"]];
     res.navIcon = [self parseNavIcon:jsonData[@"navIcon"]];
     res.order = [jsonData[@"order"] intValue];
@@ -894,6 +894,13 @@ static OAApplicationMode *_HORSE;
     res.parent = jsonData[@"parent"];
     res.stringKey = jsonData[@"stringKey"];
     return res;
+}
+
++ (NSString *)parseProfileIcon:(NSString *)iconName
+{
+    if ([iconName isEqualToString:@"ic_action_truck_dark"])
+        return @"ic_action_truck";
+    return iconName;
 }
 
 + (EOANavigationIcon) parseNavIcon:(NSString *)locIcon

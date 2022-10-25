@@ -6,7 +6,7 @@
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
 //  OsmAnd-java/src/net/osmand/search/core/SearchResult.java
-//  git revision 9ea32a8fb553ba22e188f6a7896b4868593ca808
+//  git revision aea6f3ff8842b91fda4b471e24015e4142c52d13
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
@@ -16,6 +16,18 @@
 #include <OsmAndCore/Data/Amenity.h>
 #include <OsmAndCore/IFavoriteLocation.h>
 #include <OsmAndCore/GpxDocument.h>
+
+// MAX_TYPES_BASE_10 should be > ObjectType.getTypeWeight(objectType) = 5
+#define MAX_TYPES_BASE_10 10
+// MAX_PHRASE_WEIGHT_TOTAL should be  > getSumPhraseMatchWeight
+#define MAX_PHRASE_WEIGHT_TOTAL MAX_TYPES_BASE_10 * MAX_TYPES_BASE_10
+
+@interface CheckWordsMatchCount : NSObject
+
+@property BOOL allWordsEqual;
+@property BOOL allWordsInPhraseAreInResult;
+
+@end
 
 @class OASearchPhrase;
 
@@ -68,9 +80,9 @@
 - (double) getSumPhraseMatchWeight;
 - (int) getDepth;
 - (OASearchResult *)setNewParentSearchResult:(OASearchResult *)parentSearchResult;
-- (BOOL) allWordsMatched:(NSString *)name;
-- (BOOL) checkOtherNames;
+- (BOOL) allWordsMatched:(NSString *)name cnt:(CheckWordsMatchCount*)cnt;
 - (NSMutableArray<NSString *> *) getSearchPhraseNames;
+- (double) getPhraseWeightForCompleteMatch:(CheckWordsMatchCount *)completeMatchRes;
 
 - (NSString *) toString;
 

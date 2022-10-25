@@ -6,7 +6,7 @@
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
 //  OsmAnd-java/src/net/osmand/search/core/SearchPhrase.java
-//  git revision f755ac69f5b65e1f63591354a3384c014cac5176
+//  git revision aea6f3ff8842b91fda4b471e24015e4142c52d13
 
 #import "OASearchPhrase.h"
 #import "OASearchWord.h"
@@ -28,6 +28,7 @@
 
 static NSString *DELIMITER = @" ";
 static NSString *ALLDELIMITERS = @"\\s|,";
+static NSString *ALLDELIMITERS_WITH_HYPHEN = @"\\s|,|-";
 static NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:ALLDELIMITERS options:0 error:nil];
 
 static NSSet<NSString *> *conjunctions;
@@ -300,11 +301,11 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
     return cnt;
 }
 
-+ (NSMutableArray<NSString *> *) splitWords:(NSString *)w ws:(NSMutableArray<NSString *> *)ws
++ (NSMutableArray<NSString *> *) splitWords:(NSString *)w ws:(NSMutableArray<NSString *> *)ws delimiters:(NSString *)delimiters
 {
     if (w && w.length > 0)
     {
-        NSArray<NSString *> *wrs = [w componentsSeparatedByRegex:ALLDELIMITERS];
+        NSArray<NSString *> *wrs = [w componentsSeparatedByRegex:delimiters];
         for (int i = 0; i < [wrs count]; i++)
         {
             NSString *wd = wrs[i].trim;

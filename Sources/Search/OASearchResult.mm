@@ -30,6 +30,9 @@
 #define ALLDELIMITERS "\\s|,"
 #define ALLDELIMITERS_WITH_HYPHEN "\\s|,|-"
 
+@implementation CheckWordsMatchCount
+@end
+
 @implementation OASearchResult
 
 - (instancetype) initWithPhrase:(OASearchPhrase *)sp
@@ -63,7 +66,7 @@
     }
     else
     {
-        CheckWordsMatchCount *completeMatchRes;
+        CheckWordsMatchCount *completeMatchRes = [[CheckWordsMatchCount alloc] init];
         if ([self allWordsMatched:_localeName cnt:completeMatchRes])
         {
             // ignore other names

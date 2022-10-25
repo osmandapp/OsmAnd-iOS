@@ -1950,9 +1950,6 @@ static const NSInteger _buttonsCount = 4;
     }
     else
     {
-        UIImage *screenshot = [self.mapView getGLScreenshot];
-        [items addObject:screenshot];
-
         if (_targetPoint.title.length > 0)
             [sharingText appendString:_targetPoint.title];
         if (_targetPoint.titleAddress.length > 0)
@@ -1961,7 +1958,21 @@ static const NSInteger _buttonsCount = 4;
                 [sharingText appendString:@"\n"];
             [sharingText appendString:_targetPoint.titleAddress];
         }
-
+        NSString *geoUrl = [OAUtilities buildGeoUrl:_targetPoint.location.latitude
+                                          longitude:_targetPoint.location.longitude
+                                               zoom:_mapView.zoomLevel];
+        if (geoUrl.length > 0)
+        {
+            NSString *cordinates = [NSString stringWithFormat:@"Location: %@",geoUrl];
+                [sharingText appendString:@"\n"];
+                [sharingText appendString:cordinates];
+        }
+        NSString *httpUrl = [NSString stringWithFormat:kShareLink, _targetPoint.location.latitude, _targetPoint.location.longitude, _mapView.zoomLevel];
+        if (httpUrl.length > 0)
+        {
+            [sharingText appendString:@"\n"];
+            [sharingText appendString:httpUrl];
+        }
     }
     if (sharingText && sharingText.length > 0)
         [items addObject:sharingText];

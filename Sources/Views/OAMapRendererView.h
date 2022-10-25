@@ -87,8 +87,6 @@ struct CLLocationCoordinate2D;
 - (std::shared_ptr<OsmAnd::MapRendererDebugSettings>) getMapDebugSettings;
 - (void) setMapDebugSettings:(std::shared_ptr<OsmAnd::MapRendererDebugSettings>) debugSettings;
 
-- (UIImage*) getGLScreenshot;
-
 - (BOOL) isGpuWorkerPaused;
 - (BOOL) suspendGpuWorker;
 - (BOOL) resumeGpuWorker;

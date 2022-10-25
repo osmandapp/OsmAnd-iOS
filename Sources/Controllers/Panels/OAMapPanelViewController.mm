@@ -2500,6 +2500,9 @@ typedef enum
     
     [self showTargetPointMenu:NO showFullMenu:showFullMenu onComplete:^{
         [self goToTargetPointDefault];
+
+        if (_targetMenuView.needsManualContextMode)
+            [self enterContextMenuMode];
     }];
 }
 

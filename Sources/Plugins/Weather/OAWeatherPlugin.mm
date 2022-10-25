@@ -232,18 +232,18 @@
     }
 }
 
-- (void)updateInfoWidgets
+- (void)showWidgets
 {
-    if (_weatherTempControl)
-        [_weatherTempControl updateInfo];
-    if (_weatherPressureControl)
-        [_weatherPressureControl updateInfo];
-    if (_weatherWindSpeedControl)
-        [_weatherWindSpeedControl updateInfo];
-    if (_weatherCloudControl)
-        [_weatherCloudControl updateInfo];
-    if (_weatherPrecipControl)
-        [_weatherPrecipControl updateInfo];
+    if (_weatherTempControl && ![_weatherTempControl isVisible])
+        [_weatherTempControl updateVisibility:YES];
+    if (_weatherPressureControl && ![_weatherPressureControl isVisible])
+        [_weatherPressureControl updateVisibility:YES];
+    if (_weatherWindSpeedControl && ![_weatherWindSpeedControl isVisible])
+        [_weatherWindSpeedControl updateVisibility:YES];
+    if (_weatherCloudControl && ![_weatherCloudControl isVisible])
+        [_weatherCloudControl updateVisibility:YES];
+    if (_weatherPrecipControl && ![_weatherPrecipControl isVisible])
+        [_weatherPrecipControl updateVisibility:YES];
 }
 
 @end

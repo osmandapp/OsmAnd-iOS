@@ -136,7 +136,8 @@
     BOOL hideQuickButton = ![_settings.quickActionIsOn get] ||
     [mapPanel isContextMenuVisible] ||
     [mapPanel gpxModeActive] ||
-    [mapPanel isRouteInfoVisible];
+    [mapPanel isRouteInfoVisible] ||
+    [mapPanel.hudViewController shouldShowWeatherToolbar];
     
     [UIView animateWithDuration:.25 animations:^{
         _quickActionFloatingButton.alpha = hideQuickButton ? 0 : 1;
@@ -258,6 +259,11 @@
     }
 }
 
+- (BOOL)isActionSheetVisible
+{
+    return _isActionsViewVisible;
+}
+
 - (void)showActionsSheetAnimated
 {
     [_mapHudController hideWeatherToolbarIfNeeded];
@@ -271,8 +277,9 @@
         [self adjustMapViewPort];
     }];
     [self setPinPosition];
-    [_mapHudController hideTopControls];
     _isActionsViewVisible = YES;
+    [_mapHudController hideTopControls];
+    [_mapHudController showBottomControls:0. animated:YES];
     [self updateColors:NO];
 }
 
@@ -280,9 +287,8 @@
 {
     if (_actionsView.hidden || !_actionsView.superview)
         return;
-    
-        [_mapHudController showTopControls:NO];
-    
+
+    _isActionsViewVisible = NO;
     [UIView animateWithDuration:.3 animations:^{
         _quickActionPin.hidden = YES;
         _actionsView.frame = CGRectMake(OAUtilities.getLeftMargin, DeviceScreenHeight, _actionsView.bounds.size.width, _actionsView.bounds.size.height);
@@ -290,8 +296,8 @@
     } completion:^(BOOL finished) {
         [_actionsView removeFromSuperview];
         [_mapHudController showTopControls:NO];
+        [_mapHudController showBottomControls:0. animated:YES];
     }];
-    _isActionsViewVisible = NO;
     [self updateColors:NO];
 }
 

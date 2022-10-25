@@ -9,12 +9,16 @@
 #import "OAWeatherToolbar.h"
 #import "OARootViewController.h"
 #import "OAMapHudViewController.h"
+#import "OAMapInfoController.h"
 #import "OAWeatherLayerSettingsViewController.h"
 #import "OASegmentedSlider.h"
 #import "OASizes.h"
 #import "OAMapLayers.h"
+#import "OAMapWidgetRegistry.h"
+#import "OAMapWidgetRegInfo.h"
 #import "OAWeatherToolbarHandlers.h"
 #import "OAWeatherHelper.h"
+#import "OAWeatherPlugin.h"
 
 @interface OAWeatherToolbar () <OAWeatherToolbarDelegate, OAWeatherLayerSettingsDelegate>
 
@@ -27,8 +31,9 @@
 @implementation OAWeatherToolbar
 {
     OsmAndAppInstance _app;
+    OAAutoObserverProxy *_applicaionModeObserver;
+    OAAutoObserverProxy *_weatherChangeObserver;
     NSMutableArray<OAAutoObserverProxy *> *_layerChangeObservers;
-    OAAutoObserverProxy* _weatherChangeObserver;
 
     NSCalendar *_currentTimezoneCalendar;
     OAWeatherToolbarLayersHandler *_layersHandler;
@@ -103,6 +108,9 @@
     [self.timeSliderView removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
     [self.timeSliderView addTarget:self action:@selector(timeChanged:) forControlEvents:UIControlEventTouchUpInside];
 
+    _applicaionModeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                        withHandler:@selector(onUpdateWeatherLayerSettings)
+                                                         andObserve:_app.data.applicationModeChangedObservable];
     _weatherChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                        withHandler:@selector(onUpdateWeatherLayerSettings)
                                                         andObserve:_app.data.weatherChangeObservable];
@@ -171,6 +179,12 @@
     [self updateVisibility:visible];
     [hudViewController.weatherButton setImage:[UIImage templateImageNamed:visible ? @"ic_custom_cancel" : @"ic_custom_umbrella"]
                                      forState:UIControlStateNormal];
+    if (visible)
+    {
+        [hudViewController.mapInfoController updateInfo];
+        [(OAWeatherPlugin *) [OAPlugin getPlugin:OAWeatherPlugin.class] showWidgets];
+    }
+
     return YES;
 }
 

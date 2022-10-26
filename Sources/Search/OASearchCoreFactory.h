@@ -103,6 +103,7 @@ static const double SEARCH_AMENITY_BY_NAME_TOWN_PRIORITY_DISTANCE = 0.005;
 @interface OASearchLocationAndUrlAPI : OASearchBaseAPI
 
 - (instancetype) initWithAPI:(OASearchAmenityByNameAPI *) amenitiesAPI;
+- (void) initCachedOlcCode:(OASearchPhrase *)phrase;
 
 @end
 

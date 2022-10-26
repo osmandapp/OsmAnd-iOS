@@ -522,6 +522,10 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
         [self preparePhrase:sphrase];
         OAAtomicInteger *ai = [OAAtomicInteger atomicInteger:0];
         OASearchResultMatcher *rm = [[OASearchResultMatcher alloc] initWithMatcher:matcher phrase:sphrase request:[ai get] requestNumber:ai totalLimit:totalLimit];
+        
+        if ([api isKindOfClass:OASearchLocationAndUrlAPI.class])
+            [(OASearchLocationAndUrlAPI *)api initCachedOlcCode:sphrase];
+        
         [api search:sphrase resultMatcher:rm];
         
         OASearchResultCollection *collection = [[OASearchResultCollection alloc] initWithPhrase:sphrase];

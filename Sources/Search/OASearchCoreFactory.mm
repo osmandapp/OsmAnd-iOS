@@ -1875,9 +1875,6 @@
     OAParsedOpenLocationCode *parsedCode = _cachedParsedCode;
     CLLocation *l;
     
-    if (!parsedCode)
-        parsedCode = [OALocationParser parseOpenLocationCode:lw];
-    
     if (parsedCode != nil)
     {
         CLLocation *latLon = parsedCode.latLon;
@@ -2075,6 +2072,11 @@
         _cachedParsedCode = [OALocationParser parseOpenLocationCode:p.getUnknownSearchPhrase];
     }
     return SEARCH_LOCATION_PRIORITY;
+}
+
+- (void) initCachedOlcCode:(OASearchPhrase *)phrase
+{
+    _cachedParsedCode = [OALocationParser parseOpenLocationCode:[phrase getUnknownSearchPhrase]];
 }
 
 - (BOOL) isSearchDone:(OASearchPhrase *)phrase

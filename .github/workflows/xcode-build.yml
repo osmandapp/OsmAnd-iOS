@@ -21,7 +21,7 @@ on:
         default: true
 jobs:
   build:
-    runs-on: macOS-latest
+    runs-on: macos-12
     steps:
     # - name: Install xcode tools
     #   run: sudo xcode-select --install

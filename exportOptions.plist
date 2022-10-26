@@ -4,8 +4,6 @@
 <dict>
 	<key>method</key>
 	<string>app-store</string>
-	<key>uploadBitcode</key>
-	<true/>
 	<key>uploadSymbols</key>
 	<true/>
 	<key>provisioningProfiles</key>

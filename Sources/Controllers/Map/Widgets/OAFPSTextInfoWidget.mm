@@ -44,7 +44,6 @@
     return self;
 }
 
-// Can be called at random time
 - (void) onExternalUpdate
 {
     if ([self isVisible] && !_timer)
@@ -68,7 +67,6 @@
     _timer = nil;
 }
 
-// Should be launched 1 time per second.
 - (BOOL) updateWidget
 {
     if (![self isVisible])

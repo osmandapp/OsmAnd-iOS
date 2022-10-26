@@ -29,22 +29,28 @@
         _lastUpdatingMs = 0;
         _lastUpdatingFrameId = 0;
         _rendererView = [OARootViewController instance].mapPanel.mapViewController.mapView;
+        [self setText:@"-" subtext:@"FPS"];
+        [self setIcons:@"widget_fps_day" widgetNightIcon:@"widget_fps_night"];
         
         __weak OAFPSTextInfoWidget *selfWeak = self;
         self.onClickFunction = ^(id sender) {
             [selfWeak onWidgetClicked];
         };
-        
-        [self startRefreshingTimer];
+        self.updateInfoFunction = ^BOOL{
+            [selfWeak onExternalUpdate];
+            return NO;
+        };
     }
     return self;
 }
 
-//  Launches only on widget turning on. But not on turning off.
-- (BOOL) updateVisibility:(BOOL)visible
-{   
-    [self startRefreshingTimer];
-    return [super updateVisibility:visible];
+// Can be called at random time
+- (void) onExternalUpdate
+{
+    if ([self isVisible] && !_timer)
+        [self startRefreshingTimer];
+    else if (![self isVisible] && _timer)
+        [self stopRefreshingTimer];
 }
 
 - (void) startRefreshingTimer
@@ -57,11 +63,12 @@
 
 - (void) stopRefreshingTimer
 {
-    if ([_timer isValid])
+    if (_timer && [_timer isValid])
         [_timer invalidate];
     _timer = nil;
 }
 
+// Should be launched 1 time per second.
 - (BOOL) updateWidget
 {
     if (![self isVisible])
@@ -89,7 +96,7 @@
 
 - (void) onWidgetClicked
 {
-    [self updateWidget];
+    [self onExternalUpdate];
 }
 
 @end

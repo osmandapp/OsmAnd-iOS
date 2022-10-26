@@ -74,14 +74,8 @@
 - (void) updateLayers
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        OAMapWidgetRegistry *mapWidgetRegistry = [OARootViewController instance].mapPanel.mapWidgetRegistry;
-        OAMapWidgetRegInfo *weatherButtonController = [mapWidgetRegistry widgetByKey:@"weather_button"];
-
         if ([self isEnabled])
         {
-            if (!weatherButtonController)
-                [self registerToolbarWidget];
-
             if (!_weatherTempControl)
                 [self registerWidget:WEATHER_BAND_TEMPERATURE];
 
@@ -103,12 +97,6 @@
         }
         else
         {
-            if (weatherButtonController)
-            {
-                [mapWidgetRegistry removeSideWidget:@"weather_button"];
-                [mapWidgetRegistry updateVisibleWidgets];
-            }
-
             OAMapInfoController *mapInfoController = [self getMapInfoController];
             if (mapInfoController)
             {
@@ -141,21 +129,6 @@
             }
         }
     });
-}
-
-- (void)registerToolbarWidget
-{
-    OAMapInfoController *mapInfoController = [self getMapInfoController];
-    if (mapInfoController)
-    {
-        [mapInfoController registerSideWidget:nil
-                                      imageId:@"ic_custom_umbrella"
-                                      message:OALocalizedString(@"screen_settings_weather_toolbar")
-                                          key:@"weather_button"
-                                         left:YES
-                                priorityOrder:8];
-        [mapInfoController recreateControls];
-    }
 }
 
 - (void)registerWidget:(EOAWeatherBand)band
@@ -230,20 +203,6 @@
                 return;
         }
     }
-}
-
-- (void)showWidgets
-{
-    if (_weatherTempControl && ![_weatherTempControl isVisible])
-        [_weatherTempControl updateVisibility:YES];
-    if (_weatherPressureControl && ![_weatherPressureControl isVisible])
-        [_weatherPressureControl updateVisibility:YES];
-    if (_weatherWindSpeedControl && ![_weatherWindSpeedControl isVisible])
-        [_weatherWindSpeedControl updateVisibility:YES];
-    if (_weatherCloudControl && ![_weatherCloudControl isVisible])
-        [_weatherCloudControl updateVisibility:YES];
-    if (_weatherPrecipControl && ![_weatherPrecipControl isVisible])
-        [_weatherPrecipControl updateVisibility:YES];
 }
 
 @end

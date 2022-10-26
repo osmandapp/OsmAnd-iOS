@@ -381,6 +381,7 @@ typedef enum
     _scrollableHudViewController.view.frame = self.view.bounds;
     [self.view addSubview:_scrollableHudViewController.view];
     [_hudViewController.quickActionController updateViewVisibility];
+    [_hudViewController updateWeatherButtonVisibility];
     [self enterContextMenuMode];
 }
 
@@ -410,6 +411,7 @@ typedef enum
     [self resetActiveTargetMenu];
     [self restoreFromContextMenuMode];
     [_hudViewController.quickActionController updateViewVisibility];
+    [_hudViewController updateWeatherButtonVisibility];
 }
 
 - (void)showPlanRouteViewController:(OARoutePlanningHudViewController *)controller
@@ -711,6 +713,7 @@ typedef enum
 {
     [self targetHideMenu:.2 backButtonClicked:NO onComplete:^{
         [_hudViewController.quickActionController updateViewVisibility];
+        [_hudViewController updateWeatherButtonVisibility];
     }];
 }
 
@@ -789,6 +792,7 @@ typedef enum
             if (bottomsControlHeight)
                 [self setBottomControlsVisible:YES menuHeight:bottomsControlHeight.floatValue animated:YES];
             [_hudViewController.quickActionController updateViewVisibility];
+            [_hudViewController updateWeatherButtonVisibility];
             if (onComplete)
                 onComplete();
         }];
@@ -808,6 +812,7 @@ typedef enum
         [self.routeInfoView hide:YES duration:.2 onComplete:^{
             [self setTopControlsVisible:NO];
             [_hudViewController.quickActionController updateViewVisibility];
+            [_hudViewController updateWeatherButtonVisibility];
             if (onComplete)
                 onComplete();
         }];
@@ -994,6 +999,7 @@ typedef enum
     
     self.sidePanelController.recognizesPanGesture = NO;
     [_hudViewController.quickActionController updateViewVisibility];
+    [_hudViewController updateWeatherButtonVisibility];
     [self.routeInfoView show:YES fullMenu:fullMenu onComplete:^{
         self.sidePanelController.recognizesPanGesture = NO;
     }];
@@ -1992,6 +1998,7 @@ typedef enum
     if (self.targetMultiMenuView.superview)
         [self.targetMultiMenuView hide:YES duration:.2 onComplete:^{
             [_hudViewController.quickActionController updateViewVisibility];
+            [_hudViewController updateWeatherButtonVisibility];
         }];
 }
 
@@ -2156,6 +2163,7 @@ typedef enum
     
     self.sidePanelController.recognizesPanGesture = NO;
     [_hudViewController.quickActionController updateViewVisibility];
+    [_hudViewController updateWeatherButtonVisibility];
     [self.targetMenuView show:YES onComplete:^{
         self.sidePanelController.recognizesPanGesture = NO;
     }];
@@ -2188,6 +2196,7 @@ typedef enum
     self.sidePanelController.recognizesPanGesture = NO;
     [self.targetMultiMenuView show:YES onComplete:^{
         [_hudViewController.quickActionController updateViewVisibility];
+        [_hudViewController updateWeatherButtonVisibility];
         self.sidePanelController.recognizesPanGesture = NO;
     }];
 }
@@ -2252,6 +2261,7 @@ typedef enum
     {
         [self.targetMultiMenuView hide:YES duration:animationDuration onComplete:^{
             [_hudViewController.quickActionController updateViewVisibility];
+            [_hudViewController updateWeatherButtonVisibility];
         }];
         return;
     }
@@ -2303,6 +2313,7 @@ typedef enum
         else
         {
             [_hudViewController.quickActionController updateViewVisibility];
+            [_hudViewController updateWeatherButtonVisibility];
         }
     }];
     
@@ -2355,6 +2366,7 @@ typedef enum
             onComplete();
         
         [_hudViewController.quickActionController updateViewVisibility];
+        [_hudViewController updateWeatherButtonVisibility];
     }];
     
     [self showTopControls:NO];

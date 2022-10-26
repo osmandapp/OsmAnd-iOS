@@ -177,13 +177,6 @@
     OAMapHudViewController *hudViewController = [OARootViewController instance].mapPanel.hudViewController;
     BOOL visible =  [hudViewController shouldShowWeatherToolbar];
     [self updateVisibility:visible];
-    [hudViewController.weatherButton setImage:[UIImage templateImageNamed:visible ? @"ic_custom_cancel" : @"ic_custom_umbrella"]
-                                     forState:UIControlStateNormal];
-    if (visible)
-    {
-        [hudViewController.mapInfoController updateInfo];
-        [(OAWeatherPlugin *) [OAPlugin getPlugin:OAWeatherPlugin.class] showWidgets];
-    }
 
     return YES;
 }
@@ -440,7 +433,7 @@
     if (show)
         [[OARootViewController instance].mapPanel.hudViewController changeWeatherToolbarVisible];
     else
-        [[OARootViewController instance].mapPanel.hudViewController updateWeatherButton];
+        [[OARootViewController instance].mapPanel.hudViewController updateWeatherButtonVisibility];
 }
 
 @end

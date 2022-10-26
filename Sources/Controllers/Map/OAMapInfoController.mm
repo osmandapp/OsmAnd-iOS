@@ -464,6 +464,7 @@
 
     [UIView animateWithDuration:.3 animations:^{
         [_weatherToolbar moveToScreen];
+        [_mapHudViewController.weatherButton setImage:[UIImage templateImageNamed:@"ic_custom_cancel"] forState:UIControlStateNormal];
 
         [_mapHudViewController showBottomControls:[OAUtilities isLandscape] ? 0. : _weatherToolbar.frame.size.height - [OAUtilities getBottomMargin]
                                          animated:YES];
@@ -484,6 +485,7 @@
 {
     [UIView animateWithDuration:.3 animations: ^{
         [_weatherToolbar moveOutOfScreen];
+        [_mapHudViewController.weatherButton setImage:[UIImage templateImageNamed:@"ic_custom_umbrella"] forState:UIControlStateNormal];
     }                completion:^(BOOL finished) {
         _weatherToolbar.hidden = YES;
     }];

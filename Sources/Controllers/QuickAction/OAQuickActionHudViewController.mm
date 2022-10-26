@@ -280,6 +280,7 @@
     _isActionsViewVisible = YES;
     [_mapHudController hideTopControls];
     [_mapHudController showBottomControls:0. animated:YES];
+    [_mapHudController updateWeatherButtonVisibility];
     [self updateColors:NO];
 }
 
@@ -297,6 +298,7 @@
         [_actionsView removeFromSuperview];
         [_mapHudController showTopControls:NO];
         [_mapHudController showBottomControls:0. animated:YES];
+        [_mapHudController updateWeatherButtonVisibility];
     }];
     [self updateColors:NO];
 }

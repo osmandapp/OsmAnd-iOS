@@ -168,8 +168,7 @@
     _compassBox.alpha = ([self shouldShowCompass] ? 1.0 : 0.0);
     _compassBox.userInteractionEnabled = _compassBox.alpha > 0.0;
 
-    _weatherButton.alpha = ([self shouldShowWeatherButton] ? 1.0 : 0.0);
-    _weatherButton.userInteractionEnabled = _weatherButton.alpha > 0.0;
+    [self updateWeatherButtonVisibility];
     
     _zoomInButton.enabled = [_mapViewController canZoomIn];
     _zoomOutButton.enabled = [_mapViewController canZoomOut];
@@ -356,7 +355,7 @@
 
 - (BOOL)shouldShowWeatherButton
 {
-    return [_mapPanelViewController.mapWidgetRegistry isVisible:@"weather_button"] && [[OAPlugin getPlugin:OAWeatherPlugin.class] isEnabled];
+    return [[OAAppSettings sharedManager].weatherButtonIsOn get] && [[OAPlugin getPlugin:OAWeatherPlugin.class] isEnabled];
 }
 
 - (BOOL)shouldShowWeatherToolbar
@@ -474,7 +473,6 @@
     [self updateMapModeButton];
     [self updateRouteButton:NO followingMode:NO];
 
-    [_weatherButton setImage:[UIImage templateImageNamed:@"ic_custom_umbrella"] forState:UIControlStateNormal];
     [_weatherButton updateColorsForPressedState:NO];
     _weatherButton.tintColorDay = UIColorFromRGB(color_primary_purple);
     _weatherButton.tintColorNight = UIColorFromRGB(color_primary_light_blue);
@@ -507,12 +505,6 @@
 {
     if (_cachedLocationAvailableState != [self isLocationAvailable])
         [self updateMapModeButton];
-}
-
-- (void)updateWeatherButton
-{
-    BOOL showWeather = [self shouldShowWeatherButton];
-    [self updateWeatherButtonVisibility:showWeather];
 }
 
 - (void) updateMapModeButton
@@ -694,6 +686,7 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [self updateColors];
         [_quickActionController updateViewVisibility];
+        [self updateWeatherButtonVisibility];
         [_mapPanelViewController refreshToolbar];
     });
 }
@@ -730,17 +723,27 @@
         [self hideCompass];
 }
 
-- (void) updateWeatherButtonVisibility:(BOOL)showWeatherButton
+- (void) updateWeatherButtonVisibility
 {
-    BOOL needShow = _weatherButton.alpha == 0.0 && showWeatherButton;
-    BOOL needHide = _weatherButton.alpha == 1.0 && !showWeatherButton;
-    if (!showWeatherButton)
-        _weatherToolbarVisible = NO;
+    BOOL isQuickActionSheetVisible = [self.quickActionController isActionSheetVisible];
+    BOOL scrollableHudVisible = _mapPanelViewController.scrollableHudViewController != nil || _mapPanelViewController.prevScrollableHudViewController != nil;
+    BOOL hideWeatherButton = ![self shouldShowWeatherButton]
+        || self.contextMenuMode
+        || isQuickActionSheetVisible
+        || scrollableHudVisible
+        || [_mapPanelViewController isRouteInfoVisible]
+        || [_mapPanelViewController isContextMenuVisible];
 
-    if (needShow)
-        [self showWeatherButton];
-    else if (needHide)
+
+    if (hideWeatherButton)
+    {
+        _weatherToolbarVisible = NO;
         [self hideWeatherButton];
+    }
+    else
+    {
+        [self showWeatherButton];
+    }
 }
 
 - (void) showCompass
@@ -753,6 +756,13 @@
 }
 
 - (void) showWeatherButton
+{
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideWeatherButtonImpl) object:nil];
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(showWeatherButtonImpl) object:nil];
+    [self performSelector:@selector(showWeatherButtonImpl) withObject:NULL afterDelay:0.];
+}
+
+- (void)showWeatherButtonImpl
 {
     [UIView animateWithDuration:.25 animations:^{
         _weatherButton.alpha = 1.0;
@@ -793,8 +803,9 @@
 
 - (void)hideWeatherButton
 {
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(showWeatherButtonImpl) object:nil];
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideWeatherButtonImpl) object:nil];
-    [self performSelector:@selector(hideWeatherButtonImpl) withObject:NULL afterDelay:5.0];
+    [self performSelector:@selector(hideWeatherButtonImpl) withObject:NULL afterDelay:0.];
 }
 
 - (void)hideWeatherButtonImpl
@@ -1263,14 +1274,12 @@
 - (void) showBottomControls:(CGFloat)menuHeight animated:(BOOL)animated
 {
     BOOL isWeatherToolbarVisible = [self shouldShowWeatherToolbar];
-    BOOL isQuickActionSheetVisible = [self.quickActionController isActionSheetVisible];
     BOOL scrollableHudVisible = _mapPanelViewController.scrollableHudViewController != nil || _mapPanelViewController.prevScrollableHudViewController != nil;
     CGFloat bottomMargin = [OAUtilities getBottomMargin];
     if (_mapModeButton.alpha == 0.0 || _mapModeButton.frame.origin.y != DeviceScreenHeight - 69.0 - menuHeight - bottomMargin)
     {
          void (^mainBlock)(void) = ^{
             _optionsMenuButton.alpha = self.contextMenuMode || isWeatherToolbarVisible || scrollableHudVisible ? 0.0 : 1.0;
-            _weatherButton.alpha = (self.contextMenuMode || ![self shouldShowWeatherButton] || isQuickActionSheetVisible || scrollableHudVisible ? 0.0 : 1.0);
             _zoomButtonsView.alpha = 1.0;
             _mapModeButton.alpha = 1.0;
             _driveModeButton.alpha = self.contextMenuMode || isWeatherToolbarVisible || scrollableHudVisible ? 0.0 : 1.0;
@@ -1279,7 +1288,6 @@
         
         void (^completionBlock)(BOOL) = ^(BOOL finished){
             _optionsMenuButton.userInteractionEnabled = _optionsMenuButton.alpha > 0.0;
-            _weatherButton.userInteractionEnabled = _weatherButton.alpha > 0.0;
             _zoomButtonsView.userInteractionEnabled = YES;
             _mapModeButton.userInteractionEnabled = YES;
             _driveModeButton.userInteractionEnabled = _driveModeButton.alpha > 0.0;
@@ -1304,7 +1312,6 @@
     {
         void (^mainBlock)(void) = ^{
             _optionsMenuButton.alpha = 0.0;
-            _weatherButton.alpha = 0.0;
             _zoomButtonsView.alpha = 0.0;
             _mapModeButton.alpha = 0.0;
             _driveModeButton.alpha = 0.0;
@@ -1313,7 +1320,6 @@
             
             CGFloat offsetValue = DeviceScreenWidth;
             [self addOffsetToView:_optionsMenuButton x:-offsetValue y:0];
-            [self addOffsetToView:_weatherButton x:-offsetValue y:0];
             [self addOffsetToView:_driveModeButton x:-offsetValue y:0];
             [self addOffsetToView:_mapModeButton x:offsetValue y:0];
             [self addOffsetToView:_zoomButtonsView x:offsetValue y:0];
@@ -1321,7 +1327,6 @@
         
         void (^completionBlock)(BOOL) = ^(BOOL finished){
             _optionsMenuButton.userInteractionEnabled = NO;
-            _weatherButton.userInteractionEnabled = NO;
             _zoomButtonsView.userInteractionEnabled = NO;
             _mapModeButton.userInteractionEnabled = NO;
             _driveModeButton.userInteractionEnabled = NO;

@@ -66,6 +66,8 @@
 - (void) updateMapRulerData;
 - (void) updateMapRulerDataWithDelay;
 
+- (void) updateDependentButtonsVisibility;
+
 - (BOOL) shouldShowWeatherToolbar;
 - (void) changeWeatherToolbarVisible;
 - (void) hideWeatherToolbarIfNeeded;

@@ -380,8 +380,7 @@ typedef enum
     [self addChildViewController:_scrollableHudViewController];
     _scrollableHudViewController.view.frame = self.view.bounds;
     [self.view addSubview:_scrollableHudViewController.view];
-    [_hudViewController.quickActionController updateViewVisibility];
-    [_hudViewController updateWeatherButtonVisibility];
+    [_hudViewController updateDependentButtonsVisibility];
     [self enterContextMenuMode];
 }
 
@@ -410,8 +409,7 @@ typedef enum
     }
     [self resetActiveTargetMenu];
     [self restoreFromContextMenuMode];
-    [_hudViewController.quickActionController updateViewVisibility];
-    [_hudViewController updateWeatherButtonVisibility];
+    [_hudViewController updateDependentButtonsVisibility];
 }
 
 - (void)showPlanRouteViewController:(OARoutePlanningHudViewController *)controller
@@ -712,8 +710,7 @@ typedef enum
 - (void) hideContextMenu
 {
     [self targetHideMenu:.2 backButtonClicked:NO onComplete:^{
-        [_hudViewController.quickActionController updateViewVisibility];
-        [_hudViewController updateWeatherButtonVisibility];
+        [_hudViewController updateDependentButtonsVisibility];
     }];
 }
 
@@ -791,8 +788,7 @@ typedef enum
             [self setTopControlsVisible:topControlsVisibility];
             if (bottomsControlHeight)
                 [self setBottomControlsVisible:YES menuHeight:bottomsControlHeight.floatValue animated:YES];
-            [_hudViewController.quickActionController updateViewVisibility];
-            [_hudViewController updateWeatherButtonVisibility];
+            [_hudViewController updateDependentButtonsVisibility];
             if (onComplete)
                 onComplete();
         }];
@@ -811,8 +807,7 @@ typedef enum
         
         [self.routeInfoView hide:YES duration:.2 onComplete:^{
             [self setTopControlsVisible:NO];
-            [_hudViewController.quickActionController updateViewVisibility];
-            [_hudViewController updateWeatherButtonVisibility];
+            [_hudViewController updateDependentButtonsVisibility];
             if (onComplete)
                 onComplete();
         }];
@@ -998,8 +993,7 @@ typedef enum
     [self.view addSubview:self.routeInfoView];
     
     self.sidePanelController.recognizesPanGesture = NO;
-    [_hudViewController.quickActionController updateViewVisibility];
-    [_hudViewController updateWeatherButtonVisibility];
+    [_hudViewController updateDependentButtonsVisibility];
     [self.routeInfoView show:YES fullMenu:fullMenu onComplete:^{
         self.sidePanelController.recognizesPanGesture = NO;
     }];
@@ -1997,8 +1991,7 @@ typedef enum
 - (void)hideMultiMenuIfNeeded {
     if (self.targetMultiMenuView.superview)
         [self.targetMultiMenuView hide:YES duration:.2 onComplete:^{
-            [_hudViewController.quickActionController updateViewVisibility];
-            [_hudViewController updateWeatherButtonVisibility];
+            [_hudViewController updateDependentButtonsVisibility];
         }];
 }
 
@@ -2162,8 +2155,7 @@ typedef enum
         onComplete();
     
     self.sidePanelController.recognizesPanGesture = NO;
-    [_hudViewController.quickActionController updateViewVisibility];
-    [_hudViewController updateWeatherButtonVisibility];
+    [_hudViewController updateDependentButtonsVisibility];
     [self.targetMenuView show:YES onComplete:^{
         self.sidePanelController.recognizesPanGesture = NO;
     }];
@@ -2195,8 +2187,7 @@ typedef enum
     
     self.sidePanelController.recognizesPanGesture = NO;
     [self.targetMultiMenuView show:YES onComplete:^{
-        [_hudViewController.quickActionController updateViewVisibility];
-        [_hudViewController updateWeatherButtonVisibility];
+        [_hudViewController updateDependentButtonsVisibility];
         self.sidePanelController.recognizesPanGesture = NO;
     }];
 }
@@ -2260,8 +2251,7 @@ typedef enum
     if (self.targetMultiMenuView.superview)
     {
         [self.targetMultiMenuView hide:YES duration:animationDuration onComplete:^{
-            [_hudViewController.quickActionController updateViewVisibility];
-            [_hudViewController updateWeatherButtonVisibility];
+            [_hudViewController updateDependentButtonsVisibility];
         }];
         return;
     }
@@ -2312,8 +2302,7 @@ typedef enum
         }
         else
         {
-            [_hudViewController.quickActionController updateViewVisibility];
-            [_hudViewController updateWeatherButtonVisibility];
+            [_hudViewController updateDependentButtonsVisibility];
         }
     }];
     
@@ -2364,9 +2353,8 @@ typedef enum
         }
         if (onComplete)
             onComplete();
-        
-        [_hudViewController.quickActionController updateViewVisibility];
-        [_hudViewController updateWeatherButtonVisibility];
+
+        [_hudViewController updateDependentButtonsVisibility];
     }];
     
     [self showTopControls:NO];

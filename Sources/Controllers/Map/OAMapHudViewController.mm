@@ -681,12 +681,17 @@
     [[OARootViewController instance].mapPanel onNavigationClick:NO];
 }
 
+- (void) updateDependentButtonsVisibility
+{
+    [_quickActionController updateViewVisibility];
+    [self updateWeatherButtonVisibility];
+}
+
 - (void) onApplicationModeChanged:(OAApplicationMode *)prevMode
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self updateColors];
-        [_quickActionController updateViewVisibility];
-        [self updateWeatherButtonVisibility];
+        [self updateDependentButtonsVisibility];
         [_mapPanelViewController refreshToolbar];
     });
 }

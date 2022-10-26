@@ -293,7 +293,7 @@
                     offlineForecastData[@"type"] = [OASimpleTableViewCell getCellIdentifier];
                     offlineForecastData[@"region"] = region;
                     offlineForecastData[@"description"] = [OAWeatherHelper getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateInProgress
-                            ? [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_loading")
+                            ? [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_download_update")
                                                               attributes:@{
                                                                       NSFontAttributeName: [UIFont systemFontOfSize:13.],
                                                                       NSForegroundColorAttributeName: UIColorFromRGB(color_text_footer)

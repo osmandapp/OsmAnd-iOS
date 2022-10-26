@@ -2427,7 +2427,7 @@ static BOOL _repositoryUpdated = NO;
                 title = [OAResourceType resourceTypeLocalized:item.resourceType];
 
                 if (item.resourceType == OsmAndResourceType::WeatherForecast && ![_weatherHelper isOfflineForecastSizesInfoCalculated:[OAWeatherHelper checkAndGetRegionId:item.worldRegion]])
-                   subtitle = OALocalizedString(@"shared_string_loading");
+                   subtitle = OALocalizedString(@"shared_string_download_update");
                 else if (_sizePkg >= 0)
                     subtitle = [NSByteCountFormatter stringFromByteCount:_sizePkg countStyle:NSByteCountFormatterCountStyleFile];
 

@@ -884,14 +884,11 @@
             backButtonAlpha = 0;
         if (self.topToolbarType == ETopToolbarTypeFloatingFixedButton)
             backButtonAlpha = 1;
-        
-        if (self.buttonBack.alpha != backButtonAlpha)
-        {
-            self.buttonBack.alpha = backButtonAlpha;
-            if (![OAUtilities isLandscape] && ![OAUtilities isIPad])
-                [OARootViewController.instance.mapPanel.hudViewController setTopControlsAlpha:1 - backButtonAlpha];
-        }
-        
+
+        self.buttonBack.alpha = backButtonAlpha;
+        if (![OAUtilities isLandscape] && ![OAUtilities isIPad])
+            [OARootViewController.instance.mapPanel.hudViewController setTopControlsAlpha:1 - backButtonAlpha];
+
         if (self.topToolbarType == ETopToolbarTypeMiddleFixed)
         {
             if (alpha < 1)

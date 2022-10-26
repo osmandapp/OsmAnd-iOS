@@ -35,6 +35,7 @@
 #import "OADownloadMapWidget.h"
 #import "OAWeatherToolbar.h"
 #import "OACompassModeWidgetState.h"
+#import "OAQuickActionHudViewController.h"
 
 @interface OATextState : NSObject
 
@@ -449,7 +450,7 @@
     BOOL visible = [_mapHudViewController shouldShowWeatherToolbar];
     if (visible && (_weatherToolbar.hidden || _weatherToolbar.frame.origin.y != [OAWeatherToolbar calculateY]))
         [self showWeatherToolbar];
-    else if (!visible && _weatherToolbar.frame.origin.y != [OAWeatherToolbar calculateYOutScreen])
+    else if (!visible && !_weatherToolbar.hidden && _weatherToolbar.frame.origin.y != [OAWeatherToolbar calculateYOutScreen])
         [self hideWeatherToolbar];
 }
 
@@ -463,10 +464,13 @@
 
     [UIView animateWithDuration:.3 animations:^{
         [_weatherToolbar moveToScreen];
+        [_mapHudViewController.weatherButton setImage:[UIImage templateImageNamed:@"ic_custom_cancel"] forState:UIControlStateNormal];
 
         [_mapHudViewController showBottomControls:[OAUtilities isLandscape] ? 0. : _weatherToolbar.frame.size.height - [OAUtilities getBottomMargin]
                                          animated:YES];
         [[OARootViewController instance].mapPanel setTopControlsVisible:YES];
+        [_mapHudViewController.quickActionController updateViewVisibility];
+        [self recreateControls];
 
         CGFloat height = [OAUtilities isLandscape] ? 0. : _weatherToolbar.frame.size.height;
         CGFloat leftMargin = [OAUtilities isLandscape]
@@ -481,13 +485,15 @@
 {
     [UIView animateWithDuration:.3 animations: ^{
         [_weatherToolbar moveOutOfScreen];
+        [_mapHudViewController.weatherButton setImage:[UIImage templateImageNamed:@"ic_custom_umbrella"] forState:UIControlStateNormal];
     }                completion:^(BOOL finished) {
         _weatherToolbar.hidden = YES;
     }];
     [_mapHudViewController showBottomControls:0. animated:YES];
     [_mapHudViewController resetToDefaultRulerLayout];
-    if ([OAUtilities isLandscape] && _weatherToolbar.topControlsVisibleInLandscape)
-        [[OARootViewController instance].mapPanel setTopControlsVisible:YES];
+    [[OARootViewController instance].mapPanel setTopControlsVisible:YES];
+    [_mapHudViewController.quickActionController updateViewVisibility];
+    [self recreateControls];
 }
 
 - (CGFloat) getLeftBottomY

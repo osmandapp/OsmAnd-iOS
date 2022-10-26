@@ -14,6 +14,9 @@
 #import "OAWidgetState.h"
 #import "OAApplicationMode.h"
 #import "OAAutoObserverProxy.h"
+#import "OAWeatherPlugin.h"
+#import "OARootViewController.h"
+#import "OAMapHudViewController.h"
 
 #define COLLAPSED_PREFIX @"+"
 #define HIDE_PREFIX @"-"
@@ -47,16 +50,18 @@
 - (void) populateStackControl:(UIView *)stack mode:(OAApplicationMode *)mode left:(BOOL)left expanded:(BOOL)expanded
 {
     NSArray<OAMapWidgetRegInfo *> *s = [NSArray arrayWithArray:left ? _leftWidgetSet.array : _rightWidgetSet.array];
+    NSArray *weatherWidgets = @[kWeatherTemp, kWeatherPressure, kWeatherWind, kWeatherCloud, kWeatherPrecip];
+    BOOL shouldShowWeatherToolbar = [[OARootViewController instance].mapPanel.hudViewController shouldShowWeatherToolbar];
     for (OAMapWidgetRegInfo *r in s)
     {
-        if (r.widget && ([r visible:mode] || [r.widget isExplicitlyVisible]))
+        if (r.widget && ((!shouldShowWeatherToolbar && ([r visible:mode] || [r.widget isExplicitlyVisible])) || (shouldShowWeatherToolbar && [weatherWidgets containsObject:r.key])))
             [stack addSubview:r.widget];
     }
     if (expanded)
     {
         for (OAMapWidgetRegInfo *r in s)
         {
-            if (r.widget && [r visibleCollapsed:mode] && ![r.widget isExplicitlyVisible])
+            if (r.widget && ((!shouldShowWeatherToolbar && [r visibleCollapsed:mode] && ![r.widget isExplicitlyVisible]) || (shouldShowWeatherToolbar && [weatherWidgets containsObject:r.key])))
                 [stack addSubview:r.widget];
         }
     }
@@ -83,9 +88,13 @@
 
 - (void) update:(OAApplicationMode *)mode expanded:(BOOL)expanded widgetSet:(NSOrderedSet<OAMapWidgetRegInfo *> *)widgetSet
 {
+    NSArray *weatherWidgets = @[kWeatherTemp, kWeatherPressure, kWeatherWind, kWeatherCloud, kWeatherPrecip];
+    BOOL shouldShowWeatherToolbar = [[OARootViewController instance].mapPanel.hudViewController shouldShowWeatherToolbar];
     for (OAMapWidgetRegInfo *r in widgetSet)
-        if (r.widget && ([r visible:mode] || ([r visibleCollapsed:mode] && expanded)))
+    {
+        if (r.widget && ((!shouldShowWeatherToolbar && ([r visible:mode] || ([r visibleCollapsed:mode] && expanded))) || (shouldShowWeatherToolbar && [weatherWidgets containsObject:r.key])))
             [r.widget updateInfo];
+    }
 }
 
 - (void) removeSideWidget:(NSString *)key
@@ -331,7 +340,7 @@
     [self loadVisibleElementsFromSettings];
     for (OAMapWidgetRegInfo *ri in _leftWidgetSet)
         [self processVisibleModes:ri.key ii:ri];
-    for (OAMapWidgetRegInfo *ri in _leftWidgetSet)
+    for (OAMapWidgetRegInfo *ri in _rightWidgetSet)
         [self processVisibleModes:ri.key ii:ri];
 }
 

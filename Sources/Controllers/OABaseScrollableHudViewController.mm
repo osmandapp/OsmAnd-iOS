@@ -442,32 +442,29 @@
 - (void) hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete
 {
     _isHiding = YES;
-    
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-    [mapPanel setTopControlsVisible:YES];
-    [mapPanel setBottomControlsVisible:YES menuHeight:0 animated:YES];
 
-    _isHiding = YES;
-    
     CGRect frame = _scrollableView.frame;
     frame.origin.y = DeviceScreenHeight + 10.0;
     
     if (animated)
     {
         [UIView animateWithDuration:0.3 animations:^{
+            [mapPanel hideScrollableHudViewController];
+            [mapPanel setTopControlsVisible:YES];
+            [mapPanel setBottomControlsVisible:YES menuHeight:0 animated:YES];
             _scrollableView.frame = frame;
         } completion:^(BOOL finished) {
-            [self dismissViewControllerAnimated:NO completion:nil];
-            if (onComplete)
-                onComplete();
+            [self dismissViewControllerAnimated:NO completion:onComplete];
         }];
     }
     else
     {
+        [mapPanel hideScrollableHudViewController];
+        [mapPanel setTopControlsVisible:YES];
+        [mapPanel setBottomControlsVisible:YES menuHeight:0 animated:YES];
         _scrollableView.frame = frame;
-        [self dismissViewControllerAnimated:YES completion:nil];
-        if (onComplete)
-            onComplete();
+        [self dismissViewControllerAnimated:YES completion:onComplete];
     }
 }
 

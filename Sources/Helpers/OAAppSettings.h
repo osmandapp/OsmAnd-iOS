@@ -927,6 +927,8 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 // Custom plugins
 @property (nonatomic) NSString *customPluginsJson;
 
+@property (nonatomic) OACommonBoolean *weatherButtonIsOn;
+
 - (void) setApplicationModePref:(OAApplicationMode *)applicationMode;
 - (void) setApplicationModePref:(OAApplicationMode *)applicationMode markAsLastUsed:(BOOL)markAsLastUsed;
 

@@ -227,6 +227,8 @@
 #define mapillaryFilterEndDateKey @"mapillaryFilterEndDate"
 #define mapillaryFilterPanoKey @"mapillaryFilterPano"
 
+#define weatherButtonIsOnKey @"weatherButtonIsOn"
+
 #define quickActionIsOnKey @"qiuckActionIsOn"
 #define quickActionsListKey @"quickActionsList"
 #define isQuickActionTutorialShownKey @"isQuickActionTutorialShown"
@@ -4012,6 +4014,9 @@
 
         // Custom plugins
         _customPluginsJson = [[NSUserDefaults standardUserDefaults] objectForKey:customPluginsJsonKey] ? [[NSUserDefaults standardUserDefaults] stringForKey:customPluginsJsonKey] : @"";
+
+        _weatherButtonIsOn = [OACommonBoolean withKey:weatherButtonIsOnKey defValue:NO];
+        [_profilePreferences setObject:_weatherButtonIsOn forKey:@"weather_button_state"];
 
         // Direction Appearance
         _activeMarkers = [OACommonActiveMarkerConstant withKey:activeMarkerKey defValue:ONE_ACTIVE_MARKER];

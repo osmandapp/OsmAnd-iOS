@@ -17,6 +17,5 @@
 @interface OAWeatherPlugin : OAPlugin
 
 - (void)weatherChanged:(BOOL)isOn;
-- (void)updateInfoWidgets;
 
 @end

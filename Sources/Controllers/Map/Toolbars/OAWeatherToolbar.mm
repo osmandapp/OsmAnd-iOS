@@ -9,12 +9,16 @@
 #import "OAWeatherToolbar.h"
 #import "OARootViewController.h"
 #import "OAMapHudViewController.h"
+#import "OAMapInfoController.h"
 #import "OAWeatherLayerSettingsViewController.h"
 #import "OASegmentedSlider.h"
 #import "OASizes.h"
 #import "OAMapLayers.h"
+#import "OAMapWidgetRegistry.h"
+#import "OAMapWidgetRegInfo.h"
 #import "OAWeatherToolbarHandlers.h"
 #import "OAWeatherHelper.h"
+#import "OAWeatherPlugin.h"
 
 @interface OAWeatherToolbar () <OAWeatherToolbarDelegate, OAWeatherLayerSettingsDelegate>
 
@@ -27,6 +31,8 @@
 @implementation OAWeatherToolbar
 {
     OsmAndAppInstance _app;
+    OAAutoObserverProxy *_applicaionModeObserver;
+    OAAutoObserverProxy *_weatherChangeObserver;
     NSMutableArray<OAAutoObserverProxy *> *_layerChangeObservers;
 
     NSCalendar *_currentTimezoneCalendar;
@@ -102,8 +108,13 @@
     [self.timeSliderView removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
     [self.timeSliderView addTarget:self action:@selector(timeChanged:) forControlEvents:UIControlEventTouchUpInside];
 
+    _applicaionModeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                        withHandler:@selector(onUpdateWeatherLayerSettings)
+                                                         andObserve:_app.data.applicationModeChangedObservable];
+    _weatherChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                       withHandler:@selector(onUpdateWeatherLayerSettings)
+                                                        andObserve:_app.data.weatherChangeObservable];
     _layerChangeObservers = [NSMutableArray array];
-
     for (OAWeatherBand *band in [[OAWeatherHelper sharedInstance] bands])
     {
         [_layerChangeObservers addObject:[band createSwitchObserver:self handler:@selector(onUpdateWeatherLayerSettings)]];
@@ -163,8 +174,10 @@
 
 - (BOOL)updateInfo
 {
-    BOOL visible = [[OARootViewController instance].mapPanel.hudViewController shouldShowWeatherToolbar];
+    OAMapHudViewController *hudViewController = [OARootViewController instance].mapPanel.hudViewController;
+    BOOL visible =  [hudViewController shouldShowWeatherToolbar];
     [self updateVisibility:visible];
+
     return YES;
 }
 
@@ -420,7 +433,7 @@
     if (show)
         [[OARootViewController instance].mapPanel.hudViewController changeWeatherToolbarVisible];
     else
-        [[OARootViewController instance].mapPanel.hudViewController updateWeatherButton];
+        [[OARootViewController instance].mapPanel.hudViewController updateWeatherButtonVisibility];
 }
 
 @end

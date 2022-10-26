@@ -136,18 +136,6 @@
     OsmAnd::ZoomLevel __block cachedZoom = OsmAnd::ZoomLevel::InvalidZoomLevel;
     __block NSDate *cachedDate;
     weatherControl.updateInfoFunction = ^BOOL{
-
-        BOOL enabled = _app.data.weather;
-        if (!enabled)
-        {
-            if (cachedValue[0] != undefined)
-                [weatherControlWeak setText:nil subtext:nil];
-            
-            [selfWeak setMapCenterMarkerVisibility:NO];
-            
-            return false;
-        }
-        
         OAMapViewController *mapCtrl = [OARootViewController instance].mapPanel.mapViewController;
                                         
         OsmAnd::PointI target31 = mapCtrl.mapView.target31;

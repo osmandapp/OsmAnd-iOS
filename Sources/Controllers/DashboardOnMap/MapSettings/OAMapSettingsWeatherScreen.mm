@@ -351,7 +351,7 @@
     if (show)
         [[OARootViewController instance].mapPanel showWeatherLayersScreen];
 
-    [[OARootViewController instance].mapPanel.hudViewController updateWeatherButton];
+    [[OARootViewController instance].mapPanel.hudViewController updateWeatherButtonVisibility];
 }
 
 @end

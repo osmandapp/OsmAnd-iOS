@@ -35,6 +35,8 @@
 @property (readonly) OAObservable* underlayAlphaChangeObservable;
 @property (readonly) OAObservable* mapLayersConfigurationChangeObservable;
 
+- (void) refreshOverlayUnderlayAlpha;
+
 @property (nonatomic) BOOL weather;
 @property (nonatomic) BOOL weatherUseOfflineData;
 @property (nonatomic) BOOL weatherTemp;

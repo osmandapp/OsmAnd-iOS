@@ -39,6 +39,10 @@
 #define kCellTypeIconSwitch @"icon_switch_cell"
 #define kCellTypeMap @"icon_text_desc_button_cell"
 
+#define kShowSlider @"kShowSlider"
+#define kShowLabels @"kShowLabels"
+#define kHidePoligons @"kHidePoligons"
+
 typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 typedef enum
@@ -145,7 +149,8 @@ static NSInteger kButtonsSection;
                          }];
     [sliderArr addObject:@{
                         @"type" : kCellTypeSwitch,
-                        @"title": OALocalizedString(@"map_settings_show_slider_map")
+                        @"title": OALocalizedString(@"map_settings_show_slider_map"),
+                        @"tag" : kShowSlider
                          }];
     
     NSMutableArray *availableLayersArr = [NSMutableArray new];
@@ -177,13 +182,23 @@ static NSInteger kButtonsSection;
     }];
     [tableData addObject: sliderArr];
     [tableData addObject: availableLayersArr];
+    
+    NSMutableArray *styleArray = [NSMutableArray new];
+    [styleArray addObject:@{
+        @"type" : kCellTypeSwitch,
+        @"title": OALocalizedString(@"map_settings_show_map_symbols"),
+        @"tag" : kShowLabels
+    }];
     if (_mapSettingType == EMapSettingUnderlay)
     {
-        [tableData addObject:@{
+        [styleArray addObject:@{
             @"type" : kCellTypeSwitch,
-            @"title": OALocalizedString(@"map_settings_hide_polygons")
+            @"title": OALocalizedString(@"map_settings_hide_polygons"),
+            @"tag" : kHidePoligons
         }];
     }
+    [tableData addObject: styleArray];
+    
     [tableData addObject: buttonsArray];
     _data = [NSArray arrayWithArray:tableData];
     
@@ -222,13 +237,9 @@ static NSInteger kButtonsSection;
         else if (indexPath.row == _onlineMapSources.count)
             return _data[indexPath.section][_onlineMapSources.count];
     }
-    else if ((_mapSettingType == EMapSettingOverlay && indexPath.section == 3) || (_mapSettingType == EMapSettingUnderlay && indexPath.section == 4))
+    else if (indexPath.section == 3 || indexPath.section == 4)
     {
         return _data[indexPath.section][indexPath.row];
-    }
-    else if (_mapSettingType == EMapSettingUnderlay && indexPath.section == 3)
-    {
-        return _data[indexPath.section];
     }
     return nil;
 }
@@ -251,7 +262,7 @@ static NSInteger kButtonsSection;
         case 2:
             return [_onlineMapSources count] + 1;
         case 3:
-            return _mapSettingType == EMapSettingOverlay ? 2 : 1;
+            return _mapSettingType == EMapSettingOverlay ? 1 : 2;
         case 4:
             return 2;
         default:
@@ -389,12 +400,18 @@ static NSInteger kButtonsSection;
         {
             [cell.textView setText:item[@"title"]];
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
-            if (indexPath.section == kMapVisibilitySection)
+            
+            if ([item[@"tag"] isEqualToString:kShowSlider])
             {
                 [cell.switchView setOn: [self isOpacitySliderVisible]];
                 [cell.switchView addTarget:self action:@selector(onShowSwitchChanged:) forControlEvents:UIControlEventValueChanged];
             }
-            else
+            else if ([item[@"tag"] isEqualToString:kShowLabels])
+            {
+                [cell.switchView setOn: _settings.keepMapLabelsVisible.get];
+                [cell.switchView addTarget:self action:@selector(onShowLabelsChanged:) forControlEvents:UIControlEventValueChanged];
+            }
+            else if ([item[@"tag"] isEqualToString:kHidePoligons])
             {
                 [cell.switchView setOn:[_hidePolygonsParameter.value isEqualToString:@"true"]];
                 [cell.switchView addTarget:self action:@selector(onPolygonsChanged:) forControlEvents:UIControlEventValueChanged];
@@ -535,6 +552,13 @@ static NSInteger kButtonsSection;
     }
 }
 
+- (void) onShowLabelsChanged:(id)sender
+{
+     UISwitch *switchView = (UISwitch*)sender;
+     if (switchView)
+         [self showLabels:switchView.isOn];
+}
+
 - (void) onPolygonsChanged:(id)sender
 {
      UISwitch *switchView = (UISwitch*)sender;
@@ -550,6 +574,16 @@ static NSInteger kButtonsSection;
         [self setOpacitySliderVisibility:switchView.isOn];
         [[OARootViewController instance].mapPanel updateOverlayUnderlayView];
     }
+}
+
+- (void) showLabels:(BOOL)show
+{
+    [_settings.keepMapLabelsVisible set:show];
+    //refresh layers
+//    _app.data.overlayAlpha = _app.data.overlayAlpha;
+//    _app.data.underlayAlpha = _app.data.underlayAlpha;
+    [_app.data refreshOverlayUnderlayAlpha];
+//    [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
 }
 
 - (void) hidePolygons:(BOOL)hide

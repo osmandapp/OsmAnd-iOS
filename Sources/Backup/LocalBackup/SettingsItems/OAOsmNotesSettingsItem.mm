@@ -153,9 +153,8 @@
      return [self getJsonWriter];
  }
 
-- (NSDictionary *)getSettingsJson
+- (void)writeItemsToJson:(id)json
 {
-    NSMutableDictionary *json = [NSMutableDictionary new];
     NSMutableArray *jsonArray = [NSMutableArray array];
     if (self.items.count > 0)
     {
@@ -171,7 +170,6 @@
         }
         json[@"items"] = jsonArray;
     }
-    return json;
 }
 
 @end

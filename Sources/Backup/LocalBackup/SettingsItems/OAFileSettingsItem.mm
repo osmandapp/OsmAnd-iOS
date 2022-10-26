@@ -298,7 +298,10 @@
         }
         else if (self.subtype == EOASettingsItemFileSubtypeGpx)
         {
-            NSString *path = [[json[@"file"] substringFromIndex:1] stringByReplacingOccurrencesOfString:@"tracks/" withString:@""];
+            NSString *file = json[@"file"];
+            if (![file hasPrefix:@"/"])
+                file = [@"/" stringByAppendingString:file];
+            NSString *path = [[file substringFromIndex:1] stringByReplacingOccurrencesOfString:@"tracks/" withString:@""];
             self.filePath = [[OAFileSettingsItemFileSubtype getSubtypeFolder:_subtype] stringByAppendingPathComponent:path];
         }
         else
@@ -450,6 +453,8 @@
         return;
     }
     NSString *fileName = json[@"file"];
+    if (![fileName hasPrefix:@"/"])
+        fileName = [@"/" stringByAppendingString:fileName];
     if (!_subtype)
     {
         NSString *subtypeStr = json[@"subtype"];

@@ -110,6 +110,11 @@
     return [self getJsonReader];
 }
 
+- (OASettingsItemWriter *)getWriter
+{
+    return [self getJsonWriter];
+}
+
 - (long)getEstimatedItemSize:(OAAvoidRoadInfo *)item
 {
     return APPROXIMATE_AVOID_ROAD_SIZE_BYTES;
@@ -141,7 +146,7 @@
     }
 }
 
-- (void) writeItemsToJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
+- (void) writeItemsToJson:(id)json
 {
     NSMutableArray *jsonArray = [NSMutableArray array];
     if (self.items.count > 0)

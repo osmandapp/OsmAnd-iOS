@@ -327,9 +327,8 @@
     json[@"appMode"] = [_appMode toJson];
 }
 
-- (NSDictionary *) getSettingsJson
+- (void)writeItemsToJson:(id)json
 {
-    MutableOrderedDictionary *res = [MutableOrderedDictionary new];
     OAAppSettings *settings = OAAppSettings.sharedManager;
     NSSet<NSString *> *appModeBeanPrefsIds = [NSSet setWithArray:settings.appModeBeanPrefsIds];
     for (NSString *key in [settings getPreferences:NO].keyEnumerator)
@@ -343,14 +342,14 @@
             if (stringValue)
             {
                 if ([setting.key isEqualToString:@"voice_provider"])
-                    res[key] = [stringValue stringByAppendingString:@"-tts"];
+                    json[key] = [stringValue stringByAppendingString:@"-tts"];
                 else
-                    res[key] = stringValue;
+                    json[key] = stringValue;
             }
         }
     }
     
-    [OsmAndApp.instance.data addPreferenceValuesToDictionary:res mode:self.appMode];
+    [OsmAndApp.instance.data addPreferenceValuesToDictionary:json mode:self.appMode];
     OAMapStyleSettings *styleSettings = [OAMapStyleSettings sharedInstance];
     NSMutableString *enabledTransport = [NSMutableString new];
     if ([styleSettings isCategoryEnabled:TRANSPORT_CATEGORY])
@@ -365,11 +364,11 @@
             }
         }
     }
-    res[@"displayed_transport_settings"] = enabledTransport;
+    json[@"displayed_transport_settings"] = enabledTransport;
     
     for (OAMapStyleParameter *param in [styleSettings getAllParameters])
     {
-        res[[@"nrenderer_" stringByAppendingString:param.name]] = param.value;
+        json[[@"nrenderer_" stringByAppendingString:param.name]] = param.value;
     }
     
     const auto router = [OsmAndApp.instance getRouter:self.appMode];
@@ -381,20 +380,19 @@
             if (p.type == RoutingParameterType::BOOLEAN)
             {
                 OACommonBoolean *boolSetting = [settings getCustomRoutingBooleanProperty:[NSString stringWithUTF8String:p.id.c_str()] defaultValue:p.defaultBoolean];
-                res[[@"prouting_" stringByAppendingString:[NSString stringWithUTF8String:p.id.c_str()]]] = [boolSetting toStringValue:self.appMode];
+                json[[@"prouting_" stringByAppendingString:[NSString stringWithUTF8String:p.id.c_str()]]] = [boolSetting toStringValue:self.appMode];
             }
             else
             {
                 OACommonString *stringSetting = [settings getCustomRoutingProperty:[NSString stringWithUTF8String:p.id.c_str()] defaultValue:p.type == RoutingParameterType::NUMERIC ? kDefaultNumericValue : kDefaultSymbolicValue];
-                res[[@"prouting_" stringByAppendingString:[NSString stringWithUTF8String:p.id.c_str()]]] = [stringSetting get:self.appMode];
+                json[[@"prouting_" stringByAppendingString:[NSString stringWithUTF8String:p.id.c_str()]]] = [stringSetting get:self.appMode];
                 
             }
         }
     }
     NSString *renderer = [[OAAppSettings sharedManager].renderer get:_appMode];
     NSDictionary *mapStyleInfo = [OARendererRegistry getMapStyleInfo:renderer];
-    res[@"renderer"] = mapStyleInfo[@"title"];
-    return res;
+    json[@"renderer"] = mapStyleInfo[@"title"];
 }
 
 - (OASettingsItemReader *) getReader

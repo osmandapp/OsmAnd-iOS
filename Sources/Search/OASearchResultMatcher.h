@@ -14,7 +14,11 @@
 
 @interface OASearchResultMatcher : OAResultMatcher
 
-- (instancetype)initWithMatcher:(OAResultMatcher<OASearchResult *> *)matcher phrase:(OASearchPhrase *)phrase request:(int)request requestNumber:(OAAtomicInteger *)requestNumber totalLimit:(int)totalLimit;
+- (instancetype) initWithMatcher:(OAResultMatcher<OASearchResult *> *)matcher
+                          phrase:(OASearchPhrase *)phrase
+                         request:(int)request
+                   requestNumber:(OAAtomicInteger *)requestNumber
+                      totalLimit:(int)totalLimit;
 
 - (OASearchResult *) setParentSearchResult:(OASearchResult *)parentSearchResult;
 - (NSArray<OASearchResult *> *) getRequestResults;
@@ -26,6 +30,6 @@
 - (void) searchFinished:(OASearchPhrase *)phrase;
 - (void) filterFinished:(OASearchPhrase *)phrase;
 
--(BOOL)publish:(OASearchResult *)object;
+- (BOOL) publish:(OASearchResult *)object;
 
 @end

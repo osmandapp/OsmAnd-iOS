@@ -440,4 +440,64 @@ static const int SEARCH_HISTORY_OBJECT_PRIORITY = 53;
     });
 }
 
+- (void) searchCityLocations:(NSString *)text
+          searchLocation:(CLLocation *)searchLocation
+            searchBBox31:(QuadRect *)searchBBox31
+            allowedTypes:(NSArray<NSString *> *)allowedTypes
+                   limit:(NSInteger)limit
+              onComplete:(void (^)(NSArray<OASearchResult *> *searchResults))onComplete
+{
+    NSInteger searchRequestsCount = ++_searchRequestsCount;
+    dispatch_block_t searchCitiesFunc = ^{
+        dispatch_group_enter(_searchCitiesGroup);
+
+        NSString *lang = [[OAAppSettings sharedManager].settingPrefMapLanguage get];
+        BOOL transliterate = [[OAAppSettings sharedManager].settingMapLanguageTranslit get];
+        NSMutableArray *results = [NSMutableArray array];
+
+        OAQuickSearchHelper *searchHelper = [OAQuickSearchHelper instance];
+        OASearchUICore *searchUICore = [searchHelper getCore];
+        OASearchSettings *settings = [[searchUICore getSearchSettings] setOriginalLocation:[OsmAndApp instance].locationServices.lastKnownLocation];
+        settings = [settings setLang:lang ? lang : @"" transliterateIfMissing:transliterate];
+        settings = [settings setSortByName:NO];
+        settings = [settings setAddressSearch:YES];
+        settings = [settings setEmptyQueryAllowed:YES];
+        settings = [settings setOriginalLocation:searchLocation];
+        settings = [settings setSearchBBox31:searchBBox31];
+        [searchUICore updateSettings:settings];
+
+        int __block count = 0;
+        [searchUICore shallowSearch:OASearchLocationAndUrlAPI.class
+                               text:text
+                            matcher:[[OAResultMatcher alloc] initWithPublishFunc:^BOOL(OASearchResult *__autoreleasing *object) {
+            OASearchResult *searchResult = *object;
+            CLLocation *location = searchResult.location;
+            if (!location)
+                return NO;
+            
+            if (count++ > limit || _searchRequestsCount > searchRequestsCount || _searchRequestsCount == 0)
+                return NO;
+            
+            [results addObject:searchResult];
+            return NO;
+        } cancelledFunc:^BOOL{
+            return count > limit || _searchRequestsCount > searchRequestsCount || _searchRequestsCount == 0;
+        }] resortAll:YES removeDuplicates:YES];
+
+        if (_searchRequestsCount == searchRequestsCount)
+        {
+            _searchRequestsCount = 0;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (onComplete)
+                    onComplete(results);
+            });
+        }
+        dispatch_group_leave(_searchCitiesGroup);
+    };
+
+    dispatch_group_notify(_searchCitiesGroup, _searchCitiesSerialQueue, ^{
+        dispatch_async(_searchCitiesSerialQueue, searchCitiesFunc);
+    });
+}
+
 @end

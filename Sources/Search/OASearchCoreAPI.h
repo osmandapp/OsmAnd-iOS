@@ -28,7 +28,17 @@
  */
 - (BOOL) isSearchMoreAvailable:(OASearchPhrase *)phrase;
 
+/**
+ * @param phrase
+ * @return true if search available for execution
+ */
 - (BOOL) isSearchAvailable:(OASearchPhrase *)phrase;
+
+/**
+ * @param phrase
+ * @return true if search is done and no other api should execute next
+ */
+- (BOOL) isSearchDone:(OASearchPhrase *)phrase;
 
 /**
  * @param phrase

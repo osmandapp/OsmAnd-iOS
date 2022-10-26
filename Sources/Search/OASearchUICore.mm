@@ -50,9 +50,16 @@ typedef NS_ENUM(NSInteger, EOAResultCompareStep) {
 
 @end
 
-const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible), @(EOAFoundWordCount), @(EOAUnknownPhraseMatchWeight),
-                                                         @(EOACompareAmenityTypeAdditional), @(EOASearchDistanceIfNotByName), @(EOACompareFirstNumberInName),
-                                                         @(EOACompareDistanceToParentSearchResult), @(EOACompareByName), @(EOACompareByDistance), @(EOAAmenityLastAndSortBySubtype)];
+const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
+                                                        @(EOAFoundWordCount),
+                                                        @(EOAUnknownPhraseMatchWeight),
+                                                        @(EOACompareAmenityTypeAdditional),
+                                                        @(EOASearchDistanceIfNotByName),
+                                                        @(EOACompareFirstNumberInName),
+                                                        @(EOACompareDistanceToParentSearchResult),
+                                                        @(EOACompareByName),
+                                                        @(EOACompareByDistance),
+                                                        @(EOAAmenityLastAndSortBySubtype)];
 
 @interface OASearchResultComparator ()
 
@@ -81,10 +88,8 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible), @(EOAF
             {
                 EOAResultCompareStep step = (EOAResultCompareStep) stepN.integerValue;
                 NSComparisonResult r = [weakSelf compare:o1 o2:o2 comparator:weakSelf step:step];
-                if(r != NSOrderedSame)
-                {
+                if (r != NSOrderedSame)
                     return r;
-                }
             }
             return NSOrderedSame;
         };
@@ -111,16 +116,14 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible), @(EOAF
         case EOAFoundWordCount:
         {
             if (o1.getFoundWordCount != o2.getFoundWordCount)
-            {
                 return [OAUtilities compareInt:o2.getFoundWordCount y:o1.getFoundWordCount];
-            }
+
             break;
         }
         case EOAUnknownPhraseMatchWeight:
         {
             // here we check how much each sub search result matches the phrase
             // also we sort it by type house -> street/poi -> city/postcode/village/other
-            
             OASearchPhrase *ph = o1.requiredSearchPhrase;
             double o1PhraseWeight = o1.unknownPhraseMatchWeight;
             double o2PhraseWeight = o2.unknownPhraseMatchWeight;
@@ -131,11 +134,9 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible), @(EOAF
                 if (![[ph getUnknownWordToSearchBuildingNameMatcher] matches:o2.localeName])
                     o2PhraseWeight--;
             }
-            
-            if (o1.unknownPhraseMatchWeight != o2.unknownPhraseMatchWeight)
-            {
-                return [OAUtilities compareDouble:o2.unknownPhraseMatchWeight y:o1.unknownPhraseMatchWeight];
-            }
+            if (o1PhraseWeight != o2PhraseWeight)
+                return [OAUtilities compareDouble:o2PhraseWeight y:o1PhraseWeight];
+
             break;
         }
         case EOASearchDistanceIfNotByName:
@@ -160,6 +161,7 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible), @(EOAF
             int st2 = [OAUtilities extractFirstIntegerNumber:localeName2];
             if (st1 != st2)
                 return [OAUtilities compareInt:st1 y:st2];
+
             break;
         }
         case EOACompareAmenityTypeAdditional:
@@ -193,6 +195,7 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible), @(EOAF
             int cmp = OsmAnd::ICU::ccompare(QString::fromNSString(localeName1), QString::fromNSString(localeName2));
             if (cmp != 0)
                 return (NSComparisonResult)cmp;
+
             break;
         }
         case EOACompareByDistance:
@@ -507,10 +510,15 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible), @(EOAF
 
 - (OASearchResultCollection *) shallowSearch:(Class)cl text:(NSString *)text matcher:(OAResultMatcher<OASearchResult *> *)matcher resortAll:(BOOL)resortAll removeDuplicates:(BOOL)removeDuplicates
 {
+    [self shallowSearch:cl text:text matcher:matcher resortAll:resortAll removeDuplicates:removeDuplicates searchSettings:_searchSettings];
+}
+
+- (OASearchResultCollection *) shallowSearch:(Class)cl text:(NSString *)text matcher:(OAResultMatcher<OASearchResult *> *)matcher resortAll:(BOOL)resortAll removeDuplicates:(BOOL)removeDuplicates searchSettings:(OASearchSettings *)searchSettings
+{
     OASearchCoreAPI *api = [self getApiByClass:cl];
     if (api)
     {
-        OASearchPhrase *sphrase = [_phrase generateNewPhrase:text settings:_searchSettings];
+        OASearchPhrase *sphrase = [_phrase generateNewPhrase:text settings:searchSettings];
         [self preparePhrase:sphrase];
         OAAtomicInteger *ai = [OAAtomicInteger atomicInteger:0];
         OASearchResultMatcher *rm = [[OASearchResultMatcher alloc] initWithMatcher:matcher phrase:sphrase request:[ai get] requestNumber:ai totalLimit:totalLimit];
@@ -528,11 +536,12 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible), @(EOAF
 
 - (void) initApi
 {
-    [_apis addObject:[[OASearchLocationAndUrlAPI alloc] init]];
+    OASearchAmenityByNameAPI *amenitiesApi = [[OASearchAmenityByNameAPI alloc] init];
+    [_apis addObject:[[OASearchLocationAndUrlAPI alloc] initWithAPI:amenitiesApi]];
     OASearchAmenityTypesAPI *searchAmenityTypesAPI = [[OASearchAmenityTypesAPI alloc] init];
     [_apis addObject:searchAmenityTypesAPI];
     [_apis addObject:[[OASearchAmenityByTypeAPI alloc] initWithTypesAPI:searchAmenityTypesAPI]];
-    [_apis addObject:[[OASearchAmenityByNameAPI alloc] init]];
+    [_apis addObject:amenitiesApi];
     OASearchBuildingAndIntersectionsByStreetAPI *streetsApi = [[OASearchBuildingAndIntersectionsByStreetAPI alloc] init];
     [_apis addObject:streetsApi];
     OASearchStreetByCityAPI *cityApi = [[OASearchStreetByCityAPI alloc] initWithAPI:streetsApi];
@@ -794,6 +803,9 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible), @(EOAF
         {
             NSLog(@"OASearchUICore.searchInBackground error %@", e);
         }
+
+        if ([api isSearchDone:phrase])
+            break;
     }
 }
 

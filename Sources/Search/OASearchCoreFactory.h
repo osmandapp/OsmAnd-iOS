@@ -43,7 +43,7 @@ static const int SEARCH_AMENITY_BY_NAME_API_PRIORITY_IF_3_CHAR = 700;
 static const double SEARCH_AMENITY_BY_NAME_CITY_PRIORITY_DISTANCE = 0.001;
 static const double SEARCH_AMENITY_BY_NAME_TOWN_PRIORITY_DISTANCE = 0.005;
 
-@class OAObjectType, OAPOIBaseType;
+@class OAObjectType, OAPOIBaseType, OASearchResult;
 
 @interface OASearchBaseAPI : OASearchCoreAPI
 
@@ -51,6 +51,7 @@ static const double SEARCH_AMENITY_BY_NAME_TOWN_PRIORITY_DISTANCE = 0.005;
 
 - (BOOL) isSearchAvailable:(OASearchPhrase *)p;
 - (BOOL) search:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher;
+- (BOOL) search:(OASearchPhrase *)phrase fullArea:(BOOL)fullArea resultMatcher:(OASearchResultMatcher *)resultMatcher;
 - (int) getSearchPriority:(OASearchPhrase *)p;
 - (BOOL) isSearchMoreAvailable:(OASearchPhrase *)phrase;
 
@@ -101,13 +102,15 @@ static const double SEARCH_AMENITY_BY_NAME_TOWN_PRIORITY_DISTANCE = 0.005;
 
 @interface OASearchLocationAndUrlAPI : OASearchBaseAPI
 
+- (instancetype) initWithAPI:(OASearchAmenityByNameAPI *) amenitiesAPI;
+
 @end
 
 
 @interface OASearchCoreFactory : NSObject
 
 + (BOOL) DISPLAY_DEFAULT_POI_TYPES;
-+ (BOOL) setDisplayDefaultPoiTypes:(BOOL)value;
++ (void) setDisplayDefaultPoiTypes:(BOOL)value;
 
 
 @end

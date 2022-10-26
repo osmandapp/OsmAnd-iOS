@@ -47,7 +47,7 @@ typedef NS_ENUM(NSInteger, EOASearchPhraseDataType)
 - (NSString *) getUnknownSearchPhrase;
 - (BOOL) isUnknownSearchWordPresent;
 
-- (QuadRect *) getRadiusBBoxToSearch:(int)radius;
+- (QuadRect *) getRadiusBBox31ToSearch:(int)radius;
 - (QuadRect *) get1km31Rect;
 - (OASearchSettings *) getSettings;
 - (int) getRadiusLevel;

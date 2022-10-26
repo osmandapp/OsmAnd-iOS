@@ -20,6 +20,7 @@
 #import "OALocationParser.h"
 #import <RegexKitLite.h>
 #import "OAAbbreviations.h"
+#import "OAMapUtils.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/ResourcesManager.h>
@@ -377,7 +378,7 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
         }];
         for (NSString *s in searchWords)
         {
-            if (s.length > 0 && ![OALocationParser isValidOLC:s])
+            if (s.length > 0)
             {
                 _mainUnknownWordToSearch = s.trim;
                 if ([_mainUnknownWordToSearch hasSuffix:@"."])
@@ -465,8 +466,12 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
     return _firstUnknownSearchWord.length > 0;
 }
 
-- (QuadRect *) getRadiusBBoxToSearch:(int)radius
+- (QuadRect *) getRadiusBBox31ToSearch:(int)radius
 {
+    QuadRect *searchBBox31 = self.settings.getSearchBBox31;
+    if (searchBBox31)
+        return searchBBox31;
+
     int radiusInMeters = [self getRadiusSearch:radius];
     QuadRect *cache1kmRect = [self get1km31Rect];
     if (!cache1kmRect)
@@ -506,7 +511,7 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
 
 - (NSArray<NSString *> *) getRadiusOfflineIndexes:(int)meters dt:(EOASearchPhraseDataType)dt
 {
-    QuadRect *rect = meters > 0 ? [self getRadiusBBoxToSearch:meters] : nil;
+    QuadRect *rect = meters > 0 ? [self getRadiusBBox31ToSearch:meters] : nil;
     return [self getOfflineIndexes:rect dt:dt];
     
 }

@@ -12,25 +12,31 @@
 
 - (int) getSearchPriority:(OASearchPhrase *)p
 {
-    // not implemented;
+    // not implemented
     return 0;
 }
 
 - (BOOL) search:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
 {
-    // not implemented;
+    // not implemented
     return NO;
 }
 
 - (BOOL) isSearchMoreAvailable:(OASearchPhrase *)phrase
 {
-    // not implemented;
+    // not implemented
     return NO;
 }
 
 - (BOOL) isSearchAvailable:(OASearchPhrase *)phrase
 {
-    // not implemented;
+    // not implemented
+    return NO;
+}
+
+- (BOOL) isSearchDone:(OASearchPhrase *)phrase
+{
+    // not implemented
     return NO;
 }
 

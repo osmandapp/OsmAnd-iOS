@@ -33,6 +33,7 @@
 #import "OAStreetIntersection.h"
 #import "OALocationParser.h"
 #import "OrderedDictionary.h"
+#import "OAMapUtils.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IObfsCollection.h>
@@ -325,7 +326,7 @@
     if (![p isNoSelectedType] && [p getRadiusLevel] == 1)
         return -1;
 
-    if([p isLastWord:POI] || [p isLastWord:POI_TYPE])
+    if ([p isLastWord:POI] || [p isLastWord:POI_TYPE])
         return -1;
     
     if ([p isNoSelectedType])
@@ -370,7 +371,7 @@
     OsmAndAppInstance app = [OsmAndApp instance];
     const auto& obfsCollection = app.resourcesManager->obfsCollection;
 
-    QuadRect *bbox = [phrase getRadiusBBoxToSearch:DEFAULT_ADDRESS_BBOX_RADIUS * 20];
+    QuadRect *bbox = [phrase getRadiusBBox31ToSearch:DEFAULT_ADDRESS_BBOX_RADIUS * 20];
     NSArray<NSString *> *offlineIndexes = [phrase getOfflineIndexes:bbox dt:P_DATA_TYPE_ADDRESS];
     for (NSString *resId in offlineIndexes)
     {
@@ -465,10 +466,10 @@
         BOOL locSpecified = [phrase getLastTokenLocation] != nil;
         CLLocation *loc = [phrase getLastTokenLocation];
         NSMutableArray<OASearchResult *> *immediateResults = [NSMutableArray array];
-        QuadRect *streetBbox = [phrase getRadiusBBoxToSearch:DEFAULT_ADDRESS_BBOX_RADIUS];
-        QuadRect *postcodeBbox = [phrase getRadiusBBoxToSearch:DEFAULT_ADDRESS_BBOX_RADIUS * 5];
-        QuadRect *villagesBbox = [phrase getRadiusBBoxToSearch:DEFAULT_ADDRESS_BBOX_RADIUS * 3];
-        QuadRect *cityBbox = [phrase getRadiusBBoxToSearch:DEFAULT_ADDRESS_BBOX_RADIUS * 5]; // covered by separate search before
+        QuadRect *streetBbox = [phrase getRadiusBBox31ToSearch:DEFAULT_ADDRESS_BBOX_RADIUS];
+        QuadRect *postcodeBbox = [phrase getRadiusBBox31ToSearch:DEFAULT_ADDRESS_BBOX_RADIUS * 5];
+        QuadRect *villagesBbox = [phrase getRadiusBBox31ToSearch:DEFAULT_ADDRESS_BBOX_RADIUS * 3];
+        QuadRect *cityBbox = [phrase getRadiusBBox31ToSearch:DEFAULT_ADDRESS_BBOX_RADIUS * 5]; // covered by separate search before
         int priority = [phrase isNoSelectedType] ? SEARCH_ADDRESS_BY_NAME_PRIORITY : SEARCH_ADDRESS_BY_NAME_PRIORITY_RADIUS2;
         
         NSString *currentResId;
@@ -695,7 +696,7 @@
     NSString *searchWord = [phrase getUnknownWordToSearch];
     OANameStringMatcher *nm = [phrase getMainUnknownNameStringMatcher];
     
-    QuadRect *bbox = [phrase getRadiusBBoxToSearch:BBOX_RADIUS_INSIDE];
+    QuadRect *bbox = [phrase getRadiusBBox31ToSearch:BBOX_RADIUS_INSIDE];
     
     int limit = 0;
     std::shared_ptr<const OsmAnd::IQueryController> ctrl;
@@ -710,7 +711,7 @@
     searchCriteria->name = QString::fromNSString(searchWord);
     searchCriteria->bbox31 = OsmAnd::AreaI(bbox.top, bbox.left, bbox.bottom, bbox.right);
     searchCriteria->xy31 = OsmAnd::PointI(bbox.centerX, bbox.centerY);
-    
+
     const auto& obfsCollection = app.resourcesManager->obfsCollection;
     const auto search = std::shared_ptr<const OsmAnd::AmenitiesByNameSearch>(new OsmAnd::AmenitiesByNameSearch(obfsCollection));
 
@@ -748,16 +749,6 @@
                                       && ![nm matchesMap:object.getAdditionalInfo.allValues]) {
                                       return false;
                                   }
-            /*
-                                  if (sr.localeName.length == 0)
-                                  {
-                                      OAPOIBaseType *st = [_types getAnyPoiTypeByName:amenity->subType.toNSString()];
-                                      if (st)
-                                          sr.localeName = st.nameLocalized;
-                                      else
-                                          sr.localeName = amenity->subType.toNSString();
-                                  }
-             */
                                   sr.amenity = amenity;
                                   sr.preferredZoom = 17;
                                   sr.resourceId = currentResId;
@@ -1239,7 +1230,7 @@
         if ([@"std_" isEqualToString:name])
             radius = BBOX_RADIUS_NEAREST;
     }
-    QuadRect *bbox = [phrase getRadiusBBoxToSearch:radius];
+    QuadRect *bbox = [phrase getRadiusBBox31ToSearch:radius];
     
     std::shared_ptr<const OsmAnd::IQueryController> ctrl;
     ctrl.reset(new OsmAnd::FunctorQueryController([self, &resultMatcher]
@@ -1796,29 +1787,30 @@
 
 @implementation OASearchLocationAndUrlAPI
 {
+    OASearchAmenityByNameAPI *_amenitiesAPI;
+
     NSUInteger _olcPhraseHash;
     CLLocation *_olcPhraseLocation;
     OAParsedOpenLocationCode *_cachedParsedCode;
-    NSArray<NSString *> *_citySubTypes;
 }
 
-- (instancetype)init
+- (instancetype) initWithAPI:(OASearchAmenityByNameAPI *) amenitiesAPI
 {
     self = [super initWithSearchTypes:@[[OAObjectType withType:LOCATION],
                                         [OAObjectType withType:PARTIAL_LOCATION]]];
     if (self)
     {
-        _citySubTypes = @[@"city", @"town", @"village"];
+        _amenitiesAPI = amenitiesAPI;
     }
     return self;
 }
 
--(BOOL)isSearchMoreAvailable:(OASearchPhrase *)phrase
+- (BOOL) isSearchMoreAvailable:(OASearchPhrase *)phrase
 {
     return NO;
 }
 
--(BOOL)search:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
+- (BOOL) search:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
 {
     if (![phrase isUnknownSearchWordPresent])
         return NO;
@@ -1882,49 +1874,23 @@
     // Detect OLC
     OAParsedOpenLocationCode *parsedCode = _cachedParsedCode;
     CLLocation *l;
+    
+    if (!parsedCode)
+        parsedCode = [OALocationParser parseOpenLocationCode:lw];
+    
     if (parsedCode != nil)
     {
         CLLocation *latLon = parsedCode.latLon;
         // do we have local code with locality
-        if (latLon == nil && !parsedCode.full && parsedCode.placeName.length > 0)
+        if (!parsedCode.full && parsedCode.placeName.length > 0)
         {
-            NSArray<OASearchResult *> *requestResults = resultMatcher.getRequestResults;
-            if (requestResults.count > 0)
-            {
-                CLLocation *searchLocation = nil;
-                for (OASearchResult *sr in requestResults)
-                {
-                    switch (sr.objectType) {
-                        case POI:
-                        {
-                            OAPOI *a = (OAPOI *) sr.object;
-                            if ([_citySubTypes containsObject:[a.type getOsmValue]])
-                            {
-                                searchLocation = sr.location;
-                            }
-                            break;
-                        }
-                        default:
-                        {
-                            searchLocation = sr.location;
-                            break;
-                        }
-                    }
-                    if (searchLocation != nil)
-                    {
-                        break;
-                    }
-                }
-                if (searchLocation != nil)
-                {
-                    latLon = [parsedCode recover:searchLocation];
-                }
-            }
+            CLLocation *cityLocation = [self searchOLCLocation:phrase resultMatcher:resultMatcher];
+            if (cityLocation)
+                latLon = [parsedCode recover:cityLocation];
         }
         if (latLon == nil && !parsedCode.full)
-        {
             latLon = [parsedCode recover:phrase.getSettings.getOriginalLocation];
-        }
+
         l = latLon;
     }
     else
@@ -1963,6 +1929,104 @@
             [resultMatcher publish:sp];
         }
     }
+}
+
+- (CLLocation *) searchOLCLocation:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
+{
+    NSArray<NSString *> *unknownWords = phrase.getUnknownSearchWords;
+    NSString *text = unknownWords.count > 0 ? unknownWords[0] : phrase.getUnknownWordToSearch;
+
+    NSArray<NSString *> *allowedTypes = @[@"town", @"village", @"city"];
+    int totalLimit = 500;
+    QuadRect *searchBBox31 = [[QuadRect alloc] initWithLeft:0 top:0 right:INT_MAX bottom:INT_MAX];
+    OANameStringMatcher *nm = [[OANameStringMatcher alloc] initWithNamePart:text mode:CHECK_STARTS_FROM_SPACE];
+    const auto lang = QString::fromNSString(phrase.getSettings.getLang);
+    BOOL transliterate = phrase.getSettings.isTransliterate;
+
+    OASearchSettings *settings = [phrase.getSettings setSearchBBox31:searchBBox31];
+    settings = [settings setSortByName:NO];
+    settings = [settings setAddressSearch:YES];
+    settings = [settings setEmptyQueryAllowed:YES];
+
+    OASearchPhrase *olcPhrase = [phrase generateNewPhrase:text settings:settings];
+    int __block count = 0;
+    NSMutableArray<OASearchResult *> *result = [NSMutableArray array];
+    OASearchResultMatcher *rm = [[OASearchResultMatcher alloc] initWithMatcher:[[OAResultMatcher alloc] initWithPublishFunc:^BOOL(OASearchResult *__autoreleasing *object) {
+
+        if (count > totalLimit)
+            return NO;
+
+        OASearchResult *searchResult = *object;
+        const auto& amenity = searchResult.amenity;
+        if (!amenity)
+            return NO;
+
+        NSString *subType = amenity->subType.toNSString();
+        NSString *localeName = amenity->getName(lang, transliterate).toNSString();
+        NSArray<NSString *> *otherNames = searchResult.otherNames;
+
+        if (![allowedTypes containsObject:subType] || (![nm matches:localeName] && ![nm matchesMap:otherNames]))
+            return NO;
+
+        [result addObject:searchResult];
+        count++;
+
+        return YES;
+    } cancelledFunc:^BOOL{
+        return count > totalLimit || [resultMatcher isCancelled];
+    }] phrase:olcPhrase request:0 requestNumber:nil totalLimit:totalLimit];
+
+    [_amenitiesAPI search:olcPhrase resultMatcher:rm];
+
+    nm = [[OANameStringMatcher alloc] initWithNamePart:text mode:CHECK_EQUALS];
+    [result sortUsingComparator:^NSComparisonResult(OASearchResult  *_Nonnull sr1, OASearchResult *_Nonnull sr2) {
+        int o1 = 0;
+        int o2 = 0;
+
+        OAPOI *poi1;
+        OAPOI *poi2;
+        if (sr1.objectType == POI)
+            poi1 = (OAPOI *)sr1.object;
+        if (sr2.objectType == POI)
+            poi2 = (OAPOI *)sr2.object;
+
+        if (poi1 && poi2)
+        {
+            NSUInteger poi1TypeIndex = [allowedTypes indexOfObject:poi1.subType];
+            NSUInteger poi2TypeIndex = [allowedTypes indexOfObject:poi2.subType];
+
+            if (poi1TypeIndex != NSNotFound)
+            {
+                o1 += poi1TypeIndex;
+                if ([nm matches:poi1.name])
+                    o1 += 8;
+                else
+                    for (NSString *localizedName in poi1.localizedNames)
+                        if ([nm matches:localizedName])
+                        {
+                            o1 += 8;
+                            break;
+                        }
+            }
+
+            if (poi2TypeIndex != NSNotFound)
+            {
+                o2 += poi2TypeIndex;
+                if ([nm matches:poi2.name])
+                    o2 += 8;
+                else
+                    for (NSString *localizedName in poi2.localizedNames)
+                        if ([nm matches:localizedName])
+                        {
+                            o2 += 8;
+                            break;
+                        }
+            }
+        }
+        return [OAUtilities compareInt:o2 y:o1];
+    }];
+
+    return result.count > 0 ? result[0].location : nil;
 }
 
 - (BOOL) parseUrl:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
@@ -2010,7 +2074,12 @@
         _olcPhraseLocation = p.getSettings.getOriginalLocation;
         _cachedParsedCode = [OALocationParser parseOpenLocationCode:p.getUnknownSearchPhrase];
     }
-    return _cachedParsedCode == nil ? SEARCH_LOCATION_PRIORITY : SEARCH_MAX_PRIORITY;
+    return SEARCH_LOCATION_PRIORITY;
+}
+
+- (BOOL) isSearchDone:(OASearchPhrase *)phrase
+{
+    return _cachedParsedCode != nil;
 }
 
 @end
@@ -2034,7 +2103,7 @@ static BOOL DISPLAY_DEFAULT_POI_TYPES = NO;
     return DISPLAY_DEFAULT_POI_TYPES;
 }
 
-+ (BOOL) setDisplayDefaultPoiTypes:(BOOL)value
++ (void) setDisplayDefaultPoiTypes:(BOOL)value
 {
     DISPLAY_DEFAULT_POI_TYPES = value;
 }

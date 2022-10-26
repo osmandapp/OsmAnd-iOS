@@ -1150,7 +1150,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         OAAppSettings *settings = [OAAppSettings sharedManager];
         NSMutableArray<NSMutableArray<OAQuickSearchListItem *> *> *data = [NSMutableArray array];
 
-        self.citySearchedRect = [phrase getRadiusBBoxToSearch:1000];
+        self.citySearchedRect = [phrase getRadiusBBox31ToSearch:1000];
         OASearchResult *lastCity = nil;
         if (res)
         {
@@ -1594,7 +1594,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
             }
         }
 
-        return true;
+        return YES;
 
     } cancelledFunc:^BOOL {
 

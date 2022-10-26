@@ -37,6 +37,8 @@
 #import "OAHistoryHelper.h"
 #import "OAQuickSearchListItem.h"
 #import "OASearchResult.h"
+#import "OASearchCoreFactory.h"
+#import "QuadRect.h"
 
 #import "OsmAnd_Maps-Swift.h"
 #import <OsmAndCore/Utilities.h>
@@ -44,7 +46,7 @@
 #include <GeographicLib/GeoCoords.hpp>
 #include <GeographicLib/MGRS.hpp>
 
-#define kSearchCityLimit 100
+#define kSearchCityLimit 500
 #define defaultNavBarHeight 58
 #define kHintBarHeight 44
 #define kMaxEastingValue 833360
@@ -72,10 +74,11 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
 };
 
 
-@interface OAQuickSearchCoordinatesViewController() <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate, OAQuickSearchCoordinateFormatsDelegate>
+@interface OAQuickSearchCoordinatesViewController() <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate, OAQuickSearchCoordinateFormatsDelegate, OAPOISearchDelegate>
 
 @property (strong, nonatomic) IBOutlet UIView *toolbarView;
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 
 @property (weak) UITextView *tagTextView;
 
@@ -112,6 +115,10 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     BOOL _shouldHideHintBar;
     UIView *_navBarBackgroundView;
     NSTimeInterval _lastTableViewTapTime;
+    
+    NSMutableArray<OAPOI *> *_olcCities;
+    NSString *_olcSearchingCity;
+    NSString *_olcSearchingCode;
 }
 
 - (instancetype) initWithLat:(double)lat lon:(double)lon
@@ -167,6 +174,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     [self.cancelButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
     self.doneButton.hidden = YES;
     self.doneButton.enabled = NO;
+    _activityIndicator.hidden = YES;
     
     _toolbarView.frame = CGRectMake(0, DeviceScreenHeight, self.view.frame.size.width, kHintBarHeight);
     
@@ -325,6 +333,14 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     };
 }
 
+#pragma mark - OAPOISearchDelegate
+
+- (void) poiFound:(OAPOI *)poi
+{
+    if (!_olcCities)
+        _olcCities = [NSMutableArray array];
+    [_olcCities addObject:poi];
+}
 
 #pragma mark - Coordinates processing
 
@@ -450,68 +466,65 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
 
 - (void) parseLocation
 {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        if (_isOlcCitySearchRunning)
+    if (_isOlcCitySearchRunning)
+    {
+        _isOlcCitySearchRunning = NO;
+        [self updateDistanceAndDirection:YES];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.view removeSpinner];
+        });
+    }
+    CLLocation *loc = nil;
+    CLLocation *additionalLoc = nil;
+    try
+    {
+        if (_currentFormat == MAP_GEO_UTM_FORMAT)
         {
-            [[OAQuickSearchHelper instance] cancelSearchCities];
-            _isOlcCitySearchRunning = NO;
-            [self updateDistanceAndDirection:YES];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.view removeSpinner];
-            });
-        }
-        CLLocation *loc = nil;
-        CLLocation *additionalLoc = nil;
-        try
-        {
-            if (_currentFormat == MAP_GEO_UTM_FORMAT)
+            if ([self isValidValueInField:EOAQuickSearchCoordinatesTextFieldNorthing] && [self isValidValueInField:EOAQuickSearchCoordinatesTextFieldEasting] && [self isValidValueInField:EOAQuickSearchCoordinatesTextFieldZone])
             {
-                if ([self isValidValueInField:EOAQuickSearchCoordinatesTextFieldNorthing] && [self isValidValueInField:EOAQuickSearchCoordinatesTextFieldEasting] && [self isValidValueInField:EOAQuickSearchCoordinatesTextFieldZone])
-                {
-                    double northing = [self parseDoubleFromString:_northingStr];
-                    double easting = [self parseDoubleFromString:_eastingStr];
-                    NSString *zone = [_zoneStr trim];
-                    int zoneNumber = [self parseIntFromString:[zone substringToIndex:zone.length - 1]];
-                    NSString *zoneLetter = [zone substringFromIndex:zone.length - 1];
-                    
-                    NSArray<CLLocation *> *locations = [self parseUtmLocations:northing easting:easting zoneNumber:zoneNumber zoneLetter:zoneLetter];
-                    loc = locations[0];
-                    
-                    CLLocation *secondLocation;
-                    if (locations.count > 1)
-                        secondLocation = locations[1];
-                    
-                    if (!loc || (secondLocation && ![OAUtilities isCoordEqual:loc.coordinate.latitude srcLon:loc.coordinate.longitude destLat:secondLocation.coordinate.latitude destLon:secondLocation.coordinate.longitude upToDigits:6]))
-                        additionalLoc = locations[1];
-                }
-            }
-            else if (_currentFormat == MAP_GEO_OLC_FORMAT)
-            {
-                if ([self isValidValueInField:EOAQuickSearchCoordinatesTextFieldOlc])
-                    loc = [self parseOlcCode:_olcStr];
-            }
-            else if (_currentFormat == MAP_GEO_MGRS_FORMAT)
-            {
-                if ([self isValidValueInField:EOAQuickSearchCoordinatesTextFieldMgrs])
-                    loc = [self parseMgrsString:_mgrsStr];
-            }
-            else
-            {
-                if ([self isValidValueInField:EOAQuickSearchCoordinatesTextFieldLat] && [self isValidValueInField:EOAQuickSearchCoordinatesTextFieldLon])
-                {
-                    double lat = [OALocationConvert convert:_latStr];
-                    double lon = [OALocationConvert convert:_lonStr];
-                    if (!isnan(lat) && !isnan(lon))
-                        loc = [[CLLocation alloc] initWithLatitude:lat longitude:lon];
-                }
+                double northing = [self parseDoubleFromString:_northingStr];
+                double easting = [self parseDoubleFromString:_eastingStr];
+                NSString *zone = [_zoneStr trim];
+                int zoneNumber = [self parseIntFromString:[zone substringToIndex:zone.length - 1]];
+                NSString *zoneLetter = [zone substringFromIndex:zone.length - 1];
+                
+                NSArray<CLLocation *> *locations = [self parseUtmLocations:northing easting:easting zoneNumber:zoneNumber zoneLetter:zoneLetter];
+                loc = locations[0];
+                
+                CLLocation *secondLocation;
+                if (locations.count > 1)
+                    secondLocation = locations[1];
+                
+                if (!loc || (secondLocation && ![OAUtilities isCoordEqual:loc.coordinate.latitude srcLon:loc.coordinate.longitude destLat:secondLocation.coordinate.latitude destLon:secondLocation.coordinate.longitude upToDigits:6]))
+                    additionalLoc = locations[1];
             }
         }
-        catch(GeographicLib::GeographicErr err)
+        else if (_currentFormat == MAP_GEO_OLC_FORMAT)
         {
-            [self updateResults:additionalLoc loc:loc];
+            if ([self isValidValueInField:EOAQuickSearchCoordinatesTextFieldOlc])
+                loc = [self parseOlcCode:_olcStr];
         }
+        else if (_currentFormat == MAP_GEO_MGRS_FORMAT)
+        {
+            if ([self isValidValueInField:EOAQuickSearchCoordinatesTextFieldMgrs])
+                loc = [self parseMgrsString:_mgrsStr];
+        }
+        else
+        {
+            if ([self isValidValueInField:EOAQuickSearchCoordinatesTextFieldLat] && [self isValidValueInField:EOAQuickSearchCoordinatesTextFieldLon])
+            {
+                double lat = [OALocationConvert convert:_latStr];
+                double lon = [OALocationConvert convert:_lonStr];
+                if (!isnan(lat) && !isnan(lon))
+                    loc = [[CLLocation alloc] initWithLatitude:lat longitude:lon];
+            }
+        }
+    }
+    catch(GeographicLib::GeographicErr err)
+    {
         [self updateResults:additionalLoc loc:loc];
-    });
+    }
+    [self updateResults:additionalLoc loc:loc];
 }
 
 - (BOOL) isValidValueInField:(NSInteger)field
@@ -721,69 +734,71 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
 - (CLLocation *) parseOlcCode:(NSString *)olcText
 {
     CLLocation *loc = nil;
-    NSString *olcTextCode;
-    NSString *cityName = @"";
+    _olcSearchingCity = @"";
     NSArray<NSString *> *olcTextParts = [olcText componentsSeparatedByString:@" "];
     if (olcTextParts.count > 1)
     {
-        olcTextCode = olcTextParts[0];
-        cityName = olcTextParts[1];
+        _olcSearchingCode = olcTextParts[0];
+        _olcSearchingCity = [olcText substringFromIndex:_olcSearchingCode.length + 1];
     }
     else
     {
-        olcTextCode = olcText;
+        _olcSearchingCode = olcText;
     }
     OLCArea *codeArea = nil;
-    if ([OLCConverter isFullCode:olcTextCode])
+    if ([OLCConverter isFullCode:_olcSearchingCode])
     {
-        codeArea = [OLCConverter decode:olcTextCode];
+        codeArea = [OLCConverter decode:_olcSearchingCode];
     }
-    else if ([OLCConverter isShortCode:olcTextCode])
+    else if ([OLCConverter isShortCode:_olcSearchingCode])
     {
-        NSString *code = olcTextCode;
         CLLocation *mapLocation = [[OARootViewController instance].mapPanel.mapViewController getMapLocation];
-        if (!cityName || cityName.length == 0)
+        if (!_olcSearchingCity || _olcSearchingCity.length == 0)
         {
             if (mapLocation)
             {
-                NSString *newCode = [OLCConverter recoverNearestWithShortcode:code referenceLatitude:mapLocation.coordinate.latitude referenceLongitude:mapLocation.coordinate.longitude];
+                NSString *newCode = [OLCConverter recoverNearestWithShortcode:_olcSearchingCode referenceLatitude:mapLocation.coordinate.latitude referenceLongitude:mapLocation.coordinate.longitude];
                 codeArea = [OLCConverter decode:newCode];
             }
         }
         else
         {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.view addSpinner];
-            });
             _searchLocation = mapLocation;
-            _region = cityName;
-            _isOlcCitySearchRunning = YES;
-            [[OAQuickSearchHelper instance] searchCities:cityName
-                               searchLocation:_searchLocation
-                                 allowedTypes:@[@"city", @"town", @"village"]
-                                    cityLimit:kSearchCityLimit
-                                   onComplete:^(NSMutableArray *amenities)
-                                   {
-                                       _isOlcCitySearchRunning = NO;
-                                       if (amenities && amenities.count > 0)
-                                       {
-                                           OASearchResult *firstResult = amenities[0];
-                                           if (firstResult && firstResult.location)
-                                           {
-                                               _searchLocation = firstResult.location;
-                                               [self updateDistanceAndDirection:YES];
-                                           }
-                                       }
-                                        dispatch_async(dispatch_get_main_queue(), ^{
-                                            [self.view removeSpinner];
-                                        });
-                                   }
-            ];
+            _region = olcText;
+            [self startAsyncCitySearching];
         }
     }
     if (codeArea)
         loc = [[CLLocation alloc] initWithLatitude:codeArea.latitudeCenter longitude:codeArea.longitudeCenter];
     return loc;
+}
+
+- (void) startAsyncCitySearching
+{
+    [self.view addSpinner];
+    _isOlcCitySearchRunning = YES;
+    [OAQuickSearchHelper.instance searchCityLocations:_region
+                                   searchLocation:_searchLocation
+                                     searchBBox31:[[QuadRect alloc] initWithLeft:0 top:0 right:INT_MAX bottom:INT_MAX]
+                                     allowedTypes:@[@"city", @"town", @"village"]
+                                            limit:kSearchCityLimit
+                                       onComplete:^(NSArray<OASearchResult *> *searchResults)
+    {
+        _isOlcCitySearchRunning = NO;
+        [self onCitiesSearchDone:searchResults];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.view removeSpinner];
+        });
+    }];
+}
+
+- (void) onCitiesSearchDone:(NSArray<OASearchResult *> *)searchResults
+{
+    if (searchResults && searchResults.count > 0 && searchResults[0].location)
+    {
+        _searchLocation = searchResults[0].location;
+        [self updateDistanceAndDirection:YES];
+    }
 }
 
 - (double) parseDoubleFromString:(NSString *)stringValue
@@ -840,8 +855,6 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     OAMapViewController* mapVC = mapPanel.mapViewController;
     OATargetPoint *targetPoint = [mapVC.mapLayers.contextMenuLayer getUnknownTargetPoint:_searchLocation.coordinate.latitude longitude:_searchLocation.coordinate.longitude];
     targetPoint.centerMap = YES;
-    const OsmAnd::LatLon latLon(location.coordinate.latitude, location.coordinate.longitude);
-    Point31 pos = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(latLon)];
     [mapPanel showContextMenu:targetPoint];
     [self.presentingViewController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }

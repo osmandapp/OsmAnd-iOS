@@ -40,6 +40,7 @@
 #import "OAQuickSearchHelper.h"
 #import "OAWeatherHelper.h"
 #import "OAWeatherForecastDetailsViewController.h"
+#import "QuadRect.h"
 #import "OASearchUICore.h"
 
 #include <OsmAndCore/WorldRegions.h>
@@ -1498,66 +1499,66 @@ static BOOL _repositoryUpdated = NO;
         };
 
         // Regions that start with given name have higher priority
-        NSPredicate *predicateBeginsWith = [NSPredicate predicateWithFormat:@"name BEGINSWITH[cd] %@", searchString];
-        NSMutableArray<OAWorldRegion *> *regionsBeginsWith = [NSMutableArray array];
-        [regionsBeginsWith addObjectsFromArray:[searchableContent filteredArrayUsingPredicate:predicateBeginsWith]];
-        if (regionsBeginsWith.count == 0)
+        NSPredicate *startsWith = [NSPredicate predicateWithFormat:@"name BEGINSWITH[cd] %@", searchString];
+        NSMutableArray *regionsStartsWith = [[searchableContent filteredArrayUsingPredicate:startsWith] mutableCopy];
+        if ([regionsStartsWith count] == 0)
         {
-            NSPredicate *predicateAnyBeginsWithSearchString = [NSPredicate predicateWithFormat:@"ANY allNames BEGINSWITH[cd] %@", searchString];
-            [regionsBeginsWith addObjectsFromArray:[searchableContent filteredArrayUsingPredicate:predicateAnyBeginsWithSearchString]];
+            NSPredicate *anyStartsWith = [NSPredicate predicateWithFormat:@"ANY allNames BEGINSWITH[cd] %@", searchString];
+            [regionsStartsWith addObjectsFromArray:[searchableContent filteredArrayUsingPredicate:anyStartsWith]];
         }
-        [regionsBeginsWith sortUsingComparator:regionComparator];
+        [regionsStartsWith sortUsingComparator:regionComparator];
 
         // Regions that only contain given string have less priority
-        NSPredicate *predicateOnlyContains = [NSPredicate predicateWithFormat:
-                                    @"(name CONTAINS[cd] %@) AND NOT (name BEGINSWITH[cd] %@)",
-                                     searchString, searchString];
-        NSMutableArray<OAWorldRegion *> *regionsOnlyContains = [NSMutableArray array];
-        [regionsOnlyContains addObjectsFromArray:[searchableContent filteredArrayUsingPredicate:predicateOnlyContains]];
-        if (regionsOnlyContains.count == 0)
+        NSPredicate *onlyContains = [NSPredicate predicateWithFormat:
+                                     @"(name CONTAINS[cd] %@) AND NOT (name BEGINSWITH[cd] %@)",
+                                     searchString,
+                                     searchString];
+        NSMutableArray *regionsOnlyContains = [[searchableContent filteredArrayUsingPredicate:onlyContains] mutableCopy];
+        if ([regionsOnlyContains count] == 0)
         {
-            NSPredicate *predicateAnyOnlyContains = [NSPredicate predicateWithFormat:
+            NSPredicate *anyOnlyContains = [NSPredicate predicateWithFormat:
                                             @"(ANY allNames CONTAINS[cd] %@) AND NOT (ANY allNames BEGINSWITH[cd] %@)",
                                             searchString,
                                             searchString];
-            [regionsOnlyContains addObjectsFromArray:[searchableContent filteredArrayUsingPredicate:predicateAnyOnlyContains]];
+            [regionsOnlyContains addObjectsFromArray:[searchableContent filteredArrayUsingPredicate:anyOnlyContains]];
         }
         [regionsOnlyContains sortUsingComparator:regionComparator];
 
         // Assemble all regions all togather
-        NSArray<OAWorldRegion *> *regions = [regionsBeginsWith arrayByAddingObjectsFromArray:regionsOnlyContains];
-        _searchResults = [self createSearchResult:regions byMapRegion:NO];
+        NSArray *regions = [regionsStartsWith arrayByAddingObjectsFromArray:regionsOnlyContains];
+        NSArray *resultByContains = [self createSearchResult:regions byMapRegion:NO];
+        _searchResults = resultByContains;
         [_tableView reloadData];
 
-        [[OAQuickSearchHelper instance] searchCities:searchString
-                                      searchLocation:[[CLLocation alloc] initWithLatitude:_app.worldRegion.bboxTopLeft.latitude
-                                                                                longitude:_app.worldRegion.bboxBottomRight.longitude]
-                                        allowedTypes:@[@"city", @"town"]
-                                           cityLimit:kSearchCityLimit
-                                          onComplete:^(NSMutableArray *amenities)
+        [self.view addSpinner];
+        [OAQuickSearchHelper.instance searchCityLocations:searchString
+                                       searchLocation:_app.locationServices.lastKnownLocation
+                                         searchBBox31:[[QuadRect alloc] initWithLeft:0 top:0 right:INT_MAX bottom:INT_MAX]
+                                         allowedTypes:@[@"city", @"town"]
+                                                limit:kSearchCityLimit
+                                           onComplete:^(NSArray<OASearchResult *> *searchResults)
          {
-            NSMutableArray *citiesContainsSearchString = [NSMutableArray array];
-            for (OASearchResult *amenity in amenities)
+            NSMutableArray *regionsByCity = [NSMutableArray array];
+            for (OASearchResult *amenity in searchResults)
             {
-                OAWorldRegion *region = [_app.worldRegion findAtLat:amenity.location.coordinate.latitude
-                                                                lon:amenity.location.coordinate.longitude];
+                OAWorldRegion *region = [_app.worldRegion findAtLat:amenity.location.coordinate.latitude lon:amenity.location.coordinate.longitude];
                 if (region)
                 {
                     NSArray *searchResult = [self createSearchResult:@[region] byMapRegion:YES];
                     if (searchResult.count == 1 && [searchResult.firstObject isKindOfClass:OAResourceItem.class])
                     {
                         amenity.relatedObject = searchResult.firstObject;
-                        [citiesContainsSearchString addObject:amenity];
+                        [regionsByCity addObject:amenity];
                     }
                     else
                     {
-                        [citiesContainsSearchString addObjectsFromArray:searchResult];
+                        [regionsByCity addObjectsFromArray:searchResult];
                     }
                 }
             }
-            if (citiesContainsSearchString.count > 0)
+            if (regionsByCity.count > 0)
             {
-                _searchResults = [_searchResults arrayByAddingObjectsFromArray:citiesContainsSearchString];
+                _searchResults = [resultByContains arrayByAddingObjectsFromArray:regionsByCity];
                 [_tableView reloadData];
             }
             [self.view removeSpinner];

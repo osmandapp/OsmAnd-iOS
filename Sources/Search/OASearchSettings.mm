@@ -16,6 +16,7 @@
 
 @property (nonatomic) int pRadiusLevel;
 @property (nonatomic) CLLocation *pOriginalLocation;
+@property (nonatomic) QuadRect *pSearchBBox31;
 @property (nonatomic) OAWorldRegion *pRegions;
 @property (nonatomic) NSString *pRegionLang;
 @property (nonatomic) int pTotalLimit;
@@ -56,6 +57,7 @@
             self.pTransliterateIfMissing = s.pTransliterateIfMissing;
             self.pTotalLimit = s.pTotalLimit;
             self.pOriginalLocation = s.pOriginalLocation;
+            self.pSearchBBox31 = s.pSearchBBox31;
             self.pRegions = s.pRegions;
             self.pRegionLang = s.pRegionLang;
             [self setOfflineIndexes:[s getOfflineIndexes]];
@@ -137,6 +139,18 @@
     double distance = _pOriginalLocation == nil ? -1 :  [OAMapUtils getDistance:l.coordinate second:_pOriginalLocation.coordinate];
     s.pRegionLang = (distance > MIN_DISTANCE_REGION_LANG_RECALC || distance == -1 || !_pRegionLang ) ? [self calculateRegionLang:l] : _pRegionLang;
     s.pOriginalLocation = l;
+    return s;
+}
+
+- (QuadRect *) getSearchBBox31
+{
+    return self.pSearchBBox31;
+}
+
+- (OASearchSettings *) setSearchBBox31:(QuadRect *)searchBBox31
+{
+    OASearchSettings *s = [[OASearchSettings alloc] initWithSettings:self];
+    s.pSearchBBox31 = searchBBox31;
     return s;
 }
 

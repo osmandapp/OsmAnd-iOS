@@ -23,8 +23,8 @@ jobs:
   build:
     runs-on: macOS-latest
     steps:
-    # - name: Install xcode tools
-    #   run: sudo xcode-select --install
+     - name: Install xcode tools
+       run: sudo xcode-select --install
     # - name: Install brew
     #   run:  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     # - name: Install svn

@@ -169,6 +169,8 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
         fileName = filePath.lastPathComponent;
     else if (fileSettingsItem.subtype == EOASettingsItemFileSubtypeGpx)
         fileName = [filePath stringByReplacingOccurrencesOfString:[subtypeFolder stringByAppendingString:@"/"] withString:@""];
+    else if ([OAFileSettingsItemFileSubtype isMap:fileSettingsItem.subtype])
+        fileName = filePath.lastPathComponent;
     else
         fileName = [filePath substringFromIndex:[filePath indexOf:subtypeFolder.lastPathComponent]];
 

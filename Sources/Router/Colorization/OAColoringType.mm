@@ -16,6 +16,7 @@
 #import "OAAppSettings.h"
 #import "OARouteExporter.h"
 #import "OARouteProvider.h"
+#import "OAIAPHelper.h"
 
 #include <CommonCollections.h>
 #include <commonOsmAndCore.h>
@@ -28,9 +29,8 @@ static OAColoringType * ALTITUDE;
 static OAColoringType * SLOPE;
 static OAColoringType * ATTRIBUTE;
 
-// TODO: make other types available in the new subscription
-static NSArray<OAColoringType *> * ROUTE_COLORING_TYPES = @[OAColoringType.DEFAULT, OAColoringType.CUSTOM_COLOR, OAColoringType.ALTITUDE, /*OAColoringType.SLOPE, OAColoringType.ATTRIBUTE*/];
-static NSArray<OAColoringType *> * TRACK_COLORING_TYPES = @[OAColoringType.TRACK_SOLID, OAColoringType.ALTITUDE, /*OAColoringType.SPEED, OAColoringType.SLOPE, OAColoringType.ATTRIBUTE*/];
+static NSArray<OAColoringType *> * ROUTE_COLORING_TYPES = @[OAColoringType.DEFAULT, OAColoringType.CUSTOM_COLOR, OAColoringType.ALTITUDE, OAColoringType.SLOPE, OAColoringType.ATTRIBUTE];
+static NSArray<OAColoringType *> * TRACK_COLORING_TYPES = @[OAColoringType.TRACK_SOLID, OAColoringType.ALTITUDE, OAColoringType.SPEED, OAColoringType.SLOPE, OAColoringType.ATTRIBUTE];
 
 @implementation OAColoringType
 
@@ -203,13 +203,11 @@ static NSArray<OAColoringType *> * TRACK_COLORING_TYPES = @[OAColoringType.TRACK
     return YES;
 }
 
-
-- (BOOL) isAvailableInSubscription:(NSString *)attributeName route:(BOOL)route
+- (BOOL) isAvailableInSubscription
 {
-    // TODO: restrict access with subscription
-//    if ((isRouteInfoAttribute() && route) || this == ColoringType.SLOPE) {
-//        return InAppPurchaseHelper.isOsmAndProAvailable(app);
-//    }
+    if ([self isRouteInfoAttribute] || self == self.class.SLOPE)
+        return [OAIAPHelper isOsmAndProAvailable];
+
     return YES;
 }
 

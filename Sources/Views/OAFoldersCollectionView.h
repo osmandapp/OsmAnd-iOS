@@ -13,9 +13,10 @@
 @protocol OAFoldersCellDelegate <NSObject>
 
 @required
-
 - (void)onItemSelected:(NSInteger)index;
-- (void)askForPaidProduct:(NSString *)productIdentifier;
+
+@optional
+- (void)onDisabledItemSelected:(NSInteger)index;
 
 @end
 

@@ -377,7 +377,7 @@ static NSMutableArray *activePopups;
         needShow = YES;
 
         title = OALocalizedString(@"pro_features");
-        descText = OALocalizedString(@"option_available_only_by_subscription");
+        descText = OALocalizedString(@"purchases_feature_desc_pro_widgets");
         okButtonName = OALocalizedString(@"subscriptions");
         cancelButtonName = OALocalizedString(@"shared_string_cancel");
         iconName = @"ic_custom_advanced_widgets_colored_day";

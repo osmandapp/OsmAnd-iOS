@@ -810,7 +810,10 @@
             currentRoute = 0;
 
         OAColoringType *routeColoringType = _routeColoringType;
-        if ([routeColoringType isGradient] && ![routeColoringType isAvailableForDrawingRoute:route attributeName:nil])
+        BOOL isAvailable = [routeColoringType isAvailableInSubscription];
+        if (!isAvailable)
+            routeColoringType = OAColoringType.DEFAULT;
+        else if ([routeColoringType isGradient] && ![routeColoringType isAvailableForDrawingRoute:route attributeName:nil])
             routeColoringType = OAColoringType.DEFAULT;
         else if ([routeColoringType isRouteInfoAttribute] && ![routeColoringType isAvailableForDrawingRoute:route attributeName:_routeInfoAttribute])
             routeColoringType = OAColoringType.DEFAULT;

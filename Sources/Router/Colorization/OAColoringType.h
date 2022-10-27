@@ -32,6 +32,7 @@
 
 - (BOOL) isAvailableForDrawingRoute:(OARouteCalculationResult *)route attributeName:(NSString *)attributeName;
 - (BOOL) isAvailableForDrawingTrack:(OAGPXDocument *)selectedGpxFile attributeName:(NSString *)attributeName;
+- (BOOL) isAvailableInSubscription;
 
 - (OAGradientScaleType *) toGradientScaleType;
 

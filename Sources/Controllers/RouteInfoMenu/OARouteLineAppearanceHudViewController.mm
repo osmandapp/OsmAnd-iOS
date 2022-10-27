@@ -8,6 +8,7 @@
 
 #import "OARouteLineAppearanceHudViewController.h"
 #import "OABaseTrackMenuHudViewController.h"
+#import "OAPluginPopupViewController.h"
 #import "OARootViewController.h"
 #import "OAMapHudViewController.h"
 #import "OAPreviewRouteLineLayer.h"
@@ -33,6 +34,8 @@
 #import "OAMapLayers.h"
 #import "OAPreviewRouteLineInfo.h"
 #import "OADefaultFavorite.h"
+#import "OARouteStatisticsHelper.h"
+#import "OAProducts.h"
 
 #define kColorDayMode OALocalizedString(@"map_settings_day")
 #define kColorNightMode OALocalizedString(@"map_settings_night")
@@ -295,25 +298,24 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
             [types addObject:type];
     }
 
-    // TODO: add other coloring types with the new subscription
-//    NSArray<NSString *> *attributes = [OARouteStatisticsHelper getRouteStatisticAttrsNames:YES];
-//    for (NSString *attribute in attributes)
-//    {
-//        NSString *title = OALocalizedString([NSString stringWithFormat:@"%@_name", attribute]);
-//        NSString *topDescription = OALocalizedString([NSString stringWithFormat:@"%@_description", attribute]);
-//        NSString *bottomDescription = OALocalizedString(@"white_color_undefined");
-//        OARouteAppearanceType *type = [[OARouteAppearanceType alloc] initWithColoringType:OAColoringType.ATTRIBUTE
-//                                                                                    title:title
-//                                                                                 attrName:attribute
-//                                                                           topDescription:topDescription
-//                                                                        bottomDescription:bottomDescription
-//                                                                                 isActive:YES];
-//        [types addObject:type];
-//
-//        if ([_previewRouteLineInfo.coloringType isRouteInfoAttribute]
-//                && [_previewRouteLineInfo.routeInfoAttribute isEqualToString:attribute])
-//            _selectedType = type;
-//    }
+    NSArray<NSString *> *attributes = [OARouteStatisticsHelper getRouteStatisticAttrsNames:YES];
+    for (NSString *attribute in attributes)
+    {
+        NSString *title = OALocalizedString([NSString stringWithFormat:@"%@_name", attribute]);
+        NSString *topDescription = OALocalizedString([NSString stringWithFormat:@"%@_description", attribute]);
+        NSString *bottomDescription = OALocalizedString(@"white_color_undefined");
+        OARouteAppearanceType *type = [[OARouteAppearanceType alloc] initWithColoringType:OAColoringType.ATTRIBUTE
+                                                                                    title:title
+                                                                                 attrName:attribute
+                                                                           topDescription:topDescription
+                                                                        bottomDescription:bottomDescription
+                                                                                 isActive:YES];
+        [types addObject:type];
+
+        if ([_previewRouteLineInfo.coloringType isRouteInfoAttribute]
+                && [_previewRouteLineInfo.routeInfoAttribute isEqualToString:attribute])
+            _selectedType = type;
+    }
 
     _coloringTypes = types;
 
@@ -375,6 +377,14 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     [_mapPanelViewController.hudViewController hideTopControls];
     [_mapPanelViewController.hudViewController updateMapRulerDataWithDelay];
     [self refreshPreviewLayer];
+    [self checkColoringAvailability];
+    BOOL isAvailable = [_selectedType.coloringType isAvailableInSubscription];
+    if (!isAvailable && _colorValuesCell)
+    {
+        [_colorValuesCell.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:[_colorValuesCell.collectionView getSelectedIndex] inSection:0]
+                                                atScrollPosition:UICollectionViewScrollPositionLeft
+                                                        animated:YES];
+    }
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -739,6 +749,19 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     }];
 }
 
+- (void)checkColoringAvailability
+{
+    BOOL isAvailable = [_selectedType.coloringType isAvailableInSubscription];
+    if (!isAvailable)
+        [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Advanced_Widgets];
+    self.applyButton.userInteractionEnabled = isAvailable;
+    [self.applyButton setTitleColor:isAvailable ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer)
+                           forState:UIControlStateNormal];
+    self.applyNavBarButton.userInteractionEnabled = isAvailable;
+    [self.applyNavBarButton setTitleColor:isAvailable ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer)
+                           forState:UIControlStateNormal];
+}
+
 - (OAGPXTableCellData *)generateTopDescriptionCellData
 {
     return [OAGPXTableCellData withData:@{
@@ -965,11 +988,21 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         {
             sectionData.values[@"color_map_style"] = @(toggle);
             if (toggle)
+            {
                 _selectedType = [self getRouteAppearanceType:OAColoringType.DEFAULT];
+                self.applyButton.userInteractionEnabled = YES;
+                self.applyNavBarButton.userInteractionEnabled = YES;
+                [self.applyButton setTitleColor:UIColorFromRGB(color_primary_purple) forState:UIControlStateNormal];
+                [self.applyNavBarButton setTitleColor:UIColorFromRGB(color_primary_purple) forState:UIControlStateNormal];
+            }
             else if (_selectedType.coloringType == OAColoringType.DEFAULT)
+            {
                 _selectedType = [self getRouteAppearanceType:OAColoringType.CUSTOM_COLOR];
+            }
             else
+            {
                 _selectedType = [self getRouteAppearanceType:_previewRouteLineInfo.coloringType];
+            }
 
             _previewRouteLineInfo.coloringType = _selectedType.coloringType;
             [self updateRouteLayer:_previewRouteLineInfo];
@@ -1660,6 +1693,8 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
                         [self.tableView reloadData];
                     }
                     completion:nil];
+
+    [self checkColoringAvailability];
 }
 
 #pragma mark - OAColorsTableViewCellDelegate

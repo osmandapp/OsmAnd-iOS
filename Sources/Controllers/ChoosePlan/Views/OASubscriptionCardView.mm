@@ -177,7 +177,7 @@
     );
     self.labelTitle.frame = CGRectMake(
             leftMargin,
-            9.,
+            self.viewTitleContainer.frame.origin.y,
             titleSize.width,
             titleSize.height
     );

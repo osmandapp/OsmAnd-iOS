@@ -87,6 +87,7 @@
             OsmAnd::MapLayerConfiguration config;
             config.setOpacityFactor(self.app.data.overlayAlpha);
             [self.mapView setMapLayerConfiguration:self.layerIndex configuration:config forcedUpdate:NO];
+            [self.mapViewController updateSymbolsLayerProviderAlpha];
         }
         else
         {
@@ -106,6 +107,7 @@
                     OsmAnd::MapLayerConfiguration config;
                     config.setOpacityFactor(self.app.data.overlayAlpha);
                     [self.mapView setMapLayerConfiguration:self.layerIndex configuration:config forcedUpdate:NO];
+                    [self.mapViewController updateSymbolsLayerProviderAlpha];
                 }
             }
         }
@@ -122,14 +124,20 @@
     [self updateOverlayLayer];
 }
 
+- (float) getAlpha
+{
+    BOOL isOverlayLayerDisplayed = self.app.data.overlayMapSource;
+    return isOverlayLayerDisplayed ? self.app.data.overlayAlpha : 0.0f;
+}
+
 - (void) onOverlayLayerAlphaChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.mapViewController runWithRenderSync:^{
             OsmAnd::MapLayerConfiguration config;
-            config.setOpacityFactor(self.app.data.overlayAlpha);
+            config.setOpacityFactor([self getAlpha]);
             [self.mapView setMapLayerConfiguration:self.layerIndex configuration:config forcedUpdate:NO];
-            [self.mapViewController updateLayerProviderAlpha];
+            [self.mapViewController updateSymbolsLayerProviderAlpha];
         }];
     });
 }
@@ -142,11 +150,11 @@
             {
                 [self.mapView resetProviderFor:self.layerIndex];
                 _rasterOverlayMapProvider.reset();
-                [self.mapViewController updateLayerProviderAlpha];
+                [self.mapViewController updateSymbolsLayerProviderAlpha];
             }
             else
             {
-                [self.mapViewController updateLayerProviderAlpha];
+                [self.mapViewController updateSymbolsLayerProviderAlpha];
             }
         }];
     });

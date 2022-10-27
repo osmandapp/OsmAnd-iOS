@@ -186,6 +186,7 @@
 
 - (void) onApplicationDestroyed;
 
-- (void) updateLayerProviderAlpha;
+- (void) updateRasterLayerProviderAlpha:(float)alpha;
+- (void) updateSymbolsLayerProviderAlpha;
 
 @end

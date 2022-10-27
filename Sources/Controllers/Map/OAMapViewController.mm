@@ -1891,7 +1891,6 @@
                                                                                    rasterTileSize));
             
             [_mapView addTiledSymbolsProvider:kObfSymbolSection provider:_obfMapSymbolsProvider];
-            [self updateLayerProviderAlpha];
             
             _app.resourcesManager->getWeatherResourcesManager()->setBandSettings(OAWeatherHelper.sharedInstance.getBandSettings);
         }
@@ -2009,20 +2008,27 @@
     }
 }
 
-- (void) updateLayerProviderAlpha
+- (void) updateRasterLayerProviderAlpha:(float)alpha
 {
-    BOOL isOverlayLayerDisplayed = _app.data.overlayMapSource;
-    float alpha = isOverlayLayerDisplayed ? _app.data.overlayAlpha : 0.0f;
-    
     OsmAnd::MapLayerConfiguration mapLayerConfiguration;
-    mapLayerConfiguration.setOpacityFactor(1.0f - _app.data.overlayAlpha);
+    mapLayerConfiguration.setOpacityFactor(1.0f - alpha);
     [_mapView setMapLayerConfiguration:kObfRasterLayer configuration:mapLayerConfiguration forcedUpdate:NO];
+}
 
-    BOOL keepLabels = [[OAAppSettings sharedManager].keepMapLabelsVisible get];
+- (void) updateSymbolsLayerProviderAlpha
+{
+    float symbolsAlpha = 1.0;
+    if (![[OAAppSettings sharedManager].keepMapLabelsVisible get])
+    {
+        float overlayAlpha = _app.data.overlayMapSource ? _app.data.overlayAlpha : 0.0;
+        float underlayAlpha = _app.data.underlayMapSource ? _app.data.underlayAlpha : 0.0;
+        symbolsAlpha = 1.0 - overlayAlpha - underlayAlpha;
+        if (symbolsAlpha < 0)
+            symbolsAlpha = 0;
+    }
     
-    alpha = keepLabels ? 1.0f : 1.0f - alpha;
     OsmAnd::SymbolSubsectionConfiguration symbolSubsectionConfiguration;
-    symbolSubsectionConfiguration.setOpacityFactor(alpha);
+    symbolSubsectionConfiguration.setOpacityFactor(symbolsAlpha);
     [_mapView setSymbolSubsectionConfiguration:kObfSymbolSection configuration:symbolSubsectionConfiguration];
 }
 

@@ -335,8 +335,7 @@
             kCellType: [OAFoldersCell getCellIdentifier],
             kTableValues: @{
                 @"array_value": trackColoringTypes,
-                @"selected_integer_value": @([_availableColoringTypes indexOfObject:_selectedItem]),
-                @"scroll_to_selected": @(YES)
+                @"selected_integer_value": @([_availableColoringTypes indexOfObject:_selectedItem])
             },
             kCellTitle: OALocalizedString(@"fav_color")
     }];

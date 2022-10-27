@@ -15,6 +15,7 @@
 @interface OAStatusBackupViewController : OACompoundViewController
 
 - (instancetype) initWithBackup:(OAPrepareBackupResult *)backup status:(OABackupStatus *)status;
+- (instancetype) initWithBackup:(OAPrepareBackupResult *)backup status:(OABackupStatus *)status openConflicts:(BOOL)openConflicts;
 
 @property (nonatomic, weak) id<OABackupTypesDelegate> delegate;
 

@@ -19,6 +19,7 @@
 #import "OAMultiIconTextDescCell.h"
 #import "OAIconTitleValueCell.h"
 #import "OATitleIconProgressbarCell.h"
+#import "OAValueTableViewCell.h"
 #import "OATitleDescrRightIconTableViewCell.h"
 #import "OAMainSettingsViewController.h"
 #import "OARestoreBackupViewController.h"
@@ -295,7 +296,7 @@
                 };
                 [backupRows addObject:cancellCell];
             }
-            else if (_status == OABackupStatus.MAKE_BACKUP || _status == OABackupStatus.CONFLICTS)
+            else if (_status == OABackupStatus.MAKE_BACKUP)
             {
                 NSDictionary *backupNowCell = @{
                     @"cellId": OAButtonRightIconCell.getCellIdentifier,
@@ -304,6 +305,16 @@
                     @"image": @"ic_custom_cloud_upload"
                 };
                 [backupRows addObject:backupNowCell];
+            }
+            else if (_status == OABackupStatus.CONFLICTS)
+            {
+                NSDictionary *conflictsCell = @{
+                    @"cellId": OAValueTableViewCell.getCellIdentifier,
+                    @"name": @"viewConflictsCell",
+                    @"title": OALocalizedString(@"cloud_view_conflicts"),
+                    @"value": @(_info.filteredFilesToMerge.count)
+                };
+                [backupRows addObject:conflictsCell];
             }
             else if (_status == OABackupStatus.NO_INTERNET_CONNECTION || _status == OABackupStatus.ERROR)
             {
@@ -418,6 +429,13 @@
     }
 }
 
+- (void) onViewConflictsPressed
+{
+    OAStatusBackupViewController *statusBackupViewController = [[OAStatusBackupViewController alloc] initWithBackup:_backup status:_status openConflicts:YES];
+    statusBackupViewController.delegate = self;
+    [self.navigationController pushViewController:statusBackupViewController animated:YES];
+}
+
 - (void)onRetryPressed
 {
     [_backupHelper prepareBackup];
@@ -496,6 +514,24 @@
 
         if (cell.needsUpdateConstraints)
             [cell updateConstraints];
+
+        return cell;
+    }
+    else if ([cellId isEqualToString:OAValueTableViewCell.getCellIdentifier])
+    {
+        OAValueTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:OAValueTableViewCell.getCellIdentifier];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAValueTableViewCell *)[nib objectAtIndex:0];
+            cell.titleLabel.textColor = UIColorFromRGB(color_primary_purple);
+            cell.titleLabel.font = [UIFont systemFontOfSize:17. weight:UIFontWeightMedium];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        }
+        cell.titleLabel.text = item[@"title"];
+        cell.valueLabel.text = [item[@"value"] stringValue];
 
         return cell;
     }
@@ -638,6 +674,10 @@
     else if ([itemId isEqualToString:@"restoreFromFile"])
     {
         [self onRestoreFromFilePressed];
+    }
+    else if ([itemId isEqualToString:@"viewConflictsCell"])
+    {
+        [self onViewConflictsPressed];
     }
     else if ([itemId isEqualToString:@"backupNow"])
     {

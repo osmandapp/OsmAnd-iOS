@@ -2177,7 +2177,7 @@
 "delete_waypoints" = "Iscantzella sos puntos de coladòrgiu";
 "gpx_split_interval_descr" = "Ischerta s\'intervallu in ue sos sinnos cun distàntzia o oràriu in sa mapa ant a èssere ammustrados.";
 "nautical" = "Nàutica";
-"delete_group_confirm" = "Ses seguru de chèrrere iscantzellare su grupu ”%@”?";
+"delete_group_confirm" = "Ses seguru de chèrrere iscantzellare su grupu \"%@\"?";
 "read_full_description" = "Leghe sa descritzione intrea";
 "shared_string_overview" = "Vista generale";
 
@@ -2598,7 +2598,7 @@
 "fetching_from_server" = "Recuperende sos datos dae su serbidore";
 "backup_complete" = "Còpia de seguresa acabada";
 "duration_ago" = "%@ a como";
-"you_can_get_feature_as_part_of_pattern" = "Otene “%@” comente parte de su pranu %@. Cunfrontu:";
+"you_can_get_feature_as_part_of_pattern" = "Otene \"%@\" comente parte de su pranu %@. Cunfrontu:";
 "subscription_cancel_description" = "Annulla·lu in cale si siat momentu in s'AppStore.";
 "shared_string_now" = "Como";
 "subscription_banner_free_maps_title" = "Podes iscarrigare %i mapas de badas.";
@@ -2627,7 +2627,7 @@
 "simulate_location_movement_speed_x4_desc" = "Sa lestresa de su movimentu de sa positzione durante sa simulatzione at a èssere bator bortas sa lestresa in s'archìviu seletzionadu.";
 "routing_attr_allow_private_for_truck_description" = "Permite s'atzessu a sas àreas privadas pro sos càmions";
 "copy_poi_name" = "Còpia su nùmene de su PDI";
-"empty_purchases_description" = "Si sa còmpora tua non benit ammustrada inoghe toca in “%@” o cuntata su grupu de suportu nostru.";
+"empty_purchases_description" = "Si sa còmpora tua non benit ammustrada inoghe toca in \"%@\" o cuntata su grupu de suportu nostru.";
 "osm_live_payment_subscription_management_aid" = "Su pagamentu s'at a addebitare a su contu de Apple ID tuo a pustis de sa cunfirma de sa còmpora.\n\nS'abbonamentu si rinnovat in automàticu francu chi bèngiat annulladu a su nessi 24 oras in antis de sa fine de su perìodu currente. Su contu tuo at a retzire un'addèbitu intre 24 oras in antis de sa fine de su perìodu currente.\n\nPodes amministrare e annullare sos abbonamentos tuos andende a sas impostatziones de su contu tuo in s'App Store a pustis de sa còmpora";
 "compass_options_description" = "Incarca in sa bùssola pro cambiare sa modalidade de orientamentu de sa mapa";
 "subscription_banner_no_free_maps_title" = "As gastadu totu sos iscarrigamentos de badas";
@@ -2743,3 +2743,4 @@
 "map_download_privacy_descr" = "Iscarrighende mapas atzetas sas <a href='https://osmand.net/docs/legal/terms-of-use'> Cunditziones de Impreu</a> e sa <a href='https://osmand.net/docs/legal/privacy-policy'>Polìtica de Riservadesa</a>.";
 "shared_string_profile" = "Profilu";
 "map_widget_rendering_fps" = "FPS de sa renderizatzione de sa mapa";
+"ios_release_4_3" = "• Animatzione flùida pro sos càmbios de positzione durante su movimentu\n• CarPlay: corsias annantas, visualizatzione 2.5D, problemas àudio risoltos durante la connessione pro mèdiu de Bluetooth\n• Presentatzione de pianos de còmpora noos: abbonamentos \"OsmAnd Pro\" cun atzessu a totu sas funtzionalidades e còmpora \"Maps+\" cun iscarrigamentos chene lìmites de mapas e atzessu a sas estensiones a pagamentu.\n• Annanta sa còpia de seguresa in sa nue e previsiones de su mèteu non in lìnia pro sos impreadores de OsmAnd Pro\n• Ischermada noa discansosa \"Còmpora\" cun s'elencu de totu sas còmporas\n• Avantàgios pro sos collaboradores ativos de OpenStreetMap.org\n• Sas rastas como si podent colorare in base a s'artària, a sa velotzidade o sa pendèntzia\n• Sas mapas non in lìnia como sunt atzessìbiles pro mèdiu de s'aplicatzione Archìvios\n• Preferidos: annanta s'ingendradura de còpias de seguresa locales a pustis de cada modìfica, còpias de seguresa atzessìbiles dae s'aplicatzione Archìvios\n• Sos PDI sarvados in sos preferidos ant a ammentare e ammustrare totu sos datos de sos PDI fintzas chene una mapa non in lìnia\n• GPX at annantu su suportu pro sas teichetas link, cmt, e desc e pro estensiones personalizadas eventuales\n• Annanta una modalidade pro su butone Bùssola\n• Risoltu unu problema cun su formadu de sas coordinadas UTM\n• Risoltu unu problema cun sos puntos de coladòrgiu in sa navigatzione\n";

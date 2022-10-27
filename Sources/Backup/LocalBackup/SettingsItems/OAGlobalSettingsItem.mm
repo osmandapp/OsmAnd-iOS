@@ -82,9 +82,8 @@
 
 // MARK: OASettingsItemWriter
 
-- (NSDictionary *) getSettingsJson
+- (void)writeItemsToJson:(id)json
 {
-    NSMutableDictionary *json = [NSMutableDictionary new];
     NSMapTable<NSString *, OACommonPreference *> *globalPreferences = [OAAppSettings.sharedManager getPreferences:YES];
     for (NSString *key in globalPreferences.keyEnumerator)
     {
@@ -96,7 +95,6 @@
                 json[key] = stringValue;
         }
     }
-    return json;
 }
 
 @end

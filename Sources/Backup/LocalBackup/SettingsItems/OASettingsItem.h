@@ -43,7 +43,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) applyAdditionalParams:(NSString *)filePath;
 - (BOOL) applyFileName:(NSString *)fileName;
 + (EOASettingsItemType) parseItemType:(id)json error:(NSError * _Nullable *)error;
-- (NSDictionary *) getSettingsJson;
 - (long) getEstimatedSize;
 - (NSString *)getPublicName;
 

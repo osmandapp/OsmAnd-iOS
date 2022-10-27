@@ -106,7 +106,7 @@
 
 - (NSString *)getPublicName
 {
-    return OALocalizedString(@"osm_edits");
+    return OALocalizedString(@"osm_edits_title");
 }
 
 - (BOOL) shouldReadOnCollecting
@@ -163,9 +163,8 @@
      return [self getJsonWriter];
  }
 
-- (NSDictionary *)getSettingsJson
+- (void)writeItemsToJson:(id)json
 {
-    NSMutableDictionary *json = [NSMutableDictionary new];
     NSMutableArray *jsonArray = [NSMutableArray array];
     if (self.items.count > 0)
     {
@@ -187,7 +186,6 @@
         }
         json[@"items"] = jsonArray;
     }
-    return json;
 }
 
 @end

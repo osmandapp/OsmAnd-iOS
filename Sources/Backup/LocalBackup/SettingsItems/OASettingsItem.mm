@@ -8,6 +8,7 @@
 
 #import "OASettingsItem.h"
 #import "OAGPXDocument.h"
+#import "OrderedDictionary.h"
 
 @interface OASettingsItem()
 
@@ -126,12 +127,6 @@
     // non implemented
 }
 
-- (NSDictionary *) getSettingsJson
-{
-    // override
-    return @{};
-}
-
 + (EOASettingsItemType) parseItemType:(id)json error:(NSError * _Nullable *)error
 {
     NSString *typeStr = json[@"type"];
@@ -179,7 +174,6 @@
         
         json[@"file"] = self.fileName;
     }
-    [self writeItemsToJson:json];
 }
 
 - (void) readItemsFromJson:(id)json error:(NSError * _Nullable *)error
@@ -327,9 +321,11 @@
 
 - (BOOL) writeToFile:(NSString *)filePath error:(NSError * _Nullable *)error
 {
-    NSDictionary *json = [self.item getSettingsJson];
+    MutableOrderedDictionary *json = [MutableOrderedDictionary dictionary];
+    [self.item writeItemsToJson:json];
     if (json.count > 0)
     {
+        
         NSError *writeJsonError;
         NSData *data = [NSJSONSerialization dataWithJSONObject:json options:NSJSONWritingPrettyPrinted error:&writeJsonError];
         if (writeJsonError)

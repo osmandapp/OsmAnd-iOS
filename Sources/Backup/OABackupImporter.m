@@ -611,7 +611,7 @@
                 @throw [NSException exceptionWithName:@"IOException" reason:[@"No temp item file: " stringByAppendingString:tempFile.lastPathComponent] userInfo:nil];
             }
         }];
-        [_queue addOperations:itemFileDownloadTasks waitUntilFinished:NO];
+        [_queue addOperations:itemFileDownloadTasks waitUntilFinished:YES];
     }
     else
     {

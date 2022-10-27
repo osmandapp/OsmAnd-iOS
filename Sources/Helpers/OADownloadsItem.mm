@@ -37,7 +37,7 @@
     _items = [_items arrayByAddingObjectsFromArray:[OACustomPlugin collectRegionsFromJson:jsonArr]];
 }
 
-- (void) writeItemsToJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
+- (void) writeItemsToJson:(id)json
 {
     NSMutableArray *jsonArray = [NSMutableArray array];
     if (self.items.count > 0)

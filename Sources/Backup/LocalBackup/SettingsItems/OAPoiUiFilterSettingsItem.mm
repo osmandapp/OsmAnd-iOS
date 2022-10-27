@@ -125,6 +125,11 @@
     return [self getJsonReader];
 }
 
+- (OASettingsItemWriter *)getWriter
+{
+    return [self getJsonWriter];
+}
+
 - (void) readItemsFromJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
 {
     NSArray* itemsJson = [json mutableArrayValueForKey:@"items"];

@@ -86,6 +86,8 @@
     [OAIAPHelper.sharedInstance checkBackupPurchase];
     _settingsHelper = OANetworkSettingsHelper.sharedInstance;
     _backupHelper = OABackupHelper.sharedInstance;
+    self.tblView.refreshControl = [[UIRefreshControl alloc] init];
+    [self.tblView.refreshControl addTarget:self action:@selector(onRefresh) forControlEvents:UIControlEventValueChanged];
     if (!_settingsHelper.isBackupExporting)
     {
         [_settingsHelper updateExportListener:self];
@@ -125,6 +127,21 @@
 - (void)applyLocalization
 {
     self.navBarTitle.text = OALocalizedString(@"backup_and_restore");
+}
+
+- (void) onRefresh
+{
+    if (!_settingsHelper.isBackupExporting)
+    {
+        [_settingsHelper updateExportListener:self];
+        [_settingsHelper updateImportListener:self];
+        [_backupHelper addPrepareBackupListener:self];
+        [_backupHelper prepareBackup];
+    }
+    else
+    {
+        [self.tblView.refreshControl endRefreshing];
+    }
 }
 
 - (void)generateData
@@ -718,12 +735,14 @@
     [self refreshContent];
     self.settingsButton.userInteractionEnabled = YES;
     self.settingsButton.tintColor = UIColor.whiteColor;
+    [self.tblView.refreshControl endRefreshing];
 }
 
 - (void)onBackupPreparing
 {
     // Show progress bar
-
+    [self.tblView.refreshControl layoutIfNeeded];
+    [self.tblView.refreshControl beginRefreshing];
     self.settingsButton.userInteractionEnabled = NO;
     self.settingsButton.tintColor = UIColorFromRGB(color_tint_gray);
 }

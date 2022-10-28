@@ -329,21 +329,16 @@ static NSString * const _unitsMph = OALocalizedString(@"units_mph");
     OAAppSettings* settings = [OAAppSettings sharedManager];
     float kmh = metersperseconds * 3.6f;
     if ([settings.metricSystem get] == KILOMETERS_AND_METERS) {
-        if (kmh >= 10 || drive) {
-            // case of car
-            return [self formatValue:(int) round(kmh) unit:_unitsKmh forceTrailingZeroes:NO decimalPlacesNumber:0];
-        }
+        
         int kmh10 = (int) (kmh * 10.0f);
         // calculate 2.0 km/h instead of 2 km/h in order to not stress UI text lengh
-        return [self formatValue:kmh10 / 10.0f unit:_unitsKmh forceTrailingZeroes:NO decimalPlacesNumber:0];
+        return [self formatValue:kmh10 / 10.0f unit:_unitsKmh forceTrailingZeroes:NO decimalPlacesNumber:1];
     } else {
         float mph = kmh * METERS_IN_KILOMETER / METERS_IN_ONE_MILE;
-        if (mph >= 10) {
-            return [self formatValue:(int) round(mph) unit:_unitsMph forceTrailingZeroes:NO decimalPlacesNumber:0];
-        } else {
-            int mph10 = (int) (mph * 10.0f);
-            return [self formatValue:mph10 / 10.0f unit:_unitsMph forceTrailingZeroes:NO decimalPlacesNumber:0];
-        }
+        int mph10 = (int) (mph * 10.0f);
+        
+        return [self formatValue:mph10 / 10.0f unit:_unitsMph forceTrailingZeroes:NO decimalPlacesNumber:1];
+        
     }
 }
 

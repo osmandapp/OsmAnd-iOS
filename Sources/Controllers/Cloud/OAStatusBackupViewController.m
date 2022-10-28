@@ -46,6 +46,8 @@
     OAPrepareBackupResult *_backup;
     OABackupStatus *_status;
     OANetworkSettingsHelper *_settingsHelper;
+    
+    BOOL _startWithConflicts;
 }
 
 - (instancetype) initWithBackup:(OAPrepareBackupResult *)backup status:(OABackupStatus *)status
@@ -54,6 +56,15 @@
     if (self) {
         _backup = backup;
         _status = status;
+    }
+    return self;
+}
+
+- (instancetype) initWithBackup:(OAPrepareBackupResult *)backup status:(OABackupStatus *)status openConflicts:(BOOL)openConflicts
+{
+    self = [self initWithBackup:backup status:status];
+    if (self) {
+        _startWithConflicts = openConflicts;
     }
     return self;
 }
@@ -74,6 +85,8 @@
                      forState:UIControlStateNormal];
     _settingsHelper = [OANetworkSettingsHelper sharedInstance];
     [self setupBottomButtons:YES];
+    [_segmentControl setTitleTextAttributes:@{NSForegroundColorAttributeName : UIColor.whiteColor} forState:UIControlStateNormal];
+    [_segmentControl setTitleTextAttributes:@{NSForegroundColorAttributeName : UIColor.blackColor} forState:UIControlStateSelected];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -84,10 +97,12 @@
     _conflictsTableViewController = [[OAStatusBackupTableViewController alloc] initWithTableType:EOARecentChangesConflicts];
     [_conflictsTableViewController setDelegate:self];
     [self setupPageController];
-    [_pageController setViewControllers:@[_allTableViewController]
-                              direction:UIPageViewControllerNavigationDirectionForward
+    _segmentControl.selectedSegmentIndex = _startWithConflicts ? 1 : 0;
+    [_pageController setViewControllers:@[_startWithConflicts ? _conflictsTableViewController : _allTableViewController]
+                              direction:_startWithConflicts ? UIPageViewControllerNavigationDirectionReverse : UIPageViewControllerNavigationDirectionForward
                                animated:NO
                              completion:nil];
+    _startWithConflicts = NO;
 }
 
 - (void)setupPageController
@@ -114,7 +129,7 @@
         case 0:
         {
             [_pageController setViewControllers:@[_allTableViewController]
-                                      direction:UIPageViewControllerNavigationDirectionForward
+                                      direction:UIPageViewControllerNavigationDirectionReverse
                                        animated:YES
                                      completion:nil];
             break;

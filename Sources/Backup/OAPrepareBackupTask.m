@@ -11,6 +11,7 @@
 #import "OABackupListeners.h"
 #import "OAPrepareBackupResult.h"
 #import "OANetworkSettingsHelper.h"
+#import "Localization.h"
 
 @interface OABackupTaskType ()
 
@@ -227,7 +228,7 @@ static OABackupTaskType *GENERATE_BACKUP_INFO;
     }
     else
     {
-        [self onError:@"Download remote items error"];
+        [self onError:OALocalizedString(@"backup_error_failed_to_fetch_remote_items")];
     }
     [self onTaskFinished:OABackupTaskType.COLLECT_REMOTE_FILES];
 }

@@ -19,6 +19,7 @@
 #import "OAMultiIconTextDescCell.h"
 #import "OAIconTitleValueCell.h"
 #import "OATitleIconProgressbarCell.h"
+#import "OAValueTableViewCell.h"
 #import "OATitleDescrRightIconTableViewCell.h"
 #import "OAMainSettingsViewController.h"
 #import "OARestoreBackupViewController.h"
@@ -35,8 +36,12 @@
 #import "OABaseBackupTypesViewController.h"
 #import "OAStatusBackupViewController.h"
 #import "OAExportBackupTask.h"
+#import "OAAppVersionDependentConstants.h"
 
-@interface OACloudBackupViewController () <UITableViewDelegate, UITableViewDataSource, OABackupExportListener, OAImportListener, OAOnPrepareBackupListener, OABackupTypesDelegate>
+#import <MessageUI/MessageUI.h>
+#import <MessageUI/MFMailComposeViewController.h>
+
+@interface OACloudBackupViewController () <UITableViewDelegate, UITableViewDataSource, OABackupExportListener, OAImportListener, OAOnPrepareBackupListener, OABackupTypesDelegate, MFMailComposeViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *navBarBackgroundView;
 @property (weak, nonatomic) IBOutlet UILabel *navBarTitle;
@@ -86,6 +91,8 @@
     [OAIAPHelper.sharedInstance checkBackupPurchase];
     _settingsHelper = OANetworkSettingsHelper.sharedInstance;
     _backupHelper = OABackupHelper.sharedInstance;
+    self.tblView.refreshControl = [[UIRefreshControl alloc] init];
+    [self.tblView.refreshControl addTarget:self action:@selector(onRefresh) forControlEvents:UIControlEventValueChanged];
     if (!_settingsHelper.isBackupExporting)
     {
         [_settingsHelper updateExportListener:self];
@@ -125,6 +132,21 @@
 - (void)applyLocalization
 {
     self.navBarTitle.text = OALocalizedString(@"backup_and_restore");
+}
+
+- (void) onRefresh
+{
+    if (!_settingsHelper.isBackupExporting)
+    {
+        [_settingsHelper updateExportListener:self];
+        [_settingsHelper updateImportListener:self];
+        [_backupHelper addPrepareBackupListener:self];
+        [_backupHelper prepareBackup];
+    }
+    else
+    {
+        [self.tblView.refreshControl endRefreshing];
+    }
 }
 
 - (void)generateData
@@ -248,7 +270,7 @@
             {
                 BOOL hasWarningStatus = _status.warningTitle != nil;
                 BOOL hasDescr = _error || _status.warningDescription;
-                NSString *descr = hasDescr && hasWarningStatus ? _status.warningDescription : _error;
+                NSString *descr = hasDescr && hasWarningStatus ? _status.warningDescription : [_error stringByAppendingFormat:@"\n%@", OALocalizedString(@"error_contact_support")];
                 NSInteger color = _status == OABackupStatus.CONFLICTS || _status == OABackupStatus.ERROR ? _status.iconColor
                         : _status == OABackupStatus.MAKE_BACKUP ? profile_icon_color_green_light : -1;
                 NSDictionary *makeBackupWarningCell = @{
@@ -262,10 +284,10 @@
                 [backupRows addObject:makeBackupWarningCell];
             }
         }
-            
-        BOOL actionButtonHidden = _status == OABackupStatus.BACKUP_COMPLETE ||
-        (_status == OABackupStatus.CONFLICTS
-         && (_info == nil || (_info.filteredFilesToUpload.count == 0 && _info.filteredFilesToDelete.count == 0)));
+        BOOL hasInfo = _info != nil;
+        BOOL noConflicts = _status == OABackupStatus.CONFLICTS && (!hasInfo || _info.filteredFilesToMerge.count == 0);
+        BOOL noChanges = _status == OABackupStatus.MAKE_BACKUP && (!hasInfo || (_info.filteredFilesToUpload.count == 0 && _info.filteredFilesToDelete.count == 0));
+        BOOL actionButtonHidden = _status == OABackupStatus.BACKUP_COMPLETE || noConflicts || noChanges;
         if (!actionButtonHidden)
         {
             if (_settingsHelper.isBackupExporting)
@@ -278,7 +300,7 @@
                 };
                 [backupRows addObject:cancellCell];
             }
-            else if (_status == OABackupStatus.MAKE_BACKUP || _status == OABackupStatus.CONFLICTS)
+            else if (_status == OABackupStatus.MAKE_BACKUP)
             {
                 NSDictionary *backupNowCell = @{
                     @"cellId": OAButtonRightIconCell.getCellIdentifier,
@@ -288,13 +310,33 @@
                 };
                 [backupRows addObject:backupNowCell];
             }
-            else if (_status == OABackupStatus.NO_INTERNET_CONNECTION || _status == OABackupStatus.ERROR)
+            else if (_status == OABackupStatus.CONFLICTS)
+            {
+                NSDictionary *conflictsCell = @{
+                    @"cellId": OAValueTableViewCell.getCellIdentifier,
+                    @"name": @"viewConflictsCell",
+                    @"title": OALocalizedString(@"cloud_view_conflicts"),
+                    @"value": @(_info.filteredFilesToMerge.count)
+                };
+                [backupRows addObject:conflictsCell];
+            }
+            else if (_status == OABackupStatus.NO_INTERNET_CONNECTION)
             {
                 NSDictionary *retryCell = @{
                     @"cellId": OAButtonRightIconCell.getCellIdentifier,
                     @"name": @"onRetryPressed",
                     @"title": _status.actionTitle,
                     @"image": @"ic_custom_reset"
+                };
+                [backupRows addObject:retryCell];
+            }
+            else if (_status == OABackupStatus.ERROR)
+            {
+                NSDictionary *retryCell = @{
+                    @"cellId": OAButtonRightIconCell.getCellIdentifier,
+                    @"name": @"onSupportPressed",
+                    @"title": _status.actionTitle,
+                    @"image": @"ic_custom_letter_outlined"
                 };
                 [backupRows addObject:retryCell];
             }
@@ -401,9 +443,21 @@
     }
 }
 
+- (void) onViewConflictsPressed
+{
+    OAStatusBackupViewController *statusBackupViewController = [[OAStatusBackupViewController alloc] initWithBackup:_backup status:_status openConflicts:YES];
+    statusBackupViewController.delegate = self;
+    [self.navigationController pushViewController:statusBackupViewController animated:YES];
+}
+
 - (void)onRetryPressed
 {
     [_backupHelper prepareBackup];
+}
+
+- (void)onSupportPressed
+{
+    [self sendEmail];
 }
 
 - (void) cancellBackupPressed
@@ -479,6 +533,24 @@
 
         if (cell.needsUpdateConstraints)
             [cell updateConstraints];
+
+        return cell;
+    }
+    else if ([cellId isEqualToString:OAValueTableViewCell.getCellIdentifier])
+    {
+        OAValueTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:OAValueTableViewCell.getCellIdentifier];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAValueTableViewCell *)[nib objectAtIndex:0];
+            cell.titleLabel.textColor = UIColorFromRGB(color_primary_purple);
+            cell.titleLabel.font = [UIFont systemFontOfSize:17. weight:UIFontWeightMedium];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        }
+        cell.titleLabel.text = item[@"title"];
+        cell.valueLabel.text = [item[@"value"] stringValue];
 
         return cell;
     }
@@ -622,6 +694,10 @@
     {
         [self onRestoreFromFilePressed];
     }
+    else if ([itemId isEqualToString:@"viewConflictsCell"])
+    {
+        [self onViewConflictsPressed];
+    }
     else if ([itemId isEqualToString:@"backupNow"])
     {
         
@@ -718,12 +794,14 @@
     [self refreshContent];
     self.settingsButton.userInteractionEnabled = YES;
     self.settingsButton.tintColor = UIColor.whiteColor;
+    [self.tblView.refreshControl endRefreshing];
 }
 
 - (void)onBackupPreparing
 {
     // Show progress bar
-
+    [self.tblView.refreshControl layoutIfNeeded];
+    [self.tblView.refreshControl beginRefreshing];
     self.settingsButton.userInteractionEnabled = NO;
     self.settingsButton.tintColor = UIColorFromRGB(color_tint_gray);
 }
@@ -737,6 +815,27 @@
 
 - (void)setProgressTotal:(NSInteger)total
 {
+}
+
+#pragma mark - MFMailComposeViewControllerDelegate
+
+- (void)sendEmail
+{
+    if([MFMailComposeViewController canSendMail])
+    {
+        MFMailComposeViewController *mailCont = [[MFMailComposeViewController alloc] init];
+        mailCont.mailComposeDelegate = self;
+        [mailCont setSubject:OALocalizedString(@"backup_and_restore")];
+        NSString *body = [NSString stringWithFormat:@"%@\n%@", _backup.error, [OAAppVersionDependentConstants getAppVersionWithBundle]];
+        [mailCont setToRecipients:[NSArray arrayWithObject:OALocalizedString(@"login_footer_email_part")]];
+        [mailCont setMessageBody:body isHTML:NO];
+        [self presentViewController:mailCont animated:YES completion:nil];
+    }
+}
+
+- (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error
+{
+    [controller dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end

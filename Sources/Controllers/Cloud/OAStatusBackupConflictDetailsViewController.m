@@ -27,6 +27,9 @@
 #import "Localization.h"
 
 @interface OAStatusBackupConflictDetailsViewController () <UITableViewDelegate, UITableViewDataSource>
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UIButton *closeButton;
+@property (weak, nonatomic) IBOutlet UILabel *titleView;
 
 @end
 
@@ -259,7 +262,7 @@
     OATableViewRowData *item = [_data itemForIndexPath:indexPath];
     if ([item boolForKey:@"enabled"])
     {
-        [self hide:YES completion:^{
+        [self dismissViewControllerAnimated:YES completion:^{
             NSString *fileName = [OABackupHelper getItemFileName:_localFile.item];
             if ([item.key isEqualToString:@"uploadLocal"])
             {

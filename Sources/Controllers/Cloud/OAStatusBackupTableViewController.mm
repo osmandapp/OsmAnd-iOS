@@ -408,11 +408,20 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
             cell = (OALargeImageTitleDescrTableViewCell *) nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             [cell showButton:NO];
+            cell.titleLabel.font = [UIFont systemFontOfSize:17. weight:UIFontWeightRegular];
         }
         if (cell)
         {
             cell.titleLabel.text = item.title;
-            cell.descriptionLabel.text = item.descr;
+            NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithString:item.descr];
+            NSRange range = NSMakeRange(0, str.length);
+            NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+            paragraphStyle.lineSpacing = 4;
+            paragraphStyle.alignment = NSTextAlignmentCenter;
+            [str addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:range];
+            [str addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(color_text_footer) range:range];
+            [str addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15.] range:range];
+            cell.descriptionLabel.attributedText = str;
             [cell.cellImageView setImage:[UIImage imageNamed:item.iconName]];
 
             if (cell.needsUpdateConstraints)
@@ -488,7 +497,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
                                                                     remoteFile:[item objForKey:@"remoteConflictItem"]
                                                     backupExportImportListener:self];
         conflictDetailsViewController.delegate = _delegate;
-        [conflictDetailsViewController presentInViewController:self];
+        [self presentViewController:conflictDetailsViewController animated:YES completion:nil];
     }
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];

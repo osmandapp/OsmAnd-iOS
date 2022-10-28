@@ -15,6 +15,7 @@
 #import "OAExportSettingsType.h"
 #import "OASettingsCategoryItems.h"
 #import "OAPrepareBackupResult.h"
+#import "OABackupInfo.h"
 #import "OABackupHelper.h"
 #import "OAAppSettings.h"
 #import "Localization.h"
@@ -73,6 +74,7 @@
 {
     [super onTypeSelected:type selected:selected];
     [[_backupHelper getBackupTypePref:type] set:selected];
+    [_backupHelper.backup.backupInfo createItemCollections];
 }
 
 - (void)showClearTypeScreen:(OAExportSettingsType *)type

@@ -36,8 +36,12 @@
 #import "OABaseBackupTypesViewController.h"
 #import "OAStatusBackupViewController.h"
 #import "OAExportBackupTask.h"
+#import "OAAppVersionDependentConstants.h"
 
-@interface OACloudBackupViewController () <UITableViewDelegate, UITableViewDataSource, OABackupExportListener, OAImportListener, OAOnPrepareBackupListener, OABackupTypesDelegate>
+#import <MessageUI/MessageUI.h>
+#import <MessageUI/MFMailComposeViewController.h>
+
+@interface OACloudBackupViewController () <UITableViewDelegate, UITableViewDataSource, OABackupExportListener, OAImportListener, OAOnPrepareBackupListener, OABackupTypesDelegate, MFMailComposeViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *navBarBackgroundView;
 @property (weak, nonatomic) IBOutlet UILabel *navBarTitle;
@@ -266,7 +270,7 @@
             {
                 BOOL hasWarningStatus = _status.warningTitle != nil;
                 BOOL hasDescr = _error || _status.warningDescription;
-                NSString *descr = hasDescr && hasWarningStatus ? _status.warningDescription : _error;
+                NSString *descr = hasDescr && hasWarningStatus ? _status.warningDescription : [_error stringByAppendingFormat:@"\n%@", OALocalizedString(@"error_contact_support")];
                 NSInteger color = _status == OABackupStatus.CONFLICTS || _status == OABackupStatus.ERROR ? _status.iconColor
                         : _status == OABackupStatus.MAKE_BACKUP ? profile_icon_color_green_light : -1;
                 NSDictionary *makeBackupWarningCell = @{
@@ -280,10 +284,10 @@
                 [backupRows addObject:makeBackupWarningCell];
             }
         }
-            
-        BOOL actionButtonHidden = _status == OABackupStatus.BACKUP_COMPLETE ||
-        (_status == OABackupStatus.CONFLICTS
-         && (_info == nil || (_info.filteredFilesToUpload.count == 0 && _info.filteredFilesToDelete.count == 0)));
+        BOOL hasInfo = _info != nil;
+        BOOL noConflicts = _status == OABackupStatus.CONFLICTS && (!hasInfo || _info.filteredFilesToMerge.count == 0);
+        BOOL noChanges = _status == OABackupStatus.MAKE_BACKUP && (!hasInfo || (_info.filteredFilesToUpload.count == 0 && _info.filteredFilesToDelete.count == 0));
+        BOOL actionButtonHidden = _status == OABackupStatus.BACKUP_COMPLETE || noConflicts || noChanges;
         if (!actionButtonHidden)
         {
             if (_settingsHelper.isBackupExporting)
@@ -316,13 +320,23 @@
                 };
                 [backupRows addObject:conflictsCell];
             }
-            else if (_status == OABackupStatus.NO_INTERNET_CONNECTION || _status == OABackupStatus.ERROR)
+            else if (_status == OABackupStatus.NO_INTERNET_CONNECTION)
             {
                 NSDictionary *retryCell = @{
                     @"cellId": OAButtonRightIconCell.getCellIdentifier,
                     @"name": @"onRetryPressed",
                     @"title": _status.actionTitle,
                     @"image": @"ic_custom_reset"
+                };
+                [backupRows addObject:retryCell];
+            }
+            else if (_status == OABackupStatus.ERROR)
+            {
+                NSDictionary *retryCell = @{
+                    @"cellId": OAButtonRightIconCell.getCellIdentifier,
+                    @"name": @"onSupportPressed",
+                    @"title": _status.actionTitle,
+                    @"image": @"ic_custom_letter_outlined"
                 };
                 [backupRows addObject:retryCell];
             }
@@ -439,6 +453,11 @@
 - (void)onRetryPressed
 {
     [_backupHelper prepareBackup];
+}
+
+- (void)onSupportPressed
+{
+    [self sendEmail];
 }
 
 - (void) cancellBackupPressed
@@ -796,6 +815,27 @@
 
 - (void)setProgressTotal:(NSInteger)total
 {
+}
+
+#pragma mark - MFMailComposeViewControllerDelegate
+
+- (void)sendEmail
+{
+    if([MFMailComposeViewController canSendMail])
+    {
+        MFMailComposeViewController *mailCont = [[MFMailComposeViewController alloc] init];
+        mailCont.mailComposeDelegate = self;
+        [mailCont setSubject:OALocalizedString(@"backup_and_restore")];
+        NSString *body = [NSString stringWithFormat:@"%@\n%@", _backup.error, [OAAppVersionDependentConstants getAppVersionWithBundle]];
+        [mailCont setToRecipients:[NSArray arrayWithObject:OALocalizedString(@"login_footer_email_part")]];
+        [mailCont setMessageBody:body isHTML:NO];
+        [self presentViewController:mailCont animated:YES completion:nil];
+    }
+}
+
+- (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error
+{
+    [controller dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end

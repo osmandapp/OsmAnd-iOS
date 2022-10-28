@@ -126,7 +126,7 @@ static OABackupStatus *ERROR;
                                             warningIconName:@"ic_custom_alert"
                                                warningTitle:nil
                                          warningDescription:nil
-                                                actionTitle:OALocalizedString(@"shared_string_retry")
+                                                actionTitle:OALocalizedString(@"contact_support")
                                                   iconColor:color_primary_red];
     }
     return ERROR;

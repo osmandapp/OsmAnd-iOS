@@ -245,6 +245,7 @@
         self.conflictedName = @"";
 
         [OAUtilities denyAccessToFile:_url.path removeFromInbox:YES];
+        [OsmAndApp.instance saveFavoritesToPermamentStorage];
 
         [self.navigationController popViewControllerAnimated:YES];
     }

@@ -488,7 +488,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
                                                                     remoteFile:[item objForKey:@"remoteConflictItem"]
                                                     backupExportImportListener:self];
         conflictDetailsViewController.delegate = _delegate;
-        [conflictDetailsViewController presentInViewController:self];
+        [self presentViewController:conflictDetailsViewController animated:YES completion:nil];
     }
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];

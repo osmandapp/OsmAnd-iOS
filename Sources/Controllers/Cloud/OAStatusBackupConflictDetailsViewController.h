@@ -6,13 +6,13 @@
 //  Copyright © 2022 OsmAnd. All rights reserved.
 //
 
-#import "OABaseBottomSheetViewController.h"
+#import "OASuperViewController.h"
 
 @class OALocalFile, OARemoteFile;
 
 @protocol OAStatusBackupTableDelegate;
 
-@interface OAStatusBackupConflictDetailsViewController : OABaseBottomSheetViewController
+@interface OAStatusBackupConflictDetailsViewController : OASuperViewController
 
 - (instancetype)initWithLocalFile:(OALocalFile *)localeFile
                        remoteFile:(OARemoteFile *)remoteFile

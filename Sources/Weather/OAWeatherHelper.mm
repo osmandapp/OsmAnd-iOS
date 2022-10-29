@@ -118,7 +118,7 @@
             contourLevelsMap.insert((OsmAnd::ZoomLevel)zoomNum.intValue, levels);
         }
         NSDictionary<NSNumber *, NSArray<NSString *> *> *contourTypes = [band getContourTypes:self.mapPresentationEnvironment];
-        QHash<OsmAnd::ZoomLevel, QStringList> contourTypesMap;
+        QHash<OsmAnd::ZoomLevel, QList<QString>> contourTypesMap;
         for (NSNumber * zoomNum in contourTypes.allKeys)
         {
             NSArray<NSString *> *typesList = contourTypes[zoomNum];

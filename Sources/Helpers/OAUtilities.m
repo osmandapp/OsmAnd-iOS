@@ -1000,6 +1000,39 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
     return [NSDictionary dictionaryWithDictionary:queryStrings];
 }
 
++ (BOOL) isOsmAndMapUrl:(NSURL *)url
+{
+    return [self isOsmAndSite:url] && [self isPathPrefix:url pathPrefix:@"/map"];
+}
+
++ (BOOL) isOsmAndGoUrl:(NSURL *)url
+{
+    return [self isOsmAndSite:url] && [self isPathPrefix:url pathPrefix:@"/go"];
+}
+
++ (BOOL) isOsmAndSite:(NSURL *)url
+{
+    return [self isHttpOrHttpsScheme:url] && [self isOsmAndHost:url];
+}
+
++ (BOOL) isHttpOrHttpsScheme:(NSURL *)url
+{
+    NSString *scheme = url.scheme;
+    return scheme && ([scheme.lowercaseString isEqualToString:@"http"] || [scheme.lowercaseString isEqualToString:@"https"]);
+}
+
++ (BOOL) isOsmAndHost:(NSURL *)url
+{
+    NSString *host = url.host;
+    return host && [host.lowercaseString hasSuffix:@"osmand.net"];
+}
+
++ (BOOL) isPathPrefix:(NSURL *)url pathPrefix:(NSString *)pathPrefix
+{
+    NSString *path = url.path;
+    return path && [path.lowercaseString hasPrefix:pathPrefix];
+}
+
 + (void) getHMS:(NSTimeInterval)timeInterval hours:(int*)hours minutes:(int*)minutes seconds:(int*)seconds
 {
     long secondsL = lroundf(timeInterval);

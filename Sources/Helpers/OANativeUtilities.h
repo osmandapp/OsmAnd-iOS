@@ -52,4 +52,6 @@
 
 + (QList<OsmAnd::TileId>)convertToQListTileIds:(NSArray<NSArray<NSNumber *> *> *)tileIds;
 
++ (CLLocation *)parseLatLon:(NSString *)latLon;
+
 @end

@@ -29,6 +29,11 @@
 #import "OAChoosePlanHelper.h"
 #import "OACarPlayActiveViewController.h"
 #import "Localization.h"
+#import "OALog.h"
+#import "OARoutingHelper.h"
+#import "OATargetPointsHelper.h"
+#import "OAMapActions.h"
+#import "OADiscountHelper.h"
 
 #include "CoreResourcesFromBundleProvider.h"
 
@@ -55,7 +60,7 @@
     BOOL _appInitDone;
     BOOL _appInitializing;
     
-    NSURL *loadedURL;
+    NSURL *_loadedURL;
     NSTimer *_checkUpdatesTimer;
 
     OACarPlayMapViewController *_carPlayMapController API_AVAILABLE(ios(12.0));
@@ -134,13 +139,10 @@
                 [self.rootViewController.navigationController pushViewController:welcome animated:NO];
             }
             
-            if (loadedURL)
+            if (_loadedURL)
             {
-                if ([loadedURL.scheme isEqualToString:@"file"])
-                    [_rootViewController handleIncomingURL:loadedURL];
-                else if ([loadedURL.scheme isEqualToString:@"osmandmaps"] || [loadedURL.lastPathComponent isEqualToString:@"add-tile-source"])
-                    [self handleIncomingURL:loadedURL];
-                loadedURL = nil;
+                [self openURL:_loadedURL];
+                _loadedURL = nil;
             }
             [OAUtilities clearTmpDirectory];
             
@@ -175,90 +177,235 @@
     return YES;
 }
 
-- (BOOL)handleIncomingURL:(NSURL * _Nonnull)url
+- (BOOL)openURL:(NSURL *)url
 {
-    NSDictionary<NSString *, NSString *> *params = [OAUtilities parseUrlQuery:url];
-    if ([url.lastPathComponent isEqualToString:@"add-tile-source"])
+    if (_rootViewController)
     {
-        if (_rootViewController)
+        return [self handleIncomingFileURL:url]
+            || [self handleIncomingNavigationURL:url]
+            || [self handleIncomingSetPinOnMapURL:url]
+            || [self handleIncomingMoveMapToLocationURL:url]
+            || [self handleIncomingOpenLocationMenuURL:url]
+            || [self handleIncomingTileSourceURL:url];
+    }
+    else
+    {
+        _loadedURL = url;
+        return NO;
+    }
+}
+
+- (BOOL)handleIncomingFileURL:(NSURL *)url
+{
+    if (_rootViewController && [url.scheme.lowercaseString isEqualToString:@"file"])
+        return [_rootViewController handleIncomingURL:url];
+    return NO;
+}
+
+- (BOOL)handleIncomingNavigationURL:(NSURL *)url
+{
+    NSURLComponents *components = [NSURLComponents componentsWithURL:url resolvingAgainstBaseURL:YES];
+    NSArray<NSURLQueryItem *> *queryItems = components.queryItems;
+    BOOL hasNavigationDestination = NO;
+    NSString *startLatLonParam;
+    NSString *endLatLonParam;
+    NSString *appModeKeyParam;
+    for (NSURLQueryItem *queryItem in queryItems)
+    {
+        if ([queryItem.name.lowercaseString isEqualToString:@"end"])
         {
-            // https://osmand.net/add-tile-source?name=&url_template=&min_zoom=&max_zoom=
-            OAOnlineTilesEditingViewController *editTileSourceController = [[OAOnlineTilesEditingViewController alloc] initWithUrlParameters:params];
-            [_rootViewController.navigationController pushViewController:editTileSourceController animated:NO];
-            return YES;
+            hasNavigationDestination = YES;
+            endLatLonParam = queryItem.value;
         }
-        else
+        else if ([queryItem.name.lowercaseString isEqualToString:@"start"])
         {
-            loadedURL = url;
-            return NO;
+            startLatLonParam = queryItem.value;
+        }
+        else if ([queryItem.name.lowercaseString isEqualToString:@"mode"])
+        {
+            appModeKeyParam = queryItem.value;
         }
     }
-    else if (params.count != 0)
+
+    if (_rootViewController && hasNavigationDestination && [OAUtilities isOsmAndMapUrl:url])
     {
-        // osmandmaps://?lat=45.6313&lon=34.9955&z=8&title=New+York
-        double lat = [params[@"lat"] doubleValue];
-        double lon = [params[@"lon"] doubleValue];
-        double zoom = [params[@"z"] doubleValue];
-        NSString *title = params[@"title"];
-        NSString *navigate = [url host];
+        if (!endLatLonParam || endLatLonParam.length == 0)
+        {
+            OALog(@"Malformed OsmAnd navigation URL: destination location is missing");
+            return YES;
+        }
+
+        CLLocation *startLatLon = [OANativeUtilities parseLatLon:startLatLonParam];
+        if (startLatLonParam && !startLatLon)
+            OALog(@"Malformed OsmAnd navigation URL: start location is broken");
         
-        Point31 pos31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon))];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            
-            OAMapViewController* mapViewController = [_rootViewController.mapPanel mapViewController];
-            
-            if (!_rootViewController || !mapViewController || !mapViewController.mapViewLoaded)
-            {
-                OAMapViewState *state = [[OAMapViewState alloc] init];
-                state.target31 = pos31;
-                state.zoom = zoom;
-                state.azimuth = 0.0f;
-                _app.initialURLMapState = state;
-                return;
-            }
-            
-            UIViewController *top = _rootViewController.navigationController.topViewController;
-            
-            if (![top isKindOfClass:[JASidePanelController class]])
-                [_rootViewController.navigationController popToRootViewControllerAnimated:NO];
-            
-            if (_rootViewController.state != JASidePanelCenterVisible)
-                [_rootViewController showCenterPanelAnimated:NO];
-            
-            [_rootViewController.mapPanel closeDashboard];
-            
-            OATargetPoint *targetPoint = [mapViewController.mapLayers.contextMenuLayer getUnknownTargetPoint:lat longitude:lon];
-            if (title.length > 0)
-                targetPoint.title = title;
-            if ([navigate isEqualToString:@"navigate"])
-            {
-                [_rootViewController.mapPanel navigate:targetPoint];
-                [_rootViewController.mapPanel closeRouteInfo];
-                [_rootViewController.mapPanel startNavigation];
-            } else
-            {
-                [_rootViewController.mapPanel showContextMenu:targetPoint];
-            }
-            [mapViewController goToPosition:pos31 andZoom:zoom animated:NO];
-        });
-        
+        CLLocation *endLatLon = [OANativeUtilities parseLatLon:endLatLonParam];
+        if (!endLatLon)
+        {
+            OALog(@"Malformed OsmAnd navigation URL: destination location is broken");
+            return YES;
+        }
+
+        OAApplicationMode *appMode = [OAApplicationMode valueOfStringKey:appModeKeyParam def:nil];
+        if (appModeKeyParam && appModeKeyParam.length > 0 && !appMode)
+            OALog(@"App mode with specified key not available, using default navigation app mode");
+
+        [self buildRoute:startLatLon end:endLatLon appMode:appMode];
         return YES;
     }
     return NO;
 }
 
-- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler
+- (BOOL)handleIncomingSetPinOnMapURL:(NSURL *)url
 {
-    if (_rootViewController)
+    NSURLComponents *components = [NSURLComponents componentsWithURL:url resolvingAgainstBaseURL:YES];
+    NSArray<NSURLQueryItem *> *queryItems = components.queryItems;
+    BOOL hasPin = NO;
+    NSString *latLonParam;
+    for (NSURLQueryItem *queryItem in queryItems)
     {
-        return [self handleIncomingURL:userActivity.webpageURL];
+        if ([queryItem.name.lowercaseString isEqualToString:@"pin"])
+        {
+            hasPin = YES;
+            latLonParam = queryItem.value;
+        }
     }
-    else
+
+    if (_rootViewController && hasPin && [OAUtilities isOsmAndMapUrl:url])
     {
-        loadedURL = userActivity.webpageURL;
+        CLLocation *latLon = !latLonParam || latLonParam.length == 0 ? nil : [OANativeUtilities parseLatLon:latLonParam];
+        if (latLon)
+        {
+            double lat = latLon.coordinate.latitude;
+            double lon = latLon.coordinate.longitude;
+            int zoom = _rootViewController.mapPanel.mapViewController.mapView.zoom;
+            [self moveMapToLat:lat lon:lon zoom:zoom withTitle:nil];
+            return YES;
+        }
+    }
+    return NO;
+}
+
+- (BOOL)handleIncomingMoveMapToLocationURL:(NSURL *)url
+{
+    NSString *pathPrefix = @"/map#";
+    NSInteger pathStartIndex = [url.absoluteString indexOf:pathPrefix];
+    if (_rootViewController && pathStartIndex != -1 && [OAUtilities isOsmAndMapUrl:url])
+    {
+        NSArray<NSString *> *params = [[url.absoluteString substringFromIndex:pathStartIndex + pathPrefix.length] componentsSeparatedByString:@"/"];
+        if (params.count == 3)
+        {
+            int zoom = [params[0] intValue];
+            double lat = [params[1] doubleValue];
+            double lon = [params[2] doubleValue];
+            [self moveMapToLat:lat lon:lon zoom:zoom withTitle:nil];
+            return YES;
+        }
+    }
+    return NO;
+}
+
+- (BOOL)handleIncomingOpenLocationMenuURL:(NSURL *)url
+{
+    if ([OAUtilities isOsmAndGoUrl:url])
+    {
+        NSURLComponents *components = [NSURLComponents componentsWithURL:url resolvingAgainstBaseURL:YES];
+        NSArray<NSURLQueryItem *> *queryItems = components.queryItems;
+        NSString *latParam;
+        NSString *lonParam;
+        NSString *zoomParam;
+        NSString *titleParam;
+        for (NSURLQueryItem *queryItem in queryItems)
+        {
+            if ([queryItem.name.lowercaseString isEqualToString:@"lat"])
+                latParam = queryItem.value;
+            else if ([queryItem.name.lowercaseString isEqualToString:@"lon"])
+                lonParam = queryItem.value;
+            else if ([queryItem.name.lowercaseString isEqualToString:@"z"])
+                zoomParam = queryItem.value;
+            else if ([queryItem.name.lowercaseString isEqualToString:@"title"])
+                titleParam = queryItem.value;
+        }
+
+        if (_rootViewController && latParam && lonParam)
+        {
+            double lat = [latParam doubleValue];
+            double lon = [lonParam doubleValue];
+            int zoom = _rootViewController.mapPanel.mapViewController.mapView.zoom;
+            if (zoomParam)
+                zoom = [zoomParam intValue];
+            [self moveMapToLat:lat lon:lon zoom:zoom withTitle:titleParam];
+            return YES;
+        }
+    }
+    return NO;
+}
+
+- (BOOL)handleIncomingTileSourceURL:(NSURL *)url
+{
+    if (_rootViewController && [OAUtilities isOsmAndSite:url] && [OAUtilities isPathPrefix:url pathPrefix:@ "/add-tile-source"])
+    {
+        NSDictionary<NSString *, NSString *> *params = [OAUtilities parseUrlQuery:url];
+        // https://osmand.net/add-tile-source?name=&url_template=&min_zoom=&max_zoom=
+        OAOnlineTilesEditingViewController *editTileSourceController = [[OAOnlineTilesEditingViewController alloc] initWithUrlParameters:params];
+        [_rootViewController.navigationController pushViewController:editTileSourceController animated:NO];
         return YES;
     }
-        
+    return NO;
+}
+
+- (void)buildRoute:(CLLocation *)start end:(CLLocation *)end appMode:(OAApplicationMode *)appMode
+{
+    if (appMode)
+        [[OARoutingHelper sharedInstance] setAppMode:appMode];
+
+    [[OATargetPointsHelper sharedInstance] navigateToPoint:end updateRoute:YES intermediate:-1];
+    [_rootViewController.mapPanel.mapActions enterRoutePlanningModeGivenGpx:nil
+                                                                    appMode:appMode
+                                                                       path:nil
+                                                                       from:start
+                                                                   fromName:nil
+                                             useIntermediatePointsByDefault:NO
+                                                                 showDialog:YES];
+}
+
+- (void)moveMapToLat:(double)lat lon:(double)lon zoom:(int)zoom withTitle:(NSString *)title
+{
+    Point31 pos31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon))];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        OAMapViewController *mapViewController = [_rootViewController.mapPanel mapViewController];
+
+        if (!_rootViewController || !mapViewController || !mapViewController.mapViewLoaded)
+        {
+            OAMapViewState *state = [[OAMapViewState alloc] init];
+            state.target31 = pos31;
+            state.zoom = zoom;
+            state.azimuth = 0.0f;
+            _app.initialURLMapState = state;
+            return;
+        }
+
+        UIViewController *top = _rootViewController.navigationController.topViewController;
+        if (![top isKindOfClass:[JASidePanelController class]])
+            [_rootViewController.navigationController popToRootViewControllerAnimated:NO];
+
+        if (_rootViewController.state != JASidePanelCenterVisible)
+            [_rootViewController showCenterPanelAnimated:NO];
+
+        [_rootViewController.mapPanel closeDashboard];
+
+        OATargetPoint *targetPoint = [mapViewController.mapLayers.contextMenuLayer getUnknownTargetPoint:lat longitude:lon];
+        if (title.length > 0)
+            targetPoint.title = title;
+
+        [_rootViewController.mapPanel showContextMenu:targetPoint];
+        [mapViewController goToPosition:pos31 andZoom:zoom animated:NO];
+    });
+}
+
+- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler
+{
+    return [self openURL:userActivity.webpageURL];
 }
 
 - (void)performUpdatesCheck
@@ -431,19 +578,6 @@
 - (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey, id> *)options
 {
     return [self openURL:url];
-}
-
-- (BOOL)openURL:(NSURL *)url
-{
-    NSString *scheme = [[url scheme] lowercaseString];
-
-    if ([scheme isEqualToString:@"file"] && _rootViewController)
-        return [_rootViewController handleIncomingURL:url];
-    else if ([scheme isEqualToString:@"osmandmaps"])
-        return [self handleIncomingURL:url];
-
-    loadedURL = url;
-    return NO;
 }
 
 @end

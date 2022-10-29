@@ -763,14 +763,14 @@
 - (void) refreshRouteWithSync:(BOOL)sync
 {
     BOOL isNight = [OAAppSettings sharedManager].nightMode;
-    _prevRouteColoringType = _routeColoringType;
-    _prevRouteInfoAttribute = _routeInfoAttribute;
-    [self updateRouteColoringType];
-    [self updateRouteColors:isNight];
-
     OARouteCalculationResult *route = [_routingHelper getRoute];
     if ([_routingHelper isPublicTransportMode])
     {
+        _prevRouteColoringType = _routeColoringType;
+        _prevRouteInfoAttribute = _routeInfoAttribute;
+        [self updateRouteColoringType];
+        [self updateRouteColors:isNight];
+
         NSInteger currentRoute = _transportHelper.currentRoute;
         const auto routes = [_transportHelper getRoutes];
         const auto route = currentRoute != -1 && routes.size() > currentRoute ? routes[currentRoute] : nullptr;
@@ -805,6 +805,11 @@
     }
     else if ([_routingHelper getFinalLocation] && route && [route isCalculated])
     {
+        _prevRouteColoringType = _routeColoringType;
+        _prevRouteInfoAttribute = _routeInfoAttribute;
+        [self updateRouteColoringType];
+        [self updateRouteColors:isNight];
+
         int currentRoute = route.currentRoute;
         if (currentRoute < 0)
             currentRoute = 0;

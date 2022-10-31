@@ -302,10 +302,9 @@
             else
             {
                 [_iapHelper disableProduct:product.productIdentifier];
-                if ([product.productIdentifier isEqual: @"net.osmand.maps.inapp.addon.mapillary"])
+                if ([product.productIdentifier isEqual: kInAppId_Addon_Mapillary])
                 {
-                    OsmAndAppInstance app = OsmAndApp.instance;
-                    [app.data setMapillary:NO];
+                    [OsmAndApp.instance.data setMapillary:NO];
                 }
             }
             

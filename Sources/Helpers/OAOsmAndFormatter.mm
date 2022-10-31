@@ -335,18 +335,18 @@ static NSString * const _unitsmps = OALocalizedString(@"units_m_s");
 
         int kmh10 = (int) (kmh * 10.0f);
         if (kmh >= 20){
-            return [self formatValue: (int) kmh10 / 10.0f unit:_unitsKmh forceTrailingZeroes:NO decimalPlacesNumber:0];
+            return [self getFormattedHighSpeed: (int) kmh10 / 10.0f unit:_unitsKmh];
         }
         // calculate 2.0 km/h instead of 2 km/h in order to not stress UI text lengh
-        return [self formatValue:kmh10 / 10.0f unit:_unitsKmh forceTrailingZeroes:NO decimalPlacesNumber:1];
+        return [self getFormattedLowSpeed:kmh10 / 10.0f unit:_unitsKmh];
     } else if ([settings.speedSystem get] == MILES_PER_HOUR) {
         
         float mph = kmh * METERS_IN_KILOMETER / METERS_IN_ONE_MILE;
         int mph10 = (int) (mph * 10.0f);
         if (mph >= 20){
-            return [self formatValue:mph10 / 10.0f unit:_unitsMph forceTrailingZeroes:NO decimalPlacesNumber:0];
+            return [self getFormattedHighSpeed:mph10 / 10.0f unit:_unitsMph];
         }
-        return [self formatValue:mph10 / 10.0f unit:_unitsMph forceTrailingZeroes:NO decimalPlacesNumber:1];
+        return [self getFormattedLowSpeed:mph10 / 10.0f unit:_unitsMph];
 
     }else if ([settings.speedSystem get] == NAUTICALMILES_PER_HOUR){
         
@@ -354,9 +354,9 @@ static NSString * const _unitsmps = OALocalizedString(@"units_m_s");
         int mph10 = (int) (mph * 10.0f);
         
         if (mph >= 20){
-            return [self formatValue:mph10 / 10.0f unit:_unitsNm forceTrailingZeroes:NO decimalPlacesNumber:0];
+            return [self getFormattedHighSpeed:mph10 / 10.0f unit:_unitsNm];
         }
-        return [self formatValue:mph10 / 10.0f unit:_unitsNm forceTrailingZeroes:NO decimalPlacesNumber:1];
+        return [self getFormattedLowSpeed:mph10 / 10.0f unit:_unitsNm];
     }else if ([settings.speedSystem get] == MINUTES_PER_KILOMETER){
         
         if (metersperseconds < 0.111111111) {
@@ -364,7 +364,7 @@ static NSString * const _unitsmps = OALocalizedString(@"units_m_s");
         }
         float minPerKm = METERS_IN_KILOMETER / (METERS_PER_SECOND * 60);
         if (minPerKm >= 10) {
-            return [self formatValue:minPerKm unit:_unitsMinKm forceTrailingZeroes:NO decimalPlacesNumber:0];
+            return [self getFormattedHighSpeed:minPerKm unit:_unitsMinKm];
         } else {
             int seconds = round(minPerKm * 60);
             return [OAUtilities getFormattedValue:[self getFormattedTimeInterval:seconds] unit:_unitsMinKm];
@@ -377,22 +377,33 @@ static NSString * const _unitsmps = OALocalizedString(@"units_m_s");
         float minPerM = (METERS_IN_ONE_MILE) / (metersperseconds * 60);
         if (minPerM >= 10) {
             int rounded = round(minPerM);
-            return [self formatValue:rounded unit:_unitsMinMi forceTrailingZeroes:NO decimalPlacesNumber:0];
+            return [self getFormattedHighSpeed:rounded unit:_unitsMinMi];
         } else {
             int mph10 = round(minPerM * 10.0f);
-            return [self formatValue: mph10/10.0f unit:_unitsMinMi forceTrailingZeroes:NO decimalPlacesNumber:1];
+            return [self getFormattedLowSpeed: mph10/10.0f unit:_unitsMinMi];
         }
     }else{
         
         if (metersperseconds >= 10) {
-            return [self formatValue:roundf(metersperseconds) unit:_unitsmps forceTrailingZeroes:false decimalPlacesNumber:0];
+            return [self getFormattedHighSpeed:metersperseconds unit:_unitsmps];
         }
         
         // for smaller values display 1 decimal digit x.y km/h, (0.5% precision at 20 km/h)
         int kmh10 = round(metersperseconds * 10.0f);
-        return [self formatValue:kmh10 / 10.0f unit:_unitsmps forceTrailingZeroes:false decimalPlacesNumber:1];
+        return [self getFormattedLowSpeed:kmh10 / 10.0f unit:_unitsmps];
     }
 }
+
++ (NSString *) getFormattedHighSpeed:(float) speed unit:(NSString*) unit
+{
+    return [self formatValue:speed unit:unit forceTrailingZeroes:false decimalPlacesNumber:0];
+}
+
++ (NSString *) getFormattedLowSpeed:(float) speed unit:(NSString*) unit
+{
+    return [self formatValue:speed unit:unit forceTrailingZeroes:false decimalPlacesNumber:1];
+}
+
 
 + (double) calculateRoundedDist:(double)baseMetersDist
 {

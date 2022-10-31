@@ -1879,3 +1879,11 @@
 "routing_attr_allow_intermediate_description" = "较难的路线，有较陡峭的路段。一般来说，有些障碍物是应该避免的。";
 "choose_what_to_restore" = "选择要恢复的项目";
 "login_help_email_title" = "OsmAnd iOS云";
+"map_widget_rendering_fps" = "地图渲染 FPS";
+"rendering_attr_tracktype_grade3_name" = "多半坚实";
+"vehicle_parameters" = "车辆参数";
+"routeInfo_winter_ice_road_name" = "冬季和冰雪道路";
+"rendering_attr_tracktype_grade4_name" = "多半松软";
+"rendering_attr_tracktype_grade2_name" = "坚实（无铺面）";
+"rendering_attr_tracktype_grade1_name" = "坚实（有铺面）";
+"app_mode_campervan" = "露营车（RV）";

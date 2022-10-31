@@ -182,6 +182,7 @@
     if (_rootViewController)
     {
         return [self handleIncomingFileURL:url]
+            || [self handleIncomingActionsURL:url]
             || [self handleIncomingNavigationURL:url]
             || [self handleIncomingSetPinOnMapURL:url]
             || [self handleIncomingMoveMapToLocationURL:url]
@@ -193,6 +194,37 @@
         _loadedURL = url;
         return NO;
     }
+}
+
+- (BOOL)handleIncomingActionsURL:(NSURL *)url
+{
+    // osmandmaps://?lat=45.6313&lon=34.9955&z=8&title=New+York
+    if (_rootViewController && [url.scheme.lowercaseString isEqualToString:@"osmandmaps"])
+    {
+        NSDictionary<NSString *, NSString *> *params = [OAUtilities parseUrlQuery:url];
+        double lat = [params[@"lat"] doubleValue];
+        double lon = [params[@"lon"] doubleValue];
+        int zoom = [params[@"z"] intValue];
+        NSString *title = params[@"title"];
+        NSString *navigate = url.host;
+
+        if ([navigate isEqualToString:@"navigate"])
+        {
+            OAMapViewController *mapViewController = [_rootViewController.mapPanel mapViewController];
+            OATargetPoint *targetPoint = [mapViewController.mapLayers.contextMenuLayer getUnknownTargetPoint:lat longitude:lon];
+            if (title.length > 0)
+                targetPoint.title = title;
+
+            [_rootViewController.mapPanel navigate:targetPoint];
+            [_rootViewController.mapPanel closeRouteInfo];
+            [_rootViewController.mapPanel startNavigation];
+        }
+        else
+        {
+            [self moveMapToLat:lat lon:lon zoom:zoom withTitle:title];
+        }
+    }
+    return NO;
 }
 
 - (BOOL)handleIncomingFileURL:(NSURL *)url

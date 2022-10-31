@@ -304,7 +304,10 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
             else
             {
                 [_iapHelper disableProduct:_product.productIdentifier];
-                [OsmAndApp.instance.data setMapillary:NO];
+                if ([_product.productIdentifier isEqualToString:kInAppId_Addon_Mapillary])
+                {
+                    [OsmAndApp.instance.data setMapillary:NO];
+                }
             }
             [self updatePurchaseButton];
             

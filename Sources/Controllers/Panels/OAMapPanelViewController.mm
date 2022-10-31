@@ -1447,6 +1447,26 @@ typedef enum
     return [[OAReverseGeocoder instance] lookupAddressAtLat:lat lon:lon];
 }
 
+- (void) moveMapToLat:(double)lat lon:(double)lon zoom:(int)zoom withTitle:(NSString *)title
+{
+    UIViewController *top = self.rootViewController.navigationController.topViewController;
+    if (![top isKindOfClass:[JASidePanelController class]])
+        [self.rootViewController.navigationController popToRootViewControllerAnimated:NO];
+
+    if (self.rootViewController.state != JASidePanelCenterVisible)
+        [self.rootViewController showCenterPanelAnimated:NO];
+
+    [self closeDashboard];
+
+    Point31 pos31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon))];
+    OATargetPoint *targetPoint = [self.mapViewController.mapLayers.contextMenuLayer getUnknownTargetPoint:lat longitude:lon];
+    if (title.length > 0)
+        targetPoint.title = title;
+
+    [self showContextMenu:targetPoint];
+    [self.mapViewController goToPosition:pos31 andZoom:zoom animated:NO];
+}
+
 - (void) goToTargetPointDefault
 {
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;

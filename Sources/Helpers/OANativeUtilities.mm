@@ -168,15 +168,4 @@
     return qTileIds;
 }
 
-+ (CLLocation *)parseLatLon:(NSString *)latLon
-{
-    NSArray<NSString *> *coords = [latLon componentsSeparatedByString:@","];
-    if (coords.count != 2)
-        return nil;
-    
-    double lat = [coords[0] doubleValue];
-    double lon = [coords[1] doubleValue];
-    return [[CLLocation alloc] initWithLatitude:lat longitude:lon];
-}
-
 @end

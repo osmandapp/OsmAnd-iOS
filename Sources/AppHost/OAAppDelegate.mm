@@ -268,11 +268,11 @@
             return YES;
         }
 
-        CLLocation *startLatLon = [OANativeUtilities parseLatLon:startLatLonParam];
+        CLLocation *startLatLon = [OAUtilities parseLatLon:startLatLonParam];
         if (startLatLonParam && !startLatLon)
             OALog(@"Malformed OsmAnd navigation URL: start location is broken");
         
-        CLLocation *endLatLon = [OANativeUtilities parseLatLon:endLatLonParam];
+        CLLocation *endLatLon = [OAUtilities parseLatLon:endLatLonParam];
         if (!endLatLon)
         {
             OALog(@"Malformed OsmAnd navigation URL: destination location is broken");
@@ -306,7 +306,7 @@
 
     if (_rootViewController && hasPin && [OAUtilities isOsmAndMapUrl:url])
     {
-        CLLocation *latLon = !latLonParam || latLonParam.length == 0 ? nil : [OANativeUtilities parseLatLon:latLonParam];
+        CLLocation *latLon = !latLonParam || latLonParam.length == 0 ? nil : [OAUtilities parseLatLon:latLonParam];
         if (latLon)
         {
             double lat = latLon.coordinate.latitude;
@@ -403,21 +403,7 @@
             return;
         }
 
-        UIViewController *top = _rootViewController.navigationController.topViewController;
-        if (![top isKindOfClass:[JASidePanelController class]])
-            [_rootViewController.navigationController popToRootViewControllerAnimated:NO];
-
-        if (_rootViewController.state != JASidePanelCenterVisible)
-            [_rootViewController showCenterPanelAnimated:NO];
-
-        [_rootViewController.mapPanel closeDashboard];
-
-        OATargetPoint *targetPoint = [mapViewController.mapLayers.contextMenuLayer getUnknownTargetPoint:lat longitude:lon];
-        if (title.length > 0)
-            targetPoint.title = title;
-
-        [_rootViewController.mapPanel showContextMenu:targetPoint];
-        [mapViewController goToPosition:pos31 andZoom:zoom animated:NO];
+        [_rootViewController.mapPanel moveMapToLat:lat lon:lon zoom:zoom withTitle:title];
     });
 }
 

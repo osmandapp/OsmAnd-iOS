@@ -1001,6 +1001,17 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
     return [NSDictionary dictionaryWithDictionary:queryStrings];
 }
 
++ (CLLocation *)parseLatLon:(NSString *)latLon
+{
+    NSArray<NSString *> *coords = [latLon componentsSeparatedByString:@","];
+    if (coords.count != 2)
+        return nil;
+    
+    double lat = [coords[0] doubleValue];
+    double lon = [coords[1] doubleValue];
+    return [[CLLocation alloc] initWithLatitude:lat longitude:lon];
+}
+
 + (BOOL) isOsmAndMapUrl:(NSURL *)url
 {
     return [self isOsmAndSite:url] && [self isPathPrefix:url pathPrefix:kOsmAndMapPathPrefix];

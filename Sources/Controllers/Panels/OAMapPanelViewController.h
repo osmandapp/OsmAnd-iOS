@@ -181,6 +181,7 @@
                 animated:(BOOL)animated;
 
 - (void) applyTargetPoint:(OATargetPoint *)targetPoint;
+- (void) moveMapToLat:(double)lat lon:(double)lon zoom:(int)zoom withTitle:(NSString *)title;
 
 - (void) showCards;
 

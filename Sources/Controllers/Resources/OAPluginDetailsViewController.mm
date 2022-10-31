@@ -19,7 +19,6 @@
 #import "OAPlugin.h"
 #import "OAColors.h"
 #import <SafariServices/SafariServices.h>
-#import "OAResourcesBaseViewController.h"
 
 #define kPriceButtonTextInset 8.0
 #define kPriceButtonMinTextWidth 80.0
@@ -304,10 +303,6 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
             else
             {
                 [_iapHelper disableProduct:_product.productIdentifier];
-                if ([_product.productIdentifier isEqualToString:kInAppId_Addon_Mapillary])
-                {
-                    [OsmAndApp.instance.data setMapillary:NO];
-                }
             }
             [self updatePurchaseButton];
             

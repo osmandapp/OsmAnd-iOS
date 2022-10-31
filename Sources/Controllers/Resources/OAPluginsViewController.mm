@@ -302,10 +302,6 @@
             else
             {
                 [_iapHelper disableProduct:product.productIdentifier];
-                if ([product.productIdentifier isEqualToString:kInAppId_Addon_Mapillary])
-                {
-                    [OsmAndApp.instance.data setMapillary:NO];
-                }
             }
             
             [self refreshProduct:indexPath];

@@ -177,6 +177,11 @@
     return YES;
 }
 
+- (CGFloat)detailsButtonHeight
+{
+    return 50. + (OAUtilities.isLandscapeIpadAware ? 0 : OAUtilities.getBottomMargin);
+}
+
 - (ETopToolbarType) topToolbarType
 {
     return ETopToolbarTypeFloating;

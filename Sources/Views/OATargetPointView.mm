@@ -1050,7 +1050,7 @@ static const NSInteger _buttonsCount = 4;
         if ([_customController showDetailsButton])
         {
             NSIndexPath *collapseDetailsCellIndex = [NSIndexPath indexPathForRow:0 inSection:0];
-            [((OAMapDownloadController *)_customController).tableView reloadRowsAtIndexPaths:@[collapseDetailsCellIndex] withRowAnimation:UITableViewRowAnimationAutomatic];
+            [((OATargetInfoViewController *)_customController).tableView reloadRowsAtIndexPaths:@[collapseDetailsCellIndex] withRowAnimation:UITableViewRowAnimationAutomatic];
         }
     }
 }
@@ -1233,7 +1233,7 @@ static const NSInteger _buttonsCount = 4;
         }
     }
     CGFloat containerViewHeight = topViewHeight + controlButtonsHeight + buttonsHeight + infoViewHeight;
-    _containerView.frame = CGRectMake(0.0, landscape ? (toolBarHeight > 0 ? toolBarHeight : [OAUtilities getStatusBarHeight]) : DeviceScreenHeight - containerViewHeight, width, containerViewHeight);
+    _containerView.frame = CGRectMake(0.0, landscape ? (toolBarHeight > 0 ? toolBarHeight : [OAUtilities getStatusBarHeight]) : DeviceScreenHeight - containerViewHeight - self.customController.detailsButtonHeight, width, containerViewHeight);
     CGFloat bottomToolBarHeight = self.customController.hasBottomToolbar ? self.customController.bottomToolBarView.frame.size.height : 0.0;
     
     if (self.customController && [self.customController hasContent])
@@ -1286,7 +1286,7 @@ static const NSInteger _buttonsCount = 4;
     else
         newOffset = {0, static_cast<CGFloat>(_customController.hasBottomToolbar && !landscape ? _customController.getToolBarHeight + topViewHeight / 2 : _headerOffset) + [self getAdditionalContentOffset]};
     
-    if (adjustOffset || [_customController showDetailsButton])
+    if (adjustOffset)
         self.contentOffset = newOffset;
 
     if (_imageView.image)
@@ -1429,10 +1429,7 @@ static const NSInteger _buttonsCount = 4;
 
 - (CGFloat) getAdditionalContentOffset
 {
-    if ([_customController showDetailsButton])
-        return self.customController.additionalContentOffset + [_customController detailsButtonHeight] + OAUtilities.getBottomMargin;
-    else
-        return self.customController.additionalContentOffset;
+    return self.customController.additionalContentOffset;
 }
 
 - (CGFloat) calculateTopY

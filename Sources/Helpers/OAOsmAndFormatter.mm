@@ -331,52 +331,75 @@ static NSString * const _unitsmps = OALocalizedString(@"units_m_s");
 {
     OAAppSettings* settings = [OAAppSettings sharedManager];
     float kmh = metersperseconds * 3.6f;
-    if ([settings.speedSystem get] == KILOMETERS_PER_HOUR) {
+    if ([settings.speedSystem get] == KILOMETERS_PER_HOUR)
+    {
         int kmh10 = (int) (kmh * 10.0f);
-        if (kmh >= 20){
+        if (kmh >= 20)
+        {
             return [self getFormattedSpeed: (int) kmh10 / 10.0f unit:_unitsKmh];
         }
         // calculate 2.0 km/h instead of 2 km/h in order to not stress UI text lengh
         return [self getFormattedLowSpeed:kmh10 / 10.0f unit:_unitsKmh];
-    } else if ([settings.speedSystem get] == MILES_PER_HOUR) {
+    }
+    else if ([settings.speedSystem get] == MILES_PER_HOUR)
+    {
         float mph = kmh * METERS_IN_KILOMETER / METERS_IN_ONE_MILE;
         int mph10 = (int) (mph * 10.0f);
-        if (mph >= 20){
+        if (mph >= 20)
+        {
             return [self getFormattedSpeed:mph10 / 10.0f unit:_unitsMph];
         }
         return [self getFormattedLowSpeed:mph10 / 10.0f unit:_unitsMph];
-    }else if ([settings.speedSystem get] == NAUTICALMILES_PER_HOUR){
+    }
+    else if ([settings.speedSystem get] == NAUTICALMILES_PER_HOUR)
+    {
         float mph = kmh * METERS_IN_KILOMETER / METERS_IN_ONE_NAUTICALMILE;
         int mph10 = (int) (mph * 10.0f);
-        if (mph >= 20){
+        if (mph >= 20)
+        {
             return [self getFormattedSpeed:mph10 / 10.0f unit:_unitsNm];
         }
         return [self getFormattedLowSpeed:mph10 / 10.0f unit:_unitsNm];
-    }else if ([settings.speedSystem get] == MINUTES_PER_KILOMETER){
-        if (metersperseconds < 0.111111111) {
+    }
+    else if ([settings.speedSystem get] == MINUTES_PER_KILOMETER)
+    {
+        if (metersperseconds < 0.111111111)
+        {
             return [OAUtilities getFormattedValue:@"-" unit:_unitsMinKm];
         }
         float minPerKm = METERS_IN_KILOMETER / (METERS_PER_SECOND * 60);
-        if (minPerKm >= 10) {
+        if (minPerKm >= 10)
+        {
             return [self getFormattedSpeed:minPerKm unit:_unitsMinKm];
-        } else {
+        }
+        else
+        {
             int seconds = round(minPerKm * 60);
             return [OAUtilities getFormattedValue:[self getFormattedTimeInterval:seconds] unit:_unitsMinKm];
         }
-    }else if ([settings.speedSystem get] == MINUTES_PER_MILE){
-        if (metersperseconds < 0.111111111) {
+    }
+    else if ([settings.speedSystem get] == MINUTES_PER_MILE)
+    {
+        if (metersperseconds < 0.111111111)
+        {
             return [OAUtilities getFormattedValue:@"-" unit:_unitsMinMi];
         }
         float minPerM = (METERS_IN_ONE_MILE) / (metersperseconds * 60);
-        if (minPerM >= 10) {
+        if (minPerM >= 10)
+        {
             int rounded = round(minPerM);
             return [self getFormattedSpeed:rounded unit:_unitsMinMi];
-        } else {
+        }
+        else
+        {
             int mph10 = round(minPerM * 10.0f);
             return [self getFormattedLowSpeed: mph10/10.0f unit:_unitsMinMi];
         }
-    }else{
-        if (metersperseconds >= 10) {
+    }
+    else
+    {
+        if (metersperseconds >= 10)
+        {
             return [self getFormattedSpeed:metersperseconds unit:_unitsmps];
         }
         // for smaller values display 1 decimal digit x.y km/h, (0.5% precision at 20 km/h)

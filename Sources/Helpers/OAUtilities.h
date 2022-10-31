@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreLocation/CoreLocation.h>
 
 //RGB color macro
 #define UIColorFromRGB(rgbValue) [UIColor \
@@ -200,6 +201,12 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 + (CGSize) calculateTextBounds:(NSString *)text width:(CGFloat)width height:(CGFloat)height font:(UIFont *)font;
 
 + (NSDictionary<NSString *, NSString *> *) parseUrlQuery:(NSURL *)url;
++ (CLLocation *)parseLatLon:(NSString *)latLon;
++ (BOOL) isOsmAndMapUrl:(NSURL *)url;
++ (BOOL) isOsmAndGoUrl:(NSURL *)url;
++ (BOOL) isOsmAndSite:(NSURL *)url;
++ (BOOL) isPathPrefix:(NSURL *)url pathPrefix:(NSString *)pathPrefix;
+
 + (void) getHMS:(NSTimeInterval)timeInterval hours:(int*)hours minutes:(int*)minutes seconds:(int*)seconds;
 
 + (NSArray *) splitCoordinates:(NSString *)string;

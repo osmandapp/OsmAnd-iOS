@@ -6,8 +6,17 @@
 //  Copyright (c) 2022 OsmAnd. All rights reserved.
 //
 
-#ifndef OAIndexConstants_h
-#define OAIndexConstants_h
+#ifndef OALinks_h
+#define OALinks_h
+
+#define kOsmAndActionScheme @"osmandmaps"
+#define kFileScheme @"file"
+#define kHttpScheme @"http"
+#define kHttpsScheme @"https"
+#define kNavigateActionHost @"navigate"
+#define kOsmAndHost @"osmand.net"
+#define kOsmAndGoPathPrefix @"/go"
+#define kOsmAndMapPathPrefix @"/map"
 
 //#define kDocsLatestVersion @"https://docs.osmand.net/blog/osmand-ios-4-3-released"
 #define kDocsLatestVersion  @"https://docs.osmand.net/docs/versions/future-ios"
@@ -76,4 +85,4 @@
 
 #define kWeatherTilesUrlPrefix @"https://osmand.net/weather/gfs/tiff/"
 
-#endif /* OAIndexConstants_h */
+#endif /* OALinks_h */

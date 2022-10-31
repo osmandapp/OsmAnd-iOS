@@ -19,6 +19,7 @@
 #import <UIKit/UIDevice.h>
 #import "OAIndexConstants.h"
 #import <MBProgressHUD.h>
+#import "OALinks.h"
 
 #import <mach/mach.h>
 #import <mach/mach_host.h>
@@ -998,6 +999,50 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
         queryStrings[key] = value;
     }
     return [NSDictionary dictionaryWithDictionary:queryStrings];
+}
+
++ (CLLocation *)parseLatLon:(NSString *)latLon
+{
+    NSArray<NSString *> *coords = [latLon componentsSeparatedByString:@","];
+    if (coords.count != 2)
+        return nil;
+    
+    double lat = [coords[0] doubleValue];
+    double lon = [coords[1] doubleValue];
+    return [[CLLocation alloc] initWithLatitude:lat longitude:lon];
+}
+
++ (BOOL) isOsmAndMapUrl:(NSURL *)url
+{
+    return [self isOsmAndSite:url] && [self isPathPrefix:url pathPrefix:kOsmAndMapPathPrefix];
+}
+
++ (BOOL) isOsmAndGoUrl:(NSURL *)url
+{
+    return [self isOsmAndSite:url] && [self isPathPrefix:url pathPrefix:kOsmAndGoPathPrefix];
+}
+
++ (BOOL) isOsmAndSite:(NSURL *)url
+{
+    return [self isHttpOrHttpsScheme:url] && [self isOsmAndHost:url];
+}
+
++ (BOOL) isHttpOrHttpsScheme:(NSURL *)url
+{
+    NSString *scheme = url.scheme;
+    return scheme && ([scheme.lowercaseString isEqualToString:kHttpScheme] || [scheme.lowercaseString isEqualToString:kHttpsScheme]);
+}
+
++ (BOOL) isOsmAndHost:(NSURL *)url
+{
+    NSString *host = url.host;
+    return host && [host.lowercaseString hasSuffix:kOsmAndHost];
+}
+
++ (BOOL) isPathPrefix:(NSURL *)url pathPrefix:(NSString *)pathPrefix
+{
+    NSString *path = url.path;
+    return path && [path.lowercaseString hasPrefix:pathPrefix];
 }
 
 + (void) getHMS:(NSTimeInterval)timeInterval hours:(int*)hours minutes:(int*)minutes seconds:(int*)seconds

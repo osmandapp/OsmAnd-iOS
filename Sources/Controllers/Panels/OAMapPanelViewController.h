@@ -181,6 +181,7 @@
                 animated:(BOOL)animated;
 
 - (void) applyTargetPoint:(OATargetPoint *)targetPoint;
+- (void) moveMapToLat:(double)lat lon:(double)lon zoom:(int)zoom withTitle:(NSString *)title;
 
 - (void) showCards;
 
@@ -206,6 +207,8 @@
 // Navigation
 - (void) displayCalculatedRouteOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight;
 - (void) displayCalculatedRouteOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight animated:(BOOL)animated;
+
+- (void) buildRoute:(CLLocation *)start end:(CLLocation *)end appMode:(OAApplicationMode *)appMode;
 
 - (void) onNavigationClick:(BOOL)hasTargets;
 - (void) switchToRouteFollowingLayout;

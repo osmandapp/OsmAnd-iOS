@@ -1921,8 +1921,6 @@ static const NSInteger _buttonsCount = 4;
 
 - (IBAction) buttonShareClicked:(id)sender
 {
-    // http://osmand.net/go.html?lat=12.6313&lon=-7.9955&z=8&title=New+York The location was shared with you by OsmAnd
-
     NSMutableArray *items = [NSMutableArray array];
 
     NSMutableString *sharingText = [[NSMutableString alloc] init];
@@ -1958,16 +1956,17 @@ static const NSInteger _buttonsCount = 4;
                 [sharingText appendString:@"\n"];
             [sharingText appendString:_targetPoint.titleAddress];
         }
-        NSString *geoUrl = [OAUtilities buildGeoUrl:_targetPoint.location.latitude
-                                          longitude:_targetPoint.location.longitude
-                                               zoom:_mapView.zoomLevel];
+        double lat = _targetPoint.location.latitude;
+        double lon = _targetPoint.location.longitude;
+        int zoom = _mapView.zoomLevel;
+        NSString *geoUrl = [OAUtilities buildGeoUrl:lat longitude:lon zoom:zoom];
         if (geoUrl.length > 0)
         {
             NSString *cordinates = [NSString stringWithFormat:@"Location: %@",geoUrl];
                 [sharingText appendString:@"\n"];
                 [sharingText appendString:cordinates];
         }
-        NSString *httpUrl = [NSString stringWithFormat:kShareLink, _targetPoint.location.latitude, _targetPoint.location.longitude, _mapView.zoomLevel];
+        NSString *httpUrl = [NSString stringWithFormat:kShareLink, lat, lon, zoom, lat, lon];
         if (httpUrl.length > 0)
         {
             [sharingText appendString:@"\n"];
@@ -2578,10 +2577,11 @@ static const NSInteger _buttonsCount = 4;
     {
         case OAShareMenuActivityClipboard:
         {
-            NSString *geoUrl = [OAUtilities buildGeoUrl:_targetPoint.location.latitude
-                                              longitude:_targetPoint.location.longitude
-                                                   zoom:_mapView.zoomLevel];
-            NSString *httpUrl = [NSString stringWithFormat:kShareLinkTemplate, _targetPoint.location.latitude, _targetPoint.location.longitude, _mapView.zoomLevel];
+            double lat = _targetPoint.location.latitude;
+            double lon = _targetPoint.location.longitude;
+            int zoom = _mapView.zoomLevel;
+            NSString *geoUrl = [OAUtilities buildGeoUrl:lat longitude:lon zoom:zoom];
+            NSString *httpUrl = [NSString stringWithFormat:kShareLinkTemplate, lat, lon, zoom, lat, lon];
             NSMutableString *sms = [NSMutableString string];
             if (_targetPoint.title && _targetPoint.title.length > 0)
             {

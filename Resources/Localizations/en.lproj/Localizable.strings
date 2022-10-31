@@ -2773,7 +2773,7 @@
 "cross_buy" = "Cross-buy";
 
 "track_has_no_needed_data" = "The track is missing the respective data.";
-"select_another_colorization" = "Please select another type of coloring.";
+"select_another_colorization" = "Please select another coloring type.";
 
 "purchases_feature_desc_osmand_cloud" = "Store all OsmAnd data online. No lost data after reinstalling. Back up and restore all info easily.";
 "purchases_feature_desc_pro_widgets" = "Get access to OsmAnd Pro features: Route coloring and more.";

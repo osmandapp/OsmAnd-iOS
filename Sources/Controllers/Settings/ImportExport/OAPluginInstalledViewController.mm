@@ -287,9 +287,14 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
     {
         OAProduct *product = [[OAIAPHelper sharedInstance] product:_pluginId];
         if (product)
+        {
             [_iapHelper disableProduct:_pluginId];
+            [_app.data setMapillary: NO];
+        }
         else
+        {
             [OAPlugin enablePlugin:_plugin enable:NO];
+        }
     }
     [self dismissViewControllerAnimated:YES completion:nil];
 }

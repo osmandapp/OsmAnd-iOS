@@ -302,6 +302,11 @@
             else
             {
                 [_iapHelper disableProduct:product.productIdentifier];
+                if ([product.productIdentifier isEqual: @"net.osmand.maps.inapp.addon.mapillary"])
+                {
+                    OsmAndAppInstance app = OsmAndApp.instance;
+                    [app.data setMapillary:NO];
+                }
             }
             
             [self refreshProduct:indexPath];

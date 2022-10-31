@@ -290,7 +290,9 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
         {
             [_iapHelper disableProduct:_pluginId];
             if ([product.productIdentifier isEqualToString:kInAppId_Addon_Mapillary])
-            [_app.data setMapillary:NO];
+            {
+                [OsmAndApp.instance.data setMapillary:NO];
+            }
         }
         else
         {

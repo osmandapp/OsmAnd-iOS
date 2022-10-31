@@ -34,6 +34,7 @@
 #import "OATargetPointsHelper.h"
 #import "OAMapActions.h"
 #import "OADiscountHelper.h"
+#import "OALinks.h"
 
 #include "CoreResourcesFromBundleProvider.h"
 
@@ -199,16 +200,16 @@
 - (BOOL)handleIncomingActionsURL:(NSURL *)url
 {
     // osmandmaps://?lat=45.6313&lon=34.9955&z=8&title=New+York
-    if (_rootViewController && [url.scheme.lowercaseString isEqualToString:@"osmandmaps"])
+    if (_rootViewController && [url.scheme.lowercaseString isEqualToString:kOsmAndActionScheme])
     {
         NSDictionary<NSString *, NSString *> *params = [OAUtilities parseUrlQuery:url];
         double lat = [params[@"lat"] doubleValue];
         double lon = [params[@"lon"] doubleValue];
         int zoom = [params[@"z"] intValue];
         NSString *title = params[@"title"];
-        NSString *navigate = url.host;
+        NSString *host = url.host;
 
-        if ([navigate isEqualToString:@"navigate"])
+        if ([host isEqualToString:kNavigateActionHost])
         {
             OAMapViewController *mapViewController = [_rootViewController.mapPanel mapViewController];
             OATargetPoint *targetPoint = [mapViewController.mapLayers.contextMenuLayer getUnknownTargetPoint:lat longitude:lon];
@@ -229,7 +230,7 @@
 
 - (BOOL)handleIncomingFileURL:(NSURL *)url
 {
-    if (_rootViewController && [url.scheme.lowercaseString isEqualToString:@"file"])
+    if (_rootViewController && [url.scheme.lowercaseString isEqualToString:kFileScheme])
         return [_rootViewController handleIncomingURL:url];
     return NO;
 }
@@ -282,7 +283,7 @@
         if (appModeKeyParam && appModeKeyParam.length > 0 && !appMode)
             OALog(@"App mode with specified key not available, using default navigation app mode");
 
-        [self buildRoute:startLatLon end:endLatLon appMode:appMode];
+        [_rootViewController.mapPanel buildRoute:startLatLon end:endLatLon appMode:appMode];
         return YES;
     }
     return NO;
@@ -384,21 +385,6 @@
         return YES;
     }
     return NO;
-}
-
-- (void)buildRoute:(CLLocation *)start end:(CLLocation *)end appMode:(OAApplicationMode *)appMode
-{
-    if (appMode)
-        [[OARoutingHelper sharedInstance] setAppMode:appMode];
-
-    [[OATargetPointsHelper sharedInstance] navigateToPoint:end updateRoute:YES intermediate:-1];
-    [_rootViewController.mapPanel.mapActions enterRoutePlanningModeGivenGpx:nil
-                                                                    appMode:appMode
-                                                                       path:nil
-                                                                       from:start
-                                                                   fromName:nil
-                                             useIntermediatePointsByDefault:NO
-                                                                 showDialog:YES];
 }
 
 - (void)moveMapToLat:(double)lat lon:(double)lon zoom:(int)zoom withTitle:(NSString *)title

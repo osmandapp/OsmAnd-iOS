@@ -19,6 +19,7 @@
 #import <UIKit/UIDevice.h>
 #import "OAIndexConstants.h"
 #import <MBProgressHUD.h>
+#import "OALinks.h"
 
 #import <mach/mach.h>
 #import <mach/mach_host.h>
@@ -1002,12 +1003,12 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
 
 + (BOOL) isOsmAndMapUrl:(NSURL *)url
 {
-    return [self isOsmAndSite:url] && [self isPathPrefix:url pathPrefix:@"/map"];
+    return [self isOsmAndSite:url] && [self isPathPrefix:url pathPrefix:kOsmAndMapPathPrefix];
 }
 
 + (BOOL) isOsmAndGoUrl:(NSURL *)url
 {
-    return [self isOsmAndSite:url] && [self isPathPrefix:url pathPrefix:@"/go"];
+    return [self isOsmAndSite:url] && [self isPathPrefix:url pathPrefix:kOsmAndGoPathPrefix];
 }
 
 + (BOOL) isOsmAndSite:(NSURL *)url
@@ -1018,13 +1019,13 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
 + (BOOL) isHttpOrHttpsScheme:(NSURL *)url
 {
     NSString *scheme = url.scheme;
-    return scheme && ([scheme.lowercaseString isEqualToString:@"http"] || [scheme.lowercaseString isEqualToString:@"https"]);
+    return scheme && ([scheme.lowercaseString isEqualToString:kHttpScheme] || [scheme.lowercaseString isEqualToString:kHttpsScheme]);
 }
 
 + (BOOL) isOsmAndHost:(NSURL *)url
 {
     NSString *host = url.host;
-    return host && [host.lowercaseString hasSuffix:@"osmand.net"];
+    return host && [host.lowercaseString hasSuffix:kOsmAndHost];
 }
 
 + (BOOL) isPathPrefix:(NSURL *)url pathPrefix:(NSString *)pathPrefix

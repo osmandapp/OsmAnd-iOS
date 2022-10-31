@@ -3637,6 +3637,21 @@ typedef enum
     [self displayAreaOnMap:topLeft bottomRight:bottomRight zoom:0 bottomInset:[_routeInfoView superview] && !landscape ? _routeInfoView.frame.size.height + 20.0 : 0 leftInset:[_routeInfoView superview] && landscape ? _routeInfoView.frame.size.width + 20.0 : 0 animated:NO];
 }
 
+- (void) buildRoute:(CLLocation *)start end:(CLLocation *)end appMode:(OAApplicationMode *)appMode
+{
+   if (appMode)
+       [[OARoutingHelper sharedInstance] setAppMode:appMode];
+
+   [[OATargetPointsHelper sharedInstance] navigateToPoint:end updateRoute:YES intermediate:-1];
+   [self.mapActions enterRoutePlanningModeGivenGpx:nil
+                                           appMode:appMode
+                                              path:nil
+                                              from:start
+                                          fromName:nil
+                    useIntermediatePointsByDefault:NO
+                                        showDialog:YES];
+}
+
 - (void) onNavigationClick:(BOOL)hasTargets
 {
     OATargetPointsHelper *targets = [OATargetPointsHelper sharedInstance];

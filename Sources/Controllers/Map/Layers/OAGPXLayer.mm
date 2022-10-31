@@ -216,6 +216,10 @@
             OAColoringType *type = gpx.coloringType.length > 0
                     ? [OAColoringType getNonNullTrackColoringTypeByName:gpx.coloringType]
                     : OAColoringType.TRACK_SOLID;
+            BOOL isAvailable = [type isAvailableInSubscription];
+            if (!isAvailable)
+                type = OAColoringType.DEFAULT;
+
             if ([type isGradient]
                     && (![cachedTrack[@"prev_coloring_type"] isEqualToString:gpx.coloringType]
                     || [cachedTrack[@"colorization_scheme"] intValue] != COLORIZATION_GRADIENT

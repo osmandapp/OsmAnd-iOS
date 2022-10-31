@@ -314,9 +314,10 @@
             _selectionIndex = indexPath.row;
             [self.foldersDelegate onItemSelected:indexPath.row];
         }
-        else if ([item.allKeys containsObject:@"product_identifier"])
+        else
         {
-            [self.foldersDelegate askForPaidProduct:item[@"product_identifier"]];
+            if ([self.foldersDelegate respondsToSelector:@selector(onDisabledItemSelected:)])
+                [self.foldersDelegate onDisabledItemSelected:indexPath.row];
         }
     }
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];

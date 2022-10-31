@@ -31,6 +31,7 @@
 #import "OAIAPHelper.h"
 #import "OAPluginPopupViewController.h"
 #import "OASegmentedSlider.h"
+#import "OARouteStatisticsHelper.h"
 
 #define kColorsSection 1
 
@@ -41,12 +42,14 @@
 @property (nonatomic) OAColoringType *coloringType;
 @property (nonatomic) NSString *title;
 @property (nonatomic) NSString *attrName;
-@property (nonatomic, assign) BOOL isActive;
+@property (nonatomic, assign) BOOL isAvailable;
+@property (nonatomic, assign) BOOL isEnabled;
 
 - (instancetype)initWithColoringType:(OAColoringType *)coloringType
                                title:(NSString *)title
                             attrName:(NSString *)attrName
-                            isActive:(BOOL)isActive;
+                            isAvailable:(BOOL)isAvailable
+                            isEnabled:(BOOL)isEnabled;
 
 @end
 
@@ -55,7 +58,8 @@
 - (instancetype)initWithColoringType:(OAColoringType *)coloringType
                                title:(NSString *)title
                             attrName:(NSString *)attrName
-                            isActive:(BOOL)isActive
+                         isAvailable:(BOOL)isAvailable
+                           isEnabled:(BOOL)isEnabled
 {
     self = [super init];
     if (self)
@@ -63,7 +67,8 @@
         _coloringType = coloringType;
         _title = title;
         _attrName = attrName;
-        _isActive = isActive;
+        _isAvailable = isAvailable;
+        _isEnabled = isEnabled;
     }
     return self;
 }
@@ -173,24 +178,34 @@
         if ([coloringType isRouteInfoAttribute])
             continue;
 
-        OATrackAppearanceItem *item = [[OATrackAppearanceItem alloc] initWithColoringType:coloringType title:coloringType.title attrName:nil isActive:[coloringType isAvailableForDrawingTrack:self.doc attributeName:nil]];
+        BOOL isAvailable = [coloringType isAvailableInSubscription];
+        BOOL isEnabled = [coloringType isAvailableForDrawingTrack:self.doc attributeName:nil];
+        OATrackAppearanceItem *item = [[OATrackAppearanceItem alloc] initWithColoringType:coloringType
+                                                                                    title:coloringType.title
+                                                                                 attrName:nil
+                                                                                 isAvailable:isAvailable
+                                                                                 isEnabled:isEnabled];
         [items addObject:item];
 
         if (currentType == coloringType)
             _selectedItem = item;
     }
-    // TODO: make other types available in the new subscription
-//    NSArray<NSString *> *attributes = [OARouteStatisticsHelper getRouteStatisticAttrsNames:YES];
-//
-//    for (NSString *attribute in attributes)
-//    {
-//        BOOL isAvailable = [OAIAPHelper isSubscribedToOsmAndPro] &&  [OAColoringType.ATTRIBUTE isAvailableForDrawingTrack:self.doc attributeName:attribute];
-//        OATrackAppearanceItem *item = [[OATrackAppearanceItem alloc] initWithColoringType:OAColoringType.ATTRIBUTE title:OALocalizedString([NSString stringWithFormat:@"%@_name", attribute]) attrName:attribute isActive:isAvailable];
-//        [items addObject:item];
-//
-//        if (currentType == OAColoringType.ATTRIBUTE && [self.gpx.coloringType isEqualToString:attribute])
-//            _selectedItem = item;
-//    }
+
+    NSArray<NSString *> *attributes = [OARouteStatisticsHelper getRouteStatisticAttrsNames:YES];
+    for (NSString *attribute in attributes)
+    {
+        BOOL isAvailable = [OAColoringType.ATTRIBUTE isAvailableInSubscription];
+        BOOL isEnabled = [OAColoringType.ATTRIBUTE isAvailableForDrawingTrack:self.doc attributeName:attribute];
+        OATrackAppearanceItem *item = [[OATrackAppearanceItem alloc] initWithColoringType:OAColoringType.ATTRIBUTE
+                                                                                    title:OALocalizedString([NSString stringWithFormat:@"%@_name", attribute])
+                                                                                 attrName:attribute
+                                                                              isAvailable:isAvailable
+                                                                                isEnabled:isEnabled];
+        [items addObject:item];
+
+        if (currentType == OAColoringType.ATTRIBUTE && [self.gpx.coloringType isEqualToString:attribute])
+            _selectedItem = item;
+    }
 
     _availableColoringTypes = items;
 
@@ -219,6 +234,12 @@
     self.tableView.sectionFooterHeight = 0.001;
     [self.tableView registerClass:OATableViewCustomFooterView.class
         forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [self checkColoringAvailability];
 }
 
 - (void)applyLocalization
@@ -305,8 +326,7 @@
     {
         [trackColoringTypes addObject:@{
             @"title": item.title,
-            @"available": @(item.isActive),
-            @"product_identifier": kInAppId_Addon_Advanced_Widgets
+            @"available": @(item.isAvailable && item.isEnabled)
         }];
     }
 
@@ -575,6 +595,24 @@
 - (BOOL)isSelectedTypeAltitude
 {
     return _selectedItem.coloringType == OAColoringType.ALTITUDE;
+}
+
+- (void)checkColoringAvailability
+{
+    BOOL isAvailable = [_selectedItem.coloringType isAvailableInSubscription];
+    if (!isAvailable)
+    {
+        [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Advanced_Widgets];
+        if (_colorValuesCell)
+        {
+            [_colorValuesCell.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:[_colorValuesCell.collectionView getSelectedIndex] inSection:0]
+                                                    atScrollPosition:UICollectionViewScrollPositionLeft
+                                                            animated:YES];
+        }
+    }
+    self.doneButton.userInteractionEnabled = isAvailable;
+    [self.doneButton setTitleColor:isAvailable ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer)
+                           forState:UIControlStateNormal];
 }
 
 - (IBAction)onBackButtonPressed:(id)sender
@@ -1085,13 +1123,25 @@
                     animations:^(void)
                     {
                         [self.tableView reloadData];
+                        self.doneButton.userInteractionEnabled = YES;
+                        [self.doneButton setTitleColor:UIColorFromRGB(color_primary_purple)
+                                              forState:UIControlStateNormal];
                     }
                     completion:nil];
 }
 
-- (void)askForPaidProduct:(NSString *)productIdentifier
+- (void)onDisabledItemSelected:(NSInteger)index
 {
-    [OAPluginPopupViewController askForPlugin:productIdentifier];
+    OATrackAppearanceItem *item = _availableColoringTypes[index];
+    if (item.isAvailable && !item.isEnabled)
+    {
+        NSString *message = [NSString stringWithFormat:@"%@ %@", OALocalizedString(@"track_has_no_needed_data"), OALocalizedString(@"select_another_colorization")];
+        [OAUtilities showToast:message details:nil duration:4 inView:self.view];
+    }
+    else
+    {
+        [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Advanced_Widgets];
+    }
 }
 
 #pragma mark - OAColorsTableViewCellDelegate
@@ -1197,8 +1247,7 @@
         {
             [newTrackColoringTypes addObject:@{
                     @"title": item.title,
-                    @"available": @(item.isActive),
-                    @"product_identifier": kInAppId_Addon_Advanced_Widgets
+                    @"available": @(item.isAvailable && item.isEnabled)
             }];
         }
         [tableData setData:@{

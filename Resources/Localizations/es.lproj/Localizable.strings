@@ -2713,3 +2713,7 @@
 "tts" = "TTS";
 "recorded_voice" = "Grabado";
 "shared_string_download_update" = "Descargar actualización";
+"track_has_no_needed_data" = "La traza no contiene los datos necesarios.";
+"backup_error_failed_to_fetch_remote_items" = "No se pudo obtener la lista de archivos del servidor.";
+"error_contact_support" = "Si el problema persiste, contacta con nuestro equipo de asistencia.";
+"select_another_colorization" = "Elige otro tipo de color.";

@@ -127,6 +127,7 @@ typedef NS_ENUM(NSInteger, EOASubscriptionOrigin) {
 - (BOOL) checkBackupSubscriptions;
 
 - (void) onBackupPurchaseRequested;
+- (void) checkBackupPurchase:(void(^)(BOOL))onComplete;
 - (void) checkBackupPurchase;
 
 + (int) freeMapsAvailable;

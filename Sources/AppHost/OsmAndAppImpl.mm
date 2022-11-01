@@ -606,9 +606,11 @@
     [OAMapCreatorHelper sharedInstance];
     [OATerrainLayer sharedInstanceHillshade];
     [OATerrainLayer sharedInstanceSlope];
-    
-    [[OAIAPHelper sharedInstance] requestProductsWithCompletionHandler:^(BOOL success) {}];
     [OAPlugin initPlugins];
+
+    [[OAIAPHelper sharedInstance] requestProductsWithCompletionHandler:^(BOOL success) {
+        [_mapSettingsChangeObservable notifyEvent];
+    }];
     
     [OAApplicationMode onApplicationStart];
     OAApplicationMode *initialAppMode = [settings.useLastApplicationModeByDefault get] ?
@@ -616,7 +618,6 @@
                                                                                     settings.defaultApplicationMode.get;
     [settings setApplicationModePref:initialAppMode];
     
-    [OAPOIHelper sharedInstance];
     [OAQuickSearchHelper instance];
     OAPOIFiltersHelper *helper = [OAPOIFiltersHelper sharedInstance];
     [helper reloadAllPoiFilters];

@@ -613,6 +613,7 @@ typedef enum : NSUInteger {
             _productsRequestNeeded = YES;
             _productsRequestReload = reload;
             _productsRequestWithProgress = showProgress;
+            [[OsmAndApp instance].mapSettingsChangeObservable notifyEvent];
             return NO;
         }
     }
@@ -662,7 +663,9 @@ typedef enum : NSUInteger {
         [self showProgress:EOARestorePurchasesProgressType];
 
     [_iapHelper restoreCompletedTransactions];
-    [_iapHelper checkBackupPurchase];
+    [_iapHelper checkBackupPurchase:^(BOOL success) {
+        [[OsmAndApp instance].mapSettingsChangeObservable notifyEvent];
+    }];
     return YES;
 }
 

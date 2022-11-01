@@ -595,7 +595,9 @@ static OASubscriptionState *EXPIRED;
         [[SKPaymentQueue defaultQueue] addTransactionObserver:self];
     }
     
-    [self checkBackupPurchaseIfNeeded];
+    RequestProductsCompletionHandler onComplete = ^(BOOL success) {
+        [self checkBackupPurchaseIfNeeded:completionHandler];
+    };
 
     NSString *ver = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
 
@@ -618,21 +620,21 @@ static OASubscriptionState *EXPIRED;
                     }
                 }
                 
-                _completionHandler = [completionHandler copy];
+                _completionHandler = [onComplete copy];
                 _productsRequest = [[SKProductsRequest alloc] initWithProductIdentifiers:[OAProducts getProductIdentifiers:_products.inAppsPaid]];
                 _productsRequest.delegate = self;
                 [_productsRequest start];
             }
             @catch (NSException *e)
             {
-                if (completionHandler)
-                    completionHandler(NO);
+                if (onComplete)
+                    onComplete(NO);
             }
         }
         else
         {
-            if (completionHandler)
-                completionHandler(NO);
+            if (onComplete)
+                onComplete(NO);
         }
     }];
 }
@@ -1118,7 +1120,9 @@ static OASubscriptionState *EXPIRED;
         if (validateProducts)
         {
             _settings.lastReceiptValidationDate = [NSDate dateWithTimeIntervalSince1970:0];
-            [self requestProductsWithCompletionHandler:nil];
+            [self requestProductsWithCompletionHandler:^(BOOL success) {
+                [[OsmAndApp instance].mapSettingsChangeObservable notifyEvent];
+            }];
         }
     });
 }
@@ -1311,6 +1315,7 @@ static OASubscriptionState *EXPIRED;
             }
 
             [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchasedNotification object:productIdentifier userInfo:nil];
+            [[OsmAndApp instance].mapSettingsChangeObservable notifyEvent];
             return;
         }
 
@@ -1812,18 +1817,21 @@ static OASubscriptionState *EXPIRED;
     _lastBackupPurchaseCheckTime = NSDate.date.timeIntervalSince1970;
 }
 
-- (void) checkBackupPurchase
+- (void) checkBackupPurchase:(void(^)(BOOL))onComplete
 {
     OACheckBackupSubscriptionTask *t = [[OACheckBackupSubscriptionTask alloc] init];
-    [t execute:nil];
+    [t execute:onComplete];
 }
 
-- (void) checkBackupPurchaseIfNeeded
+- (void) checkBackupPurchase
+{
+    [self checkBackupPurchase:nil];
+}
+
+- (void) checkBackupPurchaseIfNeeded:(void(^)(BOOL))onComplete
 {
     if ([self needRequestBackupPurchase])
-    {
-        [self checkBackupPurchase];
-    }
+        [self checkBackupPurchase:onComplete];
 }
 
 - (OASubscription *) getAnyPurchasedOsmAndProSubscription

@@ -269,7 +269,7 @@
 
             [self dismissViewControllerAnimated:YES completion:^{
                 if (self.accountDelegate)
-                    [self.accountDelegate onAccountInformationUpdated];
+                    [self.accountDelegate onAccountInformationUpdatedWithBenefitsShown:NO];
             }];
         }
     }
@@ -282,7 +282,7 @@
 
         [self dismissViewControllerAnimated:YES completion:^{
             if (self.accountDelegate)
-                [self.accountDelegate onAccountInformationUpdated];
+                [self.accountDelegate onAccountInformationUpdatedWithBenefitsShown:NO];
         }];
     }
 }
@@ -309,16 +309,16 @@
         [self generateData];
         needToReloadCells = YES;
     }
-    else if (((_newUserName.length == 0 || _newPassword.length == 0) && textField.text.length > 0) || textField.text.length == 0)
-    {
-        needToReloadCells = YES;
-    }
-
     if ([item[@"key"] isEqualToString:@"email_input_cell"])
         _newUserName = textField.text;
     else if ([item[@"key"] isEqualToString:@"password_input_cell"])
+    {
+        if (((_newUserName.length == 0 || _newPassword.length == 0) && textField.text.length > 0) || textField.text.length == 0)
+        {
+            needToReloadCells = YES;
+        }
         _newPassword = textField.text;
-
+    }
     [self.tableView performBatchUpdates:^{
         if (needToReloadCells && _errorEmptySpaceIndexPath && _loginIndexPath)
         {

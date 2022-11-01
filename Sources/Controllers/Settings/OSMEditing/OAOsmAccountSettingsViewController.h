@@ -17,7 +17,7 @@ typedef NS_ENUM(NSUInteger, EOAOSMAccountSettingsScreenType)
 
 @protocol OAAccountSettingDelegate <NSObject>
 
-- (void) onAccountInformationUpdated;
+- (void)onAccountInformationUpdatedWithBenefitsShown:(BOOL)shouldOpenBenefits;
 
 @end
 

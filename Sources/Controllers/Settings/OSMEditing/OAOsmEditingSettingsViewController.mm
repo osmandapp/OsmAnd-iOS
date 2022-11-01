@@ -393,7 +393,7 @@
 
 #pragma mark - OAAccontSettingDelegate
 
-- (void)onAccountInformationUpdated
+- (void)onAccountInformationUpdatedWithBenefitsShown:(BOOL)shouldOpenBenefits
 {
     _isLogged = [_settings.osmUserName get].length > 0 && [_settings.osmUserPassword get].length > 0;
     if (_credentialIndexPath && _mappersIndexPath)
@@ -409,7 +409,7 @@
 
         [self.tableView reloadRowsAtIndexPaths:@[_credentialIndexPath, _mappersIndexPath]
                               withRowAnimation:UITableViewRowAnimationNone];
-        if (_isLogged)
+        if (_isLogged && shouldOpenBenefits)
         {
             OAMappersViewController *benefitsViewController = [[OAMappersViewController alloc] init];
             [self presentViewController:benefitsViewController animated:YES completion:nil];

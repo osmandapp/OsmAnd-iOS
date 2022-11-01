@@ -81,6 +81,7 @@
     }
     if (error != nil)
     {
+        NSLog(@"OANetworkWriter error: %@", error);
         @throw [NSException exceptionWithName:@"IOException" reason:error userInfo:nil];
     }
 }

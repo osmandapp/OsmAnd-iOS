@@ -404,7 +404,7 @@ static OAApplicationMode *DEFAULT_APP_MODE;
         return [[OAWptPt alloc] init];
     NSMutableArray<OAWptPt *> *points = [NSMutableArray arrayWithArray:_before.points];
     OAWptPt *pt = points[position];
-    if (position > 0 && pt.isGap)
+    if (updateSnapToRoad && position > 0 && pt.isGap)
     {
         OAWptPt *prevPt = _before.points[position - 1];
         if (!prevPt.isGap)

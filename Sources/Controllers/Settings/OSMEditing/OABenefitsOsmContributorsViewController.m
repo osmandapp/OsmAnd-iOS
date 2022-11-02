@@ -178,11 +178,11 @@
 
 #pragma mark - OAAccountSettingDelegate
 
-- (void)onAccountInformationUpdatedWithBenefitsShown:(BOOL)shouldOpenBenefits
+- (void)onAccountInformationUpdated
 {
     [self dismissViewControllerAnimated:YES completion:^{
         if (self.accountDelegate)
-            [self.accountDelegate onAccountInformationUpdatedWithBenefitsShown:YES];
+            [self.accountDelegate onAccountInformationUpdatedFromBenefits];
     }];
 }
 

@@ -269,7 +269,7 @@
 
             [self dismissViewControllerAnimated:YES completion:^{
                 if (self.accountDelegate)
-                    [self.accountDelegate onAccountInformationUpdatedWithBenefitsShown:NO];
+                    [self.accountDelegate onAccountInformationUpdated];
             }];
         }
     }
@@ -282,7 +282,7 @@
 
         [self dismissViewControllerAnimated:YES completion:^{
             if (self.accountDelegate)
-                [self.accountDelegate onAccountInformationUpdatedWithBenefitsShown:NO];
+                [self.accountDelegate onAccountInformationUpdated];
         }];
     }
 }

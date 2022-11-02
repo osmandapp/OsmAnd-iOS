@@ -172,7 +172,9 @@
                                            buttonSize.height);
         height += buttonSize.height;
 
-        if (_type == EOASubscriptionBannerNoFree)
+        if (isFree)
+            height += 3.;
+        else if (_type == EOASubscriptionBannerNoFree)
             height += 16.;
     }
     else if (_type == EOASubscriptionBannerUpdates)

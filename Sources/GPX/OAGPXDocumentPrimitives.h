@@ -74,7 +74,7 @@ struct RouteDataBundle;
 
 @end
 
-@interface OAGpxExtension : NSObject
+@interface OAGpxExtension : NSObject <NSCopying>
 
 @property (nonatomic) NSString *name;
 @property (nonatomic) NSString *value;
@@ -146,6 +146,8 @@ struct RouteDataBundle;
 @property (nonatomic) double horizontalDilutionOfPrecision;
 @property (nonatomic) double verticalDilutionOfPrecision;
 @property (nonatomic) double heading;
+
+- (instancetype)initWithWpt:(OAWptPt *)wptPt;
 
 - (NSString *)getIcon;
 - (void)setIcon:(NSString *)iconName;

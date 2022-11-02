@@ -820,6 +820,11 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (IBAction)closePressed:(id)sender
 {
+    if (_hudMode == EOAHudModeMovePoint)
+    {
+        [self exitMovePointMode:YES];
+        return;
+    }
     if (_editingContext.hasChanges)
     {
         OAExitRoutePlanningBottomSheetViewController *bottomSheet = [[OAExitRoutePlanningBottomSheetViewController alloc] init];
@@ -834,6 +839,8 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (IBAction)donePressed:(id)sender
 {
+    if (_hudMode == EOAHudModeMovePoint)
+        [self exitMovePointMode:YES];
     if ([self isFollowTrackMode])
         [self startTrackNavigation];
     else

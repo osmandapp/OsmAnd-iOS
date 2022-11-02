@@ -63,6 +63,7 @@
     NSArray<NSString *> *_allCategories;
 
     NSArray<OAMapStyleParameter *> *_routesParameters;
+    NSArray<NSString *> *_mountainParameters;
     NSArray<NSString *> *_routesWithoutGroup;
     NSArray<NSString *> *_routesWithGroup;
 
@@ -94,6 +95,7 @@
         _filteredTopLevelParams = [NSArray array];
         _allCategories = [NSArray array];
         _routesParameters = [NSArray array];
+        _mountainParameters = [NSArray array];
         _routesWithoutGroup = [NSArray array];
         _routesWithGroup = [NSArray array];
         _osmParameters = [NSArray array];
@@ -252,14 +254,31 @@
         group.groupType = EOATableCollapsableGroupMapSettingsRoutes;
 
         NSMutableArray<NSDictionary *> *routeCells = [NSMutableArray array];
-        NSArray<NSString *> *hasParameters = @[SHOW_CYCLE_ROUTES_ATTR, HIKING_ROUTES_OSMC_ATTR, TRAVEL_ROUTES];
+        NSArray<NSString *> *hasParameters = @[SHOW_CYCLE_ROUTES_ATTR, SHOW_MTB_ROUTES_ATTR, HIKING_ROUTES_OSMC_ATTR, TRAVEL_ROUTES];
         for (OAMapStyleParameter *routeParameter in _routesParameters)
         {
+            NSString *value = @"";
+            BOOL isMountainBike = [routeParameter.name isEqualToString:SHOW_MTB_ROUTES_ATTR];
+            if (isMountainBike)
+            {
+                NSInteger enabledCount = 0;
+                for (NSString *parameter in _mountainParameters)
+                {
+                    OAMapStyleParameter *param = [_styleSettings getParameter:parameter];
+                    if (param.storedValue.length > 0 && [param.storedValue isEqualToString:@"true"])
+                        enabledCount++;
+                }
+                value = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_slash"),
+                         @(enabledCount).stringValue, @(_mountainParameters.count).stringValue];
+            }
             NSDictionary *routeData = @{
-                    @"name": routeParameter.title,
+                    @"name": isMountainBike ? OALocalizedString(@"mountain_bike") : routeParameter.title,
                     @"image": [self getImageForParameterOrCategory:routeParameter.name],
                     @"key": [NSString stringWithFormat:@"routes_%@", routeParameter.name],
-                    @"type": [hasParameters containsObject:routeParameter.name] ? [OASimpleTableViewCell getCellIdentifier] : [OATableViewCellSwitch getCellIdentifier]
+                    @"type": [hasParameters containsObject:routeParameter.name]
+                                ? isMountainBike ? [OAValueTableViewCell getCellIdentifier] : [OASimpleTableViewCell getCellIdentifier]
+                                : [OATableViewCellSwitch getCellIdentifier],
+                    @"value": value
             };
 
             if ([_routesWithoutGroup containsObject:routeParameter.name])
@@ -464,6 +483,13 @@
         }];
         NSMutableArray<OAMapStyleParameter *> *routesParameters = [_routesParameters mutableCopy];
         [routesParameters removeObject:[_styleSettings getParameter:CYCLE_NODE_NETWORK_ROUTES_ATTR]];
+
+        OAMapStyleParameter *imbaTrails = [_styleSettings getParameter:SHOW_MTB_IMBA_ROUTES_ATTR];
+        if ([_styleSettings getParameter:SHOW_MTB_ROUTES_ATTR] && imbaTrails)
+        {
+            _mountainParameters = @[SHOW_MTB_ROUTES_ATTR, SHOW_MTB_IMBA_ROUTES_ATTR];
+            [routesParameters removeObject:imbaTrails];
+        }
         _routesParameters = routesParameters;
 
         NSMutableArray<NSString *> *routesWithoutGroup = [NSMutableArray array];
@@ -537,7 +563,7 @@
 
 - (NSString *)getImageForParameterOrCategory:(NSString *)paramName
 {
-    if ([paramName isEqualToString:SHOW_CYCLE_ROUTES_ATTR] || [paramName isEqualToString:SHOW_MTB_ROUTES_ATTR])
+    if ([paramName isEqualToString:SHOW_CYCLE_ROUTES_ATTR] || [paramName isEqualToString:SHOW_MTB_ROUTES_ATTR] || [paramName isEqualToString:SHOW_MTB_IMBA_ROUTES_ATTR])
         return @"ic_action_bicycle_dark";
     else if([paramName isEqualToString:WHITE_WATER_SPORTS_ATTR])
         return @"ic_action_kayak";
@@ -599,6 +625,15 @@
     if ([key hasPrefix:@"routes_"] && _routesParameters.count > index)
     {
         NSString *routesValue = _routesParameters[index].value;
+        if ([_routesParameters[index].name isEqualToString:SHOW_MTB_ROUTES_ATTR] && ![routesValue isEqualToString:@"true"])
+        {
+            for (NSString *parameter in _mountainParameters)
+            {
+                OAMapStyleParameter *param = [_styleSettings getParameter:parameter];
+                if (param.value.length > 0 && [param.value isEqualToString:@"true"])
+                    routesValue = param.value;
+            }
+        }
         return routesValue.length > 0 ? [key hasSuffix:HIKING_ROUTES_OSMC_ATTR] ? ![routesValue isEqualToString:@"disabled"] : [routesValue isEqualToString:@"true"] : NO;
     }
     else if ([key hasPrefix:@"osm_"] && _osmParameters.count > index - _osmSettingsCount)
@@ -993,10 +1028,14 @@
 
     if ([item[@"key"] hasPrefix:@"routes_"])
     {
-        NSArray<NSString *> *hasParameters = @[SHOW_CYCLE_ROUTES_ATTR, HIKING_ROUTES_OSMC_ATTR, TRAVEL_ROUTES];
+        NSArray<NSString *> *hasParameters = @[SHOW_CYCLE_ROUTES_ATTR, SHOW_MTB_ROUTES_ATTR, HIKING_ROUTES_OSMC_ATTR, TRAVEL_ROUTES];
         NSString *parameterName = [item[@"key"] substringFromIndex:7];
         if ([hasParameters containsObject:parameterName])
-            mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenRoutes param:parameterName];
+        {
+            mapSettingsViewController =
+                    [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenRoutes
+                                                                          param:[parameterName isEqualToString:SHOW_MTB_ROUTES_ATTR] ? _mountainParameters : parameterName];
+        }
     }
     else if ([item[@"key"] isEqualToString:@"map_type"])
     {

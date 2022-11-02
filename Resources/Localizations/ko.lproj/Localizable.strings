@@ -111,7 +111,7 @@
 "download_depth_countours" = "해상 깊이 등고선";
 "angular_units_descr" = "방위각 측정 단위를 변경합니다.";
 "shared_string_search" = "검색";
-"search_more" = "추가 검색…";
+"search_more" = "더 검색…";
 "get_free_trial_title" = "지금 바로 %d %@ 평가를 시작하세요.";
 "angular_units" = "각도 측정 단위";
 "access_intermediate_arrival_time" = "중간 도착 시간";
@@ -938,7 +938,7 @@
 "shared_string_password" = "OSM패스워드";
 "shared_string_show_more" = "추가 표시";
 "rendering_attr_publicTransportMode_name" = "버스, 무궤도전차, 셔틀 노선";
-"shared_string_enabled" = "활성화됨";
+"shared_string_enabled" = "활성화";
 "col_green" = "녹색";
 "rendering_attr_roadStyle_name" = "도로 스타일";
 "arrival_distance_factor_normally" = "일반";
@@ -1252,3 +1252,12 @@
 "quick_action_switch_profile_descr" = "작업 버튼은 선택한 프로필 간에 전환합니다.";
 "rendering_attr_currentTrackColor_description" = "GPX 색상";
 "backup_error_user_is_already_registered" = "이미 전자 메일 주소가 다른 계정에서 사용 중";
+"routing_attr_allow_private_for_truck_name" = "개인 액세스 허용(트럭)";
+"delete_all_confirmation" = "예, 모두 삭제";
+"routing_attr_hazmat_category_no_restrictions_name" = "A (제한 없음)";
+"shared_string_status" = "상태";
+"resend_verification_code" = "재전송";
+"backup_delete_all_data" = "내 모든 데이터 삭제";
+"upload_local_version" = "로컬 버전 업로드";
+"cloud_email_already_registered" = "해당 이메일 주소는 이미 등록되었습니다.";
+"osmand_cloud_login_descr" = "등록한 이메일 주소를 입력하십시오. 다음 단계를 위한 일회용 암호가 전송됩니다.";

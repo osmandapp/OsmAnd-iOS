@@ -15,6 +15,7 @@
 #import "OASettingsTitleTableViewCell.h"
 #import "Localization.h"
 #import "OAColors.h"
+#import "OASizes.h"
 #import "OAMapStyleSettings.h"
 
 typedef NS_ENUM(NSInteger, EOAMapSettingsRoutesSection)
@@ -26,6 +27,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsRoutesSection)
 typedef NS_ENUM(NSInteger, ERoutesSettingType)
 {
     ERoutesSettingCycle = 0,
+    ERoutesSettingMountain,
     ERoutesSettingHiking,
     ERoutesSettingTravel
 
@@ -38,6 +40,7 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
 
     OAMapStyleSettings *_styleSettings;
     OAMapStyleParameter *_routesParameter;
+    NSArray<OAMapStyleParameter *> *_routesParameters;
     ERoutesSettingType _routesSettingType;
 
     NSArray<NSArray <NSDictionary *> *> *_data;
@@ -53,27 +56,44 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
     {
         _app = [OsmAndApp instance];
         _styleSettings = [OAMapStyleSettings sharedInstance];
-        _routesParameter = [_styleSettings getParameter:param];
+        tblView = tableView;
         settingsScreen = EMapSettingsScreenRoutes;
 
-        if ([param isEqualToString:SHOW_CYCLE_ROUTES_ATTR])
+        if ([param isKindOfClass:NSArray.class])
         {
-            _routesSettingType = ERoutesSettingCycle;
-            _routesEnabled = _routesParameter.storedValue.length > 0 && [_routesParameter.storedValue isEqualToString:@"true"];
-        }
-        else if ([param isEqualToString:HIKING_ROUTES_OSMC_ATTR])
-        {
-            _routesSettingType = ERoutesSettingHiking;
-            _routesEnabled = _routesParameter.storedValue.length > 0 && ![_routesParameter.storedValue isEqualToString:@"disabled"];
+            NSArray<NSString *> *parameters = (NSArray *) param;
+            if ([parameters containsObject:SHOW_MTB_ROUTES_ATTR])
+                _routesSettingType = ERoutesSettingMountain;
+
+            NSMutableArray<OAMapStyleParameter *> *routesParameters = [NSMutableArray array];
+            for (NSString *parameter in parameters)
+            {
+                [routesParameters addObject:[_styleSettings getParameter:parameter]];
+            }
+            _routesParameters = routesParameters;
         }
         else
         {
-            _routesSettingType = ERoutesSettingTravel;
-            _routesEnabled = _routesParameter.storedValue.length > 0;
+            _routesParameter = [_styleSettings getParameter:param];
+            if ([param isEqualToString:SHOW_CYCLE_ROUTES_ATTR])
+            {
+                _routesSettingType = ERoutesSettingCycle;
+                _routesEnabled = _routesParameter.storedValue.length > 0 && [_routesParameter.storedValue isEqualToString:@"true"];
+            }
+            else if ([param isEqualToString:HIKING_ROUTES_OSMC_ATTR])
+            {
+                _routesSettingType = ERoutesSettingHiking;
+                _routesEnabled = _routesParameter.storedValue.length > 0 && ![_routesParameter.storedValue isEqualToString:@"disabled"];
+            }
+            else
+            {
+                _routesSettingType = ERoutesSettingTravel;
+                _routesEnabled = _routesParameter.storedValue.length > 0;
+            }
         }
-
+        
         vwController = viewController;
-        tblView = tableView;
+        
         _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
         [self initData];
     }
@@ -84,44 +104,59 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
 {
     NSMutableArray *dataArr = [NSMutableArray new];
 
-    [dataArr addObject:@[@{@"type": [OASettingSwitchCell getCellIdentifier]}]];
-
-    NSMutableArray *colorsArr = [NSMutableArray new];
-    if (_routesSettingType == ERoutesSettingCycle)
+    if (_routesParameters)
     {
-        [colorsArr addObject:@{
-                @"type": [OASettingsTitleTableViewCell getCellIdentifier],
-                @"value": @"false",
-                @"title": OALocalizedString(@"gpx_route")
-        }];
-        [colorsArr addObject:@{
-                @"type": [OASettingsTitleTableViewCell getCellIdentifier],
-                @"value": @"true",
-                @"title": OALocalizedString(@"rendering_value_walkingRoutesOSMCNodes_name")
-        }];
+        for (OAMapStyleParameter *parameter in _routesParameters)
+        {
+            [dataArr addObject:@[@{
+                @"type": [OASettingSwitchCell getCellIdentifier],
+                @"value": @(parameter.storedValue.length > 0 && [parameter.storedValue isEqualToString:@"true"]),
+                @"title": parameter.title,
+                @"icon": @"ic_action_bicycle_dark"
+            }]];
+        }
     }
     else
     {
-        for (OAMapStyleParameterValue *value in _routesParameter.possibleValuesUnsorted)
+        [dataArr addObject:@[@{@"type": [OASettingSwitchCell getCellIdentifier]}]];
+
+        NSMutableArray *colorsArr = [NSMutableArray new];
+        if (_routesSettingType == ERoutesSettingCycle)
         {
-            if (value.name.length != 0)
+            [colorsArr addObject:@{
+                @"type": [OASettingsTitleTableViewCell getCellIdentifier],
+                @"value": @"false",
+                @"title": OALocalizedString(@"gpx_route")
+            }];
+            [colorsArr addObject:@{
+                @"type": [OASettingsTitleTableViewCell getCellIdentifier],
+                @"value": @"true",
+                @"title": OALocalizedString(@"rendering_value_walkingRoutesOSMCNodes_name")
+            }];
+        }
+        else if (_routesSettingType != ERoutesSettingMountain)
+        {
+            for (OAMapStyleParameterValue *value in _routesParameter.possibleValuesUnsorted)
             {
-                [colorsArr addObject:@{
+                if (value.name.length != 0)
+                {
+                    [colorsArr addObject:@{
                         @"type": [OASettingsTitleTableViewCell getCellIdentifier],
                         @"value": value.name,
                         @"title": value.title
-                }];
+                    }];
+                }
             }
         }
+        [dataArr addObject:colorsArr];
     }
-    [dataArr addObject:colorsArr];
 
     _data = dataArr;
 }
 
 - (void)setupView
 {
-    title = _routesParameter.title;
+    title = _routesSettingType == ERoutesSettingMountain ? OALocalizedString(@"mountain_bike") : _routesParameter.title;
 
     tblView.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
     [tblView.tableFooterView removeFromSuperview];
@@ -146,13 +181,18 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
 
 - (NSString *)getTextForFooter:(NSInteger)section
 {
-    if (!_routesEnabled || section == EOAMapSettingsRoutesSectionVisibility)
+    if ((_routesSettingType != ERoutesSettingMountain && !_routesEnabled) || section == EOAMapSettingsRoutesSectionVisibility)
         return @"";
 
     if (_routesSettingType == ERoutesSettingCycle)
     {
         OAMapStyleParameter *cycleNode = [_styleSettings getParameter:CYCLE_NODE_NETWORK_ROUTES_ATTR];
         return [cycleNode.value isEqualToString:@"true"] ? [self getRenderingStringPropertyDescription:@"walkingRoutesOSMCNodes"] : OALocalizedString(@"walking_route_osmc_description");
+    }
+    else if (_routesParameters)
+    {
+        if (_routesSettingType == ERoutesSettingMountain)
+            return [self getRenderingStringPropertyDescription:_routesParameters[section].name];
     }
 
     return [self getRenderingStringPropertyDescription:_routesParameter.value];
@@ -172,7 +212,7 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (section != EOAMapSettingsRoutesSectionVisibility && !_routesEnabled)
+    if (_routesSettingType != ERoutesSettingMountain && section != EOAMapSettingsRoutesSectionVisibility && !_routesEnabled)
         return 0;
 
     return _data[section].count;
@@ -193,12 +233,14 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
         }
         if (cell)
         {
-            cell.textView.text = _routesEnabled ? OALocalizedString(@"shared_string_enabled") : OALocalizedString(@"rendering_value_disabled_name");
-            NSString *imgName = _routesEnabled ? @"ic_custom_show.png" : @"ic_custom_hide.png";
+            BOOL isMountain = _routesSettingType == ERoutesSettingMountain;
+            BOOL enabled = isMountain ? [item[@"value"] boolValue] : _routesEnabled;
+            cell.textView.text = isMountain ? item[@"title"] : enabled ? OALocalizedString(@"shared_string_enabled") : OALocalizedString(@"rendering_value_disabled_name");
+            NSString *imgName = isMountain ? item[@"icon"] : enabled ? @"ic_custom_show.png" : @"ic_custom_hide.png";
             cell.imgView.image = [UIImage templateImageNamed:imgName];
-            cell.imgView.tintColor = _routesEnabled ? UIColorFromRGB(color_dialog_buttons_dark) : UIColorFromRGB(color_tint_gray);
+            cell.imgView.tintColor = enabled ? isMountain ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_dialog_buttons_dark) : UIColorFromRGB(color_tint_gray);
 
-            [cell.switchView setOn:_routesEnabled];
+            [cell.switchView setOn:enabled];
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
@@ -254,7 +296,7 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
 
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
 {
-    if (section == EOAMapSettingsRoutesSectionColors && _routesEnabled)
+    if (_routesSettingType != ERoutesSettingMountain && section == EOAMapSettingsRoutesSectionColors && _routesEnabled)
     {
         UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *) view;
         header.textLabel.textColor = UIColorFromRGB(color_text_footer);
@@ -263,7 +305,9 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    if (!_routesEnabled || section == EOAMapSettingsRoutesSectionVisibility)
+    if (_routesSettingType == ERoutesSettingMountain)
+        return kHeaderHeightDefault;
+    else if (!_routesEnabled || section == EOAMapSettingsRoutesSectionVisibility)
         return 0.01;
 
     return 56.0;
@@ -271,7 +315,7 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    if (!_routesEnabled || section == EOAMapSettingsRoutesSectionVisibility)
+    if (_routesSettingType == ERoutesSettingMountain || !_routesEnabled || section == EOAMapSettingsRoutesSectionVisibility)
         return @"";
 
     return OALocalizedString(@"routes_color_by_type");
@@ -284,7 +328,7 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
-    if (!_routesEnabled || section == EOAMapSettingsRoutesSectionVisibility)
+    if ((_routesSettingType != ERoutesSettingMountain && !_routesEnabled) || section == EOAMapSettingsRoutesSectionVisibility)
         return nil;
 
     OATableViewCustomFooterView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
@@ -301,35 +345,45 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
     {
         [tblView beginUpdates];
         UISwitch *sw = (UISwitch *) sender;
-        _routesEnabled = sw.on;
-
-        if (_routesEnabled)
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sw.tag & 0x3FF inSection:sw.tag >> 10];
+        if (_routesSettingType == ERoutesSettingMountain)
         {
-            if (_routesSettingType == ERoutesSettingCycle)
-                _routesParameter.value = @"true";
-            else if (_routesSettingType == ERoutesSettingHiking)
-                _routesParameter.value = @"walkingRoutesOSMC";
+            _routesParameters[indexPath.section].value = sw.on ? @"true" : @"false";
+            [_styleSettings save:_routesParameters[indexPath.section]];
+            [self initData];
         }
         else
         {
-            if (_routesSettingType == ERoutesSettingCycle)
+            _routesEnabled = sw.on;
+            
+            if (_routesEnabled)
             {
-                _routesParameter.value = @"false";
-                OAMapStyleParameter *cycleNode = [_styleSettings getParameter:CYCLE_NODE_NETWORK_ROUTES_ATTR];
-                cycleNode.value = @"false";
-                [_styleSettings save:cycleNode];
+                if (_routesSettingType == ERoutesSettingCycle)
+                    _routesParameter.value = @"true";
+                else if (_routesSettingType == ERoutesSettingHiking)
+                    _routesParameter.value = @"walkingRoutesOSMC";
             }
-            else if (_routesSettingType == ERoutesSettingHiking)
+            else
             {
-                _routesParameter.value = @"disabled";
+                if (_routesSettingType == ERoutesSettingCycle)
+                {
+                    _routesParameter.value = @"false";
+                    OAMapStyleParameter *cycleNode = [_styleSettings getParameter:CYCLE_NODE_NETWORK_ROUTES_ATTR];
+                    cycleNode.value = @"false";
+                    [_styleSettings save:cycleNode];
+                }
+                else if (_routesSettingType == ERoutesSettingHiking)
+                {
+                    _routesParameter.value = @"disabled";
+                }
+                else if (_routesSettingType == ERoutesSettingTravel)
+                {
+                }
             }
-            else if (_routesSettingType == ERoutesSettingTravel)
-            {
-            }
+            [_styleSettings save:_routesParameter];
         }
-        [_styleSettings save:_routesParameter];
 
-        [tblView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:sw.tag & 0x3FF inSection:sw.tag >> 10]] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [tblView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
         [tblView reloadSections:[NSIndexSet indexSetWithIndex:EOAMapSettingsRoutesSectionColors] withRowAnimation:UITableViewRowAnimationAutomatic];
         [tblView endUpdates];
     }

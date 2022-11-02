@@ -2397,3 +2397,4 @@
 "save_heading_descr" = "Salva l'orientamento per ogni punto della traccia durante la registrazione";
 "gpx_export_failed" = "Impossibile salvare il percorso creato";
 "gpx_import_already_exists_short" = "Il file traccia specificato è già presente nella lista.";
+"recorded_voice" = "Registrato";

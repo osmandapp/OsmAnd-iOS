@@ -682,7 +682,7 @@
 "monitoring_control_start" = "Optag";
 "map_widget_intermediate_distance" = "Mellemliggende destination";
 "map_widget_distance" = "Destination";
-"always_center_position_on_map" = "Vis altid position centeret";
+"always_center_position_on_map" = "Vis altid position centreret";
 "map_widget_appearance_rem" = "Øvrige elementer";
 "map_widget_compass" = "Kompas";
 "map_widget_next_turn" = "Næste sving";
@@ -2480,11 +2480,11 @@
 "simulation_constant_mode_title" = "Fast hastighed";
 "simulation_preview_mode_title" = "Hurtig forhåndsvisningstilstand";
 "speed_mode" = "Hastighedstilstand";
-"altitude_ascent" = "Op ad bakke";
+"altitude_ascent" = "Opstigning";
 "units_cubic_m" = "m³";
 "simulation_preview_mode_desc" = "Hastigheden i simuleringen er maksimal på lige strækninger og sænkes kun ved kryds.";
 "shared_string_capacity" = "Kapacitet";
-"altitude_descent" = "Ned ad bakke";
+"altitude_descent" = "Nedstigning";
 "copy_address" = "Kopiér adresse";
 "copy_poi_name" = "Kopiér IP-navn";
 "copy_coordinates" = "Kopiér koordinater";
@@ -2717,3 +2717,4 @@
 "shared_string_profile" = "Profil";
 "map_widget_rendering_fps" = "Kortgengivelse FPS";
 "ios_release_4_3" = "• Jævn animation til ændring af placering under bevægelse\n• CarPlay: tilføjede baner, 2,5D-visning, løste lydproblemer ved forbindelse via Bluetooth\n• Introduktion af nye betalingsabonnementer: \"OsmAnd Pro\"-abonnementer med adgang til alle funktioner og \"Maps+\"-køb med ubegrænsede kortdownloads og adgang til betalte udvidelser.\n• Tilføjet Cloud-backup og Offline vejrprognose for OsmAnd Pro-brugere\n• Ny praktisk \"Køb\"-skærm med listen over alle køb\n• Fordele for aktive OpenStreetMap.org-bidragydere\n• Spor kan nu farves efter højde, hastighed eller hældning\n• Offlinekort er nu tilgængelige via appen Filer\n• Favoritter: tilføjet lokal generering af sikkerhedskopi efter hver ændring, sikkerhedskopier tilgængelige fra Files-appen\n• POI gemt til favoritter gemmer og viser alle POI-data, selv uden et offlinekort\n• GPX tilføjede understøttelse af link-, cmt- og desc-tags og for alle brugerdefinerede udvidelser\n• Tilføjet tilstand for knappen Kompas\n• Der blev rettet et problem med UTM-koordinaternes format\n• Rettet et problem med mellemliggende punkter i navigation\n";
+"shared_string_download_update" = "Hent opdatering";

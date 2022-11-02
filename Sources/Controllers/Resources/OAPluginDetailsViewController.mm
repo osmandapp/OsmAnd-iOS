@@ -38,7 +38,6 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
 {
     OAIAPHelper *_iapHelper;
     OAPlugin *_plugin;
-    
     EOAPluginScreenType _screenType;
 
     CALayer *_horizontalLineDesc;

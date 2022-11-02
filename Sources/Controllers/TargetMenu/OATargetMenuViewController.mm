@@ -659,7 +659,7 @@
 
 - (CGFloat) detailsButtonHeight
 {
-    return 50.; //override
+    return 0.; //override
 }
 
 - (IBAction) buttonBackPressed:(id)sender

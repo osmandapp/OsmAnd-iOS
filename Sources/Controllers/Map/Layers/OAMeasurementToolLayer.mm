@@ -236,8 +236,9 @@
 {
     const auto latLon = OsmAnd::Utilities::convert31ToLatLon(self.mapViewController.mapView.target31);
     
-    OAWptPt *point = _editingCtx.originalPointToMove;
+    OAWptPt *point = [[OAWptPt alloc] initWithWpt:_editingCtx.originalPointToMove];
     point.position = CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
+    [point copyExtensions:_editingCtx.originalPointToMove];
     return point;
 }
 
@@ -396,7 +397,6 @@
             {
                 hasPointsBefore = YES;
                 OAWptPt *pt = segment.points.lastObject;
-                hasGapBefore = pt.isGap;
                 if (!pt.isGap || (_editingCtx.isInAddPointMode && _editingCtx.addPointMode != EOAAddPointModeBefore))
                 {
                     points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt.getLatitude, pt.getLongitude)));

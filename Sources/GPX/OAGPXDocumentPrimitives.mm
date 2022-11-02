@@ -89,6 +89,16 @@
     return self;
 }
 
+- (id)copyWithZone:(NSZone *)zone
+{
+    OAGpxExtension *copy = [[OAGpxExtension allocWithZone:zone] init];
+    copy.name = self.name;
+    copy.value = self.value;
+    copy.attributes = [self.attributes copy];
+    copy.subextensions = [self.subextensions copy];
+    return copy;
+}
+
 @end
 
 @implementation OAGpxExtensions
@@ -114,7 +124,10 @@
 - (void)copyExtensions:(OAGpxExtensions *)e
 {
     if (e && e.extensions.count > 0)
-        _extensions = [_extensions arrayByAddingObjectsFromArray:e.extensions];
+    {
+        NSArray<OAGpxExtension *> *exts = [[NSArray alloc] initWithArray:e.extensions copyItems:YES];
+        _extensions = [_extensions arrayByAddingObjectsFromArray:exts];
+    }
 }
 
 - (OAGpxExtension *)getExtensionByKey:(NSString *)key
@@ -286,6 +299,35 @@
         self.verticalDilutionOfPrecision = NAN;
         self.heading = NAN;
         self.distance = 0.0;
+    }
+    return self;
+}
+
+- (instancetype)initWithWpt:(OAWptPt *)wptPt
+{
+    self = [super init];
+    if (self)
+    {
+        self.firstPoint = NO;
+        self.lastPoint = NO;
+        self.position = wptPt.position;
+        self.name = wptPt.name;
+//        self.link = wptPt.link;
+//        self.category = wptPt.category;
+        self.desc = wptPt.desc;
+        self.comment = wptPt.comment;
+        self.time = wptPt.time;
+        self.elevation = wptPt.elevation;
+        self.speed = wptPt.speed;
+        self.verticalDilutionOfPrecision = wptPt.verticalDilutionOfPrecision;
+        self.horizontalDilutionOfPrecision = wptPt.horizontalDilutionOfPrecision;
+        self.heading = wptPt.heading;
+//        self.deleted = wptPt.deleted;
+//        self.speedColor = wptPt.speedColor;
+//        self.altitudeColor = wptPt.altitudeColor;
+//        self.slopeColor = wptPt.slopeColor;
+//        self.colourARGB = wptPt.colourARGB;
+        self.distance = wptPt.distance;
     }
     return self;
 }

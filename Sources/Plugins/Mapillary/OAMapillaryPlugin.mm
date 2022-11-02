@@ -73,6 +73,12 @@
     [self registerWidget];
 }
 
+- (void)disable
+{
+    [super disable];
+    [OsmAndApp.instance.data setMapillary:NO];
+}
+
 - (void) updateLayers
 {
     dispatch_async(dispatch_get_main_queue(), ^{

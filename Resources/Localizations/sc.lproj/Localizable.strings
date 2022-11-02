@@ -2720,7 +2720,7 @@
 "benefits_for_contributors_secondary_descr" = "Intra in OpenStreetMap pro averguare de èssere o nono idòneu pro retzire agiornamentos de sas mapas mensiles e cada ora.";
 "not_enough_contributions_descr" = "Unu mìnimu de %i modìficas in s'ùrtimu bimestre %@ est netzessàriu pro tènnere atzessu a sos agiornamentos chene lìmites de sa mapa pro cada ora.";
 "enough_contributions_descr" = "Bene meda, as fatu contributziones bastantes a OpenStreetMap e como ti podes godire agiornamentos chene lìmites de sas mapas de OsmAnd!";
-"cross_buy" = "Còmpora rugrada";
+"cross_buy" = "Còmpora multi-prataforma";
 "purchases_feature_desc_cross_buy" = "Imprea totu sas funtzionalidades de s'abbonamentu in prataformas mùltiplas chene costos additzionales. A disponimentu in Android/iOS/Web.";
 "cloud_confirm_delete_type" = "Ses seguru de bòlere iscantzellare \"%@\" dae OsmAnd Cloud?";
 "shared_string_changed" = "Cambiadu";
@@ -2744,3 +2744,4 @@
 "shared_string_profile" = "Profilu";
 "map_widget_rendering_fps" = "FPS de sa renderizatzione de sa mapa";
 "ios_release_4_3" = "• Animatzione flùida pro sos càmbios de positzione durante su movimentu\n• CarPlay: corsias annantas, visualizatzione 2.5D, problemas àudio risoltos durante la connessione pro mèdiu de Bluetooth\n• Presentatzione de pianos de còmpora noos: abbonamentos \"OsmAnd Pro\" cun atzessu a totu sas funtzionalidades e còmpora \"Maps+\" cun iscarrigamentos chene lìmites de mapas e atzessu a sas estensiones a pagamentu.\n• Annanta sa còpia de seguresa in sa nue e previsiones de su mèteu non in lìnia pro sos impreadores de OsmAnd Pro\n• Ischermada noa discansosa \"Còmpora\" cun s'elencu de totu sas còmporas\n• Avantàgios pro sos collaboradores ativos de OpenStreetMap.org\n• Sas rastas como si podent colorare in base a s'artària, a sa velotzidade o sa pendèntzia\n• Sas mapas non in lìnia como sunt atzessìbiles pro mèdiu de s'aplicatzione Archìvios\n• Preferidos: annanta s'ingendradura de còpias de seguresa locales a pustis de cada modìfica, còpias de seguresa atzessìbiles dae s'aplicatzione Archìvios\n• Sos PDI sarvados in sos preferidos ant a ammentare e ammustrare totu sos datos de sos PDI fintzas chene una mapa non in lìnia\n• GPX at annantu su suportu pro sas teichetas link, cmt, e desc e pro estensiones personalizadas eventuales\n• Annanta una modalidade pro su butone Bùssola\n• Risoltu unu problema cun su formadu de sas coordinadas UTM\n• Risoltu unu problema cun sos puntos de coladòrgiu in sa navigatzione\n";
+"shared_string_download_update" = "Iscàrriga agiornamentu";

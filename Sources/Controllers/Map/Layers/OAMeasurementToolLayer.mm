@@ -397,8 +397,7 @@
             {
                 hasPointsBefore = YES;
                 OAWptPt *pt = segment.points.lastObject;
-                hasGapBefore = pt.isGap && !_isInMovingMode;
-                if (!hasGapBefore || (_editingCtx.isInAddPointMode && _editingCtx.addPointMode != EOAAddPointModeBefore))
+                if (!pt.isGap || (_editingCtx.isInAddPointMode && _editingCtx.addPointMode != EOAAddPointModeBefore))
                 {
                     points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt.getLatitude, pt.getLongitude)));
                 }

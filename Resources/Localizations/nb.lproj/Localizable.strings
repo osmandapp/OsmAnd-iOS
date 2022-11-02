@@ -2320,3 +2320,4 @@
 "paused" = "I pausemodus";
 "routing_attr_hazmat_category_no_restrictions_name" = "A (Ingen begrensninger)";
 "in_grace_period" = "I nådeperioden";
+"map_widget_rendering_fps" = "Kartgjengivelse FPS";

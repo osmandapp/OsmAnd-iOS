@@ -37,6 +37,7 @@
 #import "OAStatusBackupViewController.h"
 #import "OAExportBackupTask.h"
 #import "OAAppVersionDependentConstants.h"
+#import "OsmAndApp.h"
 
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
@@ -88,7 +89,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [OAIAPHelper.sharedInstance checkBackupPurchase];
+    BOOL isPaidVersion = [OAIAPHelper isPaidVersion];
+    [[OAIAPHelper sharedInstance] checkBackupPurchase:^(BOOL success) {
+        BOOL isPaidVersionChecked = [OAIAPHelper isPaidVersion];
+        if (isPaidVersion != isPaidVersionChecked)
+            [[OsmAndApp instance].mapSettingsChangeObservable notifyEvent];
+    }];
     _settingsHelper = OANetworkSettingsHelper.sharedInstance;
     _backupHelper = OABackupHelper.sharedInstance;
     self.tblView.refreshControl = [[UIRefreshControl alloc] init];

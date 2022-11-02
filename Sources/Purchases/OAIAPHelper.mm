@@ -553,37 +553,39 @@ static OASubscriptionState *EXPIRED;
         _settings = [OAAppSettings sharedManager];
         _products = [[OAProducts alloc] init];
         _wasProductListFetched = NO;
-        
-        // test - reset purchases
-        if (TEST_LOCAL_PURCHASE)
-        {
-            [[NSUserDefaults standardUserDefaults] setInteger:1 forKey:@"freeMapsAvailable"];
+    }
+    return self;
+}
 
-            [_settings.liveUpdatesPurchased set:NO];
-            [_settings.osmandProPurchased set:NO];
-            [_settings.osmandMapsPurchased set:NO];
-            [_settings.fullVersionPurchased set:NO];
-            [_settings.depthContoursPurchased set:NO];
-            [_settings.contourLinesPurchased set:NO];
-            [_settings.wikipediaPurchased set:NO];
-            for (OAProduct *product in _products.inAppsPaid)
+- (void)resetTestPurchases
+{
+    if (TEST_LOCAL_PURCHASE)
+    {
+        [[NSUserDefaults standardUserDefaults] setInteger:1 forKey:@"freeMapsAvailable"];
+
+        [_settings.liveUpdatesPurchased set:NO];
+        [_settings.osmandProPurchased set:NO];
+        [_settings.osmandMapsPurchased set:NO];
+        [_settings.fullVersionPurchased set:NO];
+        [_settings.depthContoursPurchased set:NO];
+        [_settings.contourLinesPurchased set:NO];
+        [_settings.wikipediaPurchased set:NO];
+        for (OAProduct *product in _products.inAppsPaid)
+        {
+            if ([[NSUserDefaults standardUserDefaults] boolForKey:product.productIdentifier])
             {
-                if ([[NSUserDefaults standardUserDefaults] boolForKey:product.productIdentifier])
+                if ([product isKindOfClass:OASubscription.class])
                 {
-                    if ([product isKindOfClass:OASubscription.class])
-                    {
-                        [_products setExpired:product.productIdentifier];
-                    }
-                    else
-                    {
-                        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:product.productIdentifier];
-                        [[NSUserDefaults standardUserDefaults] synchronize];
-                    }
+                    [_products setExpired:product.productIdentifier];
+                }
+                else
+                {
+                    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:product.productIdentifier];
+                    [[NSUserDefaults standardUserDefaults] synchronize];
                 }
             }
         }
     }
-    return self;
 }
 
 - (void) requestProductsWithCompletionHandler:(RequestProductsCompletionHandler)completionHandler
@@ -1120,8 +1122,11 @@ static OASubscriptionState *EXPIRED;
         if (validateProducts)
         {
             _settings.lastReceiptValidationDate = [NSDate dateWithTimeIntervalSince1970:0];
+            BOOL isPaidVersion = [OAIAPHelper isPaidVersion];
             [self requestProductsWithCompletionHandler:^(BOOL success) {
-                [[OsmAndApp instance].mapSettingsChangeObservable notifyEvent];
+                BOOL isPaidVersionChecked = [OAIAPHelper isPaidVersion];
+                if (isPaidVersion != isPaidVersionChecked)
+                    [[OsmAndApp instance].mapSettingsChangeObservable notifyEvent];
             }];
         }
     });
@@ -1286,6 +1291,7 @@ static OASubscriptionState *EXPIRED;
         // test - emulate purchase
         if (TEST_LOCAL_PURCHASE)
         {
+            BOOL isPaidVersion = [OAIAPHelper isPaidVersion];
             [_products setPurchased:productIdentifier];
 
             if ([product isKindOfClass:OASubscription.class])
@@ -1315,7 +1321,10 @@ static OASubscriptionState *EXPIRED;
             }
 
             [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchasedNotification object:productIdentifier userInfo:nil];
-            [[OsmAndApp instance].mapSettingsChangeObservable notifyEvent];
+
+            BOOL isPaidVersionChecked = [OAIAPHelper isPaidVersion];
+            if (isPaidVersion != isPaidVersionChecked)
+                [[OsmAndApp instance].mapSettingsChangeObservable notifyEvent];
             return;
         }
 

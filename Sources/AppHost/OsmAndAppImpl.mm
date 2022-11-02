@@ -608,8 +608,13 @@
     [OATerrainLayer sharedInstanceSlope];
     [OAPlugin initPlugins];
 
-    [[OAIAPHelper sharedInstance] requestProductsWithCompletionHandler:^(BOOL success) {
-        [_mapSettingsChangeObservable notifyEvent];
+    OAIAPHelper *iapHelper = [OAIAPHelper sharedInstance];
+    BOOL isPaidVersion = [OAIAPHelper isPaidVersion];
+    [iapHelper resetTestPurchases];
+    [iapHelper requestProductsWithCompletionHandler:^(BOOL success) {
+        BOOL isPaidVersionChecked = [OAIAPHelper isPaidVersion];
+        if (isPaidVersion != isPaidVersionChecked)
+            [_mapSettingsChangeObservable notifyEvent];
     }];
     
     [OAApplicationMode onApplicationStart];
@@ -618,6 +623,7 @@
                                                                                     settings.defaultApplicationMode.get;
     [settings setApplicationModePref:initialAppMode];
     
+    [OAPOIHelper sharedInstance];
     [OAQuickSearchHelper instance];
     OAPOIFiltersHelper *helper = [OAPOIFiltersHelper sharedInstance];
     [helper reloadAllPoiFilters];

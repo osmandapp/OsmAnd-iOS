@@ -613,7 +613,6 @@ typedef enum : NSUInteger {
             _productsRequestNeeded = YES;
             _productsRequestReload = reload;
             _productsRequestWithProgress = showProgress;
-            [[OsmAndApp instance].mapSettingsChangeObservable notifyEvent];
             return NO;
         }
     }
@@ -663,8 +662,11 @@ typedef enum : NSUInteger {
         [self showProgress:EOARestorePurchasesProgressType];
 
     [_iapHelper restoreCompletedTransactions];
+    BOOL isPaidVersion = [OAIAPHelper isPaidVersion];
     [_iapHelper checkBackupPurchase:^(BOOL success) {
-        [[OsmAndApp instance].mapSettingsChangeObservable notifyEvent];
+        BOOL isPaidVersionChecked = [OAIAPHelper isPaidVersion];
+        if (isPaidVersion != isPaidVersionChecked)
+            [[OsmAndApp instance].mapSettingsChangeObservable notifyEvent];
     }];
     return YES;
 }

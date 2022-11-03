@@ -87,7 +87,6 @@
             OsmAnd::MapLayerConfiguration config;
             config.setOpacityFactor(self.app.data.overlayAlpha);
             [self.mapView setMapLayerConfiguration:self.layerIndex configuration:config forcedUpdate:NO];
-            [self.mapViewController updateSymbolsLayerProviderAlpha];
         }
         else
         {
@@ -107,7 +106,6 @@
                     OsmAnd::MapLayerConfiguration config;
                     config.setOpacityFactor(self.app.data.overlayAlpha);
                     [self.mapView setMapLayerConfiguration:self.layerIndex configuration:config forcedUpdate:NO];
-                    [self.mapViewController updateSymbolsLayerProviderAlpha];
                 }
             }
         }
@@ -124,20 +122,15 @@
     [self updateOverlayLayer];
 }
 
-- (float) getAlpha
-{
-    BOOL isOverlayLayerDisplayed = self.app.data.overlayMapSource;
-    return isOverlayLayerDisplayed ? self.app.data.overlayAlpha : 0.0f;
-}
-
 - (void) onOverlayLayerAlphaChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.mapViewController runWithRenderSync:^{
             OsmAnd::MapLayerConfiguration config;
-            config.setOpacityFactor([self getAlpha]);
+            BOOL isOverlayLayerDisplayed = self.app.data.overlayMapSource;
+            float alpha = isOverlayLayerDisplayed ? self.app.data.overlayAlpha : 0.0f;
+            config.setOpacityFactor(alpha);
             [self.mapView setMapLayerConfiguration:self.layerIndex configuration:config forcedUpdate:NO];
-            [self.mapViewController updateSymbolsLayerProviderAlpha];
         }];
     });
 }
@@ -150,11 +143,11 @@
             {
                 [self.mapView resetProviderFor:self.layerIndex];
                 _rasterOverlayMapProvider.reset();
-                [self.mapViewController updateSymbolsLayerProviderAlpha];
-            }
-            else
-            {
-                [self.mapViewController updateSymbolsLayerProviderAlpha];
+                OsmAnd::MapLayerConfiguration config;
+                BOOL isOverlayLayerDisplayed = self.app.data.overlayMapSource;
+                float alpha = isOverlayLayerDisplayed ? self.app.data.overlayAlpha : 0.0f;
+                config.setOpacityFactor(alpha);
+                [self.mapView setMapLayerConfiguration:self.layerIndex configuration:config forcedUpdate:NO];
             }
         }];
     });

@@ -1360,13 +1360,18 @@
             _app.data.mapLastViewedState.azimuth = _mapView.azimuth;
             break;
         case OAMapRendererViewStateEntryZoom:
+        {
             [_zoomObservable notifyEventWithKey:nil andValue:[NSNumber numberWithFloat:_mapView.zoom]];
             _app.data.mapLastViewedState.zoom = _mapView.zoom;
             break;
+        }
         case OAMapRendererViewStateEntryElevationAngle:
+        {
             _app.data.mapLastViewedState.elevationAngle = _mapView.elevationAngle;
             break;
+        }
         case OAMapRendererViewStateEntryTarget:
+        {
             OsmAnd::PointI newTarget31 = _mapView.target31;
             Point31 newTarget31_converted;
             newTarget31_converted.x = newTarget31.x;
@@ -1374,6 +1379,13 @@
             _app.data.mapLastViewedState.target31 = newTarget31_converted;
             [_mapObservable notifyEventWithKey:nil ];
             break;
+        }
+        case OAMapRendererViewStateEntryMapLayers_Configuration:
+        {
+            [self updateSymbolsLayerProviderAlpha];
+            [self updateRasterLayerProviderAlpha];
+            break;
+        }
     }
 
     [_stateObservable notifyEventWithKey:key];
@@ -2008,8 +2020,10 @@
     }
 }
 
-- (void) updateRasterLayerProviderAlpha:(float)alpha
+- (void) updateRasterLayerProviderAlpha
 {
+    BOOL isUnderlayLayerDisplayed = _app.data.underlayMapSource;
+    float alpha = isUnderlayLayerDisplayed ? _app.data.underlayAlpha : 0.0f;
     OsmAnd::MapLayerConfiguration mapLayerConfiguration;
     mapLayerConfiguration.setOpacityFactor(1.0f - alpha);
     [_mapView setMapLayerConfiguration:kObfRasterLayer configuration:mapLayerConfiguration forcedUpdate:NO];

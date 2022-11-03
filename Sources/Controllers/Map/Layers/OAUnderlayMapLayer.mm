@@ -87,8 +87,6 @@
             OsmAnd::MapLayerConfiguration config;
             config.setOpacityFactor(1 - self.app.data.underlayAlpha);
             [self.mapView setMapLayerConfiguration:0 configuration:config forcedUpdate:NO];
-            [self.mapViewController updateRasterLayerProviderAlpha:[self getAlpha]];
-            [self.mapViewController updateSymbolsLayerProviderAlpha];
         }
         else
         {    const auto resourceId = QString::fromNSString(self.app.data.underlayMapSource.resourceId);
@@ -107,8 +105,6 @@
                     OsmAnd::MapLayerConfiguration config;
                     config.setOpacityFactor(1 - self.app.data.underlayAlpha);
                     [self.mapView setMapLayerConfiguration:0 configuration:config forcedUpdate:NO];
-                    [self.mapViewController updateRasterLayerProviderAlpha:[self getAlpha]];
-                    [self.mapViewController updateSymbolsLayerProviderAlpha];
                 }
             }
         }
@@ -120,21 +116,15 @@
     return NO;
 }
 
-- (float) getAlpha
-{
-    BOOL isUnderlayLayerDisplayed = self.app.data.underlayMapSource;
-    return isUnderlayLayerDisplayed ? self.app.data.underlayAlpha : 0.0f;
-}
-
 - (void) onUnderlayLayerAlphaChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.mapViewController runWithRenderSync:^{
             OsmAnd::MapLayerConfiguration config;
-            config.setOpacityFactor([self getAlpha]);
+            BOOL isUnderlayLayerDisplayed = self.app.data.underlayMapSource;
+            float alpha = isUnderlayLayerDisplayed ? self.app.data.underlayAlpha : 0.0f;
+            config.setOpacityFactor(alpha);
             [self.mapView setMapLayerConfiguration:0 configuration:config forcedUpdate:NO];
-            [self.mapViewController updateRasterLayerProviderAlpha:[self getAlpha]];
-            [self.mapViewController updateSymbolsLayerProviderAlpha];
         }];
     });
 }
@@ -151,18 +141,13 @@
             if (![self updateLayer])
             {
                 OsmAnd::MapLayerConfiguration config;
-                config.setOpacityFactor([self getAlpha]);
+                BOOL isUnderlayLayerDisplayed = self.app.data.underlayMapSource;
+                float alpha = isUnderlayLayerDisplayed ? self.app.data.underlayAlpha : 0.0f;
+                config.setOpacityFactor(alpha);
                 [self.mapView setMapLayerConfiguration:0 configuration:config forcedUpdate:NO];
                 
                 [self.mapView resetProviderFor:self.layerIndex];
                 _rasterUnderlayMapProvider.reset();
-                [self.mapViewController updateRasterLayerProviderAlpha:[self getAlpha]];
-                [self.mapViewController updateSymbolsLayerProviderAlpha];
-            }
-            else
-            {
-                [self.mapViewController updateRasterLayerProviderAlpha:[self getAlpha]];
-                [self.mapViewController updateSymbolsLayerProviderAlpha];
             }
         }];
     });

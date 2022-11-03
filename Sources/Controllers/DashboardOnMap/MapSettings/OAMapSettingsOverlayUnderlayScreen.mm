@@ -8,6 +8,7 @@
 
 #import "OAMapSettingsOverlayUnderlayScreen.h"
 #import "OAMapSettingsViewController.h"
+#import "OAMapRendererView.h"
 #import "Localization.h"
 #import "OASwitchTableViewCell.h"
 #import "OARootViewController.h"
@@ -579,11 +580,7 @@ static NSInteger kButtonsSection;
 - (void) showLabels:(BOOL)show
 {
     [_settings.keepMapLabelsVisible set:show];
-    //refresh layers
-//    _app.data.overlayAlpha = _app.data.overlayAlpha;
-//    _app.data.underlayAlpha = _app.data.underlayAlpha;
-    [_app.data refreshOverlayUnderlayAlpha];
-//    [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
+    [OARootViewController.instance.mapPanel.mapViewController.mapView.stateObservable notifyEventWithKey:[NSNumber numberWithUnsignedInteger:OAMapRendererViewStateEntryMapLayers_Configuration]];
 }
 
 - (void) hidePolygons:(BOOL)hide

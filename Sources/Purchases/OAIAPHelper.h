@@ -108,6 +108,7 @@ typedef NS_ENUM(NSInteger, EOASubscriptionOrigin) {
 @property (nonatomic, readonly) NSArray<OAFunctionalAddon *> *functionalAddons;
 @property (nonatomic, readonly) OAFunctionalAddon *singleAddon;
 
+- (void) resetTestPurchases;
 - (void) requestProductsWithCompletionHandler:(RequestProductsCompletionHandler)completionHandler;
 - (void) buyProduct:(OAProduct *)product;
 - (void) restoreCompletedTransactions;
@@ -127,6 +128,7 @@ typedef NS_ENUM(NSInteger, EOASubscriptionOrigin) {
 - (BOOL) checkBackupSubscriptions;
 
 - (void) onBackupPurchaseRequested;
+- (void) checkBackupPurchase:(void(^)(BOOL))onComplete;
 - (void) checkBackupPurchase;
 
 + (int) freeMapsAvailable;

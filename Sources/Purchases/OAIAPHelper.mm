@@ -553,37 +553,39 @@ static OASubscriptionState *EXPIRED;
         _settings = [OAAppSettings sharedManager];
         _products = [[OAProducts alloc] init];
         _wasProductListFetched = NO;
-        
-        // test - reset purchases
-        if (TEST_LOCAL_PURCHASE)
-        {
-            [[NSUserDefaults standardUserDefaults] setInteger:1 forKey:@"freeMapsAvailable"];
+    }
+    return self;
+}
 
-            [_settings.liveUpdatesPurchased set:NO];
-            [_settings.osmandProPurchased set:NO];
-            [_settings.osmandMapsPurchased set:NO];
-            [_settings.fullVersionPurchased set:NO];
-            [_settings.depthContoursPurchased set:NO];
-            [_settings.contourLinesPurchased set:NO];
-            [_settings.wikipediaPurchased set:NO];
-            for (OAProduct *product in _products.inAppsPaid)
+- (void)resetTestPurchases
+{
+    if (TEST_LOCAL_PURCHASE)
+    {
+        [[NSUserDefaults standardUserDefaults] setInteger:1 forKey:@"freeMapsAvailable"];
+
+        [_settings.liveUpdatesPurchased set:NO];
+        [_settings.osmandProPurchased set:NO];
+        [_settings.osmandMapsPurchased set:NO];
+        [_settings.fullVersionPurchased set:NO];
+        [_settings.depthContoursPurchased set:NO];
+        [_settings.contourLinesPurchased set:NO];
+        [_settings.wikipediaPurchased set:NO];
+        for (OAProduct *product in _products.inAppsPaid)
+        {
+            if ([[NSUserDefaults standardUserDefaults] boolForKey:product.productIdentifier])
             {
-                if ([[NSUserDefaults standardUserDefaults] boolForKey:product.productIdentifier])
+                if ([product isKindOfClass:OASubscription.class])
                 {
-                    if ([product isKindOfClass:OASubscription.class])
-                    {
-                        [_products setExpired:product.productIdentifier];
-                    }
-                    else
-                    {
-                        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:product.productIdentifier];
-                        [[NSUserDefaults standardUserDefaults] synchronize];
-                    }
+                    [_products setExpired:product.productIdentifier];
+                }
+                else
+                {
+                    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:product.productIdentifier];
+                    [[NSUserDefaults standardUserDefaults] synchronize];
                 }
             }
         }
     }
-    return self;
 }
 
 - (void) requestProductsWithCompletionHandler:(RequestProductsCompletionHandler)completionHandler
@@ -595,7 +597,9 @@ static OASubscriptionState *EXPIRED;
         [[SKPaymentQueue defaultQueue] addTransactionObserver:self];
     }
     
-    [self checkBackupPurchaseIfNeeded];
+    RequestProductsCompletionHandler onComplete = ^(BOOL success) {
+        [self checkBackupPurchaseIfNeeded:completionHandler];
+    };
 
     NSString *ver = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
 
@@ -618,21 +622,21 @@ static OASubscriptionState *EXPIRED;
                     }
                 }
                 
-                _completionHandler = [completionHandler copy];
+                _completionHandler = [onComplete copy];
                 _productsRequest = [[SKProductsRequest alloc] initWithProductIdentifiers:[OAProducts getProductIdentifiers:_products.inAppsPaid]];
                 _productsRequest.delegate = self;
                 [_productsRequest start];
             }
             @catch (NSException *e)
             {
-                if (completionHandler)
-                    completionHandler(NO);
+                if (onComplete)
+                    onComplete(NO);
             }
         }
         else
         {
-            if (completionHandler)
-                completionHandler(NO);
+            if (onComplete)
+                onComplete(NO);
         }
     }];
 }
@@ -845,7 +849,8 @@ static OASubscriptionState *EXPIRED;
 {
     OALog(@"Loaded list of products...");
     _productsRequest = nil;
-    
+    BOOL isPaidVersion = [self.class isPaidVersion];
+
     for (SKProduct * skProduct in response.products)
     {
         if (skProduct)
@@ -1013,6 +1018,10 @@ static OASubscriptionState *EXPIRED;
         }
 
         _wasProductListFetched = success;
+
+        BOOL isPaidVersionChecked = [self.class isPaidVersion];
+        if (isPaidVersion != isPaidVersionChecked)
+            [[OsmAndApp instance].mapSettingsChangeObservable notifyEvent];
 
         if (_completionHandler)
             _completionHandler(success);
@@ -1282,6 +1291,7 @@ static OASubscriptionState *EXPIRED;
         // test - emulate purchase
         if (TEST_LOCAL_PURCHASE)
         {
+            BOOL isPaidVersion = [OAIAPHelper isPaidVersion];
             [_products setPurchased:productIdentifier];
 
             if ([product isKindOfClass:OASubscription.class])
@@ -1311,6 +1321,10 @@ static OASubscriptionState *EXPIRED;
             }
 
             [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchasedNotification object:productIdentifier userInfo:nil];
+
+            BOOL isPaidVersionChecked = [OAIAPHelper isPaidVersion];
+            if (isPaidVersion != isPaidVersionChecked)
+                [[OsmAndApp instance].mapSettingsChangeObservable notifyEvent];
             return;
         }
 
@@ -1812,18 +1826,29 @@ static OASubscriptionState *EXPIRED;
     _lastBackupPurchaseCheckTime = NSDate.date.timeIntervalSince1970;
 }
 
-- (void) checkBackupPurchase
+- (void) checkBackupPurchase:(void(^)(BOOL))onComplete
 {
+    BOOL isPaidVersion = [OAIAPHelper isPaidVersion];
     OACheckBackupSubscriptionTask *t = [[OACheckBackupSubscriptionTask alloc] init];
-    [t execute:nil];
+    [t execute:^(BOOL success) {
+        BOOL isPaidVersionChecked = [OAIAPHelper isPaidVersion];
+        if (isPaidVersion != isPaidVersionChecked)
+            [[OsmAndApp instance].mapSettingsChangeObservable notifyEvent];
+
+        if (onComplete)
+            onComplete(success);
+    }];
 }
 
-- (void) checkBackupPurchaseIfNeeded
+- (void) checkBackupPurchase
+{
+    [self checkBackupPurchase:nil];
+}
+
+- (void) checkBackupPurchaseIfNeeded:(void(^)(BOOL))onComplete
 {
     if ([self needRequestBackupPurchase])
-    {
-        [self checkBackupPurchase];
-    }
+        [self checkBackupPurchase:onComplete];
 }
 
 - (OASubscription *) getAnyPurchasedOsmAndProSubscription

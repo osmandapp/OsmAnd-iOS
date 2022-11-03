@@ -21,7 +21,7 @@
 #import "OAAutoObserverProxy.h"
 #import "OsmAndApp.h"
 #import "OAApplicationMode.h"
-#import "OAPlugin.h"
+#import "OAWikipediaPlugin.h"
 
 static NSString* const UDF_CAR_AID = @"car_aid";
 static NSString* const UDF_FOR_TOURISTS = @"for_tourists";
@@ -995,6 +995,9 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
         NSArray<NSString *> *filters = [storedString componentsSeparatedByString:@","];
         for (NSString *f in filters)
         {
+            if ([f isEqualToString:[NSString stringWithFormat:@"std_%@", OSM_WIKI_CATEGORY]] && ![[OAPlugin getPlugin:OAWikipediaPlugin.class] isEnabled])
+                continue;
+
             OAPOIUIFilter *filter = [self getFilterById:f];
             if (filter)
                 [_selectedPoiFilters addObject:filter];

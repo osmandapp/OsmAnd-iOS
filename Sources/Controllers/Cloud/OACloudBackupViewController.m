@@ -37,6 +37,7 @@
 #import "OAStatusBackupViewController.h"
 #import "OAExportBackupTask.h"
 #import "OAAppVersionDependentConstants.h"
+#import "OsmAndApp.h"
 
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
@@ -88,7 +89,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [OAIAPHelper.sharedInstance checkBackupPurchase];
+    [[OAIAPHelper sharedInstance] checkBackupPurchase];
     _settingsHelper = OANetworkSettingsHelper.sharedInstance;
     _backupHelper = OABackupHelper.sharedInstance;
     self.tblView.refreshControl = [[UIRefreshControl alloc] init];

@@ -606,10 +606,12 @@
     [OAMapCreatorHelper sharedInstance];
     [OATerrainLayer sharedInstanceHillshade];
     [OATerrainLayer sharedInstanceSlope];
-    
-    [[OAIAPHelper sharedInstance] requestProductsWithCompletionHandler:^(BOOL success) {}];
     [OAPlugin initPlugins];
-    
+
+    OAIAPHelper *iapHelper = [OAIAPHelper sharedInstance];
+    [iapHelper resetTestPurchases];
+    [iapHelper requestProductsWithCompletionHandler:nil];
+
     [OAApplicationMode onApplicationStart];
     OAApplicationMode *initialAppMode = [settings.useLastApplicationModeByDefault get] ?
         [OAApplicationMode valueOfStringKey:[settings.lastUsedApplicationMode get] def:OAApplicationMode.DEFAULT] :

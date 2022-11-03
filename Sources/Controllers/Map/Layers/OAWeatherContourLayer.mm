@@ -13,7 +13,7 @@
 #import "OAWeatherHelper.h"
 #import "OAMapRendererEnvironment.h"
 #import "OAMapStyleSettings.h"
-#import "OAIAPHelper.h"
+#import "OAWeatherPlugin.h"
 
 #include <OsmAndCore/Map/WeatherTileResourcesManager.h>
 #include <OsmAndCore/Map/GeoTileObjectsProvider.h>
@@ -104,7 +104,7 @@
 {
     [super updateLayer];
 
-    if ([[OAIAPHelper sharedInstance].weather isActive])
+    if ([[OAPlugin getPlugin:OAWeatherPlugin.class] isEnabled])
     {
         OsmAnd::BandIndex band = WEATHER_BAND_UNDEFINED;
         OAMapStyleParameter *tempContourLinesParam = [_styleSettings getParameter:WEATHER_TEMP_CONTOUR_LINES_ATTR];

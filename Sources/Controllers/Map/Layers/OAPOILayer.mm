@@ -18,6 +18,7 @@
 #import "OAReverseGeocoder.h"
 #import "Localization.h"
 #import "OAPOIFiltersHelper.h"
+#import "OAWikipediaPlugin.h"
 
 #include "OACoreResourcesAmenityIconProvider.h"
 #include <OsmAndCore/Data/Amenity.h>
@@ -99,15 +100,18 @@
         _showWikiOnMap = NO;
     }
 
-    NSMutableSet<OAPOIUIFilter *> *filters =
-            [[_filtersHelper getSelectedPoiFilters:@[[_filtersHelper getTopWikiPoiFilter]]] mutableCopy];
+    OAPOIUIFilter *wikiFilter = [_filtersHelper getTopWikiPoiFilter];
+    BOOL isWikiEnabled = [[OAPlugin getPlugin:OAWikipediaPlugin.class] isEnabled];
+    NSMutableSet<OAPOIUIFilter *> *filters = [NSMutableSet setWithSet:[_filtersHelper getSelectedPoiFilters:@[wikiFilter]]];
+    if (!isWikiEnabled || ![_filtersHelper isPoiFilterSelectedByFilterId:[OAPOIFiltersHelper getTopWikiPoiFilterId]])
+    {
+        [filters removeObject:wikiFilter];
+        wikiFilter = nil;
+    }
     [OAPOIUIFilter combineStandardPoiFilters:filters];
 
     dispatch_async(dispatch_get_main_queue(), ^{
-        if ([_filtersHelper isPoiFilterSelectedByFilterId:[OAPOIFiltersHelper getTopWikiPoiFilterId]])
-            [self showPoiOnMap:filters wikiOnMap:[_filtersHelper getTopWikiPoiFilter]];
-        else
-            [self showPoiOnMap:filters wikiOnMap:nil];
+        [self showPoiOnMap:filters wikiOnMap:wikiFilter];
     });
 }
 

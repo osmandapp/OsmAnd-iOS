@@ -9,7 +9,7 @@
 #import "OATerrainMapLayer.h"
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
-#import "OAIAPHelper.h"
+#import "OASRTMPlugin.h"
 #import "OAMapStyleSettings.h"
 #import "OAAutoObserverProxy.h"
 
@@ -63,7 +63,7 @@
     [super updateLayer];
 
     EOATerrainType type = self.app.data.terrainType;
-    if (type != EOATerrainTypeDisabled && [[OAIAPHelper sharedInstance].srtm isActive])
+    if (type != EOATerrainTypeDisabled && [[OAPlugin getPlugin:OASRTMPlugin.class] isEnabled])
     {
         OsmAnd::ZoomLevel minZoom = [self getMinZoom];
         OsmAnd::ZoomLevel maxZoom = [self getMaxZoom];

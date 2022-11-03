@@ -20,6 +20,11 @@
     return PLUGIN_ID;
 }
 
+- (BOOL)isEnabled
+{
+    return [super isEnabled] && [[OAIAPHelper sharedInstance].srtm isActive];
+}
+
 - (NSArray<OAResourceItem *> *) getSuggestedMaps
 {
     NSMutableArray *suggestedMaps = [NSMutableArray new];

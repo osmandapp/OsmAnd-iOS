@@ -1047,12 +1047,6 @@
     }
 }
 
-- (void) refreshOverlayUnderlayAlpha
-{
-    [_overlayAlphaChangeObservable notifyEventWithKey:self andValue:@(self.overlayAlpha)];
-    [_underlayAlphaChangeObservable notifyEventWithKey:self andValue:@(self.underlayAlpha)];
-}
-
 - (OAMapLayersConfiguration *)mapLayersConfiguration
 {
     @synchronized (_lock)

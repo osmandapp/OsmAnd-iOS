@@ -609,14 +609,9 @@
     [OAPlugin initPlugins];
 
     OAIAPHelper *iapHelper = [OAIAPHelper sharedInstance];
-    BOOL isPaidVersion = [OAIAPHelper isPaidVersion];
     [iapHelper resetTestPurchases];
-    [iapHelper requestProductsWithCompletionHandler:^(BOOL success) {
-        BOOL isPaidVersionChecked = [OAIAPHelper isPaidVersion];
-        if (isPaidVersion != isPaidVersionChecked)
-            [_mapSettingsChangeObservable notifyEvent];
-    }];
-    
+    [iapHelper requestProductsWithCompletionHandler:nil];
+
     [OAApplicationMode onApplicationStart];
     OAApplicationMode *initialAppMode = [settings.useLastApplicationModeByDefault get] ?
         [OAApplicationMode valueOfStringKey:[settings.lastUsedApplicationMode get] def:OAApplicationMode.DEFAULT] :

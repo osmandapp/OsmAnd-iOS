@@ -1122,12 +1122,7 @@ static OASubscriptionState *EXPIRED;
         if (validateProducts)
         {
             _settings.lastReceiptValidationDate = [NSDate dateWithTimeIntervalSince1970:0];
-            BOOL isPaidVersion = [OAIAPHelper isPaidVersion];
-            [self requestProductsWithCompletionHandler:^(BOOL success) {
-                BOOL isPaidVersionChecked = [OAIAPHelper isPaidVersion];
-                if (isPaidVersion != isPaidVersionChecked)
-                    [[OsmAndApp instance].mapSettingsChangeObservable notifyEvent];
-            }];
+            [self requestProductsWithCompletionHandler:nil];
         }
     });
 }
@@ -1828,8 +1823,16 @@ static OASubscriptionState *EXPIRED;
 
 - (void) checkBackupPurchase:(void(^)(BOOL))onComplete
 {
+    BOOL isPaidVersion = [OAIAPHelper isPaidVersion];
     OACheckBackupSubscriptionTask *t = [[OACheckBackupSubscriptionTask alloc] init];
-    [t execute:onComplete];
+    [t execute:^(BOOL success) {
+        BOOL isPaidVersionChecked = [OAIAPHelper isPaidVersion];
+        if (isPaidVersion != isPaidVersionChecked)
+            [[OsmAndApp instance].mapSettingsChangeObservable notifyEvent];
+
+        if (onComplete)
+            onComplete(success);
+    }];
 }
 
 - (void) checkBackupPurchase

@@ -662,12 +662,7 @@ typedef enum : NSUInteger {
         [self showProgress:EOARestorePurchasesProgressType];
 
     [_iapHelper restoreCompletedTransactions];
-    BOOL isPaidVersion = [OAIAPHelper isPaidVersion];
-    [_iapHelper checkBackupPurchase:^(BOOL success) {
-        BOOL isPaidVersionChecked = [OAIAPHelper isPaidVersion];
-        if (isPaidVersion != isPaidVersionChecked)
-            [[OsmAndApp instance].mapSettingsChangeObservable notifyEvent];
-    }];
+    [_iapHelper checkBackupPurchase];
     return YES;
 }
 

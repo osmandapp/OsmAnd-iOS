@@ -89,12 +89,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    BOOL isPaidVersion = [OAIAPHelper isPaidVersion];
-    [[OAIAPHelper sharedInstance] checkBackupPurchase:^(BOOL success) {
-        BOOL isPaidVersionChecked = [OAIAPHelper isPaidVersion];
-        if (isPaidVersion != isPaidVersionChecked)
-            [[OsmAndApp instance].mapSettingsChangeObservable notifyEvent];
-    }];
+    [[OAIAPHelper sharedInstance] checkBackupPurchase];
     _settingsHelper = OANetworkSettingsHelper.sharedInstance;
     _backupHelper = OABackupHelper.sharedInstance;
     self.tblView.refreshControl = [[UIRefreshControl alloc] init];

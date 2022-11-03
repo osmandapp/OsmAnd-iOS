@@ -10,9 +10,12 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class OATableSectionData;
+
 @interface OABaseCloudBackupViewController : OABaseBigTitleSettingsViewController
 
 - (NSDictionary *)getLocalBackupSectionData;
+- (OATableSectionData *)getLocalBackupSectionDataObj;
 
 - (void)onBackupIntoFilePressed;
 - (void)onRestoreFromFilePressed;

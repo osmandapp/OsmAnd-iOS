@@ -9,6 +9,9 @@
 #import "OABaseCloudBackupViewController.h"
 #import "Localization.h"
 #import "OASettingsHelper.h"
+#import "OATableDataModel.h"
+#import "OATableSectionData.h"
+#import "OATableRowData.h"
 
 #import "OATitleRightIconCell.h"
 #import "OAExportItemsViewController.h"
@@ -34,6 +37,7 @@
     _titleText = OALocalizedString(@"backup_and_restore");
 }
 
+// TODO: migrate cloud introduction to new model and remove this method
 - (NSDictionary *)getLocalBackupSectionData
 {
     return @{
@@ -54,6 +58,26 @@
             }
         ]
     };
+}
+
+- (OATableSectionData *)getLocalBackupSectionDataObj
+{
+    OATableSectionData *section = [OATableSectionData sectionData];
+    section.headerText = OALocalizedString(@"local_backup");
+    section.footerText = OALocalizedString(@"local_backup_descr");
+    [section addRowFromDictionary:@{
+        kCellTypeKey: OATitleRightIconCell.getCellIdentifier,
+        kCellKeyKey: @"backupIntoFile",
+        kCellTitleKey: OALocalizedString(@"backup_into_file"),
+        kCellIconNameKey: @"ic_custom_save_to_file"
+    }];
+    [section addRowFromDictionary:@{
+        kCellTypeKey: OATitleRightIconCell.getCellIdentifier,
+        kCellKeyKey: @"restoreFromFile",
+        kCellTitleKey: OALocalizedString(@"restore_from_file"),
+        kCellIconNameKey: @"ic_custom_read_from_file"
+    }];
+    return section;
 }
 
 - (void)onBackupIntoFilePressed

@@ -11,9 +11,9 @@
 #import "OASimpleTableViewCell.h"
 #import "OARightIconTableViewCell.h"
 #import "OATableViewCustomHeaderView.h"
-#import "OATableViewDataModel.h"
-#import "OATableViewSectionData.h"
-#import "OATableViewRowData.h"
+#import "OATableDataModel.h"
+#import "OATableSectionData.h"
+#import "OATableRowData.h"
 #import "OANetworkSettingsHelper.h"
 #import "OABackupHelper.h"
 #import "OABackupDbHelper.h"
@@ -40,7 +40,7 @@
     OANetworkSettingsHelper *_settingsHelper;
     id _backupExportImportListener;
 
-    OATableViewDataModel *_data;
+    OATableDataModel *_data;
     NSInteger _itemSection;
 }
 
@@ -92,8 +92,8 @@
 
 - (void)generateData
 {
-    _data = [[OATableViewDataModel alloc] init];
-    OATableViewSectionData *itemInfoSection = [OATableViewSectionData sectionData];
+    _data = [[OATableDataModel alloc] init];
+    OATableSectionData *itemInfoSection = [OATableSectionData sectionData];
     
     NSString *name = [_localFile.item getPublicName];
     if ([_localFile.item isKindOfClass:OAFileSettingsItem.class])
@@ -105,14 +105,14 @@
             name = [NSString stringWithFormat:@"%@ (%@)", name, OALocalizedString(@"recorded_voice")];
     }
 
-    OATableViewRowData *itemInfoRow = [[OATableViewRowData alloc] initWithData:@{
+    OATableRowData *itemInfoRow = [[OATableRowData alloc] initWithData:@{
         kCellTypeKey: [OASimpleTableViewCell getCellIdentifier],
         kCellKeyKey: @"itemInfo",
         kCellTitleKey: name,
         kCellIconTint: @(color_icon_inactive)
     }];
 
-    OATableViewRowData *uploadLocalRow = [[OATableViewRowData alloc] initWithData:@{
+    OATableRowData *uploadLocalRow = [[OATableRowData alloc] initWithData:@{
         kCellTypeKey: [OARightIconTableViewCell getCellIdentifier],
         kCellKeyKey: @"uploadLocal",
         kCellTitleKey: OALocalizedString(@"upload_local_version"),
@@ -120,7 +120,7 @@
         kCellIconTint: @(color_primary_purple)
     }];
 
-    OATableViewRowData *downloadCloudRow = [[OATableViewRowData alloc] initWithData:@{
+    OATableRowData *downloadCloudRow = [[OATableRowData alloc] initWithData:@{
         kCellTypeKey: [OARightIconTableViewCell getCellIdentifier],
         kCellKeyKey: @"downloadCloud",
         kCellTitleKey: OALocalizedString(@"dowload_cloud_version"),
@@ -174,7 +174,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    OATableViewRowData *item = [_data itemForIndexPath:indexPath];
+    OATableRowData *item = [_data itemForIndexPath:indexPath];
     if ([item.cellType isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
     {
         OASimpleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
@@ -259,7 +259,7 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
-    OATableViewRowData *item = [_data itemForIndexPath:indexPath];
+    OATableRowData *item = [_data itemForIndexPath:indexPath];
     if ([item boolForKey:@"enabled"])
     {
         [self dismissViewControllerAnimated:YES completion:^{

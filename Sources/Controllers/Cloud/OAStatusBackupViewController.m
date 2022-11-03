@@ -17,7 +17,7 @@
 #import "OAExportSettingsType.h"
 #import "OAApplicationMode.h"
 #import "OABackupDbHelper.h"
-#import "OATableViewRowData.h"
+#import "OATableRowData.h"
 #import "OAOsmAndFormatter.h"
 #import "OAColors.h"
 #import "Localization.h"
@@ -214,7 +214,7 @@
     return _status;
 }
 
-- (void)setRowIcon:(OATableViewRowData *)rowData item:(OASettingsItem *)item
+- (void)setRowIcon:(OATableRowData *)rowData item:(OASettingsItem *)item
 {
     if ([item isKindOfClass:OAProfileSettingsItem.class])
     {

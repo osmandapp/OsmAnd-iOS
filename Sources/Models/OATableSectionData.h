@@ -1,5 +1,5 @@
 //
-//  OATableViewSectionData.h
+//  OATableSectionData.h
 //  OsmAnd Maps
 //
 //  Created by Paul on 20.09.2022.
@@ -10,19 +10,19 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class OATableViewRowData;
+@class OATableRowData;
 
-@interface OATableViewSectionData : NSObject
+@interface OATableSectionData : NSObject
 
 + (instancetype) sectionData;
 
 @property (nonatomic) NSString *headerText;
 @property (nonatomic) NSString *footerText;
 
-- (OATableViewRowData *) getRow:(NSUInteger)index;
+- (OATableRowData *) getRow:(NSUInteger)index;
 
-- (void)addRow:(OATableViewRowData *)rowData;
-- (OATableViewRowData *) addRowFromDictionary:(NSDictionary *)dictionary;
+- (void)addRow:(OATableRowData *)rowData;
+- (OATableRowData *) addRowFromDictionary:(NSDictionary *)dictionary;
 
 - (NSUInteger) rowCount;
 

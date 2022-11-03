@@ -37,6 +37,10 @@
 #import "OAStatusBackupViewController.h"
 #import "OAExportBackupTask.h"
 #import "OAAppVersionDependentConstants.h"
+#import "OATableDataModel.h"
+#import "OATableCollapsableRowData.h"
+#import "OATableRowData.h"
+#import "OATableSectionData.h"
 
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
@@ -53,7 +57,7 @@
 
 @implementation OACloudBackupViewController
 {
-    NSArray<NSDictionary *> *_data;
+    OATableDataModel *_data;
     OANetworkSettingsHelper *_settingsHelper;
     OABackupHelper *_backupHelper;
     
@@ -151,7 +155,7 @@
 
 - (void)generateData
 {
-    NSMutableArray<NSDictionary *> *result = [NSMutableArray array];
+    _data = [[OATableDataModel alloc] init];
     
     if (!_status)
         _status = [OABackupStatus getBackupStatus:_backup];
@@ -165,106 +169,96 @@
         if (_sourceType == EOACloudScreenSourceTypeSignIn)
         {
             // Existing backup case
-            NSMutableArray<NSDictionary *> *existingBackupRows = [NSMutableArray array];
-            [existingBackupRows addObject:@{
-                @"cellId": OALargeImageTitleDescrTableViewCell.getCellIdentifier,
-                @"name": @"existingOnlineBackup",
-                @"title": OALocalizedString(@"cloud_welcome_back"),
-                @"description": OALocalizedString(@"cloud_description"),
-                @"image": @"ic_action_cloud_smile_face_colored"
+            OATableSectionData *existingBackupSection = [OATableSectionData sectionData];
+            [existingBackupSection addRowFromDictionary:@{
+                kCellTypeKey: OALargeImageTitleDescrTableViewCell.getCellIdentifier,
+                kCellKeyKey: @"existingOnlineBackup",
+                kCellTitleKey: OALocalizedString(@"cloud_welcome_back"),
+                kCellDescrKey: OALocalizedString(@"cloud_description"),
+                kCellIconNameKey: @"ic_action_cloud_smile_face_colored"
             }];
             BOOL showBothButtons = [self shouldShowBackupButton] && [self shouldShowRestoreButton];
             if (showBothButtons)
             {
-                [existingBackupRows addObject:@{
-                    @"cellId": OATwoFilledButtonsTableViewCell.getCellIdentifier,
-                    @"name": @"backupAndRestore",
+                [existingBackupSection addRowFromDictionary:@{
+                    kCellTypeKey: OATwoFilledButtonsTableViewCell.getCellIdentifier,
+                    kCellKeyKey: @"backupAndRestore",
                     @"topTitle": OALocalizedString(@"cloud_restore_now"),
                     @"bottomTitle": OALocalizedString(@"cloud_set_up_backup")
                 }];
             }
             if ([self shouldShowRestoreButton] && !showBothButtons)
             {
-                [existingBackupRows addObject:@{
-                    @"cellId": OAFilledButtonCell.getCellIdentifier,
-                    @"name": @"onRestoreButtonPressed",
-                    @"title": OALocalizedString(@"cloud_restore_now")
+                [existingBackupSection addRowFromDictionary:@{
+                    kCellTypeKey: OAFilledButtonCell.getCellIdentifier,
+                    kCellKeyKey: @"onRestoreButtonPressed",
+                    kCellTitleKey: OALocalizedString(@"cloud_restore_now")
                 }];
             }
             if ([self shouldShowBackupButton] && !showBothButtons)
             {
-                [existingBackupRows addObject:@{
-                    @"cellId": OAFilledButtonCell.getCellIdentifier,
-                    @"name": @"onSetUpBackupButtonPressed",
-                    @"title": OALocalizedString(@"cloud_set_up_backup")
+                [existingBackupSection addRowFromDictionary:@{
+                    kCellTypeKey: OAFilledButtonCell.getCellIdentifier,
+                    kCellKeyKey: @"onSetUpBackupButtonPressed",
+                    kCellTitleKey: OALocalizedString(@"cloud_set_up_backup")
                 }];
             }
-            NSDictionary *backupSection = @{
-                @"sectionHeader": OALocalizedString(@"cloud_backup"),
-                @"rows": existingBackupRows
-            };
-            [result addObject:backupSection];
+            existingBackupSection.headerText = OALocalizedString(@"cloud_backup");
+            [_data addSection:existingBackupSection];
         }
         else if (_sourceType == EOACloudScreenSourceTypeSignUp)
         {
             // No backup case
-            NSMutableArray<NSDictionary *> *noBackupRows = [NSMutableArray array];
-            [noBackupRows addObject:@{
-                @"cellId": OALargeImageTitleDescrTableViewCell.getCellIdentifier,
-                @"name": @"noOnlineBackup",
-                @"title": OALocalizedString(@"cloud_no_online_backup"),
-                @"description": OALocalizedString(@"cloud_no_online_backup_descr"),
-                @"image": @"ic_custom_cloud_neutral_face_colored"
+            OATableSectionData *noBackupRows = [OATableSectionData sectionData];
+            [noBackupRows addRowFromDictionary:@{
+                kCellTypeKey: OALargeImageTitleDescrTableViewCell.getCellIdentifier,
+                kCellKeyKey: @"noOnlineBackup",
+                kCellTitleKey: OALocalizedString(@"cloud_no_online_backup"),
+                kCellDescrKey: OALocalizedString(@"cloud_no_online_backup_descr"),
+                kCellIconNameKey: @"ic_custom_cloud_neutral_face_colored"
             }];
             
             if ([self shouldShowBackupButton])
             {
-                [noBackupRows addObject:@{
-                    @"cellId": OAFilledButtonCell.getCellIdentifier,
-                    @"name": @"onSetUpBackupButtonPressed",
-                    @"title": OALocalizedString(@"cloud_set_up_backup")
+                [noBackupRows addRowFromDictionary:@{
+                    kCellTypeKey: OAFilledButtonCell.getCellIdentifier,
+                    kCellKeyKey: @"onSetUpBackupButtonPressed",
+                    kCellTitleKey: OALocalizedString(@"cloud_set_up_backup")
                 }];
             }
-            NSDictionary *backupSection = @{
-                @"sectionHeader": OALocalizedString(@"cloud_backup"),
-                @"rows": noBackupRows
-            };
-            [result addObject:backupSection];
+            noBackupRows.headerText = OALocalizedString(@"cloud_backup");
+            [_data addSection:noBackupRows];
         }
     }
     else
     {
-        NSMutableArray<NSDictionary *> *backupRows = [NSMutableArray array];
-        NSDictionary *backupSection = @{
-            @"sectionHeader": OALocalizedString(@"cloud_backup"),
-            @"rows": backupRows
-        };
-        [result addObject:backupSection];
+        OATableSectionData *backupRows = [OATableSectionData sectionData];
+        backupRows.headerText = OALocalizedString(@"cloud_backup");
+        [_data addSection:backupRows];
 
         OAExportBackupTask *exportTask = [_settingsHelper getExportTask:kBackupItemsKey];
         if (exportTask)
         {
-            // TODO: show progress from HeaderStatusViewHolder.java
             _backupProgressCell = [self getProgressBarCell];
             NSDictionary *backupProgressCell = @{
-                @"cellId": OATitleIconProgressbarCell.getCellIdentifier,
+                kCellTypeKey: OATitleIconProgressbarCell.getCellIdentifier,
                 @"cell": _backupProgressCell
             };
-            [backupRows addObject:backupProgressCell];
+            [backupRows addRowFromDictionary:backupProgressCell];
         }
         else
         {
             NSString *backupTime = [OAOsmAndFormatter getFormattedPassedTime:OAAppSettings.sharedManager.backupLastUploadedTime.get def:OALocalizedString(@"shared_string_never")];
             NSDictionary *lastBackupCell = @{
-                @"cellId": OAMultiIconTextDescCell.getCellIdentifier,
-                @"name": @"lastBackup",
-                @"title": _status.statusTitle,
-                @"description": backupTime,
-                @"image": _status.statusIconName,
-                @"imageColor": @(_status.iconColor)
+                kCellTypeKey: OAMultiIconTextDescCell.getCellIdentifier,
+                kCellKeyKey: @"lastBackup",
+                kCellTitleKey: _status.statusTitle,
+                kCellDescrKey: backupTime,
+                kCellIconNameKey: _status.statusIconName,
+                kCellIconTint: @(_status.iconColor)
             };
-            [backupRows addObject:lastBackupCell];
-            _lastBackupIndexPath = [NSIndexPath indexPathForRow:backupRows.count - 1 inSection:result.count - 1];
+            [backupRows addRowFromDictionary:lastBackupCell];
+            _lastBackupIndexPath = [NSIndexPath indexPathForRow:backupRows.rowCount - 1 inSection:_data.sectionCount - 1];
 
             if (_status.warningTitle != nil || _error.length > 0)
             {
@@ -274,14 +268,14 @@
                 NSInteger color = _status == OABackupStatus.CONFLICTS || _status == OABackupStatus.ERROR ? _status.iconColor
                         : _status == OABackupStatus.MAKE_BACKUP ? profile_icon_color_green_light : -1;
                 NSDictionary *makeBackupWarningCell = @{
-                    @"cellId": OATitleDescrRightIconTableViewCell.getCellIdentifier,
-                    @"name": @"makeBackupWarning",
-                    @"title": hasWarningStatus ? _status.warningTitle : OALocalizedString(@"osm_failed_uploads"),
-                    @"description": descr ? descr : @"",
-                    @"imageColor": @(color),
-                    @"image": _status.warningIconName
+                    kCellTypeKey: OATitleDescrRightIconTableViewCell.getCellIdentifier,
+                    kCellKeyKey: @"makeBackupWarning",
+                    kCellTitleKey: hasWarningStatus ? _status.warningTitle : OALocalizedString(@"osm_failed_uploads"),
+                    kCellDescrKey: descr ? descr : @"",
+                    kCellIconTint: @(color),
+                    kCellIconNameKey: _status.warningIconName
                 };
-                [backupRows addObject:makeBackupWarningCell];
+                [backupRows addRowFromDictionary:makeBackupWarningCell];
             }
         }
         BOOL hasInfo = _info != nil;
@@ -293,86 +287,77 @@
             if (_settingsHelper.isBackupExporting)
             {
                 NSDictionary *cancellCell = @{
-                    @"cellId": OAButtonRightIconCell.getCellIdentifier,
-                    @"name": @"cancellBackupPressed",
-                    @"title": OALocalizedString(@"shared_string_cancel"),
-                    @"image": @"ic_custom_cancel"
+                    kCellTypeKey: OAButtonRightIconCell.getCellIdentifier,
+                    kCellKeyKey: @"cancellBackupPressed",
+                    kCellTitleKey: OALocalizedString(@"shared_string_cancel"),
+                    kCellIconNameKey: @"ic_custom_cancel"
                 };
-                [backupRows addObject:cancellCell];
+                [backupRows addRowFromDictionary:cancellCell];
             }
             else if (_status == OABackupStatus.MAKE_BACKUP)
             {
                 NSDictionary *backupNowCell = @{
-                    @"cellId": OAButtonRightIconCell.getCellIdentifier,
-                    @"name": @"onSetUpBackupButtonPressed",
-                    @"title": OALocalizedString(@"cloud_backup_now"),
-                    @"image": @"ic_custom_cloud_upload"
+                    kCellTypeKey: OAButtonRightIconCell.getCellIdentifier,
+                    kCellKeyKey: @"onSetUpBackupButtonPressed",
+                    kCellTitleKey: OALocalizedString(@"cloud_backup_now"),
+                    kCellIconNameKey: @"ic_custom_cloud_upload"
                 };
-                [backupRows addObject:backupNowCell];
+                [backupRows addRowFromDictionary:backupNowCell];
             }
             else if (_status == OABackupStatus.CONFLICTS)
             {
                 NSDictionary *conflictsCell = @{
-                    @"cellId": OAValueTableViewCell.getCellIdentifier,
-                    @"name": @"viewConflictsCell",
-                    @"title": OALocalizedString(@"cloud_view_conflicts"),
+                    kCellTypeKey: OAValueTableViewCell.getCellIdentifier,
+                    kCellKeyKey: @"viewConflictsCell",
+                    kCellTitleKey: OALocalizedString(@"cloud_view_conflicts"),
                     @"value": @(_info.filteredFilesToMerge.count)
                 };
-                [backupRows addObject:conflictsCell];
+                [backupRows addRowFromDictionary:conflictsCell];
             }
             else if (_status == OABackupStatus.NO_INTERNET_CONNECTION)
             {
                 NSDictionary *retryCell = @{
-                    @"cellId": OAButtonRightIconCell.getCellIdentifier,
-                    @"name": @"onRetryPressed",
-                    @"title": _status.actionTitle,
-                    @"image": @"ic_custom_reset"
+                    kCellTypeKey: OAButtonRightIconCell.getCellIdentifier,
+                    kCellKeyKey: @"onRetryPressed",
+                    kCellTitleKey: _status.actionTitle,
+                    kCellIconNameKey: @"ic_custom_reset"
                 };
-                [backupRows addObject:retryCell];
+                [backupRows addRowFromDictionary:retryCell];
             }
             else if (_status == OABackupStatus.ERROR)
             {
                 NSDictionary *retryCell = @{
-                    @"cellId": OAButtonRightIconCell.getCellIdentifier,
-                    @"name": @"onSupportPressed",
-                    @"title": _status.actionTitle,
-                    @"image": @"ic_custom_letter_outlined"
+                    kCellTypeKey: OAButtonRightIconCell.getCellIdentifier,
+                    kCellKeyKey: @"onSupportPressed",
+                    kCellTitleKey: _status.actionTitle,
+                    kCellIconNameKey: @"ic_custom_letter_outlined"
                 };
-                [backupRows addObject:retryCell];
+                [backupRows addRowFromDictionary:retryCell];
             }
             else if (_status == OABackupStatus.SUBSCRIPTION_EXPIRED)
             {
                 NSDictionary *purchaseCell = @{
-                    @"cellId": OAButtonRightIconCell.getCellIdentifier,
-                    @"name": @"onSubscriptionExpired",
-                    @"title": _status.actionTitle,
-                    @"image": @"ic_custom_osmand_pro_logo_colored"
+                    kCellTypeKey: OAButtonRightIconCell.getCellIdentifier,
+                    kCellKeyKey: @"onSubscriptionExpired",
+                    kCellTitleKey: _status.actionTitle,
+                    kCellIconNameKey: @"ic_custom_osmand_pro_logo_colored"
                 };
-                [backupRows addObject:purchaseCell];
+                [backupRows addRowFromDictionary:purchaseCell];
             }
         }
     }
-    NSDictionary *restoreSection = @{
-        @"sectionHeader" : OALocalizedString(@"restore"),
-        @"sectionFooter" : OALocalizedString(@"restore_backup_descr"),
-        @"rows" : @[@{
-            @"cellId": OAButtonRightIconCell.getCellIdentifier,
-            @"name": @"onRestoreButtonPressed",
-            @"title": OALocalizedString(@"restore_data"),
-            @"image": @"ic_custom_restore"
-        }]
-    };
-    [result addObject:restoreSection];
+    OATableSectionData *restoreSection = [OATableSectionData sectionData];
+    restoreSection.headerText = OALocalizedString(@"restore");
+    restoreSection.footerText = OALocalizedString(@"restore_backup_descr");
+    [restoreSection addRowFromDictionary:@{
+        kCellTypeKey: OAButtonRightIconCell.getCellIdentifier,
+        kCellKeyKey: @"onRestoreButtonPressed",
+        kCellTitleKey: OALocalizedString(@"restore_data"),
+        kCellIconNameKey: @"ic_custom_restore"
+    }];
+    [_data addSection:restoreSection];
 
-//    // View conflicts cell
-//    NSDictionary *viewConflictsCell = @{
-//        @"cellId": OAIconTitleValueCell.getCellIdentifier,
-//        @"name": @"viewConflicts",
-//        @"title": OALocalizedString(@"cloud_view_conflicts"),
-//        @"value": @"13" // TODO: insert conflicts count
-//    };
-    [result addObject:[self getLocalBackupSectionData]];
-    _data = result;
+    [_data addSection:[self getLocalBackupSectionDataObj]];
 }
 
 - (OATitleIconProgressbarCell *) getProgressBarCell
@@ -481,28 +466,28 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return _data.count;
+    return _data.sectionCount;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return _data[section][@"sectionHeader"];
+    return [_data sectionDataForIndex:section].headerText;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
-    return _data[section][@"sectionFooter"];
+    return [_data sectionDataForIndex:section].footerText;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return ((NSArray *)_data[section][@"rows"]).count;
+    return [_data rowCount:section];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary *item = _data[indexPath.section][@"rows"][indexPath.row];
-    NSString *cellId = item[@"cellId"];
+    OATableRowData *item = [_data itemForIndexPath:indexPath];
+    NSString *cellId = item.cellType;
     if ([cellId isEqualToString:OATitleRightIconCell.getCellIdentifier])
     {
         OATitleRightIconCell* cell = [tableView dequeueReusableCellWithIdentifier:OATitleRightIconCell.getCellIdentifier];
@@ -513,8 +498,8 @@
             cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
             cell.titleView.font = [UIFont systemFontOfSize:17.];
         }
-        cell.titleView.text = item[@"title"];
-        [cell.iconView setImage:[UIImage templateImageNamed:item[@"image"]]];
+        cell.titleView.text = item.title;
+        [cell.iconView setImage:[UIImage templateImageNamed:item.iconName]];
         return cell;
     }
     else if ([cellId isEqualToString:OALargeImageTitleDescrTableViewCell.getCellIdentifier])
@@ -527,9 +512,9 @@
             cell.separatorInset = UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.);
             [cell showButton:NO];
         }
-        cell.titleLabel.text = item[@"title"];
-        cell.descriptionLabel.text = item[@"description"];
-        [cell.cellImageView setImage:[UIImage imageNamed:item[@"image"]]];
+        cell.titleLabel.text = item.title;
+        cell.descriptionLabel.text = item.descr;
+        [cell.cellImageView setImage:[UIImage imageNamed:item.iconName]];
 
         if (cell.needsUpdateConstraints)
             [cell updateConstraints];
@@ -549,8 +534,8 @@
             [cell descriptionVisibility:NO];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
-        cell.titleLabel.text = item[@"title"];
-        cell.valueLabel.text = [item[@"value"] stringValue];
+        cell.titleLabel.text = item.title;
+        cell.valueLabel.text = [item stringForKey:@"value"];
 
         return cell;
     }
@@ -570,9 +555,9 @@
             cell.heightConstraint.constant = 42.;
             cell.separatorInset = UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.);
         }
-        [cell.button setTitle:item[@"title"] forState:UIControlStateNormal];
+        [cell.button setTitle:item.title forState:UIControlStateNormal];
         [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
-        [cell.button addTarget:self action:NSSelectorFromString(item[@"name"]) forControlEvents:UIControlEventTouchUpInside];
+        [cell.button addTarget:self action:NSSelectorFromString(item.key) forControlEvents:UIControlEventTouchUpInside];
         return cell;
     }
     else if ([cellId isEqualToString:OATwoFilledButtonsTableViewCell.getCellIdentifier])
@@ -584,10 +569,10 @@
             cell = (OATwoFilledButtonsTableViewCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.);
         }
-        [cell.topButton setTitle:item[@"topTitle"] forState:UIControlStateNormal];
+        [cell.topButton setTitle:[item objForKey:@"topTitle"] forState:UIControlStateNormal];
         [cell.topButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
         [cell.topButton addTarget:self action:@selector(onRestoreButtonPressed) forControlEvents:UIControlEventTouchUpInside];
-        [cell.bottomButton setTitle:item[@"bottomTitle"] forState:UIControlStateNormal];
+        [cell.bottomButton setTitle:[item objForKey:@"bottomTitle"] forState:UIControlStateNormal];
         [cell.bottomButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
         [cell.bottomButton addTarget:self action:@selector(onSetUpBackupButtonPressed) forControlEvents:UIControlEventTouchUpInside];
         return cell;
@@ -602,10 +587,10 @@
             [cell setOverflowVisibility:YES];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
-        cell.textView.text = item[@"title"];
-        cell.descView.text = item[@"description"];
-        [cell.iconView setImage:[UIImage templateImageNamed:item[@"image"]]];
-        cell.iconView.tintColor = [item.allKeys containsObject:@"imageColor"] ? UIColorFromRGB([item[@"imageColor"] integerValue]) : UIColorFromRGB(color_primary_purple);
+        cell.textView.text = item.title;
+        cell.descView.text = item.descr;
+        [cell.iconView setImage:[UIImage templateImageNamed:item.iconName]];
+        cell.iconView.tintColor = item.iconTint != -1 ? UIColorFromRGB(item.iconTint) : UIColorFromRGB(color_primary_purple);
         return cell;
     }
     else if ([cellId isEqualToString:OAButtonRightIconCell.getCellIdentifier])
@@ -618,9 +603,9 @@
             cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
         }
         [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
-        [cell.button addTarget:self action:NSSelectorFromString(item[@"name"]) forControlEvents:UIControlEventTouchUpInside];
-        [cell.button setTitle:item[@"title"] forState:UIControlStateNormal];
-        [cell.iconView setImage:[UIImage templateImageNamed:item[@"image"]]];
+        [cell.button addTarget:self action:NSSelectorFromString(item.key) forControlEvents:UIControlEventTouchUpInside];
+        [cell.button setTitle:item.title forState:UIControlStateNormal];
+        [cell.iconView setImage:[UIImage templateImageNamed:item.iconName]];
         return cell;
     }
     else if ([cellId isEqualToString:OATitleDescrRightIconTableViewCell.getCellIdentifier])
@@ -632,17 +617,17 @@
             cell = (OATitleDescrRightIconTableViewCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
-        cell.titleLabel.text = item[@"title"];
-        cell.descriptionLabel.text = item[@"description"];
-        NSInteger color = [item[@"imageColor"] integerValue];
+        cell.titleLabel.text = item.title;
+        cell.descriptionLabel.text = item.descr;
+        NSInteger color = item.iconTint;
         if (color != -1)
         {
             cell.iconView.tintColor = UIColorFromRGB(color);
-            [cell.iconView setImage:[UIImage templateImageNamed:item[@"image"]]];
+            [cell.iconView setImage:[UIImage templateImageNamed:item.iconName]];
         }
         else
         {
-            [cell.iconView setImage:[UIImage imageNamed:item[@"image"]]];
+            [cell.iconView setImage:[UIImage imageNamed:item.iconName]];
         }
         
         return cell;
@@ -663,13 +648,13 @@
             [cell showLeftIcon:NO];
             [cell showRightIcon:YES];
         }
-        cell.textView.text = item[@"title"];
-        cell.descriptionView.text = item[@"value"];
+        cell.textView.text = item.title;
+        cell.descriptionView.text = [item stringForKey:@"value"];
         return cell;
     }
     else if ([cellId isEqualToString:OATitleIconProgressbarCell.getCellIdentifier])
     {
-        return item[@"cell"];
+        return [item objForKey:@"cell"];
     }
     return nil;
 }
@@ -678,8 +663,8 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary *item = _data[indexPath.section][@"rows"][indexPath.row];
-    NSString *itemId = item[@"name"];
+    OATableRowData *item = [_data itemForIndexPath:indexPath];
+    NSString *itemId = item.key;
     if (indexPath == _lastBackupIndexPath)
     {
         OAStatusBackupViewController *statusBackupViewController = [[OAStatusBackupViewController alloc] initWithBackup:_backup status:_status];

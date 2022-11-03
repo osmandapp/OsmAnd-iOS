@@ -10,9 +10,9 @@
 #import "OAStatusBackupViewController.h"
 #import "OAStatusBackupConflictDetailsViewController.h"
 #import "OAColors.h"
-#import "OATableViewDataModel.h"
-#import "OATableViewSectionData.h"
-#import "OATableViewRowData.h"
+#import "OATableDataModel.h"
+#import "OATableSectionData.h"
+#import "OATableRowData.h"
 #import "OAPrepareBackupResult.h"
 #import "OABackupStatus.h"
 #import "OABackupInfo.h"
@@ -58,7 +58,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
 @implementation OAStatusBackupTableViewController
 {
     EOARecentChangesTable _tableType;
-    OATableViewDataModel *_data;
+    OATableDataModel *_data;
     __weak id<OAStatusBackupTableDelegate> _delegate;
     NSIndexPath *_lastBackupIndexPath;
     NSInteger _itemsSection;
@@ -134,15 +134,15 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
 
 - (void)generateData
 {
-    _data = [[OATableViewDataModel alloc] init];
-    OATableViewSectionData *statusSection = [OATableViewSectionData sectionData];
+    _data = [[OATableDataModel alloc] init];
+    OATableSectionData *statusSection = [OATableSectionData sectionData];
     NSString *backupTime = [OAOsmAndFormatter getFormattedPassedTime:OAAppSettings.sharedManager.backupLastUploadedTime.get def:OALocalizedString(@"shared_string_never")];
     if ([_settingsHelper isBackupExporting])
     {
         OAExportBackupTask *exportTask = [_settingsHelper getExportTask:kBackupItemsKey];
         float progress = exportTask ? (float) exportTask.generalProgress / exportTask.maxProgress : 0.;
         progress = progress > 1 ? 1 : progress;
-        OATableViewRowData *progressCell = [OATableViewRowData rowData];
+        OATableRowData *progressCell = [OATableRowData rowData];
         [progressCell setCellType:[OATitleIconProgressbarCell getCellIdentifier]];
         [progressCell setKey:@"lastBackup"];
         [progressCell setTitle:[OALocalizedString(@"osm_edit_uploading") stringByAppendingString:[NSString stringWithFormat:@"%i%%", (int) (progress * 100)]]];
@@ -165,7 +165,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     [_data addSection:statusSection];
     _lastBackupIndexPath = [NSIndexPath indexPathForRow:statusSection.rowCount - 1 inSection:_data.sectionCount - 1];
     
-    OATableViewSectionData *itemsSection = [OATableViewSectionData sectionData];
+    OATableSectionData *itemsSection = [OATableSectionData sectionData];
     if (_tableType == EOARecentChangesAll)
     {
         for (OASettingsItem *item in self.getBackup.backupInfo.itemsToUpload)
@@ -199,11 +199,11 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
         [_data sectionDataForIndex:_itemsSection].headerText = OALocalizedString(@"backup_conflicts_descr");
 }
 
-- (OATableViewRowData *) rowFromConflictItems:(NSArray *)items
+- (OATableRowData *) rowFromConflictItems:(NSArray *)items
 {
     OALocalFile *localFile = (OALocalFile *) items.firstObject;
     OARemoteFile *remoteFile = (OARemoteFile *) items.lastObject;
-    OATableViewRowData *rowData = [self rowFromItem:localFile.item toDelete:NO];
+    OATableRowData *rowData = [self rowFromItem:localFile.item toDelete:NO];
     [rowData setObj:localFile forKey:@"localConflictItem"];
     [rowData setObj:remoteFile forKey:@"remoteConflictItem"];
     NSString *conflictStr = [OALocalizedString(@"cloud_conflict") stringByAppendingString:@". "];
@@ -221,9 +221,9 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     return rowData;
 }
 
-- (OATableViewRowData *) rowFromItem:(OASettingsItem *)item toDelete:(BOOL)toDelete
+- (OATableRowData *) rowFromItem:(OASettingsItem *)item toDelete:(BOOL)toDelete
 {
-    OATableViewRowData *rowData = [OATableViewRowData rowData];
+    OATableRowData *rowData = [OATableRowData rowData];
     [rowData setCellType:[OARightIconTableViewCell getCellIdentifier]];
     [rowData setObj:item forKey:@"settings_item"];
     NSString *name = item.getPublicName;
@@ -256,10 +256,10 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
 - (NSArray *) rowAndIndexForType:(NSString *)type fileName:(NSString *)fileName
 {
     EOASettingsItemType intType = [OASettingsItemType parseType:type];
-    OATableViewSectionData *section = [_data sectionDataForIndex:_itemsSection];
+    OATableSectionData *section = [_data sectionDataForIndex:_itemsSection];
     for (NSInteger i = 0; i < section.rowCount; i++)
     {
-        OATableViewRowData *row = [section getRow:i];
+        OATableRowData *row = [section getRow:i];
         OASettingsItem *item = [row objForKey:@"settings_item"];
         if (item.type == intType && [[row objForKey:@"file_name"] isEqualToString:fileName])
             return @[row, @(i)];
@@ -277,7 +277,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
         if (rowIndex)
         {
             NSIndexPath *indPath = [NSIndexPath indexPathForRow:[rowIndex.lastObject integerValue] inSection:_itemsSection];
-            OATableViewRowData *item = [_data itemForIndexPath:indPath];
+            OATableRowData *item = [_data itemForIndexPath:indPath];
             BOOL hasConflict = [item objForKey:@"remoteConflictItem"] != nil;
             OARightIconTableViewCell *cell = [self.tableView cellForRowAtIndexPath:indPath];
             if (cell)
@@ -340,7 +340,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    OATableViewRowData *item = [_data itemForIndexPath:indexPath];
+    OATableRowData *item = [_data itemForIndexPath:indexPath];
     if ([item.cellType isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
     {
         OASimpleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
@@ -488,7 +488,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    OATableViewRowData *item = [_data itemForIndexPath:indexPath];
+    OATableRowData *item = [_data itemForIndexPath:indexPath];
     OARemoteFile *remoteConflictItem = [item objForKey:@"remoteConflictItem"];
     if (remoteConflictItem)
     {
@@ -512,7 +512,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
         
         if (_lastBackupIndexPath)
         {
-            OATableViewRowData *progressCell = [_data itemForIndexPath:_lastBackupIndexPath];
+            OATableRowData *progressCell = [_data itemForIndexPath:_lastBackupIndexPath];
             if ([progressCell.cellType isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
                 [progressCell setCellType:[OATitleIconProgressbarCell getCellIdentifier]];
             
@@ -569,7 +569,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
             {
                 float progress = (float) exportTask.generalProgress / exportTask.maxProgress;
                 progress = progress > 1 ? 1 : progress;
-                OATableViewRowData *progressCell = [_data itemForIndexPath:_lastBackupIndexPath];
+                OATableRowData *progressCell = [_data itemForIndexPath:_lastBackupIndexPath];
                 [progressCell setTitle:[OALocalizedString(@"osm_edit_uploading") stringByAppendingString:[NSString stringWithFormat:@"%i%%", (int) (progress * 100)]]];
                 [progressCell setObj:@(progress) forKey:@"progress"];
                 [self.tableView reloadRowsAtIndexPaths:@[_lastBackupIndexPath]

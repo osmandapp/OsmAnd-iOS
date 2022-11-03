@@ -1887,3 +1887,4 @@
 "rendering_attr_tracktype_grade2_name" = "坚实（无铺面）";
 "rendering_attr_tracktype_grade1_name" = "坚实（有铺面）";
 "app_mode_campervan" = "露营车（RV）";
+"shared_string_open_street_map" = "OpenStreetMap";

@@ -2717,3 +2717,7 @@
 "weather_forecast_entire_world" = "Previsão do tempo em todo o mundo";
 "map_download_privacy_descr" = "Ao descarregar os mapas concorda com os <a href='https://osmand.net/docs/legal/terms-of-use'>Termos de utilização</a> e a <a href='https://osmand.net/docs/legal/privacy-policy'>Política de privacidade</a>.";
 "shared_string_download_update" = "Descarregar atualização";
+"backup_error_failed_to_fetch_remote_items" = "Não foi possível obter a lista do servidor.";
+"error_contact_support" = "Se o problema persistir, contacte o nosso apoio ao cliente.";
+"track_has_no_needed_data" = "O trilho não tem os respetivos dados.";
+"select_another_colorization" = "Selecione outro tipo de coloração.";

@@ -849,7 +849,8 @@ static OASubscriptionState *EXPIRED;
 {
     OALog(@"Loaded list of products...");
     _productsRequest = nil;
-    
+    BOOL isPaidVersion = [self.class isPaidVersion];
+
     for (SKProduct * skProduct in response.products)
     {
         if (skProduct)
@@ -1017,6 +1018,10 @@ static OASubscriptionState *EXPIRED;
         }
 
         _wasProductListFetched = success;
+
+        BOOL isPaidVersionChecked = [self.class isPaidVersion];
+        if (isPaidVersion != isPaidVersionChecked)
+            [[OsmAndApp instance].mapSettingsChangeObservable notifyEvent];
 
         if (_completionHandler)
             _completionHandler(success);

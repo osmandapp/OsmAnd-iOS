@@ -342,7 +342,7 @@
             {
                 container.frame = leftContainerFrame;
                 if (self.delegate)
-                    [self.delegate leftWidgetsLayoutDidChange:container animated:YES];
+                    [self.delegate leftWidgetsLayoutDidChange:_streetNameView animated:YES];
             }
         }
         
@@ -374,9 +374,14 @@
             CGFloat w = f.size.width - (hasRightWidgets ? rightFrame.size.width + 2 : 0) - (hasLeftWidgets ? leftFrame.size.width + 2 : 0);
             _streetNameView.frame = CGRectMake(hasLeftWidgets ? leftFrame.size.width + 2 : 0, yPos, w, streetNameViewHeight);
         }
-
+        [self.delegate streetViewLayoutDidChange:_streetNameView animate:YES];
         if (maxContainerHeight < streetNameViewHeight)
             maxContainerHeight = streetNameViewHeight;
+        
+    }
+    else
+    {
+        
     }
     
     if (_lanesControl && _lanesControl.superview && !_lanesControl.hidden)
@@ -399,11 +404,15 @@
         _rulerControl.center = _rulerControl.superview.center;
     }
     
+   
+    
     if (_rightWidgetsView.superview)
     {
         CGRect f = _rightWidgetsView.superview.frame;
         _rightWidgetsView.superview.frame = CGRectMake(f.origin.x, f.origin.y, f.size.width, maxContainerHeight);
     }
+    
+    
     
     if (_topCoordinatesView && _topCoordinatesView.superview && !_topCoordinatesView.hidden)
     {

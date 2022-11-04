@@ -136,7 +136,6 @@ struct CLLocationCoordinate2D;
 
 @property (readonly) OAObservable* targetChangedObservable;
 @property (readonly) OAObservable* framePreparedObservable;
-@property (readonly) OAObservable* stateObservable;
 @property (nonatomic, weak) id<OAMapRendererDelegate> rendererDelegate;
 
 @property(nonatomic, readonly, getter=getMapAnimator) const std::shared_ptr<OsmAnd::MapAnimator>& mapAnimator;

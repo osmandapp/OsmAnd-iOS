@@ -1522,7 +1522,8 @@
 - (void) streetViewLayoutDidChange:(UIView *)streetNameView animate:(BOOL)animated
 {
     BOOL isLandscape = [OAUtilities isLandscape];
-    if (isLandscape){
+    if (isLandscape)
+    {
         [self layoutButtonsToStreet:streetNameView animated:animated];
     }else{
         [self updateButtonsLayout:animated];

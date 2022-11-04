@@ -375,7 +375,6 @@
         [self.delegate streetViewLayoutDidChange:_streetNameView animate:YES];
         if (maxContainerHeight < streetNameViewHeight)
             maxContainerHeight = streetNameViewHeight;
-        
     }
     
     if (_lanesControl && _lanesControl.superview && !_lanesControl.hidden)

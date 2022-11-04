@@ -421,7 +421,6 @@
 
 - (IBAction) onMapModeButtonClicked:(id)sender
 {
-    
     [self updateMapModeButton];
     
     switch (self.mapModeButtonType)
@@ -967,11 +966,9 @@
     CGFloat cY = y + kButtonHeight + kButtonOffset;
     CGSize cSize = _compassBox.frame.size;
 
-
     CGFloat searchOffsetX = x + 2 * kButtonOffset + kButtonWidth;
     if (!CGRectEqualToRect(_mapSettingsButton.frame, CGRectMake(y, searchOffsetX, size.width, size.height)))
     {
-        
         _mapSettingsButton.frame = CGRectMake(x + kButtonOffset, y, size.width, size.height);
         _searchButton.frame = CGRectMake(searchOffsetX, sY, sSize.width, sSize.height);
         _compassBox.frame = CGRectMake(x + kButtonOffset, cY, cSize.width, cSize.height);

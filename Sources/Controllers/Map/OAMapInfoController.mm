@@ -330,9 +330,7 @@
             CGFloat rightOffset = 2.0;
             CGRect rightContainerFrame = CGRectMake(_mapHudViewController.view.frame.size.width - maxWidth - 2 * rightOffset, yPos, maxWidth, containerHeight);
             if (!CGRectEqualToRect(container.frame, rightContainerFrame))
-            {
                 container.frame = rightContainerFrame;
-            }
         }
         else
         {

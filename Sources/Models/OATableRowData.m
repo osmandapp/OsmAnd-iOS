@@ -141,4 +141,9 @@
     return 0;
 }
 
+- (OATableRowData *) getDependentRow:(NSUInteger)index
+{
+    return nil;
+}
+
 @end

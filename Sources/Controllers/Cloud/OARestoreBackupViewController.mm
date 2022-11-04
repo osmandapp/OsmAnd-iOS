@@ -240,8 +240,8 @@
                     [itemsForRestore addObject:restoreItem];
             }
         }
-        _settingsItems = items;
-        self.itemsMap = [OASettingsHelper getSettingsToOperateByCategory:items importComplete:NO addEmptyItems:NO];
+        _settingsItems = itemsForRestore.allObjects;
+        self.itemsMap = [OASettingsHelper getSettingsToOperateByCategory:_settingsItems importComplete:NO addEmptyItems:NO];
         self.itemTypes = self.itemsMap.allKeys;
         [self setupView];
         [self.tableView reloadData];

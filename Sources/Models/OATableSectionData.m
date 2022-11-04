@@ -8,6 +8,7 @@
 
 #import "OATableSectionData.h"
 #import "OATableRowData.h"
+#import "OATableCollapsableRowData.h"
 
 @implementation OATableSectionData
 {
@@ -30,8 +31,25 @@
 
 - (OATableRowData *) getRow:(NSUInteger)index
 {
-    if (index < _rowData.count)
-        return _rowData[index];
+    NSInteger realIdx = -1;
+    for (NSInteger i = 0; i < _rowData.count; i++)
+    {
+        realIdx++;
+        OATableRowData *row = _rowData[i];
+        if (index == realIdx)
+            return row;
+        if (row.dependentRowsCount > 0 && !((OATableCollapsableRowData *) row).collapsed)
+        {
+            for (NSInteger idx = 0; idx < row.dependentRowsCount; idx++)
+            {
+                realIdx++;
+                if (realIdx == index)
+                {
+                    return [row getDependentRow:idx];
+                }
+            }
+        }
+    }
     return nil;
 }
 
@@ -53,7 +71,8 @@
     for (OATableRowData *row in _rowData)
     {
         res++;
-        res += row.dependentRowsCount;
+        if (row.rowType == EOATableRowTypeCollapsable && !((OATableCollapsableRowData *) row).collapsed)
+            res += row.dependentRowsCount;
     }
     return res;
 }

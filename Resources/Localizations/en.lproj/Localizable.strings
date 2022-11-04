@@ -2712,6 +2712,10 @@
 "backup_complete" = "Backup complete";
 "duration_ago" = "%@ ago";
 
+"last_sync" = "Last sync";
+"sync_now" = "Sync now";
+"local_changes" = "Local changes";
+
 "cloud_no_online_backup" = "You don’t have any online backup yet";
 "cloud_no_online_backup_descr" = "Set up an automatic backup so you don't have to worry about lost data.";
 "cloud_set_up_backup" = "Set up backup";

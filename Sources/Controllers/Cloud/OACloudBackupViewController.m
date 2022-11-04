@@ -249,15 +249,31 @@
         else
         {
             NSString *backupTime = [OAOsmAndFormatter getFormattedPassedTime:OAAppSettings.sharedManager.backupLastUploadedTime.get def:OALocalizedString(@"shared_string_never")];
-            NSDictionary *lastBackupCell = @{
+            OATableCollapsableRowData *collapsableRow = [[OATableCollapsableRowData alloc] initWithData:@{
                 kCellTypeKey: OAMultiIconTextDescCell.getCellIdentifier,
                 kCellKeyKey: @"lastBackup",
                 kCellTitleKey: _status.statusTitle,
                 kCellDescrKey: backupTime,
                 kCellIconNameKey: _status.statusIconName,
                 kCellIconTint: @(_status.iconColor)
-            };
-            [backupRows addRowFromDictionary:lastBackupCell];
+            }];
+            OATableRowData *localChangesRow = [[OATableRowData alloc] initWithData:@{
+                kCellTypeKey: OAValueTableViewCell.getCellIdentifier,
+                kCellKeyKey: @"local_changes",
+                kCellTitleKey: OALocalizedString(@"local_changes"),
+                kCellIconNameKey: @"ic_custom_device",
+                @"value": @(_backup.backupInfo.filteredFilesToUpload.count)
+            }];
+            [collapsableRow addDependentRow:localChangesRow];
+            OATableRowData *updatesRow = [[OATableRowData alloc] initWithData:@{
+                kCellTypeKey: OAValueTableViewCell.getCellIdentifier,
+                kCellKeyKey: @"remote_updates",
+                kCellTitleKey: OALocalizedString(@"res_updates"),
+                kCellIconNameKey: @"ic_custom_cloud",
+                @"value": @(_backup.backupInfo.filesToDownload.count)
+            }];
+            [collapsableRow addDependentRow:updatesRow];
+            [backupRows addRow:collapsableRow];
             _lastBackupIndexPath = [NSIndexPath indexPathForRow:backupRows.rowCount - 1 inSection:_data.sectionCount - 1];
 
             if (_status.warningTitle != nil || _error.length > 0)
@@ -299,8 +315,8 @@
                 NSDictionary *backupNowCell = @{
                     kCellTypeKey: OAButtonRightIconCell.getCellIdentifier,
                     kCellKeyKey: @"onSetUpBackupButtonPressed",
-                    kCellTitleKey: OALocalizedString(@"cloud_backup_now"),
-                    kCellIconNameKey: @"ic_custom_cloud_upload"
+                    kCellTitleKey: OALocalizedString(@"sync_now"),
+                    kCellIconNameKey: @"ic_custom_update"
                 };
                 [backupRows addRowFromDictionary:backupNowCell];
             }
@@ -528,15 +544,14 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAValueTableViewCell *)[nib objectAtIndex:0];
-            cell.titleLabel.textColor = UIColorFromRGB(color_primary_purple);
-            cell.titleLabel.font = [UIFont systemFontOfSize:17. weight:UIFontWeightMedium];
-            [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
         cell.titleLabel.text = item.title;
         cell.valueLabel.text = [item stringForKey:@"value"];
-
+        cell.leftIconView.image = [UIImage templateImageNamed:item.iconName];
+        cell.leftIconView.tintColor = UIColorFromRGB((([item integerForKey:@"value"] > 0) ? color_primary_purple : color_tint_gray));
+        cell.separatorInset = UIEdgeInsetsMake(0., ([item.key isEqualToString:@"remote_updates"] ? 0. : 65.), 0., 0.);
         return cell;
     }
     else if ([cellId isEqualToString:OAFilledButtonCell.getCellIdentifier])
@@ -585,8 +600,11 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMultiIconTextDescCell getCellIdentifier] owner:self options:nil];
             cell = (OAMultiIconTextDescCell *)[nib objectAtIndex:0];
             [cell setOverflowVisibility:YES];
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
+        BOOL collapsed = item.rowType == EOATableRowTypeCollapsable && ((OATableCollapsableRowData *) item).collapsed;
+        UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage templateImageNamed:collapsed ? @"ic_custom_arrow_right" : @"ic_custom_arrow_down"]];
+        imageView.tintColor = UIColorFromRGB(color_primary_purple);
+        cell.accessoryView = imageView;
         cell.textView.text = item.title;
         cell.descView.text = item.descr;
         [cell.iconView setImage:[UIImage templateImageNamed:item.iconName]];
@@ -667,9 +685,26 @@
     NSString *itemId = item.key;
     if (indexPath == _lastBackupIndexPath)
     {
-        OAStatusBackupViewController *statusBackupViewController = [[OAStatusBackupViewController alloc] initWithBackup:_backup status:_status];
-        statusBackupViewController.delegate = self;
-        [self.navigationController pushViewController:statusBackupViewController animated:YES];
+        if (item.rowType == EOATableRowTypeCollapsable)
+        {
+            OATableCollapsableRowData *collapsableRow = (OATableCollapsableRowData *)item;
+            collapsableRow.collapsed = !collapsableRow.collapsed;
+            NSMutableArray<NSIndexPath *> *rowIndexes = [NSMutableArray array];
+            for (NSInteger i = 1; i <= collapsableRow.dependentRowsCount; i++)
+                [rowIndexes addObject:[NSIndexPath indexPathForRow:(indexPath.row + i) inSection:indexPath.section]];
+            
+            [tableView performBatchUpdates:^{
+                [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+                if (collapsableRow.collapsed)
+                    [tableView deleteRowsAtIndexPaths:rowIndexes withRowAnimation:UITableViewRowAnimationBottom];
+                else
+                    [tableView insertRowsAtIndexPaths:rowIndexes withRowAnimation:UITableViewRowAnimationBottom];
+            } completion:nil];
+            
+        }
+//        OAStatusBackupViewController *statusBackupViewController = [[OAStatusBackupViewController alloc] initWithBackup:_backup status:_status];
+//        statusBackupViewController.delegate = self;
+//        [self.navigationController pushViewController:statusBackupViewController animated:YES];
     }
     else if ([itemId isEqualToString:@"backupIntoFile"])
     {

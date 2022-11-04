@@ -23,6 +23,7 @@
     self = [super init];
     if (self) {
         _dependentData = [NSMutableArray array];
+        _collapsed = YES;
     }
     return self;
 }
@@ -32,6 +33,7 @@
     self = [super initWithData:data];
     if (self) {
         _dependentData = [NSMutableArray array];
+        _collapsed = YES;
     }
     return self;
 }
@@ -46,9 +48,14 @@
     [_dependentData removeObject:rowData];
 }
 
+- (OATableRowData *) getDependentRow:(NSUInteger)index
+{
+    return _dependentData[index];
+}
+
 - (NSInteger) dependentRowsCount
 {
-    return self.collapsed ? 0 : _dependentData.count;
+    return _dependentData.count;
 }
 
 @end

@@ -47,6 +47,7 @@ typedef NS_ENUM(NSInteger, EOATableRowType) {
 - (BOOL) boolForKey:(nonnull NSString *)key;
 
 - (NSInteger) dependentRowsCount;
+- (OATableRowData *) getDependentRow:(NSUInteger)index;
 
 @end
 

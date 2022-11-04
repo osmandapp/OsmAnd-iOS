@@ -589,7 +589,6 @@
 
 - (IBAction) onMapSettingsButtonClick:(id)sender
 {
-    
     [_mapPanelViewController mapSettingsButtonClick:sender];
 }
 
@@ -605,13 +604,11 @@
 
 - (IBAction) onOptionsMenuButtonDown:(id)sender
 {
-    
     self.sidePanelController.recognizesPanGesture = YES;
 }
 
 - (IBAction) onOptionsMenuButtonClicked:(id)sender
 {
-    
     self.sidePanelController.recognizesPanGesture = YES;
     [self.sidePanelController showLeftPanelAnimated:YES];
 }
@@ -1050,17 +1047,18 @@
     }
 }
 
-- (void) layoutButtonsToStreet: (UIView*) container animated: (BOOL) animated
+- (void) layoutButtonsToStreet:(UIView*) container animated: (BOOL) animated
 {
     CGFloat xLand = container.frame.origin.x;
     CGFloat yLand = container.frame.origin.y + container.frame.size.height;
-    if (animated){
-        
+    if (animated)
+    {
         [UIView animateWithDuration:.2 animations:^{
             [self updateButtonsLayoutX:xLand yPosition:yLand];
         }];
-        
-    }else{
+    }
+    else
+    {
         [self updateButtonsLayoutX:xLand yPosition:yLand];
     }
 }

@@ -379,10 +379,6 @@
             maxContainerHeight = streetNameViewHeight;
         
     }
-    else
-    {
-        
-    }
     
     if (_lanesControl && _lanesControl.superview && !_lanesControl.hidden)
     {
@@ -404,15 +400,11 @@
         _rulerControl.center = _rulerControl.superview.center;
     }
     
-   
-    
     if (_rightWidgetsView.superview)
     {
         CGRect f = _rightWidgetsView.superview.frame;
         _rightWidgetsView.superview.frame = CGRectMake(f.origin.x, f.origin.y, f.size.width, maxContainerHeight);
     }
-    
-    
     
     if (_topCoordinatesView && _topCoordinatesView.superview && !_topCoordinatesView.hidden)
     {

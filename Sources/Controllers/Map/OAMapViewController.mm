@@ -501,6 +501,8 @@
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onProfileSettingSet:) name:kNotificationSetProfileSetting object:nil];
+    
     [self showWhatsNewDialogIfNeeded];
 }
 
@@ -1361,13 +1363,18 @@
             _app.data.mapLastViewedState.azimuth = _mapView.azimuth;
             break;
         case OAMapRendererViewStateEntryZoom:
+        {
             [_zoomObservable notifyEventWithKey:nil andValue:[NSNumber numberWithFloat:_mapView.zoom]];
             _app.data.mapLastViewedState.zoom = _mapView.zoom;
             break;
+        }
         case OAMapRendererViewStateEntryElevationAngle:
+        {
             _app.data.mapLastViewedState.elevationAngle = _mapView.elevationAngle;
             break;
+        }
         case OAMapRendererViewStateEntryTarget:
+        {
             OsmAnd::PointI newTarget31 = _mapView.target31;
             Point31 newTarget31_converted;
             newTarget31_converted.x = newTarget31.x;
@@ -1375,6 +1382,13 @@
             _app.data.mapLastViewedState.target31 = newTarget31_converted;
             [_mapObservable notifyEventWithKey:nil ];
             break;
+        }
+        case OAMapRendererViewStateEntryMapLayers_Configuration:
+        {
+            [self updateSymbolsLayerProviderAlpha];
+            [self updateRasterLayerProviderAlpha];
+            break;
+        }
     }
 
     [_stateObservable notifyEventWithKey:key];
@@ -1707,6 +1721,23 @@
     });
 }
 
+- (void) onProfileSettingSet:(NSNotification *)notification
+{
+    OACommonPreference *obj = notification.object;
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    OACommonBoolean *keepMapLabelsVisible = settings.keepMapLabelsVisible;
+    if (obj)
+    {
+        if (obj == keepMapLabelsVisible)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self updateSymbolsLayerProviderAlpha];
+                [self updateRasterLayerProviderAlpha];
+            });
+        }
+    }
+}
+
 - (void) refreshMap
 {
     if (_app.locationServices.status == OALocationServicesStatusActive)
@@ -1892,7 +1923,6 @@
                                                                                    rasterTileSize));
             
             [_mapView addTiledSymbolsProvider:kObfSymbolSection provider:_obfMapSymbolsProvider];
-            [self updateLayerProviderAlpha];
             
             _app.resourcesManager->getWeatherResourcesManager()->setBandSettings(OAWeatherHelper.sharedInstance.getBandSettings);
         }
@@ -2010,20 +2040,29 @@
     }
 }
 
-- (void) updateLayerProviderAlpha
+- (void) updateRasterLayerProviderAlpha
 {
-    BOOL isOverlayLayerDisplayed = _app.data.overlayMapSource;
-    float alpha = isOverlayLayerDisplayed ? _app.data.overlayAlpha : 0.0f;
-    
+    BOOL isUnderlayLayerDisplayed = _app.data.underlayMapSource;
+    float alpha = isUnderlayLayerDisplayed ? _app.data.underlayAlpha : 0.0f;
     OsmAnd::MapLayerConfiguration mapLayerConfiguration;
-    mapLayerConfiguration.setOpacityFactor(1.0f - _app.data.overlayAlpha);
+    mapLayerConfiguration.setOpacityFactor(1.0f - alpha);
     [_mapView setMapLayerConfiguration:kObfRasterLayer configuration:mapLayerConfiguration forcedUpdate:NO];
+}
 
-    BOOL keepLabels = [[OAAppSettings sharedManager].keepMapLabelsVisible get];
+- (void) updateSymbolsLayerProviderAlpha
+{
+    float symbolsAlpha = 1.0;
+    if (![[OAAppSettings sharedManager].keepMapLabelsVisible get])
+    {
+        float overlayAlpha = _app.data.overlayMapSource ? _app.data.overlayAlpha : 0.0;
+        float underlayAlpha = _app.data.underlayMapSource ? _app.data.underlayAlpha : 0.0;
+        symbolsAlpha = 1.0 - overlayAlpha - underlayAlpha;
+        if (symbolsAlpha < 0)
+            symbolsAlpha = 0;
+    }
     
-    alpha = keepLabels ? 1.0f : 1.0f - alpha;
     OsmAnd::SymbolSubsectionConfiguration symbolSubsectionConfiguration;
-    symbolSubsectionConfiguration.setOpacityFactor(alpha);
+    symbolSubsectionConfiguration.setOpacityFactor(symbolsAlpha);
     [_mapView setSymbolSubsectionConfiguration:kObfSymbolSection configuration:symbolSubsectionConfiguration];
 }
 

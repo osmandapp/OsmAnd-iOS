@@ -1523,11 +1523,9 @@
 {
     BOOL isLandscape = [OAUtilities isLandscape];
     if (isLandscape)
-    {
         [self layoutButtonsToStreet:streetNameView animated:animated];
-    }else{
+    else
         [self updateButtonsLayout:animated];
-    }
 }
 
 @end

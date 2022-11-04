@@ -340,7 +340,7 @@
             {
                 container.frame = leftContainerFrame;
                 if (self.delegate)
-                    [self.delegate leftWidgetsLayoutDidChange:_streetNameView animated:YES];
+                    [self.delegate leftWidgetsLayoutDidChange:container animated:YES];
             }
         }
         

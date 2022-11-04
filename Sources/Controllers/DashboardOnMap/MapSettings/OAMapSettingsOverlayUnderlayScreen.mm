@@ -580,8 +580,7 @@ static NSInteger kButtonsSection;
 - (void) showLabels:(BOOL)show
 {
     [_settings.keepMapLabelsVisible set:show];
-    _app.data.overlayAlpha = _app.data.overlayAlpha;
-    _app.data.underlayAlpha = _app.data.underlayAlpha;
+    [OARootViewController.instance.mapPanel.mapViewController.mapView.stateObservable notifyEventWithKey:[NSNumber numberWithUnsignedInteger:OAMapRendererViewStateEntryMapLayers_Configuration]];
 }
 
 - (void) hidePolygons:(BOOL)hide

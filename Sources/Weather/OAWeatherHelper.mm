@@ -129,18 +129,18 @@
             contourTypesMap.insert((OsmAnd::ZoomLevel)zoomNum.intValue, types);
         }
 
-//        auto settings = std::make_shared<const OsmAnd::GeoBandSettings>(
-//            QString::fromNSString([band getBandUnit].symbol),
-//            QString::fromNSString([band getBandGeneralUnitFormat]),
-//            QString::fromNSString([band getBandPreciseUnitFormat]),
-//            QString::fromNSString([band getInternalBandUnit]),
-//            [band getBandOpacity],
-//            QString::fromNSString([band getColorFilePath]),
-//            contourStyleName,
-//            contourLevelsMap,
-//            contourTypesMap
-//        );
-//        result.insert((OsmAnd::BandIndex)band.bandIndex, settings);
+        auto settings = std::make_shared<const OsmAnd::GeoBandSettings>(
+            QString::fromNSString([band getBandUnit].symbol),
+            QString::fromNSString([band getBandGeneralUnitFormat]),
+            QString::fromNSString([band getBandPreciseUnitFormat]),
+            QString::fromNSString([band getInternalBandUnit]),
+            [band getBandOpacity],
+            QString::fromNSString([band getColorFilePath]),
+            contourStyleName,
+            contourLevelsMap,
+            contourTypesMap
+        );
+        result.insert((OsmAnd::BandIndex)band.bandIndex, settings);
     }
     return result;
 }

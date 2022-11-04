@@ -580,8 +580,6 @@ static NSInteger kButtonsSection;
 - (void) showLabels:(BOOL)show
 {
     [_settings.keepMapLabelsVisible set:show];
-    _app.data.overlayAlpha = _app.data.overlayAlpha;
-    _app.data.underlayAlpha = _app.data.underlayAlpha;
 }
 
 - (void) hidePolygons:(BOOL)hide

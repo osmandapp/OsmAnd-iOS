@@ -501,6 +501,8 @@
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onProfileSettingSet:) name:kNotificationSetProfileSetting object:nil];
+    
     [self showWhatsNewDialogIfNeeded];
 }
 
@@ -1716,6 +1718,23 @@
             [self updateCurrentMapSource];
         });
     });
+}
+
+- (void) onProfileSettingSet:(NSNotification *)notification
+{
+    OACommonPreference *obj = notification.object;
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    OACommonBoolean *keepMapLabelsVisible = settings.keepMapLabelsVisible;
+    if (obj)
+    {
+        if (obj == keepMapLabelsVisible)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self updateSymbolsLayerProviderAlpha];
+                [self updateRasterLayerProviderAlpha];
+            });
+        }
+    }
 }
 
 - (void) refreshMap

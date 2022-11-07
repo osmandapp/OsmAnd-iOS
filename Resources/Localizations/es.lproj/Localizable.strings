@@ -2313,7 +2313,7 @@
 "hide_coordinates" = "Ocultar coordenadas";
 "cloud_show" = "Mostrar nubes";
 "product_desc_openplacereviews" = "Comparte tus opiniones sobre lugares públicos";
-"product_title_weather" = "Clima";
+"product_title_weather" = "Meteorología";
 "backup_and_restore" = "Copia de seguridad y restauración";
 "approximate_file_size" = "Tamaño aproximado del archivo: %@";
 "mgrs_description" = "OsmAnd utiliza el formato MGRS que es idéntico al UTM de la OTAN.";
@@ -2717,3 +2717,7 @@
 "backup_error_failed_to_fetch_remote_items" = "No se pudo obtener la lista de archivos del servidor.";
 "error_contact_support" = "Si el problema persiste, contacta con nuestro equipo de asistencia.";
 "select_another_colorization" = "Elige otro tipo de color.";
+"mountain_bike" = "Bicicleta de montaña";
+"ltr_or_rtl_combine_via_slash" = "%@/%@";
+"rendering_attr_showMtbScaleIMBATrails_name" = "Senderos de montaña IMBA";
+"rendering_value_showMtbScaleIMBATrails_description" = "Asociación Internacional del Ciclismo de Montaña";

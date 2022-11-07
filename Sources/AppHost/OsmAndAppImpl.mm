@@ -1193,7 +1193,10 @@
     [targetPointsHelper removeAllWayPoints:NO clearBackup:NO];
     dispatch_async(dispatch_get_main_queue(), ^{
         OAApplicationMode *carPlayMode = settings.isCarPlayModeDefault ? OAApplicationMode.CAR : [OAAppSettings.sharedManager.carPlayMode get];
-        [settings setApplicationModePref:_carPlayActive ? carPlayMode : [settings.defaultApplicationMode get] markAsLastUsed:NO];
+        OAApplicationMode *defaultAppMode = [settings.useLastApplicationModeByDefault get] ?
+            [OAApplicationMode valueOfStringKey:[settings.lastUsedApplicationMode get] def:OAApplicationMode.DEFAULT] :
+            settings.defaultApplicationMode.get;
+        [settings setApplicationModePref:_carPlayActive ? carPlayMode : defaultAppMode markAsLastUsed:NO];
     });
 }
 

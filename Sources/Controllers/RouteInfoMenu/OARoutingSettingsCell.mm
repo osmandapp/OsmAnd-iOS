@@ -34,7 +34,7 @@
     [self setupButton:_optionsButton];
     [self setupButton:_soundButton];
     [self refreshSoundButton];
-    [self adjustButtonSize];
+    [self adjustButtonsSize];
 }
 
 - (void) setupButton:(UIButton *)btn
@@ -73,7 +73,7 @@
     }
 }
 
-- (void) adjustButtonSize
+- (void) adjustButtonsSize
 {
     CGFloat soundTextWidth = [OAUtilities calculateTextBounds:_soundButton.currentTitle width:self.frame.size.width font:_soundButton.titleLabel.font].width;
     CGFloat soundBtnWidth = 55. + soundTextWidth;
@@ -90,7 +90,7 @@
     BOOL isMuted = [[OAAppSettings sharedManager].voiceMute get:[OARoutingHelper sharedInstance].getAppMode];
     [_soundButton setImage:isMuted ? [UIImage imageNamed:@"ic_custom_sound_off"] : [UIImage imageNamed:@"ic_custom_sound"]forState:UIControlStateNormal];
     [_soundButton setTitle:isMuted ? OALocalizedString(@"shared_string_off") : OALocalizedString(@"shared_string_on") forState:UIControlStateNormal];
-    [self adjustButtonSize];
+    [self adjustButtonsSize];
 }
 
 - (IBAction)optionsButtonPressed:(id)sender

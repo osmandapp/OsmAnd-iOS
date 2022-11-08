@@ -29,12 +29,12 @@
     _divider.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
     [self.contentView.layer addSublayer:_divider];
     
-    [_optionsButton setTitle:OALocalizedString(@"shared_string_options") forState:UIControlStateNormal];
+    [_optionsButton setTitle:OALocalizedString(@"sett_settings") forState:UIControlStateNormal];
     
     [self setupButton:_optionsButton];
     [self setupButton:_soundButton];
     [self refreshSoundButton];
-    [self adjustInsets:_optionsButton];
+    [self adjustButtonSize];
 }
 
 - (void) setupButton:(UIButton *)btn
@@ -43,7 +43,6 @@
     btn.layer.borderWidth = 1.;
     btn.layer.borderColor = UIColorFromRGB(color_bottom_sheet_secondary).CGColor;
 }
-
 - (void) layoutSubviews
 {
     [super layoutSubviews];
@@ -76,10 +75,14 @@
 
 - (void) adjustButtonSize
 {
-    CGFloat textWidth = [OAUtilities calculateTextBounds:_soundButton.currentTitle width:self.frame.size.width font:_soundButton.titleLabel.font].width;
-    CGFloat btnWidth = 55. + textWidth;
-    _soundButton.frame = CGRectMake(self.frame.size.width - 16. - btnWidth - OAUtilities.getLeftMargin, 9., btnWidth, 32.);
+    CGFloat soundTextWidth = [OAUtilities calculateTextBounds:_soundButton.currentTitle width:self.frame.size.width font:_soundButton.titleLabel.font].width;
+    CGFloat soundBtnWidth = 55. + soundTextWidth;
+    _soundButton.frame = CGRectMake(self.frame.size.width - 16. - soundBtnWidth - OAUtilities.getLeftMargin, 9., soundBtnWidth, 32.);
+    CGFloat settingTextWidth = [OAUtilities calculateTextBounds: _optionsButton.currentTitle width:self.frame.size.width font:_optionsButton.titleLabel.font].width;
+    CGFloat optionsBtnWidht = 55. + settingTextWidth;
+    _optionsButton.frame = CGRectMake(16., 9., optionsBtnWidht, 32.);
     [self adjustInsets:_soundButton];
+    [self adjustInsets:_optionsButton];
 }
 
 - (void) refreshSoundButton

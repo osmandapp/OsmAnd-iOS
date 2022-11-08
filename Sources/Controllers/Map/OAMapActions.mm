@@ -141,7 +141,7 @@
             CLLocation *finishLoc = ps.lastObject;
             CLLocation *location = _app.locationServices.lastKnownLocation;
             [pointsHelper clearAllIntermediatePoints:NO];
-            if (location || [location distanceFromLocation:startLoc] <= START_TRACK_POINT_MY_LOCATION_RADIUS_METERS)
+            if (!location || [location distanceFromLocation:startLoc] <= START_TRACK_POINT_MY_LOCATION_RADIUS_METERS)
             {
                 [pointsHelper clearStartPoint:NO];
             }

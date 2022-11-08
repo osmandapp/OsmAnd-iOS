@@ -326,8 +326,8 @@
 {
     [OAAnalyticsHelper logEvent:@"help_open"];
 
-    // Data is powered by OpenStreetMap ODbL, &#169; http://www.openstreetmap.org/copyright
-//    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:@"Copyright OsmAnd 2017\n\nData is powered by OpenStreetMap ODbL, ©\nhttp://www.openstreetmap.org/copyright" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+    // Data is powered by OpenStreetMap ODbL, &#169; https://www.openstreetmap.org/copyright
+//    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:@"Copyright OsmAnd 2017\n\nData is powered by OpenStreetMap ODbL, ©\nhttps://www.openstreetmap.org/copyright" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
 //    [alert show];
     OAHelpViewController *helpViewController = [[OAHelpViewController alloc] init];
     [self.navigationController pushViewController:helpViewController animated:YES];

@@ -3,15 +3,15 @@
 <!--
 	Copyright © Hugo Haas <hugoh@hugoh.net>
 	GNU General Public License, version 2 (GPL-2.0)
-	http://opensource.org/licenses/gpl-2.0.php
+	https://opensource.org/licenses/gpl-2.0.php
 -->
 
-<xsl:stylesheet xmlns:atom="http://www.w3.org/2005/Atom"
-				xmlns:ge="http://earth.google.com/kml/2.2"
-				xmlns:gx="http://www.google.com/kml/ext/2.2"
-				xmlns:kml="http://www.opengis.net/kml/2.2"
+<xsl:stylesheet xmlns:atom="https://www.w3.org/2005/Atom"
+				xmlns:ge="https://earth.google.com/kml/2.2"
+				xmlns:gx="https://www.google.com/kml/ext/2.2"
+				xmlns:kml="https://www.opengis.net/kml/2.2"
 
-				xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+				xmlns:xsl="https://www.w3.org/1999/XSL/Transform"
 				version="1.0">
 
 	<xsl:output indent="yes"
@@ -20,7 +20,7 @@
 	<xsl:template match="/">
 		<gpx creator="kml2gpx.xslt"
 			 version="1.1"
-			 xmlns="http://www.topografix.com/GPX/1/1">
+			 xmlns="https://www.topografix.com/GPX/1/1">
 			<metadata>
 				<name><xsl:value-of select="kml:kml/kml:Document/kml:name"/></name>
 				<author>

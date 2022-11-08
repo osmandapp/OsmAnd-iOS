@@ -213,7 +213,7 @@ double bitsToDouble(uint64_t bitPattern)
 
 // Approximate power function, Math.pow is quite slow and we don't need accuracy.
 // See:
-// http://martin.ankerl.com/2007/10/04/optimized-pow-approximation-for-java-and-c-c/
+// https://martin.ankerl.com/2007/10/04/optimized-pow-approximation-for-java-and-c-c/
 // Important facts:
 // - >25 times faster
 // - Extreme cases can lead to error of 25% - but usually less.

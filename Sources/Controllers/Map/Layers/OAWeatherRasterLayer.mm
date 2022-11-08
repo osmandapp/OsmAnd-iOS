@@ -102,7 +102,7 @@
         [self updateOpacitySliderVisibility];
 
         QList<OsmAnd::BandIndex> bands = [_weatherHelper getVisibleBands];
-        if (!self.app.data.weather || bands.empty())
+        if ((!self.app.data.weather && ![[OAAppSettings sharedManager] isWeatherToolbarActive]) || bands.empty())
             return NO;
 
         //[self showProgressHUD];
@@ -171,12 +171,7 @@
 
 - (void) onWeatherLayerAlphaChanged
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.mapViewController runWithRenderSync:^{
-            _resourcesManager->setBandSettings([_weatherHelper getBandSettings]);
-            [self updateWeatherLayer];
-        }];
-    });
+    [self updateWeatherLayerAlpha];
 /*
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.mapViewController runWithRenderSync:^{
@@ -198,6 +193,16 @@
                 [self.mapView resetProviderFor:self.layerIndex];
                 _provider.reset();
             }
+        }];
+    });
+}
+
+- (void) updateWeatherLayerAlpha
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.mapViewController runWithRenderSync:^{
+            _resourcesManager->setBandSettings([_weatherHelper getBandSettings]);
+            [self updateWeatherLayer];
         }];
     });
 }

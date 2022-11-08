@@ -63,7 +63,6 @@
     OAAutoObserverProxy* _locationServicesStatusObserver;
 
     BOOL _driveModeActive;
-    BOOL _weatherToolbarVisible;
     
     OAAutoObserverProxy* _downloadTaskProgressObserver;
     OAAutoObserverProxy* _downloadTaskCompletedObserver;
@@ -311,10 +310,7 @@
         [self updateControlsLayout:[self getHudTopOffset]];
         BOOL showWeatherToolbar = [self shouldShowWeatherToolbar];
         if (showWeatherToolbar)
-        {
             [_mapInfoController updateWeatherToolbarVisible];
-            [_weatherToolbar reloadLayersCollectionView];
-        }
         if (!showWeatherToolbar || [OAUtilities isLandscape])
             [self setupBottomContolMarginsForHeight:0];
     } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
@@ -360,12 +356,12 @@
 
 - (BOOL)shouldShowWeatherToolbar
 {
-    return _weatherToolbarVisible && [self shouldShowWeatherButton];
+    return [OAAppSettings sharedManager].weatherToolbarVisible && [self shouldShowWeatherButton];
 }
 
 - (void)changeWeatherToolbarVisible
 {
-    _weatherToolbarVisible = !_weatherToolbarVisible;
+    [OAAppSettings sharedManager].weatherToolbarVisible = ![OAAppSettings sharedManager].weatherToolbarVisible;
     [_weatherToolbar updateInfo];
 }
 
@@ -742,7 +738,7 @@
 
     if (hideWeatherButton)
     {
-        _weatherToolbarVisible = NO;
+        [OAAppSettings sharedManager].weatherToolbarVisible = NO;
         [self hideWeatherButton];
     }
     else

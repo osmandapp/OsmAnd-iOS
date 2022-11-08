@@ -95,55 +95,64 @@
 
 - (void) refreshLayer
 {
-    NSMutableArray<OAWorldRegion *> *mapRegions = [NSMutableArray array];
-    NSMutableArray<OAWorldRegion *> *toRemove = [NSMutableArray array];
-    const auto& localResources = self.app.resourcesManager->getLocalResources();
-    if (!localResources.isEmpty())
-    {
-        NSArray<OAWorldRegion *> *regions = self.app.worldRegion.flattenedSubregions;
-        for (OAWorldRegion *region in regions)
-        {
-            for (const auto& resource : localResources)
-            {
-                if (resource && resource->origin == OsmAnd::ResourcesManager::ResourceOrigin::Installed && resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion)
-                {
-                    if ([region.resourceTypes containsObject:@((int)OsmAnd::ResourcesManager::ResourceType::MapRegion)]
-                        && !resource->id.isNull() && [resource->id.toLower().toNSString() hasPrefix:region.downloadsIdPrefix])
-                    {
-                        [mapRegions addObject:region];
-                        [toRemove addObjectsFromArray:region.subregions];
-                        break;
-                    }
-                }
-            }
-        }
-        [mapRegions removeObjectsInArray:toRemove];
-    }
-    if (mapRegions.count > 0)
-    {
-        [self.mapViewController runWithRenderSync:^{
-            [self.mapView removeKeyedSymbolsProvider:_collection];
-            _collection = std::make_shared<OsmAnd::PolygonsCollection>();
-            BOOL hasPoints = NO;
-            for (OAWorldRegion *r in mapRegions)
-            {
-                OAPointIContainer *pc = [[OAPointIContainer alloc] init];
-                [r getPoints31:pc];
-                if (!pc.qPoints.isEmpty())
-                {
-                    [self drawRegion:pc.qPoints region:r];
-                    hasPoints = YES;
-                }
-            }
-            if (hasPoints)
-                [self.mapView addKeyedSymbolsProvider:_collection];
-        }];
-    }
-    else
+    if ([[OAAppSettings sharedManager] isWeatherToolbarActive])
     {
         [self.mapViewController runWithRenderSync:^{
             [self resetLayer];
         }];
+    }
+    else
+    {
+        NSMutableArray<OAWorldRegion *> *mapRegions = [NSMutableArray array];
+        NSMutableArray<OAWorldRegion *> *toRemove = [NSMutableArray array];
+        const auto& localResources = self.app.resourcesManager->getLocalResources();
+        if (!localResources.isEmpty())
+        {
+            NSArray<OAWorldRegion *> *regions = self.app.worldRegion.flattenedSubregions;
+            for (OAWorldRegion *region in regions)
+            {
+                for (const auto& resource : localResources)
+                {
+                    if (resource && resource->origin == OsmAnd::ResourcesManager::ResourceOrigin::Installed && resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion)
+                    {
+                        if ([region.resourceTypes containsObject:@((int)OsmAnd::ResourcesManager::ResourceType::MapRegion)]
+                            && !resource->id.isNull() && [resource->id.toLower().toNSString() hasPrefix:region.downloadsIdPrefix])
+                        {
+                            [mapRegions addObject:region];
+                            [toRemove addObjectsFromArray:region.subregions];
+                            break;
+                        }
+                    }
+                }
+            }
+            [mapRegions removeObjectsInArray:toRemove];
+        }
+        if (mapRegions.count > 0)
+        {
+            [self.mapViewController runWithRenderSync:^{
+                [self.mapView removeKeyedSymbolsProvider:_collection];
+                _collection = std::make_shared<OsmAnd::PolygonsCollection>();
+                BOOL hasPoints = NO;
+                for (OAWorldRegion *r in mapRegions)
+                {
+                    OAPointIContainer *pc = [[OAPointIContainer alloc] init];
+                    [r getPoints31:pc];
+                    if (!pc.qPoints.isEmpty())
+                    {
+                        [self drawRegion:pc.qPoints region:r];
+                        hasPoints = YES;
+                    }
+                }
+                if (hasPoints)
+                    [self.mapView addKeyedSymbolsProvider:_collection];
+            }];
+        }
+        else
+        {
+            [self.mapViewController runWithRenderSync:^{
+                [self resetLayer];
+            }];
+        }
     }
 }
 

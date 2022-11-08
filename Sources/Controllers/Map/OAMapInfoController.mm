@@ -36,6 +36,7 @@
 #import "OAWeatherToolbar.h"
 #import "OACompassModeWidgetState.h"
 #import "OAQuickActionHudViewController.h"
+#import "OAMapLayers.h"
 
 @interface OATextState : NSObject
 
@@ -456,6 +457,17 @@
 
 - (void)showWeatherToolbar
 {
+    OAMapPanelViewController *mapPanelViewController = [OARootViewController instance].mapPanel;
+    if ([OAAppSettings sharedManager].weatherToolbarVisible && ![OAAppSettings sharedManager].weatherToolbarNeedsSettings)
+    {
+        [mapPanelViewController.mapViewController.mapLayers.weatherLayerLow updateWeatherLayerAlpha];
+        [mapPanelViewController.mapViewController.mapLayers.weatherLayerHigh updateWeatherLayerAlpha];
+        [mapPanelViewController.mapViewController.mapLayers.weatherContourLayer updateWeatherLayer];
+        [mapPanelViewController.mapViewController.mapLayers.downloadedRegionsLayer updateLayer];
+    }
+    [OAAppSettings sharedManager].weatherToolbarNeedsSettings = NO;
+    [_weatherToolbar resetHandlersData];
+
     if (_weatherToolbar.hidden)
     {
         [_weatherToolbar moveOutOfScreen];
@@ -468,7 +480,7 @@
 
         [_mapHudViewController showBottomControls:[OAUtilities isLandscape] ? 0. : _weatherToolbar.frame.size.height - [OAUtilities getBottomMargin]
                                          animated:YES];
-        [[OARootViewController instance].mapPanel setTopControlsVisible:YES];
+        [mapPanelViewController setTopControlsVisible:YES];
         [_mapHudViewController.quickActionController updateViewVisibility];
         [self recreateControls];
 
@@ -483,6 +495,16 @@
 
 - (void)hideWeatherToolbar
 {
+    OAMapPanelViewController *mapPanelViewController = [OARootViewController instance].mapPanel;
+    if (![[OAAppSettings sharedManager] isWeatherToolbarActive])
+    {
+        mapPanelViewController.mapViewController.mapLayers.weatherDate = [NSDate date];
+        [mapPanelViewController.mapViewController.mapLayers.weatherLayerLow updateWeatherLayerAlpha];
+        [mapPanelViewController.mapViewController.mapLayers.weatherLayerHigh updateWeatherLayerAlpha];
+        [mapPanelViewController.mapViewController.mapLayers.weatherContourLayer updateWeatherLayer];
+        [mapPanelViewController.mapViewController.mapLayers.downloadedRegionsLayer updateLayer];
+    }
+
     [UIView animateWithDuration:.3 animations: ^{
         [_weatherToolbar moveOutOfScreen];
         [_mapHudViewController.weatherButton setImage:[UIImage templateImageNamed:@"ic_custom_umbrella"] forState:UIControlStateNormal];
@@ -491,7 +513,7 @@
     }];
     [_mapHudViewController showBottomControls:0. animated:YES];
     [_mapHudViewController resetToDefaultRulerLayout];
-    [[OARootViewController instance].mapPanel setTopControlsVisible:YES];
+    [mapPanelViewController setTopControlsVisible:YES];
     [_mapHudViewController.quickActionController updateViewVisibility];
     [self recreateControls];
 }

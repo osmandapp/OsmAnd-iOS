@@ -17,7 +17,7 @@ typedef NS_ENUM(NSInteger, EOAWeatherToolbarDelegateType)
 
 @protocol OAWeatherToolbarDelegate
 
-- (void)updateData:(NSArray *)data type:(EOAWeatherToolbarDelegateType)type;
+- (void)updateData:(NSArray *)data type:(EOAWeatherToolbarDelegateType)type index:(NSInteger)index;
 
 @end
 
@@ -26,17 +26,16 @@ typedef NS_ENUM(NSInteger, EOAWeatherToolbarDelegateType)
 @property (nonatomic, weak) id<OAWeatherToolbarDelegate> delegate;
 
 - (void)updateData;
-- (NSArray *)getData;
+- (NSArray<NSMutableDictionary *> *)getData;
+- (BOOL)isAllLayersDisabled;
 
 @end
 
 @interface OAWeatherToolbarDatesHandler : NSObject<OAFoldersCellDelegate>
 
-- (instancetype)initWithAvailable:(BOOL)available date:(NSDate *)date;
-
 @property (nonatomic, weak) id<OAWeatherToolbarDelegate> delegate;
 
-- (void)updateData:(BOOL)available date:(NSDate *)date;
+- (void)updateData;
 - (NSArray<NSMutableDictionary *> *)getData;
 
 @end

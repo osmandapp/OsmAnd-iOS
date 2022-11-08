@@ -118,7 +118,7 @@
         config.setOpacityFactor(self.app.data.contoursAlpha);
         [self.mapView setMapLayerConfiguration:self.layerIndex configuration:config forcedUpdate:NO];
 
-        if (!self.app.data.weather || band == WEATHER_BAND_UNDEFINED)
+        if ((!self.app.data.weather && ![[OAAppSettings sharedManager] isWeatherToolbarActive]) || band == WEATHER_BAND_UNDEFINED)
             return NO;
 
         //[self showProgressHUD];

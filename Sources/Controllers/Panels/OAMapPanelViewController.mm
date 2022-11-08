@@ -100,6 +100,7 @@
 #import "OARouteLineAppearanceHudViewController.h"
 #import "OAOpenAddTrackViewController.h"
 #import "OASearchToolbarViewController.h"
+#import "OAWeatherLayerSettingsViewController.h"
 
 #include <OsmAndCore/CachingRoadLocator.h>
 #include <OsmAndCore/Data/Road.h>
@@ -394,6 +395,8 @@ typedef enum
         _activeTargetType = OATargetRoutePlanning;
     else if ([controller isKindOfClass:OARouteLineAppearanceHudViewController.class])
         _activeTargetType = OATargetRouteLineAppearance;
+    else if ([controller isKindOfClass:OAWeatherLayerSettingsViewController.class])
+        _activeTargetType = OATargetRouteWeatherLayerSettings;
 
     [self setupScrollableHud:controller];
 }
@@ -1273,7 +1276,8 @@ typedef enum
     || _activeTargetType == OATargetRouteDetails
     || (_activeTargetType == OATargetRoutePlanning && !_isNewContextMenuStillEnabled)
     || _activeTargetType == OATargetGPX
-    || _activeTargetType == OATargetRouteLineAppearance;
+    || _activeTargetType == OATargetRouteLineAppearance
+    || _activeTargetType == OATargetRouteWeatherLayerSettings;
 }
 
 - (void) showContextMenu:(OATargetPoint *)targetPoint saveState:(BOOL)saveState

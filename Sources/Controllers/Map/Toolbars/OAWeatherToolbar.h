@@ -14,7 +14,8 @@
 
 @property (nonatomic) BOOL topControlsVisibleInLandscape;
 
-- (void)reloadLayersCollectionView;
+- (void)resetHandlersData;
+- (void)reloadCollectionsView;
 - (void)moveOutOfScreen;
 - (void)moveToScreen;
 

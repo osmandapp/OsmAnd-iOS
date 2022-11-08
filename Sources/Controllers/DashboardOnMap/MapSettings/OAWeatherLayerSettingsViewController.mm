@@ -79,6 +79,7 @@
     OsmAndAppInstance _app;
     OAMapStyleSettings *_styleSettings;
     OAMapPanelViewController *_mapPanel;
+    BOOL _backButtonPressed;
 }
 
 - (instancetype)initWithLayerType:(EOAWeatherLayerType)layerType
@@ -122,6 +123,21 @@
                 customStatusBarStyle:[OAAppSettings sharedManager].nightMode
      ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault];
     [_mapPanel.hudViewController hideBottomControls:_menuHeight animated:YES];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+
+    if (!_backButtonPressed && [OAAppSettings sharedManager].weatherToolbarNeedsSettings)
+    {
+        [OAAppSettings sharedManager].weatherToolbarNeedsSettings = NO;
+        _mapPanel.mapViewController.mapLayers.weatherDate = [NSDate date];
+        [_mapPanel.mapViewController.mapLayers.weatherLayerLow updateWeatherLayerAlpha];
+        [_mapPanel.mapViewController.mapLayers.weatherLayerHigh updateWeatherLayerAlpha];
+        [_mapPanel.mapViewController.mapLayers.weatherContourLayer updateWeatherLayer];
+        [_mapPanel.mapViewController.mapLayers.downloadedRegionsLayer updateLayer];
+    }
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -364,6 +380,7 @@
 
 - (IBAction)backButtonPressed:(UIButton *)sender
 {
+    _backButtonPressed = YES;
     [self hide:YES duration:.2 onComplete:^{
         if (self.delegate)
             [self.delegate onDoneWeatherLayerSettings:YES];

@@ -1270,8 +1270,8 @@
 "gpx_alt_range" = "Rango de altitud";
 "gpx_avg_altitude" = "Altitud media";
 "region_nautical" = "Mapas náuticos";
-"gpx_ascent" = "Ascenso";
-"gpx_descent" = "Descenso";
+"gpx_ascent" = "Subida";
+"gpx_descent" = "Bajada";
 "res_elliptic_mercator" = "Mercator elíptica";
 "res_url" = "URL";
 "rendering_attr_hmRendered_name" = "Mostrar más detalle del mapa";
@@ -2643,8 +2643,8 @@
 "cloud_all_changes_uploaded_descr" = "Todos los cambios hechos en este dispositivo se sincronizaron en OsmAnd Cloud.";
 "cloud_no_conflicts" = "Sin conflictos";
 "cloud_no_conflicts_descr" = "Los datos en el dispositivo y en OsmAnd Cloud son los mismos.";
-"backup_conflicts_descr" = "Existe una versión más reciente de estos archivos en el servidor. Elige una acción.";
-"backup_conflicts_action_descr" = "Existe otra versión de este archivo en el servidor. Elige una acción.";
+"backup_conflicts_descr" = "Existe una versión más reciente de estos archivos en el servidor. Elige una acción";
+"backup_conflicts_action_descr" = "Existe otra versión de este archivo en el servidor. Elige una acción";
 "carplay" = "CarPlay";
 "product_title_pro" = "OsmAnd Pro";
 "expires" = "Expira";
@@ -2668,7 +2668,7 @@
 "cloud_contains_newer_changes" = "La versión de OsmAnd Cloud contiene cambios más recientes.";
 "cross_buy" = "Compra cruzada";
 "purchases_feature_desc_carplay" = "Transmite los mapas y navegación sin conexión de OsmAnd en la pantalla del vehículo y se integra con los controles del mismo.";
-"osm_live_payment_subscription_management_aid" = "El pago se cargará a su cuenta de ID de Apple al confirmar la compra.\n\nLa suscripción se renueva automáticamente a menos que se cancele al menos 24 horas antes del final del período actual. La renovación se cargará en su cuenta 24 horas antes de que finalice el periodo actual.\n\nPuede gestionar y cancelar sus suscripciones accediendo a los ajustes de su cuenta en el App Store tras la compra.";
+"osm_live_payment_subscription_management_aid" = "El pago se cargará a su cuenta de ID de Apple al confirmar la compra.\n\nLa suscripción se renueva automáticamente a menos que se cancele al menos 24 horas antes del final del período actual. La renovación se cargará en su cuenta 24 horas antes de que finalice el periodo actual.\n\nPuede gestionar y cancelar sus suscripciones accediendo a la configuración de su cuenta en el App Store tras la compra";
 "google_play" = "Google Play";
 "purchase_origin" = "Origen de la compra";
 "contact_support_description" = "Si tienes alguna duda, ponte en contacto con nosotros en support@osmand.net.";

@@ -130,7 +130,7 @@
         NSIndexPath *indexPath = [self.layersCollectionView indexPathForItemAtPoint:point];
         if (indexPath)
         {
-            [OAAppSettings sharedManager].weatherToolbarNeedsSettings = YES;
+            _needsSettingsForToolbar = YES;
             OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
             [mapPanel.hudViewController changeWeatherToolbarVisible];
 

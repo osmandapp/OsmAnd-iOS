@@ -16,6 +16,7 @@
 #import "OAMapStyleSettings.h"
 #import "OAWeatherHelper.h"
 #import "OAWeatherBand.h"
+#import "OAWeatherToolbar.h"
 #import "OAWeatherBandSettingsViewController.h"
 #import "OAMapLayers.h"
 
@@ -129,14 +130,11 @@
 {
     [super viewWillDisappear:animated];
 
-    if (!_backButtonPressed && [OAAppSettings sharedManager].weatherToolbarNeedsSettings)
+    if (!_backButtonPressed && _mapPanel.hudViewController.weatherToolbar.needsSettingsForToolbar)
     {
-        [OAAppSettings sharedManager].weatherToolbarNeedsSettings = NO;
         _mapPanel.mapViewController.mapLayers.weatherDate = [NSDate date];
-        [_mapPanel.mapViewController.mapLayers.weatherLayerLow updateWeatherLayerAlpha];
-        [_mapPanel.mapViewController.mapLayers.weatherLayerHigh updateWeatherLayerAlpha];
-        [_mapPanel.mapViewController.mapLayers.weatherContourLayer updateWeatherLayer];
-        [_mapPanel.mapViewController.mapLayers.downloadedRegionsLayer updateLayer];
+        _mapPanel.hudViewController.weatherToolbar.needsSettingsForToolbar = NO;
+        [_mapPanel.weatherToolbarStateChangeObservable notifyEvent];
     }
 }
 

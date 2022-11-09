@@ -34,6 +34,7 @@
 #import "OAToolbarViewController.h"
 #import "OADownloadMapWidget.h"
 #import "OAWeatherToolbar.h"
+#import "OAWeatherPlugin.h"
 #import "OACompassModeWidgetState.h"
 #import "OAQuickActionHudViewController.h"
 #import "OAMapLayers.h"
@@ -448,24 +449,19 @@
 
 - (void)updateWeatherToolbarVisible
 {
-    BOOL visible = [_mapHudViewController shouldShowWeatherToolbar];
-    if (visible && (_weatherToolbar.hidden || _weatherToolbar.frame.origin.y != [OAWeatherToolbar calculateY]))
+    if (_weatherToolbarVisible && (_weatherToolbar.hidden || _weatherToolbar.frame.origin.y != [OAWeatherToolbar calculateY]))
         [self showWeatherToolbar];
-    else if (!visible && !_weatherToolbar.hidden && _weatherToolbar.frame.origin.y != [OAWeatherToolbar calculateYOutScreen])
+    else if (!_weatherToolbarVisible && !_weatherToolbar.hidden && _weatherToolbar.frame.origin.y != [OAWeatherToolbar calculateYOutScreen])
         [self hideWeatherToolbar];
 }
 
 - (void)showWeatherToolbar
 {
-    OAMapPanelViewController *mapPanelViewController = [OARootViewController instance].mapPanel;
-    if ([OAAppSettings sharedManager].weatherToolbarVisible && ![OAAppSettings sharedManager].weatherToolbarNeedsSettings)
-    {
-        [mapPanelViewController.mapViewController.mapLayers.weatherLayerLow updateWeatherLayerAlpha];
-        [mapPanelViewController.mapViewController.mapLayers.weatherLayerHigh updateWeatherLayerAlpha];
-        [mapPanelViewController.mapViewController.mapLayers.weatherContourLayer updateWeatherLayer];
-        [mapPanelViewController.mapViewController.mapLayers.downloadedRegionsLayer updateLayer];
-    }
-    [OAAppSettings sharedManager].weatherToolbarNeedsSettings = NO;
+    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+    if (!mapPanel.hudViewController.weatherToolbar.needsSettingsForToolbar)
+        mapPanel.mapViewController.mapLayers.weatherDate = [NSDate date];
+    mapPanel.hudViewController.weatherToolbar.needsSettingsForToolbar = NO;
+    [mapPanel.weatherToolbarStateChangeObservable notifyEvent];
     [_weatherToolbar resetHandlersData];
 
     if (_weatherToolbar.hidden)
@@ -480,7 +476,7 @@
 
         [_mapHudViewController showBottomControls:[OAUtilities isLandscape] ? 0. : _weatherToolbar.frame.size.height - [OAUtilities getBottomMargin]
                                          animated:YES];
-        [mapPanelViewController setTopControlsVisible:YES];
+        [[OARootViewController instance].mapPanel setTopControlsVisible:YES];
         [_mapHudViewController.quickActionController updateViewVisibility];
         [self recreateControls];
 
@@ -495,15 +491,10 @@
 
 - (void)hideWeatherToolbar
 {
-    OAMapPanelViewController *mapPanelViewController = [OARootViewController instance].mapPanel;
-    if (![[OAAppSettings sharedManager] isWeatherToolbarActive])
-    {
-        mapPanelViewController.mapViewController.mapLayers.weatherDate = [NSDate date];
-        [mapPanelViewController.mapViewController.mapLayers.weatherLayerLow updateWeatherLayerAlpha];
-        [mapPanelViewController.mapViewController.mapLayers.weatherLayerHigh updateWeatherLayerAlpha];
-        [mapPanelViewController.mapViewController.mapLayers.weatherContourLayer updateWeatherLayer];
-        [mapPanelViewController.mapViewController.mapLayers.downloadedRegionsLayer updateLayer];
-    }
+    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+    if (!mapPanel.hudViewController.weatherToolbar.needsSettingsForToolbar)
+        mapPanel.mapViewController.mapLayers.weatherDate = [NSDate date];
+    [mapPanel.weatherToolbarStateChangeObservable notifyEvent];
 
     [UIView animateWithDuration:.3 animations: ^{
         [_weatherToolbar moveOutOfScreen];
@@ -513,7 +504,7 @@
     }];
     [_mapHudViewController showBottomControls:0. animated:YES];
     [_mapHudViewController resetToDefaultRulerLayout];
-    [mapPanelViewController setTopControlsVisible:YES];
+    [mapPanel setTopControlsVisible:YES];
     [_mapHudViewController.quickActionController updateViewVisibility];
     [self recreateControls];
 }

@@ -7,13 +7,17 @@
 //
 
 #import "OAWeatherContourLayer.h"
+#import "OARootViewController.h"
 #import "OAMapViewController.h"
+#import "OAMapHudViewController.h"
 #import "OAMapRendererView.h"
 #import "OAAutoObserverProxy.h"
 #import "OAWeatherHelper.h"
 #import "OAMapRendererEnvironment.h"
 #import "OAMapStyleSettings.h"
 #import "OAWeatherPlugin.h"
+#import "OAWeatherToolbar.h"
+#import "OAMapLayers.h"
 
 #include <OsmAndCore/Map/WeatherTileResourcesManager.h>
 #include <OsmAndCore/Map/GeoTileObjectsProvider.h>
@@ -30,6 +34,8 @@
     
     OAWeatherHelper *_weatherHelper;
     OAMapStyleSettings *_styleSettings;
+    OAAutoObserverProxy *_weatherToolbarStateChangeObservable;
+    BOOL _needsSettingsForToolbar;
     OAAutoObserverProxy* _weatherChangeObserver;
     OAAutoObserverProxy* _weatherUseOfflineDataChangeObserver;
     OAAutoObserverProxy* _alphaChangeObserver;
@@ -57,6 +63,9 @@
     _weatherHelper = [OAWeatherHelper sharedInstance];
     _styleSettings = [OAMapStyleSettings sharedInstance];
     
+    _weatherToolbarStateChangeObservable = [[OAAutoObserverProxy alloc] initWith:self
+                                                                     withHandler:@selector(onWeatherToolbarStateChanged)
+                                                                      andObserve:[OARootViewController instance].mapPanel.weatherToolbarStateChangeObservable];
     _weatherChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                        withHandler:@selector(onWeatherChanged)
                                                         andObserve:self.app.data.weatherChangeObservable];
@@ -74,6 +83,11 @@
 
 - (void) deinitLayer
 {
+    if (_weatherToolbarStateChangeObservable)
+    {
+        [_weatherToolbarStateChangeObservable detach];
+        _weatherToolbarStateChangeObservable = nil;
+    }
     if (_weatherChangeObserver)
     {
         [_weatherChangeObserver detach];
@@ -118,7 +132,7 @@
         config.setOpacityFactor(self.app.data.contoursAlpha);
         [self.mapView setMapLayerConfiguration:self.layerIndex configuration:config forcedUpdate:NO];
 
-        if ((!self.app.data.weather && ![[OAAppSettings sharedManager] isWeatherToolbarActive]) || band == WEATHER_BAND_UNDEFINED)
+        if ((!self.app.data.weather && !_needsSettingsForToolbar) || band == WEATHER_BAND_UNDEFINED)
             return NO;
 
         //[self showProgressHUD];
@@ -166,6 +180,17 @@
     _mapObjectsSymbolsProvider = nullptr;
     _mapPrimitivesProvider = nullptr;
     _geoTileObjectsProvider = nullptr;
+}
+
+- (void)onWeatherToolbarStateChanged
+{
+    BOOL needsSettingsForToolbar = [[OARootViewController instance].mapPanel.hudViewController needsSettingsForWeatherToolbar];
+    if (_needsSettingsForToolbar != needsSettingsForToolbar)
+    {
+        _date = self.mapViewController.mapLayers.weatherDate;
+        _needsSettingsForToolbar = needsSettingsForToolbar;
+        [self updateWeatherLayer];
+    }
 }
 
 - (void)onLayerAlphaChanged

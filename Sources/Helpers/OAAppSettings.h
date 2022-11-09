@@ -930,8 +930,6 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 // Weather
 
 @property (nonatomic) OACommonBoolean *weatherButtonIsOn;
-@property (nonatomic) BOOL weatherToolbarVisible;
-@property (nonatomic) BOOL weatherToolbarNeedsSettings;
 
 - (void) setApplicationModePref:(OAApplicationMode *)applicationMode;
 - (void) setApplicationModePref:(OAApplicationMode *)applicationMode markAsLastUsed:(BOOL)markAsLastUsed;
@@ -1135,7 +1133,5 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 - (void) setLastGlobalModifiedTime:(long)timestamp;
 - (long) getLastProfileSettingsModifiedTime:(OAApplicationMode *)mode;
 - (void) setLastProfileModifiedTime:(long)timestamp mode:(OAApplicationMode *)mode;
-
-- (BOOL) isWeatherToolbarActive;
 
 @end

@@ -356,12 +356,17 @@
 
 - (BOOL)shouldShowWeatherToolbar
 {
-    return [OAAppSettings sharedManager].weatherToolbarVisible && [self shouldShowWeatherButton];
+    return _mapInfoController.weatherToolbarVisible && [self shouldShowWeatherButton];
+}
+
+- (BOOL)needsSettingsForWeatherToolbar
+{
+    return [self shouldShowWeatherToolbar] || _weatherToolbar.needsSettingsForToolbar;
 }
 
 - (void)changeWeatherToolbarVisible
 {
-    [OAAppSettings sharedManager].weatherToolbarVisible = ![OAAppSettings sharedManager].weatherToolbarVisible;
+    _mapInfoController.weatherToolbarVisible = !_mapInfoController.weatherToolbarVisible;
     [_weatherToolbar updateInfo];
 }
 
@@ -738,7 +743,7 @@
 
     if (hideWeatherButton)
     {
-        [OAAppSettings sharedManager].weatherToolbarVisible = NO;
+        _mapInfoController.weatherToolbarVisible = NO;
         [self hideWeatherButton];
     }
     else

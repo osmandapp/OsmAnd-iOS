@@ -4961,9 +4961,4 @@
     [[NSUserDefaults standardUserDefaults] setObject:@(timestamp) forKey:[NSString stringWithFormat:@"%@_%@", lastProfileSettingsModifiedTimeKey, mode.stringKey]];
 }
 
-- (BOOL) isWeatherToolbarActive
-{
-    return _weatherToolbarVisible || _weatherToolbarNeedsSettings;
-}
-
 @end

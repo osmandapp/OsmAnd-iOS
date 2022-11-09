@@ -9,6 +9,7 @@
 #import "OADownloadedRegionsLayer.h"
 #import "OARootViewController.h"
 #import "OAMapViewController.h"
+#import "OAMapHudViewController.h"
 #import "OAMapRendererView.h"
 #import "OAUtilities.h"
 #import "OANativeUtilities.h"
@@ -18,6 +19,7 @@
 #import "OAResourcesUIHelper.h"
 #import "OADownloadsManager.h"
 #import "OAManageResourcesViewController.h"
+#import "OAWeatherToolbar.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -52,7 +54,10 @@
     std::shared_ptr<OsmAnd::PolygonsCollection> _collection;
     OAAutoObserverProxy* _localResourcesChangedObserver;
     BOOL _initDone;
-    
+
+    OAAutoObserverProxy *_weatherToolbarStateChangeObservable;
+    BOOL _needsSettingsForToolbar;
+
     std::shared_ptr<OsmAnd::Polygon> _selectionPolygon;
 }
 
@@ -66,6 +71,9 @@
     _localResourcesChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                withHandler:@selector(onLocalResourcesChanged:withKey:)
                                                                 andObserve:self.app.localResourcesChangedObservable];
+    _weatherToolbarStateChangeObservable = [[OAAutoObserverProxy alloc] initWith:self
+                                                                     withHandler:@selector(onWeatherToolbarStateChanged)
+                                                                      andObserve:[OARootViewController instance].mapPanel.weatherToolbarStateChangeObservable];
     _collection = std::make_shared<OsmAnd::PolygonsCollection>();
     _initDone = YES;
     
@@ -75,8 +83,16 @@
 - (void)deinitLayer
 {
     [super deinitLayer];
-    [_localResourcesChangedObserver detach];
-    _localResourcesChangedObserver = nil;
+    if (_localResourcesChangedObserver)
+    {
+        [_localResourcesChangedObserver detach];
+        _localResourcesChangedObserver = nil;
+    }
+    if (_weatherToolbarStateChangeObservable)
+    {
+        [_weatherToolbarStateChangeObservable detach];
+        _weatherToolbarStateChangeObservable = nil;
+    }
 }
 
 - (void) resetLayer
@@ -95,7 +111,7 @@
 
 - (void) refreshLayer
 {
-    if ([[OAAppSettings sharedManager] isWeatherToolbarActive])
+    if (_needsSettingsForToolbar)
     {
         [self.mapViewController runWithRenderSync:^{
             [self resetLayer];
@@ -358,6 +374,20 @@
         [self updateLayer];
     });
 }
+
+
+- (void)onWeatherToolbarStateChanged
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        BOOL needsSettingsForToolbar = [[OARootViewController instance].mapPanel.hudViewController needsSettingsForWeatherToolbar];
+        if (_needsSettingsForToolbar != needsSettingsForToolbar)
+        {
+            _needsSettingsForToolbar = needsSettingsForToolbar;
+            [self updateLayer];
+        }
+    });
+}
+
 
 #pragma mark - OAContextMenuProvider
 

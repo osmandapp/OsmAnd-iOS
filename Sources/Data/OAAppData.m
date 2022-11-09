@@ -14,6 +14,8 @@
 #import "OAPOIFiltersHelper.h"
 #import "OAWikipediaPlugin.h"
 #import "OAWeatherBand.h"
+#import "OARootViewController.h"
+#import "OAMapHudViewController.h"
 
 #define kLastMapSourceKey @"lastMapSource"
 #define kOverlaySourceKey @"overlayMapSource"
@@ -439,6 +441,11 @@
     });
 }
 
+- (BOOL)isWeatherToolbarActive
+{
+    return [[OARootViewController instance].mapPanel.hudViewController needsSettingsForWeatherToolbar];
+}
+
 - (void) safeInit
 {
     if (_lastMapSources == nil)
@@ -620,7 +627,7 @@
 {
     @synchronized(_lock)
     {
-        return [[OAAppSettings sharedManager] isWeatherToolbarActive] ? [_weatherTempToolbarProfile get] : [_weatherTempProfile get];
+        return [self isWeatherToolbarActive] ? [_weatherTempToolbarProfile get] : [_weatherTempProfile get];
     }
 }
 
@@ -628,7 +635,7 @@
 {
     @synchronized(_lock)
     {
-        [[OAAppSettings sharedManager] isWeatherToolbarActive] ? [_weatherTempToolbarProfile set:weatherTemp] : [_weatherTempProfile set:weatherTemp];
+        [self isWeatherToolbarActive] ? [_weatherTempToolbarProfile set:weatherTemp] : [_weatherTempProfile set:weatherTemp];
         [_weatherTempChangeObservable notifyEventWithKey:@(WEATHER_BAND_TEMPERATURE) andValue:@(self.weatherTemp)];
     }
 }
@@ -637,7 +644,7 @@
 {
     @synchronized(_lock)
     {
-        NSUnitTemperature *unit = (NSUnitTemperature *) ([[OAAppSettings sharedManager] isWeatherToolbarActive] ? [_weatherTempUnitProfile get] : [_weatherTempUnitProfile get]);
+        NSUnitTemperature *unit = (NSUnitTemperature *) ([self isWeatherToolbarActive] ? [_weatherTempUnitProfile get] : [_weatherTempUnitProfile get]);
         if (self.weatherTempUnitAuto)
         {
             NSUnitTemperature *current = [NSUnitTemperature current];
@@ -655,7 +662,7 @@
 {
     @synchronized(_lock)
     {
-        [[OAAppSettings sharedManager] isWeatherToolbarActive] ? [_weatherTempToolbarUnitProfile set:weatherTempUnit] : [_weatherTempUnitProfile set:weatherTempUnit];
+        [self isWeatherToolbarActive] ? [_weatherTempToolbarUnitProfile set:weatherTempUnit] : [_weatherTempUnitProfile set:weatherTempUnit];
         [_weatherTempUnitChangeObservable notifyEventWithKey:@(WEATHER_BAND_TEMPERATURE) andValue:self.weatherTempUnit];
     }
 }
@@ -664,7 +671,7 @@
 {
     @synchronized(_lock)
     {
-        return [[OAAppSettings sharedManager] isWeatherToolbarActive] ? [_weatherTempToolbarUnitAutoProfile get] : [_weatherTempUnitAutoProfile get];
+        return [self isWeatherToolbarActive] ? [_weatherTempToolbarUnitAutoProfile get] : [_weatherTempUnitAutoProfile get];
     }
 }
 
@@ -672,11 +679,11 @@
 {
     @synchronized(_lock)
     {
-        [[OAAppSettings sharedManager] isWeatherToolbarActive] ? [_weatherTempToolbarUnitAutoProfile set:weatherTempUnitAuto] : [_weatherTempUnitAutoProfile set:weatherTempUnitAuto];
+        [self isWeatherToolbarActive] ? [_weatherTempToolbarUnitAutoProfile set:weatherTempUnitAuto] : [_weatherTempUnitAutoProfile set:weatherTempUnitAuto];
         if (weatherTempUnitAuto)
         {
             NSUnitTemperature *current = [NSUnitTemperature current];
-            if (([[OAAppSettings sharedManager] isWeatherToolbarActive] ? [_weatherTempToolbarUnitProfile get] : [_weatherTempUnitProfile get]) != current)
+            if (([self isWeatherToolbarActive] ? [_weatherTempToolbarUnitProfile get] : [_weatherTempUnitProfile get]) != current)
                 [self setWeatherTempUnit:current];
         }
     }
@@ -686,7 +693,7 @@
 {
     @synchronized (_lock)
     {
-        return [[OAAppSettings sharedManager] isWeatherToolbarActive] ? [_weatherTempToolbarAlphaProfile get] : [_weatherTempAlphaProfile get];
+        return [self isWeatherToolbarActive] ? [_weatherTempToolbarAlphaProfile get] : [_weatherTempAlphaProfile get];
     }
 }
 
@@ -694,7 +701,7 @@
 {
     @synchronized(_lock)
     {
-        [[OAAppSettings sharedManager] isWeatherToolbarActive] ? [_weatherTempToolbarAlphaProfile set:weatherTempAlpha] : [_weatherTempAlphaProfile set:weatherTempAlpha];
+        [self isWeatherToolbarActive] ? [_weatherTempToolbarAlphaProfile set:weatherTempAlpha] : [_weatherTempAlphaProfile set:weatherTempAlpha];
         [_weatherTempAlphaChangeObservable notifyEventWithKey:@(WEATHER_BAND_TEMPERATURE) andValue:@(self.weatherTempAlpha)];
     }
 }
@@ -703,7 +710,7 @@
 {
     @synchronized(_lock)
     {
-        return [[OAAppSettings sharedManager] isWeatherToolbarActive] ? [_weatherPressureToolbarProfile get] : [_weatherPressureProfile get];
+        return [self isWeatherToolbarActive] ? [_weatherPressureToolbarProfile get] : [_weatherPressureProfile get];
     }
 }
 
@@ -711,7 +718,7 @@
 {
     @synchronized(_lock)
     {
-        [[OAAppSettings sharedManager] isWeatherToolbarActive] ? [_weatherPressureToolbarProfile set:weatherPressure] : [_weatherPressureProfile set:weatherPressure];
+        [self isWeatherToolbarActive] ? [_weatherPressureToolbarProfile set:weatherPressure] : [_weatherPressureProfile set:weatherPressure];
         [_weatherPressureChangeObservable notifyEventWithKey:@(WEATHER_BAND_PRESSURE) andValue:@(self.weatherPressure)];
     }
 }
@@ -720,7 +727,7 @@
 {
     @synchronized(_lock)
     {
-        NSUnitPressure *unit = (NSUnitPressure *) ([[OAAppSettings sharedManager] isWeatherToolbarActive] ? [_weatherPressureToolbarUnitProfile get] : [_weatherPressureUnitProfile get]);
+        NSUnitPressure *unit = (NSUnitPressure *) ([self isWeatherToolbarActive] ? [_weatherPressureToolbarUnitProfile get] : [_weatherPressureUnitProfile get]);
         if (self.weatherPressureUnitAuto)
         {
             NSUnitPressure *current = [NSUnitPressure current];
@@ -738,7 +745,7 @@
 {
     @synchronized(_lock)
     {
-        [[OAAppSettings sharedManager] isWeatherToolbarActive] ? [_weatherPressureToolbarUnitProfile set:weatherPressureUnit] : [_weatherPressureUnitProfile set:weatherPressureUnit];
+        [self isWeatherToolbarActive] ? [_weatherPressureToolbarUnitProfile set:weatherPressureUnit] : [_weatherPressureUnitProfile set:weatherPressureUnit];
         [_weatherPressureUnitChangeObservable notifyEventWithKey:@(WEATHER_BAND_PRESSURE) andValue:self.weatherPressureUnit];
     }
 }
@@ -747,7 +754,7 @@
 {
     @synchronized(_lock)
     {
-        return [[OAAppSettings sharedManager] isWeatherToolbarActive] ? [_weatherPressureToolbarUnitAutoProfile get] : [_weatherPressureUnitAutoProfile get];
+        return [self isWeatherToolbarActive] ? [_weatherPressureToolbarUnitAutoProfile get] : [_weatherPressureUnitAutoProfile get];
     }
 }
 
@@ -755,11 +762,11 @@
 {
     @synchronized(_lock)
     {
-        [[OAAppSettings sharedManager] isWeatherToolbarActive] ? [_weatherPressureToolbarUnitAutoProfile set:weatherPressureUnitAuto] : [_weatherPressureUnitAutoProfile set:weatherPressureUnitAuto];
+        [self isWeatherToolbarActive] ? [_weatherPressureToolbarUnitAutoProfile set:weatherPressureUnitAuto] : [_weatherPressureUnitAutoProfile set:weatherPressureUnitAuto];
         if (weatherPressureUnitAuto)
         {
             NSUnitPressure *current = [NSUnitPressure current];
-            if (([[OAAppSettings sharedManager] isWeatherToolbarActive] ? [_weatherPressureToolbarUnitProfile get] : [_weatherPressureUnitProfile get]) != current)
+            if (([self isWeatherToolbarActive] ? [_weatherPressureToolbarUnitProfile get] : [_weatherPressureUnitProfile get]) != current)
                 [self setWeatherPressureUnit:current];
         }
     }
@@ -769,7 +776,7 @@
 {
     @synchronized (_lock)
     {
-        return [[OAAppSettings sharedManager] isWeatherToolbarActive] ? [_weatherPressureToolbarAlphaProfile get] : [_weatherPressureAlphaProfile get];
+        return [self isWeatherToolbarActive] ? [_weatherPressureToolbarAlphaProfile get] : [_weatherPressureAlphaProfile get];
     }
 }
 
@@ -777,7 +784,7 @@
 {
     @synchronized(_lock)
     {
-        [[OAAppSettings sharedManager] isWeatherToolbarActive] ? [_weatherPressureToolbarAlphaProfile set:weatherPressureAlpha] : [_weatherPressureAlphaProfile set:weatherPressureAlpha];
+        [self isWeatherToolbarActive] ? [_weatherPressureToolbarAlphaProfile set:weatherPressureAlpha] : [_weatherPressureAlphaProfile set:weatherPressureAlpha];
         [_weatherPressureAlphaChangeObservable notifyEventWithKey:@(WEATHER_BAND_PRESSURE) andValue:@(self.weatherPressureAlpha)];
     }
 }
@@ -786,7 +793,7 @@
 {
     @synchronized(_lock)
     {
-        return [[OAAppSettings sharedManager] isWeatherToolbarActive] ? [_weatherWindToolbarProfile get] : [_weatherWindProfile get];
+        return [self isWeatherToolbarActive] ? [_weatherWindToolbarProfile get] : [_weatherWindProfile get];
     }
 }
 
@@ -794,7 +801,7 @@
 {
     @synchronized(_lock)
     {
-        [[OAAppSettings sharedManager] isWeatherToolbarActive] ? [_weatherWindToolbarProfile set:weatherWind] : [_weatherWindProfile set:weatherWind];
+        [self isWeatherToolbarActive] ? [_weatherWindToolbarProfile set:weatherWind] : [_weatherWindProfile set:weatherWind];
         [_weatherWindChangeObservable notifyEventWithKey:@(WEATHER_BAND_WIND_SPEED) andValue:@(self.weatherWind)];
     }
 }
@@ -803,7 +810,7 @@
 {
     @synchronized(_lock)
     {
-        NSUnitSpeed *unit = (NSUnitSpeed *) ([[OAAppSettings sharedManager] isWeatherToolbarActive] ? [_weatherWindToolbarUnitProfile get] : [_weatherWindUnitProfile get]);
+        NSUnitSpeed *unit = (NSUnitSpeed *) ([self isWeatherToolbarActive] ? [_weatherWindToolbarUnitProfile get] : [_weatherWindUnitProfile get]);
         if (self.weatherWindUnitAuto)
         {
             NSUnitSpeed *current = [NSUnitSpeed current];
@@ -821,7 +828,7 @@
 {
     @synchronized(_lock)
     {
-        [[OAAppSettings sharedManager] isWeatherToolbarActive] ? [_weatherWindToolbarUnitProfile set:weatherWindUnit] : [_weatherWindUnitProfile set:weatherWindUnit];
+        [self isWeatherToolbarActive] ? [_weatherWindToolbarUnitProfile set:weatherWindUnit] : [_weatherWindUnitProfile set:weatherWindUnit];
         [_weatherWindUnitChangeObservable notifyEventWithKey:@(WEATHER_BAND_WIND_SPEED) andValue:self.weatherWindUnit];
     }
 }
@@ -830,7 +837,7 @@
 {
     @synchronized(_lock)
     {
-        return [[OAAppSettings sharedManager] isWeatherToolbarActive] ? [_weatherWindToolbarUnitAutoProfile get] : [_weatherWindUnitAutoProfile get];
+        return [self isWeatherToolbarActive] ? [_weatherWindToolbarUnitAutoProfile get] : [_weatherWindUnitAutoProfile get];
     }
 }
 
@@ -838,11 +845,11 @@
 {
     @synchronized(_lock)
     {
-        [[OAAppSettings sharedManager] isWeatherToolbarActive] ? [_weatherWindToolbarUnitAutoProfile set:weatherWindUnitAuto] : [_weatherWindUnitAutoProfile set:weatherWindUnitAuto];
+        [self isWeatherToolbarActive] ? [_weatherWindToolbarUnitAutoProfile set:weatherWindUnitAuto] : [_weatherWindUnitAutoProfile set:weatherWindUnitAuto];
         if (weatherWindUnitAuto)
         {
             NSUnitSpeed *current = [NSUnitSpeed current];
-            if (([[OAAppSettings sharedManager] isWeatherToolbarActive] ? [_weatherWindToolbarUnitProfile get] : [_weatherWindUnitProfile get]) != current)
+            if (([self isWeatherToolbarActive] ? [_weatherWindToolbarUnitProfile get] : [_weatherWindUnitProfile get]) != current)
                 [self setWeatherWindUnit:current];
         }
     }
@@ -852,7 +859,7 @@
 {
     @synchronized (_lock)
     {
-        return [[OAAppSettings sharedManager] isWeatherToolbarActive] ? [_weatherWindToolbarAlphaProfile get] : [_weatherWindAlphaProfile get];
+        return [self isWeatherToolbarActive] ? [_weatherWindToolbarAlphaProfile get] : [_weatherWindAlphaProfile get];
     }
 }
 
@@ -860,7 +867,7 @@
 {
     @synchronized(_lock)
     {
-        [[OAAppSettings sharedManager] isWeatherToolbarActive] ? [_weatherWindToolbarAlphaProfile set:weatherWindAlpha] : [_weatherWindAlphaProfile set:weatherWindAlpha];
+        [self isWeatherToolbarActive] ? [_weatherWindToolbarAlphaProfile set:weatherWindAlpha] : [_weatherWindAlphaProfile set:weatherWindAlpha];
         [_weatherWindAlphaChangeObservable notifyEventWithKey:@(WEATHER_BAND_WIND_SPEED) andValue:@(self.weatherWindAlpha)];
     }
 }
@@ -869,7 +876,7 @@
 {
     @synchronized(_lock)
     {
-        return [[OAAppSettings sharedManager] isWeatherToolbarActive] ? [_weatherCloudToolbarProfile get] : [_weatherCloudProfile get];
+        return [self isWeatherToolbarActive] ? [_weatherCloudToolbarProfile get] : [_weatherCloudProfile get];
     }
 }
 
@@ -877,7 +884,7 @@
 {
     @synchronized(_lock)
     {
-        [[OAAppSettings sharedManager] isWeatherToolbarActive] ? [_weatherCloudToolbarProfile set:weatherCloud] : [_weatherCloudProfile set:weatherCloud];
+        [self isWeatherToolbarActive] ? [_weatherCloudToolbarProfile set:weatherCloud] : [_weatherCloudProfile set:weatherCloud];
         [_weatherCloudChangeObservable notifyEventWithKey:@(WEATHER_BAND_CLOUD) andValue:@(self.weatherCloud)];
     }
 }
@@ -886,7 +893,7 @@
 {
     @synchronized(_lock)
     {
-        NSUnitCloud *unit = (NSUnitCloud *) ([[OAAppSettings sharedManager] isWeatherToolbarActive] ? [_weatherCloudToolbarUnitProfile get] : [_weatherCloudUnitProfile get]);
+        NSUnitCloud *unit = (NSUnitCloud *) ([self isWeatherToolbarActive] ? [_weatherCloudToolbarUnitProfile get] : [_weatherCloudUnitProfile get]);
         if (self.weatherCloudUnitAuto)
         {
             NSUnitCloud *current = [NSUnitCloud current];
@@ -904,7 +911,7 @@
 {
     @synchronized(_lock)
     {
-        [[OAAppSettings sharedManager] isWeatherToolbarActive] ? [_weatherCloudToolbarUnitProfile set:weatherCloudUnit] : [_weatherCloudUnitProfile set:weatherCloudUnit];
+        [self isWeatherToolbarActive] ? [_weatherCloudToolbarUnitProfile set:weatherCloudUnit] : [_weatherCloudUnitProfile set:weatherCloudUnit];
         [_weatherCloudUnitChangeObservable notifyEventWithKey:@(WEATHER_BAND_CLOUD) andValue:self.weatherCloudUnit];
     }
 }
@@ -913,7 +920,7 @@
 {
     @synchronized(_lock)
     {
-        return [[OAAppSettings sharedManager] isWeatherToolbarActive] ? [_weatherCloudToolbarUnitAutoProfile get] : [_weatherCloudUnitAutoProfile get];
+        return [self isWeatherToolbarActive] ? [_weatherCloudToolbarUnitAutoProfile get] : [_weatherCloudUnitAutoProfile get];
     }
 }
 
@@ -921,11 +928,11 @@
 {
     @synchronized(_lock)
     {
-        [[OAAppSettings sharedManager] isWeatherToolbarActive] ? [_weatherCloudToolbarUnitAutoProfile set:weatherCloudUnitAuto] : [_weatherCloudUnitAutoProfile set:weatherCloudUnitAuto];
+        [self isWeatherToolbarActive] ? [_weatherCloudToolbarUnitAutoProfile set:weatherCloudUnitAuto] : [_weatherCloudUnitAutoProfile set:weatherCloudUnitAuto];
         if (weatherCloudUnitAuto)
         {
             NSUnitCloud *current = [NSUnitCloud current];
-            if (([[OAAppSettings sharedManager] isWeatherToolbarActive] ? [_weatherCloudToolbarUnitProfile get] : [_weatherCloudUnitProfile get]) != current)
+            if (([self isWeatherToolbarActive] ? [_weatherCloudToolbarUnitProfile get] : [_weatherCloudUnitProfile get]) != current)
                 [self setWeatherCloudUnit:current];
         }
     }
@@ -935,7 +942,7 @@
 {
     @synchronized (_lock)
     {
-        return [[OAAppSettings sharedManager] isWeatherToolbarActive] ? [_weatherCloudToolbarAlphaProfile get] : [_weatherCloudAlphaProfile get];
+        return [self isWeatherToolbarActive] ? [_weatherCloudToolbarAlphaProfile get] : [_weatherCloudAlphaProfile get];
     }
 }
 
@@ -943,7 +950,7 @@
 {
     @synchronized(_lock)
     {
-        [[OAAppSettings sharedManager] isWeatherToolbarActive] ? [_weatherCloudToolbarAlphaProfile set:weatherCloudAlpha] : [_weatherCloudAlphaProfile set:weatherCloudAlpha];
+        [self isWeatherToolbarActive] ? [_weatherCloudToolbarAlphaProfile set:weatherCloudAlpha] : [_weatherCloudAlphaProfile set:weatherCloudAlpha];
         [_weatherCloudAlphaChangeObservable notifyEventWithKey:@(WEATHER_BAND_CLOUD) andValue:@(self.weatherCloudAlpha)];
     }
 }
@@ -952,7 +959,7 @@
 {
     @synchronized(_lock)
     {
-        return [[OAAppSettings sharedManager] isWeatherToolbarActive] ? [_weatherPrecipToolbarProfile get] : [_weatherPrecipProfile get];
+        return [self isWeatherToolbarActive] ? [_weatherPrecipToolbarProfile get] : [_weatherPrecipProfile get];
     }
 }
 
@@ -960,7 +967,7 @@
 {
     @synchronized(_lock)
     {
-        [[OAAppSettings sharedManager] isWeatherToolbarActive] ? [_weatherPrecipToolbarProfile set:weatherPrecip] : [_weatherPrecipProfile set:weatherPrecip];
+        [self isWeatherToolbarActive] ? [_weatherPrecipToolbarProfile set:weatherPrecip] : [_weatherPrecipProfile set:weatherPrecip];
         [_weatherPrecipChangeObservable notifyEventWithKey:@(WEATHER_BAND_PRECIPITATION) andValue:@(self.weatherPrecip)];
     }
 }
@@ -969,7 +976,7 @@
 {
     @synchronized(_lock)
     {
-        NSUnitLength *unit = (NSUnitLength *) ([[OAAppSettings sharedManager] isWeatherToolbarActive] ? [_weatherPrecipToolbarUnitProfile get] : [_weatherPrecipUnitProfile get]);
+        NSUnitLength *unit = (NSUnitLength *) ([self isWeatherToolbarActive] ? [_weatherPrecipToolbarUnitProfile get] : [_weatherPrecipUnitProfile get]);
         if (self.weatherPrecipUnitAuto)
         {
             NSUnitLength *current = [NSUnitLength current];
@@ -987,7 +994,7 @@
 {
     @synchronized(_lock)
     {
-        [[OAAppSettings sharedManager] isWeatherToolbarActive] ? [_weatherPrecipToolbarUnitProfile set:weatherPrecipUnit] : [_weatherPrecipUnitProfile set:weatherPrecipUnit];
+        [self isWeatherToolbarActive] ? [_weatherPrecipToolbarUnitProfile set:weatherPrecipUnit] : [_weatherPrecipUnitProfile set:weatherPrecipUnit];
         [_weatherPrecipUnitChangeObservable notifyEventWithKey:@(WEATHER_BAND_PRECIPITATION) andValue:self.weatherPrecipUnit];
     }
 }
@@ -996,7 +1003,7 @@
 {
     @synchronized(_lock)
     {
-        return [[OAAppSettings sharedManager] isWeatherToolbarActive] ? [_weatherPrecipToolbarUnitAutoProfile get] : [_weatherPrecipUnitAutoProfile get];
+        return [self isWeatherToolbarActive] ? [_weatherPrecipToolbarUnitAutoProfile get] : [_weatherPrecipUnitAutoProfile get];
     }
 }
 
@@ -1004,11 +1011,11 @@
 {
     @synchronized(_lock)
     {
-        [[OAAppSettings sharedManager] isWeatherToolbarActive] ? [_weatherPrecipToolbarUnitAutoProfile set:weatherPrecipUnitAuto] : [_weatherPrecipUnitAutoProfile set:weatherPrecipUnitAuto];
+        [self isWeatherToolbarActive] ? [_weatherPrecipToolbarUnitAutoProfile set:weatherPrecipUnitAuto] : [_weatherPrecipUnitAutoProfile set:weatherPrecipUnitAuto];
         if (weatherPrecipUnitAuto)
         {
             NSUnitLength *current = [NSUnitLength current];
-            if (([[OAAppSettings sharedManager] isWeatherToolbarActive] ? [_weatherPrecipToolbarUnitProfile get] : [_weatherPrecipUnitProfile get]) != current)
+            if (([self isWeatherToolbarActive] ? [_weatherPrecipToolbarUnitProfile get] : [_weatherPrecipUnitProfile get]) != current)
                 [self setWeatherPrecipUnit:current];
         }
     }
@@ -1018,7 +1025,7 @@
 {
     @synchronized (_lock)
     {
-        return [[OAAppSettings sharedManager] isWeatherToolbarActive] ? [_weatherPrecipToolbarAlphaProfile get] : [_weatherPrecipAlphaProfile get];
+        return [self isWeatherToolbarActive] ? [_weatherPrecipToolbarAlphaProfile get] : [_weatherPrecipAlphaProfile get];
     }
 }
 
@@ -1026,7 +1033,7 @@
 {
     @synchronized(_lock)
     {
-        [[OAAppSettings sharedManager] isWeatherToolbarActive] ? [_weatherPrecipToolbarAlphaProfile set:weatherPrecipAlpha] : [_weatherPrecipAlphaProfile set:weatherPrecipAlpha];
+        [self isWeatherToolbarActive] ? [_weatherPrecipToolbarAlphaProfile set:weatherPrecipAlpha] : [_weatherPrecipAlphaProfile set:weatherPrecipAlpha];
         [_weatherPrecipAlphaChangeObservable notifyEventWithKey:@(WEATHER_BAND_PRECIPITATION) andValue:@(self.weatherPrecipAlpha)];
     }
 }
@@ -1143,7 +1150,7 @@
 {
     @synchronized (_lock)
     {
-        return [[OAAppSettings sharedManager] isWeatherToolbarActive] ? [_contoursAlphaToolbarProfile get] : [_contoursAlphaProfile get];
+        return [self isWeatherToolbarActive] ? [_contoursAlphaToolbarProfile get] : [_contoursAlphaProfile get];
     }
 }
 
@@ -1151,7 +1158,7 @@
 {
     @synchronized(_lock)
     {
-        [[OAAppSettings sharedManager] isWeatherToolbarActive] ? [_contoursAlphaToolbarProfile set:contoursAlpha] : [_contoursAlphaProfile set:contoursAlpha];
+        [self isWeatherToolbarActive] ? [_contoursAlphaToolbarProfile set:contoursAlpha] : [_contoursAlphaProfile set:contoursAlpha];
         [_contoursAlphaChangeObservable notifyEventWithKey:self andValue:@(self.overlayAlpha)];
     }
 }

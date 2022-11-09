@@ -10,9 +10,12 @@
 #import "OABaseWidgetView.h"
 #import "OAFoldersCollectionView.h"
 
+@class OAObservable;
+
 @interface OAWeatherToolbar : OABaseWidgetView
 
 @property (nonatomic) BOOL topControlsVisibleInLandscape;
+@property (nonatomic) BOOL needsSettingsForToolbar;
 
 - (void)resetHandlersData;
 - (void)reloadCollectionsView;

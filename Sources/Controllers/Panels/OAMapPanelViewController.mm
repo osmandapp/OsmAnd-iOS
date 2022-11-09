@@ -200,7 +200,8 @@ typedef enum
     _routingHelper = [OARoutingHelper sharedInstance];
     _mapViewTrackingUtilities = [OAMapViewTrackingUtilities instance];
     _mapWidgetRegistry = [[OAMapWidgetRegistry alloc] init];
-    
+    _weatherToolbarStateChangeObservable = [[OAObservable alloc] init];
+
     _addonsSwitchObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                       withHandler:@selector(onAddonsSwitch:withKey:andValue:)
                                                        andObserve:_app.addonsSwitchObservable];

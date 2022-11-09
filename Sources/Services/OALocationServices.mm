@@ -782,7 +782,7 @@
 
 + (void) computeDistanceAndBearing:(double)lat1 lon1:(double)lon1 lat2:(double)lat2 lon2:(double)lon2 distance:(double *)distance initialBearing:(double *)initialBearing /*finalBearing:(double *)finalBearing*/
 {
-    // Based on http://www.ngs.noaa.gov/PUBS_LIB/inverse.pdf
+    // Based on https://www.ngs.noaa.gov/PUBS_LIB/inverse.pdf
     // using the "Inverse Formula" (section 4)
 
     int MAXITERS = 20;

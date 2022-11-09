@@ -1894,7 +1894,7 @@
 
 "product_title_srtm" = "Contour lines";
 "product_desc_srtm" = "Visual assessment of the shape of the land surface";
-"product_desc_ext_srtm" = "Terrain information, such as contour lines, hillshades and slopes, helps you visually assess the shape of the land surface, considering curvature, extremes, steepness, points of equal height, and more. Topographic information on a map can be represented by slope shading, contour lines for the uphill and downhill, and the colour of the slope angle deviation from flat. Data from SRTM and ASTER. \n\nHow to - http://osmand.net/docs/user/plugins/contour-lines";
+"product_desc_ext_srtm" = "Terrain information, such as contour lines, hillshades and slopes, helps you visually assess the shape of the land surface, considering curvature, extremes, steepness, points of equal height, and more. Topographic information on a map can be represented by slope shading, contour lines for the uphill and downhill, and the colour of the slope angle deviation from flat. Data from SRTM and ASTER. \n\nHow to - https://osmand.net/docs/user/plugins/contour-lines";
 
 "product_title_wikivoyage" = "Travel Guides";
 "product_desc_wikivoyage" = "The free worldwide travel guide anyone can edit.";

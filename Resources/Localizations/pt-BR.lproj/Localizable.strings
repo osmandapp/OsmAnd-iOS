@@ -911,7 +911,7 @@
 "product_desc_ext_wiki" = "Ter a Wikipédia offline em sua viagem ajuda você a aprender mais sobre os lugares que visita. Está disponível offline e mostra artigos da Wikipédia em relação aos pontos de interesse diretamente no mapa. Não se esqueça de baixar os mapas da Wikipédia para a região escolhida.";
 "product_title_srtm" = "Curvas de nível";
 "product_desc_srtm" = "Avaliação visual da forma da superfície terrestre";
-"product_desc_ext_srtm" = "As informações do terreno, como curvas de nível, sombras e declives, ajudam a avaliar visualmente a forma da superfície do terreno, considerando curvatura, extremos, inclinação, pontos de igual altura e muito mais. As informações topográficas em um mapa podem ser representadas pelo sombreamento do declive, linhas de contorno para a subida e descida e a cor do desvio do ângulo de inclinação do plano. Dados do SRTM e ASTER.\n\nComo funciona - http://osmand.net/docs/user/plugins/contour-lines";
+"product_desc_ext_srtm" = "As informações do terreno, como curvas de nível, sombras e declives, ajudam a avaliar visualmente a forma da superfície do terreno, considerando curvatura, extremos, inclinação, pontos de igual altura e muito mais. As informações topográficas em um mapa podem ser representadas pelo sombreamento do declive, linhas de contorno para a subida e descida e a cor do desvio do ângulo de inclinação do plano. Dados do SRTM e ASTER.\n\nComo funciona - https://osmand.net/docs/user/plugins/contour-lines";
 "product_title_sea_depth_contours" = "Batimetria náutica";
 "product_desc_sea_depth_contours" = "Curvas de nível e balizas marítimas";
 "enter_description" = "Insira a descrição";

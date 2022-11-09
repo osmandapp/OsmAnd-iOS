@@ -1701,7 +1701,7 @@
 "product_title_sea_depth_contours" = "Contururi nautice de adâncime";
 "product_desc_ext_wikivoyage" = "Ghiduri către cele mai interesante locuri de pe planetă, în interiorul OsmAnd, fără conexiune la internet.";
 "product_desc_wikivoyage" = "Ghidul de călătorie gratuit la nivel mondial pe care oricine îl poate edita.";
-"product_desc_ext_srtm" = "Informațiile privind terenul, cum ar fi curbele de nivel, pantele și pantele, vă ajută să evaluați vizual forma suprafeței terenului, luând în considerare curbura, extremele, abruptul, punctele de înălțime egală și multe altele. Informațiile topografice de pe o hartă pot fi reprezentate prin umbrirea pantei, curbele de nivel pentru urcare și coborâre, precum și prin culoarea abaterii unghiului de pantă față de plat. Date din SRTM și ASTER. \n\nCum se utilizează - http://osmand.net/docs/user/plugins/contour-lines";
+"product_desc_ext_srtm" = "Informațiile privind terenul, cum ar fi curbele de nivel, pantele și pantele, vă ajută să evaluați vizual forma suprafeței terenului, luând în considerare curbura, extremele, abruptul, punctele de înălțime egală și multe altele. Informațiile topografice de pe o hartă pot fi reprezentate prin umbrirea pantei, curbele de nivel pentru urcare și coborâre, precum și prin culoarea abaterii unghiului de pantă față de plat. Date din SRTM și ASTER. \n\nCum se utilizează - https://osmand.net/docs/user/plugins/contour-lines";
 "product_desc_srtm" = "Evaluarea vizuală a formei suprafeței terenului";
 "preferred_languages" = "Limbi preferate";
 "available_languages" = "Limbi disponibile";

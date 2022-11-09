@@ -381,7 +381,7 @@
                                                          QString::fromNSString(NSTemporaryDirectory()),
                                                          QString::fromNSString(_cachePath),
                                                          QString::fromNSString([[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"]),
-                                                         QString::fromNSString(@"http://download.osmand.net"),
+                                                         QString::fromNSString(@"https://download.osmand.net"),
                                                          QString::fromNSString([self generateIndexesUrl]),
                                                          _webClient));
 
@@ -985,7 +985,7 @@
                                                              QString::fromNSString(NSTemporaryDirectory()),
                                                              QString::fromNSString(_cachePath),
                                                              QString::fromNSString([[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"]),
-                                                             QString::fromNSString(@"http://download.osmand.net"),
+                                                             QString::fromNSString(@"https://download.osmand.net"),
                                                              QString::fromNSString([self generateIndexesUrl]),
                                                              _webClient));
     }

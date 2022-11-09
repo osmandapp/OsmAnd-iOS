@@ -2548,3 +2548,5 @@
 "compass_visible_in_rotated_mode" = "Виден, если карта повернута";
 "shared_string_data" = "Данные";
 "shared_string_undefined" = "Неопределённо";
+"map_widget_rendering_fps" = "FPS отрисовки карты";
+"weather_offline_forecast" = "Офлайн-прогноз";

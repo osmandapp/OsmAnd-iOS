@@ -2721,3 +2721,7 @@
 "error_contact_support" = "Se o problema persistir, contacte o nosso apoio ao cliente.";
 "track_has_no_needed_data" = "O trilho não tem os respetivos dados.";
 "select_another_colorization" = "Selecione outro tipo de coloração.";
+"ltr_or_rtl_combine_via_slash" = "%@/%@";
+"mountain_bike" = "Bicicleta de montanha";
+"rendering_attr_showMtbScaleIMBATrails_name" = "Trilhos IMBA";
+"rendering_value_showMtbScaleIMBATrails_description" = "International Mountain Bicycling Association";

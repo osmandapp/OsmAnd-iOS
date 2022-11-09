@@ -2426,3 +2426,5 @@
 
 // Route planning
 "plan_route" = "Планаванне маршруту";
+"weather_offline_forecast" = "Пазасеткавы прагноз";
+"measurement_units" = "Адзінкі вымярэння";

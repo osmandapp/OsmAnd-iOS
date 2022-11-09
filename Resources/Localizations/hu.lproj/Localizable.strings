@@ -1991,7 +1991,7 @@
 "poi_categories" = "POI kategóriák";
 "default_color_descr" = "Ez a szín lesz használva a csoporthoz hozzáadott új kedvenceknél.";
 "map_settings_install_more" = "Telepítsen többet...";
-"map_settings_weather_cloud" = "Felhők";
+"map_settings_weather_cloud" = "Felhőzet";
 "map_settings_weather_precip" = "Csapadék";
 "navigate_point_format_UTM" = "UTM";
 "utm_description" = "Felhívjuk figyelmét, hogy az OsmAnd az UTM Standard formátumot használja, amely hasonló, de nem azonos az UTM NATO formátummal.";
@@ -2150,3 +2150,5 @@
 "shared_string_updates_frequency" = "Frissítés gyakorisága";
 "gpx_import_already_exists_short" = "A megadott útvonalfájl már létezik a listában.";
 "shared_string_unavailable" = "Nem elérhető";
+"measurement_units" = "Mértékegységek";
+"weather_offline_forecast" = "Offline időjárási előrejelzés";

@@ -2737,3 +2737,4 @@
 "rendering_value_showMtbScaleIMBATrails_description" = "International Mountain Bicycling Association";
 "mountain_bike" = "Mountainbike";
 "rendering_attr_showMtbScaleIMBATrails_name" = "IMBA-Trails";
+"map_settings_show_map_symbols" = "Karten-Symbole anzeigen";

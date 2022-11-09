@@ -2733,3 +2733,4 @@
 "rendering_attr_showMtbScaleIMBATrails_name" = "Маршрути IMBA";
 "rendering_value_showMtbScaleIMBATrails_description" = "Міжнародна асоціація гірського велоспорту";
 "mountain_bike" = "Гірський велосипед";
+"map_settings_show_map_symbols" = "Показати символи мапи";

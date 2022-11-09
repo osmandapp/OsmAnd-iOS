@@ -1271,7 +1271,7 @@
 "gpx_avg_altitude" = "Altitud media";
 "region_nautical" = "Mapas náuticos";
 "gpx_ascent" = "Ascenso";
-"gpx_descent" = "Bajada";
+"gpx_descent" = "Descendente";
 "res_elliptic_mercator" = "Mercator elíptica";
 "res_url" = "URL";
 "rendering_attr_hmRendered_name" = "Mostrar más detalle del mapa";

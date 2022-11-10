@@ -476,7 +476,7 @@
 
         [_mapHudViewController showBottomControls:[OAUtilities isLandscape] ? 0. : _weatherToolbar.frame.size.height - [OAUtilities getBottomMargin]
                                          animated:YES];
-        [[OARootViewController instance].mapPanel setTopControlsVisible:YES];
+        [mapPanel setTopControlsVisible:YES];
         [_mapHudViewController.quickActionController updateViewVisibility];
         [self recreateControls];
 

@@ -43,6 +43,7 @@
 #import "OATableViewCustomHeaderView.h"
 #import "OASizes.h"
 #import "OAResourcesUIHelper.h"
+#import "OASyncBackupTask.h"
 
 typedef NS_ENUM(NSInteger, EOAItemStatusType)
 {
@@ -82,9 +83,19 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     _delegate = delegate;
 }
 
+- (void)setupNotificationListeners
+{
+    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(onBackupFinished:) name:kBackupSyncFinishedNotification object:nil];
+    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(onBackupProgressUpdate:) name:kBackupProgressUpdateNotification object:nil];
+    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(onBackupProgressItemFinished:) name:kBackupItemFinishedNotification object:nil];
+    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(onBackupItemProgress:) name:kBackupItemProgressNotification object:nil];
+    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(onBackupItemStarted:) name:kBackupItemStartedNotification object:nil];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self setupNotificationListeners];
     self.tableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
     self.tableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0.001, 0.001)];
     _settingsHelper = [OANetworkSettingsHelper sharedInstance];
@@ -101,8 +112,8 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [_settingsHelper updateExportListener:self];
-    [_settingsHelper updateImportListener:self];
+//    [_settingsHelper updateExportListener:self];
+//    [_settingsHelper updateImportListener:self];
     [_backupHelper.backupListeners addDeleteFilesListener:self];
     [_backupHelper addPrepareBackupListener:self];
 }
@@ -110,10 +121,15 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    [_settingsHelper updateExportListener:nil];
-    [_settingsHelper updateImportListener:nil];
+//    [_settingsHelper updateExportListener:nil];
+//    [_settingsHelper updateImportListener:nil];
     [_backupHelper.backupListeners removeDeleteFilesListener:self];
     [_backupHelper removePrepareBackupListener:self];
+}
+
+- (void)dealloc
+{
+    [NSNotificationCenter.defaultCenter removeObserver:self];
 }
 
 - (void)updateData
@@ -527,9 +543,10 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     });
 }
 
-- (void)onBackupExportFinished:(nonnull NSString *)error
+- (void)onBackupFinished:(NSNotification *)notification
 {
     dispatch_async(dispatch_get_main_queue(), ^{
+        NSString *error = notification.userInfo[@"error"];
         if (error != nil)
         {
             [OAUtilities showToast:nil
@@ -544,37 +561,34 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     });
 }
 
-- (void)onBackupExportItemFinished:(nonnull NSString *)type fileName:(nonnull NSString *)fileName
+- (void)onBackupProgressItemFinished:(NSNotification *)notification
 {
-    [self updateCellProgress:fileName type:type itemProgressType:EOAItemStatusFinishedType value:100];
+    [self updateCellProgress:notification.userInfo[@"name"] type:notification.userInfo[@"type"] itemProgressType:EOAItemStatusFinishedType value:100];
 }
 
-- (void)onBackupExportItemProgress:(nonnull NSString *)type fileName:(nonnull NSString *)fileName value:(NSInteger)value
+- (void)onBackupItemProgress:(NSNotification *)notification
 {
-    [self updateCellProgress:fileName type:type itemProgressType:EOAItemStatusInProgressType value:value];
+    NSDictionary *info = notification.userInfo;
+    [self updateCellProgress:info[@"name"] type:info[@"type"] itemProgressType:EOAItemStatusInProgressType value:[info[@"value"] integerValue]];
 }
 
-- (void)onBackupExportItemStarted:(nonnull NSString *)type fileName:(nonnull NSString *)fileName work:(NSInteger)work
+- (void)onBackupItemStarted:(NSNotification *)notification
 {
-    [self updateCellProgress:fileName type:type itemProgressType:EOAItemStatusStartedType value:0];
+    NSDictionary *info = notification.userInfo;
+    [self updateCellProgress:info[@"name"] type:info[@"type"] itemProgressType:EOAItemStatusStartedType value:0];
 }
 
-- (void)onBackupExportProgressUpdate:(NSInteger)value
+- (void)onBackupProgressUpdate:(NSNotification *)notification
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        OAExportBackupTask *exportTask = [_settingsHelper getExportTask:kBackupItemsKey];
-        if (exportTask)
+        float progress = [notification.userInfo[@"progress"] floatValue];
+        if (_lastBackupIndexPath)
         {
-            if (_lastBackupIndexPath)
-            {
-                float progress = (float) exportTask.generalProgress / exportTask.maxProgress;
-                progress = progress > 1 ? 1 : progress;
-                OATableRowData *progressCell = [_data itemForIndexPath:_lastBackupIndexPath];
-                [progressCell setTitle:[OALocalizedString(@"osm_edit_uploading") stringByAppendingString:[NSString stringWithFormat:@"%i%%", (int) (progress * 100)]]];
-                [progressCell setObj:@(progress) forKey:@"progress"];
-                [self.tableView reloadRowsAtIndexPaths:@[_lastBackupIndexPath]
-                                      withRowAnimation:UITableViewRowAnimationNone];
-            }
+            OATableRowData *progressCell = [_data itemForIndexPath:_lastBackupIndexPath];
+            [progressCell setTitle:[OALocalizedString(@"osm_edit_uploading") stringByAppendingString:[NSString stringWithFormat:@"%i%%", (int) (progress * 100)]]];
+            [progressCell setObj:@(progress) forKey:@"progress"];
+            [self.tableView reloadRowsAtIndexPaths:@[_lastBackupIndexPath]
+                                  withRowAnimation:UITableViewRowAnimationNone];
         }
     });
 }
@@ -595,36 +609,6 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
 
 - (void)onFilesDeleteStarted:(NSArray<OARemoteFile *> *)files
 {
-}
-
-// MARK: OAImportListener
-
-- (void)onImportFinished:(BOOL)succeed needRestart:(BOOL)needRestart items:(NSArray<OASettingsItem *> *)items
-{
-    // TODO: implement
-//    for (SettingsItem settingsItem : settingsItems) {
-//        String fileName = BackupHelper.getItemFileName(settingsItem);
-//        Object item = getBackupItem(settingsItem.getType().name(), fileName);
-//        if (item != null) {
-//            notifyItemChanged(items.indexOf(item));
-//        }
-//    }
-    [_backupHelper prepareBackup];
-}
-
-- (void)onImportItemFinished:(NSString *)type fileName:(NSString *)fileName
-{
-    [self updateCellProgress:fileName type:type itemProgressType:EOAItemStatusFinishedType value:100];
-}
-
-- (void)onImportItemProgress:(NSString *)type fileName:(NSString *)fileName value:(int)value
-{
-    [self updateCellProgress:fileName type:type itemProgressType:EOAItemStatusInProgressType value:value];
-}
-
-- (void)onImportItemStarted:(NSString *)type fileName:(NSString *)fileName work:(int)work
-{
-    [self updateCellProgress:fileName type:type itemProgressType:EOAItemStatusStartedType value:0];
 }
 
 // MARK: OAOnPrepareBackupListener

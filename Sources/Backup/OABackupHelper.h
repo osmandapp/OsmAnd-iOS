@@ -113,6 +113,8 @@
 
 - (BOOL) isObfMapExistsOnServer:(NSString *)name;
 
+- (NSInteger) calculateFileSize:(OARemoteFile *)remoteFile;
+
 + (BOOL) isTokenValid:(NSString *)token;
 
 + (BOOL) applyItem:(OASettingsItem *)item type:(NSString *)type name:(NSString *)name;

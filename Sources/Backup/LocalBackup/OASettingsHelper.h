@@ -34,6 +34,7 @@
 
 @protocol OAImportListener <NSObject>
 
+- (void) onImportProgressUpdate:(NSInteger)value uploadedKb:(NSInteger)uploadedKb;
 - (void) onImportItemStarted:(NSString *)type fileName:(NSString *)fileName work:(int)work;
 - (void) onImportItemProgress:(NSString *)type fileName:(NSString *)fileName value:(int)value;
 - (void) onImportItemFinished:(NSString *)type fileName:(NSString *)fileName;

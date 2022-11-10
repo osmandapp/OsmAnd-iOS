@@ -2066,6 +2066,7 @@
 "restore_purchases" = "Restore purchases";
 "restore_backup_descr" = "Restore data on the device unsing online backups";
 "restore_data" = "Restore data";
+"syncing_progress" = "Syncing...";
 
 "no_statistics" = "No statistics";
 

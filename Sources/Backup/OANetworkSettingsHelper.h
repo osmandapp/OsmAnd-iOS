@@ -12,7 +12,7 @@
 #define kRestoreItemsKey @"restore_items_key"
 #define kPrepareBackupKey @"prepare_backup_key"
 
-@class OASettingsItem, OARemoteFile, OAImportBackupTask, OAExportBackupTask;
+@class OASettingsItem, OARemoteFile, OAImportBackupTask, OAExportBackupTask, OASyncBackupTask;
 
 @protocol OABackupExportListener <NSObject>
 
@@ -36,6 +36,7 @@
 
 @property (nonatomic, readonly) NSMutableDictionary<NSString *, OAImportBackupTask *> *importAsyncTasks;
 @property (nonatomic, readonly) NSMutableDictionary<NSString *, OAExportBackupTask *> *exportAsyncTasks;
+@property (nonatomic) OASyncBackupTask *syncBackupTask;
 
 + (OANetworkSettingsHelper *) sharedInstance;
 

@@ -31,6 +31,7 @@
 #import "OAChoosePlanHelper.h"
 #import "OAOsmAndFormatter.h"
 #import "OABackupError.h"
+#import "OASyncBackupTask.h"
 #import "OASettingsBackupViewController.h"
 #import "OAExportSettingsType.h"
 #import "OABaseBackupTypesViewController.h"
@@ -89,9 +90,17 @@
     return self;
 }
 
+- (void)setupNotificationListeners
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onBackupFinished:) name:kBackupSyncFinishedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onBackupStarted) name:kBackupSyncStartedNotification object:nil];
+    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(onBackupProgressUpdate:) name:kBackupProgressUpdateNotification object:nil];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self setupNotificationListeners];
     [OAIAPHelper.sharedInstance checkBackupPurchase];
     _settingsHelper = OANetworkSettingsHelper.sharedInstance;
     _backupHelper = OABackupHelper.sharedInstance;
@@ -99,8 +108,8 @@
     [self.tblView.refreshControl addTarget:self action:@selector(onRefresh) forControlEvents:UIControlEventValueChanged];
     if (!_settingsHelper.isBackupExporting)
     {
-        [_settingsHelper updateExportListener:self];
-        [_settingsHelper updateImportListener:self];
+//        [_settingsHelper updateExportListener:self];
+//        [_settingsHelper updateImportListener:self];
         [_backupHelper addPrepareBackupListener:self];
         [_backupHelper prepareBackup];
     }
@@ -120,17 +129,22 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [_settingsHelper updateExportListener:self];
-    [_settingsHelper updateImportListener:self];
+//    [_settingsHelper updateExportListener:self];
+//    [_settingsHelper updateImportListener:self];
     [_backupHelper addPrepareBackupListener:self];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    [_settingsHelper updateExportListener:nil];
-    [_settingsHelper updateImportListener:nil];
+//    [_settingsHelper updateExportListener:nil];
+//    [_settingsHelper updateImportListener:nil];
     [_backupHelper removePrepareBackupListener:self];
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)applyLocalization
@@ -236,8 +250,8 @@
         backupRows.headerText = OALocalizedString(@"cloud_backup");
         [_data addSection:backupRows];
 
-        OAExportBackupTask *exportTask = [_settingsHelper getExportTask:kBackupItemsKey];
-        if (exportTask)
+        OASyncBackupTask *syncTask = _settingsHelper.syncBackupTask;
+        if (syncTask)
         {
             _backupProgressCell = [self getProgressBarCell];
             NSDictionary *backupProgressCell = @{
@@ -310,7 +324,7 @@
                 };
                 [backupRows addRowFromDictionary:cancellCell];
             }
-            else if (_status == OABackupStatus.MAKE_BACKUP)
+            else if (_status == OABackupStatus.MAKE_BACKUP || _status == OABackupStatus.CONFLICTS)
             {
                 NSDictionary *backupNowCell = @{
                     kCellTypeKey: OAButtonRightIconCell.getCellIdentifier,
@@ -320,16 +334,16 @@
                 };
                 [backupRows addRowFromDictionary:backupNowCell];
             }
-            else if (_status == OABackupStatus.CONFLICTS)
-            {
-                NSDictionary *conflictsCell = @{
-                    kCellTypeKey: OAValueTableViewCell.getCellIdentifier,
-                    kCellKeyKey: @"viewConflictsCell",
-                    kCellTitleKey: OALocalizedString(@"cloud_view_conflicts"),
-                    @"value": @(_info.filteredFilesToMerge.count)
-                };
-                [backupRows addRowFromDictionary:conflictsCell];
-            }
+//            else if (_status == OABackupStatus.CONFLICTS)
+//            {
+//                NSDictionary *conflictsCell = @{
+//                    kCellTypeKey: OAValueTableViewCell.getCellIdentifier,
+//                    kCellKeyKey: @"viewConflictsCell",
+//                    kCellTitleKey: OALocalizedString(@"cloud_view_conflicts"),
+//                    @"value": @(_info.filteredFilesToMerge.count)
+//                };
+//                [backupRows addRowFromDictionary:conflictsCell];
+//            }
             else if (_status == OABackupStatus.NO_INTERNET_CONNECTION)
             {
                 NSDictionary *retryCell = @{
@@ -382,7 +396,7 @@
     OATitleIconProgressbarCell *resultCell = (OATitleIconProgressbarCell *)[nib objectAtIndex:0];
     [resultCell.progressBar setProgress:0.0 animated:NO];
     [resultCell.progressBar setProgressTintColor:UIColorFromRGB(color_primary_purple)];
-    resultCell.textView.text = [OALocalizedString(@"osm_edit_uploading") stringByAppendingString:[NSString stringWithFormat:@"%i%%", 0]];
+    resultCell.textView.text = [OALocalizedString(@"syncing_progress") stringByAppendingString:[NSString stringWithFormat:@"%i%%", 0]];
     resultCell.imgView.image = [UIImage templateImageNamed:@"ic_custom_cloud_upload"];
     resultCell.imgView.tintColor = UIColorFromRGB(color_primary_purple);
     resultCell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -429,19 +443,8 @@
 
 - (void)onSetUpBackupButtonPressed
 {
-    @try
-    {
-        NSArray<OASettingsItem *> *items = _info.itemsToUpload;
-        if (items.count > 0 || _info.filteredFilesToDelete.count > 0)
-        {
-            [_settingsHelper exportSettings:kBackupItemsKey items:items itemsToDelete:_info.itemsToDelete listener:self];
-            [self refreshContent];
-        }
-    }
-    @catch (NSException *e)
-    {
-        NSLog(@"Backup generation error: %@", e.reason);
-    }
+    OASyncBackupTask *syncTask = [[OASyncBackupTask alloc] init];
+    [syncTask execute];
 }
 
 - (void) onViewConflictsPressed
@@ -735,8 +738,9 @@
 
 // MARK: OABackupExportListener
 
-- (void)onBackupExportFinished:(nonnull NSString *)error
+- (void)onBackupFinished:(NSNotification *)notification
 {
+    NSString *error = notification.userInfo[@"error"];
     if (error != nil)
     {
         [self refreshContent];
@@ -746,6 +750,25 @@
     {
         [_backupHelper prepareBackup];
     }
+}
+
+- (void)onBackupProgressUpdate:(NSNotification *)notification
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        float value = [notification.userInfo[@"progress"] floatValue];
+        if (_backupProgressCell)
+        {
+            _backupProgressCell.progressBar.progress = value;
+            _backupProgressCell.textView.text = [OALocalizedString(@"syncing_progress") stringByAppendingString:[NSString stringWithFormat:@"%i%%", (int) (value * 100)]];
+        }
+    });
+}
+
+- (void)onBackupStarted
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self refreshContent];
+    });
 }
 
 - (void)onBackupExportItemFinished:(nonnull NSString *)type fileName:(nonnull NSString *)fileName
@@ -761,28 +784,6 @@
 - (void)onBackupExportItemStarted:(nonnull NSString *)type fileName:(nonnull NSString *)fileName work:(NSInteger)work
 {
     
-}
-
-- (void)onBackupExportProgressUpdate:(NSInteger)value
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        OAExportBackupTask *exportTask = [_settingsHelper getExportTask:kBackupItemsKey];
-        if (_backupProgressCell && exportTask)
-        {
-            float progress = (float) exportTask.generalProgress / exportTask.maxProgress;
-            progress = progress > 1 ? 1 : progress;
-            OAExportBackupTask *exportTask = [_settingsHelper getExportTask:kBackupItemsKey];
-            _backupProgressCell.progressBar.progress = (float) exportTask.generalProgress / exportTask.maxProgress;
-            _backupProgressCell.textView.text = [OALocalizedString(@"osm_edit_uploading") stringByAppendingString:[NSString stringWithFormat:@"%i%%", (int) (progress * 100)]];
-        }
-    });
-}
-
-- (void)onBackupExportStarted
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self refreshContent];
-    });
 }
 
 // MARK: OAImportListener

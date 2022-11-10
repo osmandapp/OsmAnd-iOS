@@ -19,6 +19,7 @@
 #import "OABackupDbHelper.h"
 #import "OATableRowData.h"
 #import "OAOsmAndFormatter.h"
+#import "OASyncBackupTask.h"
 #import "OAColors.h"
 #import "Localization.h"
 
@@ -171,21 +172,8 @@
 
 - (IBAction)rightButtonPressed:(UIButton *)sender
 {
-    @try
-    {
-        NSArray<OASettingsItem *> *items = _backup.backupInfo.itemsToUpload;
-        if (items.count > 0 || _backup.backupInfo.filteredFilesToDelete.count > 0)
-        {
-            [_settingsHelper exportSettings:kBackupItemsKey
-                                      items:items
-                              itemsToDelete:_backup.backupInfo.itemsToDelete
-                                   listener:self.segmentControl.selectedSegmentIndex == 0 ? _allTableViewController : _conflictsTableViewController];
-        }
-    }
-    @catch (NSException *e)
-    {
-        NSLog(@"Backup generation error: %@", e.reason);
-    }
+    OASyncBackupTask *syncTask = [[OASyncBackupTask alloc] init];
+    [syncTask execute];
 }
 
 #pragma mark - OAStatusBackupTableDelegate

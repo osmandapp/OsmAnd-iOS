@@ -19,6 +19,7 @@
 #import "OASettingsImporter.h"
 #import "OAGpxSettingsItem.h"
 #import "OAOperationLog.h"
+#import "OAAtomicInteger.h"
 
 @interface OAItemFileDownloadTask : NSOperation
 
@@ -133,12 +134,14 @@
 @implementation OABackupImporter
 {
     OABackupHelper *_backupHelper;
-    id<OANetworkImportProgressListener> _listener;
+    __weak id<OANetworkImportProgressListener> _listener;
     
     BOOL _cancelled;
     
     NSOperationQueue *_queue;
     
+    OAAtomicInteger *_dataProgress;
+    OAAtomicInteger *_itemsProgress;
     NSString *_tmpFilesDir;
 }
 
@@ -190,6 +193,8 @@
 
 - (void) importItems:(NSArray<OASettingsItem *> *)items forceReadData:(BOOL)forceReadData
 {
+    _dataProgress = [[OAAtomicInteger alloc] initWithInteger:0];
+    _itemsProgress = [[OAAtomicInteger alloc] initWithInteger:0];
     if (items.count == 0)
         @throw [NSException exceptionWithName:@"IllegalArgumentException" reason:@"No setting items" userInfo:nil];
 
@@ -626,13 +631,22 @@
 }
 
 - (void)onFileDownloadDone:(NSString *)type fileName:(NSString *)fileName error:(NSString *)error {
+    [_itemsProgress addAndGet:1];
     if (_listener)
+    {
         [_listener itemExportDone:type fileName:fileName];
+        [_listener updateGeneralProgress:_itemsProgress.get uploadedKb:_dataProgress.get];
+    }
 }
 
-- (void)onFileDownloadProgress:(NSString *)type fileName:(NSString *)fileName progress:(NSInteger)progress deltaWork:(NSInteger)deltaWork itemFileName:(NSString *)itemFileName {
+- (void)onFileDownloadProgress:(NSString *)type fileName:(NSString *)fileName progress:(NSInteger)progress deltaWork:(NSInteger)deltaWork itemFileName:(NSString *)itemFileName
+{
+    NSInteger p = [_dataProgress addAndGet:(int) deltaWork];
     if (_listener)
+    {
         [_listener updateItemProgress:type fileName:fileName progress:(int)progress];
+        [_listener updateGeneralProgress:_itemsProgress.get uploadedKb:p];
+    }
 }
 
 - (void)onFileDownloadStarted:(NSString *)type fileName:(NSString *)fileName work:(NSInteger)work itemFileName:(NSString *)itemFileName

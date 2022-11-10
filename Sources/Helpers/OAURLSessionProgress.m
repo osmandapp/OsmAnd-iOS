@@ -19,7 +19,7 @@
 -(void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didWriteData:(int64_t)bytesWritten totalBytesWritten:(int64_t)totalBytesWritten totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite
 {
    int progress = ((double)totalBytesWritten / (double)totalBytesExpectedToWrite) * 100;
-    _onProgress(progress, totalBytesWritten / 1024);
+    _onProgress(progress, bytesWritten / 1024);
 }
 
 - (void)URLSession:(NSURLSession *)session

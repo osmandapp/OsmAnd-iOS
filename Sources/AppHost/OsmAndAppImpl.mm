@@ -290,6 +290,16 @@
 
 - (BOOL) initialize
 {
+    [AFNetworkReachabilityManager.sharedManager startMonitoring];
+    [AFNetworkReachabilityManager.sharedManager setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
+        [NSNotificationCenter.defaultCenter postNotificationName:kReachabilityChangedNotification object:nil];
+
+        if (status == AFNetworkReachabilityStatusReachableViaWWAN || status == AFNetworkReachabilityStatusReachableViaWiFi)
+        {
+            [self checkAndDownloadOsmAndLiveUpdates];
+            [self checkAndDownloadWeatherForecastsUpdates];
+        }
+    }];
     NSError* versionError = nil;
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -623,10 +633,6 @@
     OAPOIFiltersHelper *helper = [OAPOIFiltersHelper sharedInstance];
     [helper reloadAllPoiFilters];
     [helper loadSelectedPoiFilters];
-    [AFNetworkReachabilityManager.sharedManager startMonitoring];
-    [AFNetworkReachabilityManager.sharedManager setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
-        [NSNotificationCenter.defaultCenter postNotificationName:kReachabilityChangedNotification object:nil];
-    }];
     [self askReview];
     
     return YES;

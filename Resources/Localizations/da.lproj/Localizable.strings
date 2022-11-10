@@ -1268,7 +1268,7 @@
 "hide_hillshade" = "Skjul reliefskygger";
 "toggle_contour_lines" = "Vis/skjul højdekurver";
 "toggle_hillshade" = "Vis/skjul terræn";
-"display_starting_at_zoom_level" = "Vis fra zoomniveau";
+"display_starting_at_zoom_level" = "Visning starter ved zoomniveau";
 "quick_action_contour_lines_descr" = "Tryk på genvejsknappen viser eller skjuler højdekurver på kortet.";
 "hide_contour_lines" = "Skjul højdekurver";
 "show_contour_lines" = "Vis højdekurver";

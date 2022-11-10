@@ -2726,3 +2726,4 @@
 "ltr_or_rtl_combine_via_slash" = "%@/%@";
 "mountain_bike" = "Mountainbike";
 "rendering_value_showMtbScaleIMBATrails_description" = "International Mountain Bicycling Association";
+"map_settings_show_map_symbols" = "Vis kortsymboler";

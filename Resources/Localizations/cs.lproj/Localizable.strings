@@ -2101,7 +2101,7 @@
 "navigate_point_easting" = "Souřadnice X";
 "navigate_point_northing" = "Souřadnice Y";
 "navigate_point_zone" = "Zóna";
-"product_desc_ext_openplacereviews" = "Vkládejte fotografie, recenze a odkazy související s veřejnými místy jako jsou restaurace, hotely, muzea a body zájmu, a to jako otevřená data na https://openplacereviews.org/data/.\n\nPřečtěte si více na http://openplacereviews.org";
+"product_desc_ext_openplacereviews" = "Vkládejte fotografie, recenze a odkazy související s veřejnými místy jako jsou restaurace, hotely, muzea a body zájmu, a to jako otevřená data na https://openplacereviews.org/data/.\n\nPřečtěte si více na https://openplacereviews.org";
 "product_title_openplacereviews" = "OpenPlaceReviews";
 "routes_color_by_type" = "Obarvit trasy podle…";
 "rendering_value_walkingRoutesOSMC_description" = "Obarví trasy podle jejich individuální lokální barvy (pokud je nastavena v OpenStreetMap) a turistického značení.";

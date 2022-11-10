@@ -42,6 +42,7 @@
 #import "OATableCollapsableRowData.h"
 #import "OATableRowData.h"
 #import "OATableSectionData.h"
+#import "OsmAndApp.h"
 
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
@@ -376,18 +377,6 @@
             }
         }
     }
-    OATableSectionData *restoreSection = [OATableSectionData sectionData];
-    restoreSection.headerText = OALocalizedString(@"restore");
-    restoreSection.footerText = OALocalizedString(@"restore_backup_descr");
-    [restoreSection addRowFromDictionary:@{
-        kCellTypeKey: OAButtonRightIconCell.getCellIdentifier,
-        kCellKeyKey: @"onRestoreButtonPressed",
-        kCellTitleKey: OALocalizedString(@"restore_data"),
-        kCellIconNameKey: @"ic_custom_restore"
-    }];
-    [_data addSection:restoreSection];
-
-    [_data addSection:[self getLocalBackupSectionDataObj]];
 }
 
 - (OATitleIconProgressbarCell *) getProgressBarCell
@@ -708,14 +697,6 @@
 //        OAStatusBackupViewController *statusBackupViewController = [[OAStatusBackupViewController alloc] initWithBackup:_backup status:_status];
 //        statusBackupViewController.delegate = self;
 //        [self.navigationController pushViewController:statusBackupViewController animated:YES];
-    }
-    else if ([itemId isEqualToString:@"backupIntoFile"])
-    {
-        [self onBackupIntoFilePressed];
-    }
-    else if ([itemId isEqualToString:@"restoreFromFile"])
-    {
-        [self onRestoreFromFilePressed];
     }
     else if ([itemId isEqualToString:@"viewConflictsCell"])
     {

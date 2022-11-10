@@ -172,7 +172,7 @@
     NSMutableDictionary *productDict = [NSMutableDictionary dictionary];
     productDict[@"type"] = [OATitleDescriptionBigIconCell getCellIdentifier];
     productDict[@"title"] = _isPromo ? OALocalizedString(@"promo_subscription") : OALocalizedString(@"product_title_pro");
-    UIImage *icon = [UIImage imageNamed:@"ic_custom_osmand_pro_logo_colored"];
+    UIImage *icon = [UIImage imageNamed:@"ic_custom_osmand_pro_logo_colored_big"];
     if (icon)
         productDict[@"icon"] = icon;
     
@@ -278,7 +278,7 @@
             cell.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             [cell showLeftIcon:NO];
-            [cell showRightIcon:NO];
+            [cell showRightIcon:YES];
         }
         if (cell)
         {

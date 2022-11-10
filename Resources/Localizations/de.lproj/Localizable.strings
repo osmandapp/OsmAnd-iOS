@@ -427,7 +427,7 @@
 "plugin_popup_nautical_desc" = "Bitte erst die Seekarten herunterladen.\nDann unter <b>Karte konfigurieren</b> > <b>Kartendarstellung</b> die Darstellung <b>Nautical</b> aktiviere";
 "plugin_popup_trip_planning_ask" = "Um eine Strecke planen zu können, bitte das <b>Streckenplaner-Plugin</b> aktivieren";
 "product_desc_ext_trip_planning" = "Das Entfernungsmesser & Routen-Planer Plugin ermöglicht es dir deine Routen auf der Karte zu planen, zu speichern, die gerade Strecke zwischen Punkten zu messen, uvm. Erstellt eine vorläufige Routenplanung anstatt einer genauen Route.";
-"product_desc_ext_srtm" = "Geländeinformationen wie Höhenlinien, Hangschattierungen und Steigungen helfen Ihnen, die Form der Landoberfläche unter Berücksichtigung von Krümmung, Extremen, Steilheit, Punkten gleicher Höhe und mehr visuell zu beurteilen. Topografische Informationen auf einer Karte können durch Hangschattierungen, Höhenlinien für die Steigung und das Gefälle sowie durch die Farbe der Abweichung des Neigungswinkels von der Ebene dargestellt werden. Die Daten stammen von SRTM und ASTER. \n\nAnleitungen - http://osmand.net/docs/user/plugins/contour-lines";
+"product_desc_ext_srtm" = "Geländeinformationen wie Höhenlinien, Hangschattierungen und Steigungen helfen Ihnen, die Form der Landoberfläche unter Berücksichtigung von Krümmung, Extremen, Steilheit, Punkten gleicher Höhe und mehr visuell zu beurteilen. Topografische Informationen auf einer Karte können durch Hangschattierungen, Höhenlinien für die Steigung und das Gefälle sowie durch die Farbe der Abweichung des Neigungswinkels von der Ebene dargestellt werden. Die Daten stammen von SRTM und ASTER. \n\nAnleitungen - https://osmand.net/docs/user/plugins/contour-lines";
 "device_memory" = "Gerätespeicher";
 "free_memory" = "Frei %@";
 "gpx_waypoint" = "Wegpunkt";
@@ -2327,7 +2327,7 @@
 "points_delete_multiple" = "%d Punkt(e) löschen\?";
 "context_menu_edit_descr" = "Beschreibung bearbeiten";
 "add_description" = "Beschreibung hinzufügen";
-"map_settings_weather_cloud" = "Wolken";
+"map_settings_weather_cloud" = "Bewölkung";
 "map_settings_weather_precip" = "Niederschlag";
 "map_settings_weather_pressure" = "Druck";
 "map_settings_weather_wind" = "Wind";
@@ -2729,3 +2729,12 @@
 "map_widget_rendering_fps" = "Kartendarstellung FPS";
 "ios_release_4_3" = "• Flüssige Animation für Standortwechsel während der Bewegung\n• CarPlay: Fahrspuren hinzugefügt, 2,5D-Ansicht, Soundprobleme behoben, während über Bluetooth verbunden\n• Einführung neuer Kaufpläne: \"OsmAnd Pro\"-Abonnements mit Zugriff auf alle Funktionen und \"Maps+\"-Kauf mit unbegrenzten Kartendownloads und kostenpflichtigem Plugin-Zugang.\n• Cloud-Backup und Offline-Wettervorhersage für OsmAnd Pro-Benutzer hinzugefügt\n• Neuer bequemer \"Kauf\" -Bildschirm mit der Liste aller Einkäufe\n• Vorteile für aktive OpenStreetMap.org Mitwirkende\n• Tracks können jetzt nach Höhe, Geschwindigkeit oder Neigung eingefärbt werden\n• Offline-Karten sind jetzt über die Dateien-App zugänglich\n• Favoriten: Generierung lokaler Backups nach jeder Änderung hinzugefügt, Backups, auf die über die Dateien-App zugegriffen werden kann\n• POI, die in Favoriten gespeichert werden, speichern und zeigen alle POI-Daten auch ohne Offline-Karte an\n• GPX fügt Unterstützung für Link-, CMT-, DESC-Tags und für benutzerdefinierte Erweiterungen hinzu\n• Modus für die Kompasstaste hinzugefügt\n• Problem mit dem UTM-Koordinatenformat behoben\n• Problem mit Zwischenpunkten in der Navigation behoben\n";
 "shared_string_download_update" = "Aktualisierung herunterladen";
+"track_has_no_needed_data" = "Dem Track fehlen die entsprechenden Daten.";
+"backup_error_failed_to_fetch_remote_items" = "Fehler beim Abrufen der Dateiliste vom Server.";
+"error_contact_support" = "Wenn das Problem weiterhin besteht, wenden Sie sich bitte an unser Support-Team.";
+"select_another_colorization" = "Bitte wählen Sie eine andere Einfärbung.";
+"ltr_or_rtl_combine_via_slash" = "%@/% @";
+"rendering_value_showMtbScaleIMBATrails_description" = "International Mountain Bicycling Association";
+"mountain_bike" = "Mountainbike";
+"rendering_attr_showMtbScaleIMBATrails_name" = "IMBA-Trails";
+"map_settings_show_map_symbols" = "Karten-Symbole anzeigen";

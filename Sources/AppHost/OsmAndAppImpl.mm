@@ -381,7 +381,7 @@
                                                          QString::fromNSString(NSTemporaryDirectory()),
                                                          QString::fromNSString(_cachePath),
                                                          QString::fromNSString([[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"]),
-                                                         QString::fromNSString(@"http://download.osmand.net"),
+                                                         QString::fromNSString(@"https://download.osmand.net"),
                                                          QString::fromNSString([self generateIndexesUrl]),
                                                          _webClient));
 
@@ -606,10 +606,12 @@
     [OAMapCreatorHelper sharedInstance];
     [OATerrainLayer sharedInstanceHillshade];
     [OATerrainLayer sharedInstanceSlope];
-    
-    [[OAIAPHelper sharedInstance] requestProductsWithCompletionHandler:^(BOOL success) {}];
     [OAPlugin initPlugins];
-    
+
+    OAIAPHelper *iapHelper = [OAIAPHelper sharedInstance];
+    [iapHelper resetTestPurchases];
+    [iapHelper requestProductsWithCompletionHandler:nil];
+
     [OAApplicationMode onApplicationStart];
     OAApplicationMode *initialAppMode = [settings.useLastApplicationModeByDefault get] ?
         [OAApplicationMode valueOfStringKey:[settings.lastUsedApplicationMode get] def:OAApplicationMode.DEFAULT] :
@@ -983,7 +985,7 @@
                                                              QString::fromNSString(NSTemporaryDirectory()),
                                                              QString::fromNSString(_cachePath),
                                                              QString::fromNSString([[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"]),
-                                                             QString::fromNSString(@"http://download.osmand.net"),
+                                                             QString::fromNSString(@"https://download.osmand.net"),
                                                              QString::fromNSString([self generateIndexesUrl]),
                                                              _webClient));
     }
@@ -1191,7 +1193,10 @@
     [targetPointsHelper removeAllWayPoints:NO clearBackup:NO];
     dispatch_async(dispatch_get_main_queue(), ^{
         OAApplicationMode *carPlayMode = settings.isCarPlayModeDefault ? OAApplicationMode.CAR : [OAAppSettings.sharedManager.carPlayMode get];
-        [settings setApplicationModePref:_carPlayActive ? carPlayMode : [settings.defaultApplicationMode get] markAsLastUsed:NO];
+        OAApplicationMode *defaultAppMode = [settings.useLastApplicationModeByDefault get] ?
+            [OAApplicationMode valueOfStringKey:[settings.lastUsedApplicationMode get] def:OAApplicationMode.DEFAULT] :
+            settings.defaultApplicationMode.get;
+        [settings setApplicationModePref:_carPlayActive ? carPlayMode : defaultAppMode markAsLastUsed:NO];
     });
 }
 

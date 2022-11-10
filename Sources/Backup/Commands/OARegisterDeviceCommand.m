@@ -81,7 +81,7 @@
                 [settings.backupNativeDeviceId set:resultJson[@"deviceid"]];
                 [settings.backupAccessToken set:resultJson[@"accesstoken"]];
                 [settings.backupAccessTokenUpdateTime set:resultJson[@"udpatetime"]];
-                
+
                 message = @"Device have been registered successfully";
                 status = STATUS_SUCCESS;
             }

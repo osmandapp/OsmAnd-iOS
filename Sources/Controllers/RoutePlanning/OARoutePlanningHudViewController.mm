@@ -895,7 +895,6 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (void)showSegmentRouteOptions
 {
-    [_mapPanel refreshMap];
     if (_editingContext.isApproximationNeeded)
     {
         [self enterApproximationMode];

@@ -182,7 +182,7 @@
 {
     [self dismissViewControllerAnimated:YES completion:^{
         if (self.accountDelegate)
-            [self.accountDelegate onAccountInformationUpdated];
+            [self.accountDelegate onAccountInformationUpdatedFromBenefits];
     }];
 }
 

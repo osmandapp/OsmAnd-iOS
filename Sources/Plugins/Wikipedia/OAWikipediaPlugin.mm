@@ -17,6 +17,7 @@
 #import "OASearchPhrase.h"
 #import "OASearchWord.h"
 #import "OAPOI.h"
+#import "OAIAPHelper.h"
 
 #define PLUGIN_ID kInAppId_Addon_Wiki
 
@@ -45,6 +46,11 @@
 {
     [super disable];
     [self toggleWikipediaPoi:NO];
+}
+
+- (BOOL)isEnabled
+{
+    return [super isEnabled] && [[OAIAPHelper sharedInstance].wiki isActive];
 }
 
 - (NSString *)getLogoResourceId

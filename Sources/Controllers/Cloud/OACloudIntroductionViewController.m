@@ -71,7 +71,7 @@
 
 - (void)generateData
 {
-    _data = @[ [self getLocalBackupSectionData] ];
+    _data = @[];
 }
 
 - (void)setUpTableHeaderView
@@ -147,14 +147,6 @@
 {
     NSDictionary *item = _data[indexPath.section][@"rows"][indexPath.row];
     NSString *itemId = item[@"name"];
-    if ([itemId isEqualToString:@"backupIntoFile"])
-    {
-        [self onBackupIntoFilePressed];
-    }
-    else if ([itemId isEqualToString:@"restoreFromFile"])
-    {
-        [self onRestoreFromFilePressed];
-    }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 

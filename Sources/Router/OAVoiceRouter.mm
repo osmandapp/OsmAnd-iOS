@@ -1031,7 +1031,7 @@ std::string preferredLanguage;
     if ([self isMute])
         return;
     
-    // Taken unaltered from https://freesound.org/people/Corsica_S/sounds/91926/ under license http://creativecommons.org/licenses/by/3.0/ :
+    // Taken unaltered from https://freesound.org/people/Corsica_S/sounds/91926/ under license https://creativecommons.org/licenses/by/3.0/ :
     NSString *soundPath = [[NSBundle mainBundle] pathForResource:@"ding" ofType:@"aiff"];
     if (soundPath)
     {

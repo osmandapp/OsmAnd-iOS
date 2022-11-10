@@ -164,7 +164,7 @@
 "general_settings_2" = "Powšitkowne nastajenja";
 "general_settings_descr" = "Configure display and common settings for the application";
 "routing_settings_descr" = "Specify options for navigation";
-"auto_zoom_none" = "No auto zoom";
+"auto_zoom_none" = "Žadyn awtozoom";
 "auto_zoom_close" = "To close-up";
 "auto_zoom_far" = "To mid-range";
 "auto_zoom_farthest" = "To long-range";
@@ -346,7 +346,7 @@
 "shared_string_no" = "Ně";
 "shared_string_yes" = "Haj";
 "shared_string_save" = "Składować";
-"shared_string_done" = "Done";
+"shared_string_done" = "Hotowo";
 "shared_string_clear_all" = "Wšě wotstronić";
 "shared_string_update" = "Aktualizowanje";
 "shared_string_install" = "Instalować";
@@ -1236,7 +1236,7 @@
 "subscribe_email_desc" = "Subscribe to our mailing list:<br/>• Get 3 extra maps to download<br/>• Hear about discounts first<br/>• Participate in promocodes <a href='https://osmand.net/giveaway'>giveaways</a>";
 "osm_live_subscribe_btn" = "Abonować";
 "shared_string_email_address" = "Mejlowa adresa";
-"osm_live_enter_email" = "Prošu zapodajće płaćiwu mejlkowu adresu";
+"osm_live_enter_email" = "Prošu zapodaj płaćiwu mejlowu adresu";
 "osm_live_enter_user_name" = "Please enter public name";
 "shared_string_unexpected_error" = "Njewočakowany zmylk";
 "osm_live_payment_desc" = "You can manage and cancel your subscriptions in your App Store account settings after purchase";
@@ -1580,3 +1580,9 @@
 "rendering_value_black_name" = "čorne";
 "select_group" = "Wubjer skupinu";
 "select_color" = "Wubjer barbu";
+"backup_error_user_is_already_registered" = "Tuta mejlowa adresa so za druhe konto wužiwa";
+"cloud_email_already_registered" = "Tuta mejlowa adresa je hižo zapisana.";
+"osmand_cloud_login_descr" = "Prošu zapodaj mejlowu adresu, z kotrejž sy so zapisał/a. Jónkrótne hesło za přichodny krok so tam sćele.";
+"cloud_email_not_registered" = "Tuta mejlowa adresa njeje přizjewjena za OsmAnd Cloud";
+"backup_error_user_is_not_registered" = "Žadyn zapisany wužiwar z tutej mejlowej adresu";
+"copy_address" = "Adresu kopěrować";

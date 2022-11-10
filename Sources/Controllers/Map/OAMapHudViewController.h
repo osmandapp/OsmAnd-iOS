@@ -10,6 +10,8 @@
 #import "OAMapModeHeaders.h"
 #import "OAHudButton.h"
 
+typedef void(^OAShowTopControlsCompletionBlock)();
+
 @class OAQuickActionHudViewController;
 @class OAToolbarViewController;
 @class OAMapRulerView;
@@ -89,6 +91,7 @@
 
 - (void) setTopControlsAlpha:(CGFloat)alpha;
 - (void) showTopControls:(BOOL)onlyMapSettingsAndSearch;
+- (void) setShowTopControlsCompletionBlock:(OAShowTopControlsCompletionBlock)completionBlock;
 - (void) hideTopControls;
 - (void) showBottomControls:(CGFloat)menuHeight animated:(BOOL)animated;
 - (void) hideBottomControls:(CGFloat)menuHeight animated:(BOOL)animated;

@@ -38,6 +38,7 @@
 #import "OACompassModeWidgetState.h"
 #import "OAQuickActionHudViewController.h"
 #import "OAMapLayers.h"
+#import "OAWeatherLayerSettingsViewController.h"
 
 @interface OATextState : NSObject
 
@@ -57,7 +58,7 @@
 @implementation OATextState
 @end
 
-@interface OAMapInfoController () <OAWidgetListener>
+@interface OAMapInfoController () <OAWidgetListener, OAWeatherLayerSettingsDelegate>
 
 @end
 
@@ -459,10 +460,13 @@
 {
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
     if (!mapPanel.hudViewController.weatherToolbar.needsSettingsForToolbar)
+    {
         mapPanel.mapViewController.mapLayers.weatherDate = [NSDate date];
+        [_weatherToolbar resetHandlersData];
+    }
+
     mapPanel.hudViewController.weatherToolbar.needsSettingsForToolbar = NO;
     [mapPanel.weatherToolbarStateChangeObservable notifyEvent];
-    [_weatherToolbar resetHandlersData];
 
     if (_weatherToolbar.hidden)
     {
@@ -492,7 +496,8 @@
 - (void)hideWeatherToolbar
 {
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-    if (!mapPanel.hudViewController.weatherToolbar.needsSettingsForToolbar)
+    BOOL needsSettingsForToolbar = mapPanel.hudViewController.weatherToolbar.needsSettingsForToolbar;
+    if (!needsSettingsForToolbar)
         mapPanel.mapViewController.mapLayers.weatherDate = [NSDate date];
     [mapPanel.weatherToolbarStateChangeObservable notifyEvent];
 
@@ -504,9 +509,19 @@
     }];
     [_mapHudViewController showBottomControls:0. animated:YES];
     [_mapHudViewController resetToDefaultRulerLayout];
-    [mapPanel setTopControlsVisible:YES];
     [_mapHudViewController.quickActionController updateViewVisibility];
     [self recreateControls];
+
+    if (needsSettingsForToolbar && _weatherToolbar.selectedLayerIndex != -1)
+    {
+        [_mapHudViewController setShowTopControlsCompletionBlock:^{
+            OAWeatherLayerSettingsViewController *weatherLayerSettingsViewController =
+            [[OAWeatherLayerSettingsViewController alloc] initWithLayerType:(EOAWeatherLayerType) _weatherToolbar.selectedLayerIndex];
+            weatherLayerSettingsViewController.delegate = self;
+            [mapPanel showScrollableHudViewController:weatherLayerSettingsViewController];
+        }];
+    }
+    [mapPanel setTopControlsVisible:YES];
 }
 
 - (CGFloat) getLeftBottomY
@@ -763,6 +778,16 @@
             [_mapWidgetRegistry updateInfo:_settings.applicationMode.get expanded:_expanded];
         });
     }
+}
+
+#pragma mark - OAWeatherLayerSettingsDelegate
+
+- (void)onDoneWeatherLayerSettings:(BOOL)show
+{
+    if (show)
+        [_mapHudViewController changeWeatherToolbarVisible];
+    else
+        [_mapHudViewController updateWeatherButtonVisibility];
 }
 
 @end

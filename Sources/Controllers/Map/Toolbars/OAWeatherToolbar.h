@@ -16,6 +16,7 @@
 
 @property (nonatomic) BOOL topControlsVisibleInLandscape;
 @property (nonatomic) BOOL needsSettingsForToolbar;
+@property (nonatomic, readonly) NSInteger selectedLayerIndex;
 
 - (void)resetHandlersData;
 - (void)reloadCollectionsView;

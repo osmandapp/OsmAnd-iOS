@@ -69,13 +69,15 @@
     OAAutoObserverProxy* _locationServicesUpdateFirstTimeObserver;
     OAAutoObserverProxy* _lastMapSourceChangeObserver;
     OAAutoObserverProxy* _applicaionModeObserver;
-    
+    OAAutoObserverProxy *_weatherSettingsChangeObserver;
+
     OAOverlayUnderlayView* _overlayUnderlayView;
     
     NSLayoutConstraint *_bottomRulerConstraint;
     NSLayoutConstraint *_leftRulerConstraint;
     
     BOOL _cachedLocationAvailableState;
+    OAShowTopControlsCompletionBlock _showTopControlsCompletionBlock;
 }
 
 - (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -137,6 +139,10 @@
     _applicaionModeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                         withHandler:@selector(onApplicationModeChanged:)
                                                          andObserve:[OsmAndApp instance].data.applicationModeChangedObservable];
+
+    _weatherSettingsChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                        withHandler:@selector(onWeatherSettingsChange:withKey:andValue:)
+                                                         andObserve:[OsmAndApp instance].data.weatherSettingsChangeObservable];
     
     _locationServicesStatusObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                         withHandler:@selector(onLocationServicesStatusChanged)
@@ -367,13 +373,23 @@
 - (void)changeWeatherToolbarVisible
 {
     _mapInfoController.weatherToolbarVisible = !_mapInfoController.weatherToolbarVisible;
-    [_weatherToolbar updateInfo];
+    [_app.data.weatherSettingsChangeObservable notifyEventWithKey:kWeatherSettingsChanging
+                                                         andValue:@(_mapInfoController.weatherToolbarVisible || _weatherToolbar.needsSettingsForToolbar)];
 }
 
 - (void)hideWeatherToolbarIfNeeded
 {
     if ([self shouldShowWeatherToolbar])
         [self changeWeatherToolbarVisible];
+}
+
+- (void)onWeatherSettingsChange:(id)observer withKey:(id)key andValue:(id)value
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSString *operation = (NSString *) key;
+        if ([operation isEqualToString:kWeatherSettingsChanged])
+            [_weatherToolbar updateInfo];
+    });
 }
 
 - (BOOL) shouldShowCompass:(float)azimuth
@@ -1213,8 +1229,18 @@
             self.topCoordinatesWidget.userInteractionEnabled = self.topCoordinatesWidget.alpha > 0.0;
         if (self.downloadMapWidget)
             self.downloadMapWidget.userInteractionEnabled = self.downloadMapWidget.alpha > 0.0;
-        
+
+        if (_showTopControlsCompletionBlock)
+        {
+            _showTopControlsCompletionBlock();
+            _showTopControlsCompletionBlock = nil;
+        }
     }];
+}
+
+- (void)setShowTopControlsCompletionBlock:(OAShowTopControlsCompletionBlock)completionBlock
+{
+    _showTopControlsCompletionBlock = completionBlock;
 }
 
 - (void) hideTopControls

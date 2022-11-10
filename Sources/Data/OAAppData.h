@@ -15,6 +15,11 @@
 #import "OARTargetPoint.h"
 #import "OAAppSettings.h"
 
+#define kWeatherSettingsChanging @"weather_settings_changing"
+#define kWeatherSettingsChanged @"weather_settings_changed"
+#define kWeatherSettingsReseting @"weather_settings_reseting"
+#define kWeatherSettingsReset @"weather_settings_reset"
+
 @class MutableOrderedDictionary, NSUnitCloud;
 
 @interface OAAppData : NSObject <NSCoding>
@@ -57,6 +62,8 @@
 @property (nonatomic) NSUnitLength *weatherPrecipUnit;
 @property (nonatomic) BOOL weatherPrecipUnitAuto;
 @property (nonatomic) double weatherPrecipAlpha;
+
+@property (readonly) OAObservable *weatherSettingsChangeObservable;
 
 @property (readonly) OAObservable* weatherChangeObservable;
 @property (readonly) OAObservable* weatherUseOfflineDataChangeObservable;

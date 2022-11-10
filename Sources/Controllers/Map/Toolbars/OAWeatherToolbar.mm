@@ -20,7 +20,7 @@
 #import "OAWeatherHelper.h"
 #import "OAWeatherPlugin.h"
 
-@interface OAWeatherToolbar () <OAWeatherToolbarDelegate, OAWeatherLayerSettingsDelegate>
+@interface OAWeatherToolbar () <OAWeatherToolbarDelegate>
 
 @property (weak, nonatomic) IBOutlet OAFoldersCollectionView *layersCollectionView;
 @property (weak, nonatomic) IBOutlet OAFoldersCollectionView *dateCollectionView;
@@ -93,7 +93,7 @@
     _layerChangeObservers = [NSMutableArray array];
     for (OAWeatherBand *band in [OAWeatherHelper sharedInstance].bands)
     {
-        [_layerChangeObservers addObject:[band createSwitchObserver:self handler:@selector(resetHandlersData)]];
+        [_layerChangeObservers addObject:[band createSwitchObserver:self handler:@selector(updateLayersHandlerData)]];
     }
     [self updateInfo];
 }
@@ -122,6 +122,15 @@
     });
 }
 
+- (void)updateLayersHandlerData
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [_layersHandler updateData];
+        [self updateData:[_layersHandler getData] type:EOAWeatherToolbarLayers index:-1];
+        [self.layersCollectionView reloadData];
+    });
+}
+
 - (void)handleLongPressOnLayer:(UILongPressGestureRecognizer *)gestureRecognizer
 {
     if (gestureRecognizer.state == UIGestureRecognizerStateBegan)
@@ -130,14 +139,11 @@
         NSIndexPath *indexPath = [self.layersCollectionView indexPathForItemAtPoint:point];
         if (indexPath)
         {
+            [self.layersCollectionView reloadData];
+            _selectedLayerIndex = indexPath.row;
             _needsSettingsForToolbar = YES;
             OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
             [mapPanel.hudViewController changeWeatherToolbarVisible];
-
-            OAWeatherLayerSettingsViewController *weatherLayerSettingsViewController =
-                    [[OAWeatherLayerSettingsViewController alloc] initWithLayerType:(EOAWeatherLayerType) indexPath.row];
-            weatherLayerSettingsViewController.delegate = self;
-            [mapPanel showScrollableHudViewController:weatherLayerSettingsViewController];
         }
     }
 }
@@ -170,6 +176,7 @@
     {
         if (visible)
         {
+            _selectedLayerIndex = -1;
             _isOpening = YES;
             if ([OAUtilities isLandscape])
                 self.topControlsVisibleInLandscape = [[OARootViewController instance].mapPanel isTopControlsVisible];
@@ -376,16 +383,6 @@
         [self.dateCollectionView reloadData];
         _previousSelectedDayIndex = index;
     }
-}
-
-#pragma mark - OAWeatherLayerSettingsDelegate
-
-- (void)onDoneWeatherLayerSettings:(BOOL)show
-{
-    if (show)
-        [[OARootViewController instance].mapPanel.hudViewController changeWeatherToolbarVisible];
-    else
-        [[OARootViewController instance].mapPanel.hudViewController updateWeatherButtonVisibility];
 }
 
 @end

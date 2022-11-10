@@ -81,6 +81,8 @@
     OAMapStyleSettings *_styleSettings;
     OAMapPanelViewController *_mapPanel;
     BOOL _backButtonPressed;
+
+    OAAutoObserverProxy *_weatherSettingsChangeObserver;
 }
 
 - (instancetype)initWithLayerType:(EOAWeatherLayerType)layerType
@@ -94,11 +96,16 @@
         _layerType = layerType;
         _weatherBand = [self getWeatherBand];
         _layerEnabled = [self isLayerEnabled];
+
+        _weatherSettingsChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                            withHandler:@selector(onWeatherSettingsChange:withKey:andValue:)
+                                                             andObserve:[OsmAndApp instance].data.weatherSettingsChangeObservable];
     }
     return self;
 }
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     
     [self applyLocalization];
@@ -134,7 +141,12 @@
     {
         _mapPanel.mapViewController.mapLayers.weatherDate = [NSDate date];
         _mapPanel.hudViewController.weatherToolbar.needsSettingsForToolbar = NO;
-        [_mapPanel.weatherToolbarStateChangeObservable notifyEvent];
+        [_app.data.weatherSettingsChangeObservable notifyEventWithKey:kWeatherSettingsReseting];
+    }
+    else if (_weatherSettingsChangeObserver)
+    {
+        [_weatherSettingsChangeObserver detach];
+        _weatherSettingsChangeObserver = nil;
     }
 }
 
@@ -391,6 +403,19 @@
         if (self.delegate)
             [self.delegate onDoneWeatherLayerSettings:NO];
     }];
+}
+
+- (void)onWeatherSettingsChange:(id)observer withKey:(id)key andValue:(id)value
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSString *operation = (NSString *) key;
+        if ([operation isEqualToString:kWeatherSettingsReset])
+        {
+            [_mapPanel.weatherToolbarStateChangeObservable notifyEvent];
+            [_weatherSettingsChangeObserver detach];
+            _weatherSettingsChangeObserver = nil;
+        }
+    });
 }
 
 - (void)onSwitchValueChanged:(UISwitch *)sender

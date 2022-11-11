@@ -53,8 +53,11 @@
     BOOL isWindSelected = _app.data.weatherWind;
     BOOL isCloudSelected = _app.data.weatherCloud;
     BOOL isPrecipitationSelected = _app.data.weatherPrecip;
-    BOOL isContourSelected = ([[_styleSettings getParameter:WEATHER_TEMP_CONTOUR_LINES_ATTR].value isEqualToString:@"true"]
-                              || [[_styleSettings getParameter:WEATHER_PRESSURE_CONTOURS_LINES_ATTR].value isEqualToString:@"true"]);
+    BOOL isContourSelected = [_styleSettings isWeatherContourLinesEnabled:WEATHER_TEMP_CONTOUR_LINES_ATTR]
+        || [_styleSettings isWeatherContourLinesEnabled:WEATHER_PRESSURE_CONTOURS_LINES_ATTR]
+        || [_styleSettings isWeatherContourLinesEnabled:WEATHER_CLOUD_CONTOURS_LINES_ATTR]
+        || [_styleSettings isWeatherContourLinesEnabled:WEATHER_WIND_CONTOURS_LINES_ATTR]
+        || [_styleSettings isWeatherContourLinesEnabled:WEATHER_PRECIPITATION_CONTOURS_LINES_ATTR];
 
     NSMutableDictionary *tempData = [NSMutableDictionary dictionaryWithDictionary:@{
         @"img": @"ic_custom_thermometer",
@@ -157,11 +160,13 @@
         }
         else if (index == kContoursIndex)
         {
-            BOOL selected = !([[_styleSettings getParameter:WEATHER_TEMP_CONTOUR_LINES_ATTR].value isEqualToString:@"true"]
-                              || [[_styleSettings getParameter:WEATHER_PRESSURE_CONTOURS_LINES_ATTR].value isEqualToString:@"true"]);
-            _data[kContoursIndex][@"selected"] = @(selected);
-            [OAMapStyleSettings weatherContoursParamChangedToValue:selected ? WEATHER_TEMP_CONTOUR_LINES_ATTR : WEATHER_NONE_CONTOURS_LINES_VALUE
-                                                     styleSettings:_styleSettings];
+            BOOL selected = [_styleSettings isWeatherContourLinesEnabled:WEATHER_TEMP_CONTOUR_LINES_ATTR]
+                || [_styleSettings isWeatherContourLinesEnabled:WEATHER_PRESSURE_CONTOURS_LINES_ATTR]
+                || [_styleSettings isWeatherContourLinesEnabled:WEATHER_CLOUD_CONTOURS_LINES_ATTR]
+                || [_styleSettings isWeatherContourLinesEnabled:WEATHER_WIND_CONTOURS_LINES_ATTR]
+                || [_styleSettings isWeatherContourLinesEnabled:WEATHER_PRECIPITATION_CONTOURS_LINES_ATTR];
+            _data[kContoursIndex][@"selected"] = @(!selected);
+            [_styleSettings setWeatherContourLinesEnabled:!selected weatherContourLinesAttr:!selected ? WEATHER_TEMP_CONTOUR_LINES_ATTR : WEATHER_NONE_CONTOURS_LINES_VALUE];
         }
     }
 

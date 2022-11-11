@@ -911,7 +911,7 @@
 "product_desc_ext_wiki" = "Aceder a artigos da Wikipédia na sua viagem ajuda-o a saber mais sobre os locais que visita. Está disponível para descarregamento, para poder vê-los desligado da Internet e mostra artigos da Wikipédia relacionados com os pontos de interesse diretamente no mapa. Não se esqueça de descarregar os mapas da Wikipédia para a região escolhida.";
 "product_title_srtm" = "Curvas de nível";
 "product_desc_srtm" = "Avaliação visual da forma da superfície do terreno";
-"product_desc_ext_srtm" = "Informações sobre o terreno, tais como curvas de nível, encostas e declives, ajudam a avaliar visualmente a forma da superfície do terreno, considerando a curvatura, extremos, declive, pontos de igual altura e muito mais. A informação topográfica num mapa pode ser representada por sombreamento da inclinação, linhas de contorno para a subida e descida e a cor do desvio do ângulo da inclinação em relação ao plano. Dados provenientes do SRTM e do ASTER. \n\nInstruções em http://osmand.net/docs/user/plugins/contour-lines";
+"product_desc_ext_srtm" = "Informações sobre o terreno, tais como curvas de nível, encostas e declives, ajudam a avaliar visualmente a forma da superfície do terreno, considerando a curvatura, extremos, declive, pontos de igual altura e muito mais. A informação topográfica num mapa pode ser representada por sombreamento da inclinação, linhas de contorno para a subida e descida e a cor do desvio do ângulo da inclinação em relação ao plano. Dados provenientes do SRTM e do ASTER. \n\nInstruções em https://osmand.net/docs/user/plugins/contour-lines";
 "product_title_sea_depth_contours" = "Curvas de profundidades náuticas";
 "product_desc_sea_depth_contours" = "Curvas de nível e balizas marítimas";
 "enter_description" = "Insira a descrição";
@@ -2717,3 +2717,11 @@
 "weather_forecast_entire_world" = "Previsão do tempo em todo o mundo";
 "map_download_privacy_descr" = "Ao descarregar os mapas concorda com os <a href='https://osmand.net/docs/legal/terms-of-use'>Termos de utilização</a> e a <a href='https://osmand.net/docs/legal/privacy-policy'>Política de privacidade</a>.";
 "shared_string_download_update" = "Descarregar atualização";
+"backup_error_failed_to_fetch_remote_items" = "Não foi possível obter a lista do servidor.";
+"error_contact_support" = "Se o problema persistir, contacte o nosso apoio ao cliente.";
+"track_has_no_needed_data" = "O trilho não tem os respetivos dados.";
+"select_another_colorization" = "Selecione outro tipo de coloração.";
+"ltr_or_rtl_combine_via_slash" = "%@/%@";
+"mountain_bike" = "Bicicleta de montanha";
+"rendering_attr_showMtbScaleIMBATrails_name" = "Trilhos IMBA";
+"rendering_value_showMtbScaleIMBATrails_description" = "International Mountain Bicycling Association";

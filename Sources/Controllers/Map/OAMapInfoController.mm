@@ -333,9 +333,7 @@
             CGFloat rightOffset = 2.0;
             CGRect rightContainerFrame = CGRectMake(_mapHudViewController.view.frame.size.width - maxWidth - 2 * rightOffset, yPos, maxWidth, containerHeight);
             if (!CGRectEqualToRect(container.frame, rightContainerFrame))
-            {
                 container.frame = rightContainerFrame;
-            }
         }
         else
         {
@@ -377,7 +375,7 @@
             CGFloat w = f.size.width - (hasRightWidgets ? rightFrame.size.width + 2 : 0) - (hasLeftWidgets ? leftFrame.size.width + 2 : 0);
             _streetNameView.frame = CGRectMake(hasLeftWidgets ? leftFrame.size.width + 2 : 0, yPos, w, streetNameViewHeight);
         }
-
+        [self.delegate streetViewLayoutDidChange:_streetNameView animate:YES];
         if (maxContainerHeight < streetNameViewHeight)
             maxContainerHeight = streetNameViewHeight;
     }

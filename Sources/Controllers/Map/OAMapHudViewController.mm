@@ -31,6 +31,7 @@
 
 #define kButtonWidth 50.0
 #define kButtonOffset 16.0
+#define kButtonHeight 50.0
 #define kWidgetsOffset 2.0
 
 #define _(name) OAMapModeHudViewController__##name
@@ -973,6 +974,25 @@
     }
 }
 
+- (void) updateButtonsLayoutX:(CGFloat)x yPosition: (CGFloat)yPos
+{
+    CGFloat y = yPos + kButtonOffset;
+    CGSize size = _mapSettingsButton.frame.size;
+    CGFloat sY = yPos + kButtonOffset;
+    CGSize sSize = _searchButton.frame.size;
+    CGFloat cY = y + kButtonHeight + kButtonOffset;
+    CGSize cSize = _compassBox.frame.size;
+
+    CGFloat searchOffsetX = x + 2 * kButtonOffset + kButtonWidth;
+    if (!CGRectEqualToRect(_mapSettingsButton.frame, CGRectMake(y, searchOffsetX, size.width, size.height)))
+    {
+        _mapSettingsButton.frame = CGRectMake(x + kButtonOffset, y, size.width, size.height);
+        _searchButton.frame = CGRectMake(searchOffsetX, sY, sSize.width, sSize.height);
+        _compassBox.frame = CGRectMake(x + kButtonOffset, cY, cSize.width, cSize.height);
+    }
+
+}
+
 - (CGFloat) getHudMinTopOffset
 {
     return [OAUtilities getStatusBarHeight];
@@ -1038,6 +1058,22 @@
     else
     {
         [self updateButtonsLayoutY:y];
+    }
+}
+
+- (void) layoutButtonsToStreet:(UIView*) container animated: (BOOL) animated
+{
+    CGFloat xLand = container.frame.origin.x;
+    CGFloat yLand = container.frame.origin.y + container.frame.size.height;
+    if (animated)
+    {
+        [UIView animateWithDuration:.2 animations:^{
+            [self updateButtonsLayoutX:xLand yPosition:yLand];
+        }];
+    }
+    else
+    {
+        [self updateButtonsLayoutX:xLand yPosition:yLand];
     }
 }
 
@@ -1505,6 +1541,15 @@
 - (void) leftWidgetsLayoutDidChange:(UIView *)leftWidgetsView animated:(BOOL)animated
 {
     [self updateButtonsLayout:animated];
+}
+
+- (void) streetViewLayoutDidChange:(UIView *)streetNameView animate:(BOOL)animated
+{
+    BOOL isLandscape = [OAUtilities isLandscape];
+    if (isLandscape)
+        [self layoutButtonsToStreet:streetNameView animated:animated];
+    else
+        [self updateButtonsLayout:animated];
 }
 
 @end

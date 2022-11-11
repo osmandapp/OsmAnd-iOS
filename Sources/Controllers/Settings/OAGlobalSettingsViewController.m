@@ -16,6 +16,7 @@
 #import "OAColors.h"
 
 #define kCarplayHeaderTopMargin 40
+#define kDefaultProfileHeaderTopMargin 40
 
 @interface OAGlobalSettingsViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -376,6 +377,8 @@
 {
     if (_settingsType == EOACarplayProfile)
         return OALocalizedString(@"carplay_profile_descr");
+    else if (_settingsType == EOADefaultProfile)
+        return OALocalizedString(@"default_profile_descr");
     else
         return @"";
 }
@@ -416,6 +419,11 @@
     {
         NSString *title = [self tableView:tableView titleForHeaderInSection:section];
         return [OATableViewCustomHeaderView getHeight:title width:tableView.bounds.size.width] + kCarplayHeaderTopMargin;
+    }
+    else if (_settingsType == EOADefaultProfile)
+    {
+        NSString *title = [self tableView:tableView titleForHeaderInSection:section];
+        return [OATableViewCustomHeaderView getHeight:title width:tableView.bounds.size.width] + kDefaultProfileHeaderTopMargin;
     }
     else
         return section == 0 ? 18.0 : 16.0;

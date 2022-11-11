@@ -186,6 +186,4 @@
 
 - (void) onApplicationDestroyed;
 
-- (void) updateLayerProviderAlpha;
-
 @end

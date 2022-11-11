@@ -2014,3 +2014,9 @@
 
 // Route planning
 "plan_route" = "規劃路線";
+"weather_offline_forecast" = "離線預報";
+"map_settings_weather_cloud" = "雲";
+"map_settings_weather_wind" = "風";
+"map_settings_weather_temp" = "溫度";
+"measurement_units" = "測量單位";
+"map_settings_weather_precip" = "降水";

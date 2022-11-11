@@ -393,7 +393,7 @@
 "product_desc_ext_skimap" = "Designet til at navigere på vintersportssteder. Se oplysninger om skipister, skiliftsmarkører og endda farvede linjer med angivelse af spor kompleksitet. Brugsvejledning: Efter aktiveret skal du gå til \"Konfigurer Kort\" og sætte korttype til Skikort.";
 "product_desc_ext_track_recording" = "Giver dig mulighed for at registrere, gemme og analysere dine trænings- eller bevægelsesdata, f.eks. hastighed, stigninger, nedstigninger eller ruteprofil, som du derefter kan genbruge, forbedre, supplere eller dele med venner.\n\nVejledning - https://osmand.net/docs/user/plugins/trip-recording";
 "product_desc_ext_wiki" = "Med offline Wikipedia på din rejse kan du lære mere om de steder, du besøger. Den er tilgængelig offline og viser Wikipedia-artikler om interessepunkter direkte på kortet. Glem ikke at downloade Wikipedia-kort for den valgte region.";
-"product_desc_ext_srtm" = "Terrænoplysninger, f.eks. højdekurver, bakkeskygger og skråninger, hjælper dig med at vurdere terrænets form visuelt, idet du tager højde for krumning, ekstremer, stejlhed, punkter med samme højde og meget mere. Topografiske oplysninger på et kort kan repræsenteres ved skravering af skråninger, konturlinjer for op- og nedstigninger og farven på skråningsvinklens afvigelse fra det flade. Data fra SRTM og ASTER.\n\nVejledning - http://osmand.net/docs/user/plugins/contour-lines";
+"product_desc_ext_srtm" = "Terrænoplysninger, f.eks. højdekurver, bakkeskygger og skråninger, hjælper dig med at vurdere terrænets form visuelt, idet du tager højde for krumning, ekstremer, stejlhed, punkter med samme højde og meget mere. Topografiske oplysninger på et kort kan repræsenteres ved skravering af skråninger, konturlinjer for op- og nedstigninger og farven på skråningsvinklens afvigelse fra det flade. Data fra SRTM og ASTER.\n\nVejledning - https://osmand.net/docs/user/plugins/contour-lines";
 "plugin_popup_wiki_ask" = "For at hente Wikipedia data, aktiver udvidelsen: <b>Wikipedia</b>";
 "plugin_popup_srtm_ask" = "For at hente højdekurver skal du aktivere udvidelsen: <b>Højdekurver</b>";
 "turn_on_plugin" = "Aktiver udvidelse";
@@ -2472,8 +2472,8 @@
 "weather_precip_enable_descr" = "Aktiver for at få vist nedbørslag på kortet.";
 "weather_contours_enable_descr" = "Aktiver for at få vist isolinjelag på kortet.";
 "ios_release_4_2" = "• Udseende af rutelinje: tilføjet mulighed for at indstille bredde og farve\n• Spor: tilføjet mulighed for at slette flere spor på én gang\n• Kontekstmenu for spor: tilføjet rullebjælke med grupper af rutepunkter\n• Kortudseende: opdelt yderligere ruter efter type med mulighed for at aktivere en fra hver kategori separat\n• Ridning: tilføjede ny navigationstype og app-profil\n• OsmAnd-filer er nu synlige i Filer-appen\n• UX af indstillingerne \"Brug højdedata\" og \"Vælg højdesvingninger\" blev forbedret, de blev kombineret og omdøbt til \"Foretrukket terræn\", der i øjeblikket er tilgængelig for \"Cykel\" og \"Fodgænger\"-profiler.\n• Ny indstilling \"Medtag overskrift\" til sporregistrering\n• Modul med vejnavne: viser nu vejskilt og afkørselsnummer under navigation\n• Nye fitness- og løberuter på kortet\n• CarPlay-fejlrettelser, tilføjede bevægelser til touchscreens\n• Rettet import af GPX-filer fra OSF-pakken\n• Rettet import af brugerdefinerede udvidelser med inkluderede filer\n• Rettet forskellige nedbrud i ruteplanlægningstilstanden\n• Rettet nedbrud under Navigation\n";
-"routeInfo_horse_scale_description" = "Gengiv stier i henhold til sværhedsgraden af hestestier";
-"routeInfo_horse_scale_name" = "Hestestiers sværhedsgrad";
+"routeInfo_horse_scale_description" = "Gengiv stier i henhold til sværhedsgraden af ridestier";
+"routeInfo_horse_scale_name" = "Ridestiers sværhedsgrad";
 "simulation_real_mode_desc" = "• På lige vejstrækninger vil hastigheden være tilnærmelsesvis den maksimalt tilladte hastighed.\n• Ved kryds vil hastigheden af simuleringen sænkes.\n• Der vil blive anvendt ekstra sanktioner ved trafiksignaler, stopskilte mv.";
 "simulation_real_mode_title" = "Realistisk simulering";
 "simulation_constant_mode_desc" = "Simuleringen vil blive udført med en konstant, valgt hastighed.";
@@ -2718,3 +2718,12 @@
 "map_widget_rendering_fps" = "Kortgengivelse FPS";
 "ios_release_4_3" = "• Jævn animation til ændring af placering under bevægelse\n• CarPlay: tilføjede baner, 2,5D-visning, løste lydproblemer ved forbindelse via Bluetooth\n• Introduktion af nye betalingsabonnementer: \"OsmAnd Pro\"-abonnementer med adgang til alle funktioner og \"Maps+\"-køb med ubegrænsede kortdownloads og adgang til betalte udvidelser.\n• Tilføjet Cloud-backup og Offline vejrprognose for OsmAnd Pro-brugere\n• Ny praktisk \"Køb\"-skærm med listen over alle køb\n• Fordele for aktive OpenStreetMap.org-bidragydere\n• Spor kan nu farves efter højde, hastighed eller hældning\n• Offlinekort er nu tilgængelige via appen Filer\n• Favoritter: tilføjet lokal generering af sikkerhedskopi efter hver ændring, sikkerhedskopier tilgængelige fra Files-appen\n• POI gemt til favoritter gemmer og viser alle POI-data, selv uden et offlinekort\n• GPX tilføjede understøttelse af link-, cmt- og desc-tags og for alle brugerdefinerede udvidelser\n• Tilføjet tilstand for knappen Kompas\n• Der blev rettet et problem med UTM-koordinaternes format\n• Rettet et problem med mellemliggende punkter i navigation\n";
 "shared_string_download_update" = "Hent opdatering";
+"track_has_no_needed_data" = "Sporet mangler de respektive data.";
+"select_another_colorization" = "Vælg venligst en anden farvelægningstype.";
+"error_contact_support" = "Hvis problemet fortsætter, bedes du kontakte vores supportteam.";
+"backup_error_failed_to_fetch_remote_items" = "Fillisten kunne ikke hentes fra serveren.";
+"rendering_attr_showMtbScaleIMBATrails_name" = "IMBA-spor";
+"ltr_or_rtl_combine_via_slash" = "%@/%@";
+"mountain_bike" = "Mountainbike";
+"rendering_value_showMtbScaleIMBATrails_description" = "International Mountain Bicycling Association";
+"map_settings_show_map_symbols" = "Vis kortsymboler";

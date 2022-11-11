@@ -499,7 +499,6 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
     for (OASearchCoreAPI *a in _apis)
         if ([a isKindOfClass:cl])
             return a;
-
     return nil;
 }
 
@@ -510,7 +509,7 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
 
 - (OASearchResultCollection *) shallowSearch:(Class)cl text:(NSString *)text matcher:(OAResultMatcher<OASearchResult *> *)matcher resortAll:(BOOL)resortAll removeDuplicates:(BOOL)removeDuplicates
 {
-    [self shallowSearch:cl text:text matcher:matcher resortAll:resortAll removeDuplicates:removeDuplicates searchSettings:_searchSettings];
+    return [self shallowSearch:cl text:text matcher:matcher resortAll:resortAll removeDuplicates:removeDuplicates searchSettings:_searchSettings];
 }
 
 - (OASearchResultCollection *) shallowSearch:(Class)cl text:(NSString *)text matcher:(OAResultMatcher<OASearchResult *> *)matcher resortAll:(BOOL)resortAll removeDuplicates:(BOOL)removeDuplicates searchSettings:(OASearchSettings *)searchSettings

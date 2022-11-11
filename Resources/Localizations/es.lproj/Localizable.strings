@@ -396,7 +396,7 @@
 "plugin_popup_nautical_title" = "Descargar mapas náuticos";
 "plugin_popup_nautical_desc" = "Primero descargue los mapas náuticos.\nLuego vaya a los <b>Ajustes del mapa</b> > <b>Tipo de mapa</b> y active el estilo <b>Náutico</b>";
 "go_to_downloads" = "Ir a descargas";
-"product_desc_ext_srtm" = "La información del terreno, como las curvas de nivel, los sombreados y las pendientes, ayudan a evaluar visualmente la forma de la superficie del terreno, considerando la curvatura, los extremos, la inclinación, los puntos de igual altura, etc. La información topográfica en un mapa puede representarse mediante el sombreado de la pendiente, las curvas de nivel para ascensos y descensos, y el color de la desviación del ángulo de la pendiente con respecto al plano. Datos de SRTM y ASTER.\n\nVéase - http://osmand.net/docs/user/plugins/contour-lines";
+"product_desc_ext_srtm" = "La información del terreno, como las curvas de nivel, los sombreados y las pendientes, ayudan a evaluar visualmente la forma de la superficie del terreno, considerando la curvatura, los extremos, la inclinación, los puntos de igual altura, etc. La información topográfica en un mapa puede representarse mediante el sombreado de la pendiente, las curvas de nivel para ascensos y descensos, y el color de la desviación del ángulo de la pendiente con respecto al plano. Datos de SRTM y ASTER.\n\nVéase - https://osmand.net/docs/user/plugins/contour-lines";
 "product_desc_ext_skimap" = "Diseñado para navegar en lugares de deportes de invierno. Observa las pistas de esquí, los marcadores de los remontes y las líneas de color que indican la complejidad de cada pista. Para usarlo luego de activarlo, ve a «Configurar mapa» y elige el tipo de mapa «Invierno y esquí».";
 "map_settings_hillshade" = "Sombreado";
 "product_title_trip_planning" = "Planificación de viaje";
@@ -2313,7 +2313,7 @@
 "hide_coordinates" = "Ocultar coordenadas";
 "cloud_show" = "Mostrar nubes";
 "product_desc_openplacereviews" = "Comparte tus opiniones sobre lugares públicos";
-"product_title_weather" = "Clima";
+"product_title_weather" = "Meteorología";
 "backup_and_restore" = "Copia de seguridad y restauración";
 "approximate_file_size" = "Tamaño aproximado del archivo: %@";
 "mgrs_description" = "OsmAnd utiliza el formato MGRS que es idéntico al UTM de la OTAN.";
@@ -2643,8 +2643,8 @@
 "cloud_all_changes_uploaded_descr" = "Todos los cambios hechos en este dispositivo se sincronizaron en OsmAnd Cloud.";
 "cloud_no_conflicts" = "Sin conflictos";
 "cloud_no_conflicts_descr" = "Los datos en el dispositivo y en OsmAnd Cloud son los mismos.";
-"backup_conflicts_descr" = "Existe una versión más reciente de estos archivos en el servidor. Elige una acción.";
-"backup_conflicts_action_descr" = "Existe otra versión de este archivo en el servidor. Elige una acción.";
+"backup_conflicts_descr" = "Existe una versión más reciente de estos archivos en el servidor. Elige una acción";
+"backup_conflicts_action_descr" = "Existe otra versión de este archivo en el servidor. Elige una acción";
 "carplay" = "CarPlay";
 "product_title_pro" = "OsmAnd Pro";
 "expires" = "Expira";
@@ -2668,7 +2668,7 @@
 "cloud_contains_newer_changes" = "La versión de OsmAnd Cloud contiene cambios más recientes.";
 "cross_buy" = "Compra cruzada";
 "purchases_feature_desc_carplay" = "Transmite los mapas y navegación sin conexión de OsmAnd en la pantalla del vehículo y se integra con los controles del mismo.";
-"osm_live_payment_subscription_management_aid" = "El pago se cargará a su cuenta de ID de Apple al confirmar la compra.\n\nLa suscripción se renueva automáticamente a menos que se cancele al menos 24 horas antes del final del período actual. La renovación se cargará en su cuenta 24 horas antes de que finalice el periodo actual.\n\nPuede gestionar y cancelar sus suscripciones accediendo a los ajustes de su cuenta en el App Store tras la compra.";
+"osm_live_payment_subscription_management_aid" = "El pago se cargará a su cuenta de ID de Apple al confirmar la compra.\n\nLa suscripción se renueva automáticamente a menos que se cancele al menos 24 horas antes del final del período actual. La renovación se cargará en su cuenta 24 horas antes de que finalice el periodo actual.\n\nPuede gestionar y cancelar sus suscripciones accediendo a la configuración de su cuenta en el App Store tras la compra";
 "google_play" = "Google Play";
 "purchase_origin" = "Origen de la compra";
 "contact_support_description" = "Si tienes alguna duda, ponte en contacto con nosotros en support@osmand.net.";
@@ -2713,3 +2713,12 @@
 "tts" = "TTS";
 "recorded_voice" = "Grabado";
 "shared_string_download_update" = "Descargar actualización";
+"track_has_no_needed_data" = "La traza no contiene los datos necesarios.";
+"backup_error_failed_to_fetch_remote_items" = "No se pudo obtener la lista de archivos del servidor.";
+"error_contact_support" = "Si el problema persiste, contacta con nuestro equipo de asistencia.";
+"select_another_colorization" = "Elige otro tipo de color.";
+"mountain_bike" = "Bicicleta de montaña";
+"ltr_or_rtl_combine_via_slash" = "%@/%@";
+"rendering_attr_showMtbScaleIMBATrails_name" = "Senderos de montaña IMBA";
+"rendering_value_showMtbScaleIMBATrails_description" = "Asociación Internacional del Ciclismo de Montaña";
+"map_settings_show_map_symbols" = "Mostrar los símbolos del mapa";

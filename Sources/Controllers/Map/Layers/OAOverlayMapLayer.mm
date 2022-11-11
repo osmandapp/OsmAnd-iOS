@@ -127,9 +127,10 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.mapViewController runWithRenderSync:^{
             OsmAnd::MapLayerConfiguration config;
-            config.setOpacityFactor(self.app.data.overlayAlpha);
+            BOOL isOverlayLayerDisplayed = self.app.data.overlayMapSource;
+            float alpha = isOverlayLayerDisplayed ? self.app.data.overlayAlpha : 0.0f;
+            config.setOpacityFactor(alpha);
             [self.mapView setMapLayerConfiguration:self.layerIndex configuration:config forcedUpdate:NO];
-            [self.mapViewController updateLayerProviderAlpha];
         }];
     });
 }
@@ -142,11 +143,11 @@
             {
                 [self.mapView resetProviderFor:self.layerIndex];
                 _rasterOverlayMapProvider.reset();
-                [self.mapViewController updateLayerProviderAlpha];
-            }
-            else
-            {
-                [self.mapViewController updateLayerProviderAlpha];
+                OsmAnd::MapLayerConfiguration config;
+                BOOL isOverlayLayerDisplayed = self.app.data.overlayMapSource;
+                float alpha = isOverlayLayerDisplayed ? self.app.data.overlayAlpha : 0.0f;
+                config.setOpacityFactor(alpha);
+                [self.mapView setMapLayerConfiguration:self.layerIndex configuration:config forcedUpdate:NO];
             }
         }];
     });

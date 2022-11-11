@@ -85,7 +85,7 @@
             [self.mapView setProvider:_rasterUnderlayMapProvider forLayer:self.layerIndex];
             
             OsmAnd::MapLayerConfiguration config;
-            config.setOpacityFactor(1.0 - self.app.data.underlayAlpha);
+            config.setOpacityFactor(1 - self.app.data.underlayAlpha);
             [self.mapView setMapLayerConfiguration:0 configuration:config forcedUpdate:NO];
         }
         else
@@ -103,7 +103,7 @@
                     [self.mapView setProvider:_rasterUnderlayMapProvider forLayer:self.layerIndex];
                     
                     OsmAnd::MapLayerConfiguration config;
-                    config.setOpacityFactor(1.0 - self.app.data.underlayAlpha);
+                    config.setOpacityFactor(1 - self.app.data.underlayAlpha);
                     [self.mapView setMapLayerConfiguration:0 configuration:config forcedUpdate:NO];
                 }
             }
@@ -121,7 +121,9 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.mapViewController runWithRenderSync:^{
             OsmAnd::MapLayerConfiguration config;
-            config.setOpacityFactor(1.0 - self.app.data.underlayAlpha);
+            BOOL isUnderlayLayerDisplayed = self.app.data.underlayMapSource;
+            float alpha = isUnderlayLayerDisplayed ? self.app.data.underlayAlpha : 0.0f;
+            config.setOpacityFactor(alpha);
             [self.mapView setMapLayerConfiguration:0 configuration:config forcedUpdate:NO];
         }];
     });
@@ -139,7 +141,9 @@
             if (![self updateLayer])
             {
                 OsmAnd::MapLayerConfiguration config;
-                config.setOpacityFactor(1.0 - self.app.data.underlayAlpha);
+                BOOL isUnderlayLayerDisplayed = self.app.data.underlayMapSource;
+                float alpha = isUnderlayLayerDisplayed ? self.app.data.underlayAlpha : 0.0f;
+                config.setOpacityFactor(alpha);
                 [self.mapView setMapLayerConfiguration:0 configuration:config forcedUpdate:NO];
                 
                 [self.mapView resetProviderFor:self.layerIndex];

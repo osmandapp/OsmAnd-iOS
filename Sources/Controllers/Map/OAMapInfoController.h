@@ -13,6 +13,7 @@
 
 - (void) leftWidgetsLayoutDidChange:(UIView *)leftWidgetsView animated:(BOOL)animated;
 
+- (void) streetViewLayoutDidChange: (UIView *)streetNameView animate:(BOOL)animated;
 @end
 
 @class OAMapHudViewController, OATextInfoWidget, OAWidgetState, OAMapWidgetRegInfo, OARulerWidget;

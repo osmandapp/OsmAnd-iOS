@@ -500,6 +500,22 @@
         return 0;
 }
 
+- (BOOL)isAnyWeatherContourLinesEnabled
+{
+    if ([self isWeatherContourLinesEnabled:WEATHER_TEMP_CONTOUR_LINES_ATTR])
+        return YES;
+    if ([self isWeatherContourLinesEnabled:WEATHER_PRESSURE_CONTOURS_LINES_ATTR])
+        return YES;
+    if ([self isWeatherContourLinesEnabled:WEATHER_CLOUD_CONTOURS_LINES_ATTR])
+        return YES;
+    if ([self isWeatherContourLinesEnabled:WEATHER_WIND_CONTOURS_LINES_ATTR])
+        return YES;
+    if ([self isWeatherContourLinesEnabled:WEATHER_PRECIPITATION_CONTOURS_LINES_ATTR])
+        return YES;
+
+    return NO;
+}
+
 - (BOOL)isWeatherContourLinesEnabled:(NSString *)attr
 {
     OAMapStyleParameter *param = [self getParameter:attr];

@@ -22,6 +22,10 @@
 #define kLastUnderlayKey @"lastUnderlayMapSource"
 #define kOverlayAlphaKey @"overlayAlpha"
 #define kUnderlayAlphaKey @"underlayAlpha"
+#define kContourNameKey @"contourName"
+#define kContourNameToolbarKey @"contourNameToolbar"
+#define kContourNameLastUsedKey @"contourNameLastUsed"
+#define kContourNameLastUsedToolbarKey @"contourNameLastUsedToolbar"
 #define kContoursAlphaKey @"contoursAlpha"
 #define kContoursAlphaToolbarKey @"contoursAlphaToolbar"
 #define kMapLayersConfigurationKey @"mapLayersConfiguration"
@@ -155,6 +159,10 @@
     OACommonDouble *_weatherPrecipAlphaProfile;
     OACommonDouble *_weatherPrecipToolbarAlphaProfile;
     
+    OACommonString *_contourNameProfile;
+    OACommonString *_contourNameToolbarProfile;
+    OACommonString *_contourNameLastUsedProfile;
+    OACommonString *_contourNameLastUsedToolbarProfile;
     OACommonDouble *_contoursAlphaProfile;
     OACommonDouble *_contoursAlphaToolbarProfile;
 
@@ -249,6 +257,7 @@
     _overlayAlphaChangeObservable = [[OAObservable alloc] init];
     _underlayMapSourceChangeObservable = [[OAObservable alloc] init];
     _underlayAlphaChangeObservable = [[OAObservable alloc] init];
+    _contourNameChangeObservable = [[OAObservable alloc] init];
     _contoursAlphaChangeObservable = [[OAObservable alloc] init];
     _terrainChangeObservable = [[OAObservable alloc] init];
     _terrainResourcesChangeObservable = [[OAObservable alloc] init];
@@ -279,6 +288,10 @@
     _lastUnderlayMapSourceProfile = [OACommonMapSource withKey:kLastUnderlayKey defValue:nil];
     _overlayAlphaProfile = [OACommonDouble withKey:kOverlayAlphaKey defValue:0.5];
     _underlayAlphaProfile = [OACommonDouble withKey:kUnderlayAlphaKey defValue:0.5];
+    _contourNameProfile = [OACommonString withKey:kContourNameKey defValue:@""];
+    _contourNameToolbarProfile = [OACommonString withKey:kContourNameToolbarKey defValue:@""];
+    _contourNameLastUsedProfile = [OACommonString withKey:kContourNameLastUsedKey defValue:@""];
+    _contourNameLastUsedToolbarProfile = [OACommonString withKey:kContourNameLastUsedToolbarKey defValue:@""];
     _contoursAlphaProfile = [OACommonDouble withKey:kContoursAlphaKey defValue:1.];
     _contoursAlphaToolbarProfile = [OACommonDouble withKey:kContoursAlphaToolbarKey defValue:1.];
     _terrainTypeProfile = [OACommonTerrain withKey:kTerrainTypeKey defValue:EOATerrainTypeDisabled];
@@ -364,6 +377,10 @@
     [_registeredPreferences setObject:_underlayMapSourceProfile forKey:@"map_underlay_previous"];
     [_registeredPreferences setObject:_overlayAlphaProfile forKey:@"overlay_transparency"];
     [_registeredPreferences setObject:_underlayAlphaProfile forKey:@"map_transparency"];
+    [_registeredPreferences setObject:_contourNameProfile forKey:@"contour_name"];
+    [_registeredPreferences setObject:_contourNameToolbarProfile forKey:@"contour_name_toolbar"];
+    [_registeredPreferences setObject:_contourNameLastUsedProfile forKey:@"contour_name_last_used"];
+    [_registeredPreferences setObject:_contourNameLastUsedToolbarProfile forKey:@"contour_name_last_used_toolbar"];
     [_registeredPreferences setObject:_contoursAlphaProfile forKey:@"contours_alpha"];
     [_registeredPreferences setObject:_contoursAlphaToolbarProfile forKey:@"contours_alpha_toolbar"];
     [_registeredPreferences setObject:_lastTerrainTypeProfile forKey:@"terrain_mode"];
@@ -442,6 +459,7 @@
         [_mapLayersConfiguration resetConfigutation];
         [_overlayAlphaChangeObservable notifyEventWithKey:self andValue:@(self.overlayAlpha)];
         [_underlayAlphaChangeObservable notifyEventWithKey:self andValue:@(self.underlayAlpha)];
+        [_contourNameChangeObservable notifyEventWithKey:self andValue:self.contourName];
         [_contoursAlphaChangeObservable notifyEventWithKey:self andValue:@(self.contoursAlpha)];
         [_terrainChangeObservable notifyEventWithKey:self andValue:@YES];
         if (self.terrainType != EOATerrainTypeDisabled)
@@ -581,6 +599,7 @@
 @synthesize overlayAlphaChangeObservable = _overlayAlphaChangeObservable;
 @synthesize underlayMapSourceChangeObservable = _underlayMapSourceChangeObservable;
 @synthesize underlayAlphaChangeObservable = _underlayAlphaChangeObservable;
+@synthesize contourNameChangeObservable = _contourNameChangeObservable;
 @synthesize contoursAlphaChangeObservable = _contoursAlphaChangeObservable;
 @synthesize destinationsChangeObservable = _destinationsChangeObservable;
 @synthesize destinationAddObservable = _destinationAddObservable;
@@ -1167,6 +1186,39 @@
     }
 }
 
+- (NSString *) contourName
+{
+    @synchronized (_lock)
+    {
+        return _weatherToolbarActive ? [_contourNameToolbarProfile get] : [_contourNameProfile get];
+    }
+}
+
+- (void) setContourName:(NSString *)contourName
+{
+    @synchronized(_lock)
+    {
+        _weatherToolbarActive ? [_contourNameToolbarProfile set:contourName] : [_contourNameProfile set:contourName];
+        [_contourNameChangeObservable notifyEventWithKey:self andValue:self.contourName];
+    }
+}
+
+- (NSString *) contourNameLastUsed
+{
+    @synchronized (_lock)
+    {
+        return _weatherToolbarActive ? [_contourNameLastUsedToolbarProfile get] : [_contourNameLastUsedProfile get];
+    }
+}
+
+- (void) setContourNameLastUsed:(NSString *)contourNameLastUsed
+{
+    @synchronized(_lock)
+    {
+        _weatherToolbarActive ? [_contourNameLastUsedToolbarProfile set:contourNameLastUsed] : [_contourNameLastUsedProfile set:contourNameLastUsed];
+    }
+}
+
 - (double) contoursAlpha
 {
     @synchronized (_lock)
@@ -1180,7 +1232,7 @@
     @synchronized(_lock)
     {
         _weatherToolbarActive ? [_contoursAlphaToolbarProfile set:contoursAlpha] : [_contoursAlphaProfile set:contoursAlpha];
-        [_contoursAlphaChangeObservable notifyEventWithKey:self andValue:@(self.overlayAlpha)];
+        [_contoursAlphaChangeObservable notifyEventWithKey:self andValue:@(self.contoursAlpha)];
     }
 }
 
@@ -1643,6 +1695,10 @@
     [_lastUnderlayMapSourceProfile set:[_lastUnderlayMapSourceProfile get:sourceMode] mode:targetMode];
     [_overlayAlphaProfile set:[_overlayAlphaProfile get:sourceMode] mode:targetMode];
     [_underlayAlphaProfile set:[_underlayAlphaProfile get:sourceMode] mode:targetMode];
+    [_contourNameProfile set:[_contourNameProfile get:sourceMode] mode:targetMode];
+    [_contourNameToolbarProfile set:[_contourNameToolbarProfile get:sourceMode] mode:targetMode];
+    [_contourNameLastUsedProfile set:[_contourNameLastUsedProfile get:sourceMode] mode:targetMode];
+    [_contourNameLastUsedToolbarProfile set:[_contourNameLastUsedToolbarProfile get:sourceMode] mode:targetMode];
     [_contoursAlphaProfile set:[_contoursAlphaProfile get:sourceMode] mode:targetMode];
     [_contoursAlphaToolbarProfile set:[_contoursAlphaToolbarProfile get:sourceMode] mode:targetMode];
     [_terrainTypeProfile set:[_terrainTypeProfile get:sourceMode] mode:targetMode];

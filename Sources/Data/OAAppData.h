@@ -98,7 +98,10 @@
 @property (readonly) OAObservable* weatherPrecipAlphaChangeObservable;
 @property (readonly) OAObservable* weatherPrecipAlphaToolbarChangeObservable;
 
+@property (nonatomic) NSString *contourName;
+@property (nonatomic) NSString *contourNameLastUsed;
 @property (nonatomic) double contoursAlpha;
+@property (readonly) OAObservable* contourNameChangeObservable;
 @property (readonly) OAObservable* contoursAlphaChangeObservable;
 @property (readonly) OAObservable* contoursAlphaToolbarChangeObservable;
 

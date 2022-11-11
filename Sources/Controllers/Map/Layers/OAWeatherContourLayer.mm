@@ -120,17 +120,32 @@
 
     if ([[OAPlugin getPlugin:OAWeatherPlugin.class] isEnabled])
     {
+        NSString *parameterName = self.app.data.contourName;
         OsmAnd::BandIndex band = WEATHER_BAND_UNDEFINED;
-        if ([_styleSettings isWeatherContourLinesEnabled:WEATHER_TEMP_CONTOUR_LINES_ATTR])
+
+        if ([parameterName isEqualToString:WEATHER_TEMP_CONTOUR_LINES_ATTR])
             band = WEATHER_BAND_TEMPERATURE;
-        else if ([_styleSettings isWeatherContourLinesEnabled:WEATHER_PRESSURE_CONTOURS_LINES_ATTR])
+        if ([parameterName isEqualToString:WEATHER_PRESSURE_CONTOURS_LINES_ATTR])
             band = WEATHER_BAND_PRESSURE;
-        else if ([_styleSettings isWeatherContourLinesEnabled:WEATHER_CLOUD_CONTOURS_LINES_ATTR])
+        if ([parameterName isEqualToString:WEATHER_CLOUD_CONTOURS_LINES_ATTR])
             band = WEATHER_BAND_CLOUD;
-        else if ([_styleSettings isWeatherContourLinesEnabled:WEATHER_WIND_CONTOURS_LINES_ATTR])
+        if ([parameterName isEqualToString:WEATHER_WIND_CONTOURS_LINES_ATTR])
             band = WEATHER_BAND_WIND_SPEED;
-        else if ([_styleSettings isWeatherContourLinesEnabled:WEATHER_PRECIPITATION_CONTOURS_LINES_ATTR])
+        if ([parameterName isEqualToString:WEATHER_PRECIPITATION_CONTOURS_LINES_ATTR])
             band = WEATHER_BAND_PRECIPITATION;
+
+        if ((![_styleSettings isWeatherContourLinesEnabled:WEATHER_TEMP_CONTOUR_LINES_ATTR] && band == WEATHER_BAND_TEMPERATURE)
+            || (![_styleSettings isWeatherContourLinesEnabled:WEATHER_PRESSURE_CONTOURS_LINES_ATTR] && band == WEATHER_BAND_PRESSURE)
+            || (![_styleSettings isWeatherContourLinesEnabled:WEATHER_CLOUD_CONTOURS_LINES_ATTR] && band == WEATHER_BAND_CLOUD)
+            || (![_styleSettings isWeatherContourLinesEnabled:WEATHER_WIND_CONTOURS_LINES_ATTR] && band == WEATHER_BAND_WIND_SPEED)
+            || (![_styleSettings isWeatherContourLinesEnabled:WEATHER_PRECIPITATION_CONTOURS_LINES_ATTR] && band == WEATHER_BAND_PRECIPITATION))
+        {
+            [_styleSettings setWeatherContourLinesEnabled:YES weatherContourLinesAttr:parameterName];
+        }
+        else if ([_styleSettings isAnyWeatherContourLinesEnabled] && band == WEATHER_BAND_UNDEFINED)
+        {
+            [_styleSettings setWeatherContourLinesEnabled:NO weatherContourLinesAttr:parameterName];
+        }
 
         OsmAnd::MapLayerConfiguration config;
         config.setOpacityFactor(self.app.data.contoursAlpha);

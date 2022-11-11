@@ -1408,7 +1408,7 @@
 "hide_terrain" = "Ocultar terreno";
 "toggle_contour_lines" = "Mostrar/ocultar líneas de contorno";
 "toggle_hillshade" = "Mostrar/Ocultar terreno";
-"display_starting_at_zoom_level" = "Mostrar desde el nivel de zum";
+"display_starting_at_zoom_level" = "La vista inicia desde el nivel de zum";
 "quick_action_contour_lines_descr" = "Un botón que muestra u oculta las curvas de nivel en el mapa.";
 "hide_contour_lines" = "Ocultar curvas de nivel";
 "show_contour_lines" = "Mostrar curvas de nivel";
@@ -2737,3 +2737,4 @@
 "rendering_attr_showMtbScaleIMBATrails_name" = "Senderos de montaña IMBA";
 "rendering_value_showMtbScaleIMBATrails_description" = "Asociación Internacional del Ciclismo de Montaña";
 "ltr_or_rtl_combine_via_slash" = "%@/%@";
+"map_settings_show_map_symbols" = "Mostrar símbolos del mapa";

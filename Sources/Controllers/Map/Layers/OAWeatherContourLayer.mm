@@ -107,13 +107,17 @@
     if ([[OAPlugin getPlugin:OAWeatherPlugin.class] isEnabled])
     {
         OsmAnd::BandIndex band = WEATHER_BAND_UNDEFINED;
-        OAMapStyleParameter *tempContourLinesParam = [_styleSettings getParameter:WEATHER_TEMP_CONTOUR_LINES_ATTR];
-        OAMapStyleParameter *pressureContourLinesParam = [_styleSettings getParameter:WEATHER_PRESSURE_CONTOURS_LINES_ATTR];
-        if ([tempContourLinesParam.value isEqualToString:@"true"])
+        if ([_styleSettings isWeatherContourLinesEnabled:WEATHER_TEMP_CONTOUR_LINES_ATTR])
             band = WEATHER_BAND_TEMPERATURE;
-        else if ([pressureContourLinesParam.value isEqualToString:@"true"])
+        else if ([_styleSettings isWeatherContourLinesEnabled:WEATHER_PRESSURE_CONTOURS_LINES_ATTR])
             band = WEATHER_BAND_PRESSURE;
-        
+        else if ([_styleSettings isWeatherContourLinesEnabled:WEATHER_CLOUD_CONTOURS_LINES_ATTR])
+            band = WEATHER_BAND_CLOUD;
+        else if ([_styleSettings isWeatherContourLinesEnabled:WEATHER_WIND_CONTOURS_LINES_ATTR])
+            band = WEATHER_BAND_WIND_SPEED;
+        else if ([_styleSettings isWeatherContourLinesEnabled:WEATHER_PRECIPITATION_CONTOURS_LINES_ATTR])
+            band = WEATHER_BAND_PRECIPITATION;
+
         OsmAnd::MapLayerConfiguration config;
         config.setOpacityFactor(self.app.data.contoursAlpha);
         [self.mapView setMapLayerConfiguration:self.layerIndex configuration:config forcedUpdate:NO];

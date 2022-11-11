@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21225" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21207"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -23,11 +23,11 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" allowsSelectionDuringEditing="YES" allowsMultipleSelection="YES" allowsMultipleSelectionDuringEditing="YES" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="18" sectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="047-sX-bmi">
-                    <rect key="frame" x="0.0" y="100" width="414" height="709"/>
+                    <rect key="frame" x="0.0" y="104" width="414" height="695"/>
                     <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                 </tableView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yZg-za-Wl8">
-                    <rect key="frame" x="0.0" y="809" width="414" height="87"/>
+                    <rect key="frame" x="0.0" y="799" width="414" height="53"/>
                     <subviews>
                         <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="17" translatesAutoresizingMaskIntoConstraints="NO" id="WqB-Ea-YDl">
                             <rect key="frame" x="20" y="9" width="374" height="42"/>
@@ -82,11 +82,11 @@
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="z1H-Xh-Vqx" userLabel="navBarView">
-                    <rect key="frame" x="0.0" y="0.0" width="414" height="100"/>
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="104"/>
                     <color key="backgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.95294117649999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </view>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kXa-gs-sfl">
-                    <rect key="frame" x="20" y="44" width="53" height="56"/>
+                    <rect key="frame" x="20" y="48" width="53" height="56"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="56" id="b6d-sH-jMu"/>
                     </constraints>
@@ -106,7 +106,7 @@
                 <constraint firstItem="z1H-Xh-Vqx" firstAttribute="leading" secondItem="mrf-Nc-zcj" secondAttribute="leading" id="3jf-Lw-BUF"/>
                 <constraint firstItem="yZg-za-Wl8" firstAttribute="leading" secondItem="3w3-gS-5vz" secondAttribute="leading" id="BO2-uT-t3P"/>
                 <constraint firstItem="047-sX-bmi" firstAttribute="top" secondItem="kXa-gs-sfl" secondAttribute="bottom" id="Cp5-N9-TIz"/>
-                <constraint firstAttribute="bottom" secondItem="yZg-za-Wl8" secondAttribute="bottom" id="HSS-zI-zRI"/>
+                <constraint firstItem="3w3-gS-5vz" firstAttribute="bottom" secondItem="yZg-za-Wl8" secondAttribute="bottom" constant="10" id="HSS-zI-zRI"/>
                 <constraint firstItem="kXa-gs-sfl" firstAttribute="top" secondItem="3w3-gS-5vz" secondAttribute="top" id="MGh-G1-cob"/>
                 <constraint firstItem="z1H-Xh-Vqx" firstAttribute="top" secondItem="mrf-Nc-zcj" secondAttribute="top" id="MyA-mE-gyB"/>
                 <constraint firstItem="yZg-za-Wl8" firstAttribute="trailing" secondItem="3w3-gS-5vz" secondAttribute="trailing" id="Rok-99-q1R"/>

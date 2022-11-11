@@ -570,8 +570,8 @@
 "route_to" = "Hacia";
 "route_via" = "Vía";
 "route_from" = "Desde";
-"lat" = "Lat";
-"lon" = "Lon";
+"lat" = "Lat.";
+"lon" = "Lon.";
 "sort_by_distance" = "Ordenar por distancia";
 "sort_by_name" = "Ordenar por nombre";
 "map_markers_other" = "Otros marcadores";
@@ -1081,7 +1081,7 @@
 "osm_edit_uploading" = "Subiendo...";
 "key_hint_zoom_out" = "Alejar";
 "shared_string_read_more" = "Leer más";
-"short_location_on_map" = "Lat %@ Lon %@";
+"short_location_on_map" = "Lat. %@ Lon. %@";
 "navigate_point_format_D" = "DDD.DD";
 "navigate_point_format_DM" = "DDD MM.MM";
 "navigate_point_format_DMS" = "DDD MM SS.SS";
@@ -1265,7 +1265,7 @@
 "region_others" = "Otros mapas";
 "download_depth_countours" = "Curvas de profundidad náuticas";
 "show_contour_lines" = "Mostrar curvas de nivel";
-"display_starting_at_zoom_level" = "Mostrar desde el nivel de zum";
+"display_starting_at_zoom_level" = "La visualización comienza con zoom";
 "hide_contour_lines" = "Ocultar curvas de nivel";
 "gpx_alt_range" = "Rango de altitud";
 "gpx_avg_altitude" = "Altitud media";

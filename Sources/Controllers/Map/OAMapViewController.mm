@@ -1899,13 +1899,20 @@
                 
                 // --- Apply Map Style Settings
                 OAMapStyleSettings *styleSettings = [OAMapStyleSettings sharedInstance];
-                
                 NSArray *params = styleSettings.getAllParameters;
+                OAIAPHelper *iapHelper = [OAIAPHelper sharedInstance];
+                BOOL useContours = [iapHelper.srtm isActive];
+                BOOL useDepthContours = [iapHelper.nautical isActive] && ([OAIAPHelper isPaidVersion] || [OAIAPHelper isDepthContoursPurchased]);
                 for (OAMapStyleParameter *param in params)
                 {
-                    if ([param.name isEqualToString:@"contourLines"] && ![[OAIAPHelper sharedInstance].srtm isActive])
+                    if ([param.name isEqualToString:CONTOUR_LINES] && !useContours)
                     {
                         newSettings[QString::fromNSString(param.name)] = QStringLiteral("disabled");
+                        continue;
+                    }
+                    if ([param.name isEqualToString:NAUTICAL_DEPTH_CONTOURS] && !useDepthContours)
+                    {
+                        newSettings[QString::fromNSString(param.name)] = QStringLiteral("false");
                         continue;
                     }
                     if (param.value.length > 0 && ![param.value isEqualToString:@"false"])

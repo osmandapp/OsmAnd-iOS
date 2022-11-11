@@ -540,6 +540,7 @@
 		463C536C286B58FB00AFABE9 /* warnings_railways_ca@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 463C5368286B58FA00AFABE9 /* warnings_railways_ca@3x.png */; };
 		464167D428AE4F2C00C6AA8F /* ic_custom_checkbox_unselected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 464167D228AE4F2C00C6AA8F /* ic_custom_checkbox_unselected@2x.png */; };
 		464167D528AE4F2D00C6AA8F /* ic_custom_checkbox_unselected@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 464167D328AE4F2C00C6AA8F /* ic_custom_checkbox_unselected@3x.png */; };
+		4643322A291D5FE7005AEF12 /* OAMapSettingsNauticalDepthScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = 46433229291D5FE7005AEF12 /* OAMapSettingsNauticalDepthScreen.m */; };
 		46453ADA2835234B001F9A3A /* ic_custom_advanced_widgets_colored_day@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46453AD62835234A001F9A3A /* ic_custom_advanced_widgets_colored_day@2x.png */; };
 		46453ADB2835234B001F9A3A /* ic_custom_advanced_widgets_colored_big@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46453AD72835234A001F9A3A /* ic_custom_advanced_widgets_colored_big@2x.png */; };
 		46453ADC2835234B001F9A3A /* ic_custom_advanced_widgets_colored_big@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46453AD82835234B001F9A3A /* ic_custom_advanced_widgets_colored_big@3x.png */; };
@@ -660,6 +661,7 @@
 		46C2FD8728B38EF600771E6E /* ic_custom_storage@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46C2FD8128B38EF600771E6E /* ic_custom_storage@2x.png */; };
 		46C2FD8828B38EF600771E6E /* ic_custom_globe_latitude@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46C2FD8228B38EF600771E6E /* ic_custom_globe_latitude@2x.png */; };
 		46C2FD8D28B3AD9A00771E6E /* OADeleteAllVersionsBackupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46C2FD8C28B3AD9A00771E6E /* OADeleteAllVersionsBackupViewController.xib */; };
+		46C49509291E57DA005A9D70 /* OANauticalDepthParametersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46C49508291E57DA005A9D70 /* OANauticalDepthParametersViewController.m */; };
 		46C7647728DC7BAA002DB43E /* OASimpleTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46C7647628DC7BAA002DB43E /* OASimpleTableViewCell.xib */; };
 		46C78C0A28BD16A30019FF69 /* OAStorageStateValuesCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46C78C0928BD16A30019FF69 /* OAStorageStateValuesCell.xib */; };
 		46D6CF4A2844F736007A43F9 /* OAPurchaseDetailsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46D6CF492844F736007A43F9 /* OAPurchaseDetailsViewController.xib */; };
@@ -3906,6 +3908,8 @@
 		463C5368286B58FA00AFABE9 /* warnings_railways_ca@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "warnings_railways_ca@3x.png"; sourceTree = "<group>"; };
 		464167D228AE4F2C00C6AA8F /* ic_custom_checkbox_unselected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_checkbox_unselected@2x.png"; path = "Resources/Icons/ic_custom_checkbox_unselected@2x.png"; sourceTree = "<group>"; };
 		464167D328AE4F2C00C6AA8F /* ic_custom_checkbox_unselected@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_checkbox_unselected@3x.png"; path = "Resources/Icons/ic_custom_checkbox_unselected@3x.png"; sourceTree = "<group>"; };
+		46433228291D5FD1005AEF12 /* OAMapSettingsNauticalDepthScreen.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAMapSettingsNauticalDepthScreen.h; sourceTree = "<group>"; };
+		46433229291D5FE7005AEF12 /* OAMapSettingsNauticalDepthScreen.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAMapSettingsNauticalDepthScreen.m; sourceTree = "<group>"; };
 		46453AD62835234A001F9A3A /* ic_custom_advanced_widgets_colored_day@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_advanced_widgets_colored_day@2x.png"; path = "Resources/Icons/ic_custom_advanced_widgets_colored_day@2x.png"; sourceTree = "<group>"; };
 		46453AD72835234A001F9A3A /* ic_custom_advanced_widgets_colored_big@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_advanced_widgets_colored_big@2x.png"; path = "Resources/Icons/ic_custom_advanced_widgets_colored_big@2x.png"; sourceTree = "<group>"; };
 		46453AD82835234B001F9A3A /* ic_custom_advanced_widgets_colored_big@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_advanced_widgets_colored_big@3x.png"; path = "Resources/Icons/ic_custom_advanced_widgets_colored_big@3x.png"; sourceTree = "<group>"; };
@@ -4029,6 +4033,8 @@
 		46C2FD8128B38EF600771E6E /* ic_custom_storage@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_storage@2x.png"; path = "Resources/Icons/ic_custom_storage@2x.png"; sourceTree = "<group>"; };
 		46C2FD8228B38EF600771E6E /* ic_custom_globe_latitude@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_globe_latitude@2x.png"; path = "Resources/Icons/ic_custom_globe_latitude@2x.png"; sourceTree = "<group>"; };
 		46C2FD8C28B3AD9A00771E6E /* OADeleteAllVersionsBackupViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OADeleteAllVersionsBackupViewController.xib; sourceTree = "<group>"; };
+		46C49507291E57CA005A9D70 /* OANauticalDepthParametersViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OANauticalDepthParametersViewController.h; sourceTree = "<group>"; };
+		46C49508291E57DA005A9D70 /* OANauticalDepthParametersViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OANauticalDepthParametersViewController.m; sourceTree = "<group>"; };
 		46C7647628DC7BAA002DB43E /* OASimpleTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OASimpleTableViewCell.xib; sourceTree = "<group>"; };
 		46C78C0928BD16A30019FF69 /* OAStorageStateValuesCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAStorageStateValuesCell.xib; sourceTree = "<group>"; };
 		46D6CF492844F736007A43F9 /* OAPurchaseDetailsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAPurchaseDetailsViewController.xib; sourceTree = "<group>"; };
@@ -12802,6 +12808,10 @@
 				B24745BD27F862C200C18C3F /* OAWeatherLayerSettingsViewController.h */,
 				B24745BE27F862C200C18C3F /* OAWeatherLayerSettingsViewController.mm */,
 				B24745BF27F862C300C18C3F /* OAWeatherLayerSettingsViewController.xib */,
+				46433228291D5FD1005AEF12 /* OAMapSettingsNauticalDepthScreen.h */,
+				46433229291D5FE7005AEF12 /* OAMapSettingsNauticalDepthScreen.m */,
+				46C49507291E57CA005A9D70 /* OANauticalDepthParametersViewController.h */,
+				46C49508291E57DA005A9D70 /* OANauticalDepthParametersViewController.m */,
 			);
 			path = MapSettings;
 			sourceTree = "<group>";
@@ -15954,6 +15964,7 @@
 				DA5A825826C563A700F274C7 /* OASpeedLimitToleranceViewController.m in Sources */,
 				DA5A84AE26C563A900F274C7 /* OAHistoryViewController.mm in Sources */,
 				DAEDAAA42865E65800CE54D0 /* OARestoreBackupViewController.mm in Sources */,
+				4643322A291D5FE7005AEF12 /* OAMapSettingsNauticalDepthScreen.m in Sources */,
 				DA5A84E826C563A900F274C7 /* OAWaypointsViewController.mm in Sources */,
 				46E9AD9C28DC8F4C00CC55F9 /* OAValueTableViewCell.m in Sources */,
 				DA5A83FE26C563A800F274C7 /* OAQuickSearchListItem.mm in Sources */,
@@ -16461,6 +16472,7 @@
 				DA5A841F26C563A800F274C7 /* OAGPXEditWptViewController.mm in Sources */,
 				DA5A831F26C563A800F274C7 /* OAIconTextDescCell.m in Sources */,
 				DA5A844F26C563A900F274C7 /* OAUnderlayMapLayer.mm in Sources */,
+				46C49509291E57DA005A9D70 /* OANauticalDepthParametersViewController.m in Sources */,
 				DA5A83CF26C563A800F274C7 /* OATransportStopViewController.mm in Sources */,
 				DA5A839026C563A800F274C7 /* OAOsmAndLiveSelectionViewController.mm in Sources */,
 				DA5A83C626C563A800F274C7 /* OAActionConfigurationViewController.mm in Sources */,

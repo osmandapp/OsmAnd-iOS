@@ -188,7 +188,7 @@
 "calculate_osmand_route_without_internet" = "Calculate OsmAnd route segment without Internet";
 "routing_settings_2" = "Axustes da navegación";
 "gpx_navigation" = "Seguir pista";
-"impassable_road" = "Evitar estradas…";
+"impassable_road" = "Evitalas estradas";
 "impassable_road_desc" = "Escolle as estradas que desexes evitar durante a navegación.";
 "interrupt_music_descr" = "Fully pause any music during voice prompts (not just lower its volume)";
 "interrupt_music" = "Deter a música";
@@ -210,9 +210,9 @@
 "shared_string_select_on_map" = "Seleccionar no mapa";
 "shared_string_my_location" = "A miña posición";
 "route_descr_select_destination" = "Escoller destino";
-"route_to" = "To:";
-"route_via" = "Vía:";
-"route_from" = "Dende:";
+"route_to" = "Para";
+"route_via" = "Vía";
+"route_from" = "Dende";
 "lat" = "Lat";
 "lon" = "Lon";
 "error_calculating_route" = "Error calculating route";
@@ -479,7 +479,7 @@
 "res_region_map" = "Region map";
 "res_updates_avail" = "Updates available";
 "res_maps_inst" = "map(s)";
-"res_deleting" = "Deleting...";
+"res_deleting" = "Eliminando…";
 "res_wsea_map" = "World seamarks basemap";
 "res_wmap" = "Worldwide overview map";
 "res_dmap" = "Detailed overview map";
@@ -622,7 +622,7 @@
 "product_desc_ext_skimap" = "OsmAnd Ski Maps is a plugin to OsmAnd Maps&Navigation app designed to navigate at winter sports locations. It gives the information about ski pistes, ski lift markers and even colored lines indicating the complexity of each track. You get the info about ski tracks themselves as well as the surrounding infrastructure.\n\nUsage Instructions: Enable the plugin in OsmAnd application, tap the map button and set the map type to Ski maps.";
 "product_title_track_recording" = "Trip recording";
 "product_desc_track_recording" = "Activates the functionality to record and save your tracks";
-"product_desc_ext_track_recording" = "Record your trips and save them manually using OsmAnd Trip recording plugin. Export your trip as a gpx file, share it or even use it to contribute to OpenStreetMap project.  A handy tool for runners, hikers and anyone interested in recording their trips.";
+"product_desc_ext_track_recording" = "Permíteche gravar, gardar e analizalos teus datos do adestramento ou movementos, coma velocidade, ascensos, descensos ou alivio da ruta, que logo se poden reutilizar, mellorar, complementar ou compartir cos amigos.. \n\nComo - https://osmand.net/docs/user/plugins/trip-recording";
 "product_title_trip_planning" = "Trip planning";
 "product_desc_trip_planning" = "Plan your trip, add waypoints, measure the distance to your destination using this plugin";
 "product_desc_ext_trip_planning" = "Trip planning plugin allows you to create your trip on the map, save it, measure the distance between points connected with straight lines, etc. Created for preliminary trip planning rather than thorough route building.";
@@ -661,7 +661,7 @@
 "enter_description" = "Enter description";
 "description" = "Descrición";
 "enter_fav_name" = "Enter favorite name";
-"res_installing" = "Installing...";
+"res_installing" = "Instalando…";
 "res_roads" = "Estradas";
 "res_srtm" = "Curvas de nivel";
 "res_wiki" = "Wikipedia";
@@ -837,7 +837,7 @@
 "toggle_poi" = "Amosar/Agochar os PDI";
 "quick_action_no_underlay" = "Sen subxacencia";
 "map_underlays" = "Mapas de embaixo (subxacentes)";
-"osm_live_routing" = "Navegación do OsmAnd ao Vivo";
+"osm_live_routing" = "OsmAnd navegación en directo";
 "add_gpx_waypoint" = "Engadir punto de pasaxe GPX";
 "osm_note_created" = "Nota de OSM creada";
 "download_depth_countours" = "Curvas do afundimento náuticos";
@@ -1805,3 +1805,11 @@
 "shared_string_delete_all" = "Eliminar todo";
 "in_grace_period" = "En período experimental";
 "shared_string_undefined" = "Sen definir";
+"map_settings_weather_temp" = "Temperatura";
+"osm_live_routing_descr" = "Use as actualizacións de OsmAnd Live para a navegación";
+"repeat_after" = "Repita despois";
+"map_settings_weather_wind" = "Vento";
+"map_settings_weather_precip" = "Precipitacións";
+"measurement_units" = "Unidades de medida";
+"map_settings_weather_cloud" = "Nube";
+"weather_offline_forecast" = "Pronóstico sen conexión";

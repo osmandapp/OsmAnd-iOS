@@ -1266,7 +1266,7 @@
 "hide_hillshade" = "Schummerung ausblenden";
 "toggle_contour_lines" = "Ein-/Ausblenden von Höhenlinien";
 "toggle_hillshade" = "Gelände ein-/ausblenden";
-"display_starting_at_zoom_level" = "Darstellen ab Zoomstufe";
+"display_starting_at_zoom_level" = "Anzeige beginnt bei Zoomstufe";
 "quick_action_contour_lines_descr" = "Ein Umschalter zum Ein- und Ausblenden von Höhenlinien auf der Karte.";
 "hide_contour_lines" = "Höhenlinien ausblenden";
 "show_contour_lines" = "Höhenlinien anzeigen";

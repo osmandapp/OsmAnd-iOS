@@ -2151,4 +2151,4 @@
 "gpx_import_already_exists_short" = "A megadott útvonalfájl már létezik a listában.";
 "shared_string_unavailable" = "Nem elérhető";
 "measurement_units" = "Mértékegységek";
-"weather_offline_forecast" = "Offline időjárási előrejelzés";
+"weather_offline_forecast" = "Offline időjárás-előrejelzés";

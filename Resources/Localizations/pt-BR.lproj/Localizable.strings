@@ -425,7 +425,7 @@
 "day_night_info" = "Informações dia/noite";
 "daynight_mode_auto" = "Nascer/pôr do sol";
 "auto_follow_location_enabled" = "Mapa automaticamente centrado.";
-"unknown_location" = "Posição ainda desconhecida.";
+"unknown_location" = "Posição ainda desconhecida";
 "settings_preset" = "Perfil predefinido";
 "settings_preset_descr" = "Configurações de exibição e navegação de mapa são gravadas por perfil de uso. Defina seu perfil padrão aqui.";
 "coords_format" = "Formato de coordenada";
@@ -764,7 +764,7 @@
 "routing_settings_descr" = "Configurar navegação";
 "fast_route_mode_descr" = "Ative para calcular a rota mais rápida ou desative para calcular a rota mais econômica.";
 "avoid_in_routing_descr" = "Evitar estradas com portagem, não pavimentadas e balsas/ferries";
-"prefer_in_routing_descr" = "Preferir autoestradas.";
+"prefer_in_routing_descr" = "Preferir autoestradas";
 "choose_auto_follow_route_descr" = "Tempo até o mapa ser centrado na posição atual";
 "auto_zoom_map_descr" = "Nível de ampliação automático de acordo com a velocidade (enquanto o mapa é sincronizado com a posição atual).";
 "snap_to_road_descr" = "Ajustar posição às vias próximas durante a navegação";
@@ -1687,7 +1687,7 @@
 "quick_action_remove_next_destination" = "Apagar o ponto de destino mais próximo";
 "shared_string_terrain" = "Terreno";
 "announce" = "Anunciar";
-"profile_prefs_reset_successful" = "Todas as configurações de perfil são restauradas para o padrão.";
+"profile_prefs_reset_successful" = "Todas as configurações de perfil são restauradas para o padrão";
 "consider_limitations_param" = "Aplicar limitações temporárias (obras...)";
 "two" = "Dois";
 "shared_string_max" = "Máx.";
@@ -2103,7 +2103,7 @@
 "population_num" = "População";
 "added_profiles_descr" = "Perfis adicionados pelo complemento";
 "added_profiles" = "Perfis adicionados";
-"suggested_maps_descr" = "Esses mapas são necessários para o complemento.";
+"suggested_maps_descr" = "Esses mapas são necessários para o complemento";
 "suggested_maps" = "Mapas sugeridos";
 "product_desc_ext_openplacereviews" = "Permite que você faça contribuições ao projeto OpenPlaceReviews. Como fotos, comentários, links sobre locais públicos, como restaurantes, hotéis, museus e pontos de passagem.\n\nVocê pode encontrar instruções sobre como contribuir em nosso site - https://osmand.net/docs/user/plugins/openplacereviews";
 "product_desc_openplacereviews" = "Compartilhe sua opinião sobre lugares públicos";
@@ -2170,7 +2170,7 @@
 "ios_release_4_1" = "• Interação com trilhos completamente redesenhada: um novo menu com gráficos, estatísticas, capacidade de alterar a aparência, cor por velocidade, altura e inclinação e seleção de trilhos no mapa\n• Novo ecrã para procura por coordenadas em diferentes formatos\n• Pesquisa de coordenadas no formato OLC melhorada\n• Novo menu de fácil utilização para escolher os idiomas a usar nos artigos da Wikipédia no mapa\n• Capacidade de carregar mapas de todas as regiões de alguns países facilmente com alguns cliques\n• Adicionadas linhas de contorno na medida \"pés\" (é necessário descarregar novamente os ficheiros)\n• Adicionada a capacidade de descarregar mapas selecionando a região ou país desejado no mapa, bem como a adição de uma caixa de diálogo com a sugestão de carregar um mapa em falta de uma região exibida\n• Nova aparência os botões de controlo do mapa e a capacidade adicional de alterar a ampliação do mapa tocando duas vezes e deslizando\n• As configurações de visibilidade das rotas foram movidas para cima no ecrã \"Configurar mapa\" e foram reorganizadas para uma melhor flexibilidade.\n";
 "delete_waypoints" = "Apagar ponto fixo";
 "delete_group_confirm_short" = "Eliminar grupo?";
-"delete_group_confirm" = "Quer mesmo eliminar o grupo ”%@”?";
+"delete_group_confirm" = "Quer mesmo eliminar o grupo \"%@\"?";
 "shared_string_time_span" = "Intervalo de tempo";
 "shared_string_start_time" = "Hora de início";
 "shared_string_end_time" = "Hora de fim";
@@ -2321,7 +2321,7 @@
 "map_widget_speed" = "Velocidade";
 "shared_string_min_height" = "Altura mín.";
 "route_preferred_terrain_hilly" = "Rotas com um perfil de terreno montanhoso.";
-"route_preferred_terrain_any" = "O perfil do terreno não é levado em consideração ao escolher uma rota";
+"route_preferred_terrain_any" = "O perfil do terreno não é levado em consideração ao escolher uma rota.";
 "shared_string_any" = "Todos";
 "shared_string_max_height" = "Altura máx.";
 "customize_route_line" = "Customizar linha da rota";
@@ -2442,7 +2442,7 @@
 "simulation_preview_mode_title" = "Modo de visualização rápida";
 "rendering_attr_lightRailRoutes_name" = "Rotas de trilha leve";
 "transport_hazmat_yes_desc" = "Você precisa escolher a categoria adequada.";
-"routing_attr_allow_private_for_truck_description" = "Permitir o acesso aáreas privadas para caminhões.";
+"routing_attr_allow_private_for_truck_description" = "Permitir o acesso aéreas privadas para caminhões";
 "simulation_constant_mode_desc" = "A simulação será realizada com velocidade selecionada constante.";
 "shared_string_data" = "Dados";
 "shared_string_delete_all" = "Apagar tudo";
@@ -2501,7 +2501,7 @@
 "restore_purchase" = "Restaurar compra";
 "promo_subscription" = "OsmAnd Pro (promoção)";
 "q_clear_weather_cache" = "Quer limpar os arquivos temporários da meteorologia?";
-"you_can_get_feature_as_part_of_pattern" = "Obtenha “%@” como parte do plano %@. Comparação:";
+"you_can_get_feature_as_part_of_pattern" = "Obtenha \"%@\" como parte do plano %@. Comparação:";
 "animate_my_location" = "Animar minha posição";
 "animate_my_location_descr" = "Transição suave de localização no mapa durante a navegação";
 "save_heading_descr" = "Salvar o cabeçalho em cada ponto da trilha durante a gravação";
@@ -2577,7 +2577,7 @@
 "purchases_feature_desc_carplay" = "Traz mapas e navegação offline do OsmAnd para a tela do seu veículo e se integra aos controles do seu veículo.";
 "quarterly_subscription" = "Assinatura trimestral";
 "no_purchases" = "Você não tem nenhuma compra";
-"empty_purchases_description" = "Se suas compras não aparecerem aqui, toque em “%@” ou entre em contato com nossa equipe de suporte.";
+"empty_purchases_description" = "Se suas compras não aparecerem aqui, toque em \"%@\" ou entre em contato com nossa equipe de suporte.";
 "expires" = "Expira";
 "turn_arrows_descr" = "Controle a visibilidade das setas de curva na linha de rota.";
 "shared_string_always_visible" = "Sempre visível";
@@ -2713,3 +2713,15 @@
 "weather_entire_world" = "Mundo inteiro";
 "map_widget_rendering_fps" = "FPS da renderização do mapa";
 "shared_string_profile" = "Perfil";
+"map_settings_show_map_symbols" = "Mostrar símbolos do mapa";
+"mountain_bike" = "Bicicleta de montanha";
+"rendering_attr_showMtbScaleIMBATrails_name" = "Trilhos BTT";
+"rendering_value_showMtbScaleIMBATrails_description" = "Associação Internacional de Ciclismo de Montanha";
+"ios_release_4_3" = "- Animação suave em alterações de localização durante o movimento\n- CarPlay: adicionadas vias de trânsito (faixas), vista 2.5D; problemas de som corrigidos em conexões por Bluetooth\n- Introdução de novos planos de compra: subscrições \"OsmAnd Pro\" com acesso a todas as funcionalidades e compra \"Mapas+\" com descarregamentos ilimitados de mapas e acesso pago a complementos (plug-ins).\n- Adicionada opção de cópia de segurança na nuvem e previsão meteorológica off-line para utilizadores OsmAnd Pro\n- Novo e conveniente tela de \"Compra\" com a lista de todas as compras\n- Benefícios para colaboradores ativos do OpenStreetMap.org\n- Os trilhos podem agora ser coloridos por altitude, velocidade ou declive\n- Os mapas off-line estão agora acessíveis através da aplicação Ficheiros do sistema Android\n- Favoritos: adicionada opção de geração de cópias de segurança no dispositivo após cada alteração, as cópias de segurança são acessíveis a partir da aplicação Ficheiros\n- POIs guardados nos favoritos armazenam e mostram todos os dados de POI mesmo sem um mapa off-line\n- Suporte de GPX para link, cmt, desc tags e para quaisquer extensões personalizadas\n- Modo adicionado para o botão Bússola\n- Corrigido um problema com o formato coordenadas UTM\n- Corrigido um problema com pontos intermédios na navegação\n";
+"shared_string_download_update" = "Baixar atualização";
+"backup_error_failed_to_fetch_remote_items" = "Falha ao buscar a lista de arquivos do servidor.";
+"error_contact_support" = "Se o problema persistir, entre em contato com nossa equipe de suporte.";
+"ltr_or_rtl_combine_via_slash" = "%@/%@";
+"track_has_no_needed_data" = "A trilha não tem os respectivos dados.";
+"select_another_colorization" = "Selecione outro tipo de coloração.";
+"map_download_privacy_descr" = "Ao baixar os mapas concorda com os <a href='https://osmand.net/docs/legal/terms-of-use'>Termos de uso</a> e a <a href='https://osmand.net/docs/legal/privacy-policy'>Política de privacidade</a>.";

@@ -2462,3 +2462,9 @@
 "shared_string_data" = "Data";
 "shared_string_undefined" = "Tidak tersedia";
 "map_widget_rendering_fps" = "FPS perenderan peta";
+"measurement_units" = "Satuan pengukuran";
+"map_settings_weather_temp" = "Suhu";
+"map_settings_weather_wind" = "Angin";
+"map_settings_weather_cloud" = "Awan";
+"map_settings_weather_precip" = "Curah hujan";
+"weather_offline_forecast" = "Prakiraan luring";

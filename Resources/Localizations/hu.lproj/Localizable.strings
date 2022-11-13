@@ -526,10 +526,10 @@
 "driving_region_australia" = "Ausztrália";
 "left_side_navigation" = "Bal oldali közlekedés";
 "right_side_navigation" = "Jobb oldali közlekedés";
-"si_mi_feet" = "Mérföld/láb";
-"si_mi_yard" = "Mérföld/yard";
-"si_mi_meters" = "Mérföld/méter";
-"si_km_m" = "Kilométer/méter";
+"si_mi_feet" = "Mérföld, láb";
+"si_mi_yard" = "Mérföld, yard";
+"si_mi_meters" = "Mérföld, méter";
+"si_km_m" = "Kilométer, méter";
 "si_nm" = "Tengeri mérföld";
 "si_kmh" = "km/h";
 "si_mph" = "mérföld/h";
@@ -756,7 +756,7 @@
 "mapillary_image" = "Mapillary-fénykép";
 "shared_string_reset" = "Visszaállítás";
 "shared_string_reload" = "Újratöltés";
-"day" = "napra";
+"day" = "nappali";
 "days_2_4" = "napra";
 "days_5" = "napra";
 "week" = "hétre";

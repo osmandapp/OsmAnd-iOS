@@ -183,6 +183,22 @@
         }];
     }
 
+    BOOL useDepthContours = [_iapHelper.nautical isActive] && ([OAIAPHelper isPaidVersion] || [OAIAPHelper isDepthContoursPurchased]);
+    if (useDepthContours)
+    {
+        OAMapStyleParameter *nauticalDepthControursParameter = [_styleSettings getParameter:NAUTICAL_DEPTH_CONTOURS];
+        if (nauticalDepthControursParameter)
+        {
+            [showSectionData addObject:@{
+                @"name": OALocalizedString(@"product_title_sea_depth_contours"),
+                @"image": @"ic_custom_nautical_depth_colored_day",
+                @"type": [OAValueTableViewCell getCellIdentifier],
+                @"key": @"nautical_depth",
+                @"value": OALocalizedString([nauticalDepthControursParameter.value isEqualToString:@"true"] ? @"shared_string_on" : @"shared_string_off")
+            }];
+        }
+    }
+
     [data addObject:@{
             @"group_name": OALocalizedString(@"map_settings_show"),
             @"cells": showSectionData
@@ -364,7 +380,7 @@
             }];
         }
 
-        _filteredTopLevelParams = [[_styleSettings getParameters:@""] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(_name != %@) AND (_name != %@) AND (_name != %@)", kContourLinesDensity, kContourLinesWidth, kContourLinesColorScheme]];
+        _filteredTopLevelParams = [[_styleSettings getParameters:@""] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(_name != %@) AND (_name != %@) AND (_name != %@) AND (_name != %@) AND (_name != %@)", CONTOUR_DENSITY_ATTR, CONTOUR_WIDTH_ATTR, CONTOUR_COLOR_SCHEME_ATTR, NAUTICAL_DEPTH_CONTOUR_WIDTH_ATTR, NAUTICAL_DEPTH_CONTOUR_COLOR_SCHEME_ATTR]];
         for (OAMapStyleParameter *parameter in _filteredTopLevelParams)
         {
             if (parameter.title)
@@ -612,7 +628,7 @@
     else if ([key isEqualToString:@"category_transport"])
         return ![_styleSettings isCategoryDisabled:TRANSPORT_CATEGORY];
     else if ([key isEqualToString:@"contour_lines_layer"])
-        return ![[_styleSettings getParameter:@"contourLines"].value isEqualToString:@"disabled"];
+        return ![[_styleSettings getParameter:CONTOUR_LINES].value isEqualToString:@"disabled"];
     else if ([key isEqualToString:@"terrain_layer"])
         return _app.data.terrainType != EOATerrainTypeDisabled;
     else if ([key isEqualToString:@"overlay_layer"])
@@ -621,6 +637,8 @@
         return _app.data.underlayMapSource != nil;
     else if ([key isEqualToString:@"weather_layer"])
         return _app.data.weather;
+    else if ([key isEqualToString:@"nautical_depth"])
+        return [[_styleSettings getParameter:NAUTICAL_DEPTH_CONTOURS].value isEqualToString:@"true"];
 
     if ([key hasPrefix:@"routes_"] && _routesParameters.count > index)
     {
@@ -1025,6 +1043,8 @@
         mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenLanguage];
     else if ([item[@"key"] isEqualToString:@"weather_layer"] && !isPromoButton)
         mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenWeather];
+    else if ([item[@"key"] isEqualToString:@"nautical_depth"])
+        mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenNauticalDepth];
 
     if ([item[@"key"] hasPrefix:@"routes_"])
     {
@@ -1150,7 +1170,7 @@
 
 - (void)contourLinesChanged:(BOOL)isOn
 {
-    OAMapStyleParameter *parameter = [_styleSettings getParameter:@"contourLines"];
+    OAMapStyleParameter *parameter = [_styleSettings getParameter:CONTOUR_LINES];
     parameter.value = isOn ? [_settings.contourLinesZoom get] : @"disabled";
     [_styleSettings save:parameter];
 }

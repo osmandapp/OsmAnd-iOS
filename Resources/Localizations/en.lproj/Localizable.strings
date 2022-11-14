@@ -1614,7 +1614,7 @@
 "hide_terrain" = "Hide Terrain";
 "toggle_contour_lines" = "Show/Hide contour lines";
 "toggle_hillshade" = "Show/Hide terrain";
-"display_starting_at_zoom_level" = "Display starting at zoom level";
+"display_starting_at_zoom_level" = "Displaying starts at zoom level";
 "quick_action_contour_lines_descr" = "Tapping this action button shows or hides contour lines layer.";
 "hide_contour_lines" = "Hide contour lines";
 "show_contour_lines" = "Show contour lines";
@@ -1902,6 +1902,7 @@
 
 "product_title_sea_depth_contours" = "Nautical depth contours";
 "product_desc_sea_depth_contours" = "Sea depth contour lines and seamarks";
+"depth_contour_lines" = "Depth contour lines";
 
 "my_location" = "My Location";
 "all_categories" = "All categories";
@@ -2490,6 +2491,8 @@
 "routing_attr_driving_style_safety_name" = "Prefer byways";
 "rendering_attr_surface_paving_stones_name" = "Paving stones";
 "rendering_attr_depthContours_name" = "Nautical depth contours";
+"rendering_attr_depthContourWidth_name" = "Lines width";
+"rendering_attr_depthContourColorScheme_name" = "Lines color scheme";
 "rendering_attr_piste_difficulty_freeride_name" = "Freeride";
 "routeInfo_steepness_name" = "Steepness";
 "rendering_attr_smoothness_very_bad_name" = "Very bad";

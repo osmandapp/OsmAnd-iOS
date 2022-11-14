@@ -1,0 +1,227 @@
+//
+//  OAMapSettingsNauticalDepthScreen.mm
+//  OsmAnd
+//
+//  Created by Skalii on 10.11.2022.
+//  Copyright (c) 2021 OsmAnd. All rights reserved.
+//
+
+#import "OAMapSettingsNauticalDepthScreen.h"
+#import "OANauticalDepthParametersViewController.h"
+#import "OAMapSettingsViewController.h"
+#import "OAMapViewController.h"
+#import "OARootViewController.h"
+#import "OAValueTableViewCell.h"
+#import "OATableViewCellSwitch.h"
+#import "OAMapStyleSettings.h"
+#import "OATableViewDataModel.h"
+#import "OATableViewSectionData.h"
+#import "OATableViewRowData.h"
+#import "OASizes.h"
+#import "OAColors.h"
+#import "Localization.h"
+
+@interface OAMapSettingsNauticalDepthScreen () <OANauticalDepthParametersDelegate>
+
+@end
+
+@implementation OAMapSettingsNauticalDepthScreen
+{
+    OsmAndAppInstance _app;
+    OAMapViewController *_mapViewController;
+
+    OAMapStyleSettings *_styleSettings;
+    OAMapStyleParameter *_depthContours;
+    OAMapStyleParameter *_depthContourWidth;
+    OAMapStyleParameter *_depthContourColorScheme;
+
+    OATableViewDataModel *_data;
+}
+
+@synthesize settingsScreen, tableData, vwController, tblView, title, isOnlineMapSource;
+
+- (id)initWithTable:(UITableView *)tableView viewController:(OAMapSettingsViewController *)viewController
+{
+    self = [super init];
+    if (self)
+    {
+        _app = [OsmAndApp instance];
+        _styleSettings = [OAMapStyleSettings sharedInstance];
+        tblView = tableView;
+        settingsScreen = EMapSettingsScreenNauticalDepth;
+        vwController = viewController;
+        _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
+        _depthContours = [_styleSettings getParameter:NAUTICAL_DEPTH_CONTOURS];
+        _depthContourWidth = [_styleSettings getParameter:NAUTICAL_DEPTH_CONTOUR_WIDTH_ATTR];
+        _depthContourColorScheme = [_styleSettings getParameter:NAUTICAL_DEPTH_CONTOUR_COLOR_SCHEME_ATTR];
+
+        [self initData];
+    }
+    return self;
+}
+
+- (void)initData
+{
+    _data = [[OATableViewDataModel alloc] init];
+    OATableViewSectionData *switchSection = [OATableViewSectionData sectionData];
+    [switchSection addRowFromDictionary:@{
+        kCellTypeKey: [OATableViewCellSwitch getCellIdentifier],
+        kCellTitle: OALocalizedString(@"product_title_sea_depth_contours"),
+        kCellIconNameKey: @"ic_custom_nautical_depth_colored_day",
+        kCellIconTint: @(color_primary_purple),
+        @"iconTintDisabled" : @(color_tint_gray)
+    }];
+    [_data addSection:switchSection];
+
+    if ([_depthContours.value isEqualToString:@"true"])
+    {
+        OATableViewSectionData *settingsSection = [OATableViewSectionData sectionData];
+        settingsSection.headerText = OALocalizedString(@"depth_contour_lines");
+        [settingsSection addRowFromDictionary:@{
+            kCellTypeKey: [OAValueTableViewCell getCellIdentifier],
+            @"parameter": _depthContourWidth
+        }];
+        [settingsSection addRowFromDictionary:@{
+            kCellTypeKey: [OAValueTableViewCell getCellIdentifier],
+            @"parameter": _depthContourColorScheme
+        }];
+        [_data addSection:settingsSection];
+    }
+}
+
+- (void)setupView
+{
+    title = OALocalizedString(@"product_title_sea_depth_contours");
+    tblView.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
+}
+
+#pragma mark - UITableViewDataSource
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return [_data sectionCount];
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return [_data rowCount:section];
+}
+
+- (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    OATableViewRowData *item = [_data itemForIndexPath:indexPath];
+    if ([item.cellType isEqualToString:[OATableViewCellSwitch getCellIdentifier]])
+    {
+        OATableViewCellSwitch *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellSwitch getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellSwitch getCellIdentifier] owner:self options:nil];
+            cell = (OATableViewCellSwitch *) nib[0];
+            [cell descriptionVisibility:NO];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        }
+        if (cell)
+        {
+            cell.titleLabel.text = item.title;
+
+            BOOL isOn = [_depthContours.value isEqualToString:@"true"];
+            cell.leftIconView.image = [UIImage templateImageNamed:item.iconName];
+            cell.leftIconView.tintColor = isOn ? UIColorFromRGB(item.iconTint) : UIColorFromRGB([item integerForKey:@"iconTintDisabled"]);
+
+            cell.switchView.on = isOn;
+            cell.switchView.tag = indexPath.section << 10 | indexPath.row;
+            [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];
+            [cell.switchView addTarget:self action:@selector(onSwitchPressed:) forControlEvents:UIControlEventValueChanged];
+        }
+        return cell;
+    }
+    else if ([item.cellType isEqualToString:[OAValueTableViewCell getCellIdentifier]])
+    {
+        OAMapStyleParameter *parameter = [item objForKey:@"parameter"];
+        OAValueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAValueTableViewCell *) nib[0];
+            [cell descriptionVisibility:NO];
+            [cell leftIconVisibility:NO];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        }
+        if (cell)
+        {
+            cell.titleLabel.text = parameter.title;
+            cell.valueLabel.text = [parameter getValueTitle];
+        }
+        return cell;
+    }
+
+    return nil;
+}
+
+#pragma mark - UITableViewDelegate
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    return [_data sectionDataForIndex:section].headerText;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    NSString *header = [_data sectionDataForIndex:section].headerText;
+    if (header)
+    {
+        CGFloat headerHeight = [OAUtilities calculateTextBounds:header
+                                                          width:tableView.frame.size.width - (kPaddingOnSideOfContent + [OAUtilities getLeftMargin]) * 2
+                                                           font:[UIFont systemFontOfSize:13.]].height + kPaddingOnSideOfHeaderWithText;
+        return headerHeight;
+    }
+
+    return 0.;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+
+    OATableViewRowData *item = [_data itemForIndexPath:indexPath];
+    OAMapStyleParameter *parameter = [item objForKey:@"parameter"];
+    if (parameter)
+    {
+        OANauticalDepthParametersViewController *depthParametersViewController = [[OANauticalDepthParametersViewController alloc] initWithParameter:parameter];
+        depthParametersViewController.depthDelegate = self;
+        [vwController presentViewController:depthParametersViewController animated:YES completion:nil];
+    }
+}
+
+#pragma mark - Selectors
+
+- (void)onSwitchPressed:(id)sender
+{
+    UISwitch *switchView = (UISwitch *) sender;
+    if (switchView)
+    {
+        _depthContours.value = switchView.on ? @"true" : @"false";
+        [_styleSettings save:_depthContours];
+        [self initData];
+        [UIView transitionWithView:tblView
+                          duration:.35
+                           options:UIViewAnimationOptionTransitionCrossDissolve
+                        animations:^(void) {
+                            [tblView reloadData];
+                        }
+                        completion:nil];
+    }
+}
+
+#pragma mark - OANauticalDepthParametersDelegate
+
+- (void)onValueSelected:(OAMapStyleParameter *)parameter
+{
+    if ([_depthContours.value isEqualToString:@"true"])
+    {
+        [tblView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:parameter == _depthContourWidth ? 0 : 1 inSection:1]]
+                       withRowAnimation:UITableViewRowAnimationAutomatic];
+    }
+}
+
+@end

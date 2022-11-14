@@ -33,11 +33,23 @@ static NSString * const LIGHT_RAIL_ROUTES_ATTR = @"showLightRailRoutes";
 static NSString * const FUNICULAR_ROUTES = @"showFunicularRoutes";
 static NSString * const MONORAIL_ROUTES_ATTR = @"showMonorailRoutes";
 
+static NSString * const CONTOUR_LINES = @"contourLines";
+static NSString * const CONTOUR_DENSITY_ATTR = @"contourDensity";
+static NSString * const CONTOUR_WIDTH_ATTR = @"contourWidth";
+static NSString * const CONTOUR_COLOR_SCHEME_ATTR = @"contourColorScheme";
+
+static NSString * const NAUTICAL_DEPTH_CONTOURS = @"depthContours";
+static NSString * const NAUTICAL_DEPTH_CONTOUR_WIDTH_ATTR = @"depthContourWidth";
+static NSString * const NAUTICAL_DEPTH_CONTOUR_COLOR_SCHEME_ATTR = @"depthContourColorScheme";
+
 static NSString * const CURRENT_TRACK_COLOR_ATTR = @"currentTrackColor";
 static NSString * const CURRENT_TRACK_WIDTH_ATTR = @"currentTrackWidth";
 
 static NSString * const WEATHER_TEMP_CONTOUR_LINES_ATTR = @"weatherTempContours";
 static NSString * const WEATHER_PRESSURE_CONTOURS_LINES_ATTR = @"weatherPressureContours";
+static NSString * const WEATHER_CLOUD_CONTOURS_LINES_ATTR = @"weatherCloudContours";
+static NSString * const WEATHER_WIND_CONTOURS_LINES_ATTR = @"weatherWindSpeedContours";
+static NSString * const WEATHER_PRECIPITATION_CONTOURS_LINES_ATTR = @"weatherPrecipitationContours";
 static NSString * const WEATHER_NONE_CONTOURS_LINES_VALUE = @"none";
 
 typedef NS_ENUM(NSInteger, OAMapStyleValueDataType)
@@ -100,9 +112,11 @@ typedef NS_ENUM(NSInteger, OAMapStyleValueDataType)
 - (void) resetMapStyleForAppMode:(NSString *)mapPresetName
                       onComplete:(void(^)(void))onComplete;
 
+- (BOOL)isWeatherContourLinesEnabled:(NSString *)attr;
+- (void)setWeatherContourLinesEnabled:(BOOL)enabled weatherContourLinesAttr:(NSString *)attr;
+
 + (NSString *)getTransportIconForName:(NSString *)name;
 + (int)getTransportSortIndexForName:(NSString *)name;
 
-+ (NSString *)weatherContoursParamChangedToValue:(NSString *)newValue styleSettings:(OAMapStyleSettings *)styleSettings;
 
 @end

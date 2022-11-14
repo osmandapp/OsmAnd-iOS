@@ -2052,7 +2052,6 @@ static const double d180PI = 180.0 / M_PI_2;
     label.attributedText = text;
     label.numberOfLines = 0;
     label.lineBreakMode = NSLineBreakByWordWrapping;
-    label.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [label sizeToFit];
     CGRect frame = label.frame;
     frame.size.height = label.frame.size.height;

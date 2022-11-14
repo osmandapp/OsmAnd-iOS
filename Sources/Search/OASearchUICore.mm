@@ -499,7 +499,6 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
     for (OASearchCoreAPI *a in _apis)
         if ([a isKindOfClass:cl])
             return a;
-
     return nil;
 }
 

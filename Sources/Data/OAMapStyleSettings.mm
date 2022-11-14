@@ -500,34 +500,36 @@
         return 0;
 }
 
-+ (NSString *)weatherContoursParamChangedToValue:(NSString *)newValue styleSettings:(OAMapStyleSettings *)styleSettings
+- (BOOL)isWeatherContourLinesEnabled:(NSString *)attr
 {
-    OAMapStyleParameter *tempContourLinesParam = [styleSettings getParameter:WEATHER_TEMP_CONTOUR_LINES_ATTR];
-    OAMapStyleParameter *pressureContourLinesParam = [styleSettings getParameter:WEATHER_PRESSURE_CONTOURS_LINES_ATTR];
-    if ([WEATHER_TEMP_CONTOUR_LINES_ATTR isEqualToString:newValue])
-    {
-        tempContourLinesParam.value = @"true";
-        [styleSettings save:tempContourLinesParam];
-        pressureContourLinesParam.value = @"false";
-        [styleSettings save:pressureContourLinesParam];
-        return WEATHER_TEMP_CONTOUR_LINES_ATTR;
-    }
-    else if ([WEATHER_PRESSURE_CONTOURS_LINES_ATTR isEqualToString:newValue])
-    {
-        tempContourLinesParam.value = @"false";
-        [styleSettings save:tempContourLinesParam];
-        pressureContourLinesParam.value = @"true";
-        [styleSettings save:pressureContourLinesParam];
-        return WEATHER_PRESSURE_CONTOURS_LINES_ATTR;
-    }
-    else
-    {
-        tempContourLinesParam.value = @"false";
-        [styleSettings save:tempContourLinesParam];
-        pressureContourLinesParam.value = @"false";
-        [styleSettings save:pressureContourLinesParam];
-        return WEATHER_NONE_CONTOURS_LINES_VALUE;
-    }
+    OAMapStyleParameter *param = [self getParameter:attr];
+    return param && [@"true" isEqualToString:param.value];
+}
+
+- (void)setWeatherContourLinesEnabled:(BOOL)enabled weatherContourLinesAttr:(NSString *)attr
+{
+    OAMapStyleParameter *tempContourLinesParam = [self getParameter:WEATHER_TEMP_CONTOUR_LINES_ATTR];
+    OAMapStyleParameter *pressureContourLinesParam = [self getParameter:WEATHER_PRESSURE_CONTOURS_LINES_ATTR];
+    OAMapStyleParameter *cloudContourLinesParam = [self getParameter:WEATHER_CLOUD_CONTOURS_LINES_ATTR];
+    OAMapStyleParameter *windContourLinesParam = [self getParameter:WEATHER_WIND_CONTOURS_LINES_ATTR];
+    OAMapStyleParameter *precipContourLinesParam = [self getParameter:WEATHER_PRECIPITATION_CONTOURS_LINES_ATTR];
+
+    BOOL enableTempContourLines = enabled && [WEATHER_TEMP_CONTOUR_LINES_ATTR isEqualToString:attr];
+    BOOL enablePressureContourLines = enabled && [WEATHER_PRESSURE_CONTOURS_LINES_ATTR isEqualToString:attr];
+    BOOL enableCloudContourLines = enabled && [WEATHER_CLOUD_CONTOURS_LINES_ATTR isEqualToString:attr];
+    BOOL enableWindContourLines = enabled && [WEATHER_WIND_CONTOURS_LINES_ATTR isEqualToString:attr];
+    BOOL enablePrecipContourLines = enabled && [WEATHER_PRECIPITATION_CONTOURS_LINES_ATTR isEqualToString:attr];
+
+    tempContourLinesParam.value = enableTempContourLines ? @"true" : @"false";
+    [self save:tempContourLinesParam refreshMap:NO];
+    pressureContourLinesParam.value = enablePressureContourLines ? @"true" : @"false";
+    [self save:pressureContourLinesParam refreshMap:NO];
+    cloudContourLinesParam.value = enableCloudContourLines ? @"true" : @"false";
+    [self save:cloudContourLinesParam refreshMap:NO];
+    windContourLinesParam.value = enableWindContourLines ? @"true" : @"false";
+    [self save:windContourLinesParam refreshMap:NO];
+    precipContourLinesParam.value = enablePrecipContourLines ? @"true" : @"false";
+    [self save:precipContourLinesParam refreshMap:YES];
 }
 
 @end

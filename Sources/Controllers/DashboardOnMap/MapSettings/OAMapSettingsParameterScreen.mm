@@ -80,7 +80,7 @@
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if ([parameterName isEqualToString:@"contourLines"])
+    if ([parameterName isEqualToString:CONTOUR_LINES])
         return parameter.possibleValues.count - 1; //without "Disabled"
     return parameter.possibleValues.count;
 }
@@ -121,7 +121,7 @@
     parameter.value = value.name;
     [styleSettings save:parameter];
     
-    if ([parameterName isEqualToString:@"contourLines"])
+    if ([parameterName isEqualToString:CONTOUR_LINES])
         [[OAAppSettings sharedManager].contourLinesZoom set:value.name];
     
     [tableView reloadData];

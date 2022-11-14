@@ -2722,3 +2722,10 @@
 "rendering_attr_showMtbScaleIMBATrails_name" = "Senderos de montaña IMBA";
 "rendering_value_showMtbScaleIMBATrails_description" = "Asociación Internacional del Ciclismo de Montaña";
 "map_settings_show_map_symbols" = "Mostrar los símbolos del mapa";
+"depth_contour_lines" = "Líneas del contorno de la profundidad";
+"rendering_attr_depthContourWidth_name" = "Ancho de las lineas";
+"rendering_attr_depthContourColorScheme_name" = "Esquema de los colores de las líneas";
+"last_sync" = "Última sincronización";
+"sync_now" = "Sincronizar ahora";
+"local_changes" = "Cambios locales";
+"syncing_progress" = "Sincronizando...";

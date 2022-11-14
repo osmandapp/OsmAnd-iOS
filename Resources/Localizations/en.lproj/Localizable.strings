@@ -1902,6 +1902,7 @@
 
 "product_title_sea_depth_contours" = "Nautical depth contours";
 "product_desc_sea_depth_contours" = "Sea depth contour lines and seamarks";
+"depth_contour_lines" = "Depth contour lines";
 
 "my_location" = "My Location";
 "all_categories" = "All categories";
@@ -2489,6 +2490,8 @@
 "routing_attr_driving_style_safety_name" = "Prefer byways";
 "rendering_attr_surface_paving_stones_name" = "Paving stones";
 "rendering_attr_depthContours_name" = "Nautical depth contours";
+"rendering_attr_depthContourWidth_name" = "Lines width";
+"rendering_attr_depthContourColorScheme_name" = "Lines color scheme";
 "rendering_attr_piste_difficulty_freeride_name" = "Freeride";
 "routeInfo_steepness_name" = "Steepness";
 "rendering_attr_smoothness_very_bad_name" = "Very bad";

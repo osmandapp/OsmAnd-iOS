@@ -477,7 +477,7 @@ typedef enum
 - (void) onAddonsSwitch:(id)observable withKey:(id)key andValue:(id)value
 {
     NSString *productIdentifier = key;
-    if ([productIdentifier isEqualToString:kInAppId_Addon_Srtm])
+    if ([productIdentifier isEqualToString:kInAppId_Addon_Srtm] || [productIdentifier isEqualToString:kInAppId_Addon_Nautical])
     {
         [_app.data.mapLayerChangeObservable notifyEvent];
     }

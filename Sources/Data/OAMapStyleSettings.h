@@ -33,6 +33,15 @@ static NSString * const LIGHT_RAIL_ROUTES_ATTR = @"showLightRailRoutes";
 static NSString * const FUNICULAR_ROUTES = @"showFunicularRoutes";
 static NSString * const MONORAIL_ROUTES_ATTR = @"showMonorailRoutes";
 
+static NSString * const CONTOUR_LINES = @"contourLines";
+static NSString * const CONTOUR_DENSITY_ATTR = @"contourDensity";
+static NSString * const CONTOUR_WIDTH_ATTR = @"contourWidth";
+static NSString * const CONTOUR_COLOR_SCHEME_ATTR = @"contourColorScheme";
+
+static NSString * const NAUTICAL_DEPTH_CONTOURS = @"depthContours";
+static NSString * const NAUTICAL_DEPTH_CONTOUR_WIDTH_ATTR = @"depthContourWidth";
+static NSString * const NAUTICAL_DEPTH_CONTOUR_COLOR_SCHEME_ATTR = @"depthContourColorScheme";
+
 static NSString * const CURRENT_TRACK_COLOR_ATTR = @"currentTrackColor";
 static NSString * const CURRENT_TRACK_WIDTH_ATTR = @"currentTrackWidth";
 

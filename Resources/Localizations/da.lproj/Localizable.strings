@@ -2727,3 +2727,10 @@
 "mountain_bike" = "Mountainbike";
 "rendering_value_showMtbScaleIMBATrails_description" = "International Mountain Bicycling Association";
 "map_settings_show_map_symbols" = "Vis kortsymboler";
+"depth_contour_lines" = "Dybdekonturlinjer";
+"syncing_progress" = "Synkroniserer...";
+"rendering_attr_depthContourWidth_name" = "Linjebredde";
+"last_sync" = "Sidste synkronisering";
+"sync_now" = "Synkroniser nu";
+"local_changes" = "Lokale ændringer";
+"rendering_attr_depthContourColorScheme_name" = "Linjers farvesætning";

@@ -1265,7 +1265,7 @@
 "hide_hillshade" = "Сховати відтінення рельєфу";
 "toggle_contour_lines" = "Показати/сховати ізолінії";
 "toggle_hillshade" = "Показати/Сховати рельєф";
-"display_starting_at_zoom_level" = "Показувати починаючи з масштабу";
+"display_starting_at_zoom_level" = "Показ розпочинається з масштабу";
 "quick_action_contour_lines_descr" = "Натискання на цю кнопку вмикає чи вимикає показ ізоліній на мапі.";
 "hide_contour_lines" = "Сховати ізолінії";
 "show_contour_lines" = "Показ ізоліній";

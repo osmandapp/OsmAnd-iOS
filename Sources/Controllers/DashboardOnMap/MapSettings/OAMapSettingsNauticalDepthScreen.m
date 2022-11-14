@@ -14,6 +14,9 @@
 #import "OAValueTableViewCell.h"
 #import "OATableViewCellSwitch.h"
 #import "OAMapStyleSettings.h"
+#import "OATableViewDataModel.h"
+#import "OATableViewSectionData.h"
+#import "OATableViewRowData.h"
 #import "OASizes.h"
 #import "OAColors.h"
 #import "Localization.h"
@@ -32,7 +35,7 @@
     OAMapStyleParameter *_depthContourWidth;
     OAMapStyleParameter *_depthContourColorScheme;
 
-    NSArray<NSArray<NSDictionary *> *> *_data;
+    OATableViewDataModel *_data;
 }
 
 @synthesize settingsScreen, tableData, vwController, tblView, title, isOnlineMapSource;
@@ -59,31 +62,30 @@
 
 - (void)initData
 {
-    NSMutableArray<NSArray<NSDictionary *> *> *data = [NSMutableArray new];
-
-    [data addObject:@[@{ @"type": [OATableViewCellSwitch getCellIdentifier] }]];
+    _data = [[OATableViewDataModel alloc] init];
+    OATableViewSectionData *switchSection = [OATableViewSectionData sectionData];
+    [switchSection addRowFromDictionary:@{
+        kCellTypeKey: [OATableViewCellSwitch getCellIdentifier],
+        kCellTitle: OALocalizedString(@"product_title_sea_depth_contours"),
+        kCellIconNameKey: @"ic_custom_nautical_depth_colored_day",
+        kCellIconTint: @(color_tint_gray)
+    }];
+    [_data addSection:switchSection];
 
     if ([_depthContours.value isEqualToString:@"true"])
     {
-        NSMutableArray<NSDictionary *> *cells = [NSMutableArray new];
-        if (_depthContourWidth)
-        {
-            [cells addObject:@{
-                @"type": [OAValueTableViewCell getCellIdentifier],
-                @"parameter": _depthContourWidth
-            }];
-        }
-        if (_depthContourColorScheme)
-        {
-            [cells addObject:@{
-                @"type": [OAValueTableViewCell getCellIdentifier],
-                @"parameter": _depthContourColorScheme
-            }];
-        }
-        [data addObject:cells];
+        OATableViewSectionData *settingsSection = [OATableViewSectionData sectionData];
+        settingsSection.headerText = OALocalizedString(@"depth_contour_lines");
+        [settingsSection addRowFromDictionary:@{
+            kCellTypeKey: [OAValueTableViewCell getCellIdentifier],
+            @"parameter": _depthContourWidth
+        }];
+        [settingsSection addRowFromDictionary:@{
+            kCellTypeKey: [OAValueTableViewCell getCellIdentifier],
+            @"parameter": _depthContourColorScheme
+        }];
+        [_data addSection:settingsSection];
     }
-
-    _data = data;
 }
 
 - (void)setupView
@@ -92,27 +94,22 @@
     tblView.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
 }
 
-- (NSDictionary *)getItem:(NSIndexPath *)indexPath
-{
-    return _data[indexPath.section][indexPath.row];
-}
-
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return _data.count;
+    return [_data sectionCount];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _data[section].count;
+    return [_data rowCount:section];
 }
 
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:[OATableViewCellSwitch getCellIdentifier]])
+    OATableViewRowData *item = [_data itemForIndexPath:indexPath];
+    if ([item.cellType isEqualToString:[OATableViewCellSwitch getCellIdentifier]])
     {
         OATableViewCellSwitch *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellSwitch getCellIdentifier]];
         if (cell == nil)
@@ -121,21 +118,14 @@
             cell = (OATableViewCellSwitch *) nib[0];
             [cell descriptionVisibility:NO];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.leftIconView.tintColor = UIColorFromRGB(item.iconTint);
         }
         if (cell)
         {
-            cell.titleLabel.text = OALocalizedString(@"product_title_sea_depth_contours");
+            cell.titleLabel.text = item.title;
 
             BOOL isOn = [_depthContours.value isEqualToString:@"true"];
-            if (!isOn)
-            {
-                cell.leftIconView.image = [UIImage templateImageNamed:@"ic_custom_nautical_depth_colored_day"];
-                cell.leftIconView.tintColor = UIColorFromRGB(color_tint_gray);
-            }
-            else
-            {
-                cell.leftIconView.image = [UIImage imageNamed:@"ic_custom_nautical_depth_colored_day"];
-            }
+            cell.leftIconView.image = isOn ? [UIImage imageNamed:item.iconName] : [UIImage templateImageNamed:item.iconName];
 
             cell.switchView.on = isOn;
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
@@ -144,9 +134,9 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:[OAValueTableViewCell getCellIdentifier]])
+    else if ([item.cellType isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
-        OAMapStyleParameter *parameter = item[@"parameter"];
+        OAMapStyleParameter *parameter = [item objForKey:@"parameter"];
         OAValueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
@@ -171,17 +161,15 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    if (section == 1)
-        return OALocalizedString(@"depth_contour_lines");
-
-    return nil;
+    return [_data sectionDataForIndex:section].headerText;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    if (section == 1)
+    NSString *header = [_data sectionDataForIndex:section].headerText;
+    if (header)
     {
-        CGFloat headerHeight = [OAUtilities calculateTextBounds:OALocalizedString(@"depth_contour_lines")
+        CGFloat headerHeight = [OAUtilities calculateTextBounds:header
                                                           width:tableView.frame.size.width - (kPaddingOnSideOfContent + [OAUtilities getLeftMargin]) * 2
                                                            font:[UIFont systemFontOfSize:13.]].height + kPaddingOnSideOfHeaderWithText;
         return headerHeight;
@@ -194,8 +182,8 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
-    NSDictionary *item = [self getItem:indexPath];
-    OAMapStyleParameter *parameter = item[@"parameter"];
+    OATableViewRowData *item = [_data itemForIndexPath:indexPath];
+    OAMapStyleParameter *parameter = [item objForKey:@"parameter"];
     if (parameter)
     {
         OANauticalDepthParametersViewController *depthParametersViewController = [[OANauticalDepthParametersViewController alloc] initWithParameter:parameter];

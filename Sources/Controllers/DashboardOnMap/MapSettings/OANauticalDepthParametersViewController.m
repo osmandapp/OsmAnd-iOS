@@ -17,7 +17,6 @@
 
 @implementation OANauticalDepthParametersViewController
 {
-    NSArray<NSDictionary *> *_data;
     OAMapStyleSettings *_styleSettings;
     OAMapStyleParameter *_parameter;
 }

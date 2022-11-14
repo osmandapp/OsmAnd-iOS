@@ -14,9 +14,9 @@
 #import "OAValueTableViewCell.h"
 #import "OATableViewCellSwitch.h"
 #import "OAMapStyleSettings.h"
-#import "OATableViewDataModel.h"
-#import "OATableViewSectionData.h"
-#import "OATableViewRowData.h"
+#import "OATableDataModel.h"
+#import "OATableSectionData.h"
+#import "OATableRowData.h"
 #import "OASizes.h"
 #import "OAColors.h"
 #import "Localization.h"
@@ -35,7 +35,7 @@
     OAMapStyleParameter *_depthContourWidth;
     OAMapStyleParameter *_depthContourColorScheme;
 
-    OATableViewDataModel *_data;
+    OATableDataModel *_data;
 }
 
 @synthesize settingsScreen, tableData, vwController, tblView, title, isOnlineMapSource;
@@ -62,8 +62,8 @@
 
 - (void)initData
 {
-    _data = [[OATableViewDataModel alloc] init];
-    OATableViewSectionData *switchSection = [OATableViewSectionData sectionData];
+    _data = [[OATableDataModel alloc] init];
+    OATableSectionData *switchSection = [OATableSectionData sectionData];
     [switchSection addRowFromDictionary:@{
         kCellTypeKey: [OATableViewCellSwitch getCellIdentifier],
         kCellTitle: OALocalizedString(@"product_title_sea_depth_contours"),
@@ -75,7 +75,7 @@
 
     if ([_depthContours.value isEqualToString:@"true"])
     {
-        OATableViewSectionData *settingsSection = [OATableViewSectionData sectionData];
+        OATableSectionData *settingsSection = [OATableSectionData sectionData];
         settingsSection.headerText = OALocalizedString(@"depth_contour_lines");
         [settingsSection addRowFromDictionary:@{
             kCellTypeKey: [OAValueTableViewCell getCellIdentifier],
@@ -109,7 +109,7 @@
 
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    OATableViewRowData *item = [_data itemForIndexPath:indexPath];
+    OATableRowData *item = [_data itemForIndexPath:indexPath];
     if ([item.cellType isEqualToString:[OATableViewCellSwitch getCellIdentifier]])
     {
         OATableViewCellSwitch *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellSwitch getCellIdentifier]];
@@ -183,7 +183,7 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
-    OATableViewRowData *item = [_data itemForIndexPath:indexPath];
+    OATableRowData *item = [_data itemForIndexPath:indexPath];
     OAMapStyleParameter *parameter = [item objForKey:@"parameter"];
     if (parameter)
     {

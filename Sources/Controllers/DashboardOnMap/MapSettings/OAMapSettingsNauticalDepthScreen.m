@@ -68,7 +68,8 @@
         kCellTypeKey: [OATableViewCellSwitch getCellIdentifier],
         kCellTitle: OALocalizedString(@"product_title_sea_depth_contours"),
         kCellIconNameKey: @"ic_custom_nautical_depth_colored_day",
-        kCellIconTint: @(color_tint_gray)
+        kCellIconTint: @(color_primary_purple),
+        @"iconTintDisabled" : @(color_tint_gray)
     }];
     [_data addSection:switchSection];
 
@@ -118,14 +119,14 @@
             cell = (OATableViewCellSwitch *) nib[0];
             [cell descriptionVisibility:NO];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.leftIconView.tintColor = UIColorFromRGB(item.iconTint);
         }
         if (cell)
         {
             cell.titleLabel.text = item.title;
 
             BOOL isOn = [_depthContours.value isEqualToString:@"true"];
-            cell.leftIconView.image = isOn ? [UIImage imageNamed:item.iconName] : [UIImage templateImageNamed:item.iconName];
+            cell.leftIconView.image = [UIImage templateImageNamed:item.iconName];
+            cell.leftIconView.tintColor = isOn ? UIColorFromRGB(item.iconTint) : UIColorFromRGB([item integerForKey:@"iconTintDisabled"]);
 
             cell.switchView.on = isOn;
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;

@@ -2734,3 +2734,10 @@
 "rendering_value_showMtbScaleIMBATrails_description" = "Міжнародна асоціація гірського велоспорту";
 "mountain_bike" = "Гірський велосипед";
 "map_settings_show_map_symbols" = "Показати символи мапи";
+"rendering_attr_depthContourColorScheme_name" = "Колірна схема ліній";
+"last_sync" = "Остання синхронізація";
+"depth_contour_lines" = "Ізолінії глибини";
+"syncing_progress" = "Синхронізація...";
+"sync_now" = "Синхронізувати зараз";
+"rendering_attr_depthContourWidth_name" = "Ширина ліній";
+"local_changes" = "Локальні зміни";

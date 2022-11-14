@@ -1,14 +1,14 @@
 //
-//  OATableViewRowData.m
+//  OATableRowData.m
 //  OsmAnd Maps
 //
 //  Created by Paul on 20.09.2022.
 //  Copyright © 2022 OsmAnd. All rights reserved.
 //
 
-#import "OATableViewRowData.h"
+#import "OATableRowData.h"
 
-@implementation OATableViewRowData
+@implementation OATableRowData
 {
     NSMutableDictionary *_data;
 }
@@ -98,7 +98,7 @@
 
 - (NSInteger)iconTint
 {
-    return [_data[kCellIconTint] integerValue];
+    return _data[kCellIconTint] ? [_data[kCellIconTint] integerValue] : -1;
 }
 
 - (void)setIconTint:(NSInteger)iconTint
@@ -129,6 +129,21 @@
 - (BOOL) boolForKey:(nonnull NSString *)key
 {
     return [_data[key] boolValue];
+}
+
+- (EOATableRowType)rowType
+{
+    return EOATableRowTypeRegular;
+}
+
+- (NSInteger)dependentRowsCount
+{
+    return 0;
+}
+
+- (OATableRowData *) getDependentRow:(NSUInteger)index
+{
+    return nil;
 }
 
 @end

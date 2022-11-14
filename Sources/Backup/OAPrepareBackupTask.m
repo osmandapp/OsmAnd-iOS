@@ -44,7 +44,7 @@ static OABackupTaskType *GENERATE_BACKUP_INFO;
 + (OABackupTaskType *) COLLECT_REMOTE_FILES
 {
     if (!COLLECT_REMOTE_FILES)
-        COLLECT_REMOTE_FILES = [[OABackupTaskType alloc] initWithDependentTasks:nil];
+        COLLECT_REMOTE_FILES = [[OABackupTaskType alloc] initWithDependentTasks:@[self.COLLECT_LOCAL_FILES]];
     return COLLECT_REMOTE_FILES;
 }
 
@@ -163,7 +163,7 @@ static OABackupTaskType *GENERATE_BACKUP_INFO;
 {
     @try
     {
-        [OANetworkSettingsHelper.sharedInstance collectSettings:kPrepareBackupKey readData:NO listener:self];
+        [OANetworkSettingsHelper.sharedInstance collectSettings:kPrepareBackupKey readData:YES listener:self];
     }
     @catch (NSException *e)
     {

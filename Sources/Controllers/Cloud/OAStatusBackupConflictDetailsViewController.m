@@ -7,12 +7,12 @@
 //
 
 #import "OAStatusBackupConflictDetailsViewController.h"
-#import "OAStatusBackupTableViewController.h"
 #import "OASimpleTableViewCell.h"
 #import "OARightIconTableViewCell.h"
 #import "OATableViewCustomHeaderView.h"
 #import "OATableDataModel.h"
 #import "OATableSectionData.h"
+#import "OACloudBackupViewController.h"
 #import "OATableRowData.h"
 #import "OANetworkSettingsHelper.h"
 #import "OABackupHelper.h"
@@ -265,15 +265,9 @@
         [self dismissViewControllerAnimated:YES completion:^{
             NSString *fileName = [OABackupHelper getItemFileName:_localFile.item];
             if ([item.key isEqualToString:@"uploadLocal"])
-            {
-                [_settingsHelper exportSettings:fileName items:@[_localFile.item] itemsToDelete:@[] listener:_backupExportImportListener];
-            }
+                [_settingsHelper syncSettingsItems:fileName localFile:_localFile remoteFile:_remoteFile operation:EOABackupSyncOperationUpload];
             else if ([item.key isEqualToString:@"downloadCloud"])
-            {
-                OASettingsItem *settingsItem = _remoteFile.item;
-                [settingsItem setShouldReplace:YES];
-                [_settingsHelper importSettings:fileName items:@[settingsItem] forceReadData:YES listener:_backupExportImportListener];
-            }
+                [_settingsHelper syncSettingsItems:fileName localFile:_localFile remoteFile:_remoteFile operation:EOABackupSyncOperationDownload];
         }];
     }
 }

@@ -13,34 +13,41 @@
 #import "OAImportBackupTask.h"
 #import "OAExportSettingsType.h"
 #import "OABackupHelper.h"
+#import "OASettingsItem.h"
 #import "OABackupInfo.h"
 #import "OARemoteFile.h"
 #import "OsmAndApp.h"
 
 #include <OsmAndCore/ResourcesManager.h>
 
-@interface OASyncBackupTask () <OABackupCollectListener, OAOnPrepareBackupListener, OACheckDuplicatesListener, OAImportListener, OABackupExportListener>
+@interface OASyncBackupTask () <OAOnPrepareBackupListener, OAImportListener, OABackupExportListener>
 
 @end
 
 @implementation OASyncBackupTask
 {
+    NSString *_key;
     OABackupHelper *_backupHelper;
     NSArray<OASettingsItem *> *_settingsItems;
     NSInteger _maxProgress;
     NSInteger _lastProgress;
     NSInteger _currentProgress;
+    
+    BOOL _cancelled;
+    BOOL _singleOperation;
 }
 
-- (instancetype)init
+- (instancetype)initWithKey:(NSString *)key
 {
     self = [super init];
     if (self) {
+        _key = key;
         _backupHelper = OABackupHelper.sharedInstance;
         [_backupHelper addPrepareBackupListener:self];
         _currentProgress = 0;
         _lastProgress = 0;
         _maxProgress = 0;
+        _cancelled = NO;
     }
     return self;
 }
@@ -50,31 +57,63 @@
     [_backupHelper removePrepareBackupListener:self];
 }
 
+- (void)startSync
+{
+    OAPrepareBackupResult *backup = _backupHelper.backup;
+    OABackupInfo *info = backup.backupInfo;
+    
+    _settingsItems = [OABackupHelper getItemsForRestore:info settingsItems:backup.settingsItems];
+    _maxProgress += [OAImportBackupTask calculateMaxProgress];
+    _maxProgress += ([self calculateExportMaxProgress] / 1024);
+    
+    if (_settingsItems.count > 0)
+    {
+        [OANetworkSettingsHelper.sharedInstance importSettings:kRestoreItemsKey items:_settingsItems forceReadData:NO listener:self];
+    }
+    else
+    {
+        [self uploadNewItems];
+    }
+    
+    [NSNotificationCenter.defaultCenter postNotificationName:kBackupSyncStartedNotification object:nil];
+}
+
 - (void)execute
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        OANetworkSettingsHelper.sharedInstance.syncBackupTask = self;
         if (!_backupHelper.isBackupPreparing)
-            [self collectAndReadSettings];
-        
-        [NSNotificationCenter.defaultCenter postNotificationName:kBackupSyncStartedNotification object:nil];
+            [self startSync];
     });
 }
 
-- (void) collectAndReadSettings
+- (void)uploadLocalItem:(OASettingsItem *)item fileName:(NSString *)fileName
 {
-    @try
-    {
-        [OANetworkSettingsHelper.sharedInstance collectSettings:kRestoreItemsKey readData:YES listener:self];
-    }
-    @catch (NSException *e)
-    {
-        NSLog(@"Restore backup error: %@", e.reason);
-    }
+    _singleOperation = YES;
+    [OANetworkSettingsHelper.sharedInstance exportSettings:fileName items:@[item] itemsToDelete:@[] listener:self];
+}
+
+- (void)downloadRemoteVersion:(OASettingsItem *)item fileName:(NSString *)fileName
+{
+    _singleOperation = YES;
+    [item setShouldReplace:YES];
+    [OANetworkSettingsHelper.sharedInstance importSettings:fileName items:@[item] forceReadData:YES listener:self];
+}
+
+- (void)deleteItem:(OASettingsItem *)item fileName:(NSString *)fileName
+{
+    _singleOperation = YES;
+    [OANetworkSettingsHelper.sharedInstance exportSettings:fileName items:@[] itemsToDelete:@[item] listener:self];
+}
+
+- (void)cancel
+{
+    _cancelled = YES;
 }
 
 - (void) uploadNewItems
 {
+    if (_cancelled)
+        return;
     @try
     {
         OABackupInfo *info = _backupHelper.backup.backupInfo;
@@ -83,47 +122,14 @@
         {
             [OANetworkSettingsHelper.sharedInstance exportSettings:kBackupItemsKey items:items itemsToDelete:info.itemsToDelete listener:self];
         }
+        else
+        {
+            [self onSyncFinished:nil];
+        }
     }
     @catch (NSException *e)
     {
         NSLog(@"Backup generation error: %@", e.reason);
-    }
-}
-
-// MARK: OABackupCollectListener
-
-- (void)onBackupCollectFinished:(BOOL)succeed empty:(BOOL)empty items:(NSArray<OASettingsItem *> *)items remoteFiles:(NSArray<OARemoteFile *> *)remoteFiles
-{
-    if (succeed)
-    {
-        OAPrepareBackupResult *backup = _backupHelper.backup;
-        OABackupInfo *info = backup.backupInfo;
-        NSMutableSet<OASettingsItem *> *itemsForRestore = [NSMutableSet set];
-        if (info != nil)
-        {
-            for (OARemoteFile *remoteFile in info.filesToDownload)
-            {
-                OASettingsItem *restoreItem = [self getRestoreItem:items remoteFile:remoteFile];
-                if (restoreItem != nil)
-                    [itemsForRestore addObject:restoreItem];
-            }
-        }
-        _settingsItems = itemsForRestore.allObjects;
-        _maxProgress += [OAImportBackupTask calculateMaxProgress];
-        _maxProgress += ([self calculateExportMaxProgress] / 1024);
-        
-        if (_settingsItems.count > 0)
-        {
-            [OANetworkSettingsHelper.sharedInstance checkDuplicates:kRestoreItemsKey items:_settingsItems selectedItems:_settingsItems listener:self];
-        }
-        else
-        {
-            [self uploadNewItems];
-        }
-    }
-    else
-    {
-        [NSNotificationCenter.defaultCenter postNotificationName:kBackupSyncFinishedNotification object:nil userInfo:nil];
     }
 }
 
@@ -143,21 +149,11 @@
     
 }
 
-- (OASettingsItem *) getRestoreItem:(NSArray<OASettingsItem *> *)items remoteFile:(OARemoteFile *)remoteFile
-{
-    for (OASettingsItem *item in items)
-    {
-        if ([OABackupHelper applyItem:item type:remoteFile.type name:remoteFile.name])
-            return item;
-    }
-    return nil;
-}
-
 // MARK: OAOnPrepareBackupListener
 
 - (void)onBackupPrepared:(nonnull OAPrepareBackupResult *)backupResult
 {
-    [self collectAndReadSettings];
+    [self startSync];
     [NSNotificationCenter.defaultCenter postNotificationName:kBackupSyncStartedNotification object:nil];
 }
 
@@ -165,23 +161,12 @@
     
 }
 
-// MARK: OACheckDuplicatesListener
-
-- (void)onDuplicatesChecked:(NSArray *)duplicates items:(NSArray<OASettingsItem *> *)items
-{
-    NSMutableArray<OASettingsItem *> *filteredItems = [NSMutableArray arrayWithArray:items];
-    [filteredItems removeObjectsInArray:duplicates];
-    @try {
-        [OANetworkSettingsHelper.sharedInstance importSettings:kRestoreItemsKey items:filteredItems forceReadData:NO listener:self];
-    } @catch (NSException *e) {
-        NSLog(@"Restore backup import error: %@", e.reason);
-    }
-}
-
 // MARK: OAImportListener
 
 - (void)onImportFinished:(BOOL)succeed needRestart:(BOOL)needRestart items:(NSArray<OASettingsItem *> *)items
 {
+    if (_cancelled)
+        return;
     if (succeed)
     {
         OsmAndAppInstance app = OsmAndApp.instance;
@@ -194,6 +179,8 @@
 //            plugin.indexingFiles(true, true);
 //        }
     }
+    if (_singleOperation)
+        return [self onSyncFinished:nil];
     [self uploadNewItems];
 }
 
@@ -220,6 +207,12 @@
     [NSNotificationCenter.defaultCenter postNotificationName:kBackupProgressUpdateNotification object:nil userInfo:@{@"progress": @(progress)}];
 }
 
+- (void)onSyncFinished:(NSDictionary *)info
+{
+    [OANetworkSettingsHelper.sharedInstance.syncBackupTasks removeObjectForKey:_key];
+    [NSNotificationCenter.defaultCenter postNotificationName:kBackupSyncFinishedNotification object:nil userInfo:info];
+}
+
 // MARK: OABackupExportListener
 
 - (void)onBackupExportFinished:(NSString *)error
@@ -227,8 +220,7 @@
     NSDictionary *info = nil;
     if (error)
         info = @{@"error": error};
-    OANetworkSettingsHelper.sharedInstance.syncBackupTask = nil;
-    [NSNotificationCenter.defaultCenter postNotificationName:kBackupSyncFinishedNotification object:nil userInfo:info];
+    [self onSyncFinished:info];
 }
 
 - (void)onBackupExportProgressUpdate:(NSInteger)value

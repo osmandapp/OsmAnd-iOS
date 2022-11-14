@@ -50,8 +50,10 @@
 - (NSString *) getPublicName
 {
     if (_appMode.isCustomProfile)
-        return _appMode.getUserProfileName;
-    return _appMode.name;
+        return _modeBean.userProfileName;
+    else if (_appMode.name.length > 0)
+        return _appMode.name;
+    return self.name;
 }
 
 - (NSString *) defaultFileName
@@ -241,7 +243,6 @@
         [builder setLocationIcon:_modeBean.locIcon];
         [builder setNavigationIcon:_modeBean.navIcon];
 //        app.getSettings().copyPreferencesFromProfile(parent, builder.getApplicationMode());
-//        appMode = ApplicationMode.saveProfile(builder, app);
         _appMode = [OAApplicationMode saveProfile:builder];
     }
     else if (!self.shouldReplace && [self exists])

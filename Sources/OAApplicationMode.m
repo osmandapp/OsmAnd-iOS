@@ -775,8 +775,10 @@ static OAApplicationMode *_HORSE;
 + (OAApplicationMode *) valueOfStringKey:(NSString *)key def:(OAApplicationMode *)def
 {
     for (OAApplicationMode *p in _values)
+    {
         if ([p.stringKey isEqualToString:key])
             return p;
+    }
 
     return def;
 }

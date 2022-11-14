@@ -307,15 +307,12 @@
             {
                 BOOL delete = NO;
                 NSString *origFileName = [remoteFile.name stringByDeletingPathExtension];
-                for (OARemoteFile *file in filesToDelete)
-                {
-                    if ([file.name isEqualToString:origFileName])
-                    {
-                        delete = YES;
-                        break;
-                    }
-                }
                 OAUploadedFileInfo *fileInfo = infoMap[[NSString stringWithFormat:@"%@___%@", remoteFile.type, origFileName]];
+                if (_backupHelper.getPreparedLocalFiles[fileName.stringByDeletingPathExtension] == nil && !remoteFile.isDeleted)
+                {
+                    if (fileInfo != nil)
+                        delete = YES;
+                }
                 long uploadTime = fileInfo != nil ? fileInfo.uploadTime : 0;
                 if (readItems && (uploadTime != remoteFile.clienttimems || delete))
                     remoteInfoFilesMap[[_tmpFilesDir stringByAppendingPathComponent:fileName]] = remoteFile;

@@ -57,7 +57,6 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
 
 @implementation OABackupHelper
 {
-    
     OAPrepareBackupTask *_prepareBackupTask;
     NSHashTable<id<OAOnPrepareBackupListener>> *_prepareBackupListeners;
     
@@ -100,6 +99,46 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
 + (BOOL) isTokenValid:(NSString *)token
 {
     return [token isMatchedByRegex:@"[0-9]+"];
+}
+
++ (NSArray<OASettingsItem *> *) getItemsForRestore:(OABackupInfo *)info settingsItems:(NSArray<OASettingsItem *> *)settingsItems
+{
+    NSMutableSet<OASettingsItem *> *itemsForRestore = [NSMutableSet set];
+    if (info != nil)
+    {
+        for (OARemoteFile *remoteFile in info.filteredFilesToDownload)
+        {
+            OASettingsItem *restoreItem = [self getRestoreItem:settingsItems remoteFile:remoteFile];
+            if (restoreItem != nil && !restoreItem.exists)
+                [itemsForRestore addObject:restoreItem];
+        }
+    }
+    return itemsForRestore.allObjects;
+}
+
++ (NSArray<NSArray *> *) getItemsMapForRestore:(OABackupInfo *)info settingsItems:(NSArray<OASettingsItem *> *)settingsItems
+{
+    NSMutableSet<NSArray *> *itemsForRestore = [NSMutableSet set];
+    if (info != nil)
+    {
+        for (OARemoteFile *remoteFile in info.filteredFilesToDownload)
+        {
+            OASettingsItem *restoreItem = [self getRestoreItem:settingsItems remoteFile:remoteFile];
+            if (restoreItem != nil && !restoreItem.exists)
+                [itemsForRestore addObject:@[remoteFile, restoreItem]];
+        }
+    }
+    return itemsForRestore.allObjects;
+}
+
++ (OASettingsItem *) getRestoreItem:(NSArray<OASettingsItem *> *)items remoteFile:(OARemoteFile *)remoteFile
+{
+    for (OASettingsItem *item in items)
+    {
+        if ([self.class applyItem:item type:remoteFile.type name:remoteFile.name])
+            return item;
+    }
+    return nil;
 }
 
 + (BOOL) applyItem:(OASettingsItem *)item type:(NSString *)type name:(NSString *)name
@@ -574,9 +613,10 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
     
     OAURLSessionProgress *progress = [[OAURLSessionProgress alloc] init];
     NSInteger sz = [self calculateFileSize:remoteFile];
-    
+    __block int64_t work = 0;
     [progress setOnProgress:^(int progress, int64_t deltaWork) {
-        int prog = ((double)deltaWork / (double)sz) * 100;
+        work += deltaWork;
+        int prog = ((double)work / (double)sz) * 100;
         [listener onFileDownloadProgress:type fileName:fileName progress:prog deltaWork:deltaWork itemFileName:nil];
     }];
     
@@ -633,6 +673,13 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
 {
     OABackupInfoGenerationTask *task = [[OABackupInfoGenerationTask alloc] initWithLocalFiles:localFiles uniqueRemoteFiles:uniqueRemoteFiles deletedRemoteFiles:deletedRemoteFiles onComplete:onComplete];
     [_executor addOperation:task];
+}
+
+- (NSDictionary<NSString *, OALocalFile *> *)getPreparedLocalFiles
+{
+    if (self.isBackupPreparing)
+        return _prepareBackupTask.backup.localFiles;
+    return nil;
 }
 
 - (BOOL) isBackupPreparing

@@ -17,9 +17,18 @@ NS_ASSUME_NONNULL_BEGIN
 #define kBackupItemProgressNotification @"OsmandBackupSyncItemProgressNotification"
 #define kBackupItemStartedNotification @"OsmandBackupSyncItemStartedNotification"
 
+@class OASettingsItem;
+
 @interface OASyncBackupTask : NSObject
 
-- (void)execute;
+- (instancetype)initWithKey:(NSString *)key;
+
+- (void) execute;
+- (void)uploadLocalItem:(OASettingsItem *)item fileName:(NSString *)fileName;
+- (void)downloadRemoteVersion:(OASettingsItem *)item fileName:(NSString *)fileName;
+- (void)deleteItem:(OASettingsItem *)item fileName:(NSString *)fileName;
+
+- (void) cancel;
 
 @end
 

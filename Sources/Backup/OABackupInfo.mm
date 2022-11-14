@@ -36,6 +36,7 @@
 
 - (void) createItemCollections
 {
+    [self createFilteredFilesToDownload];
     [self createFilteredFilesToUpload];
     [self createItemsToUpload];
     [self createFilteredFilesToDelete];
@@ -64,6 +65,21 @@
             [items addObject:item];
     }
     _itemsToDelete = [NSMutableArray arrayWithArray:items.allObjects];
+}
+
+- (void) createFilteredFilesToDownload
+{
+    NSMutableArray<OARemoteFile *> *files = [NSMutableArray array];
+    OABackupHelper *helper = OABackupHelper.sharedInstance;
+    for (OARemoteFile *remoteFile in _filesToDownload)
+    {
+        OAExportSettingsType *type = remoteFile.item != nil ? [OAExportSettingsType getExportSettingsTypeForItem:remoteFile.item] : nil;
+        if (type != nil && [helper getBackupTypePref:type].get)
+        {
+            [files addObject:remoteFile];
+        }
+    }
+    _filteredFilesToDownload = files;
 }
 
 - (void) createFilteredFilesToUpload

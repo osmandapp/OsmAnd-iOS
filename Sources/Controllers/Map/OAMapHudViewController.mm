@@ -78,7 +78,6 @@
     NSLayoutConstraint *_leftRulerConstraint;
     
     BOOL _cachedLocationAvailableState;
-    OAShowTopControlsCompletionBlock _showTopControlsCompletionBlock;
 }
 
 - (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -1265,18 +1264,7 @@
             self.topCoordinatesWidget.userInteractionEnabled = self.topCoordinatesWidget.alpha > 0.0;
         if (self.downloadMapWidget)
             self.downloadMapWidget.userInteractionEnabled = self.downloadMapWidget.alpha > 0.0;
-
-        if (_showTopControlsCompletionBlock)
-        {
-            _showTopControlsCompletionBlock();
-            _showTopControlsCompletionBlock = nil;
-        }
     }];
-}
-
-- (void)setShowTopControlsCompletionBlock:(OAShowTopControlsCompletionBlock)completionBlock
-{
-    _showTopControlsCompletionBlock = completionBlock;
 }
 
 - (void) hideTopControls

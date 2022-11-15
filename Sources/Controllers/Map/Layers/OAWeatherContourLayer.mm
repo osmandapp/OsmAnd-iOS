@@ -203,13 +203,15 @@
 
 - (void)onWeatherToolbarStateChanged
 {
-    BOOL needsSettingsForToolbar = [[OARootViewController instance].mapPanel.hudViewController needsSettingsForWeatherToolbar];
-    if (_needsSettingsForToolbar != needsSettingsForToolbar)
-    {
-        _date = self.mapViewController.mapLayers.weatherDate;
-        _needsSettingsForToolbar = needsSettingsForToolbar;
-        [self updateWeatherLayer];
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        BOOL needsSettingsForToolbar = [[OARootViewController instance].mapPanel.hudViewController needsSettingsForWeatherToolbar];
+        if (_needsSettingsForToolbar != needsSettingsForToolbar)
+        {
+            _date = self.mapViewController.mapLayers.weatherDate;
+            _needsSettingsForToolbar = needsSettingsForToolbar;
+            [self updateWeatherLayer];
+        }
+    });
 }
 
 - (void)onLayerAlphaChanged

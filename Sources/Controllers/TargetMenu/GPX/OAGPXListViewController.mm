@@ -32,6 +32,7 @@
 #import "OAExportItemsViewController.h"
 #import "OAIndexConstants.h"
 #import "OsmAndApp.h"
+#import "OARightIconTableViewCell.h"
 
 #include <OsmAndCore/ArchiveReader.h>
 #include <OsmAndCore/IFavoriteLocation.h>
@@ -1202,18 +1203,22 @@ static UIViewController *parentController;
         }
         else if ([menuCellType isEqualToString:[OAIconTextTableViewCell getCellIdentifier]])
         {
-            OAIconTextTableViewCell* cell;
-            cell = (OAIconTextTableViewCell *)[self.gpxTableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
+            OARightIconTableViewCell* cell;
+            cell = (OARightIconTableViewCell *)[self.gpxTableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
-                cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
-                cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
+                cell = (OARightIconTableViewCell *)[nib objectAtIndex:0];
+                cell.titleLabel.tintColor = UIColorFromRGB(color_primary_purple);
             }
             if (cell) {
-                cell.textView.text = menuItem[@"title"];
-                cell.iconView.image = [UIImage templateImageNamed:menuItem[@"icon"]];
-                cell.arrowIconView.hidden = YES;
+                cell.titleLabel.text = menuItem[@"title"];
+                cell.rightIconView.image = [UIImage templateImageNamed:menuItem[@"icon"]];
+                cell.rightIconView.tintColor = [self colorFromHexString: @"#5714CC"];
+                cell.titleLabel.textColor = [self colorFromHexString: @"#5714CC"];
+                [cell leftIconVisibility:NO];
+                cell.descriptionLabel.hidden = YES;
+                [cell rightIconVisibility:YES];
             }
             return cell;
         }
@@ -1635,6 +1640,14 @@ static UIViewController *parentController;
     dispatch_async(dispatch_get_main_queue(), ^{
         [self reloadData];
     });
+}
+
+- (UIColor *)colorFromHexString:(NSString *)hexString {
+    unsigned rgbValue = 0;
+    NSScanner *scanner = [NSScanner scannerWithString:hexString];
+    [scanner setScanLocation:1]; // bypass '#' character
+    [scanner scanHexInt:&rgbValue];
+    return [UIColor colorWithRed:((rgbValue & 0xFF0000) >> 16)/255.0 green:((rgbValue & 0xFF00) >> 8)/255.0 blue:(rgbValue & 0xFF)/255.0 alpha:1.0];
 }
 
 @end

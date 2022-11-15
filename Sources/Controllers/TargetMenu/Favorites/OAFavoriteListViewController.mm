@@ -24,6 +24,7 @@
 #import "OASizes.h"
 #import "OAColors.h"
 #import "OAOsmAndFormatter.h"
+#import "OARightIconTableViewCell.h"
 
 #import "OsmAndApp.h"
 
@@ -397,7 +398,7 @@ static UIViewController *parentController;
 
 -(void)setupView
 {
-    self.favoriteTableView.separatorInset = UIEdgeInsetsMake(0.0, 62.0, 0.0, 0.0);
+    self.favoriteTableView.separatorInset = UIEdgeInsetsMake(0.0, 20.0, 0.0, 0.0);
     [self.favoriteTableView setDataSource:self];
     [self.favoriteTableView setDelegate:self];
     self.favoriteTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
@@ -1003,18 +1004,22 @@ static UIViewController *parentController;
 - (UITableViewCell*)getActionCellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
-    OAIconTextTableViewCell* cell;
-    cell = (OAIconTextTableViewCell *)[self.favoriteTableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
+    OARightIconTableViewCell* cell;
+    cell = (OARightIconTableViewCell *)[self.favoriteTableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
-        cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
+        cell = (OARightIconTableViewCell *)[nib objectAtIndex:0];
     }
 
-    if (cell)
-    {
-        [cell.textView setText:[item objectForKey:@"text"]];
-        [cell.iconView setImage: [UIImage imageNamed:[item objectForKey:@"icon"]]];
+    if (cell) {
+        cell.titleLabel.text = [item objectForKey:@"text"];
+        cell.rightIconView.image = [UIImage templateImageNamed:[item objectForKey:@"icon"]];
+        cell.rightIconView.tintColor = [self colorFromHexString: @"#5714CC"];
+        cell.titleLabel.textColor = [self colorFromHexString: @"#5714CC"];
+        cell.titleLabel.hidden = NO;
+        cell.descriptionLabel.hidden = YES;
+        [cell leftIconVisibility: NO];
     }
     return cell;
 }
@@ -1614,4 +1619,11 @@ static UIViewController *parentController;
     [self.favoriteTableView endUpdates];
 }
 
+- (UIColor *)colorFromHexString:(NSString *)hexString {
+    unsigned rgbValue = 0;
+    NSScanner *scanner = [NSScanner scannerWithString:hexString];
+    [scanner setScanLocation:1]; // bypass '#' character
+    [scanner scanHexInt:&rgbValue];
+    return [UIColor colorWithRed:((rgbValue & 0xFF0000) >> 16)/255.0 green:((rgbValue & 0xFF00) >> 8)/255.0 blue:(rgbValue & 0xFF)/255.0 alpha:1.0];
+}
 @end

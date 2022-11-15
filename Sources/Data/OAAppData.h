@@ -103,7 +103,6 @@
 @property (nonatomic) double contoursAlpha;
 @property (readonly) OAObservable* contourNameChangeObservable;
 @property (readonly) OAObservable* contoursAlphaChangeObservable;
-@property (readonly) OAObservable* contoursAlphaToolbarChangeObservable;
 
 @property (readonly) OAMapLayersConfiguration* mapLayersConfiguration;
 

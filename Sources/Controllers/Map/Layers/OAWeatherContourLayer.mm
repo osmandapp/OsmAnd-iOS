@@ -123,28 +123,38 @@
         NSString *parameterName = self.app.data.contourName;
         OsmAnd::BandIndex band = WEATHER_BAND_UNDEFINED;
 
-        if ([parameterName isEqualToString:WEATHER_TEMP_CONTOUR_LINES_ATTR])
+        OAMapStyleParameter *tempContourLinesParam = [_styleSettings getParameter:WEATHER_TEMP_CONTOUR_LINES_ATTR];
+        OAMapStyleParameter *pressureContourLinesParam = [_styleSettings getParameter:WEATHER_PRESSURE_CONTOURS_LINES_ATTR];
+        OAMapStyleParameter *cloudContourLinesParam = [_styleSettings getParameter:WEATHER_CLOUD_CONTOURS_LINES_ATTR];
+        OAMapStyleParameter *windContourLinesParam = [_styleSettings getParameter:WEATHER_WIND_CONTOURS_LINES_ATTR];
+        OAMapStyleParameter *precipContourLinesParam = [_styleSettings getParameter:WEATHER_PRECIPITATION_CONTOURS_LINES_ATTR];
+
+        if (tempContourLinesParam && [parameterName isEqualToString:WEATHER_TEMP_CONTOUR_LINES_ATTR])
             band = WEATHER_BAND_TEMPERATURE;
-        if ([parameterName isEqualToString:WEATHER_PRESSURE_CONTOURS_LINES_ATTR])
+        else if (pressureContourLinesParam && [parameterName isEqualToString:WEATHER_PRESSURE_CONTOURS_LINES_ATTR])
             band = WEATHER_BAND_PRESSURE;
-        if ([parameterName isEqualToString:WEATHER_CLOUD_CONTOURS_LINES_ATTR])
+        else if (cloudContourLinesParam && [parameterName isEqualToString:WEATHER_CLOUD_CONTOURS_LINES_ATTR])
             band = WEATHER_BAND_CLOUD;
-        if ([parameterName isEqualToString:WEATHER_WIND_CONTOURS_LINES_ATTR])
+        else if (windContourLinesParam && [parameterName isEqualToString:WEATHER_WIND_CONTOURS_LINES_ATTR])
             band = WEATHER_BAND_WIND_SPEED;
-        if ([parameterName isEqualToString:WEATHER_PRECIPITATION_CONTOURS_LINES_ATTR])
+        else if (precipContourLinesParam && [parameterName isEqualToString:WEATHER_PRECIPITATION_CONTOURS_LINES_ATTR])
             band = WEATHER_BAND_PRECIPITATION;
 
-        if ((![_styleSettings isWeatherContourLinesEnabled:WEATHER_TEMP_CONTOUR_LINES_ATTR] && band == WEATHER_BAND_TEMPERATURE)
-            || (![_styleSettings isWeatherContourLinesEnabled:WEATHER_PRESSURE_CONTOURS_LINES_ATTR] && band == WEATHER_BAND_PRESSURE)
-            || (![_styleSettings isWeatherContourLinesEnabled:WEATHER_CLOUD_CONTOURS_LINES_ATTR] && band == WEATHER_BAND_CLOUD)
-            || (![_styleSettings isWeatherContourLinesEnabled:WEATHER_WIND_CONTOURS_LINES_ATTR] && band == WEATHER_BAND_WIND_SPEED)
-            || (![_styleSettings isWeatherContourLinesEnabled:WEATHER_PRECIPITATION_CONTOURS_LINES_ATTR] && band == WEATHER_BAND_PRECIPITATION))
+        BOOL needUpdateStyleSettings = (tempContourLinesParam && ![tempContourLinesParam.value isEqualToString:@"true"] && band == WEATHER_BAND_TEMPERATURE)
+            || (pressureContourLinesParam && ![pressureContourLinesParam.value isEqualToString:@"true"] && band == WEATHER_BAND_PRESSURE)
+            || (cloudContourLinesParam && ![cloudContourLinesParam.value isEqualToString:@"true"] && band == WEATHER_BAND_CLOUD)
+            || (windContourLinesParam && ![windContourLinesParam.value isEqualToString:@"true"] && band == WEATHER_BAND_WIND_SPEED)
+            || (precipContourLinesParam && ![precipContourLinesParam.value isEqualToString:@"true"] && band == WEATHER_BAND_PRECIPITATION);
+
+        if (needUpdateStyleSettings)
         {
             [_styleSettings setWeatherContourLinesEnabled:YES weatherContourLinesAttr:parameterName];
+            return NO;
         }
         else if ([_styleSettings isAnyWeatherContourLinesEnabled] && band == WEATHER_BAND_UNDEFINED)
         {
             [_styleSettings setWeatherContourLinesEnabled:NO weatherContourLinesAttr:parameterName];
+            return NO;
         }
 
         OsmAnd::MapLayerConfiguration config;

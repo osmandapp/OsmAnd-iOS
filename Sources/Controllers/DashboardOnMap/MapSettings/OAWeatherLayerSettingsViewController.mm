@@ -345,12 +345,11 @@
 {
     if (_layerType == EOAWeatherLayerTypeContours)
     {
-        BOOL isEnabled = [_styleSettings isAnyWeatherContourLinesEnabled];
-        NSString *contourName = WEATHER_NONE_CONTOURS_LINES_VALUE;
-        if (isEnabled)
+        NSString *contourName = _app.data.contourName;
+        BOOL isEnabled = [_styleSettings isAnyWeatherContourLinesEnabled] || contourName.length > 0;
+        if (contourName.length == 0)
         {
-            contourName = _app.data.contourName;
-            if (contourName.length == 0)
+            if (isEnabled)
             {
                 if ([_styleSettings isWeatherContourLinesEnabled:WEATHER_TEMP_CONTOUR_LINES_ATTR])
                     contourName = WEATHER_TEMP_CONTOUR_LINES_ATTR;
@@ -363,9 +362,13 @@
                 else if ([_styleSettings isWeatherContourLinesEnabled:WEATHER_PRECIPITATION_CONTOURS_LINES_ATTR])
                     contourName = WEATHER_PRECIPITATION_CONTOURS_LINES_ATTR;
             }
+            else
+            {
+                contourName = WEATHER_NONE_CONTOURS_LINES_VALUE;
+            }
         }
         _selectedContoursParam = contourName;
-        return isEnabled;
+        return isEnabled && _selectedContoursParam != WEATHER_NONE_CONTOURS_LINES_VALUE;
     }
     return _weatherBand.isBandVisible;
 }
@@ -484,16 +487,17 @@
         if (!_layerEnabled)
         {
             _selectedContoursParam = WEATHER_NONE_CONTOURS_LINES_VALUE;
+            NSString *contourName = _app.data.contourName;
 
-            if ([_styleSettings isWeatherContourLinesEnabled:WEATHER_TEMP_CONTOUR_LINES_ATTR])
+            if ([_styleSettings isWeatherContourLinesEnabled:WEATHER_TEMP_CONTOUR_LINES_ATTR] || [contourName isEqualToString:WEATHER_TEMP_CONTOUR_LINES_ATTR])
                 lastUsedParameterName = WEATHER_TEMP_CONTOUR_LINES_ATTR;
-            else if ([_styleSettings isWeatherContourLinesEnabled:WEATHER_PRESSURE_CONTOURS_LINES_ATTR])
+            else if ([_styleSettings isWeatherContourLinesEnabled:WEATHER_PRESSURE_CONTOURS_LINES_ATTR] || [contourName isEqualToString:WEATHER_PRESSURE_CONTOURS_LINES_ATTR])
                 lastUsedParameterName = WEATHER_PRESSURE_CONTOURS_LINES_ATTR;
-            else if ([_styleSettings isWeatherContourLinesEnabled:WEATHER_CLOUD_CONTOURS_LINES_ATTR])
+            else if ([_styleSettings isWeatherContourLinesEnabled:WEATHER_CLOUD_CONTOURS_LINES_ATTR] || [contourName isEqualToString:WEATHER_CLOUD_CONTOURS_LINES_ATTR])
                 lastUsedParameterName = WEATHER_CLOUD_CONTOURS_LINES_ATTR;
-            else if ([_styleSettings isWeatherContourLinesEnabled:WEATHER_WIND_CONTOURS_LINES_ATTR])
+            else if ([_styleSettings isWeatherContourLinesEnabled:WEATHER_WIND_CONTOURS_LINES_ATTR] || [contourName isEqualToString:WEATHER_WIND_CONTOURS_LINES_ATTR])
                 lastUsedParameterName = WEATHER_WIND_CONTOURS_LINES_ATTR;
-            else if ([_styleSettings isWeatherContourLinesEnabled:WEATHER_PRECIPITATION_CONTOURS_LINES_ATTR])
+            else if ([_styleSettings isWeatherContourLinesEnabled:WEATHER_PRECIPITATION_CONTOURS_LINES_ATTR] || [contourName isEqualToString:WEATHER_PRECIPITATION_CONTOURS_LINES_ATTR])
                 lastUsedParameterName = WEATHER_PRECIPITATION_CONTOURS_LINES_ATTR;
 
             _app.data.contourName = @"";
@@ -723,10 +727,10 @@
     else if ([cellType isEqualToString:kContoursTypeCell])
     {
         NSString *contoursType = item[@"contoursType"];
-        [_styleSettings setWeatherContourLinesEnabled:YES weatherContourLinesAttr:contoursType];
         _selectedContoursParam = contoursType;
         _app.data.contourName = contoursType;
         _app.data.contourNameLastUsed = contoursType;
+        [_styleSettings setWeatherContourLinesEnabled:YES weatherContourLinesAttr:contoursType];
 
         [self generateData];
         NSIndexSet *sectionsToReload = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(kContoursTypesSection, tableView.numberOfSections - 1)];

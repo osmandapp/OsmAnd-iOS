@@ -32,6 +32,7 @@
 {
     OsmAndAppInstance _app;
     NSMutableArray<OAAutoObserverProxy *> *_layerChangeObservers;
+    OAAutoObserverProxy *_contourNameChangeObserver;
 
     NSCalendar *_currentTimezoneCalendar;
     OAWeatherToolbarLayersHandler *_layersHandler;
@@ -95,6 +96,9 @@
     {
         [_layerChangeObservers addObject:[band createSwitchObserver:self handler:@selector(updateLayersHandlerData)]];
     }
+    _contourNameChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                       withHandler:@selector(updateLayersHandlerData)
+                                                        andObserve:_app.data.contourNameChangeObservable];
     [self updateInfo];
 }
 
@@ -102,8 +106,13 @@
 {
     for (OAAutoObserverProxy *observer in _layerChangeObservers)
         [observer detach];
-
     _layerChangeObservers = nil;
+
+    if (_contourNameChangeObserver)
+    {
+        [_contourNameChangeObserver detach];
+        _contourNameChangeObserver = nil;
+    }
 }
 
 - (void)resetHandlersData

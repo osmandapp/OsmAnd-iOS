@@ -47,12 +47,6 @@
 - (void)updateData
 {
     NSMutableArray<NSMutableDictionary *> *layersData = [NSMutableArray array];
-    BOOL isWeatherEnabled = _app.data.weather;
-    BOOL isTempSelected = _app.data.weatherTemp;
-    BOOL isPressureSelected = _app.data.weatherPressure;
-    BOOL isWindSelected = _app.data.weatherWind;
-    BOOL isCloudSelected = _app.data.weatherCloud;
-    BOOL isPrecipitationSelected = _app.data.weatherPrecip;
 
     [layersData addObject:[NSMutableDictionary dictionaryWithDictionary:@{
         @"img": @"ic_custom_thermometer",
@@ -76,7 +70,7 @@
     }]];
     [layersData addObject:[NSMutableDictionary dictionaryWithDictionary:@{
         @"img": @"ic_custom_contour_lines",
-        @"selected": @(_app.data.contourName.length > 0)
+        @"selected": @([_styleSettings isAnyWeatherContourLinesEnabled] || _app.data.contourName.length > 0)
     }]];
 
     _data = layersData;
@@ -133,20 +127,21 @@
     }
     else if (index == kContoursIndex)
     {
-        BOOL selected = [_styleSettings isAnyWeatherContourLinesEnabled];
+        NSString *contourName = _app.data.contourName;
+        BOOL selected = [_styleSettings isAnyWeatherContourLinesEnabled] || contourName.length > 0;
         _data[kContoursIndex][@"selected"] = @(!selected);
         NSString *lastUsedParameterName;
         if (selected)
         {
-            if ([_styleSettings isWeatherContourLinesEnabled:WEATHER_TEMP_CONTOUR_LINES_ATTR])
+            if ([_styleSettings isWeatherContourLinesEnabled:WEATHER_TEMP_CONTOUR_LINES_ATTR] || [contourName isEqualToString:WEATHER_TEMP_CONTOUR_LINES_ATTR])
                 lastUsedParameterName = WEATHER_TEMP_CONTOUR_LINES_ATTR;
-            else if ([_styleSettings isWeatherContourLinesEnabled:WEATHER_PRESSURE_CONTOURS_LINES_ATTR])
+            else if ([_styleSettings isWeatherContourLinesEnabled:WEATHER_PRESSURE_CONTOURS_LINES_ATTR] || [contourName isEqualToString:WEATHER_PRESSURE_CONTOURS_LINES_ATTR])
                 lastUsedParameterName = WEATHER_PRESSURE_CONTOURS_LINES_ATTR;
-            else if ([_styleSettings isWeatherContourLinesEnabled:WEATHER_CLOUD_CONTOURS_LINES_ATTR])
+            else if ([_styleSettings isWeatherContourLinesEnabled:WEATHER_CLOUD_CONTOURS_LINES_ATTR] || [contourName isEqualToString:WEATHER_CLOUD_CONTOURS_LINES_ATTR])
                 lastUsedParameterName = WEATHER_CLOUD_CONTOURS_LINES_ATTR;
-            else if ([_styleSettings isWeatherContourLinesEnabled:WEATHER_WIND_CONTOURS_LINES_ATTR])
+            else if ([_styleSettings isWeatherContourLinesEnabled:WEATHER_WIND_CONTOURS_LINES_ATTR] || [contourName isEqualToString:WEATHER_WIND_CONTOURS_LINES_ATTR])
                 lastUsedParameterName = WEATHER_WIND_CONTOURS_LINES_ATTR;
-            else if ([_styleSettings isWeatherContourLinesEnabled:WEATHER_PRECIPITATION_CONTOURS_LINES_ATTR])
+            else if ([_styleSettings isWeatherContourLinesEnabled:WEATHER_PRECIPITATION_CONTOURS_LINES_ATTR] || [contourName isEqualToString:WEATHER_PRECIPITATION_CONTOURS_LINES_ATTR])
                 lastUsedParameterName = WEATHER_PRECIPITATION_CONTOURS_LINES_ATTR;
 
             _app.data.contourName = @"";

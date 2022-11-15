@@ -21,6 +21,7 @@
 #import "OABackupDbHelper.h"
 #import "OACollectLocalFilesTask.h"
 #import "OABackupInfoGenerationTask.h"
+#import "OACollectionSettingsItem.h"
 #import "OADeleteFilesCommand.h"
 #import "OAWebClient.h"
 #import "OAOperationLog.h"
@@ -109,6 +110,12 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
         for (OARemoteFile *remoteFile in info.filteredFilesToDownload)
         {
             OASettingsItem *restoreItem = [self getRestoreItem:settingsItems remoteFile:remoteFile];
+            if ([restoreItem isKindOfClass:OACollectionSettingsItem.class])
+            {
+                OACollectionSettingsItem *settingsItem = (OACollectionSettingsItem *) restoreItem;
+                [settingsItem processDuplicateItems];
+                settingsItem.shouldReplace = YES;
+            }
             if (restoreItem != nil && !restoreItem.exists)
                 [itemsForRestore addObject:restoreItem];
         }

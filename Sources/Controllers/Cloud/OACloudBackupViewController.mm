@@ -879,19 +879,23 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
         conflictDetailsViewController.delegate = self;
         [self presentViewController:conflictDetailsViewController animated:YES completion:nil];
     }
-    else if ([item objForKey:@"settings_item"] && [item objForKey:@"operation"])
+    else if ([item objForKey:@"settings_item"] && [item objForKey:@"operation"] && !_settingsHelper.isBackupSyncing)
     {
         EOABackupSyncOperationType operation = (EOABackupSyncOperationType) [item integerForKey:@"operation"];
         id file = [item objForKey:@"file"];
         if ([file isKindOfClass:OALocalFile.class] && operation == EOABackupSyncOperationUpload)
         {
             OALocalFile *fl = (OALocalFile *) file;
-            [_settingsHelper syncSettingsItems:[OABackupHelper getItemFileName:fl.item] localFile:fl remoteFile:nil operation:operation];
+            NSString *fileName = [OABackupHelper getItemFileName:fl.item];
+            if (!_settingsHelper.syncBackupTasks[fileName])
+                [_settingsHelper syncSettingsItems:fileName localFile:fl remoteFile:nil operation:operation];
         }
         else if ([file isKindOfClass:OARemoteFile.class])
         {
             OARemoteFile *fl = (OARemoteFile *) file;
-            [_settingsHelper syncSettingsItems:[OABackupHelper getItemFileName:fl.item] localFile:nil remoteFile:fl operation:operation];
+            NSString *fileName = [OABackupHelper getItemFileName:fl.item];
+            if (!_settingsHelper.syncBackupTasks[fileName])
+                [_settingsHelper syncSettingsItems:fileName localFile:nil remoteFile:fl operation:operation];
         }
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];

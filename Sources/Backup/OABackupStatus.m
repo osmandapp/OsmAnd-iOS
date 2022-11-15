@@ -49,26 +49,27 @@ static OABackupStatus *ERROR;
 {
     if (!BACKUP_COMPLETE)
     {
-        BACKUP_COMPLETE = [[OABackupStatus alloc] initWithStatusTitle:OALocalizedString(@"backup_complete")
+        BACKUP_COMPLETE = [[OABackupStatus alloc] initWithStatusTitle:OALocalizedString(@"last_sync")
                                                        statusIconName:@"ic_custom_cloud_done"
                                                       warningIconName:nil warningTitle:nil
                                                    warningDescription:nil
-                                                          actionTitle:OALocalizedString(@"cloud_backup_now")
+                                                          actionTitle:OALocalizedString(@"sync_now")
                                                             iconColor:color_support_green];
     }
     return BACKUP_COMPLETE;
 }
+
 + (OABackupStatus *) MAKE_BACKUP
 {
     if (!MAKE_BACKUP)
     {
-        MAKE_BACKUP = [[OABackupStatus alloc] initWithStatusTitle:OALocalizedString(@"cloud_last_backup")
+        MAKE_BACKUP = [[OABackupStatus alloc] initWithStatusTitle:OALocalizedString(@"last_sync")
                                                    statusIconName:@"ic_custom_cloud_info"
-                                                  warningIconName:@"ic_custom_alert_circle"
-                                                     warningTitle:OALocalizedString(@"cloud_make_backup")
-                                               warningDescription:OALocalizedString(@"cloud_make_backup_descr")
-                                                      actionTitle:OALocalizedString(@"cloud_backup_now")
-                                                        iconColor:color_primary_red];
+                                                  warningIconName:nil
+                                                     warningTitle:nil
+                                               warningDescription:nil
+                                                      actionTitle:OALocalizedString(@"sync_now")
+                                                        iconColor:profile_icon_color_yellow_light];
     }
     return MAKE_BACKUP;
 }

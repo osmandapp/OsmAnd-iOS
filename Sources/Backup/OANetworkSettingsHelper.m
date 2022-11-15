@@ -10,7 +10,11 @@
 #import "OABackupHelper.h"
 #import "OAImportBackupTask.h"
 #import "OAExportBackupTask.h"
+#import "OASyncBackupTask.h"
 #import "OASettingsItem.h"
+#import "OALocalFile.h"
+#import "OARemoteFile.h"
+#import "OASyncBackupTask.h"
 #import "OAUtilities.h"
 #import "OABackupHelper.h"
 #import "OARootViewController.h"
@@ -37,6 +41,7 @@
         _backupHelper = [OABackupHelper sharedInstance];
         _importAsyncTasks = [NSMutableDictionary dictionary];
         _exportAsyncTasks = [NSMutableDictionary dictionary];
+        _syncBackupTasks = [NSMutableDictionary dictionary];
     }
     return self;
 }
@@ -85,6 +90,21 @@
     return cancelled;
 }
 
+- (BOOL) cancelSyncTasks
+{
+    BOOL cancelled = YES;
+    for (OASyncBackupTask *syncTask in self.syncBackupTasks.allValues)
+        [syncTask cancel];
+    return cancelled;
+}
+
+- (void) cancelSync
+{
+    [self cancelImport];
+    [self cancelExport];
+    [self cancelSyncTasks];
+}
+
 - (BOOL) isBackupExporting
 {
     return self.exportAsyncTasks.count > 0;
@@ -93,6 +113,11 @@
 - (BOOL) isBackupImporting
 {
     return self.importAsyncTasks.count > 0;
+}
+
+- (BOOL) isBackupSyncing
+{
+    return self.syncBackupTasks[kSyncItemsKey] != nil;
 }
 
 - (void) updateExportListener:(id<OABackupExportListener>)listener
@@ -143,6 +168,48 @@
     else
     {
         @throw [NSException exceptionWithName:@"IllegalStateException" reason:[@"Already importing " stringByAppendingString:key] userInfo:nil];
+    }
+}
+
+- (void) syncSettingsItems:(NSString *)key
+{
+    if (!_syncBackupTasks[key])
+    {
+        OASyncBackupTask *syncTask = [[OASyncBackupTask alloc] initWithKey:key];
+        _syncBackupTasks[key] = syncTask;
+        
+        [syncTask execute];
+    }
+    else
+    {
+        @throw [NSException exceptionWithName:@"IllegalStateException" reason:[@"Already syncing " stringByAppendingString:key] userInfo:nil];
+    }
+}
+
+- (void) syncSettingsItems:(NSString *)key localFile:(OALocalFile *)localFile remoteFile:(OARemoteFile *)remoteFile operation:(EOABackupSyncOperationType)operation
+{
+    if (!_syncBackupTasks[key])
+    {
+        OASyncBackupTask *syncTask = [[OASyncBackupTask alloc] initWithKey:key];
+        _syncBackupTasks[key] = syncTask;
+        
+        NSString *fileName = [OABackupHelper getItemFileName:localFile ? localFile.item : remoteFile.item];
+        
+        switch (operation)
+        {
+            case EOABackupSyncOperationDelete:
+                return [syncTask deleteItem:remoteFile.item fileName:fileName];
+            case EOABackupSyncOperationUpload:
+                return [syncTask uploadLocalItem:localFile.item fileName:fileName];
+            case EOABackupSyncOperationDownload:
+                return [syncTask downloadRemoteVersion:remoteFile.item fileName:fileName];
+            default:
+                return;
+        }
+    }
+    else
+    {
+        @throw [NSException exceptionWithName:@"IllegalStateException" reason:[@"Already syncing " stringByAppendingString:key] userInfo:nil];
     }
 }
 

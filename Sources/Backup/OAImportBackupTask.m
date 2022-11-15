@@ -17,6 +17,7 @@
 #import "OASettingsHelper.h"
 #import "OAImportBackupItemsTask.h"
 #import "OASettingsImporter.h"
+#import "OABackupInfo.h"
 
 @implementation OAItemProgressInfo
 
@@ -109,6 +110,17 @@
     _helper = OANetworkSettingsHelper.sharedInstance;
     _importer = [[OABackupImporter alloc] initWithListener:self];
     _itemsProgress = [NSMutableDictionary dictionary];
+    _maxProgress = [self.class calculateMaxProgress];
+}
+
++ (NSInteger) calculateMaxProgress
+{
+    NSInteger maxProgress = 0;
+    OABackupHelper *backupHelper = OABackupHelper.sharedInstance;
+    OAPrepareBackupResult *backup = backupHelper.backup;
+    for (OARemoteFile *file in backup.backupInfo.filesToDownload)
+        maxProgress += [backupHelper calculateFileSize:file];
+    return maxProgress;
 }
 
 - (OAItemProgressInfo *) getItemProgressInfo:(NSString *)type fileName:(NSString *)fileName
@@ -245,8 +257,8 @@
         case EOAImportTypeCollect:
         case EOAImportTypeCollectAndRead:
         {
-            [_collectListener onBackupCollectFinished:items != nil empty:NO items:_items remoteFiles:_remoteFiles];
             [_helper.importAsyncTasks removeObjectForKey:_key];
+            [_collectListener onBackupCollectFinished:items != nil empty:NO items:_items remoteFiles:_remoteFiles];
             break;
         }
         case EOAImportTypeCheckDuplicates:
@@ -334,6 +346,12 @@
 
 - (void)updateItemProgress:(nonnull NSString *)type fileName:(nonnull NSString *)fileName progress:(NSInteger)progress {
     [self onProgressUpdate:[[OAItemProgressInfo alloc] initWithType:type fileName:fileName progress:progress work:0 finished:NO]];
+}
+
+- (void)updateGeneralProgress:(NSInteger)downloadedItems uploadedKb:(NSInteger)uploadedKb
+{
+    _generalProgress = uploadedKb;
+    [_importListener onImportProgressUpdate:_generalProgress uploadedKb:uploadedKb];
 }
 
 // MARK: OAImportItemsListener

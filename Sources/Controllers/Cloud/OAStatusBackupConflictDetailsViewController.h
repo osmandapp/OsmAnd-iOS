@@ -10,7 +10,7 @@
 
 @class OALocalFile, OARemoteFile;
 
-@protocol OAStatusBackupTableDelegate;
+@protocol OAStatusBackupDelegate;
 
 @interface OAStatusBackupConflictDetailsViewController : OASuperViewController
 
@@ -18,6 +18,6 @@
                        remoteFile:(OARemoteFile *)remoteFile
        backupExportImportListener:(id)backupExportImportListener;
 
-@property(nonatomic, weak) id<OAStatusBackupTableDelegate> delegate;
+@property(nonatomic, weak) id<OAStatusBackupDelegate> delegate;
 
 @end

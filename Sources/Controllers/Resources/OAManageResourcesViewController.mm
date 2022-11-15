@@ -449,8 +449,11 @@ static BOOL _repositoryUpdated = NO;
     if (value == self.region)
     {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1. * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            OAResourceItem *item = _regionMapItems[_weatherForecastRow];
-            [self updateDisplayItem:item];
+            if (_weatherForecastRow != -1)
+            {
+                OAResourceItem *item = _regionMapItems[_weatherForecastRow];
+                [self updateDisplayItem:item];
+            }
         });
     }
 }

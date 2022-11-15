@@ -17,6 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) itemExportStarted:(NSString *)type fileName:(NSString *)fileName work:(NSInteger)work;
 - (void) updateItemProgress:(NSString *)type fileName:(NSString *)fileName progress:(NSInteger)progress;
 - (void) itemExportDone:(NSString *)type fileName:(NSString *)fileName;
+- (void) updateGeneralProgress:(NSInteger)downloadedItems uploadedKb:(NSInteger)uploadedKb;
 
 @end
 

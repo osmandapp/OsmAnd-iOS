@@ -1,17 +1,18 @@
 //
-//  OATableViewDataModel.m
+//  OATableDataModel.m
 //  OsmAnd Maps
 //
 //  Created by Paul on 20.09.2022.
 //  Copyright © 2022 OsmAnd. All rights reserved.
 //
 
-#import "OATableViewDataModel.h"
-#import "OATableViewSectionData.h"
+#import "OATableDataModel.h"
+#import "OATableSectionData.h"
+#import "OATableRowData.h"
 
-@implementation OATableViewDataModel
+@implementation OATableDataModel
 {
-    NSMutableArray<OATableViewSectionData *> *_sectionData;
+    NSMutableArray<OATableSectionData *> *_sectionData;
 }
 
 - (instancetype)init
@@ -23,26 +24,26 @@
     return self;
 }
 
-- (void)addSection:(OATableViewSectionData *)sectionData
+- (void)addSection:(OATableSectionData *)sectionData
 {
     [_sectionData addObject:sectionData];
 }
 
-- (void)addSection:(OATableViewSectionData *)sectionData atIndex:(NSInteger)index
+- (void)addSection:(OATableSectionData *)sectionData atIndex:(NSInteger)index
 {
     if (index < _sectionData.count)
         [_sectionData insertObject:sectionData atIndex:index];
 }
 
 
-- (OATableViewSectionData *)sectionDataForIndex:(NSUInteger)index
+- (OATableSectionData *)sectionDataForIndex:(NSUInteger)index
 {
     return _sectionData[index];
 }
 
-- (OATableViewRowData *)itemForIndexPath:(NSIndexPath *)indexPath
+- (OATableRowData *)itemForIndexPath:(NSIndexPath *)indexPath
 {
-    OATableViewSectionData *section = _sectionData[indexPath.section];
+    OATableSectionData *section = _sectionData[indexPath.section];
     return [section getRow:indexPath.row];
 }
 

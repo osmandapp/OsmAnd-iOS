@@ -9,6 +9,7 @@
 #import "OAReverseGeocoder.h"
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
+#import "OARouteCalculationParams.h"
 
 #include <OsmAndCore/Search/ReverseGeocoder.h>
 #include <OsmAndCore/RoadLocator.h>
@@ -23,6 +24,7 @@
 #include <OsmAndCore/Data/Road.h>
 
 #include <OsmAndCore/Search/AddressesByNameSearch.h>
+#include <routePlannerFrontEnd.h>
 
 
 @implementation OAReverseGeocoder
@@ -42,12 +44,32 @@
 {
     OsmAndAppInstance app = [OsmAndApp instance];
     const auto& obfsCollection = app.resourcesManager->obfsCollection;
+    
+    OARouteCalculationParams *params = [[OARouteCalculationParams alloc] init];
+    params.mode = OAApplicationMode.CAR;
+    std::shared_ptr<RoutingContext> ctx;
+    
+    auto router = std::make_shared<RoutePlannerFrontEnd>();
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    router->setUseFastRecalculation(settings.useFastRecalculation);
+    
+    auto config = [app getRoutingConfigForMode:params.mode];
+    auto generalRouter = [app getRouter:config mode:params.mode];
+    if (generalRouter)
+    {
+        auto cf = [[OARoutingHelper sharedInstance].getRouteProvider initOsmAndRoutingConfig:config params:params generalRouter:generalRouter];
+        if (cf)
+        {
+            ctx = router->buildRoutingContext(cf, RouteCalculationMode::NORMAL);
+            ctx->geocoding = true;
+        }
+    }
 
     const auto& geocoder = std::shared_ptr<OsmAnd::ReverseGeocoder>(new OsmAnd::ReverseGeocoder(obfsCollection, std::shared_ptr<OsmAnd::RoadLocator>(new OsmAnd::RoadLocator(obfsCollection))));
     
     const auto& geoCriteria = std::shared_ptr<OsmAnd::ReverseGeocoder::Criteria>(new OsmAnd::ReverseGeocoder::Criteria);
     geoCriteria->position31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon));
-    const auto object = geocoder->performSearch(*geoCriteria);
+    const auto object = geocoder->performSearch(*geoCriteria, ctx);
     
     NSMutableString *geocodingResult = [NSMutableString string];
     if (object)

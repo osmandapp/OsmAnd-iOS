@@ -114,6 +114,7 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
             {
                 OACollectionSettingsItem *settingsItem = (OACollectionSettingsItem *) restoreItem;
                 [settingsItem processDuplicateItems];
+                settingsItem.shouldReplace = YES;
             }
             if (restoreItem != nil && !restoreItem.exists)
                 [itemsForRestore addObject:restoreItem];

@@ -504,11 +504,7 @@
         [_mapHudViewController.weatherButton setImage:[UIImage templateImageNamed:@"ic_custom_umbrella"] forState:UIControlStateNormal];
     }                completion:^(BOOL finished) {
         _weatherToolbar.hidden = YES;
-        if (!needsSettingsForToolbar)
-        {
-            [mapPanel setTopControlsVisible:YES];
-        }
-        else
+        if (needsSettingsForToolbar)
         {
             OAWeatherLayerSettingsViewController *weatherLayerSettingsViewController =
             [[OAWeatherLayerSettingsViewController alloc] initWithLayerType:(EOAWeatherLayerType) _weatherToolbar.selectedLayerIndex];
@@ -516,7 +512,11 @@
             [mapPanel showScrollableHudViewController:weatherLayerSettingsViewController];
         }
     }];
-    [_mapHudViewController showBottomControls:0. animated:YES];
+    if (!needsSettingsForToolbar)
+    {
+        [mapPanel setTopControlsVisible:YES];
+        [_mapHudViewController showBottomControls:0. animated:YES];
+    }
     [_mapHudViewController resetToDefaultRulerLayout];
     [_mapHudViewController.quickActionController updateViewVisibility];
     [self recreateControls];

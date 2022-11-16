@@ -455,7 +455,8 @@
 
 - (void) searchPoiInCity:(OASearchPhrase *)nphrase res:(OASearchResult *)res resultMatcher:(OASearchResultMatcher *)resultMatcher
 {
-    if (nphrase != nil && res.objectType == CITY) {
+    if (nphrase != nil && res.objectType == CITY)
+    {
         OASearchAmenityByNameAPI *poiApi = [[OASearchAmenityByNameAPI alloc] init];
         OASearchPhrase *newPhrase = [nphrase generateNewPhrase:nphrase fileId:res.resourceId];
         [newPhrase.getSettings setOriginalLocation:res.location];
@@ -634,9 +635,9 @@
                     break;
                 
                 if (res.objectType == STREET)
-                {
                     [self subSearchApiOrPublish:phrase resultMatcher:resultMatcher res:res api:_streetsApi];
-                } else {
+                else
+                {
                     OASearchPhrase *nphrase = [self subSearchApiOrPublish:phrase resultMatcher:resultMatcher res:res api:_cityApi];
                     [self searchPoiInCity:nphrase res:res resultMatcher:resultMatcher];
                 }

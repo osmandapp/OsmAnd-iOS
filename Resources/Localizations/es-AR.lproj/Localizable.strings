@@ -329,7 +329,7 @@
 "sort_by" = "Ordenar";
 "map_markers_other" = "Otros marcadores";
 "directions_other" = "Otras direcciones";
-"shared_string_turn" = "Girar";
+"shared_string_turn" = "Giros";
 "stop_routing_confirm" = "¿Parar la navegación?";
 "cancel_route" = "Descartar ruta";
 "route_is_too_long_v2" = "Esta ruta puede ser muy larga para calcular. Añade destinos intermedios si no se encuentran resultados dentro de los 10 minutos.";
@@ -1332,10 +1332,10 @@
 "toggle_online_notes" = "Alternar notas de OSM";
 "toggle_local_edits" = "Alternar ediciones locales de OSM";
 "add_poi" = "Añadir PDI";
-"change_map_style" = "Cambiar estilo del mapa";
-"change_map_source" = "Cambiar repositorio del mapa";
-"change_map_overlay" = "Cambiar mapa superpuesto";
-"change_map_underlay" = "Cambiar mapa subyacente";
+"change_map_style" = "Alternar estilo del mapa";
+"change_map_source" = "Alternar repositorio del mapa";
+"change_map_overlay" = "Alternar mapa superpuesto";
+"change_map_underlay" = "Alternar mapa subyacente";
 "replace_destination" = "Reemplazar destino";
 "add_destination" = "Añadir destino";
 "add_start" = "Añadir punto de partida";
@@ -2738,3 +2738,10 @@
 "rendering_value_showMtbScaleIMBATrails_description" = "Asociación Internacional del Ciclismo de Montaña";
 "ltr_or_rtl_combine_via_slash" = "%@/%@";
 "map_settings_show_map_symbols" = "Mostrar símbolos del mapa";
+"depth_contour_lines" = "Curvas de nivel de profundidad";
+"syncing_progress" = "Sincronizando...";
+"last_sync" = "Última sincronización";
+"rendering_attr_depthContourWidth_name" = "Grosor de la línea";
+"rendering_attr_depthContourColorScheme_name" = "Esquema de color de las líneas";
+"sync_now" = "Sincronizar ahora";
+"local_changes" = "Cambios locales";

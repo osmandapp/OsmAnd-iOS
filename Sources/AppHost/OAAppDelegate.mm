@@ -152,10 +152,7 @@
             
             [[UIApplication sharedApplication] endBackgroundTask:_appInitTask];
             _appInitTask = UIBackgroundTaskInvalid;
-            
-            // Check for updates at the app start
-            [_app checkAndDownloadOsmAndLiveUpdates];
-            [_app checkAndDownloadWeatherForecastsUpdates];
+
             // Set the background fetch
             [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:kCheckUpdatesIntervalHour];
             // Check for updates every hour when the app is in the foreground
@@ -535,6 +532,7 @@
         _carPlayDashboardController = [[OACarPlayDashboardInterfaceController alloc] initWithInterfaceController:interfaceController];
         _carPlayDashboardController.delegate = _carPlayMapController;
         [_carPlayDashboardController present];
+        _carPlayMapController.delegate = _carPlayDashboardController;
         [OARootViewController.instance.mapPanel onCarPlayConnected];
     }
     else

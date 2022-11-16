@@ -307,7 +307,6 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     [_mapPanel setTopControlsVisible:YES
             onlyMapSettingsAndSearch:YES
                 customStatusBarStyle:self.preferredStatusBarStyle];
-    [_mapPanel targetSetBottomControlsVisible:YES menuHeight:[self getViewHeight] animated:YES];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle

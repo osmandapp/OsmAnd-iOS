@@ -100,6 +100,7 @@
 #import "OARouteLineAppearanceHudViewController.h"
 #import "OAOpenAddTrackViewController.h"
 #import "OASearchToolbarViewController.h"
+#import "OAWeatherLayerSettingsViewController.h"
 
 #include <OsmAndCore/CachingRoadLocator.h>
 #include <OsmAndCore/Data/Road.h>
@@ -199,7 +200,8 @@ typedef enum
     _routingHelper = [OARoutingHelper sharedInstance];
     _mapViewTrackingUtilities = [OAMapViewTrackingUtilities instance];
     _mapWidgetRegistry = [[OAMapWidgetRegistry alloc] init];
-    
+    _weatherToolbarStateChangeObservable = [[OAObservable alloc] init];
+
     _addonsSwitchObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                       withHandler:@selector(onAddonsSwitch:withKey:andValue:)
                                                        andObserve:_app.addonsSwitchObservable];
@@ -394,6 +396,8 @@ typedef enum
         _activeTargetType = OATargetRoutePlanning;
     else if ([controller isKindOfClass:OARouteLineAppearanceHudViewController.class])
         _activeTargetType = OATargetRouteLineAppearance;
+    else if ([controller isKindOfClass:OAWeatherLayerSettingsViewController.class])
+        _activeTargetType = OATargetRouteWeatherLayerSettings;
 
     [self setupScrollableHud:controller];
 }
@@ -477,7 +481,7 @@ typedef enum
 - (void) onAddonsSwitch:(id)observable withKey:(id)key andValue:(id)value
 {
     NSString *productIdentifier = key;
-    if ([productIdentifier isEqualToString:kInAppId_Addon_Srtm])
+    if ([productIdentifier isEqualToString:kInAppId_Addon_Srtm] || [productIdentifier isEqualToString:kInAppId_Addon_Nautical])
     {
         [_app.data.mapLayerChangeObservable notifyEvent];
     }
@@ -1273,7 +1277,8 @@ typedef enum
     || _activeTargetType == OATargetRouteDetails
     || (_activeTargetType == OATargetRoutePlanning && !_isNewContextMenuStillEnabled)
     || _activeTargetType == OATargetGPX
-    || _activeTargetType == OATargetRouteLineAppearance;
+    || _activeTargetType == OATargetRouteLineAppearance
+    || _activeTargetType == OATargetRouteWeatherLayerSettings;
 }
 
 - (void) showContextMenu:(OATargetPoint *)targetPoint saveState:(BOOL)saveState

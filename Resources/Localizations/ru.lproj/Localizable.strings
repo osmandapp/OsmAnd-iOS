@@ -694,7 +694,7 @@
 "angular_units" = "Угловые единицы измерения";
 "show_tunnels" = "Туннели";
 "map_settings_text_size" = "Размер текста";
-"shared_string_previous" = "Предыдущий";
+"shared_string_previous" = "Предыдущая";
 "day_short" = "День";
 "week_short" = "Нед.";
 "weeks_short" = "Нед.";
@@ -1869,7 +1869,7 @@
 "reset_profile_action_descr" = "Сбросить все настройки профиля до значений по умолчанию. Нажатие на \"Сброс\" отменяет все ваши изменения, это действие нельзя отменить.";
 "gpx_parse_error" = "GPXсформирован неправильно, пожалуйста, свяжитесь со службой поддержки для выяснения причин.";
 "nothing_found_empty" = "Ничего не найдено";
-"shared_string_next" = "Далее";
+"shared_string_next" = "Следующая";
 "add_one_more_pnt" = "Добавить еще одну точку";
 "delete_point" = "Удалить точку";
 "change_route_type_after" = "Изменить тип маршрута после этой точки";

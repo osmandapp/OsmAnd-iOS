@@ -15,6 +15,11 @@
 #import "OARTargetPoint.h"
 #import "OAAppSettings.h"
 
+#define kWeatherSettingsChanging @"weather_settings_changing"
+#define kWeatherSettingsChanged @"weather_settings_changed"
+#define kWeatherSettingsReseting @"weather_settings_reseting"
+#define kWeatherSettingsReset @"weather_settings_reset"
+
 @class MutableOrderedDictionary, NSUnitCloud;
 
 @interface OAAppData : NSObject <NSCoding>
@@ -58,25 +63,45 @@
 @property (nonatomic) BOOL weatherPrecipUnitAuto;
 @property (nonatomic) double weatherPrecipAlpha;
 
+@property (readonly) OAObservable *weatherSettingsChangeObservable;
+
 @property (readonly) OAObservable* weatherChangeObservable;
 @property (readonly) OAObservable* weatherUseOfflineDataChangeObservable;
 @property (readonly) OAObservable* weatherTempChangeObservable;
+@property (readonly) OAObservable* weatherTempToolbarChangeObservable;
 @property (readonly) OAObservable* weatherTempUnitChangeObservable;
+@property (readonly) OAObservable* weatherTempUnitToolbarChangeObservable;
 @property (readonly) OAObservable* weatherTempAlphaChangeObservable;
+@property (readonly) OAObservable* weatherTempAlphaToolbarChangeObservable;
 @property (readonly) OAObservable* weatherPressureChangeObservable;
+@property (readonly) OAObservable* weatherPressureToolbarChangeObservable;
 @property (readonly) OAObservable* weatherPressureUnitChangeObservable;
+@property (readonly) OAObservable* weatherPressureUnitToolbarChangeObservable;
 @property (readonly) OAObservable* weatherPressureAlphaChangeObservable;
+@property (readonly) OAObservable* weatherPressureAlphaToolbarChangeObservable;
 @property (readonly) OAObservable* weatherWindChangeObservable;
+@property (readonly) OAObservable* weatherWindToolbarChangeObservable;
 @property (readonly) OAObservable* weatherWindUnitChangeObservable;
+@property (readonly) OAObservable* weatherWindUnitToolbarChangeObservable;
 @property (readonly) OAObservable* weatherWindAlphaChangeObservable;
+@property (readonly) OAObservable* weatherWindAlphaToolbarChangeObservable;
 @property (readonly) OAObservable* weatherCloudChangeObservable;
+@property (readonly) OAObservable* weatherCloudToolbarChangeObservable;
 @property (readonly) OAObservable* weatherCloudUnitChangeObservable;
+@property (readonly) OAObservable* weatherCloudUnitToolbarChangeObservable;
 @property (readonly) OAObservable* weatherCloudAlphaChangeObservable;
+@property (readonly) OAObservable* weatherCloudAlphaToolbarChangeObservable;
 @property (readonly) OAObservable* weatherPrecipChangeObservable;
+@property (readonly) OAObservable* weatherPrecipToolbarChangeObservable;
 @property (readonly) OAObservable* weatherPrecipUnitChangeObservable;
+@property (readonly) OAObservable* weatherPrecipUnitToolbarChangeObservable;
 @property (readonly) OAObservable* weatherPrecipAlphaChangeObservable;
+@property (readonly) OAObservable* weatherPrecipAlphaToolbarChangeObservable;
 
+@property (nonatomic) NSString *contourName;
+@property (nonatomic) NSString *contourNameLastUsed;
 @property (nonatomic) double contoursAlpha;
+@property (readonly) OAObservable* contourNameChangeObservable;
 @property (readonly) OAObservable* contoursAlphaChangeObservable;
 
 @property (readonly) OAMapLayersConfiguration* mapLayersConfiguration;

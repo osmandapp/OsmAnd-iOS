@@ -33,7 +33,7 @@ static OAQuickActionType *TYPE;
 
 - (OAMapStyleParameter *) parameter
 {
-    return [_styleSettings getParameter:@"contourLines"];
+    return [_styleSettings getParameter:CONTOUR_LINES];
 }
 
 - (BOOL) isContourLinesOn

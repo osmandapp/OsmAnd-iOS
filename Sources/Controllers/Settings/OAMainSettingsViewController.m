@@ -33,6 +33,10 @@
 
 #define kAppModesSection 2
 
+@interface OAMainSettingsViewController () <UIDocumentPickerDelegate>
+
+@end
+
 @implementation OAMainSettingsViewController
 {
     NSArray<NSArray *> *_data;
@@ -170,7 +174,29 @@
     
     [data addObject:profilesSection];
     
+    [data addObject:[self getLocalBackupSectionData]];
+    
     _data = [NSArray arrayWithArray:data];
+}
+
+- (NSArray *)getLocalBackupSectionData
+{
+    return @[
+        @{
+            @"type": OATitleRightIconCell.getCellIdentifier,
+            @"name": @"backupIntoFile",
+            @"title": OALocalizedString(@"backup_into_file"),
+            @"img": @"ic_custom_save_to_file",
+            @"regular_text": @(YES)
+        },
+        @{
+            @"type": OATitleRightIconCell.getCellIdentifier,
+            @"name": @"restoreFromFile",
+            @"title": OALocalizedString(@"restore_from_file"),
+            @"img": @"ic_custom_read_from_file",
+            @"regular_text": @(YES)
+        }
+    ];
 }
 
 - (NSString *) getProfileDescription:(OAApplicationMode *)am
@@ -198,6 +224,20 @@
         [self setupView];
         [self.settingsTableView reloadData];
     });
+}
+
+- (void)onBackupIntoFilePressed
+{
+    OAExportItemsViewController *exportController = [[OAExportItemsViewController alloc] init];
+    [self.navigationController pushViewController:exportController animated:YES];
+}
+
+- (void)onRestoreFromFilePressed
+{
+    UIDocumentPickerViewController *documentPickerVC = [[UIDocumentPickerViewController alloc] initWithDocumentTypes:@[@"net.osmand.osf"] inMode:UIDocumentPickerModeImport];
+    documentPickerVC.allowsMultipleSelection = NO;
+    documentPickerVC.delegate = self;
+    [self presentViewController:documentPickerVC animated:YES completion:nil];
 }
 
 #pragma mark - UITableViewDataSource
@@ -301,6 +341,16 @@
             cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
             cell.titleView.font = [UIFont systemFontOfSize:17. weight:UIFontWeightSemibold];
         }
+        if ([item[@"regular_text"] boolValue])
+        {
+            cell.titleView.textColor = UIColor.blackColor;
+            cell.titleView.font = [UIFont systemFontOfSize:17.];
+        }
+        else
+        {
+            cell.titleView.textColor = UIColorFromRGB(color_primary_purple);
+            cell.titleView.font = [UIFont systemFontOfSize:17. weight:UIFontWeightSemibold];
+        }
         cell.titleView.text = item[@"title"];
         [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]]];
         return cell;
@@ -314,6 +364,8 @@
         return OALocalizedString(@"selected_profile");
     else if (section == 2)
         return OALocalizedString(@"app_profiles");
+    else if (section == 3)
+        return OALocalizedString(@"local_backup");
     return nil;
 }
 
@@ -323,6 +375,8 @@
         return OALocalizedString(@"global_settings_descr");
     else if (section == 2)
         return OALocalizedString(@"import_profile_descr");
+    else if (section == 3)
+        return OALocalizedString(@"local_backup_descr");
     return nil;
 }
 
@@ -386,6 +440,27 @@
         OARearrangeProfilesViewController* rearrangeProfilesViewController = [[OARearrangeProfilesViewController alloc] init];
         [self.navigationController pushViewController:rearrangeProfilesViewController animated:YES];
     }
+    else if ([name isEqualToString:@"backupIntoFile"])
+    {
+        [self onBackupIntoFilePressed];
+    }
+    else if ([name isEqualToString:@"restoreFromFile"])
+    {
+        [self onRestoreFromFilePressed];
+    }
+}
+
+// MARK: UIDocumentPickerDelegate
+
+- (void)documentPicker:(UIDocumentPickerViewController *)controller didPickDocumentsAtURLs:(NSArray<NSURL *> *)urls
+{
+    if (urls.count == 0)
+        return;
+    
+    NSString *path = urls[0].path;
+    NSString *extension = [[path pathExtension] lowercaseString];
+    if ([extension caseInsensitiveCompare:@"osf"] == NSOrderedSame)
+        [OASettingsHelper.sharedInstance collectSettings:urls[0].path latestChanges:@"" version:1];
 }
 
 @end

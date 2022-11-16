@@ -7,11 +7,15 @@
 //
 
 #import "OAWeatherRasterLayer.h"
+#import "OARootViewController.h"
 #import "OAMapViewController.h"
+#import "OAMapHudViewController.h"
 #import "OAMapRendererView.h"
 #import "OAAutoObserverProxy.h"
 #import "OAWeatherHelper.h"
 #import "OAWeatherPlugin.h"
+#import "OAWeatherToolbar.h"
+#import "OAMapLayers.h"
 
 #include <OsmAndCore/Map/WeatherTileResourcesManager.h>
 #include <OsmAndCore/Map/WeatherRasterLayerProvider.h>
@@ -22,6 +26,8 @@
     std::shared_ptr<OsmAnd::WeatherRasterLayerProvider> _provider;
 
     OAWeatherHelper *_weatherHelper;
+    OAAutoObserverProxy *_weatherToolbarStateChangeObservable;
+    BOOL _needsSettingsForToolbar;
     OAAutoObserverProxy* _weatherChangeObserver;
     OAAutoObserverProxy* _weatherUseOfflineDataChangeObserver;
     NSMutableArray<OAAutoObserverProxy *> *_layerChangeObservers;
@@ -48,7 +54,10 @@
 {
     _resourcesManager = self.app.resourcesManager->getWeatherResourcesManager();
     _weatherHelper = [OAWeatherHelper sharedInstance];
-    
+
+    _weatherToolbarStateChangeObservable = [[OAAutoObserverProxy alloc] initWith:self
+                                                                     withHandler:@selector(onWeatherToolbarStateChanged)
+                                                                      andObserve:[OARootViewController instance].mapPanel.weatherToolbarStateChangeObservable];
     _weatherChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                        withHandler:@selector(onWeatherChanged)
                                                         andObserve:self.app.data.weatherChangeObservable];
@@ -67,6 +76,11 @@
 
 - (void) deinitLayer
 {
+    if (_weatherToolbarStateChangeObservable)
+    {
+        [_weatherToolbarStateChangeObservable detach];
+        _weatherToolbarStateChangeObservable = nil;
+    }
     if (_weatherChangeObserver)
     {
         [_weatherChangeObserver detach];
@@ -102,7 +116,7 @@
         [self updateOpacitySliderVisibility];
 
         QList<OsmAnd::BandIndex> bands = [_weatherHelper getVisibleBands];
-        if (!self.app.data.weather || bands.empty())
+        if ((!self.app.data.weather && !_needsSettingsForToolbar) || bands.empty())
             return NO;
 
         //[self showProgressHUD];
@@ -144,6 +158,19 @@
     return NO;
 }
 
+- (void)onWeatherToolbarStateChanged
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        BOOL needsSettingsForToolbar = [[OARootViewController instance].mapPanel.hudViewController needsSettingsForWeatherToolbar];
+        if (_needsSettingsForToolbar != needsSettingsForToolbar)
+        {
+            _date = self.mapViewController.mapLayers.weatherDate;
+            _needsSettingsForToolbar = needsSettingsForToolbar;
+            [self updateWeatherLayerAlpha];
+        }
+    });
+}
+
 - (void) onWeatherChanged
 {
     [self updateWeatherLayer];
@@ -171,12 +198,7 @@
 
 - (void) onWeatherLayerAlphaChanged
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.mapViewController runWithRenderSync:^{
-            _resourcesManager->setBandSettings([_weatherHelper getBandSettings]);
-            [self updateWeatherLayer];
-        }];
-    });
+    [self updateWeatherLayerAlpha];
 /*
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.mapViewController runWithRenderSync:^{
@@ -198,6 +220,16 @@
                 [self.mapView resetProviderFor:self.layerIndex];
                 _provider.reset();
             }
+        }];
+    });
+}
+
+- (void) updateWeatherLayerAlpha
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.mapViewController runWithRenderSync:^{
+            _resourcesManager->setBandSettings([_weatherHelper getBandSettings]);
+            [self updateWeatherLayer];
         }];
     });
 }

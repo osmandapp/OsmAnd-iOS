@@ -12,6 +12,7 @@
 #import "OARootViewController.h"
 #import "OANativeUtilities.h"
 #import "OAMapViewTrackingUtilities.h"
+#import "OACarPlayDashboardInterfaceController.h"
 
 #define kViewportXNonShifted 1.0
 
@@ -32,6 +33,8 @@
     
     CGFloat _cachedWidthOffset;
     CGFloat _cachedHeightOffset;
+    
+    BOOL _isInNavigationMode;
 }
 
 - (instancetype) initWithCarPlayWindow:(CPWindow *)window mapViewController:(OAMapViewController *)mapVC
@@ -48,6 +51,7 @@
 {
     [super viewDidAppear:animated];
     [self attachMapToWindow];
+    [self.delegate onMapViewAttached];
 }
 
 - (void)viewDidLayoutSubviews
@@ -64,7 +68,7 @@
     CGFloat widthOffset = MAX(insets.right, insets.left) / w;
     CGFloat heightOffset = insets.top / h;
     
-    if (widthOffset != _cachedWidthOffset && heightOffset != _cachedHeightOffset && widthOffset != 0 && heightOffset != 0)
+    if (widthOffset != _cachedWidthOffset && heightOffset != _cachedHeightOffset && widthOffset != 0 && heightOffset != 0 && !_isInNavigationMode)
     {
         _mapVc.mapView.viewportXScale = leftSide ? widthOffset : 1.0 + widthOffset;
         _mapVc.mapView.viewportYScale = 1.0 + heightOffset;
@@ -209,11 +213,13 @@
 {
     BOOL leftSide = _window.safeAreaInsets.right > _window.safeAreaInsets.left && _window.safeAreaInsets.bottom == 0;
     _mapVc.mapView.viewportXScale = leftSide ? 0.5 : 1.5;
+    _isInNavigationMode = YES;
 }
 
 - (void) exitNavigationMode
 {
     _mapVc.mapView.viewportXScale = _cachedViewportX;
+    _isInNavigationMode = NO;
 }
 
 @end

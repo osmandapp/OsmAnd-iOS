@@ -77,7 +77,7 @@
 
 - (NSString *)doInBackground
 {
-    long itemsSize = [self getEstimatedItemsSize];
+    long itemsSize = [self.class getEstimatedItemsSize:_exporter.getItems itemsToDelete:_exporter.getItemsToDelete oldItemsToDelete:_exporter.getOldItemsToDelete];
     [self publishProgress:@(itemsSize / 1024) isUploadedKb:NO];
     
     NSString *error = nil;
@@ -92,12 +92,12 @@
     return error;
 }
 
-- (long) getEstimatedItemsSize
++ (long) getEstimatedItemsSize:(NSArray<OASettingsItem *> *)items itemsToDelete:(NSArray<OASettingsItem *> *)itemsToDelete oldItemsToDelete:(NSArray<OASettingsItem *> *)oldItemsToDelete
 {
     long size = 0;
     OABackupHelper *backupHelper = OABackupHelper.sharedInstance;
     NSFileManager *fileManager = [NSFileManager defaultManager];
-    for (OASettingsItem *item in _exporter.getItems)
+    for (OASettingsItem *item in items)
     {
         if ([item isKindOfClass:OAFileSettingsItem.class])
         {
@@ -114,7 +114,6 @@
     NSDictionary<NSString *, OARemoteFile *> *remoteFilesMap = [backupHelper.backup getRemoteFiles:EOARemoteFilesTypeUnique];
     if (remoteFilesMap != nil)
     {
-        NSArray<OASettingsItem *> *itemsToDelete = _exporter.getItemsToDelete;
         for (OARemoteFile *remoteFile in remoteFilesMap.allValues)
         {
             for (OASettingsItem *item in itemsToDelete)
@@ -125,7 +124,6 @@
                 }
             }
         }
-        NSArray<OASettingsItem *> *oldItemsToDelete = _exporter.getOldItemsToDelete;
         for (OARemoteFile *remoteFile in remoteFilesMap.allValues)
         {
             for (OASettingsItem *item in oldItemsToDelete)

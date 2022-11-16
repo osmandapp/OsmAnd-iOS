@@ -1902,6 +1902,7 @@
 
 "product_title_sea_depth_contours" = "Nautical depth contours";
 "product_desc_sea_depth_contours" = "Sea depth contour lines and seamarks";
+"depth_contour_lines" = "Depth contour lines";
 
 "my_location" = "My Location";
 "all_categories" = "All categories";
@@ -2068,6 +2069,7 @@
 "restore_purchases" = "Restore purchases";
 "restore_backup_descr" = "Restore data on the device unsing online backups";
 "restore_data" = "Restore data";
+"syncing_progress" = "Syncing...";
 
 "no_statistics" = "No statistics";
 
@@ -2493,6 +2495,8 @@
 "routing_attr_driving_style_safety_name" = "Prefer byways";
 "rendering_attr_surface_paving_stones_name" = "Paving stones";
 "rendering_attr_depthContours_name" = "Nautical depth contours";
+"rendering_attr_depthContourWidth_name" = "Lines width";
+"rendering_attr_depthContourColorScheme_name" = "Lines color scheme";
 "rendering_attr_piste_difficulty_freeride_name" = "Freeride";
 "routeInfo_steepness_name" = "Steepness";
 "rendering_attr_smoothness_very_bad_name" = "Very bad";
@@ -2720,6 +2724,10 @@
 "fetching_from_server" = "Fetching data from server";
 "backup_complete" = "Backup complete";
 "duration_ago" = "%@ ago";
+
+"last_sync" = "Last sync";
+"sync_now" = "Sync now";
+"local_changes" = "Local changes";
 
 "cloud_no_online_backup" = "You don’t have any online backup yet";
 "cloud_no_online_backup_descr" = "Set up an automatic backup so you don't have to worry about lost data.";

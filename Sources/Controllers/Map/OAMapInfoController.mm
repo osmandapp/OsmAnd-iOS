@@ -34,8 +34,11 @@
 #import "OAToolbarViewController.h"
 #import "OADownloadMapWidget.h"
 #import "OAWeatherToolbar.h"
+#import "OAWeatherPlugin.h"
 #import "OACompassModeWidgetState.h"
 #import "OAQuickActionHudViewController.h"
+#import "OAMapLayers.h"
+#import "OAWeatherLayerSettingsViewController.h"
 
 @interface OATextState : NSObject
 
@@ -55,7 +58,7 @@
 @implementation OATextState
 @end
 
-@interface OAMapInfoController () <OAWidgetListener>
+@interface OAMapInfoController () <OAWidgetListener, OAWeatherLayerSettingsDelegate>
 
 @end
 
@@ -445,15 +448,24 @@
 
 - (void)updateWeatherToolbarVisible
 {
-    BOOL visible = [_mapHudViewController shouldShowWeatherToolbar];
-    if (visible && (_weatherToolbar.hidden || _weatherToolbar.frame.origin.y != [OAWeatherToolbar calculateY]))
+    if (_weatherToolbarVisible && (_weatherToolbar.hidden || _weatherToolbar.frame.origin.y != [OAWeatherToolbar calculateY]))
         [self showWeatherToolbar];
-    else if (!visible && !_weatherToolbar.hidden && _weatherToolbar.frame.origin.y != [OAWeatherToolbar calculateYOutScreen])
+    else if (!_weatherToolbarVisible && !_weatherToolbar.hidden && _weatherToolbar.frame.origin.y != [OAWeatherToolbar calculateYOutScreen])
         [self hideWeatherToolbar];
 }
 
 - (void)showWeatherToolbar
 {
+    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+    if (!mapPanel.hudViewController.weatherToolbar.needsSettingsForToolbar)
+    {
+        mapPanel.mapViewController.mapLayers.weatherDate = [NSDate date];
+        [_weatherToolbar resetHandlersData];
+    }
+
+    mapPanel.hudViewController.weatherToolbar.needsSettingsForToolbar = NO;
+    [mapPanel.weatherToolbarStateChangeObservable notifyEvent];
+
     if (_weatherToolbar.hidden)
     {
         [_weatherToolbar moveOutOfScreen];
@@ -466,7 +478,7 @@
 
         [_mapHudViewController showBottomControls:[OAUtilities isLandscape] ? 0. : _weatherToolbar.frame.size.height - [OAUtilities getBottomMargin]
                                          animated:YES];
-        [[OARootViewController instance].mapPanel setTopControlsVisible:YES];
+        [mapPanel setTopControlsVisible:YES];
         [_mapHudViewController.quickActionController updateViewVisibility];
         [self recreateControls];
 
@@ -481,15 +493,31 @@
 
 - (void)hideWeatherToolbar
 {
+    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+    BOOL needsSettingsForToolbar = mapPanel.hudViewController.weatherToolbar.needsSettingsForToolbar;
+    if (!needsSettingsForToolbar)
+        mapPanel.mapViewController.mapLayers.weatherDate = [NSDate date];
+    [mapPanel.weatherToolbarStateChangeObservable notifyEvent];
+
     [UIView animateWithDuration:.3 animations: ^{
         [_weatherToolbar moveOutOfScreen];
         [_mapHudViewController.weatherButton setImage:[UIImage templateImageNamed:@"ic_custom_umbrella"] forState:UIControlStateNormal];
     }                completion:^(BOOL finished) {
         _weatherToolbar.hidden = YES;
+        if (needsSettingsForToolbar)
+        {
+            OAWeatherLayerSettingsViewController *weatherLayerSettingsViewController =
+            [[OAWeatherLayerSettingsViewController alloc] initWithLayerType:(EOAWeatherLayerType) _weatherToolbar.selectedLayerIndex];
+            weatherLayerSettingsViewController.delegate = self;
+            [mapPanel showScrollableHudViewController:weatherLayerSettingsViewController];
+        }
     }];
-    [_mapHudViewController showBottomControls:0. animated:YES];
+    if (!needsSettingsForToolbar)
+    {
+        [mapPanel setTopControlsVisible:YES];
+        [_mapHudViewController showBottomControls:0. animated:YES];
+    }
     [_mapHudViewController resetToDefaultRulerLayout];
-    [[OARootViewController instance].mapPanel setTopControlsVisible:YES];
     [_mapHudViewController.quickActionController updateViewVisibility];
     [self recreateControls];
 }
@@ -748,6 +776,16 @@
             [_mapWidgetRegistry updateInfo:_settings.applicationMode.get expanded:_expanded];
         });
     }
+}
+
+#pragma mark - OAWeatherLayerSettingsDelegate
+
+- (void)onDoneWeatherLayerSettings:(BOOL)show
+{
+    if (show)
+        [_mapHudViewController changeWeatherToolbarVisible];
+    else
+        [_mapHudViewController updateWeatherButtonVisibility];
 }
 
 @end

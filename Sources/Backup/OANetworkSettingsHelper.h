@@ -10,9 +10,17 @@
 
 #define kBackupItemsKey @"backup_items_key"
 #define kRestoreItemsKey @"restore_items_key"
+#define kSyncItemsKey @"sync_items_key"
 #define kPrepareBackupKey @"prepare_backup_key"
 
-@class OASettingsItem, OARemoteFile, OAImportBackupTask, OAExportBackupTask;
+typedef NS_ENUM(NSInteger, EOABackupSyncOperationType) {
+    EOABackupSyncOperationNone = -1,
+    EOABackupSyncOperationUpload = 0,
+    EOABackupSyncOperationDownload,
+    EOABackupSyncOperationDelete
+};
+
+@class OASettingsItem, OARemoteFile, OALocalFile, OAImportBackupTask, OAExportBackupTask, OASyncBackupTask;
 
 @protocol OABackupExportListener <NSObject>
 
@@ -36,6 +44,7 @@
 
 @property (nonatomic, readonly) NSMutableDictionary<NSString *, OAImportBackupTask *> *importAsyncTasks;
 @property (nonatomic, readonly) NSMutableDictionary<NSString *, OAExportBackupTask *> *exportAsyncTasks;
+@property (nonatomic, readonly) NSMutableDictionary<NSString *, OASyncBackupTask *> *syncBackupTasks;
 
 + (OANetworkSettingsHelper *) sharedInstance;
 
@@ -49,10 +58,14 @@
 
 - (BOOL) isBackupExporting;
 - (BOOL) isBackupImporting;
+- (BOOL) isBackupSyncing;
+
 
 - (void) updateExportListener:(id<OABackupExportListener>)listener;
 - (void) updateImportListener:(id<OAImportListener>)listener;
 
+- (void) syncSettingsItems:(NSString *)key;
+- (void) syncSettingsItems:(NSString *)key localFile:(OALocalFile *)localFile remoteFile:(OARemoteFile *)remoteFile operation:(EOABackupSyncOperationType)operation;
 
 - (void) finishImport:(id<OAImportListener>)listener success:(BOOL)success items:(NSArray<OASettingsItem *> *)items;
 

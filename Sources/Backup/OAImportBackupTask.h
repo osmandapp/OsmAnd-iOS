@@ -35,6 +35,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) NSArray<OASettingsItem *> *selectedItems;
 @property (nonatomic, readonly) NSArray *duplicates;
 
+@property (nonatomic, readonly) NSInteger generalProgress;
+@property (nonatomic, readonly) NSInteger maxProgress;
+
++ (NSInteger) calculateMaxProgress;
+
 - (instancetype) initWithKey:(NSString *)key
              collectListener:(id<OABackupCollectListener>)collectListener
                     readData:(BOOL)readData;

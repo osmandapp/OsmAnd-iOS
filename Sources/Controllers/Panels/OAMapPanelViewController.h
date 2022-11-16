@@ -42,6 +42,8 @@
 @property (nonatomic, readonly) id activeViewControllerState;
 @property (nonatomic, readonly) BOOL activeTargetChildPushed;
 
+@property (readonly) OAObservable *weatherToolbarStateChangeObservable;
+
 - (void) prepareMapForReuse:(Point31)destinationPoint zoom:(CGFloat)zoom newAzimuth:(float)newAzimuth newElevationAngle:(float)newElevationAngle animated:(BOOL)animated;
 
 - (void) prepareMapForReuse:(UIView *)destinationView mapBounds:(OAGpxBounds)mapBounds newAzimuth:(float)newAzimuth newElevationAngle:(float)newElevationAngle animated:(BOOL)animated;

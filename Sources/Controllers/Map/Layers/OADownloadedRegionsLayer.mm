@@ -9,6 +9,7 @@
 #import "OADownloadedRegionsLayer.h"
 #import "OARootViewController.h"
 #import "OAMapViewController.h"
+#import "OAMapHudViewController.h"
 #import "OAMapRendererView.h"
 #import "OAUtilities.h"
 #import "OANativeUtilities.h"
@@ -18,6 +19,7 @@
 #import "OAResourcesUIHelper.h"
 #import "OADownloadsManager.h"
 #import "OAManageResourcesViewController.h"
+#import "OAWeatherToolbar.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -52,7 +54,10 @@
     std::shared_ptr<OsmAnd::PolygonsCollection> _collection;
     OAAutoObserverProxy* _localResourcesChangedObserver;
     BOOL _initDone;
-    
+
+    OAAutoObserverProxy *_weatherToolbarStateChangeObservable;
+    BOOL _needsSettingsForToolbar;
+
     std::shared_ptr<OsmAnd::Polygon> _selectionPolygon;
 }
 
@@ -66,6 +71,9 @@
     _localResourcesChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                withHandler:@selector(onLocalResourcesChanged:withKey:)
                                                                 andObserve:self.app.localResourcesChangedObservable];
+    _weatherToolbarStateChangeObservable = [[OAAutoObserverProxy alloc] initWith:self
+                                                                     withHandler:@selector(onWeatherToolbarStateChanged)
+                                                                      andObserve:[OARootViewController instance].mapPanel.weatherToolbarStateChangeObservable];
     _collection = std::make_shared<OsmAnd::PolygonsCollection>();
     _initDone = YES;
     
@@ -75,8 +83,16 @@
 - (void)deinitLayer
 {
     [super deinitLayer];
-    [_localResourcesChangedObserver detach];
-    _localResourcesChangedObserver = nil;
+    if (_localResourcesChangedObserver)
+    {
+        [_localResourcesChangedObserver detach];
+        _localResourcesChangedObserver = nil;
+    }
+    if (_weatherToolbarStateChangeObservable)
+    {
+        [_weatherToolbarStateChangeObservable detach];
+        _weatherToolbarStateChangeObservable = nil;
+    }
 }
 
 - (void) resetLayer
@@ -95,55 +111,64 @@
 
 - (void) refreshLayer
 {
-    NSMutableArray<OAWorldRegion *> *mapRegions = [NSMutableArray array];
-    NSMutableArray<OAWorldRegion *> *toRemove = [NSMutableArray array];
-    const auto& localResources = self.app.resourcesManager->getLocalResources();
-    if (!localResources.isEmpty())
-    {
-        NSArray<OAWorldRegion *> *regions = self.app.worldRegion.flattenedSubregions;
-        for (OAWorldRegion *region in regions)
-        {
-            for (const auto& resource : localResources)
-            {
-                if (resource && resource->origin == OsmAnd::ResourcesManager::ResourceOrigin::Installed && resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion)
-                {
-                    if ([region.resourceTypes containsObject:@((int)OsmAnd::ResourcesManager::ResourceType::MapRegion)]
-                        && !resource->id.isNull() && [resource->id.toLower().toNSString() hasPrefix:region.downloadsIdPrefix])
-                    {
-                        [mapRegions addObject:region];
-                        [toRemove addObjectsFromArray:region.subregions];
-                        break;
-                    }
-                }
-            }
-        }
-        [mapRegions removeObjectsInArray:toRemove];
-    }
-    if (mapRegions.count > 0)
-    {
-        [self.mapViewController runWithRenderSync:^{
-            [self.mapView removeKeyedSymbolsProvider:_collection];
-            _collection = std::make_shared<OsmAnd::PolygonsCollection>();
-            BOOL hasPoints = NO;
-            for (OAWorldRegion *r in mapRegions)
-            {
-                OAPointIContainer *pc = [[OAPointIContainer alloc] init];
-                [r getPoints31:pc];
-                if (!pc.qPoints.isEmpty())
-                {
-                    [self drawRegion:pc.qPoints region:r];
-                    hasPoints = YES;
-                }
-            }
-            if (hasPoints)
-                [self.mapView addKeyedSymbolsProvider:_collection];
-        }];
-    }
-    else
+    if (_needsSettingsForToolbar)
     {
         [self.mapViewController runWithRenderSync:^{
             [self resetLayer];
         }];
+    }
+    else
+    {
+        NSMutableArray<OAWorldRegion *> *mapRegions = [NSMutableArray array];
+        NSMutableArray<OAWorldRegion *> *toRemove = [NSMutableArray array];
+        const auto& localResources = self.app.resourcesManager->getLocalResources();
+        if (!localResources.isEmpty())
+        {
+            NSArray<OAWorldRegion *> *regions = self.app.worldRegion.flattenedSubregions;
+            for (OAWorldRegion *region in regions)
+            {
+                for (const auto& resource : localResources)
+                {
+                    if (resource && resource->origin == OsmAnd::ResourcesManager::ResourceOrigin::Installed && resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion)
+                    {
+                        if ([region.resourceTypes containsObject:@((int)OsmAnd::ResourcesManager::ResourceType::MapRegion)]
+                            && !resource->id.isNull() && [resource->id.toLower().toNSString() hasPrefix:region.downloadsIdPrefix])
+                        {
+                            [mapRegions addObject:region];
+                            [toRemove addObjectsFromArray:region.subregions];
+                            break;
+                        }
+                    }
+                }
+            }
+            [mapRegions removeObjectsInArray:toRemove];
+        }
+        if (mapRegions.count > 0)
+        {
+            [self.mapViewController runWithRenderSync:^{
+                [self.mapView removeKeyedSymbolsProvider:_collection];
+                _collection = std::make_shared<OsmAnd::PolygonsCollection>();
+                BOOL hasPoints = NO;
+                for (OAWorldRegion *r in mapRegions)
+                {
+                    OAPointIContainer *pc = [[OAPointIContainer alloc] init];
+                    [r getPoints31:pc];
+                    if (!pc.qPoints.isEmpty())
+                    {
+                        [self drawRegion:pc.qPoints region:r];
+                        hasPoints = YES;
+                    }
+                }
+                if (hasPoints)
+                    [self.mapView addKeyedSymbolsProvider:_collection];
+            }];
+        }
+        else
+        {
+            [self.mapViewController runWithRenderSync:^{
+                [self resetLayer];
+            }];
+        }
     }
 }
 
@@ -349,6 +374,20 @@
         [self updateLayer];
     });
 }
+
+
+- (void)onWeatherToolbarStateChanged
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        BOOL needsSettingsForToolbar = [[OARootViewController instance].mapPanel.hudViewController needsSettingsForWeatherToolbar];
+        if (_needsSettingsForToolbar != needsSettingsForToolbar)
+        {
+            _needsSettingsForToolbar = needsSettingsForToolbar;
+            [self updateLayer];
+        }
+    });
+}
+
 
 #pragma mark - OAContextMenuProvider
 

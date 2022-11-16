@@ -64,14 +64,14 @@
     OAAutoObserverProxy* _locationServicesStatusObserver;
 
     BOOL _driveModeActive;
-    BOOL _weatherToolbarVisible;
     
     OAAutoObserverProxy* _downloadTaskProgressObserver;
     OAAutoObserverProxy* _downloadTaskCompletedObserver;
     OAAutoObserverProxy* _locationServicesUpdateFirstTimeObserver;
     OAAutoObserverProxy* _lastMapSourceChangeObserver;
     OAAutoObserverProxy* _applicaionModeObserver;
-    
+    OAAutoObserverProxy *_weatherSettingsChangeObserver;
+
     OAOverlayUnderlayView* _overlayUnderlayView;
     
     NSLayoutConstraint *_bottomRulerConstraint;
@@ -139,6 +139,10 @@
     _applicaionModeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                         withHandler:@selector(onApplicationModeChanged:)
                                                          andObserve:[OsmAndApp instance].data.applicationModeChangedObservable];
+
+    _weatherSettingsChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                        withHandler:@selector(onWeatherSettingsChange:withKey:andValue:)
+                                                         andObserve:[OsmAndApp instance].data.weatherSettingsChangeObservable];
     
     _locationServicesStatusObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                         withHandler:@selector(onLocationServicesStatusChanged)
@@ -312,10 +316,7 @@
         [self updateControlsLayout:[self getHudTopOffset]];
         BOOL showWeatherToolbar = [self shouldShowWeatherToolbar];
         if (showWeatherToolbar)
-        {
             [_mapInfoController updateWeatherToolbarVisible];
-            [_weatherToolbar reloadLayersCollectionView];
-        }
         if (!showWeatherToolbar || [OAUtilities isLandscape])
             [self setupBottomContolMarginsForHeight:0];
     } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
@@ -361,19 +362,34 @@
 
 - (BOOL)shouldShowWeatherToolbar
 {
-    return _weatherToolbarVisible && [self shouldShowWeatherButton];
+    return _mapInfoController.weatherToolbarVisible && [self shouldShowWeatherButton];
+}
+
+- (BOOL)needsSettingsForWeatherToolbar
+{
+    return [self shouldShowWeatherToolbar] || _weatherToolbar.needsSettingsForToolbar;
 }
 
 - (void)changeWeatherToolbarVisible
 {
-    _weatherToolbarVisible = !_weatherToolbarVisible;
-    [_weatherToolbar updateInfo];
+    _mapInfoController.weatherToolbarVisible = !_mapInfoController.weatherToolbarVisible;
+    [_app.data.weatherSettingsChangeObservable notifyEventWithKey:kWeatherSettingsChanging
+                                                         andValue:@(_mapInfoController.weatherToolbarVisible || _weatherToolbar.needsSettingsForToolbar)];
 }
 
 - (void)hideWeatherToolbarIfNeeded
 {
     if ([self shouldShowWeatherToolbar])
         [self changeWeatherToolbarVisible];
+}
+
+- (void)onWeatherSettingsChange:(id)observer withKey:(id)key andValue:(id)value
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSString *operation = (NSString *) key;
+        if ([operation isEqualToString:kWeatherSettingsChanged])
+            [_weatherToolbar updateInfo];
+    });
 }
 
 - (BOOL) shouldShowCompass:(float)azimuth
@@ -743,7 +759,7 @@
 
     if (hideWeatherButton)
     {
-        _weatherToolbarVisible = NO;
+        _mapInfoController.weatherToolbarVisible = NO;
         [self hideWeatherButton];
     }
     else
@@ -1248,7 +1264,6 @@
             self.topCoordinatesWidget.userInteractionEnabled = self.topCoordinatesWidget.alpha > 0.0;
         if (self.downloadMapWidget)
             self.downloadMapWidget.userInteractionEnabled = self.downloadMapWidget.alpha > 0.0;
-        
     }];
 }
 

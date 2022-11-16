@@ -7,13 +7,17 @@
 //
 
 #import "OAWeatherContourLayer.h"
+#import "OARootViewController.h"
 #import "OAMapViewController.h"
+#import "OAMapHudViewController.h"
 #import "OAMapRendererView.h"
 #import "OAAutoObserverProxy.h"
 #import "OAWeatherHelper.h"
 #import "OAMapRendererEnvironment.h"
 #import "OAMapStyleSettings.h"
 #import "OAWeatherPlugin.h"
+#import "OAWeatherToolbar.h"
+#import "OAMapLayers.h"
 
 #include <OsmAndCore/Map/WeatherTileResourcesManager.h>
 #include <OsmAndCore/Map/GeoTileObjectsProvider.h>
@@ -30,6 +34,8 @@
     
     OAWeatherHelper *_weatherHelper;
     OAMapStyleSettings *_styleSettings;
+    OAAutoObserverProxy *_weatherToolbarStateChangeObservable;
+    BOOL _needsSettingsForToolbar;
     OAAutoObserverProxy* _weatherChangeObserver;
     OAAutoObserverProxy* _weatherUseOfflineDataChangeObserver;
     OAAutoObserverProxy* _alphaChangeObserver;
@@ -57,6 +63,9 @@
     _weatherHelper = [OAWeatherHelper sharedInstance];
     _styleSettings = [OAMapStyleSettings sharedInstance];
     
+    _weatherToolbarStateChangeObservable = [[OAAutoObserverProxy alloc] initWith:self
+                                                                     withHandler:@selector(onWeatherToolbarStateChanged)
+                                                                      andObserve:[OARootViewController instance].mapPanel.weatherToolbarStateChangeObservable];
     _weatherChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                        withHandler:@selector(onWeatherChanged)
                                                         andObserve:self.app.data.weatherChangeObservable];
@@ -74,6 +83,11 @@
 
 - (void) deinitLayer
 {
+    if (_weatherToolbarStateChangeObservable)
+    {
+        [_weatherToolbarStateChangeObservable detach];
+        _weatherToolbarStateChangeObservable = nil;
+    }
     if (_weatherChangeObserver)
     {
         [_weatherChangeObserver detach];
@@ -106,19 +120,48 @@
 
     if ([[OAPlugin getPlugin:OAWeatherPlugin.class] isEnabled])
     {
+        NSString *parameterName = self.app.data.contourName;
         OsmAnd::BandIndex band = WEATHER_BAND_UNDEFINED;
+
         OAMapStyleParameter *tempContourLinesParam = [_styleSettings getParameter:WEATHER_TEMP_CONTOUR_LINES_ATTR];
         OAMapStyleParameter *pressureContourLinesParam = [_styleSettings getParameter:WEATHER_PRESSURE_CONTOURS_LINES_ATTR];
-        if ([tempContourLinesParam.value isEqualToString:@"true"])
+        OAMapStyleParameter *cloudContourLinesParam = [_styleSettings getParameter:WEATHER_CLOUD_CONTOURS_LINES_ATTR];
+        OAMapStyleParameter *windContourLinesParam = [_styleSettings getParameter:WEATHER_WIND_CONTOURS_LINES_ATTR];
+        OAMapStyleParameter *precipContourLinesParam = [_styleSettings getParameter:WEATHER_PRECIPITATION_CONTOURS_LINES_ATTR];
+
+        if (tempContourLinesParam && [parameterName isEqualToString:WEATHER_TEMP_CONTOUR_LINES_ATTR])
             band = WEATHER_BAND_TEMPERATURE;
-        else if ([pressureContourLinesParam.value isEqualToString:@"true"])
+        else if (pressureContourLinesParam && [parameterName isEqualToString:WEATHER_PRESSURE_CONTOURS_LINES_ATTR])
             band = WEATHER_BAND_PRESSURE;
-        
+        else if (cloudContourLinesParam && [parameterName isEqualToString:WEATHER_CLOUD_CONTOURS_LINES_ATTR])
+            band = WEATHER_BAND_CLOUD;
+        else if (windContourLinesParam && [parameterName isEqualToString:WEATHER_WIND_CONTOURS_LINES_ATTR])
+            band = WEATHER_BAND_WIND_SPEED;
+        else if (precipContourLinesParam && [parameterName isEqualToString:WEATHER_PRECIPITATION_CONTOURS_LINES_ATTR])
+            band = WEATHER_BAND_PRECIPITATION;
+
+        BOOL needUpdateStyleSettings = (tempContourLinesParam && ![tempContourLinesParam.value isEqualToString:@"true"] && band == WEATHER_BAND_TEMPERATURE)
+            || (pressureContourLinesParam && ![pressureContourLinesParam.value isEqualToString:@"true"] && band == WEATHER_BAND_PRESSURE)
+            || (cloudContourLinesParam && ![cloudContourLinesParam.value isEqualToString:@"true"] && band == WEATHER_BAND_CLOUD)
+            || (windContourLinesParam && ![windContourLinesParam.value isEqualToString:@"true"] && band == WEATHER_BAND_WIND_SPEED)
+            || (precipContourLinesParam && ![precipContourLinesParam.value isEqualToString:@"true"] && band == WEATHER_BAND_PRECIPITATION);
+
+        if (needUpdateStyleSettings)
+        {
+            [_styleSettings setWeatherContourLinesEnabled:YES weatherContourLinesAttr:parameterName];
+            return NO;
+        }
+        else if ([_styleSettings isAnyWeatherContourLinesEnabled] && band == WEATHER_BAND_UNDEFINED)
+        {
+            [_styleSettings setWeatherContourLinesEnabled:NO weatherContourLinesAttr:parameterName];
+            return NO;
+        }
+
         OsmAnd::MapLayerConfiguration config;
         config.setOpacityFactor(self.app.data.contoursAlpha);
         [self.mapView setMapLayerConfiguration:self.layerIndex configuration:config forcedUpdate:NO];
 
-        if (!self.app.data.weather || band == WEATHER_BAND_UNDEFINED)
+        if ((!self.app.data.weather && !_needsSettingsForToolbar) || band == WEATHER_BAND_UNDEFINED)
             return NO;
 
         //[self showProgressHUD];
@@ -166,6 +209,19 @@
     _mapObjectsSymbolsProvider = nullptr;
     _mapPrimitivesProvider = nullptr;
     _geoTileObjectsProvider = nullptr;
+}
+
+- (void)onWeatherToolbarStateChanged
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        BOOL needsSettingsForToolbar = [[OARootViewController instance].mapPanel.hudViewController needsSettingsForWeatherToolbar];
+        if (_needsSettingsForToolbar != needsSettingsForToolbar)
+        {
+            _date = self.mapViewController.mapLayers.weatherDate;
+            _needsSettingsForToolbar = needsSettingsForToolbar;
+            [self updateWeatherLayer];
+        }
+    });
 }
 
 - (void)onLayerAlphaChanged

@@ -16,6 +16,7 @@
 #import "OAMapStyleSettings.h"
 #import "OAWeatherHelper.h"
 #import "OAWeatherBand.h"
+#import "OAWeatherToolbar.h"
 #import "OAWeatherBandSettingsViewController.h"
 #import "OAMapLayers.h"
 
@@ -79,6 +80,9 @@
     OsmAndAppInstance _app;
     OAMapStyleSettings *_styleSettings;
     OAMapPanelViewController *_mapPanel;
+    BOOL _backButtonPressed;
+
+    OAAutoObserverProxy *_weatherSettingsChangeObserver;
 }
 
 - (instancetype)initWithLayerType:(EOAWeatherLayerType)layerType
@@ -92,11 +96,16 @@
         _layerType = layerType;
         _weatherBand = [self getWeatherBand];
         _layerEnabled = [self isLayerEnabled];
+
+        _weatherSettingsChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                            withHandler:@selector(onWeatherSettingsChange:withKey:andValue:)
+                                                             andObserve:[OsmAndApp instance].data.weatherSettingsChangeObservable];
     }
     return self;
 }
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     
     [self applyLocalization];
@@ -122,6 +131,23 @@
                 customStatusBarStyle:[OAAppSettings sharedManager].nightMode
      ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault];
     [_mapPanel.hudViewController hideBottomControls:_menuHeight animated:YES];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+
+    if (!_backButtonPressed && _mapPanel.hudViewController.weatherToolbar.needsSettingsForToolbar)
+    {
+        _mapPanel.mapViewController.mapLayers.weatherDate = [NSDate date];
+        _mapPanel.hudViewController.weatherToolbar.needsSettingsForToolbar = NO;
+        [_app.data.weatherSettingsChangeObservable notifyEventWithKey:kWeatherSettingsReseting];
+    }
+    else if (_weatherSettingsChangeObserver)
+    {
+        [_weatherSettingsChangeObserver detach];
+        _weatherSettingsChangeObserver = nil;
+    }
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -188,15 +214,40 @@
             [contoursTypesRows addObject:dividerCell];
             _menuHeight += [OADividerCell cellHeight:_dividerHeight dividerInsets:UIEdgeInsetsMake(0., [dividerInset floatValue], 0., 0.)];
             NSArray<OAWeatherBand *> *contours = @[[OAWeatherBand withWeatherBand:WEATHER_BAND_TEMPERATURE],
-                                                   [OAWeatherBand withWeatherBand:WEATHER_BAND_PRESSURE]];
+                                                   [OAWeatherBand withWeatherBand:WEATHER_BAND_PRESSURE],
+                                                   [OAWeatherBand withWeatherBand:WEATHER_BAND_CLOUD],
+                                                   [OAWeatherBand withWeatherBand:WEATHER_BAND_WIND_SPEED],
+                                                   [OAWeatherBand withWeatherBand:WEATHER_BAND_PRECIPITATION]];
+
             for (NSInteger i = 0; i < contours.count; i++) {
                 OAWeatherBand *band = contours[i];
+                NSString *contoursType = @"";
+                switch (band.bandIndex)
+                {
+                    case WEATHER_BAND_TEMPERATURE:
+                        contoursType = WEATHER_TEMP_CONTOUR_LINES_ATTR;
+                        break;
+                    case WEATHER_BAND_PRESSURE:
+                        contoursType = WEATHER_PRESSURE_CONTOURS_LINES_ATTR;
+                        break;
+                    case WEATHER_BAND_CLOUD:
+                        contoursType = WEATHER_CLOUD_CONTOURS_LINES_ATTR;
+                        break;
+                    case WEATHER_BAND_WIND_SPEED:
+                        contoursType = WEATHER_WIND_CONTOURS_LINES_ATTR;
+                        break;
+                    case WEATHER_BAND_PRECIPITATION:
+                        contoursType = WEATHER_PRECIPITATION_CONTOURS_LINES_ATTR;
+                        break;
+                    case WEATHER_BAND_UNDEFINED:
+                        break;
+                }
                 [contoursTypesRows addObject:@{
                     @"cellId" : OAIconTitleValueCell.getCellIdentifier,
                     @"type" : kContoursTypeCell,
                     @"title" : band.getMeasurementName,
                     @"image" : band.getIcon,
-                    @"contoursType" : band.bandIndex == WEATHER_BAND_TEMPERATURE ? WEATHER_TEMP_CONTOUR_LINES_ATTR : WEATHER_PRESSURE_CONTOURS_LINES_ATTR
+                    @"contoursType" : contoursType
                 }];
                 CGFloat titleHeight = [OAUtilities calculateTextBounds:band.getMeasurementName width:width - kTitleValueLabelHorizontalOffset font:[UIFont systemFontOfSize:17.]].height;
                 _menuHeight += titleHeight + kTitleValueFixedHeight;
@@ -292,16 +343,32 @@
 
 - (BOOL)isLayerEnabled
 {
-    if (_layerType == EOAWeatherLayerTypeContours) {
-        OAMapStyleParameter *tempContourLinesParam = [_styleSettings getParameter:WEATHER_TEMP_CONTOUR_LINES_ATTR];
-        OAMapStyleParameter *pressureContourLinesParam = [_styleSettings getParameter:WEATHER_PRESSURE_CONTOURS_LINES_ATTR];
-        if ([tempContourLinesParam.value isEqualToString:@"true"])
-            _selectedContoursParam = WEATHER_TEMP_CONTOUR_LINES_ATTR;
-        else if ([pressureContourLinesParam.value isEqualToString:@"true"])
-            _selectedContoursParam = WEATHER_PRESSURE_CONTOURS_LINES_ATTR;
-        else
-            _selectedContoursParam = WEATHER_NONE_CONTOURS_LINES_VALUE;
-        return [tempContourLinesParam.value isEqualToString:@"true"] || [pressureContourLinesParam.value isEqualToString:@"true"];
+    if (_layerType == EOAWeatherLayerTypeContours)
+    {
+        NSString *contourName = _app.data.contourName;
+        BOOL isEnabled = [_styleSettings isAnyWeatherContourLinesEnabled] || contourName.length > 0;
+        if (contourName.length == 0)
+        {
+            if (isEnabled)
+            {
+                if ([_styleSettings isWeatherContourLinesEnabled:WEATHER_TEMP_CONTOUR_LINES_ATTR])
+                    contourName = WEATHER_TEMP_CONTOUR_LINES_ATTR;
+                else if ([_styleSettings isWeatherContourLinesEnabled:WEATHER_PRESSURE_CONTOURS_LINES_ATTR])
+                    contourName = WEATHER_PRESSURE_CONTOURS_LINES_ATTR;
+                else if ([_styleSettings isWeatherContourLinesEnabled:WEATHER_CLOUD_CONTOURS_LINES_ATTR])
+                    contourName = WEATHER_CLOUD_CONTOURS_LINES_ATTR;
+                else if ([_styleSettings isWeatherContourLinesEnabled:WEATHER_WIND_CONTOURS_LINES_ATTR])
+                    contourName = WEATHER_WIND_CONTOURS_LINES_ATTR;
+                else if ([_styleSettings isWeatherContourLinesEnabled:WEATHER_PRECIPITATION_CONTOURS_LINES_ATTR])
+                    contourName = WEATHER_PRECIPITATION_CONTOURS_LINES_ATTR;
+            }
+            else
+            {
+                contourName = WEATHER_NONE_CONTOURS_LINES_VALUE;
+            }
+        }
+        _selectedContoursParam = contourName;
+        return isEnabled && _selectedContoursParam != WEATHER_NONE_CONTOURS_LINES_VALUE;
     }
     return _weatherBand.isBandVisible;
 }
@@ -322,16 +389,25 @@
             band = [OAWeatherBand withWeatherBand:WEATHER_BAND_TEMPERATURE];
         else if ([_selectedContoursParam isEqualToString:WEATHER_PRESSURE_CONTOURS_LINES_ATTR])
             band = [OAWeatherBand withWeatherBand:WEATHER_BAND_PRESSURE];
+        else if ([_selectedContoursParam isEqualToString:WEATHER_CLOUD_CONTOURS_LINES_ATTR])
+            band = [OAWeatherBand withWeatherBand:WEATHER_BAND_CLOUD];
+        else if ([_selectedContoursParam isEqualToString:WEATHER_WIND_CONTOURS_LINES_ATTR])
+            band = [OAWeatherBand withWeatherBand:WEATHER_BAND_WIND_SPEED];
+        else if ([_selectedContoursParam isEqualToString:WEATHER_PRECIPITATION_CONTOURS_LINES_ATTR])
+            band = [OAWeatherBand withWeatherBand:WEATHER_BAND_PRECIPITATION];
     }
     NSMeasurementFormatter *formatter = [NSMeasurementFormatter new];
     formatter.locale = NSLocale.autoupdatingCurrentLocale;
-    
     NSString *result = @"";
-    NSUnit *unit = [band getBandUnit];
-    if (band.bandIndex == WEATHER_BAND_TEMPERATURE)
-        result = unit.name != nil ? unit.name : [formatter displayStringFromUnit:unit];
-    else
-        result = [formatter displayStringFromUnit:unit];
+    if (band)
+    {
+        NSUnit *unit = [band getBandUnit];
+        if (band.bandIndex == WEATHER_BAND_TEMPERATURE)
+            result = unit.name != nil ? unit.name : [formatter displayStringFromUnit:unit];
+        else
+            result = [formatter displayStringFromUnit:unit];
+    }
+
     return result;
 }
 
@@ -364,6 +440,7 @@
 
 - (IBAction)backButtonPressed:(UIButton *)sender
 {
+    _backButtonPressed = YES;
     [self hide:YES duration:.2 onComplete:^{
         if (self.delegate)
             [self.delegate onDoneWeatherLayerSettings:YES];
@@ -378,11 +455,21 @@
     }];
 }
 
+- (void)onWeatherSettingsChange:(id)observer withKey:(id)key andValue:(id)value
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSString *operation = (NSString *) key;
+        if ([operation isEqualToString:kWeatherSettingsReset])
+        {
+            [_mapPanel.weatherToolbarStateChangeObservable notifyEvent];
+            [_weatherSettingsChangeObserver detach];
+            _weatherSettingsChangeObserver = nil;
+        }
+    });
+}
+
 - (void)onSwitchValueChanged:(UISwitch *)sender
 {
-    if (!_app.data.weather)
-        _app.data.weather = YES;
-
     _layerEnabled = sender.isOn;
     if (_layerType == EOAWeatherLayerTypeTemperature)
         _app.data.weatherTemp = _layerEnabled;
@@ -395,9 +482,41 @@
     else if (_layerType == EOAWeatherLayerTypePrecipitation)
         _app.data.weatherPrecip = _layerEnabled;
     else if (_layerType == EOAWeatherLayerTypeContours)
-        _selectedContoursParam = [OAMapStyleSettings weatherContoursParamChangedToValue:_layerEnabled ? WEATHER_TEMP_CONTOUR_LINES_ATTR : WEATHER_NONE_CONTOURS_LINES_VALUE
-                                                                          styleSettings:_styleSettings];
-    
+    {
+        NSString *lastUsedParameterName;
+        if (!_layerEnabled)
+        {
+            _selectedContoursParam = WEATHER_NONE_CONTOURS_LINES_VALUE;
+            NSString *contourName = _app.data.contourName;
+
+            if ([_styleSettings isWeatherContourLinesEnabled:WEATHER_TEMP_CONTOUR_LINES_ATTR] || [contourName isEqualToString:WEATHER_TEMP_CONTOUR_LINES_ATTR])
+                lastUsedParameterName = WEATHER_TEMP_CONTOUR_LINES_ATTR;
+            else if ([_styleSettings isWeatherContourLinesEnabled:WEATHER_PRESSURE_CONTOURS_LINES_ATTR] || [contourName isEqualToString:WEATHER_PRESSURE_CONTOURS_LINES_ATTR])
+                lastUsedParameterName = WEATHER_PRESSURE_CONTOURS_LINES_ATTR;
+            else if ([_styleSettings isWeatherContourLinesEnabled:WEATHER_CLOUD_CONTOURS_LINES_ATTR] || [contourName isEqualToString:WEATHER_CLOUD_CONTOURS_LINES_ATTR])
+                lastUsedParameterName = WEATHER_CLOUD_CONTOURS_LINES_ATTR;
+            else if ([_styleSettings isWeatherContourLinesEnabled:WEATHER_WIND_CONTOURS_LINES_ATTR] || [contourName isEqualToString:WEATHER_WIND_CONTOURS_LINES_ATTR])
+                lastUsedParameterName = WEATHER_WIND_CONTOURS_LINES_ATTR;
+            else if ([_styleSettings isWeatherContourLinesEnabled:WEATHER_PRECIPITATION_CONTOURS_LINES_ATTR] || [contourName isEqualToString:WEATHER_PRECIPITATION_CONTOURS_LINES_ATTR])
+                lastUsedParameterName = WEATHER_PRECIPITATION_CONTOURS_LINES_ATTR;
+
+            _app.data.contourName = @"";
+            _app.data.contourNameLastUsed = lastUsedParameterName;
+            [_styleSettings setWeatherContourLinesEnabled:NO
+                                    weatherContourLinesAttr:lastUsedParameterName];
+        }
+        else
+        {
+            lastUsedParameterName = _app.data.contourNameLastUsed;
+            if (lastUsedParameterName.length == 0)
+                lastUsedParameterName = WEATHER_TEMP_CONTOUR_LINES_ATTR;
+            _app.data.contourName = lastUsedParameterName;
+            _selectedContoursParam = lastUsedParameterName;
+            [_styleSettings setWeatherContourLinesEnabled:YES
+                                  weatherContourLinesAttr:lastUsedParameterName];
+        }
+    }
+
     [self generateData];
     [UIView transitionWithView:self.tableView duration:.3 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
         [self.tableView reloadData];
@@ -582,7 +701,23 @@
     {
         OAWeatherBand *band = _weatherBand;
         if (!band)
-            band = [OAWeatherBand withWeatherBand:[_selectedContoursParam isEqualToString:WEATHER_TEMP_CONTOUR_LINES_ATTR] ? WEATHER_BAND_TEMPERATURE : WEATHER_BAND_PRESSURE];
+        {
+            EOAWeatherBand bandIndex;
+            if ([_selectedContoursParam isEqualToString:WEATHER_TEMP_CONTOUR_LINES_ATTR])
+                bandIndex = WEATHER_BAND_TEMPERATURE;
+            else if ([_selectedContoursParam isEqualToString:WEATHER_PRESSURE_CONTOURS_LINES_ATTR])
+                bandIndex = WEATHER_BAND_PRESSURE;
+            else if ([_selectedContoursParam isEqualToString:WEATHER_CLOUD_CONTOURS_LINES_ATTR])
+                bandIndex = WEATHER_BAND_CLOUD;
+            else if ([_selectedContoursParam isEqualToString:WEATHER_WIND_CONTOURS_LINES_ATTR])
+                bandIndex = WEATHER_BAND_WIND_SPEED;
+            else if ([_selectedContoursParam isEqualToString:WEATHER_PRECIPITATION_CONTOURS_LINES_ATTR])
+                bandIndex = WEATHER_BAND_PRECIPITATION;
+            else
+                bandIndex = WEATHER_BAND_TEMPERATURE;
+
+            band = [OAWeatherBand withWeatherBand:bandIndex];
+        }
         OAWeatherBandSettingsViewController *controller =
         [[OAWeatherBandSettingsViewController alloc] initWithWeatherBand:band];
         controller.bandDelegate = self;
@@ -592,8 +727,11 @@
     else if ([cellType isEqualToString:kContoursTypeCell])
     {
         NSString *contoursType = item[@"contoursType"];
-        _selectedContoursParam = [OAMapStyleSettings weatherContoursParamChangedToValue:contoursType
-                                                                          styleSettings:_styleSettings];
+        _selectedContoursParam = contoursType;
+        _app.data.contourName = contoursType;
+        _app.data.contourNameLastUsed = contoursType;
+        [_styleSettings setWeatherContourLinesEnabled:YES weatherContourLinesAttr:contoursType];
+
         [self generateData];
         NSIndexSet *sectionsToReload = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(kContoursTypesSection, tableView.numberOfSections - 1)];
         [tableView reloadSections:sectionsToReload withRowAnimation:UITableViewRowAnimationAutomatic];

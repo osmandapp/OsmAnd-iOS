@@ -38,11 +38,6 @@
 #include <OsmAndCore/WorldRegions.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
 
-#define kContourLinesDensity @"contourDensity"
-#define kContourLinesWidth @"contourWidth"
-#define kContourLinesColorScheme @"contourColorScheme"
-#define kContourLinesZoomLevel @"contourLines"
-
 #define kCellTypeSwitch @"switchCell"
 #define kCellTypeValue @"valueCell"
 #define kCellTypePicker @"pickerCell"
@@ -168,7 +163,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     tblView.separatorInset = UIEdgeInsetsMake(0, [OAUtilities getLeftMargin] + 16, 0, 0);
     tblView.estimatedRowHeight = kEstimatedRowHeight;
     
-    OAMapStyleParameter *zoomLevelParameter = [_styleSettings getParameter:kContourLinesZoomLevel];
+    OAMapStyleParameter *zoomLevelParameter = [_styleSettings getParameter:CONTOUR_LINES];
     NSArray *zoomValues = [zoomLevelParameter possibleValues];
     NSMutableArray<NSString *> *visibleZoomValues = [NSMutableArray array];
     for (OAMapStyleParameterValue* v in zoomValues)
@@ -178,7 +173,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
     _visibleZoomValues = visibleZoomValues;
     
-    OAMapStyleParameter *widthParameter = [_styleSettings getParameter:kContourLinesWidth];
+    OAMapStyleParameter *widthParameter = [_styleSettings getParameter:CONTOUR_WIDTH_ATTR];
     NSArray *widthValues = [widthParameter possibleValuesUnsorted];
     NSMutableArray<NSString *> *visibleWidthValues = [NSMutableArray array];
     for (OAMapStyleParameterValue* v in widthValues)
@@ -188,7 +183,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
     _visibleWidthValues = visibleWidthValues;
     
-    OAMapStyleParameter *densityParameter = [_styleSettings getParameter:kContourLinesDensity];
+    OAMapStyleParameter *densityParameter = [_styleSettings getParameter:CONTOUR_DENSITY_ATTR];
     NSArray *densityValues = [densityParameter possibleValuesUnsorted];
     NSMutableArray<NSString *> *visibleDensityValues = [NSMutableArray array];
     for (OAMapStyleParameterValue* v in densityValues)
@@ -200,7 +195,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     
     _colors = [NSMutableArray new];
     NSMutableArray *colorNames = [NSMutableArray new];
-    OAMapStyleParameter *colorParameter = [_styleSettings getParameter:kContourLinesColorScheme];
+    OAMapStyleParameter *colorParameter = [_styleSettings getParameter:CONTOUR_COLOR_SCHEME_ATTR];
     NSArray *colorValues = [colorParameter possibleValuesUnsorted];
     BOOL nightMode = _settings.nightMode;
     _defaultColorScheme = kDefaultColorScheme;
@@ -258,7 +253,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     if ([self isContourLinesOn])
     {
         NSMutableArray *zoomArr = [NSMutableArray array];
-        param = [_styleSettings getParameter:kContourLinesZoomLevel];
+        param = [_styleSettings getParameter:CONTOUR_LINES];
         if (param)
         {
             [zoomArr addObject:@{
@@ -269,7 +264,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         }
         if (_showZoomPicker)
         {
-            param = [_styleSettings getParameter:kContourLinesZoomLevel];
+            param = [_styleSettings getParameter:CONTOUR_LINES];
             if (param)
             {
                 [zoomArr addObject:@{
@@ -281,7 +276,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         }
         
         NSMutableArray *linesArr = [NSMutableArray array];
-        param = [_styleSettings getParameter:kContourLinesColorScheme];
+        param = [_styleSettings getParameter:CONTOUR_COLOR_SCHEME_ATTR];
         if (param)
         {
             [linesArr addObject:@{
@@ -290,7 +285,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                 @"parameter" : param
             }];
         }
-        param = [_styleSettings getParameter:kContourLinesWidth];
+        param = [_styleSettings getParameter:CONTOUR_WIDTH_ATTR];
         if (param)
         {
             [linesArr addObject:@{
@@ -299,7 +294,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                 @"name" : OALocalizedString(@"map_settings_line_width")
             }];
         }
-        param = [_styleSettings getParameter:kContourLinesDensity];
+        param = [_styleSettings getParameter:CONTOUR_DENSITY_ATTR];
         if (param)
         {
             [linesArr addObject:@{
@@ -601,7 +596,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             OAMapStyleParameter *p = (OAMapStyleParameter *)item[@"parameter"];
             cell.topLeftLabel.text = item[@"name"];
             cell.sliderView.tag = indexPath.section << 10 | indexPath.row;
-            if ([p.name isEqualToString:kContourLinesDensity])
+            if ([p.name isEqualToString:CONTOUR_DENSITY_ATTR])
             {
                 NSString *v = p.value.length == 0 ? kDefaultDensity : p.value;
                 cell.topRightLabel.text = [self getLocalizedParamValue:v];
@@ -610,7 +605,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                 [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
                 [cell.sliderView addTarget:self action:@selector(densityChanged:) forControlEvents:UIControlEventTouchUpInside];
             }
-            else if ([p.name isEqualToString:kContourLinesWidth])
+            else if ([p.name isEqualToString:CONTOUR_WIDTH_ATTR])
             {
                 NSString *v = p.value.length == 0 ? kDefaultWidth : p.value;
                 cell.topRightLabel.text = [self getLocalizedParamValue:v];
@@ -858,7 +853,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sender.tag & 0x3FF inSection:sender.tag >> 10];
         OASegmentSliderTableViewCell *cell = [tblView cellForRowAtIndexPath:indexPath];
         NSInteger index = cell.sliderView.selectedMark;
-        OAMapStyleParameter *p = [_styleSettings getParameter:kContourLinesWidth];
+        OAMapStyleParameter *p = [_styleSettings getParameter:CONTOUR_WIDTH_ATTR];
         NSString *currentValue = p.value.length == 0 ? kDefaultWidth : p.value;
         NSString *selectedValue = _visibleWidthValues[index];
         if (![currentValue isEqualToString:selectedValue])
@@ -877,7 +872,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sender.tag & 0x3FF inSection:sender.tag >> 10];
         OASegmentSliderTableViewCell *cell = [tblView cellForRowAtIndexPath:indexPath];
         NSInteger index = cell.sliderView.selectedMark;
-        OAMapStyleParameter *p = [_styleSettings getParameter:kContourLinesDensity];
+        OAMapStyleParameter *p = [_styleSettings getParameter:CONTOUR_DENSITY_ATTR];
         NSString *currentValue = p.value.length == 0 ? kDefaultDensity : p.value;
         NSString *selectedValue = _visibleDensityValues[index];
         if (![currentValue isEqualToString:selectedValue])
@@ -906,7 +901,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void) customPickerValueChanged:(NSString *)value tag:(NSInteger)pickerTag
 {
-    OAMapStyleParameter *parameter = [_styleSettings getParameter:kContourLinesZoomLevel];
+    OAMapStyleParameter *parameter = [_styleSettings getParameter:CONTOUR_LINES];
     if (parameter.value != value)
     {
         _minZoom = value;
@@ -921,7 +916,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void) colorChanged:(NSInteger)row
 {
-    OAMapStyleParameter *p = [_styleSettings getParameter:kContourLinesColorScheme];
+    OAMapStyleParameter *p = [_styleSettings getParameter:CONTOUR_COLOR_SCHEME_ATTR];
     NSString *currentValue = p.value.length == 0 ? _defaultColorScheme : p.value;
     NSString *selectedValue = _visibleColorValues[row];
     if (![currentValue isEqualToString:selectedValue])

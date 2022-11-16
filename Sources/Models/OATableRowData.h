@@ -10,7 +10,12 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface OATableViewRowData : NSObject
+typedef NS_ENUM(NSInteger, EOATableRowType) {
+    EOATableRowTypeRegular,
+    EOATableRowTypeCollapsable
+};
+
+@interface OATableRowData : NSObject
 
 #define kCellTypeKey @"cellType"
 #define kCellKeyKey @"key"
@@ -30,7 +35,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) NSString *descr;
 @property (nonatomic) NSString *iconName;
 @property (nonatomic) NSInteger iconTint;
-@property (nonatomic) NSString * secondaryIconName;
+@property (nonatomic) NSString *secondaryIconName;
+
+@property (nonatomic, readonly, assign) EOATableRowType rowType;
 
 - (void) setObj:(id)data forKey:(nonnull NSString *)key;
 - (id) objForKey:(nonnull NSString *)key;
@@ -38,6 +45,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSString *) stringForKey:(nonnull NSString *)key;
 - (NSInteger) integerForKey:(nonnull NSString *)key;
 - (BOOL) boolForKey:(nonnull NSString *)key;
+
+- (NSInteger) dependentRowsCount;
+- (OATableRowData *) getDependentRow:(NSUInteger)index;
 
 @end
 

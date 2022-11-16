@@ -103,13 +103,6 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     [self enterBrowsingState];
     
     [self.interfaceController setRootTemplate:_mapTemplate animated:YES];
-    
-    OARouteCalculationResult *route = [_routingHelper getRoute];
-    CLLocation * start = _routingHelper.getLastFixedLocation;
-    if (route && start && _routingHelper.isRouteCalculated)
-    {
-        [self enterRoutePreviewMode];
-    }
 }
 
 - (void) enterBrowsingState
@@ -575,6 +568,18 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
         return @"map_turn_roundablot_left";
     }
     return nil;
+}
+
+// MARK: OACarPlayMapViewDelegate
+
+- (void)onMapViewAttached
+{
+    OARouteCalculationResult *route = [_routingHelper getRoute];
+    CLLocation * start = _routingHelper.getLastFixedLocation;
+    if (route && start && _routingHelper.isRouteCalculated)
+    {
+        [self enterRoutePreviewMode];
+    }
 }
 
 @end

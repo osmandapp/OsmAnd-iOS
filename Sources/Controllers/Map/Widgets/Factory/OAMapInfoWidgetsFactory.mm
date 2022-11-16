@@ -17,6 +17,7 @@
 #import "OAMapInfoController.h"
 #import "OAOsmAndFormatter.h"
 #import "OAIAPHelper.h"
+#import "OAWeatherToolbar.h"
 
 #include <OsmAndCore/Map/WeatherTileResourcesManager.h>
 
@@ -135,19 +136,27 @@
     OsmAnd::PointI __block cachedTarget31 = OsmAnd::PointI(0, 0);
     OsmAnd::ZoomLevel __block cachedZoom = OsmAnd::ZoomLevel::InvalidZoomLevel;
     __block NSDate *cachedDate;
+
+    NSMeasurementFormatter *formatter = [NSMeasurementFormatter new];
+    formatter.locale = NSLocale.autoupdatingCurrentLocale;
+    __block NSString *cachedBandUnit = [formatter displayStringFromUnit:[[OAWeatherBand withWeatherBand:band] getBandUnit]];
+
     weatherControl.updateInfoFunction = ^BOOL{
         OAMapViewController *mapCtrl = [OARootViewController instance].mapPanel.mapViewController;
                                         
         OsmAnd::PointI target31 = mapCtrl.mapView.target31;
         OsmAnd::ZoomLevel zoom = mapCtrl.mapView.zoomLevel;
         NSDate *date = mapCtrl.mapLayers.weatherDate;
+        NSString *bandUnit = [formatter displayStringFromUnit:[[OAWeatherBand withWeatherBand:band] getBandUnit]];
+        BOOL needToUpdate = ![cachedBandUnit isEqualToString:bandUnit];
 
-        if (cachedTarget31 == target31 && cachedZoom == zoom && cachedDate && [cachedDate isEqualToDate:date])
+        if (cachedTarget31 == target31 && cachedZoom == zoom && cachedDate && [cachedDate isEqualToDate:date] && !needToUpdate)
             return false;
 
         cachedTarget31 = target31;
         cachedZoom = zoom;
         cachedDate = date;
+        cachedBandUnit = bandUnit;
 
         OsmAnd::WeatherTileResourcesManager::ValueRequest _request;
         _request.dateTime = date.timeIntervalSince1970 * 1000;
@@ -157,7 +166,7 @@
         _request.localData = _app.data.weatherUseOfflineData;
 
         OsmAnd::WeatherTileResourcesManager::ObtainValueAsyncCallback _callback =
-            [selfWeak, cachedValue, band, undefined, weatherControlWeak]
+            [selfWeak, cachedValue, band, needToUpdate, bandUnit, undefined, weatherControlWeak]
             (const bool succeeded,
                 const double value,
                 const std::shared_ptr<OsmAnd::Metric>& metric)
@@ -165,16 +174,11 @@
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if (succeeded)
                     {
-                        if (![cachedValue[0] isEqual:@(value)])
+                        if (![cachedValue[0] isEqual:@(value)] || needToUpdate)
                         {
                             cachedValue[0] = @(value);
                             const auto bandValue = [OsmAndApp instance].resourcesManager->getWeatherResourcesManager()->getConvertedBandValue(band, value);
                             const auto bandValueStr = [OsmAndApp instance].resourcesManager->getWeatherResourcesManager()->getFormattedBandValue(band, bandValue, true);
-
-                            NSMeasurementFormatter *formatter = [NSMeasurementFormatter new];
-                            formatter.locale = NSLocale.autoupdatingCurrentLocale;
-
-                            NSString *bandUnit = [formatter displayStringFromUnit:[[OAWeatherBand withWeatherBand:band] getBandUnit]];
 
                             BOOL unitsWithBigFont = band == WEATHER_BAND_TEMPERATURE;
                             if (unitsWithBigFont)

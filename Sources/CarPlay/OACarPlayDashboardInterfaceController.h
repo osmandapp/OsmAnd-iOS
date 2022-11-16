@@ -7,6 +7,7 @@
 //
 
 #import "OABaseCarPlayInterfaceController.h"
+#import "OACarPlayMapViewController.h"
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 
@@ -29,7 +30,7 @@ API_AVAILABLE(ios(12.0))
 @class CPInterfaceController;
 
 API_AVAILABLE(ios(12.0))
-@interface OACarPlayDashboardInterfaceController : OABaseCarPlayInterfaceController
+@interface OACarPlayDashboardInterfaceController : OABaseCarPlayInterfaceController <OACarPlayMapViewDelegate>
 
 @property (nonatomic, weak) id<OACarPlayDashboardDelegate> delegate;
 

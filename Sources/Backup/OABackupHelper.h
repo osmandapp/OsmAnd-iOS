@@ -10,7 +10,7 @@
 #import "OABackupListeners.h"
 #import "OAPrepareBackupTask.h"
 
-#define BACKUP_DEBUG_LOGS NO
+#define BACKUP_DEBUG_LOGS YES
 
 #define STATUS_SUCCESS 0
 #define STATUS_PARSE_JSON_ERROR 1

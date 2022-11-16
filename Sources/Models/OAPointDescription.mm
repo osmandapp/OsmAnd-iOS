@@ -178,8 +178,8 @@
     [results setObject:[OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_OLC] forKey:@(FORMAT_OLC)];
     [results setObject:[OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_MGRS] forKey:@(FORMAT_MGRS)];
     
-    float zoom = [OARootViewController instance].mapPanel.mapViewController.getMapZoom;
-    NSString *url = [NSString stringWithFormat:@"https://osmand.net/go?lat=%f&lon=%f&z=%f", lat, lon, zoom];
+    int zoom = ((int) [OARootViewController instance].mapPanel.mapViewController.getMapZoom);
+    NSString *url = [NSString stringWithFormat:kShareLink, lat, lon, zoom, lat, lon];
     [results setObject:url forKey:@(POINT_LOCATION_URL)];
     
     NSInteger f = [self.class coordinatesFormatToFormatterMode:[settings.settingGeoFormat get]];

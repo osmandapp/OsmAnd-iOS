@@ -10,11 +10,16 @@
 #import "OABaseWidgetView.h"
 #import "OAFoldersCollectionView.h"
 
+@class OAObservable;
+
 @interface OAWeatherToolbar : OABaseWidgetView
 
 @property (nonatomic) BOOL topControlsVisibleInLandscape;
+@property (nonatomic) BOOL needsSettingsForToolbar;
+@property (nonatomic, readonly) NSInteger selectedLayerIndex;
 
-- (void)reloadLayersCollectionView;
+- (void)resetHandlersData;
+- (void)reloadCollectionsView;
 - (void)moveOutOfScreen;
 - (void)moveToScreen;
 

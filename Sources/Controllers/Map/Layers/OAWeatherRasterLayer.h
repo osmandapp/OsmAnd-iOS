@@ -23,5 +23,6 @@ typedef NS_ENUM(NSInteger, EOAWeatherLayer)
 
 - (void) updateDate:(NSDate *)date;
 - (void) updateWeatherLayer;
+- (void) updateWeatherLayerAlpha;
 
 @end

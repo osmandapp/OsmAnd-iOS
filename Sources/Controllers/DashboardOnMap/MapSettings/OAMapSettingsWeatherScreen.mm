@@ -121,19 +121,22 @@
             @"image" : @"ic_custom_precipitation"
         }];
 
-    NSString *selectedContourLinesName;
-    if ([_styleSettings isWeatherContourLinesEnabled:WEATHER_TEMP_CONTOUR_LINES_ATTR])
-        selectedContourLinesName = OALocalizedString(@"map_settings_weather_temp");
-    else if ([_styleSettings isWeatherContourLinesEnabled:WEATHER_PRESSURE_CONTOURS_LINES_ATTR])
-        selectedContourLinesName = OALocalizedString(@"map_settings_weather_pressure");
-    else if ([_styleSettings isWeatherContourLinesEnabled:WEATHER_CLOUD_CONTOURS_LINES_ATTR])
-        selectedContourLinesName = OALocalizedString(@"map_settings_weather_cloud");
-    else if ([_styleSettings isWeatherContourLinesEnabled:WEATHER_WIND_CONTOURS_LINES_ATTR])
-        selectedContourLinesName = OALocalizedString(@"map_settings_weather_wind");
-    else if ([_styleSettings isWeatherContourLinesEnabled:WEATHER_PRECIPITATION_CONTOURS_LINES_ATTR])
-        selectedContourLinesName = OALocalizedString(@"map_settings_weather_precip");
-    else
-        selectedContourLinesName = OALocalizedString(@"shared_string_none");
+    NSString *selectedContourLinesName = OALocalizedString(@"shared_string_none");
+    NSString *contourName = _app.data.contourName;
+    BOOL isEnabled = [_styleSettings isAnyWeatherContourLinesEnabled] || contourName.length > 0;
+    if (isEnabled)
+    {
+        if ([_styleSettings isWeatherContourLinesEnabled:WEATHER_TEMP_CONTOUR_LINES_ATTR] || [contourName isEqualToString:WEATHER_TEMP_CONTOUR_LINES_ATTR])
+            selectedContourLinesName = OALocalizedString(@"map_settings_weather_temp");
+        else if ([_styleSettings isWeatherContourLinesEnabled:WEATHER_PRESSURE_CONTOURS_LINES_ATTR] || [contourName isEqualToString:WEATHER_PRESSURE_CONTOURS_LINES_ATTR])
+            selectedContourLinesName = OALocalizedString(@"map_settings_weather_pressure");
+        else if ([_styleSettings isWeatherContourLinesEnabled:WEATHER_CLOUD_CONTOURS_LINES_ATTR] || [contourName isEqualToString:WEATHER_CLOUD_CONTOURS_LINES_ATTR])
+            selectedContourLinesName = OALocalizedString(@"map_settings_weather_cloud");
+        else if ([_styleSettings isWeatherContourLinesEnabled:WEATHER_WIND_CONTOURS_LINES_ATTR] || [contourName isEqualToString:WEATHER_WIND_CONTOURS_LINES_ATTR])
+            selectedContourLinesName = OALocalizedString(@"map_settings_weather_wind");
+        else if ([_styleSettings isWeatherContourLinesEnabled:WEATHER_PRECIPITATION_CONTOURS_LINES_ATTR] || [contourName isEqualToString:WEATHER_PRECIPITATION_CONTOURS_LINES_ATTR])
+            selectedContourLinesName = OALocalizedString(@"map_settings_weather_precip");
+    }
 
     NSArray *contourLines = @[
         @{

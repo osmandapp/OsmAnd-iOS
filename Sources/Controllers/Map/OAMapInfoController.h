@@ -21,6 +21,7 @@
 @interface OAMapInfoController : NSObject
 
 @property (nonatomic, weak) id<OAMapInfoControllerProtocol> delegate;
+@property (nonatomic) BOOL weatherToolbarVisible;
 
 - (instancetype) initWithHudViewController:(OAMapHudViewController *)mapHudViewController;
 

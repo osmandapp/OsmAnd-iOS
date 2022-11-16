@@ -532,6 +532,7 @@
         _carPlayDashboardController = [[OACarPlayDashboardInterfaceController alloc] initWithInterfaceController:interfaceController];
         _carPlayDashboardController.delegate = _carPlayMapController;
         [_carPlayDashboardController present];
+        _carPlayMapController.delegate = _carPlayDashboardController;
         [OARootViewController.instance.mapPanel onCarPlayConnected];
     }
     else

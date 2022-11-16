@@ -8,19 +8,24 @@
 
 #import <UIKit/UIKit.h>
 
-#import "OACarPlayDashboardInterfaceController.h"
+@protocol OACarPlayDashboardDelegate;
 
-NS_ASSUME_NONNULL_BEGIN
+API_AVAILABLE(ios(12.0))
+@protocol OACarPlayMapViewDelegate <NSObject>
+
+- (void)onMapViewAttached;
+
+@end
 
 @class CPWindow, OAMapViewController;
 
 API_AVAILABLE(ios(12.0))
 @interface OACarPlayMapViewController : UIViewController <OACarPlayDashboardDelegate>
 
+@property (nonatomic, weak) id<OACarPlayMapViewDelegate> delegate;
+
 - (instancetype) initWithCarPlayWindow:(CPWindow *)window mapViewController:(OAMapViewController *)mapVC;
 
 - (void) detachFromCarPlayWindow;
 
 @end
-
-NS_ASSUME_NONNULL_END

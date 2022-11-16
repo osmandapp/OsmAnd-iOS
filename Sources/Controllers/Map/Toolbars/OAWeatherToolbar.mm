@@ -33,6 +33,7 @@
     OsmAndAppInstance _app;
     NSMutableArray<OAAutoObserverProxy *> *_layerChangeObservers;
     OAAutoObserverProxy *_contourNameChangeObserver;
+    OAAutoObserverProxy *_mapSourceUpdatedObserver;
 
     NSCalendar *_currentTimezoneCalendar;
     OAWeatherToolbarLayersHandler *_layersHandler;
@@ -99,6 +100,10 @@
     _contourNameChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                        withHandler:@selector(updateLayersHandlerData)
                                                         andObserve:_app.data.contourNameChangeObservable];
+    _mapSourceUpdatedObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                 withHandler:@selector(updateLayersHandlerData)
+                                                  andObserve:[OARootViewController instance].mapPanel.mapViewController.mapSourceUpdatedObservable];
+    
     [self updateInfo];
 }
 
@@ -112,6 +117,11 @@
     {
         [_contourNameChangeObserver detach];
         _contourNameChangeObserver = nil;
+    }
+    if (_mapSourceUpdatedObserver)
+    {
+        [_mapSourceUpdatedObserver detach];
+        _mapSourceUpdatedObserver = nil;
     }
 }
 
@@ -353,8 +363,6 @@
 {
     NSInteger index = self.timeSliderView.selectedMark;
     NSDate *selectedDate = _timeInGMTTimezoneValues[index];
-    NSInteger seconds = -[[NSTimeZone localTimeZone] secondsFromGMTForDate:selectedDate];
-    selectedDate = [NSDate dateWithTimeInterval:seconds sinceDate:selectedDate];
     [[OARootViewController instance].mapPanel.mapViewController.mapLayers updateWeatherDate:selectedDate];
 
     if ([_layersHandler isAllLayersDisabled])

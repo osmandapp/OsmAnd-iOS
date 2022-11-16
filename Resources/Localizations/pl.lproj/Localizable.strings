@@ -596,7 +596,7 @@
 "keep_informing" = "Powtarzanie instrukcji";
 "keep_informing_descr" = "Odtwarza komunikaty nawigacyjne w regularnych odstępach czasu.";
 "arrival_distance" = "Powiadomienia osiągnięcia celu";
-"arrival_distance_descr" = "Określa moment powiadamiania o osiągnięciu celu";
+"arrival_distance_descr" = "Jak szybko chcesz otrzymać powiadomienie o osiągnięciu celu?";
 "default_speed_system" = "Jednostki prędkości";
 "default_speed_system_descr" = "Definiuje jednostkę prędkości.";
 "speed_limit_exceed" = "Tolerancja ograniczenia prędkości";
@@ -1685,7 +1685,7 @@
 "select_online_source" = "Wybierz źródło";
 "preview_of_selected_zoom_levels" = "Podgląd wybranego powiększenia";
 "download_size" = "Rozmiar pobierania";
-"number_of_tiles" = "Liczbę kafelków";
+"number_of_tiles" = "Liczba kafelków";
 "move_map_to_select_area" = "Przesuń mapę, aby wybrać żądany obszar.";
 "announce" = "Zapowiedź";
 "update_map" = "Uaktualnij mapę";
@@ -3195,3 +3195,10 @@
 "lang_kab" = "Kabylski";
 "lang_eu" = "Baskijski";
 "lang_kk" = "Kazachski";
+"routing_attr_hazmat_category_name" = "Transport materiałów niebezpiecznych";
+"map_widget_rendering_fps" = "FPS renderowania mapy";
+"routing_attr_allow_private_for_truck_name" = "Zezwalaj na prywatny dostęp (ciężarówka)";
+"are_you_sure" = "Na pewno?";
+"weather_offline_forecast" = "Prognoza w trybie offline";
+"depth_contour_lines" = "Linie konturowe głębokości";
+"measurement_units" = "Jednostki miary";

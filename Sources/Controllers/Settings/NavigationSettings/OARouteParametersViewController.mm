@@ -196,14 +196,28 @@
                     rp.routingParameter = p;
                     [list addObject:rp];
                     
-                    [parametersArr addObject:
-                     @{
-                         @"name" : paramId,
-                         @"title" : title,
-                         @"icon" : [self getParameterIcon:paramId isSelected:rp.isSelected],
-                         @"value" : rp,
-                         @"type" : [OASettingSwitchCell getCellIdentifier] }
-                     ];
+                    BOOL isGoodsRestrictions = [paramId isEqualToString:kRouteParamIdGoodsRestrictions];
+                    if (isGoodsRestrictions)
+                    {
+                        NSMutableDictionary *parameterDict = [NSMutableDictionary dictionary];
+                        parameterDict[@"ind"] = @(i);
+                        parameterDict[@"key"] = @"multiValuePref";
+                        OAGoodsDeliveryRoutingParameter *goodsParameter = [[OAGoodsDeliveryRoutingParameter alloc]initWithAppMode:self.appMode];
+                        goodsParameter.routingParameter = p;
+                        parameterDict[@"param"] = goodsParameter;
+                        [parametersArr addObject:parameterDict];
+                    }
+                    else
+                    {
+                        [parametersArr addObject:
+                             @{
+                            @"name" : paramId,
+                            @"title" : title,
+                            @"icon" : [self getParameterIcon:paramId isSelected:rp.isSelected],
+                            @"value" : rp,
+                            @"type" : [OASettingSwitchCell getCellIdentifier] }
+                        ];
+                    }
                 }
             }
             else

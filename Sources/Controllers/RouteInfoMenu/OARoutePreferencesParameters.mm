@@ -990,3 +990,47 @@
 }
 
 @end
+
+@implementation OAGoodsDeliveryRoutingParameter
+{
+    OACommonBoolean *_property;
+}
+
+- (instancetype)initWithAppMode:(OAApplicationMode *)appMode
+{
+    self = [super initWithAppMode:appMode];
+    if (self)
+    {
+        NSString *id = [NSString stringWithUTF8String:self.routingParameter.id.c_str()];
+        _property = [self.settings getCustomRoutingBooleanProperty:[NSString stringWithUTF8String:self.routingParameter.id.c_str()] defaultValue:self.routingParameter.defaultBoolean];
+    }
+    return self;
+}
+
+- (UIImage *)getIcon
+{
+    return [UIImage templateImageNamed:@"ic_custom_van"];
+}
+
+- (NSString *) getDescription
+{
+    return OALocalizedString([self isSelected] ? @"routing_attr_goods_restrictions_footer_desc" : @"");
+}
+
+- (NSString *)getValue
+{
+    return OALocalizedString([self isSelected] ? @"shared_string_yes" : @"shared_string_no");
+}
+
+- (NSString *) getCellType
+{
+    return [OAIconTitleValueCell getCellIdentifier];
+}
+
+- (void) rowSelectAction:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath
+{
+    if (self.delegate)
+        [self.delegate showParameterValuesScreen:self];
+}
+
+@end

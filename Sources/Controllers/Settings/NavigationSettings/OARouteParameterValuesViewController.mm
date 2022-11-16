@@ -11,6 +11,7 @@
 #import "OAIconTextTableViewCell.h"
 #import "OARoutingHelper.h"
 #import "OARoutePreferencesParameters.h"
+#import "OATableViewCustomHeaderView.h"
 #import "OATableViewCustomFooterView.h"
 #import "OAColors.h"
 #import "Localization.h"
@@ -39,6 +40,9 @@ typedef NS_ENUM(NSInteger, EOARouteParamType) {
     NSInteger _indexSelected;
     BOOL _isHazmatCategory;
     BOOL _isAnyCategorySelected;
+    BOOL _isGoodsRestrictionsCategory;
+    
+    UIView *_tableHeaderView;
 }
 
 - (instancetype) initWithRoutingParameterGroup:(OALocalRoutingParameterGroup *)group appMode:(OAApplicationMode *)mode
@@ -85,7 +89,8 @@ typedef NS_ENUM(NSInteger, EOARouteParamType) {
     if (_parameter)
     {
         _isHazmatCategory = [_parameter isKindOfClass:OAHazmatRoutingParameter.class];
-        _isAnyCategorySelected = _isHazmatCategory && [_parameter isSelected];
+        _isGoodsRestrictionsCategory = [_parameter isKindOfClass:OAGoodsDeliveryRoutingParameter.class];
+        _isAnyCategorySelected = (_isHazmatCategory || _isGoodsRestrictionsCategory) && [_parameter isSelected];
     }
 }
 
@@ -96,6 +101,8 @@ typedef NS_ENUM(NSInteger, EOARouteParamType) {
     self.tableView.dataSource = self;
     [self.tableView registerClass:OATableViewCustomFooterView.class
         forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
+    if (_isGoodsRestrictionsCategory)
+        [self setupTableHeaderViewWithText:OALocalizedString(@"routing_attr_goods_restrictions_header_name")];
 }
 
 - (void)applyLocalization
@@ -117,7 +124,7 @@ typedef NS_ENUM(NSInteger, EOARouteParamType) {
 {
     if (_type == EOARouteParamTypeGroup)
         return [_group getRoutingParameters].count;
-    else if (_isHazmatCategory && section == 0)
+    else if ((_isHazmatCategory || _isGoodsRestrictionsCategory) && section == 0)
         return 2;
 
     return _parameter ? _parameter.routingParameter.possibleValues.size() : _param.possibleValues.size();
@@ -132,7 +139,7 @@ typedef NS_ENUM(NSInteger, EOARouteParamType) {
 
     if (_type == EOARouteParamTypeNumeric)
     {
-        if (_isHazmatCategory)
+        if (_isHazmatCategory || _isGoodsRestrictionsCategory)
         {
             color = UIColorFromRGB(color_primary_purple);
             if (indexPath.section == 0)
@@ -210,7 +217,7 @@ typedef NS_ENUM(NSInteger, EOARouteParamType) {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (_type == EOARouteParamTypeNumeric)
     {
-        if (_isHazmatCategory && indexPath.section == 0)
+        if ((_isHazmatCategory || _isGoodsRestrictionsCategory) && indexPath.section == 0)
         {
             BOOL isAnyCategorySelected = _isAnyCategorySelected;
             _isAnyCategorySelected = indexPath.row == 1;
@@ -250,8 +257,7 @@ typedef NS_ENUM(NSInteger, EOARouteParamType) {
 
     if (self.delegate)
         [self.delegate onSettingsChanged];
-
-    if (_isHazmatCategory && indexPath.section == 0)
+    if ((_isHazmatCategory && indexPath.section == 0) || (_isGoodsRestrictionsCategory && indexPath.section == 0))
         [self.tableView reloadData];
     else
         [self dismissViewController];
@@ -259,7 +265,7 @@ typedef NS_ENUM(NSInteger, EOARouteParamType) {
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    if (!(_type == EOARouteParamTypeGroup || (_isHazmatCategory && section == 0)))
+    if (!(_type == EOARouteParamTypeGroup || ((_isHazmatCategory || _isGoodsRestrictionsCategory) && section == 0)))
         return 0.001;
 
     NSString *footer = @"";
@@ -268,7 +274,7 @@ typedef NS_ENUM(NSInteger, EOARouteParamType) {
         OALocalRoutingParameter *param = _group.getRoutingParameters[_indexSelected];
         footer = [param getDescription];
     }
-    else if (_isHazmatCategory)
+    else if (_isHazmatCategory || _isGoodsRestrictionsCategory)
     {
         footer = [_parameter getDescription];
     }
@@ -278,7 +284,7 @@ typedef NS_ENUM(NSInteger, EOARouteParamType) {
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
-    if (!(_type == EOARouteParamTypeGroup || (_isHazmatCategory && section == 0)))
+    if (!(_type == EOARouteParamTypeGroup || ((_isHazmatCategory || _isGoodsRestrictionsCategory) && section == 0)))
         return nil;
 
     NSString *footer = @"";
@@ -289,7 +295,7 @@ typedef NS_ENUM(NSInteger, EOARouteParamType) {
         if (!footer || footer.length == 0)
             return nil;
     }
-    else if (_isHazmatCategory)
+    else if (_isHazmatCategory || _isGoodsRestrictionsCategory)
     {
         footer = [_parameter getDescription];
     }

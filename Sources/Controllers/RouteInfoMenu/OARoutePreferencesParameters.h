@@ -25,6 +25,7 @@
 #define kRouteParamIdReliefSmoothnessFactorHills @"relief_smoothness_factor_hills"
 #define kRouteParamIdHeightObstacles @"height_obstacles"
 #define kRouteParamIdShortWay @"short_way"
+#define kRouteParamIdGoodsRestrictions @"goods_restrictions"
 #define kRouteParamIdAllowPrivate @"allow_private"
 #define kRouteParamIdAllowPrivateTruck @"allow_private_for_truck"
 #define kRouteParamIdAllowMotorway @"allow_motorway"
@@ -140,5 +141,9 @@ struct RoutingParameter;
 
 - (NSString *)getValue:(NSInteger)index;
 - (void)setValue:(NSInteger)index;
+
+@end
+
+@interface OAGoodsDeliveryRoutingParameter : OALocalRoutingParameter
 
 @end

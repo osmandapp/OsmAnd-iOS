@@ -2309,8 +2309,8 @@
 "rendering_attr_appMode_name" = "Rendering mode";
 "routing_attr_goods_restrictions_name" = "Goods delivery";
 "routing_attr_goods_restrictions_header_name" = "Vehicle transporting goods can be restricted to access some roads.";
-"routing_attr_goods_restrictions_footer_desc" = "Applies only for vehicles carrying goods that have at least four wheells and weigh no more then 3.5 tonnes.\n\nIf you vehicle weight is more than 3.5 tonnes you need to use Truck profile.";
-"routing_attr_goods_restrictions_yes_desc" = "Roads that closed for goods delivery will be avoided.";
+"routing_attr_goods_restrictions_footer_desc" = "Applies only for vehicles carrying goods that have at least four wheells and weigh no more then 3.5 tonnes.\n\nIf your vehicle height is more than 3.5 tonnes you need to use Truck profile.";
+"routing_attr_goods_restrictions_yes_desc" = "Roads that are closed for goods delivery will be avoided.";
 "routing_attr_avoid_subway_description" = "Avoids subways and lightweight rail transport";
 "routing_attr_driving_style_prefer_unpaved_description" = "Prefer unpaved over paved roads for routing.";
 "rendering_value_light_brown_name" = "Light brown";

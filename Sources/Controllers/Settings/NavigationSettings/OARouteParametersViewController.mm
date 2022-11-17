@@ -202,7 +202,7 @@
                         NSMutableDictionary *parameterDict = [NSMutableDictionary dictionary];
                         parameterDict[@"ind"] = @(i);
                         parameterDict[@"key"] = @"multiValuePref";
-                        OAGoodsDeliveryRoutingParameter *goodsParameter = [[OAGoodsDeliveryRoutingParameter alloc]initWithAppMode:self.appMode];
+                        OAGoodsDeliveryRoutingParameter *goodsParameter = [[OAGoodsDeliveryRoutingParameter alloc] initWithAppMode:self.appMode];
                         goodsParameter.routingParameter = p;
                         parameterDict[@"param"] = goodsParameter;
                         [parametersArr addObject:parameterDict];

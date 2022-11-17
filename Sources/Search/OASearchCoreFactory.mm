@@ -707,7 +707,6 @@
     bool transliterate = [[phrase getSettings] isTransliterate];
 
     NSString *currentResId;
-    NSArray<NSString *> *offlineIndexes = [phrase getRadiusOfflineIndexes:BBOX_RADIUS dt:P_DATA_TYPE_POI];
     NSMutableSet<NSString *> *ids = [NSMutableSet new];
 
     NSString *searchWord = [phrase getUnknownWordToSearch];
@@ -732,14 +731,16 @@
     const auto& obfsCollection = app.resourcesManager->obfsCollection;
     const auto search = std::shared_ptr<const OsmAnd::AmenitiesByNameSearch>(new OsmAnd::AmenitiesByNameSearch(obfsCollection));
 
+    NSMutableArray<NSString *> *offlineIndexes = [NSMutableArray new];
     NSString *phraseResId = [phrase getFileId];
+    if (phraseResId)
+        [offlineIndexes addObject:phraseResId];
+    else
+        [offlineIndexes addObjectsFromArray:[phrase getRadiusOfflineIndexes:BBOX_RADIUS dt:P_DATA_TYPE_POI]];
+        
     for (NSString *resId in offlineIndexes)
     {
-        if (phraseResId)
-            currentResId = phraseResId;
-        else
-            currentResId = resId;
-        
+        currentResId = resId;
         const auto& r = app.resourcesManager->getLocalResource(QString::fromNSString(resId));
         searchCriteria->localResources = {r};
 
@@ -801,9 +802,6 @@
 
         if (![resultMatcher isCancelled])
             [resultMatcher apiSearchRegionFinished:self resourceId:resId phrase:phrase];
-        
-        if (phraseResId)
-            break;
     }
 
     return true;

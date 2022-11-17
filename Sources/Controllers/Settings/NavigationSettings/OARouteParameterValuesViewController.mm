@@ -8,7 +8,7 @@
 
 #import "OARouteParameterValuesViewController.h"
 #import "OAAppSettings.h"
-#import "OAIconTextTableViewCell.h"
+#import "OARightIconTableViewCell.h"
 #import "OARoutingHelper.h"
 #import "OARoutePreferencesParameters.h"
 #import "OATableViewCustomHeaderView.h"
@@ -17,6 +17,8 @@
 #import "Localization.h"
 
 #include <generalRouter.h>
+
+#define kGoodsRestrictionsHeaderTopMargin 20
 
 typedef NS_ENUM(NSInteger, EOARouteParamType) {
     EOARouteParamTypeGroup = 0,
@@ -170,35 +172,42 @@ typedef NS_ENUM(NSInteger, EOARouteParamType) {
         isSelected = _group.getSelected == _group.getRoutingParameters[indexPath.row];
     }
 
-    OAIconTextTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
+    OARightIconTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
-        cell = (OAIconTextTableViewCell *) nib[0];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
+        cell = (OARightIconTableViewCell *) nib[0];
+        [cell descriptionVisibility:NO];
+        [cell leftIconVisibility:NO];
     }
     if (cell)
     {
-        [cell.textView setText:text];
-        cell.iconView.image = icon;
-        cell.iconView.tintColor = color != nil ? color : UIColorFromRGB([self.appMode getIconColor]);
-        [cell showImage:icon != nil];
+        cell.titleLabel.text = text;
+        cell.rightIconView.image = icon;
+        cell.rightIconView.tintColor = color != nil ? color : UIColorFromRGB([self.appMode getIconColor]);
 
         if (isSelected)
         {
             _indexSelected = indexPath.row;
-            cell.arrowIconView.image = [UIImage templateImageNamed:@"menu_cell_selected"];
-            cell.arrowIconView.tintColor = color != nil ? color : UIColorFromRGB([self.appMode getIconColor]);
+            cell.rightIconView.image = [UIImage templateImageNamed:@"menu_cell_selected"];
+            cell.rightIconView.tintColor = color != nil ? color : UIColorFromRGB([self.appMode getIconColor]);
+            if (_isGoodsRestrictionsCategory && _indexSelected == 1)
+            {
+                [cell descriptionVisibility:YES];
+                cell.descriptionLabel.text = OALocalizedString(@"routing_attr_goods_restrictions_yes_desc");
+            }
+            else
+            {
+                [cell descriptionVisibility:NO];
+                cell.descriptionLabel.text = nil;
+            }
         }
         else
         {
-            cell.iconView.tintColor = UIColorFromRGB(color_icon_inactive);
-            [cell.arrowIconView setImage:nil];
+            cell.rightIconView.tintColor = UIColorFromRGB(color_icon_inactive);
+            [cell.rightIconView setImage:nil];
         }
     }
-
-    if ([cell needsUpdateConstraints])
-        [cell updateConstraints];
-
     return cell;
 }
 
@@ -261,6 +270,12 @@ typedef NS_ENUM(NSInteger, EOARouteParamType) {
         [self.tableView reloadData];
     else
         [self dismissViewController];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    NSString *title = [self tableView:tableView titleForHeaderInSection:section];
+    return [OATableViewCustomHeaderView getHeight:title width:tableView.bounds.size.width] + kGoodsRestrictionsHeaderTopMargin;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section

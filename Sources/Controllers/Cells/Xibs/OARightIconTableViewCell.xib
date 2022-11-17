@@ -79,7 +79,7 @@
                                             </label>
                                         </subviews>
                                     </stackView>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="VST-yo-Bfz">
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="VST-yo-Bfz">
                                         <rect key="frame" x="344" y="5" width="30" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="30" id="LzE-Kc-wEW"/>

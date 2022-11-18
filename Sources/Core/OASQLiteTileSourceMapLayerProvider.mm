@@ -46,6 +46,11 @@ OASQLiteTileSourceMapLayerProvider::OASQLiteTileSourceMapLayerProvider(const QSt
             auto tileSize = meta.getTileSize(&ok);
             if (ok)
                 _tileSize = (int) tileSize;
+            
+            ok = true;
+            auto userAgent = meta.getUserAgent(&ok);
+            if (ok)
+                _userAgent = userAgent;
                         
             _randomsArray = OsmAnd::OnlineTileSources::parseRandoms(meta.getRandoms());
         }
@@ -151,7 +156,7 @@ QByteArray OASQLiteTileSourceMapLayerProvider::downloadTile(
     if (!tileUrl.isEmpty())
     {
         std::shared_ptr<const OsmAnd::IWebClient::IRequestResult> requestResult;
-        const auto& downloadResult = _webClient->downloadData(tileUrl, &requestResult, nullptr, queryController);
+        const auto& downloadResult = _webClient->downloadData(tileUrl, &requestResult, nullptr, queryController, _userAgent);
         
         // If there was error, check what the error was
         if (!requestResult || !requestResult->isSuccessful() || downloadResult.isEmpty())

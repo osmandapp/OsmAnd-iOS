@@ -9,6 +9,7 @@
 #import "OAWebClient.h"
 
 #define kTimeout 60.0 * 5.0 // 5 minutes
+#define kDefaultUserAgent @"OsmAndiOS"
 
 OARequestResult::OARequestResult(const bool successful) : successful(successful)
 {
@@ -56,12 +57,14 @@ QByteArray OAWebClient::downloadData(
     const QString& url,
     std::shared_ptr<const OsmAnd::IWebClient::IRequestResult>* const requestResult/* = nullptr*/,
     const OsmAnd::IWebClient::RequestProgressCallbackSignature progressCallback/* = nullptr*/,
-    const std::shared_ptr<const OsmAnd::IQueryController>& queryController/* = nullptr*/) const
+    const std::shared_ptr<const OsmAnd::IQueryController>& queryController/* = nullptr*/,
+    const QString& userAgent /* QString()*/) const
 {
     QByteArray res;
     if (url != nullptr && !url.isEmpty())
     {
-        NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[url.toNSString() stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:kTimeout];
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[url.toNSString() stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet]] cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:kTimeout];
+        [request addValue:(userAgent.isNull() || userAgent.isEmpty()) ? kDefaultUserAgent : userAgent.toNSString() forHTTPHeaderField:@"User-Agent"];
 
         unsigned int responseCode = 0;
         NSURLResponse __block *response = nil;

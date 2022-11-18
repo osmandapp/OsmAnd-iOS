@@ -301,6 +301,9 @@
             
             if (item.isSql && item.referer && item.referer.length > 0)
                 jsonObject[@"referer"] = item.referer;
+            if (item.isSql && item.userAgent && item.userAgent.length > 0)
+                jsonObject[@"userAgent"] = item.userAgent;
+            
             [jsonArray addObject:jsonObject];
         }
         json[@"items"] = jsonArray;

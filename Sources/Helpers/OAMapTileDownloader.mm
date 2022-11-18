@@ -16,6 +16,8 @@
 #include <OsmAndCore/Map/OnlineRasterMapLayerProvider.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
 
+#define kDefaultUserAgent @"OsmAndiOS"
+
 #define kMaxRequests 50
 
 @implementation OAMapTileDownloader
@@ -263,7 +265,12 @@
 - (void) downloadTile:(NSURL *)url x:(int)x y:(int)y zoom:(int)zoom tileSource:(OASQLiteTileSource *)tileSource
 {
     _activeDownloads++;
-    NSURLSessionDownloadTask *task = [_urlSession downloadTaskWithURL:url completionHandler:^(NSURL * _Nullable location, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url
+                                                           cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
+                                                       timeoutInterval:60.0];
+    [request setHTTPMethod:@"GET"];
+    [request addValue:tileSource.userAgent.length > 0 ? tileSource.userAgent : kDefaultUserAgent forHTTPHeaderField:@"User-Agent"];
+    NSURLSessionDownloadTask *task = [_urlSession downloadTaskWithRequest:request completionHandler:^(NSURL * _Nullable location, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         NSData *data = [NSData dataWithContentsOfFile:location.path];
         if (data)
         {

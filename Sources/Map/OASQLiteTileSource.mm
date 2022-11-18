@@ -9,7 +9,7 @@
 #import "OASQLiteTileSource.h"
 #import <sqlite3.h>
 #import "QuadRect.h"
-#import "OAMapCreatorDbHelper.h""
+#import "OAMapCreatorDbHelper.h"
 
 #include <OsmAndCore/Map/OnlineTileSources.h>
 #include <OsmAndCore/Map/OnlineRasterMapLayerProvider.h>
@@ -126,6 +126,10 @@
         const auto referer = meta.getReferer(&ok);
         if (ok)
             _referer = referer.toNSString();
+        
+        const auto userAgent = meta.getUserAgent(&ok);
+        if (ok)
+            _userAgent = userAgent.toNSString();
         
         auto url = meta.getUrl(&ok);
         if (ok)
@@ -436,6 +440,7 @@
         meta.setExpireMinutes([parameters[@"expireminutes"] intValue]);
         meta.setTimeColumn(QString::fromNSString(parameters[@"timecolumn"]));
         meta.setReferer(QString::fromNSString(parameters[@"referer"]));
+        meta.setUserAgent(QString::fromNSString(parameters[@"userAgent"]));
         meta.setTileNumbering(QString::fromNSString(parameters[@"tilenumbering"] ? parameters[@"tilenumbering"] : @"BigPlanet"));
         meta.setRandoms(QString::fromNSString(parameters[@"randoms"]));
         meta.setInvertedY([parameters[@"inverted_y"] intValue]);

@@ -133,8 +133,8 @@
 
 @interface OASearchBaseAPI ()
 
-- (void) subSearchApiOrPublish:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher res:(OASearchResult *)res api:(OASearchBaseAPI *)api;
-- (void) subSearchApiOrPublish:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher res:(OASearchResult *)res api:(OASearchBaseAPI *)api publish:(BOOL)publish;
+- (OASearchPhrase *) subSearchApiOrPublish:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher res:(OASearchResult *)res api:(OASearchBaseAPI *)api;
+- (OASearchPhrase *) subSearchApiOrPublish:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher res:(OASearchResult *)res api:(OASearchBaseAPI *)api publish:(BOOL)publish;
 
 @end
 
@@ -194,12 +194,12 @@
     return [phrase getRadiusLevel] < MAX_DEFAULT_SEARCH_RADIUS;
 }
 
-- (void)subSearchApiOrPublish:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher res:(OASearchResult *)res api:(OASearchBaseAPI *)api
+- (OASearchPhrase *)subSearchApiOrPublish:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher res:(OASearchResult *)res api:(OASearchBaseAPI *)api
 {
     return [self subSearchApiOrPublish:phrase resultMatcher:resultMatcher res:res api:api publish:YES];
 }
 
-- (void) subSearchApiOrPublish:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher res:(OASearchResult *)res api:(OASearchBaseAPI *)api publish:(BOOL)publish
+- (OASearchPhrase *) subSearchApiOrPublish:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher res:(OASearchResult *)res api:(OASearchBaseAPI *)api publish:(BOOL)publish
 {
     [phrase countUnknownWordsMatchMainResult:res];
     BOOL firstUnknownWordMatches = res.firstUnknownWordMatches;
@@ -275,7 +275,9 @@
                 resultMatcher.getParentSearchResult];
         [api search:nphrase resultMatcher:resultMatcher];
         [resultMatcher setParentSearchResult:prev];
+        return nphrase;
     }
+    return nil;
 }
 
 @end
@@ -441,12 +443,24 @@
                 }
                 else if ([nm matches:res.localeName] || [nm matchesMap:res.otherNames])
                 {
-                    [self subSearchApiOrPublish:phrase resultMatcher:resultMatcher res:res api:_cityApi];
+                    OASearchPhrase *nphrase = [self subSearchApiOrPublish:phrase resultMatcher:resultMatcher res:res api:_cityApi];
+                    [self searchPoiInCity:nphrase res:res resultMatcher:resultMatcher];
                 }
                 if (limit++ > LIMIT * [phrase getRadiusLevel])
                     break;
             }
         }
+    }
+}
+
+- (void) searchPoiInCity:(OASearchPhrase *)nphrase res:(OASearchResult *)res resultMatcher:(OASearchResultMatcher *)resultMatcher
+{
+    if (nphrase != nil && res.objectType == CITY)
+    {
+        OASearchAmenityByNameAPI *poiApi = [[OASearchAmenityByNameAPI alloc] init];
+        OASearchPhrase *newPhrase = [nphrase generateNewPhrase:nphrase fileId:res.resourceId];
+        [newPhrase.getSettings setOriginalLocation:res.location];
+        [poiApi search:newPhrase resultMatcher:resultMatcher];
     }
 }
 
@@ -621,10 +635,11 @@
                     break;
                 
                 if (res.objectType == STREET)
-                {
                     [self subSearchApiOrPublish:phrase resultMatcher:resultMatcher res:res api:_streetsApi];
-                } else {
-                    [self subSearchApiOrPublish:phrase resultMatcher:resultMatcher res:res api:_cityApi];
+                else
+                {
+                    OASearchPhrase *nphrase = [self subSearchApiOrPublish:phrase resultMatcher:resultMatcher res:res api:_cityApi];
+                    [self searchPoiInCity:nphrase res:res resultMatcher:resultMatcher];
                 }
             }
             
@@ -645,7 +660,8 @@
 {
     int LIMIT;
     int BBOX_RADIUS;
-    int BBOX_RADIUS_INSIDE; // to support city search for basemap
+    int BBOX_RADIUS_INSIDE;// to support city search for basemap
+    int BBOX_RADIUS_POI_IN_CITY;
     int FIRST_WORD_MIN_LENGTH;
     OAPOIHelper *_types;
 }
@@ -658,6 +674,7 @@
         LIMIT = 10000;
         BBOX_RADIUS = 500 * 1000;
         BBOX_RADIUS_INSIDE = 10000 * 1000;
+        BBOX_RADIUS_POI_IN_CITY = 25 * 1000;
         FIRST_WORD_MIN_LENGTH = 3;
         _types = [OAPOIHelper sharedInstance];
     }
@@ -690,13 +707,12 @@
     bool transliterate = [[phrase getSettings] isTransliterate];
 
     NSString *currentResId;
-    NSArray<NSString *> *offlineIndexes = [phrase getRadiusOfflineIndexes:BBOX_RADIUS dt:P_DATA_TYPE_POI];
     NSMutableSet<NSString *> *ids = [NSMutableSet new];
 
     NSString *searchWord = [phrase getUnknownWordToSearch];
     OANameStringMatcher *nm = [phrase getMainUnknownNameStringMatcher];
     
-    QuadRect *bbox = [phrase getRadiusBBox31ToSearch:BBOX_RADIUS_INSIDE];
+    QuadRect *bbox = [phrase getFileId] != nil ? [phrase getRadiusBBox31ToSearch:BBOX_RADIUS_POI_IN_CITY] : [phrase getRadiusBBox31ToSearch:BBOX_RADIUS_INSIDE];
     
     int limit = 0;
     std::shared_ptr<const OsmAnd::IQueryController> ctrl;
@@ -715,10 +731,16 @@
     const auto& obfsCollection = app.resourcesManager->obfsCollection;
     const auto search = std::shared_ptr<const OsmAnd::AmenitiesByNameSearch>(new OsmAnd::AmenitiesByNameSearch(obfsCollection));
 
+    NSArray<NSString *> *offlineIndexes = nil;
+    NSString *phraseResId = [phrase getFileId];
+    if (phraseResId)
+        offlineIndexes = @[phraseResId];
+    else
+        offlineIndexes = [phrase getRadiusOfflineIndexes:BBOX_RADIUS dt:P_DATA_TYPE_POI];
+        
     for (NSString *resId in offlineIndexes)
     {
         currentResId = resId;
-        
         const auto& r = app.resourcesManager->getLocalResource(QString::fromNSString(resId));
         searchCriteria->localResources = {r};
 

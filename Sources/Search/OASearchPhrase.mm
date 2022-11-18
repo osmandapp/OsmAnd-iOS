@@ -45,6 +45,8 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
 @property (nonatomic) OACollatorStringMatcher *clt;
 @property (nonatomic) OASearchSettings *settings;
 
+@property (nonatomic) NSString *fileId;
+
 // Object consists of 2 part [known + unknown]
 @property (nonatomic) NSString *fullTextSearchPhrase;
 @property (nonatomic) NSString *unknownSearchPhrase;
@@ -157,6 +159,18 @@ static NSArray<NSString *> *CHARS_TO_NORMALIZE_VALUE = @[@"'"];
 + (OASearchPhrase *) emptyPhrase:(OASearchSettings *)settings
 {
     return [[OASearchPhrase alloc] initWithSettings:settings];
+}
+
+- (NSString *) getFileId
+{
+    return _fileId;
+}
+
+- (OASearchPhrase *) generateNewPhrase:(OASearchPhrase *)phrase fileId:(NSString *)fileId
+{
+    OASearchPhrase *nphrase = [phrase generateNewPhrase:[phrase getUnknownSearchPhrase] settings:[phrase getSettings]];
+    nphrase.fileId = fileId;
+    return nphrase;
 }
 
 - (OASearchPhrase *) createNewSearchPhrase:(OASearchSettings *)settings fullText:(NSString *)text foundWords:(NSMutableArray<OASearchWord *> *)foundWords textToSearch:(NSString *)textToSearch

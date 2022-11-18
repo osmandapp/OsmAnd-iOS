@@ -731,12 +731,12 @@
     const auto& obfsCollection = app.resourcesManager->obfsCollection;
     const auto search = std::shared_ptr<const OsmAnd::AmenitiesByNameSearch>(new OsmAnd::AmenitiesByNameSearch(obfsCollection));
 
-    NSMutableArray<NSString *> *offlineIndexes = [NSMutableArray new];
+    NSArray<NSString *> *offlineIndexes = nil;
     NSString *phraseResId = [phrase getFileId];
     if (phraseResId)
-        [offlineIndexes addObject:phraseResId];
+        offlineIndexes = @[phraseResId];
     else
-        [offlineIndexes addObjectsFromArray:[phrase getRadiusOfflineIndexes:BBOX_RADIUS dt:P_DATA_TYPE_POI]];
+        offlineIndexes = [phrase getRadiusOfflineIndexes:BBOX_RADIUS dt:P_DATA_TYPE_POI];
         
     for (NSString *resId in offlineIndexes)
     {

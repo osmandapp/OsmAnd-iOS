@@ -51,6 +51,8 @@
     
     NSString *_itemName;
     NSString *_itemURL;
+    NSString *_referer;
+    NSString *_userAgent;
     int _minZoom;
     int _maxZoom;
     long _expireTimeMillis;
@@ -78,6 +80,8 @@
 {
     _itemName = _tileSource->name.toNSString();
     _itemURL = _tileSource->urlToLoad.toNSString();
+    _referer = _tileSource->referer.toNSString();
+    _userAgent = _tileSource->userAgent.toNSString();
     _minZoom = _tileSource->minZoom;
     _maxZoom = _tileSource->maxZoom;
     _expireTimeMillis = _tileSource->expirationTimeMillis;
@@ -90,6 +94,8 @@
 {
     _itemName = _sqliteSource.title;
     _itemURL = _sqliteSource.urlTemplate;
+    _referer = _sqliteSource.referer;
+    _userAgent = _sqliteSource.userAgent;
     _minZoom = _sqliteSource.minimumZoomSupported;
     _maxZoom = _sqliteSource.maximumZoomSupported;
     _expireTimeMillis = _sqliteSource.getExpirationTimeMillis;
@@ -301,6 +307,8 @@
     result->maxZoom = OsmAnd::ZoomLevel(_maxZoom);
     result->expirationTimeMillis = _expireTimeMillis;
     result->ellipticYTile = _isEllipticYTile;
+    result->referer = QString::fromNSString(_referer);
+    result->userAgent = QString::fromNSString(_userAgent);
     
     if (_tileSource != nullptr)
     {
@@ -340,6 +348,8 @@
     params[@"timeSupported"] = _expireTimeMillis != -1 ? @"yes" : @"no";
     params[@"expireminutes"] = _expireTimeMillis != -1 ? [NSString stringWithFormat:@"%ld", _expireTimeMillis / 60000] : @"";
     params[@"timecolumn"] = _expireTimeMillis != -1 ? @"yes" : @"no";
+    params[@"referer"] = _referer ? _referer : @"";
+    params[@"userAgent"] = _userAgent ? _userAgent : @"";
     
     if (_tileSource != nullptr)
     {

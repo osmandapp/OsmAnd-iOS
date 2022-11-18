@@ -46,6 +46,7 @@
         _ellipsoid = source.isEllipticYTile;
         _invertedY = source.isInvertedYTile;
         _referer = source.referer;
+        _userAgent = source.userAgent;
         _timesupported = source.isTimeSupported;
         _expire = source.getExpirationTimeMillis;
         _inversiveZoom = source.isInversiveZoom;
@@ -72,7 +73,8 @@
         _randoms = source->randoms.toNSString();
         _ellipsoid = source->ellipticYTile;
         _invertedY = source->invertedYTile;
-        _referer = @"";
+        _referer = source->referer.toNSString();
+        _userAgent = source->userAgent.toNSString();
         _timesupported = source->expirationTimeMillis > 0;
         _expire = source->expirationTimeMillis / 60000;
         _inversiveZoom = NO;
@@ -101,6 +103,7 @@
         _ellipsoid = other.ellipsoid;
         _invertedY = other.invertedY;
         _referer = other.referer;
+        _userAgent = other.userAgent;
         _timesupported = other.timesupported;
         _expire = other.expire;
         _inversiveZoom = other.inversiveZoom;
@@ -138,6 +141,7 @@
     _ellipsoid = params[@"ellipsoid"] ? [params[@"ellipsoid"] boolValue] : NO;
     _invertedY = params[@"inverted_y"] ? [params[@"inverted_y"] boolValue] : NO;
     _referer = params[@"referer"];
+    _userAgent = params[@"userAgent"];
     _timesupported = params[@"timesupported"] ? [params[@"timesupported"] boolValue] : NO;
     _expire = [params[@"expire"] longValue];
     _inversiveZoom = params[@"inversiveZoom"] ? [params[@"inversiveZoom"] boolValue] : NO;
@@ -162,6 +166,7 @@
     params[@"rule"] = _rule;
     params[@"randoms"] = _randoms;
     params[@"referer"] = _referer;
+    params[@"userAgent"] = _userAgent;
     params[@"inversiveZoom"] = _inversiveZoom ? @(1) : @(0);
     params[@"ext"] = _ext;
     params[@"tileSize"] = [NSString stringWithFormat:@"%d", _tileSize];
@@ -184,6 +189,8 @@
     result->avgSize = _avgSize;
     result->bitDensity = _bitDensity;
     result->invertedYTile = _invertedY;
+    result->referer = QString::fromNSString(_referer);
+    result->userAgent = QString::fromNSString(_userAgent);
     result->randoms = QString::fromNSString(_randoms);
     result->randomsArray = OsmAnd::OnlineTileSources::parseRandoms(result->randoms);
     result->rule = QString::fromNSString(_rule);

@@ -28,6 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) BOOL ellipsoid;
 @property (nonatomic, readonly) BOOL invertedY;
 @property (nonatomic, readonly) NSString *referer;
+@property (nonatomic, readonly) NSString *userAgent;
 @property (nonatomic, readonly) BOOL timesupported;
 @property (nonatomic, readonly) long expire;
 @property (nonatomic, readonly) BOOL inversiveZoom;

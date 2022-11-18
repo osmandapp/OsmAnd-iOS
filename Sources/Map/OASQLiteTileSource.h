@@ -21,6 +21,7 @@
 @property (nonatomic, readonly) NSString *tileFormat;
 @property (nonatomic, readonly) int tileSize;
 @property (nonatomic, readonly) NSString *referer;
+@property (nonatomic, readonly) NSString *userAgent;
 @property (nonatomic, readonly) NSString *urlTemplate;
 @property (nonatomic, readonly) NSString *randoms;
 @property (nonatomic, readonly) QList<QString> randomsArray;

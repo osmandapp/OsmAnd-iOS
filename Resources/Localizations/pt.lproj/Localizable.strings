@@ -2726,3 +2726,14 @@
 "rendering_attr_showMtbScaleIMBATrails_name" = "Trilhos IMBA";
 "rendering_value_showMtbScaleIMBATrails_description" = "International Mountain Bicycling Association";
 "map_settings_show_map_symbols" = "Mostrar símbolos do mapa";
+"depth_contour_lines" = "Curvas de nível de profundidade";
+"syncing_progress" = "A sincronizar...";
+"routing_attr_goods_restrictions_name" = "Entrega de mercadorias";
+"routing_attr_goods_restrictions_header_name" = "Os veículos de transporte de mercadorias podem ter o acesso restrito em algumas estradas.";
+"routing_attr_goods_restrictions_footer_desc" = "Aplica-se apenas aos veículos que transportam mercadorias que tenham, pelo menos, quatro rodas e não pesem mais de 3,5 toneladas.\n\nSe o peso do seu veículo for superior a 3,5 toneladas, tem de usar o perfil \"Camião\".";
+"rendering_attr_depthContourWidth_name" = "Espessura da linha";
+"sync_now" = "Sincronizar agora";
+"routing_attr_goods_restrictions_yes_desc" = "As estradas que estão fechadas para entrega de mercadorias serão evitadas.";
+"rendering_attr_depthContourColorScheme_name" = "Esquema de cores das linhas";
+"last_sync" = "Última sincronização";
+"local_changes" = "Alterações locais";

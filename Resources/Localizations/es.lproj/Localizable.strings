@@ -2610,7 +2610,7 @@
 "subscription" = "Suscripción";
 "use_login_and_password_description" = "Usa tu correo y contraseña para ingresar en OpenStreetMap.org.";
 "last_two_month_total" = "Total del último bimestre";
-"promo_subscription" = "OsmAnd Pro (Promo)";
+"promo_subscription" = "Promoción de OsmAnd Pro";
 "animate_my_location" = "Animar cambio de ubicación";
 "login_help_email_title" = "OsmAnd Cloud en iOS";
 
@@ -2729,3 +2729,7 @@
 "sync_now" = "Sincronizar ahora";
 "local_changes" = "Cambios locales";
 "syncing_progress" = "Sincronizando...";
+"routing_attr_goods_restrictions_yes_desc" = "Se evitarán las carreteras que estén cerradas para la entrega de mercancías.";
+"routing_attr_goods_restrictions_name" = "Entrega de los productos";
+"routing_attr_goods_restrictions_header_name" = "Los vehículos de transporte de mercancías pueden tener restringido el acceso a algunas carreteras.";
+"routing_attr_goods_restrictions_footer_desc" = "Sólo se aplica a los vehículos que transportan mercancías que tienen al menos cuatro ruedas y no pesan más de 3,5 toneladas.\n\nSi el peso de su vehículo es superior a 3,5 toneladas, deberá utilizar el perfil de camión.";

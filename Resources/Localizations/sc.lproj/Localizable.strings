@@ -2761,3 +2761,7 @@
 "rendering_attr_depthContourWidth_name" = "Grussesa de sas lìnias";
 "last_sync" = "Ùrtima sincronizatzione";
 "ltr_or_rtl_combine_via_slash" = "%@/%@";
+"routing_attr_goods_restrictions_yes_desc" = "S'ant a evitare sos caminos chi sunt serrados pro su trasportu de mercantzias.";
+"routing_attr_goods_restrictions_name" = "Intrega de mertzes";
+"routing_attr_goods_restrictions_header_name" = "Sos veìculos chi trasportant mercantzias podent tènnere limitatziones in unos cantos caminos.";
+"routing_attr_goods_restrictions_footer_desc" = "S'àplicat petzi pro veìculos chi trasportant mercantzias chi tenent a su nessi bator rodas e pesant non prus de 3,5 tonnelladas.\n\nSi su veìculu tuo pesat prus de 3,5 tonnelladas depes impreare su profilu Càmion.";

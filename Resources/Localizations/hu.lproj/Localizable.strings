@@ -643,7 +643,7 @@
 "gpx_option_from_start_point" = "Végig az egész útvonalon";
 "gpx_option_reverse_route" = "GPX irány megfordítása";
 "prefer_in_routing_title" = "A következők előnyben részesítése…";
-"routing_preferences_descr" = "Útvonal-tervezési beállítások";
+"routing_preferences_descr" = "Útvonal-tervezési preferenciák";
 "app_mode_hiking" = "Túrázás";
 "osm_live_plan_pricing" = "Csomagok és árazás";
 "osm_live_payment_monthly_title" = "Fizetés havonta";
@@ -756,7 +756,7 @@
 "mapillary_image" = "Mapillary-fénykép";
 "shared_string_reset" = "Visszaállítás";
 "shared_string_reload" = "Újratöltés";
-"day" = "nappali";
+"day" = "napra";
 "days_2_4" = "napra";
 "days_5" = "napra";
 "week" = "hétre";
@@ -978,7 +978,7 @@
 "show_notes" = "OSM-jegyzetek megjelenítése";
 "res_elliptic_mercator" = "Elliptikus Merkátor";
 "res_url" = "URL";
-"rendering_attr_currentTrackWidth_description" = "GPX vastagsága";
+"rendering_attr_currentTrackWidth_description" = "GPX-nyomvonal vastagsága";
 "rendering_attr_piste_difficulty_aerialway_name" = "Kötélpályás felvonó";
 "routing_attr_no_new_routing_description" = "Ne használja az 1.9-es verzióban bevezetett útvonalszabályokat.";
 "routeInfo_roadClass_name" = "Úttípus";
@@ -1094,7 +1094,7 @@
 "rendering_attr_horseRoutes_name" = "Lovaglóutak";
 "routing_attr_relief_smoothness_factor_name" = "Magasság ingadozásának kijelölése";
 "routing_attr_avoid_bus_name" = "Busz nélkül";
-"rendering_attr_buildings15zoom_name" = "Épületek 15-ös zoomnál";
+"rendering_attr_buildings15zoom_name" = "Épületek 15-ös szintű nagyításnál";
 "rendering_value_brown_name" = "Barna";
 "routing_attr_driving_style_prefer_unpaved_name" = "Burkolatlan utak előnyben részesítése";
 "routing_attr_avoid_borders_name" = "Határátlépés nélkül";
@@ -1218,7 +1218,7 @@
 "rendering_attr_transportStops_name" = "Tömegközlekedési megállók";
 "rendering_value_high_name" = "Magas";
 "rendering_attr_appMode_description" = "Térkép optimalizálása a következőhöz:";
-"rendering_attr_currentTrackWidth_name" = "GPX szélessége";
+"rendering_attr_currentTrackWidth_name" = "GPX-nyomvonal vastagsága";
 "rendering_attr_surface_ice_name" = "Jég";
 "rendering_attr_hideWaterPolygons_description" = "Vízfelületek";
 "routing_attr_max_num_changes_name" = "Átszállások száma";
@@ -1320,7 +1320,7 @@
 "selected_profile" = "Kiválasztott profil";
 "profile_appearance" = "Profil megjelenése";
 "profile_type_custom_string" = "Egyéni profil";
-"width_limit_description" = "Adja meg a járműve szélességét (a széles járművekre útvonalkorlátozások vonatkozhatnak).";
+"width_limit_description" = "Adja meg járműve szélességét (a széles járművekre útvonalkorlátozások vonatkozhatnak).";
 "height_limit_description" = "Adja meg a járműve magasságát (a magas járművekre útvonalkorlátozások vonatkozhatnak).";
 "weight_limit_description" = "Adja meg a járműve tömegét (a nehéz járművekre útvonalkorlátozások vonatkozhatnak).";
 "monitoring_control_start" = "REC";
@@ -2152,3 +2152,4 @@
 "shared_string_unavailable" = "Nem elérhető";
 "measurement_units" = "Mértékegységek";
 "weather_offline_forecast" = "Offline időjárás-előrejelzés";
+"backup_delete_old_data_warning" = "Törölni készül a korábban betöltött adatok változáselőzményeit.\n\nAz adatok jelenlegi verziója el lesz mentve a kiszolgálón, de a korábbi változtatásokra nem térhet vissza.";

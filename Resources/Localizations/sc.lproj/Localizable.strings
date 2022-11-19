@@ -1266,7 +1266,7 @@
 "hide_hillshade" = "Cua sas umbraduras";
 "toggle_contour_lines" = "Ammustra/Cua sas curvas de livellu";
 "toggle_hillshade" = "Ammustra/Cua su terrinu";
-"display_starting_at_zoom_level" = "Ammustra incumintzende dae su livellu de ismanniamentu";
+"display_starting_at_zoom_level" = "Sa visualizatzione incumintzat dae su livellu de ismanniamentu";
 "quick_action_contour_lines_descr" = "Incarchende custu butone as a ammustrare o cuare sas curvas de livellu in sa mapa.";
 "hide_contour_lines" = "Cua sas curvas de livellu";
 "show_contour_lines" = "Ammustra curvas de livellu";
@@ -2344,8 +2344,8 @@
 "add_description" = "Annanghe una descritzione";
 "map_settings_weather_temp" = "Temperadura";
 "map_settings_weather_pressure" = "Pressione";
-"map_settings_weather_cloud" = "Nue";
-"map_settings_weather_precip" = "Pretzipitatzione";
+"map_settings_weather_cloud" = "Nues";
+"map_settings_weather_precip" = "Pretzipitatziones";
 "map_settings_clear_geo_cache" = "Isbòida sos tasseddos geogràficos";
 "map_settings_clear_raster_cache" = "Isbòida sos tasseddos raster";
 "q_clear_weather_cache" = "Boles isboidare sa memòria temporànea de su mèteu?";
@@ -2696,7 +2696,7 @@
 "manage_storage" = "Amministra sa memòria";
 "cloud_storage_used" = "%@ de %@ impreados";
 "shared_string_leave" = "Abbandona";
-"backup_delete_data_type_description" = "Custu at a iscantzellare totu sos datos %@ dae OsmAnd Cloud. Custa atzione non si podet annullare.";
+"backup_delete_data_type_description" = "Custu at a iscantzellare totu sos datos de \"%@\"dae OsmAnd Cloud. Custa atzione non si podet annullare.";
 "backup_empty_data_from_category" = "OsmAnd Cloud no incluit perunu datu de custa categoria.";
 "backup_delete_types_descr" = "Iscantzellare totu sos datos pro sas castas de datos disabilitadas dae OsmAnd Could?";
 "recording_delete_confirm" = "Iscantzellare custu elementu?";
@@ -2749,3 +2749,15 @@
 "error_contact_support" = "Si su problema sighit cuntata s'iscuadra de suportu nostra.";
 "track_has_no_needed_data" = "Sa rasta non tenet sos datos currispondentes.";
 "select_another_colorization" = "Ischerta un'àtera casta de colorimentu.";
+"map_settings_show_map_symbols" = "Ammustra sos sìmbulos de sa mapa";
+"mountain_bike" = "Bitzicleta de monte";
+"rendering_attr_showMtbScaleIMBATrails_name" = "Camineras IMBA";
+"rendering_value_showMtbScaleIMBATrails_description" = "Assòtziu Internatzionale de su Tziclismu de Monte (International Mountain Bicycling Association)";
+"depth_contour_lines" = "Curvas de livellu de sa profundidade";
+"syncing_progress" = "Sincronizende...";
+"rendering_attr_depthContourColorScheme_name" = "Ischema de colore de sas lìnias";
+"sync_now" = "Sincroniza como";
+"local_changes" = "Modìficas locales";
+"rendering_attr_depthContourWidth_name" = "Grussesa de sas lìnias";
+"last_sync" = "Ùrtima sincronizatzione";
+"ltr_or_rtl_combine_via_slash" = "%@/%@";

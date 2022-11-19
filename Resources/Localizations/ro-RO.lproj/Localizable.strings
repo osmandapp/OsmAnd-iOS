@@ -2013,7 +2013,7 @@
 "search_my_location" = "Căutați-mi locația";
 "first_usage_greeting" = "Obțineți indicații și descoperiți locuri noi fără conexiune la internet";
 "quick_action_contour_lines_descr" = "Atingerea acestui buton de acțiune afișează sau ascunde stratul de linii de contur.";
-"display_starting_at_zoom_level" = "Afișare începând de la nivelul de zoom";
+"display_starting_at_zoom_level" = "Afișarea începe la nivelul de zoom";
 "toggle_hillshade" = "Afișați / Ascundeți terenul";
 "toggle_contour_lines" = "Afișați/ascundeți liniile de contur";
 "hide_terrain" = "Ascundeți terenul";
@@ -2705,3 +2705,11 @@
 "map_updates_are_unavailable_yet" = "Actualizările hărților nu sunt încă disponibile :-(";
 "not_enough_contributions_descr" = "Pentru a avea acces la actualizări nelimitate de hărți din oră în oră, este necesar un minim de %i modificări în ultimele două luni %@.";
 "map_download_privacy_descr" = "Prin descărcarea hărților sunteți de acord cu <a href='https://osmand.net/docs/legal/terms-of-use'>Condițiile de utilizare</a> și <a href='https://osmand.net/docs/legal/privacy-policy'>Politica de confidențialitate</a>.";
+"map_settings_show_map_symbols" = "Afișați simbolurile hărții";
+"depth_contour_lines" = "Linii de contur de adâncime";
+"syncing_progress" = "Sincronizarea...";
+"rendering_attr_depthContourWidth_name" = "Lățimea liniilor";
+"rendering_attr_depthContourColorScheme_name" = "Schema de culori a liniilor";
+"sync_now" = "Sincronizează acum";
+"last_sync" = "Ultima sincronizare";
+"local_changes" = "Schimbări locale";

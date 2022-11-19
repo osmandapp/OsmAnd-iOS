@@ -2738,3 +2738,10 @@
 "mountain_bike" = "Mountainbike";
 "rendering_attr_showMtbScaleIMBATrails_name" = "IMBA-Trails";
 "map_settings_show_map_symbols" = "Karten-Symbole anzeigen";
+"depth_contour_lines" = "Tiefenlinien";
+"last_sync" = "Letzte Synchronisierung";
+"sync_now" = "Jetzt synchronisieren";
+"local_changes" = "Lokale Änderungen";
+"syncing_progress" = "Synchronisieren...";
+"rendering_attr_depthContourWidth_name" = "Linienbreite";
+"rendering_attr_depthContourColorScheme_name" = "Linien Farbschema";

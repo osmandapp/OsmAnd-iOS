@@ -1295,3 +1295,28 @@
 "restore_all_purchases" = "모든 구매 내역 복원";
 "backup_complete" = "백업 완료";
 "subscription_banner_free_maps_title" = "%i개의 지도를 무료로 다운로드할 수 있습니다.";
+"toggle_local_edits" = "로컬 OSM 편집 토글";
+"quick_action_toggle_edits_descr" = "이 액션 버튼을 탭하여 오프라인 OSM 편집을 표시하거나 숨깁니다.";
+"osm_edits_offline_layer" = "OSM 편집/노트 (오프라인)";
+"osm_edits_title" = "OSM 편집";
+"show_edits" = "로컬 수정사항 표시";
+"create_new_trip" = "새 트랙 만들기";
+"osm_live_get_title" = "OsmAnd 라이브 받기";
+"configure_screen_quick_action" = "빠른 작업";
+"osm_edits_notes" = "노트";
+"osm_edits_edits_label" = "편집";
+"hide_edits" = "로컬 편집 숨기기";
+"select_online_source" = "소스 선택";
+"osm_edits_all" = "모든 편집";
+"osm_edits_poi" = "POI 편집";
+
+// Quick action
+"quick_action_name" = "빠른 작업";
+"plugin_popup_osm_editing_ask" = "OpenStreetMap 편집 플러그인을 활성화하여 지도 편집 및 메모를 추가하고 관리하십시오.";
+"map_settings_under" = "언더레이";
+"map_settings_show_slider_map" = "지도에 슬라이더 표시";
+"map_settings_layer_transparency" = "레이어 투명도";
+"map_settings_overunder" = "오버레이/언더레이";
+"map_settings_over" = "오버레이";
+"map_settings_avail_lay" = "사용 가능한 레이어";
+"map_settings_hide_polygons" = "다각형 숨기기";

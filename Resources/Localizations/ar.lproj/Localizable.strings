@@ -1263,7 +1263,7 @@
 "hide_hillshade" = "إخفاء التضاريس";
 "toggle_contour_lines" = "إظهار/إخفاء الخطوط الكنتورية";
 "toggle_hillshade" = "إظهار/إخفاء التضاريس";
-"display_starting_at_zoom_level" = "العرض بداية من مستوى التكبير";
+"display_starting_at_zoom_level" = "يبدأ العرض عند مستوى التكبير";
 "quick_action_contour_lines_descr" = "يؤدي النقر فوق زر الإجراء هذا إلى إظهار أو إخفاء الخطوط الكنتورية.";
 "hide_contour_lines" = "إخفاء الخطوط الكنتورية";
 "show_contour_lines" = "أظهر الخطوط الكنتورية";
@@ -2728,3 +2728,11 @@
 "rendering_attr_showMtbScaleIMBATrails_name" = "امبا تريل";
 "rendering_value_showMtbScaleIMBATrails_description" = "الرابطة الدولية للدراجات الجبلية";
 "ltr_or_rtl_combine_via_slash" = "%@/%@";
+"map_settings_show_map_symbols" = "إظهار رموز الخريطة";
+"depth_contour_lines" = "خطوط كنتورالعمق";
+"syncing_progress" = "مزامنة ...";
+"rendering_attr_depthContourWidth_name" = "عرض الخطوط";
+"rendering_attr_depthContourColorScheme_name" = "مخطط ألوان الخطوط";
+"last_sync" = "آخر مزامنة";
+"sync_now" = "المزامنة الآن";
+"local_changes" = "التغييرات المحلية";

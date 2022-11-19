@@ -2442,3 +2442,10 @@
 "in_grace_period" = "Grazia aldian";
 "shared_string_undefined" = "Indefinitua";
 "shared_string_data" = "Datuak";
+"map_settings_weather_precip" = "Prezipitazioak";
+"measurement_units" = "Neurketa-unitateak";
+"map_settings_weather_wind" = "Haizea";
+"map_settings_weather_cloud" = "Hodeiak";
+"depth_contour_lines" = "Sakoneraren sestra-kurbak";
+"map_settings_weather_temp" = "Tenperatura";
+"weather_offline_forecast" = "Lineaz kanpoko iragarpena";

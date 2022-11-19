@@ -2745,3 +2745,7 @@
 "syncing_progress" = "Synchronisieren...";
 "rendering_attr_depthContourWidth_name" = "Linienbreite";
 "rendering_attr_depthContourColorScheme_name" = "Linien Farbschema";
+"routing_attr_goods_restrictions_yes_desc" = "Für Lieferverkehr gesperrte Straßen werden gemieden.";
+"routing_attr_goods_restrictions_footer_desc" = "Gilt nur für Fahrzeuge, die Güter befördern, die mindestens vier Räder haben und nicht mehr als 3,5 Tonnen wiegen.\n\nWenn das Gewicht Ihres Fahrzeugs mehr als 3,5 Tonnen beträgt, müssen Sie das Profil Lkw verwenden.";
+"routing_attr_goods_restrictions_name" = "Lieferverkehr";
+"routing_attr_goods_restrictions_header_name" = "Für Lieferverkehr kann der Zugang zu einigen Straßen eingeschränkt sein.";

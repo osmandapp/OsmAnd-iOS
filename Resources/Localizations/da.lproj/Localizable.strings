@@ -2734,3 +2734,7 @@
 "sync_now" = "Synkroniser nu";
 "local_changes" = "Lokale ændringer";
 "rendering_attr_depthContourColorScheme_name" = "Linjers farvesætning";
+"routing_attr_goods_restrictions_name" = "Varelevering";
+"routing_attr_goods_restrictions_yes_desc" = "Veje, der er lukket for varekørsel, vil blive undgået.";
+"routing_attr_goods_restrictions_header_name" = "Køretøjer, der transporterer varer, kan begrænses til at få adgang til visse veje.";
+"routing_attr_goods_restrictions_footer_desc" = "Gælder kun for køretøjer, der transporterer gods, som har mindst fire hjul og vejer højst 3,5 tons.\n\nHvis dit køretøj vejer mere end 3,5 tons, skal du bruge lastbilprofilen.";

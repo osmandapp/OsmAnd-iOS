@@ -79,6 +79,7 @@
     
     std::shared_ptr<const OsmAnd::TextRasterizer> _textRasterizer;
     OACurrentStreetName *_prevStreetName;
+    NSString *_roadShieldName;
     
     UIFont *_textFont;
     UIFont *_textWaypointFont;
@@ -580,6 +581,12 @@
             int idx = [streetName.text indexOf:@"»"];
             if (idx > 0)
                 streetName.text = [streetName.text substringToIndex:idx];
+            
+            if (_roadShieldName && [streetName.text containsString:_roadShieldName])
+            {
+                streetName.text = [streetName.text stringByReplacingOccurrencesOfString:_roadShieldName withString:@""];
+                streetName.text = [streetName.text trim];
+            }
         }
         else
         {
@@ -724,9 +731,11 @@
     if (textImage)
     {
         view.image = [OANativeUtilities skImageToUIImage:textImage];
+        _roadShieldName = name;
         return YES;
     }
 
+    _roadShieldName = nil;
     return NO;
 }
 

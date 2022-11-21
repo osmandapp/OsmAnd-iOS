@@ -169,13 +169,12 @@
             OATransportStopType *type = [OATransportStopType findType:rs->type.toNSString()];
             if (!_stopType && type && [OATransportStopType isTopType:type.type])
                 _stopType = type;
-            
-            if (![self containsRef:routes transportRoute:rs])
+            OATransportStopRoute *r = [[OATransportStopRoute alloc] init];
+            r.route = rs;
+            if (![self containsRef:routes transportRoute:r])
             {
-                OATransportStopRoute *r = [[OATransportStopRoute alloc] init];
                 r.type = type;
                 r.desc = rs->getName(QString::fromNSString(lang), transliterate).toNSString();
-                r.route = rs;
                 r.refStop = _transportStop.stop;
                 r.stop = s;
                 r.distance = dist;
@@ -183,25 +182,6 @@
             }
         }
     }
-}
-
-- (BOOL) containsRef:(NSArray<OATransportStopRoute *> *)routes transportRoute:(std::shared_ptr<const OsmAnd::TransportRoute>)transportRoute
-{
-    for (OATransportStopRoute *route in routes)
-        if (route.route->ref == transportRoute->ref)
-            return YES;
-
-    return NO;
-}
-
-
-- (BOOL) containsRef:(std::shared_ptr<const OsmAnd::TransportRoute>)transportRoute
-{
-    for (OATransportStopRoute *route in self.routes)
-        if (route.route->ref == transportRoute->ref)
-            return YES;
-    
-    return NO;
 }
 
 + (UIImage *) createStopPlate:(NSString *)text color:(UIColor *)color

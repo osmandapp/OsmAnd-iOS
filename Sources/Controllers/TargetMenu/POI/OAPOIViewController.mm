@@ -858,16 +858,15 @@ static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsap
     {
         for (auto rs : rts)
         {
-            if (![self containsRef:routes transportRoute:rs])
+            OATransportStopRoute *r = [[OATransportStopRoute alloc] init];
+            r.route = rs;
+            if (![self containsRef:routes transportRoute:r])
             {
                 OATransportStopType *t = [OATransportStopType findType:rs->type.toNSString()];
                 if (isSubwayEntrance && t.type != TST_SUBWAY && dist > 150)
                     continue;
-                
-                OATransportStopRoute *r = [[OATransportStopRoute alloc] init];
                 r.type = t;
                 r.desc = rs->getName(QString::fromNSString(lang), transliterate).toNSString();
-                r.route = rs;
                 r.stop = s;
                 if ([OAUtilities isCoordEqual:self.poi.latitude srcLon:self.poi.longitude destLat:s->location.latitude destLon:s->location.longitude] || (isSubwayEntrance && t.type == TST_SUBWAY))
                     r.refStop = s;
@@ -877,15 +876,6 @@ static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsap
             }
         }
     }
-}
-
-- (BOOL) containsRef:(NSArray<OATransportStopRoute *> *)routes transportRoute:(std::shared_ptr<const OsmAnd::TransportRoute>)transportRoute
-{
-    for (OATransportStopRoute *route in routes)
-        if (route.route->ref == transportRoute->ref)
-            return YES;
-
-    return NO;
 }
 
 - (NSArray<OATransportStopRoute *> *) getSubTransportStopRoutes:(BOOL)nearby

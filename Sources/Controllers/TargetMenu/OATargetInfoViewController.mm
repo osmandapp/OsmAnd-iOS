@@ -150,6 +150,15 @@
     }
 }
 
+- (BOOL) containsRef:(NSArray<OATransportStopRoute *> *)routes transportRoute:(OATransportStopRoute *)transportRoute
+{
+    for (OATransportStopRoute *route in routes)
+        if (route.route->type == transportRoute.route->type && route.route->ref == transportRoute.route->ref)
+            return YES;
+
+    return NO;
+}
+
 - (void) buildDescription:(NSMutableArray<OARowInfo *> *)rows
 {
     // implement in subclasses

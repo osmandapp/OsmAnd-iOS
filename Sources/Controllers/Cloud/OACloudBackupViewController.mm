@@ -42,6 +42,7 @@
 #import "OAFileSettingsItem.h"
 #import "OAProfileSettingsItem.h"
 #import "OASettingsBackupViewController.h"
+#import "OAStatusBackupViewController.h"
 #import "OAExportSettingsType.h"
 #import "OABaseBackupTypesViewController.h"
 #import "OAExportBackupTask.h"
@@ -62,7 +63,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     EOAItemStatusFinishedType
 };
 
-@interface OACloudBackupViewController () <UITableViewDelegate, UITableViewDataSource, OAOnPrepareBackupListener, OABackupTypesDelegate, OAStatusBackupDelegate, MFMailComposeViewControllerDelegate>
+@interface OACloudBackupViewController () <UITableViewDelegate, UITableViewDataSource, OAOnPrepareBackupListener, OABackupTypesDelegate, MFMailComposeViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *navBarBackgroundView;
 @property (weak, nonatomic) IBOutlet UILabel *navBarTitle;
@@ -111,9 +112,6 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(onBackupFinished:) name:kBackupSyncFinishedNotification object:nil];
     [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(onBackupStarted) name:kBackupSyncStartedNotification object:nil];
     [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(onBackupProgressUpdate:) name:kBackupProgressUpdateNotification object:nil];
-    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(onBackupProgressItemFinished:) name:kBackupItemFinishedNotification object:nil];
-    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(onBackupItemProgress:) name:kBackupItemProgressNotification object:nil];
-    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(onBackupItemStarted:) name:kBackupItemStartedNotification object:nil];
 }
 
 - (void)viewDidLoad
@@ -124,40 +122,24 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     _settingsHelper = OANetworkSettingsHelper.sharedInstance;
     _backupHelper = OABackupHelper.sharedInstance;
     self.tblView.refreshControl = [[UIRefreshControl alloc] init];
+    [_backupHelper addPrepareBackupListener:self];
     [self.tblView.refreshControl addTarget:self action:@selector(onRefresh) forControlEvents:UIControlEventValueChanged];
     if (!_settingsHelper.isBackupSyncing && !_backupHelper.isBackupPreparing)
     {
         [_backupHelper addPrepareBackupListener:self];
         [_backupHelper prepareBackup];
     }
-
+    [self generateData];
     self.tblView.delegate = self;
     self.tblView.dataSource = self;
     self.tblView.estimatedRowHeight = 44.;
     self.tblView.rowHeight = UITableViewAutomaticDimension;
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    [self generateData];
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    [_backupHelper addPrepareBackupListener:self];
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    [_backupHelper removePrepareBackupListener:self];
-}
-
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [_backupHelper removePrepareBackupListener:self];
 }
 
 - (void)applyLocalization
@@ -342,219 +324,6 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
             }
         }
     }
-    OATableSectionData *itemsSection = [OATableSectionData sectionData];
-    for (OALocalFile *file in _info.filteredFilesToUpload)
-    {
-        [itemsSection addRow:[self rowFromItem:file
-                                      iconName:@"ic_custom_cloud_upload_outline"
-                                      mainTint:color_icon_inactive
-                                 secondaryTint:color_primary_purple operation:EOABackupSyncOperationUpload]];
-    }
-    for (OARemoteFile *file in _info.filteredFilesToDelete)
-    {
-        [itemsSection addRow:[self rowFromItem:file iconName:@"ic_custom_remove" mainTint:color_primary_purple secondaryTint:color_primary_red operation:EOABackupSyncOperationDelete]];
-    }
-    NSArray<NSArray *> *downloadItems = [OABackupHelper getItemsMapForRestore:_info settingsItems:_backup.settingsItems];
-    for (NSArray *pair in downloadItems)
-    {
-        [itemsSection addRow:[self rowFromItem:pair.firstObject
-                                      iconName:@"ic_custom_cloud_download_outline"
-                                      mainTint:color_icon_inactive
-                                 secondaryTint:color_primary_purple
-                                     operation:EOABackupSyncOperationDownload]];
-    }
-    for (NSArray *items in _info.filteredFilesToMerge)
-    {
-        [itemsSection addRow:[self rowFromConflictItems:items]];
-    }
-    if (itemsSection.rowCount == 0)
-    {
-        [itemsSection addRowFromDictionary:@{
-            kCellTypeKey: [OALargeImageTitleDescrTableViewCell getCellIdentifier],
-            kCellKeyKey: @"epmtyState",
-            kCellTitleKey: OALocalizedString(@"cloud_all_changes_uploaded"),
-            kCellDescrKey: OALocalizedString(@"cloud_all_changes_uploaded_descr"),
-            kCellIconNameKey: @"ic_action_cloud_smile_face_colored"
-        }];
-    }
-    if (!_backupHelper.isBackupPreparing)
-    {
-        _itemsSection = _data.sectionCount;
-        [_data addSection:itemsSection];
-    }
-}
-
-- (OATableRowData *) rowFromConflictItems:(NSArray *)items
-{
-    OALocalFile *localFile = (OALocalFile *) items.firstObject;
-    OARemoteFile *remoteFile = (OARemoteFile *) items.lastObject;
-    OATableRowData *rowData = [self rowFromItem:localFile
-                                       iconName:@"ic_custom_cloud_info"
-                                       mainTint:color_icon_inactive
-                                  secondaryTint:color_tint_gray
-                                      operation:EOABackupSyncOperationNone];
-    [rowData setObj:localFile forKey:@"localConflictItem"];
-    [rowData setObj:remoteFile forKey:@"remoteConflictItem"];
-    NSString *conflictStr = [OALocalizedString(@"cloud_conflict") stringByAppendingString:@". "];
-    NSMutableAttributedString *attributedDescr = [[NSMutableAttributedString alloc] initWithString:[conflictStr stringByAppendingString:rowData.descr]];
-    [attributedDescr addAttributes:@{ NSFontAttributeName : [UIFont systemFontOfSize:13 weight:UIFontWeightMedium],
-                                      NSForegroundColorAttributeName : UIColorFromRGB(color_primary_red) }
-                             range:[attributedDescr.string rangeOfString:conflictStr]];
-    [attributedDescr addAttributes:@{ NSFontAttributeName : [UIFont systemFontOfSize:13],
-                                      NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer) }
-                             range:[attributedDescr.string rangeOfString:rowData.descr]];
-    [rowData setObj:attributedDescr forKey:@"descr_attr"];
-    [rowData setObj:@"ic_custom_alert" forKey:@"secondary_icon_conflict"];
-    [rowData setObj:@(color_primary_red) forKey:@"secondary_icon_color"];
-    [rowData setIconTint:color_primary_purple];
-    return rowData;
-}
-
-- (OATableRowData *) rowFromItem:(id)file iconName:(NSString *)iconName mainTint:(NSInteger)mainTint secondaryTint:(NSInteger)secondaryTint operation:(EOABackupSyncOperationType)operation
-{
-    OASettingsItem *item = nil;
-    if ([file isKindOfClass:OALocalFile.class])
-        item = ((OALocalFile *) file).item;
-    else if ([file isKindOfClass:OARemoteFile.class])
-        item = ((OARemoteFile *) file).item;
-    OATableRowData *rowData = [OATableRowData rowData];
-    [rowData setCellType:[OARightIconTableViewCell getCellIdentifier]];
-    [rowData setObj:file forKey:@"file"];
-    [rowData setObj:item forKey:@"settings_item"];
-    [rowData setObj:@(operation) forKey:@"operation"];
-    NSString *name = item.getPublicName;
-    if ([item isKindOfClass:OAFileSettingsItem.class])
-    {
-        OAFileSettingsItem *flItem = (OAFileSettingsItem *)item;
-        if (flItem.subtype == EOASettingsItemFileSubtypeVoiceTTS)
-            name = [NSString stringWithFormat:@"%@ (%@)", name, OALocalizedString(@"tts")];
-        else if (flItem.subtype == EOASettingsItemFileSubtypeVoice)
-            name = [NSString stringWithFormat:@"%@ (%@)", name, OALocalizedString(@"recorded_voice")];
-    }
-    [rowData setTitle:name];
-    NSString *fileName = [OABackupHelper getItemFileName:item];
-    [rowData setObj:fileName forKey:@"file_name"];
-
-    
-    [rowData setDescr:[self getDescriptionForItemType:item.type
-                                             fileName:fileName
-                                              summary:OALocalizedString(@"cloud_last_backup")]];
-    [self setRowIcon:rowData item:item];
-
-    [rowData setSecondaryIconName:iconName];
-    [rowData setObj:@(secondaryTint) forKey:@"secondary_icon_color"];
-    [rowData setIconTint:mainTint];
-    return rowData;
-}
-
-- (void)setRowIcon:(OATableRowData *)rowData item:(OASettingsItem *)item
-{
-    if ([item isKindOfClass:OAProfileSettingsItem.class])
-    {
-        OAProfileSettingsItem *profileItem = (OAProfileSettingsItem *) item;
-        OAApplicationMode *mode = profileItem.appMode;
-        [rowData setObj:[UIImage templateImageNamed:[mode getIconName]] forKey:@"icon"];
-    }
-    else
-    {
-        OAExportSettingsType *type = [OAExportSettingsType getExportSettingsTypeForItem:item];
-        if (type != nil)
-            [rowData setObj:type.icon forKey:@"icon"];
-    }
-}
-
-- (NSArray *) rowAndIndexForType:(NSString *)type fileName:(NSString *)fileName
-{
-    EOASettingsItemType intType = [OASettingsItemType parseType:type];
-    OATableSectionData *section = [_data sectionDataForIndex:_itemsSection];
-    for (NSInteger i = 0; i < section.rowCount; i++)
-    {
-        OATableRowData *row = [section getRow:i];
-        OASettingsItem *item = [row objForKey:@"settings_item"];
-        if (item.type == intType && [[row objForKey:@"file_name"] isEqualToString:fileName])
-            return @[row, @(i)];
-    }
-    return nil;
-}
-
-- (void)updateCellProgress:(NSString * _Nonnull)fileName
-                      type:(NSString * _Nonnull)type
-          itemProgressType:(EOAItemStatusType)itemProgressType
-                     value:(NSInteger)value
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        NSArray *rowIndex = [self rowAndIndexForType:type fileName:fileName];
-        if (rowIndex)
-        {
-            NSIndexPath *indPath = [NSIndexPath indexPathForRow:[rowIndex.lastObject integerValue] inSection:_itemsSection];
-            OATableRowData *item = [_data itemForIndexPath:indPath];
-            BOOL hasConflict = [item objForKey:@"remoteConflictItem"] != nil;
-            OARightIconTableViewCell *cell = [self.tblView cellForRowAtIndexPath:indPath];
-            if (cell)
-            {
-                [cell rightIconVisibility:hasConflict];
-                FFCircularProgressView *progressView = (FFCircularProgressView *) cell.accessoryView;
-                if (!progressView)
-                {
-                    progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0., 0., 25., 25.)];
-                    progressView.iconView = [[UIView alloc] init];
-                    progressView.tintColor = UIColorFromRGB(color_primary_purple);
-                    cell.accessoryView = progressView;
-                }
-
-                if (itemProgressType == EOAItemStatusStartedType)
-                {
-                    progressView.iconPath = [UIBezierPath bezierPath];
-                    progressView.progress = 0.;
-                    if (!progressView.isSpinning)
-                        [progressView startSpinProgressBackgroundLayer];
-                    [progressView setNeedsDisplay];
-                }
-                else if (itemProgressType == EOAItemStatusInProgressType)
-                {
-                    progressView.iconPath = nil;
-                    if (progressView.isSpinning)
-                        [progressView stopSpinProgressBackgroundLayer];
-                    progressView.progress = value / 100. - 0.001;
-                }
-                else if (itemProgressType == EOAItemStatusFinishedType)
-                {
-                    progressView.iconPath = [OAResourcesUIHelper tickPath:progressView];
-                    progressView.progress = 0.;
-                    if (!progressView.isSpinning)
-                        [progressView startSpinProgressBackgroundLayer];
-
-                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t) (1. * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                        [cell rightIconVisibility:YES];
-                        BOOL hasConflict = [item objForKey:@"remoteConflictItem"] != nil;
-                        [item setIconTint:color_primary_purple];
-                        [item setObj:hasConflict ? @(color_primary_red) : @(color_primary_purple) forKey:@"secondary_icon_color"];
-                        [self.tblView reloadRowsAtIndexPaths:@[indPath] withRowAnimation:UITableViewRowAnimationNone];
-                    });
-                }
-            }
-        }
-    });
-}
-
-- (NSString *)generateTimeString:(long)timeMs summary:(NSString *)summary
-{
-    if (timeMs != -1)
-    {
-        NSString *time = [OAOsmAndFormatter getFormattedPassedTime:(timeMs / 1000)
-                                                               def:OALocalizedString(@"shared_string_never")];
-        return [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_colon"), summary, time];
-    }
-    else
-    {
-        return [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_colon"), summary, OALocalizedString(@"shared_string_never")];
-    }
-}
-
-- (NSString *)getDescriptionForItemType:(EOASettingsItemType)type fileName:(NSString *)fileName summary:(NSString *)summary
-{
-    OAUploadedFileInfo *info = [[OABackupDbHelper sharedDatabase] getUploadedFileInfo:[OASettingsItemType typeName:type] name:fileName];
-    return [self generateTimeString:info.uploadTime summary:summary];
 }
 
 - (OATitleIconProgressbarCell *) getProgressBarCell
@@ -573,7 +342,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
 
 - (BOOL) shouldShowSyncButton
 {
-    return _backup.localFiles.count > 0 || _backup.remoteFiles.count > 0;
+    return _info.filteredFilesToDelete.count > 0 || _info.filteredFilesToDownload.count > 0 || _info.filteredFilesToUpload.count > 0;
 }
 
 - (void) refreshContent
@@ -621,8 +390,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
 
 - (void) cancellBackupPressed
 {
-    [_settingsHelper cancelImport];
-    [_settingsHelper cancelExport];
+    [_settingsHelper cancelSync];
 }
 
 - (void) onSubscriptionExpired
@@ -791,6 +559,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMultiIconTextDescCell getCellIdentifier] owner:self options:nil];
             cell = (OAMultiIconTextDescCell *)[nib objectAtIndex:0];
             [cell setOverflowVisibility:YES];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
         cell.textView.text = item.title;
         cell.descView.text = item.descr;
@@ -869,34 +638,10 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OATableRowData *item = [_data itemForIndexPath:indexPath];
-    OARemoteFile *remoteConflictItem = [item objForKey:@"remoteConflictItem"];
-    if (remoteConflictItem)
+    if ([item.key isEqualToString:@"lastBackup"])
     {
-        OAStatusBackupConflictDetailsViewController *conflictDetailsViewController =
-        [[OAStatusBackupConflictDetailsViewController alloc] initWithLocalFile:[item objForKey:@"localConflictItem"]
-                                                                    remoteFile:[item objForKey:@"remoteConflictItem"]
-                                                    backupExportImportListener:self];
-        conflictDetailsViewController.delegate = self;
-        [self presentViewController:conflictDetailsViewController animated:YES completion:nil];
-    }
-    else if ([item objForKey:@"settings_item"] && [item objForKey:@"operation"] && !_settingsHelper.isBackupSyncing)
-    {
-        EOABackupSyncOperationType operation = (EOABackupSyncOperationType) [item integerForKey:@"operation"];
-        id file = [item objForKey:@"file"];
-        if ([file isKindOfClass:OALocalFile.class] && operation == EOABackupSyncOperationUpload)
-        {
-            OALocalFile *fl = (OALocalFile *) file;
-            NSString *fileName = [OABackupHelper getItemFileName:fl.item];
-            if (!_settingsHelper.syncBackupTasks[fileName])
-                [_settingsHelper syncSettingsItems:fileName localFile:fl remoteFile:nil operation:operation];
-        }
-        else if ([file isKindOfClass:OARemoteFile.class])
-        {
-            OARemoteFile *fl = (OARemoteFile *) file;
-            NSString *fileName = [OABackupHelper getItemFileName:fl.item];
-            if (!_settingsHelper.syncBackupTasks[fileName])
-                [_settingsHelper syncSettingsItems:fileName localFile:nil remoteFile:fl operation:operation];
-        }
+        OAStatusBackupViewController *statusBackupViewController = [[OAStatusBackupViewController alloc] initWithType:EOARecentChangesRemote];
+        [self.navigationController pushViewController:statusBackupViewController animated:YES];
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
@@ -995,23 +740,6 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
             _backupProgressCell.textView.text = [OALocalizedString(@"syncing_progress") stringByAppendingString:[NSString stringWithFormat:@"%i%%", (int) (value * 100)]];
         }
     });
-}
-
-- (void)onBackupProgressItemFinished:(NSNotification *)notification
-{
-    [self updateCellProgress:notification.userInfo[@"name"] type:notification.userInfo[@"type"] itemProgressType:EOAItemStatusFinishedType value:100];
-}
-
-- (void)onBackupItemProgress:(NSNotification *)notification
-{
-    NSDictionary *info = notification.userInfo;
-    [self updateCellProgress:info[@"name"] type:info[@"type"] itemProgressType:EOAItemStatusInProgressType value:[info[@"value"] integerValue]];
-}
-
-- (void)onBackupItemStarted:(NSNotification *)notification
-{
-    NSDictionary *info = notification.userInfo;
-    [self updateCellProgress:info[@"name"] type:info[@"type"] itemProgressType:EOAItemStatusStartedType value:0];
 }
 
 @end

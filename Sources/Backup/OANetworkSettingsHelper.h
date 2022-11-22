@@ -53,8 +53,7 @@ typedef NS_ENUM(NSInteger, EOABackupSyncOperationType) {
 
 - (EOAImportType) getImportTaskType:(NSString *)key;
 
-- (BOOL) cancelExport;
-- (BOOL) cancelImport;
+- (void) cancelSync;
 
 - (BOOL) isBackupExporting;
 - (BOOL) isBackupImporting;

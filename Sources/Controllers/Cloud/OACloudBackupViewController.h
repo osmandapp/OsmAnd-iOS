@@ -15,16 +15,6 @@ typedef NS_ENUM(NSInteger, EOACloudScreenSourceType) {
     EOACloudScreenSourceTypeDirect
 };
 
-@class OATableRowData;
-
-@protocol OAStatusBackupDelegate
-
-- (void)setRowIcon:(OATableRowData *)rowData item:(OASettingsItem *)item;
-- (NSString *)getDescriptionForItemType:(EOASettingsItemType)type fileName:(NSString *)fileName summary:(NSString *)summary;
-- (NSString *)generateTimeString:(long)timeMs summary:(NSString *)summary;
-
-@end
-
 @interface OACloudBackupViewController : OABaseCloudBackupViewController
 
 - (instancetype) initWithSourceType:(EOACloudScreenSourceType)type;

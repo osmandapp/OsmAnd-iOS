@@ -2713,3 +2713,7 @@
 "sync_now" = "Sincronizează acum";
 "last_sync" = "Ultima sincronizare";
 "local_changes" = "Schimbări locale";
+"routing_attr_goods_restrictions_header_name" = "Accesul vehiculelor care transportă mărfuri poate fi restricționat pe anumite drumuri.";
+"routing_attr_goods_restrictions_footer_desc" = "Se aplică numai pentru vehiculele care transportă mărfuri cu cel puțin patru roți și care cântăresc cel mult 3,5 tone.\n\nDacă vehiculul dumneavoastră are o greutate mai mare de 3,5 tone, trebuie să utilizați profilul pentru camioane.";
+"routing_attr_goods_restrictions_name" = "Livrarea mărfurilor";
+"routing_attr_goods_restrictions_yes_desc" = "Se vor evita drumurile care sunt închise pentru livrarea mărfurilor.";

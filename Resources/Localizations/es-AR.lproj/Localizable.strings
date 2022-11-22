@@ -2745,3 +2745,7 @@
 "rendering_attr_depthContourColorScheme_name" = "Esquema de color de las líneas";
 "sync_now" = "Sincronizar ahora";
 "local_changes" = "Cambios locales";
+"routing_attr_goods_restrictions_header_name" = "Los vehículos de transporte de mercancías pueden tener restringido el acceso a algunos caminos.";
+"routing_attr_goods_restrictions_name" = "Entrega de mercancías";
+"routing_attr_goods_restrictions_footer_desc" = "Sólo aplica a los transportes de mercancías que tienen al menos cuatro ruedas y no pesan más de 3,5 toneladas.\n\nSi el peso del vehículo es superior a 3,5 toneladas, debe usar el perfil de camión.";
+"routing_attr_goods_restrictions_yes_desc" = "Serán evitados los caminos cerrados para la entrega de mercancías.";

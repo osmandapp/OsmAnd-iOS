@@ -2736,3 +2736,7 @@
 "last_sync" = "آخر مزامنة";
 "sync_now" = "المزامنة الآن";
 "local_changes" = "التغييرات المحلية";
+"routing_attr_goods_restrictions_name" = "تسليم البضائع";
+"routing_attr_goods_restrictions_header_name" = "يمكن تقييد المركبات التي تنقل البضائع للوصول إلى بعض الطرق.";
+"routing_attr_goods_restrictions_footer_desc" = "ينطبق فقط على المركبات التي تحمل البضائع التي تحتوي على أربعة عجلات على الأقل ولا يزيد وزنها عن 3.5 طن.\n\nإذا كان وزن سيارتك أكثر من 3.5 طن ، فأنت بحاجة إلى استخدام ملف تعريف الشاحنة.";
+"routing_attr_goods_restrictions_yes_desc" = "سيتم تجنب الطرق التي أغلقت لتسليم البضائع.";

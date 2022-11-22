@@ -560,6 +560,15 @@
         switch (res.objectType)
         {
             case LOCATION:
+            case GPX_TRACK:
+            {
+                OAPointDescCell* cell = [self getPointDescCell];
+                if (cell)
+                {
+                    //TODO: add ui for gpx
+                    cell.titleIcon.image = [UIImage templateImageNamed:@"ic_action_world_globe"];
+                }
+            }
             case PARTIAL_LOCATION:
             {
                 OAPointDescCell* cell = [self getPointDescCell];

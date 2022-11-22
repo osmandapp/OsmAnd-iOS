@@ -22,6 +22,10 @@
 
 @end
 
+@interface OASearchGpxAPI : OASearchBaseAPI
+
+@end
+
 @interface OASearchWptAPI : OASearchBaseAPI
 
 - (void) setWptData:(QList<std::shared_ptr<const OsmAnd::GpxDocument>>&)geoDocList paths:(NSArray *)paths;

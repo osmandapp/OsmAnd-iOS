@@ -22,6 +22,7 @@
 #import "OASearchWord.h"
 #import "Localization.h"
 #import "OAAutoObserverProxy.h"
+#import "OAGPXDatabase.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IFavoriteLocation.h>
@@ -34,6 +35,8 @@ static const int SEARCH_WPT_API_PRIORITY = 50;
 static const int SEARCH_WPT_OBJECT_PRIORITY = 52;
 static const int SEARCH_HISTORY_API_PRIORITY = 50;
 static const int SEARCH_HISTORY_OBJECT_PRIORITY = 53;
+static const int SEARCH_TRACK_API_PRIORITY = 50;
+static const int SEARCH_TRACK_OBJECT_PRIORITY = 53;
 
 
 @implementation OASearchFavoritesAPI
@@ -57,8 +60,12 @@ static const int SEARCH_HISTORY_OBJECT_PRIORITY = 53;
         sr.preferredZoom = 17;
         if ([phrase getFullSearchPhrase].length <= 1 && [phrase isNoSelectedType])
             [resultMatcher publish:sr];
-        else if ([[phrase getFirstUnknownNameStringMatcher] matches:sr.localeName])
-            [resultMatcher publish:sr];
+        else
+        {
+            OANameStringMatcher *matcher = [[OANameStringMatcher alloc] initWithNamePart:[phrase getFullSearchPhrase] mode:CHECK_CONTAINS];
+            if ([matcher matches:sr.localeName])
+                [resultMatcher publish:sr];
+        }
     }
     return YES;
 }
@@ -105,6 +112,45 @@ static const int SEARCH_HISTORY_OBJECT_PRIORITY = 53;
         return -1;
     
     return SEARCH_FAVORITE_API_CATEGORY_PRIORITY;
+}
+
+@end
+
+@implementation OASearchGpxAPI
+
+- (BOOL) isSearchMoreAvailable:(OASearchPhrase *)phrase
+{
+    return NO;
+}
+
+- (BOOL) search:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
+{
+    for (OAGPX *gpxInfo : [[OAGPXDatabase sharedDb] gpxList])
+    {
+        OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:phrase];
+        sr.objectType = GPX_TRACK;
+        sr.localeName = gpxInfo.gpxTitle;
+        sr.relatedObject = gpxInfo;
+        sr.priority = SEARCH_TRACK_OBJECT_PRIORITY;
+        sr.preferredZoom = 17;
+        if ([phrase getFullSearchPhrase].length <= 1 && [phrase isNoSelectedType])
+            [resultMatcher publish:sr];
+        else
+        {
+            OANameStringMatcher *matcher = [[OANameStringMatcher alloc] initWithNamePart:[phrase getFullSearchPhrase] mode:CHECK_CONTAINS];
+            if ([matcher matches:sr.localeName])
+                [resultMatcher publish:sr];
+        }
+    }
+    return YES;
+}
+
+- (int) getSearchPriority:(OASearchPhrase *)p
+{
+    if (![p isNoSelectedType] || ![p isUnknownSearchWordPresent])
+        return -1;
+    
+    return SEARCH_TRACK_OBJECT_PRIORITY;
 }
 
 @end
@@ -168,8 +214,12 @@ static const int SEARCH_HISTORY_OBJECT_PRIORITY = 53;
             sr.preferredZoom = 17;
             if ([phrase getFullSearchPhrase].length <= 1 && [phrase isNoSelectedType])
                 [resultMatcher publish:sr];
-            else if ([[phrase getFirstUnknownNameStringMatcher] matches:sr.localeName])
-                [resultMatcher publish:sr];
+            else
+            {
+                OANameStringMatcher *matcher = [[OANameStringMatcher alloc] initWithNamePart:[phrase getFullSearchPhrase] mode:CHECK_CONTAINS];
+                if ([matcher matches:sr.localeName])
+                    [resultMatcher publish:sr];
+            }
         }
         i++;
     }
@@ -298,6 +348,9 @@ static const int SEARCH_HISTORY_OBJECT_PRIORITY = 53;
     // Register WptPt search api
     [_core registerAPI:[[OASearchWptAPI alloc] init]];
     [_core registerAPI:[[OASearchHistoryAPI alloc] init]];
+    
+    // Register Gpx search api
+    [_core registerAPI:[[OASearchGpxAPI alloc] init]];
     
     [self refreshCustomPoiFilters];
 }

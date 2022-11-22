@@ -75,7 +75,8 @@ typedef void(^OAMapSettingsCategoryCellDataOnSelect)();
     if ([categoryName isEqual:@"details"])
     {
         parameters = [[_styleSettings getParameters:categoryName] filteredArrayUsingPredicate:
-                [NSPredicate predicateWithFormat:@"(_name != %@) AND (_name != %@) AND (_name != %@) AND (_name != %@) AND (_name != %@) AND (_name != %@)", CONTOUR_LINES,
+                [NSPredicate predicateWithFormat:@"(_name != %@) AND (_name != %@) AND (_name != %@) AND (_name != %@) AND (_name != %@) AND (_name != %@)",
+                 CONTOUR_LINES, NAUTICAL_DEPTH_CONTOURS,
                  WEATHER_TEMP_CONTOUR_LINES_ATTR, WEATHER_PRESSURE_CONTOURS_LINES_ATTR,
                  WEATHER_WIND_CONTOURS_LINES_ATTR, WEATHER_CLOUD_CONTOURS_LINES_ATTR,
                  WEATHER_PRECIPITATION_CONTOURS_LINES_ATTR]];

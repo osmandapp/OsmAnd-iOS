@@ -66,7 +66,7 @@
     OATableSectionData *switchSection = [OATableSectionData sectionData];
     [switchSection addRowFromDictionary:@{
         kCellTypeKey: [OATableViewCellSwitch getCellIdentifier],
-        kCellTitle: OALocalizedString(@"product_title_sea_depth_contours"),
+        kCellTitle: OALocalizedString(@"nautical_depth"),
         kCellIconNameKey: @"ic_custom_nautical_depth_colored_day",
         kCellIconTint: @(color_primary_purple),
         @"iconTintDisabled" : @(color_tint_gray)
@@ -91,7 +91,7 @@
 
 - (void)setupView
 {
-    title = OALocalizedString(@"product_title_sea_depth_contours");
+    title = OALocalizedString(@"nautical_depth");
     tblView.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
 }
 

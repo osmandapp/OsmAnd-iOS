@@ -126,6 +126,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             continue;
         if ([item.mapSource.resourceId isEqualToString:@"mapnik.render.xml"] && ![_app.data.lastMapSource isEqual:item.mapSource])
             continue;
+        if ([item.mapSource.resourceId hasSuffix:RENDER_ADDON])
+            continue;
 
         item.resourceType = OsmAndResourceType::MapStyle;
         item.resource = resource;

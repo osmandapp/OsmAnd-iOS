@@ -20,6 +20,7 @@
 #define UNIRS_RENDER @"UniRS"
 #define DESERT_RENDER @"Desert"
 #define SNOWMOBILE_RENDER @"Snowmobile"
+#define RENDER_ADDON @".addon.render.xml"
 
 @class OAApplicationMode;
 

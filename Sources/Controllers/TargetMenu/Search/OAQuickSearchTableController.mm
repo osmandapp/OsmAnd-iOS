@@ -565,7 +565,7 @@
                 OAPointDescCell* cell = [self getPointDescCell];
                 if (cell)
                 {
-                    //TODO add ui for gpx
+                    //TODO: add ui for gpx
                     cell.titleIcon.image = [UIImage templateImageNamed:@"ic_action_world_globe"];
                 }
             }

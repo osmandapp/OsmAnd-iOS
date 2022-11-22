@@ -30,6 +30,7 @@ typedef NS_ENUM(NSInteger, EOAObjectType)
     FAVORITE_GROUP,
     WPT,
     RECENT_OBJ,
+    GPX_TRACK,
 
     REGION,
     

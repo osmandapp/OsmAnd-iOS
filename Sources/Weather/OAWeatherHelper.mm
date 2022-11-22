@@ -117,17 +117,6 @@
             
             contourLevelsMap.insert((OsmAnd::ZoomLevel)zoomNum.intValue, levels);
         }
-        NSDictionary<NSNumber *, NSArray<NSString *> *> *contourTypes = [band getContourTypes:self.mapPresentationEnvironment];
-        QHash<OsmAnd::ZoomLevel, QList<QString>> contourTypesMap;
-        for (NSNumber * zoomNum in contourTypes.allKeys)
-        {
-            NSArray<NSString *> *typesList = contourTypes[zoomNum];
-            QStringList types;
-            for (NSString *type in typesList)
-                types << QString::fromNSString(type);
-            
-            contourTypesMap.insert((OsmAnd::ZoomLevel)zoomNum.intValue, types);
-        }
 
         auto settings = std::make_shared<const OsmAnd::GeoBandSettings>(
             QString::fromNSString([band getBandUnit].symbol),
@@ -137,8 +126,7 @@
             [band getBandOpacity],
             QString::fromNSString([band getColorFilePath]),
             contourStyleName,
-            contourLevelsMap,
-            contourTypesMap
+            contourLevelsMap
         );
         result.insert((OsmAnd::BandIndex)band.bandIndex, settings);
     }

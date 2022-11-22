@@ -433,27 +433,6 @@ static NSString *kPrecipContourStyleName;
 
 - (NSDictionary<NSNumber *, NSArray<NSNumber *> *> *) getContourLevels:(OAMapPresentationEnvironment *)mapPresentationEnvironment
 {
-    return [self getContourValuesType:CONTOUR_VALUE_LEVELS mapPresentationEnvironment:mapPresentationEnvironment];
-}
-
-- (NSDictionary<NSNumber *, NSArray<NSString *> *> *) getContourTypes:(OAMapPresentationEnvironment *)mapPresentationEnvironment
-{
-    NSDictionary<NSNumber *, NSArray<NSNumber *> *> *contourTypeValues = [self getContourValuesType:CONTOUR_VALUE_TYPES mapPresentationEnvironment:mapPresentationEnvironment];
-    NSMutableDictionary<NSNumber *, NSArray<NSString *> *> *contourTypes = [NSMutableDictionary dictionary];
-    NSString *unit = [self getBandUnit].symbol;
-    [contourTypeValues enumerateKeysAndObjectsUsingBlock:^(NSNumber * _Nonnull zoomNum, NSArray<NSNumber *> * _Nonnull values, BOOL * _Nonnull stop)
-    {
-        NSMutableArray<NSString *> *types = [NSMutableArray array];
-        for (NSNumber *val in values)
-             [types addObject:[NSString stringWithFormat:@"%d%@", (int)val.doubleValue, unit]];
-        
-        contourTypes[zoomNum] = [NSArray arrayWithArray:types];
-    }];
-    return contourTypes;
-}
-
-- (NSDictionary<NSNumber *, NSArray<NSNumber *> *> *) getContourValuesType:(EOAContourValueType)valueType mapPresentationEnvironment:(OAMapPresentationEnvironment *)mapPresentationEnvironment
-{
     if (!mapPresentationEnvironment)
         return @{};
 
@@ -496,10 +475,8 @@ static NSString *kPrecipContourStyleName;
     while (zoom <= maxZoom)
     {
         const auto qUnit = QString::fromNSString(unit).remove(QStringLiteral("°"));
-        const auto& result = valueType == CONTOUR_VALUE_LEVELS
-            ? env->getWeatherContourLevels(QString::asprintf("%s_%s", qPrintable(type), qPrintable(qUnit)), zoom)
-            : env->getWeatherContourTypes(QString::asprintf("%s_%s", qPrintable(type), qPrintable(qUnit)), zoom);
-        
+        const auto& result = env->getWeatherContourLevels(QString::asprintf("%s_%s", qPrintable(type), qPrintable(qUnit)), zoom);
+
         if (!result.isEmpty())
         {
             NSMutableArray<NSNumber *> *levels = [NSMutableArray array];

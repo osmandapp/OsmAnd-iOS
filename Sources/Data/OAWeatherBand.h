@@ -47,7 +47,6 @@ typedef NS_ENUM(NSInteger, EOAWeatherBand)
 - (NSString *) getColorFilePath;
 - (NSString *) getContourStyleName;
 - (NSDictionary<NSNumber *, NSArray<NSNumber *> *> *) getContourLevels:(OAMapPresentationEnvironment *)mapPresentationEnvironment;
-- (NSDictionary<NSNumber *, NSArray<NSString *> *> *) getContourTypes:(OAMapPresentationEnvironment *)mapPresentationEnvironment;
 
 - (OAAutoObserverProxy *) createSwitchObserver:(id)owner handler:(SEL)handler;
 - (OAAutoObserverProxy *) createAlphaObserver:(id)owner handler:(SEL)handler;

@@ -2020,3 +2020,4 @@
 "map_settings_weather_temp" = "溫度";
 "measurement_units" = "測量單位";
 "map_settings_weather_precip" = "降水";
+"simulation_real_mode_desc" = "• 在筆直的路段，速度大約是最大允許的速度。\n• 在交叉路口，模擬會變慢。\n• 紅綠燈與停止標誌將會有額外延遲。";

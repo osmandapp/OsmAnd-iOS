@@ -1911,3 +1911,4 @@
 "routing_attr_allow_gate_description" = "允许使用大门";
 "weather_offline_forecast" = "离线预测";
 "rendering_attr_piste_type_snow_park_name" = "地形公园";
+"routing_attr_hazmat_category_name" = "危险品运输";

@@ -67,12 +67,8 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<OAAbstractCard *> *ca
     imageName = [imageName substringToIndex:[imageName lastIndexOf:@"."]];
     NSString *urlSafeFileName = [imageFileName stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
 
-    NSString *hash = [CocoaSecurity md5:imageFileName].hexLower;
-    NSString *hashFirstPart = [hash substringWithRange:NSMakeRange(0, 1)];
-    NSString *hashSecondPart = [hash substringWithRange:NSMakeRange(0, 2)];
-
-    NSString *imageHiResUrl = [NSString stringWithFormat:@"%@%@/%@/%@", IMAGE_BASE_URL, hashFirstPart, hashSecondPart, urlSafeFileName];
-    NSString *imageStubUrl = [NSString stringWithFormat:@"%@thumb/%@/%@/%@/%ipx-%@", IMAGE_BASE_URL, hashFirstPart, hashSecondPart, urlSafeFileName, THUMB_SIZE, urlSafeFileName];
+    NSString *imageHiResUrl = [NSString stringWithFormat:@"%@%@", IMAGE_BASE_URL, urlSafeFileName];
+    NSString *imageStubUrl = [NSString stringWithFormat:@"%@%@%@%i", IMAGE_BASE_URL, urlSafeFileName, WIKIMEDIA_WIDTH, THUMB_SIZE];
 
     return [[OAWikiImage alloc] initWithWikiMediaTag:urlSafeFileName imageName:imageName imageStubUrl:imageStubUrl imageHiResUrl:imageHiResUrl];
 }
@@ -160,7 +156,7 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<OAAbstractCard *> *ca
                             NSString *imageName = imageDict[@"title"];
                             if (imageName)
                             {
-                                OAWikiImageCard *card = [[OAWikiImageCard alloc] initWithWikiImage:[self getWikiImage:imageName] type:@"wikimedia-photo"];
+                                OAWikiImageCard *card = [[OAWikiImageCard alloc] initWithWikiImage:[self getWikiImage:imageName] type:@"wikimedia-photo" wikimediaCategory:YES];
                                 if (card)
                                     [resultCards addObject:card];
                             }

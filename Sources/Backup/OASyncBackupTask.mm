@@ -71,6 +71,7 @@
     if (_operation != EOABackupSyncOperationUpload)
         _maxProgress += [OAImportBackupTask calculateMaxProgress];
     
+    [NSNotificationCenter.defaultCenter postNotificationName:kBackupSyncStartedNotification object:nil];
     if (_settingsItems.count > 0 && _operation != EOABackupSyncOperationUpload)
     {
         [OANetworkSettingsHelper.sharedInstance importSettings:kRestoreItemsKey items:_settingsItems forceReadData:NO listener:self];
@@ -79,8 +80,10 @@
     {
         [self uploadNewItems];
     }
-    
-    [NSNotificationCenter.defaultCenter postNotificationName:kBackupSyncStartedNotification object:nil];
+    else
+    {
+        [self onSyncFinished:nil];
+    }
 }
 
 - (void)execute

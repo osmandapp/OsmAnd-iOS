@@ -73,6 +73,11 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     if (self)
     {
         _tableType = type;
+        _settingsHelper = [OANetworkSettingsHelper sharedInstance];
+        _backupHelper = [OABackupHelper sharedInstance];
+        [self setupNotificationListeners];
+        _itemsSection = -1;
+        [_backupHelper addPrepareBackupListener:self];
     }
     return self;
 }
@@ -92,11 +97,6 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     [super viewDidLoad];
     self.tableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
     self.tableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0.001, 0.001)];
-    _itemsSection = -1;
-    _settingsHelper = [OANetworkSettingsHelper sharedInstance];
-    _backupHelper = [OABackupHelper sharedInstance];
-    [self setupNotificationListeners];
-    [_backupHelper addPrepareBackupListener:self];
     [self generateData];
     [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
 }
@@ -196,6 +196,20 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     }
     if (_itemsSection != -1 && _tableType == EOARecentChangesConflicts && itemsSection.rowCount > 1)
         [_data sectionDataForIndex:_itemsSection].headerText = OALocalizedString(@"backup_conflicts_descr");
+}
+
+- (BOOL) hasItems
+{
+    switch (_tableType)
+    {
+        case EOARecentChangesRemote:
+            return [OABackupHelper getItemsMapForRestore:_backupHelper.backup.backupInfo settingsItems:_backupHelper.backup.settingsItems].count > 0;
+        case EOARecentChangesLocal:
+            return _backupHelper.backup.backupInfo.filteredFilesToDelete.count + _backupHelper.backup.backupInfo.filteredFilesToUpload.count > 0;
+        default:
+            return NO;
+    }
+    
 }
 
 - (NSString *) getLocalizedEmptyStateHeader
@@ -599,9 +613,6 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
 
 - (void)onBackupFinished:(NSNotification *)notification
 {
-//    dispatch_async(dispatch_get_main_queue(), ^{
-//        [self updateData];
-//    });
 }
 
 - (void)onBackupStarted
@@ -621,8 +632,10 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
         {
             [row setObj:@(value) forKey:@"progress"];
             [row setTitle:[OALocalizedString(@"syncing_progress") stringByAppendingString:[NSString stringWithFormat:@"%i%%", (int) (value * 100)]]];
+            OATitleIconProgressbarCell *cell = (OATitleIconProgressbarCell *) [self.tableView cellForRowAtIndexPath:progressIdxPath];
+            if (cell)
+                cell.progressBar.progress = value;
         }
-        [self.tableView reloadRowsAtIndexPaths:@[progressIdxPath] withRowAnimation:UITableViewRowAnimationNone];
     });
 }
 

@@ -49,6 +49,7 @@
 #import "OAAppVersionDependentConstants.h"
 #import "OATableDataModel.h"
 #import "OATableRowData.h"
+#import "OATableCollapsableRowData.h"
 #import "OATableSectionData.h"
 #import "OsmAndApp.h"
 #import "OASizes.h"
@@ -231,6 +232,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
             _backupProgressCell = [self getProgressBarCell];
             NSDictionary *backupProgressCell = @{
                 kCellTypeKey: OATitleIconProgressbarCell.getCellIdentifier,
+                kCellKeyKey: @"backup_progress",
                 @"cell": _backupProgressCell
             };
             [backupRows addRowFromDictionary:backupProgressCell];
@@ -238,7 +240,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
         else
         {
             NSString *backupTime = [OAOsmAndFormatter getFormattedPassedTime:OAAppSettings.sharedManager.backupLastUploadedTime.get def:OALocalizedString(@"shared_string_never")];
-            OATableRowData *collapsableRow = [[OATableRowData alloc] initWithData:@{
+            OATableCollapsableRowData *collapsableRow = [[OATableCollapsableRowData alloc] initWithData:@{
                 kCellTypeKey: OAMultiIconTextDescCell.getCellIdentifier,
                 kCellKeyKey: @"lastBackup",
                 kCellTitleKey: _status.statusTitle,
@@ -246,6 +248,30 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
                 kCellIconNameKey: _status.statusIconName,
                 kCellIconTint: @(_status.iconColor)
             }];
+            OATableRowData *localChangesRow = [[OATableRowData alloc] initWithData:@{
+                kCellTypeKey: OAValueTableViewCell.getCellIdentifier,
+                kCellKeyKey: @"local_changes",
+                kCellTitleKey: OALocalizedString(@"local_changes"),
+                kCellIconNameKey: @"ic_custom_device",
+                @"value": @(_backup.backupInfo.filteredFilesToUpload.count + _backup.backupInfo.filteredFilesToDelete.count)
+            }];
+            [collapsableRow addDependentRow:localChangesRow];
+            OATableRowData *updatesRow = [[OATableRowData alloc] initWithData:@{
+                kCellTypeKey: OAValueTableViewCell.getCellIdentifier,
+                kCellKeyKey: @"remote_updates",
+                kCellTitleKey: OALocalizedString(@"res_updates"),
+                kCellIconNameKey: @"ic_custom_cloud",
+                @"value": @([OABackupHelper getItemsMapForRestore:_info settingsItems:_backup.settingsItems].count)
+            }];
+            [collapsableRow addDependentRow:updatesRow];
+            OATableRowData *conflictsRow = [[OATableRowData alloc] initWithData:@{
+                kCellTypeKey: OAValueTableViewCell.getCellIdentifier,
+                kCellKeyKey: @"conflicts",
+                kCellTitleKey: OALocalizedString(@"cloud_conflicts"),
+                kCellIconNameKey: @"ic_custom_alert",
+                @"value": @(_backup.backupInfo.filteredFilesToMerge.count)
+            }];
+            [collapsableRow addDependentRow:conflictsRow];
             [backupRows addRow:collapsableRow];
 
             if (_status.warningTitle != nil || _error.length > 0)
@@ -267,9 +293,8 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
             }
         }
         BOOL hasInfo = _info != nil;
-        BOOL noConflicts = _status == OABackupStatus.CONFLICTS && (!hasInfo || _info.filteredFilesToMerge.count == 0);
-        BOOL noChanges = _status == OABackupStatus.MAKE_BACKUP && (!hasInfo || (_info.filteredFilesToUpload.count == 0 && _info.filteredFilesToDelete.count == 0));
-        BOOL actionButtonHidden = _status == OABackupStatus.BACKUP_COMPLETE || noConflicts || noChanges;
+        BOOL noChanges = _status == OABackupStatus.MAKE_BACKUP && (!hasInfo || (_info.filteredFilesToUpload.count == 0 && _info.filteredFilesToDelete.count == 0 && [OABackupHelper getItemsMapForRestore:_info settingsItems:_backup.settingsItems].count == 0));
+        BOOL actionButtonHidden = _status == OABackupStatus.BACKUP_COMPLETE || noChanges;
         if (!actionButtonHidden)
         {
             if (_settingsHelper.isBackupSyncing)
@@ -374,7 +399,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
 
 - (void)onSetUpBackupButtonPressed
 {
-    [_settingsHelper syncSettingsItems:kSyncItemsKey];
+    [_settingsHelper syncSettingsItems:kSyncItemsKey operation:EOABackupSyncOperationSync];
 }
 
 - (void)onRetryPressed
@@ -561,6 +586,10 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
             [cell setOverflowVisibility:YES];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
+        BOOL collapsed = item.rowType == EOATableRowTypeCollapsable && ((OATableCollapsableRowData *) item).collapsed;
+        UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage templateImageNamed:collapsed ? @"ic_custom_arrow_right" : @"ic_custom_arrow_down"]];
+        imageView.tintColor = UIColorFromRGB(color_primary_purple);
+        cell.accessoryView = imageView;
         cell.textView.text = item.title;
         cell.descView.text = item.descr;
         [cell.iconView setImage:[UIImage templateImageNamed:item.iconName]];
@@ -638,11 +667,43 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OATableRowData *item = [_data itemForIndexPath:indexPath];
-    if ([item.key isEqualToString:@"lastBackup"])
+    OAStatusBackupViewController *statusBackupViewController = nil;
+    if (item.rowType == EOATableRowTypeCollapsable)
     {
-        OAStatusBackupViewController *statusBackupViewController = [[OAStatusBackupViewController alloc] initWithType:EOARecentChangesRemote];
-        [self.navigationController pushViewController:statusBackupViewController animated:YES];
+        OATableCollapsableRowData *collapsableRow = (OATableCollapsableRowData *)item;
+        collapsableRow.collapsed = !collapsableRow.collapsed;
+        NSMutableArray<NSIndexPath *> *rowIndexes = [NSMutableArray array];
+        for (NSInteger i = 1; i <= collapsableRow.dependentRowsCount; i++)
+            [rowIndexes addObject:[NSIndexPath indexPathForRow:(indexPath.row + i) inSection:indexPath.section]];
+        
+        [tableView performBatchUpdates:^{
+            [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+            if (collapsableRow.collapsed)
+                [tableView deleteRowsAtIndexPaths:rowIndexes withRowAnimation:UITableViewRowAnimationBottom];
+            else
+                [tableView insertRowsAtIndexPaths:rowIndexes withRowAnimation:UITableViewRowAnimationBottom];
+        } completion:nil];
+        
     }
+    
+    else if ([item.key isEqualToString:@"backup_progress"])
+    {
+        statusBackupViewController = [[OAStatusBackupViewController alloc] initWithType:EOARecentChangesLocal];
+    }
+    else if ([item.key isEqualToString:@"local_changes"])
+    {
+        statusBackupViewController = [[OAStatusBackupViewController alloc] initWithType:EOARecentChangesLocal];
+    }
+    else if ([item.key isEqualToString:@"remote_updates"])
+    {
+        statusBackupViewController = [[OAStatusBackupViewController alloc] initWithType:EOARecentChangesRemote];
+    }
+    else if ([item.key isEqualToString:@"conflicts"])
+    {
+        statusBackupViewController = [[OAStatusBackupViewController alloc] initWithType:EOARecentChangesConflicts];
+    }
+    if (statusBackupViewController)
+        [self.navigationController pushViewController:statusBackupViewController animated:YES];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 

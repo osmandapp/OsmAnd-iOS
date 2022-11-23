@@ -33,15 +33,18 @@
     NSInteger _lastProgress;
     NSInteger _currentProgress;
     
+    EOABackupSyncOperationType _operation;
     BOOL _cancelled;
     BOOL _singleOperation;
 }
 
-- (instancetype)initWithKey:(NSString *)key
+- (instancetype)initWithKey:(NSString *)key operation:(EOABackupSyncOperationType)operation
 {
     self = [super init];
     if (self) {
         _key = key;
+        _operation = operation;
+        _singleOperation = operation != EOABackupSyncOperationSync;
         _backupHelper = OABackupHelper.sharedInstance;
         [_backupHelper addPrepareBackupListener:self];
         _currentProgress = 0;
@@ -63,14 +66,16 @@
     OABackupInfo *info = backup.backupInfo;
     
     _settingsItems = [OABackupHelper getItemsForRestore:info settingsItems:backup.settingsItems];
-    _maxProgress += [OAImportBackupTask calculateMaxProgress];
-    _maxProgress += ([self calculateExportMaxProgress] / 1024);
+    if (_operation != EOABackupSyncOperationDownload)
+        _maxProgress += ([self calculateExportMaxProgress] / 1024);
+    if (_operation != EOABackupSyncOperationUpload)
+        _maxProgress += [OAImportBackupTask calculateMaxProgress];
     
-    if (_settingsItems.count > 0)
+    if (_settingsItems.count > 0 && _operation != EOABackupSyncOperationUpload)
     {
         [OANetworkSettingsHelper.sharedInstance importSettings:kRestoreItemsKey items:_settingsItems forceReadData:NO listener:self];
     }
-    else
+    else if (_operation != EOABackupSyncOperationDownload)
     {
         [self uploadNewItems];
     }
@@ -88,20 +93,17 @@
 
 - (void)uploadLocalItem:(OASettingsItem *)item fileName:(NSString *)fileName
 {
-    _singleOperation = YES;
     [OANetworkSettingsHelper.sharedInstance exportSettings:fileName items:@[item] itemsToDelete:@[] listener:self];
 }
 
 - (void)downloadRemoteVersion:(OASettingsItem *)item fileName:(NSString *)fileName
 {
-    _singleOperation = YES;
     [item setShouldReplace:YES];
     [OANetworkSettingsHelper.sharedInstance importSettings:fileName items:@[item] forceReadData:YES listener:self];
 }
 
 - (void)deleteItem:(OASettingsItem *)item fileName:(NSString *)fileName
 {
-    _singleOperation = YES;
     [OANetworkSettingsHelper.sharedInstance exportSettings:fileName items:@[] itemsToDelete:@[item] listener:self];
 }
 

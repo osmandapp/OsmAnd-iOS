@@ -31,4 +31,6 @@ typedef NS_ENUM(NSInteger, EOARecentChangesType)
 
 - (instancetype)initWithTableType:(EOARecentChangesType)type;
 
+- (BOOL) hasItems;
+
 @end

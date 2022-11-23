@@ -57,6 +57,10 @@
     self = [super init];
     if (self) {
         _startType = type;
+        _settingsHelper = [OANetworkSettingsHelper sharedInstance];
+        _backupHelper = OABackupHelper.sharedInstance;
+        [self setupNotificationListeners];
+        [_backupHelper addPrepareBackupListener:self];
     }
     return self;
 }
@@ -76,11 +80,6 @@
     UIImage *backImage = [UIImage templateImageNamed:@"ic_navbar_chevron"];
     [self.backButton setImage:[self.backButton isDirectionRTL] ? backImage.imageFlippedForRightToLeftLayoutDirection : backImage
                      forState:UIControlStateNormal];
-    _settingsHelper = [OANetworkSettingsHelper sharedInstance];
-    _backupHelper = OABackupHelper.sharedInstance;
-    [self setupBottomButtons:YES];
-    [self setupNotificationListeners];
-    [_backupHelper addPrepareBackupListener:self];
     [_segmentControl setTitleTextAttributes:@{NSForegroundColorAttributeName : UIColor.whiteColor} forState:UIControlStateNormal];
     [_segmentControl setTitleTextAttributes:@{NSForegroundColorAttributeName : UIColor.blackColor} forState:UIControlStateSelected];
 }
@@ -106,6 +105,7 @@
     }
     [self setupPageController];
     _segmentControl.selectedSegmentIndex = _startType;
+    [self setupBottomButtons];
     _prevTab = _segmentControl.selectedSegmentIndex;
     [_pageController setViewControllers:@[_controllers[_startType]]
                               direction:_startType == EOARecentChangesConflicts ? UIPageViewControllerNavigationDirectionReverse : UIPageViewControllerNavigationDirectionForward
@@ -137,23 +137,44 @@
                                animated:YES
                              completion:nil];
     _prevTab = currTab;
+    [self setupBottomButtons];
 }
 
-- (void)setupBottomButtons:(BOOL)enabled
+- (void)setupBottomButtons
 {
     BOOL isSyncing = [_settingsHelper isBackupSyncing];
+    BOOL isPreparing = [_backupHelper isBackupPreparing];
     
-    self.leftBottomButton.userInteractionEnabled = isSyncing && enabled;
+    self.leftBottomButton.userInteractionEnabled = isSyncing && !isPreparing;
     [self.leftBottomButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
-    [self.leftBottomButton setTintColor:isSyncing && enabled ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer)];
-    [self.leftBottomButton setTitleColor:isSyncing && enabled ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer)
+    [self.leftBottomButton setTintColor:isSyncing && !isPreparing ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer)];
+    [self.leftBottomButton setTitleColor:isSyncing && !isPreparing ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer)
                               forState:UIControlStateNormal];
 
-    self.rightBottomButton.userInteractionEnabled = !isSyncing && enabled;
-    [self.rightBottomButton setTitle:OALocalizedString(@"cloud_backup_now") forState:UIControlStateNormal];
-    [self.rightBottomButton setTintColor:!isSyncing && enabled ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer)];
-    [self.rightBottomButton setTitleColor:!isSyncing && enabled ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer)
+    BOOL isEnabled = !isSyncing && !isPreparing && self.rightButtonEnabled;
+    self.rightBottomButton.userInteractionEnabled = isEnabled;
+    [self.rightBottomButton setTitle:self.rightButtonTitle forState:UIControlStateNormal];
+    [self.rightBottomButton setTintColor:isEnabled ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer)];
+    [self.rightBottomButton setTitleColor:isEnabled ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer)
                                forState:UIControlStateNormal];
+}
+
+- (BOOL) rightButtonEnabled
+{
+    return [_controllers[_segmentControl.selectedSegmentIndex] hasItems];
+}
+
+- (NSString *) rightButtonTitle
+{
+    switch (_segmentControl.selectedSegmentIndex)
+    {
+        case EOARecentChangesLocal:
+            return OALocalizedString(@"upload_all");
+        case EOARecentChangesRemote:
+            return OALocalizedString(@"download_all");
+        default:
+            return @"";
+    }
 }
 
 - (IBAction)leftButtonPressed:(UIButton *)sender
@@ -163,12 +184,15 @@
 
 - (IBAction)rightButtonPressed:(UIButton *)sender
 {
-    
-}
-
-- (void)disableBottomButtons
-{
-    [self setupBottomButtons:NO];
+    switch (_segmentControl.selectedSegmentIndex)
+    {
+        case EOARecentChangesRemote:
+            return [_settingsHelper syncSettingsItems:kSyncItemsKey operation:EOABackupSyncOperationDownload];
+        case EOARecentChangesLocal:
+            return [_settingsHelper syncSettingsItems:kSyncItemsKey operation:EOABackupSyncOperationUpload];
+        default:
+            return;
+    }
 }
 
 - (void)setRowIcon:(OATableRowData *)rowData item:(OASettingsItem *)item
@@ -238,6 +262,7 @@
 {
     NSInteger idx = [_controllers indexOfObject:(OAStatusBackupTableViewController *)pageViewController.viewControllers[0]];
     _segmentControl.selectedSegmentIndex = idx;
+    [self setupBottomButtons];
 }
 
 // MARK: Sync callbacks
@@ -260,14 +285,14 @@
 - (void)onBackupPreparing
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self disableBottomButtons];
+        [self setupBottomButtons];
     });
 }
 
 - (void)onBackupPrepared:(OAPrepareBackupResult *)backupResult
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self setupBottomButtons:YES];
+        [self setupBottomButtons];
     });
 }
 

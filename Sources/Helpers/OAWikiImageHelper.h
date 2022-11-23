@@ -14,11 +14,12 @@
 #define WIKIMEDIA_ACTION @"?action=query&list=categorymembers&cmtitle="
 #define CM_LIMIT @"&cmlimit=500"
 #define FORMAT_JSON @"&format=json"
-#define IMAGE_BASE_URL @"https://upload.wikimedia.org/wikipedia/commons/"
+#define IMAGE_BASE_URL @"https://commons.wikimedia.org/wiki/Special:FilePath/"
 
 #define WIKIDATA_PREFIX @"Q"
 #define WIKIMEDIA_FILE @"File:"
 #define WIKIMEDIA_CATEGORY @"Category:"
+#define WIKIMEDIA_WIDTH @"?width="
 
 #define THUMB_SIZE 500
 

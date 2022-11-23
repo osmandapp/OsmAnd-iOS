@@ -12,7 +12,7 @@
 #import "OATableViewCustomHeaderView.h"
 #import "OATableDataModel.h"
 #import "OATableSectionData.h"
-#import "OACloudBackupViewController.h"
+#import "OAStatusBackupTableViewController.h"
 #import "OATableRowData.h"
 #import "OANetworkSettingsHelper.h"
 #import "OABackupHelper.h"

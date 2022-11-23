@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "OANetworkSettingsHelper.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -21,7 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface OASyncBackupTask : NSObject
 
-- (instancetype)initWithKey:(NSString *)key;
+- (instancetype)initWithKey:(NSString *)key operation:(EOABackupSyncOperationType)operation;
 
 - (void) execute;
 - (void)uploadLocalItem:(OASettingsItem *)item fileName:(NSString *)fileName;

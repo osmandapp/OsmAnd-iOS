@@ -1710,6 +1710,9 @@
 		DA23425423477F33003911B8 /* ic_custom_clear_list@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA23424023477F32003911B8 /* ic_custom_clear_list@2x.png */; };
 		DA23425623477F33003911B8 /* ic_custom_alert_color@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA23424123477F32003911B8 /* ic_custom_alert_color@2x.png */; };
 		DA23425823477F33003911B8 /* ic_custom_clear_list@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA23424223477F32003911B8 /* ic_custom_clear_list@3x.png */; };
+		DA2483E52927916700189AF2 /* OAStatusBackupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA2483E02927916400189AF2 /* OAStatusBackupViewController.m */; };
+		DA2483E62927916700189AF2 /* OAStatusBackupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA2483E12927916500189AF2 /* OAStatusBackupViewController.xib */; };
+		DA2483E72927916700189AF2 /* OAStatusBackupTableViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA2483E42927916600189AF2 /* OAStatusBackupTableViewController.mm */; };
 		DA25FA5623FFFC90009CDEAD /* ic_custom_change_object_position@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA25FA5323FFFC8F009CDEAD /* ic_custom_change_object_position@2x.png */; };
 		DA25FA5A23FFFC90009CDEAD /* ic_custom_change_object_position@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA25FA5523FFFC90009CDEAD /* ic_custom_change_object_position@3x.png */; };
 		DA291845290ABCF300231CFE /* ic_custom_letter_outlined@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA291843290ABCF200231CFE /* ic_custom_letter_outlined@3x.png */; };
@@ -5226,6 +5229,11 @@
 		DA23424023477F32003911B8 /* ic_custom_clear_list@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_clear_list@2x.png"; path = "Resources/Icons/ic_custom_clear_list@2x.png"; sourceTree = "<group>"; };
 		DA23424123477F32003911B8 /* ic_custom_alert_color@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_alert_color@2x.png"; path = "Resources/Icons/ic_custom_alert_color@2x.png"; sourceTree = "<group>"; };
 		DA23424223477F32003911B8 /* ic_custom_clear_list@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_clear_list@3x.png"; path = "Resources/Icons/ic_custom_clear_list@3x.png"; sourceTree = "<group>"; };
+		DA2483E02927916400189AF2 /* OAStatusBackupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAStatusBackupViewController.m; sourceTree = "<group>"; };
+		DA2483E12927916500189AF2 /* OAStatusBackupViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAStatusBackupViewController.xib; sourceTree = "<group>"; };
+		DA2483E22927916500189AF2 /* OAStatusBackupTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAStatusBackupTableViewController.h; sourceTree = "<group>"; };
+		DA2483E32927916600189AF2 /* OAStatusBackupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAStatusBackupViewController.h; sourceTree = "<group>"; };
+		DA2483E42927916600189AF2 /* OAStatusBackupTableViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAStatusBackupTableViewController.mm; sourceTree = "<group>"; };
 		DA25FA5323FFFC8F009CDEAD /* ic_custom_change_object_position@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_change_object_position@2x.png"; path = "Resources/Icons/ic_custom_change_object_position@2x.png"; sourceTree = "<group>"; };
 		DA25FA5523FFFC90009CDEAD /* ic_custom_change_object_position@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_change_object_position@3x.png"; path = "Resources/Icons/ic_custom_change_object_position@3x.png"; sourceTree = "<group>"; };
 		DA291843290ABCF200231CFE /* ic_custom_letter_outlined@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_letter_outlined@3x.png"; path = "Resources/Icons/ic_custom_letter_outlined@3x.png"; sourceTree = "<group>"; };
@@ -9688,6 +9696,11 @@
 		B247453027E35B1D00C18C3F /* Cloud */ = {
 			isa = PBXGroup;
 			children = (
+				DA2483E22927916500189AF2 /* OAStatusBackupTableViewController.h */,
+				DA2483E42927916600189AF2 /* OAStatusBackupTableViewController.mm */,
+				DA2483E32927916600189AF2 /* OAStatusBackupViewController.h */,
+				DA2483E02927916400189AF2 /* OAStatusBackupViewController.m */,
+				DA2483E12927916500189AF2 /* OAStatusBackupViewController.xib */,
 				32D253A727F336C000324717 /* OABaseCloudBackupViewController.h */,
 				32D253A227F336BF00324717 /* OABaseCloudBackupViewController.m */,
 				32D253A627F336C000324717 /* OACloudAccountBaseViewController.h */,
@@ -15608,6 +15621,7 @@
 				DA04D775284F86060097CAED /* ic_custom_osmand_pro_logo_monotone_big@2x.png in Resources */,
 				DA5A827B26C563A700F274C7 /* OATargetInfoCollapsableViewCell.xib in Resources */,
 				158DE48F25AEF31B007C1B57 /* ic_destination_pin_6@3x.png in Resources */,
+				DA2483E62927916700189AF2 /* OAStatusBackupViewController.xib in Resources */,
 				DA291846290ABCF300231CFE /* ic_custom_letter_outlined@2x.png in Resources */,
 				32D253AE27F336C100324717 /* OACloudBackupViewController.xib in Resources */,
 				DA8A928725DE8B4A00F5320A /* ic_carplay_map_markers@2x.png in Resources */,
@@ -16191,6 +16205,7 @@
 				DAD2203E2913AF010052B967 /* OATableCollapsableRowData.m in Sources */,
 				DA12757E28631154007E2A0D /* OAImportBackupItemsTask.m in Sources */,
 				DA5A840026C563A800F274C7 /* OAQuickSearchMoreListItem.mm in Sources */,
+				DA2483E52927916700189AF2 /* OAStatusBackupViewController.m in Sources */,
 				DA5A819D26C563A700F274C7 /* OASwitchProfileAction.m in Sources */,
 				DA5A82FE26C563A800F274C7 /* OATextInputFloatingCell.mm in Sources */,
 				DA5A825F26C563A700F274C7 /* OAActivityViewWithTitleCell.m in Sources */,
@@ -16601,6 +16616,7 @@
 				DA5A84BB26C563A900F274C7 /* OAPublicTransportOptionsBottomSheet.mm in Sources */,
 				DA5A832726C563A800F274C7 /* OARouteInfoAltitudeCell.m in Sources */,
 				DA5A817126C563A700F274C7 /* OsmAndApp.mm in Sources */,
+				DA2483E72927916700189AF2 /* OAStatusBackupTableViewController.mm in Sources */,
 				DA5A815326C563A700F274C7 /* OACarPlayDashboardInterfaceController.mm in Sources */,
 				DA5A84C126C563A900F274C7 /* OAProfileSelectionBottomSheetViewController.m in Sources */,
 				DA5A856726C563A900F274C7 /* OAAmenityLocationPoint.mm in Sources */,

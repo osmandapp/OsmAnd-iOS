@@ -15,7 +15,8 @@
 
 typedef NS_ENUM(NSInteger, EOABackupSyncOperationType) {
     EOABackupSyncOperationNone = -1,
-    EOABackupSyncOperationUpload = 0,
+    EOABackupSyncOperationSync = 0,
+    EOABackupSyncOperationUpload,
     EOABackupSyncOperationDownload,
     EOABackupSyncOperationDelete
 };
@@ -53,8 +54,7 @@ typedef NS_ENUM(NSInteger, EOABackupSyncOperationType) {
 
 - (EOAImportType) getImportTaskType:(NSString *)key;
 
-- (BOOL) cancelExport;
-- (BOOL) cancelImport;
+- (void) cancelSync;
 
 - (BOOL) isBackupExporting;
 - (BOOL) isBackupImporting;
@@ -64,7 +64,7 @@ typedef NS_ENUM(NSInteger, EOABackupSyncOperationType) {
 - (void) updateExportListener:(id<OABackupExportListener>)listener;
 - (void) updateImportListener:(id<OAImportListener>)listener;
 
-- (void) syncSettingsItems:(NSString *)key;
+- (void) syncSettingsItems:(NSString *)key operation:(EOABackupSyncOperationType)operation;
 - (void) syncSettingsItems:(NSString *)key localFile:(OALocalFile *)localFile remoteFile:(OARemoteFile *)remoteFile operation:(EOABackupSyncOperationType)operation;
 
 - (void) finishImport:(id<OAImportListener>)listener success:(BOOL)success items:(NSArray<OASettingsItem *> *)items;

@@ -171,11 +171,11 @@
     }
 }
 
-- (void) syncSettingsItems:(NSString *)key
+- (void) syncSettingsItems:(NSString *)key operation:(EOABackupSyncOperationType)operation
 {
     if (!_syncBackupTasks[key])
     {
-        OASyncBackupTask *syncTask = [[OASyncBackupTask alloc] initWithKey:key];
+        OASyncBackupTask *syncTask = [[OASyncBackupTask alloc] initWithKey:key operation:operation];
         _syncBackupTasks[key] = syncTask;
         
         [syncTask execute];
@@ -190,7 +190,7 @@
 {
     if (!_syncBackupTasks[key])
     {
-        OASyncBackupTask *syncTask = [[OASyncBackupTask alloc] initWithKey:key];
+        OASyncBackupTask *syncTask = [[OASyncBackupTask alloc] initWithKey:key operation:operation];
         _syncBackupTasks[key] = syncTask;
         
         NSString *fileName = [OABackupHelper getItemFileName:localFile ? localFile.item : remoteFile.item];

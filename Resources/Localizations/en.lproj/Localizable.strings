@@ -789,6 +789,7 @@
 
 "map_settings_map" = "Map";
 "layer_amenity_label" = "Point Labels (POI, Favorites)";
+"show_borders_of_downloaded_maps" = "Show borders of downloaded maps";
 "map_settings_show" = "Show on map";
 "map_settings_type" = "Map type";
 "map_mode" = "Map mode";

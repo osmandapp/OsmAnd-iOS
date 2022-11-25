@@ -111,13 +111,7 @@
 
 - (void) refreshLayer
 {
-    if (_needsSettingsForToolbar)
-    {
-        [self.mapViewController runWithRenderSync:^{
-            [self resetLayer];
-        }];
-    }
-    else
+    if (!_needsSettingsForToolbar && [OAAppSettings.sharedManager.mapSettingShowBordersOfDownloadedMaps get])
     {
         NSMutableArray<OAWorldRegion *> *mapRegions = [NSMutableArray array];
         NSMutableArray<OAWorldRegion *> *toRemove = [NSMutableArray array];
@@ -161,12 +155,6 @@
                 }
                 if (hasPoints)
                     [self.mapView addKeyedSymbolsProvider:_collection];
-            }];
-        }
-        else
-        {
-            [self.mapViewController runWithRenderSync:^{
-                [self resetLayer];
             }];
         }
     }

@@ -182,6 +182,13 @@
                 @"key": @"tracks"
         }];
     }
+    
+    [showSectionData addObject:@{
+            @"name": OALocalizedString(@"show_borders_of_downloaded_maps"),
+            @"image": @"ic_custom_download_map",
+            @"type": [OATableViewCellSwitch getCellIdentifier],
+            @"key": @"show_borders_of_downloaded_maps"
+    }];
 
     BOOL useDepthContours = [_iapHelper.nautical isActive] && ([OAIAPHelper isPaidVersion] || [OAIAPHelper isDepthContoursPurchased]);
     if (useDepthContours)
@@ -615,6 +622,8 @@
         return [[_settings.selectedPoiFilters get] stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"std_%@", OSM_WIKI_CATEGORY] withString:@""].length > 0;
     else if ([key isEqualToString:@"layer_amenity_label"])
         return [_settings.mapSettingShowPoiLabel get];
+    else if ([key isEqualToString:@"show_borders_of_downloaded_maps"])
+        return [_settings.mapSettingShowBordersOfDownloadedMaps get];
     else if ([key isEqualToString:@"wikipedia_layer"])
         return _app.data.wikipedia;
     else if ([key isEqualToString:@"osm_edits_offline_layer"])
@@ -1100,6 +1109,8 @@
         [_settings setShowFavorites:switchView.on];
     else if ([item[@"key"] isEqualToString:@"layer_amenity_label"])
         [_settings setShowPoiLabel:switchView.isOn];
+    else if ([item[@"key"] isEqualToString:@"show_borders_of_downloaded_maps"])
+        [_settings setShowBordersOfDownloadedMaps:switchView.isOn];
     else if ([item[@"key"] isEqualToString:@"wikipedia_layer"])
         [_app.data setWikipedia:switchView.isOn];
     else if ([item[@"key"] isEqualToString:@"osm_edits_offline_layer"])

@@ -689,6 +689,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 
 @property (nonatomic) OACommonBoolean *mapSettingShowFavorites;
 @property (nonatomic) OACommonBoolean *mapSettingShowPoiLabel;
+@property (nonatomic) OACommonBoolean *mapSettingShowBordersOfDownloadedMaps;
 @property (nonatomic) OACommonBoolean *mapSettingShowOfflineEdits;
 @property (nonatomic) OACommonBoolean *mapSettingShowOnlineNotes;
 @property (nonatomic) OACommonStringList *mapSettingVisibleGpx;
@@ -942,6 +943,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 
 - (void) setShowFavorites:(BOOL)mapSettingShowFavorites;
 - (void) setShowPoiLabel:(BOOL)mapSettingShowPoiLabel;
+- (void) setShowBordersOfDownloadedMaps:(BOOL)mapSettingShowBordersOfDownloadedMaps;
 
 - (void) addImpassableRoad:(OAAvoidRoadInfo *)roadInfo;
 - (void) updateImpassableRoad:(OAAvoidRoadInfo *)roadInfo;

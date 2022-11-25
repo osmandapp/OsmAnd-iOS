@@ -1060,7 +1060,7 @@
 "listed_exist" = "Το εισηγμένο %@, υπάρχει ήδη στο OsmAnd.";
 "help_mapillary" = "OsmAnd + Mapillary";
 "configure_map_descr" = "Εμφάνιση χάρτη";
-"quick_action_remove_next_destination" = "Διαγραφή του επόμενου σημείου προορισμού";
+"quick_action_remove_next_destination" = "Διαγραφή του πλησιέστερου σημείου προορισμού";
 "position_icon_while_moving" = "Εικονίδιο θέσης κατά τη μετακίνηση";
 "res_online_source_cache_alert" = "Η εφαρμογή αυτών των αλλαγών θα καθαρίσει τα κρυμμένα δεδομένα της πηγής πλακιδίου";
 "res_hillshade" = "Σκίαση ανάγλυφου";
@@ -1088,7 +1088,7 @@
 "import_profile_select_descr" = "Επιλέξτε τα δεδομένα για εισαγωγή.";
 "help_nav_profiles" = "Κατατομές (προφίλ) πλοήγησης";
 "logging_min_speed" = "Ελάχιστη ταχύτητα";
-"layer_amenity_label" = "Ετικέτες επίστρωσης ΣΕ";
+"layer_amenity_label" = "Ετικέτες επίστρωσης (ΣΕ, Αγαπημένα)";
 "select_distance_for_recalculation" = "Επιλέξτε την απόσταση μετά την οποία η διαδρομή θα επανυπολογιστεί.";
 "shared_string_finish" = "Τερματισμός";
 "route_recalculation_descr" = "Η διαδρομή θα επανυπολογιστεί εάν η απόσταση από τη διαδρομή στην τρέχουσα θέση είναι μεγαλύτερη από την επιλεγμένη τιμή.";
@@ -1450,3 +1450,22 @@
 "shared_string_undefined" = "Ακαθόριστο";
 "shared_string_delete_all" = "Διαγραφή όλων";
 "paused" = "Σε παύση";
+"copy_address" = "Αντιγραφή διεύθυνσης";
+"select_another_track" = "Επιλογή άλλου ίχνους";
+"nearest_point" = "Κοντινότερο σημείο";
+"manage_subscription" = "Διαχείριση συνδρομής";
+"user_login" = "Σύνδεση";
+"simulation_real_mode_title" = "Ρεαλιστική προσομοίωση";
+"profile_type_osmand_string" = "Προφίλ OsmAnd";
+"simplified_track" = "Απλοποιημένο ίχνος";
+"profile_type_user_string" = "Προφίλ χρήστη";
+"upload_to_openstreetmap" = "Μεταφόρτωση στο OpenStreetMap";
+
+// Resources
+"shared_string_resources" = "Πηγές";
+"register_opr_create_new_account" = "Δημιουργία νέου λογαριασμού";
+"edit_track" = "Επεξεργασία ίχνους";
+"sign_in_with_open_street_map" = "Σύνδεση μέσω OpenStreetMap";
+"login_open_street_map_org" = "Σύνδεση στο OpenStreetMap.org";
+"simulation_constant_mode_title" = "Σταθερή ταχύτητα";
+"speed_mode" = "Λειτουργία ταχύτητας";

@@ -2706,7 +2706,7 @@
 "cloud_all_changes_uploaded_descr" = "Todas as alterações feitas neste dispositivo são sincronizadas com o OsmAnd Cloud.";
 "cloud_no_conflicts_descr" = "Os dados no dispositivo e na nuvem OsmAnd são iguais.";
 "backup_conflicts_action_descr" = "Outra versão deste ficheiro é armazenada no servidor. Tem de selecionar a ação";
-"backup_conflicts_descr" = "A versão mais recente destes ficheiro é armazenada no servidor. Tem de selecionar a ação";
+"backup_conflicts_descr" = "A versão mais recente destes ficheiros é armazenada no servidor. Tem de selecionar a ação";
 "shared_string_changed" = "Alterado";
 "tts" = "TTS";
 "recorded_voice" = "Gravado";
@@ -2737,3 +2737,7 @@
 "rendering_attr_depthContourColorScheme_name" = "Esquema de cores das linhas";
 "last_sync" = "Última sincronização";
 "local_changes" = "Alterações locais";
+"shared_string_file_cloud" = "Nuvens";
+"upload_all" = "Enviar tudo";
+"download_all" = "Descarregar tudo";
+"cloud_all_changes_downloaded" = "Todas as alterações descarregadas";

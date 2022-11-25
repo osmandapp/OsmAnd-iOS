@@ -126,10 +126,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     [_backupHelper addPrepareBackupListener:self];
     [self.tblView.refreshControl addTarget:self action:@selector(onRefresh) forControlEvents:UIControlEventValueChanged];
     if (!_settingsHelper.isBackupSyncing && !_backupHelper.isBackupPreparing)
-    {
-        [_backupHelper addPrepareBackupListener:self];
         [_backupHelper prepareBackup];
-    }
     [self generateData];
     self.tblView.delegate = self;
     self.tblView.dataSource = self;
@@ -145,7 +142,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
 
 - (void)applyLocalization
 {
-    self.navBarTitle.text = OALocalizedString(@"backup_and_restore");
+    self.navBarTitle.text = OALocalizedString(@"osmand_cloud");
 }
 
 - (void) onRefresh
@@ -292,61 +289,55 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
                 [backupRows addRowFromDictionary:makeBackupWarningCell];
             }
         }
-        BOOL hasInfo = _info != nil;
-        BOOL noChanges = _status == OABackupStatus.MAKE_BACKUP && (!hasInfo || (_info.filteredFilesToUpload.count == 0 && _info.filteredFilesToDelete.count == 0 && [OABackupHelper getItemsMapForRestore:_info settingsItems:_backup.settingsItems].count == 0));
-        BOOL actionButtonHidden = _status == OABackupStatus.BACKUP_COMPLETE || noChanges;
-        if (!actionButtonHidden)
+        if (_settingsHelper.isBackupSyncing)
         {
-            if (_settingsHelper.isBackupSyncing)
-            {
-                NSDictionary *cancellCell = @{
-                    kCellTypeKey: OAButtonRightIconCell.getCellIdentifier,
-                    kCellKeyKey: @"cancellBackupPressed",
-                    kCellTitleKey: OALocalizedString(@"shared_string_cancel"),
-                    kCellIconNameKey: @"ic_custom_cancel"
-                };
-                [backupRows addRowFromDictionary:cancellCell];
-            }
-            else if (_status == OABackupStatus.MAKE_BACKUP || _status == OABackupStatus.CONFLICTS)
-            {
-                NSDictionary *backupNowCell = @{
-                    kCellTypeKey: OAButtonRightIconCell.getCellIdentifier,
-                    kCellKeyKey: @"onSetUpBackupButtonPressed",
-                    kCellTitleKey: OALocalizedString(@"sync_now"),
-                    kCellIconNameKey: @"ic_custom_update"
-                };
-                [backupRows addRowFromDictionary:backupNowCell];
-            }
-            else if (_status == OABackupStatus.NO_INTERNET_CONNECTION)
-            {
-                NSDictionary *retryCell = @{
-                    kCellTypeKey: OAButtonRightIconCell.getCellIdentifier,
-                    kCellKeyKey: @"onRetryPressed",
-                    kCellTitleKey: _status.actionTitle,
-                    kCellIconNameKey: @"ic_custom_reset"
-                };
-                [backupRows addRowFromDictionary:retryCell];
-            }
-            else if (_status == OABackupStatus.ERROR)
-            {
-                NSDictionary *retryCell = @{
-                    kCellTypeKey: OAButtonRightIconCell.getCellIdentifier,
-                    kCellKeyKey: @"onSupportPressed",
-                    kCellTitleKey: _status.actionTitle,
-                    kCellIconNameKey: @"ic_custom_letter_outlined"
-                };
-                [backupRows addRowFromDictionary:retryCell];
-            }
-            else if (_status == OABackupStatus.SUBSCRIPTION_EXPIRED)
-            {
-                NSDictionary *purchaseCell = @{
-                    kCellTypeKey: OAButtonRightIconCell.getCellIdentifier,
-                    kCellKeyKey: @"onSubscriptionExpired",
-                    kCellTitleKey: _status.actionTitle,
-                    kCellIconNameKey: @"ic_custom_osmand_pro_logo_colored"
-                };
-                [backupRows addRowFromDictionary:purchaseCell];
-            }
+            NSDictionary *cancellCell = @{
+                kCellTypeKey: OAButtonRightIconCell.getCellIdentifier,
+                kCellKeyKey: @"cancellBackupPressed",
+                kCellTitleKey: OALocalizedString(@"shared_string_cancel"),
+                kCellIconNameKey: @"ic_custom_cancel"
+            };
+            [backupRows addRowFromDictionary:cancellCell];
+        }
+        else if (_status == OABackupStatus.MAKE_BACKUP || _status == OABackupStatus.CONFLICTS || _status == OABackupStatus.BACKUP_COMPLETE)
+        {
+            NSDictionary *backupNowCell = @{
+                kCellTypeKey: OAButtonRightIconCell.getCellIdentifier,
+                kCellKeyKey: @"onSetUpBackupButtonPressed",
+                kCellTitleKey: OALocalizedString(@"sync_now"),
+                kCellIconNameKey: @"ic_custom_update"
+            };
+            [backupRows addRowFromDictionary:backupNowCell];
+        }
+        else if (_status == OABackupStatus.NO_INTERNET_CONNECTION)
+        {
+            NSDictionary *retryCell = @{
+                kCellTypeKey: OAButtonRightIconCell.getCellIdentifier,
+                kCellKeyKey: @"onRetryPressed",
+                kCellTitleKey: _status.actionTitle,
+                kCellIconNameKey: @"ic_custom_reset"
+            };
+            [backupRows addRowFromDictionary:retryCell];
+        }
+        else if (_status == OABackupStatus.ERROR)
+        {
+            NSDictionary *retryCell = @{
+                kCellTypeKey: OAButtonRightIconCell.getCellIdentifier,
+                kCellKeyKey: @"onSupportPressed",
+                kCellTitleKey: _status.actionTitle,
+                kCellIconNameKey: @"ic_custom_letter_outlined"
+            };
+            [backupRows addRowFromDictionary:retryCell];
+        }
+        else if (_status == OABackupStatus.SUBSCRIPTION_EXPIRED)
+        {
+            NSDictionary *purchaseCell = @{
+                kCellTypeKey: OAButtonRightIconCell.getCellIdentifier,
+                kCellKeyKey: @"onSubscriptionExpired",
+                kCellTitleKey: _status.actionTitle,
+                kCellIconNameKey: @"ic_custom_osmand_pro_logo_colored"
+            };
+            [backupRows addRowFromDictionary:purchaseCell];
         }
     }
 }
@@ -535,7 +526,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
         cell.valueLabel.text = [item stringForKey:@"value"];
         cell.leftIconView.image = [UIImage templateImageNamed:item.iconName];
         cell.leftIconView.tintColor = UIColorFromRGB((([item integerForKey:@"value"] > 0) ? color_primary_purple : color_tint_gray));
-        cell.separatorInset = UIEdgeInsetsMake(0., ([item.key isEqualToString:@"remote_updates"] ? 0. : 65.), 0., 0.);
+        cell.separatorInset = UIEdgeInsetsMake(0., ([item.key isEqualToString:@"conflicts"] ? 0. : 65.), 0., 0.);
         return cell;
     }
     else if ([cellId isEqualToString:OAFilledButtonCell.getCellIdentifier])
@@ -603,10 +594,15 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonRightIconCell getCellIdentifier] owner:self options:nil];
             cell = (OAButtonRightIconCell *)[nib objectAtIndex:0];
-            cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
         }
+        BOOL hasInfo = _info != nil;
+        BOOL noChanges = _status == OABackupStatus.MAKE_BACKUP && (!hasInfo || (_info.filteredFilesToUpload.count == 0 && _info.filteredFilesToDelete.count == 0 && [OABackupHelper getItemsMapForRestore:_info settingsItems:_backup.settingsItems].count == 0));
+        BOOL actionButtonDisabled = _status == OABackupStatus.BACKUP_COMPLETE || noChanges || _backupHelper.isBackupPreparing || _settingsHelper.isBackupSyncing;
+        cell.iconView.tintColor = actionButtonDisabled ? UIColorFromRGB(color_tint_gray) : UIColorFromRGB(color_primary_purple);
+        [cell.button setTitleColor:actionButtonDisabled ? UIColorFromRGB(color_text_footer) : UIColorFromRGB(color_primary_purple) forState:UIControlStateNormal];
         [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
-        [cell.button addTarget:self action:NSSelectorFromString(item.key) forControlEvents:UIControlEventTouchUpInside];
+        if (!actionButtonDisabled)
+            [cell.button addTarget:self action:NSSelectorFromString(item.key) forControlEvents:UIControlEventTouchUpInside];
         [cell.button setTitle:item.title forState:UIControlStateNormal];
         [cell.iconView setImage:[UIImage templateImageNamed:item.iconName]];
         return cell;
@@ -726,11 +722,6 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
 - (void)onBackupPreparing
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        // Show progress bar
-        [self.tblView.refreshControl layoutIfNeeded];
-        [self.tblView.refreshControl beginRefreshing];
-        CGPoint contentOffset = CGPointMake(0, -self.tblView.refreshControl.frame.size.height);
-        [self.tblView setContentOffset:contentOffset animated:YES];
         self.settingsButton.userInteractionEnabled = NO;
         self.settingsButton.tintColor = UIColorFromRGB(color_tint_gray);
     });

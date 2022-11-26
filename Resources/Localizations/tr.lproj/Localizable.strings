@@ -2610,3 +2610,4 @@
 "weather_offline_forecast_only" = "Sadece çevrim dışı tahmin";
 "weather_data_provider" = "Veri sağlayıcısı GFS.";
 "weather_clear_online_cache" = "Bu, çevrim içi hava durumu katmanı için tüm önbelleği temizleyecektir.";
+"depth_contour_lines" = "Eş derinlik eğrileri";

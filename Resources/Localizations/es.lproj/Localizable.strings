@@ -2643,7 +2643,7 @@
 "cloud_all_changes_uploaded_descr" = "Todos los cambios hechos en este dispositivo se sincronizaron en OsmAnd Cloud.";
 "cloud_no_conflicts" = "Sin conflictos";
 "cloud_no_conflicts_descr" = "Los datos en el dispositivo y en OsmAnd Cloud son los mismos.";
-"backup_conflicts_descr" = "Existe una versión más reciente de estos archivos en el servidor. Elige una acción";
+"backup_conflicts_descr" = "La versión más reciente de estos archivos se almacena en el servidor. Debe seleccionar la acción";
 "backup_conflicts_action_descr" = "Existe otra versión de este archivo en el servidor. Elige una acción";
 "carplay" = "CarPlay";
 "product_title_pro" = "OsmAnd Pro";
@@ -2733,3 +2733,7 @@
 "routing_attr_goods_restrictions_name" = "Entrega de los productos";
 "routing_attr_goods_restrictions_header_name" = "Los vehículos de transporte de mercancías pueden tener restringido el acceso a algunas carreteras.";
 "routing_attr_goods_restrictions_footer_desc" = "Sólo se aplica a los vehículos que transportan mercancías que tienen al menos cuatro ruedas y no pesan más de 3,5 toneladas.\n\nSi el peso de su vehículo es superior a 3,5 toneladas, deberá utilizar el perfil de camión.";
+"download_all" = "Descargar todo";
+"cloud_all_changes_downloaded" = "Todos los cambios descargados";
+"shared_string_file_cloud" = "iCloud";
+"upload_all" = "Subir todo";

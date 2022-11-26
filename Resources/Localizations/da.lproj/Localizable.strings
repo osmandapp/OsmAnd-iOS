@@ -2707,7 +2707,7 @@
 "cloud_pause_all" = "Sæt alle på pause";
 "cloud_all_changes_uploaded_descr" = "Alle ændringer, der foretages på denne enhed, synkroniseres med OsmAnd Cloud.";
 "cloud_no_conflicts_descr" = "Dataene på enheden og i OsmAnd Cloud er de samme.";
-"backup_conflicts_descr" = "Nyere version af disse filer er gemt på serveren. Du skal vælge handling";
+"backup_conflicts_descr" = "Nyere version af disse filer er gemt på serveren. Du skal vælge en handling";
 "cloud_contains_newer_changes" = "OsmAnd Cloud-version indeholder nyere ændringer.";
 "cloud_all_changes_uploaded" = "Alle ændringer er uploadet";
 "recorded_voice" = "Optaget";
@@ -2738,3 +2738,7 @@
 "routing_attr_goods_restrictions_yes_desc" = "Veje, der er lukket for varekørsel, vil blive undgået.";
 "routing_attr_goods_restrictions_header_name" = "Køretøjer, der transporterer varer, kan begrænses til at få adgang til visse veje.";
 "routing_attr_goods_restrictions_footer_desc" = "Gælder kun for køretøjer, der transporterer gods, som har mindst fire hjul og vejer højst 3,5 tons.\n\nHvis dit køretøj vejer mere end 3,5 tons, skal du bruge lastbilprofilen.";
+"download_all" = "Download alle";
+"upload_all" = "Upload alle";
+"cloud_all_changes_downloaded" = "Alle ændringer downloadet";
+"shared_string_file_cloud" = "Cloud";

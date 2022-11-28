@@ -123,7 +123,7 @@
         },
         @{
             @"name" : @"backup_restore",
-            @"title" : OALocalizedString(@"backup_and_restore"),
+            @"title" : OALocalizedString(@"osmand_cloud"),
             @"value" : @"", // TODO: insert value
             @"description" : OALocalizedString(@"global_settings_descr"),
             @"img" : @"ic_custom_restore",

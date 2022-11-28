@@ -93,10 +93,14 @@
             else if (remoteUploadTime == localUploadTime)
             {
                 if ((localUploadTime / 1000) < localFile.localModifiedTime)
-                {
                     [info.filesToUpload addObject:localFile];
+            }
+            else if (localUploadTime == 0)
+            {
+                if ((remoteUploadTime / 1000) < localFile.localModifiedTime)
+                    [info.filesToUpload addObject:localFile];
+                else
                     [info.filesToDownload addObject:remoteFile];
-                }
             }
             else
             {

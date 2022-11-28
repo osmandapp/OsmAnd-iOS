@@ -1390,6 +1390,7 @@
 "simulate_location_movement_speed_x3_desc" = "The location movement speed during the simulation will be x3 bigger to the speed in the selected file.";
 "simulate_location_movement_speed_x4_desc" = "The location movement speed during the simulation will be x4 bigger to the speed in the selected file.";
 
+"shared_string_added" = "Added";
 "osm_note" = "OSM Note";
 "osm_created" = "Created";
 "osm_deleted" = "Deleted";

@@ -11,8 +11,6 @@
 static NSString * const HORSE_ROUTES_ATTR = @"horseRoutes";
 static NSString * const PISTE_ROUTES_ATTR = @"pisteRoutes";
 static NSString * const ALPINE_HIKING_ATTR = @"alpineHiking";
-static NSString * const SHOW_MTB_ROUTES_ATTR = @"showMtbRoutes";
-static NSString * const SHOW_MTB_IMBA_ROUTES_ATTR = @"showMtbScaleIMBATrails";
 static NSString * const SHOW_CYCLE_ROUTES_ATTR = @"showCycleRoutes";
 static NSString * const WHITE_WATER_SPORTS_ATTR = @"whiteWaterSports";
 static NSString * const HIKING_ROUTES_OSMC_ATTR = @"hikingRoutesOSMC";
@@ -20,6 +18,11 @@ static NSString * const CYCLE_NODE_NETWORK_ROUTES_ATTR = @"showCycleNodeNetworkR
 static NSString * const TRAVEL_ROUTES = @"travel_routes";
 static NSString * const SHOW_FITNESS_TRAILS_ATTR = @"showFitnessTrails";
 static NSString * const SHOW_RUNNING_ROUTES_ATTR = @"showRunningRoutes";
+
+static NSString * const SHOW_MTB_ROUTES = @"showMtbRoutes";
+static NSString * const SHOW_MTB_SCALE = @"showMtbScale";
+static NSString * const SHOW_MTB_SCALE_UPHILL = @"showMtbScaleUphill";
+static NSString * const SHOW_MTB_SCALE_IMBA_TRAILS = @"showMtbScaleIMBATrails";
 
 static NSString * const TRANSPORT_CATEGORY = @"transport";
 static NSString * const TRANSPORT_STOPS_ATTR = @"transportStops";

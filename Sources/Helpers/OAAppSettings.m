@@ -34,6 +34,7 @@
 
 #define mapSettingShowFavoritesKey @"mapSettingShowFavoritesKey"
 #define mapSettingShowPoiLabelKey @"mapSettingShowPoiLabelKey"
+#define mapSettingShowBordersOfDownloadedMapsKey @"mapSettingShowBordersOfDownloadedMapsKey"
 #define mapSettingShowOfflineEditsKey @"mapSettingShowOfflineEditsKey"
 #define mapSettingShowOnlineNotesKey @"mapSettingShowOnlineNotesKey"
 #define layerTransparencySeekbarModeKey @"layerTransparencySeekbarModeKey"
@@ -3522,12 +3523,14 @@
         // Map Settings
         _mapSettingShowFavorites = [OACommonBoolean withKey:mapSettingShowFavoritesKey defValue:YES];
         _mapSettingShowPoiLabel = [OACommonBoolean withKey:mapSettingShowPoiLabelKey defValue:NO];
+        _mapSettingShowBordersOfDownloadedMaps = [OACommonBoolean withKey:mapSettingShowBordersOfDownloadedMapsKey defValue:YES];
         _mapSettingShowOfflineEdits = [OACommonBoolean withKey:mapSettingShowOfflineEditsKey defValue:YES];
         _mapSettingShowOnlineNotes = [OACommonBoolean withKey:mapSettingShowOnlineNotesKey defValue:NO];
         _layerTransparencySeekbarMode = [OACommonInteger withKey:layerTransparencySeekbarModeKey defValue:LAYER_TRANSPARENCY_SEEKBAR_MODE_UNDEFINED];
 
         [_profilePreferences setObject:_mapSettingShowFavorites forKey:@"show_favorites"];
         [_profilePreferences setObject:_mapSettingShowPoiLabel forKey:@"show_poi_label"];
+        [_profilePreferences setObject:_mapSettingShowBordersOfDownloadedMaps forKey:@"show_downloaded_borders"];
         [_profilePreferences setObject:_mapSettingShowOfflineEdits forKey:@"show_osm_edits"];
         [_profilePreferences setObject:_mapSettingShowOnlineNotes forKey:@"show_osm_bugs"];
         [_profilePreferences setObject:_layerTransparencySeekbarMode forKey:@"layer_transparency_seekbar_mode"];
@@ -4467,6 +4470,12 @@
 - (void) setShowPoiLabel:(BOOL)mapSettingShowPoiLabel
 {
     [_mapSettingShowPoiLabel set:mapSettingShowPoiLabel];
+    [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
+}
+
+- (void) setShowBordersOfDownloadedMaps:(BOOL)mapSettingShowBordersOfDownloadedMaps
+{
+    [_mapSettingShowBordersOfDownloadedMaps set:mapSettingShowBordersOfDownloadedMaps];
     [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
 }
 

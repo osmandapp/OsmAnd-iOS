@@ -30,6 +30,7 @@
 #define kRouteParamIdAllowPrivateTruck @"allow_private_for_truck"
 #define kRouteParamIdAllowMotorway @"allow_motorway"
 #define kRouteParamIdHazmatCategory @"hazmat_category"
+#define kRouteParamShortWay @"short_way"
 
 #define kDefaultNumericValue @"0.0"
 #define kDefaultSymbolicValue @"-"

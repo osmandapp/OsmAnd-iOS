@@ -113,6 +113,10 @@
                 reliefFactorParameters.insert(reliefFactorParameters.begin(), r);
                 continue;
             }
+            else if ([[NSString stringWithUTF8String:r.id.c_str()] isEqualToString:kRouteParamShortWay] && ![am isDerivedRoutingFrom:OAApplicationMode.CAR])
+            {
+                continue;
+            }
             
             if (!r.group.empty())
             {

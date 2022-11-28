@@ -146,6 +146,7 @@
     BOOL isPreparing = [_backupHelper isBackupPreparing];
     
     self.leftBottomButton.userInteractionEnabled = isSyncing && !isPreparing;
+    self.leftBottomButton.hidden = !isSyncing;
     [self.leftBottomButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
     [self.leftBottomButton setTintColor:isSyncing && !isPreparing ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer)];
     [self.leftBottomButton setTitleColor:isSyncing && !isPreparing ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer)
@@ -180,6 +181,7 @@
 - (IBAction)leftButtonPressed:(UIButton *)sender
 {
     [_settingsHelper cancelSync];
+    [self setupBottomButtons];
 }
 
 - (IBAction)rightButtonPressed:(UIButton *)sender
@@ -187,12 +189,19 @@
     switch (_segmentControl.selectedSegmentIndex)
     {
         case EOARecentChangesRemote:
-            return [_settingsHelper syncSettingsItems:kSyncItemsKey operation:EOABackupSyncOperationDownload];
+        {
+            [_settingsHelper syncSettingsItems:kSyncItemsKey operation:EOABackupSyncOperationDownload];
+            break;
+        }
         case EOARecentChangesLocal:
-            return [_settingsHelper syncSettingsItems:kSyncItemsKey operation:EOABackupSyncOperationUpload];
+        {
+            [_settingsHelper syncSettingsItems:kSyncItemsKey operation:EOABackupSyncOperationUpload];
+            break;
+        }
         default:
-            return;
+            break;
     }
+    [self setupBottomButtons];
 }
 
 - (void)setRowIcon:(OATableRowData *)rowData item:(OASettingsItem *)item

@@ -278,16 +278,36 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     NSString *fileName = [OABackupHelper getItemFileName:item];
     [rowData setObj:fileName forKey:@"file_name"];
 
-    
-    [rowData setDescr:[self getDescriptionForItemType:item.type
-                                             fileName:fileName
-                                              summary:OALocalizedString(@"cloud_last_backup")]];
+    if (operation != EOABackupSyncOperationUpload)
+    {
+        [rowData setDescr:[self getDescriptionForItemType:item.type
+                                                 fileName:fileName
+                                                  summary:[self localizedSummaryForOperation:operation]]];
+    }
+    else
+    {
+        [rowData setDescr:[self generateTimeString:((OARemoteFile *) file).updatetimems summary:[self localizedSummaryForOperation:operation]]];
+    }
     [self setRowIcon:rowData item:item];
 
     [rowData setSecondaryIconName:iconName];
     [rowData setObj:@(secondaryTint) forKey:@"secondary_icon_color"];
     [rowData setIconTint:mainTint];
     return rowData;
+}
+
+- (NSString *) localizedSummaryForOperation:(EOABackupSyncOperationType)operation
+{
+    switch (operation) {
+        case EOABackupSyncOperationDownload:
+            return OALocalizedString(@"shared_string_added");
+        case EOABackupSyncOperationUpload:
+            return OALocalizedString(@"osm_modified");
+        case EOABackupSyncOperationDelete:
+            return OALocalizedString(@"osm_deleted");
+        default:
+            return nil;
+    }
 }
 
 - (void)setRowIcon:(OATableRowData *)rowData item:(OASettingsItem *)item

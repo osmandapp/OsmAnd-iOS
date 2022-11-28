@@ -190,7 +190,7 @@
         if (nauticalDepthControursParameter)
         {
             [showSectionData addObject:@{
-                @"name": OALocalizedString(@"product_title_sea_depth_contours"),
+                @"name": OALocalizedString(@"nautical_depth"),
                 @"image": @"ic_custom_nautical_depth_colored_day",
                 @"type": [OAValueTableViewCell getCellIdentifier],
                 @"key": @"nautical_depth",

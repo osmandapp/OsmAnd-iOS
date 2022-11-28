@@ -368,20 +368,27 @@
         FFCircularProgressView* progressView = (FFCircularProgressView*)cell.accessoryView;
         
         float progressCompleted = item.downloadTask.progressCompleted;
-        if (progressCompleted >= 0.0f && item.downloadTask.state == OADownloadTaskStateRunning)
+        if (progressCompleted >= 0.001 && item.downloadTask.state == OADownloadTaskStateRunning)
         {
-            [progressView stopSpinProgressBackgroundLayer];
-            progressView.progress = progressCompleted;
+            progressView.iconPath = nil;
+            if ([progressView isSpinning])
+                [progressView stopSpinProgressBackgroundLayer];
+            progressView.progress = progressCompleted - 0.001;
         }
         else if (item.downloadTask.state == OADownloadTaskStateFinished)
         {
-            [progressView stopSpinProgressBackgroundLayer];
-            progressView.progress = 1.0f;
+            progressView.iconPath = [OAResourcesUIHelper tickPath:progressView];
+            progressView.progress = 0.;
+            if (![progressView isSpinning])
+                [progressView startSpinProgressBackgroundLayer];
         }
         else
         {
+            progressView.iconPath = [UIBezierPath bezierPath];
+            progressView.progress = 0.;
             if (!progressView.isSpinning)
                 [progressView startSpinProgressBackgroundLayer];
+            [progressView setNeedsDisplay];
         }
     }
 }
@@ -518,22 +525,29 @@
         if (cell.accessoryView && [cell.accessoryView isKindOfClass:FFCircularProgressView.class])
         {
             FFCircularProgressView* progressView = (FFCircularProgressView*)cell.accessoryView;
-
+            
             float progressCompleted = item.downloadTask.progressCompleted;
-            if (progressCompleted >= 0.0f && item.downloadTask.state == OADownloadTaskStateRunning)
+            if (progressCompleted >= .001 && item.downloadTask.state == OADownloadTaskStateRunning)
             {
-                [progressView stopSpinProgressBackgroundLayer];
-                progressView.progress = progressCompleted;
+                progressView.iconPath = nil;
+                if ([progressView isSpinning])
+                    [progressView stopSpinProgressBackgroundLayer];
+                progressView.progress = progressCompleted - .001;
             }
             else if (item.downloadTask.state == OADownloadTaskStateFinished)
             {
-                [progressView stopSpinProgressBackgroundLayer];
-                progressView.progress = 1.0f;
+                progressView.iconPath = [OAResourcesUIHelper tickPath:progressView];
+                progressView.progress = 0.;
+                if (![progressView isSpinning])
+                    [progressView startSpinProgressBackgroundLayer];
             }
             else
             {
+                progressView.iconPath = [UIBezierPath bezierPath];
+                progressView.progress = 0.;
                 if (!progressView.isSpinning)
                     [progressView startSpinProgressBackgroundLayer];
+                [progressView setNeedsDisplay];
             }
         }
     }

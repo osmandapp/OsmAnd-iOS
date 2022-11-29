@@ -2736,7 +2736,7 @@
 "ltr_or_rtl_combine_via_slash" = "%@/% @";
 "rendering_value_showMtbScaleIMBATrails_description" = "International Mountain Bicycling Association";
 "mountain_bike" = "Mountainbike";
-"rendering_attr_showMtbScaleIMBATrails_name" = "IMBA-Trails";
+"rendering_attr_showMtbScaleIMBATrails_name" = "IMBA";
 "map_settings_show_map_symbols" = "Karten-Symbole anzeigen";
 "depth_contour_lines" = "Tiefenlinien";
 "last_sync" = "Letzte Synchronisierung";
@@ -2753,3 +2753,7 @@
 "upload_all" = "Alle hochladen";
 "cloud_all_changes_downloaded" = "Alle Änderungen heruntergeladen";
 "download_all" = "Alle herunterladen";
+"rendering_attr_showMtbScale_name" = "MTB-Skala";
+"show_borders_of_downloaded_maps" = "Grenzen der heruntergeladenen Karten anzeigen";
+"mtb_segment_classification" = "Abschnitts-Klassifizierung";
+"shared_string_added" = "Hinzugefügt";

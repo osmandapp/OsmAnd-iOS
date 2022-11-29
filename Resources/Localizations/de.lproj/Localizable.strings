@@ -2446,7 +2446,7 @@
 "backup_error_no_valid_subscription" = "Kein gültiges Abonnement vorhanden";
 "rendering_attr_funicularRoutes_name" = "Kabelgetriebene Linien";
 "rendering_attr_lightRailRoutes_name" = "Stadtbahnlinien";
-"backup_error_subscription_was_expired_descr" = "Ihr OsmAnd Pro Abonnement ist abgelaufen. Erneuern Sie es, um die Datensicherung zu nutzen. Sie können weiterhin Daten aus der Cloud wiederherstellen.";
+"backup_error_subscription_was_expired_descr" = "Ihr OsmAnd Pro-Abonnement ist abgelaufen. Erneuern Sie es, um die Datensicherung zu nutzen. Sie können weiterhin Daten aus der Cloud wiederherstellen.";
 "backup_error_user_is_already_registered" = "Diese E-Mail-Adresse wird in einem anderen Konto verwendet";
 "backup_error_subscription_was_expired" = "Abonnement abgelaufen";
 "backup_error_subscription_was_used" = "Abonnement oder Aktionsangebot wird von einem anderen Konto verwendet %@";
@@ -2541,7 +2541,7 @@
 "monthly_subscription" = "Monatliches Abo";
 "purchases_feature_desc_wikipedia" = "Erkunden Sie Wikipedia offline. Artikel sind nach Ländern und Regionen unterteilt und in allen Sprachen verfügbar.";
 "expired" = "Abgelaufen";
-"osm_live_banner_desc" = "Erhalten Sie unbegrenzte Kartendownloads, fügt wöchentliche, tägliche oder sogar stündliche Updates hinzu.";
+"osm_live_banner_desc" = "Erhalten Sie unbegrenzte Kartendownloads und fügen wöchentliche, tägliche oder sogar stündliche Updates hinzu.";
 "purchases_feature_desc_hourly_map_updates" = "Erhalten Sie Zugang zu häufigeren Kartenaktualisierungen. Wählen Sie zwischen stündlichen, täglichen oder wöchentlichen Aktualisierungen. Updates erfolgen inkrementell, nur der geänderte Bereich wird heruntergeladen.";
 "purchases_feature_desc_pro_widgets" = "Erhalten Sie Zugang zu den Funktionen von OsmAnd Pro: Routeneinfärbung und mehr.";
 "purchases_feature_desc_osmand_cloud" = "Speichern Sie alle OsmAnd-Daten online. Kein Datenverlust nach Neuinstallation. Einfaches Sichern und Wiederherstellen aller Daten.";

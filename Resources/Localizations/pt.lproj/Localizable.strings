@@ -2723,7 +2723,7 @@
 "select_another_colorization" = "Selecione outro tipo de coloração.";
 "ltr_or_rtl_combine_via_slash" = "%@/%@";
 "mountain_bike" = "Bicicleta de montanha";
-"rendering_attr_showMtbScaleIMBATrails_name" = "Trilhos IMBA";
+"rendering_attr_showMtbScaleIMBATrails_name" = "IMBA";
 "rendering_value_showMtbScaleIMBATrails_description" = "International Mountain Bicycling Association";
 "map_settings_show_map_symbols" = "Mostrar símbolos do mapa";
 "depth_contour_lines" = "Curvas de nível de profundidade";
@@ -2741,3 +2741,7 @@
 "upload_all" = "Enviar tudo";
 "download_all" = "Descarregar tudo";
 "cloud_all_changes_downloaded" = "Todas as alterações descarregadas";
+"shared_string_added" = "Data de adicionado";
+"mtb_segment_classification" = "Classificação de segmento";
+"rendering_attr_showMtbScale_name" = "Escala MTB";
+"show_borders_of_downloaded_maps" = "Mostrar bordas em mapas descarregados";

@@ -1860,3 +1860,4 @@
 
 // Route planning
 "plan_route" = "Načrtuj pot";
+"mtb_segment_classification" = "Klasifikacija segmenta";

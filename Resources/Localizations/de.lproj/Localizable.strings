@@ -2749,3 +2749,7 @@
 "routing_attr_goods_restrictions_footer_desc" = "Gilt nur für Fahrzeuge, die Güter befördern, die mindestens vier Räder haben und nicht mehr als 3,5 Tonnen wiegen.\n\nWenn das Gewicht Ihres Fahrzeugs mehr als 3,5 Tonnen beträgt, müssen Sie das Profil Lkw verwenden.";
 "routing_attr_goods_restrictions_name" = "Lieferverkehr";
 "routing_attr_goods_restrictions_header_name" = "Für Lieferverkehr kann der Zugang zu einigen Straßen eingeschränkt sein.";
+"shared_string_file_cloud" = "Cloud";
+"upload_all" = "Alle hochladen";
+"cloud_all_changes_downloaded" = "Alle Änderungen heruntergeladen";
+"download_all" = "Alle herunterladen";

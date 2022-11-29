@@ -2722,7 +2722,7 @@
 "select_another_colorization" = "Vælg venligst en anden farvelægningstype.";
 "error_contact_support" = "Hvis problemet fortsætter, bedes du kontakte vores supportteam.";
 "backup_error_failed_to_fetch_remote_items" = "Fillisten kunne ikke hentes fra serveren.";
-"rendering_attr_showMtbScaleIMBATrails_name" = "IMBA-spor";
+"rendering_attr_showMtbScaleIMBATrails_name" = "IMBA";
 "ltr_or_rtl_combine_via_slash" = "%@/%@";
 "mountain_bike" = "Mountainbike";
 "rendering_value_showMtbScaleIMBATrails_description" = "International Mountain Bicycling Association";
@@ -2742,3 +2742,7 @@
 "upload_all" = "Upload alle";
 "cloud_all_changes_downloaded" = "Alle ændringer downloadet";
 "shared_string_file_cloud" = "Cloud";
+"shared_string_added" = "Tilføjet";
+"mtb_segment_classification" = "Segmentklassificering";
+"rendering_attr_showMtbScale_name" = "MTB-skala";
+"show_borders_of_downloaded_maps" = "Vis grænser for downloadede kort";

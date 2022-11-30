@@ -20,6 +20,8 @@
 #import "OAIconTitleValueCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OATextInputFloatingCellWithIcon.h"
+#import "OAPOIUIFilter.h"
+#import "OAPOIHelper.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -58,6 +60,35 @@ static OAQuickActionType *ACTION_TYPE;
             [OAOsmEditingViewController savePoi:@"" poiData:data editingUtil:plugin.getPoiModificationLocalUtil closeChangeSet:NO];
         }
     }
+}
+
+- (NSString *) getIconResName
+{
+    OAPOIType *poiType = [self getPoiType];
+    NSString *iconName = [OAPOIUIFilter getPoiTypeIconName:poiType];
+    if (iconName.length > 0) {
+        return iconName;
+    }
+    OAPOICategory *poiCategory = [self getCategory];
+    NSString *categoryIconName = [OAPOIUIFilter getPoiTypeIconName:poiCategory];
+    return categoryIconName.length == 0 ? [super getIconResName] : categoryIconName;
+}
+
+- (OAPOIType *) getPoiType
+{
+    NSString *poiTypeTranslation = [self getPoiTypeTranslation];
+    return poiTypeTranslation == nil ? nil : [OAPOIHelper.sharedInstance getAllTranslatedNames:NO][poiTypeTranslation.lowerCase];
+}
+
+- (NSString *) getPoiTypeTranslation
+{
+    return [self getTagsFromParams][POI_TYPE_TAG];
+}
+
+- (OAPOICategory *) getCategory
+{
+    OAPOIType *poiType = [self getPoiType];
+    return poiType != nil ? poiType.category : nil;
 }
 
 - (OrderedDictionary<NSString *, NSString *> *) getTagsFromParams

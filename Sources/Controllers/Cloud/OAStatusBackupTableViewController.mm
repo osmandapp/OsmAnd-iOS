@@ -278,7 +278,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     NSString *fileName = [OABackupHelper getItemFileName:item];
     [rowData setObj:fileName forKey:@"file_name"];
 
-    if (operation != EOABackupSyncOperationDownload)
+    if (operation == EOABackupSyncOperationUpload || operation == EOABackupSyncOperationNone)
     {
         [rowData setDescr:[self getDescriptionForItemType:item.type
                                                  fileName:fileName

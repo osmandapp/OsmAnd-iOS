@@ -390,7 +390,8 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
 
 - (void)onSetUpBackupButtonPressed
 {
-    [_settingsHelper syncSettingsItems:kSyncItemsKey operation:EOABackupSyncOperationSync];
+    if (!_settingsHelper.isBackupSyncing)
+        [_settingsHelper syncSettingsItems:kSyncItemsKey operation:EOABackupSyncOperationSync];
 }
 
 - (void)onRetryPressed

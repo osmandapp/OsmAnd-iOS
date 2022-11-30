@@ -12,6 +12,9 @@
 #import "OASegmentedSlider.h"
 #import "OAAppSettings.h"
 #import "OARoutingHelper.h"
+#import "OATableDataModel.h"
+#import "OATableSectionData.h"
+#import "OATableRowData.h"
 #import "OAColors.h"
 #import "Localization.h"
 
@@ -25,7 +28,7 @@
 
 @implementation OAAngleStraightLineViewController
 {
-    NSArray<NSDictionary *> *_data;
+    OATableDataModel *_data;
     OAAppSettings *_settings;
     NSInteger _selectedValue;
 }
@@ -71,15 +74,19 @@
 
 - (void)generateData
 {
-    _data = @[@{
-        @"type" : [OASegmentSliderTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"shared_string_angle"),
+    _data = [[OATableDataModel alloc] init];
+    OATableSectionData *sliderSection = [OATableSectionData sectionData];
+    sliderSection.headerText = OALocalizedString(@"recalc_angle_dialog_descr");
+    [sliderSection addRowFromDictionary:@{
+        kCellTypeKey: [OASegmentSliderTableViewCell getCellIdentifier],
+        kCellTitleKey: OALocalizedString(@"shared_string_angle"),
         @"value" : [NSString stringWithFormat:@"%ld°", _selectedValue],
         @"minValue" : [NSString stringWithFormat:@"%d°", (int) kAngleMinValue],
         @"maxValue" : [NSString stringWithFormat:@"%d°", (int) kAngleMaxValue],
         @"marksCount" : @((kAngleMaxValue / kAngleStepValue) + 1),
         @"selectedMark" : @(_selectedValue / kAngleStepValue)
     }];
+    [_data addSection:sliderSection];
 }
 
 - (IBAction)doneButtonPressed:(id)sender
@@ -97,18 +104,18 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1;
+    return [_data sectionCount];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _data.count;
+    return [_data rowCount:section];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary *item = _data[indexPath.row];
-    if ([item[@"type"] isEqualToString:[OASegmentSliderTableViewCell getCellIdentifier]])
+    OATableRowData *item = [_data itemForIndexPath:indexPath];
+    if ([item.cellType isEqualToString:[OASegmentSliderTableViewCell getCellIdentifier]])
     {
         OASegmentSliderTableViewCell *cell =
                 [tableView dequeueReusableCellWithIdentifier:[OASegmentSliderTableViewCell getCellIdentifier]];
@@ -121,15 +128,15 @@
         }
         if (cell)
         {
-            cell.topLeftLabel.text = item[@"title"];
-            cell.topRightLabel.text = item[@"value"];
+            cell.topLeftLabel.text = item.title;
+            cell.topRightLabel.text = [item stringForKey:@"value"];
             cell.topRightLabel.textColor = UIColorFromRGB(color_primary_purple);
             cell.topRightLabel.font = [UIFont systemFontOfSize:17 weight:UIFontWeightMedium];
-            cell.bottomLeftLabel.text = item[@"minValue"];
-            cell.bottomRightLabel.text = item[@"maxValue"];
+            cell.bottomLeftLabel.text = [item stringForKey:@"minValue"];
+            cell.bottomRightLabel.text = [item stringForKey:@"maxValue"];
 
-            [cell.sliderView setNumberOfMarks:[item[@"marksCount"] integerValue] additionalMarksBetween:0];
-            cell.sliderView.selectedMark = [item[@"selectedMark"] integerValue];
+            [cell.sliderView setNumberOfMarks:[item integerForKey:@"marksCount"] additionalMarksBetween:0];
+            cell.sliderView.selectedMark = [item integerForKey:@"selectedMark"];
             cell.sliderView.tag = indexPath.section << 10 | indexPath.row;
             [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.sliderView addTarget:self
@@ -143,7 +150,7 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
-    return OALocalizedString(@"recalc_angle_dialog_descr");
+    return [_data sectionDataForIndex:section].headerText;
 }
 
 #pragma mark - Selectors

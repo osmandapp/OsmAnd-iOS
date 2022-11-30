@@ -143,7 +143,7 @@
                 _reliefFactorParameters.insert(_reliefFactorParameters.begin(), p);
             else if ([group isEqualToString:kRouteParamGroupDrivingStyle])
                 _drivingStyleParameters.push_back(p);
-            else if ([param isEqualToString:@"short_way"])
+            else if ([param isEqualToString:kRouteParamShortWay])
                 _fastRouteParameter = p;
             else if ("weight" != p.id && "height" != p.id && "length" != p.id && "width" != p.id)
                 _otherParameters.push_back(p);

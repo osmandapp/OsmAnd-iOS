@@ -278,7 +278,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     NSString *fileName = [OABackupHelper getItemFileName:item];
     [rowData setObj:fileName forKey:@"file_name"];
 
-    if (operation != EOABackupSyncOperationUpload)
+    if (operation != EOABackupSyncOperationDownload)
     {
         [rowData setDescr:[self getDescriptionForItemType:item.type
                                                  fileName:fileName
@@ -306,7 +306,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
         case EOABackupSyncOperationDelete:
             return OALocalizedString(@"osm_deleted");
         default:
-            return nil;
+            return OALocalizedString(@"osm_modified");
     }
 }
 
@@ -589,7 +589,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
         OAStatusBackupConflictDetailsViewController *conflictDetailsViewController =
         [[OAStatusBackupConflictDetailsViewController alloc] initWithLocalFile:[item objForKey:@"localConflictItem"]
                                                                     remoteFile:[item objForKey:@"remoteConflictItem"]
-                                                    backupExportImportListener:self];
+                                                        operation:EOABackupSyncOperationNone];
         conflictDetailsViewController.delegate = self;
         [self presentViewController:conflictDetailsViewController animated:YES completion:nil];
     }
@@ -597,20 +597,20 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     {
         EOABackupSyncOperationType operation = (EOABackupSyncOperationType) [item integerForKey:@"operation"];
         id file = [item objForKey:@"file"];
-        if ([file isKindOfClass:OALocalFile.class] && operation == EOABackupSyncOperationUpload)
-        {
-            OALocalFile *fl = (OALocalFile *) file;
-            NSString *fileName = [OABackupHelper getItemFileName:fl.item];
-            if (!_settingsHelper.syncBackupTasks[fileName])
-                [_settingsHelper syncSettingsItems:fileName localFile:fl remoteFile:nil operation:operation];
-        }
-        else if ([file isKindOfClass:OARemoteFile.class])
-        {
-            OARemoteFile *fl = (OARemoteFile *) file;
-            NSString *fileName = [OABackupHelper getItemFileName:fl.item];
-            if (!_settingsHelper.syncBackupTasks[fileName])
-                [_settingsHelper syncSettingsItems:fileName localFile:nil remoteFile:fl operation:operation];
-        }
+        OALocalFile *localFile = nil;
+        OARemoteFile *remoteFile = nil;
+        if (operation != EOABackupSyncOperationUpload)
+            remoteFile = (OARemoteFile *) file;
+        else
+            localFile = (OALocalFile *) file;
+        
+        
+        OAStatusBackupConflictDetailsViewController *conflictDetailsViewController =
+        [[OAStatusBackupConflictDetailsViewController alloc] initWithLocalFile:localFile
+                                                                    remoteFile:remoteFile
+                                                                     operation:operation];
+        conflictDetailsViewController.delegate = self;
+        [self presentViewController:conflictDetailsViewController animated:YES completion:nil];
     }
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];

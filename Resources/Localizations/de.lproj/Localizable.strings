@@ -2446,7 +2446,7 @@
 "backup_error_no_valid_subscription" = "Kein gültiges Abonnement vorhanden";
 "rendering_attr_funicularRoutes_name" = "Kabelgetriebene Linien";
 "rendering_attr_lightRailRoutes_name" = "Stadtbahnlinien";
-"backup_error_subscription_was_expired_descr" = "Ihr OsmAnd Pro Abonnement ist abgelaufen. Erneuern Sie es, um die Datensicherung zu nutzen. Sie können weiterhin Daten aus der Cloud wiederherstellen.";
+"backup_error_subscription_was_expired_descr" = "Ihr OsmAnd Pro-Abonnement ist abgelaufen. Erneuern Sie es, um die Datensicherung zu nutzen. Sie können weiterhin Daten aus der Cloud wiederherstellen.";
 "backup_error_user_is_already_registered" = "Diese E-Mail-Adresse wird in einem anderen Konto verwendet";
 "backup_error_subscription_was_expired" = "Abonnement abgelaufen";
 "backup_error_subscription_was_used" = "Abonnement oder Aktionsangebot wird von einem anderen Konto verwendet %@";
@@ -2541,7 +2541,7 @@
 "monthly_subscription" = "Monatliches Abo";
 "purchases_feature_desc_wikipedia" = "Erkunden Sie Wikipedia offline. Artikel sind nach Ländern und Regionen unterteilt und in allen Sprachen verfügbar.";
 "expired" = "Abgelaufen";
-"osm_live_banner_desc" = "Erhalten Sie unbegrenzte Kartendownloads, fügt wöchentliche, tägliche oder sogar stündliche Updates hinzu.";
+"osm_live_banner_desc" = "Erhalten Sie unbegrenzte Kartendownloads und fügen wöchentliche, tägliche oder sogar stündliche Updates hinzu.";
 "purchases_feature_desc_hourly_map_updates" = "Erhalten Sie Zugang zu häufigeren Kartenaktualisierungen. Wählen Sie zwischen stündlichen, täglichen oder wöchentlichen Aktualisierungen. Updates erfolgen inkrementell, nur der geänderte Bereich wird heruntergeladen.";
 "purchases_feature_desc_pro_widgets" = "Erhalten Sie Zugang zu den Funktionen von OsmAnd Pro: Routeneinfärbung und mehr.";
 "purchases_feature_desc_osmand_cloud" = "Speichern Sie alle OsmAnd-Daten online. Kein Datenverlust nach Neuinstallation. Einfaches Sichern und Wiederherstellen aller Daten.";
@@ -2736,7 +2736,7 @@
 "ltr_or_rtl_combine_via_slash" = "%@/% @";
 "rendering_value_showMtbScaleIMBATrails_description" = "International Mountain Bicycling Association";
 "mountain_bike" = "Mountainbike";
-"rendering_attr_showMtbScaleIMBATrails_name" = "IMBA-Trails";
+"rendering_attr_showMtbScaleIMBATrails_name" = "IMBA";
 "map_settings_show_map_symbols" = "Karten-Symbole anzeigen";
 "depth_contour_lines" = "Tiefenlinien";
 "last_sync" = "Letzte Synchronisierung";
@@ -2749,3 +2749,11 @@
 "routing_attr_goods_restrictions_footer_desc" = "Gilt nur für Fahrzeuge, die Güter befördern, die mindestens vier Räder haben und nicht mehr als 3,5 Tonnen wiegen.\n\nWenn das Gewicht Ihres Fahrzeugs mehr als 3,5 Tonnen beträgt, müssen Sie das Profil Lkw verwenden.";
 "routing_attr_goods_restrictions_name" = "Lieferverkehr";
 "routing_attr_goods_restrictions_header_name" = "Für Lieferverkehr kann der Zugang zu einigen Straßen eingeschränkt sein.";
+"shared_string_file_cloud" = "Cloud";
+"upload_all" = "Alle hochladen";
+"cloud_all_changes_downloaded" = "Alle Änderungen heruntergeladen";
+"download_all" = "Alle herunterladen";
+"rendering_attr_showMtbScale_name" = "MTB-Skala";
+"show_borders_of_downloaded_maps" = "Grenzen der heruntergeladenen Karten anzeigen";
+"mtb_segment_classification" = "Abschnitts-Klassifizierung";
+"shared_string_added" = "Hinzugefügt";

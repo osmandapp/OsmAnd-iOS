@@ -2728,7 +2728,7 @@
 "cloud_all_changes_uploaded" = "Carrigadas totu sas modìficas";
 "cloud_all_changes_uploaded_descr" = "Totu sas modìficas fatas in custu dispositivu sunt sincronizadas cun OsmAnd Cloud.";
 "cloud_no_conflicts_descr" = "Sos datos in su dispositivu e in OsmAnd Cloud sunt sos matessi.";
-"backup_conflicts_descr" = "In su serbidore b'at una versione prus noa de custu documentu. Depes seletzionare un'atzione";
+"backup_conflicts_descr" = "In su serbidore b'at una versione prus noa de custos documentos. Depes seletzionare s'atzione";
 "cloud_contains_newer_changes" = "Sa versione de OsmAnd Cloud tenet modìficas prus noas.";
 "cloud_pause_all" = "Pone totu in pàusa";
 "recorded_voice" = "Registradu";
@@ -2737,7 +2737,7 @@
 "upload_local_version" = "Càrriga sa versione locale";
 "dowload_cloud_version" = "Iscàrriga sa versione de sa nue";
 "tts" = "TTS";
-"backup_conflicts_action_descr" = "In su serbidore b'at un'àtera versione de custu documentu. Depes seletzionare un'atzione";
+"backup_conflicts_action_descr" = "In su serbidore b'at un'àtera versione de custu documentu. Depes seletzionare s'atzione";
 "weather_forecast_entire_world" = "Previsiones mèteu pro totu su mundu";
 "weather_entire_world" = "Totu su mundu";
 "map_download_privacy_descr" = "Iscarrighende mapas atzetas sas <a href='https://osmand.net/docs/legal/terms-of-use'> Cunditziones de Impreu</a> e sa <a href='https://osmand.net/docs/legal/privacy-policy'>Polìtica de Riservadesa</a>.";
@@ -2751,7 +2751,7 @@
 "select_another_colorization" = "Ischerta un'àtera casta de colorimentu.";
 "map_settings_show_map_symbols" = "Ammustra sos sìmbulos de sa mapa";
 "mountain_bike" = "Bitzicleta de monte";
-"rendering_attr_showMtbScaleIMBATrails_name" = "Camineras IMBA";
+"rendering_attr_showMtbScaleIMBATrails_name" = "IMBA";
 "rendering_value_showMtbScaleIMBATrails_description" = "Assòtziu Internatzionale de su Tziclismu de Monte (International Mountain Bicycling Association)";
 "depth_contour_lines" = "Curvas de livellu de sa profundidade";
 "syncing_progress" = "Sincronizende...";
@@ -2765,3 +2765,11 @@
 "routing_attr_goods_restrictions_name" = "Intrega de mertzes";
 "routing_attr_goods_restrictions_header_name" = "Sos veìculos chi trasportant mercantzias podent tènnere limitatziones in unos cantos caminos.";
 "routing_attr_goods_restrictions_footer_desc" = "S'àplicat petzi pro veìculos chi trasportant mercantzias chi tenent a su nessi bator rodas e pesant non prus de 3,5 tonnelladas.\n\nSi su veìculu tuo pesat prus de 3,5 tonnelladas depes impreare su profilu Càmion.";
+"shared_string_file_cloud" = "Nue";
+"upload_all" = "Carriga totu";
+"download_all" = "Iscàrriga totu";
+"cloud_all_changes_downloaded" = "Totu sas modìficas sunt istadas iscarrigadas";
+"show_borders_of_downloaded_maps" = "Ammustra sos oros de sas mapas iscarrigadas";
+"mtb_segment_classification" = "Classificatzione de sos segmentos";
+"rendering_attr_showMtbScale_name" = "Iscala MTB (pro bitzicletas de monte)";
+"shared_string_added" = "Annantu";

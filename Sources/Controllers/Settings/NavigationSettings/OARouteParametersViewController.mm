@@ -39,6 +39,7 @@
     vector<RoutingParameter> _preferParameters;
     vector<RoutingParameter> _reliefFactorParameters;
     vector<RoutingParameter> _drivingStyleParameters;
+    RoutingParameter _fastRouteParameter;
 }
 
 - (instancetype) initWithAppMode:(OAApplicationMode *)appMode
@@ -154,9 +155,36 @@
                 _reliefFactorParameters.insert(_reliefFactorParameters.begin(), p);
             else if ([group isEqualToString:kRouteParamGroupDrivingStyle])
                 _drivingStyleParameters.push_back(p);
+            else if ([param isEqualToString:kRouteParamShortWay])
+                _fastRouteParameter = p;
             else if ("weight" != p.id && "height" != p.id && "length" != p.id && "width" != p.id)
                 _otherParameters.push_back(p);
         }
+    
+        if ([[NSString stringWithUTF8String:_fastRouteParameter.id.c_str()] isEqualToString:kRouteParamShortWay])
+        {
+            OALocalNonAvoidParameter *rp = [[OALocalNonAvoidParameter alloc] initWithAppMode:self.appMode];
+            rp.routingParameter = _fastRouteParameter;
+            
+            NSString *paramId = [NSString stringWithUTF8String:_fastRouteParameter.id.c_str()];
+            NSString *title = [self getRoutingStringPropertyName:paramId defaultName:[NSString stringWithUTF8String:_fastRouteParameter.name.c_str()]];
+            NSString *icon = [self getParameterIcon:paramId isSelected:YES];
+            if (![self.appMode isDerivedRoutingFrom:OAApplicationMode.CAR])
+            {
+                title = OALocalizedString(@"fast_route_mode");
+                icon = @"ic_action_play_dark";
+            }
+            [parametersArr addObject:
+                 @{
+                    @"name" : paramId,
+                    @"title" : title,
+                    @"icon" : icon,
+                    @"value" : rp,
+                    @"type" : [OASettingSwitchCell getCellIdentifier]
+                }
+            ];
+        }
+        
         if (_drivingStyleParameters.size() > 0)
         {
             OALocalRoutingParameterGroup *group = [[OALocalRoutingParameterGroup alloc] initWithAppMode:self.appMode

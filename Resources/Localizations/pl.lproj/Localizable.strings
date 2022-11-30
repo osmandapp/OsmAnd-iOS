@@ -1529,7 +1529,7 @@
 "rendering_attr_showCycleNodeNetworkRoutes_name" = "Pokaż trasy rowerowe z sieci węzłów";
 "rendering_attr_piste_type_nordic_name" = "Skandynawski";
 "routeInfo_piste_difficulty_name" = "Trudność trasy";
-"rendering_attr_piste_difficulty_freeride_name" = "Freeride";
+"rendering_attr_piste_difficulty_freeride_name" = "Bardzo trudna";
 "rendering_attr_piste_difficulty_novice_name" = "Nowicjusz";
 "rendering_attr_surface_fine_gravel_name" = "Drobnyżwir";
 "routing_attr_piste_type_downhill_description" = "Stoki narciarskie do narciarstwa alpejskiego i zjazdowego oraz dostęp do wyciągów narciarskich.";
@@ -3165,7 +3165,7 @@
 "lang_da" = "Duński";
 "lang_af" = "Afrykański";
 "verify_email_address_descr" = "Kod weryfikacyjny wysłany na %@. Wprowadź go w polu poniżej.";
-"routeInfo_horse_scale_name" = "Trudność szlaków konnych";
+"routeInfo_horse_scale_name" = "Poziom trudności szlaków konnych";
 "nautical" = "Morski";
 "context_menu_item_edit_waypoint" = "Edytuj punkt trasy GPX";
 "backup_error_subscription_was_used" = "Subskrypcja lub promocja wykorzystana przez inne konto %@";

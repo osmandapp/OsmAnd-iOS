@@ -76,7 +76,7 @@
 {
     _data = [[OATableDataModel alloc] init];
     OATableSectionData *sliderSection = [OATableSectionData sectionData];
-    sliderSection.headerText = OALocalizedString(@"recalc_angle_dialog_descr");
+    sliderSection.footerText = OALocalizedString(@"recalc_angle_dialog_descr");
     [sliderSection addRowFromDictionary:@{
         kCellTypeKey: [OASegmentSliderTableViewCell getCellIdentifier],
         kCellTitleKey: OALocalizedString(@"shared_string_angle"),
@@ -150,7 +150,7 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
-    return [_data sectionDataForIndex:section].headerText;
+    return [_data sectionDataForIndex:section].footerText;
 }
 
 #pragma mark - Selectors

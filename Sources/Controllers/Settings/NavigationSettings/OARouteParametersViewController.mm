@@ -20,6 +20,7 @@
 #import "OARouteParameterValuesViewController.h"
 #import "OARoutingHelper.h"
 #import "OARoadSpeedsViewController.h"
+#import "OAAngleStraightLineViewController.h"
 #import "OAOsmAndFormatter.h"
 #import "Localization.h"
 #import "OAColors.h"
@@ -93,13 +94,24 @@
     NSMutableArray *tableData = [NSMutableArray array];
     NSMutableArray *otherArr = [NSMutableArray array];
     NSMutableArray *parametersArr = [NSMutableArray array];
-    OAAppSettings *settings = [OAAppSettings sharedManager];
     [otherArr addObject:@{
         @"type" : [OADeviceScreenTableViewCell getCellIdentifier],
         @"foregroundImage" : @"img_settings_sreen_route_parameters@3x.png",
         @"backgroundImage" : @"img_settings_device_bottom_light@3x.png",
     }];
-    
+
+    if ([_settings.routerService get:self.appMode] == EOARouteService::STRAIGHT)
+    {
+        [parametersArr addObject:
+         @{
+             @"key" : @"angleStraight",
+             @"title" : OALocalizedString(@"recalc_angle_dialog_title"),
+             @"icon" : [UIImage templateImageNamed:@"ic_custom_minimal_distance"],
+             @"value" : [NSString stringWithFormat:OALocalizedString(@"shared_string_angle_param"), (int) [_settings.routeStraightAngle get:self.appMode]],
+             @"type" : [OAIconTitleValueCell getCellIdentifier] }
+         ];
+    }
+
     double recalcDist = [_settings.routeRecalculationDistance get:self.appMode];
     recalcDist = recalcDist == 0 ? [OARoutingHelper getDefaultAllowedDeviation:self.appMode posTolerance:[OARoutingHelper getPosTolerance:0]] : recalcDist;
     NSString *descr = recalcDist == -1
@@ -118,7 +130,7 @@
          @"key" : @"reverseDir",
          @"title" : OALocalizedString(@"recalculate_wrong_dir"),
          @"icon" : @"ic_custom_reverse_direction",
-         @"value" : @([settings.disableWrongDirectionRecalc get:self.appMode]),
+         @"value" : @([_settings.disableWrongDirectionRecalc get:self.appMode]),
          @"type" : [OASettingSwitchCell getCellIdentifier] }
      ];
     
@@ -273,7 +285,7 @@
             @"key" : @"temp_limitation",
             @"title" : OALocalizedString(@"consider_limitations_param"),
             @"icon" : @"ic_custom_alert",
-            @"value" : @([settings.enableTimeConditionalRouting get:self.appMode]),
+            @"value" : @([_settings.enableTimeConditionalRouting get:self.appMode]),
             @"type" : [OASettingSwitchCell getCellIdentifier] }
         ];
         [parametersArr addObject:@{
@@ -498,9 +510,11 @@
         settingsViewController = [[OAAvoidPreferParametersViewController alloc] initWithAppMode:self.appMode isAvoid:NO];
     else if ([itemKey isEqualToString:@"roadSpeeds"])
         settingsViewController = [[OARoadSpeedsViewController alloc] initWithApplicationMode:self.appMode speedParameters:item];
+    else if ([itemKey isEqualToString:@"angleStraight"])
+        settingsViewController = [[OAAngleStraightLineViewController alloc] initWithAppMode:self.appMode];
 
     settingsViewController.delegate = self;
-    if ([itemKey isEqualToString:@"roadSpeeds"])
+    if ([itemKey isEqualToString:@"roadSpeeds"] || [itemKey isEqualToString:@"angleStraight"])
         [self presentViewController:settingsViewController animated:YES completion:nil];
     else
         [self showViewController:settingsViewController];

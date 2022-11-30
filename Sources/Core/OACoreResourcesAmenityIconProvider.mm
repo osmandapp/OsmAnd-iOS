@@ -90,7 +90,15 @@ sk_sp<SkImage> OACoreResourcesAmenityIconProvider::getIcon(
             {
                 bitmap = bitmapIt.value();
             }
-            
+
+            if (!qFuzzyCompare(textScaleFactor, 1.0f) && bitmap)
+            {
+                bitmap = OsmAnd::SkiaUtilities::scaleImage(
+                    bitmap,
+                    textScaleFactor,
+                    textScaleFactor);
+            }
+
             return bitmap;
         }
         

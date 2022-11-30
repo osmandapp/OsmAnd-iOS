@@ -14,7 +14,6 @@
 #import "OATableSectionData.h"
 #import "OAStatusBackupTableViewController.h"
 #import "OATableRowData.h"
-#import "OANetworkSettingsHelper.h"
 #import "OABackupHelper.h"
 #import "OABackupDbHelper.h"
 #import "OALocalFile.h"
@@ -38,22 +37,22 @@
     OALocalFile *_localFile;
     OARemoteFile *_remoteFile;
     OANetworkSettingsHelper *_settingsHelper;
-    id _backupExportImportListener;
-
+    
     OATableDataModel *_data;
     NSInteger _itemSection;
+    EOABackupSyncOperationType _operation;
 }
 
 - (instancetype)initWithLocalFile:(OALocalFile *)localeFile
                        remoteFile:(OARemoteFile *)remoteFile
-       backupExportImportListener:(id)backupExportImportListener
+                        operation:(EOABackupSyncOperationType)operation
 {
     self = [super init];
     if (self)
     {
         _localFile = localeFile;
         _remoteFile = remoteFile;
-        _backupExportImportListener = backupExportImportListener;
+        _operation = operation;
     }
     return self;
 }
@@ -82,7 +81,22 @@
 - (void)applyLocalization
 {
     [self.closeButton setTitle:OALocalizedString(@"shared_string_close") forState:UIControlStateNormal];
-    self.titleView.text = OALocalizedString(@"cloud_conflict");
+    self.titleView.text = [self titleForOperation:_operation];
+}
+
+- (NSString *) titleForOperation:(EOABackupSyncOperationType)operation
+{
+    switch (operation)
+    {
+        case EOABackupSyncOperationDownload:
+            return OALocalizedString(@"remote_item");
+        case EOABackupSyncOperationUpload:
+            return OALocalizedString(@"local_item");
+        case EOABackupSyncOperationDelete:
+            return OALocalizedString(@"deleted_item");
+        default:
+            return OALocalizedString(@"cloud_conflict");
+    }
 }
 
 - (CGFloat) initialHeight
@@ -90,15 +104,129 @@
     return DeviceScreenHeight / 2;
 }
 
+- (BOOL) isRowEnabled:(NSString *)fileName
+{
+    OAImportBackupTask *importTask = [_settingsHelper getImportTask:fileName];
+    OAExportBackupTask *exportTask = [_settingsHelper getExportTask:fileName];
+    return exportTask == nil && importTask == nil;
+}
+
+- (void)populateConflictActions:(OASettingsItem *)item itemInfoSection:(OATableSectionData *)itemInfoSection
+{
+    OATableRowData *uploadLocalRow = [[OATableRowData alloc] initWithData:@{
+        kCellTypeKey: [OARightIconTableViewCell getCellIdentifier],
+        kCellKeyKey: @"uploadLocal",
+        kCellTitleKey: OALocalizedString(@"upload_local_version"),
+        kCellSecondaryIconName: @"ic_custom_globe_upload",
+        kCellIconTint: @(color_primary_purple)
+    }];
+    
+    OATableRowData *downloadCloudRow = [[OATableRowData alloc] initWithData:@{
+        kCellTypeKey: [OARightIconTableViewCell getCellIdentifier],
+        kCellKeyKey: @"downloadCloud",
+        kCellTitleKey: OALocalizedString(@"dowload_cloud_version"),
+        kCellSecondaryIconName: @"ic_custom_device_download",
+        kCellIconTint: @(color_primary_purple)
+    }];
+    
+    NSString *fileName = [OABackupHelper getItemFileName:item];
+    BOOL enabled = [self isRowEnabled:fileName];
+    [uploadLocalRow setObj:@(enabled) forKey:@"enabled"];
+    [downloadCloudRow setObj:@(enabled) forKey:@"enabled"];
+    [uploadLocalRow setDescr:[self.delegate getDescriptionForItemType:item.type
+                                                             fileName:fileName
+                                                              summary:OALocalizedString(@"shared_string_changed")]];
+    
+    [downloadCloudRow setDescr:[self.delegate generateTimeString:_remoteFile.updatetimems
+                                                         summary:OALocalizedString(@"shared_string_changed")]];
+    
+    [itemInfoSection addRow:uploadLocalRow];
+    [itemInfoSection addRow:downloadCloudRow];
+}
+
+- (void)populateDeleteActions:(OASettingsItem *)item itemInfoSection:(OATableSectionData *)itemInfoSection
+{
+    OATableRowData *deleteCloudRow = [[OATableRowData alloc] initWithData:@{
+        kCellTypeKey: [OARightIconTableViewCell getCellIdentifier],
+        kCellKeyKey: @"deleteCloud",
+        kCellTitleKey: OALocalizedString(@"backup_delete_from_cloud"),
+        kCellSecondaryIconName: @"ic_custom_remove",
+        kCellIconTint: @(color_primary_red)
+    }];
+    
+    OATableRowData *downloadCloudRow = [[OATableRowData alloc] initWithData:@{
+        kCellTypeKey: [OARightIconTableViewCell getCellIdentifier],
+        kCellKeyKey: @"downloadCloud",
+        kCellTitleKey: OALocalizedString(@"dowload_cloud_version"),
+        kCellSecondaryIconName: @"ic_custom_device_download",
+        kCellIconTint: @(color_primary_purple)
+    }];
+    
+    NSString *fileName = [OABackupHelper getItemFileName:item];
+    BOOL enabled = [self isRowEnabled:fileName];
+    [deleteCloudRow setObj:@(enabled) forKey:@"enabled"];
+    [downloadCloudRow setObj:@(enabled) forKey:@"enabled"];
+    [deleteCloudRow setDescr:[self.delegate getDescriptionForItemType:item.type
+                                                             fileName:fileName
+                                                              summary:OALocalizedString(@"shared_string_changed")]];
+    
+    [downloadCloudRow setDescr:[self.delegate generateTimeString:_remoteFile.updatetimems
+                                                         summary:OALocalizedString(@"shared_string_changed")]];
+    
+    [itemInfoSection addRow:deleteCloudRow];
+    [itemInfoSection addRow:downloadCloudRow];
+}
+
+- (void)populateUploadActions:(OASettingsItem *)item itemInfoSection:(OATableSectionData *)itemInfoSection
+{
+    OATableRowData *uploadLocalRow = [[OATableRowData alloc] initWithData:@{
+        kCellTypeKey: [OARightIconTableViewCell getCellIdentifier],
+        kCellKeyKey: @"uploadLocal",
+        kCellTitleKey: OALocalizedString(@"upload_local_version"),
+        kCellSecondaryIconName: @"ic_custom_globe_upload",
+        kCellIconTint: @(color_primary_purple)
+    }];
+    
+    NSString *fileName = [OABackupHelper getItemFileName:item];
+    BOOL enabled = [self isRowEnabled:fileName];
+    [uploadLocalRow setObj:@(enabled) forKey:@"enabled"];
+    [uploadLocalRow setDescr:[self.delegate getDescriptionForItemType:item.type
+                                                             fileName:fileName
+                                                              summary:OALocalizedString(@"shared_string_changed")]];
+    
+    [itemInfoSection addRow:uploadLocalRow];
+}
+
+- (void)populateDownloadActions:(OASettingsItem *)item itemInfoSection:(OATableSectionData *)itemInfoSection
+{
+    OATableRowData *downloadCloudRow = [[OATableRowData alloc] initWithData:@{
+        kCellTypeKey: [OARightIconTableViewCell getCellIdentifier],
+        kCellKeyKey: @"downloadCloud",
+        kCellTitleKey: OALocalizedString(@"dowload_cloud_version"),
+        kCellSecondaryIconName: @"ic_custom_device_download",
+        kCellIconTint: @(color_primary_purple)
+    }];
+    
+    NSString *fileName = [OABackupHelper getItemFileName:item];
+    BOOL enabled = [self isRowEnabled:fileName];
+    [downloadCloudRow setObj:@(enabled) forKey:@"enabled"];
+    
+    [downloadCloudRow setDescr:[self.delegate generateTimeString:_remoteFile.updatetimems
+                                                         summary:OALocalizedString(@"shared_string_changed")]];
+    
+    [itemInfoSection addRow:downloadCloudRow];
+}
+
 - (void)generateData
 {
     _data = [[OATableDataModel alloc] init];
     OATableSectionData *itemInfoSection = [OATableSectionData sectionData];
     
-    NSString *name = [_localFile.item getPublicName];
-    if ([_localFile.item isKindOfClass:OAFileSettingsItem.class])
+    OASettingsItem *item = _operation != EOABackupSyncOperationUpload ? _remoteFile.item : _localFile.item;
+    NSString *name = [item getPublicName];
+    if ([item isKindOfClass:OAFileSettingsItem.class])
     {
-        OAFileSettingsItem *flItem = (OAFileSettingsItem *) _localFile.item;
+        OAFileSettingsItem *flItem = (OAFileSettingsItem *) item;
         if (flItem.subtype == EOASettingsItemFileSubtypeVoiceTTS)
             name = [NSString stringWithFormat:@"%@ (%@)", name, OALocalizedString(@"tts")];
         else if (flItem.subtype == EOASettingsItemFileSubtypeVoice)
@@ -112,49 +240,33 @@
         kCellIconTint: @(color_icon_inactive)
     }];
 
-    OATableRowData *uploadLocalRow = [[OATableRowData alloc] initWithData:@{
-        kCellTypeKey: [OARightIconTableViewCell getCellIdentifier],
-        kCellKeyKey: @"uploadLocal",
-        kCellTitleKey: OALocalizedString(@"upload_local_version"),
-        kCellSecondaryIconName: @"ic_custom_globe_upload",
-        kCellIconTint: @(color_primary_purple)
-    }];
-
-    OATableRowData *downloadCloudRow = [[OATableRowData alloc] initWithData:@{
-        kCellTypeKey: [OARightIconTableViewCell getCellIdentifier],
-        kCellKeyKey: @"downloadCloud",
-        kCellTitleKey: OALocalizedString(@"dowload_cloud_version"),
-        kCellSecondaryIconName: @"ic_custom_device_download",
-        kCellIconTint: @(color_primary_purple)
-    }];
-
-    NSString *fileName = [OABackupHelper getItemFileName:_localFile.item];
-    OAImportBackupTask *importTask = [_settingsHelper getImportTask:fileName];
-    OAExportBackupTask *exportTask = [_settingsHelper getExportTask:fileName];
-    BOOL enabled = exportTask == nil && importTask == nil;
-    [uploadLocalRow setObj:@(enabled) forKey:@"enabled"];
-    [downloadCloudRow setObj:@(enabled) forKey:@"enabled"];
-
     if (self.delegate)
     {
-        [self.delegate setRowIcon:itemInfoRow item:_localFile.item];
-        [itemInfoRow setDescr:[self.delegate getDescriptionForItemType:_localFile.item.type
-                                                              fileName:fileName
-                                                               summary:OALocalizedString(@"cloud_last_backup")]];
+        [self.delegate setRowIcon:itemInfoRow item:item];
+        long timestamp = 0;
+        if (_operation != EOABackupSyncOperationUpload)
+            timestamp = _remoteFile.updatetimems;
+        else
+            timestamp = _localFile.localModifiedTime;
 
-        [uploadLocalRow setDescr:[self.delegate getDescriptionForItemType:_localFile.item.type
-                                                                 fileName:fileName
-                                                                  summary:OALocalizedString(@"shared_string_changed")]];
-
-        [downloadCloudRow setDescr:[self.delegate generateTimeString:_remoteFile.updatetimems
-                                                             summary:OALocalizedString(@"shared_string_changed")]];
+        [itemInfoRow setDescr:[self.delegate generateTimeString:timestamp summary:[self.delegate localizedSummaryForOperation:_operation]]];
     }
     [itemInfoSection addRow:itemInfoRow];
-    [itemInfoSection addRow:uploadLocalRow];
-    [itemInfoSection addRow:downloadCloudRow];
+    if (_operation == EOABackupSyncOperationNone)
+        [self populateConflictActions:item itemInfoSection:itemInfoSection];
+    else if (_operation == EOABackupSyncOperationDelete)
+        [self populateDeleteActions:item itemInfoSection:itemInfoSection];
+    else if (_operation == EOABackupSyncOperationUpload)
+        [self populateUploadActions:item itemInfoSection:itemInfoSection];
+    else if (_operation == EOABackupSyncOperationDownload)
+        [self populateDownloadActions:item itemInfoSection:itemInfoSection];
+        
     
-    itemInfoSection.headerText = OALocalizedString(@"backup_conflicts_action_descr");
-    itemInfoSection.footerText = OALocalizedString(@"cloud_contains_newer_changes");
+    if (_operation == EOABackupSyncOperationNone)
+    {
+        itemInfoSection.headerText = OALocalizedString(@"backup_conflicts_action_descr");
+        itemInfoSection.footerText = OALocalizedString(@"cloud_contains_newer_changes");
+    }
 
     [_data addSection:itemInfoSection];
     _itemSection = _data.sectionCount - 1;
@@ -263,11 +375,13 @@
     if ([item boolForKey:@"enabled"])
     {
         [self dismissViewControllerAnimated:YES completion:^{
-            NSString *fileName = [OABackupHelper getItemFileName:_localFile.item];
+            NSString *fileName = [OABackupHelper getItemFileName:_localFile ? _localFile.item : _remoteFile.item];
             if ([item.key isEqualToString:@"uploadLocal"])
                 [_settingsHelper syncSettingsItems:fileName localFile:_localFile remoteFile:_remoteFile operation:EOABackupSyncOperationUpload];
             else if ([item.key isEqualToString:@"downloadCloud"])
                 [_settingsHelper syncSettingsItems:fileName localFile:_localFile remoteFile:_remoteFile operation:EOABackupSyncOperationDownload];
+            else if ([item.key isEqualToString:@"deleteCloud"])
+                [_settingsHelper syncSettingsItems:fileName localFile:_localFile remoteFile:_remoteFile operation:EOABackupSyncOperationDelete];
         }];
     }
 }

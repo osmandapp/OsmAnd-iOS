@@ -18,7 +18,8 @@
 
 #include <generalRouter.h>
 
-#define kGoodsRestrictionsHeaderTopMargin 20
+#define kGoodsRestrictionsHeaderTopMargin 40
+#define kSidePadding 20
 
 typedef NS_ENUM(NSInteger, EOARouteParamType) {
     EOARouteParamTypeGroup = 0,
@@ -103,8 +104,6 @@ typedef NS_ENUM(NSInteger, EOARouteParamType) {
     self.tableView.dataSource = self;
     [self.tableView registerClass:OATableViewCustomFooterView.class
         forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
-    if (_isGoodsRestrictionsCategory)
-        [self setupTableHeaderViewWithText:OALocalizedString(@"routing_attr_goods_restrictions_header_name")];
 }
 
 - (void)applyLocalization
@@ -143,7 +142,6 @@ typedef NS_ENUM(NSInteger, EOARouteParamType) {
     {
         if (_isHazmatCategory || _isGoodsRestrictionsCategory)
         {
-            color = UIColorFromRGB(color_primary_purple);
             if (indexPath.section == 0)
             {
                 isSelected = (indexPath.row == 0 && !_isAnyCategorySelected) || (indexPath.row == 1 && _isAnyCategorySelected);
@@ -167,8 +165,6 @@ typedef NS_ENUM(NSInteger, EOARouteParamType) {
     {
         OALocalRoutingParameter *routeParam = _group.getRoutingParameters[indexPath.row];
         text = [routeParam getText];
-        icon = [[routeParam getIcon] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        color = [routeParam getTintColor];
         isSelected = _group.getSelected == _group.getRoutingParameters[indexPath.row];
     }
 
@@ -183,14 +179,12 @@ typedef NS_ENUM(NSInteger, EOARouteParamType) {
     if (cell)
     {
         cell.titleLabel.text = text;
-        cell.rightIconView.image = icon;
-        cell.rightIconView.tintColor = color != nil ? color : UIColorFromRGB([self.appMode getIconColor]);
+        cell.accessoryType = UITableViewCellAccessoryCheckmark;
 
         if (isSelected)
         {
             _indexSelected = indexPath.row;
-            cell.rightIconView.image = [UIImage templateImageNamed:@"menu_cell_selected"];
-            cell.rightIconView.tintColor = color != nil ? color : UIColorFromRGB([self.appMode getIconColor]);
+            cell.accessoryType = UITableViewCellAccessoryCheckmark;
             if (_isGoodsRestrictionsCategory && _indexSelected == 1)
             {
                 [cell descriptionVisibility:YES];
@@ -204,8 +198,7 @@ typedef NS_ENUM(NSInteger, EOARouteParamType) {
         }
         else
         {
-            cell.rightIconView.tintColor = UIColorFromRGB(color_icon_inactive);
-            [cell.rightIconView setImage:nil];
+            cell.accessoryType = UITableViewCellAccessoryNone;
         }
     }
     return cell;
@@ -324,6 +317,34 @@ typedef NS_ENUM(NSInteger, EOARouteParamType) {
     }];
     vw.label.attributedText = textStr;
     return vw;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    if (_isGoodsRestrictionsCategory)
+    {
+        NSString *text = OALocalizedString(@"routing_attr_goods_restrictions_header_name");
+        CGFloat textWidth = DeviceScreenWidth - (kSidePadding + OAUtilities.getLeftMargin) * 2;
+        CGFloat textHeight = [self heightForLabel:text];
+        _tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, textHeight + kSidePadding)];
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(kSidePadding + OAUtilities.getLeftMargin, kSidePadding, textWidth, textHeight)];
+        NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+        [style setLineSpacing:6];
+        label.attributedText = [[NSAttributedString alloc] initWithString:text
+                                                               attributes:@{NSParagraphStyleAttributeName : style,
+                                                                            NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer),
+                                                                            NSFontAttributeName : [UIFont systemFontOfSize:13.0],
+                                                                            NSBackgroundColorAttributeName : UIColor.clearColor}];
+        label.textAlignment = NSTextAlignmentLeft;
+        label.numberOfLines = 0;
+        label.lineBreakMode = NSLineBreakByWordWrapping;
+        label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        _tableHeaderView.backgroundColor = UIColor.clearColor;
+        [_tableHeaderView addSubview:label];
+        self.tableView.tableHeaderView = _tableHeaderView;
+        return _tableHeaderView;
+    }
+    return nil;
 }
 
 @end

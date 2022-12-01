@@ -185,10 +185,15 @@
 - (NSArray<NSString *> *) getTagsMatchingWith:(NSString *)searchString
 {
     NSArray<NSString *> *tags = [self getAllTags];
-    if (tags)
-        return [tags filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF BEGINSWITH[c] %@", searchString]];
+    if (tags && searchString.length > 0)
+    {
+        NSString *searchStringWithPrefix = [NSString stringWithFormat:@"service:%@", searchString];
+        return [tags filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF BEGINSWITH[c] %@ OR SELF BEGINSWITH[c] %@", searchString, searchStringWithPrefix]];
+    }
     else
+    {
         return @[];
+    }
 }
 
 - (NSArray<NSString *> *) getValuesMatchingWith:(NSString *)searchString forTag:(NSString *)tag

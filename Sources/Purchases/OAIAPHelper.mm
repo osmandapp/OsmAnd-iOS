@@ -863,23 +863,6 @@ static OASubscriptionState *EXPIRED;
         }
     }
     
-//    NSData* receipt = [self getLocalReceipt];
-//    if (!_settings.shouldReqestReceipt && !receipt)
-//    {
-//        BOOL success = response.products.count > 0;
-//        _wasProductListFetched = success;
-//
-//        if (_completionHandler)
-//            _completionHandler(success);
-//
-//        _completionHandler = nil;
-//        return;
-//    }
-//    else if (receipt)
-//    {
-//        _settings.shouldReqestReceipt = YES;
-//    }
-    
     [self getActiveProducts:^(NSArray<OAProduct *> *products, NSDictionary<NSString *,NSDate *> *expirationDates, BOOL success) {
         
         if (products)

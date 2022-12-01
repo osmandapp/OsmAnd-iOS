@@ -863,6 +863,23 @@ static OASubscriptionState *EXPIRED;
         }
     }
     
+//    NSData* receipt = [self getLocalReceipt];
+//    if (!_settings.shouldReqestReceipt && !receipt)
+//    {
+//        BOOL success = response.products.count > 0;
+//        _wasProductListFetched = success;
+//
+//        if (_completionHandler)
+//            _completionHandler(success);
+//
+//        _completionHandler = nil;
+//        return;
+//    }
+//    else if (receipt)
+//    {
+//        _settings.shouldReqestReceipt = YES;
+//    }
+    
     [self getActiveProducts:^(NSArray<OAProduct *> *products, NSDictionary<NSString *,NSDate *> *expirationDates, BOOL success) {
         
         if (products)
@@ -1281,6 +1298,12 @@ static OASubscriptionState *EXPIRED;
         [_settings.billingUserEmail set:[email isKindOfClass:[NSString class]] ? (NSString *)email : @""];
 }
 
+- (NSData *) getLocalReceipt
+{
+    NSURL *receiptURL = [[NSBundle mainBundle] appStoreReceiptURL];
+    return [NSData dataWithContentsOfURL:receiptURL];
+}
+
 - (void) provideContentForProductIdentifier:(NSString * _Nonnull)productIdentifier transaction:(SKPaymentTransaction *)transaction
 {
     OAProduct *product = [self product:productIdentifier];
@@ -1330,8 +1353,7 @@ static OASubscriptionState *EXPIRED;
 
         if ([product isKindOfClass:[OASubscription class]])
         {
-            NSURL *receiptURL = [[NSBundle mainBundle] appStoreReceiptURL];
-            NSData *receipt = [NSData dataWithContentsOfURL:receiptURL];
+            NSData *receipt = [self getLocalReceipt];
             if (!receipt || !transaction)
             {
                 NSLog(@"Error: No local receipt or transaction");
@@ -1451,8 +1473,7 @@ static OASubscriptionState *EXPIRED;
 
 - (void) getActiveProducts:(RequestActiveProductsCompletionHandler)onComplete
 {
-    NSURL *receiptURL = [[NSBundle mainBundle] appStoreReceiptURL];
-    NSData *receipt = [NSData dataWithContentsOfURL:receiptURL];
+    NSData *receipt = [self getLocalReceipt];
     
 #if TARGET_OS_SIMULATOR
     if (onComplete)
@@ -1850,6 +1871,8 @@ static OASubscriptionState *EXPIRED;
 {
     if ([self needRequestBackupPurchase])
         [self checkBackupPurchase:onComplete];
+    else if (onComplete)
+        onComplete(YES);
 }
 
 - (OASubscription *) getAnyPurchasedOsmAndProSubscription

@@ -126,7 +126,7 @@
             @"title" : OALocalizedString(@"osmand_cloud"),
             @"value" : @"", // TODO: insert value
             @"description" : OALocalizedString(@"global_settings_descr"),
-            @"img" : @"ic_custom_restore",
+            @"img" : @"ic_custom_cloud_upload_colored_day",
             @"type" : [OAIconTitleValueCell getCellIdentifier]
         },
         @{
@@ -272,7 +272,7 @@
         {
             cell.textView.text = item[@"title"];
             cell.descriptionView.text = item[@"value"];
-            cell.leftIconView.image = [UIImage templateImageNamed:item[@"img"]];
+            cell.leftIconView.image = [item[@"name"] isEqualToString:@"backup_restore"] ? [UIImage imageNamed:item[@"img"]] : [UIImage templateImageNamed:item[@"img"]];
         }
         return cell;
     }

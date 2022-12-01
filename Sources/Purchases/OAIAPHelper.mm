@@ -1425,6 +1425,7 @@ static OASubscriptionState *EXPIRED;
 
 - (BOOL) needValidateReceipt
 {
+    
     if (!_settings.billingUserId.get)
         return YES;
     

@@ -710,8 +710,6 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 
 - (NSArray<OAWptPt *> *)collectRoutePointsFromSegment:(OATrkSegment *)segment segmentInd:(NSInteger)segmentInd
 {
-    OARouteImporter *routeImporter = [[OARouteImporter alloc] initWithTrkSeg:segment];
-    auto routeSegments = [routeImporter importRoute];
     NSArray<OAWptPt *> *routePointsRte = [_gpxData.gpxFile getRoutePoints:segmentInd];
     NSMutableArray<OAWptPt *> *routePoints = [NSMutableArray arrayWithArray:routePointsRte];
     NSArray<OAWptPt *> *points = segment.points;
@@ -721,6 +719,10 @@ static OAApplicationMode *DEFAULT_APP_MODE;
         [routePoints addObject:points[0]];
         [routePoints addObject:points[points.count - 1]];
     }
+    
+    OARouteImporter *routeImporter = [[OARouteImporter alloc] initWithTrkSeg:segment segmentRoutePoints:routePoints];
+    auto routeSegments = [routeImporter importRoute];
+    
     for (NSInteger i = 0; i < (NSInteger) routePoints.count - 1; i++)
     {
         NSArray<OAWptPt *> *pair = @[routePoints[i], routePoints[i + 1]];

@@ -20,6 +20,7 @@
     NSString *_file;
     OAGPXDocument *_gpxFile;
     OATrkSegment *_segment;
+    NSArray<OAWptPt *> *_segmentRoutePoints;
 
     std::vector<std::shared_ptr<RouteSegmentResult>> _route;
 }
@@ -33,11 +34,12 @@
     return self;
 }
 
-- (instancetype) initWithTrkSeg:(OATrkSegment *)segment
+- (instancetype) initWithTrkSeg:(OATrkSegment *)segment segmentRoutePoints:(NSArray<OAWptPt *> *)segmentRoutePoints
 {
     self = [super init];
     if (self) {
         _segment = segment;
+        _segmentRoutePoints = segmentRoutePoints;
     }
     return self;
 }
@@ -61,24 +63,26 @@
 {
     if (_segment)
     {
-        [self parseRoute:_segment];
+        [self parseRoute:_segment segmentRoutePoints:_segmentRoutePoints];
     }
     else if (_gpxFile)
     {
         NSArray<OATrkSegment *> *segments = [_gpxFile getNonEmptyTrkSegments:YES];
-        for (OATrkSegment *s in segments)
+        for (int i = 0; i < segments.count; i++)
         {
-            [self parseRoute:s];
+            OATrkSegment *segment = segments[i];
+            [self parseRoute:segment segmentRoutePoints:[_gpxFile getRoutePoints:i]];
         }
     }
 }
 
-- (void) parseRoute:(OATrkSegment *)segment
+- (void) parseRoute:(OATrkSegment *)segment segmentRoutePoints:(NSArray<OAWptPt *> *)segmentRoutePoints
 {
     RoutingIndex *region = new RoutingIndex();
     auto resources = std::make_shared<RouteDataResources>();
     
     [self collectLocations:resources segment:segment];
+    [self collectRoutePointIndexes:resources segmentRoutePoints:segmentRoutePoints];
     auto route = [self collectRouteSegments:region resources:resources segment:segment];
     [self collectRouteTypes:region segment:segment];
     for (auto& routeSegment : route)
@@ -107,6 +111,18 @@
                 loc.altitude = lastElevation;
             }
             locations.push_back(loc);
+        }
+    }
+}
+
+- (void) collectRoutePointIndexes:(std::shared_ptr<RouteDataResources> &)resources segmentRoutePoints:(NSArray<OAWptPt *> *)segmentRoutePoints
+{
+    vector<int> routePointIndexes = resources->routePointIndexes;
+    if (!routePointIndexes.empty())
+    {
+        for (OAWptPt *routePoint in segmentRoutePoints)
+        {
+            routePointIndexes.push_back((int) [routePoint getTrkPtIndex]);
         }
     }
 }

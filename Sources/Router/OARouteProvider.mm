@@ -366,7 +366,7 @@
         {
             [points addObject:[self createLocation:p]];
         }
-        OARouteImporter *routeImporter = [[OARouteImporter alloc] initWithTrkSeg:segment];
+        OARouteImporter *routeImporter = [[OARouteImporter alloc] initWithTrkSeg:segment segmentRoutePoints:[gpxFile getRoutePoints:selectedSegment]];
         return [routeImporter importRoute];
     }
     else

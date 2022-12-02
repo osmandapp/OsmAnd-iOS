@@ -18,6 +18,7 @@
 #import "OAColors.h"
 #import "OAMapHudViewController.h"
 #import "OAWeatherPlugin.h"
+#import "OAAutoObserverProxy.h"
 
 #import "OARoutePlanningHudViewController.h"
 #import "InitialRoutePlanningBottomSheetViewController.h"
@@ -61,6 +62,8 @@
     CALayer *_menuButtonSettingsDiv;
     CALayer *_menuButtonPluginsDiv;
     CALayer *_menuButtonMapsAndResourcesDiv;
+
+    OAAutoObserverProxy *_weatherChangeObserver;
 }
 
 - (void) viewWillLayoutSubviews
@@ -73,10 +76,16 @@
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    _weatherChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                       withHandler:@selector(onWeatherChanged)
+                                                        andObserve:[OsmAndApp instance].data.weatherChangeObservable];
+}
 
-    BOOL isWeatherPluginEnabled = [[OAPlugin getPlugin:OAWeatherPlugin.class] isEnabled];
-    if (isWeatherPluginEnabled != !self.menuButtonWeather.hidden)
+- (void)onWeatherChanged
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
         [self updateLayout];
+    });
 }
 
 - (void) updateLayout

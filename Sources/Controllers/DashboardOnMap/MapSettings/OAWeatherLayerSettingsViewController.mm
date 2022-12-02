@@ -115,7 +115,10 @@
     [self.backButton setImage:[self.backButton isDirectionRTL] ? backImage.imageFlippedForRightToLeftLayoutDirection : backImage
                      forState:UIControlStateNormal];
     [self.backButton addBlurEffect:YES cornerRadius:12. padding:0];
-    [self.doneButton addBlurEffect:YES cornerRadius:12. padding:5];
+    if (_mapPanel.hudViewController.weatherToolbar.needsSettingsForToolbar)
+        self.doneButtonContainerView.hidden = YES;
+    else
+        [self.doneButton addBlurEffect:YES cornerRadius:12. padding:5];
     
     self.tableView.delegate = self;
     self.tableView.dataSource = self;

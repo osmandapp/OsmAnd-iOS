@@ -22,7 +22,6 @@
 #import "OAColors.h"
 #import "OAMapLayers.h"
 #import "OAIconTitleValueCell.h"
-#import "OAWeatherPlugin.h"
 
 @interface OAConfigureMenuMainScreen () <OAAppModeCellDelegate>
 
@@ -114,19 +113,6 @@
     
     [self addControls:controlsList widgets:[_mapWidgetRegistry getLeftWidgetSet] mode:_settings.applicationMode.get];
 
-    if ([[OAPlugin getPlugin:OAWeatherPlugin.class] isEnabled])
-    {
-        [controlsList addObject:@{
-            @"title" : OALocalizedString(@"screen_settings_weather_toolbar"),
-            @"description" : @"",
-            @"key" : @"weather_button",
-            @"img" : @"ic_custom_umbrella",
-            @"selected" : @([_settings.weatherButtonIsOn get]),
-            @"secondaryImg" : @"",
-            @"type" : [OASettingSwitchCell getCellIdentifier]
-        }];
-    }
-    
     if (controlsList.count > 0)
         [arr addObjectsFromArray:controls];
     
@@ -232,13 +218,7 @@
         [[OARootViewController instance].mapPanel.hudViewController.quickActionController updateViewVisibility];
         return YES;
     }
-    else if ([key isEqualToString:@"weather_button"])
-    {
-        [_settings.weatherButtonIsOn set:sw.on];
-        [[OARootViewController instance].mapPanel.hudViewController updateWeatherButtonVisibility];
-        return YES;
-    }
-    
+
     [self setVisibility:indexPath visible:sw.on collapsed:NO];
     OAMapWidgetRegInfo *r = [_mapWidgetRegistry widgetByKey:key];
     if (r && r.widget)

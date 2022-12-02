@@ -68,7 +68,6 @@
 
 - (void) updateDependentButtonsVisibility;
 
-- (BOOL) shouldShowWeatherToolbar;
 - (BOOL) needsSettingsForWeatherToolbar;
 - (void) changeWeatherToolbarVisible;
 - (void) hideWeatherToolbarIfNeeded;

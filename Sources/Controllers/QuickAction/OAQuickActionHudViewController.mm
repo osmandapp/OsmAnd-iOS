@@ -10,6 +10,7 @@
 #import "OAAppSettings.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
+#import "OAMapInfoController.h"
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 #import "OAQuickActionsSheetView.h"
@@ -137,7 +138,7 @@
     [mapPanel isContextMenuVisible] ||
     [mapPanel gpxModeActive] ||
     [mapPanel isRouteInfoVisible] ||
-    [mapPanel.hudViewController shouldShowWeatherToolbar];
+    mapPanel.hudViewController.mapInfoController.weatherToolbarVisible;
     
     [UIView animateWithDuration:.25 animations:^{
         _quickActionFloatingButton.alpha = hideQuickButton ? 0 : 1;
@@ -280,7 +281,6 @@
     _isActionsViewVisible = YES;
     [_mapHudController hideTopControls];
     [_mapHudController showBottomControls:0. animated:YES];
-    [_mapHudController updateWeatherButtonVisibility];
     [self updateColors:NO];
 }
 
@@ -298,7 +298,6 @@
         [_actionsView removeFromSuperview];
         [_mapHudController showTopControls:NO];
         [_mapHudController showBottomControls:0. animated:YES];
-        [_mapHudController updateWeatherButtonVisibility];
     }];
     [self updateColors:NO];
 }

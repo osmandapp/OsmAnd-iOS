@@ -59,7 +59,6 @@
 {
     [super setEnabled:enabled];
     [[OsmAndApp instance].data setWeather:enabled ? [_lastUsedWeather get] : NO];
-    [[self getMapPanelViewController].hudViewController updateWeatherButtonVisibility];
 }
 
 - (BOOL)isEnabled
@@ -76,7 +75,6 @@
 - (void) updateLayers
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [[self getMapPanelViewController].hudViewController updateWeatherButtonVisibility];
         if ([self isEnabled])
         {
             if (!_weatherTempControl)

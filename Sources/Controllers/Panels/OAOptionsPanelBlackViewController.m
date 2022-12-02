@@ -16,6 +16,8 @@
 #import "OAHelpViewController.h"
 #import "OAPluginsViewController.h"
 #import "OAColors.h"
+#import "OAMapHudViewController.h"
+#import "OAWeatherPlugin.h"
 
 #import "OARoutePlanningHudViewController.h"
 #import "InitialRoutePlanningBottomSheetViewController.h"
@@ -38,6 +40,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *menuButtonMyWaypoints;
 @property (weak, nonatomic) IBOutlet UIButton *menuButtonNavigation;
 @property (weak, nonatomic) IBOutlet UIButton *menuButtonPlanRoute;
+@property (weak, nonatomic) IBOutlet UIButton *menuButtonWeather;
 @property (weak, nonatomic) IBOutlet UIButton *menuButtonSettings;
 @property (weak, nonatomic) IBOutlet UIButton *menuButtonMapsAndResources;
 @property (weak, nonatomic) IBOutlet UIButton *menuButtonConfigureScreen;
@@ -53,6 +56,7 @@
     CALayer *_menuButtonMyWaypointsDiv;
     CALayer *_menuButtonNavigationDiv;
     CALayer *_menuButtonPlanRouteDiv;
+    CALayer *_menuButtonWeatherDiv;
     CALayer *_menuButtonConfigureScreenDiv;
     CALayer *_menuButtonSettingsDiv;
     CALayer *_menuButtonPluginsDiv;
@@ -66,21 +70,45 @@
     [self updateLayout];
 }
 
+- (void) viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+
+    BOOL isWeatherPluginEnabled = [[OAPlugin getPlugin:OAWeatherPlugin.class] isEnabled];
+    if (isWeatherPluginEnabled != !self.menuButtonWeather.hidden)
+        [self updateLayout];
+}
+
 - (void) updateLayout
 {
     CGFloat topY = [OAUtilities getStatusBarHeight];
     CGFloat buttonHeight = 50.0;
     CGFloat width = kDrawerWidth;
+    BOOL isWeatherPluginEnabled = [[OAPlugin getPlugin:OAWeatherPlugin.class] isEnabled];
 
-    _menuButtonPlanRouteDiv.hidden = NO;
+    if (isWeatherPluginEnabled)
+        _menuButtonWeatherDiv.hidden = NO;
+    else
+        _menuButtonPlanRouteDiv.hidden = NO;
     
-    NSArray<UIButton *> *topButtons = @[ self.menuButtonMaps,
-                                         self.menuButtonMyData,
-                                         self.menuButtonMyWaypoints,
-                                         self.menuButtonMapsAndResources,
-                                         self.menuButtonNavigation,
-                                         self.menuButtonPlanRoute
-                                         ];
+    NSMutableArray<UIButton *> *topButtons = [NSMutableArray arrayWithObjects:
+                                              self.menuButtonMaps,
+                                              self.menuButtonMyData,
+                                              self.menuButtonMyWaypoints,
+                                              self.menuButtonMapsAndResources,
+                                              self.menuButtonNavigation,
+                                              self.menuButtonPlanRoute,
+                                              nil
+                                             ];
+    if (isWeatherPluginEnabled)
+    {
+        self.menuButtonWeather.hidden = NO;
+        [topButtons addObject:self.menuButtonWeather];
+    }
+    else
+    {
+        self.menuButtonWeather.hidden = YES;
+    }
     
     NSArray<UIButton *> *bottomButtons = @[ self.menuButtonConfigureScreen,
                                             self.menuButtonPlugins,
@@ -88,7 +116,7 @@
                                             self.menuButtonHelp
                                             ];
     
-    CALayer *bottomDiv = _menuButtonPlanRouteDiv;
+    CALayer *bottomDiv = _menuButtonWeatherDiv;
     
     NSInteger buttonsCount = topButtons.count + bottomButtons.count;
     CGFloat buttonsHeight = buttonHeight * buttonsCount;
@@ -143,6 +171,7 @@
     _menuButtonMyWaypointsDiv.frame = CGRectMake(divX, divY, divW, divH);
     _menuButtonNavigationDiv.frame = CGRectMake(divX, divY, divW, divH);
     _menuButtonPlanRouteDiv.frame = CGRectMake(divX, divY, divW, divH);
+    _menuButtonWeatherDiv.frame = CGRectMake(divX, divY, divW, divH);
     _menuButtonMapsAndResourcesDiv.frame = CGRectMake(divX, divY, divW, divH);
     _menuButtonConfigureScreenDiv.frame = CGRectMake(divX, divY, divW, divH);
     _menuButtonSettingsDiv.frame = CGRectMake(divX, divY, divW, divH);
@@ -184,7 +213,6 @@
 - (void) viewDidLoad
 {
     [super viewDidLoad];
-    
 
     self.automaticallyAdjustsScrollViewInsets = NO;
 
@@ -193,6 +221,7 @@
     _menuButtonMyWaypointsDiv = [[CALayer alloc] init];
     _menuButtonNavigationDiv = [[CALayer alloc] init];
     _menuButtonPlanRouteDiv = [[CALayer alloc] init];
+    _menuButtonWeatherDiv = [[CALayer alloc] init];
     _menuButtonMapsAndResourcesDiv = [[CALayer alloc] init];
     _menuButtonConfigureScreenDiv = [[CALayer alloc] init];
     _menuButtonSettingsDiv = [[CALayer alloc] init];
@@ -205,6 +234,7 @@
     _menuButtonMyWaypointsDiv.backgroundColor = divColor.CGColor;
     _menuButtonNavigationDiv.backgroundColor = divColor.CGColor;
     _menuButtonPlanRouteDiv.backgroundColor = divColor.CGColor;
+    _menuButtonWeatherDiv.backgroundColor = divColor.CGColor;
     _menuButtonMapsAndResourcesDiv.backgroundColor = divColor.CGColor;
     _menuButtonConfigureScreenDiv.backgroundColor = divColor.CGColor;
     _menuButtonSettingsDiv.backgroundColor = divColor.CGColor;
@@ -221,6 +251,7 @@
     [_menuButtonHelp setTitle:OALocalizedString(@"menu_help") forState:UIControlStateNormal];
     [_menuButtonNavigation setTitle:OALocalizedString(@"shared_string_navigation") forState:UIControlStateNormal];
     [_menuButtonPlanRoute setTitle:OALocalizedString(@"plan_route") forState:UIControlStateNormal];
+    [_menuButtonWeather setTitle:OALocalizedString(@"product_title_weather") forState:UIControlStateNormal];
     [_menuButtonPlugins setTitle:OALocalizedString(@"plugins") forState:UIControlStateNormal];
     
     [_menuButtonMaps.layer addSublayer:_menuButtonMapsDiv];
@@ -231,6 +262,7 @@
     [_menuButtonConfigureScreen.layer addSublayer:_menuButtonConfigureScreenDiv];
     [_menuButtonSettings.layer addSublayer:_menuButtonSettingsDiv];
     [_menuButtonPlanRoute.layer addSublayer:_menuButtonPlanRouteDiv];
+    [_menuButtonWeather.layer addSublayer:_menuButtonWeatherDiv];
     [_menuButtonPlugins.layer addSublayer:_menuButtonPluginsDiv];
     
     [_menuButtonMaps setImage:[UIImage templateImageNamed:@"left_menu_icon_map.png"] forState:UIControlStateNormal];
@@ -242,6 +274,7 @@
     [_menuButtonHelp setImage:[UIImage templateImageNamed:@"left_menu_icon_about.png"] forState:UIControlStateNormal];
     [_menuButtonNavigation setImage:[UIImage templateImageNamed:@"left_menu_icon_navigation.png"] forState:UIControlStateNormal];
     [_menuButtonPlanRoute setImage:[UIImage templateImageNamed:@"ic_custom_routes.png"] forState:UIControlStateNormal];
+    [_menuButtonWeather setImage:[UIImage templateImageNamed:@"ic_custom_umbrella.png"] forState:UIControlStateNormal];
     [_menuButtonPlugins setImage:[UIImage templateImageNamed:@"left_menu_icon_plugins"] forState:UIControlStateNormal];
 
     [_menuButtonMaps setTintColor:UIColorFromRGB(color_options_panel_icon)];
@@ -253,6 +286,7 @@
     [_menuButtonHelp setTintColor:UIColorFromRGB(color_options_panel_icon)];
     [_menuButtonNavigation setTintColor:UIColorFromRGB(color_options_panel_icon)];
     [_menuButtonPlanRoute setTintColor:UIColorFromRGB(color_options_panel_icon)];
+    [_menuButtonWeather setTintColor:UIColorFromRGB(color_options_panel_icon)];
     [_menuButtonPlugins setTintColor:UIColorFromRGB(color_options_panel_icon)];
 }
 
@@ -292,6 +326,12 @@
     [self.sidePanelController toggleLeftPanel:self];
     InitialRoutePlanningBottomSheetViewController *bottomSheet = [[InitialRoutePlanningBottomSheetViewController alloc] init];
     [bottomSheet presentInViewController:OARootViewController.instance.mapPanel.mapViewController];
+}
+
+- (IBAction)weatherButtonClicked:(id)sender
+{
+    [self.sidePanelController toggleLeftPanel:self];
+    [[OARootViewController instance].mapPanel.hudViewController changeWeatherToolbarVisible];
 }
 
 - (IBAction) configureScreenButtonClicked:(id)sender

@@ -314,7 +314,7 @@
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         [self applyCorrectViewSize];
         [self updateControlsLayout:[self getHudTopOffset]];
-        BOOL showWeatherToolbar = [self shouldShowWeatherToolbar];
+        BOOL showWeatherToolbar = _mapInfoController.weatherToolbarVisible;
         if (showWeatherToolbar)
             [_mapInfoController updateWeatherToolbarVisible];
         if (!showWeatherToolbar || [OAUtilities isLandscape])
@@ -355,19 +355,9 @@
     return [self shouldShowCompass:_mapViewController.mapRendererView.azimuth];
 }
 
-- (BOOL)shouldShowWeatherButton
-{
-    return [[OAAppSettings sharedManager].weatherButtonIsOn get] && [[OAPlugin getPlugin:OAWeatherPlugin.class] isEnabled];
-}
-
-- (BOOL)shouldShowWeatherToolbar
-{
-    return _mapInfoController.weatherToolbarVisible && [self shouldShowWeatherButton];
-}
-
 - (BOOL)needsSettingsForWeatherToolbar
 {
-    return [self shouldShowWeatherToolbar] || _weatherToolbar.needsSettingsForToolbar;
+    return _mapInfoController.weatherToolbarVisible || _weatherToolbar.needsSettingsForToolbar;
 }
 
 - (void)changeWeatherToolbarVisible
@@ -379,7 +369,7 @@
 
 - (void)hideWeatherToolbarIfNeeded
 {
-    if ([self shouldShowWeatherToolbar])
+    if (_mapInfoController.weatherToolbarVisible)
         [self changeWeatherToolbarVisible];
 }
 
@@ -491,6 +481,7 @@
     [self updateRouteButton:NO followingMode:NO];
 
     [_weatherButton updateColorsForPressedState:NO];
+    [_weatherButton setImage:[UIImage templateImageNamed:@"ic_custom_cancel"] forState:UIControlStateNormal];
     _weatherButton.tintColorDay = UIColorFromRGB(color_primary_purple);
     _weatherButton.tintColorNight = UIColorFromRGB(color_primary_light_blue);
 
@@ -701,7 +692,6 @@
 - (void) updateDependentButtonsVisibility
 {
     [_quickActionController updateViewVisibility];
-    [self updateWeatherButtonVisibility];
 }
 
 - (void) onApplicationModeChanged:(OAApplicationMode *)prevMode
@@ -747,25 +737,10 @@
 
 - (void) updateWeatherButtonVisibility
 {
-    BOOL isQuickActionSheetVisible = [self.quickActionController isActionSheetVisible];
-    BOOL scrollableHudVisible = _mapPanelViewController.scrollableHudViewController != nil || _mapPanelViewController.prevScrollableHudViewController != nil;
-    BOOL hideWeatherButton = ![self shouldShowWeatherButton]
-        || self.contextMenuMode
-        || isQuickActionSheetVisible
-        || scrollableHudVisible
-        || [_mapPanelViewController isRouteInfoVisible]
-        || [_mapPanelViewController isContextMenuVisible];
-
-
-    if (hideWeatherButton)
-    {
-        _mapInfoController.weatherToolbarVisible = NO;
-        [self hideWeatherButton];
-    }
-    else
-    {
+    if (!self.weatherToolbar.hidden && _weatherButton.alpha < 1.)
         [self showWeatherButton];
-    }
+    else if (self.weatherToolbar.hidden && _weatherButton.alpha > 0.)
+        [self hideWeatherButton];
 }
 
 - (void) showCompass
@@ -1227,7 +1202,7 @@
 
 - (void) showTopControls:(BOOL)onlyMapSettingsAndSearch
 {
-    BOOL isWeatherToolbarVisible = [self shouldShowWeatherToolbar];
+    BOOL isWeatherToolbarVisible = _mapInfoController.weatherToolbarVisible;
     BOOL scrollableHudVisible = _mapPanelViewController.scrollableHudViewController != nil || _mapPanelViewController.prevScrollableHudViewController != nil;
     CGFloat alphaEx = onlyMapSettingsAndSearch || self.contextMenuMode || isWeatherToolbarVisible || scrollableHudVisible ? 0.0 : 1.0;
 
@@ -1317,7 +1292,7 @@
     if ([OAUtilities isLandscape])
         _weatherButton.frame = CGRectMake(self.view.bounds.size.width - 3 * kButtonWidth - 2 * kButtonOffset - [self getExtraScreenOffset], topSpace - _weatherButton.bounds.size.height, _weatherButton.bounds.size.width, _weatherButton.bounds.size.height);
     else
-        _weatherButton.frame = CGRectMake([self getExtraScreenOffset], topSpace - _weatherButton.bounds.size.height - ([self shouldShowWeatherToolbar] ? 0. : (kButtonOffset + _optionsMenuButton.bounds.size.height)), _weatherButton.bounds.size.width, _weatherButton.bounds.size.height);
+        _weatherButton.frame = CGRectMake([self getExtraScreenOffset], topSpace - _weatherButton.bounds.size.height - (_mapInfoController.weatherToolbarVisible ? 0. : (kButtonOffset + _optionsMenuButton.bounds.size.height)), _weatherButton.bounds.size.width, _weatherButton.bounds.size.height);
 
     _optionsMenuButton.frame = CGRectMake([self getExtraScreenOffset], topSpace - _optionsMenuButton.bounds.size.height, _optionsMenuButton.bounds.size.width, _optionsMenuButton.bounds.size.height);
     _driveModeButton.frame = CGRectMake([self getExtraScreenOffset] + kButtonWidth + kButtonOffset, topSpace - _driveModeButton.bounds.size.height, _driveModeButton.bounds.size.width, _driveModeButton.bounds.size.height);
@@ -1329,7 +1304,7 @@
 
 - (void) showBottomControls:(CGFloat)menuHeight animated:(BOOL)animated
 {
-    BOOL isWeatherToolbarVisible = [self shouldShowWeatherToolbar];
+    BOOL isWeatherToolbarVisible = _mapInfoController.weatherToolbarVisible;
     BOOL scrollableHudVisible = _mapPanelViewController.scrollableHudViewController != nil || _mapPanelViewController.prevScrollableHudViewController != nil;
     CGFloat bottomMargin = [OAUtilities getBottomMargin];
     if (_mapModeButton.alpha == 0.0 || _mapModeButton.frame.origin.y != DeviceScreenHeight - 69.0 - menuHeight - bottomMargin)
@@ -1533,7 +1508,7 @@
 
 - (void) streetViewLayoutDidChange:(UIView *)streetNameView animate:(BOOL)animated
 {
-    BOOL isLandscape = [OAUtilities isLandscape];
+    BOOL isLandscape = [OAUtilities isLandscape] && ![OAUtilities isIPad];
     if (isLandscape)
         [self layoutButtonsToStreet:streetNameView animated:animated];
     else

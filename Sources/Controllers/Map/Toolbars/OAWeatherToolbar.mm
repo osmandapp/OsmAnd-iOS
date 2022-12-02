@@ -182,8 +182,8 @@
 
 - (BOOL)updateInfo
 {
-    OAMapHudViewController *hudViewController = [OARootViewController instance].mapPanel.hudViewController;
-    BOOL visible =  [hudViewController shouldShowWeatherToolbar];
+    OAMapInfoController *mapInfoController = [OARootViewController instance].mapPanel.hudViewController.mapInfoController;
+    BOOL visible =  mapInfoController.weatherToolbarVisible;
     [self updateVisibility:visible];
 
     return YES;

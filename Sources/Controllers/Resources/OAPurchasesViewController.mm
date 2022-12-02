@@ -69,6 +69,7 @@ static BOOL _purchasesUpdated;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchaseFailed:) name:OAIAPProductPurchaseFailedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRestored:) name:OAIAPProductsRestoredNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRequested:) name:OAIAPProductsRequestSucceedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRequested:) name:OAIAPProductsRequestFailedNotification object:nil];
 
     OAAppSettings.sharedManager.lastReceiptValidationDate = [NSDate dateWithTimeIntervalSince1970:0];
     [[OARootViewController instance] requestProductsWithProgress:NO reload:YES];

@@ -17,6 +17,7 @@
 #import "OAWeatherPlugin.h"
 #import "OARootViewController.h"
 #import "OAMapHudViewController.h"
+#import "OAMapInfoController.h"
 
 #define COLLAPSED_PREFIX @"+"
 #define HIDE_PREFIX @"-"
@@ -51,17 +52,17 @@
 {
     NSArray<OAMapWidgetRegInfo *> *s = [NSArray arrayWithArray:left ? _leftWidgetSet.array : _rightWidgetSet.array];
     NSArray *weatherWidgets = @[kWeatherTemp, kWeatherPressure, kWeatherWind, kWeatherCloud, kWeatherPrecip];
-    BOOL shouldShowWeatherToolbar = [[OARootViewController instance].mapPanel.hudViewController shouldShowWeatherToolbar];
+    BOOL weatherToolbarVisible = [OARootViewController instance].mapPanel.hudViewController.mapInfoController.weatherToolbarVisible;
     for (OAMapWidgetRegInfo *r in s)
     {
-        if (r.widget && ((!shouldShowWeatherToolbar && ([r visible:mode] || [r.widget isExplicitlyVisible])) || (shouldShowWeatherToolbar && [weatherWidgets containsObject:r.key])))
+        if (r.widget && ((!weatherToolbarVisible && ([r visible:mode] || [r.widget isExplicitlyVisible])) || (weatherToolbarVisible && [weatherWidgets containsObject:r.key])))
             [stack addSubview:r.widget];
     }
     if (expanded)
     {
         for (OAMapWidgetRegInfo *r in s)
         {
-            if (r.widget && ((!shouldShowWeatherToolbar && [r visibleCollapsed:mode] && ![r.widget isExplicitlyVisible]) || (shouldShowWeatherToolbar && [weatherWidgets containsObject:r.key])))
+            if (r.widget && ((!weatherToolbarVisible && [r visibleCollapsed:mode] && ![r.widget isExplicitlyVisible]) || (weatherToolbarVisible && [weatherWidgets containsObject:r.key])))
                 [stack addSubview:r.widget];
         }
     }
@@ -89,10 +90,10 @@
 - (void) update:(OAApplicationMode *)mode expanded:(BOOL)expanded widgetSet:(NSOrderedSet<OAMapWidgetRegInfo *> *)widgetSet
 {
     NSArray *weatherWidgets = @[kWeatherTemp, kWeatherPressure, kWeatherWind, kWeatherCloud, kWeatherPrecip];
-    BOOL shouldShowWeatherToolbar = [[OARootViewController instance].mapPanel.hudViewController shouldShowWeatherToolbar];
+    BOOL weatherToolbarVisible = [OARootViewController instance].mapPanel.hudViewController.mapInfoController.weatherToolbarVisible;
     for (OAMapWidgetRegInfo *r in widgetSet)
     {
-        if (r.widget && ((!shouldShowWeatherToolbar && ([r visible:mode] || ([r visibleCollapsed:mode] && expanded))) || (shouldShowWeatherToolbar && [weatherWidgets containsObject:r.key])))
+        if (r.widget && ((!weatherToolbarVisible && ([r visible:mode] || ([r visibleCollapsed:mode] && expanded))) || (weatherToolbarVisible && [weatherWidgets containsObject:r.key])))
             [r.widget updateInfo];
     }
 }

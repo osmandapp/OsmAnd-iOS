@@ -101,6 +101,7 @@
 #import "OAOpenAddTrackViewController.h"
 #import "OASearchToolbarViewController.h"
 #import "OAWeatherLayerSettingsViewController.h"
+#import "OAMapInfoController.h"
 
 #include <OsmAndCore/CachingRoadLocator.h>
 #include <OsmAndCore/Data/Road.h>
@@ -144,6 +145,7 @@ typedef enum
     OAAutoObserverProxy* _addonsSwitchObserver;
     OAAutoObserverProxy* _destinationRemoveObserver;
     OAAutoObserverProxy* _mapillaryChangeObserver;
+    OAAutoObserverProxy *_weatherSettingsChangeObserver;
 
     BOOL _mapNeedsRestore;
     OAMapMode _mainMapMode;
@@ -213,6 +215,10 @@ typedef enum
     _mapillaryChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                          withHandler:@selector(onMapillaryChanged)
                                                           andObserve:_app.data.mapillaryChangeObservable];
+
+    _weatherSettingsChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                               withHandler:@selector(onWeatherSettingsChange:withKey:andValue:)
+                                                                andObserve:_app.data.weatherSettingsChangeObservable];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onMapGestureAction:) name:kNotificationMapGestureAction object:nil];
 
@@ -397,7 +403,7 @@ typedef enum
     else if ([controller isKindOfClass:OARouteLineAppearanceHudViewController.class])
         _activeTargetType = OATargetRouteLineAppearance;
     else if ([controller isKindOfClass:OAWeatherLayerSettingsViewController.class])
-        _activeTargetType = OATargetRouteWeatherLayerSettings;
+        _activeTargetType = OATargetWeatherLayerSettings;
 
     [self setupScrollableHud:controller];
 }
@@ -467,15 +473,22 @@ typedef enum
     return [self.targetMenuView getStatusBarStyle:[self contextMenuMode] defaultStyle:style];
 }
 
+- (BOOL) hasGpxActiveTargetType
+{
+    return _activeTargetType == OATargetGPX || _activeTargetType == OATargetRouteStartSelection || _activeTargetType == OATargetRouteFinishSelection || _activeTargetType == OATargetRouteIntermediateSelection || _activeTargetType == OATargetImpassableRoadSelection || _activeTargetType == OATargetHomeSelection || _activeTargetType == OATargetWorkSelection || _activeTargetType == OATargetRouteDetails || _activeTargetType == OATargetRouteDetailsGraph;
+}
+
 - (void) onMapillaryChanged
 {
     if (!_app.data.mapillary)
         [_mapillaryController hideMapillaryView];
 }
 
-- (BOOL) hasGpxActiveTargetType
+- (void) onWeatherSettingsChange:(id)observer withKey:(id)key andValue:(id)value
 {
-    return _activeTargetType == OATargetGPX || _activeTargetType == OATargetRouteStartSelection || _activeTargetType == OATargetRouteFinishSelection || _activeTargetType == OATargetRouteIntermediateSelection || _activeTargetType == OATargetImpassableRoadSelection || _activeTargetType == OATargetHomeSelection || _activeTargetType == OATargetWorkSelection || _activeTargetType == OATargetRouteDetails || _activeTargetType == OATargetRouteDetailsGraph;
+    NSString *operation = (NSString *) key;
+    if ([operation isEqualToString:kWeatherSettingsChanging])
+        _activeTargetType = self.hudViewController.mapInfoController.weatherToolbarVisible ? OATargetWeatherToolbar : OATargetNone;
 }
 
 - (void) onAddonsSwitch:(id)observable withKey:(id)key andValue:(id)value
@@ -1278,7 +1291,8 @@ typedef enum
     || (_activeTargetType == OATargetRoutePlanning && !_isNewContextMenuStillEnabled)
     || _activeTargetType == OATargetGPX
     || _activeTargetType == OATargetRouteLineAppearance
-    || _activeTargetType == OATargetRouteWeatherLayerSettings;
+    || _activeTargetType == OATargetWeatherLayerSettings
+    || _activeTargetType == OATargetWeatherToolbar;
 }
 
 - (void) showContextMenu:(OATargetPoint *)targetPoint saveState:(BOOL)saveState
@@ -2610,6 +2624,7 @@ typedef enum
     }
     [self doShowGpxItem:item state:state trackHudMode:trackHudMode];
 }
+
 
 - (void)doShowGpxItem:(OAGPX *)item
                 state:(OATrackMenuViewControllerState *)state

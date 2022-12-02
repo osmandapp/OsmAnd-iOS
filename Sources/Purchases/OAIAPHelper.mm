@@ -1281,6 +1281,12 @@ static OASubscriptionState *EXPIRED;
         [_settings.billingUserEmail set:[email isKindOfClass:[NSString class]] ? (NSString *)email : @""];
 }
 
+- (NSData *) getLocalReceipt
+{
+    NSURL *receiptURL = [[NSBundle mainBundle] appStoreReceiptURL];
+    return [NSData dataWithContentsOfURL:receiptURL];
+}
+
 - (void) provideContentForProductIdentifier:(NSString * _Nonnull)productIdentifier transaction:(SKPaymentTransaction *)transaction
 {
     OAProduct *product = [self product:productIdentifier];
@@ -1330,8 +1336,7 @@ static OASubscriptionState *EXPIRED;
 
         if ([product isKindOfClass:[OASubscription class]])
         {
-            NSURL *receiptURL = [[NSBundle mainBundle] appStoreReceiptURL];
-            NSData *receipt = [NSData dataWithContentsOfURL:receiptURL];
+            NSData *receipt = [self getLocalReceipt];
             if (!receipt || !transaction)
             {
                 NSLog(@"Error: No local receipt or transaction");
@@ -1425,6 +1430,7 @@ static OASubscriptionState *EXPIRED;
 
 - (BOOL) needValidateReceipt
 {
+    
     if (!_settings.billingUserId.get)
         return YES;
     
@@ -1450,8 +1456,7 @@ static OASubscriptionState *EXPIRED;
 
 - (void) getActiveProducts:(RequestActiveProductsCompletionHandler)onComplete
 {
-    NSURL *receiptURL = [[NSBundle mainBundle] appStoreReceiptURL];
-    NSData *receipt = [NSData dataWithContentsOfURL:receiptURL];
+    NSData *receipt = [self getLocalReceipt];
     
 #if TARGET_OS_SIMULATOR
     if (onComplete)
@@ -1849,6 +1854,8 @@ static OASubscriptionState *EXPIRED;
 {
     if ([self needRequestBackupPurchase])
         [self checkBackupPurchase:onComplete];
+    else if (onComplete)
+        onComplete(YES);
 }
 
 - (OASubscription *) getAnyPurchasedOsmAndProSubscription

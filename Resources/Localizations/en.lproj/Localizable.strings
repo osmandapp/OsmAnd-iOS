@@ -596,6 +596,8 @@
 "shared_string_changed" = "Changed";
 "shared_string_profile" = "Profile";
 "shared_string_download_update" = "Download update";
+"shared_string_angle" = "Angle";
+"shared_string_angle_param" = "Angle: %d°";
 
 "restart" = "Restart";
 
@@ -2915,6 +2917,9 @@
 "enough_contributions_descr" = "Congratulations, you have made enough OpenStreetMap contributions and can now enjoy unlimited OsmAnd map updates!";
 "last_two_month_total" = "Last two month total";
 "auth_error" = "Authorization Error";
+
+"recalc_angle_dialog_title" = "Minimum angle between my location and route";
+"recalc_angle_dialog_descr" = "Extra straight segment between my location and calculated route will be displayed until the route is recalculated";
 
 // Release Notes
 // instruction:

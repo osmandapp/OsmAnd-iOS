@@ -2746,3 +2746,11 @@
 "mtb_segment_classification" = "Segmentklassificering";
 "rendering_attr_showMtbScale_name" = "MTB-skala";
 "show_borders_of_downloaded_maps" = "Vis grænser for downloadede kort";
+"shared_string_angle_param" = "Vinkel: %d°";
+"local_item" = "Lokalt element";
+"deleted_item" = "Slettet element";
+"recalc_angle_dialog_title" = "Mindste vinkel mellem min placering og rute";
+"shared_string_angle" = "Vinkel";
+"remote_item" = "Fjernelement";
+"recalc_angle_dialog_descr" = "Ekstra lige segment mellem min placering og den beregnede rute vises, indtil ruten er genberegnet";
+"backup_delete_from_cloud" = "Slet fra clouden";

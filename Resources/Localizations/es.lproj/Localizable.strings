@@ -2741,3 +2741,11 @@
 "shared_string_added" = "Añadido";
 "mtb_segment_classification" = "Clasificación por segmentos";
 "rendering_attr_showMtbScale_name" = "Escala de MTB";
+"shared_string_angle" = "Ángulo";
+"shared_string_angle_param" = "Ángulo: %d°";
+"local_item" = "Elemento local";
+"deleted_item" = "Elemento eliminado";
+"backup_delete_from_cloud" = "Eliminar de la nube";
+"recalc_angle_dialog_title" = "Ángulo mínimo entre mi ubicación y la ruta";
+"recalc_angle_dialog_descr" = "Se mostrará un segmento recto adicional entre mi ubicación y la ruta calculada hasta que se vuelva a calcular la ruta";
+"remote_item" = "Elemento remoto";

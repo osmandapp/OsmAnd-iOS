@@ -141,7 +141,7 @@
 "plugin_settings_reset" = "Qoşma parametrlərini standarta sıfırla";
 "map_widget_magnetic_bearing" = "Magnetic bearing";
 "map_widget_bearing" = "Relative bearing";
-"map_widget_transparent" = "Şəffaf widget-lər";
+"map_widget_transparent" = "Şəffaf vidcetlər";
 "shared_string_near" = "Yaxın";
 "map_widget_next_turn" = "Növbəti döngə";
 "map_widget_next_turn_small" = "Növbəti döngə (kiçik)";
@@ -164,7 +164,7 @@
 "map_widget_distance_by_tap" = "Distance by tap";
 "shared_string_collapse" = "Yığışdır";
 "shared_string_topbar" = "Üst panel";
-"shared_string_widgets" = "Widget-lər";
+"shared_string_widgets" = "Vidcetlər";
 "map_widget_right" = "Sağ panel";
 "map_widget_left" = "Sol panel";
 "layer_map_appearance" = "Ekranı tənzimlə";
@@ -2403,3 +2403,10 @@
 "restore_from_osmand_cloud" = "OsmAnd Cloud-dan bərpa et";
 "on_hold" = "Gözləmədə";
 "paused" = "Fasilə verildi";
+"copy_coordinates" = "Koordinatları kopyala";
+"map_settings_weather_wind" = "Külək";
+"measurement_units" = "Ölçü vahidləri";
+"map_settings_weather_precip" = "Yağıntı";
+"map_settings_weather_temp" = "Temperatur";
+"osmand_cloud_login_descr" = "Qeydiyyatdan keçdiyiniz e-poçt ünvanını daxil edin. Növbəti addım üçün birdəfəlik şifrə göndəriləcək.";
+"map_settings_weather_cloud" = "Bulud";

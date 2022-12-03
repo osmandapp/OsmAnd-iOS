@@ -683,7 +683,7 @@
 "shared_string_info" = "Info";
 "simulate_routing" = "Standort simulieren";
 "day_night_info_description" = "Sonnenaufgang: %1$s \nSonnenuntergang: %2$s";
-"day_night_info" = "Tag/Nacht-Information";
+"day_night_info" = "Tag-/Nacht-Information";
 "daynight_mode_auto" = "Sonnenaufgang/-untergang";
 "route_simulation" = "Routensimulation";
 "unknown_location" = "Position noch nicht bekannt";
@@ -2083,9 +2083,9 @@
 "add_custom_category" = "Benutzerdefinierte Kategorie hinzufügen";
 "ios_release_4_0" = "• Neu! Bildschirm \"Favorit hinzufügen\" mit Optionen zur Auswahl von benutzerdefiniertem Symbol, Farbe und Form\n• Neues \"Koordinaten-Widget\" mit den Koordinaten des aktuellen Standorts hinzugefügt\n• Es wurde die Möglichkeit zugefügt, benutzerdefinierte Plugins zu importieren\n• Die Import/Export-Funktionalität wurde erheblich erweitert\n• Entfernung durch Antippen aus dem Radius-Lineal in eine separate Option verschoben\n• Fehler beseitigt, der dazu führte, dass die CarPlay-App einfriert, wenn der iPhone-Bildschirm ausgeschaltet ist\n• Der Plugin-Bildschirm wurde aus dem Menü Karten & Ressourcen in das Hauptmenü verschoben\n• Finnische Sprachversion hinzugefügt\n• Bedienoberfläche im Querformat für den \"Route planen\"-Bildschirm korrigiert\n• Unterstützung für benutzerdefinierte Routing- und Rendering-Dateien zugefügt\n• Die Leistung der Marker-Richtungslinie wurde korrigiert\n• Problem beim Importieren von GPX-Dateien mit Großbuchstaben-Erweiterungen behoben\n• Es gab ein Problem mit dem Menü \"Track folgen\", welches nun behoben ist\n• Der Import von OBF-Dateien wurde korrigiert\n";
 "approximate_file_size" = "Ungefähre Dateigröße: %@";
-"gpx_upload_private_visibility_descr" = "\"Privat\" bedeutet, dass der Track nicht in öffentlichen Verzeichnissen auftaucht, aber seine Trackpunkte in nicht chronologischer Reihenfolge über die öffentliche GPS API ohne Zeitstempel verfügbar sind.";
+"gpx_upload_private_visibility_descr" = "\"Privat\" bedeutet, dass der Track nicht in öffentlichen Verzeichnissen auftaucht, aber seine Trackpunkte in nicht chronologischer Reihenfolge über die öffentliche GPS-API ohne Zeitstempel verfügbar sind.";
 "gpx_upload_identifiable_visibility_descr" = "\"Identifizierbar\" bedeutet, dass der Track in Ihren GPS-Tracks und in öffentlichen GPS-Trackverzeichnissen angezeigt wird, d. h., andere Benutzer können den Track herunterladen und mit Ihrem Benutzernamen verknüpfen. Öffentliche, mit Zeitstempel versehene Trackpunkt-Daten von der GPS-API, die über die Trackpunkt-API bereitgestellt werden, verweisen auf Ihre ursprüngliche Trackseite.";
-"gpx_upload_public_visibility_descr" = "\"Öffentlich\" bedeutet, dass der Track öffentlich in Ihren GPS-Tracks und in öffentlichen GPS-Track Verzeichnissen mit Zeitstempeln in Rohform angezeigt wird. Die über die API bereitgestellten Daten verweisen nicht auf Ihre Track-Seite. Die Zeitstempel der Trackpunkte sind nicht über die öffentliche GPS API verfügbar, und die Trackpunkte sind nicht chronologisch geordnet.";
+"gpx_upload_public_visibility_descr" = "\"Öffentlich\" bedeutet, dass der Track öffentlich in Ihren GPS-Tracks und in öffentlichen GPS-Trackverzeichnissen mit Zeitstempeln in Rohform angezeigt wird. Die über die API bereitgestellten Daten verweisen nicht auf Ihre Trackseite. Die Zeitstempel der Trackpunkte sind nicht über die öffentliche GPS-API verfügbar und die Trackpunkte sind nicht chronologisch geordnet.";
 "gpxup_private" = "Privat";
 "gpxup_trackable" = "Nachverfolgbar";
 "gpxup_identifiable" = "Identifizierbar";
@@ -2109,7 +2109,7 @@
 "preferred_languages" = "Bevorzugte Sprachen";
 "available_languages" = "Verfügbare Sprachen";
 "some_articles_may_not_available_in_lang" = "Einige Wikipedia-Artikel sind möglicherweise nicht in Ihrer Sprache verfügbar.";
-"wiki_menu_download_descr" = "Zusätzliche Karten werden benötigt um Wikipedia-POIs auf der Karte anzuzeigen.";
+"wiki_menu_download_descr" = "Zusätzliche Karten werden benötigt, um Wikipedia-POIs auf der Karte anzuzeigen.";
 "select_wikipedia_article_langs" = "Wählen Sie die Sprachen aus, in welchen Wikipedia Artikel auf der Karte erscheinen sollen. Sie können zwischen allen verfügbaren Sprachen wechseln, während Sie den Artikel lesen.";
 "shared_string_all_languages" = "Alle Sprachen";
 "population_num" = "Einwohnerzahl";
@@ -2199,7 +2199,7 @@
 "lang_ar" = "Arabisch";
 "lang_ast" = "Asturisch";
 "lang_az" = "Aserbaidschanisch";
-"lang_be_by" = "Weißrussisch (Lateinische Schrift)";
+"lang_be_by" = "Belarussisch (Lateinische Schrift)";
 "lang_ber" = "Berber";
 "lang_bg" = "Bulgarisch";
 "lang_bpy" = "Bishnupriya";
@@ -2273,7 +2273,7 @@
 "white_color_undefined" = "Bereiche ohne Daten werden weiß dargestellt.";
 "lang_af" = "Afrikaans";
 "lang_ba" = "Baschkirisch";
-"lang_be" = "Weißrussisch";
+"lang_be" = "Belarussisch";
 "lang_el" = "Griechisch";
 "lang_et" = "Estnisch";
 "lang_ht" = "Haitianisch";
@@ -2386,9 +2386,9 @@
 "map_settings_weather_isolines" = "Isolinien";
 "rendering_attr_showRunningRoutes_name" = "Laufrouten";
 "rendering_attr_showRunningRoutes_description" = "Laufrouten anzeigen";
-"rendering_attr_showFitnessTrails_name" = "Fitness Parcours";
-"rendering_attr_showFitnessTrails_description" = "Fitness Parcours anzeigen";
-"backup_and_restore" = "Backup und Wiederherstellen";
+"rendering_attr_showFitnessTrails_name" = "Fitness-Parcours";
+"rendering_attr_showFitnessTrails_description" = "Fitness-Parcours anzeigen";
+"backup_and_restore" = "Sichern und Wiederherstellen";
 "plugin_popup_weather_title" = "Wetter einschalten";
 "plugin_popup_weather_ask" = "Bitte Wettermodul aktivieren";
 "measurement_units" = "Maßeinheiten";
@@ -2520,13 +2520,13 @@
 "terrain_maps" = "Terrainkarten";
 "not_available_with" = "Nicht verfügbar mit %@";
 "transport_hazmat_no_desc" = "Auf einigen Straßen und Tunneln ist der Transport gefährlicher Materialien verboten.";
-"annual_subscription" = "Jährliches Abonnement";
+"annual_subscription" = "Jahresabonnement";
 "product_title_development" = "OsmAnd-Entwicklung";
 "purchases_feature_desc_terrain" = "Höhenlinien, Reliefkarten mit dunklen Schattierungen und Hangneigungskarten mit Farben zur Darstellung von Erhebungen und Niederungen.";
-"explore_osmnad_plans_to_find_suitable" = "OsmAnd Angebote entdecken, um das Passende für Sie zu finden.";
+"explore_osmnad_plans_to_find_suitable" = "OsmAnd-Angebote entdecken, um das Passende für Sie zu finden.";
 "complete_purchase" = "Vollständiger Kauf";
 "purchases_feature_desc_nautical" = "Vektorkarten für die Navigation von Segelrouten";
-"purchases_feature_desc_monthly_map_updates" = "Erhalten Sie Zugang zu den regulären monatlichen Updates für Offlinekarten.";
+"purchases_feature_desc_monthly_map_updates" = "Erhalten Sie Zugang zu den regulären monatlichen Updates für Offline-Karten.";
 "redeem_promo_code" = "Aktionscode einlösen";
 "wikipedia_and_wikivoyage_offline" = "Wikipedia und Wikivoyage offline";
 "purchases_feature_desc_unlimited_map_download" = "Erhalten Sie unbegrenzte Downloads für Offline-Karten aller Kontinente und Regionen.";
@@ -2536,7 +2536,7 @@
 "product_desc_plus" = "Erweiterte Features erhalten";
 "product_desc_pro" = "Alle Features erhalten";
 "transport_hazmat_yes_desc" = "Sie müssen eine richtige Kategorie wählen.";
-"purchases_feature_desc_combined_wiki" = "Erkunden Sie Wikipedia Artikel auch unterwegs, ohne Internetverbindung. Offline Daten sind nach Ländern aufgeteilt und in allen Sprachen verfügbar.";
+"purchases_feature_desc_combined_wiki" = "Erkunden Sie Wikipedia Artikel auch unterwegs, ohne Internetverbindung. Offline-Daten sind nach Ländern aufgeteilt und in allen Sprachen verfügbar.";
 "continue_with" = "Mit %@ fortfahren";
 "monthly_subscription" = "Monatliches Abo";
 "purchases_feature_desc_wikipedia" = "Erkunden Sie Wikipedia offline. Artikel sind nach Ländern und Regionen unterteilt und in allen Sprachen verfügbar.";
@@ -2755,5 +2755,5 @@
 "download_all" = "Alle herunterladen";
 "rendering_attr_showMtbScale_name" = "MTB-Skala";
 "show_borders_of_downloaded_maps" = "Grenzen der heruntergeladenen Karten anzeigen";
-"mtb_segment_classification" = "Abschnitts-Klassifizierung";
+"mtb_segment_classification" = "Abschnittsklassifizierung";
 "shared_string_added" = "Hinzugefügt";

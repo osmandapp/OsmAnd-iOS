@@ -2757,3 +2757,11 @@
 "show_borders_of_downloaded_maps" = "Grenzen der heruntergeladenen Karten anzeigen";
 "mtb_segment_classification" = "Abschnittsklassifizierung";
 "shared_string_added" = "Hinzugefügt";
+"shared_string_angle_param" = "Winkel: %d°";
+"local_item" = "Lokales Element";
+"deleted_item" = "Gelöschtes Element";
+"backup_delete_from_cloud" = "Aus der Cloud löschen";
+"recalc_angle_dialog_title" = "Minimaler Winkel zwischen meinem Standort und der Route";
+"recalc_angle_dialog_descr" = "Ein gerades Segment zwischen meinem Standort und berechneter Route wird angezeigt, bis die Route neu berechnet wird";
+"shared_string_angle" = "Winkel";
+"remote_item" = "Entferntes Element";

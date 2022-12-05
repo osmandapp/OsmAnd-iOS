@@ -187,8 +187,18 @@
     NSArray<NSString *> *tags = [self getAllTags];
     if (tags && searchString.length > 0)
     {
-        NSString *searchStringWithPrefix = [NSString stringWithFormat:@"service:%@", searchString];
-        return [tags filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF BEGINSWITH[c] %@ OR SELF BEGINSWITH[c] %@", searchString, searchStringWithPrefix]];
+        NSArray<NSString *> *filteredTags = [tags filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF CONTAINS[cd] %@", searchString]];
+        
+        return [filteredTags sortedArrayUsingComparator:^NSComparisonResult(NSString* _Nonnull o1, NSString* _Nonnull o2) {
+            BOOL hasPrefix1 = [o1 hasPrefix:searchString];
+            BOOL hasPrefix2 = [o2 hasPrefix:searchString];
+            if (hasPrefix1 == hasPrefix2)
+                return NSOrderedSame;
+            else if (hasPrefix1)
+                return NSOrderedAscending;
+            else
+                return NSOrderedDescending;
+        }];
     }
     else
     {

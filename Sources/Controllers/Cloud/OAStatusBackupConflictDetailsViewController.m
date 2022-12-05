@@ -233,25 +233,27 @@
             name = [NSString stringWithFormat:@"%@ (%@)", name, OALocalizedString(@"recorded_voice")];
     }
 
-    OATableRowData *itemInfoRow = [[OATableRowData alloc] initWithData:@{
-        kCellTypeKey: [OASimpleTableViewCell getCellIdentifier],
-        kCellKeyKey: @"itemInfo",
-        kCellTitleKey: name,
-        kCellIconTint: @(color_icon_inactive)
-    }];
-
-    if (self.delegate)
+    if (name)
     {
-        [self.delegate setRowIcon:itemInfoRow item:item];
-        long timestamp = 0;
-        if (_operation != EOABackupSyncOperationUpload)
-            timestamp = _remoteFile.updatetimems;
-        else
-            timestamp = _localFile.localModifiedTime;
+        OATableRowData *itemInfoRow = [[OATableRowData alloc] initWithData:@{
+            kCellTypeKey: [OASimpleTableViewCell getCellIdentifier],
+            kCellKeyKey: @"itemInfo",
+            kCellTitleKey: name,
+            kCellIconTint: @(color_icon_inactive)
+        }];
+        if (self.delegate)
+        {
+            [self.delegate setRowIcon:itemInfoRow item:item];
+            long timestamp = 0;
+            if (_operation != EOABackupSyncOperationUpload && _operation != EOABackupSyncOperationNone)
+                timestamp = _remoteFile.updatetimems;
+            else
+                timestamp = _localFile.item.localModifiedTime * 1000;
 
-        [itemInfoRow setDescr:[self.delegate generateTimeString:timestamp summary:[self.delegate localizedSummaryForOperation:_operation]]];
+            [itemInfoRow setDescr:[self.delegate generateTimeString:timestamp summary:[self.delegate localizedSummaryForOperation:_operation]]];
+        }
+        [itemInfoSection addRow:itemInfoRow];
     }
-    [itemInfoSection addRow:itemInfoRow];
     if (_operation == EOABackupSyncOperationNone)
         [self populateConflictActions:item itemInfoSection:itemInfoSection];
     else if (_operation == EOABackupSyncOperationDelete)

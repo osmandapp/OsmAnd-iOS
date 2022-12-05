@@ -2745,3 +2745,11 @@
 "mtb_segment_classification" = "Classificação de segmento";
 "rendering_attr_showMtbScale_name" = "Escala MTB";
 "show_borders_of_downloaded_maps" = "Mostrar bordas em mapas descarregados";
+"shared_string_angle" = "Ângulo";
+"remote_item" = "Item remoto";
+"local_item" = "Item local";
+"deleted_item" = "Item eliminado";
+"backup_delete_from_cloud" = "Eliminar da cloud";
+"recalc_angle_dialog_title" = "Ângulo mínimo entre a minha localização e a rota";
+"recalc_angle_dialog_descr" = "Será mostrado o segmento reto adicional entre a minha localização e a rota calculada até que a rota seja recalculada";
+"shared_string_angle_param" = "Ângulo: %d°";

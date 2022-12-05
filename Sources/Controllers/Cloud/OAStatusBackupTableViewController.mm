@@ -290,7 +290,6 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     }
     [self setRowIcon:rowData item:item];
 
-    [rowData setSecondaryIconName:iconName];
     [rowData setObj:@(secondaryTint) forKey:@"secondary_icon_color"];
     [rowData setIconTint:mainTint];
     return rowData;
@@ -466,8 +465,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
         {
             BOOL hasConflict = [item objForKey:@"remoteConflictItem"] != nil;
             cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingToLeftOfContentWithIcon, 0., 0.);
-            cell.selectionStyle = hasConflict ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
-            cell.accessoryType = hasConflict ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 
             NSString *description = item.descr;
             NSAttributedString *descriptionAttributed = [item objForKey:@"descr_attr"];
@@ -488,8 +486,16 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
             cell.leftIconView.tintColor = UIColorFromRGB(item.iconTint);
 
             NSString *secondaryIconName = hasConflict ? [item stringForKey:@"secondary_icon_conflict"] : item.secondaryIconName;
-            cell.rightIconView.image = secondaryIconName ? [UIImage templateImageNamed:secondaryIconName] : nil;
-            cell.rightIconView.tintColor = UIColorFromRGB([item integerForKey:@"secondary_icon_color"]);
+            if (secondaryIconName.length > 0)
+            {
+                cell.rightIconView.image = [UIImage templateImageNamed:secondaryIconName];
+                cell.rightIconView.tintColor = UIColorFromRGB([item integerForKey:@"secondary_icon_color"]);
+                [cell rightIconVisibility:YES];
+            }
+            else
+            {
+                [cell rightIconVisibility:NO];
+            }
         }
         return cell;
     }

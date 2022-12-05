@@ -188,12 +188,11 @@
     if (tags && searchString.length > 0)
     {
         NSArray<NSString *> *filteredTags = [tags filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF CONTAINS[cd] %@", searchString]];
-        
         return [filteredTags sortedArrayUsingComparator:^NSComparisonResult(NSString* _Nonnull o1, NSString* _Nonnull o2) {
             BOOL hasPrefix1 = [o1 hasPrefix:searchString];
             BOOL hasPrefix2 = [o2 hasPrefix:searchString];
             if (hasPrefix1 == hasPrefix2)
-                return NSOrderedSame;
+                return [o1 compare:o2];
             else if (hasPrefix1)
                 return NSOrderedAscending;
             else

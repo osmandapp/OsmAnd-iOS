@@ -1409,8 +1409,8 @@
         if ([prevSegmentPoint distanceFromLocation:newSegmentPoint] <= MIN_DISTANCE_FOR_INSERTING_ROUTE_SEGMENT)
             continue;
 
-        NSInteger indexNew = [self findNearestGpxPointIndexFromRoute:gpxRouteLocations startLoc:newSegmentPoint calculateOsmAndRouteParts:routeParams.gpxRoute.calculateOsmAndRouteParts];
-        NSInteger indexPrev = [self findNearestGpxPointIndexFromRoute:gpxRouteLocations startLoc:prevSegmentPoint calculateOsmAndRouteParts:routeParams.gpxRoute.calculateOsmAndRouteParts];
+        NSInteger indexNew = [self findNearestGpxPointIndexFromRoute:gpxRouteLocations startLoc:newSegmentPoint calculateOsmAndRouteParts:NO];
+        NSInteger indexPrev = [self findNearestGpxPointIndexFromRoute:gpxRouteLocations startLoc:prevSegmentPoint calculateOsmAndRouteParts:NO];
         if (indexPrev != -1 && indexPrev > nearestGpxPointInd && indexNew != -1)
         {
             const auto& origRoute = [result getOriginalRoute:(int)lastIndex endIndex:(int)indexPrev includeFirstSegment:YES];

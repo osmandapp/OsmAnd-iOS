@@ -1,9 +1,9 @@
 name: Build OsmAndMaps
 # on:
 #  push:
-#    branches: [ master ]
+#    branches: [ r4.3 ]
 #  pull_request:
-#    branches: [ master ]
+#    branches: [ r4.3 ]
 on: 
   workflow_dispatch:
     inputs:
@@ -42,42 +42,42 @@ jobs:
     - name: Checkout ios
       uses: actions/checkout@v2
       with:
-        ref: master
+        ref: r4.3
         path: ios
     - name: Checkout android
       uses: actions/checkout@v2
       with:
-        ref: master
+        ref: r4.3
         repository: osmandapp/OsmAnd
         path: android
     - name: Checkout build
       uses: actions/checkout@v2
       with:
-        ref: master
+        ref: r4.3
         repository: osmandapp/OsmAnd-build
         path: build
     - name: Checkout core legacy
       uses: actions/checkout@v2
       with:
-        ref: master
+        ref: r4.3
         repository: osmandapp/OsmAnd-core-legacy
         path: core-legacy
     - name: Checkout core
       uses: actions/checkout@v2
       with:
-        ref: master
+        ref: r4.3
         repository: osmandapp/OsmAnd-core
         path: core
     - name: Checkout help
       uses: actions/checkout@v2
       with:
-        ref: master
+        ref: r4.3
         repository: osmandapp/osmandapp.github.io
         path: help
     - name: Checkout resources
       uses: actions/checkout@v2
       with:
-        ref: master
+        ref: r4.3
         repository: osmandapp/OsmAnd-resources
         path: resources
     # - name: Select XCode 11.3

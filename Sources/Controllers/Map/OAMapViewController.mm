@@ -543,7 +543,6 @@
         OATargetPoint *targetPoint = [self.mapLayers.contextMenuLayer getUnknownTargetPoint:latLon.latitude longitude:latLon.longitude];
         targetPoint.centerMap = YES;
         [rootViewController.mapPanel showContextMenu:targetPoint];
-        _app.initialURLMapState = nil;
     }
     
     _mapView.userInteractionEnabled = YES;

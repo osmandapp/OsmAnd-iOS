@@ -29,10 +29,12 @@ OAWaypointsMapLayerProvider::OAWaypointsMapLayerProvider(const QList<OsmAnd::Ref
                                                          const bool showCaptions_,
                                                          const OsmAnd::TextRasterizer::Style captionStyle_,
                                                          const double captionTopSpace_,
-                                                         const float referenceTileSizeOnScreenInPixels_)
+                                                         const float referenceTileSizeOnScreenInPixels_,
+                                                         const float symbolsScaleFactor_)
 
 : IOAMapTiledCollectionProvider(baseOrder_, hiddenPoints_, showCaptions_, captionStyle_, captionTopSpace_, referenceTileSizeOnScreenInPixels_)
 , _wptPtPoints(wptPtPoints_)
+, _symbolsScaleFactor(symbolsScaleFactor_)
 {
     for (const auto& point : _wptPtPoints)
         _points.push_back(OsmAnd::Utilities::convertLatLonTo31(point->position));
@@ -106,6 +108,15 @@ sk_sp<SkImage> OAWaypointsMapLayerProvider::getBitmapByWaypoint(const OsmAnd::Re
     {
         bitmap = bitmapIt.value();
     }
+
+    if (!qFuzzyCompare(_symbolsScaleFactor, 1.0f) && bitmap)
+    {
+        bitmap = OsmAnd::SkiaUtilities::scaleImage(
+            bitmap,
+            _symbolsScaleFactor,
+            _symbolsScaleFactor);
+    }
+
     return bitmap;
 }
 

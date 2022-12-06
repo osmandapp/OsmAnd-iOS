@@ -308,7 +308,16 @@
         {
             double lat = latLon.coordinate.latitude;
             double lon = latLon.coordinate.longitude;
-            int zoom = _rootViewController.mapPanel.mapViewController.mapView.zoom;
+            int zoom;
+
+            NSString *pathPrefix = [@"/map?pin=" stringByAppendingString:latLonParam];
+            NSInteger pathStartIndex = [[url.absoluteString stringByRemovingPercentEncoding] indexOf:pathPrefix];
+            NSArray<NSString *> *params = [[[url.absoluteString stringByRemovingPercentEncoding] substringFromIndex:pathStartIndex + pathPrefix.length] componentsSeparatedByString:@"/"];
+            if (params.count == 3) //  #15/52.3187/4.8801
+                zoom = [[params.firstObject stringByReplacingOccurrencesOfString:@"#" withString:@""] intValue];
+            else
+                zoom = _rootViewController.mapPanel.mapViewController.mapView.zoom;
+
             [self moveMapToLat:lat lon:lon zoom:zoom withTitle:nil];
             return YES;
         }

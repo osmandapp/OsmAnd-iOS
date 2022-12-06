@@ -592,18 +592,17 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         }
         if (cell)
         {
-            [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventAllEvents];
             OAMapStyleParameter *p = (OAMapStyleParameter *)item[@"parameter"];
             cell.topLeftLabel.text = item[@"name"];
             cell.sliderView.tag = indexPath.section << 10 | indexPath.row;
+            [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
             if ([p.name isEqualToString:CONTOUR_DENSITY_ATTR])
             {
                 NSString *v = p.value.length == 0 ? kDefaultDensity : p.value;
                 cell.topRightLabel.text = [self getLocalizedParamValue:v];
                 [cell.sliderView setNumberOfMarks:_visibleDensityValues.count additionalMarksBetween:0];
                 cell.sliderView.selectedMark = [_visibleDensityValues indexOfObject:v];
-                [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
-                [cell.sliderView addTarget:self action:@selector(densityChanged:) forControlEvents:UIControlEventTouchUpInside];
+                [cell.sliderView addTarget:self action:@selector(densityChanged:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
             }
             else if ([p.name isEqualToString:CONTOUR_WIDTH_ATTR])
             {
@@ -611,8 +610,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                 cell.topRightLabel.text = [self getLocalizedParamValue:v];
                 [cell.sliderView setNumberOfMarks:_visibleWidthValues.count additionalMarksBetween:0];
                 cell.sliderView.selectedMark = [_visibleWidthValues indexOfObject:v];
-                [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
-                [cell.sliderView addTarget:self action:@selector(widthChanged:) forControlEvents:UIControlEventTouchUpInside];
+                [cell.sliderView addTarget:self action:@selector(widthChanged:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
             }
             if ([cell needsUpdateConstraints])
                 [cell updateConstraints];

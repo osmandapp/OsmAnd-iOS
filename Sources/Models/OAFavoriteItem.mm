@@ -156,7 +156,6 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     locationPoint.x = OsmAnd::Utilities::get31TileNumberX(lon);
     locationPoint.y = OsmAnd::Utilities::get31TileNumberY(lat);
 
-    QString qElevation = altitude > 0 ? QString::fromNSString([self toStringAltitude:altitude]) : QString();
     QString qTime = timestamp ? QString::fromNSString([self.class toStringDate:timestamp]) : QString();
     QString qPickupTime;
     
@@ -175,7 +174,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
                 alpha:&a];
 
     std::shared_ptr<OsmAnd::IFavoriteLocation> favorite = [OsmAndApp instance].favoritesCollection->createFavoriteLocation(locationPoint,
-                                                                     qElevation,
+                                                                     altitude,
                                                                      qTime,
                                                                      qPickupTime,
                                                                      qName,
@@ -461,21 +460,12 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 
 - (double) getAltitude
 {
-    if (!self.favorite->getElevation().isNull())
-    {
-        NSString *storedString = self.favorite->getElevation().toNSString();
-        return [storedString doubleValue];
-    }
-    else
-    {
-        return 0;
-    }
+    return self.favorite->getElevation();
 }
 
 - (void) setAltitude:(double)altitude
 {
-    NSString *savingString = [self toStringAltitude:altitude];
-    self.favorite->setElevation(QString::fromNSString(savingString));
+    self.favorite->setElevation(altitude);
 }
 
 - (NSString *) toStringAltitude:(double)altitude

@@ -267,7 +267,7 @@
         const auto& favorite = item.favorite;
         if (favorite != nullptr)
         {
-            QString elevation = favorite->getElevation();
+            double elevation = favorite->getElevation();
             QString time = favorite->getTime();
             QString pickupTime = favorite->getPickupTime();
             QString title = favorite->getTitle();

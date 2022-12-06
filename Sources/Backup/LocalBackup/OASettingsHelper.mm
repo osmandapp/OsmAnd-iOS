@@ -862,7 +862,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 
 - (void) onSettingsCollectFinished:(BOOL)succeed empty:(BOOL)empty items:(NSArray<OASettingsItem *> *)items
 {
-    if (succeed)
+    if (succeed && !empty)
     {
         NSMutableArray<OASettingsItem *> *pluginIndependentItems = [NSMutableArray new];
         NSMutableArray<OAPluginSettingsItem *> *pluginSettingsItems = [NSMutableArray new];
@@ -892,9 +892,8 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     }
     else if (empty)
     {
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:[NSString stringWithFormat:OALocalizedString(@"err_profile_import"), items.firstObject.name] preferredStyle:UIAlertControllerStyleAlert];
-        [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
-        [OARootViewController.instance presentViewController:alert animated:YES completion:nil];
+        [_importDataVC.navigationController popViewControllerAnimated:YES];
+        [OAUtilities showToast:OALocalizedString(@"osm_failed_uploads") details:OALocalizedString(@"local_backup_empty_file") duration:4 inView:OARootViewController.instance.view];
     }
 }
 

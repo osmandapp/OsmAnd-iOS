@@ -133,9 +133,7 @@
     BOOL enabled = [self isRowEnabled:fileName];
     [uploadLocalRow setObj:@(enabled) forKey:@"enabled"];
     [downloadCloudRow setObj:@(enabled) forKey:@"enabled"];
-    [uploadLocalRow setDescr:[self.delegate getDescriptionForItemType:item.type
-                                                             fileName:fileName
-                                                              summary:OALocalizedString(@"shared_string_changed")]];
+    [uploadLocalRow setDescr:[self.delegate generateTimeString:_localFile.item.localModifiedTime * 1000 summary:OALocalizedString(@"shared_string_changed")]];
     
     [downloadCloudRow setDescr:[self.delegate generateTimeString:_remoteFile.updatetimems
                                                          summary:OALocalizedString(@"shared_string_changed")]];
@@ -190,9 +188,8 @@
     NSString *fileName = [OABackupHelper getItemFileName:item];
     BOOL enabled = [self isRowEnabled:fileName];
     [uploadLocalRow setObj:@(enabled) forKey:@"enabled"];
-    [uploadLocalRow setDescr:[self.delegate getDescriptionForItemType:item.type
-                                                             fileName:fileName
-                                                              summary:OALocalizedString(@"shared_string_changed")]];
+    [uploadLocalRow setDescr:[self.delegate generateTimeString:_localFile.localModifiedTime * 1000
+                                                       summary:OALocalizedString(@"shared_string_changed")]];
     
     [itemInfoSection addRow:uploadLocalRow];
 }
@@ -244,13 +241,7 @@
         if (self.delegate)
         {
             [self.delegate setRowIcon:itemInfoRow item:item];
-            long timestamp = 0;
-            if (_operation != EOABackupSyncOperationUpload && _operation != EOABackupSyncOperationNone)
-                timestamp = _remoteFile.updatetimems;
-            else
-                timestamp = _localFile.item.localModifiedTime * 1000;
-
-            [itemInfoRow setDescr:[self.delegate generateTimeString:timestamp summary:[self.delegate localizedSummaryForOperation:_operation]]];
+            [itemInfoRow setDescr:[self.delegate generateTimeString:_localFile.uploadTime summary:OALocalizedString(@"last_sync")]];
         }
         [itemInfoSection addRow:itemInfoRow];
     }

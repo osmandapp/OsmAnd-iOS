@@ -29,6 +29,7 @@ public:
 private:
     QList<std::shared_ptr<OsmAnd::IFavoriteLocation>> _favorites;
     QHash<QString, sk_sp<SkImage>> _iconsCache;
+    float _symbolsScaleFactor;
     
     sk_sp<SkImage> getBitmapByFavorite(const std::shared_ptr<OsmAnd::IFavoriteLocation> &fav, bool isFullSize);
     QString backgroundImageNameByType(const QString& type) const;
@@ -40,7 +41,8 @@ public:
                                 const bool showCaptions,
                                 const OsmAnd::TextRasterizer::Style captionStyle,
                                 const double captionTopSpace,
-                                const float referenceTileSizeOnScreenInPixels);
+                                const float referenceTileSizeOnScreenInPixels,
+                                const float symbolsScaleFactor);
     virtual ~OAFavoritesMapLayerProvider();
 
     virtual OsmAnd::PointI getPoint31(const int index) const override;

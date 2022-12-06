@@ -531,7 +531,7 @@
         case EOAImportTypeCollect:
             _importDone = YES;
             if (_delegate)
-                [_delegate onSettingsCollectFinished:YES empty:NO items:_items];
+                [_delegate onSettingsCollectFinished:YES empty:_items.count == 0 items:_items];
             if (self.onSettingsCollected)
                 self.onSettingsCollected(YES, NO, _items);
             break;
@@ -552,6 +552,8 @@
                 task.onImportComplete = self.onImportComplete;
                 [task execute];
             }
+            break;
+        default:
             break;
     }
 }

@@ -2729,6 +2729,7 @@
 "cloud_existing_account" = "I already have an account";
 "local_backup" = "Local Backup";
 "local_backup_descr" = "Backup or restore data from a local file.";
+"local_backup_empty_file" = "The backup file does not contain any items to restore.";
 "backup_into_file" = "Backup into file";
 "restore_from_file" = "Restore from file";
 "fetching_from_server" = "Fetching data from server";

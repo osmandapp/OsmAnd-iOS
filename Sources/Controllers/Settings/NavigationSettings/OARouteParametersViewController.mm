@@ -543,6 +543,7 @@
 
     settingsViewController.delegate = self;
     [self presentViewController:settingsViewController animated:YES completion:nil];
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 #pragma mark - Switch

@@ -138,10 +138,10 @@
             [cell.sliderView setNumberOfMarks:[item integerForKey:@"marksCount"] additionalMarksBetween:0];
             cell.sliderView.selectedMark = [item integerForKey:@"selectedMark"];
             cell.sliderView.tag = indexPath.section << 10 | indexPath.row;
-            [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventAllEvents];
+            [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
             [cell.sliderView addTarget:self
                                 action:@selector(sliderChanged:)
-                      forControlEvents:UIControlEventTouchUpInside];
+                      forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
         }
         return cell;
     }

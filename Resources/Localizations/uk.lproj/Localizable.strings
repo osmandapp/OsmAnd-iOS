@@ -2709,7 +2709,7 @@
 "cloud_no_conflicts_descr" = "Дані на пристрої та в OsmAnd Cloud збігаються.";
 "shared_string_changed" = "Змінено";
 "cloud_conflict" = "Конфлікт";
-"cloud_recent_changes" = "Останні зміни";
+"cloud_recent_changes" = "Зміни";
 "cloud_pause_all" = "Призупинити все";
 "cloud_all_changes_uploaded" = "Усі зміни вивантажено";
 "cloud_all_changes_uploaded_descr" = "Усі зміни, зроблені на цьому пристрої, синхронізуються з OsmAnd Cloud.";
@@ -2761,3 +2761,4 @@
 "deleted_item" = "Видалений елемент";
 "shared_string_angle_param" = "Кут: %d°";
 "remote_item" = "Віддалений елемент";
+"local_backup_empty_file" = "Файл резервної копії не містить жодних об'єктів для відновлення.";

@@ -304,7 +304,7 @@
 "product_desc_skimap" = "Skíðabrekkur á öllum heimsins skíðastöðum";
 "product_desc_ext_skimap" = "Þessi viðbót fyrir OsmAnd setur við fingurgóma þína allskyns smáatriði varðandi skíðabrekkur, gönguskíðabrautir, fjallaskíðaleiðir, kláfa og skíðalyftur. Leiðir og brautir eru með litakóða eftir erfiðleikastigi, og birtast í sérstökum 'Vetrar'-kortastíl sem líkir eftir snævi þöktu landslagi. \n\nVirkjun á þessari sýn breytirstíl kortsins yfir í 'Vetur og skíði', þar sem allt landslag birtist í vetraraðstæðum. Til að snúa aftur í hefðbundnari kortastíla OsmAnd, þarf einfaldlega að gera viðbótina óvirka aftur eða breyta stílnum í 'Stíll korts' í 'Stilla kort' valmyndinni.";
 "product_title_track_recording" = "Skráning ferils";
-"product_desc_track_recording" = "Virkjar eiginleikann að geta skráð og vistað ferlana þína";
+"product_desc_track_recording" = "Skráðu og vistaðu ferðirnar þínar í GPX-ferla";
 "product_desc_ext_track_recording" = "Skráðu ferlana þína og vistaðu þá handvirkt með OsmAnd ferilskráningar-viðbótinni. Flyttu út ferilinn þinn sem GPX-skrá, deildu henni eða jafnvel geturðu notað hana sem framlag í OpenStreetMap verkefnið. Notadrjúgt verkfæri fyrir hlaupara, hjólafólk, gangandi vegfarendur og hvern þann sem hefur áhuga á að skrá ferðir sínar.";
 "product_title_trip_planning" = "Skipulagning ferða";
 "product_desc_trip_planning" = "Skipulegðu ferðina þína, bættu við ferilpunktum, mældu vegalengd á áfangastað - með aðstoð þessarar viðbótar";
@@ -2428,7 +2428,7 @@
 "weather_cloud_enable_descr" = "Virkja til að skoða skýjahululag á kortinu.";
 "weather_precip_enable_descr" = "Virkja til að skoða úrkomulag á kortinu.";
 "ltr_or_rtl_combine_via_dash" = "%@ - %@";
-"product_desc_ext_weather" = "Veðurviðbótin er með\n- 5 lög...  24klst veðurspá á klukkustundar fresti og 7 daga veðurspá á 3 tíma bilum\n- viðmótshluta byggða á staðsetningu\n- hitastig / jafnþrýstilínur\nVeðurgögn koma frá GFS https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast.";
+"product_desc_ext_weather" = "Virkjaðu Veðurviðbótina til að skipuleggja leiðir með tilliti til veðurs. Skoðaðu litkóðað kort með veðurspá fyrir næstu klukkustundir, morgundaginn og viku fram í tímann.\n\nÁ ferðinni geturðu séð staðarháða viðmótshluti með upplýsingum um hitastig, úrkomu, vidhraða og loftþrýsting. \n\nVerður notadrjúgt í gönguferðum og lengri ferðum á reiðhjóli eða mótorhjóli.";
 "weather_cloud_data_description" = "Veðurgögn verða sótt fyrir skoðað svæði í hvert skipti.";
 "obf_import_already_exists_short" = "Skrá með þessu heiti er þegar til staðar.";
 "routing_attr_avoid_low_emission_zone_name" = "Engin svæði með takmörkunum á útblæstri";
@@ -2455,7 +2455,7 @@
 "toggle_precipitation" = "Birta/Fela úrkomulag";
 "plugin_popup_weather_title" = "Virkja veður";
 "plugin_popup_weather_ask" = "Virkjaðu forritsviðbót fyrir veðurlýsingar";
-"product_desc_weather" = "24klst veðurspá á klukkustundar fresti og 7 daga veðurspá á 3 tíma bilum";
+"product_desc_weather" = "24klst veðurspá á klukkustundar fresti, 7 daga fram í tímann";
 "verification" = "Sannvottun";
 "verification_code_placeholder" = "Kóði";
 "backup_error_invalid_token" = "Teiknið er ekki gilt";
@@ -2502,7 +2502,7 @@
 "shared_string_learn_more" = "Kanna nánar";
 "altitude_ascent" = "Hækkun";
 "subscriptions" = "Áskriftir";
-"purchases_feature_desc_nautical" = "Fáðu aðgang að upplýsingum um dýpt sjávar";
+"purchases_feature_desc_nautical" = "Vektorkort sem henta fyrir leiðsögn á siglingum";
 "simulation_constant_mode_desc" = "Leiðarherming verður framkvæmd með völdum föstum hraða.";
 "purchases_feature_desc_combined_wiki" = "Skoðaðu Wikipedia-greinar á ferðum þínum án nettengingar. Ónettengdum gögnum er skipt eftir löndum og héruðum og eru þau tiltæk á öllum tungumálum.";
 "not_available_with" = "Ekki tiltækt með %@";

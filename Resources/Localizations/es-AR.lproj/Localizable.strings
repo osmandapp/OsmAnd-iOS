@@ -1605,7 +1605,7 @@
 //inapps
 "product_title_nautical" = "Mapa náutico";
 "product_desc_nautical" = "Mapas vectoriales adecuados para la navegación náutica";
-"product_desc_ext_nautical" = "Enriquece el mapa y la navegación de OsmAnd al producir también mapas náuticos para el canotaje, vela y otros tipos de deportes acuáticos.\n\nAl activarlo, enriquece el mapa con información sobre rutas náuticas, marcas de navegación náutica, zonas de peligro, zonas donde está permitido o prohibido navegar o atracar, etc. Para usarlo, descarga los mapas náuticos y activa «Mapa náutico» en «Configurar mapa».\n\nVéase - https://osmand.net/docs/user/plugins/nautical-charts";
+"product_desc_ext_nautical" = "Al activarlo, enriquece el mapa con información sobre rutas náuticas, marcas de navegación náutica, zonas de peligro, zonas donde está permitido o prohibido navegar o atracar, etc. Para usarlo, descarga los mapas náuticos y activa «Mapa náutico» en «Configurar mapa».\n\nVéase - https://osmand.net/docs/user/plugins/nautical-charts";
 "product_title_parking" = "Ubicación de estacionamiento";
 "product_desc_parking" = "Rastrea el tiempo de estacionamiento y la ubicación de su vehículo";
 "product_desc_ext_parking" = "Permite registrar un punto en el mapa en donde el vehículo es dejado en la calle y crea un recordatorio en el calendario sobre el inicio del estacionamiento. El complemento ayuda a seguir el tiempo del estacionamiento y la ubicación del vehículo. Para colocar un marcador, elige un lugar en el mapa, luego ve a «Acciones» y pulsa «Añadir estacionamiento».";
@@ -1663,7 +1663,7 @@
 "preferred_languages" = "Idiomas preferidos";
 "product_title_srtm" = "Curvas de nivel";
 "product_desc_srtm" = "Evaluación visual de la forma de la superficie terrestre";
-"product_desc_ext_srtm" = "Funcionalidad muy apreciada por atletas, caminantes, excursionistas, y cualquiera interesado en la estructura de relieve de un paisaje.\n\nLa información del terreno, como las curvas de nivel, los sombreados y las pendientes, ayudan a evaluar visualmente la forma de la superficie del terreno, considerando la curvatura, los extremos, la inclinación, los puntos de igual altura, etc. La información topográfica en un mapa puede representarse mediante el sombreado de la pendiente, las curvas de nivel para ascensos y descensos, y el color de la desviación del ángulo de la pendiente con respecto al plano. Datos de SRTM y ASTER.\n\nVéase - https://osmand.net/docs/user/plugins/contour-lines";
+"product_desc_ext_srtm" = "La información del terreno, como las curvas de nivel, los sombreados y las pendientes, ayudan a evaluar visualmente la forma de la superficie del terreno, considerando la curvatura, los extremos, la inclinación, los puntos de igual altura, etc. La información topográfica en un mapa puede representarse mediante el sombreado de la pendiente, las curvas de nivel para ascensos y descensos, y el color de la desviación del ángulo de la pendiente con respecto al plano. Datos de SRTM y ASTER.\n\nVéase - https://osmand.net/docs/user/plugins/contour-lines";
 "product_title_wikivoyage" = "Guías turísticas";
 "product_desc_wikivoyage" = "La guía turística libre global que cualquiera puede editar.";
 "product_desc_ext_wikivoyage" = "Las guías de los sitios más interesantes del planeta, dentro de OsmAnd y sin conexión a Internet.";
@@ -2327,13 +2327,13 @@
 "points_delete_multiple" = "¿Borrar %d punto(s)\?";
 "context_menu_edit_descr" = "Editar descripción";
 "add_description" = "Añadir descripción";
-"q_clear_weather_cache" = "¿Vaciar caché del clima?";
+"q_clear_weather_cache" = "¿Vaciar caché de la meteorología?";
 "map_settings_weather_wind" = "Viento";
 "map_settings_weather_cloud" = "Nubes";
 "map_settings_weather_precip" = "Precipitación";
 "map_settings_clear_geo_cache" = "Vaciar teselas geográficas";
 "map_settings_clear_raster_cache" = "Vaciar teselas ráster";
-"product_title_weather" = "Clima";
+"product_title_weather" = "Meteorología";
 "map_settings_weather_pressure" = "Presión";
 "map_settings_weather_temp" = "Temperatura";
 "customize_route_line" = "Personalizar línea de ruta";
@@ -2388,8 +2388,8 @@
 "rendering_attr_showRunningRoutes_name" = "Rutas para correr";
 "rendering_attr_showRunningRoutes_description" = "Mostrar rutas para correr";
 "rendering_attr_showFitnessTrails_description" = "Muestra los circuitos aeróbicos";
-"plugin_popup_weather_title" = "Mostrar el clima";
-"product_desc_ext_weather" = "Activa el complemento del clima para planificar una ruta teniendo en cuenta la meteorología. Mira el mapa colorido del pronóstico, que se actualiza cada hora para hoy, mañana y la próxima semana.\n\nMientras viajas, observa los widgets de temperatura, precipitación, velocidad del viento y presión, basados en la ubicación.\n\nEs útil para hacer senderismo y largos viajes en bicicleta o motocicleta.";
+"plugin_popup_weather_title" = "Ver meteorología";
+"product_desc_ext_weather" = "Activa el complemento meteorológico para planificar una ruta teniendo en cuenta la meteorología. Mira el mapa colorido del pronóstico, que se actualiza cada hora para hoy, mañana y la próxima semana.\n\nMientras viajas, observa los widgets de temperatura, precipitación, velocidad del viento y presión, basados en la ubicación.\n\nEs útil para hacer senderismo y largos viajes en bicicleta o motocicleta.";
 "measurement_units" = "Unidades de medida";
 "weather_temp_unit_c" = "Celsius";
 "weather_temp_unit_f" = "Fahrenheit";
@@ -2432,7 +2432,7 @@
 "cloud_make_backup" = "Crear copia de seguridad";
 "cloud_set_up_backup" = "Configurar copia de seguridad";
 "cloud_welcome_back" = "¡Es genial verte de nuevo!";
-"plugin_popup_weather_ask" = "Activar el complemento del clima";
+"plugin_popup_weather_ask" = "Activar el complemento meteorológico";
 "backup_and_restore" = "Copia de seguridad y restauración";
 "product_desc_weather" = "Pronóstico horario de 24 horas con 7 días de anticipación en el mapa";
 "user_login" = "Ingresar";
@@ -2592,7 +2592,7 @@
 // Shared Strings
 "shared_string_cancelled" = "Cancelado";
 "promo_subscription" = "OsmAnd Pro (Promo)";
-"screen_settings_weather_toolbar" = "Barra de herramientas del clima";
+"screen_settings_weather_toolbar" = "Barra de herramientas de la meteorología";
 "shared_string_now" = "Ahora";
 "subscription_banner_free_maps_description" = "Obtén descargas y actualizaciones de mapas ilimitadas.";
 "subscription_banner_no_free_maps_title" = "Has gastado todas las descargas gratuitas";
@@ -2611,7 +2611,7 @@
 "shared_string_total_size" = "Tamaño total";
 "shared_string_delete_all" = "Borrar todo";
 "shared_string_countries" = "Países";
-"weather_plugin" = "Complemento del clima";
+"weather_plugin" = "Complemento meteorológico";
 "weather_offline_forecast" = "Pronóstico sin conexión";
 "weather_offline_forecast_only" = "Solo pronóstico sin conexión";
 "weather_offline_forecast_only_desc" = "El pronóstico estará disponible solo para países con datos descargados previamente.";

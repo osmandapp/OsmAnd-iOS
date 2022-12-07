@@ -22,7 +22,7 @@
 
 #import <OsmAndCore/Utilities.h>
 
-#define kPageControlMargin 4.0
+#define kmaxNumberOfRoutes 4
 
 @interface OATrsansportRouteDetailsViewController () <UIPageViewControllerDataSource, UIPageViewControllerDelegate, OATransportDetailsControllerDelegate>
 
@@ -99,12 +99,12 @@
     _pageControl.currentPage = _currentRoute;
     _pageControl.numberOfPages = _numberOfRoutes;
     CGRect pageControlFrame = _pageControl.frame;
-    pageControlFrame.size = [_pageControl sizeForNumberOfPages:_numberOfRoutes];
+    pageControlFrame.size = [_pageControl sizeForNumberOfPages:MIN(_numberOfRoutes, kmaxNumberOfRoutes)];
     pageControlFrame.origin.y = _pageControlContainer.frame.size.height / 2 - pageControlFrame.size.height / 2;
     _pageControl.frame = pageControlFrame;
     
     CGRect pageControlContainerFrame = _pageControlContainer.frame;
-    pageControlContainerFrame.size.width = _pageControl.frame.size.width + kPageControlMargin * 2;
+    pageControlContainerFrame.size.width = _pageControl.frame.size.width;
     _pageControlContainer.frame = pageControlContainerFrame;
     
     [self setupPageController];

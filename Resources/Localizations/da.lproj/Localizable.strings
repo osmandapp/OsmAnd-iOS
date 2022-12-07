@@ -2703,7 +2703,7 @@
 "tts" = "TTS";
 "dowload_cloud_version" = "Download cloud-version";
 "shared_string_changed" = "Ændret";
-"cloud_recent_changes" = "Seneste ændringer";
+"cloud_recent_changes" = "Ændringer";
 "cloud_pause_all" = "Sæt alle på pause";
 "cloud_all_changes_uploaded_descr" = "Alle ændringer, der foretages på denne enhed, synkroniseres med OsmAnd Cloud.";
 "cloud_no_conflicts_descr" = "Dataene på enheden og i OsmAnd Cloud er de samme.";
@@ -2754,3 +2754,4 @@
 "remote_item" = "Fjernelement";
 "recalc_angle_dialog_descr" = "Ekstra lige segment mellem min placering og den beregnede rute vises, indtil ruten er genberegnet";
 "backup_delete_from_cloud" = "Slet fra clouden";
+"local_backup_empty_file" = "Sikkerhedskopifilen indeholder ingen elementer, der skal gendannes.";

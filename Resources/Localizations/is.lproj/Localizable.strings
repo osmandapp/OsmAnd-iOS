@@ -2676,3 +2676,7 @@
 "update_only_over_wi_fi" = "Uppfæra einungis í gegnum Wi-Fi";
 "subscription_banner_free_maps_title" = "Þú getur sótt %i kort ókeypis.";
 "compass_options_description" = "Smelltu á áttavitann til að breyta stefnu kortsins";
+"map_widget_rendering_fps" = "Rammatíðni myndgerðar korts";
+"depth_contour_lines" = "Dýptarlínur";
+"show_borders_of_downloaded_maps" = "Sýna jaðra sóttra landakorta";
+"mtb_segment_classification" = "Flokkun búta";

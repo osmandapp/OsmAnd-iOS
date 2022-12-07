@@ -185,7 +185,7 @@
     self.quickActionController.view.frame = self.view.frame;
     [self.view addSubview:self.quickActionController.view];
     
-    self.weatherButton.hidden = YES;
+    self.weatherButton.alpha = 0.;
 
     // IOS-218
     self.rulerLabel = [[OAMapRulerView alloc] initWithFrame:CGRectMake(120, DeviceScreenHeight - 42, kMapRulerMinWidth, 25)];

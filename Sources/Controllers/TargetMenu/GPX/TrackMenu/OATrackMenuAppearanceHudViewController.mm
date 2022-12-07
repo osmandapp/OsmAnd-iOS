@@ -967,10 +967,10 @@
             cell.sliderView.selectedMark = [arrayValue indexOfObject:cellData.values[@"custom_string_value"]];
 
             cell.sliderView.tag = indexPath.section << 10 | indexPath.row;
-            [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventAllEvents];
+            [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
             [cell.sliderView addTarget:self
                                 action:@selector(sliderChanged:)
-                      forControlEvents:UIControlEventTouchUpInside];
+                      forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
         }
         outCell = cell;
     }

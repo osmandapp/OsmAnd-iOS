@@ -30,6 +30,7 @@ private:
     QList<OsmAnd::Ref<OsmAnd::GpxDocument::WptPt>> _wptPtPoints;
     QList<OsmAnd::PointI> _points;
     QHash<QString, sk_sp<SkImage>> _iconsCache;
+    float _symbolsScaleFactor;
     sk_sp<SkImage> getBitmapByWaypoint(const OsmAnd::Ref<OsmAnd::GpxDocument::WptPt> &point, bool isFullSize);
     QString backgroundImageNameByType(const QString& type) const;
 protected:
@@ -40,7 +41,8 @@ public:
                                 const bool showCaptions,
                                 const OsmAnd::TextRasterizer::Style captionStyle,
                                 const double captionTopSpace,
-                                const float referenceTileSizeOnScreenInPixels);
+                                const float referenceTileSizeOnScreenInPixels,
+                                const float symbolsScaleFactor);
     virtual ~OAWaypointsMapLayerProvider();
 
     virtual OsmAnd::PointI getPoint31(const int index) const override;

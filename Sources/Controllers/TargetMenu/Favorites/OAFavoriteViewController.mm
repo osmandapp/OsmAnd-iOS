@@ -67,7 +67,7 @@
         locationPoint.x = OsmAnd::Utilities::get31TileNumberX(location.longitude);
         locationPoint.y = OsmAnd::Utilities::get31TileNumberY(location.latitude);
         
-        double elevation = 0;
+        double elevation = NAN;
         QString time = QString::fromNSString([OAFavoriteItem toStringDate:[NSDate date]]);
         QString pickupTime = QString::fromNSString([OAFavoriteItem toStringDate:[NSDate date]]);
         

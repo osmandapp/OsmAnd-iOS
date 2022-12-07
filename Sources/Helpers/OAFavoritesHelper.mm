@@ -173,7 +173,7 @@ static BOOL _favoritesLoaded = NO;
 
 + (BOOL) addFavorite:(OAFavoriteItem *)point saveImmediately:(BOOL)saveImmediately
 {
-    if ([point getAltitude] == 0)
+    if (isnan([point getAltitude]) || [point getAltitude] == 0)
         [point initAltitude];
     
     if ([point getName].length == 0 && _flatGroups[[point getCategory]])

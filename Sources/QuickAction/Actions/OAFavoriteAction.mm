@@ -105,7 +105,7 @@ static OAQuickActionType *TYPE;
     if ([self isItemExists:title])
         title = [self getNewItemName:title];
     
-    double elevation = 0;
+    double elevation = NAN;
     QString time = QString::fromNSString([OAFavoriteItem toStringDate:[NSDate date]]);
     QString pickupTime;
     

@@ -2708,7 +2708,7 @@
 "cross_buy" = "Compra cruzada";
 "purchases_feature_desc_cross_buy" = "Usa todas las funciones de la suscripción en múltiples plataformas sin coste adicional. Disponible en Android/iOS/Web.";
 "cloud_conflict" = "Conflicto";
-"cloud_recent_changes" = "Cambios recientes";
+"cloud_recent_changes" = "Cambios";
 "cloud_all_changes_uploaded" = "Se cargaron todo los cambios";
 "cloud_all_changes_uploaded_descr" = "Todos los cambios hechos en este dispositivo se sincronizaron en OsmAnd Cloud.";
 "cloud_no_conflicts" = "Sin conflictos";
@@ -2765,3 +2765,4 @@
 "recalc_angle_dialog_descr" = "Se muestra un segmento recto adicional entre la ubicación y la ruta calculada, hasta que la ruta sea recalculada";
 "local_item" = "Elemento local";
 "deleted_item" = "Elemento borrado";
+"local_backup_empty_file" = "No existen elementos a restaurar desde la copia de seguridad.";

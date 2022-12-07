@@ -2476,3 +2476,5 @@
 "paused" = "Pausad";
 "shared_string_delete_all" = "Ta bort alla";
 "restore_from_osmand_cloud" = "Återställ från OsmAnd Cloud";
+"simulation_real_mode_title" = "Realistisk simulering";
+"simulation_constant_mode_title" = "Konstant hastighet";

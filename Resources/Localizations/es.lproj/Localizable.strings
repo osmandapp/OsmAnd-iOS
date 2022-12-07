@@ -2638,7 +2638,7 @@
 "manage_storage" = "Gestionar almacenamiento";
 "backup_delete_types_descr" = "¿Borrar todos los tipos de datos obsoletos en OsmAnd Cloud?";
 "backup_delete_data_type_description" = "Esto borrará todos los datos de «%@» en OsmAnd Cloud. Esta acción no se puede deshacer.";
-"cloud_recent_changes" = "Cambios recientes";
+"cloud_recent_changes" = "Cambios";
 "cloud_all_changes_uploaded" = "Se cargaron todo los cambios";
 "cloud_all_changes_uploaded_descr" = "Todos los cambios hechos en este dispositivo se sincronizaron en OsmAnd Cloud.";
 "cloud_no_conflicts" = "Sin conflictos";
@@ -2749,3 +2749,4 @@
 "recalc_angle_dialog_title" = "Ángulo mínimo entre mi ubicación y la ruta";
 "recalc_angle_dialog_descr" = "Se mostrará un segmento recto adicional entre mi ubicación y la ruta calculada hasta que se vuelva a calcular la ruta";
 "remote_item" = "Elemento remoto";
+"local_backup_empty_file" = "La copia de seguridad no contiene ningún elemento que restaurar.";

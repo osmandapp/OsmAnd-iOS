@@ -185,10 +185,18 @@
 - (NSArray<NSString *> *) getTagsMatchingWith:(NSString *)searchString
 {
     NSArray<NSString *> *tags = [self getAllTags];
-    if (tags)
-        return [tags filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF BEGINSWITH[c] %@", searchString]];
+    if (tags && searchString.length > 0)
+    {
+        NSString *searchStringWithPrefix = [NSString stringWithFormat:@":%@", searchString];
+        NSArray<NSString *> *filteredTags = [tags filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF BEGINSWITH[c] %@ OR SELF CONTAINS[cd] %@", searchString, searchStringWithPrefix]];
+        return [filteredTags sortedArrayUsingComparator:^NSComparisonResult(NSString* _Nonnull o1, NSString* _Nonnull o2) {
+                return [o1.lowerCase compare:o2.lowerCase];
+        }];
+    }
     else
+    {
         return @[];
+    }
 }
 
 - (NSArray<NSString *> *) getValuesMatchingWith:(NSString *)searchString forTag:(NSString *)tag

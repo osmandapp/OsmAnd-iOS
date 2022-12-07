@@ -2757,3 +2757,11 @@
 "shared_string_file_cloud" = "Nube";
 "mtb_segment_classification" = "Clasificación de segmentos";
 "show_borders_of_downloaded_maps" = "Colorear mapas descargados";
+"remote_item" = "Elemento remoto";
+"shared_string_angle_param" = "Ángulo: %d°";
+"shared_string_angle" = "Ángulo";
+"backup_delete_from_cloud" = "Borrar de la nube";
+"recalc_angle_dialog_title" = "Ángulo mínimo entre la ubicación y la ruta";
+"recalc_angle_dialog_descr" = "Se muestra un segmento recto adicional entre la ubicación y la ruta calculada, hasta que la ruta sea recalculada";
+"local_item" = "Elemento local";
+"deleted_item" = "Elemento borrado";

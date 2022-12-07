@@ -2770,6 +2770,14 @@
 "download_all" = "Iscàrriga totu";
 "cloud_all_changes_downloaded" = "Totu sas modìficas sunt istadas iscarrigadas";
 "show_borders_of_downloaded_maps" = "Ammustra sos oros de sas mapas iscarrigadas";
-"mtb_segment_classification" = "Classificatzione de sos segmentos";
+"mtb_segment_classification" = "Classificatzione de su segmentu";
 "rendering_attr_showMtbScale_name" = "Iscala MTB (pro bitzicletas de monte)";
 "shared_string_added" = "Annantu";
+"shared_string_angle" = "Àngulu";
+"shared_string_angle_param" = "Àngulu: %d°";
+"backup_delete_from_cloud" = "Iscantzella dae sa nue";
+"remote_item" = "Elementu remotu";
+"local_item" = "Elementu locale";
+"deleted_item" = "Elementu iscantzelladu";
+"recalc_angle_dialog_title" = "Àngulu mìnimu intre sa positzione mea e s'àndala";
+"recalc_angle_dialog_descr" = "Unu segmentu dritu intre sa positzione mea e s'àndala carculada at a èssere ammustradu finas a cando s'àndala non s'at a torrare a carculare";

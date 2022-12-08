@@ -2732,7 +2732,7 @@
 "cloud_contains_newer_changes" = "Sa versione de OsmAnd Cloud tenet modìficas prus noas.";
 "cloud_pause_all" = "Pone totu in pàusa";
 "recorded_voice" = "Registradu";
-"cloud_recent_changes" = "Modìficas reghentes";
+"cloud_recent_changes" = "Modìficas";
 "cloud_no_conflicts" = "Non bi sunt cunflitos";
 "upload_local_version" = "Càrriga sa versione locale";
 "dowload_cloud_version" = "Iscàrriga sa versione de sa nue";
@@ -2781,3 +2781,4 @@
 "deleted_item" = "Elementu iscantzelladu";
 "recalc_angle_dialog_title" = "Àngulu mìnimu intre sa positzione mea e s'àndala";
 "recalc_angle_dialog_descr" = "Unu segmentu dritu intre sa positzione mea e s'àndala carculada at a èssere ammustradu finas a cando s'àndala non s'at a torrare a carculare";
+"local_backup_empty_file" = "Su documentu de còpia de seguresa non cuntenet perunu elementu de ripristinare.";

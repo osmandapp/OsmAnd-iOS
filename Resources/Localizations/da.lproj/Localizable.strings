@@ -1387,7 +1387,7 @@
 "routing_attr_piste_type_nordic_description" = "Spor til nordisk eller langrend.";
 "rendering_attr_smoothness_impassable_name" = "Ikke farbar";
 "rendering_attr_showCycleNodeNetworkRoutes_name" = "Vis cykelrute-knudepunkter";
-"rendering_attr_shareTaxiRoutes_name" = "Delebilruter";
+"rendering_attr_shareTaxiRoutes_name" = "Deletaxiruter";
 "rendering_attr_surface_grass_paver_name" = "Befæstet græs";
 "routing_attr_avoid_ferries_name" = "Ingen færger";
 "routing_attr_allow_motorway_name" = "Brug motorveje";

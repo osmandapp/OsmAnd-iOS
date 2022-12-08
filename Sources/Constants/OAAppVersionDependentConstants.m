@@ -8,11 +8,14 @@
 
 #import "OAAppVersionDependentConstants.h"
 
+#define kVersion4_3 @"4.3."
+#define kVersion4_4 @"4.4."
+
 @implementation OAAppVersionDependentConstants
 
 + (NSString *) getShortAppVersionWithSeparator:(NSString *)separator
 {
-    NSString *fullVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    NSString *fullVersion = self.getVersion;
     NSArray *subversions = [fullVersion componentsSeparatedByString:@"."];
     
     if (subversions && subversions.count > 1)
@@ -20,6 +23,18 @@
         return [NSString stringWithFormat:@"%@%@%@", subversions[0], separator, subversions[1]];
     }
     return fullVersion;
+}
+
++ (NSString *) getVersion
+{
+    NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    if ([version hasPrefix:kVersion4_4])
+    {
+        NSRange rOriginal = [version rangeOfString:kVersion4_4];
+        if (NSNotFound != rOriginal.location)
+            version = [version stringByReplacingCharactersInRange:rOriginal withString:kVersion4_3];
+    }
+    return version;
 }
 
 //4_2
@@ -30,14 +45,14 @@
 
 + (NSString *)getAppVersionWithBundle
 {
-    NSString *appVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    NSString *appVersion = self.getVersion;
     NSString *bundleVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
     return [NSString stringWithFormat:@"OsmAnd Maps %@ (%@)", appVersion, bundleVersion];
 }
 
 + (NSString *) getAppVersionForUrl
 {
-    return [[NSString stringWithFormat:@"OsmAndIOS_%@", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    return [[NSString stringWithFormat:@"OsmAndIOS_%@", self.getVersion] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
 }
 
 @end

@@ -63,8 +63,7 @@
 
 - (NSMutableAttributedString *)getAttributedContentText
 {
-    NSString *fullAppVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-    NSString *title = [NSString stringWithFormat:OALocalizedString(@"latest_version"), fullAppVersion];
+    NSString *title = [NSString stringWithFormat:OALocalizedString(@"latest_version"), OAAppVersionDependentConstants.getVersion];
     NSString *description = OALocalizedString([NSString stringWithFormat:@"ios_release_%@", [OAAppVersionDependentConstants getShortAppVersion]]);
     
     NSString *labelText = [NSString stringWithFormat:@"%@\n\n%@", title, description];

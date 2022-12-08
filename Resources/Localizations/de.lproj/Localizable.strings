@@ -2706,7 +2706,7 @@
 "auth_error" = "Autorisierungsfehler";
 "cloud_confirm_delete_type" = "Sind Sie sicher, dass sie „%@” aus OsmAnd Cloud löschen möchten?";
 "purchases_feature_desc_cross_buy" = "Nutzen Sie alle Abo-Features auf allen Plattformen ohne zusätzliche Kosten. Verfügbar für Android/iOS/Web.";
-"cloud_recent_changes" = "Letzte Änderungen";
+"cloud_recent_changes" = "Änderungen";
 "cloud_contains_newer_changes" = "Die OsmAnd Cloud-Version enthält neuere Änderungen.";
 "backup_conflicts_descr" = "Eine neuere Version dieser Dateien ist auf dem Server gespeichert. Sie müssen eine Aktion auswählen";
 "recorded_voice" = "Aufgezeichnet";
@@ -2765,3 +2765,4 @@
 "recalc_angle_dialog_descr" = "Ein gerades Segment zwischen meinem Standort und berechneter Route wird angezeigt, bis die Route neu berechnet wird";
 "shared_string_angle" = "Winkel";
 "remote_item" = "Entferntes Element";
+"local_backup_empty_file" = "Die Sicherungsdatei enthält keine wiederherzustellenden Elemente.";

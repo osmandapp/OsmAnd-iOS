@@ -223,8 +223,6 @@
 "arrival_distance_factor_normally" = "ნორმალური";
 "arrival_distance_factor_late" = "გვიანი";
 "arrival_distance_factor_at_last" = "ბოლო დარჩენილი მეტრებისას";
-"map_orientation_change_in_accordance_with_speed" = "Map orientation threshold";
-"map_orientation_change_in_accordance_with_speed_descr" = "Select below which speed the map orientation switches from 'To direction of movement' to 'To compass'";
 "route_parameters" = "გზის პარამეტრები";
 "fast_route_mode" = "უსწრაფესი გზა";
 "nav_type_title" = "ნავიგაციის ტიპი";

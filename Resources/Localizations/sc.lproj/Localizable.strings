@@ -637,8 +637,6 @@
 "arrival_distance_factor_normally" = "Normale";
 "arrival_distance_factor_late" = "Tardu";
 "arrival_distance_factor_at_last" = "A sosùrtimos metros";
-"map_orientation_change_in_accordance_with_speed" = "Lìmite de orientamentu de sa mapa";
-"map_orientation_change_in_accordance_with_speed_descr" = "Ischerta sa lestresa in suta de sa cale s'orientamentu de sa mapa colat dae 'in sa diretzione de mòvida' a 'bussola'";
 "snap_to_road" = "Arrea in subra de sos caminos";
 "snap_to_road_descr" = "Arrea sa positzione in subra de sos caminos durante sa navigatzione";
 "show_warnings_title" = "Ammustra avertimentos…";

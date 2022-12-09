@@ -223,8 +223,6 @@
 "arrival_distance_factor_normally" = "Normal";
 "arrival_distance_factor_late" = "Gec";
 "arrival_distance_factor_at_last" = "Son metrlərdə";
-"map_orientation_change_in_accordance_with_speed" = "Xəritə istiqamətləndirmə həddi";
-"map_orientation_change_in_accordance_with_speed_descr" = "Select below which speed the map orientation switches from 'To direction of movement' to 'To compass'";
 "route_parameters" = "Marşrut parametrləri";
 "fast_route_mode" = "Fastest route";
 "nav_type_title" = "Naviqasiya növü";

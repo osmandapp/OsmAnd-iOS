@@ -223,8 +223,6 @@
 "arrival_distance_factor_normally" = "Нормално";
 "arrival_distance_factor_late" = "По-късно";
 "arrival_distance_factor_at_last" = "В последните метри";
-"map_orientation_change_in_accordance_with_speed" = "Map orientation threshold";
-"map_orientation_change_in_accordance_with_speed_descr" = "Select below which speed the map orientation switches from 'To direction of movement' to 'To compass'";
 "route_parameters" = "Route parameters";
 "fast_route_mode" = "Най-бърз маршрут";
 "nav_type_title" = "Navigation type";

@@ -313,8 +313,6 @@
 "shared_string_remove" = "Excluir";
 "device_memory" = "Memória do aparelho";
 "free_memory" = "Livre %@";
-"map_orientation_change_in_accordance_with_speed" = "Limite para orientação do mapa";
-"map_orientation_change_in_accordance_with_speed_descr" = "Selecione abaixo em qual velocidade a orientação do mapa alterna de 'Na direção do movimento' para 'Na direção da bússola'";
 "today" = "Hoje";
 "yesterday" = "Ontem";
 "shared_string_widgets" = "Widgets";

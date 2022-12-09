@@ -122,8 +122,6 @@
 "arrival_distance_factor_normally" = "Op tijd";
 "arrival_distance_factor_late" = "Laat";
 "arrival_distance_factor_at_last" = "In de laatste meters";
-"map_orientation_change_in_accordance_with_speed" = "Snelheidsdrempel kaart oriëntatie";
-"map_orientation_change_in_accordance_with_speed_descr" = "Kies de snelheid waarboven Kaartrotatie wijzigt van 'Volgens kompas' naar 'In beweegrichting'.";
 "fast_route_mode" = "Snelste route";
 "fast_route_mode_descr" = "Activeer voor de snelste route of deactiveer voor een zuinige route.";
 "avoid_in_routing_title" = "Vermijd…";

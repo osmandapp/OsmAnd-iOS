@@ -223,8 +223,6 @@
 "arrival_distance_factor_normally" = "Normal";
 "arrival_distance_factor_late" = "Terlambat";
 "arrival_distance_factor_at_last" = "Dalam meter akhir";
-"map_orientation_change_in_accordance_with_speed" = "Ambang orientasi peta";
-"map_orientation_change_in_accordance_with_speed_descr" = "Select below which speed the map orientation switches from 'To direction of movement' to 'To compass'";
 "route_parameters" = "Parameter rute";
 "fast_route_mode" = "Rute tercepat";
 "nav_type_title" = "Jenis navigasi";

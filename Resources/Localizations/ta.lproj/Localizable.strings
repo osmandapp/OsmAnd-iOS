@@ -245,8 +245,6 @@
 "arrival_distance_factor_normally" = "இயல்பான";
 "arrival_distance_factor_late" = "தாமதம்";
 "arrival_distance_factor_at_last" = "கடந்த மீட்டர்";
-"map_orientation_change_in_accordance_with_speed" = "நோக்குநிலையிலன் தொடக்கநிலையை வரைக";
-"map_orientation_change_in_accordance_with_speed_descr" = "Select below which speed the map orientation switches from 'To direction of movement' to 'To compass'";
 
 "route_parameters" = "Route parameters";
 "fast_route_mode" = "Fastest route";

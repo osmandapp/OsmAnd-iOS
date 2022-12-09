@@ -513,7 +513,6 @@
 "today" = "Oggi";
 "yesterday" = "Ieri";
 "shared_string_topbar" = "Barra superiore";
-"map_orientation_change_in_accordance_with_speed_descr" = "Selezionare la velocità sotto la quale l'orientamento della mappa passa da 'Nella direzione del movimento' a 'Con bussola'";
 "fast_route_mode_descr" = "Abilita per calcolare il percorso più veloce o disabilita per il percorso dal minor consumo.";
 "shared_string_collapse" = "Compatta";
 "shared_string_widgets" = "Widget";
@@ -544,7 +543,6 @@
 "shared_string_my_location" = "La mia posizione";
 "shared_string_address" = "Indirizzi";
 "map_widget_battery" = "Livello della batteria";
-"map_orientation_change_in_accordance_with_speed" = "Soglia di orientamento della mappa";
 "units_nm" = "nmi";
 "show_traffic_warnings" = "Avvisi di traffico";
 "snap_to_road" = "Blocca sulle strade";

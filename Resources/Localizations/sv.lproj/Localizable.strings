@@ -223,8 +223,6 @@
 "arrival_distance_factor_normally" = "Normalt";
 "arrival_distance_factor_late" = "Sent";
 "arrival_distance_factor_at_last" = "De sista metrarna";
-"map_orientation_change_in_accordance_with_speed" = "Kartorienteringströskel";
-"map_orientation_change_in_accordance_with_speed_descr" = "Select below which speed the map orientation switches from 'To direction of movement' to 'To compass'";
 "route_parameters" = "Ruttparametrar";
 "fast_route_mode" = "Snabbaste vägen";
 "nav_type_title" = "Navigeringstyp";

@@ -243,8 +243,6 @@
 "arrival_distance_factor_normally" = "Normal";
 "arrival_distance_factor_late" = "Late";
 "arrival_distance_factor_at_last" = "In the last meters";
-"map_orientation_change_in_accordance_with_speed" = "Map orientation threshold";
-"map_orientation_change_in_accordance_with_speed_descr" = "Select below which speed the map orientation switches from 'To direction of movement' to 'To compass'";
 
 "route_parameters" = "Route parameters";
 "fast_route_mode" = "वेगवान रस्ता";

@@ -1868,7 +1868,6 @@
 "routing_attr_avoid_sett_description" = "避免鹅卵石或小型原石砖";
 "routing_attr_piste_type_downhill_description" = "适合高山或高山速降滑雪的斜坡，并可使用滑雪缆车。";
 "routing_attr_piste_type_nordic_description" = "适合北欧或越野滑雪的小径。";
-"map_orientation_change_in_accordance_with_speed" = "地图方向阈值";
 "routing_attr_allow_classic_only_name" = "只允许经典路线";
 "routing_attr_difficulty_preference_description" = "倾向于这种难度的路线，尽管在更难或更容易的滑雪道仍可用时其路线时间更短。";
 "routing_attr_piste_type_sled_description" = "供雪橇使用的斜坡。";

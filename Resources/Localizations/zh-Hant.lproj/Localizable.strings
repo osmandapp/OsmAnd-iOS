@@ -642,8 +642,6 @@
 "arrival_distance_factor_normally" = "正常";
 "arrival_distance_factor_late" = "稍遲";
 "arrival_distance_factor_at_last" = "在最後幾公尺";
-"map_orientation_change_in_accordance_with_speed" = "地圖定位起點";
-"map_orientation_change_in_accordance_with_speed_descr" = "選擇下方哪個速度的地圖方向從'行動方向'切換到'羅盤'";
 "snap_to_road" = "對齊道路";
 "snap_to_road_descr" = "導航過程中對齊道路位置";
 "show_warnings_title" = "顯示警示…";

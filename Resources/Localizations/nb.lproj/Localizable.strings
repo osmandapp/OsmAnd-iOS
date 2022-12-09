@@ -173,8 +173,6 @@
 "arrival_distance_factor_normally" = "Normal";
 "arrival_distance_factor_late" = "Sen";
 "arrival_distance_factor_at_last" = "De siste meterne";
-"map_orientation_change_in_accordance_with_speed" = "Kartorienteringsterskel";
-"map_orientation_change_in_accordance_with_speed_descr" = "Select below which speed the map orientation switches from 'To direction of movement' to 'To compass'";
 "route_parameters" = "Ruteparametere";
 "fast_route_mode" = "Raskeste rute";
 "fast_route_mode_descr" = "Aktiver forå beregne raskeste rute eller deaktiver for drivstoffbesparende rute.";

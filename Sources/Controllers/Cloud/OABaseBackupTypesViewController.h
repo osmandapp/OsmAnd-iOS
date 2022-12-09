@@ -29,7 +29,7 @@
 - (NSMutableDictionary<OAExportSettingsType *, NSArray *> *)getSelectedItems;
 - (NSDictionary<OAExportSettingsCategory *, OASettingsCategoryItems *> *)getDataItems;
 
-- (void)onTypeSelected:(OAExportSettingsType *)type selected:(BOOL)selected;
+- (void)onTypeSelected:(OAExportSettingsType *)type selected:(BOOL)selected view:(UIView *)view;
 - (NSArray *)getItemsForType:(OAExportSettingsType *)type;
 
 + (NSInteger)calculateItemsSize:(NSArray *)items;

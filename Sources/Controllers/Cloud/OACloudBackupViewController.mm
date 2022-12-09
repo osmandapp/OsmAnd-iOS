@@ -614,9 +614,14 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonRightIconCell getCellIdentifier] owner:self options:nil];
             cell = (OAButtonRightIconCell *)[nib objectAtIndex:0];
         }
-        BOOL hasInfo = _info != nil;
-        BOOL noChanges = _status == OABackupStatus.MAKE_BACKUP && (!hasInfo || (_info.filteredFilesToUpload.count == 0 && _info.filteredFilesToDelete.count == 0 && [OABackupHelper getItemsMapForRestore:_info settingsItems:_backup.settingsItems].count == 0));
-        BOOL actionButtonDisabled = _status == OABackupStatus.BACKUP_COMPLETE || noChanges || _backupHelper.isBackupPreparing || _settingsHelper.isBackupSyncing;
+        BOOL isSyncButton = [item.key isEqualToString:@"onSetUpBackupButtonPressed"];
+        BOOL actionButtonDisabled = isSyncButton;
+        if (isSyncButton)
+        {
+            BOOL hasInfo = _info != nil;
+            BOOL noChanges = _status == OABackupStatus.MAKE_BACKUP && (!hasInfo || (_info.filteredFilesToUpload.count == 0 && _info.filteredFilesToDelete.count == 0 && [OABackupHelper getItemsMapForRestore:_info settingsItems:_backup.settingsItems].count == 0));
+            actionButtonDisabled = noChanges || _backupHelper.isBackupPreparing || _settingsHelper.isBackupSyncing;
+        }
         cell.iconView.tintColor = actionButtonDisabled ? UIColorFromRGB(color_tint_gray) : UIColorFromRGB(color_primary_purple);
         [cell.button setTitleColor:actionButtonDisabled ? UIColorFromRGB(color_text_footer) : UIColorFromRGB(color_primary_purple) forState:UIControlStateNormal];
         [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];

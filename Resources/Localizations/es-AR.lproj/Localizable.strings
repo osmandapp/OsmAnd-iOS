@@ -223,8 +223,6 @@
 "arrival_distance_factor_normally" = "Normal";
 "arrival_distance_factor_late" = "Cerca";
 "arrival_distance_factor_at_last" = "En losúltimos metros";
-"map_orientation_change_in_accordance_with_speed" = "Umbral de orientación del mapa";
-"map_orientation_change_in_accordance_with_speed_descr" = "Velocidad a partir de la cual la orientación del mapa cambia de «Dirección del movimiento» a «Dirección de la brújula»";
 "route_parameters" = "Parámetros de ruta";
 "fast_route_mode" = "Ruta más rápida";
 "nav_type_title" = "Tipo de navegación";

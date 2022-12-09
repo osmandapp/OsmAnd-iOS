@@ -521,7 +521,6 @@
 "si_km_m" = "Kílómetrar/metrar";
 "driving_region_automatic" = "Sjálfvirkt";
 "shared_string_topbar" = "Toppstika";
-"map_orientation_change_in_accordance_with_speed" = "Þolvik fyrir stefnu korts";
 "shared_string_info" = "Upplýsingar";
 "simulate_routing" = "Herma staðsetningu þína";
 "simulate_routing_descr" = "Herma eftir staðsetningu með því að nota reiknaða leið";
@@ -722,7 +721,6 @@
 "shared_string_road" = "Vegur";
 "avoid_roads_msg" = "Þú getur sett í gang varaleið með því að velja götur sem á að forðast";
 "save_global_track_interval_descr" = "Veldu millibil skráninga í almenna ferilskráningu (virkjað með viðmótshlutanum fyrir GPX-skráningu á kortinu).";
-"map_orientation_change_in_accordance_with_speed_descr" = "Veldu undir hvaða hraða stefna kortsins skiptir úr 'Eftir átt hreyfingar' yfir í 'Eftir áttavita'";
 "day_off_label" = "slökkt";
 "open_from" = "Opið frá";
 "open_till" = "Opið til";

@@ -223,8 +223,6 @@
 "arrival_distance_factor_normally" = "Norme";
 "arrival_distance_factor_late" = "Malfrue";
 "arrival_distance_factor_at_last" = "Dum la plej lastaj metroj";
-"map_orientation_change_in_accordance_with_speed" = "Map-orientiĝa sojlo";
-"map_orientation_change_in_accordance_with_speed_descr" = "Select below which speed the map orientation switches from 'To direction of movement' to 'To compass'";
 "route_parameters" = "Parametroj de navigo";
 "fast_route_mode" = "Plej rapida kurso";
 "nav_type_title" = "Speco de navigo";

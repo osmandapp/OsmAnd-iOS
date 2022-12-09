@@ -88,8 +88,6 @@
 "arrival_distance_factor_normally" = "Normal";
 "arrival_distance_factor_late" = "Late";
 "arrival_distance_factor_at_last" = "In the last meters";
-"map_orientation_change_in_accordance_with_speed" = "မြေပုံ orientation ကန့်သတ်နေရာ";
-"map_orientation_change_in_accordance_with_speed_descr" = "Select below which speed the map orientation switches from 'To direction of movement' to 'To compass'";
 "fast_route_mode" = "Fastest route";
 "fast_route_mode_descr" = "Enable to calculate fastest route or disable for fuel-saving route";
 "avoid_in_routing_title" = "Avoid…";

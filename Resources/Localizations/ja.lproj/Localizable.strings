@@ -173,8 +173,6 @@
 "arrival_distance_factor_normally" = "普通";
 "arrival_distance_factor_late" = "遅め";
 "arrival_distance_factor_at_last" = "最後の数メートル";
-"map_orientation_change_in_accordance_with_speed" = "マップ向きのしきい値";
-"map_orientation_change_in_accordance_with_speed_descr" = "マップの向きが’移動方向'から'方位'に切り替わる速度を選択します";
 "route_parameters" = "ルートパラメーター";
 "fast_route_mode" = "最速ルート";
 "fast_route_mode_descr" = "有効なら目的地までの最速ルートで計算し、無効なら燃費を抑えた短いルートで計算します";

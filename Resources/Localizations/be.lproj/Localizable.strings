@@ -612,8 +612,6 @@
 "arrival_distance_factor_normally" = "Звычайна";
 "arrival_distance_factor_late" = "Пазней";
 "arrival_distance_factor_at_last" = "На апошніх метрах";
-"map_orientation_change_in_accordance_with_speed" = "Парог арыентацыі мапы";
-"map_orientation_change_in_accordance_with_speed_descr" = "Абярыце ніжэй, на якой хуткасці арыентацыя мапы пераключаецца \"Напрамку руху\" на \"Па компасе\"";
 "snap_to_road" = "Прывязвацца да дарог";
 "snap_to_road_descr" = "Прывязвацца да дарог падчас навігацыі";
 "show_warnings_title" = "Паказваць папярэджанні…";

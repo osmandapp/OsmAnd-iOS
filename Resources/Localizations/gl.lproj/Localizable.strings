@@ -136,8 +136,6 @@
 "arrival_distance_factor_normally" = "Normal";
 "arrival_distance_factor_late" = "Tardo";
 "arrival_distance_factor_at_last" = "Nos derradeiros metros";
-"map_orientation_change_in_accordance_with_speed" = "Limiar de orientación do mapa";
-"map_orientation_change_in_accordance_with_speed_descr" = "Select below which speed the map orientation switches from 'To direction of movement' to 'To compass'";
 "fast_route_mode" = "Rota máis rápida";
 "fast_route_mode_descr" = "Activa isto para calcular a ruta máis rápida ou desactívao para a máis eficiencia no combustíbel.";
 "avoid_in_routing_title" = "Evitar…";

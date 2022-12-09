@@ -175,8 +175,6 @@
 "arrival_distance_factor_normally" = "Normaalne";
 "arrival_distance_factor_late" = "Hilja";
 "arrival_distance_factor_at_last" = "Viimastel meetritel";
-"map_orientation_change_in_accordance_with_speed" = "Kaardi orientatsiooni lävi";
-"map_orientation_change_in_accordance_with_speed_descr" = "Vali allpool 'liikumise suunalt' 'kompassi suunale' vastavalt kaardi orientatsiooni ümber lülitamise kiirus";
 "route_parameters" = "Teekonna parameetrid";
 "fast_route_mode" = "Kiireim teekond";
 "fast_route_mode_descr" = "Luba, et arvutada kiireim teekond või keela kütusesäästliku teekonna jaoks.";

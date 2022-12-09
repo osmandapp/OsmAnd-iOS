@@ -243,8 +243,6 @@
 "arrival_distance_factor_normally" = "Սովորական";
 "arrival_distance_factor_late" = "Ուշացումով";
 "arrival_distance_factor_at_last" = "Վերջին պահին";
-"map_orientation_change_in_accordance_with_speed" = "Քարտեզի կողմնորոշման շեմը";
-"map_orientation_change_in_accordance_with_speed_descr" = "Select below which speed the map orientation switches from 'To direction of movement' to 'To compass'";
 
 "route_parameters" = "Route parameters";
 "fast_route_mode" = "Արագընթաց երթուղի";

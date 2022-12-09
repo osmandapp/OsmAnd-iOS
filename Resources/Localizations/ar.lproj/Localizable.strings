@@ -122,8 +122,6 @@
 "arrival_distance_factor_normally" = "طبيعي";
 "arrival_distance_factor_late" = "متأخر";
 "arrival_distance_factor_at_last" = "في الأمتار الأخيرة";
-"map_orientation_change_in_accordance_with_speed" = "عتبة توجيه الخريطة";
-"map_orientation_change_in_accordance_with_speed_descr" = "حدد أدناه السرعة التي ينتقل بها اتجاه الخريطة من \"اتجاه الحركة\" إلى \"البوصلة\"";
 "fast_route_mode" = "الطريق الأسرع";
 "fast_route_mode_descr" = "تفعيل لحساب الطريق الأسرع أو تعطيل لحساب مسار أقل استهلاكا للوقود";
 "avoid_in_routing_title" = "التجنب…";

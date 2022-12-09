@@ -216,8 +216,6 @@
 "arrival_distance_factor_normally" = "Normaali";
 "arrival_distance_factor_late" = "Myöhään";
 "arrival_distance_factor_at_last" = "Viime metreillä";
-"map_orientation_change_in_accordance_with_speed" = "Kartan suuntauskynnys";
-"map_orientation_change_in_accordance_with_speed_descr" = "Select below which speed the map orientation switches from 'To direction of movement' to 'To compass'";
 "route_parameters" = "Reittiparametrit";
 "fast_route_mode" = "Nopein reitti";
 "nav_type_title" = "Navigointityyppi";

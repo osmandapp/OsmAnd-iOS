@@ -223,8 +223,6 @@
 "arrival_distance_factor_normally" = "רגיל";
 "arrival_distance_factor_late" = "מאוחר";
 "arrival_distance_factor_at_last" = "במטרים האחרונים";
-"map_orientation_change_in_accordance_with_speed" = "סף כיווניות מפה";
-"map_orientation_change_in_accordance_with_speed_descr" = "Select below which speed the map orientation switches from 'To direction of movement' to 'To compass'";
 "route_parameters" = "מאפייני מסלול";
 "fast_route_mode" = "המסלול המהיר ביותר";
 "nav_type_title" = "סוג ניווט";

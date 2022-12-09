@@ -834,7 +834,6 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonSpeedConstant *speedSystem;
 @property (nonatomic) OACommonAngularConstant *angularUnits;
 @property (nonatomic) OACommonDouble *speedLimitExceedKmh;
-@property (nonatomic) OACommonDouble *switchMapDirectionToCompass;
 @property (nonatomic) OACommonDouble *routeRecalculationDistance;
 @property (nonatomic) OACommonInteger *customRouteColorDay;
 @property (nonatomic) OACommonInteger *customRouteColorNight;

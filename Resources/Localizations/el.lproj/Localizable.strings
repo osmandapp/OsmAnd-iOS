@@ -180,7 +180,6 @@
 "osm_note_action_field_descr" = "Αυτό το μήνυμα περιλαμβάνεται στο πεδίο σχολίων.";
 "shared_string_time" = "Χρόνος";
 "avoid_in_routing_title" = "Αποφυγή…";
-"map_orientation_change_in_accordance_with_speed" = "Όριο προσανατολισμού χάρτη";
 "longitude" = "Γεωγραφικό μήκος";
 "tile_cache" = "Κρυφή μνήμη πλακιδίου";
 "shared_string_clear_all" = "Καθαρισμός όλων";
@@ -981,7 +980,6 @@
 "get_discount_title" = "Αγορά %d %@ με %d%% έκπτωση.";
 "year_short" = "Χρ";
 "month_short" = "Μήν";
-"map_orientation_change_in_accordance_with_speed_descr" = "Επιλογή ταχύτητας που ο προσανατολισμός του χάρτη θα αλλάξει από «Προς την κατεύθυνση κίνησης» σε «Προς την πυξίδα»";
 "vehicle_parameters" = "Παράμετροι οχήματος";
 "screen_alerts" = "Προειδοποιήσεις οθόνης";
 "voice_announces" = "Φωνητικές ανακοινώσεις";

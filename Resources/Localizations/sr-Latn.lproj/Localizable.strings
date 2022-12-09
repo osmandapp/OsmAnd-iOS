@@ -224,8 +224,6 @@
 "arrival_distance_factor_normally" = "Normalno";
 "arrival_distance_factor_late" = "Kasno";
 "arrival_distance_factor_at_last" = "U poslednjih par metara";
-"map_orientation_change_in_accordance_with_speed" = "Zadrška usmerenja karte";
-"map_orientation_change_in_accordance_with_speed_descr" = "Select below which speed the map orientation switches from 'To direction of movement' to 'To compass'";
 "route_parameters" = "Parametri puta";
 "fast_route_mode" = "Najbrži put";
 "nav_type_title" = "Tip navođenja";

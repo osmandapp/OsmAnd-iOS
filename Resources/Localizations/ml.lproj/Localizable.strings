@@ -243,8 +243,6 @@
 "arrival_distance_factor_normally" = "സാധാരണ";
 "arrival_distance_factor_late" = "\"താമസിച്ച് \"";
 "arrival_distance_factor_at_last" = "അവസാന നിമിഷത്തില്‍";
-"map_orientation_change_in_accordance_with_speed" = "മാപ്പ് ഓറിയന്റേഷൻ ത്രെഷോൾഡ്";
-"map_orientation_change_in_accordance_with_speed_descr" = "Select below which speed the map orientation switches from 'To direction of movement' to 'To compass'";
 
 "route_parameters" = "Route parameters";
 "fast_route_mode" = "വേഗതയേറിയ വഴി";

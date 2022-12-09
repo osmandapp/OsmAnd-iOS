@@ -149,7 +149,6 @@
 #define speedSystemKey @"speedSystem"
 #define angularUnitsKey @"angularUnits"
 #define speedLimitExceedKey @"speedLimitExceed"
-#define switchMapDirectionToCompassKey @"switchMapDirectionToCompass"
 #define showArrivalTimeKey @"showArrivalTime"
 #define showIntermediateArrivalTimeKey @"showIntermediateArrivalTime"
 #define showRelativeBearingKey @"showRelativeBearing"
@@ -3832,9 +3831,7 @@
         _speedSystem = [OACommonSpeedConstant withKey:speedSystemKey defValue:KILOMETERS_PER_HOUR];
         _angularUnits = [OACommonAngularConstant withKey:angularUnitsKey defValue:DEGREES];
         _speedLimitExceedKmh = [OACommonDouble withKey:speedLimitExceedKey defValue:5.f];
-        _switchMapDirectionToCompass = [OACommonDouble withKey:switchMapDirectionToCompassKey defValue:0.f];
 
-        [_profilePreferences setObject:_switchMapDirectionToCompass forKey:@"speed_for_map_to_direction_of_movement"];
         [_profilePreferences setObject:_speedLimitExceedKmh forKey:@"speed_limit_exceed"];
         [_profilePreferences setObject:_angularUnits forKey:@"angular_measurement"];
         [_profilePreferences setObject:_speedSystem forKey:@"default_speed_system"];

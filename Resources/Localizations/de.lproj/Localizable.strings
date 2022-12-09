@@ -597,8 +597,6 @@
 "shared_string_do_not_use" = "Nicht benutzen";
 "voice_provider" = "Sprachansagen";
 "shared_string_sound" = "Ton";
-"map_orientation_change_in_accordance_with_speed" = "Kartenausrichtungsgrenzwert";
-"map_orientation_change_in_accordance_with_speed_descr" = "Auswählen, bei welcher Geschwindigkeit die Kartenausrichtung von 'Nach Bewegungsrichtung' auf 'Nach Kompass' umschaltet";
 "map_widget_battery" = "Akkustand";
 "map_widget_plain_time" = "Aktuelle Zeit";
 "map_widget_max_speed" = "Tempolimit";

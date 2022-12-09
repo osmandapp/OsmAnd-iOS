@@ -579,8 +579,6 @@
 "arrival_distance_factor_normally" = "Normal";
 "arrival_distance_factor_late" = "Tard";
 "arrival_distance_factor_at_last" = "Dans les derniers mètres";
-"map_orientation_change_in_accordance_with_speed" = "Pilotage de l\'orientation de la carte";
-"map_orientation_change_in_accordance_with_speed_descr" = "Indiquez ci-dessous à quelle vitesse l'orientation de la carte doit basculer de 'Sens du déplacement' à 'Boussole'";
 "snap_to_road" = "Déplacer sur la route";
 "snap_to_road_descr" = "Déplacer la position sur la route en cours de navigation";
 "show_warnings_title" = "Alertes visuelles…";

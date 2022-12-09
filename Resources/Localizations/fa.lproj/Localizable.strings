@@ -1974,3 +1974,6 @@
 "restore_from_osmand_cloud" = "بازیابی از ابر OsmAnd";
 "paused" = "مکث‌کرده";
 "shared_string_delete_all" = "حذف همه";
+"map_settings_weather_wind" = "باد";
+"map_settings_weather_temp" = "درجه دما";
+"map_settings_weather_cloud" = "ابر";

@@ -118,13 +118,14 @@
 - (void) collectRoutePointIndexes:(std::shared_ptr<RouteDataResources> &)resources segmentRoutePoints:(NSArray<OAWptPt *> *)segmentRoutePoints
 {
     vector<int> routePointIndexes = resources->routePointIndexes;
-    if (!routePointIndexes.empty())
+    if (segmentRoutePoints && segmentRoutePoints.count > 0)
     {
         for (OAWptPt *routePoint in segmentRoutePoints)
         {
             routePointIndexes.push_back((int) [routePoint getTrkPtIndex]);
         }
     }
+    resources->routePointIndexes = routePointIndexes;
 }
 
 - (std::vector<std::shared_ptr<RouteSegmentResult>>) collectRouteSegments:(RoutingIndex *)region resources:(std::shared_ptr<RouteDataResources> &)resources segment:(OATrkSegment *)segment

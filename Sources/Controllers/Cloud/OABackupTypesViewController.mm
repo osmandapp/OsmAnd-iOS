@@ -70,19 +70,23 @@
     }
 }
 
-- (void)onTypeSelected:(OAExportSettingsType *)type selected:(BOOL)selected
+- (void)onTypeSelected:(OAExportSettingsType *)type selected:(BOOL)selected view:(UIView *)view
 {
-    [super onTypeSelected:type selected:selected];
+    [super onTypeSelected:type selected:selected view:view];
     [[_backupHelper getBackupTypePref:type] set:selected];
     [_backupHelper.backup.backupInfo createItemCollections];
 }
 
-- (void)showClearTypeScreen:(OAExportSettingsType *)type
+- (void)showClearTypeScreen:(OAExportSettingsType *)type view:(UIView *)view
 {
     UIAlertController *alert =
             [UIAlertController alertControllerWithTitle:OALocalizedString(@"backup_delete_types_descr")
                                                 message:nil
                                          preferredStyle:UIAlertControllerStyleActionSheet];
+    UIPopoverPresentationController *popPresenter = [alert popoverPresentationController];
+    popPresenter.sourceView = self.view;
+    popPresenter.sourceRect = view.frame;
+    popPresenter.permittedArrowDirections = UIPopoverArrowDirectionUp;
 
     UIAlertAction *deleteAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_delete")
                                                            style:UIAlertActionStyleDestructive
@@ -101,7 +105,7 @@
                                                            style:UIAlertActionStyleCancel
                                                          handler:^(UIAlertAction *action)
                                                          {
-                                                             [self onTypeSelected:type selected:YES];
+                                                             [self onTypeSelected:type selected:YES view:nil];
                                                          }
     ];
 

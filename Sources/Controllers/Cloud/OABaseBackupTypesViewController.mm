@@ -112,7 +112,7 @@
     // override
 }
 
-- (void)onTypeSelected:(OAExportSettingsType *)type selected:(BOOL)selected
+- (void)onTypeSelected:(OAExportSettingsType *)type selected:(BOOL)selected view:(UIView *)view
 {
     NSArray *items = [self getItemsForType:type];
     if (selected)
@@ -121,13 +121,13 @@
         [_selectedItems removeObjectForKey:type];
 
     if (!selected && items.count > 0)
-        [self showClearTypeScreen:type];
+        [self showClearTypeScreen:type view:view];
 
     if (_selectedIndexPath)
         [self.tableView reloadRowsAtIndexPaths:@[_selectedIndexPath] withRowAnimation:UITableViewRowAnimationNone];
 }
 
-- (void)showClearTypeScreen:(OAExportSettingsType *)type
+- (void)showClearTypeScreen:(OAExportSettingsType *)type view:(UIView *)view
 {
     // override
 }
@@ -329,7 +329,7 @@
         _selectedIndexPath = indexPath;
         NSMutableDictionary *item = [self getItem:indexPath];
 
-        [self onTypeSelected:item[@"setting"] selected:switchView.isOn];
+        [self onTypeSelected:item[@"setting"] selected:switchView.isOn view:switchView];
     }
 }
 

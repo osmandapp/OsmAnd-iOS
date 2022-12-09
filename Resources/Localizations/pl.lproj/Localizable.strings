@@ -3086,7 +3086,7 @@
 "product_desc_plus" = "Uzyskaj rozszerzoną funkcjonalność";
 "lang_mk" = "Macedoński";
 "routeInfo_surface_description" = "Podaj informacje o fizycznej powierzchni drogi/chodnika.";
-"rendering_attr_showFitnessTrails_name" = "Trasy fitness";
+"rendering_attr_showFitnessTrails_name" = "Ścieżki zdrowia";
 "lang_nap" = "Neapolitański";
 "lang_ar" = "Arabski";
 "suggested_maps" = "Sugerowane mapy";
@@ -3141,7 +3141,7 @@
 "gpxup_identifiable" = "Identyfikowalny";
 "shared_string_turn_off" = "Wyłącz";
 "shared_string_learn_more" = "Dowiedz się więcej";
-"rendering_attr_showFitnessTrails_description" = "Pokaż trasy fitness";
+"rendering_attr_showFitnessTrails_description" = "Pokaż ścieżki zdrowia";
 "lang_en" = "Angielski";
 "routing_attr_only_permitted_streets_name" = "Celowo dozwolone ulice";
 "monthly_subscription" = "Subskrypcja miesięczna";
@@ -3202,3 +3202,4 @@
 "weather_offline_forecast" = "Prognoza w trybie offline";
 "depth_contour_lines" = "Linie konturowe głębokości";
 "measurement_units" = "Jednostki miary";
+"track_has_no_needed_data" = "Trasa nie zawiera potrzebnych danych.";

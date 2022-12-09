@@ -143,7 +143,6 @@ typedef NS_ENUM(NSInteger, EOARouteParamType) {
     {
         if (_isHazmatCategory || _isGoodsRestrictionsCategory)
         {
-            color = UIColorFromRGB(color_primary_purple);
             if (indexPath.section == 0)
             {
                 isSelected = (indexPath.row == 0 && !_isAnyCategorySelected) || (indexPath.row == 1 && _isAnyCategorySelected);
@@ -167,8 +166,6 @@ typedef NS_ENUM(NSInteger, EOARouteParamType) {
     {
         OALocalRoutingParameter *routeParam = _group.getRoutingParameters[indexPath.row];
         text = [routeParam getText];
-        icon = [[routeParam getIcon] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        color = [routeParam getTintColor];
         isSelected = _group.getSelected == _group.getRoutingParameters[indexPath.row];
     }
 
@@ -183,14 +180,12 @@ typedef NS_ENUM(NSInteger, EOARouteParamType) {
     if (cell)
     {
         cell.titleLabel.text = text;
-        cell.rightIconView.image = icon;
-        cell.rightIconView.tintColor = color != nil ? color : UIColorFromRGB([self.appMode getIconColor]);
+        cell.accessoryType = UITableViewCellAccessoryCheckmark;
 
         if (isSelected)
         {
             _indexSelected = indexPath.row;
-            cell.rightIconView.image = [UIImage templateImageNamed:@"menu_cell_selected"];
-            cell.rightIconView.tintColor = color != nil ? color : UIColorFromRGB([self.appMode getIconColor]);
+            cell.accessoryType = UITableViewCellAccessoryCheckmark;
             if (_isGoodsRestrictionsCategory && _indexSelected == 1)
             {
                 [cell descriptionVisibility:YES];
@@ -204,8 +199,7 @@ typedef NS_ENUM(NSInteger, EOARouteParamType) {
         }
         else
         {
-            cell.rightIconView.tintColor = UIColorFromRGB(color_icon_inactive);
-            [cell.rightIconView setImage:nil];
+            cell.accessoryType = UITableViewCellAccessoryNone;
         }
     }
     return cell;

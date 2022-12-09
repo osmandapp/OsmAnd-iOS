@@ -185,6 +185,8 @@
     self.quickActionController.view.frame = self.view.frame;
     [self.view addSubview:self.quickActionController.view];
     
+    self.weatherButton.alpha = 0.;
+
     // IOS-218
     self.rulerLabel = [[OAMapRulerView alloc] initWithFrame:CGRectMake(120, DeviceScreenHeight - 42, kMapRulerMinWidth, 25)];
     self.rulerLabel.translatesAutoresizingMaskIntoConstraints = NO;
@@ -258,13 +260,15 @@
 - (void) viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    
+
+    BOOL hasInitialURL = _app.initialURLMapState != nil;
     if ([[OAAppSettings sharedManager] settingShowZoomButton])
     {
         [self.zoomButtonsView setHidden: NO];
-        [self showBottomControls:0 animated:NO];
+        if (!hasInitialURL && ![_mapPanelViewController isContextMenuVisible])
+            [self showBottomControls:0 animated:NO];
     }
-    else
+    else if (!hasInitialURL && ![_mapPanelViewController isContextMenuVisible])
     {
         [self.zoomButtonsView setHidden: YES];
         [self hideBottomControls:0 animated:NO];
@@ -274,6 +278,9 @@
     
     if (self.toolbarViewController)
         [self.toolbarViewController onViewDidAppear:self.mapHudType];
+
+    if (hasInitialURL)
+        _app.initialURLMapState = nil;
 }
 
 - (void) viewWillDisappear:(BOOL)animated

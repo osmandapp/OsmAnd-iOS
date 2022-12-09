@@ -78,11 +78,11 @@ static OABackupStatus *ERROR;
 {
     if (!CONFLICTS)
     {
-        CONFLICTS = [[OABackupStatus alloc] initWithStatusTitle:OALocalizedString(@"cloud_last_backup")
+        CONFLICTS = [[OABackupStatus alloc] initWithStatusTitle:OALocalizedString(@"last_sync")
                                                  statusIconName:@"ic_custom_cloud_info"
                                                 warningIconName:@"ic_custom_alert"
-                                                   warningTitle:OALocalizedString(@"cloud_conflicts")
-                                             warningDescription:OALocalizedString(@"cloud_conflicts_descr")
+                                                   warningTitle:nil
+                                             warningDescription:nil
                                                     actionTitle:OALocalizedString(@"cloud_view_conflicts")
                                                       iconColor:color_primary_red];
     }
@@ -93,7 +93,7 @@ static OABackupStatus *ERROR;
 {
     if (!NO_INTERNET_CONNECTION)
     {
-        NO_INTERNET_CONNECTION = [[OABackupStatus alloc] initWithStatusTitle:OALocalizedString(@"cloud_last_backup")
+        NO_INTERNET_CONNECTION = [[OABackupStatus alloc] initWithStatusTitle:OALocalizedString(@"last_sync")
                                                               statusIconName:@"ic_custom_cloud_done"
                                                              warningIconName:@"ic_custom_wifi_off"
                                                                 warningTitle:OALocalizedString(@"no_inet_connection")
@@ -108,7 +108,7 @@ static OABackupStatus *ERROR;
 {
     if (!SUBSCRIPTION_EXPIRED)
     {
-        SUBSCRIPTION_EXPIRED = [[OABackupStatus alloc] initWithStatusTitle:OALocalizedString(@"cloud_last_backup")
+        SUBSCRIPTION_EXPIRED = [[OABackupStatus alloc] initWithStatusTitle:OALocalizedString(@"last_sync")
                                                             statusIconName:@"ic_custom_cloud_done"
                                                            warningIconName:@"ic_custom_osmand_pro_logo_colored"
                                                               warningTitle:OALocalizedString(@"backup_error_subscription_was_expired")
@@ -122,7 +122,7 @@ static OABackupStatus *ERROR;
 {
     if (!ERROR)
     {
-        ERROR = [[OABackupStatus alloc] initWithStatusTitle:OALocalizedString(@"cloud_last_backup")
+        ERROR = [[OABackupStatus alloc] initWithStatusTitle:OALocalizedString(@"last_sync")
                                              statusIconName:@"ic_custom_cloud_alert"
                                             warningIconName:@"ic_custom_alert"
                                                warningTitle:nil

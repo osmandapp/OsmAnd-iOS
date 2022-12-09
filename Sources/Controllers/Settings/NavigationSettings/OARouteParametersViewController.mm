@@ -414,8 +414,8 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTitleValueCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
-            cell.rightIconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
-            cell.rightIconView.tintColor = UIColorFromRGB(color_icon_inactive);
+            cell.rightIconView.hidden = YES;
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
         if (cell)
         {
@@ -445,8 +445,8 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
-            cell.arrowIconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
-            cell.arrowIconView.tintColor = UIColorFromRGB(color_tint_gray);
+            cell.arrowIconView.hidden = YES;
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
         if (cell)
         {
@@ -542,11 +542,8 @@
         settingsViewController = [[OAAngleStraightLineViewController alloc] initWithAppMode:self.appMode];
 
     settingsViewController.delegate = self;
-    if ([itemKey isEqualToString:@"roadSpeeds"] || [itemKey isEqualToString:@"angleStraight"])
-        [self presentViewController:settingsViewController animated:YES completion:nil];
-    else
-        [self showViewController:settingsViewController];
-    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+    [self presentViewController:settingsViewController animated:YES completion:nil];
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 #pragma mark - Switch

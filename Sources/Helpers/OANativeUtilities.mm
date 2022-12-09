@@ -15,6 +15,7 @@
 
 #include <SkCGUtils.h>
 #include <SkCanvas.h>
+#include <OsmAndCore/SkiaUtilities.h>
 
 @implementation UIColor (nsColorNative)
 
@@ -102,6 +103,13 @@
              },
              (void *)dataRef
          ));
+}
+
++ (sk_sp<SkImage>) getScaledSkImage:(sk_sp<SkImage>)skImage scaleFactor:(float)scaleFactor
+{
+    if (!qFuzzyCompare(scaleFactor, 1.0f) && skImage)
+        skImage = OsmAnd::SkiaUtilities::scaleImage(skImage, scaleFactor, scaleFactor);
+    return skImage;
 }
 
 + (UIImage *) skImageToUIImage:(const sk_sp<SkImage> &)image

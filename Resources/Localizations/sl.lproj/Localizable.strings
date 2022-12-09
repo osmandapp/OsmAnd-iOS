@@ -1861,3 +1861,12 @@
 // Route planning
 "plan_route" = "Načrtuj pot";
 "mtb_segment_classification" = "Klasifikacija segmenta";
+"map_settings_weather_precip" = "Padavine";
+"map_widget_rendering_fps" = "FPS za izrisovanje zemljevida";
+"map_settings_weather_temp" = "Temperatura";
+"weather_offline_forecast" = "Napoved brez povezave";
+"map_settings_weather_wind" = "Veter";
+"map_settings_weather_cloud" = "Oblaki";
+"measurement_units" = "Merske enote";
+"show_borders_of_downloaded_maps" = "Pokaži obrobe prenesenih zemljevidov";
+"depth_contour_lines" = "Izobate";

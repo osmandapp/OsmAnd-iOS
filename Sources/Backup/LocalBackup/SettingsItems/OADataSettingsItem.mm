@@ -84,6 +84,14 @@
 
 - (BOOL) readFromFile:(NSString *)filePath error:(NSError * _Nullable *)error
 {
+    if (self.item.read)
+    {
+        if (error)
+            *error = [NSError errorWithDomain:kSettingsItemErrorDomain code:kSettingsItemErrorCodeAlreadyRead userInfo:nil];
+
+        return NO;
+    }
+
     NSError *readError;
     NSData *data = [NSData dataWithContentsOfFile:filePath options:NSDataReadingMappedIfSafe error:&readError];
     if (error && readError)
@@ -92,6 +100,8 @@
         return NO;
     }
     self.item.data = data;
+    
+    self.item.read = YES;
     return YES;
 }
 

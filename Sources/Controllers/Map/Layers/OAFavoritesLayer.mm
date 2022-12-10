@@ -285,7 +285,7 @@
             bool calendarEvent = favorite->getCalendarEvent();
             
             self.app.favoritesCollection->removeFavoriteLocation(favorite);
-            const auto newItem = self.app.favoritesCollection->createFavoriteLocation(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(position.latitude, position.longitude)),
+            const auto newItem = self.app.favoritesCollection->createFavoriteLocation(OsmAnd::LatLon(position.latitude, position.longitude),
                                                             elevation,
                                                             time,
                                                             pickupTime,
@@ -306,7 +306,7 @@
                     [plugin setParkingPosition:position.latitude longitude:position.longitude];
                 }
             }
-            [self.app saveFavoritesToPermamentStorage];
+            [self.app saveFavoritesToPermanentStorage:@[item.getCategory]];
             [OAFavoritesHelper loadFavorites];
         }
     }

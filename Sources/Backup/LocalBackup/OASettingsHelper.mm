@@ -520,7 +520,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     NSMutableArray<OAPOIUIFilter *> *poiUIFilters = [NSMutableArray array];
     NSMutableArray<OATileSource *> *tileSourceTemplates = [NSMutableArray array];
     NSMutableArray<OAAvoidRoadInfo *> *avoidRoads = [NSMutableArray array];
-    NSMutableArray<OAFavoriteGroup *> *favoiriteItems = [NSMutableArray array];
+    NSMutableArray<OAFavoriteGroup *> *favoriteGroups = [NSMutableArray array];
     NSMutableArray<OAOsmNotePoint *> *osmNotesPointList = [NSMutableArray array];
     NSMutableArray<OAOpenStreetMapPoint *> *osmEditsPointList = [NSMutableArray array];
     NSMutableArray<OADestination *> *activeMarkersList = [NSMutableArray array];
@@ -560,7 +560,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         else if ([object isKindOfClass:OAFileSettingsItem.class])
             [result addObject:object];
         else if ([object isKindOfClass:OAFavoriteGroup.class])
-            [favoiriteItems addObject:object];
+            [favoriteGroups addObject:object];
         else if ([object isKindOfClass:OADestination.class])
             [activeMarkersList addObject:object];
         else if ([object isKindOfClass:OAHistoryItem.class])
@@ -596,8 +596,40 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         [result addObject:[[OAMapSourcesSettingsItem alloc] initWithItems:tileSourceTemplates]];
     if (avoidRoads.count > 0)
         [result addObject:[[OAAvoidRoadsSettingsItem alloc] initWithItems:avoidRoads]];
-    if (favoiriteItems.count > 0)
-        [result addObject:[[OAFavoritesSettingsItem alloc] initWithItems:favoiriteItems]];
+    if (favoriteGroups.count > 0)
+    {
+        if (doExport)
+        {
+            for (OAFavoriteGroup *favoriteGroup in favoriteGroups)
+                [result addObject:[[OAFavoritesSettingsItem alloc] initWithItems:@[favoriteGroup]]];
+        }
+        else
+        {
+            if (settingsItems.count == 1)
+            {
+                OAFavoritesSettingsItem *baseItem = [self getBaseItem:EOASettingsItemTypeFavorites clazz:OAFavoritesSettingsItem.class settingsItems:settingsItems];
+                [result addObject:[[OAFavoritesSettingsItem alloc] initWithItems:favoriteGroups baseItem:baseItem]];
+            }
+            else
+            {
+                for (OAFavoriteGroup *favoriteGroup in favoriteGroups)
+                {
+                    OAFavoritesSettingsItem *favSettingsItem;
+                    for (OASettingsItem *item in settingsItems)
+                    {
+                        NSString *fileName = item.fileName;
+                        if ([item isKindOfClass:OAFavoritesSettingsItem.class] && [[[OsmAndApp.instance favoritesStorageFilename:favoriteGroup.name] lastPathComponent] isEqualToString:fileName])
+                        {
+                            favSettingsItem = (OAFavoritesSettingsItem *) item;
+                            break;
+                        }
+                    }
+                    if (favSettingsItem)
+                        [result addObject:[[OAFavoritesSettingsItem alloc] initWithItems:@[favoriteGroup] baseItem:favSettingsItem]];
+                }
+            }
+        }
+    }
     if (poiUIFilters.count > 0)
     {
         OAPoiUiFilterSettingsItem *baseItem = [self getBaseItem:EOASettingsItemTypePoiUIFilters clazz:OAPoiUiFilterSettingsItem.class settingsItems:settingsItems];

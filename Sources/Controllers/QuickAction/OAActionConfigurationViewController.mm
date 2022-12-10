@@ -364,7 +364,7 @@
     }
 }
 
-- (void)applyParameter:(id)sender
+- (void) applyParameter:(id)sender
 {
     if ([sender isKindOfClass:[UISwitch class]])
     {
@@ -380,12 +380,12 @@
     }
 }
 
-- (NSArray *)getItemGroups
+- (NSArray<NSString *> *) getItemGroups
 {
-    return [[OANativeUtilities QListOfStringsToNSMutableArray:[OsmAndApp instance].favoritesCollection->getGroups().toList()] copy];
+    return [OANativeUtilities QListOfStringsToNSArray:[OsmAndApp instance].favoritesCollection->getGroups().values()];
 }
 
-- (NSMutableArray *)getItemNames
+- (NSMutableArray *) getItemNames
 {
     NSMutableArray *arr = [NSMutableArray new];
     for (NSDictionary *item in _data[_data.allKeys.lastObject])

@@ -10,6 +10,9 @@
 #import "OAGPXDocument.h"
 #import "OrderedDictionary.h"
 
+NSString *const kSettingsItemErrorDomain = @"SettingsItem";
+NSInteger const kSettingsItemErrorCodeAlreadyRead = 1;
+
 @interface OASettingsItem()
 
 @property (nonatomic) NSString *pluginId;
@@ -271,6 +274,14 @@
 
 - (BOOL) readFromFile:(NSString *)filePath error:(NSError * _Nullable *)error
 {
+    if (self.item.read)
+    {
+        if (error)
+            *error = [NSError errorWithDomain:kSettingsItemErrorDomain code:kSettingsItemErrorCodeAlreadyRead userInfo:nil];
+
+        return NO;
+    }
+
     NSError *readError;
     NSData *data = [NSData dataWithContentsOfFile:filePath options:NSDataReadingMappedIfSafe error:&readError];
     if (readError)
@@ -310,6 +321,8 @@
     }];
     [self.item applyRendererPreferences:rendererSettings];
     [self.item applyRoutingPreferences:routingSettings];
+
+    self.item.read = YES;
     return YES;
 }
 

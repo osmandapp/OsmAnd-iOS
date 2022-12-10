@@ -82,8 +82,8 @@ static NSString *kPrecipContourStyleName;
         NSUnitSpeed.kilometersPerHour.symbol: @"%d",
         NSUnitSpeed.milesPerHour.symbol: @"%d",
         NSUnitSpeed.knots.symbol: @"%d",
-        NSUnitLength.millimeters.symbol: @"%d",
-        NSUnitLength.inches.symbol: @"%d"
+        NSUnitLength.millimeters.symbol: @"%.1f",
+        NSUnitLength.inches.symbol: @"%.1f"
     };
 
     kPreciseUnitFormats = @{

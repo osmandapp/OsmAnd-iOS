@@ -2698,7 +2698,7 @@
 "sign_in_with_open_street_map" = "تسجيل الدخول عبر الشارع المفتوح";
 "tts" = "تحويل النص إلى كلام";
 "recorded_voice" = "المسافة";
-"cloud_recent_changes" = "التغييرات الأخيرة";
+"cloud_recent_changes" = "التغييرات";
 "cloud_conflict" = "نزاع";
 "cloud_pause_all" = "إيقاف الكل";
 "cloud_all_changes_uploaded" = "جميع التغييرات المحملة";
@@ -2754,3 +2754,4 @@
 "shared_string_added" = "تمت الإضافة";
 "mtb_segment_classification" = "تصنيف القطاعات";
 "recalc_angle_dialog_descr" = "سيتم عرض جزء مستقيم إضافي بين موقعي والمسار المحسوب حتى يتم إعادة حساب المسار";
+"local_backup_empty_file" = "لا يحتوي ملف النسخ الاحتياطي على أي عناصر لاستعادتها.";

@@ -2751,3 +2751,4 @@
 "recalc_angle_dialog_descr" = "Será mostrado o segmento reto adicional entre a minha localização e a rota calculada até que a rota seja recalculada";
 "shared_string_angle_param" = "Ângulo: %d°";
 "local_backup_empty_file" = "O ficheiro da cópia de segurança não contém nenhum item para restaurar.";
+"today" = "Hoje";

@@ -2329,7 +2329,7 @@
 "map_settings_weather_cloud" = "Облак";
 "map_settings_weather_precip" = "Падавине";
 "q_clear_weather_cache" = "Да ли желите да обришете кеш меморију за време?";
-"map_settings_weather_temp" = "Температура";
+"map_settings_weather_temp" = "Топлота";
 "product_title_weather" = "Време";
 "map_settings_weather_pressure" = "Притисак";
 "map_settings_clear_geo_cache" = "Очисти гео плочице";
@@ -2487,7 +2487,7 @@
 "copy_coordinates" = "Копирај координате";
 "share_geo" = "гео:";
 "toast_empty_name_error" = "Неименована локација";
-"routing_attr_allow_private_for_truck_name" = "Дозвољен приватни приступ (камион)";
+"routing_attr_allow_private_for_truck_name" = "Дозвољен приватни приступ (теретно возило)";
 "altitude_descent" = "Низбрдо";
 "weather_temp_enable_descr" = "Омогућите да видите температурни слој на мапи.";
 "units_cubic_m" = "m³";
@@ -2553,3 +2553,7 @@
 "in_grace_period" = "У грејс периоду";
 "shared_string_undefined" = "Неодређено";
 "lang_ckb" = "Централнокурдски";
+"show_borders_of_downloaded_maps" = "Приказуј границе преузетих карата";
+"mtb_segment_classification" = "Чланковито разврставање";
+"weather_offline_forecast" = "Ванмрежне временске прилике";
+"depth_contour_lines" = "Дубина линија обриса";

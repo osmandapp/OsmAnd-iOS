@@ -1327,7 +1327,7 @@
         
         BOOL lastSegment = routeInd + 1 == list.size();
         std::shared_ptr<RouteSegmentResult> nextSegment = lastSegment ? nullptr : list[routeInd + 1];
-        BOOL gapAfter = nextSegment != nullptr && !nextSegment->continuesBeyondRouteSegment(*s.get());
+        BOOL gapAfter = nextSegment != nullptr && !nextSegment->continuesBeyondRouteSegment(s);
         while (true)
         {
             if (i == s->getEndPointIndex() && !gapAfter && !lastSegment)

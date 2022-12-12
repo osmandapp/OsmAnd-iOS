@@ -64,6 +64,9 @@
 
 + (UIImage *) getCompositeIcon:(NSString *)icon backgroundIcon:(NSString *)backgroundIcon color:(UIColor *)color;
 
++ (void) backup;
++ (NSArray<NSString *> *) getGroupFiles;
+
 @end
 
 @interface OAFavoriteGroup : NSObject

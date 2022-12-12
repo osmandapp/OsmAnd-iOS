@@ -56,6 +56,7 @@
 #define RENDERER_INDEX_EXT @".render.xml"
 
 #define GPX_FILE_EXT @".gpx"
+#define GPX_ZIP_FILE_EXT @".gpx.zip"
 
 #define WPT_CHART_FILE_EXT @".wpt.chart"
 #define SQLITE_CHART_FILE_EXT @".3d.chart"
@@ -88,6 +89,8 @@
 #define TEMP_DIR @"temp"
 #define ROUTING_PROFILES_DIR @"routing"
 #define PLUGINS_DIR @"Plugins"
+#define FAVORITES_INDEX_DIR @"favorites"
+#define FAVORITES_BACKUP_DIR @"favorites_backup"
 
 #define VOICE_PROVIDER_SUFFIX @"-tts"
 

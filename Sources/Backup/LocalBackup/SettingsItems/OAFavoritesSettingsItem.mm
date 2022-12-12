@@ -15,6 +15,7 @@
 #import "OAFavoritesHelper.h"
 #import "OAPlugin.h"
 #import "OAParkingPositionPlugin.h"
+#import "OAIndexConstants.h"
 
 #include <OsmAndCore/IFavoriteLocation.h>
 
@@ -52,25 +53,63 @@
     return EOASettingsItemTypeFavorites;
 }
 
-- (NSString *) name
+- (OAFavoriteGroup *) getSingleGroup
 {
-    return @"favourites";
+    return self.items.count == 1 ? self.items[0] : nil;
 }
 
-- (NSString *)getPublicName
+- (NSString *) name
 {
-    return OALocalizedString(@"favorites");
+    OsmAndAppInstance app = OsmAndApp.instance;
+    OAFavoriteGroup *singleGroup = [self getSingleGroup];
+    NSString *groupName = singleGroup ? singleGroup.name : nil;
+    return groupName.length > 0
+            ? [NSString stringWithFormat:@"%@%@%@", app.favoritesFilePrefix, app.favoritesGroupNameSeparator, groupName]
+            : app.favoritesFilePrefix;
+}
+
+- (NSString *) getPublicName
+{
+    OsmAndAppInstance app = OsmAndApp.instance;
+    OAFavoriteGroup *singleGroup = [self getSingleGroup];
+    NSString *groupName = singleGroup ? singleGroup.name : nil;
+    NSString *fileName = self.fileName;
+    if (groupName.length > 0)
+    {
+        return [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_space"), OALocalizedString(@"favorites"), groupName];
+    }
+    else if (fileName.length > 0)
+    {
+        groupName = [[fileName stringByReplacingOccurrencesOfString:app.favoritesFilePrefix withString:@""] stringByReplacingOccurrencesOfString:GPX_FILE_EXT withString:@""];
+        if ([groupName hasPrefix:app.favoritesGroupNameSeparator])
+            groupName = [groupName substringFromIndex:1];
+
+        return [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_space"), OALocalizedString(@"favorites"), groupName];
+    }
+    else
+    {
+        return OALocalizedString(@"favorites");
+    }
 }
 
 - (NSString *) defaultFileExtension
 {
-    return @".gpx";
+    return GPX_FILE_EXT;
 }
 
-- (long)localModifiedTime
+- (long) localModifiedTime
 {
-    NSString *favPath = OsmAndApp.instance.favoritesStorageFilename;
+    OAFavoriteGroup *singleGroup = [self getSingleGroup];
+    NSString *groupFilePath = singleGroup ? [OsmAndApp.instance favoritesStorageFilename:singleGroup.name] : nil;
     NSFileManager *manager = NSFileManager.defaultManager;
+    if (groupFilePath && [manager fileExistsAtPath:groupFilePath])
+    {
+        NSError *err = nil;
+        NSDictionary *attrs = [manager attributesOfItemAtPath:groupFilePath error:&err];
+        return !err ? attrs.fileModificationDate.timeIntervalSince1970 : 0;
+    }
+    
+    NSString *favPath = OsmAndApp.instance.favoritesLegacyStorageFilename;
     if ([manager fileExistsAtPath:favPath])
     {
         NSError *err = nil;
@@ -81,13 +120,20 @@
     return 0;
 }
 
-- (void)setLocalModifiedTime:(long)localModifiedTime
+- (void) setLocalModifiedTime:(long)localModifiedTime
 {
-    NSString *favPath = OsmAndApp.instance.favoritesStorageFilename;
+    OAFavoriteGroup *singleGroup = [self getSingleGroup];
+    NSString *groupFilePath = singleGroup ? [OsmAndApp.instance favoritesStorageFilename:singleGroup.name] : nil;
     NSFileManager *manager = NSFileManager.defaultManager;
-    if ([manager fileExistsAtPath:favPath])
+    if (groupFilePath && [manager fileExistsAtPath:groupFilePath])
     {
-        [manager setAttributes:@{ NSFileModificationDate : [NSDate dateWithTimeIntervalSince1970:localModifiedTime] } ofItemAtPath:favPath error:nil];
+        [manager setAttributes:@{ NSFileModificationDate : [NSDate dateWithTimeIntervalSince1970:localModifiedTime] } ofItemAtPath:groupFilePath error:nil];
+    }
+    else
+    {
+        NSString *favPath = OsmAndApp.instance.favoritesLegacyStorageFilename;
+        if ([manager fileExistsAtPath:favPath])
+            [manager setAttributes:@{ NSFileModificationDate : [NSDate dateWithTimeIntervalSince1970:localModifiedTime] } ofItemAtPath:favPath error:nil];
     }
 }
 
@@ -155,7 +201,7 @@
         for (OAFavoriteItem *favorite in favourites)
             favoriteCollection->copyFavoriteLocation(favorite.favorite);
         app.favoritesCollection->mergeFrom(favoriteCollection);
-        [app saveFavoritesToPermamentStorage];
+        [app saveFavoritesToPermanentStorage];
         [OAFavoritesHelper loadFavorites];
     }
 }
@@ -244,9 +290,19 @@
 
 - (BOOL) readFromFile:(NSString *)filePath error:(NSError * _Nullable *)error
 {
+    if (self.item.read)
+    {
+        if (error)
+            *error = [NSError errorWithDomain:kSettingsItemErrorDomain code:kSettingsItemErrorCodeAlreadyRead userInfo:nil];
+
+        return NO;
+    }
+
     const auto favoritesCollection = OsmAnd::FavoriteLocationsGpxCollection::tryLoadFrom(QString::fromNSString(filePath));
     if (favoritesCollection)
         [self.item.items addObjectsFromArray:[OAFavoritesHelper getGroupedFavorites:favoritesCollection->getFavoriteLocations()]];
+
+    self.item.read = YES;
     return YES;
 }
 

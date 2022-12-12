@@ -18,6 +18,7 @@
 #import "OAFileSettingsItem.h"
 #import "OASettingsImporter.h"
 #import "OAGpxSettingsItem.h"
+#import "OACollectionSettingsItem.h"
 #import "OAOperationLog.h"
 #import "OAAtomicInteger.h"
 
@@ -244,7 +245,12 @@
         {
             [reader readFromFile:tempFilePath error:nil];
             if (forceReadData)
+            {
+                if ([item isKindOfClass:OACollectionSettingsItem.class])
+                    [((OACollectionSettingsItem *) item) processDuplicateItems];
+                
                 [item apply];
+            }
 
             [_backupHelper updateFileUploadTime:remoteFile.type fileName:remoteFile.name uploadTime:remoteFile.clienttimems];
             

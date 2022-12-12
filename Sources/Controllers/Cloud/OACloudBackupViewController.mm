@@ -236,12 +236,13 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
         }
         else
         {
-            NSString *backupTime = [OAOsmAndFormatter getFormattedPassedTime:OAAppSettings.sharedManager.backupLastUploadedTime.get def:OALocalizedString(@"shared_string_never")];
+            NSString *backupStatusDescr = _backup == nil ? OALocalizedString(@"checking_progress")
+                : [OAOsmAndFormatter getFormattedPassedTime:OAAppSettings.sharedManager.backupLastUploadedTime.get def:OALocalizedString(@"shared_string_never")];
             OATableCollapsableRowData *collapsableRow = [[OATableCollapsableRowData alloc] initWithData:@{
                 kCellTypeKey: OAMultiIconTextDescCell.getCellIdentifier,
                 kCellKeyKey: @"lastBackup",
                 kCellTitleKey: _status.statusTitle,
-                kCellDescrKey: backupTime,
+                kCellDescrKey: backupStatusDescr,
                 kCellIconNameKey: _status.statusIconName,
                 kCellIconTint: @(_status.iconColor)
             }];
@@ -289,7 +290,18 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
                 [backupRows addRowFromDictionary:makeBackupWarningCell];
             }
         }
-        if (_settingsHelper.isBackupSyncing)
+
+        if (_backup == nil)
+        {
+            NSDictionary *checkingCell = @{
+                kCellTypeKey: [OASimpleTableViewCell getCellIdentifier],
+                kCellKeyKey: @"checkingBackup",
+                kCellTitleKey: OALocalizedString(@"checking_progress"),
+                @"titleTint": UIColorFromRGB(color_primary_purple)
+            };
+            [backupRows addRowFromDictionary:checkingCell];
+        }
+        else if (_settingsHelper.isBackupSyncing)
         {
             NSDictionary *cancellCell = @{
                 kCellTypeKey: OAButtonRightIconCell.getCellIdentifier,
@@ -668,6 +680,36 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
         }
         cell.textView.text = item.title;
         cell.descriptionView.text = [item stringForKey:@"value"];
+        return cell;
+    }
+    else if ([cellId isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
+    {
+        OASimpleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
+        if (!cell)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASimpleTableViewCell *) nib[0];
+            [cell descriptionVisibility:NO];
+            [cell leftIconVisibility:NO];
+        }
+        if (cell)
+        {
+            BOOL isCheckingBackup = [item.key isEqualToString:@"checkingBackup"];
+            cell.selectionStyle = isCheckingBackup ? UITableViewCellSelectionStyleNone : UITableViewCellSelectionStyleDefault;
+            if (isCheckingBackup)
+            {
+                UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+                cell.accessoryView = activityIndicator;
+                [activityIndicator startAnimating];
+            }
+            else
+            {
+                cell.accessoryView = nil;
+            }
+
+            cell.titleLabel.text = item.title;
+            cell.titleLabel.textColor = [item objForKey:@"titleTint"];
+        }
         return cell;
     }
     else if ([cellId isEqualToString:OATitleIconProgressbarCell.getCellIdentifier])

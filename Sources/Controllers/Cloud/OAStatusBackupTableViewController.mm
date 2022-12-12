@@ -146,39 +146,111 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     
     OATableSectionData *itemsSection = [OATableSectionData sectionData];
     OABackupInfo *info = _backupHelper.backup.backupInfo;
-    if (_tableType == EOARecentChangesLocal)
+
+    if (_tableType == EOARecentChangesLocal || _tableType == EOARecentChangesRemote)
     {
-        for (OALocalFile *file in info.filteredFilesToUpload)
+        NSMutableDictionary<NSString *, NSMutableDictionary *> *filesByName =  [NSMutableDictionary dictionary];
+        if (_tableType == EOARecentChangesLocal)
         {
-            [itemsSection addRow:[self rowFromItem:file
-                                          iconName:@"ic_custom_cloud_upload_outline"
-                                          mainTint:color_icon_inactive
-                                     secondaryTint:color_primary_purple operation:EOABackupSyncOperationUpload]];
+            NSArray<OALocalFile *> *localFiles = info.filteredFilesToUpload;
+            for (OALocalFile *localFile in localFiles)
+            {
+                NSString *key = [localFile getTypeFileName];
+                filesByName[key] = [NSMutableDictionary dictionary];
+                filesByName[key][@"localFile"] = localFile;
+            }
+            NSArray<OARemoteFile *> *deletedFiles = info.filteredFilesToDelete;
+            for (OARemoteFile *deletedFile in deletedFiles)
+            {
+                NSString *key = [deletedFile getTypeNamePath];
+                filesByName[key] = [NSMutableDictionary dictionary];
+                filesByName[key][@"deleted"] = @(YES);
+                filesByName[key][@"remoteFile"] = deletedFile;
+            }
+            if (filesByName.count > 0)
+            {
+                NSArray<NSArray *> *downloadItems = [OABackupHelper getItemsMapForRestore:info settingsItems:_backupHelper.backup.settingsItems];
+                for (NSArray *downloadItem in downloadItems)
+                {
+                    OARemoteFile *remoteFile = downloadItem.firstObject;
+                    NSString *key = [remoteFile getTypeNamePath];
+                    if ([filesByName.allKeys containsObject:key] && ![filesByName[key].allKeys containsObject:@"remoteFile"])
+                        filesByName[key][@"remoteFile"] = remoteFile;
+                }
+                for (NSString *key in filesByName.allKeys)
+                {
+                    if (![filesByName[key].allKeys containsObject:@"remoteFile"])
+                    {
+                        OARemoteFile *remoteFile = _backupHelper.backup.remoteFiles[key];
+                        if (remoteFile)
+                            filesByName[key][@"remoteFile"] = remoteFile;
+                    }
+                }
+            }
         }
-        for (OARemoteFile *file in info.filteredFilesToDelete)
+        else if (_tableType == EOARecentChangesRemote)
         {
-            [itemsSection addRow:[self rowFromItem:file iconName:@"ic_custom_remove" mainTint:color_primary_purple secondaryTint:color_primary_red operation:EOABackupSyncOperationDelete]];
+            NSArray<NSArray *> *downloadItems = [OABackupHelper getItemsMapForRestore:info settingsItems:_backupHelper.backup.settingsItems];
+            for (NSArray *downloadItem in downloadItems)
+            {
+                OARemoteFile *remoteFile = downloadItem.firstObject;
+                NSString *key = [remoteFile getTypeNamePath];
+                filesByName[key] = [NSMutableDictionary dictionary];
+                filesByName[key][@"remoteFile"] = remoteFile;
+            }
+            NSArray<OALocalFile *> *deletedFiles = info.localFilesToDelete;
+            for (OALocalFile *deletedFile in deletedFiles)
+            {
+                NSString *key = [deletedFile getTypeFileName];
+                filesByName[key] = [NSMutableDictionary dictionary];
+                filesByName[key][@"deleted"] = @(YES);
+                filesByName[key][@"localFile"] = deletedFile;
+            }
+            if (filesByName.count > 0)
+            {
+                NSArray<OALocalFile *> *localFiles = info.filteredFilesToUpload;
+                for (OALocalFile *localFile in localFiles)
+                {
+                    NSString *key = [localFile getTypeFileName];
+                    if ([filesByName.allKeys containsObject:key] && ![filesByName[key].allKeys containsObject:@"localFile"])
+                        filesByName[key][@"localFile"] = localFile;
+                }
+                for (NSString *key in filesByName.allKeys)
+                {
+                    if (![filesByName[key].allKeys containsObject:@"localFile"])
+                    {
+                        OALocalFile *localFile = _backupHelper.backup.localFiles[key];
+                        if (localFile)
+                            filesByName[key][@"localFile"] = localFile;
+                    }
+                }
+            }
         }
-    }
-    else if (_tableType == EOARecentChangesRemote)
-    {
-        NSArray<NSArray *> *downloadItems = [OABackupHelper getItemsMapForRestore:info settingsItems:_backupHelper.backup.settingsItems];
-        for (NSArray *pair in downloadItems)
+
+        for (NSString *key in filesByName.allKeys)
         {
-            [itemsSection addRow:[self rowFromItem:pair.firstObject
-                                          iconName:@"ic_custom_cloud_download_outline"
-                                          mainTint:color_icon_inactive
-                                     secondaryTint:color_primary_purple
-                                         operation:EOABackupSyncOperationDownload]];
+            BOOL deleted = [filesByName[key][@"deleted"] boolValue];
+            EOABackupSyncOperationType operation = deleted ? EOABackupSyncOperationDelete
+                : _tableType == EOARecentChangesLocal ? EOABackupSyncOperationUpload : EOABackupSyncOperationDownload;
+            [itemsSection addRow:[self rowFromKey:key
+                                         mainTint:deleted ? color_primary_purple : color_icon_inactive
+                                    secondaryTint:deleted ? color_primary_red : color_primary_purple
+                                        operation:operation
+                                        localFile:filesByName[key][@"localFile"]
+                                       remoteFile:filesByName[key][@"remoteFile"]]];
         }
     }
     else if (_tableType == EOARecentChangesConflicts)
     {
         for (NSArray *items in info.filteredFilesToMerge)
         {
-            [itemsSection addRow:[self rowFromConflictItems:items]];
+            NSString *key = [((OALocalFile *) items.firstObject) getTypeFileName];
+            [itemsSection addRow:[self rowFromConflictItems:key
+                                                  localFile:items.firstObject
+                                                 remoteFile:items.lastObject]];
         }
     }
+
     if (itemsSection.rowCount == 0)
     {
         [itemsSection addRowFromDictionary:@{
@@ -189,7 +261,8 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
             kCellIconNameKey: @"ic_action_cloud_smile_face_colored"
         }];
     }
-    if (!_backupHelper.isBackupPreparing)
+
+    if (![_backupHelper isBackupPreparing])
     {
         _itemsSection = _data.sectionCount;
         [_data addSection:itemsSection];
@@ -227,17 +300,16 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     }
 }
 
-- (OATableRowData *) rowFromConflictItems:(NSArray *)items
+- (OATableRowData *)rowFromConflictItems:(NSString *)key
+                               localFile:(OALocalFile *)localFile
+                              remoteFile:(OARemoteFile *)remoteFile
 {
-    OALocalFile *localFile = (OALocalFile *) items.firstObject;
-    OARemoteFile *remoteFile = (OARemoteFile *) items.lastObject;
-    OATableRowData *rowData = [self rowFromItem:localFile
-                                       iconName:@"ic_custom_cloud_info"
-                                       mainTint:color_icon_inactive
-                                  secondaryTint:color_tint_gray
-                                      operation:EOABackupSyncOperationNone];
-    [rowData setObj:localFile forKey:@"localConflictItem"];
-    [rowData setObj:remoteFile forKey:@"remoteConflictItem"];
+    OATableRowData *rowData = [self rowFromKey:key
+                                      mainTint:color_icon_inactive
+                                 secondaryTint:color_tint_gray
+                                     operation:EOABackupSyncOperationNone
+                                     localFile:localFile
+                                    remoteFile:remoteFile];
     NSString *conflictStr = [OALocalizedString(@"cloud_conflict") stringByAppendingString:@". "];
     NSMutableAttributedString *attributedDescr = [[NSMutableAttributedString alloc] initWithString:[conflictStr stringByAppendingString:rowData.descr]];
     [attributedDescr addAttributes:@{ NSFontAttributeName : [UIFont systemFontOfSize:13 weight:UIFontWeightMedium],
@@ -246,82 +318,105 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     [attributedDescr addAttributes:@{ NSFontAttributeName : [UIFont systemFontOfSize:13],
                                       NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer) }
                              range:[attributedDescr.string rangeOfString:rowData.descr]];
-    [rowData setObj:attributedDescr forKey:@"descr_attr"];
-    [rowData setObj:@"ic_custom_alert" forKey:@"secondary_icon_conflict"];
-    [rowData setObj:@(color_primary_red) forKey:@"secondary_icon_color"];
+    [rowData setObj:attributedDescr forKey:@"descrAttr"];
+    [rowData setObj:@"ic_custom_alert" forKey:@"secondaryIconConflict"];
+    [rowData setObj:@(color_primary_red) forKey:@"secondaryIconColor"];
     [rowData setIconTint:color_primary_purple];
     return rowData;
 }
 
-- (OATableRowData *) rowFromItem:(id)file iconName:(NSString *)iconName mainTint:(NSInteger)mainTint secondaryTint:(NSInteger)secondaryTint operation:(EOABackupSyncOperationType)operation
+- (OATableRowData *)rowFromKey:(NSString *)key
+                      mainTint:(NSInteger)mainTint
+                 secondaryTint:(NSInteger)secondaryTint
+                     operation:(EOABackupSyncOperationType)operation
+                     localFile:(OALocalFile *)localFile
+                    remoteFile:(OARemoteFile *)remoteFile
 {
-    OASettingsItem *item = nil;
-    if ([file isKindOfClass:OALocalFile.class])
-        item = ((OALocalFile *) file).item;
-    else if ([file isKindOfClass:OARemoteFile.class])
-        item = ((OARemoteFile *) file).item;
-    OATableRowData *rowData = [OATableRowData rowData];
-    [rowData setCellType:[OARightIconTableViewCell getCellIdentifier]];
-    [rowData setObj:file forKey:@"file"];
-    [rowData setObj:item forKey:@"settings_item"];
-    [rowData setObj:@(operation) forKey:@"operation"];
-    NSString *name = item.getPublicName;
-    if ([item isKindOfClass:OAFileSettingsItem.class])
+    OASettingsItem *settingsItem = nil;
+    if (_tableType == EOARecentChangesLocal)
     {
-        OAFileSettingsItem *flItem = (OAFileSettingsItem *)item;
-        if (flItem.subtype == EOASettingsItemFileSubtypeVoiceTTS)
-            name = [NSString stringWithFormat:@"%@ (%@)", name, OALocalizedString(@"tts")];
-        else if (flItem.subtype == EOASettingsItemFileSubtypeVoice)
-            name = [NSString stringWithFormat:@"%@ (%@)", name, OALocalizedString(@"recorded_voice")];
-    }
-    [rowData setTitle:name];
-    NSString *fileName = [OABackupHelper getItemFileName:item];
-    [rowData setObj:fileName forKey:@"file_name"];
-
-    if (operation == EOABackupSyncOperationUpload || operation == EOABackupSyncOperationNone)
-    {
-        [rowData setDescr:[self getDescriptionForItemType:item.type
-                                                 fileName:fileName
-                                                  summary:[self localizedSummaryForOperation:operation]]];
+        settingsItem = localFile.item;
+        if (!settingsItem)
+            settingsItem = remoteFile.item;
     }
     else
     {
-        [rowData setDescr:[self generateTimeString:((OARemoteFile *) file).updatetimems summary:[self localizedSummaryForOperation:operation]]];
+        settingsItem = remoteFile.item;
+        if (!settingsItem)
+            settingsItem = localFile.item;
     }
-    [self setRowIcon:rowData item:item];
 
-    [rowData setObj:@(secondaryTint) forKey:@"secondary_icon_color"];
-    [rowData setIconTint:mainTint];
+    NSString *name = @"";
+    if ([settingsItem isKindOfClass:OAProfileSettingsItem.class])
+    {
+        name = [((OAProfileSettingsItem *) settingsItem).appMode toHumanString];
+    }
+    else
+    {
+        name = [settingsItem getPublicName];
+        if ([settingsItem isKindOfClass:OAFileSettingsItem.class])
+        {
+            OAFileSettingsItem *fileItem = (OAFileSettingsItem *) settingsItem;
+            if (fileItem.subtype == EOASettingsItemFileSubtypeVoiceTTS)
+                name = [NSString stringWithFormat:@"%@ (%@)", name, OALocalizedString(@"tts")];
+            else if (fileItem.subtype == EOASettingsItemFileSubtypeVoice)
+                name = [NSString stringWithFormat:@"%@ (%@)", name, OALocalizedString(@"recorded_voice")];
+        }
+        else if (!name)
+        {
+            name = OALocalizedString(@"res_unknown");
+        }
+    }
+
+    long timeMs = 0;
+    if (_tableType == EOARecentChangesLocal && operation == EOABackupSyncOperationDelete)
+        timeMs = remoteFile.clienttimems;
+    else if (_tableType == EOARecentChangesLocal || _tableType == EOARecentChangesConflicts)
+        timeMs = localFile.localModifiedTime * 1000;
+    else if (operation == EOABackupSyncOperationDelete)
+        timeMs = localFile.uploadTime;
+    else
+        timeMs = remoteFile.updatetimems;
+
+    NSString *description = [self generateTimeString:timeMs
+                                             summary:[self localizedSummaryForOperation:operation
+                                                                              localFile:localFile
+                                                                             remoteFile:remoteFile]];
+
+    OATableRowData *rowData = [[OATableRowData alloc] initWithData:@{
+        kCellTypeKey: [OARightIconTableViewCell getCellIdentifier],
+        kCellTitleKey: name,
+        kCellDescrKey: description,
+        kCellIconTint: @(mainTint),
+        @"secondaryIconColor": @(secondaryTint),
+        @"operation": @(operation),
+        @"fileName": key.lastPathComponent,
+        @"settingsItem": settingsItem
+    }];
+    [self setRowIcon:rowData item:settingsItem];
+
+    if (localFile)
+        [rowData setObj:localFile forKey:@"localFile"];
+    if (remoteFile)
+        [rowData setObj:remoteFile forKey:@"remoteFile"];
+
     return rowData;
 }
 
-- (NSString *) localizedSummaryForOperation:(EOABackupSyncOperationType)operation
+- (NSString *)localizedSummaryForOperation:(EOABackupSyncOperationType)operation
+                                 localFile:(OALocalFile *)localFile
+                                remoteFile:(OARemoteFile *)remoteFile
 {
-    switch (operation) {
+    switch (operation)
+    {
         case EOABackupSyncOperationDownload:
-            return OALocalizedString(@"shared_string_added");
+            return OALocalizedString(localFile ? @"osm_modified" : @"shared_string_added");
         case EOABackupSyncOperationUpload:
-            return OALocalizedString(@"osm_modified");
+            return OALocalizedString(remoteFile ? @"osm_modified" : @"shared_string_added");
         case EOABackupSyncOperationDelete:
             return OALocalizedString(@"osm_deleted");
         default:
             return OALocalizedString(@"osm_modified");
-    }
-}
-
-- (void)setRowIcon:(OATableRowData *)rowData item:(OASettingsItem *)item
-{
-    if ([item isKindOfClass:OAProfileSettingsItem.class])
-    {
-        OAProfileSettingsItem *profileItem = (OAProfileSettingsItem *) item;
-        OAApplicationMode *mode = profileItem.appMode;
-        [rowData setObj:[UIImage templateImageNamed:[mode getIconName]] forKey:@"icon"];
-    }
-    else
-    {
-        OAExportSettingsType *type = [OAExportSettingsType getExportSettingsTypeForItem:item];
-        if (type != nil)
-            [rowData setObj:type.icon forKey:@"icon"];
     }
 }
 
@@ -332,8 +427,8 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     for (NSInteger i = 0; i < section.rowCount; i++)
     {
         OATableRowData *row = [section getRow:i];
-        OASettingsItem *item = [row objForKey:@"settings_item"];
-        if (item.type == intType && [[row objForKey:@"file_name"] isEqualToString:fileName])
+        OASettingsItem *item = [row objForKey:@"settingsItem"];
+        if (item.type == intType && [[row objForKey:@"fileName"] isEqualToString:fileName])
             return @[row, @(i)];
     }
     return nil;
@@ -350,7 +445,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
         {
             NSIndexPath *indPath = [NSIndexPath indexPathForRow:[rowIndex.lastObject integerValue] inSection:_itemsSection];
             OATableRowData *item = [_data itemForIndexPath:indPath];
-            BOOL hasConflict = [item objForKey:@"remoteConflictItem"] != nil;
+            BOOL hasConflict = (EOABackupSyncOperationType) [item integerForKey:@"operation"] == EOABackupSyncOperationNone;
             OARightIconTableViewCell *cell = [self.tableView cellForRowAtIndexPath:indPath];
             if (cell)
             {
@@ -388,9 +483,9 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
 
                     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t) (1. * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                         [cell rightIconVisibility:YES];
-                        BOOL hasConflict = [item objForKey:@"remoteConflictItem"] != nil;
+                        BOOL hasConflict = (EOABackupSyncOperationType) [item integerForKey:@"operation"] == EOABackupSyncOperationNone;
                         [item setIconTint:color_primary_purple];
-                        [item setObj:hasConflict ? @(color_primary_red) : @(color_primary_purple) forKey:@"secondary_icon_color"];
+                        [item setObj:hasConflict ? @(color_primary_red) : @(color_primary_purple) forKey:@"secondaryIconColor"];
                         [self.tableView reloadRowsAtIndexPaths:@[indPath] withRowAnimation:UITableViewRowAnimationNone];
                     });
                 }
@@ -399,17 +494,35 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     });
 }
 
+// MARK: OAStatusBackupDelegate
+
+- (void)setRowIcon:(OATableRowData *)rowData item:(OASettingsItem *)item
+{
+    if ([item isKindOfClass:OAProfileSettingsItem.class])
+    {
+        OAProfileSettingsItem *profileItem = (OAProfileSettingsItem *) item;
+        OAApplicationMode *mode = profileItem.appMode;
+        [rowData setObj:[UIImage templateImageNamed:[mode getIconName]] forKey:@"icon"];
+    }
+    else
+    {
+        OAExportSettingsType *type = [OAExportSettingsType getExportSettingsTypeForItem:item];
+        if (type != nil)
+            [rowData setObj:type.icon forKey:@"icon"];
+    }
+}
+
 - (NSString *)generateTimeString:(long)timeMs summary:(NSString *)summary
 {
     if (timeMs != -1)
     {
         NSString *time = [OAOsmAndFormatter getFormattedPassedTime:(timeMs / 1000)
                                                                def:OALocalizedString(@"shared_string_never")];
-        return [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_colon"), summary, time];
+        return [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_dash"), summary, time];
     }
     else
     {
-        return [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_colon"), summary, OALocalizedString(@"shared_string_never")];
+        return [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_dash"), summary, OALocalizedString(@"shared_string_never")];
     }
 }
 
@@ -463,12 +576,12 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
         }
         if (cell)
         {
-            BOOL hasConflict = [item objForKey:@"remoteConflictItem"] != nil;
+            BOOL hasConflict = (EOABackupSyncOperationType) [item integerForKey:@"operation"] == EOABackupSyncOperationNone;
             cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingToLeftOfContentWithIcon, 0., 0.);
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 
             NSString *description = item.descr;
-            NSAttributedString *descriptionAttributed = [item objForKey:@"descr_attr"];
+            NSAttributedString *descriptionAttributed = [item objForKey:@"descrAttr"];
             [cell descriptionVisibility:description != nil || descriptionAttributed != nil];
             if (descriptionAttributed)
             {
@@ -485,11 +598,11 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
             cell.leftIconView.image = [item objForKey:@"icon"];
             cell.leftIconView.tintColor = UIColorFromRGB(item.iconTint);
 
-            NSString *secondaryIconName = hasConflict ? [item stringForKey:@"secondary_icon_conflict"] : item.secondaryIconName;
+            NSString *secondaryIconName = hasConflict ? [item stringForKey:@"secondaryIconConflict"] : item.secondaryIconName;
             if (secondaryIconName.length > 0)
             {
                 cell.rightIconView.image = [UIImage templateImageNamed:secondaryIconName];
-                cell.rightIconView.tintColor = UIColorFromRGB([item integerForKey:@"secondary_icon_color"]);
+                cell.rightIconView.tintColor = UIColorFromRGB([item integerForKey:@"secondaryIconColor"]);
                 [cell rightIconVisibility:YES];
             }
             else
@@ -589,34 +702,15 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OATableRowData *item = [_data itemForIndexPath:indexPath];
-    OARemoteFile *remoteConflictItem = [item objForKey:@"remoteConflictItem"];
-    if (remoteConflictItem)
+    if ([item objForKey:@"settingsItem"] && [item objForKey:@"operation"] && ![_settingsHelper isBackupSyncing])
     {
-        OAStatusBackupConflictDetailsViewController *conflictDetailsViewController =
-        [[OAStatusBackupConflictDetailsViewController alloc] initWithLocalFile:[item objForKey:@"localConflictItem"]
-                                                                    remoteFile:[item objForKey:@"remoteConflictItem"]
-                                                        operation:EOABackupSyncOperationNone];
-        conflictDetailsViewController.delegate = self;
-        [self presentViewController:conflictDetailsViewController animated:YES completion:nil];
-    }
-    else if ([item objForKey:@"settings_item"] && [item objForKey:@"operation"] && !_settingsHelper.isBackupSyncing)
-    {
-        EOABackupSyncOperationType operation = (EOABackupSyncOperationType) [item integerForKey:@"operation"];
-        id file = [item objForKey:@"file"];
-        OALocalFile *localFile = nil;
-        OARemoteFile *remoteFile = nil;
-        if (operation != EOABackupSyncOperationUpload)
-            remoteFile = (OARemoteFile *) file;
-        else
-            localFile = (OALocalFile *) file;
-        
-        
-        OAStatusBackupConflictDetailsViewController *conflictDetailsViewController =
-        [[OAStatusBackupConflictDetailsViewController alloc] initWithLocalFile:localFile
-                                                                    remoteFile:remoteFile
-                                                                     operation:operation];
-        conflictDetailsViewController.delegate = self;
-        [self presentViewController:conflictDetailsViewController animated:YES completion:nil];
+        OAStatusBackupConflictDetailsViewController *statusDetailsViewController =
+        [[OAStatusBackupConflictDetailsViewController alloc] initWithLocalFile:[item objForKey:@"localFile"]
+                                                                    remoteFile:[item objForKey:@"remoteFile"]
+                                                                     operation:(EOABackupSyncOperationType) [item integerForKey:@"operation"]
+                                                             recentChangesType:_tableType];
+        statusDetailsViewController.delegate = self;
+        [self presentViewController:statusDetailsViewController animated:YES completion:nil];
     }
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];

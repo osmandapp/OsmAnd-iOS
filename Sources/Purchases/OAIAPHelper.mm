@@ -1287,6 +1287,19 @@ static OASubscriptionState *EXPIRED;
     return [NSData dataWithContentsOfURL:receiptURL];
 }
 
+- (void)updateTransactionId:(OAProduct *)product transactionId:(NSString *)transactionId
+{
+    NSData *data = [OAAppSettings.sharedManager.purchasedIdentifiers.get dataUsingEncoding:NSUTF8StringEncoding];
+    NSError *error = nil;
+    NSDictionary *result = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
+    NSMutableDictionary *res = error ? [NSMutableDictionary dictionary] : [NSMutableDictionary dictionaryWithDictionary:result];
+    res[product.productIdentifier] = transactionId;
+    NSString *resStr = [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:res
+                                                                                      options:0
+                                                                                        error:&error] encoding:NSUTF8StringEncoding];
+    [_settings.purchasedIdentifiers set:resStr];
+}
+
 - (void) provideContentForProductIdentifier:(NSString * _Nonnull)productIdentifier transaction:(SKPaymentTransaction *)transaction
 {
     OAProduct *product = [self product:productIdentifier];
@@ -1367,6 +1380,7 @@ static OASubscriptionState *EXPIRED;
                 NSString *transactionId = transaction.transactionIdentifier;
                 if (transactionId)
                     [params setObject:transactionId forKey:@"purchaseToken"];
+                [self updateTransactionId:product transactionId:transactionId];
 
                 NSString *receiptStr = [receipt base64EncodedStringWithOptions:0];
                 if (receiptStr)

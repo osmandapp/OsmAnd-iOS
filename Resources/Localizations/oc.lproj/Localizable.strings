@@ -173,8 +173,6 @@
 "arrival_distance_factor_normally" = "Normau";
 "arrival_distance_factor_late" = "Tard";
 "arrival_distance_factor_at_last" = "Dins lei darriers mètres";
-"map_orientation_change_in_accordance_with_speed" = "Intervalle d'orientacion de la mapa";
-"map_orientation_change_in_accordance_with_speed_descr" = "Indicatz la velocitat minimala en dessota de la quala s'emplegarà la bossòla intèrna per determinar l'orientacion de la mapa prenent en còmpte l'endrechiera";
 "route_parameters" = "Paramètres dau percors";
 "fast_route_mode" = "Percors pus rapide";
 "fast_route_mode_descr" = "Activatz per calcular lo percors pus rapide o desactivatz per cercar aqueu de la consomacion melhora";

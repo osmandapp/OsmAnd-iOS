@@ -16,6 +16,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 #define APPROXIMATE_PREFERENCE_SIZE_BYTES 60
 
+FOUNDATION_EXTERN NSString *const kSettingsItemErrorDomain;
+FOUNDATION_EXTERN NSInteger const kSettingsItemErrorCodeAlreadyRead;
+
 @class OAGPXDocument;
 
 @interface OASettingsItem : NSObject
@@ -32,6 +35,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readonly) NSMutableArray<NSString *> *warnings;
 @property (nonatomic, assign) BOOL shouldReplace;
+@property (nonatomic, assign) BOOL read;
 
 - (instancetype _Nullable) initWithJson:(id)json error:(NSError * _Nullable *)error;
 - (instancetype) initWithBaseItem:(OASettingsItem *)baseItem;

@@ -447,7 +447,6 @@
 "use_displayed_track_for_navigation" = "Ali želite uporabiti prikazano sled za navigacijo?";
 "today" = "Danes";
 "yesterday" = "Včeraj";
-"map_orientation_change_in_accordance_with_speed" = "Prag usmerjenosti zemljevida";
 "shared_string_collapse" = "Zloži";
 "shared_string_topbar" = "Vrhnja vrstica";
 "shared_string_widgets" = "Gradniki";
@@ -569,7 +568,6 @@
 "driving_region_descr" = "Izbira določil vožnje: ZDA, Evropa, Velika Britanija, Azija in druga.";
 "map_widget_magnetic_bearing" = "Smer po magnetnem polju";
 "map_widget_bearing" = "Relativna smer";
-"map_orientation_change_in_accordance_with_speed_descr" = "Hitrost, pri kateri se usmerjenost preklopi »iz smeri gibanja« na »kompas«.";
 "shared_string_select_on_map" = "Izberi na zemljevidu";
 "shared_string_my_location" = "Moj položaj";
 "route_descr_select_destination" = "Izbor cilja";

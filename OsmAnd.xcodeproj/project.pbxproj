@@ -2094,7 +2094,6 @@
 		DA5A824826C563A700F274C7 /* OARoadSpeedsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7B7E26C563A100F274C7 /* OARoadSpeedsViewController.mm */; };
 		DA5A824926C563A700F274C7 /* OAAutoCenterMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7B8226C563A100F274C7 /* OAAutoCenterMapViewController.m */; };
 		DA5A824A26C563A700F274C7 /* OADefaultSpeedViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7B8426C563A100F274C7 /* OADefaultSpeedViewController.mm */; };
-		DA5A824B26C563A700F274C7 /* OAMapOrientationThresholdViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7B8726C563A100F274C7 /* OAMapOrientationThresholdViewController.m */; };
 		DA5A824C26C563A700F274C7 /* OANavigationLanguageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7B8826C563A100F274C7 /* OANavigationLanguageViewController.m */; };
 		DA5A824D26C563A700F274C7 /* OAScreenAlertsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7B8926C563A100F274C7 /* OAScreenAlertsViewController.m */; };
 		DA5A824E26C563A700F274C7 /* OAMapBehaviorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7B8B26C563A100F274C7 /* OAMapBehaviorViewController.m */; };
@@ -5917,7 +5916,6 @@
 		DA5A7B8426C563A100F274C7 /* OADefaultSpeedViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OADefaultSpeedViewController.mm; sourceTree = "<group>"; };
 		DA5A7B8526C563A100F274C7 /* OASpeedLimitToleranceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASpeedLimitToleranceViewController.h; sourceTree = "<group>"; };
 		DA5A7B8626C563A100F274C7 /* OAVoicePromptsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAVoicePromptsViewController.h; sourceTree = "<group>"; };
-		DA5A7B8726C563A100F274C7 /* OAMapOrientationThresholdViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAMapOrientationThresholdViewController.m; sourceTree = "<group>"; };
 		DA5A7B8826C563A100F274C7 /* OANavigationLanguageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OANavigationLanguageViewController.m; sourceTree = "<group>"; };
 		DA5A7B8926C563A100F274C7 /* OAScreenAlertsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAScreenAlertsViewController.m; sourceTree = "<group>"; };
 		DA5A7B8A26C563A100F274C7 /* OAProfileNavigationSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAProfileNavigationSettingsViewController.h; sourceTree = "<group>"; };
@@ -5934,7 +5932,6 @@
 		DA5A7B9526C563A100F274C7 /* OAAutoZoomMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAAutoZoomMapViewController.m; sourceTree = "<group>"; };
 		DA5A7B9626C563A100F274C7 /* OAArrivalAnnouncementViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAArrivalAnnouncementViewController.m; sourceTree = "<group>"; };
 		DA5A7B9726C563A100F274C7 /* OASettingsModalPresentationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OASettingsModalPresentationViewController.xib; sourceTree = "<group>"; };
-		DA5A7B9826C563A100F274C7 /* OAMapOrientationThresholdViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMapOrientationThresholdViewController.h; sourceTree = "<group>"; };
 		DA5A7B9926C563A100F274C7 /* OARecalculateRouteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARecalculateRouteViewController.h; sourceTree = "<group>"; };
 		DA5A7B9A26C563A100F274C7 /* OARouteParameterValuesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OARouteParameterValuesViewController.h; sourceTree = "<group>"; };
 		DA5A7B9B26C563A100F274C7 /* OAAvoidPreferParametersViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAvoidPreferParametersViewController.mm; sourceTree = "<group>"; };
@@ -11225,8 +11222,6 @@
 				DA5A7B8426C563A100F274C7 /* OADefaultSpeedViewController.mm */,
 				DA5A7B7526C563A100F274C7 /* OAMapBehaviorViewController.h */,
 				DA5A7B8B26C563A100F274C7 /* OAMapBehaviorViewController.m */,
-				DA5A7B9826C563A100F274C7 /* OAMapOrientationThresholdViewController.h */,
-				DA5A7B8726C563A100F274C7 /* OAMapOrientationThresholdViewController.m */,
 				DA5A7B7A26C563A100F274C7 /* OANavigationLanguageViewController.h */,
 				DA5A7B8826C563A100F274C7 /* OANavigationLanguageViewController.m */,
 				DA5A7B9026C563A100F274C7 /* OANavigationTypeViewController.h */,
@@ -16494,7 +16489,6 @@
 				DA5A856426C563A900F274C7 /* OAGpxApproximator.mm in Sources */,
 				DA5A814026C563A700F274C7 /* OAOsmBaseStorage.m in Sources */,
 				DA5A837026C563A800F274C7 /* OARoutingTargetCell.m in Sources */,
-				DA5A824B26C563A700F274C7 /* OAMapOrientationThresholdViewController.m in Sources */,
 				DA5A84C526C563A900F274C7 /* OAOsmNoteBottomSheetViewController.mm in Sources */,
 				DA5A84A726C563A900F274C7 /* OARouteExporter.mm in Sources */,
 				DA5A84CB26C563A900F274C7 /* OACopyProfileBottomSheetViewControler.mm in Sources */,
@@ -17173,7 +17167,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 4.3.0.21;
+				CURRENT_PROJECT_VERSION = 4.4.1.2;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = LM67P5MQ23;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
@@ -17193,7 +17187,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
-				MARKETING_VERSION = 4.3.0;
+				MARKETING_VERSION = 4.4.1;
 				OBJROOT = $SYMROOT;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -17233,7 +17227,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 4.3.0.21;
+				CURRENT_PROJECT_VERSION = 4.4.1.2;
 				DEVELOPMENT_TEAM = LM67P5MQ23;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -17251,7 +17245,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
-				MARKETING_VERSION = 4.3.0;
+				MARKETING_VERSION = 4.4.1;
 				OBJROOT = $SYMROOT;
 				OTHER_LDFLAGS = (
 					"$(inherited)",

@@ -29,6 +29,14 @@
 
 - (BOOL) readFromFile:(NSString *)filePath error:(NSError * _Nullable *)error
 {
+    if (self.item.read)
+    {
+        if (error)
+            *error = [NSError errorWithDomain:kSettingsItemErrorDomain code:kSettingsItemErrorCodeAlreadyRead userInfo:nil];
+
+        return NO;
+    }
+
     NSError *readError;
     NSData *data = [NSData dataWithContentsOfFile:filePath options:NSDataReadingMappedIfSafe error:&readError];
     if (readError)
@@ -62,6 +70,8 @@
         NSLog(@"Json parsing error");
         return NO;
     }
+
+    self.item.read = YES;
     return YES;
 }
 

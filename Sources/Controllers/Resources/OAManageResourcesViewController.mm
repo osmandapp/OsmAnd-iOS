@@ -512,7 +512,7 @@ static BOOL _repositoryUpdated = NO;
 
 - (void) updateContentIfNeeded
 {
-    BOOL needUpdateContent = NO;
+    BOOL needUpdateContent = [self isNauticalScope];
     if ([self shouldHideBanner] && _displayBanner)
     {
         _displayBanner = NO;

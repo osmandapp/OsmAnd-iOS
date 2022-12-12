@@ -223,8 +223,6 @@
 "arrival_distance_factor_normally" = "Arrunta";
 "arrival_distance_factor_late" = "Berandu";
 "arrival_distance_factor_at_last" = "Azkeneko metrotan";
-"map_orientation_change_in_accordance_with_speed" = "Maparen orientazioaren atalasea";
-"map_orientation_change_in_accordance_with_speed_descr" = "Select below which speed the map orientation switches from 'To direction of movement' to 'To compass'";
 "route_parameters" = "Ibilbidearen parametroak";
 "fast_route_mode" = "Ibilbiderik azkarrena";
 "nav_type_title" = "Nabigazio mota";

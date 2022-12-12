@@ -223,8 +223,6 @@
 "arrival_distance_factor_normally" = "Нормално";
 "arrival_distance_factor_late" = "Касно";
 "arrival_distance_factor_at_last" = "У последњих пар метара";
-"map_orientation_change_in_accordance_with_speed" = "Задршка усмерења карте";
-"map_orientation_change_in_accordance_with_speed_descr" = "Изаберите испод које брзине се оријентација карте мења са „Према смеру кретања“ у „Према компасу“";
 "route_parameters" = "Параметри пута";
 "fast_route_mode" = "Најбржи пут";
 "nav_type_title" = "Тип навођења";

@@ -63,9 +63,7 @@
         _app = [OsmAndApp instance];
         
         // Create favorite
-        OsmAnd::PointI locationPoint;
-        locationPoint.x = OsmAnd::Utilities::get31TileNumberX(location.longitude);
-        locationPoint.y = OsmAnd::Utilities::get31TileNumberY(location.latitude);
+        OsmAnd::LatLon locationPoint(location.latitude, location.longitude);
         
         QString elevation = QString();
         QString time = QString::fromNSString([OAFavoriteItem toStringDate:[NSDate date]]);
@@ -74,10 +72,9 @@
         QString title = QString::fromNSString(formattedLocation);
         
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        NSString *groupName;
-        if ([userDefaults objectForKey:kFavoriteDefaultGroupKey])
-            groupName = [userDefaults stringForKey:kFavoriteDefaultGroupKey];
-        
+        NSString *groupName = [userDefaults objectForKey:kFavoriteDefaultGroupKey] ? [userDefaults stringForKey:kFavoriteDefaultGroupKey] : @"";
+        QString group = QString::fromNSString(groupName);
+
         NSInteger defaultColor = [[userDefaults objectForKey:kFavoriteDefaultColorKey] integerValue];
         OAFavoriteColor *favCol = [OADefaultFavorite builtinColors][[OADefaultFavorite getValidBuiltInColorNumber:defaultColor]];
         
@@ -87,13 +84,7 @@
                  green:&g
                   blue:&b
                  alpha:&a];
-        
-        QString group;
-        if (groupName)
-            group = QString::fromNSString(groupName);
-        else
-            group = QString();
-        
+
         QString description = QString();
         QString address = QString();
         QString icon = QString();
@@ -113,11 +104,11 @@
         
         OAFavoriteItem* fav = [[OAFavoriteItem alloc] initWithFavorite:favorite];
         _favorite = fav;
-        [_app saveFavoritesToPermamentStorage];
+        [_app saveFavoritesToPermanentStorage:@[self.favorite.getCategory]];
         if (!OAFavoritesHelper.isFavoritesLoaded)
             [OAFavoritesHelper loadFavorites];
         
-        _favoriteGroup = [OAFavoritesHelper getGroupByName:[self.favorite getCategory]];
+        _favoriteGroup = [OAFavoritesHelper getGroupByName:self.favorite.getCategory];
         [self acquireOriginObject];
         self.topToolbarType = ETopToolbarTypeMiddleFixed;
     }

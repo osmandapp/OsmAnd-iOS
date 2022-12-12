@@ -530,6 +530,7 @@ static UIViewController *parentController;
     {
         OsmAndAppInstance app = [OsmAndApp instance];
         OAFavoriteColor *favCol = [[OADefaultFavorite builtinColors] objectAtIndex:_colorController.colorIndex];
+        NSMutableSet<NSString *> *groupNames = [NSMutableSet set];
 
         for (NSIndexPath *indexPath in _selectedItems)
         {
@@ -556,6 +557,7 @@ static UIViewController *parentController;
             if (item)
             {
                 [item setColor:favCol.color];
+                [groupNames addObject:item.getCategory];
 
                 if (indexPath.row == 1)
                 {
@@ -565,7 +567,7 @@ static UIViewController *parentController;
             }
         }
 
-        [app saveFavoritesToPermamentStorage];
+        [app saveFavoritesToPermanentStorage:groupNames.allObjects];
     }
     [self finishEditing];
     [self.favoriteTableView reloadData];
@@ -586,6 +588,7 @@ static UIViewController *parentController;
             return [row2 compare:row1];
         }];
 
+        NSMutableSet *groupNames = [NSMutableSet set];
         for (NSIndexPath *indexPath in sortedSelectedItems)
         {
             OAFavoriteItem* item;
@@ -610,11 +613,12 @@ static UIViewController *parentController;
 
             if (item)
             {
+                [groupNames addObject:item.getCategory];
                 [OAFavoritesHelper editFavoriteName:item newName:[item getDisplayName] group:_groupController.groupName descr:[item getDescription] address:[item getAddress]];
             }
         }
 
-        [app saveFavoritesToPermamentStorage];
+        [app saveFavoritesToPermanentStorage:groupNames.allObjects];
     }
     [self finishEditing];
     [self generateData];
@@ -723,7 +727,7 @@ static UIViewController *parentController;
     if (exportCollection->getFavoriteLocationsCount() == 0)
         return;
 
-    NSString* filename = [OsmAndApp instance].favoritesStorageFilename.lastPathComponent;
+    NSString* filename = [OsmAndApp instance].favoritesLegacyStorageFilename.lastPathComponent;
     NSString* fullFilename = [NSTemporaryDirectory() stringByAppendingString:filename];
     if (!exportCollection->saveTo(QString::fromNSString(fullFilename)))
         return;
@@ -765,7 +769,7 @@ static UIViewController *parentController;
 
     OsmAndAppInstance app = [OsmAndApp instance];
     // Share all favorites
-    NSURL* favoritesUrl = [NSURL fileURLWithPath:app.favoritesStorageFilename];
+    NSURL* favoritesUrl = [NSURL fileURLWithPath:app.favoritesLegacyStorageFilename];
     _exportController = [UIDocumentInteractionController interactionControllerWithURL:favoritesUrl];
     _exportController.UTI = @"com.topografix.gpx";
     _exportController.delegate = self;

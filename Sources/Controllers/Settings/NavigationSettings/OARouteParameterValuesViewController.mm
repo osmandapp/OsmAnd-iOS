@@ -107,6 +107,16 @@ typedef NS_ENUM(NSInteger, EOARouteParamType) {
         [self setupTableHeaderViewWithText:OALocalizedString(@"routing_attr_goods_restrictions_header_name")];
 }
 
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        if (_isGoodsRestrictionsCategory)
+            [self setupTableHeaderViewWithText:OALocalizedString(@"routing_attr_goods_restrictions_header_name")];
+        [self.tableView reloadData];
+    } completion:nil];
+}
+
 - (void)applyLocalization
 {
     [super applyLocalization];

@@ -313,9 +313,6 @@
 "shared_string_remove" = "Remover";
 "device_memory" = "Memória do aparelho";
 "free_memory" = "%@ livre";
-"map_orientation_change_in_accordance_with_speed" = "Limite para orientação do mapa";
-"map_orientation_change_in_accordance_with_speed_descr" = "Selecione abaixo em qual velocidade a orientação do mapa alterna de \"Na direção do movimento\" para \"Na direção da bússola\"";
-"today" = "Hoje";
 "yesterday" = "Ontem";
 "shared_string_widgets" = "Widgets";
 "relief_smoothness_factor_descr" = "Terreno preferido: plano ou montanhoso.";
@@ -2696,7 +2693,7 @@
 "cross_buy" = "Compra cruzada";
 "purchases_feature_desc_cross_buy" = "Utilizar todas as funcionalidades de subscrição em múltiplas plataformas sem custos adicionais. Disponível em Android/iOS/Web.";
 "cloud_all_changes_uploaded" = "Todas as alterações enviadas";
-"cloud_recent_changes" = "Alterações recentes";
+"cloud_recent_changes" = "Alterações";
 "upload_local_version" = "Enviar versão local";
 "dowload_cloud_version" = "Descarregar versão da cloud";
 "cloud_conflict" = "Conflito";
@@ -2753,3 +2750,4 @@
 "recalc_angle_dialog_title" = "Ângulo mínimo entre a minha localização e a rota";
 "recalc_angle_dialog_descr" = "Será mostrado o segmento reto adicional entre a minha localização e a rota calculada até que a rota seja recalculada";
 "shared_string_angle_param" = "Ângulo: %d°";
+"local_backup_empty_file" = "O ficheiro da cópia de segurança não contém nenhum item para restaurar.";

@@ -88,8 +88,6 @@
 "arrival_distance_factor_normally" = "معمولی";
 "arrival_distance_factor_late" = "دیر";
 "arrival_distance_factor_at_last" = "در چند متر آخر";
-"map_orientation_change_in_accordance_with_speed" = "آستانهٔ تغییر جهت نقشه";
-"map_orientation_change_in_accordance_with_speed_descr" = "Select below which speed the map orientation switches from 'To direction of movement' to 'To compass'";
 "fast_route_mode" = "سریع‌ترین مسیر";
 "fast_route_mode_descr" = "فعال کنید تا سریع‌ترین مسیر محاسبه شود یا غیرفعال کنید تا مسیر صرفه‌جویی سوخت محاسبه شود.";
 "avoid_in_routing_title" = "پرهیز از…";
@@ -1974,3 +1972,6 @@
 "restore_from_osmand_cloud" = "بازیابی از ابر OsmAnd";
 "paused" = "مکث‌کرده";
 "shared_string_delete_all" = "حذف همه";
+"map_settings_weather_wind" = "باد";
+"map_settings_weather_temp" = "درجه دما";
+"map_settings_weather_cloud" = "ابر";

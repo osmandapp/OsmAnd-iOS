@@ -152,9 +152,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 
 - (std::shared_ptr<OsmAnd::IFavoriteLocation>) createFavoritePointWithLat:(double)lat lon:(double)lon altitude:(double)altitude timestamp:(NSDate *)timestamp name:(NSString *)name description:(NSString *)description address:(NSString *)address category:(NSString *)category iconName:(NSString *)iconName backgroundIconName:(NSString *)backgroundIconName color:(UIColor *)color visible:(BOOL)visible
 {
-    OsmAnd::PointI locationPoint;
-    locationPoint.x = OsmAnd::Utilities::get31TileNumberX(lon);
-    locationPoint.y = OsmAnd::Utilities::get31TileNumberY(lat);
+    OsmAnd::LatLon locationPoint(lat, lon);
 
     QString qElevation = altitude > 0 ? QString::fromNSString([self toStringAltitude:altitude]) : QString();
     QString qTime = timestamp ? QString::fromNSString([self.class toStringDate:timestamp]) : QString();
@@ -163,7 +161,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
     QString qName = name ? QString::fromNSString(name) : QString();
     QString qDescription = description ? QString::fromNSString(description) : QString();
     QString qAddress = address ? QString::fromNSString(address) : QString();
-    QString qCategory = category ? QString::fromNSString(category) : QString();
+    QString qCategory = category ? QString::fromNSString(category) : QStringLiteral("");
     QString qIconName = iconName ? QString::fromNSString(iconName) : QString();
     QString qBackgroundIconName = backgroundIconName ? QString::fromNSString(backgroundIconName) : QString();
     
@@ -435,7 +433,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 
 - (NSString *) getCategory
 {
-    if (!self.favorite->getGroup().isNull())
+    if (!self.favorite->getGroup().isEmpty())
         return self.favorite->getGroup().toNSString();
     else
         return @"";

@@ -467,21 +467,12 @@
 {
     int currentMapRotation = [_settings.rotateMap get];
     double course = -1;
-
-    double speedForDirectionOfMovement = [_settings.switchMapDirectionToCompass get];
-    BOOL smallSpeedForDirectionOfMovement = speedForDirectionOfMovement != 0 && [self.class isSmallSpeedForDirectionOfMovement:location speedToDirectionOfMovement:speedForDirectionOfMovement];
-    BOOL smallSpeedForCompass = [self.class isSmallSpeedForCompass:location];
-    //BOOL smallSpeedForAnimation = [self.class isSmallSpeedForAnimation:newLocation];
     
-    BOOL sva = (location.course < 0 || smallSpeedForCompass);
+    BOOL sva = location.course < 0;
     
     if (currentMapRotation == ROTATE_MAP_BEARING)
     {
-        if (smallSpeedForDirectionOfMovement)
-        {
-            sva = _routePlanningMode;
-        }
-        else if (location.course >= 0 && !smallSpeedForCompass)
+        if (location.course >= 0)
         {
             // special case when bearing equals to zero (we don't change anything)
             if (location.course != 0)
@@ -499,9 +490,7 @@
     CLLocationDirection direction = course;
     if (direction < 0)
     {
-        double speedForDirectionOfMovement = [_settings.switchMapDirectionToCompass get];
-        BOOL smallSpeedForDirectionOfMovement = speedForDirectionOfMovement != 0 && location && [self.class isSmallSpeedForDirectionOfMovement:location speedToDirectionOfMovement:speedForDirectionOfMovement];
-        if (([_settings.rotateMap get] == ROTATE_MAP_COMPASS || ([_settings.rotateMap get] == ROTATE_MAP_BEARING && smallSpeedForDirectionOfMovement)) && !_routePlanningMode)
+        if ([_settings.rotateMap get] == ROTATE_MAP_COMPASS && !_routePlanningMode)
         {
             if (ABS(degreesDiff(_mapView.azimuth, heading)) > 1)
                 direction = heading;
@@ -568,11 +557,6 @@
 - (void) refreshLocation
 {
     [self onLocationServicesUpdate];
-}
-
-+ (BOOL) isSmallSpeedForDirectionOfMovement:(CLLocation *)location speedToDirectionOfMovement:(double)speedToDirectionOfMovement
-{
-    return location.speed < speedToDirectionOfMovement;
 }
 
 + (BOOL) isSmallSpeedForCompass:(CLLocation *)location

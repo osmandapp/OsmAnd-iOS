@@ -122,8 +122,6 @@
 "arrival_distance_factor_normally" = "طبيعي";
 "arrival_distance_factor_late" = "متأخر";
 "arrival_distance_factor_at_last" = "في الأمتار الأخيرة";
-"map_orientation_change_in_accordance_with_speed" = "عتبة توجيه الخريطة";
-"map_orientation_change_in_accordance_with_speed_descr" = "حدد أدناه السرعة التي ينتقل بها اتجاه الخريطة من \"اتجاه الحركة\" إلى \"البوصلة\"";
 "fast_route_mode" = "الطريق الأسرع";
 "fast_route_mode_descr" = "تفعيل لحساب الطريق الأسرع أو تعطيل لحساب مسار أقل استهلاكا للوقود";
 "avoid_in_routing_title" = "التجنب…";
@@ -2700,7 +2698,7 @@
 "sign_in_with_open_street_map" = "تسجيل الدخول عبر الشارع المفتوح";
 "tts" = "تحويل النص إلى كلام";
 "recorded_voice" = "المسافة";
-"cloud_recent_changes" = "التغييرات الأخيرة";
+"cloud_recent_changes" = "التغييرات";
 "cloud_conflict" = "نزاع";
 "cloud_pause_all" = "إيقاف الكل";
 "cloud_all_changes_uploaded" = "جميع التغييرات المحملة";
@@ -2756,3 +2754,4 @@
 "shared_string_added" = "تمت الإضافة";
 "mtb_segment_classification" = "تصنيف القطاعات";
 "recalc_angle_dialog_descr" = "سيتم عرض جزء مستقيم إضافي بين موقعي والمسار المحسوب حتى يتم إعادة حساب المسار";
+"local_backup_empty_file" = "لا يحتوي ملف النسخ الاحتياطي على أي عناصر لاستعادتها.";

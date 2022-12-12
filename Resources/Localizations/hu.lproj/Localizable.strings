@@ -553,8 +553,6 @@
 "nearest_cities" = "Közeli települések";
 "type_address" = "Cím megadása";
 "search_poi_category_hint" = "Gépeljen az összes kereséséhez";
-"map_orientation_change_in_accordance_with_speed_descr" = "Válassza ki, mekkora sebességnél váltson a térkép forgatása „Mozgás iránya”-ról „Iránytű”-re";
-"map_orientation_change_in_accordance_with_speed" = "Térképforgatást kiváltó küszöbérték";
 "unit_of_length_descr" = "Hosszmértékegység megváltoztatása.";
 "coords_format_descr" = "Földrajzi koordináták formátuma.";
 "save_global_track_interval_descr" = "Válasszon naplózási időközt az általános útrögzítéshez (a térképen lévő GPX naplózó felületi elemen keresztül engedélyezve).";

@@ -132,6 +132,8 @@
             else if (![[NSString stringWithUTF8String:r.id.c_str()] containsString:@"avoid"])
             {
                 OALocalNonAvoidParameter *rp = [[OALocalNonAvoidParameter alloc] initWithAppMode:am];
+                if ([[NSString stringWithUTF8String:r.id.c_str()] isEqualToString:kRouteParamIdGoodsRestrictions])
+                    continue;
                 rp.routingParameter = r;
                 rp.delegate = self;
                 [list addObject:rp];

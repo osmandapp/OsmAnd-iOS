@@ -622,8 +622,6 @@
 "arrival_distance_factor_normally" = "Normálne";
 "arrival_distance_factor_late" = "Neskoro";
 "arrival_distance_factor_at_last" = "V posledných metroch";
-"map_orientation_change_in_accordance_with_speed" = "Citlivosť zmeny orientácie mapy";
-"map_orientation_change_in_accordance_with_speed_descr" = "Zvoľte pod akou rýchlosťou sa orientácia mapy zmení zo \"V smere pohybu\" na \"Smer kompasu\"";
 "fast_route_mode" = "Najrýchlejšia trasa";
 "fast_route_mode_descr" = "Zapnite pre výpočet najrýchlejšej trasy alebo vypnite pre ekonomickú trasu";
 "avoid_in_routing_title" = "Vyhnúť sa…";

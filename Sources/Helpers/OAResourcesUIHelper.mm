@@ -636,7 +636,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             return OALocalizedString(@"res_wsea_map");
 
         auto name = resource->id;
-        name = name.remove(QStringLiteral("_osmand_ext")).remove(QStringLiteral(".depth.obf")).mid(6).replace('_', ' ');
+        name = name.remove(QStringLiteral(".depth.obf")).replace('_', ' ');
         return name.toNSString().capitalizedString;
     }
 

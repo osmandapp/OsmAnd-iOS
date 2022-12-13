@@ -386,7 +386,8 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     << OsmAnd::ResourcesManager::ResourceType::SrtmMapRegion
     << OsmAnd::ResourcesManager::ResourceType::HillshadeRegion
     << OsmAnd::ResourcesManager::ResourceType::SlopeRegion
-    << OsmAnd::ResourcesManager::ResourceType::WikiMapRegion;
+    << OsmAnd::ResourcesManager::ResourceType::WikiMapRegion
+    << OsmAnd::ResourcesManager::ResourceType::DepthMapRegion;
     NSArray<NSString *> *localIndexFiles = [OAResourcesUIHelper getInstalledResourcePathsByTypes:types];
     if (localIndexFiles.count > 0)
     {

@@ -182,6 +182,12 @@
                     return subtype;
                 break;
             }
+            case EOASettingsItemFileSubtypeNauticalDepth:
+            {
+                if ([name hasSuffix:BINARY_DEPTH_MAP_INDEX_EXT])
+                    return subtype;
+                break;
+            }
             default:
             {
                 NSString *subtypeFolder = [self.class getSubtypeFolder:subtype];

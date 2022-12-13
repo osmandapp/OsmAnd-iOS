@@ -19,6 +19,8 @@
 
 #include <OsmAndCore/CommonTypes.h>
 
+#include <openingHoursParser.h>
+
 #import <Foundation/Foundation.h>
 
 #import "OACommonTypes.h"
@@ -52,5 +54,8 @@
 + (QHash<QString, QString>) dictionaryToQHash:(NSDictionary<NSString *, NSString*> *)dictionary;
 
 + (QList<OsmAnd::TileId>)convertToQListTileIds:(NSArray<NSArray<NSNumber *> *> *)tileIds;
+
++ (UIColor *) getOpeningHoursColor:(std::vector<std::shared_ptr<OpeningHoursParser::OpeningHours::Info>>)openingHoursInfo;
++ (NSAttributedString *) getOpeningHoursDescr:(std::vector<std::shared_ptr<OpeningHoursParser::OpeningHours::Info>>)openingHoursInfo;
 
 @end

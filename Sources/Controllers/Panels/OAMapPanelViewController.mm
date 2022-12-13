@@ -1772,7 +1772,8 @@ typedef enum
     OAEditPointViewController *controller =
             [[OAEditPointViewController alloc] initWithLocation:self.targetMenuView.targetPoint.location
                                                           title:self.targetMenuView.targetPoint.title
-                                                    customParam:self.targetMenuView.targetPoint.titleAddress
+                                                        address:self.targetMenuView.targetPoint.titleAddress
+                                                    customParam:nil
                                                       pointType:EOAEditPointTypeFavorite
                                                 targetMenuState:nil
                                                             poi:poi];
@@ -1926,6 +1927,7 @@ typedef enum
     OAPOI *poi = [self getTargetPointPoi];
     OAEditPointViewController *controller = [[OAEditPointViewController alloc] initWithLocation:location
                                                                                           title:title
+                                                                                        address:self.targetMenuView.targetPoint.titleAddress
                                                                                     customParam:gpxFileName
                                                                                       pointType:EOAEditPointTypeWaypoint
                                                                                 targetMenuState:_activeViewControllerState

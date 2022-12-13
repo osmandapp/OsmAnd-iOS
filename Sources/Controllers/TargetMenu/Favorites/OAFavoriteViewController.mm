@@ -35,6 +35,7 @@
     OsmAndAppInstance _app;
     OAPOI *_originObject;
     OAFavoriteGroup *_favoriteGroup;
+    std::vector<std::shared_ptr<OpeningHoursParser::OpeningHours::Info>> _openingHoursInfo;
 }
 
 - (id) initWithItem:(OAFavoriteItem *)favorite headerOnly:(BOOL)headerOnly
@@ -45,6 +46,7 @@
         _app = [OsmAndApp instance];
         _favorite = favorite;
         _favoriteGroup = [OAFavoritesHelper getGroupByName:[self.favorite getCategory]];
+        _openingHoursInfo = OpeningHoursParser::getInfo(self.favorite.favorite->getExtension(QString::fromNSString([PRIVATE_PREFIX stringByAppendingString:OPENING_HOURS])).toStdString());
 
         if (!OAFavoritesHelper.isFavoritesLoaded)
             [OAFavoritesHelper loadFavorites];
@@ -216,7 +218,25 @@
 
 - (NSAttributedString *) getAttributedTypeStr:(NSString *)group
 {
-    return [self getAttributedTypeStr:group color:[_favoriteGroup color]];
+    NSAttributedString *attributedTypeStr = [self getAttributedTypeStr:group color:[_favoriteGroup color]];
+    NSString *address = [@"\n\n" stringByAppendingString:[self.favorite getAddress]];
+    NSMutableAttributedString *mutAttributedTypeStr = [[NSMutableAttributedString alloc] init];
+    [mutAttributedTypeStr appendAttributedString:attributedTypeStr];
+    [mutAttributedTypeStr appendAttributedString:[[NSAttributedString alloc] initWithString:address]];
+    [mutAttributedTypeStr addAttributes:@{ NSFontAttributeName : [UIFont systemFontOfSize:15],
+                                           NSForegroundColorAttributeName : UIColorFromRGB(color_dialog_text_description_color_night) }
+                                  range:NSMakeRange(0, mutAttributedTypeStr.length)];
+    return mutAttributedTypeStr;
+}
+
+- (UIColor *) getAdditionalInfoColor
+{
+    return [OANativeUtilities getOpeningHoursColor:_openingHoursInfo];
+}
+
+- (NSAttributedString *) getAdditionalInfoStr
+{
+    return [OANativeUtilities getOpeningHoursDescr:_openingHoursInfo];
 }
 
 - (NSString *) getItemName

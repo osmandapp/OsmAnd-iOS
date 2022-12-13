@@ -80,6 +80,8 @@ static BOOL dataInvalidated = NO;
             else
             {
                 OAResourceItem *item = obj1;
+                if (item.resourceId == QString::fromUtf8(kWorldSeamarksKey))
+                    return NSOrderedAscending;
                 if (item.resourceId.startsWith(QStringLiteral("world_")))
                     str1 = [NSString stringWithFormat:@"!%@%d", item.title, item.resourceType];
                 else
@@ -93,6 +95,8 @@ static BOOL dataInvalidated = NO;
             else
             {
                 OAResourceItem *item = obj2;
+                if (item.resourceId == QString::fromUtf8(kWorldSeamarksKey))
+                    return NSOrderedDescending;
                 if (item.resourceId.startsWith(QStringLiteral("world_")))
                     str2 = [NSString stringWithFormat:@"!%@%d", item.title, item.resourceType];
                 else
@@ -410,9 +414,9 @@ static BOOL dataInvalidated = NO;
                 [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Srtm];
             else if (item.resourceType == OsmAndResourceType::WikiMapRegion && ![_iapHelper.wiki isActive])
                 [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Wiki];
-            else if (item.resourceType == OsmAndResourceType::DepthContourRegion && ![OAIAPHelper isDepthContoursPurchased])
+            else if ((item.resourceType == OsmAndResourceType::DepthContourRegion || item.resourceType == OsmAndResourceType::DepthMapRegion) && ![OAIAPHelper isDepthContoursPurchased])
                 [OAPluginPopupViewController askForPlugin:kInAppId_Addon_DepthContours];
-            else if (item.resourceType == OsmAndResourceType::DepthContourRegion && ![OAPlugin isEnabled:OANauticalMapsPlugin.class])
+            else if ((item.resourceType == OsmAndResourceType::DepthContourRegion || item.resourceType == OsmAndResourceType::DepthMapRegion) && ![OAPlugin isEnabled:OANauticalMapsPlugin.class])
                 [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Nautical];
             else if (item.resourceType == OsmAndResourceType::MapRegion && [item.worldRegion.regionId isEqualToString:OsmAnd::WorldRegions::NauticalRegionId.toNSString()] && ![OAPlugin isEnabled:OANauticalMapsPlugin.class])
                 [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Nautical];

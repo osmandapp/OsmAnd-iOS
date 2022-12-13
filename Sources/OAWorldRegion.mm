@@ -22,6 +22,7 @@
 #import "OAIAPHelper.h"
 #import "OAUtilities.h"
 #import "OAPointIContainer.h"
+#import "OAIndexConstants.h"
 
 #import "OAWorldRegion+Protected.h"
 #import "OAResourcesUIHelper.h"
@@ -105,6 +106,17 @@
         _localizedName = localizedName;
         if (localizedName != nil)
             _allNames = @[_localizedName];
+    }
+    return self;
+}
+
+- (instancetype) initWithId:(NSString*)regionId
+        andAcceptedExtension:(NSString*)acceptedExtension
+           andLocalizedName:(NSString*)localizedName
+{
+    self = [self initWithId:regionId andDownloadIdPrefix:@"" andLocalizedName:localizedName];
+    if (self) {
+        _acceptedExtension = acceptedExtension;
     }
     return self;
 }
@@ -222,6 +234,7 @@
 
 @synthesize regionId = _regionId;
 @synthesize downloadsIdPrefix = _downloadsIdPrefix;
+@synthesize acceptedExtension = _acceptedExtension;
 @synthesize nativeName = _nativeName;
 @synthesize localizedName = _localizedName;
 @synthesize allNames = _allNames;
@@ -412,7 +425,7 @@
     regionsLookupTable[southAmericaRegion.regionId] = southAmericaRegion;
 
     OAWorldRegion *nauticalRegion = [[OAWorldRegion alloc] initWithId:OsmAnd::WorldRegions::NauticalRegionId.toNSString()
-                                                andDownloadIdPrefix:@"depth_"
+                                                andAcceptedExtension:BINARY_DEPTH_MAP_INDEX_EXT
                                                    andLocalizedName:OALocalizedString(@"region_nautical")];
     [entireWorld addSubregion:nauticalRegion];
     regionsLookupTable[nauticalRegion.regionId] = nauticalRegion;

@@ -19,6 +19,7 @@ typedef NS_ENUM(NSInteger, EOASettingsItemFileSubtype) {
     EOASettingsItemFileSubtypeRenderingStyle,
     EOASettingsItemFileSubtypeWikiMap,
     EOASettingsItemFileSubtypeSrtmMap,
+    EOASettingsItemFileSubtypeNauticalDepth,
     EOASettingsItemFileSubtypeObfMap,
     EOASettingsItemFileSubtypeTilesMap,
     EOASettingsItemFileSubtypeRoadMap,

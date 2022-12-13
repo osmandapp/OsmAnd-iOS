@@ -23,6 +23,7 @@
 #import "OACollapsableCoordinatesView.h"
 #import "OATextMultiViewCell.h"
 #import "OAPOIHelper.h"
+#import "OANativeUtilities.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -37,6 +38,7 @@
     OsmAndAppInstance _app;
     NSString *_gpxFileName;
     OAPOI *_originObject;
+    std::vector<std::shared_ptr<OpeningHoursParser::OpeningHours::Info>> _openingHoursInfo;
 }
 
 - (id) initWithItem:(OAGpxWptItem *)wpt headerOnly:(BOOL)headerOnly
@@ -50,6 +52,8 @@
             wpt.docPath = [[OASelectedGPXHelper instance] getSelectedGpx:wpt.point].path;
         }
         self.wpt = wpt;
+        OAGpxExtension *openingHoursExt = [self.wpt.point getExtensionByKey:[PRIVATE_PREFIX stringByAppendingString:OPENING_HOURS]];
+        _openingHoursInfo = OpeningHoursParser::getInfo(openingHoursExt && openingHoursExt.value ? openingHoursExt.value.UTF8String : "");
         [self acquireOriginObject];
         self.topToolbarType = ETopToolbarTypeMiddleFixed;
     }
@@ -206,7 +210,25 @@
 
 - (NSAttributedString *) getAttributedTypeStr:(NSString *)group
 {
-    return [self getAttributedTypeStr:group color:[self getItemColor]];
+    NSAttributedString *attributedTypeStr = [self getAttributedTypeStr:group color:[self getItemColor]];
+    NSString *address = [@"\n\n" stringByAppendingString:[self.wpt.point getAddress]];
+    NSMutableAttributedString *mutAttributedTypeStr = [[NSMutableAttributedString alloc] init];
+    [mutAttributedTypeStr appendAttributedString:attributedTypeStr];
+    [mutAttributedTypeStr appendAttributedString:[[NSAttributedString alloc] initWithString:address]];
+    [mutAttributedTypeStr addAttributes:@{ NSFontAttributeName : [UIFont systemFontOfSize:15],
+                                           NSForegroundColorAttributeName : UIColorFromRGB(color_dialog_text_description_color_night) }
+                                  range:NSMakeRange(0, mutAttributedTypeStr.length)];
+    return mutAttributedTypeStr;
+}
+
+- (UIColor *) getAdditionalInfoColor
+{
+    return [OANativeUtilities getOpeningHoursColor:_openingHoursInfo];
+}
+
+- (NSAttributedString *) getAdditionalInfoStr
+{
+    return [OANativeUtilities getOpeningHoursDescr:_openingHoursInfo];
 }
 
 - (NSString *) getItemName

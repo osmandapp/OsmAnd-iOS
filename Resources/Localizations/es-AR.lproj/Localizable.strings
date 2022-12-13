@@ -2523,7 +2523,7 @@
 "product_desc_development" = "Para desarrolladores y usuarios experimentados";
 "product_desc_ext_development" = "Permite configurar OsmAnd para realizar pruebas: simular rutas de navegación, comprobar el rendimiento del renderizado de la pantalla, etc. El complemento no es necesario para el uso normal de la aplicación.";
 "ltr_or_rtl_combine_via_or" = "%@ o %@";
-"routing_attr_hazmat_category_name" = "Transporte de materiales peligrosos";
+"routing_attr_hazmat_category_name" = "Categoría de materiales peligrosos";
 "routing_attr_hazmat_category_no_restrictions_name" = "A (Sin restricciones)";
 "transport_hazmat_yes_desc" = "Debes elegir la categoría adecuada.";
 "carplay" = "CarPlay";
@@ -2764,3 +2764,16 @@
 "local_item" = "Elemento local";
 "deleted_item" = "Elemento borrado";
 "local_backup_empty_file" = "No existen elementos a restaurar desde la copia de seguridad.";
+"shared_string_do_not_exist" = "No existe";
+"new_file" = "Archivo nuevo";
+"modified_file" = "Archivo modificado";
+"deleted_file" = "Archivo borrado";
+"last_synchronization" = "Última sincronización";
+"cloud_conflict_descr" = "Las versiones en local y en la nube contienen cambios desde la última sincronización.";
+"upload_change" = "Subir cambio";
+"cloud_version_will_be_removed" = "Se quitará la versión en la nube";
+"cloud_changes_will_be_dismissed" = "Los cambios en la nube serán descartados";
+"local_file_will_be_restored" = "El archivo local será restaurado";
+"local_changes_will_be_dismissed" = "Los cambios locales serán descartados";
+"checking_progress" = "Comprobando..";
+"shared_string_uploaded" = "Subido";

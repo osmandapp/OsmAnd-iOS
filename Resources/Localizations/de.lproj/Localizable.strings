@@ -2703,7 +2703,7 @@
 "enough_contributions_descr" = "Herzlichen Glückwunsch, Sie haben genug OpenStreetMap-Beiträge geleistet und können nun unbegrenzte OsmAnd-Kartenaktualisierungen genießen!";
 "auth_error" = "Autorisierungsfehler";
 "cloud_confirm_delete_type" = "Sind Sie sicher, dass sie „%@” aus OsmAnd Cloud löschen möchten?";
-"purchases_feature_desc_cross_buy" = "Nutzen Sie alle Abo-Features auf allen Plattformen ohne zusätzliche Kosten. Verfügbar für Android/iOS/Web.";
+"purchases_feature_desc_cross_buy" = "Nutzen Sie alle Abo-Features auf allen Plattformen ohne zusätzliche Kosten.";
 "cloud_recent_changes" = "Änderungen";
 "cloud_contains_newer_changes" = "Die OsmAnd Cloud-Version enthält neuere Änderungen.";
 "backup_conflicts_descr" = "Eine neuere Version dieser Dateien ist auf dem Server gespeichert. Sie müssen eine Aktion auswählen";

@@ -2655,7 +2655,7 @@
 "shared_string_contributions" = "Framlög";
 "manage_storage" = "Sýsla með geymslurými";
 "cross_buy" = "Kaupa á milli kerfa";
-"purchases_feature_desc_cross_buy" = "Notaðu eiginleika áskriftarinnar þinnar á mismunandi kerfum (Android/iOS/vefnum) án nokkurs aukakostnaðar..";
+"purchases_feature_desc_cross_buy" = "Notaðu eiginleika áskriftarinnar þinnar á mismunandi kerfum án nokkurs aukakostnaðar..";
 "contact_support_description" = "Ef þú ert með spurningar skaltu hafa samband við okkur á support@osmand.net.";
 "update_parameters" = "Uppfæra breytur";
 "backup_delete_all_data_finished" = "Öllum gögnum þínum hefur verið eytt af OsmAnd-tölvuskýinu.";

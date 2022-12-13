@@ -2704,7 +2704,7 @@
 "carplay_available_in_sub_plans" = "Compra «OsmAnd Pro» o «Maps+» para usar OsmAnd con CarPlay.";
 "cloud_confirm_delete_type" = "¿Borrar «%@» de OsmAnd Cloud?";
 "cross_buy" = "Compra cruzada";
-"purchases_feature_desc_cross_buy" = "Usa todas las funciones de la suscripción en múltiples plataformas sin coste adicional. Disponible en Android/iOS/Web.";
+"purchases_feature_desc_cross_buy" = "Usa todas las funciones de la suscripción en múltiples plataformas sin coste adicional.";
 "cloud_conflict" = "Conflicto";
 "cloud_recent_changes" = "Cambios";
 "cloud_all_changes_uploaded" = "Se cargaron todo los cambios";

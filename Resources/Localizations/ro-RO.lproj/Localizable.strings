@@ -2660,7 +2660,7 @@
 "backup_empty_data_from_category" = "OsmAnd Cloud nu include niciun fel de date din această categorie.";
 "cloud_confirm_delete_type" = "Sunteți sigur că doriți să ștergeți \"%@\" din OsmAnd Cloud?";
 "cross_buy" = "Cumpărare încrucișată";
-"purchases_feature_desc_cross_buy" = "Utilizați toate funcțiile abonamentului pe mai multe platforme, fără costuri suplimentare. Disponibil pe Android/iOS/Web.";
+"purchases_feature_desc_cross_buy" = "Utilizați toate funcțiile abonamentului pe mai multe platforme, fără costuri suplimentare.";
 "login_open_street_map_org" = "Conectați-vă la OpenStreetMap.org";
 "shared_string_not_included" = "Nu este inclus";
 "backup_deleting_all_data" = "Ștergerea tuturor datelor";

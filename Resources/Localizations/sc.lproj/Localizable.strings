@@ -2719,7 +2719,7 @@
 "not_enough_contributions_descr" = "Unu mìnimu de %i modìficas in s'ùrtimu bimestre %@ est netzessàriu pro tènnere atzessu a sos agiornamentos chene lìmites de sa mapa pro cada ora.";
 "enough_contributions_descr" = "Bene meda, as fatu contributziones bastantes a OpenStreetMap e como ti podes godire agiornamentos chene lìmites de sas mapas de OsmAnd!";
 "cross_buy" = "Còmpora multi-prataforma";
-"purchases_feature_desc_cross_buy" = "Imprea totu sas funtzionalidades de s'abbonamentu in prataformas mùltiplas chene costos additzionales. A disponimentu in Android/iOS/Web.";
+"purchases_feature_desc_cross_buy" = "Imprea totu sas funtzionalidades de s'abbonamentu in prataformas mùltiplas chene costos additzionales.";
 "cloud_confirm_delete_type" = "Ses seguru de bòlere iscantzellare \"%@\" dae OsmAnd Cloud?";
 "shared_string_changed" = "Cambiadu";
 "cloud_conflict" = "Cunflitu";

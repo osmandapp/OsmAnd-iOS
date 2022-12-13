@@ -2633,7 +2633,7 @@
 "auth_error" = "Error de autorización";
 "cloud_confirm_delete_type" = "¿Borrar «%@» de OsmAnd Cloud?";
 "cross_buy" = "Compra cruzada";
-"purchases_feature_desc_cross_buy" = "Usa todas las funciones de la suscripción en múltiples plataformas sin coste adicional. Disponible en Android/iOS/Web.";
+"purchases_feature_desc_cross_buy" = "Usa todas las funciones de la suscripción en múltiples plataformas sin coste adicional.";
 "contact_support" = "Contacto con soporte";
 "contact_support_description" = "Si tienes alguna duda, ponte en contacto con nosotros en support@osmand.net.";
 "weather_offline_forecast_only" = "Solo pronóstico sin conexión";

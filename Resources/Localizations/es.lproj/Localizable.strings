@@ -2628,7 +2628,7 @@
 "weather_forecast_is_outdated" = "Pronóstico desactualizado.";
 "weather_generates_new_forecast_description" = "OsmAnd genera un nuevo pronóstico cada 6 horas. Cuanto más cerca de la fecha actual, más preciso será.";
 "cloud_confirm_delete_type" = "¿Borrar «%@» de OsmAnd Cloud?";
-"purchases_feature_desc_cross_buy" = "Usa todas las funciones de la suscripción en múltiples plataformas sin coste adicional. Disponible en Android/iOS/Web.";
+"purchases_feature_desc_cross_buy" = "Usa todas las funciones de la suscripción en múltiples plataformas sin coste adicional.";
 "shared_string_now" = "Ahora";
 "cloud_conflict" = "Conflicto";
 "backup_remove_old_versions_finished" = "Las versiones antiguas han sido borradas con éxito de OsmAnd Cloud.";

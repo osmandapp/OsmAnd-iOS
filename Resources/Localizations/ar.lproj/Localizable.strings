@@ -2681,7 +2681,7 @@
 "not_enough_contributions_descr" = "الحد الأدنى من %1$s تغيير خلال فترة الشهرين الماضية %2$s مطلوب للحصول على تحديثات خرائط غير محدودة كل ساعة.";
 "cloud_confirm_delete_type" = "هل أنت متأكد من أنك تريد حذف \"%@\" من أوسماند كلاود؟";
 "cross_buy" = "شراء عبر";
-"purchases_feature_desc_cross_buy" = "استخدم جميع ميزات الاشتراك على منصات متعددة دون أي تكلفة إضافية. متوفر على Android / iOS / Web.";
+"purchases_feature_desc_cross_buy" = "استخدم جميع ميزات الاشتراك على منصات متعددة دون أي تكلفة إضافية.";
 "login_open_street_map_org" = "تسجيل الدخول إلى خريطة الشارع المفتوح";
 "benefits_for_contributors_secondary_descr" = "سجل الدخول إلى خريطة الشارع المفتوح للتحقق مما إذا كنت مؤهلا للحصول على تحديثات خرائط شهرية أو ساعية غير محدودة .";
 "contributions_may_calculate_with_delay" = "حساب المساهمات قد يستغرق عدة ساعات .";

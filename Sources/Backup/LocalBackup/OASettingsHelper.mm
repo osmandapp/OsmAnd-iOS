@@ -606,28 +606,27 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         }
         else
         {
-            if (settingsItems.count == 1)
+            BOOL hasGroupFile = NO;
+            for (OAFavoriteGroup *favoriteGroup in favoriteGroups)
+            {
+                OAFavoritesSettingsItem *favSettingsItem;
+                for (OASettingsItem *item in settingsItems)
+                {
+                    NSString *fileName = item.fileName;
+                    if ([item isKindOfClass:OAFavoritesSettingsItem.class] && [[[OsmAndApp.instance favoritesStorageFilename:favoriteGroup.name] lastPathComponent] isEqualToString:fileName])
+                    {
+                        favSettingsItem = (OAFavoritesSettingsItem *) item;
+                        hasGroupFile = YES;
+                        break;
+                    }
+                }
+                if (favSettingsItem)
+                    [result addObject:[[OAFavoritesSettingsItem alloc] initWithItems:@[favoriteGroup] baseItem:favSettingsItem]];
+            }
+            if (!hasGroupFile)
             {
                 OAFavoritesSettingsItem *baseItem = [self getBaseItem:EOASettingsItemTypeFavorites clazz:OAFavoritesSettingsItem.class settingsItems:settingsItems];
                 [result addObject:[[OAFavoritesSettingsItem alloc] initWithItems:favoriteGroups baseItem:baseItem]];
-            }
-            else
-            {
-                for (OAFavoriteGroup *favoriteGroup in favoriteGroups)
-                {
-                    OAFavoritesSettingsItem *favSettingsItem;
-                    for (OASettingsItem *item in settingsItems)
-                    {
-                        NSString *fileName = item.fileName;
-                        if ([item isKindOfClass:OAFavoritesSettingsItem.class] && [[[OsmAndApp.instance favoritesStorageFilename:favoriteGroup.name] lastPathComponent] isEqualToString:fileName])
-                        {
-                            favSettingsItem = (OAFavoritesSettingsItem *) item;
-                            break;
-                        }
-                    }
-                    if (favSettingsItem)
-                        [result addObject:[[OAFavoritesSettingsItem alloc] initWithItems:@[favoriteGroup] baseItem:favSettingsItem]];
-                }
             }
         }
     }

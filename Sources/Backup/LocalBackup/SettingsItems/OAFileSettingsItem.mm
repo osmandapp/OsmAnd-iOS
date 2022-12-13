@@ -182,6 +182,12 @@
                     return subtype;
                 break;
             }
+            case EOASettingsItemFileSubtypeNauticalDepth:
+            {
+                if ([name hasSuffix:BINARY_DEPTH_MAP_INDEX_EXT])
+                    return subtype;
+                break;
+            }
             default:
             {
                 NSString *subtypeFolder = [self.class getSubtypeFolder:subtype];
@@ -196,7 +202,7 @@
 
 + (BOOL) isMap:(EOASettingsItemFileSubtype)type
 {
-    return type == EOASettingsItemFileSubtypeObfMap || type == EOASettingsItemFileSubtypeWikiMap || type == EOASettingsItemFileSubtypeSrtmMap || type == EOASettingsItemFileSubtypeTilesMap || type == EOASettingsItemFileSubtypeRoadMap;
+    return type == EOASettingsItemFileSubtypeObfMap || type == EOASettingsItemFileSubtypeWikiMap || type == EOASettingsItemFileSubtypeSrtmMap || type == EOASettingsItemFileSubtypeTilesMap || type == EOASettingsItemFileSubtypeRoadMap || type == EOASettingsItemFileSubtypeNauticalDepth;
 }
 
 + (NSString *) getIcon:(EOASettingsItemFileSubtype)subtype
@@ -206,6 +212,7 @@
         case EOASettingsItemFileSubtypeObfMap:
         case EOASettingsItemFileSubtypeTilesMap:
         case EOASettingsItemFileSubtypeRoadMap:
+        case EOASettingsItemFileSubtypeNauticalDepth:
             return @"ic_custom_map";
         case EOASettingsItemFileSubtypeSrtmMap:
             return @"ic_custom_contour_lines";

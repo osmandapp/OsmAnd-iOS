@@ -37,6 +37,8 @@
 #define BINARY_SRTM_MAP_INDEX_EXT_ZIP @".srtm.obf.zip"
 #define BINARY_SRTMF_MAP_INDEX_EXT @".srtmf.obf"
 #define BINARY_SRTMF_MAP_INDEX_EXT_ZIP @".srtmf.obf.zip"
+#define BINARY_DEPTH_MAP_INDEX_EXT @".depth.obf"
+#define BINARY_DEPTH_MAP_INDEX_EXT_ZIP @".depth.obf.zip"
 #define EXTRA_EXT @".extra"
 #define EXTRA_ZIP_EXT @".extra.zip"
 
@@ -75,6 +77,7 @@
 #define LIVE_INDEX_DIR @"live"
 #define TOURS_INDEX_DIR @"tours"
 #define SRTM_INDEX_DIR @"srtm"
+#define NAUTICAL_INDEX_DIR "nautical"
 #define ROADS_INDEX_DIR @"roads"
 #define WIKI_INDEX_DIR @"wiki"
 #define WIKIVOYAGE_INDEX_DIR @"travel"

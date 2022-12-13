@@ -62,6 +62,8 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         case OsmAndResourceType::MapRegion:
         case OsmAndResourceType::DepthContourRegion:
             return OALocalizedString(@"map_settings_map");
+        case OsmAndResourceType::DepthMapRegion:
+            return OALocalizedString(@"nautical_depth");
         case OsmAndResourceType::SrtmMapRegion:
             return OALocalizedString(@"res_srtm");
         case OsmAndResourceType::WikiMapRegion:
@@ -145,6 +147,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         case OsmAndResourceType::SrtmMapRegion:
             return 40;
         case OsmAndResourceType::DepthContourRegion:
+        case OsmAndResourceType::DepthMapRegion:
             return 45;
         case OsmAndResourceType::HillshadeRegion:
             return 50;
@@ -183,6 +186,8 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         return OsmAndResourceType::SrtmMapRegion;
     else if ([scopeId isEqualToString:@"depth"])
         return OsmAndResourceType::DepthContourRegion;
+    else if ([scopeId isEqualToString:@"depthmap"])
+        return OsmAndResourceType::DepthMapRegion;
     else if ([scopeId isEqualToString:@"hillshade"])
         return OsmAndResourceType::HillshadeRegion;
     else if ([scopeId isEqualToString:@"slope"])
@@ -224,6 +229,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             [self.class toValue:OsmAndResourceType::RoadMapRegion],
             [self.class toValue:OsmAndResourceType::SrtmMapRegion],
             [self.class toValue:OsmAndResourceType::DepthContourRegion],
+            [self.class toValue:OsmAndResourceType::DepthMapRegion],
             [self.class toValue:OsmAndResourceType::HillshadeRegion],
             [self.class toValue:OsmAndResourceType::SlopeRegion],
             [self.class toValue:OsmAndResourceType::WikiMapRegion],
@@ -631,7 +637,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 
         auto name = resource->id;
         name = name.remove(QStringLiteral("_osmand_ext")).remove(QStringLiteral(".depth.obf")).mid(6).replace('_', ' ');
-        return [[NSString alloc] initWithFormat:@"%@ %@", OALocalizedString(@"download_depth_countours"), name.toNSString().capitalizedString];
+        return name.toNSString().capitalizedString;
     }
 
     return [OAResourcesUIHelper titleOfResourceType:resource->type inRegion:region withRegionName:includeRegionName withResourceType:includeResourceType];

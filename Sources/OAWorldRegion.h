@@ -16,6 +16,7 @@
 // Region data:
 @property (readonly) NSString* regionId;
 @property (readonly) NSString* downloadsIdPrefix;
+@property (readonly) NSString* acceptedExtension;
 @property (readonly) NSString* nativeName;
 @property (readonly) NSString* localizedName;
 @property (readonly) NSString* name;

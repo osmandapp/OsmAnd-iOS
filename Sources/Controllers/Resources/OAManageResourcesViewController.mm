@@ -746,6 +746,7 @@ static BOOL _repositoryUpdated = NO;
                     case OsmAndResourceType::HillshadeRegion:
                     case OsmAndResourceType::SlopeRegion:
                     case OsmAndResourceType::DepthContourRegion:
+                    case OsmAndResourceType::DepthMapRegion:
                         [typesArray addObject:@((int) resource->type)];
                         break;
                     default:
@@ -2287,7 +2288,7 @@ static BOOL _repositoryUpdated = NO;
                     disabled = YES;
                     item.disabled = disabled;
                 }
-                if (item.resourceType == OsmAndResourceType::DepthContourRegion && (![OAIAPHelper isDepthContoursPurchased] || ![OAPlugin isEnabled:OANauticalMapsPlugin.class]))
+                if ((item.resourceType == OsmAndResourceType::DepthContourRegion || item.resourceType == OsmAndResourceType::DepthMapRegion) && (![OAIAPHelper isDepthContoursPurchased] || ![OAPlugin isEnabled:OANauticalMapsPlugin.class]))
                 {
                     disabled = YES;
                     item.disabled = disabled;

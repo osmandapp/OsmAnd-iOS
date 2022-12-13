@@ -412,7 +412,7 @@
     regionsLookupTable[southAmericaRegion.regionId] = southAmericaRegion;
 
     OAWorldRegion *nauticalRegion = [[OAWorldRegion alloc] initWithId:OsmAnd::WorldRegions::NauticalRegionId.toNSString()
-                                                andDownloadIdPrefix:@"depth_"
+                                                andDownloadIdPrefix:@""
                                                    andLocalizedName:OALocalizedString(@"region_nautical")];
     [entireWorld addSubregion:nauticalRegion];
     regionsLookupTable[nauticalRegion.regionId] = nauticalRegion;

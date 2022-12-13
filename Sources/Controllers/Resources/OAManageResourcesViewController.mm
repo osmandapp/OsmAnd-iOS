@@ -674,6 +674,8 @@ static BOOL _repositoryUpdated = NO;
         
         const auto regionId = QString::fromNSString(region.regionId);
         const auto downloadsIdPrefix = QString::fromNSString(region.downloadsIdPrefix).toLower();
+        const auto acceptedExtension = QString::fromNSString(region.acceptedExtension).toLower();
+        bool checkExtension = acceptedExtension.length() > 0;
         
         RegionResources regionResources;
         RegionResources regionResPrevious;
@@ -689,7 +691,9 @@ static BOOL _repositoryUpdated = NO;
         {
             for (const auto& resource : _localResources)
             {
-                if (resource->id.startsWith(downloadsIdPrefix))
+                if (checkExtension && resource->id.endsWith(acceptedExtension))
+                    regionResources.allResources.remove(resource->id);
+                else if (resource->id.startsWith(downloadsIdPrefix))
                     regionResources.allResources.remove(resource->id);
             }
             for (const auto& resource : regionResources.outdatedResources)
@@ -709,7 +713,9 @@ static BOOL _repositoryUpdated = NO;
         
         for (const auto& resource : _outdatedResources)
         {
-            if (!resource->id.startsWith(downloadsIdPrefix))
+            if (checkExtension && !resource->id.endsWith(acceptedExtension))
+                continue;
+            else if (!resource->id.startsWith(downloadsIdPrefix))
                 continue;
             
             regionResources.allResources.insert(resource->id, resource);
@@ -719,7 +725,9 @@ static BOOL _repositoryUpdated = NO;
         
         for (const auto& resource : _localResources)
         {
-            if (!resource->id.startsWith(downloadsIdPrefix))
+            if (checkExtension && !resource->id.endsWith(acceptedExtension))
+                continue;
+            else if (!resource->id.startsWith(downloadsIdPrefix))
                 continue;
 
             if (!regionResources.allResources.contains(resource->id))
@@ -734,7 +742,9 @@ static BOOL _repositoryUpdated = NO;
             BOOL hasSrtm = NO;
             for (const auto& resource : _resourcesInRepository)
             {
-                if (!resource->id.startsWith(downloadsIdPrefix))
+                if (checkExtension && !resource->id.endsWith(acceptedExtension))
+                    continue;
+                else if (!resource->id.startsWith(downloadsIdPrefix))
                     continue;
                 
                 switch (resource->type)

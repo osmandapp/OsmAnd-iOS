@@ -2752,3 +2752,16 @@
 "shared_string_angle_param" = "Ângulo: %d°";
 "local_backup_empty_file" = "O ficheiro da cópia de segurança não contém nenhum item para restaurar.";
 "today" = "Hoje";
+"shared_string_do_not_exist" = "Não existe";
+"new_file" = "Novo ficheiro";
+"modified_file" = "Ficheiro alterado";
+"last_synchronization" = "Última sincronização";
+"upload_change" = "Enviar alteração";
+"cloud_version_will_be_removed" = "A versão na claud será removida";
+"local_file_will_be_restored" = "O ficheiro local será restaurado";
+"local_changes_will_be_dismissed" = "As alterações locais serão perdidas";
+"checking_progress" = "A verificar…";
+"cloud_changes_will_be_dismissed" = "As alterações na cloud serão perdidas";
+"deleted_file" = "Ficheiro eliminado";
+"shared_string_uploaded" = "Enviado";
+"cloud_conflict_descr" = "As versões local e na cloud contêm alterações deste a última sincronização.";

@@ -2753,3 +2753,16 @@
 "recalc_angle_dialog_descr" = "Ekstra lige segment mellem min placering og den beregnede rute vises, indtil ruten er genberegnet";
 "backup_delete_from_cloud" = "Slet fra clouden";
 "local_backup_empty_file" = "Sikkerhedskopifilen indeholder ingen elementer, der skal gendannes.";
+"shared_string_do_not_exist" = "Findes ikke";
+"new_file" = "Ny fil";
+"modified_file" = "Ændret fil";
+"deleted_file" = "Slettet fil";
+"upload_change" = "Upload ændring";
+"cloud_version_will_be_removed" = "Cloud-version vil blive fjernet";
+"local_file_will_be_restored" = "Lokal fil vil blive gendannet";
+"local_changes_will_be_dismissed" = "Lokale ændringer vil blive afvist";
+"checking_progress" = "Tjekker..";
+"cloud_changes_will_be_dismissed" = "Cloud-ændringer vil blive afvist";
+"shared_string_uploaded" = "Uploadet";
+"last_synchronization" = "Seneste synkronisering";
+"cloud_conflict_descr" = "De lokale og cloud-versioner indeholder ændringer siden den sidste synkronisering.";

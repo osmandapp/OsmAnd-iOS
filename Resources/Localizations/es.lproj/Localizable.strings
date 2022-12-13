@@ -2748,3 +2748,16 @@
 "recalc_angle_dialog_descr" = "Se mostrará un segmento recto adicional entre mi ubicación y la ruta calculada hasta que se vuelva a calcular la ruta";
 "remote_item" = "Elemento remoto";
 "local_backup_empty_file" = "La copia de seguridad no contiene ningún elemento que restaurar.";
+"new_file" = "Nuevo archivo";
+"modified_file" = "Archivo modificado";
+"last_synchronization" = "Última sincronización";
+"upload_change" = "Subir cambio";
+"cloud_version_will_be_removed" = "Se eliminará la versión en la nube";
+"cloud_changes_will_be_dismissed" = "Se descartarán los cambios en la nube";
+"local_file_will_be_restored" = "Se restaurará el archivo local";
+"checking_progress" = "Comprobando...";
+"deleted_file" = "Archivo eliminado";
+"shared_string_uploaded" = "Subido";
+"shared_string_do_not_exist" = "No existe";
+"cloud_conflict_descr" = "Las versiones local y en la nube contienen cambios desde la última sincronización.";
+"local_changes_will_be_dismissed" = "Se descartarán los cambios locales";

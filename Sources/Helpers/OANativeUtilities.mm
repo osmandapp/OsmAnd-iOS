@@ -9,6 +9,7 @@
 #import "OANativeUtilities.h"
 
 #import <UIKit/UIKit.h>
+#import "OAColors.h"
 #import "OAUtilities.h"
 
 #include <QString>
@@ -16,6 +17,7 @@
 #include <SkCGUtils.h>
 #include <SkCanvas.h>
 #include <OsmAndCore/SkiaUtilities.h>
+#include <openingHoursParser.h>
 
 @implementation UIColor (nsColorNative)
 
@@ -175,6 +177,61 @@
         qTileIds.append(qTileId);
     }
     return qTileIds;
+}
+
++ (UIColor *)getOpeningHoursColor:(std::vector<std::shared_ptr<OpeningHoursParser::OpeningHours::Info>>)openingHoursInfo
+{
+    if (!openingHoursInfo.empty())
+    {
+        bool open = false;
+        for (auto info : openingHoursInfo)
+        {
+            if (info->opened || info->opened24_7)
+            {
+                open = true;
+                break;
+            }
+        }
+        return open ? UIColorFromRGB(color_ctx_menu_amenity_opened_text) : UIColorFromRGB(color_ctx_menu_amenity_closed_text);
+    }
+    return nil;
+}
+
++ (NSAttributedString *)getOpeningHoursDescr:(std::vector<std::shared_ptr<OpeningHoursParser::OpeningHours::Info>>)openingHoursInfo
+{
+    if (!openingHoursInfo.empty())
+    {
+        NSMutableAttributedString *str = [[NSMutableAttributedString alloc] init];
+        UIColor *colorOpen = UIColorFromRGB(color_ctx_menu_amenity_opened_text);
+        UIColor *colorClosed = UIColorFromRGB(color_ctx_menu_amenity_closed_text);
+        for (int i = 0; i < openingHoursInfo.size(); i ++)
+        {
+            auto info = openingHoursInfo[i];
+
+            if (str.length > 0)
+                [str appendAttributedString:[[NSAttributedString alloc] initWithString:@"\n"]];
+
+            NSString *time = [NSString stringWithUTF8String:info->getInfo().c_str()];
+
+            NSMutableAttributedString *s = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"  %@", time]];
+            NSTextAttachment *attachment = [[NSTextAttachment alloc] init];
+            BOOL opened = info->fallback && i > 0 ? openingHoursInfo[i - 1]->opened : info->opened;
+            attachment.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_travel_time"]
+                                                                             color:opened ? colorOpen : colorClosed];
+            
+            NSAttributedString *strWithImage = [NSAttributedString attributedStringWithAttachment:attachment];
+            [s replaceCharactersInRange:NSMakeRange(0, 1) withAttributedString:strWithImage];
+            [s addAttribute:NSBaselineOffsetAttributeName value:[NSNumber numberWithFloat:-2.0] range:NSMakeRange(0, 1)];
+            [s addAttribute:NSForegroundColorAttributeName value:opened ? colorOpen : colorClosed range:NSMakeRange(0, s.length)];
+            [str appendAttributedString:s];
+        }
+        
+        UIFont *font = [UIFont systemFontOfSize:13.0 weight:UIFontWeightMedium];
+        [str addAttribute:NSFontAttributeName value:font range:NSMakeRange(0, str.length)];
+        
+        return str;
+    }
+    return nil;
 }
 
 @end

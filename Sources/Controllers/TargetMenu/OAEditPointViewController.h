@@ -49,6 +49,7 @@ typedef NS_ENUM(NSInteger, EOAEditPointType) {
 - (id)initWithGpxWpt:(OAGpxWptItem *)gpxWpt;
 - (id)initWithLocation:(CLLocationCoordinate2D)location
                  title:(NSString *)formattedTitle
+               address:(NSString *)address
            customParam:(NSString *)customParam
              pointType:(EOAEditPointType)pointType
        targetMenuState:(OATargetMenuViewControllerState *)targetMenuState

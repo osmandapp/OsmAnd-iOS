@@ -69,7 +69,8 @@ private:
     QList<std::shared_ptr<const OAOnlineOsmNote>> _notesCache;
     OsmAnd::AreaI _cacheBBox31;
     OsmAnd::ZoomLevel _cacheZoom;
-    
+    float _symbolsScaleFactor;
+
     DataReadyCallback _dataReadyCallback;
     OsmAnd::AreaI _requestedBBox31;
     OsmAnd::AreaI _requestingBBox31;
@@ -83,7 +84,7 @@ private:
     QList<std::shared_ptr<OsmAnd::MapSymbolsGroup>> buildMapSymbolsGroups(const OsmAnd::AreaI &bbox31);
 protected:
 public:
-    OAOsmNotesMapLayerProvider();
+    OAOsmNotesMapLayerProvider(const float symbolsScaleFactor);
     virtual ~OAOsmNotesMapLayerProvider();
 
     virtual OsmAnd::AreaI getRequestedBBox31() const;

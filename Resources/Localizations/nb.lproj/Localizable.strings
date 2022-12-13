@@ -2324,3 +2324,4 @@
 "measurement_units" = "Målingsenheter";
 "weather_offline_forecast" = "Frakoblet værvarsel";
 "map_settings_weather_wind" = "Vind";
+"mtb_segment_classification" = "Segmentklassifisering";

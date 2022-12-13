@@ -621,7 +621,7 @@
 "speak_traffic_warnings" = "Verkehrswarnungen";
 "announce_gpx_waypoints" = "Track-Wegpunkte";
 "speak_favorites" = "Nahegelegene Favoriten";
-"speak_poi" = "Nahegelegene POI";
+"speak_poi" = "Nahe gelegene POI";
 "speak_pedestrian" = "Fußgängerübergänge";
 "units_seconds" = "Sekunden";
 "shared_string_never" = "Niemals";
@@ -757,7 +757,7 @@
 "show_poi_over_map" = "POI anzeigen";
 "search_radius" = "Suchradius";
 "transport_routes" = "Routen";
-"transport_nearby_routes_within" = "Nahegelegene Routen innerhalb von";
+"transport_nearby_routes_within" = "Nahe gelegene Routen innerhalb von";
 "transport_stop" = "Haltestelle";
 "transport_nearby_routes" = "Innerhalb";
 "route_stops_before" = "%d Haltestellen davor";
@@ -1348,7 +1348,7 @@
 "rendering_attr_highway_class_track_name" = "Wirtschaftsweg";
 "routing_attr_avoid_shuttle_train_description" = "Vermeidet die Nutzung von Shuttlezügen";
 "rendering_value_walkingRoutesOSMC_name" = "OSMC";
-"rendering_attr_showMtbRoutes_name" = "Mountainbike-Touren";
+"rendering_attr_showMtbRoutes_name" = "Mountainbike-Routen";
 "rendering_attr_tracktype_grade4_name" = "Überwiegend weich";
 "rendering_attr_surface_sett_name" = "Steinpflaster";
 "rendering_attr_highway_class_service_name" = "Erschließungsweg";
@@ -2182,10 +2182,10 @@
 "delete_group_confirm_short" = "Gruppe löschen?";
 "delete_group_confirm" = "Sind Sie sicher, dass Sie die Gruppe \"%@\" löschen wollen?";
 "delete_waypoints" = "Wegpunkte löschen";
-"shared_string_start_time" = "Startzeit";
+"shared_string_start_time" = "Startzeitpunkt";
 "shared_string_time_moving" = "Zeit in Bewegung";
 "shared_string_time_span" = "Dauer";
-"shared_string_end_time" = "Beendigungszeit";
+"shared_string_end_time" = "Endzeitpunkt";
 "distance_moving" = "Korrigierte Distanz";
 "parked_at" = "geparkt um";
 "industrial" = "Industriell";

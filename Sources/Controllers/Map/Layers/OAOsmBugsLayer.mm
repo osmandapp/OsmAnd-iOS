@@ -36,6 +36,7 @@ static const NSString* BASE_URL = @"https://api.openstreetmap.org/";
 {
     std::shared_ptr<OAOsmNotesMapLayerProvider> _notesMapProvider;
     OAOsmEditingPlugin *_plugin;
+    double _textSize;
 }
 
 - (instancetype) initWithMapViewController:(OAMapViewController *)mapViewController baseOrder:(int)baseOrder
@@ -55,11 +56,12 @@ static const NSString* BASE_URL = @"https://api.openstreetmap.org/";
 - (void) initLayer
 {
     [super initLayer];
-    
+    _textSize = [[OAAppSettings sharedManager].textSize get];
+
     [self.app.data.mapLayersConfiguration setLayer:self.layerId
                                     Visibility:[_plugin isEnabled] && [[OAAppSettings sharedManager].mapSettingShowOnlineNotes get]];
-    
-    _notesMapProvider.reset(new OAOsmNotesMapLayerProvider());
+
+    _notesMapProvider.reset(new OAOsmNotesMapLayerProvider(_textSize));
     [self.mapView addTiledSymbolsProvider:_notesMapProvider];
     
     const OAOsmNotesMapLayerProvider::DataReadyCallback callback =
@@ -68,6 +70,32 @@ static const NSString* BASE_URL = @"https://api.openstreetmap.org/";
         [self.mapView invalidateFrame];
     };
     _notesMapProvider->setDataReadyCallback(callback);
+}
+
+- (BOOL) updateLayer
+{
+    [super updateLayer];
+
+    CGFloat textSize = [[OAAppSettings sharedManager].textSize get];
+    if (_textSize != textSize)
+    {
+        _textSize = textSize;
+        if ([self isVisible])
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self hide];
+                _notesMapProvider.reset(new OAOsmNotesMapLayerProvider(_textSize));
+                const OAOsmNotesMapLayerProvider::DataReadyCallback callback =
+                [self] ()
+                {
+                    [self.mapView invalidateFrame];
+                };
+                _notesMapProvider->setDataReadyCallback(callback);
+                [self show];
+            });
+        }
+    }
+    return YES;
 }
 
 - (void) onMapFrameRendered

@@ -93,10 +93,11 @@
 {
     [super updateLayer];
     
-    if (self.showCaptions != _showCaptionsCache || _textSize != OAAppSettings.sharedManager.textSize.get)
+    CGFloat textSize = [[OAAppSettings sharedManager].textSize get];
+    if (self.showCaptions != _showCaptionsCache || _textSize != textSize)
     {
         _showCaptionsCache = self.showCaptions;
-        _textSize = OAAppSettings.sharedManager.textSize.get;
+        _textSize = textSize;
         dispatch_async(dispatch_get_main_queue(), ^{
             [self hide];
             [self refreshOsmEditsCollection];
@@ -139,6 +140,7 @@
 
 - (sk_sp<SkImage>) getIcon:(OAOsmPoint *)point
 {
+    sk_sp<SkImage> bitmap;
     if ([point isKindOfClass:OAOpenStreetMapPoint.class])
     {
         OAOpenStreetMapPoint *osmP = (OAOpenStreetMapPoint *)point;
@@ -149,7 +151,6 @@
             OAPOIType *type = poiTypeMap[poiTranslation.lowerCase];
             auto iconId = QString::fromNSString(type.name);
             const auto bitmapIt = _iconsCache.find(iconId);
-            sk_sp<SkImage> bitmap;
             if (bitmapIt == _iconsCache.end())
             {
                 bitmap = [OACompoundIconUtils createCompositeIconWithcolor:UIColorFromARGB(color_osm_edit) shapeName:@"circle" iconName:type.name isFullSize:YES icon:type.icon];
@@ -159,10 +160,14 @@
             {
                 bitmap = bitmapIt.value();
             }
-            return bitmap;
         }
     }
-    return [OANativeUtilities skImageFromPngResource:@"map_osm_edit"];
+    else
+    {
+        bitmap = [OANativeUtilities skImageFromPngResource:@"map_osm_edit"];
+    }
+
+    return [OANativeUtilities getScaledSkImage:bitmap scaleFactor:_textSize];
 }
 
 - (NSString *) getPointDescription:(OAOsmPoint *)point

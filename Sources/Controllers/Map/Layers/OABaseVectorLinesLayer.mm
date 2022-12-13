@@ -82,15 +82,18 @@
     return YES;
 }
 
-- (void) setVectorLineProvider:(std::shared_ptr<OsmAnd::VectorLinesCollection> &)collection
+- (void) setVectorLineProvider:(std::shared_ptr<OsmAnd::VectorLinesCollection> &)collection sync:(BOOL)sync
 {
     QWriteLocker scopedLocker(&_lock);
 
     _vectorLinesCollection = collection;
     _vectorLinesArrowsProvider = _vectorLinesCollection->getVectorLineArrowsProvider();
-    [self.mapViewController runWithRenderSync:^{
+    if (sync)
+        [self.mapViewController runWithRenderSync:^{
+            [self.mapView addKeyedSymbolsProvider:_vectorLinesArrowsProvider];
+        }];
+    else
         [self.mapView addKeyedSymbolsProvider:_vectorLinesArrowsProvider];
-    }];
 }
 
 - (sk_sp<SkImage>) bitmapForColor:(UIColor *)color fileName:(NSString *)fileName

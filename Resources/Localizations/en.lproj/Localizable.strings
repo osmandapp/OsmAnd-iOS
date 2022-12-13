@@ -596,6 +596,8 @@
 "shared_string_download_update" = "Download update";
 "shared_string_angle" = "Angle";
 "shared_string_angle_param" = "Angle: %d°";
+"shared_string_uploaded" = "Uploaded";
+"shared_string_do_not_exist" = "Do not exist";
 
 "restart" = "Restart";
 
@@ -2722,6 +2724,9 @@
 "remote_item" = "Remote item";
 "local_item" = "Local item";
 "deleted_item" = "Deleted item";
+"new_file" = "New file";
+"modified_file" = "Modified file";
+"deleted_file" = "Deleted file";
 "cloud_description" = "Never lose your data. Back up and restore all info easily.";
 "cloud_create_account" = "Create account";
 "cloud_existing_account" = "I already have an account";
@@ -2735,8 +2740,15 @@
 "duration_ago" = "%@ ago";
 
 "last_sync" = "Last sync";
+"last_synchronization" = "Last synchronization";
 "sync_now" = "Sync now";
 "local_changes" = "Local changes";
+"cloud_conflict_descr" = "The local and cloud versions contain changes since the last sync.";
+"upload_change" = "Upload change";
+"cloud_version_will_be_removed" = "Cloud version will be removed";
+"cloud_changes_will_be_dismissed" = "Cloud changes will be dismissed";
+"local_file_will_be_restored" = "Local file will be restored";
+"local_changes_will_be_dismissed" = "Local changes will be dismissed";
 
 "cloud_no_online_backup" = "You don’t have any online backup yet";
 "cloud_no_online_backup_descr" = "Set up an automatic backup so you don't have to worry about lost data.";
@@ -2918,6 +2930,8 @@
 
 "recalc_angle_dialog_title" = "Minimum angle between my location and route";
 "recalc_angle_dialog_descr" = "Extra straight segment between my location and calculated route will be displayed until the route is recalculated";
+
+"checking_progress" = "Checking..";
 
 // Release Notes
 // instruction:

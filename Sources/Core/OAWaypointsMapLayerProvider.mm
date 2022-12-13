@@ -109,15 +109,7 @@ sk_sp<SkImage> OAWaypointsMapLayerProvider::getBitmapByWaypoint(const OsmAnd::Re
         bitmap = bitmapIt.value();
     }
 
-    if (!qFuzzyCompare(_symbolsScaleFactor, 1.0f) && bitmap)
-    {
-        bitmap = OsmAnd::SkiaUtilities::scaleImage(
-            bitmap,
-            _symbolsScaleFactor,
-            _symbolsScaleFactor);
-    }
-
-    return bitmap;
+    return [OANativeUtilities getScaledSkImage:bitmap scaleFactor:_symbolsScaleFactor];
 }
 
 QString OAWaypointsMapLayerProvider::backgroundImageNameByType(const QString& type) const

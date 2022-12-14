@@ -2659,7 +2659,7 @@
 "backup_delete_all_data_finished" = "تم حذف جميع بياناتك بنجاح من سحابة OsmAnd.";
 "shared_string_delete_data" = "حذف البيانات";
 "backup_danger_zone" = "منطقة الخطر";
-"backup_delete_old_data_warning" = "أنت على وشك حذف محفوظات التغيير للبيانات التي تم تحميلها مسبقا.\n\nسيتم حفظ الإصدار الحالي من البيانات على الخادم ، لكنك لن تتمكن من العودة إلى التغييرات التي تم إجراؤها مسبقا.";
+"backup_delete_old_data_warning" = "أنت على وشك حذف محفوظات التغييرات للبيانات التي تم تحميلها مسبقًا.\n\nسيتم حفظ الإصدار الحالي من البيانات على الخادم ، ولكن لن تتمكن من الرجوع إلى التغييرات التي تم إجراؤها مسبقًا.";
 "backup_version_history" = "تاريخ النسخة";
 "select_backup_data_descr" = "حدد البيانات والمجلدات للنسخ الاحتياطي.";
 "backup_delete_all_data" = "حذف جميع بياناتي";
@@ -2755,3 +2755,16 @@
 "mtb_segment_classification" = "تصنيف القطاعات";
 "recalc_angle_dialog_descr" = "سيتم عرض جزء مستقيم إضافي بين موقعي والمسار المحسوب حتى يتم إعادة حساب المسار";
 "local_backup_empty_file" = "لا يحتوي ملف النسخ الاحتياطي على أي عناصر لاستعادتها.";
+"shared_string_uploaded" = "تم الرفع";
+"shared_string_do_not_exist" = "غير موجود";
+"new_file" = "ملف جديد";
+"modified_file" = "ملف معدل";
+"deleted_file" = "ملف محذوف";
+"last_synchronization" = "آخر مزامنة";
+"cloud_conflict_descr" = "تحتوي الإصدارات المحلية والسحابة على تغييرات منذ آخر مزامنة.";
+"upload_change" = "تحميل التغيير";
+"cloud_version_will_be_removed" = "ستتم إزالة النسخة السحابية";
+"cloud_changes_will_be_dismissed" = "سيتم رفض التغييرات السحابية";
+"local_file_will_be_restored" = "سيتم استعادة الملف المحلي";
+"local_changes_will_be_dismissed" = "سيتم رفض التغييرات المحلية";
+"checking_progress" = "التحقق..";

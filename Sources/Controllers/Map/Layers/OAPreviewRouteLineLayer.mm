@@ -225,7 +225,7 @@
             if (isFirstLine)
             {
                 [self.mapView addKeyedSymbolsProvider:_collection];
-                [self setVectorLineProvider:_collection];
+                [self setVectorLineProvider:_collection sync:YES];
             }
         }
         else

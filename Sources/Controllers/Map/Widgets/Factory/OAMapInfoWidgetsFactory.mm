@@ -138,6 +138,7 @@
     __block NSDate *cachedDate;
 
     NSMeasurementFormatter *formatter = [NSMeasurementFormatter new];
+    formatter.unitStyle = NSFormattingUnitStyleShort;
     formatter.locale = NSLocale.autoupdatingCurrentLocale;
     __block NSString *cachedBandUnit = [formatter displayStringFromUnit:[[OAWeatherBand withWeatherBand:band] getBandUnit]];
 

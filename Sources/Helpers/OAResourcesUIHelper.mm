@@ -78,6 +78,8 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             return OALocalizedString(@"online_map");
         case OsmAndResourceType::WeatherForecast:
             return OALocalizedString(@"weather_forecast");
+        case OsmAndResourceType::HeightmapRegion:
+            return OALocalizedString(@"res_heightmap");
         default:
             return OALocalizedString(@"res_unknown");
     }
@@ -206,9 +208,10 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         return OsmAndResourceType::SqliteFile;
     else if ([scopeId isEqualToString:@"weather_forecast"])
         return OsmAndResourceType::WeatherForecast;
+    else if ([scopeId isEqualToString:@"heightmap"])
+        return OsmAndResourceType::HeightmapRegion;
 
     //TODO: add another types from ResourcesManager.h
-    //HeightmapRegion,
     //MapStyle,
     //MapStylesPresets,
     //OnlineTileSources,
@@ -658,7 +661,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         case OsmAndResourceType::HillshadeRegion:
         case OsmAndResourceType::SlopeRegion:
         case OsmAndResourceType::WeatherForecast:
-
+        case OsmAndResourceType::HeightmapRegion:
             if ([region.subregions count] > 0)
             {
                 if (!includeRegionName || region == nil)
@@ -829,10 +832,19 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 + (OAWorldRegion*) findRegionOrAnySubregionOf:(OAWorldRegion*)region
                          thatContainsResource:(const QString&)resourceId
 {
-    const auto& downloadsIdPrefix = QString::fromNSString(region.downloadsIdPrefix);
+    const auto downloadsIdPrefix = QString::fromNSString(region.downloadsIdPrefix);
+    const auto acceptedExtension = QString::fromNSString(region.acceptedExtension);
 
-    if (resourceId.startsWith(downloadsIdPrefix))
+    if (!acceptedExtension.isEmpty())
+    {
+        if (resourceId.endsWith(acceptedExtension))
+            return region;
+        return nil;
+    }
+    else if (resourceId.startsWith(downloadsIdPrefix))
+    {
         return region;
+    }
 
     for (OAWorldRegion* subregion in region.subregions)
     {

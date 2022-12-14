@@ -691,10 +691,15 @@ static BOOL _repositoryUpdated = NO;
         {
             for (const auto& resource : _localResources)
             {
-                if (checkExtension && resource->id.endsWith(acceptedExtension))
-                    regionResources.allResources.remove(resource->id);
+                if (checkExtension)
+                {
+                    if (resource->id.endsWith(acceptedExtension))
+                        regionResources.allResources.remove(resource->id);
+                }
                 else if (resource->id.startsWith(downloadsIdPrefix))
+                {
                     regionResources.allResources.remove(resource->id);
+                }
             }
             for (const auto& resource : regionResources.outdatedResources)
             {
@@ -713,10 +718,15 @@ static BOOL _repositoryUpdated = NO;
         
         for (const auto& resource : _outdatedResources)
         {
-            if (checkExtension && !resource->id.endsWith(acceptedExtension))
-                continue;
+            if (checkExtension)
+            {
+                if (!resource->id.endsWith(acceptedExtension))
+                    continue;
+            }
             else if (!resource->id.startsWith(downloadsIdPrefix))
+            {
                 continue;
+            }
             
             regionResources.allResources.insert(resource->id, resource);
             regionResources.outdatedResources.insert(resource->id, resource);
@@ -725,10 +735,15 @@ static BOOL _repositoryUpdated = NO;
         
         for (const auto& resource : _localResources)
         {
-            if (checkExtension && !resource->id.endsWith(acceptedExtension))
-                continue;
+            if (checkExtension)
+            {
+                if (!resource->id.endsWith(acceptedExtension))
+                    continue;
+            }
             else if (!resource->id.startsWith(downloadsIdPrefix))
+            {
                 continue;
+            }
 
             if (!regionResources.allResources.contains(resource->id))
                 regionResources.allResources.insert(resource->id, resource);
@@ -742,10 +757,15 @@ static BOOL _repositoryUpdated = NO;
             BOOL hasSrtm = NO;
             for (const auto& resource : _resourcesInRepository)
             {
-                if (checkExtension && !resource->id.endsWith(acceptedExtension))
-                    continue;
+                if (checkExtension)
+                {
+                    if (!resource->id.endsWith(acceptedExtension))
+                        continue;
+                }
                 else if (!resource->id.startsWith(downloadsIdPrefix))
+                {
                     continue;
+                }
                 
                 switch (resource->type)
                 {
@@ -757,6 +777,7 @@ static BOOL _repositoryUpdated = NO;
                     case OsmAndResourceType::SlopeRegion:
                     case OsmAndResourceType::DepthContourRegion:
                     case OsmAndResourceType::DepthMapRegion:
+                    case OsmAndResourceType::HeightmapRegion:
                         [typesArray addObject:@((int) resource->type)];
                         break;
                     default:
@@ -854,6 +875,10 @@ static BOOL _repositoryUpdated = NO;
             if (nauticalRegion)
             {
                 [allResourcesArray addObject:item_];
+            }
+            else if (![OAAppSettings.sharedManager.showHeightmaps get] && item_.resourceType == OsmAndResourceType::HeightmapRegion)
+            {
+                continue;
             }
             else if (region == self.region)
             {
@@ -2225,6 +2250,7 @@ static BOOL _repositoryUpdated = NO;
                     if (item.resourceTypes.count > 0)
                     {
                         NSMutableOrderedSet<NSNumber *> *typesSet = [NSMutableOrderedSet orderedSetWithArray:item.resourceTypes];
+                        [typesSet removeObject:@((int) OsmAndResourceType::HeightmapRegion)];
                         NSArray<NSNumber *> *sortedTypesWithoutDuplicate = [[typesSet array] sortedArrayUsingComparator:^NSComparisonResult(NSNumber *type1, NSNumber *type2) {
                             NSInteger orderValue1 = [OAResourceType getOrderIndex:type1];
                             NSInteger orderValue2 = [OAResourceType getOrderIndex:type2];

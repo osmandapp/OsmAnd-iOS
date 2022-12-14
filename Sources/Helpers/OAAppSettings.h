@@ -882,6 +882,8 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) NSString *simulateNavigationGpxTrackSpeedMode;
 @property (assign, nonatomic) BOOL useOsmLiveForRouting;
 
+@property (nonatomic) OACommonBoolean *showHeightmaps;
+
 @property (nonatomic) OACommonRulerWidgetMode *rulerMode;
 
 @property (nonatomic) OACommonStringList *poiFiltersOrder;

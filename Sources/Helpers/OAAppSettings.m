@@ -393,6 +393,8 @@
 
 #define lastUUIDChangeTimestampKey @"lastUUIDChangeTimestamp"
 
+#define kShowHeightmapsKey @"showHeightmaps"
+
 @implementation OACompassMode
 
 + (NSString *) getTitle:(EOACompassMode)cm
@@ -4190,6 +4192,9 @@
 
         _levelToSwitchVectorRaster = [[OACommonInteger withKey:debugRenderingInfoKey defValue:1] makeGlobal];
         [_globalPreferences setObject:_levelToSwitchVectorRaster forKey:@"level_to_switch_vector_raster"];
+        
+        _showHeightmaps = [[[OACommonBoolean withKey:kShowHeightmapsKey defValue:NO] makeGlobal] makeShared];
+        [_globalPreferences setObject:_showHeightmaps forKey:@"show_heightmaps"];
 
         // For now this can be changed only in TestVoiceActivity
 //        public final OsmandPreference<Integer>[] VOICE_PROMPT_DELAY = new IntPreference[10];

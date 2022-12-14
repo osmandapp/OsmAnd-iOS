@@ -15,6 +15,11 @@
     NSMutableArray<OATableSectionData *> *_sectionData;
 }
 
++ (instancetype) model
+{
+    return [[self.class alloc] init];
+}
+
 - (instancetype)init
 {
     self = [super init];

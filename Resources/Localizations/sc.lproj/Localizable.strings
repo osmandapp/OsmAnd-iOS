@@ -866,7 +866,7 @@
 "product_desc_ext_wikivoyage" = "Ghias pro sos logos prus interessantes de su mundu, in intro de OsmAnd, chi non tenent bisòngiu de impreare una connessione a ìnternet.";
 "product_title_sea_depth_contours" = "Curvas de livellu nàuticas";
 "product_desc_sea_depth_contours" = "Mapas de sas curvas de livellu nàuticas e de sos pidagnos";
-"in_app_purchase_desc_ex" = "A pustis de sa còmpora at a èssere disponìbile pro semper.";
+"in_app_purchase_desc_ex" = "A pustis de sa còmpora at a èssere a disponimentu pro semper.";
 "unlock_all_features" = "Isbloca totu sas funtzionalidades de OsmAnd";
 "subscribe_email_desc" = "Iscrie·ti a sa lista de posta eletrònica nostra:<br/>• Otene 3 mapas de iscarrigare in prus<br/>• Retzi informatziones in antis de totus a pitzu de sos iscontos<br/>• Partètzipa a sas promotziones cun còdighes <a href='https://osmand.net/giveaway'> in donu</a>";
 "osm_live_subscribe_btn" = "Abbona·ti";
@@ -1618,7 +1618,7 @@
 "wiki_sheet_title" = "Comente abèrrere sos artìculos de Wikipedia?";
 "download_wiki_data" = "Iscàrriga sos datos de Wikipedia pro %@";
 "open_wiki_online" = "Aberi un\'artìculu in lìnia";
-"online_webpage_warning" = "Custa pàgina est disponìbile in lìnia ebbia. La cheres abèrrere in s\'esploradore/navigadore (browser) web\?";
+"online_webpage_warning" = "Custa pàgina est a disponimentu in lìnia ebbia. La cheres abèrrere in s'esploradore/navigadore (browser) web?";
 "app_mode_pedestrian" = "A pee";
 "app_mode_bicycle" = "Bitzicleta";
 "app_mode_car" = "Màchina";
@@ -2780,3 +2780,16 @@
 "recalc_angle_dialog_title" = "Àngulu mìnimu intre sa positzione mea e s'àndala";
 "recalc_angle_dialog_descr" = "Unu segmentu dritu intre sa positzione mea e s'àndala carculada at a èssere ammustradu finas a cando s'àndala non s'at a torrare a carculare";
 "local_backup_empty_file" = "Su documentu de còpia de seguresa non cuntenet perunu elementu de ripristinare.";
+"shared_string_do_not_exist" = "No esistet";
+"new_file" = "Documentu nou";
+"modified_file" = "Documentu modificadu";
+"deleted_file" = "Documentu iscantzelladu";
+"cloud_conflict_descr" = "Sas versiones locale e in sa nue tenent modìficas dae s'ùrtima sincronizatzione.";
+"upload_change" = "Càrriga sa modìfica";
+"local_changes_will_be_dismissed" = "Sas modìficas locales s'ant a ignorare";
+"checking_progress" = "Verifichende..";
+"shared_string_uploaded" = "Imbiadu";
+"last_synchronization" = "Ùrtima sincronizatzione";
+"cloud_version_will_be_removed" = "Sa versione in sa nue s'at a bogare";
+"cloud_changes_will_be_dismissed" = "Sas modìficas in sa nue s'ant a ignorare";
+"local_file_will_be_restored" = "Su documentu locale s'at a ripristinare";

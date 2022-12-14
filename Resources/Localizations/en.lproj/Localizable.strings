@@ -2639,6 +2639,8 @@
 "routing_attr_hazmat_category_no_restrictions_name" = "A (No restrictions)";
 "transport_hazmat_yes_desc" = "You need to choose proper category.";
 "transport_hazmat_no_desc" = "On some roads and tunnels transporting of hazardous materials is forbidden.";
+"routing_attr_motor_type_name" = "Fuel used by motor";
+"routing_attr_motor_type_description" = "Select fuel type used by your vehicle motor, to calculate CO2 emission.";
    
 
 //Icon categories

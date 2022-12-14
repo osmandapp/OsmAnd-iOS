@@ -157,7 +157,7 @@
                 _drivingStyleParameters.push_back(p);
             else if ([param isEqualToString:kRouteParamShortWay])
                 _fastRouteParameter = p;
-            else if ("weight" != p.id && "height" != p.id && "length" != p.id && "width" != p.id)
+            else if ("weight" != p.id && "height" != p.id && "length" != p.id && "width" != p.id && "motor_type" != p.id)
                 _otherParameters.push_back(p);
         }
     

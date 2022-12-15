@@ -44,6 +44,7 @@
         promoActive = [self checkBackupSubscription:promocode];
     if (!promoActive)
     {
+        //Get only PRO subscriptions
         NSString *orderId = [_iapHelper getOrderIdByDeviceIdAndToken];
         if (orderId.length > 0) {
             promoActive = [self checkBackupSubscription:orderId];
@@ -65,6 +66,7 @@
             [_settings.backupPurchaseState set:stateHolder.state];
             [_settings.backupPurchaseStartTime set:stateHolder.startTime];
             [_settings.backupPurchaseExpireTime set:stateHolder.expireTime];
+            [_settings.proSubscriptionDuration set:(int)stateHolder.duration];
             return stateHolder.state.isActive;
         }
     }

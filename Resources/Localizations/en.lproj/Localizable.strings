@@ -2869,6 +2869,8 @@
 "subscription" = "Subscription";
 "google_play" = "Google Play";
 "app_store" = "App Store";
+"amazon_appstore" = "Amazon Appstore";
+"huawei_appgallery" = "Huawei AppGallery";
 "promo" = "Promo";
 "purchase_origin" = "Purchase origin";
 "contact_support" = "Contact support";

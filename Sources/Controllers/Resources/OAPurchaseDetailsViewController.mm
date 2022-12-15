@@ -205,10 +205,29 @@
     [data addObject:@{
             @"type": [OAIconTitleValueCell getCellIdentifier],
             @"title": OALocalizedString(@"purchase_origin"),
-            @"description": _isPromo ? OALocalizedString(@"promo") : OALocalizedString(@"google_play")
+            @"description": [self subscripitonOriginToString:(EOASubscriptionOrigin)_settings.proSubscriptionOrigin.get]
     }];
 
     _data = data;
+}
+
+- (NSString *) subscripitonOriginToString:(EOASubscriptionOrigin)origin
+{
+    switch (origin) {
+        case EOASubscriptionOriginPromo:
+            return OALocalizedString(@"promo");
+        case EOASubscriptionOriginAndroid:
+            return OALocalizedString(@"google_play");
+        case EOASubscriptionOriginAmazon:
+            return OALocalizedString(@"amazon_appstore");
+        case EOASubscriptionOriginHuawei:
+            return OALocalizedString(@"huawei_appgallery");
+        case EOASubscriptionOriginIOS:
+            return OALocalizedString(@"app_store");
+            
+        default:
+            return @"";
+    }
 }
 
 - (UIImage *)getIcon

@@ -1745,6 +1745,8 @@ static OASubscriptionState *EXPIRED;
     for (NSInteger i = 0; i < subscriptionsStateJson.count; i++)
     {
         NSDictionary *subObj = subscriptionsStateJson[i];
+        if (![subObj[@"valid"] boolValue])
+            continue;
         NSString *sku = subObj[@"sku"];
         NSString *state = subObj[@"state"];
         
@@ -1755,6 +1757,12 @@ static OASubscriptionState *EXPIRED;
             stateHolder.startTime = [subObj[@"start_time"] integerValue] / 1000;
             stateHolder.expireTime = [subObj[@"expire_time"] integerValue] / 1000;
             stateHolder.origin = [self getSubscriptionOriginBySku:sku];
+            EOASubscriptionDuration periodUnit = EOASubscriptionDurationUndefined;
+            if (stateHolder.origin == EOASubscriptionOriginPromo || [sku containsString:@"annual"])
+                periodUnit = EOASubscriptionDurationYearly;
+            else if ([sku containsString:@"monthly"])
+                periodUnit = EOASubscriptionDurationMonthly;
+            stateHolder.duration = periodUnit;
             subscriptionStateMap[sku] = stateHolder;
         }
     }
@@ -1765,10 +1773,14 @@ static OASubscriptionState *EXPIRED;
 {
     if ([sku isEqualToString:@"promo_website"])
         return EOASubscriptionOriginPromo;
-    else if ([sku.lowerCase hasPrefix:@"osmand_"])
+    else if ([sku.lowerCase hasPrefix:@"osmand_pro_"])
         return EOASubscriptionOriginAndroid;
-    else if ([sku.lowerCase hasPrefix:@"net.osmand.maps."])
+    else if ([sku.lowerCase hasPrefix:@"net.osmand.maps.subscription.pro"])
         return EOASubscriptionOriginIOS;
+    else if ([sku.lowerCase containsString:@".huawei.annual.pro"] || [sku.lowerCase containsString:@".huawei.monthly.pro"])
+        return EOASubscriptionOriginHuawei;
+    else if ([sku.lowerCase containsString:@".amazon.pro"])
+        return EOASubscriptionOriginAmazon;
     return EOASubscriptionOriginUndefined;
 }
 

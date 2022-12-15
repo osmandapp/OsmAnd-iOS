@@ -303,6 +303,7 @@
 #define backupPurchaseExpireTimeKey @"backupPurchaseExpireTime"
 #define backupPurchaseStateKey @"backupPurchaseState"
 #define proSubscriptionOriginKey @"proSubscriptionOrigin"
+#define proSubscriptionDurationKey @"proSubscriptionDuration"
 #define purchaseIdentifiersKey @"purchaseIdentifiers"
 
 #define userIosIdKey @"userIosId"
@@ -4124,6 +4125,7 @@
         _backupPurchaseExpireTime = [[OACommonLong withKey:backupPurchaseExpireTimeKey defValue:0] makeGlobal];
         _backupPurchaseState = [[OACommonSubscriptionState withKey:backupPurchaseStateKey defValue:OASubscriptionState.UNDEFINED] makeGlobal];
         _proSubscriptionOrigin = [[OACommonInteger withKey:proSubscriptionOriginKey defValue:-1] makeGlobal];
+        _proSubscriptionDuration = [[OACommonInteger withKey:proSubscriptionDurationKey defValue:-1] makeGlobal];
         
         [_globalPreferences setObject:_backupPromocode forKey:@"backup_promocode"];
         [_globalPreferences setObject:_backupPurchaseActive forKey:@"backup_promocode_active"];
@@ -4131,6 +4133,7 @@
         [_globalPreferences setObject:_backupPurchaseExpireTime forKey:@"promo_website_expire_time"];
         [_globalPreferences setObject:_backupPurchaseState forKey:@"promo_website_state"];
         [_globalPreferences setObject:_proSubscriptionOrigin forKey:@"pro_subscription_origin"];
+        [_globalPreferences setObject:_proSubscriptionDuration forKey:@"backup_purchase_period"];
         
         _purchasedIdentifiers = [[OACommonString withKey:purchaseIdentifiersKey defValue:@""] makeGlobal];
 

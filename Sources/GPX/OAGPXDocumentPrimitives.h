@@ -177,6 +177,7 @@ struct RouteDataBundle;
 
 @property (nonatomic) NSString *identifier;
 @property (nonatomic) NSString *length;
+@property (nonatomic) NSString *startTrackPointIndex;
 @property (nonatomic) NSString *segmentTime;
 @property (nonatomic) NSString *speed;
 @property (nonatomic) NSString *turnType;

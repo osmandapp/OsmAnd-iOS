@@ -20,15 +20,17 @@
     NSString *_name;
     std::vector<std::shared_ptr<RouteSegmentResult>> _route;
     NSArray<CLLocation *> *_locations;
+    std::vector<int> _routePointIndexes;
     NSArray<OAWptPt *> *_points;
 }
 
-- (instancetype) initWithName:(NSString *)name route:(std::vector<std::shared_ptr<RouteSegmentResult>> &)route locations:(NSArray<CLLocation *> *)locations points:(NSArray<OAWptPt *> *)points
+- (instancetype) initWithName:(NSString *)name route:(std::vector<std::shared_ptr<RouteSegmentResult>> &)route locations:(NSArray<CLLocation *> *)locations routePointIndexes:(std::vector<int>)routePointIndexes points:(NSArray<OAWptPt *> *)points
 {
     self = [super init];
     if (self) {
         _name = name;
         _route = route;
+        _routePointIndexes = routePointIndexes;
         _locations = locations;
         _points = points;
     }
@@ -74,7 +76,7 @@
 
 - (OATrkSegment *) generateRouteSegment
 {
-    std::shared_ptr<RouteDataResources> resources = std::make_shared<RouteDataResources>([self coordinatesToLocationVector:_locations]);
+    std::shared_ptr<RouteDataResources> resources = std::make_shared<RouteDataResources>([self coordinatesToLocationVector:_locations], _routePointIndexes);
     std::vector<std::shared_ptr<RouteDataBundle>> routeItems;
     if (_route.size() > 0)
     {

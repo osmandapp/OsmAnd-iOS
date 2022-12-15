@@ -2760,3 +2760,16 @@
 "shared_string_angle_param" = "Кут: %d°";
 "remote_item" = "Віддалений елемент";
 "local_backup_empty_file" = "Файл резервної копії не містить жодних об'єктів для відновлення.";
+"deleted_file" = "Видалений файл";
+"upload_change" = "Вивантажити зміни";
+"cloud_version_will_be_removed" = "Версія у хмарі буде вилучена";
+"cloud_changes_will_be_dismissed" = "Зміни у хмарі буде відхилено";
+"shared_string_do_not_exist" = "Не існує";
+"new_file" = "Новий файл";
+"shared_string_uploaded" = "Вивантажено";
+"modified_file" = "Змінений файл";
+"last_synchronization" = "Остання синхронізація";
+"cloud_conflict_descr" = "Локальна і хмарна версії містять зміни від часу останньої синхронізації.";
+"local_changes_will_be_dismissed" = "Локальні зміни буде відхилено";
+"local_file_will_be_restored" = "Локальний файл буде відновлено";
+"checking_progress" = "Перевірка..";

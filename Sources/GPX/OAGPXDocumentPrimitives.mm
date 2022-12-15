@@ -539,6 +539,7 @@
     if (self) {
         _identifier = dict[@"id"];
         _length = dict[@"length"];
+        _startTrackPointIndex = dict[@"startTrkptIdx"];
         _segmentTime = dict[@"segmentTime"];
         _speed = dict[@"speed"];
         _turnType = dict[@"turnType"];
@@ -556,6 +557,7 @@
     if (self) {
         _identifier = seg->id.toNSString();
         _length = seg->length.toNSString();
+        _startTrackPointIndex = seg->startTrackPointIndex.toNSString();
         _segmentTime = seg->segmentTime.toNSString();
         _speed = seg->speed.toNSString();
         _turnType = seg->turnType.toNSString();
@@ -572,6 +574,7 @@
     OARouteSegment *s = [[OARouteSegment alloc] init];
     s.identifier = [NSString stringWithUTF8String:bundle->getString("id", "").c_str()];
     s.length = [NSString stringWithUTF8String:bundle->getString("length", "").c_str()];
+    s.startTrackPointIndex = [NSString stringWithUTF8String:bundle->getString("startTrkptIdx", "").c_str()];
     s.segmentTime = [NSString stringWithUTF8String:bundle->getString("segmentTime", "").c_str()];
     s.speed = [NSString stringWithUTF8String:bundle->getString("speed", "").c_str()];
     s.turnType = [NSString stringWithUTF8String:bundle->getString("turnType", "").c_str()];
@@ -587,6 +590,7 @@
     auto bundle = std::make_shared<RouteDataBundle>();
     [self addToBundleIfNotNull:"id" value:_identifier bundle:bundle];
     [self addToBundleIfNotNull:"length" value:_length bundle:bundle];
+    [self addToBundleIfNotNull:"startTrkptIdx" value:_startTrackPointIndex bundle:bundle];
     [self addToBundleIfNotNull:"segmentTime" value:_segmentTime bundle:bundle];
     [self addToBundleIfNotNull:"speed" value:_speed bundle:bundle];
     [self addToBundleIfNotNull:"turnType" value:_turnType bundle:bundle];
@@ -608,6 +612,7 @@
     NSMutableDictionary<NSString *, NSString *> *res = [NSMutableDictionary new];
     [self addIfValueNotEmpty:res key:@"id" value:_identifier];
     [self addIfValueNotEmpty:res key:@"length" value:_length];
+    [self addIfValueNotEmpty:res key:@"startTrkptIdx" value:_startTrackPointIndex];
     [self addIfValueNotEmpty:res key:@"segmentTime" value:_segmentTime];
     [self addIfValueNotEmpty:res key:@"speed" value:_speed];
     [self addIfValueNotEmpty:res key:@"turnType" value:_turnType];

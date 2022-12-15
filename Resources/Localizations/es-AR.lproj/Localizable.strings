@@ -2777,3 +2777,10 @@
 "local_changes_will_be_dismissed" = "Los cambios locales serán descartados";
 "checking_progress" = "Comprobando..";
 "shared_string_uploaded" = "Subido";
+"depth_contours" = "Curvas de profundidad";
+"huawei_appgallery" = "Huawei AppGallery";
+"nautical_depth_points" = "Puntos de profundidad náuticos";
+"use_heightmap_setting" = "Usar mapas de altura del relieve 3D";
+"worldwide_maps" = "Mapas del mundo";
+"res_heightmap" = "Mapa de alturas";
+"amazon_appstore" = "Amazon Appstore";

@@ -1428,7 +1428,7 @@ static BOOL _isDeviatedFromRoute = false;
     
     NSArray<CLLocation *> *locations = route.getImmutableAllLocations;
     auto originalRoute = route.getOriginalRoute;
-    OARouteExporter *exporter = [[OARouteExporter alloc] initWithName:name route:originalRoute locations:locations points:points];
+    OARouteExporter *exporter = [[OARouteExporter alloc] initWithName:name route:originalRoute locations:locations routePointIndexes:{} points:points];
     return [exporter exportRoute];
 }
 

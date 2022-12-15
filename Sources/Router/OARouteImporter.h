@@ -12,7 +12,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class OAGPXDocument, OATrkSegment;
+@class OAGPXDocument, OATrkSegment, OAWptPt;
 
 struct RouteSegmentResult;
 
@@ -20,7 +20,7 @@ struct RouteSegmentResult;
 
 //- (instancetype) initWithFile:(NSString *)file;
 - (instancetype) initWithGpxFile:(OAGPXDocument *)gpxFile;
-- (instancetype) initWithTrkSeg:(OATrkSegment *)segment;
+- (instancetype) initWithTrkSeg:(OATrkSegment *)segment segmentRoutePoints:(NSArray<OAWptPt *> *)segmentRoutePoints;
 
 - (std::vector<std::shared_ptr<RouteSegmentResult>> &) importRoute;
 

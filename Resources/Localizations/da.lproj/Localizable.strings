@@ -2766,3 +2766,10 @@
 "shared_string_uploaded" = "Uploadet";
 "last_synchronization" = "Seneste synkronisering";
 "cloud_conflict_descr" = "De lokale og cloud-versioner indeholder ændringer siden den sidste synkronisering.";
+"res_heightmap" = "Højdekort";
+"depth_contours" = "Dybdekonturer";
+"worldwide_maps" = "Globale kort";
+"use_heightmap_setting" = "Brug højdekort med 3D-relief";
+"nautical_depth_points" = "Nautiske dybdepunkter";
+"amazon_appstore" = "Amazon Appstore";
+"huawei_appgallery" = "Huawei AppGallery";

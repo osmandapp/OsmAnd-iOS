@@ -2765,3 +2765,10 @@
 "checking_progress" = "Vérification...";
 "modified_file" = "Fichier modifié";
 "last_synchronization" = "Dernière synchronisation";
+"use_heightmap_setting" = "Utiliser les cartes de hauteur en relief 3D";
+"res_heightmap" = "Cartes de hauteur";
+"nautical_depth_points" = "Points de profondeur";
+"depth_contours" = "Lignes de sondes";
+"worldwide_maps" = "Cartes mondiales";
+"amazon_appstore" = "Boutique Amazon";
+"huawei_appgallery" = "Galerie d'applications Huawei";

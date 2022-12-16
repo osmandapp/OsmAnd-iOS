@@ -84,6 +84,8 @@
             const auto& resource = app.resourcesManager->getResourceInRepository(resId);
             if (!app.resourcesManager->isResourceInstalled(resId) && resource->type != _mapObject.indexItem.resourceType)
             {
+                if (!OAAppSettings.sharedManager.showHeightmaps.get && resource->type == OsmAndResourceType::HeightmapRegion)
+                    continue;
                 OAResourceItem *item = [self resourceItemByResource:resource region:_mapObject.worldRegion];
                 [res addObject:item];
             }

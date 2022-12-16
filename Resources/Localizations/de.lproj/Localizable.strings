@@ -2777,3 +2777,10 @@
 "checking_progress" = "Überprüfung..";
 "cloud_conflict_descr" = "Die lokale und die Cloud-Version enthalten Änderungen seit der letzten Synchronisierung.";
 "local_changes_will_be_dismissed" = "Lokale Änderungen werden verworfen";
+"res_heightmap" = "Höhenkarte";
+"use_heightmap_setting" = "3D-Reliefhöhenkarten verwenden";
+"nautical_depth_points" = "Nautische Tiefenpunkte";
+"depth_contours" = "Tiefenlinien";
+"worldwide_maps" = "Weltweite Karten";
+"huawei_appgallery" = "Huawei AppGallery";
+"amazon_appstore" = "Amazon Appstore";

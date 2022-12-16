@@ -179,6 +179,9 @@
 "map_widget_next_turn_small" = "Next turn (small)";
 "map_widget_next_next_turn" = "Second next turn";
 "always_center_position_on_map" = "Display position always in center";
+"position_on_map" = "Display position";
+"position_on_map_center" = "Center";
+"position_on_map_bottom" = "Bottom";
 "map_widget_appearance_rem" = "Remaining elements";
 "map_widget_compass" = "Compass";
 "map_widget_intermediate_distance" = "Intermediate destination";

@@ -11,6 +11,7 @@
 typedef enum
 {
     EOAProfileGeneralSettingsMapOrientation = 0,
+    EOAProfileGeneralSettingsDisplayPosition,
     EOAProfileGeneralSettingsDrivingRegion,
     EOAProfileGeneralSettingsUnitsOfLenght,
     EOAProfileGeneralSettingsUnitsOfSpeed,

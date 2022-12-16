@@ -2768,3 +2768,10 @@
 "local_file_will_be_restored" = "سيتم استعادة الملف المحلي";
 "local_changes_will_be_dismissed" = "سيتم رفض التغييرات المحلية";
 "checking_progress" = "التحقق..";
+"res_heightmap" = "خريطة الارتفاع";
+"use_heightmap_setting" = "استخدام خرائط تضاريس الارتفاع 3D";
+"nautical_depth_points" = "نقاط العمق البحري";
+"depth_contours" = "ملامح العمق";
+"worldwide_maps" = "خرائط عالمية";
+"amazon_appstore" = "متجر تطبيقات أمازون";
+"huawei_appgallery" = "متجر تطبيق هواوي";

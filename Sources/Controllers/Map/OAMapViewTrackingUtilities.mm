@@ -729,7 +729,7 @@
         if ([_settings.rotateMap get] == ROTATE_MAP_NONE || _routePlanningMode)
             [self animatedAlignAzimuthToNorth];
         
-        _mapViewController.mapPosition = ([_settings.rotateMap get] == ROTATE_MAP_BEARING && !_routePlanningMode && ![_settings.centerPositionOnMap get] ? BOTTOM_CONSTANT : CENTER_CONSTANT);
+        _mapViewController.mapPosition = ([_settings.centerPositionOnMap get] || _routePlanningMode ? CENTER_CONSTANT : BOTTOM_CONSTANT);
     }
 }
 

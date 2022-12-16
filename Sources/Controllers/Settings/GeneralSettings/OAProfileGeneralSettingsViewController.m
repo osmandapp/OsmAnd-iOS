@@ -79,8 +79,20 @@
         rotateMapIcon = @"ic_custom_direction_north";
     }
     
+    NSString *positionMapValue;
+    NSString *positionMapIcon;
+    if ([_settings.centerPositionOnMap get:self.appMode] == YES)
+    {
+        positionMapValue = OALocalizedString(@"position_on_map_center");
+        positionMapIcon = @"ic_custom_display_position_center.png";
+    }
+    else
+    {
+        positionMapValue = OALocalizedString(@"position_on_map_bottom");
+        positionMapIcon = @"ic_custom_display_position_bottom.png";
+    }
+    
     NSNumber *allow3DValue = @([_settings.settingAllow3DView get:self.appMode]);
-    NSNumber *positionInCenter = @([_settings.centerPositionOnMap get:self.appMode]);
     
     NSString *drivingRegionValue;
     if ([_settings.drivingRegionAutomatic get:self.appMode])
@@ -217,13 +229,11 @@
         @"key" : @"3dView",
     }];
     [appearanceArr addObject:@{
-        @"name" : @"center_position",
-        @"type" : [OASettingSwitchCell getCellIdentifier],
-        @"title" : OALocalizedString(@"always_center_position_on_map"),
-        @"key" : @"always_center_position_on_map",
-        @"isOn" : positionInCenter,
-        @"icon" : [positionInCenter boolValue] ? @"ic_custom_display_position_center.png" : @"ic_custom_display_position_bottom.png",
-        @"key" : @"center_position",
+        @"type" : [OAIconTitleValueCell getCellIdentifier],
+        @"title" : OALocalizedString(@"position_on_map"),
+        @"value" : positionMapValue,
+        @"icon" : positionMapIcon,
+        @"key" : @"position_on_map",
     }];
     [unitsAndFormatsArr addObject:@{
         @"type" : [OAIconTitleValueCell getCellIdentifier],
@@ -364,6 +374,8 @@
         settingsViewController = [[OABaseSettingsViewController alloc] init];
     else if ([itemKey isEqualToString:@"map_orientation"])
         settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsMapOrientation applicationMode:self.appMode];
+    else if ([itemKey isEqualToString:@"position_on_map"])
+        settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsDisplayPosition applicationMode:self.appMode];
     else if ([itemKey isEqualToString:@"drivingRegion"])
         settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsDrivingRegion applicationMode:self.appMode];
     else if ([itemKey isEqualToString:@"lengthUnits"])
@@ -376,7 +388,8 @@
         settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsAngularMeasurmentUnits applicationMode:self.appMode];
     else if ([itemKey isEqualToString:@"externalImputDevice"])
         settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsExternalInputDevices applicationMode:self.appMode];
-    [self.navigationController pushViewController:settingsViewController animated:YES];
+    settingsViewController.delegate = self;
+    [self presentViewController:settingsViewController animated:YES completion:nil];
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
@@ -424,14 +437,18 @@
                         [app.mapModeObservable notifyEvent];
                 }
             }
-            else if ([name isEqualToString:@"center_position"])
-            {
-                [_settings.centerPositionOnMap set:isChecked mode:self.appMode];
-            }
             [self setupView];
             [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:indexPath.row inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationFade];
         }
     }
+}
+
+#pragma mark - OASettingsDataDelegate
+
+- (void) onSettingsChanged;
+{
+    [self setupView];
+    [self.tableView reloadData];
 }
 
 @end

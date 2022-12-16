@@ -455,7 +455,7 @@
 - (void) selectDisplayPosition:(NSString *)name
 {
     if ([name isEqualToString:@"center"])
-        [_settings.centerPositionOnMap set:YES mode:self.appMode];
+        [_settings.centerPositionOnMap set:[name isEqualToString:@"center"] mode:self.appMode];
     else
         [_settings.centerPositionOnMap set:NO mode:self.appMode];
 }

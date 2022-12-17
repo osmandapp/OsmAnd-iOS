@@ -7,6 +7,8 @@
 //
 
 #import "OAVehicleParametersSettingsViewController.h"
+#import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAInputCellWithTitle.h"
 #import "OAOnlyImageViewCell.h"
 #import "OAHorizontalCollectionViewCell.h"
@@ -16,6 +18,8 @@
 #import "OAColors.h"
 #import "OASizes.h"
 #import "OAUtilities.h"
+#import "OAEmissionHelper.h"
+#import "OARoutingHelper.h"
 
 #define kSidePadding 20.
 #define kTopPaddingMotorType 20.
@@ -248,6 +252,9 @@
     [self dismissViewController];
     if (self.delegate)
         [self.delegate onSettingsChanged];
+
+    if (_isMotorType)
+        [[OARootViewController instance].mapPanel updateRouteInfoData];
 }
 
 #pragma mark - UITableViewDataSource

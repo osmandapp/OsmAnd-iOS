@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 OsmAnd. All rights reserved.
 //
 
+#define kWorld @"world"
+
 #import "OAWorldRegion.h"
 
 #include <OsmAndCore/Utilities.h>
@@ -892,6 +894,17 @@
         }
     }
     return oddNodes;
+}
+
+- (BOOL)isContinent
+{
+    if (_superregion)
+    {
+        NSString *superRegionId = _superregion.regionId;
+        NSString *thisRegionId = _regionId;
+        return [kWorld isEqualToString:superRegionId] && ![OsmAnd::WorldRegions::RussiaRegionId.toNSString() isEqualToString:thisRegionId];
+    }
+    return false;
 }
 
 @end

@@ -167,7 +167,7 @@
             rp.routingParameter = _fastRouteParameter;
             
             NSString *paramId = [NSString stringWithUTF8String:_fastRouteParameter.id.c_str()];
-            NSString *title = [self getRoutingStringPropertyName:paramId defaultName:[NSString stringWithUTF8String:_fastRouteParameter.name.c_str()]];
+            NSString *title = [OAUtilities getRoutingStringPropertyName:paramId defaultName:[NSString stringWithUTF8String:_fastRouteParameter.name.c_str()]];
             NSString *icon = [self getParameterIcon:paramId isSelected:YES];
             if (![self.appMode isDerivedRoutingFrom:OAApplicationMode.CAR])
             {
@@ -216,7 +216,7 @@
         {
             const auto& p = _otherParameters[i];
             NSString *paramId = [NSString stringWithUTF8String:p.id.c_str()];
-            NSString *title = [self getRoutingStringPropertyName:paramId defaultName:[NSString stringWithUTF8String:p.name.c_str()]];
+            NSString *title = [OAUtilities getRoutingStringPropertyName:paramId defaultName:[NSString stringWithUTF8String:p.name.c_str()]];
             if (p.type == RoutingParameterType::BOOLEAN)
             {
                 if (!p.group.empty())
@@ -341,15 +341,6 @@
     return nil;
 }
 
-- (NSString *) getRoutingStringPropertyName:(NSString *)propertyName defaultName:(NSString *)defaultName
-{
-    NSString *key = [NSString stringWithFormat:@"routing_attr_%@_name", propertyName];
-    NSString *res = OALocalizedString(key);
-    if ([res isEqualToString:key])
-        res = defaultName;
-    return res;
-}
- 
 - (BOOL) checkIfAnyParameterIsSelected:(vector <RoutingParameter>)routingParameters
 {
     for (const auto& p : routingParameters)

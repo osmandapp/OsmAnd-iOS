@@ -9,6 +9,9 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 
+#define kGermanyRegionId @"europe_germany"
+#define kFranceRegionId @"europe_france"
+
 @class OAProduct, OAPointIContainer, OAResourceGroupItem, QuadRect;
 
 @interface OAWorldRegion : NSObject
@@ -72,5 +75,7 @@
 - (BOOL)hasGroupItems;
 + (NSArray<OAWorldRegion *> *)removeDuplicates:(NSArray<OAWorldRegion *> *)regions;
 - (BOOL)containsRegion:(OAWorldRegion *)another;
+
+- (BOOL)isContinent;
 
 @end

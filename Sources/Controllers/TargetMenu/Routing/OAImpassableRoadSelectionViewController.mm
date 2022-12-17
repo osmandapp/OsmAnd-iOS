@@ -114,7 +114,7 @@
         }
         else
         {
-            _routeInfoLabel.attributedText = [self getFormattedDistTimeString];
+            _routeInfoLabel.attributedText = [self.class getFormattedDistTimeString];
             OAGPXTrackAnalysis *trackAnalysis = self.routingHelper.getTrackAnalysis;
             if (trackAnalysis)
             {

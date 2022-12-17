@@ -106,7 +106,7 @@
         for (const auto& p : _otherParameters)
         {
             NSString *paramId = [NSString stringWithUTF8String:p.id.c_str()];
-            NSString *title = [self getRoutingStringPropertyName:paramId defaultName:[NSString stringWithUTF8String:p.name.c_str()]];
+            NSString *title = [OAUtilities getRoutingStringPropertyName:paramId defaultName:[NSString stringWithUTF8String:p.name.c_str()]];
             if (!(p.type == RoutingParameterType::BOOLEAN))
             {
                 BOOL isMotorType = [paramId isEqualToString:@"motor_type"];
@@ -169,15 +169,6 @@
         _otherSection = tableData.count - 1;
     }
     _data = [NSArray arrayWithArray:tableData];
-}
-
-- (NSString *) getRoutingStringPropertyName:(NSString *)propertyName defaultName:(NSString *)defaultName
-{
-    NSString *key = [NSString stringWithFormat:@"routing_attr_%@_name", propertyName];
-    NSString *res = OALocalizedString(key);
-    if ([res isEqualToString:key])
-        res = defaultName;
-    return res;
 }
 
 - (NSString *) getParameterIcon:(NSString *)parameterName
@@ -337,6 +328,8 @@
 {
     [self setupView];
     [self.tableView reloadData];
+    if (self.delegate)
+        [self.delegate onSettingsChanged];
 }
 
 @end

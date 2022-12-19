@@ -9,7 +9,7 @@
 #import "OAMapSettingsLanguageScreen.h"
 #import "OAMapSettingsViewController.h"
 #import "OASettingsTableViewCell.h"
-#import "OATableViewCellSwitch.h"
+#import "OASwitchTableViewCell.h"
 #include "Localization.h"
 
 
@@ -172,11 +172,11 @@
     }
     else
     {
-        OATableViewCellSwitch *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellSwitch getCellIdentifier]];
+        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellSwitch getCellIdentifier] owner:self options:nil];
-            cell = (OATableViewCellSwitch *) nib[0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASwitchTableViewCell *) nib[0];
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
         }

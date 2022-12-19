@@ -9,7 +9,7 @@
 #import "OADonationSettingsViewController.h"
 #import "OASettingsTableViewCell.h"
 #import "OASettingsTitleTableViewCell.h"
-#import "OATableViewCellSwitch.h"
+#import "OASwitchTableViewCell.h"
 #import "OATextInputCell.h"
 #import "OAAppSettings.h"
 #import "Localization.h"
@@ -53,8 +53,8 @@
     NSArray *_data;
     BOOL _donation;
     
-    OATableViewCellSwitch *_donationSwitch;
-    OATableViewCellSwitch *_hideNameSwitch;
+    OASwitchTableViewCell *_donationSwitch;
+    OASwitchTableViewCell *_hideNameSwitch;
     OATextInputCell *_emailCell;
     OATextInputCell *_userNameCell;
     UIView *_footerView;
@@ -118,8 +118,8 @@
 
     if (_settingsType == EDonationSettingsScreenMain)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellSwitch getCellIdentifier] owner:self options:nil];
-        _donationSwitch = (OATableViewCellSwitch *) nib[0];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
+        _donationSwitch = (OASwitchTableViewCell *) nib[0];
         [_donationSwitch leftIconVisibility:NO];
         [_donationSwitch descriptionVisibility:NO];
         _donationSwitch.titleLabel.numberOfLines = 0;
@@ -127,8 +127,8 @@
         _donationSwitch.switchView.on = _donation;
         [_donationSwitch.switchView addTarget:self action:@selector(donationSwitchChanged:) forControlEvents:UIControlEventValueChanged];
 
-        nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellSwitch getCellIdentifier] owner:self options:nil];
-        _hideNameSwitch = (OATableViewCellSwitch *) nib[0];
+        nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
+        _hideNameSwitch = (OASwitchTableViewCell *) nib[0];
         [_hideNameSwitch leftIconVisibility:NO];
         [_hideNameSwitch descriptionVisibility:NO];
         _hideNameSwitch.titleLabel.numberOfLines = 0;

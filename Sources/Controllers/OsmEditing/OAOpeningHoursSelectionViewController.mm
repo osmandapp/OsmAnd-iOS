@@ -10,7 +10,7 @@
 #import "OASettingsTitleTableViewCell.h"
 #import "Localization.h"
 #import "OAEditPOIData.h"
-#import "OATableViewCellSwitch.h"
+#import "OASwitchTableViewCell.h"
 #import "OADateTimePickerTableViewCell.h"
 #import "OATimeTableViewCell.h"
 #import "OASizes.h"
@@ -145,7 +145,7 @@ static const NSInteger timeSectionIndex = 1;
     const auto rule = std::dynamic_pointer_cast<OpeningHoursParser::BasicOpeningHourRule>(_currentRule);
     [dataArr addObject:@{
                          @"title" : OALocalizedString(@"osm_around_the_clock"),
-                         @"type" : [OATableViewCellSwitch getCellIdentifier]
+                         @"type" : [OASwitchTableViewCell getCellIdentifier]
                          }];
 
     _startDate = [self dateFromMinutes:rule->getStartTime()];
@@ -305,13 +305,13 @@ static const NSInteger timeSectionIndex = 1;
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:[OATableViewCellSwitch getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OATableViewCellSwitch *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellSwitch getCellIdentifier]];
+        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellSwitch getCellIdentifier] owner:self options:nil];
-            cell = (OATableViewCellSwitch *) nib[0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASwitchTableViewCell *) nib[0];
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
         }

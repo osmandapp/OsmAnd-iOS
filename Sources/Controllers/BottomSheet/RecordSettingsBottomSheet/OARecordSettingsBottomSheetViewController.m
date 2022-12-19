@@ -10,7 +10,7 @@
 #import "OAAppSettings.h"
 #import "Localization.h"
 #import "OAColors.h"
-#import "OATableViewCellSwitch.h"
+#import "OASwitchTableViewCell.h"
 #import "OATitleSliderTableViewCell.h"
 
 #define kOABottomSheetWidth 320.
@@ -139,14 +139,14 @@
     }];
     
     [_data addObject:@{
-        @"type" : [OATableViewCellSwitch getCellIdentifier],
+        @"type" : [OASwitchTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"track_interval_remember"),
         @"value" : @(_isRememberChoise),
         @"tag" : @(kRememberMyChoiseTag)
     }];
     
     [_data addObject:@{
-        @"type" : [OATableViewCellSwitch getCellIdentifier],
+        @"type" : [OASwitchTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"map_settings_show"),
         @"value" : @(_isShowOnMap),
         @"tag" : @(kShowOnMapTag)
@@ -246,13 +246,13 @@
         }
         return cell;
     }
-    else if ([type isEqualToString:[OATableViewCellSwitch getCellIdentifier]])
+    else if ([type isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OATableViewCellSwitch *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellSwitch getCellIdentifier]];
+        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellSwitch getCellIdentifier] owner:self options:nil];
-            cell = (OATableViewCellSwitch *) nib[0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASwitchTableViewCell *) nib[0];
             cell.backgroundColor = [UIColor clearColor];
             cell.switchView.tintColor = UIColorFromRGB(color_bottom_sheet_secondary);
             [cell leftIconVisibility:NO];

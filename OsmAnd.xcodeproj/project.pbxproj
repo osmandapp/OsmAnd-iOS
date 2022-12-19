@@ -683,8 +683,8 @@
 		46E9AD8E28DC85A700CC55F9 /* OARightIconTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46E9AD8D28DC85A700CC55F9 /* OARightIconTableViewCell.xib */; };
 		46E9AD9128DC869300CC55F9 /* OARightIconTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 46E9AD9028DC869300CC55F9 /* OARightIconTableViewCell.m */; };
 		46E9AD9228DC894600CC55F9 /* OASimpleTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 46E9AD8C28DC7F8700CC55F9 /* OASimpleTableViewCell.m */; };
-		46E9AD9428DC89DD00CC55F9 /* OATableViewCellSwitch.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46E9AD9328DC89DD00CC55F9 /* OATableViewCellSwitch.xib */; };
-		46E9AD9728DC8B1200CC55F9 /* OATableViewCellSwitch.m in Sources */ = {isa = PBXBuildFile; fileRef = 46E9AD9628DC8B1200CC55F9 /* OATableViewCellSwitch.m */; };
+		46E9AD9428DC89DD00CC55F9 /* OASwitchTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46E9AD9328DC89DD00CC55F9 /* OASwitchTableViewCell.xib */; };
+		46E9AD9728DC8B1200CC55F9 /* OASwitchTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 46E9AD9628DC8B1200CC55F9 /* OASwitchTableViewCell.m */; };
 		46E9AD9928DC8E8C00CC55F9 /* OAValueTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46E9AD9828DC8E8C00CC55F9 /* OAValueTableViewCell.xib */; };
 		46E9AD9C28DC8F4C00CC55F9 /* OAValueTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 46E9AD9B28DC8F4C00CC55F9 /* OAValueTableViewCell.m */; };
 		46E9AD9E28DC9EDF00CC55F9 /* OAButtonTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46E9AD9D28DC9EDF00CC55F9 /* OAButtonTableViewCell.xib */; };
@@ -4067,9 +4067,9 @@
 		46E9AD8D28DC85A700CC55F9 /* OARightIconTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OARightIconTableViewCell.xib; sourceTree = "<group>"; };
 		46E9AD8F28DC860B00CC55F9 /* OARightIconTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OARightIconTableViewCell.h; sourceTree = "<group>"; };
 		46E9AD9028DC869300CC55F9 /* OARightIconTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OARightIconTableViewCell.m; sourceTree = "<group>"; };
-		46E9AD9328DC89DD00CC55F9 /* OATableViewCellSwitch.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OATableViewCellSwitch.xib; sourceTree = "<group>"; };
-		46E9AD9528DC8AF800CC55F9 /* OATableViewCellSwitch.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATableViewCellSwitch.h; sourceTree = "<group>"; };
-		46E9AD9628DC8B1200CC55F9 /* OATableViewCellSwitch.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OATableViewCellSwitch.m; sourceTree = "<group>"; };
+		46E9AD9328DC89DD00CC55F9 /* OASwitchTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OASwitchTableViewCell.xib; sourceTree = "<group>"; };
+		46E9AD9528DC8AF800CC55F9 /* OASwitchTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OASwitchTableViewCell.h; sourceTree = "<group>"; };
+		46E9AD9628DC8B1200CC55F9 /* OASwitchTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OASwitchTableViewCell.m; sourceTree = "<group>"; };
 		46E9AD9828DC8E8C00CC55F9 /* OAValueTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAValueTableViewCell.xib; sourceTree = "<group>"; };
 		46E9AD9A28DC8F1000CC55F9 /* OAValueTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAValueTableViewCell.h; sourceTree = "<group>"; };
 		46E9AD9B28DC8F4C00CC55F9 /* OAValueTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAValueTableViewCell.m; sourceTree = "<group>"; };
@@ -11552,8 +11552,8 @@
 				46E9AD8C28DC7F8700CC55F9 /* OASimpleTableViewCell.m */,
 				46E9AD8F28DC860B00CC55F9 /* OARightIconTableViewCell.h */,
 				46E9AD9028DC869300CC55F9 /* OARightIconTableViewCell.m */,
-				46E9AD9528DC8AF800CC55F9 /* OATableViewCellSwitch.h */,
-				46E9AD9628DC8B1200CC55F9 /* OATableViewCellSwitch.m */,
+				46E9AD9528DC8AF800CC55F9 /* OASwitchTableViewCell.h */,
+				46E9AD9628DC8B1200CC55F9 /* OASwitchTableViewCell.m */,
 				46E9AD9A28DC8F1000CC55F9 /* OAValueTableViewCell.h */,
 				46E9AD9B28DC8F4C00CC55F9 /* OAValueTableViewCell.m */,
 				46E9AD9F28DC9F8300CC55F9 /* OAButtonTableViewCell.h */,
@@ -11709,7 +11709,7 @@
 				46C78C0928BD16A30019FF69 /* OAStorageStateValuesCell.xib */,
 				46C7647628DC7BAA002DB43E /* OASimpleTableViewCell.xib */,
 				46E9AD8D28DC85A700CC55F9 /* OARightIconTableViewCell.xib */,
-				46E9AD9328DC89DD00CC55F9 /* OATableViewCellSwitch.xib */,
+				46E9AD9328DC89DD00CC55F9 /* OASwitchTableViewCell.xib */,
 				46E9AD9828DC8E8C00CC55F9 /* OAValueTableViewCell.xib */,
 				46E9AD9D28DC9EDF00CC55F9 /* OAButtonTableViewCell.xib */,
 			);
@@ -13767,7 +13767,7 @@
 				DA5A83A326C563A800F274C7 /* OAPoiTypeSelectionViewController.xib in Resources */,
 				DAC849B626CF97EE00018091 /* OADownloadMapWidget.xib in Resources */,
 				3296B48727F8790800108AF7 /* widget_weather_umbrella_night@2x.png in Resources */,
-				46E9AD9428DC89DD00CC55F9 /* OATableViewCellSwitch.xib in Resources */,
+				46E9AD9428DC89DD00CC55F9 /* OASwitchTableViewCell.xib in Resources */,
 				8AFC2C0D24334A4E0095BA9F /* map_location_default_top@3x.png in Resources */,
 				B24745B327F7465D00C18C3F /* ic_custom_clouds@2x.png in Resources */,
 				DA5A82D926C563A800F274C7 /* OATextViewTableViewCell.xib in Resources */,
@@ -16824,7 +16824,7 @@
 				B0D617D463DFB9B852379893 /* OATrackMenuTabOverview.mm in Sources */,
 				B0D6143C1114AC3D58A2F898 /* OATrackMenuTabPoints.mm in Sources */,
 				B0D610DBE05EACD61CFE6859 /* OATrackMenuTabSegments.mm in Sources */,
-				46E9AD9728DC8B1200CC55F9 /* OATableViewCellSwitch.m in Sources */,
+				46E9AD9728DC8B1200CC55F9 /* OASwitchTableViewCell.m in Sources */,
 				B0D61E373B1DC253E7C0BB0C /* OAFoldersCollectionView.mm in Sources */,
 				CA4EDC45F03787B5F481123A /* OASlider.mm in Sources */,
 				CA4EDE42CED78CB3617A9FFB /* OACollectionViewFlowLayout.m in Sources */,

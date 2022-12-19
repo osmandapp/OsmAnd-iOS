@@ -8,7 +8,7 @@
 
 #import "OAParkingViewController.h"
 #import "Localization.h"
-#import "OATableViewCellSwitch.h"
+#import "OASwitchTableViewCell.h"
 #import "OADateTimePickerTableViewCell.h"
 #import "OATimeTableViewCell.h"
 #import "OAMapViewController.h"
@@ -259,11 +259,11 @@
     {
         case 0:
         {
-            OATableViewCellSwitch *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellSwitch getCellIdentifier]];
+            OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellSwitch getCellIdentifier] owner:self options:nil];
-                cell = (OATableViewCellSwitch *) nib[0];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
+                cell = (OASwitchTableViewCell *) nib[0];
                 [cell leftIconVisibility:NO];
                 [cell descriptionVisibility:NO];
             }
@@ -310,11 +310,11 @@
         }
         case 3:
         {
-            OATableViewCellSwitch *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellSwitch getCellIdentifier]];
+            OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellSwitch getCellIdentifier] owner:self options:nil];
-                cell = (OATableViewCellSwitch *) nib[0];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
+                cell = (OASwitchTableViewCell *) nib[0];
                 [cell leftIconVisibility:NO];
                 [cell descriptionVisibility:NO];
             }

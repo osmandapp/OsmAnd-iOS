@@ -7,7 +7,7 @@
 //
 
 #import "OARepeatNavigationInstructionsViewController.h"
-#import "OATableViewCellSwitch.h"
+#import "OASwitchTableViewCell.h"
 #import "OATimeTableViewCell.h"
 #import "OACustomPickerTableViewCell.h"
 #import "OAAppSettings.h"
@@ -79,7 +79,7 @@
     NSMutableArray *distanceArr = [NSMutableArray array];
     BOOL isManualAnnunce = [_settings.keepInforming get:self.appMode] == 0;
     [statusArr addObject:@{
-        @"type" : [OATableViewCellSwitch getCellIdentifier],
+        @"type" : [OASwitchTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"only_manually"),
         @"isOn" : @(isManualAnnunce),
     }];
@@ -104,14 +104,14 @@
 - (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:[OATableViewCellSwitch getCellIdentifier]])
+    if ([cellType isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
 
-        OATableViewCellSwitch *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellSwitch getCellIdentifier]];
+        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellSwitch getCellIdentifier] owner:self options:nil];
-            cell = (OATableViewCellSwitch *) nib[0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASwitchTableViewCell *) nib[0];
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
         }

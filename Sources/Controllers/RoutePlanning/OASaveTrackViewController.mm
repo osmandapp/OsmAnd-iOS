@@ -11,7 +11,7 @@
 #import "Localization.h"
 #import "OAColors.h"
 #import "OATextViewResizingCell.h"
-#import "OATableViewCellSwitch.h"
+#import "OASwitchTableViewCell.h"
 #import "OASaveTrackBottomSheetViewController.h"
 #import "OAMapLayers.h"
 #import "OAMapRendererView.h"
@@ -181,7 +181,7 @@
     {
         [data addObject:@[
             @{
-                @"type" : [OATableViewCellSwitch getCellIdentifier],
+                @"type" : [OASwitchTableViewCell getCellIdentifier],
                 @"title" : OALocalizedString(@"simplified_track"),
                 @"key" : @"simplified_track",
                 @"footer" : OALocalizedString(@"simplified_track_description")
@@ -191,7 +191,7 @@
     
     [data addObject:@[
         @{
-            @"type" : [OATableViewCellSwitch getCellIdentifier],
+            @"type" : [OASwitchTableViewCell getCellIdentifier],
             @"title" : OALocalizedString(@"map_settings_show"),
             @"key" : @"map_settings_show"
         }
@@ -301,13 +301,13 @@
         
         return cell;
     }
-    else if ([cellType isEqualToString:[OATableViewCellSwitch getCellIdentifier]])
+    else if ([cellType isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OATableViewCellSwitch *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellSwitch getCellIdentifier]];
+        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellSwitch getCellIdentifier] owner:self options:nil];
-            cell = (OATableViewCellSwitch *) nib[0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASwitchTableViewCell *) nib[0];
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
         }

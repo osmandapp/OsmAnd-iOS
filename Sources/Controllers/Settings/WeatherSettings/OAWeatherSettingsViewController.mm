@@ -10,7 +10,7 @@
 #import "OAWeatherBandSettingsViewController.h"
 #import "OAWeatherCacheSettingsViewController.h"
 #import "OAValueTableViewCell.h"
-#import "OATableViewCellSwitch.h"
+#import "OASwitchTableViewCell.h"
 #import "OsmAndApp.h"
 #import "Localization.h"
 #import "OAColors.h"
@@ -113,7 +113,7 @@
             @"key": @"offline_forecast_only",
             @"title": OALocalizedString(@"weather_offline_forecast_only"),
             @"selected": @([OsmAndApp instance].data.weatherUseOfflineData),
-            @"type": [OATableViewCellSwitch getCellIdentifier]
+            @"type": [OASwitchTableViewCell getCellIdentifier]
     }];
     [data addObject:@{
             @"cells": forecastData,
@@ -235,13 +235,13 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:[OATableViewCellSwitch getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OATableViewCellSwitch *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellSwitch getCellIdentifier]];
+        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (!cell)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellSwitch getCellIdentifier] owner:self options:nil];
-            cell = (OATableViewCellSwitch *) nib[0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASwitchTableViewCell *) nib[0];
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
         }

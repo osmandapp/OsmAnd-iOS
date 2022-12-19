@@ -9,7 +9,7 @@
 #import "OAGlobalSettingsViewController.h"
 #import "OAAppSettings.h"
 #import "OASettingsTableViewCell.h"
-#import "OATableViewCellSwitch.h"
+#import "OASwitchTableViewCell.h"
 #import "OAMultiIconTextDescCell.h"
 #import "OATableViewCustomHeaderView.h"
 #import "Localization.h"
@@ -128,7 +128,7 @@
                     @"title" : OALocalizedString(@"send_anonymous_data"),
                     @"description" : OALocalizedString(@"send_anonymous_data_desc"),
                     @"value" : @(_settings.sendAnonymousAppUsageData.get),
-                    @"type" : [OATableViewCellSwitch getCellIdentifier], }
+                    @"type" : [OASwitchTableViewCell getCellIdentifier], }
             ];
             break;
         }
@@ -140,7 +140,7 @@
                 @"name" : @"last_used",
                 @"title" : OALocalizedString(@"last_used"),
                 @"value" : @(_isUsingLastAppMode),
-                @"type" : [OATableViewCellSwitch getCellIdentifier] }];
+                @"type" : [OASwitchTableViewCell getCellIdentifier] }];
             
             if (!_isUsingLastAppMode)
             {
@@ -165,7 +165,7 @@
                 @"name" : @"carplay_mode_is_default_string",
                 @"title" : OALocalizedString(@"settings_preset"),
                 @"value" : @(_isDefaultProfile),
-                @"type" : [OATableViewCellSwitch getCellIdentifier] }];
+                @"type" : [OASwitchTableViewCell getCellIdentifier] }];
             
             if (!_isDefaultProfile)
             {
@@ -193,13 +193,13 @@
                     @"title" : OALocalizedString(@"do_not_show_discount"),
                     @"description" : OALocalizedString(@"do_not_show_discount_desc"),
                     @"value" : @(_settings.settingDoNotShowPromotions.get),
-                    @"type" : [OATableViewCellSwitch getCellIdentifier]
+                    @"type" : [OASwitchTableViewCell getCellIdentifier]
                 },
                 @{
                     @"name" : @"download_map_dialog",
                     @"title" : OALocalizedString(@"download_map_dialog"),
                     @"value" : @(_settings.showDownloadMapDialog.get),
-                    @"type" : [OATableViewCellSwitch getCellIdentifier]
+                    @"type" : [OASwitchTableViewCell getCellIdentifier]
                 }
             ];
         }
@@ -256,13 +256,13 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:[OATableViewCellSwitch getCellIdentifier]])
+    else if ([cellType isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OATableViewCellSwitch *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellSwitch getCellIdentifier]];
+        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellSwitch getCellIdentifier] owner:self options:nil];
-            cell = (OATableViewCellSwitch *) nib[0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASwitchTableViewCell *) nib[0];
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
         }

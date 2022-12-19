@@ -12,7 +12,7 @@
 #import "OAMapViewController.h"
 #import "OARootViewController.h"
 #import "OAValueTableViewCell.h"
-#import "OATableViewCellSwitch.h"
+#import "OASwitchTableViewCell.h"
 #import "OAMapStyleSettings.h"
 #import "OATableDataModel.h"
 #import "OATableSectionData.h"
@@ -65,7 +65,7 @@
     _data = [[OATableDataModel alloc] init];
     OATableSectionData *switchSection = [OATableSectionData sectionData];
     [switchSection addRowFromDictionary:@{
-        kCellTypeKey: [OATableViewCellSwitch getCellIdentifier],
+        kCellTypeKey: [OASwitchTableViewCell getCellIdentifier],
         kCellTitle: OALocalizedString(@"nautical_depth"),
         kCellIconNameKey: @"ic_custom_nautical_depth_colored_day",
         kCellIconTint: @(color_primary_purple),
@@ -110,13 +110,13 @@
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OATableRowData *item = [_data itemForIndexPath:indexPath];
-    if ([item.cellType isEqualToString:[OATableViewCellSwitch getCellIdentifier]])
+    if ([item.cellType isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OATableViewCellSwitch *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellSwitch getCellIdentifier]];
+        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellSwitch getCellIdentifier] owner:self options:nil];
-            cell = (OATableViewCellSwitch *) nib[0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASwitchTableViewCell *) nib[0];
             [cell descriptionVisibility:NO];
         }
         if (cell)

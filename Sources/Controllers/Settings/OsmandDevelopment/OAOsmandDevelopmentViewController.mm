@@ -13,7 +13,7 @@
 #import "OAColors.h"
 #import "OALocationSimulation.h"
 #import "OAIconTitleValueCell.h"
-#import "OATableViewCellSwitch.h"
+#import "OASwitchTableViewCell.h"
 #import "OATableRowData.h"
 #import "OATableDataModel.h"
 #import "OATableSectionData.h"
@@ -91,7 +91,7 @@ NSString *const kSimulateLocationKey = @"kSimulateLocationKey";
     
     OATableSectionData *heightMapSection = [OATableSectionData sectionData];
     [heightMapSection addRowFromDictionary:@{
-        kCellTypeKey : OATableViewCellSwitch.getCellIdentifier,
+        kCellTypeKey : OASwitchTableViewCell.getCellIdentifier,
         kCellKeyKey : @"display_heightmap",
         kCellTitleKey : OALocalizedString(@"use_heightmap_setting")
     }];
@@ -157,13 +157,13 @@ NSString *const kSimulateLocationKey = @"kSimulateLocationKey";
         }
         return cell;
     }
-    else if ([type isEqualToString:[OATableViewCellSwitch getCellIdentifier]])
+    else if ([type isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OATableViewCellSwitch *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellSwitch getCellIdentifier]];
+        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellSwitch getCellIdentifier] owner:self options:nil];
-            cell = (OATableViewCellSwitch *) nib[0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASwitchTableViewCell *) nib[0];
             cell.switchView.tintColor = UIColorFromRGB(color_bottom_sheet_secondary);
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];

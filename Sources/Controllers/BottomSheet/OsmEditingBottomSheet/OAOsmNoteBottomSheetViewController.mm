@@ -11,7 +11,7 @@
 #import "Localization.h"
 #import "OATextInputFloatingCell.h"
 #import "OABottomSheetHeaderCell.h"
-#import "OATableViewCellSwitch.h"
+#import "OASwitchTableViewCell.h"
 #import "OAPasswordInputFieldCell.h"
 #import "OADividerCell.h"
 #import "OAUtilities.h"
@@ -129,7 +129,7 @@
         if (_screenType == TYPE_CREATE)
         {
             [arr addObject:@{
-                             @"type" : [OATableViewCellSwitch getCellIdentifier],
+                             @"type" : [OASwitchTableViewCell getCellIdentifier],
                              @"name" : @"upload_immediately",
                              @"title" : OALocalizedString(@"osm_note_upload_immediately"),
                              @"value" : @(_uploadImmediately)
@@ -142,7 +142,7 @@
         [arr addObject:@{ @"type" : [OADividerCell getCellIdentifier] } ];
         
         [arr addObject:@{
-                         @"type" : [OATableViewCellSwitch getCellIdentifier],
+                         @"type" : [OASwitchTableViewCell getCellIdentifier],
                          @"name" : @"upload_anonymously",
                          @"title" : OALocalizedString(@"osm_note_upload_anonymously"),
                          @"value" : @(_uploadAnonymously)
@@ -252,7 +252,7 @@
     {
         return MAX(((OATextInputFloatingCell *)_data[indexPath.row][@"cell"]).inputField.intrinsicContentSize.height, 60.0);
     }
-    else if ([item[@"type"] isEqualToString:[OATableViewCellSwitch getCellIdentifier]] || [item[@"type"] isEqualToString:[OABottomSheetHeaderCell getCellIdentifier]] || [item[@"type"] isEqualToString:[OADescrTitleCell getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]] || [item[@"type"] isEqualToString:[OABottomSheetHeaderCell getCellIdentifier]] || [item[@"type"] isEqualToString:[OADescrTitleCell getCellIdentifier]])
     {
         return UITableViewAutomaticDimension;
     }
@@ -310,13 +310,13 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:[OATableViewCellSwitch getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OATableViewCellSwitch *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellSwitch getCellIdentifier]];
+        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellSwitch getCellIdentifier] owner:self options:nil];
-            cell = (OATableViewCellSwitch *) nib[0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASwitchTableViewCell *) nib[0];
             cell.backgroundColor = [UIColor clearColor];
             cell.switchView.tintColor = UIColorFromRGB(color_bottom_sheet_secondary);
             [cell leftIconVisibility:NO];

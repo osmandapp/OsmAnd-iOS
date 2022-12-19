@@ -11,7 +11,7 @@
 #import "OAMapViewController.h"
 #import "OARootViewController.h"
 #import "OATableViewCustomFooterView.h"
-#import "OATableViewCellSwitch.h"
+#import "OASwitchTableViewCell.h"
 #import "OARightIconTableViewCell.h"
 #import "Localization.h"
 #import "OAColors.h"
@@ -92,7 +92,7 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
 {
     NSMutableArray *dataArr = [NSMutableArray new];
     
-    [dataArr addObject:@[@{@"type": [OATableViewCellSwitch getCellIdentifier]}]];
+    [dataArr addObject:@[@{@"type": [OASwitchTableViewCell getCellIdentifier]}]];
     
     NSMutableArray *valuesArr = [NSMutableArray new];
     if (_routesSettingType == ERoutesSettingCycle)
@@ -214,13 +214,13 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:[OATableViewCellSwitch getCellIdentifier]])
+    if ([item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OATableViewCellSwitch *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellSwitch getCellIdentifier]];
+        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (!cell)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellSwitch getCellIdentifier] owner:self options:nil];
-            cell = (OATableViewCellSwitch *) nib[0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASwitchTableViewCell *) nib[0];
             [cell descriptionVisibility:NO];
         }
         if (cell)

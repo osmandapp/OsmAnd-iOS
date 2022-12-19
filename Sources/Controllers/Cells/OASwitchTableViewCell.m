@@ -1,14 +1,14 @@
 //
-//  OATableViewCellSwitch.m
+//  OASwitchTableViewCell.m
 //  OsmAnd Maps
 //
 //  Created by Skalii on 22.09.2022.
 //  Copyright © 2022 OsmAnd. All rights reserved.
 //
 
-#import "OATableViewCellSwitch.h"
+#import "OASwitchTableViewCell.h"
 
-@interface OATableViewCellSwitch ()
+@interface OASwitchTableViewCell ()
 
 @property (weak, nonatomic) IBOutlet UIStackView *rightContentStackView;
 
@@ -16,7 +16,7 @@
 
 @end
 
-@implementation OATableViewCellSwitch
+@implementation OASwitchTableViewCell
 
 - (void)dividerVisibility:(BOOL)show
 {

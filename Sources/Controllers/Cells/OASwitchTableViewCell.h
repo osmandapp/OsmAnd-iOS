@@ -1,5 +1,5 @@
 //
-//  OATableViewCellSwitch.h
+//  OASwitchTableViewCell.h
 //  OsmAnd
 //
 //  Created by Skalii on 22.09.2022.
@@ -8,7 +8,7 @@
 
 #import "OASimpleTableViewCell.h"
 
-@interface OATableViewCellSwitch : OASimpleTableViewCell
+@interface OASwitchTableViewCell : OASimpleTableViewCell
 
 @property (weak, nonatomic) IBOutlet UIView *dividerView;
 @property (weak, nonatomic) IBOutlet UISwitch *switchView;

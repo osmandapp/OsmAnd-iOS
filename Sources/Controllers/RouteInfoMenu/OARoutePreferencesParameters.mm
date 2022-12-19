@@ -21,7 +21,7 @@
 #import "OsmAndApp.h"
 #import "OAIconTitleValueCell.h"
 #import "OASettingSwitchCell.h"
-#import "OATableViewCellSwitch.h"
+#import "OASwitchTableViewCell.h"
 
 @implementation OALocalRoutingParameter
 {
@@ -142,7 +142,7 @@
 
 - (NSString *) getCellType
 {
-    return [OATableViewCellSwitch getCellIdentifier];
+    return [OASwitchTableViewCell getCellIdentifier];
 }
 
 - (void) setControlAction:(UIControl *)control
@@ -572,7 +572,7 @@
 
 - (NSString *) getCellType
 {
-    return [OATableViewCellSwitch getCellIdentifier];
+    return [OASwitchTableViewCell getCellIdentifier];
 }
 
 - (void) setControlAction:(UIControl *)control

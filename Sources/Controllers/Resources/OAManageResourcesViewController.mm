@@ -2245,34 +2245,6 @@ static BOOL _repositoryUpdated = NO;
                 
                 cellTypeId = subregionCell;
                 title = item.name;
-                if (item.superregion != nil && item.superregion != _app.worldRegion)
-                {
-                    if (item.resourceTypes.count > 0)
-                    {
-                        NSMutableOrderedSet<NSNumber *> *typesSet = [NSMutableOrderedSet orderedSetWithArray:item.resourceTypes];
-                        [typesSet removeObject:@((int) OsmAndResourceType::HeightmapRegion)];
-                        NSArray<NSNumber *> *sortedTypesWithoutDuplicate = [[typesSet array] sortedArrayUsingComparator:^NSComparisonResult(NSNumber *type1, NSNumber *type2) {
-                            NSInteger orderValue1 = [OAResourceType getOrderIndex:type1];
-                            NSInteger orderValue2 = [OAResourceType getOrderIndex:type2];
-                            if (orderValue1 < orderValue2)
-                                return NSOrderedAscending;
-                            else if (orderValue1 > orderValue2)
-                                return NSOrderedDescending;
-                            else
-                                return NSOrderedSame;
-                        }];
-
-                        NSMutableArray<NSString *> *typesLocalized = [NSMutableArray new];
-                        [sortedTypesWithoutDuplicate enumerateObjectsUsingBlock:^(NSNumber *type, NSUInteger idx, BOOL *stop) {
-                            [typesLocalized addObject:[OAResourceType resourceTypeLocalized:[OAResourceType toResourceType:type isGroup:NO]]];
-                        }];
-                        subtitle = [typesLocalized componentsJoinedByString:@", "];
-                    }
-                    else
-                    {
-                        subtitle = item.superregion.name;
-                    }
-                }
             }
             else
             {

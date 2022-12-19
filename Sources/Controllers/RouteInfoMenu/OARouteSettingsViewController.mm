@@ -169,7 +169,10 @@
             cell.titleLabel.text = text;
             cell.leftIconView.image = [param.getIcon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             cell.leftIconView.tintColor = [param isChecked] ? UIColorFromRGB([appMode getIconColor]) : UIColorFromRGB(color_icon_inactive);
-            [cell dividerVisibility:[param hasOptions]];
+
+            BOOL showDivider = [param hasOptions];
+            [cell dividerVisibility:showDivider];
+            cell.selectionStyle = showDivider ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
         }
         return cell;
     }

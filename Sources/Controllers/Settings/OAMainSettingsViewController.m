@@ -308,6 +308,7 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASwitchTableViewCell *) nib[0];
+            cell.selectionStyle = UITableViewCellSelectionStyleDefault;
         }
         OAApplicationMode *am = item[@"app_mode"];
         BOOL isEnabled = [OAApplicationMode.values containsObject:am];

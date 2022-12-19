@@ -399,7 +399,9 @@
     NSString *desc = data[@"description"];
     cell.descriptionLabel.text = desc;
     [cell descriptionVisibility:desc && desc.length > 0];
-    [cell dividerVisibility:data[@"showDivider"]];
+    BOOL showDivider = [data[@"showDivider"] boolValue];
+    [cell dividerVisibility:showDivider];
+    cell.selectionStyle = showDivider ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
 }
 
 #pragma mark - UITableViewDelegate

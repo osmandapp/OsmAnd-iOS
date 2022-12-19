@@ -6,10 +6,6 @@
 //  Copyright (c) 2014 OsmAnd. All rights reserved.
 //
 
-#ifndef STR_PROP
-    #define STR_PROP(prop) NSStringFromSelector(@selector(prop))
-#endif
-
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 

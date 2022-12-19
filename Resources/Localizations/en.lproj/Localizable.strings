@@ -1708,7 +1708,7 @@
 "units_sec_short" = "s";
 "units_seconds" = "seconds";
 
-"kg" = "kg";
+"units_kg" = "kg";
 
 // Help
 "help_first_steps" = "First steps";
@@ -2642,7 +2642,7 @@
 "transport_hazmat_yes_desc" = "You need to choose proper category.";
 "transport_hazmat_no_desc" = "On some roads and tunnels transporting of hazardous materials is forbidden.";
 "routing_attr_motor_type_name" = "Fuel used by motor";
-"routing_attr_motor_type_description" = "Select fuel type used by your vehicle motor, to calculate CO2 emission.";
+"routing_attr_motor_type_description" = "Select the fuel type of your vehicle to calculate CO2 emission.";
 "routing_attr_motor_type_diesel_name" = "Diesel";
 "routing_attr_motor_type_petrol_name" = "Petrol";
 "routing_attr_motor_type_lpg_name" = "LPG";

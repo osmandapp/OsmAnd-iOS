@@ -11,10 +11,10 @@
 #import "OsmAndApp.h"
 #import "OAIconTitleValueCell.h"
 #import "OASettingsTableViewCell.h"
-#import "OASettingSwitchCell.h"
+#import "OASwitchTableViewCell.h"
 #import "OAProfileGeneralSettingsParametersViewController.h"
 #import "OACoordinatesFormatViewController.h"
-
+#import "OASizes.h"
 #import "Localization.h"
 #import "OAColors.h"
 
@@ -222,7 +222,7 @@
     }];
     [appearanceArr addObject:@{
         @"name" : @"allow_3d",
-        @"type" : [OASettingSwitchCell getCellIdentifier],
+        @"type" : [OASwitchTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"allow_3D_view"),
         @"isOn" : allow3DValue,
         @"icon" : @"ic_custom_2_5d_view",
@@ -313,24 +313,25 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:[OASettingSwitchCell getCellIdentifier]])
+    else if ([cellType isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
+        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
-            cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
-            cell.descriptionView.hidden = YES;
-            cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.imgView.tintColor = UIColorFromRGB(color_icon_inactive);
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASwitchTableViewCell *) nib[0];
+            [cell descriptionVisibility:NO];
+            cell.separatorInset = UIEdgeInsetsMake(0., kPaddingToLeftOfContentWithIcon, 0., 0.);
+            cell.leftIconView.tintColor = UIColorFromRGB(color_icon_inactive);
         }
         if (cell)
         {
-            cell.textView.text = item[@"title"];
+            cell.textLabel.text = item[@"title"];
+
+            cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
+            cell.leftIconView.tintColor = [item[@"isOn"] boolValue] ? UIColorFromRGB(self.appMode.getIconColor) : UIColorFromRGB(color_icon_inactive);
+
             cell.switchView.on = [item[@"isOn"] boolValue];
-            cell.imgView.image = [UIImage templateImageNamed:item[@"icon"]];
-            cell.imgView.tintColor = [item[@"isOn"] boolValue] ? UIColorFromRGB(self.appMode.getIconColor) : UIColorFromRGB(color_icon_inactive);
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];

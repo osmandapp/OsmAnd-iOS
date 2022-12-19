@@ -20,7 +20,7 @@
 #import "OAWeatherBandSettingsViewController.h"
 #import "OAMapLayers.h"
 
-#import "OASettingSwitchCell.h"
+#import "OASwitchTableViewCell.h"
 #import "OATextLineViewCell.h"
 #import "OATitleSliderTableViewCell.h"
 #import "OADividerCell.h"
@@ -183,7 +183,7 @@
     
     NSString * layerTitle = _weatherBand ? _weatherBand.getMeasurementName : OALocalizedString(@"map_settings_weather_contours");
     [layerRowData addObject:@{
-        @"cellId" : OASettingSwitchCell.getCellIdentifier,
+        @"cellId" : OASwitchTableViewCell.getCellIdentifier,
         @"type" : kSwitchCell,
         @"title" : layerTitle,
         @"image" : _weatherBand ? _weatherBand.getIcon : @"ic_custom_contour_lines"
@@ -587,24 +587,23 @@
 {
     NSDictionary *item = _data[indexPath.section][@"rows"][indexPath.row];
     NSString *cellId = item[@"cellId"];
-    if ([cellId isEqualToString:OASettingSwitchCell.getCellIdentifier])
+    if ([cellId isEqualToString:OASwitchTableViewCell.getCellIdentifier])
     {
-        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
+        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (!cell)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
-            cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.descriptionView.hidden = YES;
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASwitchTableViewCell *) nib[0];
+            [cell descriptionVisibility:NO];
             cell.separatorInset = UIEdgeInsetsMake(0., 0., 0., 0.);
             cell.backgroundColor = UIColor.clearColor;
         }
         if (cell)
         {
-            cell.textView.text = item[@"title"];
-            cell.imgView.image = [UIImage templateImageNamed:item[@"image"]];
-            cell.imgView.tintColor = _layerEnabled ? UIColorFromRGB(color_dialog_buttons_dark) : UIColorFromRGB(color_tint_gray);
-            
+            cell.titleLabel.text = item[@"title"];
+            cell.leftIconView.image = [UIImage templateImageNamed:item[@"image"]];
+            cell.leftIconView.tintColor = _layerEnabled ? UIColorFromRGB(color_dialog_buttons_dark) : UIColorFromRGB(color_tint_gray);
+
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.switchView setOn:_layerEnabled];
             [cell.switchView addTarget:self action:@selector(onSwitchValueChanged:) forControlEvents:UIControlEventValueChanged];

@@ -15,10 +15,11 @@
 #import "OAResourcesUIHelper.h"
 #import "OAIAPHelper.h"
 #import "OAAutoObserverProxy.h"
-#import "OAIconTextDescSwitchCell.h"
+#import "OASwitchTableViewCell.h"
 #import "OADownloadMultipleResourceViewController.h"
 #import "OAPluginPopupViewController.h"
 #import "OARootViewController.h"
+#import "OASizes.h"
 
 #define kSidePadding 20.0
 #define kTopPadding 6
@@ -168,7 +169,7 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
         [OAApplicationMode changeProfileAvailability:mode isSelected:YES];
         [addedAppModesSection addObject: @{
             @"sectionType" : [NSNumber numberWithInt:EOAPluginSectionTypeSuggestedProfiles],
-            @"type" : [OAIconTextDescSwitchCell getCellIdentifier],
+            @"type" : [OASwitchTableViewCell getCellIdentifier],
             @"mode" : mode
         }];
     }
@@ -415,23 +416,22 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
         return cell;
     }
     
-    else if ([item[@"type"] isEqualToString:[OAIconTextDescSwitchCell getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OAIconTextDescSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTextDescSwitchCell getCellIdentifier]];
+        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextDescSwitchCell getCellIdentifier] owner:self options:nil];
-            cell = (OAIconTextDescSwitchCell *)[nib objectAtIndex:0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASwitchTableViewCell *) nib[0];
         }
         OAApplicationMode *am = item[@"mode"];
         BOOL isEnabled = [OAApplicationMode.values containsObject:am];
-        cell.separatorInset = UIEdgeInsetsMake(0.0, indexPath.row < OAApplicationMode.allPossibleValues.count - 1 ? 62.0 : 0.0, 0.0, 0.0);
+        cell.separatorInset = UIEdgeInsetsMake(0.0, indexPath.row < OAApplicationMode.allPossibleValues.count - 1 ? kPaddingToLeftOfContentWithIcon : 0.0, 0.0, 0.0);
         UIImage *img = am.getIcon;
         cell.leftIconView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.leftIconView.tintColor = isEnabled ? UIColorFromRGB(am.getIconColor) : UIColorFromRGB(color_tint_gray);
         cell.titleLabel.text = am.toHumanString;
-        cell.descLabel.text = [self getProfileDescription:am];
+        cell.descriptionLabel.text = [self getProfileDescription:am];
         cell.switchView.tag = indexPath.row;
         BOOL isDefault = am == OAApplicationMode.DEFAULT;
         [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
@@ -440,8 +440,8 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
             [cell.switchView setOn:isEnabled];
             [cell.switchView addTarget:self action:@selector(onAppModeSwitchChanged:) forControlEvents:UIControlEventValueChanged];
         }
-        cell.switchView.hidden = isDefault;
-        cell.dividerView.hidden = isDefault;
+        [cell switchVisibility:!isDefault];
+        [cell dividerVisibility:!isDefault];
         return cell;
     }
      

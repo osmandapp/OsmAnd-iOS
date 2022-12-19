@@ -13,6 +13,7 @@
 #import "OANativeUtilities.h"
 #import "OAMapViewTrackingUtilities.h"
 #import "OACarPlayDashboardInterfaceController.h"
+#import "OAAlarmWidget.h"
 
 #define kViewportXNonShifted 1.0
 
@@ -35,6 +36,8 @@
     CGFloat _cachedHeightOffset;
     
     BOOL _isInNavigationMode;
+    
+    OAAlarmWidget *_alarmWidget;
 }
 
 - (instancetype) initWithCarPlayWindow:(CPWindow *)window mapViewController:(OAMapViewController *)mapVC
@@ -51,6 +54,7 @@
 {
     [super viewDidAppear:animated];
     [self attachMapToWindow];
+    [self setupAlarmWidget];
     [self.delegate onMapViewAttached];
 }
 
@@ -60,7 +64,7 @@
     
     UIEdgeInsets insets = _window.safeAreaInsets;
     
-    BOOL leftSide = insets.right > insets.left;
+    BOOL leftSide = [self isLeftSideDriving];
     
     CGFloat w = self.view.frame.size.width;
     CGFloat h = self.view.frame.size.height;
@@ -78,6 +82,26 @@
         _cachedViewportX = _mapVc.mapView.viewportXScale;
         _cachedViewportY = _mapVc.mapView.viewportYScale;
     }
+    [self setupAlarmPosition];
+}
+
+- (void)setupAlarmPosition
+{
+    UIEdgeInsets insets = _window.safeAreaInsets;
+    CGRect alarmRect = CGRectMake(0., 0., 40., 40.);
+    if ([self isLeftSideDriving])
+        alarmRect.origin = CGPointMake(8.0, insets.top + 8.);
+    else
+        alarmRect.origin = CGPointMake(CGRectGetMaxX(_window.frame) - 48., insets.top + 8.);
+    
+    _alarmWidget.frame = alarmRect;
+}
+
+- (void) setupAlarmWidget
+{
+    _alarmWidget = [[OAAlarmWidget alloc] initForCarPlay];
+    _alarmWidget.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.view addSubview:_alarmWidget];
 }
 
 - (void) attachMapToWindow
@@ -209,10 +233,14 @@
                                                       animated:YES];
 }
 
+- (BOOL)isLeftSideDriving
+{
+    return _window.safeAreaInsets.right > _window.safeAreaInsets.left && _window.safeAreaInsets.bottom == 0;
+}
+
 - (void) enterNavigationMode
 {
-    BOOL leftSide = _window.safeAreaInsets.right > _window.safeAreaInsets.left && _window.safeAreaInsets.bottom == 0;
-    _mapVc.mapView.viewportXScale = leftSide ? 0.5 : 1.5;
+    _mapVc.mapView.viewportXScale = [self isLeftSideDriving] ? 0.5 : 1.5;
     _isInNavigationMode = YES;
 }
 
@@ -220,6 +248,13 @@
 {
     _mapVc.mapView.viewportXScale = _cachedViewportX;
     _isInNavigationMode = NO;
+}
+
+- (void)onLocationChanged
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [_alarmWidget updateInfo];
+    });
 }
 
 @end

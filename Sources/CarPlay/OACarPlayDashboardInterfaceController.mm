@@ -536,6 +536,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
         }
         [self updateTripEstimates:_navigationSession.trip];
     }
+    [self.delegate onLocationChanged];
 }
 
 - (NSString *) imageNameForTurnType:(const std::shared_ptr<TurnType> &)turnType

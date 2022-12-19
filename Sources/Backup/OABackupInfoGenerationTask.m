@@ -86,27 +86,33 @@
         {
             long remoteUploadTime = remoteFile.clienttimems;
             long localUploadTime = localFile.uploadTime;
+            long localModifiedTime = localFile.localModifiedTime;
+
             if (remoteFile.isDeleted)
             {
+                // Remote file deleted
                 [info.localFilesToDelete addObject:localFile];
             }
-            else if (remoteUploadTime == localUploadTime)
+            else if (localModifiedTime > localUploadTime / 1000)
             {
-                if ((localUploadTime / 1000) < localFile.localModifiedTime)
-                    [info.filesToUpload addObject:localFile];
-            }
-            else if (localUploadTime == 0)
-            {
-                if ((remoteUploadTime / 1000) < localFile.localModifiedTime)
-                    [info.filesToUpload addObject:localFile];
+                // Local file modified since last upload
+                if (remoteUploadTime > localUploadTime)
+                {
+                    // Remote file modified also. Have conflict. Needs to be resolved.
+                    [info.filesToMerge addObject:@[localFile, remoteFile]];
+                }
                 else
-                    [info.filesToDownload addObject:remoteFile];
+                {
+                    // Remote file is non modified. Suggest to upload local file to the cloud.
+                    [info.filesToUpload addObject:localFile];
+                }
             }
-            else
+            else if (remoteUploadTime > localUploadTime)
             {
-                [info.filesToMerge addObject:@[localFile, remoteFile]];
+                // Remote file modified. Suggest to download from the cloud.
                 [info.filesToDownload addObject:remoteFile];
             }
+
             NSDictionary *attributes = localFile.filePath ? [fileManager attributesOfItemAtPath:localFile.filePath error:NULL] : @{};
             long localFileSize = attributes.fileSize;
             long remoteFileSize = remoteFile.filesize;
@@ -120,10 +126,9 @@
             OAUploadedFileInfo *fileInfo = [OABackupDbHelper.sharedDatabase getUploadedFileInfo:remoteFile.type name:remoteFile.name];
             // suggest to remove only if file exists in db
             if (fileInfo != nil)
-            {
                 [info.filesToDelete addObject:remoteFile];
-            }
-            [info.filesToDownload addObject:remoteFile];
+            else
+                [info.filesToDownload addObject:remoteFile];
         }
     }
     for (OALocalFile *localFile in _localFiles.allValues)
@@ -134,7 +139,8 @@
             continue;
         
         BOOL hasRemoteFile = _uniqueRemoteFiles[localFile.getTypeFileName] != nil;
-        if (!hasRemoteFile)
+        BOOL fileToDelete = [info.localFilesToDelete containsObject:localFile];
+        if (!hasRemoteFile && !fileToDelete)
         {
             BOOL isEmpty = [localFile.item isKindOfClass:OACollectionSettingsItem.class] && ((OACollectionSettingsItem *) localFile.item).isEmpty;
             if (!isEmpty)

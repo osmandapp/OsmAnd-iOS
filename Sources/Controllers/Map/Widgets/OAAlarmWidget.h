@@ -11,4 +11,6 @@
 
 @interface OAAlarmWidget : OABaseWidgetView
 
+- (instancetype) initForCarPlay;
+
 @end

@@ -18,6 +18,7 @@
 #import "OAAppData.h"
 #import "OAMapRendererView.h"
 
+#import "OAIndexConstants.h"
 #import "OAAutoObserverProxy.h"
 #import "OANavigationController.h"
 #import "OARootViewController.h"
@@ -1792,18 +1793,15 @@
 
         _gpxDocsRec.clear();
         
-        
-        // TODO: Setup heights map from Documents folder temporarily
-        // >>>---------------
-        /*
-        std::shared_ptr<const OsmAnd::ITileSqliteDatabasesCollection> heightsCollection;
-        const auto manualHeightsCollection = new OsmAnd::TileSqliteDatabasesCollection();
-        manualHeightsCollection->addDirectory(_app.resourcesManager->userStoragePath);
-        heightsCollection.reset(manualHeightsCollection);
-        [_mapView setElevationDataProvider:
-            std::make_shared<OsmAnd::SqliteHeightmapTileProvider>(heightsCollection, _mapView.elevationDataTileSize)];
-         */
-        // <<<---------------
+        if ([OAAppSettings.sharedManager.showHeightmaps get])
+        {
+            std::shared_ptr<const OsmAnd::ITileSqliteDatabasesCollection> heightsCollection;
+            const auto manualHeightsCollection = new OsmAnd::TileSqliteDatabasesCollection();
+            manualHeightsCollection->addDirectory(_app.documentsDir.absoluteFilePath(QString::fromNSString(RESOURCES_DIR)));
+            heightsCollection.reset(manualHeightsCollection);
+            [_mapView setElevationDataProvider:
+                std::make_shared<OsmAnd::SqliteHeightmapTileProvider>(heightsCollection, _mapView.elevationDataTileSize)];
+        }
         
         // Determine what type of map-source is being activated
         typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;

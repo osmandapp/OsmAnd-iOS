@@ -22,6 +22,7 @@ API_AVAILABLE(ios(12.0))
 - (void) onCenterMapPressed;
 - (void) enterNavigationMode;
 - (void) exitNavigationMode;
+- (void) onLocationChanged;
 
 - (void) centerMapOnRoute:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight;
 

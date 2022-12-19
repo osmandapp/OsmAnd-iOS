@@ -2752,3 +2752,16 @@
 "routing_attr_goods_restrictions_footer_desc" = "S'applique aux véhicules transportant des marchandises ayant au moins 4 roues et pesant moins de 3.5 tonnes.\n\nSi votre véhicule pèse plus de 3.5 tonnes, vous devez utiliser le profil \"Camion\".";
 "routing_attr_goods_restrictions_yes_desc" = "Les routes interdites aux livraisons de marchandises seront évitées.";
 "rendering_value_showMtbScaleIMBATrails_description" = "International Mountain Bicycling Association";
+"shared_string_uploaded" = "Téléversé";
+"shared_string_do_not_exist" = "N'existe pas";
+"new_file" = "Nouveau fichier";
+"deleted_file" = "Fichier supprimé";
+"cloud_conflict_descr" = "La version locale et en ligne contiennent des changements depuis la dernière synchronisation.";
+"upload_change" = "Téléverser les changements";
+"cloud_version_will_be_removed" = "La version en ligne va être supprimée";
+"cloud_changes_will_be_dismissed" = "Les changements de la version en ligne seront ignorés";
+"local_file_will_be_restored" = "Le fichier local va être restauré";
+"local_changes_will_be_dismissed" = "Les changements sur le fichier local seront ignorés";
+"checking_progress" = "Vérification...";
+"modified_file" = "Fichier modifié";
+"last_synchronization" = "Dernière synchronisation";

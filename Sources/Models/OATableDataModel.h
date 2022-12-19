@@ -12,6 +12,8 @@
 
 @interface OATableDataModel : NSObject
 
++ (instancetype) model;
+
 @property (nonatomic) NSString *tableHeaderText;
 @property (nonatomic) NSString *tableFooterText;
 

@@ -2751,3 +2751,9 @@
 "routing_attr_goods_restrictions_yes_desc" = "Estradas que estão fechadas para entrega de mercadorias serão evitadas.";
 "local_backup_empty_file" = "O arquivo de backup não contém nenhum item para restaurar.";
 "cloud_all_changes_downloaded" = "Todas as alterações foram baixadas";
+"shared_string_uploaded" = "Enviado";
+"new_file" = "Novo arquivo";
+"modified_file" = "Arquivo modificado";
+"deleted_file" = "Arquivo excluído";
+"last_synchronization" = "Última sincronização";
+"shared_string_do_not_exist" = "Não existe";

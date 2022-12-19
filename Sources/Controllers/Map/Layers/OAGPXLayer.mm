@@ -346,7 +346,7 @@
         }
         [self.mapView addKeyedSymbolsProvider:_linesCollection];
     }
-    [self setVectorLineProvider:_linesCollection];
+    [self setVectorLineProvider:_linesCollection sync:YES];
     [self refreshGpxWaypoints];
     [self refreshStartFinishPoints];
 }

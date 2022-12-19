@@ -8,7 +8,7 @@
 
 #import "OAParkingViewController.h"
 #import "Localization.h"
-#import "OASwitchTableViewCell.h"
+#import "OATableViewCellSwitch.h"
 #import "OADateTimePickerTableViewCell.h"
 #import "OATimeTableViewCell.h"
 #import "OAMapViewController.h"
@@ -259,19 +259,22 @@
     {
         case 0:
         {
-            OASwitchTableViewCell* cell;
-            cell = (OASwitchTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
+            OATableViewCellSwitch *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellSwitch getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
-                cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellSwitch getCellIdentifier] owner:self options:nil];
+                cell = (OATableViewCellSwitch *) nib[0];
+                [cell leftIconVisibility:NO];
+                [cell descriptionVisibility:NO];
             }
-            [cell.switchView setOn:_timeLimitActive];
-            [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
-            [cell.switchView addTarget:self action:@selector(timeLimitSwitched:) forControlEvents:UIControlEventValueChanged];
-            
-            cell.textView.text = OALocalizedString(@"time_limited");
-            
+            if (cell)
+            {
+                [cell.switchView setOn:_timeLimitActive];
+                [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
+                [cell.switchView addTarget:self action:@selector(timeLimitSwitched:) forControlEvents:UIControlEventValueChanged];
+
+                cell.titleLabel.text = OALocalizedString(@"time_limited");
+            }
             return cell;
         }
         case 1:
@@ -307,20 +310,22 @@
         }
         case 3:
         {
-            OASwitchTableViewCell* cell;
-            cell = (OASwitchTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
+            OATableViewCellSwitch *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellSwitch getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
-                cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellSwitch getCellIdentifier] owner:self options:nil];
+                cell = (OATableViewCellSwitch *) nib[0];
+                [cell leftIconVisibility:NO];
+                [cell descriptionVisibility:NO];
             }
-            
-            [cell.switchView setOn:_addToCalActive];
-            [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
-            [cell.switchView addTarget:self action:@selector(addNotificationSwitched:) forControlEvents:UIControlEventValueChanged];
-            
-            cell.textView.text = OALocalizedString(@"add_notification_calendar");
-            
+            if (cell)
+            {
+                [cell.switchView setOn:_addToCalActive];
+                [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
+                [cell.switchView addTarget:self action:@selector(addNotificationSwitched:) forControlEvents:UIControlEventValueChanged];
+
+                cell.titleLabel.text = OALocalizedString(@"add_notification_calendar");
+            }
             return cell;
         }
             

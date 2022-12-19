@@ -11,7 +11,7 @@
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 #import "OsmAndApp.h"
 #import "OASettingsTableViewCell.h"
-#import "OASwitchTableViewCell.h"
+#import "OATableViewCellSwitch.h"
 #import "OASettingsTitleTableViewCell.h"
 #import "OAIAPHelper.h"
 #import "OAAppSettings.h"
@@ -173,7 +173,7 @@ static const NSInteger groupCount = 1;
                @"name" : @"osm_live_enabled",
                @"title" : OALocalizedString(@"osmand_live_updates"),
                @"value" : @(_isLiveUpdatesEnabled),
-               @"type" : [OASwitchTableViewCell getCellIdentifier]
+               @"type" : [OATableViewCellSwitch getCellIdentifier]
                }];
             
             [dataArr addObject:
@@ -181,7 +181,7 @@ static const NSInteger groupCount = 1;
                @"name" : @"wifi_only",
                @"title" : OALocalizedString(@"osmand_live_wifi_only"),
                @"value" : @(_isWifiUpdatesOnly),
-               @"type" : [OASwitchTableViewCell getCellIdentifier],
+               @"type" : [OATableViewCellSwitch getCellIdentifier],
                }];
             
             [dataArr addObject:
@@ -279,20 +279,20 @@ static const NSInteger groupCount = 1;
     NSDictionary *item = [self getItem:indexPath];
     NSString *type = item[@"type"];
     
-    if ([type isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
+    if ([type isEqualToString:[OATableViewCellSwitch getCellIdentifier]])
     {
-        OASwitchTableViewCell* cell = nil;
-        cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
+        OATableViewCellSwitch *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellSwitch getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
-            cell.textView.numberOfLines = 0;
-        }
-        
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellSwitch getCellIdentifier] owner:self options:nil];
+            cell = (OATableViewCellSwitch *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
+        }        
         if (cell)
         {
-            [cell.textView setText: item[@"title"]];
+            cell.titleLabel.text = item[@"title"];
+
             id v = item[@"value"];
             cell.switchView.on = [v boolValue];
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;

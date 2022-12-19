@@ -10,7 +10,7 @@
 #import "OASettingsTitleTableViewCell.h"
 #import "Localization.h"
 #import "OAEditPOIData.h"
-#import "OASwitchTableViewCell.h"
+#import "OATableViewCellSwitch.h"
 #import "OADateTimePickerTableViewCell.h"
 #import "OATimeTableViewCell.h"
 #import "OASizes.h"
@@ -145,7 +145,7 @@ static const NSInteger timeSectionIndex = 1;
     const auto rule = std::dynamic_pointer_cast<OpeningHoursParser::BasicOpeningHourRule>(_currentRule);
     [dataArr addObject:@{
                          @"title" : OALocalizedString(@"osm_around_the_clock"),
-                         @"type" : [OASwitchTableViewCell getCellIdentifier]
+                         @"type" : [OATableViewCellSwitch getCellIdentifier]
                          }];
 
     _startDate = [self dateFromMinutes:rule->getStartTime()];
@@ -305,20 +305,20 @@ static const NSInteger timeSectionIndex = 1;
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:[OATableViewCellSwitch getCellIdentifier]])
     {
-        OASwitchTableViewCell* cell = nil;
-        cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
+        OATableViewCellSwitch *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellSwitch getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
-            cell.textView.numberOfLines = 0;
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellSwitch getCellIdentifier] owner:self options:nil];
+            cell = (OATableViewCellSwitch *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
         }
-        
         if (cell)
         {
-            [cell.textView setText: item[@"title"]];
+            cell.titleLabel.text = item[@"title"];
+
             cell.switchView.on = _isOpened24_7;
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];

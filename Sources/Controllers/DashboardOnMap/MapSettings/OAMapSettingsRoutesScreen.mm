@@ -222,7 +222,6 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellSwitch getCellIdentifier] owner:self options:nil];
             cell = (OATableViewCellSwitch *) nib[0];
             [cell descriptionVisibility:NO];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         if (cell)
         {

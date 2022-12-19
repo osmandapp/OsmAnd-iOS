@@ -21,7 +21,7 @@
 #import "OAFileNameTranslationHelper.h"
 #import "OARouteProvider.h"
 #import "OAGPXDocument.h"
-#import "OASwitchTableViewCell.h"
+#import "OATableViewCellSwitch.h"
 #import "OATargetPointsHelper.h"
 #import "OARTargetPoint.h"
 #import "OARootViewController.h"
@@ -109,7 +109,7 @@
     OALocalRoutingParameter *param = _data[indexPath.row];
     NSString *type = [param getCellType];
     
-    if ([type isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
+    if ([type isEqualToString:[OATableViewCellSwitch getCellIdentifier]])
     {
         return UITableViewAutomaticDimension;
     }
@@ -167,18 +167,21 @@
 {
     NSString *text = [param getText];
     NSString *type = [param getCellType];
-    if ([type isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
+    if ([type isEqualToString:[OATableViewCellSwitch getCellIdentifier]])
     {
-        OASwitchTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
+        OATableViewCellSwitch *cell = [self.tableView dequeueReusableCellWithIdentifier:[OATableViewCellSwitch getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellSwitch getCellIdentifier] owner:self options:nil];
+            cell = (OATableViewCellSwitch *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
         }
         
         if (cell)
         {
-            [cell.textView setText:text];
+            cell.titleLabel.text = text;
+
             [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.switchView setOn:[param isChecked]];
             [param setControlAction:cell.switchView];

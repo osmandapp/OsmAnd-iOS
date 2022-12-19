@@ -10,7 +10,7 @@
 #import "OAGPXListViewController.h"
 #import "OASettingsTableViewCell.h"
 #import "OASettingsTitleTableViewCell.h"
-#import "OASwitchTableViewCell.h"
+#import "OATableViewCellSwitch.h"
 #import "OAAppSettings.h"
 #import "Localization.h"
 #import "OAUtilities.h"
@@ -168,7 +168,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
                  @"title" : OALocalizedString(@"save_heading"),
                  @"description" : OALocalizedString(@"save_heading_descr"),
                  @"value" : @([_settings.saveHeadingToGpx get:self.appMode]),
-                 @"type" : [OASwitchTableViewCell getCellIdentifier]
+                 @"type" : [OATableViewCellSwitch getCellIdentifier]
                 }
              ]];
             
@@ -200,7 +200,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
                  @"description" : OALocalizedString(@"auto_split_gap_descr"),
                  @"value" : @([_settings.autoSplitRecording get:self.appMode]),
                  @"img" : @"menu_cell_pointer.png",
-                 @"type" : [OASwitchTableViewCell getCellIdentifier] }]];
+                 @"type" : [OATableViewCellSwitch getCellIdentifier] }]];
             
             NSString *menuPath = [NSString stringWithFormat:@"%@ — %@ — %@", OALocalizedString(@"menu"), OALocalizedString(@"menu_my_places"), OALocalizedString(@"menu_my_trips")];
             NSString *actionsDescr = [NSString stringWithFormat:OALocalizedString(@"trip_rec_actions_descr"), menuPath];
@@ -405,20 +405,20 @@ static NSArray<NSString *> *minTrackSpeedNames;
     NSDictionary *item = [self getItem:indexPath];
     NSString *type = item[@"type"];
     
-    if ([type isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
+    if ([type isEqualToString:[OATableViewCellSwitch getCellIdentifier]])
     {
-        OASwitchTableViewCell* cell = nil;
-        cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
+        OATableViewCellSwitch *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellSwitch getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
-            cell.textView.numberOfLines = 0;
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellSwitch getCellIdentifier] owner:self options:nil];
+            cell = (OATableViewCellSwitch *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
         }
-        
         if (cell)
         {
-            [cell.textView setText: item[@"title"]];
+            cell.titleLabel.text = item[@"title"];
+
             id v = item[@"value"];
             if ([v isKindOfClass:[OACommonBoolean class]])
             {

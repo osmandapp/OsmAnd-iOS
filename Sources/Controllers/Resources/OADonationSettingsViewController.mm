@@ -9,7 +9,7 @@
 #import "OADonationSettingsViewController.h"
 #import "OASettingsTableViewCell.h"
 #import "OASettingsTitleTableViewCell.h"
-#import "OASwitchTableViewCell.h"
+#import "OATableViewCellSwitch.h"
 #import "OATextInputCell.h"
 #import "OAAppSettings.h"
 #import "Localization.h"
@@ -53,8 +53,8 @@
     NSArray *_data;
     BOOL _donation;
     
-    OASwitchTableViewCell *_donationSwitch;
-    OASwitchTableViewCell *_hideNameSwitch;
+    OATableViewCellSwitch *_donationSwitch;
+    OATableViewCellSwitch *_hideNameSwitch;
     OATextInputCell *_emailCell;
     OATextInputCell *_userNameCell;
     UIView *_footerView;
@@ -118,17 +118,21 @@
 
     if (_settingsType == EDonationSettingsScreenMain)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
-        _donationSwitch = (OASwitchTableViewCell *)[nib objectAtIndex:0];
-        _donationSwitch.textView.numberOfLines = 0;
-        _donationSwitch.textView.text = OALocalizedString(@"osmand_live_donation_switch_title");
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellSwitch getCellIdentifier] owner:self options:nil];
+        _donationSwitch = (OATableViewCellSwitch *) nib[0];
+        [_donationSwitch leftIconVisibility:NO];
+        [_donationSwitch descriptionVisibility:NO];
+        _donationSwitch.titleLabel.numberOfLines = 0;
+        _donationSwitch.titleLabel.text = OALocalizedString(@"osmand_live_donation_switch_title");
         _donationSwitch.switchView.on = _donation;
         [_donationSwitch.switchView addTarget:self action:@selector(donationSwitchChanged:) forControlEvents:UIControlEventValueChanged];
 
-        nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
-        _hideNameSwitch = (OASwitchTableViewCell *)[nib objectAtIndex:0];
-        _hideNameSwitch.textView.numberOfLines = 0;
-        _hideNameSwitch.textView.text = OALocalizedString(@"osm_live_hide_user_name");
+        nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellSwitch getCellIdentifier] owner:self options:nil];
+        _hideNameSwitch = (OATableViewCellSwitch *) nib[0];
+        [_hideNameSwitch leftIconVisibility:NO];
+        [_hideNameSwitch descriptionVisibility:NO];
+        _hideNameSwitch.titleLabel.numberOfLines = 0;
+        _hideNameSwitch.titleLabel.text = OALocalizedString(@"osm_live_hide_user_name");
         _hideNameSwitch.switchView.on = _settings.billingHideUserName.get;
         
         nib = [[NSBundle mainBundle] loadNibNamed:[OATextInputCell getCellIdentifier] owner:self options:nil];

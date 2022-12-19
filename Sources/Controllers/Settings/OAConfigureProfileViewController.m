@@ -11,7 +11,7 @@
 #import "Localization.h"
 #import "OAColors.h"
 #import "OATableViewCustomHeaderView.h"
-#import "OASwitchTableViewCell.h"
+#import "OATableViewCellSwitch.h"
 #import "OATitleRightIconCell.h"
 #import "OAIconTextDescCell.h"
 #import "OAAutoObserverProxy.h"
@@ -92,7 +92,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     {
         [data addObject:@[
             @{
-                @"type" : [OASwitchTableViewCell getCellIdentifier],
+                @"type" : [OATableViewCellSwitch getCellIdentifier],
                 @"title" : OALocalizedString(@"shared_string_enabled")
             }
         ]];
@@ -504,23 +504,23 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
-    if ([item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
+    if ([item[@"type"] isEqualToString:[OATableViewCellSwitch getCellIdentifier]])
     {
-        OASwitchTableViewCell* cell = nil;
-        cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
+        OATableViewCellSwitch *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellSwitch getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
-            cell.textView.numberOfLines = 0;
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellSwitch getCellIdentifier] owner:self options:nil];
+            cell = (OATableViewCellSwitch *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
         }
-        
         if (cell)
         {
             [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             cell.switchView.on = [OAApplicationMode.values containsObject:_appMode];
             [cell.switchView addTarget:self action:@selector(onModeSwitchPressed:) forControlEvents:UIControlEventValueChanged];
-            cell.textView.text = [OAApplicationMode.values containsObject:_appMode] ? OALocalizedString(@"shared_string_enabled") : OALocalizedString(@"rendering_value_disabled_name");
+
+            cell.titleLabel.text = [OAApplicationMode.values containsObject:_appMode] ? OALocalizedString(@"shared_string_enabled") : OALocalizedString(@"rendering_value_disabled_name");
         }
         return cell;
     }

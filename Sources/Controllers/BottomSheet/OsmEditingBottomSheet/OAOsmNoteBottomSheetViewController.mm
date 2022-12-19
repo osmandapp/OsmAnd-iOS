@@ -11,7 +11,7 @@
 #import "Localization.h"
 #import "OATextInputFloatingCell.h"
 #import "OABottomSheetHeaderCell.h"
-#import "OASwitchTableViewCell.h"
+#import "OATableViewCellSwitch.h"
 #import "OAPasswordInputFieldCell.h"
 #import "OADividerCell.h"
 #import "OAUtilities.h"
@@ -129,7 +129,7 @@
         if (_screenType == TYPE_CREATE)
         {
             [arr addObject:@{
-                             @"type" : [OASwitchTableViewCell getCellIdentifier],
+                             @"type" : [OATableViewCellSwitch getCellIdentifier],
                              @"name" : @"upload_immediately",
                              @"title" : OALocalizedString(@"osm_note_upload_immediately"),
                              @"value" : @(_uploadImmediately)
@@ -142,7 +142,7 @@
         [arr addObject:@{ @"type" : [OADividerCell getCellIdentifier] } ];
         
         [arr addObject:@{
-                         @"type" : [OASwitchTableViewCell getCellIdentifier],
+                         @"type" : [OATableViewCellSwitch getCellIdentifier],
                          @"name" : @"upload_anonymously",
                          @"title" : OALocalizedString(@"osm_note_upload_anonymously"),
                          @"value" : @(_uploadAnonymously)
@@ -252,7 +252,7 @@
     {
         return MAX(((OATextInputFloatingCell *)_data[indexPath.row][@"cell"]).inputField.intrinsicContentSize.height, 60.0);
     }
-    else if ([item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]] || [item[@"type"] isEqualToString:[OABottomSheetHeaderCell getCellIdentifier]] || [item[@"type"] isEqualToString:[OADescrTitleCell getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:[OATableViewCellSwitch getCellIdentifier]] || [item[@"type"] isEqualToString:[OABottomSheetHeaderCell getCellIdentifier]] || [item[@"type"] isEqualToString:[OADescrTitleCell getCellIdentifier]])
     {
         return UITableViewAutomaticDimension;
     }
@@ -310,26 +310,26 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:[OATableViewCellSwitch getCellIdentifier]])
     {
-        OASwitchTableViewCell* cell = nil;
-        cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
+        OATableViewCellSwitch *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellSwitch getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
-            cell.textView.numberOfLines = 0;
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellSwitch getCellIdentifier] owner:self options:nil];
+            cell = (OATableViewCellSwitch *) nib[0];
+            cell.backgroundColor = [UIColor clearColor];
+            cell.switchView.tintColor = UIColorFromRGB(color_bottom_sheet_secondary);
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
         }
-        
         if (cell)
         {
-            cell.backgroundColor = [UIColor clearColor];
-            [cell.textView setText: item[@"title"]];
+            cell.titleLabel.text = item[@"title"];
+
             cell.switchView.on = [item[@"value"] boolValue];
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
-            cell.switchView.tintColor = UIColorFromRGB(color_bottom_sheet_secondary);
         }
         return cell;
     }
@@ -436,15 +436,6 @@
 - (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section
 {
     view.hidden = YES;
-}
-
-- (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSDictionary *item = _data[indexPath.row];
-    if (![item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
-        return indexPath;
-    else
-        return nil;
 }
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

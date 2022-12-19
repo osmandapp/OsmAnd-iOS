@@ -13,7 +13,7 @@
 #import "OAColors.h"
 #import "OALocationSimulation.h"
 #import "OAIconTitleValueCell.h"
-#import "OASwitchTableViewCell.h"
+#import "OATableViewCellSwitch.h"
 #import "OATableRowData.h"
 #import "OATableDataModel.h"
 #import "OATableSectionData.h"
@@ -91,7 +91,7 @@ NSString *const kSimulateLocationKey = @"kSimulateLocationKey";
     
     OATableSectionData *heightMapSection = [OATableSectionData sectionData];
     [heightMapSection addRowFromDictionary:@{
-        kCellTypeKey : OASwitchTableViewCell.getCellIdentifier,
+        kCellTypeKey : OATableViewCellSwitch.getCellIdentifier,
         kCellKeyKey : @"display_heightmap",
         kCellTitleKey : OALocalizedString(@"use_heightmap_setting")
     }];
@@ -157,21 +157,22 @@ NSString *const kSimulateLocationKey = @"kSimulateLocationKey";
         }
         return cell;
     }
-    else if ([type isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
+    else if ([type isEqualToString:[OATableViewCellSwitch getCellIdentifier]])
     {
-        OASwitchTableViewCell* cell = nil;
-        cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
+        OATableViewCellSwitch *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellSwitch getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
-            cell.textView.numberOfLines = 0;
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellSwitch getCellIdentifier] owner:self options:nil];
+            cell = (OATableViewCellSwitch *) nib[0];
             cell.switchView.tintColor = UIColorFromRGB(color_bottom_sheet_secondary);
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
         }
         
         if (cell)
         {
-            [cell.textView setText:item.title];
+            cell.titleLabel.text = item.title;
+
             cell.switchView.on = [OAAppSettings.sharedManager.showHeightmaps get];
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];

@@ -10,7 +10,7 @@
 #import "OAMapSettingsViewController.h"
 #import "OAMapRendererView.h"
 #import "Localization.h"
-#import "OASwitchTableViewCell.h"
+#import "OATableViewCellSwitch.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OAMapCreatorHelper.h"
@@ -390,26 +390,27 @@ static NSInteger kButtonsSection;
     
     else if ([item[@"type"] isEqualToString:kCellTypeSwitch])
     {
-        OASwitchTableViewCell* cell = nil;
-        cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
+        OATableViewCellSwitch *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellSwitch getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellSwitch getCellIdentifier] owner:self options:nil];
+            cell = (OATableViewCellSwitch *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
         }
         if (cell)
         {
-            [cell.textView setText:item[@"title"]];
+            cell.titleLabel.text = item[@"title"];
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
-            
+
             if ([item[@"tag"] isEqualToString:kShowSlider])
             {
-                [cell.switchView setOn: [self isOpacitySliderVisible]];
+                [cell.switchView setOn:[self isOpacitySliderVisible]];
                 [cell.switchView addTarget:self action:@selector(onShowSwitchChanged:) forControlEvents:UIControlEventValueChanged];
             }
             else if ([item[@"tag"] isEqualToString:kShowLabels])
             {
-                [cell.switchView setOn: _settings.keepMapLabelsVisible.get];
+                [cell.switchView setOn:_settings.keepMapLabelsVisible.get];
                 [cell.switchView addTarget:self action:@selector(onShowLabelsChanged:) forControlEvents:UIControlEventValueChanged];
             }
             else if ([item[@"tag"] isEqualToString:kHidePoligons])

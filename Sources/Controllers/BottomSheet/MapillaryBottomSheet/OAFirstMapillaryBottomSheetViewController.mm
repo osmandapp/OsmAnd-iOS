@@ -23,7 +23,6 @@
 #import "OAMapWidgetRegistry.h"
 #import "OAProducts.h"
 #import "OAMapWidgetRegInfo.h"
-#import "OASwitchTableViewCell.h"
 
 #define kButtonsDividerTag 150
 
@@ -215,8 +214,8 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
             cell.textView.numberOfLines = 0;
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
-        
         if (cell)
         {
             [self updateSettingSwitchCell:cell data:item];
@@ -283,15 +282,6 @@
 - (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section
 {
     view.hidden = YES;
-}
-
-- (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSDictionary *item = _data[indexPath.row];
-    if (![item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
-        return indexPath;
-    else
-        return nil;
 }
 
 @synthesize vwController;

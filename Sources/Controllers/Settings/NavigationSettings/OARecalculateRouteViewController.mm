@@ -7,7 +7,7 @@
 //
 
 #import "OARecalculateRouteViewController.h"
-#import "OASwitchTableViewCell.h"
+#import "OATableViewCellSwitch.h"
 #import "OATimeTableViewCell.h"
 #import "OACustomPickerTableViewCell.h"
 #import "OAApplicationMode.h"
@@ -100,7 +100,7 @@
     NSMutableArray *distanceArr = [NSMutableArray array];
     BOOL disabled = [_settings.routeRecalculationDistance get:self.appMode] == kDisableMode;
     [statusArr addObject:@{
-        @"type" : [OASwitchTableViewCell getCellIdentifier],
+        @"type" : [OATableViewCellSwitch getCellIdentifier],
         @"title" : disabled ? OALocalizedString(@"rendering_value_disabled_name") : OALocalizedString(@"shared_string_enabled"),
         @"isOn" : @(!disabled),
     }];
@@ -127,18 +127,20 @@
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
+    if ([cellType isEqualToString:[OATableViewCellSwitch getCellIdentifier]])
     {
-        OASwitchTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
+        OATableViewCellSwitch *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellSwitch getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellSwitch getCellIdentifier] owner:self options:nil];
+            cell = (OATableViewCellSwitch *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
         }
         if (cell)
         {
-            cell.textView.text = item[@"title"];
+            cell.titleLabel.text = item[@"title"];
+
             cell.switchView.on = [item[@"isOn"] boolValue];
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];

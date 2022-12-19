@@ -7,7 +7,7 @@
 //
 
 #import "OAAvoidPreferParametersViewController.h"
-#import "OASwitchTableViewCell.h"
+#import "OATableViewCellSwitch.h"
 #import "OAAppSettings.h"
 #import "OsmAndApp.h"
 #import "OAApplicationMode.h"
@@ -81,7 +81,7 @@
                    @"name" : param,
                    @"title" : title,
                    @"value" : value,
-                   @"type" : [OASwitchTableViewCell getCellIdentifier] }
+                   @"type" : [OATableViewCellSwitch getCellIdentifier] }
                  ];
             }
         }
@@ -134,18 +134,20 @@
 - (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     NSDictionary *item = _data[indexPath.row];
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
+    if ([cellType isEqualToString:[OATableViewCellSwitch getCellIdentifier]])
     {
-        OASwitchTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
+        OATableViewCellSwitch *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellSwitch getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellSwitch getCellIdentifier] owner:self options:nil];
+            cell = (OATableViewCellSwitch *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
         }
         if (cell)
         {
-            cell.textView.text = item[@"title"];
+            cell.titleLabel.text = item[@"title"];
+
             id v = item[@"value"];
             [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             if ([v isKindOfClass:[OACommonBoolean class]])

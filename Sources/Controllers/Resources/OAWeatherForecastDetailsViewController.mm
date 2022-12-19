@@ -414,7 +414,6 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellSwitch getCellIdentifier] owner:self options:nil];
             cell = (OATableViewCellSwitch *) nib[0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
         }

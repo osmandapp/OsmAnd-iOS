@@ -161,7 +161,7 @@
 "map_widget_ruler_control" = "Radius xətkeşi";
 "show_compass_ruler" = "Kompas xətkeşini göstər";
 "hide_compass_ruler" = "Kompas xətkeşini gizlət";
-"map_widget_distance_by_tap" = "Distance by tap";
+"map_widget_distance_by_tap" = "Toxunuşla məsafə";
 "shared_string_collapse" = "Yığışdır";
 "shared_string_topbar" = "Üst panel";
 "shared_string_widgets" = "Vidcetlər";

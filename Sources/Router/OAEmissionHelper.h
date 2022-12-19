@@ -18,6 +18,7 @@
 
 @interface OAMotorType : NSObject
 
+@property (nonatomic, readonly) NSString *name; // unit (L/kwH/kg)/100km
 @property (nonatomic, readonly) CGFloat fuelConsumption; // unit (L/kwH/kg)/100km
 @property (nonatomic, readonly) CGFloat fuelEmissionFactor; // kg CO2/unit (L/kwH/kg)
 

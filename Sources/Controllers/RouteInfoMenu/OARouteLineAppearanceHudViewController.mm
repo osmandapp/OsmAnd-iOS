@@ -17,7 +17,7 @@
 #import "OAMapRendererView.h"
 #import "OASlider.h"
 #import "OADividerCell.h"
-#import "OAIconTextDividerSwitchCell.h"
+#import "OASwitchTableViewCell.h"
 #import "OAColorsTableViewCell.h"
 #import "OAImageTextViewCell.h"
 #import "OAFoldersCell.h"
@@ -36,6 +36,7 @@
 #import "OADefaultFavorite.h"
 #import "OARouteStatisticsHelper.h"
 #import "OAProducts.h"
+#import "OASizes.h"
 
 #define kColorDayMode OALocalizedString(@"map_settings_day")
 #define kColorNightMode OALocalizedString(@"map_settings_night")
@@ -542,7 +543,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 
         OAGPXTableCellData *colorMapStyleCellData = [OAGPXTableCellData withData:@{
                 kTableKey:@"cell_color_map_style",
-                kCellType:[OAIconTextDividerSwitchCell getCellIdentifier],
+                kCellType:[OASwitchTableViewCell getCellIdentifier],
                 kCellTitle:OALocalizedString(@"map_settings_style")
         }];
         [colorsSectionData.subjects addObject:colorMapStyleCellData];
@@ -568,7 +569,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 
         OAGPXTableCellData *widthMapStyleCellData = [OAGPXTableCellData withData:@{
                 kTableKey:@"width_map_style",
-                kCellType:[OAIconTextDividerSwitchCell getCellIdentifier],
+                kCellType:[OASwitchTableViewCell getCellIdentifier],
                 kCellTitle:OALocalizedString(@"map_settings_style")
         }];
         [widthSectionData.subjects addObject:widthMapStyleCellData];
@@ -590,7 +591,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 
         OAGPXTableCellData *turnArrowsCellData = [OAGPXTableCellData withData:@{
                 kTableKey:@"turn_arrows",
-                kCellType:[OAIconTextDividerSwitchCell getCellIdentifier],
+                kCellType:[OASwitchTableViewCell getCellIdentifier],
                 kCellTitle:OALocalizedString(@"turn_arrows")
         }];
         [turnArrowsSectionData.subjects addObject:turnArrowsCellData];
@@ -1277,25 +1278,24 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         }
         outCell = cell;
     }
-    else if ([cellData.type isEqualToString:[OAIconTextDividerSwitchCell getCellIdentifier]])
+    else if ([cellData.type isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OAIconTextDividerSwitchCell *cell =
-                [tableView dequeueReusableCellWithIdentifier:[OAIconTextDividerSwitchCell getCellIdentifier]];
+        OASwitchTableViewCell *cell =
+                [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextDividerSwitchCell getCellIdentifier]
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier]
                                                          owner:self options:nil];
-            cell = (OAIconTextDividerSwitchCell *) nib[0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.dividerView.hidden = YES;
-            [cell showIcon:NO];
+            cell = (OASwitchTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
         }
         if (cell)
         {
-            cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + 20., 0., 0.);
+            cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingOnSideOfContent, 0., 0.);
 
             cell.switchView.on = [self isOn:cellData];
-            cell.textView.text = cellData.title;
+            cell.titleLabel.text = cellData.title;
 
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];

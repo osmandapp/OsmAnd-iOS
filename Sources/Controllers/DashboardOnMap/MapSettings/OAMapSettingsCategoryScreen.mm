@@ -10,10 +10,11 @@
 #import "OAMapSettingsViewController.h"
 #import "OATableViewCustomHeaderView.h"
 #import "OASettingsTableViewCell.h"
-#import "OAIconTextDividerSwitchCell.h"
+#import "OASwitchTableViewCell.h"
 #import "OAColors.h"
 #import "Localization.h"
 #import "OAMapStyleSettings.h"
+#import "OASizes.h"
 
 typedef void(^OAMapSettingsCategoryCellDataOnSwitch)(BOOL is, NSIndexPath *indexPath);
 typedef void(^OAMapSettingsCategoryCellDataOnSelect)();
@@ -96,7 +97,7 @@ typedef void(^OAMapSettingsCategoryCellDataOnSelect)();
         transportCell[@"title"] = OALocalizedString(enabled ? @"shared_string_enabled" : @"rendering_value_disabled_name");
         transportCell[@"value"] = @(enabled);
         transportCell[@"icon"] = enabled ? @"ic_custom_show" : @"ic_custom_hide";
-        transportCell[@"type"] = [OAIconTextDividerSwitchCell getCellIdentifier];
+        transportCell[@"type"] = [OASwitchTableViewCell getCellIdentifier];
         transportCell[@"switch"] = ^(BOOL isOn, NSIndexPath *indexPath) {
             [_styleSettings setCategoryEnabled:isOn categoryName:TRANSPORT_CATEGORY];
             transportCell[@"title"] = OALocalizedString(isOn ? @"shared_string_enabled" : @"rendering_value_disabled_name");
@@ -116,7 +117,7 @@ typedef void(^OAMapSettingsCategoryCellDataOnSelect)();
             NSMutableDictionary *cell = [NSMutableDictionary dictionary];
             cell[@"title"] = parameter.title;
             cell[@"value"] = @([parameter.storedValue isEqualToString:@"true"]);
-            cell[@"type"] = [OAIconTextDividerSwitchCell getCellIdentifier];
+            cell[@"type"] = [OASwitchTableViewCell getCellIdentifier];
             cell[@"switch"] = ^(BOOL isOn, NSIndexPath *indexPath) {
                 parameter.value = isOn ? @"true" : @"false";
                 [_styleSettings save:parameter];
@@ -207,21 +208,21 @@ typedef void(^OAMapSettingsCategoryCellDataOnSelect)();
         }
         outCell = cell;
     }
-    else if ([item[@"type"] isEqualToString:[OAIconTextDividerSwitchCell getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OAIconTextDividerSwitchCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTextDividerSwitchCell getCellIdentifier]];
+        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextDividerSwitchCell getCellIdentifier] owner:self options:nil];
-            cell = (OAIconTextDividerSwitchCell *) nib[0];
-            cell.separatorInset = UIEdgeInsetsMake(0., item[@"icon"] ? 65. : [OAUtilities getLeftMargin] + 16., 0., 0.);
-            cell.dividerView.hidden = YES;
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASwitchTableViewCell *) nib[0];
+            [cell descriptionVisibility:NO];
         }
         if (cell)
         {
+            cell.separatorInset = UIEdgeInsetsMake(0., item[@"icon"] ? kPaddingToLeftOfContentWithIcon : [OAUtilities getLeftMargin], 0., 0.);
+            cell.titleLabel.text = item[@"title"];
             BOOL isOn = [item[@"value"] boolValue];
-
-            [cell showIcon:_isTransport];
+            [cell leftIconVisibility:_isTransport];
             NSString *iconName = item[@"icon"];
             if (iconName)
             {
@@ -230,11 +231,9 @@ typedef void(^OAMapSettingsCategoryCellDataOnSelect)();
                     icon = [[OAUtilities getMxIcon:iconName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
                 else
                     icon = [UIImage templateImageNamed:item[@"icon"]];
-                cell.iconView.image = icon;
-                cell.iconView.tintColor = isOn ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
+                cell.leftIconView.image = icon;
+                cell.leftIconView.tintColor = isOn ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
             }
-
-            [cell.textView setText:item[@"title"]];
             [cell.switchView setOn:isOn];
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.switchView addTarget:self action:@selector(onSwitchPressed:) forControlEvents:UIControlEventValueChanged];

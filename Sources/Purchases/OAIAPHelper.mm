@@ -1184,7 +1184,6 @@ static OASubscriptionState *EXPIRED;
             else
             {
                 OALog(@"restoreTransaction - %@", transaction.originalTransaction.payment.productIdentifier);
-                [self provideContentForProductIdentifier:transaction.originalTransaction.payment.productIdentifier transaction:transaction.originalTransaction];
             }
         }
         [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
@@ -1439,7 +1438,10 @@ static OASubscriptionState *EXPIRED;
     _restoringPurchases = YES;
     _transactionErrors = 0;
 
-    [[SKPaymentQueue defaultQueue] restoreCompletedTransactions];
+    [self requestProductsWithCompletionHandler:^(BOOL success) {
+        [self checkBackupPurchase];
+        [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductsRestoredNotification object:[NSNumber numberWithInteger:_transactionErrors] userInfo:nil];
+    }];
 }
 
 - (BOOL) needValidateReceipt
@@ -1479,9 +1481,11 @@ static OASubscriptionState *EXPIRED;
     return;
 #endif
     
-    if (!receipt)
+    if (!receipt || _restoringPurchases)
     {
-        NSLog(@"No local receipt. Requesting new one...");
+        if (!_restoringPurchases)
+            NSLog(@"No local receipt. Requesting new one...");
+        _restoringPurchases = NO;
         _activeProductsCompletionHandler = onComplete;
         _receiptRequest = [[SKReceiptRefreshRequest alloc] initWithReceiptProperties:nil];
         _receiptRequest.delegate = self;
@@ -1537,6 +1541,12 @@ static OASubscriptionState *EXPIRED;
                                  }
                                  
                                  NSArray *subscriptions = [map objectForKey:@"subscriptions"];
+                                 NSData *data = [OAAppSettings.sharedManager.purchasedIdentifiers.get dataUsingEncoding:NSUTF8StringEncoding];
+                                 NSError *error = nil;
+                                 NSDictionary *result = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
+                                 NSMutableDictionary *res = (error || OAAppSettings.sharedManager.purchasedIdentifiers.get.length == 0)
+                                    ? [NSMutableDictionary dictionary] : [NSMutableDictionary dictionaryWithDictionary:result];
+                                 
                                  for (NSDictionary *subscription in subscriptions)
                                  {
                                      NSString *subscriptionId = subscription[@"product_id"];
@@ -1556,8 +1566,17 @@ static OASubscriptionState *EXPIRED;
                                                  [expirationDates setObject:expDate forKey:subscriptionId];
                                              }
                                          }
+                                         NSString *transactionId = subscription[@"original_transaction_id"];
+                                         if (transactionId && product)
+                                             res[product.productIdentifier] = transactionId;
                                      }
                                  }
+                                 error = nil;
+                                 NSString *resStr = [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:res
+                                                                                                                   options:0
+                                                                                                                     error:&error] encoding:NSUTF8StringEncoding];
+                                 resStr = error ? @"" : resStr;
+                                 [_settings.purchasedIdentifiers set:resStr];
                              }
                              else if (status == kUserNotFoundStatus || status == kNoSubscriptionsFoundStatus)
                              {

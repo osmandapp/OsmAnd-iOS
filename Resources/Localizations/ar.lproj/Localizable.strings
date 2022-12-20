@@ -2775,3 +2775,16 @@
 "worldwide_maps" = "خرائط عالمية";
 "amazon_appstore" = "متجر تطبيقات أمازون";
 "huawei_appgallery" = "متجر تطبيق هواوي";
+"position_on_map" = "موضع العرض";
+"position_on_map_center" = "المركز";
+"position_on_map_bottom" = "الأسفل";
+"units_kg" = "كغ";
+"routing_attr_motor_type_lpg_name" = "غاز البترول المسال";
+"routing_attr_motor_type_gas_name" = "الغاز الطبيعي المضغوط";
+"routing_attr_motor_type_electric_name" = "كهربائي";
+"co2_mission" = "انبعاث CO2";
+"routing_attr_motor_type_name" = "الوقود المستخدم من قبل المحرك";
+"routing_attr_motor_type_description" = "حدد نوع الوقود الخاص بمركبتك لحساب انبعاثات ثاني أكسيد الكربون.";
+"routing_attr_motor_type_diesel_name" = "الديزل";
+"routing_attr_motor_type_petrol_name" = "البنزين";
+"routing_attr_motor_type_hybrid_name" = "هجين";

@@ -10,7 +10,7 @@
 #import "OADeviceScreenTableViewCell.h"
 #import "OAIconTitleValueCell.h"
 #import "OAIconTextTableViewCell.h"
-#import "OASettingSwitchCell.h"
+#import "OASwitchTableViewCell.h"
 #import "OAAvoidPreferParametersViewController.h"
 #import "OARecalculateRouteViewController.h"
 #import "OARoutePreferencesParameters.h"
@@ -22,6 +22,7 @@
 #import "OARoadSpeedsViewController.h"
 #import "OAAngleStraightLineViewController.h"
 #import "OAOsmAndFormatter.h"
+#import "OASizes.h"
 #import "Localization.h"
 #import "OAColors.h"
 
@@ -132,7 +133,7 @@
          @"title" : OALocalizedString(@"recalculate_wrong_dir"),
          @"icon" : @"ic_custom_reverse_direction",
          @"value" : @([_settings.disableWrongDirectionRecalc get:self.appMode]),
-         @"type" : [OASettingSwitchCell getCellIdentifier] }
+         @"type" : [OASwitchTableViewCell getCellIdentifier] }
      ];
     
     auto router = [OsmAndApp.instance getRouter:self.appMode];
@@ -180,7 +181,7 @@
                     @"title" : title,
                     @"icon" : icon,
                     @"value" : rp,
-                    @"type" : [OASettingSwitchCell getCellIdentifier]
+                    @"type" : [OASwitchTableViewCell getCellIdentifier]
                 }
             ];
         }
@@ -255,7 +256,7 @@
                             @"title" : title,
                             @"icon" : [self getParameterIcon:paramId isSelected:rp.isSelected],
                             @"value" : rp,
-                            @"type" : [OASettingSwitchCell getCellIdentifier] }
+                            @"type" : [OASwitchTableViewCell getCellIdentifier] }
                         ];
                     }
                 }
@@ -314,7 +315,7 @@
             @"title" : OALocalizedString(@"consider_limitations_param"),
             @"icon" : @"ic_custom_alert",
             @"value" : @([_settings.enableTimeConditionalRouting get:self.appMode]),
-            @"type" : [OASettingSwitchCell getCellIdentifier] }
+            @"type" : [OASwitchTableViewCell getCellIdentifier] }
         ];
         [parametersArr addObject:@{
             @"type" : [OAIconTextTableViewCell getCellIdentifier],
@@ -447,22 +448,22 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:[OASettingSwitchCell getCellIdentifier]])
+    else if ([cellType isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
+        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
-            cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
-            cell.descriptionView.hidden = YES;
-            cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASwitchTableViewCell *) nib[0];
+            [cell descriptionVisibility:NO];
+            cell.separatorInset = UIEdgeInsetsMake(0., kPaddingToLeftOfContentWithIcon, 0., 0.);
         }
         if (cell)
         {
-            cell.textView.text = item[@"title"];
-            cell.imgView.image = [UIImage templateImageNamed:item[@"icon"]];
+            cell.titleLabel.text = item[@"title"];
+            cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
             id v = item[@"value"];
+
             [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             if ([v isKindOfClass:[OALocalRoutingParameter class]])
             {
@@ -476,7 +477,7 @@
                 cell.switchView.on = [v boolValue];
                 [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
             }
-            cell.imgView.tintColor = cell.switchView.on ? UIColorFromRGB(_iconColor) : UIColorFromRGB(color_icon_inactive);
+            cell.leftIconView.tintColor = cell.switchView.on ? UIColorFromRGB(_iconColor) : UIColorFromRGB(color_icon_inactive);
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
         }
         return cell;

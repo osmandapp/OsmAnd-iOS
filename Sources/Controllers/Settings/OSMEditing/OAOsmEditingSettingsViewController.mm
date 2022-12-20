@@ -14,7 +14,7 @@
 #import "OAMappersViewController.h"
 #import "OASimpleTableViewCell.h"
 #import "OARightIconTableViewCell.h"
-#import "OATableViewCellSwitch.h"
+#import "OASwitchTableViewCell.h"
 #import "OASizes.h"
 #import "Localization.h"
 #import "OAColors.h"
@@ -104,7 +104,7 @@
 
     NSMutableDictionary *offlieneEditingData = [NSMutableDictionary dictionary];
     offlieneEditingData[@"key"] = @"offline_editing";
-    offlieneEditingData[@"type"] = [OATableViewCellSwitch getCellIdentifier];
+    offlieneEditingData[@"type"] = [OASwitchTableViewCell getCellIdentifier];
     offlieneEditingData[@"title"] = OALocalizedString(@"osm_editing_offline");
     [offlieneEditingCells addObject:offlieneEditingData];
 
@@ -278,14 +278,13 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:[OATableViewCellSwitch getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OATableViewCellSwitch *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellSwitch getCellIdentifier]];
+        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (!cell)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellSwitch getCellIdentifier] owner:self options:nil];
-            cell = (OATableViewCellSwitch *) nib[0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASwitchTableViewCell *) nib[0];
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
         }

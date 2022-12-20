@@ -8,7 +8,7 @@
 
 #import "OABackupTypesViewController.h"
 #import "OAManageStorageViewController.h"
-#import "OAIconTextDividerSwitchCell.h"
+#import "OASwitchTableViewCell.h"
 #import "OAIconTitleValueCell.h"
 #import "OAStorageStateValuesCell.h"
 #import "OAExportSettingsCategory.h"
@@ -166,7 +166,7 @@
         {
             NSMutableDictionary *itemData = [NSMutableDictionary dictionary];
             itemData[@"key"] = [type.name stringByAppendingString:@"_cell"];
-            itemData[@"type"] = [OAIconTextDividerSwitchCell getCellIdentifier];
+            itemData[@"type"] = [OASwitchTableViewCell getCellIdentifier];
             itemData[@"setting"] = type;
             itemData[@"category"] = categoryItems;
 

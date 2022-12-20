@@ -22,7 +22,7 @@
 #import "OAMapWidgetRegistry.h"
 #import "OAProducts.h"
 #import "OAMapWidgetRegInfo.h"
-#import "OASettingSwitchCell.h"
+#import "OASimpleTableViewCell.h"
 #import "OAOsmEditingPlugin.h"
 #import "MaterialTextFields.h"
 #import "OATextInputFloatingCell.h"
@@ -94,9 +94,8 @@
     if (!_hasFailedPoints)
     {
         [arr addObject:@{
-                         @"type" : [OASettingSwitchCell getCellIdentifier],
+                         @"type" : [OASimpleTableViewCell getCellIdentifier],
                          @"title" : OALocalizedString(@"osm_upload_complete"),
-                         @"description" : @"",
                          @"img" : @"ic_custom_success"
                          }];
     }
@@ -241,26 +240,20 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:[OASettingSwitchCell getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
     {
-        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
+        OASimpleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
-            cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASimpleTableViewCell *) nib[0];
+            [cell descriptionVisibility:NO];
+            cell.backgroundColor = UIColor.clearColor;
         }
-        
         if (cell)
         {
-            cell.backgroundColor = UIColor.clearColor;
-            [cell.switchView setHidden:YES];
-        
-            cell.textView.text = item[@"title"];
-            cell.descriptionView.hidden = YES;
-            [cell setSecondaryImage:nil];
-            cell.imgView.image = [UIImage imageNamed:item[@"img"]];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            [cell setNeedsUpdateConstraints];
+            cell.titleLabel.text = item[@"title"];
+            cell.leftIconView.image = [UIImage imageNamed:item[@"img"]];
         }
         return cell;
     }

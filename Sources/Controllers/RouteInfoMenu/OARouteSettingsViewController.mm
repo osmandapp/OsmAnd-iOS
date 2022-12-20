@@ -17,8 +17,9 @@
 #import "OARoutingHelper.h"
 #import "OASettingsTableViewCell.h"
 #import "OAUtilities.h"
-#import "OASettingSwitchCell.h"
+#import "OASwitchTableViewCell.h"
 #import "OAIconTitleValueCell.h"
+#import "OASizes.h"
 
 @interface OARouteSettingsViewController ()
 
@@ -149,30 +150,29 @@
         cell.backgroundColor = UIColor.redColor;
         return cell;
     }
-    else if ([type isEqualToString:[OASettingSwitchCell getCellIdentifier]])
+    else if ([type isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
+        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
-            cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASwitchTableViewCell *) nib[0];
+            cell.separatorInset = UIEdgeInsetsMake(0., kPaddingToLeftOfContentWithIcon, 0., 0.);
+            [cell descriptionVisibility:NO];
         }
-        
         if (cell)
         {
             [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.switchView setOn:[param isChecked]];
-            cell.textView.text = text;
-            cell.descriptionView.text = nil;
-            cell.descriptionView.hidden = YES;
-            [cell setSecondaryImage:param.getSecondaryIcon];
-            cell.imgView.image = [param.getIcon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            cell.imgView.tintColor = [param isChecked] ? UIColorFromRGB([appMode getIconColor]) : UIColorFromRGB(color_icon_inactive);
             [param setControlAction:cell.switchView];
-            cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            if ([cell needsUpdateConstraints])
-                [cell setNeedsUpdateConstraints];
+
+            cell.titleLabel.text = text;
+            cell.leftIconView.image = [param.getIcon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.leftIconView.tintColor = [param isChecked] ? UIColorFromRGB([appMode getIconColor]) : UIColorFromRGB(color_icon_inactive);
+
+            BOOL showDivider = [param hasOptions];
+            [cell dividerVisibility:showDivider];
+            cell.selectionStyle = showDivider ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
         }
         return cell;
     }

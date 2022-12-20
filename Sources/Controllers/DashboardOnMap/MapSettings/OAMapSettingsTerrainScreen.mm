@@ -11,7 +11,7 @@
 #import "OAMapStyleSettings.h"
 #import "Localization.h"
 #import "OAColors.h"
-#import "OASettingSwitchCell.h"
+#import "OASwitchTableViewCell.h"
 #import "OATimeTableViewCell.h"
 #import "OACustomPickerTableViewCell.h"
 #import "OATitleSliderTableViewCell.h"
@@ -505,25 +505,26 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     NSDictionary *item = [self getItem:indexPath];
     if ([item[@"type"] isEqualToString: kCellTypeSwitch])
     {
-        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
+        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
-            cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.descriptionView.hidden = YES;
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASwitchTableViewCell *) nib[0];
+            cell.separatorInset = UIEdgeInsetsMake(0., DBL_MAX, 0., 0.);
+            [cell descriptionVisibility:NO];
         }
         if (cell)
         {
-            cell.textView.text = [self isTerrainOn] ? OALocalizedString(@"shared_string_enabled") : OALocalizedString(@"rendering_value_disabled_name");
-            NSString *imgName = [self isTerrainOn] ? @"ic_custom_show.png" : @"ic_custom_hide.png";
-            cell.imgView.image = [UIImage templateImageNamed:imgName];
-            cell.imgView.tintColor = [self isTerrainOn] ? UIColorFromRGB(color_dialog_buttons_dark) : UIColorFromRGB(color_tint_gray);
+            BOOL isOn = [self isTerrainOn];
+            cell.titleLabel.text = isOn ? OALocalizedString(@"shared_string_enabled") : OALocalizedString(@"rendering_value_disabled_name");
+
+            NSString *imgName = isOn ? @"ic_custom_show.png" : @"ic_custom_hide.png";
+            cell.leftIconView.image = [UIImage templateImageNamed:imgName];
+            cell.leftIconView.tintColor = isOn ? UIColorFromRGB(color_dialog_buttons_dark) : UIColorFromRGB(color_tint_gray);
             
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
-            [cell.switchView setOn:[self isTerrainOn]];
+            [cell.switchView setOn:isOn];
             [cell.switchView addTarget:self action:@selector(mapSettingSwitchChanged:) forControlEvents:UIControlEventValueChanged];
-            cell.separatorInset = UIEdgeInsetsMake(0., DBL_MAX, 0., 0.);
         }
         return cell;
     }

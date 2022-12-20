@@ -119,16 +119,20 @@
     if (_settingsType == EDonationSettingsScreenMain)
     {
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
-        _donationSwitch = (OASwitchTableViewCell *)[nib objectAtIndex:0];
-        _donationSwitch.textView.numberOfLines = 0;
-        _donationSwitch.textView.text = OALocalizedString(@"osmand_live_donation_switch_title");
+        _donationSwitch = (OASwitchTableViewCell *) nib[0];
+        [_donationSwitch leftIconVisibility:NO];
+        [_donationSwitch descriptionVisibility:NO];
+        _donationSwitch.titleLabel.numberOfLines = 0;
+        _donationSwitch.titleLabel.text = OALocalizedString(@"osmand_live_donation_switch_title");
         _donationSwitch.switchView.on = _donation;
         [_donationSwitch.switchView addTarget:self action:@selector(donationSwitchChanged:) forControlEvents:UIControlEventValueChanged];
 
         nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
-        _hideNameSwitch = (OASwitchTableViewCell *)[nib objectAtIndex:0];
-        _hideNameSwitch.textView.numberOfLines = 0;
-        _hideNameSwitch.textView.text = OALocalizedString(@"osm_live_hide_user_name");
+        _hideNameSwitch = (OASwitchTableViewCell *) nib[0];
+        [_hideNameSwitch leftIconVisibility:NO];
+        [_hideNameSwitch descriptionVisibility:NO];
+        _hideNameSwitch.titleLabel.numberOfLines = 0;
+        _hideNameSwitch.titleLabel.text = OALocalizedString(@"osm_live_hide_user_name");
         _hideNameSwitch.switchView.on = _settings.billingHideUserName.get;
         
         nib = [[NSBundle mainBundle] loadNibNamed:[OATextInputCell getCellIdentifier] owner:self options:nil];

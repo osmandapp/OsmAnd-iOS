@@ -15,7 +15,7 @@
 #import "OAMapPanelViewController.h"
 #import "OAMapCreatorHelper.h"
 #import "OAMapStyleSettings.h"
-#import "OASettingSwitchCell.h"
+#import "OASwitchTableViewCell.h"
 #import "OATitleSliderTableViewCell.h"
 #import "OAIconTextDescButtonCell.h"
 #import "OAButtonCell.h"
@@ -304,21 +304,21 @@ static NSInteger kButtonsSection;
 
     if ([item[@"type"] isEqualToString:kCellTypeIconSwitch])
     {
-        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
+        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
-            cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.descriptionView.hidden = YES;
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASwitchTableViewCell *) nib[0];
+            [cell descriptionVisibility:NO];
         }
         if (cell)
         {
-            cell.textView.text = _isEnabled ? OALocalizedString(@"shared_string_enabled") : OALocalizedString(@"rendering_value_disabled_name");
+            cell.titleLabel.text = _isEnabled ? OALocalizedString(@"shared_string_enabled") : OALocalizedString(@"rendering_value_disabled_name");
+
             NSString *imgName = _isEnabled ? @"ic_custom_show.png" : @"ic_custom_hide.png";
-            cell.imgView.image = [UIImage templateImageNamed:imgName];
-            cell.imgView.tintColor = _isEnabled ? UIColorFromRGB(color_dialog_buttons_dark) : UIColorFromRGB(color_tint_gray);
-            
+            cell.leftIconView.image = [UIImage templateImageNamed:imgName];
+            cell.leftIconView.tintColor = _isEnabled ? UIColorFromRGB(color_dialog_buttons_dark) : UIColorFromRGB(color_tint_gray);
+
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.switchView setOn:_isEnabled];
             [cell.switchView addTarget:self action:@selector(turnLayerOnOff:) forControlEvents:UIControlEventValueChanged];
@@ -390,26 +390,27 @@ static NSInteger kButtonsSection;
     
     else if ([item[@"type"] isEqualToString:kCellTypeSwitch])
     {
-        OASwitchTableViewCell* cell = nil;
-        cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
+        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
+            cell = (OASwitchTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
         }
         if (cell)
         {
-            [cell.textView setText:item[@"title"]];
+            cell.titleLabel.text = item[@"title"];
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
-            
+
             if ([item[@"tag"] isEqualToString:kShowSlider])
             {
-                [cell.switchView setOn: [self isOpacitySliderVisible]];
+                [cell.switchView setOn:[self isOpacitySliderVisible]];
                 [cell.switchView addTarget:self action:@selector(onShowSwitchChanged:) forControlEvents:UIControlEventValueChanged];
             }
             else if ([item[@"tag"] isEqualToString:kShowLabels])
             {
-                [cell.switchView setOn: _settings.keepMapLabelsVisible.get];
+                [cell.switchView setOn:_settings.keepMapLabelsVisible.get];
                 [cell.switchView addTarget:self action:@selector(onShowLabelsChanged:) forControlEvents:UIControlEventValueChanged];
             }
             else if ([item[@"tag"] isEqualToString:kHidePoligons])

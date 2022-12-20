@@ -20,7 +20,6 @@
 #import "OAGPXDocument.h"
 #import "OsmAndApp.h"
 #import "OAIconTitleValueCell.h"
-#import "OASettingSwitchCell.h"
 #import "OASwitchTableViewCell.h"
 
 @implementation OALocalRoutingParameter
@@ -267,9 +266,9 @@
         [self.settings.announceNearbyFavorites set:selected];
 }
 
-- (UIImage *)getSecondaryIcon
+- (BOOL) hasOptions
 {
-    return nil;
+    return NO;
 }
 
 - (UIColor *) getTintColor
@@ -283,7 +282,7 @@
 
 - (NSString *)getCellType
 {
-    return [OASettingSwitchCell getCellIdentifier];
+    return [OASwitchTableViewCell getCellIdentifier];
 }
 
 - (UIImage *)getIcon
@@ -512,7 +511,7 @@
 
 - (NSString *) getCellType
 {
-    return [OASettingSwitchCell getCellIdentifier];
+    return [OASwitchTableViewCell getCellIdentifier];
 }
 
 - (void) setControlAction:(UIControl *)control
@@ -531,9 +530,9 @@
         [self.delegate selectVoiceGuidance:tableView indexPath:indexPath];
 }
 
-- (UIImage *)getSecondaryIcon
+- (BOOL) hasOptions
 {
-    return [UIImage imageNamed:@"ic_action_additional_option"];
+    return YES;
 }
 
 - (UIColor *)getTintColor
@@ -757,7 +756,7 @@
 
 - (NSString *) getCellType
 {
-    return [OASettingSwitchCell getCellIdentifier];
+    return [OASwitchTableViewCell getCellIdentifier];
 }
 
 - (BOOL) isSelected
@@ -798,9 +797,9 @@
         [self.delegate openSimulateNavigationScreen];
 }
 
-- (UIImage *)getSecondaryIcon
+- (BOOL) hasOptions
 {
-    return [UIImage imageNamed:@"ic_action_additional_option"];
+    return YES;
 }
 
 @end
@@ -819,7 +818,7 @@
 
 - (NSString *) getCellType
 {
-    return [OASettingSwitchCell getCellIdentifier];
+    return [OASwitchTableViewCell getCellIdentifier];
 }
 
 - (BOOL) isSelected

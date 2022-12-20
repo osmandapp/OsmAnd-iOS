@@ -8,7 +8,7 @@
 
 #import "OAPublicTransportOptionsBottomSheet.h"
 #import "OABottomSheetHeaderIconCell.h"
-#import "OAIconTextDividerSwitchCell.h"
+#import "OASwitchTableViewCell.h"
 #import "OAMapStyleSettings.h"
 #import "Localization.h"
 #import "OAColors.h"
@@ -69,7 +69,7 @@
         cell[@"parameter"] = parameter;
         cell[@"title"] = parameter.title;
         cell[@"value"] = @([parameter.storedValue isEqualToString:@"true"]);
-        cell[@"type"] = [OAIconTextDividerSwitchCell getCellIdentifier];
+        cell[@"type"] = [OASwitchTableViewCell getCellIdentifier];
         cell[@"icon"] = [OAMapStyleSettings getTransportIconForName:parameter.name];
         cell[@"index"] = @([OAMapStyleSettings getTransportSortIndexForName:parameter.name]);
 
@@ -146,21 +146,19 @@
         }
         outCell = cell;
     }
-    else if ([item[@"type"] isEqualToString:[OAIconTextDividerSwitchCell getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OAIconTextDividerSwitchCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTextDividerSwitchCell getCellIdentifier]];
+        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextDividerSwitchCell getCellIdentifier] owner:self options:nil];
-            cell = (OAIconTextDividerSwitchCell *) nib[0];
-            cell.dividerView.hidden = YES;
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASwitchTableViewCell *) nib[0];
+            [cell descriptionVisibility:NO];
         }
-        
         if (cell)
         {
+            cell.titleLabel.text = item[@"title"];
             BOOL isOn = [item[@"value"] boolValue];
-
-            [cell showIcon:YES];
             NSString *iconName = item[@"icon"];
             if (iconName)
             {
@@ -169,11 +167,9 @@
                     icon = [[OAUtilities getMxIcon:iconName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
                 else
                     icon = [UIImage templateImageNamed:item[@"icon"]];
-                cell.iconView.image = icon;
-                cell.iconView.tintColor = isOn ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_tint_gray);
+                cell.leftIconView.image = icon;
+                cell.leftIconView.tintColor = isOn ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_tint_gray);
             }
-
-            [cell.textView setText:item[@"title"]];
             [cell.switchView setOn:isOn];
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.switchView addTarget:self action:@selector(onSwitchPressed:) forControlEvents:UIControlEventValueChanged];

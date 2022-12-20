@@ -10,12 +10,13 @@
 #import "OABaseTrackMenuHudViewController.h"
 #import "OATextInputCell.h"
 #import "OAColorsTableViewCell.h"
-#import "OAIconTextDividerSwitchCell.h"
+#import "OASwitchTableViewCell.h"
 #import "OAIconTitleValueCell.h"
 #import "Localization.h"
 #import "OAColors.h"
 #import "OADefaultFavorite.h"
 #import "OAFavoritesHelper.h"
+#import "OASizes.h"
 
 @interface OAEditWaypointsGroupOptionsViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, OAColorsTableViewCellDelegate>
 
@@ -188,7 +189,7 @@
 
                 OAGPXTableCellData *groupCellData = [OAGPXTableCellData withData:@{
                         kTableKey: [@"cell_waypoints_group_" stringByAppendingString:groupName],
-                        kCellType: [OAIconTextDividerSwitchCell getCellIdentifier],
+                        kCellType: [OASwitchTableViewCell getCellIdentifier],
                         kCellTitle: groupName,
                         kCellLeftIcon: [UIImage templateImageNamed:visible ? @"ic_custom_folder" : @"ic_custom_folder_hidden"],
                         kCellTintColor: @(visible ? color : color_footer_icon_gray),
@@ -404,28 +405,27 @@
         }
         outCell = cell;
     }
-    else if ([cellData.type isEqualToString:[OAIconTextDividerSwitchCell getCellIdentifier]])
+    else if ([cellData.type isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OAIconTextDividerSwitchCell *cell =
-                [tableView dequeueReusableCellWithIdentifier:[OAIconTextDividerSwitchCell getCellIdentifier]];
+        OASwitchTableViewCell *cell =
+                [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextDividerSwitchCell getCellIdentifier]
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier]
                                                          owner:self options:nil];
-            cell = (OAIconTextDividerSwitchCell *) nib[0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
-            cell.dividerView.hidden = YES;
+            cell = (OASwitchTableViewCell *) nib[0];
+            cell.separatorInset = UIEdgeInsetsMake(0., kPaddingOnSideOfContent, 0., 0.);
+            [cell descriptionVisibility:NO];
         }
         if (cell)
         {
             BOOL isOn = [self isOn:cellData];
             cell.switchView.on = isOn;
-            cell.textView.text = cellData.title;
+            cell.titleLabel.text = cellData.title;
 
-            [cell showIcon:cellData.leftIcon != nil];
-            cell.iconView.image = cellData.leftIcon;
-            cell.iconView.tintColor = UIColorFromRGB(cellData.tintColor);
+            [cell leftIconVisibility:cellData.leftIcon != nil];
+            cell.leftIconView.image = cellData.leftIcon;
+            cell.leftIconView.tintColor = UIColorFromRGB(cellData.tintColor);
 
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];

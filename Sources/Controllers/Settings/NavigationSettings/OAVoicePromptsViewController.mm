@@ -9,7 +9,7 @@
 #import "OAVoicePromptsViewController.h"
 #import "OASwitchTableViewCell.h"
 #import "OAIconTitleValueCell.h"
-#import "OASettingSwitchCell.h"
+#import "OASwitchTableViewCell.h"
 #import "OASettingsTableViewCell.h"
 #import "OANavigationLanguageViewController.h"
 #import "OASpeedLimitToleranceViewController.h"
@@ -19,7 +19,7 @@
 #import "OAApplicationMode.h"
 #import "OARoutingHelper.h"
 #import "OAVoiceRouter.h"
-
+#import "OASizes.h"
 #import "Localization.h"
 #import "OAColors.h"
 
@@ -99,7 +99,7 @@
     NSArray<NSNumber *> *speedLimitsMiles = @[ @0.f, @3.f, @5.f, @7.f, @10.f, @15.f ];
     
     [firstSection addObject:@{
-        @"type" : [OASettingSwitchCell getCellIdentifier],
+        @"type" : [OASwitchTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"voice_provider"),
         @"icon" : @"ic_custom_sound",
         @"value" : _settings.voiceMute,
@@ -220,22 +220,21 @@
 - (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:[OASettingSwitchCell getCellIdentifier]])
+    if ([cellType isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
+        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
-            cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
-            cell.descriptionView.hidden = YES;
-            cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASwitchTableViewCell *) nib[0];
+            [cell descriptionVisibility:NO];
+            cell.separatorInset = UIEdgeInsetsMake(0., kPaddingToLeftOfContentWithIcon, 0., 0.);
         }
         if (cell)
         {
-            cell.textView.text = item[@"title"];
-            cell.imgView.image = [UIImage templateImageNamed:item[@"icon"]];
-            cell.imgView.tintColor = _voiceOn ? UIColorFromRGB(self.appMode.getIconColor) : UIColorFromRGB(color_icon_inactive);
+            cell.titleLabel.text = item[@"title"];
+            cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
+            cell.leftIconView.tintColor = _voiceOn ? UIColorFromRGB(self.appMode.getIconColor) : UIColorFromRGB(color_icon_inactive);
                                   
             id v = item[@"value"];
             [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
@@ -275,16 +274,18 @@
     }
     else if ([cellType isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OASwitchTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
+        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell = (OASwitchTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
         }
         if (cell)
         {
-            cell.textView.text = item[@"title"];
+            cell.titleLabel.text = item[@"title"];
+
             id v = item[@"value"];
             [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             if ([v isKindOfClass:[OACommonBoolean class]])

@@ -548,18 +548,18 @@
     }
     else if ([item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OASwitchTableViewCell* cell = nil;
-        cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
+        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
-            cell.textView.numberOfLines = 0;
+            cell = (OASwitchTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
         }
-        
         if (cell)
         {
-            [cell.textView setText: item[@"title"]];
+            cell.titleLabel.text = item[@"title"];
+
             cell.switchView.on = [item[@"value"] boolValue];
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];

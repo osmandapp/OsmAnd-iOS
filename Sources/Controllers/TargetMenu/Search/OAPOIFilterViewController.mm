@@ -18,7 +18,7 @@
 #import "OAPOIFilter.h"
 #import "OAUtilities.h"
 #import "OAIconTextCollapseCell.h"
-#import "OASettingSwitchCell.h"
+#import "OASwitchTableViewCell.h"
 #import "OAIconButtonCell.h"
 #import "OAIconTextFieldCell.h"
 #import "OASizes.h"
@@ -913,39 +913,36 @@ typedef enum
         }
         case SWITCH_ITEM:
         {
-            OASettingSwitchCell* cell;
-            cell = (OASettingSwitchCell *)[tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
+            OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
-                cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
-                cell.imgView.tintColor = UIColorFromRGB(profile_icon_color_inactive);
-                cell.descriptionView.hidden = YES;
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
+                cell = (OASwitchTableViewCell *) nib[0];
+                cell.leftIconView.tintColor = UIColorFromRGB(profile_icon_color_inactive);
+                [cell descriptionVisibility:NO];
             }
-            
             if (cell)
             {
                 [cell.switchView removeTarget:self action:@selector(toggleCheckbox:) forControlEvents:UIControlEventValueChanged];
                 cell.switchView.tag = (indexPath.section << 10) + indexPath.row;
                 [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];
                 [cell.switchView addTarget:self action:@selector(toggleCheckbox:) forControlEvents:UIControlEventValueChanged];
+
                 if (item.icon)
                 {
-                    cell.imgView.image = item.icon;
-                    cell.imgView.hidden = NO;
+                    cell.leftIconView.image = item.icon;
+                    cell.leftIconView.hidden = NO;
                     cell.separatorInset = UIEdgeInsetsMake(0., 70., 0., 0.);
                 }
                 else
                 {
-                    cell.imgView.image = nil;
-                    cell.imgView.hidden = YES;
+                    cell.leftIconView.image = nil;
+                    cell.leftIconView.hidden = YES;
                     cell.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
                 }
-                [cell.textView setText:item.text];
+                cell.titleLabel.text = item.text;
                 cell.switchView.on = item.checked;
             }
-            if ([cell needsUpdateConstraints])
-                [cell updateConstraints];
             return cell;
         }
         case BUTTON_ITEM:
@@ -1007,7 +1004,7 @@ typedef enum
         }
         case SWITCH_ITEM:
         {
-            OASettingSwitchCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+            OASwitchTableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
             if (cell)
             {
                 UISwitch *switchView = cell.switchView;

@@ -312,24 +312,24 @@
     }
     else if ([item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OASwitchTableViewCell* cell = nil;
-        cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
+        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
-            cell.textView.numberOfLines = 0;
+            cell = (OASwitchTableViewCell *) nib[0];
+            cell.backgroundColor = [UIColor clearColor];
+            cell.switchView.tintColor = UIColorFromRGB(color_bottom_sheet_secondary);
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
         }
-        
         if (cell)
         {
-            cell.backgroundColor = [UIColor clearColor];
-            [cell.textView setText: item[@"title"]];
+            cell.titleLabel.text = item[@"title"];
+
             cell.switchView.on = [item[@"value"] boolValue];
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
-            cell.switchView.tintColor = UIColorFromRGB(color_bottom_sheet_secondary);
         }
         return cell;
     }
@@ -436,15 +436,6 @@
 - (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section
 {
     view.hidden = YES;
-}
-
-- (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSDictionary *item = _data[indexPath.row];
-    if (![item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
-        return indexPath;
-    else
-        return nil;
 }
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

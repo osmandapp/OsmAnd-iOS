@@ -303,17 +303,18 @@
     }
     else if ([cellType isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OASwitchTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
+        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell = (OASwitchTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
         }
-        
         if (cell)
         {
-            [cell.textView setText: item[@"title"]];
+            cell.titleLabel.text = item[@"title"];
+
             NSString *itemKey = item[@"key"];
             BOOL value = [self cellValueByKey:itemKey];
             cell.switchView.on = value;

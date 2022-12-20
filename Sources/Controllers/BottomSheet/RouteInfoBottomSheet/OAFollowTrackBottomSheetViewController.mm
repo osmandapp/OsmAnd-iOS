@@ -17,7 +17,7 @@
 #import "OAGPXDatabase.h"
 #import "OASegmentTableViewCell.h"
 #import "OAIconTextDescCell.h"
-#import "OASettingSwitchCell.h"
+#import "OASwitchTableViewCell.h"
 #import "OATitleRightIconCell.h"
 #import "OsmAndApp.h"
 #import "OARoutingHelper.h"
@@ -190,7 +190,7 @@
 	}];
 	
 	[items addObject:@{
-		@"type" : [OASettingSwitchCell getCellIdentifier],
+		@"type" : [OASwitchTableViewCell getCellIdentifier],
 		@"title" : OALocalizedString(@"reverse_track_dir"),
 		@"img" : @"ic_custom_swap",
 		@"key" : @"reverse_track"
@@ -397,31 +397,25 @@
         }
         return cell;
     }
-    else if ([type isEqualToString:[OASettingSwitchCell getCellIdentifier]])
+    else if ([type isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
+        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
-            cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
-            cell.descriptionView.hidden = YES;
-            
-            [cell setSecondaryImage:nil];
-            
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASwitchTableViewCell *) nib[0];
+            [cell descriptionVisibility:NO];
             cell.separatorInset = UIEdgeInsetsMake(0., 66., 0., 0.);
+            cell.leftIconView.tintColor = UIColorFromRGB(color_primary_purple);
         }
-        
         if (cell)
         {
-            cell.textView.text = item[@"title"];
-            cell.imgView.image = [UIImage templateImageNamed:item[@"img"]];
-            cell.imgView.tintColor = UIColorFromRGB(color_primary_purple);
+            cell.titleLabel.text = item[@"title"];
+            cell.leftIconView.image = [UIImage templateImageNamed:item[@"img"]];
+
             [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             cell.switchView.on = _reverseParam.isSelected;
             [_reverseParam setControlAction:cell.switchView];
-            
-            if ([cell needsUpdateConstraints])
-                [cell setNeedsUpdateConstraints];
         }
         return cell;
     }

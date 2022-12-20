@@ -1024,6 +1024,12 @@ typedef enum
         [self.routeInfoView updateMenu];
 }
 
+- (void) updateRouteInfoData
+{
+    if ([self isRouteInfoVisible])
+        [self.routeInfoView update];
+}
+
 - (void) addWaypoint
 {
     [self.routeInfoView addWaypoint];

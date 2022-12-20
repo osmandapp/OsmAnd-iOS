@@ -7,6 +7,8 @@
 //
 
 #import "OARoutingHelperUtils.h"
+#import "OARoutePreferencesParameters.h"
+#import "OAApplicationMode.h"
 
 #define CACHE_RADIUS 100000
 
@@ -34,6 +36,27 @@
     }
     [formattedStreetName replaceOccurrencesOfString:@";" withString:@", " options:0 range:NSMakeRange(0, formattedStreetName.length)];
     return formattedStreetName;
+}
+
+
++ (RoutingParameter)getParameterForDerivedProfile:(NSString *)key appMode:(OAApplicationMode *)appMode router:(std::shared_ptr<GeneralRouter>)router
+{
+    return [self getParametersForDerivedProfile:appMode router:router][key.UTF8String];
+}
+
++ (map<string, RoutingParameter>) getParametersForDerivedProfile:(OAApplicationMode *)appMode router:(std::shared_ptr<GeneralRouter>)router
+{
+    NSString *derivedProfile = [appMode getDerivedProfile];
+    map<string, RoutingParameter> parameters;
+    auto& params = router->getParameters();
+    for (auto it = params.begin(); it != params.end(); ++it)
+    {
+        vector<string> profiles = it->second.profiles;
+        if (profiles.empty() || std::find(profiles.begin(), profiles.end(), derivedProfile.UTF8String) != profiles.end())
+            parameters[it->first] = it->second;
+    }
+
+    return parameters;
 }
 
 @end

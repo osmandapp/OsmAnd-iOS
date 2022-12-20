@@ -202,6 +202,39 @@
 
 @end
 
+@implementation NSMutableAttributedString (util)
+
+- (void) addString:(NSString *)string fontWeight:(UIFontWeight)fontWeight size:(CGFloat)size
+{
+    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:string];
+    NSRange fullRange = NSMakeRange(0, string.length);
+    UIFont *font = [UIFont systemFontOfSize:size weight:fontWeight];
+    [attributedString addAttribute:NSFontAttributeName value:font range:fullRange];
+    [self appendAttributedString:attributedString];
+}
+
+- (void) setFontSize:(CGFloat)size forString:(NSString *)string
+{
+    NSRange range = [self.string rangeOfString:string];
+    UIFont *font = [UIFont systemFontOfSize:size];
+    [self addAttribute:NSFontAttributeName value:font range:range];
+}
+
+- (void) setFontWeight:(UIFontWeight)fontWeight andSize:(CGFloat)size forString:(NSString *)string
+{
+    NSRange range = [self.string rangeOfString:string];
+    UIFont *font = [UIFont systemFontOfSize:size weight:fontWeight];
+    [self addAttribute:NSFontAttributeName value:font range:range];
+}
+
+- (void) setColor:(UIColor *)color forString:(NSString *)string
+{
+    NSRange range = [self.string rangeOfString:string];
+    [self addAttribute:NSForegroundColorAttributeName value:color range:range];
+}
+
+@end
+
 @implementation NSString (util)
 
 - (int) indexOf:(NSString *)text
@@ -2413,4 +2446,13 @@ static const double d180PI = 180.0 / M_PI_2;
     return [[NSDate alloc] initWithTimeInterval:interval sinceDate:sourceDate];
 }
 
++ (NSString *)getRoutingStringPropertyName:(NSString *)propertyName defaultName:(NSString *)defaultName
+{
+    NSString *key = [NSString stringWithFormat:@"routing_attr_%@_name", propertyName];
+    NSString *res = OALocalizedString(key);
+    if ([res isEqualToString:key])
+        res = defaultName;
+    return res;
+}
+ 
 @end

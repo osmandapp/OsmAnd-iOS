@@ -2768,3 +2768,16 @@
 "res_heightmap" = "Mapa de altura";
 "nautical_depth_points" = "Puntos de calado náutico";
 "amazon_appstore" = "Amazon Appstore";
+"position_on_map" = "Posición de la pantalla";
+"units_kg" = "kg";
+"co2_mission" = "Emisión de CO2";
+"position_on_map_center" = "Centro";
+"position_on_map_bottom" = "Fondo";
+"routing_attr_motor_type_name" = "Combustible del motor";
+"routing_attr_motor_type_description" = "Seleccione el tipo de combustible de su vehículo para calcular las emisiones de CO2.";
+"routing_attr_motor_type_diesel_name" = "Diésel";
+"routing_attr_motor_type_petrol_name" = "Gasolina";
+"routing_attr_motor_type_lpg_name" = "GLP";
+"routing_attr_motor_type_gas_name" = "GNC";
+"routing_attr_motor_type_electric_name" = "Eléctrico";
+"routing_attr_motor_type_hybrid_name" = "Híbrido";

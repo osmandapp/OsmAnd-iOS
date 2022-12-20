@@ -656,7 +656,7 @@
 "rendering_value_walkingRoutesOSMC_name" = "Χρώμα ανάλογα με τα σύμβολα πεζοπορίας OSMC";
 "routing_attr_avoid_shuttle_train_description" = "Απέφυγε χρήση τρένου κλειστής διαδρομής";
 "rendering_attr_highway_class_track_name" = "Αγροτική Οδός";
-"rendering_attr_showMtbRoutes_name" = "Εμφάνιση μονοπατιών ποδηλασίας βουνού";
+"rendering_attr_showMtbRoutes_name" = "Μονοπάτια ποδηλασίας βουνού";
 "rendering_attr_highway_class_service_name" = "Εξυπηρέτησης";
 "rendering_attr_surface_salt_name" = "Αλάτι";
 "rendering_attr_surface_sett_name" = "Πλακόστρωση";
@@ -665,7 +665,7 @@
 "routing_attr_no_new_routing_description" = "Να μην χρησιμοποιηθούν οι κανόνες δρομολόγησης που εισήχθησαν στην έκδοση 1.9.";
 "routing_attr_avoid_ferry_name" = "Χωρίς πορθμεία";
 "rendering_value_defaultTranslucentCyan_name" = "Προεπιλογή (ημιδιαφανές κυανό)";
-"rendering_attr_hikingRoutesOSMC_name" = "Επίστρωμα συμβόλων πεζοπορίας";
+"rendering_attr_hikingRoutesOSMC_name" = "Διαδρομές πεζοπορίας";
 "rendering_attr_depthContours_name" = "Ναυτικές ισοβαθείς καμπύλες";
 "rendering_value_pedestrian_name" = "Πεζοπόρος";
 "rendering_attr_moreDetailed_name" = "Περισσότερες λεπτομέρειες";
@@ -768,7 +768,7 @@
 "rendering_attr_surface_stone_name" = "Πέτρα";
 "rendering_value_germanRoadAtlas_name" = "Γερμανικός άτλαντας δρόμων";
 "rendering_attr_ice_road_name" = "Παγωμένος δρόμος";
-"rendering_attr_showCycleRoutes_name" = "Εμφάνιση διαδρομών ποδηλάτων";
+"rendering_attr_showCycleRoutes_name" = "Ποδηλατικές διαδρομές";
 "rendering_attr_highway_class_steps_name" = "Σκάλες";
 "rendering_value_purple_name" = "Μοβ";
 "routing_attr_avoid_subway_name" = "Χωρίς μετρό";
@@ -1467,3 +1467,5 @@
 "login_open_street_map_org" = "Σύνδεση στο OpenStreetMap.org";
 "simulation_constant_mode_title" = "Σταθερή ταχύτητα";
 "speed_mode" = "Λειτουργία ταχύτητας";
+"shared_string_turn" = "Στροφή";
+"monitoring_control_start" = "ΕΓΓΡΑΦΗ";

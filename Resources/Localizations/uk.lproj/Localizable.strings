@@ -2773,3 +2773,10 @@
 "local_changes_will_be_dismissed" = "Локальні зміни буде відхилено";
 "local_file_will_be_restored" = "Локальний файл буде відновлено";
 "checking_progress" = "Перевірка..";
+"res_heightmap" = "Мапа висот";
+"use_heightmap_setting" = "Використовувати 3D-мапи висот";
+"depth_contours" = "Ізолінії глибин";
+"huawei_appgallery" = "Huawei AppGallery";
+"nautical_depth_points" = "Точки морських глибин";
+"worldwide_maps" = "Мапи світу";
+"amazon_appstore" = "Amazon Appstore";

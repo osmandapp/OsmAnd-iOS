@@ -2054,7 +2054,7 @@
 "rendering_attr_highway_class_road_name" = "Vojoj";
 "rendering_value_translucent_green_name" = "Helverda diafana";
 "rendering_value_translucent_yellow_name" = "Flava diafana";
-"rendering_attr_OSMMapperAssistant_name" = "Etikedoj“riparu min!”";
+"rendering_attr_OSMMapperAssistant_name" = "Ŝlosiloj “Riparu min!”";
 "routing_attr_avoid_borders_name" = "Sen landlimaj trairejoj";
 "rendering_value_walkingRoutesScopeOSMC_name" = "prizorganto";
 "rendering_attr_smoothness_excellent_name" = "Bonega";
@@ -2305,7 +2305,7 @@
 "walking_route_osmc_description" = "Color routes according to their individual local color (if present on OpenStreetMap) and type (international, regional, local).";
 "rendering_value_walkingRoutesOSMCNodes_description" = "Kolorigi kursojn laŭ speco de reto (interŝtata, regiona, loka).";
 "rendering_value_walkingRoutesScopeOSMC_description" = "Kolorigi kursojn laŭ prizorganto.";
-"rendering_value_walkingRoutesOSMC_description" = "Kolorigi kursojn laŭ iliaj koloroj kaj emblemoj en la realo (se ekzistas en OSM – ŝlosilo “osmc:symbol=”).";
+"rendering_value_walkingRoutesOSMC_description" = "Kolorigi kursojn laŭ iliaj koloroj kaj emblemoj en la realo (se ekzistas en OSM – ŝlosilo «osmc:symbol»).";
 "routes_color_by_type" = "Kolorigi kursojn laŭ…";
 
 // Release Notes
@@ -2460,3 +2460,4 @@
 "shared_string_data" = "Datumoj";
 "on_hold" = "Ĉesigita";
 "paused" = "Paŭzigita";
+"mtb_segment_classification" = "Klasifiki segmentojn";

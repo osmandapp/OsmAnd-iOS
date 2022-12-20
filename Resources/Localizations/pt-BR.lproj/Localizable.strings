@@ -2771,3 +2771,15 @@
 "local_file_will_be_restored" = "O arquivo local será restaurado";
 "amazon_appstore" = "Amazon Appstore";
 "huawei_appgallery" = "Huawei AppGallery";
+"position_on_map_center" = "Centro";
+"position_on_map_bottom" = "Em baixo";
+"units_kg" = "kg";
+"routing_attr_motor_type_description" = "Selecione o tipo de combustível do seu veículo para calcular a emissão de CO2.";
+"routing_attr_motor_type_diesel_name" = "Diesel";
+"routing_attr_motor_type_petrol_name" = "Gasolina";
+"routing_attr_motor_type_lpg_name" = "GLP";
+"routing_attr_motor_type_gas_name" = "GNV";
+"routing_attr_motor_type_electric_name" = "Elétrico";
+"routing_attr_motor_type_hybrid_name" = "Híbrido";
+"co2_mission" = "Emissão de CO2";
+"position_on_map" = "Posição na tela";

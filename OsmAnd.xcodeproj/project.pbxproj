@@ -2201,7 +2201,6 @@
 		DA5A82BC26C563A800F274C7 /* OALocationIconsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7C1226C563A200F274C7 /* OALocationIconsTableViewCell.xib */; };
 		DA5A82BD26C563A800F274C7 /* OAIconTextTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7C1326C563A200F274C7 /* OAIconTextTableViewCell.xib */; };
 		DA5A82BE26C563A800F274C7 /* OATextInputFloatingCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7C1426C563A200F274C7 /* OATextInputFloatingCell.xib */; };
-		DA5A82BF26C563A800F274C7 /* OATextInputIconCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7C1526C563A200F274C7 /* OATextInputIconCell.xib */; };
 		DA5A82C026C563A800F274C7 /* OAIconButtonCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7C1626C563A200F274C7 /* OAIconButtonCell.xib */; };
 		DA5A82C126C563A800F274C7 /* OAIconsCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7C1726C563A200F274C7 /* OAIconsCollectionViewCell.xib */; };
 		DA5A82C226C563A800F274C7 /* OAPasswordInputFieldCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7C1826C563A200F274C7 /* OAPasswordInputFieldCell.xib */; };
@@ -2340,7 +2339,6 @@
 		DA5A834E26C563A800F274C7 /* OAPointDescCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7D0D26C563A300F274C7 /* OAPointDescCell.mm */; };
 		DA5A835026C563A800F274C7 /* OADownloadInfoTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7D0F26C563A300F274C7 /* OADownloadInfoTableViewCell.m */; };
 		DA5A835126C563A800F274C7 /* OAPointHeaderTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7D1326C563A300F274C7 /* OAPointHeaderTableViewCell.m */; };
-		DA5A835226C563A800F274C7 /* OATextInputIconCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7D1426C563A300F274C7 /* OATextInputIconCell.mm */; };
 		DA5A835326C563A800F274C7 /* OANoImagesCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7D1526C563A300F274C7 /* OANoImagesCell.mm */; };
 		DA5A835426C563A800F274C7 /* OAGPXRouteRoundCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7D1926C563A300F274C7 /* OAGPXRouteRoundCell.m */; };
 		DA5A835526C563A800F274C7 /* OAGPXTrackCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7D1B26C563A300F274C7 /* OAGPXTrackCell.m */; };
@@ -6033,7 +6031,6 @@
 		DA5A7C1226C563A200F274C7 /* OALocationIconsTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OALocationIconsTableViewCell.xib; sourceTree = "<group>"; };
 		DA5A7C1326C563A200F274C7 /* OAIconTextTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAIconTextTableViewCell.xib; sourceTree = "<group>"; };
 		DA5A7C1426C563A200F274C7 /* OATextInputFloatingCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OATextInputFloatingCell.xib; sourceTree = "<group>"; };
-		DA5A7C1526C563A200F274C7 /* OATextInputIconCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OATextInputIconCell.xib; sourceTree = "<group>"; };
 		DA5A7C1626C563A200F274C7 /* OAIconButtonCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAIconButtonCell.xib; sourceTree = "<group>"; };
 		DA5A7C1726C563A200F274C7 /* OAIconsCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAIconsCollectionViewCell.xib; sourceTree = "<group>"; };
 		DA5A7C1826C563A200F274C7 /* OAPasswordInputFieldCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAPasswordInputFieldCell.xib; sourceTree = "<group>"; };
@@ -6251,7 +6248,6 @@
 		DA5A7CFA26C563A200F274C7 /* OAButtonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAButtonCell.h; sourceTree = "<group>"; };
 		DA5A7CFB26C563A200F274C7 /* OATargetInfoCollapsableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OATargetInfoCollapsableViewCell.h; sourceTree = "<group>"; };
 		DA5A7CFC26C563A300F274C7 /* OADateTimePickerTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OADateTimePickerTableViewCell.m; sourceTree = "<group>"; };
-		DA5A7CFD26C563A300F274C7 /* OATextInputIconCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OATextInputIconCell.h; sourceTree = "<group>"; };
 		DA5A7CFE26C563A300F274C7 /* OAIconTitleValueCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAIconTitleValueCell.h; sourceTree = "<group>"; };
 		DA5A7CFF26C563A300F274C7 /* OASegmentedControlCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OASegmentedControlCell.m; sourceTree = "<group>"; };
 		DA5A7D0026C563A300F274C7 /* OARadiusCellEx.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OARadiusCellEx.m; sourceTree = "<group>"; };
@@ -6271,7 +6267,6 @@
 		DA5A7D1026C563A300F274C7 /* OAPublicTransportRouteShieldCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAPublicTransportRouteShieldCell.h; sourceTree = "<group>"; };
 		DA5A7D1126C563A300F274C7 /* OAIconsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAIconsTableViewCell.h; sourceTree = "<group>"; };
 		DA5A7D1326C563A300F274C7 /* OAPointHeaderTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAPointHeaderTableViewCell.m; sourceTree = "<group>"; };
-		DA5A7D1426C563A300F274C7 /* OATextInputIconCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OATextInputIconCell.mm; sourceTree = "<group>"; };
 		DA5A7D1526C563A300F274C7 /* OANoImagesCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OANoImagesCell.mm; sourceTree = "<group>"; };
 		DA5A7D1626C563A300F274C7 /* OAIconTitleButtonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAIconTitleButtonCell.h; sourceTree = "<group>"; };
 		DA5A7D1726C563A300F274C7 /* OAProgressTitleCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAProgressTitleCell.h; sourceTree = "<group>"; };
@@ -11456,8 +11451,6 @@
 				DA5A7C7F26C563A200F274C7 /* OATextInputFloatingCell.mm */,
 				DA5A7C5D26C563A200F274C7 /* OATextInputFloatingCellWithIcon.h */,
 				DA5A7CB026C563A200F274C7 /* OATextInputFloatingCellWithIcon.mm */,
-				DA5A7CFD26C563A300F274C7 /* OATextInputIconCell.h */,
-				DA5A7D1426C563A300F274C7 /* OATextInputIconCell.mm */,
 				DA5A7CAA26C563A200F274C7 /* OATextLineViewCell.h */,
 				DA5A7D2A26C563A300F274C7 /* OATextLineViewCell.m */,
 				DA5A7BAF26C563A100F274C7 /* OATextMultiViewCell.h */,
@@ -11638,7 +11631,6 @@
 				DA5A7C3426C563A200F274C7 /* OATargetPointViewCell.xib */,
 				DA5A7C1426C563A200F274C7 /* OATextInputFloatingCell.xib */,
 				DA5A7C3126C563A200F274C7 /* OATextInputFloatingCellWithIcon.xib */,
-				DA5A7C1526C563A200F274C7 /* OATextInputIconCell.xib */,
 				DA5A7BE426C563A100F274C7 /* OATextLineViewCell.xib */,
 				DA5A7BDF26C563A100F274C7 /* OATextMultiViewCell.xib */,
 				DA5A7C0E26C563A200F274C7 /* OATextViewResizingCell.xib */,
@@ -14036,7 +14028,6 @@
 				841A11221DEC454F009558D3 /* osmand_logo@2x.png in Resources */,
 				8420C1CE1B42F2AC004EDAE6 /* ic_dialog_rename@2x.png in Resources */,
 				0CF58566244072EC0081238D /* widget_marker_triangle_pin_4@3x.png in Resources */,
-				DA5A82BF26C563A800F274C7 /* OATextInputIconCell.xib in Resources */,
 				DA83602D23449C6B003374B5 /* ic_custom_options@3x.png in Resources */,
 				DA5A857326C567B400F274C7 /* OAPluginPopupViewController.xib in Resources */,
 				0A31AFCD26FBAC39000EE842 /* ic_small_speed@2x.png in Resources */,
@@ -16052,7 +16043,6 @@
 				DA5A83DA26C563A800F274C7 /* OAAddFavoriteGroupViewController.mm in Sources */,
 				DA5A814726C563A700F274C7 /* OAUploadOsmPointsAsyncTask.m in Sources */,
 				DA5A81E526C563A700F274C7 /* OAGPXDatabase.mm in Sources */,
-				DA5A835226C563A800F274C7 /* OATextInputIconCell.mm in Sources */,
 				DA5A84C826C563A900F274C7 /* OAOsmEditingBottomSheetViewController.mm in Sources */,
 				DA5A83C926C563A800F274C7 /* OAEditPointViewController.mm in Sources */,
 				DA5A84AD26C563A900F274C7 /* OARootViewController.m in Sources */,

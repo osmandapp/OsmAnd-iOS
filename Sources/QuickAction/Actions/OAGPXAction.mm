@@ -23,7 +23,7 @@
 #import "OAQuickActionType.h"
 #import "OAIconTitleValueCell.h"
 #import "OASwitchTableViewCell.h"
-#import "OATextInputIconCell.h"
+#import "OAInputTableViewCell.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -152,7 +152,7 @@ static OAQuickActionType *TYPE;
                           @"footer" : OALocalizedString(@"quick_action_dialog_descr")
                           }] forKey:OALocalizedString(@"shared_string_options")];
     [data setObject:@[@{
-                          @"type" : [OATextInputIconCell getCellIdentifier],
+                          @"type" : [OAInputTableViewCell getCellIdentifier],
                           @"key" : KEY_NAME,
                           @"title" : self.getParams[KEY_NAME] ? self.getParams[KEY_NAME] : @"",
                           @"hint" : OALocalizedString(@"quick_action_template_name"),

@@ -15,7 +15,6 @@
 #import "OASizes.h"
 #import "OAColors.h"
 #import "OASwitchTableViewCell.h"
-#import "OATextInputIconCell.h"
 #import "OAIconTitleValueCell.h"
 #import "OAEditColorViewController.h"
 #import "OADefaultFavorite.h"
@@ -527,24 +526,42 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAInputTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAInputTableViewCell *) nib[0];
-            [cell leftIconVisibility:NO];
             [cell titleVisibility:NO];
             [cell clearButtonVisibility:NO];
             cell.inputField.textAlignment = NSTextAlignmentNatural;
         }
         if (cell)
         {
-            if (_action.isActionEditable)
+            NSString *imgName = item[@"img"];
+            [cell leftIconVisibility:imgName && imgName.length > 0];
+            if (!cell.leftIconView.hidden)
+            {
+                [cell.leftIconView setImage:[UIImage templateImageNamed:imgName]];
+                cell.leftIconView.tintColor = UIColorFromRGB(color_text_footer);
+            }
+
+            if ([item.allKeys containsObject:@"hint"] && [item[@"hint"] isEqualToString:OALocalizedString(@"quick_action_template_name")])
             {
                 cell.inputField.text = item[@"title"];
+                cell.inputField.placeholder = item[@"hint"];
+                cell.inputField.tag = indexPath.section << 10 | indexPath.row;
                 [cell.inputField removeTarget:self action:NULL forControlEvents:UIControlEventEditingChanged];
-                [cell.inputField addTarget:self action:@selector(onNameChanged:) forControlEvents:UIControlEventEditingChanged];
+                [cell.inputField addTarget:self action:@selector(onTextFieldChanged:) forControlEvents:UIControlEventEditingChanged];
             }
             else
             {
-                cell.inputField.placeholder = item[@"title"];
+                cell.userInteractionEnabled = [_action isActionEditable];
+                if (cell.userInteractionEnabled)
+                {
+                    cell.inputField.text = item[@"title"];
+                    [cell.inputField removeTarget:self action:NULL forControlEvents:UIControlEventEditingChanged];
+                    [cell.inputField addTarget:self action:@selector(onNameChanged:) forControlEvents:UIControlEventEditingChanged];
+                }
+                else
+                {
+                    cell.inputField.placeholder = item[@"title"];
+                }
             }
-            cell.userInteractionEnabled = _action.isActionEditable;
         }
         return cell;
     }
@@ -567,32 +584,6 @@
             [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
         }
-        return cell;
-    }
-    else if ([item[@"type"] isEqualToString:[OATextInputIconCell getCellIdentifier]])
-    {
-        OATextInputIconCell* cell = [tableView dequeueReusableCellWithIdentifier:[OATextInputIconCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextInputIconCell getCellIdentifier] owner:self options:nil];
-            cell = (OATextInputIconCell *)[nib objectAtIndex:0];
-        }
-        
-        if (cell)
-        {
-            cell.inputField.text = item[@"title"];
-            cell.inputField.placeholder = item[@"hint"];
-            cell.inputField.tag = indexPath.section << 10 | indexPath.row;
-            [cell.inputField removeTarget:self action:NULL forControlEvents:UIControlEventEditingChanged];
-            [cell.inputField addTarget:self action:@selector(onTextFieldChanged:) forControlEvents:UIControlEventEditingChanged];
-            NSString *imgName = item[@"img"];
-            if (imgName && imgName.length > 0)
-            {
-                [cell.iconView setImage:[UIImage templateImageNamed:imgName]];
-                cell.iconView.tintColor = UIColorFromRGB(color_text_footer);
-            }
-        }
-        
         return cell;
     }
     else if ([item[@"type"] isEqualToString:[OAIconTitleValueCell getCellIdentifier]])

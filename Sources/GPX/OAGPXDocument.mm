@@ -396,6 +396,8 @@
                     _seg.trkseg = _s->shared_ptr();
                     [_seg fetchExtensions:_s->shared_ptr()];
                     [_seg fillRouteDetails];
+                    [_seg fillExtensions];
+                    [_seg fillExtensions:_s->shared_ptr()];
                     [seg addObject:_seg];
                 }
                 

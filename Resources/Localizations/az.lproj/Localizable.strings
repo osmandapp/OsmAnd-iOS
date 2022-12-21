@@ -2408,3 +2408,9 @@
 "map_settings_weather_temp" = "Temperatur";
 "osmand_cloud_login_descr" = "Qeydiyyatdan keçdiyiniz e-poçt ünvanını daxil edin. Növbəti addım üçün birdəfəlik şifrə göndəriləcək.";
 "map_settings_weather_cloud" = "Bulud";
+"routing_attr_motor_type_electric_name" = "Elektrik";
+"routing_attr_motor_type_gas_name" = "CNG";
+"routing_attr_motor_type_hybrid_name" = "Hibrid";
+"routing_attr_motor_type_diesel_name" = "Dizel";
+"routing_attr_motor_type_petrol_name" = "Benzin";
+"routing_attr_motor_type_lpg_name" = "LPG";

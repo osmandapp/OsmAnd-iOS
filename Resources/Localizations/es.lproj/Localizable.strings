@@ -2761,3 +2761,10 @@
 "shared_string_do_not_exist" = "No existe";
 "cloud_conflict_descr" = "Las versiones local y en la nube contienen cambios desde la última sincronización.";
 "local_changes_will_be_dismissed" = "Se descartarán los cambios locales";
+"use_heightmap_setting" = "Utilizar mapas de altura en relieve 3D";
+"depth_contours" = "Contornos de la profundidad";
+"worldwide_maps" = "Mapamundi";
+"huawei_appgallery" = "Huawei AppGallery";
+"res_heightmap" = "Mapa de altura";
+"nautical_depth_points" = "Puntos de calado náutico";
+"amazon_appstore" = "Amazon Appstore";

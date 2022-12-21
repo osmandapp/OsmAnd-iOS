@@ -58,18 +58,9 @@
 
 - (void)textIndentsStyle:(EOATableViewCellTextIndentsStyle)style
 {
-    if (style == EOATableViewCellTextNormalIndentsStyle)
-    {
-        self.textCustomMarginTopStackView.spacing = 5.;
-        self.textStackView.spacing = 2.;
-        self.textCustomMarginBottomStackView.spacing = 5.;
-    }
-    else if (style == EOATableViewCellTextIncreasedTopCenterIndentStyle)
-    {
-        self.textCustomMarginTopStackView.spacing = 9.;
-        self.textStackView.spacing = 6.;
-        self.textCustomMarginBottomStackView.spacing = 5.;
-    }
+    self.textCustomMarginTopStackView.spacing = style == EOATableViewCellTextIncreasedTopCenterIndentStyle ? 9. : 5.;
+    self.textStackView.spacing = style == EOATableViewCellTextNormalIndentsStyle ? 2. : 6.;
+    self.textCustomMarginBottomStackView.spacing = 5.;
 }
 
 - (void)anchorContent:(EOATableViewCellContentStyle)style

@@ -2514,3 +2514,13 @@
 "toggle_wind" = "Mostra/nascondi - Livello dei venti";
 "toggle_precipitation" = "Mostra/nascondi - Livello delle precipitazioni";
 "tts" = "TTS";
+"delete_group_confirm" = "Sicuro di volere cancellare il gruppo \"%@\"?";
+"product_desc_ext_osm_editing" = "Consente di contribuire a OpenStreetMap, una comunità globale volta a creare una mappa completa del mondo e a fornire dati open source aggiornati a ogni utente.\n\nPuoi trovare istruzioni su come modificare la mappa sul nostro sito web https://osmand.net/docs/user/plugins/osm-editing";
+"replace_waypoint_confirmation" = "Sicuro di volere sostituire il waypoint %@?";
+"shared_string_uploaded" = "Caricato";
+"shared_string_do_not_exist" = "Non esiste";
+"product_desc_ext_skimap" = "Progettato per navigare in luoghi di sport invernali. Guarda le piste da sci, gli indicatori degli impianti di risalita e le linee colorate che indicano la complessità di ogni traccia. Per utilizzare dopo aver abilitato vai su Configura mappa e scegli il tipo di mappa \"Inverno e sci\".";
+"help_travel" = "Viaggi (Wikipedia e Wikivoyage)";
+"help_legend_descr" = "Guida ai simboli della mappa";
+"res_heightmap" = "Mappa altitudini";
+"use_heightmap_setting" = "Utilizza le mappe altitudini in rilievo 3D";

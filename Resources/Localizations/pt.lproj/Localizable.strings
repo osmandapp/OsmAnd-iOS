@@ -2765,3 +2765,10 @@
 "deleted_file" = "Ficheiro eliminado";
 "shared_string_uploaded" = "Enviado";
 "cloud_conflict_descr" = "As versões local e na cloud contêm alterações deste a última sincronização.";
+"worldwide_maps" = "Mapas mundiais";
+"amazon_appstore" = "Amazon Appstore";
+"res_heightmap" = "Mapa de atitudes";
+"use_heightmap_setting" = "Usar mapas de altitude em relevo 3D";
+"depth_contours" = "Contornos de profundidade";
+"huawei_appgallery" = "Huawei AppGallery";
+"nautical_depth_points" = "Pontos de profundidade náutica";

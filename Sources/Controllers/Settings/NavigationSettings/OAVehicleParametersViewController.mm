@@ -21,9 +21,9 @@
 #import "OARouteSettingsBaseViewController.h"
 #import "OARouteProvider.h"
 #import "OARoutePreferencesParameters.h"
-
 #import "Localization.h"
 #import "OAColors.h"
+#import "OASizes.h"
 
 @interface OAVehicleParametersViewController () <UITableViewDelegate, UITableViewDataSource, OAVehicleParametersSettingDelegate>
 
@@ -34,6 +34,7 @@
     NSArray<NSArray *> *_data;
     OAAppSettings *_settings;
     vector<RoutingParameter> _otherParameters;
+    NSInteger _otherSection;
 }
 
 - (instancetype) initWithAppMode:(OAApplicationMode *)appMode
@@ -50,6 +51,7 @@
 {
     [super applyLocalization];
     self.titleLabel.text = OALocalizedString(@"vehicle_parameters");
+    [self.backButton setTitle:OALocalizedString(@"routing_settings") forState:UIControlStateNormal];
 }
 
 - (void) viewDidLoad
@@ -76,6 +78,7 @@
 {
     NSMutableArray *tableData = [NSMutableArray array];
     NSMutableArray *parametersArr = [NSMutableArray array];
+    NSMutableArray *exraParametersArr = [NSMutableArray array];
     NSMutableArray *defaultSpeedArr = [NSMutableArray array];
     auto router = [OsmAndApp.instance getRouter:self.appMode];
     _otherParameters.clear();
@@ -103,9 +106,10 @@
         for (const auto& p : _otherParameters)
         {
             NSString *paramId = [NSString stringWithUTF8String:p.id.c_str()];
-            NSString *title = [self getRoutingStringPropertyName:paramId defaultName:[NSString stringWithUTF8String:p.name.c_str()]];
+            NSString *title = [OAUtilities getRoutingStringPropertyName:paramId defaultName:[NSString stringWithUTF8String:p.name.c_str()]];
             if (!(p.type == RoutingParameterType::BOOLEAN))
             {
+                BOOL isMotorType = [paramId isEqualToString:@"motor_type"];
                 OACommonString *stringParam = [_settings getCustomRoutingProperty:paramId defaultValue:@"0"];
                 NSString *value = [stringParam get:self.appMode];
                 int index = -1;
@@ -129,12 +133,12 @@
                 }
 
                 if (index == 0)
-                    value = OALocalizedString(@"shared_string_none");
+                    value = OALocalizedString([paramId isEqualToString:@"motor_type"] ? @"not_selected" : @"shared_string_none");
                 else if (index != -1)
                     value = [self addSpaceToValue:[NSString stringWithUTF8String:p.possibleValueDescriptions[index].c_str()]];
                 else
                     value = [NSString stringWithFormat:@"%@ %@", value, [paramId isEqualToString:@"weight"] ? OALocalizedString(@"units_t") : OALocalizedString(@"units_m")];
-                [parametersArr addObject:
+                [isMotorType ? exraParametersArr : parametersArr addObject:
                  @{
                      @"name" : paramId,
                      @"title" : title,
@@ -157,18 +161,14 @@
     }];
     if (parametersArr.count > 0)
         [tableData addObject:parametersArr];
+    if (exraParametersArr.count > 0)
+        [tableData addObject:exraParametersArr];
     if (defaultSpeedArr.count > 0)
+    {
         [tableData addObject:defaultSpeedArr];
+        _otherSection = tableData.count - 1;
+    }
     _data = [NSArray arrayWithArray:tableData];
-}
-
-- (NSString *) getRoutingStringPropertyName:(NSString *)propertyName defaultName:(NSString *)defaultName
-{
-    NSString *key = [NSString stringWithFormat:@"routing_attr_%@_name", propertyName];
-    NSString *res = OALocalizedString(key);
-    if ([res isEqualToString:key])
-        res = defaultName;
-    return res;
 }
 
 - (NSString *) getParameterIcon:(NSString *)parameterName
@@ -181,12 +181,33 @@
         return @"ic_custom_length_limit";
     else if ([parameterName isEqualToString:@"width"])
         return @"ic_custom_width_limit";
+    else if ([parameterName isEqualToString:@"motor_type"])
+        return @"ic_custom_fuel";
     return @"";
+}
+
+- (NSString *)getTitleForHeader:(NSInteger)section
+{
+    if (section == _otherSection)
+        return OALocalizedString(@"help_other_header");
+
+    return nil;
+}
+
+- (NSString *)getTitleForFooter:(NSInteger)section
+{
+    if (section == 0)
+        return OALocalizedString(@"touting_specified_vehicle_parameters_descr");
+    else if (section == _otherSection)
+        return OALocalizedString(@"default_speed_descr");
+
+    return nil;
 }
 
 #pragma mark - TableView
 
-- (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
+- (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
+{
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
     if ([cellType isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
@@ -246,7 +267,8 @@
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
-- (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+- (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
     return _data[section].count;
 }
 
@@ -257,26 +279,57 @@
 
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return section == 0 ? @"" : OALocalizedString(@"help_other_header");
+    return [self getTitleForHeader:section];
 }
 
 - (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
-    return section == 0 ? OALocalizedString(@"touting_specified_vehicle_parameters_descr") : OALocalizedString(@"default_speed_descr");
+    return [self getTitleForFooter:section];
 }
 
--(void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section
+- (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section
 {
     UITableViewHeaderFooterView *vw = (UITableViewHeaderFooterView *) view;
     [vw.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    NSString *header = [self getTitleForHeader:section];
+    if (header)
+    {
+        UIFont *font = [UIFont systemFontOfSize:13.];
+        CGFloat headerHeight = [OAUtilities calculateTextBounds:header
+                                                          width:tableView.frame.size.width - (kPaddingOnSideOfContent + [OAUtilities getLeftMargin]) * 2
+                                                           font:font].height + kPaddingOnSideOfHeaderWithText;
+        return headerHeight;
+    }
+
+    return kHeaderHeightDefault;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    NSString *footer = [self getTitleForFooter:section];
+    if (footer)
+    {
+        UIFont *font = [UIFont systemFontOfSize:13.];
+        CGFloat footerHeight = [OAUtilities calculateTextBounds:footer
+                                                          width:tableView.frame.size.width - (kPaddingOnSideOfContent + [OAUtilities getLeftMargin]) * 2
+                                                           font:font].height + kPaddingOnSideOfFooterWithText;
+        return footerHeight;
+    }
+
+    return 0.001;
+}
 #pragma mark - OAVehicleParametersSettingDelegate
 
 - (void) onSettingsChanged
 {
     [self setupView];
     [self.tableView reloadData];
+    if (self.delegate)
+        [self.delegate onSettingsChanged];
 }
 
 @end

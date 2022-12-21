@@ -114,6 +114,15 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 
 @end
 
+@interface NSMutableAttributedString (util)
+
+- (void) addString:(NSString *)string fontWeight:(UIFontWeight)fontWeight size:(CGFloat)size;
+- (void) setFontSize:(CGFloat)size forString:(NSString *)string;
+- (void) setFontWeight:(UIFontWeight)fontWeight andSize:(CGFloat)size forString:(NSString *)string;
+- (void) setColor:(UIColor *)color forString:(NSString *)string;
+
+@end
+
 @interface NSMeasurementFormatter (util)
 
 - (NSString *)displayStringFromUnit:(NSUnit *)unit;
@@ -309,5 +318,7 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 + (NSString *) formatWarnings:(NSArray<NSString *> *)warnings;
 
 + (NSDate *)getCurrentTimezoneDate:(NSDate *)sourceDate;
+
++ (NSString *) getRoutingStringPropertyName:(NSString *)propertyName defaultName:(NSString *)defaultName;
 
 @end

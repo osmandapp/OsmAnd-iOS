@@ -506,15 +506,49 @@
     return NO;
 }
 
-- (NSAttributedString *) getFormattedDistTimeString
++ (NSAttributedString *) getFormattedElevationString:(OAGPXTrackAnalysis *)analysis
 {
-    OsmAndAppInstance app = [OsmAndApp instance];
-    
+    UIFont *textFont = [UIFont systemFontOfSize:15.];
+    NSDictionary *attrs = @{ NSFontAttributeName: textFont, NSForegroundColorAttributeName: UIColorFromRGB(color_text_footer) };
+    if (analysis)
+    {
+        NSMutableAttributedString *res = [NSMutableAttributedString new];
+
+        NSTextAttachment *arrowUpAttachment = [[NSTextAttachment alloc] init];
+        arrowUpAttachment.image = [UIImage templateImageNamed:@"ic_small_ascent"];
+        arrowUpAttachment.bounds = CGRectMake(0., roundf(textFont.capHeight - 20.)/2.f, 20., 20.);
+
+        NSTextAttachment *arrowDownAttachment = [[NSTextAttachment alloc] init];
+        arrowDownAttachment.image = [UIImage templateImageNamed:@"ic_small_descent"];
+        arrowDownAttachment.bounds = CGRectMake(0., roundf(textFont.capHeight - 20.)/2.f, 20., 20.);
+
+        [res appendAttributedString:[NSAttributedString attributedStringWithAttachment:arrowUpAttachment]];
+        [res appendAttributedString:[[NSAttributedString alloc] initWithString:
+                                     [NSString stringWithFormat:@" %@", [OAOsmAndFormatter getFormattedAlt:analysis.maxElevation]]
+                                                                    attributes:attrs]];
+        [res appendAttributedString:[[NSAttributedString alloc] initWithString:@"    "]];
+
+        [res appendAttributedString:[NSAttributedString attributedStringWithAttachment:arrowDownAttachment]];
+        [res appendAttributedString:[[NSAttributedString alloc] initWithString:
+                                     [NSString stringWithFormat:@" %@", [OAOsmAndFormatter getFormattedAlt:analysis.minElevation]]
+                                                                    attributes:attrs]];
+
+        [res addAttributes:attrs range:NSMakeRange(0, res.length)];
+
+        return res;
+    }
+    return nil;
+}
+
++ (NSAttributedString *) getFormattedDistTimeString
+{
+    OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
+
     NSDictionary *numericAttributes = @{NSFontAttributeName: [UIFont systemFontOfSize:20 weight:UIFontWeightSemibold], NSForegroundColorAttributeName : UIColor.blackColor};
     NSDictionary *alphabeticAttributes = @{NSFontAttributeName: [UIFont systemFontOfSize:20], NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer)};
-    NSString *dist = [OAOsmAndFormatter getFormattedDistance:[_routingHelper getLeftDistance]];
+    NSString *dist = [OAOsmAndFormatter getFormattedDistance:[routingHelper getLeftDistance]];
     NSAttributedString *distance = [self formatDistance:dist numericAttributes:numericAttributes alphabeticAttributes:alphabeticAttributes];
-    NSAttributedString *time = [self getFormattedTimeInterval:[_routingHelper getLeftTime] numericAttributes:numericAttributes alphabeticAttributes:alphabeticAttributes];
+    NSAttributedString *time = [self getFormattedTimeInterval:[routingHelper getLeftTime] numericAttributes:numericAttributes alphabeticAttributes:alphabeticAttributes];
 
     NSMutableAttributedString *str = [[NSMutableAttributedString alloc] init];
     NSAttributedString *space = [[NSAttributedString alloc] initWithString:@" "];
@@ -528,7 +562,7 @@
     return str;
 }
 
-- (NSAttributedString *) formatDistance:(NSString *)dist numericAttributes:(NSDictionary *) numericAttributes alphabeticAttributes:(NSDictionary *)alphabeticAttributes
++ (NSAttributedString *) formatDistance:(NSString *)dist numericAttributes:(NSDictionary *) numericAttributes alphabeticAttributes:(NSDictionary *)alphabeticAttributes
 {
     NSMutableAttributedString *res = [[NSMutableAttributedString alloc] init];
     if (dist.length > 0)
@@ -546,7 +580,7 @@
     return res;
 }
 
-- (NSAttributedString *) getFormattedTimeInterval:(NSTimeInterval)timeInterval numericAttributes:(NSDictionary *) numericAttributes alphabeticAttributes:(NSDictionary *)alphabeticAttributes
++ (NSAttributedString *) getFormattedTimeInterval:(NSTimeInterval)timeInterval numericAttributes:(NSDictionary *) numericAttributes alphabeticAttributes:(NSDictionary *)alphabeticAttributes
 {
     int hours, minutes, seconds;
     [OAUtilities getHMS:timeInterval hours:&hours minutes:&minutes seconds:&seconds];
@@ -589,7 +623,7 @@
     return [[NSAttributedString alloc] initWithAttributedString:time];
 }
 
-- (NSString *)getTimeAfter:(NSTimeInterval)timeInterval
++ (NSString *)getTimeAfter:(NSTimeInterval)timeInterval
 {
     int hours, minutes, seconds;
     [OAUtilities getHMS:timeInterval hours:&hours minutes:&minutes seconds:&seconds];

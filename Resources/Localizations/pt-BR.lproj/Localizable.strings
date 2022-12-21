@@ -57,7 +57,7 @@
 "tracks" = "Trilhas";
 // GPX
 "gpx_point" = "Ponto";
-"gpx_waypoints" = "Marcos do trajeto";
+"gpx_waypoints" = "Pontos do trajeto";
 "gpx_points" = "Ponto(s)";
 "shared_string_export" = "Exportar";
 "import_export" = "Importar/exportar";
@@ -164,7 +164,7 @@
 "res_region_map" = "Mapa regional";
 "res_updates_avail" = "Atualizações disponíveis";
 "res_maps_inst" = "mapa(s)";
-"res_deleting" = "A eliminar…";
+"res_deleting" = "Apagando…";
 "res_wsea_map" = "Mapa base mundial de balizas marítimas";
 "res_wmap" = "Mapa mundial de visão geral";
 "res_dmap" = "Visão geral detalhada do mapa";
@@ -178,7 +178,7 @@
 "res_inst_avail_wifi_q" = "A instalação de %@ necessita de %@ para ser descarregado pela rede Wi-Fi.";
 "res_cancel_upd_q" = "Vai cancelar a atualização de %@.";
 "data_will_be_lost" = "Todos os dados descarregados serão perdidos.";
-"res_cancel_inst_q" = "Vai cancelar a instalação de %@.";
+"res_cancel_inst_q" = "Você vai cancelar a instalação de %@.";
 "res_uninst_managed_q" = "Vai desinstalar %@. Pode tornar a instalá-lo depois no catálogo.";
 "res_uninst_unmanaged_q" = "Vai eliminar %@. Não é proveniente do catálogo, por isso certifique-se que tem uma cópia de segurança, se necessário.";
 "res_details" = "Detalhes";
@@ -197,8 +197,8 @@
 "other_options" = "Outras opções";
 "add_parking" = "Adicionar como posição de estacionamento";
 "add_parking_short" = "Adicionar estacionamento";
-"add_waypoint" = "Adicionar ponto intermédio ao trilho";
-"add_waypoint_short" = "Adicionar ponto da rota";
+"add_waypoint" = "Adicionar ponto de trajeto à trilha";
+"add_waypoint_short" = "Adicionar ponto da trajeto";
 "more" = "Mais";
 "time_limited" = "Tempo limitado";
 "pickup_car" = "Buscar o carro";
@@ -730,10 +730,10 @@
 "last_intermediate_dest_description" = "Adicionar a última paragem ao longo do percurso";
 "show_poi_over_map" = "Mostrar POI";
 "search_radius" = "Raio de pesquisa";
-"will_close_at" = "Fecha às";
-"will_open_at" = "Abre às";
-"will_open_on" = "Abre às";
-"will_open_tomorrow_at" = "Abre amanhã às";
+"will_close_at" = "Fechará às";
+"will_open_at" = "Abrirá às";
+"will_open_on" = "Abrirá às";
+"will_open_tomorrow_at" = "Abrirá amanhã às";
 "shared_string_select_avoid_road_on_map" = "Selecione uma estrada a ser evitada durante o roteamento";
 "avoid_roads_msg" = "Pode obter uma rota alternativa, selecionando as vias a evitar";
 "simulate_routing_descr" = "Simule a sua posição usando uma rota calculada";
@@ -877,7 +877,7 @@
 "upload_to_osm" = "Enviar alterações para o OSM";
 "osm_edit_show_on_map" = "Mostrar alteração no mapa";
 "osm_edit_show_on_map_descr" = "Abrir o mapa centrado neste ponto";
-"edit_waypoint_short" = "Editar ponto da rota";
+"edit_waypoint_short" = "Editar ponto de trajeto";
 "edit_osm_note" = "Editar nota do OSM";
 "modify_poi" = "Alterar as informações do POI";
 // Help
@@ -920,7 +920,7 @@
 "language_short" = "Idioma";
 "open_url" = "Abrir página no navegador";
 "no_other_translations" = "Não há outras traduções";
-"wpt_remove_q" = "Remover ponto da rota?";
+"wpt_remove_q" = "Remover ponto de trajeto?";
 "gpx_select_track" = "Selecionar trilho";
 "gpx_curr_new_track" = "Trilha atual";
 "language" = "Idioma";
@@ -935,10 +935,10 @@
 "menu_all_trips" = "Todos os trilhos";
 "total_time" = "Tempo total";
 "change_group" = "Alterar grupo";
-"wpt_select" = "Por favor, selecione pontos da rota";
-"gpx_remove_wpts_q" = "Quer eliminar o ponto da rota selecionado?";
+"wpt_select" = "Por favor, selecione pontos de trajeto";
+"gpx_remove_wpts_q" = "Deseja apagar os pontos de trajeto selecionados?";
 "create_new_trip" = "Criar novo trilho";
-"editing_waypoints" = "A editar pontos da rota";
+"editing_waypoints" = "Editando pontos de trajetos";
 "select_wpt_on_map" = "Selecionar ponto no mapa para adicionar ao trilho";
 "gpx_rename_q" = "Renomear trilha";
 "gpx_enter_new_name" = "Por favor, insira novo nome para o trilho";
@@ -1079,7 +1079,7 @@
 "create_items" = "Criar itens";
 "configure_map" = "Configurar mapa";
 "add_map_marker" = "Adicionar marcador de mapa";
-"add_gpx_waypoint" = "Acrescentar ponto GPX";
+"add_gpx_waypoint" = "Acrescentar ponto de trajeto GPX";
 "toggle_fav" = "Mostrar/esconder favoritos";
 "toggle_poi" = "Mostrar/esconder POI";
 "add_parking_place" = "Marcar estacionamento";
@@ -1737,12 +1737,12 @@
 "map_settings_available_srtm_maps_descr" = "São necessários mapas adicionais para ver sombras de relevo no mapa";
 "nav_type_brouter" = "BRouter";
 "nav_type_osmand" = "OsmAnd (roteamento offline)";
-"reset_profile_action_descr" = "Repor todas as configurações de perfil nos valores de instalação. Ao tocar em Repor, todas as alterações serão descartadas, esta ação não pode ser desfeita.";
+"reset_profile_action_descr" = "Resetar todas as configurações de perfil para os padrões de instalação. Ao tocar em Resetar todas as alterações serão descartadas, esta ação não pode ser desfeita.";
 "map_settings_add_maps_slopes" = "São necessários mapas adicionais para visualizar declives no mapa";
 "map_settings_hillshade_description" = "Os mapas de sombras de relevo permitem visualizar declives, picos e planícies usando diferentes níveis de cinzas";
 "map_settings_slopes_description" = "Os mapas de declives usam cores diferentes para visualizar o terreno";
 "map_settings_slopes_legend" = "Pode ler mais sobre declives na Wikipédia";
-"ios_release_3_90" = "- Introduzida a funcionalidade \"Planear uma rota\" para planear viagens futuras com a capacidade de criar segmentos de trilhos utilizando diferentes tipos de navegação\n- Adicionada uma opção para ativar um compasso sobre a ferramenta \"Raio da régua\"\n- Adicionada a opção \"Nomes dos POI\" que permite mostrar nomes de favoritos, pontos de passagem de trilhos e marcadores no mapa\n- Adicionadas novas ações rápidas para visibilidade das curvas de nível e do terreno no mapa, alterando um perfil de aplicação, eliminando um ponto intermédio mais próximo\n- Problemas corrigidos com a categoria de pesquisa da Wikipédia em falta\n- Importação de configurações: erros corrigidos, suporte adicionado para todos os tipos de dados disponíveis no OsmAnd\n- Edição do OpenStreetMap: corrigido o seletor de tempo e a incapacidade de alterar o comentário do conjunto de alterações\n";
+"ios_release_3_90" = "- Apresentada a funcionalidade \"Planejar uma rota\" para planejar futuras viagens com capacidade de criar segmentos de trilha usando diferentes tipos de navegação\n- Adicionada uma opção para ativar uma bússola sobre a ferramenta \"Raio de Régua\"\n- Adicionada a opção \"Sobreposição de nome dos POI\", permitindo mostrar nomes de favoritos, pontos de trajetos de trilhas e marcadores no mapa\n- Adicionadas novas ações rápidas para visibilidade das curvas de nível e do terreno no mapa, alterando um perfil de aplicação, eliminando um ponto intermédio mais próximo\n- Problemas corrigidos com a categoria de pesquisa da Wikipédia ausentes\n- Importar Configurações: bugs corrigidos, suporte adicionado para todos os tipos de dados disponíveis no OsmAnd\n- Edição do OpenStreetMap: corrigido o seletor de tempo e a incapacidade de alterar o comentário do conjunto de alterações\n";
 "ios_release_3_80" = "• Adicionados \"Perfis da aplicação\" com configurações independentes\n• Nova disposição das configurações por perfis e tipos: navegação, geral, mapa e ecrã\n• Capacidade de importar ou exportar configurações de perfis\n• Adicionadas origens de dados para fotografias online\n• Adicionada a capacidade de descarregar mapas online para a cache\n• Algoritmos de \"Pesquisa\" melhorados\n";
 
 
@@ -1871,7 +1871,7 @@
 "track_is_saved" = "%@\nestá guardado!";
 "plan_route_create_new_route" = "Criar nova rota";
 "open_saved_track" = "Abrir trilha salva";
-"simplified_track_description" = "Apenas a linha da rota será salva, os pontos de passagem serão excluídos.";
+"simplified_track_description" = "Apenas a linha da rota será salva, os pontos do trajeto serão excluídos.";
 "simplified_track" = "Trilha simplificada";
 "join_segments" = "Unir segmentos";
 "prev_segs_recalc_descr" = "Todos os segmentos anteriores serão recalculados usando o perfil selecionado";
@@ -2052,7 +2052,7 @@
 "export_failed" = "Não foi possível exportar o perfil";
 "export_profile_select_descr" = "Selecione os dados a serem exportados.";
 "delete_custom_categories" = "Eliminar categorias personalizadas";
-"reset_to_default_category_button_promo" = "Restaurar valores predefinidos irá repor a ordenação de origem.";
+"reset_to_default_category_button_promo" = "Resetar para o padrão restaurará a ordem de classificação ao seu estado inicial.";
 "create_custom_categories_list_promo" = "Pode adicionar categorias personalizadas, ocultar categorias que não achar necessárias e alterar a ordenação da lista. As categorias personalizadas podem ser importadas e exportadas com perfis.";
 "hidden_categories" = "Categorias ocultas";
 "visible_categories" = "Categorias visíveis";
@@ -2080,9 +2080,9 @@
 "restart" = "Reiniciar";
 "shared_string_wifi_only" = "Somente com WiFi";
 "app_restart_required" = "É necessário reiniciar o aplicativo para aplicar algumas configurações.";
-"no_waypoints_found" = "Não há pontos de rota";
-"replace_waypoint_confirmation" = "Quer mesmo substituir o ponto %@?";
-"context_menu_item_edit_waypoint" = "Editar ponto GPX";
+"no_waypoints_found" = "Nenhum ponto de trajeto encontrado";
+"replace_waypoint_confirmation" = "Deseja realmente substituir o ponto de trajeto %@?";
+"context_menu_item_edit_waypoint" = "Editar ponto de trajeto GPX";
 "default" = "Predefinido";
 "route_between_points_warning_desc" = "Em seguida, ajuste seu caminho para a estrada permitida mais próxima com um de seus perfis de navegação para usar esta opção.";
 "carplay_profile_descr" = "Perfil que será utilizado ao conectar-se ao CarPlay.";
@@ -2103,7 +2103,7 @@
 "added_profiles" = "Perfis adicionados";
 "suggested_maps_descr" = "Esses mapas são necessários para o complemento";
 "suggested_maps" = "Mapas sugeridos";
-"product_desc_ext_openplacereviews" = "Permite que você faça contribuições ao projeto OpenPlaceReviews. Como fotos, comentários, links sobre locais públicos, como restaurantes, hotéis, museus e pontos de passagem.\n\nVocê pode encontrar instruções sobre como contribuir em nosso site - https://osmand.net/docs/user/plugins/openplacereviews";
+"product_desc_ext_openplacereviews" = "Permite que você faça contribuições ao projeto OpenPlaceReviews. Como fotos, comentários, links sobre locais públicos, como restaurantes, hotéis, museus e pontos de trajetos.\n\nVocê pode encontrar instruções sobre como contribuir em nosso site - https://osmand.net/docs/user/plugins/openplacereviews";
 "product_desc_openplacereviews" = "Compartilhe sua opinião sobre lugares públicos";
 "product_title_openplacereviews" = "OpenPlaceReviews";
 "product_desc_ext_mapillary" = "Traz vistas ao nível da rua. Onde faltam imagens, você pode simplesmente adicioná-las para que outras pessoas possam usá-las. Para habilitar a camada Mapillary, ative as \"Imagens de nível de rua\" no menu Configurar mapa.";
@@ -2133,7 +2133,7 @@
 "navigate_point_easting" = "Leste (E)";
 "navigate_point_zone" = "Zona";
 "navigate_point_northing" = "Norte (N)";
-"reset_to_original" = "Redefinir para original";
+"reset_to_original" = "Resetar ao original";
 "route_line_color_elevation_description" = "A linha da rota será colorida dependendo do perfil de elevação da rota.";
 "nautical" = "Náutico";
 "track_coloring_solid" = "Sólido";
@@ -2166,7 +2166,7 @@
 "duplicate_track" = "Duplicar trilho";
 "shared_string_overview" = "Visão geral";
 "ios_release_4_1" = "• Interação com trilhos completamente redesenhada: um novo menu com gráficos, estatísticas, capacidade de alterar a aparência, cor por velocidade, altura e inclinação e seleção de trilhos no mapa\n• Novo ecrã para procura por coordenadas em diferentes formatos\n• Pesquisa de coordenadas no formato OLC melhorada\n• Novo menu de fácil utilização para escolher os idiomas a usar nos artigos da Wikipédia no mapa\n• Capacidade de carregar mapas de todas as regiões de alguns países facilmente com alguns cliques\n• Adicionadas linhas de contorno na medida \"pés\" (é necessário descarregar novamente os ficheiros)\n• Adicionada a capacidade de descarregar mapas selecionando a região ou país desejado no mapa, bem como a adição de uma caixa de diálogo com a sugestão de carregar um mapa em falta de uma região exibida\n• Nova aparência os botões de controlo do mapa e a capacidade adicional de alterar a ampliação do mapa tocando duas vezes e deslizando\n• As configurações de visibilidade das rotas foram movidas para cima no ecrã \"Configurar mapa\" e foram reorganizadas para uma melhor flexibilidade.\n";
-"delete_waypoints" = "Apagar ponto fixo";
+"delete_waypoints" = "Apagar ponto de trajeto";
 "delete_group_confirm_short" = "Eliminar grupo?";
 "delete_group_confirm" = "Quer mesmo eliminar o grupo \"%@\"?";
 "shared_string_time_span" = "Intervalo de tempo";
@@ -2309,7 +2309,7 @@
 "shared_string_hide_all" = "Ocultar tudo";
 "lang_vo" = "Volapuque";
 "grey_color_undefined" = "As partes sem dados são mostradas em cinza.";
-"white_color_undefined" = "As partes sem dados são mostradas em branco.";
+"white_color_undefined" = "As partes sem dados estão em branco.";
 "points_delete_multiple" = "Excluir %d ponto(s)\?";
 "route_preferred_terrain_flat" = "Rotas com um perfil de relevo plano. O trajeto pode ser mais longo.";
 "route_preferred_terrain_less_hilly" = "Rotas menores, menos montanhosas.";
@@ -2757,3 +2757,17 @@
 "deleted_file" = "Arquivo excluído";
 "last_synchronization" = "Última sincronização";
 "shared_string_do_not_exist" = "Não existe";
+"cloud_conflict_descr" = "As versões local e na nuvem contém alterações desde a última sincronização.";
+"local_changes_will_be_dismissed" = "Alterações locais serão descartadas";
+"res_heightmap" = "Mapa de altitude";
+"checking_progress" = "Checando...";
+"use_heightmap_setting" = "Usar mapas de altitude para relevos em 3D";
+"nautical_depth_points" = "Pontos de profundidade náuticos";
+"depth_contours" = "Contornos de profundidade";
+"worldwide_maps" = "Mapas mundiais";
+"upload_change" = "Carregar alterações";
+"cloud_version_will_be_removed" = "A versão na nuvem será removida";
+"cloud_changes_will_be_dismissed" = "As alterações na nuvem serão descartadas";
+"local_file_will_be_restored" = "O arquivo local será restaurado";
+"amazon_appstore" = "Amazon Appstore";
+"huawei_appgallery" = "Huawei AppGallery";

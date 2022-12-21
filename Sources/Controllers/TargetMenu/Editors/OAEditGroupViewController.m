@@ -8,7 +8,7 @@
 
 #import "OAEditGroupViewController.h"
 #import "OAIconTextTableViewCell.h"
-#import "OATextViewTableViewCell.h"
+#import "OAInputTableViewCell.h"
 #import "OAUtilities.h"
 #import "OsmAndApp.h"
 #include "Localization.h"
@@ -126,24 +126,24 @@
     }
     else
     {
-        OATextViewTableViewCell* cell;
-        cell = (OATextViewTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OATextViewTableViewCell getCellIdentifier]];
+        OAInputTableViewCell *cell = (OAInputTableViewCell *) [tableView dequeueReusableCellWithIdentifier:[OAInputTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextViewTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OATextViewTableViewCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAInputTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAInputTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell titleVisibility:NO];
+            [cell clearButtonVisibility:NO];
+            cell.inputField.textAlignment = NSTextAlignmentNatural;
+            cell.inputField.placeholder = OALocalizedString(@"fav_enter_group_name");
         }
-        
         if (cell)
         {
-            [cell.textView setPlaceholder:OALocalizedString(@"fav_enter_group_name")];
-            [cell.textView removeTarget:self action:NULL forControlEvents:UIControlEventEditingChanged];
-            [cell.textView addTarget:self action:@selector(editGroupName:) forControlEvents:UIControlEventEditingChanged];
-            [cell.textView setDelegate:self];
-            
-            return cell;
+            cell.inputField.delegate = self;
+            [cell.inputField removeTarget:self action:NULL forControlEvents:UIControlEventEditingChanged];
+            [cell.inputField addTarget:self action:@selector(editGroupName:) forControlEvents:UIControlEventEditingChanged];
         }
-        
+        return cell;
     }
     return nil;
 }

@@ -1082,9 +1082,6 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
 
 - (void) scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    if (_currentEditingTextField)
-        [_currentEditingTextField resignFirstResponder];
-
     CGFloat alpha = (self.tableView.contentOffset.y + defaultNavBarHeight) < 0 ? 0 : ((self.tableView.contentOffset.y + defaultNavBarHeight) / (fabs(self.tableView.contentSize.height - self.tableView.frame.size.height)));
     if (alpha > 0)
     {

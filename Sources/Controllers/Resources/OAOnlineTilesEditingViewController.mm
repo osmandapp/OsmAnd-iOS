@@ -9,7 +9,6 @@
 #import "OAOnlineTilesEditingViewController.h"
 #import "Localization.h"
 #import "OASQLiteTileSource.h"
-#import "OATextViewResizingCell.h"
 #import "OAColors.h"
 #import "OATimeTableViewCell.h"
 #import "OASettingsTableViewCell.h"
@@ -254,15 +253,18 @@
     
     NSMutableArray *tableData = [NSMutableArray new];
     [tableData addObject:@{
-        @"type" : [OATextViewResizingCell getCellIdentifier],
+        @"type" : [OAInputTableViewCell getCellIdentifier],
+        @"key" : @"name"
     }];
     [tableData addObject:@{
-        @"type" : [OATextViewResizingCell getCellIdentifier],
+        @"type" : [OAInputTableViewCell getCellIdentifier],
+        @"key" : @"url"
     }];
     [tableData addObject: zoomArr];
     [tableData addObject:@{
         @"placeholder" : OALocalizedString(@"shared_string_not_set"),
         @"type" : [OAInputTableViewCell getCellIdentifier],
+        @"key" : @"empireTime"
     }];
     
     [tableData addObject:@{
@@ -772,44 +774,7 @@
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     NSDictionary *item =  [self getItem:indexPath];
     
-    if ([item[@"type"] isEqualToString:[OATextViewResizingCell getCellIdentifier]])
-    {
-        OATextViewResizingCell* cell = [tableView dequeueReusableCellWithIdentifier:[OATextViewResizingCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextViewResizingCell getCellIdentifier] owner:self options:nil];
-            cell = (OATextViewResizingCell *)[nib objectAtIndex:0];
-        }
-        
-        if (cell)
-        {
-            BOOL isURL = indexPath.section == kURLSection;
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.inputField.delegate = self;
-            cell.inputField.textContainer.lineBreakMode = NSLineBreakByCharWrapping;
-            cell.inputField.tag = isURL ? kURLCellTag : kNameCellTag;
-            cell.clearButton.tag = cell.inputField.tag;
-            [cell.clearButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
-            [cell.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-            if ([self isOfflineSQLiteDB] && isURL)
-            {
-                cell.userInteractionEnabled = NO;
-                cell.inputField.text = OALocalizedString(@"res_offlineSQL_URL_warning");
-                cell.inputField.textColor = [UIColor lightGrayColor];
-                cell.clearButton.hidden = YES;
-            }
-            else
-            {
-                cell.userInteractionEnabled = YES;
-                cell.inputField.text = isURL ? _itemURL : _itemName;
-                cell.inputField.textColor = [UIColor blackColor];
-                cell.clearButton.hidden = NO;
-            }
-        }
-        
-        return cell;
-    }
-    else if ([item[@"type"] isEqualToString:[OAInputTableViewCell getCellIdentifier]])
+    if ([item[@"type"] isEqualToString:[OAInputTableViewCell getCellIdentifier]])
     {
         OAInputTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAInputTableViewCell getCellIdentifier]];
         if (cell == nil)
@@ -818,23 +783,50 @@
             cell = (OAInputTableViewCell *) nib[0];
             [cell leftIconVisibility:NO];
             [cell titleVisibility:NO];
-            [cell clearButtonVisibility:NO];
-            [cell.inputField removeTarget:self action:NULL forControlEvents:UIControlEventEditingChanged];
-            [cell.inputField addTarget:self action:@selector(textChanged:) forControlEvents:UIControlEventEditingChanged];
-            cell.inputField.keyboardType = UIKeyboardTypeNumberPad;
             cell.inputField.textAlignment = NSTextAlignmentNatural;
+            cell.inputField.delegate = self;
         }
-        cell.inputField.text = _expireTimeMinutes;
-        cell.inputField.delegate = self;
-        if ([self isOfflineSQLiteDB])
+        if (cell)
         {
-            cell.userInteractionEnabled = NO;
-            cell.inputField.placeholder = OALocalizedString(@"res_offlineSQL_URL_warning");
-        }
-        else
-        {
-            cell.userInteractionEnabled = YES;
-            cell.inputField.placeholder = item[@"placeholder"];
+            BOOL isOfflineSQLiteDB = [self isOfflineSQLiteDB];
+            [cell.clearButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
+            [cell.inputField removeTarget:self action:NULL forControlEvents:UIControlEventEditingChanged];
+
+            if ([item[@"key"] isEqualToString:@"name"] || [item[@"key"] isEqualToString:@"url"])
+            {
+                BOOL isURL = indexPath.section == kURLSection;
+                cell.inputField.tag = isURL ? kURLCellTag : kNameCellTag;
+                [cell.inputField addTarget:self action:@selector(textViewDidChange:) forControlEvents:UIControlEventEditingChanged];
+
+                cell.clearButton.tag = cell.inputField.tag;
+                [cell.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+                if (isOfflineSQLiteDB && isURL)
+                {
+                    cell.userInteractionEnabled = NO;
+                    cell.inputField.text = OALocalizedString(@"res_offlineSQL_URL_warning");
+                    cell.inputField.textColor = UIColor.lightGrayColor;
+                    [cell clearButtonVisibility:NO];
+                }
+                else
+                {
+                    cell.userInteractionEnabled = YES;
+                    cell.inputField.text = isURL ? _itemURL : _itemName;
+                    cell.inputField.textColor = UIColor.blackColor;
+                    [cell clearButtonVisibility:YES];
+                }
+            }
+            else if ([item[@"key"] isEqualToString:@"empireTime"])
+            {
+                [cell clearButtonVisibility:NO];
+
+                [cell.inputField addTarget:self action:@selector(textChanged:) forControlEvents:UIControlEventEditingChanged];
+                cell.inputField.keyboardType = UIKeyboardTypeNumberPad;
+                cell.inputField.text = _expireTimeMinutes;
+                cell.inputField.textColor = UIColor.blackColor;
+
+                cell.userInteractionEnabled = !isOfflineSQLiteDB;
+                cell.inputField.placeholder = isOfflineSQLiteDB ? OALocalizedString(@"res_offlineSQL_URL_warning") : item[@"placeholder"];
+            }
         }
         return cell;
     }
@@ -978,35 +970,17 @@
     return _data.count;
 }
 
-#pragma mark - UITextViewDelegate
-
--(void)textViewDidChange:(UITextView *)textView
-{
-    if (textView.tag == kNameCellTag)
-        _itemName = textView.text;
-    else if (textView.tag == kURLCellTag)
-        _itemURL = textView.text;
-    
-    [textView sizeToFit];
-    [self.tableView beginUpdates];
-    [self.tableView endUpdates];
-}
-
-- (void)textViewDidBeginEditing:(UITextView *)textView
-{
-    [self hidePicker];
-}
-
-- (void)textChanged:(UITextView *)textView
-{
-    _expireTimeMinutes = textView.text;
-}
-
 #pragma mark - UITextFieldDelegate
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
     [self hidePicker];
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [textField resignFirstResponder];
+    return YES;
 }
 
 #pragma mark - OACustomPickerTableViewCellDelegate
@@ -1063,7 +1037,26 @@
     } completion:nil];
 }
 
--(void) clearButtonPressed:(UIButton *)sender
+#pragma mark - Selectors
+
+- (void)textChanged:(UITextView *)textView
+{
+    _expireTimeMinutes = textView.text;
+}
+
+- (void)textViewDidChange:(UITextView *)textView
+{
+    if (textView.tag == kNameCellTag)
+        _itemName = textView.text;
+    else if (textView.tag == kURLCellTag)
+        _itemURL = textView.text;
+    
+    [textView sizeToFit];
+    [self.tableView beginUpdates];
+    [self.tableView endUpdates];
+}
+
+- (void) clearButtonPressed:(UIButton *)sender
 {
     if (sender.tag == kNameCellTag)
         _itemName = @"";
@@ -1072,8 +1065,8 @@
     
     [_tableView beginUpdates];
     UITableViewCell *cell = [_tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:sender.tag == kNameCellTag ? kNameSection : kURLSection]];
-    if ([cell isKindOfClass:OATextViewResizingCell.class])
-        ((OATextViewResizingCell *) cell).inputField.text = @"";
+    if ([cell isKindOfClass:OAInputTableViewCell.class])
+        ((OAInputTableViewCell *) cell).inputField.text = @"";
     
     [_tableView endUpdates];
 }

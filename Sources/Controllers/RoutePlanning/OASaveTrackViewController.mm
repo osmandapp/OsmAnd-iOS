@@ -10,7 +10,7 @@
 #import "OARootViewController.h"
 #import "Localization.h"
 #import "OAColors.h"
-#import "OATextViewResizingCell.h"
+#import "OAInputTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OASaveTrackBottomSheetViewController.h"
 #import "OAMapLayers.h"
@@ -21,7 +21,7 @@
 #import "OAAddTrackFolderViewController.h"
 #import "OACollectionViewCellState.h"
 
-@interface OASaveTrackViewController() <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate, OASelectTrackFolderDelegate, OAFolderCardsCellDelegate, OAAddTrackFolderDelegate>
+@interface OASaveTrackViewController() <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate, UITextFieldDelegate, OASelectTrackFolderDelegate, OAFolderCardsCellDelegate, OAAddTrackFolderDelegate>
 
 @end
 
@@ -155,7 +155,7 @@
     
     [data addObject:@[
         @{
-            @"type" : [OATextViewResizingCell getCellIdentifier],
+            @"type" : [OAInputTableViewCell getCellIdentifier],
             @"fileName" : _fileName,
             @"header" : OALocalizedString(@"fav_name"),
             @"key" : @"input_name",
@@ -277,23 +277,26 @@
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:[OATextViewResizingCell getCellIdentifier]])
+    if ([cellType isEqualToString:[OAInputTableViewCell getCellIdentifier]])
     {
-        OATextViewResizingCell* cell = [tableView dequeueReusableCellWithIdentifier:[OATextViewResizingCell getCellIdentifier]];
+        OAInputTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAInputTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextViewResizingCell getCellIdentifier] owner:self options:nil];
-            cell = (OATextViewResizingCell *)[nib objectAtIndex:0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAInputTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAInputTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell titleVisibility:NO];
+            cell.inputField.textAlignment = NSTextAlignmentNatural;
+            cell.inputField.delegate = self;
+            cell.inputField.returnKeyType = UIReturnKeyDone;
+            cell.inputField.enablesReturnKeyAutomatically = YES;
         }
-        
         if (cell)
         {
             cell.inputField.text = item[@"fileName"];
-            cell.inputField.delegate = self;
-            cell.inputField.textContainer.lineBreakMode = NSLineBreakByCharWrapping;
-            cell.inputField.returnKeyType = UIReturnKeyDone;
-            cell.inputField.enablesReturnKeyAutomatically = YES;
+            [cell.inputField removeTarget:self action:NULL forControlEvents:UIControlEventEditingChanged];
+            [cell.inputField addTarget:self action:@selector(textViewDidChange:) forControlEvents:UIControlEventEditingChanged];
+
             cell.clearButton.tag = cell.inputField.tag;
             [cell.clearButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
             [cell.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
@@ -431,7 +434,17 @@
     }
 }
 
--(void) clearButtonPressed:(UIButton *)sender
+#pragma mark - UITextFieldDelegate
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [textField resignFirstResponder];
+    return YES;
+}
+
+#pragma mark - Selectors
+
+- (void) clearButtonPressed:(UIButton *)sender
 {
     _fileName = @"";
     
@@ -440,8 +453,8 @@
     
     [_tableView beginUpdates];
     UITableViewCell *cell = [_tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row inSection:indexPath.section]];
-    if ([cell isKindOfClass:OATextViewResizingCell.class])
-        ((OATextViewResizingCell *) cell).inputField.text = @"";
+    if ([cell isKindOfClass:OAInputTableViewCell.class])
+        ((OAInputTableViewCell *) cell).inputField.text = @"";
     [_tableView endUpdates];
 }
 
@@ -462,8 +475,6 @@
         [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
 }
-
-#pragma mark - UITextViewDelegate
 
 - (void) textViewDidChange:(UITextView *)textView
 {

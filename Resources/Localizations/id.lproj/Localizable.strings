@@ -620,8 +620,8 @@
 "gpx_elev_range" = "Elevation range";
 "gpx_avg_altitude" = "Ketinggian rata-rata";
 "gpx_alt_range" = "Rentang ketinggian";
-"gpx_ascent" = "Ascent";
-"gpx_descent" = "Descent";
+"gpx_ascent" = "Naik";
+"gpx_descent" = "Turun";
 "gpx_updown" = "Up/Down";
 "gpx_uphills_total" = "Uphills total";
 "distance_moving" = "Jarak dibenarkan";
@@ -1406,7 +1406,7 @@
 "hide_terrain" = "Hide Terrain";
 "toggle_contour_lines" = "Show/Hide contour lines";
 "toggle_hillshade" = "Show/Hide terrain";
-"display_starting_at_zoom_level" = "Tampilkan dari level perbesaran";
+"display_starting_at_zoom_level" = "Penampilan dimulai dari level perbesaran";
 "quick_action_contour_lines_descr" = "Tapping this action button shows or hides contour lines layer.";
 "hide_contour_lines" = "Hide contour lines";
 "show_contour_lines" = "Tampilkan garis jejak";
@@ -1440,7 +1440,7 @@
 "add_waypoint_short" = "Add waypoint";
 "delete_waypoints" = "Hapus titik jalan";
 "delete_group_confirm_short" = "Delete group?";
-"delete_group_confirm" = "Are you sure you want to delete ”%@” group?";
+"delete_group_confirm" = "Apakah Anda ingin menghapus grup \"%@\"?";
 "edit_waypoint_short" = "Edit waypoint";
 "replace_waypoint_confirmation" = "Are you sure you want to replace Waypoint %@?";
 "no_waypoints_found" = "No waypoints found";
@@ -1602,13 +1602,13 @@
 
 //inapps
 "product_title_nautical" = "Nautical map";
-"product_desc_nautical" = "Nautical map of all world";
-"product_desc_ext_nautical" = "OsmAnd Nautical Charts is a plugin for OsmAnd Maps & Navigation app. It is a detailed graphical representation of oceans, seas, coastal areas and rivers. The charts can contain various information like sailing routes, navigation lights, dangerous areas, areas where it's allowed or not allowed to sail or dock, etc.\n\nUsage Instructions: it is highly recommended to download nautical basemap in order to see the maps regardless of detailed map presence. To turn on Nautical charts, tap the map button and set map type to Nautical.\n\nNote: All professional sailors are obliged to have official nautical charts on their ships.\n\nOsmAnd Nautical charts are based on the data from OpenSeaMap project. While OpenSeaMap charts at the moment cannot compete with official nautical charts, they can be used by recreational sailors for orientation or route planning.";
+"product_desc_nautical" = "Peta vektor cocok untuk navigasi rute pelayaran";
+"product_desc_ext_nautical" = "Nyalakan untuk memperkaya peta Anda dengan informasi tentang rute pelayaran, lampu navigasi, zona bahaya, zona yang diperbolehkan atau tidak diperbolehkan untuk berlayar atau dok, dll. Untuk menggunakan unduh Peta bahari dan aktifkan jenis \"Peta laut\" dalam Konfigurasi peta. \n\nCara penggunaan";
 "product_title_parking" = "Parking Position";
-"product_desc_parking" = "Let you easily memorize when the car was parked and how much time left if the parking is limited by time";
-"product_desc_ext_parking" = "OsmAnd Parking Plugin reminds you of your parking position. It is a plugin for OsmAnd Maps&Navigation app.\nChoose a time-independent reminder (only a marker on the map) or a time-limited one with alarm upon time expiration (includes also a marker on the map). To use the plugin, enable it in the Plugins menu.";
+"product_desc_parking" = "Lacak waktu parkir dan lokasi mobil Anda";
+"product_desc_ext_parking" = "Aktifkan untuk menetapkan titik di peta di mana mobil Anda ditinggal di jalan dan beri tahu kalender Anda ketika waktu parkir dimulai. Plubin membantu melacak waktu parkir dan lokasi mobil Anda. Untuk menaruh penanda pilih tempat di peta, lalu pergi ke Tindakan dan tekan \"Tambahkan parkir\".";
 "product_title_skimap" = "Ski map";
-"product_desc_skimap" = "Ski slopes for all ski resorts in the world";
+"product_desc_skimap" = "Peta jalur ski terkini dengan angkatan dan lempengan";
 "product_desc_ext_skimap" = "OsmAnd Ski Maps is a plugin to OsmAnd Maps&Navigation app designed to navigate at winter sports locations. It gives the information about ski pistes, ski lift markers and even colored lines indicating the complexity of each track. You get the info about ski tracks themselves as well as the surrounding infrastructure.\n\nUsage Instructions: Enable the plugin in OsmAnd application, tap the map button and set the map type to Ski maps.";
 "product_title_track_recording" = "Track recording";
 "product_desc_track_recording" = "Activates the functionality to record and save your tracks";

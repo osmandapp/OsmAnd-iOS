@@ -254,6 +254,7 @@
             cell = (OAInputTableViewCell *) nib[0];
             [cell leftIconVisibility:NO];
             [cell clearButtonVisibility:NO];
+            [cell.inputField removeTarget:self action:NULL forControlEvents:UIControlEventEditingChanged];
             [cell.inputField addTarget:self action:@selector(textViewDidChange:) forControlEvents:UIControlEventEditingChanged];
             cell.inputField.delegate = self;
         }

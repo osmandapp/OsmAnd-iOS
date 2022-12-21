@@ -10,7 +10,7 @@
 #import "Localization.h"
 #import "OAQuickAction.h"
 #import "OrderedDictionary.h"
-#import "OATextInputCell.h"
+#import "OAInputTableViewCell.h"
 #import "OAQuickActionRegistry.h"
 #import "OASizes.h"
 #import "OAColors.h"
@@ -159,7 +159,7 @@
 {
     MutableOrderedDictionary *dataModel = [[MutableOrderedDictionary alloc] init];
     [dataModel setObject:@[@{
-            @"type" : [OATextInputCell getCellIdentifier],
+            @"type" : [OAInputTableViewCell getCellIdentifier],
             @"title" : _action.getName
     }] forKey:OALocalizedString(@"quick_action_name_str")];
 
@@ -520,21 +520,24 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:[OATextInputCell getCellIdentifier]])
+    if ([item[@"type"] isEqualToString:[OAInputTableViewCell getCellIdentifier]])
     {
-        OATextInputCell* cell = [tableView dequeueReusableCellWithIdentifier:[OATextInputCell getCellIdentifier]];
+        OAInputTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAInputTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextInputCell getCellIdentifier] owner:self options:nil];
-            cell = (OATextInputCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAInputTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAInputTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell titleVisibility:NO];
+            [cell clearButtonVisibility:NO];
+            cell.inputField.textAlignment = NSTextAlignmentNatural;
         }
-        
         if (cell)
         {
             if (_action.isActionEditable)
             {
                 cell.inputField.text = item[@"title"];
-                [cell.inputField removeTarget:nil action:NULL forControlEvents:UIControlEventEditingChanged];
+                [cell.inputField removeTarget:self action:NULL forControlEvents:UIControlEventEditingChanged];
                 [cell.inputField addTarget:self action:@selector(onNameChanged:) forControlEvents:UIControlEventEditingChanged];
             }
             else
@@ -543,7 +546,6 @@
             }
             cell.userInteractionEnabled = _action.isActionEditable;
         }
-        
         return cell;
     }
     else if ([item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
@@ -581,7 +583,7 @@
             cell.inputField.text = item[@"title"];
             cell.inputField.placeholder = item[@"hint"];
             cell.inputField.tag = indexPath.section << 10 | indexPath.row;
-            [cell.inputField removeTarget:nil action:NULL forControlEvents:UIControlEventEditingChanged];
+            [cell.inputField removeTarget:self action:NULL forControlEvents:UIControlEventEditingChanged];
             [cell.inputField addTarget:self action:@selector(onTextFieldChanged:) forControlEvents:UIControlEventEditingChanged];
             NSString *imgName = item[@"img"];
             if (imgName && imgName.length > 0)

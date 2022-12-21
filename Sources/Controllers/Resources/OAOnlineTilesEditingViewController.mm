@@ -14,7 +14,7 @@
 #import "OATimeTableViewCell.h"
 #import "OASettingsTableViewCell.h"
 #import "OACustomPickerTableViewCell.h"
-#import "OATextInputCell.h"
+#import "OAInputTableViewCell.h"
 #import "OAOnlineTilesSettingsViewController.h"
 #import "OAResourcesBaseViewController.h"
 #import "OAManageResourcesViewController.h"
@@ -262,7 +262,7 @@
     [tableData addObject: zoomArr];
     [tableData addObject:@{
         @"placeholder" : OALocalizedString(@"shared_string_not_set"),
-        @"type" : [OATextInputCell getCellIdentifier],
+        @"type" : [OAInputTableViewCell getCellIdentifier],
     }];
     
     [tableData addObject:@{
@@ -809,20 +809,23 @@
         
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:[OATextInputCell getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:[OAInputTableViewCell getCellIdentifier]])
     {
-        OATextInputCell* cell = [tableView dequeueReusableCellWithIdentifier:[OATextInputCell getCellIdentifier]];
+        OAInputTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAInputTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextInputCell getCellIdentifier] owner:self options:nil];
-            cell = (OATextInputCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAInputTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAInputTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell titleVisibility:NO];
+            [cell clearButtonVisibility:NO];
+            [cell.inputField removeTarget:self action:NULL forControlEvents:UIControlEventEditingChanged];
+            [cell.inputField addTarget:self action:@selector(textChanged:) forControlEvents:UIControlEventEditingChanged];
+            cell.inputField.keyboardType = UIKeyboardTypeNumberPad;
+            cell.inputField.textAlignment = NSTextAlignmentNatural;
         }
         cell.inputField.text = _expireTimeMinutes;
         cell.inputField.delegate = self;
-        cell.userInteractionEnabled = YES;
-        [cell.inputField removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-        [cell.inputField addTarget:self action:@selector(textChanged:) forControlEvents:UIControlEventEditingChanged];
-        cell.inputField.keyboardType = UIKeyboardTypeNumberPad;
         if ([self isOfflineSQLiteDB])
         {
             cell.userInteractionEnabled = NO;

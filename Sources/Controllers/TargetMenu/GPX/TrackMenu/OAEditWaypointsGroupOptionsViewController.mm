@@ -8,7 +8,7 @@
 
 #import "OAEditWaypointsGroupOptionsViewController.h"
 #import "OABaseTrackMenuHudViewController.h"
-#import "OATextInputCell.h"
+#import "OAInputTableViewCell.h"
 #import "OAColorsTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OAIconTitleValueCell.h"
@@ -111,7 +111,7 @@
                 kTableKey: @"section",
                 kTableSubjects: @[[OAGPXTableCellData withData:@{
                         kTableKey: @"new_name",
-                        kCellType: [OATextInputCell getCellIdentifier],
+                        kCellType: [OAInputTableViewCell getCellIdentifier],
                         kCellTitle: _groupName,
                         kCellDesc: OALocalizedString(@"fav_enter_group_name")
                 }]],
@@ -359,16 +359,21 @@
 {
     OAGPXTableCellData *cellData = [self getCellData:indexPath];
     UITableViewCell *outCell = nil;
-    if ([cellData.type isEqualToString:[OATextInputCell getCellIdentifier]])
+    if ([cellData.type isEqualToString:[OAInputTableViewCell getCellIdentifier]])
     {
-        OATextInputCell *cell = [tableView dequeueReusableCellWithIdentifier:[OATextInputCell getCellIdentifier]];
+        OAInputTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAInputTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextInputCell getCellIdentifier] owner:self options:nil];
-            cell = (OATextInputCell *) nib[0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAInputTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAInputTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell titleVisibility:NO];
+            [cell clearButtonVisibility:NO];
+            [cell.inputField removeTarget:self action:NULL forControlEvents:UIControlEventEditingChanged];
             [cell.inputField addTarget:self action:@selector(textViewDidChange:) forControlEvents:UIControlEventEditingChanged];
             cell.inputField.autocapitalizationType = UITextAutocapitalizationTypeNone;
             cell.inputField.placeholder = cellData.desc;
+            cell.inputField.textAlignment = NSTextAlignmentNatural;
         }
         if (cell)
         {
@@ -469,8 +474,8 @@
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if ((_screenType == EOAEditWaypointsGroupRenameScreen || _screenType == EOAEditWaypointsGroupCopyToFavoritesScreen) &&
-            [[self getCellData:indexPath].type isEqualToString:[OATextInputCell getCellIdentifier]])
-        [((OATextInputCell *) cell).inputField becomeFirstResponder];
+            [[self getCellData:indexPath].type isEqualToString:[OAInputTableViewCell getCellIdentifier]])
+        [((OAInputTableViewCell *) cell).inputField becomeFirstResponder];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

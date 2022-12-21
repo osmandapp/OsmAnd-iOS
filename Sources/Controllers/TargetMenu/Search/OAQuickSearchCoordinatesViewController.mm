@@ -10,7 +10,7 @@
 #import "Localization.h"
 #import "OAColors.h"
 #import "OASettingsTableViewCell.h"
-#import "OACoodinateSearchCell.h"
+#import "OAInputTableViewCell.h"
 #import "OAQuickSearchCoordinateFormatsViewController.h"
 #import "OAAppSettings.h"
 #import "OsmAndApp.h"
@@ -230,7 +230,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     if (_currentFormat == MAP_GEO_OLC_FORMAT)
     {
         [result addObject:@{
-            @"type" : [OACoodinateSearchCell getCellIdentifier],
+            @"type" : [OAInputTableViewCell getCellIdentifier],
             @"title" : OALocalizedString(@"navigate_point_olc_short"),
             @"value" : _olcStr,
             @"tag" : @(EOAQuickSearchCoordinatesTextFieldOlc),
@@ -239,21 +239,21 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     else if (_currentFormat == MAP_GEO_UTM_FORMAT)
     {
         [result addObject:@{
-            @"type" : [OACoodinateSearchCell getCellIdentifier],
+            @"type" : [OAInputTableViewCell getCellIdentifier],
             @"title" : OALocalizedString(@"navigate_point_northing"),
             @"value" : _northingStr,
             @"tag" : @(EOAQuickSearchCoordinatesTextFieldNorthing),
         }];
         
         [result addObject:@{
-            @"type" : [OACoodinateSearchCell getCellIdentifier],
+            @"type" : [OAInputTableViewCell getCellIdentifier],
             @"title" : OALocalizedString(@"navigate_point_easting"),
             @"value" : _eastingStr,
             @"tag" : @(EOAQuickSearchCoordinatesTextFieldEasting),
         }];
         
         [result addObject:@{
-            @"type" : [OACoodinateSearchCell getCellIdentifier],
+            @"type" : [OAInputTableViewCell getCellIdentifier],
             @"title" : OALocalizedString(@"navigate_point_zone"),
             @"value" : _zoneStr,
             @"tag" : @(EOAQuickSearchCoordinatesTextFieldZone),
@@ -262,7 +262,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     else if (_currentFormat == MAP_GEO_MGRS_FORMAT)
     {
         [result addObject:@{
-            @"type" : [OACoodinateSearchCell getCellIdentifier],
+            @"type" : [OAInputTableViewCell getCellIdentifier],
             @"title" : OALocalizedString(@"navigate_point_format_MGRS"),
             @"value" : _mgrsStr,
             @"tag" : @(EOAQuickSearchCoordinatesTextFieldMgrs),
@@ -271,14 +271,14 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     else
     {
         [result addObject:@{
-            @"type" : [OACoodinateSearchCell getCellIdentifier],
+            @"type" : [OAInputTableViewCell getCellIdentifier],
             @"title" : OALocalizedString(@"latitude"),
             @"value" : _latStr,
             @"tag" : @(EOAQuickSearchCoordinatesTextFieldLat),
         }];
         
         [result addObject:@{
-            @"type" : [OACoodinateSearchCell getCellIdentifier],
+            @"type" : [OAInputTableViewCell getCellIdentifier],
             @"title" : OALocalizedString(@"longitude"),
             @"value" : _lonStr,
             @"tag" : @(EOAQuickSearchCoordinatesTextFieldLon),
@@ -953,54 +953,51 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
         }
         return cell;
     }
-    else if ([cellType isEqualToString:[OACoodinateSearchCell getCellIdentifier]])
+    else if ([cellType isEqualToString:[OAInputTableViewCell getCellIdentifier]])
     {
-        OACoodinateSearchCell* cell = [tableView dequeueReusableCellWithIdentifier:[OACoodinateSearchCell getCellIdentifier]];
+        OAInputTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAInputTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OACoodinateSearchCell getCellIdentifier] owner:self options:nil];
-            cell = (OACoodinateSearchCell *)[nib objectAtIndex:0];
-            cell.textField.font = [UIFont systemFontOfSize:17.0];
-            [cell.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field"] forState:UIControlStateNormal];
-            cell.clearButton.tintColor = UIColorFromRGB(color_tint_gray);
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAInputTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAInputTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
         }
         if (cell)
         {
             NSInteger tag = [item[@"tag"] integerValue];
             if (tag == EOAQuickSearchCoordinatesTextFieldOlc || tag == EOAQuickSearchCoordinatesTextFieldMgrs)
-                cell.textField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
+                cell.inputField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
             else
-                cell.textField.keyboardType = UIKeyboardTypeASCIICapableNumberPad;
-            
-            cell.textField.tag = tag;
-            cell.textField.text = item[@"value"];
-            cell.textField.delegate = self;
-            cell.textField.autocorrectionType = UITextAutocorrectionTypeNo;
-            cell.textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+                cell.inputField.keyboardType = UIKeyboardTypeASCIICapableNumberPad;
 
-            cell.textField.returnKeyType = UIReturnKeyDone;
-            cell.textField.enablesReturnKeyAutomatically = YES;
-            [cell.textField removeTarget:self action:NULL forControlEvents:UIControlEventEditingChanged];
-            [cell.textField addTarget:self action:@selector(textViewDidChange:) forControlEvents:UIControlEventEditingChanged];
-            cell.label.text = item[@"title"];
-            
+            cell.inputField.tag = tag;
+            cell.inputField.text = item[@"value"];
+            cell.inputField.delegate = self;
+            cell.inputField.autocorrectionType = UITextAutocorrectionTypeNo;
+            cell.inputField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+            cell.inputField.returnKeyType = UIReturnKeyDone;
+            cell.inputField.enablesReturnKeyAutomatically = YES;
+            [cell.inputField removeTarget:self action:NULL forControlEvents:UIControlEventEditingChanged];
+            [cell.inputField addTarget:self action:@selector(textViewDidChange:) forControlEvents:UIControlEventEditingChanged];
+
+            cell.titleLabel.text = item[@"title"];
+
             cell.clearButton.tag = tag;
             [cell.clearButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
             [cell.clearButton addTarget:self action:@selector(onClearButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-            cell.clearBackgroundButton.tag = tag;
-            [cell.clearBackgroundButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
-            [cell.clearBackgroundButton addTarget:self action:@selector(onClearButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-            
-            
-            UITextInputAssistantItem* inputAssistantItem = cell.textField.inputAssistantItem;
+            cell.clearButtonArea.tag = tag;
+            [cell.clearButtonArea removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
+            [cell.clearButtonArea addTarget:self action:@selector(onClearButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+
+            UITextInputAssistantItem *inputAssistantItem = cell.inputField.inputAssistantItem;
             inputAssistantItem.leadingBarButtonGroups = @[];
             inputAssistantItem.trailingBarButtonGroups = @[];
             if (tag == EOAQuickSearchCoordinatesTextFieldEasting || tag == EOAQuickSearchCoordinatesTextFieldNorthing)
-                cell.textField.inputAccessoryView = nil;
+                cell.inputField.inputAccessoryView = nil;
             else
-                cell.textField.inputAccessoryView = self.toolbarView;
-            [cell.textField reloadInputViews];
+                cell.inputField.inputAccessoryView = self.toolbarView;
+
+            [cell.inputField reloadInputViews];
         }
         return cell;
     }
@@ -1069,13 +1066,11 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
                 [self showMapMenuForLocationPoint:location];
             }
         }
-        else if ([cellType isEqualToString:[OACoodinateSearchCell getCellIdentifier]])
+        else if ([cellType isEqualToString:[OAInputTableViewCell getCellIdentifier]])
         {
-            OACoodinateSearchCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+            OAInputTableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
             if (cell)
-            {
-                [cell.textField becomeFirstResponder];
-            }
+                [cell.inputField becomeFirstResponder];
         }
     }
     
@@ -1119,7 +1114,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     }
 }
 
-#pragma mark - UITextViewDelegate
+#pragma mark - UITextFieldDelegate
 
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
 {
@@ -1166,8 +1161,8 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     
     [self.tableView beginUpdates];
     UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row inSection:indexPath.section]];
-    if ([cell isKindOfClass:OACoodinateSearchCell.class])
-        ((OACoodinateSearchCell *) cell).textField.text = @"";
+    if ([cell isKindOfClass:OAInputTableViewCell.class])
+        ((OAInputTableViewCell *) cell).inputField.text = @"";
     [self.tableView endUpdates];
     
     [self setText:@"" forTextFieldByTag:sender.tag];

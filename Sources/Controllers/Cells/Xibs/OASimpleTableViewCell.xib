@@ -10,7 +10,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="fqq-Rd-psA" customClass="OASimpleTableViewCell">
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="OASimpleTableViewCell" id="fqq-Rd-psA" customClass="OASimpleTableViewCell">
             <rect key="frame" x="0.0" y="0.0" width="414" height="66"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="fqq-Rd-psA" id="1Mu-Vo-bMK">
@@ -121,6 +121,7 @@
             <connections>
                 <outlet property="bottomContentSpaceView" destination="Ptd-nb-IFh" id="Dpe-mw-UL4"/>
                 <outlet property="contentInsideStackView" destination="qsl-wU-oPa" id="0OX-Jq-tcF"/>
+                <outlet property="contentOutsideStackViewVertical" destination="A8L-0E-OUk" id="7Gc-N4-dZr"/>
                 <outlet property="descriptionLabel" destination="HOZ-n0-HKH" id="cmR-9J-nK4"/>
                 <outlet property="leftIconView" destination="CU3-rf-tUx" id="fAK-t2-pZ1"/>
                 <outlet property="textCustomMarginBottomStackView" destination="0eF-fF-uCK" id="uCY-9s-4fQ"/>

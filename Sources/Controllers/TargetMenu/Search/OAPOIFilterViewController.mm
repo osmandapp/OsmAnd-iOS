@@ -20,7 +20,7 @@
 #import "OAIconTextCollapseCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OAIconButtonCell.h"
-#import "OAIconTextFieldCell.h"
+#import "OAInputTableViewCell.h"
 #import "OASizes.h"
 #import "OAColors.h"
 
@@ -102,7 +102,7 @@ typedef enum
     NSDictionary<NSNumber *, NSMutableArray<OAPOIFilterListItem *> *> *_groups;
     
     UIView *_textFieldHeaderView;
-    OAIconTextFieldCell *_textFieldCell;
+    OAInputTableViewCell *_textFieldCell;
     BOOL _applyViewVisible;
 
     UIPanGestureRecognizer *_tblMove;
@@ -170,15 +170,19 @@ typedef enum
     
     _applyView.hidden = YES;
     
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextFieldCell getCellIdentifier] owner:self options:nil];
-    _textFieldCell = (OAIconTextFieldCell *)[nib objectAtIndex:0];
-    _textFieldCell.backgroundColor = [UIColor whiteColor];
-    _textFieldCell.iconView.image = [OAUtilities getTintableImageNamed:@"search_icon"];
-    _textFieldCell.textField.placeholder = OALocalizedString(@"filter_poi_hint");
-    _textFieldCell.textField.text = _nameFilterText;
-    [_textFieldCell.textField addTarget:self action:@selector(filterTextChanged:) forControlEvents:UIControlEventEditingChanged];
-    
-    _textFieldHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, _tableView.bounds.size.width, 51.0)];
+    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAInputTableViewCell getCellIdentifier] owner:self options:nil];
+    _textFieldCell = (OAInputTableViewCell *) nib[0];
+    [_textFieldCell titleVisibility:NO];
+    [_textFieldCell clearButtonVisibility:NO];
+    _textFieldCell.inputField.textAlignment = NSTextAlignmentNatural;
+    _textFieldCell.leftIconView.image = [UIImage templateImageNamed:@"search_icon"];
+    _textFieldCell.leftIconView.tintColor = UIColorFromRGB(profile_icon_color_inactive);
+    _textFieldCell.leftIconView.contentMode = UIViewContentModeCenter;
+    _textFieldCell.inputField.placeholder = OALocalizedString(@"filter_poi_hint");
+    _textFieldCell.inputField.text = _nameFilterText;
+    [_textFieldCell.inputField addTarget:self action:@selector(filterTextChanged:) forControlEvents:UIControlEventEditingChanged];
+
+    _textFieldHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, _tableView.bounds.size.width, _textFieldCell.frame.size.height)];
     _textFieldHeaderView.backgroundColor = [UIColor groupTableViewBackgroundColor];
     _textFieldHeaderView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [_textFieldHeaderView addSubview:_textFieldCell];
@@ -190,7 +194,7 @@ typedef enum
     topSeparatorView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     [_textFieldHeaderView addSubview:topSeparatorView];
 
-    UIView *bottomSeparatorView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 51.5, _textFieldHeaderView.bounds.size.width, 0.5)];
+    UIView *bottomSeparatorView = [[UIView alloc] initWithFrame:CGRectMake(0.0, _textFieldCell.frame.size.height - 0.5, _textFieldHeaderView.bounds.size.width, 0.5)];
     bottomSeparatorView.backgroundColor = _tableView.separatorColor;
     bottomSeparatorView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     [_textFieldHeaderView addSubview:bottomSeparatorView];
@@ -238,7 +242,7 @@ typedef enum
 
 -(void)moveGestureDetected:(id)sender
 {
-    [_textFieldCell.textField resignFirstResponder];
+    [_textFieldCell.inputField resignFirstResponder];
 }
 
 // keyboard notifications register+process
@@ -835,7 +839,7 @@ typedef enum
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     if (section == 0)
-        return 51.0 + tableView.sectionHeaderHeight;
+        return _textFieldCell.frame.size.height + tableView.sectionHeaderHeight;
     else
         return tableView.sectionHeaderHeight;
 }

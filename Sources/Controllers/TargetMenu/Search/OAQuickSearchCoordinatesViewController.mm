@@ -114,7 +114,6 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     UITextField *_currentEditingTextField;
     BOOL _shouldHideHintBar;
     UIView *_navBarBackgroundView;
-    NSTimeInterval _lastTableViewTapTime;
     
     NSMutableArray<OAPOI *> *_olcCities;
     NSString *_olcSearchingCity;
@@ -164,12 +163,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     self.tableView.dataSource = self;
     self.tableView.separatorColor = UIColorFromRGB(color_tint_gray);
     self.tableView.contentInset = UIEdgeInsetsMake(defaultNavBarHeight, 0, 0, 0);
-    
-    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
-    tapGesture.cancelsTouchesInView = NO;
-    tapGesture.delegate = self;
-    [self.tableView addGestureRecognizer:tapGesture];
-    
+
     self.titleLabel.text = OALocalizedString(@"coords_search");
     [self.cancelButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
     self.doneButton.hidden = YES;
@@ -1043,15 +1037,23 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ([self canSelectCell])
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    NSDictionary *item = indexPath.section == 0 ? _controlsSectionData[indexPath.row] : _searchResultSectionData[indexPath.row];
+    NSString *cellType = item[@"type"];
+
+    if ([cellType isEqualToString:[OAInputTableViewCell getCellIdentifier]])
     {
-        NSDictionary *item = indexPath.section == 0 ? _controlsSectionData[indexPath.row] : _searchResultSectionData[indexPath.row];
-        NSString *cellType = item[@"type"];
-        
+        OAInputTableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+        if (cell)
+            [cell.inputField becomeFirstResponder];
+    }
+    else
+    {
+        if (_currentEditingTextField)
+            [_currentEditingTextField resignFirstResponder];
+
         if ([cellType isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
         {
-            [self.view endEditing:YES];
-            
             OAQuickSearchCoordinateFormatsViewController *vc = [[OAQuickSearchCoordinateFormatsViewController alloc] initWithCurrentFormat:_currentFormat location:[self getDisplayingCoordinate]];
             vc.delegate = self;
             [self presentViewController:vc animated:YES completion:nil];
@@ -1066,15 +1068,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
                 [self showMapMenuForLocationPoint:location];
             }
         }
-        else if ([cellType isEqualToString:[OAInputTableViewCell getCellIdentifier]])
-        {
-            OAInputTableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
-            if (cell)
-                [cell.inputField becomeFirstResponder];
-        }
     }
-    
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 #pragma mark - UIGestureRecognizerDelegate
@@ -1086,17 +1080,11 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     return YES;
 }
 
-- (BOOL) canSelectCell
-{
-    //Sometimes a TapGestureRecognizer that has been added to the tableView to hide the keyboard immediately calls the didSelectRow method  with random IndexPath value.
-    // This method filters that extra calls.
-    double filteringTimeIntervalInSeconds = 0.1;
-    NSTimeInterval timeNow = [[NSDate date] timeIntervalSince1970];
-    return timeNow - _lastTableViewTapTime > filteringTimeIntervalInSeconds;
-}
-
 - (void) scrollViewDidScroll:(UIScrollView *)scrollView
 {
+    if (_currentEditingTextField)
+        [_currentEditingTextField resignFirstResponder];
+
     CGFloat alpha = (self.tableView.contentOffset.y + defaultNavBarHeight) < 0 ? 0 : ((self.tableView.contentOffset.y + defaultNavBarHeight) / (fabs(self.tableView.contentSize.height - self.tableView.frame.size.height)));
     if (alpha > 0)
     {
@@ -1169,12 +1157,12 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     [self parseLocation];
 }
 
-- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
     [textField resignFirstResponder];
+    _currentEditingTextField = nil;
     return YES;
 }
-
-#pragma mark - UIGestureRecognizerDelegate
 
 #pragma mark - Keyboard notifications
 
@@ -1205,13 +1193,8 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
         UIEdgeInsets insets = [[self tableView] contentInset];
         [[self tableView] setContentInset:UIEdgeInsetsMake(insets.top, insets.left, 0, insets.right)];
+        _currentEditingTextField = nil;
     } completion:nil];
-}
-
-- (void) dismissKeyboard
-{
-    _lastTableViewTapTime = [[NSDate date] timeIntervalSince1970];
-    [self.view endEditing:YES];
 }
 
 #pragma mark - Hintbar

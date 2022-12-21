@@ -101,8 +101,6 @@ typedef enum
     
     NSDictionary<NSNumber *, NSMutableArray<OAPOIFilterListItem *> *> *_groups;
     
-    UIView *_textFieldHeaderView;
-    OAInputTableViewCell *_textFieldCell;
     BOOL _applyViewVisible;
 
     UIPanGestureRecognizer *_tblMove;
@@ -167,37 +165,11 @@ typedef enum
     [_applyView.layer setShadowOpacity:0.3];
     [_applyView.layer setShadowRadius:3.0];
     [_applyView.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
-    
     _applyView.hidden = YES;
-    
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAInputTableViewCell getCellIdentifier] owner:self options:nil];
-    _textFieldCell = (OAInputTableViewCell *) nib[0];
-    [_textFieldCell titleVisibility:NO];
-    [_textFieldCell clearButtonVisibility:NO];
-    _textFieldCell.inputField.textAlignment = NSTextAlignmentNatural;
-    _textFieldCell.leftIconView.image = [UIImage templateImageNamed:@"search_icon"];
-    _textFieldCell.leftIconView.tintColor = UIColorFromRGB(profile_icon_color_inactive);
-    _textFieldCell.leftIconView.contentMode = UIViewContentModeCenter;
-    _textFieldCell.inputField.placeholder = OALocalizedString(@"filter_poi_hint");
-    _textFieldCell.inputField.text = _nameFilterText;
-    [_textFieldCell.inputField addTarget:self action:@selector(filterTextChanged:) forControlEvents:UIControlEventEditingChanged];
 
-    _textFieldHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, _tableView.bounds.size.width, _textFieldCell.frame.size.height)];
-    _textFieldHeaderView.backgroundColor = [UIColor groupTableViewBackgroundColor];
-    _textFieldHeaderView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    [_textFieldHeaderView addSubview:_textFieldCell];
-    
     _tableView.separatorColor = UIColorFromRGB(color_tint_gray);
-    
-    UIView *topSeparatorView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, _textFieldHeaderView.bounds.size.width, 0.5)];
-    topSeparatorView.backgroundColor = _tableView.separatorColor;
-    topSeparatorView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    [_textFieldHeaderView addSubview:topSeparatorView];
-
-    UIView *bottomSeparatorView = [[UIView alloc] initWithFrame:CGRectMake(0.0, _textFieldCell.frame.size.height - 0.5, _textFieldHeaderView.bounds.size.width, 0.5)];
-    bottomSeparatorView.backgroundColor = _tableView.separatorColor;
-    bottomSeparatorView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    [_textFieldHeaderView addSubview:bottomSeparatorView];
+    _tableView.sectionHeaderHeight = 0.001;
+    _tableView.sectionFooterHeight = 0.001;
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -242,7 +214,9 @@ typedef enum
 
 -(void)moveGestureDetected:(id)sender
 {
-    [_textFieldCell.inputField resignFirstResponder];
+    OAInputTableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+    if (cell)
+        [cell.inputField resignFirstResponder];
 }
 
 // keyboard notifications register+process
@@ -815,60 +789,53 @@ typedef enum
 
 #pragma mark - UITableViewDataSource
 
--(OAPOIFilterListItem *) getItem:(NSIndexPath *)indexPath
+- (OAPOIFilterListItem *) getItem:(NSIndexPath *)indexPath
 {
-    if (indexPath.section < 0 || indexPath.section > _groups.count - 1)
+    if (indexPath.section == 0)
+        return nil;
+
+    NSIndexPath *indexPath_ = indexPath.section > 0 ? [NSIndexPath indexPathForRow:indexPath.row inSection:indexPath.section - 1] : indexPath;
+    if (indexPath_.section < 0 || indexPath_.section > _groups.count - 1)
         return nil;
     
-    NSMutableArray<OAPOIFilterListItem *> *items = [_groups objectForKey:[NSNumber numberWithInteger:indexPath.section]];
+    NSMutableArray<OAPOIFilterListItem *> *items = [_groups objectForKey:[NSNumber numberWithInteger:indexPath_.section]];
     
-    if (!items || indexPath.row < 0 || indexPath.row > items.count - 1)
+    if (!items || indexPath_.row < 0 || indexPath_.row > items.count - 1)
         return nil;
     
-    return items[indexPath.row];
+    return items[indexPath_.row];
 }
 
--(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    if (section == _groups.count - 1)
-        return tableView.sectionFooterHeight;
-    else
-        return 0.01;
+    return section == 0 ? 0.001 : 18.;
 }
 
--(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    if (section == 0)
-        return _textFieldCell.frame.size.height + tableView.sectionHeaderHeight;
-    else
-        return tableView.sectionHeaderHeight;
+    return section == _groups.count ? 18. : 0.001;
 }
 
--(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{
-    if (section == 0)
-        return _textFieldHeaderView;
-    else
-        return nil;
-}
-
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OAPOIFilterListItem *item = [self getItem:indexPath];
-    if (!item || (item.type != SWITCH_ITEM && item.type != GROUP_HEADER))
+    if (item && item.type == BUTTON_ITEM)
         return 51.0;
     else
         return UITableViewAutomaticDimension;
 }
 
--(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return MAX(1, _groups.count);
+    return MAX(1, _groups.count + 1);
 }
 
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    NSMutableArray<OAPOIFilterListItem *> *items = [_groups objectForKey:[NSNumber numberWithInteger:section]];
+    if (section == 0)
+        return 1;
+
+    NSMutableArray<OAPOIFilterListItem *> *items = [_groups objectForKey:[NSNumber numberWithInteger:section - 1]];
     if (items)
         return items.count;
     else
@@ -877,6 +844,30 @@ typedef enum
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (indexPath.section == 0 && indexPath.row == 0)
+    {
+        OAInputTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAInputTableViewCell getCellIdentifier]];
+        if (!cell)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAInputTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAInputTableViewCell *) nib[0];
+            [cell titleVisibility:NO];
+            [cell clearButtonVisibility:NO];
+            cell.inputField.textAlignment = NSTextAlignmentNatural;
+            cell.inputField.placeholder = OALocalizedString(@"filter_poi_hint");
+            cell.leftIconView.image = [UIImage templateImageNamed:@"search_icon"];
+            cell.leftIconView.tintColor = UIColorFromRGB(profile_icon_color_inactive);
+            cell.leftIconView.contentMode = UIViewContentModeCenter;
+        }
+        if (cell)
+        {
+            cell.inputField.text = _nameFilterText;
+            [cell.inputField removeTarget:self action:NULL forControlEvents:UIControlEventEditingChanged];
+            [cell.inputField addTarget:self action:@selector(filterTextChanged:) forControlEvents:UIControlEventEditingChanged];
+        }
+        return cell;
+    }
+
     OAPOIFilterListItem *item = [self getItem:indexPath];
     if (!item)
         return nil;
@@ -981,9 +972,18 @@ typedef enum
     }
 }
 
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+
+    if (indexPath.section == 0 && indexPath.row == 0)
+    {
+        OAInputTableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+        if (cell)
+            [cell.inputField becomeFirstResponder];
+        return;
+    }
+
     [self moveGestureDetected:nil];
     
     OAPOIFilterListItem *item = [self getItem:indexPath];

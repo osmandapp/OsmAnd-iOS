@@ -9,7 +9,7 @@
 #import "OAVehicleParametersSettingsViewController.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
-#import "OAInputCellWithTitle.h"
+#import "OAInputTableViewCell.h"
 #import "OAOnlyImageViewCell.h"
 #import "OAHorizontalCollectionViewCell.h"
 #import "OARightIconTableViewCell.h"
@@ -174,7 +174,7 @@
             @"icon" : [self getParameterImage:parameter],
         }];
         [parametersArr addObject:@{
-            @"type" : [OAInputCellWithTitle getCellIdentifier],
+            @"type" : [OAInputTableViewCell getCellIdentifier],
             @"title" : [self getMeasurementUnit:parameter],
             @"value" : [_measurementValue isEqualToString:OALocalizedString(@"shared_string_none")] ? @"0" : _measurementValue,
         }];
@@ -288,13 +288,15 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:[OAInputCellWithTitle getCellIdentifier]])
+    else if ([cellType isEqualToString:[OAInputTableViewCell getCellIdentifier]])
     {
-        OAInputCellWithTitle* cell = [tableView dequeueReusableCellWithIdentifier:[OAInputCellWithTitle getCellIdentifier]];
+        OAInputTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAInputTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAInputCellWithTitle getCellIdentifier] owner:self options:nil];
-            cell = (OAInputCellWithTitle *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAInputTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAInputTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell clearButtonVisibility:NO];
             [cell.inputField removeTarget:self action:NULL forControlEvents:UIControlEventEditingChanged];
             [cell.inputField addTarget:self action:@selector(textViewDidChange:) forControlEvents:UIControlEventEditingChanged];
             cell.inputField.keyboardType = UIKeyboardTypeDecimalPad;
@@ -422,9 +424,9 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     NSDictionary *item = _data[indexPath.section][indexPath.row];
-    if ([item[@"type"] isEqualToString:[OAInputCellWithTitle getCellIdentifier]])
+    if ([item[@"type"] isEqualToString:[OAInputTableViewCell getCellIdentifier]])
     {
-        OAInputCellWithTitle *cell = (OAInputCellWithTitle *) [tableView cellForRowAtIndexPath:indexPath];
+        OAInputTableViewCell *cell = (OAInputTableViewCell *) [tableView cellForRowAtIndexPath:indexPath];
         if (cell.inputField.isFirstResponder)
         {
             [cell.inputField resignFirstResponder];

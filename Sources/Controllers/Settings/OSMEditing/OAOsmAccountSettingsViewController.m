@@ -8,7 +8,7 @@
 
 #import "OAOsmAccountSettingsViewController.h"
 #import "OAOsmEditingSettingsViewController.h"
-#import "OAInputCellWithTitle.h"
+#import "OAInputTableViewCell.h"
 #import "OAFilledButtonCell.h"
 #import "OADividerCell.h"
 #import "OASimpleTableViewCell.h"
@@ -136,7 +136,7 @@
     }];
     [loginLogoutSection addObject:@{
         @"key" : @"email_input_cell",
-        @"type" : [OAInputCellWithTitle getCellIdentifier]
+        @"type" : [OAInputTableViewCell getCellIdentifier]
     }];
     _userNameIndexPath = [NSIndexPath indexPathForRow:loginLogoutSection.count - 1 inSection:data.count - 1];
 
@@ -148,7 +148,7 @@
         }];
         [loginLogoutSection addObject:@{
             @"key" : @"password_input_cell",
-            @"type" : [OAInputCellWithTitle getCellIdentifier]
+            @"type" : [OAInputTableViewCell getCellIdentifier]
         }];
         _passwordIndexPath = [NSIndexPath indexPathForRow:loginLogoutSection.count - 1 inSection:data.count - 1];
     }
@@ -200,7 +200,7 @@
     }
     else if (estimated)
     {
-        if ([type isEqualToString:[OAInputCellWithTitle getCellIdentifier]])
+        if ([type isEqualToString:[OAInputTableViewCell getCellIdentifier]])
             return 48.;
         else if ([type isEqualToString:[OAFilledButtonCell getCellIdentifier]])
             return 42.;
@@ -215,12 +215,12 @@
 {
     if (_userNameIndexPath)
     {
-        OAInputCellWithTitle *cell = [self.tableView cellForRowAtIndexPath:_userNameIndexPath];
+        OAInputTableViewCell *cell = [self.tableView cellForRowAtIndexPath:_userNameIndexPath];
         [cell.inputField resignFirstResponder];
     }
     if (_passwordIndexPath)
     {
-        OAInputCellWithTitle *cell = [self.tableView cellForRowAtIndexPath:_passwordIndexPath];
+        OAInputTableViewCell *cell = [self.tableView cellForRowAtIndexPath:_passwordIndexPath];
         [cell.inputField resignFirstResponder];
     }
 }
@@ -231,12 +231,12 @@
 {
     if (_userNameIndexPath)
     {
-        OAInputCellWithTitle *cell = [self.tableView cellForRowAtIndexPath:_userNameIndexPath];
+        OAInputTableViewCell *cell = [self.tableView cellForRowAtIndexPath:_userNameIndexPath];
         [cell.inputField resignFirstResponder];
     }
     if (_passwordIndexPath)
     {
-        OAInputCellWithTitle *cell = [self.tableView cellForRowAtIndexPath:_passwordIndexPath];
+        OAInputTableViewCell *cell = [self.tableView cellForRowAtIndexPath:_passwordIndexPath];
         [cell.inputField resignFirstResponder];
     }
 
@@ -290,9 +290,9 @@
 - (void)showKeyboardForCellForIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
-    if (cell && [cell isKindOfClass:OAInputCellWithTitle.class])
+    if (cell && [cell isKindOfClass:OAInputTableViewCell.class])
     {
-        OAInputCellWithTitle *resCell = (OAInputCellWithTitle *) cell;
+        OAInputTableViewCell *resCell = (OAInputTableViewCell *) cell;
         [resCell.inputField becomeFirstResponder];
     }
 }
@@ -346,17 +346,17 @@
     UITableViewCell *outCell = nil;
 
     NSString *type = item[@"type"];
-    if ([type isEqualToString:[OAInputCellWithTitle getCellIdentifier]])
+    if ([type isEqualToString:[OAInputTableViewCell getCellIdentifier]])
     {
-        OAInputCellWithTitle *cell = [tableView dequeueReusableCellWithIdentifier:[OAInputCellWithTitle getCellIdentifier]];
+        OAInputTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAInputTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAInputCellWithTitle getCellIdentifier] owner:self options:nil];
-            cell = (OAInputCellWithTitle *) [nib objectAtIndex:0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAInputTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAInputTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell clearButtonVisibility:NO];
             [cell.inputField addTarget:self action:@selector(textViewDidChange:) forControlEvents:UIControlEventEditingChanged];
             cell.inputField.delegate = self;
-            cell.inputField.textAlignment = NSTextAlignmentRight;
         }
         if (cell)
         {
@@ -374,7 +374,7 @@
             cell.inputField.tag = indexPath.section << 10 | indexPath.row;;
             cell.inputField.returnKeyType = UIReturnKeyDone;
         }
-        outCell = cell;
+        return cell;
     }
     else if ([type isEqualToString:[OAFilledButtonCell getCellIdentifier]])
     {

@@ -2147,7 +2147,6 @@
 		DA5A828226C563A700F274C7 /* OAIconTextDescCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7BD826C563A100F274C7 /* OAIconTextDescCell.xib */; };
 		DA5A828326C563A700F274C7 /* OAPublicTransportShieldCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7BD926C563A100F274C7 /* OAPublicTransportShieldCell.xib */; };
 		DA5A828426C563A700F274C7 /* OAHomeWorkCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7BDA26C563A100F274C7 /* OAHomeWorkCollectionViewCell.xib */; };
-		DA5A828526C563A700F274C7 /* OAInputCellWithTitle.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7BDB26C563A100F274C7 /* OAInputCellWithTitle.xib */; };
 		DA5A828626C563A700F274C7 /* OARouteInfoAltitudeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7BDC26C563A100F274C7 /* OARouteInfoAltitudeCell.xib */; };
 		DA5A828726C563A700F274C7 /* OARouteProgressBarCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7BDD26C563A100F274C7 /* OARouteProgressBarCell.xib */; };
 		DA5A828826C563A700F274C7 /* OAOnlyImageViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7BDE26C563A100F274C7 /* OAOnlyImageViewCell.xib */; };
@@ -2307,7 +2306,6 @@
 		DA5A832626C563A800F274C7 /* OALineChartCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7CC526C563A200F274C7 /* OALineChartCell.m */; };
 		DA5A832726C563A800F274C7 /* OARouteInfoAltitudeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7CC626C563A200F274C7 /* OARouteInfoAltitudeCell.m */; };
 		DA5A832826C563A800F274C7 /* OADividerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7CC726C563A200F274C7 /* OADividerCell.m */; };
-		DA5A832926C563A800F274C7 /* OAInputCellWithTitle.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7CCA26C563A200F274C7 /* OAInputCellWithTitle.m */; };
 		DA5A832B26C563A800F274C7 /* OADirectionTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7CCD26C563A200F274C7 /* OADirectionTableViewCell.m */; };
 		DA5A832C26C563A800F274C7 /* OAMultiIconTextDescCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7CCE26C563A200F274C7 /* OAMultiIconTextDescCell.m */; };
 		DA5A832D26C563A800F274C7 /* OATextMultiViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7CCF26C563A200F274C7 /* OATextMultiViewCell.m */; };
@@ -5983,7 +5981,6 @@
 		DA5A7BD826C563A100F274C7 /* OAIconTextDescCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAIconTextDescCell.xib; sourceTree = "<group>"; };
 		DA5A7BD926C563A100F274C7 /* OAPublicTransportShieldCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAPublicTransportShieldCell.xib; sourceTree = "<group>"; };
 		DA5A7BDA26C563A100F274C7 /* OAHomeWorkCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAHomeWorkCollectionViewCell.xib; sourceTree = "<group>"; };
-		DA5A7BDB26C563A100F274C7 /* OAInputCellWithTitle.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAInputCellWithTitle.xib; sourceTree = "<group>"; };
 		DA5A7BDC26C563A100F274C7 /* OARouteInfoAltitudeCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OARouteInfoAltitudeCell.xib; sourceTree = "<group>"; };
 		DA5A7BDD26C563A100F274C7 /* OARouteProgressBarCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OARouteProgressBarCell.xib; sourceTree = "<group>"; };
 		DA5A7BDE26C563A100F274C7 /* OAOnlyImageViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAOnlyImageViewCell.xib; sourceTree = "<group>"; };
@@ -6074,7 +6071,6 @@
 		DA5A7C3626C563A200F274C7 /* OAIconTitleIconRoundCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAIconTitleIconRoundCell.xib; sourceTree = "<group>"; };
 		DA5A7C3726C563A200F274C7 /* OAGPXTrackCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAGPXTrackCell.xib; sourceTree = "<group>"; };
 		DA5A7C3826C563A200F274C7 /* OADescrTitleCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OADescrTitleCell.xib; sourceTree = "<group>"; };
-		DA5A7C3926C563A200F274C7 /* OAInputCellWithTitle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAInputCellWithTitle.h; sourceTree = "<group>"; };
 		DA5A7C3B26C563A200F274C7 /* OATargetInfoCollapsableCoordinatesViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OATargetInfoCollapsableCoordinatesViewCell.m; sourceTree = "<group>"; };
 		DA5A7C3C26C563A200F274C7 /* OAColorsTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAColorsTableViewCell.m; sourceTree = "<group>"; };
 		DA5A7C3D26C563A200F274C7 /* OAMapillaryContributeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMapillaryContributeCell.h; sourceTree = "<group>"; };
@@ -6213,7 +6209,6 @@
 		DA5A7CC726C563A200F274C7 /* OADividerCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OADividerCell.m; sourceTree = "<group>"; };
 		DA5A7CC826C563A200F274C7 /* OATargetInfoCollapsableCoordinatesViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OATargetInfoCollapsableCoordinatesViewCell.h; sourceTree = "<group>"; };
 		DA5A7CC926C563A200F274C7 /* OAColorsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAColorsTableViewCell.h; sourceTree = "<group>"; };
-		DA5A7CCA26C563A200F274C7 /* OAInputCellWithTitle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAInputCellWithTitle.m; sourceTree = "<group>"; };
 		DA5A7CCC26C563A200F274C7 /* OAImageCardCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAImageCardCell.h; sourceTree = "<group>"; };
 		DA5A7CCD26C563A200F274C7 /* OADirectionTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OADirectionTableViewCell.m; sourceTree = "<group>"; };
 		DA5A7CCE26C563A200F274C7 /* OAMultiIconTextDescCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAMultiIconTextDescCell.m; sourceTree = "<group>"; };
@@ -11352,8 +11347,6 @@
 				DA5A7CF526C563A200F274C7 /* OAImageTextViewCell.m */,
 				DA5A7CAD26C563A200F274C7 /* OAInAppCell.h */,
 				DA5A7D2526C563A300F274C7 /* OAInAppCell.m */,
-				DA5A7C3926C563A200F274C7 /* OAInputCellWithTitle.h */,
-				DA5A7CCA26C563A200F274C7 /* OAInputCellWithTitle.m */,
 				DA5A7CDA26C563A200F274C7 /* OALabelCollectionViewCell.h */,
 				DA5A7C7026C563A200F274C7 /* OALabelCollectionViewCell.m */,
 				DA5A7C4126C563A200F274C7 /* OALineChartCell.h */,
@@ -11598,7 +11591,6 @@
 				DA5A7BF726C563A100F274C7 /* OAImagesTableViewCell.xib */,
 				DA5A7BBF26C563A100F274C7 /* OAImageTextViewCell.xib */,
 				DA5A7BE526C563A100F274C7 /* OAInAppCell.xib */,
-				DA5A7BDB26C563A100F274C7 /* OAInputCellWithTitle.xib */,
 				DA5A7C1F26C563A200F274C7 /* OALabelCollectionViewCell.xib */,
 				DA5A7C2C26C563A200F274C7 /* OALineChartCell.xib */,
 				DA5A7C1226C563A200F274C7 /* OALocationIconsTableViewCell.xib */,
@@ -14598,7 +14590,6 @@
 				DA32846726CBF76B0036BA73 /* img_plugin_wikipedia.jpg in Resources */,
 				DAE08335253F0953009B5A11 /* ic_custom_save_to_file@2x.png in Resources */,
 				3296B48627F8790800108AF7 /* ic_navbar_pencil@3x.png in Resources */,
-				DA5A828526C563A700F274C7 /* OAInputCellWithTitle.xib in Resources */,
 				84EC52B21F8BF26600AFC252 /* ic_action_target@3x.png in Resources */,
 				DAA8890B241BCD2A0057722C /* ic_small_arrow_forward@3x.png in Resources */,
 				DA52CDEB24AE087F00CC309D /* img_help_width_limit_day@3x.png in Resources */,
@@ -16272,7 +16263,6 @@
 				DA5A842F26C563A800F274C7 /* OATargetTurnViewController.m in Sources */,
 				DA5A856926C563A900F274C7 /* OARouteProvider.mm in Sources */,
 				DA5A848F26C563A900F274C7 /* OABaseTableViewController.m in Sources */,
-				DA5A832926C563A800F274C7 /* OAInputCellWithTitle.m in Sources */,
 				DA5A849326C563A900F274C7 /* OAGpxApproximationViewController.mm in Sources */,
 				32C21CB727E0A66B00DE4266 /* OARecordSettingsBottomSheetViewController.m in Sources */,
 				DA5A850926C563A900F274C7 /* UITableViewCell+getTableView.m in Sources */,

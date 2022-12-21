@@ -12,6 +12,7 @@
 #import "OABackupListeners.h"
 #import "OABackupError.h"
 #import "OACloudBackupViewController.h"
+#import "OAInputTableViewCell.h"
 
 #define VERIFICATION_CODE_EXPIRATION_TIME_MIN (10 * 60)
 
@@ -82,7 +83,7 @@
     },
     @{ @"type" : [OADividerCell getCellIdentifier] },
     @{
-        @"type" : [OAInputCellWithTitle getCellIdentifier],
+        @"type" : [OAInputTableViewCell getCellIdentifier],
         @"title" : @"",
         @"placeholder" : OALocalizedString(@"verification_code_placeholder"),
         @"numbersKeyboard" : @(YES)

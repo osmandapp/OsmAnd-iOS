@@ -401,8 +401,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
             return;
         }
     }
-
-    [self dismissViewController];
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 - (IBAction)onSettingsButtonPressed

@@ -2784,3 +2784,16 @@
 "worldwide_maps" = "Weltweite Karten";
 "huawei_appgallery" = "Huawei AppGallery";
 "amazon_appstore" = "Amazon Appstore";
+"position_on_map" = "Position anzeigen";
+"position_on_map_center" = "Zentrieren";
+"position_on_map_bottom" = "Unten";
+"units_kg" = "kg";
+"routing_attr_motor_type_description" = "Wähle die Kraftstoffart des Fahrzeugs, um die CO2-Emissionen zu berechnen.";
+"routing_attr_motor_type_lpg_name" = "LPG";
+"routing_attr_motor_type_gas_name" = "CNG";
+"routing_attr_motor_type_electric_name" = "Elektrisch";
+"routing_attr_motor_type_hybrid_name" = "Hybrid";
+"routing_attr_motor_type_petrol_name" = "Benzin";
+"co2_mission" = "CO2-Emission";
+"routing_attr_motor_type_diesel_name" = "Diesel";
+"routing_attr_motor_type_name" = "Kraftstoffverbrauch des Motors";

@@ -2780,3 +2780,16 @@
 "nautical_depth_points" = "Точки морських глибин";
 "worldwide_maps" = "Мапи світу";
 "amazon_appstore" = "Amazon Appstore";
+"position_on_map" = "Позиція на екрані";
+"position_on_map_center" = "Центр";
+"units_kg" = "кг";
+"routing_attr_motor_type_name" = "Пальне, що використовується двигуном";
+"co2_mission" = "Викиди CO2";
+"position_on_map_bottom" = "Униз";
+"routing_attr_motor_type_description" = "Виберіть тип пального вашого автомобіля, щоб розрахувати викиди CO2.";
+"routing_attr_motor_type_diesel_name" = "Дизель";
+"routing_attr_motor_type_petrol_name" = "Бензин";
+"routing_attr_motor_type_lpg_name" = "Пропан";
+"routing_attr_motor_type_gas_name" = "Метан";
+"routing_attr_motor_type_electric_name" = "Електро";
+"routing_attr_motor_type_hybrid_name" = "Гібрид";

@@ -2784,3 +2784,16 @@
 "worldwide_maps" = "Mapas del mundo";
 "res_heightmap" = "Mapa de alturas";
 "amazon_appstore" = "Amazon Appstore";
+"units_kg" = "kg";
+"routing_attr_motor_type_name" = "Combustible del motor";
+"routing_attr_motor_type_diesel_name" = "Diésel";
+"co2_mission" = "Emisión de CO2";
+"position_on_map" = "Posición de la ubicación";
+"position_on_map_center" = "Centro";
+"position_on_map_bottom" = "Abajo";
+"routing_attr_motor_type_description" = "Elige el tipo de combustible del motor, necesario para estimar las emisiones de CO₂.";
+"routing_attr_motor_type_petrol_name" = "Gasolina, Nafta, Bencina";
+"routing_attr_motor_type_gas_name" = "Gas natural comprimido (GNC)";
+"routing_attr_motor_type_electric_name" = "Eléctrico";
+"routing_attr_motor_type_hybrid_name" = "Híbrido";
+"routing_attr_motor_type_lpg_name" = "Gas licuado de petróleo (GLP)";

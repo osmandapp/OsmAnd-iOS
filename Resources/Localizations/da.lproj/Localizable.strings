@@ -2773,3 +2773,16 @@
 "nautical_depth_points" = "Nautiske dybdepunkter";
 "amazon_appstore" = "Amazon Appstore";
 "huawei_appgallery" = "Huawei AppGallery";
+"position_on_map" = "Vis position";
+"units_kg" = "kg";
+"co2_mission" = "CO2-udledning";
+"routing_attr_motor_type_gas_name" = "Komprimeret naturgas";
+"routing_attr_motor_type_electric_name" = "Elektrisk";
+"routing_attr_motor_type_hybrid_name" = "Hybrid";
+"position_on_map_center" = "Centrum";
+"position_on_map_bottom" = "Bund";
+"routing_attr_motor_type_name" = "Brændstof anvendt af motor";
+"routing_attr_motor_type_description" = "Vælg brændstoftypen for dit køretøj for at beregne CO2-udledning.";
+"routing_attr_motor_type_diesel_name" = "Diesel";
+"routing_attr_motor_type_petrol_name" = "Benzin";
+"routing_attr_motor_type_lpg_name" = "Flaskegas";

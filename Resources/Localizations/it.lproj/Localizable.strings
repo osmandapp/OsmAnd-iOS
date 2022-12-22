@@ -2524,3 +2524,15 @@
 "help_legend_descr" = "Guida ai simboli della mappa";
 "res_heightmap" = "Mappa altitudini";
 "use_heightmap_setting" = "Utilizza le mappe altitudini in rilievo 3D";
+"position_on_map_center" = "Centro";
+"co2_mission" = "Emissione di CO2";
+"recalc_angle_dialog_title" = "Angolo minimo tra la mia posizione e il percorso";
+
+// Release Notes
+// instruction:
+//https://github.com/osmandapp/OsmAnd-Issues/blob/master/Adding%20release%20information%20to%20IOS.md
+
+"latest_version" = "Hai l'ultima versione: %@";
+"enough_contributions_descr" = "Congratulazioni, hai dato abbastanza contributi a OpenStreetMap e ora puoi goderti aggiornamenti illimitati delle mappe di OsmAnd!";
+"checking_progress" = "Controllo..";
+"last_two_month_total" = "Ultimi due mesi in totale";

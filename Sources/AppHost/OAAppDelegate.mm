@@ -416,7 +416,6 @@
         if ([OABackupHelper isTokenValid:tokenParam])
         {
             [OABackupHelper.sharedInstance registerDevice:tokenParam];
-            _rootViewController.token = nil;
         }
         else
         {

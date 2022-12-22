@@ -7,7 +7,7 @@
 //
 
 #import "OATrackMenuTabOverview.h"
-#import "OATextViewSimpleCell.h"
+#import "OATextMultilineTableViewCell.h"
 #import "OAIconTitleValueCell.h"
 #import "Localization.h"
 #import "OAColors.h"
@@ -193,7 +193,7 @@
 {
     return [OAGPXTableCellData withData:@{
             kTableKey: @"description",
-            kCellType: [OATextViewSimpleCell getCellIdentifier],
+            kCellType: [OATextMultilineTableViewCell getCellIdentifier],
             kTableValues: @{ @"attr_string_value": [self generateDescriptionAttrString] }
     }];
 }

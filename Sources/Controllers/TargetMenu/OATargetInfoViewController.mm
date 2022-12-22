@@ -762,7 +762,6 @@
         if (label.length == 0)
         {
             cell.textView.font = [UIFont systemFontOfSize:16.0];
-            cell.textView.textContainerInset = UIEdgeInsetsMake(11,11,0,0);
             cell.textView.text = info.textPrefix;
             cell.textView.textColor = [UIColor lightGrayColor];
         }

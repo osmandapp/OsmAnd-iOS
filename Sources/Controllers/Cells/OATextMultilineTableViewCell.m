@@ -21,6 +21,7 @@
 {
     [super awakeFromNib];
 
+    self.textView.textContainerInset = UIEdgeInsetsZero;
     [self.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field"] forState:UIControlStateNormal];
     self.clearButton.tintColor = UIColorFromRGB(color_tint_gray);
 }

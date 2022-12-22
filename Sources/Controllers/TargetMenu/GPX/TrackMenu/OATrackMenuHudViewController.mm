@@ -23,7 +23,7 @@
 #import "OAMapRendererView.h"
 #import "OATabBar.h"
 #import "OAIconTitleValueCell.h"
-#import "OATextViewSimpleCell.h"
+#import "OATextMultilineTableViewCell.h"
 #import "OATextLineViewCell.h"
 #import "OATitleIconRoundCell.h"
 #import "OATitleDescriptionIconRoundCell.h"
@@ -1862,15 +1862,16 @@
         }
         outCell = cell;
     }
-    else if ([cellData.type isEqualToString:[OATextViewSimpleCell getCellIdentifier]])
+    else if ([cellData.type isEqualToString:[OATextMultilineTableViewCell getCellIdentifier]])
     {
-        OATextViewSimpleCell *cell = [tableView dequeueReusableCellWithIdentifier:[OATextViewSimpleCell getCellIdentifier]];
+        OATextMultilineTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OATextMultilineTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextViewSimpleCell getCellIdentifier] owner:self options:nil];
-            cell = (OATextViewSimpleCell *) nib[0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextMultilineTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OATextMultilineTableViewCell *) nib[0];
             cell.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            [cell leftIconVisibility:NO];
+            [cell clearButtonVisibility:NO];
             cell.textView.textContainer.maximumNumberOfLines = 10;
             cell.textView.textContainer.lineBreakMode = NSLineBreakByTruncatingTail;
         }

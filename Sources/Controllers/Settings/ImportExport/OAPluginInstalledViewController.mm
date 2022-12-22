@@ -7,7 +7,7 @@
 //
 
 #import "OAPluginInstalledViewController.h"
-#import "OATextViewSimpleCell.h"
+#import "OATextMultilineTableViewCell.h"
 #import "OAPlugin.h"
 #import "OAColors.h"
 #import "OAProducts.h"
@@ -137,7 +137,7 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
     NSMutableArray *descriptionSection = [NSMutableArray new];
     [descriptionSection addObject: @{
         @"sectionType" : [NSNumber numberWithInt:EOAPluginSectionTypeDescription],
-        @"type" : [OATextViewSimpleCell getCellIdentifier],
+        @"type" : [OATextMultilineTableViewCell getCellIdentifier],
         @"text" : _plugin.getDescription
     }];
     [data addObject:descriptionSection];
@@ -317,14 +317,16 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
-    if ([item[@"type"] isEqualToString:[OATextViewSimpleCell getCellIdentifier]])
+    if ([item[@"type"] isEqualToString:[OATextMultilineTableViewCell getCellIdentifier]])
     {
-        OATextViewSimpleCell *cell = [tableView dequeueReusableCellWithIdentifier:[OATextViewSimpleCell getCellIdentifier]];
+        OATextMultilineTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OATextMultilineTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextViewSimpleCell getCellIdentifier] owner:self options:nil];
-            cell = (OATextViewSimpleCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextMultilineTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OATextMultilineTableViewCell *) nib[0];
             cell.separatorInset = UIEdgeInsetsZero;
+            [cell leftIconVisibility:NO];
+            [cell clearButtonVisibility:NO];
         }
         if (cell)
         {

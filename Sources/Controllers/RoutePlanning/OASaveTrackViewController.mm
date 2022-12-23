@@ -10,7 +10,7 @@
 #import "OARootViewController.h"
 #import "Localization.h"
 #import "OAColors.h"
-#import "OAInputTableViewCell.h"
+#import "OATextMultilineTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OASaveTrackBottomSheetViewController.h"
 #import "OAMapLayers.h"
@@ -21,7 +21,7 @@
 #import "OAAddTrackFolderViewController.h"
 #import "OACollectionViewCellState.h"
 
-@interface OASaveTrackViewController() <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate, UITextFieldDelegate, OASelectTrackFolderDelegate, OAFolderCardsCellDelegate, OAAddTrackFolderDelegate>
+@interface OASaveTrackViewController() <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate, OASelectTrackFolderDelegate, OAFolderCardsCellDelegate, OAAddTrackFolderDelegate>
 
 @end
 
@@ -155,7 +155,7 @@
     
     [data addObject:@[
         @{
-            @"type" : [OAInputTableViewCell getCellIdentifier],
+            @"type" : [OATextMultilineTableViewCell getCellIdentifier],
             @"fileName" : _fileName,
             @"header" : OALocalizedString(@"fav_name"),
             @"key" : @"input_name",
@@ -277,31 +277,28 @@
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:[OAInputTableViewCell getCellIdentifier]])
+    if ([cellType isEqualToString:[OATextMultilineTableViewCell getCellIdentifier]])
     {
-        OAInputTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAInputTableViewCell getCellIdentifier]];
+        OATextMultilineTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OATextMultilineTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAInputTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OAInputTableViewCell *) nib[0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextMultilineTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OATextMultilineTableViewCell *) nib[0];
             [cell leftIconVisibility:NO];
-            [cell titleVisibility:NO];
-            cell.inputField.textAlignment = NSTextAlignmentNatural;
-            cell.inputField.delegate = self;
-            cell.inputField.returnKeyType = UIReturnKeyDone;
-            cell.inputField.enablesReturnKeyAutomatically = YES;
+            cell.textView.userInteractionEnabled = YES;
+            cell.textView.editable = YES;
+            cell.textView.delegate = self;
+            cell.textView.returnKeyType = UIReturnKeyDone;
+            cell.textView.enablesReturnKeyAutomatically = YES;
         }
         if (cell)
         {
-            cell.inputField.text = item[@"fileName"];
-            [cell.inputField removeTarget:self action:NULL forControlEvents:UIControlEventEditingChanged];
-            [cell.inputField addTarget:self action:@selector(textViewDidChange:) forControlEvents:UIControlEventEditingChanged];
-
-            cell.clearButton.tag = cell.inputField.tag;
+            cell.textView.text = item[@"fileName"];
+            cell.textView.tag = indexPath.section << 10 | indexPath.row;
+            cell.clearButton.tag = cell.textView.tag;
             [cell.clearButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
             [cell.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         }
-        
         return cell;
     }
     else if ([cellType isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
@@ -442,6 +439,24 @@
     return YES;
 }
 
+#pragma mark - UITextViewDelegate
+
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    if([text isEqualToString:@"\n"])
+    {
+        [textView resignFirstResponder];
+        return NO;
+    }
+    return YES;
+}
+
+- (void) textViewDidChange:(UITextView *)textView
+{
+    [self updateErrorMessage:textView.text];
+    [textView sizeToFit];
+}
+
 #pragma mark - Selectors
 
 - (void) clearButtonPressed:(UIButton *)sender
@@ -453,8 +468,8 @@
     
     [_tableView beginUpdates];
     UITableViewCell *cell = [_tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row inSection:indexPath.section]];
-    if ([cell isKindOfClass:OAInputTableViewCell.class])
-        ((OAInputTableViewCell *) cell).inputField.text = @"";
+    if ([cell isKindOfClass:OATextMultilineTableViewCell.class])
+        ((OATextMultilineTableViewCell *) cell).textView.text = @"";
     [_tableView endUpdates];
 }
 
@@ -476,12 +491,6 @@
     }
 }
 
-- (void) textViewDidChange:(UITextView *)textView
-{
-    [self updateErrorMessage:textView.text];
-    [textView sizeToFit];
-}
-
 - (void) updateErrorMessage:(NSString *)text
 {
     [self updateFileNameFromEditText:text];
@@ -492,16 +501,6 @@
     footer.textLabel.text = _inputFieldError;
     [footer sizeToFit];
     [self.tableView endUpdates];
-}
-
-- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
-{
-    if([text isEqualToString:@"\n"])
-    {
-        [textView resignFirstResponder];
-        return NO;
-    }
-    return YES;
 }
 
 - (void) updateFileNameFromEditText:(NSString *)name

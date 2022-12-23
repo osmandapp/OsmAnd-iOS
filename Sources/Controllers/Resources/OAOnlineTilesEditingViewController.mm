@@ -14,6 +14,7 @@
 #import "OASettingsTableViewCell.h"
 #import "OACustomPickerTableViewCell.h"
 #import "OAInputTableViewCell.h"
+#import "OATextMultilineTableViewCell.h"
 #import "OAOnlineTilesSettingsViewController.h"
 #import "OAResourcesBaseViewController.h"
 #import "OAManageResourcesViewController.h"
@@ -252,19 +253,12 @@
     _zoomArray = [NSArray arrayWithArray: zoomArr];
     
     NSMutableArray *tableData = [NSMutableArray new];
-    [tableData addObject:@{
-        @"type" : [OAInputTableViewCell getCellIdentifier],
-        @"key" : @"name"
-    }];
-    [tableData addObject:@{
-        @"type" : [OAInputTableViewCell getCellIdentifier],
-        @"key" : @"url"
-    }];
+    [tableData addObject:@{ @"type" : [OATextMultilineTableViewCell getCellIdentifier] }];
+    [tableData addObject:@{ @"type" : [OATextMultilineTableViewCell getCellIdentifier] }];
     [tableData addObject: zoomArr];
     [tableData addObject:@{
         @"placeholder" : OALocalizedString(@"shared_string_not_set"),
-        @"type" : [OAInputTableViewCell getCellIdentifier],
-        @"key" : @"empireTime"
+        @"type" : [OAInputTableViewCell getCellIdentifier]
     }];
     
     [tableData addObject:@{
@@ -771,10 +765,47 @@
     return @"";
 }
 
-- (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
+- (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
+{
     NSDictionary *item =  [self getItem:indexPath];
-    
-    if ([item[@"type"] isEqualToString:[OAInputTableViewCell getCellIdentifier]])
+    if ([item[@"type"] isEqualToString:[OATextMultilineTableViewCell getCellIdentifier]])
+    {
+        OATextMultilineTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OATextMultilineTableViewCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextMultilineTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OATextMultilineTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            cell.textView.userInteractionEnabled = YES;
+            cell.textView.editable = YES;
+            cell.textView.delegate = self;
+            cell.textView.textContainer.lineBreakMode = NSLineBreakByCharWrapping;
+        }
+        if (cell)
+        {
+            BOOL isURL = indexPath.section == kURLSection;
+            cell.textView.tag = isURL ? kURLCellTag : kNameCellTag;
+            cell.clearButton.tag = cell.textView.tag;
+            [cell.clearButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
+            [cell.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+            if ([self isOfflineSQLiteDB] && isURL)
+            {
+                cell.userInteractionEnabled = NO;
+                cell.textView.text = OALocalizedString(@"res_offlineSQL_URL_warning");
+                cell.textView.textColor = [UIColor lightGrayColor];
+                [cell clearButtonVisibility:NO];
+            }
+            else
+            {
+                cell.userInteractionEnabled = YES;
+                cell.textView.text = isURL ? _itemURL : _itemName;
+                cell.textView.textColor = [UIColor blackColor];
+                [cell clearButtonVisibility:YES];
+            }
+        }
+        return cell;
+    }
+    else if ([item[@"type"] isEqualToString:[OAInputTableViewCell getCellIdentifier]])
     {
         OAInputTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAInputTableViewCell getCellIdentifier]];
         if (cell == nil)
@@ -783,50 +814,20 @@
             cell = (OAInputTableViewCell *) nib[0];
             [cell leftIconVisibility:NO];
             [cell titleVisibility:NO];
+            [cell clearButtonVisibility:NO];
+            [cell.inputField removeTarget:self action:NULL forControlEvents:UIControlEventEditingChanged];
+            [cell.inputField addTarget:self action:@selector(textChanged:) forControlEvents:UIControlEventEditingChanged];
+            cell.inputField.keyboardType = UIKeyboardTypeNumberPad;
             cell.inputField.textAlignment = NSTextAlignmentNatural;
-            cell.inputField.delegate = self;
         }
         if (cell)
         {
+            cell.inputField.text = _expireTimeMinutes;
+            cell.inputField.delegate = self;
+
             BOOL isOfflineSQLiteDB = [self isOfflineSQLiteDB];
-            [cell.clearButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
-            [cell.inputField removeTarget:self action:NULL forControlEvents:UIControlEventEditingChanged];
-
-            if ([item[@"key"] isEqualToString:@"name"] || [item[@"key"] isEqualToString:@"url"])
-            {
-                BOOL isURL = indexPath.section == kURLSection;
-                cell.inputField.tag = isURL ? kURLCellTag : kNameCellTag;
-                [cell.inputField addTarget:self action:@selector(textViewDidChange:) forControlEvents:UIControlEventEditingChanged];
-
-                cell.clearButton.tag = cell.inputField.tag;
-                [cell.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-                if (isOfflineSQLiteDB && isURL)
-                {
-                    cell.userInteractionEnabled = NO;
-                    cell.inputField.text = OALocalizedString(@"res_offlineSQL_URL_warning");
-                    cell.inputField.textColor = UIColor.lightGrayColor;
-                    [cell clearButtonVisibility:NO];
-                }
-                else
-                {
-                    cell.userInteractionEnabled = YES;
-                    cell.inputField.text = isURL ? _itemURL : _itemName;
-                    cell.inputField.textColor = UIColor.blackColor;
-                    [cell clearButtonVisibility:YES];
-                }
-            }
-            else if ([item[@"key"] isEqualToString:@"empireTime"])
-            {
-                [cell clearButtonVisibility:NO];
-
-                [cell.inputField addTarget:self action:@selector(textChanged:) forControlEvents:UIControlEventEditingChanged];
-                cell.inputField.keyboardType = UIKeyboardTypeNumberPad;
-                cell.inputField.text = _expireTimeMinutes;
-                cell.inputField.textColor = UIColor.blackColor;
-
-                cell.userInteractionEnabled = !isOfflineSQLiteDB;
-                cell.inputField.placeholder = isOfflineSQLiteDB ? OALocalizedString(@"res_offlineSQL_URL_warning") : item[@"placeholder"];
-            }
+            cell.userInteractionEnabled = !isOfflineSQLiteDB;
+            cell.inputField.placeholder = isOfflineSQLiteDB ? OALocalizedString(@"res_offlineSQL_URL_warning") : item[@"placeholder"];
         }
         return cell;
     }
@@ -943,6 +944,16 @@
         [self hidePicker];
         [self.navigationController pushViewController:settingsViewController animated:YES];
     }
+    else if ([item[@"type"] isEqualToString:[OAInputTableViewCell getCellIdentifier]])
+    {
+        OAInputTableViewCell *cell = (OAInputTableViewCell *) [tableView cellForRowAtIndexPath:indexPath];
+        [cell.inputField becomeFirstResponder];
+    }
+    else if ([item[@"type"] isEqualToString:[OATextMultilineTableViewCell getCellIdentifier]])
+    {
+        OATextMultilineTableViewCell *cell = (OATextMultilineTableViewCell *) [tableView cellForRowAtIndexPath:indexPath];
+        [cell.textView becomeFirstResponder];
+    }
 }
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -1037,11 +1048,11 @@
     } completion:nil];
 }
 
-#pragma mark - Selectors
+#pragma mark - UITextViewDelegate
 
-- (void)textChanged:(UITextView *)textView
+- (void)textViewDidBeginEditing:(UITextView *)textView
 {
-    _expireTimeMinutes = textView.text;
+    [self hidePicker];
 }
 
 - (void)textViewDidChange:(UITextView *)textView
@@ -1056,18 +1067,24 @@
     [self.tableView endUpdates];
 }
 
+#pragma mark - Selectors
+
+- (void)textChanged:(UITextView *)textView
+{
+    _expireTimeMinutes = textView.text;
+}
+
 - (void) clearButtonPressed:(UIButton *)sender
 {
     if (sender.tag == kNameCellTag)
         _itemName = @"";
     else if (sender.tag == kURLCellTag)
         _itemURL = @"";
-    
+
     [_tableView beginUpdates];
     UITableViewCell *cell = [_tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:sender.tag == kNameCellTag ? kNameSection : kURLSection]];
-    if ([cell isKindOfClass:OAInputTableViewCell.class])
-        ((OAInputTableViewCell *) cell).inputField.text = @"";
-    
+    if ([cell isKindOfClass:OATextMultilineTableViewCell.class])
+        ((OATextMultilineTableViewCell *) cell).textView.text = @"";
     [_tableView endUpdates];
 }
 

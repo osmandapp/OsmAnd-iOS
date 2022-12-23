@@ -273,11 +273,11 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextMultilineTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OATextMultilineTableViewCell *) nib[0];
-            cell.textView.userInteractionEnabled = YES;
-            cell.textView.editable = YES;
-            cell.textView.font = [UIFont systemFontOfSize:16];
             [cell leftIconVisibility:NO];
             [cell clearButtonVisibility:NO];
+            cell.textView.userInteractionEnabled = YES;
+            cell.textView.editable = YES;
+            cell.textView.font = [UIFont systemFontOfSize:16.];
         }
         if (cell)
         {

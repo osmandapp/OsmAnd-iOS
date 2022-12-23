@@ -1881,7 +1881,7 @@
             cell.textView.linkTextAttributes = @{NSForegroundColorAttributeName: UIColorFromRGB(color_primary_purple)};
             [cell.textView sizeToFit];
         }
-        outCell = cell;
+        return cell;
     }
     else if ([cellData.type isEqualToString:[OATextLineViewCell getCellIdentifier]])
     {

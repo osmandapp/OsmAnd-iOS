@@ -7,7 +7,6 @@
 //
 
 #import "OAIAPHelper.h"
-#import "OALog.h"
 #import "OsmAndApp.h"
 #import "OAAnalyticsHelper.h"
 #import "OANetworkUtilities.h"
@@ -171,7 +170,7 @@ static OASubscriptionState *EXPIRED;
         [[NSUserDefaults standardUserDefaults] setInteger:kFreeMapsAvailableTotal forKey:@"freeMapsAvailable"];
     }
 
-    OALog(@"Free maps available: %d", freeMaps);
+    NSLog(@"Free maps available: %d", freeMaps);
     return freeMaps;
 }
 
@@ -184,7 +183,7 @@ static OASubscriptionState *EXPIRED;
     [[NSUserDefaults standardUserDefaults] setInteger:--freeMaps forKey:@"freeMapsAvailable"];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
-    OALog(@"Free maps left: %d", freeMaps);
+    NSLog(@"Free maps left: %d", freeMaps);
 }
 
 + (void) increaseFreeMapsCount:(int)count
@@ -197,7 +196,7 @@ static OASubscriptionState *EXPIRED;
     [[NSUserDefaults standardUserDefaults] setInteger:freeMaps forKey:@"freeMapsAvailable"];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
-    OALog(@"Free maps left: %d", freeMaps);
+    NSLog(@"Free maps left: %d", freeMaps);
 }
 
 + (BOOL) isPaidVersion
@@ -657,7 +656,7 @@ static OASubscriptionState *EXPIRED;
 
 - (void) buyProduct:(OAProduct *)product
 {
-    OALog(@"Buying %@...", product.productIdentifier);
+    NSLog(@"Buying %@...", product.productIdentifier);
     
     // test - emulate purchasing
     if (TEST_LOCAL_PURCHASE)
@@ -847,7 +846,7 @@ static OASubscriptionState *EXPIRED;
 
 - (void) productsRequest:(SKProductsRequest *)request didReceiveResponse:(SKProductsResponse *)response
 {
-    OALog(@"Loaded list of products...");
+    NSLog(@"Loaded list of products...");
     _productsRequest = nil;
     BOOL isPaidVersion = [self.class isPaidVersion];
 
@@ -855,7 +854,7 @@ static OASubscriptionState *EXPIRED;
     {
         if (skProduct)
         {
-            OALog(@"Found product: %@ %@ %0.2f",
+            NSLog(@"Found product: %@ %@ %0.2f",
                   skProduct.productIdentifier,
                   skProduct.localizedTitle,
                   skProduct.price.floatValue);
@@ -1034,17 +1033,17 @@ static OASubscriptionState *EXPIRED;
 {
     if (request == _productsRequest)
     {
-        OALog(@"Products request did finish OK");
+        NSLog(@"Products request did finish OK");
     }
     else if (request == _receiptRequest)
     {
-        OALog(@"Receipt request did finish OK");
+        NSLog(@"Receipt request did finish OK");
         _receiptRequest = nil;
         [self getActiveProducts:_activeProductsCompletionHandler];
     }
     else
     {
-        OALog(@"SKRequest did finish OK");
+        NSLog(@"SKRequest did finish OK");
     }
 }
 
@@ -1058,7 +1057,7 @@ static OASubscriptionState *EXPIRED;
     else
         requestName = @"Unknown";
 
-    OALog(@"%@ request did fail with error: %@", requestName, error.localizedDescription);
+    NSLog(@"%@ request did fail with error: %@", requestName, error.localizedDescription);
     
     if (request == _productsRequest)
     {
@@ -1159,11 +1158,11 @@ static OASubscriptionState *EXPIRED;
         {
             if (![self productsLoaded])
             {
-                OALog(@"Cannot completeTransaction - %@. Products are not loaded yet.", transaction.payment.productIdentifier);
+                NSLog(@"Cannot completeTransaction - %@. Products are not loaded yet.", transaction.payment.productIdentifier);
             }
             else
             {
-                OALog(@"completeTransaction - %@", transaction.payment.productIdentifier);
+                NSLog(@"completeTransaction - %@", transaction.payment.productIdentifier);
                 [self provideContentForProductIdentifier:transaction.payment.productIdentifier transaction:transaction.originalTransaction ? transaction.originalTransaction : transaction];
             }
         }
@@ -1179,11 +1178,11 @@ static OASubscriptionState *EXPIRED;
         {
             if (![self productsLoaded])
             {
-                OALog(@"Cannot restoreTransaction - %@. Products are not loaded yet.", transaction.originalTransaction.payment.productIdentifier);
+                NSLog(@"Cannot restoreTransaction - %@. Products are not loaded yet.", transaction.originalTransaction.payment.productIdentifier);
             }
             else
             {
-                OALog(@"restoreTransaction - %@", transaction.originalTransaction.payment.productIdentifier);
+                NSLog(@"restoreTransaction - %@", transaction.originalTransaction.payment.productIdentifier);
             }
         }
         [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
@@ -1192,7 +1191,7 @@ static OASubscriptionState *EXPIRED;
 
 - (void) deferredTransaction:(SKPaymentTransaction *)transaction
 {
-    OALog(@"Transaction deferred state: %@", transaction.payment.productIdentifier);
+    NSLog(@"Transaction deferred state: %@", transaction.payment.productIdentifier);
     [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchaseDeferredNotification object:transaction.payment.productIdentifier userInfo:nil];
 }
 
@@ -1203,11 +1202,11 @@ static OASubscriptionState *EXPIRED;
         if (transaction.payment && transaction.payment.productIdentifier)
         {
             NSString *productIdentifier = transaction.payment.productIdentifier;
-            OALog(@"failedTransaction - %@", productIdentifier);
+            NSLog(@"failedTransaction - %@", productIdentifier);
             [self logTransactionType:@"failed" productIdentifier:productIdentifier];
             if (transaction.error && transaction.error.code != SKErrorPaymentCancelled)
             {
-                OALog(@"Transaction error: %@", transaction.error.localizedDescription);
+                NSLog(@"Transaction error: %@", transaction.error.localizedDescription);
                 [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchaseFailedNotification object:productIdentifier userInfo:@{@"error" : [NSString stringWithFormat:@"failedTransaction %@ - %@", productIdentifier, transaction.error.localizedDescription]}];
             }
             else

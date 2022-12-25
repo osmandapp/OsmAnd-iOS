@@ -2772,3 +2772,16 @@
 "worldwide_maps" = "Cartes mondiales";
 "amazon_appstore" = "Boutique Amazon";
 "huawei_appgallery" = "Galerie d'applications Huawei";
+"position_on_map_center" = "Centrer";
+"units_kg" = "kg";
+"routing_attr_motor_type_name" = "Carburant utilisé par le moteur";
+"routing_attr_motor_type_description" = "Sélectionnez le type de carburant de votre véhicule pour calculer les émissions de CO2.";
+"routing_attr_motor_type_diesel_name" = "Diesel";
+"routing_attr_motor_type_lpg_name" = "GPL";
+"routing_attr_motor_type_petrol_name" = "Essence";
+"routing_attr_motor_type_electric_name" = "Électrique";
+"routing_attr_motor_type_hybrid_name" = "Hybride";
+"routing_attr_motor_type_gas_name" = "GNV";
+"co2_mission" = "Émissions de CO2";
+"position_on_map_bottom" = "En bas";
+"position_on_map" = "Afficher la position";

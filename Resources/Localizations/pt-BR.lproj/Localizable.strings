@@ -2783,3 +2783,4 @@
 "routing_attr_motor_type_hybrid_name" = "Híbrido";
 "co2_mission" = "Emissão de CO2";
 "position_on_map" = "Posição na tela";
+"routing_attr_motor_type_name" = "Combustível usado pelo motor";

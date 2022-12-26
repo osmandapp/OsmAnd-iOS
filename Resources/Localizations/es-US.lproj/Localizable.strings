@@ -459,7 +459,7 @@
 "shared_string_modify" = "Editar";
 "shared_string_later" = "Luego";
 "shared_string_of" = "de";
-"shared_string_all" = "Todos";
+"shared_string_all" = "Todo";
 "shared_string_from" = "desde";
 "shared_string_time" = "Tiempo";
 "shared_string_time_of_day" = "Hora del día";
@@ -2765,3 +2765,4 @@
 "download_all" = "Descargar todo";
 "backup_delete_from_cloud" = "Borrar de la nube";
 "cloud_all_changes_downloaded" = "Todos los cambios descargados";
+"nautical_depth_points" = "Puntos de profundidad náuticos";

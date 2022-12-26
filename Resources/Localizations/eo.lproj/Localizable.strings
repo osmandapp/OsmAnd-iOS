@@ -2461,3 +2461,6 @@
 "on_hold" = "Ĉesigita";
 "paused" = "Paŭzigita";
 "mtb_segment_classification" = "Klasifiko de segmentoj";
+"map_settings_weather_temp" = "Temperaturo";
+"depth_contour_lines" = "Maraj profundec-kurboj";
+"weather_offline_forecast" = "Malkonekta veterproggnozo";

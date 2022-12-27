@@ -319,7 +319,6 @@ static const NSInteger groupCount = 5;
        }];
     
     NSString *versionNumber = [[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"];
-    versionNumber = [versionNumber stringByReplacingOccurrencesOfString:@"4.4." withString:@"4.3."];
     [dataArr addObject:
      @{
        @"name" : @"about",

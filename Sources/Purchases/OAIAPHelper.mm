@@ -1457,7 +1457,7 @@ static OASubscriptionState *EXPIRED;
         if (!expDate)
             return YES;
 
-        if ([[[NSDate alloc] init] timeIntervalSinceDate:expDate] > 0 && lastReceiptValidationTimeInterval > kReceiptValidationMinPeriod)
+        if (lastReceiptValidationTimeInterval > kReceiptValidationMinPeriod)
             return YES;
     }
     

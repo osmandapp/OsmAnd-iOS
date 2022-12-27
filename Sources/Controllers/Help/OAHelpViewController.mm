@@ -11,6 +11,7 @@
 #import "Localization.h"
 #import "OAWebViewController.h"
 #import "OALinks.h"
+#import "OAAppVersionDependentConstants.h"
 
 #define kLinkInternalType @"internal_link"
 #define kLinkExternalType @"ext_link"
@@ -318,13 +319,11 @@ static const NSInteger groupCount = 5;
        @"type" : kLinkExternalType
        }];
     
-    NSString *versionNumber = [[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"];
-    versionNumber = [versionNumber stringByReplacingOccurrencesOfString:@"4.4." withString:@"4.3."];
     [dataArr addObject:
      @{
        @"name" : @"about",
        @"title" : OALocalizedString(@"help_about"),
-       @"description" : [NSString stringWithFormat:@"%@ %@", @"OsmAnd", versionNumber],
+       @"description" : [NSString stringWithFormat:@"%@ %@", @"OsmAnd", OAAppVersionDependentConstants.getVersion],
        @"type" : kLinkInternalType,
        @"html" : @"about"
        }];

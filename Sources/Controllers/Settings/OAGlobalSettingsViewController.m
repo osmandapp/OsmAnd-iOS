@@ -483,7 +483,7 @@
             if ([name isEqualToString:@"do_not_show_discount"])
                 [_settings.settingDoNotShowPromotions set:isChecked];
             else if ([name isEqualToString:@"do_not_send_anonymous_data"])
-                [_settings.settingUseAnalytics set:isChecked];
+                [_settings.sendAnonymousAppUsageData set:isChecked];
             else if ([name isEqualToString:@"download_map_dialog"])
                 [_settings.showDownloadMapDialog set:isChecked];
             else if ([name isEqualToString:@"last_used"])

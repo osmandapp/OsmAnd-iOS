@@ -153,16 +153,14 @@ static BOOL _purchasesUpdated;
             else if (product.purchaseState == PSTATE_NOT_PURCHASED)
                 [expiredProducts addObject:product];
         }
-        // Display old purchases if no new purchases are active
-        if (activeProducts.count == 0)
+        for (OAProduct *product in _iapHelper.inAppsPurchased)
         {
-            for (OAProduct *product in _iapHelper.inAppsPurchased)
-            {
-                if (product.purchaseState == PSTATE_PURCHASED)
-                    [activeProducts addObject:product];
-                else if (product.purchaseState == PSTATE_NOT_PURCHASED)
-                    [expiredProducts addObject:product];
-            }
+            if ([activeProducts containsObject:product])
+                continue;
+            if (product.purchaseState == PSTATE_PURCHASED)
+                [activeProducts addObject:product];
+            else if (product.purchaseState == PSTATE_NOT_PURCHASED)
+                [expiredProducts addObject:product];
         }
 
         OAAppSettings *settings = OAAppSettings.sharedManager;

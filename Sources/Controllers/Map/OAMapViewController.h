@@ -37,7 +37,7 @@
 #define kMapBottomPosConstant 1.3f
 #define kGoToMyLocationZoom 15.0f
 #define kMapModeFollowDefaultZoom 18.0f
-#define kMapModeFollowDefaultElevationAngle kElevationMinAngle
+#define kMapModeFollowDefaultElevationAngle 30.0
 #define kQuickAnimationTime 0.25f
 #define kFastAnimationTime 0.5f
 #define kOneSecondAnimatonTime 1.0f

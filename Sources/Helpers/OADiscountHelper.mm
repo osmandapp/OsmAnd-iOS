@@ -516,7 +516,7 @@ const static NSString *URL = @"https://osmand.net/api/motd";
             else if ([featureSuffix isEqualToString:@"weather"])
                 [OAChoosePlanHelper showChoosePlanScreenWithFeature:[OAFeature WEATHER] navController:mapPanel.navigationController];
             else
-                [OAChoosePlanHelper showChoosePlanScreenWithSuffix:@"" navController:mapPanel.navigationController];
+                [OAChoosePlanHelper showChoosePlanScreenWithSuffix:featureSuffix navController:mapPanel.navigationController];
         }
         else
         {

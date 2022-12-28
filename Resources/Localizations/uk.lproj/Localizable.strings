@@ -2706,12 +2706,12 @@
 "recorded_voice" = "Записано";
 "cloud_no_conflicts_descr" = "Дані на пристрої та в OsmAnd Cloud збігаються.";
 "shared_string_changed" = "Змінено";
-"cloud_conflict" = "Конфлікт";
+"cloud_conflict" = "Неузгодженість";
 "cloud_recent_changes" = "Зміни";
 "cloud_pause_all" = "Призупинити все";
 "cloud_all_changes_uploaded" = "Усі зміни вивантажено";
 "cloud_all_changes_uploaded_descr" = "Усі зміни, зроблені на цьому пристрої, синхронізуються з OsmAnd Cloud.";
-"cloud_no_conflicts" = "Конфліктів немає";
+"cloud_no_conflicts" = "Неузгодженостей немає";
 "backup_conflicts_action_descr" = "Ще одна версія цього файлу зберігається на сервері. Потрібно вибрати дію";
 "cloud_contains_newer_changes" = "Версія на OsmAnd Cloud містить новіші зміни.";
 "upload_local_version" = "Вивантажити локальну версію";

@@ -2715,9 +2715,9 @@
 "cloud_no_conflicts_descr" = "Die Daten auf dem Gerät und in der OsmAnd Cloud sind gleich.";
 "cloud_pause_all" = "Alles anhalten";
 "cloud_all_changes_uploaded" = "Alle Änderungen hochgeladen";
-"cloud_all_changes_uploaded_descr" = "Alle mit diesem Gerät vorgenommenen Änderungen werden mit OsmAnd Cloud synchronisiert.";
+"cloud_all_changes_uploaded_descr" = "Alle auf diesem Gerät vorgenommenen Änderungen werden mit OsmAnd Cloud synchronisiert.";
 "dowload_cloud_version" = "Cloud-Version herunterladen";
-"cloud_no_conflicts" = "Keine Konflikte";
+"cloud_no_conflicts" = "Es gibt keine Konflikte";
 "upload_local_version" = "Lokale Version hochladen";
 "cross_buy" = "Cross-Buy";
 "weather_forecast_entire_world" = "Weltweite Wettervorhersage";
@@ -2771,9 +2771,9 @@
 "deleted_file" = "Gelöschte Datei";
 "last_synchronization" = "Letzte Synchronisierung";
 "upload_change" = "Änderung hochladen";
-"cloud_version_will_be_removed" = "Cloud-Version wird entfernt";
-"cloud_changes_will_be_dismissed" = "Cloud-Änderungen werden verworfen";
-"local_file_will_be_restored" = "Lokale Datei wird wiederhergestellt";
+"cloud_version_will_be_removed" = "Die Cloud-Version wird entfernt";
+"cloud_changes_will_be_dismissed" = "Die Cloud-Änderungen werden verworfen";
+"local_file_will_be_restored" = "Die lokale Datei wird wiederhergestellt";
 "checking_progress" = "Überprüfung..";
 "cloud_conflict_descr" = "Die lokale und die Cloud-Version enthalten Änderungen seit der letzten Synchronisierung.";
 "local_changes_will_be_dismissed" = "Lokale Änderungen werden verworfen";

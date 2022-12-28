@@ -98,7 +98,7 @@
 "dialogs_and_notifications" = "Dialoger och notifieringar";
 "dialogs_and_notifications_descr" = "Styr popup-fönster, dialogrutor och aviseringar";
 "settings_preset_descr" = "Kartvy och navigeringsinställningar är kopplade till din profil. Ange din standardprofil här.";
-"unit_of_length" = "Enhet för längd";
+"unit_of_length" = "Längdenhet";
 "unit_of_length_descr" = "Ändra längdenheter.";
 "coords_format" = "Koordinatformat";
 "coords_format_descr_quick_search" = "Du kan ändra koordinatformat för profil i allmänna inställningar";
@@ -396,7 +396,7 @@
 "si_mi_feet" = "Miles/fot";
 "si_mi_yard" = "Miles/yard";
 "si_mi_meters" = "Miles/meter";
-"si_km_m" = "Kilomter/meter";
+"si_km_m" = "Kilometer/meter";
 "si_nm" = "Distansminuter";
 "si_kmh" = "Kilometer per timme";
 "si_mph" = "Miles per timme";

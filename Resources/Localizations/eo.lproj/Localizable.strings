@@ -2463,4 +2463,8 @@
 "mtb_segment_classification" = "Klasifiko de segmentoj";
 "map_settings_weather_temp" = "Temperaturo";
 "depth_contour_lines" = "Maraj profundec-kurboj";
-"weather_offline_forecast" = "Malkonekta veterproggnozo";
+"weather_offline_forecast" = "Malkonekta veterprognozo";
+"measurement_units" = "Mezur-unuoj";
+"map_settings_weather_cloud" = "Nub-kovriĝo";
+"map_settings_weather_wind" = "Vento";
+"map_settings_weather_precip" = "Precipitaĵoj";

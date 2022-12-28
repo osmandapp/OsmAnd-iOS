@@ -2708,7 +2708,7 @@
 "cloud_conflict" = "Conflicto";
 "cloud_recent_changes" = "Cambios";
 "cloud_all_changes_uploaded" = "Se cargaron todo los cambios";
-"cloud_all_changes_uploaded_descr" = "Todos los cambios hechos en este dispositivo se sincronizaron en OsmAnd Cloud.";
+"cloud_all_changes_uploaded_descr" = "Todos los cambios hechos en este dispositivo están sincronizados con OsmAnd Cloud.";
 "cloud_no_conflicts" = "Sin conflictos";
 "cloud_no_conflicts_descr" = "Los datos en el dispositivo y en OsmAnd Cloud son los mismos.";
 "backup_conflicts_descr" = "Existe una versión más reciente de estos archivos en el servidor. Elige una acción.";

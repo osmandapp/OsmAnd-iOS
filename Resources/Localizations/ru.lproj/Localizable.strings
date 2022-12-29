@@ -2567,3 +2567,5 @@
 "new_file" = "Новый файл";
 "cloud_recent_changes" = "Изменения";
 "backup_error_failed_to_fetch_remote_items" = "Не удалось получить список файлов с сервера.";
+"local_file_will_be_restored" = "Локальный файл будет восстановлен";
+"local_changes_will_be_dismissed" = "Локальные изменения будут отклонены";

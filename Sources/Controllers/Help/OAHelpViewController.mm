@@ -11,6 +11,7 @@
 #import "Localization.h"
 #import "OAWebViewController.h"
 #import "OALinks.h"
+#import "OAAppVersionDependentConstants.h"
 
 #define kLinkInternalType @"internal_link"
 #define kLinkExternalType @"ext_link"
@@ -323,7 +324,7 @@ static const NSInteger groupCount = 5;
      @{
        @"name" : @"about",
        @"title" : OALocalizedString(@"help_about"),
-       @"description" : [NSString stringWithFormat:@"%@ %@", @"OsmAnd", versionNumber],
+       @"description" : [NSString stringWithFormat:@"%@ %@", @"OsmAnd", OAAppVersionDependentConstants.getVersion],
        @"type" : kLinkInternalType,
        @"html" : @"about"
        }];

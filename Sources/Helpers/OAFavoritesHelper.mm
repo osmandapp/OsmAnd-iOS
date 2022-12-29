@@ -19,6 +19,7 @@
 #import "OAParkingPositionPlugin.h"
 #import "OAPlugin.h"
 #import "OAIndexConstants.h"
+#import "OAAppVersionDependentConstants.h"
 
 #import <EventKit/EventKit.h>
 
@@ -683,8 +684,7 @@ static BOOL _favoritesLoaded = NO;
 + (OAGPXDocument *) asGpxFile:(NSArray<OAFavoriteItem *> *)favoritePoints
 {
     OAGPXMutableDocument *gpx = [[OAGPXMutableDocument alloc] init];
-    [gpx setVersion:[NSString stringWithFormat:@"%@ %@", @"OsmAnd",
-                     [[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"]]];
+    [gpx setVersion:[NSString stringWithFormat:@"%@ %@", @"OsmAnd", OAAppVersionDependentConstants.getVersion]];
     for (OAFavoriteItem *p in favoritePoints)
     {
         [gpx addWpt:p.toWpt];

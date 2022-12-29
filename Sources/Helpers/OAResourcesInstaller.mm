@@ -276,7 +276,7 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
                             {
                                 for (OAWorldRegion *region in _app.worldRegion.flattenedSubregions)
                                 {
-                                    if (resource->id.startsWith(QString::fromNSString(region.downloadsIdPrefix)))
+                                    if (region.downloadsIdPrefix.length > 0 &&  resource->id.startsWith(QString::fromNSString(region.downloadsIdPrefix)))
                                     {
                                         foundRegion = region;
                                         break;

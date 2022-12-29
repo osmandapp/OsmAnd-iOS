@@ -17,6 +17,7 @@
 #import "OADestinationItem.h"
 #import "OAGPXMutableDocument.h"
 #import "OAGPXDocumentPrimitives.h"
+#import "OAAppVersionDependentConstants.h"
 
 #define kMarkersChanged @"markers_modified_time"
 
@@ -328,8 +329,7 @@
 - (OAGPXDocument *) generateGpx:(NSArray<OADestination *> *)markers completeBackup:(BOOL)completeBackup
 {
     OAGPXMutableDocument *doc = [[OAGPXMutableDocument alloc] init];
-    [doc setVersion:[NSString stringWithFormat:@"%@ %@", @"OsmAnd",
-                     [[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"]]];
+    [doc setVersion:[NSString stringWithFormat:@"%@ %@", @"OsmAnd", OAAppVersionDependentConstants.getVersion]];
     for (OADestination *marker in markers)
     {
         OAWptPt *wpt = [[OAWptPt alloc] init];

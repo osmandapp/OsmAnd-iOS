@@ -2555,7 +2555,7 @@
 "cloud_no_conflicts" = "Конфликтов нет";
 "cloud_all_changes_uploaded" = "Все изменения выгружены";
 "last_sync" = "Последняя синхронизация";
-"upload_all" = "Выгрузить всё";
+"upload_all" = "Выгрузить все";
 "cloud_all_changes_uploaded_descr" = "Все изменения, сделанные на этом устройстве, синхронизируются с OsmAnd Cloud.";
 "shared_string_uploaded" = "Выгружено";
 "shared_string_do_not_exist" = "Не существует";

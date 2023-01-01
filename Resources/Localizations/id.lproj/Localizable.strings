@@ -93,7 +93,7 @@
 "auto_follow_location_enabled" = "Tampilan peta tengah otomatis sedang digunakan.";
 "unknown_location" = "Posisi belum diketahui";
 "animate_routing_route_not_calculated" = "Harap hitung rute terlebih dahulu";
-"settings_preset" = "Profil default";
+"settings_preset" = "Profil bawaan";
 "default_profile_descr" = "Pilih profil yang akan digunakan pada peluncuran aplikasi.";
 "dialogs_and_notifications" = "Dialog-dialog dan notifikasi-notifikasi";
 "dialogs_and_notifications_descr" = "Atur pop-up, dialog, dan notifikasi";
@@ -167,7 +167,7 @@
 "shared_string_widgets" = "Widget";
 "map_widget_right" = "Panel kanan";
 "map_widget_left" = "Panel kiri";
-"layer_map_appearance" = "Konfigurasikan layar";
+"layer_map_appearance" = "Konfigurasi layar";
 "configure_screen_descr" = "Pilih opsi layar untuk profil";
 "map_markers" = "Map markers";
 "markers_history" = "Riwayat penanda";
@@ -264,7 +264,7 @@
 "default_speed_system_descr" = "Define unit of speed";
 "speed_limit_exceed" = "Toleransi batas kecepatan";
 "speed_limit_exceed_message" = "Select speed limit tolerance margin, above which you will receive a voice warning.";
-"wake_on_voice" = "Hidupkan layar";
+"wake_on_voice" = "Nyalakan layar";
 "wake_on_voice_descr" = "Hidupkan layar perangkat (jika mati) ketika mendekati sebuah belokan.";
 "voice_pref_title" = "Suara";
 "voice_provider" = "Panduan suara";
@@ -475,7 +475,7 @@
 "shared_string_not_set" = "Not set";
 "shared_string_reset" = "Setel ulang";
 "shared_string_read_more" = "Baca lebih lanjut";
-"shared_string_on" = "Hidup";
+"shared_string_on" = "Nyala";
 "shared_string_off" = "Mati";
 "shared_string_clear_cache" = "Clear cache";
 "shared_string_maximum" = "Maximum";
@@ -894,7 +894,7 @@
 "lang_zhminnan" = "Min Selatan";
 "lang_zhyue" = "Kantonis";
 "maps" = "Peta-peta";
-"purchases" = "Pembelian-pembelian";
+"purchases" = "Pembelian";
 "select_map_style" = "Select map style";
 "select_map_source" = "Select map source";
 "select_overlay" = "Select overlay map";
@@ -949,7 +949,7 @@
 "create_profile_descr" = "Dasarkan profil kustom Anda pada salah satu profil aplikasi default, ini menentukan pengaturan dasar seperti visibilitas default widget dan unit kecepatan dan jarak. Ini adalah profil aplikasi default, bersama dengan contoh profil khusus yang dapat diperluas ke:";
 "profile_type_custom_string" = "Profil kustom";
 "new_profile" = "Profil baru";
-"configure_profile" = "Konfigurasikan profil";
+"configure_profile" = "Konfigurasi profil";
 "profile_settings" = "Profile settings";
 "profile_appearance" = "Tampilan profil";
 "profile_appearance_descr" = "Icon, color, and name";
@@ -1038,7 +1038,7 @@
 "next_segs_recalc_descr" = "All subsequent segments will be recalculated using the selected profile";
 "prev_segs_recalc_descr" = "All previous segments will be recalculated using the selected profile";
 "reverse_route" = "Balikkan rute";
-"join_segments" = "Gabungkan segmen-segmen";
+"join_segments" = "Gabungkan segmen";
 "simplified_track" = "Trek yang disederhanakan";
 "simplified_track_description" = "Hanya garis rute yang akan disimpan, titik jalan akan dihapus.";
 "open_saved_track" = "Buka trek yang tersimpan";
@@ -1317,7 +1317,7 @@
 "add_map_marker" = "Tambahkan penanda peta";
 "select_map_marker" = "Select map marker";
 "add_gpx_waypoint" = "Add GPX waypoint";
-"context_menu_item_edit_waypoint" = "Edit titik jalan GPX";
+"context_menu_item_edit_waypoint" = "Sunting titik jalan GPX";
 "toggle_fav" = "Show/hide favorites";
 "fav_show" = "Show favorites";
 "fav_hide" = "Hide favorites";
@@ -1706,7 +1706,7 @@
 "slope_grey_color_descr" = "Grey color is used when slope is undefined.";
 "analyze_on_map" = "Analisa pada peta";
 "upload_to_openstreetmap" = "Unggah ke OpenStreetMap";
-"edit_track" = "Edit trek";
+"edit_track" = "Sunting trek";
 "duplicate_track" = "Duplicate track";
 "enter_name" = "Masukkan nama";
 "not_selected" = "Tidak terpilih";
@@ -1870,7 +1870,7 @@
 "shared_string_email" = "Email";
 "shared_string_password" = "Kata sandi";
 "shared_string_filters" = "Filter-filter";
-"edit_filter" = "Sunting kategori-kategori";
+"edit_filter" = "Sunting kategori";
 "shared_string_save_as" = "Simpan Sebagai";
 "delete_filter" = "Hapus filter";
 "save_filter" = "Simpan filter";
@@ -2352,18 +2352,18 @@
 "backup_error_gzip_only_supported_upload" = "Berkas seharusnya sudah dikirim dengan format .gzip";
 "weather_wind_unit_km_per_hour" = "Kilometer per jam";
 "cloud_last_backup" = "Pencadangan terakhir";
-"cloud_email_not_registered" = "Alamat e-mail ini belum terdaftar di OsmAnd Cloud";
+"cloud_email_not_registered" = "Alamat surel ini belum terdaftar di OsmAnd Cloud";
 "cloud_make_backup_descr" = "Ada banyak perubahan pada perangkat ini, harap melakukan pencadangan dari data ini agar tidak hilang.";
 "cloud_backup_now" = "Cadangkan sekarang";
 "backup_error_user_is_already_registered" = "Alamat surel ini telah digunakan oleh akun lain";
 "units_min_short" = "m";
 "cloud_set_up_backup" = "Siapkan pencadangan";
-"osmand_cloud_login_descr" = "Mohon masukkan alamat e-mail yang Anda daftarkan. Sebuah kata sandi sekali pakai untuk langkah berikutnya akan dikirim.";
+"osmand_cloud_login_descr" = "Mohon masukkan alamat surel yang Anda daftarkan. Sebuah kata sandi sekali pakai untuk langkah berikutnya akan dikirim.";
 "altitude" = "Ketinggian";
 "cloud_existing_account" = "Saya sudah memiliki sebuah akun";
 "restore_from_file" = "Pulihkan dari berkas";
 "resend_verification_code" = "Kirim ulang";
-"cloud_email_already_registered" = "Alamat e-mail ini telah didaftarkan.";
+"cloud_email_already_registered" = "Alamat surel ini telah didaftarkan.";
 "osmand_cloud" = "OsmAnd Cloud";
 "grey_color_undefined" = "Bagian tanpa data berwarna abu-abu.";
 "start_point" = "Mulai";
@@ -2427,7 +2427,7 @@
 "speed_mode" = "Mode cepat";
 "new_device_account" = "Perangkat baru / akun baru";
 "shared_string_learn_more" = "Pelajari lebih lanjut";
-"purchases_feature_desc_wikivoyage" = "Jelajahi Wikivoyage secara luring. Artikel-artikel dibagi berdasarkan negara dan daerah dan tersedia pada bahasa apa pun.";
+"purchases_feature_desc_wikivoyage" = "Jelajahi Wikivoyage secara luring. Artikel dibagi berdasarkan negara dan daerah dan tersedia pada bahasa apa pun.";
 "manage_subscription" = "Kelola langganan";
 "purchases_feature_desc_nautical" = "Dapatkan akses ke informasi kedalaman laut";
 "annual_subscription" = "Langganan tahunan";
@@ -2487,3 +2487,4 @@
 "cloud_all_changes_downloaded" = "Semua perubahan diunduh";
 "modified_file" = "Berkas diubah";
 "deleted_file" = "Berkas dihapus";
+"backup_delete_old_data" = "Hapus versi lama";

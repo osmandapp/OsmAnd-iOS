@@ -2611,3 +2611,10 @@
 "product_desc_ext_weather" = "Abilita il plugin Meteo per pianificare un percorso tenendo conto del meteo. Guarda la mappa colorata delle previsioni del tempo, aggiornata ogni ora per oggi, domani e la settimana successiva.\n\nDurante il viaggio visualizza i widget informativi basati sulla posizione con temperatura, precipitazioni, velocità del vento, pressione.\n\nSarà utile per escursioni e lunghi viaggi in bicicletta o in moto.";
 "res_import_unsupported" = "Tipo di file errato. Sono supportati solo i file routing.xml e *.render.xml.";
 "subscriptions_public_info" = "Il pagamento verrà addebitato sul tuo account iTunes alla conferma dell'acquisto. L'abbonamento si rinnoverà automaticamente a meno che il rinnovo automatico non venga disattivato almeno 24 ore prima della fine del periodo corrente. Il tuo account verrà addebitato in base al tuo piano per il rinnovo entro 24 ore prima della fine del periodo corrente. Puoi gestire o disattivare il rinnovo automatico nelle Impostazioni account dopo l'acquisto. Se acquisti un abbonamento durante un periodo di prova gratuito, la parte inutilizzata di questo periodo verrà persa.";
+"map_download_privacy_descr" = "Scaricando le mappe accetti i <a href='https://osmand.net/docs/legal/terms-of-use'>Termini d'uso</a> e la <a href='https://osmand. net/docs/legal/privacy-policy'>Informativa sulla privacy</a>.";
+"already_has_inapp" = "Sei già iscritto a %@.";
+"already_has_subscription" = "Sei già abbonato a OsmAnd Live e hai tutte le funzionalità sbloccate.";
+"touting_specified_vehicle_parameters_descr" = "I parametri del veicolo specificati possono influire sul percorso.";
+"routing_attr_goods_restrictions_name" = "Consegna della merce";
+"routing_attr_goods_restrictions_header_name" = "I veicoli che trasportano merci possono essere limitati per l'accesso ad alcune strade.";
+"routing_attr_goods_restrictions_footer_desc" = "Si applica solo ai veicoli che trasportano merci che hanno almeno quattro ruote e pesano non più di 3,5 tonnellate.\n\nSe il peso del tuo veicolo è superiore a 3,5 tonnellate devi utilizzare il profilo Camion.";

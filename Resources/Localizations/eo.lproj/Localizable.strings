@@ -2468,3 +2468,4 @@
 "map_settings_weather_cloud" = "Nub-kovriĝo";
 "map_settings_weather_wind" = "Vento";
 "map_settings_weather_precip" = "Precipitaĵoj";
+"show_borders_of_downloaded_maps" = "Montri randojn de elŝutitaj mapoj";

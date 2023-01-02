@@ -2716,3 +2716,12 @@
 "rendering_attr_showMtbScaleIMBATrails_name" = "IMBA";
 "cloud_all_changes_uploaded_descr" = "Všechny změny provedené v tomto zařízení jsou synchronizovány s OsmAnd Cloud.";
 "osm_live_payment_subscription_management_aid" = "Platba bude z vašeho účtu Apple ID stržena při potvrzení nákupu.\n\nPředplatné se automaticky obnovuje, pokud není zrušeno alespoň 24 hodin před koncem aktuálního období. Z vašeho účtu bude částka za obnovení předplatného stržena do 24 hodin před koncem aktuálního období.\n\nPředplatné můžete spravovat a zrušit tak, že po zakoupení přejdete do nastavení svého účtu v App Store";
+"subscription_banner_free_maps_description" = "Získejte neomezené stahování a aktualizace map.";
+"contact_support_description" = "Máte-li jakékoli dotazy, kontaktujte nás na adrese support@osmand.net.";
+"shared_string_now" = "Nyní";
+"contact_support" = "Kontaktovat podporu";
+"loading_purchase_information" = "Načítání informací o nákupu";
+"subscription_banner_free_maps_title" = "Mapy %i si můžete stáhnout zdarma.";
+"subscription_banner_no_free_maps_title" = "Využili jste všechna bezplatná stahování";
+"compass_visible_in_rotated_mode" = "Viditelné, pokud je mapa otočena";
+"subscription_banner_osmand_pro_title" = "Získávejte hodinové, denní nebo týdenní aktualizace map pomocí aplikace OsmAnd Pro.";

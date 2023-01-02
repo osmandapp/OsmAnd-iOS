@@ -2711,7 +2711,7 @@
 "verification_code_missing_description" = "Může to trvat až 10 minut. Pokud se zpráva nenachází ve složce spamu, použijte níže uvedené tlačítko.";
 "routing_attr_goods_restrictions_name" = "Dodávání zboží";
 "routing_attr_goods_restrictions_header_name" = "Vjezd vozidel přepravujících zboží na některé silnice může být omezen.";
-"routing_attr_goods_restrictions_footer_desc" = "Platí pouze pro vozidla přepravující zboží, která mají nejméně čtyři kola a váží nejvýše 3,5 tuny.\n\nPokud je hmotnost vašeho vozidla vyšší než 3,5 tuny, musíte použít profil Truck.";
+"routing_attr_goods_restrictions_footer_desc" = "Platí pouze pro vozidla přepravující zboží, která mají nejméně čtyři kola a váží nejvýše 3,5 tuny.\n\nPokud je hmotnost vašeho vozidla vyšší než 3,5 tuny, musíte použít profil Kamion.";
 "routing_attr_goods_restrictions_yes_desc" = "Silnice, které jsou uzavřeny pro rozvoz zboží, budou objížděny.";
 "rendering_attr_showMtbScaleIMBATrails_name" = "IMBA";
 "cloud_all_changes_uploaded_descr" = "Všechny změny provedené v tomto zařízení jsou synchronizovány s OsmAnd Cloud.";

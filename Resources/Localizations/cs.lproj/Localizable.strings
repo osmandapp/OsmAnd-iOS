@@ -2725,3 +2725,15 @@
 "subscription_banner_no_free_maps_title" = "Využili jste všechna bezplatná stahování";
 "compass_visible_in_rotated_mode" = "Viditelné, pokud je mapa otočena";
 "subscription_banner_osmand_pro_title" = "Získávejte hodinové, denní nebo týdenní aktualizace map pomocí aplikace OsmAnd Pro.";
+"compass_visible_in_rotated_mode_descr" = "Skryté, když je sever nahoře";
+"weather_forecast" = "Předpověď počasí";
+"weather_offline_forecast_only" = "Pouze offline předpověď";
+"weather_offline_forecast_only_desc" = "Předpověď bude k dispozici pouze pro země s předem staženými daty.";
+"weather_clear_offline_cache" = "Tím se vymaže veškerá mezipaměť pro dlaždice počasí offline.";
+"compass_options_description" = "Kliknutím na kompas přepnete režim orientace mapy";
+"weather_plugin" = "Zásuvný modul pro počasí";
+"weather_forecast_entire_world" = "Předpověď počasí pro celý svět";
+"weather_offline_forecast" = "Předpověď v režimu offline";
+"weather_data_provider" = "Poskytovatel dat GFS.";
+"weather_entire_world" = "Celý svět";
+"weather_clear_online_cache" = "Tím vymažete veškerou mezipaměť pro dlaždice počasí online.";

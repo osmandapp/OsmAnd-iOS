@@ -68,7 +68,7 @@
 "gpx_waypoints" = "Ferilpunktar";
 "gpx_points" = "Punkt(ur/ar)";
 "shared_string_export" = "Flytjaút";
-"import_export" = "Flytja inn/út";
+"import_export" = "Inn-/útflutningur";
 "gpx_import_title" = "Flytja inn ferla";
 "gpx_import_already_exists" = "Tiltekna ferlaskráin er þegar á listanum. Veldu einhverja aðgerð.";
 "gpx_add_new" = "Bæta við nýrri skrá";
@@ -2595,7 +2595,7 @@
 "shared_string_next_update" = "Næsta uppfærsla";
 "renew_subscription" = "Endurnýja áskrift";
 "fetching_from_server" = "Næ í gögn frá netþjóni";
-"cloud_conflict" = "Árekstrar";
+"cloud_conflict" = "Árekstur";
 "backup_data" = "Öryggisafrit gagna";
 "cloud_storage_used" = "%@ af %@ notað";
 "cloud_recent_changes" = "Breytingar";
@@ -2752,3 +2752,17 @@
 "weather_generates_new_forecast_description" = "OsmAnd útbýr nýja veðurspá á 6 klst. fresti. Því nær núverandi dagsetningu, því nákvæmari verður spáin.";
 "offline_edition_descr" = "Ef ónettengdar breytingar eru virkar, þá eru breytingar fyrst vistaðar á tækinu og geta síðan einungis verið sendar inn handvirkt. Annars gerist þetta jafnóðum.";
 "osm_live_payment_subscription_management_aid" = "Greiðsla verður rukkuð af Apple ID reikningnum þínum við staðfestingu á innkaupum.\n\nÁskriftin endurnýjast sjálfkrafa nema hætt sé við hana a.m.k. 24 klst áður en núverandi greiðslutímabili lýkur. Reikningurinn þinn verður krafinn um greiðslu innan 24 klst áður en núverandi greiðslutímabili lýkur.\n\nÞú getur sýslað með og hætt við áskriftir með því að fara í stillingar reikningsins þíns í App Store eftir innkaup";
+"position_on_map" = "Staðsetning á skjá";
+"position_on_map_center" = "Miðjað";
+"position_on_map_bottom" = "Neðst";
+"shared_string_do_not_exist" = "Er ekki til";
+"shared_string_uploaded" = "Sent inn";
+"new_file" = "Ný skrá";
+"modified_file" = "Breytt skrá";
+"deleted_file" = "Eydd skrá";
+"cloud_version_will_be_removed" = "Útgáfa á tölvuskýi verður fjarlægð";
+"cloud_changes_will_be_dismissed" = "Breytingar á tölvuskýinu verða hunsaðar";
+"local_file_will_be_restored" = "Staðvær skrá verður endurheimt";
+"local_changes_will_be_dismissed" = "Staðværar breytingar verða hunsaðar";
+"res_heightmap" = "Hæðakort";
+"upload_change" = "Senda inn breytingu";

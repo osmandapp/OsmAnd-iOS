@@ -2697,7 +2697,7 @@
 "cloud_no_conflicts" = "Nejsou žádné konflikty";
 "cloud_confirm_delete_type" = "Opravdu chcete z OsmAnd Cloud odstranit položku \"%@\"?";
 "select_another_colorization" = "Vyberte prosím jiný typ zbarvení.";
-"subscription_cancel_description" = "Zrušit kdykoli v AppStore.";
+"subscription_cancel_description" = "Zrušte kdykoliv v AppStore.";
 "huawei_appgallery" = "Huawei AppGallery";
 "local_backup" = "Místní záloha";
 "local_backup_descr" = "Záloha nebo obnova dat z místního souboru.";
@@ -2717,11 +2717,11 @@
 "cloud_all_changes_uploaded_descr" = "Všechny změny provedené v tomto zařízení jsou synchronizovány s OsmAnd Cloud.";
 "osm_live_payment_subscription_management_aid" = "Platba bude z vašeho účtu Apple ID stržena při potvrzení nákupu.\n\nPředplatné se automaticky obnovuje, pokud není zrušeno alespoň 24 hodin před koncem aktuálního období. Z vašeho účtu bude částka za obnovení předplatného stržena do 24 hodin před koncem aktuálního období.\n\nPředplatné můžete spravovat a zrušit tak, že po zakoupení přejdete do nastavení svého účtu v App Store";
 "subscription_banner_free_maps_description" = "Získejte neomezené stahování a aktualizace map.";
-"contact_support_description" = "Máte-li jakékoli dotazy, kontaktujte nás na adrese support@osmand.net.";
+"contact_support_description" = "Máte-li jakékoliv dotazy, kontaktujte nás na adrese support@osmand.net.";
 "shared_string_now" = "Nyní";
 "contact_support" = "Kontaktovat podporu";
 "loading_purchase_information" = "Načítání informací o nákupu";
-"subscription_banner_free_maps_title" = "Mapy %i si můžete stáhnout zdarma.";
+"subscription_banner_free_maps_title" = "Můžete si zdarma stáhnout %i map.";
 "subscription_banner_no_free_maps_title" = "Využili jste všechna bezplatná stahování";
 "compass_visible_in_rotated_mode" = "Viditelné, pokud je mapa otočena";
 "subscription_banner_osmand_pro_title" = "Získávejte hodinové, denní nebo týdenní aktualizace map pomocí aplikace OsmAnd Pro.";
@@ -2731,7 +2731,7 @@
 "weather_offline_forecast_only_desc" = "Předpověď bude k dispozici pouze pro země s předem staženými daty.";
 "weather_clear_offline_cache" = "Tím se vymaže veškerá mezipaměť pro dlaždice počasí offline.";
 "compass_options_description" = "Kliknutím na kompas přepnete režim orientace mapy";
-"weather_plugin" = "Zásuvný modul pro počasí";
+"weather_plugin" = "Modul Počasí";
 "weather_forecast_entire_world" = "Předpověď počasí pro celý svět";
 "weather_offline_forecast" = "Předpověď v režimu offline";
 "weather_data_provider" = "Poskytovatel dat GFS.";

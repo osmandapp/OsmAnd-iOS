@@ -64,7 +64,7 @@
 "gpx_waypoints" = "Punkty trasy";
 "gpx_points" = "Punkt(y)";
 "shared_string_export" = "Eksportuj";
-"import_export" = "Importuj/Eksportuj";
+"import_export" = "Import/Eksport";
 "gpx_import_title" = "Importuj trasy";
 "shared_string_edit" = "Edytuj";
 "shared_string_dismiss" = "Anuluj";
@@ -1836,7 +1836,7 @@
 "add_point" = "Dodaj punkt";
 
 // Route planning
-"plan_route" = "Zaplanuj trasę";
+"plan_route" = "Planowanie trasy";
 "checking_for_duplicate_description" = "OsmAnd wyszukuje duplikaty %@ wśród istniejących elementów. To może zająć chwilę.";
 "position_icon_while_moving" = "Ikona położenia podczas ruchu";
 "position_icon_at_rest" = "Ikona położenia podczas spoczynku";
@@ -3201,3 +3201,24 @@
 "depth_contour_lines" = "Linie konturowe głębokości";
 "measurement_units" = "Jednostki miary";
 "track_has_no_needed_data" = "Trasa nie zawiera potrzebnych danych.";
+"modified_file" = "Plik zmieniony";
+"local_changes_will_be_dismissed" = "Lokalne zmiany zostaną odrzucone";
+"cloud_all_changes_uploaded" = "Wszystkie zmiany przesłane";
+"deleted_file" = "Plik usunięty";
+"last_sync" = "Ostatnia synchronizacja";
+"sync_now" = "Synchronizuj teraz";
+"cloud_no_conflicts" = "Nie ma żadnych konfliktów";
+"upload_all" = "Prześlij wszystko";
+"cloud_recent_changes" = "Zmiany";
+"cloud_conflict" = "Konflikt";
+"shared_string_uploaded" = "Przesłano";
+"shared_string_do_not_exist" = "Nie istnieje";
+"new_file" = "Nowy plik";
+"local_changes" = "Zmiany lokalne";
+"upload_change" = "Prześlij zmianę";
+"cloud_version_will_be_removed" = "Wersja w chmurze zostanie usunięta";
+"cloud_changes_will_be_dismissed" = "Zmiany w chmurze zostaną odrzucone";
+"local_file_will_be_restored" = "Plik lokalny zostanie przywrócony";
+"cloud_all_changes_downloaded" = "Pobrane wszystkie zmiany";
+"cloud_all_changes_uploaded_descr" = "Wszystkie zmiany dokonane na tym urządzeniu są synchronizowane z Chmurą OsmAnd.";
+"backup_error_failed_to_fetch_remote_items" = "Nie udało się pobrać listy plików z serwera.";

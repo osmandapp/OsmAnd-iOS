@@ -177,7 +177,20 @@
             OsmAnd::ObfPoiSectionReader::VisitorFunction amenityFilter =
                     [=](const std::shared_ptr<const OsmAnd::Amenity> &amenity)
                     {
-                        OAPOI *poi = [OAPOIHelper parsePOIByAmenity:amenity];
+                        OAPOI *poi = [[OAPOI alloc] init];
+                        poi.name = amenity->nativeName.toNSString();
+                        NSMutableDictionary *names = [NSMutableDictionary dictionary];
+                        for(const auto& entry : OsmAnd::rangeOf(amenity->localizedNames))
+                        {
+                            [names setObject:entry.value().toNSString() forKey:entry.key().toNSString()];
+                        }
+                        NSString *prefLang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
+                        const QString lang = (prefLang ? QString::fromNSString(prefLang) : QString());
+                        poi.nameLocalized = amenity->getName(lang, false).toNSString();
+                        poi.localizedNames = names;
+                        OAPOIType *type = [OAPOIHelper parsePOITypeByAmenity:amenity];
+                        poi.type = type;
+                        
                         BOOL check = !_wikiUiNameFilter && !_wikiUiFilter && _poiUiNameFilter
                                 && _poiUiFilter && _poiUiFilter.filterByName && _poiUiFilter.filterByName.length > 0;
                         if (!isWiki && [poi.type.tag isEqualToString:OSM_WIKI_CATEGORY])

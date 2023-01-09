@@ -471,7 +471,7 @@
 
 - (void) toggleTagToolbar
 {
-    if ((self.tagTextView.inputAccessoryView == nil) && (_isHintsAvailable || [self.tagTextView.text isEqualToString:@""]))
+    if ((self.tagTextView.inputAccessoryView == nil) && (_isHintsAvailable || self.tagTextView.text.length == 0))
         [self createTagToolbarFor];
     else if ([self.tagTextView.text isEqualToString:@""])
         [self hideTagToolbar];
@@ -481,7 +481,7 @@
 {
     self.tagTextView.inputAccessoryView = nil;
     [self.tagTextView reloadInputViews];
-    if (![self.tagTextView.text isEqualToString:@""])
+    if (self.tagTextView.text.length > 0)
         _isHintsAvailable = NO;
 }
 
@@ -520,7 +520,7 @@
     if ([hints count] == 0)
     {
         if (_isHintsAvailable)
-        [self hideTagToolbar];
+            [self hideTagToolbar];
     }
     else
     {

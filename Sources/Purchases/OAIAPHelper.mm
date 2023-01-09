@@ -242,16 +242,6 @@ static OASubscriptionState *EXPIRED;
 //#endif
 }
 
-+ (BOOL) isCarPlayAvailable
-{
-    long time = (long) NSDate.date.timeIntervalSince1970;
-    long installTime = [self getInstallTime];
-    if (time >= installTime + CARPLAY_START_DATE_SEC)
-        return [self isPaidVersion];
-
-    return YES;
-}
-
 + (long) getInstallTime
 {
     NSDate *installDate = [[NSUserDefaults standardUserDefaults] objectForKey:@"install_date"];
@@ -333,6 +323,26 @@ static OASubscriptionState *EXPIRED;
         sharedInstance = [[self alloc] init];
     });
     return sharedInstance;
+}
+
+- (BOOL) isCarPlayAvailable
+{
+    long time = (long) NSDate.date.timeIntervalSince1970;
+    long installTime = [self.class getInstallTime];
+    if (time >= installTime + CARPLAY_START_DATE_SEC)
+        return [self hasCarPlayPurchase];
+
+    return YES;
+}
+
+- (BOOL) hasCarPlayPurchase
+{
+    return [self.class isPaidVersion] || [self.class isContourLinesPurchased] || [self isAnyMapRegionPurchased];
+}
+
+- (BOOL) isAnyMapRegionPurchased
+{
+    return _products.inAppMapsPurchased.count > 0;
 }
 
 - (OAProduct *) skiMap

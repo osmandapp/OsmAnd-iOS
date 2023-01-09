@@ -1147,7 +1147,7 @@
     return [self.class parsePOIByAmenity:amenity type:type];
 }
 
-+ (OAPOIType *) parsePOITypeByAmenity:(std::shared_ptr<const OsmAnd::Amenity>)amenity
++ (OAPOIType *) parsePOITypeByAmenity:(const std::shared_ptr<const OsmAnd::Amenity> &)amenity
 {
     OAPOIHelper *helper = [OAPOIHelper sharedInstance];
 

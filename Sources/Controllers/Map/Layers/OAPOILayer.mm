@@ -180,9 +180,9 @@
                         OAPOI *poi = [[OAPOI alloc] init];
                         poi.name = amenity->nativeName.toNSString();
                         NSMutableDictionary *names = [NSMutableDictionary dictionary];
-                        for(const auto& entry : OsmAnd::rangeOf(amenity->localizedNames))
+                        for (const auto& entry : OsmAnd::rangeOf(amenity->localizedNames))
                         {
-                            [names setObject:entry.value().toNSString() forKey:entry.key().toNSString()];
+                            names[entry.key().toNSString()] = entry.value().toNSString();
                         }
                         NSString *prefLang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
                         const QString lang = (prefLang ? QString::fromNSString(prefLang) : QString());

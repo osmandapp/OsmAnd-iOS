@@ -1711,6 +1711,15 @@ typedef enum
          [_hudViewController.quickActionController hideActionsSheetAnimated];
  }
 
+- (void) updateTargetPointPosition:(CGFloat)height animated:(BOOL)animated
+{
+    if ((![self.targetMenuView isLandscape] && self.targetMenuView.showFullScreen) || (self.targetMenuView.targetPoint.type == OATargetImpassableRoadSelection && !_routingHelper.isRouteCalculated))
+        return;
+    
+    Point31 targetPoint31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_targetLatitude, _targetLongitude))];
+    [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:([self.targetMenuView isLandscape] ? kInfoViewLanscapeWidth : 0.0) bottomInset:([self.targetMenuView isLandscape] ? 0.0 : height) centerBBox:(_targetMode == EOATargetBBOX) animated:animated];
+}
+
 #pragma mark - OATargetPointViewDelegate
 
 - (void) targetResetCustomStatusBarStyle
@@ -2021,13 +2030,14 @@ typedef enum
         [self displayGpxOnMap:[[OASavingTrackHelper sharedInstance] getCurrentGPX]];
 }
 
+- (void) targetViewOnAppear:(CGFloat)height animated:(BOOL)animated
+{
+    [self updateTargetPointPosition:height animated:animated];
+}
+
 - (void) targetViewHeightChanged:(CGFloat)height animated:(BOOL)animated
 {
-    if ((![self.targetMenuView isLandscape] && self.targetMenuView.showFullScreen) || (self.targetMenuView.targetPoint.type == OATargetImpassableRoadSelection && !_routingHelper.isRouteCalculated))
-        return;
-    
-    Point31 targetPoint31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_targetLatitude, _targetLongitude))];
-    [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:([self.targetMenuView isLandscape] ? kInfoViewLanscapeWidth : 0.0) bottomInset:([self.targetMenuView isLandscape] ? 0.0 : height) centerBBox:(_targetMode == EOATargetBBOX) animated:animated];
+    [self updateTargetPointPosition:height animated:animated];
 }
 
 - (void) showTargetPointMenu:(BOOL)saveMapState showFullMenu:(BOOL)showFullMenu

@@ -2040,3 +2040,14 @@
 "cloud_all_changes_uploaded" = "已上傳所有變更";
 "cloud_all_changes_uploaded_descr" = "在此裝置上做出的所有變更都會與 OsmAnd Cloud 同步。";
 "cloud_no_conflicts" = "沒有衝突";
+"purchase_origin" = "付款來源";
+"save_heading_descr" = "儲存標題資訊在每一個標點";
+"position_on_map" = "位置顯示";
+"position_on_map_center" = "中心";
+"position_on_map_bottom" = "下面";
+"loading_purchase_information" = "讀取付款資訊";
+"subscription_banner_free_maps_title" = "您可以免費下載 %i 地圖。";
+"shared_string_now" = "現在";
+"contact_support_description" = "如果有任何問題，請聯絡 support@osmand.net";
+"contact_support" = "聯絡支援";
+"subscription_banner_free_maps_description" = "獲得無限制的地圖下載和更新。";

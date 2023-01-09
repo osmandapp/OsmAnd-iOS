@@ -2771,7 +2771,7 @@
 "last_synchronization" = "Última sincronización";
 "cloud_conflict_descr" = "Las versiones en local y en la nube contienen cambios desde la última sincronización.";
 "upload_change" = "Subir cambio";
-"cloud_version_will_be_removed" = "Se quitará la versión en la nube";
+"cloud_version_will_be_removed" = "La versión en la nube será quitada";
 "cloud_changes_will_be_dismissed" = "Los cambios en la nube serán descartados";
 "local_file_will_be_restored" = "El archivo local será restaurado";
 "local_changes_will_be_dismissed" = "Los cambios locales serán descartados";

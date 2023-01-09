@@ -568,7 +568,7 @@
 //inapps
 "product_title_nautical" = "Námořní mapa";
 "product_desc_nautical" = "Vektorové mapy vhodné pro navigaci na vodních trasách";
-"product_desc_ext_nautical" = "Zapnutím obohatíte mapu o informace o plavebních trasách, navigačních světlech, nebezpečných zónách, zónách, kde je povoleno nebo zakázáno plout či kotvit atd. Chcete-li použít stažení námořních map a zapnutí \"Námořní mapy\", zadejte do pole Konfigurace mapy. \n\nJak na to - https://osmand.net/docs/user/plugins/nautical-charts";
+"product_desc_ext_nautical" = "Zapnutím obohatíte mapu o informace o plavebních trasách, navigačních světlech, nebezpečných zónách, zónách, kde je povoleno nebo zakázáno plout či kotvit atd. Chcete-li modul použít, stáhněte si námořní mapy a zapněte styl \"Plavební\" v menu Nastavení mapy. \n\nJak na to - https://osmand.net/docs/user/plugins/nautical-charts";
 "product_title_parking" = "Parking Position";
 "product_desc_parking" = "Sledování doby parkování a polohy vašeho vozu";
 "product_desc_ext_parking" = "Umožňuje nastavit bod na mapě, kde je vaše auto ponecháno na ulici, a upozornit váš kalendář na začátek doby parkování. Plugin pomáhá sledovat dobu parkování a polohu vašeho vozu. Chcete-li umístit značku, vyberte místo na mapě, přejděte do části Akce a stiskněte tlačítko \"Přidat parkování\".";
@@ -2075,7 +2075,7 @@
 "gpx_upload_public_visibility_descr" = "„Veřejná“ znamená, že trasa je veřejně dostupná ve vašich GPS trasách, ve veřejných seznamech GPS tras a také ve veřejném seznamu stop s nezpracovanými časovými razítky. Data poskytnutá prostřednictvím API nebudou odkazovat na vaši stránku s trasou. Časová razítka bodů trasy nebudou dostupná prostřednictvím veřejného GPS API a body nebudou chronologicky seřazeny.";
 "restart" = "Restartovat";
 "shared_string_wifi_only" = "Pouze naWi-Fi";
-"ios_release_4_0" = "• Nová obrazovka \"Přidat oblíbený bod\" s možností nastavení ikony, barvy a tvaru\n• Přidán nástroj \"Souřadnice\" se souřadnicemi aktuální polohy\n• Přidána možnost importovat vlastní zásuvné moduly\n• Značně rozšířená funkcionalita pro import a export\n• Vzdálenost klepnutím byla přesunuta z kruhového pravítka do samostatné možnosti\n• Opraveno zamrznutí aplikace pro CarPlay při vypnutí obrazovky iPhonu\n• Obrazovka pro zásuvné moduly přesunuta z menu Mapy & zdroje do hlavního menu\n• Přidána finská lokalizace\n• Opraveno uživatelské rozhraní v orientaci na šířku pro obrazovku \"Plánování cesty\"\n• Přidána podpora vlastních souborů pro navigaci a vykreslování\n• Vylepšena rychlost zpracování směrové čáry k mapovým značkám\n• Opraven problém s importem GPX souborů, jejichž přípona je velkými písmeny\n• Opraven problém s menu \"Následovat stopu\"\n• Opraven import OBF souborů\n";
+"ios_release_4_0" = "• Nová obrazovka \"Přidat oblíbený bod\" s možností nastavení ikony, barvy a tvaru\n• Přidán nástroj \"Souřadnice\" se souřadnicemi aktuální polohy\n• Přidána možnost importovat vlastní moduly\n• Značně rozšířená funkcionalita pro import a export\n• Vzdálenost klepnutím byla přesunuta z kruhového pravítka do samostatné možnosti\n• Opraveno zamrznutí aplikace pro CarPlay při vypnutí obrazovky iPhonu\n• Obrazovka pro moduly přesunuta z menu Mapy & zdroje do hlavního menu\n• Přidána finská lokalizace\n• Opraveno uživatelské rozhraní v orientaci na šířku pro obrazovku \"Plánování trasy\"\n• Přidána podpora vlastních souborů pro navigaci a vykreslování\n• Vylepšena rychlost zpracování směrové čáry k mapovým značkám\n• Opraven problém s importem GPX souborů, jejichž přípona je velkými písmeny\n• Opraven problém s menu \"Následovat stopu\"\n• Opraven import OBF souborů\n";
 "default" = "Výchozí";
 "select_profile" = "Zvolte profil";
 "threshold_distance" = "Mezní vzdálenost";
@@ -2676,7 +2676,7 @@
 "cross_buy" = "Křížový nákup";
 "cloud_create_account" = "Vytvořit účet";
 "res_heightmap" = "Výšková mapa";
-"use_heightmap_setting" = "Použití 3D reliéfních výškových map";
+"use_heightmap_setting" = "Použít 3D reliéfní výškové mapy";
 "nautical_depth_points" = "Plavební hloubkové body";
 "depth_contours" = "Hloubkové vrstevnice";
 "worldwide_maps" = "Celosvětové mapy";
@@ -2724,19 +2724,19 @@
 "subscription_banner_free_maps_title" = "Můžete si zdarma stáhnout %i map.";
 "subscription_banner_no_free_maps_title" = "Využili jste všechna bezplatná stahování";
 "compass_visible_in_rotated_mode" = "Viditelné, pokud je mapa otočena";
-"subscription_banner_osmand_pro_title" = "Získávejte hodinové, denní nebo týdenní aktualizace map pomocí aplikace OsmAnd Pro.";
+"subscription_banner_osmand_pro_title" = "Získávejte hodinové, denní nebo týdenní aktualizace map s předplatným OsmAnd Pro.";
 "compass_visible_in_rotated_mode_descr" = "Skryté, když je sever nahoře";
 "weather_forecast" = "Předpověď počasí";
 "weather_offline_forecast_only" = "Pouze offline předpověď";
 "weather_offline_forecast_only_desc" = "Předpověď bude k dispozici pouze pro země s předem staženými daty.";
-"weather_clear_offline_cache" = "Tím se vymaže veškerá mezipaměť pro dlaždice počasí offline.";
+"weather_clear_offline_cache" = "Tím se vymaže veškerá mezipaměť pro offline dlaždice počasí.";
 "compass_options_description" = "Kliknutím na kompas přepnete režim orientace mapy";
 "weather_plugin" = "Modul Počasí";
 "weather_forecast_entire_world" = "Předpověď počasí pro celý svět";
 "weather_offline_forecast" = "Předpověď v režimu offline";
 "weather_data_provider" = "Poskytovatel dat GFS.";
 "weather_entire_world" = "Celý svět";
-"weather_clear_online_cache" = "Tím vymažete veškerou mezipaměť pro dlaždice počasí online.";
+"weather_clear_online_cache" = "Tím vymažete veškerou mezipaměť pro online dlaždice počasí.";
 "contributions_may_calculate_with_delay" = "Příspěvky mohou být vypočteny s několikahodinovým zpožděním.";
 "benefits_for_contributors_secondary_descr" = "Přihlaste se do OpenStreetMap a zkontrolujte, zda máte nárok na neomezené měsíční a hodinové aktualizace map.";
 "auth_error" = "Chyba autorizace";
@@ -2750,7 +2750,7 @@
 "login_open_street_map_org" = "Přihlášení do OpenStreetMap.org";
 "sign_in_with_open_street_map" = "Přihlaste se pomocí OpenStreetMap";
 "use_login_and_password" = "Použít přihlašovací jméno a heslo";
-"weather_miss_forecasts_description" = "Offline předpověď je k dispozici pro každou zemi. Doba trvání až 7 dní. Je třeba vybrat potřebné země.";
+"weather_miss_forecasts_description" = "Offline předpověď je k dispozici pro každou zemi zvlášť. Doba trvání až 7 dní. Je třeba vybrat potřebné země.";
 "enough_contributions_descr" = "Gratulujeme, přispěli jste do OpenStreetMap dostatečným počtem příspěvků a nyní můžete využívat neomezené aktualizace map OsmAnd!";
 "weather_miss_forecasts" = "Nemáte offline předpovědi";
 "weather_remove_forecasts_description" = "Opravdu chcete odstranit předpověď pro země: %d.";
@@ -2773,5 +2773,5 @@
 "recording_delete_confirm" = "Smazat tuto položku?";
 "offline_edition_descr" = "Pokud je povolena úprava offline, změny se uloží lokálně a lze je nahrát pouze ručně, jinak se změny nahrají okamžitě.";
 "recalc_angle_dialog_descr" = "Dokud nebude trasa přepočítána, bude mezi mou polohou a vypočtenou trasou zobrazen další přímý úsek";
-"ios_release_4_2" = "- Vzhled čáry trasy: přidána možnost nastavení šířky a barvy\n- Trasy: přidána možnost odstranit několik tras najednou.\n- Kontextová nabídka trasy: přidán posuvník se skupinami bodů trasy\n- Vzhled mapy: rozdělení dalších tras podle typu s možností povolit jednu z každé kategorie zvlášť\n- Jízda na koni: přidán nový typ navigace a profil aplikace\n- Soubory OsmAnd jsou nyní viditelné v aplikaci \"Soubory\"\n- Bylo vylepšeno UX voleb \"Použít údaje o nadmořské výšce\" a \"Vybrat kolísání nadmořské výšky\", byly sloučeny a přejmenovány na \"Preferovaný terén\", v současné době jsou k dispozici pro profily \"Cyklista\" a \"Pěší\".\n- Nová možnost \"Zahrnout záhlaví\" pro záznam trasy\n- Widget názvu ulice: nyní zobrazuje silniční štít a číslo výjezdu během navigace.\n- Nové Fitness a běžecké trasy na mapě\n- Opravy chyb CarPlay, přidána gesta pro dotykové displeje\n- Opraven import souborů GPX z balíčku OSF\n- Opraven import vlastních zásuvných modulů s přiloženými soubory\n- Opraveny různé pády v režimu plánování trasy\n- Opraveny pády během navigace\n";
-"ios_release_4_3" = "- Plynulá animace změn polohy během pohybu\n- CarPlay: přidány jízdní pruhy, 2,5D zobrazení, opraveny problémy se zvukem při připojení přes Bluetooth\n- Zavedení nových nákupních plánů: \"Mapy+\" s neomezeným stahováním map a přístupem k placeným doplňkům.\n- Přidáno zálohování do cloudu a předpověď počasí offline pro uživatele aplikace OsmAnd Pro.\n- Nová pohodlná obrazovka \"Nákup\" se seznamem všech nákupů\n- Výhody pro aktivní přispěvatele na OpenStreetMap.org\n- Trasy lze nyní obarvit podle nadmořské výšky, rychlosti nebo sklonu.\n- Offline mapy jsou nyní přístupné prostřednictvím aplikace Soubory\n- Oblíbené: přidáno generování lokálních záloh po každé změně, zálohy přístupné z aplikace Soubory\n- Body zájmu uložené do oblíbených položek uloží a zobrazí všechna data bodů zájmu i bez offline mapy\n- GPX přidána podpora pro značky link, cmt, desc a pro libovolná vlastní rozšíření\n- Přidán režim pro tlačítko Kompas\n- Opraven problém s formátem souřadnic UTM\n- Opraven problém s mezilehlými body v navigaci\n";
+"ios_release_4_2" = "• Vzhled čáry trasy: přidána možnost nastavení šířky a barvy\n• Stopy: přidána možnost odstranit několik stop najednou\n• Kontextová nabídka stopy: přidán posuvník se skupinami mezicílů\n• Vzhled mapy: rozdělení dalších tras podle typu s možností povolit jednu z každé kategorie zvlášť\n• Jízda na koni: přidán nový typ navigace a profil aplikace\n• Soubory OsmAnd jsou nyní viditelné v aplikaci \"Soubory\"\n• Bylo vylepšeno UX nastavení \"Použít údaje o nadmořské výšce\" a \"Vybrat kolísání nadmořské výšky\", možnosti byly sloučeny a přejmenovány na \"Preferovaný terén\", v současné době jsou k dispozici pro profily \"Jízda na kole\" a \"Chůze\".\n• Nová možnost \"Zahrnout záhlaví\" pro záznam stopy\n• Widget názvu ulice: nyní zobrazuje silniční štít a číslo výjezdu během navigace.\n• Nové fitness a běžecké trasy na mapě\n• Opravy chyb CarPlay, přidána gesta pro dotykové displeje\n• Opraven import souborů GPX z balíčku OSF\n• Opraven import vlastních modulů s přiloženými soubory\n• Opraveny různé pády v režimu plánování trasy\n• Opraveny pády během navigace\n";
+"ios_release_4_3" = "• Plynulá animace změn polohy během pohybu\n• CarPlay: přidány jízdní pruhy, 2,5D zobrazení, opraveny problémy se zvukem při připojení přes Bluetooth\n• Zavedení nových nákupních plánů: předplatné \"OsmAnd Pro\" s přístupem ke všem funkcím a \"Mapy+\" s neomezeným stahováním map a přístupem k placeným modulům.\n• Přidáno zálohování do cloudu a předpověď počasí offline pro uživatele aplikace OsmAnd Pro\n• Nová pohodlná obrazovka \"Nákup\" se seznamem všech nákupů\n• Výhody pro aktivní přispěvatele na OpenStreetMap.org\n• Stopy lze nyní obarvit podle nadmořské výšky, rychlosti nebo sklonu.\n• Offline mapy jsou nyní přístupné prostřednictvím aplikace Soubory\n• Oblíbené: přidáno generování lokálních záloh po každé změně, zálohy jsou přístupné z aplikace Soubory\n• Body zájmu uložené do oblíbených položek uloží a zobrazí všechna data bodů zájmu i bez offline mapy\n• Přidána podpora pro GPX značky link, cmt, desc a pro libovolná vlastní rozšíření\n• Přidán režim pro tlačítko Kompas\n• Opraven problém s formátem souřadnic UTM\n• Opraven problém s mezicíly v navigaci\n";

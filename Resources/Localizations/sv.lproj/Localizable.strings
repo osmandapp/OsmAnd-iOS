@@ -1138,7 +1138,7 @@
 "res_uninst_unmanaged_q" = "You're going to delete %@. It's not from catalog, so please be sure you have a backup if needed.";
 "res_details" = "Detaljer";
 "res_type" = "Typ";
-"res_unknown" = "Unknown";
+"res_unknown" = "Okänd";
 "res_size" = "Storlek";
 "res_created_on" = "Skapad";
 "res_update_all" = "Update all";
@@ -1200,7 +1200,7 @@
 "osm_note" = "OSM-anteckning";
 "osm_created" = "Created";
 "osm_deleted" = "Raderad";
-"osm_modified" = "Modified";
+"osm_modified" = "Ändrad";
 "osm_reopened" = "Reopened";
 "osm_name" = "OpenStreetMap username";
 "osm_pass" = "OpenStreetMap password";
@@ -2476,3 +2476,36 @@
 "restore_from_osmand_cloud" = "Återställ från OsmAnd Cloud";
 "simulation_real_mode_title" = "Realistisk simulering";
 "simulation_constant_mode_title" = "Konstant hastighet";
+"cloud_no_conflicts" = "Inga konflikter hittades";
+
+// Shared Strings
+"shared_string_cancelled" = "Avbruten";
+"carplay_available_in_sub_plans" = "Köp OsmAnd Pro eller Maps+ för att använda OsmAnd tillsammans med CarPlay.";
+"cloud_conflict" = "Konflikt";
+"cloud_all_changes_uploaded_descr" = "Alla ändringar gjorda på denna enhet synkroniseras med OsmAnd molnlagring.";
+"position_on_map" = "Visningsläge för position";
+"position_on_map_center" = "I mitten";
+"position_on_map_bottom" = "Nedtill";
+"upload_change" = "Ladda upp ändring";
+"cloud_version_will_be_removed" = "Moln-versionen kommer tas bort";
+"cloud_changes_will_be_dismissed" = "Moln-ändringar kommer avvisas";
+"cloud_recent_changes" = "Ändringar";
+"cloud_all_changes_downloaded" = "Alla ändringar är nedladdade";
+"sync_now" = "Synkronisera nu";
+"shared_string_do_not_exist" = "Finns inte";
+"shared_string_uploaded" = "Uppladdad";
+"modified_file" = "Ändrad fil";
+"deleted_file" = "Borttagen fil";
+"new_file" = "Ny fil";
+"local_file_will_be_restored" = "Lokal fil kommer återställas";
+"local_changes_will_be_dismissed" = "Lokala ändringar kommer avvisas";
+"upload_all" = "Ladda upp alla";
+"cloud_all_changes_uploaded" = "Alla ändringar har laddats upp";
+"shared_string_always_visible" = "Alltid synlig";
+"shared_string_always_hidden" = "Alltid dold";
+"local_changes" = "Lokala ändringar";
+"last_sync" = "Senaste synkronisering";
+"speed_mode" = "Hastighetsmetod";
+"backup_error_failed_to_fetch_remote_items" = "Misslyckades att hämta listan över filer från servern.";
+"tts" = "Text-till-tal (TTS)";
+"recorded_voice" = "Inspelat";

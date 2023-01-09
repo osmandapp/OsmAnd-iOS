@@ -17,7 +17,7 @@
 #import "OAAppSettings.h"
 #import "OsmAndApp.h"
 
-#import "OATextInputCell.h"
+#import "OAInputTableViewCell.h"
 #import "OAColorsTableViewCell.h"
 #import "OAIconsTableViewCell.h"
 #import "OALocationIconsTableViewCell.h"
@@ -266,7 +266,7 @@
     NSMutableArray *profileMapAppearanceArr = [NSMutableArray array];
     NSString* profileColor = OALocalizedString(_colorNames[@(_changedProfile.color)]);
     [profileNameArr addObject:@{
-        @"type" : [OATextInputCell getCellIdentifier],
+        @"type" : [OAInputTableViewCell getCellIdentifier],
         @"title" : _changedProfile.name,
     }];
     [profileAppearanceArr addObject:@{
@@ -505,15 +505,20 @@
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath { 
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = [[NSString alloc] initWithString:item[@"type"]];
-    if ([cellType isEqualToString:[OATextInputCell getCellIdentifier]])
+    if ([cellType isEqualToString:[OAInputTableViewCell getCellIdentifier]])
     {
-        OATextInputCell* cell = [tableView dequeueReusableCellWithIdentifier:[OATextInputCell getCellIdentifier]];
+        OAInputTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAInputTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextInputCell getCellIdentifier] owner:self options:nil];
-            cell = (OATextInputCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAInputTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAInputTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell titleVisibility:NO];
+            [cell clearButtonVisibility:NO];
+            [cell.inputField removeTarget:self action:NULL forControlEvents:UIControlEventEditingChanged];
             [cell.inputField addTarget:self action:@selector(textViewDidChange:) forControlEvents:UIControlEventEditingChanged];
             cell.inputField.autocapitalizationType = UITextAutocapitalizationTypeSentences;
+            cell.inputField.textAlignment = NSTextAlignmentNatural;
         }
         cell.inputField.text = item[@"title"];
         cell.inputField.delegate = self;

@@ -326,7 +326,7 @@
         }
         if (cell)
         {
-            cell.textLabel.text = item[@"title"];
+            cell.titleLabel.text = item[@"title"];
 
             cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
             cell.leftIconView.tintColor = [item[@"isOn"] boolValue] ? UIColorFromRGB(self.appMode.getIconColor) : UIColorFromRGB(color_icon_inactive);

@@ -10,7 +10,7 @@
 #import "OASettingsTableViewCell.h"
 #import "OASettingsTitleTableViewCell.h"
 #import "OASwitchTableViewCell.h"
-#import "OATextInputCell.h"
+#import "OAInputTableViewCell.h"
 #import "OAAppSettings.h"
 #import "Localization.h"
 #import "OAUtilities.h"
@@ -55,8 +55,8 @@
     
     OASwitchTableViewCell *_donationSwitch;
     OASwitchTableViewCell *_hideNameSwitch;
-    OATextInputCell *_emailCell;
-    OATextInputCell *_userNameCell;
+    OAInputTableViewCell *_emailCell;
+    OAInputTableViewCell *_userNameCell;
     UIView *_footerView;
     
     MBProgressHUD *_progressHUD;
@@ -135,15 +135,23 @@
         _hideNameSwitch.titleLabel.text = OALocalizedString(@"osm_live_hide_user_name");
         _hideNameSwitch.switchView.on = _settings.billingHideUserName.get;
         
-        nib = [[NSBundle mainBundle] loadNibNamed:[OATextInputCell getCellIdentifier] owner:self options:nil];
-        _emailCell = (OATextInputCell *)[nib objectAtIndex:0];
+        nib = [[NSBundle mainBundle] loadNibNamed:[OAInputTableViewCell getCellIdentifier] owner:self options:nil];
+        _emailCell = (OAInputTableViewCell *) nib[0];
+        [_emailCell leftIconVisibility:NO];
+        [_emailCell titleVisibility:NO];
+        [_emailCell clearButtonVisibility:NO];
+        _emailCell.inputField.textAlignment = NSTextAlignmentNatural;
         _emailCell.inputField.text = _settings.billingUserEmail.get;
         _emailCell.inputField.placeholder = OALocalizedString(@"osmand_live_donations_enter_email");
         _emailCell.inputField.keyboardType = UIKeyboardTypeEmailAddress;
         _emailCell.inputField.delegate = self;
 
-        nib = [[NSBundle mainBundle] loadNibNamed:[OATextInputCell getCellIdentifier] owner:self options:nil];
-        _userNameCell = (OATextInputCell *)[nib objectAtIndex:0];
+        nib = [[NSBundle mainBundle] loadNibNamed:[OAInputTableViewCell getCellIdentifier] owner:self options:nil];
+        _userNameCell = (OAInputTableViewCell *) nib[0];
+        [_emailCell leftIconVisibility:NO];
+        [_emailCell titleVisibility:NO];
+        [_emailCell clearButtonVisibility:NO];
+        _emailCell.inputField.textAlignment = NSTextAlignmentNatural;
         _userNameCell.inputField.text = _settings.billingUserName.get;
         _userNameCell.inputField.placeholder = OALocalizedString(@"osmand_live_public_name");
         _userNameCell.inputField.delegate = self;

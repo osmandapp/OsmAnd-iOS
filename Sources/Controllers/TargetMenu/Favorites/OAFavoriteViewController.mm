@@ -22,7 +22,7 @@
 #import "OAPOIViewController.h"
 #import "OAColors.h"
 #import "OACollapsableCoordinatesView.h"
-#import "OATextMultiViewCell.h"
+#import "OATextMultilineTableViewCell.h"
 #import "OAPOIHelper.h"
 
 #include <OsmAndCore.h>

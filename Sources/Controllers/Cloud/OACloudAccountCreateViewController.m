@@ -13,6 +13,7 @@
 #import "OABackupListeners.h"
 #import "OACloudAccountVerificationViewController.h"
 #import "OACloudAccountLoginViewController.h"
+#import "OAInputTableViewCell.h"
 
 @interface OACloudAccountCreateViewController () <OAOnRegisterUserListener, OAOnRegisterDeviceListener>
 
@@ -69,7 +70,7 @@
     },
     @{ @"type" : [OADividerCell getCellIdentifier] },
     @{
-        @"type" : [OAInputCellWithTitle getCellIdentifier],
+        @"type" : [OAInputTableViewCell getCellIdentifier],
         @"title" : [self getTextFieldValue],
         @"placeholder" : OALocalizedString(@"shared_string_email")
     },

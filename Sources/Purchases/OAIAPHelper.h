@@ -140,6 +140,8 @@ typedef NS_ENUM(NSInteger, EOASubscriptionDuration) {
 - (void) checkBackupPurchase:(void(^)(BOOL))onComplete;
 - (void) checkBackupPurchase;
 
+- (BOOL) isCarPlayAvailable;
+
 + (int) freeMapsAvailable;
 + (void) increaseFreeMapsCount:(int)count;
 + (void) decreaseFreeMapsCount;
@@ -152,7 +154,6 @@ typedef NS_ENUM(NSInteger, EOASubscriptionDuration) {
 + (BOOL) isSubscribedCrossPlatform;
 + (BOOL) isSubscribedToMapperUpdates;
 + (BOOL) isOsmAndProAvailable;
-+ (BOOL) isCarPlayAvailable;
 
 + (BOOL) isFullVersionPurchased;
 + (BOOL) isDepthContoursPurchased;

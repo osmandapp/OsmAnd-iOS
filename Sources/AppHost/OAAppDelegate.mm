@@ -525,7 +525,7 @@
 - (void)presentInCarPlay:(CPInterfaceController * _Nonnull)interfaceController window:(CPWindow * _Nonnull)window API_AVAILABLE(ios(12.0))
 {
     
-    if (OAIAPHelper.isCarPlayAvailable)
+    if (OAIAPHelper.sharedInstance.isCarPlayAvailable)
     {
         OAMapViewController *mapVc = OARootViewController.instance.mapPanel.mapViewController;
         if (!mapVc)

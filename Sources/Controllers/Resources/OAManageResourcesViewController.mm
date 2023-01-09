@@ -1232,7 +1232,7 @@ static BOOL _repositoryUpdated = NO;
         item.size = localResource->size;
         item.date = [[[NSFileManager defaultManager] attributesOfItemAtPath:localResource->localPath.toNSString() error:NULL] fileModificationDate];;
         item.worldRegion = match;
-        NSString *localResourcePath = _app.resourcesManager->getLocalResource(item.resourceId)->localPath.toNSString();
+        NSString *localResourcePath = localResource->localPath.toNSString();
         item.date = [[[NSFileManager defaultManager] attributesOfItemAtPath:localResourcePath error:NULL] fileModificationDate];
 
         _totalInstalledSize += localResource->size;

@@ -394,7 +394,7 @@ static const NSInteger _buttonsCount = 4;
     _toolbarVisible = YES;
     _toolbarHeight = showTopControls ? _customController.getNavBarHeight : OAUtilities.getStatusBarHeight;
     
-    [self.menuViewDelegate targetViewOnAppear:[self getVisibleHeight] animated:NO];
+    [self.menuViewDelegate targetViewOnAppear:[self getVisibleHeight] animated:YES];
     [self.menuViewDelegate targetSetTopControlsVisible:showTopControls];
     
     if (self.customController.topToolbarType == ETopToolbarTypeFloating || self.customController.topToolbarType == ETopToolbarTypeMiddleFixed || self.customController.topToolbarType == ETopToolbarTypeFloatingFixedButton)

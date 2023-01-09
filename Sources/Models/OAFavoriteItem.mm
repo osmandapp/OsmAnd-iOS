@@ -441,7 +441,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 
 - (NSString *) getCategoryDisplayName
 {
-    return [OAFavoriteGroup getDisplayName:[self getCategory]];
+    return [OAFavoriteGroup getDisplayName:[OAAppSettings.sharedManager.lastFavCategoryEntered get]];
 }
 
 

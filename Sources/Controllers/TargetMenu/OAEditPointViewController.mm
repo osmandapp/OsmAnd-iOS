@@ -824,7 +824,7 @@
         [[OARootViewController instance].mapPanel reopenContextMenu];
         
         if (_editPointType == EOAEditPointTypeFavorite)
-        [OAAppSettings.sharedManager.lastFavCategoryEntered set:savingGroup];
+            [OAAppSettings.sharedManager.lastFavCategoryEntered set:savingGroup];
     }
 }
 

@@ -1936,7 +1936,7 @@
 "wikivoyage_offline" = "Wikivoyage frånkopplad";
 "unlimited_downloads" = "Obegränsat antal nedladdningar";
 "wikipedia_offline" = "Wikipedia frånkopplad";
-"contour_lines_hillshade_maps" = "Contour lines & Hillshade maps";
+"contour_lines_hillshade_maps" = "Terrängkartor: höjdkurvor, terrängskuggning, lutning";
 "monthly_map_updates" = "Månatliga kartuppdateringar";
 "daily_map_updates" = "Uppdatering av kartan varje timme";
 "index_item_depth_contours_osmand_ext" = "Nautiska djupkurvor";
@@ -2462,7 +2462,7 @@
 "toast_empty_name_error" = "Ej namngiven plats";
 "purchases_feature_desc_combined_wiki" = "Utforska Wikipedia-artiklar i farten, utan internetuppkoppling. Offline-data indelad per land och tillgänglig på alla språk.";
 "altitude_descent" = "Sänkning";
-"purchases_feature_desc_unlimited_map_download" = "Få obergänsade nedladdningar av offline-kartor för alla kontinenter och regioner.";
+"purchases_feature_desc_unlimited_map_download" = "Få obegränsade nedladdningar av offline-kartor för alla kontinenter och regioner.";
 "share_geo" = "geo:";
 "monthly_subscription" = "Månadspernumeration";
 "purchases_feature_desc_osmand_cloud" = "Skaffa OsmAnd Cloud för att lagra all OsmAnd-data online. Ingen förlorad data efter ominstallation. Säkerhetskopiera och återställ all info med lätthet.";
@@ -2509,3 +2509,13 @@
 "backup_error_failed_to_fetch_remote_items" = "Misslyckades att hämta listan över filer från servern.";
 "tts" = "Text-till-tal (TTS)";
 "recorded_voice" = "Inspelat";
+"map_widget_rendering_fps" = "Kartrenderingens FPS";
+"worldwide_maps" = "Världskartor";
+"nautical_depth_points" = "Nautiska djuppunkter";
+"depth_contours" = "Djupkurvor";
+"mtb_segment_classification" = "Segmentklassificering";
+"purchases_feature_desc_hourly_map_updates" = "Få tillgång till mer frekventa kartuppdateringar. Uppdateringar varje timme, dag eller vecka. Uppdateringar laddas ner stegvis, endast för det ändrade området.";
+"redeem_promo_code" = "Lös in kampanjkod";
+"show_borders_of_downloaded_maps" = "Visa gränser för nedladdade kartor";
+"depth_contour_lines" = "Djupkurvor";
+"nautical_depth" = "Havsdjup";

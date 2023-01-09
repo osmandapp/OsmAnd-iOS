@@ -39,6 +39,7 @@
     NSMutableArray *_fieldPairs;
     
     BOOL _isKeyboardShown;
+    BOOL _isHintsAvailable;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame
@@ -465,11 +466,12 @@
     item.trailingBarButtonGroups = @[];
     self.tagTextView.inputAccessoryView = self.toolbarView;
     [self.tagTextView reloadInputViews];
+    _isHintsAvailable = YES;
 }
 
 - (void) toggleTagToolbar
 {
-    if (self.tagTextView.inputAccessoryView == nil)
+    if ((self.tagTextView.inputAccessoryView == nil) && (_isHintsAvailable || self.tagTextView.text.length == 0))
         [self createTagToolbarFor];
     else if ([self.tagTextView.text isEqualToString:@""])
         [self hideTagToolbar];
@@ -479,6 +481,8 @@
 {
     self.tagTextView.inputAccessoryView = nil;
     [self.tagTextView reloadInputViews];
+    if (self.tagTextView.text.length > 0)
+        _isHintsAvailable = NO;
 }
 
 - (void) updateTagHintsSet:(NSString *)tag
@@ -515,7 +519,8 @@
     
     if ([hints count] == 0)
     {
-        [self hideTagToolbar];
+        if (_isHintsAvailable)
+            [self hideTagToolbar];
     }
     else
     {
@@ -542,9 +547,9 @@
             
             [self.scrollView addSubview:btn];
         }
+        _isHintsAvailable = YES;
     }
     self.scrollView.contentSize = CGSizeMake(xPosition, self.toolbarView.frame.size.height);
-    [self.tagTextView reloadInputViews];
 }
 
 - (void) removeFromSuperview:(UITapGestureRecognizer *)sender

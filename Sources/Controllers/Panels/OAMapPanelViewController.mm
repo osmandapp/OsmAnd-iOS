@@ -1717,7 +1717,7 @@ typedef enum
         return;
     
     Point31 targetPoint31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_targetLatitude, _targetLongitude))];
-    [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:([self.targetMenuView isLandscape] ? kInfoViewLanscapeWidth : 0.0) bottomInset:([self.targetMenuView isLandscape] ? 0.0 : height) centerBBox:(_targetMode == EOATargetBBOX) animated:animated];
+    [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:([self.targetMenuView isLandscape] ? self.targetMenuView.frame.size.width + 20.0 : 0.0) bottomInset:([self.targetMenuView isLandscape] ? 0.0 : height) centerBBox:(_targetMode == EOATargetBBOX) animated:animated];
 }
 
 #pragma mark - OATargetPointViewDelegate

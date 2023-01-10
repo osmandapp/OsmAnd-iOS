@@ -1711,6 +1711,15 @@ typedef enum
          [_hudViewController.quickActionController hideActionsSheetAnimated];
  }
 
+- (void) updateTargetPointPosition:(CGFloat)height animated:(BOOL)animated
+{
+    if ((![self.targetMenuView isLandscape] && self.targetMenuView.showFullScreen) || (self.targetMenuView.targetPoint.type == OATargetImpassableRoadSelection && !_routingHelper.isRouteCalculated))
+        return;
+    
+    Point31 targetPoint31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_targetLatitude, _targetLongitude))];
+    [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:([self.targetMenuView isLandscape] ? self.targetMenuView.frame.size.width + 20.0 : 0.0) bottomInset:([self.targetMenuView isLandscape] ? 0.0 : height) centerBBox:(_targetMode == EOATargetBBOX) animated:animated];
+}
+
 #pragma mark - OATargetPointViewDelegate
 
 - (void) targetResetCustomStatusBarStyle
@@ -2021,13 +2030,14 @@ typedef enum
         [self displayGpxOnMap:[[OASavingTrackHelper sharedInstance] getCurrentGPX]];
 }
 
+- (void) targetViewOnAppear:(CGFloat)height animated:(BOOL)animated
+{
+    [self updateTargetPointPosition:height animated:animated];
+}
+
 - (void) targetViewHeightChanged:(CGFloat)height animated:(BOOL)animated
 {
-    if ((![self.targetMenuView isLandscape] && self.targetMenuView.showFullScreen) || (self.targetMenuView.targetPoint.type == OATargetImpassableRoadSelection && !_routingHelper.isRouteCalculated))
-        return;
-    
-    Point31 targetPoint31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_targetLatitude, _targetLongitude))];
-    [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:([self.targetMenuView isLandscape] ? kInfoViewLanscapeWidth : 0.0) bottomInset:([self.targetMenuView isLandscape] ? 0.0 : height) centerBBox:(_targetMode == EOATargetBBOX) animated:animated];
+    [self updateTargetPointPosition:height animated:animated];
 }
 
 - (void) showTargetPointMenu:(BOOL)saveMapState showFullMenu:(BOOL)showFullMenu
@@ -2190,13 +2200,6 @@ typedef enum
     }
     
     [self.view addSubview:self.targetMenuView];
-    OAMapRendererView *renderView = (OAMapRendererView*)_mapViewController.view;
-    Point31 targetPoint31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_targetLatitude, _targetLongitude))];
-    BOOL landscape = ([self.targetMenuView isLandscape] || OAUtilities.isIPad) && !OAUtilities.isWindowed;
-    if (_targetMenuView.targetPoint.type != OATargetRouteDetailsGraph && _targetMenuView.targetPoint.type != OATargetRouteDetails && _targetMenuView.targetPoint.type != OATargetImpassableRoadSelection)
-    {
-        [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mapStateSaved ? _mainMapTarget31 : renderView.target31] leftInset:landscape ? self.targetMenuView.frame.size.width + 20.0 : 0 bottomInset:landscape ? 0.0 : [self.targetMenuView getHeaderViewHeight] centerBBox:(_targetMode == EOATargetBBOX) animated:YES];
-    }
     
     if (onComplete)
         onComplete();

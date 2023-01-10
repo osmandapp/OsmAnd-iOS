@@ -898,6 +898,7 @@ static const NSInteger _buttonsCount = 4;
     }
 
     [self startLocationUpdate];
+    [self.menuViewDelegate targetViewOnAppear:[self getVisibleHeight] animated:YES];
     
     if (self.customController)
         [self.customController onMenuShown];

@@ -91,16 +91,19 @@
 {
     NSError *error = nil;
 
-    unsigned long long deviceMemoryCapacity = 0;
+    unsigned long long deviceMemoryCapacity = 1;
     unsigned long long deviceMemoryAvailable = 0;
     
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSDictionary *dictionary = [[NSFileManager defaultManager] attributesOfFileSystemForPath:[paths lastObject] error: &error];
-    if (dictionary)
+    NSDictionary *dictionary = [[NSFileManager defaultManager] attributesOfFileSystemForPath:NSHomeDirectory() error: &error];
+    if (dictionary && !error)
     {
         NSNumber *fileSystemSizeInBytes = [dictionary objectForKey: NSFileSystemSize];
         deviceMemoryCapacity = [fileSystemSizeInBytes unsignedLongLongValue];
-        
+        if (deviceMemoryCapacity <= 0)
+        {
+            NSLog(@"Error obtaining dvice memory capacity");
+            deviceMemoryCapacity = 1;
+        }
         
         NSURL *home = [NSURL fileURLWithPath:NSHomeDirectory()];
         NSDictionary *results = [home resourceValuesForKeys:@[NSURLVolumeAvailableCapacityForImportantUsageKey] error:&error];
@@ -130,7 +133,14 @@
     _sysVal = (double) systemValue / capValue;
     _appVal = (double) docValue / capValue;
     _freeVal = (double) availValue / capValue;
-
+    double sum = _sysVal + _appVal + _freeVal;
+    if (sum > 1.5 || sum <= 0)
+    {
+        NSLog(@"Incorrect storage calculation (total:%llu, system:%llu, free:%llu, doc:%llu)", capValue, systemValue, availValue, docValue);
+        _sysVal = 0;
+        _appVal = 0;
+        _freeVal = 1;
+    }
     NSString *deviceMemoryAvailableStr = [NSByteCountFormatter stringFromByteCount:deviceMemoryAvailable countStyle:NSByteCountFormatterCountStyleFile];
     _freeMemLabel.text = [NSString stringWithFormat:OALocalizedString(@"free_memory"), deviceMemoryAvailableStr];
 }

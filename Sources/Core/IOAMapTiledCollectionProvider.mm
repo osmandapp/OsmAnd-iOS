@@ -199,7 +199,7 @@ void IOAMapTiledCollectionProvider::obtainDataAsync(const IMapDataProvider::Requ
                                                  const IMapDataProvider::ObtainDataAsyncCallback callback,
                                                  const bool collectMetric /*= false*/)
 {
-    OsmAnd::MapDataProviderHelpers::nonNaturalObtainDataAsync(this, request, callback, collectMetric);
+    OsmAnd::MapDataProviderHelpers::nonNaturalObtainDataAsync(shared_from_this(), request, callback, collectMetric);
 }
 
 IOAMapTiledCollectionProvider::Data::Data(const OsmAnd::TileId tileId_,

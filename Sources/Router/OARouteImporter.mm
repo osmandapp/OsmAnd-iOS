@@ -135,8 +135,15 @@
         auto object = std::make_shared<RouteDataObject>(region);
         auto segmentResult = std::make_shared<RouteSegmentResult>(object);
 		auto bundle = std::make_shared<RouteDataBundle>(resources, routeSegment.toStringBundle);
-        segmentResult->readFromBundle(bundle);
-        route.push_back(segmentResult);
+        try
+        {
+            segmentResult->readFromBundle(bundle);
+            route.push_back(segmentResult);
+        }
+        catch (const std::exception &ex)
+        {
+            NSLog(@"%s", ex.what());
+        }
     }
     if (!route.empty())
     {

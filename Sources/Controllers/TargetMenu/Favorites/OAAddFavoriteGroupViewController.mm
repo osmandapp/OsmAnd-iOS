@@ -153,7 +153,7 @@
             int selectedIndex = [item[@"index"] intValue];
             cell.currentColor = selectedIndex;
             [cell.collectionView reloadData];
-            [cell layoutIfNeeded];
+            [cell layoutSubviews];
         }
         return cell;
     }

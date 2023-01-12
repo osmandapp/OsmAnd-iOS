@@ -399,23 +399,22 @@
 
 - (void) showTripSettingsScreen
 {
-    [self dismissViewControllerAnimated:YES completion:^{
-        OAGPXRouteParamsBuilder *gpxParams = _routingHelper.getCurrentGPXRoute;
-        OAGPXDocument *gpx = gpxParams ? gpxParams.file : nil;
-        OAFollowTrackBottomSheetViewController *followTrack = [[OAFollowTrackBottomSheetViewController alloc] initWithFile:gpx];
+    [self dismissViewControllerAnimated:NO completion:nil];
+    OAGPXRouteParamsBuilder *gpxParams = _routingHelper.getCurrentGPXRoute;
+    OAGPXDocument *gpx = gpxParams ? gpxParams.file : nil;
+    OAFollowTrackBottomSheetViewController *followTrack = [[OAFollowTrackBottomSheetViewController alloc] initWithFile:gpx];
+    
+    if (gpx)
+    {
+        followTrack.view.hidden = NO;
+        [followTrack presentInViewController:OARootViewController.instance animated:YES];
         
-        if (gpx)
-        {
-            followTrack.view.hidden = NO;
-            [followTrack presentInViewController:OARootViewController.instance animated:YES];
-            
-        }
-        else
-        {
-            followTrack.view.hidden = YES;
-            [followTrack presentInViewController:OARootViewController.instance animated:NO];
-        }
-    }];
+    }
+    else
+    {
+        followTrack.view.hidden = YES;
+        [followTrack presentInViewController:OARootViewController.instance animated:NO];
+    }
 }
 
 - (void) showAvoidTransportScreen

@@ -44,7 +44,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     EOANameDescending
 };
 
-@interface OAOpenAddTrackViewController() <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate, OASegmentSelectionDelegate, OAFoldersCellDelegate>
+@interface OAOpenAddTrackViewController() <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate, OASegmentSelectionDelegate, OAFoldersCellDelegate, UIAdaptivePresentationControllerDelegate>
 
 @end
 
@@ -103,6 +103,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
 - (void) viewDidLoad
 {
     [super viewDidLoad];
+    self.navigationController.presentationController.delegate = self;
 
     _sortingMode = EOAModifiedDate;
     self.tableView.delegate = self;
@@ -516,6 +517,14 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     _selectedFolderIndex = index;
     [self generateData];
     [self.tableView reloadData];
+}
+
+#pragma mark UIAdaptivePresentationControllerDelegate
+
+- (void)presentationControllerDidDismiss:(UIPresentationController *)presentationController
+{
+    if (_screenType == EOAFollowTrack)
+        [self closeBottomSheetDelegate];
 }
 
 @end

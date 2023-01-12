@@ -82,7 +82,6 @@
     OAAppSettings *_settings;
     OADayNightHelper *_dayNightHelper;
     OAAutoObserverProxy* _framePreparedObserver;
-    OAAutoObserverProxy* _applicaionModeObserver;
     OAAutoObserverProxy* _locationServicesUpdateObserver;
     OAAutoObserverProxy* _mapZoomObserver;
     OAAutoObserverProxy* _mapSourceUpdatedObserver;
@@ -118,10 +117,6 @@
         _framePreparedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                            withHandler:@selector(onMapRendererFramePrepared)
                                                             andObserve:[OARootViewController instance].mapPanel.mapViewController.framePreparedObservable];
-        
-        _applicaionModeObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                            withHandler:@selector(onApplicationModeChanged:)
-                                                             andObserve:[OsmAndApp instance].data.applicationModeChangedObservable];
         
         _locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                     withHandler:@selector(onLocationServicesUpdate)
@@ -175,13 +170,6 @@
 - (void) onRightWidgetSuperviewLayout
 {
     [self execOnDraw];
-}
-
-- (void) onApplicationModeChanged:(OAApplicationMode *)prevMode
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self recreateControls];
-    });
 }
 
 - (void) onMapSourceUpdated

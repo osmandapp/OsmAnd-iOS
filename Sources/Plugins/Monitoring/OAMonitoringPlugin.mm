@@ -91,7 +91,6 @@
         _monitoringControl = [self createMonitoringControl];
         
         [mapInfoController registerSideWidget:_monitoringControl imageId:@"ic_action_play_dark" message:[self getName] key:PLUGIN_ID left:NO priorityOrder:30];
-        [mapInfoController recreateControls];
     }
 }
 
@@ -109,7 +108,6 @@
             {
                 OAMapInfoController *mapInfoController = [self getMapInfoController];
                 [mapInfoController removeSideWidget:_monitoringControl];
-                [mapInfoController recreateControls];
                 _monitoringControl = nil;
             }
         }

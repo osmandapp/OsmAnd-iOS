@@ -91,10 +91,6 @@
 
             if (!_weatherPrecipControl)
                 [self registerWidget:WEATHER_BAND_PRECIPITATION];
-
-            OAMapInfoController *mapInfoController = [self getMapInfoController];
-            if (mapInfoController)
-                [mapInfoController recreateControls];
         }
         else
         {
@@ -126,7 +122,6 @@
                     [mapInfoController removeSideWidget:_weatherPrecipControl];
                     _weatherPrecipControl = nil;
                 }
-                [mapInfoController recreateControls];
             }
         }
     });

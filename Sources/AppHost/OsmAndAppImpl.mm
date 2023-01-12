@@ -378,7 +378,7 @@
     _worldMiniBasemapFilename = [[NSBundle mainBundle] pathForResource:@"WorldMiniBasemap"
                                                                 ofType:@"obf"
                                                            inDirectory:@"Shipped"];
-    NSString* worldMiniBasemapStamp = [[NSBundle mainBundle] pathForResource:@"WorldMiniBasemap.obf"
+    NSString* worldMiniBasemapStamp = [[NSBundle mainBundle] pathForResource:kWorldMiniBasemapKey
                                                                       ofType:@"stamp"
                                                                  inDirectory:@"Shipped"];
     NSString* worldMiniBasemapStampContents = [NSString stringWithContentsOfFile:worldMiniBasemapStamp

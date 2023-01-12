@@ -1206,10 +1206,10 @@ static BOOL _repositoryUpdated = NO;
     {
         OAWorldRegion *match = [OAResourcesUIHelper findRegionOrAnySubregionOf:self.region
                                                           thatContainsResource:localResource->id];
-        
-        if (!match && ![OAResourceType isMapResourceType:localResource->type])
+
+        if ((!match && ![OAResourceType isMapResourceType:localResource->type]) || localResource->id == QString::fromNSString(kWorldMiniBasemapKey.lowercaseString))
             continue;
-        
+
         OALocalResourceItem *item = [[OALocalResourceItem alloc] init];
         item.resourceId = localResource->id;
         item.resourceType = localResource->type;

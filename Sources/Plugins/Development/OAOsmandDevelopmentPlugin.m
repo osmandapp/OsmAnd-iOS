@@ -57,7 +57,6 @@
     {
         _fpsWidgetControl = [[OAFPSTextInfoWidget alloc] init];
         [mapInfoController registerSideWidget:_fpsWidgetControl imageId:@"ic_custom_fps" message:OALocalizedString(@"map_widget_rendering_fps") key:PLUGIN_ID left:false priorityOrder:99];
-        [mapInfoController recreateControls];
     }
 }
 
@@ -75,7 +74,6 @@
             {
                 OAMapInfoController *mapInfoController = [self getMapInfoController];
                 [mapInfoController removeSideWidget:_fpsWidgetControl];
-                [mapInfoController recreateControls];
                 _fpsWidgetControl = nil;
             }
         }

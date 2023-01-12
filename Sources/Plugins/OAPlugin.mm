@@ -528,6 +528,9 @@ public List<String> indexingFiles(IProgress progress) {
 {
     for (OAPlugin *plugin in [self.class getAvailablePlugins])
         [plugin updateLayers];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [OARootViewController.instance.mapPanel recreateControls];
+    });
 }
 
 + (NSArray<OAPlugin *> *) getAvailablePlugins

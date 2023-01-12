@@ -93,7 +93,6 @@
             {
                 OAMapInfoController *mapInfoController = [self getMapInfoController];
                 [mapInfoController removeSideWidget:_mapillaryControl];
-                [mapInfoController recreateControls];
                 _mapillaryControl = nil;
             }
         }
@@ -113,7 +112,6 @@
         _mapillaryControl = [self createMapillaryInfoControl];
         
         [mapInfoController registerSideWidget:_mapillaryControl imageId:@"ic_custom_mapillary_symbol" message:[self getName] key:PLUGIN_ID left:NO priorityOrder:19];
-        [mapInfoController recreateControls];
     }
 }
 

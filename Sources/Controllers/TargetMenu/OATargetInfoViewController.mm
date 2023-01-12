@@ -209,16 +209,7 @@
             return NSOrderedDescending;
     }];
 
-    if ([self needCoords])
-    {
-        OARowInfo *coordinatesRow = [[OARowInfo alloc] initWithKey:nil icon:nil textPrefix:nil text:@"" textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
-        coordinatesRow.collapsed = YES;
-        coordinatesRow.collapsable = YES;
-        OACollapsableCoordinatesView *collapsableView = [[OACollapsableCoordinatesView alloc] initWithFrame:CGRectMake(0, 0, 320, 100) lat:self.location.latitude lon:self.location.longitude];
-        coordinatesRow.collapsableView = collapsableView;
-        [_rows addObject:coordinatesRow];
-    }
-    
+    [self buildCoordinateRows:rows];
     [self addNearbyImagesIfNeeded];
 
     _calculatedWidth = 0;
@@ -274,6 +265,19 @@
     {
         OARowInfo *commentRow = [[OARowInfo alloc] initWithKey:nil icon:[UIImage imageNamed:@"ic_description"] textPrefix:nil text:comment textColor:nil isText:YES needLinks:NO order:4 typeName:kCommentRowType isPhoneNumber:NO isUrl:NO];
         [rows addObject:commentRow];
+    }
+}
+
+- (void)buildCoordinateRows:(NSMutableArray<OARowInfo *> *)rows
+{
+    if ([self needCoords])
+    {
+        OARowInfo *coordinatesRow = [[OARowInfo alloc] initWithKey:nil icon:nil textPrefix:nil text:@"" textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
+        coordinatesRow.collapsed = YES;
+        coordinatesRow.collapsable = YES;
+        OACollapsableCoordinatesView *collapsableView = [[OACollapsableCoordinatesView alloc] initWithFrame:CGRectMake(0, 0, 320, 100) lat:self.location.latitude lon:self.location.longitude];
+        coordinatesRow.collapsableView = collapsableView;
+        [rows addObject:coordinatesRow];
     }
 }
 

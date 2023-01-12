@@ -147,6 +147,11 @@
         builder.location = CLLocationCoordinate2DMake(_wpt.point.position.latitude, _wpt.point.position.longitude);
         [builder buildRowsInternal:rows];
     }
+    else
+    {
+        [self buildCoordinateRows:rows];
+    }
+
     [self setRows:rows];
 }
 

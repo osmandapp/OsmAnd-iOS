@@ -29,6 +29,7 @@
 - (void) buildRowsInternal:(NSMutableArray<OARowInfo *> *)rows;
 - (void) buildDateRow:(NSMutableArray<OARowInfo *> *)rows timestamp:(NSDate *)timestamp;
 - (void) buildCommentRow:(NSMutableArray<OARowInfo *> *)rows comment:(NSString *)comment;
+- (void) buildCoordinateRows:(NSMutableArray<OARowInfo *> *)rows;
 - (void) rebuildRows;
 - (void) setRows:(NSMutableArray<OARowInfo *> *)rows;
 - (BOOL) containsRef:(NSArray<OATransportStopRoute *> *)routes transportRoute:(OATransportStopRoute *)transportRoute;

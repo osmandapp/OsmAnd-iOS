@@ -21,6 +21,7 @@
 #define CurrentInterfaceOrientation [[UIApplication sharedApplication] statusBarOrientation]
 
 #define kWorldBasemapKey "world_basemap.obf"
+#define kWorldMiniBasemapKey @"WorldMiniBasemap.obf"
 #define kWorldSeamarksKey "world_seamarks.obf"
 #define kWorldSeamarksOldKey "world_seamarks_basemap.obf"
 #define kAppExecCounter @"kAppExecCounter"

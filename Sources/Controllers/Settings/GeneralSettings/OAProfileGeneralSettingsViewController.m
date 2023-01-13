@@ -114,8 +114,11 @@
         case MILES_AND_METERS:
             metricSystemValue = OALocalizedString(@"si_mi_meters");
             break;
-        case NAUTICAL_MILES:
-            metricSystemValue = OALocalizedString(@"si_nm");
+        case NAUTICAL_MILES_AND_METERS:
+            metricSystemValue = OALocalizedString(@"si_nm_mt");
+            break;
+        case NAUTICAL_MILES_AND_FEET:
+            metricSystemValue = OALocalizedString(@"si_nm_ft");
             break;
         default:
             metricSystemValue = OALocalizedString(@"si_km_m");

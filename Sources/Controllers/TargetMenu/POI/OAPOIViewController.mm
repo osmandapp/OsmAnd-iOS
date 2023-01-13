@@ -426,7 +426,7 @@ static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsap
             vl = [OAOsmAndFormatter getFormattedAlt:distance];
             NSString *collapsibleVal;
             EOAMetricsConstant metricSystem = [[OAAppSettings sharedManager].metricSystem get];
-            if (metricSystem == MILES_AND_FEET || metricSystem == MILES_AND_YARDS)
+            if (metricSystem == MILES_AND_FEET || metricSystem == MILES_AND_YARDS || metricSystem == NAUTICAL_MILES_AND_FEET)
                 collapsibleVal = [OAOsmAndFormatter getFormattedAlt:distance mc:KILOMETERS_AND_METERS];
             else
                 collapsibleVal = [OAOsmAndFormatter getFormattedAlt:distance mc:MILES_AND_FEET];
@@ -685,7 +685,7 @@ static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsap
     else if (([key isEqualToString:@"depth"] || [key isEqualToString:@"seamark_height"]) && [self isNumericValue:value])
     {
         double valueAsDouble = [value doubleValue];
-        if (metricSystem == MILES_AND_FEET)
+        if (metricSystem == MILES_AND_FEET || metricSystem == NAUTICAL_MILES_AND_FEET)
         {
             valueAsDouble *= FEET_IN_ONE_METER;
             formattedValue = [NSString stringWithFormat:@"%@ %@",

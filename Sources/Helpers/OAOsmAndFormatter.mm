@@ -184,7 +184,7 @@ static NSString * const _unitsmps = OALocalizedString(@"units_m_s");
         mainUnitStr = _unitsKm;
         mainUnitInMeters = METERS_IN_KILOMETER;
     }
-    else if (mc == NAUTICAL_MILES)
+    else if (mc == NAUTICAL_MILES_AND_METERS || mc == NAUTICAL_MILES_AND_FEET)
     {
         mainUnitStr = _unitsNm;
         mainUnitInMeters = METERS_IN_ONE_NAUTICALMILE;
@@ -205,7 +205,7 @@ static NSString * const _unitsmps = OALocalizedString(@"units_m_s");
     {
         return [self formatValue:floatDistance unit:mainUnitStr forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:1];
     }
-    else if (meters > 0.999f * mainUnitInMeters && mc != NAUTICAL_MILES)
+    else if (meters > 0.999f * mainUnitInMeters && (mc != NAUTICAL_MILES_AND_METERS || mc != NAUTICAL_MILES_AND_FEET))
     {
         return [self formatValue:floatDistance unit:mainUnitStr forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:2];
     }
@@ -221,17 +221,21 @@ static NSString * const _unitsmps = OALocalizedString(@"units_m_s");
     {
         return [self formatValue:floatDistance unit:mainUnitStr forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:2];
     }
-    else if (mc == NAUTICAL_MILES && meters > 0.99f * mainUnitInMeters && ![self isCleanValue:meters inUnits:1.0000f])
+    else if (mc == NAUTICAL_MILES_AND_METERS && meters > 0.99f * mainUnitInMeters && ![self isCleanValue:meters inUnits:1.0000f])
+    {
+        return [self formatValue:floatDistance unit:mainUnitStr forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:2];
+    }
+    else if (mc == NAUTICAL_MILES_AND_FEET && meters > 0.99f * mainUnitInMeters && ![self isCleanValue:meters inUnits:1.0000f])
     {
         return [self formatValue:floatDistance unit:mainUnitStr forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:2];
     }
     else
     {
-        if (mc == KILOMETERS_AND_METERS || mc == MILES_AND_METERS || mc == NAUTICAL_MILES)
+        if (mc == KILOMETERS_AND_METERS || mc == MILES_AND_METERS || mc == NAUTICAL_MILES_AND_METERS)
         {
             return [self formatValue:(int) (meters + 0.5) unit:_unitsM forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:0];
         }
-        else if (mc == MILES_AND_FEET)
+        else if (mc == MILES_AND_FEET || mc == NAUTICAL_MILES_AND_FEET)
         {
             int feet = (int) (meters * FEET_IN_ONE_METER + 0.5);
             return [self formatValue:feet unit:_unitsFt forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:0];
@@ -309,7 +313,7 @@ static NSString * const _unitsmps = OALocalizedString(@"units_m_s");
 
 + (NSString *) getFormattedAlt:(double)alt mc:(EOAMetricsConstant)mc
 {
-    BOOL useFeet = mc == MILES_AND_FEET || mc == MILES_AND_YARDS;
+    BOOL useFeet = mc == MILES_AND_FEET || mc == MILES_AND_YARDS || mc == NAUTICAL_MILES_AND_FEET;
     if (useFeet)
     {
         int feet = (int) (alt * FEET_IN_ONE_METER + 0.5);
@@ -435,9 +439,14 @@ static NSString * const _unitsmps = OALocalizedString(@"units_m_s");
         mainUnitInMeter = 1;
         metersInSecondUnit = METERS_IN_ONE_MILE;
     }
-    else if (mc == NAUTICAL_MILES)
+    else if (mc == NAUTICAL_MILES_AND_METERS)
     {
         mainUnitInMeter = 1;
+        metersInSecondUnit = METERS_IN_ONE_NAUTICALMILE;
+    }
+    else if (mc == NAUTICAL_MILES_AND_FEET)
+    {
+        mainUnitInMeter = FEET_IN_ONE_METER;
         metersInSecondUnit = METERS_IN_ONE_NAUTICALMILE;
     }
     else if (mc == MILES_AND_YARDS)

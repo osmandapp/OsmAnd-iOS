@@ -597,7 +597,7 @@ import Charts.Swift
     
     private static func createGPXElevationDataSet(chartView: LineChartView, analysis: OAGPXTrackAnalysis, axisType: GPXDataSetAxisType, useRightAxis: Bool, drawFilled: Bool) -> OrderedLineDataSet {
         let mc: EOAMetricsConstant = OAAppSettings.sharedManager().metricSystem.get()
-        let useFeet: Bool = (mc == EOAMetricsConstant.MILES_AND_FEET) || (mc == EOAMetricsConstant.MILES_AND_YARDS)
+        let useFeet: Bool = (mc == EOAMetricsConstant.MILES_AND_FEET) || (mc == EOAMetricsConstant.MILES_AND_YARDS) || (mc == EOAMetricsConstant.NAUTICAL_MILES_AND_FEET)
         let convEle: Double = useFeet ? 3.28084 : 1.0
         var divX: Double
         let xAxis: XAxis = chartView.xAxis
@@ -667,7 +667,7 @@ import Charts.Swift
             return nil;
         }
         let mc: EOAMetricsConstant = OAAppSettings.sharedManager().metricSystem.get()
-        let useFeet: Bool = (mc == EOAMetricsConstant.MILES_AND_FEET) || (mc == EOAMetricsConstant.MILES_AND_YARDS)
+        let useFeet: Bool = (mc == EOAMetricsConstant.MILES_AND_FEET) || (mc == EOAMetricsConstant.MILES_AND_YARDS) || (mc == EOAMetricsConstant.NAUTICAL_MILES_AND_FEET)
         let convEle: Double = useFeet ? 3.28084 : 1.0
         let totalDistance: Double = Double(analysis.totalDistance)
         
@@ -826,7 +826,7 @@ import Charts.Swift
         if mc == EOAMetricsConstant.KILOMETERS_AND_METERS {
             mainUnitStr = OAUtilities.getLocalizedString("units_km")
             mainUnitInMeters = GpxUIHelper.METERS_IN_KILOMETER
-        } else if mc == EOAMetricsConstant.NAUTICAL_MILES {
+        } else if (mc == EOAMetricsConstant.NAUTICAL_MILES_AND_METERS || mc == EOAMetricsConstant.NAUTICAL_MILES_AND_FEET) {
             mainUnitStr = OAUtilities.getLocalizedString("units_nm")
             mainUnitInMeters = GpxUIHelper.METERS_IN_ONE_NAUTICALMILE
         } else {
@@ -843,7 +843,8 @@ import Charts.Swift
             mc == EOAMetricsConstant.MILES_AND_FEET && meters > 0.249 * mainUnitInMeters ||
             mc == EOAMetricsConstant.MILES_AND_METERS && meters > 0.249 * mainUnitInMeters ||
             mc == EOAMetricsConstant.MILES_AND_YARDS && meters > 0.249 * mainUnitInMeters ||
-            mc == EOAMetricsConstant.NAUTICAL_MILES && meters > 0.99 * mainUnitInMeters) {
+            mc == EOAMetricsConstant.NAUTICAL_MILES_AND_METERS && meters > 0.99 * mainUnitInMeters ||
+            mc == EOAMetricsConstant.NAUTICAL_MILES_AND_FEET && meters > 0.99 * mainUnitInMeters) {
             
             divX = mainUnitInMeters;
             if (fmt == nil) {
@@ -856,7 +857,7 @@ import Charts.Swift
             if (mc == EOAMetricsConstant.KILOMETERS_AND_METERS || mc == EOAMetricsConstant.MILES_AND_METERS) {
                 divX = 1;
                 mainUnitStr = OAUtilities.getLocalizedString("units_m")
-            } else if (mc == EOAMetricsConstant.MILES_AND_FEET) {
+            } else if (mc == EOAMetricsConstant.MILES_AND_FEET || mc == EOAMetricsConstant.NAUTICAL_MILES_AND_FEET) {
                 divX = Double(1.0 / GpxUIHelper.FEET_IN_ONE_METER)
                 mainUnitStr = OAUtilities.getLocalizedString("units_ft")
             } else if (mc == EOAMetricsConstant.MILES_AND_YARDS) {

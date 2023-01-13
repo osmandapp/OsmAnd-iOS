@@ -2172,3 +2172,8 @@
 "upload_all" = "Összes feltöltése";
 "local_changes_will_be_dismissed" = "A helyi változások el lesznek vetve";
 "cloud_all_changes_uploaded_descr" = "Az eszközön végrehajtott összes módosítás szinkronizálva van az OsmAnd felhőszolgáltatással.";
+"save_heading_descr" = "Az egyes rögzített pontokhoz tartozó fejlécadatok mentése";
+"position_on_map" = "Pozíció mutatása";
+"position_on_map_center" = "Középre";
+"position_on_map_bottom" = "Alulra";
+"animate_my_location_descr" = "A térképen való helyváltoztatás zökkenőmentes a navigáció során";

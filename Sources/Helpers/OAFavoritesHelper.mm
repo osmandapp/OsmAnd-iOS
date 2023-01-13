@@ -18,10 +18,16 @@
 #import "OAGPXMutableDocument.h"
 #import "OAParkingPositionPlugin.h"
 #import "OAPlugin.h"
+#import "OAIndexConstants.h"
+#import "OAAppVersionDependentConstants.h"
 
 #import <EventKit/EventKit.h>
 
 #include <OsmAndCore.h>
+#include <OsmAndCore/ArchiveWriter.h>
+
+#define BACKUP_MAX_COUNT 10
+#define BACKUP_MAX_PER_DAY 3
 
 @implementation OAFavoritesHelper
 
@@ -312,9 +318,123 @@ static BOOL _favoritesLoaded = NO;
 
 + (void) saveCurrentPointsIntoFile
 {
-    [[OsmAndApp instance] saveFavoritesToPermamentStorage];
+    [[OsmAndApp instance] saveFavoritesToPermanentStorage];
 }
 
++ (void) backup
+{
+    [self.class backup:[self.class getBackupFile]];
+}
+
++ (void) backup:(NSString *)backupFileName
+{
+    NSFileManager *manager = [NSFileManager defaultManager];
+    NSString *favoritesPath = OsmAndApp.instance.favoritesPath;
+    QList<QString> filesList;
+    NSArray<NSString *> *files = [manager contentsOfDirectoryAtPath:favoritesPath error:nil];
+    for (NSString *file in files)
+        filesList << QString::fromNSString([favoritesPath stringByAppendingPathComponent:file]);
+
+    bool ok = !filesList.isEmpty();
+    if (ok)
+    {
+        const auto backupFile = QString::fromNSString(backupFileName);
+        const auto basePath = QString::fromNSString(favoritesPath);
+        OsmAnd::ArchiveWriter archiveWriter;
+        ok = false;
+        archiveWriter.createArchive(&ok, backupFile, filesList, basePath);
+    }
+    if (!ok)
+        NSLog(@"ERROR: Favorites backup failed");
+
+    [self.class clearOldBackups:[self.class getBackupFiles] maxCount:BACKUP_MAX_COUNT];
+}
+
++ (void) clearOldBackups:(NSArray *)files maxCount:(int)maxCount
+{
+    if (files.count < maxCount)
+        return;
+
+    // sort in order from oldest to newest
+    NSArray* sortedFiles = [files sortedArrayUsingComparator:^(id file1, id file2) {
+        return [[file2 objectForKey:@"lastDate"] compare:[file1 objectForKey:@"lastDate"]];
+    }];
+
+    NSFileManager *manager = [NSFileManager defaultManager];
+    for (int i = (int) sortedFiles.count; i > maxCount; --i)
+        [manager removeItemAtPath:sortedFiles[i - 1][@"path"] error:nil];
+}
+
++ (NSString *) getBackupFile
+{
+    [self.class clearOldBackups:[self.class getBackupFilesForToday] maxCount:BACKUP_MAX_PER_DAY];
+
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy_MM_dd_HH_mm_ss"];
+    NSString *fileName = [[dateFormatter stringFromDate:NSDate.date] stringByAppendingString:GPX_ZIP_FILE_EXT];
+    return [OsmAndApp.instance.favoritesBackupPath stringByAppendingPathComponent:fileName];
+}
+
++ (NSArray *) getBackupFilesForToday
+{
+    NSMutableArray *result = [NSMutableArray array];
+    NSArray *files = [self.class getBackupFiles];
+
+    NSCalendar *cal = [NSCalendar currentCalendar];
+    NSDateComponents *dateComponents = [cal components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay fromDate:NSDate.date];
+    [dateComponents setHour:0];
+    [dateComponents setMinute:0];
+    [dateComponents setSecond:0];
+    NSDate *startDayTime = [cal dateFromComponents:dateComponents];
+
+    NSDateComponents *startDay = [[NSDateComponents alloc] init];
+    for (NSDictionary *file in files)
+    {
+        NSDate *lastModifiedDate = file[@"lastDate"];
+        if ([lastModifiedDate compare:startDayTime] != NSOrderedAscending)
+            [result addObject:file];
+    }
+    return [NSArray arrayWithArray:result];
+}
+
++ (NSArray *) getBackupFiles
+{
+    NSString *backupPath = OsmAndApp.instance.favoritesBackupPath;
+    NSFileManager *manager = [NSFileManager defaultManager];
+    NSArray<NSString *> *files = [manager contentsOfDirectoryAtPath:backupPath error:nil];
+
+    // acquire modification dates
+    NSMutableArray *result = [NSMutableArray arrayWithCapacity:files.count];
+    for (NSString* file in files)
+        if ([file hasSuffix:GPX_ZIP_FILE_EXT])
+        {
+            NSString* filePath = [backupPath stringByAppendingPathComponent:file];
+            NSError *err = nil;
+            NSDictionary<NSFileAttributeKey, id> *attrs = [manager attributesOfItemAtPath:filePath error:&err];
+            NSDate *modifiedDate = !err ? attrs.fileModificationDate : [NSDate dateWithTimeIntervalSince1970:0];
+            [result addObject:@{ @"path": filePath, @"lastDate" : attrs.fileModificationDate}];
+        }
+
+    return [NSArray arrayWithArray:result];
+}
+
++ (NSArray<NSString *> *) getGroupFiles
+{
+    NSString *favoritesPath = OsmAndApp.instance.favoritesPath;
+    NSFileManager *manager = [NSFileManager defaultManager];
+    NSArray<NSString *> *files = [manager contentsOfDirectoryAtPath:favoritesPath error:nil];
+
+    // acquire modification dates
+    NSMutableArray<NSString *> *result = [NSMutableArray arrayWithCapacity:files.count];
+    for (NSString* file in files)
+        if ([file hasSuffix:GPX_FILE_EXT])
+        {
+            NSString* filePath = [favoritesPath stringByAppendingPathComponent:file];
+            [result addObject:filePath];
+        }
+
+    return [NSArray arrayWithArray:result];
+}
 
 + (void) sortAll
 {
@@ -564,8 +684,7 @@ static BOOL _favoritesLoaded = NO;
 + (OAGPXDocument *) asGpxFile:(NSArray<OAFavoriteItem *> *)favoritePoints
 {
     OAGPXMutableDocument *gpx = [[OAGPXMutableDocument alloc] init];
-    [gpx setVersion:[NSString stringWithFormat:@"%@ %@", @"OsmAnd",
-                     [[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"]]];
+    [gpx setVersion:[NSString stringWithFormat:@"%@ %@", @"OsmAnd", OAAppVersionDependentConstants.getVersion]];
     for (OAFavoriteItem *p in favoritePoints)
     {
         [gpx addWpt:p.toWpt];

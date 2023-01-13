@@ -82,7 +82,6 @@
     OAAppSettings *_settings;
     OADayNightHelper *_dayNightHelper;
     OAAutoObserverProxy* _framePreparedObserver;
-    OAAutoObserverProxy* _applicaionModeObserver;
     OAAutoObserverProxy* _locationServicesUpdateObserver;
     OAAutoObserverProxy* _mapZoomObserver;
     OAAutoObserverProxy* _mapSourceUpdatedObserver;
@@ -118,10 +117,6 @@
         _framePreparedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                            withHandler:@selector(onMapRendererFramePrepared)
                                                             andObserve:[OARootViewController instance].mapPanel.mapViewController.framePreparedObservable];
-        
-        _applicaionModeObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                            withHandler:@selector(onApplicationModeChanged:)
-                                                             andObserve:[OsmAndApp instance].data.applicationModeChangedObservable];
         
         _locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                     withHandler:@selector(onLocationServicesUpdate)
@@ -175,13 +170,6 @@
 - (void) onRightWidgetSuperviewLayout
 {
     [self execOnDraw];
-}
-
-- (void) onApplicationModeChanged:(OAApplicationMode *)prevMode
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self recreateControls];
-    });
 }
 
 - (void) onMapSourceUpdated
@@ -470,11 +458,11 @@
     {
         [_weatherToolbar moveOutOfScreen];
         _weatherToolbar.hidden = NO;
+        [_mapHudViewController updateWeatherButtonVisibility];
     }
 
     [UIView animateWithDuration:.3 animations:^{
         [_weatherToolbar moveToScreen];
-        [_mapHudViewController.weatherButton setImage:[UIImage templateImageNamed:@"ic_custom_cancel"] forState:UIControlStateNormal];
 
         [_mapHudViewController showBottomControls:[OAUtilities isLandscape] ? 0. : _weatherToolbar.frame.size.height - [OAUtilities getBottomMargin]
                                          animated:YES];
@@ -496,14 +484,18 @@
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
     BOOL needsSettingsForToolbar = mapPanel.hudViewController.weatherToolbar.needsSettingsForToolbar;
     if (!needsSettingsForToolbar)
+    {
         mapPanel.mapViewController.mapLayers.weatherDate = [NSDate date];
+        [mapPanel setTopControlsVisible:YES];
+        [_mapHudViewController showBottomControls:0. animated:YES];
+    }
     [mapPanel.weatherToolbarStateChangeObservable notifyEvent];
 
+    _weatherToolbar.hidden = YES;
+    [_mapHudViewController updateWeatherButtonVisibility];
     [UIView animateWithDuration:.3 animations: ^{
         [_weatherToolbar moveOutOfScreen];
-        [_mapHudViewController.weatherButton setImage:[UIImage templateImageNamed:@"ic_custom_umbrella"] forState:UIControlStateNormal];
     }                completion:^(BOOL finished) {
-        _weatherToolbar.hidden = YES;
         if (needsSettingsForToolbar)
         {
             OAWeatherLayerSettingsViewController *weatherLayerSettingsViewController =
@@ -512,11 +504,6 @@
             [mapPanel showScrollableHudViewController:weatherLayerSettingsViewController];
         }
     }];
-    if (!needsSettingsForToolbar)
-    {
-        [mapPanel setTopControlsVisible:YES];
-        [_mapHudViewController showBottomControls:0. animated:YES];
-    }
     [_mapHudViewController resetToDefaultRulerLayout];
     [_mapHudViewController.quickActionController updateViewVisibility];
     [self recreateControls];
@@ -784,8 +771,6 @@
 {
     if (show)
         [_mapHudViewController changeWeatherToolbarVisible];
-    else
-        [_mapHudViewController updateWeatherButtonVisibility];
 }
 
 @end

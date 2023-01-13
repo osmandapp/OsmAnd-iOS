@@ -23,7 +23,7 @@
 #import "OAQuickActionType.h"
 #import "OAIconTitleValueCell.h"
 #import "OASwitchTableViewCell.h"
-#import "OATextInputIconCell.h"
+#import "OAInputTableViewCell.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/IFavoriteLocation.h>
@@ -83,7 +83,7 @@ static OAQuickActionType *TYPE;
 - (void) addFavoriteSilent:(double)lat lon:(double)lon title:(NSString *)title
 {
     OsmAndAppInstance app = [OsmAndApp instance];
-    NSString *groupName = self.getParams[KEY_CATEGORY_NAME];
+    NSString *groupName = self.getParams[KEY_CATEGORY_NAME] ? self.getParams[KEY_CATEGORY_NAME] : @"";
     UIColor* color;
     if (self.getParams[KEY_CATEGORY_COLOR])
     {
@@ -105,21 +105,20 @@ static OAQuickActionType *TYPE;
     if ([self isItemExists:title])
         title = [self getNewItemName:title];
     
-    QString elevation = QString::null;
+    QString elevation = QString();
     QString time = QString::fromNSString([OAFavoriteItem toStringDate:[NSDate date]]);
     QString pickupTime;
     
     QString titleStr = QString::fromNSString(title);
-    QString group = QString::fromNSString(groupName ? groupName : @"");
-    QString description = QString::null;
-    QString address = QString::null;
-    QString icon = QString::null;
-    QString background = QString::null;
+    QString group = QString::fromNSString(groupName);
+    QString description = QString();
+    QString address = QString();
+    QString icon = QString();
+    QString background = QString();
     
-    auto favorite = app.favoritesCollection->createFavoriteLocation(OsmAnd::LatLon(lat, lon), elevation, time, pickupTime, titleStr, description, address, group, icon, background, OsmAnd::FColorRGB(r,g,b));
-    OAFavoriteItem *fav = [[OAFavoriteItem alloc] initWithFavorite:favorite];
-    
-    [app saveFavoritesToPermamentStorage];
+    app.favoritesCollection->createFavoriteLocation(OsmAnd::LatLon(lat, lon), elevation, time, pickupTime, titleStr, description, address, group, icon, background, OsmAnd::FColorRGB(r,g,b));
+
+    [app saveFavoritesToPermanentStorage:@[groupName]];
 }
 
 - (BOOL) isItemExists:(NSString *)name
@@ -157,7 +156,7 @@ static OAQuickActionType *TYPE;
                           @"footer" : OALocalizedString(@"quick_action_dialog_descr")
                           }] forKey:OALocalizedString(@"shared_string_options")];
     [data setObject:@[@{
-                          @"type" : [OATextInputIconCell getCellIdentifier],
+                          @"type" : [OAInputTableViewCell getCellIdentifier],
                           @"key" : KEY_NAME,
                           @"title" : self.getParams[KEY_NAME] ? self.getParams[KEY_NAME] : @"",
                           @"hint" : OALocalizedString(@"quick_action_template_name"),

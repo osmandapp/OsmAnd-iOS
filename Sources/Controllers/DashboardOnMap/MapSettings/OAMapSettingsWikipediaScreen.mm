@@ -12,7 +12,7 @@
 #import "Localization.h"
 #import "OAColors.h"
 #import "OATableViewCustomFooterView.h"
-#import "OASettingSwitchCell.h"
+#import "OASwitchTableViewCell.h"
 #import "OAIconTitleValueCell.h"
 #import "OAPOIFiltersHelper.h"
 #import "OAWikipediaLanguagesViewController.h"
@@ -105,7 +105,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
 - (void)initData
 {
     NSMutableArray *dataArr = [NSMutableArray new];
-    [dataArr addObject:@[@{@"type": [OASettingSwitchCell getCellIdentifier]}]];
+    [dataArr addObject:@[@{@"type": [OASwitchTableViewCell getCellIdentifier]}]];
 
     if (_wikipediaEnabled)
     {
@@ -236,22 +236,22 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:[OASettingSwitchCell getCellIdentifier]])
+    if ([item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OASettingSwitchCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
+        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
-            cell = (OASettingSwitchCell *) nib[0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.descriptionView.hidden = YES;
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASwitchTableViewCell *) nib[0];
+            [cell descriptionVisibility:NO];
         }
         if (cell)
         {
-            cell.textView.text = _wikipediaEnabled ? OALocalizedString(@"shared_string_enabled") : OALocalizedString(@"rendering_value_disabled_name");
+            cell.titleLabel.text = _wikipediaEnabled ? OALocalizedString(@"shared_string_enabled") : OALocalizedString(@"rendering_value_disabled_name");
+
             NSString *imgName = _wikipediaEnabled ? @"ic_custom_show.png" : @"ic_custom_hide.png";
-            cell.imgView.image = [UIImage templateImageNamed:imgName];
-            cell.imgView.tintColor = _wikipediaEnabled ? UIColorFromRGB(color_dialog_buttons_dark) : UIColorFromRGB(color_tint_gray);
+            cell.leftIconView.image = [UIImage templateImageNamed:imgName];
+            cell.leftIconView.tintColor = _wikipediaEnabled ? UIColorFromRGB(color_dialog_buttons_dark) : UIColorFromRGB(color_tint_gray);
 
             [cell.switchView setOn:_wikipediaEnabled];
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;

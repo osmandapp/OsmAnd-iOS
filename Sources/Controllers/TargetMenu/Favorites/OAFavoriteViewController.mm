@@ -22,7 +22,7 @@
 #import "OAPOIViewController.h"
 #import "OAColors.h"
 #import "OACollapsableCoordinatesView.h"
-#import "OATextMultiViewCell.h"
+#import "OATextMultilineTableViewCell.h"
 #import "OAPOIHelper.h"
 
 #include <OsmAndCore.h>
@@ -35,6 +35,7 @@
     OsmAndAppInstance _app;
     OAPOI *_originObject;
     OAFavoriteGroup *_favoriteGroup;
+    std::vector<std::shared_ptr<OpeningHoursParser::OpeningHours::Info>> _openingHoursInfo;
 }
 
 - (id) initWithItem:(OAFavoriteItem *)favorite headerOnly:(BOOL)headerOnly
@@ -45,6 +46,7 @@
         _app = [OsmAndApp instance];
         _favorite = favorite;
         _favoriteGroup = [OAFavoritesHelper getGroupByName:[self.favorite getCategory]];
+        _openingHoursInfo = OpeningHoursParser::getInfo(self.favorite.favorite->getExtension(QString::fromNSString([PRIVATE_PREFIX stringByAppendingString:OPENING_HOURS])).toStdString());
 
         if (!OAFavoritesHelper.isFavoritesLoaded)
             [OAFavoritesHelper loadFavorites];
@@ -63,9 +65,7 @@
         _app = [OsmAndApp instance];
         
         // Create favorite
-        OsmAnd::PointI locationPoint;
-        locationPoint.x = OsmAnd::Utilities::get31TileNumberX(location.longitude);
-        locationPoint.y = OsmAnd::Utilities::get31TileNumberY(location.latitude);
+        OsmAnd::LatLon locationPoint(location.latitude, location.longitude);
         
         QString elevation = QString();
         QString time = QString::fromNSString([OAFavoriteItem toStringDate:[NSDate date]]);
@@ -74,10 +74,9 @@
         QString title = QString::fromNSString(formattedLocation);
         
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        NSString *groupName;
-        if ([userDefaults objectForKey:kFavoriteDefaultGroupKey])
-            groupName = [userDefaults stringForKey:kFavoriteDefaultGroupKey];
-        
+        NSString *groupName = [userDefaults objectForKey:kFavoriteDefaultGroupKey] ? [userDefaults stringForKey:kFavoriteDefaultGroupKey] : @"";
+        QString group = QString::fromNSString(groupName);
+
         NSInteger defaultColor = [[userDefaults objectForKey:kFavoriteDefaultColorKey] integerValue];
         OAFavoriteColor *favCol = [OADefaultFavorite builtinColors][[OADefaultFavorite getValidBuiltInColorNumber:defaultColor]];
         
@@ -87,13 +86,7 @@
                  green:&g
                   blue:&b
                  alpha:&a];
-        
-        QString group;
-        if (groupName)
-            group = QString::fromNSString(groupName);
-        else
-            group = QString();
-        
+
         QString description = QString();
         QString address = QString();
         QString icon = QString();
@@ -113,11 +106,11 @@
         
         OAFavoriteItem* fav = [[OAFavoriteItem alloc] initWithFavorite:favorite];
         _favorite = fav;
-        [_app saveFavoritesToPermamentStorage];
+        [_app saveFavoritesToPermanentStorage:@[self.favorite.getCategory]];
         if (!OAFavoritesHelper.isFavoritesLoaded)
             [OAFavoritesHelper loadFavorites];
         
-        _favoriteGroup = [OAFavoritesHelper getGroupByName:[self.favorite getCategory]];
+        _favoriteGroup = [OAFavoritesHelper getGroupByName:self.favorite.getCategory];
         [self acquireOriginObject];
         self.topToolbarType = ETopToolbarTypeMiddleFixed;
     }
@@ -225,7 +218,25 @@
 
 - (NSAttributedString *) getAttributedTypeStr:(NSString *)group
 {
-    return [self getAttributedTypeStr:group color:[_favoriteGroup color]];
+    NSAttributedString *attributedTypeStr = [self getAttributedTypeStr:group color:[_favoriteGroup color]];
+    NSString *address = [@"\n\n" stringByAppendingString:[self.favorite getAddress]];
+    NSMutableAttributedString *mutAttributedTypeStr = [[NSMutableAttributedString alloc] init];
+    [mutAttributedTypeStr appendAttributedString:attributedTypeStr];
+    [mutAttributedTypeStr appendAttributedString:[[NSAttributedString alloc] initWithString:address]];
+    [mutAttributedTypeStr addAttributes:@{ NSFontAttributeName : [UIFont systemFontOfSize:15],
+                                           NSForegroundColorAttributeName : UIColorFromRGB(color_dialog_text_description_color_night) }
+                                  range:NSMakeRange(0, mutAttributedTypeStr.length)];
+    return mutAttributedTypeStr;
+}
+
+- (UIColor *) getAdditionalInfoColor
+{
+    return [OANativeUtilities getOpeningHoursColor:_openingHoursInfo];
+}
+
+- (NSAttributedString *) getAdditionalInfoStr
+{
+    return [OANativeUtilities getOpeningHoursDescr:_openingHoursInfo];
 }
 
 - (NSString *) getItemName

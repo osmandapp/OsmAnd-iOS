@@ -19,7 +19,7 @@ struct RouteSegmentResult;
 
 @interface OARouteExporter : NSObject
 
-- (instancetype) initWithName:(NSString *)name route:(std::vector<std::shared_ptr<RouteSegmentResult>> &)route locations:(NSArray<CLLocation *> *)locations points:(NSArray<OAWptPt *> *)points;
+- (instancetype) initWithName:(NSString *)name route:(std::vector<std::shared_ptr<RouteSegmentResult>> &)route locations:(NSArray<CLLocation *> *)locations routePointIndexes:(std::vector<int>)routePointIndexes points:(NSArray<OAWptPt *> *)points;
 - (OAGPXDocument *) exportRoute;
 - (OATrkSegment *) generateRouteSegment;
 

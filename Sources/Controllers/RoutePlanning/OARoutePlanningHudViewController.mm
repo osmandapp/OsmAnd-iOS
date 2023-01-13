@@ -54,6 +54,7 @@
 #import "OAMapHudViewController.h"
 #import "OAOsmAndFormatter.h"
 #import "OATrackMenuHudViewController.h"
+#import "OAAppVersionDependentConstants.h"
 
 #define VIEWPORT_SHIFTED_SCALE 1.5f
 #define VIEWPORT_NON_SHIFTED_SCALE 1.0f
@@ -1753,7 +1754,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
                     [self enterApproximationMode];
                 } else {
                     OAGPXMutableDocument *gpx = [[OAGPXMutableDocument alloc] init];
-                    [gpx setVersion:[NSString stringWithFormat:@"%@ %@", @"OsmAnd", [[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"]]];
+                    [gpx setVersion:[NSString stringWithFormat:@"%@ %@", @"OsmAnd", OAAppVersionDependentConstants.getVersion]];
                     [gpx addRoutePoints:points addRoute:NO];
                     [self onCloseButtonPressed];
                     [targetPointsHelper clearAllPoints:NO];

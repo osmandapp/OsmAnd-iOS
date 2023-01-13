@@ -73,7 +73,7 @@
     label.attributedText = [[NSAttributedString alloc] initWithString:text
                                                         attributes:@{NSParagraphStyleAttributeName : style,
                                                         NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer),
-                                                        NSFontAttributeName : [UIFont systemFontOfSize:15.0],
+                                                        NSFontAttributeName : [UIFont systemFontOfSize:13.0],
                                                         NSBackgroundColorAttributeName : UIColor.clearColor}];
     label.textAlignment = NSTextAlignmentLeft;
     label.numberOfLines = 0;

@@ -11,7 +11,7 @@
 #import "OAAppSettings.h"
 #import "OATableViewCustomHeaderView.h"
 #import "OATableViewCustomFooterView.h"
-#import "OASettingSwitchCell.h"
+#import "OASwitchTableViewCell.h"
 #import "OASettingsCheckmarkCell.h"
 #import "OAMapWidgetRegInfo.h"
 #import "OAMapWidgetRegistry.h"
@@ -134,7 +134,7 @@
                         }];
 
     [distanceIndicationArr addObject:@{
-                        @"type" : [OASettingSwitchCell getCellIdentifier],
+                        @"type" : [OASwitchTableViewCell getCellIdentifier],
                         @"key" : kDistanceIndication,
                         @"value" : @([_settings.distanceIndicationVisibility get]),
                         @"title" : OALocalizedString(@"distance_indication"),
@@ -163,14 +163,14 @@
                         }];
    
     [appearanceOnMapArr addObject:@{
-                        @"type" : [OASettingSwitchCell getCellIdentifier],
+                        @"type" : [OASwitchTableViewCell getCellIdentifier],
                         @"key" : kArrowsOnMap,
                         @"value" : @([_settings.arrowsOnMap get]),
                         @"title" : OALocalizedString(@"arrows_on_map"),
                         }];
     
     [appearanceOnMapArr addObject:@{
-                        @"type" : [OASettingSwitchCell getCellIdentifier],
+                        @"type" : [OASwitchTableViewCell getCellIdentifier],
                         @"key" : kLinesOnMap,
                         @"value" : @([_settings.directionLines get]),
                         @"title" : OALocalizedString(@"direction_lines"),
@@ -274,15 +274,14 @@
     }
     else
     {
-        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
+        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
-            cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
-            cell.descriptionView.hidden = YES;
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASwitchTableViewCell *) nib[0];
+            [cell descriptionVisibility:NO];
         }
-        cell.textView.text = item[@"title"];
+        cell.titleLabel.text = item[@"title"];
         [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
         if ([item[@"key"] isEqualToString:kDistanceIndication])
         {

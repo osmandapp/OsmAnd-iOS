@@ -15,6 +15,7 @@
 #import "OASimpleTableViewCell.h"
 #import "OAAppSettings.h"
 #import "OABackupHelper.h"
+#import "OAIAPHelper.h"
 #import "OAPrepareBackupResult.h"
 #import "OASizes.h"
 #import "OAColors.h"
@@ -186,6 +187,7 @@
 - (void)onLogout
 {
     [[OABackupHelper sharedInstance] logout];
+    [OAIAPHelper.sharedInstance checkBackupPurchase];
 
     for (UIViewController *controller in self.navigationController.viewControllers)
     {

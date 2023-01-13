@@ -20,11 +20,12 @@
 #include <OsmAndCore/QRunnableFunctor.h>
 #include "OAWebClient.h"
 
-OAOsmNotesMapLayerProvider::OAOsmNotesMapLayerProvider()
+OAOsmNotesMapLayerProvider::OAOsmNotesMapLayerProvider(const float symbolsScaleFactor_)
 : webClient(std::make_shared<OAWebClient>())
 , _dataReadyCallback(nullptr)
 , _cacheBBox31()
 , _cacheZoom(OsmAnd::ZoomLevel::InvalidZoomLevel)
+, _symbolsScaleFactor(symbolsScaleFactor_)
 {
 }
 
@@ -187,8 +188,10 @@ QList<std::shared_ptr<OsmAnd::MapSymbolsGroup>> OAOsmNotesMapLayerProvider::buil
 {
     QReadLocker scopedLocker(&_lock);
 
-    const auto iconOpen = [OANativeUtilities skImageFromPngResource:@"map_osm_note_unresolved"];
-    const auto iconClosed = [OANativeUtilities skImageFromPngResource:@"map_osm_note_resolved"];
+    const auto iconOpen = [OANativeUtilities getScaledSkImage:[OANativeUtilities skImageFromPngResource:@"map_osm_note_unresolved"]
+                                                  scaleFactor:_symbolsScaleFactor];
+    const auto iconClosed = [OANativeUtilities getScaledSkImage:[OANativeUtilities skImageFromPngResource:@"map_osm_note_resolved"]
+                                                    scaleFactor:_symbolsScaleFactor];
     QList<std::shared_ptr<OsmAnd::MapSymbolsGroup>> mapSymbolsGroups;
 
     for (const auto note : _notesCache)
@@ -284,7 +287,7 @@ void OAOsmNotesMapLayerProvider::obtainDataAsync(const IMapDataProvider::Request
                                                  const IMapDataProvider::ObtainDataAsyncCallback callback,
                                                  const bool collectMetric /*= false*/)
 {
-    OsmAnd::MapDataProviderHelpers::nonNaturalObtainDataAsync(this, request, callback, collectMetric);
+    OsmAnd::MapDataProviderHelpers::nonNaturalObtainDataAsync(shared_from_this(), request, callback, collectMetric);
 }
 
 OAOsmNotesMapLayerProvider::Data::Data(const OsmAnd::TileId tileId_,

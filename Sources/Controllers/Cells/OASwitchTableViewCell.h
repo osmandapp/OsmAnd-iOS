@@ -2,14 +2,18 @@
 //  OASwitchTableViewCell.h
 //  OsmAnd
 //
-//  Created by Anton Rogachevskiy on 16.11.14.
-//  Copyright (c) 2014 OsmAnd. All rights reserved.
+//  Created by Skalii on 22.09.2022.
+//  Copyright © 2022 OsmAnd. All rights reserved.
 //
 
-#import "OATableViewCell.h"
+#import "OASimpleTableViewCell.h"
 
-@interface OASwitchTableViewCell : OATableViewCell
-@property (weak, nonatomic) IBOutlet UILabel *textView;
+@interface OASwitchTableViewCell : OASimpleTableViewCell
+
+@property (weak, nonatomic) IBOutlet UIView *dividerView;
 @property (weak, nonatomic) IBOutlet UISwitch *switchView;
+
+- (void)dividerVisibility:(BOOL)show;
+- (void)switchVisibility:(BOOL)show;
 
 @end

@@ -29,10 +29,12 @@ OAWaypointsMapLayerProvider::OAWaypointsMapLayerProvider(const QList<OsmAnd::Ref
                                                          const bool showCaptions_,
                                                          const OsmAnd::TextRasterizer::Style captionStyle_,
                                                          const double captionTopSpace_,
-                                                         const float referenceTileSizeOnScreenInPixels_)
+                                                         const float referenceTileSizeOnScreenInPixels_,
+                                                         const float symbolsScaleFactor_)
 
 : IOAMapTiledCollectionProvider(baseOrder_, hiddenPoints_, showCaptions_, captionStyle_, captionTopSpace_, referenceTileSizeOnScreenInPixels_)
 , _wptPtPoints(wptPtPoints_)
+, _symbolsScaleFactor(symbolsScaleFactor_)
 {
     for (const auto& point : _wptPtPoints)
         _points.push_back(OsmAnd::Utilities::convertLatLonTo31(point->position));
@@ -106,7 +108,8 @@ sk_sp<SkImage> OAWaypointsMapLayerProvider::getBitmapByWaypoint(const OsmAnd::Re
     {
         bitmap = bitmapIt.value();
     }
-    return bitmap;
+
+    return [OANativeUtilities getScaledSkImage:bitmap scaleFactor:_symbolsScaleFactor];
 }
 
 QString OAWaypointsMapLayerProvider::backgroundImageNameByType(const QString& type) const

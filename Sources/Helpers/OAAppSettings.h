@@ -834,7 +834,6 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonSpeedConstant *speedSystem;
 @property (nonatomic) OACommonAngularConstant *angularUnits;
 @property (nonatomic) OACommonDouble *speedLimitExceedKmh;
-@property (nonatomic) OACommonDouble *switchMapDirectionToCompass;
 @property (nonatomic) OACommonDouble *routeRecalculationDistance;
 @property (nonatomic) OACommonInteger *customRouteColorDay;
 @property (nonatomic) OACommonInteger *customRouteColorNight;
@@ -883,6 +882,8 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) NSString *simulateNavigationGpxTrackSpeedMode;
 @property (assign, nonatomic) BOOL useOsmLiveForRouting;
 
+@property (nonatomic) OACommonBoolean *showHeightmaps;
+
 @property (nonatomic) OACommonRulerWidgetMode *rulerMode;
 
 @property (nonatomic) OACommonStringList *poiFiltersOrder;
@@ -927,10 +928,6 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 
 // Custom plugins
 @property (nonatomic) NSString *customPluginsJson;
-
-// Weather
-
-@property (nonatomic) OACommonBoolean *weatherButtonIsOn;
 
 - (void) setApplicationModePref:(OAApplicationMode *)applicationMode;
 - (void) setApplicationModePref:(OAApplicationMode *)applicationMode markAsLastUsed:(BOOL)markAsLastUsed;
@@ -1042,6 +1039,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonLong *backupPurchaseExpireTime;
 @property (nonatomic) OACommonSubscriptionState *backupPurchaseState;
 @property (nonatomic) OACommonInteger *proSubscriptionOrigin;
+@property (nonatomic) OACommonInteger *proSubscriptionDuration;
 
 @property (nonatomic) OACommonString *purchasedIdentifiers;
 

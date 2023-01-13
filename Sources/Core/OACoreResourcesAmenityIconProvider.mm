@@ -22,6 +22,7 @@
 #import "OAPOIHelper.h"
 #import "OAPOIType.h"
 #import "OAUtilities.h"
+#import "OANativeUtilities.h"
 #import "OAColors.h"
 
 const static float kTextSize = 13.0f;
@@ -90,8 +91,8 @@ sk_sp<SkImage> OACoreResourcesAmenityIconProvider::getIcon(
             {
                 bitmap = bitmapIt.value();
             }
-            
-            return bitmap;
+
+            return [OANativeUtilities getScaledSkImage:bitmap scaleFactor:textScaleFactor];
         }
         
         return nullptr;

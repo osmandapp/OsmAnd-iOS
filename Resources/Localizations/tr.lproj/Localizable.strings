@@ -557,7 +557,6 @@
 "arrival_distance_factor_normally" = "Normal";
 "arrival_distance_factor_late" = "Geç";
 "arrival_distance_factor_at_last" = "Son metrelerde";
-"map_orientation_change_in_accordance_with_speed" = "Harita yönlendirme eşiği";
 "fast_route_mode" = "En hızlı rota";
 "fast_route_mode_descr" = "En hızlı rotayı hesaplamayı etkinleştirin veya yakıt tasarrufu rotası için devre dışı bırakın.";
 "avoid_in_routing_title" = "Kaçın…";
@@ -1010,7 +1009,6 @@
 "interrupt_music_descr" = "Sesli komutlar sırasında müziği tamamen duraklat (sadece ses seviyesini düşürme)";
 "choose_auto_follow_route_descr" = "Geçerli konum ile harita görünümünü eşzamanlamaya kadar geçecek süre";
 "auto_zoom_map_descr" = "(Geçerli konum ile harita eşzamanlandığında) haritayı hızınıza göre otomatik yakınlaştırın";
-"map_orientation_change_in_accordance_with_speed_descr" = "Hangi hızın altında harita yönünün 'Hareket yönüne'den 'Pusulaya' geçeceğini seçin";
 "show_warnings_descr" = "Trafik uyarılarını (hız sınırları, zorunlu duruşlar, hız tümsekleri, tüneller), hız kamerası uyarılarını ve şerit bilgilerini yapılandırın";
 "speak_descr" = "Sokak adlarını, trafik uyarılarını (zorunlu duruşlar, hız tümsekleri), hız kamerası uyarılarını, hız sınırlarını duyurmayı yapılandırın";
 "voice_provider_descr" = "Navigasyon için sesli yönlendirme seçin";

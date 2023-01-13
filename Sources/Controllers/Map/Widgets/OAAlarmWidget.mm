@@ -36,6 +36,8 @@
     NSString *_imgId;
     NSString *_textString;
     NSString *_bottomTextString;
+    
+    BOOL _carPlayMode;
 }
 
 - (instancetype) init
@@ -52,6 +54,35 @@
     
     if (self)
         self.frame = CGRectMake(0, 0, 100, 100);
+    
+    [self commonInit];
+    
+    return self;
+}
+
+- (instancetype) initForCarPlay
+{
+    NSArray *bundle = [[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:nil options:nil];
+    for (UIView *v in bundle)
+    {
+        if ([v isKindOfClass:[OAAlarmWidget class]])
+        {
+            self = (OAAlarmWidget *)v;
+            break;
+        }
+    }
+    if (self)
+    {
+        self.frame = CGRectMake(0, 0, 40., 40.);
+        self.imageView.frame = self.frame;
+        self.textView.frame = self.frame;
+        self.bottomTextView.frame = CGRectMake(0, 24.4, 40., 9.);
+        _carPlayMode = YES;
+    }
+    
+    self.textView.font = [UIFont systemFontOfSize:12.];
+    self.bottomTextView.font = [UIFont systemFontOfSize:7.];
+    self.imageView.contentMode = UIViewContentModeScaleAspectFit;
     
     [self commonInit];
     
@@ -222,7 +253,7 @@
                     _textString = text;
                     _textView.text = _textString;
                     CGRect f = _textView.frame;
-                    f.origin.y = alarm.type == AIT_SPEED_LIMIT && americanSigns && !isCanadianRegion ? 10 : 0;
+                    f.origin.y = alarm.type == AIT_SPEED_LIMIT && americanSigns && !isCanadianRegion ? (_carPlayMode ? 4. : 10) : 0;
                     _textView.frame = f;
                 }
                 if (![self stringEquals:bottomText b:_bottomTextString])

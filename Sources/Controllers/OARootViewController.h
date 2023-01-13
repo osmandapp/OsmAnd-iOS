@@ -18,6 +18,7 @@
 
 @property (nonatomic, weak, readonly) OAMapPanelViewController* mapPanel;
 @property(readonly) BOOL isMenuOpened;
+@property (nonatomic) NSString *token;
 
 + (OARootViewController*) instance;
 

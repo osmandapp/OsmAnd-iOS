@@ -15,7 +15,7 @@
 #import "OAAppModeCell.h"
 #import "OASimpleTableViewCell.h"
 #import "OARightIconTableViewCell.h"
-#import "OATableViewCellSwitch.h"
+#import "OASwitchTableViewCell.h"
 #import "OAValueTableViewCell.h"
 #import "OAButtonTableViewCell.h"
 #import "OAChoosePlanHelper.h"
@@ -130,7 +130,7 @@
     [showSectionData addObject:@{
             @"name": OALocalizedString(@"favorites"),
             @"image": @"ic_custom_favorites",
-            @"type": [OATableViewCellSwitch getCellIdentifier],
+            @"type": [OASwitchTableViewCell getCellIdentifier],
             @"key": @"favorites"
     }];
 
@@ -145,7 +145,7 @@
     [showSectionData addObject:@{
             @"name": OALocalizedString(@"layer_amenity_label"),
             @"image": @"ic_custom_point_labels",
-            @"type": [OATableViewCellSwitch getCellIdentifier],
+            @"type": [OASwitchTableViewCell getCellIdentifier],
             @"key": @"layer_amenity_label"
     }];
 
@@ -155,7 +155,7 @@
                 @"name": OALocalizedString(@"product_title_wiki"),
                 @"image": hasWiki ? @"ic_custom_wikipedia" : @"ic_custom_wikipedia_download_colored",
                 hasWiki ? @"has_options" : @"desc": hasWiki ? @YES : OALocalizedString(@"explore_wikipedia_offline"),
-                @"type": hasWiki ? [OATableViewCellSwitch getCellIdentifier] : [OAButtonTableViewCell getCellIdentifier],
+                @"type": hasWiki ? [OASwitchTableViewCell getCellIdentifier] : [OAButtonTableViewCell getCellIdentifier],
                 @"key": @"wikipedia_layer"
         }];
     }
@@ -166,7 +166,7 @@
                 @"name": OALocalizedString(@"street_level_imagery"),
                 @"image": @"ic_custom_mapillary_symbol",
                 @"has_options": @YES,
-                @"type": [OATableViewCellSwitch getCellIdentifier],
+                @"type": [OASwitchTableViewCell getCellIdentifier],
                 @"key": @"mapillary_layer"
         }];
     }
@@ -184,7 +184,7 @@
     [showSectionData addObject:@{
             @"name": OALocalizedString(@"show_borders_of_downloaded_maps"),
             @"image": @"ic_custom_download_map",
-            @"type": [OATableViewCellSwitch getCellIdentifier],
+            @"type": [OASwitchTableViewCell getCellIdentifier],
             @"key": @"show_borders_of_downloaded_maps"
     }];
 
@@ -222,13 +222,13 @@
         [group.groupItems addObject:@{
                 @"name": OALocalizedString(@"osm_edits_offline_layer"),
                 @"image": @"ic_action_openstreetmap_logo",
-                @"type": [OATableViewCellSwitch getCellIdentifier],
+                @"type": [OASwitchTableViewCell getCellIdentifier],
                 @"key": @"osm_edits_offline_layer"
         }];
         [group.groupItems addObject:@{
                 @"name": OALocalizedString(@"osm_notes_online_layer"),
                 @"image": @"ic_action_osm_note",
-                @"type": [OATableViewCellSwitch getCellIdentifier],
+                @"type": [OASwitchTableViewCell getCellIdentifier],
                 @"key": @"osm_notes_online_layer"
         }];
         _osmSettingsCount = group.groupItems.count + 1;
@@ -240,7 +240,7 @@
                 [group.groupItems addObject:@{
                         @"name": osmParameter.title,
                         @"has_empty_icon": @YES,
-                        @"type": [OATableViewCellSwitch getCellIdentifier],
+                        @"type": [OASwitchTableViewCell getCellIdentifier],
                         @"key": [NSString stringWithFormat:@"osm_%@", osmParameter.name]
                 }];
             }
@@ -306,7 +306,7 @@
                     @"key": [NSString stringWithFormat:@"routes_%@", routeParameter.name],
                     @"type": [hasParameters containsObject:routeParameter.name]
                                 ? isMountainBike ? [OAValueTableViewCell getCellIdentifier] : [OASimpleTableViewCell getCellIdentifier]
-                                : [OATableViewCellSwitch getCellIdentifier],
+                                : [OASwitchTableViewCell getCellIdentifier],
                     @"value": value
             };
 
@@ -388,7 +388,7 @@
                     @"name": [_styleSettings getCategoryTitle:cName],
                     @"image": [self getImageForParameterOrCategory:cName],
                     @"key": [NSString stringWithFormat:@"category_%@", cName],
-                    @"type": isTransport ? [OATableViewCellSwitch getCellIdentifier] : [OASimpleTableViewCell getCellIdentifier],
+                    @"type": isTransport ? [OASwitchTableViewCell getCellIdentifier] : [OASimpleTableViewCell getCellIdentifier],
                     isTransport ? @"has_options" : @"value": isTransport ? @YES : @""
             }];
         }
@@ -415,7 +415,7 @@
                     @"name": OALocalizedString(@"product_title_srtm"),
                     @"image": @"ic_custom_contour_lines",
                     @"has_options": @YES,
-                    @"type": [OATableViewCellSwitch getCellIdentifier],
+                    @"type": [OASwitchTableViewCell getCellIdentifier],
                     @"key": @"contour_lines_layer"
             }];
         }
@@ -433,7 +433,7 @@
                 @"name": OALocalizedString(@"shared_string_terrain"),
                 @"image": hasSRTM ? @"ic_custom_hillshade" : @"ic_custom_contour_lines_colored",
                 hasSRTM ? @"has_options" : @"desc": hasSRTM ? @YES : OALocalizedString(@"contour_lines_hillshades_slope"),
-                @"type": hasSRTM ? [OATableViewCellSwitch getCellIdentifier] : [OAButtonTableViewCell getCellIdentifier],
+                @"type": hasSRTM ? [OASwitchTableViewCell getCellIdentifier] : [OAButtonTableViewCell getCellIdentifier],
                 @"key": @"terrain_layer"
         }];
     }
@@ -441,14 +441,14 @@
             @"name": OALocalizedString(@"map_settings_over"),
             @"image": @"ic_custom_overlay_map",
             @"has_options": @YES,
-            @"type": [OATableViewCellSwitch getCellIdentifier],
+            @"type": [OASwitchTableViewCell getCellIdentifier],
             @"key": @"overlay_layer"
     }];
     [overlayUnderlaySectionData addObject:@{
             @"name": OALocalizedString(@"map_settings_under"),
             @"image": @"ic_custom_underlay_map",
             @"has_options": @YES,
-            @"type": [OATableViewCellSwitch getCellIdentifier],
+            @"type": [OASwitchTableViewCell getCellIdentifier],
             @"key": @"underlay_layer"
     }];
 
@@ -458,7 +458,7 @@
                 @"name": OALocalizedString(@"product_title_weather"),
                 @"image": @"ic_custom_umbrella",
                 hasWeather ? @"has_options" : @"desc": hasWeather ? @YES : OALocalizedString(@"product_title_weather"),
-                @"type": hasWeather ? [OATableViewCellSwitch getCellIdentifier] : [OAButtonTableViewCell getCellIdentifier],
+                @"type": hasWeather ? [OASwitchTableViewCell getCellIdentifier] : [OAButtonTableViewCell getCellIdentifier],
                 @"key": @"weather_layer"
         }];
     }
@@ -900,13 +900,13 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:[OATableViewCellSwitch getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OATableViewCellSwitch *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellSwitch getCellIdentifier]];
+        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellSwitch getCellIdentifier] owner:self options:nil];
-            cell = (OATableViewCellSwitch *) nib[0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASwitchTableViewCell *) nib[0];
             [cell descriptionVisibility:NO];
         }
         if (cell)

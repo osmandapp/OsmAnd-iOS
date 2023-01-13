@@ -19,10 +19,10 @@
 #import "OAFileNameTranslationHelper.h"
 #import "OASavingTrackHelper.h"
 #import "OAIconTitleValueCell.h"
-#import "OASettingSwitchCell.h"
 #import "OAIconTextTableViewCell.h"
 #import "OATitleRightIconCell.h"
 #import "OAColors.h"
+#import "OASizes.h"
 
 #include <generalRouter.h>
 
@@ -181,7 +181,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
                    @"description" : [NSString stringWithFormat:@"%@ %@", OALocalizedString(@"track_during_nav_descr"), OALocalizedString(@"logging_interval_navigation_descr")],
                    @"value" : _settings.saveTrackToGPX,
                    @"img" : @"ic_custom_navigation",
-                   @"type" : [OASettingSwitchCell getCellIdentifier] },
+                   @"type" : [OASwitchTableViewCell getCellIdentifier] },
                @{
                    @"name" : @"logging_interval_navigation",
                    @"title" : OALocalizedString(@"logging_interval_navigation"),
@@ -199,7 +199,6 @@ static NSArray<NSString *> *minTrackSpeedNames;
                  @"title" : OALocalizedString(@"auto_split_gap"),
                  @"description" : OALocalizedString(@"auto_split_gap_descr"),
                  @"value" : @([_settings.autoSplitRecording get:self.appMode]),
-                 @"img" : @"menu_cell_pointer.png",
                  @"type" : [OASwitchTableViewCell getCellIdentifier] }]];
             
             NSString *menuPath = [NSString stringWithFormat:@"%@ — %@ — %@", OALocalizedString(@"menu"), OALocalizedString(@"menu_my_places"), OALocalizedString(@"menu_my_trips")];
@@ -407,18 +406,23 @@ static NSArray<NSString *> *minTrackSpeedNames;
     
     if ([type isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OASwitchTableViewCell* cell = nil;
-        cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
+        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
-            cell.textView.numberOfLines = 0;
+            cell = (OASwitchTableViewCell *) nib[0];
+            [cell descriptionVisibility:NO];
         }
-        
         if (cell)
         {
-            [cell.textView setText: item[@"title"]];
+            cell.titleLabel.text = item[@"title"];
+
+            NSString *iconName = item[@"img"];
+            [cell leftIconVisibility:iconName && iconName.length > 0];
+            cell.leftIconView.tintColor = cell.switchView.isOn ? UIColorFromRGB(self.appMode.getIconColor) : UIColorFromRGB(color_icon_inactive);
+            cell.leftIconView.image = [UIImage templateImageNamed:iconName];
+            cell.separatorInset = UIEdgeInsetsMake(0., iconName && iconName.length > 0 ? kPaddingToLeftOfContentWithIcon : kPaddingOnSideOfContent, 0., 0.);
+
             id v = item[@"value"];
             if ([v isKindOfClass:[OACommonBoolean class]])
             {
@@ -472,40 +476,6 @@ static NSArray<NSString *> *minTrackSpeedNames;
 
             [cell showLeftIcon:img != nil];
             [cell updateConstraints];
-        }
-        return cell;
-    }
-    else if ([item[@"type"] isEqualToString:[OASettingSwitchCell getCellIdentifier]])
-    {
-        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
-            cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
-            cell.descriptionView.hidden = YES;
-            cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        }
-        
-        if (cell)
-        {
-            id v = item[@"value"];
-            if ([v isKindOfClass:[OACommonBoolean class]])
-            {
-                OACommonBoolean *value = v;
-                [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-                cell.switchView.on = [value get:self.appMode];
-            }
-            else
-            {
-                cell.switchView.on = [v boolValue];
-            }
-            cell.imgView.tintColor = cell.switchView.isOn ? UIColorFromRGB(self.appMode.getIconColor) : UIColorFromRGB(color_icon_inactive);
-            cell.switchView.tag = indexPath.section << 10 | indexPath.row;
-            [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
-            
-            cell.textView.text = item[@"title"];
-            cell.imgView.image = [UIImage templateImageNamed:item[@"img"]];
         }
         return cell;
     }

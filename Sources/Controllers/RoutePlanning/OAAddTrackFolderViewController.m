@@ -10,7 +10,7 @@
 #import "OAColors.h"
 #import "Localization.h"
 #import "OAUtilities.h"
-#import "OATextViewResizingCell.h"
+#import "OATextMultilineTableViewCell.h"
 #import "OsmAndApp.h"
 
 @interface OAAddTrackFolderViewController() <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate>
@@ -53,7 +53,7 @@
     NSMutableArray *data = [NSMutableArray new];
     [data addObject:@[
         @{
-            @"type" : [OATextViewResizingCell getCellIdentifier],
+            @"type" : [OATextMultilineTableViewCell getCellIdentifier],
             @"title" : @"",
             @"key" : @"input_name",
         }
@@ -67,15 +67,6 @@
     self.titleLabel.text = OALocalizedString(@"add_folder");
 }
 
--(void) clearButtonPressed:(UIButton *)sender
-{
-    _newFolderName = @"";
-    _inputFieldError= @"";
-    [self generateData];
-    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
-    self.doneButton.enabled = NO;
-}
-
 - (void)onDoneButtonPressed
 {
     [self.delegate onTrackFolderAdded:[_newFolderName trim]];
@@ -86,37 +77,35 @@
 - (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
-    NSString *cellType = item[@"type"];
-    
-    if ([cellType isEqualToString:[OATextViewResizingCell getCellIdentifier]])
+    if ([item[@"type"] isEqualToString:[OATextMultilineTableViewCell getCellIdentifier]])
     {
-        OATextViewResizingCell* cell = [tableView dequeueReusableCellWithIdentifier:[OATextViewResizingCell getCellIdentifier]];
+        OATextMultilineTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OATextMultilineTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextViewResizingCell getCellIdentifier] owner:self options:nil];
-            cell = (OATextViewResizingCell *)[nib objectAtIndex:0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextMultilineTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OATextMultilineTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            cell.textView.userInteractionEnabled = YES;
+            cell.textView.editable = YES;
+            cell.textView.delegate = self;
+            cell.textView.returnKeyType = UIReturnKeyDone;
+            cell.textView.enablesReturnKeyAutomatically = YES;
         }
         if (cell)
         {
             if (_isFirstLaunch)
             {
-                [cell.inputField becomeFirstResponder];
+                [cell.textView becomeFirstResponder];
                 _isFirstLaunch = NO;
             }
-            cell.inputField.text = item[@"title"];
-            cell.inputField.delegate = self;
-            cell.inputField.textContainer.lineBreakMode = NSLineBreakByCharWrapping;
-            cell.inputField.returnKeyType = UIReturnKeyDone;
-            cell.inputField.enablesReturnKeyAutomatically = YES;
-            cell.clearButton.tag = cell.inputField.tag;
+            cell.textView.text = item[@"title"];
+            cell.textView.tag = indexPath.section << 10 | indexPath.row;
+            cell.clearButton.tag = cell.textView.tag;
             [cell.clearButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
             [cell.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         }
-        
         return cell;
     }
-    
     return nil;
 }
 
@@ -142,10 +131,20 @@
 
 #pragma mark - UITextViewDelegate
 
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    if ([text isEqualToString:@"\n"])
+    {
+        [textView resignFirstResponder];
+        return NO;
+    }
+    return YES;
+}
+
 - (void) textViewDidChange:(UITextView *)textView
 {
     [self updateFileNameFromEditText:textView.text];
-    
+
     [textView sizeToFit];
     [self.tableView beginUpdates];
     UITableViewHeaderFooterView *footer = [self.tableView footerViewForSection:0];
@@ -153,6 +152,17 @@
     footer.textLabel.text = _inputFieldError;
     [footer sizeToFit];
     [self.tableView endUpdates];
+}
+
+#pragma mark - Selectors
+
+- (void)clearButtonPressed:(UIButton *)sender
+{
+    _newFolderName = @"";
+    _inputFieldError= @"";
+    [self generateData];
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
+    self.doneButton.enabled = NO;
 }
 
 - (void) updateFileNameFromEditText:(NSString *)name
@@ -178,16 +188,6 @@
         _doneButtonEnabled = YES;
     }
     self.doneButton.enabled = _doneButtonEnabled;
-}
-
-- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
-{
-    if([text isEqualToString:@"\n"])
-    {
-        [textView resignFirstResponder];
-        return NO;
-    }
-    return YES;
 }
 
 - (BOOL) isFolderExist:(NSString *)name

@@ -10,7 +10,7 @@
 #import "OADownloadDescriptionInfo.h"
 #import "OACustomRegion.h"
 #import "OAResourcesUIHelper.h"
-#import "OATextViewSimpleCell.h"
+#import "OATextMultilineTableViewCell.h"
 #import "OAMenuSimpleCellNoIcon.h"
 #import "OAFilledButtonCell.h"
 #import "OAResourcesUIHelper.h"
@@ -114,7 +114,7 @@
     {
         NSAttributedString *attrString = [OAUtilities attributedStringFromHtmlString:_item.descriptionInfo.getLocalizedDescription fontSize:17];
         [data addObject:@{
-                @"type" : [OATextViewSimpleCell getCellIdentifier],
+                @"type" : [OATextMultilineTableViewCell getCellIdentifier],
                 @"attrText" : attrString
         }];
     }
@@ -229,15 +229,15 @@
         }
         return cell;
     }
-    else if ([type isEqualToString:[OATextViewSimpleCell getCellIdentifier]])
+    else if ([type isEqualToString:[OATextMultilineTableViewCell getCellIdentifier]])
     {
-        OATextViewSimpleCell *cell = [tableView dequeueReusableCellWithIdentifier:[OATextViewSimpleCell getCellIdentifier]];
+        OATextMultilineTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OATextMultilineTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextViewSimpleCell getCellIdentifier] owner:self options:nil];
-            cell = (OATextViewSimpleCell *)[nib objectAtIndex:0];
-            cell.separatorInset = UIEdgeInsetsZero;
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextMultilineTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OATextMultilineTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell clearButtonVisibility:NO];
         }
         if (cell)
         {

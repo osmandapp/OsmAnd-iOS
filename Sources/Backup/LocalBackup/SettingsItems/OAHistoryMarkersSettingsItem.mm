@@ -162,6 +162,14 @@
 
 - (BOOL) readFromFile:(NSString *)filePath error:(NSError * _Nullable *)error
 {
+    if (self.item.read)
+    {
+        if (error)
+            *error = [NSError errorWithDomain:kSettingsItemErrorDomain code:kSettingsItemErrorCodeAlreadyRead userInfo:nil];
+
+        return NO;
+    }
+
     OAGPXDocument *gpxFile = [[OAGPXDocument alloc] initWithGpxFile:filePath];
     if (gpxFile)
     {
@@ -186,6 +194,7 @@
             [self.item.items addObject:historyItem];
         }
     }
+    self.item.read = YES;
     return YES;
 }
 

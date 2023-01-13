@@ -13,7 +13,7 @@
 #import "OALoadGpxTask.h"
 #import "OAGPXRecTableViewCell.h"
 #import "OAIconTitleValueCell.h"
-#import "OASettingSwitchCell.h"
+#import "OASwitchTableViewCell.h"
 #import "OAGPXTrackCell.h"
 #import "OAGPXDocument.h"
 #import "OASavingTrackHelper.h"
@@ -698,7 +698,7 @@ static UIViewController *parentController;
                  @"title" : [item getNiceTitle],
                  @"icon" : @"ic_custom_trip.png",
                  @"track" : item,
-                 @"type" : [OASettingSwitchCell getCellIdentifier],
+                 @"type" : [OASwitchTableViewCell getCellIdentifier],
                  @"key" : @"track_group"}];
         }
     }
@@ -1264,24 +1264,25 @@ static UIViewController *parentController;
             NSDictionary *groupItem = item.groupItems[dataIndex];
             NSString *cellType = groupItem[@"type"];
             OAGPX *gpx = groupItem[@"track"];
-            if ([cellType isEqualToString:[OASettingSwitchCell getCellIdentifier]])
+            if ([cellType isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
             {
-                OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
+                OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
                 if (cell == nil)
                 {
-                    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
-                    cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
-                    cell.descriptionView.hidden = YES;
+                    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
+                    cell = (OASwitchTableViewCell *) nib[0];
+                    [cell descriptionVisibility:NO];
                     cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
                 }
                 if (cell)
                 {
-                    cell.textView.text = groupItem[@"title"];
-                    cell.imgView.image = [UIImage templateImageNamed:groupItem[@"icon"]];
+                    cell.titleLabel.text = groupItem[@"title"];
+                    cell.leftIconView.image = [UIImage templateImageNamed:groupItem[@"icon"]];
+                    cell.leftIconView.tintColor = [_settings.mapSettingVisibleGpx.get containsObject:gpx.gpxFilePath] ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
+
                     [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
                     cell.switchView.on = [_settings.mapSettingVisibleGpx.get containsObject:gpx.gpxFilePath];
                     [cell.switchView addTarget:self action:@selector(onSwitchClick:) forControlEvents:UIControlEventValueChanged];
-                    cell.imgView.tintColor = [_settings.mapSettingVisibleGpx.get containsObject:gpx.gpxFilePath] ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
                     cell.switchView.tag = indexPath.section << 10 | indexPath.row;
                 }
                 return cell;

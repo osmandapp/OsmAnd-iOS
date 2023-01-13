@@ -30,6 +30,7 @@
 @property(nonatomic, readonly) NSString* weatherForecastPath;
 @property(nonatomic, readonly) NSString* gpxPath;
 @property(nonatomic, readonly) NSString* inboxPath;
+@property(nonatomic, readonly) NSString* favoritesPath;
 
 @property(readonly) OAAppData* data;
 @property(readonly) OAWorldRegion* worldRegion;
@@ -54,14 +55,19 @@
 
 - (void) saveDataToPermamentStorage;
 
+@property(readonly) NSString* favoritesFilePrefix;
+@property(readonly) NSString* favoritesGroupNameSeparator;
+@property(readonly) NSString* legacyFavoritesFilePrefix;
 @property(readonly) OAObservable* favoritesCollectionChangedObservable;
 @property(readonly) OAObservable* favoriteChangedObservable;
-@property(readonly) NSString* favoritesStorageFilename;
+@property(readonly) NSString* favoritesLegacyStorageFilename;
+@property(readonly) NSString* favoritesBackupPath;
 
 @property(readonly) OAObservable* gpxCollectionChangedObservable;
 @property(readonly) OAObservable* gpxChangedObservable;
 
-- (void)saveFavoritesToPermamentStorage;
+- (void)saveFavoritesToPermanentStorage;
+- (void)saveFavoritesToPermanentStorage:(NSArray<NSString *> *)groupNames;
 - (void)updateScreenTurnOffSetting;
 
 @property(readonly) unsigned long long freeSpaceAvailableOnDevice;
@@ -103,6 +109,8 @@
 - (void)checkAndDownloadWeatherForecastsUpdates;
 
 - (void) loadRoutingFiles;
+
+- (NSString *) favoritesStorageFilename:(NSString *)groupName;
 
 - (NSString *) getUserIosId;
 

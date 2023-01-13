@@ -104,6 +104,7 @@
 - (void) targetGoToPoint;
 - (void) targetGoToGPX;
 - (void) targetViewHeightChanged:(CGFloat)height animated:(BOOL)animated;
+- (void) targetViewOnAppear:(CGFloat)height animated:(BOOL)animated;
 - (void) targetSetTopControlsVisible:(BOOL)visible;
 - (void) targetSetBottomControlsVisible:(BOOL)visible menuHeight:(CGFloat)menuHeight animated:(BOOL)animated;
 - (void) targetStatusBarChanged;

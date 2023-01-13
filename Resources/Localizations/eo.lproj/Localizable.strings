@@ -223,8 +223,6 @@
 "arrival_distance_factor_normally" = "Norme";
 "arrival_distance_factor_late" = "Malfrue";
 "arrival_distance_factor_at_last" = "Dum la plej lastaj metroj";
-"map_orientation_change_in_accordance_with_speed" = "Map-orientiĝa sojlo";
-"map_orientation_change_in_accordance_with_speed_descr" = "Select below which speed the map orientation switches from 'To direction of movement' to 'To compass'";
 "route_parameters" = "Parametroj de navigo";
 "fast_route_mode" = "Plej rapida kurso";
 "nav_type_title" = "Speco de navigo";
@@ -594,7 +592,7 @@
 "shared_string_export" = "Elporti";
 "gpx_selection_segment_title" = "Segments";
 "route_points" = "Punktoj de kurso";
-"import_export" = "Import/Export";
+"import_export" = "Enporti/elporti";
 "gpx_import_title" = "Enporti spurojn";
 "gpx_import_already_exists" = "The specified track file is already exists in the list. Please choose action.";
 "gpx_add_new" = "Add new file";
@@ -718,7 +716,7 @@
 "allow_3D_view" = "2.5D view";
 "units_of_speed" = "Units of speed";
 "angular_measurment_units" = "Angular measurment units";
-"units_and_formats" = "Units & formats";
+"units_and_formats" = "Mezurunuoj kaj formoj";
 "device_settings" = "Device settings";
 "osmand_settings" = "Ĝeneralaj agordoj";
 "global_settings_descr" = "Affect the entire application.";
@@ -1140,7 +1138,7 @@
 "res_uninst_unmanaged_q" = "You're going to delete %@. It's not from catalog, so please be sure you have a backup if needed.";
 "res_details" = "Detaloj";
 "res_type" = "Speco";
-"res_unknown" = "Unknown";
+"res_unknown" = "Nekonata";
 "res_size" = "Grando";
 "res_created_on" = "Kreita je";
 "res_update_all" = "Update all";
@@ -2056,7 +2054,7 @@
 "rendering_attr_highway_class_road_name" = "Vojoj";
 "rendering_value_translucent_green_name" = "Helverda diafana";
 "rendering_value_translucent_yellow_name" = "Flava diafana";
-"rendering_attr_OSMMapperAssistant_name" = "Etikedoj“riparu min!”";
+"rendering_attr_OSMMapperAssistant_name" = "Ŝlosiloj “Riparu min!”";
 "routing_attr_avoid_borders_name" = "Sen landlimaj trairejoj";
 "rendering_value_walkingRoutesScopeOSMC_name" = "prizorganto";
 "rendering_attr_smoothness_excellent_name" = "Bonega";
@@ -2307,7 +2305,7 @@
 "walking_route_osmc_description" = "Color routes according to their individual local color (if present on OpenStreetMap) and type (international, regional, local).";
 "rendering_value_walkingRoutesOSMCNodes_description" = "Kolorigi kursojn laŭ speco de reto (interŝtata, regiona, loka).";
 "rendering_value_walkingRoutesScopeOSMC_description" = "Kolorigi kursojn laŭ prizorganto.";
-"rendering_value_walkingRoutesOSMC_description" = "Kolorigi kursojn laŭ iliaj koloroj kaj emblemoj en la realo (se ekzistas en OSM – ŝlosilo “osmc:symbol=”).";
+"rendering_value_walkingRoutesOSMC_description" = "Kolorigi kursojn laŭ iliaj koloroj kaj emblemoj en la realo (se ekzistas en OSM – ŝlosilo «osmc:symbol»).";
 "routes_color_by_type" = "Kolorigi kursojn laŭ…";
 
 // Release Notes
@@ -2462,3 +2460,33 @@
 "shared_string_data" = "Datumoj";
 "on_hold" = "Ĉesigita";
 "paused" = "Paŭzigita";
+"mtb_segment_classification" = "Klasifiko de segmentoj";
+"map_settings_weather_temp" = "Temperaturo";
+"depth_contour_lines" = "Maraj profundec-kurboj";
+"weather_offline_forecast" = "Malkonekta veterprognozo";
+"measurement_units" = "Mezurunuoj";
+"map_settings_weather_cloud" = "Nub-kovriĝo";
+"map_settings_weather_wind" = "Vento";
+"map_settings_weather_precip" = "Precipitaĵoj";
+"show_borders_of_downloaded_maps" = "Montri randojn de elŝutitaj mapoj";
+"cloud_conflict" = "Konflikto";
+"cloud_all_changes_uploaded" = "Alŝutis ĉiujn ŝanĝojn";
+"new_file" = "Nova dosiero";
+"modified_file" = "Modifita dosiero";
+"deleted_file" = "Forigita dosiero";
+"sync_now" = "Samtempigi nun";
+"local_changes" = "Lokaj ŝanĝoj";
+"upload_change" = "Alŝuti ŝanĝon";
+"cloud_version_will_be_removed" = "Versio en la nubo estos forigita";
+"local_file_will_be_restored" = "Loka dosiero estos restarigita";
+"cloud_changes_will_be_dismissed" = "Ŝanĝoj en la nubo perdiĝos";
+"local_changes_will_be_dismissed" = "Lokaj ŝanĝoj perdiĝos";
+"cloud_recent_changes" = "Ŝanĝoj";
+"cloud_all_changes_downloaded" = "Elŝutis ĉiujn ŝanĝojn";
+"cloud_all_changes_uploaded_descr" = "Ĉiuj ŝanĝoj faritaj en tiu ĉi aparato estas samtempigitaj kun OsmAnd-Nubo.";
+"cloud_no_conflicts" = "Neniu konflikto";
+"upload_all" = "Alŝuti ĉiujn";
+"shared_string_uploaded" = "Alŝutita";
+"shared_string_do_not_exist" = "Ne ekzistas";
+"last_sync" = "Antaŭa samtempigo";
+"backup_error_failed_to_fetch_remote_items" = "Fiaskis elŝuti dosierliston el la servilo.";

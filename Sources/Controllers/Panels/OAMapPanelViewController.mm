@@ -101,6 +101,7 @@
 #import "OAOpenAddTrackViewController.h"
 #import "OASearchToolbarViewController.h"
 #import "OAWeatherLayerSettingsViewController.h"
+#import "OAMapInfoController.h"
 
 #include <OsmAndCore/CachingRoadLocator.h>
 #include <OsmAndCore/Data/Road.h>
@@ -144,6 +145,7 @@ typedef enum
     OAAutoObserverProxy* _addonsSwitchObserver;
     OAAutoObserverProxy* _destinationRemoveObserver;
     OAAutoObserverProxy* _mapillaryChangeObserver;
+    OAAutoObserverProxy *_weatherSettingsChangeObserver;
 
     BOOL _mapNeedsRestore;
     OAMapMode _mainMapMode;
@@ -213,6 +215,10 @@ typedef enum
     _mapillaryChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                          withHandler:@selector(onMapillaryChanged)
                                                           andObserve:_app.data.mapillaryChangeObservable];
+
+    _weatherSettingsChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                               withHandler:@selector(onWeatherSettingsChange:withKey:andValue:)
+                                                                andObserve:_app.data.weatherSettingsChangeObservable];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onMapGestureAction:) name:kNotificationMapGestureAction object:nil];
 
@@ -397,7 +403,7 @@ typedef enum
     else if ([controller isKindOfClass:OARouteLineAppearanceHudViewController.class])
         _activeTargetType = OATargetRouteLineAppearance;
     else if ([controller isKindOfClass:OAWeatherLayerSettingsViewController.class])
-        _activeTargetType = OATargetRouteWeatherLayerSettings;
+        _activeTargetType = OATargetWeatherLayerSettings;
 
     [self setupScrollableHud:controller];
 }
@@ -467,15 +473,22 @@ typedef enum
     return [self.targetMenuView getStatusBarStyle:[self contextMenuMode] defaultStyle:style];
 }
 
+- (BOOL) hasGpxActiveTargetType
+{
+    return _activeTargetType == OATargetGPX || _activeTargetType == OATargetRouteStartSelection || _activeTargetType == OATargetRouteFinishSelection || _activeTargetType == OATargetRouteIntermediateSelection || _activeTargetType == OATargetImpassableRoadSelection || _activeTargetType == OATargetHomeSelection || _activeTargetType == OATargetWorkSelection || _activeTargetType == OATargetRouteDetails || _activeTargetType == OATargetRouteDetailsGraph;
+}
+
 - (void) onMapillaryChanged
 {
     if (!_app.data.mapillary)
         [_mapillaryController hideMapillaryView];
 }
 
-- (BOOL) hasGpxActiveTargetType
+- (void) onWeatherSettingsChange:(id)observer withKey:(id)key andValue:(id)value
 {
-    return _activeTargetType == OATargetGPX || _activeTargetType == OATargetRouteStartSelection || _activeTargetType == OATargetRouteFinishSelection || _activeTargetType == OATargetRouteIntermediateSelection || _activeTargetType == OATargetImpassableRoadSelection || _activeTargetType == OATargetHomeSelection || _activeTargetType == OATargetWorkSelection || _activeTargetType == OATargetRouteDetails || _activeTargetType == OATargetRouteDetailsGraph;
+    NSString *operation = (NSString *) key;
+    if ([operation isEqualToString:kWeatherSettingsChanging])
+        _activeTargetType = self.hudViewController.mapInfoController.weatherToolbarVisible ? OATargetWeatherToolbar : OATargetNone;
 }
 
 - (void) onAddonsSwitch:(id)observable withKey:(id)key andValue:(id)value
@@ -1011,6 +1024,12 @@ typedef enum
         [self.routeInfoView updateMenu];
 }
 
+- (void) updateRouteInfoData
+{
+    if ([self isRouteInfoVisible])
+        [self.routeInfoView update];
+}
+
 - (void) addWaypoint
 {
     [self.routeInfoView addWaypoint];
@@ -1278,7 +1297,8 @@ typedef enum
     || (_activeTargetType == OATargetRoutePlanning && !_isNewContextMenuStillEnabled)
     || _activeTargetType == OATargetGPX
     || _activeTargetType == OATargetRouteLineAppearance
-    || _activeTargetType == OATargetRouteWeatherLayerSettings;
+    || _activeTargetType == OATargetWeatherLayerSettings
+    || _activeTargetType == OATargetWeatherToolbar;
 }
 
 - (void) showContextMenu:(OATargetPoint *)targetPoint saveState:(BOOL)saveState
@@ -1691,6 +1711,15 @@ typedef enum
          [_hudViewController.quickActionController hideActionsSheetAnimated];
  }
 
+- (void) updateTargetPointPosition:(CGFloat)height animated:(BOOL)animated
+{
+    if ((![self.targetMenuView isLandscape] && self.targetMenuView.showFullScreen) || (self.targetMenuView.targetPoint.type == OATargetImpassableRoadSelection && !_routingHelper.isRouteCalculated))
+        return;
+    
+    Point31 targetPoint31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_targetLatitude, _targetLongitude))];
+    [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:([self.targetMenuView isLandscape] ? self.targetMenuView.frame.size.width + 20.0 : 0.0) bottomInset:([self.targetMenuView isLandscape] ? 0.0 : height) centerBBox:(_targetMode == EOATargetBBOX) animated:animated];
+}
+
 #pragma mark - OATargetPointViewDelegate
 
 - (void) targetResetCustomStatusBarStyle
@@ -1758,7 +1787,8 @@ typedef enum
     OAEditPointViewController *controller =
             [[OAEditPointViewController alloc] initWithLocation:self.targetMenuView.targetPoint.location
                                                           title:self.targetMenuView.targetPoint.title
-                                                    customParam:self.targetMenuView.targetPoint.titleAddress
+                                                        address:self.targetMenuView.targetPoint.titleAddress
+                                                    customParam:nil
                                                       pointType:EOAEditPointTypeFavorite
                                                 targetMenuState:nil
                                                             poi:poi];
@@ -1912,6 +1942,7 @@ typedef enum
     OAPOI *poi = [self getTargetPointPoi];
     OAEditPointViewController *controller = [[OAEditPointViewController alloc] initWithLocation:location
                                                                                           title:title
+                                                                                        address:self.targetMenuView.targetPoint.titleAddress
                                                                                     customParam:gpxFileName
                                                                                       pointType:EOAEditPointTypeWaypoint
                                                                                 targetMenuState:_activeViewControllerState
@@ -1999,13 +2030,14 @@ typedef enum
         [self displayGpxOnMap:[[OASavingTrackHelper sharedInstance] getCurrentGPX]];
 }
 
+- (void) targetViewOnAppear:(CGFloat)height animated:(BOOL)animated
+{
+    [self updateTargetPointPosition:height animated:animated];
+}
+
 - (void) targetViewHeightChanged:(CGFloat)height animated:(BOOL)animated
 {
-    if ((![self.targetMenuView isLandscape] && self.targetMenuView.showFullScreen) || (self.targetMenuView.targetPoint.type == OATargetImpassableRoadSelection && !_routingHelper.isRouteCalculated))
-        return;
-    
-    Point31 targetPoint31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_targetLatitude, _targetLongitude))];
-    [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:([self.targetMenuView isLandscape] ? kInfoViewLanscapeWidth : 0.0) bottomInset:([self.targetMenuView isLandscape] ? 0.0 : height) centerBBox:(_targetMode == EOATargetBBOX) animated:animated];
+    [self updateTargetPointPosition:height animated:animated];
 }
 
 - (void) showTargetPointMenu:(BOOL)saveMapState showFullMenu:(BOOL)showFullMenu
@@ -2168,13 +2200,6 @@ typedef enum
     }
     
     [self.view addSubview:self.targetMenuView];
-    OAMapRendererView *renderView = (OAMapRendererView*)_mapViewController.view;
-    Point31 targetPoint31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_targetLatitude, _targetLongitude))];
-    BOOL landscape = ([self.targetMenuView isLandscape] || OAUtilities.isIPad) && !OAUtilities.isWindowed;
-    if (_targetMenuView.targetPoint.type != OATargetRouteDetailsGraph && _targetMenuView.targetPoint.type != OATargetRouteDetails && _targetMenuView.targetPoint.type != OATargetImpassableRoadSelection)
-    {
-        [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mapStateSaved ? _mainMapTarget31 : renderView.target31] leftInset:landscape ? self.targetMenuView.frame.size.width + 20.0 : 0 bottomInset:landscape ? 0.0 : [self.targetMenuView getHeaderViewHeight] centerBBox:(_targetMode == EOATargetBBOX) animated:YES];
-    }
     
     if (onComplete)
         onComplete();
@@ -2610,6 +2635,7 @@ typedef enum
     }
     [self doShowGpxItem:item state:state trackHudMode:trackHudMode];
 }
+
 
 - (void)doShowGpxItem:(OAGPX *)item
                 state:(OATrackMenuViewControllerState *)state

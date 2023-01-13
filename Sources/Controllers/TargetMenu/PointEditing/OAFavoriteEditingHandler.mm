@@ -45,9 +45,7 @@
         [self commonInit];
         
         // Create favorite
-        OsmAnd::PointI locationPoint;
-        locationPoint.x = OsmAnd::Utilities::get31TileNumberX(location.longitude);
-        locationPoint.y = OsmAnd::Utilities::get31TileNumberY(location.latitude);
+        OsmAnd::LatLon locationPoint(location.latitude, location.longitude);
         
         QString elevation;
         QString time = QString::fromNSString([OAFavoriteItem toStringDate:[NSDate date]]);
@@ -65,10 +63,9 @@
         _iconName = poiIconName;
         
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        NSString *groupName;
-        if ([userDefaults objectForKey:kFavoriteDefaultGroupKey])
-            groupName = [userDefaults stringForKey:kFavoriteDefaultGroupKey];
-        
+        NSString *groupName = [userDefaults objectForKey:kFavoriteDefaultGroupKey] ? [userDefaults stringForKey:kFavoriteDefaultGroupKey] : @"";
+        QString group = QString::fromNSString(groupName);
+
         OAFavoriteColor *favCol = [OADefaultFavorite builtinColors].firstObject;
         
         UIColor* color_ = favCol.color;
@@ -77,11 +74,7 @@
                  green:&g
                   blue:&b
                  alpha:&a];
-        
-        QString group;
-        if (groupName)
-            group = QString::fromNSString(groupName);
-        
+
         auto favorite = _app.favoritesCollection->createFavoriteLocation(locationPoint,
                                                                         elevation,
                                                                         time,

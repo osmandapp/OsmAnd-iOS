@@ -10,7 +10,7 @@
 #import "OATableViewCustomFooterView.h"
 #import "OAFoldersCollectionView.h"
 #import "OASlider.h"
-#import "OAIconTextDividerSwitchCell.h"
+#import "OASwitchTableViewCell.h"
 #import "OAIconTitleValueCell.h"
 #import "OAColorsTableViewCell.h"
 #import "OATextLineViewCell.h"
@@ -32,6 +32,7 @@
 #import "OAPluginPopupViewController.h"
 #import "OASegmentedSlider.h"
 #import "OARouteStatisticsHelper.h"
+#import "OASizes.h"
 
 #define kColorsSection 1
 
@@ -298,13 +299,13 @@
     NSMutableArray<OAGPXTableSectionData *> *appearanceSections = [NSMutableArray array];
     OAGPXTableCellData *directionCellData = [OAGPXTableCellData withData:@{
             kTableKey:@"direction_arrows",
-            kCellType:[OAIconTextDividerSwitchCell getCellIdentifier],
+            kCellType:[OASwitchTableViewCell getCellIdentifier],
             kCellTitle:OALocalizedString(@"gpx_dir_arrows")
     }];
 
     OAGPXTableCellData *startFinishCellData = [OAGPXTableCellData withData:@{
             kTableKey:@"start_finish_icons",
-            kCellType:[OAIconTextDividerSwitchCell getCellIdentifier],
+            kCellType:[OASwitchTableViewCell getCellIdentifier],
             kCellTitle:OALocalizedString(@"track_show_start_finish_icons")
     }];
 
@@ -433,7 +434,7 @@
 
     OAGPXTableCellData *joinGapsCellData = [OAGPXTableCellData withData:@{
             kTableKey:@"join_gaps",
-            kCellType:[OAIconTextDividerSwitchCell getCellIdentifier],
+            kCellType:[OASwitchTableViewCell getCellIdentifier],
             kCellTitle:OALocalizedString(@"gpx_join_gaps")
     }];
 
@@ -733,24 +734,23 @@
         }
         outCell = cell;
     }
-    else if ([cellData.type isEqualToString:[OAIconTextDividerSwitchCell getCellIdentifier]])
+    else if ([cellData.type isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OAIconTextDividerSwitchCell *cell =
-                [tableView dequeueReusableCellWithIdentifier:[OAIconTextDividerSwitchCell getCellIdentifier]];
+        OASwitchTableViewCell *cell =
+                [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextDividerSwitchCell getCellIdentifier]
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier]
                                                          owner:self options:nil];
-            cell = (OAIconTextDividerSwitchCell *) nib[0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
-            cell.dividerView.hidden = YES;
-            [cell showIcon:NO];
+            cell = (OASwitchTableViewCell *) nib[0];
+            cell.separatorInset = UIEdgeInsetsMake(0., kPaddingOnSideOfContent, 0., 0.);
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
         }
         if (cell)
         {
             cell.switchView.on = [self isOn:cellData];
-            cell.textView.text = cellData.title;
+            cell.titleLabel.text = cellData.title;
 
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
@@ -967,10 +967,10 @@
             cell.sliderView.selectedMark = [arrayValue indexOfObject:cellData.values[@"custom_string_value"]];
 
             cell.sliderView.tag = indexPath.section << 10 | indexPath.row;
-            [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventAllEvents];
+            [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
             [cell.sliderView addTarget:self
                                 action:@selector(sliderChanged:)
-                      forControlEvents:UIControlEventTouchUpInside];
+                      forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
         }
         outCell = cell;
     }

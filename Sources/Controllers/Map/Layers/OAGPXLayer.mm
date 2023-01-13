@@ -47,6 +47,7 @@
     std::shared_ptr<OsmAnd::GpxAdditionalIconsProvider> _startFinishProvider;
     BOOL _showCaptionsCache;
     OsmAnd::PointI _hiddenPointPos31;
+    double _textScaleFactor;
 
     NSMutableDictionary<NSString *, NSMutableDictionary<NSString *, id> *> *_cachedTracks;
     QHash< QString, QList<OsmAnd::FColorARGB> > _cachedColors;
@@ -64,6 +65,7 @@
     
     _hiddenPointPos31 = OsmAnd::PointI();
     _showCaptionsCache = self.showCaptions;
+    _textScaleFactor = [[OAAppSettings sharedManager].textSize get];
 
     _linesCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
 
@@ -89,12 +91,15 @@
 - (BOOL) updateLayer
 {
     [super updateLayer];
-    
-    if (self.showCaptions != _showCaptionsCache)
+
+    CGFloat textScaleFactor = [[OAAppSettings sharedManager].textSize get];
+    if (self.showCaptions != _showCaptionsCache || _textScaleFactor != textScaleFactor)
     {
         _showCaptionsCache = self.showCaptions;
+        _textScaleFactor = textScaleFactor;
         dispatch_async(dispatch_get_main_queue(), ^{
             [self refreshGpxWaypoints];
+            [self refreshStartFinishPoints];
         });
     }
 
@@ -341,7 +346,7 @@
         }
         [self.mapView addKeyedSymbolsProvider:_linesCollection];
     }
-    [self setVectorLineProvider:_linesCollection];
+    [self setVectorLineProvider:_linesCollection sync:YES];
     [self refreshGpxWaypoints];
     [self refreshStartFinishPoints];
 }
@@ -633,13 +638,22 @@ colorizationScheme:(int)colorizationScheme
             }
         }
     }
-    
-    _startFinishProvider.reset(new OsmAnd::GpxAdditionalIconsProvider(
-                                                                      self.pointsOrder - 20000, UIScreen.mainScreen.scale, startFinishPoints, splitLabels,
-        [OANativeUtilities skImageFromPngResource:@"map_track_point_start"],
-        [OANativeUtilities skImageFromPngResource:@"map_track_point_finish"],
-        [OANativeUtilities skImageFromPngResource:@"map_track_point_start_finish"]));
-        
+
+    sk_sp<SkImage> startIcon = [OANativeUtilities skImageFromPngResource:@"map_track_point_start"];
+    sk_sp<SkImage> finishIcon = [OANativeUtilities skImageFromPngResource:@"map_track_point_finish"];
+    sk_sp<SkImage> startFinishIcon = [OANativeUtilities skImageFromPngResource:@"map_track_point_start_finish"];
+    _startFinishProvider.reset(new OsmAnd::GpxAdditionalIconsProvider(self.pointsOrder - 20000,
+                                                                      UIScreen.mainScreen.scale,
+                                                                      startFinishPoints,
+                                                                      splitLabels,
+                                                                      [OANativeUtilities getScaledSkImage:startIcon
+                                                                                              scaleFactor:_textScaleFactor],
+                                                                      [OANativeUtilities getScaledSkImage:finishIcon
+                                                                                              scaleFactor:_textScaleFactor],
+                                                                      [OANativeUtilities getScaledSkImage:startFinishIcon
+                                                                                              scaleFactor:_textScaleFactor]
+                                                                      ));
+
     [self.mapView addTiledSymbolsProvider:_startFinishProvider];
 }
 
@@ -682,7 +696,7 @@ colorizationScheme:(int)colorizationScheme
             hiddenPoints.append(_hiddenPointPos31);
             
         _waypointsMapProvider.reset(new OAWaypointsMapLayerProvider(points, self.pointsOrder - points.count() - 1, hiddenPoints,
-                                                                    self.showCaptions, self.captionStyle, self.captionTopSpace, rasterTileSize));
+                                                                    self.showCaptions, self.captionStyle, self.captionTopSpace, rasterTileSize, _textScaleFactor));
         [self.mapView addTiledSymbolsProvider:_waypointsMapProvider];
     }
 }

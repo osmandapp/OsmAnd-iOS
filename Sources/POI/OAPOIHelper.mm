@@ -420,10 +420,13 @@
 
 - (OAPOIType *) getPoiTypeByCategory:(NSString *)category name:(NSString *)name
 {
-    for (OAPOIType *t in _poiTypes)
-        if ([t.category.name isEqualToString:category] && [t.name isEqualToString:name])
-            return t;
-    
+    for (OAPOICategory *c in _poiCategories)
+    {
+        if ([c.name isEqualToString:category])
+        {
+            return [c getPoiTypeByKeyName:name];
+        }
+    }
     return nil;
 }
 
@@ -1144,7 +1147,7 @@
     return [self.class parsePOIByAmenity:amenity type:type];
 }
 
-+ (OAPOIType *) parsePOITypeByAmenity:(std::shared_ptr<const OsmAnd::Amenity>)amenity
++ (OAPOIType *) parsePOITypeByAmenity:(const std::shared_ptr<const OsmAnd::Amenity> &)amenity
 {
     OAPOIHelper *helper = [OAPOIHelper sharedInstance];
 

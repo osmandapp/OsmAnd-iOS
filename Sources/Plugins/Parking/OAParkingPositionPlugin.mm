@@ -203,7 +203,6 @@
         _parkingPlaceControl = [self createParkingPlaceInfoControl];
         
         [mapInfoController registerSideWidget:_parkingPlaceControl imageId:@"ic_custom_parking" message:[self getName] key:PLUGIN_ID left:NO priorityOrder:10];
-        [mapInfoController recreateControls];
     }
 }
 
@@ -221,7 +220,6 @@
             {
                 OAMapInfoController *mapInfoController = [self getMapInfoController];
                 [mapInfoController removeSideWidget:_parkingPlaceControl];
-                [mapInfoController recreateControls];
                 _parkingPlaceControl = nil;
             }
         }

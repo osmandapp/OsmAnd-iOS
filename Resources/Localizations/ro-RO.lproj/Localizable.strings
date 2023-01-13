@@ -1056,7 +1056,6 @@
 "routing_attr_driving_style_safety_name" = "Preferă drumurile secundare";
 "index_item_depth_contours_osmand_ext" = "Contururi nautice de adâncime";
 "replace_all_desc" = "Elementele curente vor fiînlocuite cu elemente din fișierul";
-"map_orientation_change_in_accordance_with_speed" = "Pragul de orientare a hărții";
 "transport_nearby_routes" = "În cadrul";
 "transport_nearby_routes_within" = "Rutele apropiate din cadrul";
 "rendering_attr_whiteWaterSports_name" = "Sporturi Whitewater";
@@ -1082,7 +1081,6 @@
 "nav_type_osmand" = "OsmAnd (rutare offline)";
 "nav_type_descr" = "Selectați modul de calculare a unui traseu pentru acest profil";
 "change_map_behavior" = "Modificarea comportamentului hărții în timpul navigării";
-"map_orientation_change_in_accordance_with_speed_descr" = "Selectați viteza sub care orientarea hărții se schimbă de la 'În direcția de deplasare' la 'În funcție de busolă'";
 "general_settings_descr" = "Temă app, unități, regiune";
 "arrows_direction_to_markers" = "Săgețile indică direcția către markerul activ dacă acesta se află în afara ecranului. Liniile de direcție trasează o linie către markerii activi.";
 "choose_how_display_distance" = "Alegeți cum să afișați distanța până la markerii activi";
@@ -2662,7 +2660,7 @@
 "backup_empty_data_from_category" = "OsmAnd Cloud nu include niciun fel de date din această categorie.";
 "cloud_confirm_delete_type" = "Sunteți sigur că doriți să ștergeți \"%@\" din OsmAnd Cloud?";
 "cross_buy" = "Cumpărare încrucișată";
-"purchases_feature_desc_cross_buy" = "Utilizați toate funcțiile abonamentului pe mai multe platforme, fără costuri suplimentare. Disponibil pe Android/iOS/Web.";
+"purchases_feature_desc_cross_buy" = "Utilizați toate funcțiile abonamentului pe mai multe platforme, fără costuri suplimentare.";
 "login_open_street_map_org" = "Conectați-vă la OpenStreetMap.org";
 "shared_string_not_included" = "Nu este inclus";
 "backup_deleting_all_data" = "Ștergerea tuturor datelor";

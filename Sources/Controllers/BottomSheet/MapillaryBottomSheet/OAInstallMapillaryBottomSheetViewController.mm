@@ -18,7 +18,6 @@
 #import "OAAppSettings.h"
 #import "OADescrTitleCell.h"
 #import "OAMapillaryPlugin.h"
-#import "OASwitchTableViewCell.h"
 
 #define kButtonsDividerTag 150
 
@@ -170,15 +169,6 @@
 - (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section
 {
     view.hidden = YES;
-}
-
-- (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSDictionary *item = _data[indexPath.row];
-    if (![item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
-        return indexPath;
-    else
-        return nil;
 }
 
 @synthesize vwController;

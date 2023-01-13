@@ -149,7 +149,6 @@
 #define speedSystemKey @"speedSystem"
 #define angularUnitsKey @"angularUnits"
 #define speedLimitExceedKey @"speedLimitExceed"
-#define switchMapDirectionToCompassKey @"switchMapDirectionToCompass"
 #define showArrivalTimeKey @"showArrivalTime"
 #define showIntermediateArrivalTimeKey @"showIntermediateArrivalTime"
 #define showRelativeBearingKey @"showRelativeBearing"
@@ -228,8 +227,6 @@
 #define mapillaryFilterEndDateKey @"mapillaryFilterEndDate"
 #define mapillaryFilterPanoKey @"mapillaryFilterPano"
 
-#define weatherButtonIsOnKey @"weatherButtonIsOn"
-
 #define quickActionIsOnKey @"qiuckActionIsOn"
 #define quickActionsListKey @"quickActionsList"
 #define isQuickActionTutorialShownKey @"isQuickActionTutorialShown"
@@ -306,6 +303,7 @@
 #define backupPurchaseExpireTimeKey @"backupPurchaseExpireTime"
 #define backupPurchaseStateKey @"backupPurchaseState"
 #define proSubscriptionOriginKey @"proSubscriptionOrigin"
+#define proSubscriptionDurationKey @"proSubscriptionDuration"
 #define purchaseIdentifiersKey @"purchaseIdentifiers"
 
 #define userIosIdKey @"userIosId"
@@ -395,6 +393,8 @@
 #define lastProfileSettingsModifiedTimeKey @"lastProfileSettingsModifiedTime"
 
 #define lastUUIDChangeTimestampKey @"lastUUIDChangeTimestamp"
+
+#define kShowHeightmapsKey @"showHeightmaps"
 
 @implementation OACompassMode
 
@@ -3834,9 +3834,7 @@
         _speedSystem = [OACommonSpeedConstant withKey:speedSystemKey defValue:KILOMETERS_PER_HOUR];
         _angularUnits = [OACommonAngularConstant withKey:angularUnitsKey defValue:DEGREES];
         _speedLimitExceedKmh = [OACommonDouble withKey:speedLimitExceedKey defValue:5.f];
-        _switchMapDirectionToCompass = [OACommonDouble withKey:switchMapDirectionToCompassKey defValue:0.f];
 
-        [_profilePreferences setObject:_switchMapDirectionToCompass forKey:@"speed_for_map_to_direction_of_movement"];
         [_profilePreferences setObject:_speedLimitExceedKmh forKey:@"speed_limit_exceed"];
         [_profilePreferences setObject:_angularUnits forKey:@"angular_measurement"];
         [_profilePreferences setObject:_speedSystem forKey:@"default_speed_system"];
@@ -4018,9 +4016,6 @@
         // Custom plugins
         _customPluginsJson = [[NSUserDefaults standardUserDefaults] objectForKey:customPluginsJsonKey] ? [[NSUserDefaults standardUserDefaults] stringForKey:customPluginsJsonKey] : @"";
 
-        _weatherButtonIsOn = [OACommonBoolean withKey:weatherButtonIsOnKey defValue:NO];
-        [_profilePreferences setObject:_weatherButtonIsOn forKey:@"weather_button_state"];
-
         // Direction Appearance
         _activeMarkers = [OACommonActiveMarkerConstant withKey:activeMarkerKey defValue:ONE_ACTIVE_MARKER];
         [_profilePreferences setObject:_activeMarkers forKey:@"displayed_markers_widgets_count"];
@@ -4130,6 +4125,7 @@
         _backupPurchaseExpireTime = [[OACommonLong withKey:backupPurchaseExpireTimeKey defValue:0] makeGlobal];
         _backupPurchaseState = [[OACommonSubscriptionState withKey:backupPurchaseStateKey defValue:OASubscriptionState.UNDEFINED] makeGlobal];
         _proSubscriptionOrigin = [[OACommonInteger withKey:proSubscriptionOriginKey defValue:-1] makeGlobal];
+        _proSubscriptionDuration = [[OACommonInteger withKey:proSubscriptionDurationKey defValue:-1] makeGlobal];
         
         [_globalPreferences setObject:_backupPromocode forKey:@"backup_promocode"];
         [_globalPreferences setObject:_backupPurchaseActive forKey:@"backup_promocode_active"];
@@ -4137,6 +4133,7 @@
         [_globalPreferences setObject:_backupPurchaseExpireTime forKey:@"promo_website_expire_time"];
         [_globalPreferences setObject:_backupPurchaseState forKey:@"promo_website_state"];
         [_globalPreferences setObject:_proSubscriptionOrigin forKey:@"pro_subscription_origin"];
+        [_globalPreferences setObject:_proSubscriptionDuration forKey:@"backup_purchase_period"];
         
         _purchasedIdentifiers = [[OACommonString withKey:purchaseIdentifiersKey defValue:@""] makeGlobal];
 
@@ -4198,6 +4195,9 @@
 
         _levelToSwitchVectorRaster = [[OACommonInteger withKey:debugRenderingInfoKey defValue:1] makeGlobal];
         [_globalPreferences setObject:_levelToSwitchVectorRaster forKey:@"level_to_switch_vector_raster"];
+        
+        _showHeightmaps = [[[OACommonBoolean withKey:kShowHeightmapsKey defValue:NO] makeGlobal] makeShared];
+        [_globalPreferences setObject:_showHeightmaps forKey:@"show_heightmaps"];
 
         // For now this can be changed only in TestVoiceActivity
 //        public final OsmandPreference<Integer>[] VOICE_PROMPT_DELAY = new IntPreference[10];

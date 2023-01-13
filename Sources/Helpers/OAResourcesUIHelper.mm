@@ -62,6 +62,8 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         case OsmAndResourceType::MapRegion:
         case OsmAndResourceType::DepthContourRegion:
             return OALocalizedString(@"map_settings_map");
+        case OsmAndResourceType::DepthMapRegion:
+            return OALocalizedString(@"nautical_depth");
         case OsmAndResourceType::SrtmMapRegion:
             return OALocalizedString(@"res_srtm");
         case OsmAndResourceType::WikiMapRegion:
@@ -76,6 +78,8 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             return OALocalizedString(@"online_map");
         case OsmAndResourceType::WeatherForecast:
             return OALocalizedString(@"weather_forecast");
+        case OsmAndResourceType::HeightmapRegion:
+            return OALocalizedString(@"res_heightmap");
         default:
             return OALocalizedString(@"res_unknown");
     }
@@ -145,6 +149,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         case OsmAndResourceType::SrtmMapRegion:
             return 40;
         case OsmAndResourceType::DepthContourRegion:
+        case OsmAndResourceType::DepthMapRegion:
             return 45;
         case OsmAndResourceType::HillshadeRegion:
             return 50;
@@ -183,6 +188,8 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         return OsmAndResourceType::SrtmMapRegion;
     else if ([scopeId isEqualToString:@"depth"])
         return OsmAndResourceType::DepthContourRegion;
+    else if ([scopeId isEqualToString:@"depthmap"])
+        return OsmAndResourceType::DepthMapRegion;
     else if ([scopeId isEqualToString:@"hillshade"])
         return OsmAndResourceType::HillshadeRegion;
     else if ([scopeId isEqualToString:@"slope"])
@@ -201,9 +208,10 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         return OsmAndResourceType::SqliteFile;
     else if ([scopeId isEqualToString:@"weather_forecast"])
         return OsmAndResourceType::WeatherForecast;
+    else if ([scopeId isEqualToString:@"heightmap"])
+        return OsmAndResourceType::HeightmapRegion;
 
     //TODO: add another types from ResourcesManager.h
-    //HeightmapRegion,
     //MapStyle,
     //MapStylesPresets,
     //OnlineTileSources,
@@ -224,6 +232,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             [self.class toValue:OsmAndResourceType::RoadMapRegion],
             [self.class toValue:OsmAndResourceType::SrtmMapRegion],
             [self.class toValue:OsmAndResourceType::DepthContourRegion],
+            [self.class toValue:OsmAndResourceType::DepthMapRegion],
             [self.class toValue:OsmAndResourceType::HillshadeRegion],
             [self.class toValue:OsmAndResourceType::SlopeRegion],
             [self.class toValue:OsmAndResourceType::WikiMapRegion],
@@ -630,8 +639,8 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             return OALocalizedString(@"res_wsea_map");
 
         auto name = resource->id;
-        name = name.remove(QStringLiteral("_osmand_ext")).remove(QStringLiteral(".depth.obf")).mid(6).replace('_', ' ');
-        return [[NSString alloc] initWithFormat:@"%@ %@", OALocalizedString(@"download_depth_countours"), name.toNSString().capitalizedString];
+        name = name.remove(QStringLiteral(".depth.obf")).replace('_', ' ');
+        return name.toNSString().capitalizedString;
     }
 
     return [OAResourcesUIHelper titleOfResourceType:resource->type inRegion:region withRegionName:includeRegionName withResourceType:includeResourceType];
@@ -652,7 +661,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         case OsmAndResourceType::HillshadeRegion:
         case OsmAndResourceType::SlopeRegion:
         case OsmAndResourceType::WeatherForecast:
-
+        case OsmAndResourceType::HeightmapRegion:
             if ([region.subregions count] > 0)
             {
                 if (!includeRegionName || region == nil)
@@ -823,10 +832,19 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 + (OAWorldRegion*) findRegionOrAnySubregionOf:(OAWorldRegion*)region
                          thatContainsResource:(const QString&)resourceId
 {
-    const auto& downloadsIdPrefix = QString::fromNSString(region.downloadsIdPrefix);
+    const auto downloadsIdPrefix = QString::fromNSString(region.downloadsIdPrefix);
+    const auto acceptedExtension = QString::fromNSString(region.acceptedExtension);
 
-    if (resourceId.startsWith(downloadsIdPrefix))
+    if (!acceptedExtension.isEmpty())
+    {
+        if (resourceId.endsWith(acceptedExtension))
+            return region;
+        return nil;
+    }
+    else if (resourceId.startsWith(downloadsIdPrefix))
+    {
         return region;
+    }
 
     for (OAWorldRegion* subregion in region.subregions)
     {

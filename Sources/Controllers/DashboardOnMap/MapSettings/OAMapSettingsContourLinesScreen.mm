@@ -15,7 +15,7 @@
 #import "OAAppSettings.h"
 #import "OASegmentSliderTableViewCell.h"
 #import "OAMapViewController.h"
-#import "OASettingSwitchCell.h"
+#import "OASwitchTableViewCell.h"
 #import "OAColors.h"
 #import "OAColorsTableViewCell.h"
 #import "OAResourcesUIHelper.h"
@@ -499,21 +499,21 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     
     if ([item[@"type"] isEqualToString:kCellTypeSwitch])
     {
-        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
+        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
-            cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.descriptionView.hidden = YES;
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASwitchTableViewCell *) nib[0];
+            [cell descriptionVisibility:NO];
         }
         if (cell)
         {
-            cell.textView.text = [self isContourLinesOn] ? OALocalizedString(@"shared_string_enabled") : OALocalizedString(@"rendering_value_disabled_name");
+            cell.titleLabel.text = [self isContourLinesOn] ? OALocalizedString(@"shared_string_enabled") : OALocalizedString(@"rendering_value_disabled_name");
+
             NSString *imgName = [self isContourLinesOn] ? @"ic_custom_show.png" : @"ic_custom_hide.png";
-            cell.imgView.image = [UIImage templateImageNamed:imgName];
-            cell.imgView.tintColor = [self isContourLinesOn] ? UIColorFromRGB(color_dialog_buttons_dark) : UIColorFromRGB(color_tint_gray);
-            
+            cell.leftIconView.image = [UIImage templateImageNamed:imgName];
+            cell.leftIconView.tintColor = [self isContourLinesOn] ? UIColorFromRGB(color_dialog_buttons_dark) : UIColorFromRGB(color_tint_gray);
+
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.switchView setOn:[self isContourLinesOn]];
             [cell.switchView addTarget:self action:@selector(mapSettingSwitchChanged:) forControlEvents:UIControlEventValueChanged];
@@ -592,18 +592,17 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         }
         if (cell)
         {
-            [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventAllEvents];
             OAMapStyleParameter *p = (OAMapStyleParameter *)item[@"parameter"];
             cell.topLeftLabel.text = item[@"name"];
             cell.sliderView.tag = indexPath.section << 10 | indexPath.row;
+            [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
             if ([p.name isEqualToString:CONTOUR_DENSITY_ATTR])
             {
                 NSString *v = p.value.length == 0 ? kDefaultDensity : p.value;
                 cell.topRightLabel.text = [self getLocalizedParamValue:v];
                 [cell.sliderView setNumberOfMarks:_visibleDensityValues.count additionalMarksBetween:0];
                 cell.sliderView.selectedMark = [_visibleDensityValues indexOfObject:v];
-                [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
-                [cell.sliderView addTarget:self action:@selector(densityChanged:) forControlEvents:UIControlEventTouchUpInside];
+                [cell.sliderView addTarget:self action:@selector(densityChanged:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
             }
             else if ([p.name isEqualToString:CONTOUR_WIDTH_ATTR])
             {
@@ -611,8 +610,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                 cell.topRightLabel.text = [self getLocalizedParamValue:v];
                 [cell.sliderView setNumberOfMarks:_visibleWidthValues.count additionalMarksBetween:0];
                 cell.sliderView.selectedMark = [_visibleWidthValues indexOfObject:v];
-                [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
-                [cell.sliderView addTarget:self action:@selector(widthChanged:) forControlEvents:UIControlEventTouchUpInside];
+                [cell.sliderView addTarget:self action:@selector(widthChanged:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
             }
             if ([cell needsUpdateConstraints])
                 [cell updateConstraints];

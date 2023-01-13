@@ -29,10 +29,12 @@ OAFavoritesMapLayerProvider::OAFavoritesMapLayerProvider(const QList<std::shared
                                                          const bool showCaptions_,
                                                          const OsmAnd::TextRasterizer::Style captionStyle_,
                                                          const double captionTopSpace_,
-                                                         const float referenceTileSizeOnScreenInPixels_)
+                                                         const float referenceTileSizeOnScreenInPixels_,
+                                                         const float symbolsScaleFactor_)
 
 : IOAMapTiledCollectionProvider(baseOrder_, hiddenPoints_, showCaptions_, captionStyle_, captionTopSpace_, referenceTileSizeOnScreenInPixels_)
 , _favorites(favorites_)
+, _symbolsScaleFactor(symbolsScaleFactor_)
 {
 }
 
@@ -78,7 +80,8 @@ sk_sp<SkImage> OAFavoritesMapLayerProvider::getBitmapByFavorite(const std::share
     {
         bitmap = bitmapIt.value();
     }
-    return bitmap;
+
+    return [OANativeUtilities getScaledSkImage:bitmap scaleFactor:_symbolsScaleFactor];
 }
 
 QString OAFavoritesMapLayerProvider::backgroundImageNameByType(const QString& type) const

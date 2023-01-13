@@ -138,6 +138,7 @@
     __block NSDate *cachedDate;
 
     NSMeasurementFormatter *formatter = [NSMeasurementFormatter new];
+    formatter.unitStyle = NSFormattingUnitStyleShort;
     formatter.locale = NSLocale.autoupdatingCurrentLocale;
     __block NSString *cachedBandUnit = [formatter displayStringFromUnit:[[OAWeatherBand withWeatherBand:band] getBandUnit]];
 
@@ -168,6 +169,7 @@
         OsmAnd::WeatherTileResourcesManager::ObtainValueAsyncCallback _callback =
             [selfWeak, cachedValue, band, needToUpdate, bandUnit, undefined, weatherControlWeak]
             (const bool succeeded,
+                int64_t requestedTime,
                 const double value,
                 const std::shared_ptr<OsmAnd::Metric>& metric)
             {

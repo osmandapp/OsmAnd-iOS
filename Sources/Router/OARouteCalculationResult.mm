@@ -1324,9 +1324,12 @@
 
             tunnelAlarm = nil;
         }
+        bool lastSegment = routeInd + 1 == list.size();
+        const auto nextSegment = lastSegment ? nullptr : list[routeInd + 1];
+        bool gapAfter = nextSegment != nullptr && !nextSegment->continuesBeyondRouteSegment(s);
         while (true)
         {
-            if (i == s->getEndPointIndex() && routeInd != list.size() - 1)
+            if (i == s->getEndPointIndex() && !gapAfter && !lastSegment)
                 break;
             auto lat = get31LatitudeY(s->object->pointsY[i]);
             auto lon = get31LongitudeX(s->object->pointsX[i]);

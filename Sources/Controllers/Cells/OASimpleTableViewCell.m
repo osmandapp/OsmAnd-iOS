@@ -10,6 +10,7 @@
 
 @interface OASimpleTableViewCell ()
 
+@property (weak, nonatomic) IBOutlet UIStackView *contentOutsideStackViewVertical;
 @property (weak, nonatomic) IBOutlet UIStackView *textCustomMarginTopStackView;
 @property (weak, nonatomic) IBOutlet UIStackView *contentInsideStackView;
 @property (weak, nonatomic) IBOutlet UIStackView *textCustomMarginBottomStackView;
@@ -27,19 +28,27 @@
 - (void)titleVisibility:(BOOL)show
 {
     self.titleLabel.hidden = !show;
+    if (!show && self.descriptionLabel.hidden)
+        self.textStackView.hidden = YES;
+
     [self updateMargins];
 }
 
 - (void)descriptionVisibility:(BOOL)show
 {
     self.descriptionLabel.hidden = !show;
+    if (!show && self.titleLabel.hidden)
+        self.textStackView.hidden = YES;
+
     [self updateMargins];
 }
 
 - (void)updateMargins
 {
-    self.topContentSpaceView.hidden = (self.descriptionLabel.hidden || self.titleLabel.hidden) && [self checkSubviewsToUpdateMargins];
-    self.bottomContentSpaceView.hidden = (self.descriptionLabel.hidden || self.titleLabel.hidden) && [self checkSubviewsToUpdateMargins];
+    BOOL hidden = (self.descriptionLabel.hidden || self.titleLabel.hidden) && [self checkSubviewsToUpdateMargins];
+    self.topContentSpaceView.hidden = hidden;
+    self.bottomContentSpaceView.hidden = hidden;
+    self.contentOutsideStackViewVertical.spacing = hidden ? 3 : 4;
 }
 
 - (BOOL)checkSubviewsToUpdateMargins
@@ -49,18 +58,9 @@
 
 - (void)textIndentsStyle:(EOATableViewCellTextIndentsStyle)style
 {
-    if (style == EOATableViewCellTextNormalIndentsStyle)
-    {
-        self.textCustomMarginTopStackView.spacing = 5.;
-        self.textStackView.spacing = 2.;
-        self.textCustomMarginBottomStackView.spacing = 5.;
-    }
-    else if (style == EOATableViewCellTextIncreasedTopCenterIndentStyle)
-    {
-        self.textCustomMarginTopStackView.spacing = 9.;
-        self.textStackView.spacing = 6.;
-        self.textCustomMarginBottomStackView.spacing = 5.;
-    }
+    self.textCustomMarginTopStackView.spacing = style == EOATableViewCellTextIncreasedTopCenterIndentStyle ? 9. : 5.;
+    self.textStackView.spacing = style == EOATableViewCellTextNormalIndentsStyle ? 2. : 6.;
+    self.textCustomMarginBottomStackView.spacing = 5.;
 }
 
 - (void)anchorContent:(EOATableViewCellContentStyle)style

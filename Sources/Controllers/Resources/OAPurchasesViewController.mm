@@ -69,6 +69,7 @@ static BOOL _purchasesUpdated;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchaseFailed:) name:OAIAPProductPurchaseFailedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRestored:) name:OAIAPProductsRestoredNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRequested:) name:OAIAPProductsRequestSucceedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRequested:) name:OAIAPProductsRequestFailedNotification object:nil];
 
     OAAppSettings.sharedManager.lastReceiptValidationDate = [NSDate dateWithTimeIntervalSince1970:0];
     [[OARootViewController instance] requestProductsWithProgress:NO reload:YES];
@@ -152,16 +153,14 @@ static BOOL _purchasesUpdated;
             else if (product.purchaseState == PSTATE_NOT_PURCHASED)
                 [expiredProducts addObject:product];
         }
-        // Display old purchases if no new purchases are active
-        if (activeProducts.count == 0)
+        for (OAProduct *product in _iapHelper.inAppsPurchased)
         {
-            for (OAProduct *product in _iapHelper.inAppsPurchased)
-            {
-                if (product.purchaseState == PSTATE_PURCHASED)
-                    [activeProducts addObject:product];
-                else if (product.purchaseState == PSTATE_NOT_PURCHASED)
-                    [expiredProducts addObject:product];
-            }
+            if ([activeProducts containsObject:product])
+                continue;
+            if (product.purchaseState == PSTATE_PURCHASED)
+                [activeProducts addObject:product];
+            else if (product.purchaseState == PSTATE_NOT_PURCHASED)
+                [expiredProducts addObject:product];
         }
 
         OAAppSettings *settings = OAAppSettings.sharedManager;

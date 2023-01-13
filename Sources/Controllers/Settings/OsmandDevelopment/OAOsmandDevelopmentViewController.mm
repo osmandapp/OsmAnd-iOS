@@ -13,6 +13,10 @@
 #import "OAColors.h"
 #import "OALocationSimulation.h"
 #import "OAIconTitleValueCell.h"
+#import "OASwitchTableViewCell.h"
+#import "OATableRowData.h"
+#import "OATableDataModel.h"
+#import "OATableSectionData.h"
 #import "OAOsmandDevelopmentSimulateLocationViewController.h"
 
 
@@ -22,7 +26,7 @@
 
 @implementation OAOsmandDevelopmentViewController
 {
-    NSArray<NSArray *> *_data;
+    OATableDataModel* _data;
     NSString *_headerDescription;
 }
 
@@ -71,33 +75,39 @@ NSString *const kSimulateLocationKey = @"kSimulateLocationKey";
 
 - (void) generateData
 {
-    NSMutableArray<NSArray *> *sectionArr = [NSMutableArray new];
-    NSMutableArray *dataArr = [NSMutableArray new];
     BOOL isRouteAnimating = [[OsmAndApp instance].locationServices.locationSimulation isRouteAnimating];
-    
-    [dataArr addObject:@{
-        @"type" : [OAIconTitleValueCell getCellIdentifier],
-        @"key" : kSimulateLocationKey,
-        @"title" : OALocalizedString(@"simulate_routing"),
-        @"value" : isRouteAnimating ? OALocalizedString(@"simulate_in_progress") : @"",
-        @"actionBlock" : (^void(){ [self openSimulateLocationSettings]; }),
-        @"headerTitle" : OALocalizedString(@"osmand_depelopment_simulate_location_section"),
-        @"footerTitle" : @"",
+    _data = [OATableDataModel model];
+    __weak OAOsmandDevelopmentViewController *weakSelf = self;
+    OATableSectionData *simulationSection = [OATableSectionData sectionData];
+    [simulationSection addRowFromDictionary:@{
+        kCellTypeKey : [OAIconTitleValueCell getCellIdentifier],
+        kCellKeyKey : kSimulateLocationKey,
+        kCellTitleKey : OALocalizedString(@"simulate_routing"),
+        kCellDescrKey : isRouteAnimating ? OALocalizedString(@"simulate_in_progress") : @"",
+        @"actionBlock" : (^void(){ [weakSelf openSimulateLocationSettings]; })
     }];
-    [sectionArr addObject:[NSArray arrayWithArray:dataArr]];
+    simulationSection.headerText = OALocalizedString(@"osmand_depelopment_simulate_location_section");
+    [_data addSection:simulationSection];
     
-    _data = sectionArr;
-}
-
-- (NSDictionary *) getItem:(NSIndexPath *)indexPath
-{
-    return _data[indexPath.section][indexPath.row];
+    OATableSectionData *heightMapSection = [OATableSectionData sectionData];
+    [heightMapSection addRowFromDictionary:@{
+        kCellTypeKey : OASwitchTableViewCell.getCellIdentifier,
+        kCellKeyKey : @"display_heightmap",
+        kCellTitleKey : OALocalizedString(@"use_heightmap_setting")
+    }];
+    [_data addSection:heightMapSection];
 }
 
 - (void) reloadData
 {
     [self generateData];
     [self.tableView reloadData];
+}
+
+- (void) applyParameter:(UISwitch *)sender
+{
+    [OAAppSettings.sharedManager.showHeightmaps set:sender.isOn];
+    [OsmAndApp.instance.mapSettingsChangeObservable notifyEvent];
 }
 
 
@@ -115,18 +125,18 @@ NSString *const kSimulateLocationKey = @"kSimulateLocationKey";
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return _data.count;
+    return _data.sectionCount;
 }
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _data[section].count;
+    return [_data rowCount:section];
 }
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary *item = [self getItem:indexPath];
-    NSString *type = item[@"type"];
+    OATableRowData *item = [_data itemForIndexPath:indexPath];
+    NSString *type = item.cellType;
     
     if ([type isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
     {
@@ -142,8 +152,31 @@ NSString *const kSimulateLocationKey = @"kSimulateLocationKey";
         }
         if (cell)
         {
-            cell.textView.text = item[@"title"];
-            cell.descriptionView.text = item[@"value"];
+            cell.textView.text = item.title;
+            cell.descriptionView.text = item.descr;
+        }
+        return cell;
+    }
+    else if ([type isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
+    {
+        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASwitchTableViewCell *) nib[0];
+            cell.switchView.tintColor = UIColorFromRGB(color_bottom_sheet_secondary);
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
+        }
+        
+        if (cell)
+        {
+            cell.titleLabel.text = item.title;
+
+            cell.switchView.on = [OAAppSettings.sharedManager.showHeightmaps get];
+            cell.switchView.tag = indexPath.section << 10 | indexPath.row;
+            [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];
+            [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
         }
         return cell;
     }
@@ -152,14 +185,12 @@ NSString *const kSimulateLocationKey = @"kSimulateLocationKey";
 
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    NSDictionary *item = [self getItem:[NSIndexPath indexPathForRow:0 inSection:section]];
-    return item[@"headerTitle"];
+    return [_data sectionDataForIndex:section].headerText;
 }
 
 - (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
-    NSDictionary *item = [self getItem:[NSIndexPath indexPathForRow:0 inSection:section]];
-    return item[@"footerTitle"];
+    return [_data sectionDataForIndex:section].footerText;
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
@@ -177,8 +208,8 @@ NSString *const kSimulateLocationKey = @"kSimulateLocationKey";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    NSDictionary *item = [self getItem:indexPath];
-    void (^actionBlock)() = item[@"actionBlock"];
+    OATableRowData *item = [_data itemForIndexPath:indexPath];
+    void (^actionBlock)() = [item objForKey:@"actionBlock"];
     if (actionBlock)
         actionBlock();
 }

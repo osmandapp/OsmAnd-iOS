@@ -184,6 +184,11 @@
         }
         
         NSMutableArray<NSString *> *values = [NSMutableArray array];
+
+        if (![param.name isEqualToString:NAUTICAL_DEPTH_CONTOUR_WIDTH_ATTR]
+            && ![param.name isEqualToString:NAUTICAL_DEPTH_CONTOUR_COLOR_SCHEME_ATTR])
+            [values addObject:@""];
+
         for (const auto& val : p->getPossibleValues())
         {
             NSString *valStr = resolvedMapStyle->getStringById(val.asSimple.asUInt).toNSString();
@@ -339,7 +344,9 @@
     {
         NSString *parameterSettingName = [NSString stringWithFormat:@"%@_%@_%@", p.mapStyleName, p.mapPresetName, p.name];
         p.storedValue = [defaults objectForKey:parameterSettingName] ? [defaults valueForKey:parameterSettingName] : @"";
-        if (p.storedValue.length == 0 && p.possibleValues.count > 0)
+        if (([p.name isEqualToString:NAUTICAL_DEPTH_CONTOUR_WIDTH_ATTR]
+            || [p.name isEqualToString:NAUTICAL_DEPTH_CONTOUR_COLOR_SCHEME_ATTR])
+            && p.storedValue.length == 0 && p.possibleValuesUnsorted.count > 0)
             p.storedValue = p.possibleValuesUnsorted.firstObject.name;
         p.value = [self isCategoryDisabled:p.category] ? @"" : p.storedValue;
     }

@@ -266,39 +266,12 @@
 
 - (NSAttributedString *)getAttributedTypeStr
 {
-    return [self getFormattedDistTimeString];
+    return [self.class getFormattedDistTimeString];
 }
 
 - (NSAttributedString *) getAdditionalInfoStr
 {
-    OsmAndAppInstance app = [OsmAndApp instance];
-    UIFont *textFont = [UIFont systemFontOfSize:13.0];
-    NSDictionary *attrs = @{NSFontAttributeName: textFont, NSForegroundColorAttributeName: UIColorFromRGB(color_text_footer)};
-    if (self.analysis)
-    {
-        NSMutableAttributedString *res = [NSMutableAttributedString new];
-        
-        NSTextAttachment *arrowUpAttachment = [[NSTextAttachment alloc] init];
-        arrowUpAttachment.image = [UIImage templateImageNamed:@"ic_small_arrow_up"];
-        arrowUpAttachment.bounds = CGRectMake(0., roundf(textFont.capHeight - 20.)/2.f, 20., 20.);
-        
-        NSTextAttachment *arrowDownAttachment = [[NSTextAttachment alloc] init];
-        arrowDownAttachment.image = [UIImage templateImageNamed:@"ic_small_arrow_down"];
-        arrowDownAttachment.bounds = CGRectMake(0., roundf(textFont.capHeight - 20.)/2.f, 20., 20.);
-        
-        [res appendAttributedString:[NSAttributedString attributedStringWithAttachment:arrowUpAttachment]];
-        [res appendAttributedString:[[NSAttributedString alloc] initWithString:[OAOsmAndFormatter getFormattedAlt:self.analysis.maxElevation] attributes:attrs]];
-        [res appendAttributedString:[[NSAttributedString alloc] initWithString:@"    "]];
-        
-        [res appendAttributedString:[NSAttributedString attributedStringWithAttachment:arrowDownAttachment]];
-        [res appendAttributedString:[[NSAttributedString alloc] initWithString:[OAOsmAndFormatter getFormattedAlt:self.analysis.minElevation] attributes:attrs]];
-        
-        [res addAttributes:attrs range:NSMakeRange(0, res.length)];
-        
-        return res;
-    }
-    
-    return nil;
+    return [self.class getFormattedElevationString:self.analysis];
 }
 
 - (void)viewDidLoad

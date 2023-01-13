@@ -37,6 +37,8 @@
 #define BINARY_SRTM_MAP_INDEX_EXT_ZIP @".srtm.obf.zip"
 #define BINARY_SRTMF_MAP_INDEX_EXT @".srtmf.obf"
 #define BINARY_SRTMF_MAP_INDEX_EXT_ZIP @".srtmf.obf.zip"
+#define BINARY_DEPTH_MAP_INDEX_EXT @".depth.obf"
+#define BINARY_DEPTH_MAP_INDEX_EXT_ZIP @".depth.obf.zip"
 #define EXTRA_EXT @".extra"
 #define EXTRA_ZIP_EXT @".extra.zip"
 
@@ -56,6 +58,7 @@
 #define RENDERER_INDEX_EXT @".render.xml"
 
 #define GPX_FILE_EXT @".gpx"
+#define GPX_ZIP_FILE_EXT @".gpx.zip"
 
 #define WPT_CHART_FILE_EXT @".wpt.chart"
 #define SQLITE_CHART_FILE_EXT @".3d.chart"
@@ -75,6 +78,7 @@
 #define LIVE_INDEX_DIR @"live"
 #define TOURS_INDEX_DIR @"tours"
 #define SRTM_INDEX_DIR @"srtm"
+#define NAUTICAL_INDEX_DIR "nautical"
 #define ROADS_INDEX_DIR @"roads"
 #define WIKI_INDEX_DIR @"wiki"
 #define WIKIVOYAGE_INDEX_DIR @"travel"
@@ -88,6 +92,8 @@
 #define TEMP_DIR @"temp"
 #define ROUTING_PROFILES_DIR @"routing"
 #define PLUGINS_DIR @"Plugins"
+#define FAVORITES_INDEX_DIR @"favorites"
+#define FAVORITES_BACKUP_DIR @"favorites_backup"
 
 #define VOICE_PROVIDER_SUFFIX @"-tts"
 

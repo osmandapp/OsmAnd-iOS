@@ -14,6 +14,14 @@
 
 - (BOOL) readFromFile:(NSString *)filePath error:(NSError * _Nullable *)error
 {
+    if (self.item.read)
+    {
+        if (error)
+            *error = [NSError errorWithDomain:kSettingsItemErrorDomain code:kSettingsItemErrorCodeAlreadyRead userInfo:nil];
+
+        return NO;
+    }
+
     NSError *readError;
     NSData *data = [NSData dataWithContentsOfFile:filePath options:NSDataReadingMappedIfSafe error:&readError];
     if (readError)
@@ -41,11 +49,11 @@
         return NO;
     }
     
-    NSDictionary<NSString *, NSString *> *settings = (NSDictionary *) json;
     [self.item readFromJson:json error:error];
     if (error)
         return NO;
-    
+
+    self.item.read = YES;
     return YES;
 }
 

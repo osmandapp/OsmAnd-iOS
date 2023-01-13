@@ -89,8 +89,8 @@
     [self.layersCollectionView addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self
                                                                                                   action:@selector(handleLongPressOnLayer:)]];
 
-    [self.timeSliderView removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
-    [self.timeSliderView addTarget:self action:@selector(timeChanged:) forControlEvents:UIControlEventTouchUpInside];
+    [self.timeSliderView removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
+    [self.timeSliderView addTarget:self action:@selector(timeChanged:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
 
     _layerChangeObservers = [NSMutableArray array];
     for (OAWeatherBand *band in [OAWeatherHelper sharedInstance].bands)
@@ -182,8 +182,8 @@
 
 - (BOOL)updateInfo
 {
-    OAMapHudViewController *hudViewController = [OARootViewController instance].mapPanel.hudViewController;
-    BOOL visible =  [hudViewController shouldShowWeatherToolbar];
+    OAMapInfoController *mapInfoController = [OARootViewController instance].mapPanel.hudViewController.mapInfoController;
+    BOOL visible =  mapInfoController.weatherToolbarVisible;
     [self updateVisibility:visible];
 
     return YES;

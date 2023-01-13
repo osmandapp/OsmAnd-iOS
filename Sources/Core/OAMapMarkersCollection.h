@@ -12,7 +12,9 @@
 #include <OsmAndCore/Map/IMapKeyedSymbolsProvider.h>
 #include "OAMapMarker.h"
 
-class OAMapMarkersCollection : public OsmAnd::IMapKeyedSymbolsProvider
+class OAMapMarkersCollection
+    : public std::enable_shared_from_this<OAMapMarkersCollection>
+    , public OsmAnd::IMapKeyedSymbolsProvider
 {
     
 private:

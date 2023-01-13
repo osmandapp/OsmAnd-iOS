@@ -43,7 +43,7 @@
     return self;
 }
 
-- (instancetype)initWithLocation:(CLLocationCoordinate2D)location title:(NSString*)formattedLocation gpxFileName:(NSString*)gpxFileName poi:(OAPOI *)poi
+- (instancetype)initWithLocation:(CLLocationCoordinate2D)location title:(NSString*)formattedLocation address:(NSString *)address gpxFileName:(NSString*)gpxFileName poi:(OAPOI *)poi
 {
     self = [super init];
     if (self)
@@ -69,7 +69,7 @@
 
         [p setIcon:_iconName];
         [p setBackgroundIcon:@"circle"];
-        [p setExtension:ADDRESS_EXTENSION value:@""];
+        [p setExtension:ADDRESS_EXTENSION value:address];
         [p setAmenity:poi];
         [p setAmenityOriginName:poi.toStringEn];
 

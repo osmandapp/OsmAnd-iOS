@@ -386,7 +386,8 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     << OsmAnd::ResourcesManager::ResourceType::SrtmMapRegion
     << OsmAnd::ResourcesManager::ResourceType::HillshadeRegion
     << OsmAnd::ResourcesManager::ResourceType::SlopeRegion
-    << OsmAnd::ResourcesManager::ResourceType::WikiMapRegion;
+    << OsmAnd::ResourcesManager::ResourceType::WikiMapRegion
+    << OsmAnd::ResourcesManager::ResourceType::DepthMapRegion;
     NSArray<NSString *> *localIndexFiles = [OAResourcesUIHelper getInstalledResourcePathsByTypes:types];
     if (localIndexFiles.count > 0)
     {
@@ -520,7 +521,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     NSMutableArray<OAPOIUIFilter *> *poiUIFilters = [NSMutableArray array];
     NSMutableArray<OATileSource *> *tileSourceTemplates = [NSMutableArray array];
     NSMutableArray<OAAvoidRoadInfo *> *avoidRoads = [NSMutableArray array];
-    NSMutableArray<OAFavoriteGroup *> *favoiriteItems = [NSMutableArray array];
+    NSMutableArray<OAFavoriteGroup *> *favoriteGroups = [NSMutableArray array];
     NSMutableArray<OAOsmNotePoint *> *osmNotesPointList = [NSMutableArray array];
     NSMutableArray<OAOpenStreetMapPoint *> *osmEditsPointList = [NSMutableArray array];
     NSMutableArray<OADestination *> *activeMarkersList = [NSMutableArray array];
@@ -560,7 +561,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         else if ([object isKindOfClass:OAFileSettingsItem.class])
             [result addObject:object];
         else if ([object isKindOfClass:OAFavoriteGroup.class])
-            [favoiriteItems addObject:object];
+            [favoriteGroups addObject:object];
         else if ([object isKindOfClass:OADestination.class])
             [activeMarkersList addObject:object];
         else if ([object isKindOfClass:OAHistoryItem.class])
@@ -596,8 +597,39 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         [result addObject:[[OAMapSourcesSettingsItem alloc] initWithItems:tileSourceTemplates]];
     if (avoidRoads.count > 0)
         [result addObject:[[OAAvoidRoadsSettingsItem alloc] initWithItems:avoidRoads]];
-    if (favoiriteItems.count > 0)
-        [result addObject:[[OAFavoritesSettingsItem alloc] initWithItems:favoiriteItems]];
+    if (favoriteGroups.count > 0)
+    {
+        if (doExport)
+        {
+            for (OAFavoriteGroup *favoriteGroup in favoriteGroups)
+                [result addObject:[[OAFavoritesSettingsItem alloc] initWithItems:@[favoriteGroup]]];
+        }
+        else
+        {
+            BOOL hasGroupFile = NO;
+            for (OAFavoriteGroup *favoriteGroup in favoriteGroups)
+            {
+                OAFavoritesSettingsItem *favSettingsItem;
+                for (OASettingsItem *item in settingsItems)
+                {
+                    NSString *fileName = item.fileName;
+                    if ([item isKindOfClass:OAFavoritesSettingsItem.class] && [[[OsmAndApp.instance favoritesStorageFilename:favoriteGroup.name] lastPathComponent] isEqualToString:fileName])
+                    {
+                        favSettingsItem = (OAFavoritesSettingsItem *) item;
+                        hasGroupFile = YES;
+                        break;
+                    }
+                }
+                if (favSettingsItem)
+                    [result addObject:[[OAFavoritesSettingsItem alloc] initWithItems:@[favoriteGroup] baseItem:favSettingsItem]];
+            }
+            if (!hasGroupFile)
+            {
+                OAFavoritesSettingsItem *baseItem = [self getBaseItem:EOASettingsItemTypeFavorites clazz:OAFavoritesSettingsItem.class settingsItems:settingsItems];
+                [result addObject:[[OAFavoritesSettingsItem alloc] initWithItems:favoriteGroups baseItem:baseItem]];
+            }
+        }
+    }
     if (poiUIFilters.count > 0)
     {
         OAPoiUiFilterSettingsItem *baseItem = [self getBaseItem:EOASettingsItemTypePoiUIFilters clazz:OAPoiUiFilterSettingsItem.class settingsItems:settingsItems];
@@ -862,7 +894,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 
 - (void) onSettingsCollectFinished:(BOOL)succeed empty:(BOOL)empty items:(NSArray<OASettingsItem *> *)items
 {
-    if (succeed)
+    if (succeed && !empty)
     {
         NSMutableArray<OASettingsItem *> *pluginIndependentItems = [NSMutableArray new];
         NSMutableArray<OAPluginSettingsItem *> *pluginSettingsItems = [NSMutableArray new];
@@ -892,9 +924,8 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     }
     else if (empty)
     {
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:[NSString stringWithFormat:OALocalizedString(@"err_profile_import"), items.firstObject.name] preferredStyle:UIAlertControllerStyleAlert];
-        [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
-        [OARootViewController.instance presentViewController:alert animated:YES completion:nil];
+        [_importDataVC.navigationController popViewControllerAnimated:YES];
+        [OAUtilities showToast:OALocalizedString(@"osm_failed_uploads") details:OALocalizedString(@"local_backup_empty_file") duration:4 inView:OARootViewController.instance.view];
     }
 }
 

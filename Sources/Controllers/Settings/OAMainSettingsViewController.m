@@ -9,7 +9,7 @@
 #import "OAMainSettingsViewController.h"
 #import "OAIconTitleValueCell.h"
 #import "OAMultiIconTextDescCell.h"
-#import "OAIconTextDescSwitchCell.h"
+#import "OASwitchTableViewCell.h"
 #import "OATitleRightIconCell.h"
 #import "OAAppSettings.h"
 #import "Localization.h"
@@ -20,7 +20,7 @@
 #import "OAAutoObserverProxy.h"
 #import "OAPurchasesViewController.h"
 #import "OABackupHelper.h"
-
+#import "OASizes.h"
 #import "OACreateProfileViewController.h"
 #import "OARearrangeProfilesViewController.h"
 #import "OAProfileNavigationSettingsViewController.h"
@@ -126,7 +126,7 @@
             @"title" : OALocalizedString(@"osmand_cloud"),
             @"value" : @"", // TODO: insert value
             @"description" : OALocalizedString(@"global_settings_descr"),
-            @"img" : @"ic_custom_restore",
+            @"img" : @"ic_custom_cloud_upload_colored_day",
             @"type" : [OAIconTitleValueCell getCellIdentifier]
         },
         @{
@@ -153,7 +153,7 @@
         [profilesSection addObject:@{
             @"name" : @"profile_val",
             @"app_mode" : OAApplicationMode.allPossibleValues[i],
-            @"type" : i == 0 ? [OAMultiIconTextDescCell getCellIdentifier] : [OAIconTextDescSwitchCell getCellIdentifier],
+            @"type" : i == 0 ? [OAMultiIconTextDescCell getCellIdentifier] : [OASwitchTableViewCell getCellIdentifier],
             @"isColored" : @NO
         }];
     }
@@ -272,7 +272,7 @@
         {
             cell.textView.text = item[@"title"];
             cell.descriptionView.text = item[@"value"];
-            cell.leftIconView.image = [UIImage templateImageNamed:item[@"img"]];
+            cell.leftIconView.image = [item[@"name"] isEqualToString:@"backup_restore"] ? [UIImage imageNamed:item[@"img"]] : [UIImage templateImageNamed:item[@"img"]];
         }
         return cell;
     }
@@ -301,22 +301,23 @@
             cell.backgroundColor = UIColor.whiteColor;
         return cell;
     }
-    else if ([type isEqualToString:[OAIconTextDescSwitchCell getCellIdentifier]])
+    else if ([type isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OAIconTextDescSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTextDescSwitchCell getCellIdentifier]];
+        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextDescSwitchCell getCellIdentifier] owner:self options:nil];
-            cell = (OAIconTextDescSwitchCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASwitchTableViewCell *) nib[0];
+            cell.selectionStyle = UITableViewCellSelectionStyleDefault;
         }
         OAApplicationMode *am = item[@"app_mode"];
         BOOL isEnabled = [OAApplicationMode.values containsObject:am];
-        cell.separatorInset = UIEdgeInsetsMake(0.0, indexPath.row < OAApplicationMode.allPossibleValues.count - 1 ? 62.0 : 0.0, 0.0, 0.0);
+        cell.separatorInset = UIEdgeInsetsMake(0.0, indexPath.row < OAApplicationMode.allPossibleValues.count - 1 ? kPaddingToLeftOfContentWithIcon : 0.0, 0.0, 0.0);
         UIImage *img = am.getIcon;
         cell.leftIconView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.leftIconView.tintColor = isEnabled ? UIColorFromRGB(am.getIconColor) : UIColorFromRGB(color_tint_gray);
         cell.titleLabel.text = am.toHumanString;
-        cell.descLabel.text = [self getProfileDescription:am];
+        cell.descriptionLabel.text = [self getProfileDescription:am];
         cell.switchView.tag = indexPath.row;
         BOOL isDefault = am == OAApplicationMode.DEFAULT;
         [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
@@ -325,8 +326,8 @@
             [cell.switchView setOn:isEnabled];
             [cell.switchView addTarget:self action:@selector(onAppModeSwitchChanged:) forControlEvents:UIControlEventValueChanged];
         }
-        cell.switchView.hidden = isDefault;
-        cell.dividerView.hidden = isDefault;
+        [cell switchVisibility:!isDefault];
+        [cell dividerVisibility:!isDefault];
         return cell;
     }
     else if ([type isEqualToString:[OATitleRightIconCell getCellIdentifier]])

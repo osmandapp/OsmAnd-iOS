@@ -32,6 +32,7 @@
     std::shared_ptr<OAFavoritesMapLayerProvider> _favoritesMapProvider;
     BOOL _showCaptionsCache;
     OsmAnd::PointI _hiddenPointPos31;
+    double _textScaleFactor;
 }
 
 - (NSString *) layerId
@@ -45,6 +46,7 @@
  
     _hiddenPointPos31 = OsmAnd::PointI();
     _showCaptionsCache = self.showCaptions;
+    _textScaleFactor = [[OAAppSettings sharedManager].textSize get];
     
     self.app.favoritesCollection->collectionChangeObservable.attach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self),
                                                                 [self]
@@ -72,9 +74,11 @@
     [self.app.data.mapLayersConfiguration setLayer:self.layerId
                                         Visibility:self.isVisible];
 
-    if (self.showCaptions != _showCaptionsCache)
+    CGFloat textScaleFactor = [[OAAppSettings sharedManager].textSize get];
+    if (self.showCaptions != _showCaptionsCache || _textScaleFactor != textScaleFactor)
     {
         _showCaptionsCache = self.showCaptions;
+        _textScaleFactor = textScaleFactor;
         if (self.isVisible)
             [self reloadFavorites];
     }
@@ -108,9 +112,9 @@
         QList<OsmAnd::PointI> hiddenPoints;
         if (_hiddenPointPos31 != OsmAnd::PointI())
             hiddenPoints.append(_hiddenPointPos31);
-        
+
         _favoritesMapProvider.reset(new OAFavoritesMapLayerProvider(self.app.favoritesCollection->getFavoriteLocations(),
-                                                                    self.pointsOrder, hiddenPoints, self.showCaptions, self.captionStyle, self.captionTopSpace, rasterTileSize));
+                                                                    self.pointsOrder, hiddenPoints, self.showCaptions, self.captionStyle, self.captionTopSpace, rasterTileSize, _textScaleFactor));
         [self.mapView addTiledSymbolsProvider:_favoritesMapProvider];
     }];
 }
@@ -281,7 +285,7 @@
             bool calendarEvent = favorite->getCalendarEvent();
             
             self.app.favoritesCollection->removeFavoriteLocation(favorite);
-            const auto newItem = self.app.favoritesCollection->createFavoriteLocation(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(position.latitude, position.longitude)),
+            const auto newItem = self.app.favoritesCollection->createFavoriteLocation(OsmAnd::LatLon(position.latitude, position.longitude),
                                                             elevation,
                                                             time,
                                                             pickupTime,
@@ -302,7 +306,7 @@
                     [plugin setParkingPosition:position.latitude longitude:position.longitude];
                 }
             }
-            [self.app saveFavoritesToPermamentStorage];
+            [self.app saveFavoritesToPermanentStorage:@[item.getCategory]];
             [OAFavoritesHelper loadFavorites];
         }
     }

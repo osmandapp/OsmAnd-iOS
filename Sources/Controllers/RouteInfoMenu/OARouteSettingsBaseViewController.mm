@@ -113,6 +113,10 @@
                 reliefFactorParameters.insert(reliefFactorParameters.begin(), r);
                 continue;
             }
+            else if ([[NSString stringWithUTF8String:r.id.c_str()] isEqualToString:kRouteParamShortWay] && ![am isDerivedRoutingFrom:OAApplicationMode.CAR])
+            {
+                continue;
+            }
             
             if (!r.group.empty())
             {
@@ -128,6 +132,8 @@
             else if (![[NSString stringWithUTF8String:r.id.c_str()] containsString:@"avoid"])
             {
                 OALocalNonAvoidParameter *rp = [[OALocalNonAvoidParameter alloc] initWithAppMode:am];
+                if ([[NSString stringWithUTF8String:r.id.c_str()] isEqualToString:kRouteParamIdGoodsRestrictions])
+                    continue;
                 rp.routingParameter = r;
                 rp.delegate = self;
                 [list addObject:rp];
@@ -393,23 +399,22 @@
 
 - (void) showTripSettingsScreen
 {
-    [self dismissViewControllerAnimated:YES completion:^{
-        OAGPXRouteParamsBuilder *gpxParams = _routingHelper.getCurrentGPXRoute;
-        OAGPXDocument *gpx = gpxParams ? gpxParams.file : nil;
-        OAFollowTrackBottomSheetViewController *followTrack = [[OAFollowTrackBottomSheetViewController alloc] initWithFile:gpx];
+    [self dismissViewControllerAnimated:NO completion:nil];
+    OAGPXRouteParamsBuilder *gpxParams = _routingHelper.getCurrentGPXRoute;
+    OAGPXDocument *gpx = gpxParams ? gpxParams.file : nil;
+    OAFollowTrackBottomSheetViewController *followTrack = [[OAFollowTrackBottomSheetViewController alloc] initWithFile:gpx];
+    
+    if (gpx)
+    {
+        followTrack.view.hidden = NO;
+        [followTrack presentInViewController:OARootViewController.instance animated:YES];
         
-        if (gpx)
-        {
-            followTrack.view.hidden = NO;
-            [followTrack presentInViewController:OARootViewController.instance animated:YES];
-            
-        }
-        else
-        {
-            followTrack.view.hidden = YES;
-            [followTrack presentInViewController:OARootViewController.instance animated:NO];
-        }
-    }];
+    }
+    else
+    {
+        followTrack.view.hidden = YES;
+        [followTrack presentInViewController:OARootViewController.instance animated:NO];
+    }
 }
 
 - (void) showAvoidTransportScreen

@@ -23,6 +23,7 @@
 #import "OATransportStop.h"
 #import "OAPOILocationType.h"
 #import "OARootViewController.h"
+#import "OAAppVersionDependentConstants.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -76,7 +77,7 @@ static const NSString* URL_TO_UPLOAD_GPX = @"https://api.openstreetmap.org/api/0
                                                                              cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
                                                                          timeoutInterval:30.0];
     [request setHTTPMethod:requestMethod];
-    NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    NSString *version = OAAppVersionDependentConstants.getVersion;
     [request addValue:[NSString stringWithFormat:@"OsmAndiOS %@", version] forHTTPHeaderField:@"User-Agent"];
 
     if ([requestMethod isEqualToString:@"PUT"] || [requestMethod isEqualToString:@"POST"] || [requestMethod isEqualToString:@"DELETE"])
@@ -163,8 +164,7 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
 
 -(NSString *)getAppFullName
 {
-    return [NSString stringWithFormat:@"%@ %@", [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDisplayName"],
-            [[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"]];
+    return [NSString stringWithFormat:@"%@ %@", [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDisplayName"], OAAppVersionDependentConstants.getVersion];
 }
 
 -(void)writeNode:(OANode *)node entityInfo:(OAEntityInfo *)info xmlWriter:(QXmlStreamWriter &)xmlWriter changesetId:(long)changeSetId user:(NSString *)user

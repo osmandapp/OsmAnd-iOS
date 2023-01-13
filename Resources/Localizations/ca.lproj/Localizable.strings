@@ -643,8 +643,6 @@
 "arrival_distance_factor_normally" = "Normal";
 "arrival_distance_factor_late" = "Tard";
 "arrival_distance_factor_at_last" = "Als darrers metres";
-"map_orientation_change_in_accordance_with_speed" = "Interval d\'orientació del mapa";
-"map_orientation_change_in_accordance_with_speed_descr" = "Indiqueu la velocitat mínima per sota de la que s'utiilitzarà la brúixola interna per determinar l'orientació del mapa en comptes de la direcció del moviment";
 "snap_to_road" = "Desplaça a la carretera";
 "snap_to_road_descr" = "Ajusta la posició a les carreteres durant la navegació";
 "show_warnings_title" = "Mostra alertes…";

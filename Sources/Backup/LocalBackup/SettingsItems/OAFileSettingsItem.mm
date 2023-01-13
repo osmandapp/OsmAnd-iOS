@@ -16,6 +16,7 @@
 #import "OAIndexConstants.h"
 #import "OASettingsItemReader.h"
 #import "OASettingsItemWriter.h"
+#import "OARendererRegistry.h"
 #import "OAFileNameTranslationHelper.h"
 
 @implementation OAFileSettingsItemFileSubtype
@@ -181,6 +182,12 @@
                     return subtype;
                 break;
             }
+            case EOASettingsItemFileSubtypeNauticalDepth:
+            {
+                if ([name hasSuffix:BINARY_DEPTH_MAP_INDEX_EXT])
+                    return subtype;
+                break;
+            }
             default:
             {
                 NSString *subtypeFolder = [self.class getSubtypeFolder:subtype];
@@ -195,7 +202,7 @@
 
 + (BOOL) isMap:(EOASettingsItemFileSubtype)type
 {
-    return type == EOASettingsItemFileSubtypeObfMap || type == EOASettingsItemFileSubtypeWikiMap || type == EOASettingsItemFileSubtypeSrtmMap || type == EOASettingsItemFileSubtypeTilesMap || type == EOASettingsItemFileSubtypeRoadMap;
+    return type == EOASettingsItemFileSubtypeObfMap || type == EOASettingsItemFileSubtypeWikiMap || type == EOASettingsItemFileSubtypeSrtmMap || type == EOASettingsItemFileSubtypeTilesMap || type == EOASettingsItemFileSubtypeRoadMap || type == EOASettingsItemFileSubtypeNauticalDepth;
 }
 
 + (NSString *) getIcon:(EOASettingsItemFileSubtype)subtype
@@ -205,6 +212,7 @@
         case EOASettingsItemFileSubtypeObfMap:
         case EOASettingsItemFileSubtypeTilesMap:
         case EOASettingsItemFileSubtypeRoadMap:
+        case EOASettingsItemFileSubtypeNauticalDepth:
             return @"ic_custom_map";
         case EOASettingsItemFileSubtypeSrtmMap:
             return @"ic_custom_contour_lines";
@@ -381,6 +389,15 @@
     {
         return [OAFileNameTranslationHelper getVoiceName:_filePath.lastPathComponent];
     }
+    else if (_subtype == EOASettingsItemFileSubtypeRenderingStyle)
+    {
+        NSString *name = [[self.name lastPathComponent] stringByReplacingOccurrencesOfString:@".render.xml" withString:@""];
+        return [OARendererRegistry getMapStyleInfo:name][@"title"];
+    }
+    else if (_subtype == EOASettingsItemFileSubtypeRoutingConfig)
+    {
+        return self.name.lastPathComponent;
+    }
 //    else if (subtype == FileSubtype.MULTIMEDIA_NOTES) {
 //        if (file.exists()) {
 //            return new Recording(file).getName(app, true);
@@ -504,6 +521,14 @@
 
 - (BOOL) readFromFile:(NSString *)filePath error:(NSError * _Nullable *)error
 {
+    if (self.item.read)
+    {
+        if (error)
+            *error = [NSError errorWithDomain:kSettingsItemErrorDomain code:kSettingsItemErrorCodeAlreadyRead userInfo:nil];
+
+        return NO;
+    }
+
     NSString *destFilePath = self.item.filePath;
     if (![self.item exists] || [self.item shouldReplace])
         destFilePath = self.item.filePath;
@@ -553,7 +578,8 @@
     }
     
     [self.item installItem:destFilePath];
-    
+
+    self.item.read = res;
     return res;
 }
 

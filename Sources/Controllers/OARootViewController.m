@@ -26,6 +26,8 @@
 #import "OAXmlImportHandler.h"
 #import "OsmAndApp.h"
 #import "Localization.h"
+#import "OABackupHelper.h"
+#import "OACloudAccountVerificationViewController.h"
 
 #define _(name) OARootViewController__##name
 #define commonInit _(commonInit)
@@ -131,6 +133,16 @@ typedef enum : NSUInteger {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
 }
 
+- (void) viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    if (self.token != nil)
+    {
+        [self handleOsmAndCloudVerification:self.token];
+        self.token = nil;
+    }
+}
+
 - (BOOL) prefersStatusBarHidden
 {
     return NO;
@@ -213,6 +225,22 @@ typedef enum : NSUInteger {
      */
 
     [self setNeedsStatusBarAppearanceUpdate];
+}
+
+- (void) handleOsmAndCloudVerification:(NSString *)tokenParam
+{
+    OACloudAccountVerificationViewController *verificationVC = [[OACloudAccountVerificationViewController alloc] initWithEmail:OAAppSettings.sharedManager.backupUserEmail.get sourceType:EOACloudScreenSourceTypeSignIn];
+    [self.navigationController pushViewController:verificationVC animated:NO];
+    
+    if ([OABackupHelper isTokenValid:tokenParam])
+    {
+        [OABackupHelper.sharedInstance registerDevice:tokenParam];
+    }
+    else
+    {
+        verificationVC.errorMessage = OALocalizedString(@"backup_error_invalid_token");
+        [verificationVC updateScreen];
+    }
 }
 
 - (void) closeMenuAnimated:(BOOL)animated
@@ -662,7 +690,6 @@ typedef enum : NSUInteger {
         [self showProgress:EOARestorePurchasesProgressType];
 
     [_iapHelper restoreCompletedTransactions];
-    [_iapHelper checkBackupPurchase];
     return YES;
 }
 

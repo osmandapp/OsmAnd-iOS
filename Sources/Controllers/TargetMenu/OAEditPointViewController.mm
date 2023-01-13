@@ -166,6 +166,7 @@
 
 - (instancetype)initWithLocation:(CLLocationCoordinate2D)location
                            title:(NSString *)formattedTitle
+                         address:(NSString *)address
                      customParam:(NSString *)customParam
                        pointType:(EOAEditPointType)pointType
                  targetMenuState:(OATargetMenuViewControllerState *)targetMenuState
@@ -182,12 +183,12 @@
 
         if (_editPointType == EOAEditPointTypeFavorite)
         {
-            _pointHandler = [[OAFavoriteEditingHandler alloc] initWithLocation:location title:formattedTitle address:customParam poi:poi];
-            self.address = customParam ? customParam : @"";
+            _pointHandler = [[OAFavoriteEditingHandler alloc] initWithLocation:location title:formattedTitle address:address poi:poi];
+            self.address = address ? address : @"";
         }
         else if (_editPointType == EOAEditPointTypeWaypoint)
         {
-            _pointHandler = [[OAGpxWptEditingHandler alloc] initWithLocation:location title:formattedTitle gpxFileName:customParam poi:poi];
+            _pointHandler = [[OAGpxWptEditingHandler alloc] initWithLocation:location title:formattedTitle address:address gpxFileName:customParam poi:poi];
             self.gpxFileName = customParam ? customParam : @"";
             self.address = ((OAGpxWptEditingHandler *)_pointHandler).getAddress;
         }
@@ -821,6 +822,9 @@
         }
 
         [[OARootViewController instance].mapPanel reopenContextMenu];
+        
+        if (_editPointType == EOAEditPointTypeFavorite)
+            [OAAppSettings.sharedManager.lastFavCategoryEntered set:savingGroup];
     }
 }
 

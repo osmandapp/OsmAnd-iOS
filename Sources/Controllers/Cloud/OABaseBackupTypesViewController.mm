@@ -8,7 +8,7 @@
 
 #import "OABaseBackupTypesViewController.h"
 #import "MBProgressHUD.h"
-#import "OAIconTextDividerSwitchCell.h"
+#import "OASwitchTableViewCell.h"
 #import "OAIconTitleValueCell.h"
 #import "OAStorageStateValuesCell.h"
 #import "OAExportSettingsType.h"
@@ -20,6 +20,7 @@
 #import "OABackupHelper.h"
 #import "OASettingsHelper.h"
 #import "OAColors.h"
+#import "OASizes.h"
 
 @interface OABaseBackupTypesViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -112,7 +113,7 @@
     // override
 }
 
-- (void)onTypeSelected:(OAExportSettingsType *)type selected:(BOOL)selected
+- (void)onTypeSelected:(OAExportSettingsType *)type selected:(BOOL)selected view:(UIView *)view
 {
     NSArray *items = [self getItemsForType:type];
     if (selected)
@@ -121,13 +122,13 @@
         [_selectedItems removeObjectForKey:type];
 
     if (!selected && items.count > 0)
-        [self showClearTypeScreen:type];
+        [self showClearTypeScreen:type view:view];
 
     if (_selectedIndexPath)
         [self.tableView reloadRowsAtIndexPaths:@[_selectedIndexPath] withRowAnimation:UITableViewRowAnimationNone];
 }
 
-- (void)showClearTypeScreen:(OAExportSettingsType *)type
+- (void)showClearTypeScreen:(OAExportSettingsType *)type view:(UIView *)view
 {
     // override
 }
@@ -329,7 +330,7 @@
         _selectedIndexPath = indexPath;
         NSMutableDictionary *item = [self getItem:indexPath];
 
-        [self onTypeSelected:item[@"setting"] selected:switchView.isOn];
+        [self onTypeSelected:item[@"setting"] selected:switchView.isOn view:switchView];
     }
 }
 
@@ -355,24 +356,22 @@
     BOOL emptyCell = [item[@"key"] hasPrefix:@"empty_cell_"];
     BOOL hasEmptyIcon = [item[@"has_empty_icon"] boolValue];
 
-    if ([cellType isEqualToString:[OAIconTextDividerSwitchCell getCellIdentifier]])
+    if ([cellType isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OAIconTextDividerSwitchCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTextDividerSwitchCell getCellIdentifier]];
+        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (!cell)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextDividerSwitchCell getCellIdentifier] owner:self options:nil];
-            cell = (OAIconTextDividerSwitchCell *) nib[0];
-            [cell showIcon:YES];
-            cell.dividerView.hidden = YES;
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASwitchTableViewCell *) nib[0];
+            [cell descriptionVisibility:NO];
         }
         if (cell)
         {
-            cell.separatorInset = UIEdgeInsetsMake(0., 66. + [OAUtilities getLeftMargin], 0., 0.);
+            cell.separatorInset = UIEdgeInsetsMake(0., kPaddingToLeftOfContentWithIcon + [OAUtilities getLeftMargin], 0., 0.);
             cell.switchView.on = [_selectedItems.allKeys containsObject:settingsType];
-            cell.textView.text = settingsType.title;
-            cell.iconView.image = settingsType.icon;
-            cell.iconView.tintColor = cell.switchView.on ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_tint_gray);
+            cell.titleLabel.text = settingsType.title;
+            cell.leftIconView.image = settingsType.icon;
+            cell.leftIconView.tintColor = cell.switchView.on ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_tint_gray);
 
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];

@@ -14,7 +14,7 @@
 #import "Localization.h"
 #import "OAColors.h"
 #import "OAOsmAndFormatter.h"
-#import "OASettingSwitchCell.h"
+#import "OASwitchTableViewCell.h"
 #import "OASliderWithValuesCell.h"
 #import "OADividerCell.h"
 
@@ -114,7 +114,7 @@
             @"inset" : zeroInset,
         },
         @{
-            @"type" : [OASettingSwitchCell getCellIdentifier],
+            @"type" : [OASwitchTableViewCell getCellIdentifier],
             @"key" : kSimulateNavigationSwitchkey,
             @"title" : OALocalizedString(@"shared_string_enabled"),
             @"value" : @(_isEnabled),
@@ -311,21 +311,20 @@
 {
     NSDictionary *item = [self getDataItem:indexPath];
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:[OASettingSwitchCell getCellIdentifier]])
+    if ([cellType isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OASettingSwitchCell* cell = nil;
-        cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
+        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
-            cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
-            cell.textView.numberOfLines = 0;
-            cell.descriptionView.hidden = YES;
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASwitchTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
         }
         if (cell)
         {
-            [cell.textView setText: item[@"title"]];
+            cell.titleLabel.text = item[@"title"];
+
             cell.switchView.on = [item[@"value"] boolValue];
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];

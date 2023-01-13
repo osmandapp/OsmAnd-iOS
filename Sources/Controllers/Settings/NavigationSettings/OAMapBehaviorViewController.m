@@ -8,10 +8,9 @@
 
 #import "OAMapBehaviorViewController.h"
 #import "OASettingsTableViewCell.h"
-#import "OASettingSwitchCell.h"
+#import "OASwitchTableViewCell.h"
 #import "OAAutoCenterMapViewController.h"
 #import "OAAutoZoomMapViewController.h"
-#import "OAMapOrientationThresholdViewController.h"
 #import "OAAppSettings.h"
 #import "OAApplicationMode.h"
 
@@ -78,12 +77,6 @@
         EOAAutoZoomMap autoZoomMap = [_settings.autoZoomMapScale get:self.appMode];
         autoZoomValue = [OAAutoZoomMap getName:autoZoomMap];
     }
-    NSString *mapOrientationValue = nil;
-    NSInteger mapOrientation = [_settings.switchMapDirectionToCompass get:self.appMode];
-    if ([_settings.metricSystem get:self.appMode] == KILOMETERS_AND_METERS)
-        mapOrientationValue = [NSString stringWithFormat:@"%d %@", (int)mapOrientation, OALocalizedString(@"units_km_h")];
-    else
-        mapOrientationValue = [NSString stringWithFormat:@"%d %@", (int)mapOrientation, OALocalizedString(@"units_mph")];
 
     NSMutableArray *dataArr = [NSMutableArray arrayWithObjects:@{
                                     @"type" : [OASettingsTableViewCell getCellIdentifier],
@@ -97,13 +90,7 @@
                                     @"key" : @"autoZoom",
                                },
                                @{
-                                    @"type" : [OASettingsTableViewCell getCellIdentifier],
-                                    @"title" : OALocalizedString(@"map_orientation_change_in_accordance_with_speed"),
-                                    @"value" : mapOrientationValue,
-                                    @"key" : @"mapOrientation",
-                               },
-                               @{
-                                    @"type" : [OASettingSwitchCell getCellIdentifier],
+                                    @"type" : [OASwitchTableViewCell getCellIdentifier],
                                     @"title" : OALocalizedString(@"snap_to_road"),
                                     @"value" : _settings.snapToRoad
                                }, nil];
@@ -133,20 +120,19 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:[OASettingSwitchCell getCellIdentifier]])
+    else if ([cellType isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
+        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
-            cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
-            cell.descriptionView.hidden = YES;
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASwitchTableViewCell *) nib[0];
+            [cell descriptionVisibility:NO];
             cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         if (cell)
         {
-            cell.textView.text = item[@"title"];
+            cell.titleLabel.text = item[@"title"];
             id v = item[@"value"];
             [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             if ([v isKindOfClass:[OACommonBoolean class]])
@@ -187,8 +173,6 @@
     else if (section == 1)
         return OALocalizedString(@"auto_zoom_map_descr");
     else if (section == 2)
-        return OALocalizedString(@"map_orientation_change_in_accordance_with_speed_descr");
-    else if (section == 3)
         return OALocalizedString(@"snap_to_road_descr");
     else
         return @"";
@@ -221,8 +205,6 @@
         settingsViewController = [[OAAutoCenterMapViewController alloc] initWithAppMode:self.appMode];
     else if ([itemKey isEqualToString:@"autoZoom"])
         settingsViewController = [[OAAutoZoomMapViewController alloc] initWithAppMode:self.appMode];
-    else if ([itemKey isEqualToString:@"mapOrientation"])
-        settingsViewController = [[OAMapOrientationThresholdViewController alloc] initWithAppMode:self.appMode];
     [self showViewController:settingsViewController];
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }

@@ -30,6 +30,7 @@
 #define kRouteParamIdAllowPrivateTruck @"allow_private_for_truck"
 #define kRouteParamIdAllowMotorway @"allow_motorway"
 #define kRouteParamIdHazmatCategory @"hazmat_category"
+#define kRouteParamShortWay @"short_way"
 
 #define kDefaultNumericValue @"0.0"
 #define kDefaultSymbolicValue @"-"
@@ -77,7 +78,7 @@ struct RoutingParameter;
 - (NSString *) getDescription;
 - (UIImage *) getIcon;
 - (NSString *) getCellType;
-- (UIImage *) getSecondaryIcon;
+- (BOOL) hasOptions;
 - (UIColor *) getTintColor;
 
 - (void) setControlAction:(UIControl *)control;

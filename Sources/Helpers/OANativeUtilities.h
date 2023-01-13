@@ -19,6 +19,8 @@
 
 #include <OsmAndCore/CommonTypes.h>
 
+#include <openingHoursParser.h>
+
 #import <Foundation/Foundation.h>
 
 #import "OACommonTypes.h"
@@ -41,8 +43,9 @@
 + (sk_sp<SkImage>) skImageFromPngResource:(NSString *)resourceName;
 + (sk_sp<SkImage>) skImageFromResourcePath:(NSString *)resourcePath;
 + (sk_sp<SkImage>) skImageFromNSData:(const NSData *)data;
++ (sk_sp<SkImage>) getScaledSkImage:(sk_sp<SkImage>)skImage scaleFactor:(float)scaleFactor;
 
-+ (NSMutableArray*) QListOfStringsToNSMutableArray:(const QList<QString>&)list;
++ (NSArray<NSString *> *) QListOfStringsToNSArray:(const QList<QString> &)list;
 + (Point31) convertFromPointI:(OsmAnd::PointI)input;
 + (OsmAnd::PointI) convertFromPoint31:(Point31)input;
 + (sk_sp<SkImage>) skImageFromCGImage:(CGImageRef) image;
@@ -51,5 +54,8 @@
 + (QHash<QString, QString>) dictionaryToQHash:(NSDictionary<NSString *, NSString*> *)dictionary;
 
 + (QList<OsmAnd::TileId>)convertToQListTileIds:(NSArray<NSArray<NSNumber *> *> *)tileIds;
+
++ (UIColor *) getOpeningHoursColor:(std::vector<std::shared_ptr<OpeningHoursParser::OpeningHours::Info>>)openingHoursInfo;
++ (NSAttributedString *) getOpeningHoursDescr:(std::vector<std::shared_ptr<OpeningHoursParser::OpeningHours::Info>>)openingHoursInfo;
 
 @end

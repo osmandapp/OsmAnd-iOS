@@ -45,7 +45,15 @@ typedef NS_ENUM(NSInteger, EOASubscriptionOrigin) {
     EOASubscriptionOriginUndefined = -1,
     EOASubscriptionOriginAndroid,
     EOASubscriptionOriginPromo,
-    EOASubscriptionOriginIOS
+    EOASubscriptionOriginIOS,
+    EOASubscriptionOriginAmazon,
+    EOASubscriptionOriginHuawei
+};
+
+typedef NS_ENUM(NSInteger, EOASubscriptionDuration) {
+    EOASubscriptionDurationUndefined = -1,
+    EOASubscriptionDurationMonthly,
+    EOASubscriptionDurationYearly
 };
 
 @interface OASubscriptionStateHolder : NSObject
@@ -54,6 +62,7 @@ typedef NS_ENUM(NSInteger, EOASubscriptionOrigin) {
 @property (nonatomic, assign) long startTime;
 @property (nonatomic, assign) long expireTime;
 @property (nonatomic, assign) EOASubscriptionOrigin origin;
+@property (nonatomic, assign) EOASubscriptionDuration duration;
 
 @end
 
@@ -131,6 +140,8 @@ typedef NS_ENUM(NSInteger, EOASubscriptionOrigin) {
 - (void) checkBackupPurchase:(void(^)(BOOL))onComplete;
 - (void) checkBackupPurchase;
 
+- (BOOL) isCarPlayAvailable;
+
 + (int) freeMapsAvailable;
 + (void) increaseFreeMapsCount:(int)count;
 + (void) decreaseFreeMapsCount;
@@ -143,7 +154,6 @@ typedef NS_ENUM(NSInteger, EOASubscriptionOrigin) {
 + (BOOL) isSubscribedCrossPlatform;
 + (BOOL) isSubscribedToMapperUpdates;
 + (BOOL) isOsmAndProAvailable;
-+ (BOOL) isCarPlayAvailable;
 
 + (BOOL) isFullVersionPurchased;
 + (BOOL) isDepthContoursPurchased;

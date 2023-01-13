@@ -128,7 +128,6 @@
                     @"title" : OALocalizedString(@"send_anonymous_data"),
                     @"description" : OALocalizedString(@"send_anonymous_data_desc"),
                     @"value" : @(_settings.sendAnonymousAppUsageData.get),
-                    @"img" : @"menu_cell_pointer.png",
                     @"type" : [OASwitchTableViewCell getCellIdentifier], }
             ];
             break;
@@ -141,7 +140,6 @@
                 @"name" : @"last_used",
                 @"title" : OALocalizedString(@"last_used"),
                 @"value" : @(_isUsingLastAppMode),
-                @"img" : @"menu_cell_pointer.png",
                 @"type" : [OASwitchTableViewCell getCellIdentifier] }];
             
             if (!_isUsingLastAppMode)
@@ -167,7 +165,6 @@
                 @"name" : @"carplay_mode_is_default_string",
                 @"title" : OALocalizedString(@"settings_preset"),
                 @"value" : @(_isDefaultProfile),
-                @"img" : @"menu_cell_pointer.png",
                 @"type" : [OASwitchTableViewCell getCellIdentifier] }];
             
             if (!_isDefaultProfile)
@@ -261,16 +258,18 @@
     }
     else if ([cellType isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OASwitchTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
+        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell = (OASwitchTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
         }
         if (cell)
         {
-            cell.textView.text = item[@"title"];
+            cell.titleLabel.text = item[@"title"];
+
             [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             cell.switchView.on = [item[@"value"] boolValue];
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
@@ -483,7 +482,7 @@
             if ([name isEqualToString:@"do_not_show_discount"])
                 [_settings.settingDoNotShowPromotions set:isChecked];
             else if ([name isEqualToString:@"do_not_send_anonymous_data"])
-                [_settings.settingUseAnalytics set:isChecked];
+                [_settings.sendAnonymousAppUsageData set:isChecked];
             else if ([name isEqualToString:@"download_map_dialog"])
                 [_settings.showDownloadMapDialog set:isChecked];
             else if ([name isEqualToString:@"last_used"])

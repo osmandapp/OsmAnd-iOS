@@ -24,6 +24,7 @@
 #import "OAPOIFiltersHelper.h"
 #import "OAPOIUIFilter.h"
 #import "OAChoosePlanHelper.h"
+#import "OAAppVersionDependentConstants.h"
 
 const static NSString *URL = @"https://osmand.net/api/motd";
 
@@ -189,7 +190,7 @@ const static NSString *URL = @"https://osmand.net/api/motd";
     _lastCheckTime = currentTime;
     
     NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
-    NSString *ver = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    NSString *ver = OAAppVersionDependentConstants.getVersion;
     int execCount = (int)[settings integerForKey:kAppExecCounter];
     double appInstalledTime = [settings doubleForKey:kAppInstalledDate];
     int appInstalledDays = (int)((currentTime - appInstalledTime) / (24 * 60 * 60));
@@ -485,8 +486,37 @@ const static NSString *URL = @"https://osmand.net/api/motd";
         else if ([_url hasPrefix:@"show-choose-plan:"])
         {
             OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-            NSString *productIdentifierSuffix = [_url substringFromIndex:[@"show-choose-plan:" length]];
-            [OAChoosePlanHelper showChoosePlanScreenWithSuffix:productIdentifierSuffix navController:mapPanel.navigationController];
+            NSString *featureSuffix = [_url substringFromIndex:[@"show-choose-plan:" length]];
+            if ([featureSuffix isEqualToString:@"free-version"] || [featureSuffix isEqualToString:@"osmand-maps-plus"])
+                [OAChoosePlanHelper showChoosePlanScreenWithSuffix:@"maps.plus" navController:mapPanel.navigationController];
+            else if ([featureSuffix isEqualToString:@"osmand-pro"])
+                [OAChoosePlanHelper showChoosePlanScreenWithSuffix:@"" navController:mapPanel.navigationController];
+            else if ([featureSuffix isEqualToString:@"sea-depth"])
+                [OAChoosePlanHelper showChoosePlanScreenWithFeature:[OAFeature NAUTICAL] navController:mapPanel.navigationController];
+            else if ([featureSuffix isEqualToString:@"hillshade"])
+                [OAChoosePlanHelper showChoosePlanScreenWithFeature:[OAFeature TERRAIN] navController:mapPanel.navigationController];
+            else if ([featureSuffix isEqualToString:@"wikipedia"])
+                [OAChoosePlanHelper showChoosePlanScreenWithFeature:[OAFeature WIKIPEDIA] navController:mapPanel.navigationController];
+            else if ([featureSuffix isEqualToString:@"wikivoyage"])
+                [OAChoosePlanHelper showChoosePlanScreenWithFeature:[OAFeature WIKIVOYAGE] navController:mapPanel.navigationController];
+            else if ([featureSuffix isEqualToString:@"osmand-cloud"])
+                [OAChoosePlanHelper showChoosePlanScreenWithFeature:[OAFeature OSMAND_CLOUD] navController:mapPanel.navigationController];
+            else if ([featureSuffix isEqualToString:@"advanced-widgets"])
+                [OAChoosePlanHelper showChoosePlanScreenWithFeature:[OAFeature ADVANCED_WIDGETS] navController:mapPanel.navigationController];
+            else if ([featureSuffix isEqualToString:@"hourly-map-updates"])
+                [OAChoosePlanHelper showChoosePlanScreenWithFeature:[OAFeature HOURLY_MAP_UPDATES] navController:mapPanel.navigationController];
+            else if ([featureSuffix isEqualToString:@"monthly-map-updates"])
+                [OAChoosePlanHelper showChoosePlanScreenWithFeature:[OAFeature MONTHLY_MAP_UPDATES] navController:mapPanel.navigationController];
+            else if ([featureSuffix isEqualToString:@"unlimited-map-downloads"])
+                [OAChoosePlanHelper showChoosePlanScreenWithFeature:[OAFeature UNLIMITED_MAP_DOWNLOADS] navController:mapPanel.navigationController];
+            else if ([featureSuffix isEqualToString:@"combined-wiki"])
+                [OAChoosePlanHelper showChoosePlanScreenWithFeature:[OAFeature COMBINED_WIKI] navController:mapPanel.navigationController];
+            else if ([featureSuffix isEqualToString:@"carplay"])
+                [OAChoosePlanHelper showChoosePlanScreenWithFeature:[OAFeature CARPLAY] navController:mapPanel.navigationController];
+            else if ([featureSuffix isEqualToString:@"weather"])
+                [OAChoosePlanHelper showChoosePlanScreenWithFeature:[OAFeature WEATHER] navController:mapPanel.navigationController];
+            else
+                [OAChoosePlanHelper showChoosePlanScreenWithSuffix:featureSuffix navController:mapPanel.navigationController];
         }
         else
         {

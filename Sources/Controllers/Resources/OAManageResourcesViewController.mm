@@ -28,7 +28,7 @@
 #import "OAPlugin.h"
 #import "OACustomRegion.h"
 #import "OADownloadDescriptionInfo.h"
-#import "OATextViewSimpleCell.h"
+#import "OATextMultilineTableViewCell.h"
 #import "OAMultiIconTextDescCell.h"
 #import "OAColors.h"
 #import "OANauticalMapsPlugin.h"
@@ -512,7 +512,7 @@ static BOOL _repositoryUpdated = NO;
 
 - (void) updateContentIfNeeded
 {
-    BOOL needUpdateContent = NO;
+    BOOL needUpdateContent = [self isNauticalScope];
     if ([self shouldHideBanner] && _displayBanner)
     {
         _displayBanner = NO;
@@ -674,6 +674,8 @@ static BOOL _repositoryUpdated = NO;
         
         const auto regionId = QString::fromNSString(region.regionId);
         const auto downloadsIdPrefix = QString::fromNSString(region.downloadsIdPrefix).toLower();
+        const auto acceptedExtension = QString::fromNSString(region.acceptedExtension).toLower();
+        bool checkExtension = acceptedExtension.length() > 0;
         
         RegionResources regionResources;
         RegionResources regionResPrevious;
@@ -689,8 +691,15 @@ static BOOL _repositoryUpdated = NO;
         {
             for (const auto& resource : _localResources)
             {
-                if (resource->id.startsWith(downloadsIdPrefix))
+                if (checkExtension)
+                {
+                    if (resource->id.endsWith(acceptedExtension))
+                        regionResources.allResources.remove(resource->id);
+                }
+                else if (resource->id.startsWith(downloadsIdPrefix))
+                {
                     regionResources.allResources.remove(resource->id);
+                }
             }
             for (const auto& resource : regionResources.outdatedResources)
             {
@@ -709,8 +718,15 @@ static BOOL _repositoryUpdated = NO;
         
         for (const auto& resource : _outdatedResources)
         {
-            if (!resource->id.startsWith(downloadsIdPrefix))
+            if (checkExtension)
+            {
+                if (!resource->id.endsWith(acceptedExtension))
+                    continue;
+            }
+            else if (!resource->id.startsWith(downloadsIdPrefix))
+            {
                 continue;
+            }
             
             regionResources.allResources.insert(resource->id, resource);
             regionResources.outdatedResources.insert(resource->id, resource);
@@ -719,8 +735,15 @@ static BOOL _repositoryUpdated = NO;
         
         for (const auto& resource : _localResources)
         {
-            if (!resource->id.startsWith(downloadsIdPrefix))
+            if (checkExtension)
+            {
+                if (!resource->id.endsWith(acceptedExtension))
+                    continue;
+            }
+            else if (!resource->id.startsWith(downloadsIdPrefix))
+            {
                 continue;
+            }
 
             if (!regionResources.allResources.contains(resource->id))
                 regionResources.allResources.insert(resource->id, resource);
@@ -734,8 +757,15 @@ static BOOL _repositoryUpdated = NO;
             BOOL hasSrtm = NO;
             for (const auto& resource : _resourcesInRepository)
             {
-                if (!resource->id.startsWith(downloadsIdPrefix))
+                if (checkExtension)
+                {
+                    if (!resource->id.endsWith(acceptedExtension))
+                        continue;
+                }
+                else if (!resource->id.startsWith(downloadsIdPrefix))
+                {
                     continue;
+                }
                 
                 switch (resource->type)
                 {
@@ -746,6 +776,8 @@ static BOOL _repositoryUpdated = NO;
                     case OsmAndResourceType::HillshadeRegion:
                     case OsmAndResourceType::SlopeRegion:
                     case OsmAndResourceType::DepthContourRegion:
+                    case OsmAndResourceType::DepthMapRegion:
+                    case OsmAndResourceType::HeightmapRegion:
                         [typesArray addObject:@((int) resource->type)];
                         break;
                     default:
@@ -843,6 +875,10 @@ static BOOL _repositoryUpdated = NO;
             if (nauticalRegion)
             {
                 [allResourcesArray addObject:item_];
+            }
+            else if (![OAAppSettings.sharedManager.showHeightmaps get] && item_.resourceType == OsmAndResourceType::HeightmapRegion)
+            {
+                continue;
             }
             else if (region == self.region)
             {
@@ -1196,7 +1232,7 @@ static BOOL _repositoryUpdated = NO;
         item.size = localResource->size;
         item.date = [[[NSFileManager defaultManager] attributesOfItemAtPath:localResource->localPath.toNSString() error:NULL] fileModificationDate];;
         item.worldRegion = match;
-        NSString *localResourcePath = _app.resourcesManager->getLocalResource(item.resourceId)->localPath.toNSString();
+        NSString *localResourcePath = localResource->localPath.toNSString();
         item.date = [[[NSFileManager defaultManager] attributesOfItemAtPath:localResourcePath error:NULL] fileModificationDate];
 
         _totalInstalledSize += localResource->size;
@@ -2181,7 +2217,7 @@ static BOOL _repositoryUpdated = NO;
         {
             if (indexPath.row == 0)
             {
-                cellTypeId = [OATextViewSimpleCell getCellIdentifier];
+                cellTypeId = [OATextMultilineTableViewCell getCellIdentifier];
                 title = nil;
             }
             else
@@ -2209,33 +2245,6 @@ static BOOL _repositoryUpdated = NO;
                 
                 cellTypeId = subregionCell;
                 title = item.name;
-                if (item.superregion != nil && item.superregion != _app.worldRegion)
-                {
-                    if (item.resourceTypes.count > 0)
-                    {
-                        NSMutableOrderedSet<NSNumber *> *typesSet = [NSMutableOrderedSet orderedSetWithArray:item.resourceTypes];
-                        NSArray<NSNumber *> *sortedTypesWithoutDuplicate = [[typesSet array] sortedArrayUsingComparator:^NSComparisonResult(NSNumber *type1, NSNumber *type2) {
-                            NSInteger orderValue1 = [OAResourceType getOrderIndex:type1];
-                            NSInteger orderValue2 = [OAResourceType getOrderIndex:type2];
-                            if (orderValue1 < orderValue2)
-                                return NSOrderedAscending;
-                            else if (orderValue1 > orderValue2)
-                                return NSOrderedDescending;
-                            else
-                                return NSOrderedSame;
-                        }];
-
-                        NSMutableArray<NSString *> *typesLocalized = [NSMutableArray new];
-                        [sortedTypesWithoutDuplicate enumerateObjectsUsingBlock:^(NSNumber *type, NSUInteger idx, BOOL *stop) {
-                            [typesLocalized addObject:[OAResourceType resourceTypeLocalized:[OAResourceType toResourceType:type isGroup:NO]]];
-                        }];
-                        subtitle = [typesLocalized componentsJoinedByString:@", "];
-                    }
-                    else
-                    {
-                        subtitle = item.superregion.name;
-                    }
-                }
             }
             else
             {
@@ -2287,7 +2296,7 @@ static BOOL _repositoryUpdated = NO;
                     disabled = YES;
                     item.disabled = disabled;
                 }
-                if (item.resourceType == OsmAndResourceType::DepthContourRegion && (![OAIAPHelper isDepthContoursPurchased] || ![OAPlugin isEnabled:OANauticalMapsPlugin.class]))
+                if ((item.resourceType == OsmAndResourceType::DepthContourRegion || item.resourceType == OsmAndResourceType::DepthMapRegion) && (![OAIAPHelper isDepthContoursPurchased] || ![OAPlugin isEnabled:OANauticalMapsPlugin.class]))
                 {
                     disabled = YES;
                     item.disabled = disabled;
@@ -2528,12 +2537,11 @@ static BOOL _repositoryUpdated = NO;
             btnAcc.frame = CGRectMake(0.0, 0.0, 60.0, 50.0);
             [cell setAccessoryView:btnAcc];
         }
-        else if ([cellTypeId isEqualToString:[OATextViewSimpleCell getCellIdentifier]])
+        else if ([cellTypeId isEqualToString:[OATextMultilineTableViewCell getCellIdentifier]])
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextViewSimpleCell getCellIdentifier] owner:self options:nil];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextMultilineTableViewCell getCellIdentifier] owner:self options:nil];
             cell = nib[0];
             cell.separatorInset = UIEdgeInsetsMake(0., DBL_MAX, 0., 0.);
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         else if ([cellTypeId isEqualToString:descriptionButtonIconCell])
         {
@@ -2756,9 +2764,11 @@ static BOOL _repositoryUpdated = NO;
             [progressView setNeedsDisplay];
         }
     }
-    else if ([cellTypeId isEqualToString:[OATextViewSimpleCell getCellIdentifier]])
+    else if ([cellTypeId isEqualToString:[OATextMultilineTableViewCell getCellIdentifier]])
     {
-        OATextViewSimpleCell *textViewCell = (OATextViewSimpleCell *) cell;
+        OATextMultilineTableViewCell *textViewCell = (OATextMultilineTableViewCell *) cell;
+        [textViewCell leftIconVisibility:NO];
+        [textViewCell clearButtonVisibility:NO];
         textViewCell.textView.attributedText = [OAUtilities attributedStringFromHtmlString:_downloadDescriptionInfo.getLocalizedDescription fontSize:17];
         textViewCell.textView.linkTextAttributes = @{NSForegroundColorAttributeName: UIColorFromRGB(color_primary_purple)};
         [textViewCell.textView sizeToFit];

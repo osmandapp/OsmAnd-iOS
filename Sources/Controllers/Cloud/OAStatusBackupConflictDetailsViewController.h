@@ -7,6 +7,8 @@
 //
 
 #import "OASuperViewController.h"
+#import "OAStatusBackupTableViewController.h"
+#import "OANetworkSettingsHelper.h"
 
 @class OALocalFile, OARemoteFile;
 
@@ -16,7 +18,9 @@
 
 - (instancetype)initWithLocalFile:(OALocalFile *)localeFile
                        remoteFile:(OARemoteFile *)remoteFile
-       backupExportImportListener:(id)backupExportImportListener;
+                        operation:(EOABackupSyncOperationType)operation
+                recentChangesType:(EOARecentChangesType)recentChangesType;
+
 
 @property(nonatomic, weak) id<OAStatusBackupDelegate> delegate;
 

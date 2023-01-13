@@ -205,9 +205,15 @@
                 @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
             }];
             [dataArr addObject:@{
-                @"name" : @"NAUTICAL_MILES",
-                @"title" : OALocalizedString(@"si_nm"),
-                @"selected" : @(metricSystem == NAUTICAL_MILES),
+                @"name" : @"NAUTICAL_MILES_AND_METERS",
+                @"title" : OALocalizedString(@"si_nm_mt"),
+                @"selected" : @(metricSystem == NAUTICAL_MILES_AND_METERS),
+                @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
+            }];
+            [dataArr addObject:@{
+                @"name" : @"NAUTICAL_MILES_AND_FEET",
+                @"title" : OALocalizedString(@"si_nm_ft"),
+                @"selected" : @(metricSystem == NAUTICAL_MILES_AND_FEET),
                 @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
             }];
             break;
@@ -459,8 +465,10 @@
         [_settings.metricSystem set:MILES_AND_YARDS mode:self.appMode];
     else if ([name isEqualToString:@"MILES_AND_METERS"])
         [_settings.metricSystem set:MILES_AND_METERS mode:self.appMode];
-    else if ([name isEqualToString:@"NAUTICAL_MILES"])
-        [_settings.metricSystem set:NAUTICAL_MILES mode:self.appMode];
+    else if ([name isEqualToString:@"NAUTICAL_MILES_AND_METERS"])
+        [_settings.metricSystem set:NAUTICAL_MILES_AND_METERS mode:self.appMode];
+    else if ([name isEqualToString:@"NAUTICAL_MILES_AND_FEET"])
+        [_settings.metricSystem set:NAUTICAL_MILES_AND_FEET mode:self.appMode];
     [_settings.metricSystemChangedManually set:YES mode:self.appMode];
 }
 

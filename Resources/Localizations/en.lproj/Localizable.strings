@@ -455,6 +455,8 @@
 "si_mi_meters" = "Miles/meters";
 "si_km_m" = "Kilometers/meters";
 "si_nm" = "Nautical miles";
+"si_nm_mt" = "Nautical miles/meters";
+"si_nm_ft" = "Nautical miles/feet";
 "si_kmh" = "Kilometers per hour";
 "si_mph" = "Miles per hour";
 "si_m_s" = "Meters per second";

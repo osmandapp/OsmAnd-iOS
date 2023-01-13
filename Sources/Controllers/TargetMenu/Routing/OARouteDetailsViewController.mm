@@ -787,8 +787,7 @@
 - (void)onSetupEmission:(NSString *)result
 {
     _emission = result;
-    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-    [mapPanel updateDescriptionLabel];
+    [[OARootViewController instance].mapPanel updateTargetDescriptionLabel];
 }
 
 @end

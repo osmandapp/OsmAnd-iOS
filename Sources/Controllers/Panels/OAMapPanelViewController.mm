@@ -1030,7 +1030,7 @@ typedef enum
         [self.routeInfoView update];
 }
 
-- (void) updateDescriptionLabel
+- (void) updateTargetDescriptionLabel
 {
     [self.targetMenuView updateDescriptionLabel];
 }

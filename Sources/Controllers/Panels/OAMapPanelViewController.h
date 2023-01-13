@@ -92,7 +92,7 @@
 - (void) closeRouteInfo:(BOOL)topControlsVisibility onComplete:(void (^)(void))onComplete;
 - (void) updateRouteInfo;
 - (void) updateRouteInfoData;
-- (void) updateDescriptionLabel;
+- (void) updateTargetDescriptionLabel;
 - (void) showWaypoints;
 - (void) showRoutePreferences;
 - (void) showConfigureScreen;

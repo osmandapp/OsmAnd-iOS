@@ -181,9 +181,15 @@
         OAPOIBaseType *item = _isFiltered ? (OAPOIBaseType *)_filteredData[indexPath.row] : (OAPOIBaseType *)_data[indexPath.row];
         cell.titleLabel.text = item.nameLocalized;
         if ((_screenType == CATEGORY_SCREEN && [item isEqual:_poiData.getPoiCategory]) || [item isEqual:_poiData.getCurrentPoiType])
+        {
             [cell.leftIconView setImage:[UIImage imageNamed:@"menu_cell_selected.png"]];
+        }
         else
-            [cell.leftIconView setImage:item.icon];
+        {
+            UIImage *icon = [item.icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            [cell.leftIconView setImage:icon];
+            [cell.leftIconView setTintColor:UIColorFromRGB(color_poi_orange)];
+        }
     }
     return cell;
 }

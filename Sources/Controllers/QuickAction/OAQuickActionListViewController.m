@@ -325,7 +325,8 @@
     if (cell)
     {
         [cell.textView setText:action.getName];
-        [cell.iconView setImage:[UIImage imageNamed:action.getIconResName]];
+        [cell.iconView setImage:[UIImage templateImageNamed:action.getIconResName]];
+        [cell.iconView setTintColor:UIColorFromRGB(color_poi_orange)];
         if (cell.iconView.subviews.count > 0)
             [[cell.iconView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
         

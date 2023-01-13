@@ -60,7 +60,29 @@
 
 - (NSString *) iconName
 {
-    return [OAUtilities drawablePath:[NSString stringWithFormat:@"mx_%@_%@", self.getOsmTag, self.getOsmValue]];
+    UIImage *img = [super icon];
+    if (!img)
+    {
+        NSString *iconName = [OAUtilities drawablePath:[NSString stringWithFormat:@"mx_%@_%@", self.getOsmTag, self.getOsmValue]];
+        img = [UIImage imageNamed:iconName];
+        if (img)
+        {
+            return iconName;
+        }
+        else if (self.parentType)
+        {
+            return [self.parentType iconName];
+        }
+        else if (self.filter)
+        {
+            return [self.filter iconName];
+        }
+        else if (self.category)
+        {
+            return [self.category iconName];
+        }
+    }
+    return [super iconName];
 }
 
 - (UIImage *) mapIcon

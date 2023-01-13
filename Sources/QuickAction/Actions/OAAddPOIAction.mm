@@ -77,7 +77,7 @@ static OAQuickActionType *ACTION_TYPE;
 - (OAPOIType *) getPoiType
 {
     NSString *poiTypeTranslation = [self getPoiTypeTranslation];
-    return poiTypeTranslation == nil ? nil : [OAPOIHelper.sharedInstance getAllTranslatedNames:NO][poiTypeTranslation.lowerCase];
+    return poiTypeTranslation == nil ? nil : [OAPOIHelper.sharedInstance getAllTranslatedNames:YES][poiTypeTranslation.lowerCase];
 }
 
 - (NSString *) getPoiTypeTranslation

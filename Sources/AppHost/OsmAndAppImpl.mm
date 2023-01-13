@@ -648,7 +648,6 @@
     [OAMapCreatorHelper sharedInstance];
     [OATerrainLayer sharedInstanceHillshade];
     [OATerrainLayer sharedInstanceSlope];
-    [OAPlugin initPlugins];
 
     OAIAPHelper *iapHelper = [OAIAPHelper sharedInstance];
     [iapHelper resetTestPurchases];
@@ -660,6 +659,7 @@
                                                                                     settings.defaultApplicationMode.get;
     [settings setApplicationModePref:initialAppMode];
     
+    [OAPlugin initPlugins];
     [OAPOIHelper sharedInstance];
     [OAQuickSearchHelper instance];
     OAPOIFiltersHelper *helper = [OAPOIFiltersHelper sharedInstance];

@@ -467,8 +467,10 @@
             return OALocalizedString(@"si_mi_meters");
         case MILES_AND_YARDS:
             return OALocalizedString(@"si_mi_yard");
-        case NAUTICAL_MILES:
-            return OALocalizedString(@"si_nm");
+        case NAUTICAL_MILES_AND_METERS:
+            return OALocalizedString(@"si_nm_mt");
+        case NAUTICAL_MILES_AND_FEET:
+            return OALocalizedString(@"si_nm_ft");
 
         default:
             return @"";
@@ -487,8 +489,10 @@
             return @"mi-m";
         case MILES_AND_YARDS:
             return @"mi-y";
-        case NAUTICAL_MILES:
-            return @"units_nm";
+        case NAUTICAL_MILES_AND_METERS:
+            return @"nm-m";
+        case NAUTICAL_MILES_AND_FEET:
+            return @"nm-f";
 
         default:
             return @"";
@@ -2282,7 +2286,7 @@
     if ([mode isDerivedRoutingFrom:[OAApplicationMode BOAT]])
         return @(NAUTICALMILES_PER_HOUR);
 
-    if (mc == NAUTICAL_MILES)
+    if (mc == NAUTICAL_MILES_AND_METERS || mc == NAUTICAL_MILES_AND_FEET)
         return @(NAUTICALMILES_PER_HOUR);
     else if (mc == KILOMETERS_AND_METERS)
         return @(KILOMETERS_PER_HOUR);
@@ -2687,8 +2691,10 @@
         return [self set:MILES_AND_METERS mode:mode];
     else if ([strValue isEqualToString:@"MILES_AND_YARDS"])
         return [self set:MILES_AND_YARDS mode:mode];
-    else if ([strValue isEqualToString:@"NAUTICAL_MILES"])
-        return [self set:NAUTICAL_MILES mode:mode];
+    else if ([strValue isEqualToString:@"NAUTICAL_MILES_AND_METERS"])
+        return [self set:NAUTICAL_MILES_AND_METERS mode:mode];
+    else if ([strValue isEqualToString:@"NAUTICAL_MILES_AND_FEET"])
+        return [self set:NAUTICAL_MILES_AND_FEET mode:mode];
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
@@ -2703,8 +2709,10 @@
             return @"MILES_AND_METERS";
         case MILES_AND_YARDS:
             return @"MILES_AND_YARDS";
-        case NAUTICAL_MILES:
-            return @"NAUTICAL_MILES";
+        case NAUTICAL_MILES_AND_METERS:
+            return @"NAUTICAL_MILES_AND_METERS";
+        case NAUTICAL_MILES_AND_FEET:
+            return @"NAUTICAL_MILES_AND_FEET";
         default:
             return @"KILOMETERS_AND_METERS";
     }

@@ -60,7 +60,8 @@ typedef NS_ENUM(NSInteger, EOAMetricsConstant)
     MILES_AND_FEET,
     MILES_AND_YARDS,
     MILES_AND_METERS,
-    NAUTICAL_MILES
+    NAUTICAL_MILES_AND_METERS,
+    NAUTICAL_MILES_AND_FEET
 };
 
 @interface OAMetricsConstant : NSObject

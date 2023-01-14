@@ -315,14 +315,18 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:[OAButtonCell getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:[OAButtonTableViewCell getCellIdentifier]])
     {
-        OAButtonCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAButtonCell getCellIdentifier]];
+        OAButtonTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAButtonTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonCell getCellIdentifier] owner:self options:nil];
-            cell = (OAButtonCell *)[nib objectAtIndex:0];
-            [cell showImage:NO];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAButtonTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell titleVisibility:NO];
+            [cell descriptionVisibility:NO];
+            cell.button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+            cell.backgroundColor = UIColor.clearColor;
         }
         if (cell)
         {
@@ -330,7 +334,6 @@
             [cell.button setTitleColor:item[@"color"] forState:UIControlStateNormal];
             [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.button addTarget:self action:NSSelectorFromString(item[@"action"]) forControlEvents:UIControlEventTouchUpInside];
-            cell.backgroundColor = UIColor.clearColor;
         }
         return cell;
     }

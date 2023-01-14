@@ -13,7 +13,7 @@
 #import "OADescrTitleCell.h"
 #import "OAFilledButtonCell.h"
 #import "OADividerCell.h"
-#import "OAButtonCell.h"
+#import "OAButtonTableViewCell.h"
 
 @interface OACloudAccountBaseViewController : OABaseBigTitleSettingsViewController
 

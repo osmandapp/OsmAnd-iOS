@@ -15,7 +15,7 @@
 #import "OAQuickActionSelectionBottomSheetViewController.h"
 #import "OAQuickActionType.h"
 #import "OAResourcesUIHelper.h"
-#import "OAButtonCell.h"
+#import "OAButtonTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OATitleDescrDraggableCell.h"
 
@@ -160,7 +160,7 @@ static OAQuickActionType *TYPE;
     }
     [arr addObject:@{
                      @"title" : OALocalizedString(@"add_map_source"),
-                     @"type" : [OAButtonCell getCellIdentifier],
+                     @"type" : [OAButtonTableViewCell getCellIdentifier],
                      @"target" : @"addMapSource"
                      }];
     [data setObject:[NSArray arrayWithArray:arr] forKey:OALocalizedString(@"map_sources")];

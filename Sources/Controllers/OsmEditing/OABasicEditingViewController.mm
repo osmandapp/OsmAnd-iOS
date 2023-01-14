@@ -20,7 +20,7 @@
 #import "OAPoiTypeSelectionViewController.h"
 #import "OAPOIHelper.h"
 #import "OAOSMSettings.h"
-#import "OAButtonCell.h"
+#import "OAButtonTableViewCell.h"
 #import "OAOpeningHoursSelectionViewController.h"
 
 #include <openingHoursParser.h>
@@ -201,7 +201,7 @@ static const NSInteger _contactInfoSectionCount = 5;
     }
     [dataArr addObject:@{
                          @"title" : OALocalizedString(@"osm_add_timespan"),
-                         @"type" : [OAButtonCell getCellIdentifier]
+                         @"type" : [OAButtonTableViewCell getCellIdentifier]
                          }];
     _hoursSectionItems = [NSArray arrayWithArray:dataArr];
 }
@@ -282,14 +282,17 @@ static const NSInteger _contactInfoSectionCount = 5;
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:[OAButtonCell getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:[OAButtonTableViewCell getCellIdentifier]])
     {
-        OAButtonCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAButtonCell getCellIdentifier]];
+        OAButtonTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAButtonTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonCell getCellIdentifier] owner:self options:nil];
-            cell = (OAButtonCell *)[nib objectAtIndex:0];
-            [cell showImage:NO];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAButtonTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell titleVisibility:NO];
+            [cell descriptionVisibility:NO];
+            cell.button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
         }
         if (cell)
         {

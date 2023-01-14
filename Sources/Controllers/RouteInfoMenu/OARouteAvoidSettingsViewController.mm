@@ -31,7 +31,7 @@
 #import "OAUtilities.h"
 #import "OAAvoidSpecificRoads.h"
 #import "OAMenuSimpleCell.h"
-#import "OAButtonCell.h"
+#import "OAButtonTableViewCell.h"
 #import "OAOsmAndFormatter.h"
 
 #include <OsmAndCore/Utilities.h>
@@ -106,7 +106,7 @@
     
     [sectionData addObject:@{
         @"title" : OALocalizedString(@"shared_string_select_on_map"),
-        @"type" : [OAButtonCell getCellIdentifier],
+        @"type" : [OAButtonTableViewCell getCellIdentifier],
         @"key" : @"select_on_map"
     }];
     
@@ -270,22 +270,23 @@
             }
             return cell;
         }
-        else if ([item[@"type"] isEqualToString:[OAButtonCell getCellIdentifier]])
+        else if ([item[@"type"] isEqualToString:[OAButtonTableViewCell getCellIdentifier]])
         {
-            OAButtonCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAButtonCell getCellIdentifier]];
+            OAButtonTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAButtonTableViewCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonCell getCellIdentifier] owner:self options:nil];
-                cell = (OAButtonCell *)[nib objectAtIndex:0];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonTableViewCell getCellIdentifier] owner:self options:nil];
+                cell = (OAButtonTableViewCell *) nib[0];
+                [cell leftIconVisibility:NO];
+                [cell titleVisibility:NO];
+                [cell descriptionVisibility:NO];
+                cell.button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
             }
             if (cell)
             {
-                cell.userInteractionEnabled = YES;
                 [cell.button setTitle:item[@"title"] forState:UIControlStateNormal];
                 [cell.button removeTarget:self action:NULL forControlEvents:UIControlEventTouchDown];
                 [cell.button addTarget:self action:@selector(addRoadPressed:) forControlEvents:UIControlEventTouchDown];
-                [cell.button setTintColor:UIColorFromRGB(color_primary_purple)];
-                [cell showImage:NO];
             }
             return cell;
         }

@@ -14,7 +14,7 @@
 #import "OAQuickActionSelectionBottomSheetViewController.h"
 #import "OAQuickActionType.h"
 #import "OAResourcesUIHelper.h"
-#import "OAButtonCell.h"
+#import "OAButtonTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OATitleDescrDraggableCell.h"
 
@@ -155,7 +155,7 @@ static OAQuickActionType *TYPE;
     }
     [arr addObject:@{
                      @"title" : OALocalizedString(@"quick_action_add_overlay"),
-                     @"type" : [OAButtonCell getCellIdentifier],
+                     @"type" : [OAButtonTableViewCell getCellIdentifier],
                      @"target" : @"addMapOverlay"
                      }];
     [data setObject:[NSArray arrayWithArray:arr] forKey:OALocalizedString(@"map_overlays")];

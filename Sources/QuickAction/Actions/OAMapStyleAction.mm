@@ -13,7 +13,7 @@
 #import "OAQuickActionSelectionBottomSheetViewController.h"
 #import "OARendererRegistry.h"
 #import "OAQuickActionType.h"
-#import "OAButtonCell.h"
+#import "OAButtonTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OATitleDescrDraggableCell.h"
 #import "OAIndexConstants.h"
@@ -197,7 +197,7 @@ static OAQuickActionType *TYPE;
     }
     [arr addObject:@{
                      @"title" : OALocalizedString(@"add_map_style"),
-                     @"type" : [OAButtonCell getCellIdentifier],
+                     @"type" : [OAButtonTableViewCell getCellIdentifier],
                      @"target" : @"addMapStyle"
                      }];
     [data setObject:[NSArray arrayWithArray:arr] forKey:OALocalizedString(@"map_styles")];

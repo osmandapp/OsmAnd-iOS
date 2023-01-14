@@ -22,7 +22,7 @@
 #import "OANativeUtilities.h"
 #import "OsmAndApp.h"
 #import "OAMenuSimpleCell.h"
-#import "OAButtonCell.h"
+#import "OAButtonTableViewCell.h"
 #import "OAActionAddCategoryViewController.h"
 #import "OAQuickSearchListItem.h"
 #import "OAPOIUIFilter.h"
@@ -389,7 +389,7 @@
     NSMutableArray *arr = [NSMutableArray new];
     for (NSDictionary *item in _data[_data.allKeys.lastObject])
     {
-        if (![item[@"type"] isEqualToString:[OAButtonCell getCellIdentifier]])
+        if (![item[@"type"] isEqualToString:[OAButtonTableViewCell getCellIdentifier]])
             [arr addObject:item[@"title"]];
     }
     return arr;
@@ -651,21 +651,23 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:[OAButtonCell getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:[OAButtonTableViewCell getCellIdentifier]])
     {
-        OAButtonCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAButtonCell getCellIdentifier]];
+        OAButtonTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAButtonTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonCell getCellIdentifier] owner:self options:nil];
-            cell = (OAButtonCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAButtonTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell titleVisibility:NO];
+            [cell descriptionVisibility:NO];
+            cell.button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
         }
         if (cell)
         {
             [cell.button setTitle:item[@"title"] forState:UIControlStateNormal];
             [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventTouchDown];
             [cell.button addTarget:self action:NSSelectorFromString(item[@"target"]) forControlEvents:UIControlEventTouchDown];
-            [cell.button setTintColor:UIColorFromRGB(color_primary_purple)];
-            [cell showImage:NO];
         }
         return cell;
     }

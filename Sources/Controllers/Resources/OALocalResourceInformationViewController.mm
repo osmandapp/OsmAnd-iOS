@@ -9,7 +9,7 @@
 #import "OALocalResourceInformationViewController.h"
 #import "OsmAndApp.h"
 #import "OALocalResourceInfoCell.h"
-#import "OAButtonCell.h"
+#import "OAButtonTableViewCell.h"
 #import "OAPurchasesViewController.h"
 #import "OAPluginsViewController.h"
 #import "OAUtilities.h"
@@ -329,15 +329,17 @@
     tableButtons = tButtons;
 }
 
-- (OAButtonCell *) getButtonCell:(NSString *)type
+- (OAButtonTableViewCell *) getButtonCell:(NSString *)type
 {
-    OAButtonCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAButtonCell getCellIdentifier]];
+    OAButtonTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAButtonTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonCell getCellIdentifier] owner:self options:nil];
-        cell = (OAButtonCell *)[nib objectAtIndex:0];
-        [cell showImage:NO];
-        [cell.button setTitleColor:UIColorFromRGB(color_primary_purple) forState:UIControlStateNormal];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonTableViewCell getCellIdentifier] owner:self options:nil];
+        cell = (OAButtonTableViewCell *) nib[0];
+        [cell leftIconVisibility:NO];
+        [cell titleVisibility:NO];
+        [cell descriptionVisibility:NO];
+        cell.button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     }
     if (cell)
     {

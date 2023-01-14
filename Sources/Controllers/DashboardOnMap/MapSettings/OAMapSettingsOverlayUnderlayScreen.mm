@@ -18,7 +18,7 @@
 #import "OASwitchTableViewCell.h"
 #import "OATitleSliderTableViewCell.h"
 #import "OAIconTextDescButtonCell.h"
-#import "OAButtonCell.h"
+#import "OAButtonTableViewCell.h"
 #import "OAColors.h"
 #import "OALocalResourceInformationViewController.h"
 #import "OAOnlineTilesEditingViewController.h"
@@ -447,20 +447,24 @@ static NSInteger kButtonsSection;
     }
     else if ([item[@"type"] isEqualToString:kCellTypeButton])
     {
-        OAButtonCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAButtonCell getCellIdentifier]];
+        OAButtonTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAButtonTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonCell getCellIdentifier] owner:self options:nil];
-            cell = (OAButtonCell *)[nib objectAtIndex:0];
-            [cell showImage:NO];
-            [cell.button setTitleColor:[UIColor colorWithRed:87.0/255.0 green:20.0/255.0 blue:204.0/255.0 alpha:1] forState:UIControlStateNormal];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAButtonTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell titleVisibility:NO];
+            [cell descriptionVisibility:NO];
+            cell.button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
         }
         if (cell)
         {
             [cell.button setTitle:item[@"title"] forState:UIControlStateNormal];
             [cell.button removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
             if (indexPath.section == kAvailableLayersSection)
+            {
                 [cell.button addTarget:self action:@selector(installMorePressed) forControlEvents:UIControlEventTouchUpInside];
+            }
             else
             {
                 if (indexPath.row == 0)

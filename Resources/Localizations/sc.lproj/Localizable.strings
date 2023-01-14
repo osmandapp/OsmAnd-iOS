@@ -699,7 +699,7 @@
 "map_widget_bearing" = "Bùssola relativa";
 "map_widget_transparent" = "Butones trasparentes";
 "shared_string_near" = "A curtzu";
-"auto_follow_location_enabled" = "Bisura de sa mapa tzentrada automaticamente.";
+"auto_follow_location_enabled" = "Vista de sa mapa tzentrada in automàticu.";
 "unknown_location" = "Positzione galu disconnota";
 "day_night_info_description" = "Arbèschida: %1$s \nIntrinada: %2$s";
 "day_night_info" = "Informatziones die/note";

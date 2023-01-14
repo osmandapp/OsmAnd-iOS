@@ -19,7 +19,7 @@
 #import "OAPOIFiltersHelper.h"
 #import "OAMapViewController.h"
 #import "OARootViewController.h"
-#import "OAIconTitleButtonCell.h"
+#import "OAButtonTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OAIconTitleValueCell.h"
 #import "OATimeTableViewCell.h"
@@ -134,7 +134,7 @@ static const NSInteger panoImageFilterSection = 2;
                              @"key" : @"mapillary_enabled"
                              },
                          @{
-                             @"type" : [OAIconTitleButtonCell getCellIdentifier],
+                             @"type" : [OAButtonTableViewCell getCellIdentifier],
                              @"title" : OALocalizedString(@"tile_cache"),
                              @"btnTitle" : OALocalizedString(@"shared_string_reload"),
                              @"description" : @"",
@@ -362,26 +362,25 @@ static const NSInteger panoImageFilterSection = 2;
         }
         outCell = cell;
     }
-    else if ([item[@"type"] isEqualToString:[OAIconTitleButtonCell getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:[OAButtonTableViewCell getCellIdentifier]])
     {
-        OAIconTitleButtonCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleButtonCell getCellIdentifier]];
+        OAButtonTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAButtonTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleButtonCell getCellIdentifier] owner:self options:nil];
-            cell = (OAIconTitleButtonCell *)[nib objectAtIndex:0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAButtonTableViewCell *) nib[0];
+            [cell descriptionVisibility:NO];
         }
         if (cell)
         {
-            cell.titleView.text = item[@"title"];
-            cell.iconView.image = [UIImage templateImageNamed:item[@"img"]];
-            cell.iconView.tintColor = UIColorFromRGB(color_tint_gray);
-            [cell setButtonText:item[@"btnTitle"]];
-            [cell.buttonView removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
-            [cell.buttonView addTarget:self action:@selector(reloadCache) forControlEvents:UIControlEventTouchUpInside];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.titleLabel.text = item[@"title"];
+            cell.leftIconView.image = [UIImage templateImageNamed:item[@"img"]];
+            cell.leftIconView.tintColor = UIColorFromRGB(color_tint_gray);
+            [cell.button setTitle:item[@"btnTitle"] forState:UIControlStateNormal];
+            [cell.button removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
+            [cell.button addTarget:self action:@selector(reloadCache) forControlEvents:UIControlEventTouchUpInside];
         }
-        outCell = cell;
+        return cell;
     }
     else if ([item[@"type"] isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
     {
@@ -599,7 +598,7 @@ static const NSInteger panoImageFilterSection = 2;
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]] || [item[@"type"] isEqualToString:[OAIconTitleButtonCell getCellIdentifier]] || [item[@"type"] isEqualToString:[OAIconTitleValueCell getCellIdentifier]] || [indexPath isEqual:_datePickerIndexPath])
+    if ([item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]] || [item[@"type"] isEqualToString:[OAButtonTableViewCell getCellIdentifier]] || [item[@"type"] isEqualToString:[OAIconTitleValueCell getCellIdentifier]] || [indexPath isEqual:_datePickerIndexPath])
     {
         return UITableViewAutomaticDimension;
     }

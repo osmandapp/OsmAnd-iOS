@@ -12,7 +12,7 @@
 #import "OAQuickActionRegistry.h"
 #import "OAQuickAction.h"
 #import "OrderedDictionary.h"
-#import "OAIconTitleButtonCell.h"
+#import "OAButtonTableViewCell.h"
 #import "OASizes.h"
 #import "OAQuickActionType.h"
 
@@ -228,40 +228,40 @@
     OAQuickActionType *action = [self getItem:indexPath];
     if (action)
     {
-        OAIconTitleButtonCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleButtonCell getCellIdentifier]];
+        OAButtonTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAButtonTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleButtonCell getCellIdentifier] owner:self options:nil];
-            cell = (OAIconTitleButtonCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAButtonTableViewCell *) nib[0];
+            [cell descriptionVisibility:NO];
+            [cell.button setTitle:nil forState:UIControlStateNormal];
         }
-        
         if (cell)
         {
-            cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
-            cell.titleView.text = action.name;
-            cell.iconView.image = [UIImage imageNamed:action.iconName];
-            if (cell.iconView.subviews.count > 0)
-                [[cell.iconView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
+            cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingToLeftOfContentWithIcon, 0., 0.);
+            cell.titleLabel.text = action.name;
+            cell.leftIconView.image = [UIImage imageNamed:action.iconName];
+            if (cell.leftIconView.subviews.count > 0)
+                [[cell.leftIconView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
             
             if (action.hasSecondaryIcon)
             {
                 OAQuickAction *act = [action createNew];
-                CGRect frame = CGRectMake(0., 0., cell.iconView.frame.size.width, cell.iconView.frame.size.height);
+                CGRect frame = CGRectMake(0., 0., cell.leftIconView.frame.size.width, cell.leftIconView.frame.size.height);
                 UIImage *imgBackground = [UIImage templateImageNamed:@"ic_custom_compound_action_background"];
                 UIImageView *background = [[UIImageView alloc] initWithImage:imgBackground];
                 [background setTintColor:UIColor.whiteColor];
-                [cell.iconView addSubview:background];
+                [cell.leftIconView addSubview:background];
                 UIImage *img = [UIImage imageNamed:act.getSecondaryIconName];
                 UIImageView *view = [[UIImageView alloc] initWithImage:img];
                 view.frame = frame;
-                [cell.iconView addSubview:view];
+                [cell.leftIconView addSubview:view];
             }
-            [cell setButtonText:nil];
-            cell.buttonView.tag = indexPath.section << 10 | indexPath.row;
-            [cell.buttonView setImage:[[UIImage imageNamed:@"ic_custom_plus"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
-            [cell.buttonView removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
-            [cell.buttonView addTarget:self action:@selector(addAction:) forControlEvents:UIControlEventTouchUpInside];
-            cell.buttonView.imageEdgeInsets = UIEdgeInsetsMake(0., cell.buttonView.frame.size.width - 30, 0, 0);
+            cell.button.tag = indexPath.section << 10 | indexPath.row;
+            [cell.button setImage:[[UIImage imageNamed:@"ic_custom_plus"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]
+                         forState:UIControlStateNormal];
+            [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
+            [cell.button addTarget:self action:@selector(addAction:) forControlEvents:UIControlEventTouchUpInside];
         }
         return cell;
     }

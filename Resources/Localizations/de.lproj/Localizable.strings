@@ -2797,3 +2797,5 @@
 "co2_mission" = "CO2-Emission";
 "routing_attr_motor_type_diesel_name" = "Diesel";
 "routing_attr_motor_type_name" = "Kraftstoffverbrauch des Motors";
+"si_nm_ft" = "Seemeilen/Fuß";
+"si_nm_mt" = "Seemeilen/Meter";

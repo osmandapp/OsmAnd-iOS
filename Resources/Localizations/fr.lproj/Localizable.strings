@@ -455,7 +455,7 @@
 "cannot_add_marker_desc" = "Veuillez retirer au moins une direction et réessayer";
 "product_desc_ext_track_recording" = "Vous permet d'enregistrer, de sauvegarder et d'analyser vos données d'entraînement ou de mouvement, telles que la vitesse, les montées, les descentes ou le relief de l'itinéraire, qui peuvent ensuite être réutilisées, améliorées, complétées ou partagées avec des amis.\n\nComment faire - https://osmand.net/docs/user/plugins/trip-recording";
 "right_side_navigation" = "Conduite à droite";
-"si_mi_meters" = "Miles / Mètres";
+"si_mi_meters" = "Miles / mètres";
 "units_nm" = "mn";
 "si_nm" = "Miles nautiques";
 "si_kmh" = "Kilomètres par heure";
@@ -475,9 +475,9 @@
 "driving_region_uk" = "Royaume-Uni, Inde et équivalents";
 "driving_region_australia" = "Australie";
 "left_side_navigation" = "Conduite à gauche";
-"si_mi_feet" = "Miles/pieds";
+"si_mi_feet" = "Miles / pieds";
 "si_mi_yard" = "Miles / yards";
-"si_km_m" = "Kilomètres/mètres";
+"si_km_m" = "Kilomètres / mètres";
 "no_address_found" = "Impossible de déterminer l\'adresse";
 "looking_up_address" = "Recherche de l\'adresse";
 "traffic_warning_hazard" = "Danger";
@@ -2785,3 +2785,5 @@
 "co2_mission" = "Émissions de CO2";
 "position_on_map_bottom" = "En bas";
 "position_on_map" = "Afficher la position";
+"si_nm_mt" = "Miles nautiques / mètres";
+"si_nm_ft" = "Miles nautiques / pieds";

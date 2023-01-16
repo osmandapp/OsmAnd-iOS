@@ -2798,3 +2798,5 @@
 "local_file_will_be_restored" = "El archivo local será restaurado";
 "local_changes_will_be_dismissed" = "Los cambios locales serán descartados";
 "cloud_version_will_be_removed" = "La versión en la nube será quitada";
+"si_nm_mt" = "Millas/metros náuticos";
+"si_nm_ft" = "Millas/pies náuticos";

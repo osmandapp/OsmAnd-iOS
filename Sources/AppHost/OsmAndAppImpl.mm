@@ -378,7 +378,7 @@
     _worldMiniBasemapFilename = [[NSBundle mainBundle] pathForResource:@"WorldMiniBasemap"
                                                                 ofType:@"obf"
                                                            inDirectory:@"Shipped"];
-    NSString* worldMiniBasemapStamp = [[NSBundle mainBundle] pathForResource:@"WorldMiniBasemap.obf"
+    NSString* worldMiniBasemapStamp = [[NSBundle mainBundle] pathForResource:kWorldMiniBasemapKey
                                                                       ofType:@"stamp"
                                                                  inDirectory:@"Shipped"];
     NSString* worldMiniBasemapStampContents = [NSString stringWithContentsOfFile:worldMiniBasemapStamp
@@ -648,7 +648,6 @@
     [OAMapCreatorHelper sharedInstance];
     [OATerrainLayer sharedInstanceHillshade];
     [OATerrainLayer sharedInstanceSlope];
-    [OAPlugin initPlugins];
 
     OAIAPHelper *iapHelper = [OAIAPHelper sharedInstance];
     [iapHelper resetTestPurchases];
@@ -660,6 +659,7 @@
                                                                                     settings.defaultApplicationMode.get;
     [settings setApplicationModePref:initialAppMode];
     
+    [OAPlugin initPlugins];
     [OAPOIHelper sharedInstance];
     [OAQuickSearchHelper instance];
     OAPOIFiltersHelper *helper = [OAPOIFiltersHelper sharedInstance];

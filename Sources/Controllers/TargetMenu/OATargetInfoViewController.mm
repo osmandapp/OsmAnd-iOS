@@ -38,7 +38,7 @@
 #import "OAWikiImageCard.h"
 #import "OAWikipediaPlugin.h"
 #import "OAOsmAndFormatter.h"
-#import "OAButtonRightIconCell.h"
+#import "OASimpleTableViewCell.h"
 #import "OAMapillaryOsmTagHelper.h"
 #import "OACollapsableWaypointsView.h"
 #import "OATextMultilineTableViewCell.h"
@@ -209,16 +209,7 @@
             return NSOrderedDescending;
     }];
 
-    if ([self needCoords])
-    {
-        OARowInfo *coordinatesRow = [[OARowInfo alloc] initWithKey:nil icon:nil textPrefix:nil text:@"" textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
-        coordinatesRow.collapsed = YES;
-        coordinatesRow.collapsable = YES;
-        OACollapsableCoordinatesView *collapsableView = [[OACollapsableCoordinatesView alloc] initWithFrame:CGRectMake(0, 0, 320, 100) lat:self.location.latitude lon:self.location.longitude];
-        coordinatesRow.collapsableView = collapsableView;
-        [_rows addObject:coordinatesRow];
-    }
-    
+    [self buildCoordinateRows:rows];
     [self addNearbyImagesIfNeeded];
 
     _calculatedWidth = 0;
@@ -274,6 +265,19 @@
     {
         OARowInfo *commentRow = [[OARowInfo alloc] initWithKey:nil icon:[UIImage imageNamed:@"ic_description"] textPrefix:nil text:comment textColor:nil isText:YES needLinks:NO order:4 typeName:kCommentRowType isPhoneNumber:NO isUrl:NO];
         [rows addObject:commentRow];
+    }
+}
+
+- (void)buildCoordinateRows:(NSMutableArray<OARowInfo *> *)rows
+{
+    if ([self needCoords])
+    {
+        OARowInfo *coordinatesRow = [[OARowInfo alloc] initWithKey:nil icon:nil textPrefix:nil text:@"" textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
+        coordinatesRow.collapsed = YES;
+        coordinatesRow.collapsable = YES;
+        OACollapsableCoordinatesView *collapsableView = [[OACollapsableCoordinatesView alloc] initWithFrame:CGRectMake(0, 0, 320, 100) lat:self.location.latitude lon:self.location.longitude];
+        coordinatesRow.collapsableView = collapsableView;
+        [rows addObject:coordinatesRow];
     }
 }
 
@@ -723,28 +727,25 @@
     
     if ([info.typeName isEqualToString:kCollapseDetailsRowType])
     {
-        OAButtonRightIconCell *cell;
-        cell = (OAButtonRightIconCell *)[tableView dequeueReusableCellWithIdentifier:[OAButtonRightIconCell getCellIdentifier]];
-        
+        OASimpleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonRightIconCell getCellIdentifier] owner:self options:nil];
-            cell = (OAButtonRightIconCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASimpleTableViewCell *) nib[0];
             cell.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0);
             cell.backgroundColor = UIColorFromRGB(color_divider_light);
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
+            cell.titleLabel.textColor = UIColorFromRGB(color_dialog_buttons_light);
+            cell.titleLabel.font = [UIFont systemFontOfSize:13 weight:UIFontWeightSemibold];
+            [cell textIndentsStyle:EOATableViewCellTextIncreasedTopCenterIndentStyle];
+            [cell anchorContent:EOATableViewCellContentTopStyle];
         }
-        [cell setButtonTopOffset:18];
-        cell.iconView.hidden = YES;
-        cell.button.hidden = NO;
-        cell.button.userInteractionEnabled = NO;
-        [cell.button setTitleColor:UIColorFromRGB(color_dialog_buttons_light) forState:UIControlStateNormal];
-        [cell.button.titleLabel setFont:[UIFont systemFontOfSize:13 weight:UIFontWeightSemibold]];
-        
         if (self.delegate.isInFullMode)
-            [cell.button setTitle:OALocalizedString(@"shared_string_collapse").upperCase forState:UIControlStateNormal];
+            cell.titleLabel.text = OALocalizedString(@"shared_string_collapse").upperCase;
         else
-            [cell.button setTitle:OALocalizedString(@"res_details").upperCase forState:UIControlStateNormal];
-       
+            cell.titleLabel.text = OALocalizedString(@"res_details").upperCase;
+
         return cell;
     }
     else if ([info.typeName isEqualToString:kDescriptionRowType])

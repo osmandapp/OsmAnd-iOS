@@ -2786,3 +2786,5 @@
 "routing_attr_motor_type_diesel_name" = "Diesel";
 "routing_attr_motor_type_petrol_name" = "Benzin";
 "routing_attr_motor_type_lpg_name" = "Flaskegas";
+"si_nm_mt" = "Sømil/meter";
+"si_nm_ft" = "Sømil/fod";

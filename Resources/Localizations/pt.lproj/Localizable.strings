@@ -2785,3 +2785,5 @@
 "co2_mission" = "Emissão de CO2";
 "routing_attr_motor_type_description" = "Selecione o tipo de combustível do seu veículo para calcular a emissão de CO2.";
 "routing_attr_motor_type_lpg_name" = "GPL";
+"si_nm_mt" = "Milhas náuticas / metros";
+"si_nm_ft" = "Milhas náuticas / pés";

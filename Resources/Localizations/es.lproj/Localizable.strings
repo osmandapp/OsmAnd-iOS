@@ -2781,3 +2781,5 @@
 "routing_attr_motor_type_gas_name" = "GNC";
 "routing_attr_motor_type_electric_name" = "Eléctrico";
 "routing_attr_motor_type_hybrid_name" = "Híbrido";
+"si_nm_ft" = "Millas náuticas/pies";
+"si_nm_mt" = "Millas/metros náuticos";

@@ -2797,3 +2797,5 @@
 "routing_attr_motor_type_electric_name" = "Eléctrico";
 "routing_attr_motor_type_hybrid_name" = "Híbrido";
 "routing_attr_motor_type_lpg_name" = "Gas licuado de petróleo (GLP)";
+"si_nm_mt" = "Millas/metros náuticos";
+"si_nm_ft" = "Millas/pies náuticos";

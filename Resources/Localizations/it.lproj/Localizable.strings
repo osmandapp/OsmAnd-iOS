@@ -2771,3 +2771,5 @@
 "weather_miss_forecasts_description" = "Le previsioni offline sono disponibili per paese. Durata fino a 7 giorni. Occorre selezionare i paesi necessari.";
 "use_login_and_password_description" = "Usa la tua mail e password per accedere a OpenStreetMap.org.";
 "backup_delete_old_data" = "Rimuovi le vecchie versioni";
+"si_nm_ft" = "Miglia/piedi nautici";
+"si_nm_mt" = "Miglia/metri nautici";

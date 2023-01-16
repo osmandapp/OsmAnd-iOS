@@ -154,7 +154,7 @@
         {
             OASettingsItem *item = itemWriter.item;
             NSString *fileName = item.fileName;
-            if ([fileName hasSuffix:@"WorldMiniBasemap.obf"])
+            if ([fileName hasSuffix:kWorldMiniBasemapKey])
                 return nil;
             if (!fileName || fileName.length == 0)
                 fileName = item.defaultFileName;

@@ -16,7 +16,6 @@
 #import "OAIAPHelper.h"
 #import "OABackupHelper.h"
 #import "OAStatusBackupConflictDetailsViewController.h"
-#import "OAButtonRightIconCell.h"
 #import "OAMultiIconTextDescCell.h"
 #import "OAIconTitleValueCell.h"
 #import "OATitleIconProgressbarCell.h"
@@ -304,7 +303,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
         else if (_settingsHelper.isBackupSyncing)
         {
             NSDictionary *cancellCell = @{
-                kCellTypeKey: OAButtonRightIconCell.getCellIdentifier,
+                kCellTypeKey: [OARightIconTableViewCell getCellIdentifier],
                 kCellKeyKey: @"cancellBackupPressed",
                 kCellTitleKey: OALocalizedString(@"shared_string_cancel"),
                 kCellIconNameKey: @"ic_custom_cancel"
@@ -314,7 +313,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
         else if (_status == OABackupStatus.MAKE_BACKUP || _status == OABackupStatus.CONFLICTS || _status == OABackupStatus.BACKUP_COMPLETE)
         {
             NSDictionary *backupNowCell = @{
-                kCellTypeKey: OAButtonRightIconCell.getCellIdentifier,
+                kCellTypeKey: [OARightIconTableViewCell getCellIdentifier],
                 kCellKeyKey: @"onSetUpBackupButtonPressed",
                 kCellTitleKey: OALocalizedString(@"sync_now"),
                 kCellIconNameKey: @"ic_custom_update"
@@ -324,7 +323,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
         else if (_status == OABackupStatus.NO_INTERNET_CONNECTION)
         {
             NSDictionary *retryCell = @{
-                kCellTypeKey: OAButtonRightIconCell.getCellIdentifier,
+                kCellTypeKey: [OARightIconTableViewCell getCellIdentifier],
                 kCellKeyKey: @"onRetryPressed",
                 kCellTitleKey: _status.actionTitle,
                 kCellIconNameKey: @"ic_custom_reset"
@@ -334,7 +333,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
         else if (_status == OABackupStatus.ERROR)
         {
             NSDictionary *retryCell = @{
-                kCellTypeKey: OAButtonRightIconCell.getCellIdentifier,
+                kCellTypeKey: [OARightIconTableViewCell getCellIdentifier],
                 kCellKeyKey: @"onSupportPressed",
                 kCellTitleKey: _status.actionTitle,
                 kCellIconNameKey: @"ic_custom_letter_outlined"
@@ -344,7 +343,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
         else if (_status == OABackupStatus.SUBSCRIPTION_EXPIRED)
         {
             NSDictionary *purchaseCell = @{
-                kCellTypeKey: OAButtonRightIconCell.getCellIdentifier,
+                kCellTypeKey: [OARightIconTableViewCell getCellIdentifier],
                 kCellKeyKey: @"onSubscriptionExpired",
                 kCellTitleKey: _status.actionTitle,
                 kCellIconNameKey: @"ic_custom_osmand_pro_logo_colored"
@@ -371,6 +370,19 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
 - (BOOL) shouldShowSyncButton
 {
     return _info.filteredFilesToDelete.count > 0 || _info.filteredFilesToDownload.count > 0 || _info.filteredFilesToUpload.count > 0;
+}
+
+- (BOOL)isActionButtonDisabled:(OATableRowData *)item
+{
+    BOOL isSyncButton = [item.key isEqualToString:@"onSetUpBackupButtonPressed"];
+    BOOL actionButtonDisabled = isSyncButton;
+    if (isSyncButton)
+    {
+        BOOL hasInfo = _info != nil;
+        BOOL noChanges = _status == OABackupStatus.MAKE_BACKUP && (!hasInfo || (_info.filteredFilesToUpload.count == 0 && _info.filteredFilesToDelete.count == 0 && [OABackupHelper getItemsMapForRestore:_info settingsItems:_backup.settingsItems].count == 0));
+        actionButtonDisabled = noChanges || _backupHelper.isBackupPreparing || _settingsHelper.isBackupSyncing;
+    }
+    return actionButtonDisabled;
 }
 
 - (void) refreshContent
@@ -485,45 +497,6 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
         [cell.iconView setImage:[UIImage templateImageNamed:item.iconName]];
         return cell;
     }
-    else if ([cellId isEqualToString:[OARightIconTableViewCell getCellIdentifier]])
-    {
-        OARightIconTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
-        if (!cell)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OARightIconTableViewCell *) nib[0];
-        }
-        if (cell)
-        {
-            BOOL hasConflict = [item objForKey:@"remoteConflictItem"] != nil;
-            cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingToLeftOfContentWithIcon, 0., 0.);
-            cell.selectionStyle = hasConflict ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
-            cell.accessoryType = hasConflict ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
-
-            NSString *description = item.descr;
-            NSAttributedString *descriptionAttributed = [item objForKey:@"descr_attr"];
-            [cell descriptionVisibility:description != nil || descriptionAttributed != nil];
-            if (descriptionAttributed)
-            {
-                cell.descriptionLabel.text = nil;
-                cell.descriptionLabel.attributedText = descriptionAttributed;
-            }
-            else
-            {
-                cell.descriptionLabel.attributedText = nil;
-                cell.descriptionLabel.text = description;
-            }
-
-            cell.titleLabel.text = item.title;
-            cell.leftIconView.image = [item objForKey:@"icon"];
-            cell.leftIconView.tintColor = UIColorFromRGB(item.iconTint);
-
-            NSString *secondaryIconName = hasConflict ? [item stringForKey:@"secondary_icon_conflict"] : item.secondaryIconName;
-            cell.rightIconView.image = secondaryIconName ? [UIImage templateImageNamed:secondaryIconName] : nil;
-            cell.rightIconView.tintColor = UIColorFromRGB([item integerForKey:@"secondary_icon_color"]);
-        }
-        return cell;
-    }
     else if ([cellId isEqualToString:OALargeImageTitleDescrTableViewCell.getCellIdentifier])
     {
         OALargeImageTitleDescrTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:OALargeImageTitleDescrTableViewCell.getCellIdentifier];
@@ -618,29 +591,25 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
         cell.iconView.tintColor = item.iconTint != -1 ? UIColorFromRGB(item.iconTint) : UIColorFromRGB(color_primary_purple);
         return cell;
     }
-    else if ([cellId isEqualToString:OAButtonRightIconCell.getCellIdentifier])
+    else if ([cellId isEqualToString:[OARightIconTableViewCell getCellIdentifier]])
     {
-        OAButtonRightIconCell* cell = [tableView dequeueReusableCellWithIdentifier:OAButtonRightIconCell.getCellIdentifier];
+        OARightIconTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonRightIconCell getCellIdentifier] owner:self options:nil];
-            cell = (OAButtonRightIconCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OARightIconTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
+            cell.titleLabel.font = [UIFont systemFontOfSize:17. weight:UIFontWeightMedium];
         }
-        BOOL isSyncButton = [item.key isEqualToString:@"onSetUpBackupButtonPressed"];
-        BOOL actionButtonDisabled = isSyncButton;
-        if (isSyncButton)
+        if (cell)
         {
-            BOOL hasInfo = _info != nil;
-            BOOL noChanges = _status == OABackupStatus.MAKE_BACKUP && (!hasInfo || (_info.filteredFilesToUpload.count == 0 && _info.filteredFilesToDelete.count == 0 && [OABackupHelper getItemsMapForRestore:_info settingsItems:_backup.settingsItems].count == 0));
-            actionButtonDisabled = noChanges || _backupHelper.isBackupPreparing || _settingsHelper.isBackupSyncing;
+            BOOL actionButtonDisabled = [self isActionButtonDisabled:item];
+            cell.rightIconView.image = [UIImage templateImageNamed:item.iconName];
+            cell.rightIconView.tintColor = actionButtonDisabled ? UIColorFromRGB(color_tint_gray) : UIColorFromRGB(color_primary_purple);
+            cell.titleLabel.text = item.title;
+            cell.titleLabel.textColor = actionButtonDisabled ? UIColorFromRGB(color_text_footer) : UIColorFromRGB(color_primary_purple);
         }
-        cell.iconView.tintColor = actionButtonDisabled ? UIColorFromRGB(color_tint_gray) : UIColorFromRGB(color_primary_purple);
-        [cell.button setTitleColor:actionButtonDisabled ? UIColorFromRGB(color_text_footer) : UIColorFromRGB(color_primary_purple) forState:UIControlStateNormal];
-        [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
-        if (!actionButtonDisabled)
-            [cell.button addTarget:self action:NSSelectorFromString(item.key) forControlEvents:UIControlEventTouchUpInside];
-        [cell.button setTitle:item.title forState:UIControlStateNormal];
-        [cell.iconView setImage:[UIImage templateImageNamed:item.iconName]];
         return cell;
     }
     else if ([cellId isEqualToString:OATitleDescrRightIconTableViewCell.getCellIdentifier])
@@ -741,6 +710,11 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     else if ([item.key isEqualToString:@"conflicts"])
     {
         statusBackupViewController = [[OAStatusBackupViewController alloc] initWithType:EOARecentChangesConflicts];
+    }
+    else if ([item.cellType isEqualToString:[OARightIconTableViewCell getCellIdentifier]])
+    {
+        if (![self isActionButtonDisabled:item])
+            [self performSelector:NSSelectorFromString(item.key) withObject:nil afterDelay:0.];
     }
     if (statusBackupViewController)
         [self.navigationController pushViewController:statusBackupViewController animated:YES];

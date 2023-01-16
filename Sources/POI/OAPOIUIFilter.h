@@ -60,6 +60,7 @@ typedef BOOL(^OAAmenityNameFilterAccept)(OAPOI * poi);
 + (NSComparator) getComparator;
 
 + (UIImage *) getUserIcon;
++ (NSString *) getPoiTypeIconName:(OAPOIBaseType *)abstractPoiType;
 
 - (NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *) getAcceptedTypes;
 - (NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *) getAcceptedTypesOrigin;

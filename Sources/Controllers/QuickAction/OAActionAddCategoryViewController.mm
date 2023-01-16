@@ -13,9 +13,11 @@
 #import "OASearchUICore.h"
 #import "OAQuickSearchHelper.h"
 #import "OAQuickSearchListItem.h"
-#import "OATextLineViewCell.h"
+#import "OASimpleTableViewCell.h"
 #import "OAPOIUIFilter.h"
 #import "OAPOIBaseType.h"
+#import "OAPOIHelper.h"
+#import "OAColors.h"
 
 #define kHeaderViewFont [UIFont systemFontOfSize:15.0]
 
@@ -178,20 +180,26 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     id category = [self getItem:indexPath];
-    OATextLineViewCell* cell;
-    cell = (OATextLineViewCell *)[tableView dequeueReusableCellWithIdentifier:[OATextLineViewCell getCellIdentifier]];
+    OASimpleTableViewCell* cell;
+    cell = (OASimpleTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextLineViewCell getCellIdentifier] owner:self options:nil];
-        cell = (OATextLineViewCell *)[nib objectAtIndex:0];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+        cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
+        [cell descriptionVisibility:NO];
     }
     
     if (cell)
     {
         cell.contentView.backgroundColor = [UIColor whiteColor];
-        [cell.textView setTextColor:[UIColor blackColor]];
         NSString *name = [self getNameFromCategory:category];
-        [cell.textView setText:name];
+        cell.titleLabel.text = name;
+        [cell.titleLabel setTextColor:[UIColor blackColor]];
+        if ([category isKindOfClass:OAPOIBaseType.class])
+            cell.leftIconView.image = ((OAPOIBaseType *)category).icon;
+        else if ([category isKindOfClass:OAPOIUIFilter.class])
+            cell.leftIconView.image = [OAPOIHelper getCustomFilterIcon:(OAPOIUIFilter *)category];
+        cell.leftIconView.tintColor = UIColorFromRGB(color_osmand_orange);
         if ([_initialValues containsObject:name])
         {
             [_tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];

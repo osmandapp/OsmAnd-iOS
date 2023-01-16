@@ -54,6 +54,33 @@ static OAQuickActionType *TYPE;
     [[OsmAndApp instance].mapSettingsChangeObservable notifyEvent];
 }
 
+- (NSString *) getIconResName
+{
+    OAPOIFiltersHelper *helper = [OAPOIFiltersHelper sharedInstance];
+    NSArray<NSString *> *filtersIds = [NSArray new];
+    
+    NSString *filtersIdsJson = self.getParams[KEY_FILTERS];
+    if (filtersIdsJson && [filtersIdsJson trim].length != 0)
+        filtersIds = [NSArray arrayWithArray:[filtersIdsJson componentsSeparatedByString:@","]];
+    
+    if ([filtersIds count] == 0)
+        return [super getIconResName];
+    
+    OAPOIUIFilter *filter = [helper getFilterById:filtersIds[0]];
+    if (!filter)
+        return [super getIconResName];
+    
+    id iconRes = [filter getIconResource];
+    if ([iconRes isKindOfClass:NSString.class])
+    {
+        return [OAUtilities drawablePath:[NSString stringWithFormat:@"mx_%@", (NSString *)iconRes]];
+    }
+    else
+    {
+        return [super getIconResName];
+    }
+}
+
 - (BOOL)isActionWithSlash
 {
     return [self isCurrentFilters];

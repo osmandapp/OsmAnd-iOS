@@ -38,7 +38,7 @@
 #import "OAWikiImageCard.h"
 #import "OAWikipediaPlugin.h"
 #import "OAOsmAndFormatter.h"
-#import "OAButtonRightIconCell.h"
+#import "OASimpleTableViewCell.h"
 #import "OAMapillaryOsmTagHelper.h"
 #import "OACollapsableWaypointsView.h"
 #import "OATextMultilineTableViewCell.h"
@@ -727,28 +727,25 @@
     
     if ([info.typeName isEqualToString:kCollapseDetailsRowType])
     {
-        OAButtonRightIconCell *cell;
-        cell = (OAButtonRightIconCell *)[tableView dequeueReusableCellWithIdentifier:[OAButtonRightIconCell getCellIdentifier]];
-        
+        OASimpleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonRightIconCell getCellIdentifier] owner:self options:nil];
-            cell = (OAButtonRightIconCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASimpleTableViewCell *) nib[0];
             cell.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0);
             cell.backgroundColor = UIColorFromRGB(color_divider_light);
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
+            cell.titleLabel.textColor = UIColorFromRGB(color_dialog_buttons_light);
+            cell.titleLabel.font = [UIFont systemFontOfSize:13 weight:UIFontWeightSemibold];
+            [cell textIndentsStyle:EOATableViewCellTextIncreasedTopCenterIndentStyle];
+            [cell anchorContent:EOATableViewCellContentTopStyle];
         }
-        [cell setButtonTopOffset:18];
-        cell.iconView.hidden = YES;
-        cell.button.hidden = NO;
-        cell.button.userInteractionEnabled = NO;
-        [cell.button setTitleColor:UIColorFromRGB(color_dialog_buttons_light) forState:UIControlStateNormal];
-        [cell.button.titleLabel setFont:[UIFont systemFontOfSize:13 weight:UIFontWeightSemibold]];
-        
         if (self.delegate.isInFullMode)
-            [cell.button setTitle:OALocalizedString(@"shared_string_collapse").upperCase forState:UIControlStateNormal];
+            cell.titleLabel.text = OALocalizedString(@"shared_string_collapse").upperCase;
         else
-            [cell.button setTitle:OALocalizedString(@"res_details").upperCase forState:UIControlStateNormal];
-       
+            cell.titleLabel.text = OALocalizedString(@"res_details").upperCase;
+
         return cell;
     }
     else if ([info.typeName isEqualToString:kDescriptionRowType])

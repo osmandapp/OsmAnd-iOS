@@ -39,6 +39,7 @@
 - (void) setNavigationController:(UINavigationController *)controller;
 - (void) setParentViewInstance:(UIView *)parentView;
 - (void) updateTargetPointType:(OATargetPointType)targetType;
+- (void) updateDescriptionLabel;
 
 - (void) setCustomViewController:(OATargetMenuViewController *)customController needFullMenu:(BOOL)needFullMenu;
 

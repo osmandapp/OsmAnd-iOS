@@ -31,6 +31,7 @@
 #import "OAFilledButtonCell.h"
 #import "OASaveGpxToTripsActivity.h"
 #import "OAOsmAndFormatter.h"
+#import "OAEmissionHelper.h"
 #import <Charts/Charts-Swift.h>
 
 #define kStatsSection 0
@@ -42,7 +43,7 @@
 #define VIEWPORT_FULL_SCALE 0.6f
 #define VIEWPORT_MINIMIZED_SCALE 0.2f
 
-@interface OARouteDetailsViewController () <OAStateChangedListener, ChartViewDelegate, OAStatisticsSelectionDelegate>
+@interface OARouteDetailsViewController () <OAStateChangedListener, ChartViewDelegate, OAStatisticsSelectionDelegate, OAEmissionHelperListener>
 
 @end
 
@@ -61,6 +62,7 @@
     
     CGFloat _cachedYViewPort;
     OAMapRendererView *_mapView;
+    NSString *_emission;
 }
 
 - (UITableViewCell *) getAnalyzeButtonCell
@@ -266,44 +268,30 @@
 
 - (NSAttributedString *)getAttributedTypeStr
 {
-    return [self getFormattedDistTimeString];
+    return [self.class getFormattedDistTimeString];
 }
 
 - (NSAttributedString *) getAdditionalInfoStr
 {
-    OsmAndAppInstance app = [OsmAndApp instance];
-    UIFont *textFont = [UIFont systemFontOfSize:13.0];
-    NSDictionary *attrs = @{NSFontAttributeName: textFont, NSForegroundColorAttributeName: UIColorFromRGB(color_text_footer)};
-    if (self.analysis)
+    NSMutableAttributedString *attrDescription =
+    [[NSMutableAttributedString alloc] initWithAttributedString:[self.class getFormattedElevationString:self.analysis]];
+    if (_emission)
     {
-        NSMutableAttributedString *res = [NSMutableAttributedString new];
-        
-        NSTextAttachment *arrowUpAttachment = [[NSTextAttachment alloc] init];
-        arrowUpAttachment.image = [UIImage templateImageNamed:@"ic_small_arrow_up"];
-        arrowUpAttachment.bounds = CGRectMake(0., roundf(textFont.capHeight - 20.)/2.f, 20., 20.);
-        
-        NSTextAttachment *arrowDownAttachment = [[NSTextAttachment alloc] init];
-        arrowDownAttachment.image = [UIImage templateImageNamed:@"ic_small_arrow_down"];
-        arrowDownAttachment.bounds = CGRectMake(0., roundf(textFont.capHeight - 20.)/2.f, 20., 20.);
-        
-        [res appendAttributedString:[NSAttributedString attributedStringWithAttachment:arrowUpAttachment]];
-        [res appendAttributedString:[[NSAttributedString alloc] initWithString:[OAOsmAndFormatter getFormattedAlt:self.analysis.maxElevation] attributes:attrs]];
-        [res appendAttributedString:[[NSAttributedString alloc] initWithString:@"    "]];
-        
-        [res appendAttributedString:[NSAttributedString attributedStringWithAttachment:arrowDownAttachment]];
-        [res appendAttributedString:[[NSAttributedString alloc] initWithString:[OAOsmAndFormatter getFormattedAlt:self.analysis.minElevation] attributes:attrs]];
-        
-        [res addAttributes:attrs range:NSMakeRange(0, res.length)];
-        
-        return res;
+        NSString *emission = [NSString stringWithFormat:@"    |    %@", _emission];
+        [attrDescription addString:emission fontWeight:UIFontWeightRegular size:15.];
+        [attrDescription setColor:UIColorFromRGB(color_text_footer) forString:emission];
     }
-    
-    return nil;
+    return attrDescription;
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    OAEmissionHelper *emissionHelper = [OAEmissionHelper sharedInstance];
+    OAMotorType *motorType = [emissionHelper getMotorTypeForMode:[self.routingHelper getAppMode]];
+    if (motorType)
+        [emissionHelper getEmission:motorType meters:[self.routingHelper getLeftDistance] listener:self];
     
     [self setupRouteInfo];
     
@@ -792,6 +780,14 @@
                                           analysis:self.analysis
                                           modeCell:statsModeCell];
     }
+}
+
+#pragma mark - OAEmissionHelperListener
+
+- (void)onSetupEmission:(NSString *)result
+{
+    _emission = result;
+    [[OARootViewController instance].mapPanel updateTargetDescriptionLabel];
 }
 
 @end

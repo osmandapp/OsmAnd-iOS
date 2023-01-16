@@ -12,7 +12,6 @@
 #import "OATransportRoutingHelper.h"
 #import "OAAppModeCell.h"
 #import "OARoutingTargetCell.h"
-#import "OARoutingInfoCell.h"
 #import "OALineChartCell.h"
 #import "OARTargetPoint.h"
 #import "OAPointDescription.h"
@@ -59,6 +58,9 @@
 #import "OARouteAvoidTransportSettingsViewController.h"
 #import "OAOsmAndFormatter.h"
 #import "OALinks.h"
+#import "OASimpleTableViewCell.h"
+#import "OARouteBaseViewController.h"
+#import "OAEmissionHelper.h"
 
 #include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
 
@@ -78,7 +80,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     EOARouteInfoMenuStateFullScreen
 };
 
-@interface OARouteInfoView ()<OARouteInformationListener, OAAppModeCellDelegate, OAWaypointSelectionDelegate, OAHomeWorkCellDelegate, OAStateChangedListener, UIGestureRecognizerDelegate, OARouteCalculationProgressCallback, OATransportRouteCalculationProgressCallback, UITextViewDelegate, OASegmentSelectionDelegate, OARoutingSettingsCellDelegate>
+@interface OARouteInfoView ()<OARouteInformationListener, OAAppModeCellDelegate, OAWaypointSelectionDelegate, OAHomeWorkCellDelegate, OAStateChangedListener, UIGestureRecognizerDelegate, OARouteCalculationProgressCallback, OATransportRouteCalculationProgressCallback, UITextViewDelegate, OASegmentSelectionDelegate, OARoutingSettingsCellDelegate, OAEmissionHelperListener>
 
 @end
 
@@ -121,6 +123,9 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     
     BOOL _hasEmptyTransportRoute;
     BOOL _optionsMenuSelected;
+
+    NSIndexPath *_routingInfoIndexPath;
+    NSString *_emission;
 }
 
 - (instancetype) init
@@ -541,6 +546,9 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 
 - (void) updateData
 {
+    _emission = nil;
+    _routingInfoIndexPath = nil;
+
     int sectionIndex = 0;
     NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
     NSMutableArray *section = [[NSMutableArray alloc] init];
@@ -607,9 +615,12 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
                 @"cell" : [OADividerCell getCellIdentifier],
                 @"custom_insets" : @(NO)
             }];
+
             [section addObject:@{
-                @"cell" : [OARoutingInfoCell getCellIdentifier]
+                @"cell" : [OASimpleTableViewCell getCellIdentifier],
             }];
+            _routingInfoIndexPath = [NSIndexPath indexPathForRow:section.count - 1 inSection:sectionIndex];
+
             [section addObject:@{
                 @"cell" : kCellReuseIdentifier
             }];
@@ -665,6 +676,14 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     _data = [NSDictionary dictionaryWithDictionary:dictionary];
     
     [self setupGoButton];
+
+    if (_routingInfoIndexPath)
+    {
+        OAEmissionHelper *emissionHelper = [OAEmissionHelper sharedInstance];
+        OAMotorType *motorType = [emissionHelper getMotorTypeForMode:[_routingHelper getAppMode]];
+        if (motorType)
+            [emissionHelper getEmission:motorType meters:[_routingHelper getLeftDistance] listener:self];
+    }
 }
 
 - (BOOL) isFinishPointFromTrack
@@ -1374,22 +1393,31 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         }
         return cell;
     }
-    else if ([item[@"cell"] isEqualToString:[OARoutingInfoCell getCellIdentifier]])
+    else if ([item[@"cell"] isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
     {
-        OARoutingInfoCell* cell;
-        cell = (OARoutingInfoCell *)[self.tableView dequeueReusableCellWithIdentifier:[OARoutingInfoCell getCellIdentifier]];
-        if (cell == nil)
+        OASimpleTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
+        if (!cell)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARoutingInfoCell getCellIdentifier] owner:self options:nil];
-            cell = (OARoutingInfoCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASimpleTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell textIndentsStyle:EOATableViewCellTextIncreasedCenterIndentStyle];
         }
-        
         if (cell)
         {
-            cell.directionInfo = directionInfo;
-            [cell updateControls];
-            cell.distanceTitleLabel.text = OALocalizedString(@"shared_string_distance");
-            cell.timeTitleLabel.text = OALocalizedString(@"shared_string_time");
+            if (indexPath == _routingInfoIndexPath)
+            {
+                cell.titleLabel.attributedText = [OARouteBaseViewController getFormattedDistTimeString];
+                NSMutableAttributedString *attrDescription =
+                [[NSMutableAttributedString alloc] initWithAttributedString:[OARouteBaseViewController getFormattedElevationString:[self getTrackAnalysis]]];
+                if (_emission)
+                {
+                    NSString *emission = [NSString stringWithFormat:@"    |    %@", _emission];
+                    [attrDescription addString:emission fontWeight:UIFontWeightRegular size:15.];
+                    [attrDescription setColor:UIColorFromRGB(color_text_footer) forString:emission];
+                }
+                cell.descriptionLabel.attributedText = attrDescription;
+            }
         }
         return cell;
     }
@@ -2126,6 +2154,16 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 - (void) onOptionsButtonPressed
 {
     _optionsMenuSelected = YES;
+}
+
+#pragma mark - OAEmissionHelperListener
+
+- (void)onSetupEmission:(NSString *)result
+{
+    _emission = result;
+    if (_routingInfoIndexPath)
+        [_tableView reloadRowsAtIndexPaths:@[_routingInfoIndexPath] withRowAnimation:UITableViewRowAnimationNone];
+
 }
 
 @end

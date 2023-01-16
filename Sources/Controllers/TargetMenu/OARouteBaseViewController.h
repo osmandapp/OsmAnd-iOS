@@ -72,7 +72,8 @@
 
 - (instancetype) initWithGpxData:(NSDictionary *)data;
 
-- (NSAttributedString *) getFormattedDistTimeString;
++ (NSAttributedString *) getFormattedElevationString:(OAGPXTrackAnalysis *)analysis;
++ (NSAttributedString *) getFormattedDistTimeString;
 
 - (void) setupRouteInfo;
 

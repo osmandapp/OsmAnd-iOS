@@ -3715,6 +3715,7 @@
 		326B4FB0257FD0FB00ABAB1D /* ic_action_motorboat@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_motorboat@3x.png"; path = "Resources/Icons/Profile/ic_action_motorboat@3x.png"; sourceTree = "<group>"; };
 		326B4FBB257FD11300ABAB1D /* ic_action_light_aircraft@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_light_aircraft@2x.png"; path = "Resources/Icons/Profile/ic_action_light_aircraft@2x.png"; sourceTree = "<group>"; };
 		326B4FBC257FD11400ABAB1D /* ic_action_light_aircraft@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_light_aircraft@3x.png"; path = "Resources/Icons/Profile/ic_action_light_aircraft@3x.png"; sourceTree = "<group>"; };
+		3275552129758ED80049BC84 /* sq */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sq; path = sq.lproj/Localizable.strings; sourceTree = "<group>"; };
 		327B4AAE288F30EC00AF71AF /* OAFavoriteViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAFavoriteViewController.h; sourceTree = "<group>"; };
 		327B4AAF288F310700AF71AF /* OAFavoriteViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAFavoriteViewController.mm; sourceTree = "<group>"; };
 		327B4AB3288F508E00AF71AF /* OAFavoriteViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAFavoriteViewController.xib; sourceTree = "<group>"; };
@@ -13445,6 +13446,7 @@
 				vi,
 				cy,
 				ckb,
+				sq,
 			);
 			mainGroup = BB098CE81793F7FD00423944;
 			productRefGroup = BB098CF21793F7FD00423944 /* Products */;
@@ -16834,6 +16836,7 @@
 				32113578275425870050242B /* vi */,
 				32113579275426020050242B /* cy */,
 				3249BFBE285CC2D200FFEF42 /* ckb */,
+				3275552129758ED80049BC84 /* sq */,
 			);
 			name = Localizable.strings;
 			path = Resources/Localizations;

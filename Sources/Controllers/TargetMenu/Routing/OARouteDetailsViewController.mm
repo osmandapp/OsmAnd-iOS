@@ -31,6 +31,7 @@
 #import "OAFilledButtonCell.h"
 #import "OASaveGpxToTripsActivity.h"
 #import "OAOsmAndFormatter.h"
+#import "OAEmissionHelper.h"
 #import <Charts/Charts-Swift.h>
 
 #define kStatsSection 0
@@ -42,7 +43,7 @@
 #define VIEWPORT_FULL_SCALE 0.6f
 #define VIEWPORT_MINIMIZED_SCALE 0.2f
 
-@interface OARouteDetailsViewController () <OAStateChangedListener, ChartViewDelegate, OAStatisticsSelectionDelegate>
+@interface OARouteDetailsViewController () <OAStateChangedListener, ChartViewDelegate, OAStatisticsSelectionDelegate, OAEmissionHelperListener>
 
 @end
 
@@ -61,6 +62,7 @@
     
     CGFloat _cachedYViewPort;
     OAMapRendererView *_mapView;
+    NSString *_emission;
 }
 
 - (UITableViewCell *) getAnalyzeButtonCell
@@ -271,12 +273,25 @@
 
 - (NSAttributedString *) getAdditionalInfoStr
 {
-    return [self.class getFormattedElevationString:self.analysis];
+    NSMutableAttributedString *attrDescription =
+    [[NSMutableAttributedString alloc] initWithAttributedString:[self.class getFormattedElevationString:self.analysis]];
+    if (_emission)
+    {
+        NSString *emission = [NSString stringWithFormat:@"    |    %@", _emission];
+        [attrDescription addString:emission fontWeight:UIFontWeightRegular size:15.];
+        [attrDescription setColor:UIColorFromRGB(color_text_footer) forString:emission];
+    }
+    return attrDescription;
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    OAEmissionHelper *emissionHelper = [OAEmissionHelper sharedInstance];
+    OAMotorType *motorType = [emissionHelper getMotorTypeForMode:[self.routingHelper getAppMode]];
+    if (motorType)
+        [emissionHelper getEmission:motorType meters:[self.routingHelper getLeftDistance] listener:self];
     
     [self setupRouteInfo];
     
@@ -765,6 +780,14 @@
                                           analysis:self.analysis
                                           modeCell:statsModeCell];
     }
+}
+
+#pragma mark - OAEmissionHelperListener
+
+- (void)onSetupEmission:(NSString *)result
+{
+    _emission = result;
+    [[OARootViewController instance].mapPanel updateTargetDescriptionLabel];
 }
 
 @end

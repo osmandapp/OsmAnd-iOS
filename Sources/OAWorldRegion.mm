@@ -367,6 +367,7 @@
 
     // Create root region
     OAWorldRegion *entireWorld = [[OAWorldRegion alloc] initWorld];
+    [[OAWeatherHelper sharedInstance] firstInitForecast:[OAWeatherHelper checkAndGetRegionId:entireWorld]];
 
     // Create main regions:
 
@@ -463,7 +464,7 @@
             OAWorldRegion *newRegion = [[OAWorldRegion alloc] initFrom:region];
             [parentRegion addSubregion:newRegion];
             regionsLookupTable[newRegion.regionId] = newRegion;
-            [[OAWeatherHelper sharedInstance] firstInitForecast:newRegion.regionId];
+            [[OAWeatherHelper sharedInstance] firstInitForecast:[OAWeatherHelper checkAndGetRegionId:newRegion]];
 
             // Remove
             processedRegions++;

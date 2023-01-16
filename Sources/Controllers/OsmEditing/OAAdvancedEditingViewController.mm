@@ -10,7 +10,7 @@
 #import "OAOsmEditingViewController.h"
 #import "OADescrTitleCell.h"
 #import "OATextInputFloatingCellWithIcon.h"
-#import "OAButtonCell.h"
+#import "OAButtonTableViewCell.h"
 #import "OAEditPOIData.h"
 #import "Localization.h"
 #import "OAColors.h"
@@ -115,21 +115,23 @@
     return resultCell;
 }
 
-- (OAButtonCell *) getAddTagButtonCell
+- (OAButtonTableViewCell *) getAddTagButtonCell
 {
-    OAButtonCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAButtonCell getCellIdentifier]];
+    OAButtonTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAButtonTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonCell getCellIdentifier] owner:self options:nil];
-        cell = (OAButtonCell *)[nib objectAtIndex:0];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonTableViewCell getCellIdentifier] owner:self options:nil];
+        cell = (OAButtonTableViewCell *) nib[0];
     }
     if (cell)
     {
         [cell.button setTitle:OALocalizedString(@"shared_string_add") forState:UIControlStateNormal];
         [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventTouchDown];
         [cell.button addTarget:self action:@selector(addTag:) forControlEvents:UIControlEventTouchDown];
-        [cell showImage:YES];
-        cell.iconView.image = [UIImage imageNamed:@"ic_custom_plus"];
+        [cell titleVisibility:NO];
+        [cell descriptionVisibility:NO];
+        cell.button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+        cell.leftIconView.image = [UIImage imageNamed:@"ic_custom_plus"];
     }
     return cell;
 }
@@ -210,11 +212,7 @@
                                      ]];
         }
     }];
-    [_fieldPairs addObject:@[
-                             @{
-                                 @"type" : [OAButtonCell getCellIdentifier]
-                                 }
-                             ]];
+    [_fieldPairs addObject:@[ @{ @"type" : [OAButtonTableViewCell getCellIdentifier] } ]];
     [self.tableView reloadData];
 }
 
@@ -249,7 +247,7 @@
 {
     NSDictionary *item = [self getItem:indexPath];
     [tableView deselectRowAtIndexPath:indexPath animated:true];
-    if ([item[@"type"] isEqualToString:[OAButtonCell getCellIdentifier]])
+    if ([item[@"type"] isEqualToString:[OAButtonTableViewCell getCellIdentifier]])
         [self addTag:nil];
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     if ([cell canBecomeFirstResponder])
@@ -263,7 +261,7 @@
         return [self getTextCellWithDescr:indexPath];
     else if ([item[@"type"] isEqualToString:[OATextInputFloatingCellWithIcon getCellIdentifier]])
         return [self getInputCellWithHint:indexPath];
-    else if ([item[@"type"] isEqualToString:[OAButtonCell getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:[OAButtonTableViewCell getCellIdentifier]])
         return [self getAddTagButtonCell];
     return nil;
 }

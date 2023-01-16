@@ -105,7 +105,7 @@
     }
     
     [otherCells addObject:@{
-        @"type" : [OAButtonCell getCellIdentifier],
+        @"type" : [OAButtonTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"verification_code_missing"),
         @"color" : UIColorFromRGB(color_primary_purple),
         @"action" : @"unfoldButtonPressed",

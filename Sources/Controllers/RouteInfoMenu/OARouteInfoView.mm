@@ -48,7 +48,7 @@
 #import "OARouteProvider.h"
 #import "OASelectedGPXHelper.h"
 #import "OAHistoryHelper.h"
-#import "OAButtonCell.h"
+#import "OAButtonTableViewCell.h"
 #import "OARouteProgressBarCell.h"
 #import "OARouteStatisticsHelper.h"
 #import "OAFilledButtonCell.h"
@@ -448,7 +448,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         if (allItems.count == _historyItemsLimit)
         {
             [section addObject:@{
-                @"cell" : [OAButtonCell getCellIdentifier],
+                @"cell" : [OAButtonTableViewCell getCellIdentifier],
                 @"title" : OALocalizedString(@"shared_string_show_more")
             }];
         }
@@ -1558,22 +1558,23 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         }
         return cell;
     }
-    else if ([item[@"cell"] isEqualToString:[OAButtonCell getCellIdentifier]])
+    else if ([item[@"cell"] isEqualToString:[OAButtonTableViewCell getCellIdentifier]])
     {
-        OAButtonCell* cell = nil;
-        cell = [self.tableView dequeueReusableCellWithIdentifier:[OAButtonCell getCellIdentifier]];
+        OAButtonTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAButtonTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonCell getCellIdentifier] owner:self options:nil];
-            cell = (OAButtonCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAButtonTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell titleVisibility:NO];
+            [cell descriptionVisibility:NO];
+            cell.button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
         }
         if (cell)
         {
             [cell.button setTitle:item[@"title"] forState:UIControlStateNormal];
             [cell.button removeTarget:self action:NULL forControlEvents:UIControlEventTouchDown];
             [cell.button addTarget:self action:@selector(onHistoryButtonPressed:) forControlEvents:UIControlEventTouchDown];
-            [cell.button setTintColor:UIColorFromRGB(color_primary_purple)];
-            [cell showImage:NO];
         }
         return cell;
     }

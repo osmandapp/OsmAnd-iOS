@@ -60,13 +60,12 @@ typedef enum
 
 @end
 
-@interface OAFavoriteListViewController () <OAMultiselectableHeaderDelegate>
+@interface OAFavoriteListViewController () <OAMultiselectableHeaderDelegate, UIDocumentPickerDelegate>
 {
 
     BOOL isDecelerating;
 }
     @property (strong, nonatomic) NSArray*  menuItems;
-    @property (strong, nonatomic) UIDocumentInteractionController* exportController;
     @property (strong, nonatomic) NSMutableArray*  sortedFavoriteItems;
     @property NSUInteger sortingType;
 @end
@@ -733,13 +732,19 @@ static UIViewController *parentController;
         return;
 
     NSURL* favoritesUrl = [NSURL fileURLWithPath:fullFilename];
-    _exportController = [UIDocumentInteractionController interactionControllerWithURL:favoritesUrl];
-    _exportController.UTI = @"com.topografix.gpx";
-    _exportController.delegate = self;
-    _exportController.name = filename;
-    [_exportController presentOptionsMenuFromRect:_exportButton.frame
-                                           inView:self.view
-                                         animated:YES];
+    UIActivityViewController *activityViewController =
+    [[UIActivityViewController alloc] initWithActivityItems:@[favoritesUrl]
+                                      applicationActivities:nil];
+    activityViewController.popoverPresentationController.sourceView = self.view;
+    activityViewController.popoverPresentationController.sourceRect = _exportButton.frame;
+    activityViewController.completionWithItemsHandler = ^void(UIActivityType activityType, BOOL completed, NSArray *returnedItems, NSError *activityError) {
+        [NSFileManager.defaultManager removeItemAtURL:favoritesUrl error:nil];
+    };
+    
+    [self presentViewController:activityViewController
+                       animated:YES
+                     completion:nil];
+
     [self finishEditing];
     [self generateData];
 }
@@ -751,32 +756,36 @@ static UIViewController *parentController;
 
 -(void)onImportClicked
 {
-    NSString* favoritesImportText = OALocalizedString(@"fav_import_desc");
-    UIAlertController* alert = [UIAlertController alertControllerWithTitle:@""
-                                message:favoritesImportText
-                                preferredStyle:UIAlertControllerStyleAlert];
-
-     UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {}];
-
-     [alert addAction:defaultAction];
-     [self presentViewController:alert animated:YES completion:nil];
+    UIDocumentPickerViewController *documentPickerVC = [[UIDocumentPickerViewController alloc] initWithDocumentTypes:@[@"com.topografix.gpx"] inMode:UIDocumentPickerModeImport];
+    documentPickerVC.allowsMultipleSelection = NO;
+    documentPickerVC.delegate = self;
+    [self presentViewController:documentPickerVC animated:YES completion:nil];
 }
 
 -(void)onExportClicked
 {
     if (self.sortedFavoriteItems.count == 0)
         return;
-
-    OsmAndAppInstance app = [OsmAndApp instance];
-    // Share all favorites
-    NSURL* favoritesUrl = [NSURL fileURLWithPath:app.favoritesLegacyStorageFilename];
-    _exportController = [UIDocumentInteractionController interactionControllerWithURL:favoritesUrl];
-    _exportController.UTI = @"com.topografix.gpx";
-    _exportController.delegate = self;
-    _exportController.name = @"OsmAnd favourites.gpx";
-    [_exportController presentOptionsMenuFromRect:CGRectZero
-                                           inView:self.view
-                                         animated:YES];
+    
+    const auto& exportCollection = [OsmAndApp instance].favoritesCollection;
+    NSString* filename = [OsmAndApp instance].favoritesLegacyStorageFilename.lastPathComponent;
+    NSString* fullFilename = [NSTemporaryDirectory() stringByAppendingPathComponent:filename];
+    if (!exportCollection->saveTo(QString::fromNSString(fullFilename)))
+        return;
+    
+    NSURL* favoritesUrl = [NSURL fileURLWithPath:fullFilename];
+    UIActivityViewController *activityViewController =
+    [[UIActivityViewController alloc] initWithActivityItems:@[favoritesUrl]
+                                      applicationActivities:nil];
+    activityViewController.popoverPresentationController.sourceView = self.view;
+    activityViewController.popoverPresentationController.sourceRect = _exportButton.frame;
+    activityViewController.completionWithItemsHandler = ^void(UIActivityType activityType, BOOL completed, NSArray *returnedItems, NSError *activityError) {
+        [NSFileManager.defaultManager removeItemAtURL:favoritesUrl error:nil];
+    };
+    
+    [self presentViewController:activityViewController
+                       animated:YES
+                     completion:nil];
 }
 
 #pragma mark - UITableViewDataSource
@@ -1582,20 +1591,6 @@ static UIViewController *parentController;
     parentController = nil;
 }
 
-#pragma mark - UIDocumentInteractionControllerDelegate
-
-- (void)documentInteractionControllerDidDismissOptionsMenu:(UIDocumentInteractionController *)controller
-{
-    if (controller == _exportController)
-        _exportController = nil;
-}
-
-- (void)documentInteractionControllerDidDismissOpenInMenu:(UIDocumentInteractionController *)controller
-{
-    if (controller == _exportController)
-        _exportController = nil;
-}
-
 #pragma mark - OAMultiselectableHeaderDelegate
 
 -(void)headerCheckboxChanged:(id)sender value:(BOOL)value
@@ -1616,6 +1611,17 @@ static UIViewController *parentController;
             [self.favoriteTableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:section] animated:YES];
     }
     [self.favoriteTableView endUpdates];
+}
+
+#pragma mark - UIDocumentPickerDelegate
+
+- (void)documentPicker:(UIDocumentPickerViewController *)controller didPickDocumentsAtURLs:(NSArray<NSURL *> *)urls
+{
+    if (urls.count == 0)
+        return;
+    
+    NSURL *url = urls.firstObject;
+    [OARootViewController.instance handleIncomingURL:url];
 }
 
 @end

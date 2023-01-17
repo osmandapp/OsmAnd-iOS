@@ -6,16 +6,14 @@
 //  Copyright © 2018 OsmAnd. All rights reserved.
 //
 
-#import "OATargetInfoViewController.h"
+#import "OATransportStopsBaseController.h"
 
 const static CGFloat kTransportStopPlateWidth = 32.0;
 const static CGFloat kTransportStopPlateHeight = 18.0;
 
 @class OATransportStop;
 
-@interface OATransportStopViewController : OATargetInfoViewController
-
-@property (nonatomic, readonly) OATransportStop *transportStop;
+@interface OATransportStopViewController : OATransportStopsBaseController
 
 - (id) initWithTransportStop:(OATransportStop *)transportStop;
 

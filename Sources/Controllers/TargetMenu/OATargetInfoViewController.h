@@ -32,7 +32,6 @@
 - (void) buildCoordinateRows:(NSMutableArray<OARowInfo *> *)rows;
 - (void) rebuildRows;
 - (void) setRows:(NSMutableArray<OARowInfo *> *)rows;
-- (BOOL) containsRef:(NSArray<OATransportStopRoute *> *)routes transportRoute:(OATransportStopRoute *)transportRoute;
 
 + (UIImage *) getIcon:(NSString *)fileName;
 

@@ -758,9 +758,4 @@ static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsap
     return ETopToolbarTypeFloating;
 }
 
-- (NSArray<OATransportStopRoute *> *) getSubTransportStopRoutes:(BOOL)nearby
-{
-    return nearby ? self.nearbyRoutes : self.localRoutes;
-}
-
 @end

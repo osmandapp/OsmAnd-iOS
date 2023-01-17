@@ -31,7 +31,6 @@
 - (void) buildCommentRow:(NSMutableArray<OARowInfo *> *)rows comment:(NSString *)comment;
 - (void) rebuildRows;
 - (void) setRows:(NSMutableArray<OARowInfo *> *)rows;
-- (BOOL) containsRef:(NSArray<OATransportStopRoute *> *)routes transportRoute:(OATransportStopRoute *)transportRoute;
 
 + (UIImage *) getIcon:(NSString *)fileName;
 

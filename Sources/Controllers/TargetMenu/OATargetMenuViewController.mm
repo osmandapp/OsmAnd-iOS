@@ -37,6 +37,7 @@
 #import "OARouteDetailsGraphViewController.h"
 #import "OAChangePositionViewController.h"
 #import "OATrsansportRouteDetailsViewController.h"
+#import "OATransportStop.h"
 #import "OAMapDownloadController.h"
 #import "OADownloadedRegionsLayer.h"
 #import "OASizes.h"

@@ -7,9 +7,8 @@
 //
 
 #import "OAVoicePromptsViewController.h"
-#import "OASwitchTableViewCell.h"
 #import "OAIconTitleValueCell.h"
-#import "OASwitchTableViewCell.h"
+#import "OATableViewCellSwitch.h"
 #import "OASettingsTableViewCell.h"
 #import "OANavigationLanguageViewController.h"
 #import "OASpeedLimitToleranceViewController.h"
@@ -99,7 +98,7 @@
     NSArray<NSNumber *> *speedLimitsMiles = @[ @0.f, @3.f, @5.f, @7.f, @10.f, @15.f ];
     
     [firstSection addObject:@{
-        @"type" : [OASwitchTableViewCell getCellIdentifier],
+        @"type" : [OATableViewCellSwitch getCellIdentifier],
         @"title" : OALocalizedString(@"voice_provider"),
         @"icon" : @"ic_custom_sound",
         @"value" : _settings.voiceMute,
@@ -115,26 +114,26 @@
     }];
     
     [secondSection addObject:@{
-        @"type" : [OASwitchTableViewCell getCellIdentifier],
+        @"type" : [OATableViewCellSwitch getCellIdentifier],
         @"title" : OALocalizedString(@"speak_street_names"),
         @"value" : _settings.speakStreetNames,
         @"key" : @"streetNames",
     }];
     [secondSection addObject:@{
-        @"type" : [OASwitchTableViewCell getCellIdentifier],
+        @"type" : [OATableViewCellSwitch getCellIdentifier],
         @"title" : OALocalizedString(@"show_traffic_warnings"),
         @"value" : _settings.speakTrafficWarnings,
         @"key" : @"trafficWarnings",
     }];
     [secondSection addObject:@{
-        @"type" : [OASwitchTableViewCell getCellIdentifier],
+        @"type" : [OATableViewCellSwitch getCellIdentifier],
         @"title" : OALocalizedString(@"show_pedestrian_warnings"),
         @"value" : _settings.speakPedestrian,
         @"key" : @"pedestrianCrosswalks",
     }];
     
     [thirdSection addObject:@{
-        @"type" : [OASwitchTableViewCell getCellIdentifier],
+        @"type" : [OATableViewCellSwitch getCellIdentifier],
         @"title" : OALocalizedString(@"speak_speed_limit"),
         @"value" : _settings.speakSpeedLimit,
         @"key" : @"speedLimit",
@@ -159,31 +158,31 @@
     }];
     
     [fourthSection addObject:@{
-        @"type" : [OASwitchTableViewCell getCellIdentifier],
+        @"type" : [OATableViewCellSwitch getCellIdentifier],
         @"title" : OALocalizedString(@"speak_cameras"),
         @"value" : _settings.speakCameras,
         @"key" : @"speedCameras",
     }];
     [fourthSection addObject:@{
-        @"type" : [OASwitchTableViewCell getCellIdentifier],
+        @"type" : [OATableViewCellSwitch getCellIdentifier],
         @"title" : OALocalizedString(@"speak_tunnels"),
         @"value" : _settings.speakTunnels,
         @"key" : @"tunnels",
     }];
     [fourthSection addObject:@{
-        @"type" : [OASwitchTableViewCell getCellIdentifier],
+        @"type" : [OATableViewCellSwitch getCellIdentifier],
         @"title" : OALocalizedString(@"announce_gpx_waypoints"),
         @"value" : _settings.announceWpt,
         @"key" : @"GPXWaypoints",
     }];
     [fourthSection addObject:@{
-        @"type" : [OASwitchTableViewCell getCellIdentifier],
+        @"type" : [OATableViewCellSwitch getCellIdentifier],
         @"title" : OALocalizedString(@"speak_favorites"),
         @"value" : _settings.announceNearbyFavorites,
         @"key" : @"nearbyFavorites",
     }];
     [fourthSection addObject:@{
-        @"type" : [OASwitchTableViewCell getCellIdentifier],
+        @"type" : [OATableViewCellSwitch getCellIdentifier],
         @"title" : OALocalizedString(@"speak_poi"),
         @"value" : _settings.announceNearbyPoi,
         @"key" : @"nearbyPOI",
@@ -220,13 +219,13 @@
 - (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
+    if ([cellType isEqualToString:[OATableViewCellSwitch getCellIdentifier]])
     {
-        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
+        OATableViewCellSwitch *cell = [tableView dequeueReusableCellWithIdentifier:[OATableViewCellSwitch getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASwitchTableViewCell *) nib[0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATableViewCellSwitch getCellIdentifier] owner:self options:nil];
+            cell = (OATableViewCellSwitch *) nib[0];
             [cell descriptionVisibility:NO];
         }
         if (cell)

@@ -509,7 +509,7 @@
 + (NSAttributedString *) getFormattedElevationString:(OAGPXTrackAnalysis *)analysis
 {
     UIFont *textFont = [UIFont systemFontOfSize:15.];
-    NSDictionary *attrs = @{ NSFontAttributeName: textFont, NSForegroundColorAttributeName: UIColorFromRGB(color_text_footer) };
+    NSDictionary *textAttrs = @{ NSFontAttributeName: textFont, NSForegroundColorAttributeName: UIColorFromRGB(color_text_footer) };
     if (analysis)
     {
         NSMutableAttributedString *res = [NSMutableAttributedString new];
@@ -517,23 +517,27 @@
         NSTextAttachment *arrowUpAttachment = [[NSTextAttachment alloc] init];
         arrowUpAttachment.image = [UIImage templateImageNamed:@"ic_small_ascent"];
         arrowUpAttachment.bounds = CGRectMake(0., roundf(textFont.capHeight - 20.)/2.f, 20., 20.);
+        NSMutableAttributedString *uphillIcon = [[NSMutableAttributedString alloc] initWithAttributedString:
+                                                 [NSAttributedString attributedStringWithAttachment:arrowUpAttachment]];
+        [uphillIcon setColor:UIColorFromRGB(color_tint_gray) forString:uphillIcon.string];
 
         NSTextAttachment *arrowDownAttachment = [[NSTextAttachment alloc] init];
         arrowDownAttachment.image = [UIImage templateImageNamed:@"ic_small_descent"];
         arrowDownAttachment.bounds = CGRectMake(0., roundf(textFont.capHeight - 20.)/2.f, 20., 20.);
+        NSMutableAttributedString *downhilIcon = [[NSMutableAttributedString alloc] initWithAttributedString:
+                                                  [NSAttributedString attributedStringWithAttachment:arrowDownAttachment]];
+        [downhilIcon setColor:UIColorFromRGB(color_tint_gray) forString:downhilIcon.string];
 
-        [res appendAttributedString:[NSAttributedString attributedStringWithAttachment:arrowUpAttachment]];
+        [res appendAttributedString:uphillIcon];
         [res appendAttributedString:[[NSAttributedString alloc] initWithString:
                                      [NSString stringWithFormat:@" %@", [OAOsmAndFormatter getFormattedAlt:analysis.maxElevation]]
-                                                                    attributes:attrs]];
+                                                                    attributes:textAttrs]];
         [res appendAttributedString:[[NSAttributedString alloc] initWithString:@"    "]];
 
-        [res appendAttributedString:[NSAttributedString attributedStringWithAttachment:arrowDownAttachment]];
+        [res appendAttributedString:downhilIcon];
         [res appendAttributedString:[[NSAttributedString alloc] initWithString:
                                      [NSString stringWithFormat:@" %@", [OAOsmAndFormatter getFormattedAlt:analysis.minElevation]]
-                                                                    attributes:attrs]];
-
-        [res addAttributes:attrs range:NSMakeRange(0, res.length)];
+                                                                    attributes:textAttrs]];
 
         return res;
     }

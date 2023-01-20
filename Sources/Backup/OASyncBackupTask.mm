@@ -30,8 +30,9 @@
     OABackupHelper *_backupHelper;
     NSArray<OASettingsItem *> *_settingsItems;
     NSInteger _maxProgress;
+    NSInteger _importProgress;
+    NSInteger _exportProgress;
     NSInteger _lastProgress;
-    NSInteger _currentProgress;
     
     EOABackupSyncOperationType _operation;
     BOOL _cancelled;
@@ -47,8 +48,8 @@
         _singleOperation = operation != EOABackupSyncOperationSync;
         _backupHelper = OABackupHelper.sharedInstance;
         [_backupHelper addPrepareBackupListener:self];
-        _currentProgress = 0;
-        _lastProgress = 0;
+        _importProgress = 0;
+        _exportProgress = 0;
         _maxProgress = 0;
         _cancelled = NO;
     }
@@ -58,6 +59,11 @@
 - (void)dealloc
 {
     [_backupHelper removePrepareBackupListener:self];
+}
+
+- (NSInteger) getGeneralProgress
+{
+    return _importProgress + _exportProgress;
 }
 
 - (void)startSync
@@ -74,7 +80,7 @@
     [NSNotificationCenter.defaultCenter postNotificationName:kBackupSyncStartedNotification object:nil];
     if (_settingsItems.count > 0 && _operation != EOABackupSyncOperationUpload)
     {
-        [OANetworkSettingsHelper.sharedInstance importSettings:kRestoreItemsKey items:_settingsItems forceReadData:NO listener:self];
+        [OANetworkSettingsHelper.sharedInstance importSettings:kRestoreItemsKey items:_settingsItems forceReadData:YES listener:self];
     }
     else if (_operation != EOABackupSyncOperationDownload)
     {
@@ -94,20 +100,25 @@
     });
 }
 
-- (void)uploadLocalItem:(OASettingsItem *)item fileName:(NSString *)fileName
+- (void)uploadLocalItem:(OASettingsItem *)item
 {
-    [OANetworkSettingsHelper.sharedInstance exportSettings:fileName items:@[item] itemsToDelete:@[] listener:self];
+    [OANetworkSettingsHelper.sharedInstance exportSettings:[OABackupHelper getItemFileName:item] items:@[item] itemsToDelete:@[] localItemsToDelete:@[] listener:self];
 }
 
-- (void)downloadRemoteVersion:(OASettingsItem *)item fileName:(NSString *)fileName
+- (void)downloadRemoteVersion:(OASettingsItem *)item
 {
     [item setShouldReplace:YES];
-    [OANetworkSettingsHelper.sharedInstance importSettings:fileName items:@[item] forceReadData:YES listener:self];
+    [OANetworkSettingsHelper.sharedInstance importSettings:[OABackupHelper getItemFileName:item] items:@[item] forceReadData:YES listener:self];
 }
 
-- (void)deleteItem:(OASettingsItem *)item fileName:(NSString *)fileName
+- (void) deleteItem:(OASettingsItem *)item
 {
-    [OANetworkSettingsHelper.sharedInstance exportSettings:fileName items:@[] itemsToDelete:@[item] listener:self];
+    [OANetworkSettingsHelper.sharedInstance exportSettings:[OABackupHelper getItemFileName:item] items:@[] itemsToDelete:@[item] localItemsToDelete:@[] listener:self];
+}
+
+- (void) deleteLocalItem:(OASettingsItem *)item
+{
+    [OANetworkSettingsHelper.sharedInstance exportSettings:[OABackupHelper getItemFileName:item] items:@[] itemsToDelete:@[] localItemsToDelete:@[item] listener:self];
 }
 
 - (void)cancel
@@ -122,10 +133,12 @@
     @try
     {
         OABackupInfo *info = _backupHelper.backup.backupInfo;
-        NSArray<OASettingsItem *> *items = info.itemsToUpload;
-        if (items.count > 0 || info.filteredFilesToDelete.count > 0)
+        NSArray<OASettingsItem *> *itemsToUpload = info.itemsToUpload;
+        NSArray<OASettingsItem *> *itemsToDelete = info.itemsToDelete;
+        NSArray<OASettingsItem *> *localItemsToDelete = info.localItemsToDelete;
+        if (itemsToUpload.count > 0 || itemsToDelete.count > 0 || localItemsToDelete.count > 0)
         {
-            [OANetworkSettingsHelper.sharedInstance exportSettings:kBackupItemsKey items:items itemsToDelete:info.itemsToDelete listener:self];
+            [OANetworkSettingsHelper.sharedInstance exportSettings:kBackupItemsKey items:itemsToUpload itemsToDelete:itemsToDelete localItemsToDelete:localItemsToDelete listener:self];
         }
         else
         {
@@ -141,17 +154,20 @@
 - (NSInteger) calculateExportMaxProgress
 {
     OABackupInfo *info = _backupHelper.backup.backupInfo;
-    NSMutableArray<OASettingsItem *> *oldItemsToDelete = [NSMutableArray array];
-    for (OASettingsItem *item in info.itemsToUpload)
+    if (info)
     {
-        OAExportSettingsType *exportType = [OAExportSettingsType getExportSettingsTypeForItem:item];
-        if (exportType && [_backupHelper getVersionHistoryTypePref:exportType].get)
+        NSMutableArray<OASettingsItem *> *oldItemsToDelete = [NSMutableArray array];
+        for (OASettingsItem *item in info.itemsToUpload)
         {
-            [oldItemsToDelete addObject:item];
+            OAExportSettingsType *exportType = [OAExportSettingsType getExportSettingsTypeForItem:item];
+            if (exportType && [_backupHelper getVersionHistoryTypePref:exportType].get)
+            {
+                [oldItemsToDelete addObject:item];
+            }
         }
+        return [OAExportBackupTask getEstimatedItemsSize:info.itemsToUpload itemsToDelete:info.itemsToDelete localItemsToDelete:info.localItemsToDelete oldItemsToDelete:oldItemsToDelete];
     }
-    return [OAExportBackupTask getEstimatedItemsSize:info.itemsToUpload itemsToDelete:info.itemsToDelete oldItemsToDelete:oldItemsToDelete];;
-    
+    return 0;
 }
 
 // MARK: OAOnPrepareBackupListener
@@ -206,8 +222,8 @@
 
 - (void)onImportProgressUpdate:(NSInteger)value uploadedKb:(NSInteger)uploadedKb
 {
-    _currentProgress = uploadedKb;
-    float progress = (float) _currentProgress / _maxProgress;
+    _importProgress = uploadedKb;
+    float progress = (float) self.getGeneralProgress / _maxProgress;
     progress = progress > 1 ? 1 : progress;
     [NSNotificationCenter.defaultCenter postNotificationName:kBackupProgressUpdateNotification object:nil userInfo:@{@"progress": @(progress)}];
 }
@@ -231,8 +247,8 @@
 - (void)onBackupExportProgressUpdate:(NSInteger)value
 {
     OAExportBackupTask *exportTask = [OANetworkSettingsHelper.sharedInstance getExportTask:kBackupItemsKey];
-    _currentProgress += exportTask.generalProgress - _lastProgress;
-    float progress = (float) _currentProgress / _maxProgress;
+    _exportProgress += exportTask.generalProgress - _lastProgress;
+    float progress = (float) self.getGeneralProgress / _maxProgress;
     progress = progress > 1 ? 1 : progress;
     [NSNotificationCenter.defaultCenter postNotificationName:kBackupProgressUpdateNotification object:nil userInfo:@{@"progress": @(progress)}];
     _lastProgress = exportTask.generalProgress;

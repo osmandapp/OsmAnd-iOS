@@ -42,6 +42,8 @@
     [self createFilteredFilesToDelete];
     [self createItemsToDelete];
     [self createFilteredFilesToMerge];
+    [self createFilteredLocalFilesToDelete];
+    [self createLocalItemsToDelete];
 }
 
 - (void) createItemsToUpload
@@ -65,6 +67,17 @@
             [items addObject:item];
     }
     _itemsToDelete = [NSMutableArray arrayWithArray:items.allObjects];
+}
+
+- (void) createLocalItemsToDelete
+{
+    NSMutableSet<OASettingsItem *> *items = [NSMutableSet set];
+    for (OARemoteFile *remoteFile in _filteredLocalFilesToDelete) {
+        OASettingsItem *item = remoteFile.item;
+        if (item)
+            [items addObject:item];
+    }
+    _localItemsToDelete = [NSMutableArray arrayWithArray:items.allObjects];
 }
 
 - (void) createFilteredFilesToDownload
@@ -110,6 +123,21 @@
         }
     }
     _filteredFilesToDelete = files;
+}
+
+- (void) createFilteredLocalFilesToDelete
+{
+    NSMutableArray<OALocalFile *> *files = [NSMutableArray array];
+    OABackupHelper *helper = OABackupHelper.sharedInstance;
+    for (OALocalFile *localFile in _localFilesToDelete)
+    {
+        OAExportSettingsType *exportType = localFile.item != nil ? [OAExportSettingsType getExportSettingsTypeForItem:localFile.item] : nil;
+        if (exportType != nil && [helper getBackupTypePref:exportType].get)
+        {
+            [files addObject:localFile];
+        }
+    }
+    _filteredLocalFilesToDelete = files;
 }
 
 - (void) createFilteredFilesToMerge

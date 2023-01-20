@@ -87,6 +87,14 @@
     }
 }
 
+- (void)remove
+{
+    [super remove];
+    [OAPlugin removeCustomPlugin:_plugin];
+    for (OASettingsItem *item in _pluginDependentItems)
+         [item remove];
+}
+
 - (void) readFromJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
 {
     [super readFromJson:json error:error];

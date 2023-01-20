@@ -23,6 +23,7 @@
 - (ObjectType) renameItem:(ObjectType)item;
 - (long) getEstimatedItemSize:(ObjectType)item;
 - (BOOL) shouldShowDuplicates;
+- (void) deleteItem:(ObjectType)item;
 
 - (BOOL) isEmpty;
 

@@ -160,7 +160,7 @@
     return self;
 }
 
-- (OACollectItemsResult *) collectItems:(BOOL)readItems
+- (OACollectItemsResult *) collectItems:(NSArray<OASettingsItem *> *)settingsItems readItems:(BOOL)readItems
 {
     OACollectItemsResult *result = [[OACollectItemsResult alloc] init];
     __block NSString *error = nil;
@@ -170,6 +170,11 @@
         [_backupHelper downloadFileList:^(NSInteger status, NSString * _Nonnull message, NSArray<OARemoteFile *> * _Nonnull remoteFiles) {
             if (status == STATUS_SUCCESS)
             {
+                if (settingsItems)
+                {
+                    NSDictionary<OARemoteFile *, OASettingsItem *> *items = [OABackupHelper getRemoteFilesSettingsItems:settingsItems remoteFiles:remoteFiles infoFiles:YES];
+                    remoteFiles = items.allKeys;
+                }
                 result.remoteFiles = remoteFiles;
                 @try {
                     result.items = [self getRemoteItems:remoteFiles readItems:readItems];
@@ -219,9 +224,12 @@
                 break;
             }
         }
-        if (item != nil && (!item.shouldReadOnCollecting || forceReadData))
+        if (item != nil)
         {
-            [tasks addObject:[[OAItemFileImportTask alloc] initWithRemoteFile:remoteFile item:item importer:self forceReadData:forceReadData]];
+            if (!item.shouldReadOnCollecting || forceReadData)
+                [tasks addObject:[[OAItemFileImportTask alloc] initWithRemoteFile:remoteFile item:item importer:self forceReadData:forceReadData]];
+            else
+                [_backupHelper updateFileUploadTime:remoteFile.type fileName:remoteFile.name uploadTime:remoteFile.clienttimems];
         }
     }
     [_queue addOperations:tasks waitUntilFinished:YES];
@@ -240,8 +248,9 @@
     NSString *tempFilePath = [_tmpFilesDir stringByAppendingPathComponent:fileName];
     if (reader)
     {
-        NSString *error = [_backupHelper downloadFile:tempFilePath remoteFile:remoteFile listener:self];
-        if (error.length == 0)
+        NSString *errorStr = [_backupHelper downloadFile:tempFilePath remoteFile:remoteFile listener:self];
+        BOOL error = errorStr.length > 0;
+        if (!error)
         {
             [reader readFromFile:tempFilePath error:nil];
             if (forceReadData)
@@ -252,7 +261,7 @@
                 [item apply];
             }
 
-            [_backupHelper updateFileUploadTime:remoteFile.type fileName:remoteFile.name uploadTime:remoteFile.clienttimems];
+            [_backupHelper updateFileUploadTime:remoteFile.type fileName:remoteFile.name uploadTime:remoteFile.updatetimems];
             
             if ([item isKindOfClass:OAFileSettingsItem.class])
             {
@@ -260,13 +269,15 @@
                 if (itemFileName.pathExtension.length == 0)
                 {
                     [_backupHelper updateFileUploadTime:[OASettingsItemType typeName:item.type] fileName:itemFileName
-                                            uploadTime:remoteFile.clienttimems];
+                                            uploadTime:remoteFile.updatetimems];
                 }
             }
         }
-        else
+        if ([NSFileManager.defaultManager fileExistsAtPath:tempFilePath])
+            [NSFileManager.defaultManager removeItemAtPath:tempFilePath error:nil];
+        if (error)
         {
-            @throw [NSException exceptionWithName:@"IOException" reason:[NSString stringWithFormat:@"Error reading temp item file %@: %@", fileName, error] userInfo:nil];
+            @throw [NSException exceptionWithName:@"IOException" reason:[NSString stringWithFormat:@"Error reading temp item file %@: %@", fileName, errorStr] userInfo:nil];
         }
         
     }
@@ -314,13 +325,16 @@
                 BOOL delete = NO;
                 NSString *origFileName = [remoteFile.name stringByDeletingPathExtension];
                 OAUploadedFileInfo *fileInfo = infoMap[[NSString stringWithFormat:@"%@___%@", remoteFile.type, origFileName]];
-                if (_backupHelper.getPreparedLocalFiles[fileName.stringByDeletingPathExtension] == nil && !remoteFile.isDeleted)
+                for (OARemoteFile *file in filesToDelete)
                 {
-                    if (fileInfo != nil)
+                    if ([file.name isEqualToString:origFileName])
+                    {
                         delete = YES;
+                        break;
+                    }
                 }
                 long uploadTime = fileInfo != nil ? fileInfo.uploadTime : 0;
-                if (readItems && (uploadTime != remoteFile.clienttimems || delete))
+                if (readItems && (uploadTime != remoteFile.updatetimems || delete))
                     remoteInfoFilesMap[[_tmpFilesDir stringByAppendingPathComponent:fileName]] = remoteFile;
                 
                 NSString *itemFileName = [fileName stringByDeletingPathExtension];
@@ -619,9 +633,15 @@
                 @throw [NSException exceptionWithName:@"IOException" reason:[@"No temp item file: " stringByAppendingString:tempFile.lastPathComponent] userInfo:nil];
             }
         }];
+        
         [_queue addOperations:itemFileDownloadTasks waitUntilFinished:YES];
     }
-    else
+    NSFileManager *fileManager = NSFileManager.defaultManager;
+    [remoteFilesForDownload enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull tempFile, OARemoteFile * _Nonnull remoteFile, BOOL * _Nonnull stop) {
+        if ([fileManager fileExistsAtPath:tempFile])
+            [fileManager removeItemAtPath:tempFile error:nil];
+    }];
+    if (hasDownloadErrors)
     {
         @throw [NSException exceptionWithName:@"IOException" reason:@"Error downloading temp item files" userInfo:nil];
     }

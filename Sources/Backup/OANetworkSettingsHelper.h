@@ -86,6 +86,7 @@ typedef NS_ENUM(NSInteger, EOABackupSyncOperationType) {
 - (void) exportSettings:(NSString *)key
                   items:(NSArray<OASettingsItem *> *)items
           itemsToDelete:(NSArray<OASettingsItem *> *)itemsToDelete
+          localItemsToDelete:(NSArray<OASettingsItem *> *)localItemsToDelete
                listener:(id<OABackupExportListener>)listener;
 
 @end

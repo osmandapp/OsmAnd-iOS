@@ -105,4 +105,21 @@
     return 0; // override
 }
 
+- (void)remove
+{
+    [super remove];
+    if (_items.count > 0)
+    {
+        for (id item in _items)
+        {
+            [self deleteItem:item];
+        }
+    }
+}
+
+- (void) deleteItem:(id)item
+{
+    // override
+}
+
 @end

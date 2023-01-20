@@ -442,7 +442,7 @@
 "search_map" = "Leita á korti…";
 "search_another_country" = "Velja annað svæði";
 "skip_map_downloading" = "Sleppaþví að ná í kort";
-"skip_map_downloading_desc" = "Þú ert ekki með uppsett nein ónettengd kort. Þú gætir valið kort úr listanum eða hlaðið inn kortum síðar með valmyndinni - Sýsla með kortaskrár";
+"skip_map_downloading_desc_ios" = "Þú ert ekki með uppsett nein ónettengd kort. Þú gætir valið kort úr listanum eða hlaðið inn kortum síðar með valmyndinni - Sýsla með kortaskrár";
 "wiki_around" = "Wikipedia-greinarí nágrenninu";
 "categories" = "Flokkar";
 "shared_string_all" = "Allt";
@@ -681,7 +681,7 @@
 "arrived_at_intermediate_point" = "Þú hefur náð á milliáfanga";
 "starting_point_too_far" = "Upphafspunktur of langt frá næsta akvegi.";
 "ending_point_too_far" = "Endapunktur of langt frá næsta akvegi.";
-"intermediate_point_too_far" = "Milliáfanginn %1$s er of langt frá næsta akvegi.";
+"intermediate_point_too_far" = "Milliáfanginn %@ er of langt frá næsta akvegi.";
 "towards" = "í áttina að";
 "route_roundabout" = "Hringtorg: Beygðu útaf við %1$d afrein og haltu áfram";
 "route_roundabout_short" = "Beygðu útaf við %d afrein og haltu áfram";
@@ -754,7 +754,7 @@
 "transport_routes" = "Leiðir";
 "transport_nearby_routes_within" = "Nálægar leiðir innan";
 "transport_stop" = "Biðstöð";
-"route_stops_before" = "%d stopp á undan";
+"route_stops_before" = "%@ stopp á undan";
 "transport_nearby_routes" = "innan";
 "shared_string_previous" = "Fyrra";
 "logging_interval_navigation" = "Millibil skráninga á meðan leiðsögn stendur";
@@ -1083,9 +1083,9 @@
 "key_hint_zoom_out" = "Renna frá";
 "shared_string_read_more" = "Lesa meira";
 "short_location_on_map" = "Bre %@ Len %@";
-"navigate_point_format_D" = "DDD.DD";
-"navigate_point_format_DM" = "DDD MM.MM";
-"navigate_point_format_DMS" = "DDD MM SS.SS";
+"navigate_point_format_D" = "DDD.DDDDD";
+"navigate_point_format_DM" = "DDD MM.MMM";
+"navigate_point_format_DMS" = "DDD MM SS.S";
 "navigate_point_format_OLC" = "Opinn staðsetningarkóði (OLC)";
 "coordinates_example" = "Dæmi";
 "utm_description" = "Athugaðu að OsmAnd notar staðlað UTM-snið sem er svipað en ekki nákvæmlega eins og UTM-snið NATO.";
@@ -1693,7 +1693,7 @@
 "nav_type_descr" = "Veldu hvernig eigi að reikna leiðir í þessu sniði";
 "calc_pedestrian_route" = "Reikna leið fyrir fótgangandi";
 "help_mapillary" = "OsmAnd + Mapillary";
-"by_type" = "Eftir %@";
+"by_transport_type" = "Eftir %@";
 "show_terrain" = "Birta yfirborð";
 "nav_type_title" = "Gerð leiðsagnar";
 "public_transport_empty_warning_descr" = "Prófaðu að breyta stillingunum.";
@@ -2618,7 +2618,7 @@
 "benefits_for_contributors" = "Kostir fyrir virka OSM-þáttakendur";
 "benefits_for_contributors_primary_descr" = "Virkir þátttakendur í OpenStreetMap geta átt rétt á ótakmörkuðum uppfærslum korta á mánaðar og klukkustundar fresti.";
 "map_updates_are_unavailable_yet" = "Uppfærslur á kortum eru ekki enn tiltækar :-(";
-"not_enough_contributions_descr" = "Að lágmarki þarf %i breytingar á undangengnu tveggja-mánaða tímabili %@ til að fá aðgang að ótakmörkuðum uppfærlum á klukkustundar fresti.";
+"not_enough_contributions_descr" = "Að lágmarki þarf %@ breytingar á undangengnu tveggja-mánaða tímabili %@ til að fá aðgang að ótakmörkuðum uppfærlum á klukkustundar fresti.";
 "enough_contributions_descr" = "Til hamingju, þú hefur gefið næg framlög til OpenStreetMap og getur því notið ótakmarkaðs niðurhals á uppfærslum OsmAnd-landakorta!";
 "shared_string_not_included" = "Ekki innifalið";
 "choose_what_to_restore" = "Veldu atriði sem á að endurheimta";

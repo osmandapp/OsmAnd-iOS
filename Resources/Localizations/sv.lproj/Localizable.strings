@@ -37,7 +37,7 @@
 "map_widget_intermediate_time" = "Mellanliggande tid";
 "shared_string_previous" = "Föregående";
 "shared_string_next" = "Nästa";
-"route_stops_before" = "%d stannar före";
+"route_stops_before" = "%@ stannar före";
 "transport_routes" = "Rutter";
 "transport_nearby_routes_within" = "Rutter nära i";
 "transport_nearby_routes" = "i";
@@ -356,7 +356,7 @@
 "arrived_at_intermediate_point" = "You have arrived at your intermediate destination";
 "starting_point_too_far" = "Starting point too far from nearest road.";
 "ending_point_too_far" = "Slutpunkten för långt från närmaste väg.";
-"intermediate_point_too_far" = "Intermediate destination %d is too far from the nearest road.";
+"intermediate_point_too_far" = "Intermediate destination %@ is too far from the nearest road.";
 "arrived_at_destination" = "Du har anlänt.";
 "towards" = "mot";
 "route_roundabout" = "Roundabout: take %d exit and go";
@@ -409,7 +409,7 @@
 "units_min_km" = "min/km";
 "units_m_s" = "m/s";
 "tones" = "ton";
-"nothing_found" = "Nothing found: %@";
+"nothing_found" = "Nothing found";
 "nothing_found_empty" = "Hittade ingenting";
 "nothing_found_descr" = "Modify the search query or increase the search radius";
 "select_street" = "Välj gator";
@@ -746,9 +746,9 @@
 "sett_arr_loc" = "Plats";
 "sett_arr_map" = "Map center";
 "short_location_on_map" = "Lat %@ Lon %@";
-"navigate_point_format_D" = "DDD.DD";
-"navigate_point_format_DM" = "DDD MM.MM";
-"navigate_point_format_DMS" = "DDD MM SS.SS";
+"navigate_point_format_D" = "DDD.DDDDD";
+"navigate_point_format_DM" = "DDD MM.MMM";
+"navigate_point_format_DMS" = "DDD MM SS.S";
 "navigate_point_format_OLC" = "Open Location Code (OLC)";
 "navigate_point_format_UTM" = "UTM";
 "navigate_point_format_unknown" = "Unknown format";
@@ -757,7 +757,7 @@
 "navigate_point_zone" = "Zon";
 "navigate_point_olc" = "Öppna platskod";
 "navigate_point_olc_short" = "OLC";
-"approximate_file_size" = "Approximate file size: %@";
+"approximate_file_size" = "Approximate file size";
 "coordinates_example" = "Exempel";
 "utm_description" = "Please note, OsmAnd uses UTM Standard format which is similar but not identical to UTM NATO.";
 "coordinates_copy_descr" = "Tap to copy coordintates to clipboard.";
@@ -910,7 +910,7 @@
 "export_profile_select_descr" = "Select the data to be exported.";
 "selected_profiles" = "%d av %d";
 "selected_of" = "Selected - %d/%d";
-"nav_type_hint" = "Navigation type: %@";
+"nav_type_hint" = "Navigation type";
 "shared_string_nothing_selected" = "Nothing selected";
 "export_failed" = "Could not export profile";
 "custom_osmand_plugin_name" = "Anpassad OsmAnd-plugin";
@@ -1734,7 +1734,7 @@
 "walk" = "Gå";
 "board_at" = "Board at";
 "exit_at" = "Exit at";
-"by_type" = "By %@";
+"by_transport_type" = "By %@";
 "num_stops" = "hållplatser";
 "total_time" = "Total time";
 "moving_time" = "Moving time";
@@ -1835,7 +1835,7 @@
 "search_map" = "Searching map…";
 "search_another_country" = "Välj en annan region";
 "skip_map_downloading" = "Hoppaöver nerladdning av kartor";
-"skip_map_downloading_desc" = "You have no offline map installed. You may choose a map from the list or download maps later via Menu - Manage map files";
+"skip_map_downloading_desc_ios" = "You have no offline map installed. You may choose a map from the list or download maps later via Menu - Manage map files";
 "wiki_around" = "Närliggande Wikipedia-artiklar";
 "categories" = "Kategorier";
 "items_selected" = "%d selected";
@@ -1918,7 +1918,7 @@
 "osm_live_payment_3_months_title" = "Pay once in 3 months";
 "osm_live_payment_annual_title" = "Pay once a year";
 "osm_live_payment_month_cost_descr" = "%@ / månad";
-"osm_live_payment_month_cost_descr_ex" = "%@ %@ / month";
+"osm_live_payment_month_cost_descr_ex" = "%.2f %@ / month";
 "osm_live_payment_discount_descr" = "Save %@!";
 "osm_live_payment_current_subscription" = "Your current subscription";
 "osm_live_payment_renews_monthly" = "Förnyas varje månad";
@@ -1929,7 +1929,7 @@
 "osm_live_payment_contribute_descr" = "Part of income goes to OpenStreetMap contributors.";
 "purchase_dialog_title" = "Välj abonnemang";
 "purchase_dialog_travel_description" = "Köp något av följande för att läsa researtiklar frånkopplad:";
-"free_version_message" = "You can download or update %d maps";
+"free_version_message" = "%@ maps to download or update.";
 "get_osmand_live" = "Get OsmAnd Live to unlock all features:";
 "osm_live_subscription" = "OsmAnd Live-prenumeration";
 "osm_live_cancel_subscription" = "Avsluta abonnemang";

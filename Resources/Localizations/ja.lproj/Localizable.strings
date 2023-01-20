@@ -527,9 +527,9 @@
 "sett_arr_loc" = "緯度・経度";
 "sett_arr_map" = "マップ中央";
 "short_location_on_map" = "緯度 %@ 経度 %@";
-"navigate_point_format_D" = "DDD.DD";
-"navigate_point_format_DM" = "DDD MM.MM";
-"navigate_point_format_DMS" = "DDD MM SS.SS";
+"navigate_point_format_D" = "DDD.DDDDD";
+"navigate_point_format_DM" = "DDD MM.MMM";
+"navigate_point_format_DMS" = "DDD MM SS.S";
 "navigate_point_format_OLC" = "オープンロケーションコード(OLC)";
 "coordinates_example" = "例";
 "utm_description" = "OsmAndは座標形式の一つとしてUTM標準形式を使用しています。これはUTM NATO形式と似ていますが異なるものなのでご注意ください。";
@@ -1150,7 +1150,7 @@
 "search_map" = "マップの検索中…";
 "search_another_country" = "別の地域を選択";
 "skip_map_downloading" = "マップのダウンロードをスキップ";
-"skip_map_downloading_desc" = "オフラインマップがインストールされていません。リストからマップを選択するか、『メニュー』＞『マップファイル管理』から必要なマップをダウンロードしてください";
+"skip_map_downloading_desc_ios" = "オフラインマップがインストールされていません。リストからマップを選択するか、『メニュー』＞『マップファイル管理』から必要なマップをダウンロードしてください";
 "wiki_around" = "近隣のWikipedia記事";
 "categories" = "カテゴリー";
 "items_selected" = "%d個選択済み";
@@ -1742,7 +1742,7 @@
 "public_transport_ped_route_title" = "徒歩でのルートは約%@で、公共交通機関の利用よりも速い可能性があります。";
 "public_transport_warning_descr_blog" = "OsmAndのルーティング詳細については、公式ブログをご参照ください。";
 "num_stops" = "乗り場";
-"by_type" = "%@を利用";
+"by_transport_type" = "%@を利用";
 "exit_at" = "降車";
 "board_at" = "乗車";
 "walk" = "徒歩";

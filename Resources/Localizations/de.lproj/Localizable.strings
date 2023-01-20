@@ -446,7 +446,7 @@
 "search_map" = "Karte wird gesucht …";
 "search_another_country" = "Eine andere Region auswählen";
 "skip_map_downloading" = "Herunterladen der Kartenüberspringen";
-"skip_map_downloading_desc" = "Sie haben keine Offline Karten installiert. Sie können jetzt eine Karte auswählen oder später Karten über “Menü - Kartenverwaltung“ herunterladen";
+"skip_map_downloading_desc_ios" = "Sie haben keine Offline Karten installiert. Sie können jetzt eine Karte auswählen oder später Karten über “Menü - Kartenverwaltung“ herunterladen";
 "wiki_around" = "Wikipedia-Artikel zur Umgebung";
 "categories" = "Kategorien";
 "items_selected" = "%d ausgewählt";
@@ -549,7 +549,7 @@
 "route_tu" = "Wenden";
 "destination_point" = "Ziel %@";
 "intermediate_point" = "Zwischenziel %@";
-"intermediate_point_too_far" = "Zwischenziel %d ist zu weit von der nächsten Straße entfernt.";
+"intermediate_point_too_far" = "Zwischenziel %@ ist zu weit von der nächsten Straße entfernt.";
 "towards" = "nach";
 "route_kl" = "Links halten, dann";
 "route_kr" = "rechts halten, dann";
@@ -760,7 +760,7 @@
 "transport_nearby_routes_within" = "Nahe gelegene Routen innerhalb von";
 "transport_stop" = "Haltestelle";
 "transport_nearby_routes" = "Innerhalb";
-"route_stops_before" = "%d Haltestellen davor";
+"route_stops_before" = "%@ Haltestellen davor";
 "shared_string_previous" = "Zurück";
 "logging_interval_navigation" = "Erfassungsintervall während der Navigation";
 "auto_split_gap" = "Aufzeichnungen bei Lücken automatisch trennen";
@@ -1652,7 +1652,7 @@
 "map_settings_base_transp" = "Kartentransparenz";
 "map_coords" = "Karte: Breite %.5f Länge %.5f";
 "num_stops" = "Haltestellen";
-"by_type" = "Nach Typ";
+"by_transport_type" = "Nach Typ";
 "exit_at" = "Aussteigen bei";
 "board_at" = "Einsteigen bei";
 "walk" = "Gehen";
@@ -2699,7 +2699,7 @@
 "use_login_and_password" = "Login und Passwort verwenden";
 "use_login_and_password_description" = "Verwenden Sie Ihre E-Mail-Adresse/Ihr Login und Ihr Passwort, um sich bei OpenStreetMap.org anzumelden.";
 "benefits_for_contributors_secondary_descr" = "Melden Sie sich bei OpenStreetMap an, um zu prüfen, ob Sie Anspruch auf unbegrenzte monatliche und stündliche Kartenaktualisierungen haben.";
-"not_enough_contributions_descr" = "Mindestens %i Änderungen in den letzten zwei Monaten %@ sind erforderlich, um Zugriff auf unbegrenzte stündliche Kartenaktualisierungen zu erhalten.";
+"not_enough_contributions_descr" = "Mindestens %@ Änderungen in den letzten zwei Monaten %@ sind erforderlich, um Zugriff auf unbegrenzte stündliche Kartenaktualisierungen zu erhalten.";
 "enough_contributions_descr" = "Herzlichen Glückwunsch, Sie haben genug OpenStreetMap-Beiträge geleistet und können nun unbegrenzte OsmAnd-Kartenaktualisierungen genießen!";
 "auth_error" = "Autorisierungsfehler";
 "cloud_confirm_delete_type" = "Sind Sie sicher, dass sie „%@” aus OsmAnd Cloud löschen möchten?";

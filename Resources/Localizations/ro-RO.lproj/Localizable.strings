@@ -1141,7 +1141,7 @@
 "new_destination_point_dialog" = "Aveți setată deja o destinație";
 "switch_start_finish" = "Inversați punctul de plecare & destinația";
 "start_navigation" = "Începeți navigarea";
-"route_stops_before" = "%d opriri înainte de";
+"route_stops_before" = "%@ opriri înainte de";
 "allow_3d_descr" = "Activați această opțiune pentru a putea vizualiza harta în perspectiva 2.5D";
 "allow_3d" = "Permiteți vizualizarea 2.5D";
 "angular_units" = "Unități de măsură unghiulară";
@@ -1293,9 +1293,9 @@
 "utm_description" = "Vă rugăm să rețineți că OsmAnd utilizează formatul UTM Standard, care este similar, dar nu identic cu UTM NATO.";
 "approximate_file_size" = "Dimensiune aproximativă fișier: %@";
 "navigate_point_format_OLC" = "Cod de locație deschisă (OLC)";
-"navigate_point_format_DMS" = "DDD MM SS.SS";
-"navigate_point_format_DM" = "DDD MM.MM";
-"navigate_point_format_D" = "DDD.DD";
+"navigate_point_format_DMS" = "DDD MM SS.S";
+"navigate_point_format_DM" = "DDD MM.MMM";
+"navigate_point_format_D" = "DDD.DDDDD";
 "short_location_on_map" = "Lat %@ Lun %@";
 "sett_arr_map" = "Centru de hartă";
 "sett_arr" = "Săgeți pe hartă";
@@ -1478,7 +1478,7 @@
 "traffic_warning_tunnel" = "Tunelîn față";
 "route_roundabout_short" = "Ia %d ieși și mergi";
 "route_roundabout" = "Sens giratoriu: ia %d ieși și mergi";
-"intermediate_point_too_far" = "Punctul de destinație intermediar %d este prea departe de cel mai apropiat drum.";
+"intermediate_point_too_far" = "Punctul de destinație intermediar %@ este prea departe de cel mai apropiat drum.";
 "starting_point_too_far" = "Punctul de plecare este prea departe de cel mai apropiat drum.";
 "arrived_at_intermediate_point" = "Ați ajuns la destinația intermediară";
 "empty_route_calculated" = "Eroare: Ruta calculată este goală";
@@ -1664,7 +1664,7 @@
 "wpt_select" = "Vă rugăm să selectați punctele de trecere";
 "change_group" = "Schimbarea grupului";
 "total_time" = "Timp total";
-"by_type" = "Prin %@";
+"by_transport_type" = "Prin %@";
 "board_at" = "Consiliul de administrație la";
 "public_transport_empty_warning_title" = "Din păcate, OsmAnd nu a putut găsi o rută pentru setările dumneavoastră.";
 "public_transport_warning_descr_blog" = "Citiți mai multe despre rutele OsmAnd pe blogul nostru.";
@@ -2005,7 +2005,7 @@
 "download_wiki_data" = "Descărcați datele Wikipedia pentru %@";
 "wiki_sheet_title" = "Cum se deschid articolele din Wikipedia\?";
 "items_selected" = "%d selectat";
-"skip_map_downloading_desc" = "Nu aveți instalată nicio hartă offline. Puteți alege o hartă din listă sau puteți descărca hărți mai târziu prin Menu - Manage map files (Meniu - Gestionare fișiere hartă)";
+"skip_map_downloading_desc_ios" = "Nu aveți instalată nicio hartă offline. Puteți alege o hartă din listă sau puteți descărca hărți mai târziu prin Menu - Manage map files (Meniu - Gestionare fișiere hartă)";
 "search_map" = "Căutare hartă…";
 "search_location" = "Căutarea locației…";
 "search_my_location" = "Căutați-mi locația";
@@ -2701,7 +2701,7 @@
 "cloud_no_conflicts" = "Nu sunt conflicte";
 "contact_support_description" = "Dacă aveți întrebări, vă rugăm să ne contactați la support@osmand.net.";
 "map_updates_are_unavailable_yet" = "Actualizările hărților nu sunt încă disponibile :-(";
-"not_enough_contributions_descr" = "Pentru a avea acces la actualizări nelimitate de hărți din oră în oră, este necesar un minim de %i modificări în ultimele două luni %@.";
+"not_enough_contributions_descr" = "Pentru a avea acces la actualizări nelimitate de hărți din oră în oră, este necesar un minim de %@ modificări în ultimele două luni %@.";
 "map_download_privacy_descr" = "Prin descărcarea hărților sunteți de acord cu <a href='https://osmand.net/docs/legal/terms-of-use'>Condițiile de utilizare</a> și <a href='https://osmand.net/docs/legal/privacy-policy'>Politica de confidențialitate</a>.";
 "map_settings_show_map_symbols" = "Afișați simbolurile hărții";
 "depth_contour_lines" = "Linii de contur de adâncime";

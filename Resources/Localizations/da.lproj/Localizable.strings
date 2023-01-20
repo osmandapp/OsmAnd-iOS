@@ -445,7 +445,7 @@
 "search_map" = "Søger på kort…";
 "search_another_country" = "Vælg et andet område";
 "skip_map_downloading" = "Spring over hentning af kort";
-"skip_map_downloading_desc" = "Der er ingen offline kort installeret. Vælg et kort fra listen eller hent et kort senere via Menu - Administrer kort";
+"skip_map_downloading_desc_ios" = "Der er ingen offline kort installeret. Vælg et kort fra listen eller hent et kort senere via Menu - Administrer kort";
 "wiki_around" = "Wikipedia artikler i nærheden";
 "categories" = "Kategorier";
 "items_selected" = "%d valgt";
@@ -553,7 +553,7 @@
 "traffic_warning_hazard" = "Fare";
 "starting_point_too_far" = "Udgangspunktet er for langt fra nærmeste vej.";
 "ending_point_too_far" = "Slutpunktet er for langt væk fra nærmeste vej.";
-"intermediate_point_too_far" = "Mellemliggende destination %d er for langt væk fra den nærmeste vej.";
+"intermediate_point_too_far" = "Mellemliggende destination %@ er for langt væk fra den nærmeste vej.";
 "destination_point" = "Destinationen %@";
 "intermediate_point" = "Mellemliggende destination %@";
 "arrived_at_intermediate_point" = "Ankommet til mellemliggende destination";
@@ -758,7 +758,7 @@
 "transport_nearby_routes_within" = "Nærliggende ruter indenfor";
 "transport_stop" = "Stop";
 "transport_nearby_routes" = "Indenfor";
-"route_stops_before" = "%d stop før";
+"route_stops_before" = "%@ stop før";
 "shared_string_previous" = "Forrige";
 "speak_tunnels" = "Tunneler";
 "traffic_warning_tunnel" = "Tunnel forude";
@@ -1087,8 +1087,8 @@
 "shared_string_read_more" = "Læs mere";
 "short_location_on_map" = "Lat %@ Lon %@";
 "navigate_point_format_D" = "GGG.GG";
-"navigate_point_format_DM" = "DDD MM.MM";
-"navigate_point_format_DMS" = "DDD MM SS.SS";
+"navigate_point_format_DM" = "DDD MM.MMM";
+"navigate_point_format_DMS" = "DDD MM SS.S";
 "navigate_point_format_OLC" = "Open Location Code (OLC)";
 "coordinates_example" = "Eksempel";
 "utm_description" = "OsmAnd bruger UTM standardformat, som er tilsvarende, men ikke identisk med UTM NATO format.";
@@ -1650,7 +1650,7 @@
 "map_settings_base_transp" = "Gennemsigtighed for basiskort";
 "map_coords" = "Kort: Lat %.5f Lon %.5f";
 "num_stops" = "Stoppesteder";
-"by_type" = "Ved %@";
+"by_transport_type" = "Ved %@";
 "exit_at" = "Stå af ved";
 "board_at" = "Stig på ved";
 "walk" = "Gang";
@@ -2687,7 +2687,7 @@
 "benefits_for_contributors_secondary_descr" = "Log ind på OpenStreetMap for at tjekke, om du er berettiget til ubegrænsede kortopdateringer hver måned og time.";
 "contributions_may_calculate_with_delay" = "Beregning af bidrag kan tage adskillige timer.";
 "map_updates_are_unavailable_yet" = "Kortopdateringer er endnu ikke tilgængelige :-(";
-"not_enough_contributions_descr" = "Der kræves mindst %i ændringer i løbet af de sidste to måneder %@ for at få adgang til ubegrænsede kortopdateringer hver time.";
+"not_enough_contributions_descr" = "Der kræves mindst %@ ændringer i løbet af de sidste to måneder %@ for at få adgang til ubegrænsede kortopdateringer hver time.";
 "last_two_month_total" = "De sidste to måneder i alt";
 "auth_error" = "Godkendelsesfejl";
 "carplay_available_in_sub_plans" = "Køb OsmAnd Pro eller Maps+ for at bruge OsmAnd med CarPlay.";

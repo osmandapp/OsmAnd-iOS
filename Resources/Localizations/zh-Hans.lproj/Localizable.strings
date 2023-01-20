@@ -456,7 +456,7 @@
 "search_map" = "正在搜索地图…";
 "search_another_country" = "选择另一区域";
 "skip_map_downloading" = "跳过下载地图";
-"skip_map_downloading_desc" = "";
+"skip_map_downloading_desc_ios" = "";
 "wiki_around" = "附近的维基百科文章";
 "categories" = "分类";
 "items_selected" = "%d 已选中";
@@ -724,7 +724,7 @@
 "save_global_track_interval_descr" = "选择常规行程记录的记录时间间隔 (通过地图上的GPX记录小部件启用)。";
 "keep_and_add_destination_point" = "请添加作为随后的目的地";
 "intermediate_items_sort_by_distance" = "排序 门到门";
-"route_stops_before" = "%1$s 之前停止";
+"route_stops_before" = "%@ 之前停止";
 "shared_string_previous" = "上一页";
 "poi_clear" = "清除";
 "shared_setting_always_ask" = "总是询问";
@@ -785,14 +785,14 @@
 "shared_string_enabled" = "已启用";
 "shared_string_reset" = "重置";
 "shared_string_read_more" = "阅读更多";
-"navigate_point_format_D" = "DDD.DD";
-"navigate_point_format_DM" = "DDD MM.MM";
-"navigate_point_format_DMS" = "DDD MM SS.SS";
+"navigate_point_format_D" = "DDD.DDDDD";
+"navigate_point_format_DM" = "DDD MM.MMM";
+"navigate_point_format_DMS" = "DDD MM SS.S";
 "route_roundabout" = "环岛：第%d个出口驶离";
 "route_roundabout_short" = "利用 %d 退出并离开";
 "starting_point_too_far" = "起始标点离最近的道路太远。";
 "ending_point_too_far" = "结束点与最近道路太远。";
-"intermediate_point_too_far" = "中转点 %d 离最近的路太远。";
+"intermediate_point_too_far" = "中转点 %@ 离最近的路太远。";
 "destination_point" = "终点 %@";
 "stop_routing_confirm" = "是否确定停止导航？";
 "cancel_route" = "取消路线";

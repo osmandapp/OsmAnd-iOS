@@ -747,14 +747,14 @@
 "shared_string_milliradians" = "milli-radiante";
 "show_tunnels" = "Gallerie";
 "shared_string_read_more" = "Approfondisci";
-"navigate_point_format_D" = "DDD.DD";
-"navigate_point_format_DM" = "DDD MM.MM";
-"navigate_point_format_DMS" = "DDD MM SS.SS";
+"navigate_point_format_D" = "DDD.DDDDD";
+"navigate_point_format_DM" = "DDD MM.MMM";
+"navigate_point_format_DMS" = "DDD MM SS.S";
 "sett_generic_ext_input" = "Tastiera generica";
 "sett_wunderlinq_ext_input" = "WunderLINQ";
 "transport_routes" = "Percorsi";
 "transport_stop" = "Ferma";
-"route_stops_before" = "%d fermate prima";
+"route_stops_before" = "%@ fermate prima";
 "logging_interval_navigation" = "Intervallo di registrazione durante la navigazione";
 "logging_interval_navigation_descr" = "Scegli l'intervallo di registrazione per la registrazione del viaggio durante la navigazione";
 "logging_min_distance" = "Minimo spostamento";
@@ -1275,7 +1275,7 @@
 "rendering_attr_hmRendered_description" = "Aumenta la quantità dei dettagli della mappa visualizzati.";
 "driving_region_europe_asia" = "Europa, Asia, America Latina & similari";
 "route_roundabout" = "Rotatoria: prendi la %d uscita e prosegui";
-"intermediate_point_too_far" = "La destinazione intermedia %d è troppo lontana dalla strada più vicina.";
+"intermediate_point_too_far" = "La destinazione intermedia %@ è troppo lontana dalla strada più vicina.";
 "lat" = "Lat";
 "lon" = "Lon";
 "shared_string_turn" = "Svolta";
@@ -2330,7 +2330,7 @@
 "cloud_backup" = "Backup";
 "backup_complete" = "Backup completato";
 "duration_ago" = "%@ fa";
-"by_type" = "Per %@";
+"by_transport_type" = "Per %@";
 "activity" = "Attività";
 "weather_temp_unit_c" = "Celsius";
 "weather_precip_unit_mm" = "Millimetri";
@@ -2585,7 +2585,7 @@
 "wiki_download_description" = "Per leggere gli articoli completi, scarica i dati da Wikipedia di %@";
 "plugin_popup_osm_editing_title" = "Attiva le modifiche su OpenStreetMap";
 "plugin_popup_nautical_desc" = "Si prega di scaricare prima le mappe nautiche.\nQuindi vai su <b>Impostazioni mappa</b> > <b>Tipo di mappa</b> e attiva lo stile <b>Nautico</b>";
-"skip_map_downloading_desc" = "Non hai nessuna mappa offline installata. Puoi scegliere una mappa dall'elenco o scaricarla in un secondo momento tramite Menu - Gestisci file mappa";
+"skip_map_downloading_desc_ios" = "Non hai nessuna mappa offline installata. Puoi scegliere una mappa dall'elenco o scaricarla in un secondo momento tramite Menu - Gestisci file mappa";
 "syncing_progress" = "Sincronizzazione...";
 "plugin_popup_weather_ask" = "Si prega di abilitare il plugin Meteo";
 "weather_cloud_data_description" = "I dati meteorologici verranno scaricati ogni volta per l'area visualizzata.";
@@ -2761,7 +2761,7 @@
 "weather_forecast_is_outdated" = "La previsione è obsoleta.";
 "weather_offline_forecast_only_desc" = "Le previsioni saranno disponibili solo per i paesi con dati pre-scaricati.";
 "map_updates_for_mappers" = "Aggiornamenti della mappa per i mappatori";
-"not_enough_contributions_descr" = "È necessario un minimo di %i modifiche negli ultimi due mesi %@ per ottenere l'accesso agli aggiornamenti orari illimitati delle mappe.";
+"not_enough_contributions_descr" = "È necessario un minimo di %@ modifiche negli ultimi due mesi %@ per ottenere l'accesso agli aggiornamenti orari illimitati delle mappe.";
 "backup_delete_old_data_warning" = "Stai per eliminare la cronologia delle modifiche per i dati precedentemente caricati.\n\nLa versione corrente dei dati verrà salvata sul server, ma non sarà possibile ripristinare le modifiche apportate in precedenza.";
 "backup_delete_all_data" = "Cancella tutti i miei dati";
 "backup_delete_from_cloud" = "Elimina dal cloud";

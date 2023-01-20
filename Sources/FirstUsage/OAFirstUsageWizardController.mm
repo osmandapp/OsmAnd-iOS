@@ -284,7 +284,7 @@ typedef enum
 
 - (IBAction)skipPress:(id)sender
 {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"skip_map_downloading") message:OALocalizedString(@"skip_map_downloading_desc") delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_cancel") otherButtonTitles:OALocalizedString(@"intro_skip"), OALocalizedString(@"shared_string_select"), nil];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"skip_map_downloading") message:OALocalizedString(@"skip_map_downloading_desc_ios") delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_cancel") otherButtonTitles:OALocalizedString(@"intro_skip"), OALocalizedString(@"shared_string_select"), nil];
     alert.tag = ALERT_SKIP;
     [alert show];
 }

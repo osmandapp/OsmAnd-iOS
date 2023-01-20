@@ -459,7 +459,7 @@
 "apply_filters" = "Szűrők alkalmazása";
 "filter_poi_hint" = "Szűrés név szerint";
 "search_map" = "Térkép keresése…";
-"skip_map_downloading_desc" = "Nincs telepítve offline térképed. Választhatsz egy térképet a listából, vagy letölthetsz térképet később a Menü - Térképek kezelése alól";
+"skip_map_downloading_desc_ios" = "Nincs telepítve offline térképed. Választhatsz egy térképet a listából, vagy letölthetsz térképet később a Menü - Térképek kezelése alól";
 "city_type_suburb" = "Településrész";
 "city_type_hamlet" = "Falucska";
 "city_type_village" = "Község";
@@ -491,7 +491,7 @@
 "arrived_at_intermediate_point" = "Megérkeztél a köztes célponthoz";
 "starting_point_too_far" = "A kezdőpont közelében nem található út.";
 "ending_point_too_far" = "A célpont közelében nem található út.";
-"intermediate_point_too_far" = "%d. köztes célpont közelében nincsen út.";
+"intermediate_point_too_far" = "%@. köztes célpont közelében nincsen út.";
 "towards" = "erre:";
 "route_roundabout" = "Körforgalom: %d. kijárat, majd menj";
 "route_roundabout_short" = "Hajtson ki a(z) %d kijáraton, és haladjon tovább itt:";
@@ -1357,7 +1357,7 @@
 "subsequent_dest_description" = "Célpont följebb mozgatása, vagy létrehozása";
 "new_destination_point_dialog" = "Már be van állítva célpont";
 "start_navigation" = "Navigáció elindítása";
-"route_stops_before" = "%d megálló eddig:";
+"route_stops_before" = "%@ megálló eddig:";
 "allow_3d" = "2,5D-s nézet engedélyezése";
 "shared_string_next" = "Következő";
 "poi_overlay" = "POI-rátétréteg";

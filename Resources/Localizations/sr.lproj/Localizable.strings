@@ -37,7 +37,7 @@
 "map_widget_intermediate_time" = "Међувреме";
 "shared_string_previous" = "Претходно";
 "shared_string_next" = "Следеће";
-"route_stops_before" = "%d стаје пре";
+"route_stops_before" = "%@ стаје пре";
 "transport_routes" = "Путеви";
 "transport_nearby_routes_within" = "Превоз у близини";
 "transport_nearby_routes" = "Близу";
@@ -356,7 +356,7 @@
 "arrived_at_intermediate_point" = "Стигли сте на своје међуодредиште";
 "starting_point_too_far" = "Почетна тачка је предалеко од најближег пута.";
 "ending_point_too_far" = "Завршна тачка је предалеко од најближег пута.";
-"intermediate_point_too_far" = "Међуодредиште %d је предалеко од најближег пута.";
+"intermediate_point_too_far" = "Међуодредиште %@ је предалеко од најближег пута.";
 "arrived_at_destination" = "Стигли сте.";
 "towards" = "према";
 "route_roundabout" = "Кружни ток: изађите на %d излазу и наставите";
@@ -746,9 +746,9 @@
 "sett_arr_loc" = "Положај";
 "sett_arr_map" = "Центар мапе";
 "short_location_on_map" = "Лат %@ Лон %@";
-"navigate_point_format_D" = "DDD.DD";
-"navigate_point_format_DM" = "DDD MM.MM";
-"navigate_point_format_DMS" = "DDD MM SS.SS";
+"navigate_point_format_D" = "DDD.DDDDD";
+"navigate_point_format_DM" = "DDD MM.MMM";
+"navigate_point_format_DMS" = "DDD MM SS.S";
 "navigate_point_format_OLC" = "Отворени код локације (OLC)";
 "navigate_point_format_UTM" = "UTM";
 "navigate_point_format_unknown" = "Непознат формат";
@@ -910,7 +910,7 @@
 "export_profile_select_descr" = "Изаберите податке за извоз.";
 "selected_profiles" = "%dод %d";
 "selected_of" = "Изабрано - %d/%d";
-"nav_type_hint" = "Navigation type: %@";
+"nav_type_hint" = "Navigation type";
 "shared_string_nothing_selected" = "Ништа није означено";
 "export_failed" = "Није могуће извести профил";
 "custom_osmand_plugin_name" = "Произвољни OsmAnd додатак";
@@ -1734,7 +1734,7 @@
 "walk" = "Пешке";
 "board_at" = "Укрцавање у";
 "exit_at" = "Излаз на";
-"by_type" = "By %@";
+"by_transport_type" = "By %@";
 "num_stops" = "станице";
 "total_time" = "Укупно време";
 "moving_time" = "Време кретања";
@@ -1835,7 +1835,7 @@
 "search_map" = "Претраживање мапе…";
 "search_another_country" = "Одаберите другу област";
 "skip_map_downloading" = "Прескочи преузимање карата";
-"skip_map_downloading_desc" = "Немате инсталирану ниједну ван мрежну мапу. Можете да изаберете мапу са листе или да преузмете мапе касније преко Мени - Управљање датотекама мапе";
+"skip_map_downloading_desc_ios" = "Немате инсталирану ниједну ван мрежну мапу. Можете да изаберете мапу са листе или да преузмете мапе касније преко Мени - Управљање датотекама мапе";
 "wiki_around" = "Чланци Википедије о околини";
 "categories" = "Категорије";
 "items_selected" = "%d изабрано";

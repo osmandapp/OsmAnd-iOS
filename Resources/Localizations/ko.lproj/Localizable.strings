@@ -68,7 +68,7 @@
 "allow_3d_descr" = "지도를 2.5D 관점으로 보려면 이 옵션을 선택";
 "shared_string_previous" = "이전";
 "shared_string_next" = "다음";
-"route_stops_before" = "%d이(가) 다음에서 중지됨";
+"route_stops_before" = "%@이(가) 다음에서 중지됨";
 "transport_routes" = "경로";
 "transport_nearby_routes_within" = "다음 내 인근 경로";
 "transport_nearby_routes" = "안쪽";
@@ -330,7 +330,7 @@
 "empty_route_calculated" = "오류: 계산된 경로가 비어 있음";
 "arrived_at_intermediate_point" = "중간 목적지에 도착";
 "starting_point_too_far" = "가장 가까운 도로에서 출발점이 너무 멀다.";
-"intermediate_point_too_far" = "중간 목적지 %d이(가) 가장 가까운 도로에서 너무 멀다.";
+"intermediate_point_too_far" = "중간 목적지 %@이(가) 가장 가까운 도로에서 너무 멀다.";
 "arrived_at_destination" = "도착지에 도착하였습니다";
 "looking_up_address" = "주소 조회 중";
 "no_address_found" = "결정된 주소 없음";

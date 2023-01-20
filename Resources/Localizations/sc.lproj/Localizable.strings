@@ -458,7 +458,7 @@
 "edit_filter_delete_dialog_title" = "Iscantzellare su filtru ischertadu?";
 "apply_filters" = "Àplica sos filtros";
 "filter_poi_hint" = "Filtra pro nùmene";
-"skip_map_downloading_desc" = "Non tenes mapas non in lìnia installadas. Podes isseberare una mapa dae sa lista o iscarrigare mapas prus a tardu pro mèdiu de Menù - Amministra sos documentos de sas mapas";
+"skip_map_downloading_desc_ios" = "Non tenes mapas non in lìnia installadas. Podes isseberare una mapa dae sa lista o iscarrigare mapas prus a tardu pro mèdiu de Menù - Amministra sos documentos de sas mapas";
 "items_selected" = "%d ischertada(s)";
 "shared_string_save_as" = "Sarva comente";
 "shared_string_from" = "dae";
@@ -548,7 +548,7 @@
 "arrived_at_intermediate_point" = "Ses arribadu a sa tapa intermèdia tua";
 "starting_point_too_far" = "Puntu de tzucada tropu indedda dae su caminu prus a curtzu.";
 "ending_point_too_far" = "Puntu finale tropu indedda dae su caminu prus a curtzu.";
-"intermediate_point_too_far" = "Sa tapa %d est tropu indedda dae su caminu prus a curtzu.";
+"intermediate_point_too_far" = "Sa tapa %@ est tropu indedda dae su caminu prus a curtzu.";
 "error_calculating_route" = "Errore in su càrculu de s'àndala";
 "internet_connection_required_for_online_route" = "Est istadu ischertadu unu servìtziu de navigatzione in lìnia, ma sa connessione a ìnternet no est a disponimentu.";
 "empty_route_calculated" = "Errore: s’àndala carculada est bòida";
@@ -752,7 +752,7 @@
 "transport_nearby_routes_within" = "Àndalas a curtzu intre";
 "transport_stop" = "Stop";
 "transport_nearby_routes" = "Intre";
-"route_stops_before" = "%1$s firmadas in antis";
+"route_stops_before" = "%@ firmadas in antis";
 "shared_string_previous" = "Antepostu";
 "poi_overlay" = "Subrapositzione PDI";
 "poi_clear" = "Iscantzella";
@@ -1041,9 +1041,9 @@
 "price_free" = "De badas";
 "save_poi_too_many_uppercase" = "In su nùmene bi sunt tropas lìteras maiùscolas. Boles sighire?";
 "shared_string_read_more" = "Legheàteru";
-"navigate_point_format_D" = "DDD.DD";
-"navigate_point_format_DM" = "DDD MM.MM";
-"navigate_point_format_DMS" = "DDD MM SS.SS";
+"navigate_point_format_D" = "DDD.DDDDD";
+"navigate_point_format_DM" = "DDD MM.MMM";
+"navigate_point_format_DMS" = "DDD MM SS.S";
 "shared_string_retry" = "Torra a proare";
 // Mapillary
 "mapil_no_inet_descr" = "Tenes bisòngiu de una connessione a ìnternet pro bìdere sas fotografias de Mapillary.";
@@ -1654,7 +1654,7 @@
 "avoid_transport_type" = "Istransi castas de trasportu";
 "map_coords" = "Mapa: Lat %.5f Lon %.5f";
 "num_stops" = "firmadas";
-"by_type" = "Pro %@";
+"by_transport_type" = "Pro %@";
 "exit_at" = "Essi in";
 "walk" = "A pede";
 "total" = "Totale";
@@ -2716,7 +2716,7 @@
 "sign_in_with_open_street_map" = "Intra cun OpenStreetMap";
 "benefits_for_contributors_primary_descr" = "Sos contribuidores ativos a OpenStreetMap.org diant pòdere èssere idòneos a retzire agiornamentos de sa mapa chene lìmites cada ora.";
 "benefits_for_contributors_secondary_descr" = "Intra in OpenStreetMap pro averguare de èssere o nono idòneu pro retzire agiornamentos de sas mapas mensiles e cada ora.";
-"not_enough_contributions_descr" = "Unu mìnimu de %i modìficas in s'ùrtimu bimestre %@ est netzessàriu pro tènnere atzessu a sos agiornamentos chene lìmites de sa mapa pro cada ora.";
+"not_enough_contributions_descr" = "Unu mìnimu de %@ modìficas in s'ùrtimu bimestre %@ est netzessàriu pro tènnere atzessu a sos agiornamentos chene lìmites de sa mapa pro cada ora.";
 "enough_contributions_descr" = "Bene meda, as fatu contributziones bastantes a OpenStreetMap e como ti podes godire agiornamentos chene lìmites de sas mapas de OsmAnd!";
 "cross_buy" = "Còmpora multi-prataforma";
 "purchases_feature_desc_cross_buy" = "Imprea totu sas funtzionalidades de s'abbonamentu in prataformas mùltiplas chene costos additzionales.";

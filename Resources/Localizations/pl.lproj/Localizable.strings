@@ -613,7 +613,7 @@
 "lon" = "Dł.";
 "destination_point" = "Cel trasy %@";
 "intermediate_point" = "Pośredni cel %@";
-"intermediate_point_too_far" = "Cel pośredni %1$s jest zbyt daleko od najbliższej ulicy.";
+"intermediate_point_too_far" = "Cel pośredni %@ jest zbyt daleko od najbliższej ulicy.";
 "route_roundabout" = "Na rondzie wybierz %1$d zjazd";
 "route_roundabout_short" = "Zjedź %d zjazdem";
 "driving_region_europe_asia" = "Europa, Azja, Ameryka Łacińska i podobne";
@@ -655,7 +655,7 @@
 "no_statistics" = "Brak statystyk";
 "local_names" = "Nazwy lokalne";
 "go_to_map" = "Wyświetl mapę";
-"skip_map_downloading_desc" = "Nie zainstalowano map offline. Można wybrać mapę z listy lub pobrać mapy później za pośrednictwem polecenia menu - Zarządzaj plikami map";
+"skip_map_downloading_desc_ios" = "Nie zainstalowano map offline. Można wybrać mapę z listy lub pobrać mapy później za pośrednictwem polecenia menu - Zarządzaj plikami map";
 "items_selected" = "Wybrano: %d";
 "do_not_show_discount" = "Nie pokazuj promocji";
 "do_not_send_anonymous_data" = "Nie wysyłaj anonimowych danych";
@@ -697,7 +697,7 @@
 "clear_all_intermediates" = "Wyczyść wszystkie punkty pośrednie";
 "shared_string_options" = "Opcje";
 "shared_string_previous" = "Poprzedni";
-"route_stops_before" = "%d zatrzymanie przed";
+"route_stops_before" = "%@ zatrzymanie przed";
 "transport_routes" = "Trasy";
 "transport_nearby_routes_within" = "Najbliższe trasy w obrębie";
 "transport_nearby_routes" = "W ciągu";
@@ -1079,9 +1079,9 @@
 "key_hint_zoom_out" = "Oddal";
 "shared_string_read_more" = "Przeczytaj więcej";
 "short_location_on_map" = "Szer. %1$s Dł. %2$s";
-"navigate_point_format_D" = "DDD.DD";
-"navigate_point_format_DM" = "DDD MM.MM";
-"navigate_point_format_DMS" = "DDD MM SS.SS";
+"navigate_point_format_D" = "DDD.DDDDD";
+"navigate_point_format_DM" = "DDD MM.MMM";
+"navigate_point_format_DMS" = "DDD MM SS.S";
 "navigate_point_format_OLC" = "Kod Open Location Code (OLC)";
 "coordinates_example" = "Przykład";
 "utm_description" = "Należy pamiętać, że OsmAnd używa formatu UTM Standard, który jest podobny, ale nie taki sam, jak format USM NATO.";
@@ -1634,7 +1634,7 @@
 "change_position_descr" = "Przesuń mapę by zmienić położenie obiektu";
 "map_coords" = "Mapa:Szer %.5f Dł %.5f";
 "num_stops" = "przystanki";
-"by_type" = "Wg: %@";
+"by_transport_type" = "Wg: %@";
 "exit_at" = "Opuść na";
 "board_at" = "Wsiądź na";
 "walk" = "Pieszo";

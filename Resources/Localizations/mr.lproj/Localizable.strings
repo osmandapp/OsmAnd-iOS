@@ -44,7 +44,7 @@
 "map_widget_intermediate_time" = "Intermediate time";
 "shared_string_previous" = "मागे";
 "shared_string_next" = "पुढे";
-"route_stops_before" = "%d stops before";
+"route_stops_before" = "%@ stops before";
 "transport_routes" = "मार्ग";
 "transport_nearby_routes_within" = "Nearby routes within";
 "transport_nearby_routes" = "Within";
@@ -378,7 +378,7 @@
 "arrived_at_intermediate_point" = "You have arrived at your intermediate destination";
 "starting_point_too_far" = "Starting point too far from nearest road.";
 "ending_point_too_far" = "Ending point too far from nearest road.";
-"intermediate_point_too_far" = "Intermediate destination %d is too far from the nearest road.";
+"intermediate_point_too_far" = "Intermediate destination %@ is too far from the nearest road.";
 "arrived_at_destination" = "आपण पोहोचलात.";
 
 "towards" = "कडे";
@@ -437,7 +437,7 @@
 "units_m_s" = "m/s";
 "tones" = "tones";
 
-"nothing_found" = "Nothing found: %@";
+"nothing_found" = "Nothing found";
 "nothing_found_empty" = "काही सापडले नाही";
 "nothing_found_descr" = "Modify the search query or increase the search radius";
 "select_street" = "Select street";
@@ -790,9 +790,9 @@
 "sett_arr_loc" = "Location";
 "sett_arr_map" = "Map center";
 "short_location_on_map" = "Lat %@ Lon %@";
-"navigate_point_format_D" = "DDD.DD";
-"navigate_point_format_DM" = "DDD MM.MM";
-"navigate_point_format_DMS" = "DDD MM SS.SS";
+"navigate_point_format_D" = "DDD.DDDDD";
+"navigate_point_format_DM" = "DDD MM.MMM";
+"navigate_point_format_DMS" = "DDD MM SS.S";
 "navigate_point_format_OLC" = "Open Location Code (OLC)";
 "navigate_point_format_UTM" = "UTM";
 "navigate_point_format_unknown" = "Unknown format";
@@ -801,7 +801,7 @@
 "navigate_point_zone" = "Zone";
 "navigate_point_olc" = "Open Location Code";
 "navigate_point_olc_short" = "OLC";
-"approximate_file_size" = "Approximate file size: %@";
+"approximate_file_size" = "Approximate file size";
 
 "coordinates_example" = "Example";
 "utm_description" = "Please note, OsmAnd uses UTM Standard format which is similar but not identical to UTM NATO.";
@@ -960,7 +960,7 @@
 "export_profile_select_descr" = "Select the data to be exported.";
 "selected_profiles" = "%d of %d";
 "selected_of" = "Selected - %d/%d";
-"nav_type_hint" = "Navigation type: %@";
+"nav_type_hint" = "Navigation type";
 "shared_string_nothing_selected" = "Nothing selected";
 "export_failed" = "Could not export profile";
 "custom_osmand_plugin_name" = "Custom OsmAnd plugin";
@@ -1820,7 +1820,7 @@
 "walk" = "Walk";
 "board_at" = "Board at";
 "exit_at" = "Exit at";
-"by_type" = "By %@";
+"by_transport_type" = "By %@";
 "num_stops" = "थांबे";
 "total_time" = "Total time";
 "moving_time" = "Moving time";
@@ -1939,7 +1939,7 @@
 "search_another_country" = "इतर प्रदेश निवडा";
 
 "skip_map_downloading" = "Skip downloading maps";
-"skip_map_downloading_desc" = "You have no offline map installed. You may choose a map from the list or download maps later via Menu - Manage map files";
+"skip_map_downloading_desc_ios" = "You have no offline map installed. You may choose a map from the list or download maps later via Menu - Manage map files";
 
 "wiki_around" = "Nearby Wikipedia articles";
 "categories" = "Categories";
@@ -2033,7 +2033,7 @@
 "osm_live_payment_3_months_title" = "Pay once in 3 months";
 "osm_live_payment_annual_title" = "Pay once a year";
 "osm_live_payment_month_cost_descr" = "%@ / month";
-"osm_live_payment_month_cost_descr_ex" = "%@ %@ / month";
+"osm_live_payment_month_cost_descr_ex" = "%.2f %@ / month";
 "osm_live_payment_discount_descr" = "Save %@!";
 "osm_live_payment_current_subscription" = "Your current subscription";
 "osm_live_payment_renews_monthly" = "Renews monthly";
@@ -2045,7 +2045,7 @@
 
 "purchase_dialog_title" = "Choose plan";
 "purchase_dialog_travel_description" = "Purchase one of the following to receive the offline travel guide functionality:";
-"free_version_message" = "You can download or update %d maps";
+"free_version_message" = "%@ maps to download or update.";
 "get_osmand_live" = "Get OsmAnd Live to unlock all features:";
 "osm_live_subscription" = "OsmAnd Live subscription";
 "osm_live_cancel_subscription" = "Cancel subscription";

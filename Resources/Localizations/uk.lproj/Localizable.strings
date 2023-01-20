@@ -462,7 +462,7 @@
 "free_memory" = "Вільно %@";
 "try_again" = "Спробуйте ще раз";
 "search_map" = "Пошук на мапі…";
-"skip_map_downloading_desc" = "У Вас немає встановлених оффлайн мап. Ви можете вибрати мапу з переліку або завантажити мапи пізніше через меню — Керування файлами мап";
+"skip_map_downloading_desc_ios" = "У Вас немає встановлених оффлайн мап. Ви можете вибрати мапу з переліку або завантажити мапи пізніше через меню — Керування файлами мап";
 "categories" = "Категорії";
 "items_selected" = "%d вибрано";
 "poi_filter_custom_filter" = "Власний фільтр";
@@ -554,7 +554,7 @@
 "arrived_at_intermediate_point" = "Ви прибули у проміжний пункт призначення";
 "starting_point_too_far" = "Початок маршруту надто далеко від найближчої дороги.";
 "ending_point_too_far" = "Кінець маршруту далеко від найближчої дороги.";
-"intermediate_point_too_far" = "Проміжний пункт призначення %d надто далеко від найближчої дороги.";
+"intermediate_point_too_far" = "Проміжний пункт призначення %@ надто далеко від найближчої дороги.";
 "route_to" = "До";
 "route_via" = "Через";
 "route_from" = "Від";
@@ -757,7 +757,7 @@
 // Shared Strings
 "shared_string_apply" = "Застосувати";
 "shared_string_previous" = "Назад";
-"route_stops_before" = "%d зупинок до";
+"route_stops_before" = "%@ зупинок до";
 "logging_interval_navigation" = "Інтервал між точками під час навігації";
 "logging_interval_navigation_descr" = "Виберіть інтервал запису треку під час навігації";
 "logging_min_distance" = "Мінімальне зміщення";
@@ -1651,7 +1651,7 @@
 "calc_pedestrian_route" = "Обчислити пішохідний маршрут";
 "map_coords" = "Мапа: широта %.5f довгота %.5f";
 "num_stops" = "зупинок";
-"by_type" = "За типом";
+"by_transport_type" = "За типом";
 "walk" = "Пішки";
 "public_transport_warning_descr_blog" = "Докладніше про те, як OsmAnd обчислює маршрути, читайте в нашому деннику.";
 "total" = "Усього";
@@ -2683,7 +2683,7 @@
 "sign_in_with_open_street_map" = "Увійти за допомогою OpenStreetMap";
 "use_login_and_password_description" = "Для входу на OpenStreetMap.org використовуйте свою електронну пошту та пароль.";
 "benefits_for_contributors" = "Переваги для активних учасників OSM";
-"not_enough_contributions_descr" = "Щоб отримати безплатні щогодинні оновлення, зробіть щонайменше %i змін за останні два місяці %@.";
+"not_enough_contributions_descr" = "Щоб отримати безплатні щогодинні оновлення, зробіть щонайменше %@ змін за останні два місяці %@.";
 "enough_contributions_descr" = "Вітаємо, ви зробили достатньо змін в OpenStreetMap і тепер можете насолоджуватися необмеженою кількістю оновлень мап OsmAnd!";
 "auth_error" = "Помилка авторизації";
 "shared_string_contributions" = "Кількість змін";

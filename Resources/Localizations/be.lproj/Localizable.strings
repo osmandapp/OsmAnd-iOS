@@ -503,7 +503,7 @@
 "starting_point_too_far" = "Пачатковы пункт занадта далёка ад бліжэйшай дарогі.";
 "destination_point" = "Месца прызначэння %@";
 "intermediate_point" = "Прамежкавы пункт %@";
-"intermediate_point_too_far" = "Прамежкавы пункт %d занадта далёка ад бліжэйшай дарогі.";
+"intermediate_point_too_far" = "Прамежкавы пункт %@ занадта далёка ад бліжэйшай дарогі.";
 "offline_maps" = "Аўтаномныя мапы";
 "edit_waypoint_short" = "Рэдагаваць пункт шляху";
 "est_travel_time" = "Прыблізны час";
@@ -542,7 +542,7 @@
 "go_to_downloads" = "Перайсці ў спампоўкі";
 "map_creator" = "Стваральнік мапы";
 "hist_select_remove" = "Калі ласка, абярыце элемент гісторыі для выдалення";
-"skip_map_downloading_desc" = "У вас няма аўтаномных мапаў. Вы можаце абраць мапу са спіса або спампаваць яе пазней праз \"Меню - Кіраванне файламі мапаў\"";
+"skip_map_downloading_desc_ios" = "У вас няма аўтаномных мапаў. Вы можаце абраць мапу са спіса або спампаваць яе пазней праз \"Меню - Кіраванне файламі мапаў\"";
 "sort_by_distance" = "Сартаваць паводле адлегласці";
 "sort_by_name" = "Сартаваць паводле назвы";
 "map_markers_other" = "Іншыя адзнакі";
@@ -717,7 +717,7 @@
 "shared_string_close" = "Закрыць";
 "facebook" = "Facebook";
 "twitter" = "Twitter";
-"route_stops_before" = "%1$s прыпынкаў да абранага";
+"route_stops_before" = "%@ прыпынкаў да абранага";
 "transport_routes" = "Маршруты";
 "transport_stop" = "Спыніць";
 "new_destination_point_dialog" = "Вы ўжо абралі пункт прызначэння";
@@ -766,9 +766,9 @@
 "shared_string_reload" = "Перазагрузіць";
 "save_poi_too_many_uppercase" = "Назва змяшчае занадта шмат вялікіх літар. Працягнуць\?";
 "shared_string_read_more" = "Падрабязней";
-"navigate_point_format_D" = "DDD.DD";
-"navigate_point_format_DM" = "DDD MM.MM";
-"navigate_point_format_DMS" = "DDD MM SS.SS";
+"navigate_point_format_D" = "DDD.DDDDD";
+"navigate_point_format_DM" = "DDD MM.MMM";
+"navigate_point_format_DMS" = "DDD MM SS.S";
 "route_simulation" = "Сімуляцыя маршруту";
 "day_night_info_description" = "Узыход: %@\nЗаход: %@";
 "simulate_routing" = "Мадэляваць вашае месцазнаходжанне";
@@ -1764,7 +1764,7 @@
 "plugin_popup_ski_desc" = "Каб уключыць стыль <b>Лыжная мапа</b> , перайдзіце ў <b>Налады мапы</b> > <b>Тып мапы</b>";
 "change_position_descr" = "Перамясціце мапу, каб змяніць пазіцыю аб’екта";
 "map_coords" = "Мапа: Шырата %.5f Даўгата %.5f";
-"by_type" = "Па %@";
+"by_transport_type" = "Па %@";
 "walk" = "Пешшу";
 "total" = "Агулам";
 "public_transport_empty_warning_descr" = "Паспрабуйце змяніць налады.";

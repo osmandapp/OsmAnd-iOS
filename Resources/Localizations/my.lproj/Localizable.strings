@@ -172,7 +172,7 @@
 "arrived_at_intermediate_point" = "You have arrived at your intermediate destination";
 "starting_point_too_far" = "Starting point too far from nearest road.";
 "ending_point_too_far" = "Ending point too far from nearest road.";
-"intermediate_point_too_far" = "Intermediate destination %d is too far from the nearest road.";
+"intermediate_point_too_far" = "Intermediate destination %@ is too far from the nearest road.";
 "towards" = "toward";
 "route_roundabout" = "Roundabout: take %d exit and go";
 "route_roundabout_short" = "Take %d exit and go";
@@ -679,7 +679,7 @@
 "search_map" = "Searching map…";
 "search_another_country" = "အခြားဒေသတစ်ခုကိုရွေးပါ";
 "skip_map_downloading" = "Skip downloading maps";
-"skip_map_downloading_desc" = "You have no offline map installed. You may choose a map from the list or download maps later via Menu - Manage map files";
+"skip_map_downloading_desc_ios" = "You have no offline map installed. You may choose a map from the list or download maps later via Menu - Manage map files";
 "wiki_around" = "Nearby Wikipedia articles";
 "categories" = "Categories";
 "items_selected" = "%d selected";

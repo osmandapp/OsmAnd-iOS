@@ -287,7 +287,7 @@ static BOOL _purchasesUpdated;
         @{
             @"key": @"contact_support_description",
             @"type": [OAIconTitleValueCell getCellIdentifier],
-            @"title": OALocalizedString(@"contact_support_description"),
+            @"title": [NSString stringWithFormat: OALocalizedString(@"contact_support_description"), kSupportEmail],
             @"tint_color": UIColorFromRGB(color_text_footer)
         },
         @{

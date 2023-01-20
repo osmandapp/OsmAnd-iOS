@@ -616,13 +616,13 @@
 "empty_route_calculated" = "Erreur : l'itinéraire calculé est vide";
 "destination_point" = "Arrivée %@";
 "intermediate_point" = "Étape %@";
-"intermediate_point_too_far" = "Étape %1$s trop éloignée de la route la plus proche.";
+"intermediate_point_too_far" = "Étape %@ trop éloignée de la route la plus proche.";
 "route_roundabout" = "Giratoire : prenez la sortie %1$d puis continuez";
 "route_roundabout_short" = "Prenez la sortie %d";
 "driving_region_europe_asia" = "Europe, Asie, Amérique latine et équivalent";
 "history" = "Historique";
 "search_map" = "Recherche des cartes …";
-"skip_map_downloading_desc" = "Aucune carte hors-ligne n'est installée. Vous pouvez sélectionner une carte dans la liste ou télécharger ultérieurement une carte depuis le menu « Gérer les fichiers de cartes »";
+"skip_map_downloading_desc_ios" = "Aucune carte hors-ligne n'est installée. Vous pouvez sélectionner une carte dans la liste ou télécharger ultérieurement une carte depuis le menu « Gérer les fichiers de cartes »";
 "map_widget_battery" = "Niveau de batterie";
 "map_widget_plain_time" = "Heure actuelle";
 "map_widget_max_speed" = "Limite de vitesse";
@@ -753,7 +753,7 @@
 "new_destination_point_dialog" = "Vous avez déjà défini une destination";
 "logging_interval_navigation" = "Intervalle d\'enregistrement pendant le guidage";
 "logging_min_speed_descr" = "Filtre : pas d'enregistrement en dessous de la vitesse choisie";
-"route_stops_before" = "%d arrêts avant";
+"route_stops_before" = "%@ arrêts avant";
 "transport_stop" = "Arrêt";
 "facebook" = "Facebook";
 "twitter" = "Twitter";
@@ -1024,9 +1024,9 @@
 "sett_wunderlinq_ext_input" = "WunderLINQ";
 "save_poi_too_many_uppercase" = "Le nom contient beaucoup de lettres majuscules. Voulez-vous continuer \?";
 "shared_string_read_more" = "En savoir plus";
-"navigate_point_format_D" = "DDD.DD";
-"navigate_point_format_DM" = "DDD MM.MM";
-"navigate_point_format_DMS" = "DDD MM SS.SS";
+"navigate_point_format_D" = "DDD.DDDDD";
+"navigate_point_format_DM" = "DDD MM.MMM";
+"navigate_point_format_DMS" = "DDD MM SS.S";
 "days_2_4" = "Jours";
 "days_5" = "Jours";
 "weeks_5" = "Semaines";
@@ -2068,7 +2068,7 @@
 "gpxup_private" = "Privée";
 "gpxup_public" = "Publique";
 "shared_string_wifi_only" = "Seulement en Wi-Fi";
-"by_type" = "Par %@";
+"by_transport_type" = "Par %@";
 "trip_hint" = "Entrez le nom de la trace";
 "app_restart_required" = "Un redémarrage de l\'application est nécessaire pour appliquer certains paramètres.";
 "gpx_upload_private_visibility_descr" = "\"Privée\" signifie que la trace ne sera visible dans aucune des listes publiques, mais les points de trace qu'elle contient seront disponibles sans horodatage et dans un ordre non-chronologique au moyen de l'API GPS publique.";
@@ -2689,7 +2689,7 @@
 "offline_edition_descr" = "Si la modification hors-ligne est activée, les modifications seront sauvegardées localement et seront uniquement mises en ligne manuellement. Sinon, les modifications seront mises en ligne immédiatement.";
 "benefits_for_contributors_secondary_descr" = "Connectez-vous à OpenStreetMap pour vérifier si vous êtes éligible aux mises à jour illimitées.";
 "map_updates_are_unavailable_yet" = "Les mises à jour de cartes ne sont pas disponibles pour l'instant . :-(";
-"not_enough_contributions_descr" = "Un minimum de %i modifications au cours des deux derniers mois %@ est requis pour bénéficier de la mise à jour horaire des cartes en illimité.";
+"not_enough_contributions_descr" = "Un minimum de %@ modifications au cours des deux derniers mois %@ est requis pour bénéficier de la mise à jour horaire des cartes en illimité.";
 "carplay_available_in_sub_plans" = "Achetez OsmAnd Pro ou Maps+ pour utiliser OsmAnd avec CarPlay.";
 "cloud_confirm_delete_type" = "Voulez-vous supprimer \"%@\" depuis OsmAnd Cloud ?";
 "purchases_feature_desc_cross_buy" = "Utilisez toutes les fonctionnalités souscrites sur plusieurs plateformes sans coût supplémentaire.";

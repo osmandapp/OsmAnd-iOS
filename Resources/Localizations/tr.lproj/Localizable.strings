@@ -454,7 +454,7 @@
 "arrived_at_intermediate_point" = "Ara hedefine ulaştın";
 "starting_point_too_far" = "Başlangıç noktası en yakın yoldan çok uzakta.";
 "ending_point_too_far" = "Bitiş noktası en yakın yoldan çok uzakta.";
-"intermediate_point_too_far" = "Ara hedef %d en yakın yoldan çok uzakta.";
+"intermediate_point_too_far" = "Ara hedef %@ en yakın yoldan çok uzakta.";
 "select_city" = "Şehir seç";
 "select_postcode" = "Posta-kodu seç";
 "coords_search" = "Koordinat ara";
@@ -758,9 +758,9 @@
 "sett_wunderlinq_ext_input" = "WunderLINQ";
 "save_poi_too_many_uppercase" = "Adçok fazla büyük harf içeriyor. Devam edilsin mi\?";
 "shared_string_read_more" = "Devamını oku";
-"navigate_point_format_D" = "DDD.DD";
-"navigate_point_format_DM" = "DDD MM.MM";
-"navigate_point_format_DMS" = "DDD MM SS.SS";
+"navigate_point_format_D" = "DDD.DDDDD";
+"navigate_point_format_DM" = "DDD MM.MMM";
+"navigate_point_format_DMS" = "DDD MM SS.S";
 "months_3" = "Üç ay";
 "configure_map" = "Haritayı yapılandır";
 "simulate_navigation" = "Navigasyonu simüle et";
@@ -797,7 +797,7 @@
 "last_intermediate_dest_description" = "Rota boyunca son durağı ekler";
 "transport_routes" = "Rotalar";
 "transport_stop" = "Durak";
-"route_stops_before" = "%d durak önce";
+"route_stops_before" = "%@ durak önce";
 "logging_interval_navigation" = "Navigasyon sırasında kayıt aralığı";
 "logging_interval_navigation_descr" = "Navigasyon sırasında yol kaydı için kayıt aralığını seçin";
 "logging_min_distance" = "Asgari yer değiştirme";
@@ -1020,7 +1020,7 @@
 "shared_string_of" = "/";
 "search_my_location" = "Konumumu ara";
 "search_map" = "Harita aranıyor…";
-"skip_map_downloading_desc" = "Yüklü çevrim dışı haritanız yok. Listeden bir harita seçebilir veya daha sonra şuradan harita indirebilirsiniz: Menü - Harita dosyalarını yönet";
+"skip_map_downloading_desc_ios" = "Yüklü çevrim dışı haritanız yok. Listeden bir harita seçebilir veya daha sonra şuradan harita indirebilirsiniz: Menü - Harita dosyalarını yönet";
 "items_selected" = "%d seçildi";
 "shared_string_street_intersection" = "Sokak kesişimi";
 "do_not_show_discount" = "Tanıtımları gösterme";
@@ -1644,7 +1644,7 @@
 "map_settings_base_transp" = "Temel harita saydamlığı";
 "map_coords" = "Harita: Enlem %.5f Boylam %.5f";
 "num_stops" = "durak";
-"by_type" = "%@ göre";
+"by_transport_type" = "%@ göre";
 "walk" = "Yürüme";
 "total" = "Toplam";
 "public_transport_warning_descr_blog" = "OsmAnd'ın rotaları hakkında blogumuzda daha fazla bilgi edinin.";

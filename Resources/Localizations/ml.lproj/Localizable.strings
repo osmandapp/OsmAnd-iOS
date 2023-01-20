@@ -44,7 +44,7 @@
 "map_widget_intermediate_time" = "ഇടയ്ക്കുള്ള സമയം";
 "shared_string_previous" = "കഴിഞ്ഞത്";
 "shared_string_next" = "അടുത്തത്";
-"route_stops_before" = "%d stops before";
+"route_stops_before" = "%@ stops before";
 "transport_routes" = "റൂട്ടുകള്‍";
 "transport_nearby_routes_within" = "ഉള്ളില്‍ സമീപത്തുള്ള റൂട്ടുകൾ";
 "transport_nearby_routes" = "\"അകത്ത് \"";
@@ -378,7 +378,7 @@
 "arrived_at_intermediate_point" = "You have arrived at your intermediate destination";
 "starting_point_too_far" = "Starting point too far from nearest road.";
 "ending_point_too_far" = "അടുത്തുള്ള റോഡില്‍ നിന്നും വളരെ അകലെയാണു അവസാനബിന്ദു.";
-"intermediate_point_too_far" = "Intermediate destination %d is too far from the nearest road.";
+"intermediate_point_too_far" = "Intermediate destination %@ is too far from the nearest road.";
 "arrived_at_destination" = "\"നിങ്ങള്‍  ലക്ഷ്യസ്ഥാനത്തെത്തിയിരിക്കുന്നു\"";
 
 "towards" = "നേരെ";
@@ -437,7 +437,7 @@
 "units_m_s" = "മീ/സെ.";
 "tones" = "tones";
 
-"nothing_found" = "Nothing found: %@";
+"nothing_found" = "Nothing found";
 "nothing_found_empty" = "\"ഒന്നും കണ്ടെത്താനായില്ല \"";
 "nothing_found_descr" = "Modify the search query or increase the search radius";
 "select_street" = "\"തെരുവ് തെരഞ്ഞെടുക്കുക \"";
@@ -790,9 +790,9 @@
 "sett_arr_loc" = "സ്ഥാനം";
 "sett_arr_map" = "Map center";
 "short_location_on_map" = "Lat %@ Lon %@";
-"navigate_point_format_D" = "DDD.DD";
-"navigate_point_format_DM" = "DDD MM.MM";
-"navigate_point_format_DMS" = "DDD MM SS.SS";
+"navigate_point_format_D" = "DDD.DDDDD";
+"navigate_point_format_DM" = "DDD MM.MMM";
+"navigate_point_format_DMS" = "DDD MM SS.S";
 "navigate_point_format_OLC" = "Open Location Code (OLC)";
 "navigate_point_format_UTM" = "UTM";
 "navigate_point_format_unknown" = "Unknown format";
@@ -801,7 +801,7 @@
 "navigate_point_zone" = "മേഖല";
 "navigate_point_olc" = "ലൊക്കേഷൻ കോഡ് തുറക്കുക";
 "navigate_point_olc_short" = "OLC";
-"approximate_file_size" = "Approximate file size: %@";
+"approximate_file_size" = "Approximate file size";
 
 "coordinates_example" = "Example";
 "utm_description" = "Please note, OsmAnd uses UTM Standard format which is similar but not identical to UTM NATO.";
@@ -960,7 +960,7 @@
 "export_profile_select_descr" = "Select the data to be exported.";
 "selected_profiles" = "%d / %d";
 "selected_of" = "Selected - %d/%d";
-"nav_type_hint" = "Navigation type: %@";
+"nav_type_hint" = "Navigation type";
 "shared_string_nothing_selected" = "Nothing selected";
 "export_failed" = "Could not export profile";
 "custom_osmand_plugin_name" = "Custom OsmAnd plugin";
@@ -1820,7 +1820,7 @@
 "walk" = "നടക്കുക";
 "board_at" = "Board at";
 "exit_at" = "പുറത്തേക്ക് എത്തുക";
-"by_type" = "By %@";
+"by_transport_type" = "By %@";
 "num_stops" = "സ്ടോപുകള്‍";
 "total_time" = "Total time";
 "moving_time" = "Moving time";
@@ -1939,7 +1939,7 @@
 "search_another_country" = "\"വേറോരു പ്രദേശം(region) തെരഞ്ഞെടുക്കുക \"";
 
 "skip_map_downloading" = "ഭൂപടങ്ങള്‍ ഡൗണ്‍ലോഡ് ചെയ്യുന്നത് ഒഴിവാക്കുക";
-"skip_map_downloading_desc" = "You have no offline map installed. You may choose a map from the list or download maps later via Menu - Manage map files";
+"skip_map_downloading_desc_ios" = "You have no offline map installed. You may choose a map from the list or download maps later via Menu - Manage map files";
 
 "wiki_around" = "അടുത്തുള്ള വിക്കിപീഡിയ ലേഖനങ്ങൾ";
 "categories" = "വിഭാഗങ്ങള്‍";
@@ -2033,7 +2033,7 @@
 "osm_live_payment_3_months_title" = "Pay once in 3 months";
 "osm_live_payment_annual_title" = "Pay once a year";
 "osm_live_payment_month_cost_descr" = "\"പ്റതിമാസം  %@\"";
-"osm_live_payment_month_cost_descr_ex" = "%@ %@ / month";
+"osm_live_payment_month_cost_descr_ex" = "%.2f %@ / month";
 "osm_live_payment_discount_descr" = "Save %@!";
 "osm_live_payment_current_subscription" = "Your current subscription";
 "osm_live_payment_renews_monthly" = "മാസത്തിലൊരിക്കൽ ആവര്‍ത്തിക്കുക";
@@ -2045,7 +2045,7 @@
 
 "purchase_dialog_title" = "പ്ലാൻ തിരഞ്ഞെടുക്കുക";
 "purchase_dialog_travel_description" = "\"ഓഫ്‌ലൈന്‍  യാത്രാ ഗൈഡ് പ്രവർത്തനം ലഭിക്കുന്നതിന് ഇനിപ്പറയുന്നവയിൽ ഒന്ന് വാങ്ങുക:\"";
-"free_version_message" = "You can download or update %d maps";
+"free_version_message" = "%@ maps to download or update.";
 "get_osmand_live" = "Get OsmAnd Live to unlock all features:";
 "osm_live_subscription" = "OsmAndലൈവ് സബ്സ്ക്രിപ്ഷൻ";
 "osm_live_cancel_subscription" = "Cancel subscription";

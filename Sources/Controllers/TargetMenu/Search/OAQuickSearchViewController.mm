@@ -1765,7 +1765,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     if ([self.searchUICore isSearchMoreAvailable:self.searchUICore.getPhrase] && minimalSearchRadius != INT_MAX)
     {
         double rd = [OAOsmAndFormatter calculateRoundedDist:minimalSearchRadius];
-        item.title = [NSString stringWithFormat:OALocalizedString(@"nothing_found"),
+        item.title = [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"nothing_found"),
                 [OAOsmAndFormatter getFormattedDistance:rd forceTrailingZeroes:NO]];
     }
 

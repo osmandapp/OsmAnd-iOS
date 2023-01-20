@@ -37,7 +37,7 @@
 "map_widget_intermediate_time" = "Tiempo intermedio";
 "shared_string_previous" = "Anterior";
 "shared_string_next" = "Siguiente";
-"route_stops_before" = "%d parada(s) anterior(es)";
+"route_stops_before" = "%@ parada(s) anterior(es)";
 "transport_routes" = "Rutas";
 "transport_nearby_routes_within" = "Rutas a menos de";
 "transport_nearby_routes" = "A menos de";
@@ -356,7 +356,7 @@
 "arrived_at_intermediate_point" = "Destino intermedio alcanzado";
 "starting_point_too_far" = "Punto de partida demasiado lejos del camino más cercano.";
 "ending_point_too_far" = "Punto final demasiado lejos del camino más cercano.";
-"intermediate_point_too_far" = "Destino intermedio «%d» demasiado lejos del camino.";
+"intermediate_point_too_far" = "Destino intermedio «%@» demasiado lejos del camino.";
 "arrived_at_destination" = "Has llegado";
 "towards" = "hacia";
 "route_roundabout" = "Rotonda: toma la %dª salida en";
@@ -746,9 +746,9 @@
 "sett_arr_loc" = "Ubicación";
 "sett_arr_map" = "Centro del mapa";
 "short_location_on_map" = "Lat %@ Lon %@";
-"navigate_point_format_D" = "DDD.DD";
-"navigate_point_format_DM" = "DDD MM.MM";
-"navigate_point_format_DMS" = "DDD MM SS.SS";
+"navigate_point_format_D" = "DDD.DDDDD";
+"navigate_point_format_DM" = "DDD MM.MMM";
+"navigate_point_format_DMS" = "DDD MM SS.S";
 "navigate_point_format_OLC" = "Código de Ubicación Abierto (OLC)";
 "navigate_point_format_UTM" = "UTM";
 "navigate_point_format_unknown" = "Formato desconocido";
@@ -1734,7 +1734,7 @@
 "walk" = "Caminar";
 "board_at" = "Esperar en la parada";
 "exit_at" = "Bajar en";
-"by_type" = "Por %@";
+"by_transport_type" = "Por %@";
 "num_stops" = "paradas";
 "total_time" = "Tiempo total";
 "moving_time" = "Tiempo moviéndose";
@@ -1835,7 +1835,7 @@
 "search_map" = "Buscando mapa…";
 "search_another_country" = "Elegir otra región";
 "skip_map_downloading" = "Omitir descargas de mapas";
-"skip_map_downloading_desc" = "Sin mapas descargados. Puedes elegir uno de la lista o descargarlos luego desde el menú «Gestionar mapas»";
+"skip_map_downloading_desc_ios" = "Sin mapas descargados. Puedes elegir uno de la lista o descargarlos luego desde el menú «Gestionar mapas»";
 "wiki_around" = "Artículos de Wikipedia cerca";
 "categories" = "Categorías";
 "items_selected" = "%d elegidos";
@@ -2697,7 +2697,7 @@
 "benefits_for_contributors" = "Beneficios para colaboradores activos de OSM";
 "contributions_may_calculate_with_delay" = "Las contribuciones pueden calcularse con varias horas de retraso.";
 "map_updates_are_unavailable_yet" = "Las actualizaciones de mapas no están disponibles aún :-(";
-"not_enough_contributions_descr" = "Necesitas un mínimo de %i cambios en el último bimestre %@ para obtener acceso a actualizaciones ilimitadas de mapas por hora.";
+"not_enough_contributions_descr" = "Necesitas un mínimo de %@ cambios en el último bimestre %@ para obtener acceso a actualizaciones ilimitadas de mapas por hora.";
 "enough_contributions_descr" = "¡Felicitaciones, has hecho suficientes contribuciones a OpenStreetMap y ahora puedes disfrutar de actualizaciones ilimitadas de los mapas de OsmAnd!";
 "last_two_month_total" = "Total del último bimestre";
 "auth_error" = "Error de autorización";

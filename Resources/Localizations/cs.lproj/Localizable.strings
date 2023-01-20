@@ -1,6 +1,6 @@
 "OsmAnd Maps" = "Mapy OsmAnd";
 "shared_string_previous" = "Předchozí";
-"route_stops_before" = "%1$s zastávek před";
+"route_stops_before" = "%@ zastávek před";
 "transport_routes" = "Trasy";
 "transport_nearby_routes_within" = "Nejbližší trasy v okruhu";
 "transport_nearby_routes" = "V okruhu";
@@ -206,7 +206,7 @@
 "arrived_at_intermediate_point" = "Dorazili jste do mezicíle";
 "starting_point_too_far" = "Počáteční bod je příliš daleko od nejbližší silnice.";
 "ending_point_too_far" = "Cíl je příliš daleko od nejbližší cesty.";
-"intermediate_point_too_far" = "Mezicíl %d je příliš daleko od nejbližší cesty.";
+"intermediate_point_too_far" = "Mezicíl %@ je příliš daleko od nejbližší cesty.";
 "towards" = "směrem k";
 "route_roundabout" = "Kruhový objezd: vyjeďte %d. výjezdem";
 "route_roundabout_short" = "Použijte %d. výjezd a pokračujte";
@@ -714,7 +714,7 @@
 "search_map" = "Hledání mapy…";
 "search_another_country" = "Vybrat jinou oblast";
 "skip_map_downloading" = "Přeskočit stahování map";
-"skip_map_downloading_desc" = "Nemáte nainstalovanou žádnou offline mapu. Můžete vybrat mapu ze seznamu, nebo stáhnout mapy později přes Menu - Spravovat mapové soubory";
+"skip_map_downloading_desc_ios" = "Nemáte nainstalovanou žádnou offline mapu. Můžete vybrat mapu ze seznamu, nebo stáhnout mapy později přes Menu - Spravovat mapové soubory";
 "wiki_around" = "Články Wikipedie v okolí";
 "categories" = "Kategorie";
 "items_selected" = "%d vybraných";
@@ -1909,7 +1909,7 @@
 "change_position_descr" = "Přesuňte mapu, abyste změnili pozici objektu";
 "change_object_posiotion" = "Změnit pozici objektu";
 "map_coords" = "Mapa: šířka %.5f délka %.5f";
-"by_type" = "Prostředkem %@";
+"by_transport_type" = "Prostředkem %@";
 "board_at" = "Nastoupit na";
 "public_transport_empty_warning_title" = "Bohužel se OsmAndu nepodařilo najít trasu s vaším nastavením.";
 "public_transport_warning_descr_blog" = "Zjistěte více o výpočtu trasy v OsmAnd na našem blogu.";
@@ -2765,7 +2765,7 @@
 "other_countries" = "Ostatní země";
 "map_updates_are_unavailable_yet" = "Aktualizace map zatím nejsou k dispozici :-(";
 "benefits_for_contributors_primary_descr" = "Aktivní přispěvatelé na OpenStreetMap.org mohou mít nárok na neomezené hodinové aktualizace map.";
-"not_enough_contributions_descr" = "Pro získání přístupu k neomezeným hodinovým aktualizacím map je nutné provést minimálně %i změn za poslední dva měsíce %@.";
+"not_enough_contributions_descr" = "Pro získání přístupu k neomezeným hodinovým aktualizacím map je nutné provést minimálně %@ změn za poslední dva měsíce %@.";
 "recalc_angle_dialog_title" = "Minimální úhel mezi mou polohou a trasou";
 "checking_progress" = "Kontrola..";
 "last_two_month_total" = "Poslední dva měsíce celkem";

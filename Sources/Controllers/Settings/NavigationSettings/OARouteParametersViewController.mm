@@ -109,7 +109,7 @@
              @"key" : @"angleStraight",
              @"title" : OALocalizedString(@"recalc_angle_dialog_title"),
              @"icon" : [UIImage templateImageNamed:@"ic_custom_minimal_distance"],
-             @"value" : [NSString stringWithFormat:OALocalizedString(@"shared_string_angle_param"), (int) [_settings.routeStraightAngle get:self.appMode]],
+             @"value" : [NSString stringWithFormat:OALocalizedString(@"shared_string_angle_param"), @((int) [_settings.routeStraightAngle get:self.appMode]).stringValue],
              @"type" : [OAIconTitleValueCell getCellIdentifier] }
          ];
     }

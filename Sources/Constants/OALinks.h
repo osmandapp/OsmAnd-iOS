@@ -22,6 +22,8 @@
 #define kDocsLatestVersion  @"https://docs.osmand.net/docs/versions/future-ios"
 #define kBlogGuideline  @"https://osmand.net/blog/guideline-pt"
 
+#define kSupportEmail @"support@osmand.net"
+
 #define kDocsAddOnlineMaps  @"https://docs.osmand.net/docs/user/map/raster-maps#add-new-online-raster-map-source"
 #define kDocsWidgets  @"https://docs.osmand.net/docs/user/widgets/"
 #define kDocsWidgetConfigureScreen  @"https://docs.osmand.net/docs/user/widgets/configure-screen"

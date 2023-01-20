@@ -1,6 +1,6 @@
 "OsmAnd Maps" = "Mapas do OsmAnd";
 "shared_string_previous" = "Anterior";
-"route_stops_before" = "Paraxes anteriores: %d";
+"route_stops_before" = "Paraxes anteriores: %@";
 "transport_routes" = "Rotas";
 "transport_nearby_routes_within" = "Liñas próximas a menos dos";
 "transport_nearby_routes" = "Preto dos";
@@ -221,7 +221,7 @@
 "arrived_at_intermediate_point" = "Chegou ó destino intermedio";
 "starting_point_too_far" = "O punto de comezo está demasiado lonxe da estrada máis próxima.";
 "ending_point_too_far" = "O derradeiro punto está moi lonxe da estrada máis próxima.";
-"intermediate_point_too_far" = "Intermediate destination %d is too far from the nearest road.";
+"intermediate_point_too_far" = "Intermediate destination %@ is too far from the nearest road.";
 "towards" = "cara a";
 "route_roundabout" = "Roundabout: take %d exit and go";
 "route_roundabout_short" = "Colla a %d saída e siga";
@@ -759,7 +759,7 @@
 "search_map" = "Searching map…";
 "search_another_country" = "Escoller outra rexión";
 "skip_map_downloading" = "Rexeitar a descarga dos mapas";
-"skip_map_downloading_desc" = "You have no offline map installed. You may choose a map from the list or download maps later via Menu - Manage map files";
+"skip_map_downloading_desc_ios" = "You have no offline map installed. You may choose a map from the list or download maps later via Menu - Manage map files";
 "wiki_around" = "Artigos da Wikipedia pretos";
 "categories" = "Categorías";
 "items_selected" = "%d selected";

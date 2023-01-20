@@ -722,7 +722,7 @@
 "angular_units_descr" = "Mudar as unidades de medida do azimute.";
 "access_intermediate_arrival_time" = "Hora de chegada intermediária";
 "map_widget_intermediate_time" = "Hora intermediária";
-"route_stops_before" = "%d paragens anteriores";
+"route_stops_before" = "%@ paragens anteriores";
 "transport_routes" = "Rotas";
 "new_destination_point_dialog" = "Já tem o destino definido";
 "subsequent_dest_description" = "Mover destino para cima e criar destino";
@@ -792,7 +792,7 @@
 "empty_route_calculated" = "Erro: a rota calculada está vazia";
 "destination_point" = "Destino %@";
 "intermediate_point" = "Destino intermediário %@";
-"intermediate_point_too_far" = "O destino intermédio %d está muito longe da estrada mais próxima.";
+"intermediate_point_too_far" = "O destino intermédio %@ está muito longe da estrada mais próxima.";
 "route_roundabout" = "Rotunda: saia na %d saída para";
 "route_roundabout_short" = "Tome %d sair e ir";
 "traffic_warning_tunnel" = "Túnel à frente";
@@ -977,7 +977,7 @@
 "go_to_map" = "Ir para o mapa";
 "search_my_location" = "Encontrar a minha localização";
 "search_map" = "À procura de mapas…";
-"skip_map_downloading_desc" = "Não tem nenhum mapa offline instalado. Pode escolher um mapa na lista ou descarregar mapas mais tarde através do Menu - Mapas e recursos";
+"skip_map_downloading_desc_ios" = "Não tem nenhum mapa offline instalado. Pode escolher um mapa na lista ou descarregar mapas mais tarde através do Menu - Mapas e recursos";
 "items_selected" = "%d selecionado";
 "shared_string_password" = "Senha";
 "poi_category_and_type" = "Categoria e tipo de POI";
@@ -1786,7 +1786,7 @@
 "change_position_descr" = "Mova o mapa para mudar a posição do objeto";
 "change_object_posiotion" = "Alterar a posição do objeto";
 "map_coords" = "Mapa: Lat %.5f Lon %.5f";
-"by_type" = "Por %@";
+"by_transport_type" = "Por %@";
 "board_at" = "Embarque em";
 "public_transport_empty_warning_title" = "Infelizmente, o OsmAnd não conseguiu encontrar um diretório para as suas configurações.";
 "public_transport_warning_descr_blog" = "Leia mais sobre o roteamento do OsmAnd no nosso blogue.";
@@ -2677,7 +2677,7 @@
 "map_updates_for_mappers" = "Atualizações de mapas para mapeadores";
 "sign_in_with_open_street_map" = "Entrar com o OpenStreetMap";
 "benefits_for_contributors_primary_descr" = "Contribuidores ativos do OpenStreetMap.org podem ter direito a atualizações ilimitadas de mapas por hora.";
-"not_enough_contributions_descr" = "Um mínimo de %i alterações no último período de dois meses %@ é necessário para obter acesso a atualizações ilimitadas de mapas por hora.";
+"not_enough_contributions_descr" = "Um mínimo de %@ alterações no último período de dois meses %@ é necessário para obter acesso a atualizações ilimitadas de mapas por hora.";
 "last_two_month_total" = "Total dos últimos dois meses";
 "select_backup_data_descr" = "Selecione os dados e pastas para fazer backup.";
 "backup_version_history" = "Histórico de versão";

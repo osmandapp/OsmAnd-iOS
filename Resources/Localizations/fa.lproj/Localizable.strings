@@ -172,7 +172,7 @@
 "arrived_at_intermediate_point" = "به مقصد میانی خود رسیده‌اید";
 "starting_point_too_far" = "مبدأ از نزدیک‌ترین جاده خیلی دور است.";
 "ending_point_too_far" = "نقطهٔ پایانی از نزدیک‌ترین جاده خیلی دور است.";
-"intermediate_point_too_far" = "Intermediate destination %d is too far from the nearest road.";
+"intermediate_point_too_far" = "Intermediate destination %@ is too far from the nearest road.";
 "towards" = "به‌طرف";
 "route_roundabout" = "Roundabout: take %d exit and go";
 "route_roundabout_short" = "خروجی %d را بگیرید و بروید";
@@ -679,7 +679,7 @@
 "search_map" = "Searching map…";
 "search_another_country" = "منطقهٔ دیگری را انتخاب کنید";
 "skip_map_downloading" = "صرف‌نظر از بارگیری نقشه‌ها";
-"skip_map_downloading_desc" = "You have no offline map installed. You may choose a map from the list or download maps later via Menu - Manage map files";
+"skip_map_downloading_desc_ios" = "You have no offline map installed. You may choose a map from the list or download maps later via Menu - Manage map files";
 "wiki_around" = "مقالات ویکی‌پدیا دربارهٔ این حوالی";
 "categories" = "دسته‌ها";
 "items_selected" = "%d selected";
@@ -751,7 +751,7 @@
 "transport_nearby_routes_within" = "مسیرهای نزدیک تا";
 "shared_string_previous" = "قبلی";
 "transport_nearby_routes" = "تا";
-"route_stops_before" = "%d ایستگاه قبلی";
+"route_stops_before" = "%@ ایستگاه قبلی";
 "transport_routes" = "مسیرها";
 "transport_stop" = "ایستگاه";
 "new_destination_point_dialog" = "قبلاً مقصدی را انتخاب کرده‌اید";
@@ -811,9 +811,9 @@
 "shared_string_reload" = "بارکردن مجدد";
 "save_poi_too_many_uppercase" = "حروف بزرگ زیادی در نام وجود دارد. ادامه می‌دهید؟";
 "shared_string_read_more" = "بیشتر بخوانید";
-"navigate_point_format_D" = "DDD.DD";
-"navigate_point_format_DM" = "DDD MM.MM";
-"navigate_point_format_DMS" = "DDD MM SS.SS";
+"navigate_point_format_D" = "DDD.DDDDD";
+"navigate_point_format_DM" = "DDD MM.MMM";
+"navigate_point_format_DMS" = "DDD MM SS.S";
 "sett_generic_ext_input" = "صفحه‌کلید معمولی";
 "sett_wunderlinq_ext_input" = "WunderLINQ";
 "day" = "روز";

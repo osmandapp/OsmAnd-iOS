@@ -413,7 +413,7 @@
 "arrived_at_intermediate_point" = "Prispeli ste do vmesnega cilja";
 "starting_point_too_far" = "- izhodišče je predaleč od najbližje ceste.";
 "ending_point_too_far" = "Končna točka je predaleč od najbližje ceste.";
-"intermediate_point_too_far" = "Vmesni cilj %1$s je predaleč od najbližje ceste.";
+"intermediate_point_too_far" = "Vmesni cilj %@ je predaleč od najbližje ceste.";
 "route_head" = "Začetek poti";
 "shared_string_ellipsis" = "…";
 "route_to" = "Konec poti:";
@@ -628,7 +628,7 @@
 "shared_string_close" = "Zapri";
 "transport_nearby_routes_within" = "Bližnje poti v";
 "transport_nearby_routes" = "Blizu";
-"route_stops_before" = "%1$s se zaustavi pred";
+"route_stops_before" = "%@ se zaustavi pred";
 "transport_routes" = "Poti";
 "logging_interval_navigation" = "Interval beleženja med navigacijo";
 "logging_min_distance" = "Najmanjša razdalja";
@@ -831,9 +831,9 @@
 "get_discount_short_descr" = "%@ za %d %@, nato %@";
 "save_poi_too_many_uppercase" = "V imenu je preveč velikih črk. Ali želite vseeno nadaljevati?";
 "shared_string_read_more" = "Preberite več";
-"navigate_point_format_D" = "DDD.DD";
-"navigate_point_format_DM" = "DDD MM.MM";
-"navigate_point_format_DMS" = "DDD MM SS.SS";
+"navigate_point_format_D" = "DDD.DDDDD";
+"navigate_point_format_DM" = "DDD MM.MMM";
+"navigate_point_format_DMS" = "DDD MM SS.S";
 "months_3" = "Tri mesece";
 "get_discount_first_part" = "%@ za prvi %@";
 "get_discount_second_part" = "nato %@";

@@ -484,7 +484,7 @@
 "wiki_download_description" = "要閱讀完整文章 - 下載維基百科 %@ 的資料";
 "map_an_region" = "這個區域";
 "first_usage_wizard_desc" = "讓 OsmAnd 確定您所在的位置和建議下載該區域的地圖。";
-"skip_map_downloading_desc" = "您並沒有安裝離線地圖。您可以從清單中選擇一張地圖或稍後透過選單 - 管理地圖檔案，下載地圖";
+"skip_map_downloading_desc_ios" = "您並沒有安裝離線地圖。您可以從清單中選擇一張地圖或稍後透過選單 - 管理地圖檔案，下載地圖";
 "new_filter_desc" = "請輸入新的篩選名稱，這會加到您的類別標籤裡。";
 "wiki_buy_description" = "要閱讀完整文章 - 請購買維基百科外掛元件和下載維基百科 %@ 的資料";
 "first_usage_greeting" = "在沒有網際網路連線的情況下，取得指引與探索新地點";
@@ -552,7 +552,7 @@
 "traffic_warning_hazard" = "危險";
 "starting_point_too_far" = "起始標點離最近的道路太遠。";
 "ending_point_too_far" = "結束標點離最近的道路太遠。";
-"intermediate_point_too_far" = "中轉地點 %d 離最近的道路太遠。";
+"intermediate_point_too_far" = "中轉地點 %@ 離最近的道路太遠。";
 "arrived_at_intermediate_point" = "您已經抵達您的中轉地點";
 "destination_point" = "目的地 %@";
 "intermediate_point" = "中轉地點 %@";
@@ -757,7 +757,7 @@
 "transport_nearby_routes_within" = "在附近的路線";
 "transport_stop" = "停止";
 "transport_nearby_routes" = "範圍內";
-"route_stops_before" = "%1$s 之前停止";
+"route_stops_before" = "%@ 之前停止";
 "shared_string_previous" = "上一頁";
 "poi_overlay" = "POI 在上層";
 "poi_clear" = "清除";
@@ -976,9 +976,9 @@
 "sett_generic_ext_input" = "通用鍵盤";
 "sett_wunderlinq_ext_input" = "WunderLINQ";
 "shared_string_read_more" = "讀取更多";
-"navigate_point_format_D" = "DDD.DD";
-"navigate_point_format_DM" = "DDD MM.MM";
-"navigate_point_format_DMS" = "DDD MM SS.SS";
+"navigate_point_format_D" = "DDD.DDDDD";
+"navigate_point_format_DM" = "DDD MM.MMM";
+"navigate_point_format_DMS" = "DDD MM SS.S";
 "shared_string_distance" = "距離";
 "day" = "天";
 "days_2_4" = "天";

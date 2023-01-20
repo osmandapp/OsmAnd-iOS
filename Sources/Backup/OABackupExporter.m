@@ -64,6 +64,7 @@
 {
     OABackupHelper *_backupHelper;
     NSMutableArray<OASettingsItem *> *_itemsToDelete;
+    NSMutableArray<OASettingsItem *> *_localItemsToDelete;
     NSMutableArray<OASettingsItem *> *_oldItemsToDelete;
     NSOperationQueue *_executor;
     __weak id<OANetworkExportProgressListener> _listener;
@@ -79,6 +80,7 @@
     self = [super initWithListener:nil];
     if (self) {
         _itemsToDelete = [NSMutableArray array];
+        _localItemsToDelete = [NSMutableArray array];
         _oldFilesToDelete = [[OAConcurrentArray alloc] init];
         _backupHelper = OABackupHelper.sharedInstance;
         _listener = listener;
@@ -91,6 +93,11 @@
     return _itemsToDelete;
 }
 
+- (NSArray<OASettingsItem *> *)getLocalItemsToDelete
+{
+    return _localItemsToDelete;
+}
+
 - (NSArray<OASettingsItem *> *)getOldItemsToDelete
 {
     return _oldItemsToDelete;
@@ -99,6 +106,11 @@
 - (void) addItemToDelete:(OASettingsItem *)item
 {
     [_itemsToDelete addObject:item];
+}
+
+- (void) addLocalItemToDelete:(OASettingsItem *)item
+{
+    [_localItemsToDelete addObject:item];
 }
 
 - (void) addOldItemToDelete:(OASettingsItem *)item
@@ -175,6 +187,7 @@
     [self writeItems:networkWriter];
     [self deleteFiles:self];
     [self deleteOldFiles:self];
+    [self deleteLocalFiles:_itemsProgress dataProgress:_dataProgress];
     if (!self.isCancelled)
         [_backupHelper updateBackupUploadTime];
     if (_listener != nil)
@@ -226,6 +239,23 @@
     }
 }
 
+- (void) deleteLocalFiles:(OAConcurrentSet *)itemsProgress dataProgress:(OAAtomicInteger *)dataProgress
+{
+    NSArray<OASettingsItem *> *localItemsToDelete = _localItemsToDelete;
+    for (OASettingsItem *item in localItemsToDelete)
+    {
+        [item remove];
+        [itemsProgress addObjectSync:item];
+        if (_listener)
+        {
+            int p = [dataProgress addAndGet:(APPROXIMATE_FILE_SIZE_BYTES / 1024)];
+            NSString *fileName = [OABackupHelper getItemFileName:item];
+            [_listener itemExportDone:[OASettingsItemType typeName:item.type] fileName:fileName];
+            [_listener updateGeneralProgress:itemsProgress.countSync uploadedKb:(NSInteger)p];
+        }
+    }
+}
+
 - (void)cancel
 {
     [super cancel];
@@ -264,7 +294,7 @@
     }
 }
 
-- (void)onItemUploadDone:(nonnull OASettingsItem *)item fileName:(nonnull NSString *)fileName uploadTime:(long)uploadTime error:(nonnull NSString *)error {
+- (void)onItemUploadDone:(nonnull OASettingsItem *)item fileName:(nonnull NSString *)fileName error:(nonnull NSString *)error {
     NSString *type = [OASettingsItemType typeName:item.type];
     if (error.length > 0)
     {

@@ -144,6 +144,7 @@
 - (id)copyWithZone:(NSZone *)zone
 {
     OARemoteFile* clone = [[OARemoteFile alloc] initWithJson:self.toJson];
+    clone.item = _item;
     return clone;
 }
 

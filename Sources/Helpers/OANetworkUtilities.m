@@ -140,8 +140,6 @@
             onComplete(data, response, error);
         dispatch_semaphore_signal(semaphore);
     }];
-    // TODO: add progress
-//    uploadTask.progress addObserver: forKeyPath: options: context:
 
     [uploadTask resume];
     if (!hasFinished)

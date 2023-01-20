@@ -120,6 +120,11 @@
     return item;
 }
 
+- (void)deleteItem:(OAHistoryItem *)item
+{
+    [_historyMarkersHelper removePoint:item];
+}
+
 - (OASettingsItemReader *) getReader
 {
     return [[OAHistoryMarkersSettingsItemReader alloc] initWithItem:self];

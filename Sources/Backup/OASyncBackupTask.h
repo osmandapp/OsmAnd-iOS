@@ -25,9 +25,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithKey:(NSString *)key operation:(EOABackupSyncOperationType)operation;
 
 - (void) execute;
-- (void)uploadLocalItem:(OASettingsItem *)item fileName:(NSString *)fileName;
-- (void)downloadRemoteVersion:(OASettingsItem *)item fileName:(NSString *)fileName;
-- (void)deleteItem:(OASettingsItem *)item fileName:(NSString *)fileName;
+- (void)uploadLocalItem:(OASettingsItem *)item;
+- (void)downloadRemoteVersion:(OASettingsItem *)item;
+- (void)deleteItem:(OASettingsItem *)item;
+- (void)deleteLocalItem:(OASettingsItem *)item;
 
 - (void) cancel;
 

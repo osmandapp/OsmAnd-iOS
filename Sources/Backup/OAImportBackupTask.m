@@ -178,7 +178,7 @@
         {
             @try
             {
-                OACollectItemsResult *result = [_importer collectItems:_importType == EOAImportTypeCollectAndRead];
+                OACollectItemsResult *result = [_importer collectItems:nil readItems:_importType == EOAImportTypeCollectAndRead];
                 _remoteFiles = result.remoteFiles;
                 return result.items;
             }
@@ -194,46 +194,30 @@
             return _selectedItems;
         }
         case EOAImportTypeImport:
+        case EOAImportTypeImportForceRead:
         {
-            if (_items.count > 0)
+            if (_importType == EOAImportTypeImportForceRead)
             {
-                OABackupHelper *backupHelper = OABackupHelper.sharedInstance;
-                OAPrepareBackupResult *backup = backupHelper.backup;
+                @try
+                {
+                    OACollectItemsResult *result = [_importer collectItems:_items readItems:YES];
+                    for (OASettingsItem *item in result.items)
+                    {
+                        [item setShouldReplace:YES];
+                    }
+                    _items = result.items;
+                }
+                @catch (NSException *e)
+                {
+                    NSLog(@"Failed to recollect items for backup import: %@", e.reason);
+                    return nil;
+                }
+            }
+            else
+            {
                 for (OASettingsItem *item in _items)
                 {
                     [item apply];
-                    NSString *fileName = item.fileName;
-                    [self updateFileUploadTime:backup backupHelper:backupHelper fileName:fileName item:item];
-                }
-            }
-            return _items;
-        }
-        case EOAImportTypeImportForceRead:
-        {
-            if (_items.count > 0)
-            {
-                OABackupHelper *backupHelper = OABackupHelper.sharedInstance;
-                OAPrepareBackupResult *backup = backupHelper.backup;
-                NSMutableDictionary *json = [NSMutableDictionary dictionary];
-                NSMutableArray *itemsJson = [NSMutableArray array];
-                json[@"items"] = itemsJson;
-                NSMutableArray<OASettingsItem *> *filteredItems = [NSMutableArray arrayWithArray:_items];
-                for (OASettingsItem *item in _items)
-                {
-                    NSString *fileName = item.fileName;
-                    OARemoteFile *remoteFile = [backup getRemoteFile:[OASettingsItemType typeName:item.type] fileName:[fileName stringByAppendingPathExtension:OABackupHelper.INFO_EXT]];
-                    if (remoteFile)
-                    {
-                        [filteredItems removeObject:item];
-                        [self fetchRemoteFileInfo:remoteFile itemsJson:itemsJson];
-                    }
-                    [self updateFileUploadTime:backup backupHelper:backupHelper fileName:fileName item:item];
-                    
-                    OASettingsItemsFactory *itemsFactory = [[OASettingsItemsFactory alloc] initWithParsedJSON:json];
-                    NSArray<OASettingsItem *> *items = [NSArray arrayWithArray:itemsFactory.getItems];
-                    for (OASettingsItem *it in items)
-                        it.shouldReplace = YES;
-                    _items = [items arrayByAddingObjectsFromArray:filteredItems];
                 }
             }
             return _items;
@@ -277,6 +261,10 @@
                 OAImportBackupItemsTask *task = [[OAImportBackupItemsTask alloc] initWithImporter:_importer items:items listener:self forceReadData:forceReadData];
                 
                 [OABackupHelper.sharedInstance.executor addOperation:task];
+            }
+            else {
+                [_helper.importAsyncTasks removeObjectForKey:_key];
+                [_helper finishImport:_importListener success:NO items:@[]];
             }
             break;
         }

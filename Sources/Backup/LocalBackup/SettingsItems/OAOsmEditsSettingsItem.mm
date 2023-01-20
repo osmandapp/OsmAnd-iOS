@@ -94,6 +94,11 @@
      return [self.existingItems containsObject:item];
  }
 
+- (void)deleteItem:(OAOpenStreetMapPoint *)item
+{
+    [[OAOsmEditsDBHelper sharedDatabase] deletePOI:item];
+}
+
 - (BOOL)shouldShowDuplicates
 {
     return NO;

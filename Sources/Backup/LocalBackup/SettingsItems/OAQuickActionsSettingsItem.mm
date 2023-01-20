@@ -125,6 +125,11 @@
     return @"quick_actions";
 }
 
+- (void)deleteItem:(OAQuickAction *)item
+{
+    [_actionsRegistry deleteQuickAction:item];
+}
+
 - (OASettingsItemReader *) getReader
 {
     return [[OAQuickActionsSettingsItemReader alloc] initWithItem:self];

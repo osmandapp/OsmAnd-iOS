@@ -599,7 +599,7 @@
 "shared_string_angle" = "Angle";
 "shared_string_angle_param" = "Angle: %d°";
 "shared_string_uploaded" = "Uploaded";
-"shared_string_do_not_exist" = "Do not exist";
+"shared_string_does_not_exist" = "Does not exist";
 
 "restart" = "Restart";
 

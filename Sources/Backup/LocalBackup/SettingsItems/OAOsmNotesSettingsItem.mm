@@ -90,6 +90,11 @@
      return [self.existingItems containsObject:item];
  }
 
+- (void)deleteItem:(OAOsmNotePoint *)item
+{
+    [[OAOsmBugsDBHelper sharedDatabase] deleteAllBugModifications:item];
+}
+
 - (NSString *) name
 {
     return @"osm_notes";

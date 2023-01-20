@@ -96,7 +96,7 @@
                      type:(NSString *)type
                      data:(NSData *)data
                      size:(int)size
-               uploadTime:(NSTimeInterval)uploadTime
+         lastModifiedTime:(long)lastModifiedTime
                  listener:(id<OAOnUploadFileListener>)listener;
 
 - (void) updateFileUploadTime:(NSString *)type fileName:(NSString *)fileName uploadTime:(long)updateTime;
@@ -120,6 +120,9 @@
 
 + (BOOL) applyItem:(OASettingsItem *)item type:(NSString *)type name:(NSString *)name;
 + (NSArray<OASettingsItem *> *) getItemsForRestore:(OABackupInfo *)info settingsItems:(NSArray<OASettingsItem *> *)settingsItems;
-+ (NSArray<NSArray *> *) getItemsMapForRestore:(OABackupInfo *)info settingsItems:(NSArray<OASettingsItem *> *)settingsItems;
++ (NSDictionary<OARemoteFile *, OASettingsItem *> *) getItemsMapForRestore:(OABackupInfo *)info settingsItems:(NSArray<OASettingsItem *> *)settingsItems;
++ (NSDictionary<OARemoteFile *, OASettingsItem *> *) getRemoteFilesSettingsItems:(NSArray<OASettingsItem *> *)items
+                                                                     remoteFiles:(NSArray<OARemoteFile *> *)remoteFiles
+                                                                       infoFiles:(BOOL)infoFiles;
 
 @end

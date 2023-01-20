@@ -12,6 +12,7 @@
 #import "OAExportSettingsType.h"
 #import "OABackupHelper.h"
 #import "OAAppSettings.h"
+#import "OALocalFile.h"
 #import "OAFileSettingsItem.h"
 #import "OAPrepareBackupResult.h"
 #import "OARemoteFile.h"
@@ -33,6 +34,7 @@
 - (instancetype) initWithKey:(NSString *)key
                        items:(NSArray<OASettingsItem *> *)items
                itemsToDelete:(NSArray<OASettingsItem *> *)itemsToDelete
+               localItemsToDelete:(NSArray<OASettingsItem *> *)localItemsToDelete
                     listener:(id<OABackupExportListener>)listener
 {
     self = [super init];
@@ -58,6 +60,10 @@
         {
             [_exporter addItemToDelete:item];
         }
+        for (OASettingsItem *item in localItemsToDelete)
+        {
+            [_exporter addLocalItemToDelete:item];
+        }
     }
     return self;
 }
@@ -77,7 +83,7 @@
 
 - (NSString *)doInBackground
 {
-    long itemsSize = [self.class getEstimatedItemsSize:_exporter.getItems itemsToDelete:_exporter.getItemsToDelete oldItemsToDelete:_exporter.getOldItemsToDelete];
+    long itemsSize = [self.class getEstimatedItemsSize:_exporter.getItems itemsToDelete:_exporter.getItemsToDelete localItemsToDelete:_exporter.getLocalItemsToDelete oldItemsToDelete:_exporter.getOldItemsToDelete];
     [self publishProgress:@(itemsSize / 1024) isUploadedKb:NO];
     
     NSString *error = nil;
@@ -92,7 +98,10 @@
     return error;
 }
 
-+ (long) getEstimatedItemsSize:(NSArray<OASettingsItem *> *)items itemsToDelete:(NSArray<OASettingsItem *> *)itemsToDelete oldItemsToDelete:(NSArray<OASettingsItem *> *)oldItemsToDelete
++ (long) getEstimatedItemsSize:(NSArray<OASettingsItem *> *)items
+                 itemsToDelete:(NSArray<OASettingsItem *> *)itemsToDelete
+                 localItemsToDelete:(NSArray<OASettingsItem *> *)localItemsToDelete
+              oldItemsToDelete:(NSArray<OASettingsItem *> *)oldItemsToDelete
 {
     long size = 0;
     OABackupHelper *backupHelper = OABackupHelper.sharedInstance;
@@ -112,7 +121,7 @@
         }
     }
     NSDictionary<NSString *, OARemoteFile *> *remoteFilesMap = [backupHelper.backup getRemoteFiles:EOARemoteFilesTypeUnique];
-    if (remoteFilesMap != nil)
+    if (remoteFilesMap.count > 0)
     {
         for (OARemoteFile *remoteFile in remoteFilesMap.allValues)
         {
@@ -137,6 +146,20 @@
                         itemFileName = [itemFileName substringFromIndex:1];
                     }
                     if ([itemFileName isEqualToString:remoteFileItem.fileName])
+                    {
+                        size += APPROXIMATE_FILE_SIZE_BYTES;
+                    }
+                }
+            }
+        }
+        NSDictionary<NSString *, OALocalFile *> *localFilesMap = backupHelper.backup.localFiles;
+        if (localFilesMap.count > 0)
+        {
+            for (OALocalFile *localFile in localFilesMap.allValues)
+            {
+                for (OASettingsItem *item in localItemsToDelete)
+                {
+                    if ([item isEqual:localFile.item])
                     {
                         size += APPROXIMATE_FILE_SIZE_BYTES;
                     }

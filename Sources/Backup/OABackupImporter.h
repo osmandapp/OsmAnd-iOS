@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-NS_ASSUME_NONNULL_BEGIN
-
 @class OASettingsItem, OARemoteFile;
 
 @protocol OANetworkImportProgressListener <NSObject>
@@ -35,7 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) BOOL cancelled;
 
 - (void) importItems:(NSArray<OASettingsItem *> *)items forceReadData:(BOOL)forceReadData;
-- (OACollectItemsResult *) collectItems:(BOOL)readItems;
+- (OACollectItemsResult *) collectItems:(NSArray<OASettingsItem *> *)settingsItems readItems:(BOOL)readItems;
 
 @end
 
@@ -44,5 +42,3 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype) initWithRemoteFile:(OARemoteFile *)remoteFile item:(OASettingsItem *)item importer:(OABackupImporter *)importer forceReadData:(BOOL)forceReadData;
 
 @end
-
-NS_ASSUME_NONNULL_END

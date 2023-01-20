@@ -271,7 +271,7 @@
 "reminder_not_set_text" = "Az emlékeztető nem lett beállítva, mivel nem engedélyezte a naptárhoz való hozzáférést";
 //inapps
 "product_title_nautical" = "Hajózási térkép";
-"product_desc_nautical" = "Az egész világ hajózási térképe";
+"product_desc_nautical" = "A vektor térképek alkalmasak a hajózási útvonalak navigálásához";
 "product_title_parking" = "Parkolási hely";
 "fav_import_desc" = "Importálhatja a kedvenceit a GPX-fájlban lévő útvonalpontokként (gyakori GPS adatformátum)\n\nA favorites.gpx fájl megosztásához megnyithatja a fájlt a Dropboxból, e-mailből vagy bármilyen más forrásból - Használja a Megnyitás ebben funkciót.";
 "gpx_import_desc" = "GPX-fájlok (gyakori GPS adatformátum) Dropboxból, e-mailből vagy más forrásból való importálásához használja a \"Másolás az OsmAnd térképekhez\" opciót";
@@ -823,7 +823,7 @@
 "osm_edit_without_name" = "Névtelen";
 "osm_note_action_field_descr" = "Ez azüzenet bekerül a megjegyzés mezőbe.";
 "create_items" = "Elemek létrehozása";
-"display_starting_at_zoom_level" = "Megjelenítés a következő nagyítási szinttől:";
+"display_starting_at_zoom_level" = "Megjelenítés a következő nagyítási szinttől";
 "blue" = "Kék";
 "osm_alert_message" = "Üzenet";
 "shared_setting_always_ask" = "Mindig kérdezzen rá";
@@ -1147,7 +1147,7 @@
 "rendering_value_lightgreen_name" = "Világoszöld";
 "rendering_attr_pisteGrooming_name" = "Sípálya kezeltség";
 "rendering_attr_alpineHiking_name" = "Alpesi túra nehézségi szint (SAC)";
-"rendering_value_walkingRoutesScopeOSMC_name" = "Hálózathoz tartozás";
+"rendering_value_walkingRoutesScopeOSMC_name" = "Hálózathoz felvétel";
 "routing_attr_avoid_ferries_description" = "Elkerüli a kompokat";
 "rendering_value_disabled_name" = "Letiltva";
 "rendering_attr_hideProposed_name" = "Tervezett objektumok";
@@ -1215,7 +1215,7 @@
 "rendering_attr_smoothness_excellent_name" = "Kitűnő";
 "rendering_attr_transportStops_name" = "Tömegközlekedési megállók";
 "rendering_value_high_name" = "Magas";
-"rendering_attr_appMode_description" = "Térkép optimalizálása a következőhöz:";
+"rendering_attr_appMode_description" = "Térkép optimalizálása a következőhöz";
 "rendering_attr_currentTrackWidth_name" = "GPX-nyomvonal vastagsága";
 "rendering_attr_surface_ice_name" = "Jég";
 "rendering_attr_hideWaterPolygons_description" = "Vízfelületek";
@@ -1224,7 +1224,7 @@
 "routeInfo_piste_difficulty_name" = "Sípálya nehézsége";
 "rendering_attr_tracktype_grade5_name" = "Laza";
 "rendering_attr_tracktype_grade3_name" = "Jórészt szilárd";
-"rendering_value_walkingRoutesOSMC_name" = "OSMC turistaútjelzés";
+"rendering_value_walkingRoutesOSMC_name" = "OSMC";
 "rendering_attr_showSurfaceGrade_name" = "Útminőség megjelenítése";
 "rendering_attr_surface_ground_name" = "Talaj";
 "rendering_attr_currentTrackColor_name" = "GPX színe";
@@ -2177,3 +2177,13 @@
 "position_on_map_center" = "Középre";
 "position_on_map_bottom" = "Alulra";
 "animate_my_location_descr" = "A térképen való helyváltoztatás zökkenőmentes a navigáció során";
+"promo_subscription" = "OsmAnd Pro (Promó)";
+"promo" = "Promó";
+"routing_attr_avoid_low_emission_zone_description" = "Alacsony kibocsátású zónák elkerülése";
+"renew_subscription" = "Előfizetés megújítása";
+"map_widget_rendering_fps" = "Térképmegjelenítés (képkocka/másodperc)";
+"calc_pedestrian_route" = "Gyalogos útvonal tervezése";
+"routing_attr_avoid_tunnels_name" = "Alagutak nélkül";
+"routing_attr_avoid_tunnels_description" = "Alagutakat elkerüli";
+"rendering_attr_depthContourWidth_name" = "Vonalak szélessége";
+"rendering_attr_depthContourColorScheme_name" = "Vonalak színsémája";

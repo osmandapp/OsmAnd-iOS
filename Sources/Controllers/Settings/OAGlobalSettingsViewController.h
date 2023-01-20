@@ -22,7 +22,6 @@ typedef enum
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (nonatomic, readonly) EOAGlobalSettingsScreen settingsType;
 
 - (instancetype) initWithSettingsType:(EOAGlobalSettingsScreen)settingsType;
 

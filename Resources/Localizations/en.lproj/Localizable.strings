@@ -603,6 +603,7 @@
 "shared_string_angle_param" = "Angle: %d°";
 "shared_string_uploaded" = "Uploaded";
 "shared_string_does_not_exist" = "Does not exist";
+"shared_string_legal" = "Legal";
 
 "restart" = "Restart";
 
@@ -2294,6 +2295,7 @@
 
 "terms_of_use" = "Terms of use";
 "privacy_policy" = "Privacy policy";
+"privacy_and_security" = "Privacy and security";
 
 "map_download_privacy_descr" = "By downloading maps you agree to the <a href='https://osmand.net/docs/legal/terms-of-use'>Terms Of Use</a> and <a href='https://osmand.net/docs/legal/privacy-policy'>Privacy Policy</a>.";
 
@@ -2956,6 +2958,8 @@
 "checking_progress" = "Checking..";
 
 "co2_mission" = "CO2 emission";
+
+"uninstall_speed_cameras" = "Uninstall speed cameras";
 
 // Release Notes
 // instruction:

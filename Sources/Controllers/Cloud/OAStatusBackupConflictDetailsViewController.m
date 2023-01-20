@@ -36,7 +36,7 @@
 {
     OALocalFile *_localFile;
     OARemoteFile *_remoteFile;
-    NSString *_fileName;
+    OASettingsItem *_settingsItem;
     OANetworkSettingsHelper *_settingsHelper;
     
     OATableDataModel *_data;
@@ -57,7 +57,7 @@
         _remoteFile = remoteFile;
         _operation = operation;
         _recentChangesType = recentChangesType;
-        _fileName = [OABackupHelper getItemFileName:_recentChangesType == EOARecentChangesLocal && _localFile ? _localFile.item : _remoteFile.item];
+        _settingsItem = [self getSettingsItem:_localFile remoteFile:_remoteFile];
     }
     return self;
 }
@@ -100,6 +100,16 @@
         default:
             return OALocalizedString(@"cloud_conflict");
     }
+}
+
+- (OASettingsItem *) getSettingsItem:(OALocalFile *)localFile remoteFile:(OARemoteFile *)remoteFile
+{
+    OASettingsItem *settingsItem;
+    if (_recentChangesType == EOARecentChangesLocal)
+        settingsItem = localFile == nil ? remoteFile.item : localFile.item;
+    else
+        settingsItem = remoteFile == nil ? localFile.item : remoteFile.item;
+    return settingsItem;
 }
 
 - (CGFloat) initialHeight
@@ -206,7 +216,8 @@
 - (OATableRowData *)populateUploadAction
 {
     BOOL deleteOperation = _operation == EOABackupSyncOperationDelete;
-    BOOL enabled = [self isRowEnabled:_fileName] && (_localFile || deleteOperation);
+    NSString *fileName = [OABackupHelper getItemFileName:_settingsItem];
+    BOOL enabled = [self isRowEnabled:fileName] && (_localFile || deleteOperation);
     NSString *title = OALocalizedString(deleteOperation ? @"upload_change" : @"upload_local_version");
     NSString *description = @"";
     if (self.delegate)
@@ -220,7 +231,7 @@
         }
         else if (!_localFile)
         {
-            description = OALocalizedString(@"shared_string_do_not_exist");
+            description = OALocalizedString(@"shared_string_does_not_exist");
         }
         else
         {
@@ -248,7 +259,8 @@
 - (OATableRowData *)populateDownloadAction
 {
     BOOL deleteOperation = _operation == EOABackupSyncOperationDelete;
-    BOOL enabled = [self isRowEnabled:_fileName] && (_remoteFile || deleteOperation);
+    NSString *fileName = [OABackupHelper getItemFileName:_settingsItem];
+    BOOL enabled = [self isRowEnabled:fileName] && (_remoteFile || deleteOperation);
     NSString *description = @"";
     if (self.delegate)
     {
@@ -260,7 +272,7 @@
             {
                 description = [NSString stringWithFormat:@"%@\n%@",
                                [self.delegate getDescriptionForItemType:type
-                                                               fileName:_fileName
+                                                               fileName:fileName
                                                                 summary:OALocalizedString(@"shared_string_uploaded")],
                                OALocalizedString(@"local_file_will_be_restored")
                 ];
@@ -273,7 +285,7 @@
         }
         else if (!_remoteFile)
         {
-            description = OALocalizedString(@"shared_string_do_not_exist");
+            description = OALocalizedString(@"shared_string_does_not_exist");
         }
         else
         {
@@ -396,12 +408,13 @@
     if ([item boolForKey:@"enabled"])
     {
         [self dismissViewControllerAnimated:YES completion:^{
+            NSString *fileName = [OABackupHelper getItemFileName:_settingsItem];
             if ([item.key isEqualToString:@"uploadLocal"])
-                [_settingsHelper syncSettingsItems:_fileName localFile:_localFile remoteFile:_remoteFile operation:EOABackupSyncOperationUpload];
+                [_settingsHelper syncSettingsItems:fileName localFile:_localFile remoteFile:_remoteFile operation:EOABackupSyncOperationUpload];
             else if ([item.key isEqualToString:@"downloadCloud"])
-                [_settingsHelper syncSettingsItems:_fileName localFile:_localFile remoteFile:_remoteFile operation:EOABackupSyncOperationDownload];
+                [_settingsHelper syncSettingsItems:fileName localFile:_localFile remoteFile:_remoteFile operation:EOABackupSyncOperationDownload];
             else if ([item.key isEqualToString:@"deleteItem"])
-                [_settingsHelper syncSettingsItems:_fileName localFile:_localFile remoteFile:_remoteFile operation:EOABackupSyncOperationDelete];
+                [_settingsHelper syncSettingsItems:fileName localFile:_localFile remoteFile:_remoteFile operation:EOABackupSyncOperationDelete];
         }];
     }
 }

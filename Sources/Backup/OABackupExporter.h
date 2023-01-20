@@ -30,9 +30,11 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype) initWithListener:(id<OANetworkExportProgressListener>)listener;
 
 - (void) addItemToDelete:(OASettingsItem *)item;
+- (void) addLocalItemToDelete:(OASettingsItem *)item;
 - (void) addOldItemToDelete:(OASettingsItem *)item;
 
 - (NSArray<OASettingsItem *> *)getItemsToDelete;
+- (NSArray<OASettingsItem *> *)getLocalItemsToDelete;
 - (NSArray<OASettingsItem *> *)getOldItemsToDelete;
 
 - (void) export;

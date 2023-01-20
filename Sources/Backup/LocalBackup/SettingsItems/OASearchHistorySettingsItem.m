@@ -152,6 +152,11 @@
     return NO;
 }
 
+- (void)deleteItem:(OAHistoryItem *)item
+{
+    [_searchHistoryHelper removePoint:item];
+}
+
 - (BOOL)shouldShowDuplicates
 {
     return NO;

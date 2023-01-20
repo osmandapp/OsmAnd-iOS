@@ -153,7 +153,7 @@ static OABackupStatus *ERROR;
         {
             return OABackupStatus.CONFLICTS;
         }
-        else if (info.itemsToUpload.count > 0 || info.itemsToDelete.count > 0)
+        else if (info.itemsToUpload.count > 0 || info.itemsToDelete.count > 0 || info.localItemsToDelete.count > 0)
         {
             return OABackupStatus.MAKE_BACKUP;
         }

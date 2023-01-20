@@ -122,12 +122,17 @@ NSInteger const kSettingsItemErrorCodeAlreadyRead = 1;
 
 - (void) apply
 {
-    // non implemented
+    // not implemented
+}
+
+- (void) remove
+{
+    // not implemented
 }
 
 - (void) applyAdditionalParams:(NSString *)filePath
 {
-    // non implemented
+    // not implemented
 }
 
 + (EOASettingsItemType) parseItemType:(id)json error:(NSError * _Nullable *)error

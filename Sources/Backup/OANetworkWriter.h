@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) onItemUploadStarted:(OASettingsItem *)item fileName:(NSString *)fileName work:(NSInteger)work;
 - (void) onItemUploadProgress:(OASettingsItem *)item fileName:(NSString *)fileName progress:(NSInteger)progress deltaWork:(NSInteger)deltaWork;
 - (void) onItemFileUploadDone:(OASettingsItem *)item fileName:(NSString *)fileName uploadTime:(long)uploadTime error:(NSString *)error;
-- (void) onItemUploadDone:(OASettingsItem *)item fileName:(NSString *)fileName uploadTime:(long)uploadTime error:(NSString *)error;
+- (void) onItemUploadDone:(OASettingsItem *)item fileName:(NSString *)fileName error:(NSString *)error;
 
 @end
 

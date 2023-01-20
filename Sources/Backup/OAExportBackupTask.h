@@ -22,11 +22,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) NSInteger generalProgress;
 @property (nonatomic, readonly) NSInteger maxProgress;
 
-+ (long) getEstimatedItemsSize:(NSArray<OASettingsItem *> *)items itemsToDelete:(NSArray<OASettingsItem *> *)itemsToDelete oldItemsToDelete:(NSArray<OASettingsItem *> *)oldItemsToDelete;
++ (long) getEstimatedItemsSize:(NSArray<OASettingsItem *> *)items itemsToDelete:(NSArray<OASettingsItem *> *)itemsToDelete localItemsToDelete:(NSArray<OASettingsItem *> *)localItemsToDelete oldItemsToDelete:(NSArray<OASettingsItem *> *)oldItemsToDelete;
 
 - (instancetype) initWithKey:(NSString *)key
                        items:(NSArray<OASettingsItem *> *)items
                itemsToDelete:(NSArray<OASettingsItem *> *)itemsToDelete
+               localItemsToDelete:(NSArray<OASettingsItem *> *)localItemsToDelete
                     listener:(id<OABackupExportListener>)listener;
 
 - (OAItemProgressInfo *) getItemProgressInfo:(NSString *)type fileName:(NSString *)fileName;

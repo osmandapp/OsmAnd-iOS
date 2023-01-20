@@ -118,6 +118,11 @@
     return NO;
 }
 
+- (void)deleteItem:(OADestination *)item
+{
+    [_destinationsHelper removeDestination:item];
+}
+
 - (BOOL) shouldReadOnCollecting
 {
     return YES;

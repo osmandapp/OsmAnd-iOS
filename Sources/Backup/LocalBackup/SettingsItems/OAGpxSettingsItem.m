@@ -9,6 +9,7 @@
 #import "OAGpxSettingsItem.h"
 #import "OAGpxAppearanceInfo.h"
 #import "OAGPXUIHelper.h"
+#import "OsmAndApp.h"
 
 @interface OAGpxSettingsItem()
 
@@ -65,6 +66,20 @@
 - (NSString *)getPublicName
 {
     return [self.filePath.lastPathComponent stringByDeletingPathExtension];
+}
+
+- (void)remove
+{
+    [super remove];
+    NSFileManager *manager = NSFileManager.defaultManager;
+    NSError *err = nil;
+    [manager removeItemAtPath:self.filePath error:&err];
+    if (!err)
+    {
+        NSString *parentDir = [self.filePath stringByDeletingLastPathComponent];
+        if (![parentDir isEqualToString:OsmAndApp.instance.gpxPath] && [manager contentsOfDirectoryAtPath:parentDir error:nil].count == 0)
+            [manager removeItemAtPath:parentDir error:nil];
+    }
 }
  
 - (void) readFromJson:(id)json error:(NSError * _Nullable __autoreleasing *)error

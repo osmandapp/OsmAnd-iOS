@@ -51,7 +51,7 @@
         [_categoriesListController present];
     }];
     
-    CPGridButton *btnSearch = [[CPGridButton alloc] initWithTitleVariants:@[OALocalizedString(@"address_search")] image:[UIImage imageNamed:@"ic_carplay_search"] handler:^(CPGridButton * _Nonnull barButton) {
+    CPGridButton *btnSearch = [[CPGridButton alloc] initWithTitleVariants:@[OALocalizedString(@"shared_string_search")] image:[UIImage imageNamed:@"ic_carplay_search"] handler:^(CPGridButton * _Nonnull barButton) {
         _searchController = [[OACarPlayAddressSearchController alloc] initWithInterfaceController:self.interfaceController];
         [_searchController present];
     }];

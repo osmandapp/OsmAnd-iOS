@@ -66,6 +66,12 @@
     return [OAApplicationMode valueOfStringKey:_appMode.stringKey def:nil] != nil;
 }
 
+- (void)remove
+{
+    [super remove];
+    [OAApplicationMode deleteCustomModes:@[_appMode]];
+}
+
 - (long)localModifiedTime
 {
     return [OAAppSettings.sharedManager getLastProfileSettingsModifiedTime:_appMode];

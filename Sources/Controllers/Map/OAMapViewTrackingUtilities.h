@@ -20,7 +20,6 @@
 
 + (OAMapViewTrackingUtilities *)instance;
 
-+ (BOOL) isSmallSpeedForDirectionOfMovement:(CLLocation *)location speedToDirectionOfMovement:(double)speedToDirectionOfMovement;
 + (BOOL) isSmallSpeedForCompass:(CLLocation *)location;
 + (BOOL) isSmallSpeedForAnimation:(CLLocation *)location;
 

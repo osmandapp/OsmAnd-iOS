@@ -31,28 +31,36 @@
 {
     OASearchUICore *_searchUICore;
     OAQuickSearchHelper *_searchHelper;
-    
+
     CPSearchTemplate *_searchTemplate;
-    
+    CPListTemplate *_resultsListTemplate;
+
     NSArray<OAQuickSearchListItem *> *_searchItems;
     NSArray<CPListItem *> *_cpItems;
-    
+    CPListItem *_searchingItem;
+    CPListItem *_emptyItem;
+
     NSString *_currentSearchPhrase;
     BOOL _cancelPrev;
+    BOOL _searching;
 }
 
 - (void) commonInit
 {
-    _searchHelper = OAQuickSearchHelper.instance;
-    _searchUICore = _searchHelper.getCore;
+    _searchingItem = [[CPListItem alloc] initWithText:OALocalizedString(@"search_preogress") detailText:nil];
+    _emptyItem = [[CPListItem alloc] initWithText:OALocalizedString(@"nothing_found_empty") detailText:nil];
+    _searchItems = @[];
+    _cpItems = @[];
+
+    _resultsListTemplate = [[CPListTemplate alloc] initWithTitle:OALocalizedString(@"shared_string_search")
+                                                        sections:@[[[CPListSection alloc] initWithItems:_cpItems]]];
+    _resultsListTemplate.delegate = self;
+
+    _searchHelper = [OAQuickSearchHelper instance];
+    _searchUICore = [_searchHelper getCore];
     _currentSearchPhrase = @"";
 
-    OASearchSettings *settings = [[[[[[_searchUICore getSearchSettings]
-                                      resetSearchTypes]
-                                     setEmptyQueryAllowed:false]
-                                    setSortByName:false]
-                                   setAddressSearch:false]
-                                  setRadiusLevel:1];
+    OASearchSettings *settings = [[[[[[_searchUICore getSearchSettings] resetSearchTypes] setEmptyQueryAllowed:NO] setSortByName:NO] setAddressSearch:NO] setRadiusLevel:1];
     [_searchUICore updateSettings:settings];
     [_searchHelper setResultCollection:nil];
     [_searchUICore resetPhrase];
@@ -121,6 +129,10 @@
 {
     NSMutableArray<OAQuickSearchListItem *> *searchItems = [NSMutableArray array];
     NSMutableArray<CPListItem *> *cpItems = [NSMutableArray array];
+
+    if (_searching && _currentSearchPhrase.length > 0)
+        [cpItems addObject:_searchingItem];
+
     if (res && [res getCurrentSearchResults].count > 0)
     {
         NSArray<OASearchResult *> *searchResultItems = [res getCurrentSearchResults];
@@ -128,22 +140,28 @@
         {
             OASearchResult *sr = searchResultItems[i];
             OAQuickSearchListItem *qsItem = [[OAQuickSearchListItem alloc] initWithSearchResult:sr];
-            OAAddress *address = (OAAddress *)qsItem.getSearchResult.object;
-            CPListItem *cpItem = [[CPListItem alloc] initWithText:qsItem.getName detailText:[self generateDescription:qsItem] image:address.icon];
+            CPListItem *cpItem = [[CPListItem alloc] initWithText:qsItem.getName
+                                                       detailText:[self generateDescription:qsItem]
+                                                            image:[UIImage imageNamed:[OAQuickSearchListItem getIconName:sr]]];
             cpItem.userInfo = @(i);
 
             [searchItems addObject:qsItem];
             [cpItems addObject:cpItem];
         }
     }
-    else if (_currentSearchPhrase.length > 0)
+    else if (!_searching && _currentSearchPhrase.length > 0)
     {
-        [cpItems addObject:[[CPListItem alloc] initWithText:OALocalizedString(@"nothing_found_empty") detailText:nil]];
+        [cpItems addObject:_emptyItem];
     }
+
     _searchItems = searchItems;
     _cpItems = cpItems;
-    if (completionHandler)
-        completionHandler(cpItems);
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [_resultsListTemplate updateSections:@[[[CPListSection alloc] initWithItems:_cpItems]]];
+        if (completionHandler)
+            completionHandler(@[]);
+    });
 }
 
 - (NSString *) generateDescription:(OAQuickSearchListItem *)item
@@ -174,6 +192,7 @@
         [_searchUICore updateSettings:[settings setRadiusLevel:1]];
 
     _cancelPrev = YES;
+    _searching = YES;
 
     OASearchResultCollection __block *regionResultCollection;
     OASearchCoreAPI __block *regionResultApi;
@@ -190,11 +209,7 @@
         if (_cancelPrev)
         {
             if (results.count > 0)
-            {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [[_searchHelper getResultCollection] addSearchResults:results resortAll:YES removeDuplicates:YES];
-                });
-            }
+                [[_searchHelper getResultCollection] addSearchResults:results resortAll:YES removeDuplicates:YES];
             return NO;
         }
 
@@ -202,45 +217,43 @@
         {
             case FILTER_FINISHED:
             {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self updateSearchResult:[_searchUICore getCurrentSearchResult] completionHandler:completionHandler];
-                });
+                [self updateSearchResult:[_searchUICore getCurrentSearchResult] completionHandler:completionHandler];
+                break;
+            }
+            case SEARCH_FINISHED:
+            {
+                _searching = NO;
+                [self updateSearchResult:[_searchHelper getResultCollection] completionHandler:completionHandler];
                 break;
             }
             case SEARCH_API_FINISHED:
             {
                 OASearchCoreAPI *searchApi = (OASearchCoreAPI *) obj.object;
-                NSMutableArray<OASearchResult *> *apiResults;
                 OASearchPhrase *phrase = obj.requiredSearchPhrase;
                 OASearchCoreAPI *regionApi = regionResultApi;
                 OASearchResultCollection *regionCollection = regionResultCollection;
                 BOOL hasRegionCollection = (searchApi == regionApi && regionCollection);
-                if (hasRegionCollection)
-                    apiResults = [NSMutableArray arrayWithArray:[regionCollection getCurrentSearchResults]];
-                else
-                    apiResults = results;
+                NSArray<OASearchResult *> *apiResults = hasRegionCollection ? [regionCollection getCurrentSearchResults] : results;
 
                 regionResultApi = nil;
                 regionResultCollection = nil;
-                results = [NSMutableArray array];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    if (!_cancelPrev)
+                [results removeAllObjects];
+                if (!_cancelPrev)
+                {
+                    BOOL append = [_searchHelper getResultCollection] != nil;
+                    if (append)
                     {
-                        BOOL append = [_searchHelper getResultCollection] != nil;
-                        if (append)
-                        {
-                            [[_searchHelper getResultCollection] addSearchResults:apiResults resortAll:YES removeDuplicates:YES];
-                        }
-                        else
-                        {
-                            OASearchResultCollection *resCollection = [[OASearchResultCollection alloc] initWithPhrase:phrase];
-                            [resCollection addSearchResults:apiResults resortAll:YES removeDuplicates:YES];
-                            [_searchHelper setResultCollection:resCollection];
-                        }
-                        if (!hasRegionCollection)
-                            [self updateSearchResult:[_searchHelper getResultCollection] completionHandler:completionHandler];
+                        [[_searchHelper getResultCollection] addSearchResults:apiResults resortAll:YES removeDuplicates:YES];
                     }
-                });
+                    else
+                    {
+                        OASearchResultCollection *resCollection = [[OASearchResultCollection alloc] initWithPhrase:phrase];
+                        [resCollection addSearchResults:apiResults resortAll:YES removeDuplicates:YES];
+                        [_searchHelper setResultCollection:resCollection];
+                    }
+                    if (!hasRegionCollection)
+                        [self updateSearchResult:[_searchHelper getResultCollection] completionHandler:completionHandler];
+                }
                 break;
             }
             case SEARCH_API_REGION_FINISHED:
@@ -250,22 +263,20 @@
                 regionResultCollection = [[[OASearchResultCollection alloc] initWithPhrase:regionPhrase] addSearchResults:results
                                                                                                                 resortAll:YES
                                                                                                          removeDuplicates:YES];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    if (!_cancelPrev)
+                if (!_cancelPrev)
+                {
+                    if ([_searchHelper getResultCollection])
                     {
-                        if ([_searchHelper getResultCollection])
-                        {
-                            OASearchResultCollection *resCollection = [[_searchHelper getResultCollection] combineWithCollection:regionResultCollection
-                                                                                                                          resort:YES
-                                                                                                                removeDuplicates:YES];
-                            [self updateSearchResult:resCollection completionHandler:completionHandler];
-                        }
-                        else
-                        {
-                            [self updateSearchResult:regionResultCollection completionHandler:completionHandler];
-                        }
+                        OASearchResultCollection *resCollection = [[_searchHelper getResultCollection] combineWithCollection:regionResultCollection
+                                                                                                                      resort:YES
+                                                                                                            removeDuplicates:YES];
+                        [self updateSearchResult:resCollection completionHandler:completionHandler];
                     }
-                });
+                    else
+                    {
+                        [self updateSearchResult:regionResultCollection completionHandler:completionHandler];
+                    }
+                }
                 break;
             }
             case SEARCH_STARTED:
@@ -294,7 +305,8 @@
         selectedResult:(CPListItem *)item
      completionHandler:(void (^)(void))completionHandler
 {
-    [self onItemSelected:item];
+    if (item != _searchingItem && item != _emptyItem)
+        [self onItemSelected:item];
     completionHandler();
 }
 
@@ -322,10 +334,8 @@
 
 - (void)searchTemplateSearchButtonPressed:(CPSearchTemplate *)searchTemplate
 {
-    CPListSection *section = [[CPListSection alloc] initWithItems:_cpItems];
-    CPListTemplate *resultsList = [[CPListTemplate alloc] initWithTitle:OALocalizedString(@"shared_string_search") sections:@[section]];
-    resultsList.delegate = self;
-    [self.interfaceController pushTemplate:resultsList animated:YES];
+    [_resultsListTemplate updateSections:@[[[CPListSection alloc] initWithItems:_cpItems]]];
+    [self.interfaceController pushTemplate:_resultsListTemplate animated:YES];
 }
 
 // MARK: CPListTemplateDelegate

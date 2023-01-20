@@ -392,9 +392,24 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     }
     else if ([targetScreenKey isEqualToString:@"reset_to_default"])
     {
-        OAPluginResetBottomSheetViewController *screen = [[OAPluginResetBottomSheetViewController alloc] initWithParam:_appMode];
-        screen.delegate = self;
-        [screen show];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"reset_to_default")
+                                                                       message:OALocalizedString                  (@"reset_profile_action_descr")
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel")
+                                                               style:UIAlertActionStyleDefault
+                                                             handler:nil
+        ];
+        UIAlertAction *resetAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_reset")
+                                                              style:UIAlertActionStyleDestructive
+                                                            handler:^(UIAlertAction * _Nonnull action) {
+            [self resetAppModePrefs:_appMode];
+        }];
+        
+        [alert addAction:cancelAction];
+        [alert addAction:resetAction];
+        alert.preferredAction = resetAction;
+        [self presentViewController:alert animated:YES completion:nil];
     }
     else if ([targetScreenKey isEqualToString:@"delete_profile"])
     {

@@ -23,6 +23,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *subtitleLabel;
 @property (weak, nonatomic) IBOutlet UIButton *doneButton;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *navBarHeightConstraint;
+
 @property (weak, nonatomic) id<OAVehicleParametersSettingDelegate> delegate;
 @property (nonatomic) OAApplicationMode *appMode;
 

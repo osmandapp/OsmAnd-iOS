@@ -2799,3 +2799,4 @@
 "routing_attr_motor_type_name" = "Kraftstoffverbrauch des Motors";
 "si_nm_ft" = "Seemeilen/Fuß";
 "si_nm_mt" = "Seemeilen/Meter";
+"shared_string_does_not_exist" = "Nicht vorhanden";

@@ -2799,3 +2799,4 @@
 "routing_attr_motor_type_lpg_name" = "Gas licuado de petróleo (GLP)";
 "si_nm_mt" = "Millas/metros náuticos";
 "si_nm_ft" = "Millas/pies náuticos";
+"shared_string_does_not_exist" = "No existe";

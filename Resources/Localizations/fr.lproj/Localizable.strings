@@ -2787,3 +2787,4 @@
 "position_on_map" = "Afficher la position";
 "si_nm_mt" = "Miles nautiques / mètres";
 "si_nm_ft" = "Miles nautiques / pieds";
+"shared_string_does_not_exist" = "N'existe pas";

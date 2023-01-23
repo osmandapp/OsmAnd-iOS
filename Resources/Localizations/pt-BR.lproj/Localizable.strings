@@ -114,7 +114,7 @@
 "shared_string_none" = "Nenhum";
 "map_settings_offline" = "Estilos de mapas offline";
 "map_settings_online" = "Mapas on-line";
-"map_settings_transp" = "Transparência";
+"shared_string_transparency" = "Transparência";
 "map_settings_avail_lay" = "Camadas disponíveis";
 // Intro
 "intro_skip" = "Pular";
@@ -588,7 +588,7 @@
 "osm_editing_lost_changes_title" = "Sair sem salvar?";
 "osm_editing_lost_changes_descr" = "Quaisquer alterações não salvas serão perdidas. Continuar?";
 "osn_bug_name" = "Nota no OSM";
-"osm_deleted" = "Excluído";
+"poi_remove_success" = "Excluído";
 "osm_editing_offline" = "Edição off-line";
 "osm_working_days" = "Diasúteis";
 "osm_opening_hours_time" = "Tempo";
@@ -597,7 +597,7 @@
 "osm_phone" = "Telefone";
 "osm_website" = "Site";
 "osm_poi_delete_title" = "Apagar POI";
-"osm_target_modified" = "POI no OSM modificado";
+"osm_edit_modified_poi" = "POI no OSM modificado";
 "osm_target_deleted" = "POI no OSM excluído";
 "osm_target_created" = "POI OSM criado";
 "osm_note_created" = "Nota no OSM criada";
@@ -635,7 +635,6 @@
 "pink" = "Rosa";
 "translucent_red" = "Vermelho translúcido";
 "translucent_orange" = "Laranja translúcido";
-"translucent_lightblue" = "Azul claro translúcido";
 "translucent_blue" = "Azul translúcido";
 "translucent_purple" = "Roxo translúcido";
 "translucent_pink" = "Rosa translúcida";
@@ -667,7 +666,7 @@
 "pedestrian" = "A pé";
 "plugins" = "Complementos";
 "restore" = "Restaurar";
-"show_region_on_map_title" = "Mapa baixado";
+"map_downloaded" = "Mapa baixado";
 "local_names" = "Nomes locais";
 "history" = "Histórico";
 "try_again" = "Tentar novamente";
@@ -906,7 +905,7 @@
 "product_title_wiki" = "Wikipédia";
 "product_desc_wiki" = "Artigos da Wikipédia baseados em localização no mapa";
 "product_desc_ext_wiki" = "Ter a Wikipédia offline em sua viagem ajuda você a aprender mais sobre os lugares que visita. Está disponível offline e mostra artigos da Wikipédia em relação aos pontos de interesse diretamente no mapa. Não se esqueça de baixar os mapas da Wikipédia para a região escolhida.";
-"product_title_srtm" = "Curvas de nível";
+"download_srtm_maps" = "Curvas de nível";
 "product_desc_srtm" = "Avaliação visual da forma da superfície terrestre";
 "product_desc_ext_srtm" = "As informações do terreno, como curvas de nível, sombras e declives, ajudam a avaliar visualmente a forma da superfície do terreno, considerando curvatura, extremos, inclinação, pontos de igual altura e muito mais. As informações topográficas em um mapa podem ser representadas pelo sombreamento do declive, linhas de contorno para a subida e descida e a cor do desvio do ângulo de inclinação do plano. Dados do SRTM e ASTER.\n\nComo funciona - https://osmand.net/docs/user/plugins/contour-lines";
 "product_title_sea_depth_contours" = "Batimetria náutica";
@@ -914,7 +913,7 @@
 "enter_description" = "Insira a descrição";
 "enter_fav_name" = "Digite o nome do favorito";
 "res_installing" = "A instalar…";
-"res_hillshade" = "Sombras de relevo";
+"shared_string_hillshade" = "Sombras de relevo";
 "select_language" = "Escolher idioma";
 "language_short" = "Idioma";
 "open_url" = "Abrir página no navegador";
@@ -1098,7 +1097,6 @@
 "toggle_day_night" = "Mudar de modo diurno/noturno";
 "show_hide_gpx" = "Mostrar/ocultar trilhos";
 "quick_action_name_str" = "Nome da ação";
-"fav_add_group" = "Adicionar um grupo";
 "poi_list" = "Lista de POIs";
 "quick_actions_show_dialog" = "Mostrar um diálogo intermediário";
 "quick_action_name_footer" = "Deixe em branco para usar o endereço ou nome de lugar.";
@@ -1675,10 +1673,10 @@
 "next_seg" = "Próximo segmento";
 "default_speed_setting_title" = "Velocidade padrão";
 "voice_announces" = "Instruções de voz";
-"nav_type_ski" = "Esqui";
+"routing_profile_ski" = "Esqui";
 "arrival_announcement_frequency" = "Em quanto tempo você quer o anúncio da chegada?";
 "maximum_speed" = "Velocidade máxima";
-"configure_map_descr" = "Aparência do mapa";
+"map_look_descr" = "Aparência do mapa";
 "public_transport_show" = "Mostrar transporte público";
 "app_profiles" = "Perfis do aplicativo";
 "quick_action_remove_next_destination" = "Apagar o ponto de destino mais próximo";
@@ -1690,7 +1688,7 @@
 "shared_string_max" = "Máx.";
 "nav_type_title" = "Tipo de navegação";
 "nav_type_straight_line" = "Em linha reta";
-"app_theme_light" = "Claro";
+"light_theme" = "Claro";
 "nothing_found_empty" = "Nada encontrado";
 "res_online_source_cache_alert" = "A aplicação dessas alterações limpará os dados em cache dessa origem de bloco";
 "importing_from" = "Importando dados de %@";
@@ -2530,7 +2528,7 @@
 "product_desc_ext_weather" = "O plugin meteorológico fornece\n- 5 camadas... previsão meteorológica de 24 horas a cada hora e previsão de 7 dias a cada 3 horas\n- widgets baseados em localização\n- isolinhas de temperatura/pressão\nOs dados meteorológicos são fornecidos pela GFS https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast.";
 "measurement_units" = "Unidades de medida";
 "weather_pressure_unit_inhg" = "Polegadas de mercúrio";
-"weather_temp_unit_f" = "Fahrenheit";
+"weather_temperature_fahrenheit" = "Fahrenheit";
 "weather_pressure_unit_hpa" = "Hectopascals";
 "weather_pressure_unit_mmhg" = "Milímetros de mercúrio";
 "weather_wind_unit_m_s" = "Metros/segundo";

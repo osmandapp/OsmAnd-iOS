@@ -256,7 +256,7 @@
 "nav_type_straight_line" = "Straight line";
 "nav_type_direct_to" = "Direct-to-point";
 "nav_type_brouter" = "BRouter";
-"nav_type_ski" = "Ski";
+"routing_profile_ski" = "Ski";
 "nav_type_geocoding" = "Geocoding";
 "fast_route_mode_descr" = "Հաշվարկել արագընթաց երթուղի փոխարեն ամենակարճ։";
 "avoid_in_routing_title" = "Երթուղին կառուցման ժամանակ խուսափել…";
@@ -555,7 +555,6 @@
 "my_favorites" = "My Favorites";
 "my_places" = "Իմ վայրերը";
 "fav_no_group" = "No group";
-"fav_add_group" = "Ավելացնել խումբ";
 "fav_add_new_group" = "Add new group";
 "select_group_descr" = "Select group or add a new one";
 "available_groups" = "Available groups";
@@ -723,7 +722,7 @@
 "map_settings_install_more" = "Install more...";
 "map_settings_offline" = "Styles for offline maps";
 "map_settings_online" = "Առցանց քարտեզներ";
-"map_settings_transp" = "Transparency";
+"shared_string_transparency" = "Transparency";
 "map_settings_base_transp" = "Հիմնական քարտեզը թափանցիկությունը";
 "map_settings_avail_lay" = "Available layers";
 "map_settings_hillshade" = "Hillshade";
@@ -753,7 +752,7 @@
 "map_settings_available_srtm_maps_descr" = "Additional maps are needed to view Hillshade on the map";
 
 "settings_app_theme" = "Application theme";
-"app_theme_light" = "Լուսավոր";
+"light_theme" = "Լուսավոր";
 "do_not_rotate" = "Do not rotate";
 "allow_3D_view" = "2.5D view";
 "units_of_speed" = "Units of speed";
@@ -1259,7 +1258,7 @@
 
 "osn_bug_name" = "OSMնշում";
 "osm_created" = "Created";
-"osm_deleted" = "Ջնջված է";
+"poi_remove_success" = "Ջնջված է";
 "osm_modified" = "Modified";
 "osm_reopened" = "Reopened";
 "osm_name" = "OpenStreetMap username";
@@ -1281,7 +1280,7 @@
 "osm_add_place" = "Add place";
 "osm_modify_place" = "Modify place";
 "osm_poi_delete_title" = "POIջնջում";
-"osm_target_modified" = "Փոփոխված OSM POI";
+"osm_edit_modified_poi" = "Փոփոխված OSM POI";
 "osm_target_deleted" = "Ջնջված է OSM POI";
 "osm_target_created" = "Ստեղծեք OSM POI";
 "osm_note_created" = "OSMնշում ստեղծվել է";
@@ -1373,7 +1372,7 @@
 "unsupported_items" = "Unsupported items";
 "create_items" = "Ստեղծել գործողություններ";
 "configure_map" = "Քարտեզի կարգավորում";
-"configure_map_descr" = "Քարտեզի տեսքը";
+"map_look_descr" = "Քարտեզի տեսքը";
 "add_map_marker" = "Ավելացնել մարկեր";
 "select_map_marker" = "Ընտրեք մարկերը";
 "add_gpx_waypoint" = "Add GPX waypoint";
@@ -1621,7 +1620,6 @@
 "pink" = "Վարդագույն";
 "translucent_red" = "Կիսաթափանցիկ կարմիր";
 "translucent_orange" = "Կիսաթափանցիկ նարնջագույն";
-"translucent_lightblue" = "Կիսաթափանցիկ կապույտ";
 "translucent_blue" = "Կիսաթափանցիկ կապույտ";
 "translucent_purple" = "Թափանցիկ մանուշակագույն";
 "translucent_pink" = "Թափանցիկ վարդագույն";
@@ -1730,7 +1728,7 @@
 "available_languages" = "Available languages";
 "preferred_languages" = "Preferred languages";
 
-"product_title_srtm" = "Բարձունքների գծեր";
+"download_srtm_maps" = "Բարձունքների գծեր";
 "product_desc_srtm" = "Display of contour lines";
 "product_desc_ext_srtm" = "This plugin provides contour lines and hillshade, which can be displayed in OsmAnd offline maps. Contour lines provide the information about heights of the area while hillshade is their visualization. See the names of mountain peaks and specific features of terrain using this plugin.\n\nThe global data (between 70 degrees north and 70 degrees south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA's Earth Observing System. ASTER is a cooperative effort between NASA, Japan's Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
 
@@ -1760,7 +1758,7 @@
 "res_roads" = "Ճանապարհներ";
 "res_srtm" = "Բարձունքների գծեր";
 "res_wiki" = "Վիքիփեդիա";
-"res_hillshade" = "Hillshade";
+"shared_string_hillshade" = "Hillshade";
 "res_slope" = "Լանջ";
 "res_standard" = "Ստանդարտ քարտեզ";
 
@@ -1880,7 +1878,7 @@
 
 "no_internet_avail" = "No internet available";
 "no_internet_avail_desc_first" = "Please turn on internet connection to download list of maps";
-"show_region_on_map_title" = "Քարտեզը ներբեռնված է";
+"map_downloaded" = "Քարտեզը ներբեռնված է";
 "show_region_on_map_desc" = "Map of %@ has been downloaded. Go to the map to start using it.";
 "show_region_on_map_go" = "Go to the map";
 

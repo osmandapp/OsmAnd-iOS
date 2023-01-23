@@ -92,7 +92,7 @@
 "map_settings_under" = "Zemljevid za podlogo";
 "shared_string_none" = "Brez";
 "map_settings_online" = "Spletni zemljevidi";
-"map_settings_transp" = "Prosojnost";
+"shared_string_transparency" = "Prosojnost";
 // Intro
 "intro_skip" = "Preskoči";
 "intro_download" = "Prejem\nzemljevida";
@@ -356,7 +356,7 @@
 "product_desc_asia" = "Neomejeno prenašanje zemljevidov Azije";
 "product_title_wiki" = "Wikipedija";
 "product_desc_wiki" = "Podatki Wikipedije";
-"product_title_srtm" = "Izris izohips";
+"download_srtm_maps" = "Izris izohips";
 "product_desc_srtm" = "Prikaz izohips na zemljevidu";
 "my_location" = "Trenutno mesto";
 "all_categories" = "Vse kategorije";
@@ -657,7 +657,7 @@
 "facebook" = "Facebook";
 "twitter" = "Twitter";
 "product_title_trip_planning" = "Načrtovanje potovanja";
-"res_hillshade" = "Senčenje";
+"shared_string_hillshade" = "Senčenje";
 "no_other_translations" = "Ni drugih prevodov";
 "wpt_remove_q" = "Ali želite odstraniti vmesno točko?";
 "menu_active_trips" = "Dejaven";
@@ -716,7 +716,7 @@
 "osm_add_place" = "Dodaj mesto";
 "osm_modify_place" = "Spremeni mesto";
 "osm_poi_delete_title" = "Izbriši točko POI";
-"osm_target_modified" = "Spremenjena točka POI";
+"osm_edit_modified_poi" = "Spremenjena točka POI";
 "osm_target_deleted" = "Izbrisana točka POI";
 "osm_target_created" = "Ustvarjena točka POI";
 "osm_confirm_delete" = "Ali želite izbrisati točko POI?";
@@ -898,13 +898,11 @@
 "gpx_avg_altitude" = "Povprečna nadmorska višina";
 "night_mode" = "Nočni način";
 "mapil_pano_only" = "Pokaži le 360° slike";
-"fav_add_group" = "Dodaj skupino";
 "map_sources" = "Viri zemljevida";
 "product_desc_ext_wikivoyage" = "Krajevno shranjeni vodniki po najbolj zanimivih krajih sveta, prikazani v programu OsmAnd, tudi na mestih, kjer ni povezave z internetom.";
 "osm_note_action_field_descr" = "Sporočilo bo dodano v polje opombe.";
 "product_title_wikivoyage" = "Popotniški vodniki";
 "translucent_green" = "Prosojna zelena";
-"translucent_lightblue" = "Prosojna svetlo modra";
 "pink" = "Rožnata";
 "yellow" = "Rumena";
 "offline_vector_maps" = "Vektorski zemljevidi za delo brez povezave";
@@ -920,12 +918,12 @@
 "quick_action_name_footer" = "Pusti prazno za uporabo naslova ali imena mesta.";
 "pause_resume_nav" = "Ustavi/Nadaljuj navigacijo";
 "coordinates_example" = "Primer";
-"osm_deleted" = "Izbrisano";
+"poi_remove_success" = "Izbrisano";
 "mapillary" = "Mapillary";
 "poi_type" = "Vrsta točke POI";
 "translucent_blue" = "Prosojna modra";
 "map_settings_map_magnifier" = "Velikost zemljevida";
-"show_region_on_map_title" = "Zemljevid je prejet";
+"map_downloaded" = "Zemljevid je prejet";
 "add_poi" = "Dodaj točko POI";
 "my_places" = "Shranjene točke";
 "green" = "Zelena";
@@ -1297,16 +1295,16 @@
 "active_markers" = "Dejavne označbe";
 "voice_announces" = "Glasovna navodila";
 "shared_string_continue" = "Nadaljuj";
-"nav_type_ski" = "Smučanje";
+"routing_profile_ski" = "Smučanje";
 "arrival_announcement_frequency" = "Kako hitro naj se najavi napovedančas prihoda?";
 "maximum_speed" = "Največja hitrost";
-"configure_map_descr" = "Videz zemljevida";
+"map_look_descr" = "Videz zemljevida";
 "base_profile_descr_bicycle" = "Za gorska kolesa, motorna kolesa, ježo s konji";
 "base_profile_descr_aircraft" = "Za letala, jadralna padala ...";
 "export_profile" = "Izvozi profil";
 "quick_action_remove_next_destination" = "Izbriši najbližjo ciljno točko";
 "app_profiles" = "Profili aplikacije";
-"app_theme_light" = "Svetla";
+"light_theme" = "Svetla";
 "consider_limitations_param" = "Upoštevaj začasne omejitve";
 "configure_profile" = "Nastavi profil";
 "shared_string_max" = "Največji";

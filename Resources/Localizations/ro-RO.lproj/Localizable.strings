@@ -78,7 +78,7 @@
 "osm_edit_without_name" = "Fără nume";
 "toggle_nav" = "Pornește/oprește navigația";
 "map_widget_next_next_turn" = "Manevra ulterioară";
-"osm_target_modified" = "Modificat POI OSM";
+"osm_edit_modified_poi" = "Modificat POI OSM";
 "shared_string_in_name" = "în %@";
 "translucent_red" = "Roșu translucid";
 "app_mode_hiking" = "Drumeție";
@@ -98,7 +98,7 @@
 "closing_changeset" = "Seînchide modificarea…";
 "blue" = "Albastru";
 "subcategories" = "Subcategorii";
-"show_region_on_map_title" = "Hartă descărcată";
+"map_downloaded" = "Hartă descărcată";
 "shared_string_update" = "Actualizare";
 "select_city" = "Selectați orașul";
 "osm_edits_basic" = "De bază";
@@ -141,7 +141,7 @@
 "longitude" = "Longitudine";
 "shared_string_is_open_24_7" = "Deschis 24/7";
 "speak_street_names" = "numele Străzilor (TTS)";
-"osm_deleted" = "Șters";
+"poi_remove_success" = "Șters";
 "si_km_m" = "Km/metri";
 "osm_note_upload" = "Încărcați note OSM";
 "map_widget_next_turn" = "Următoarea manevră";
@@ -267,7 +267,7 @@
 "transport_stop" = "Stop";
 "osm_note_upload_anonymously" = "Încarcă anonim";
 "shared_string_street" = "Stradă";
-"product_title_srtm" = "Hărți SRTM";
+"download_srtm_maps" = "Hărți SRTM";
 "keep_informing" = "Repetați instrucțiunile de navigare";
 "default_speed_system_descr" = "Definiți unitatea de viteză";
 "speak_pedestrian" = "Treceri pietonale";
@@ -359,7 +359,6 @@
 "snap_to_road_descr" = "Poziție instantanee pe drumuri în timpul navigației";
 "traffic_warning_payment" = "Cabina de taxă";
 "commiting_node" = "Se execută modificarea nodului…";
-"fav_add_group" = "Adaugă un grup";
 "purchase_dialog_title" = "Alege planul";
 "restore" = "Restaurați";
 "quick_action_pause_nav_descr" = "Atingeți acest buton pentru pauză sau reluare navigație.";
@@ -483,7 +482,6 @@
 "osm_website" = "Site web";
 "latitude" = "Latitudine";
 "speak_speed_limit" = "Limita de viteză";
-"translucent_lightblue" = "Albastru deschis translucid";
 "product_title_australia" = "Australia";
 "gpx_waypoint" = "Punct de reper";
 "shared_string_is_open" = "Deschide";
@@ -826,7 +824,7 @@
 "shared_string_finish" = "Sfârşit";
 "new_profile" = "profil nou";
 "one" = "Una";
-"app_theme_light" = "Deschisă";
+"light_theme" = "Deschisă";
 "public_transport_menu" = "Transport";
 "shared_string_exit" = "Ieșire";
 "walk" = "Mergi";
@@ -859,7 +857,7 @@
 "replace_all" = "Înlocuiți tot";
 "vehicle_parameters" = "Parametrii vehicul";
 "create_profile_descr" = "Profilul personalizat pe unul dintre profilurile ale aplicației implicite, acest lucru definește configurarea de bază, cum ar fi vizibilitatea implicită a widgets și unități de viteză și distanță.Acestea sunt profilurile de aplicație implicite, împreună cu exemple de profiluri personalizate pot fi extinse la:";
-"nav_type_ski" = "Schi";
+"routing_profile_ski" = "Schi";
 "distance_indication" = "Indicație distanță";
 "logging_min_accuracy" = "Acuratețe minimă";
 "copy_from_other_profile" = "Copiați din alt profil";
@@ -872,7 +870,7 @@
 "shared_string_continue" = "Continuă";
 "nav_type_geocoding" = "Geocodare";
 "num_stops" = "stații";
-"configure_map_descr" = "Aspect hartă";
+"map_look_descr" = "Aspect hartă";
 "consider_limitations_param" = "Luați în considerare limitările temporare";
 "avoid_road" = "Evită drumul";
 "shared_string_import_complete" = "Importarea s-a finalizat";
@@ -1338,7 +1336,7 @@
 "map_settings_layer_transparency" = "Transparența stratului";
 "map_settings_hillshade" = "Umbra dealului";
 "map_settings_avail_lay" = "Straturi disponibile";
-"map_settings_transp" = "Transparență";
+"shared_string_transparency" = "Transparență";
 "map_settings_offline" = "Stiluri pentru hărți offline";
 "map_settings_install_more" = "Instalați mai mult...";
 "map_settings_install_maps" = "Alegeți hărțile de instalat sau de actualizat";
@@ -1684,7 +1682,7 @@
 "open_url" = "Deschideți pagina în browser";
 "language_short" = "Limba";
 "select_language" = "Selectați limba";
-"res_hillshade" = "Umbra dealului";
+"shared_string_hillshade" = "Umbra dealului";
 "res_installing" = "Instalare…";
 "enter_fav_name" = "Introduceți numele preferat";
 "enter_description" = "Introduceți descrierea";
@@ -2533,7 +2531,7 @@
 "toggle_precipitation" = "Afișați / ascundeți - Strat de precipitații";
 "cloud_show" = "Arată nor";
 "measurement_units" = "Unități de măsură";
-"weather_temp_unit_f" = "Fahrenheit";
+"weather_temperature_fahrenheit" = "Fahrenheit";
 "obf_import_already_exists_short" = "Fișierul cu acest nume există deja.";
 "cloud_no_online_backup" = "Nu aveți încă niciun backup online";
 "cloud_no_online_backup_descr" = "Configurați o copie de rezervă automată, astfel încât să nu trebuie să vă faceți griji cu privire la pierderea datelor.";

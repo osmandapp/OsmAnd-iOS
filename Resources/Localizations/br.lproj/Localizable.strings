@@ -280,7 +280,7 @@
 "nav_type_straight_line" = "Straight line";
 "nav_type_direct_to" = "Direct-to-point";
 "nav_type_brouter" = "BRouter";
-"nav_type_ski" = "Ski";
+"routing_profile_ski" = "Ski";
 "nav_type_geocoding" = "Geocoding";
 "fast_route_mode_descr" = "Enable to calculate fastest route or disable for fuel-saving route";
 "avoid_in_routing_title" = "Avoid…";
@@ -636,7 +636,6 @@
 "my_favorites" = "My Favorites";
 "my_places" = "My Places";
 "fav_no_group" = "No group";
-"fav_add_group" = "Add a group";
 "fav_add_new_group" = "Add new group";
 "select_group_descr" = "Select group or add a new one";
 "available_groups" = "Available groups";
@@ -810,7 +809,7 @@
 "map_settings_install_more" = "Install more...";
 "map_settings_offline" = "Styles for offline maps";
 "map_settings_online" = "Online maps";
-"map_settings_transp" = "Transparency";
+"shared_string_transparency" = "Transparency";
 "map_settings_base_transp" = "Base map transparency";
 "map_settings_avail_lay" = "Available layers";
 "map_settings_hillshade" = "Hillshade";
@@ -861,7 +860,7 @@
 "screen_settings_weather_toolbar" = "Weather toolbar";
 
 "settings_app_theme" = "Application theme";
-"app_theme_light" = "Light";
+"light_theme" = "Light";
 "do_not_rotate" = "Do not rotate";
 "allow_3D_view" = "2.5D view";
 "units_of_speed" = "Units of speed";
@@ -1401,7 +1400,7 @@
 "shared_string_added" = "Added";
 "osn_bug_name" = "OSM Note";
 "osm_created" = "Created";
-"osm_deleted" = "Deleted";
+"poi_remove_success" = "Deleted";
 "osm_modified" = "Modified";
 "osm_reopened" = "Reopened";
 "osm_name" = "OpenStreetMap username";
@@ -1423,7 +1422,7 @@
 "osm_add_place" = "Add place";
 "osm_modify_place" = "Modify place";
 "osm_poi_delete_title" = "Delete POI";
-"osm_target_modified" = "Modified OSM POI";
+"osm_edit_modified_poi" = "Modified OSM POI";
 "osm_target_deleted" = "Deleted OSM POI";
 "osm_target_created" = "Created OSM POI";
 "osm_note_created" = "Created OSM Note";
@@ -1515,7 +1514,7 @@
 "unsupported_items" = "Unsupported items";
 "create_items" = "Create items";
 "configure_map" = "Configure map";
-"configure_map_descr" = "Map appearance";
+"map_look_descr" = "Map appearance";
 "add_map_marker" = "Add map marker";
 "select_map_marker" = "Select map marker";
 "add_gpx_waypoint" = "Add GPX waypoint";
@@ -1789,7 +1788,6 @@
 "pink" = "Pink";
 "translucent_red" = "Translucent red";
 "translucent_orange" = "Translucent orange";
-"translucent_lightblue" = "Translucent light blue";
 "translucent_blue" = "Translucent blue";
 "translucent_purple" = "Translucent purple";
 "translucent_pink" = "Translucent pink";
@@ -1902,7 +1900,7 @@
 "available_languages" = "Available languages";
 "preferred_languages" = "Preferred languages";
 
-"product_title_srtm" = "Contour lines";
+"download_srtm_maps" = "Contour lines";
 "product_desc_srtm" = "Visual assessment of the shape of the land surface";
 "product_desc_ext_srtm" = "Terrain information, such as contour lines, hillshades and slopes, helps you visually assess the shape of the land surface, considering curvature, extremes, steepness, points of equal height, and more. Topographic information on a map can be represented by slope shading, contour lines for the uphill and downhill, and the colour of the slope angle deviation from flat. Data from SRTM and ASTER. \n\nHow to - https://osmand.net/docs/user/plugins/contour-lines";
 
@@ -1939,7 +1937,7 @@
 "res_roads" = "Roads";
 "res_srtm" = "Contour lines";
 "res_wiki" = "Wikipedia";
-"res_hillshade" = "Hillshade";
+"shared_string_hillshade" = "Hillshade";
 "res_slope" = "Slope";
 "res_standard" = "Standard map";
 
@@ -2057,7 +2055,7 @@
 "measurement_units" = "Measurement units";
 
 "weather_temp_unit_c" = "Celsius";
-"weather_temp_unit_f" = "Fahrenheit";
+"weather_temperature_fahrenheit" = "Fahrenheit";
 
 "weather_pressure_unit_hpa" = "Hectopascals";
 "weather_pressure_unit_mmhg" = "Millimeters of mercury";
@@ -2089,7 +2087,7 @@
 
 "no_internet_avail" = "No internet available";
 "no_internet_avail_desc_first" = "Please turn on internet connection to download list of maps";
-"show_region_on_map_title" = "Map downloaded";
+"map_downloaded" = "Map downloaded";
 "show_region_on_map_desc" = "Map of %@ has been downloaded. Go to the map to start using it.";
 "show_region_on_map_go" = "Go to the map";
 

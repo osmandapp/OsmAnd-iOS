@@ -229,7 +229,7 @@
 "map_mode" = "Korttilstand";
 "map_settings_over" = "Overlejret";
 "map_settings_offline" = "Stil for offline kort";
-"map_settings_transp" = "Gennemsigtighed";
+"shared_string_transparency" = "Gennemsigtighed";
 // Intro
 "intro_skip" = "Spring over";
 "intro_promo" = "Globale offline kort";
@@ -315,7 +315,7 @@
 "res_installing" = "Installation…";
 "product_title_wiki" = "Wikipedia";
 "product_desc_wiki" = "Placeringsbaserede Wikipedia-artikler på kortet";
-"product_title_srtm" = "Højdekurver";
+"download_srtm_maps" = "Højdekurver";
 "product_desc_srtm" = "Visuel bedømmelse af terrænets form";
 "res_roads" = "Veje";
 "res_srtm" = "Højdekurver";
@@ -334,7 +334,7 @@
 "you_searching" = "Du søger";
 "from_location" = "bort fra";
 "show_alt_in_drive" = "Vis højde i køretilstand";
-"res_hillshade" = "Terrænskygge";
+"shared_string_hillshade" = "Terrænskygge";
 "purchase_get" = "Hent";
 "srtm_disabled" = "Højdekurver er deaktiveret";
 "prch_wiki_info" = "Wikipedia modul tilføjer oplysninger fra Wikipedia for kort, som er købt eller hentet inden for den gratis grænse.";
@@ -405,7 +405,7 @@
 "no_statistics" = "Ingen statistikker";
 "no_internet_avail" = "Internet ikke tilgængeligt";
 "no_internet_avail_desc_first" = "Aktiver internetforbindelse for at hente listen over kort";
-"show_region_on_map_title" = "Kort hentet";
+"map_downloaded" = "Kort hentet";
 "show_region_on_map_desc" = "Kort over %@ er hentet. Gå til kortet for at begynde at bruge det.";
 "show_region_on_map_go" = "Gå til kortet";
 "map_settings_hillshade" = "Terrænskygge";
@@ -898,7 +898,6 @@
 "blue" = "Blå";
 "pink" = "Lyserød";
 "translucent_orange" = "Gennemsigtigt orange";
-"translucent_lightblue" = "Gennemsigtig lyseblå";
 "translucent_blue" = "Gennemsigtig blå";
 "translucent_purple" = "Gennemsigtig lilla";
 "translucent_pink" = "Gennemsigtig lyserød";
@@ -921,7 +920,7 @@
 "loading_poi_obj" = "Indlæser interessepunkt…";
 "osn_bug_name" = "OSM-note";
 "osm_created" = "Oprettet";
-"osm_deleted" = "Slettet";
+"poi_remove_success" = "Slettet";
 "osm_modified" = "Ændret";
 "osm_reopened" = "Genåbnet";
 "osm_name" = "OpenStreetMap brugernavn";
@@ -943,7 +942,7 @@
 "osm_add_place" = "Tilføj sted";
 "osm_modify_place" = "Ændre sted";
 "osm_poi_delete_title" = "Slet interessepunkt";
-"osm_target_modified" = "Ændret OSM IP";
+"osm_edit_modified_poi" = "Ændret OSM IP";
 "osm_target_deleted" = "Slettet OSM IP";
 "osm_target_created" = "Oprettede OSM IP";
 "osm_confirm_delete" = "Slet interessepunkt?";
@@ -1156,7 +1155,6 @@
 "quick_action_name_str" = "Genvejsnavn";
 "quick_action_name_alert" = "Navnet på genvej ændret til %@ for at undgå dubletter.";
 "quick_action_screen_header" = "Skærm %ld";
-"fav_add_group" = "Tilføj en gruppe";
 "group_properties" = "Gruppeegenskaber";
 "add_group" = "Tilføj en gruppe";
 "poi_list" = "IP-liste";
@@ -1748,7 +1746,7 @@
 "email_example_hint" = "bruger@eksempel.com";
 "help_nav_profiles" = "Navigationsprofiler";
 "toggle_public_transport" = "Vis/skjul offentlig transport";
-"configure_map_descr" = "Kortets udseende";
+"map_look_descr" = "Kortets udseende";
 "osm_editing_settings_descr" = "Indstillinger for udvidelsen er globale, og gælder for alle profiler.";
 
 // Menu
@@ -1775,7 +1773,7 @@
 "angular_measurment_units" = "Enhed for vinkelmåling";
 "allow_3D_view" = "2.5D-visning";
 "do_not_rotate" = "Roter ikke";
-"app_theme_light" = "Lyst";
+"light_theme" = "Lyst";
 "settings_app_theme" = "App-tema";
 "online_sources" = "Onlinekilder";
 "select_online_source" = "Vælg kilde";
@@ -1796,7 +1794,7 @@
 "osmand_routing" = "OsmAnd ruteberegning";
 "repeat_after" = "Gentag efter";
 "nav_type_geocoding" = "Geokodning";
-"nav_type_ski" = "Ski";
+"routing_profile_ski" = "Ski";
 "nav_type_brouter" = "BRouter";
 "plugin_settings_reset" = "Nulstil udvidelser-indstillinger til standard";
 "logging_accuracy" = "Lognøjagtighed";
@@ -2376,7 +2374,7 @@
 "backup_and_restore" = "Sikkerhedskopiering og gendannelse";
 "measurement_units" = "Måleenheder";
 "weather_temp_unit_c" = "Celsius";
-"weather_temp_unit_f" = "Fahrenheit";
+"weather_temperature_fahrenheit" = "Fahrenheit";
 "weather_pressure_unit_hpa" = "Hektopascal";
 "weather_pressure_unit_mmhg" = "Millimeter kviksølv";
 "weather_pressure_unit_inhg" = "Tommer kviksølv";

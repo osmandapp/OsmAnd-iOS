@@ -414,7 +414,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
         case EOABackupSyncOperationUpload:
             return OALocalizedString(remoteFile ? @"osm_modified" : @"shared_string_added");
         case EOABackupSyncOperationDelete:
-            return OALocalizedString(@"osm_deleted");
+            return OALocalizedString(@"poi_remove_success");
         default:
             return OALocalizedString(@"osm_modified");
     }

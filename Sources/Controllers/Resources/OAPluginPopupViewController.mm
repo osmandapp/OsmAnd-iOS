@@ -199,7 +199,7 @@ static NSMutableArray *activePopups;
     NSString *okButtonName;
     NSString *cancelButtonName;
     
-    title = OALocalizedString(@"show_region_on_map_title");
+    title = OALocalizedString(@"map_downloaded");
     descText = [NSString stringWithFormat:OALocalizedString(@"show_region_on_map_desc"), region.name];
     cancelButtonName = OALocalizedString(@"shared_string_later");
     okButtonName = OALocalizedString(@"show_region_on_map_go");

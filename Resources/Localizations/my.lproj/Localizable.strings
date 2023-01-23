@@ -364,7 +364,7 @@
 "shared_string_none" = "None";
 "map_settings_offline" = "Styles for offline maps";
 "map_settings_online" = "Online maps";
-"map_settings_transp" = "Transparency";
+"shared_string_transparency" = "Transparency";
 "map_settings_avail_lay" = "Available layers";
 "map_settings_hillshade" = "Hillshade";
 // Intro
@@ -567,7 +567,7 @@
 "product_title_wiki" = "Wikipedia";
 "product_desc_wiki" = "Wikipedia data";
 "product_desc_ext_wiki" = "Get information about points of interest from Wikipedia. It is your pocket offline guide - just enable Wikipedia plugin and enjoy articles about objects around you.";
-"product_title_srtm" = "Contour lines";
+"download_srtm_maps" = "Contour lines";
 "product_desc_srtm" = "Display of contour lines";
 "product_desc_ext_srtm" = "This plugin provides contour lines and hillshade, which can be displayed in OsmAnd offline maps. Contour lines provide the information about heights of the area while hillshade is their visualization. See the names of mountain peaks and specific features of terrain using this plugin.\n\nThe global data (between 70 degrees north and 70 degrees south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA's Earth Observing System. ASTER is a cooperative effort between NASA, Japan's Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
 "my_location" = "My Location";
@@ -585,7 +585,7 @@
 "res_roads" = "Roads";
 "res_srtm" = "Contour lines";
 "res_wiki" = "Wikipedia";
-"res_hillshade" = "Hillshade";
+"shared_string_hillshade" = "Hillshade";
 "select_language" = "Select language";
 "language_short" = "Lang";
 "open_url" = "Open page in browser";
@@ -651,7 +651,7 @@
 "no_statistics" = "No statistics";
 "no_internet_avail" = "No internet available";
 "no_internet_avail_desc_first" = "Please turn on internet connection to download list of maps";
-"show_region_on_map_title" = "Map downloaded";
+"map_downloaded" = "Map downloaded";
 "show_region_on_map_desc" = "Map of %@ has been downloaded. Go to the map to start using it.";
 "show_region_on_map_go" = "Go to the map";
 "sqlitedb_import_title" = "Import Map Creator file";
@@ -769,7 +769,7 @@
 "get_discount_second_part" = "ပြီးရင် %@";
 "route_parameters" = "လမ်းကြောင်း parameters များ";
 "osm_edit_without_name" = "နာမည်မရှိဘဲ";
-"osm_deleted" = "ဖျက်လိုက်သည်";
+"poi_remove_success" = "ဖျက်လိုက်သည်";
 "purchase_unlim_title" = "၀ယ်ပါ - %@";
 "prev_route" = "ယခင်လမ်းကြောင်း";
 "coordinates_example" = "ဥပမာ";
@@ -777,7 +777,6 @@
 "work_pt" = "အလုပ်";
 "osm_live_payment_month_cost_descr" = "%@ /လ";
 "osm_live_cancel_subscription" = "ကြေးပေးသွင်းမှုကိုပယ်ဖျက်ပါ";
-"fav_add_group" = "အဖွဲ့တစ်ဖွဲ့ထည့်ပါ";
 "rendering_attr_surface_metal_name" = "သံ";
 "routing_attr_driving_style_speed_name" = "လမ်းကြောင်းတိုများ";
 "rendering_attr_piste_difficulty_expert_name" = "ဝါရင့်";
@@ -881,13 +880,13 @@
 "nav_type_straight_line" = "လမ်းဖြောင့်";
 "profile_type_base_string" = "အခြေခံပရိုဖိုင်း";
 "profile_alert_delete_title" = "ပရိုဖိုင်းကိုဖျက်မည်";
-"nav_type_ski" = "နှင်းလျှောစီး";
+"routing_profile_ski" = "နှင်းလျှောစီး";
 "new_profile" = "ပရိုဖိုင်းအသစ်";
 "osmand_routing" = "Osmandလမ်းကြောင်း";
 "enter_profile_name" = "ပရိုဖိုင်းအမည်ရိုက်ထည့်ပါ";
 "app_profiles" = "အက်ပလီကေးရှင်းပရိုဖိုင်းများ";
 "total" = "စုစုပေါင်း";
-"configure_map_descr" = "မြေပုံမျက်နှာပြင်";
+"map_look_descr" = "မြေပုံမျက်နှာပြင်";
 
 "coordinates_widget" = "Coordinatesဝစ်ဂျက်";
 "osmand_settings" = "OsmAအပြင်အဆင်များ";

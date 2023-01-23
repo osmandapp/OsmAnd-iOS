@@ -399,7 +399,7 @@
 "shared_string_none" = "Žádná";
 "map_settings_offline" = "Styly pro offline mapy";
 "map_settings_online" = "On-line mapy";
-"map_settings_transp" = "Průhlednost";
+"shared_string_transparency" = "Průhlednost";
 "map_settings_avail_lay" = "Dostupné vrstvy";
 "map_settings_hillshade" = "Stínování svahů";
 // Intro
@@ -602,7 +602,7 @@
 "product_title_wiki" = "Wikipedie";
 "product_desc_wiki" = "Umístění článků Wikipedie na mapě";
 "product_desc_ext_wiki" = "Offline Wikipedie na cestách vám pomůže dozvědět se více o navštívených místech. Je dostupná offline a zobrazuje články Wikipedie v souvislosti s místy zájmu přímo na mapě. Nezapomeňte si stáhnout mapy Wikipedie pro vybraný region.";
-"product_title_srtm" = "Vrstevnice";
+"download_srtm_maps" = "Vrstevnice";
 "product_desc_srtm" = "Vizuální posouzení tvaru povrchu země";
 "product_desc_ext_srtm" = "Informace o terénu, jako jsou vrstevnice, stínování kopců a sklony, vám pomohou vizuálně posoudit tvar povrchu pozemku s ohledem na zakřivení, extrémy, strmost, body stejné výšky a další. Topografické informace na mapě mohou být reprezentovány stínováním sklonu, vrstevnicemi pro stoupání a klesání a barvou sklonu svahu od roviny. Data ze SRTM a ASTER. \n\nJak na to - https://osmand.net/docs/user/plugins/contour-lines";
 "my_location" = "Moje poloha";
@@ -620,7 +620,7 @@
 "res_roads" = "Cesty";
 "res_srtm" = "Vrstevnice";
 "res_wiki" = "Wikipedie";
-"res_hillshade" = "Stínování svahů";
+"shared_string_hillshade" = "Stínování svahů";
 "select_language" = "Zvolte jazyk";
 "language_short" = "Lang";
 "open_url" = "Open page in browser";
@@ -686,7 +686,7 @@
 "no_statistics" = "Žádné statistiky";
 "no_internet_avail" = "Internet není k dispozici";
 "no_internet_avail_desc_first" = "Pro stažení seznamu map se prosím připojte k internetu";
-"show_region_on_map_title" = "Mapa stažena";
+"map_downloaded" = "Mapa stažena";
 "show_region_on_map_desc" = "Mapa %@ byla stažena. Přejděte na mapu a začněte ji používat.";
 "show_region_on_map_go" = "Přejít na mapu";
 "sqlitedb_import_title" = "Importovat soubor rastrové mapy";
@@ -930,7 +930,6 @@
 "select_map_marker" = "Vyberte mapovou značku";
 "osm_website" = "Webová stránka";
 "translucent_green" = "Průsvitná zelená";
-"fav_add_group" = "Přidat skupinu";
 "change_map_underlay" = "Změna mapy podkladu";
 "quick_action_no_underlay" = "Bez podkladové vrstvy";
 "modify_edit_short" = "Upravit změnu OSM";
@@ -940,7 +939,6 @@
 "region_nautical" = "Námořní mapy";
 "route_parameters" = "Parametry trasy";
 "quick_action_no_overlay" = "Bez překryvné vrstvy";
-"translucent_lightblue" = "Průsvitná světlemodrá";
 "tile_cache" = "Vyrovnávací paměť dlaždic";
 "mapillary" = "Mapillary";
 "mapil_add_photos" = "Přidat fotografie";
@@ -1017,7 +1015,7 @@
 "quick_action_pause_nav_descr" = "Stiskněte toto tlačítko na pozastavení, nebo pokračování navigace.";
 "osm_close_changeset" = "Zavřít změny";
 "quick_action_add_underlay" = "Přidat podklad";
-"osm_deleted" = "Smazáno";
+"poi_remove_success" = "Smazáno";
 "map_styles" = "Styly mapy";
 "osm_alert_message" = "Zpráva";
 "shared_string_retry" = "Zkusit znovu";
@@ -1035,7 +1033,7 @@
 "create_poi_short" = "Vytvořit POI";
 "map_overlays" = "Překryvy mapy";
 "work_pt" = "Práce";
-"osm_target_modified" = "Upravený OSM POI";
+"osm_edit_modified_poi" = "Upravený OSM POI";
 "orange" = "Oranžová";
 "day_mode" = "Denní režim";
 "key_hint_select" = "Vybrat";
@@ -1431,7 +1429,7 @@
 "amenity" = "Občanská vybavenost";
 "shared_string_account" = "Účet";
 "hide_contour_lines" = "Skrýt vrstevnice";
-"configure_map_descr" = "Vzhled mapy";
+"map_look_descr" = "Vzhled mapy";
 "nav_type_geocoding" = "Geokódování";
 "profile_alert_delete_title" = "Odstranit profil";
 "num_stops" = "zastávky";
@@ -1473,7 +1471,7 @@
 "select_icon" = "Zvolit ikonu";
 "announce" = "Oznámení";
 "public_transport_menu" = "Doprava";
-"app_theme_light" = "Světlý";
+"light_theme" = "Světlý";
 "shared_string_add_profile" = "Přidat profil";
 "shared_string_password" = "Heslo";
 "osm_notes" = "OSM poznámky";
@@ -1541,7 +1539,7 @@
 "product_title_antarctica" = "Antarktida";
 "walk" = "Chůze";
 "shared_string_exit" = "Konec";
-"nav_type_ski" = "Lyžování";
+"routing_profile_ski" = "Lyžování";
 "osm_note_close" = "Zavřít OSM poznámku";
 "res_slope" = "Svah";
 "base_profile_descr_pedestrian" = "Chůze, turistika, běh";
@@ -2602,7 +2600,7 @@
 "backup_delete_all_data_or_versions_descr" = "Smazat všechna data v OsmAnd Cloud nebo pouze historii verzí. Místní data zůstanou nedotčena.";
 "backup_delete_all_data" = "Smazat všechna moje data";
 "show_borders_of_downloaded_maps" = "Zobrazit hranice stažených map";
-"weather_temp_unit_f" = "stupnice Fahrenheit";
+"weather_temperature_fahrenheit" = "stupnice Fahrenheit";
 "verification" = "Ověřování";
 "verification_code_placeholder" = "Kód";
 "expires" = "Platnost končí";

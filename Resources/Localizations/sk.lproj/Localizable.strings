@@ -86,7 +86,7 @@
 "shared_string_none" = "Žiadne";
 "map_settings_offline" = "Štýly pre offline mapy";
 "map_settings_online" = "Online mapy";
-"map_settings_transp" = "Priehľadnosť";
+"shared_string_transparency" = "Priehľadnosť";
 "map_settings_avail_lay" = "Dostupné vrstvy";
 "map_settings_hillshade" = "Tieňované svahy";
 // Intro
@@ -125,7 +125,7 @@
 "no_statistics" = "Žiadne štatistiky";
 "no_internet_avail" = "Internet nie je k dispozícii";
 "no_internet_avail_desc_first" = "Pre stiahnutie zoznamu máp prosím zapnite pripojenie k Internetu";
-"show_region_on_map_title" = "Mapa stiahnutá";
+"map_downloaded" = "Mapa stiahnutá";
 "show_region_on_map_desc" = "Mapa %@ bola stiahnutá. Prejdite na mapu a začnite ju používať.";
 "show_region_on_map_go" = "Prejsť na mapu";
 "sqlitedb_import_title" = "Importovať súbor rastrovej mapy";
@@ -337,7 +337,7 @@
 "product_desc_asia" = "Neobmedzené sťahovania máp Ázie";
 "product_title_wiki" = "Wikipédia";
 "product_desc_wiki" = "Údaje Wikipédie";
-"product_title_srtm" = "Údaje vrstevníc";
+"download_srtm_maps" = "Údaje vrstevníc";
 "product_desc_srtm" = "Zobrazenie vrstevníc";
 "my_location" = "Moja poloha";
 "all_categories" = "Všetky kategórie";
@@ -396,7 +396,7 @@
 "res_roads" = "Cesty";
 "res_srtm" = "Údaje vrstevníc";
 "res_wiki" = "Wikipédia";
-"res_hillshade" = "Tieňované svahy";
+"shared_string_hillshade" = "Tieňované svahy";
 "select_language" = "Zvoľte jazyk";
 "language_short" = "Jazyk";
 "open_url" = "Otvoriť stránku v prehliadači";
@@ -851,7 +851,7 @@
 "osm_delete_confirmation_descr" = "Naozaj chcete odstrániť tento bod záujmu?";
 "osn_bug_name" = "OSM poznámka";
 "osm_created" = "Vytvorená";
-"osm_deleted" = "Odstránené";
+"poi_remove_success" = "Odstránené";
 "osm_modified" = "Zmenená";
 "osm_reopened" = "Znovuotvorená";
 "osm_name" = "Prihlasovacie meno v OpenStreetMap";
@@ -872,7 +872,7 @@
 "osm_add_place" = "Pridať miesto";
 "osm_modify_place" = "Upraviť miesto";
 "osm_poi_delete_title" = "Vymazať POI";
-"osm_target_modified" = "Upravený OSM POI";
+"osm_edit_modified_poi" = "Upravený OSM POI";
 "osm_target_deleted" = "Odstránený OSM POI";
 "osm_target_created" = "Vytvorený OSM POI";
 "osm_note_created" = "Vytvorená OSM poznámka";
@@ -919,7 +919,6 @@
 "orange" = "Oranžová";
 "lightblue" = "Svetlomodrá";
 "translucent_orange" = "Priehľadná oranžová";
-"translucent_lightblue" = "Priehľadná svetlomodrá";
 "translucent_blue" = "Priehľadná modrá";
 "translucent_purple" = "Priehľadná fialová";
 "translucent_pink" = "Priehľadná ružová";
@@ -1112,7 +1111,6 @@
 "download_pending" = "Sťahovanie prebieha";
 "reddit" = "Reddit";
 "configure_map" = "Nastaviť mapu";
-"fav_add_group" = "Pridať skupinu";
 "add_group" = "Pridať skupinu";
 "poi_list" = "Zoznam POI";
 "group_properties" = "Vlastnosti skupiny";
@@ -1608,8 +1606,8 @@
 "save_changes" = "Uložiť zmeny";
 "create_profile_descr" = "Vlastný profil aplikácie založíte na niektorom základnom profile, čo určí predvolené nastavenia ako stav nástrojov, jednotky rýchlosti a vzdialenosti. Toto sú základné profily aplikácie, spolu s príkladmi vlastných profilov na ktoré môžu byť rozšírené:";
 "ui_customization_descr" = "Položky v úvodnom paneli a kontextovom menu";
-"nav_type_ski" = "Lyžovanie";
-"configure_map_descr" = "Zobrazenie mapy";
+"routing_profile_ski" = "Lyžovanie";
+"map_look_descr" = "Zobrazenie mapy";
 "vessel_width_limit_description" = "Nastavte šírku plavidla, aby sa dalo vyhnúť úzkym mostom.";
 "profile_type_user_string" = "Profil používateľa";
 "quick_action_mapillary_hide" = "Skryť Mapillary";
@@ -1656,7 +1654,7 @@
 "update_tile" = "Aktualizovať mapu";
 "shared_string_add_profile" = "Pridať profil";
 "walk" = "Chôdza";
-"app_theme_light" = "Svetlá";
+"light_theme" = "Svetlá";
 "add_point" = "Pridať bod";
 "import_profile_select_descr" = "Zvoľte údaje na importovanie.";
 "quick_action_showhide_mapillary_title" = "Zobraziť/skryť Mapillary";

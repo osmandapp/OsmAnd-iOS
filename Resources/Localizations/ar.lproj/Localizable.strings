@@ -399,7 +399,7 @@
 "shared_string_none" = "بدون";
 "map_settings_offline" = "أنماط للخرائط غير المتصلة";
 "map_settings_online" = "خرائط الإنترنت";
-"map_settings_transp" = "الشفافية";
+"shared_string_transparency" = "الشفافية";
 "map_settings_avail_lay" = "الطبقات المتاحة";
 "map_settings_hillshade" = "التضاريس";
 // Intro
@@ -602,7 +602,7 @@
 "product_title_wiki" = "ويكيبيديا";
 "product_desc_wiki" = "مقالات ويكبيديا على الخريطة";
 "product_desc_ext_wiki" = "وظيفة ويكبيديا هي تزويدك بمعلومات حول نقاط الاهتمام . إنه دليلك غير المتصل بجيبك - ما عليك سوى تمكين الملحق الإضافي ويكبيديا والاستمتاع بمقالات حول المواقع والأشياء من حولك.";
-"product_title_srtm" = "الخطوط الكنتورية";
+"download_srtm_maps" = "الخطوط الكنتورية";
 "product_desc_srtm" = "إظهارالخطوط الكنتورية";
 "product_desc_ext_srtm" = "تساعدك معلومات التضاريس ، مثل الخطوط الكنتورية ، والتضاريس ، والمنحدرات ، على التقييم البصري لشكل سطح الأرض ، مع مراعاة الانحناء ، والحدود القصوى ، والانحدار ، ونقاط الارتفاع المتساوية ، والمزيد. يمكن تمثيل المعلومات الطبوغرافية على الخريطة من خلال تظليل المنحدر ، والخطوط الكنتورية للصعود والهبوط ، ولون انحراف زاوية الانحدار عن المسطح. البيانات من SRTM و ASTER.\n\nكيف - https://osmand.net/docs/user/plugins/contour-lines";
 "my_location" = "موقعي";
@@ -620,7 +620,7 @@
 "res_roads" = "الطرق";
 "res_srtm" = "الخطوط الكنتورية";
 "res_wiki" = "ويكيبيديا";
-"res_hillshade" = "التضاريس";
+"shared_string_hillshade" = "التضاريس";
 "select_language" = "اختيار اللغة";
 "language_short" = "اللغة";
 "open_url" = "افتح الصفحة في المتصفح";
@@ -686,7 +686,7 @@
 "no_statistics" = "لا توجد إحصائيات";
 "no_internet_avail" = "لا تتوفر خدمه الإنترنت";
 "no_internet_avail_desc_first" = "يرجى تشغيل اتصال الإنترنت لتنزيل قائمة الخرائط";
-"show_region_on_map_title" = "تم تحميل الخريطة";
+"map_downloaded" = "تم تحميل الخريطة";
 "show_region_on_map_desc" = "الخريطة من%@ . تم تنزلها انتقل للخرائط للبدء في استخدامها.";
 "show_region_on_map_go" = "الانتقال إلى الخريطة";
 "sqlitedb_import_title" = "استيراد ملف خريطة نقطية";
@@ -926,7 +926,6 @@
 "blue" = "أزرق";
 "pink" = "وردي";
 "translucent_orange" = "برتقالي فاتح";
-"translucent_lightblue" = "سماوي";
 "translucent_blue" = "أزرق فاتح";
 "translucent_purple" = "بنفسجي فاتح";
 "translucent_pink" = "وردي فاتح";
@@ -948,7 +947,7 @@
 "loading_poi_obj" = "تحميل POI…";
 "osn_bug_name" = "ملاحظة OSM";
 "osm_created" = "تم إنشاءة";
-"osm_deleted" = "حذف";
+"poi_remove_success" = "حذف";
 "osm_modified" = "تم التعديل";
 "osm_reopened" = "إعادة فتح";
 "osm_name" = "اسم مستخدم خريطة الشارع المفتوح";
@@ -969,7 +968,7 @@
 "osm_add_place" = "أضف مكان";
 "osm_modify_place" = "تعديل المكان";
 "osm_poi_delete_title" = "حذف POI";
-"osm_target_modified" = "OSM POIمعدل";
+"osm_edit_modified_poi" = "OSM POIمعدل";
 "osm_target_deleted" = "حذف OSM POI";
 "osm_target_created" = "إنشاء OSM POI";
 "osm_confirm_delete" = "حذف POI؟";
@@ -1152,7 +1151,6 @@
 "quick_action_name_str" = "اسم الإجراء";
 "quick_action_name_alert" = "تم تغيير اسم الاختصار السريع إلى٪ @ لتجنب التكرار.";
 "quick_action_screen_header" = "الشاشة %ld";
-"fav_add_group" = "إضافة مجموعة";
 "group_properties" = "خصائص المجموعة";
 "add_group" = "إضافة مجموعة";
 "poi_list" = "قائمة POI";
@@ -1756,7 +1754,7 @@
 "units_of_speed" = "وحدات السرعة";
 "allow_3D_view" = "عرض 3D";
 "do_not_rotate" = "عدم تدوير";
-"app_theme_light" = "نهاري";
+"light_theme" = "نهاري";
 "settings_app_theme" = "نمط الخريطة";
 "shared_string_meters" = "أمتار";
 "tones" = "نغمات";
@@ -1771,7 +1769,7 @@
 "special_routing" = "توجيه خاص";
 "choose_auto_center_map_view_descr" = "إعادة توسيط الموقع الحالي بعد مدة معينه";
 "nav_type_geocoding" = "الترميز الجغرافي";
-"nav_type_ski" = "تزلج";
+"routing_profile_ski" = "تزلج";
 "nav_type_brouter" = "التوجيه عبر BRouter";
 "voice_announces" = "المطالبات الصوتية";
 "max_speed" = "السرعة القصوى";
@@ -1796,7 +1794,7 @@
 "height_limit_description" = "أدل بارتفاع مركبتك ،قد يتم تطبيق بعض القيود على المركبات المرتفعة.";
 "weight_limit_description" = "أدل بوزن مركبتك ،قد يتم تطبيق بعض القيود على المركبات الثقيلة.";
 "export_profile" = "تصدير";
-"configure_map_descr" = "مظهر الخريطة";
+"map_look_descr" = "مظهر الخريطة";
 "export_profile_descr" = "لاستيراد ملف تعريف ، انقر فوق الملف المطلوب (* .osf) في أي تطبيق وحدد نسخ إلى أوسماند.";
 "profile_sett_descr" = "تؤثر على ملف التعريف المحدد";
 "app_profiles" = "أوضاع التطبيق";
@@ -2423,7 +2421,7 @@
 "precipitation_hide" = "إخفاء هطول الأمطار";
 "product_desc_weather" = "توقعات الطقس على مدار 24 ساعة و 7 أيام توقعات كل 3 ساعات";
 "weather_temp_unit_c" = "درجة مئوية";
-"weather_temp_unit_f" = "فهرنهايت";
+"weather_temperature_fahrenheit" = "فهرنهايت";
 "weather_pressure_unit_hpa" = "هيكتوباسكال";
 "weather_pressure_unit_mmhg" = "ملليمتر زئبقي";
 "weather_pressure_unit_inhg" = "بوصة من الزئبق";

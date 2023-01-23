@@ -127,7 +127,7 @@
 "shared_string_none" = "Ekkert";
 "map_settings_offline" = "Stíll ónettengdra korta";
 "map_settings_online" = "Nettengd kort";
-"map_settings_transp" = "Gegnsæi";
+"shared_string_transparency" = "Gegnsæi";
 "map_settings_avail_lay" = "Tiltæk lög";
 "map_settings_hillshade" = "Hæðaskygging";
 // Intro
@@ -330,7 +330,7 @@
 "product_title_wiki" = "Wikipedia";
 "product_desc_wiki" = "Staðsetningarháðar Wikipediu-greinar á landakortinu";
 "product_desc_ext_wiki" = "Það að hafa Wikipediu með á ferðalögum hjálpar þér að vita meira um staðina sem þú heimsækir. Hægt er að nota hana án nettengingar og birta greinar um áhugaverða staði beint á landakortinu. Ekki gleyma að sækja Wikipedia-kort fyrir svæðin sem þú hefur áhuga á.";
-"product_title_srtm" = "Hæðarlínur";
+"download_srtm_maps" = "Hæðarlínur";
 "product_desc_srtm" = "Sjónrænt mat á lögun yfirborðs landsins";
 "product_desc_ext_srtm" = "Yfirborðsupplýsingar, eins og hæðarlínur, hæðaskygging (relief hillshade) og brekkur, sem birtast ofan á staðalkortum OsmAnd, hjálpa við að meta landslag út frá atriðum á borð við sléttleika, hættur, halla, hæðarmismun og fleira. Yfirborðsupplýsingar á korti er hægt að túlka með skyggingum fyrir halla, hæðarlínum og litstiglum fyrir nismunandi frávik frá flötu landi. Gögnin koma frá SRTM (Shuttle Radar Topography Mission) og ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer).\n\nLeiðbeiningar - https://osmand.net/docs/user/plugins/contour-lines";
 "my_location" = "Staðsetning mín";
@@ -348,7 +348,7 @@
 "res_roads" = "Vegir";
 "res_srtm" = "Hæðarlínur";
 "res_wiki" = "Wikipedia";
-"res_hillshade" = "Hæðaskygging";
+"shared_string_hillshade" = "Hæðaskygging";
 "select_language" = "Veldu tungumál";
 "language_short" = "Tungumál";
 "open_url" = "Opna síðu í vafra";
@@ -414,7 +414,7 @@
 "no_statistics" = "Engin tölfræði";
 "no_internet_avail" = "Engin internettenging tiltæk";
 "no_internet_avail_desc_first" = "Kveiktu á internettengingunni til að sækja lista yfir kort";
-"show_region_on_map_title" = "Búið að ná í kort";
+"map_downloaded" = "Búið að ná í kort";
 "show_region_on_map_desc" = "Kort af %@ hefur verið sótt, þú getur núna byrjað að nota það.";
 "show_region_on_map_go" = "Fara á landakortið";
 "sqlitedb_import_title" = "Flytja inn rastakortaskrá";
@@ -896,7 +896,6 @@
 "blue" = "Blátt";
 "pink" = "Bleikt";
 "translucent_orange" = "Hálfgegnsætt appelsínugult";
-"translucent_lightblue" = "Hálfgegnsætt ljósblátt";
 "translucent_blue" = "Hálfgegnsætt blátt";
 "translucent_purple" = "Hálfgegnsætt fjólublátt";
 "translucent_pink" = "Hálfgegnsætt bleikt";
@@ -918,7 +917,7 @@
 "loading_poi_obj" = "Hleð inn merkisstöðum…";
 "osn_bug_name" = "OSM-minnispunktur";
 "osm_created" = "Búið til þann";
-"osm_deleted" = "Eytt";
+"poi_remove_success" = "Eytt";
 "osm_modified" = "Breytt";
 "osm_reopened" = "Enduropnað";
 "osm_name" = "Notandanafn á OpenStreetMap";
@@ -940,7 +939,7 @@
 "osm_add_place" = "Bæta við stað";
 "osm_modify_place" = "Breyta stað";
 "osm_poi_delete_title" = "Eyða merkisstað";
-"osm_target_modified" = "Breyttur OSM-merkisstaður";
+"osm_edit_modified_poi" = "Breyttur OSM-merkisstaður";
 "osm_target_deleted" = "Eyddi OSM-merkisstað";
 "osm_target_created" = "Bjó til OSM-merkisstað";
 "osm_confirm_delete" = "Eyða merkisstað?";
@@ -1153,7 +1152,6 @@
 "quick_action_name_str" = "Heiti aðgerðar";
 "quick_action_name_alert" = "Nafni á flýtiaðgerð var breytt í %@ til að koma í veg fyrir tvítekningu.";
 "quick_action_screen_header" = "Skjár %ld";
-"fav_add_group" = "Bæta við hópi";
 "group_properties" = "Eiginleikar hóps";
 "add_group" = "Bæta við hópi";
 "poi_list" = "Listi yfir merkisstaði";
@@ -1741,7 +1739,7 @@
 "profile_type_base_string" = "Grunnsnið";
 "shared_string_meters" = "metrar";
 "profile_appearance" = "Útlit sniðs";
-"nav_type_ski" = "Skíði";
+"routing_profile_ski" = "Skíði";
 "shared_string_account_add" = "Bæta við notandaaðgangi";
 "public_transport_show" = "Birta almenningssamgöngur";
 "public_transport_hide" = "Fela almenningssamgöngur";
@@ -1791,7 +1789,7 @@
 "export_profile" = "Flytja út";
 "default_speed_descr" = "Notað til að áætla komutíma á óþekktum gerðum vega og til takmörkunar á hraða á öllum vegum (gæti breytt leiðarvali)";
 "base_profile_descr_pedestrian" = "Ganga, hlaup";
-"app_theme_light" = "Ljóst";
+"light_theme" = "Ljóst";
 "speed_limit_tolerance_descr" = "Veldu þolvik hraðatakmarkana, ef þú ert þetta mikið fyrir ofan verður lesin aðvörun.";
 "recalculate_route" = "Endurreikna leið ef farið er út af fyrirfram gefinni leið";
 "base_profile_descr_public_transport" = "Tegundir almenningssamgangna";
@@ -1809,7 +1807,7 @@
 "send_anonymous_data" = "Senda nafnlaus gögn";
 "map_during_navigation" = "Skrá á meðan leiðsögn stendur";
 "vehicle_parameters" = "Breytur varðandi farartæki";
-"configure_map_descr" = "Útlit landakorts";
+"map_look_descr" = "Útlit landakorts";
 "number_of_tiles" = "Fjöldi flísa";
 "app_profiles" = "Forritssnið";
 "weight_limit_description" = "Settu innþyngd farartækisins, takmarkanir geta verið á sumum leiðum varðandi þyngd farartækja.";
@@ -2395,7 +2393,7 @@
 "rendering_attr_lightRailRoutes_name" = "Leiðir léttlesta";
 "verification_code_missing" = "Ég fékk ekki neinn sannvottunarkóða";
 "weather_temp_unit_c" = "Selsíus";
-"weather_temp_unit_f" = "Fahrenheit";
+"weather_temperature_fahrenheit" = "Fahrenheit";
 "weather_pressure_unit_hpa" = "Hektópasköl";
 "weather_pressure_unit_mmhg" = "Millímetrar kvikasilfurs";
 "weather_pressure_unit_inhg" = "Tommur kvikasilfurs";

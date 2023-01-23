@@ -170,14 +170,14 @@
 
     if (deleteOperation && _recentChangesType == EOARecentChangesLocal)
     {
-        [itemInfoRow setDescr:OALocalizedString(@"osm_deleted")];
+        [itemInfoRow setDescr:OALocalizedString(@"poi_remove_success")];
     }
     else if (self.delegate)
     {
         long timeMs = _recentChangesType == EOARecentChangesLocal || _recentChangesType == EOARecentChangesConflicts
             ? _localFile.localModifiedTime * 1000
             : _recentChangesType == EOARecentChangesRemote && deleteOperation ? _localFile.uploadTime : _remoteFile.updatetimems;
-        NSString *summary = OALocalizedString(deleteOperation && _recentChangesType != EOARecentChangesLocal ? @"osm_deleted" : @"osm_modified");
+        NSString *summary = OALocalizedString(deleteOperation && _recentChangesType != EOARecentChangesLocal ? @"poi_remove_success" : @"osm_modified");
         [itemInfoRow setDescr:[self.delegate generateTimeString:timeMs summary:summary]];
     }
 
@@ -268,7 +268,7 @@
             else
             {
                 description = [self.delegate generateTimeString:_localFile.uploadTime
-                                                        summary:OALocalizedString(@"osm_deleted")];
+                                                        summary:OALocalizedString(@"poi_remove_success")];
             }
         }
         else if (!_remoteFile)

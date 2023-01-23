@@ -121,7 +121,7 @@
 "shared_string_none" = "Perunu";
 "map_settings_offline" = "Istiles pro sas mapas non in lìnia";
 "map_settings_online" = "Mapas in lìnia";
-"map_settings_transp" = "Trasparèntzia";
+"shared_string_transparency" = "Trasparèntzia";
 "map_settings_avail_lay" = "Livellos disponìbiles";
 // Intro
 "intro_skip" = "Brinca";
@@ -312,7 +312,7 @@
 "product_desc_asia" = "Iscarrigamentos de mapas illimitados pro s’Àsia";
 "product_title_wiki" = "Wikipedia";
 "product_desc_wiki" = "Artìculos de Wikipedia in sa mapa basados subra de sa positzione";
-"product_title_srtm" = "Curvas de livellu";
+"download_srtm_maps" = "Curvas de livellu";
 "product_desc_srtm" = "Valutatzione cun sa vista de sa forma de sa superfìtzie de su terrinu";
 "my_location" = "Positzione mea";
 "all_categories" = "Totu sas categorias";
@@ -328,7 +328,7 @@
 "res_roads" = "Caminos";
 "res_srtm" = "Curvas de livellu";
 "res_wiki" = "Wikipedia";
-"res_hillshade" = "Umbraduras de sos rilievos";
+"shared_string_hillshade" = "Umbraduras de sos rilievos";
 "select_language" = "Ischerta sa limba";
 "language_short" = "Limba";
 "open_url" = "Aberi sa pàgina in unu navigadore (browser)";
@@ -399,7 +399,7 @@
 "no_statistics" = "No istatìsticas";
 "no_internet_avail" = "Ìnternet non disponìbile";
 "no_internet_avail_desc_first" = "Pro piaghere allue sa cunnessione ìnternet pro iscarrigare sa lista de sas mapas";
-"show_region_on_map_title" = "Mapa iscarrigada";
+"map_downloaded" = "Mapa iscarrigada";
 "show_region_on_map_desc" = "Sa mapa %@ est istada iscarrigada. Bae a sa mapa pro incumentzare a l’impreare.";
 "show_region_on_map_go" = "Bae a sa mapa";
 "sqlitedb_import_title" = "Importa su documentu de sa mapa raster";
@@ -898,7 +898,6 @@
 "blue" = "Biaitu";
 "pink" = "Rosa";
 "translucent_orange" = "Arantzu translùcidu";
-"translucent_lightblue" = "Biaitu craru translùcidu";
 "translucent_blue" = "Biaitu translùcidu";
 "translucent_purple" = "Pùrpura translùcidu";
 "translucent_pink" = "Rosa translùtzidu";
@@ -926,7 +925,7 @@
 "osm_phone" = "Telèfonu";
 "osm_website" = "Situ web";
 "osm_poi_delete_title" = "Iscantzella PDI";
-"osm_target_modified" = "PDI OSM modificadu";
+"osm_edit_modified_poi" = "PDI OSM modificadu";
 "osm_target_deleted" = "PDI OSM iscantzelladu";
 "osm_target_created" = "PDI de OSM creadu";
 "osm_close_changeset" = "Serra sas modìficas";
@@ -948,7 +947,7 @@
 "osm_editing_lost_changes_descr" = "Totu sas modìficas non sarvadas s’ant a pèrdere. Sighire?";
 "osm_delete_confirmation_descr" = "Ses seguru de chèrrere iscantzellare custu PDI?";
 "osm_created" = "Creadu";
-"osm_deleted" = "Iscantzelladu";
+"poi_remove_success" = "Iscantzelladu";
 "osm_modified" = "Modificadu";
 "osm_reopened" = "Torradu a abèrrere";
 "osm_name" = "Nùmene impreadore de OpenStreetMap";
@@ -1155,7 +1154,6 @@
 "toggle_day_night" = "Cola intre Die/Note";
 "show_hide_gpx" = "Ammustra/cua sas rastas";
 "quick_action_name_alert" = "Su nùmene de s'atzione lestra est istadu cambiadu in %@ pro non tènnere duplicados.";
-"fav_add_group" = "Annanghe unu grupu";
 "group_properties" = "Propriedades de su grupu";
 "add_group" = "Annanghe unu grupu";
 "poi_list" = "Lista de PDI";
@@ -1766,7 +1764,7 @@
 "units_of_speed" = "Unidades de lestresa";
 "allow_3D_view" = "Vista 2.5D";
 "do_not_rotate" = "Non rodes";
-"app_theme_light" = "Craru";
+"light_theme" = "Craru";
 "settings_app_theme" = "Tema de s'aplicatzione";
 "shared_string_meters" = "metros";
 "tones" = "sonerias";
@@ -1780,7 +1778,7 @@
 "special_routing" = "Càrculu de s\'àndala ispetziale";
 "choose_auto_center_map_view_descr" = "Issèbera s’intervallu de tempus pro sa sincronizatzione de sa bisura de sa mapa cun sa positzione atuale a pustis de su movimentu";
 "nav_type_geocoding" = "Geocodìfica";
-"nav_type_ski" = "Iscì";
+"routing_profile_ski" = "Iscì";
 "nav_type_brouter" = "BRouter";
 "voice_prompts" = "Indicatziones vocales";
 "default_speed_setting_title" = "Letresa predefinida";
@@ -1802,7 +1800,7 @@
 "lenght_limit_description" = "Inserta sa longària de su veìculu tuo. Bi diant pòdere èssere unas cantas restritziones de sas àndalas pro sos veìculos longos.";
 "weight_limit_description" = "Inserta su pesu de su veìculu tuo, ca unas cantas restritziones si diat pòdere aplicare pro veìculos pesantes ebbia.";
 "export_profile" = "Esporta";
-"configure_map_descr" = "Aparèntzia de sa mapa";
+"map_look_descr" = "Aparèntzia de sa mapa";
 "export_profile_descr" = "Podes esportare totu sas impostatziones de unu profilu, copiare totu sas impostatziones dae un'àteru profilu o torrare sas impostatziones de profilu a s'istadu predefinidu issoro.";
 "profile_sett_descr" = "Influentzat sos profilos de s'aplicatzione ischertados";
 "app_profiles" = "Profilos de s\'aplicatzione";
@@ -2457,7 +2455,7 @@
 "product_desc_weather" = "Previsiones oràrias 24o e cun 7 dies de antìtzipu in sa mapa";
 "precipitation_hide" = "Cua sas pretzipitatziones";
 "weather_temp_unit_c" = "Celsius";
-"weather_temp_unit_f" = "Fahrenheit";
+"weather_temperature_fahrenheit" = "Fahrenheit";
 "toggle_precipitation" = "Ammustra/cua - Istratu de sas pretzipitatziones";
 "weather_precip_unit_in" = "Pòddighes";
 "rendering_attr_funicularRoutes_name" = "Àndalas funiculares";

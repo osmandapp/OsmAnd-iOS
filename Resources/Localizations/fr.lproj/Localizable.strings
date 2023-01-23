@@ -99,7 +99,7 @@
 "map_settings_night" = "Nuit";
 "shared_string_none" = "Aucun";
 "map_settings_online" = "Cartes en ligne";
-"map_settings_transp" = "Transparence";
+"shared_string_transparency" = "Transparence";
 // Intro
 "intro_skip" = "Ignorer";
 "intro_next" = "Suivant";
@@ -263,7 +263,7 @@
 "today" = "Aujourd\'hui";
 "yesterday" = "Hier";
 "gpx_edit_mode" = "Mode édition";
-"show_region_on_map_title" = "Carte téléchargée";
+"map_downloaded" = "Carte téléchargée";
 "tracks" = "Traces";
 "gpx_import_title" = "Importer des traces";
 "gpx_export_title" = "Exporter la trace";
@@ -366,12 +366,12 @@
 "product_desc_track_recording" = "Enregistre et sauvegarde vos trajets dans des traces GPX";
 "product_desc_trip_planning" = "Planifiez votre trajets, ajoutez des points de passage, mesurez la distance à votre destination avec ce greffon";
 "product_desc_allworld" = "Cartes du Monde";
-"product_title_srtm" = "Courbes de niveau";
+"download_srtm_maps" = "Courbes de niveau";
 "product_desc_srtm" = "Visualiser les formes de la surface du terrain";
 "track_save_short_q" = "La trace est trop courte, voulez-vous l'enregistrer ?";
 "enter_fav_name" = "Entrez le nom du favoris";
 "res_srtm" = "Courbes de niveau";
-"res_hillshade" = "Ombrage du relief";
+"shared_string_hillshade" = "Ombrage du relief";
 "wpt_remove_q" = "Supprimer le point de passage ?";
 "gpx_select_track" = "Sélectionnez la trace";
 "enter_name" = "Saisissez un nom";
@@ -874,7 +874,7 @@
 "osm_upload_no_internet" = "Veuillez vérifier votre connexion internet et réessayer.";
 "osm_delete_confirmation_descr" = "Êtes vous sûr de vouloir supprimer ce point ?";
 "osn_bug_name" = "Note OSM";
-"osm_deleted" = "Supprimé";
+"poi_remove_success" = "Supprimé";
 "osm_modified" = "Modifié";
 "osm_reopened" = "Ré-ouvert";
 "osm_name" = "Identifiant OpenStreetMap";
@@ -915,7 +915,7 @@
 "osm_opens_at" = "Ouvre à :";
 "osm_closes_at" = "Ferme à :";
 "osm_building_num" = "Numéro de bâtiment";
-"osm_target_modified" = "Point d\'intérêt OSM modifié";
+"osm_edit_modified_poi" = "Point d\'intérêt OSM modifié";
 "osm_target_deleted" = "Point d\'intérêt OSM supprimé";
 "osm_target_created" = "Point d\'intérêt créé sur OSM";
 "osm_note_created" = "Note OSM créée";
@@ -968,7 +968,6 @@
 "pink" = "Rose";
 "translucent_red" = "Rouge translucide";
 "translucent_orange" = "Orange translucide";
-"translucent_lightblue" = "Bleu clair translucide";
 "translucent_blue" = "Bleu translucide";
 "translucent_purple" = "Violet translucide";
 "translucent_pink" = "Rose translucide";
@@ -1061,7 +1060,6 @@
 "gpx_slope" = "Pente";
 "map_underlays" = "Sous-couches de carte";
 "coordinates_example" = "Exemple";
-"fav_add_group" = "Ajouter un groupe";
 "shared_string_time_of_day" = "Heure de la journée";
 "gpx_avg_altitude" = "Altitude moyenne";
 "offline_vector_maps" = "Cartes vectorielles OSM";
@@ -1624,7 +1622,7 @@
 "import_routing_file_descr" = "Vous pouvez importer un fichier d'itinéraire depuis n'importe quelle appli de stockage en ligne en l'ouvrant avec OsmAnd.";
 "special_routing" = "Calcul d\'itinéraire spécial";
 "nav_type_geocoding" = "Geocoding";
-"nav_type_ski" = "Ski";
+"routing_profile_ski" = "Ski";
 "nav_type_straight_line" = "Ligne droite";
 "nav_type_osmand" = "OsmAnd (itinéraires hors-ligne)";
 "voice_announces" = "Annonces vocales";
@@ -1654,7 +1652,7 @@
 "units_of_speed" = "Unités de vitesse";
 "allow_3D_view" = "Vue en 2.5D";
 "do_not_rotate" = "Ne pivotez pas";
-"app_theme_light" = "Clair";
+"light_theme" = "Clair";
 "settings_app_theme" = "Thème de l'application";
 "map_settings_available_srtm_maps_descr" = "Des cartes supplémentaires sont nécessaires pour voir l'ombrage du relief sur la carte";
 "map_settings_add_maps_slopes" = "Des cartes supplémentaires sont nécessaires pour voir les pentes sur la carte";
@@ -1793,7 +1791,7 @@
 "res_slope" = "Pente";
 "menu" = "Menu";
 "profile_type_osmand_string" = "Profil OsmAnd";
-"configure_map_descr" = "Apparence de la carte";
+"map_look_descr" = "Apparence de la carte";
 "quick_action_remove_next_destination_descr" = "Supprime la prochaineétape de votre route. S\'il s\'agit de la destination finale, le guidage s\'arrêtera.";
 "num_stops" = "arrêts";
 "help_nav_profiles" = "Profils de navigation";
@@ -2428,7 +2426,7 @@
 "speed_mode" = "Mode de vitesse";
 "weather_cloud_data_description" = "Les données météorologiques seront téléchargées pour la zone visualisée à chaque fois.";
 "weather_temp_unit_c" = "Celsius";
-"weather_temp_unit_f" = "Fahrenheit";
+"weather_temperature_fahrenheit" = "Fahrenheit";
 "weather_temp_enable_descr" = "Activer pour afficher la couche de température sur la carte.";
 "weather_wind_enable_descr" = "Activer pour afficher la couche de vent sur la carte.";
 "weather_precip_enable_descr" = "Activer pour afficher la couche de précipitations sur la carte.";

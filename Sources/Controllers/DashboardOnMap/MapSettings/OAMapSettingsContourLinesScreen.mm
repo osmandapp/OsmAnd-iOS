@@ -159,7 +159,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                                                                withHandler:@selector(onLocalResourcesChanged:withKey:)
                                                                 andObserve:_app.localResourcesChangedObservable];
     _styleSettings = [OAMapStyleSettings sharedInstance];
-    title = OALocalizedString(@"product_title_srtm");
+    title = OALocalizedString(@"download_srtm_maps");
     tblView.separatorInset = UIEdgeInsetsMake(0, [OAUtilities getLeftMargin] + 16, 0, 0);
     tblView.estimatedRowHeight = kEstimatedRowHeight;
     

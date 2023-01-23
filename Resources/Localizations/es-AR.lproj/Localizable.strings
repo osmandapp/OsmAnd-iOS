@@ -236,7 +236,7 @@
 "nav_type_straight_line" = "Línea recta";
 "nav_type_direct_to" = "Directo al punto";
 "nav_type_brouter" = "BRouter";
-"nav_type_ski" = "Esquí";
+"routing_profile_ski" = "Esquí";
 "nav_type_geocoding" = "Geocodificación";
 "fast_route_mode_descr" = "Activar para calcular la ruta más rápida o desactivar para la más eficiente en combustible";
 "avoid_in_routing_title" = "Evitar…";
@@ -525,7 +525,6 @@
 "my_favorites" = "Mis favoritos";
 "my_places" = "Mis sitios";
 "fav_no_group" = "Sin grupo";
-"fav_add_group" = "Añadir un grupo";
 "fav_add_new_group" = "Añadir un grupo";
 "select_group_descr" = "Elige un grupo o añade uno nuevo";
 "available_groups" = "Grupos disponibles";
@@ -682,7 +681,7 @@
 "map_settings_install_more" = "Instalar más...";
 "map_settings_offline" = "Estilos de mapas sin conexión";
 "map_settings_online" = "Mapas en línea";
-"map_settings_transp" = "Transparencia";
+"shared_string_transparency" = "Transparencia";
 "map_settings_base_transp" = "Transparencia del mapa base";
 "map_settings_avail_lay" = "Capas disponibles";
 "map_settings_hillshade" = "Sombreado";
@@ -710,7 +709,7 @@
 "map_settings_line_density_slowdown_warning" = "La alta densidad de líneas puede ralentizar la visualización del mapa";
 "map_settings_available_srtm_maps_descr" = "Se necesitan mapas adicionales para ver el sombreado en el mapa";
 "settings_app_theme" = "Aspecto de la aplicación";
-"app_theme_light" = "Claro";
+"light_theme" = "Claro";
 "do_not_rotate" = "No rotar";
 "allow_3D_view" = "Vista 2.5D";
 "units_of_speed" = "Unidades de velocidad";
@@ -1198,7 +1197,7 @@
 "osm_editing_settings_descr" = "Los ajustes de este complemento son globales y se aplica a todos los perfiles.";
 "osn_bug_name" = "Nota de OSM";
 "osm_created" = "Creado";
-"osm_deleted" = "Borrado";
+"poi_remove_success" = "Borrado";
 "osm_modified" = "Editado";
 "osm_reopened" = "Reabierto";
 "osm_name" = "Nombre de usuario de OpenStreetMap";
@@ -1220,7 +1219,7 @@
 "osm_add_place" = "Añadir lugar";
 "osm_modify_place" = "Editar lugar";
 "osm_poi_delete_title" = "Borrar PDI";
-"osm_target_modified" = "PDI de OSM modificado";
+"osm_edit_modified_poi" = "PDI de OSM modificado";
 "osm_target_deleted" = "PDI de OSM borrado";
 "osm_target_created" = "PDI de OSM creado";
 "osm_note_created" = "Nota de OSM creada";
@@ -1312,7 +1311,7 @@
 "unsupported_items" = "Elementos no admitidos";
 "create_items" = "Crear elementos";
 "configure_map" = "Configurar mapa";
-"configure_map_descr" = "Aspecto del mapa";
+"map_look_descr" = "Aspecto del mapa";
 "add_map_marker" = "Añadir marcador de mapa";
 "select_map_marker" = "Elegir marcador del mapa";
 "add_gpx_waypoint" = "Añadir punto de ruta GPX";
@@ -1557,7 +1556,6 @@
 "pink" = "Rosa";
 "translucent_red" = "Rojo translúcido";
 "translucent_orange" = "Anaranjado translúcido";
-"translucent_lightblue" = "Azul claro translúcido";
 "translucent_blue" = "Azul translúcido";
 "translucent_purple" = "Púrpura translúcida";
 "translucent_pink" = "Rosa translúcido";
@@ -1657,7 +1655,7 @@
 "some_articles_may_not_available_in_lang" = "Es posible que algunos artículos de Wikipedia no estén disponibles en tu idioma.";
 "available_languages" = "Idiomas disponibles";
 "preferred_languages" = "Idiomas preferidos";
-"product_title_srtm" = "Curvas de nivel";
+"download_srtm_maps" = "Curvas de nivel";
 "product_desc_srtm" = "Evaluación visual de la forma de la superficie terrestre";
 "product_desc_ext_srtm" = "La información del terreno, como las curvas de nivel, los sombreados y las pendientes, ayudan a evaluar visualmente la forma de la superficie del terreno, considerando la curvatura, los extremos, la inclinación, los puntos de igual altura, etc. La información topográfica en un mapa puede representarse mediante el sombreado de la pendiente, las curvas de nivel para ascensos y descensos, y el color de la desviación del ángulo de la pendiente con respecto al plano. Datos de SRTM y ASTER.\n\nVéase - https://osmand.net/docs/user/plugins/contour-lines";
 "product_title_wikivoyage" = "Guías turísticas";
@@ -1682,7 +1680,7 @@
 "res_roads" = "Caminos";
 "res_srtm" = "Curvas de nivel";
 "res_wiki" = "Wikipedia";
-"res_hillshade" = "Sombreado";
+"shared_string_hillshade" = "Sombreado";
 "res_slope" = "Pendiente";
 "res_standard" = "Mapa estándar";
 "select_language" = "Eligir idioma";
@@ -1786,7 +1784,7 @@
 "no_statistics" = "Sin estadísticas";
 "no_internet_avail" = "Sin Internet disponible";
 "no_internet_avail_desc_first" = "Activa la conexión a Internet para descargar la lista de mapas";
-"show_region_on_map_title" = "Mapa descargado";
+"map_downloaded" = "Mapa descargado";
 "show_region_on_map_desc" = "El mapa de %@ fue descargado. Ve al mapa para usarlo.";
 "show_region_on_map_go" = "Ir al mapa";
 "obf_import_title" = "Importar archivo de mapa sin conexión";
@@ -2388,7 +2386,7 @@
 "product_desc_ext_weather" = "Activa el complemento meteorológico para planificar una ruta teniendo en cuenta la meteorología. Mira el mapa colorido del pronóstico, que se actualiza cada hora para hoy, mañana y la próxima semana.\n\nMientras viajas, observa los widgets de temperatura, precipitación, velocidad del viento y presión, basados en la ubicación.\n\nEs útil para hacer senderismo y largos viajes en bicicleta o motocicleta.";
 "measurement_units" = "Unidades de medida";
 "weather_temp_unit_c" = "Celsius";
-"weather_temp_unit_f" = "Fahrenheit";
+"weather_temperature_fahrenheit" = "Fahrenheit";
 "weather_pressure_unit_hpa" = "Hectopascales";
 "weather_pressure_unit_mmhg" = "Milímetros de mercurio";
 "weather_pressure_unit_inhg" = "Pulgadas de mercurio";

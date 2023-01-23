@@ -49,7 +49,7 @@
 "local_names" = "";
 "map_creator" = "Çêkirina Nexşe";
 "show_region_on_map_go" = "Here Nexşe";
-"show_region_on_map_title" = "Nexşe hate daxistin";
+"map_downloaded" = "Nexşe hate daxistin";
 "no_internet_avail" = "Înternet Nîne";
 "plugin_popup_nautical_title" = "Nexşen deryavanî bi daxinin";
 "plugin_popup_wiki_title" = "Wîkîpediyayê daxe";
@@ -154,7 +154,7 @@
 "intro_next" = "Dû re";
 "transport_stop" = "Rawestgeh";
 "transport_nearby_routes" = "NÊZÎK";
-"osm_deleted" = "Jêbirî";
+"poi_remove_success" = "Jêbirî";
 "poi_type" = "Cureya POIyê";
 "osmand_live_daily" = "Rojane";
 "help_map_viewing" = "Dîtina nexşeyê";

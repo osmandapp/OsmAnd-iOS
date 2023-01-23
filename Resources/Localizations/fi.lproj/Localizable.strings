@@ -229,7 +229,7 @@
 "nav_type_straight_line" = "Suora viiva";
 "nav_type_direct_to" = "Suoraan pisteeseen";
 "nav_type_brouter" = "BRouter";
-"nav_type_ski" = "Hiihto";
+"routing_profile_ski" = "Hiihto";
 "nav_type_geocoding" = "Geocoding";
 "fast_route_mode_descr" = "Enable to calculate fastest route or disable for fuel-saving route";
 "avoid_in_routing_title" = "Vältä…";
@@ -501,7 +501,6 @@
 "my_favorites" = "My Favorites";
 "my_places" = "Omat paikat";
 "fav_no_group" = "No group";
-"fav_add_group" = "Lisää ryhmä";
 "fav_add_new_group" = "Add new group";
 "select_group_descr" = "Select group or add a new one";
 "available_groups" = "Available groups";
@@ -650,7 +649,7 @@
 "shared_string_none" = "Ei mitään";
 "map_settings_offline" = "Styles for offline maps";
 "map_settings_online" = "Online kartat";
-"map_settings_transp" = "Läpinäkyvyys";
+"shared_string_transparency" = "Läpinäkyvyys";
 "map_settings_base_transp" = "Peruskartan läpinäkyvyys";
 "map_settings_avail_lay" = "Available layers";
 "map_settings_hillshade" = "Rinnevarjostus";
@@ -678,7 +677,7 @@
 "map_settings_line_density_slowdown_warning" = "High line density may slowdown map rendering";
 "map_settings_available_srtm_maps_descr" = "Additional maps are needed to view Hillshade on the map";
 "settings_app_theme" = "Application theme";
-"app_theme_light" = "Vaalea";
+"light_theme" = "Vaalea";
 "do_not_rotate" = "Älä kierrä";
 "allow_3D_view" = "2.5D-näkymä";
 "units_of_speed" = "Nopeuden yksiköt";
@@ -1020,7 +1019,7 @@
 "osm_editing_settings_descr" = "This plugin's settings are global and apply to all profiles.";
 "osn_bug_name" = "OSM-huomautus";
 "osm_created" = "Created";
-"osm_deleted" = "Poistettu";
+"poi_remove_success" = "Poistettu";
 "osm_modified" = "Modified";
 "osm_reopened" = "Reopened";
 "osm_name" = "OpenStreetMap username";
@@ -1041,7 +1040,7 @@
 "osm_add_place" = "Add place";
 "osm_modify_place" = "Modify place";
 "osm_poi_delete_title" = "Poista KP";
-"osm_target_modified" = "Muokattu OSM KP";
+"osm_edit_modified_poi" = "Muokattu OSM KP";
 "osm_target_deleted" = "Poistettu OSM KP";
 "osm_target_created" = "OSM KP luotu";
 "osm_note_created" = "OSM-huomautus luotu";
@@ -1133,7 +1132,7 @@
 "unsupported_items" = "Unsupported items";
 "create_items" = "Luo jäsen";
 "configure_map" = "Kartta-asetukset";
-"configure_map_descr" = "Kartan ulkoasu";
+"map_look_descr" = "Kartan ulkoasu";
 "add_map_marker" = "Lisää karttamarkkeri";
 "select_map_marker" = "Valitse karttamarkkeri";
 "add_gpx_waypoint" = "Add GPX waypoint";
@@ -1370,7 +1369,6 @@
 "pink" = "Vaaleanpunainen";
 "translucent_red" = "Läpikuultava punainen";
 "translucent_orange" = "Läpikuultava oranssi";
-"translucent_lightblue" = "Läpikuultava vaaleansininen";
 "translucent_blue" = "Läpikuultava sininen";
 "translucent_purple" = "Läpikuultava purppura";
 "translucent_pink" = "Läpikuultava vaaleanpunainen";
@@ -1461,7 +1459,7 @@
 "product_title_wiki" = "Wikipedia";
 "product_desc_wiki" = "Wikipedia data";
 "product_desc_ext_wiki" = "Get information about points of interest from Wikipedia. It is your pocket offline guide - just enable Wikipedia plugin and enjoy articles about objects around you.";
-"product_title_srtm" = "Korkeuskäyrät";
+"download_srtm_maps" = "Korkeuskäyrät";
 "product_desc_srtm" = "Display of contour lines";
 "product_desc_ext_srtm" = "This plugin provides contour lines and hillshade, which can be displayed in OsmAnd offline maps. Contour lines provide the information about heights of the area while hillshade is their visualization. See the names of mountain peaks and specific features of terrain using this plugin.\n\nThe global data (between 70 degrees north and 70 degrees south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA's Earth Observing System. ASTER is a cooperative effort between NASA, Japan's Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
 "product_title_wikivoyage" = "Matkaoppaat";
@@ -1485,7 +1483,7 @@
 "res_roads" = "Tiet";
 "res_srtm" = "Korkeuskäyrät";
 "res_wiki" = "Wikipedia";
-"res_hillshade" = "Rinnevarjostus";
+"shared_string_hillshade" = "Rinnevarjostus";
 "res_slope" = "Kaltevuus";
 "res_standard" = "Tavalliset kartat";
 "select_language" = "Valitse kieli";
@@ -1573,7 +1571,7 @@
 "no_statistics" = "Ei tilastoja";
 "no_internet_avail" = "No internet available";
 "no_internet_avail_desc_first" = "Please turn on internet connection to download list of maps";
-"show_region_on_map_title" = "Kartta ladattu";
+"map_downloaded" = "Kartta ladattu";
 "show_region_on_map_desc" = "Map of %@ has been downloaded. Go to the map to start using it.";
 "show_region_on_map_go" = "Siirry kartalle";
 "obf_import_title" = "Import offline map file";

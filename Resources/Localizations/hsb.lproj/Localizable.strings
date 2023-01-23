@@ -395,7 +395,6 @@
 "my_favorites" = "My Favorites";
 "my_places" = "Moje městna";
 "fav_no_group" = "No group";
-"fav_add_group" = "Skupinu přidać";
 "fav_remove_q" = "Remove favorite?";
 "fav_import" = "Import";
 "fav_import_title" = "Import favorite";
@@ -500,7 +499,7 @@
 "shared_string_none" = "žane";
 "map_settings_offline" = "Styles for offline maps";
 "map_settings_online" = "Online-karty";
-"map_settings_transp" = "Transparenca";
+"shared_string_transparency" = "Transparenca";
 "map_settings_avail_lay" = "Available layers";
 "map_settings_hillshade" = "Hillshade";
 "mapillary" = "Mapillary";
@@ -646,7 +645,7 @@
 "osm_failed_uploads" = "Failed";
 "osn_bug_name" = "OSM-notica";
 "osm_created" = "Created";
-"osm_deleted" = "Wotstronjene";
+"poi_remove_success" = "Wotstronjene";
 "osm_modified" = "Modified";
 "osm_reopened" = "Reopened";
 "osm_name" = "OpenStreetMap username";
@@ -667,7 +666,7 @@
 "osm_add_place" = "Add place";
 "osm_modify_place" = "Modify place";
 "osm_poi_delete_title" = "POI wušmórnyć";
-"osm_target_modified" = "Změnjene OSM POI-dypki";
+"osm_edit_modified_poi" = "Změnjene OSM POI-dypki";
 "osm_target_deleted" = "Wotstronjene OSM POI-dypki";
 "osm_target_created" = "OSM POI-dypk wutworjeny";
 "osm_note_created" = "OSM-notica je so wutworiła";
@@ -932,7 +931,6 @@
 "pink" = "pink";
 "translucent_red" = "transparentnečerwjene";
 "translucent_orange" = "transparentne oranžowe";
-"translucent_lightblue" = "transparentne jasnomódre";
 "translucent_blue" = "transparentne módre";
 "translucent_purple" = "transparentne fijałkojte";
 "translucent_pink" = "transparentny pink";
@@ -1012,7 +1010,7 @@
 "product_title_wiki" = "Wikipedija";
 "product_desc_wiki" = "Wikipedia data";
 "product_desc_ext_wiki" = "Get information about points of interest from Wikipedia. It is your pocket offline guide - just enable Wikipedia plugin and enjoy articles about objects around you.";
-"product_title_srtm" = "Wysokostne linije";
+"download_srtm_maps" = "Wysokostne linije";
 "product_desc_srtm" = "Display of contour lines";
 "product_desc_ext_srtm" = "This plugin provides contour lines and hillshade, which can be displayed in OsmAnd offline maps. Contour lines provide the information about heights of the area while hillshade is their visualization. See the names of mountain peaks and specific features of terrain using this plugin.\n\nThe global data (between 70 degrees north and 70 degrees south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA's Earth Observing System. ASTER is a cooperative effort between NASA, Japan's Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
 "product_title_wikivoyage" = "Travel Guides";
@@ -1035,7 +1033,7 @@
 "res_roads" = "puće";
 "res_srtm" = "Wysokostne linije";
 "res_wiki" = "Wikipedija";
-"res_hillshade" = "Hillshade";
+"shared_string_hillshade" = "Hillshade";
 "select_language" = "Select language";
 "language_short" = "Lang";
 "open_url" = "Open page in browser";
@@ -1103,7 +1101,7 @@
 "no_statistics" = "No statistics";
 "no_internet_avail" = "No internet available";
 "no_internet_avail_desc_first" = "Please turn on internet connection to download list of maps";
-"show_region_on_map_title" = "Karta sćehnjena";
+"map_downloaded" = "Karta sćehnjena";
 "show_region_on_map_desc" = "Map of %@ has been downloaded. Go to the map to start using it.";
 "show_region_on_map_go" = "Go to the map";
 "obf_import_title" = "Import offline map file";
@@ -1397,7 +1395,7 @@
 "one" = "Jedyn";
 "shared_string_next" = "Přichodne";
 "base_profile_descr_aircraft" = "Lětadło, gliding";
-"app_theme_light" = "Swětłe";
+"light_theme" = "Swětłe";
 "update_tile" = "Zaktualizuj kartu";
 "enter_profile_name" = "Zapodaj mjeno profila";
 "nothing_found_empty" = "Žadyn wuslědk";

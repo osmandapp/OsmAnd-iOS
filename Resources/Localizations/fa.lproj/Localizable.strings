@@ -364,7 +364,7 @@
 "shared_string_none" = "هیچ‌کدام";
 "map_settings_offline" = "Styles for offline maps";
 "map_settings_online" = "نقشه‌های آنلاین";
-"map_settings_transp" = "شفافیت";
+"shared_string_transparency" = "شفافیت";
 "map_settings_avail_lay" = "Available layers";
 "map_settings_hillshade" = "سایه‌روشن";
 // Intro
@@ -567,7 +567,7 @@
 "product_title_wiki" = "ویکی‌پدیا";
 "product_desc_wiki" = "Wikipedia data";
 "product_desc_ext_wiki" = "Get information about points of interest from Wikipedia. It is your pocket offline guide - just enable Wikipedia plugin and enjoy articles about objects around you.";
-"product_title_srtm" = "منحنی‌های میزان";
+"download_srtm_maps" = "منحنی‌های میزان";
 "product_desc_srtm" = "Display of contour lines";
 "product_desc_ext_srtm" = "This plugin provides contour lines and hillshade, which can be displayed in OsmAnd offline maps. Contour lines provide the information about heights of the area while hillshade is their visualization. See the names of mountain peaks and specific features of terrain using this plugin.\n\nThe global data (between 70 degrees north and 70 degrees south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA's Earth Observing System. ASTER is a cooperative effort between NASA, Japan's Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
 "my_location" = "My Location";
@@ -585,7 +585,7 @@
 "res_roads" = "جاده‌ها";
 "res_srtm" = "منحنی‌های میزان";
 "res_wiki" = "ویکی‌پدیا";
-"res_hillshade" = "سایه‌روشن";
+"shared_string_hillshade" = "سایه‌روشن";
 "select_language" = "Select language";
 "language_short" = "Lang";
 "open_url" = "Open page in browser";
@@ -651,7 +651,7 @@
 "no_statistics" = "No statistics";
 "no_internet_avail" = "No internet available";
 "no_internet_avail_desc_first" = "Please turn on internet connection to download list of maps";
-"show_region_on_map_title" = "نقشه بارگیری شد";
+"map_downloaded" = "نقشه بارگیری شد";
 "show_region_on_map_desc" = "Map of %@ has been downloaded. Go to the map to start using it.";
 "show_region_on_map_go" = "Go to the map";
 "sqlitedb_import_title" = "Import Map Creator file";
@@ -893,7 +893,6 @@
 "osm_alert_button_ok" = "نوشتن یادداشت";
 "quick_action_tags" = "برچسب‌ها";
 "replace_destination" = "تغییر مقصد";
-"translucent_lightblue" = "آبی روشن شفاف";
 "angular_units_descr" = "واحد اندازه‌گیری سمت (azimuth) را مشخص کنید.";
 "osmand_live_update_now" = "الآن روزآمد کن";
 "osm_note_created" = "ایجاد یادداشت OSM";
@@ -970,13 +969,12 @@
 "osm_edits_notes" = "یادداشت‌ها";
 "osm_edits_basic" = "ساده";
 "product_desc_wikivoyage" = "راهنمای سفر رایگان با پوشش جهانی که همه می‌توانند آن را ویرایش کنند.";
-"fav_add_group" = "افزودن گروه";
 "osm_edits_title" = "ویرایش‌های OSM";
 "change_map_overlay" = "تغییر لایهٔ رویی نقشه";
 "change_map_source" = "تغییر منبع نقشه";
 "translucent_blue" = "آبی شفاف";
 "get_discount_second_part" = "سپس %@";
-"osm_deleted" = "حذف‌شده(ها)";
+"poi_remove_success" = "حذف‌شده(ها)";
 "poi_list" = "لیست POI";
 "osm_editing_lost_changes_descr" = "تغییراتی که ذخیره نکرده‌اید، از دست می‌رود. ادامه می‌دهید؟";
 "prev_route" = "مسیر قبلی";
@@ -984,7 +982,7 @@
 "help_faq" = "سؤالات رایج";
 "map_sources" = "منابع نقشه";
 "offline_vector_maps" = "نقشه‌های بُرداری آفلاین";
-"osm_target_modified" = "اصلاح نقطهٔ توجه";
+"osm_edit_modified_poi" = "اصلاح نقطهٔ توجه";
 "speak_tunnels" = "تونل‌ها";
 "help_faq_descr" = "سؤالاتی که زیاد پرسیده شده است";
 "gpx_avg_altitude" = "میانگین ارتفاع";
@@ -1411,7 +1409,7 @@
 "shared_string_terrain" = "ناهمواری‌ها";
 "position_icon_at_rest" = "نماد موقعیت هنگام توقف";
 "route_betw_points" = "مسیر بین نقطه‌ها";
-"nav_type_ski" = "اسکی";
+"routing_profile_ski" = "اسکی";
 "logging_accuracy" = "صحت ردنگاری";
 "ltr_or_rtl_combine_via_colon" = "%@:‪%@‬";
 "nav_type_straight_line" = "خط مستقیم";
@@ -1442,7 +1440,7 @@
 "import_profile_select_descr" = "دادهٔ موردنظر را برای درون‌برد انتخاب کنید.";
 "quick_action_showhide_mapillary_title" = "آشکار/پنهان کردن مپیلاری";
 "quick_action_remove_next_destination_descr" = "مقصد بعدیِ مسیر شما را حذف خواهد کرد. البته اگر مقصد نهایی باشد، ناوبری را متوقف می‌کند.";
-"app_theme_light" = "روشن";
+"light_theme" = "روشن";
 "res_slope" = "شیب";
 "osm_notes" = "یادداشت‌های OSM";
 "osmand_routing" = "مسیریابی OsmAnd";
@@ -1477,7 +1475,7 @@
 "tones" = "تُن";
 "quick_action_remove_next_destination" = "حذف نزدیک‌ترین مقصد";
 "walk" = "پیاده";
-"configure_map_descr" = "ظاهر نقشه";
+"map_look_descr" = "ظاهر نقشه";
 "res_pseudo_mercator" = "فراتابی شبه مرکاتور";
 "save_changes" = "ذخیرهٔ تغییرات";
 "import_complete_description" = "همهٔ داده از %@ درون‌برد شد. با استفاده از دکمه‌های زیر می‌توانید بخش موردنیاز برنامه را برای مدیریت آن باز کنید.";

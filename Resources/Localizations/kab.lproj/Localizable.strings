@@ -18,7 +18,7 @@
 "groups" = "Igrawen";
 "shared_string_show_all" = "Sken akk";
 "red" = "Azeggaɣ";
-"map_settings_transp" = "Afrawan";
+"shared_string_transparency" = "Afrawan";
 "units_min_km" = "tasint";
 "col_orange" = "Ačinawi";
 "route_head" = "Edfar";
@@ -318,7 +318,7 @@
 "create_poi_short" = "rnu";
 "rendering_attr_noAdminboundaries_name" = "Ajemmeq n uḍris";
 "rendering_attr_highway_class_bridleway_name" = "Aɣaras n yimnayen";
-"show_region_on_map_title" = "yettusider";
+"map_downloaded" = "yettusider";
 "help_features" = "Timahalin";
 "rendering_attr_piste_type_nordic_name" = "Agafan";
 "rendering_value_boldOutline_name" = "Aɣawas";
@@ -331,7 +331,6 @@
 "plugins" = "Iseɣzaf";
 "shared_string_all" = "Meṛṛa";
 "product_title_centralamerica" = "Marikan Talemmast";
-"fav_add_group" = "Rnu agraw";
 "months_2_4" = "Ayyuren";
 "subcategories" = "Adutaggayin";
 "units_hour" = "s";
@@ -425,7 +424,7 @@
 "rendering_value_yellow_name" = "Awraɣ";
 "region_others" = "Wayeḍ";
 "home_pt" = "Agejdan";
-"osm_deleted" = "Yettwakkes";
+"poi_remove_success" = "Yettwakkes";
 "shared_string_my_location" = "ideg";
 "get_started" = "Aha bdu tura";
 "product_title_track_recording" = "Asekles";
@@ -542,11 +541,11 @@
 "next_seg" = "Aḥric i d-itteddun";
 "shared_string_continue" = "Kemmel";
 "maximum_speed" = "Arured afellay";
-"configure_map_descr" = "Arwes";
+"map_look_descr" = "Arwes";
 "shared_string_importing" = "Akter";
 "routing_attr_piste_type_skitour_name" = "Uccuḍ deg udfel";
 "app_profiles" = "Imeɣna";
-"app_theme_light" = "Aceɛlal";
+"light_theme" = "Aceɛlal";
 "configure_profile" = "Sbadu amaɣnu";
 "shared_string_max" = "Afellay";
 "nav_type_straight_line" = "Ajerriḍ usrid";

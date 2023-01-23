@@ -395,7 +395,6 @@
 "my_favorites" = "Mei preferits";
 "my_places" = "Mei luòcs preferits";
 "fav_no_group" = "Ges de grop";
-"fav_add_group" = "Ajustar un grop";
 "fav_remove_q" = "Volètz suprimir lo preferit?";
 "fav_import" = "Importar";
 "fav_import_title" = "Importar un preferit";
@@ -498,7 +497,7 @@
 "shared_string_none" = "Ges";
 "map_settings_offline" = "Mapas fòra de linha";
 "map_settings_online" = "Mapas en linha";
-"map_settings_transp" = "Transparéncia";
+"shared_string_transparency" = "Transparéncia";
 "map_settings_avail_lay" = "Jaças disponiblas";
 "map_settings_hillshade" = "Ombras de relèu";
 "mapillary" = "Mapillary";
@@ -643,7 +642,7 @@
 "osm_failed_uploads" = "Mancat";
 "osn_bug_name" = "Nòta d'OSM";
 "osm_created" = "Creat";
-"osm_deleted" = "Eliminat";
+"poi_remove_success" = "Eliminat";
 "osm_modified" = "Modificat";
 "osm_reopened" = "Tornat dobèrt";
 "osm_name" = "Nom d'utilizator OpenStreetMap";
@@ -664,7 +663,7 @@
 "osm_add_place" = "Ajustar un luòc";
 "osm_modify_place" = "Modificar lo luòc";
 "osm_poi_delete_title" = "Eliminar lo PDI";
-"osm_target_modified" = "Lo PDI d'OSM es estat modificat";
+"osm_edit_modified_poi" = "Lo PDI d'OSM es estat modificat";
 "osm_target_deleted" = "Lo PDI d'OSM es escafat";
 "osm_target_created" = "Un PDI OSM es estat creat";
 "osm_note_created" = "Una Nòta OSM es estada creada";
@@ -928,7 +927,6 @@
 "pink" = "Ròse -a";
 "translucent_red" = "Roginèu";
 "translucent_orange" = "Arange translucid";
-"translucent_lightblue" = "Azur translucid";
 "translucent_blue" = "Blau translucid";
 "translucent_purple" = "Porpra translucida";
 "translucent_pink" = "Ròse translucid";
@@ -1008,7 +1006,7 @@
 "product_title_wiki" = "Wikipèdia";
 "product_desc_wiki" = "Notícias Wikipèdia localizadas sus la mapa";
 "product_desc_ext_wiki" = "Un guida de pòcha : avètz Wikipèdia per vòstre viatge e leis articles que tractan de l'environa de vòstre percors. Se pòt consultar fòra de linha mai oblidetz pas de teledescargar lei notícias Wikipèdia de la region de destinacion.";
-"product_title_srtm" = "Corbas de nivèu";
+"download_srtm_maps" = "Corbas de nivèu";
 "product_desc_srtm" = "Mostrar lei corbas de nivèu";
 "product_desc_ext_srtm" = "Leis informacions de terren coma lei corbas de nivèu, l'ombra de relèu e la penda, vos ajudan a visualizar l'aspècte de la superficia. Amb aquest ajust podretz veire lo nom dei montanhas e lei caracteristicas particularas a l'encontrada. Donadas SRTM e ASTER.\n\nPer n'en sacher mai : https://osmand.net/docs/user/plugins/contour-lines";
 "product_title_wikivoyage" = "Guida de viatge";
@@ -1031,7 +1029,7 @@
 "res_roads" = "Carrieras";
 "res_srtm" = "Corbas de nivèu";
 "res_wiki" = "Wikipèdia";
-"res_hillshade" = "Ombras de relèu";
+"shared_string_hillshade" = "Ombras de relèu";
 "select_language" = "Chausir la lenga";
 "language_short" = "Lenga";
 "open_url" = "Obrir la pagina dins un navigador";
@@ -1099,7 +1097,7 @@
 "no_statistics" = "I a ges d'estatistica";
 "no_internet_avail" = "Ges de connexion internet disponibla";
 "no_internet_avail_desc_first" = "Per plaser connectatz-vos a internet per teledescargar la lista dei mapas";
-"show_region_on_map_title" = "Mapa teledescargada";
+"map_downloaded" = "Mapa teledescargada";
 "show_region_on_map_desc" = "La mapa de %@ es teledescargada. Anètz a la mapa per començar de l'emplegar.";
 "show_region_on_map_go" = "Anar a la mapa";
 "obf_import_title" = "Importar la mapa sensa connexion, partent d'un archiu";
@@ -1348,7 +1346,7 @@
 "shared_string_exit" = "Sortir";
 "default_speed_setting_title" = "Velocitat per defaut";
 "configure_screen_descr" = "Seleccionatz leis opcions d’ecran per lo perfiu";
-"nav_type_ski" = "Esquilh";
+"routing_profile_ski" = "Esquilh";
 "nav_type_title" = "Mena de navigacion";
 "profile_alert_delete_title" = "Eliminar lo perfiu";
 "profile_type_base_string" = "Perfiu de basa";
@@ -1441,7 +1439,7 @@
 "shared_string_navigation" = "Navigacion";
 "layer_amenity_label" = "Etiquetas superpausadas de PDIs";
 "select_wikipedia_article_langs" = "Chausissètz lei lengas per leis articles de Wikipèdia que pareisseràn sus la mapa. Podètz bascular entre totei lei lengas disponiblas a volontat quand legissètz un article.";
-"configure_map_descr" = "Aparéncia de la mapa";
+"map_look_descr" = "Aparéncia de la mapa";
 "map_settings_slopes_description" = "Lei mapas de pistas emplegan diferentei colors per visualizar lo terren";
 "map_settings_hillshade_description" = "Lei mapas dau relèu ombrejat mòstran lei pistas, cimas e vaus amb diferents nivèus de gris";
 "map_settings_install_more" = "Installar mai...";
@@ -1806,7 +1804,7 @@
 "map_settings_add_maps_desc" = "Podètz ajustar de mapas novèlas per lo mejan d'un ligam ò l'importacion d'un archiu SQLite.";
 "map_settings_available_srtm_maps_descr" = "Son necessàrias de mapas suplementàrias per visualizar leis ombras de relèu sus la mapa";
 "settings_app_theme" = "Tema de l'aplicacion";
-"app_theme_light" = "Clar";
+"light_theme" = "Clar";
 "units_of_speed" = "Unitat de velocitat";
 "angular_measurment_units" = "Unitats de mesura angulara";
 "device_settings" = "Configuracion de l'aparelh";

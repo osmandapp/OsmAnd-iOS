@@ -118,7 +118,7 @@
 "shared_string_none" = "無";
 "map_settings_offline" = "離線地圖的樣式";
 "map_settings_online" = "線上地圖";
-"map_settings_transp" = "透明度";
+"shared_string_transparency" = "透明度";
 "map_settings_avail_lay" = "可用的圖層";
 // Intro
 "intro_skip" = "跳過";
@@ -315,7 +315,7 @@
 "res_installing" = "正在安裝...";
 "product_title_wiki" = "維基百科";
 "product_desc_wiki" = "維琪百科資料";
-"product_title_srtm" = "等高線";
+"download_srtm_maps" = "等高線";
 "product_desc_srtm" = "顯示等高線";
 "res_roads" = "道路";
 "res_srtm" = "等高線";
@@ -334,7 +334,7 @@
 "you_searching" = "您正在查尋";
 "from_location" = "遠離";
 "show_alt_in_drive" = "在駕駛時顯示海拔高度";
-"res_hillshade" = "地形陰影";
+"shared_string_hillshade" = "地形陰影";
 "purchase_get" = "取得";
 "srtm_disabled" = "等高線已停用";
 "prch_wiki_info" = "維基百科外掛您有資格為地圖啟用維基百科資訊，購買或在免費的期限內下載。";
@@ -405,7 +405,7 @@
 "product_desc_ext_srtm" = "這個外掛元件提供了等高線層和山體陰影層，它可以顯示在 OsmAnd 的離線地圖。等高線提供了該地區高度的相關資訊，而山體陰影則具體呈現出它們。使用這個外掛元件可看到山峰名稱和看到山峰和地勢的具體特徵。\n\n全球圖資（在北緯 70 度至南緯 70 度之間）的量測基礎在於 SRTM (Shuttle Radar Topography Mission)和 ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer)，安裝在美國太空總署地球觀測系統的旗艦衛星 Terra 上的遙測儀器，ASTER 是美國太空總署、日本經濟產業省(METI)、日本太空系統 (J-spacesystems)之間的通力合作產物。";
 "no_internet_avail" = "無網路可用";
 "no_internet_avail_desc_first" = "請開啟網路連線以下載地圖清單";
-"show_region_on_map_title" = "地圖已下載";
+"map_downloaded" = "地圖已下載";
 "show_region_on_map_desc" = "已下載 %@ 地圖。 轉到地圖開始使用。";
 "show_region_on_map_go" = "返回地圖";
 "map_settings_hillshade" = "地形陰影";
@@ -898,7 +898,6 @@
 "blue" = "藍色";
 "pink" = "粉紅色";
 "translucent_orange" = "半透明的橙色";
-"translucent_lightblue" = "半透明的淡藍色";
 "translucent_blue" = "半透明的藍色";
 "translucent_purple" = "半透明的紫色";
 "translucent_pink" = "半透明粉紅色";
@@ -924,7 +923,7 @@
 "osm_editing_lost_changes_descr" = "任何未儲存的變更將會失去。要繼續嗎?";
 "osn_bug_name" = "OSM註解";
 "osm_created" = "建立";
-"osm_deleted" = "已刪除";
+"poi_remove_success" = "已刪除";
 "osm_modified" = "已修改";
 "osm_name" = "OpenStreetMap 的使用者名稱";
 "osm_pass" = "OpenStreetmap 密碼";
@@ -936,7 +935,7 @@
 "osm_phone" = "電話";
 "osm_website" = "網站";
 "osm_poi_delete_title" = "刪除 POI";
-"osm_target_modified" = "已修改 OSM 的 POI";
+"osm_edit_modified_poi" = "已修改 OSM 的 POI";
 "osm_target_deleted" = "已刪除 OSM 的 POI";
 "osm_target_created" = "建立 OSM 的 POI";
 "osm_note_created" = "建立 OSM 的註解";
@@ -1071,7 +1070,6 @@
 "show_contour_lines" = "顯示等高線";
 "add_map_marker" = "增加地圖標記";
 "mapillary" = "Mapillary";
-"fav_add_group" = "新增群組";
 "add_gpx_waypoint" = "增加 GPX 航點";
 "shared_string_show_more" = "顯示更多";
 "shared_string_filter" = "篩選";
@@ -1481,7 +1479,7 @@
 "import_complete_description" = "所有從 %@ 而來的資料都已匯入，您可以使用下方的按鈕以開啟應用程式中需要的部份來管理它。";
 "help_osmand_live" = "訂閱 - OsmAnd Live";
 "res_pseudo_mercator" = "偽麥卡托投影";
-"nav_type_ski" = "滑雪";
+"routing_profile_ski" = "滑雪";
 "public_transport_show" = "顯示大眾運輸";
 "position_icon_at_rest" = "靜止位置圖示";
 "nav_type_geocoding" = "天氣預報";
@@ -1506,7 +1504,7 @@
 "profile_prefs_reset_successful" = "所有設定檔的設定都已恢復為預設值。";
 "selected_profiles" = "%d的 %d";
 "num_stops" = "停靠站";
-"app_theme_light" = "明亮";
+"light_theme" = "明亮";
 "shared_string_max" = "最大";
 "maximum_speed" = "最高速度";
 "nav_type_direct_to" = "點對點";
@@ -1532,7 +1530,7 @@
 "vessel_width_limit_description" = "設定船艦寬度以避免窄橋";
 "arrived_at_destination" = "您已抵達。";
 "quick_action_mapillary_show" = "顯示 Mapillary";
-"configure_map_descr" = "地圖外觀";
+"map_look_descr" = "地圖外觀";
 "recalculate_route_distance_promo" = "如果從路徑到目前位置的距離大於選定的值，將會重新計算路徑。";
 "voice_announces" = "語音提示";
 "help_nav_profiles" = "導航設定檔";

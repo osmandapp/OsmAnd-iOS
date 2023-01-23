@@ -237,7 +237,7 @@
 "nav_type_straight_line" = "Prava linija";
 "nav_type_direct_to" = "Dikretno-na-tačku";
 "nav_type_brouter" = "BRouter";
-"nav_type_ski" = "Skijanje";
+"routing_profile_ski" = "Skijanje";
 "nav_type_geocoding" = "Geokodiranje";
 "fast_route_mode_descr" = "Uključite da računate najbrži put ili isključite da računate put sa najvećom uštednjom goriva.";
 "avoid_in_routing_title" = "Izbegavati…";
@@ -526,7 +526,6 @@
 "my_favorites" = "My Favorites";
 "my_places" = "Moja mesta";
 "fav_no_group" = "No group";
-"fav_add_group" = "Dodaj skup";
 "fav_add_new_group" = "Add new group";
 "select_group_descr" = "Select group or add a new one";
 "available_groups" = "Available groups";
@@ -684,7 +683,7 @@
 "map_settings_install_more" = "Install more...";
 "map_settings_offline" = "Styles for offline maps";
 "map_settings_online" = "Mrežne karte";
-"map_settings_transp" = "Providnost";
+"shared_string_transparency" = "Providnost";
 "map_settings_base_transp" = "Providnost osnovne karte";
 "map_settings_avail_lay" = "Available layers";
 "map_settings_hillshade" = "Senke brda";
@@ -712,7 +711,7 @@
 "map_settings_line_density_slowdown_warning" = "High line density may slowdown map rendering";
 "map_settings_available_srtm_maps_descr" = "Additional maps are needed to view Hillshade on the map";
 "settings_app_theme" = "Application theme";
-"app_theme_light" = "Svetla";
+"light_theme" = "Svetla";
 "do_not_rotate" = "Do not rotate";
 "allow_3D_view" = "2.5D view";
 "units_of_speed" = "Units of speed";
@@ -1201,7 +1200,7 @@
 "osm_editing_settings_descr" = "This plugin's settings are global and apply to all profiles.";
 "osn_bug_name" = "Beleška OSM-a";
 "osm_created" = "Created";
-"osm_deleted" = "Izbrisano";
+"poi_remove_success" = "Izbrisano";
 "osm_modified" = "Modified";
 "osm_reopened" = "Reopened";
 "osm_name" = "OpenStreetMap username";
@@ -1223,7 +1222,7 @@
 "osm_add_place" = "Add place";
 "osm_modify_place" = "Modify place";
 "osm_poi_delete_title" = "Brisanje POI";
-"osm_target_modified" = "Izmenjene OSM tačke od interesa";
+"osm_edit_modified_poi" = "Izmenjene OSM tačke od interesa";
 "osm_target_deleted" = "Izbrisane OSM tačke od interesa";
 "osm_target_created" = "OSM tačka od interesa je napravljena";
 "osm_note_created" = "Napravi belešku OSM-a";
@@ -1315,7 +1314,7 @@
 "unsupported_items" = "Unsupported items";
 "create_items" = "Napravi stavke";
 "configure_map" = "Podesi kartu";
-"configure_map_descr" = "Izgled karte";
+"map_look_descr" = "Izgled karte";
 "add_map_marker" = "Dodaj oznaku na karti";
 "select_map_marker" = "Izaberite oznaku karte";
 "add_gpx_waypoint" = "Add GPX waypoint";
@@ -1560,7 +1559,6 @@
 "pink" = "Ružičasta";
 "translucent_red" = "Prozirna crvena";
 "translucent_orange" = "Prozirna narandžasta";
-"translucent_lightblue" = "Prozirna svetlo plava";
 "translucent_blue" = "Prozirna plava";
 "translucent_purple" = "Prozirna ljubičasta";
 "translucent_pink" = "Prozirna ružičasta";
@@ -1660,7 +1658,7 @@
 "some_articles_may_not_available_in_lang" = "Nekičlanci sa Vikipedija su možda dostupni na Vašem jeziku.";
 "available_languages" = "Available languages";
 "preferred_languages" = "Preferred languages";
-"product_title_srtm" = "Izohipse";
+"download_srtm_maps" = "Izohipse";
 "product_desc_srtm" = "Display of contour lines";
 "product_desc_ext_srtm" = "This plugin provides contour lines and hillshade, which can be displayed in OsmAnd offline maps. Contour lines provide the information about heights of the area while hillshade is their visualization. See the names of mountain peaks and specific features of terrain using this plugin.\n\nThe global data (between 70 degrees north and 70 degrees south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA's Earth Observing System. ASTER is a cooperative effort between NASA, Japan's Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
 "product_title_wikivoyage" = "Turistički vodiči";
@@ -1685,7 +1683,7 @@
 "res_roads" = "Putevi";
 "res_srtm" = "Izohipse";
 "res_wiki" = "Vikipedija";
-"res_hillshade" = "Senke brda";
+"shared_string_hillshade" = "Senke brda";
 "res_slope" = "Nagib";
 "res_standard" = "Uobičajena karta";
 "select_language" = "Select language";
@@ -1789,7 +1787,7 @@
 "no_statistics" = "No statistics";
 "no_internet_avail" = "No internet available";
 "no_internet_avail_desc_first" = "Please turn on internet connection to download list of maps";
-"show_region_on_map_title" = "Karta je preuzeta";
+"map_downloaded" = "Karta je preuzeta";
 "show_region_on_map_desc" = "Map of %@ has been downloaded. Go to the map to start using it.";
 "show_region_on_map_go" = "Go to the map";
 "obf_import_title" = "Import offline map file";

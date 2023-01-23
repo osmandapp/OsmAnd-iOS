@@ -399,7 +399,7 @@
 "shared_string_none" = "Geen";
 "map_settings_offline" = "Styles for offline maps";
 "map_settings_online" = "Online kaarten";
-"map_settings_transp" = "Transparantie";
+"shared_string_transparency" = "Transparantie";
 "map_settings_avail_lay" = "Available layers";
 "map_settings_hillshade" = "Reliëfschaduw";
 // Intro
@@ -602,7 +602,7 @@
 "product_title_wiki" = "Wikipedia";
 "product_desc_wiki" = "Wikipedia data";
 "product_desc_ext_wiki" = "Get information about points of interest from Wikipedia. It is your pocket offline guide - just enable Wikipedia plugin and enjoy articles about objects around you.";
-"product_title_srtm" = "Hoogtelijnen";
+"download_srtm_maps" = "Hoogtelijnen";
 "product_desc_srtm" = "Display of contour lines";
 "product_desc_ext_srtm" = "This plugin provides contour lines and hillshade, which can be displayed in OsmAnd offline maps. Contour lines provide the information about heights of the area while hillshade is their visualization. See the names of mountain peaks and specific features of terrain using this plugin.\n\nThe global data (between 70 degrees north and 70 degrees south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA's Earth Observing System. ASTER is a cooperative effort between NASA, Japan's Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
 "my_location" = "My Location";
@@ -620,7 +620,7 @@
 "res_roads" = "Wegen";
 "res_srtm" = "Hoogtelijnen";
 "res_wiki" = "Wikipedia";
-"res_hillshade" = "Reliëfschaduw";
+"shared_string_hillshade" = "Reliëfschaduw";
 "select_language" = "Select language";
 "language_short" = "Lang";
 "open_url" = "Open page in browser";
@@ -686,7 +686,7 @@
 "no_statistics" = "No statistics";
 "no_internet_avail" = "No internet available";
 "no_internet_avail_desc_first" = "Please turn on internet connection to download list of maps";
-"show_region_on_map_title" = "Kaart gedownload";
+"map_downloaded" = "Kaart gedownload";
 "show_region_on_map_desc" = "Map of %@ has been downloaded. Go to the map to start using it.";
 "show_region_on_map_go" = "Go to the map";
 "sqlitedb_import_title" = "Import Map Creator file";
@@ -838,12 +838,11 @@
 "shared_setting_always_ask" = "Altijd vragen";
 "toggle_nav" = "Navigatie starten/stoppen";
 "edit_action" = "Sneltoets bewerken";
-"fav_add_group" = "Een groep toevoegen";
 "shared_string_filter" = "Filter";
 "help_other_header" = "Andere";
 "blue" = "Blauw";
 "poi_type" = "POI type";
-"osm_target_modified" = "Gewijzigde OSM POI";
+"osm_edit_modified_poi" = "Gewijzigde OSM POI";
 "poi_clear" = "Wis";
 "add_map_source" = "Kaartbron toevoegen";
 "gpx_avg_altitude" = "Gemiddelde hoogte";
@@ -937,7 +936,6 @@
 "directions_more_options" = "Route vanaf";
 "shared_string_retry" = "Probeer opnieuw";
 "speak_tunnels" = "Tunnels";
-"translucent_lightblue" = "Doorschijnend lichtblauw";
 "mapil_add_photos" = "Foto\'s toevoegen";
 "units_min_short" = "m";
 "add_map_marker" = "Markeervlaggetje toevoegen";
@@ -947,7 +945,7 @@
 "osmand_live_update_now" = "Nu updaten";
 "gpx_descent" = "Daling";
 "brown" = "Bruin";
-"osm_deleted" = "Verwijderd";
+"poi_remove_success" = "Verwijderd";
 "help_map_viewing" = "De kaart bekijken";
 "shared_string_show_more" = "Toon meer";
 "map_sources" = "Kaartbronnen";
@@ -1455,7 +1453,7 @@
 "res_zoom_levels" = "Zoomniveaus";
 "import_profile_select_descr" = "Kies de te importeren gegevens.";
 "osm_note_comment_title" = "Opmerking maken bij OSM-nota";
-"configure_map_descr" = "Kaartweergave";
+"map_look_descr" = "Kaartweergave";
 "total" = "Totaal";
 "announce" = "Meld";
 "m_style_pulic_transport" = "Openbaar vervoer";
@@ -1494,12 +1492,12 @@
 "profile_prefs_reset_successful" = "Alle profielinstellingen zijn teruggezet naar de standaardwaarden.";
 "res_source_one_per_tile" = "Eén beeldbestand per rasterkaartsegment";
 "two" = "Twee";
-"app_theme_light" = "Licht";
+"light_theme" = "Licht";
 "tones" = "ton";
 "whole_track" = "De gehele route";
 "help_nav_profiles" = "Navigatieprofielen";
 "osm_note_close" = "Sluit OSM Note";
-"nav_type_ski" = "Ski";
+"routing_profile_ski" = "Ski";
 "min_speed" = "Minimumsnelheid";
 "create_profile_descr" = "Baseer je aangepaste profiel opéén van de standaard profielen, dit bepaalt de algemene opzet zoals standaard zichtbaarheid van widgets en eenheden van snelheid en afstand. Dit zijn de standaard profielen samen met voorbeelden van aangepaste profielen die uitgebreid kunnen worden:";
 "profile_type_osmand_string" = "OsmAnd-profiel";

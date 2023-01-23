@@ -95,7 +95,7 @@
 "shared_string_none" = "Нет";
 "map_settings_offline" = "Стили офлайн карт";
 "map_settings_online" = "Онлайн-карты";
-"map_settings_transp" = "Прозрачность";
+"shared_string_transparency" = "Прозрачность";
 "map_settings_avail_lay" = "Доступные слои";
 // Intro
 "intro_skip" = "Пропустить";
@@ -339,7 +339,7 @@
 "shared_string_edit" = "Редактировать";
 "product_title_wiki" = "Википедия";
 "product_desc_wiki" = "Данные Википедии";
-"product_title_srtm" = "Контурные линии";
+"download_srtm_maps" = "Контурные линии";
 "product_desc_srtm" = "Отображать контурные линии";
 "enter_description" = "Введите описание";
 "description" = "Описание";
@@ -348,7 +348,7 @@
 "res_roads" = "Дороги";
 "res_srtm" = "Контурные линии";
 "res_wiki" = "Википедия";
-"res_hillshade" = "Затенение рельефа";
+"shared_string_hillshade" = "Затенение рельефа";
 "select_language" = "Выберите язык";
 "language_short" = "Язык";
 "open_url" = "Открыть в браузере";
@@ -430,7 +430,7 @@
 "no_statistics" = "Нет статистики";
 "no_internet_avail" = "Отсутствует интернет-соединение";
 "no_internet_avail_desc_first" = "Пожалуйста, активируйте интернет-соединение для загрузки списка карт";
-"show_region_on_map_title" = "Карта загружена";
+"map_downloaded" = "Карта загружена";
 "show_region_on_map_desc" = "Карта %@ загружена. Для начала использования перейдите к карте.";
 "show_region_on_map_go" = "Перейти к карте";
 "sqlitedb_import_title" = "Импорт файла растровой карты";
@@ -771,7 +771,6 @@
 "blue" = "Синий";
 "pink" = "Розовый";
 "translucent_orange" = "Полупрозрачный оранжевый";
-"translucent_lightblue" = "Полупрозрачный голубой";
 "translucent_blue" = "Полупрозрачный синий";
 "translucent_purple" = "Полупрозрачный фиолетовый";
 "translucent_pink" = "Прозрачно-розовый";
@@ -985,7 +984,6 @@
 "toggle_day_night" = "Переключить дневной/ночной режим";
 "search_results" = "Результаты поиска";
 "quick_action_screen_header" = "Экран %ld";
-"fav_add_group" = "Добавить группу";
 "add_group" = "Добавить группу";
 "poi_list" = "Список категорий";
 "select_map_style" = "Выберите стиль карты";
@@ -1113,7 +1111,7 @@
 "loading_poi_obj" = "Загрузка POI…";
 "osn_bug_name" = "Заметка OSM";
 "osm_created" = "Создано";
-"osm_deleted" = "Удалено";
+"poi_remove_success" = "Удалено";
 "osm_modified" = "Изменено";
 "osm_reopened" = "Переоткрыто";
 "osm_offline_editing" = "Всегда редактировать офлайн";
@@ -1122,7 +1120,7 @@
 "osm_around_the_clock" = "Круглосуточно (24/7)";
 "osm_opens_at" = "Открывается в:";
 "osm_closes_at" = "Закрывается в:";
-"osm_target_modified" = "Отредактированная OSM POI";
+"osm_edit_modified_poi" = "Отредактированная OSM POI";
 "osm_target_deleted" = "Удалённая OSM POI";
 "osm_target_created" = "Создана OSM POI";
 "osm_confirm_upload" = "Отправить правки?";
@@ -1777,11 +1775,11 @@
 "size_of_downloaded_data" = "Большая разница между уровнями масштабирования может увеличить размер загружаемых данных.";
 "import_routing_file_descr" = "Вы можете импортировать файл маршрутизации из любого приложения облачного хранилища или открыв его в OsmAnd.";
 "units_and_formats" = "Единицы измерения и форматы";
-"app_theme_light" = "Светлая";
+"light_theme" = "Светлая";
 "settings_app_theme" = "Тема приложения";
 "only_manually" = "Только вручную";
 "nav_type_geocoding" = "Геокодирование";
-"nav_type_ski" = "Лыжи";
+"routing_profile_ski" = "Лыжи";
 "nav_type_brouter" = "BRouter";
 "voice_announces" = "Голосовые подсказки";
 "max_speed" = "Макс. скорость";
@@ -1803,7 +1801,7 @@
 "shared_string_required" = "Требуется";
 "email_example_hint" = "user@example.com";
 "default_speed_descr" = "Используется для оценки времени прибытия для неизвестного типа дорог и ограничения скорости для всех дорог (может изменить маршрут)";
-"configure_map_descr" = "Внешний вид карты";
+"map_look_descr" = "Внешний вид карты";
 "osm_editing_access_descr" = "Вы можете просмотреть все свои локальные правки и заметки в %@. Уже загруженные точки не отображаются в OsmAnd.";
 "osm_editing_settings_descr" = "Настройки этого плагина глобальны и применяются ко всем профилям.";
 // Menu
@@ -2450,7 +2448,7 @@
 "toggle_cloud" = "Показать/скрыть - Слой облачности";
 "precipitation_show" = "Показать осадки";
 "precipitation_hide" = "Скрыть осадки";
-"weather_temp_unit_f" = "Фаренгейт";
+"weather_temperature_fahrenheit" = "Фаренгейт";
 "weather_precip_unit_in" = "Дюймы";
 "login_footer_full_text" = "Нужна помощь? Пожалуйста, свяжитесь с нами по адресу\nsupport@osmand.net";
 "login_footer_email_part" = "support@osmand.net";

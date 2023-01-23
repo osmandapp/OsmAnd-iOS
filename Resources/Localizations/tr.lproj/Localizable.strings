@@ -122,7 +122,7 @@
 "shared_string_none" = "Hiçbiri";
 "map_settings_offline" = "Çevrim dışı haritalar için tarzlar";
 "map_settings_online" = "Çevrim içi haritalar";
-"map_settings_transp" = "Şeffaflık";
+"shared_string_transparency" = "Şeffaflık";
 "map_settings_avail_lay" = "Kullanılabilir katmanlar";
 // Intro
 "intro_skip" = "Atla";
@@ -318,7 +318,7 @@
 "product_title_wiki" = "Wikipedia";
 "product_desc_wiki" = "Vikipedi veri";
 "product_desc_ext_wiki" = "Wikipedia'dan ilgi çekici yerler hakkında bilgi alın. Bu sizin çevrim dışı cep rehberinizdir - sadece Wikipedia eklentisini etkinleştirin ve etrafınızdaki nesneler hakkında makalelerin tadını çıkarın.";
-"product_title_srtm" = "Eş yükselti eğrileri";
+"download_srtm_maps" = "Eş yükselti eğrileri";
 "product_desc_srtm" = "Eş yükselti eğrilerinin görüntülenmesi";
 "my_location" = "Konumum";
 "all_categories" = "Tüm kategoriler";
@@ -398,7 +398,7 @@
 "no_statistics" = "Hiçbir istatistikleri";
 "no_internet_avail" = "İnternet yok";
 "no_internet_avail_desc_first" = "Lütfen haritaların listesi karşıdan yüklemek için Internet bağlantısı açın";
-"show_region_on_map_title" = "İndirilen harita";
+"map_downloaded" = "İndirilen harita";
 "show_region_on_map_desc" = "% Haritası yüklendi. Bunu kullanmaya başlamak için harita için gidin.";
 "show_region_on_map_go" = "Harita git";
 "sqlitedb_import_title" = "Raster harita dosyasını içe aktar";
@@ -421,7 +421,7 @@
 "product_desc_ext_skimap" = "OsmAnd Kayak Haritaları, kış sporları konumlarında gezinmek için tasarlanmış bir OsmAnd Haritalar&Navigasyon uygulaması eklentisidir. Kayak pistleri, telesiyej işaretleri hakkında bilgiler vermekte ve hatta her parkurun karmaşıklığını gösteren renkli çizgiler sağlamaktadır. Kayak pistleri ve çevresindeki altyapı hakkında bilgiler edinebilirsiniz.\n\nKullanım Talimatları: OsmAnd uygulamasında eklentiyi etkinleştirin, harita düğmesine dokunun ve harita türünü Kayak haritaları olarak ayarlayın.";
 "product_desc_ext_track_recording" = "İzlediğiniz yolları OsmAnd Yol kaydı eklentisini kullanarak elle kaydedin. İzlediğiniz yolu bir gpx dosyası olarak dışa aktarın, paylaşın ve hatta OpenStreetMap projesine katkıda bulunmak için kullanın. Koşucular, yürüyüşçüler ve izledikleri yolları kaydetmek isteyen herkes için kullanışlı bir araçtır.";
 "product_desc_ext_srtm" = "Bu eklenti, OsmAnd çevrim dışı haritalarında görüntülenebilen eş yükselti eğrileri ve tepe gölgelemesi sağlamaktadır. Eş yükselti eğrileri, alandaki yükseklikler hakkında bilgi sağlarken, tepe gölgeleri bunları görselleştirmektedir. Bu eklentiyi kullanarak dağ zirvelerinin adlarını ve arazinin belirli özelliklerini görün.\n\nKüresel veriler (70° kuzey ve 70° güney arasındaki) SRTM (Shuttle Radar Topography Mission) ve ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), NASA'nın Dünya Gözlem Sisteminin amiral uydusu olan Terra üzerindeki bir görüntüleme aracı, tarafından yapılan ölçümlere dayanmaktadır. ASTER NASA, Japonya Ekonomi, Ticaret ve Sanayi Bakanlığı (METI) , ve Japon Uzay Sistemleri (J-spacesystems) arasında ortak bir çalışmadır.";
-"res_hillshade" = "Tepe gölgesi";
+"shared_string_hillshade" = "Tepe gölgesi";
 "plugin_popup_ski_desc" = "<b>Kayak haritası</b> tarzını açmak için lütfen <b>Harita Ayarları</b> > <b> Harita türü</b>'ne gidin";
 "plugin_popup_nautical_desc" = "Lütfen önce Deniz haritalarını indirin.\nArdından <b>Harita Ayarları</b> > <b> Harita türü</b>'ne gidin ve <b>Deniz</b> tarzını açın";
 "device_memory" = "Aygıt belleği";
@@ -850,7 +850,6 @@
 "help_about" = "Hakkında";
 "osmand_live_donations" = "Bağışlar";
 "osm_note_reopen" = "Yeniden Açmak";
-"translucent_lightblue" = "Yarı saydam açık mavi";
 "osm_edits_basic" = "Temel";
 "mapillary" = "Mapillary";
 "help_tech_articles" = "Teknik makaleler";
@@ -861,7 +860,6 @@
 "pause_resume_nav" = "Navigasyonu duraklat/devam ettir";
 "red" = "Kırmızı";
 "show_something_on_map" = "%@ \'ı haritada göster";
-"fav_add_group" = "Grup ekle";
 "translucent_red" = "Yarı saydam kırmızı";
 "add_poi" = "POI ekle";
 "select_all" = "Hepsini seç";
@@ -883,14 +881,14 @@
 "help_faq" = "SSS";
 "translucent_pink" = "Şeffaf pembe";
 "region_others" = "Diğer haritalar";
-"osm_target_modified" = "Modifiye OSM POI";
+"osm_edit_modified_poi" = "Modifiye OSM POI";
 "change_map_source" = "Harita kaynağını değiştir";
 "map_widget_ruler_control" = "Yarıçap cetveli";
 "map_settings_text_size" = "Yazı boyutu";
 "coordinates_example" = "Örnek";
 "lightblue" = "Açık mavi";
 "osm_str_name" = "Sokak ismi";
-"osm_deleted" = "Silindi";
+"poi_remove_success" = "Silindi";
 "my_places" = "Yerlerim";
 "osm_close_changeset" = "Değişiklik listesini kapat";
 "purple" = "Mor";
@@ -1751,7 +1749,7 @@
 "special_routing" = "Özel yönlendirme";
 "choose_auto_center_map_view_descr" = "Hareket ettikten sonra harita görünümünün geçerli konumla eşzamanlanmasına kadar geçen süre";
 "nav_type_geocoding" = "Coğrafi Kodlama";
-"nav_type_ski" = "Kayak";
+"routing_profile_ski" = "Kayak";
 "nav_type_brouter" = "BRouter";
 "voice_announces" = "Sesli uyarılar";
 "max_speed" = "En yüksek hız";
@@ -1767,7 +1765,7 @@
 "units_of_speed" = "Hız birimleri";
 "allow_3D_view" = "2.5B görünüm";
 "do_not_rotate" = "Döndürme";
-"app_theme_light" = "Açık";
+"light_theme" = "Açık";
 "settings_app_theme" = "Uygulama teması";
 "shared_string_meters" = "metre";
 "tones" = "ton";
@@ -1796,7 +1794,7 @@
 "height_limit_description" = "Aracınızın yüksekliğini belirtin, yüksek araçlar için bazı rota kısıtlamaları geçerli olabilir.";
 "export_profile" = "Dışa aktar";
 "profile_settings" = "Profil ayarları";
-"configure_map_descr" = "Harita görünümü";
+"map_look_descr" = "Harita görünümü";
 "export_profile_descr" = "Tüm profil ayarlarını dışa aktarabilir, başka bir profilden kopyalayabilir veya varsayılan durumlarına sıfırlayabilirsiniz.";
 "profile_sett_descr" = "Seçili uygulama profilini etkiler";
 "app_profiles" = "Uygulama profilleri";
@@ -2381,7 +2379,7 @@
 "product_desc_weather" = "Gün boyunca saatlik tahmin ve her 3 saatte bir 7 günlük tahmin";
 "measurement_units" = "Ölçü birimleri";
 "weather_temp_unit_c" = "Santigrat";
-"weather_temp_unit_f" = "Fahrenhayt";
+"weather_temperature_fahrenheit" = "Fahrenhayt";
 "weather_pressure_unit_hpa" = "Hektopascal";
 "weather_pressure_unit_mmhg" = "Milimetre cıva";
 "weather_pressure_unit_inhg" = "Cıva inç";

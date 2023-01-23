@@ -421,7 +421,7 @@
 "shared_string_none" = "Ningún";
 "map_settings_offline" = "Styles for offline maps";
 "map_settings_online" = "Mapas con conexión";
-"map_settings_transp" = "Transparencia";
+"shared_string_transparency" = "Transparencia";
 "map_settings_avail_lay" = "Available layers";
 "map_settings_hillshade" = "Sombras do relevo";
 // Intro
@@ -645,7 +645,7 @@
 "product_title_wiki" = "Wikipedia";
 "product_desc_wiki" = "Wikipedia data";
 "product_desc_ext_wiki" = "Get information about points of interest from Wikipedia. It is your pocket offline guide - just enable Wikipedia plugin and enjoy articles about objects around you.";
-"product_title_srtm" = "Curvas de nivel";
+"download_srtm_maps" = "Curvas de nivel";
 "product_desc_srtm" = "Display of contour lines";
 "product_desc_ext_srtm" = "This plugin provides contour lines and hillshade, which can be displayed in OsmAnd offline maps. Contour lines provide the information about heights of the area while hillshade is their visualization. See the names of mountain peaks and specific features of terrain using this plugin.\n\nThe global data (between 70 degrees north and 70 degrees south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA's Earth Observing System. ASTER is a cooperative effort between NASA, Japan's Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
 "my_location" = "My Location";
@@ -663,7 +663,7 @@
 "res_roads" = "Estradas";
 "res_srtm" = "Curvas de nivel";
 "res_wiki" = "Wikipedia";
-"res_hillshade" = "Sombras do relevo";
+"shared_string_hillshade" = "Sombras do relevo";
 "select_language" = "Select language";
 "language_short" = "Lang";
 "open_url" = "Open page in browser";
@@ -731,7 +731,7 @@
 "no_statistics" = "No statistics";
 "no_internet_avail" = "No internet available";
 "no_internet_avail_desc_first" = "Please turn on internet connection to download list of maps";
-"show_region_on_map_title" = "Mapa baixado";
+"map_downloaded" = "Mapa baixado";
 "show_region_on_map_desc" = "Map of %@ has been downloaded. Go to the map to start using it.";
 "show_region_on_map_go" = "Go to the map";
 "sqlitedb_import_title" = "Import Map Creator file";
@@ -860,7 +860,6 @@
 "shared_string_distance" = "Distancia";
 "offline_vector_maps" = "Mapas vectoriais sen conexión";
 "osm_alert_button_ok" = "Crear unha nota";
-"translucent_lightblue" = "Azul claro translúcido";
 "modify_poi_short" = "Modificar o PDI";
 "shared_string_time" = "Tempo";
 "mapil_add_photos" = "Engadir imaxes";
@@ -922,7 +921,7 @@
 "wikivoyage_offline" = "Wikiviaxes sen conexión";
 "shared_string_filter" = "Filtro";
 "add_map_marker" = "Engadir unha marcaxe do mapa";
-"osm_deleted" = "Eliminado";
+"poi_remove_success" = "Eliminado";
 "map_sources" = "Fontes de mapas";
 "osm_edits_basic" = "Básico";
 "osm_note_reopen" = "Reabrir";
@@ -943,7 +942,7 @@
 "open_osm_note" = "Abrir nota do OSM";
 "mapil_pano_only" = "Amosar só imaxes 360°";
 "change_map_overlay" = "Mudar mapa sobreposto";
-"osm_target_modified" = "Modificouse un PDI do OSM";
+"osm_edit_modified_poi" = "Modificouse un PDI do OSM";
 "dark_yellow" = "Amarelo escuro";
 "shared_string_milliradians" = "Milirradiáns";
 "add_poi" = "Engadir un PDI";
@@ -992,7 +991,6 @@
 "online_map" = "Mapa na rede";
 "get_discount_second_part" = "depois %@";
 "mapillary_image" = "Imaxe de Mapillary";
-"fav_add_group" = "Engadir un grupo";
 "osmand_live_support_reg_title" = "Rexión suportada";
 "quick_action_name" = "Acción rápida";
 "osm_edits_advanced" = "Avanzado";
@@ -1364,7 +1362,7 @@
 "app_profiles" = "Perfís da aplicación";
 "reverse_route" = "Ruta inversa";
 "plugin_settings_reset" = "Restabelecer a configuración do plugin ós valores por defecto";
-"app_theme_light" = "Claro";
+"light_theme" = "Claro";
 "base_profile_descr_pedestrian" = "Andar, sendeirismo, correr";
 "quick_action_remove_next_destination_descr" = "Elimina o seguinte destino da ruta. Seé o destino final, a navegación será detida.";
 "profile_alert_delete_title" = "Eliminar perfil";
@@ -1395,7 +1393,7 @@
 "copy_from_other_profile" = "Copiar doutro perfil";
 "avoid_road" = "Evitar estrada";
 "shared_string_exit" = "Saír";
-"configure_map_descr" = "Aparencia do mapa";
+"map_look_descr" = "Aparencia do mapa";
 "route_betw_points" = "Ruta entre puntos";
 "shared_string_max" = "Máx.";
 "importing_from" = "Estanse a importar datos de %@";
@@ -1468,7 +1466,7 @@
 "base_profile_descr_public_transport" = "Tipos de transporte público";
 "replace_all_desc" = "Os elementos actuais serán substituídos polos elementos do ficheiro";
 "quick_action_remove_next_destination" = "Eliminar punto de destino máis preto";
-"nav_type_ski" = "Esquí";
+"routing_profile_ski" = "Esquí";
 "two" = "Dous";
 "shared_string_nothing_selected" = "Ren selecionado";
 "map_settings_add_online_source" = "Engadir fonte en liña";

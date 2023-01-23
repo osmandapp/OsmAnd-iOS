@@ -553,7 +553,7 @@
         @"values" : _groupNames,
         @"sizes" : _groupSizes,
         @"colors" : _groupColors,
-        @"addButtonTitle" : OALocalizedString(@"fav_add_group")
+        @"addButtonTitle" : OALocalizedString(@"add_group")
     }];
     _selectCategoryCardsRowIndex = section.count - 1;
     [data addObject:[NSArray arrayWithArray:section]];

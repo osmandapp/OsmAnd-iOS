@@ -222,7 +222,6 @@
 "my_favorites" = "내 즐겨찾기";
 "my_places" = "저장소";
 "fav_no_group" = "그룹 없음";
-"fav_add_group" = "그룹 추가";
 "fav_add_new_group" = "새 그룹 추가";
 "select_group_descr" = "그룹을 선택하거나 새 그룹을 추가하십시오.";
 "available_groups" = "사용 가능한 그룹";
@@ -308,7 +307,7 @@
 "nav_type_descr" = "이 프로필의 경로를 계산하는 방법 선택";
 "nav_type_osmand" = "OsmAnd(오프라인 라우팅)";
 "nav_type_straight_line" = "직선";
-"nav_type_ski" = "스키";
+"routing_profile_ski" = "스키";
 "nav_type_geocoding" = "지오코딩";
 "fast_route_mode_descr" = "\"가장 빠른 경로를 활성화하거나 or 가장 짧은 경로를 비활성화합니다 \"";
 "avoid_in_routing_descr_" = "유료 도로, 비 포장 도로, 페리 제외";
@@ -639,7 +638,6 @@
 "route_head" = "전방";
 "rendering_value_lightblue_name" = "연한 파랑";
 "osm_note_comment" = "설명";
-"translucent_lightblue" = "반투명 밝은 파란색";
 "rendering_value_brown_name" = "갈색";
 "rendering_attr_tramRoutes_name" = "전차 노선";
 "poi_opening_hours" = "오프닝 시간";
@@ -653,7 +651,7 @@
 "rendering_value_green_name" = "녹색";
 "lang_da" = "덴마크어";
 "shared_string_building" = "빌딩";
-"osm_deleted" = "POI가 성공적으로 삭제되었습니다";
+"poi_remove_success" = "POI가 성공적으로 삭제되었습니다";
 "rendering_attr_noPolygons_name" = "폴리곤 숨기기";
 "rendering_value_translucent_blue_name" = "반투명 블루";
 "tile_cache" = "타일 캐시";
@@ -796,7 +794,7 @@
 "units_ft" = "피트";
 "lang_el" = "그리스어";
 "rendering_attr_buildings15zoom_name" = "줌 레벨 15에 있는 건물 표시";
-"app_theme_light" = "밝은";
+"light_theme" = "밝은";
 "ctx_mnu_share" = "공유";
 "lightgreen" = "가벼운 녹색";
 "shared_string_never" = "결코";
@@ -829,7 +827,7 @@
 "key_hint_deselect" = "선택 취소";
 "arrival_distance_factor_at_last" = "마지막 미터에서";
 "industrial" = "공업";
-"product_title_srtm" = "등고선";
+"download_srtm_maps" = "등고선";
 "lang_vi" = "베트남어";
 "nothanks" = "필요없음";
 "rendering_attr_trainLightrailRoutes_name" = "기차 노선";
@@ -1109,8 +1107,8 @@
 "lang_mn" = "몽골어";
 "turn_arrows" = "화살표 돌리기";
 "register_opr_create_new_account" = "새 계정 만들기";
-"map_settings_transp" = "투명도";
-"configure_map_descr" = "지도 모양";
+"shared_string_transparency" = "투명도";
+"map_look_descr" = "지도 모양";
 "osmand_live_last_live_update" = "마지막 업데이트: %@";
 "weather_wind_unit_km_per_hour" = "시간당 킬로미터";
 "help_versions" = "버전";
@@ -1287,7 +1285,7 @@
 "subscription_banner_free_maps_description" = "무제한 지도 다운로드 및 업데이트를 받으세요.";
 "backup_into_file" = "파일로 백업";
 "prch_wiki_info" = "Wikipedia 애드온은 무료 한도 내에서 자격, 구매 또는 다운로드 된지도에 대한 위키백과 정보를 활성화합니다.";
-"show_region_on_map_title" = "지도 다운로드됨";
+"map_downloaded" = "지도 다운로드됨";
 "subscriptions_public_info" = "결제는 구매 확인 시 iTunes 계정으로 청구됩니다. 현재 기간이 끝나기 최소 24시간 전에 자동 갱신을 끄지 않으면 구독이 자동으로 갱신됩니다. 귀하의 계정은 현재 기간이 끝나기 24시간 이내에 갱신 계획에 따라 청구됩니다. 구매 후 계정 설정에서 자동 갱신을 관리하거나 끌 수 있습니다. 무료 평가판 기간 동안 구독을 구매하면 이 기간 중 사용하지 않은 부분은 소멸됩니다.";
 "res_uninst_unmanaged_q" = "%@을(를) 삭제하려고 합니다. 카탈로그에서 가져온 것이 아니므로 필요한 경우 백업이 있는지 확인하십시오.";
 "restore_all_purchases" = "모든 구매 내역 복원";

@@ -97,7 +97,7 @@
 "shared_string_none" = "Nessuno";
 "map_settings_offline" = "Stili per le mappe offline";
 "map_settings_online" = "Mappe online";
-"map_settings_transp" = "Trasparenza";
+"shared_string_transparency" = "Trasparenza";
 "map_settings_avail_lay" = "Livelli disponibili";
 // Intro
 "intro_skip" = "Salta";
@@ -303,7 +303,7 @@
 "product_desc_asia" = "Scaricamenti illimitati delle mappe per l'Asia";
 "product_title_wiki" = "Wikipedia";
 "product_desc_wiki" = "Articoli di Wikipedia basati sulla posizione sulla mappa";
-"product_title_srtm" = "Linee isoipse";
+"download_srtm_maps" = "Linee isoipse";
 "product_desc_srtm" = "Valutazione visiva della forma della superficie terrestre";
 "my_location" = "La mia posizione";
 "all_categories" = "Tutte le categorie";
@@ -320,7 +320,7 @@
 "res_roads" = "Strade";
 "res_srtm" = "Linee isoipse";
 "res_wiki" = "Wikipedia";
-"res_hillshade" = "Ombreggiatura rilievi";
+"shared_string_hillshade" = "Ombreggiatura rilievi";
 "select_language" = "Scegli la lingua";
 "language_short" = "Lingua";
 "open_url" = "Apri la pagina in un browser";
@@ -830,7 +830,6 @@
 "blue" = "Blu";
 "add_map_marker" = "Aggiungi marcatore mappa";
 "translucent_blue" = "Blu traslucido";
-"translucent_lightblue" = "Azzurro traslucido";
 "map_styles" = "Stili mappa";
 "help_versions" = "Versioni";
 "mapillary_get_title" = "Migliora la copertura fotografica con Mapillary";
@@ -919,7 +918,7 @@
 "poi_type" = "Tipo di PDI";
 "add_poi" = "Aggiungi PDI";
 "directions_more_options" = "Indicazioni da";
-"show_region_on_map_title" = "Mappa scaricata";
+"map_downloaded" = "Mappa scaricata";
 "quick_actions_show_dialog" = "Mostra una finestra di dialogo temporanea";
 "prefer_in_routing_descr" = "Preferisci autostrade";
 "replace_destination" = "Sostituisci la destinazione";
@@ -934,7 +933,6 @@
 "day_mode" = "Modalità giorno";
 "nearby_search" = "Cerca nelle vicinanze";
 "help_first_use" = "Primo utilizzo";
-"fav_add_group" = "Aggiungi un gruppo";
 "quick_action_name" = "Azione veloce";
 "osm_alert_button_ok" = "Crea nota";
 "mapil_pano_only" = "Mostra solo immagini a 360°";
@@ -958,7 +956,7 @@
 "osm_phone" = "Telefono";
 "orange" = "Arancione";
 "quick_action_name_footer" = "Lascia il campo vuoto per utilizzare l’indirizzo o il nome del luogo.";
-"osm_deleted" = "Eliminato";
+"poi_remove_success" = "Eliminato";
 "translucent_green" = "Verde traslucido";
 "purchase_unlim_title" = "Acquista - %@";
 "osmand_live_available_maps" = "Mappe disponibili";
@@ -979,7 +977,7 @@
 "poi_clear" = "Pulisci";
 "osm_editing_contact_info" = "Informazioni di contatto";
 "quick_action_add_poi_category" = "Aggiungi una categoria";
-"osm_target_modified" = "PDI di OSM modificato";
+"osm_edit_modified_poi" = "PDI di OSM modificato";
 "route_roundabout_short" = "Prendere la %d uscita e proseguire";
 "res_url" = "URL";
 "res_elliptic_mercator" = "Mercatore ellittico";
@@ -1645,7 +1643,7 @@
 "units_of_speed" = "Unità di misura della velocità";
 "allow_3D_view" = "Vista 2.5D";
 "do_not_rotate" = "Non ruotare";
-"app_theme_light" = "Chiaro";
+"light_theme" = "Chiaro";
 "settings_app_theme" = "Tema dell'applicazione";
 "map_settings_available_srtm_maps_descr" = "Sono necessarie mappe aggiuntive per visualizzare Hillshade sulla mappa";
 "map_settings_line_density_slowdown_warning" = "Un'elevata densità di linea può rallentare il rendering della mappa";
@@ -1704,7 +1702,7 @@
 "repeat_after" = "Ripeti dopo";
 "choose_auto_center_map_view_descr" = "Tempo fino a quando la visualizzazione della mappa si sincronizza con la posizione corrente dopo lo spostamento";
 "nav_type_geocoding" = "Geocodifica";
-"nav_type_ski" = "Sci";
+"routing_profile_ski" = "Sci";
 "nav_type_brouter" = "BRouter";
 "nav_type_direct_to" = "Dritto-al-punto";
 "nav_type_straight_line" = "Linea retta";
@@ -1746,7 +1744,7 @@
 "res_source_one_per_tile" = "Un file immagine per mattonella";
 "whole_track" = "Tutta la traccia";
 "width_limit_description" = "Indica la larghezza del veicolo, alcune restrizioni stradali potrebbero essere applicate per veicoli larghi.";
-"configure_map_descr" = "Aspetto della mappa";
+"map_look_descr" = "Aspetto della mappa";
 "import_complete_description" = "Tutti i dati sono stati importati da %@, puoi utilizzare i bottoni sottostanti per aprire e gestire le parti dell'applicazione di cui necessiti";
 "public_transport_menu" = "Trasporti pubblici";
 "select_icon" = "Seleziona icona";
@@ -2337,7 +2335,7 @@
 "ui_customization" = "Personalizzazione interfaccia";
 "select_profile" = "Seleziona profilo";
 "toggle_coordinates" = "Mostra/nascondi widget delle coordinate";
-"weather_temp_unit_f" = "Fahrenheit";
+"weather_temperature_fahrenheit" = "Fahrenheit";
 "backup_error_invalid_token" = "Token non valido";
 "verification_code_placeholder" = "Codice";
 "checking_for_duplicates" = "Controllo duplicati...";

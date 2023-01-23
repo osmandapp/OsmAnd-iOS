@@ -206,7 +206,7 @@
         NSDictionary *transparencyRow = @{
             @"cellId" : OATitleSliderTableViewCell.getCellIdentifier,
             @"type" : kTransparencyCell,
-            @"title" : OALocalizedString(@"map_settings_transp"),
+            @"title" : OALocalizedString(@"shared_string_transparency"),
             @"value" : @([self getLayerAlphaValue])
         };
         

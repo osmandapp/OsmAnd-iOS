@@ -236,7 +236,7 @@ static const NSInteger groupCount = 5;
     [dataArr addObject:
      @{
        @"name" : @"contour_lines",
-       @"title" : OALocalizedString(@"product_title_srtm"),
+       @"title" : OALocalizedString(@"download_srtm_maps"),
        @"type" : kLinkInternalType,
        @"html" : @"contour-lines-plugin"
        }];

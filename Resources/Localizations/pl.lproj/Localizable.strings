@@ -99,7 +99,7 @@
 "shared_string_none" = "Brak";
 "map_settings_offline" = "Style map offline";
 "map_settings_online" = "Mapy online";
-"map_settings_transp" = "Przejrzystość";
+"shared_string_transparency" = "Przejrzystość";
 "map_settings_avail_lay" = "Dostępne warstwy";
 "map_settings_hillshade" = "Mapa cieniowana";
 // Intro
@@ -346,7 +346,7 @@
 "cannot_add_marker" = "Nie można dodać Parkingu";
 "product_title_track_recording" = "Nagrywanie trasy";
 "product_title_wiki" = "Wikipedia";
-"product_title_srtm" = "Poziomice";
+"download_srtm_maps" = "Poziomice";
 "product_desc_srtm" = "Wyświetlaj poziomice";
 "my_location" = "Aktualne położenie";
 "all_categories" = "Wszystkie kategorie";
@@ -383,7 +383,7 @@
 "plugin_popup_ski_title" = "Włącz styl Mapy tras narciarskich";
 "restore" = "Przywróć";
 "no_internet_avail" = "Brak połączenia z Internetem";
-"show_region_on_map_title" = "Pobrano mapę";
+"map_downloaded" = "Pobrano mapę";
 "history" = "Historia";
 "today" = "Dzisiaj";
 "yesterday" = "Wczoraj";
@@ -639,7 +639,7 @@
 "product_desc_wiki" = "Dane z Wikipedii";
 "get_unlimited_access" = "Uzyskaj nieograniczony dostęp";
 "track_save_short_q" = "Trasa jest zbyt krótka, czy chcesz ją zapisać?";
-"res_hillshade" = "Mapa cieniowana";
+"shared_string_hillshade" = "Mapa cieniowana";
 "open_url" = "Otwórz w przeglądarce";
 "wpt_remove_q" = "Usunąć punkt trasy?";
 "from_location" = "stąd";
@@ -897,7 +897,6 @@
 "blue" = "Niebieski";
 "pink" = "Różowy";
 "translucent_orange" = "Przezroczysty pomarańczowy";
-"translucent_lightblue" = "Przezroczysty jasnoniebieski";
 "translucent_blue" = "Przezroczysty niebieski";
 "translucent_purple" = "Przezroczysty fioletowy";
 "translucent_pink" = "Przezroczysty różowy";
@@ -919,7 +918,7 @@
 "loading_poi_obj" = "Wczytywanie użytecznego miejsca…";
 "osn_bug_name" = "Uwaga OSM";
 "osm_created" = "Utworzono";
-"osm_deleted" = "Usunięte";
+"poi_remove_success" = "Usunięte";
 "osm_modified" = "Zmodyfikowano";
 "osm_reopened" = "Otwarto ponownie";
 "osm_name" = "Nazwa użytkownika OpenStreetMap";
@@ -941,7 +940,7 @@
 "osm_add_place" = "Dodaj miejsce";
 "osm_modify_place" = "Zmodyfikuj miejsce";
 "osm_poi_delete_title" = "Usuń użyteczne miejsce";
-"osm_target_modified" = "Zmodyfikowane użyteczne miejsce OSM";
+"osm_edit_modified_poi" = "Zmodyfikowane użyteczne miejsce OSM";
 "osm_target_deleted" = "Usunięto użyteczne miejce OSM";
 "osm_target_created" = "Utworzone użyteczne miejsce OSM";
 "osm_confirm_delete" = "Usunąć Miejsce Użyteczne?";
@@ -1153,7 +1152,6 @@
 "quick_action_name_str" = "Nazwa czynności";
 "quick_action_name_alert" = "Zmieniono nazwę szybkiej czynności na %@ by uniknąć duplikacji.";
 "quick_action_screen_header" = "Ekran %ld";
-"fav_add_group" = "Dodaj grupę";
 "add_group" = "Dodaj grupę";
 "poi_list" = "Lista użytecznych miejsc";
 "select_map_style" = "Wybierz styl mapy";
@@ -1700,7 +1698,7 @@
 "osmand_routing" = "Wyznaczanie trasy przez OsmAnd";
 "choose_auto_center_map_view_descr" = "Ustala opóźnienie synchronizacji mapy z aktualnym położeniem po ruchu";
 "nav_type_geocoding" = "Geokodowanie";
-"nav_type_ski" = "Narty";
+"routing_profile_ski" = "Narty";
 "nav_type_brouter" = "BRouter";
 "nav_type_direct_to" = "Bezpośrednio do punktu";
 "nav_type_straight_line" = "Linia prosta";
@@ -1776,7 +1774,7 @@
 "osmand_settings" = "Ustawienia OsmAnd";
 "device_settings" = "Ustawienia urządzenia";
 "allow_3D_view" = "Widok 2.5D";
-"app_theme_light" = "Jasny";
+"light_theme" = "Jasny";
 "settings_app_theme" = "Motyw aplikacji";
 "map_settings_legend" = "Legenda";
 "gpx_parse_error" = "Plik OsmAnd GPX nie jest poprawnie skonstruowany, prosimy o kontakt z zespołem wsparcia technicznego w celu dalszego zbadania sprawy.";
@@ -1822,7 +1820,7 @@
 "units_t" = "t";
 "public_transport_hide" = "Ukryj transport publiczny";
 "public_transport_show" = "Pokaż transport publiczny";
-"configure_map_descr" = "Wygląd mapy";
+"map_look_descr" = "Wygląd mapy";
 "delete_point" = "Usuń punkt";
 "move_point" = "Przesuń punkt";
 "add_to_track" = "Dodaj do trasy";

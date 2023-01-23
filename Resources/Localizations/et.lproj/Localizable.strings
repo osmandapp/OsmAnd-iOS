@@ -397,7 +397,6 @@
 "my_favorites" = "Minu lemmikud";
 "my_places" = "Minu kohad";
 "fav_no_group" = "Gruppi pole";
-"fav_add_group" = "Lisa grupp";
 "fav_remove_q" = "Eemaldada lemmik?";
 "fav_import" = "Impordi";
 "fav_import_title" = "Impordi lemmik";
@@ -507,7 +506,7 @@
 "shared_string_none" = "Mitteühtegi";
 "map_settings_offline" = "Võrguühenduseta kaartide stiilid";
 "map_settings_online" = "Veebikaardid";
-"map_settings_transp" = "Läbipaistvus";
+"shared_string_transparency" = "Läbipaistvus";
 "map_settings_avail_lay" = "Saadaolevad kihid";
 "map_settings_hillshade" = "Kõrgusreljeef";
 "mapillary" = "Mapillary";
@@ -653,7 +652,7 @@
 "osm_failed_uploads" = "Ebaõnnestus";
 "osn_bug_name" = "OSM märge";
 "osm_created" = "Loodud";
-"osm_deleted" = "Kustutatud";
+"poi_remove_success" = "Kustutatud";
 "osm_modified" = "Muudetud";
 "osm_reopened" = "Taasavatud";
 "osm_name" = "OpenStreetMap kasutajanimi";
@@ -674,7 +673,7 @@
 "osm_add_place" = "Lisa koht";
 "osm_modify_place" = "Muuda kohta";
 "osm_poi_delete_title" = "Kustuta huvipunkt";
-"osm_target_modified" = "Muudetud OSM huvipunkt";
+"osm_edit_modified_poi" = "Muudetud OSM huvipunkt";
 "osm_target_deleted" = "Kustutatud OSM huvipunkt";
 "osm_target_created" = "OSM huvipunkt loodud";
 "osm_note_created" = "Loodud OSM märge";
@@ -947,7 +946,6 @@
 "pink" = "Roosa";
 "translucent_red" = "Läbikumav punane";
 "translucent_orange" = "Läbikumav oranž";
-"translucent_lightblue" = "Läbikumav helesinine";
 "translucent_blue" = "Läbikumav sinine";
 "translucent_purple" = "Läbikumav purpur";
 "translucent_pink" = "Läbikumav roosa";
@@ -1030,7 +1028,7 @@
 "product_title_wiki" = "Vikipeedia";
 "product_desc_wiki" = "Wikipedia data";
 "product_desc_ext_wiki" = "Hangi huviväärsuste kohta teavet Vikipeediast. See on sinu võrguühenduseta juhend - luba lihtsalt Vikipeedia lisaprogramm ja naudi artikleid enda ümber asuvate objektide kohta.";
-"product_title_srtm" = "Kõrgusjooned";
+"download_srtm_maps" = "Kõrgusjooned";
 "product_desc_srtm" = "Kuva kõrgusjooned";
 "product_desc_ext_srtm" = "See lisaprogramm pakub kõrgusjooni ja künkavarjutust, mida saab kuvada OsmAnd võrguühenduseta kaartidel. Kõrgusjooned annavad teavet piirkonna kõrguse kohta, samas kui nende nähtavaks tegemine on künkavari. Selle lisaprogrammi abil saad vaadata mäetippude nimesid ja maastiku eripära.\n\nGlobaalsed andmed (vahemikus 70 kraadi põhja ja 70 kraadi lõuna vahel) põhinevad mõõtmistel, mille viivad läbi SRTM (süstiku radari topograafiamissioon) ja ASTER (täiustatud kosmose termilise emissiooni ja peegelduse radiomeeter), NASA maavaatlussatelliidi pildistamisinstrument Terra. Süsteem ASTER on NASA, Jaapani majandus-, kaubandus- ja tööstusministeeriumi (METI) ja Jaapani kosmosesüsteemide (J-kosmosesüsteemid) koostöö.";
 "product_title_wikivoyage" = "Reisijuhid";
@@ -1053,7 +1051,7 @@
 "res_roads" = "Teed";
 "res_srtm" = "Kõrgusjooned";
 "res_wiki" = "Vikipeedia";
-"res_hillshade" = "Kõrgusreljeef";
+"shared_string_hillshade" = "Kõrgusreljeef";
 "select_language" = "Vali keel";
 "language_short" = "Lang";
 "open_url" = "Open page in browser";
@@ -1121,7 +1119,7 @@
 "no_statistics" = "Statistika puudub";
 "no_internet_avail" = "Internetiühendus puudub";
 "no_internet_avail_desc_first" = "Kaardiloendi allalaadimiseks lülita sisse internetiühendus";
-"show_region_on_map_title" = "Kaart on allalaaditud";
+"map_downloaded" = "Kaart on allalaaditud";
 "show_region_on_map_desc" = "%@ kaart on alla laaditud. Selle kasutamiseks ava kaardivaade.";
 "show_region_on_map_go" = "Mine kaardile";
 "obf_import_title" = "Impordi võrguühenduseta kaardifail";
@@ -1721,7 +1719,7 @@
 "public_transport_menu" = "Ühistransport";
 "hide_terrain" = "Peida maastik";
 "show_terrain" = "Kuva maastik";
-"configure_map_descr" = "Kaardi välimus";
+"map_look_descr" = "Kaardi välimus";
 "osm_editing_settings_descr" = "Selle lisaprogrammi seaded kehtivad kogu rakenduses ja rakenduvad kõikidele profiilidele.";
 // Menu
 "menu" = "Menüü";
@@ -1765,12 +1763,12 @@
 "osmand_routing" = "OsmAnd marsruutimine";
 "choose_auto_center_map_view_descr" = "Kaardivaate praeguse asukohaga sünkroonimise aeg peale liikuma hakkamist";
 "nav_type_geocoding" = "Geokoodeerimine";
-"nav_type_ski" = "Suusatamine";
+"routing_profile_ski" = "Suusatamine";
 "nav_type_brouter" = "BRouter";
 "nav_type_direct_to" = "Otse sihtpunkti";
 "nav_type_straight_line" = "Sirgjoon";
 "plugin_settings_descr" = "Lisaprogrammide seadistused valitud profiilis.";
-"app_theme_light" = "Hele";
+"light_theme" = "Hele";
 "map_during_navigation" = "Kaart navigeerimise ajal";
 "change_map_behavior" = "Muuda kaardi käitumist navigeerimise ajal";
 "shared_string_account" = "Kasutajakonto";
@@ -2341,7 +2339,7 @@
 "context_menu_edit_descr" = "Muuda kirjeldust";
 "add_description" = "Lisa kirjeldus";
 "product_desc_ext_weather" = "Ilma pistikprogramm pakub\n- 5 kihti... 24h tunnipõhine prognoos ja 7 päeva prognoos iga 3 tunni järel\n- asukohapõhised vidinad\n- temperatuuri / rõhu isojooned\nIlmaandmeid pakub GFS https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast.";
-"weather_temp_unit_f" = "F";
+"weather_temperature_fahrenheit" = "F";
 "select_tracks" = "Vali rajad";
 "map_settings_weather_wind" = "Tuul";
 "turn_arrows" = "Pöörangute nooled";

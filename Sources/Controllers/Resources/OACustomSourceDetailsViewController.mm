@@ -169,7 +169,7 @@
 {
     _downloadButton = downloadButton;
     BOOL active = downloadButton != nil;
-    [self.actionButton setTitle:active ? downloadButton.name : OALocalizedString(@"show_region_on_map_title") forState:UIControlStateNormal];
+    [self.actionButton setTitle:active ? downloadButton.name : OALocalizedString(@"map_downloaded") forState:UIControlStateNormal];
     self.actionButton.backgroundColor = active ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_route_button_inactive);
     [self.actionButton setTitleColor:active ? UIColor.whiteColor : UIColorFromRGB(color_text_footer) forState:UIControlStateNormal];
     [self.actionButton setUserInteractionEnabled:active];

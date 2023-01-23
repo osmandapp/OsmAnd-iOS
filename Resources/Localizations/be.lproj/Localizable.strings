@@ -122,7 +122,7 @@
 "map_settings_over" = "Пакрыццё";
 "map_settings_under" = "Падкладка";
 "map_settings_offline" = "Стылі аўтаномных мапаў";
-"map_settings_transp" = "Празрыстасць";
+"shared_string_transparency" = "Празрыстасць";
 "map_settings_avail_lay" = "Даступныя пласты";
 // Intro
 "intro_skip" = "Прамінуць";
@@ -315,7 +315,7 @@
 "res_installing" = "Усталёўка…";
 "product_title_wiki" = "Вікіпедыя";
 "product_desc_wiki" = "Даныя вікіпедыі";
-"product_title_srtm" = "Контурныя лініі";
+"download_srtm_maps" = "Контурныя лініі";
 "res_roads" = "Дарогі";
 "res_srtm" = "Контурныя лініі";
 "res_wiki" = "Вікіпедыя";
@@ -334,7 +334,7 @@
 "you_searching" = "Вы шукаеце";
 "from_location" = "адсюль";
 "show_alt_in_drive" = "Паказваць вышыню ў рэжыме кіравання";
-"res_hillshade" = "Зацяненне рэльефу";
+"shared_string_hillshade" = "Зацяненне рэльефу";
 "purchase_get" = "Атрымаць";
 "srtm_disabled" = "Контурныя лініі адключаныя";
 "prch_wiki_info" = "Дапаўненне Вікіпедыі дадае інфармацыю для мапаў, якія вы купілі альбо спампавалі бясплатна.";
@@ -512,7 +512,7 @@
 "restore_all_purchases" = "Аднавіць усе пакупкі";
 "no_statistics" = "Няма статыстыкі";
 "no_internet_avail" = "Злучэнне з інтэрнэтам адсутнічае";
-"show_region_on_map_title" = "Мапа спампаваная";
+"map_downloaded" = "Мапа спампаваная";
 "show_region_on_map_go" = "Перайсці да мапы";
 "gpx_edit_mode" = "Рэжым рэдагавання";
 "go_to_map" = "Парайсці да мапы";
@@ -884,7 +884,7 @@
 "help_faq_descr" = "Частыя пытанні";
 "purchase_unlim_title" = "Купіць - %@";
 "mapil_add_photos" = "Дадаць фотаздымкі";
-"osm_target_modified" = "OSM POIадрэдагаваная";
+"osm_edit_modified_poi" = "OSM POIадрэдагаваная";
 "gpx_descent" = "Спуск";
 "map_settings_text_size" = "Памер тэксту";
 "product_desc_ext_wikivoyage" = "Дапаможнік па самым цікавым месцам на планеце ўнутры OsmAnd без злучэння з Інтэрнэтам.";
@@ -904,7 +904,6 @@
 "shared_string_retry" = "Паўтарыць";
 "map_settings_map_magnifier" = "Лупа мапы";
 "osmand_live_update_now" = "Абнавіць зараз";
-"translucent_lightblue" = "Празрысты блакітны";
 "yellow" = "Жоўты";
 "map_underlays" = "Падкладка мапы";
 "shared_setting_always_ask" = "Пытацца заўсёды";
@@ -925,7 +924,7 @@
 "osmand_live_available_maps" = "Даступныя мапы";
 "osm_target_created" = "Створана OSM POI";
 "osm_edit_without_name" = "Без назвы";
-"osm_deleted" = "Выдалена";
+"poi_remove_success" = "Выдалена";
 "translucent_lightgreen" = "Празрысты светла-зялёны";
 "help_other_header" = "Іншае";
 "res_world_region" = "Свет";
@@ -933,7 +932,6 @@
 "menu_help" = "Дапамога";
 "quick_action_pause_nav_descr" = "Націсніце гэтую кнопку, каб прыпыніць ці аднавіць навігацыю.";
 "help_versions" = "Версіі";
-"fav_add_group" = "Дадаць групу";
 "osmand_live_daily" = "Штодзённа";
 "modify_edit_short" = "Рэдагаваць POI";
 "edit_action" = "Рэдагаваць дзеянне";
@@ -1400,7 +1398,7 @@
 "angular_measurment_units" = "Адзінкі вымярэння вуглоў";
 "map_settings_hillshade_description" = "Мапы схілаў візуалізуюць схілы, вяршыні і нізіны пры дапамозе розных адценняў шэрага колеру";
 "allow_3D_view" = "Выгляд 2.5D";
-"app_theme_light" = "Светлая";
+"light_theme" = "Светлая";
 "map_settings_available_srtm_maps_descr" = "Для адлюстравання схілаў на мапе патрабуюцца дадатковыя мапы";
 "map_settings_contour_zoom_level_descr" = "Абярыце ўзровень маштабавання, на якім будуць адлюстроўвацца контурныя лініі";
 "map_settings_line_width" = "Шырыня лініі";
@@ -1495,7 +1493,7 @@
 "special_routing" = "Адмысловая маршрутызацыя";
 "osm_live_routing_descr" = "Выкарыстоўваць абнаўленні OsmAnd Live для навігацыі";
 "choose_auto_center_map_view_descr" = "Час да сінхранізацыі выгляду мапы з бягучай пазіцыяй пасля перамяшчэння";
-"nav_type_ski" = "Лыжы";
+"routing_profile_ski" = "Лыжы";
 "nav_type_brouter" = "BRouter";
 "nav_type_straight_line" = "Прамая лінія";
 "nav_type_descr" = "Абярыце спосаб разліку маршруту для гэтага профілю";
@@ -1535,7 +1533,7 @@
 "fav_hide" = "Схаваць улюбёныя мясціны";
 "fav_show" = "Паказаць улюбёныя мясціны";
 "toggle_fav" = "Паказаць/схаваць улюбёныя мясціны";
-"configure_map_descr" = "Выгляд мапы";
+"map_look_descr" = "Выгляд мапы";
 "add_map_style" = "Дадаць стыль мапы";
 "quick_action_list_descr" = "Націск на гэтую кнопку прагортвае старонкі дадзенага спіса";
 "mapil_select_user" = "Абраць карыстальніка";
@@ -2180,7 +2178,7 @@
 "map_settings_weather_precip" = "Ападкі";
 "product_title_weather" = "Надвор'е";
 "plan_route_folder" = "Каталог";
-"weather_temp_unit_f" = "Па фарэнгейту";
+"weather_temperature_fahrenheit" = "Па фарэнгейту";
 "routeInfo_surface_description" = "Пастаўляе інфармацыю пра фізічнае пакрыццё дарогі/пешаходнай дарожкі.";
 "shared_string_interval" = "Дыяпазон";
 "map_settings_weather_layers" = "Слаі";

@@ -236,7 +236,7 @@
 "nav_type_straight_line" = "Права линија";
 "nav_type_direct_to" = "Дикретно-на-тачку";
 "nav_type_brouter" = "БиРутер";
-"nav_type_ski" = "Скијање";
+"routing_profile_ski" = "Скијање";
 "nav_type_geocoding" = "Геокодирање";
 "fast_route_mode_descr" = "Укључите да рачунате најбржи пут или искључите да рачунате пут са највећом уштедњом горива.";
 "avoid_in_routing_title" = "Избегавати…";
@@ -525,7 +525,6 @@
 "my_favorites" = "Моји омиљени";
 "my_places" = "Моја места";
 "fav_no_group" = "Нема групе";
-"fav_add_group" = "Додај скуп";
 "fav_add_new_group" = "Додај нову групу";
 "select_group_descr" = "Изаберите групу или додајте нову";
 "available_groups" = "Доступне групе";
@@ -682,7 +681,7 @@
 "map_settings_install_more" = "Инсталирај више...";
 "map_settings_offline" = "Стилови за ванмрежне мапе";
 "map_settings_online" = "Мрежне карте";
-"map_settings_transp" = "Провидност";
+"shared_string_transparency" = "Провидност";
 "map_settings_base_transp" = "Провидност основне карте";
 "map_settings_avail_lay" = "Доступни слојеви";
 "map_settings_hillshade" = "Сенке брда";
@@ -710,7 +709,7 @@
 "map_settings_line_density_slowdown_warning" = "Велика густина линија може успорити приказивање мапе";
 "map_settings_available_srtm_maps_descr" = "Додатне мапе су потребне да бисте видели сенке брда на мапи";
 "settings_app_theme" = "Tema aplikacije";
-"app_theme_light" = "Светла";
+"light_theme" = "Светла";
 "do_not_rotate" = "Не ротирај";
 "allow_3D_view" = "2.5D view";
 "units_of_speed" = "Јединице брзине";
@@ -1198,7 +1197,7 @@
 "osm_editing_settings_descr" = "Подешавања овог додатка су глобална и примењују се на све профиле.";
 "osn_bug_name" = "Белешка ОСМ-а";
 "osm_created" = "Направљено";
-"osm_deleted" = "Избрисано";
+"poi_remove_success" = "Избрисано";
 "osm_modified" = "Измењено";
 "osm_reopened" = "Поново отворено";
 "osm_name" = "OpenStreetMap корисничко име";
@@ -1220,7 +1219,7 @@
 "osm_add_place" = "Додај место";
 "osm_modify_place" = "Измените место";
 "osm_poi_delete_title" = "Брисање POI";
-"osm_target_modified" = "Измењене ОСМ тачке од интереса";
+"osm_edit_modified_poi" = "Измењене ОСМ тачке од интереса";
 "osm_target_deleted" = "Избрисане ОСМ тачке од интереса";
 "osm_target_created" = "OSMтачка од интереса је направљена";
 "osm_note_created" = "Направи белешку ОСМ-а";
@@ -1312,7 +1311,7 @@
 "unsupported_items" = "Неподржане ставке";
 "create_items" = "Направи ставке";
 "configure_map" = "Подеси карту";
-"configure_map_descr" = "Изглед карте";
+"map_look_descr" = "Изглед карте";
 "add_map_marker" = "Додај ознаку на карти";
 "select_map_marker" = "Изаберите ознаку карте";
 "add_gpx_waypoint" = "Додај GPX пролазну тачку";
@@ -1557,7 +1556,6 @@
 "pink" = "Ружичаста";
 "translucent_red" = "Прозирна црвена";
 "translucent_orange" = "Прозирна наранџаста";
-"translucent_lightblue" = "Прозирна светло плава";
 "translucent_blue" = "Прозирна плава";
 "translucent_purple" = "Прозирна љубичаста";
 "translucent_pink" = "Прозирна ружичаста";
@@ -1657,7 +1655,7 @@
 "some_articles_may_not_available_in_lang" = "Неки чланци са Википедија су можда доступни на Вашем језику.";
 "available_languages" = "Доступни језици";
 "preferred_languages" = "Жељени језици";
-"product_title_srtm" = "Изохипсе";
+"download_srtm_maps" = "Изохипсе";
 "product_desc_srtm" = "Приказ контурних линија";
 "product_desc_ext_srtm" = "Овај додатак пружа контурне линије и сенчење, који се могу приказати на ОсмАнд ванмрежним мапама. Контурне линије пружају информације о висинама подручја, док је сенка њихова визуелизација. Погледајте називе планинских врхова и специфичне карактеристике терена користећи овај додатак.\n\nГлобални подаци (између 70 степени северно и 70 степени јужно) засновани су на мерењима SRTM (Шатл мисија радиометријске топографије) и ASTER (Напредни орбитални термоемисиони и рефлексиони радиометар), инструмента за снимање на Тери, водећем сателиту система NASA-е за посматрање Земље. ASTER је заједнички напор NASA-е, јапанског Министарства економије, трговине и индустрије (METI) и Јапанског Свемирског Програма (J-spacesystems).";
 "product_title_wikivoyage" = "Туристички водичи";
@@ -1682,7 +1680,7 @@
 "res_roads" = "Путеви";
 "res_srtm" = "Изохипсе";
 "res_wiki" = "Википедија";
-"res_hillshade" = "Сенке брда";
+"shared_string_hillshade" = "Сенке брда";
 "res_slope" = "Нагиб";
 "res_standard" = "Уобичајена карта";
 "select_language" = "Изаберите језик";
@@ -1786,7 +1784,7 @@
 "no_statistics" = "Нема статистике";
 "no_internet_avail" = "Нема доступног интернета";
 "no_internet_avail_desc_first" = "Укључите интернет везу да бисте преузели листу мапа";
-"show_region_on_map_title" = "Карта је преузета";
+"map_downloaded" = "Карта је преузета";
 "show_region_on_map_desc" = "Мапа %@ је преузета. Идите на мапу да бисте почели да је користите.";
 "show_region_on_map_go" = "Иди на мапу";
 "obf_import_title" = "Увези ван мрежну датотеку мапе";
@@ -2424,7 +2422,7 @@
 "product_desc_ext_weather" = "Временски додатак пружа\n- 5 слојева... 24-часовна прогноза и 7 дана прогноза свака 3 сата\n- виџети засновани на локацији\n- изолиније температуре / притиска\nВременске податке обезбеђује GFS https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast.";
 "weather_temp_unit_c" = "Целзијус";
 "weather_pressure_unit_inhg" = "Инча живиног стуба";
-"weather_temp_unit_f" = "Фаренхајт";
+"weather_temperature_fahrenheit" = "Фаренхајт";
 "weather_wind_unit_knots" = "Чворова";
 "osmand_cloud" = "ОсмАнд облак";
 "weather_pressure_unit_mmhg" = "Милиметара живиног стуба";

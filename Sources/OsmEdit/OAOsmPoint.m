@@ -88,7 +88,7 @@
         case CREATE:
             return OALocalizedString(@"osm_created");
         case DELETE:
-            return OALocalizedString(@"osm_deleted");
+            return OALocalizedString(@"poi_remove_success");
         case MODIFY:
             return OALocalizedString(@"osm_modified");
         case REOPEN:

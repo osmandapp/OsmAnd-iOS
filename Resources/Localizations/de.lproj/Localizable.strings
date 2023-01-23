@@ -74,7 +74,7 @@
 "shared_string_none" = "Keine";
 "map_settings_offline" = "Stile für Offline Karten";
 "map_settings_online" = "Online-Karten";
-"map_settings_transp" = "Transparenz";
+"shared_string_transparency" = "Transparenz";
 "intro_download" = "Karte\nherunterladen";
 "intro_next" = "Weiter";
 "intro_welcome" = "Willkommen bei\nOsmAnd";
@@ -321,7 +321,7 @@
 "menu_my_trips" = "Meine Tracks";
 "product_title_trip_planning" = "Streckenplanung";
 "product_desc_wiki" = "Standortbezogene Wikipedia-Artikel auf der Karte";
-"product_title_srtm" = "Höhenlinien";
+"download_srtm_maps" = "Höhenlinien";
 "product_desc_srtm" = "Visuelle Übersetzung der Form der Landoberfläche";
 "enter_description" = "Beschreibung eingeben";
 "description" = "Beschreibung";
@@ -330,7 +330,7 @@
 "res_roads" = "Straßen";
 "res_srtm" = "Höhenlinien";
 "res_wiki" = "Wikipedia";
-"res_hillshade" = "Relief";
+"shared_string_hillshade" = "Relief";
 "select_language" = "Sprache auswählen";
 "language_short" = "Sprache";
 "open_url" = "Seite im Browser öffnen";
@@ -383,7 +383,7 @@
 "no_statistics" = "Keine Statistik";
 "no_internet_avail" = "Kein Internet verfügbar";
 "no_internet_avail_desc_first" = "Bitte schalten Sie die Internetverbindung ein, um die Liste der Karten herunterzuladen";
-"show_region_on_map_title" = "Karte heruntergeladen";
+"map_downloaded" = "Karte heruntergeladen";
 "show_region_on_map_desc" = "Karte von %@ wurde heruntergeladen. Gehen Sie zur Karte, um sie zu benutzen.";
 "show_region_on_map_go" = "Gehen Sie zur Karte";
 "product_title_wiki" = "Wikipedia";
@@ -901,7 +901,6 @@
 "blue" = "Blau";
 "pink" = "Rosa";
 "translucent_orange" = "Transparentes Orange";
-"translucent_lightblue" = "Transparentes Hellblau";
 "translucent_blue" = "Transparentes Blau";
 "translucent_purple" = "Transparentes Lila";
 "translucent_pink" = "Transparentes Rosa";
@@ -923,7 +922,7 @@
 "loading_poi_obj" = "Lade POI…";
 "osn_bug_name" = "OSM-Hinweis";
 "osm_created" = "Erstellt";
-"osm_deleted" = "Gelöscht";
+"poi_remove_success" = "Gelöscht";
 "osm_modified" = "Geändert";
 "osm_reopened" = "Wieder geöffnet";
 "osm_name" = "OpenStreetMap Benutzername";
@@ -945,7 +944,7 @@
 "osm_add_place" = "Ort hinzufügen";
 "osm_modify_place" = "Ort bearbeiten";
 "osm_poi_delete_title" = "Lösche POI";
-"osm_target_modified" = "Geänderter OSM-POI";
+"osm_edit_modified_poi" = "Geänderter OSM-POI";
 "osm_target_deleted" = "Gelöschter OSM-POI";
 "osm_target_created" = "OSM-POI erstellt";
 "osm_confirm_delete" = "POI löschen?";
@@ -1156,7 +1155,6 @@
 "quick_action_name_str" = "Aktionsname";
 "quick_action_name_alert" = "Schnellaktions-Name wurde geändert zu %@ um Duplikate zu verhindern.";
 "quick_action_screen_header" = "Ansicht %ld";
-"fav_add_group" = "Gruppe hinzufügen";
 "group_properties" = "Gruppen-Eigenschaften";
 "add_group" = "Gruppe hinzufügen";
 "poi_list" = "POI-Liste";
@@ -1762,7 +1760,7 @@
 "units_of_speed" = "Geschwindigkeitseinheiten";
 "allow_3D_view" = "2.5D-Ansicht";
 "do_not_rotate" = "Nicht drehen";
-"app_theme_light" = "Hell";
+"light_theme" = "Hell";
 "shared_string_meters" = "Meter";
 "announce" = "Ankündigung";
 "only_manually" = "Nur manuell";
@@ -1774,7 +1772,7 @@
 "special_routing" = "Spezielles Routing";
 "choose_auto_center_map_view_descr" = "Zeit, bis sich die Kartenansicht nach der Bewegung mit der aktuellen Position synchronisiert";
 "nav_type_geocoding" = "Geocodierung";
-"nav_type_ski" = "Ski";
+"routing_profile_ski" = "Ski";
 "nav_type_brouter" = "BRouter";
 "voice_announces" = "Sprachansagen";
 "max_speed" = "Max. Geschwindigkeit";
@@ -1801,7 +1799,7 @@
 "width_limit_description" = "Geben Sie Ihre Fahrzeugbreite an. Für breite Fahrzeuge können einige Routenbeschränkungen gelten.";
 "weight_limit_description" = "Geben Sie Ihr Fahrzeuggewicht an, für schwere Fahrzeuge können einige Routenbeschränkungen gelten.";
 "send_anonymous_data" = "Anonyme Daten senden";
-"configure_map_descr" = "Kartendarstellung";
+"map_look_descr" = "Kartendarstellung";
 "downloading" = "Lädt herunter";
 "export_profile_descr" = "Sie können alle Profileinstellungen exportieren, alle Einstellungen aus einem anderen Profil kopieren oder alle Profileinstellungen auf den Standardzustand zurücksetzen.";
 "profile_sett_descr" = "Betrifft das ausgewählte Anwendungsprofil";
@@ -2389,7 +2387,7 @@
 "plugin_popup_weather_ask" = "Bitte Wettermodul aktivieren";
 "measurement_units" = "Maßeinheiten";
 "weather_temp_unit_c" = "Celsius";
-"weather_temp_unit_f" = "Fahrenheit";
+"weather_temperature_fahrenheit" = "Fahrenheit";
 "weather_pressure_unit_hpa" = "Hektopascal";
 "weather_pressure_unit_inhg" = "Inch Quecksilbersäule";
 "weather_wind_unit_m_s" = "Meter/Sekunde";

@@ -657,7 +657,7 @@
     if ([self.symbol isEqualToString:NSUnitTemperature.celsius.symbol])
         return OALocalizedString(@"weather_temp_unit_c");
     else if ([self.symbol isEqualToString:NSUnitTemperature.fahrenheit.symbol])
-        return OALocalizedString(@"weather_temp_unit_f");
+        return OALocalizedString(@"weather_temperature_fahrenheit");
     return nil;
 }
 

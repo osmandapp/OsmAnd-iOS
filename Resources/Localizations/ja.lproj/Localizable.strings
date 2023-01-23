@@ -395,7 +395,6 @@
 "my_favorites" = "お気に入り";
 "my_places" = "ブックマーク";
 "fav_no_group" = "グループなし";
-"fav_add_group" = "グループの追加";
 "fav_remove_q" = "お気に入りを削除してもよろしいですか？";
 "fav_import" = "インポート";
 "fav_import_title" = "お気に入りのインポート";
@@ -500,7 +499,7 @@
 "shared_string_none" = "無し";
 "map_settings_offline" = "オフラインマップのスタイル";
 "map_settings_online" = "オンラインマップ";
-"map_settings_transp" = "透過度";
+"shared_string_transparency" = "透過度";
 "map_settings_avail_lay" = "利用可能なレイヤー";
 "map_settings_hillshade" = "陰影起伏図";
 "mapillary" = "Mapillary";
@@ -646,7 +645,7 @@
 "osm_failed_uploads" = "失敗しました";
 "osn_bug_name" = "OSMでの注釈";
 "osm_created" = "作成しました";
-"osm_deleted" = "削除されました";
+"poi_remove_success" = "削除されました";
 "osm_modified" = "修正しました";
 "osm_reopened" = "再開しました";
 "osm_name" = "OpenStreetMapのユーザー名";
@@ -667,7 +666,7 @@
 "osm_add_place" = "場所の追加";
 "osm_modify_place" = "場所を変更";
 "osm_poi_delete_title" = "POIを削除";
-"osm_target_modified" = "OSMのPOIが変更されました";
+"osm_edit_modified_poi" = "OSMのPOIが変更されました";
 "osm_target_deleted" = "OSMのPOIが削除されました";
 "osm_target_created" = "OSMのPOIが作成されました";
 "osm_note_created" = "OSMに注釈を作成しました";
@@ -941,7 +940,6 @@
 "pink" = "ピンク";
 "translucent_red" = "半透明レッド";
 "translucent_orange" = "半透明オレンジ";
-"translucent_lightblue" = "半透明ライトブルー";
 "translucent_blue" = "半透明ブルー";
 "translucent_purple" = "半透明パープル";
 "translucent_pink" = "半透明ピンク";
@@ -1021,7 +1019,7 @@
 "product_title_wiki" = "Wikipedia";
 "product_desc_wiki" = "地図上の位置ベースのWikipedia記事";
 "product_desc_ext_wiki" = "Wikipediaから観光名所など旅行者が関心をもちそうな場所(POI)に関する情報を取得します。Wikipediaプラグインを有効にするだけで、今いる地域では何が有名か、などの記事を楽しむことができます。";
-"product_title_srtm" = "等高線";
+"download_srtm_maps" = "等高線";
 "product_desc_srtm" = "等高線の表示";
 "product_desc_ext_srtm" = "このプラグインは等高線と陰影起伏図を提供し、それらをOsmAndオフラインマップに重ねて表示できます。等高線は各地点の標高に関する情報を提供し、陰影起伏図は陰影(グラデーション)によりそれを視覚化したものです。このプラグインを使用すると、峰ごとの名称や地形の特徴などが一目で分かりやすくなります。\n\nこのグローバルデータ(北緯70°から南緯70°の間)はSRTM(スペースシャトル立体地形データ)とNASAの地球観測衛星であるテラ(Terra)に搭載されたASTER(資源探査用将来型センサ)と呼ばれる機器の観測結果をベースにしたものです。 ASTERはNASAと日本の経済産業省(METI)、そして宇宙システム開発利用推進機構(J-spacesystems)の共同作業によるものです。";
 "product_title_wikivoyage" = "旅行ガイド";
@@ -1044,7 +1042,7 @@
 "res_roads" = "道路";
 "res_srtm" = "等高線";
 "res_wiki" = "Wikipedia";
-"res_hillshade" = "陰影起伏図";
+"shared_string_hillshade" = "陰影起伏図";
 "select_language" = "言語の選択";
 "language_short" = "Lang";
 "open_url" = "ブラウザでページを開く";
@@ -1112,7 +1110,7 @@
 "no_statistics" = "統計なし";
 "no_internet_avail" = "インターネットが利用できません";
 "no_internet_avail_desc_first" = "マップリストをダウンロードするには、インターネット接続を有効にしてください";
-"show_region_on_map_title" = "マップがダウンロードされました";
+"map_downloaded" = "マップがダウンロードされました";
 "show_region_on_map_desc" = "%@のマップがダウンロードされました。マップ画面に移動して使用を開始します。";
 "show_region_on_map_go" = "マップ画面に移動";
 "obf_import_title" = "オフラインマップファイルをインポート";
@@ -1690,7 +1688,7 @@
 "recalculate_route_distance_promo" = "ルートから現在地までの距離が選択された値よりも大きい場合、ルートが再計算されます。";
 "recalculate_route" = "ルート再計算の逸脱しきい値";
 "nav_type_straight_line" = "直線";
-"nav_type_ski" = "スキー";
+"routing_profile_ski" = "スキー";
 "base_profile_descr_public_transport" = "公共交通機関の種類";
 "nav_type_direct_to" = "直接指示";
 "osmand_routing" = "OsmAndルーティング";
@@ -1795,7 +1793,7 @@
 "public_transport_menu" = "交通機関";
 "add_to_track" = "経路に追加";
 "nav_type_geocoding" = "ジオコーディング";
-"configure_map_descr" = "マップの見た目に関する設定";
+"map_look_descr" = "マップの見た目に関する設定";
 "quick_action_mapillary_hide" = "Mapillaryを非表示";
 "avoid_road" = "避ける道を指定";
 "arrived_at_destination" = "目的地に到着しました。";
@@ -1825,7 +1823,7 @@
 "replace_all" = "全て置き換える";
 "quick_action_switch_profile_descr" = "選択したプロファイルを切り替えるボタンです。";
 "public_transport_hide" = "公共交通機関を非表示";
-"app_theme_light" = "明色";
+"light_theme" = "明色";
 "enter_profile_name" = "プロファイル名を入力";
 "public_transport_show" = "公共交通機関を表示";
 "quick_action_mapillary_show" = "Mapillaryを表示";

@@ -236,7 +236,7 @@
 "nav_type_straight_line" = "Llinell syth";
 "nav_type_direct_to" = "Yn syth i bwynt";
 "nav_type_brouter" = "BRouter";
-"nav_type_ski" = "Sgïo";
+"routing_profile_ski" = "Sgïo";
 "nav_type_geocoding" = "Daeargodio";
 "fast_route_mode_descr" = "Enable to calculate fastest route or disable for fuel-saving route";
 "avoid_in_routing_title" = "Osgoi…";
@@ -525,7 +525,6 @@
 "my_favorites" = "My Favorites";
 "my_places" = "Fy Llefydd";
 "fav_no_group" = "No group";
-"fav_add_group" = "Ychwanegu grŵp";
 "fav_add_new_group" = "Add new group";
 "select_group_descr" = "Select group or add a new one";
 "available_groups" = "Available groups";
@@ -682,7 +681,7 @@
 "map_settings_install_more" = "Install more...";
 "map_settings_offline" = "Styles for offline maps";
 "map_settings_online" = "Mapiau ar-lein";
-"map_settings_transp" = "Tryloywder";
+"shared_string_transparency" = "Tryloywder";
 "map_settings_base_transp" = "Tryloywder map sylfaen";
 "map_settings_avail_lay" = "Available layers";
 "map_settings_hillshade" = "Cysgodion bryniau";
@@ -710,7 +709,7 @@
 "map_settings_line_density_slowdown_warning" = "High line density may slowdown map rendering";
 "map_settings_available_srtm_maps_descr" = "Additional maps are needed to view Hillshade on the map";
 "settings_app_theme" = "Application theme";
-"app_theme_light" = "Golau";
+"light_theme" = "Golau";
 "do_not_rotate" = "Do not rotate";
 "allow_3D_view" = "2.5D view";
 "units_of_speed" = "Units of speed";
@@ -1198,7 +1197,7 @@
 "osm_editing_settings_descr" = "This plugin's settings are global and apply to all profiles.";
 "osn_bug_name" = "Nodyn OSM";
 "osm_created" = "Created";
-"osm_deleted" = "Dileuwyd";
+"poi_remove_success" = "Dileuwyd";
 "osm_modified" = "Modified";
 "osm_reopened" = "Reopened";
 "osm_name" = "OpenStreetMap username";
@@ -1220,7 +1219,7 @@
 "osm_add_place" = "Add place";
 "osm_modify_place" = "Modify place";
 "osm_poi_delete_title" = "Dileu MODd";
-"osm_target_modified" = "POI OSM wedi\'i Addasu";
+"osm_edit_modified_poi" = "POI OSM wedi\'i Addasu";
 "osm_target_deleted" = "POI OSM wedi\'i ddileu";
 "osm_target_created" = "Wedi creu OSM POI";
 "osm_note_created" = "Wedi creu Nodyn OSM";
@@ -1312,7 +1311,7 @@
 "unsupported_items" = "Unsupported items";
 "create_items" = "Creu eitemau";
 "configure_map" = "Addasu\'r map";
-"configure_map_descr" = "Golwg y map";
+"map_look_descr" = "Golwg y map";
 "add_map_marker" = "Ychwanegu nod map";
 "select_map_marker" = "Dewiswch nod map";
 "add_gpx_waypoint" = "Add GPX waypoint";
@@ -1557,7 +1556,6 @@
 "pink" = "Pinc";
 "translucent_red" = "Coch tryleu";
 "translucent_orange" = "Oren tryleu";
-"translucent_lightblue" = "Glas golau tryloyw";
 "translucent_blue" = "Glas tryleu";
 "translucent_purple" = "Porffor tryleu";
 "translucent_pink" = "Pinc tryleu";
@@ -1657,7 +1655,7 @@
 "some_articles_may_not_available_in_lang" = "Efallai na fydd rhai erthyglau Wicipedia ar gael yn eich iaith.";
 "available_languages" = "Available languages";
 "preferred_languages" = "Preferred languages";
-"product_title_srtm" = "Cyfuchliniau";
+"download_srtm_maps" = "Cyfuchliniau";
 "product_desc_srtm" = "Display of contour lines";
 "product_desc_ext_srtm" = "This plugin provides contour lines and hillshade, which can be displayed in OsmAnd offline maps. Contour lines provide the information about heights of the area while hillshade is their visualization. See the names of mountain peaks and specific features of terrain using this plugin.\n\nThe global data (between 70 degrees north and 70 degrees south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA's Earth Observing System. ASTER is a cooperative effort between NASA, Japan's Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
 "product_title_wikivoyage" = "Canllawiau Teithio";
@@ -1682,7 +1680,7 @@
 "res_roads" = "Ffyrdd";
 "res_srtm" = "Cyfuchliniau";
 "res_wiki" = "Wicipedia";
-"res_hillshade" = "Cysgodion bryniau";
+"shared_string_hillshade" = "Cysgodion bryniau";
 "res_slope" = "Llethr";
 "res_standard" = "Map safonol";
 "select_language" = "Select language";
@@ -1786,7 +1784,7 @@
 "no_statistics" = "No statistics";
 "no_internet_avail" = "No internet available";
 "no_internet_avail_desc_first" = "Please turn on internet connection to download list of maps";
-"show_region_on_map_title" = "Map wedi\'i lawrlwytho";
+"map_downloaded" = "Map wedi\'i lawrlwytho";
 "show_region_on_map_desc" = "Map of %@ has been downloaded. Go to the map to start using it.";
 "show_region_on_map_go" = "Go to the map";
 "obf_import_title" = "Import offline map file";

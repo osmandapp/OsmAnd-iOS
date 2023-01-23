@@ -104,7 +104,7 @@
 "shared_string_none" = "Cap";
 "map_settings_offline" = "Estils pels mapes fora de línia";
 "map_settings_online" = "Mapes en línia";
-"map_settings_transp" = "Transparència";
+"shared_string_transparency" = "Transparència";
 "map_settings_avail_lay" = "Capes disponibles";
 // Intro
 "intro_skip" = "Omet";
@@ -311,7 +311,7 @@
 "help_quiz" = "Consulta";
 "product_title_wiki" = "Viquipèdia";
 "product_desc_wiki" = "Dades de la Viquipèdia";
-"product_title_srtm" = "Dades de corbes de nivell";
+"download_srtm_maps" = "Dades de corbes de nivell";
 "product_desc_srtm" = "Mostra les corbes de nivell";
 "enter_description" = "Introduïu la descripció";
 "description" = "Descripció";
@@ -333,7 +333,7 @@
 "language" = "Llengua";
 "you_searching" = "Esteu cercant";
 "from_location" = "més enllà";
-"res_hillshade" = "Ombrejat del relleu";
+"shared_string_hillshade" = "Ombrejat del relleu";
 "show_alt_in_drive" = "Mostra l'altitud en el mode conducció";
 "purchase_get" = "Obteniu";
 "srtm_disabled" = "Corbes de nivell desactivades";
@@ -405,7 +405,7 @@
 "no_statistics" = "No hi ha estadístiques";
 "no_internet_avail" = "No hi ha connexió a internet disponible";
 "no_internet_avail_desc_first" = "Connecteu-vos a internet per baixar la llista de mapes";
-"show_region_on_map_title" = "Mapa baixat";
+"map_downloaded" = "Mapa baixat";
 "show_region_on_map_desc" = "El mapa de %@ ja s'ha baixat. Aneu al mapa per començar a utilitzar-lo.";
 "show_region_on_map_go" = "Ves al mapa";
 "map_settings_hillshade" = "Ombrejat del relleu";
@@ -899,7 +899,6 @@
 "blue" = "Blau";
 "pink" = "rosa";
 "translucent_orange" = "Taronja translúcid";
-"translucent_lightblue" = "Blau cel translúcid";
 "translucent_blue" = "Blau translúcid";
 "translucent_purple" = "Porpra translúcid";
 "translucent_pink" = "Rosa translúcid";
@@ -921,7 +920,7 @@
 "loading_poi_obj" = "S\'està carregant el PDI…";
 "osn_bug_name" = "Nota d\'OSM";
 "osm_created" = "Creat";
-"osm_deleted" = "S\'ha esborrat";
+"poi_remove_success" = "S\'ha esborrat";
 "osm_modified" = "Modificat";
 "osm_reopened" = "Tornat a obrir";
 "osm_name" = "Nom d'usuari OpenStreetMap";
@@ -943,7 +942,7 @@
 "osm_add_place" = "Afegeix lloc";
 "osm_modify_place" = "Modifica lloc";
 "osm_poi_delete_title" = "Elimina el PDI";
-"osm_target_modified" = "S\'ha modificat PDI d\'OSM";
+"osm_edit_modified_poi" = "S\'ha modificat PDI d\'OSM";
 "osm_target_deleted" = "S\'ha eliminat PDI d\'OSM";
 "osm_target_created" = "S\'ha creat un PDI a OSM";
 "osm_confirm_delete" = "Voleu eliminar el PDI?";
@@ -1156,7 +1155,6 @@
 "quick_action_name_alert" = "El nom de l'acció directa ha canviat a %@ per evitar duplicitats.";
 "quick_action_screen_header" = "Pantalla %ld";
 "quick_action_list_descr" = "Prement aquest botó d'acció pagineu per la llista que segueix";
-"fav_add_group" = "Afegeix un grup";
 "group_properties" = "Propietats de grup";
 "add_group" = "Afegeix un grup";
 "poi_list" = "Llista de PDI";
@@ -1724,7 +1722,7 @@
 "select_nav_profile_dialog_message" = "El 'tipus de navegació' determina com es calculen les rutes.";
 "choose_auto_center_map_view_descr" = "Lapse per sincronitzar el mapa a la posició actual un cop iniciat el desplaçament";
 "nav_type_geocoding" = "Geocodificació";
-"nav_type_ski" = "Esquí";
+"routing_profile_ski" = "Esquí";
 "vehicle_parameters" = "Paràmetres del vehicle";
 "screen_alerts" = "Alertes de pantalla";
 "voice_announces" = "Anuncis de veu";
@@ -1742,7 +1740,7 @@
 "units_of_speed" = "Unitat de velocitat";
 "allow_3D_view" = "Vista 2,5D";
 "do_not_rotate" = "No giris";
-"app_theme_light" = "Lluminós";
+"light_theme" = "Lluminós";
 "settings_app_theme" = "Tema de l'aplicació";
 "import_from_files" = "Importa de fitxers";
 "map_update_warning" = "Voleu tornar a carregar dades de tessel·les de la xarxa?";
@@ -1770,7 +1768,7 @@
 "send_anonymous_data" = "Envia dades anònimes";
 "default_speed_descr" = "Estima l'hora d'arribada si es desconeix el tipus de via i aplicant les limitacions de velocitat a totes les carreteres (podria afectar la navegació)";
 "quick_action_transport_descr" = "Premeu aquesta acció per mostrar o amagar les rutes / parades de transport públic al mapa.";
-"configure_map_descr" = "Aparença del mapa";
+"map_look_descr" = "Aparença del mapa";
 "downloading" = "S’està baixant";
 "export_profile_descr" = "Podeu exportar totes les configuracions dels perfils, copiar-les d'un altre perfil o retornar-les als valors predeterminats.";
 "profile_sett_descr" = "Afecta als perfils d'aplicació seleccionats";

@@ -75,7 +75,7 @@
 "shared_string_is_open_24_7" = "Ανοιχτά 24/7";
 "lightgreen" = "Ανοιχτό πράσινο";
 "osmand_live_hourly" = "Ωριαία";
-"osm_target_modified" = "Τροποποιημένο ΣΕ OSM";
+"osm_edit_modified_poi" = "Τροποποιημένο ΣΕ OSM";
 "shared_string_all" = "Όλα";
 "use_points_as_intermediates" = "Υπολογισμός διαδρομής μεταξύ σημείων";
 "map_widget_appearance_rem" = "Εναπομείναντα στοιχεία";
@@ -86,7 +86,7 @@
 "general_settings_2" = "Γενικές ρυθμίσεις";
 "product_title_africa" = "Αφρική";
 "add_parking_place" = "Προσθήκη θέσης στάθμευσης";
-"show_region_on_map_title" = "Ο χάρτης ελήφθη";
+"map_downloaded" = "Ο χάρτης ελήφθη";
 "shared_string_reload" = "Επαναφόρτωση";
 "error_avoid_specific_road" = "Δεν βρέθηκε παράκαμψη";
 "region_ausralia_and_oceania" = "Αυστραλία και Ωκεανία";
@@ -188,7 +188,6 @@
 "display_starting_at_zoom_level" = "Εμφάνιση της εκκίνησης από το επίπεδο εστίασης";
 "shared_string_export" = "Εξαγωγή";
 "product_title_centralamerica" = "Κεντρική Αμερική";
-"translucent_lightblue" = "Ημιδιαφανές γαλάζιο";
 "offline_vector_maps" = "Διανυσματικοί χάρτες χωρίς σύνδεση";
 "app_mode_motorcycle" = "Μοτοσυκλέτα";
 "guidance_preferences_descr" = "Προτιμήσεις πλοήγησης";
@@ -489,7 +488,7 @@
 "speak_title" = "Εκφώνηση…";
 "app_mode_bus" = "Λεωφορείο";
 "help_faq_descr" = "Συχνές ερωτήσεις";
-"osm_deleted" = "Διαγράφτηκε";
+"poi_remove_success" = "Διαγράφτηκε";
 "arrival_distance" = "Αναγγελία άφιξης";
 "actions" = "Ενέργειες";
 "res_details" = "Λεπτομέρειες";
@@ -600,13 +599,12 @@
 "download_depth_countours" = "Ναυτικές ισοβαθείς καμπύλες";
 "stop_routing_confirm" = "Είστε σίγουρος ότι θέλετε να σταματήσετε την πλοήγηση;";
 "shared_string_select" = "Επιλέξτε";
-"product_title_srtm" = "Ισοϋψείς γραμμές";
+"download_srtm_maps" = "Ισοϋψείς γραμμές";
 "select_street" = "Επιλέξτε οδό";
 "orange" = "Πορτοκαλί";
 "city_type_suburb" = "Προάστιο";
 "impassable_road_desc" = "Επιλέξτε τους δρόμους που θέλετε να αποφύγετε κατά την πλοήγηση.";
 "help_trip_planning" = "Προγραμματισμός ταξιδιού";
-"fav_add_group" = "Προσθήκη ομάδας";
 "fav_replace" = "Αντικατάσταση";
 "routing_attr_piste_type_downhill_name" = "Αλπική/κατηφορική χιονοδρομία";
 "routing_attr_driving_style_name" = "Τρόπος οδήγησης";
@@ -984,7 +982,7 @@
 "voice_announces" = "Φωνητικές ανακοινώσεις";
 "nav_type_title" = "Τύπος πλοήγησης";
 "nav_type_geocoding" = "Γεωκωδικοποίηση";
-"nav_type_ski" = "Σκι";
+"routing_profile_ski" = "Σκι";
 "nav_type_brouter" = "BRouter";
 "nav_type_direct_to" = "Άμεσα-στο-σημείο";
 "nav_type_straight_line" = "Ευθεία γραμμή";
@@ -1055,11 +1053,11 @@
 "shared_string_import_complete" = "Ολοκλήρωση εισαγωγής";
 "listed_exist" = "Το εισηγμένο %@, υπάρχει ήδη στο OsmAnd.";
 "help_mapillary" = "OsmAnd + Mapillary";
-"configure_map_descr" = "Εμφάνιση χάρτη";
+"map_look_descr" = "Εμφάνιση χάρτη";
 "quick_action_remove_next_destination" = "Διαγραφή του πλησιέστερου σημείου προορισμού";
 "position_icon_while_moving" = "Εικονίδιο θέσης κατά τη μετακίνηση";
 "res_online_source_cache_alert" = "Η εφαρμογή αυτών των αλλαγών θα καθαρίσει τα κρυμμένα δεδομένα της πηγής πλακιδίου";
-"res_hillshade" = "Σκίαση ανάγλυφου";
+"shared_string_hillshade" = "Σκίαση ανάγλυφου";
 "maximum_speed" = "Μέγιστη ταχύτητα";
 "configure_profile" = "Ρυθμίστε το προφίλ";
 "avoid_road" = "Αποφυγή δρόμου";
@@ -1119,8 +1117,8 @@
 "public_transport_show" = "Εμφάνιση δημόσιων συγκοινωνιών";
 "menu" = "Μενού";
 "shared_string_password" = "Ο κωδικός σας για το OSM";
-"app_theme_light" = "Φωτεινό";
-"map_settings_transp" = "Διαφάνεια";
+"light_theme" = "Φωτεινό";
+"shared_string_transparency" = "Διαφάνεια";
 "save_new_track" = "Αποθήκευση ως νέου ίχνους";
 "m_style_pulic_transport" = "Δημόσια Μ.Μ.Μ";
 "ltr_or_rtl_combine_via_colon" = "%@: %@";

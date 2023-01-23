@@ -141,7 +141,7 @@
 "shared_string_none" = "无";
 "map_settings_offline" = "";
 "map_settings_online" = "在线地图";
-"map_settings_transp" = "透明度";
+"shared_string_transparency" = "透明度";
 "map_settings_avail_lay" = "";
 "map_settings_hillshade" = "地形阴影";
 // Intro
@@ -344,7 +344,7 @@
 "product_title_wiki" = "维基百科";
 "product_desc_wiki" = "";
 "product_desc_ext_wiki" = "";
-"product_title_srtm" = "等高线";
+"download_srtm_maps" = "等高线";
 "product_desc_srtm" = "";
 "product_desc_ext_srtm" = "";
 "my_location" = "";
@@ -362,7 +362,7 @@
 "res_roads" = "道路";
 "res_srtm" = "等高线";
 "res_wiki" = "维基百科";
-"res_hillshade" = "地形阴影";
+"shared_string_hillshade" = "地形阴影";
 "select_language" = "选语言";
 "language_short" = "语";
 "open_url" = "";
@@ -428,7 +428,7 @@
 "no_statistics" = "";
 "no_internet_avail" = "";
 "no_internet_avail_desc_first" = "";
-"show_region_on_map_title" = "地图已下载";
+"map_downloaded" = "地图已下载";
 "show_region_on_map_desc" = "";
 "show_region_on_map_go" = "去地图";
 "sqlitedb_import_title" = "";
@@ -753,7 +753,6 @@
 "blue" = "蓝色";
 "pink" = "粉红色";
 "translucent_orange" = "半透明橙色";
-"translucent_lightblue" = "半透明淡蓝色";
 "translucent_blue" = "半透明蓝色";
 "translucent_purple" = "半透明紫色";
 "translucent_pink" = "半透明粉红色";
@@ -880,7 +879,7 @@
 "quick_action_pause_nav_descr" = "点击该按钮以暂停或恢复导航。";
 "add_poi" = "添加 POI";
 "save_poi_too_many_uppercase" = "名称中包含太多的大写字母。你想要继续吗？";
-"osm_target_modified" = "已修改 OSM POI";
+"osm_edit_modified_poi" = "已修改 OSM POI";
 "night_mode" = "夜间模式";
 "osm_live_ask_for_purchase" = "请先购买 Osmand Live 的订阅";
 "osm_close_changeset" = "关闭修改集";
@@ -922,7 +921,7 @@
 "region_nautical" = "航海地图";
 "help_follow_us" = "跟随我们";
 "quick_action_name" = "快捷操作";
-"osm_deleted" = "已删除";
+"poi_remove_success" = "已删除";
 "online_map" = "在线地图";
 "map_underlays" = "地图衬底层";
 "shared_string_on" = "开";
@@ -942,7 +941,6 @@
 "osm_note_action_field_descr" = "此消息将会自动填写注释字段。";
 "directions_more_options" = "设为起点";
 "mapil_pano_only" = "仅显示 360° 图像";
-"fav_add_group" = "添加组";
 "quick_actions_show_dialog" = "显示一个临时的对话框";
 "units_nm" = "浬";
 "quick_action_start_stop_nav_descr" = "点击该按钮以开始或结束导航。";
@@ -1314,7 +1312,7 @@
 "shared_string_poi_types" = "兴趣点类型";
 "route_betw_points" = "两点间路线";
 "shared_string_preparing" = "正在准备";
-"app_theme_light" = "明亮";
+"light_theme" = "明亮";
 "help_osmand_live" = "订阅 - OsmAnd Live";
 "search_activity" = "搜索";
 "shared_string_finish" = "完成";
@@ -1331,7 +1329,7 @@
 "voice_announces" = "语音提示";
 "default_speed_setting_title" = "默认速率";
 "quick_action_mapillary_show" = "显示Mapillary";
-"nav_type_ski" = "滑雪";
+"routing_profile_ski" = "滑雪";
 "map_settings_legend" = "图例";
 "import_profile_select_descr" = "选择要导入的数据。";
 "tones" = "色调";
@@ -1530,7 +1528,7 @@
 "shared_string_wifi_only" = "仅在 Wi-Fi 上";
 "explore_wikipedia_offline" = "离线浏览维基百科。";
 "navigate_point_zone" = "地区";
-"configure_map_descr" = "地图显示";
+"map_look_descr" = "地图显示";
 "dialogs_and_notifications" = "对话框和通知";
 "contour_lines_hillshades_slope" = "等高线、丘陵阴影、坡度";
 "osmand_live_title" = "OsmAnd实况";

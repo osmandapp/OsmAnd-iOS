@@ -114,7 +114,7 @@
 "shared_string_none" = "Nenhum";
 "map_settings_offline" = "Estilos de mapas offline";
 "map_settings_online" = "Mapas online";
-"map_settings_transp" = "Transparência";
+"shared_string_transparency" = "Transparência";
 "map_settings_avail_lay" = "Camadas disponíveis";
 // Intro
 "intro_skip" = "Ignorar";
@@ -587,7 +587,7 @@
 "osm_editing_lost_changes_title" = "Sair sem guardar?";
 "osm_editing_lost_changes_descr" = "Quaisquer alterações por guardar serão perdidas. Continuar\?";
 "osn_bug_name" = "Nota do OSM";
-"osm_deleted" = "Eliminado";
+"poi_remove_success" = "Eliminado";
 "osm_editing_offline" = "Edição offline";
 "osm_working_days" = "Dias úteis";
 "osm_opening_hours_time" = "Tempo";
@@ -596,7 +596,7 @@
 "osm_phone" = "Telefone";
 "osm_website" = "Site";
 "osm_poi_delete_title" = "Eliminar POI";
-"osm_target_modified" = "POI do OpenStreetMap alterado";
+"osm_edit_modified_poi" = "POI do OpenStreetMap alterado";
 "osm_target_deleted" = "POI do OSM eliminado";
 "osm_target_created" = "POI OSM adicionado";
 "osm_note_created" = "Nota do OSM adicionada";
@@ -634,7 +634,6 @@
 "pink" = "Rosa";
 "translucent_red" = "Vermelho translúcido";
 "translucent_orange" = "Laranja translúcido";
-"translucent_lightblue" = "Azul claro translúcido";
 "translucent_blue" = "Azul translúcido";
 "translucent_purple" = "Roxo translúcido";
 "translucent_pink" = "Rosa translúcido";
@@ -666,7 +665,7 @@
 "pedestrian" = "A pé";
 "plugins" = "Complementos";
 "restore" = "Restaurar";
-"show_region_on_map_title" = "Mapa descarregado";
+"map_downloaded" = "Mapa descarregado";
 "local_names" = "Nomes no idioma local";
 "history" = "Histórico";
 "try_again" = "Tentar novamente";
@@ -905,7 +904,7 @@
 "product_title_wiki" = "Wikipédia";
 "product_desc_wiki" = "Artigos da Wikipédia baseados em localização no mapa";
 "product_desc_ext_wiki" = "Aceder a artigos da Wikipédia na sua viagem ajuda-o a saber mais sobre os locais que visita. Está disponível para descarregamento, para poder vê-los desligado da Internet e mostra artigos da Wikipédia relacionados com os pontos de interesse diretamente no mapa. Não se esqueça de descarregar os mapas da Wikipédia para a região escolhida.";
-"product_title_srtm" = "Curvas de nível";
+"download_srtm_maps" = "Curvas de nível";
 "product_desc_srtm" = "Avaliação visual da forma da superfície do terreno";
 "product_desc_ext_srtm" = "Informações sobre o terreno, tais como curvas de nível, encostas e declives, ajudam a avaliar visualmente a forma da superfície do terreno, considerando a curvatura, extremos, declive, pontos de igual altura e muito mais. A informação topográfica num mapa pode ser representada por sombreamento da inclinação, linhas de contorno para a subida e descida e a cor do desvio do ângulo da inclinação em relação ao plano. Dados provenientes do SRTM e do ASTER. \n\nInstruções em https://osmand.net/docs/user/plugins/contour-lines";
 "product_title_sea_depth_contours" = "Curvas de profundidades náuticas";
@@ -913,7 +912,7 @@
 "enter_description" = "Insira a descrição";
 "enter_fav_name" = "Digite o nome do favorito";
 "res_installing" = "A instalar…";
-"res_hillshade" = "Sombras de relevo";
+"shared_string_hillshade" = "Sombras de relevo";
 "select_language" = "Escolher idioma";
 "language_short" = "Idioma";
 "open_url" = "Abrir página no navegador";
@@ -1097,7 +1096,6 @@
 "toggle_day_night" = "Mudar de modo diurno/noturno";
 "show_hide_gpx" = "Mostrar/ocultar trilhos";
 "quick_action_name_str" = "Nome da ação";
-"fav_add_group" = "Adicionar um grupo";
 "poi_list" = "Lista de POIs";
 "quick_actions_show_dialog" = "Editar etiquetas ao aplicar";
 "quick_action_name_footer" = "Deixe em branco para usar automaticamente o endereço ou nome do lugar.";
@@ -1674,10 +1672,10 @@
 "next_seg" = "Próximo segmento";
 "default_speed_setting_title" = "Velocidade predefinida";
 "voice_announces" = "Avisos por voz";
-"nav_type_ski" = "Esqui";
+"routing_profile_ski" = "Esqui";
 "arrival_announcement_frequency" = "Quão cedo quer o anúncio da chegada\?";
 "maximum_speed" = "Velocidade máxima";
-"configure_map_descr" = "Aparência do mapa";
+"map_look_descr" = "Aparência do mapa";
 "public_transport_show" = "Mostrar transporte público";
 "app_profiles" = "Perfis da aplicação";
 "quick_action_remove_next_destination" = "Eliminar o ponto de destino mais próximo";
@@ -1689,7 +1687,7 @@
 "shared_string_max" = "Máximo";
 "nav_type_title" = "Tipo de navegação";
 "nav_type_straight_line" = "Linha reta";
-"app_theme_light" = "Claro";
+"light_theme" = "Claro";
 "nothing_found_empty" = "Não foi encontrado nada";
 "res_online_source_cache_alert" = "A aplicação dessas alterações limpará os dados temporários desta origem de mosaicos";
 "importing_from" = "A importar dados de %@";
@@ -2377,7 +2375,7 @@
 "product_desc_ext_weather" = "Habilite o complemento meteorológico para planear uma rota considerando as previsões meteorológicas. Veja o mapa colorido da previsão do tempo, que é atualizado de hora em hora para hoje, amanhã e a semana que vem. \n\nDurante a viagem, veja painéis de informações baseadas na sua localização com temperatura, precipitação, velocidade do vento e pressão. \n\nÉ útil para caminhadas e longas viagens de bicicleta ou motorizada.";
 "measurement_units" = "Unidades de medida";
 "weather_temp_unit_c" = "Celsius";
-"weather_temp_unit_f" = "Fahrenheit";
+"weather_temperature_fahrenheit" = "Fahrenheit";
 "weather_pressure_unit_hpa" = "Hectopascals";
 "weather_pressure_unit_mmhg" = "Milímetros de mercúrio";
 "weather_pressure_unit_inhg" = "Polegadas de mercúrio";

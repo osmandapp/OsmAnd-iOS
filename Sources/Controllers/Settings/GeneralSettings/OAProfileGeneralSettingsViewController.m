@@ -212,7 +212,7 @@
 //    [appearanceArr addObject:@{
 //        @"type" : [OAIconTitleValueCell getCellIdentifier],
 //        @"title" : OALocalizedString(@"settings_app_theme"),
-//        @"value" : OALocalizedString(@"app_theme_light"),
+//        @"value" : OALocalizedString(@"light_theme"),
 //        @"icon" : @"ic_custom_contrast",
 //        @"key" : @"app_theme",
 //    }];

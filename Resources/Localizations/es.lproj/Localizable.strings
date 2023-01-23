@@ -94,7 +94,7 @@
 "shared_string_none" = "Ninguno";
 "map_settings_offline" = "Estilos de mapas sin conexión";
 "map_settings_online" = "Mapas en línea";
-"map_settings_transp" = "Transparencia";
+"shared_string_transparency" = "Transparencia";
 "map_settings_avail_lay" = "Capas disponibles";
 // Intro
 "intro_skip" = "Omitir";
@@ -315,7 +315,7 @@
 "make_call" = "Hacer llamada";
 "product_title_wiki" = "Wikipedia";
 "product_desc_wiki" = "Artículos de Wikipedia basados en la ubicación del mapa";
-"product_title_srtm" = "Curvas de nivel";
+"download_srtm_maps" = "Curvas de nivel";
 "product_desc_srtm" = "Evaluación visual de la forma de la superficie terrestre";
 "enter_description" = "Añade una descripción";
 "description" = "Descripción";
@@ -337,7 +337,7 @@
 "language" = "Idioma";
 "you_searching" = "Estás buscando";
 "from_location" = "desde lejos";
-"res_hillshade" = "Sombreado";
+"shared_string_hillshade" = "Sombreado";
 "show_alt_in_drive" = "Ver altitud en modo conducción";
 "purchase_get" = "Obtener";
 "srtm_disabled" = "Curvas de nivel desactivadas";
@@ -410,7 +410,7 @@
 "no_statistics" = "Sin estadísticas";
 "no_internet_avail" = "Sin Internet disponible";
 "no_internet_avail_desc_first" = "Activa la conexión a Internet para descargar la lista de mapas";
-"show_region_on_map_title" = "Mapa descargado";
+"map_downloaded" = "Mapa descargado";
 "show_region_on_map_desc" = "El mapa de %@ fue descargado. Ve al mapa para usarlo.";
 "show_region_on_map_go" = "Ir al mapa";
 "offline_maps" = "Mapas sin conexión";
@@ -902,7 +902,6 @@
 "blue" = "Azul";
 "pink" = "Rosa";
 "translucent_orange" = "Anaranjado translúcido";
-"translucent_lightblue" = "Azul claro translúcido";
 "translucent_blue" = "Azul translúcido";
 "translucent_purple" = "Púrpura translúcida";
 "translucent_pink" = "Rosa translúcido";
@@ -930,7 +929,7 @@
 "osm_delete_confirmation_descr" = "¿Seguro que desea borrar este PDI?";
 "osn_bug_name" = "Nota de OSM";
 "osm_created" = "Creado";
-"osm_deleted" = "Borrado";
+"poi_remove_success" = "Borrado";
 "osm_modified" = "Editado";
 "osm_reopened" = "Reabierto";
 "osm_name" = "Nombre de usuario de OpenStreetMap";
@@ -952,7 +951,7 @@
 "osm_add_place" = "Añadir lugar";
 "osm_modify_place" = "Editar lugar";
 "osm_poi_delete_title" = "Borrar PDI";
-"osm_target_modified" = "PDI de OSM modificado";
+"osm_edit_modified_poi" = "PDI de OSM modificado";
 "osm_target_deleted" = "PDI de OSM borrado";
 "osm_target_created" = "PDI de OSM creado";
 "osm_confirm_delete" = "¿Borrar PDI?";
@@ -1159,7 +1158,6 @@
 "quick_action_name_str" = "Nombre de la acción";
 "quick_action_name_alert" = "El nombre de la acción rápida fue cambiado a «%@» para evitar la duplicación.";
 "quick_action_screen_header" = "Pantalla %ld";
-"fav_add_group" = "Añadir un grupo";
 "group_properties" = "Propiedades del grupo";
 "add_group" = "Añadir grupo";
 "poi_list" = "Lista de PDI";
@@ -1647,7 +1645,7 @@
 "create_profile" = "Crear perfil";
 "shared_string_import" = "Importar";
 "osmand_settings" = "Ajustes de OsmAnd";
-"app_theme_light" = "Claro";
+"light_theme" = "Claro";
 "map_settings_add_online_source" = "Añadir repositorio en línea";
 "map_settings_legend" = "Leyenda";
 "shared_string_terrain" = "Terreno";
@@ -1681,7 +1679,7 @@
 "repeat_after" = "Repetir después";
 "choose_auto_center_map_view_descr" = "El tiempo hasta que la vista del mapa se sincroniza con la ubicación actual al moverse";
 "nav_type_geocoding" = "Geocodificación";
-"nav_type_ski" = "Esquí";
+"routing_profile_ski" = "Esquí";
 "nav_type_brouter" = "BRouter";
 "nav_type_direct_to" = "Directo al punto";
 "nav_type_straight_line" = "Línea recta";
@@ -1767,7 +1765,7 @@
 "quick_action_mapillary_hide" = "Ocultar Mapillary";
 "units_t" = "ton";
 "num_stops" = "paradas";
-"configure_map_descr" = "Aspecto del mapa";
+"map_look_descr" = "Aspecto del mapa";
 "help_mapillary" = "OsmAnd + Mapillary";
 "profile_prefs_reset_successful" = "Todos los ajustes del perfil se restauraron al valor predefinido";
 "res_slope" = "Pendiente";
@@ -2398,7 +2396,7 @@
 "product_desc_ext_weather" = "Activa el complemento del clima para planificar una ruta teniendo en cuenta la meteorología. Mira el mapa colorido del pronóstico, que se actualiza cada hora para hoy, mañana y la próxima semana.\n\nMientras viajas, observa los widgets de temperatura, precipitación, velocidad del viento y presión, basados en la ubicación.\n\nEs útil para hacer senderismo y largos viajes en bicicleta o motocicleta.";
 "measurement_units" = "Unidades de medida";
 "weather_temp_unit_c" = "Celsius";
-"weather_temp_unit_f" = "Fahrenheit";
+"weather_temperature_fahrenheit" = "Fahrenheit";
 "weather_pressure_unit_hpa" = "Hectopascales";
 "weather_pressure_unit_inhg" = "Pulgadas de mercurio";
 "weather_wind_unit_m_s" = "Metros/Segundo";

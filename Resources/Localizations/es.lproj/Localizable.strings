@@ -47,7 +47,7 @@
 "poi_insrease_radius" = "Aumentar radio de búsqueda a";
 "poi_max_radius_reached" = "Radio máximo de búsqueda alcanzado";
 "poi_search_near_center" = "Buscar cerca del centro del mapa";
-"poi_hide" = "Ocultar";
+"shared_string_hide" = "Ocultar";
 // My Places
 "favorites" = "Favoritos";
 "tracks" = "Trazas";
@@ -635,7 +635,7 @@
 "fast_route_mode" = "Ruta más rápida";
 "fast_route_mode_descr" = "Activar para calcular la ruta más rápida o desactivar para la más eficiente en combustible";
 "avoid_in_routing_title" = "Evitar…";
-"avoid_in_routing_descr" = "Evita caminos con peajes, sin pavimentar, transbordadores y otros";
+"avoid_in_routing_descr_" = "Evita caminos con peajes, sin pavimentar, transbordadores y otros";
 "prefer_in_routing_title" = "Preferir…";
 "prefer_in_routing_descr" = "Preferir usar autopistas";
 "relief_smoothness_factor_descr" = "Terreno preferido: llano o empinado";
@@ -683,7 +683,7 @@
 "map_widget_appearance_rem" = "Elementos restantes";
 "map_widget_compass" = "Brújula";
 "map_widget_intermediate_distance" = "Destino intermedio";
-"map_widget_distance" = "Destino";
+"route_descr_destination" = "Destino";
 "monitoring_control_start" = "Grabar";
 "map_widget_altitude" = "Altitud";
 "map_widget_next_turn" = "Próximo giro";
@@ -915,7 +915,6 @@
 "translucent_green" = "Verde translúcido";
 "purple" = "Púrpura";
 "brown" = "Marrón";
-"black" = "Negro";
 "shared_string_upload" = "Subir";
 "poi_type" = "Tipo de PDI";
 // OSM Editing actions
@@ -929,7 +928,7 @@
 "osm_editing_lost_changes_descr" = "Se perderán los cambios no guardados. ¿Continuar?";
 "osm_upload_no_internet" = "Comprueba la conexión a Internet e inténtalo de nuevo.";
 "osm_delete_confirmation_descr" = "¿Seguro que desea borrar este PDI?";
-"osm_note" = "Nota de OSM";
+"osn_bug_name" = "Nota de OSM";
 "osm_created" = "Creado";
 "osm_deleted" = "Borrado";
 "osm_modified" = "Editado";
@@ -1661,7 +1660,7 @@
 "download_size" = "Tamaño de descarga";
 "number_of_tiles" = "Número de teselas";
 "move_map_to_select_area" = "Mover el mapa para elegir elárea necesaria.";
-"update_map" = "Actualizar mapa";
+"update_tile" = "Actualizar mapa";
 "shared_string_max" = "Máx.";
 "shared_string_min" = "Mín.";
 "nothing_found_empty" = "Nada encontrado";
@@ -1675,8 +1674,7 @@
 "only_manually" = "Sólo manualmente";
 "arrival_announcement_frequency" = "¿Cuándo quieres el anuncio de llegada\?";
 "select_distance_for_recalculation" = "Elige la distancia después de la cual la ruta será recalculada.";
-"route_recalculation_descr" = "La ruta será recalculada si la distancia a la ubicación actual es mayor que el valor elegido.";
-"avoid_routes_and_road" = "Evita ciertas rutas y tipos de caminos";
+"recalculate_route_distance_promo" = "La ruta será recalculada si la distancia a la ubicación actual es mayor que el valor elegido.";
 "recalculate_route" = "Recalcular ruta en caso de desviación";
 "special_routing" = "Navegación especial";
 "osmand_routing" = "Navegación de OsmAnd";
@@ -1709,7 +1707,7 @@
 "max_speed" = "Velocidad máx.";
 "maximum_speed" = "Velocidad máxima";
 "min_speed" = "Velocidad mínima";
-"default_speed" = "Velocidad predefinida";
+"default_speed_setting_title" = "Velocidad predefinida";
 "default_profile_descr" = "Elige el perfil que se usará al ejecutar la aplicación.";
 "allow_3d_descr" = "Activa esta opción para ver el mapa en la perspectiva 2.5D";
 "allow_3d" = "Permitir vista 2.5D";
@@ -1960,8 +1958,8 @@
 "toggle_public_transport" = "Mostrar u ocultar transporte público";
 "toggle_hillshade" = "Mostrar/Ocultar terreno";
 "toggle_contour_lines" = "Mostrar/ocultar líneas de contorno";
-"start_of_track" = "Inicio de la traza";
-"split_before" = "Dividir antes";
+"start_of_the_track" = "Inicio de la traza";
+"plan_route_split_before" = "Dividir antes";
 "split_after" = "Dividir después";
 "speed_limit_tolerance_descr" = "Margen de tolerancia sobre el límite de velocidad, en el cual recibirás un aviso de voz.";
 "size_of_downloaded_data" = "Una gran diferencia entre los niveles de zum, puede aumentar el tamaño de los datos descargados.";
@@ -2733,7 +2731,7 @@
 "routing_attr_goods_restrictions_footer_desc" = "Sólo se aplica a los vehículos que transportan mercancías que tienen al menos cuatro ruedas y no pesan más de 3,5 toneladas.\n\nSi el peso de su vehículo es superior a 3,5 toneladas, deberá utilizar el perfil de camión.";
 "download_all" = "Descargar todo";
 "cloud_all_changes_downloaded" = "Todos los cambios descargados";
-"shared_string_file_cloud" = "iCloud";
+"shared_string_cloud" = "iCloud";
 "upload_all" = "Subir todo";
 "show_borders_of_downloaded_maps" = "Mostrar los bordes de los mapas descargados";
 "shared_string_added" = "Añadido";

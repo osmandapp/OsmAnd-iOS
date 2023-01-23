@@ -218,7 +218,7 @@
         },
         @{
             @"type" : [OASegmentTableViewCell getCellIdentifier],
-            @"title0" : OALocalizedString(@"start_of_track"),
+            @"title0" : OALocalizedString(@"start_of_the_track"),
             @"title1" : OALocalizedString(@"nearest_point"),
             @"key" : @"point_to_start"
         },

@@ -111,7 +111,7 @@
 "driving_region" = "Liikkumisalue";
 "driving_region_automatic" = "Automaattinen";
 "routing_attr_length_name" = "Pituusrajoitus";
-"default_speed" = "Oletusnopeus";
+"default_speed_setting_title" = "Oletusnopeus";
 "min_speed" = "Pienin nopeus";
 "max_speed" = "Suurin nopeus";
 "maximum_speed" = "Suurin nopeus";
@@ -146,7 +146,7 @@
 "map_widget_appearance_rem" = "Jäljellejäävät elementit";
 "map_widget_compass" = "Kompassi";
 "map_widget_intermediate_distance" = "Välietappi";
-"map_widget_distance" = "Päämäärä";
+"route_descr_destination" = "Päämäärä";
 "monitoring_control_start" = "REC";
 "map_widget_altitude" = "Korkeus";
 "map_widget_battery" = "Akun taso";
@@ -233,7 +233,7 @@
 "nav_type_geocoding" = "Geocoding";
 "fast_route_mode_descr" = "Enable to calculate fastest route or disable for fuel-saving route";
 "avoid_in_routing_title" = "Vältä…";
-"avoid_in_routing_descr" = "Avoid toll roads, unpaved, ferries";
+"avoid_in_routing_descr_" = "Avoid toll roads, unpaved, ferries";
 "prefer_in_routing_title" = "Suosi…";
 "prefer_in_routing_descr" = "Suosi moottoriteitä.";
 "relief_smoothness_factor_descr" = "Preferred terrain: flat or hilly";
@@ -272,8 +272,7 @@
 "import_routing_file_descr" = "Voit tuoda reititystiedoston mistä tahansa pilvitallennussovelluksesta avaamalla sen OsmAndissa.";
 "recalculate_route" = "Laske reitti uudelleen, jos siltä poiketaan";
 "recalculate_wrong_dir" = "Laske reitti uudelleen, jos suunta on päinvastainen";
-"avoid_routes_and_road" = "Vältä tiettyjä reittejä ja tietyyppejä";
-"route_recalculation_descr" = "Reitti lasketaan uudelleen, jos etäisyys reitistä nykyiseen sijaintiin on suurempi kuin valittu arvo.";
+"recalculate_route_distance_promo" = "Reitti lasketaan uudelleen, jos etäisyys reitistä nykyiseen sijaintiin on suurempi kuin valittu arvo.";
 "select_distance_for_recalculation" = "Valitse etäisyys, jonka jälkeen reitti lasketaan uudelleen.";
 "arrival_announcement_frequency" = "Kuinka aikaisin haluat saapumisilmoituksen?";
 "speed_limit_tolerance_descr" = "Select the speed limit tolerance margin above which you will receive a voice warning.";
@@ -474,7 +473,7 @@
 "shared_string_max" = "Maks.";
 "offline_maps" = "Offline-kartat";
 "download_map" = "Lataa kartta";
-"update_map" = "Päivitä kartta";
+"update_tile" = "Päivitä kartta";
 "download_pending" = "Download pending";
 "move_map_to_select_area" = "Move map to select needed area.";
 "number_of_tiles" = "Number of tiles";
@@ -552,7 +551,7 @@
 "poi_insrease_radius" = "Increase search radius to";
 "poi_max_radius_reached" = "Maximum search radius reached";
 "poi_search_near_center" = "Search is performed near the center of the map";
-"poi_hide" = "Piilota";
+"shared_string_hide" = "Piilota";
 
 // My Places
 "favorites" = "Suosikit";
@@ -886,7 +885,7 @@
 "incorrect_symbols" = "Invalid characters entered";
 "gpx_already_exsists" = "File with this name already exists";
 "folder_already_exsists" = "Folder with this name already exists";
-"split_before" = "Jaa ennen";
+"plan_route_split_before" = "Jaa ennen";
 "split_after" = "Jaa jälkeen";
 "follow_track" = "Seuraa jälkeä";
 "shared_string_gpx_track" = "Jälki";
@@ -895,7 +894,7 @@
 "attach_to_the_roads" = "Kiinnitä teihin";
 "reverse_track_dir" = "Käännä jäljen suunta";
 "point_to_navigate" = "Navigate to";
-"start_of_track" = "Jäljen alku";
+"start_of_the_track" = "Jäljen alku";
 "nearest_point" = "Lähin piste";
 "plan_route_folder" = "Folder";
 "plan_route_change_folder" = "Vaihda kansio";
@@ -1019,7 +1018,7 @@
 "osm_succsessful_uploads" = "Successful";
 "osm_failed_uploads" = "Failed";
 "osm_editing_settings_descr" = "This plugin's settings are global and apply to all profiles.";
-"osm_note" = "OSM-huomautus";
+"osn_bug_name" = "OSM-huomautus";
 "osm_created" = "Created";
 "osm_deleted" = "Poistettu";
 "osm_modified" = "Modified";
@@ -1383,7 +1382,6 @@
 "green" = "Vihreä";
 "translucent_green" = "Läpikuultava vihreä";
 "brown" = "Ruskea";
-"black" = "Musta";
 
 // World Regions
 "region_antarctica" = "Antarctica";

@@ -45,7 +45,7 @@
 "map_widget_appearance_rem" = "Remaining elements";
 "map_widget_compass" = "Compass";
 "map_widget_intermediate_distance" = "Intermediate destination";
-"map_widget_distance" = "Destination";
+"route_descr_destination" = "Destination";
 "monitoring_control_start" = "GPX";
 "map_widget_altitude" = "Altitude";
 "map_widget_battery" = "ဘက်ထရီအဆင့်";
@@ -91,7 +91,7 @@
 "fast_route_mode" = "Fastest route";
 "fast_route_mode_descr" = "Enable to calculate fastest route or disable for fuel-saving route";
 "avoid_in_routing_title" = "Avoid…";
-"avoid_in_routing_descr" = "Avoid toll roads, unpaved, ferries";
+"avoid_in_routing_descr_" = "Avoid toll roads, unpaved, ferries";
 "prefer_in_routing_title" = "Prefer…";
 "prefer_in_routing_descr" = "Prefer motorways";
 "relief_smoothness_factor_descr" = "Preferred terrain: flat or hilly";
@@ -295,7 +295,7 @@
 "poi_insrease_radius" = "Increase search radius to";
 "poi_max_radius_reached" = "Maximum search radius reached";
 "poi_search_near_center" = "Search is performed near the center of the map";
-"poi_hide" = "Hide";
+"shared_string_hide" = "Hide";
 // My Places
 "favorites" = "Favorites";
 "tracks" = "Trips";

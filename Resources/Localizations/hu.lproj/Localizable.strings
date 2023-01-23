@@ -45,7 +45,7 @@
 "poi_insrease_radius" = "Keresési sugár növelése";
 "poi_max_radius_reached" = "A maximális keresési sugár elérve";
 "poi_search_near_center" = "A keresés a térkép közepe környékén lesz végrehajtva";
-"poi_hide" = "Elrejtés";
+"shared_string_hide" = "Elrejtés";
 // My Places
 "favorites" = "Kedvencek";
 "tracks" = "Nyomvonalak";
@@ -560,7 +560,7 @@
 "coords_format" = "Koordinátaformátum";
 "driving_region_automatic" = "Automatikus";
 "unit_of_length" = "Hosszmértékegységek";
-"map_widget_distance" = "Célpont";
+"route_descr_destination" = "Célpont";
 "map_widget_plain_time" = "Jelenlegi idő";
 "map_widget_max_speed" = "Sebességkorlátozás";
 "map_widget_left" = "Bal panel";
@@ -880,12 +880,11 @@
 "replace_destination" = "Célpont lecserélése";
 "poi_type" = "POI típus";
 "osm_phone" = "telefon";
-"osm_note" = "OSM Jegyzet";
+"osn_bug_name" = "OSM Jegyzet";
 "green" = "Zöld";
 "help_legend" = "Térkép jelkulcs";
 "res_world_region" = "Világ";
 "osm_alert_button_ok" = "Jegyzet létrehozása";
-"black" = "Fekete";
 "wake_on_voice_descr" = "Az eszköz képernyőjének bekapcsolása (ha ki van kapcsolva) egy kanyarodáshoz közeledve.";
 "brown" = "Barna";
 "menu_help" = "Súgó";
@@ -1379,7 +1378,6 @@
 "arrived_at_destination" = "Megérkezett.";
 "min_speed" = "Legkisebb sebesség";
 "profile_prefs_reset_successful" = "Minden profilbeállítás visszaállt alapértelmezettre.";
-"avoid_routes_and_road" = "Bizonyosútvonalak és úttípusok elkerülése";
 "res_pseudo_mercator" = "Pszeudo-Mercator vetület";
 "map_settings_add_online_source" = "Online forrás hozzáadása";
 "nav_type_geocoding" = "Geokódolás";
@@ -1392,7 +1390,7 @@
 "next_seg" = "Következő szakasz";
 "num_stops" = "megállók";
 "profile_type_user_string" = "Felhasználói profil";
-"route_recalculation_descr" = "Azútvonal újraszámításra kerül, amennyiben az útvonal és a jelenlegi helyzet közötti távolság nagyobb, mint a kiválasztott érték.";
+"recalculate_route_distance_promo" = "Azútvonal újraszámításra kerül, amennyiben az útvonal és a jelenlegi helyzet közötti távolság nagyobb, mint a kiválasztott érték.";
 "units_t" = "t";
 "position_icon_while_moving" = "Mozgás közben látható pozícióikon";
 "logging_min_speed" = "Legkisebb sebesség";
@@ -1426,7 +1424,7 @@
 "shared_string_min" = "Min";
 "voice_announces" = "Hangutasítások";
 "quick_action_mapillary_show" = "Mapillary megjelenítése";
-"default_speed" = "Alapértelmezett sebesség";
+"default_speed_setting_title" = "Alapértelmezett sebesség";
 "nav_type_ski" = "Sí";
 "map_settings_legend" = "Jelmagyarázat";
 "import_profile_select_descr" = "Válassza ki az importálandó adatot.";
@@ -1445,7 +1443,7 @@
 "importing_from" = "Adatok importálása innen: %@";
 "product_title_antarctica" = "Antarktika";
 "res_slope" = "Lejtés";
-"update_map" = "Térkép frissítése";
+"update_tile" = "Térkép frissítése";
 "announce_gpx_waypoints" = "Nyomvonalútpontjai";
 "add_point" = "Pont hozzáadása";
 "osm_note_comment_title" = "Hozzászólás az OSM-jegyzethez";
@@ -1490,7 +1488,7 @@
 "extra_maps" = "Egyéb térképek";
 "add_custom_category" = "Egyéni kategória hozzáadása";
 "shared_string_disable" = "Letiltás";
-"split_before" = "Elvágás ez előtt:";
+"plan_route_split_before" = "Elvágás ez előtt:";
 "shared_string_import" = "Importálás";
 "transport" = "Tömegközlekedés";
 "coordinates_widget" = "Koordináta-widget";
@@ -1534,7 +1532,7 @@
 "select_group" = "Csoport kijelölése";
 "plan_route_change_folder" = "Mappa módosítása";
 "shared_string_resources" = "Források";
-"start_of_track" = "Nyomvonal kezdete";
+"start_of_the_track" = "Nyomvonal kezdete";
 "gpx_navigation" = "Nyomvonal követése";
 "shared_string_gpx_points" = "Pontok";
 "context_menu_item_edit_waypoint" = "GPXútpont szerkesztése";
@@ -1627,7 +1625,7 @@
 "repeat_after" = "Ismétlés ennyi idő után:";
 "choose_auto_center_map_view_descr" = "Idő, amíg a térképnézet mozgás után szinkronizál a jelenlegi pozíciójával";
 "choose_auto_follow_route_descr" = "Idő, amíg a térképnézet szinkronizál a jelenlegi pozíciójával";
-"avoid_in_routing_descr" = "Fizetős vagy burkolat nélküli utak, kompok elkerülése";
+"avoid_in_routing_descr_" = "Fizetős vagy burkolat nélküli utak, kompok elkerülése";
 "nav_type_brouter" = "BRouter";
 "change_map_behavior" = "Térkép viselkedésének módosítása navigáció során";
 "nav_type_osmand" = "OsmAnd (offline útvonalkeresés)";

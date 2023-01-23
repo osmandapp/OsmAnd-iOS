@@ -127,7 +127,7 @@
 "map_widget_appearance_rem" = "その他の要素";
 "map_widget_compass" = "コンパス";
 "map_widget_intermediate_distance" = "中間経由地点";
-"map_widget_distance" = "目的地";
+"route_descr_destination" = "目的地";
 "monitoring_control_start" = "REC";
 "map_widget_altitude" = "標高";
 "map_widget_battery" = "バッテリー残量";
@@ -177,7 +177,7 @@
 "fast_route_mode" = "最速ルート";
 "fast_route_mode_descr" = "有効なら目的地までの最速ルートで計算し、無効なら燃費を抑えた短いルートで計算します";
 "avoid_in_routing_title" = "回避ルートの指定…";
-"avoid_in_routing_descr" = "有料道路、未舗装、フェリーなどを避けます";
+"avoid_in_routing_descr_" = "有料道路、未舗装、フェリーなどを避けます";
 "prefer_in_routing_title" = "優先ルートの指定…";
 "prefer_in_routing_descr" = "高速道路を優先する設定にします";
 "relief_smoothness_factor_descr" = "ルート検索時優先する地形(平坦～丘陵)を設定します。";
@@ -420,7 +420,7 @@
 "poi_insrease_radius" = "検索範囲(距離)を増やす";
 "poi_max_radius_reached" = "検索範囲が限界に達しました";
 "poi_search_near_center" = "検索はマップ中央を基点として実行されます";
-"poi_hide" = "非表示";
+"shared_string_hide" = "非表示";
 // My Places
 "favorites" = "お気に入り";
 "tracks" = "経路";
@@ -644,7 +644,7 @@
 "osm_delete_confirmation_descr" = "このPOIを削除してもよろしいですか？";
 "osm_succsessful_uploads" = "成功しました";
 "osm_failed_uploads" = "失敗しました";
-"osm_note" = "OSMでの注釈";
+"osn_bug_name" = "OSMでの注釈";
 "osm_created" = "作成しました";
 "osm_deleted" = "削除されました";
 "osm_modified" = "修正しました";
@@ -953,7 +953,6 @@
 "green" = "グリーン";
 "translucent_green" = "半透明グリーン";
 "brown" = "ブラウン";
-"black" = "黒";
 // World Regions
 "region_africa" = "アフリカ";
 "region_asia" = "アジア";
@@ -1677,7 +1676,7 @@
 "lenght_limit_description" = "車の長さを入力してください。一部のルートにおいては、長い車両では通行できない場合があります。";
 "shared_string_meters" = "メートル";
 "default_speed_dialog_msg" = "すべての道路の移動速度を制限し、種別や制限速度が不明な道路が多い場合の到着時間予測に役立ちます(ルート計算に影響します)";
-"default_speed" = "予想標準速度";
+"default_speed_setting_title" = "予想標準速度";
 "touting_specified_vehicle_parameters_descr" = "指定した車両パラメーターはルート計算に影響を与える可能性があります。";
 "announce" = "案内";
 "arrival_announcement_frequency" = "目的地周辺でのアナウンスをするタイミングを設定します";
@@ -1686,10 +1685,9 @@
 "only_manually" = "手動のみ";
 "speed_limit_tolerance_descr" = "制限速度超過の許容値を選択し、それを超えると音声警告がなされるようになります。";
 "voice_announces" = "音声案内";
-"avoid_routes_and_road" = "特定のルートや特定の道路種別を避けるよう設定ができます";
 "recalculate_wrong_dir" = "逆方向の場合にルートを再計算";
 "select_distance_for_recalculation" = "ルートを再計算する距離を選択します。";
-"route_recalculation_descr" = "ルートから現在地までの距離が選択された値よりも大きい場合、ルートが再計算されます。";
+"recalculate_route_distance_promo" = "ルートから現在地までの距離が選択された値よりも大きい場合、ルートが再計算されます。";
 "recalculate_route" = "ルート再計算の逸脱しきい値";
 "nav_type_straight_line" = "直線";
 "nav_type_ski" = "スキー";
@@ -1772,7 +1770,7 @@
 "download_size" = "ダウンロードサイズ";
 "nothing_found_empty" = "見つかりませんでした";
 "nav_type_osmand" = "OsmAnd(オフラインルーティング)";
-"update_map" = "マップを更新";
+"update_tile" = "マップを更新";
 "import_from_files" = "ファイルからインポート";
 "import_complete_description" = "%@から全データがインポートされました。以下のボタンよりアプリの管理が可能になります。";
 "route_betw_points" = "地点間のルート";
@@ -1908,14 +1906,14 @@
 "reverse_track_dir" = "経路を反転";
 "attach_to_the_roads" = "道路に沿わせる";
 "nearest_point" = "最寄りの地点";
-"start_of_track" = "経路の出発点";
+"start_of_the_track" = "経路の出発点";
 "point_to_navigate" = "案内する";
 "select_another_track" = "別の経路を選択";
 "select_track_to_follow" = "たどる経路の選択";
 "shared_string_gpx_track" = "経路";
 "follow_track" = "経路をたどる";
 "split_after" = "この後で分割";
-"split_before" = "この前で分割";
+"plan_route_split_before" = "この前で分割";
 "folder_already_exsists" = "この名前のフォルダはすでに存在します";
 "gpx_already_exsists" = "この名前のファイルはすでに存在します";
 "incorrect_symbols" = "無効な文字が入力されました";

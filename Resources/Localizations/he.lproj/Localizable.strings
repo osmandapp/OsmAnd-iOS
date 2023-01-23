@@ -115,7 +115,7 @@
 "driving_region" = "אזור נהיגה";
 "driving_region_automatic" = "אוטומטי";
 "routing_attr_length_name" = "מגבלת אורך";
-"default_speed" = "מהירות כבררת מחדל";
+"default_speed_setting_title" = "מהירות כבררת מחדל";
 "min_speed" = "מהירות מזערית";
 "max_speed" = "Max. speed";
 "maximum_speed" = "מהירות מרבית";
@@ -150,7 +150,7 @@
 "map_widget_appearance_rem" = "רכיבים שנותרו";
 "map_widget_compass" = "מצפן";
 "map_widget_intermediate_distance" = "יעד ביניים";
-"map_widget_distance" = "יעד";
+"route_descr_destination" = "יעד";
 "monitoring_control_start" = "הקלטה";
 "map_widget_altitude" = "גובה";
 "map_widget_battery" = "עצמת הסוללה";
@@ -240,7 +240,7 @@
 "nav_type_geocoding" = "גאוקודינג";
 "fast_route_mode_descr" = "יש להפעיל כדי לחשב את המסלול המהיר ביותר או להשבית כדי לקבל את המסלול החסכוני ביותר.";
 "avoid_in_routing_title" = "המנעות…";
-"avoid_in_routing_descr" = "Avoid toll roads, unpaved, ferries";
+"avoid_in_routing_descr_" = "Avoid toll roads, unpaved, ferries";
 "prefer_in_routing_title" = "העדפה…";
 "prefer_in_routing_descr" = "העדפת כבישים סלולים.";
 "relief_smoothness_factor_descr" = "סוג שטח מועדף: מישורי או הררי.";
@@ -279,8 +279,7 @@
 "import_routing_file_descr" = "You can import routing file from any cloud storage app by opening it in OsmAnd.";
 "recalculate_route" = "Recalculate route in case of deviation";
 "recalculate_wrong_dir" = "Recalculate route in case of reverse direction";
-"avoid_routes_and_road" = "הימנעות מסוגים מסוימים של מסלולים וכבישים";
-"route_recalculation_descr" = "המסלול יחושב מחדש אם המרחק מהמסלול למיקום הנוכחי עובר את הערך הנבחר.";
+"recalculate_route_distance_promo" = "המסלול יחושב מחדש אם המרחק מהמסלול למיקום הנוכחי עובר את הערך הנבחר.";
 "select_distance_for_recalculation" = "נא לבחור את המרחק שלאחריו המסלול יחושב מחדש.";
 "arrival_announcement_frequency" = "כמה לפני המועד ברצונך להיוודע על הגעה ליעד?";
 "speed_limit_tolerance_descr" = "Select the speed limit tolerance margin above which you will receive a voice warning.";
@@ -497,7 +496,7 @@
 "offline_maps" = "Offline Maps";
 "download_map" = "הורדת המפה";
 "download_map_dialog" = "דו־שיח הורדת מפה";
-"update_map" = "עדכון המפה";
+"update_tile" = "עדכון המפה";
 "download_pending" = "Download pending";
 "download_suggestion" = "Download detailed %@ map to view this area";
 "move_map_to_select_area" = "יש לזוז ברחבי המפה כדי לבחור את האזור הנחוץ.";
@@ -576,7 +575,7 @@
 "poi_insrease_radius" = "Increase search radius to";
 "poi_max_radius_reached" = "Maximum search radius reached";
 "poi_search_near_center" = "Search is performed near the center of the map";
-"poi_hide" = "הסתרה";
+"shared_string_hide" = "הסתרה";
 
 // My Places
 "favorites" = "מועדפים";
@@ -1056,7 +1055,7 @@
 "invalid_format" = "Invalid format";
 "gpx_already_exsists" = "File with this name already exists";
 "folder_already_exsists" = "Folder with this name already exists";
-"split_before" = "לפצל לפני";
+"plan_route_split_before" = "לפצל לפני";
 "split_after" = "לפצל אחרי";
 "follow_track" = "מעקב אחר מסלול";
 "shared_string_gpx_track" = "מסלול";
@@ -1065,7 +1064,7 @@
 "attach_to_the_roads" = "הצמדה לדרכים";
 "reverse_track_dir" = "היפוך כיוון המסלול";
 "point_to_navigate" = "Navigate to";
-"start_of_track" = "התחלת המסלול";
+"start_of_the_track" = "התחלת המסלול";
 "nearest_point" = "הנקודה הקרובה ביותר";
 "plan_route_folder" = "Folder";
 "plan_route_change_folder" = "החלפת תיקייה";
@@ -1197,7 +1196,7 @@
 "osm_succsessful_uploads" = "Successful";
 "osm_failed_uploads" = "Failed";
 "osm_editing_settings_descr" = "This plugin's settings are global and apply to all profiles.";
-"osm_note" = "הערת OSM";
+"osn_bug_name" = "הערת OSM";
 "osm_created" = "Created";
 "osm_deleted" = "נמחקה";
 "osm_modified" = "Modified";
@@ -1570,7 +1569,6 @@
 "green" = "ירוק";
 "translucent_green" = "ירוק שקוף למחצה";
 "brown" = "חום";
-"black" = "שחור";
 
 // World Regions
 "region_antarctica" = "אנטארקטיקה";

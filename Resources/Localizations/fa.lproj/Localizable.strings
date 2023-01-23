@@ -45,7 +45,7 @@
 "map_widget_appearance_rem" = "سایر اجزا";
 "map_widget_compass" = "قطب‌نما";
 "map_widget_intermediate_distance" = "مقصد میانی";
-"map_widget_distance" = "مقصد";
+"route_descr_destination" = "مقصد";
 "monitoring_control_start" = "ضبط";
 "map_widget_altitude" = "ارتفاع";
 "map_widget_battery" = "میزان شارژ باطری";
@@ -91,7 +91,7 @@
 "fast_route_mode" = "سریع‌ترین مسیر";
 "fast_route_mode_descr" = "فعال کنید تا سریع‌ترین مسیر محاسبه شود یا غیرفعال کنید تا مسیر صرفه‌جویی سوخت محاسبه شود.";
 "avoid_in_routing_title" = "پرهیز از…";
-"avoid_in_routing_descr" = "Avoid toll roads, unpaved, ferries";
+"avoid_in_routing_descr_" = "Avoid toll roads, unpaved, ferries";
 "prefer_in_routing_title" = "ترجیحِ…";
 "prefer_in_routing_descr" = "اولویت را به آزادراه‌ها را می‌دهد.";
 "relief_smoothness_factor_descr" = "اولویت ساختار زمین: هموار یا پرتپه.";
@@ -295,7 +295,7 @@
 "poi_insrease_radius" = "Increase search radius to";
 "poi_max_radius_reached" = "Maximum search radius reached";
 "poi_search_near_center" = "Search is performed near the center of the map";
-"poi_hide" = "نشان نده";
+"shared_string_hide" = "نشان نده";
 // My Places
 "favorites" = "علاقه‌مندی‌ها";
 "tracks" = "Tracks";
@@ -876,7 +876,7 @@
 "modify_edit_short" = "اصلاح ویرایش OSM";
 "menu_help" = "راهنما";
 "orange" = "نارنجی";
-"osm_note" = "یادداشت OSM‏";
+"osn_bug_name" = "یادداشت OSM‏";
 "show_contour_lines" = "نشان‌دادن منحنی‌های میزان";
 "help_install_and_troubleshoot" = "نصب و اشکال‌زدایی";
 "shared_string_show_more" = "بیشتر نشان بده";
@@ -1007,7 +1007,6 @@
 "mapillary_get_title" = "با مَپیلاری پوشش تصویری را بهتر کنید";
 "product_desc_ext_wikivoyage" = "راهنمای سفر به جذاب‌ترین نقاط جهان در OsmAnd، بی‌نیاز از اینترنت.";
 "shared_string_category" = "دسته";
-"black" = "سیاه";
 "osm_editing_contact_info" = "اطلاعات تماس";
 "osm_note_comment" = "توضیح";
 "osmand_live_updates" = "روزآمدسازی‌های زنده";
@@ -1398,7 +1397,7 @@
 "select_distance_for_recalculation" = "فاصله‌ای که با گذشتن از آن، مسیریابی مجدد انجام شود چقدر باشد.";
 "plugin_settings_reset" = "بازنشانی تنظیمات افزونه به پیشفرض";
 "shared_string_quick_actions" = "کنش‌های فوری";
-"route_recalculation_descr" = "اگر فاصلهٔ مسیر تا موقعیت کنونی بیش از مقدار انتخابی باشد مسیر دوباره محاسبه می‌شود.";
+"recalculate_route_distance_promo" = "اگر فاصلهٔ مسیر تا موقعیت کنونی بیش از مقدار انتخابی باشد مسیر دوباره محاسبه می‌شود.";
 "ui_customization_descr" = "اقلام کشو، منوی زمینه";
 "res_source_sqlite" = "پروندهٔ SQLiteDB";
 "add_point" = "افزودن نقطه";
@@ -1422,7 +1421,7 @@
 "help_mapillary" = "OsmAnd + Mapillary";
 "num_stops" = "ایستگاه";
 "replace_all_desc" = "موارد موجود در پرونده، جانشین موارد کنونی می‌شود";
-"update_map" = "روزآمدسازی نقشه";
+"update_tile" = "روزآمدسازی نقشه";
 "shared_string_max" = "حداکثر";
 "nav_type_direct_to" = "مستقیم تا نقطه";
 "map_settings_add_online_source" = "افزودن منبع آنلاین";
@@ -1434,7 +1433,7 @@
 "total" = "کل";
 "profile_type_user_string" = "نمایهٔ کاربر";
 "consider_limitations_param" = "در نظر گرفتن محدودیت‌های موقت در مسیریابی";
-"default_speed" = "سرعت پیشفرض";
+"default_speed_setting_title" = "سرعت پیشفرض";
 "configure_screen_quick_action" = "کنش فوری";
 "public_transport_hide" = "مخفی‌کردن حمل‌ونقل عمومی";
 "shared_string_add_profile" = "افزودن نمایه";
@@ -1453,7 +1452,6 @@
 "public_transport_empty_warning_descr" = "با تنظیمات دیگر امتحان کنید.";
 "nav_type_geocoding" = "رمزگذاری جغرافیایی";
 "enter_profile_name" = "نام نمایه را بنویسید";
-"avoid_routes_and_road" = "از مسیرهای بخصوص و انواع جاده‌ها بپرهیزید";
 "profile_type_osmand_string" = "نمایهٔ OsmAnd";
 "shared_string_routing" = "مسیریابی";
 "quick_action_mapillary_hide" = "پنهان‌کردن مپیلاری";
@@ -1534,14 +1532,14 @@
 "octagon" = "هشت‌ضلعی";
 "square" = "مربع";
 "split_after" = "تقطیع از این جا به بعد";
-"start_of_track" = "ابتدای رد";
+"start_of_the_track" = "ابتدای رد";
 "track_save_descr" = "رد جاری را همین حالا در قالب پروندهٔ GPX ذخیره کن.";
 "shared_string_enable" = "فعال";
 "shared_string_gpx_points" = "نقاط";
 "plan_route_change_folder" = "تغییر پوشه";
 "custom_osmand_plugin_name" = "افزونهٔ سفارشی OsmAnd";
 "visible" = "نمایان";
-"split_before" = "تقطیع از اینجا به قبل";
+"plan_route_split_before" = "تقطیع از اینجا به قبل";
 "shared_string_gpx_track" = "رد";
 "res_standard" = "نقشهٔ استاندارد";
 "symbols" = "نمادها";

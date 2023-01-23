@@ -115,7 +115,7 @@
 "driving_region" = "Gidatze eremua";
 "driving_region_automatic" = "Automatikoa";
 "routing_attr_length_name" = "Luzera muga";
-"default_speed" = "Lehenetsitako abiadura";
+"default_speed_setting_title" = "Lehenetsitako abiadura";
 "min_speed" = "Gutxieneko abiadura";
 "max_speed" = "Max. speed";
 "maximum_speed" = "Gehieneko abiadura";
@@ -150,7 +150,7 @@
 "map_widget_appearance_rem" = "Bestelako elementuak";
 "map_widget_compass" = "Iparrorratza";
 "map_widget_intermediate_distance" = "Erdibideko helburua";
-"map_widget_distance" = "Helburua";
+"route_descr_destination" = "Helburua";
 "monitoring_control_start" = "GRABATU";
 "map_widget_altitude" = "Altuera";
 "map_widget_battery" = "Bateriaren maila";
@@ -240,7 +240,7 @@
 "nav_type_geocoding" = "Geokodetzea";
 "fast_route_mode_descr" = "Gaitu ibilbiderik azkarrena kalkulatzeko, edo ezgaitu erregaia aurrezten duen ibilbidea kalkulatzeko.";
 "avoid_in_routing_title" = "Saihestu…";
-"avoid_in_routing_descr" = "Avoid toll roads, unpaved, ferries";
+"avoid_in_routing_descr_" = "Avoid toll roads, unpaved, ferries";
 "prefer_in_routing_title" = "Hobetsi…";
 "prefer_in_routing_descr" = "Hobetsi autobideak.";
 "relief_smoothness_factor_descr" = "Gogoko terrenoa: Laua ala menditsua.";
@@ -279,8 +279,7 @@
 "import_routing_file_descr" = "You can import routing file from any cloud storage app by opening it in OsmAnd.";
 "recalculate_route" = "Recalculate route in case of deviation";
 "recalculate_wrong_dir" = "Recalculate route in case of reverse direction";
-"avoid_routes_and_road" = "Saihestu ibilbide eta errepide mota batzuk";
-"route_recalculation_descr" = "Ibilbidea birkalkulatuko da ibilbidetik uneko punturainoko distantzia hautatutako balioa baino handiagoa bada.";
+"recalculate_route_distance_promo" = "Ibilbidea birkalkulatuko da ibilbidetik uneko punturainoko distantzia hautatutako balioa baino handiagoa bada.";
 "select_distance_for_recalculation" = "Hautatu ibilbidea birkalkulatzeko distantzia.";
 "arrival_announcement_frequency" = "Noizko nahi duzu iristearen iragarkia?";
 "speed_limit_tolerance_descr" = "Select the speed limit tolerance margin above which you will receive a voice warning.";
@@ -497,7 +496,7 @@
 "offline_maps" = "Offline Maps";
 "download_map" = "Deskargatu mapa";
 "download_map_dialog" = "Maparen deskarga elkarrizketa-koadroa";
-"update_map" = "Mapa eguneratu";
+"update_tile" = "Mapa eguneratu";
 "download_pending" = "Download pending";
 "download_suggestion" = "Download detailed %@ map to view this area";
 "move_map_to_select_area" = "Mugitu mapa behar den azalera hautatzeko.";
@@ -576,7 +575,7 @@
 "poi_insrease_radius" = "Increase search radius to";
 "poi_max_radius_reached" = "Maximum search radius reached";
 "poi_search_near_center" = "Search is performed near the center of the map";
-"poi_hide" = "Ezkutatu";
+"shared_string_hide" = "Ezkutatu";
 
 // My Places
 "favorites" = "Gogokoak";
@@ -1056,7 +1055,7 @@
 "invalid_format" = "Invalid format";
 "gpx_already_exsists" = "File with this name already exists";
 "folder_already_exsists" = "Folder with this name already exists";
-"split_before" = "Zatitu aurretik";
+"plan_route_split_before" = "Zatitu aurretik";
 "split_after" = "Zatitu ondoren";
 "follow_track" = "Jarraitu lorratza";
 "shared_string_gpx_track" = "Lorratza";
@@ -1065,7 +1064,7 @@
 "attach_to_the_roads" = "Erantsi errepideetara";
 "reverse_track_dir" = "Alderantzikatu lorratzaren noranzkoa";
 "point_to_navigate" = "Navigate to";
-"start_of_track" = "Lorratzaren hasiera";
+"start_of_the_track" = "Lorratzaren hasiera";
 "nearest_point" = "Puntu hurbilena";
 "plan_route_folder" = "Folder";
 "plan_route_change_folder" = "Aldatu karpeta";
@@ -1197,7 +1196,7 @@
 "osm_succsessful_uploads" = "Successful";
 "osm_failed_uploads" = "Failed";
 "osm_editing_settings_descr" = "This plugin's settings are global and apply to all profiles.";
-"osm_note" = "OSM oharra";
+"osn_bug_name" = "OSM oharra";
 "osm_created" = "Created";
 "osm_deleted" = "Ezabatua";
 "osm_modified" = "Modified";
@@ -1570,7 +1569,6 @@
 "green" = "Berdea";
 "translucent_green" = "Berde gardena";
 "brown" = "marroia";
-"black" = "Beltza";
 
 // World Regions
 "region_antarctica" = "Antartika";

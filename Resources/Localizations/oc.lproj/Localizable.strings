@@ -127,7 +127,7 @@
 "map_widget_appearance_rem" = "Elements restants";
 "map_widget_compass" = "Bossòla";
 "map_widget_intermediate_distance" = "Etapa intermediària";
-"map_widget_distance" = "Destinacion";
+"route_descr_destination" = "Destinacion";
 "monitoring_control_start" = "REC";
 "map_widget_altitude" = "Altitud";
 "map_widget_battery" = "Nivèu de la batariá";
@@ -177,7 +177,7 @@
 "fast_route_mode" = "Percors pus rapide";
 "fast_route_mode_descr" = "Activatz per calcular lo percors pus rapide o desactivatz per cercar aqueu de la consomacion melhora";
 "avoid_in_routing_title" = "Evitar…";
-"avoid_in_routing_descr" = "Evitar lei rotas de peatge, lei non enquitranadas e lei barcas a tralha";
+"avoid_in_routing_descr_" = "Evitar lei rotas de peatge, lei non enquitranadas e lei barcas a tralha";
 "prefer_in_routing_title" = "Preferéncias…";
 "prefer_in_routing_descr" = "Preferéncia per autorotas";
 "relief_smoothness_factor_descr" = "Terren preferit : plan ò escalabrós";
@@ -420,7 +420,7 @@
 "poi_insrease_radius" = "Relargar la recèrca a";
 "poi_max_radius_reached" = "Rai de recèrca maximau ajonch";
 "poi_search_near_center" = "La recèrca se fa dins lo ròdol dau centre de la mapa";
-"poi_hide" = "Amagar";
+"shared_string_hide" = "Amagar";
 // My Places
 "favorites" = "Preferéncias";
 "tracks" = "Traças";
@@ -641,7 +641,7 @@
 "osm_delete_confirmation_descr" = "Siatz segur que volètz suprimir aquest PDI?";
 "osm_succsessful_uploads" = "Ben capitat";
 "osm_failed_uploads" = "Mancat";
-"osm_note" = "Nòta d'OSM";
+"osn_bug_name" = "Nòta d'OSM";
 "osm_created" = "Creat";
 "osm_deleted" = "Eliminat";
 "osm_modified" = "Modificat";
@@ -940,7 +940,6 @@
 "green" = "Vèrd";
 "translucent_green" = "Vèrd translucid";
 "brown" = "Marron";
-"black" = "Negre -a";
 // World Regions
 "region_africa" = "Africa";
 "region_asia" = "Asia";
@@ -1347,7 +1346,7 @@
 "walk" = "Caminada";
 "base_profile_descr_bicycle" = "Bicicleta de montanha, ciclomotor, cavau";
 "shared_string_exit" = "Sortir";
-"default_speed" = "Velocitat per defaut";
+"default_speed_setting_title" = "Velocitat per defaut";
 "configure_screen_descr" = "Seleccionatz leis opcions d’ecran per lo perfiu";
 "nav_type_ski" = "Esquilh";
 "nav_type_title" = "Mena de navigacion";
@@ -1472,7 +1471,7 @@
 "position_icon_at_rest" = "Icona de posicion en repaus";
 "position_icon_while_moving" = "Icòna de posicion en movement";
 "move_point_descr" = "Mòure la mapa per cambiar la posicion d'aquest ponch.";
-"start_of_track" = "Començament de la traça";
+"start_of_the_track" = "Començament de la traça";
 "select_another_track" = "Chausissètz una autra traça";
 "select_profile" = "Seleccionar un perfiu";
 "res_offlineSQL_URL_warning" = "Aquò s'admet pas per aquesta mena de mapa";
@@ -1740,7 +1739,7 @@
 "shared_strings_all_regions" = "Totei lei país";
 "regions" = "País";
 "shared_string_width" = "Larjor";
-"update_map" = "Actualizar la mapa";
+"update_tile" = "Actualizar la mapa";
 "fav_add_new_group" = "Ajustar un grop novèu";
 "select_group_descr" = "Seleccionatz un grop ò ajustatz ne'n un novèu";
 "available_groups" = "Gropes disponibles";
@@ -1750,7 +1749,7 @@
 "select_group" = "Seleccionatz un grop";
 "fav_point_dublicate" = "Avètz indicat un nom de Preferit duplicat";
 "fav_point_dublicate_message" = "Preferit renomat en '%@' per evitar un doble.";
-"route_recalculation_descr" = "Un percors novèu serà calculat si la distància entre lo percors e la pocision actuala despassan una valor seleccionada.";
+"recalculate_route_distance_promo" = "Un percors novèu serà calculat si la distància entre lo percors e la pocision actuala despassan una valor seleccionada.";
 "arrival_announcement_frequency" = "Quant de temps avans d\'arribar vos fau prevenir \?";
 "avoid_transport_type" = "Evitar lei tipes de transpòrt";
 "route_calc_progress" = "A calcular : %d%%";
@@ -1768,7 +1767,6 @@
 "poi_categories" = "Categorias de PDI";
 "shared_string_interval" = "Intervalle";
 "import_routing_file_descr" = "Podètz importar un fichier de percors partent de tot servici d'emmagazinatge en nívol. Pron de lo dubrir dins OsmAnd.";
-"avoid_routes_and_road" = "Evitar d'unei percors e menas de via";
 "shared_string_time_span" = "Durada de temps";
 "shared_string_end_time" = "Ora de fin";
 "shared_string_start_time" = "Ora de començament";
@@ -2086,7 +2084,7 @@
 "save_new_track" = "Sauvagardar per traça nòva";
 "add_to_track" = "Ajustar una traça";
 "move_point" = "Desplaçar un ponch";
-"split_before" = "Separar avans";
+"plan_route_split_before" = "Separar avans";
 "split_after" = "Separar après";
 "simplified_track_description" = "La linha dau percors soleta serà sauvagardada, lei ponchs d\'etapa seràn escafats.";
 "create_profile" = "Crear un perfiu";

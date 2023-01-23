@@ -90,7 +90,7 @@
 "map_widget_appearance_rem" = "Elementos pendentes";
 "map_widget_compass" = "Compás";
 "map_widget_intermediate_distance" = "Destino intermedio";
-"map_widget_distance" = "Destino";
+"route_descr_destination" = "Destino";
 "monitoring_control_start" = "Gravar";
 "map_widget_altitude" = "Altitude";
 "map_widget_battery" = "Nivel da batería";
@@ -139,7 +139,7 @@
 "fast_route_mode" = "Rota máis rápida";
 "fast_route_mode_descr" = "Activa isto para calcular a ruta máis rápida ou desactívao para a máis eficiencia no combustíbel.";
 "avoid_in_routing_title" = "Evitar…";
-"avoid_in_routing_descr" = "Avoid toll roads, unpaved, ferries";
+"avoid_in_routing_descr_" = "Avoid toll roads, unpaved, ferries";
 "prefer_in_routing_title" = "Prefirir…";
 "prefer_in_routing_descr" = "Preferir empregar autoestradas.";
 "relief_smoothness_factor_descr" = "Terreo prefirido: chairo ou inclinado.";
@@ -348,7 +348,7 @@
 "poi_insrease_radius" = "Increase search radius to";
 "poi_max_radius_reached" = "Maximum search radius reached";
 "poi_search_near_center" = "Search is performed near the center of the map";
-"poi_hide" = "Agochar";
+"shared_string_hide" = "Agochar";
 // My Places
 "favorites" = "Favoritos";
 "tracks" = "Pistas";
@@ -852,7 +852,7 @@
 "commiting_node" = "A enviar o nó…";
 "shared_string_reload" = "Recargar";
 "osm_edit_without_name" = "Sen nome";
-"osm_note" = "Nota de OSM";
+"osn_bug_name" = "Nota de OSM";
 "add_work" = "Engadir o meu lugar de traballo";
 "map_settings_map_magnifier" = "Achegamento do mapa";
 "add_home" = "Engadir a miña casa";
@@ -888,7 +888,6 @@
 "edit_action" = "Engadir unha acción";
 "show_contour_lines" = "Amosar curvas do nivel";
 "translucent_red" = "Vermello translúcido";
-"black" = "Negro";
 "access_intermediate_arrival_time" = "Hora da chegada intermedia";
 "translucent_green" = "Verde translúcido";
 "region_nautical" = "Mapas náuticos";
@@ -1421,11 +1420,10 @@
 "special_routing" = "Enrutamento especial";
 "base_profile_descr_aircraft" = "Avión, planador";
 "osmand_routing" = "Enrutamento do OsmAnd";
-"avoid_routes_and_road" = "Evitar certas rutas e tipos de estradas";
 "gpx_parse_error" = "O GPX do OsmAnd non está ben formado, por favor, contacta co equipo de soporte para pescudar máis.";
 "listed_exist" = "%@ listado, xa existe no OsmAnd.";
 "help_nav_profiles" = "Perfís de navegación";
-"default_speed" = "Velocidade predefinida";
+"default_speed_setting_title" = "Velocidade predefinida";
 "quick_action_mapillary_show" = "Amosar o Mapillary";
 "select_distance_for_recalculation" = "Escolle a distancia após a cal a ruta será recalculada.";
 "enter_profile_name" = "Insire o nome do perfil";
@@ -1460,7 +1458,7 @@
 "num_stops" = "paradas";
 "public_transport_empty_warning_descr" = "Tenta mudar os axustes.";
 "add_point" = "Engadir punto";
-"update_map" = "Actualizar o mapa";
+"update_tile" = "Actualizar o mapa";
 "screen_alerts" = "Alertas de pantalla";
 "shared_string_deselect_all" = "Deseleccionar todo";
 "import_duplicates_title" = "Algúns elementos xa existen";
@@ -1486,7 +1484,7 @@
 "shared_string_meters" = "metros";
 "public_transport_hide" = "Agochar transporte público";
 "res_source_one_per_tile" = "Un ficheiro de imaxe por tesela";
-"route_recalculation_descr" = "A ruta será recalculada se a distancia á localización actual é maior que o valor escollido.";
+"recalculate_route_distance_promo" = "A ruta será recalculada se a distancia á localización actual é maior que o valor escollido.";
 "height_limit_description" = "Fornece a altura do teu vehículo, algunhas restricións de ruta poden ser aplicadas para vehículos altos.";
 "min_speed" = "Velocidade mínima";
 "total" = "Total";
@@ -1536,7 +1534,7 @@
 "favorite_friends_category" = "Amizades";
 "osmand_live_upd_frequency" = "Frecuencia de actualización";
 "plan_route_select_folder" = "Seleccionar cartafol";
-"start_of_track" = "Comezo da pista";
+"start_of_the_track" = "Comezo da pista";
 "search_history" = "Historial de procura";
 "some_of" = "%d de %d";
 "hide_compass_ruler" = "Agochar a regra de compás";
@@ -1569,7 +1567,7 @@
 "coordinates" = "Coordenadas";
 "shared_string_gpx_points" = "Puntos";
 "octagon" = "Octógono";
-"split_before" = "Dividir antes";
+"plan_route_split_before" = "Dividir antes";
 "select_group" = "Escoller grupo";
 "gpxup_trackable" = "Seguíbel";
 "default" = "Predeterminado";

@@ -115,7 +115,7 @@
 "driving_region" = "გზის რეგიონი";
 "driving_region_automatic" = "ავტომატური";
 "routing_attr_length_name" = "სიგრძის ლიმიტი";
-"default_speed" = "ნაგულისხმევი სიჩქარე";
+"default_speed_setting_title" = "ნაგულისხმევი სიჩქარე";
 "min_speed" = "მინ. სიჩქარე";
 "max_speed" = "Max. speed";
 "maximum_speed" = "მაქს. სიჩქარე";
@@ -150,7 +150,7 @@
 "map_widget_appearance_rem" = "დარჩენილი ელემენტები";
 "map_widget_compass" = "კომპასი";
 "map_widget_intermediate_distance" = "შუალედური დანიშნულების პუნქტი";
-"map_widget_distance" = "დანიშნულების წერტილი";
+"route_descr_destination" = "დანიშნულების წერტილი";
 "monitoring_control_start" = "ჩაწერა";
 "map_widget_altitude" = "სიმაღლე";
 "map_widget_battery" = "ელემენტის დონე";
@@ -240,7 +240,7 @@
 "nav_type_geocoding" = "გეოკოდირება";
 "fast_route_mode_descr" = "ჩართეთ უსწრაფესი გზის დასათვლელად ან გამორთეთ უმოკლესისათვის.";
 "avoid_in_routing_title" = "თავის არიდება…";
-"avoid_in_routing_descr" = "Avoid toll roads, unpaved, ferries";
+"avoid_in_routing_descr_" = "Avoid toll roads, unpaved, ferries";
 "prefer_in_routing_title" = "არჩევნის გაკეთება…";
 "prefer_in_routing_descr" = "მოტოციკლების გზებისათვის უპირატესობის მინიჭება.";
 "relief_smoothness_factor_descr" = "პრიორიტეტის ველების ან ბორცვებისთვის მინიჭება.";
@@ -279,8 +279,7 @@
 "import_routing_file_descr" = "You can import routing file from any cloud storage app by opening it in OsmAnd.";
 "recalculate_route" = "Recalculate route in case of deviation";
 "recalculate_wrong_dir" = "Recalculate route in case of reverse direction";
-"avoid_routes_and_road" = "Avoid certain routes and road types";
-"route_recalculation_descr" = "The route will be recalculated if the distance from the route to the current location is more than selected value.";
+"recalculate_route_distance_promo" = "The route will be recalculated if the distance from the route to the current location is more than selected value.";
 "select_distance_for_recalculation" = "Select the distance after which the route will be recalculated.";
 "arrival_announcement_frequency" = "How soon do you want the arrival announcement?";
 "speed_limit_tolerance_descr" = "Select the speed limit tolerance margin above which you will receive a voice warning.";
@@ -497,7 +496,7 @@
 "offline_maps" = "Offline Maps";
 "download_map" = "რუკის გადმოწერა";
 "download_map_dialog" = "რუკის დიალოგის ფანჯარა";
-"update_map" = "რუკის განახლება";
+"update_tile" = "რუკის განახლება";
 "download_pending" = "Download pending";
 "download_suggestion" = "Download detailed %@ map to view this area";
 "move_map_to_select_area" = "Move map to select needed area.";
@@ -576,7 +575,7 @@
 "poi_insrease_radius" = "Increase search radius to";
 "poi_max_radius_reached" = "Maximum search radius reached";
 "poi_search_near_center" = "Search is performed near the center of the map";
-"poi_hide" = "დამალვა";
+"shared_string_hide" = "დამალვა";
 
 // My Places
 "favorites" = "რჩეულები";
@@ -1056,7 +1055,7 @@
 "invalid_format" = "Invalid format";
 "gpx_already_exsists" = "File with this name already exists";
 "folder_already_exsists" = "Folder with this name already exists";
-"split_before" = "გაყოფა მანამდე";
+"plan_route_split_before" = "გაყოფა მანამდე";
 "split_after" = "გაყოფა შემდეგ";
 "follow_track" = "Follow track";
 "shared_string_gpx_track" = "მიდევნება";
@@ -1065,7 +1064,7 @@
 "attach_to_the_roads" = "გზებზე მიბმა";
 "reverse_track_dir" = "უკუღმა მიმართულება";
 "point_to_navigate" = "Navigate to";
-"start_of_track" = "კურსის დასაწყისი";
+"start_of_the_track" = "კურსის დასაწყისი";
 "nearest_point" = "უახლოესი წერტილი";
 "plan_route_folder" = "Folder";
 "plan_route_change_folder" = "Change folder";
@@ -1197,7 +1196,7 @@
 "osm_succsessful_uploads" = "Successful";
 "osm_failed_uploads" = "Failed";
 "osm_editing_settings_descr" = "This plugin's settings are global and apply to all profiles.";
-"osm_note" = "OSMშენიშვნა";
+"osn_bug_name" = "OSMშენიშვნა";
 "osm_created" = "Created";
 "osm_deleted" = "წაშლილია";
 "osm_modified" = "Modified";
@@ -1570,7 +1569,6 @@
 "green" = "მწვანე";
 "translucent_green" = "გამჭირვალე მწვანე";
 "brown" = "ყავისფერი";
-"black" = "შავი";
 
 // World Regions
 "region_antarctica" = "ანტარქტიკა";

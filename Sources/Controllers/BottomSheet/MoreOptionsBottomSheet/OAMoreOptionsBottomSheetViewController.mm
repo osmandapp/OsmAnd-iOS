@@ -109,7 +109,7 @@
                           @"img" : @"ic_custom_download",
                           @"type" : [OAMenuSimpleCell getCellIdentifier] } ];
 
-        [arr addObject:@{ @"title" : OALocalizedString(@"update_map"),
+        [arr addObject:@{ @"title" : OALocalizedString(@"update_tile"),
                           @"key" : @"update_map",
                           @"img" : @"ic_custom_update",
                           @"type" : [OAMenuSimpleCell getCellIdentifier] } ];

@@ -127,7 +127,7 @@
 "map_widget_appearance_rem" = "Resterende elementer";
 "map_widget_compass" = "Kompass";
 "map_widget_intermediate_distance" = "Mellomliggende reisemål";
-"map_widget_distance" = "Reisemål";
+"route_descr_destination" = "Reisemål";
 "monitoring_control_start" = "START";
 "map_widget_altitude" = "Høyde";
 "map_widget_battery" = "Batterinivå";
@@ -177,7 +177,7 @@
 "fast_route_mode" = "Raskeste rute";
 "fast_route_mode_descr" = "Aktiver forå beregne raskeste rute eller deaktiver for drivstoffbesparende rute.";
 "avoid_in_routing_title" = "Unngå…";
-"avoid_in_routing_descr" = "Avoid toll roads, unpaved, ferries";
+"avoid_in_routing_descr_" = "Avoid toll roads, unpaved, ferries";
 "prefer_in_routing_title" = "Foretrekk…";
 "prefer_in_routing_descr" = "Foretrekk motorveier.";
 "relief_smoothness_factor_descr" = "Foretrukket terreng: flatt eller kupert.";
@@ -420,7 +420,7 @@
 "poi_insrease_radius" = "Increase search radius to";
 "poi_max_radius_reached" = "Maximum search radius reached";
 "poi_search_near_center" = "Search is performed near the center of the map";
-"poi_hide" = "Skjul";
+"shared_string_hide" = "Skjul";
 // My Places
 "favorites" = "Favoritter";
 "tracks" = "Spor";
@@ -641,7 +641,7 @@
 "osm_delete_confirmation_descr" = "Are you sure you want to delete this POI?";
 "osm_succsessful_uploads" = "Successful";
 "osm_failed_uploads" = "feilet";
-"osm_note" = "OSM-notat";
+"osn_bug_name" = "OSM-notat";
 "osm_created" = "Created";
 "osm_deleted" = "Slettet";
 "osm_modified" = "Modified";
@@ -940,7 +940,6 @@
 "green" = "Grønn";
 "translucent_green" = "Gjennomskinnelig grønn";
 "brown" = "Brun";
-"black" = "Svart";
 // World Regions
 "region_africa" = "Afrika";
 "region_asia" = "Asia";
@@ -1630,7 +1629,7 @@
 "download_size" = "Nedlastningsstørrelse";
 "number_of_tiles" = "Antall kartfliser";
 "move_map_to_select_area" = "Flytt kartet forå velge ønsket område.";
-"update_map" = "Oppdater kart";
+"update_tile" = "Oppdater kart";
 "shared_string_exit" = "Avslutt";
 "shared_string_meters" = "meter";
 "nav_type_geocoding" = "Geokoding";
@@ -1652,7 +1651,7 @@
 "configure_screen_descr" = "Velg skjermalternativer for profilen";
 "max_speed" = "Maks. hastighet";
 "min_speed" = "Minimumshastighet";
-"default_speed" = "Standardhastighet";
+"default_speed_setting_title" = "Standardhastighet";
 "allow_3d" = "Tillat 2,5D-visning";
 "default_speed_dialog_msg" = "Estimerer ankomsttid for ukjente veityper og begrenser farten for alle veier (kan påvirke ruting)";
 "routing_attr_length_name" = "Lengdebegrensning";
@@ -1667,7 +1666,6 @@
 "public_transport_menu" = "Transport";
 "shared_string_preparing" = "Forbereder";
 "import_profile_select_descr" = "Velg dataå importere.";
-"avoid_routes_and_road" = "Unngå visse ruter og veityper";
 "ltr_or_rtl_combine_via_space" = "%@ %@";
 "selected_profile" = "Valgt profil";
 "select_icon" = "Velg ikon";
@@ -1678,7 +1676,7 @@
 "shared_string_importing" = "Importerer";
 "quick_action_map_source_title" = "Kartkilder";
 "height_limit_description" = "Angi kjøretøyhøyde, noen rutebegrensninger for høye kjøretøy kan tilkomme.";
-"route_recalculation_descr" = "Ruten blir beregnet på nytt hvis avstanden fra ruten til nåværende posisjon er større enn valgt verdi.";
+"recalculate_route_distance_promo" = "Ruten blir beregnet på nytt hvis avstanden fra ruten til nåværende posisjon er større enn valgt verdi.";
 "configure_profile" = "Sett opp profil";
 "menu" = "Meny";
 "base_profile_descr_boat" = "Skip, roing, seiling";
@@ -1803,13 +1801,13 @@
 "hide_terrain" = "Skjul terreng";
 "show_terrain" = "Vis terreng";
 "nearest_point" = "Nærmeste punkt";
-"start_of_track" = "Starten av sporet";
+"start_of_the_track" = "Starten av sporet";
 "point_to_navigate" = "Naviger til";
 "attach_to_the_roads" = "Følg veier";
 "select_another_track" = "Velg et annet spor";
 "shared_string_gpx_track" = "Spor";
 "follow_track" = "Følg spor";
-"split_before" = "Del før";
+"plan_route_split_before" = "Del før";
 "split_after" = "Del etter";
 "gpx_already_exsists" = "Fil med dette navnet finnes allerede";
 "empty_filename" = "Filnavn kan ikke være tomt";

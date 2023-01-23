@@ -115,7 +115,7 @@
 "driving_region" = "Región de conducción";
 "driving_region_automatic" = "Automático";
 "routing_attr_length_name" = "Límite de longitud";
-"default_speed" = "Velocidad predefinida";
+"default_speed_setting_title" = "Velocidad predefinida";
 "min_speed" = "Velocidad mín.";
 "max_speed" = "Velocidad máx.";
 "maximum_speed" = "Velocidad máxima";
@@ -150,7 +150,7 @@
 "map_widget_appearance_rem" = "Elementos restantes";
 "map_widget_compass" = "Brújula";
 "map_widget_intermediate_distance" = "Destino intermedio";
-"map_widget_distance" = "Destino";
+"route_descr_destination" = "Destino";
 "monitoring_control_start" = "Grabar";
 "map_widget_altitude" = "Altitud";
 "map_widget_battery" = "Nivel de batería";
@@ -240,7 +240,7 @@
 "nav_type_geocoding" = "Geocodificación";
 "fast_route_mode_descr" = "Activar para calcular la ruta más rápida o desactivar para la más eficiente en combustible";
 "avoid_in_routing_title" = "Evitar…";
-"avoid_in_routing_descr" = "Evita caminos con peajes, sin pavimentar, transbordadores y otros";
+"avoid_in_routing_descr_" = "Evita caminos con peajes, sin pavimentar, transbordadores y otros";
 "prefer_in_routing_title" = "Preferir…";
 "prefer_in_routing_descr" = "Preferir usar autopistas";
 "relief_smoothness_factor_descr" = "Terreno preferido: llano o empinado";
@@ -279,8 +279,7 @@
 "import_routing_file_descr" = "Puedes importar un archivo de navegación desde cualquier aplicación de almacenamiento en la nube abriéndolo en OsmAnd.";
 "recalculate_route" = "Recalcular ruta en caso de desviación";
 "recalculate_wrong_dir" = "Recalcular la ruta en caso de dirección inversa";
-"avoid_routes_and_road" = "Evita ciertas rutas y tipos de caminos";
-"route_recalculation_descr" = "La ruta será recalculada si la distancia a la ubicación actual es mayor que el valor elegido.";
+"recalculate_route_distance_promo" = "La ruta será recalculada si la distancia a la ubicación actual es mayor que el valor elegido.";
 "select_distance_for_recalculation" = "Elige la distancia después de la cual la ruta será recalculada.";
 "arrival_announcement_frequency" = "¿Cuándo quieres el anuncio de llegada?";
 "speed_limit_tolerance_descr" = "Margen de tolerancia sobre el límite de velocidad, en el cual recibirás un aviso de voz.";
@@ -497,7 +496,7 @@
 "offline_maps" = "Mapas sin conexión";
 "download_map" = "Descargar mapa";
 "download_map_dialog" = "Diálogo de descarga del mapa";
-"update_map" = "Actualizar mapa";
+"update_tile" = "Actualizar mapa";
 "download_pending" = "Descarga pendiente";
 "download_suggestion" = "Descarga el mapa detallado de «%@», para ver esta área";
 "move_map_to_select_area" = "Mover el mapa para elegir elárea necesaria.";
@@ -576,7 +575,7 @@
 "poi_insrease_radius" = "Aumentar radio de búsqueda a";
 "poi_max_radius_reached" = "Radio máximo de búsqueda alcanzado";
 "poi_search_near_center" = "Buscar cerca del centro del mapa";
-"poi_hide" = "Ocultar";
+"shared_string_hide" = "Ocultar";
 
 // My Places
 "favorites" = "Favoritos";
@@ -1056,7 +1055,7 @@
 "invalid_format" = "Formato inválido";
 "gpx_already_exsists" = "Ya existe un archivo con ese nombre";
 "folder_already_exsists" = "Una carpeta con este nombre ya existe";
-"split_before" = "Dividir antes";
+"plan_route_split_before" = "Dividir antes";
 "split_after" = "Dividir después";
 "follow_track" = "Seguir traza";
 "shared_string_gpx_track" = "Traza";
@@ -1065,7 +1064,7 @@
 "attach_to_the_roads" = "Unir a los caminos";
 "reverse_track_dir" = "Invertir la dirección de la traza";
 "point_to_navigate" = "Navegar a";
-"start_of_track" = "Inicio de la traza";
+"start_of_the_track" = "Inicio de la traza";
 "nearest_point" = "Punto más cercano";
 "plan_route_folder" = "Carpeta";
 "plan_route_change_folder" = "Cambiar carpeta";
@@ -1197,7 +1196,7 @@
 "osm_succsessful_uploads" = "Éxito";
 "osm_failed_uploads" = "Error";
 "osm_editing_settings_descr" = "Los ajustes de este complemento son globales y se aplica a todos los perfiles.";
-"osm_note" = "Nota de OSM";
+"osn_bug_name" = "Nota de OSM";
 "osm_created" = "Creado";
 "osm_deleted" = "Borrado";
 "osm_modified" = "Editado";
@@ -1570,7 +1569,6 @@
 "green" = "Verde";
 "translucent_green" = "Verde translúcido";
 "brown" = "Marrón";
-"black" = "Negro";
 
 // World Regions
 "region_antarctica" = "Antártida";
@@ -2752,7 +2750,7 @@
 "cloud_all_changes_downloaded" = "Todos los cambios descargados";
 "shared_string_added" = "Añadido";
 "rendering_attr_showMtbScale_name" = "Escala de MTB";
-"shared_string_file_cloud" = "Nube";
+"shared_string_cloud" = "Nube";
 "mtb_segment_classification" = "Clasificación de segmentos";
 "show_borders_of_downloaded_maps" = "Colorear mapas descargados";
 "remote_item" = "Elemento remoto";

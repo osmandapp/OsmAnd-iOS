@@ -704,7 +704,7 @@
     OATextInfoWidget *intermediateTime = [ric createTimeControl:YES];
     [self registerSideWidget:intermediateTime widgetState:[[OAIntermediateTimeControlWidgetState alloc] init] key:@"intermediate_time" left:NO priorityOrder:14];
     OATextInfoWidget *dist = [ric createDistanceControl];
-    [self registerSideWidget:dist imageId:@"ic_action_target" message:OALocalizedString(@"map_widget_distance") key:@"distance" left:NO priorityOrder:15];
+    [self registerSideWidget:dist imageId:@"ic_action_target" message:OALocalizedString(@"route_descr_destination") key:@"distance" left:NO priorityOrder:15];
     OATextInfoWidget *time = [ric createTimeControl:NO];
     [self registerSideWidget:time widgetState:[[OATimeWidgetState alloc] init] key:@"time" left:NO priorityOrder:16];
     OATextInfoWidget *bearing = [ric createBearingControl];

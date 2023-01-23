@@ -115,7 +115,7 @@
 "driving_region" = "Apgabals";
 "driving_region_automatic" = "Automātiski";
 "routing_attr_length_name" = "Length limit";
-"default_speed" = "Noklusētais ātrums";
+"default_speed_setting_title" = "Noklusētais ātrums";
 "min_speed" = "Min.ātrums";
 "max_speed" = "Max. speed";
 "maximum_speed" = "Maks.ātrums";
@@ -150,7 +150,7 @@
 "map_widget_appearance_rem" = "Pārējie elementi";
 "map_widget_compass" = "Kompass";
 "map_widget_intermediate_distance" = "Starpposmu punkti";
-"map_widget_distance" = "Galamērķis";
+"route_descr_destination" = "Galamērķis";
 "monitoring_control_start" = "REC";
 "map_widget_altitude" = "Augstums";
 "map_widget_battery" = "Baterijas līmenis";
@@ -240,7 +240,7 @@
 "nav_type_geocoding" = "Ģeodēzija";
 "fast_route_mode_descr" = "\"Ieslēgt, lai rēķinātu ātrāko maršrutu vai izslēgt, lai rēķinātu ekonomiskāko maršrutu \"";
 "avoid_in_routing_title" = "Izvairīties no…";
-"avoid_in_routing_descr" = "Avoid toll roads, unpaved, ferries";
+"avoid_in_routing_descr_" = "Avoid toll roads, unpaved, ferries";
 "prefer_in_routing_title" = "Dot priekšroku…";
 "prefer_in_routing_descr" = "Priekšroka automaģistrālēm";
 "relief_smoothness_factor_descr" = "Ieteicamais reljefs: līdzens vai kalnains.";
@@ -279,8 +279,7 @@
 "import_routing_file_descr" = "You can import routing file from any cloud storage app by opening it in OsmAnd.";
 "recalculate_route" = "Recalculate route in case of deviation";
 "recalculate_wrong_dir" = "Recalculate route in case of reverse direction";
-"avoid_routes_and_road" = "Avoid certain routes and road types";
-"route_recalculation_descr" = "The route will be recalculated if the distance from the route to the current location is more than selected value.";
+"recalculate_route_distance_promo" = "The route will be recalculated if the distance from the route to the current location is more than selected value.";
 "select_distance_for_recalculation" = "Select the distance after which the route will be recalculated.";
 "arrival_announcement_frequency" = "Cik drīz paziņot par ierašanos galamērķī?";
 "speed_limit_tolerance_descr" = "Select the speed limit tolerance margin above which you will receive a voice warning.";
@@ -498,7 +497,7 @@
 "offline_maps" = "Offline Maps";
 "download_map" = "Lejupielādēt kartes";
 "download_map_dialog" = "Download map dialog";
-"update_map" = "Atjaunot karti";
+"update_tile" = "Atjaunot karti";
 "download_pending" = "Download pending";
 "download_suggestion" = "Download detailed %@ map to view this area";
 "move_map_to_select_area" = "Move map to select needed area.";
@@ -577,7 +576,7 @@
 "poi_insrease_radius" = "Increase search radius to";
 "poi_max_radius_reached" = "Maximum search radius reached";
 "poi_search_near_center" = "Search is performed near the center of the map";
-"poi_hide" = "Paslēpt";
+"shared_string_hide" = "Paslēpt";
 
 // My Places
 "favorites" = "Izlase";
@@ -1057,7 +1056,7 @@
 "invalid_format" = "Invalid format";
 "gpx_already_exsists" = "File with this name already exists";
 "folder_already_exsists" = "Folder with this name already exists";
-"split_before" = "Sadalīt pirms";
+"plan_route_split_before" = "Sadalīt pirms";
 "split_after" = "Sadalīt pēc";
 "follow_track" = "Follow track";
 "shared_string_gpx_track" = "Treks";
@@ -1066,7 +1065,7 @@
 "attach_to_the_roads" = "Attach to the roads";
 "reverse_track_dir" = "Pretējs GPX virziens";
 "point_to_navigate" = "Navigate to";
-"start_of_track" = "Start of the track";
+"start_of_the_track" = "Start of the track";
 "nearest_point" = "Nearest point";
 "plan_route_folder" = "Folder";
 "plan_route_change_folder" = "Change folder";
@@ -1198,7 +1197,7 @@
 "osm_succsessful_uploads" = "Successful";
 "osm_failed_uploads" = "Failed";
 "osm_editing_settings_descr" = "This plugin's settings are global and apply to all profiles.";
-"osm_note" = "OSM piezīme";
+"osn_bug_name" = "OSM piezīme";
 "osm_created" = "Created";
 "osm_deleted" = "Izdzēsts";
 "osm_modified" = "Modified";
@@ -1570,7 +1569,6 @@
 "green" = "Zaļš";
 "translucent_green" = "Caurspīdīgi zaļš";
 "brown" = "brūns";
-"black" = "Melns";
 
 // World Regions
 "region_antarctica" = "Antarktika";

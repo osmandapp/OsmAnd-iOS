@@ -49,7 +49,7 @@
 "dark_yellow" = "Awraɣ";
 "shared_string_topbar" = "Asawen";
 "add_home" = "Agejdan";
-"map_widget_distance" = "Taniɣert";
+"route_descr_destination" = "Taniɣert";
 "download" = "Sider";
 "gpx_average_speed" = "Arured alemmas";
 "col_red" = "Azeggaɣ";
@@ -67,7 +67,7 @@
 "rendering_value_pedestrian_name" = "Amsebrid";
 "rendering_value_disabled_name" = "Yensa";
 "rendering_attr_surface_snow_name" = "Adfel";
-"poi_hide" = "Ffer";
+"shared_string_hide" = "Ffer";
 "sett_lang_local" = "Adigan";
 "shared_string_address" = "Tansa";
 "categories" = "Taggayin";
@@ -237,7 +237,6 @@
 "map_widget_altitude" = "Awrir";
 "rendering_attr_currentTrackColor_name" = "Ini";
 "settings_preset" = "Amaɣnu amezwer";
-"black" = "Aberkan";
 "shared_string_apply" = "Snes";
 "online_map" = "Iqqen";
 "voice_pref_title" = "Taɣuct";
@@ -269,7 +268,7 @@
 "clear_all_intermediates" = "Sfeḍ akk tineqqiḍin";
 "map_settings_appearance" = "Udem";
 "map_settings_day" = "Ass";
-"osm_note" = "Ldi tamawt n OSM";
+"osn_bug_name" = "Ldi tamawt n OSM";
 "not_selected" = "Ur yettwafren ara";
 "rendering_attr_highway_class_service_name" = "Ameẓlu";
 "app_mode_bicycle" = "Tilḥin s uvilo";
@@ -558,7 +557,7 @@
 "replace_all" = "Selselsi imeṛṛa";
 "public_transport_menu" = "Amesni";
 "total" = "Amatu";
-"update_map" = "leqqem";
+"update_tile" = "leqqem";
 "map_settings_legend" = "Tawaṭṭfa";
 "shared_string_preparing" = "Aheyyi";
 "shared_string_finish" = "Fakk";
@@ -571,7 +570,7 @@
 "profile_alert_delete_title" = "Kkes amaɣnu";
 "route_betw_points" = "Abrid gar wagazen";
 "quick_action_map_source_title" = "Iɣbula";
-"route_recalculation_descr" = "Abrid ad yettwasiḍen ticki ameccaq gar ubrid akked wadig-ik yugar azal i d-yettwammlen.";
+"recalculate_route_distance_promo" = "Abrid ad yettwasiḍen ticki ameccaq gar ubrid akked wadig-ik yugar azal i d-yettwammlen.";
 "shared_string_profiles" = "Imeɣna";
 "res_slope" = "Taseksert";
 "edit_profile_list" = "Ẓreg amaɣnu";

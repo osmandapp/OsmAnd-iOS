@@ -115,7 +115,7 @@
 "driving_region" = "Vairavimo regionas";
 "driving_region_automatic" = "Automatinis";
 "routing_attr_length_name" = "Ilgio limitas";
-"default_speed" = "Default speed";
+"default_speed_setting_title" = "Default speed";
 "min_speed" = "Min. speed";
 "max_speed" = "Max. speed";
 "maximum_speed" = "Didžiausias greitis";
@@ -150,7 +150,7 @@
 "map_widget_appearance_rem" = "Likę elementai";
 "map_widget_compass" = "Kompasas";
 "map_widget_intermediate_distance" = "Tarpinis tikslas";
-"map_widget_distance" = "Paskirties punktas";
+"route_descr_destination" = "Paskirties punktas";
 "monitoring_control_start" = "REC";
 "map_widget_altitude" = "Aukštis";
 "map_widget_battery" = "Baterijos būklė";
@@ -240,7 +240,7 @@
 "nav_type_geocoding" = "Geokodinimas";
 "fast_route_mode_descr" = "Įjunkite, kad būtų skaičiuojamas greičiausias maršrutas arba išjunkite, kad skaičiuotų taupiausią maršrutą.";
 "avoid_in_routing_title" = "Vengti…";
-"avoid_in_routing_descr" = "Avoid toll roads, unpaved, ferries";
+"avoid_in_routing_descr_" = "Avoid toll roads, unpaved, ferries";
 "prefer_in_routing_title" = "Teikti pirmenybę…";
 "prefer_in_routing_descr" = "Teikti pirmenybę greitkeliams.";
 "relief_smoothness_factor_descr" = "Pageidaujama reljefas: plokščias arba kalvotas.";
@@ -279,8 +279,7 @@
 "import_routing_file_descr" = "You can import routing file from any cloud storage app by opening it in OsmAnd.";
 "recalculate_route" = "Recalculate route in case of deviation";
 "recalculate_wrong_dir" = "Recalculate route in case of reverse direction";
-"avoid_routes_and_road" = "Avoid certain routes and road types";
-"route_recalculation_descr" = "The route will be recalculated if the distance from the route to the current location is more than selected value.";
+"recalculate_route_distance_promo" = "The route will be recalculated if the distance from the route to the current location is more than selected value.";
 "select_distance_for_recalculation" = "Select the distance after which the route will be recalculated.";
 "arrival_announcement_frequency" = "Kada anksti turi būti pranešama apie atvykimą?";
 "speed_limit_tolerance_descr" = "Select the speed limit tolerance margin above which you will receive a voice warning.";
@@ -497,7 +496,7 @@
 "offline_maps" = "Offline Maps";
 "download_map" = "Parsiųsti žemėlapį";
 "download_map_dialog" = "Download map dialog";
-"update_map" = "Atnaujintižemėlapį";
+"update_tile" = "Atnaujintižemėlapį";
 "download_pending" = "Download pending";
 "download_suggestion" = "Download detailed %@ map to view this area";
 "move_map_to_select_area" = "Move map to select needed area.";
@@ -576,7 +575,7 @@
 "poi_insrease_radius" = "Increase search radius to";
 "poi_max_radius_reached" = "Maximum search radius reached";
 "poi_search_near_center" = "Search is performed near the center of the map";
-"poi_hide" = "Slėpti";
+"shared_string_hide" = "Slėpti";
 
 // My Places
 "favorites" = "Įsimintos vietos";
@@ -1056,7 +1055,7 @@
 "invalid_format" = "Invalid format";
 "gpx_already_exsists" = "File with this name already exists";
 "folder_already_exsists" = "Folder with this name already exists";
-"split_before" = "Split before";
+"plan_route_split_before" = "Split before";
 "split_after" = "Split after";
 "follow_track" = "Follow track";
 "shared_string_gpx_track" = "Kelias";
@@ -1065,7 +1064,7 @@
 "attach_to_the_roads" = "Attach to the roads";
 "reverse_track_dir" = "GPX maršrutą apsukti priešinga kryptimi";
 "point_to_navigate" = "Navigate to";
-"start_of_track" = "Start of the track";
+"start_of_the_track" = "Start of the track";
 "nearest_point" = "Nearest point";
 "plan_route_folder" = "Folder";
 "plan_route_change_folder" = "Change folder";
@@ -1197,7 +1196,7 @@
 "osm_succsessful_uploads" = "Successful";
 "osm_failed_uploads" = "Failed";
 "osm_editing_settings_descr" = "This plugin's settings are global and apply to all profiles.";
-"osm_note" = "OSM pastaba";
+"osn_bug_name" = "OSM pastaba";
 "osm_created" = "Created";
 "osm_deleted" = "Panaikinta";
 "osm_modified" = "Modified";
@@ -1570,7 +1569,6 @@
 "green" = "Žalia";
 "translucent_green" = "Permatomažalia";
 "brown" = "ruda";
-"black" = "Juodas";
 
 // World Regions
 "region_antarctica" = "Antarktida";
@@ -2398,7 +2396,7 @@
 "duration_ago" = "Prieš %1";
 "last_sync" = "Paskutinis sinchronizavimas";
 "sync_now" = "Sinchronizuoti dabar";
-"shared_string_file_cloud" = "Debesis";
+"shared_string_cloud" = "Debesis";
 "cloud_create_account" = "Sukurti paskyrą";
 "local_changes" = "Vietiniai pokyčiai";
 "cloud_last_backup" = "Paskutinė atsarginė kopija";

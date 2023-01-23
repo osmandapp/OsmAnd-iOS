@@ -79,7 +79,7 @@
 "map_widget_appearance_rem" = "العناصر الأخرى";
 "map_widget_compass" = "البوصلة";
 "map_widget_intermediate_distance" = "وجهة وسطى";
-"map_widget_distance" = "وجهة";
+"route_descr_destination" = "وجهة";
 "monitoring_control_start" = "تسجيل";
 "map_widget_altitude" = "الارتفاع";
 "map_widget_battery" = "مستوى البطارية";
@@ -125,7 +125,7 @@
 "fast_route_mode" = "الطريق الأسرع";
 "fast_route_mode_descr" = "تفعيل لحساب الطريق الأسرع أو تعطيل لحساب مسار أقل استهلاكا للوقود";
 "avoid_in_routing_title" = "التجنب…";
-"avoid_in_routing_descr" = "تجنب الطرق ، والعبارات غير المعبدة";
+"avoid_in_routing_descr_" = "تجنب الطرق ، والعبارات غير المعبدة";
 "prefer_in_routing_title" = "فضّل…";
 "prefer_in_routing_descr" = "تفضيل الطرق السريعة";
 "relief_smoothness_factor_descr" = "التضاريس المفضلة : مسطحة أو تلال";
@@ -330,7 +330,7 @@
 "poi_insrease_radius" = "زيادة نصف قطر البحث إلى";
 "poi_max_radius_reached" = "تم الوصول إلى الحد الأقصى لنصف قطر البحث";
 "poi_search_near_center" = "يتم إجراء البحث بالقرب من مركز الخريطة";
-"poi_hide" = "إخفاء";
+"shared_string_hide" = "إخفاء";
 // My Places
 "favorites" = "المفضلة";
 "tracks" = "المسارات";
@@ -939,7 +939,6 @@
 "translucent_green" = "أخضر فاتح";
 "purple" = "بنفسجي";
 "brown" = "بني";
-"black" = "أسود";
 "shared_string_upload" = "رفع";
 "poi_type" = "نوع POI";
 // OSM Editing actions
@@ -947,7 +946,7 @@
 "closing_changeset" = "إغلاق التغييرات…";
 "commiting_node" = "إنشاء نقطة…";
 "loading_poi_obj" = "تحميل POI…";
-"osm_note" = "ملاحظة OSM";
+"osn_bug_name" = "ملاحظة OSM";
 "osm_created" = "تم إنشاءة";
 "osm_deleted" = "حذف";
 "osm_modified" = "تم التعديل";
@@ -1745,7 +1744,7 @@
 "download_size" = "حجم التحميل";
 "number_of_tiles" = "عدد المربعات";
 "move_map_to_select_area" = "حرك الخريطة لتحديد المنطقة المطلوبة.";
-"update_map" = "تحديث الخريطة";
+"update_tile" = "تحديث الخريطة";
 "change_map_behavior" = "تغيير الخريطة أثناء التنقل";
 "map_during_navigation" = "خريطة أثناء التنقل";
 "quick_action_transport_descr" = "انقر على هذا الإجراء لإظهار أو إخفاء مسارات / محطات النقل العام على الخريطة.";
@@ -1767,8 +1766,7 @@
 "speed_limit_tolerance_descr" = "حدد حد السرعة المسموح به لتلقي تنبيه صوتي ما إذا تجاوزته.";
 "arrival_announcement_frequency" = "متى تريد إعلان الوصول؟";
 "select_distance_for_recalculation" = "حدد المسافة التي سيتم بعدها إعادة حساب المسار.";
-"route_recalculation_descr" = "سيتم إعادة حساب المسار إذا كانت المسافة من المسار إلى الموقع الحالي أكثر من القيمة المحددة.";
-"avoid_routes_and_road" = "تجنب بعض الطرق";
+"recalculate_route_distance_promo" = "سيتم إعادة حساب المسار إذا كانت المسافة من المسار إلى الموقع الحالي أكثر من القيمة المحددة.";
 "recalculate_route" = "إعادة حساب المسار في حالة الانحراف";
 "special_routing" = "توجيه خاص";
 "choose_auto_center_map_view_descr" = "إعادة توسيط الموقع الحالي بعد مدة معينه";
@@ -1778,7 +1776,7 @@
 "voice_announces" = "المطالبات الصوتية";
 "max_speed" = "السرعة القصوى";
 "min_speed" = "الحد الأدنى للسرعة";
-"default_speed" = "السرعة الافتراضية";
+"default_speed_setting_title" = "السرعة الافتراضية";
 "units_and_formats" = "الوحدات والأشكال";
 "routing_attr_length_name" = "حد الطول";
 "send_anonymous_data" = "إرسال بيانات مجهولة المصدر";
@@ -1952,12 +1950,12 @@
 "select_application_profile" = "اختر وضع الملاحة";
 "change_application_profile" = "تغيير ملف تعريف التطبيق";
 "quick_action_showhide_mapillary_descr" = "النقر على زر الإجراء هذا يظهر أو يخفي طبقة مابيلاري على الخريطة.";
-"start_of_track" = "بداية المسار";
+"start_of_the_track" = "بداية المسار";
 "point_to_navigate" = "تنقل إلى";
 "reverse_track_dir" = "عكس اتجاه المسار";
 "shared_string_gpx_track" = "مسار";
 "split_after" = "تقسيم بعد";
-"split_before" = "تقسيم قبل";
+"plan_route_split_before" = "تقسيم قبل";
 "gpx_already_exsists" = "يوجد ملف بهذا الاسم";
 "empty_filename" = "لا يمكن أن يكون اسم الملف فارغ";
 "gpx_saved_successfully" = "تم حفظ ملف GPX في %@";
@@ -2738,7 +2736,7 @@
 "routing_attr_goods_restrictions_header_name" = "يمكن تقييد المركبات التي تنقل البضائع للوصول إلى بعض الطرق.";
 "routing_attr_goods_restrictions_footer_desc" = "ينطبق فقط على المركبات التي تحمل البضائع التي تحتوي على أربعة عجلات على الأقل ولا يزيد وزنها عن 3.5 طن.\n\nإذا كان وزن سيارتك أكثر من 3.5 طن ، فأنت بحاجة إلى استخدام ملف تعريف الشاحنة.";
 "routing_attr_goods_restrictions_yes_desc" = "سيتم تجنب الطرق التي أغلقت لتسليم البضائع.";
-"shared_string_file_cloud" = "سحابة";
+"shared_string_cloud" = "سحابة";
 "upload_all" = "رفع الكل";
 "download_all" = "تنزيل الكل";
 "rendering_attr_showMtbScale_name" = "مقياس MTB";

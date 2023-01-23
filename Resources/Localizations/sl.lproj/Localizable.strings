@@ -45,7 +45,7 @@
 // POI
 "poi_insrease_radius" = "Povečaj območje iskanja";
 "poi_search_near_center" = "Iskanje se izvaja v bližini trenutne sredine zemljevida";
-"poi_hide" = "Skrij";
+"shared_string_hide" = "Skrij";
 // My Places
 "favorites" = "Priljubljene";
 "tracks" = "Sledi";
@@ -485,7 +485,7 @@
 "fast_route_mode" = "Najhitrejša pot";
 "fast_route_mode_descr" = "Izbrana možnost določa izbor najhitrejše poti oziroma poti z najmanjšo porabo goriva.";
 "avoid_in_routing_title" = "Izogibanje…";
-"avoid_in_routing_descr" = "Izogibanje cestninam, makadamskim potem, trajektom";
+"avoid_in_routing_descr_" = "Izogibanje cestninam, makadamskim potem, trajektom";
 "prefer_in_routing_title" = "Prednostno usmerjanje…";
 "prefer_in_routing_descr" = "Prednostno naj bo izbrana navigacija po avtocestah.";
 "relief_smoothness_factor_descr" = "Prednostni izbor izrisa terena: ravninsko ali gričevnato.";
@@ -552,7 +552,7 @@
 "map_widget_appearance_rem" = "Preostali elementi";
 "map_widget_compass" = "Kompas";
 "map_widget_intermediate_distance" = "Vmesni cilji";
-"map_widget_distance" = "Cilj";
+"route_descr_destination" = "Cilj";
 "monitoring_control_start" = "REG";
 "map_widget_altitude" = "Nadmorska višina";
 "map_widget_battery" = "Stanje baterije";
@@ -926,7 +926,6 @@
 "translucent_blue" = "Prosojna modra";
 "map_settings_map_magnifier" = "Velikost zemljevida";
 "show_region_on_map_title" = "Zemljevid je prejet";
-"black" = "Črna";
 "add_poi" = "Dodaj točko POI";
 "my_places" = "Shranjene točke";
 "green" = "Zelena";
@@ -936,7 +935,7 @@
 "restore" = "Obnovi";
 "change_map_underlay" = "Spremeni podlogo zemljevida";
 "toggle_poi" = "Pokaži/Skrij točke POI";
-"osm_note" = "Opomba OSM";
+"osn_bug_name" = "Opomba OSM";
 "translucent_yellow" = "Prosojna rumena";
 "product_desc_wikivoyage" = "Brezplačen svetovni popotniški vodnik, ki ga lahko ureja vsak popotnik.";
 "download_depth_countours" = "Navtični relief globine";
@@ -1294,7 +1293,7 @@
 "base_profile_descr_boat" = "Za potovanje z ladjo, jadranje, veslanje ...";
 "selected_profiles" = "%d od %d";
 "arrived_at_destination" = "Prispeli ste.";
-"default_speed" = "Privzeta hitrost";
+"default_speed_setting_title" = "Privzeta hitrost";
 "active_markers" = "Dejavne označbe";
 "voice_announces" = "Glasovna navodila";
 "shared_string_continue" = "Nadaljuj";
@@ -1321,7 +1320,7 @@
 "public_transport_menu" = "Javni prevozi";
 "shared_string_quick_actions" = "Hitra dejanja";
 "num_stops" = "postaje";
-"update_map" = "Posodobi zemljevid";
+"update_tile" = "Posodobi zemljevid";
 "copy_from_other_profile" = "Kopiraj iz drugega profila";
 "position_icon_at_rest" = "Ikona položaja v mirovanju";
 "shared_string_preparing" = "Poteka priprava ...";
@@ -1391,7 +1390,7 @@
 "shared_string_gpx_track" = "Sled";
 "copied_to_clipboard" = "Vsebina je kopirana v odložišče";
 "shared_string_enable" = "Omogoči";
-"split_before" = "Razdeli pred";
+"plan_route_split_before" = "Razdeli pred";
 "replace_favorite_confirmation" = "Ali ste prepričani, da želite zamenjati priljubljeno točko %@?";
 "displayed_trips" = "Prikazane sledi";
 "emergency" = "Nujna medicinska pomoč";
@@ -1721,7 +1720,7 @@
 "cloud_restore_now" = "Obnovi zdaj";
 "new_device_account" = "Nova naprava / nov račun";
 "plan_route_last_modified" = "Po zadnji spremembi";
-"route_recalculation_descr" = "Pot bo ponovno izračunana, če je razdalja od poti do trenutne lokacije večja od izbrane vrednosti.";
+"recalculate_route_distance_promo" = "Pot bo ponovno izračunana, če je razdalja od poti do trenutne lokacije večja od izbrane vrednosti.";
 "purchases_feature_desc_wikipedia" = "Razišči Wikipedijo brez povezave. Članki, razdeljeni po državah in regijah, na voljo v vseh jezikih.";
 "copy_coordinates" = "Kopiraj koordinate";
 "rendering_attr_lightRailRoutes_name" = "Proge lahkihželeznic";
@@ -1801,7 +1800,6 @@
 "cloud_description" = "Nikoli ne izgubi svojih podatkov. Preprosto varnostno kopirajte in obnovitev vseh podatkov.";
 "expired" = "Poteklo";
 "product_desc_pro" = "Pridobi največ funkcij";
-"avoid_routes_and_road" = "Izogibaj se določenim potem in vrstam cest";
 "special" = "Posebno";
 "toast_empty_name_error" = "Neimenovano mesto";
 "cloud_conflicts" = "Spori";
@@ -1830,7 +1828,7 @@
 "tones" = "ton";
 "region_antarctica" = "Antarktika";
 "cloud_set_up_backup" = "Nastavi varnostno kopiranje";
-"start_of_track" = "Začetek sledi";
+"start_of_the_track" = "Začetek sledi";
 "verify_email_address_descr" = "Koda za preverjanje je bila poslana na %@. Vnesi jo v spodnje polje.";
 "daily_map_updates" = "Posodobitve zemljevidov vsako uro";
 "altitude_descent" = "Navzdol";

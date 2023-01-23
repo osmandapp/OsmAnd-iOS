@@ -24,7 +24,7 @@
 "fav_colors" = "Reng";
 "fav_name" = "Nav";
 "fav_replace" = "Biguherîne";
-"poi_hide" = "Veşêre";
+"shared_string_hide" = "Veşêre";
 "gpx_overwrite" = "Li Ser Bi nivîsena";
 "gpx_stat" = "Amar (statîstîk)";
 "gpx_finish" = "Xilasek";

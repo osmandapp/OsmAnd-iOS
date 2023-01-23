@@ -155,7 +155,7 @@
     }
     [defaultSpeedArr addObject:@{
         @"type" : [OAIconTextTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"default_speed"),
+        @"title" : OALocalizedString(@"default_speed_setting_title"),
         @"icon" : @"ic_action_speed",
         @"name" : @"defaultSpeed",
     }];

@@ -55,7 +55,7 @@
 "poi_insrease_radius" = "Arama yarıçapı arttır";
 "poi_max_radius_reached" = "Azami arama yarıçapına ulaşıldı";
 "poi_search_near_center" = "Arama haritanın merkezine yakın yapılır";
-"poi_hide" = "Gizle";
+"shared_string_hide" = "Gizle";
 // My Places
 "favorites" = "Sık Kullanılanlar";
 "tracks" = "İzlenen yollar";
@@ -521,7 +521,7 @@
 "always_center_position_on_map" = "Konumu sürekli ortada tut";
 "map_widget_appearance_rem" = "Kalan unsurlar";
 "map_widget_compass" = "Pusula";
-"map_widget_distance" = "Varış yeri";
+"route_descr_destination" = "Varış yeri";
 "monitoring_control_start" = "REC";
 "map_widget_plain_time" = "Şimdiki zaman";
 "map_widget_max_speed" = "Hız sınırı";
@@ -560,7 +560,7 @@
 "fast_route_mode" = "En hızlı rota";
 "fast_route_mode_descr" = "En hızlı rotayı hesaplamayı etkinleştirin veya yakıt tasarrufu rotası için devre dışı bırakın.";
 "avoid_in_routing_title" = "Kaçın…";
-"avoid_in_routing_descr" = "Geçiş ücretli yollardan, asfaltsız toprak yollardan, feribotlardan kaçın";
+"avoid_in_routing_descr_" = "Geçiş ücretli yollardan, asfaltsız toprak yollardan, feribotlardan kaçın";
 "prefer_in_routing_title" = "Tercih et…";
 "choose_auto_follow_route" = "Harita görünümünü otomatik olarak ortala";
 "auto_zoom_map" = "Haritayı kendiliğinden yakınlaştır";
@@ -922,7 +922,6 @@
 "shared_string_category" = "Kategori";
 "osm_target_created" = "Oluşturulmuş OSM POI\'si";
 "help_first_use" = "İlk kullanım";
-"black" = "Siyah";
 "nearby_search" = "Yakınlarda ara";
 "toggle_nav" = "Navigasyonu başlat/durdur";
 "poi_clear" = "Temizle";
@@ -981,7 +980,7 @@
 "change_map_underlay" = "Harita alt katmanını değiştir";
 "help_follow_us" = "Bizi takip edin";
 "osm_edit_without_name" = "Ad olmadan";
-"osm_note" = "OSM Notu";
+"osn_bug_name" = "OSM Notu";
 "shared_string_building" = "Bina";
 "add_first_inermediate" = "Seyahatteki ilk ara-noktayı ekleyin";
 "route_roundabout_short" = "%dçıkışa gir ve ilerle";
@@ -1746,7 +1745,7 @@
 "preview_of_selected_zoom_levels" = "Seçilen yakınlaştırma seviyelerinin ön izlemesi";
 "download_size" = "İndirme boyutu";
 "number_of_tiles" = "Döşeme sayısı";
-"update_map" = "Haritayı güncelle";
+"update_tile" = "Haritayı güncelle";
 "quick_action_transport_descr" = "Haritada toplu taşıma güzergahlarını / duraklarını göstermek veya gizlemek için bu eyleme dokunun.";
 "recalculate_route" = "Sapma durumunda güzergahı yeniden hesapla";
 "special_routing" = "Özel yönlendirme";
@@ -1757,7 +1756,7 @@
 "voice_announces" = "Sesli uyarılar";
 "max_speed" = "En yüksek hız";
 "min_speed" = "En düşük hız";
-"default_speed" = "Varsayılan hız";
+"default_speed_setting_title" = "Varsayılan hız";
 "units_and_formats" = "Birimler ve biçimler";
 "routing_attr_length_name" = "Uzunluk sınırı";
 "vehicle_height_descr" = "Aracınızın yüksekliğini belirtin, yüksek araçlar için bazı güzergah kısıtlamaları geçerli olabilir.";
@@ -1778,8 +1777,7 @@
 "speed_limit_tolerance_descr" = "Aşıldığında sesli uyarı alacağınız hız sınırı toleransı miktarını seçin.";
 "arrival_announcement_frequency" = "Varış duyurusunu ne yakınlıkta istiyorsunuz\?";
 "select_distance_for_recalculation" = "Rotanın yeniden hesaplanacağı mesafeyi seçin.";
-"route_recalculation_descr" = "Rotadan geçerli konuma olan mesafe seçilen değerden fazla ise rota yeniden hesaplanacaktır.";
-"avoid_routes_and_road" = "Belirli rotalardan ve yol türlerinden kaçın";
+"recalculate_route_distance_promo" = "Rotadan geçerli konuma olan mesafe seçilen değerden fazla ise rota yeniden hesaplanacaktır.";
 "send_anonymous_data" = "Anonim veri gönder";
 "profile_type_base_string" = "Temel profil";
 "global_settings_descr" = "Tüm uygulamayı etkiler.";
@@ -1953,7 +1951,7 @@
 "change_application_profile" = "Uygulama profilini değiştir";
 "quick_action_showhide_mapillary_descr" = "Bu eylem düğmesine dokunmak harita üzerinde Mapillary katmanını gösterir veya gizler.";
 "nearest_point" = "En yakın nokta";
-"start_of_track" = "İzlenen yolun başlangıcı";
+"start_of_the_track" = "İzlenen yolun başlangıcı";
 "point_to_navigate" = "Şuraya git";
 "reverse_track_dir" = "İzlenen yol yönünü tersine çevir";
 "attach_to_the_roads" = "Yollara ekle";
@@ -1961,7 +1959,7 @@
 "shared_string_gpx_track" = "Takip et";
 "follow_track" = "Yolu takip et";
 "split_after" = "Sonra böl";
-"split_before" = "Önce böl";
+"plan_route_split_before" = "Önce böl";
 "gpx_already_exsists" = "Bu ada sahip dosya zaten var";
 "empty_filename" = "Dosya adı boş olamaz";
 "none_point_error" = "Lütfen en az bir nokta ekleyin.";

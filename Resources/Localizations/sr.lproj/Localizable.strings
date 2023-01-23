@@ -115,7 +115,7 @@
 "driving_region" = "Област вожње";
 "driving_region_automatic" = "Самостално";
 "routing_attr_length_name" = "Лимит дужине";
-"default_speed" = "Подразумевана брзина";
+"default_speed_setting_title" = "Подразумевана брзина";
 "min_speed" = "Мин. брзина";
 "max_speed" = "Макс. брзина";
 "maximum_speed" = "Највећа брзина";
@@ -150,7 +150,7 @@
 "map_widget_appearance_rem" = "Остали елементи";
 "map_widget_compass" = "Компас";
 "map_widget_intermediate_distance" = "Пролазно одредиште";
-"map_widget_distance" = "Одредиште";
+"route_descr_destination" = "Одредиште";
 "monitoring_control_start" = "РЕК";
 "map_widget_altitude" = "Висина";
 "map_widget_battery" = "Попуњеност батерије";
@@ -240,7 +240,7 @@
 "nav_type_geocoding" = "Геокодирање";
 "fast_route_mode_descr" = "Укључите да рачунате најбржи пут или искључите да рачунате пут са највећом уштедњом горива.";
 "avoid_in_routing_title" = "Избегавати…";
-"avoid_in_routing_descr" = "Избегавајте путеве са наплатом путарине, неасфалтиране, трајектне";
+"avoid_in_routing_descr_" = "Избегавајте путеве са наплатом путарине, неасфалтиране, трајектне";
 "prefer_in_routing_title" = "Предност…";
 "prefer_in_routing_descr" = "Предност путевима за моторна возила.";
 "relief_smoothness_factor_descr" = "Омиљени терен: павно или брдовито.";
@@ -279,8 +279,7 @@
 "import_routing_file_descr" = "Можете да увезете датотеку за рутирање из било које апликације за складиштење у облаку тако што ћете је отворити у OsmAnd-у.";
 "recalculate_route" = "Прерачунај руту у случају одступања";
 "recalculate_wrong_dir" = "Прерачунајте руту у случају обрнутог смера";
-"avoid_routes_and_road" = "Избегавај одређене путеве и типове путева";
-"route_recalculation_descr" = "Пут ће бити прерачунат уколико је удаљеност тренутне позиције од пута већа од одабране вредности.";
+"recalculate_route_distance_promo" = "Пут ће бити прерачунат уколико је удаљеност тренутне позиције од пута већа од одабране вредности.";
 "select_distance_for_recalculation" = "Одаберите удаљеност после које се пут прерачунава.";
 "arrival_announcement_frequency" = "Колико брзо желите да добијете обавештење о пристизању?";
 "speed_limit_tolerance_descr" = "Одаберите границу допуштеног прекорачења брзине, преко које ћете добити гласовно упозорење.";
@@ -497,7 +496,7 @@
 "offline_maps" = "Ванмрежне Мапе";
 "download_map" = "Преузми карту";
 "download_map_dialog" = "Дијалог преузимања карте";
-"update_map" = "Ажурирај карту";
+"update_tile" = "Ажурирај карту";
 "download_pending" = "Преузимање је на чекању";
 "download_suggestion" = "Преузми детаљну %@ карту да видите ову област";
 "move_map_to_select_area" = "Померите мапу да бисте изабрали потребну област.";
@@ -576,7 +575,7 @@
 "poi_insrease_radius" = "Повећај област претраге на";
 "poi_max_radius_reached" = "Достигнут је максимални радијус претраге";
 "poi_search_near_center" = "Претрага се врши у близини центра мапе";
-"poi_hide" = "Сакриј";
+"shared_string_hide" = "Сакриј";
 
 // My Places
 "favorites" = "Омиљени";
@@ -1056,7 +1055,7 @@
 "invalid_format" = "Неважећи формат";
 "gpx_already_exsists" = "Датотека са овим именом већ постоји";
 "folder_already_exsists" = "Фолдер са овим именом већ постоји";
-"split_before" = "Подели пре";
+"plan_route_split_before" = "Подели пре";
 "split_after" = "После подели";
 "follow_track" = "Следи стазу";
 "shared_string_gpx_track" = "Путања";
@@ -1065,7 +1064,7 @@
 "attach_to_the_roads" = "Причврстите на путеве";
 "reverse_track_dir" = "Обрни смер стазе";
 "point_to_navigate" = "Иди на";
-"start_of_track" = "Почетак стазе";
+"start_of_the_track" = "Почетак стазе";
 "nearest_point" = "Најближа тачка";
 "plan_route_folder" = "Фолдер";
 "plan_route_change_folder" = "Измени фасциклу";
@@ -1197,7 +1196,7 @@
 "osm_succsessful_uploads" = "Успешно";
 "osm_failed_uploads" = "Није успело";
 "osm_editing_settings_descr" = "Подешавања овог додатка су глобална и примењују се на све профиле.";
-"osm_note" = "Белешка ОСМ-а";
+"osn_bug_name" = "Белешка ОСМ-а";
 "osm_created" = "Направљено";
 "osm_deleted" = "Избрисано";
 "osm_modified" = "Измењено";
@@ -1570,7 +1569,6 @@
 "green" = "Зелена";
 "translucent_green" = "Прозирна зелена";
 "brown" = "Смеђа";
-"black" = "Црна";
 
 // World Regions
 "region_antarctica" = "Антарктик";

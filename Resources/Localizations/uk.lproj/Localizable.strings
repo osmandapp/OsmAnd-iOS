@@ -54,7 +54,7 @@
 "fav_replace_all" = "Замінити все";
 // POI
 "poi_insrease_radius" = "Збільшити радіус пошуку до";
-"poi_hide" = "Приховати";
+"shared_string_hide" = "Приховати";
 // GPX
 "gpx_point" = "Точка";
 "shared_string_export" = "Експорт";
@@ -603,7 +603,7 @@
 "fast_route_mode" = "Найшвидший маршрут";
 "fast_route_mode_descr" = "Увімкнути прокладання найшвидшого маршруту, або ж вимкнути режим паливоощадного маршруту";
 "avoid_in_routing_title" = "Уникати…";
-"avoid_in_routing_descr" = "Уникати платних і доріг без покриття, поромів";
+"avoid_in_routing_descr_" = "Уникати платних і доріг без покриття, поромів";
 "prefer_in_routing_title" = "Надавати перевагу…";
 "prefer_in_routing_descr" = "Надавати перевагу автомагістралям";
 "relief_smoothness_factor_descr" = "Переважний рельєф: рівнинний або гористий";
@@ -680,7 +680,7 @@
 "map_widget_appearance_rem" = "Інше";
 "map_widget_compass" = "Компас";
 "map_widget_intermediate_distance" = "Проміжний пункт призначення";
-"map_widget_distance" = "Пункт призначення";
+"route_descr_destination" = "Пункт призначення";
 "map_widget_next_turn" = "Наступний маневр";
 "map_widget_next_turn_small" = "Наступний маневр (зменшено)";
 "map_widget_next_next_turn" = "Другий наступний маневр";
@@ -841,7 +841,7 @@
 "closing_changeset" = "Закривається набір змін…";
 "commiting_node" = "Надсилання точки…";
 "loading_poi_obj" = "Завантаження точок інтересу…";
-"osm_note" = "Нотатка OSM";
+"osn_bug_name" = "Нотатка OSM";
 "osm_created" = "Створено";
 "osm_deleted" = "Вилучено";
 "osm_modified" = "Змінено";
@@ -1151,7 +1151,6 @@
 "translucent_green" = "Напівпрозорий зелений";
 "purple" = "Пурпурний";
 "brown" = "Коричневий";
-"black" = "Чорний";
 "modify_poi_short" = "Редагувати POI";
 "create_poi_short" = "Додати POI";
 "modify_edit_short" = "Редагувати зміни OSM";
@@ -1744,7 +1743,7 @@
 "download_size" = "Розмір завантаження";
 "number_of_tiles" = "Кількість тайлів";
 "move_map_to_select_area" = "Перемістіть мапу, щоб вибрати потрібну ділянку.";
-"update_map" = "Оновити мапу";
+"update_tile" = "Оновити мапу";
 "import_routing_file_descr" = "Ви можете імпортувати файл маршрутизації з будь-якого застосунку хмарного сховища, відкривши його в OsmAnd.";
 "osmand_routing" = "Маршрутизація OsmAnd";
 "change_map_behavior" = "Зміна поведінки мапи під час навігації";
@@ -1754,8 +1753,7 @@
 "settings_item_read_error" = "Не вдається прочитати %@.";
 "arrival_announcement_frequency" = "Як швидко Ви хочете чути повідомлення про прибуття?";
 "select_distance_for_recalculation" = "Оберіть відстань, після якої маршрут буде переобчислено.";
-"route_recalculation_descr" = "Маршрут буде перераховано, якщо відстань від маршруту до поточного місця розташування перевищує вибране значення.";
-"avoid_routes_and_road" = "Уникати певних маршрутів та типів доріг";
+"recalculate_route_distance_promo" = "Маршрут буде перераховано, якщо відстань від маршруту до поточного місця розташування перевищує вибране значення.";
 "recalculate_route" = "Перерахунок маршруту у випадку відхилення";
 "nav_type_geocoding" = "Геокодування";
 "nav_type_ski" = "Лижі";
@@ -1763,7 +1761,7 @@
 "voice_announces" = "Голосові повідомлення";
 "max_speed" = "Макс. швидкість";
 "min_speed" = "Мінімальна швидкість";
-"default_speed" = "Типова швидкість";
+"default_speed_setting_title" = "Типова швидкість";
 "send_anonymous_data_desc" = "Надсилати до OsmAnd статистику завантаження мап, ми не збираємо дані про розташування або будь-які інші особисті дані.";
 "default_profile_descr" = "Виберіть профіль, який застосовуватиметься під час запуску.";
 "units_and_formats" = "Одиниці виміру й формати";
@@ -1955,7 +1953,7 @@
 "change_application_profile" = "Змінити профіль застосунку";
 "quick_action_showhide_mapillary_descr" = "Кнопка показує чи ховає шар Mapillary на мапі.";
 "nearest_point" = "Найближча точка";
-"start_of_track" = "Початок треку";
+"start_of_the_track" = "Початок треку";
 "point_to_navigate" = "Рухатися до";
 "reverse_track_dir" = "Зворотний напрямок треку";
 "attach_to_the_roads" = "Прикріпити до доріг";
@@ -1963,7 +1961,7 @@
 "shared_string_gpx_track" = "Трек";
 "follow_track" = "Навігація за треком";
 "split_after" = "Розділити після";
-"split_before" = "Розділити перед";
+"plan_route_split_before" = "Розділити перед";
 "gpx_already_exsists" = "Файл з цією назвою вже існує";
 "empty_filename" = "Назва файлу не може бути порожньою";
 "none_point_error" = "Необхідно додати хоча б одну точку.";
@@ -2745,7 +2743,7 @@
 "routing_attr_goods_restrictions_footer_desc" = "Поширюється тільки на транспортні засоби, що перевозять вантажі, які мають не менше чотирьох коліс і важать не більше 3,5 тонн.\n\nЯкщо вага вашого транспортного засобу перевищує 3,5 тонни, вам необхідно використовувати профіль \"Вантажний автомобіль\".";
 "download_all" = "Завантажити все";
 "cloud_all_changes_downloaded" = "Усі зміни завантажено";
-"shared_string_file_cloud" = "Хмара";
+"shared_string_cloud" = "Хмара";
 "upload_all" = "Вивантажити все";
 "show_borders_of_downloaded_maps" = "Показати межі завантажених мап";
 "shared_string_added" = "Додано";

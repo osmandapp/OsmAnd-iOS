@@ -72,7 +72,7 @@
 "poi_insrease_radius" = "";
 "poi_max_radius_reached" = "";
 "poi_search_near_center" = "";
-"poi_hide" = "隐藏";
+"shared_string_hide" = "隐藏";
 // My Places
 "favorites" = "收藏";
 "tracks" = "轨迹";
@@ -576,7 +576,7 @@
 "simulate_routing" = "模拟您的位置";
 "animate_routing_route_not_calculated" = "请先计算路径";
 "driving_region" = "驾驶区域";
-"map_widget_distance" = "目的地";
+"route_descr_destination" = "目的地";
 "map_widget_altitude" = "海拔";
 "shared_string_topbar" = "顶栏";
 "map_widget_right" = "右边栏";
@@ -765,7 +765,6 @@
 "translucent_green" = "半透明绿色";
 "purple" = "紫色";
 "brown" = "棕色";
-"black" = "黑色";
 // OSM Editing actions
 "opening_changeset" = "正在打开修改集…";
 "closing_changeset" = "正在关闭修改集…";
@@ -869,7 +868,7 @@
 "download_depth_countours" = "航海等深线";
 "osm_edits_notes" = "注解";
 "osm_editing_offline" = "离线编辑";
-"osm_note" = "OSM注记";
+"osn_bug_name" = "OSM注记";
 "help_legend" = "地图图例";
 "quick_action_tags" = "标签";
 "quick_action_add_poi_category" = "添加类别";
@@ -1330,7 +1329,7 @@
 "public_transport_show" = "显示公共交通";
 "shared_string_min" = "最小";
 "voice_announces" = "语音提示";
-"default_speed" = "默认速率";
+"default_speed_setting_title" = "默认速率";
 "quick_action_mapillary_show" = "显示Mapillary";
 "nav_type_ski" = "滑雪";
 "map_settings_legend" = "图例";
@@ -1347,7 +1346,7 @@
 "special_routing" = "特殊路线规划";
 "product_title_antarctica" = "南极洲";
 "res_slope" = "坡度";
-"update_map" = "更新地图";
+"update_tile" = "更新地图";
 "layer_amenity_label" = "兴趣点覆盖标签";
 "announce_gpx_waypoints" = "轨迹航路点";
 "add_point" = "添加点";
@@ -1445,7 +1444,7 @@
 "emergency" = "紧急救助";
 "shared_string_others" = "其它";
 "res_standard" = "定期地图";
-"route_recalculation_descr" = "如果从路线到当前位置的距离超过了所选的值，路线将被重新计算。";
+"recalculate_route_distance_promo" = "如果从路线到当前位置的距离超过了所选的值，路线将被重新计算。";
 "coordinates" = "坐标";
 "help_nav_profiles" = "导航配置文件";
 "reverse_track_dir" = "反转轨迹方向";
@@ -1489,7 +1488,7 @@
 "searching_gps" = "正在搜索 GPS";
 "shared_string_resources" = "资源";
 "travel" = "旅行";
-"split_before" = "拆分前";
+"plan_route_split_before" = "拆分前";
 "favorite_places_category" = "地方";
 "circle" = "圆形";
 "markers_history" = "标记历史";
@@ -1800,7 +1799,7 @@
 "product_desc_pro" = "获得最多功能";
 "simulation_preview_mode_desc" = "模拟的速度在直线路段将达到最大，只有在交叉路口才会减速。";
 "purchases_feature_desc_pro_widgets" = "获得 OsmAnd Pro 功能：路线着色等。";
-"start_of_track" = "轨迹起始位置";
+"start_of_the_track" = "轨迹起始位置";
 "shared_string_purchased" = "已购买";
 "routing_attr_allow_expert_description" = "极其困难的路线，有危险的障碍物和周边环境。";
 "ltr_or_rtl_combine_via_colon" = "%@：%@";

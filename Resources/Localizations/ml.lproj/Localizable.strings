@@ -1,4 +1,3 @@
-
 "OsmAnd Maps" = "OsmAnd Maps";
 
 "download_depth_countours" = "നോട്ടിക്കൽ ഡെപ്ത് കോണ്ടൂറുകള്‍";
@@ -130,7 +129,7 @@
 "driving_region" = "ഡ്രൈ‌വിങ്ങ് റീജിയണ്‍(രാജ്യം)";
 "driving_region_automatic" = "തനിയെയുള്ള";
 "routing_attr_length_name" = "Length limit";
-"default_speed" = "Default speed";
+"default_speed_setting_title" = "Default speed";
 "min_speed" = "Min. speed";
 "max_speed" = "Max. speed";
 "maximum_speed" = "കൂടിയ വേഗം";
@@ -166,7 +165,7 @@
 "map_widget_appearance_rem" = "ശേഷിക്കുന്ന അംശങ്ങള്‍";
 "map_widget_compass" = "\"വടക്ക്നോക്കി \"";
 "map_widget_intermediate_distance" = "\"ഇട-ലക്ഷ്യസ്ഥാനം \"";
-"map_widget_distance" = "ലക്ഷ്യസ്ഥാനം";
+"route_descr_destination" = "ലക്ഷ്യസ്ഥാനം";
 "monitoring_control_start" = "REC";
 "map_widget_altitude" = "ഉയരം";
 "map_widget_battery" = "\"ബാറ്ററി നില \"";
@@ -261,7 +260,7 @@
 "nav_type_geocoding" = "Geocoding";
 "fast_route_mode_descr" = "\"വേഗത്തിലുള്ള റൂട്ടിന് സജീവമാക്കുക, നിര്‍ജീവമാക്കിയാല്‍ മൈലേജ് കൂടുതലുള്ള റൂട്ട് \"";
 "avoid_in_routing_title" = "ഒഴിവാക്കുക…";
-"avoid_in_routing_descr" = "Avoid toll roads, unpaved, ferries";
+"avoid_in_routing_descr_" = "Avoid toll roads, unpaved, ferries";
 "prefer_in_routing_title" = "ഇഷ്ടങ്ങള്‍…";
 "prefer_in_routing_descr" = "അതിവേഗപാതകള്‍ തെരഞ്ഞെടുക്കുക";
 "relief_smoothness_factor_descr" = "ഇഷ്ടപ്പെട്ട ഭൂപ്രദേശം: സമതലം അല്ലെങ്കിൽ മലകൾ.";
@@ -300,8 +299,7 @@
 "import_routing_file_descr" = "You can import routing file from any cloud storage app by opening it in OsmAnd.";
 "recalculate_route" = "Recalculate route in case of deviation";
 "recalculate_wrong_dir" = "Recalculate route in case of reverse direction";
-"avoid_routes_and_road" = "Avoid certain routes and road types";
-"route_recalculation_descr" = "The route will be recalculated if the distance from the route to the current location is more than selected value.";
+"recalculate_route_distance_promo" = "The route will be recalculated if the distance from the route to the current location is more than selected value.";
 "select_distance_for_recalculation" = "Select the distance after which the route will be recalculated.";
 "arrival_announcement_frequency" = "എത്ര മുമ്പെ ആഗമന അറിയിപ്പുകള്‍ തരണം?";
 "speed_limit_tolerance_descr" = "Select the speed limit tolerance margin above which you will receive a voice warning.";
@@ -528,7 +526,7 @@
 "offline_maps" = "Offline Maps";
 "download_map" = "ഭൂപടം ഡൗണ്‍ലോഡ് ചെയ്യുക";
 "download_map_dialog" = "Download map dialog";
-"update_map" = "\"ഭൂപടം  പരിഷ്ക്കരിക്കുക\"";
+"update_tile" = "\"ഭൂപടം  പരിഷ്ക്കരിക്കുക\"";
 "download_pending" = "Download pending";
 "download_suggestion" = "Download detailed %@ map to view this area";
 "move_map_to_select_area" = "Move map to select needed area.";
@@ -608,7 +606,7 @@
 "poi_insrease_radius" = "Increase search radius to";
 "poi_max_radius_reached" = "Maximum search radius reached";
 "poi_search_near_center" = "Search is performed near the center of the map";
-"poi_hide" = "മറക്കുക";
+"shared_string_hide" = "മറക്കുക";
 
 // My Places
 "favorites" = "ഇഷ്ടമുളളവ";
@@ -1116,7 +1114,7 @@
 "invalid_format" = "Invalid format";
 "gpx_already_exsists" = "File with this name already exists";
 "folder_already_exsists" = "Folder with this name already exists";
-"split_before" = "Split before";
+"plan_route_split_before" = "Split before";
 "split_after" = "Split after";
 "follow_track" = "Follow track";
 "shared_string_gpx_track" = "ട്രാക്ക്";
@@ -1125,7 +1123,7 @@
 "attach_to_the_roads" = "Attach to the roads";
 "reverse_track_dir" = "GPXദിശ തിരിച്ചാക്കുക";
 "point_to_navigate" = "Navigate to";
-"start_of_track" = "Start of the track";
+"start_of_the_track" = "Start of the track";
 "nearest_point" = "Nearest point";
 "plan_route_folder" = "Folder";
 "plan_route_change_folder" = "Change folder";
@@ -1259,7 +1257,7 @@
 "osm_failed_uploads" = "Failed";
 "osm_editing_settings_descr" = "This plugin's settings are global and apply to all profiles.";
 
-"osm_note" = "\"ഓഎസ്എം കുറിപ്പ് \"";
+"osn_bug_name" = "\"ഓഎസ്എം കുറിപ്പ് \"";
 "osm_created" = "Created";
 "osm_deleted" = "താല്‍പര്യ ബിന്ദു (പിഓഐ) വിജയകരമായി നീക്കം ചെയ്തിരിക്കുന്നു";
 "osm_modified" = "Modified";
@@ -1635,7 +1633,6 @@
 "green" = "\"പച്ച \"";
 "translucent_green" = "മങ്ങിയ പച്ച";
 "brown" = "തവിട്ടുനിറം";
-"black" = "കറുപ്പ്";
 
 // World Regions
 "region_antarctica" = "Antarctica";

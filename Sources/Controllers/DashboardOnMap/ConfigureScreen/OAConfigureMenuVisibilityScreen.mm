@@ -135,7 +135,7 @@
                                                       key:@"action_show"
                                                      icon:@"ic_action_view"
                                                  selected:showSelected]];
-            [standardList addObject:[self createTableItem:OALocalizedString(@"poi_hide")
+            [standardList addObject:[self createTableItem:OALocalizedString(@"shared_string_hide")
                                               description:@""
                                                       key:@"action_hide"
                                                      icon:@"ic_action_hide"

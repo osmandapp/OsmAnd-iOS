@@ -318,7 +318,7 @@
                        options:UIViewAnimationOptionTransitionCrossDissolve | UIViewAnimationOptionAllowUserInteraction
                     animations:^(void) {
                         [self.showHideButton setTitle:shownTrack
-                                        ? OALocalizedString(@"poi_hide") : OALocalizedString(@"sett_show")
+                                        ? OALocalizedString(@"shared_string_hide") : OALocalizedString(@"sett_show")
                                              forState:UIControlStateNormal];
                         [self.showHideButton setImage:[UIImage templateImageNamed:shownTrack
                                         ? @"ic_custom_hide" : @"ic_custom_show"]

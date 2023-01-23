@@ -45,7 +45,7 @@
 "fav_enter_new_name" = "Introduïu un nom nou pel preferit";
 // POI
 "poi_insrease_radius" = "Incrementa el radi de cerca a";
-"poi_hide" = "Amaga";
+"shared_string_hide" = "Amaga";
 // My Places
 "favorites" = "Preferits";
 "tracks" = "Traces";
@@ -598,7 +598,7 @@
 "fast_route_mode" = "La ruta més ràpida";
 "fast_route_mode_descr" = "Activeu per calcular la ruta més ràpida o desactiveu per buscar la de menor consum.";
 "avoid_in_routing_title" = "Evita…";
-"avoid_in_routing_descr" = "Evita les carreteres de peatge, les no pavimentades i els ferris";
+"avoid_in_routing_descr_" = "Evita les carreteres de peatge, les no pavimentades i els ferris";
 "prefer_in_routing_title" = "Preferències…";
 "prefer_in_routing_descr" = "Preferència per autopistes.";
 "relief_smoothness_factor_descr" = "Predilecció del terreny: pla o aturonat.";
@@ -682,7 +682,7 @@
 "map_widget_appearance_rem" = "Elements pendents";
 "map_widget_compass" = "Brúixola";
 "map_widget_intermediate_distance" = "Fita";
-"map_widget_distance" = "Destí";
+"route_descr_destination" = "Destí";
 "map_widget_next_turn" = "Proper gir";
 "map_widget_next_turn_small" = "Proper gir (petit)";
 "map_widget_next_next_turn" = "Segon gir proper";
@@ -912,7 +912,6 @@
 "translucent_green" = "Verd translúcid";
 "purple" = "Porpra";
 "brown" = "Marró";
-"black" = "Negre";
 "shared_string_upload" = "Pujada";
 "poi_type" = "Tipus de PDI";
 // OSM Editing actions
@@ -920,7 +919,7 @@
 "closing_changeset" = "Tancant el registre de canvis…";
 "commiting_node" = "S\'està enviant el node…";
 "loading_poi_obj" = "S\'està carregant el PDI…";
-"osm_note" = "Nota d\'OSM";
+"osn_bug_name" = "Nota d\'OSM";
 "osm_created" = "Creat";
 "osm_deleted" = "S\'ha esborrat";
 "osm_modified" = "Modificat";
@@ -1709,7 +1708,7 @@
 "public_transport_menu" = "Transport";
 "number_of_tiles" = "Nombre de tessel·les";
 "move_map_to_select_area" = "Moveu el mapa per a seleccionar l\'àrea requerida.";
-"update_map" = "Actualitza el mapa";
+"update_tile" = "Actualitza el mapa";
 "shared_string_exit" = "Surt";
 "shared_string_meters" = "metres";
 "tones" = "tones";
@@ -1718,8 +1717,7 @@
 "only_manually" = "Només manualment";
 "arrival_announcement_frequency" = "Amb quina antelació voleu l\'anunci d\'arribada?";
 "select_distance_for_recalculation" = "Seleccioneu la desviació per sobre de la qual es tornarà a calcular la ruta.";
-"route_recalculation_descr" = "Es tornarà a calcular una nova ruta si la distància de la posició actual respecte la ruta vigent supera el valor seleccionat.";
-"avoid_routes_and_road" = "Evita determinades rutes i tipus de carretera";
+"recalculate_route_distance_promo" = "Es tornarà a calcular una nova ruta si la distància de la posició actual respecte la ruta vigent supera el valor seleccionat.";
 "recalculate_route" = "Recalcula la ruta cas de desviament";
 "special_routing" = "Navegació especial";
 "osmand_routing" = "Navegació OsmAnd";
@@ -1732,7 +1730,7 @@
 "voice_announces" = "Anuncis de veu";
 "max_speed" = "Velocitat màxima";
 "min_speed" = "Velocitat mínima";
-"default_speed" = "Velocitat predeterminada";
+"default_speed_setting_title" = "Velocitat predeterminada";
 "routing_attr_length_name" = "Llargada màxima";
 "create_profile_descr" = "Comenceu el vostre perfil personalitzat des d\'un perfil predeterminat de l\'aplicació,que defineixi la configuració bàsica com visibilitat predeterminada, extensions i unitats de velocitat i distància. Aquests són els perfils d\'aplicació predeterminats, junt amb exemples de personalització que es poden anar ampliant:";
 "export_profile" = "Exporta el perfil";
@@ -1949,9 +1947,9 @@
 "quick_action_showhide_mapillary_title" = "Mostra/amaga Mapil·lary";
 "reverse_route" = "Ruta inversa";
 "plan_route_create_new_route" = "Crea una ruta nova";
-"split_before" = "Separa abans";
+"plan_route_split_before" = "Separa abans";
 "rearrange_categories" = "Reorganitza les categories";
-"start_of_track" = "Inici de la traça";
+"start_of_the_track" = "Inici de la traça";
 "simplified_track" = "Traça simplificada";
 "favorite_friends_category" = "Amics";
 "res_standard" = "Mapes estàndards";

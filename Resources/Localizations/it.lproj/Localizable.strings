@@ -49,7 +49,7 @@
 "poi_insrease_radius" = "Aumenta il raggio di ricerca a";
 "poi_max_radius_reached" = "Raggio di ricerca massimo raggiunto";
 "poi_search_near_center" = "La ricerca è svolta vicino al centro della mappa";
-"poi_hide" = "Nascondi";
+"shared_string_hide" = "Nascondi";
 // My Places
 "favorites" = "Preferiti";
 "tracks" = "Tracce";
@@ -613,7 +613,7 @@
 "map_widget_next_next_turn" = "Svolta successiva";
 "map_widget_compass" = "Bussola";
 "map_widget_intermediate_distance" = "Destinazione intermedia";
-"map_widget_distance" = "Destinazione";
+"route_descr_destination" = "Destinazione";
 "monitoring_control_start" = "REG";
 "map_widget_altitude" = "Altitudine";
 "map_widget_max_speed" = "Limite di velocità";
@@ -851,7 +851,6 @@
 "create_items" = "Crea oggetti";
 "osm_alert_title" = "Invia";
 "show_contour_lines" = "Visualizza le isoipse";
-"black" = "Nero";
 "route_parameters" = "Parametri del percorso";
 "quick_action_add_overlay" = "Aggiungi sovrapposizione";
 "shared_string_category" = "Categoria";
@@ -930,7 +929,7 @@
 "translucent_purple" = "Viola traslucido";
 "tile_cache" = "Cache mattonelle";
 "toggle_voice" = "Voce accesa/spenta";
-"osm_note" = "Nota di OSM";
+"osn_bug_name" = "Nota di OSM";
 "edit_action" = "Modifica azione";
 "day_mode" = "Modalità giorno";
 "nearby_search" = "Cerca nelle vicinanze";
@@ -1284,7 +1283,7 @@
 "select_route_finish_on_map" = "Scegli il punto finale del percorso";
 "directions_other" = "Altre direzioni";
 "interrupt_music_descr" = "Sospendi completamente la musica durante gli annunci vocali (non solo diminuzione del volume)";
-"avoid_in_routing_descr" = "Evita strade a pedaggio, sterrate, traghetti";
+"avoid_in_routing_descr_" = "Evita strade a pedaggio, sterrate, traghetti";
 "choose_auto_follow_route_descr" = "Tempo per sincronizzare la mappa con la posizione attuale";
 "auto_zoom_map_descr" = "Zoom automatico relativo alla tua velocità (fintanto che la mappa è sincronizzata con la posizione corrente)";
 "general_settings_descr" = "Tema dell'app, unità, regione";
@@ -1623,7 +1622,7 @@
 "maximum_speed" = "Velocità massima";
 "min_speed" = "Velocità min";
 "max_speed" = "Velocità max";
-"default_speed" = "Velocità predefinita";
+"default_speed_setting_title" = "Velocità predefinita";
 "send_anonymous_data_desc" = "Invia a OsmAnd le statistiche di download delle mappe, non raccogliamo dati sulla posizione o informazioni personali.";
 "default_profile_descr" = "Seleziona un profilo che verrà utilizzato all'avvio dell'applicazione.";
 "allow_3d_descr" = "Abilita questa opzione per poter visualizzare la mappa nella prospettiva a 2.5D";
@@ -1679,7 +1678,7 @@
 "download_size" = "Dimensione del download";
 "number_of_tiles" = "Numero di riquadri";
 "move_map_to_select_area" = "Muovi la mappa per selezionare l\'area desiderata.";
-"update_map" = "Aggiorna la mappa";
+"update_tile" = "Aggiorna la mappa";
 "shared_string_max" = "Massimo";
 "shared_string_min" = "Min";
 "nothing_found_empty" = "Nessun risultato";
@@ -1695,8 +1694,7 @@
 "speed_limit_tolerance_descr" = "Seleziona il margine di tolleranza del limite di velocità al di sopra del quale riceverai un avviso vocale.";
 "arrival_announcement_frequency" = "Quanto prima vuoi l\'annuncio dell\'arrivo?";
 "select_distance_for_recalculation" = "Seleziona le distanza dopo la quale il percorso verrà ricalcolato.";
-"route_recalculation_descr" = "Il percorso verrà ricalcolato quando la distanza tra il percorso e la propria posizione è maggiore del valore selezionato.";
-"avoid_routes_and_road" = "Evita certi percorsi e tipi di strade";
+"recalculate_route_distance_promo" = "Il percorso verrà ricalcolato quando la distanza tra il percorso e la propria posizione è maggiore del valore selezionato.";
 "recalculate_wrong_dir" = "Ricalcola il percorso in caso di inversione di marcia";
 "recalculate_route" = "Ricalcola il percorso in caso di deviazione";
 "import_routing_file_descr" = "Puoi importare il file di instradamento da qualsiasi app di archiviazione cloud o inserendolo nella cartella OsmAnd su iTunes.";
@@ -1808,7 +1806,7 @@
 "fav_point_dublicate" = "Duplicato del nome del punto Preferito";
 "icon" = "Icona";
 "emergency" = "Emergenza";
-"split_before" = "Spezza";
+"plan_route_split_before" = "Spezza";
 "favorite_friends_category" = "Amici";
 "fav_points_not_exist" = "Non esiste alcun preferito";
 "res_standard" = "Mappe standard";
@@ -1830,7 +1828,7 @@
 "shared_string_disable" = "Disattiva";
 "transport" = "Trasporti pubblici";
 "replace_favorite_confirmation" = "Sei sicuro di voler sostituire il preferito %@?";
-"start_of_track" = "Inizio della traccia";
+"start_of_the_track" = "Inizio della traccia";
 "group_name" = "Nome del gruppo";
 "symbols" = "Simboli";
 "coordinates" = "Coordinate";
@@ -2707,7 +2705,7 @@
 "compass_visible_in_rotated_mode" = "Visibile se la mappa è ruotata";
 "rendering_attr_showMtbScale_name" = "Scala di difficoltà per MTB";
 "routing_attr_motor_type_petrol_name" = "Benzina";
-"shared_string_file_cloud" = "Cloud";
+"shared_string_cloud" = "Cloud";
 "upload_all" = "Carica tutti";
 "cloud_conflict" = "Conflitto";
 "backup_delete_all_data_or_versions_descr" = "Elimina tutti i dati su OsmAnd Cloud o solo la cronologia delle versioni. I dati locali rimarranno intatti.";

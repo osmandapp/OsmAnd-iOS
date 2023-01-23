@@ -177,7 +177,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 -(void)applyLocalization
 {
-    [_btnCancel setTitle:OALocalizedString(@"poi_hide") forState:UIControlStateNormal];
+    [_btnCancel setTitle:OALocalizedString(@"shared_string_hide") forState:UIControlStateNormal];
     [_bottomTextBtn setTitle:OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
 }
 

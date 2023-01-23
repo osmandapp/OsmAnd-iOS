@@ -55,7 +55,7 @@
 "poi_insrease_radius" = "Zwiększ promień wyszukiwania";
 "poi_max_radius_reached" = "Osiągnięto maksymalny promień poszukiwania";
 "poi_search_near_center" = "Wyszukiwanie prowadzone jest blisko centrum mapy";
-"poi_hide" = "Ukrywanie";
+"shared_string_hide" = "Ukrywanie";
 // My Places
 "favorites" = "Ulubione";
 "tracks" = "Trasy";
@@ -411,7 +411,7 @@
 "fast_route_mode" = "Najszybsza trasa";
 "fast_route_mode_descr" = "Wyznacza najszybszą trasę zamiast ekonomicznej.";
 "avoid_in_routing_title" = "Unikaj…";
-"avoid_in_routing_descr" = "Unikaj dróg płatnych, nieutwardzonych, promów";
+"avoid_in_routing_descr_" = "Unikaj dróg płatnych, nieutwardzonych, promów";
 "prefer_in_routing_title" = "Preferowanie…";
 "prefer_in_routing_descr" = "Preferuj autostrady.";
 "relief_smoothness_factor_descr" = "Preferowany teren: płaski lub górzysty.";
@@ -543,7 +543,7 @@
 "map_widget_appearance_rem" = "Pozostałe elementy";
 "map_widget_compass" = "Kompas";
 "map_widget_intermediate_distance" = "Cel pośredni trasy";
-"map_widget_distance" = "Cel";
+"route_descr_destination" = "Cel";
 "monitoring_control_start" = "REC";
 "map_widget_altitude" = "Wysokość";
 "map_widget_battery" = "Stan akumulatora";
@@ -910,7 +910,6 @@
 "translucent_green" = "Przezroczysty zielony";
 "purple" = "Fioletowy";
 "brown" = "Brązowy";
-"black" = "Czarny";
 "shared_string_upload" = "Prześlij";
 "poi_type" = "Rodzaj użytecznego miejsca";
 // OSM Editing actions
@@ -918,7 +917,7 @@
 "closing_changeset" = "Zamykanie zestawu zmian…";
 "commiting_node" = "Zapisywanie węzła…";
 "loading_poi_obj" = "Wczytywanie użytecznego miejsca…";
-"osm_note" = "Uwaga OSM";
+"osn_bug_name" = "Uwaga OSM";
 "osm_created" = "Utworzono";
 "osm_deleted" = "Usunięte";
 "osm_modified" = "Zmodyfikowano";
@@ -1686,7 +1685,7 @@
 "number_of_tiles" = "Liczba kafelków";
 "move_map_to_select_area" = "Przesuń mapę, aby wybrać żądany obszar.";
 "announce" = "Zapowiedź";
-"update_map" = "Uaktualnij mapę";
+"update_tile" = "Uaktualnij mapę";
 "shared_string_meters" = "metry";
 "tones" = "tony";
 "instructions_repeat" = "Naciśnij widżet \"Następny zakręt\", aby powtórzyć instrukcje";
@@ -1694,9 +1693,8 @@
 "speed_limit_tolerance_descr" = "Wybierz margines dopuszczalnego przekroczenia prędkości powyżej którego otrzymasz ostrzeżenie głosowe.";
 "arrival_announcement_frequency" = "Określa moment powiadamiania o osiągnięciu celu";
 "select_distance_for_recalculation" = "Wybierz odległość, po której trasa zostanie ponownie obliczona.";
-"route_recalculation_descr" = "Trasa zostanie ponownie obliczona, jeśli odległość od trasy do bieżącej lokalizacji jest większa niż wybrana wartość.";
+"recalculate_route_distance_promo" = "Trasa zostanie ponownie obliczona, jeśli odległość od trasy do bieżącej lokalizacji jest większa niż wybrana wartość.";
 "recalculate_route" = "Przelicz trasę ponownie po zboczeniu z trasy";
-"avoid_routes_and_road" = "Unikaj określonych tras i rodzajów dróg";
 "import_routing_file_descr" = "Możesz zaimportować plik routingu z dowolnej aplikacji do przechowywania danych w chmurze, otwierając go w OsmAnd.";
 "special_routing" = "Wyznaczanie trasy specjalnej";
 "osmand_routing" = "Wyznaczanie trasy przez OsmAnd";
@@ -1726,7 +1724,7 @@
 "distance_indication" = "Wskaźnik odległości";
 "two" = "Dwa";
 "max_speed" = "Maksymalna prędkość";
-"default_speed" = "Domyślna prędkość";
+"default_speed_setting_title" = "Domyślna prędkość";
 "send_anonymous_data_desc" = "Wysyłaj do OsmAnd statystyki pobranych map, nie zbieramy danych o lokalizacji ani informacji osobistych.";
 "default_profile_descr" = "Wybierz profil, który będzie używany po starcie aplikacji.";
 "repeat_after" = "Powtórz po";
@@ -1920,7 +1918,7 @@
 "nearest_point" = "Najbliższy punkt";
 "reverse_track_dir" = "Odwróć kierunek trasy";
 "attach_to_the_roads" = "Dołącz do dróg";
-"split_before" = "Podziel przed";
+"plan_route_split_before" = "Podziel przed";
 "folder_already_exsists" = "Folder o tej nazwie już istnieje";
 "gpx_already_exsists" = "Plik o tej nazwie już istnieje";
 "simplified_track_description" = "Zapisana zostanie tylko linia trasy, punkty trasy zostaną usunięte.";
@@ -2009,14 +2007,14 @@
 "new_plugin_added" = "Dodano nową wtyczkę";
 ;
 "special" = "Specjalny";
-"start_of_track" = "Początek trasy";
+"start_of_the_track" = "Początek trasy";
 "square" = "Kwadrat";
 "track" = "Ślad";
 "transport" = "Transport publiczny";
 "replace_favorite_confirmation" = "Zastąpić ulubiony punkt %@?";
 "service" = "Dojazdowa";
 "service" = "Usługi";
-"start_of_track" = "Początek trasy";
+"start_of_the_track" = "Początek trasy";
 "transport" = "Transport publiczny";
 "special" = "Specjalny";
 "track" = "Polna/leśna";
@@ -2025,12 +2023,12 @@
 "transport" = "Transport publiczny";
 "track" = "Ślad";
 "square" = "Kwadrat";
-"start_of_track" = "Początek trasy";
+"start_of_the_track" = "Początek trasy";
 "replace_favorite_confirmation" = "Zastąpić ulubiony punkt %@?";
 "service" = "Dojazdowa";
 "special" = "Specjalny";
 "service" = "Usługi";
-"start_of_track" = "Początek trasy";
+"start_of_the_track" = "Początek trasy";
 "replace_favorite_confirmation" = "Zastąpić ulubiony punkt %@?";
 "shared_string_gpx_track" = "Trasa";
 "square" = "Kwadrat";
@@ -2137,7 +2135,7 @@
 "shared_string_wifi_only" = "Tylko przez Wi-Fi";
 "navigate_point_easting" = "Linia współrzędnych \"x\"";
 "navigate_point_zone" = "Strefa";
-"start_of_track" = "Początek trasy";
+"start_of_the_track" = "Początek trasy";
 "last_used" = "Ostatnio używane";
 "navigate_point_olc" = "Otwarty kod lokalizacyjny (OLC)";
 "added_profiles_descr" = "Profile dodane przez wtyczkę";
@@ -2211,7 +2209,7 @@
 "lang_pnb" = "Pendżabski";
 "edit_track" = "Edytuj trasę";
 "lang_cv" = "Czuwaski";
-"start_of_track" = "Początek trasy";
+"start_of_the_track" = "Początek trasy";
 "lang_cy" = "Walijski";
 "lang_jv" = "Jawajski";
 "service" = "Usługi";
@@ -2794,7 +2792,7 @@
 "shared_string_time_span" = "Zakres czasu";
 "shared_string_includes" = "Zawiera";
 "nautical" = "Morski";
-"start_of_track" = "Początek trasy";
+"start_of_the_track" = "Początek trasy";
 "app_restart_required" = "Wymagane ponowne uruchomienie aplikacji w celu zastosowania niektórych ustawień.";
 "route_points" = "Punkty trasy";
 "simulation_preview_mode_title" = "Tryb szybkiego podglądu";
@@ -3062,7 +3060,7 @@
 "routing_attr_allow_private_for_truck_description" = "Zezwól na dostęp do obszarów prywatnych dla ciężarówek.";
 "contour_lines_hillshades_slope" = "Poziomice, mapy cieniowane, nachylenie";
 "lang_sco" = "Scots";
-"start_of_track" = "Początek trasy";
+"start_of_the_track" = "Początek trasy";
 "last_used" = "Ostatnio używane";
 "lang_ckb" = "Kurdyjski centralny";
 "lang_zh" = "Chiński";

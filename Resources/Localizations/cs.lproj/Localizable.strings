@@ -79,7 +79,7 @@
 "map_widget_appearance_rem" = "Zbývající prvky";
 "map_widget_compass" = "Kompas";
 "map_widget_intermediate_distance" = "Mezicíl";
-"map_widget_distance" = "Cíl";
+"route_descr_destination" = "Cíl";
 "monitoring_control_start" = "REC";
 "map_widget_altitude" = "Nadmořská výška";
 "map_widget_battery" = "Stav baterie";
@@ -125,7 +125,7 @@
 "fast_route_mode" = "Nejrychlejší trasa";
 "fast_route_mode_descr" = "Zapněte pro výpočet nejrychlejší trasy nebo vypněte pro ekonomickou trasu";
 "avoid_in_routing_title" = "Vyhnout se…";
-"avoid_in_routing_descr" = "Vyhnout se zpoplatněným a nezpevněným cestám, trajektům";
+"avoid_in_routing_descr_" = "Vyhnout se zpoplatněným a nezpevněným cestám, trajektům";
 "prefer_in_routing_title" = "Upřednostňovat…";
 "prefer_in_routing_descr" = "Upřednostňovat dálnice";
 "relief_smoothness_factor_descr" = "Preferovaný terén: rovinatý nebo kopcovitý";
@@ -330,7 +330,7 @@
 "poi_insrease_radius" = "Rozšířit okruh hledání na";
 "poi_max_radius_reached" = "Byl dosažen maximální okruh hledání";
 "poi_search_near_center" = "Vyhledává se v blízkosti středu mapy";
-"poi_hide" = "Skrýt";
+"shared_string_hide" = "Skrýt";
 // My Places
 "favorites" = "Oblíbené";
 "tracks" = "Stopy";
@@ -957,7 +957,6 @@
 "quick_action_name" = "Rychlá akce";
 "gpx_avg_altitude" = "Průměrná výška";
 "shared_string_time_of_day" = "Denní doba";
-"black" = "Černá";
 "toggle_poi" = "Zobrazit/skrýt POI";
 "add_map_source" = "Přidat zdroj mapy";
 "osm_live_cancel_subscription" = "Zrušit předplatné";
@@ -968,7 +967,7 @@
 "osm_str_name" = "Název ulice";
 "add_action" = "Přidat akci";
 "add_gpx_waypoint" = "Přidat GPX mezicíl";
-"osm_note" = "OSM poznámka";
+"osn_bug_name" = "OSM poznámka";
 "download_depth_countours" = "Námořní hloubkové vrstevnice";
 "open_osm_note" = "Otevřít OSM poznámku";
 "shared_string_show_more" = "Ukázat více";
@@ -1458,7 +1457,7 @@
 "two" = "Dvě";
 "help_osmand_live" = "Předplatné - OsmAnd Live";
 "create_profile_descr" = "Vlastní profil založte na jednom ze základních profilů. Ten určí základní nastavení jako viditelnost nástrojů, jednotky rychlosti a vzdálenosti. Toto jsou základní profily aplikace a návrhy vlastních profilů, na které mohou být rozšířeny:";
-"route_recalculation_descr" = "Trasa bude přepočítána, pokud vzdálenost od trasy k aktuální poloze je větší než zvolená hodnota.";
+"recalculate_route_distance_promo" = "Trasa bude přepočítána, pokud vzdálenost od trasy k aktuální poloze je větší než zvolená hodnota.";
 "shared_string_meters" = "metry";
 "reverse_route" = "Otočit trasu";
 "distance_indication" = "Indikace vzdálenosti";
@@ -1496,7 +1495,7 @@
 "special_routing" = "Speciální navigace";
 "base_profile_descr_aircraft" = "Letadlo, plachtění";
 "nav_type_straight_line" = "Rovná čára";
-"update_map" = "Aktualizovat mapu";
+"update_tile" = "Aktualizovat mapu";
 "importing_from" = "Importování dat z %@";
 "shared_string_min" = "Min";
 "edit_profile_list" = "Upravit seznam profilů";
@@ -1511,9 +1510,8 @@
 "quick_action_mapillary_show" = "Zobrazit Mapillary";
 "save_new_track" = "Uložit jako novou stopu";
 "public_transport_empty_warning_descr" = "Zkuste změnit nastavení.";
-"avoid_routes_and_road" = "Vyhnout se některým trasám a typům cest";
 "app_profiles" = "Profily aplikace";
-"default_speed" = "Výchozí rychlost";
+"default_speed_setting_title" = "Výchozí rychlost";
 "route_betw_points" = "Trasa mezi body";
 "quick_action_remove_next_destination_descr" = "Vymaže následující cíl na trase. Jestliže to je poslední cíl, navigace se zastaví.";
 "base_profile_descr_boat" = "Loď, veslování, plachtění";
@@ -1792,7 +1790,7 @@
 "osmand_live_deleted_object" = "Odstraněný objekt";
 "osmand_live_updates_size" = "Velikost stažených aktualizací";
 "nearest_point" = "Nejbližší bod";
-"start_of_track" = "Začátek trasy";
+"start_of_the_track" = "Začátek trasy";
 "point_to_navigate" = "Navigovat do";
 "reverse_track_dir" = "Obrátit směr stopy";
 "attach_to_the_roads" = "Připojit k cestám";
@@ -1800,7 +1798,7 @@
 "shared_string_gpx_track" = "Trasa";
 "follow_track" = "Sledovat stopu";
 "split_after" = "Rozdělit po";
-"split_before" = "Rozdělit před";
+"plan_route_split_before" = "Rozdělit před";
 "gpx_already_exsists" = "Soubor s tímto názvem již existuje";
 "empty_filename" = "Název souboru nemůže být prázdný";
 "none_point_error" = "Prosím přidejte alespoň jeden bod.";
@@ -2630,7 +2628,7 @@
 "backup_error_failed_to_fetch_remote_items" = "Nepodařilo se načíst seznam souborů ze serveru.";
 "service_is_not_available_please_try_later" = "Služba je dočasně nedostupná. Zkuste to prosím později.";
 "backup_error_invalid_token" = "Token není platný";
-"shared_string_file_cloud" = "Cloud";
+"shared_string_cloud" = "Cloud";
 "local_changes" = "Místní změny";
 "last_synchronization" = "Naposledy provedená synchronizace";
 "duration_ago" = "před %@";

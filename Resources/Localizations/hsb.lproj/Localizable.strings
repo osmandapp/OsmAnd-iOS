@@ -127,7 +127,7 @@
 "map_widget_appearance_rem" = "Remaining elements";
 "map_widget_compass" = "Kompas";
 "map_widget_intermediate_distance" = "Mjezycil";
-"map_widget_distance" = "Cil";
+"route_descr_destination" = "Cil";
 "monitoring_control_start" = "REC";
 "map_widget_altitude" = "Wysokosć";
 "map_widget_battery" = "Staw baterije";
@@ -177,7 +177,7 @@
 "fast_route_mode" = "Najspěšniša čara";
 "fast_route_mode_descr" = "Wubrać za najspěšnišu čaru abo wupinyć za najkrótšu.";
 "avoid_in_routing_title" = "Wobeńdź…";
-"avoid_in_routing_descr" = "Avoid toll roads, unpaved, ferries";
+"avoid_in_routing_descr_" = "Avoid toll roads, unpaved, ferries";
 "prefer_in_routing_title" = "Prefer…";
 "prefer_in_routing_descr" = "Prefer motorways";
 "relief_smoothness_factor_descr" = "Preferred terrain: flat or hilly";
@@ -420,7 +420,7 @@
 "poi_insrease_radius" = "Increase search radius to";
 "poi_max_radius_reached" = "Maximum search radius reached";
 "poi_search_near_center" = "Search is performed near the center of the map";
-"poi_hide" = "Schować";
+"shared_string_hide" = "Schować";
 // My Places
 "favorites" = "Fawority";
 "tracks" = "Čary";
@@ -644,7 +644,7 @@
 "osm_delete_confirmation_descr" = "Are you sure you want to delete this POI?";
 "osm_succsessful_uploads" = "Successful";
 "osm_failed_uploads" = "Failed";
-"osm_note" = "OSM-notica";
+"osn_bug_name" = "OSM-notica";
 "osm_created" = "Created";
 "osm_deleted" = "Wotstronjene";
 "osm_modified" = "Modified";
@@ -944,7 +944,6 @@
 "green" = "zelene";
 "translucent_green" = "transparentne zelene";
 "brown" = "brune";
-"black" = "Black";
 // World Regions
 "region_africa" = "Afrika";
 "region_asia" = "Azija";
@@ -1399,7 +1398,7 @@
 "shared_string_next" = "Přichodne";
 "base_profile_descr_aircraft" = "Lětadło, gliding";
 "app_theme_light" = "Swětłe";
-"update_map" = "Zaktualizuj kartu";
+"update_tile" = "Zaktualizuj kartu";
 "enter_profile_name" = "Zapodaj mjeno profila";
 "nothing_found_empty" = "Žadyn wuslědk";
 "res_slope" = "spad";
@@ -1407,7 +1406,6 @@
 "base_profile_descr_public_transport" = "Wše typy zjawneho wobchada";
 "save_changes" = "Změny składować";
 "active_markers" = "Aktiwne chorhojčki";
-"avoid_routes_and_road" = "Wěste čary a pućne typy wobeńć";
 "avoid_road" = "Dróhu wobeńć";
 "num_stops" = "zastanišća";
 "m_style_pulic_transport" = "Zjawny transport";

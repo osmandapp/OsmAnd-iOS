@@ -129,7 +129,7 @@
         @"cell" : [OAPublicTransportPointCell getCellIdentifier],
         @"img" : @"ic_custom_destination",
         @"title" : title,
-        @"descr" : OALocalizedString(@"map_widget_distance"),
+        @"descr" : OALocalizedString(@"route_descr_destination"),
         @"top_route_line" : @(NO),
         @"bottom_route_line" : @(NO),
         @"time" : [OAOsmAndFormatter getFormattedTimeHM:startTime.firstObject.doubleValue],

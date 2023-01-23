@@ -56,7 +56,7 @@
 - (void) applyLocalization
 {
     [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"default_speed");
+    self.titleLabel.text = OALocalizedString(@"default_speed_setting_title");
     [self.cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
     [self.doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
 }
@@ -119,7 +119,7 @@
         _selectedValue = _defaultValue;
     [tableData addObject:@{
         @"type" : [OATimeTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"default_speed"),
+        @"title" : OALocalizedString(@"default_speed_setting_title"),
         @"value" : [NSString stringWithFormat:@"%ld %@", _selectedValue, _units],
     }];
     [tableData addObject:@{

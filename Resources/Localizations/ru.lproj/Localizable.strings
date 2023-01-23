@@ -38,7 +38,7 @@
 "poi_insrease_radius" = "Увеличить поиск до";
 "poi_max_radius_reached" = "Достигнут максимальный радиус поиска";
 "poi_search_near_center" = "Поиск выполняется вокруг центра карты";
-"poi_hide" = "Скрыть";
+"shared_string_hide" = "Скрыть";
 // My Places
 "favorites" = "Избранное";
 "tracks" = "Треки";
@@ -784,7 +784,6 @@
 "translucent_green" = "Полупрозрачный зелёный";
 "purple" = "Фиолетовый";
 "brown" = "Коричневый";
-"black" = "Чёрный";
 "translucent_red" = "Полупрозрачный красный";
 // Rendering attributes
 "reddit" = "Reddit";
@@ -810,7 +809,7 @@
 "wiki_download_description" = "Чтобы читать полный текст статей — скачайте данные Wikipedia для %@";
 "map_an_region" = "этот регион";
 "driving_region" = "Регион вождения";
-"map_widget_distance" = "Пункт назначения";
+"route_descr_destination" = "Пункт назначения";
 "map_widget_transparent" = "Прозрачные виджеты";
 "driving_region_descr" = "Выберите регион вождения: США, Европа, Великобритания, Азия и другие.";
 "animate_routing_route_not_calculated" = "Сначала постройте маршрут";
@@ -1034,7 +1033,7 @@
 "show_contour_lines" = "Показывать контурные линии";
 "day_night_info" = "Восход/закат";
 "search_my_location" = "Определить мое местоположение";
-"avoid_in_routing_descr" = "Избегать платные дороги, дороги без покрытия, паромные переправы";
+"avoid_in_routing_descr_" = "Избегать платные дороги, дороги без покрытия, паромные переправы";
 "general_settings_descr" = "Тема приложения, единицы измерения, регион";
 "auto_zoom_none" = "Без автомасштаба";
 "auto_zoom_close" = "К ближнему плану";
@@ -1112,7 +1111,7 @@
 "opening_changeset" = "Открытие пакета правок…";
 "closing_changeset" = "Закрытие пакета правок…";
 "loading_poi_obj" = "Загрузка POI…";
-"osm_note" = "Заметка OSM";
+"osn_bug_name" = "Заметка OSM";
 "osm_created" = "Создано";
 "osm_deleted" = "Удалено";
 "osm_modified" = "Изменено";
@@ -1767,7 +1766,7 @@
 "preview_of_selected_zoom_levels" = "Предпросмотр выбранных уровней масштабирования";
 "download_size" = "Размер загрузки";
 "move_map_to_select_area" = "Переместите карту, чтобы выбрать необходимую область.";
-"update_map" = "Обновить карту";
+"update_tile" = "Обновить карту";
 "number_of_tiles" = "Количество тайлов";
 "quick_action_transport_descr" = "Нажмите на это действие, чтобы показать или скрыть маршруты/остановки общественного транспорта на карте.";
 "rearrange_profile_descr" = "Профили OsmAnd по умолчанию не могут быть удалены, но вы можете отключить их на предыдущем экране или перетащить их в конец списка.";
@@ -1787,11 +1786,10 @@
 "voice_announces" = "Голосовые подсказки";
 "max_speed" = "Макс. скорость";
 "min_speed" = "Мин. скорость";
-"default_speed" = "Скорость по умолчанию";
+"default_speed_setting_title" = "Скорость по умолчанию";
 "routing_attr_length_name" = "Предельная длина";
 "do_not_rotate" = "Не вращать";
 "select_distance_for_recalculation" = "Отклонение, при котором маршрут будет пересчитан.";
-"avoid_routes_and_road" = "Исключить определённые маршруты и типы дорог";
 "special_routing" = "Специальная навигация";
 "default_profile_descr" = "Выберите профиль, который будет использоваться при запуске приложения.";
 "vessel_width_limit_description" = "Укажите ширину судна, чтобы избежать узких мостов";
@@ -1833,7 +1831,7 @@
 "instructions_repeat" = "Нажмите на виджет \"Следующий поворот\", чтобы повторить инструкции";
 "speed_limit_tolerance_descr" = "Выберите допустимое значение превышения скорости выше которого вы получите голосовое предупреждение.";
 "arrival_announcement_frequency" = "Как скоро следует сообщать о прибытии?";
-"route_recalculation_descr" = "Маршрут будет пересчитан, если расстояние от маршрута до текущего местоположения больше выбранного значения.";
+"recalculate_route_distance_promo" = "Маршрут будет пересчитан, если расстояние от маршрута до текущего местоположения больше выбранного значения.";
 "recalculate_route" = "Пересчитывать маршрут в случае отклонения";
 "choose_auto_center_map_view_descr" = "Время до синхронизации вида карты с текущим положением после перемещения";
 "configure_screen_descr" = "Настройка элементов экрана для профиля";
@@ -2001,7 +1999,7 @@
 "favorite_places_category" = "Места";
 "street_level_imagery" = "Фото с улиц";
 "special" = "Специальные";
-"start_of_track" = "Начало трека";
+"start_of_the_track" = "Начало трека";
 "split_after" = "Разделить после";
 "shared_string_gpx_track" = "Трек";
 "some_of" = "%dиз %d";
@@ -2024,7 +2022,7 @@
 "coordinates_widget" = "Виджет координат";
 "transport" = "Транспорт";
 "circle" = "Круг";
-"split_before" = "Разделить перед";
+"plan_route_split_before" = "Разделить перед";
 "new_plugin_added" = "Добавлен новый плагин";
 "plan_route_create_new_route" = "Создать новый маршрут";
 "plan_route_open_existing_track" = "Открыть существующий трек";

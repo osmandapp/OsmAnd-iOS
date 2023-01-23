@@ -35,7 +35,7 @@
 // POI
 "poi_insrease_radius" = "Erweitere Suchradius nach";
 "poi_max_radius_reached" = "Maximaler Suchradius erreicht";
-"poi_hide" = "Ausblenden";
+"shared_string_hide" = "Ausblenden";
 // My Places
 "favorites" = "Favoriten";
 "tracks" = "Tracks";
@@ -640,7 +640,7 @@
 "fast_route_mode" = "Schnellste Route";
 "fast_route_mode_descr" = "Aktivieren um schnellste Route zu berechnen oder deaktivieren für kraftstoffsparende Route";
 "avoid_in_routing_title" = "Vermeiden von…";
-"avoid_in_routing_descr" = "Mautstraßen, unbefestigte Straßen, Fähren vermeiden";
+"avoid_in_routing_descr_" = "Mautstraßen, unbefestigte Straßen, Fähren vermeiden";
 "prefer_in_routing_title" = "Bevorzugen von…";
 "prefer_in_routing_descr" = "Autobahn bevorzugen";
 "relief_smoothness_factor_descr" = "Bevorzugte Geländeform: flach oder hügelig";
@@ -713,7 +713,7 @@
 "map_widget_appearance_rem" = "Verbleibende Elemente";
 "map_widget_compass" = "Kompass";
 "map_widget_intermediate_distance" = "Zwischenziel";
-"map_widget_distance" = "Ziel";
+"route_descr_destination" = "Ziel";
 "monitoring_control_start" = "REC";
 "map_widget_altitude" = "Höhe";
 "shared_string_go" = "Los";
@@ -914,7 +914,6 @@
 "translucent_green" = "Transparentes Grün";
 "purple" = "Lila";
 "brown" = "Braun";
-"black" = "Schwarz";
 "shared_string_upload" = "Hochladen";
 "poi_type" = "Art des POI";
 // OSM Editing actions
@@ -922,7 +921,7 @@
 "closing_changeset" = "Änderungssatz schließen …";
 "commiting_node" = "Übertrage Knoten …";
 "loading_poi_obj" = "Lade POI…";
-"osm_note" = "OSM-Hinweis";
+"osn_bug_name" = "OSM-Hinweis";
 "osm_created" = "Erstellt";
 "osm_deleted" = "Gelöscht";
 "osm_modified" = "Geändert";
@@ -1727,7 +1726,7 @@
 "online_sources" = "Online-Quellen";
 "select_online_source" = "Quelle auswählen";
 "download_size" = "Downloadgröße";
-"update_map" = "Karte aktualisieren";
+"update_tile" = "Karte aktualisieren";
 "enter_profile_name" = "Profilnamen eingeben";
 "position_icon_while_moving" = "Positionssymbol in Bewegung";
 "position_icon_at_rest" = "Positionssymbol im Ruhezustand";
@@ -1770,8 +1769,7 @@
 "speed_limit_tolerance_descr" = "Wählen Sie den Toleranzbereich der Geschwindigkeitsbegrenzung, oberhalb dessen Sie eine Sprachwarnung erhalten.";
 "arrival_announcement_frequency" = "Wann soll die Ankunft am Ziel angekündigt werden?";
 "select_distance_for_recalculation" = "Wählen Sie die Entfernung, nach der die Route neu berechnet wird.";
-"route_recalculation_descr" = "Die Route wird neu berechnet, wenn die Entfernung von der Route zur aktuellen Position größer als der ausgewählte Wert ist.";
-"avoid_routes_and_road" = "Vermeiden bestimmter Routen und Straßentypen";
+"recalculate_route_distance_promo" = "Die Route wird neu berechnet, wenn die Entfernung von der Route zur aktuellen Position größer als der ausgewählte Wert ist.";
 "recalculate_route" = "Neuberechnung der Route im Falle einer Abweichung";
 "special_routing" = "Spezielles Routing";
 "choose_auto_center_map_view_descr" = "Zeit, bis sich die Kartenansicht nach der Bewegung mit der aktuellen Position synchronisiert";
@@ -1781,7 +1779,7 @@
 "voice_announces" = "Sprachansagen";
 "max_speed" = "Max. Geschwindigkeit";
 "min_speed" = "Min. Geschwindigkeit";
-"default_speed" = "Standardgeschwindigkeit";
+"default_speed_setting_title" = "Standardgeschwindigkeit";
 "routing_attr_length_name" = "Längenbegrenzung";
 "default_profile_descr" = "Wählen Sie ein Profil, das beim Start der Anwendung verwendet wird.";
 "tones" = "Tonnen";
@@ -1959,7 +1957,7 @@
 "change_application_profile" = "App-Profil ändern";
 "quick_action_showhide_mapillary_descr" = "Eine Umschaltfläche zum Ein- oder Ausblenden des Mapillary-Layers auf der Karte.";
 "nearest_point" = "Nächstgelegener Punkt";
-"start_of_track" = "Startpunkt des Tracks";
+"start_of_the_track" = "Startpunkt des Tracks";
 "point_to_navigate" = "Navigation";
 "shared_string_gpx_track" = "Track";
 "reverse_track_dir" = "Trackrichtung umkehren";
@@ -1967,7 +1965,7 @@
 "select_another_track" = "Anderen Track wählen";
 "follow_track" = "Track folgen";
 "split_after" = "Teilen nach";
-"split_before" = "Teilen vor";
+"plan_route_split_before" = "Teilen vor";
 "gpx_already_exsists" = "Datei mit diesem Namen existiert bereits";
 "empty_filename" = "Dateiname darf nicht leer sein";
 "none_point_error" = "Bitte mindestens einen Punkt hinzufügen.";
@@ -2747,7 +2745,7 @@
 "routing_attr_goods_restrictions_footer_desc" = "Gilt nur für Fahrzeuge, die Güter befördern, die mindestens vier Räder haben und nicht mehr als 3,5 Tonnen wiegen.\n\nWenn das Gewicht Ihres Fahrzeugs mehr als 3,5 Tonnen beträgt, müssen Sie das Profil Lkw verwenden.";
 "routing_attr_goods_restrictions_name" = "Lieferverkehr";
 "routing_attr_goods_restrictions_header_name" = "Für Lieferverkehr kann der Zugang zu einigen Straßen eingeschränkt sein.";
-"shared_string_file_cloud" = "Cloud";
+"shared_string_cloud" = "Cloud";
 "upload_all" = "Alle hochladen";
 "cloud_all_changes_downloaded" = "Alle Änderungen heruntergeladen";
 "download_all" = "Alle herunterladen";

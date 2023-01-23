@@ -115,7 +115,7 @@
 "driving_region" = "Rhanbarth gyrru";
 "driving_region_automatic" = "Awtomatig";
 "routing_attr_length_name" = "Terfyn hyd";
-"default_speed" = "Cyflymder rhagosodedig";
+"default_speed_setting_title" = "Cyflymder rhagosodedig";
 "min_speed" = "LLeiafswm cyflymder";
 "max_speed" = "Max. speed";
 "maximum_speed" = "Cyflymder uchaf";
@@ -150,7 +150,7 @@
 "map_widget_appearance_rem" = "Elfennau yn weddill";
 "map_widget_compass" = "Cwmpawd";
 "map_widget_intermediate_distance" = "Cyrchfan ar y ffordd";
-"map_widget_distance" = "Cyrchfan";
+"route_descr_destination" = "Cyrchfan";
 "monitoring_control_start" = "REC";
 "map_widget_altitude" = "Uchder";
 "map_widget_battery" = "Lefel batri";
@@ -240,7 +240,7 @@
 "nav_type_geocoding" = "Daeargodio";
 "fast_route_mode_descr" = "Enable to calculate fastest route or disable for fuel-saving route";
 "avoid_in_routing_title" = "Osgoi…";
-"avoid_in_routing_descr" = "Avoid toll roads, unpaved, ferries";
+"avoid_in_routing_descr_" = "Avoid toll roads, unpaved, ferries";
 "prefer_in_routing_title" = "Ffafrio…";
 "prefer_in_routing_descr" = "Ffafrio traffyrdd.";
 "relief_smoothness_factor_descr" = "Tir a ffefrir: gwastad neu fryniog.";
@@ -279,8 +279,7 @@
 "import_routing_file_descr" = "You can import routing file from any cloud storage app by opening it in OsmAnd.";
 "recalculate_route" = "Recalculate route in case of deviation";
 "recalculate_wrong_dir" = "Recalculate route in case of reverse direction";
-"avoid_routes_and_road" = "Osgoi rhai llwybrau a mathau o ffyrdd";
-"route_recalculation_descr" = "Bydd y llwybr yn cael ei ailgyfrif os yw\'r pellter o\'r llwybr i\'r lleoliad presennol yn fwy na\'r gwerth a ddewiswyd.";
+"recalculate_route_distance_promo" = "Bydd y llwybr yn cael ei ailgyfrif os yw\'r pellter o\'r llwybr i\'r lleoliad presennol yn fwy na\'r gwerth a ddewiswyd.";
 "select_distance_for_recalculation" = "Dewis y pellter arôl hynny bydd y llwybr yn cael ei ailgyfrifo.";
 "arrival_announcement_frequency" = "How soon do you want the arrival announcement?";
 "speed_limit_tolerance_descr" = "Select the speed limit tolerance margin above which you will receive a voice warning.";
@@ -497,7 +496,7 @@
 "offline_maps" = "Offline Maps";
 "download_map" = "Lawrlwytho map";
 "download_map_dialog" = "Deialog lawrlwytho mapiau";
-"update_map" = "Diweddaru\'r map";
+"update_tile" = "Diweddaru\'r map";
 "download_pending" = "Download pending";
 "download_suggestion" = "Download detailed %@ map to view this area";
 "move_map_to_select_area" = "Symudwch y map i ddewis ardal sydd ei angen.";
@@ -576,7 +575,7 @@
 "poi_insrease_radius" = "Increase search radius to";
 "poi_max_radius_reached" = "Maximum search radius reached";
 "poi_search_near_center" = "Search is performed near the center of the map";
-"poi_hide" = "Cuddio";
+"shared_string_hide" = "Cuddio";
 
 // My Places
 "favorites" = "Ffefrynnau";
@@ -1056,7 +1055,7 @@
 "invalid_format" = "Invalid format";
 "gpx_already_exsists" = "File with this name already exists";
 "folder_already_exsists" = "Folder with this name already exists";
-"split_before" = "Hollti cyn";
+"plan_route_split_before" = "Hollti cyn";
 "split_after" = "Hollti arôl";
 "follow_track" = "Dilyn trac";
 "shared_string_gpx_track" = "Trac";
@@ -1065,7 +1064,7 @@
 "attach_to_the_roads" = "Atodi i\'r ffyrdd";
 "reverse_track_dir" = "Gwrthdroi cyfeiriad y trac";
 "point_to_navigate" = "Navigate to";
-"start_of_track" = "Dechrau\'r trac";
+"start_of_the_track" = "Dechrau\'r trac";
 "nearest_point" = "Y pwynt agosaf";
 "plan_route_folder" = "Folder";
 "plan_route_change_folder" = "Newid ffolder";
@@ -1197,7 +1196,7 @@
 "osm_succsessful_uploads" = "Successful";
 "osm_failed_uploads" = "Failed";
 "osm_editing_settings_descr" = "This plugin's settings are global and apply to all profiles.";
-"osm_note" = "Nodyn OSM";
+"osn_bug_name" = "Nodyn OSM";
 "osm_created" = "Created";
 "osm_deleted" = "Dileuwyd";
 "osm_modified" = "Modified";
@@ -1570,7 +1569,6 @@
 "green" = "Gwyrdd";
 "translucent_green" = "Gwyrdd tryleu";
 "brown" = "Brown";
-"black" = "Du";
 
 // World Regions
 "region_antarctica" = "Antarctig";

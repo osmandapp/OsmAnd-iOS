@@ -141,7 +141,7 @@
             [data addObject:@[
                 @{
                     @"type" : [OATitleIconRoundCell getCellIdentifier],
-                    @"title" : OALocalizedString(@"split_before"),
+                    @"title" : OALocalizedString(@"plan_route_split_before"),
                     @"img" : @"ic_custom_split_before",
                     @"key" : @"split_before"
                 },
@@ -158,7 +158,7 @@
             [data addObject:@[
                 @{
                     @"type" : [OATitleIconRoundCell getCellIdentifier],
-                    @"title" : OALocalizedString(@"split_before"),
+                    @"title" : OALocalizedString(@"plan_route_split_before"),
                     @"img" : @"ic_custom_split_before",
                     @"key" : @"split_before"
                 }

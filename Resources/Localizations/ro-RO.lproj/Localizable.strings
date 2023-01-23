@@ -36,7 +36,7 @@
 "stop_routing_confirm" = "Sunteți sigur că doriți să opriți navigația?";
 "route_parameters" = "Parametrii rutei";
 "shared_string_upload" = "Încarcă (upload)";
-"poi_hide" = "Ascunde";
+"shared_string_hide" = "Ascunde";
 "col_blue" = "Albastru";
 "modify_poi_short" = "Modifică POI";
 "home_pt" = "Acasă";
@@ -274,7 +274,7 @@
 "actions" = "Acțiuni";
 "map_settings_online" = "Hărți online";
 "units_mph" = "mph";
-"osm_note" = "Notă OSM";
+"osn_bug_name" = "Notă OSM";
 "layer_map_appearance" = "Configurare ecran";
 "menu_my_places" = "Locurile mele";
 "units_km" = "km";
@@ -298,7 +298,7 @@
 "osm_live_ask_for_purchase" = "Vă rugăm să achiziționați mai întâi abonamentul OsmAnd Live";
 "units_m_s" = "m/s";
 "my_places" = "Locurile mele";
-"map_widget_distance" = "Destinație";
+"route_descr_destination" = "Destinație";
 "app_mode_truck" = "Camion";
 "help_about" = "Despre";
 "map_settings_map" = "Hartă";
@@ -467,7 +467,6 @@
 "osm_alert_title" = "Comite";
 "cancel_navigation" = "Oprește navigarea";
 "city_type_town" = "Oraș";
-"black" = "Negru";
 "quick_action_start_stop_nav_descr" = "Atingeți acest buton pentru pornire sau incheiere navigație.";
 "route_head" = "Îndreptați-vă";
 "directions_more_options" = "Direcții de la";
@@ -854,7 +853,6 @@
 "whole_track" = "Întreg traseul";
 "profile_alert_delete_title" = "Ștergeți profilul";
 "base_profile_descr_car" = "Mașină, Camion, Motocicletă";
-"avoid_routes_and_road" = "Evitaţi anumite rute şi tipuri de drumuri";
 "logging_accuracy" = "Acuratețe logare";
 "nav_type_title" = "Tip navigație";
 "reverse_route" = "Inversare rută";
@@ -880,7 +878,7 @@
 "shared_string_import_complete" = "Importarea s-a finalizat";
 "arrived_at_destination" = "Ați ajuns";
 "reset_to_default" = "Resetează la valorile implicite";
-"default_speed" = "Viteză implicită";
+"default_speed_setting_title" = "Viteză implicită";
 "selected_profiles" = "%d din %d";
 "add_point" = "Adaugă punct";
 "shared_string_copy" = "Copie";
@@ -919,7 +917,7 @@
 "edit_profile_list" = "Editează lista de profiluri";
 "shared_string_next" = "Următorul";
 "default_speed_dialog_msg" = "Estimarea timpului de sosire pentru tipurile de drumuri necunoscuteși limitarea vitezei pe toate drumurile (poate afecta traseul)";
-"update_map" = "Actualizare hartă";
+"update_tile" = "Actualizare hartă";
 "profile_prefs_reset_successful" = "Toate setările de profil sunt restabilite la valorile implicite";
 "tones" = "tone";
 "shared_string_nothing_selected" = "Nimic selectat";
@@ -1075,7 +1073,7 @@
 "auto_zoom_map_descr" = "Harta cu zoom automat în acord cu viteza dumneavoastră (în timp ce harta este sincronizată cu poziția curentă)";
 "choose_auto_center_map_view_descr" = "Timpul până când vizualizarea hărții se sincronizează cu poziția curentă după mutare";
 "choose_auto_follow_route_descr" = "Intervalul de timp până când vizualizarea hărții se sincronizează cu poziția curentă";
-"avoid_in_routing_descr" = "Evitați drumurile cu taxă, drumurile neasfaltate, feriboturile";
+"avoid_in_routing_descr_" = "Evitați drumurile cu taxă, drumurile neasfaltate, feriboturile";
 "nav_type_brouter" = "BRuter";
 "nav_type_direct_to" = "Direct la punct";
 "nav_type_osmand" = "OsmAnd (rutare offline)";
@@ -1189,7 +1187,7 @@
 "only_manually" = "Numai manual";
 "speed_limit_tolerance_descr" = "Selectați marja de toleranță a limitei de viteză peste care veți primi un avertisment vocal.";
 "select_distance_for_recalculation" = "Selectați distanța după care traseul va fi recalculat.";
-"route_recalculation_descr" = "Traseul va fi recalculat dacă distanța de la traseu până la locația curentă este mai mare decât valoarea selectată.";
+"recalculate_route_distance_promo" = "Traseul va fi recalculat dacă distanța de la traseu până la locația curentă este mai mare decât valoarea selectată.";
 "recalculate_wrong_dir" = "Recalcularea traseului în caz de direcție inversă";
 "recalculate_route" = "Recalcularea rutei în caz de deviere";
 "import_routing_file_descr" = "Puteți importa un fișier de rutare din orice aplicație de stocare în cloud deschizându-l în OsmAnd.";
@@ -1234,10 +1232,10 @@
 "select_profile" = "Selectați profilul";
 "segnet_num" = "Segmentul %d";
 "plan_route_folder" = "Dosar";
-"start_of_track" = "Începutul pistei";
+"start_of_the_track" = "Începutul pistei";
 "point_to_navigate" = "Navigați la";
 "split_after" = "Divizați după";
-"split_before" = "Împărțiti înainte de";
+"plan_route_split_before" = "Împărțiti înainte de";
 "gpx_already_exsists" = "Fișierul cu acest nume există deja";
 "empty_filename" = "Numele fișierului nu poate fi gol";
 "gpx_saved_successfully" = "Fișier GPX salvat la %@";
@@ -2715,7 +2713,7 @@
 "routing_attr_goods_restrictions_footer_desc" = "Se aplică numai pentru vehiculele care transportă mărfuri cu cel puțin patru roți și care cântăresc cel mult 3,5 tone.\n\nDacă vehiculul dumneavoastră are o greutate mai mare de 3,5 tone, trebuie să utilizați profilul pentru camioane.";
 "routing_attr_goods_restrictions_name" = "Livrarea mărfurilor";
 "routing_attr_goods_restrictions_yes_desc" = "Se vor evita drumurile care sunt închise pentru livrarea mărfurilor.";
-"shared_string_file_cloud" = "Cloud";
+"shared_string_cloud" = "Cloud";
 "upload_all" = "Încărcați toate";
 "download_all" = "Descărcați toate";
 "cloud_all_changes_downloaded" = "Toate modificările descărcate";

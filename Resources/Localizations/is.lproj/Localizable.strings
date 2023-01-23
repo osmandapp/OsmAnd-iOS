@@ -58,7 +58,7 @@
 "poi_insrease_radius" = "Auka radíus leitar í";
 "poi_max_radius_reached" = "Náði hámarki á leitarradíus";
 "poi_search_near_center" = "Leit er framkvæmd nálægt miðju kortinu";
-"poi_hide" = "Fela";
+"shared_string_hide" = "Fela";
 // My Places
 "favorites" = "Eftirlæti";
 "tracks" = "Ferlar";
@@ -556,7 +556,7 @@
 "map_widget_appearance_rem" = "Atriði eftir";
 "map_widget_compass" = "Áttaviti";
 "map_widget_intermediate_distance" = "Milliáfangi";
-"map_widget_distance" = "Áfangastaður";
+"route_descr_destination" = "Áfangastaður";
 "monitoring_control_start" = "REC";
 "map_widget_altitude" = "Hæð";
 "map_widget_battery" = "Styrkur rafhlöðu";
@@ -600,7 +600,7 @@
 "fast_route_mode" = "Hraðasta leið";
 "fast_route_mode_descr" = "Virkja til að reikna hröðustu leið eða gera óvirkt til að reikna hagkvæmustu leið";
 "avoid_in_routing_title" = "Forðast…";
-"avoid_in_routing_descr" = "Forðast gjaldskyldu, óbundið slitlag, ferjur";
+"avoid_in_routing_descr_" = "Forðast gjaldskyldu, óbundið slitlag, ferjur";
 "prefer_in_routing_title" = "Gefa forgang…";
 "prefer_in_routing_descr" = "Velja hraðbrautir";
 "relief_smoothness_factor_descr" = "Kjörið landslag: slétt eða hæðótt";
@@ -909,7 +909,6 @@
 "translucent_green" = "Hálfgegnsætt grænt";
 "purple" = "Purpurablátt";
 "brown" = "Brúnt";
-"black" = "Svart";
 "shared_string_upload" = "Senda inn";
 "poi_type" = "Tegund merkisstaðar";
 // OSM Editing actions
@@ -917,7 +916,7 @@
 "closing_changeset" = "Loka breytingasetti…";
 "commiting_node" = "Sendi inn hnút…";
 "loading_poi_obj" = "Hleð inn merkisstöðum…";
-"osm_note" = "OSM-minnispunktur";
+"osn_bug_name" = "OSM-minnispunktur";
 "osm_created" = "Búið til þann";
 "osm_deleted" = "Eytt";
 "osm_modified" = "Breytt";
@@ -1752,7 +1751,7 @@
 "shared_string_email" = "Tölvupóstur";
 "download_size" = "Stærð niðurhals";
 "choose_auto_center_map_view_descr" = "Tími eftir hreyfingu þar til kortasýn samstillist við núverandi staðsetningu";
-"update_map" = "Uppfæra kort";
+"update_tile" = "Uppfæra kort";
 "empty_profile_name_warning" = "Nafn sniðs má ekki vera tómt.";
 "email_example_hint" = "tolvupostfang@midlari.is";
 "profile_settings" = "Stillingar notandasniðs";
@@ -1775,7 +1774,7 @@
 "height_limit_description" = "Settu inn hæð farartækisins, takmarkanir geta verið á sumum leiðum varðandi hæð farartækja.";
 "allow_3D_view" = "2.5D-sýn";
 "units_of_speed" = "Hraðaeiningar";
-"route_recalculation_descr" = "Leiðin verður endurreiknuð ef vegalengd frá leiðinni að núverandi staðsetningu er lengri en uppgefið gildi.";
+"recalculate_route_distance_promo" = "Leiðin verður endurreiknuð ef vegalengd frá leiðinni að núverandi staðsetningu er lengri en uppgefið gildi.";
 "angular_measurment_units" = "Mælieiningar horna";
 "osmand_routing" = "OsmAnd leiðaval";
 "voice_announces" = "Talskilaboð";
@@ -1784,12 +1783,11 @@
 "select_icon" = "Veldu táknmynd";
 "arrival_announcement_frequency" = "Hve snemma viltu fá tilkynningu um komu?";
 "not_available_profile_name" = "Snið með þessu heiti er þegar til staðar.";
-"default_speed" = "Sjálfgefinn hraði";
+"default_speed_setting_title" = "Sjálfgefinn hraði";
 "base_profile_descr_bicycle" = "Fjallahjól, skellinöðrur, hestar";
 "position_icon_while_moving" = "Staðsetningartáknmynd við hreyfingu";
 "public_transport_menu" = "Samgöngur";
 "shared_string_account" = "Notandaaðgangur";
-"avoid_routes_and_road" = "Forðast tilteknar leiðir og gerðir af vegum";
 "export_profile" = "Flytja út";
 "default_speed_descr" = "Notað til að áætla komutíma á óþekktum gerðum vega og til takmörkunar á hraða á öllum vegum (gæti breytt leiðarvali)";
 "base_profile_descr_pedestrian" = "Ganga, hlaup";
@@ -1952,7 +1950,7 @@
 "change_application_profile" = "Skipta um forritssnið";
 "quick_action_showhide_mapillary_descr" = "Ef ýtt er á þennan aðgerðahnapp mun það birta eða fela Mapillary-lagið á kortinu.";
 "nearest_point" = "Næsti punktur";
-"start_of_track" = "Upphaf ferils";
+"start_of_the_track" = "Upphaf ferils";
 "point_to_navigate" = "Fara á";
 "reverse_track_dir" = "Snúa við stefnu ferils";
 "attach_to_the_roads" = "Tengja við vegina";
@@ -1960,7 +1958,7 @@
 "shared_string_gpx_track" = "Ferill";
 "follow_track" = "Fylgja ferli";
 "split_after" = "Skipta uppá eftir";
-"split_before" = "Skipta uppá undan";
+"plan_route_split_before" = "Skipta uppá undan";
 "gpx_already_exsists" = "Skrá með þessu heiti er þegar til staðar";
 "empty_filename" = "Skráarheiti má ekki vera tómt";
 "none_point_error" = "Bættu við a.m.k. einum punkti.";
@@ -2679,7 +2677,7 @@
 "show_borders_of_downloaded_maps" = "Sýna jaðra sóttra landakorta";
 "mtb_segment_classification" = "Flokkun búta";
 "upload_local_version" = "Sækja útgáfu á tækinu";
-"shared_string_file_cloud" = "Tölvuský";
+"shared_string_cloud" = "Tölvuský";
 "sync_now" = "Samstilla núna";
 "ltr_or_rtl_combine_via_slash" = "%@/%@";
 "mountain_bike" = "Fjallahjól";

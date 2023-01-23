@@ -19,7 +19,7 @@
 "traffic_warning_calming" = "Χαλάρωση κυκλοφορίας";
 "type_address" = "Πληκτρολόγησε διεύθυνση";
 "closing_changeset" = "Κλείσιμο ομάδας αλλαγών…";
-"osm_note" = "Σημείωση OSM";
+"osn_bug_name" = "Σημείωση OSM";
 "unit_of_length" = "Μονάδες μήκους";
 "shared_string_delete" = "Διαγραφή";
 "poi_filter_custom_filter" = "Προσαρμοσμένο φίλτρο";
@@ -164,7 +164,7 @@
 "shared_string_previous" = "Προηγούμενο";
 "track_recording_name" = "Τρέχουσα καταγραφή ίχνους";
 "filter_poi_hint" = "Φιλτράρισμα κατά όνομα";
-"map_widget_distance" = "Προορισμός";
+"route_descr_destination" = "Προορισμός";
 "access_arrival_time" = "Ώρα άφιξης";
 "shared_string_cancel" = "Άκυρο";
 "apply_filters" = "Εφαρμογή φίλτρων";
@@ -198,7 +198,7 @@
 "arrival_distance_factor_at_last" = "Στα τελευταία μέτρα";
 "intermediate_point" = "Ενδιάμεσος προορισμός %@";
 "shared_string_close" = "Κλείσιμο";
-"poi_hide" = "Απόκρυψη";
+"shared_string_hide" = "Απόκρυψη";
 "map_widget_battery" = "Στάθμη μπαταρίας";
 "auto_zoom_close" = "Για κοντινά";
 "device_memory" = "Μνήμη συσκευής";
@@ -262,7 +262,6 @@
 "osm_editing_lost_changes_title" = "Έξοδος χωρίς αποθήκευση;";
 "coordinates_example" = "Παράδειγμα";
 "map_widget_bearing" = "Σχετική ανοχή";
-"black" = "Μαύρο";
 "day_off_label" = "κλειστό";
 "mapil_pano_only" = "Εμφάνιση μόνο εικόνων 360°";
 "route_parameters" = "Παράμετροι διαδρομής";
@@ -940,7 +939,7 @@
 "save_global_track_interval_descr" = "Επιλέξτε το διάστημα καταγραφής για τη γενική εγγραφή ταξιδιού (ενεργοποιείται μέσω του γραφικού στοιχείου καταγραφής GPX στο χάρτη).";
 "max_speed" = "Μέγιστη ταχύτητα";
 "min_speed" = "Ελαχ. ταχύτητα";
-"default_speed" = "Προεπιλεγμένη ταχύτητα";
+"default_speed_setting_title" = "Προεπιλεγμένη ταχύτητα";
 "driving_region_descr" = "Επιλέξτε την περιοχή οδήγησης: ΗΠΑ, Ευρώπη, Ηνωμένο Βασίλειο, Ασία και άλλα.";
 "rotate_map_none_opt" = "Να μην περιστρέφετε (ο βορράς είναι επάνω)";
 "rotate_map_bearing_opt" = "Στην κατεύθυνση της κίνησης";
@@ -1031,7 +1030,6 @@
 "shared_string_poi_types" = "Είδη Σημείων Ενδιαφέροντος";
 "importing_from" = "Εισαγωγή δεδομένων από το %@";
 "import_duplicates_title" = "Μερικά αντικείμενα υπάρχουν ήδη";
-"avoid_routes_and_road" = "Αποφυγή συγκεκριμένων διαδρομών και τύπων δρόμων";
 "res_pseudo_mercator" = "Ψευδομερκατορική προβολή";
 "plugin_settings_reset" = "Επαναφορά ρυθμίσεων προσθέτου στην προεπιλογή";
 "osmand_routing" = "Δρομολόγηση OsmAnd";
@@ -1089,7 +1087,7 @@
 "layer_amenity_label" = "Ετικέτες επίστρωσης (ΣΕ, Αγαπημένα)";
 "select_distance_for_recalculation" = "Επιλέξτε την απόσταση μετά την οποία η διαδρομή θα επανυπολογιστεί.";
 "shared_string_finish" = "Τερματισμός";
-"route_recalculation_descr" = "Η διαδρομή θα επανυπολογιστεί εάν η απόσταση από τη διαδρομή στην τρέχουσα θέση είναι μεγαλύτερη από την επιλεγμένη τιμή.";
+"recalculate_route_distance_promo" = "Η διαδρομή θα επανυπολογιστεί εάν η απόσταση από τη διαδρομή στην τρέχουσα θέση είναι μεγαλύτερη από την επιλεγμένη τιμή.";
 "import_complete_description" = "Εισήχθησαν όλα τα δεδομένα από το %@, μπορείτε να χρησιμοποιήσετε τα παρακάτω πλήκτρα για να ανοίξετε το απαιτούμενο τμήμα της εφαρμογής για να το διαχειριστείτε";
 "region_antarctica" = "Ανταρκτική";
 "ui_customization_descr" = "Στοιχεία σχεδιαστή, μενού περιβάλλοντος";
@@ -1100,7 +1098,7 @@
 "two" = "Δύο";
 "active_markers" = "Ενεργοί δείκτες";
 "shared_string_nothing_selected" = "Τίποτα δεν επιλέχτηκε";
-"update_map" = "Ενημέρωση χάρτη";
+"update_tile" = "Ενημέρωση χάρτη";
 "public_transport_menu" = "Μεταφορές";
 "exit_at" = "Έξοδος στο";
 "quick_action_map_source_title" = "Πάροχοι χάρτη";

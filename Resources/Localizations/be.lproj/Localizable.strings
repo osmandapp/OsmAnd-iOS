@@ -23,7 +23,7 @@
 "fav_ignore" = "Ігнараваць";
 "fav_rename" = "Змяніць назву";
 "fav_replace" = "Замяніць";
-"poi_hide" = "Схаваць";
+"shared_string_hide" = "Схаваць";
 // My Places
 "favorites" = "Улюбёныя";
 "gpx_waypoints" = "Пункты шляху";
@@ -567,7 +567,7 @@
 "fast_route_mode" = "Найхутчэйшы шлях";
 "fast_route_mode_descr" = "Уключыць, каб разлічваць найхутчэйшы шлях, ці адключыць для паліўна-ашчаднага шляху.";
 "avoid_in_routing_title" = "Пазбягаць…";
-"avoid_in_routing_descr" = "Пазбягаць платных дарог, дарог без пакрыцця, паромаў";
+"avoid_in_routing_descr_" = "Пазбягаць платных дарог, дарог без пакрыцця, паромаў";
 "prefer_in_routing_title" = "Аддаваць перавагу…";
 "prefer_in_routing_descr" = "Аддаваць перавагу аўтамагістралям.";
 "relief_smoothness_factor_descr" = "Пераважны рэльеф: раўнінны ці гарысты.";
@@ -648,7 +648,7 @@
 "map_widget_altitude" = "Вышыня";
 "monitoring_control_start" = "ЗАПІС";
 "map_widget_intermediate_distance" = "Прамежкавы пункт";
-"map_widget_distance" = "Пункт прызначэння";
+"route_descr_destination" = "Пункт прызначэння";
 "always_center_position_on_map" = "Паказваць становішча заўсёды ў цэнтры";
 "map_widget_appearance_rem" = "Астатнія элементы";
 "map_widget_compass" = "Компас";
@@ -838,13 +838,12 @@
 "red" = "Чырвоны";
 "purple" = "Фіялетавы";
 "osm_editing_contact_info" = "Кантакты";
-"osm_note" = "Нататка OSM";
+"osn_bug_name" = "Нататка OSM";
 "route_parameters" = "Параметры маршруту";
 "add_parking_place" = "Дадаць месца паркоўкі";
 "add_gpx_waypoint" = "Дадаць пункт GPX";
 "region_nautical" = "Марскія мапы";
 "translucent_orange" = "Празрысты аранжавы";
-"black" = "Чорны";
 "osm_note_created" = "Нататка OSM створаная";
 "product_title_sea_depth_contours" = "Контуры марскіх глыбінь";
 "quick_action_add_poi_category" = "Дадаць катэгорыю";
@@ -1471,7 +1470,7 @@
 "select_online_source" = "Абраць крыніцу";
 "download_size" = "Памер спампоўкі";
 "move_map_to_select_area" = "Перамясціць мапу, каб абраць патрэбную вобласць.";
-"update_map" = "Абнавіць мапу";
+"update_tile" = "Абнавіць мапу";
 "shared_string_maximum" = "Максімум";
 "shared_string_clear_cache" = "Ачысціць кэш";
 "shared_string_not_set" = "Не вызначана";
@@ -1491,8 +1490,7 @@
 "instructions_repeat" = "Націсніце \"Наступны паварот\", каб паўтарыць інструкцыі";
 "speed_limit_tolerance_descr" = "Абярыце дапушчальнае значэнне перавышэння хуткасці, пасля якога выведзецца галасавое папярэджанне.";
 "select_distance_for_recalculation" = "Абярыце адлегласць, пасля якой маршрут будзе пералічаны.";
-"route_recalculation_descr" = "Маршрут будзе пералічаны, калі адлегласць ад маршруту да бягучай пазіцыі большы абранага значэння.";
-"avoid_routes_and_road" = "Пазбягаць пэўныя маршруты і тыпы дарог";
+"recalculate_route_distance_promo" = "Маршрут будзе пералічаны, калі адлегласць ад маршруту да бягучай пазіцыі большы абранага значэння.";
 "recalculate_route" = "Пералічыць маршрут у выпадку адхілення";
 "special_routing" = "Адмысловая маршрутызацыя";
 "osm_live_routing_descr" = "Выкарыстоўваць абнаўленні OsmAnd Live для навігацыі";
@@ -1528,7 +1526,7 @@
 "logging_min_distance_descr" = "Фільтр: мінімальная адлегласць для рэгістрацыі новай кропкі";
 "logging_min_distance" = "Мінімальны зрух";
 "max_speed" = "Максімальная хуткасць";
-"default_speed" = "Прадвызначаная хуткасць";
+"default_speed_setting_title" = "Прадвызначаная хуткасць";
 "driving_region_descr" = "Абярыце рэгіён кіравання: ЗША, Еўропа, Вялікабрытанія, Азія і іншыя.";
 "profile_alert_delete_title" = "Выдаліць профіль";
 "reset_to_default" = "Скінуць да прадвызначаных";
@@ -1907,7 +1905,7 @@
 "emergency" = "Экстранныя службы";
 "address_search" = "Пошук па адрасе";
 "favorite_friends_category" = "Сябры";
-"start_of_track" = "Пачатак следу";
+"start_of_the_track" = "Пачатак следу";
 "search_history" = "Гісторыя пошуку";
 "shared_string_gpx_points" = "Пункты";
 "select_group" = "Абраць групу";
@@ -1932,7 +1930,7 @@
 "reverse_track_dir" = "Развярнуць кірунак следу";
 "new_plugin_added" = "Дададзена новая ўбудова";
 "plan_route_change_folder" = "Змяніць каталог";
-"split_before" = "Падзяліць да";
+"plan_route_split_before" = "Падзяліць да";
 "coordinates" = "Каардынаты";
 "transport" = "Транспарт";
 "copied_to_clipboard" = "Скапіявана ў буфер абмену";

@@ -128,7 +128,7 @@
 "map_widget_appearance_rem" = "Järelolevad elemendid";
 "map_widget_compass" = "Kompass";
 "map_widget_intermediate_distance" = "Vahepealne sihtkoht";
-"map_widget_distance" = "Sihtkoht";
+"route_descr_destination" = "Sihtkoht";
 "monitoring_control_start" = "SALVESTA";
 "map_widget_altitude" = "Kõrgus";
 "map_widget_battery" = "Aku laetuse tase";
@@ -179,7 +179,7 @@
 "fast_route_mode" = "Kiireim teekond";
 "fast_route_mode_descr" = "Luba, et arvutada kiireim teekond või keela kütusesäästliku teekonna jaoks.";
 "avoid_in_routing_title" = "Väldi…";
-"avoid_in_routing_descr" = "Väldi teemakse, sillutamata, parvlaevu";
+"avoid_in_routing_descr_" = "Väldi teemakse, sillutamata, parvlaevu";
 "prefer_in_routing_title" = "Eelista…";
 "prefer_in_routing_descr" = "Eelista kiirteid.";
 "relief_smoothness_factor_descr" = "Eelistatud maastik: tasane või künklik.";
@@ -422,7 +422,7 @@
 "poi_insrease_radius" = "Suurenda otsinguraadiust väärtuseni";
 "poi_max_radius_reached" = "Suurim otsinguraadius saavutatud";
 "poi_search_near_center" = "Otsingut teostatakse kaardi keskkoha lähedal";
-"poi_hide" = "Peida";
+"shared_string_hide" = "Peida";
 // My Places
 "favorites" = "Lemmikud";
 "tracks" = "Rajafailid";
@@ -651,7 +651,7 @@
 "osm_delete_confirmation_descr" = "Oled kindel, et soovid selle HP kustutada?";
 "osm_succsessful_uploads" = "Edukas";
 "osm_failed_uploads" = "Ebaõnnestus";
-"osm_note" = "OSM märge";
+"osn_bug_name" = "OSM märge";
 "osm_created" = "Loodud";
 "osm_deleted" = "Kustutatud";
 "osm_modified" = "Muudetud";
@@ -959,7 +959,6 @@
 "green" = "Roheline";
 "translucent_green" = "Läbikumav roheline";
 "brown" = "Pruun";
-"black" = "Must";
 // World Regions
 "region_antarctica" = "Antarktis";
 "region_africa" = "Aafrika";
@@ -1633,7 +1632,7 @@
 "distance_indication" = "Vahemaa näit";
 "two" = "Kaks";
 "max_speed" = "Suurim kiirus";
-"default_speed" = "Vaikimisi kiirus";
+"default_speed_setting_title" = "Vaikimisi kiirus";
 "send_anonymous_data_desc" = "Saada OsmAnd'ile statistikat kaartide allalaadimise kohta. Me ei kogu sinu isiklikke andmed ega asukohateavet.";
 "default_profile_descr" = "Vali profiil, mida kasutatakse rakenduse käivitamisel.";
 "base_profile_descr_boat" = "Laev, sõudmine, purjetamine";
@@ -1751,7 +1750,7 @@
 "preview_of_selected_zoom_levels" = "Valitud suumitasemete eelvaade";
 "download_size" = "Allalaaditava faili suurus";
 "number_of_tiles" = "Paanide arv";
-"update_map" = "Uuenda kaart";
+"update_tile" = "Uuenda kaart";
 "shared_string_maximum" = "Maksimum";
 "shared_string_meters" = "meetrit";
 "tones" = "toonid";
@@ -1761,7 +1760,6 @@
 "avoid_transport_type" = "Väldi transpordiliike";
 "arrival_announcement_frequency" = "Kui vara soovid kohale jõudmise teavitust\?";
 "select_distance_for_recalculation" = "Vali eemaldumine alates millest teekond arvutatakseümber.";
-"avoid_routes_and_road" = "Väldi teatud marsruute ja teetüüpe";
 "recalculate_route" = "Kõrvalekaldel arvuta teekond ümber";
 "special_routing" = "Spetsiaalne marsruutimine";
 "osmand_routing" = "OsmAnd marsruutimine";
@@ -1810,7 +1808,7 @@
 "map_settings_zoom_level_description" = "Määra väikseim ja suurim suumi tase kihi kuvamisel";
 "use_of_downloaded_map" = "Nüüd saad seda kaarti kasutadavõrgu ühenduseta režiimis põhikaardi allikana või ülekattena või aluskihina";
 "instructions_repeat" = "Juhiste kordamiseks puudutage vidinat „Järgmine pööre“";
-"route_recalculation_descr" = "Teekonnaümberarvutus, kui kaugus teekonnast praegusesse asukohta on suurem valitud väärtusest.";
+"recalculate_route_distance_promo" = "Teekonnaümberarvutus, kui kaugus teekonnast praegusesse asukohta on suurem valitud väärtusest.";
 "recalculate_wrong_dir" = "Suuna muutmisel vastupidiseks arvuta teekond ümber";
 "repeat_after" = "Korda pärast";
 "nav_type_osmand" = "OsmAnd (võrguühenduseta teekonnad)";
@@ -1952,7 +1950,7 @@
 "plan_route_folder" = "Kaust";
 "point_to_navigate" = "Navigeeri punkti";
 "split_after" = "Tükelda pärast";
-"split_before" = "Tükelda enne";
+"plan_route_split_before" = "Tükelda enne";
 "gpx_already_exsists" = "Selle nimega fail on juba olemas";
 "empty_filename" = "Faili nimi ei saa olla tühi";
 "gpx_saved_successfully" = "GPX fail salvestati asukohta %@";
@@ -1967,7 +1965,7 @@
 "favorites_empty" = "Sul ei ole salvestatud lemmikpunkte";
 "map_markers_empty" = "Sul ei ole aktiivseid kaardimarkereid";
 "address_search" = "Aadressiotsing";
-"start_of_track" = "Raja algus";
+"start_of_the_track" = "Raja algus";
 "reverse_track_dir" = "Raja vastupidine suund";
 "select_another_track" = "Vali muu teekond";
 "follow_track" = "Järgi teekonda";

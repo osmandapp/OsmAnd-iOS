@@ -1,5 +1,3 @@
-
-
 "OsmAnd Maps" = "OsmAnd 지도";
 "animate_routing_route_not_calculated" = "먼저 경로를 계산하세요";
 "will_open_tomorrow_at" = "내일부터 영업";
@@ -313,7 +311,7 @@
 "nav_type_ski" = "스키";
 "nav_type_geocoding" = "지오코딩";
 "fast_route_mode_descr" = "\"가장 빠른 경로를 활성화하거나 or 가장 짧은 경로를 비활성화합니다 \"";
-"avoid_in_routing_descr" = "유료 도로, 비 포장 도로, 페리 제외";
+"avoid_in_routing_descr_" = "유료 도로, 비 포장 도로, 페리 제외";
 "avoid_in_routing_title" = "제외…";
 "relief_smoothness_factor_descr" = "선호하는 지형: 평지 또는 낮은 언덕";
 "choose_auto_follow_route" = "자동 중앙 지도 보기";
@@ -442,7 +440,7 @@
 "fav_create_group" = "새 그룹 만들기";
 "add_group" = "그룹 추가";
 "fav_point_emoticons_message" = "이모티콘이 포함된 문자열을 파일에 저장하기 위해 즐겨찾기의 이름을 '%@'로 변경함";
-"poi_hide" = "숨기기";
+"shared_string_hide" = "숨기기";
 "tracks_on_map" = "지도상의 트랙";
 "gpx_export_failed" = "생성된 경로를 저장할 수 없음";
 "gpx_stat" = "통계";
@@ -490,7 +488,7 @@
 "osm_editing_offline" = "오프라인 편집";
 "osm_note_upload_immediately" = "즉시 업로드";
 "configure_profile" = "프로파일 구성";
-"default_speed" = "기본 속도";
+"default_speed_setting_title" = "기본 속도";
 "save_global_track_interval_descr" = "(지도의 GPX 기록 위젯을 통해 활성화) 일반 트랙 기록에 대한 기록 간격을 선택합니다.";
 "logging_interval_navigation" = "운행중 로깅 간격";
 "map_widget_transparent" = "투명 위젯";
@@ -667,7 +665,7 @@
 "rendering_attr_roadColors_description" = "도로 색상을 선택합니다:";
 "lightblue" = "연한 파랑";
 "lang_iw" = "히브리어";
-"split_before" = "분할 전";
+"plan_route_split_before" = "분할 전";
 "rendering_attr_hmRendered_description" = "지도 세부사항 표시 증가";
 "map_settings_text_size" = "텍스트 크기";
 "rendering_attr_contourLines_name" = "등고선 표시";
@@ -681,7 +679,7 @@
 "rendering_category_details" = "세부 정보";
 "rendering_attr_currentTrackColor_name" = "GPX색상";
 "intro_next" = "다음";
-"update_map" = "지도 업데이트";
+"update_tile" = "지도 업데이트";
 "region_others" = "다른 지도";
 "guidance_preferences_descr" = "운행 환경설정";
 "lang_ms" = "말레이시아어";
@@ -877,7 +875,7 @@
 "app_profiles" = "앱 프로필";
 "lang_hi" = "인도어";
 "shared_string_my_location" = "내 위치";
-"map_widget_distance" = "도착지";
+"route_descr_destination" = "도착지";
 "shared_string_gpx_points" = "장소";
 "gpx_split_interval" = "분할 간격";
 "lang_pt" = "포르투갈어";
@@ -908,7 +906,7 @@
 "route_tsll" = "약한 좌회전 후 직진";
 "osmand_live_title" = "OsmAnd라이브";
 "shared_string_all" = "모두";
-"osm_note" = "OSM노트";
+"osn_bug_name" = "OSM노트";
 "units_min_short" = "m";
 "routing_attr_avoid_shuttle_train_name" = "셔틀 열차 피하기";
 "rendering_value_germanRoadAtlas_name" = "독일 도로 지도";

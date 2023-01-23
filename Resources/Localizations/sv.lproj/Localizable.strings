@@ -115,7 +115,7 @@
 "driving_region" = "Område";
 "driving_region_automatic" = "Automatisk";
 "routing_attr_length_name" = "Längdsgräns";
-"default_speed" = "Standardhastighet";
+"default_speed_setting_title" = "Standardhastighet";
 "min_speed" = "Min. hastighet";
 "max_speed" = "Max hastighet";
 "maximum_speed" = "Högsta hastighet";
@@ -150,7 +150,7 @@
 "map_widget_appearance_rem" = "Kvarvarande element";
 "map_widget_compass" = "Kompass";
 "map_widget_intermediate_distance" = "Mellanliggande destination";
-"map_widget_distance" = "Destination";
+"route_descr_destination" = "Destination";
 "monitoring_control_start" = "Spela in";
 "map_widget_altitude" = "Höjd";
 "map_widget_battery" = "Batterinivå";
@@ -240,7 +240,7 @@
 "nav_type_geocoding" = "Geokodning";
 "fast_route_mode_descr" = "Aktivera för att beräkna den snabbaste vägen eller inaktivera för den bränslesnålaste vägen.";
 "avoid_in_routing_title" = "Undvik…";
-"avoid_in_routing_descr" = "Avoid toll roads, unpaved, ferries";
+"avoid_in_routing_descr_" = "Avoid toll roads, unpaved, ferries";
 "prefer_in_routing_title" = "Föredra …";
 "prefer_in_routing_descr" = "Föredra motorvägar.";
 "relief_smoothness_factor_descr" = "Föredragen terräng: slätt eller kuperat.";
@@ -279,8 +279,7 @@
 "import_routing_file_descr" = "You can import routing file from any cloud storage app by opening it in OsmAnd.";
 "recalculate_route" = "Recalculate route in case of deviation";
 "recalculate_wrong_dir" = "Recalculate route in case of reverse direction";
-"avoid_routes_and_road" = "Undvik vissa rutter och vägtyper";
-"route_recalculation_descr" = "Om avståndet från rutten till nuvarande plats är större än valt värde kommer rutten att beräknas om.";
+"recalculate_route_distance_promo" = "Om avståndet från rutten till nuvarande plats är större än valt värde kommer rutten att beräknas om.";
 "select_distance_for_recalculation" = "Välj efter vilket avstånd rutten ska beräknas om.";
 "arrival_announcement_frequency" = "Hur tidigt vill du höra ankomstmeddelandet?";
 "speed_limit_tolerance_descr" = "Select the speed limit tolerance margin above which you will receive a voice warning.";
@@ -497,7 +496,7 @@
 "offline_maps" = "Offline Maps";
 "download_map" = "Hämta karta";
 "download_map_dialog" = "Kartnedladdningsdialog";
-"update_map" = "Uppdatera kartan";
+"update_tile" = "Uppdatera kartan";
 "download_pending" = "Download pending";
 "download_suggestion" = "Download detailed %@ map to view this area";
 "move_map_to_select_area" = "Move map to select needed area.";
@@ -576,7 +575,7 @@
 "poi_insrease_radius" = "Increase search radius to";
 "poi_max_radius_reached" = "Maximum search radius reached";
 "poi_search_near_center" = "Search is performed near the center of the map";
-"poi_hide" = "Göm";
+"shared_string_hide" = "Göm";
 
 // My Places
 "favorites" = "Favoriter";
@@ -1056,7 +1055,7 @@
 "invalid_format" = "Invalid format";
 "gpx_already_exsists" = "File with this name already exists";
 "folder_already_exsists" = "Folder with this name already exists";
-"split_before" = "Dela innan";
+"plan_route_split_before" = "Dela innan";
 "split_after" = "Dela efter";
 "follow_track" = "Följ färdväg";
 "shared_string_gpx_track" = "Spår";
@@ -1065,7 +1064,7 @@
 "attach_to_the_roads" = "Fäst på vägarna";
 "reverse_track_dir" = "Omvänd GPX-riktning";
 "point_to_navigate" = "Navigate to";
-"start_of_track" = "Början på färdvägen";
+"start_of_the_track" = "Början på färdvägen";
 "nearest_point" = "Närmaste punkt";
 "plan_route_folder" = "Folder";
 "plan_route_change_folder" = "Byt mapp";
@@ -1197,7 +1196,7 @@
 "osm_succsessful_uploads" = "Successful";
 "osm_failed_uploads" = "Failed";
 "osm_editing_settings_descr" = "This plugin's settings are global and apply to all profiles.";
-"osm_note" = "OSM-anteckning";
+"osn_bug_name" = "OSM-anteckning";
 "osm_created" = "Created";
 "osm_deleted" = "Raderad";
 "osm_modified" = "Ändrad";
@@ -1570,7 +1569,6 @@
 "green" = "Grön";
 "translucent_green" = "Genomskinlig grön";
 "brown" = "Brun";
-"black" = "Svart";
 
 // World Regions
 "region_antarctica" = "Antarktis";

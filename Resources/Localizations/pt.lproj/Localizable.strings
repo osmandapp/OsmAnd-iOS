@@ -2787,3 +2787,4 @@
 "routing_attr_motor_type_lpg_name" = "GPL";
 "si_nm_mt" = "Milhas náuticas / metros";
 "si_nm_ft" = "Milhas náuticas / pés";
+"shared_string_does_not_exist" = "Não existe";

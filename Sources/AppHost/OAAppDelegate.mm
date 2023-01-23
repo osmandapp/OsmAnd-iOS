@@ -35,6 +35,8 @@
 #import "OAMapActions.h"
 #import "OADiscountHelper.h"
 #import "OALinks.h"
+#import "OABackupHelper.h"
+#import "OACloudAccountVerificationViewController.h"
 
 #include "CoreResourcesFromBundleProvider.h"
 
@@ -185,7 +187,8 @@
             || [self handleIncomingSetPinOnMapURL:url]
             || [self handleIncomingMoveMapToLocationURL:url]
             || [self handleIncomingOpenLocationMenuURL:url]
-            || [self handleIncomingTileSourceURL:url];
+            || [self handleIncomingTileSourceURL:url]
+            || [self handleIncomingOsmAndCloudURL:url];
     }
     else
     {
@@ -391,6 +394,41 @@
         return YES;
     }
     return NO;
+}
+
+- (BOOL)handleIncomingOsmAndCloudURL:(NSURL *)url
+{
+    if (![OAUtilities isOsmAndSite:url] || ![OAUtilities isPathPrefix:url pathPrefix:@ "/premium/device-registration"])
+        return NO;
+    NSURLComponents *components = [NSURLComponents componentsWithURL:url resolvingAgainstBaseURL:YES];
+    NSArray<NSURLQueryItem *> *queryItems = components.queryItems;
+    NSString *tokenParam;
+    for (NSURLQueryItem *queryItem in queryItems)
+    {
+        if ([queryItem.name.lowercaseString isEqualToString:@"token"])
+            tokenParam = queryItem.value;
+    }
+    
+    UIViewController *vc = _rootViewController.navigationController.visibleViewController;
+    
+    if ([vc isKindOfClass:OACloudAccountVerificationViewController.class])
+    {
+        if ([OABackupHelper isTokenValid:tokenParam])
+        {
+            [OABackupHelper.sharedInstance registerDevice:tokenParam];
+        }
+        else
+        {
+            OACloudAccountVerificationViewController *verificationVC = (OACloudAccountVerificationViewController *)vc;
+            verificationVC.errorMessage = OALocalizedString(@"backup_error_invalid_token");
+            [verificationVC updateScreen];
+        }
+    }
+    else
+    {
+        _rootViewController.token = tokenParam;
+    }
+    return YES;
 }
 
 - (void)moveMapToLat:(double)lat lon:(double)lon zoom:(int)zoom withTitle:(NSString *)title

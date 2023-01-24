@@ -1212,7 +1212,7 @@
 
 - (void)onPoiTypeSelected:(NSString *)name
 {
-    NSString *key = OALocalizedString(@"poi_type");
+    NSString *key = OALocalizedString(@"poi_dialog_poi_type");
     NSMutableArray *arr = [NSMutableArray arrayWithArray:_data[key]];
     NSMutableDictionary *item = [NSMutableDictionary dictionaryWithDictionary:arr.firstObject];
     [item setObject:name forKey:@"value"];

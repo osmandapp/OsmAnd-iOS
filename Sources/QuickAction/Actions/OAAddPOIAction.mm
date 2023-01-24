@@ -116,7 +116,7 @@ static OAQuickActionType *ACTION_TYPE;
     
     [data setObject:@[@{
                           @"type" : [OAIconTitleValueCell getCellIdentifier],
-                          @"title" : OALocalizedString(@"poi_type"),
+                          @"title" : OALocalizedString(@"poi_dialog_poi_type"),
                           @"key" : KEY_CATEGORY,
                           @"value" : self.getTagsFromParams[POI_TYPE_TAG] ? self.getTagsFromParams[POI_TYPE_TAG] : OALocalizedString(@"shared_string_select"),
                           },
@@ -124,7 +124,7 @@ static OAQuickActionType *ACTION_TYPE;
                           @"footer" : OALocalizedString(@"quick_action_get_info"),
                           @"url" : kUrlOsm_wikiMapFeatures
                           }
-                      ] forKey:OALocalizedString(@"poi_type")];
+                      ] forKey:OALocalizedString(@"poi_dialog_poi_type")];
     NSMutableArray *arr = [NSMutableArray new];
     [self.getTagsFromParams enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull value, BOOL * _Nonnull stop) {
         if (![key isEqualToString:POI_TYPE_TAG]

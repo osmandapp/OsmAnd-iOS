@@ -338,7 +338,7 @@
 "gpx_points" = "Point(s)";
 "shared_string_export" = "Export";
 "import_export" = "Import/Export";
-"gpx_import_title" = "Importovat stopy";
+"import_tracks" = "Importovat stopy";
 "gpx_import_already_exists" = "Vybraný soubor stopy již v seznamu je. Zvolte prosím akci.";
 "gpx_add_new" = "Přidat nový soubor";
 "gpx_overwrite" = "Přepsat";
@@ -365,7 +365,7 @@
 "track_save" = "Uložit aktuální trasu";
 "track_continue_rec" = "Pokračovat v záznamu";
 "track_continue_rec_q" = "Chcete pokračovat v záznamu?";
-"rec_interval" = "Interval ukládání trasy";
+"save_track_interval_globally" = "Interval ukládání trasy";
 "rec_interval_minimum" = "Minimum";
 "track_start_rec" = "Zahájit záznam stopy";
 "track_rec_addon_q" = "Aktivujte prosím modul Záznam cesty, abyste mohli zaznamenávat a ukládat své stopy";
@@ -528,7 +528,7 @@
 "col_magenta" = "Purpurová";
 // World Regions
 "region_africa" = "Afrika";
-"region_asia" = "Asie";
+"index_name_asia" = "Asie";
 "region_ausralia_and_oceania" = "Austrálie a Oceánie";
 "region_central_america" = "Střední Amerika";
 "region_europe" = "Evropa";
@@ -790,7 +790,7 @@
 "osmand_live_last_live_update" = "Poslední aktualizace: %@";
 "osmand_live_not_updated" = "Zatím neaktualizováno";
 "osmand_live_hourly" = "Každou hodinu";
-"osmand_live_daily" = "Každý den";
+"daily" = "Každý den";
 "osmand_live_weekly" = "Jednou týdně";
 "osmand_live_reports" = "Zprávy";
 "osmand_live_server_date" = "Poslední aktualizace serveru: %@";
@@ -921,7 +921,7 @@
 "get_discount_second_part" = "potom %@";
 "toggle_nav" = "Spustit/ukončit navigaci";
 "angular_units_descr" = "Změní jednotku měření azimutu.";
-"poi_type" = "Typ POI";
+"poi_dialog_poi_type" = "Typ POI";
 "osm_note_upload_anonymously" = "Nahrát anonymně";
 "quick_action_add_poi_category" = "Přidat kategorii";
 "change_map_overlay" = "Změnit překryvnou mapu";
@@ -1377,7 +1377,7 @@
 "shared_string_import_complete" = "Import dokončen";
 "shared_string_importing" = "Importování";
 "whole_track" = "Celá stopa";
-"m_style_pulic_transport" = "Veřejná doprava";
+"poi_filter_public_transport" = "Veřejná doprava";
 "ui_customization_descr" = "Položky v úvodním panelu a kontextovém menu";
 "amenity" = "Občanská vybavenost";
 "shared_string_account" = "Účet";
@@ -1450,7 +1450,7 @@
 "replace_all" = "Nahradit vše";
 "menu" = "Menu";
 "vehicle_parameters" = "Parametry vozidla";
-"next_seg" = "Další úsek";
+"next_segment" = "Další úsek";
 "public_transport_show" = "Zobrazit veřejnou dopravu";
 "export_profile" = "Export";
 "public_transport_warning_title" = "Navigace pomocí veřejné dopravy je v současné době v beta testování, očekávejte chyby a nepřesnosti.";
@@ -1474,7 +1474,7 @@
 "import_complete_description" = "Všechna data z %@ jsou naimportovaná, můžete použít tlačítka níže k otevření části aplikace pro jejich správu";
 "configure_screen_descr" = "Zvolte nastavení obrazovky pro profil";
 "profile_type_base_string" = "Základní profil";
-"help_mapillary" = "OsmAnd + Mapillary";
+"mapillary_item" = "OsmAnd + Mapillary";
 "appearance_on_map" = "Vzhled na mapě";
 "quick_action_switch_profile_descr" = "Tlačítko akce přepne mezi zvolenými profily.";
 "total" = "Celkem";
@@ -1740,7 +1740,7 @@
 "select_another_track" = "Zvolit jinou stopu";
 "shared_string_gpx_track" = "Trasa";
 "follow_track" = "Sledovat stopu";
-"split_after" = "Rozdělit po";
+"plan_route_split_after" = "Rozdělit po";
 "plan_route_split_before" = "Rozdělit před";
 "gpx_already_exsists" = "Soubor s tímto názvem již existuje";
 "empty_filename" = "Název souboru nemůže být prázdný";
@@ -2586,7 +2586,7 @@
 "carplay" = "CarPlay";
 "weather_precip_unit_in" = "Palce";
 "obf_import_already_exists_short" = "Soubor s tímto názvem již existuje.";
-"rendering_attr_lightRailRoutes_name" = "Trasy lehké železnice";
+"rendering_attr_showLightRailRoutes_name" = "Trasy lehké železnice";
 "backup_delete_old_data_warning" = "Chystáte se odstranit historii změn pro dříve načtená data.\n\nAktuální verze dat bude na serveru uložena, ale nebude možné se vrátit k dříve provedeným změnám.";
 "backup_delete_data_type_description" = "Tím se z OsmAnd Cloud odstraní všechna %@ data. Tuto akci nelze vrátit zpět.";
 "backup_conflicts_action_descr" = "Další verze tohoto souboru je uložena na serveru. Je třeba vybrat akci";

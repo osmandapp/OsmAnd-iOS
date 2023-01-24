@@ -59,7 +59,7 @@
 "gpx_points" = "Ponto(s)";
 "shared_string_export" = "Exportar";
 "import_export" = "Importar/exportar";
-"gpx_import_title" = "Importar trilhos";
+"import_tracks" = "Importar trilhos";
 "gpx_import_already_exists" = "O trilho especificado já existe na lista. Por favor, escolha a ação.";
 "gpx_add_new" = "Adicionar novo ficheiro";
 "gpx_overwrite" = "Substituir";
@@ -85,7 +85,7 @@
 "track_save" = "Guardar o trilho atual";
 "track_continue_rec" = "Continuar a gravar";
 "track_continue_rec_q" = "Quer continuar a gravar?";
-"rec_interval" = "Intervalo de registo";
+"save_track_interval_globally" = "Intervalo de registo";
 "rec_interval_minimum" = "Mínimo";
 "track_start_rec" = "Iniciar gravação do percurso";
 "track_rec_addon_q" = "Por favor, ative o complemento \"Gravar viagem\" para gravar e guardar os seus percursos";
@@ -237,7 +237,7 @@
 "col_magenta" = "Magenta";
 // World Regions
 "region_africa" = "África";
-"region_asia" = "Ásia";
+"index_name_asia" = "Ásia";
 "region_ausralia_and_oceania" = "Austrália e Oceania";
 "region_central_america" = "América Central";
 "region_europe" = "Europa";
@@ -541,7 +541,7 @@
 "shared_string_later" = "Mais tarde";
 "shared_string_all" = "Tudo";
 "download_map" = "Descarregar mapa";
-"poi_type" = "Tipo de POI";
+"poi_dialog_poi_type" = "Tipo de POI";
 "gpx_waypoint" = "Ponto de rota";
 "gpx_route" = "Rota";
 "track_save_descr" = "Guardar agora o trilho atual num ficheiro GPX.";
@@ -551,7 +551,7 @@
 "osmand_live_updates" = "Atualizações sincronizadas";
 "osmand_live_available_maps" = "Mapas disponíveis";
 "osmand_live_hourly" = "A cada hora";
-"osmand_live_daily" = "Diariamente";
+"daily" = "Diariamente";
 "osmand_live_weekly" = "Semanalmente";
 "osmand_live_donations" = "Donativos";
 "osmand_live_support_reg_title" = "Região de suporte";
@@ -1606,7 +1606,7 @@
 "add_to_track" = "Adicionar a um trilho";
 "quick_action_mapillary_show" = "Mostrar Mapillary";
 "public_transport_empty_warning_descr" = "Tente alterar a configuração.";
-"help_mapillary" = "OsmAnd + Mapillary";
+"mapillary_item" = "OsmAnd + Mapillary";
 "special_routing" = "Roteamento especial";
 "menu" = "Menu";
 "res_source_sqlite" = "Ficheiro SQLiteDB";
@@ -1621,7 +1621,7 @@
 "vessel_width_limit_description" = "Defina a largura da embarcação para evitar pontes estreitas";
 "logging_accuracy" = "Precisão do registo";
 "arrived_at_destination" = "Chegou ao destino.";
-"next_seg" = "Próximo segmento";
+"next_segment" = "Próximo segmento";
 "default_speed_setting_title" = "Velocidade predefinida";
 "voice_announces" = "Avisos por voz";
 "routing_profile_ski" = "Esqui";
@@ -1660,7 +1660,7 @@
 "product_title_antarctica" = "Antártida";
 "units_t" = "t";
 "position_icon_while_moving" = "Ícone de posição durante a movimentação";
-"m_style_pulic_transport" = "Transporte público";
+"poi_filter_public_transport" = "Transporte público";
 "nav_type_geocoding" = "Geocodificação";
 "walk" = "A pé";
 "route_betw_points" = "Rota entre pontos";
@@ -1798,7 +1798,7 @@
 "point_to_navigate" = "Navegar para";
 "select_track_to_follow" = "Selecione o trilho a seguir";
 "shared_string_gpx_track" = "Trilho";
-"split_after" = "Dividir após";
+"plan_route_split_after" = "Dividir após";
 "plan_route_split_before" = "Dividir antes";
 "gpx_already_exsists" = "Já existe um ficheiro com este nome";
 "empty_filename" = "O nome do ficheiro não pode estar vazio";
@@ -2372,7 +2372,7 @@
 "weather_precip_enable_descr" = "Ative para ver a camada de precipitação no mapa.";
 "copy_to_map_favorites" = "Copiar para os favoritos";
 "map_settings_weather_layers" = "Camadas";
-"rendering_attr_lightRailRoutes_name" = "Rotas de comboios ligeiros (e alguns metropolitanos)";
+"rendering_attr_showLightRailRoutes_name" = "Rotas de comboios ligeiros (e alguns metropolitanos)";
 "toggle_precipitation" = "Mostrar/ocultar - camada de precipitação";
 "rendering_attr_funicularRoutes_name" = "Rotas de funicular";
 "ios_release_4_2" = "• Aparência da linha de rota: nova opção para definir espessura e cor\n• Trilhos: nova opção para eliminar vários trilhos de uma só vez\n• Menu de contexto do trilho: adicionada barra de deslocação nos grupos de pontos de passagem\n• Aparência do mapa: rotas adicionais divididas por tipo com capacidade de ativar uma de cada categoria separadamente\n• Novo tipo de navegação e perfil da aplicação: \"Passeios a cavalo\"\n• Os ficheiros do OsmAnd agora estão visíveis na aplicação \"Ficheiros\"\n• Opções \"Usar dados de elevação\" e \"Selecionar flutuação da elevação \" foram combinadas e renomeadas para \"Terreno preferido\", atualmente disponíveis para os perfis \"Bicicleta\" e \"Pedestre\".\n• Nova opção \"Incluir direção\" ao gravar um trilho\n• Widget de nome de rua: agora mostra o \"escudo\" da estrada e o número de saída durante a navegação\n• Novas rotas: \"fitness\" e \"corrida\"\n• Correções no CarPlay, gestos adicionados para ecrãs sensíveis ao toque\n• Corrigida a importação de ficheiros GPX do pacote OSF\n• Corrigida a importação de complementos personalizados com ficheiros incluídos\n• Corrigidas várias falhas no modo de planeamento de rota\n• Corrigidas falhas durante a navegação\n";

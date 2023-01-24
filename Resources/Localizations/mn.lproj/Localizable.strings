@@ -625,7 +625,7 @@
 "groups" = "Groups";
 "favorite" = "Favorite";
 "poi_overlay" = "POI Overlay";
-"poi_type" = "POI Type";
+"poi_dialog_poi_type" = "POI Type";
 "my_favorites" = "My Favorites";
 "my_places" = "My Places";
 "fav_no_group" = "No group";
@@ -697,7 +697,7 @@
 
 "import_export" = "Import/Export";
 
-"gpx_import_title" = "Import tracks";
+"import_tracks" = "Import tracks";
 "gpx_import_already_exists" = "The specified track file is already exists in the list. Please choose action.";
 "gpx_import_already_exists_short" = "The specified track file is already exists in the list.";
 "gpx_add_new" = "Add new file";
@@ -742,7 +742,7 @@
 "track_save_descr" = "Save current track as GPX file now.";
 "track_continue_rec" = "Continue recording";
 "track_continue_rec_q" = "Do you want to continue recording?";
-"rec_interval" = "Logging interval";
+"save_track_interval_globally" = "Logging interval";
 "rec_interval_minimum" = "Minimum";
 "track_start_rec" = "Start track recording";
 "track_rec_addon_q" = "Please activate Track recording addon to record and save your tracks";
@@ -776,7 +776,7 @@
 
 // Map settings
 "m_style_car" = "Driving";
-"m_style_pulic_transport" = "Public transport";
+"poi_filter_public_transport" = "Public transport";
 
 "map_settings_map" = "Map";
 "layer_amenity_label" = "Point Labels (POI, Favorites)";
@@ -1182,7 +1182,7 @@
 "route_betw_points_descr" = "Choose how to connect the points: with a straight line or by calculating a route using one of profiles listed below.";
 "next_seg_descr" = "The next segment will be recalculated using selected profile.";
 "whole_track_descr" = "The whole track will be recalculated using selected profile.";
-"next_seg" = "Next segment";
+"next_segment" = "Next segment";
 "whole_track" = "Whole track";
 "next_seg_dist" = "Next segment %@";
 "next_segs_dist" = "All subsequent segments %@";
@@ -1211,7 +1211,7 @@
 "gpx_already_exsists" = "File with this name already exists";
 "folder_already_exsists" = "Folder with this name already exists";
 "plan_route_split_before" = "Split before";
-"split_after" = "Split after";
+"plan_route_split_after" = "Split after";
 "follow_track" = "Follow track";
 "select_another_track" = "Select another track";
 "select_track_to_follow" = "Select track to follow";
@@ -1241,7 +1241,7 @@
 "osmand_live_last_live_update" = "Last update: %@";
 "osmand_live_not_updated" = "Not yet updated";
 "osmand_live_hourly" = "Hourly";
-"osmand_live_daily" = "Daily";
+"daily" = "Daily";
 "osmand_live_weekly" = "Weekly";
 "osmand_live_reports" = "Reports";
 "osmand_live_server_date" = "Last server update: %@";
@@ -1692,7 +1692,7 @@
 "help_purchases" = "OsmAnd purchases";
 "help_osmand_live" = "Subscription - OsmAnd Live";
 "help_travel" = "Travel (Wikipedia & Wikivoyage)";
-"help_mapillary" = "OsmAnd + Mapillary";
+"mapillary_item" = "OsmAnd + Mapillary";
 "help_legend" = "Map legend";
 "help_legend_descr" = "The guide to map's symbols";
 "help_other_header" = "Other";
@@ -1742,7 +1742,7 @@
 // World Regions
 "region_antarctica" = "Antarctica";
 "region_africa" = "Africa";
-"region_asia" = "Asia";
+"index_name_asia" = "Asia";
 "region_ausralia_and_oceania" = "Australia and Oceania";
 "region_central_america" = "Central America";
 "region_europe" = "Europe";
@@ -2304,7 +2304,7 @@
 "routing_attr_avoid_ferry_description" = "Avoids ferries";
 "rendering_attr_highway_class_track_grade2_name" = "Grade 2";
 "rendering_attr_shareTaxiRoutes_name" = "Share taxi routes";
-"rendering_attr_lightRailRoutes_name" = "Light rail routes";
+"rendering_attr_showLightRailRoutes_name" = "Light rail routes";
 "rendering_attr_monorailRoutes_name" = "Monorail routes";
 "rendering_attr_funicularRoutes_name" = "Funicular routes";
 "routing_attr_relief_smoothness_factor_hills_name" = "Hilly";

@@ -67,7 +67,7 @@
 "gpx_points" = "Punkt(ur/ar)";
 "shared_string_export" = "Flytjaút";
 "import_export" = "Inn-/útflutningur";
-"gpx_import_title" = "Flytja inn ferla";
+"import_tracks" = "Flytja inn ferla";
 "gpx_import_already_exists" = "Tiltekna ferlaskráin er þegar á listanum. Veldu einhverja aðgerð.";
 "gpx_add_new" = "Bæta við nýrri skrá";
 "gpx_overwrite" = "Skrifa yfir";
@@ -94,7 +94,7 @@
 "track_save" = "Vista núverandi feril";
 "track_continue_rec" = "Halda áfram skráningu";
 "track_continue_rec_q" = "Viltu halda skráningu áfram?";
-"rec_interval" = "Millibil skráninga";
+"save_track_interval_globally" = "Millibil skráninga";
 "rec_interval_minimum" = "Lágmark";
 "track_start_rec" = "Byrja skráningu ferils";
 "track_rec_addon_q" = "Virkjaðu viðbótina fyrir skráningu ferils til að skrá og vista ferlana þína";
@@ -257,7 +257,7 @@
 "col_magenta" = "Blárautt (magenta)";
 // World Regions
 "region_africa" = "Afríka";
-"region_asia" = "Asía";
+"index_name_asia" = "Asía";
 "region_ausralia_and_oceania" = "Ástralía og Eyjaálfa";
 "region_central_america" = "MIð-Ameríka";
 "region_europe" = "Evrópa";
@@ -791,7 +791,7 @@
 "osmand_live_last_live_update" = "Síðasta uppfærsla: %@";
 "osmand_live_not_updated" = "Ekki uppfært ennþá";
 "osmand_live_hourly" = "Á klukkustundar fresti";
-"osmand_live_daily" = "Daglega";
+"daily" = "Daglega";
 "osmand_live_weekly" = "Vikulega";
 "osmand_live_reports" = "Skýrslur";
 "osmand_live_server_date" = "Síðasta uppfærsla á þjóni: %@";
@@ -868,7 +868,7 @@
 "osmand_live_update_now" = "Uppfæra núna";
 // GPX colors
 "shared_string_upload" = "Senda inn";
-"poi_type" = "Tegund merkisstaðar";
+"poi_dialog_poi_type" = "Tegund merkisstaðar";
 // OSM Editing actions
 "opening_changeset" = "Opna breytingasett…";
 "closing_changeset" = "Loka breytingasetti…";
@@ -1628,7 +1628,7 @@
 "nav_type_straight_line" = "Bein lína";
 "board_at" = "Fara um borð við";
 "avoid_transport_type" = "Forðast tegundir samgangna";
-"m_style_pulic_transport" = "Almenningssamgöngur";
+"poi_filter_public_transport" = "Almenningssamgöngur";
 "public_transport_empty_warning_title" = "Því miður gat OsmAnd ekki fundið hentuga leið miðað við stillingarnar þínar.";
 "num_stops" = "stoppmerki";
 "help_legend_descr" = "Leiðarvísir um tákn á kortinu";
@@ -1641,7 +1641,7 @@
 "nav_type_osmand" = "OsmAnd (ónettengt leiðaval)";
 "nav_type_descr" = "Veldu hvernig eigi að reikna leiðir í þessu sniði";
 "calc_pedestrian_route" = "Reikna leið fyrir fótgangandi";
-"help_mapillary" = "OsmAnd + Mapillary";
+"mapillary_item" = "OsmAnd + Mapillary";
 "by_transport_type" = "Eftir %@";
 "show_terrain" = "Birta yfirborð";
 "public_transport_empty_warning_descr" = "Prófaðu að breyta stillingunum.";
@@ -1860,7 +1860,7 @@
 "next_seg_descr" = "Næsti bútur verður endurreiknaður með völdu sniði.";
 "plugin_popup_osm_editing_ask" = "Virkjaðu viðbótina fyrir breytingar á OpenStreetMap til að bæta við og sýsla með breytingar á kortum og minnispunktum";
 "osm_notes" = "OSM-minnispunktar";
-"next_seg" = "Næsti bútur";
+"next_segment" = "Næsti bútur";
 "prev_segs_recalc_descr" = "Allir fyrri bútar verða endurreiknaðir með völdu sniði";
 "next_segs_dist" = "Allir bútar í kjölfarið %@";
 "whole_track_descr" = "Allur ferillinn verður endurreiknaður með völdu sniði.";
@@ -1901,7 +1901,7 @@
 "select_another_track" = "Velja annan feril";
 "shared_string_gpx_track" = "Ferill";
 "follow_track" = "Fylgja ferli";
-"split_after" = "Skipta uppá eftir";
+"plan_route_split_after" = "Skipta uppá eftir";
 "plan_route_split_before" = "Skipta uppá undan";
 "gpx_already_exsists" = "Skrá með þessu heiti er þegar til staðar";
 "empty_filename" = "Skráarheiti má ekki vera tómt";
@@ -2329,7 +2329,7 @@
 "pressure_show" = "Birta loftþrýsting";
 "pressure_hide" = "Fela loftþrýsting";
 "weather_wind_unit_knots" = "Hnútar";
-"rendering_attr_lightRailRoutes_name" = "Leiðir léttlesta";
+"rendering_attr_showLightRailRoutes_name" = "Leiðir léttlesta";
 "verification_code_missing" = "Ég fékk ekki neinn sannvottunarkóða";
 "weather_temp_unit_c" = "Selsíus";
 "weather_temperature_fahrenheit" = "Fahrenheit";

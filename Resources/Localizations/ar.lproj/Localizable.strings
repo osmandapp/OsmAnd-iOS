@@ -338,7 +338,7 @@
 "gpx_points" = "نقاط";
 "shared_string_export" = "تصدير";
 "import_export" = "استيراد/تصدير";
-"gpx_import_title" = "استيراد مسارات";
+"import_tracks" = "استيراد مسارات";
 "gpx_import_already_exists" = "ملف المسار بهذا الاسم موجود مسبقا. الرجاء تحديد إجراء.";
 "gpx_add_new" = "تغيير الاسم";
 "gpx_overwrite" = "استبدال";
@@ -365,7 +365,7 @@
 "track_save" = "حفظ المسار الحالي";
 "track_continue_rec" = "متابعه التسجيل";
 "track_continue_rec_q" = "هل ترغب في متابعة التسجيل؟";
-"rec_interval" = "الفاصل الزمني للتسجيل";
+"save_track_interval_globally" = "الفاصل الزمني للتسجيل";
 "rec_interval_minimum" = "الحد الأدنى";
 "track_start_rec" = "بدء تسجيل المسار";
 "track_rec_addon_q" = "يرجى تفعيل سجل السفر الملحق والدخول لتسجيل وحفظ رحلتك";
@@ -528,7 +528,7 @@
 "col_magenta" = "أرجواني";
 // World Regions
 "region_africa" = "إفريقيا";
-"region_asia" = "آسيا";
+"index_name_asia" = "آسيا";
 "region_ausralia_and_oceania" = "أستراليا و أوقيانوسيا";
 "region_central_america" = "أمريكا الوسطى";
 "region_europe" = "أوروبا";
@@ -835,7 +835,7 @@
 "osmand_live_last_live_update" = "آخر تحديث: %@";
 "osmand_live_not_updated" = "لم يتم تحديثها بعد";
 "osmand_live_hourly" = "كل ساعة";
-"osmand_live_daily" = "كل يوم";
+"daily" = "كل يوم";
 "osmand_live_weekly" = "كل أسبوع";
 "osmand_live_reports" = "تقارير";
 "osmand_live_server_date" = "آخر تحديث للخادم:%@";
@@ -898,7 +898,7 @@
 "osmand_live_update_now" = "حدث الآن";
 // GPX colors
 "shared_string_upload" = "رفع";
-"poi_type" = "نوع POI";
+"poi_dialog_poi_type" = "نوع POI";
 // OSM Editing actions
 "opening_changeset" = "فتح التغييرات…";
 "closing_changeset" = "إغلاق التغييرات…";
@@ -1602,7 +1602,7 @@
 "public_transport_warning_title" = "يخضع التنقل في وسائل النقل العام حاليًا للاختبار التجريبي ، ويتوقع أن يكون فيه أخطاء .";
 "calc_pedestrian_route" = "احسب طريق المشاة";
 "public_transport_ped_route_title" = "المسار على الأقدام حوالي %@, وقد يكون أسرع من وسائل النقل العام.";
-"m_style_pulic_transport" = "وسائل النقل العام";
+"poi_filter_public_transport" = "وسائل النقل العام";
 "transfers" = "النقل:";
 "consider_limitations_param" = "النظر في القيود المؤقتة";
 "avoid_transport_type" = "تجنب أنواع النقل";
@@ -1616,7 +1616,7 @@
 "public_transport_empty_warning_title" = "لسوء الحظ، تعذر على أوسماند العثور على مسار للإعدادات الخاصة بك.";
 "res_slope" = "الانحدار";
 "help_legend_descr" = "دليل رموز الخريطة";
-"help_mapillary" = "أوسماند+ مابيلاري";
+"mapillary_item" = "أوسماند+ مابيلاري";
 "help_travel" = "السفر (ويكيبيديا وويكيفويا)";
 "help_osmand_live" = "اشتراك أوسماند لايف";
 "help_purchases" = "مشتريات أوسماند";
@@ -1867,7 +1867,7 @@
 "prev_seg_dist" = "الجزء السابق %@";
 "next_segs_dist" = "جميع الأجزاء اللاحقة %@";
 "next_seg_dist" = "الجزء التالي %@";
-"next_seg" = "المقطع التالي";
+"next_segment" = "المقطع التالي";
 "whole_track_descr" = "سيتم إعادة حساب المقطع التالي فقط باستخدام ملف التعريف المحدد.";
 "next_seg_descr" = "سيتم إعادة حساب المقطع التالي فقط باستخدام ملف التعريف المحدد.";
 "route_betw_points_descr" = "اختر كيفية توصيل النقاط: بخط مستقيم أو عن طريق حساب الطريق باستخدام أحد الملفات الشخصية المدرجة أدناه.";
@@ -1897,7 +1897,7 @@
 "start_of_the_track" = "بداية المسار";
 "point_to_navigate" = "تنقل إلى";
 "shared_string_gpx_track" = "مسار";
-"split_after" = "تقسيم بعد";
+"plan_route_split_after" = "تقسيم بعد";
 "plan_route_split_before" = "تقسيم قبل";
 "gpx_already_exsists" = "يوجد ملف بهذا الاسم";
 "empty_filename" = "لا يمكن أن يكون اسم الملف فارغ";
@@ -2333,7 +2333,7 @@
 "cloud_conflicts_descr" = "تعذر تحميل بعض الملفات إلى الخادم لأنه تم تخزين إصدار أحدث على الخادم.";
 "cloud_existing_account" = "لدي حساب بالفعل";
 "backup_error_user_is_not_registered" = "المستخدم مع هذا البريد الإلكتروني غير مسجل";
-"rendering_attr_lightRailRoutes_name" = "طرق السكك الحديدية الخفيفة";
+"rendering_attr_showLightRailRoutes_name" = "طرق السكك الحديدية الخفيفة";
 "routing_attr_only_permitted_streets_description" = "استخدم فقط الشوارع المسموحة بها علنا";
 "cloud_conflicts" = "المشاكل";
 "backup_error_token_is_not_valid_or_expired" = "رمز التحقق غير صالح أو منتهي الصلاحية";

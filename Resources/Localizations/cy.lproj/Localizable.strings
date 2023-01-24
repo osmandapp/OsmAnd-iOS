@@ -514,7 +514,7 @@
 "groups" = "Grwpiau";
 "favorite" = "Ffefryn";
 "poi_overlay" = "POI Overlay";
-"poi_type" = "Math o MODd";
+"poi_dialog_poi_type" = "Math o MODd";
 "my_favorites" = "My Favorites";
 "my_places" = "Fy Llefydd";
 "fav_no_group" = "No group";
@@ -582,7 +582,7 @@
 "gpx_selection_segment_title" = "Segments";
 "route_points" = "Pwyntiau\'r llwybr";
 "import_export" = "Import/Export";
-"gpx_import_title" = "Mewnforio traciau";
+"import_tracks" = "Mewnforio traciau";
 "gpx_import_already_exists" = "The specified track file is already exists in the list. Please choose action.";
 "gpx_add_new" = "Add new file";
 "gpx_overwrite" = "Overwrite";
@@ -622,7 +622,7 @@
 "track_save_descr" = "Cadw\'r trac cyfredol fel ffeil GPX nawr.";
 "track_continue_rec" = "Continue recording";
 "track_continue_rec_q" = "Do you want to continue recording?";
-"rec_interval" = "Cyfnod logio";
+"save_track_interval_globally" = "Cyfnod logio";
 "rec_interval_minimum" = "Minimum";
 "track_start_rec" = "Start track recording";
 "track_rec_addon_q" = "Please activate Track recording addon to record and save your tracks";
@@ -651,7 +651,7 @@
 
 // Map settings
 "m_style_car" = "Gyrru";
-"m_style_pulic_transport" = "Trafnidiaeth gyhoeddus";
+"poi_filter_public_transport" = "Trafnidiaeth gyhoeddus";
 "map_settings_map" = "Map";
 "layer_amenity_label" = "Point Labels (POI, Favorites)";
 "map_settings_show" = "Dangos ar y map";
@@ -1007,7 +1007,7 @@
 "route_betw_points_descr" = "Choose how to connect the points: with a straight line or by calculating a route using one of profiles listed below.";
 "next_seg_descr" = "The next segment will be recalculated using selected profile.";
 "whole_track_descr" = "The whole track will be recalculated using selected profile.";
-"next_seg" = "Y segment nesaf";
+"next_segment" = "Y segment nesaf";
 "whole_track" = "Trac cyfan";
 "next_seg_dist" = "Next segment %@";
 "next_segs_dist" = "All subsequent segments %@";
@@ -1036,7 +1036,7 @@
 "gpx_already_exsists" = "File with this name already exists";
 "folder_already_exsists" = "Folder with this name already exists";
 "plan_route_split_before" = "Hollti cyn";
-"split_after" = "Hollti arôl";
+"plan_route_split_after" = "Hollti arôl";
 "follow_track" = "Dilyn trac";
 "shared_string_gpx_track" = "Trac";
 "select_another_track" = "Dewis drac arall";
@@ -1067,7 +1067,7 @@
 "osmand_live_last_live_update" = "Last update: %@";
 "osmand_live_not_updated" = "Not yet updated";
 "osmand_live_hourly" = "Pob awr";
-"osmand_live_daily" = "Dyddiol";
+"daily" = "Dyddiol";
 "osmand_live_weekly" = "Wythnosol";
 "osmand_live_reports" = "Reports";
 "osmand_live_server_date" = "Last server update: %@";
@@ -1465,7 +1465,7 @@
 "help_purchases" = "Prynu nwyddau OsmAnd";
 "help_osmand_live" = "Tanysgrifiad - OsmAnd Live";
 "help_travel" = "Travel (Wikipedia & Wikivoyage)";
-"help_mapillary" = "OsmAnd + Mapillary";
+"mapillary_item" = "OsmAnd + Mapillary";
 "help_legend" = "Allwedd y map";
 "help_legend_descr" = "The guide to map's symbols";
 "help_other_header" = "Eraill";
@@ -1515,7 +1515,7 @@
 // World Regions
 "region_antarctica" = "Antarctig";
 "region_africa" = "Affrica";
-"region_asia" = "Asia";
+"index_name_asia" = "Asia";
 "region_ausralia_and_oceania" = "Awstralia ac ynysoedd y Cefnfor Tawel";
 "region_central_america" = "Canolbarth America";
 "region_europe" = "Ewrop";
@@ -2341,7 +2341,7 @@
 "shared_string_learn_more" = "Dysgu rhagor";
 "units_cubic_m" = "m³";
 "shared_string_capacity" = "Capasiti";
-"rendering_attr_lightRailRoutes_name" = "Llwybrau trenau ysgafn";
+"rendering_attr_showLightRailRoutes_name" = "Llwybrau trenau ysgafn";
 "terrain_maps" = "Mapiau tirwedd";
 "osm_live_banner_desc" = "Cael lawrlwythiadau mapiau diderfyn, gan ychwanegu diweddariadau wythnosol, dyddiol neu hyd yn oed bob awr.";
 "toast_empty_name_error" = "Lleoliad heb enw";

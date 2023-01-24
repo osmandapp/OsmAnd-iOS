@@ -81,7 +81,7 @@
 "gpx_points" = "";
 "shared_string_export" = "导出";
 "import_export" = "导入／导出";
-"gpx_import_title" = "导入轨迹";
+"import_tracks" = "导入轨迹";
 "gpx_import_already_exists" = "";
 "gpx_add_new" = "添加新文件";
 "gpx_overwrite" = "覆盖";
@@ -108,7 +108,7 @@
 "track_save" = "保存当前轨迹";
 "track_continue_rec" = "";
 "track_continue_rec_q" = "";
-"rec_interval" = "记录间隔";
+"save_track_interval_globally" = "记录间隔";
 "rec_interval_minimum" = "";
 "track_start_rec" = "";
 "track_rec_addon_q" = "";
@@ -271,7 +271,7 @@
 "col_magenta" = "品红色";
 // World Regions
 "region_africa" = "非洲";
-"region_asia" = "亚洲";
+"index_name_asia" = "亚洲";
 "region_ausralia_and_oceania" = "大洋洲";
 "region_central_america" = "中美洲";
 "region_europe" = "欧洲";
@@ -769,13 +769,13 @@
 "osmand_live_updates" = "实时更新";
 "osmand_live_available_maps" = "可用地图";
 "osmand_live_hourly" = "每小时";
-"osmand_live_daily" = "每日";
+"daily" = "每日";
 "osmand_live_weekly" = "每周";
 "osmand_live_donation_header" = "捐赠设置";
 "osmand_live_donations" = "捐赠";
 "osmand_live_donation_switch_title" = "向 OpenStreetMap 社区捐赠";
 "osmand_live_support_reg_title" = "支持地区";
-"poi_type" = "POI类型";
+"poi_dialog_poi_type" = "POI类型";
 "mapillary" = "Mapillary";
 "shared_string_retry" = "重试";
 "day_short" = "天";
@@ -1223,7 +1223,7 @@
 "profile_type_base_string" = "基本配置文件";
 "shared_string_continue" = "继续";
 "hide_contour_lines" = "隐藏轮廓线";
-"m_style_pulic_transport" = "公共交通";
+"poi_filter_public_transport" = "公共交通";
 "whole_track" = "整个轨迹";
 "res_zoom_levels" = "缩放等级";
 "arrived_at_destination" = "你已到达。";
@@ -1243,7 +1243,7 @@
 "coordinates_example" = "示例";
 "res_online_source_cache_alert" = "应用这些更改将清除此图块源的缓存数据";
 "shared_string_copy" = "复制";
-"next_seg" = "下一段";
+"next_segment" = "下一段";
 "reset_to_default" = "重置为默认值";
 "num_stops" = "站点";
 "appearance_on_map" = "在地图上的外观";
@@ -1397,7 +1397,7 @@
 "octagon" = "八边形";
 "fav_point_dublicate" = "指定的收藏名称重复";
 "special" = "特殊";
-"split_after" = "拆分后";
+"plan_route_split_after" = "拆分后";
 "sett_ext_input" = "外部输入设备";
 "shared_string_account" = "帐户";
 "custom_osmand_plugin_name" = "自定义 OsmAnd 插件";
@@ -1417,7 +1417,7 @@
 "sport" = "运动";
 "select_group" = "选择组";
 "create_profile_descr" = "基于你的自定义配置文件的默认应用程序配置文件之一，这定义了基本的设置，如部件的默认可见性和速度和距离的单位。这些是默认的应用程序配置文件，以及它们可以扩展到的自定义配置文件的例子：";
-"help_mapillary" = "OsmAnd + Mapillary";
+"mapillary_item" = "OsmAnd + Mapillary";
 "plan_route_change_folder" = "更改文件夹";
 "icon" = "图标";
 "favorite_friends_category" = "朋友";
@@ -1708,7 +1708,7 @@
 "cloud_welcome_back" = "欢迎回来！";
 "add_description" = "添加描述";
 "cloud_conflicts" = "冲突";
-"rendering_attr_lightRailRoutes_name" = "轻轨线路";
+"rendering_attr_showLightRailRoutes_name" = "轻轨线路";
 "verify_email_address_descr" = "验证码已发送至 %@。请在下方字段输入它。";
 "navigate_point_format_MGRS" = "MGRS";
 "segnet_num" = "路段 %d";

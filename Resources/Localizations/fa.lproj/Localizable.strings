@@ -303,7 +303,7 @@
 "gpx_points" = "Point(s)";
 "shared_string_export" = "برون‌برد";
 "import_export" = "Import/Export";
-"gpx_import_title" = "واردکردن ردها";
+"import_tracks" = "واردکردن ردها";
 "gpx_import_already_exists" = "The specified trip file is already exists in the list. Please choose action.";
 "gpx_add_new" = "Add new file";
 "gpx_overwrite" = "Overwrite";
@@ -330,7 +330,7 @@
 "track_save" = "ذخیرهٔ رد جاری";
 "track_continue_rec" = "Continue recording";
 "track_continue_rec_q" = "Do you want to continue recording?";
-"rec_interval" = "تناوب ردنگاری";
+"save_track_interval_globally" = "تناوب ردنگاری";
 "rec_interval_minimum" = "Minimum";
 "track_start_rec" = "Start track recording";
 "track_rec_addon_q" = "Please activate Trip recording addon to record and save your tracks";
@@ -493,7 +493,7 @@
 "col_magenta" = "ارغوانی";
 // World Regions
 "region_africa" = "آفریقا";
-"region_asia" = "آسیا";
+"index_name_asia" = "آسیا";
 "region_ausralia_and_oceania" = "استرالیا و اقیانوسیه";
 "region_central_america" = "آمریکای مرکزی";
 "region_europe" = "اروپا";
@@ -827,7 +827,7 @@
 "osm_edit_without_name" = "بدون نام";
 "help_tech_articles" = "مقاله‌های فنی";
 "open_osm_note" = "ایجاد یادداشت OSM";
-"poi_type" = "نوع POI";
+"poi_dialog_poi_type" = "نوع POI";
 "my_places" = "مکان‌های من";
 "osm_editing_lost_changes_title" = "بدون ذخیره‌کردن خارج می‌شوید؟";
 "help_map_viewing" = "مرور نقشه";
@@ -948,7 +948,7 @@
 "osm_note_upload_anonymously" = "بارگذاری به‌صورت ناشناس";
 "map_settings_map_magnifier" = "ذره‌بین نقشه";
 "map_overlays" = "لایه‌های رویی نقشه";
-"osmand_live_daily" = "روزانه";
+"daily" = "روزانه";
 "add_parking_place" = "افزودن جای پارک";
 "key_hint_deselect" = "پاک‌کردن انتخاب‌ها";
 "osmand_live_donations" = "کمک‌های مالی";
@@ -1332,7 +1332,7 @@
 "select_icon" = "انتخاب نماد";
 "edit_profile_list" = "ویرایش لیست نمایه";
 "position_icon_while_moving" = "نماد موقعیت هنگام حرکت";
-"m_style_pulic_transport" = "حمل‌ونقل عمومی";
+"poi_filter_public_transport" = "حمل‌ونقل عمومی";
 "shared_string_account" = "حساب";
 "personal_category_name" = "شخصی";
 "shared_string_continue" = "ادامه";
@@ -1367,7 +1367,7 @@
 "osm_note_close" = "بستن یادداشت OSM";
 "shared_string_password" = "گذرواژه";
 "help_purchases" = "خریدهای OsmAnd";
-"help_mapillary" = "OsmAnd + Mapillary";
+"mapillary_item" = "OsmAnd + Mapillary";
 "num_stops" = "ایستگاه";
 "replace_all_desc" = "موارد موجود در پرونده، جانشین موارد کنونی می‌شود";
 "update_tile" = "روزآمدسازی نقشه";
@@ -1376,7 +1376,7 @@
 "map_settings_add_online_source" = "افزودن منبع آنلاین";
 "shared_string_poi_types" = "گونه‌های POI";
 "avoid_road" = "پرهیز از این راه";
-"next_seg" = "پارهٔ بعدی";
+"next_segment" = "پارهٔ بعدی";
 "special_routing" = "مسیریابی ویژه";
 "app_profiles" = "نمایه‌های برنامه";
 "total" = "کل";
@@ -1477,7 +1477,7 @@
 "rearrange_categories" = "مرتب‌سازی دسته‌ها";
 "octagon" = "هشت‌ضلعی";
 "square" = "مربع";
-"split_after" = "تقطیع از این جا به بعد";
+"plan_route_split_after" = "تقطیع از این جا به بعد";
 "start_of_the_track" = "ابتدای رد";
 "track_save_descr" = "رد جاری را همین حالا در قالب پروندهٔ GPX ذخیره کن.";
 "shared_string_enable" = "فعال";

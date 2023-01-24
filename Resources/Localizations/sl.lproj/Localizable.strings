@@ -53,7 +53,7 @@
 "gpx_points" = "Točke";
 "shared_string_export" = "Izvozi";
 "import_export" = "Uvoz/Izvoz";
-"gpx_import_title" = "Uvozi sledi";
+"import_tracks" = "Uvozi sledi";
 "gpx_add_new" = "Dodaj novo datoteko";
 "gpx_overwrite" = "Prepiši";
 "gpx_no_tracks" = "Ni shranjenih poti potovanj";
@@ -71,7 +71,7 @@
 "gpx_start" = "Začni";
 "gpx_avg_elev" = "Povprečna višina";
 "track_continue_rec_q" = "Ali želite nadaljevati z beleženjem sledi?";
-"rec_interval" = "Interval beleženja";
+"save_track_interval_globally" = "Interval beleženja";
 "rec_interval_minimum" = "Najmanj";
 "show_info" = "Pokaži podrobnosti";
 // Map settings
@@ -268,7 +268,7 @@
 "col_magenta" = "Temno rdeča";
 // World Regions
 "region_africa" = "Afrika";
-"region_asia" = "Azija";
+"index_name_asia" = "Azija";
 "region_ausralia_and_oceania" = "Avstralija in Oceanija";
 "region_central_america" = "Srednja Amerika";
 "region_europe" = "Evropa";
@@ -667,7 +667,7 @@
 "osmand_live_updates" = "Sprotne posodobitve";
 "osmand_live_available_maps" = "Razpoložljivi zemljevidi";
 "osmand_live_hourly" = "Vsako uro";
-"osmand_live_daily" = "Dnevno";
+"daily" = "Dnevno";
 "osmand_live_weekly" = "Tedensko";
 "osmand_live_reports" = "Poročila";
 "osmand_live_upd_frequency" = "Pogostost posodabljanja";
@@ -882,7 +882,7 @@
 "coordinates_example" = "Primer";
 "poi_remove_success" = "Izbrisano";
 "mapillary" = "Mapillary";
-"poi_type" = "Vrsta točke POI";
+"poi_dialog_poi_type" = "Vrsta točke POI";
 "map_settings_map_magnifier" = "Velikost zemljevida";
 "map_downloaded" = "Zemljevid je prejet";
 "add_poi" = "Dodaj točko POI";
@@ -1278,7 +1278,7 @@
 "position_icon_while_moving" = "Ikona položaja med premikanjem";
 "nav_type_geocoding" = "Geokodiranje";
 "units_t" = "t";
-"m_style_pulic_transport" = "Javni potniški promet";
+"poi_filter_public_transport" = "Javni potniški promet";
 "enter_profile_name" = "Ime profila";
 "profile_type_custom_string" = "Profil po meri";
 "quick_action_map_source_title" = "Viri zemljevida";
@@ -1311,7 +1311,7 @@
 "plan_route_change_folder" = "Spremeni mapo";
 "default_color" = "Privzeta barva";
 "join_segments" = "Združi odseke";
-"split_after" = "Razdeli po";
+"plan_route_split_after" = "Razdeli po";
 "group_name" = "Ime skupine";
 "osmand_settings" = "Nastavitve OsmAnd";
 "fav_point_dublicate" = "Navedeno podvojeno ime priljubljene točke";
@@ -1661,7 +1661,7 @@
 "recalculate_route_distance_promo" = "Pot bo ponovno izračunana, če je razdalja od poti do trenutne lokacije večja od izbrane vrednosti.";
 "purchases_feature_desc_wikipedia" = "Razišči Wikipedijo brez povezave. Članki, razdeljeni po državah in regijah, na voljo v vseh jezikih.";
 "copy_coordinates" = "Kopiraj koordinate";
-"rendering_attr_lightRailRoutes_name" = "Proge lahkihželeznic";
+"rendering_attr_showLightRailRoutes_name" = "Proge lahkihželeznic";
 "industrial" = "Industrijski";
 "purchases_feature_desc_pro_widgets" = "Pridobi dostop do naprednih funkcij OsmAnd Pro: barvanje poti in drugo.";
 "routing_attr_allow_private_for_truck_description" = "Dovoli dostop do zasebnih površin za tovornjake.";
@@ -1707,7 +1707,7 @@
 "save_new_track" = "Shrani kot novo sled";
 "cloud_backup_now" = "Varnostno kopiraj zdaj";
 "cloud_existing_account" = "Že imam račun";
-"help_mapillary" = "OsmAnd + Mapillary";
+"mapillary_item" = "OsmAnd + Mapillary";
 "simulation_preview_mode_desc" = "Hitrost simulacije bo največja na ravnih odsekih in se bo upočasnila le na križiščih.";
 "complete_purchase" = "Dokončaj nakup";
 "res_source_sqlite" = "Datoteka SQLiteDB";
@@ -1780,7 +1780,7 @@
 "purchases_feature_desc_unlimited_map_download" = "Pridobi neomejenoštevilo prenosov za vse celine in regije zemljevidov brez povezave.";
 "copy_to_map_favorites" = "Kopiraj med priljubljene";
 "importing_from" = "Uvažanje podatkov iz %@";
-"next_seg" = "Naslednji segment";
+"next_segment" = "Naslednji segment";
 "shape" = "Oblika";
 "restore_from_osmand_cloud" = "Obnovi iz OsmAnd Cloud";
 "shared_string_delete_all" = "Izbriši vse";

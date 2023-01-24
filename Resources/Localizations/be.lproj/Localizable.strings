@@ -28,7 +28,7 @@
 "gpx_waypoints" = "Пункты шляху";
 "shared_string_export" = "Экспартаваць";
 "gpx_stat" = "Статыстыка";
-"rec_interval" = "Інтэрвал запісу";
+"save_track_interval_globally" = "Інтэрвал запісу";
 // Map settings
 "rendering_value_browse_map_name" = "Прагляд мапы";
 "m_style_car" = "Кіраванне";
@@ -95,7 +95,7 @@
 "tracks" = "Сляды";
 "gpx_points" = "Пункты";
 "import_export" = "Імпарт/Экспарт";
-"gpx_import_title" = "Імпарт слядоў";
+"import_tracks" = "Імпарт слядоў";
 "gpx_add_new" = "Дадаць новы файл";
 "gpx_overwrite" = "Перазапісаць";
 "gpx_cannot_import" = "Немагчыма імпартаваць файл GPX";
@@ -137,7 +137,7 @@
 "col_magenta" = "Пурпуровы";
 // World Regions
 "region_africa" = "Афрыка";
-"region_asia" = "Азія";
+"index_name_asia" = "Азія";
 "region_ausralia_and_oceania" = "Аўстралія і Акіянія";
 "region_central_america" = "Цэнтральная Амерыка";
 "region_europe" = "Еўропа";
@@ -896,7 +896,7 @@
 "menu_help" = "Дапамога";
 "quick_action_pause_nav_descr" = "Націсніце гэтую кнопку, каб прыпыніць ці аднавіць навігацыю.";
 "help_versions" = "Версіі";
-"osmand_live_daily" = "Штодзённа";
+"daily" = "Штодзённа";
 "modify_edit_short" = "Рэдагаваць POI";
 "edit_action" = "Рэдагаваць дзеянне";
 "coordinates_example" = "Прыклад";
@@ -913,7 +913,7 @@
 "osmand_live_updates" = "Аўтаматычныя абнаўленні";
 "actions" = "Дзеянні";
 "create_poi_short" = "Стварыць POI";
-"poi_type" = "Тып POI";
+"poi_dialog_poi_type" = "Тып POI";
 "osmand_live_donation_switch_title" = "Ахвяраванне супольнасці OpenStreetMap";
 "hide_contour_lines" = "Схаваць контурныя лініі";
 "product_desc_wikivoyage" = "Бясплатны сусветны турыстычны даведнік, які можа рэдагаваць кожны.";
@@ -1407,7 +1407,7 @@
 "map_settings_slopes_description" = "На мапах схілаў для візуалізацыі маштабу выкарыстоўваюцца розныя колеры";
 "map_settings_layer_transparency" = "Празрыстасць пласта";
 "map_settings_install_more" = "Усталяваць яшчэ…";
-"m_style_pulic_transport" = "Грамадскі транспарт";
+"poi_filter_public_transport" = "Грамадскі транспарт";
 "track_during_nav_descr" = "Уключыце, каб аўтаматычна запісваць след падчас навігацыі";
 "track_save_descr" = "Захаваць дзейны след зараз жа як GPX-файл.";
 "gpx_analyze" = "Аналізаваць";
@@ -1739,7 +1739,7 @@
 "trip_name" = "Назва следу";
 "help_contact_us" = "Звязацца з намі";
 "help_legend_descr" = "Даведка па знаках мапы";
-"help_mapillary" = "OsmAndі Mapillary";
+"mapillary_item" = "OsmAndі Mapillary";
 "help_travel" = "Падарожжы (Wikipedia і Wikivoyage)";
 "help_osmand_live" = "Падпіска - OsmAnd Live";
 "help_purchases" = "Куплі OsmAnd";
@@ -1789,7 +1789,7 @@
 "shared_string_poi_types" = "Тыпы POI";
 "ltr_or_rtl_combine_via_space" = "%@ %@";
 "personal_category_name" = "Асабісты";
-"next_seg" = "Наступны сегмент";
+"next_segment" = "Наступны сегмент";
 "save_new_track" = "Захаваць як новы след";
 "reverse_route" = "Зваротны маршрут";
 "shared_string_max" = "Макс.";
@@ -1844,7 +1844,7 @@
 "import_duplicates_description" = "У OsmAnd ужо ёсць элементы з тымі самымі назвамі, што і імпартаваныя.\n\nАбярыце дзеянне.";
 "hide_compass_ruler" = "Схаваць лінейку компаса";
 "street_level_imagery" = "Выявы на ўзроўні вуліц";
-"split_after" = "Падзяліць пасля";
+"plan_route_split_after" = "Падзяліць пасля";
 "plan_route_last_modified" = "Апошняя змена";
 "emergency" = "Экстранныя службы";
 "address_search" = "Пошук па адрасе";
@@ -2206,7 +2206,7 @@
 "units_cubic_m" = "м³";
 "shared_string_purchased" = "Набыта";
 "purchases_feature_desc_hourly_map_updates" = "Атрымайце доступ да больш частых абнаўленняў мапаў. Штогадзінныя, штодзённыя або штотыднёвыя абнаўленні. Абнаўленні спампоўваюцца паступова, толькі для змененых абласцей.";
-"rendering_attr_lightRailRoutes_name" = "Маршруты гарадскога рэйкавага транспарту";
+"rendering_attr_showLightRailRoutes_name" = "Маршруты гарадскога рэйкавага транспарту";
 "monthly_subscription" = "Штомесячная падпіска";
 "copy_to_map_favorites" = "Скапіяваць ва ўлюбёныя";
 "segnet_num" = "Сегмент %d";

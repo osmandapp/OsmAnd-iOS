@@ -388,7 +388,7 @@
 "favorite" = "Favoritt";
 "amenity" = "Fasilitet";
 "poi_overlay" = "POI Overlay";
-"poi_type" = "Interessepunkttype";
+"poi_dialog_poi_type" = "Interessepunkttype";
 "my_favorites" = "My Favorites";
 "my_places" = "Mine steder";
 "fav_no_group" = "No group";
@@ -425,7 +425,7 @@
 "gpx_points" = "Point(s)";
 "shared_string_export" = "Eksporter";
 "import_export" = "Import/eksport";
-"gpx_import_title" = "Importer spor";
+"import_tracks" = "Importer spor";
 "gpx_import_already_exists" = "The specified trip file is already exists in the list. Please choose action.";
 "gpx_add_new" = "Add new file";
 "gpx_overwrite" = "Overwrite";
@@ -454,7 +454,7 @@
 "track_save_descr" = "Lagre nåværende spor som GPX-fil nå.";
 "track_continue_rec" = "Continue recording";
 "track_continue_rec_q" = "Do you want to continue recording?";
-"rec_interval" = "Loggeintervall";
+"save_track_interval_globally" = "Loggeintervall";
 "rec_interval_minimum" = "Minimum";
 "track_start_rec" = "Start trip recording";
 "track_rec_addon_q" = "Please activate Trip recording addon to record and save your trips";
@@ -554,7 +554,7 @@
 "osmand_live_last_live_update" = "Siste oppdatering: %@";
 "osmand_live_not_updated" = "Not yet updated";
 "osmand_live_hourly" = "Hver time";
-"osmand_live_daily" = "Daglig";
+"daily" = "Daglig";
 "osmand_live_weekly" = "Ukentlig";
 "osmand_live_reports" = "Reports";
 "osmand_live_server_date" = "Last server update: %@";
@@ -897,7 +897,7 @@
 // GPX colors
 // World Regions
 "region_africa" = "Afrika";
-"region_asia" = "Asia";
+"index_name_asia" = "Asia";
 "region_ausralia_and_oceania" = "Australia og Oseania";
 "region_central_america" = "Mellom-Amerika";
 "region_europe" = "Europa";
@@ -1557,7 +1557,7 @@
 "map_settings_show_slider_map" = "Vis glidebryter på kartet";
 "map_settings_install_more" = "Installer mer…";
 "map_settings_install_maps" = "Velg kart å installere eller oppdatere";
-"m_style_pulic_transport" = "Offentlig transport";
+"poi_filter_public_transport" = "Offentlig transport";
 "stats_select_graph_data" = "Velg diagramdata";
 "displayed_route_save" = "Lagre i OsmAnd-turer";
 "gpx_analyze" = "Analyser";
@@ -1636,7 +1636,7 @@
 "shared_string_account" = "Konto";
 "add_to_track" = "Legg til i et spor";
 "quick_action_mapillary_hide" = "Skjul Mapillary";
-"help_mapillary" = "OsmAnd + Mapillary";
+"mapillary_item" = "OsmAnd + Mapillary";
 "plugin_settings_reset" = "Tilbakestill programtilleggsinnstillinger til forvalg";
 "save_changes" = "Lagre endringer";
 "res_online_source_cache_alert" = "Å utføre disse endringene vil tømme hurtiglagret data for denne fliskilden.";
@@ -1702,7 +1702,7 @@
 "vessel_width_limit_description" = "Sett skipsbredde forå unngå smale broer";
 "walk" = "Gå";
 "shared_string_settings" = "Innstillinger";
-"next_seg" = "Neste segment";
+"next_segment" = "Neste segment";
 "avoid_road" = "Unngå vei";
 "public_transport_show" = "Vis offentlig transport";
 "vehicle_parameters" = "Kjøretøyparameter";
@@ -1752,7 +1752,7 @@
 "shared_string_gpx_track" = "Spor";
 "follow_track" = "Følg spor";
 "plan_route_split_before" = "Del før";
-"split_after" = "Del etter";
+"plan_route_split_after" = "Del etter";
 "gpx_already_exsists" = "Fil med dette navnet finnes allerede";
 "empty_filename" = "Filnavn kan ikke være tomt";
 "none_point_error" = "Legg til minst et punkt.";
@@ -2223,7 +2223,7 @@
 "simulation_constant_mode_title" = "Fastsatt hastighet";
 "monthly_subscription" = "Månedlig abonnement";
 "copy_address" = "Kopier adresse";
-"rendering_attr_lightRailRoutes_name" = "Lettbanelinjer";
+"rendering_attr_showLightRailRoutes_name" = "Lettbanelinjer";
 "purchases_feature_desc_wikivoyage" = "Utforsk Wikivoyage frakoblet. Artikler inndelt etter land og regioner og tilgjengelig på alle språk.";
 "purchases_feature_desc_terrain" = "Terrengkoter, full relieffskyggekart med mørke skygger og helningskart med farger for å vise topper og lavland.";
 "speed_mode" = "Hastighetsmodus";

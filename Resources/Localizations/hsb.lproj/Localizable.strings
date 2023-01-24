@@ -388,7 +388,7 @@
 "favorite" = "Faworit";
 "amenity" = "Amenity";
 "poi_overlay" = "POI Overlay";
-"poi_type" = "POI Type";
+"poi_dialog_poi_type" = "POI Type";
 "my_favorites" = "My Favorites";
 "my_places" = "Moje městna";
 "fav_no_group" = "No group";
@@ -425,7 +425,7 @@
 "gpx_points" = "Point(s)";
 "shared_string_export" = "Eksport";
 "import_export" = "Import/Export";
-"gpx_import_title" = "Import trip";
+"import_tracks" = "Import trip";
 "gpx_import_already_exists" = "The specified trip file is already exists in the list. Please choose action.";
 "gpx_add_new" = "Add new file";
 "gpx_overwrite" = "Overwrite";
@@ -454,7 +454,7 @@
 "track_save_descr" = "Tuchwilnučaru nětko jako GPX-dataju składować.";
 "track_continue_rec" = "Continue recording";
 "track_continue_rec_q" = "Do you want to continue recording?";
-"rec_interval" = "Interwal nahrawanja";
+"save_track_interval_globally" = "Interwal nahrawanja";
 "rec_interval_minimum" = "Minimum";
 "track_start_rec" = "Start trip recording";
 "track_rec_addon_q" = "Please activate Trip recording addon to record and save your trips";
@@ -557,7 +557,7 @@
 "osmand_live_last_live_update" = "Poslednje aktualizowanje: %@";
 "osmand_live_not_updated" = "Not yet updated";
 "osmand_live_hourly" = "Hourly";
-"osmand_live_daily" = "Daily";
+"daily" = "Daily";
 "osmand_live_weekly" = "tydźensce";
 "osmand_live_reports" = "Reports";
 "osmand_live_server_date" = "Last server update: %@";
@@ -901,7 +901,7 @@
 // GPX colors
 // World Regions
 "region_africa" = "Afrika";
-"region_asia" = "Azija";
+"index_name_asia" = "Azija";
 "region_ausralia_and_oceania" = "Awstralija a Oceanija";
 "region_central_america" = "Srjedźna Amerika";
 "region_europe" = "Europa";
@@ -1356,7 +1356,7 @@
 "active_markers" = "Aktiwne chorhojčki";
 "avoid_road" = "Dróhu wobeńć";
 "num_stops" = "zastanišća";
-"m_style_pulic_transport" = "Zjawny transport";
+"poi_filter_public_transport" = "Zjawny transport";
 "profile_alert_delete_title" = "Profil wotstronić";
 "profile_type_base_string" = "zakładny profil";
 "select_icon" = "Wubjer symbol";

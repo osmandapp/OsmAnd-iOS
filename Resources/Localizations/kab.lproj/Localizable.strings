@@ -1,6 +1,6 @@
 "OsmAnd Maps" = "OsmAnd Maps";
 "shared_string_never" = "Werǧin";
-"region_asia" = "Asya";
+"index_name_asia" = "Asya";
 "rendering_attr_surface_wood_name" = "Amadeɣ";
 "rendering_value_thick_name" = "Zzur";
 "shared_string_delete" = "Ekkes";
@@ -202,7 +202,7 @@
 "shared_string_cancel" = "Sefsex";
 "res_roads" = "Iberdan";
 "try_again" = "Ɛreḍ tikkelt nniḍen";
-"poi_type" = "Anaw";
+"poi_dialog_poi_type" = "Anaw";
 "rendering_attr_currentTrackWidth_description" = "Tehri";
 "routeInfo_road_types_name" = "Tiwsiyin";
 "routeInfo_roadClass_name" = "Anaw";
@@ -330,7 +330,7 @@
 "city_type_village" = "Taddart";
 "add_poi" = "Rnu";
 "shared_string_collapse" = "Ḍfes";
-"osmand_live_daily" = "Yal ass";
+"daily" = "Yal ass";
 "shared_string_time" = "Akud";
 "quick_action_tags" = "Tibzimin";
 "help_about" = "Γef";
@@ -504,7 +504,7 @@
 "save_changes" = "Sekles asnifel";
 "shared_string_settings" = "Iɣewwaṛen";
 "profile_type_osmand_string" = "Amaɣnu OsmAnd";
-"next_seg" = "Aḥric i d-itteddun";
+"next_segment" = "Aḥric i d-itteddun";
 "shared_string_continue" = "Kemmel";
 "map_look_descr" = "Arwes";
 "shared_string_importing" = "Akter";

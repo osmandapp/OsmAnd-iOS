@@ -59,7 +59,7 @@
 "gpx_points" = "Ponto(s)";
 "shared_string_export" = "Exportar";
 "import_export" = "Importar/exportar";
-"gpx_import_title" = "Importar trilhas";
+"import_tracks" = "Importar trilhas";
 "gpx_import_already_exists" = "O trilho especificado já existe na lista. Por favor, escolha a ação.";
 "gpx_add_new" = "Adicionar novo ficheiro";
 "gpx_overwrite" = "Substituir";
@@ -85,7 +85,7 @@
 "track_save" = "Salvar a trilha atual";
 "track_continue_rec" = "Continuar a gravar";
 "track_continue_rec_q" = "Quer continuar a gravar?";
-"rec_interval" = "Intervalo de registro";
+"save_track_interval_globally" = "Intervalo de registro";
 "rec_interval_minimum" = "Mínimo";
 "track_start_rec" = "Iniciar gravação do percurso";
 "track_rec_addon_q" = "Por favor, ative o complemento \"Gravar viagem\" para gravar e guardar os seus percursos";
@@ -237,7 +237,7 @@
 "col_magenta" = "Magenta";
 // World Regions
 "region_africa" = "África";
-"region_asia" = "Ásia";
+"index_name_asia" = "Ásia";
 "region_ausralia_and_oceania" = "Austrália e Oceania";
 "region_central_america" = "América Central";
 "region_europe" = "Europa";
@@ -542,7 +542,7 @@
 "shared_string_later" = "Depois";
 "shared_string_all" = "Todos";
 "download_map" = "Baixar mapa";
-"poi_type" = "Tipo de POI";
+"poi_dialog_poi_type" = "Tipo de POI";
 "gpx_waypoint" = "Ponto de trajeto";
 "gpx_route" = "Rota";
 "track_save_descr" = "Salvar a trilha atual como arquivo GPX agora.";
@@ -552,7 +552,7 @@
 "osmand_live_updates" = "Atualizações ao vivo";
 "osmand_live_available_maps" = "Mapas disponíveis";
 "osmand_live_hourly" = "A cada hora";
-"osmand_live_daily" = "Diariamente";
+"daily" = "Diariamente";
 "osmand_live_weekly" = "Semanalmente";
 "osmand_live_donations" = "Doações";
 "osmand_live_support_reg_title" = "Região de suporte";
@@ -1607,7 +1607,7 @@
 "add_to_track" = "Adicionar a uma trilha";
 "quick_action_mapillary_show" = "Mostrar Mapillary";
 "public_transport_empty_warning_descr" = "Tente alterar as configurações.";
-"help_mapillary" = "OsmAnd + Mapillary";
+"mapillary_item" = "OsmAnd + Mapillary";
 "special_routing" = "Roteamento especial";
 "menu" = "Menu";
 "res_source_sqlite" = "Arquivo SQLiteDB";
@@ -1622,7 +1622,7 @@
 "vessel_width_limit_description" = "Defina a largura da embarcação para evitar pontes estreitas";
 "logging_accuracy" = "Precisão de registro";
 "arrived_at_destination" = "Você chegou";
-"next_seg" = "Próximo segmento";
+"next_segment" = "Próximo segmento";
 "default_speed_setting_title" = "Velocidade padrão";
 "voice_announces" = "Instruções de voz";
 "routing_profile_ski" = "Esqui";
@@ -1661,7 +1661,7 @@
 "product_title_antarctica" = "Antártida";
 "units_t" = "t";
 "position_icon_while_moving" = "Ícone de posição enquanto se move";
-"m_style_pulic_transport" = "Transporte público";
+"poi_filter_public_transport" = "Transporte público";
 "nav_type_geocoding" = "Geocodificação";
 "walk" = "A pé";
 "route_betw_points" = "Rota entre pontos";
@@ -1799,7 +1799,7 @@
 "point_to_navigate" = "Navegar para";
 "select_track_to_follow" = "Selecione o trilho a seguir";
 "shared_string_gpx_track" = "Trilha";
-"split_after" = "Dividir depois";
+"plan_route_split_after" = "Dividir depois";
 "plan_route_split_before" = "Dividir antes";
 "gpx_already_exsists" = "Já existe um ficheiro com este nome";
 "empty_filename" = "O nome do ficheiro não pode estar vazio";
@@ -2373,7 +2373,7 @@
 "routeInfo_horse_scale_name" = "Dificuldade de trilhas de cavalos";
 "routeInfo_horse_scale_description" = "Renderizar caminhos de acordo com a dificuldade das trilhas";
 "simulation_preview_mode_title" = "Modo de visualização rápida";
-"rendering_attr_lightRailRoutes_name" = "Rotas de trilha leve";
+"rendering_attr_showLightRailRoutes_name" = "Rotas de trilha leve";
 "transport_hazmat_yes_desc" = "Você precisa escolher a categoria adequada.";
 "routing_attr_allow_private_for_truck_description" = "Permitir o acesso aéreas privadas para caminhões";
 "simulation_constant_mode_desc" = "A simulação será realizada com velocidade selecionada constante.";

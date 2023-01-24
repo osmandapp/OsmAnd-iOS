@@ -55,7 +55,7 @@
 "gpx_points" = "Punto(s)";
 "shared_string_export" = "Exportar";
 "import_export" = "Importar/Exportar";
-"gpx_import_title" = "Importar trazas";
+"import_tracks" = "Importar trazas";
 "gpx_import_already_exists" = "Ya existe el archivo de la traza indicada. Elige una acción.";
 "gpx_add_new" = "Añadir nuevo archivo";
 "gpx_overwrite" = "Sobrescribir";
@@ -196,7 +196,7 @@
 "col_magenta" = "Magenta";
 // World Regions
 "region_africa" = "África";
-"region_asia" = "Asia";
+"index_name_asia" = "Asia";
 "region_ausralia_and_oceania" = "Australia y Oceanía";
 "region_central_america" = "Centroamérica";
 "region_europe" = "Europa";
@@ -220,7 +220,7 @@
 "track_save" = "Guardar la traza actual";
 "track_continue_rec" = "Seguir grabando";
 "track_continue_rec_q" = "¿Seguir grabando?";
-"rec_interval" = "Intervalo de registro";
+"save_track_interval_globally" = "Intervalo de registro";
 "rec_interval_minimum" = "Mínimo";
 "track_start_rec" = "Iniciar grabación de traza";
 "track_rec_addon_q" = "Activa el complemento «Grabación de traza» para registrar y guardar las trazas";
@@ -797,7 +797,7 @@
 "osmand_live_last_live_update" = "Última actualización: %@";
 "osmand_live_not_updated" = "Aún no actualizado";
 "osmand_live_hourly" = "Cada hora";
-"osmand_live_daily" = "Cada día";
+"daily" = "Cada día";
 "osmand_live_weekly" = "Cada semana";
 "osmand_live_reports" = "Informes";
 "osmand_live_server_date" = "Última actualización del servidor: %@";
@@ -874,7 +874,7 @@
 "inapp_not_found" = "El %@ no se encuentra en OsmAnd. Probablemente ha sido cancelado.";
 // GPX colors
 "shared_string_upload" = "Subir";
-"poi_type" = "Tipo de PDI";
+"poi_dialog_poi_type" = "Tipo de PDI";
 // OSM Editing actions
 "opening_changeset" = "Abriendo conjunto de cambios…";
 "closing_changeset" = "Cerrando conjunto de cambios…";
@@ -1600,7 +1600,7 @@
 "map_settings_add_online_source" = "Añadir repositorio en línea";
 "map_settings_legend" = "Leyenda";
 "shared_string_terrain" = "Terreno";
-"m_style_pulic_transport" = "Transporte público";
+"poi_filter_public_transport" = "Transporte público";
 "displayed_route_save" = "Guardar en las trazas de OsmAnd";
 "import_from_files" = "Importar desde archivos";
 "online_sources" = "Repositorios en línea";
@@ -1701,7 +1701,7 @@
 "save_new_track" = "Guardar como nueva traza";
 "profile_type_user_string" = "Perfil de usuario";
 "listed_exist" = "El listado «%@», ya existe en OsmAnd.";
-"next_seg" = "Siguiente segmento";
+"next_segment" = "Siguiente segmento";
 "save_changes" = "Guardar cambios";
 "product_title_antarctica" = "Antártida";
 "quick_action_switch_profile_descr" = "El botón de acción alterna entre los perfiles elegidos.";
@@ -1713,7 +1713,7 @@
 "units_t" = "ton";
 "num_stops" = "paradas";
 "map_look_descr" = "Aspecto del mapa";
-"help_mapillary" = "OsmAnd + Mapillary";
+"mapillary_item" = "OsmAnd + Mapillary";
 "profile_prefs_reset_successful" = "Todos los ajustes del perfil se restauraron al valor predefinido";
 "res_slope" = "Pendiente";
 "help_nav_profiles" = "Perfiles de navegación";
@@ -1903,7 +1903,7 @@
 "toggle_contour_lines" = "Mostrar/ocultar líneas de contorno";
 "start_of_the_track" = "Inicio de la traza";
 "plan_route_split_before" = "Dividir antes";
-"split_after" = "Dividir después";
+"plan_route_split_after" = "Dividir después";
 "speed_limit_tolerance_descr" = "Margen de tolerancia sobre el límite de velocidad, en el cual recibirás un aviso de voz.";
 "size_of_downloaded_data" = "Una gran diferencia entre los niveles de zum, puede aumentar el tamaño de los datos descargados.";
 "simplified_track_description" = "Sólo se guardará la línea de la ruta, los puntos de referencia serán borrados.";
@@ -2415,7 +2415,7 @@
 "shared_string_learn_more" = "Más información";
 "units_cubic_m" = "m³";
 "shared_string_capacity" = "Capacidad";
-"rendering_attr_lightRailRoutes_name" = "Rutas de tren ligero";
+"rendering_attr_showLightRailRoutes_name" = "Rutas de tren ligero";
 "routeInfo_horse_scale_description" = "Mostrar rutas de acuerdo a la dificultad de las pistas a caballo";
 "terrain_maps" = "Mapas del terreno";
 "osm_live_banner_desc" = "Obtenga descargas ilimitadas de mapas, añadiendo actualizaciones semanales, diarias o incluso por hora.";

@@ -515,7 +515,7 @@
 "groups" = "Grupas";
 "favorite" = "Izlase";
 "poi_overlay" = "POI Overlay";
-"poi_type" = "POI tips";
+"poi_dialog_poi_type" = "POI tips";
 "my_favorites" = "My Favorites";
 "my_places" = "Izlase";
 "fav_no_group" = "No group";
@@ -583,7 +583,7 @@
 "gpx_selection_segment_title" = "Segments";
 "route_points" = "Maršruta punkti";
 "import_export" = "Import/Export";
-"gpx_import_title" = "Importēt trekus";
+"import_tracks" = "Importēt trekus";
 "gpx_import_already_exists" = "The specified track file is already exists in the list. Please choose action.";
 "gpx_add_new" = "Add new file";
 "gpx_overwrite" = "Overwrite";
@@ -623,7 +623,7 @@
 "track_save_descr" = "Saglabāt pašreizējo ceļu SD kartē";
 "track_continue_rec" = "Continue recording";
 "track_continue_rec_q" = "Do you want to continue recording?";
-"rec_interval" = "Logošanas intervāls";
+"save_track_interval_globally" = "Logošanas intervāls";
 "rec_interval_minimum" = "Minimum";
 "track_start_rec" = "Start track recording";
 "track_rec_addon_q" = "Please activate Track recording addon to record and save your tracks";
@@ -652,7 +652,7 @@
 
 // Map settings
 "m_style_car" = "Auto";
-"m_style_pulic_transport" = "Sabiedriskais transports";
+"poi_filter_public_transport" = "Sabiedriskais transports";
 "map_settings_map" = "Karte";
 "layer_amenity_label" = "POI nosaukumi";
 "map_settings_show" = "Rādīt uz kartes";
@@ -1008,7 +1008,7 @@
 "route_betw_points_descr" = "Choose how to connect the points: with a straight line or by calculating a route using one of profiles listed below.";
 "next_seg_descr" = "The next segment will be recalculated using selected profile.";
 "whole_track_descr" = "The whole track will be recalculated using selected profile.";
-"next_seg" = "Next segment";
+"next_segment" = "Next segment";
 "whole_track" = "Whole track";
 "next_seg_dist" = "Next segment %@";
 "next_segs_dist" = "All subsequent segments %@";
@@ -1037,7 +1037,7 @@
 "gpx_already_exsists" = "File with this name already exists";
 "folder_already_exsists" = "Folder with this name already exists";
 "plan_route_split_before" = "Sadalīt pirms";
-"split_after" = "Sadalīt pēc";
+"plan_route_split_after" = "Sadalīt pēc";
 "follow_track" = "Follow track";
 "shared_string_gpx_track" = "Treks";
 "select_another_track" = "Select another track";
@@ -1068,7 +1068,7 @@
 "osmand_live_last_live_update" = "Atjaunināts: %@";
 "osmand_live_not_updated" = "Not yet updated";
 "osmand_live_hourly" = "Katru stundu";
-"osmand_live_daily" = "Katru dienu";
+"daily" = "Katru dienu";
 "osmand_live_weekly" = "Katru nedēļu";
 "osmand_live_reports" = "Reports";
 "osmand_live_server_date" = "Last server update: %@";
@@ -1465,7 +1465,7 @@
 "help_purchases" = "OsmAnd pirkumi";
 "help_osmand_live" = "Subscription - OsmAnd Live";
 "help_travel" = "Travel (Wikipedia & Wikivoyage)";
-"help_mapillary" = "OsmAnd + Mapillary";
+"mapillary_item" = "OsmAnd + Mapillary";
 "help_legend" = "Kartes leģenda";
 "help_legend_descr" = "The guide to map's symbols";
 "help_other_header" = "Cits";
@@ -1515,7 +1515,7 @@
 // World Regions
 "region_antarctica" = "Antarktika";
 "region_africa" = "Āfrika";
-"region_asia" = "Āzija";
+"index_name_asia" = "Āzija";
 "region_ausralia_and_oceania" = "Austrālija un Okeānija";
 "region_central_america" = "Centrālamerika";
 "region_europe" = "Eiropa";

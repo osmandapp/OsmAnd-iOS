@@ -147,7 +147,7 @@
                 },
                 @{
                     @"type" : [OATitleIconRoundCell getCellIdentifier],
-                    @"title" : OALocalizedString(@"split_after"),
+                    @"title" : OALocalizedString(@"plan_route_split_after"),
                     @"img" : @"ic_custom_split_after",
                     @"key" : @"split_after"
                 }
@@ -169,7 +169,7 @@
             [data addObject:@[
                 @{
                     @"type" : [OATitleIconRoundCell getCellIdentifier],
-                    @"title" : OALocalizedString(@"split_after"),
+                    @"title" : OALocalizedString(@"plan_route_split_after"),
                     @"img" : @"ic_custom_split_after",
                     @"key" : @"split_after"
                 }

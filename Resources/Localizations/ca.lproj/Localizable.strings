@@ -53,7 +53,7 @@
 "gpx_points" = "Punt(s)";
 "shared_string_export" = "Exporta";
 "import_export" = "Importa/exporta";
-"gpx_import_title" = "Importa les traces";
+"import_tracks" = "Importa les traces";
 "gpx_import_already_exists" = "El fitxer del trajecte indicat ja existeix a la llista. Trieu una acció.";
 "gpx_add_new" = "Afegeix un fitxer nou";
 "gpx_overwrite" = "Sobreescriu";
@@ -76,7 +76,7 @@
 "track_save" = "Desa la traça actual";
 "track_continue_rec" = "Continua l'enregistrament";
 "track_continue_rec_q" = "Voleu continuar l'enregistrament?";
-"rec_interval" = "Interval d\'enregistrament";
+"save_track_interval_globally" = "Interval d\'enregistrament";
 "rec_interval_minimum" = "Mínim";
 "track_start_rec" = "Inicia l'enregistrament del trajecte";
 "track_interval_remember" = "Recorda l'elecció";
@@ -211,7 +211,7 @@
 "col_magenta" = "Magenta";
 // World Regions
 "region_africa" = "Àfrica";
-"region_asia" = "Àsia";
+"index_name_asia" = "Àsia";
 "region_ausralia_and_oceania" = "Austràlia i Oceania";
 "region_central_america" = "Amèrica Central";
 "region_europe" = "Europa";
@@ -794,7 +794,7 @@
 "osmand_live_last_live_update" = "Darrera actualització: %@";
 "osmand_live_not_updated" = "No actualitzat encara";
 "osmand_live_hourly" = "Cada hora";
-"osmand_live_daily" = "Cada dia";
+"daily" = "Cada dia";
 "osmand_live_weekly" = "Cada setmana";
 "osmand_live_reports" = "Informes";
 "osmand_live_server_date" = "Darrera actualització de servidor: %@";
@@ -871,7 +871,7 @@
 "osmand_live_update_now" = "Actualitza ara";
 // GPX colors
 "shared_string_upload" = "Pujada";
-"poi_type" = "Tipus de PDI";
+"poi_dialog_poi_type" = "Tipus de PDI";
 // OSM Editing actions
 "opening_changeset" = "Obrint el registre de canvis…";
 "closing_changeset" = "Tancant el registre de canvis…";
@@ -1609,7 +1609,7 @@
 "map_settings_slopes_legend" = "Podeu trobar més informació sobre les pistes a Viquipèdia";
 "map_settings_layer_transparency" = "Transparència de la capa";
 "shared_string_terrain" = "Terreny";
-"m_style_pulic_transport" = "Transport públic";
+"poi_filter_public_transport" = "Transport públic";
 "transfers" = "Transferències:";
 "consider_limitations_param" = "Considereu les limitacions temporals";
 "avoid_transport_type" = "Evita tipus de transport";
@@ -1643,7 +1643,7 @@
 "product_desc_antarctica" = "Baixada il·limitada del mapa de l'Antàrtida";
 "product_title_antarctica" = "Antàrtida";
 "help_legend_descr" = "La guia dels símbols del mapa";
-"help_mapillary" = "OsmAnd + Mapillary";
+"mapillary_item" = "OsmAnd + Mapillary";
 "help_travel" = "Viatge (Viquipèdia i Viquiviatges)";
 "nav_type_direct_to" = "La més curta";
 "nav_type_straight_line" = "Línia recta";
@@ -1870,7 +1870,7 @@
 "next_segs_dist" = "Tots els segments %@ següents";
 "next_seg_dist" = "Segment %@ següent";
 "whole_track" = "Pista sencera";
-"next_seg" = "Següent segment";
+"next_segment" = "Següent segment";
 "whole_track_descr" = "Tota la traça es tornarà a calcular fent ús del perfil seleccionat.";
 "next_seg_descr" = "El segment següent es tornarà a calcular fent ús del perfil seleccionat.";
 "route_betw_points_descr" = "Trieu com connectar els punts: amb una línia recta o calculant-ne una ruta mitjançant un dels perfils llistats a sota.";
@@ -1917,7 +1917,7 @@
 "symbols" = "Símbols";
 "group_name" = "Nom del grup";
 "special" = "Especial";
-"split_after" = "Separa després";
+"plan_route_split_after" = "Separa després";
 "favorite_places_category" = "Llocs";
 "replace_favorite_confirmation" = "Confirmeu que voleu substituir el Preferit %@?";
 "sport" = "Esport";

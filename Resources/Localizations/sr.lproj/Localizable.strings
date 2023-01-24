@@ -514,7 +514,7 @@
 "groups" = "Групе";
 "favorite" = "Омиљено";
 "poi_overlay" = "POI надподлога";
-"poi_type" = "Тип тачке од интереса";
+"poi_dialog_poi_type" = "Тип тачке од интереса";
 "my_favorites" = "Моји омиљени";
 "my_places" = "Моја места";
 "fav_no_group" = "Нема групе";
@@ -582,7 +582,7 @@
 "gpx_selection_segment_title" = "Сегменти";
 "route_points" = "Тачке путање";
 "import_export" = "Увоз/извоз";
-"gpx_import_title" = "Увези путање";
+"import_tracks" = "Увези путање";
 "gpx_import_already_exists" = "Наведена датотека путање већ постоји на листи. Молимо изаберите акцију.";
 "gpx_add_new" = "Додајте нову датотеку";
 "gpx_overwrite" = "Препиши";
@@ -622,7 +622,7 @@
 "track_save_descr" = "Сачувај одмах тренутну путању као GPX фајл.";
 "track_continue_rec" = "Настави са снимањем";
 "track_continue_rec_q" = "Да ли желите да наставите са снимањем?";
-"rec_interval" = "Интервал бележења";
+"save_track_interval_globally" = "Интервал бележења";
 "rec_interval_minimum" = "Minimum";
 "track_start_rec" = "Започни снимање путање";
 "track_rec_addon_q" = "Активирајте додатак за снимање путања да бисте снимили и сачували своје путање";
@@ -651,7 +651,7 @@
 
 // Map settings
 "m_style_car" = "Вожња аутомобила";
-"m_style_pulic_transport" = "Јавни превоз";
+"poi_filter_public_transport" = "Јавни превоз";
 "map_settings_map" = "Карта";
 "layer_amenity_label" = "Називи тачака (тачке од интереса, омиљене)";
 "map_settings_show" = "Прикажи на карти";
@@ -1007,7 +1007,7 @@
 "route_betw_points_descr" = "Изаберите како да повежете тачке: равном линијом или израчунавањем руте помоћу једног од профила наведених у наставку.";
 "next_seg_descr" = "Следећи сегмент ће бити поново израчунат коришћењем изабраног профила.";
 "whole_track_descr" = "Цела путања ће бити поново израчуната коришћењем изабраног профила.";
-"next_seg" = "Следећи сегмент";
+"next_segment" = "Следећи сегмент";
 "whole_track" = "Цела стаза";
 "next_seg_dist" = "Следећи сегмент %@";
 "next_segs_dist" = "Сви наредни сегменти %@";
@@ -1036,7 +1036,7 @@
 "gpx_already_exsists" = "Датотека са овим именом већ постоји";
 "folder_already_exsists" = "Фолдер са овим именом већ постоји";
 "plan_route_split_before" = "Подели пре";
-"split_after" = "После подели";
+"plan_route_split_after" = "После подели";
 "follow_track" = "Следи стазу";
 "shared_string_gpx_track" = "Путања";
 "select_another_track" = "Изаберите другу стазу";
@@ -1067,7 +1067,7 @@
 "osmand_live_last_live_update" = "Последње ажурирање: %@";
 "osmand_live_not_updated" = "Још није ажурирано";
 "osmand_live_hourly" = "На сваких сат времена";
-"osmand_live_daily" = "Дневно";
+"daily" = "Дневно";
 "osmand_live_weekly" = "Седмично";
 "osmand_live_reports" = "Reports";
 "osmand_live_server_date" = "Последње ажурирање сервера: %@";
@@ -1465,7 +1465,7 @@
 "help_purchases" = "OsmAndкуповине";
 "help_osmand_live" = "Чланарина - OsmAnd уживо";
 "help_travel" = "Путовања (Википедија и Википутовање)";
-"help_mapillary" = "OsmAnd + Mapillary";
+"mapillary_item" = "OsmAnd + Mapillary";
 "help_legend" = "Легенда на карти";
 "help_legend_descr" = "Водич за симболе на мапи";
 "help_other_header" = "Остало";
@@ -1515,7 +1515,7 @@
 // World Regions
 "region_antarctica" = "Антарктик";
 "region_africa" = "Африка";
-"region_asia" = "Азија";
+"index_name_asia" = "Азија";
 "region_ausralia_and_oceania" = "Аустралија и Океанија";
 "region_central_america" = "Централна Америка";
 "region_europe" = "Европа";
@@ -2384,7 +2384,7 @@
 "backup_error_subscription_was_expired" = "Истекла претплата";
 "rendering_attr_monorailRoutes_name" = "Руте са једним колосеком";
 "backup_error_user_is_already_registered" = "Ова адреса е-поште се користи на другом налогу";
-"rendering_attr_lightRailRoutes_name" = "Руте лаке железнице";
+"rendering_attr_showLightRailRoutes_name" = "Руте лаке железнице";
 "cloud_hide" = "Сакриј облаке";
 "temperature_show" = "Прикажи температуру";
 "cloud_show" = "Прикажи облаке";

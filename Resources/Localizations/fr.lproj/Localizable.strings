@@ -155,7 +155,7 @@
 "col_magenta" = "Magenta";
 // World Regions
 "region_africa" = "Afrique";
-"region_asia" = "Asie";
+"index_name_asia" = "Asie";
 "region_ausralia_and_oceania" = "Australie et Océanie";
 "region_central_america" = "Amérique centrale";
 "region_europe" = "Europe";
@@ -250,12 +250,12 @@
 "gpx_edit_mode" = "Mode édition";
 "map_downloaded" = "Carte téléchargée";
 "tracks" = "Traces";
-"gpx_import_title" = "Importer des traces";
+"import_tracks" = "Importer des traces";
 "gpx_export_title" = "Exporter la trace";
 "gpx_export_select_track" = "Merci de sélectionner la trace à exporter";
 "gpx_route" = "Route";
 "gpx_route_time" = "Durée de l'itinéraire";
-"rec_interval" = "Intervalle d\'enregistrement";
+"save_track_interval_globally" = "Intervalle d\'enregistrement";
 "gpx_distance_points" = "Distance (points)";
 "map_settings_style" = "Style de la carte";
 "intro_welcome" = "Bienvenue sur\nOsmAnd";
@@ -756,7 +756,7 @@
 "osmand_live_last_changed" = "Dernière modification de la carte : %@";
 "osmand_live_last_live_update" = "Dernière mise à jour : %@";
 "osmand_live_not_updated" = "Pas encore mis à jour";
-"osmand_live_daily" = "Journalière";
+"daily" = "Journalière";
 "osmand_live_weekly" = "Hebdomadaire";
 "osmand_live_upd_frequency" = "Fréquence de mise à jour";
 "osmand_live_wifi_only" = "Mettre à jour uniquement via WiFi";
@@ -869,7 +869,7 @@
 "map_widget_ruler_control" = "Règle de mesure par rayon";
 "shared_string_upload" = "Téléverser";
 "poi_overlay" = "Superposition POI";
-"poi_type" = "Type de point d\'intérêt";
+"poi_dialog_poi_type" = "Type de point d\'intérêt";
 "import_from_docs" = "Importation à partir de documents";
 "osmand_live_donation_switch_descr" = "Une partie de votre don est répartie entre les utilisateurs d'OSM qui soumettent des changements à OpenStreetMap. Le coût de l'abonnement reste le même";
 // OSM Editing actions
@@ -1496,7 +1496,7 @@
 "exit_at" = "Sortirà";
 "public_transport_warning_title" = "Les itinéraires en transports en commun sont actuellement en phase de test. Des erreurs ou des imprécisions peuvent avoir lieu.";
 "product_title_antarctica" = "Antarctique";
-"help_mapillary" = "OsmAnd + Mapillary";
+"mapillary_item" = "OsmAnd + Mapillary";
 "help_osmand_live" = "Abonnement - OsmAnd Live";
 "help_purchases" = "Achats OsmAnd";
 "hide_terrain" = "Masquer le relief";
@@ -1524,7 +1524,7 @@
 "map_settings_add_maps_hillshade" = "Des cartes supplémentaires sont nécessaires pour visualiser l'ombrage du relief";
 "map_settings_zoom_level_description" = "Définissez le zoom minimal et maximal auquel la couche est visible";
 "map_settings_hillshade_description" = "Les cartes avec ombrage du relief mettent en évidence les pentes, sommets et plaines en utilisant des niveaux de gris";
-"m_style_pulic_transport" = "Transport en commun";
+"poi_filter_public_transport" = "Transport en commun";
 "displayed_route_save" = "Enregistrer dans OsmAnd Traces";
 "add_group" = "Ajouter un groupe";
 "shared_string_end_date" = "Date de fin";
@@ -1719,7 +1719,7 @@
 "personal_category_name" = "Personnel";
 "whole_track" = "Trace entière";
 "add_point" = "Ajouter un point";
-"next_seg" = "Segment suivant";
+"next_segment" = "Segment suivant";
 "total" = "Total";
 "app_profiles" = "Profils de l\'application";
 "units_t" = "t";
@@ -1798,7 +1798,7 @@
 "quick_action_poi_add_descr" = "Appuyer sur ce bouton d’action vous permet d’ajouter rapidement des POI sur la carte avec un type et des étiquettes prédéfinis.";
 "quick_action_contour_lines_descr" = "Appuyez pour afficher/masquer les courbes de niveau.";
 "quick_action_day_night_descr" = "Ce bouton permet de basculer entre les modes Jour et Nuit de la carte.";
-"split_after" = "Couper après";
+"plan_route_split_after" = "Couper après";
 "plan_route_split_before" = "Couper avant";
 "plan_route_last_modified" = "Récents";
 "point_num" = "Point %d";
@@ -2316,7 +2316,7 @@
 "cloud_welcome_back" = "Content de vous revoir !";
 "cloud_make_backup" = "Effectuer une sauvegarde";
 "cloud_restore_now" = "Restaurer maintenant";
-"rendering_attr_lightRailRoutes_name" = "Chemins de fer légers";
+"rendering_attr_showLightRailRoutes_name" = "Chemins de fer légers";
 "cloud_conflicts_descr" = "Certains fichiers n\'ont pasété envoyés sur le serveur car le serveur en possède une version plus récente.";
 "weather_wind_unit_km_per_hour" = "Kilomètres par heure";
 "cloud_backup_now" = "Sauvegarder maintenant";

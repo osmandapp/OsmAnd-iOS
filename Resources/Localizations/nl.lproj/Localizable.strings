@@ -338,7 +338,7 @@
 "gpx_points" = "Point(s)";
 "shared_string_export" = "Exporteer";
 "import_export" = "Import/Export";
-"gpx_import_title" = "Tracks importeren";
+"import_tracks" = "Tracks importeren";
 "gpx_import_already_exists" = "The specified trip file is already exists in the list. Please choose action.";
 "gpx_add_new" = "Add new file";
 "gpx_overwrite" = "Overwrite";
@@ -365,7 +365,7 @@
 "track_save" = "Huidige GPX-track opslaan";
 "track_continue_rec" = "Continue recording";
 "track_continue_rec_q" = "Wil je doorgaan met opnemen?";
-"rec_interval" = "Interval tussen geregistreerde punten";
+"save_track_interval_globally" = "Interval tussen geregistreerde punten";
 "rec_interval_minimum" = "Minimum";
 "track_start_rec" = "Start track recording";
 "track_rec_addon_q" = "Please activate Trip recording addon to record and save your tracks";
@@ -528,7 +528,7 @@
 "col_magenta" = "Magenta";
 // World Regions
 "region_africa" = "Afrika";
-"region_asia" = "Azië";
+"index_name_asia" = "Azië";
 "region_ausralia_and_oceania" = "Australië en Oceanië";
 "region_central_america" = "Centraal Amerika";
 "region_europe" = "Europa";
@@ -819,7 +819,7 @@
 "edit_action" = "Sneltoets bewerken";
 "shared_string_filter" = "Filter";
 "help_other_header" = "Andere";
-"poi_type" = "POI type";
+"poi_dialog_poi_type" = "POI type";
 "osm_edit_modified_poi" = "Gewijzigde OSM POI";
 "poi_clear" = "Wis";
 "add_map_source" = "Kaartbron toevoegen";
@@ -854,7 +854,7 @@
 "osm_target_deleted" = "Gewiste OSM POI";
 "osm_note_upload_anonymously" = "Anoniem uploaden";
 "closing_changeset" = "Wijzigingenset sluiten…";
-"osmand_live_daily" = "Elke dag";
+"daily" = "Elke dag";
 "pause_resume_nav" = "Navigatie pauzeren/voortzetten";
 "purchase_unlim_title" = "%@ Kopen";
 "mapil_pano_only" = "Alleen 360°-foto\'s tonen";
@@ -1407,12 +1407,12 @@
 "map_look_descr" = "Kaartweergave";
 "total" = "Totaal";
 "announce" = "Meld";
-"m_style_pulic_transport" = "Openbaar vervoer";
+"poi_filter_public_transport" = "Openbaar vervoer";
 "profile_type_user_string" = "Gebruikersprofiel";
-"help_mapillary" = "OsmAnd + Mapillary";
+"mapillary_item" = "OsmAnd + Mapillary";
 "quick_action_mapillary_hide" = "Mapillary verbergen";
 "ui_customization_descr" = "Mappen, contextmenu";
-"next_seg" = "Volgende segment";
+"next_segment" = "Volgende segment";
 "position_icon_at_rest" = "Positie-icoon bij rust";
 "product_title_antarctica" = "Antarctica";
 "map_settings_legend" = "Legenda";
@@ -1512,7 +1512,7 @@
 "icon" = "Icoon";
 "shared_string_disable" = "Schakel uit";
 "plan_route_change_folder" = "Map wijzigen";
-"split_after" = "Hierna splitsen";
+"plan_route_split_after" = "Hierna splitsen";
 "emergency" = "Noodgevallen";
 "start_of_the_track" = "Begin van de track";
 "special" = "Speciaal";

@@ -122,7 +122,7 @@
             switch (dialogMode)
             {
                 case EOARouteBetweenPointsDialogModeSingle:
-                    return OALocalizedString(@"next_seg");
+                    return OALocalizedString(@"next_segment");
                 case EOARouteBetweenPointsDialogModeAll:
                     return OALocalizedString(@"whole_track");
             }

@@ -61,7 +61,7 @@
 "gpx_points" = "Puntu(os)";
 "shared_string_export" = "Esporta";
 "import_export" = "Importa/Esporta";
-"gpx_import_title" = "Importa rastas";
+"import_tracks" = "Importa rastas";
 "gpx_import_already_exists" = "Su documentu de sa rasta indicadu est giai presente in sa lista. Pro praghere issèbera s'atzione.";
 "gpx_add_new" = "Annaghe unu documentu nou";
 "gpx_overwrite" = "Subraiscrie";
@@ -91,7 +91,7 @@
 "fav_select" = "Pro piaghere ischerta sos preferidos";
 "shared_string_edit" = "Modìfica";
 "my_favorites" = "Preferidos meos";
-"rec_interval" = "Intervallu de registratzione";
+"save_track_interval_globally" = "Intervallu de registratzione";
 "rec_interval_minimum" = "Mìnimu";
 "track_start_rec" = "Incumentza sa registratzione de sa rasta";
 "track_rec_addon_q" = "Pro praghere allughe s’estensione de registratzione de sas rastas pro registrare e sarvare sas rastas tuas";
@@ -256,7 +256,7 @@
 "col_magenta" = "Magenta";
 // World Regions
 "region_africa" = "Àfrica";
-"region_asia" = "Àsia";
+"index_name_asia" = "Àsia";
 "region_ausralia_and_oceania" = "Austràlia e Otzeània";
 "region_central_america" = "Amèrica Tzentrale";
 "region_europe" = "Europa";
@@ -794,7 +794,7 @@
 "osmand_live_last_live_update" = "Ùrtimu agiornamentu: %@";
 "osmand_live_not_updated" = "Galu no agiornada";
 "osmand_live_hourly" = "Cada ora";
-"osmand_live_daily" = "Cada die";
+"daily" = "Cada die";
 "osmand_live_weekly" = "Cada chida";
 "osmand_live_reports" = "Raportos";
 "osmand_live_server_date" = "Ùrtimu agiornamentu de su servidore: %@";
@@ -870,7 +870,7 @@
 "inapp_not_found" = "Su %@ no est istadu agatadu in OsmAnd. Probabilmente est istadu annulladu.";
 "osmand_live_update_now" = "Agiorna como";
 // GPX colors
-"poi_type" = "Casta de PDI";
+"poi_dialog_poi_type" = "Casta de PDI";
 // OSM Editing actions
 "opening_changeset" = "Abertura modìficas…";
 "closing_changeset" = "Serradura modìficas…";
@@ -1611,7 +1611,7 @@
 "public_transport_warning_descr_blog" = "Leghe de prus a pitzu de su càrculu de s'àndala de OsmAnd in su blog nostru.";
 "public_transport_warning_title" = "Sa navigatzione cun sos trasportos pùblicos, in custu momentu, est in fase de proa beta. Bi diant pòdere èssere errores e impretzisiones.";
 "calc_pedestrian_route" = "Càrcula s'àndala a pee";
-"m_style_pulic_transport" = "Trasportu pùblicu";
+"poi_filter_public_transport" = "Trasportu pùblicu";
 "transfers" = "Tramudòngios:";
 "consider_limitations_param" = "Mentene in cunsìderu sas limitatziones temporàneas";
 "allow_3d_descr" = "Abìlita custa optzione pro bìdere sa mapa in sa prospetiva 2.5D";
@@ -1620,7 +1620,7 @@
 "product_title_antarctica" = "Antàrticu";
 "public_transport_empty_warning_descr" = "Proa a cambiare sas impostatziones.";
 "help_legend_descr" = "Sa ghia a sos sìmbulos de sa mapa";
-"help_mapillary" = "OsmAnd + Mapillary";
+"mapillary_item" = "OsmAnd + Mapillary";
 "help_travel" = "Biàgiu (Wikipedia e Wikivoyage)";
 "help_osmand_live" = "Abbonamentos - OsmAnd Live";
 "help_purchases" = "Còmporas de OsmAnd";
@@ -1878,7 +1878,7 @@
 "next_segs_dist" = "Totu sos segmentos imbenientes %@";
 "next_seg_dist" = "Segmentu imbeniente %@";
 "whole_track" = "Rasta intrea";
-"next_seg" = "Segmentu imbeniente";
+"next_segment" = "Segmentu imbeniente";
 "whole_track_descr" = "Sa rasta intrea s'at a torrare a carculare impreende su profilu ischertadu.";
 "next_seg_descr" = "Su segmentu imbeniente s'at a torrare a carculare impreende su profilu ischertadu.";
 "route_betw_points_descr" = "Issèbera comente ligare sos puntos: cun una lìnia drita o carculende un'àndala impreende unu de sos profilos allistados inoghe in suta.";
@@ -1910,7 +1910,7 @@
 "select_another_track" = "Ischerta un\'àtera rasta";
 "shared_string_gpx_track" = "Rasta";
 "follow_track" = "Sighi sa rasta";
-"split_after" = "Iscroba a pustis de";
+"plan_route_split_after" = "Iscroba a pustis de";
 "plan_route_split_before" = "Iscroba in antis de";
 "gpx_already_exsists" = "Esistit giai unu documentu cun custu nùmene";
 "empty_filename" = "Su nùmene de su documentu non podet èssere bòidu";
@@ -2403,7 +2403,7 @@
 "weather_wind_unit_m_s" = "Metros/segundos";
 "weather_wind_unit_knots" = "Nodos";
 "rendering_attr_monorailRoutes_name" = "Àndalas de sas monorotajas";
-"rendering_attr_lightRailRoutes_name" = "Àndalas de sos trenos lèbios";
+"rendering_attr_showLightRailRoutes_name" = "Àndalas de sos trenos lèbios";
 "login_footer_full_text" = "Tenes bisòngiu de agiudu? Cuntata·nos a s'indiritzu \nsupport@osmand.net";
 "login_footer_email_part" = "support@osmand.net";
 "backup_error_invalid_token" = "Su getone no est vàlidu";

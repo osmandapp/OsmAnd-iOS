@@ -303,7 +303,7 @@
 "gpx_points" = "Point(s)";
 "shared_string_export" = "Export";
 "import_export" = "Import/Export";
-"gpx_import_title" = "Import trip";
+"import_tracks" = "Import trip";
 "gpx_import_already_exists" = "The specified trip file is already exists in the list. Please choose action.";
 "gpx_add_new" = "Add new file";
 "gpx_overwrite" = "Overwrite";
@@ -330,7 +330,7 @@
 "track_save" = "Save current track";
 "track_continue_rec" = "Continue recording";
 "track_continue_rec_q" = "Do you want to continue recording?";
-"rec_interval" = "Logging interval";
+"save_track_interval_globally" = "Logging interval";
 "rec_interval_minimum" = "Minimum";
 "track_start_rec" = "Start track recording";
 "track_rec_addon_q" = "Please activate Trip recording addon to record and save your tracks";
@@ -493,7 +493,7 @@
 "col_magenta" = "ပန်းခရမ်းရောင်";
 // World Regions
 "region_africa" = "Africa";
-"region_asia" = "Asia";
+"index_name_asia" = "Asia";
 "region_ausralia_and_oceania" = "Australia and Oceania";
 "region_central_america" = "Central America";
 "region_europe" = "Europe";
@@ -839,7 +839,7 @@
 "base_profile_descr_pedestrian" = "လမ်းလျှောက်, တောင်တက်, အပြေး";
 "save_changes" = "ပြောင်းလဲမှုများကိုသိမ်းပါ";
 "screen_alerts" = "ဖန်သားပြင်သတိပေးချက်များ";
-"m_style_pulic_transport" = "ပြည်သူပို့ဆောင်ရေး";
+"poi_filter_public_transport" = "ပြည်သူပို့ဆောင်ရေး";
 "base_profile_descr_bicycle" = "MTB, moped,မြင်း";
 "select_icon" = "အိုင်ကွန်ကိုရွေးပါ";
 "copy_from_other_profile" = "အခြားပရိုဖိုင်းမှကူးယူပါ";

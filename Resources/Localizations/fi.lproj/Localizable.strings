@@ -490,7 +490,7 @@
 "groups" = "Ryhmät";
 "favorite" = "Suosikki";
 "poi_overlay" = "POI Overlay";
-"poi_type" = "KP tyyppi";
+"poi_dialog_poi_type" = "KP tyyppi";
 "my_favorites" = "My Favorites";
 "my_places" = "Omat paikat";
 "fav_no_group" = "No group";
@@ -556,7 +556,7 @@
 "gpx_points" = "Point(s)";
 "gpx_export" = "Vie";
 "import_export" = "Import/Export";
-"gpx_import_title" = "Tuo jäljet";
+"import_tracks" = "Tuo jäljet";
 "gpx_import_already_exists" = "The specified track file is already exists in the list. Please choose action.";
 "gpx_add_new" = "Add new file";
 "gpx_overwrite" = "Overwrite";
@@ -595,7 +595,7 @@
 "track_save_descr" = "Tallenna nykyinen reitti GPX tiedostona nyt.";
 "track_continue_rec" = "Continue recording";
 "track_continue_rec_q" = "Do you want to continue recording?";
-"rec_interval" = "Keruuväli";
+"save_track_interval_globally" = "Keruuväli";
 "rec_interval_minimum" = "Minimum";
 "track_start_rec" = "Start track recording";
 "track_rec_addon_q" = "Please activate Track recording addon to record and save your tracks";
@@ -618,7 +618,7 @@
 
 // Map settings
 "m_style_car" = "Auto";
-"m_style_pulic_transport" = "Joukkoliikenne";
+"poi_filter_public_transport" = "Joukkoliikenne";
 "map_settings_map" = "Kartta";
 "layer_amenity_label" = "Pisteiden nimet (KP:t, suosikit)";
 "map_settings_show" = "Näytä kartalla";
@@ -839,7 +839,7 @@
 "route_betw_points_descr" = "Valitse, miten pisteet yhdistetään: suoralla viivalla tai laskemalla reitti käyttämällä jotakin alla luetelluista profiileista.";
 "next_seg_descr" = "Seuraava segmentti lasketaan uudelleen käyttäen valittua profiilia.";
 "whole_track_descr" = "Koko jälki lasketaan uudelleen käyttäen valittua profiilia.";
-"next_seg" = "Seuraava segmentti";
+"next_segment" = "Seuraava segmentti";
 "whole_track" = "Koko jälki";
 "next_seg_dist" = "Next segment %@";
 "next_segs_dist" = "All subsequent segments %@";
@@ -866,7 +866,7 @@
 "gpx_already_exsists" = "File with this name already exists";
 "folder_already_exsists" = "Folder with this name already exists";
 "plan_route_split_before" = "Jaa ennen";
-"split_after" = "Jaa jälkeen";
+"plan_route_split_after" = "Jaa jälkeen";
 "follow_track" = "Seuraa jälkeä";
 "shared_string_gpx_track" = "Jälki";
 "select_another_track" = "Valitse toinen jälki";
@@ -895,7 +895,7 @@
 "osmand_live_last_live_update" = "Viimeinen päivitys: %@";
 "osmand_live_not_updated" = "Not yet updated";
 "osmand_live_hourly" = "Tunneittain";
-"osmand_live_daily" = "Päivittäin";
+"daily" = "Päivittäin";
 "osmand_live_weekly" = "Viikoittain";
 "osmand_live_reports" = "Reports";
 "osmand_live_server_date" = "Last server update: %@";
@@ -1278,7 +1278,7 @@
 "help_purchases" = "OsmAnd ostot";
 "help_osmand_live" = "Tilaus - OsmAnd Live";
 "help_travel" = "Travel (Wikipedia & Wikivoyage)";
-"help_mapillary" = "OsmAnd + Mapillary";
+"mapillary_item" = "OsmAnd + Mapillary";
 "help_legend" = "Karttaselite";
 "help_legend_descr" = "The guide to map's symbols";
 "help_other_header" = "Muuta";
@@ -1328,7 +1328,7 @@
 // World Regions
 "region_antarctica" = "Antarctica";
 "region_africa" = "Afrikka";
-"region_asia" = "Aasia";
+"index_name_asia" = "Aasia";
 "region_ausralia_and_oceania" = "Australia ja Oseania";
 "region_central_america" = "Keski-Amerikka";
 "region_europe" = "Eurooppa";

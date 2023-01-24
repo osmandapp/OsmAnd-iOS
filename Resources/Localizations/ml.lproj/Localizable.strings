@@ -544,7 +544,7 @@
 "groups" = "ഗ്രൂപ്പുകൾ";
 "favorite" = "താല്‍പര്യമുള്ളവ";
 "poi_overlay" = "POI Overlay";
-"poi_type" = "POIതരം";
+"poi_dialog_poi_type" = "POIതരം";
 "my_favorites" = "My Favorites";
 "my_places" = "\"എന്റെ സ്ഥലങ്ങള്‍ \"";
 "fav_no_group" = "No group";
@@ -615,7 +615,7 @@
 
 "import_export" = "Import/Export";
 
-"gpx_import_title" = "Import tracks";
+"import_tracks" = "Import tracks";
 "gpx_import_already_exists" = "The specified track file is already exists in the list. Please choose action.";
 "gpx_add_new" = "Add new file";
 "gpx_overwrite" = "Overwrite";
@@ -657,7 +657,7 @@
 "track_save_descr" = "ഇപ്പോൾ നിലവിലുള്ള ട്രാക്ക് ജിപിഎക്സ് ഫയൽ ആയി സംരക്ഷിക്കുക.";
 "track_continue_rec" = "Continue recording";
 "track_continue_rec_q" = "Do you want to continue recording?";
-"rec_interval" = "റിക്കോഡിങ്ങിന്റെ ഇടവേള";
+"save_track_interval_globally" = "റിക്കോഡിങ്ങിന്റെ ഇടവേള";
 "rec_interval_minimum" = "Minimum";
 "track_start_rec" = "Start track recording";
 "track_rec_addon_q" = "Please activate Track recording addon to record and save your tracks";
@@ -691,7 +691,7 @@
 
 // Map settings
 "m_style_car" = "കാര്‍";
-"m_style_pulic_transport" = "പൊതു ഗതാഗത സംവിധാനം";
+"poi_filter_public_transport" = "പൊതു ഗതാഗത സംവിധാനം";
 
 "map_settings_map" = "ഭൂപടം";
 "layer_amenity_label" = "ബിന്ദുവിന്റെ പേരുചീട്ട്";
@@ -1065,7 +1065,7 @@
 "route_betw_points_descr" = "Choose how to connect the points: with a straight line or by calculating a route using one of profiles listed below.";
 "next_seg_descr" = "The next segment will be recalculated using selected profile.";
 "whole_track_descr" = "The whole track will be recalculated using selected profile.";
-"next_seg" = "Next segment";
+"next_segment" = "Next segment";
 "whole_track" = "Whole track";
 "next_seg_dist" = "Next segment %@";
 "next_segs_dist" = "All subsequent segments %@";
@@ -1094,7 +1094,7 @@
 "gpx_already_exsists" = "File with this name already exists";
 "folder_already_exsists" = "Folder with this name already exists";
 "plan_route_split_before" = "Split before";
-"split_after" = "Split after";
+"plan_route_split_after" = "Split after";
 "follow_track" = "Follow track";
 "shared_string_gpx_track" = "ട്രാക്ക്";
 "select_another_track" = "Select another track";
@@ -1125,7 +1125,7 @@
 "osmand_live_last_live_update" = "\"അവസാന പരിഷ്ക്കരണം : %@\"";
 "osmand_live_not_updated" = "Not yet updated";
 "osmand_live_hourly" = "പ്രതിമണിക്കൂര്‍";
-"osmand_live_daily" = "ദിവസവും";
+"daily" = "ദിവസവും";
 "osmand_live_weekly" = "വാരം";
 "osmand_live_reports" = "Reports";
 "osmand_live_server_date" = "Last server update: %@";
@@ -1528,7 +1528,7 @@
 "help_purchases" = "OsmAnd purchases";
 "help_osmand_live" = "Subscription - OsmAnd Live";
 "help_travel" = "Travel (Wikipedia & Wikivoyage)";
-"help_mapillary" = "OsmAnd + Mapillary";
+"mapillary_item" = "OsmAnd + Mapillary";
 "help_legend" = "മാപ്പ് ലെജൻഡ്";
 "help_legend_descr" = "The guide to map's symbols";
 "help_other_header" = "മറ്റുളളവ";
@@ -1578,7 +1578,7 @@
 // World Regions
 "region_antarctica" = "Antarctica";
 "region_africa" = "ആഫ്രിക്ക";
-"region_asia" = "ഏഷ്യ";
+"index_name_asia" = "ഏഷ്യ";
 "region_ausralia_and_oceania" = "ഓസ്ട്രേലിയയും ഓഷ്യാനിയയും";
 "region_central_america" = "മദ്ധ്യ അമേരിക്ക";
 "region_europe" = "യൂറോപ്പ്";

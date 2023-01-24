@@ -355,7 +355,7 @@
 "gpx_points" = "Point(s)";
 "shared_string_export" = "Exportar";
 "import_export" = "Import/Export";
-"gpx_import_title" = "Import trip";
+"import_tracks" = "Import trip";
 "gpx_import_already_exists" = "The specified trip file is already exists in the list. Please choose action.";
 "gpx_add_new" = "Add new file";
 "gpx_overwrite" = "Overwrite";
@@ -383,7 +383,7 @@
 "track_save_descr" = "Garda a pista actual coma ficheiro GPX agora.";
 "track_continue_rec" = "Continue recording";
 "track_continue_rec_q" = "Do you want to continue recording?";
-"rec_interval" = "Intre de rexistro";
+"save_track_interval_globally" = "Intre de rexistro";
 "rec_interval_minimum" = "Minimum";
 "track_start_rec" = "Start track recording";
 "track_rec_addon_q" = "Please activate Trip recording addon to record and save your tracks";
@@ -570,7 +570,7 @@
 "col_magenta" = "Maxenta";
 // World Regions
 "region_africa" = "África";
-"region_asia" = "Asia";
+"index_name_asia" = "Asia";
 "region_ausralia_and_oceania" = "Australia e Oceanía";
 "region_central_america" = "América Central";
 "region_europe" = "Europa";
@@ -858,7 +858,7 @@
 "angular_units_descr" = "Mudar o \"azimuth\" no que se mide.";
 "quick_action_add_underlay" = "Engadir embaixo (subxacencia)";
 "toggle_nav" = "Comezar/Deter a navegación";
-"poi_type" = "Tipo do PDI";
+"poi_dialog_poi_type" = "Tipo do PDI";
 "edit_action" = "Engadir unha acción";
 "access_intermediate_arrival_time" = "Hora da chegada intermedia";
 "region_nautical" = "Mapas náuticos";
@@ -917,7 +917,7 @@
 "my_places" = "Os meus lugares";
 "show_tunnels" = "Túneles";
 "osm_live_payment_renews_quarterly" = "Renovación trimestral";
-"osmand_live_daily" = "Cada día";
+"daily" = "Cada día";
 "save_poi_too_many_uppercase" = "O nome contén demasiadas maiúsculas. Proseguer\?";
 "add_action" = "Engadir unha acción";
 "replace_destination" = "Substituír destino";
@@ -1305,7 +1305,7 @@
 "public_transport_warning_title" = "A navegación en transporte público atópase agora en fase de proba beta, poden xerarse erros e imprecisións.";
 "routing_attr_length_name" = "Límite de lonxitude";
 "profile_type_osmand_string" = "Perfil do OsmAnd";
-"next_seg" = "Seguinte segmento";
+"next_segment" = "Seguinte segmento";
 "nav_type_direct_to" = "Directoó punto";
 "edit_profile_list" = "Editar a listaxe de perfís";
 "amenity" = "Instalación";
@@ -1380,7 +1380,7 @@
 "shared_string_settings" = "Axustes";
 "configure_screen_descr" = "Escolle as opcións da pantalla para este perfil";
 "shared_string_quick_actions" = "Accións rápidas";
-"m_style_pulic_transport" = "Transporte público";
+"poi_filter_public_transport" = "Transporte público";
 "public_transport_show" = "Amosar transporte público";
 "save_changes" = "Gardar modificacións";
 "help_purchases" = "Compras do OsmAnd";
@@ -1396,7 +1396,7 @@
 "layer_amenity_label" = "Nomes dos PDI sobrepostos";
 "whole_track" = "Pista enteira";
 "res_pseudo_mercator" = "Proxección pseudo-Mercator";
-"help_mapillary" = "OsmAnd + Mapillary";
+"mapillary_item" = "OsmAnd + Mapillary";
 "select_icon" = "Escoller icona";
 "create_profile_descr" = "Basea o teu perfil personalizado nun dos perfís de aplicación predeterminados, isto define os axustes básicos coma a visibilidade dos trebellos e as unidades de velocidade e distancia. Estes son os perfís de aplicación predeterminados, xunto con exemplos de perfís personalizados que poden ser amplíados:";
 "shared_string_min" = "Mín";
@@ -1469,7 +1469,7 @@
 "icon" = "Icona";
 "circle" = "Círculo";
 "plan_route_last_modified" = "Última modificación";
-"split_after" = "Dividir despois";
+"plan_route_split_after" = "Dividir despois";
 "osmand_live_title" = "OsmAnd Live";
 "coordinates_widget" = "Trebello de coordenadas";
 "plan_route_open_existing_track" = "Abrir pista existente";

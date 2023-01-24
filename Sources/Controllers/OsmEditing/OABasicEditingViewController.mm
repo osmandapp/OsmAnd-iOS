@@ -145,7 +145,7 @@ static const NSInteger _contactInfoSectionCount = 5;
                          }];
     [dataArr addObject:@{
                          @"name" : @"poi_type",
-                         @"title" : OALocalizedString(@"poi_type"),
+                         @"title" : OALocalizedString(@"poi_dialog_poi_type"),
                          @"value" : _poiData.getCurrentPoiType ? _poiData.getLocalizedTypeString :
                              OALocalizedString(@"shared_string_select"),
                          @"type" : [OASettingsTableViewCell getCellIdentifier],

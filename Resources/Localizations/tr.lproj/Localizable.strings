@@ -63,7 +63,7 @@
 "gpx_points" = "Noktalarının";
 "shared_string_export" = "Dışa aktar";
 "import_export" = "Alma/verme";
-"gpx_import_title" = "Yolları içe aktar";
+"import_tracks" = "Yolları içe aktar";
 "gpx_import_already_exists" = "Belirtilen yol dosyası listede zaten var. Lütfen eylem seçin.";
 "gpx_add_new" = "Yeni dosya ekle";
 "gpx_overwrite" = "Üzerine yaz";
@@ -89,7 +89,7 @@
 "track_save" = "Mevcut rotayı kaydet";
 "track_continue_rec" = "Kayıt devam";
 "track_continue_rec_q" = "Kayıt devam etmek istiyor musunuz?";
-"rec_interval" = "Günlük aralığı";
+"save_track_interval_globally" = "Günlük aralığı";
 "rec_interval_minimum" = "En az";
 "track_start_rec" = "Yol kaydını başlatın";
 "track_rec_addon_q" = "İzlediğiniz yolları kaydetmek için lütfen Yol kaydı eklentisini etkinleştirin";
@@ -250,7 +250,7 @@
 "col_magenta" = "Eflatun";
 // World Regions
 "region_africa" = "Afrika";
-"region_asia" = "Asya";
+"index_name_asia" = "Asya";
 "region_ausralia_and_oceania" = "Avustralya ve Okyanusya";
 "region_central_america" = "Orta Amerika";
 "region_europe" = "Avrupa";
@@ -810,7 +810,7 @@
 "osm_working_days" = "İş Günleri";
 "osm_edits_advanced" = "İleri";
 "add_gpx_waypoint" = "GPX yol noktası ekle";
-"osmand_live_daily" = "Günlük";
+"daily" = "Günlük";
 "osm_live_routing" = "OsmAnd Live navigasyon";
 "osm_editing_lost_changes_title" = "Kaydetmedençık?";
 "osm_note_created" = "Oluşturulmuş OSM Notu";
@@ -911,7 +911,7 @@
 "quick_actions_show_dialog" = "Geçici bir iletişim kutusu göster";
 "product_title_wikivoyage" = "Seyahat Rehberleri";
 "map_styles" = "Harita tarzları";
-"poi_type" = "POI Türü";
+"poi_dialog_poi_type" = "POI Türü";
 "modify_poi_short" = "POI düzenle";
 "osm_website" = "Web sitesi";
 "gpx_ascent" = "Çıkış";
@@ -1602,7 +1602,7 @@
 "transfers" = "Aktarmalar:";
 "avoid_transport_type" = "Kaçınılacak taşıma türleri";
 "consider_limitations_param" = "Geçici sınırlamaları göz önünde bulundur";
-"m_style_pulic_transport" = "Toplu Taşıma";
+"poi_filter_public_transport" = "Toplu Taşıma";
 "exit_at" = "Buradaçık";
 "public_transport_warning_title" = "Toplu taşıma navigasyonu şu anda beta testindedir, hatalar ve yanlışlıklar olabilir.";
 "allow_3d" = "2.5B görüntülemeye izin ver";
@@ -1614,7 +1614,7 @@
 "public_transport_empty_warning_title" = "Maalesef, OsmAnd ayarlarınız için bir rota bulamadı.";
 "res_slope" = "Yamaç";
 "help_legend_descr" = "Harita sembolleri için rehber";
-"help_mapillary" = "OsmAnd + Mapillary";
+"mapillary_item" = "OsmAnd + Mapillary";
 "help_travel" = "Seyahat (Wikipedia & Wikivoyage)";
 "help_osmand_live" = "Abonelik - OsmAnd Live";
 "help_purchases" = "OsmAnd satın almaları";
@@ -1867,7 +1867,7 @@
 "prev_seg_dist" = "Önceki bölüm %@";
 "next_segs_dist" = "Sonraki tüm bölümler %@";
 "next_seg_dist" = "Sonraki bölüm %@";
-"next_seg" = "Sonraki bölüm";
+"next_segment" = "Sonraki bölüm";
 "whole_track_descr" = "Tüm yol, seçilen profil kullanılarak yeniden hesaplanacak.";
 "next_seg_descr" = "Sonraki bölüm, seçilen profil kullanılarak yeniden hesaplanacak.";
 "route_betw_points_descr" = "Noktaların nasıl birleştirileceğini seçin: düz bir çizgi ile veya aşağıda listelenen profillerden birini kullanıp bir güzergah hesaplayarak.";
@@ -1902,7 +1902,7 @@
 "select_another_track" = "Başka bir yol seç";
 "shared_string_gpx_track" = "Takip et";
 "follow_track" = "Yolu takip et";
-"split_after" = "Sonra böl";
+"plan_route_split_after" = "Sonra böl";
 "plan_route_split_before" = "Önce böl";
 "gpx_already_exsists" = "Bu ada sahip dosya zaten var";
 "empty_filename" = "Dosya adı boş olamaz";
@@ -2371,7 +2371,7 @@
 "cloud_conflicts" = "Çakışmalar";
 "backup_error_subscription_was_expired_descr" = "OsmAnd Pro aboneliğinizin süresi doldu, yedeklemeyi kullanmak için yenileyin. Buluttan verileri hala geri yükleyebilirsiniz.";
 "backup_error_user_is_not_registered" = "Bu e-posta adresiyle kayıtlı kullanıcı yok";
-"rendering_attr_lightRailRoutes_name" = "Hafif raylı yolları";
+"rendering_attr_showLightRailRoutes_name" = "Hafif raylı yolları";
 "backup_error_user_is_already_registered" = "Bu e-posta adresi başka bir hesapta kullanılıyor";
 "backup_error_file_not_available" = "Dosya kullanılamıyor";
 "backup_error_subscription_was_used" = "Abonelik veya tanıtım başka bir hesap tarafından kullanıldı %@";

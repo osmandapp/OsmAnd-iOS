@@ -152,7 +152,7 @@
 "driving_region_us" = "미국";
 "driving_region_europe_asia" = "유럽, 아시아, 라틴 아메리카 및 유사";
 "region_central_america" = "중앙 아메리카";
-"region_asia" = "아시아";
+"index_name_asia" = "아시아";
 
 // World Regions
 "region_antarctica" = "남극 대륙";
@@ -216,7 +216,7 @@
 "favorite" = "즐겨찾기";
 "poi_overlay" = "POI 오버레이";
 "groups" = "그룹";
-"poi_type" = "POI유형";
+"poi_dialog_poi_type" = "POI유형";
 "my_favorites" = "내 즐겨찾기";
 "my_places" = "저장소";
 "fav_no_group" = "그룹 없음";
@@ -347,7 +347,7 @@
 
 // GPX
 "gpx_point" = "포인트";
-"rec_interval" = "기록 간격";
+"save_track_interval_globally" = "기록 간격";
 "track_clear_q" = "현재 트랙을 지우시겠습니까?";
 "record_trip" = "트랙 기록";
 "track_clear" = "현재 트랙 지우기";
@@ -413,7 +413,7 @@
 "square" = "사각형";
 "gpx_waypoints" = "경유지";
 "gpx_points" = "점(s)";
-"gpx_import_title" = "트랙 가져오기";
+"import_tracks" = "트랙 가져오기";
 "gpx_import_already_exists" = "지정한 트랙 파일이 목록에 이미 있음. 작업을 선택하십시오.";
 "gpx_add_new" = "새 파일 추가";
 "gpx_overwrite" = "덮어쓰기";
@@ -726,7 +726,7 @@
 "osm_edits_basic" = "기본";
 "shared_string_none" = "없음";
 "routing_attr_avoid_toll_name" = "유료도로 회피";
-"split_after" = "다음 후 분할";
+"plan_route_split_after" = "다음 후 분할";
 "lang_ro" = "루마니아어";
 "lang_bn" = "벵골어";
 "rendering_value_purple_name" = "보라색";
@@ -792,7 +792,7 @@
 "map_widget_plain_time" = "현재 시간";
 "units_nm" = "nm";
 "route_points" = "루트 포인트";
-"m_style_pulic_transport" = "대중 교통";
+"poi_filter_public_transport" = "대중 교통";
 "lang_sc" = "사르디니아어";
 "intermediate_point" = "경유지 %@";
 "rendering_attr_currentTrackWidth_name" = "GPX폭";

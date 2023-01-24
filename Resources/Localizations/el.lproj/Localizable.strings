@@ -341,7 +341,7 @@
 "show_lanes" = "Λωρίδες";
 "osm_target_deleted" = "Διαγραμμένο ΣΕ OSM";
 "map_markers_other" = "Λοιποί δείκτες";
-"rec_interval" = "Διάστημα καταγραφής";
+"save_track_interval_globally" = "Διάστημα καταγραφής";
 "gpx_option_calculate_first_last_segment" = "Υπολογισμός διαδρομής του OsmAnd για το πρώτο και τελευταίο τμήμα";
 "quick_action_name_footer" = "Αφήστε κενό για χρήση της διεύθυνσης ή του ονόματος μέρους.";
 "product_title_asia" = "Ασία";
@@ -407,7 +407,7 @@
 "product_title_europe" = "Ευρώπη";
 "map_settings_show" = "Εμφάνιση στον χάρτη";
 "day" = "Ημέρα";
-"poi_type" = "Τύπος ΣΕ";
+"poi_dialog_poi_type" = "Τύπος ΣΕ";
 "unknown_location" = "Η Θέση δεν είναι ακόμα γνωστή.";
 "shared_string_buy" = "Αγορά";
 "shared_string_on" = "Ενεργό";
@@ -415,10 +415,10 @@
 "save_poi_too_many_uppercase" = "Το όνομα περιέχει υπερβολικά πολλά κεφαλαία γράμματα. Συνέχεια;";
 "auto_zoom_none" = "Χωρίς αυτόματη εστίαση";
 "keep_informing_never" = "Μόνο χειροκίνητα (πατήστε το βέλος)";
-"region_asia" = "Ασία";
+"index_name_asia" = "Ασία";
 "si_min_m" = "Λεπτά ανά μίλι";
 "sett_arr_loc" = "Τοποθεσία";
-"osmand_live_daily" = "Ημερήσια";
+"daily" = "Ημερήσια";
 "shared_string_building" = "Κτήριο";
 "osmand_live_updates" = "Ζωντανές ενημερώσεις";
 "create_items" = "Δημιουργία στοιχείων";
@@ -1004,7 +1004,7 @@
 "shared_string_routing" = "Δρομολόγηση";
 "shared_string_import_complete" = "Ολοκλήρωση εισαγωγής";
 "listed_exist" = "Το εισηγμένο %@, υπάρχει ήδη στο OsmAnd.";
-"help_mapillary" = "OsmAnd + Mapillary";
+"mapillary_item" = "OsmAnd + Mapillary";
 "map_look_descr" = "Εμφάνιση χάρτη";
 "quick_action_remove_next_destination" = "Διαγραφή του πλησιέστερου σημείου προορισμού";
 "position_icon_while_moving" = "Εικονίδιο θέσης κατά τη μετακίνηση";
@@ -1017,7 +1017,7 @@
 "help_purchases" = "Αγορές OsmAnd";
 "selected_profile" = "Επιλεγμένη κατατομή (προφίλ)";
 "replace_all_desc" = "Τα τρέχοντα αντικείμενα θα αντικατασταθούν με αντικείμενα από το αρχείο";
-"next_seg" = "Επόμενο τμήμα";
+"next_segment" = "Επόμενο τμήμα";
 "position_icon_at_rest" = "Εικονίδιο θέσης σε ακινησία";
 "export_profile" = "Εξαγωγή κατατομής (προφίλ)";
 "public_transport_hide" = "Απόκρυψη δημόσιων συγκοινωνιών";
@@ -1070,7 +1070,7 @@
 "light_theme" = "Φωτεινό";
 "shared_string_transparency" = "Διαφάνεια";
 "save_new_track" = "Αποθήκευση ως νέου ίχνους";
-"m_style_pulic_transport" = "Δημόσια Μ.Μ.Μ";
+"poi_filter_public_transport" = "Δημόσια Μ.Μ.Μ";
 "ltr_or_rtl_combine_via_colon" = "%@: %@";
 "edit_profile_list" = "Επεξεργασία καταλόγου κατατομών (προφίλ)";
 "quick_action_mapillary_hide" = "Απόκρυψη Mapillary";

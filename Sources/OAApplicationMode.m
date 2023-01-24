@@ -119,7 +119,7 @@ static OAApplicationMode *_HORSE;
     _PEDESTRIAN.descr = OALocalizedString(@"base_profile_descr_pedestrian");
     [_PEDESTRIAN reg];
     
-    _PUBLIC_TRANSPORT = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_pulic_transport") stringKey:@"public_transport"];
+    _PUBLIC_TRANSPORT = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"poi_filter_public_transport") stringKey:@"public_transport"];
     _PUBLIC_TRANSPORT.descr = OALocalizedString(@"base_profile_descr_public_transport");
     [_PUBLIC_TRANSPORT reg];
     

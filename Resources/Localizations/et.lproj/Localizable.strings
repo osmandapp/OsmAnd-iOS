@@ -390,7 +390,7 @@
 "favorite" = "Lemmik";
 "amenity" = "Mugavus";
 "poi_overlay" = "HP ülekate";
-"poi_type" = "Huvipunkti liik";
+"poi_dialog_poi_type" = "Huvipunkti liik";
 "my_favorites" = "Minu lemmikud";
 "my_places" = "Minu kohad";
 "fav_no_group" = "Gruppi pole";
@@ -427,7 +427,7 @@
 "gpx_points" = "Punkt(id)";
 "shared_string_export" = "Ekspordi";
 "import_export" = "Import/Eksport";
-"gpx_import_title" = "Impordi teekondi";
+"import_tracks" = "Impordi teekondi";
 "gpx_import_already_exists" = "Määratud teekonna fail on juba nimekirjas. Palun vali tegevus.";
 "gpx_add_new" = "Lisa uus fail";
 "gpx_overwrite" = "Kirjuta üle";
@@ -460,7 +460,7 @@
 "track_save_descr" = "Salvesta praegune teekond kohe GPX failina.";
 "track_continue_rec" = "Jätka salvestamist";
 "track_continue_rec_q" = "Kas soovid salvestamist jätkata?";
-"rec_interval" = "Logimise ajavahemik";
+"save_track_interval_globally" = "Logimise ajavahemik";
 "rec_interval_minimum" = "Vähim";
 "track_start_rec" = "Alusta teekonna salvestamist";
 "track_rec_addon_q" = "Palun aktiveeri teekonna salvestamise laiendus, et oma salvestada ja hoida alles oma teekondi";
@@ -564,7 +564,7 @@
 "osmand_live_last_live_update" = "Viimane uuendus: %@";
 "osmand_live_not_updated" = "Pole veel uuendatud";
 "osmand_live_hourly" = "Iga tund";
-"osmand_live_daily" = "Iga päev";
+"daily" = "Iga päev";
 "osmand_live_weekly" = "Iga nädal";
 "osmand_live_reports" = "Aruanded";
 "osmand_live_server_date" = "Viimane serveri uuendus: %@";
@@ -917,7 +917,7 @@
 // World Regions
 "region_antarctica" = "Antarktis";
 "region_africa" = "Aafrika";
-"region_asia" = "Aasia";
+"index_name_asia" = "Aasia";
 "region_ausralia_and_oceania" = "Austraalia ja Okeaania";
 "region_central_america" = "Kesk-Ameerika";
 "region_europe" = "Euroopa";
@@ -1565,7 +1565,7 @@
 "map_settings_slopes_legend" = "Lisateavet nõlvade kohta saate lugeda Vikipeediast";
 "map_settings_layer_transparency" = "Kihi läbipaistvus";
 "shared_string_terrain" = "Maastik";
-"m_style_pulic_transport" = "Ühistransport";
+"poi_filter_public_transport" = "Ühistransport";
 "displayed_route_save" = "Salvesta rakendusse OsmAnd Tracks";
 "gpx_analyze" = "Analüüsi";
 "import_from_files" = "Impordi failidest";
@@ -1636,7 +1636,7 @@
 "trip_hint" = "Sisesta teekonna nimi";
 "trip_name" = "Teekonna nimi";
 "help_legend_descr" = "Kaardisümboleid kirjeldav juhend";
-"help_mapillary" = "OsmAnd ja Mapillary";
+"mapillary_item" = "OsmAnd ja Mapillary";
 "help_travel" = "Reisimine (Wikipedia ja Wikivoyage)";
 "help_osmand_live" = "OsmAnd Live tellimus";
 "help_purchases" = "Ostud OsmAnd rakenduses";
@@ -1848,7 +1848,7 @@
 "route_betw_points_descr" = "Vali kuidas ühendada sõlmed: kas sirgjoonega või koostades uue teekonna mõne alljärgneva profiili alusel.";
 "next_seg_descr" = "Järgmine lõik arvutatakse valitud profiili alusel ümber.";
 "whole_track_descr" = "Kogu teekond arvutatakse valitud profiili alusel ümber.";
-"next_seg" = "Järgmine segment";
+"next_segment" = "Järgmine segment";
 "next_seg_dist" = "Järgmine lõik %@";
 "next_segs_dist" = "Kõik järgnevad lõigud %@";
 "prev_segs_recalc_descr" = "Kõik eelmised lõigud arvutatakse valitud profiili alusel ümber";
@@ -1894,7 +1894,7 @@
 "plan_route_change_folder" = "Vaheta kaust";
 "plan_route_folder" = "Kaust";
 "point_to_navigate" = "Navigeeri punkti";
-"split_after" = "Tükelda pärast";
+"plan_route_split_after" = "Tükelda pärast";
 "plan_route_split_before" = "Tükelda enne";
 "gpx_already_exsists" = "Selle nimega fail on juba olemas";
 "empty_filename" = "Faili nimi ei saa olla tühi";
@@ -2339,7 +2339,7 @@
 "cloud_conflicts" = "Versioonide erinevused";
 "osmand_cloud_login_descr" = "Palun sisesta registreerumisel kasutatud e-posti aadress. Saadame sulle järgmisel sammul vaja mineva ühekordse salasõna.";
 "routing_attr_prefer_horse_routes_name" = "Eelista hobuste marsruute";
-"rendering_attr_lightRailRoutes_name" = "Kergraudtee liinid";
+"rendering_attr_showLightRailRoutes_name" = "Kergraudtee liinid";
 "backup_error_token_is_not_valid_or_expired" = "Kehtetu või aegunud sümbol";
 "verify_email_address_descr" = "Kinnituskood on saadetud aadressile %@. Palun sisesta see allolevale väljale.";
 "routeInfo_roadClass_description" = "Teekonna või raja värvimine vastavalt teede klassifikatsioonile.";

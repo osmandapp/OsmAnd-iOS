@@ -514,7 +514,7 @@
 "groups" = "Grupos";
 "favorite" = "Favorito";
 "poi_overlay" = "Superposición de PDI";
-"poi_type" = "Tipo de PDI";
+"poi_dialog_poi_type" = "Tipo de PDI";
 "my_favorites" = "Mis favoritos";
 "my_places" = "Mis sitios";
 "fav_no_group" = "Sin grupo";
@@ -582,7 +582,7 @@
 "gpx_selection_segment_title" = "Segmentos";
 "route_points" = "Puntos de la ruta";
 "import_export" = "Importar/Exportar";
-"gpx_import_title" = "Importar trazas";
+"import_tracks" = "Importar trazas";
 "gpx_import_already_exists" = "Ya existe el archivo de la traza indicada. Elige una acción.";
 "gpx_add_new" = "Añadir nuevo archivo";
 "gpx_overwrite" = "Sobrescribir";
@@ -622,7 +622,7 @@
 "track_save_descr" = "Guarda la traza actual como archivo GPX ahora.";
 "track_continue_rec" = "Seguir grabando";
 "track_continue_rec_q" = "¿Seguir grabando?";
-"rec_interval" = "Intervalo de registro";
+"save_track_interval_globally" = "Intervalo de registro";
 "rec_interval_minimum" = "Mínimo";
 "track_start_rec" = "Iniciar grabación de traza";
 "track_rec_addon_q" = "Activa el complemento «Grabación de traza» para registrar y guardar las trazas";
@@ -651,7 +651,7 @@
 
 // Map settings
 "m_style_car" = "Automóvil";
-"m_style_pulic_transport" = "Transporte público";
+"poi_filter_public_transport" = "Transporte público";
 "map_settings_map" = "Mapa";
 "layer_amenity_label" = "Nombres de puntos (PDI, favoritos)";
 "map_settings_show" = "Mostrar en el mapa";
@@ -1007,7 +1007,7 @@
 "route_betw_points_descr" = "Elige cómo conectar los puntos: con una línea recta o calculando una ruta usando uno de los perfiles listados a continuación.";
 "next_seg_descr" = "El siguiente segmento será recalculado usando el perfil elegido.";
 "whole_track_descr" = "Recalcular toda la traza usando el perfil elegido.";
-"next_seg" = "Siguiente segmento";
+"next_segment" = "Siguiente segmento";
 "whole_track" = "Traza completa";
 "next_seg_dist" = "Siguiente segmento %@";
 "next_segs_dist" = "Todos los segmentos posteriores %@";
@@ -1036,7 +1036,7 @@
 "gpx_already_exsists" = "Ya existe un archivo con ese nombre";
 "folder_already_exsists" = "Una carpeta con este nombre ya existe";
 "plan_route_split_before" = "Dividir antes";
-"split_after" = "Dividir después";
+"plan_route_split_after" = "Dividir después";
 "follow_track" = "Seguir traza";
 "shared_string_gpx_track" = "Traza";
 "select_another_track" = "Elegir otra traza";
@@ -1067,7 +1067,7 @@
 "osmand_live_last_live_update" = "Última actualización: %@";
 "osmand_live_not_updated" = "Aún no actualizado";
 "osmand_live_hourly" = "Cada hora";
-"osmand_live_daily" = "Cada día";
+"daily" = "Cada día";
 "osmand_live_weekly" = "Cada semana";
 "osmand_live_reports" = "Informes";
 "osmand_live_server_date" = "Última actualización del servidor: %@";
@@ -1465,7 +1465,7 @@
 "help_purchases" = "Compras en OsmAnd";
 "help_osmand_live" = "Suscripción - OsmAnd Live";
 "help_travel" = "Viajes (Wikipedia y Wikiviajes)";
-"help_mapillary" = "OsmAnd + Mapillary";
+"mapillary_item" = "OsmAnd + Mapillary";
 "help_legend" = "Leyenda del mapa";
 "help_legend_descr" = "La guía para los símbolos del mapa";
 "help_other_header" = "Otros";
@@ -1515,7 +1515,7 @@
 // World Regions
 "region_antarctica" = "Antártida";
 "region_africa" = "África";
-"region_asia" = "Asia";
+"index_name_asia" = "Asia";
 "region_ausralia_and_oceania" = "Australia y Oceanía";
 "region_central_america" = "Centroamérica";
 "region_europe" = "Europa";
@@ -2380,7 +2380,7 @@
 "wind_show" = "Mostrar viento";
 "wind_hide" = "Ocultar viento";
 "toggle_wind" = "Mostrar/Ocultar - Capa de viento";
-"rendering_attr_lightRailRoutes_name" = "Rutas de tren ligero";
+"rendering_attr_showLightRailRoutes_name" = "Rutas de tren ligero";
 "rendering_attr_monorailRoutes_name" = "Rutas de monorriel";
 "rendering_attr_funicularRoutes_name" = "Rutas funiculares";
 "cloud_hide" = "Ocultar nubes";

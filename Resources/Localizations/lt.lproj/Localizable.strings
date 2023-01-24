@@ -514,7 +514,7 @@
 "groups" = "Grupės";
 "favorite" = "Įsimintos vietos";
 "poi_overlay" = "POI Overlay";
-"poi_type" = "LV tipas";
+"poi_dialog_poi_type" = "LV tipas";
 "my_favorites" = "My Favorites";
 "my_places" = "Mano vietos";
 "fav_no_group" = "No group";
@@ -582,7 +582,7 @@
 "gpx_selection_segment_title" = "Segments";
 "route_points" = "Maršruto taškai";
 "import_export" = "Import/Export";
-"gpx_import_title" = "Import tracks";
+"import_tracks" = "Import tracks";
 "gpx_import_already_exists" = "The specified track file is already exists in the list. Please choose action.";
 "gpx_add_new" = "Add new file";
 "gpx_overwrite" = "Overwrite";
@@ -622,7 +622,7 @@
 "track_save_descr" = "Išsaugoti esamą kelią į GPX failą dabar.";
 "track_continue_rec" = "Continue recording";
 "track_continue_rec_q" = "Do you want to continue recording?";
-"rec_interval" = "Įrašymo intervalas";
+"save_track_interval_globally" = "Įrašymo intervalas";
 "rec_interval_minimum" = "Minimum";
 "track_start_rec" = "Start track recording";
 "track_rec_addon_q" = "Please activate Track recording addon to record and save your tracks";
@@ -651,7 +651,7 @@
 
 // Map settings
 "m_style_car" = "Automobilis";
-"m_style_pulic_transport" = "Viešasis transportas";
+"poi_filter_public_transport" = "Viešasis transportas";
 "map_settings_map" = "Žemėlapis";
 "layer_amenity_label" = "LV sluoksnių pavadinimai";
 "map_settings_show" = "Rodytižemėlapyje";
@@ -1007,7 +1007,7 @@
 "route_betw_points_descr" = "Choose how to connect the points: with a straight line or by calculating a route using one of profiles listed below.";
 "next_seg_descr" = "The next segment will be recalculated using selected profile.";
 "whole_track_descr" = "The whole track will be recalculated using selected profile.";
-"next_seg" = "Next segment";
+"next_segment" = "Next segment";
 "whole_track" = "Whole track";
 "next_seg_dist" = "Next segment %@";
 "next_segs_dist" = "All subsequent segments %@";
@@ -1036,7 +1036,7 @@
 "gpx_already_exsists" = "File with this name already exists";
 "folder_already_exsists" = "Folder with this name already exists";
 "plan_route_split_before" = "Split before";
-"split_after" = "Split after";
+"plan_route_split_after" = "Split after";
 "follow_track" = "Follow track";
 "shared_string_gpx_track" = "Kelias";
 "select_another_track" = "Select another track";
@@ -1067,7 +1067,7 @@
 "osmand_live_last_live_update" = "Paskutinįkart atnaujinta: %@";
 "osmand_live_not_updated" = "Not yet updated";
 "osmand_live_hourly" = "Kas valandą";
-"osmand_live_daily" = "Kasdien";
+"daily" = "Kasdien";
 "osmand_live_weekly" = "Kas savaitę";
 "osmand_live_reports" = "Reports";
 "osmand_live_server_date" = "Last server update: %@";
@@ -1465,7 +1465,7 @@
 "help_purchases" = "OsmAnd purchases";
 "help_osmand_live" = "Subscription - OsmAnd Live";
 "help_travel" = "Travel (Wikipedia & Wikivoyage)";
-"help_mapillary" = "OsmAnd + Mapillary";
+"mapillary_item" = "OsmAnd + Mapillary";
 "help_legend" = "Legenda";
 "help_legend_descr" = "The guide to map's symbols";
 "help_other_header" = "Kita";
@@ -1515,7 +1515,7 @@
 // World Regions
 "region_antarctica" = "Antarktida";
 "region_africa" = "Afrika";
-"region_asia" = "Azija";
+"index_name_asia" = "Azija";
 "region_ausralia_and_oceania" = "Australija ir Okeanija";
 "region_central_america" = "Centrinė Amerika";
 "region_europe" = "Europa";
@@ -2368,7 +2368,7 @@
 "context_menu_edit_descr" = "Redaguoti aprašymą";
 "add_description" = "Pridėti aprašymą";
 "rendering_attr_funicularRoutes_name" = "Funikulieriaus maršrutai";
-"rendering_attr_lightRailRoutes_name" = "Lengvojo geležinkelio maršrutai";
+"rendering_attr_showLightRailRoutes_name" = "Lengvojo geležinkelio maršrutai";
 "preferred_terrain" = "Pageidaujamas reljefas";
 "quarterly_subscription" = "Ketvirtinė prenumerata";
 "expires" = "Baigia galioti";

@@ -82,7 +82,7 @@
 "rendering_category_hide" = "Veşêre";
 "region_russia" = "Rûsya";
 "region_europe" = "Ewropa";
-"region_asia" = "Asya";
+"index_name_asia" = "Asya";
 // World Regions
 "region_africa" = "Afrîka";
 "ctx_mnu_direction" = "Alî";
@@ -143,8 +143,8 @@
 "transport_stop" = "Rawestgeh";
 "transport_nearby_routes" = "NÊZÎK";
 "poi_remove_success" = "Jêbirî";
-"poi_type" = "Cureya POIyê";
-"osmand_live_daily" = "Rojane";
+"poi_dialog_poi_type" = "Cureya POIyê";
+"daily" = "Rojane";
 "help_map_viewing" = "Dîtina nexşeyê";
 "sett_show" = "Nîşan bide";
 "shared_string_upload" = "Bar bike";

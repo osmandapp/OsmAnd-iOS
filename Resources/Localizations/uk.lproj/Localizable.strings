@@ -125,7 +125,7 @@
 "tracks" = "Треки";
 "gpx_waypoints" = "Маршрутні точки";
 "gpx_points" = "Точки";
-"gpx_import_title" = "Імпорт треків";
+"import_tracks" = "Імпорт треків";
 "gpx_import_already_exists" = "Зазначений файл треку вже є в переліку. Оберіть дію.";
 "gpx_cannot_import" = "Неможливо імпортувати файл GPX";
 "gpx_export_title" = "Експорт треку";
@@ -176,7 +176,7 @@
 "gpx_route_time" = "Час маршруту";
 "gpx_uphldownhl" = "Підйоми/спуски";
 "track_save" = "Зберегти поточний трек";
-"rec_interval" = "Інтервал запису";
+"save_track_interval_globally" = "Інтервал запису";
 "track_rec_addon_q" = "Увімкніть додаток „Запис треків“ для запису ваших треків";
 "track_clear" = "Очистити поточний трек";
 "track_clear_q" = "Дійсно бажаєте очистити поточний трек?";
@@ -297,7 +297,7 @@
 "col_magenta" = "Пурпуровий";
 // World Regions
 "region_africa" = "Африка";
-"region_asia" = "Азія";
+"index_name_asia" = "Азія";
 "region_ausralia_and_oceania" = "Австралія та Океанія";
 "region_central_america" = "Центральна Америка";
 "region_europe" = "Європа";
@@ -793,7 +793,7 @@
 "osmand_live_last_live_update" = "Останнє оновлення: %@";
 "osmand_live_not_updated" = "Ще не оновлено";
 "osmand_live_hourly" = "Щогодинно";
-"osmand_live_daily" = "Щоденно";
+"daily" = "Щоденно";
 "osmand_live_weekly" = "Щотижня";
 "osmand_live_reports" = "Звіти";
 "osmand_live_server_date" = "Останнє оновлення серверу: %@";
@@ -813,7 +813,7 @@
 "osmand_live_cancel_descr" = "Поновіть передплату, щоб продовжити користування повною функціональністю:";
 "osmand_live_update_now" = "Оновити зараз";
 "shared_string_upload" = "Надіслати";
-"poi_type" = "Тип POI";
+"poi_dialog_poi_type" = "Тип POI";
 // OSM Editing actions
 "opening_changeset" = "Відкривається набір змін…";
 "closing_changeset" = "Закривається набір змін…";
@@ -1603,7 +1603,7 @@
 "walk" = "Пішки";
 "public_transport_warning_descr_blog" = "Докладніше про те, як OsmAnd обчислює маршрути, читайте в нашому деннику.";
 "total" = "Усього";
-"m_style_pulic_transport" = "Громадський транспорт";
+"poi_filter_public_transport" = "Громадський транспорт";
 "exit_at" = "Вихід на";
 "public_transport_warning_title" = "Навігація громадським транспортом на даний час проходить тестування, можливі помилки та неточності.";
 "avoid_transport_type" = "Уникати види транспорту";
@@ -1617,7 +1617,7 @@
 "public_transport_empty_warning_title" = "На жаль, OsmAnd не зміг підібрати маршрут, що відповідав би вашим налаштуванням.";
 "res_slope" = "Ухил";
 "help_legend_descr" = "Довідник умовних позначень мапи";
-"help_mapillary" = "OsmAnd + Mapillary";
+"mapillary_item" = "OsmAnd + Mapillary";
 "help_travel" = "Подорожі (Wikipedia та Wikivoyage)";
 "help_osmand_live" = "Передплата - OsmAnd Live";
 "help_purchases" = "Придбання OsmAnd";
@@ -1871,7 +1871,7 @@
 "next_segs_dist" = "Усі наступні відрізки %@";
 "next_seg_dist" = "Наступний відрізок %@";
 "whole_track" = "Весь трек";
-"next_seg" = "Наступний відрізок";
+"next_segment" = "Наступний відрізок";
 "whole_track_descr" = "Весь трек буде перераховано за допомогою вибраного профілю.";
 "next_seg_descr" = "Наступний відрізок буде створено за допомогою вибраного профілю.";
 "route_betw_points_descr" = "Виберіть як з'єднати точки: прямою лінією або обчисленням маршруту за допомогою одного з профілів, перерахованих внизу.";
@@ -1903,7 +1903,7 @@
 "select_another_track" = "Обрати інший трек";
 "shared_string_gpx_track" = "Трек";
 "follow_track" = "Навігація за треком";
-"split_after" = "Розділити після";
+"plan_route_split_after" = "Розділити після";
 "plan_route_split_before" = "Розділити перед";
 "gpx_already_exsists" = "Файл з цією назвою вже існує";
 "empty_filename" = "Назва файлу не може бути порожньою";
@@ -2385,7 +2385,7 @@
 "backup_error_subscription_was_used" = "Передплату або акцію застосовано іншим обліковим записом %@";
 "rendering_attr_monorailRoutes_name" = "Монорейкові маршрути";
 "backup_error_subscription_was_expired_descr" = "Термін дії передплати OsmAnd Pro завершився, поновіть її, щоб користуватись резервним копіюванням. Ви досі можете відновити дані з Хмари.";
-"rendering_attr_lightRailRoutes_name" = "Маршрути легкорейкового транспорту";
+"rendering_attr_showLightRailRoutes_name" = "Маршрути легкорейкового транспорту";
 "temperature_show" = "Показати температуру";
 "temperature_hide" = "Сховати температуру";
 "toggle_temperature" = "Показати/сховати - Температурний шар";

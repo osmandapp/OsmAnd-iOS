@@ -515,7 +515,7 @@
 "groups" = "Grupe";
 "favorite" = "Omiljeno";
 "poi_overlay" = "POI Overlay";
-"poi_type" = "Tip tačke od interesa";
+"poi_dialog_poi_type" = "Tip tačke od interesa";
 "my_favorites" = "My Favorites";
 "my_places" = "Moja mesta";
 "fav_no_group" = "No group";
@@ -584,7 +584,7 @@
 "route_points" = "Tačke putanje";
 "import_export" = "Import/Export";
 
-"gpx_import_title" = "Uvezi putanje";
+"import_tracks" = "Uvezi putanje";
 "gpx_import_already_exists" = "The specified track file is already exists in the list. Please choose action.";
 "gpx_add_new" = "Add new file";
 "gpx_overwrite" = "Overwrite";
@@ -624,7 +624,7 @@
 "track_save_descr" = "Sačuvaj odmah trenutnu putanju kao GPX fajl.";
 "track_continue_rec" = "Continue recording";
 "track_continue_rec_q" = "Do you want to continue recording?";
-"rec_interval" = "Interval beleženja";
+"save_track_interval_globally" = "Interval beleženja";
 "rec_interval_minimum" = "Minimum";
 "track_start_rec" = "Start track recording";
 "track_rec_addon_q" = "Please activate Track recording addon to record and save your tracks";
@@ -653,7 +653,7 @@
 
 // Map settings
 "m_style_car" = "Vožnja automobila";
-"m_style_pulic_transport" = "Javni prevoz";
+"poi_filter_public_transport" = "Javni prevoz";
 "map_settings_map" = "Karta";
 "layer_amenity_label" = "Nazivi tačaka (tačke od interesa, omiljene)";
 "map_settings_show" = "Prikaži na karti";
@@ -1010,7 +1010,7 @@
 "route_betw_points_descr" = "Choose how to connect the points: with a straight line or by calculating a route using one of profiles listed below.";
 "next_seg_descr" = "The next segment will be recalculated using selected profile.";
 "whole_track_descr" = "The whole track will be recalculated using selected profile.";
-"next_seg" = "Sledeći segment";
+"next_segment" = "Sledeći segment";
 "whole_track" = "Cela staza";
 "next_seg_dist" = "Next segment %@";
 "next_segs_dist" = "All subsequent segments %@";
@@ -1039,7 +1039,7 @@
 "gpx_already_exsists" = "File with this name already exists";
 "folder_already_exsists" = "Folder with this name already exists";
 "plan_route_split_before" = "Podeli pre";
-"split_after" = "Posle podeli";
+"plan_route_split_after" = "Posle podeli";
 "follow_track" = "Sledi stazu";
 "shared_string_gpx_track" = "Putanja";
 "select_another_track" = "Izaberite drugu stazu";
@@ -1070,7 +1070,7 @@
 "osmand_live_last_live_update" = "Poslednje ažuriranje: %@";
 "osmand_live_not_updated" = "Not yet updated";
 "osmand_live_hourly" = "Na svakih sat vremena";
-"osmand_live_daily" = "Dnevno";
+"daily" = "Dnevno";
 "osmand_live_weekly" = "Sedmično";
 "osmand_live_reports" = "Reports";
 "osmand_live_server_date" = "Last server update: %@";
@@ -1468,7 +1468,7 @@
 "help_purchases" = "OsmAnd kupovine";
 "help_osmand_live" = "Članarina - OsmAnd uživo";
 "help_travel" = "Travel (Wikipedia & Wikivoyage)";
-"help_mapillary" = "OsmAnd + Mapillary";
+"mapillary_item" = "OsmAnd + Mapillary";
 "help_legend" = "Legenda na karti";
 "help_legend_descr" = "The guide to map's symbols";
 "help_other_header" = "Ostalo";
@@ -1518,7 +1518,7 @@
 // World Regions
 "region_antarctica" = "Antarktik";
 "region_africa" = "Afrika";
-"region_asia" = "Azija";
+"index_name_asia" = "Azija";
 "region_ausralia_and_oceania" = "Australija i Okeanija";
 "region_central_america" = "Centralna Amerika";
 "region_europe" = "Evropa";
@@ -2329,7 +2329,7 @@
 "verify_email_address_descr" = "Verifikacioni kod je poslat na %@, unesite ga u polje ispod.";
 "osmand_cloud" = "OsmAnd oblak";
 "routing_attr_only_permitted_streets_name" = "Izričito dozvoljene ulice";
-"rendering_attr_lightRailRoutes_name" = "Rute lakeželeznice";
+"rendering_attr_showLightRailRoutes_name" = "Rute lakeželeznice";
 "nautical_depth" = "Nautička dubina";
 "shared_string_purchased" = "Kupljeno";
 "cloud_description" = "Nikada ne gubite podatke, pravite rezervne kopije i vraćajte sve informacije bez problema.";

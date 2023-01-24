@@ -272,7 +272,7 @@
     else if ([name isEqualToString:@"showTrainRoutes"])
         return OALocalizedString(@"rendering_attr_trainLightrailRoutes_name");
     else if ([name isEqualToString:@"showLightRailRoutes"])
-        return OALocalizedString(@"rendering_attr_lightRailRoutes_name");
+        return OALocalizedString(@"rendering_attr_showLightRailRoutes_name");
     else if ([name isEqualToString:@"showFunicularRoutes"])
         return OALocalizedString(@"rendering_attr_funicularRoutes_name");
     else if ([name isEqualToString:@"showMonorailRoutes"])

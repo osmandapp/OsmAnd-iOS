@@ -57,7 +57,7 @@
 "gpx_points" = "Punto(i)";
 "shared_string_export" = "Esporta";
 "import_export" = "Importa/Esporta";
-"gpx_import_title" = "Importa tracce";
+"import_tracks" = "Importa tracce";
 "gpx_import_already_exists" = "Il file del viaggio indicato è già presente nella lista. Per favore scegliere l'azione.";
 "gpx_add_new" = "Aggiungi un nuovo file";
 "gpx_overwrite" = "Sovrascrivi";
@@ -210,7 +210,7 @@
 "help_quiz" = "Quiz";
 // World Regions
 "region_africa" = "Africa";
-"region_asia" = "Asia";
+"index_name_asia" = "Asia";
 "region_russia" = "Russia";
 "shared_string_or" = "o";
 "shared_string_add" = "Aggiungi";
@@ -235,7 +235,7 @@
 "track_save" = "Salva la traccia corrente";
 "track_continue_rec" = "Continua a registrare";
 "track_continue_rec_q" = "Vuoi che la registrazione continui?";
-"rec_interval" = "Intervallo registrazione";
+"save_track_interval_globally" = "Intervallo registrazione";
 "rec_interval_minimum" = "Minimo";
 "track_start_rec" = "Avvia la registrazione del viaggio";
 "track_rec_addon_q" = "Prego attivare il componente aggiuntivo Registrazione del viaggio per registrare e salvare i tuoi percorsi";
@@ -786,7 +786,7 @@
 "gpx_slope" = "Pendenza";
 "download_depth_countours" = "Linee isoipse marine";
 "show_something_on_map" = "Mostra %@ sulla mappa";
-"osmand_live_daily" = "Giornaliero";
+"daily" = "Giornaliero";
 "quick_action_start_stop_nav_descr" = "Premi questo pulsante per avviare o fermare la navigazione.";
 "osm_close_changeset" = "Chiudi le modifiche";
 "hide_contour_lines" = "Nascondi le linee isoipse";
@@ -875,7 +875,7 @@
 "map_settings_map_magnifier" = "Ingrandimento mappa";
 "local_names" = "Nomi locali";
 "map_overlays" = "Mappa di sovrapposizione";
-"poi_type" = "Tipo di PDI";
+"poi_dialog_poi_type" = "Tipo di PDI";
 "add_poi" = "Aggiungi PDI";
 "directions_more_options" = "Indicazioni da";
 "map_downloaded" = "Mappa scaricata";
@@ -1613,7 +1613,7 @@
 "map_settings_slopes_legend" = "Puoi leggere di più sulle piste su Wikipedia";
 "map_settings_layer_transparency" = "Trasparenza del livello";
 "shared_string_terrain" = "Terreno";
-"m_style_pulic_transport" = "Trasporto pubblico";
+"poi_filter_public_transport" = "Trasporto pubblico";
 "import_from_files" = "Importare da file";
 "gpx_parse_error" = "OsmAnd GPX nonè ben formato, contatta il team di supporto per approfondire.";
 "map_update_warning" = "Vuoi ricaricare i dati dei riquadri da Internet?";
@@ -1674,7 +1674,7 @@
 "app_profiles" = "Profili app";
 "add_to_track" = "Aggiungi ad una traccia";
 "save_new_track" = "Salva come nuova traccia";
-"help_mapillary" = "OsmAnd + Mapillary";
+"mapillary_item" = "OsmAnd + Mapillary";
 "arrived_at_destination" = "Sei arrivato";
 "base_profile_descr_public_transport" = "Tipi di trasporto pubblico";
 "listed_exist" = "Gli elencati %@, esistono già in OsmAnd.";
@@ -1686,7 +1686,7 @@
 "route_betw_points" = "Percorso tra i punti";
 "public_transport_show" = "Mostra i trasporti pubblici";
 "osm_notes" = "Note OSM";
-"next_seg" = "Nuovo segmento";
+"next_segment" = "Nuovo segmento";
 "res_source_one_per_tile" = "Un file immagine per mattonella";
 "whole_track" = "Tutta la traccia";
 "width_limit_description" = "Indica la larghezza del veicolo, alcune restrizioni stradali potrebbero essere applicate per veicoli larghi.";
@@ -1756,7 +1756,7 @@
 "street_level_imagery" = "Immagini stradali";
 "markers_history" = "Cronologia dei marcatori";
 "shared_string_gpx_track" = "Traccia";
-"split_after" = "Spezza dopo";
+"plan_route_split_after" = "Spezza dopo";
 "shared_string_others" = "Ancora";
 "select_group" = "Seleziona il gruppo";
 "searching_gps" = "Ricerca GPS";
@@ -2084,7 +2084,7 @@
 "unlimited_map_downloads" = "Download illimitato delle mappe";
 "purchases_feature_desc_monthly_map_updates" = "Ottieni l\'accesso ad aggiornamenti mensili regolari per le mappe offline.";
 "redeem_promo_code" = "Riscatta il codice promozionale";
-"rendering_attr_lightRailRoutes_name" = "Percorsi ferroviari urbani leggeri";
+"rendering_attr_showLightRailRoutes_name" = "Percorsi ferroviari urbani leggeri";
 "monthly_map_updates" = "Aggiornamento della mappa mensile";
 "shared_string_includes" = "Include";
 "purchases_feature_desc_nautical" = "Mappe vettoriali adatte alla navigazione";

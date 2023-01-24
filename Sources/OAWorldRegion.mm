@@ -385,7 +385,7 @@
     regionsLookupTable[africaRegion.regionId] = africaRegion;
 
     OAWorldRegion* asiaRegion = [OAWorldRegion createRegionAs:OsmAnd::WorldRegions::AsiaRegionId
-                                            withLocalizedName:OALocalizedString(@"region_asia")
+                                            withLocalizedName:OALocalizedString(@"index_name_asia")
                                                          from:loadedWorldRegions];
     [entireWorld addSubregion:asiaRegion];
     regionsLookupTable[asiaRegion.regionId] = asiaRegion;

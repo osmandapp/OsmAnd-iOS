@@ -43,7 +43,7 @@
 "gpx_stat" = "Statistikker";
 "gpx_average_speed" = "Gennemsnitshastighed";
 "gpx_start" = "Start";
-"rec_interval" = "Logningsinterval";
+"save_track_interval_globally" = "Logningsinterval";
 "rec_interval_minimum" = "Minimum";
 "track_interval_remember" = "Husk valg";
 "show_info" = "Vis Infoformation";
@@ -111,7 +111,7 @@
 "col_magenta" = "Magenta";
 // World Regions
 "region_africa" = "Afrika";
-"region_asia" = "Asien";
+"index_name_asia" = "Asien";
 "region_ausralia_and_oceania" = "Australien og Oceanien";
 "region_central_america" = "Mellemamerika";
 "region_europe" = "Europa";
@@ -140,7 +140,7 @@
 "gpx_points" = "Punkter";
 "shared_string_export" = "Eksporter";
 "import_export" = "Import/eksport";
-"gpx_import_title" = "Importer spor";
+"import_tracks" = "Importer spor";
 "gpx_import_already_exists" = "Den angivne rute findes allerede på listen. Vælg en handling.";
 "gpx_add_new" = "Tilføj en ny fil";
 "gpx_export_title" = "Eksporter rute";
@@ -794,7 +794,7 @@
 "osmand_live_last_live_update" = "Sidst opdateret: %@";
 "osmand_live_not_updated" = "Endnu ikke opdateret";
 "osmand_live_hourly" = "Time";
-"osmand_live_daily" = "Daglig";
+"daily" = "Daglig";
 "osmand_live_weekly" = "Ugentlig";
 "osmand_live_reports" = "Rapporter";
 "osmand_live_server_date" = "Sidste serveropdatering: %@";
@@ -871,7 +871,7 @@
 // GPX colors
 "subscriptions_public_info" = "Betaling vil blive opkrævet på iTunes-kontoen ved købsbekræftelse. Abonnementet fornyes automatisk, medmindre autofornyelse er slukket mindst 24 timer inden udgangen af den aktuelle periode. Konto vil blive opkrævet i henhold til plan for fornyelse inden for 24 timer inden udgangen af den aktuelle periode. Administrer eller sluk for automatisk fornyelse i kontoindstillinger efter køb. Hvis købt abonnement i en gratis prøveperiode, vil den ubrugte del af denne periode blive fortabt.";
 "shared_string_upload" = "Overfør";
-"poi_type" = "IP type";
+"poi_dialog_poi_type" = "IP type";
 // OSM Editing actions
 "opening_changeset" = "Åbner ændringssæt…";
 "closing_changeset" = "Lukkerændringssæt…";
@@ -1610,7 +1610,7 @@
 "product_desc_antarctica" = "Ubegrænset hentning af kort til Antarktis";
 "product_title_antarctica" = "Antarktis";
 "map_settings_line_density_slowdown_warning" = "Høj linjetæthed kan bremse kortgengivelse";
-"m_style_pulic_transport" = "Offentlig transport";
+"poi_filter_public_transport" = "Offentlig transport";
 "transfers" = "Overførsler:";
 "consider_limitations_param" = "Tag højde for midlertidige begrænsninger";
 "avoid_transport_type" = "Undgå transporttyper";
@@ -1621,7 +1621,7 @@
 "public_transport_empty_warning_title" = "Kunne desværre ikke finde en rute, der passer til indstillingerne.";
 "res_slope" = "Hældning";
 "help_legend_descr" = "Vejledning til symbolik på kort";
-"help_mapillary" = "OsmAnd + Mapillary";
+"mapillary_item" = "OsmAnd + Mapillary";
 "help_travel" = "Rejser (Wikipedia & Wikivoyage)";
 "help_osmand_live" = "Abonnement - OsmAnd Live";
 "help_purchases" = "OsmAnd køb";
@@ -1811,7 +1811,7 @@
 "shared_string_next" = "Næste";
 "quick_action_remove_next_destination" = "Slet nærmeste destinationspunkt";
 "quick_action_mapillary_show" = "Vis Mapillary";
-"next_seg" = "Næste segment";
+"next_segment" = "Næste segment";
 "arrived_at_destination" = "Du er fremme";
 "import_complete_description" = "Alle data fra %@ er importeret, brug knapperne nedenfor til at åbne den nødvendige del af applikationen for at håndtere det";
 "personal_category_name" = "Personlig";
@@ -1888,7 +1888,7 @@
 "plan_route_split_before" = "Opdel før";
 "coordinates_widget" = "Koordinat-modul";
 "attach_to_the_roads" = "Fastgør til veje";
-"split_after" = "Opdel efter";
+"plan_route_split_after" = "Opdel efter";
 "special" = "Særlig";
 "plan_route_create_new_route" = "Opret en ny rute";
 "weight_limit_description" = "Oplys din køretøjsvægt, da der kan gælde visse ruterestriktioner for tunge køretøjer.";
@@ -2374,7 +2374,7 @@
 "backup_error_no_valid_subscription" = "Mangler gyldigt abonnement";
 "backup_error_user_is_already_registered" = "Denne e-mailadresse er i brug på en anden konto";
 "backup_error_subscription_was_used" = "Abonnement eller kampagne anvendes af en anden konto %@";
-"rendering_attr_lightRailRoutes_name" = "Letbaneruter";
+"rendering_attr_showLightRailRoutes_name" = "Letbaneruter";
 "rendering_attr_funicularRoutes_name" = "Kabelbaneruter";
 "backup_error_size_is_exceeded" = "Den maksimale størrelse på OsmAnd Cloud er overskredet %@";
 "backup_error_token_is_not_valid_or_expired" = "Ugyldig eller udløbet bekræftelseskode";

@@ -41,7 +41,7 @@
 "gpx_point" = "Punkt";
 "gpx_waypoints" = "Wegpunkte";
 "gpx_points" = "Punkt(e)";
-"gpx_import_title" = "Tracks importieren";
+"import_tracks" = "Tracks importieren";
 "gpx_add_new" = "Neue Datei hinzufügen";
 "gpx_overwrite" = "Überschreiben";
 "gpx_cannot_import" = "Angegebene GPX-Datei kann nicht importiert werden";
@@ -98,7 +98,7 @@
 "rendering_category_others" = "Weitere Kartenmerkmale";
 // Rendering attributes
 "track_continue_rec_q" = "Soll die Aufzeichnung fortgesetzt werden?";
-"rec_interval" = "Aufzeichnungsintervall";
+"save_track_interval_globally" = "Aufzeichnungsintervall";
 "rec_interval_minimum" = "Minimum";
 "track_interval_remember" = "Meine Auswahl merken";
 // Intro
@@ -150,7 +150,7 @@
 "col_magenta" = "Magenta";
 // World Regions
 "region_africa" = "Afrika";
-"region_asia" = "Asien";
+"index_name_asia" = "Asien";
 "region_ausralia_and_oceania" = "Australien und Ozeanien";
 "region_central_america" = "Mittelamerika";
 "region_europe" = "Europa";
@@ -796,7 +796,7 @@
 "osmand_live_last_live_update" = "Letzte Aktualisierung: %@";
 "osmand_live_not_updated" = "Noch nicht aktualisiert";
 "osmand_live_hourly" = "Stündlich";
-"osmand_live_daily" = "Täglich";
+"daily" = "Täglich";
 "osmand_live_weekly" = "Wöchentlich";
 "osmand_live_reports" = "Berichte";
 "osmand_live_server_date" = "Letztes Server-Update: %@";
@@ -873,7 +873,7 @@
 "inapp_not_found" = "%@ wurde nicht in OsmAnd gefunden. Wahrscheinlich wurde es abgebrochen.";
 // GPX colors
 "shared_string_upload" = "Hochladen";
-"poi_type" = "Art des POI";
+"poi_dialog_poi_type" = "Art des POI";
 // OSM Editing actions
 "opening_changeset" = "Änderungssatz öffnen …";
 "closing_changeset" = "Änderungssatz schließen …";
@@ -1612,7 +1612,7 @@
 "public_transport_ped_route_title" = "Die Route zu Fuß beträgt ca. %1$s und könnte schneller sein, als mit öffentlichen Verkehrsmitteln.";
 "product_desc_antarctica" = "Unbegrenzte Karten-Downloads für die Antarktis";
 "product_title_antarctica" = "Antarktis";
-"m_style_pulic_transport" = "Öffentlicher Verkehr";
+"poi_filter_public_transport" = "Öffentlicher Verkehr";
 "transfers" = "Umstiege:";
 "consider_limitations_param" = "Vorübergehende Einschränkungen berücksichtigen";
 "avoid_transport_type" = "Transportarten vermeiden";
@@ -1636,7 +1636,7 @@
 "public_transport_empty_warning_title" = "Leider konnte OsmAnd keine für Ihre Einstellungen geeignete Route finden.";
 "res_slope" = "Hangneigung";
 "help_legend_descr" = "Die Anleitung zu den Symbolen der Karte";
-"help_mapillary" = "OsmAnd + Mapillary";
+"mapillary_item" = "OsmAnd + Mapillary";
 "help_travel" = "Reisen (Wikipedia & Wikivoyage)";
 "help_osmand_live" = "Abonnement - OsmAnd Live";
 "help_purchases" = "OsmAnd Einkäufe";
@@ -1876,7 +1876,7 @@
 "next_segs_dist" = "Alle weiteren Segmente %@";
 "next_seg_dist" = "Nächstes Segment %@";
 "whole_track" = "Ganzer Track";
-"next_seg" = "Nächstes Segment";
+"next_segment" = "Nächstes Segment";
 "whole_track_descr" = "Der gesamte Track wird mit dem ausgewählten Profil neu berechnet.";
 "next_seg_descr" = "Das nächste Segment wird mit dem ausgewählten Profil neu berechnet.";
 "route_betw_points_descr" = "Wählen Sie, wie Sie die Punkte verbinden möchten: mit einer geraden Linie oder durch Berechnung einer Route mit einem der unten aufgeführten Profile.";
@@ -1908,7 +1908,7 @@
 "attach_to_the_roads" = "Auf Straßen einrasten";
 "select_another_track" = "Anderen Track wählen";
 "follow_track" = "Track folgen";
-"split_after" = "Teilen nach";
+"plan_route_split_after" = "Teilen nach";
 "plan_route_split_before" = "Teilen vor";
 "gpx_already_exsists" = "Datei mit diesem Namen existiert bereits";
 "empty_filename" = "Dateiname darf nicht leer sein";
@@ -2378,7 +2378,7 @@
 "product_desc_ext_weather" = "Aktivieren Sie das Wetter-Plugin, um eine Route unter Berücksichtigung des Wetters zu planen. Achten Sie auf die farbige Karte der Wettervorhersage, die stündlich für heute, morgen und die kommende Woche aktualisiert wird. \n\nWährend der Reise sehen Sie standortbasierte Info-Widgets mit Temperatur, Niederschlag, Windgeschwindigkeit, Druck. \n\nNützlich für Wanderungen und lange Reisen mit dem Fahrrad oder Motorrad.";
 "backup_error_no_valid_subscription" = "Kein gültiges Abonnement vorhanden";
 "rendering_attr_funicularRoutes_name" = "Kabelgetriebene Linien";
-"rendering_attr_lightRailRoutes_name" = "Stadtbahnlinien";
+"rendering_attr_showLightRailRoutes_name" = "Stadtbahnlinien";
 "backup_error_subscription_was_expired_descr" = "Ihr OsmAnd Pro-Abonnement ist abgelaufen. Erneuern Sie es, um die Datensicherung zu nutzen. Sie können weiterhin Daten aus der Cloud wiederherstellen.";
 "backup_error_user_is_already_registered" = "Diese E-Mail-Adresse wird in einem anderen Konto verwendet";
 "backup_error_subscription_was_expired" = "Abonnement abgelaufen";

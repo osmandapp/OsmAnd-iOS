@@ -237,7 +237,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
         }
         case kTripRecordingSettingsScreenRecInterval:
         {
-            self.titleLabel.text = OALocalizedString(@"rec_interval");
+            self.titleLabel.text = OALocalizedString(@"save_track_interval_globally");
             BOOL alwaysAsk = ![settings.mapSettingSaveTrackIntervalApproved get:self.appMode];
             [dataArr addObject:@{
                 @"title" : OALocalizedString(@"shared_setting_always_ask"),
@@ -258,7 +258,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
         }
         case kTripRecordingSettingsScreenNavRecInterval:
         {
-            self.titleLabel.text = OALocalizedString(@"rec_interval");
+            self.titleLabel.text = OALocalizedString(@"save_track_interval_globally");
             for (NSNumber *num in settings.trackIntervalArray)
             {
                 [dataArr addObject: @{

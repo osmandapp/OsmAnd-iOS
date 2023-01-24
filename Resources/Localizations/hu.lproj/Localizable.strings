@@ -53,7 +53,7 @@
 "gpx_points" = "Pont(ok)";
 "shared_string_export" = "Exportálás";
 "import_export" = "Importálás/exportálás";
-"gpx_import_title" = "Nyomvonalak importálása";
+"import_tracks" = "Nyomvonalak importálása";
 "gpx_import_already_exists" = "A megadott utazásfájl már rajta van a listán. Válasszon műveletet.";
 "gpx_add_new" = "Új fájl hozzáadása";
 "gpx_overwrite" = "Felülírás";
@@ -78,7 +78,7 @@
 "track_save" = "Jelenlegi nyomvonal mentése";
 "track_continue_rec" = "Rögzítés folytatása";
 "track_continue_rec_q" = "Szeretné folytatni a rögzítést?";
-"rec_interval" = "Naplózási intervallum";
+"save_track_interval_globally" = "Naplózási intervallum";
 "rec_interval_minimum" = "Minimum";
 "track_start_rec" = "Útrögzítés indítása";
 "track_rec_addon_q" = "Útjai rögzítéséhez és mentéséhez aktiválja az Útrögzítés bővítményt";
@@ -234,7 +234,7 @@
 "col_magenta" = "Magenta";
 // World Regions
 "region_africa" = "Afrika";
-"region_asia" = "Ázsia";
+"index_name_asia" = "Ázsia";
 "region_ausralia_and_oceania" = "Ausztrália és Óceánia";
 "region_central_america" = "Közép-Amerika";
 "region_europe" = "Európa";
@@ -843,7 +843,7 @@
 "change_map_overlay" = "Térképfedőréteg módosítása";
 "snap_to_road_descr" = "Úthoz rögzítés navigáció közben";
 "replace_destination" = "Célpont lecserélése";
-"poi_type" = "POI típus";
+"poi_dialog_poi_type" = "POI típus";
 "osm_phone" = "telefon";
 "osn_bug_name" = "OSM Jegyzet";
 "help_legend" = "Térkép jelkulcs";
@@ -896,7 +896,7 @@
 "help_features" = "Funkciók";
 "osm_live_payment_month_cost_descr" = "%@ / hó";
 "product_desc_wikivoyage" = "Az ingyenes, világméretű útikönyv, amit bárki szerkeszthet.";
-"osmand_live_daily" = "Naponta";
+"daily" = "Naponta";
 "add_map_marker" = "Térképjelölő hozzáadása";
 "mapillary" = "Mapillary";
 "shared_string_time_of_day" = "Napszak";
@@ -1324,7 +1324,7 @@
 "logging_min_accuracy" = "Legkisebb pontosság";
 "listed_exist" = "A felsorolt %@ már létezik az OsmAndban.";
 "logging_min_distance" = "Legkisebb elmozdulás";
-"m_style_pulic_transport" = "Tömegközlekedés";
+"poi_filter_public_transport" = "Tömegközlekedés";
 "map_look_descr" = "Térkép megjelenés";
 "arrived_at_destination" = "Megérkezett.";
 "min_speed" = "Legkisebb sebesség";
@@ -1337,7 +1337,7 @@
 "announce" = "Bemondás";
 "public_transport_hide" = "Tömegközlekedés elrejtése";
 "res_online_source_cache_alert" = "A módosítások alkalmazása esetén a csempeforrás gyorsítótárazott adatai törlésre kerülnek";
-"next_seg" = "Következő szakasz";
+"next_segment" = "Következő szakasz";
 "num_stops" = "megállók";
 "profile_type_user_string" = "Felhasználói profil";
 "recalculate_route_distance_promo" = "Azútvonal újraszámításra kerül, amennyiben az útvonal és a jelenlegi helyzet közötti távolság nagyobb, mint a kiválasztott érték.";
@@ -1355,7 +1355,7 @@
 "select_distance_for_recalculation" = "Jelölje ki a távolságot, amelytől kezdve az útvonal újra lesz számítva.";
 "appearance_on_map" = "Megjelenítés a térképen";
 "enter_profile_name" = "Profil nevének megadása";
-"help_mapillary" = "OsmAnd + Mapillary";
+"mapillary_item" = "OsmAnd + Mapillary";
 "import_complete_description" = "Összes adat importálva innen: %@, az alábbi gombokkal megnyithatja az alkalmazás megfelelő részét az adatok kezeléséhez.";
 "route_betw_points" = "Útvonal pontok között";
 "help_osmand_live" = "Előfizetés - OsmAnd Live";
@@ -1444,7 +1444,7 @@
 "circle" = "Kör";
 "segnet_num" = "%d szakasz";
 "replace_favorite_confirmation" = "Lecseréled a(z) %@ Kedvencet\?";
-"split_after" = "Elvágás ez után:";
+"plan_route_split_after" = "Elvágás ez után:";
 "osmand_live_upd_frequency" = "Frissítés gyakorisága";
 "shared_string_enable" = "Engedélyezés";
 "searching_gps" = "Műholdak keresése";
@@ -1682,7 +1682,7 @@
 "lang_sl" = "szlovén";
 "lang_pt" = "portugál";
 "lang_fa" = "perzsa";
-"rendering_attr_lightRailRoutes_name" = "HÉV-vonalak";
+"rendering_attr_showLightRailRoutes_name" = "HÉV-vonalak";
 "routeInfo_surface_description" = "További információk megjelenítése az utak/gyalogutak fizikai felszínéről.";
 "routing_attr_only_permitted_ways_name" = "Kifejezetten engedélyezett utak";
 "lang_lo" = "laoszi";

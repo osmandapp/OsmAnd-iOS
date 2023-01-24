@@ -38,7 +38,7 @@
 "shared_string_hide" = "Ascunde";
 "modify_poi_short" = "Modifică POI";
 "home_pt" = "Acasă";
-"osmand_live_daily" = "Zilnic";
+"daily" = "Zilnic";
 "shared_string_back" = "Înapoi";
 "driving_region_japan" = "Japonia";
 "relief_smoothness_factor_descr" = "Teren preferat: plat sau deluros";
@@ -348,7 +348,7 @@
 "shared_string_save" = "Salvați";
 "shared_string_category" = "Categoria";
 "poi_clear" = "Curăță";
-"rec_interval" = "Interval de salvare";
+"save_track_interval_globally" = "Interval de salvare";
 "route_kr" = "Țineți pe dreapta și mergeți";
 "help_legend" = "Legendă hartă";
 "arrival_distance_factor_late" = "Târziu";
@@ -458,7 +458,7 @@
 "choose_audio_stream" = "Canal voce de ghidare";
 "nearby_search" = "Căutați în apropiere";
 "product_title_europe" = "Europa";
-"poi_type" = "Tip POI";
+"poi_dialog_poi_type" = "Tip POI";
 "try_again" = "Reîncercați";
 "shared_string_current" = "Actual";
 "transport_routes" = "Rute";
@@ -479,7 +479,7 @@
 "wake_on_voice" = "Pornește ecranul";
 "routing_settings_2" = "Setări de navigație";
 "shared_string_select_on_map" = "Selectează pe hartă";
-"region_asia" = "Asia";
+"index_name_asia" = "Asia";
 "gpx_speed" = "Viteză";
 "osm_close_changeset" = "Închideți setul de modificări";
 "shared_string_ok" = "OK";
@@ -819,7 +819,7 @@
 "distance_indication" = "Indicație distanță";
 "logging_min_accuracy" = "Acuratețe minimă";
 "copy_from_other_profile" = "Copiați din alt profil";
-"next_seg" = "Segmentul următor";
+"next_segment" = "Segmentul următor";
 "logging_min_distance" = "Deplasare minimă";
 "base_profile_descr_boat" = "Navă, Canotaj, Navigație";
 "configure_profile" = "Configurează profilul";
@@ -840,7 +840,7 @@
 "appearance_on_map" = "Aspectul pe hartă";
 "profile_type_base_string" = "Profil de bază";
 "base_profile_descr_public_transport" = "Tipuri de transport public";
-"m_style_pulic_transport" = "Transport public";
+"poi_filter_public_transport" = "Transport public";
 "shared_string_max" = "Maxim";
 "meters" = "metrii";
 "save_changes" = "Salvați modificările";
@@ -1180,7 +1180,7 @@
 "plan_route_folder" = "Dosar";
 "start_of_the_track" = "Începutul pistei";
 "point_to_navigate" = "Navigați la";
-"split_after" = "Divizați după";
+"plan_route_split_after" = "Divizați după";
 "plan_route_split_before" = "Împărțiti înainte de";
 "gpx_already_exsists" = "Fișierul cu acest nume există deja";
 "empty_filename" = "Numele fișierului nu poate fi gol";
@@ -1335,7 +1335,7 @@
 "gpx_overwrite" = "Suprascrieți";
 "gpx_add_new" = "Adăugați un nou fișier";
 "gpx_import_already_exists" = "Fișierul de track specificat există deja în listă. Vă rugăm să alegeți o acțiune.";
-"gpx_import_title" = "Importați piese";
+"import_tracks" = "Importați piese";
 "import_export" = "Import/Export";
 "gpx_points" = "Punct (e)";
 "poi_search_near_center" = "Căutarea se efectuează în apropierea centrului hărții";
@@ -1730,7 +1730,7 @@
 "help_contact_us" = "Contactați-ne";
 "help_what_is_new" = "Noutăți";
 "help_legend_descr" = "Ghidul simbolurilor hărților";
-"help_mapillary" = "OsmAnd + Mapillary";
+"mapillary_item" = "OsmAnd + Mapillary";
 "help_travel" = "Călătorii (Wikipedia & Wikivoyage)";
 "help_osmand_live" = "Abonament - OsmAnd Live";
 "help_purchases" = "Achiziții OsmAnd";
@@ -2345,7 +2345,7 @@
 "units_cubic_m" = "m³";
 "routeInfo_horse_scale_name" = "Dificultatea traseelor de cai";
 "purchases_feature_desc_hourly_map_updates" = "Obțineți acces la actualizări mai frecvente ale hărților. Actualizări din oră în oră, zilnic sau săptămânal. Actualizările sunt descărcate incremental, numai pentru zona modificată.";
-"rendering_attr_lightRailRoutes_name" = "Rute de metrou ușor";
+"rendering_attr_showLightRailRoutes_name" = "Rute de metrou ușor";
 "monthly_subscription" = "Abonament lunar";
 "copy_to_map_favorites" = "Copiați în favorite";
 "copy_coordinates" = "Copiați coordonatele";

@@ -388,7 +388,7 @@
 "favorite" = "Preferit";
 "amenity" = "Equipaments & Servicis";
 "poi_overlay" = "Superpausar lei PDI";
-"poi_type" = "Mena de PDI";
+"poi_dialog_poi_type" = "Mena de PDI";
 "my_favorites" = "Mei preferits";
 "my_places" = "Mei luòcs preferits";
 "fav_no_group" = "Ges de grop";
@@ -425,7 +425,7 @@
 "gpx_points" = "Ponch(s)";
 "shared_string_export" = "Exportar";
 "import_export" = "Importar/Exportar";
-"gpx_import_title" = "Importar de traças";
+"import_tracks" = "Importar de traças";
 "gpx_import_already_exists" = "Lo fichier de l'itinerari indicat se tròba ja dins la lista. Chausissètz una accion.";
 "gpx_add_new" = "Ajustar un fichier novèu";
 "gpx_overwrite" = "Subrescriure";
@@ -454,7 +454,7 @@
 "track_save_descr" = "Sauvagardar, tot d'un temps, la traça actuala per fichier GPX.";
 "track_continue_rec" = "Continuar l'enregistrament";
 "track_continue_rec_q" = "Volètz continuar l'enregistrament?";
-"rec_interval" = "Intervalle d'enregistrament";
+"save_track_interval_globally" = "Intervalle d'enregistrament";
 "rec_interval_minimum" = "Minimum";
 "track_start_rec" = "Començar l'enregistrament dau percors";
 "track_rec_addon_q" = "Activatz l'ajuston «Enregistrament dau percors» per enregistrar e sauvagardar vòstrei percors";
@@ -554,7 +554,7 @@
 "osmand_live_last_live_update" = "Darriera actualizacion: %@";
 "osmand_live_not_updated" = "Pas encara actualizat";
 "osmand_live_hourly" = "Cada ora";
-"osmand_live_daily" = "Cada jorn";
+"daily" = "Cada jorn";
 "osmand_live_weekly" = "Cada setmana";
 "osmand_live_reports" = "Rapòrts";
 "osmand_live_server_date" = "Darriera actualizacion de servidor: %@";
@@ -897,7 +897,7 @@
 // GPX colors
 // World Regions
 "region_africa" = "Africa";
-"region_asia" = "Asia";
+"index_name_asia" = "Asia";
 "region_ausralia_and_oceania" = "Australia e Oceania";
 "region_central_america" = "America Centrala";
 "region_europe" = "Euròpa";
@@ -1311,7 +1311,7 @@
 "special_routing" = "Navigacion particulara";
 "voice_announces" = "Anóncias vocalas";
 "osm_notes" = "Nòtas OSM";
-"m_style_pulic_transport" = "Transpòrt public";
+"poi_filter_public_transport" = "Transpòrt public";
 "app_profiles" = "Perfius de l\'aplicacion";
 "none_point_error" = "Ajustar un ponch aumens.";
 "shared_string_gpx_track" = "Pista, dralha, carraira";
@@ -1475,7 +1475,7 @@
 "rendering_value_walkingRoutesOSMC_name" = "OSMC";
 "osmand_settings" = "Configuracion d\'OsmAnd";
 "prev_seg_dist" = "Estirada %@ precedenta";
-"next_seg" = "Etapa novèla";
+"next_segment" = "Etapa novèla";
 "next_seg_dist" = "Estirada%@ seguenta";
 "next_segs_dist" = "Totei leis estiradas %@ seguentas";
 "join_segments" = "Jónher leis estiradas";
@@ -2027,7 +2027,7 @@
 "add_to_track" = "Ajustar una traça";
 "move_point" = "Desplaçar un ponch";
 "plan_route_split_before" = "Separar avans";
-"split_after" = "Separar après";
+"plan_route_split_after" = "Separar après";
 "simplified_track_description" = "La linha dau percors soleta serà sauvagardada, lei ponchs d\'etapa seràn escafats.";
 "create_profile" = "Crear un perfiu";
 "import_profile_select_descr" = "Seleccionatz lei donadas que volètz importar.";
@@ -2371,7 +2371,7 @@
 "routeInfo_smoothness_name" = "Tranquille";
 "rendering_value_walkingRoutesScopeOSMC_name" = "Malhum d'apartenéncia";
 "rendering_attr_showFitnessTrails_description" = "Mostrar lei percors de santat";
-"help_mapillary" = "OsmAnd + Mapillary";
+"mapillary_item" = "OsmAnd + Mapillary";
 "gpx_join_gaps_descr" = "Lei mancas entre leis estiradas seràn tapats.";
 "vessel_height_limit_description" = "Indicatz l'auçada de vòstre veïcul per evitar lei passatges bas. Rementatz-vos que si lo pònt es mobile, lo calcul utiliza l'auçada de quand es dobèrt.";
 "height_limit_description" = "Indicatz l'auçada de vòstre veïcul, de restriccions de passatge se pòdon rescontrar per lei veïcules auts.";

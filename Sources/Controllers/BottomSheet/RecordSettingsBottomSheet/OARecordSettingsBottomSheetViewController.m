@@ -133,7 +133,7 @@
     
     [_data addObject:@{
         @"type" : [OATitleSliderTableViewCell getCellIdentifier],
-        @"name" : OALocalizedString(@"rec_interval"),
+        @"name" : OALocalizedString(@"save_track_interval_globally"),
         @"value" : @(_sliderValue),
         @"desc" : _sliderIntervalName
     }];

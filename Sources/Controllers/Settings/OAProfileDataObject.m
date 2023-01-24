@@ -159,7 +159,7 @@ static NSDictionary<NSString *, OARoutingProfileDataObject *> *_rpValues;
         case EOARoutingProfilesResourceSki:
             return OALocalizedString(@"routing_profile_ski");
         case EOARoutingProfilesResourcePublicTransport:
-            return OALocalizedString(@"m_style_pulic_transport");
+            return OALocalizedString(@"poi_filter_public_transport");
         case EOARoutingProfilesResourceBoat:
             return OALocalizedString(@"app_mode_boat");
         case EOARoutingProfilesResourceHorsebackriding:

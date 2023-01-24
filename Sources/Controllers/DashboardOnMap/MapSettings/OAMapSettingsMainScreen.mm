@@ -349,7 +349,7 @@
     {
         NSString *modeStr;
         if ([_settings.appearanceMode get] == APPEARANCE_MODE_DAY)
-            modeStr = OALocalizedString(@"map_settings_day");
+            modeStr = OALocalizedString(@"day");
         else if ([_settings.appearanceMode get] == APPEARANCE_MODE_NIGHT)
             modeStr = OALocalizedString(@"map_settings_night");
         else if ([_settings.appearanceMode get] == APPEARANCE_MODE_AUTO)
@@ -552,13 +552,13 @@
     switch (_settings.settingMapLanguage.get)
     {
         case 0: // NativeOnly
-            return OALocalizedString(@"sett_lang_local");
+            return OALocalizedString(@"download_tab_local");
         case 4: // LocalizedAndNative
-            return [NSString stringWithFormat:@"%@ %@ %@", prefLang, OALocalizedString(@"shared_string_and"), [OALocalizedString(@"sett_lang_local") lowercaseStringWithLocale:[NSLocale currentLocale]]];
+            return [NSString stringWithFormat:@"%@ %@ %@", prefLang, OALocalizedString(@"shared_string_and"), [OALocalizedString(@"download_tab_local") lowercaseStringWithLocale:[NSLocale currentLocale]]];
         case 1: // LocalizedOrNative
-            return [NSString stringWithFormat:@"%@ %@ %@", prefLang, OALocalizedString(@"shared_string_or"), [OALocalizedString(@"sett_lang_local") lowercaseStringWithLocale:[NSLocale currentLocale]]];
+            return [NSString stringWithFormat:@"%@ %@ %@", prefLang, OALocalizedString(@"shared_string_or"), [OALocalizedString(@"download_tab_local") lowercaseStringWithLocale:[NSLocale currentLocale]]];
         case 5: // LocalizedOrTransliteratedAndNative
-            return [NSString stringWithFormat:@"%@ (%@) %@ %@", prefLang, [OALocalizedString(@"sett_lang_trans") lowercaseStringWithLocale:[NSLocale currentLocale]], OALocalizedString(@"shared_string_and"), [OALocalizedString(@"sett_lang_local") lowercaseStringWithLocale:[NSLocale currentLocale]]];
+            return [NSString stringWithFormat:@"%@ (%@) %@ %@", prefLang, [OALocalizedString(@"sett_lang_trans") lowercaseStringWithLocale:[NSLocale currentLocale]], OALocalizedString(@"shared_string_and"), [OALocalizedString(@"download_tab_local") lowercaseStringWithLocale:[NSLocale currentLocale]]];
         case 6: // LocalizedOrTransliterated
             return [NSString stringWithFormat:@"%@ (%@)", prefLang, [OALocalizedString(@"sett_lang_trans") lowercaseStringWithLocale:[NSLocale currentLocale]]];
         default:

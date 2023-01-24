@@ -76,7 +76,7 @@
     else
     {
         BOOL isDepthContours = [_product.productIdentifier isEqualToString:kInAppId_Addon_Nautical];
-        self.titleView.text = isDepthContours ? OALocalizedString(@"product_title_sea_depth_contours") : _product.localizedTitle;
+        self.titleView.text = isDepthContours ? OALocalizedString(@"rendering_attr_depthContours_name") : _product.localizedTitle;
     }
     [self.backButton setTitle:@"" forState:UIControlStateNormal];
     [self.backButton setImage:[UIImage templateImageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
@@ -98,7 +98,7 @@
 
     NSMutableDictionary *productDict = [NSMutableDictionary dictionary];
     productDict[@"type"] = [OATitleDescriptionBigIconCell getCellIdentifier];
-    productDict[@"title"] = isDepthContours ? OALocalizedString(@"product_title_sea_depth_contours") : _product.localizedTitle;
+    productDict[@"title"] = isDepthContours ? OALocalizedString(@"rendering_attr_depthContours_name") : _product.localizedTitle;
     UIImage *icon = [self getIcon];
     if (icon)
         productDict[@"icon"] = icon;

@@ -202,7 +202,7 @@ static const NSInteger groupCount = 5;
     [dataArr addObject:
     @{
       @"name" : @"help_quick_action",
-      @"title" : OALocalizedString(@"quick_action_name"),
+      @"title" : OALocalizedString(@"configure_screen_quick_action"),
       @"type" : kLinkInternalType,
       @"html" : @"quick-action"
       }];

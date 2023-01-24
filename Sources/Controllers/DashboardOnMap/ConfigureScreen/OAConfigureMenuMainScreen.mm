@@ -84,7 +84,7 @@
     // Quick action
     NSArray *controls = @[@{
                               @"groupName" : @"",
-                              @"cells" : @[@{ @"title" : OALocalizedString(@"quick_action_name"),
+                              @"cells" : @[@{ @"title" : OALocalizedString(@"configure_screen_quick_action"),
                                             @"description" : @"",
                                             @"key" : @"quick_action",
                                             @"img" : @"ic_custom_quick_action",

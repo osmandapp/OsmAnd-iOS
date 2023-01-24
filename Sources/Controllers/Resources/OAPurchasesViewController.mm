@@ -524,7 +524,7 @@ static BOOL _purchasesUpdated;
             if (product)
             {
                 cell.textView.text = [product.productIdentifier isEqualToString:kInAppId_Addon_Nautical]
-                        ? OALocalizedString(@"product_title_sea_depth_contours")
+                        ? OALocalizedString(@"rendering_attr_depthContours_name")
                         : product.localizedTitle;
                 cell.imgView.image = [product isKindOfClass:OASubscription.class] || [OAIAPHelper isFullVersion:product]
                         ? [UIImage imageNamed:product.productIconName]

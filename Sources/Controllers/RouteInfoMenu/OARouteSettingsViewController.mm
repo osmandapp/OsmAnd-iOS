@@ -33,7 +33,7 @@
 -(void) applyLocalization
 {
     [super applyLocalization];
-    self.titleView.text = OALocalizedString(@"sett_settings");
+    self.titleView.text = OALocalizedString(@"shared_string_settings");
 }
 
 - (void) viewDidLoad

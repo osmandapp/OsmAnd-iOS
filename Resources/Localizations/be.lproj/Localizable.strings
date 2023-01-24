@@ -19,7 +19,6 @@
 "fav_group" = "Група";
 "groups" = "Групы";
 "favorite" = "Улюбёнае";
-"fav_import" = "Імпартаваць";
 "fav_ignore" = "Ігнараваць";
 "fav_rename" = "Змяніць назву";
 "fav_replace" = "Замяніць";
@@ -33,10 +32,8 @@
 // Map settings
 "rendering_value_browse_map_name" = "Прагляд мапы";
 "m_style_car" = "Кіраванне";
-"m_style_bicycle" = "Ровар";
 "map_settings_map" = "Мапа";
 "map_settings_show" = "Паказаць на мапе";
-"map_settings_day" = "Дзень";
 "map_settings_night" = "Ноч";
 "map_settings_style" = "Стыль мапы";
 "map_settings_overunder" = "Ніжні/верхні пласты";
@@ -45,7 +42,6 @@
 "intro_download" = "Спампаваць\nмапу";
 "intro_next" = "Далей";
 // Settings
-"sett_settings" = "Налады";
 "sett_km" = "Кіламетры";
 "sett_ml" = "Мілі";
 "sett_show" = "Паказаць";
@@ -61,7 +57,6 @@
 "product_title_parking" = "Месца паркоўкі";
 "product_title_track_recording" = "Запіс следу";
 "product_title_africa" = "Афрыка";
-"product_title_australia" = "Аўстралія";
 "product_title_centralamerica" = "Цэнтральная Амерыка";
 "product_title_europe" = "Еўропа";
 "product_title_northamerica" = "Паўночная Амерыка";
@@ -95,7 +90,6 @@
 "fav_create_group" = "Стварыць новую групу";
 "fav_enter_group_name" = "Увядзіце назву групы";
 "fav_exists" = "Улюбёнае \"%@\" ужо існуе";
-"fav_replace_all" = "Замяніць усе";
 "poi_max_radius_reached" = "Дасягнуты максімальны радыус пошуку";
 "poi_search_near_center" = "Пошук выконваецца вакол цэнтра мапы";
 "tracks" = "Сляды";
@@ -113,7 +107,6 @@
 "gpx_uphldownhl" = "Уздымы/Спускі";
 "gpx_average_speed" = "Сярэдняя хуткасць";
 "gpx_start" = "Пачатак";
-"gpx_finish" = "Фініш";
 "gpx_avg_elev" = "Сярэдняя вышыня";
 "gpx_elev_range" = "Рознасць вышынь";
 "gpx_updown" = "Уверх/Уніз";
@@ -132,8 +125,6 @@
 "cannot_add_marker" = "Нельга дадаць паркоўку";
 "cannot_add_destination" = "Нельга дадаць кірунак";
 // Units
-"units_km" = "км";
-"units_m" = "м";
 "units_mi" = "міл";
 "units_yd" = "ярд";
 "units_ft" = "фут";
@@ -142,10 +133,7 @@
 "map_inst_det_map_q" = "Усталюйце падрабязную мапу, каб атрымаць больш падрабязную інфармацыю пра сваё месцазнаходжанне.";
 // Alerts
 "alert_inet_needed" = "Для гэтага патрабуецца злучэнне з інтэрнэтам. Калі ласка, праверце вашае злучэнне з інтэрнэтам.";
-"col_green" = "Зялёны";
-"col_yellow" = "Жоўты";
 "col_gray" = "Шэры";
-"col_red" = "Чырвоны";
 "col_magenta" = "Пурпуровы";
 // World Regions
 "region_africa" = "Афрыка";
@@ -183,7 +171,6 @@
 "track_interval_remember" = "Запомніць мой выбар";
 "track_clear_q" = "Сапраўды хочаце ачысціць бягучы след?";
 "show_info" = "Паказаць інфармацыю";
-"m_style_walk" = "Пешаход";
 "map_mode" = "Рэжым мапы";
 "sett_zoom" = "Кнопкі маштабу";
 "sett_notshow" = "Не паказваць";
@@ -192,7 +179,6 @@
 "sett_deg_min" = "Градусы і хвіліны";
 "sett_arr" = "Стрэлкі на мапе";
 "sett_arr_map" = "Цэнтр мапы";
-"sett_lang_local" = "Спампаваныя";
 "prch_ski_q" = "Калі ласка актывуйце стыль \"Ski map\" у наладах карты";
 "prch_nau_q1" = "Калі ласка, актывуйце стыль \"Nautical\" у наладах мапы і спампуйце сусветную мапу марскіх аб'ектаў.";
 "prch_nau_q2_cell" = "Патрэбна спампаваць %@ праз сотавую сетку.";
@@ -258,7 +244,6 @@
 // Import
 "import_title" = "Імпартаваць даныя";
 "import_choose_type" = "Абярыце што імпартаваць";
-"import_favorite" = "Улюбёныя мясціны";
 "import_failed" = "Не атрымалася імпартаваць";
 "import_cannot" = "Вызначаны файл не можа быць імпартаваны";
 "import_gpx" = "GPX-сляды";
@@ -271,7 +256,6 @@
 "loc_access_denied" = "Доступ забаронены";
 "loc_access_denied_desc" = "Доступ да службы геалакацыі забаронены";
 // Colors
-"col_purple" = "Фіялетавы";
 "cannot_access_calendar" = "Памылка доступу да календара";
 "reminder_not_set_text" = "Нельга стварыць напамін, бо доступ да календара забаронены";
 //inapps
@@ -305,8 +289,6 @@
 "time_left" = "засталося";
 "time_overdue" = "Састарэлі";
 "units_min" = "хв.";
-"col_orange" = "Аранжавы";
-"col_blue" = "Сіні";
 "fav_select" = "Калі ласка, абярыце ўлюбёныя";
 "intro_welcome" = "Вітаем у\nOsmAnd";
 "enter_description" = "Увесці апісанне";
@@ -317,7 +299,6 @@
 "product_desc_wiki" = "Даныя вікіпедыі";
 "download_srtm_maps" = "Контурныя лініі";
 "res_roads" = "Дарогі";
-"res_srtm" = "Контурныя лініі";
 "res_wiki" = "Вікіпедыя";
 "product_desc_srtm" = "Паказваць контурныя лініі";
 "select_language" = "Абраць мову";
@@ -373,7 +354,6 @@
 "shared_string_dismiss" = "Адхіліць";
 "shared_string_modify" = "Змяніць";
 "parking" = "Паркоўка";
-"map_settings_hillshade" = "Зацяненне рэльефу";
 "pedestrian" = "Пешаход";
 "sorting" = "Сартаванне";
 "plugins" = "Убудовы";
@@ -557,7 +537,6 @@
 "use_points_as_intermediates" = "Разлічыць маршрут паміж пунктамі";
 "calculate_osmand_route_without_internet" = "Разлічыць адрэзак маршруту OsmAnd без Інтэрнэту";
 "routing_settings_2" = "Налады навігацыі";
-"gpx_navigation" = "Кіравацца следу";
 "impassable_road" = "Пазбягаць дарог";
 "impassable_road_desc" = "Абярыце дарогі, якія вы хочаце пазбягаць падчас навігацыі.";
 "interrupt_music" = "Прыпыніць музыку";
@@ -825,27 +804,20 @@
 "help_features" = "Магчымасці";
 "quick_action_add_overlay" = "Дадаць мапу накладання";
 "sett_ext_input" = "Вонкавыя прылады ўводу";
-"lightblue" = "Блакітны";
 "change_map_source" = "Змяніць крыніцу мапы";
 "replace_destination" = "Замяніць пункт прызначэння";
 "osm_editing_lost_changes_descr" = "Усе незахаваныя змены будуць страчаны. Працягваць\?";
 "gpx_slope" = "Ухіл";
 "poi_list" = "Спіс POI";
 "add_map_source" = "Дадаць крыніцу мапы";
-"translucent_blue" = "Празрысты сіні";
 "open_osm_note" = "Дадаць нататку OSM";
-"units_min_short" = "м";
-"red" = "Чырвоны";
-"purple" = "Фіялетавы";
 "osm_editing_contact_info" = "Кантакты";
 "osn_bug_name" = "Нататка OSM";
 "route_parameters" = "Параметры маршруту";
 "add_parking_place" = "Дадаць месца паркоўкі";
 "add_gpx_waypoint" = "Дадаць пункт GPX";
 "region_nautical" = "Марскія мапы";
-"translucent_orange" = "Празрысты аранжавы";
 "osm_note_created" = "Нататка OSM створаная";
-"product_title_sea_depth_contours" = "Контуры марскіх глыбінь";
 "quick_action_add_poi_category" = "Дадаць катэгорыю";
 "osm_note_action_field_descr" = "Гэтае паведамленне дададзена ў поле камэнтара.";
 "osm_alert_title" = "Пацвердзіць";
@@ -856,7 +828,6 @@
 "shared_string_time_of_day" = "Час сутак";
 "help_first_use" = "Першы запуск";
 "logging_interval_navigation" = "Інтэрвал захавання падчас навігацыі";
-"blue" = "Сіні";
 "osm_str_name" = "Назва вуліцы";
 "osm_note_reopen" = "Пераадкрыць";
 "osm_edits_title" = "Змены OSM";
@@ -872,12 +843,9 @@
 "add_first_inermediate" = "Дадаць прамежкавы пункт";
 "help_map_viewing" = "Агляд мапы";
 "directions_more_options" = "Маршрут адсюль";
-"translucent_purple" = "Празрысты фіялетавы";
 "osm_notes_online_layer" = "OSM-нататкі (у сеціве)";
-"speak_tunnels" = "Тунэлі";
 "osmand_live_weekly" = "Штотыднёва";
 "osm_target_deleted" = "OSM POIвыдаленая";
-"orange" = "Аранжавы";
 "work_pt" = "Праца";
 "osm_phone" = "Тэлефон";
 "change_map_underlay" = "Змяніць падкладку мапы";
@@ -889,7 +857,6 @@
 "map_settings_text_size" = "Памер тэксту";
 "product_desc_ext_wikivoyage" = "Дапаможнік па самым цікавым месцам на планеце ўнутры OsmAnd без злучэння з Інтэрнэтам.";
 "osm_working_days" = "Працоўныя дні";
-"translucent_pink" = "Паўпразрысты ружовы";
 "osmand_live_hourly" = "Штогадзінна";
 "prev_route" = "Папярэдні маршрут";
 "day_mode" = "Дзённы рэжым";
@@ -904,7 +871,6 @@
 "shared_string_retry" = "Паўтарыць";
 "map_settings_map_magnifier" = "Лупа мапы";
 "osmand_live_update_now" = "Абнавіць зараз";
-"yellow" = "Жоўты";
 "map_underlays" = "Падкладка мапы";
 "shared_setting_always_ask" = "Пытацца заўсёды";
 "pause_resume_nav" = "Прыпыніць/аднавіць навігацыю";
@@ -912,7 +878,6 @@
 "gpx_alt_range" = "Дыяпазон вышынь";
 "osm_alert_message" = "Паведамленне";
 "quick_action_tags" = "Пазнакі";
-"show_contour_lines" = "Паказваць контурныя лініі";
 "osmand_live_last_live_update" = "Апошняе абнаўленне: %@";
 "tile_cache" = "Кэш фрагментаў";
 "toggle_nav" = "Пачаць/спыніць навігацыю";
@@ -925,7 +890,6 @@
 "osm_target_created" = "Створана OSM POI";
 "osm_edit_without_name" = "Без назвы";
 "poi_remove_success" = "Выдалена";
-"translucent_lightgreen" = "Празрысты светла-зялёны";
 "help_other_header" = "Іншае";
 "res_world_region" = "Свет";
 "toggle_voice" = "Голас укл/адкл";
@@ -936,40 +900,31 @@
 "modify_edit_short" = "Рэдагаваць POI";
 "edit_action" = "Рэдагаваць дзеянне";
 "coordinates_example" = "Прыклад";
-"brown" = "Карычневы";
 "quick_action_no_overlay" = "Накладка адсутнічае";
 "osm_editing_lost_changes_title" = "Выйсці без захавання\?";
 "quick_action_add_underlay" = "Дадаць падкладку";
 "auto_split_gap" = "Аўтаматычнае дзяленне запісаў пасля перапынку";
-"dark_yellow" = "Цёмна-жоўты";
 "change_map_overlay" = "Змяніць накладзеную мапу";
-"translucent_red" = "Празрысты чырвоны";
 "home_pt" = "Дом";
 "traffic_warning_tunnel" = "Наперадзе тунэль";
 "nearby_search" = "Шукаць навокал";
 "quick_action_start_stop_nav_descr" = "Націсніце гэтую кнопку, каб пачаць або скончыць навігацыю.";
 "map_styles" = "Стылі мапы";
 "osmand_live_updates" = "Аўтаматычныя абнаўленні";
-"lightgreen" = "Светла-зялёны";
 "actions" = "Дзеянні";
 "create_poi_short" = "Стварыць POI";
 "poi_type" = "Тып POI";
-"translucent_green" = "Празрысты зялёны";
 "osmand_live_donation_switch_title" = "Ахвяраванне супольнасці OpenStreetMap";
 "hide_contour_lines" = "Схаваць контурныя лініі";
 "product_desc_wikivoyage" = "Бясплатны сусветны турыстычны даведнік, які можа рэдагаваць кожны.";
-"green" = "Зялёны";
 "quick_action_name_footer" = "Пакінце пустым, каб ужыць адрас або назву гораду.";
 "add_action" = "Дадаць дзеянне";
 "shared_string_category" = "Катэгорыя";
-"quick_action_name" = "Хуткае дзеянне";
 "display_starting_at_zoom_level" = "Паказваць ад узроўню маштабавання";
 "poi_clear" = "Ачысціць";
 "add_poi" = "Дадаць POI";
-"pink" = "Ружовы";
 "osm_editing_offline" = "Пазасеціўнае рэдагаванне";
 "add_map_marker" = "Дадаць адзнаку";
-"map_sources" = "Крыніцы мапаў";
 "osm_edits_notes" = "Нататкі";
 "help_install_and_troubleshoot" = "Усталёўка і вырашэнне праблемаў";
 "gpx_avg_altitude" = "Сярэдняя вышыня";
@@ -979,8 +934,6 @@
 "map_overlays" = "Накладзеная мапа";
 "quick_action_name_str" = "Назва дзеяння";
 "key_hint_deselect" = "Адкінуць выбар";
-"key_hint_select" = "Абраць";
-"translucent_yellow" = "Празрысты жоўты";
 "toggle_poi" = "Паказаць/схаваць POI";
 "osm_live_routing" = "Навігацыя OsmAnd Live";
 "product_title_wikivoyage" = "Турыстычны даведнік";
@@ -1401,7 +1354,6 @@
 "light_theme" = "Светлая";
 "map_settings_available_srtm_maps_descr" = "Для адлюстравання схілаў на мапе патрабуюцца дадатковыя мапы";
 "map_settings_contour_zoom_level_descr" = "Абярыце ўзровень маштабавання, на якім будуць адлюстроўвацца контурныя лініі";
-"map_settings_line_width" = "Шырыня лініі";
 "map_settings_hide_polygons_desc" = "Гэты параметр уплывае толькі на аўтаномныя вектарныя мапы OsmAnd";
 "map_settings_add_online_source" = "Дадаць сеціўную крыніцу";
 "map_settings_legend" = "Легенда";
@@ -1431,7 +1383,6 @@
 "consider_limitations_param" = "Разглядаць часовыя абмежаванні";
 "recording_preferences_descr" = "Налады запісу следу";
 "only_manually" = "Толькі ўласнаручна";
-"arrival_announcement_frequency" = "Як хутка вы хочаце чуць паведамленне аб прыбыцці?";
 "recalculate_wrong_dir" = "Пералічыць маршрут у выпадку змены кірунку на адваротны";
 "import_routing_file_descr" = "Вы можаце імпартаваць файл маршрутызацыі з любой праграмы воблачнага сховішча альбо адкрыўшы яго ў OsmAnd.";
 "osmand_routing" = "Навігацыя OsmAnd";
@@ -1478,7 +1429,6 @@
 "tones" = "тоны";
 "announce" = "Абвестка";
 "swap_points" = "Памяняць месцамі пункт адпраўлення і пункт прызначэння";
-"displayed_trips" = "Адлюстроўваемыя сляды";
 "directions_other" = "Іншыя кірункі";
 "by_dist" = "Па адлегласці";
 "select_home" = "Абраць пункт дома";
@@ -1498,7 +1448,6 @@
 "nav_type_straight_line" = "Прамая лінія";
 "nav_type_descr" = "Абярыце спосаб разліку маршруту для гэтага профілю";
 "map_during_navigation" = "Мапа падчас навігацыі";
-"nav_type_title" = "Тып навігацыі";
 "arrows_direction_to_markers" = "Стрэлкі паказваюць кірунак актыўнай адзнакі, калі яна знаходзіцца па-за межамі экрана. Лініі кірунку паказваюць шлях да актыўных адзнак.";
 "appearance_on_map" = "Выгляд на мапе";
 "choose_how_display_distance" = "Абярыце спосаб адлюстравання адлегласці да актыўных адзнак";
@@ -1828,7 +1777,6 @@
 "import_profile_descr" = "Каб імпартаваць профіль, націсніце патрэбны файл (* .osf) у любой праграме і абярыце \"Капіяваць у OsmAnd Maps\"";
 "profile_prefs_reset_successful" = "Усе налады профілю скінутыя да прадвызначаных.";
 "gpx_parse_error" = "OsmAndстварыў GPX не зусім правільна. Калі ласка, звяжыцеся са службай падтрымкі.";
-"nothing_found_empty" = "Нічога не знойдзена";
 "shared_string_next" = "Далей";
 "import_complete_description" = "Усе даныя з %@ імпартаваныя, вы можаце выкарыстоўваць кнопкі ніжэй, каб адкрыць адпаведны раздзел праграмы для кіравання імі";
 "route_betw_points" = "Маршрут паміж пунктамі";
@@ -1840,7 +1788,6 @@
 "shared_string_profiles" = "Профілі";
 "shared_string_poi_types" = "Тыпы POI";
 "ltr_or_rtl_combine_via_space" = "%@ %@";
-"maximum_speed" = "Максімальная хуткасць";
 "personal_category_name" = "Асабісты";
 "next_seg" = "Наступны сегмент";
 "save_new_track" = "Захаваць як новы след";
@@ -1854,7 +1801,6 @@
 "arrived_at_destination" = "Вы прыбылі.";
 "quick_action_remove_next_destination" = "Выдаліць наступны пункт прызначэння";
 "shared_string_import_complete" = "Імпарт завершаны";
-"selected_profiles" = "%dз %d";
 "import_profile_select_descr" = "Абярыце даныя для імпарту.";
 "shared_string_preparing" = "Падрыхтоўка";
 "shared_string_min" = "Мін";
@@ -1925,7 +1871,6 @@
 "shared_string_import" = "Імпартаваць";
 "visible" = "Бачны";
 "plan_route_select_folder" = "Абраць каталог";
-"reverse_track_dir" = "Развярнуць кірунак следу";
 "new_plugin_added" = "Дададзена новая ўбудова";
 "plan_route_change_folder" = "Змяніць каталог";
 "plan_route_split_before" = "Падзяліць да";
@@ -1935,11 +1880,9 @@
 "fav_point_dublicate" = "Дубляванне назвы ўлюбёнай мясціны";
 "searching_gps" = "Пошук GPS";
 "sport" = "Спорт";
-"some_of" = "%dз %d";
 "octagon" = "Васьмівугольнік";
 "custom_osmand_plugin_name" = "Адвольная ўбудова OsmAnd";
 "markers_history" = "Гісторыя адзнак";
-"service" = "Паслугі";
 "add_custom_category" = "Дадаць адвольную катэгорыю";
 "shared_string_others" = "Іншае";
 "special" = "Адмысловыя";
@@ -1955,7 +1898,6 @@
 "route_between_points_warning_desc" = "Пасля вам патрэбна абраць профіль навігацыі для вызначэння маршруту з улікам параметраў і абмежаванняў гэтага профілю.";
 "suggested_maps" = "Прапанаваныя мапы";
 "added_profiles_descr" = "Профілі, якія дададзеныя ўбудовамі";
-"default" = "Прадвызначана";
 "gpxup_public" = "Агульны";
 "navigate_point_easting" = "Па даўгаце";
 "navigate_point_zone" = "Зона";
@@ -1968,7 +1910,6 @@
 "no_waypoints_found" = "Пунктаў шляху не знойдзена";
 "shared_string_wifi_only" = "Толькі праз Wi-Fi";
 "welmode_download_maps" = "Спампаваць мапы";
-"product_title_mapillary" = "Mapillary";
 "gpxup_private" = "Прыватны";
 "wiki_menu_download_descr" = "Для прагляду POI Вікіпедыі на мапе патрабуюцца дадатковыя мапы.";
 "dialogs_and_notifications" = "Дыялогі і апавяшчэнні";
@@ -2107,7 +2048,6 @@
 "lang_bn" = "Бенгальская";
 "lang_pl" = "Польская";
 "lang_ku" = "Курдская";
-"login_error_email_invalid" = "Калі ласка, увядзіце сапраўдны адрас электроннай пошты";
 "lang_ru" = "Расійская";
 "shared_string_overview" = "Агляд";
 "lang_mn" = "Мангольская";
@@ -2148,7 +2088,6 @@
 "grey_color_undefined" = "Шэры колер выкарыстоўваецца для частак без даных.";
 "lang_cv" = "Чувашская";
 "lang_es" = "Іспанская";
-"weather_wind_unit_mi_per_hour" = "Міляў за гадзіну";
 "gpx_dir_arrows" = "Стрэлкі кірунку";
 "backup_error_no_valid_subscription" = "Няма дзейнай падпіскі";
 "lang_it" = "Італьянская";

@@ -118,7 +118,6 @@
 "default_speed_setting_title" = "Kecepatan default";
 "min_speed" = "Kecepatan min.";
 "max_speed" = "Kecepatan maks.";
-"maximum_speed" = "Kecepatan maksimal";
 "road_speeds_descr" = "Parameter ini dapat mempengaruhi perhitungan rute.";
 "road_min_speed_descr" = "Mengatur kecepatan perjalanan minimum untuk semua jalan di rute. Meningkatkan prioritas untuk jalan dengan kecepatan yang disarankan kurang dari minimum.";
 "road_max_speed_descr" = "Mengatur kecepatan perjalanan maksimum untuk semua jalan dalam rute. Menurunkan prioritas untuk jalan dengan kemungkinan kecepatan lebih tinggi dari maksimum.";
@@ -191,7 +190,6 @@
 "speak_favorites" = "Nearby Favorites";
 "speak_poi" = "POI terdekat";
 "speak_pedestrian" = "Penyeberangan pejalan kaki";
-"speak_tunnels" = "Terowongan-terowongan";
 "show_tunnels" = "Terowongan-terowongan";
 
 // Dirrection appearance
@@ -225,7 +223,6 @@
 "arrival_distance_factor_at_last" = "Dalam meter akhir";
 "route_parameters" = "Parameter rute";
 "fast_route_mode" = "Rute tercepat";
-"nav_type_title" = "Jenis navigasi";
 "voice_announces" = "Perintah suara";
 "screen_alerts" = "Peringatan layar";
 "vehicle_parameters" = "Parameter kendaraan";
@@ -281,7 +278,6 @@
 "recalculate_wrong_dir" = "Recalculate route in case of reverse direction";
 "recalculate_route_distance_promo" = "Rute akan dikalkulasi ulang jika jarak dari rute ke lokasi saat ini lebih dari nilai yang dipilih.";
 "select_distance_for_recalculation" = "Pilih jarak setelah itu rute akan dikalkulasi ulang.";
-"arrival_announcement_frequency" = "How soon do you want the arrival announcement?";
 "speed_limit_tolerance_descr" = "Select the speed limit tolerance margin above which you will receive a voice warning.";
 "only_manually" = "Only manually";
 "instructions_repeat" = "Tap \"Next turn\" widget to repeat instructions";
@@ -304,7 +300,6 @@
 "use_points_as_intermediates" = "Hitung rute antar titik";
 "calculate_osmand_route_without_internet" = "Calculate OsmAnd route segment without Internet";
 "routing_settings_2" = "Pengaturan navigasi";
-"gpx_navigation" = "Ikuti trek";
 "impassable_road" = "Avoid roads";
 "road_speeds" = "Road speeds";
 "avoid_transport_type" = "Avoid transport types";
@@ -332,7 +327,6 @@
 "route_is_too_long_v2" = "This route may be too long to calculate. Please add intermediate destinations if no result is found within 10 minutes.";
 "navigation_over_track" = "Mulai navigasi bersama trek?";
 "use_displayed_track_for_navigation" = "Do you want to use displayed track for navigation?";
-"displayed_trips" = "Trek yang ditampilkan";
 "prev_route" = "Rute sebelumnya";
 "shared_string_ellipsis" = "…";
 "shared_string_select_on_map" = "Pilih di peta";
@@ -409,7 +403,6 @@
 "units_m_s" = "m/d";
 "tones" = "ton";
 "nothing_found" = "Nothing found";
-"nothing_found_empty" = "Tidak ada yang ditemukan";
 "nothing_found_descr" = "Modify the search query or increase the search radius";
 "select_street" = "Pilih jalan";
 "shared_string_in_name" = "di %@";
@@ -530,7 +523,6 @@
 "available_groups" = "Available groups";
 "group_name" = "Nama grup";
 "fav_remove_q" = "Remove favorite?";
-"fav_import" = "Impor";
 "fav_import_title" = "Import favorite";
 "fav_export_title" = "Export favorite";
 "fav_select_remove" = "Please select favorites to remove";
@@ -542,7 +534,6 @@
 "fav_ignore" = "Ignore";
 "fav_rename" = "Ubah nama";
 "fav_replace" = "Ubah";
-"fav_replace_all" = "Ganti semua";
 "replace_favorite_confirmation" = "Are you sure you want to replace Favorite %@?";
 "fav_points_not_exist" = "Tidak ada titik Favorit yang ada";
 "fav_rename_q" = "Rename favorite";
@@ -613,7 +604,6 @@
 "gpx_uphldownhl" = "Uphills/Downhills";
 "gpx_average_speed" = "Kecepatan rata-rata";
 "gpx_start" = "Mulai";
-"gpx_finish" = "Selesai";
 "gpx_avg_elev" = "Average elevation";
 "gpx_elev_range" = "Elevation range";
 "gpx_avg_altitude" = "Ketinggian rata-rata";
@@ -661,8 +651,6 @@
 
 // Map settings
 "m_style_car" = "Mengemudi";
-"m_style_walk" = "Berjalan";
-"m_style_bicycle" = "Bersepeda";
 "m_style_pulic_transport" = "Transportasi umum";
 "map_settings_map" = "Peta";
 "layer_amenity_label" = "Label Titik (POI, Favorit)";
@@ -671,7 +659,6 @@
 "map_mode" = "Mode peta";
 "map_settings_map_magnifier" = "Kaca pembesar peta";
 "map_settings_text_size" = "Ukuran teks";
-"map_settings_day" = "Pagi";
 "map_settings_night" = "Malam";
 "map_settings_style" = "Gaya peta";
 "map_settings_overunder" = "Overlay / Underlay";
@@ -684,7 +671,6 @@
 "shared_string_transparency" = "Transparansi";
 "map_settings_base_transp" = "Transparansi peta basis";
 "map_settings_avail_lay" = "Available layers";
-"map_settings_hillshade" = "Bayangan bukit";
 "mapillary" = "Mapillary";
 "street_level_imagery" = "Citra tingkat jalanan";
 "shared_string_terrain" = "Medan";
@@ -702,7 +688,6 @@
 "map_settings_hide_polygons_desc" = "This option affects only OsmAnd Offline vector maps";
 "map_settings_add_maps_desc" = "You can add new maps via link, or by importing SQLite files.";
 "map_settings_color_scheme" = "Skema warna";
-"map_settings_line_width" = "Line width";
 "map_settings_line_density" = "Line density";
 "map_settings_contour_zoom_level_descr" = "Select zoom level, from wich contour lines will be displayed";
 "map_settings_appearance" = "Tampilan";
@@ -727,9 +712,7 @@
 "intro_welcome" = "Welcome to\nOsmAnd";
 "intro_promo" = "Global offline maps";
 "intro_placeholder" = "enter the name of your region";
-
 // Settings
-"sett_settings" = "Pengaturan";
 "sett_units" = "Units";
 "sett_lang" = "Map Language";
 "sett_km" = "Kilometers";
@@ -759,7 +742,6 @@
 "coordinates_example" = "Contoh";
 "utm_description" = "Please note, OsmAnd uses UTM Standard format which is similar but not identical to UTM NATO.";
 "coordinates_copy_descr" = "Tap to copy coordintates to clipboard.";
-"sett_lang_local" = "Lokal";
 "sett_lang_trans" = "translit";
 "sett_pref_lang" = "Preferred Language";
 "sett_lang_show_local" = "Show local names";
@@ -906,7 +888,6 @@
 "create_profile" = "Create profile";
 "import_profile_select_descr" = "Pilih data yang akan diimpor.";
 "export_profile_select_descr" = "Select the data to be exported.";
-"selected_profiles" = "%d dari %d";
 "selected_of" = "Selected - %d/%d";
 "nav_type_hint" = "Navigation type";
 "shared_string_nothing_selected" = "Tidak ada yang dipilih";
@@ -1061,7 +1042,6 @@
 "select_another_track" = "Pilih trek lain";
 "select_track_to_follow" = "Select track to follow";
 "attach_to_the_roads" = "Pasang pada jalan";
-"reverse_track_dir" = "Reverse track direction";
 "point_to_navigate" = "Navigate to";
 "start_of_the_track" = "Pemulaian trek";
 "nearest_point" = "Titik terdekat";
@@ -1073,7 +1053,6 @@
 "select_segment" = "Select segment";
 "track_multiple_segments_select" = "%@ has more than one segment. Please select a part of the track you want to use for navigation.";
 "segnet_num" = "Segmen %d";
-"some_of" = "%d dari %d";
 "threshold_distance" = "Jarak ambang batas";
 "select_profile" = "Select profile";
 
@@ -1288,9 +1267,7 @@
 "coordinates_widget" = "Widget koordinat";
 "searching_gps" = "Mencari GPS";
 "copied_to_clipboard" = "Disalin ke papan klip";
-
 // Quick action
-"quick_action_name" = "Tindakan cepat";
 "quick_action_no_overlay" = "Tidak ada hamparan";
 "quick_action_add_overlay" = "Tambahkan hamparan";
 "quick_action_no_underlay" = "Tidak ada dasaran";
@@ -1305,7 +1282,6 @@
 "offline_vector_maps" = "Peta vektor luring";
 "add_map_source" = "Tambahkan sumber peta";
 "add_map_style" = "Add map style";
-"map_sources" = "Sumber-sumber peta";
 "map_styles" = "Gaya peta";
 "add_action" = "Tambahkan tindakan";
 "unsupported_items" = "Unsupported items";
@@ -1407,7 +1383,6 @@
 "display_starting_at_zoom_level" = "Penampilan dimulai dari level perbesaran";
 "quick_action_contour_lines_descr" = "Tapping this action button shows or hides contour lines layer.";
 "hide_contour_lines" = "Hide contour lines";
-"show_contour_lines" = "Tampilkan garis jejak";
 "enable_contour_lines" = "Enable to view contour lines on the map";
 "enable_hillshade" = "Enable to view terrain data";
 "contour_lines_hillshades_slope" = "Garis kontur, bayangan bukit, lereng";
@@ -1462,10 +1437,7 @@
 "cannot_add_marker" = "Cannot add Parking";
 "cannot_add_marker_desc" = "Please remove one direction at least and retry";
 "cannot_add_destination" = "Cannot add Direction";
-
 // Units
-"units_km" = "km";
-"units_m" = "m";
 "units_mi" = "mi";
 "units_yd" = "yd";
 "units_ft" = "kaki";
@@ -1517,7 +1489,6 @@
 // Import
 "import_title" = "Import data";
 "import_choose_type" = "Please choose what to import";
-"import_favorite" = "Favorit";
 "import_failed" = "Import failed";
 "import_cannot" = "The specified file cannot be imported";
 "import_gpx" = "GPX Track";
@@ -1536,37 +1507,10 @@
 // Location Services
 "loc_access_denied" = "Access denied";
 "loc_access_denied_desc" = "Access to location service has been denied";
-
 // Colors
-"col_purple" = "Ungu";
-"col_green" = "Hijau";
-"col_yellow" = "Kuning";
-"col_orange" = "Jeruk";
 "col_gray" = "Gray";
-"col_red" = "Merah";
-"col_blue" = "Biru";
 "col_magenta" = "Magenta";
-
 // GPX colors
-"red" = "Merah";
-"orange" = "Jeruk";
-"lightblue" = "Biru muda";
-"blue" = "Biru";
-"purple" = "Ungu";
-"pink" = "Merah muda";
-"translucent_red" = "Merah tembus pandang";
-"translucent_orange" = "Oranye tembus pandang";
-"translucent_blue" = "Biru tembus pandang";
-"translucent_purple" = "Ungu tembus pandang";
-"translucent_pink" = "Translucent pink";
-"dark_yellow" = "Dark yellow";
-"yellow" = "Kuning";
-"translucent_yellow" = "Kuning tembus pandang";
-"lightgreen" = "Hijau muda";
-"translucent_lightgreen" = "Translucent light green";
-"green" = "Hijau";
-"translucent_green" = "Hijau tembus pandang";
-"brown" = "Cokelat";
 
 // World Regions
 "region_antarctica" = "Antartika";
@@ -1612,7 +1556,6 @@
 "product_title_osm_editing" = "OpenStreetMap Editing";
 "product_desc_osm_editing" = "Make changes to OpenStreetMap directly from OsmAnd";
 "product_desc_ext_osm_editing" = "OSM Editing plugin can be used to make OSM contributions like creating or modifying POI objects, opening or commenting on OSM Notes, and contributing recorded GPX files. OSM is a community driven global public domain mapping project. For more information, please refer to https://osm.org. Contributions can be made directly from OsmAnd, if you specify your OSM credentials in the app.";
-"product_title_mapillary" = "Mapillary";
 "product_desc_mapillary" = "Online street-level photos for everyone";
 "product_desc_ext_mapillary" = "Foto tingkat jalanan daring untuk semuanya. Jelajahi tempat, kolaborasi, tangkap dunia.";
 "product_title_openplacereviews" = "OpenPlaceReviews";
@@ -1623,7 +1566,6 @@
 "product_title_antarctica" = "Antartika";
 "product_desc_antarctica" = "Unlimited map downloads for Antarctica";
 "product_desc_africa_short" = "Africa region maps";
-"product_title_australia" = "Australia";
 "product_desc_australia" = "Unlimited map downloads for Australia";
 "product_desc_australia_short" = "Australia region maps";
 "product_title_centralamerica" = "Amerika Tengah";
@@ -1661,7 +1603,6 @@
 "product_title_wikivoyage" = "Panduan Perjalanan";
 "product_desc_wikivoyage" = "Penduan perjalanan gratis semua orang bisa berkontribusi.";
 "product_desc_ext_wikivoyage" = "Panduan tempat-tempat paling menarik di planet ini, di dalam OsmAnd, tanpa perlu tersambung ke internet.";
-"product_title_sea_depth_contours" = "Kontur kedalaman laut";
 "product_desc_sea_depth_contours" = "Sea depth contour lines and seamarks";
 "my_location" = "My Location";
 "all_categories" = "All categories";
@@ -1678,7 +1619,6 @@
 "enter_fav_name" = "Enter favorite name";
 "res_installing" = "Installing…";
 "res_roads" = "Jalanan";
-"res_srtm" = "Garis kontur";
 "res_wiki" = "Wiki";
 "shared_string_hillshade" = "Bayangan bukit";
 "res_slope" = "Lereng";
@@ -1902,7 +1842,6 @@
 "sett_wunderlinq_ext_input" = "WunderLINQ";
 "key_hint_zoom_in" = "Zoom In";
 "key_hint_zoom_out" = "Zoom Out";
-"key_hint_select" = "Pilih";
 "key_hint_deselect" = "Batalkan pemilihan";
 "key_hint_goback" = "Go Back";
 "key_hint_recenter_map" = "Recenter Map";
@@ -2259,13 +2198,11 @@
 "vessel_height_limit_description" = "Set vessel height to avoid low bridges. Keep in mind, if the bridge is movable, the calculation uses its height in the open state.";
 "vessel_width_limit_description" = "Atur lebar kapal untuk menghindari jembatan sempit";
 "default_speed_dialog_msg" = "Perkiraan waktu kedatangan untuk jenis jalan yang tidak diketahui, dan membatasi kecepatan untuk semua jalan (dapat mempengaruhi perutean)";
-"default" = "Default";
 
 
 //Icon categories
 "amenity" = "Fasilitas";
 "emergency" = "Darurat";
-"service" = "Layanan";
 "special" = "Spesial";
 "sport" = "Olahraga";
 "symbols" = "Simbol";
@@ -2341,7 +2278,6 @@
 "cloud_restore_now" = "Pulihkan sekarang";
 "register_opr_create_new_account" = "Buat akun baru";
 "user_login" = "Login";
-"login_error_email_invalid" = "Mohon masukkan alamat e-mail yang valid";
 "backup_error_file_not_available" = "Berkas tidak tersedia";
 "points_delete_multiple" = "Hapus %d titik\?";
 "rendering_attr_lightRailRoutes_name" = "Rute kereta api ringan";
@@ -2352,7 +2288,6 @@
 "cloud_make_backup_descr" = "Ada banyak perubahan pada perangkat ini, harap melakukan pencadangan dari data ini agar tidak hilang.";
 "cloud_backup_now" = "Cadangkan sekarang";
 "backup_error_user_is_already_registered" = "Alamat surel ini telah digunakan oleh akun lain";
-"units_min_short" = "m";
 "cloud_set_up_backup" = "Siapkan pencadangan";
 "osmand_cloud_login_descr" = "Mohon masukkan alamat surel yang Anda daftarkan. Sebuah kata sandi sekali pakai untuk langkah berikutnya akan dikirim.";
 "altitude" = "Ketinggian";
@@ -2437,7 +2372,6 @@
 "shared_string_start" = "Mulai";
 "terrain_maps" = "Peta medan";
 "subscriptions" = "Langganan";
-"weather_wind_unit_mi_per_hour" = "Mil per jam";
 "wikipedia_and_wikivoyage_offline" = "Wikipedia dan Wikivoyage luring";
 "backup_error_size_is_exceeded" = "Ukuran maksimum OsmAnd Cloud melebihi %@";
 "simulation_preview_mode_title" = "Mode penampilan cepat";

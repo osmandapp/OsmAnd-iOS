@@ -3902,7 +3902,7 @@
         [_profilePreferences setObject:_speakPedestrian forKey:@"speak_pedestrian"];
         [_profilePreferences setObject:_speakSpeedLimit forKey:@"speak_speed_limit"];
         [_profilePreferences setObject:_speakCameras forKey:@"speak_cameras"];
-        [_profilePreferences setObject:_speakTunnels forKey:@"speak_tunnels"];
+        [_profilePreferences setObject:_speakTunnels forKey:@"show_tunnels"];
         [_profilePreferences setObject:_announceNearbyFavorites forKey:@"announce_nearby_favorites"];
         [_profilePreferences setObject:_announceNearbyPoi forKey:@"announce_nearby_poi"];
 

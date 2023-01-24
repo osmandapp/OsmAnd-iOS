@@ -691,7 +691,7 @@
     else if ([self.symbol isEqualToString:NSUnitSpeed.kilometersPerHour.symbol])
         return OALocalizedString(@"weather_wind_unit_km_per_hour");
     else if ([self.symbol isEqualToString:NSUnitSpeed.milesPerHour.symbol])
-        return OALocalizedString(@"weather_wind_unit_mi_per_hour");
+        return OALocalizedString(@"si_mph");
     else if ([self.symbol isEqualToString:NSUnitSpeed.knots.symbol])
         return OALocalizedString(@"weather_wind_unit_knots");
     return nil;

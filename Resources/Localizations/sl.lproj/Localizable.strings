@@ -31,7 +31,6 @@
 "groups" = "Skupine";
 "fav_no_group" = "Ni skupine";
 "fav_remove_q" = "Ali želite odstraniti priljubljeno točko?";
-"fav_import" = "Uvozi";
 "fav_import_title" = "Uvozi priljubljene točke";
 "fav_export_title" = "Izvozi priljubljene točke";
 "fav_create_group" = "Ustvari novo skupino";
@@ -39,7 +38,6 @@
 "fav_ignore" = "Prezri";
 "fav_rename" = "Preimenuj";
 "fav_replace" = "Zamenjaj";
-"fav_replace_all" = "Zamenjaj vse";
 "fav_rename_q" = "Odstrani priljubljeno";
 "fav_enter_new_name" = "Vnesite ime priljubljene točke";
 // POI
@@ -71,7 +69,6 @@
 "gpx_export_title" = "Izvozi pot potovanja";
 "gpx_export_select_track" = "Izbor poti za izvoz";
 "gpx_start" = "Začni";
-"gpx_finish" = "Cilj";
 "gpx_avg_elev" = "Povprečna višina";
 "track_continue_rec_q" = "Ali želite nadaljevati z beleženjem sledi?";
 "rec_interval" = "Interval beleženja";
@@ -80,8 +77,6 @@
 // Map settings
 "rendering_value_browse_map_name" = "Poišči na zemljevidu";
 "m_style_car" = "Vožnja";
-"m_style_walk" = "Hoja";
-"m_style_bicycle" = "Kolesarjenje";
 "map_settings_map" = "Zemljevid";
 "map_settings_show" = "Pokaži na zemljevidu";
 "map_settings_type" = "Vrsta zemljevida";
@@ -99,7 +94,6 @@
 "intro_next" = "Naslenja";
 "intro_welcome" = "Dobrodošli v\nOsmAnd";
 // Settings
-"sett_settings" = "Nastavitve";
 "sett_units" = "Enote";
 "sett_km" = "Kilometri";
 "sett_ml" = "Milje";
@@ -141,7 +135,6 @@
 "gpx_distance_points" = "Razdalja (točke)";
 "gpx_max_speed" = "Največja hitrost";
 "gpx_speed" = "Hitrost";
-"map_settings_day" = "Dan";
 "map_settings_night" = "Temni nočni izris";
 "map_settings_offline" = "Slog prikaza zemljevida";
 // HUD
@@ -227,7 +220,6 @@
 "intro_placeholder" = "Vpišite naziv regije";
 "sett_lang" = "Jezik zemljevida";
 "sett_arr_map" = "Sredina  zemljevida";
-"sett_lang_local" = "Krajevno";
 "sett_pref_lang" = "Prednostni jezik";
 "res_catalog_upd" = "Posodobitev kataloga";
 "shared_string_building" = "Zgradba";
@@ -253,8 +245,6 @@
 "more" = "Več ...";
 "time_limited" = "Časovno omejeno";
 // Units
-"units_km" = "km";
-"units_m" = "m";
 "units_mi" = "mi";
 "units_yd" = "yd";
 "units_ft" = "ft";
@@ -266,7 +256,6 @@
 "map_remind" = "Opomni kasneje";
 // Import
 "import_title" = "Uvozi podatke";
-"import_favorite" = "Priljubljene";
 "import_failed" = "Uvoz je spodletel";
 "import_gpx" = "Sled GPX";
 // Context menu
@@ -275,13 +264,7 @@
 "ctx_mnu_share" = "Skupna raba";
 "ctx_mnu_direction" = "Oznaka zemljevida";
 // Colors
-"col_purple" = "Vijolična";
-"col_green" = "Zelena";
-"col_yellow" = "Rumena";
-"col_orange" = "Oranžno";
 "col_gray" = "Siva";
-"col_red" = "Rdeča";
-"col_blue" = "Modra";
 "col_magenta" = "Temno rdeča";
 // World Regions
 "region_africa" = "Afrika";
@@ -338,7 +321,6 @@
 "product_title_track_recording" = "Dnevnik potovanj";
 "product_title_africa" = "Afrika";
 "product_desc_africa" = "Neomejeno prenašanje zemljevidov Afrike";
-"product_title_australia" = "Avstralija";
 "product_desc_australia" = "Neomejeno prenašanje zemljevidov Avstralije";
 "product_title_centralamerica" = "Srednja Amerika";
 "product_desc_centralamerica" = "Neomejeno prenašanje zemljevidov srednje Amerike";
@@ -367,7 +349,6 @@
 "enter_fav_name" = "Vnesite ime priljubljene točke";
 "res_installing" = "Poteka nameščanje …";
 "res_roads" = "Poti";
-"res_srtm" = "Izris izohips";
 "res_wiki" = "Wikipedija";
 "select_language" = "Izbor jezika";
 "language_short" = "Jezik";
@@ -428,7 +409,6 @@
 "use_points_as_intermediates" = "Izračun poti med točkami";
 "calculate_osmand_route_without_internet" = "Izračunanje odseka poti brez interneta";
 "routing_settings_2" = "Nastavitve navigacije";
-"gpx_navigation" = "Sledi sledi";
 "impassable_road" = "Izogni se cestam …";
 "impassable_road_desc" = "Izberite poti, ki se jimželite izogniti.";
 "interrupt_music_descr" = "Ob najavah prekini (in ne le utišaj) predvajanje glasbe";
@@ -617,7 +597,6 @@
 "last_intermediate_dest_description" = "Doda vmesni postanek na poti";
 "lat" = "ZD (λ)";
 "lon" = "ZŠ (β)";
-"map_settings_hillshade" = "Senčenje";
 "sett_loc_fmt" = "Zapis koordinat";
 "res_install_no_space" = "Ni dovolj prostora za namestitev";
 "add_parking" = "Dodaj kot parkirno mesto";
@@ -678,7 +657,6 @@
 "transport_stop" = "Postaja";
 "auto_split_gap" = "Samodejno razdeli beleženje po vmesnih točkah";
 "map_widget_ruler_control" = "Krožno ravnilo";
-"speak_tunnels" = "Tuneli";
 "shared_setting_always_ask" = "Vedno vprašaj";
 "osm_live_routing" = "Navigacija s storitvijo OsmAnd Live";
 "traffic_warning_tunnel" = "Predor";
@@ -852,31 +830,22 @@
 "online_map" = "Spletni zemljevid";
 "osm_live_cancel_subscription" = "Prekliči naročnino";
 "quick_actions_show_dialog" = "Pokaži vmesno pogovorno okno";
-"purple" = "Vijolična";
 "map_settings_text_size" = "Velikost napisov";
 "gpx_descent" = "Spust";
 "purchase_unlim_title" = "Kupi - %@";
-"quick_action_name" = "Hitro dejanje";
 "quick_action_pause_nav_descr" = "Pritisnite gumb,če želite začasno ustaviti oziroma nadaljevati navigacijo.";
 "free_memory" = "Na voljo ješe %@";
 "map_styles" = "Slogi zemljevida";
-"blue" = "Modra";
 "toggle_nav" = "Začni/Končaj navigacijo";
 "prev_route" = "Predhodna pot";
-"units_min_short" = "m";
-"translucent_purple" = "Prosojna vijolična";
-"show_contour_lines" = "Izriši izohipse";
 "gpx_slope" = "Naklon";
 "add_map_source" = "Dodaj vir zemljevida";
 "shared_string_retry" = "Poskusi znova";
-"orange" = "Oranžno";
 "osm_editing_lost_changes_title" = "Končati brez shranjevanja\?";
 "change_map_source" = "Spremeni vir zemljevida";
 "quick_action_add_underlay" = "Dodaj podlogo zemljevida";
 "poi_list" = "Seznam točk POI";
-"key_hint_select" = "Izberi";
 "shared_string_category" = "Skupina";
-"translucent_red" = "Prosojna rdeča";
 "add_gpx_waypoint" = "Dodaj vmesno točko GPX";
 "route_parameters" = "Parametri poti";
 "quick_action_tags" = "Oznake";
@@ -885,26 +854,19 @@
 "quick_action_name_str" = "Ime dejanja";
 "history" = "Zgodovina";
 "gpx_ascent" = "Vzpon";
-"dark_yellow" = "Temno rumena";
 "map_underlays" = "Podloge zemljevida";
 "work_pt" = "Služba";
 "replace_destination" = "Zamenjaj cilj";
 "categories" = "Kategorije";
 "edit_action" = "Uredi dejanje";
 "day_mode" = "Dnevni način";
-"brown" = "Rjava";
-"product_title_sea_depth_contours" = "Navtični relief globine";
 "create_items" = "Ustvari predmete";
 "gpx_avg_altitude" = "Povprečna nadmorska višina";
 "night_mode" = "Nočni način";
 "mapil_pano_only" = "Pokaži le 360° slike";
-"map_sources" = "Viri zemljevida";
 "product_desc_ext_wikivoyage" = "Krajevno shranjeni vodniki po najbolj zanimivih krajih sveta, prikazani v programu OsmAnd, tudi na mestih, kjer ni povezave z internetom.";
 "osm_note_action_field_descr" = "Sporočilo bo dodano v polje opombe.";
 "product_title_wikivoyage" = "Popotniški vodniki";
-"translucent_green" = "Prosojna zelena";
-"pink" = "Rožnata";
-"yellow" = "Rumena";
 "offline_vector_maps" = "Vektorski zemljevidi za delo brez povezave";
 "poi_opening_hours" = "Delovničas";
 "add_map_marker" = "Dodaj označbo na zemljevidu";
@@ -921,12 +883,10 @@
 "poi_remove_success" = "Izbrisano";
 "mapillary" = "Mapillary";
 "poi_type" = "Vrsta točke POI";
-"translucent_blue" = "Prosojna modra";
 "map_settings_map_magnifier" = "Velikost zemljevida";
 "map_downloaded" = "Zemljevid je prejet";
 "add_poi" = "Dodaj točko POI";
 "my_places" = "Shranjene točke";
-"green" = "Zelena";
 "add_action" = "Dodaj dejanje";
 "gpx_alt_range" = "Obseg nadmorske višine";
 "quick_action_start_stop_nav_descr" = "Pritisnite gumb,če želite začeti ali končati navigacijo.";
@@ -934,27 +894,20 @@
 "change_map_underlay" = "Spremeni podlogo zemljevida";
 "toggle_poi" = "Pokaži/Skrij točke POI";
 "osn_bug_name" = "Opomba OSM";
-"translucent_yellow" = "Prosojna rumena";
 "product_desc_wikivoyage" = "Brezplačen svetovni popotniški vodnik, ki ga lahko ureja vsak popotnik.";
 "download_depth_countours" = "Navtični relief globine";
-"red" = "Rdeča";
 "add_first_inermediate" = "Dodaj prvo vmesno točko";
 "home_pt" = "Začetni zaslon";
 "shared_string_show_more" = "Pokaži več";
 "osmand_live_last_live_update" = "Zadnja posodobitev: %@";
 "shared_string_time_of_day" = "Čas dneva";
-"translucent_lightgreen" = "Prosojna svetlo zelena";
 "osm_edit_without_name" = "Brez imena";
-"lightgreen" = "Svetlo zelena";
 "key_hint_deselect" = "Počisti izbiro";
 "quick_action_no_overlay" = "Brez prekrivnih plasti";
 "quick_action_no_underlay" = "Brez podlog";
 "quick_action_add_overlay" = "Dodaj prekrivno plast";
-"translucent_orange" = "Prosojna oranžna";
-"translucent_pink" = "Prosojna rožnata";
 "quick_action_add_poi_category" = "Dodaj kategorijo";
 "region_others" = "Drugi zemljevidi";
-"lightblue" = "Svetlo modra";
 "tile_cache" = "Predpomnilnik sličic";
 "region_nautical" = "Navtični zemljevidi";
 "local_names" = "Krajevna imena";
@@ -1289,15 +1242,12 @@
 "save_changes" = "Shrani spremembe";
 "shared_string_settings" = "Nastavitve";
 "base_profile_descr_boat" = "Za potovanje z ladjo, jadranje, veslanje ...";
-"selected_profiles" = "%d od %d";
 "arrived_at_destination" = "Prispeli ste.";
 "default_speed_setting_title" = "Privzeta hitrost";
 "active_markers" = "Dejavne označbe";
 "voice_announces" = "Glasovna navodila";
 "shared_string_continue" = "Nadaljuj";
 "routing_profile_ski" = "Smučanje";
-"arrival_announcement_frequency" = "Kako hitro naj se najavi napovedančas prihoda?";
-"maximum_speed" = "Največja hitrost";
 "map_look_descr" = "Videz zemljevida";
 "base_profile_descr_bicycle" = "Za gorska kolesa, motorna kolesa, ježo s konji";
 "base_profile_descr_aircraft" = "Za letala, jadralna padala ...";
@@ -1309,10 +1259,8 @@
 "configure_profile" = "Nastavi profil";
 "shared_string_max" = "Največji";
 "profile_appearance" = "Prikaz profila";
-"nav_type_title" = "Vrsta navigacije";
 "nav_type_straight_line" = "Hoja po azimutu";
 "two" = "Dve";
-"nothing_found_empty" = "Ni zadetkov";
 "total" = "Skupaj";
 "shared_string_deselect_all" = "Počisti izbiro vsega";
 "public_transport_menu" = "Javni prevozi";
@@ -1358,7 +1306,6 @@
 "shared_string_others" = "Druge točke";
 "searching_gps" = "Poteka iskanje signalov GPS";
 "shared_string_import" = "Uvozi";
-"some_of" = "%d od %d";
 "visible" = "Prikazano";
 "address_search" = "Iskanje naslova";
 "plan_route_change_folder" = "Spremeni mapo";
@@ -1377,11 +1324,9 @@
 "hide_compass_ruler" = "Skrij kompas";
 "plan_route_open_existing_track" = "Odpri obstoječo sled";
 "favorite_friends_category" = "Naslovi prijateljev";
-"service" = "Storitev";
 "coordinates_widget" = "Gradnik za določevanje koordinat";
 "plan_route_create_new_route" = "Ustvari novo pot";
 "sport" = "Športna ustanova";
-"reverse_track_dir" = "Obratna smer sledi";
 "search_preogress" = "Iskanje…";
 "favorite_places_category" = "Priljubljeni kraji";
 "map_during_navigation" = "Zemljevid med navigacijo";
@@ -1390,7 +1335,6 @@
 "shared_string_enable" = "Omogoči";
 "plan_route_split_before" = "Razdeli pred";
 "replace_favorite_confirmation" = "Ali ste prepričani, da želite zamenjati priljubljeno točko %@?";
-"displayed_trips" = "Prikazane sledi";
 "emergency" = "Nujna medicinska pomoč";
 "transport" = "Prevoz";
 "context_menu_item_edit_waypoint" = "Uredi vmesno točko GPX";
@@ -1398,7 +1342,6 @@
 "suggested_maps" = "Predlagani zemljevidi";
 "shared_string_wifi_only" = "Le s povezavo Wi-FI";
 "last_used" = "Nazadnje uporabljeno";
-"product_title_mapillary" = "Mapillary";
 "gpxup_identifiable" = "Prepoznavno";
 "gpxup_private" = "Zasebno";
 "navigate_point_easting" = "Koordinata v smeri proti vzhodu";
@@ -1408,7 +1351,6 @@
 "navigate_point_northing" = "Koordinata v smeri proti severu";
 "shared_string_navigation" = "Navigacija";
 "gpxup_trackable" = "Sledljivo";
-"default" = "Privzeto";
 "welmode_download_maps" = "Prejmi zemljevide";
 "gpxup_public" = "Javno";
 "navigate_point_olc" = "Odpri kodo območja";
@@ -1465,7 +1407,6 @@
 "lang_da" = "Danščina";
 "lang_es_ar" = "Španščina (argentinska)";
 "lang_zh_tw" = "Kitajščina (tradicionalna)";
-"weather_wind_unit_mi_per_hour" = "Milje na uro";
 "lang_be_by" = "Beloruščina (latinica)";
 "lang_es_us" = "Španščina (ameriška)";
 "lang_zh_cn" = "Kitajščina (poenostavljena)";
@@ -1521,7 +1462,6 @@
 "lang_lb" = "Luksemburščina";
 "shared_string_start_time" = "Čas odhoda";
 "lang_ga" = "Irščina";
-"login_error_email_invalid" = "Vpišite veljaven elektronski naslov";
 "lang_al" = "Albanščina";
 "edit_track" = "Uredi sled";
 "gpx_dir_arrows" = "Smerne puščice";

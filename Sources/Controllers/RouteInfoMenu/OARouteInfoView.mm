@@ -1366,7 +1366,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
                 
                 if (gpx.getNonEmptySegmentsCount > 1 && gpxParams != nil && gpxParams.selectedSegment != -1)
                 {
-                    fileName = [NSString stringWithFormat:@"%@, %@", [NSString stringWithFormat:OALocalizedString(@"some_of"), gpxParams.selectedSegment + 1, gpx.getNonEmptySegmentsCount], fileName];
+                    fileName = [NSString stringWithFormat:@"%@, %@", [NSString stringWithFormat:OALocalizedString(@"of"), gpxParams.selectedSegment + 1, gpx.getNonEmptySegmentsCount], fileName];
                 }
                 
                 cell.finishPoint = NO;
@@ -1895,7 +1895,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     if (section == _prevRouteSection)
         return OALocalizedString(@"prev_route");
     else if (section == _gpxTripSection)
-        return OALocalizedString(@"displayed_trips");
+        return OALocalizedString(@"tracks_on_map");
     else if (section == _mapMarkerSection)
         return OALocalizedString(@"map_markers");
     else if (section == _historySection)

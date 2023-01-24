@@ -114,7 +114,6 @@
 "default_speed_setting_title" = "Oletusnopeus";
 "min_speed" = "Pienin nopeus";
 "max_speed" = "Suurin nopeus";
-"maximum_speed" = "Suurin nopeus";
 "road_speeds_descr" = "These parameters can affect the route calculation.";
 "road_min_speed_descr" = "Sets the minimum travel speed for all roads in the route. Raises priority for roads with recommended speeds less than the minimum.";
 "road_max_speed_descr" = "Sets the maximum travel speed for all roads in the route. Lowers the priority for roads with a possible speed higher than the maximum.";
@@ -184,7 +183,6 @@
 "speak_favorites" = "Nearby Favorites";
 "speak_poi" = "KP:t lähellä";
 "speak_pedestrian" = "Suojatiet";
-"speak_tunnels" = "Tunnels";
 "show_tunnels" = "Tunnels";
 
 // Dirrection appearance
@@ -218,7 +216,6 @@
 "arrival_distance_factor_at_last" = "Viime metreillä";
 "route_parameters" = "Reittiparametrit";
 "fast_route_mode" = "Nopein reitti";
-"nav_type_title" = "Navigointityyppi";
 "voice_announces" = "Äänikehotteet";
 "screen_alerts" = "Näytön hälytykset";
 "vehicle_parameters" = "Ajoneuvon parametrit";
@@ -274,7 +271,6 @@
 "recalculate_wrong_dir" = "Laske reitti uudelleen, jos suunta on päinvastainen";
 "recalculate_route_distance_promo" = "Reitti lasketaan uudelleen, jos etäisyys reitistä nykyiseen sijaintiin on suurempi kuin valittu arvo.";
 "select_distance_for_recalculation" = "Valitse etäisyys, jonka jälkeen reitti lasketaan uudelleen.";
-"arrival_announcement_frequency" = "Kuinka aikaisin haluat saapumisilmoituksen?";
 "speed_limit_tolerance_descr" = "Select the speed limit tolerance margin above which you will receive a voice warning.";
 "only_manually" = "Only manually";
 "instructions_repeat" = "Tap \"Next turn\" widget to repeat instructions";
@@ -296,7 +292,6 @@
 "use_points_as_intermediates" = "Laske reitti pisteiden välille";
 "calculate_osmand_route_without_internet" = "Laske OsmAnd reittisegmentti ilman Internetiä";
 "routing_settings_2" = "Navigointiasetukset";
-"gpx_navigation" = "Seuraa jälkeä";
 "impassable_road" = "Vältä teitä";
 "road_speeds" = "Road speeds";
 "avoid_transport_type" = "Avoid transport types";
@@ -324,7 +319,6 @@
 "route_is_too_long_v2" = "Tämä reitti voi olla liian pitkä laskettavaksi. Lisää välietappeja, jos tulosta ei löydy 10 minuutissa.";
 "navigation_over_track" = "Aloita navigointi jälkeä pitkin\?";
 "use_displayed_track_for_navigation" = "Käytetäänkö näytettyä jälkeä navigaatioon?";
-"displayed_trips" = "Näytetyt jäljet";
 "prev_route" = "Edellinen reitti";
 "shared_string_ellipsis" = "…";
 "shared_string_select_on_map" = "Valitse kartalta";
@@ -402,7 +396,6 @@
 "tonnia" = "tonnia";
 "shared_string_meters" = "metriä";
 "nothing_found" = "Mitään ei löytynyt: %@";
-"nothing_found_empty" = "Mitään ei löytynyt";
 "nothing_found_descr" = "Modify the search query or increase the search radius";
 "select_street" = "Valitse tie";
 "shared_string_in_name" = "%@:ssa";
@@ -506,7 +499,6 @@
 "available_groups" = "Available groups";
 "group_name" = "Ryhmän nimi";
 "fav_remove_q" = "Remove favorite?";
-"fav_import" = "Tuo";
 "fav_import_title" = "Import favorite";
 "fav_export_title" = "Export favorite";
 "fav_select_remove" = "Please select favorites to remove";
@@ -518,7 +510,6 @@
 "fav_ignore" = "Ignore";
 "fav_rename" = "Nimeä uudelleen";
 "fav_replace" = "Korvaa";
-"fav_replace_all" = "Korvaa kaikki";
 "replace_favorite_confirmation" = "Haluatko varmasti korvata suosikin %@?";
 "fav_points_not_exist" = "Suosikkipaikkoja ei ole";
 "fav_rename_q" = "Rename favorite";
@@ -587,7 +578,6 @@
 "gpx_uphldownhl" = "Uphills/Downhills";
 "gpx_average_speed" = "Keskinopeus";
 "gpx_start" = "Aloita";
-"gpx_finish" = "Päätepiste";
 "gpx_avg_elev" = "Average elevation";
 "gpx_elev_range" = "Elevation range";
 "gpx_avg_altitude" = "Keskimääräinen korkeus";
@@ -628,8 +618,6 @@
 
 // Map settings
 "m_style_car" = "Auto";
-"m_style_walk" = "Kävely";
-"m_style_bicycle" = "Pyörä";
 "m_style_pulic_transport" = "Joukkoliikenne";
 "map_settings_map" = "Kartta";
 "layer_amenity_label" = "Pisteiden nimet (KP:t, suosikit)";
@@ -638,7 +626,6 @@
 "map_mode" = "Karttatila";
 "map_settings_map_magnifier" = "Karttasuurennos";
 "map_settings_text_size" = "Tekstin koko";
-"map_settings_day" = "Päivä";
 "map_settings_night" = "Yö";
 "map_settings_style" = "Karttatyyli";
 "map_settings_overunder" = "Overlay / Underlay";
@@ -652,7 +639,6 @@
 "shared_string_transparency" = "Läpinäkyvyys";
 "map_settings_base_transp" = "Peruskartan läpinäkyvyys";
 "map_settings_avail_lay" = "Available layers";
-"map_settings_hillshade" = "Rinnevarjostus";
 "mapillary" = "Mapillary";
 "street_level_imagery" = "Katutason kuvat";
 "shared_string_terrain" = "Maasto";
@@ -670,7 +656,6 @@
 "map_settings_hide_polygons_desc" = "This option affects only OsmAnd Offline vector maps";
 "map_settings_add_maps_desc" = "You can add new maps via link, or by importing SQLite files.";
 "map_settings_color_scheme" = "Värimaailma";
-"map_settings_line_width" = "Line width";
 "map_settings_line_density" = "Line density";
 "map_settings_contour_zoom_level_descr" = "Select zoom level, from wich contour lines will be displayed";
 "map_settings_appearance" = "Ulkoasu";
@@ -695,9 +680,7 @@
 "intro_welcome" = "Tervetuloa\nOsmAndiin";
 "intro_promo" = "Maailmanlaajuiset offline-kartat";
 "intro_placeholder" = "kirjoita alueesi nimi";
-
 // Settings
-"sett_settings" = "Asetukset";
 "sett_units" = "Yksiköt";
 "sett_lang" = "Kartan kieli";
 "sett_km" = "Kilometrit";
@@ -719,7 +702,6 @@
 "coordinates_example" = "Esimerkki";
 "utm_description" = "Huomaa, että OsmAnd käyttää UTM Standard -muotoa, joka on samanlainen mutta ei identtinen kuin UTM NATO.";
 "coordinates_copy_descr" = "Kopioi koordinaatit leikepöydälle napauttamalla.";
-"sett_lang_local" = "Paikallinen";
 "sett_lang_trans" = "translitteroitu";
 "sett_pref_lang" = "Ensisijainen kieli";
 "sett_lang_show_local" = "Näytä paikalliset nimet";
@@ -739,7 +721,6 @@
 "create_profile" = "Luo profiili";
 "import_profile_select_descr" = "Valitse tuotavat tiedot.";
 "export_profile_select_descr" = "Select the data to be exported.";
-"selected_profiles" = "%d / %d";
 "selected_of" = "Selected - %d/%d";
 "nav_type_hint" = "Navigation type";
 "shared_string_nothing_selected" = "Mitään ei ole valittu";
@@ -891,7 +872,6 @@
 "select_another_track" = "Valitse toinen jälki";
 "select_track_to_follow" = "Select track to follow";
 "attach_to_the_roads" = "Kiinnitä teihin";
-"reverse_track_dir" = "Käännä jäljen suunta";
 "point_to_navigate" = "Navigate to";
 "start_of_the_track" = "Jäljen alku";
 "nearest_point" = "Lähin piste";
@@ -903,7 +883,6 @@
 "select_segment" = "Valitse segmentti";
 "track_multiple_segments_select" = "%@:lla on useampi kuin yksi segmentti. Valitse osa jäljestä, jota haluat käyttää navigointiin.";
 "segnet_num" = "Segmentti %d";
-"some_of" = "%d / %d";
 
 // Resources
 "shared_string_resources" = "Resurssit";
@@ -1109,9 +1088,7 @@
 "coordinates_widget" = "Coordinates widget";
 "searching_gps" = "Searching GPS";
 "copied_to_clipboard" = "Kopioitu leikepöydälle";
-
 // Quick action
-"quick_action_name" = "Pikatoiminto";
 "quick_action_no_overlay" = "Ei peittokuvaa";
 "quick_action_add_overlay" = "Add overlay";
 "quick_action_no_underlay" = "No underlay";
@@ -1126,7 +1103,6 @@
 "offline_vector_maps" = "Offline vektorikartat";
 "add_map_source" = "Lisää karttalähde";
 "add_map_style" = "Add map style";
-"map_sources" = "Karttalähteet";
 "map_styles" = "Karttatyylit";
 "add_action" = "Add action";
 "unsupported_items" = "Unsupported items";
@@ -1226,7 +1202,6 @@
 "display_starting_at_zoom_level" = "Näytä alkaen zoomaustasolta";
 "quick_action_contour_lines_descr" = "Tämän toimintopainikkeen napauttaminen näyttää tai piilottaa korkeuskäyrien tason.";
 "hide_contour_lines" = "Hide contour lines";
-"show_contour_lines" = "Näytä korkeuskäyrät";
 "enable_contour_lines" = "Enable to view contour lines on the map";
 "enable_hillshade" = "Enable to view terrain data";
 "quick_action_dir_from_descr" = "Tap this action to navigate from the current screen center point.";
@@ -1275,10 +1250,7 @@
 "cannot_add_marker" = "Cannot add Parking";
 "cannot_add_marker_desc" = "Please remove one direction at least and retry";
 "cannot_add_destination" = "Cannot add Direction";
-
 // Units
-"units_km" = "km";
-"units_m" = "m";
 "units_mi" = "mi";
 "units_yd" = "yd";
 "units_ft" = "ft";
@@ -1330,7 +1302,6 @@
 // Import
 "import_title" = "Import data";
 "import_choose_type" = "Please choose what to import";
-"import_favorite" = "Suosikki";
 "import_failed" = "Import failed";
 "import_cannot" = "The specified file cannot be imported";
 "import_gpx" = "GPX-jälki";
@@ -1349,37 +1320,10 @@
 // Location Services
 "loc_access_denied" = "Access denied";
 "loc_access_denied_desc" = "Access to location service has been denied";
-
 // Colors
-"col_purple" = "Purppura";
-"col_green" = "Vihreä";
-"col_yellow" = "Keltainen";
-"col_orange" = "Oranssi";
 "col_gray" = "Harmaa";
-"col_red" = "Punainen";
-"col_blue" = "Sininen";
 "col_magenta" = "Magenta";
-
 // GPX colors
-"red" = "Punainen";
-"orange" = "Oranssi";
-"lightblue" = "Vaaleansininen";
-"blue" = "Sininen";
-"purple" = "Purppura";
-"pink" = "Vaaleanpunainen";
-"translucent_red" = "Läpikuultava punainen";
-"translucent_orange" = "Läpikuultava oranssi";
-"translucent_blue" = "Läpikuultava sininen";
-"translucent_purple" = "Läpikuultava purppura";
-"translucent_pink" = "Läpikuultava vaaleanpunainen";
-"dark_yellow" = "Tummankeltainen";
-"yellow" = "Keltainen";
-"translucent_yellow" = "Läpikuultava keltainen";
-"lightgreen" = "Vaaleanvihreä";
-"translucent_lightgreen" = "Läpikuultava vaaleanvihreä";
-"green" = "Vihreä";
-"translucent_green" = "Läpikuultava vihreä";
-"brown" = "Ruskea";
 
 // World Regions
 "region_antarctica" = "Antarctica";
@@ -1433,7 +1377,6 @@
 "product_title_antarctica" = "Antarctica";
 "product_desc_antarctica" = "Unlimited map downloads for Antarctica";
 "product_desc_africa_short" = "Afrikan alueen kartat";
-"product_title_australia" = "Australia";
 "product_desc_australia" = "Unlimited map downloads for Australia";
 "product_desc_australia_short" = "Australian alueen kartat";
 "product_title_centralamerica" = "Keski-Amerikka";
@@ -1465,7 +1408,6 @@
 "product_title_wikivoyage" = "Matkaoppaat";
 "product_desc_wikivoyage" = "Ilmainen maailmanlaajuinen matkaopas, jota kuka tahansa voi muokata.";
 "product_desc_ext_wikivoyage" = "Oppaita planeetan mielenkiintoisimpiin paikkoihin OsmAndin sisällä, ilman Internet-yhteyttä.";
-"product_title_sea_depth_contours" = "Merelliset korkeuskäyrät";
 "product_desc_sea_depth_contours" = "Sea depth contour lines and seamarks";
 "my_location" = "Sijaintini";
 "all_categories" = "Kaikki kategoriat";
@@ -1481,7 +1423,6 @@
 "enter_fav_name" = "Enter favorite name";
 "res_installing" = "Asennetaan…";
 "res_roads" = "Tiet";
-"res_srtm" = "Korkeuskäyrät";
 "res_wiki" = "Wikipedia";
 "shared_string_hillshade" = "Rinnevarjostus";
 "res_slope" = "Kaltevuus";
@@ -1684,7 +1625,6 @@
 "sett_wunderlinq_ext_input" = "WunderLINQ";
 "key_hint_zoom_in" = "Lähennä";
 "key_hint_zoom_out" = "Loitonna";
-"key_hint_select" = "Valitse";
 "key_hint_deselect" = "Poista valinta";
 "key_hint_goback" = "Palaa";
 "key_hint_recenter_map" = "Keskitä kartta";
@@ -2046,7 +1986,6 @@
 //Poi catagories
 "amenity" = "Mukavuus";
 "emergency" = "Hätätapaus";
-"service" = "Palvelu";
 "special" = "Erityinen";
 "sport" = "Urheilu";
 "symbols" = "Symbolit";
@@ -2110,7 +2049,6 @@
 "rendering_value_walkingRoutesOSMCNodes_description" = "Väritä reitit niiden solmuvälin tyypin mukaan (kansainvälinen, alueellinen, paikallinen).";
 "walking_route_osmc_description" = "Värireitit niiden yksilöllisen paikallisen värin mukaan (jos ne ovat OpenStreetMapissa) ja tyypin (kansainvälinen, alueellinen, paikallinen).";
 "travel_routes" = "Matkareitit";
-"default" = "Oletus";
 "added_profiles_descr" = "Laajennuksen lisäämät profiilit";
 "added_profiles" = "Lisätyt profiilit";
 "suggested_maps_descr" = "Näitä karttoja tarvitaan lisäosassa.";
@@ -2126,7 +2064,6 @@
 "product_title_openplacereviews" = "OpenPlaceReviews";
 "product_desc_ext_mapillary" = "Katutason valokuvia verkossa kaikille. Tutustu paikkoihin, tee yhteistyötä, kaappaa maailma.";
 "product_desc_mapillary" = "Katutason valokuvia verkossa kaikille";
-"product_title_mapillary" = "Mapillary";
 "map_widget_parking" = "Pysäköintipaikka";
 "population_num" = "Väkiluku: %@";
 "srtm_download_single_help_message" = "Valitse tarvittava muoto. Sinun on ladattava tiedosto uudelleen muodon muuttamiseksi.";
@@ -2169,7 +2106,6 @@
 "lang_ca" = "Katalaani";
 "osmand_cloud" = "OsmAnd Cloud";
 "points_delete_multiple" = "Haluatko varmasti poistaa %d pistee(n/t)\?";
-"units_min_short" = "m";
 "lang_is" = "Islanti";
 "lang_zh" = "Kiina";
 "lang_ar" = "Arabia";
@@ -2187,7 +2123,6 @@
 "lang_ga" = "Irlanti";
 "regions" = "Alueet";
 "shared_string_interval" = "Väli";
-"login_error_email_invalid" = "Ole hyvä ja anna kelvollinen sähköpostiosoite";
 "lang_bs" = "Bosnia";
 "lang_tg" = "Tadžikki";
 "lang_ht" = "Haiti";
@@ -2349,7 +2284,6 @@
 "lang_ceb" = "Cebuano";
 "save_heading" = "Sisällytä kulkusuunta";
 "cloud_email_already_registered" = "Tällä sähköpostilla on jo rekisteröity tili.";
-"weather_wind_unit_mi_per_hour" = "Mailia tunnissa";
 "cloud_email_not_registered" = "Tätä sähköpostia ei ole rekisteröity OsmAnd Cloud -palveluun";
 "lang_ku" = "Kurdi";
 "terrain_maps" = "Maastokartat";

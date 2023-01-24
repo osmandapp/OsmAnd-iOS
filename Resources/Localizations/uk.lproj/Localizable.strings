@@ -38,7 +38,6 @@
 "my_favorites" = "Мої Закладки";
 "fav_no_group" = "Без групи";
 "fav_remove_q" = "Вилучити із закладок?";
-"fav_import" = "Імпорт";
 "fav_import_title" = "Імпортувати закладки";
 "fav_export_title" = "Експортувати закладки";
 "fav_select_remove" = "Оберіть закладки для вилучення";
@@ -51,7 +50,6 @@
 "fav_ignore" = "Ігнорувати";
 "fav_rename" = "Перейменувати";
 "fav_replace" = "Замінити";
-"fav_replace_all" = "Замінити все";
 // POI
 "poi_insrease_radius" = "Збільшити радіус пошуку до";
 "shared_string_hide" = "Приховати";
@@ -65,7 +63,6 @@
 "gpx_route" = "Маршрут";
 "gpx_average_speed" = "Рекомендована швидкість";
 "gpx_start" = "Почати";
-"gpx_finish" = "Фініш";
 "gpx_avg_elev" = "Середня висота";
 "gpx_updown" = "Вгору/вниз";
 "track_recording" = "Запис треку";
@@ -82,18 +79,14 @@
 // Map settings
 "rendering_value_browse_map_name" = "Огляд мапи";
 "m_style_car" = "Автівка";
-"m_style_walk" = "Пішки";
-"m_style_bicycle" = "Велосипед";
 "map_settings_map" = "Мапа";
 "map_settings_show" = "Показати";
 "map_settings_type" = "Тип мапи";
-"map_settings_day" = "День";
 "map_settings_night" = "Ніч";
 "shared_string_transparency" = "Прозорість";
 // Intro
 "intro_skip" = "Пропустити";
 // Settings
-"sett_settings" = "Налаштування";
 "sett_lang" = "Мова мапи";
 "sett_show" = "Показати";
 "sett_notshow" = "Не показувати";
@@ -198,7 +191,6 @@
 "map_settings_offline" = "Стилі оффлайн мап";
 "map_settings_online" = "Онлайн мапи";
 "map_settings_avail_lay" = "Доступні шари";
-"map_settings_hillshade" = "Відмивка рельєфу";
 "intro_download" = "Завантажити\nмапу";
 "intro_next" = "Наступний";
 "intro_welcome" = "Вітаємо у\nOsmAnd";
@@ -213,7 +205,6 @@
 "sett_deg_min" = "Градуси і хвилини";
 "sett_arr" = "Стрілки на мапі";
 "sett_arr_map" = "Центр мапи";
-"sett_lang_local" = "Локальні";
 "sett_lang_show_local" = "Показувати місцеві назви";
 "sett_lang_show_trans" = "Транслітерація назв";
 "maps" = "Мапи";
@@ -273,8 +264,6 @@
 "cannot_add_marker_desc" = "Приберіть один з напрямків і спробуйте ще раз";
 "cannot_add_destination" = "Неможливо додати напрям";
 // Units
-"units_km" = "км";
-"units_m" = "м";
 "units_mi" = "миля";
 "units_yd" = "ярд";
 "units_ft" = "фут";
@@ -290,7 +279,6 @@
 // Import
 "import_title" = "Імпортувати дані";
 "import_choose_type" = "Виберіть що імпортувати";
-"import_favorite" = "Закладки";
 "import_failed" = "Імпорт завершився невдачею";
 "import_cannot" = "Зазначений файл неможливо імпортувати";
 "import_gpx" = "GPX трек";
@@ -305,13 +293,7 @@
 "loc_access_denied" = "Доступ заборонений";
 "loc_access_denied_desc" = "Доступ до служби геолокації заборонений";
 // Colors
-"col_purple" = "Пурпурний";
-"col_green" = "Зелений";
-"col_yellow" = "Жовтий";
-"col_orange" = "Жовтогарячий";
 "col_gray" = "Сірий";
-"col_red" = "Червоний";
-"col_blue" = "Синій";
 "col_magenta" = "Пурпуровий";
 // World Regions
 "region_africa" = "Африка";
@@ -344,7 +326,6 @@
 "product_desc_ext_trip_planning" = "Розширення планування подорожі дозволяє створити Вашу подорож на мапі, зберегти її, виміряти відстань між точками, пов’язаними з прямими лініями тощо. Створено для попереднього планування подорожі, а не ретельної побудови маршруту.";
 "product_title_africa" = "Африка";
 "product_desc_africa" = "Завантаження мап Африки без обмежень";
-"product_title_australia" = "Австралія";
 "product_desc_australia" = "Завантаження мап Австралії без обмежень";
 "product_title_centralamerica" = "Центральна Америка";
 "product_desc_centralamerica" = "Завантаження мап Центральної Америки без обмежень";
@@ -378,7 +359,6 @@
 "enter_fav_name" = "Введіть назву закладки";
 "res_installing" = "Встановлення…";
 "res_roads" = "Дороги";
-"res_srtm" = "Ізолінії";
 "res_wiki" = "Вікіпедія";
 "shared_string_hillshade" = "Відмивка рельєфу";
 "select_language" = "Оберіть мову";
@@ -573,7 +553,6 @@
 "use_points_as_intermediates" = "Обчислити маршрут між точками";
 "calculate_osmand_route_without_internet" = "Прокласти відрізок маршруту в OsmAnd без Інтернету";
 "routing_settings_2" = "Налаштування навігації";
-"gpx_navigation" = "Навігація за треком";
 "impassable_road" = "Уникати дороги";
 "impassable_road_desc" = "Виберіть дороги, яких потрібно уникати під час навігації";
 "interrupt_music_descr" = "Повністю призупинити будь-яку музику під час голосових підказок (а не лише знизити її гучність)";
@@ -768,7 +747,6 @@
 "logging_min_speed_descr" = "Фільтр: не журналювати нижче вибраної швидкості";
 "auto_split_gap" = "Авто-розрив запису після перерви";
 "auto_split_gap_descr" = "Почніть новий відрізок після 6-хвилинної перерви, новий трек після 2-годинної перерви або новий файл після довшої перерви";
-"speak_tunnels" = "Тунелі";
 "shared_setting_always_ask" = "Завжди питати";
 "recording_preferences_descr" = "Налаштування запису треку";
 "traffic_warning_tunnel" = "Тунель попереду";
@@ -1045,7 +1023,6 @@
 "by_dist" = "За відстанню";
 "sort_by" = "Впорядкувати";
 "swap_points" = "Поміняти місцями пункти відправлення та призначення";
-"units_min_short" = "м";
 "units_sec_short" = "с";
 "select_route_intermediate" = "Виберіть проміжну точку";
 "prev_route" = "Попередній маршрут";
@@ -1069,7 +1046,6 @@
 "selected_roads" = "Обрані дороги";
 "select_home" = "Встановіть точку «Дім»";
 "select_work_point" = "Встановіть точку «Робота»";
-"displayed_trips" = "Показані треки";
 "osm_live_payment_monthly_title" = "Сплачувати щомісяця";
 "osm_live_payment_3_months_title" = "Сплачувати раз на 3 місяці";
 "osm_live_payment_annual_title" = "Сплачувати раз на рік";
@@ -1101,7 +1077,6 @@
 "mapil_pano_only" = "Показувати лише панорами 360°";
 "mapil_select_user" = "Вибрати користувача";
 "key_hint_zoom_in" = "Збільшити";
-"key_hint_select" = "Обрати";
 "key_hint_goback" = "Повернутися назад";
 "key_hint_zoom_out" = "Зменшити";
 "osm_live_cancel_subscription" = "Скасувати передплату";
@@ -1112,11 +1087,9 @@
 "res_import_success" = "%@ успішно імпортовано";
 "res_import_unsupported" = "Неправильний тип файлу. Підтримуються лише routing.xml і *.render.xml файли.";
 // Quick action
-"quick_action_name" = "Швидка дія";
 "offline_vector_maps" = "Оффлайн векторні мапи";
 "add_map_source" = "Додати джерело мапи";
 "add_map_style" = "Додати стиль мапи";
-"map_sources" = "Джерела мап";
 "map_styles" = "Стилі мапи";
 "add_action" = "Додати дію";
 "key_hint_deselect" = "Зняти виділення";
@@ -1126,29 +1099,10 @@
 "product_title_wikivoyage" = "Туристичні путівники";
 "product_desc_wikivoyage" = "Безплатний всесвітній путівник, який може покращувати кожен.";
 "product_desc_ext_wikivoyage" = "Путівники до найцікавіших місць на планеті – всередині OsmAnd і без підключення до Інтернету.";
-"product_title_sea_depth_contours" = "Ізолінії морських глибин";
 "product_desc_sea_depth_contours" = "Ізолінії морських глибин та навігаційні знаки";
 "subscribe_email_desc" = "Підпишіться на наш список розсилки:<br/>• Отримайте 3 додаткові мапи для завантаження<br/>• Дізнавайтеся про знижки першими<br/>• Беріть участь у <a href='https://osmand.net/giveaway'>розіграшах промо-кодів</a>";
 "inapp_not_found" = "%@ не знайдений в OsmAnd. Ймовірно, його скасували.";
 // GPX colors
-"red" = "Червоний";
-"orange" = "Жовтогарячий";
-"lightblue" = "Світло-блакитний";
-"blue" = "Синій";
-"pink" = "Рожевий";
-"translucent_orange" = "Напівпрозорий жовтогарячий";
-"translucent_blue" = "Напівпрозорий синій";
-"translucent_purple" = "Напівпрозорий пурпурний";
-"translucent_pink" = "Напівпрозорий рожевий";
-"dark_yellow" = "Темно-жовтий";
-"yellow" = "Жовтий";
-"translucent_yellow" = "Напівпрозорий жовтий";
-"lightgreen" = "Світло зелений";
-"translucent_lightgreen" = "Напівпрозорий світло зелений";
-"green" = "Зелений";
-"translucent_green" = "Напівпрозорий зелений";
-"purple" = "Пурпурний";
-"brown" = "Коричневий";
 "modify_poi_short" = "Редагувати POI";
 "create_poi_short" = "Додати POI";
 "modify_edit_short" = "Редагувати зміни OSM";
@@ -1158,7 +1112,6 @@
 "osm_alert_message" = "Повідомлення";
 "osm_alert_button_ok" = "Створити нотатку";
 "modify_poi" = "Редагувати відомості про точку інтересу";
-"translucent_red" = "Напівпрозорий червоний";
 "routing_import_please_restart" = "Для використання нового routing.xml будь ласка, перезапустіть застосунок.";
 "toggle_fav" = "Показати/сховати закладки";
 "toggle_poi" = "Показати/сховати точки інтересу";
@@ -1263,7 +1216,6 @@
 "display_starting_at_zoom_level" = "Показ розпочинається з масштабу";
 "quick_action_contour_lines_descr" = "Натискання на цю кнопку вмикає чи вимикає показ ізоліній на мапі.";
 "hide_contour_lines" = "Сховати ізолінії";
-"show_contour_lines" = "Показ ізоліній";
 // World Regions
 "region_antarctica" = "Антарктида";
 "region_others" = "Інші мапи";
@@ -1642,7 +1594,6 @@
 "map_settings_line_density_slowdown_warning" = "Висока щільність смуги може уповільнити відмалювання мапи";
 "map_settings_contour_zoom_level_descr" = "Виберіть масштаб, починаючи з якого буде показано ізолінії";
 "map_settings_line_density" = "Щільність смуги";
-"map_settings_line_width" = "Ширина смуги";
 "transfers" = "Пересадки:";
 "consider_limitations_param" = "Враховувати тимчасові обмеження";
 "calc_pedestrian_route" = "Обчислити пішохідний маршрут";
@@ -1696,7 +1647,6 @@
 "nav_type_straight_line" = "Пряма лінія";
 "nav_type_osmand" = "OsmAnd (автономний режим)";
 "nav_type_descr" = "Виберіть спосіб обчислення маршруту для цього профілю";
-"nav_type_title" = "Тип навігації";
 "quick_action_dir_from_descr" = "Торкніться цієї кнопки, щоб розпочати навігацію з місця в центрі екрана.";
 "board_at" = "Приземлення на";
 "base_profile_descr_boat" = "Корабель, веслування, вітрильний спорт";
@@ -1749,7 +1699,6 @@
 "voice_anounces" = "Голосові вказівки";
 "desert" = "Пустеля";
 "settings_item_read_error" = "Не вдається прочитати %@.";
-"arrival_announcement_frequency" = "Як швидко Ви хочете чути повідомлення про прибуття?";
 "select_distance_for_recalculation" = "Оберіть відстань, після якої маршрут буде переобчислено.";
 "recalculate_route_distance_promo" = "Маршрут буде перераховано, якщо відстань від маршруту до поточного місця розташування перевищує вибране значення.";
 "recalculate_route" = "Перерахунок маршруту у випадку відхилення";
@@ -1837,7 +1786,6 @@
 "import_profile_descr" = "Щоб імпортувати профіль, натисніть на потрібний файл (*.osf) в будь-якому застосунку й виберіть \"Копіювати до OsmAnd Maps\"";
 "profile_prefs_reset_successful" = "Усі налаштування профілю відновлено до типових";
 "gpx_parse_error" = "OsmAnd GPXнедостатньо сформований. Зверніться до служби підтримки для подальшого дослідження.";
-"nothing_found_empty" = "Нічого не знайдено";
 "shared_string_next" = "Вперед";
 "add_one_more_pnt" = "Додати ще одну точку";
 "delete_point" = "Вилучити точку";
@@ -1888,7 +1836,6 @@
 "import_duplicates_title" = "Деякі елементи вже є";
 "shared_string_nothing_selected" = "Нічого не вибрано";
 "nav_type_hint" = "Тип навігації: %@";
-"selected_profiles" = "%dзі %d";
 "import_profile_select_descr" = "Виберіть дані, які потрібно імпортувати.";
 "shared_string_import" = "Імпорт";
 "shared_string_preparing" = "Підготування";
@@ -1900,7 +1847,6 @@
 "road_max_speed_descr" = "Встановлює найвищу швидкість руху всіма дорогами маршруту. Знижує пріоритет доріг з можливою швидкістю понад найвищу.";
 "road_min_speed_descr" = "Встановлює найменшу швидкість руху всіма дорогами маршруту. Підвищує пріоритет доріг з рекомендованою швидкістю менше мінімальної.";
 "road_speeds_descr" = "Ці параметри можуть вплинути на обчислення маршруту.";
-"maximum_speed" = "Максимальна швидкість";
 "ios_release_3_90" = "• Представлено функцію «План маршруту» для планування майбутніх поїздок з можливістю створення відрізків треків різного типу навігації\n• Додано можливість вмикати компас через інструмент «Радіусна лінійка»\n• Додано параметр «Показ назв точок інтересу», який дозволяє показувати назви точок інтересу із закладок, маршрутних точок та позначок на мапі\n• Додано нові Швидкі дії показу ізоліній і рельєфу на мапі, зміни профілю застосунку, вилучення найближчої проміжної точки\n• Усунено ваду відсутньої категорії пошуку Вікіпедії\n• Перенесення налаштувань: виправлено помилки, додано підтримку всіх типів даних, доступних в OsmAnd\n• Редагування OpenStreetMap: виправлено інструмент вибору часу та неможливість змінити коментар до набору змін\n";
 "ios_release_3_80" = "• Введено «Профілі застосунків» з незалежними налаштуваннями\n• Нове розташування налаштувань за профілями та типами: навігація, загальна, карта й екран\n• Можливість імпорту або експорту налаштувань профілю\n• Додано джерела даних для світлин з Мережі\n• Додано можливість завантажувати мережні мапи в кеш\n• Вдосконалено алгоритми пошуку\n";
 
@@ -1953,7 +1899,6 @@
 "nearest_point" = "Найближча точка";
 "start_of_the_track" = "Початок треку";
 "point_to_navigate" = "Рухатися до";
-"reverse_track_dir" = "Зворотний напрямок треку";
 "attach_to_the_roads" = "Прикріпити до доріг";
 "select_another_track" = "Обрати інший трек";
 "shared_string_gpx_track" = "Трек";
@@ -1995,7 +1940,6 @@
 "plan_route_folder" = "Тека";
 "street_level_imagery" = "Зображення вулиць";
 "map_widget_distance_by_tap" = "Відстань дотиком";
-"some_of" = "%dзі %d";
 "segnet_num" = "Відрізок %d";
 "track_multiple_segments_select" = "%@ має кілька відрізків. Виберіть частину треку, яку слід використовувати для навігації.";
 "select_segment" = "Вибрати відрізок";
@@ -2005,7 +1949,6 @@
 "symbols" = "Знаки";
 "sport" = "Спорт";
 "special" = "Спеціальні";
-"service" = "Послуги";
 "emergency" = "Аварійні служби";
 "square" = "Квадрат";
 "octagon" = "Восьмикутник";
@@ -2088,7 +2031,6 @@
 "no_waypoints_found" = "Маршрутних точок не знайдено";
 "context_menu_item_edit_waypoint" = "Змінити маршрутну точку GPX";
 "replace_waypoint_confirmation" = "Ви дійсно бажаєте замінити маршрутну точку %@?";
-"default" = "Типово";
 "select_profile" = "Вибрати профіль";
 "threshold_distance" = "Гранична відстань";
 "route_between_points_warning_desc" = "Далі, пов\'яжіть трек до найближчої дозволеної дороги з одним із профілів навігації, щоб скористатися цим параметром.";
@@ -2113,7 +2055,6 @@
 "product_title_openplacereviews" = "OpenPlaceReviews";
 "product_desc_ext_mapillary" = "Додає огляд вулиць. Там, де зображення відсутні, ви можете додати їх самостійно, щоб інші могли ними переглядати їх. Щоб увімкнути шар Mapillary, увімкніть «Зображення вулиць» в меню «Налаштувати мапу».";
 "product_desc_mapillary" = "Огляд вулиць для ознайомлення з місцевістю";
-"product_title_mapillary" = "Mapillary";
 "shared_string_turn_off" = "Вимкнути";
 "welmode_download_maps" = "Завантаження мап";
 "shared_strings_all_regions" = "Усі регіони";
@@ -2391,12 +2332,10 @@
 "weather_pressure_unit_hpa" = "Гектопаскалі";
 "weather_wind_unit_m_s" = "Метри/Секунди";
 "weather_wind_unit_km_per_hour" = "Кілометрів на годину";
-"weather_wind_unit_mi_per_hour" = "Миль на годину";
 "weather_wind_unit_knots" = "Вузлів";
 "weather_precip_unit_in" = "Дюйми";
 "user_login" = "Ім\'я користувача";
 "login_footer_email_part" = "support@osmand.net";
-"login_error_email_invalid" = "Будь ласка, введіть дійсну електронну адресу";
 "login_help_email_title" = "OsmAnd iOS Cloud";
 "register_opr_create_new_account" = "Створити обліковий запис";
 "verification" = "Перевірка";
@@ -2647,7 +2586,6 @@
 "loading_purchase_information" = "Завантаження даних про купівлю";
 "contact_support" = "Звернутися до служби підтримки";
 "shared_string_not_included" = "Не включає";
-"gpx_segment" = "Відрізок";
 "shared_string_logout" = "Вийти";
 "shared_string_progress" = "Виконання";
 "backup_danger_zone" = "Небезпечна зона";
@@ -2778,7 +2716,6 @@
 "amazon_appstore" = "Amazon Appstore";
 "position_on_map" = "Позиція на екрані";
 "position_on_map_center" = "Центр";
-"units_kg" = "кг";
 "routing_attr_motor_type_name" = "Пальне, що використовується двигуном";
 "co2_mission" = "Викиди CO2";
 "position_on_map_bottom" = "Униз";

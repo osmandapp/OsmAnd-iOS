@@ -78,14 +78,14 @@
 - (NSAttributedString *) getFooterDescription
 {
     NSString *minimumSpeedDescriptionString = [NSString stringWithFormat:@"%@:\n%@\n", OALocalizedString(@"logging_min_speed"), OALocalizedString(@"road_min_speed_descr")];
-    NSString *maximumSpeedDescriptionString = [NSString stringWithFormat:@"%@:\n%@", OALocalizedString(@"maximum_speed"), OALocalizedString(@"road_max_speed_descr")];
+    NSString *maximumSpeedDescriptionString = [NSString stringWithFormat:@"%@:\n%@", OALocalizedString(@"max_speed"), OALocalizedString(@"road_max_speed_descr")];
 
     NSMutableAttributedString *minSpeedAttrString = [OAUtilities getStringWithBoldPart:minimumSpeedDescriptionString mainString:OALocalizedString(@"road_min_speed_descr") boldString:OALocalizedString(@"logging_min_speed") lineSpacing:1. fontSize:13.];
     NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
     [style setParagraphSpacing:12.];
     CGFloat breakLinePosition = [minimumSpeedDescriptionString indexOf:@"\n"] + 1;
     [minSpeedAttrString addAttribute:NSParagraphStyleAttributeName value: style range:NSMakeRange(breakLinePosition, minimumSpeedDescriptionString.length - breakLinePosition)];
-    NSAttributedString *maxSpeedAttrString = [OAUtilities getStringWithBoldPart:maximumSpeedDescriptionString mainString:OALocalizedString(@"road_max_speed_descr") boldString:OALocalizedString(@"maximum_speed") lineSpacing:1. fontSize:13.];
+    NSAttributedString *maxSpeedAttrString = [OAUtilities getStringWithBoldPart:maximumSpeedDescriptionString mainString:OALocalizedString(@"road_max_speed_descr") boldString:OALocalizedString(@"max_speed") lineSpacing:1. fontSize:13.];
     
     NSMutableAttributedString *finalString = [[NSMutableAttributedString alloc] initWithAttributedString:minSpeedAttrString];
     [finalString appendAttributedString:maxSpeedAttrString];
@@ -156,7 +156,7 @@
     }];
     [tableData addObject:@{
         @"type" : [OATimeTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"maximum_speed"),
+        @"title" : OALocalizedString(@"max_speed"),
         @"value" : [NSString stringWithFormat:@"%ld %@", _maxValue, _units],
     }];
     [tableData addObject:@{

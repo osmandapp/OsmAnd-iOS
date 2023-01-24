@@ -33,7 +33,7 @@ static OAExportSettingsCategory *RESOURCES;
 + (OAExportSettingsCategory *) SETTINGS
 {
     if (!SETTINGS)
-        SETTINGS = [[OAExportSettingsCategory alloc] initWithTitle:OALocalizedString(@"sett_settings")];
+        SETTINGS = [[OAExportSettingsCategory alloc] initWithTitle:OALocalizedString(@"shared_string_settings")];
     return SETTINGS;
 }
 

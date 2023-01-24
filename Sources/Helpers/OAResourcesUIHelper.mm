@@ -65,7 +65,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         case OsmAndResourceType::DepthMapRegion:
             return OALocalizedString(@"nautical_depth");
         case OsmAndResourceType::SrtmMapRegion:
-            return OALocalizedString(@"res_srtm");
+            return OALocalizedString(@"download_srtm_maps");
         case OsmAndResourceType::WikiMapRegion:
             return OALocalizedString(@"res_wiki");
         case OsmAndResourceType::RoadMapRegion:

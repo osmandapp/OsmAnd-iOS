@@ -73,7 +73,7 @@
                      @"value" : @"",
                      @"img" : mode == APPEARANCE_MODE_AUTO ? @"menu_cell_selected.png" : @"" },
                  @{
-                     @"name" : OALocalizedString(@"map_settings_day"),
+                     @"name" : OALocalizedString(@"day"),
                      @"value" : @"",
                      @"img" : mode == APPEARANCE_MODE_DAY ? @"menu_cell_selected.png" : @"" },
                  @{

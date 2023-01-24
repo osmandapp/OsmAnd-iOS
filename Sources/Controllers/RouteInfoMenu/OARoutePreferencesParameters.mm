@@ -710,7 +710,7 @@
 
 - (NSString *) getText
 {
-    return OALocalizedString(@"gpx_navigation");
+    return OALocalizedString(@"follow_track");
 }
 
 - (NSString *) getValue

@@ -118,7 +118,7 @@ static OAQuickActionType *ACTION_TYPE;
                           @"type" : [OAIconTitleValueCell getCellIdentifier],
                           @"title" : OALocalizedString(@"poi_type"),
                           @"key" : KEY_CATEGORY,
-                          @"value" : self.getTagsFromParams[POI_TYPE_TAG] ? self.getTagsFromParams[POI_TYPE_TAG] : OALocalizedString(@"key_hint_select"),
+                          @"value" : self.getTagsFromParams[POI_TYPE_TAG] ? self.getTagsFromParams[POI_TYPE_TAG] : OALocalizedString(@"shared_string_select"),
                           },
                       @{
                           @"footer" : OALocalizedString(@"quick_action_get_info"),

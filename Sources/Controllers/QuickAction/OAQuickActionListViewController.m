@@ -94,7 +94,7 @@
 
 - (void)applyLocalization
 {
-    _titleView.text = OALocalizedString(@"quick_action_name");
+    _titleView.text = OALocalizedString(@"configure_screen_quick_action");
     [_deleteAction setTitle:OALocalizedString(@"shared_string_delete") forState:UIControlStateNormal];
     [_selectAllAction setTitle:OALocalizedString(@"select_all") forState:UIControlStateNormal];
     [_btnCancel setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
@@ -164,7 +164,7 @@
     _btnCancel.hidden = YES;
     _btnDone.hidden = YES;
     [UIView animateWithDuration:.3 animations:^{
-        _titleView.text = OALocalizedString(@"quick_action_name");
+        _titleView.text = OALocalizedString(@"configure_screen_quick_action");
         [self.tabBarController.tabBar setHidden:NO];
         _bottomViewHeight.constant = 0;
     } completion:^(BOOL finished) {

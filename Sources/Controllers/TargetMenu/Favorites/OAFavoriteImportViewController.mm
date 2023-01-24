@@ -69,7 +69,7 @@
         for(const auto& localFavorite : _app.favoritesCollection->getFavoriteLocations())
         {
             if ([favoriteTitle isEqualToString:localFavorite->getTitle().toNSString()] && ![self.ignoredNames containsObject:favoriteTitle] ) {
-                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:[NSString stringWithFormat:OALocalizedString(@"fav_exists"), favoriteTitle] delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_cancel") otherButtonTitles:OALocalizedString(@"fav_ignore"), OALocalizedString(@"fav_rename"), OALocalizedString(@"fav_replace"), OALocalizedString(@"fav_replace_all"), nil];
+                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:[NSString stringWithFormat:OALocalizedString(@"fav_exists"), favoriteTitle] delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_cancel") otherButtonTitles:OALocalizedString(@"fav_ignore"), OALocalizedString(@"fav_rename"), OALocalizedString(@"fav_replace"), OALocalizedString(@"replace_all"), nil];
                 alert.tag = kAlertConflictWarning;
                 [alert show];
                 self.conflictedName = favoriteTitle;
@@ -154,7 +154,7 @@
 {
     _titleView.text = OALocalizedString(@"fav_import_title");
     [_cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
-    [_importButton setTitle:OALocalizedString(@"fav_import") forState:UIControlStateNormal];
+    [_importButton setTitle:OALocalizedString(@"shared_string_import") forState:UIControlStateNormal];
 }
 
 - (void) viewDidLoad

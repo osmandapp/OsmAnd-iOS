@@ -62,7 +62,7 @@
 
 - (void) applyLocalization
 {
-    _titleView.text = OALocalizedString(@"sett_settings");
+    _titleView.text = OALocalizedString(@"shared_string_settings");
 }
 
 - (void) viewDidLoad

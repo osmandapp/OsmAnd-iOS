@@ -111,11 +111,11 @@ static OAApplicationMode *_HORSE;
     _CAR.descr = OALocalizedString(@"base_profile_descr_car");
     [_CAR reg];
     
-    _BICYCLE = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_bicycle") stringKey:@"bicycle"];
+    _BICYCLE = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_bicycle") stringKey:@"bicycle"];
     _BICYCLE.descr = OALocalizedString(@"base_profile_descr_bicycle");
     [_BICYCLE reg];
     
-    _PEDESTRIAN = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_walk") stringKey:@"pedestrian"];
+    _PEDESTRIAN = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_pedestrian") stringKey:@"pedestrian"];
     _PEDESTRIAN.descr = OALocalizedString(@"base_profile_descr_pedestrian");
     [_PEDESTRIAN reg];
     

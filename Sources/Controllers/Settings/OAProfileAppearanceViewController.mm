@@ -307,7 +307,7 @@
         @(profile_icon_color_magenta_light),
     ];
     
-    _colorNames = @{@(profile_icon_color_blue_light_default): @"lightblue", @(profile_icon_color_purple_light) : @"purple", @(profile_icon_color_green_light) : @"green", @(profile_icon_color_blue_light) : @"blue",  @(profile_icon_color_red_light) : @"red", @(profile_icon_color_yellow_light) : @"yellow", @(profile_icon_color_magenta_light) : @"col_magenta"};
+    _colorNames = @{@(profile_icon_color_blue_light_default): @"rendering_value_lightblue_name", @(profile_icon_color_purple_light) : @"rendering_value_purple_name", @(profile_icon_color_green_light) : @"rendering_value_green_name", @(profile_icon_color_blue_light) : @"rendering_value_blue_name",  @(profile_icon_color_red_light) : @"rendering_value_red_name", @(profile_icon_color_yellow_light) : @"rendering_value_yellow_name", @(profile_icon_color_magenta_light) : @"col_magenta"};
     
     _icons = @[@"ic_world_globe_dark",
                @"ic_action_car_dark",

@@ -2473,7 +2473,7 @@
     
     if ([self.mapillary isPurchased])
     {
-        OAFunctionalAddon *addon = [[OAFunctionalAddon alloc] initWithAddonId:kInAppId_Addon_Mapillary titleShort:OALocalizedString(@"product_title_mapillary") titleWide:OALocalizedString(@"product_title_mapillary") imageName:@"ic_custom_mapillary_symbol"];
+        OAFunctionalAddon *addon = [[OAFunctionalAddon alloc] initWithAddonId:kInAppId_Addon_Mapillary titleShort:OALocalizedString(@"mapillary") titleWide:OALocalizedString(@"mapillary") imageName:@"ic_custom_mapillary_symbol"];
         addon.sortIndex = 3;
         [arr addObject:addon];
     }

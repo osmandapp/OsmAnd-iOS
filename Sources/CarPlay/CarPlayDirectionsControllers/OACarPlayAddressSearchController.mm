@@ -102,7 +102,7 @@
     }
     else if (_currentSearchPhrase.length > 0)
     {
-        return @[[[CPListItem alloc] initWithText:OALocalizedString(@"nothing_found_empty") detailText:nil]];
+        return @[[[CPListItem alloc] initWithText:OALocalizedString(@"nothing_found") detailText:nil]];
     }
     return res;
 }

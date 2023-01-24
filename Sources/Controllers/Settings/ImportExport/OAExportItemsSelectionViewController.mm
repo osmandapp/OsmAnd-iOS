@@ -155,7 +155,7 @@
             routingProfile = routingProfile.length > 0 ? [routingProfile capitalizedString] : routingProfileValue.capitalizedString;
         }
         if (routingProfile.length > 0)
-            item[@"descr"] = [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"nav_type_title"), routingProfile];
+            item[@"descr"] = [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"nav_type_hint"), routingProfile];
         else
             item[@"descr"] = OALocalizedString(@"profile_type_osmand_string");
         
@@ -367,7 +367,7 @@
     else if ([filePath hasSuffix:BINARY_WIKI_MAP_INDEX_EXT])
         return OALocalizedString(@"res_wiki");
     else if ([filePath hasSuffix:BINARY_SRTM_MAP_INDEX_EXT])
-        return OALocalizedString(@"res_srtm");
+        return OALocalizedString(@"download_srtm_maps");
     else if ([filePath hasSuffix:BINARY_MAP_INDEX_EXT])
         return OALocalizedString(@"res_standard");
     return @"";

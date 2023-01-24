@@ -166,7 +166,7 @@
     }];
     [fourthSection addObject:@{
         @"type" : [OASwitchTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"speak_tunnels"),
+        @"title" : OALocalizedString(@"show_tunnels"),
         @"value" : _settings.speakTunnels,
         @"key" : @"tunnels",
     }];

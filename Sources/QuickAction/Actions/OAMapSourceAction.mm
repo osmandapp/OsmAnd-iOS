@@ -126,7 +126,7 @@ static OAQuickActionType *TYPE;
 
 - (NSString *)getDescrTitle
 {
-    return OALocalizedString(@"map_sources");
+    return OALocalizedString(@"quick_action_map_source_title");
 }
 
 - (NSString *)getListKey
@@ -163,7 +163,7 @@ static OAQuickActionType *TYPE;
                      @"type" : [OAButtonTableViewCell getCellIdentifier],
                      @"target" : @"addMapSource"
                      }];
-    [data setObject:[NSArray arrayWithArray:arr] forKey:OALocalizedString(@"map_sources")];
+    [data setObject:[NSArray arrayWithArray:arr] forKey:OALocalizedString(@"quick_action_map_source_title")];
     return data;
 }
 

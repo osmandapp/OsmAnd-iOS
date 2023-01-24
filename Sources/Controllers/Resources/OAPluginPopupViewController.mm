@@ -350,7 +350,7 @@ static NSMutableArray *activePopups;
     {
         needShow = YES;
 
-        title = OALocalizedString(@"product_title_sea_depth_contours");
+        title = OALocalizedString(@"rendering_attr_depthContours_name");
         descText = OALocalizedString(@"option_available_only_by_subscription");
         okButtonName = OALocalizedString(@"subscriptions");
         cancelButtonName = OALocalizedString(@"shared_string_cancel");

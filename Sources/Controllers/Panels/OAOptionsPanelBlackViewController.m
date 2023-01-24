@@ -256,7 +256,7 @@
     [_menuButtonMyWaypoints setTitle:OALocalizedString(@"map_markers") forState:UIControlStateNormal];
     [_menuButtonMapsAndResources setTitle:OALocalizedString(@"res_mapsres") forState:UIControlStateNormal];
     [_menuButtonConfigureScreen setTitle:OALocalizedString(@"layer_map_appearance") forState:UIControlStateNormal];
-    [_menuButtonSettings setTitle:OALocalizedString(@"sett_settings") forState:UIControlStateNormal];
+    [_menuButtonSettings setTitle:OALocalizedString(@"shared_string_settings") forState:UIControlStateNormal];
     [_menuButtonHelp setTitle:OALocalizedString(@"menu_help") forState:UIControlStateNormal];
     [_menuButtonNavigation setTitle:OALocalizedString(@"shared_string_navigation") forState:UIControlStateNormal];
     [_menuButtonPlanRoute setTitle:OALocalizedString(@"plan_route") forState:UIControlStateNormal];

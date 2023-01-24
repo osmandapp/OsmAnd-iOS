@@ -291,7 +291,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             [linesArr addObject:@{
                 @"type" : kCellTypeSlider,
                 @"parameter" : param,
-                @"name" : OALocalizedString(@"map_settings_line_width")
+                @"name" : OALocalizedString(@"rendering_attr_depthContourWidth_name")
             }];
         }
         param = [_styleSettings getParameter:CONTOUR_DENSITY_ATTR];

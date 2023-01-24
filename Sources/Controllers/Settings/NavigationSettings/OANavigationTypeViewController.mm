@@ -33,7 +33,7 @@
 -(void) applyLocalization
 {
     [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"nav_type_title");
+    self.titleLabel.text = OALocalizedString(@"nav_type_hint");
 }
 
 - (void) viewDidLoad

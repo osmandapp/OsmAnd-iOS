@@ -88,7 +88,7 @@
     NSMutableArray *otherArr = [NSMutableArray array];
     [navigationArr addObject:@{
         @"type" : [OAIconTitleValueCell getCellIdentifier],
-        @"title" : OALocalizedString(@"nav_type_title"),
+        @"title" : OALocalizedString(@"nav_type_hint"),
         @"value" : routingData ? routingData.name : @"",
         @"icon" : routingData ? routingData.iconName : @"ic_custom_navigation",
         @"key" : @"navigationType",

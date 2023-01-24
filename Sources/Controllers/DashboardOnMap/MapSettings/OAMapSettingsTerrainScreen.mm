@@ -155,7 +155,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     
     [switchArr addObject:@{
         @"type" : kCellTypeSegment,
-        @"title0" : OALocalizedString(@"map_settings_hillshade"),
+        @"title0" : OALocalizedString(@"shared_string_hillshade"),
         @"title1" : OALocalizedString(@"gpx_slope")
     }];
 

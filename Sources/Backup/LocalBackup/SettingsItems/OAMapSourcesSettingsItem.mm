@@ -70,7 +70,7 @@
 
 - (NSString *)getPublicName
 {
-    return OALocalizedString(@"map_sources");
+    return OALocalizedString(@"quick_action_map_source_title");
 }
 
 - (long)localModifiedTime

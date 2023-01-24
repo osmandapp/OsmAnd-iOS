@@ -144,7 +144,6 @@
 "default_speed_setting_title" = "Default speed";
 "min_speed" = "Min. speed";
 "max_speed" = "Max. speed";
-"maximum_speed" = "Maximum speed";
 "road_speeds_descr" = "These parameters can affect the route calculation.";
 "road_min_speed_descr" = "Sets the minimum travel speed for all roads in the route. Raises priority for roads with recommended speeds less than the minimum.";
 "road_max_speed_descr" = "Sets the maximum travel speed for all roads in the route. Lowers the priority for roads with a possible speed higher than the maximum.";
@@ -231,7 +230,6 @@
 "speak_favorites" = "Nearby Favorites";
 "speak_poi" = "Nearby POI";
 "speak_pedestrian" = "Pedestrian crosswalks";
-"speak_tunnels" = "Tunnels";
 "show_tunnels" = "Tunnels";
 
 "tts" = "TTS";
@@ -268,7 +266,6 @@
 
 "route_parameters" = "Route parameters";
 "fast_route_mode" = "Fastest route";
-"nav_type_title" = "Navigation type";
 "connect_rp" = "Connect route points";
 "voice_announces" = "Voice prompts";
 "screen_alerts" = "Screen alerts";
@@ -325,7 +322,6 @@
 "recalculate_wrong_dir" = "Recalculate route in case of reverse direction";
 "recalculate_route_distance_promo" = "The route will be recalculated if the distance from the route to the current location is more than selected value.";
 "select_distance_for_recalculation" = "Select the distance after which the route will be recalculated.";
-"arrival_announcement_frequency" = "How soon do you want the arrival announcement?";
 "speed_limit_tolerance_descr" = "Select the speed limit tolerance margin above which you will receive a voice warning.";
 "only_manually" = "Only manually";
 "instructions_repeat" = "Tap \"Next turn\" widget to repeat instructions";
@@ -354,7 +350,6 @@
 "route_line_use_map_style_width" = "Use map style (%@) default width.";
 "turn_arrows" = "Turn Arrows";
 "turn_arrows_descr" = "Control the visibility of the turn arrows on the route line.";
-"gpx_navigation" = "Follow track";
 "impassable_road" = "Avoid roads";
 "road_speeds" = "Road speeds";
 "avoid_transport_type" = "Avoid transport types";
@@ -382,7 +377,6 @@
 "route_is_too_long_v2" = "This route may be too long to calculate. Please add intermediate destinations if no result is found within 10 minutes.";
 "navigation_over_track" = "Start navigation along track?";
 "use_displayed_track_for_navigation" = "Do you want to use displayed track for navigation?";
-"displayed_trips" = "Displayed tracks";
 "prev_route" = "Previous route";
 "shared_string_ellipsis" = "…";
 "shared_string_select_on_map" = "Select on map";
@@ -467,7 +461,6 @@
 "tones" = "tones";
 
 "nothing_found" = "Nothing found";
-"nothing_found_empty" = "Nothing found";
 "nothing_found_descr" = "Modify the search query or increase the search radius";
 "select_street" = "Select street";
 "shared_string_in_name" = "in %@";
@@ -641,7 +634,6 @@
 "available_groups" = "Available groups";
 "group_name" = "Group name";
 "fav_remove_q" = "Remove favorite?";
-"fav_import" = "Import";
 "fav_import_title" = "Import favorite";
 "fav_export_title" = "Export favorite";
 "fav_select_remove" = "Please select favorites to remove";
@@ -653,7 +645,6 @@
 "fav_ignore" = "Ignore";
 "fav_rename" = "Rename";
 "fav_replace" = "Replace";
-"fav_replace_all" = "Replace all";
 "replace_favorite_confirmation" = "Are you sure you want to replace Favorite %@?";
 "fav_points_not_exist" = "No Favorite points exist";
 "fav_rename_q" = "Rename favorite";
@@ -701,7 +692,6 @@
 "gpx_points" = "Point(s)";
 "shared_string_export" = "Export";
 "gpx_selection_segment_title" = "Segments";
-"gpx_segment" = "Segment";
 "route_points" = "Route points";
 "copy_to_map_favorites" = "Copy to favorites";
 
@@ -732,7 +722,6 @@
 "gpx_uphldownhl" = "Uphills/Downhills";
 "gpx_average_speed" = "Average speed";
 "gpx_start" = "Start";
-"gpx_finish" = "Finish";
 "gpx_avg_elev" = "Average elevation";
 "gpx_elev_range" = "Elevation range";
 "gpx_avg_altitude" = "Average altitude";
@@ -787,8 +776,6 @@
 
 // Map settings
 "m_style_car" = "Driving";
-"m_style_walk" = "Walking";
-"m_style_bicycle" = "Cycling";
 "m_style_pulic_transport" = "Public transport";
 
 "map_settings_map" = "Map";
@@ -799,7 +786,6 @@
 "map_mode" = "Map mode";
 "map_settings_map_magnifier" = "Map magnifier";
 "map_settings_text_size" = "Text size";
-"map_settings_day" = "Day";
 "map_settings_night" = "Night";
 "map_settings_style" = "Map style";
 "map_settings_overunder" = "Overlay / Underlay";
@@ -812,7 +798,6 @@
 "shared_string_transparency" = "Transparency";
 "map_settings_base_transp" = "Base map transparency";
 "map_settings_avail_lay" = "Available layers";
-"map_settings_hillshade" = "Hillshade";
 "mapillary" = "Mapillary";
 "street_level_imagery" = "Street-level imagery";
 "shared_string_terrain" = "Terrain";
@@ -832,7 +817,6 @@
 "map_settings_hide_polygons_desc" = "This option affects only OsmAnd Offline vector maps";
 "map_settings_add_maps_desc" = "You can add new maps via link, or by importing SQLite files.";
 "map_settings_color_scheme" = "Color scheme";
-"map_settings_line_width" = "Line width";
 "map_settings_line_density" = "Line density";
 "map_settings_contour_zoom_level_descr" = "Select zoom level, from wich contour lines will be displayed";
 "map_settings_appearance" = "Appearance";
@@ -879,9 +863,7 @@
 "intro_welcome" = "Welcome to\nOsmAnd";
 "intro_promo" = "Global offline maps";
 "intro_placeholder" = "enter the name of your region";
-
 // Settings
-"sett_settings" = "Settings";
 "sett_units" = "Units";
 "sett_lang" = "Map Language";
 "sett_km" = "Kilometers";
@@ -914,8 +896,6 @@
 "utm_description" = "Please note, OsmAnd uses UTM Standard format which is similar but not identical to UTM NATO.";
 "mgrs_description" = "OsmAnd uses MGRS format which is identical to UTM NATO.";
 "coordinates_copy_descr" = "Tap to copy coordintates to clipboard.";
-
-"sett_lang_local" = "Local";
 "sett_lang_trans" = "translit";
 "sett_pref_lang" = "Preferred Language";
 "sett_lang_show_local" = "Show local names";
@@ -1067,7 +1047,6 @@
 "create_profile" = "Create profile";
 "import_profile_select_descr" = "Select the data to be imported.";
 "export_profile_select_descr" = "Select the data to be exported.";
-"selected_profiles" = "%d of %d";
 "selected_of" = "Selected - %d/%d";
 "nav_type_hint" = "Navigation type";
 "shared_string_nothing_selected" = "Nothing selected";
@@ -1237,7 +1216,6 @@
 "select_another_track" = "Select another track";
 "select_track_to_follow" = "Select track to follow";
 "attach_to_the_roads" = "Attach to the roads";
-"reverse_track_dir" = "Reverse track direction";
 "point_to_navigate" = "Navigate to";
 "start_of_the_track" = "Start of the track";
 "nearest_point" = "Nearest point";
@@ -1249,7 +1227,6 @@
 "select_segment" = "Select segment";
 "track_multiple_segments_select" = "%@ has more than one segment. Please select a part of the track you want to use for navigation.";
 "segnet_num" = "Segment %d";
-"some_of" = "%d of %d";
 "threshold_distance" = "Threshold distance";
 "select_profile" = "Select profile";
 
@@ -1491,9 +1468,7 @@
 "coordinates_widget" = "Coordinates widget";
 "searching_gps" = "Searching GPS";
 "copied_to_clipboard" = "Copied to clipboard";
-
 // Quick action
-"quick_action_name" = "Quick action";
 "quick_action_no_overlay" = "No overlay";
 "quick_action_add_overlay" = "Add overlay";
 "quick_action_no_underlay" = "No underlay";
@@ -1508,7 +1483,6 @@
 "offline_vector_maps" = "Offline vector maps";
 "add_map_source" = "Add map source";
 "add_map_style" = "Add map style";
-"map_sources" = "Map sources";
 "map_styles" = "Map styles";
 "add_action" = "Add action";
 "unsupported_items" = "Unsupported items";
@@ -1625,7 +1599,6 @@
 "display_starting_at_zoom_level" = "Displaying starts at zoom level";
 "quick_action_contour_lines_descr" = "Tapping this action button shows or hides contour lines layer.";
 "hide_contour_lines" = "Hide contour lines";
-"show_contour_lines" = "Show contour lines";
 "enable_contour_lines" = "Enable to view contour lines on the map";
 "enable_hillshade" = "Enable to view terrain data";
 "contour_lines_hillshades_slope" = "Contour lines, hillshades, slope";
@@ -1682,10 +1655,7 @@
 "cannot_add_marker" = "Cannot add Parking";
 "cannot_add_marker_desc" = "Please remove one direction at least and retry";
 "cannot_add_destination" = "Cannot add Direction";
-
 // Units
-"units_km" = "km";
-"units_m" = "m";
 "units_cubic_m" = "m³";
 "units_mi" = "mi";
 "units_yd" = "yd";
@@ -1703,12 +1673,9 @@
 
 "units_hour" = "h";
 "units_min" = "min.";
-"units_min_short" = "m";
 "units_sec" = "sec";
 "units_sec_short" = "s";
 "units_seconds" = "seconds";
-
-"units_kg" = "kg";
 
 // Help
 "help_first_steps" = "First steps";
@@ -1749,7 +1716,6 @@
 // Import
 "import_title" = "Import data";
 "import_choose_type" = "Please choose what to import";
-"import_favorite" = "Favorite";
 "import_failed" = "Import failed";
 "import_cannot" = "The specified file cannot be imported";
 "import_gpx" = "GPX Track";
@@ -1768,37 +1734,10 @@
 // Location Services
 "loc_access_denied" = "Access denied";
 "loc_access_denied_desc" = "Access to location service has been denied";
-
 // Colors
-"col_purple" = "Purple";
-"col_green" = "Green";
-"col_yellow" = "Yellow";
-"col_orange" = "Orange";
 "col_gray" = "Gray";
-"col_red" = "Red";
-"col_blue" = "Blue";
 "col_magenta" = "Magenta";
-
 // GPX colors
-"red" = "Red";
-"orange" = "Orange";
-"lightblue" = "Light blue";
-"blue" = "Blue";
-"purple" = "Purple";
-"pink" = "Pink";
-"translucent_red" = "Translucent red";
-"translucent_orange" = "Translucent orange";
-"translucent_blue" = "Translucent blue";
-"translucent_purple" = "Translucent purple";
-"translucent_pink" = "Translucent pink";
-"dark_yellow" = "Dark yellow";
-"yellow" = "Yellow";
-"translucent_yellow" = "Translucent yellow";
-"lightgreen" = "Light green";
-"translucent_lightgreen" = "Translucent light green";
-"green" = "Green";
-"translucent_green" = "Translucent green";
-"brown" = "Brown";
 
 // World Regions
 "region_antarctica" = "Antarctica";
@@ -1848,8 +1787,6 @@
 "product_title_osm_editing" = "OpenStreetMap Editing";
 "product_desc_osm_editing" = "Turn your mobile phone into a mapping tool";
 "product_desc_ext_osm_editing" = "Allows you to make contributions to OpenStreetMap, a global community aimed at creating a comprehensive map of the world and providing up-to date open-source data to every user. \n\nYou can find instruction on how to edit the map on out website https://osmand.net/docs/user/plugins/osm-editing";
-
-"product_title_mapillary" = "Mapillary";
 "product_desc_mapillary" = "Street-level views to check out the surroundings";
 "product_desc_ext_mapillary" = "Brings street-level views. Where imagery is missing, you can just add it yourself so that others can make use of it. To enable the Mapillary layer turn on the \"Street-level imagery\" in Configure map menu.";
 
@@ -1866,7 +1803,6 @@
 "product_title_antarctica" = "Antarctica";
 "product_desc_antarctica" = "Unlimited map downloads for Antarctica";
 "product_desc_africa_short" = "Africa region maps";
-"product_title_australia" = "Australia";
 "product_desc_australia" = "Unlimited map downloads for Australia";
 "product_desc_australia_short" = "Australia region maps";
 "product_title_centralamerica" = "Central America";
@@ -1907,8 +1843,6 @@
 "product_title_wikivoyage" = "Travel Guides";
 "product_desc_wikivoyage" = "The free worldwide travel guide anyone can edit.";
 "product_desc_ext_wikivoyage" = "Guides to the most interesting places on the planet, inside OsmAnd, without a connection to the Internet.";
-
-"product_title_sea_depth_contours" = "Nautical depth contours";
 "product_desc_sea_depth_contours" = "Sea depth contour lines and seamarks";
 "depth_contour_lines" = "Depth contour lines";
 
@@ -1935,7 +1869,6 @@
 "enter_fav_name" = "Enter favorite name";
 "res_installing" = "Installing…";
 "res_roads" = "Roads";
-"res_srtm" = "Contour lines";
 "res_wiki" = "Wikipedia";
 "shared_string_hillshade" = "Hillshade";
 "res_slope" = "Slope";
@@ -2063,7 +1996,6 @@
 
 "weather_wind_unit_m_s" = "Meters/Second";
 "weather_wind_unit_km_per_hour" = "Kilometers per hour";
-"weather_wind_unit_mi_per_hour" = "Miles per hour";
 "weather_wind_unit_knots" = "Knots";
 
 "weather_precip_unit_mm" = "Millimeters";
@@ -2225,7 +2157,6 @@
 
 "key_hint_zoom_in" = "Zoom In";
 "key_hint_zoom_out" = "Zoom Out";
-"key_hint_select" = "Select";
 "key_hint_deselect" = "Deselect";
 "key_hint_goback" = "Go Back";
 "key_hint_recenter_map" = "Recenter Map";
@@ -2634,7 +2565,6 @@
 "vessel_height_limit_description" = "Set vessel height to avoid low bridges. Keep in mind, if the bridge is movable, the calculation uses its height in the open state.";
 "vessel_width_limit_description" = "Set vessel width to avoid narrow bridges.";
 "default_speed_dialog_msg" = "Estimates arrival time for unknown road types, and limits speed for all roads (may affect routing)";
-"default" = "Default";
 "routing_attr_hazmat_category_name" = "Transporting of hazardous materials";
 "routing_attr_hazmat_category_no_restrictions_name" = "A (No restrictions)";
 "transport_hazmat_yes_desc" = "You need to choose proper category.";
@@ -2651,7 +2581,6 @@
 //Icon categories
 "amenity" = "Amenity";
 "emergency" = "Emergency";
-"service" = "Service";
 "special" = "Special";
 "sport" = "Sport";
 "symbols" = "Symbols";
@@ -2692,7 +2621,6 @@
 "login_footer_email_part" = "support@osmand.net";
 "cloud_email_not_registered" = "This e-mail address is not registered for OsmAnd Cloud";
 "cloud_email_already_registered" = "This e-mail address is already registered.";
-"login_error_email_invalid" = "Please enter a valid e-mail address";
 "login_help_email_title" = "OsmAnd iOS Cloud";
 "restore_from_osmand_cloud" = "Restore from OsmAnd Cloud";
 "choose_what_to_restore" = "Choose items to restore";

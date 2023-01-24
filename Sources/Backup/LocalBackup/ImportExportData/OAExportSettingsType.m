@@ -285,7 +285,7 @@ static NSArray<OAExportSettingsType *> *allValues;
 + (OAExportSettingsType *)MAP_SOURCES
 {
     if (!MAP_SOURCES)
-        MAP_SOURCES = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"map_sources") name:@"MAP_SOURCES" itemName:@"MAP_SOURCES" icon:[UIImage templateImageNamed:@"ic_custom_globe_latitude"]];
+        MAP_SOURCES = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"quick_action_map_source_title") name:@"MAP_SOURCES" itemName:@"MAP_SOURCES" icon:[UIImage templateImageNamed:@"ic_custom_globe_latitude"]];
     return MAP_SOURCES;
 }
 

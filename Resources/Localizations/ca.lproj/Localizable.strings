@@ -28,7 +28,6 @@
 "favorite" = "Preferit";
 "fav_no_group" = "Cap grup";
 "fav_remove_q" = "Voleu suprimir el preferit?";
-"fav_import" = "Importa";
 "fav_import_title" = "Importa un preferit";
 "fav_export_title" = "Exporta un preferit";
 "fav_select_remove" = "Seleccioneu els preferits per suprimir";
@@ -40,7 +39,6 @@
 "fav_ignore" = "Ignora";
 "fav_rename" = "Canvia el nom";
 "fav_replace" = "Reemplaça";
-"fav_replace_all" = "Reemplaça-ho tot";
 "fav_rename_q" = "Canvia el nom d'un preferit";
 "fav_enter_new_name" = "Introduïu un nom nou pel preferit";
 // POI
@@ -68,7 +66,6 @@
 "gpx_route_time" = "Temps de ruta";
 "gpx_average_speed" = "Velocitat mitjana";
 "gpx_start" = "Comença";
-"gpx_finish" = "Finalitza";
 "fav_select" = "Si us plau seleccioneu preferits";
 "poi_max_radius_reached" = "Radi de cerca màxim assolit";
 "poi_search_near_center" = "La cerca es realitza prop del centre del mapa";
@@ -89,13 +86,10 @@
 // Map settings
 "rendering_value_browse_map_name" = "Mapa esquemàtic";
 "m_style_car" = "Cotxe";
-"m_style_walk" = "A peu";
-"m_style_bicycle" = "Bicicleta";
 "map_settings_map" = "Mapa";
 "map_settings_show" = "Mostra al mapa";
 "map_settings_type" = "Tipus de mapa";
 "map_mode" = "Mode mapa";
-"map_settings_day" = "Dia";
 "map_settings_night" = "Nit";
 "map_settings_style" = "Estil del mapa";
 "map_settings_overunder" = "Capa de fons / capa superposada";
@@ -120,7 +114,6 @@
 "intro_promo" = "Mapes locals de conjunt";
 "intro_placeholder" = "introduïu el nom del vostre país";
 // Settings
-"sett_settings" = "Configuració";
 "sett_units" = "Unitats";
 "sett_lang" = "Llengua del mapa";
 "sett_km" = "Quilòmetres";
@@ -133,7 +126,6 @@
 "sett_arr" = "Cursors del mapa";
 "sett_arr_loc" = "Localització";
 "sett_arr_map" = "Centre del mapa";
-"sett_lang_local" = "Local";
 "sett_pref_lang" = "Llengua preferida";
 "sett_lang_show_local" = "Mostra les denominacions locals";
 "maps" = "Mapes";
@@ -189,8 +181,6 @@
 "cannot_add_marker_desc" = "Esborreu com a mínim una adreça i torneu-ho a intentar";
 "cannot_add_destination" = "No es pot afegir l'adreça";
 // Units
-"units_km" = "km";
-"units_m" = "m";
 "units_mi" = "mi";
 "units_yd" = "yd";
 "units_ft" = "ft";
@@ -204,7 +194,6 @@
 // Import
 "import_title" = "Importa dades";
 "import_choose_type" = "Trieu què voleu importar";
-"import_favorite" = "Preferida";
 "import_failed" = "La importació ha fallat";
 "import_cannot" = "No es pot importar el fitxer especificat";
 "import_gpx" = "Trajecte en GPX";
@@ -218,13 +207,7 @@
 "loc_access_denied" = "S'ha denegat l'accés";
 "loc_access_denied_desc" = "S'ha denegat l'accés al servei de localització";
 // Colors
-"col_purple" = "Porpra";
-"col_green" = "Verd";
-"col_yellow" = "Groc";
-"col_orange" = "Taronja";
 "col_gray" = "Gris";
-"col_red" = "Vermell";
-"col_blue" = "Blau";
 "col_magenta" = "Magenta";
 // World Regions
 "region_africa" = "Àfrica";
@@ -255,7 +238,6 @@
 "product_desc_track_recording" = "Activa la funció d'enregistrar i desar els vostres trajectes";
 "product_title_africa" = "Àfrica";
 "product_desc_africa" = "Baixada il·limitada de mapes d'Àfrica";
-"product_title_australia" = "Austràlia";
 "product_desc_australia" = "Baixada il·limitada de mapes d'Austràlia";
 "product_title_centralamerica" = "Amèrica Central";
 "product_desc_centralamerica" = "Baixada il·limitada de mapes d'Amèrica Central";
@@ -318,7 +300,6 @@
 "enter_fav_name" = "Introduïu el nom del preferit";
 "res_installing" = "S'està instal·lant…";
 "res_roads" = "Carreteres";
-"res_srtm" = "Dades de corbes de nivell";
 "res_wiki" = "Viquipèdia";
 "select_language" = "Tria la llengua";
 "language_short" = "Llengua";
@@ -408,7 +389,6 @@
 "map_downloaded" = "Mapa baixat";
 "show_region_on_map_desc" = "El mapa de %@ ja s'ha baixat. Aneu al mapa per començar a utilitzar-lo.";
 "show_region_on_map_go" = "Ves al mapa";
-"map_settings_hillshade" = "Ombrejat del relleu";
 "sqlitedb_import_title" = "Importa el fitxer de mapa de bits";
 "sqlitedb_import_already_exists" = "El fitxer sqlitedb indicat ja existeix. Trieu una acció.";
 "map_creator" = "Creador de mapes";
@@ -587,7 +567,6 @@
 "use_points_as_intermediates" = "Calcula la ruta entre punts";
 "calculate_osmand_route_without_internet" = "Calcula un segment de ruta a l'OsmAnd sense Internet";
 "routing_settings_2" = "Paràmetres de navegació";
-"gpx_navigation" = "Segueix el trajecte";
 "impassable_road" = "Evita carreteres";
 "impassable_road_desc" = "Indiqueu les vies que voleu evitar en la navegació.";
 "interrupt_music_descr" = "Les indicacions de veu suspenen la reproducció de música, no s'hi superposen";
@@ -762,7 +741,6 @@
 "shared_string_previous" = "Enrere";
 "poi_overlay" = "Superposició PDI";
 "poi_clear" = "Neteja";
-"speak_tunnels" = "Túnels";
 "traffic_warning_tunnel" = "Túnel encarat";
 "logging_interval_navigation" = "Interval d\'enregistrament durant la navegació";
 "logging_interval_navigation_descr" = "Seleccioneu l'interval d'enregistrament en generar la traça de la navegació";
@@ -855,7 +833,6 @@
 "product_title_wikivoyage" = "Guies de viatge";
 "product_desc_wikivoyage" = "La guia de viatges de tot el món oberta que qualsevol pot editar.";
 "product_desc_ext_wikivoyage" = "Guies dels llocs més interessants del planeta, dins OsmAnd, sense cap connexió a Internet.";
-"product_title_sea_depth_contours" = "Isòbates";
 "product_desc_sea_depth_contours" = "Isòbates i fondàries nàutiques puntuals";
 "in_app_purchase_desc_ex" = "Un cop comprada, estarà permanentment a la vostra disposició.";
 "unlock_all_features" = "Desbloca totes les funcions de OsmAnd";
@@ -893,24 +870,6 @@
 "inapp_not_found" = "No s'ha trobat %@ a OsmAnd. Segurament s'ha cancel·lat.";
 "osmand_live_update_now" = "Actualitza ara";
 // GPX colors
-"red" = "Vermell";
-"orange" = "Taronja";
-"lightblue" = "Blau cel";
-"blue" = "Blau";
-"pink" = "rosa";
-"translucent_orange" = "Taronja translúcid";
-"translucent_blue" = "Blau translúcid";
-"translucent_purple" = "Porpra translúcid";
-"translucent_pink" = "Rosa translúcid";
-"dark_yellow" = "Groc fosc";
-"yellow" = "Groc";
-"translucent_yellow" = "Groc translúcid";
-"lightgreen" = "Verd clar";
-"translucent_lightgreen" = "Verd clar translúcid";
-"green" = "Verd";
-"translucent_green" = "Verd translúcid";
-"purple" = "Porpra";
-"brown" = "Marró";
 "shared_string_upload" = "Pujada";
 "poi_type" = "Tipus de PDI";
 // OSM Editing actions
@@ -1002,7 +961,6 @@
 "osm_edit_show_on_map" = "Mostra la modificació al mapa";
 "osm_edit_show_on_map_descr" = "Obre el mapa centrat en aquest punt";
 "osm_confirm_bulk_delete" = "Voleu eliminar %d edicions?";
-"translucent_red" = "Vermell translúcid";
 "access_intermediate_arrival_time" = "Temps de pas";
 "map_widget_intermediate_time" = "Temps de pas";
 "shared_string_time" = "Durada";
@@ -1076,7 +1034,6 @@
 "sett_ext_input_desc" = "Seleccioneu un aparell com a teclat genèric o WunderLINQ per a controls externs.";
 "sett_ext_input" = "Dispositius d\'entrada externs";
 "key_hint_zoom_in" = "Acosta";
-"key_hint_select" = "Selecciona";
 "key_hint_goback" = "Torna";
 "osm_tag_too_long_message" = "L'etiqueta %@ admet un màxim de 255 caràcters.\nEscurceu-la per continuar.";
 "save_poi_without_poi_type_message" = "Confirmeu que voleu desar el PDI sense indicar el seu tipus?";
@@ -1113,7 +1070,6 @@
 "download_pending" = "Baixada pendent";
 "reddit" = "Reddit";
 // Quick action
-"quick_action_name" = "Acció directa";
 "quick_action_no_overlay" = "Sense superposició";
 "quick_action_add_overlay" = "Afegeix superposició";
 "quick_action_no_underlay" = "Sense sots-posició";
@@ -1123,7 +1079,6 @@
 "offline_vector_maps" = "Mapes de vectors fora de línia";
 "add_map_source" = "Afegeix origen del mapa";
 "add_map_style" = "Afegeix estil del mapa";
-"map_sources" = "Orígens de mapa";
 "map_styles" = "Estils de mapa";
 "add_action" = "Afegeix acció";
 "create_items" = "Crea elements";
@@ -1221,7 +1176,6 @@
 "shared_string_clear_all" = "Neteja-ho tot";
 "select_home" = "Seleccioneu el punt d’inici";
 "select_work_point" = "Seleccioneu el punt de treball";
-"displayed_trips" = "Traces visualitzades";
 "prev_route" = "Ruta anterior";
 "shared_string_on" = "Activa";
 "shared_string_off" = "Inactiva";
@@ -1252,7 +1206,6 @@
 "show_edits" = "Mostra edicions properes";
 "hide_edits" = "Amaga edicions properes";
 "quick_action_edit_list" = "Edita la llista d’accions";
-"units_min_short" = "m";
 "units_sec_short" = "s";
 "map_settings_install_more" = "Instal·la més...";
 "tile_data" = "Dades de tessel·la";
@@ -1266,7 +1219,6 @@
 "display_starting_at_zoom_level" = "Mostra començant pel nivell d\'escala";
 "quick_action_contour_lines_descr" = "Prement aquest botó d'acció es mostra o s'amaga la capa amb les corbes de nivell.";
 "hide_contour_lines" = "Amaga les corbes de nivell";
-"show_contour_lines" = "Mostra les corbes de nivell";
 "gpx_descent" = "Descens";
 "gpx_avg_altitude" = "Altitud mitjana";
 "region_others" = "Altres mapes";
@@ -1641,7 +1593,6 @@
 "map_settings_appearance" = "Aparença";
 "map_settings_contour_zoom_level_descr" = "Seleccioneu el nivell de zoom inicial on ja es mostraran les corbes de nivell";
 "map_settings_line_density" = "Densitat de la línia";
-"map_settings_line_width" = "Gruix de la línia";
 "map_settings_color_scheme" = "Combinació de colors";
 "map_settings_base_transp" = "Opacitat del mapa base";
 "help_osmand_live" = "Subscripció - OsmAnd Live";
@@ -1698,7 +1649,6 @@
 "nav_type_straight_line" = "Línia recta";
 "nav_type_osmand" = "OsmAnd (determinació de ruta sense connexió)";
 "nav_type_descr" = "Seleccioneu com calcular la ruta en aquest perfil";
-"nav_type_title" = "Tipus de navegació";
 "quick_action_dir_from_descr" = "Premeu aquesta opció per iniciar la navegació des del punt central de la pantalla actual.";
 "public_transport_hide" = "Amaga el transport públic";
 "public_transport_show" = "Mostra el transport públic";
@@ -1713,7 +1663,6 @@
 "announce" = "Anunci";
 "instructions_repeat" = "Premeu el giny \"Següent desviació\" per repetir les instruccions";
 "only_manually" = "Només manualment";
-"arrival_announcement_frequency" = "Amb quina antelació voleu l\'anunci d\'arribada?";
 "select_distance_for_recalculation" = "Seleccioneu la desviació per sobre de la qual es tornarà a calcular la ruta.";
 "recalculate_route_distance_promo" = "Es tornarà a calcular una nova ruta si la distància de la posició actual respecte la ruta vigent supera el valor seleccionat.";
 "recalculate_route" = "Recalcula la ruta cas de desviament";
@@ -1837,7 +1786,6 @@
 "units_t" = "t";
 "reset_profile_action_descr" = "Reinicialitza la configuració de tots els perfils als valors inicials d'instal·lació. Si toqueu Restableix, es descartaran tots els canvis i no es podrà desfer aquesta acció.";
 "gpx_parse_error" = "No s\'ha generat correctament el fitxer GPX. Indiqueu-ho a l\'equip de suport per continuar investigant.";
-"nothing_found_empty" = "No s\'ha trobat res";
 "shared_string_next" = "Endavant";
 "shared_string_finish" = "Finalitza";
 "shared_string_import_complete" = "Importació completada";
@@ -1891,7 +1839,6 @@
 "importing_from" = "S\'estan important dades de %@";
 "shared_string_rendering_style" = "Estils de representació";
 "nav_type_hint" = "Tipus de navegació: %@";
-"selected_profiles" = "%d de %d";
 "import_profile_select_descr" = "Seleccioneu les dades que voleu importar.";
 "shared_string_import" = "Importa";
 "shared_string_max" = "Màx.";
@@ -1900,7 +1847,6 @@
 "road_min_speed_descr" = "Estableix la velocitat mínima de circulació de totes les carreteres de la ruta. Prioritza les carreteres amb velocitats recomanades inferiors a la mínima.";
 "road_max_speed_descr" = "Estableix la velocitat màxima de circulació de totes les carreteres de la ruta. Intenta evitar les carreteres on es permet velocitats superiors a la màxima.";
 "road_speeds_descr" = "Aquests paràmetres podrien afectar el càlcul de la ruta.";
-"maximum_speed" = "Velocitat màxima";
 "ios_release_3_90" = "• S'han introduït \"Perfils d'aplicació\" amb configuracions independents\n• Nova disposició de la configuració per perfils i tipus: navegació, general, mapa i pantalla\n• Possibilitat d'importar o exportar paràmetres de perfil\n• S'han afegit fonts de dades per a fotos en línia\n• S'ha afegit la possibilitat de baixar mapes en línia a la memòria cau\n• S'han millorat els algorismes de cerca\n";
 "ios_release_3_80" = "• S'han introduït \"Perfils d'aplicació\" amb configuracions independents\n• Nova disposició de la configuració per perfils i tipus: navegació, general, mapa i pantalla\n• Possibilitat d'importar o exportar paràmetres de perfil\n• S'han afegit fonts de dades per a fotos en línia\n• S'ha afegit la possibilitat de baixar mapes en línia a la memòria cau\n• S'han millorat els algorismes de cerca\n";
 
@@ -1967,7 +1913,6 @@
 "shared_string_others" = "Altres";
 "none_point_error" = "Afegiu un punt si més no.";
 "address_search" = "Cerca d\'adreces";
-"some_of" = "%d de %d";
 "shared_string_gpx_track" = "Pista";
 "symbols" = "Símbols";
 "group_name" = "Nom del grup";
@@ -1984,7 +1929,6 @@
 "copied_to_clipboard" = "S\'ha copiat al \tporta-retalls";
 "shared_string_enable" = "Activa";
 "search_history" = "Historial de cerques";
-"reverse_track_dir" = "Inverteix la direcció del GPX";
 "show_compass_ruler" = "Mostra el regle de brúixola";
 "search_preogress" = "Cercant…";
 "attach_to_the_roads" = "Circumscriu a les carreteres";
@@ -1999,10 +1943,8 @@
 "circle" = "Cercle";
 "shared_string_resources" = "Recursos";
 "hide_compass_ruler" = "Amaga el regle de brúixola";
-"service" = "Servei";
 "follow_track" = "Segueix el trajecte";
 "navigate_point_easting" = "Abscissa";
-"product_title_mapillary" = "Mapillary";
 "shared_string_all_languages" = "Tots els idiomes";
 "shared_string_turn_off" = "Desactiva";
 "gpxup_trackable" = "Seguible";
@@ -2015,7 +1957,6 @@
 "context_menu_item_edit_waypoint" = "Edita la fita GPX";
 "dialogs_and_notifications" = "Diàlegs i notificacions";
 "product_desc_ext_mapillary" = "Fotografies a nivell de carrer a la xarxa per tothom. Descobriu llocs, col·laboreu, enregistreu el món.";
-"default" = "Per defecte";
 "shared_string_wifi_only" = "Només per wi-fi";
 "gpxup_identifiable" = "Identificable";
 "gpxup_public" = "Públic";
@@ -2039,7 +1980,6 @@
 "lang_fi" = "Finès";
 "lang_yo" = "Ioruba";
 "lang_mk" = "Macedònic";
-"weather_wind_unit_mi_per_hour" = "Milles per hora";
 "lang_ml" = "Malaiàlam";
 "lang_nds" = "Baix alemany";
 "gpx_dir_arrows" = "Fletxes de direcció";
@@ -2154,7 +2094,6 @@
 "lang_es_us" = "Espanyol (americà)";
 "lang_cv" = "Txuvaix";
 "lang_sv" = "Suec";
-"login_error_email_invalid" = "Introduïu una adreça d\'e-mail vàlida";
 "shared_string_hide_all" = "Amaga-ho tot";
 "shared_string_start_time" = "Hora inicial";
 "lang_ta" = "Tàmil";

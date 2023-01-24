@@ -64,8 +64,8 @@ static OAQuickActionType *TYPE;
                           @"key" : KEY_MESSAGE
                           },
                       @{
-                          @"footer" : OALocalizedString(@"osm_note_action_field_descr")
-                          }] forKey:OALocalizedString(@"osm_alert_message")];
+                          @"footer" : OALocalizedString(@"quick_action_bug_descr")
+                          }] forKey:OALocalizedString(@"osb_comment_dialog_message")];
     
     return data;
 }

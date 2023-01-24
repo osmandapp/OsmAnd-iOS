@@ -336,7 +336,7 @@
 
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return section == 1 ? OALocalizedString(@"announce") : @"";
+    return section == 1 ? OALocalizedString(@"accessibility_announce") : @"";
 }
 
 - (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section

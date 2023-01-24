@@ -214,7 +214,7 @@
                 title = product.localizedTitle;
                 desc = product.localizedDescription;
                 if (!product.free)
-                    price = [OALocalizedString(@"shared_string_buy") uppercaseStringWithLocale:[NSLocale currentLocale]];
+                    price = [OALocalizedString(@"buy") uppercaseStringWithLocale:[NSLocale currentLocale]];
             }
             else if (indexPath.section == kCustomPluginsSection)
             {

@@ -588,7 +588,7 @@
         case METERS_PER_SECOND:
             return OALocalizedString(@"units_m_s");
         case MINUTES_PER_MILE:
-            return OALocalizedString(@"units_min_mi");
+            return OALocalizedString(@"min_mile");
         case MINUTES_PER_KILOMETER:
             return OALocalizedString(@"units_min_km");
         case NAUTICALMILES_PER_HOUR:

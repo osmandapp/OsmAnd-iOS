@@ -20,12 +20,12 @@ static NSString * const _unitsKm = OALocalizedString(@"units_km");
 static NSString * const _unitsM = OALocalizedString(@"units_m");
 static NSString * const _unitsMi = OALocalizedString(@"units_mi");
 static NSString * const _unitsYd = OALocalizedString(@"units_yd");
-static NSString * const _unitsFt = OALocalizedString(@"units_ft");
+static NSString * const _unitsFt = OALocalizedString(@"foot");
 static NSString * const _unitsNm = OALocalizedString(@"units_nm");
 static NSString * const _unitsKmh = OALocalizedString(@"units_km_h");
 static NSString * const _unitsMph = OALocalizedString(@"units_mph");
 static NSString * const _unitsMinKm = OALocalizedString(@"units_min_km");
-static NSString * const _unitsMinMi = OALocalizedString(@"units_min_mi");
+static NSString * const _unitsMinMi = OALocalizedString(@"min_mile");
 static NSString * const _unitsmps = OALocalizedString(@"units_m_s");
 
 + (NSString*) getFormattedTimeHM:(NSTimeInterval)timeInterval

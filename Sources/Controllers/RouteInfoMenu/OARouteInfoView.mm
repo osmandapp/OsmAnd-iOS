@@ -626,7 +626,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             }];
             [section addObject:@{
                 @"cell" : [OAFilledButtonCell getCellIdentifier],
-                @"title" : OALocalizedString(@"res_details"),
+                @"title" : OALocalizedString(@"shared_string_details"),
                 @"key" : @"route_details"
             }];
             [section addObject:@{
@@ -1608,7 +1608,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             cell.topInfoLabel.attributedText = [self getFirstLineDescrAttributed:_transportHelper.getRoutes[routeIndex]];
             cell.bottomInfoLabel.attributedText = [self getSecondLineDescrAttributed:_transportHelper.getRoutes[routeIndex]];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            [cell.detailsButton setTitle:OALocalizedString(@"res_details") forState:UIControlStateNormal];
+            [cell.detailsButton setTitle:OALocalizedString(@"shared_string_details") forState:UIControlStateNormal];
             cell.detailsButton.tag = routeIndex;
             [cell.detailsButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.detailsButton addTarget:self action:@selector(onTransportDetailsPressed:) forControlEvents:UIControlEventTouchUpInside];

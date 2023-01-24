@@ -325,7 +325,7 @@
     NSArray<NSString *> *pathComponents = filePath.pathComponents;
     NSString *parent = pathComponents.count > 1 ? pathComponents[pathComponents.count - 2] : @"";
     if ([[filePath stringByDeletingLastPathComponent] isEqualToString:OsmAndApp.instance.gpxPath])
-        parent = OALocalizedString(@"tracks");
+        parent = OALocalizedString(@"shared_string_gpx_tracks");
     if (parent.length > 0)
         folder = [OAUtilities capitalizeFirstLetter:parent];
     
@@ -365,7 +365,7 @@
     if ([filePath hasSuffix:BINARY_ROAD_MAP_INDEX_EXT])
         return OALocalizedString(@"res_roads");
     else if ([filePath hasSuffix:BINARY_WIKI_MAP_INDEX_EXT])
-        return OALocalizedString(@"res_wiki");
+        return OALocalizedString(@"download_wikipedia_maps");
     else if ([filePath hasSuffix:BINARY_SRTM_MAP_INDEX_EXT])
         return OALocalizedString(@"download_srtm_maps");
     else if ([filePath hasSuffix:BINARY_MAP_INDEX_EXT])

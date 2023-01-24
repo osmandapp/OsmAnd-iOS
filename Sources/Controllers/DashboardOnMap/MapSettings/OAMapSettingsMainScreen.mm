@@ -174,7 +174,7 @@
     if ([[[OAGPXDatabase sharedDb] gpxList] count] > 0 || [[OASavingTrackHelper sharedInstance] hasData])
     {
         [showSectionData addObject:@{
-                @"name": OALocalizedString(@"tracks"),
+                @"name": OALocalizedString(@"shared_string_gpx_tracks"),
                 @"image": @"ic_custom_trip",
                 @"type": [OASimpleTableViewCell getCellIdentifier],
                 @"key": @"tracks"
@@ -965,7 +965,7 @@
             BOOL hasLeftIcon = [item.allKeys containsObject:@"image"];
             cell.leftIconView.image = hasLeftIcon ? [UIImage imageNamed:item[@"image"]] : nil;
 
-            [cell.button setTitle:OALocalizedString(@"purchase_get") forState:UIControlStateNormal];
+            [cell.button setTitle:OALocalizedString(@"shared_string_get") forState:UIControlStateNormal];
             [cell.button setTitleColor:[UIColorFromRGB(color_primary_purple) colorWithAlphaComponent:0.1] forState:UIControlStateHighlighted];
             cell.button.tag = indexPath.section << 10 | indexPath.row;
             [cell.button removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];

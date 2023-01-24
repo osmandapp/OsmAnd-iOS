@@ -583,7 +583,7 @@
 
     [section addObject:@{
         @"type" : [OAShapesTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"shape"),
+        @"title" : OALocalizedString(@"shared_string_shape"),
         @"value" : OALocalizedString(_backgroundIconNames[_selectedBackgroundIndex]),
         @"index" : @(_selectedBackgroundIndex),
         @"icons" : _backgroundIcons,

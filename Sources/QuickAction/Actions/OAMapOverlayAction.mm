@@ -121,7 +121,7 @@ static OAQuickActionType *TYPE;
 
 - (NSString *)getDescrTitle
 {
-    return OALocalizedString(@"map_overlays");
+    return OALocalizedString(@"quick_action_map_overlay_title");
 }
 
 - (NSString *)getListKey
@@ -158,7 +158,7 @@ static OAQuickActionType *TYPE;
                      @"type" : [OAButtonTableViewCell getCellIdentifier],
                      @"target" : @"addMapOverlay"
                      }];
-    [data setObject:[NSArray arrayWithArray:arr] forKey:OALocalizedString(@"map_overlays")];
+    [data setObject:[NSArray arrayWithArray:arr] forKey:OALocalizedString(@"quick_action_map_overlay_title")];
     return data;
 }
 

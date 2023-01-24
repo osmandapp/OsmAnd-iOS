@@ -74,7 +74,7 @@
 "speak_favorites" = "نقاط برگزیدهٔ اطراف";
 "speak_poi" = "نقاط توجه نزدیک از نوع";
 "speak_pedestrian" = "گذرگاه‌های پیاده";
-"units_seconds" = "ثانیه";
+"int_seconds" = "ثانیه";
 "shared_string_never" = "هرگز";
 "general_settings_2" = "تنظیمات کلی";
 "general_settings_descr" = "Configure display and common settings for the application";
@@ -218,7 +218,7 @@
 "si_nm_h" = "مایل دریایی بر ساعت (نات)";
 "units_nm" = "nmi";
 "units_nm_h" = "nmi/h";
-"units_min_mi" = "min/m";
+"min_mile" = "min/m";
 "units_min_km" = "min/km";
 "units_m_s" = "m/s";
 "nothing_found" = "چیزی پیدا نشد :(";
@@ -249,7 +249,7 @@
 "shared_string_remove" = "حذف";
 "shared_string_dismiss" = "بی‌خیال";
 "shared_string_add" = "افزودن";
-"shared_string_buy" = "خرید";
+"buy" = "خرید";
 "shared_string_buy_for" = "for";
 "shared_string_or" = "یا";
 "shared_string_and" = "و";
@@ -260,7 +260,7 @@
 "shared_string_all" = "همه";
 "shared_string_from" = "از";
 "offline_maps" = "Offline Maps";
-"download_map" = "بارگیری نقشه";
+"shared_string_download_map" = "بارگیری نقشه";
 // HUD
 "hud_heading" = "Heading";
 "hud_no_movement" = "No movement";
@@ -295,10 +295,10 @@
 "shared_string_hide" = "نشان نده";
 // My Places
 "favorites" = "علاقه‌مندی‌ها";
-"tracks" = "Tracks";
+"shared_string_gpx_tracks" = "Tracks";
 // GPX
 "gpx_point" = "نقطه";
-"gpx_waypoint" = "راه‌نشان‌ها";
+"shared_string_waypoint" = "راه‌نشان‌ها";
 "gpx_waypoints" = "راه‌نشان‌ها";
 "gpx_points" = "Point(s)";
 "shared_string_export" = "برون‌برد";
@@ -427,7 +427,7 @@
 "res_cancel_inst_q" = "You're going to cancel %@ installation.";
 "res_uninst_managed_q" = "You're going to uninstall %@. You can reinstall it later from catalog.";
 "res_uninst_unmanaged_q" = "You're going to delete %@. It's not from catalog, so please be sure you have a backup if needed.";
-"res_details" = "جزئیات";
+"shared_string_details" = "جزئیات";
 "res_type" = "نوع";
 "res_unknown" = "Unknown";
 "res_size" = "اندازه";
@@ -437,7 +437,7 @@
 "res_updates_avail_q" = "update(s) are available.";
 "res_updates_exp" = "Please purchase continent(s) to update the maps";
 // Menu
-"menu_my_places" = "مکان‌های من";
+"shared_string_my_places" = "مکان‌های من";
 "menu_my_trips" = "ردهای من";
 "menu_my_directions" = "My Directions";
 "menu_feedback" = "بازخورد";
@@ -462,7 +462,7 @@
 // Units
 "units_mi" = "mi";
 "units_yd" = "yd";
-"units_ft" = "ft";
+"foot" = "ft";
 "units_km_h" = "km/h";
 "units_mph" = "mph";
 "units_hour" = "س";
@@ -492,12 +492,12 @@
 "col_gray" = "Gray";
 "col_magenta" = "ارغوانی";
 // World Regions
-"region_africa" = "آفریقا";
+"index_name_africa" = "آفریقا";
 "index_name_asia" = "آسیا";
-"region_ausralia_and_oceania" = "استرالیا و اقیانوسیه";
+"index_name_oceania" = "استرالیا و اقیانوسیه";
 "region_central_america" = "آمریکای مرکزی";
 "region_europe" = "اروپا";
-"region_north_america" = "آمریکای شمالی";
+"index_name_north_america" = "آمریکای شمالی";
 "region_russia" = "روسیه";
 "region_south_america" = "آمریکای جنوبی";
 // Help
@@ -527,7 +527,7 @@
 "product_title_trip_planning" = "Trip planning";
 "product_desc_trip_planning" = "Plan your trip, add waypoints, measure the distance to your destination using this plugin";
 "product_desc_ext_trip_planning" = "Trip planning plugin allows you to create your trip on the map, save it, measure the distance between points connected with straight lines, etc. Created for preliminary trip planning rather than thorough route building.";
-"product_title_africa" = "آفریقا";
+"index_name_africa" = "آفریقا";
 "product_desc_africa" = "Map of Africa";
 "product_desc_australia" = "Map of Australia";
 "product_title_centralamerica" = "آمریکای مرکزی";
@@ -542,7 +542,7 @@
 "product_desc_southamerica" = "Map of South America";
 "product_title_allworld" = "All World Maps";
 "product_desc_allworld" = "Map of All World";
-"product_title_asia" = "آسیا";
+"index_name_asia" = "آسیا";
 "product_desc_asia" = "Map of Asia";
 "product_title_wiki" = "ویکی‌پدیا";
 "product_desc_wiki" = "Wikipedia data";
@@ -554,7 +554,7 @@
 "all_categories" = "All categories";
 "get_unlimited_access" = "گرفتن دسترسی نامحدود";
 "latitude" = "عرض جغرافیایی";
-"longitude" = "طول جغرافیایی";
+"navigate_point_longitude" = "طول جغرافیایی";
 "track_save_short_q" = "Track is too short, do you want to save?";
 "add_as" = "Add as";
 "make_call" = "Make a call";
@@ -563,7 +563,7 @@
 "enter_fav_name" = "Enter favorite name";
 "res_installing" = "درحال نصب…";
 "res_roads" = "جاده‌ها";
-"res_wiki" = "ویکی‌پدیا";
+"download_wikipedia_maps" = "ویکی‌پدیا";
 "shared_string_hillshade" = "سایه‌روشن";
 "select_language" = "Select language";
 "language_short" = "Lang";
@@ -578,11 +578,11 @@
 "you_searching" = "You are searching";
 "from_location" = "away";
 "show_alt_in_drive" = "Show altitude in Drive mode";
-"purchase_get" = "دریافت";
+"shared_string_get" = "دریافت";
 "srtm_disabled" = "منحنی‌های میزان غیرفعال شد";
 "prch_wiki_info" = "Wikipedia addon enables wikipedia information for maps you are entitled, purchased or downloaded within free limit.";
 "prch_srtm_info" = "Contour lines addon enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
-"time_open" = "باز است";
+"shared_string_open" = "باز است";
 "time_closed" = "Closed";
 "time_will_close" = "Will close in";
 "time_will_open" = "Will open in";
@@ -691,7 +691,7 @@
 "postcode" = "کدپستی";
 "show_something_on_map" = "%@را روی نقشه نشان بده";
 "search_POI_level_btn" = "Increase search radius";
-"shared_string_street" = "خیابان";
+"search_address_street" = "خیابان";
 "shared_string_building" = "ساختمان";
 "shared_string_street_intersection" = "Street intersection";
 "shared_string_address" = "نشانی";
@@ -731,7 +731,7 @@
 "shared_string_previous" = "قبلی";
 "transport_nearby_routes" = "تا";
 "route_stops_before" = "%@ ایستگاه قبلی";
-"transport_routes" = "مسیرها";
+"transport_Routes" = "مسیرها";
 "transport_stop" = "ایستگاه";
 "new_destination_point_dialog" = "قبلاً مقصدی را انتخاب کرده‌اید";
 "show_poi_over_map" = "نمایش نقاط کاربردی";
@@ -740,7 +740,7 @@
 "logging_interval_navigation_descr" = "بازهٔ زمانی ثبت داده‌های ضبط مسیر در هنگام راهبری";
 "monitoring_min_distance" = "کمترین جابجایی";
 "logging_min_distance_descr" = "فیلتر: کمترین مسافت تا ثبت یک نقطهٔ جدید";
-"logging_min_accuracy" = "کمترین صحت";
+"monitoring_min_accuracy" = "کمترین صحت";
 "logging_min_accuracy_descr" = "فیلتر: نقطه‌ای ثبت نمی‌شود مگر به این دقت برسد";
 "logging_min_speed" = "کمترین سرعت";
 "logging_min_speed_descr" = "فیلتر: نقطه‌ای ثبت نمی‌شود مگر به این سرعت برسد";
@@ -820,13 +820,13 @@
 "shared_string_off" = "خاموش";
 "online_map" = "نقشهٔ آنلاین";
 "osmand_live_last_live_update" = "آخرین روزآمدسازی: %@";
-"quick_action_add_poi_category" = "افزودن دسته";
+"quick_action_add_category" = "افزودن دسته";
 "res_world_region" = "جهان";
 "add_map_marker" = "افزودن نشانهٔ نقشه";
 "shared_setting_always_ask" = "همیشه بپرس";
 "osm_edit_without_name" = "بدون نام";
 "help_tech_articles" = "مقاله‌های فنی";
-"open_osm_note" = "ایجاد یادداشت OSM";
+"context_menu_item_open_note" = "ایجاد یادداشت OSM";
 "poi_dialog_poi_type" = "نوع POI";
 "shared_string_my_places" = "مکان‌های من";
 "osm_editing_lost_changes_title" = "بدون ذخیره‌کردن خارج می‌شوید؟";
@@ -841,7 +841,7 @@
 "nearby_search" = "جست‌وجوی این اطراف";
 "add_gpx_waypoint" = "افزودن نقطهٔ بین‌راهی GPX";
 "display_starting_at_zoom_level" = "از این زوم آشکار شود";
-"region_others" = "نقشه‌های دیگر";
+"download_select_map_types" = "نقشه‌های دیگر";
 "modify_edit_short" = "اصلاح ویرایش OSM";
 "menu_help" = "راهنما";
 "osn_bug_name" = "یادداشت OSM‏";
@@ -865,7 +865,7 @@
 "work_pt" = "محل کار";
 "add_map_source" = "افزودن منبع نقشه";
 "map_widget_ruler_control" = "خط‌کش شعاعی";
-"quick_action_name_str" = "نام کنش";
+"shared_string_action_name" = "نام کنش";
 "help_versions" = "نسخه‌ها";
 "gpx_slope" = "شیب";
 "change_map_style" = "تغییر سبک نقشه";
@@ -879,7 +879,7 @@
 "osmand_live_hourly" = "ساعتی";
 "map_underlays" = "لایه‌های زیری نقشه";
 "osm_note_reopen" = "بازگشایی";
-"help_legend" = "کلید نقشه";
+"map_legend" = "کلید نقشه";
 "toggle_nav" = "آغاز/پایان ناوبری";
 "toggle_poi" = "آشکار/پنهان‌کردن POIها";
 "add_first_inermediate" = "افزودن اولین میانی";
@@ -901,15 +901,15 @@
 "osmand_live_support_reg_title" = "منطقهٔ تحت پوشش";
 "osmand_live_available_maps" = "نقشه‌های موجود";
 "help_trip_planning" = "طراحی سفر";
-"osm_str_name" = "نام خیابان";
+"map_widget_top_text" = "نام خیابان";
 "toggle_voice" = "گفتار روشن/خاموش";
 "quick_action_interim_dialog" = "کادری برای تنظیم آن نشان بده";
 "purchase_unlim_title" = "خرید - %@";
 "add_poi" = "افزودن POI";
-"osm_alert_message" = "پیام";
+"osb_comment_dialog_message" = "پیام";
 "modify_poi_short" = "اصلاح POI";
 "mapil_pano_only" = "فقط نمایش عکس‌های ۳۶۰ درجه";
-"osm_phone" = "تلفن";
+"phone" = "تلفن";
 "shared_string_distance" = "مسافت";
 "region_nautical" = "نقشه‌های دریایی";
 "osm_editing_offline" = "ویرایش آفلاین";
@@ -919,7 +919,7 @@
 "download_depth_countours" = "منحنی‌های میزان عمق دریایی";
 "shared_string_filter" = "پالایش";
 "help_about" = "درباره";
-"traffic_warning_tunnel" = "تونل";
+"tunnel_warning" = "تونل";
 "help_features" = "قابلیت‌ها";
 "product_title_wikivoyage" = "راهنمای مسافرت";
 "edit_action" = "اصلاح کنش";
@@ -935,7 +935,7 @@
 "osm_editing_lost_changes_descr" = "تغییراتی که ذخیره نکرده‌اید، از دست می‌رود. ادامه می‌دهید؟";
 "previous_route" = "مسیر قبلی";
 "help_other_header" = "دیگر";
-"help_faq" = "سؤالات رایج";
+"faq_item" = "سؤالات رایج";
 "vector_data" = "نقشه‌های بُرداری آفلاین";
 "osm_edit_modified_poi" = "اصلاح نقطهٔ توجه";
 "help_faq_descr" = "سؤالاتی که زیاد پرسیده شده است";
@@ -947,7 +947,7 @@
 "help_follow_us" = "ما را دنبال کنید";
 "osm_note_upload_anonymously" = "بارگذاری به‌صورت ناشناس";
 "map_settings_map_magnifier" = "ذره‌بین نقشه";
-"map_overlays" = "لایه‌های رویی نقشه";
+"quick_action_map_overlay_title" = "لایه‌های رویی نقشه";
 "daily" = "روزانه";
 "add_parking_place" = "افزودن جای پارک";
 "key_hint_deselect" = "پاک‌کردن انتخاب‌ها";
@@ -962,7 +962,7 @@
 "osm_note_comment" = "توضیح";
 "osmand_live_updates" = "روزآمدسازی‌های زنده";
 "actions" = "کنش‌ها";
-"osm_note_action_field_descr" = "این نوشته در قسمت پیام درج می‌شود.";
+"quick_action_bug_descr" = "این نوشته در قسمت پیام درج می‌شود.";
 "hide_notes" = "پنهان‌کردن یادداشت‌های OSM";
 "res_elliptic_mercator" = "مرکاتور بیضوی";
 "res_url" = "نشانی اینترنتی";
@@ -1359,11 +1359,11 @@
 "shared_string_finish" = "پایان";
 "shared_string_terrain" = "ناهمواری‌ها";
 "position_icon_at_rest" = "نماد موقعیت هنگام توقف";
-"route_betw_points" = "مسیر بین نقطه‌ها";
+"route_between_points" = "مسیر بین نقطه‌ها";
 "routing_profile_ski" = "اسکی";
 "logging_accuracy" = "صحت ردنگاری";
 "ltr_or_rtl_combine_via_colon" = "%@:‪%@‬";
-"nav_type_straight_line" = "خط مستقیم";
+"routing_profile_straightline" = "خط مستقیم";
 "osm_note_close" = "بستن یادداشت OSM";
 "shared_string_password" = "گذرواژه";
 "help_purchases" = "خریدهای OsmAnd";
@@ -1398,7 +1398,7 @@
 "quick_action_map_source_title" = "منابع نقشه";
 "reverse_route" = "برعکس‌کردن مسیر";
 "public_transport_empty_warning_descr" = "با تنظیمات دیگر امتحان کنید.";
-"nav_type_geocoding" = "رمزگذاری جغرافیایی";
+"routing_profile_geocoding" = "رمزگذاری جغرافیایی";
 "enter_profile_name" = "نام نمایه را بنویسید";
 "profile_type_osmand_string" = "نمایهٔ OsmAnd";
 "shared_string_routing" = "مسیریابی";
@@ -1408,11 +1408,11 @@
 "shared_string_min_speed" = "حداقل سرعت";
 "keep_both" = "حفظ هر دو";
 "vessel_width_limit_description" = "عرض کشتی را برای پرهیز از پل های باریک وارد کنید";
-"res_source_one_per_tile" = "یک پروندهٔ تصویر به‌ازای هر کاشی";
+"one_image_per_tile" = "یک پروندهٔ تصویر به‌ازای هر کاشی";
 "whole_track" = "تمام رد";
 "osm_note_comment_title" = "نظردادن به یادداشت OSM";
 "keep_both_desc" = "موارد درون‌بردی با پیشوند اضافه می‌شوند";
-"announce" = "اعلام";
+"accessibility_announce" = "اعلام";
 "shared_string_preparing" = "آماده‌سازی";
 "create_profile_descr" = "نمایه سفارشی خود را بر پایهٔ یکی از نمایه‌های برنامه بسازید. با این کار برخی چیزهای ابتدایی مانند نمایانی ابزارک‌ها و یکای سرعت و مسافت تنظیم می‌شود. نمایه‌های پیشفرض برنامه و چند نمونه نمایه سفارشی که بر پایهٔ آن‌ها ساخته شده، در زیر آمده:";
 "quick_action_mapillary_show" = "آشکارکردن مپیلاری";
@@ -1427,7 +1427,7 @@
 "res_pseudo_mercator" = "فراتابی شبه مرکاتور";
 "save_changes" = "ذخیرهٔ تغییرات";
 "import_complete_description" = "همهٔ داده از %@ درون‌برد شد. با استفاده از دکمه‌های زیر می‌توانید بخش موردنیاز برنامه را برای مدیریت آن باز کنید.";
-"map_settings_legend" = "کلید";
+"shared_string_legend" = "کلید";
 "quick_action_switch_profile_descr" = "با لمس دکمهٔ عملیاتی بین نمایه‌های انتخاب‌شده جابه‌جا شوید.";
 "voice_announces" = "پیام‌های گفتاری";
 "show_direction" = "نشانگر مسافت";
@@ -1473,13 +1473,13 @@
 "group_name" = "نام گروه";
 "address_search" = "جست‌وجوی نشانی";
 "extra_maps" = "نقشه‌های بیشتر";
-"special" = "ویژه";
+"icon_group_special" = "ویژه";
 "rearrange_categories" = "مرتب‌سازی دسته‌ها";
-"octagon" = "هشت‌ضلعی";
+"shared_string_octagon" = "هشت‌ضلعی";
 "square" = "مربع";
 "plan_route_split_after" = "تقطیع از این جا به بعد";
 "start_of_the_track" = "ابتدای رد";
-"track_save_descr" = "رد جاری را همین حالا در قالب پروندهٔ GPX ذخیره کن.";
+"save_current_track_descr" = "رد جاری را همین حالا در قالب پروندهٔ GPX ذخیره کن.";
 "shared_string_enable" = "فعال";
 "shared_string_gpx_points" = "نقاط";
 "plan_route_change_folder" = "تغییر پوشه";
@@ -1496,7 +1496,7 @@
 "replace_favorite_confirmation" = "آیا این نقطهٔ جدید را جانشین «%@» می‌کنید؟";
 "shared_string_others" = "دیگر";
 "add_custom_category" = "افزودن دستهٔ سفارشی";
-"emergency" = "اورژانس";
+"amenity_type_emergency" = "اورژانس";
 "copied_to_clipboard" = "کپی شد";
 "osmand_live_title" = "OsmAnd Live";
 "searching_gps" = "در حال جست‌وجوی GPS‏";
@@ -1562,7 +1562,7 @@
 "gpxup_trackable" = "قابل ردیابی";
 "gpxup_public" = "عمومی";
 "restart" = "راه‌اندازی مجدد";
-"shape" = "شکل";
+"shared_string_shape" = "شکل";
 "plan_route_folder" = "پوشه";
 "shared_string_loading" = "درحال بارگذاری…";
 "vk" = "VK";
@@ -1648,7 +1648,7 @@
 "lang_cy" = "ولزی";
 "routing_attr_only_permitted_streets_name" = "خیابان‌هایی با اجازه صریح استفاده";
 "upload_to_openstreetmap" = "بارگذاری در OpenStreetMap";
-"cloud_make_backup" = "پشتیبان بگیرید";
+"make_backup" = "پشتیبان بگیرید";
 "lang_tt" = "تاتاری";
 "gpx_join_gaps" = "حذف وقفه‌ها";
 "lang_kk" = "قزاقی";
@@ -1796,13 +1796,13 @@
 "lang_en_gb" = "انگلیسی (پادشاهی انگلستان)";
 "lang_ber" = "بربری";
 "cloud_conflicts" = "تداخل‌ها";
-"cloud_restore_now" = "اکنون بازیابی کن";
+"backup_restore_now" = "اکنون بازیابی کن";
 "lang_et" = "استونیایی";
 "lang_iw" = "عبری";
 "lang_al" = "آلبانیایی";
 "cloud_email_not_registered" = "این نشانی ایمیل برای ابر OsmAnd ثبت نشده است";
 "lang_lmo" = "لومبارد";
-"education" = "آموزش";
+"amenity_type_education" = "آموزش";
 "lang_war" = "وینارایی";
 "lang_af" = "آفریقایی";
 "lang_pms" = "پیدمونتی";
@@ -1882,7 +1882,7 @@
 "purchases_feature_desc_wikivoyage" = "ویکی‌سفر را آفلاین کاوش کنید. مقاله‌ها بر اساس کشور و منطقه تقسیم‌بندی شده و به همهٔ زبان‌ها موجود است.";
 "unlimited_map_downloads" = "بارگیری‌های نامحدود نقشه";
 "product_desc_ext_development" = "تنظیمات توسعه‌ای و امکانات عیب‌یابی را مشاهده کنید؛ مانند شبیه‌سازی ناوبری، آزمایش عملکرد رندر یا امتحان‌کردن پیام‌های گفتاری. این تنظیمات برای توسعه‌دهندگان فراهم شده است و برای کاربردهای عادی برنامه لازم نیست.";
-"industrial" = "صنعتی";
+"icon_group_industrial" = "صنعتی";
 "redeem_promo_code" = "آزادسازی کد تبلیغی";
 "shared_string_stop" = "ایستگاه";
 "purchases_feature_desc_nautical" = "به اطلاعات عمق دریایی دست یابید.";

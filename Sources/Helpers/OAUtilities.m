@@ -716,7 +716,7 @@
     if ([self.symbol isEqualToString:NSUnitPressure.hectopascals.symbol])
         return OALocalizedString(@"weather_pressure_unit_hpa");
     else if ([self.symbol isEqualToString:NSUnitPressure.millimetersOfMercury.symbol])
-        return OALocalizedString(@"weather_pressure_unit_mmhg");
+        return OALocalizedString(@"weather_pressure_millimeters_of_mercury");
     else if ([self.symbol isEqualToString:NSUnitPressure.inchesOfMercury.symbol])
         return OALocalizedString(@"weather_pressure_unit_inhg");
     return nil;
@@ -2216,7 +2216,7 @@ static const double d180PI = 180.0 / M_PI_2;
             [allFoldersNames addObject:name];
     }
     if (shouldAddTracksFolder)
-        [allFoldersNames addObject:OALocalizedString(@"tracks")];
+        [allFoldersNames addObject:OALocalizedString(@"shared_string_gpx_tracks")];
     
     if (shouldSort)
     {

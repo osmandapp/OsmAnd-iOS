@@ -379,7 +379,7 @@
     regionsLookupTable[antarcticaRegion.regionId] = antarcticaRegion;
 
     OAWorldRegion *africaRegion = [OAWorldRegion createRegionAs:OsmAnd::WorldRegions::AfricaRegionId
-                                              withLocalizedName:OALocalizedString(@"region_africa")
+                                              withLocalizedName:OALocalizedString(@"index_name_africa")
                                                            from:loadedWorldRegions];
     [entireWorld addSubregion:africaRegion];
     regionsLookupTable[africaRegion.regionId] = africaRegion;
@@ -391,7 +391,7 @@
     regionsLookupTable[asiaRegion.regionId] = asiaRegion;
 
     OAWorldRegion *australiaAndOceaniaRegion = [OAWorldRegion createRegionAs:OsmAnd::WorldRegions::AustraliaAndOceaniaRegionId
-                                                           withLocalizedName:OALocalizedString(@"region_ausralia_and_oceania")
+                                                           withLocalizedName:OALocalizedString(@"index_name_oceania")
                                                                         from:loadedWorldRegions];
     [entireWorld addSubregion:australiaAndOceaniaRegion];
     regionsLookupTable[australiaAndOceaniaRegion.regionId] = australiaAndOceaniaRegion;
@@ -409,7 +409,7 @@
     regionsLookupTable[europeRegion.regionId] = europeRegion;
 
     OAWorldRegion *northAmericaRegion = [OAWorldRegion createRegionAs:OsmAnd::WorldRegions::NorthAmericaRegionId
-                                                    withLocalizedName:OALocalizedString(@"region_north_america")
+                                                    withLocalizedName:OALocalizedString(@"index_name_north_america")
                                                                  from:loadedWorldRegions];
     [entireWorld addSubregion:northAmericaRegion];
     regionsLookupTable[northAmericaRegion.regionId] = northAmericaRegion;
@@ -434,7 +434,7 @@
     
     OAWorldRegion *othersRegion = [[OAWorldRegion alloc] initWithId:OsmAnd::WorldRegions::OthersRegionId.toNSString()
                                                 andDownloadIdPrefix:@"others_"
-                                                   andLocalizedName:OALocalizedString(@"region_others")];
+                                                   andLocalizedName:OALocalizedString(@"download_select_map_types")];
     [entireWorld addSubregion:othersRegion];
     regionsLookupTable[othersRegion.regionId] = othersRegion;
 

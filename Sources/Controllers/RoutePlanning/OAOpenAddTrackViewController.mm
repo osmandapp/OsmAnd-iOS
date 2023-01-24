@@ -234,7 +234,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     else
     {
         NSString *selectedFolderName = _allFolders[_selectedFolderIndex - 1];
-        if ([selectedFolderName isEqualToString:OALocalizedString(@"tracks")])
+        if ([selectedFolderName isEqualToString:OALocalizedString(@"shared_string_gpx_tracks")])
             selectedFolderName = @"";
         
         return [data filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(OAGPX *object, NSDictionary *bindings) {

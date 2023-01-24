@@ -2052,7 +2052,7 @@ static const NSInteger _buttonsCount = 4;
     if (_showFull || _showFullScreen)
         [_buttonShowInfo setTitle:[OALocalizedString(@"shared_string_collapse") upperCase] forState:UIControlStateNormal];
     else
-        [_buttonShowInfo setTitle:[OALocalizedString(@"res_details") upperCase] forState:UIControlStateNormal];
+        [_buttonShowInfo setTitle:[OALocalizedString(@"shared_string_details") upperCase] forState:UIControlStateNormal];
 }
 
 - (void) applyMapInteraction:(CGFloat)height animated:(BOOL)animated

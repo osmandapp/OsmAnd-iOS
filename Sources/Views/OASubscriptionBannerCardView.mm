@@ -256,7 +256,7 @@
 
 - (NSAttributedString *)getAttributedButtonText:(EOASubscriptionBannerType)type
 {
-    NSString *text = type == EOASubscriptionBannerUpdates ? OALocalizedString(@"purchase_get") : OALocalizedString(@"get_unlimited_access");
+    NSString *text = type == EOASubscriptionBannerUpdates ? OALocalizedString(@"shared_string_get") : OALocalizedString(@"get_unlimited_access");
     BOOL isFree = type == EOASubscriptionBannerFree;
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
     paragraphStyle.minimumLineHeight = isFree ? 22. : 18.;

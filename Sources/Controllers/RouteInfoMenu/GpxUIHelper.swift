@@ -608,7 +608,7 @@ import Charts.Swift
         } else {
             divX = setupAxisDistance(axisBase: xAxis, meters: Double(analysis.totalDistance))
         }
-        let mainUnitY: String = OAUtilities.getLocalizedString(useFeet ? "units_ft" : "units_m")
+        let mainUnitY: String = OAUtilities.getLocalizedString(useFeet ? "foot" : "units_m")
 
         var yAxis: YAxis
         if (useRightAxis) {
@@ -859,7 +859,7 @@ import Charts.Swift
                 mainUnitStr = OAUtilities.getLocalizedString("units_m")
             } else if (mc == EOAMetricsConstant.MILES_AND_FEET || mc == EOAMetricsConstant.NAUTICAL_MILES_AND_FEET) {
                 divX = Double(1.0 / GpxUIHelper.FEET_IN_ONE_METER)
-                mainUnitStr = OAUtilities.getLocalizedString("units_ft")
+                mainUnitStr = OAUtilities.getLocalizedString("foot")
             } else if (mc == EOAMetricsConstant.MILES_AND_YARDS) {
                 divX = Double(1.0 / GpxUIHelper.YARDS_IN_ONE_METER)
                 mainUnitStr = OAUtilities.getLocalizedString("units_yd")

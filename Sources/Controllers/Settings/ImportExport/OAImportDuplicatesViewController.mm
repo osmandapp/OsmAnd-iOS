@@ -255,7 +255,7 @@
     if (gpxFilesList.count > 0)
     {
         NSMutableArray *gpxSection = [NSMutableArray new];
-        [gpxSection addObject:[[OAHeaderType alloc] initWithTitle:OALocalizedString(@"tracks")]];
+        [gpxSection addObject:[[OAHeaderType alloc] initWithTitle:OALocalizedString(@"shared_string_gpx_tracks")]];
         [gpxSection addObjectsFromArray:gpxFilesList];
         [duplicates addObject:gpxSection];
     }

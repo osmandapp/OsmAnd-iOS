@@ -38,7 +38,7 @@
 "shared_string_previous" = "Ankstesnis";
 "shared_string_next" = "Kitas";
 "route_stops_before" = "%@ stops before";
-"transport_routes" = "Maršrutai";
+"transport_Routes" = "Maršrutai";
 "transport_nearby_routes_within" = "Nearby routes within";
 "transport_nearby_routes" = "Viduje";
 "transport_stop" = "Stop";
@@ -130,7 +130,7 @@
 "monitoring_min_distance" = "Minimum displacement";
 "logging_min_distance_descr" = "Filter: minimum distance to log a new point";
 "logging_accuracy" = "Logging accuracy";
-"logging_min_accuracy" = "Minimum accuracy";
+"monitoring_min_accuracy" = "Minimum accuracy";
 "logging_min_accuracy_descr" = "Filter: no logging unless the accuracy is reached";
 "logging_min_speed" = "Minimum speed";
 "logging_min_speed_descr" = "Filter: no logging below selected speed";
@@ -206,7 +206,7 @@
 
 // Route info
 
-"units_seconds" = "sekundės";
+"int_seconds" = "sekundės";
 "shared_string_never" = "Niekada";
 "shared_setting_always_ask" = "Visada klausti";
 "general_settings_2" = "Pagrindiniai nutatymai";
@@ -230,11 +230,11 @@
 "change_map_behavior" = "Change map behavior during navigation";
 "nav_type_descr" = "Select how to calculate a route for this profile";
 "nav_type_osmand" = "OsmAnd (offline routing)";
-"nav_type_straight_line" = "Straight line";
+"routing_profile_straightline" = "Straight line";
 "nav_type_direct_to" = "Direct-to-point";
 "nav_type_brouter" = "BRouter";
 "routing_profile_ski" = "Slidinėti";
-"nav_type_geocoding" = "Geokodinimas";
+"routing_profile_geocoding" = "Geokodinimas";
 "fast_route_mode_descr" = "Įjunkite, kad būtų skaičiuojamas greičiausias maršrutas arba išjunkite, kad skaičiuotų taupiausią maršrutą.";
 "avoid_in_routing_title" = "Vengti…";
 "avoid_in_routing_descr_" = "Avoid toll roads, unpaved, ferries";
@@ -376,8 +376,8 @@
 "traffic_warning_railways" = "Geležinkelio pervaža";
 "traffic_warning_pedestrian" = "Pėčiųjų perėja";
 "traffic_warning_hazard" = "Pavojus";
-"traffic_warning_tunnel" = "Priekyje tunelis";
-"announce" = "Announce";
+"tunnel_warning" = "Priekyje tunelis";
+"accessibility_announce" = "Announce";
 "driving_region_japan" = "Japonija";
 "driving_region_us" = "JAV";
 "driving_region_canada" = "Kanada";
@@ -398,7 +398,7 @@
 "si_min_m" = "Minutės per mylią";
 "si_nm_h" = "Nautical miles per hour (knot)";
 "units_nm_h" = "nmi/h";
-"units_min_mi" = "min/m";
+"min_mile" = "min/m";
 "units_min_km" = "min/km";
 "units_m_s" = "m/s";
 "tones" = "tones";
@@ -443,7 +443,7 @@
 "shared_string_remove" = "Pašalinti";
 "shared_string_dismiss" = "Nesiųsti";
 "shared_string_add" = "Pridėti";
-"shared_string_buy" = "Pirkti";
+"buy" = "Pirkti";
 "shared_string_buy_for" = "for";
 "shared_string_or" = "arba";
 "shared_string_and" = "ir";
@@ -487,7 +487,7 @@
 "shared_string_none" = "Nėra";
 "restart" = "Restart";
 "offline_maps" = "Offline Maps";
-"download_map" = "Parsiųsti žemėlapį";
+"shared_string_download_map" = "Parsiųsti žemėlapį";
 "download_map_dialog" = "Download map dialog";
 "update_tile" = "Atnaujintižemėlapį";
 "download_pending" = "Download pending";
@@ -546,7 +546,7 @@
 "name_and_descr" = "Name & description";
 "select_group" = "Select group";
 "icon" = "Piktograma";
-"shape" = "Shape";
+"shared_string_shape" = "Shape";
 "fav_point_dublicate" = "Pasikartojantisįsimintinos vietos pavadinimas";
 "fav_point_dublicate_message" = "Favorite renamed to \'%@\' to avoid duplication.";
 "fav_point_emoticons_message" = "Favorite renamed to \'%@\' to save the string containing emoticons to a file.";
@@ -558,7 +558,7 @@
 
 // Shapes
 "circle" = "Circle";
-"octagon" = "Octagon";
+"shared_string_octagon" = "Octagon";
 "square" = "Square";
 
 // POI
@@ -569,13 +569,13 @@
 
 // My Places
 "favorites" = "Įsimintos vietos";
-"tracks" = "Keliai";
+"shared_string_gpx_tracks" = "Keliai";
 "personal_category_name" = "Asmeninis";
 "visible" = "Matomas";
 
 // GPX
 "gpx_point" = "Taškas";
-"gpx_waypoint" = "Kelionės taškas";
+"shared_string_waypoint" = "Kelionės taškas";
 "gpx_waypoints" = "Tarpiniai taškai";
 "gpx_points" = "Point(s)";
 "shared_string_export" = "Eksportuoti";
@@ -619,7 +619,7 @@
 "track_new_segment" = "Pradėti naują segmentą";
 "track_save" = "Išsaugoti dabartinę judėjimo istoriją";
 "displayed_route_save" = "Save to OsmAnd Tracks";
-"track_save_descr" = "Išsaugoti esamą kelią į GPX failą dabar.";
+"save_current_track_descr" = "Išsaugoti esamą kelią į GPX failą dabar.";
 "track_continue_rec" = "Continue recording";
 "track_continue_rec_q" = "Do you want to continue recording?";
 "save_track_interval_globally" = "Įrašymo intervalas";
@@ -681,7 +681,7 @@
 "map_settings_zoom_level_description" = "Set the minimum and maximum zoom level to display the layer";
 "map_settings_add_maps_hillshade" = "Additional maps are needed to view hillshades on the map";
 "map_settings_add_maps_slopes" = "Additional maps are needed to view slopes on the map";
-"map_settings_legend" = "Legend";
+"shared_string_legend" = "Legend";
 "map_settings_show_slider_map" = "Show slider on the map";
 "map_settings_add_online_source" = "Add online source";
 "map_settings_hide_polygons" = "Hide polygons";
@@ -990,7 +990,7 @@
 "add_point" = "Pridėti tašką";
 "point_num" = "Point %d";
 "points_count" = "Points:";
-"route_betw_points" = "Maršrutas tarp taškų";
+"route_between_points" = "Maršrutas tarp taškų";
 "save_changes" = "Išsaugoti pakeitimus";
 "save_new_track" = "Save as new track";
 "add_to_track" = "Pridėti į maršrutą";
@@ -1113,7 +1113,7 @@
 "res_cancel_inst_q" = "You're going to cancel %@ installation.";
 "res_uninst_managed_q" = "You're going to uninstall %@. You can reinstall it later from catalog.";
 "res_uninst_unmanaged_q" = "You're going to delete %@. It's not from catalog, so please be sure you have a backup if needed.";
-"res_details" = "Detalės";
+"shared_string_details" = "Detalės";
 "res_type" = "Tipas";
 "res_unknown" = "Unknown";
 "res_size" = "Size";
@@ -1135,7 +1135,7 @@
 "res_pseudo_mercator" = "Pseudo-Mercator projection";
 "res_source_format" = "Source format";
 "sqlite_db_file" = "SQLiteDB failas";
-"res_source_one_per_tile" = "Vienas nuotraukos failas per skiltį";
+"one_image_per_tile" = "Vienas nuotraukos failas per skiltį";
 "res_zoom_levels_desc" = "This parameters will affect the map display when used as a map type or overlay/underlay.\n\nMap type: the map will be limited to the selected zooms.\n\nOverlay / Underlay: Zoom levels at which tiles will be visible. Upscale or downscale will occur above or below the set values.";
 "res_expire_time_desc" = "Expiration time in minutes. Cached tiles will be reloaded after specified time. Leave this field empty if you do not need to reload tiles for this source.\nOne day is 1440 minutes.\nOne week is 10 080 minutes.\n30 days are 43 200 minutes.";
 "res_name_warning" = "File name cannot be empty";
@@ -1154,7 +1154,7 @@
 
 // Menu
 "shared_string_menu" = "Meniu";
-"menu_my_places" = "Mano vietos";
+"shared_string_my_places" = "Mano vietos";
 "menu_my_trips" = "My Tracks";
 "menu_feedback" = "Atsiliepimai";
 "menu_help" = "Pagalba";
@@ -1190,9 +1190,9 @@
 "osm_opens_at" = "Opens at:";
 "osm_closes_at" = "Closes at:";
 "osm_editing_contact_info" = "Kontaktinė informacija";
-"osm_str_name" = "Gatvės pavadinimas";
+"map_widget_top_text" = "Gatvės pavadinimas";
 "osm_building_num" = "Building number";
-"osm_phone" = "telefonas";
+"phone" = "telefonas";
 "osm_website" = "Interneto puslapis";
 "population_num" = "Population";
 "osm_add_place" = "Add place";
@@ -1277,7 +1277,7 @@
 "show_coordinates" = "Show coordinates";
 "hide_coordinates" = "Hide coordinates";
 "quick_action_coordinates_widget_descr" = "Tapping this action button shows or hides the Coordinates widget.";
-"map_overlays" = "Map overlays";
+"quick_action_map_overlay_title" = "Map overlays";
 "map_underlays" = "Map underlays";
 "vector_data" = "Parsiųsti vektoriniai žemėlapiai";
 "add_map_source" = "Pridėti žemėlapio šaltinį";
@@ -1338,7 +1338,7 @@
 "show_edits" = "Show local edits";
 "hide_edits" = "Hide local edits";
 "search_results" = "Search results";
-"quick_action_name_str" = "Veiksmo pavadinimas";
+"shared_string_action_name" = "Veiksmo pavadinimas";
 "quick_action_name_alert" = "Quick action name was changed to %@ to avoid duplication.";
 "quick_action_screen_header" = "Screen %ld";
 "confirm_bulk_delete" = "Do you want to delete %ld items?";
@@ -1348,7 +1348,7 @@
 "quick_action_template_name" = "Template name";
 "quick_action_name_footer" = "Leave blank to use the address or place name.";
 "quick_action_select_group" = "Select the group to save the favorite in.";
-"quick_action_add_poi_category" = "Pridėti kategoriją";
+"quick_action_add_category" = "Pridėti kategoriją";
 "quick_action_add_category_descr" = "You can select multiple POI categories.";
 "quick_action_show_poi_descr" = "Add one or more POI categories to be displayed on the map.";
 "quick_action_fill_params_alert" = "Please fill out the parameters first";
@@ -1358,7 +1358,7 @@
 "quick_action_tags" = "Etiketės";
 "quick_action_get_info" = "Get info";
 "quick_action_enter_message" = "Enter message";
-"osm_note_action_field_descr" = "This message is included in the comment field.";
+"quick_action_bug_descr" = "This message is included in the comment field.";
 "quick_action_source_switch_descr" = "Tapping this action button pages through the list below.";
 "quick_action_poi_add_descr" = "Tapping this action button allows you to quickly add POI on the map with predefined type and tags.";
 "quick_action_day_night_descr" = "Tapping this action button switches between Day and Night map mode.";
@@ -1420,10 +1420,10 @@
 "modify_poi_short" = "Koreguoti LV";
 "create_poi_short" = "Sukurti LV";
 "modify_edit_short" = "Redaguoti LV";
-"open_osm_note" = "Pridėti OSM pastabą";
+"context_menu_item_open_note" = "Pridėti OSM pastabą";
 "edit_osm_note" = "Edit OSM Note";
 "osm_alert_title" = "Patvirtinti";
-"osm_alert_message" = "Žinutė";
+"osb_comment_dialog_message" = "Žinutė";
 "osm_alert_button_ok" = "Sukurti pastabą";
 "modify_poi" = "Modify the POI information";
 "actions" = "Veiksmai";
@@ -1440,7 +1440,7 @@
 // Units
 "units_mi" = "my";
 "units_yd" = "jardai";
-"units_ft" = "pėd";
+"foot" = "pėd";
 "units_nm" = "jm";
 "units_km_h" = "km/h";
 "units_mph" = "my/h";
@@ -1455,7 +1455,7 @@
 "help_first_use" = "Pirmasis naudojimas";
 "help_first_use_descr" = "How to download maps and set basic settings";
 "help_navigation_descr" = "How to set up navigation";
-"help_faq" = "DUK";
+"faq_item" = "DUK";
 "help_faq_descr" = "Frequently asked questions";
 "help_features" = "Galimybės";
 "help_map_viewing" = "Žemėlapio peržiūra";
@@ -1466,7 +1466,7 @@
 "help_osmand_live" = "Subscription - OsmAnd Live";
 "help_travel" = "Travel (Wikipedia & Wikivoyage)";
 "mapillary_item" = "OsmAnd + Mapillary";
-"help_legend" = "Legenda";
+"map_legend" = "Legenda";
 "help_legend_descr" = "The guide to map's symbols";
 "help_other_header" = "Kita";
 "help_what_is_new" = "What\'s new";
@@ -1514,16 +1514,16 @@
 
 // World Regions
 "region_antarctica" = "Antarktida";
-"region_africa" = "Afrika";
+"index_name_africa" = "Afrika";
 "index_name_asia" = "Azija";
-"region_ausralia_and_oceania" = "Australija ir Okeanija";
+"index_name_oceania" = "Australija ir Okeanija";
 "region_central_america" = "Centrinė Amerika";
 "region_europe" = "Europa";
-"region_north_america" = "Šiaurės Amerika";
+"index_name_north_america" = "Šiaurės Amerika";
 "region_russia" = "Rusija";
 "region_south_america" = "Pietų Amerika";
 "region_nautical" = "Jūrų žemėlapiai";
-"region_others" = "Kitižemėlapiai";
+"download_select_map_types" = "Kitižemėlapiai";
 
 // Help
 "help_quiz" = "Quiz";
@@ -1561,7 +1561,7 @@
 "product_title_openplacereviews" = "OpenPlaceReviews";
 "product_desc_openplacereviews" = "Send photos, reviews, and links about public places";
 "product_desc_ext_openplacereviews" = "Send photos, reviews, and links about public places such as restaurants, hotels, museums, and waypoints as open data https://openplacereviews.org/data/.\n\nRead more at https://openplacereviews.org";
-"product_title_africa" = "Afrika";
+"index_name_africa" = "Afrika";
 "product_desc_africa" = "Unlimited map downloads for Africa";
 "product_title_antarctica" = "Antarktida";
 "product_desc_antarctica" = "Unlimited map downloads for Antarctica";
@@ -1585,7 +1585,7 @@
 "product_desc_southamerica_short" = "South America region maps";
 "product_title_allworld" = "All World Maps";
 "product_desc_allworld" = "Maps of All World";
-"product_title_asia" = "Azija";
+"index_name_asia" = "Azija";
 "product_desc_asia" = "Unlimited map downloads for Asia";
 "product_desc_asia_short" = "Asia region maps";
 "product_title_wiki" = "Vikipedija";
@@ -1608,7 +1608,7 @@
 "all_categories" = "All categories";
 "get_unlimited_access" = "Gauti neribotą prieigą";
 "latitude" = "Platuma";
-"longitude" = "Ilguma";
+"navigate_point_longitude" = "Ilguma";
 "track_save_short_q" = "Track is too short, do you want to save?";
 "add_as" = "Add as";
 "make_call" = "Make a call";
@@ -1619,7 +1619,7 @@
 "enter_fav_name" = "Enter favorite name";
 "res_installing" = "Installing…";
 "res_roads" = "Keliai";
-"res_wiki" = "Vikipedija";
+"download_wikipedia_maps" = "Vikipedija";
 "shared_string_hillshade" = "Hillshade";
 "res_slope" = "Nuolydis";
 "res_standard" = "Įprastiniai žemėlapiai";
@@ -1650,11 +1650,11 @@
 "you_searching" = "You are searching";
 "from_location" = "away";
 "show_alt_in_drive" = "Show altitude in Drive mode";
-"purchase_get" = "Gauti";
+"shared_string_get" = "Gauti";
 "srtm_disabled" = "Kontūro linijos išjungtos";
 "prch_wiki_info" = "Wikipedia addon enables wikipedia information for maps you are entitled, purchased or downloaded within free limit.";
 "prch_srtm_info" = "Contour lines addon enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
-"time_open" = "Darbo laikas";
+"shared_string_open" = "Darbo laikas";
 "time_closed" = "Closed";
 "time_will_close" = "Will close in";
 "time_will_open" = "Will open in";
@@ -1830,7 +1830,7 @@
 "postcode" = "Pašto kodas";
 "show_something_on_map" = "Rodyti %@žemėlapyje";
 "search_POI_level_btn" = "Increase search radius";
-"shared_string_street" = "Gatvė";
+"search_address_street" = "Gatvė";
 "shared_string_building" = "Pastatas";
 "shared_string_street_intersection" = "Street intersection";
 "shared_string_address" = "Adresas";
@@ -2202,15 +2202,15 @@
 
 //Icon categories
 "amenity" = "Amenity";
-"emergency" = "Spec. tarnybos";
-"special" = "Special";
+"amenity_type_emergency" = "Spec. tarnybos";
+"icon_group_special" = "Special";
 "sport" = "Sportas";
 "symbols" = "Symbols";
 "transport" = "Transportas";
 "travel" = "Travel";
 "nautical" = "Jūrinis";
-"industrial" = "Industrial";
-"education" = "Mokslas/Švietimas";
+"icon_group_industrial" = "Industrial";
+"amenity_type_education" = "Mokslas/Švietimas";
 "settings_item_read_error" = "Could not read %@.";
 "app_mode_default" = "Numatyta";
 "app_mode_car" = "Automobilis";
@@ -2254,7 +2254,7 @@
 "altitude" = "Aukštis";
 "backup_error_subscription_was_used" = "Prenumerata arba akcijos kodas, naudojama kitoje paskyroje %@";
 "points_delete_multiple" = "Jūs ketinate trinti %d punktą (- us). Ar tikrai?";
-"cloud_restore_now" = "Atkurti dabar";
+"backup_restore_now" = "Atkurti dabar";
 "backup_error_no_valid_subscription" = "Nėra galiojančios prenumeratos";
 "weather_wind_unit_km_per_hour" = "Kilometrai per valandą";
 "shared_string_any" = "Bet kurią";
@@ -2437,7 +2437,7 @@
 "backup_complete" = "Atsarginės kopijos kūrimas baigtas";
 "upload_all" = "Įkelti viską";
 "download_all" = "Atsisiųsti viską";
-"cloud_make_backup" = "Sukurti atsarginę kopiją";
+"make_backup" = "Sukurti atsarginę kopiją";
 "backup_delete_from_cloud" = "Ištrinti iš debesies";
 "backup_data" = "Sukurti atsarginę duomenų kopiją";
 "backup_version_history" = "Versijų istorija";
@@ -2462,7 +2462,7 @@
 "weather_forecast_is_outdated" = "Prognozė pasenusi.";
 "shared_string_angle_param" = "Kampas: %d°";
 "weather_precip_unit_mm" = "Milimetrai";
-"recorded_voice" = "Įrašyta";
+"shared_string_recorded" = "Įrašyta";
 "tomorrow" = "Rytoj";
 "syncing_progress" = "Sinchronizuojama...";
 "speed_mode" = "Greičio režimas";
@@ -2471,7 +2471,7 @@
 "mountain_bike" = "Kalnų dviratis";
 "rendering_attr_depthContourWidth_name" = "Linijų plotis";
 "ltr_or_rtl_combine_via_dash" = "%@ - %@";
-"weather_pressure_unit_mmhg" = "Gyvsidabrio milimetrai";
+"weather_pressure_millimeters_of_mercury" = "Gyvsidabrio milimetrai";
 "osm_live_payment_year_cost_descr" = "%@ per metus";
 "backup_into_file" = "Atsarginė kopija į failą";
 "restore_from_file" = "Atkūrimas iš failo";

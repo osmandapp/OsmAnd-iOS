@@ -104,7 +104,7 @@
     // Download/Update online map
     if ([_app.data.lastMapSource.resourceId isEqualToString:@"online_tiles"] || [_app.data.lastMapSource.type isEqualToString:@"sqlitedb"])
     {
-        [arr addObject:@{ @"title" : OALocalizedString(@"download_map"),
+        [arr addObject:@{ @"title" : OALocalizedString(@"shared_string_download_map"),
                           @"key" : @"download_map",
                           @"img" : @"ic_custom_download",
                           @"type" : [OAMenuSimpleCell getCellIdentifier] } ];
@@ -166,7 +166,7 @@
                                       @"type" : [OAMenuSimpleCell getCellIdentifier] }];
                     
                     BOOL editOsmNote = _targetPoint.type == OATargetOsmNote;
-                    [arr addObject:@{ @"title" : editOsmNote ? OALocalizedString(@"edit_osm_note") : OALocalizedString(@"open_osm_note"),
+                    [arr addObject:@{ @"title" : editOsmNote ? OALocalizedString(@"edit_osm_note") : OALocalizedString(@"context_menu_item_open_note"),
                                       @"key" : @"addon_edit_poi_create_note",
                                       @"img" : editOsmNote ? @"ic_custom_edit" : @"ic_action_add_osm_note",
                                       @"type" : [OAMenuSimpleCell getCellIdentifier]}];

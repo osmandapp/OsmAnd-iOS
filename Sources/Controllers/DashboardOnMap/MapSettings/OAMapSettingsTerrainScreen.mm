@@ -226,7 +226,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     if (terrainType == EOATerrainTypeSlope)
     {
         [sectionArr addObject:@{
-            @"header" : OALocalizedString(@"map_settings_legend"),
+            @"header" : OALocalizedString(@"shared_string_legend"),
         }];
     }
     

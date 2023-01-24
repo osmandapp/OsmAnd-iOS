@@ -27,7 +27,7 @@
 
 - (NSString *)screenTitle
 {
-    return OALocalizedString(@"tracks");
+    return OALocalizedString(@"shared_string_gpx_tracks");
 }
 
 - (NSArray<CPListSection *> *)generateSections

@@ -137,7 +137,7 @@ static OAQuickActionType *TYPE;
                            }];
     }
     [items addObject:@{
-                       @"title" : OALocalizedString(@"quick_action_add_poi_category"),
+                       @"title" : OALocalizedString(@"quick_action_add_category"),
                        @"type" : [OAButtonTableViewCell getCellIdentifier],
                        @"target" : @"addCategory"
                        }];

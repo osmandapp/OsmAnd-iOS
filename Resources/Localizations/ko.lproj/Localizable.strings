@@ -28,7 +28,7 @@
 "shared_string_close" = "닫기";
 "shared_strings_all_regions" = "모든 지역";
 "regions" = "지역";
-"download_map" = "맵 다운로드";
+"shared_string_download_map" = "맵 다운로드";
 "download_pending" = "다운로드 보류 중";
 "download_size" = "다운로드 크기";
 "use_of_downloaded_map" = "이제 이 지도를 기본 지도 원본 또는 오버레이/언더레이 계층으로 오프라인으로 사용할 수 있음";
@@ -48,9 +48,9 @@
 
 // Map
 "map_inst_det_map_q" = "위치에 대한 자세한 정보를 보려면 지도 개요를 설치하십시오.";
-"region_ausralia_and_oceania" = "오세아니아";
+"index_name_oceania" = "오세아니아";
 "region_europe" = "유럽";
-"region_north_america" = "북아메리카";
+"index_name_north_america" = "북아메리카";
 "time_closed" = "닫혀있음";
 "time_will_close" = "닫힘";
 "gpx_cancel_route_q" = "이 경로를 취소하시겠습니까?";
@@ -66,7 +66,7 @@
 "shared_string_previous" = "이전";
 "shared_string_next" = "다음";
 "route_stops_before" = "%@이(가) 다음에서 중지됨";
-"transport_routes" = "경로";
+"transport_Routes" = "경로";
 "transport_nearby_routes_within" = "다음 내 인근 경로";
 "transport_nearby_routes" = "안쪽";
 "transport_stop" = "정지";
@@ -127,7 +127,7 @@
 "driving_region_canada" = "캐나다";
 "res_region_map" = "지역지도";
 "res_map_of_region" = "지역 지도";
-"region_africa" = "아프리카";
+"index_name_africa" = "아프리카";
 "osmand_live_cancel_descr" = "전체 기능을 계속 사용하려면 구독을 갱신하십시오:";
 "add_as_last_destination_point" = "마지막 경유지로 추가";
 "address_search" = "주소 검색";
@@ -234,7 +234,7 @@
 "select_favorite" = "즐겨찾기 선택";
 "add_favorite" = "즐겨찾기 추가";
 "icon" = "아이콘";
-"shape" = "모양";
+"shared_string_shape" = "모양";
 "fav_point_dublicate" = "중복된 즐겨찾기 이름이 지정됨";
 "default_color" = "기본 색상";
 "default_color_descr" = "이 색상은 그룹에 추가된 모든 새로운 즐겨찾기에 사용될 것이다.";
@@ -252,7 +252,7 @@
 // My Places
 "favorites" = "즐겨찾기";
 "personal_category_name" = "개인";
-"gpx_waypoint" = "경유지";
+"shared_string_waypoint" = "경유지";
 "shared_string_export" = "내보내기";
 "gpx_selection_segment_title" = "세그먼트";
 "import_export" = "가져오기/내보내기";
@@ -273,7 +273,7 @@
 "speak_traffic_warnings" = "교통 경고";
 "announce_gpx_waypoints" = "트랙 경유지";
 "fav_replace" = "대체";
-"tracks" = "경로";
+"shared_string_gpx_tracks" = "경로";
 "visible" = "볼 수 있다";
 "carplay_profile" = "CarPlay 프로필";
 "carplay_profile_descr" = "CarPlay에 연결된 동안 사용할 프로필.";
@@ -294,7 +294,7 @@
 "choose_how_display_distance" = "활성 마커까지의 거리를 표시하는 방법 선택";
 "appearance_on_map" = "지도상의 모양";
 "arrows_direction_to_markers" = "화면 외부에 있는 경우 화살표는 활성 마커의 방향을 보여준다. 방향 선은 활성 마커에 선을 그린다.";
-"units_seconds" = "초";
+"int_seconds" = "초";
 "prefer_in_routing_descr" = "전용도로 선호";
 "voice_announces" = "음성 프롬프트";
 "screen_alerts" = "화면 알림";
@@ -302,9 +302,9 @@
 "prefer_in_routing_title" = "선호…";
 "nav_type_descr" = "이 프로필의 경로를 계산하는 방법 선택";
 "nav_type_osmand" = "OsmAnd(오프라인 라우팅)";
-"nav_type_straight_line" = "직선";
+"routing_profile_straightline" = "직선";
 "routing_profile_ski" = "스키";
-"nav_type_geocoding" = "지오코딩";
+"routing_profile_geocoding" = "지오코딩";
 "fast_route_mode_descr" = "\"가장 빠른 경로를 활성화하거나 or 가장 짧은 경로를 비활성화합니다 \"";
 "avoid_in_routing_descr_" = "유료 도로, 비 포장 도로, 페리 제외";
 "avoid_in_routing_title" = "제외…";
@@ -391,7 +391,7 @@
 "show_warnings_descr" = "교통 경고(속도 제한, 강제 정지, 과속 방지턱, 터널), 속도 카메라 경고 및 차선 정보 구성";
 "srtm_download_list_help_message" = "osmand는 미터와 피트 단위로 윤곽선 데이터를 제공한다. 형식을 변경하려면 파일을 다시 다운로드해야 한다.";
 "traffic_warning_stop" = "정지 기호";
-"shared_string_buy" = "구입";
+"buy" = "구입";
 "si_mi_meters" = "마일/미터";
 "si_nm" = "항해 마일";
 "traffic_warning_railways" = "철도 건널목";
@@ -402,14 +402,14 @@
 "si_m_s" = "초당 미터";
 "fav_point_dublicate_message" = "중복을 방지하기 위해 즐겨찾기의 이름을 '%@'로 변경함";
 "traffic_warning_hazard" = "위험";
-"traffic_warning_tunnel" = "전방 터널";
+"tunnel_warning" = "전방 터널";
 "right_side_navigation" = "우측 핸들링";
 "fav_group" = "그룹";
 "fav_export_title" = "즐겨찾기 내보내기";
 "fav_select_remove" = "제거할 즐겨찾기를 선택하십시오.";
 "group_properties" = "그룹 프리퍼티";
 "displayed_route_save" = "OsmAnd 트랙에 저장";
-"octagon" = "팔각형";
+"shared_string_octagon" = "팔각형";
 "square" = "사각형";
 "gpx_waypoints" = "경유지";
 "gpx_points" = "점(s)";
@@ -426,7 +426,7 @@
 "import_from_files" = "파일에서 가져오기";
 "gpx_remove" = "트랙을 제거하시겠습니까?";
 "track_save" = "현재 트랙을 GPX 파일로 저장";
-"track_save_descr" = "현재 트랙을 SD 카드에 저장합니다";
+"save_current_track_descr" = "현재 트랙을 SD 카드에 저장합니다";
 "track_continue_rec" = "녹화 계속";
 "track_rec_addon_q" = "트랙을 기록하고 저장하려면 트랙 기록 추가 기능을 활성화";
 "show_info" = "정보 표시";
@@ -450,11 +450,11 @@
 "downloading" = "다운로드 중";
 "download_tab_local" = "로컬";
 "osmand_live_updates_size" = "다운로드된 업데이트 크기";
-"res_details" = "세부 사항";
+"shared_string_details" = "세부 사항";
 "res_type" = "유형";
 "res_unknown" = "알 수 없음";
 "sqlite_db_file" = "SQLiteDB 파일";
-"res_source_one_per_tile" = "타일당 하나의 이미지 파일";
+"one_image_per_tile" = "타일당 하나의 이미지 파일";
 "add_work" = "직장 추가";
 "profile_type_osmand_string" = "OsmAnd프로필";
 "rendering_attr_showCycleNodeNetworkRoutes_name" = "노드 네트워크 주기 경로 표시";
@@ -541,7 +541,7 @@
 "product_desc_europe_short" = "유럽 지역 지도";
 "open_map_settings" = "지도 설정 열기";
 "rendering_value_translucent_red_name" = "반투명 적색";
-"product_title_asia" = "아시아";
+"index_name_asia" = "아시아";
 "analyze_on_map" = "지도에서 분석";
 "select_wikipedia_article_langs" = "지도에 위키백과 문서를 표시할 언어를 선택합니다. 기사를 읽는 동안 사용 가능한 모든 언어를 전환할 수 있습니다.";
 "map_settings_hide_polygons_desc" = "이 옵션은 OsmAnd 오프라인 벡터 맵에만 영향을 줌";
@@ -568,7 +568,7 @@
 "rendering_attr_showRoadMaps_name" = "도로 전용 지도";
 "lang_cs" = "체코어";
 "lang_th" = "타일랜드어";
-"longitude" = "경도";
+"navigate_point_longitude" = "경도";
 "lang_br" = "브루타뉴어";
 "lang_new" = "Newar /네팔 Bhasa";
 "map_widget_next_next_turn" = "두번째 다음 턴";
@@ -580,11 +580,11 @@
 "modify_poi_short" = "POI수정";
 "routing_attr_no_new_routing_description" = "v1.9에서 도입된 라우팅 룰을 사용하지 마십시오";
 "units_min" = "분.";
-"shared_string_street" = "거리";
+"search_address_street" = "거리";
 "opening_changeset" = "변경사항 여는중…";
 "rendering_value_translucent_green_name" = "반투명 녹색";
 "lang_nb" = "노르웨이 보크몰어";
-"emergency" = "비상";
+"amenity_type_emergency" = "비상";
 "product_title_wiki" = "위키백과";
 "navigate_point_easting" = "동향";
 "app_mode_aircraft" = "비행기";
@@ -603,7 +603,7 @@
 "map_markers_other" = "기타 마커";
 "shared_string_is_open" = "열기";
 "rendering_value_orange_name" = "오렌지";
-"education" = "교육기관";
+"amenity_type_education" = "교육기관";
 "rendering_attr_lessDetailed_name" = "덜 상세";
 "osm_poi_delete_title" = "POI삭제";
 "map_widget_altitude" = "고도";
@@ -659,7 +659,7 @@
 "rendering_attr_currentTrackColor_name" = "GPX색상";
 "intro_next" = "다음";
 "update_tile" = "지도 업데이트";
-"region_others" = "다른 지도";
+"download_select_map_types" = "다른 지도";
 "guidance_preferences_descr" = "운행 환경설정";
 "lang_ms" = "말레이시아어";
 "srtm_disabled" = "등고선 비활성화";
@@ -682,7 +682,7 @@
 "arrival_distance_factor_late" = "늦게";
 "auto_zoom_none" = "자동 줌 안됨";
 "city_type_town" = "도시";
-"time_open" = "열기";
+"shared_string_open" = "열기";
 "routing_attr_avoid_ferries_name" = "뱃길 회피";
 "osm_editing_lost_changes_descr" = "저장되지 않은 변경 내용이 손실 됩니다. 계속 하시겠습니까?";
 "osm_note_created" = "생성된 OSM 노트";
@@ -715,7 +715,7 @@
 "rendering_category_routes" = "노선 (Routes)";
 "latitude" = "위도";
 "lang_bs" = "보스니아어";
-"res_wiki" = "위키백과";
+"download_wikipedia_maps" = "위키백과";
 "try_again" = "다시 시도하십시오";
 "routing_attr_avoid_ferries_description" = "뱃길 회피하기";
 "route_tl" = "좌회전 후 직진";
@@ -766,7 +766,7 @@
 "rendering_attr_hideAccess_name" = "접근 제한 숨기기";
 "rendering_value_browse_map_name" = "지도 보기";
 "product_title_antarctica" = "남극 대륙";
-"units_ft" = "피트";
+"foot" = "피트";
 "lang_el" = "그리스어";
 "rendering_attr_buildings15zoom_name" = "줌 레벨 15에 있는 건물 표시";
 "light_theme" = "밝은";
@@ -784,7 +784,7 @@
 "units_yd" = "야드";
 "lang_ht" = "아이티어";
 "res_standard" = "일반 지도";
-"osm_alert_message" = "메세지";
+"osb_comment_dialog_message" = "메세지";
 "shared_string_off" = "끄기";
 "access_arrival_time" = "도착 시간";
 "rendering_value_red_name" = "빨강";
@@ -798,12 +798,12 @@
 "rendering_attr_currentTrackWidth_name" = "GPX폭";
 "key_hint_deselect" = "선택 취소";
 "arrival_distance_factor_at_last" = "마지막 미터에서";
-"industrial" = "공업";
+"icon_group_industrial" = "공업";
 "download_srtm_maps" = "등고선";
 "lang_vi" = "베트남어";
 "nothanks" = "필요없음";
 "rendering_attr_trainLightrailRoutes_name" = "기차 노선";
-"open_osm_note" = "OSM노트 열기";
+"context_menu_item_open_note" = "OSM노트 열기";
 "lang_bg" = "불가리아어";
 "poi_filter_by_name" = "이름으로 검색";
 "shared_string_on" = "켜기";
@@ -813,7 +813,7 @@
 "rendering_attr_OSMMapperAssistant_name" = "OSM지도작성 도우미";
 "rendering_attr_busRoutes_name" = "버스 노선";
 "rendering_attr_showSurfaces_name" = "도로 표면 표시";
-"osm_phone" = "전화";
+"phone" = "전화";
 "directions_more_options" = "여기부터 출발";
 "shared_string_import" = "가져오기";
 "arrival_distance_factor_early" = "일찍";
@@ -825,17 +825,17 @@
 "welmode_download_maps" = "지도 다운로드";
 "rendering_value_pink_name" = "분홍";
 "help_other_header" = "기타";
-"product_title_africa" = "아프리카";
+"index_name_africa" = "아프리카";
 "lang_te" = "텔루구어";
 "route_tshl" = "급한 좌회전 후 직진";
 "gpx_option_from_start_point" = "전체 경로를 따라 이동";
 "shared_string_or" = "또는";
 "units_min_km" = "분/km";
 "rendering_attr_noPolygons_description" = "투명 지도에서 모든 면적 기능 만들기";
-"menu_my_places" = "저장소";
+"shared_string_my_places" = "저장소";
 "lang_ta" = "타밀어";
 "routing_preferences_descr" = "라우팅 환경설정";
-"osm_str_name" = "거리 이름";
+"map_widget_top_text" = "거리 이름";
 "shared_string_io_error" = "입출력 오류가 발생하였습니다";
 "loading_poi_obj" = "POI로딩…";
 "product_title_europe" = "유럽";
@@ -851,7 +851,7 @@
 "lang_lv" = "라트비아어";
 "units_m_s" = "m/s";
 "rendering_value_translucent_lightblue_name" = "반투명 밝은 파란색";
-"purchase_get" = "가져오기";
+"shared_string_get" = "가져오기";
 "lang_zh_tw" = "중국어 번체";
 "get_directions" = "운행시작";
 "device_memory" = "장치 메모리";
@@ -902,7 +902,7 @@
 "rendering_attr_roadStyle_name" = "도로 스타일";
 "arrival_distance_factor_normally" = "일반";
 "select_all" = "모두 선택";
-"units_min_mi" = "분/m";
+"min_mile" = "분/m";
 "routing_attr_height_name" = "높이 제한";
 "lang_hu" = "헝가리어";
 "lang_ml" = "말라얄람어";
@@ -1066,7 +1066,7 @@
 "weather_wind_unit_km_per_hour" = "시간당 킬로미터";
 "help_versions" = "버전";
 "lang_ne" = "네팔어";
-"cloud_restore_now" = "지금 복원";
+"backup_restore_now" = "지금 복원";
 "gpx_dir_arrows" = "방향 화살표";
 "lang_mg" = "마다가스카르어";
 "lang_nap" = "네폴리탄어";
@@ -1099,7 +1099,7 @@
 "lang_sco" = "스코틀랜드어";
 "cloud_welcome_back" = "다시 오신 것을 환영합니다!";
 "auto_split_gap" = "공백 후 자동 분할 기록";
-"help_legend" = "지도 범례";
+"map_legend" = "지도 범례";
 "altitude" = "고도";
 "lang_ky" = "키르키스어 키르기즈스탄방언";
 "lang_scn" = "시칠리아어";
@@ -1163,7 +1163,7 @@
 "shared_string_profiles" = "프로필";
 "shared_string_quick_actions" = "빠른 작업";
 "keep_both" = "둘 다 유지";
-"route_betw_points" = "지점 간 경로";
+"route_between_points" = "지점 간 경로";
 "select_map_source" = "지도 소스 선택";
 "select_map_style" = "지도 스타일 선택";
 "available_map_styles" = "사용 가능한 지도 스타일";

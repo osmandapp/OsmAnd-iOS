@@ -38,7 +38,7 @@
 "shared_string_previous" = "Antaŭa";
 "shared_string_next" = "Sekva";
 "route_stops_before" = "%@ stops before";
-"transport_routes" = "Kursoj";
+"transport_Routes" = "Kursoj";
 "transport_nearby_routes_within" = "Kursoj proksime";
 "transport_nearby_routes" = "Proksime";
 "transport_stop" = "Haltejo";
@@ -130,7 +130,7 @@
 "monitoring_min_distance" = "Minimuma delokiĝo";
 "logging_min_distance_descr" = "Filter: minimum distance to log a new point";
 "logging_accuracy" = "Precizo de registrado";
-"logging_min_accuracy" = "Minimuma precizo";
+"monitoring_min_accuracy" = "Minimuma precizo";
 "logging_min_accuracy_descr" = "Filter: no logging unless the accuracy is reached";
 "logging_min_speed" = "Minimuma rapido";
 "logging_min_speed_descr" = "Filter: no logging below selected speed";
@@ -206,7 +206,7 @@
 
 // Route info
 
-"units_seconds" = "sekundoj";
+"int_seconds" = "sekundoj";
 "shared_string_never" = "Neniam";
 "shared_setting_always_ask" = "Demandiĉiam";
 "general_settings_2" = "Ĝeneralaj agordoj";
@@ -230,11 +230,11 @@
 "change_map_behavior" = "Change map behavior during navigation";
 "nav_type_descr" = "Select how to calculate a route for this profile";
 "nav_type_osmand" = "OsmAnd (offline routing)";
-"nav_type_straight_line" = "Rekta linio";
+"routing_profile_straightline" = "Rekta linio";
 "nav_type_direct_to" = "Rekte al punkto";
 "nav_type_brouter" = "BRouter";
 "routing_profile_ski" = "Skiado";
-"nav_type_geocoding" = "Koordinat-trovado";
+"routing_profile_geocoding" = "Koordinat-trovado";
 "fast_route_mode_descr" = "Aktivigu por kalkuli la plej rapidan kurson, aŭ malaktivigu por brulaĵ-ŝpareman kurson.";
 "avoid_in_routing_title" = "Eviti…";
 "avoid_in_routing_descr_" = "Avoid toll roads, unpaved, ferries";
@@ -376,8 +376,8 @@
 "traffic_warning_railways" = "Traknivela pasejo";
 "traffic_warning_pedestrian" = "Zebrostria pasejo";
 "traffic_warning_hazard" = "Danĝero";
-"traffic_warning_tunnel" = "Tunelo antaŭe";
-"announce" = "Anonco";
+"tunnel_warning" = "Tunelo antaŭe";
+"accessibility_announce" = "Anonco";
 "driving_region_japan" = "Japanujo";
 "driving_region_us" = "Usono";
 "driving_region_canada" = "Kanado";
@@ -398,7 +398,7 @@
 "si_min_m" = "Minutoj en mejlo";
 "si_nm_h" = "Nautical miles per hour (knot)";
 "units_nm_h" = "nmi/h";
-"units_min_mi" = "min/m";
+"min_mile" = "min/m";
 "units_min_km" = "min/km";
 "units_m_s" = "m/s";
 "tones" = "tunoj";
@@ -443,7 +443,7 @@
 "shared_string_remove" = "Forigi";
 "shared_string_dismiss" = "Rezigni";
 "shared_string_add" = "Aldoni";
-"shared_string_buy" = "Aĉeti";
+"buy" = "Aĉeti";
 "shared_string_buy_for" = "for";
 "shared_string_or" = "aŭ";
 "shared_string_and" = "kaj";
@@ -487,7 +487,7 @@
 "shared_string_none" = "Neniu";
 "restart" = "Restartigi";
 "offline_maps" = "Offline Maps";
-"download_map" = "Elŝuti mapon";
+"shared_string_download_map" = "Elŝuti mapon";
 "download_map_dialog" = "Fenestro elŝuti mapojn";
 "update_tile" = "Ĝisdatigi mapon";
 "download_pending" = "Download pending";
@@ -546,7 +546,7 @@
 "name_and_descr" = "Name & description";
 "select_group" = "Elekti grupon";
 "icon" = "Emblemo";
-"shape" = "Formo";
+"shared_string_shape" = "Formo";
 "fav_point_dublicate" = "Duplikata nomo deŝatata punkto";
 "fav_point_dublicate_message" = "Favorite renamed to \'%@\' to avoid duplication.";
 "fav_point_emoticons_message" = "Favorite renamed to \'%@\' to save the string containing emoticons to a file.";
@@ -558,7 +558,7 @@
 
 // Shapes
 "circle" = "Cirklo";
-"octagon" = "Okangulo";
+"shared_string_octagon" = "Okangulo";
 "square" = "Kvadrato";
 
 // POI
@@ -569,13 +569,13 @@
 
 // My Places
 "favorites" = "Ŝatataj";
-"tracks" = "Spuroj";
+"shared_string_gpx_tracks" = "Spuroj";
 "personal_category_name" = "Personaj";
 "visible" = "Videbla(j)";
 
 // GPX
 "gpx_point" = "Punkto";
-"gpx_waypoint" = "Navigadpunkto";
+"shared_string_waypoint" = "Navigadpunkto";
 "gpx_waypoints" = "Navigadpunktoj";
 "gpx_points" = "Point(s)";
 "shared_string_export" = "Elporti";
@@ -619,7 +619,7 @@
 "track_new_segment" = "Ekigi novan segmenton";
 "track_save" = "Konservi aktualan spuron";
 "displayed_route_save" = "Save to OsmAnd Tracks";
-"track_save_descr" = "Konservi aktualan spuron kiel GPX-dosieron.";
+"save_current_track_descr" = "Konservi aktualan spuron kiel GPX-dosieron.";
 "track_continue_rec" = "Continue recording";
 "track_continue_rec_q" = "Do you want to continue recording?";
 "save_track_interval_globally" = "Intertempo de registrado";
@@ -681,7 +681,7 @@
 "map_settings_zoom_level_description" = "Set the minimum and maximum zoom level to display the layer";
 "map_settings_add_maps_hillshade" = "Additional maps are needed to view hillshades on the map";
 "map_settings_add_maps_slopes" = "Additional maps are needed to view slopes on the map";
-"map_settings_legend" = "Mapklarigo";
+"shared_string_legend" = "Mapklarigo";
 "map_settings_show_slider_map" = "Show slider on the map";
 "map_settings_add_online_source" = "Aldoni enretan fonton";
 "map_settings_hide_polygons" = "Hide polygons";
@@ -990,7 +990,7 @@
 "add_point" = "Aldoni punkton";
 "point_num" = "Point %d";
 "points_count" = "Points:";
-"route_betw_points" = "Kurso inter punktoj";
+"route_between_points" = "Kurso inter punktoj";
 "save_changes" = "Konserviŝanĝojn";
 "save_new_track" = "Konservi kiel novan spuron";
 "add_to_track" = "Aldoni al spuro";
@@ -1113,7 +1113,7 @@
 "res_cancel_inst_q" = "You're going to cancel %@ installation.";
 "res_uninst_managed_q" = "You're going to uninstall %@. You can reinstall it later from catalog.";
 "res_uninst_unmanaged_q" = "You're going to delete %@. It's not from catalog, so please be sure you have a backup if needed.";
-"res_details" = "Detaloj";
+"shared_string_details" = "Detaloj";
 "res_type" = "Speco";
 "res_unknown" = "Nekonata";
 "res_size" = "Grando";
@@ -1135,7 +1135,7 @@
 "res_pseudo_mercator" = "Kvazaŭ-merkatora projekcio";
 "res_source_format" = "Source format";
 "sqlite_db_file" = "SQLiteDB-dosiero";
-"res_source_one_per_tile" = "Po unu bild‑dosiero per kahelo";
+"one_image_per_tile" = "Po unu bild‑dosiero per kahelo";
 "res_zoom_levels_desc" = "This parameters will affect the map display when used as a map type or overlay/underlay.\n\nMap type: the map will be limited to the selected zooms.\n\nOverlay / Underlay: Zoom levels at which tiles will be visible. Upscale or downscale will occur above or below the set values.";
 "res_expire_time_desc" = "Expiration time in minutes. Cached tiles will be reloaded after specified time. Leave this field empty if you do not need to reload tiles for this source.\nOne day is 1440 minutes.\nOne week is 10 080 minutes.\n30 days are 43 200 minutes.";
 "res_name_warning" = "File name cannot be empty";
@@ -1154,7 +1154,7 @@
 
 // Menu
 "shared_string_menu" = "Menuo";
-"menu_my_places" = "Miaj ejoj";
+"shared_string_my_places" = "Miaj ejoj";
 "menu_my_trips" = "My Tracks";
 "menu_feedback" = "Sendi opinion";
 "menu_help" = "Helpo";
@@ -1190,9 +1190,9 @@
 "osm_opens_at" = "Opens at:";
 "osm_closes_at" = "Closes at:";
 "osm_editing_contact_info" = "Kontaktaj informoj";
-"osm_str_name" = "Nomo de strato";
+"map_widget_top_text" = "Nomo de strato";
 "osm_building_num" = "Building number";
-"osm_phone" = "Telefono";
+"phone" = "Telefono";
 "osm_website" = "Retejo";
 "population_num" = "Population";
 "osm_add_place" = "Add place";
@@ -1277,7 +1277,7 @@
 "show_coordinates" = "Show coordinates";
 "hide_coordinates" = "Hide coordinates";
 "quick_action_coordinates_widget_descr" = "Tapping this action button shows or hides the Coordinates widget.";
-"map_overlays" = "Mapaj surtavoloj";
+"quick_action_map_overlay_title" = "Mapaj surtavoloj";
 "map_underlays" = "Mapaj subtavoloj";
 "vector_data" = "Malkonektaj vektoraj mapoj";
 "add_map_source" = "Aldoni map-fonton";
@@ -1338,7 +1338,7 @@
 "show_edits" = "Show local edits";
 "hide_edits" = "Hide local edits";
 "search_results" = "Search results";
-"quick_action_name_str" = "Nomo de ago";
+"shared_string_action_name" = "Nomo de ago";
 "quick_action_name_alert" = "Quick action name was changed to %@ to avoid duplication.";
 "quick_action_screen_header" = "Screen %ld";
 "confirm_bulk_delete" = "Do you want to delete %ld items?";
@@ -1348,7 +1348,7 @@
 "quick_action_template_name" = "Template name";
 "quick_action_name_footer" = "Lasu kampon malplenan por uzi adreson aŭ nomon de ejo.";
 "quick_action_select_group" = "Select the group to save the favorite in.";
-"quick_action_add_poi_category" = "Aldoni kategorion";
+"quick_action_add_category" = "Aldoni kategorion";
 "quick_action_add_category_descr" = "You can select multiple POI categories.";
 "quick_action_show_poi_descr" = "Add one or more POI categories to be displayed on the map.";
 "quick_action_fill_params_alert" = "Please fill out the parameters first";
@@ -1358,7 +1358,7 @@
 "quick_action_tags" = "Etikedoj";
 "quick_action_get_info" = "Get info";
 "quick_action_enter_message" = "Enter message";
-"osm_note_action_field_descr" = "Tiuĉi mesaĝo estos inkluzivita en la komenta kampo.";
+"quick_action_bug_descr" = "Tiuĉi mesaĝo estos inkluzivita en la komenta kampo.";
 "quick_action_source_switch_descr" = "Tapping this action button pages through the list below.";
 "quick_action_poi_add_descr" = "Tapping this action button allows you to quickly add POI on the map with predefined type and tags.";
 "quick_action_day_night_descr" = "Tapping this action button switches between Day and Night map mode.";
@@ -1420,10 +1420,10 @@
 "modify_poi_short" = "Modifi interesejon";
 "create_poi_short" = "Krei interesejon";
 "modify_edit_short" = "Modifi OSMŝanĝoj";
-"open_osm_note" = "Krei OSM-rimarkon";
+"context_menu_item_open_note" = "Krei OSM-rimarkon";
 "edit_osm_note" = "Edit OSM Note";
 "osm_alert_title" = "Enmeti";
-"osm_alert_message" = "Mesaĝo";
+"osb_comment_dialog_message" = "Mesaĝo";
 "osm_alert_button_ok" = "Krei rimarkon";
 "modify_poi" = "Modify the POI information";
 "actions" = "Agoj";
@@ -1440,7 +1440,7 @@
 // Units
 "units_mi" = "mi";
 "units_yd" = "yd";
-"units_ft" = "ft";
+"foot" = "ft";
 "units_nm" = "nmi";
 "units_km_h" = "km/h";
 "units_mph" = "mi/h";
@@ -1455,7 +1455,7 @@
 "help_first_use" = "Unua uzo";
 "help_first_use_descr" = "How to download maps and set basic settings";
 "help_navigation_descr" = "How to set up navigation";
-"help_faq" = "Oftaj demandoj";
+"faq_item" = "Oftaj demandoj";
 "help_faq_descr" = "Frequently asked questions";
 "help_features" = "Ebloj";
 "help_map_viewing" = "Foliumi mapon";
@@ -1466,7 +1466,7 @@
 "help_osmand_live" = "Aboni OsmAnd Live";
 "help_travel" = "Travel (Wikipedia & Wikivoyage)";
 "mapillary_item" = "OsmAnd + Mapillary";
-"help_legend" = "Mapklarigo";
+"map_legend" = "Mapklarigo";
 "help_legend_descr" = "The guide to map's symbols";
 "help_other_header" = "Alia";
 "help_what_is_new" = "What\'s new";
@@ -1514,16 +1514,16 @@
 
 // World Regions
 "region_antarctica" = "Antarkto";
-"region_africa" = "Afriko";
+"index_name_africa" = "Afriko";
 "index_name_asia" = "Azio";
-"region_ausralia_and_oceania" = "Aŭstralio kaj Oceanio";
+"index_name_oceania" = "Aŭstralio kaj Oceanio";
 "region_central_america" = "Mez-Ameriko";
 "region_europe" = "Eŭropo";
-"region_north_america" = "Nordameriko";
+"index_name_north_america" = "Nordameriko";
 "region_russia" = "Rusujo";
 "region_south_america" = "Sudameriko";
 "region_nautical" = "Maraj mapoj";
-"region_others" = "Aliaj mapoj";
+"download_select_map_types" = "Aliaj mapoj";
 
 // Help
 "help_quiz" = "Quiz";
@@ -1561,7 +1561,7 @@
 "product_title_openplacereviews" = "OpenPlaceReviews";
 "product_desc_openplacereviews" = "Send photos, reviews, and links about public places";
 "product_desc_ext_openplacereviews" = "Send photos, reviews, and links about public places such as restaurants, hotels, museums, and waypoints as open data https://openplacereviews.org/data/.\n\nRead more at https://openplacereviews.org";
-"product_title_africa" = "Afriko";
+"index_name_africa" = "Afriko";
 "product_desc_africa" = "Unlimited map downloads for Africa";
 "product_title_antarctica" = "Antarkto";
 "product_desc_antarctica" = "Unlimited map downloads for Antarctica";
@@ -1585,7 +1585,7 @@
 "product_desc_southamerica_short" = "South America region maps";
 "product_title_allworld" = "All World Maps";
 "product_desc_allworld" = "Maps of All World";
-"product_title_asia" = "Azio";
+"index_name_asia" = "Azio";
 "product_desc_asia" = "Unlimited map downloads for Asia";
 "product_desc_asia_short" = "Asia region maps";
 "product_title_wiki" = "Vikipedio";
@@ -1608,7 +1608,7 @@
 "all_categories" = "All categories";
 "get_unlimited_access" = "Akiri senliman atingon";
 "latitude" = "Latitudo";
-"longitude" = "Longitudo";
+"navigate_point_longitude" = "Longitudo";
 "track_save_short_q" = "Track is too short, do you want to save?";
 "add_as" = "Add as";
 "make_call" = "Make a call";
@@ -1619,7 +1619,7 @@
 "enter_fav_name" = "Enter favorite name";
 "res_installing" = "Installing…";
 "res_roads" = "Vojoj";
-"res_wiki" = "Vikipedio";
+"download_wikipedia_maps" = "Vikipedio";
 "shared_string_hillshade" = "Nivelombrumo";
 "res_slope" = "Dekliveco";
 "res_standard" = "Plena mapo";
@@ -1650,11 +1650,11 @@
 "you_searching" = "You are searching";
 "from_location" = "away";
 "show_alt_in_drive" = "Show altitude in Drive mode";
-"purchase_get" = "Akiri";
+"shared_string_get" = "Akiri";
 "srtm_disabled" = "Nivelkurboj kaŝitaj";
 "prch_wiki_info" = "Wikipedia addon enables wikipedia information for maps you are entitled, purchased or downloaded within free limit.";
 "prch_srtm_info" = "Contour lines addon enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
-"time_open" = "Malfermita je";
+"shared_string_open" = "Malfermita je";
 "time_closed" = "Closed";
 "time_will_close" = "Will close in";
 "time_will_open" = "Will open in";
@@ -1830,7 +1830,7 @@
 "postcode" = "Poŝtkodo";
 "show_something_on_map" = "Montri na %@ sur la mapo";
 "search_POI_level_btn" = "Increase search radius";
-"shared_string_street" = "Strato";
+"search_address_street" = "Strato";
 "shared_string_building" = "Domo";
 "shared_string_street_intersection" = "Street intersection";
 "shared_string_address" = "Adreso";
@@ -2202,15 +2202,15 @@
 
 //Icon categories
 "amenity" = "Oportunaĵo";
-"emergency" = "Vivsavo";
-"special" = "Specialaj";
+"amenity_type_emergency" = "Vivsavo";
+"icon_group_special" = "Specialaj";
 "sport" = "Sporto";
 "symbols" = "Simboloj";
 "transport" = "Transporto";
 "travel" = "Vojaĝo";
 "nautical" = "Marnavigada";
-"industrial" = "Industrio";
-"education" = "Edukado";
+"icon_group_industrial" = "Industrio";
+"amenity_type_education" = "Edukado";
 "settings_item_read_error" = "Could not read %@.";
 "app_mode_default" = "Foliumi mapon";
 "app_mode_car" = "Aŭto";
@@ -2263,7 +2263,7 @@
 "backup_error_token_is_not_valid" = "Io estas erara pri identigilo de la aparato aŭ ĵetono";
 "routing_attr_allow_gate_description" = "Permesi navigi tra pordegoj";
 "grey_color_undefined" = "Fragmentoj sen datumoj estas grizaj.";
-"cloud_make_backup" = "Fari sekurkopion";
+"make_backup" = "Fari sekurkopion";
 "backup_error_size_is_exceeded" = "Superis maksimuman grandon por OsmAnd-Nubo: %@";
 "backup_error_file_not_available" = "Dosiero ne disponebla";
 "altitude" = "Altitudo";
@@ -2302,7 +2302,7 @@
 "turn_arrows" = "Sagetoj de turniĝoj";
 "shared_string_any" = "Ia";
 "shared_string_open_street_map" = "OpenStreetMap";
-"cloud_restore_now" = "Restarigi nun";
+"backup_restore_now" = "Restarigi nun";
 "routing_attr_only_permitted_ways_name" = "Nur certe permesataj vojoj";
 "rendering_attr_showFitnessTrails_name" = "Vojetoj de sportiloj";
 "verify_email_address_descr" = "Kontrolkodo sendita al %@, eniguĝin en la kampon sube.";

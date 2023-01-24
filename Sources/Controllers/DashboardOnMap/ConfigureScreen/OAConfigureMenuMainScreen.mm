@@ -124,7 +124,7 @@
     
     if (_settings.applicationMode.get != OAApplicationMode.DEFAULT)
     {
-        [controlsList addObject:@{ @"title" : OALocalizedString(@"osm_str_name"),
+        [controlsList addObject:@{ @"title" : OALocalizedString(@"map_widget_top_text"),
                                    @"key" : @"street_name",
                                    @"selected" : @([_settings.showStreetName get]),
                                    @"type" : [OASwitchTableViewCell getCellIdentifier]} ];

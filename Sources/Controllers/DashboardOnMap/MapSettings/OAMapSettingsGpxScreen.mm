@@ -74,7 +74,7 @@
 
 - (void) setupView
 {
-    title = OALocalizedString(@"tracks");
+    title = OALocalizedString(@"shared_string_gpx_tracks");
 }
 
 #pragma mark - UITableViewDataSource

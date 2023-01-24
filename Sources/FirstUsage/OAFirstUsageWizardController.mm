@@ -136,7 +136,7 @@ typedef enum
                                                                 andObserve:_app.downloadsManager.completedObservable];
 
     // Init wizard
-    _lbTitle.text = OALocalizedString(@"download_map");
+    _lbTitle.text = OALocalizedString(@"shared_string_download_map");
     _lbDescription.text = OALocalizedString(@"first_usage_wizard_desc");
     [_btnSkip setTitle:OALocalizedString(@"shared_string_skip") forState:UIControlStateNormal];
     

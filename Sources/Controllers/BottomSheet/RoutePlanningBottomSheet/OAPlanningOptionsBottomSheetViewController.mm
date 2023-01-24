@@ -86,7 +86,7 @@
     {
         if (_routeAppMode == nil || _routeAppMode == OAApplicationMode.DEFAULT)
         {
-            descr = OALocalizedString(@"nav_type_straight_line");
+            descr = OALocalizedString(@"routing_profile_straightline");
             icon = @"ic_custom_straight_line";
         } else
         {
@@ -103,7 +103,7 @@
     [data addObject:@[
         @{
             @"type" : [OATitleDescriptionIconRoundCell getCellIdentifier],
-            @"title" : OALocalizedString(@"route_betw_points"),
+            @"title" : OALocalizedString(@"route_between_points"),
             @"img" : icon,
             @"descr" : descr,
             @"key" : @"route_betw_points"

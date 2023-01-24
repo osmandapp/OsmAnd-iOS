@@ -40,7 +40,7 @@ static OAExportSettingsCategory *RESOURCES;
 + (OAExportSettingsCategory *) MY_PLACES
 {
     if (!MY_PLACES)
-        MY_PLACES = [[OAExportSettingsCategory alloc] initWithTitle:OALocalizedString(@"menu_my_places")];
+        MY_PLACES = [[OAExportSettingsCategory alloc] initWithTitle:OALocalizedString(@"shared_string_my_places")];
     return MY_PLACES;
 }
 

@@ -360,7 +360,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
             if (fileItem.subtype == EOASettingsItemFileSubtypeVoiceTTS)
                 name = [NSString stringWithFormat:@"%@ (%@)", name, OALocalizedString(@"tts_title")];
             else if (fileItem.subtype == EOASettingsItemFileSubtypeVoice)
-                name = [NSString stringWithFormat:@"%@ (%@)", name, OALocalizedString(@"recorded_voice")];
+                name = [NSString stringWithFormat:@"%@ (%@)", name, OALocalizedString(@"shared_string_recorded")];
         }
         else if (!name)
         {

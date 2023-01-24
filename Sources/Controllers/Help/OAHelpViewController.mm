@@ -100,7 +100,7 @@ static const NSInteger groupCount = 5;
     [dataArr addObject:
      @{
        @"name" : @"help_faq",
-       @"title" : OALocalizedString(@"help_faq"),
+       @"title" : OALocalizedString(@"faq_item"),
        @"description" : OALocalizedString(@"help_faq_descr"),
        @"type" : kLinkInternalType,
        @"html" : @"faq"
@@ -109,7 +109,7 @@ static const NSInteger groupCount = 5;
     [dataArr addObject:
     @{
       @"name" : @"help_legend",
-      @"title" : OALocalizedString(@"help_legend"),
+      @"title" : OALocalizedString(@"map_legend"),
       @"description" : OALocalizedString(@"help_legend_descr"),
       @"type" : kLinkInternalType,
       @"html" : @"map-legend"

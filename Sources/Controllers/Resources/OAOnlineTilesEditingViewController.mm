@@ -758,7 +758,7 @@
 - (NSString *) getFormatString:(EOASourceFormat)sourceFormat
 {
     if (sourceFormat == EOASourceFormatOnline)
-        return OALocalizedString(@"res_source_one_per_tile");
+        return OALocalizedString(@"one_image_per_tile");
     else if (sourceFormat == EOASourceFormatSQLite)
         return OALocalizedString(@"sqlite_db_file");
     

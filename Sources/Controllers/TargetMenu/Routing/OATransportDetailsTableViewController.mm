@@ -447,7 +447,7 @@
             cell.topInfoLabel.attributedText = [self getFirstLineDescrAttributed:_transportHelper.getRoutes[_routeIndex]];
             cell.bottomInfoLabel.attributedText = [self getSecondLineDescrAttributed:_transportHelper.getRoutes[_routeIndex]];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            [cell.detailsButton setTitle:OALocalizedString(@"res_details") forState:UIControlStateNormal];
+            [cell.detailsButton setTitle:OALocalizedString(@"shared_string_details") forState:UIControlStateNormal];
             cell.detailsButton.tag = _routeIndex;
             [cell.detailsButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.detailsButton addTarget:self action:@selector(onTransportDetailsPressed:) forControlEvents:UIControlEventTouchUpInside];

@@ -12,7 +12,7 @@
 "shared_string_uninstall" = "解除安裝";
 "shared_string_delete" = "删除";
 "shared_string_add" = "新增";
-"shared_string_buy" = "購買";
+"buy" = "購買";
 "shared_string_buy_for" = "給";
 "shared_string_or" = "或是";
 // HUD
@@ -56,7 +56,7 @@
 "rendering_category_transport" = "交通工具";
 "rendering_category_others" = "其它地圖屬性";
 // Rendering attributes
-"tracks" = "軌跡";
+"shared_string_gpx_tracks" = "軌跡";
 "gpx_waypoints" = "航點";
 "gpx_points" = "點";
 "shared_string_export" = "匯出";
@@ -178,7 +178,7 @@
 "res_cancel_inst_q" = "您要取消 %@ 的安裝。";
 "res_uninst_managed_q" = "您即將解除安裝 %@。您稍後可以從目錄重新安裝後。";
 "res_uninst_unmanaged_q" = "您即將刪除 %@。它不是從目錄中刪除，所以有需要的話，請確定您有備份。";
-"res_details" = "詳細資訊";
+"shared_string_details" = "詳細資訊";
 "res_type" = "類型";
 "res_unknown" = "未知的";
 "res_size" = "大小";
@@ -188,7 +188,7 @@
 "res_updates_avail_q" = "可用的更新。";
 "res_updates_exp" = "請購買繼續更新地圖";
 // Menu
-"menu_my_places" = "我的地點";
+"shared_string_my_places" = "我的地點";
 "menu_feedback" = "投票";
 "menu_about" = "關於";
 "other_options" = "其它選項";
@@ -206,7 +206,7 @@
 // Units
 "units_mi" = "哩";
 "units_yd" = "碼";
-"units_ft" = "呎";
+"foot" = "呎";
 "units_km_h" = "公里/小時";
 "units_mph" = "哩/小時";
 "units_hour" = "小時";
@@ -234,12 +234,12 @@
 "col_gray" = "灰色";
 "col_magenta" = "品紅";
 // World Regions
-"region_africa" = "非洲";
+"index_name_africa" = "非洲";
 "index_name_asia" = "亞洲";
-"region_ausralia_and_oceania" = "澳洲和大洋洲";
+"index_name_oceania" = "澳洲和大洋洲";
 "region_central_america" = "中美洲";
 "region_europe" = "歐洲";
-"region_north_america" = "北美洲";
+"index_name_north_america" = "北美洲";
 "region_russia" = "俄羅斯";
 "region_south_america" = "南美洲";
 // Help
@@ -256,7 +256,7 @@
 "product_title_skimap" = "滑雪地圖";
 "product_desc_skimap" = "全世界所有滑雪勝地的滑雪坡";
 "product_title_track_recording" = "旅程錄製";
-"product_title_africa" = "非洲";
+"index_name_africa" = "非洲";
 "product_desc_africa" = "非洲的地圖";
 "product_desc_australia" = "澳洲的地圖";
 "product_title_centralamerica" = "中美洲";
@@ -271,13 +271,13 @@
 "product_desc_southamerica" = "南美洲的地圖";
 "product_title_allworld" = "全世界地圖";
 "product_desc_allworld" = "地圖含有全世界";
-"product_title_asia" = "亞洲";
+"index_name_asia" = "亞洲";
 "product_desc_asia" = "亞洲的地圖";
 "my_location" = "我的位置";
 "all_categories" = "所有類別";
 "get_unlimited_access" = "取得無限制的存取";
 "latitude" = "緯度";
-"longitude" = "經度";
+"navigate_point_longitude" = "經度";
 "track_save_short_q" = "軌跡太短，您想要儲存嗎？";
 "add_as" = "新增為";
 "product_desc_track_recording" = "啟動記錄和儲存您軌跡的功能";
@@ -300,7 +300,7 @@
 "download_srtm_maps" = "等高線";
 "product_desc_srtm" = "顯示等高線";
 "res_roads" = "道路";
-"res_wiki" = "維基百科";
+"download_wikipedia_maps" = "維基百科";
 "select_language" = "選擇語言";
 "language_short" = "語言";
 "open_url" = "在瀏覽器中開啟頁面";
@@ -316,11 +316,11 @@
 "from_location" = "遠離";
 "show_alt_in_drive" = "在駕駛時顯示海拔高度";
 "shared_string_hillshade" = "地形陰影";
-"purchase_get" = "取得";
+"shared_string_get" = "取得";
 "srtm_disabled" = "等高線已停用";
 "prch_wiki_info" = "維基百科外掛您有資格為地圖啟用維基百科資訊，購買或在免費的期限內下載。";
 "prch_srtm_info" = "等高線外掛您有資格為地圖啟用等高線，購買或在免費的期限內下載。";
-"time_open" = "營業";
+"shared_string_open" = "營業";
 "time_closed" = "已關閉";
 "time_will_close" = "即將關閉";
 "time_will_open" = "即將開啓";
@@ -401,7 +401,7 @@
 "gpx_edit_mode" = "編輯模式";
 "go_to_map" = "轉至地圖";
 "offline_maps" = "離線地圖";
-"download_map" = "下載地圖";
+"shared_string_download_map" = "下載地圖";
 "product_desc_trip_planning" = "使用這個外掛元件，計劃您的旅程、增加航點、測量目的地的距離";
 "product_desc_ext_trip_planning" = "旅程規劃外掛元件可以讓您在地圖上建立您的旅程、儲存它、測量連接兩點之間的直線距離等。建立了初步的行程規劃，而非完全的路線建構。";
 "edit_waypoint_short" = "編輯航點";
@@ -410,7 +410,7 @@
 "shared_string_of" = "的";
 "shared_string_all" = "所有";
 "shared_string_from" = "從";
-"gpx_waypoint" = "航點";
+"shared_string_waypoint" = "航點";
 "menu_my_directions" = "我的方向";
 "device_memory" = "裝置記憶體";
 "free_memory" = "%@可用";
@@ -455,7 +455,7 @@
 "postcode" = "郵遞區號";
 "show_something_on_map" = "在地圖上顯示 %@";
 "search_POI_level_btn" = "增加搜尋半徑";
-"shared_string_street" = "道路";
+"search_address_street" = "道路";
 "shared_string_building" = "建築物";
 "shared_string_street_intersection" = "街道路口";
 "shared_string_address" = "地址";
@@ -491,7 +491,7 @@
 "si_min_m" = "分鐘每英里";
 "si_nm_h" = "浬每小時 (節)";
 "units_nm_h" = "浬/時";
-"units_min_mi" = "分/公尺";
+"min_mile" = "分/公尺";
 "units_min_km" = "分/公里";
 "units_m_s" = "公尺/秒";
 "driving_region" = "駕駛區域";
@@ -607,7 +607,7 @@
 "speak_favorites" = "附近我的收藏";
 "speak_poi" = "附近的 POI";
 "speak_pedestrian" = "行人穿越道";
-"units_seconds" = "秒";
+"int_seconds" = "秒";
 "shared_string_never" = "永不";
 "general_settings_2" = "一般設定";
 "general_settings_descr" = "組態應用程式顯示和共通設定";
@@ -732,7 +732,7 @@
 "switch_start_finish" = "起始點與目的地對調";
 "clear_all_intermediates" = "清除所有中轉地點";
 "cancel_navigation" = "停止導航";
-"transport_routes" = "導航路線";
+"transport_Routes" = "導航路線";
 "transport_nearby_routes_within" = "在附近的路線";
 "transport_stop" = "停止";
 "transport_nearby_routes" = "範圍內";
@@ -740,18 +740,18 @@
 "shared_string_previous" = "上一頁";
 "poi_overlay" = "POI 在上層";
 "poi_clear" = "清除";
-"traffic_warning_tunnel" = "前方有隧道";
+"tunnel_warning" = "前方有隧道";
 "logging_interval_navigation" = "在導航期間的記錄間隔";
 "logging_interval_navigation_descr" = "在導航期間，選擇軌跡錄製的記錄間隔";
 "monitoring_min_distance" = "最小偏移";
 "logging_min_distance_descr" = "篩選：記錄新標點的最小距離";
-"logging_min_accuracy" = "最低精密度";
+"monitoring_min_accuracy" = "最低精密度";
 "logging_min_accuracy_descr" = "篩選：除非達到精確度，否則不進行記錄";
 "logging_min_speed" = "最低速度";
 "logging_min_speed_descr" = "篩選：不記錄低於所選的速度";
 "auto_split_gap" = "自動分割錄製之後的間隙";
 "shared_setting_always_ask" = "始終詢問";
-"track_save_descr" = "現在把目前的軌跡存為 GPX 檔案。";
+"save_current_track_descr" = "現在把目前的軌跡存為 GPX 檔案。";
 "track_during_nav" = "導航期間自動記錄軌跡";
 "auto_split_gap_descr" = "在 6 分鐘的間隔後開始新的區段，在 2 小時的間隔後開始新的軌跡，或是在更長的間隔後開始新的檔案";
 "recording_preferences_descr" = "旅程錄製偏好";
@@ -764,13 +764,13 @@
 "help_first_use" = "首次使用";
 "help_first_use_descr" = "如何下載地圖和設置基本設定";
 "help_navigation_descr" = "如何設定導航";
-"help_faq" = "常見問題";
+"faq_item" = "常見問題";
 "help_faq_descr" = "常見的問題";
 "help_features" = "功能";
 "help_map_viewing" = "地圖檢視";
 "help_search" = "地圖搜尋";
 "help_trip_planning" = "規劃一次旅程";
-"help_legend" = "地圖圖例";
+"map_legend" = "地圖圖例";
 "help_other_header" = "其它";
 "help_install_and_troubleshoot" = "安裝和疑難排除";
 "help_tech_articles" = "技術文章";
@@ -890,8 +890,8 @@
 "osm_working_days" = "工作日";
 "osm_opening_hours_time" = "時間";
 "osm_editing_contact_info" = "連絡資訊";
-"osm_str_name" = "街道名稱";
-"osm_phone" = "電話";
+"map_widget_top_text" = "街道名稱";
+"phone" = "電話";
 "osm_website" = "網站";
 "osm_poi_delete_title" = "刪除 POI";
 "osm_edit_modified_poi" = "已修改 OSM 的 POI";
@@ -911,9 +911,9 @@
 "modify_poi_short" = "修改 POI";
 "create_poi_short" = "建立 POI";
 "modify_edit_short" = "修改 OSM 的變更";
-"open_osm_note" = "開啟 OSM 註解";
+"context_menu_item_open_note" = "開啟 OSM 註解";
 "osm_alert_title" = "提交";
-"osm_alert_message" = "訊息";
+"osb_comment_dialog_message" = "訊息";
 "osm_alert_button_ok" = "建立註解";
 "shared_string_password" = "密碼";
 "shared_string_category" = "類別";
@@ -967,7 +967,7 @@
 "osm_live_cancel_subscription" = "取消訂閱";
 "create_items" = "建立事項";
 "quick_action_name_footer" = "保留為空白以使用地址或地點名稱。";
-"quick_action_add_poi_category" = "增加一項類別";
+"quick_action_add_category" = "增加一項類別";
 "quick_action_tags" = "標籤";
 "previous_route" = "前一個路線";
 "gpx_ascent" = "上坡";
@@ -990,7 +990,7 @@
 "pause_resume_nav" = "暫停/繼續導航";
 "osm_edits_title" = "OSM編輯";
 "mapil_add_photos" = "新增照片";
-"region_others" = "其它地圖";
+"download_select_map_types" = "其它地圖";
 "coordinates_example" = "範例";
 "change_map_style" = "更改地圖樣式";
 "map_styles" = "地圖樣式";
@@ -1009,7 +1009,7 @@
 "get_discount_second_part" = "然後 %@";
 "night_mode" = "夜間模式";
 "tile_cache" = "圖磚快取";
-"quick_action_name_str" = "動作名稱";
+"shared_string_action_name" = "動作名稱";
 "quick_action_no_overlay" = "無上圖層";
 "gpx_avg_altitude" = "平均海拔";
 "mapillary_get_title" = "提高 Mapillary 照片覆蓋的範圍";
@@ -1019,7 +1019,7 @@
 "osm_edit_without_name" = "沒有名稱";
 "home_pt" = "住家";
 "gpx_descent" = "下坡";
-"osm_note_action_field_descr" = "此訊息會包含在註解欄。";
+"quick_action_bug_descr" = "此訊息會包含在註解欄。";
 "add_parking_place" = "增加停車地點";
 "add_map_marker" = "增加地圖標記";
 "mapillary" = "Mapillary";
@@ -1031,7 +1031,7 @@
 "sett_ext_input" = "外部輸入裝置";
 "quick_action_start_stop_nav_descr" = "輕點此按鈕以開始或停止導航。";
 "region_nautical" = "航海地圖";
-"map_overlays" = "地圖上圖層";
+"quick_action_map_overlay_title" = "地圖上圖層";
 "change_map_source" = "更改地圖來源";
 "res_url" = "URL";
 "hide_notes" = "隱藏 OSM 註記";
@@ -1427,7 +1427,7 @@
 "save_changes" = "儲存變更";
 "shared_string_account" = "帳號";
 "public_transport_menu" = "交通工具";
-"announce" = "公告";
+"accessibility_announce" = "公告";
 "quick_action_remove_next_destination_descr" = "刪除您路線上的下一個目的地。如果其為您最後的目的地，導航將會中止。";
 "import_complete_description" = "所有從 %@ 而來的資料都已匯入，您可以使用下方的按鈕以開啟應用程式中需要的部份來管理它。";
 "help_osmand_live" = "訂閱 - OsmAnd Live";
@@ -1435,9 +1435,9 @@
 "routing_profile_ski" = "滑雪";
 "public_transport_show" = "顯示大眾運輸";
 "position_icon_at_rest" = "靜止位置圖示";
-"nav_type_geocoding" = "天氣預報";
+"routing_profile_geocoding" = "天氣預報";
 "product_title_antarctica" = "南極洲";
-"res_source_one_per_tile" = "每個圖磚一個圖片檔案";
+"one_image_per_tile" = "每個圖磚一個圖片檔案";
 "osmand_routing" = "OsmAnd規畫路徑";
 "enter_profile_name" = "輸入設定檔名稱";
 "position_icon_while_moving" = "移動時的位置圖示";
@@ -1446,7 +1446,7 @@
 "save_new_track" = "儲存為新軌跡";
 "amenity" = "便利設施";
 "plugin_settings_reset" = "重設外掛程式設定為預設值";
-"nav_type_straight_line" = "直線";
+"routing_profile_straightline" = "直線";
 "importing_from" = "正在從 %@ 匯入資料";
 "reorder_profiles" = "編輯設定檔清單";
 "shared_string_min_speed" = "最低速度";
@@ -1459,14 +1459,14 @@
 "shared_string_max" = "最大";
 "nav_type_direct_to" = "點對點";
 "shared_string_min" = "分鐘";
-"map_settings_legend" = "圖例";
+"shared_string_legend" = "圖例";
 "select_distance_for_recalculation" = "選取要重新計算路徑的距離。";
 "add_to_track" = "新增到軌跡";
 "ltr_or_rtl_combine_via_space" = "%@ %@";
 "profile_type_osmand_string" = "OsmAnd設定檔";
 "two" = "二";
 "res_slope" = "斜坡";
-"route_betw_points" = "點與點之間的路線";
+"route_between_points" = "點與點之間的路線";
 "profile_type_user_string" = "使用者設定檔";
 "configure_screen_descr" = "選取設定檔的螢幕選項";
 "logging_accuracy" = "記錄精度";
@@ -1511,7 +1511,7 @@
 "fav_points_not_exist" = "沒有我的收藏標點存在";
 "shared_string_enable" = "啟用";
 "open_saved_track" = "開啟已儲存的軌跡";
-"emergency" = "警急";
+"amenity_type_emergency" = "警急";
 "default_color" = "預設顏色";
 "coordinates_widget" = "座標小工具";
 "shared_string_resources" = "資源";
@@ -1545,7 +1545,7 @@
 "search_preogress" = "查尋中…";
 "fav_point_dublicate" = "指定的最愛名稱重覆";
 "nearest_point" = "最近的點";
-"octagon" = "八邊形";
+"shared_string_octagon" = "八邊形";
 "plan_route_change_folder" = "變更資料夾";
 "hide_compass_ruler" = "隱藏指南針與尺規";
 "shared_string_disable" = "停用";
@@ -1553,7 +1553,7 @@
 "segnet_num" = "線段 %d";
 "circle" = "圓形";
 "shared_string_gpx_points" = "點";
-"special" = "特殊";
+"icon_group_special" = "特殊";
 "simplified_track_description" = "僅會儲存路線，航點將會被刪除。";
 "plan_route_open_existing_track" = "開啟既有的軌跡";
 "coordinates" = "座標";
@@ -1634,7 +1634,7 @@
 "lang_sr_latn" = "塞爾維亞語（拉丁文）";
 "lang_pt" = "葡萄牙";
 "lang_lo" = "寮語";
-"education" = "教育";
+"amenity_type_education" = "教育";
 "lang_an" = "亞拉岡語";
 "gpx_split_interval_none_descr" = "選取所需的分割選項：按時間或按距離。";
 "lang_ber" = "柏柏爾語";
@@ -1678,7 +1678,7 @@
 "lang_cy" = "威爾斯";
 "lang_kn" = "康納達語";
 "regions" = "地區";
-"industrial" = "工業區";
+"icon_group_industrial" = "工業區";
 "lang_sh" = "塞爾維亞-克羅埃西亞語";
 "lang_kab" = "卡拜爾";
 "lang_kk" = "哈薩克語";
@@ -1841,7 +1841,7 @@
 "user_login" = "帳號";
 "cloud_view_conflicts" = "檢視衝突";
 "routing_attr_only_permitted_ways_name" = "明確允許的路徑";
-"cloud_restore_now" = "立刻還原";
+"backup_restore_now" = "立刻還原";
 "routing_attr_only_permitted_streets_name" = "明確允許的街道";
 "routeInfo_roadClass_description" = "按道路分類為路線或軌跡線著色。";
 "size_of_downloaded_data" = "縮放等級間的巨大差異可能會增加下載資料的大小。";
@@ -1849,7 +1849,7 @@
 "backup_error_subscription_was_used" = "另一個帳號 %@ 使用了訂閱或促銷";
 "turn_arrows" = "轉彎箭頭";
 "routing_attr_allow_gate_name" = "允許使用閘門";
-"shape" = "形狀";
+"shared_string_shape" = "形狀";
 "routing_attr_allow_gate_description" = "允許使用閘門";
 "lang_af" = "南非荷蘭語";
 "backup_error_token_is_not_valid_or_expired" = "無效或過期的權杖";
@@ -1864,7 +1864,7 @@
 "cloud_description" = "絕對不會遺失您的資料。輕鬆備份與還原所有資訊。";
 "cloud_existing_account" = "我已經有帳號了";
 "start_point" = "開始";
-"cloud_make_backup" = "備份";
+"make_backup" = "備份";
 "register_opr_create_new_account" = "建立新帳號";
 "route_line_use_map_style_width" = "使用地圖樣式 (%@) 預設寬度。";
 "points_delete_multiple" = "刪除 %d 個點？";

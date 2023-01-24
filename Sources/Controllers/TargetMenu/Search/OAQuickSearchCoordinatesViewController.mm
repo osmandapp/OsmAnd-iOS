@@ -273,7 +273,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
         
         [result addObject:@{
             @"type" : [OAInputTableViewCell getCellIdentifier],
-            @"title" : OALocalizedString(@"longitude"),
+            @"title" : OALocalizedString(@"navigate_point_longitude"),
             @"value" : _lonStr,
             @"tag" : @(EOAQuickSearchCoordinatesTextFieldLon),
         }];

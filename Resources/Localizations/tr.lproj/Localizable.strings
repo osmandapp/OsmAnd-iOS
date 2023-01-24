@@ -14,7 +14,7 @@
 "shared_string_remove" = "Kaldır";
 "shared_string_dismiss" = "Vazgeç";
 "shared_string_add" = "Ekle";
-"shared_string_buy" = "Satın al";
+"buy" = "Satın al";
 "shared_string_buy_for" = "için";
 "shared_string_or" = "veya";
 "shared_string_and" = "ve";
@@ -22,7 +22,7 @@
 "shared_string_modify" = "Değiştirmek";
 "shared_string_later" = "Daha Sonra";
 "offline_maps" = "Çevrim Dışı Haritalar";
-"download_map" = "Harita indir";
+"shared_string_download_map" = "Harita indir";
 // HUD
 "hud_heading" = "Başlık";
 "hud_no_movement" = "Hiç hareket yok";
@@ -56,7 +56,7 @@
 "shared_string_hide" = "Gizle";
 // My Places
 "favorites" = "Sık Kullanılanlar";
-"tracks" = "İzlenen yollar";
+"shared_string_gpx_tracks" = "İzlenen yollar";
 // GPX
 "gpx_point" = "Mevki";
 "gpx_waypoints" = "Yol işaretleri";
@@ -184,7 +184,7 @@
 "res_cancel_inst_q" = "%@ kurulumunu iptal edeceksiniz.";
 "res_uninst_managed_q" = "%@ ögesini kaldıracaksınız. Daha sonra katalogdan yeniden kurabilirsiniz.";
 "res_uninst_unmanaged_q" = "%@ ögesini sileceksiniz. Bu katalogdan değil, bu yüzden gerekmesi halinde bir yedeğiniz olduğundan emin olun.";
-"res_details" = "Ayrıntılar";
+"shared_string_details" = "Ayrıntılar";
 "res_type" = "Tür";
 "res_unknown" = "Bilinmiyor";
 "res_size" = "Boyut";
@@ -194,7 +194,7 @@
 "res_updates_avail_q" = "için güncelleştirmeleri kullanılabilir.";
 "res_updates_exp" = "Haritalar güncellemek için kıta (lar) satın alın";
 // Menu
-"menu_my_places" = "Yerlerim";
+"shared_string_my_places" = "Yerlerim";
 "menu_my_trips" = "İzlediğim Yollar";
 "menu_feedback" = "Görüşleriniz";
 "menu_about" = "Hakkında";
@@ -218,7 +218,7 @@
 // Units
 "units_mi" = "mi";
 "units_yd" = "yd";
-"units_ft" = "ft";
+"foot" = "ft";
 "units_km_h" = "km/h";
 "units_mph" = "mph";
 "units_hour" = "sa";
@@ -249,12 +249,12 @@
 "col_gray" = "Gri";
 "col_magenta" = "Eflatun";
 // World Regions
-"region_africa" = "Afrika";
+"index_name_africa" = "Afrika";
 "index_name_asia" = "Asya";
-"region_ausralia_and_oceania" = "Avustralya ve Okyanusya";
+"index_name_oceania" = "Avustralya ve Okyanusya";
 "region_central_america" = "Orta Amerika";
 "region_europe" = "Avrupa";
-"region_north_america" = "Kuzey Amerika";
+"index_name_north_america" = "Kuzey Amerika";
 "region_russia" = "Rusya";
 "region_south_america" = "Güney Amerika";
 // Help
@@ -280,7 +280,7 @@
 "product_title_trip_planning" = "Seyahat planlama";
 "product_desc_trip_planning" = "Gezi planı, yol işaretleri eklemek, bu eklenti kullanarak hedefe Uzaklik ölçmek";
 "product_desc_ext_trip_planning" = "Seyahat planlama eklenti harita üzerinde yolculuk oluşturmak, kaydetmek, bağlı düz çizgiler, vb ile nokta arasındaki mesafeyi ölçmek sağlar. Ön seyahat ayrıntılı yol bina yerine planlama için yaratılmıştır.";
-"product_title_africa" = "Afrika";
+"index_name_africa" = "Afrika";
 "product_desc_africa" = "Afrika için sınırsız harita indirme";
 "product_desc_australia" = "Avustralya için sınırsız harita indirme";
 "product_title_centralamerica" = "Orta Amerika";
@@ -295,7 +295,7 @@
 "product_desc_southamerica" = "Güney Amerika için sınırsız harita indirme";
 "product_title_allworld" = "Tüm Dünya Haritaları";
 "product_desc_allworld" = "Tüm Dünya Haritaları";
-"product_title_asia" = "Asya";
+"index_name_asia" = "Asya";
 "product_desc_asia" = "Asya için sınırsız harita indirme";
 "product_title_wiki" = "Wikipedia";
 "product_desc_wiki" = "Vikipedi veri";
@@ -306,7 +306,7 @@
 "all_categories" = "Tüm kategoriler";
 "get_unlimited_access" = "Sınırsız erişim alın";
 "latitude" = "Enlem";
-"longitude" = "Boylam";
+"navigate_point_longitude" = "Boylam";
 "track_save_short_q" = "Yol çok kısa, kaydetmek istiyor musunuz?";
 "add_as" = "Olarak ekle";
 "make_call" = "Arama yapmak";
@@ -315,7 +315,7 @@
 "enter_fav_name" = "En sevdiğiniz adını girin";
 "res_installing" = "Yükleniyor…";
 "res_roads" = "Yollar";
-"res_wiki" = "Wikipedia";
+"download_wikipedia_maps" = "Wikipedia";
 "select_language" = "Dil Seçin";
 "language_short" = "Dil";
 "open_url" = "Sayfayı tarayıcıda aç";
@@ -329,11 +329,11 @@
 "you_searching" = "Aradığınız";
 "from_location" = "Uzakta";
 "show_alt_in_drive" = "İrtifa sürücü modunda göster";
-"purchase_get" = "Al";
+"shared_string_get" = "Al";
 "srtm_disabled" = "Eş yükselti eğrileri devre dışı";
 "prch_wiki_info" = "Vikipedi addon haritalar size başlıklı satın aldığınız veya ücretsiz limit dahilinde indirilen için wikipedia bilgileri sağlar.";
 "prch_srtm_info" = "Eş yükselti eğrileri eklentisi, kazandığınız, satın alınan veya ücretsiz sınırlar içinde indirdiğiniz haritalar için eş yükselti eğrilerini etkinleştirir.";
-"time_open" = "Aç";
+"shared_string_open" = "Aç";
 "time_closed" = "Kapalı";
 "time_will_close" = "Kapanacak";
 "time_will_open" = "Açılacak";
@@ -472,7 +472,7 @@
 "si_min_m" = "Dakika/mil";
 "si_nm_h" = "Deniz mili/saat (knot)";
 "units_nm_h" = "nmi/h";
-"units_min_mi" = "min/m";
+"min_mile" = "min/m";
 "units_min_km" = "min/km";
 "units_m_s" = "m/s";
 "coords_format" = "Koordinat biçimi";
@@ -524,7 +524,7 @@
 "speak_favorites" = "Yakındaki Sık Kıllanılanlar";
 "speak_poi" = "Yakınlardaki POI";
 "speak_pedestrian" = "Yaya geçitleri";
-"units_seconds" = "saniyeler";
+"int_seconds" = "saniyeler";
 "shared_string_never" = "Hiçbir zaman";
 "general_settings_2" = "Genel ayarlar";
 "general_settings_descr" = "Uygulama teması, birimler, bölge";
@@ -774,14 +774,14 @@
 "subsequent_dest_description" = "Hedefi yukarı taşı ve oluştur";
 "first_intermediate_dest_description" = "Rotadaki ilk durağı ekler";
 "last_intermediate_dest_description" = "Rota boyunca son durağı ekler";
-"transport_routes" = "Rotalar";
+"transport_Routes" = "Rotalar";
 "transport_stop" = "Durak";
 "route_stops_before" = "%@ durak önce";
 "logging_interval_navigation" = "Navigasyon sırasında kayıt aralığı";
 "logging_interval_navigation_descr" = "Navigasyon sırasında yol kaydı için kayıt aralığını seçin";
 "monitoring_min_distance" = "Asgari yer değiştirme";
 "logging_min_distance_descr" = "Filtre: yeni bir nokta kaydetmek için asgari mesafe";
-"logging_min_accuracy" = "Asgari doğruluk";
+"monitoring_min_accuracy" = "Asgari doğruluk";
 "logging_min_accuracy_descr" = "Filtre: bu doğruluğa ulaşılmadıkça kaydetme yok";
 "logging_min_speed" = "En düşük hız";
 "logging_min_speed_descr" = "Filtre: seçili hızın altında kaydetme yok";
@@ -805,7 +805,7 @@
 "add_parking_place" = "Otopark ekle";
 "gpx_slope" = "Yamaç";
 "modify_edit_short" = "OSM değişikliği değiştirme";
-"gpx_waypoint" = "Mevki";
+"shared_string_waypoint" = "Mevki";
 "osmand_live_weekly" = "Haftalık";
 "osm_working_days" = "İş Günleri";
 "osm_edits_advanced" = "İleri";
@@ -815,10 +815,10 @@
 "osm_editing_lost_changes_title" = "Kaydetmedençık?";
 "osm_note_created" = "Oluşturulmuş OSM Notu";
 "osmand_live_last_live_update" = "Son güncelleme: %@";
-"osm_phone" = "Telefon";
+"phone" = "Telefon";
 "mapil_pano_only" = "Sadece 360° resimleri göster";
 "shared_string_in_name" = "%@ \'de";
-"help_legend" = "Harita lejandı";
+"map_legend" = "Harita lejandı";
 "osmand_live_updates" = "Canlı güncellemeler";
 "help_about" = "Hakkında";
 "osmand_live_donations" = "Bağışlar";
@@ -834,7 +834,7 @@
 "show_something_on_map" = "%@ \'ı haritada göster";
 "add_poi" = "POI ekle";
 "select_all" = "Hepsini seç";
-"shared_string_street" = "Sokak";
+"search_address_street" = "Sokak";
 "help_faq_descr" = "Sık Sorulan Sorular";
 "osm_note_comment" = "Yorum";
 "shared_string_save_as" = "Farklı kaydet";
@@ -846,14 +846,14 @@
 "work_pt" = "İş";
 "wake_on_voice_descr" = "Bir dönüşe yaklaşırken (kapalı ise) aygıtın ekranını aç.";
 "shared_string_show_more" = "Daha fazla görüntüle";
-"help_faq" = "SSS";
-"region_others" = "Diğer haritalar";
+"faq_item" = "SSS";
+"download_select_map_types" = "Diğer haritalar";
 "osm_edit_modified_poi" = "Modifiye OSM POI";
 "change_map_source" = "Harita kaynağını değiştir";
 "map_widget_ruler_control" = "Yarıçap cetveli";
 "map_settings_text_size" = "Yazı boyutu";
 "coordinates_example" = "Örnek";
-"osm_str_name" = "Sokak ismi";
+"map_widget_top_text" = "Sokak ismi";
 "poi_remove_success" = "Silindi";
 "shared_string_my_places" = "Yerlerim";
 "osm_close_changeset" = "Değişiklik listesini kapat";
@@ -872,10 +872,10 @@
 "osmand_live_available_maps" = "Mevcut haritalar";
 "quick_action_no_overlay" = "Üst katman yok";
 "categories" = "Kategoriler";
-"open_osm_note" = "OSM Not\'u aç";
+"context_menu_item_open_note" = "OSM Not\'u aç";
 "menu_help" = "Yardım";
 "osm_note_upload" = "OSM Not yükle";
-"osm_alert_message" = "Mesaj";
+"osb_comment_dialog_message" = "Mesaj";
 "display_starting_at_zoom_level" = "Yakınlaştırma seviyesinde başlayarak görüntüle";
 "mapillary_get_title" = "Mapillary ile fotoğraf kapsama alanını geliştir";
 "shared_string_time_of_day" = "Günün zamanı";
@@ -899,11 +899,11 @@
 "actions" = "Eylemler";
 "edit_action" = "Eylemi düzenle";
 "osm_editing_offline" = "Çevrim dışı düzenleme";
-"traffic_warning_tunnel" = "İleride tünel var";
+"tunnel_warning" = "İleride tünel var";
 "key_hint_deselect" = "Seçimini kaldırın";
 "osmand_live_donation_switch_title" = "OpenStreetMap topluluğuna bağış";
-"quick_action_name_str" = "İşlem Adı";
-"quick_action_add_poi_category" = "Kategori ekle";
+"shared_string_action_name" = "İşlem Adı";
+"quick_action_add_category" = "Kategori ekle";
 "toggle_poi" = "POI göster/gizle";
 "gpx_alt_range" = "Yükseklik aralığı";
 "osm_alert_button_ok" = "Not oluştur";
@@ -922,13 +922,13 @@
 "quick_action_tags" = "Etiketler";
 "vector_data" = "Çevrim dışı vektör haritaları";
 "sett_ext_input" = "Harici giriş cihazları";
-"osm_note_action_field_descr" = "Bu mesaj yorum alanına dahil edilmiştir.";
+"quick_action_bug_descr" = "Bu mesaj yorum alanına dahil edilmiştir.";
 "osm_note_upload_anonymously" = "Anonim olarak yükle";
 "purchase_unlim_title" = "Satın al - %@";
 "help_features" = "Özellikler";
 "quick_action_add_overlay" = "Üst katman ekle";
 "shared_setting_always_ask" = "Her zaman sor";
-"map_overlays" = "Haritaüst katmanları";
+"quick_action_map_overlay_title" = "Haritaüst katmanları";
 "keep_informing_descr" = "Navigasyon talimatlarını düzenli aralıklarla yeniden duyurun.";
 "change_map_underlay" = "Harita alt katmanını değiştir";
 "help_follow_us" = "Bizi takip edin";
@@ -990,7 +990,7 @@
 "directions_other" = "Diğer yönler";
 "poi_overlay" = "POI Üst Katmanı";
 "auto_split_gap_descr" = "6 dakikalık boşluktan sonra yeni bölüm, 2 saatlik boşluktan sonra yeni yol veya daha uzun bir boşluktan sonra yeni dosya başlat";
-"track_save_descr" = "Geçerli rotayı şimdi GPX dosyası olarak kaydedin.";
+"save_current_track_descr" = "Geçerli rotayı şimdi GPX dosyası olarak kaydedin.";
 "track_during_nav" = "İzlenen yolu otomatik kaydet";
 "track_during_nav_descr" = "Navigasyon sırasında izlenen yolu otomatik olarak kaydetmek için açın";
 // Help
@@ -1538,7 +1538,7 @@
 "rendering_attr_surface_paved_name" = "Kaplamalı";
 "res_source_format" = "Kaynak biçimi";
 "sqlite_db_file" = "SQLiteDB dosyası";
-"res_source_one_per_tile" = "Döşeme başına bir görüntü dosyası";
+"one_image_per_tile" = "Döşeme başına bir görüntü dosyası";
 "res_zoom_invalid_value" = "Yakınlaştırma değerleri 1 - 22 aralığında olmalıdır";
 "online_raster_map" = "Çevrim içi raster haritası";
 "offline_raster_map" = "Çevrim dışı raster haritası";
@@ -1621,7 +1621,7 @@
 "enable_hillshade" = "Arazi verilerini görüntülemeyi etkinleştir";
 "hide_terrain" = "Araziyi Gizle";
 "show_terrain" = "Araziyi Göster";
-"map_settings_legend" = "Lejant";
+"shared_string_legend" = "Lejant";
 "map_settings_add_maps_slopes" = "Yamaçları haritada görüntülemek için ek haritalara ihtiyaç vardır";
 "map_settings_add_maps_hillshade" = "Tepe gölgelerini haritada görüntülemek için ek haritalara ihtiyaç vardır";
 "map_settings_zoom_level_description" = "Katmanı görüntülemek için asgari ve azami yakınlaştırma seviyelerini ayarlayın";
@@ -1642,7 +1642,7 @@
 // Dirrection appearance
 "one" = "Bir";
 "nav_type_direct_to" = "Doğrudan noktaya";
-"nav_type_straight_line" = "Düz çizgi";
+"routing_profile_straightline" = "Düz çizgi";
 "nav_type_osmand" = "OsmAnd (çevrim dışı yönlendirme)";
 "nav_type_descr" = "Bu profil için rotanın nasıl hesaplanacağını seçin";
 "quick_action_dir_from_descr" = "Geçerli ekran merkez noktasından gezinmek için bu eyleme dokunun.";
@@ -1699,7 +1699,7 @@
 "recalculate_route" = "Sapma durumunda güzergahı yeniden hesapla";
 "special_routing" = "Özel yönlendirme";
 "choose_auto_center_map_view_descr" = "Hareket ettikten sonra harita görünümünün geçerli konumla eşzamanlanmasına kadar geçen süre";
-"nav_type_geocoding" = "Coğrafi Kodlama";
+"routing_profile_geocoding" = "Coğrafi Kodlama";
 "routing_profile_ski" = "Kayak";
 "nav_type_brouter" = "BRouter";
 "voice_announces" = "Sesli uyarılar";
@@ -1720,7 +1720,7 @@
 "settings_app_theme" = "Uygulama teması";
 "shared_string_meters" = "metre";
 "tones" = "ton";
-"announce" = "Duyuru";
+"accessibility_announce" = "Duyuru";
 "instructions_repeat" = "Talimatları tekrarlamak için \"Sonraki dönüş\" aracına dokunun";
 "only_manually" = "Sadece el ile";
 "speed_limit_tolerance_descr" = "Aşıldığında sesli uyarı alacağınız hız sınırı toleransı miktarını seçin.";
@@ -1797,7 +1797,7 @@
 "add_to_track" = "İzlemeye ekle";
 "save_new_track" = "Yeni bir izleme olarak kaydet";
 "save_changes" = "Değişiklikleri kaydet";
-"route_betw_points" = "Noktalar arasındaki rota";
+"route_between_points" = "Noktalar arasındaki rota";
 "points_count" = "Noktalar:";
 "point_num" = "%d. nokta";
 "add_point" = "Nokta ekle";
@@ -1941,8 +1941,8 @@
 "transport" = "Ulaşım";
 "symbols" = "Semboller";
 "sport" = "Spor";
-"special" = "Özel";
-"emergency" = "Acil durum";
+"icon_group_special" = "Özel";
+"amenity_type_emergency" = "Acil durum";
 "shared_string_gpx_points" = "Noktalar";
 "res_standard" = "Standart harita";
 "quick_action_coordinates_widget_descr" = "Bu eylem düğmesine dokunmak, koordinatlar widget'ını gösterir veya gizler.";
@@ -1964,7 +1964,7 @@
 "reading_file" = "Dosya okunuyor";
 "selected_of" = "Seçildi - %d/%d";
 "square" = "Kare";
-"octagon" = "Sekizgen";
+"shared_string_octagon" = "Sekizgen";
 
 // Shapes
 "circle" = "Daire";
@@ -1976,7 +1976,7 @@
 "fav_point_emoticons_message" = "Sık Kullanılan adı, emoticon içeren metni dosyaya kaydetmek için '%@' olarak değiştirildi.";
 "fav_point_dublicate_message" = "Sık Kullanılan, yinelemeyi önlemek için '%@' olarak yeniden adlandırıldı.";
 "fav_point_dublicate" = "Yinelenen Sık Kullanılan adı belirtildi";
-"shape" = "Şekil";
+"shared_string_shape" = "Şekil";
 "icon" = "Simge";
 "select_group" = "Grup seç";
 "name_and_descr" = "Ad ve açıklama";
@@ -2105,8 +2105,8 @@
 "upload_to_openstreetmap" = "OpenStreetMap\'e yükle";
 "edit_track" = "Yolu düzenle";
 "nautical" = "Deniz";
-"industrial" = "Sanayi";
-"education" = "Eğitim";
+"icon_group_industrial" = "Sanayi";
+"amenity_type_education" = "Eğitim";
 "shared_string_time_span" = "Zaman aralığı";
 "shared_string_start_time" = "Başlangıç zamanı";
 "shared_string_end_time" = "Bitiş zamanı";
@@ -2322,7 +2322,7 @@
 "weather_temp_unit_c" = "Santigrat";
 "weather_temperature_fahrenheit" = "Fahrenhayt";
 "weather_pressure_unit_hpa" = "Hektopascal";
-"weather_pressure_unit_mmhg" = "Milimetre cıva";
+"weather_pressure_millimeters_of_mercury" = "Milimetre cıva";
 "weather_pressure_unit_inhg" = "Cıva inç";
 "weather_wind_unit_m_s" = "Metre/Saniye";
 "weather_wind_unit_km_per_hour" = "Kilometre/saat";
@@ -2352,11 +2352,11 @@
 "restore_from_file" = "Dosyadan geri yükle";
 "cloud_no_online_backup" = "Henüz çevrim içi yedeğiniz yok";
 "cloud_welcome_back" = "Tekrar hoş geldiniz!";
-"cloud_restore_now" = "Şimdi geri yükle";
+"backup_restore_now" = "Şimdi geri yükle";
 "cloud_backup" = "Yedekle";
 "cloud_last_backup" = "Son yedekleme";
 "cloud_backup_now" = "Şimdi yedekle";
-"cloud_make_backup" = "Yedekle";
+"make_backup" = "Yedekle";
 "cloud_conflicts_descr" = "Sunucuda daha yeni bir sürüm bulunduğu için bazı dosyalar sunucuya yüklenemedi.";
 "cloud_view_conflicts" = "Çakışmaları görüntüle";
 "plugin_popup_weather_title" = "Hava Durumu'nu Etkinleştir";

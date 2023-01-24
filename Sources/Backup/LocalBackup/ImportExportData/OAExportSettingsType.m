@@ -224,7 +224,7 @@ static NSArray<OAExportSettingsType *> *allValues;
 + (OAExportSettingsType *)TRACKS
 {
     if (!TRACKS)
-        TRACKS = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"tracks") name:@"TRACKS" itemName:@"GPX" icon:[UIImage templateImageNamed:@"ic_custom_trip"]];
+        TRACKS = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"shared_string_gpx_tracks") name:@"TRACKS" itemName:@"GPX" icon:[UIImage templateImageNamed:@"ic_custom_trip"]];
     return TRACKS;
 }
 

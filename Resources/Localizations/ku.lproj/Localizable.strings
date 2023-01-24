@@ -18,7 +18,7 @@
 "shared_string_edit" = "Biguherîne";
 "shared_string_modify" = "Biguherîne";
 "shared_string_later" = "Paşê";
-"download_map" = "Nexşeyê daxe";
+"shared_string_download_map" = "Nexşeyê daxe";
 // Favorites
 "fav_color" = "Reng";
 "fav_colors" = "Reng";
@@ -51,21 +51,21 @@
 "go_to_map" = "Hera Nexşe";
 "no_statistics" = "Statîstîk tine ye";
 "time_closed" = "Girtî";
-"time_open" = "Vekirî";
+"shared_string_open" = "Vekirî";
 "from_location" = "ji dûr ve";
 "language" = "Ziman";
 "enter_name" = "Nav bi kevne";
 "language_short" = "Ziman";
-"res_wiki" = "Wîkîpediya";
+"download_wikipedia_maps" = "Wîkîpediya";
 "res_roads" = "Riyan";
 "res_installing" = "Tê barkirin...";
 "description" = "Danasîn";
-"longitude" = "Hêlîlar";
+"navigate_point_longitude" = "Hêlîlar";
 "latitude" = "Hêlîpan";
 "my_location" = "Cihê min";
 "product_title_wiki" = "Wîkîpediya";
 "product_desc_asia" = "Nexşeya Asyayê";
-"product_title_asia" = "Asya";
+"index_name_asia" = "Asya";
 "product_desc_allworld" = "Nexşeya Cîhanê";
 "product_title_allworld" = "Nexşeyên hemû cîhanê";
 "product_desc_russia" = "Nexşeya Rûsyayê";
@@ -74,7 +74,7 @@
 "product_desc_europe" = "Nexşeya Ewropayê";
 "product_desc_australia" = "Nexşeya Awistralyayê";
 "product_desc_africa" = "Nexşeya Afrikayê";
-"product_title_africa" = "Afrîka";
+"index_name_africa" = "Afrîka";
 //inapps
 "product_title_nautical" = "Nexşa behrê";
 "rendering_category_details" = "Berfireh";
@@ -84,14 +84,14 @@
 "region_europe" = "Ewropa";
 "index_name_asia" = "Asya";
 // World Regions
-"region_africa" = "Afrîka";
+"index_name_africa" = "Afrîka";
 "ctx_mnu_direction" = "Alî";
 "ctx_mnu_share" = "Parve bike";
 "units_mph" = "mph";
 "units_hour" = "st";
 "units_min" = "dq";
 "units_km_h" = "km/h";
-"units_ft" = "ft";
+"foot" = "ft";
 "units_yd" = "yd";
 // Units
 "time_left" = "çep";
@@ -119,16 +119,16 @@
 "shared_string_near" = "Nêzîk";
 "driving_region_australia" = "Awistralya";
 
-"osm_alert_message" = "Peyam";
+"osb_comment_dialog_message" = "Peyam";
 "transport_nearby_routes_within" = "Rotayên nêzî te";
 "osm_editing_lost_changes_title" = "Bêyî qeydkirin dixwazî derkevî?";
 "osm_live_subscribe_btn" = "Bibe abone";
 "sett_arr_loc" = "Cih";
 "osm_edits_basic" = "Bingeh";
-"res_details" = "Berfireh";
+"shared_string_details" = "Berfireh";
 "shared_string_current" = "Yê berdest";
 "osmand_live_donations" = "Bexş bike";
-"shared_string_buy" = "Bikirre";
+"buy" = "Bikirre";
 "osmand_live_update_now" = "Niha rojane bike";
 "menu_feedback" = "Gotinên we";
 "help_features" = "Taybetmendî";

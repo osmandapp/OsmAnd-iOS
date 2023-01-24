@@ -184,7 +184,7 @@ static BOOL _purchasesUpdated;
                             @"icon": [UIImage imageNamed:@"ic_custom_osmand_pro_logo_colored"],
                             @"title": OALocalizedString(@"product_title_pro"),
                             @"description": OALocalizedString(@"osm_live_banner_desc"),
-                            @"button_title": OALocalizedString(@"purchase_get"),
+                            @"button_title": OALocalizedString(@"shared_string_get"),
                             @"button_icon": [UIImage templateImageNamed:@"ic_custom_arrow_forward"],
                             @"button_icon_color": UIColorFromRGB(color_primary_purple)
                     }

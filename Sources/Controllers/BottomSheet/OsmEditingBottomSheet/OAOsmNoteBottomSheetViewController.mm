@@ -123,7 +123,7 @@
         [arr addObject:@{
                          @"type" : [OATextInputFloatingCell getCellIdentifier],
                          @"name" : @"osm_message",
-                         @"cell" : [OAOsmNoteBottomSheetViewController getInputCellWithHint:OALocalizedString(@"osm_alert_message") text:((OAOsmNotePoint *)_bugPoints.firstObject).getText roundedCorners:UIRectCornerAllCorners hideUnderline:YES floatingTextFieldControllers:_floatingTextFieldControllers]
+                         @"cell" : [OAOsmNoteBottomSheetViewController getInputCellWithHint:OALocalizedString(@"osb_comment_dialog_message") text:((OAOsmNotePoint *)_bugPoints.firstObject).getText roundedCorners:UIRectCornerAllCorners hideUnderline:YES floatingTextFieldControllers:_floatingTextFieldControllers]
                          }];
         
         if (_screenType == TYPE_CREATE)

@@ -67,7 +67,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         case OsmAndResourceType::SrtmMapRegion:
             return OALocalizedString(@"download_srtm_maps");
         case OsmAndResourceType::WikiMapRegion:
-            return OALocalizedString(@"res_wiki");
+            return OALocalizedString(@"download_wikipedia_maps");
         case OsmAndResourceType::RoadMapRegion:
             return OALocalizedString(@"res_roads");
         case OsmAndResourceType::HillshadeRegion:
@@ -305,7 +305,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 
 + (NSString *)getSRTMFormatShort:(BOOL)isSRTMF
 {
-    return isSRTMF ? OALocalizedString(@"units_ft") : OALocalizedString(@"units_m");
+    return isSRTMF ? OALocalizedString(@"foot") : OALocalizedString(@"units_m");
 }
 
 + (NSString *)getSRTMFormatLong:(BOOL)isSRTMF

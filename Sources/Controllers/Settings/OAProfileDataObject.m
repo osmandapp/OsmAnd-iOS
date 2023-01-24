@@ -147,7 +147,7 @@ static NSDictionary<NSString *, OARoutingProfileDataObject *> *_rpValues;
         case EOARoutingProfilesResourceDirectTo:
             return OALocalizedString(@"nav_type_direct_to");
         case EOARoutingProfilesResourceStraightLine:
-            return OALocalizedString(@"nav_type_straight_line");
+            return OALocalizedString(@"routing_profile_straightline");
         case EOARoutingProfilesResourceBrouter:
             return OALocalizedString(@"nav_type_brouter");
         case EOARoutingProfilesResourceCar:
@@ -165,7 +165,7 @@ static NSDictionary<NSString *, OARoutingProfileDataObject *> *_rpValues;
         case EOARoutingProfilesResourceHorsebackriding:
             return OALocalizedString(@"horseback_riding");
         case EOARoutingProfilesResourceGeocoding:
-            return OALocalizedString(@"nav_type_geocoding");
+            return OALocalizedString(@"routing_profile_geocoding");
         default:
             return @"";
     };

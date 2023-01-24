@@ -200,7 +200,7 @@
 
 - (NSString *) getCommonTypeStr
 {
-    return OALocalizedString(@"gpx_waypoint");
+    return OALocalizedString(@"shared_string_waypoint");
 }
 
 - (NSAttributedString *) getAttributedTypeStr

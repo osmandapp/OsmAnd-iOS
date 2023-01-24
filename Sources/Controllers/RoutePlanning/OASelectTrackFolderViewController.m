@@ -38,7 +38,7 @@
     {
         _selectedFolderName = gpx.gpxFolderName;
         if ([_selectedFolderName isEqualToString:@""])
-            _selectedFolderName = OALocalizedString(@"tracks");
+            _selectedFolderName = OALocalizedString(@"shared_string_gpx_tracks");
         [self reloadData];
     }
     return self;

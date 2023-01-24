@@ -11,7 +11,7 @@
 "shared_string_uninstall" = "Afinstaller";
 "shared_string_delete" = "Slet";
 "shared_string_add" = "Tilføj";
-"shared_string_buy" = "Køb";
+"buy" = "Køb";
 "shared_string_or" = "eller";
 "hud_no_movement" = "Ingen bevægelse";
 // Favorites
@@ -34,7 +34,7 @@
 "shared_string_hide" = "Skjul";
 // My Places
 "favorites" = "Favoritter";
-"tracks" = "Spor";
+"shared_string_gpx_tracks" = "Spor";
 // GPX
 "gpx_point" = "Punkt";
 "gpx_waypoints" = "Rutepunkter";
@@ -82,7 +82,7 @@
 "product_desc_skimap" = "Opdateret kort over skispor med lifte og pister";
 "product_title_track_recording" = "Optag tur";
 "product_desc_track_recording" = "Optag og gem dine ture som GPX-spor";
-"product_title_africa" = "Afrika";
+"index_name_africa" = "Afrika";
 "product_desc_africa" = "Ubegrænset hentning af kort over Afrika";
 "product_desc_australia" = "Ubegrænset hentning af kort over Australien";
 "product_title_centralamerica" = "Mellemamerika";
@@ -97,25 +97,25 @@
 "product_desc_southamerica" = "Ubegrænset hentning af kort over Sydamerika";
 "product_title_allworld" = "Alle verdenskort";
 "product_desc_allworld" = "Kort over hele verden";
-"product_title_asia" = "Asien";
+"index_name_asia" = "Asien";
 "product_desc_asia" = "Ubegrænset hentning af kort over Asien";
 "my_location" = "Placering";
 "all_categories" = "Alle kategorier";
 "get_unlimited_access" = "Få ubegrænset adgang";
 "latitude" = "Breddegrad";
-"longitude" = "Længdegrad";
+"navigate_point_longitude" = "Længdegrad";
 // Location Services
 "loc_access_denied" = "Adgang nægtet";
 // Colors
 "col_gray" = "Grå";
 "col_magenta" = "Magenta";
 // World Regions
-"region_africa" = "Afrika";
+"index_name_africa" = "Afrika";
 "index_name_asia" = "Asien";
-"region_ausralia_and_oceania" = "Australien og Oceanien";
+"index_name_oceania" = "Australien og Oceanien";
 "region_central_america" = "Mellemamerika";
 "region_europe" = "Europa";
-"region_north_america" = "Nordamerika";
+"index_name_north_america" = "Nordamerika";
 "region_russia" = "Rusland";
 "region_south_america" = "Sydamerika";
 // Help
@@ -172,7 +172,7 @@
 // Units
 "units_mi" = "mil";
 "units_yd" = "yd";
-"units_ft" = "fod";
+"foot" = "fod";
 "units_km_h" = "km/t";
 "units_hour" = "t";
 "units_min" = "min.";
@@ -188,9 +188,9 @@
 "ctx_mnu_direction" = "Kortmarkør";
 "units_mph" = "mph";
 // Menu
-"menu_my_places" = "Mine steder";
+"shared_string_my_places" = "Mine steder";
 "res_unknown" = "Ukendt";
-"res_details" = "Detaljer";
+"shared_string_details" = "Detaljer";
 "data_will_be_lost" = "Alle hentede data vil gå tabt.";
 "res_upd_avail_q" = "En opdatering er tilgængelig for";
 "res_dmap" = "Detaljeret oversigtskort";
@@ -300,7 +300,7 @@
 "download_srtm_maps" = "Højdekurver";
 "product_desc_srtm" = "Visuel bedømmelse af terrænets form";
 "res_roads" = "Veje";
-"res_wiki" = "Wikipedia";
+"download_wikipedia_maps" = "Wikipedia";
 "select_language" = "Vælg sprog";
 "language_short" = "Sprog";
 "open_url" = "Åbn side i browseren";
@@ -316,11 +316,11 @@
 "from_location" = "bort fra";
 "show_alt_in_drive" = "Vis højde i køretilstand";
 "shared_string_hillshade" = "Terrænskygge";
-"purchase_get" = "Hent";
+"shared_string_get" = "Hent";
 "srtm_disabled" = "Højdekurver er deaktiveret";
 "prch_wiki_info" = "Wikipedia modul tilføjer oplysninger fra Wikipedia for kort, som er købt eller hentet inden for den gratis grænse.";
 "prch_srtm_info" = "Højdekurve-modul viser højdekurver på kort, der er købt eller hentet inden for den gratis grænse.";
-"time_open" = "Åben";
+"shared_string_open" = "Åben";
 "time_closed" = "Lukket";
 "time_will_close" = "Lukker om";
 "time_will_open" = "Åbner om";
@@ -401,13 +401,13 @@
 "gpx_edit_mode" = "Redigeringstilstand";
 "go_to_map" = "Vis kort";
 "offline_maps" = "Offlinekort";
-"download_map" = "Hent kort";
+"shared_string_download_map" = "Hent kort";
 "product_desc_trip_planning" = "Planlæg ruten, tilføj rutepunkter, mål afstanden til destinationen ved hjælp af denne udvidelse";
 "product_desc_ext_trip_planning" = "Rute planlægningsudvidelsen muliggør oprettelse af ruten på kortet, gemme den, måle afstanden mellem punkter forbundet med lige linjer mv. Lavet til foreløbig ruteplanlægning snarere end en mere grundig ruteplanlægning.";
 "edit_waypoint_short" = "Rediger rutepunkt";
 "device_memory" = "Lagerplads";
 "free_memory" = "Ledig %@";
-"gpx_waypoint" = "Rutepunkt";
+"shared_string_waypoint" = "Rutepunkt";
 "menu_my_waypoints" = "Mine rutepunkter";
 "menu_my_directions" = "Kørselsvejledninger";
 // Shared Strings
@@ -460,7 +460,7 @@
 "city_type_city" = "Stor by";
 "show_something_on_map" = "Vis %@ på kortet";
 "search_POI_level_btn" = "Øg søgeradius";
-"shared_string_street" = "Gade";
+"search_address_street" = "Gade";
 "shared_string_building" = "Bygning";
 "shared_string_street_intersection" = "Gadekryds";
 "shared_string_address" = "Adresse";
@@ -503,7 +503,7 @@
 "si_nm_h" = "Sømil i timen (knob)";
 "units_nm" = "sømil";
 "units_nm_h" = "sømil/t";
-"units_min_mi" = "min/m";
+"min_mile" = "min/m";
 "units_min_km" = "min/km";
 "units_m_s" = "m/s";
 "towards" = "Imod";
@@ -608,7 +608,7 @@
 "speak_favorites" = "Favoritter i nærheden";
 "speak_poi" = "Interessepunkt (IP) i nærheden";
 "speak_pedestrian" = "Fodgængerovergange";
-"units_seconds" = "sekunder";
+"int_seconds" = "sekunder";
 "shared_string_never" = "Aldrig";
 "general_settings_2" = "Generelle indstillinger";
 "general_settings_descr" = "App-tema, enheder, region";
@@ -733,24 +733,24 @@
 "switch_start_finish" = "Byt om på startpunkt og destination";
 "clear_all_intermediates" = "Ryd alle mellemliggende punkter";
 "cancel_navigation" = "Stop navigation";
-"transport_routes" = "Ruter";
+"transport_Routes" = "Ruter";
 "transport_nearby_routes_within" = "Nærliggende ruter indenfor";
 "transport_stop" = "Stop";
 "transport_nearby_routes" = "Indenfor";
 "route_stops_before" = "%@ stop før";
 "shared_string_previous" = "Forrige";
-"traffic_warning_tunnel" = "Tunnel forude";
+"tunnel_warning" = "Tunnel forude";
 "poi_overlay" = "IP overlejring";
 "poi_clear" = "Slet";
 "logging_interval_navigation" = "Logningsinterval under navigation";
 "auto_split_gap" = "Opdel automatisk optagelser efter et ophold";
 "shared_setting_always_ask" = "Spørg altid";
-"track_save_descr" = "Gem det aktuelle spor som en GPX-fil nu.";
+"save_current_track_descr" = "Gem det aktuelle spor som en GPX-fil nu.";
 "track_during_nav" = "Automatisk optagelse af rute under navigation";
 "logging_interval_navigation_descr" = "Vælg logningsinterval for ruteoptagelse under navigation";
 "logging_min_speed_descr" = "Filter: Ingen logning under denne hastighed";
 "help_trip_planning" = "Turplanlægning";
-"help_legend" = "Signaturforklaring";
+"map_legend" = "Signaturforklaring";
 "help_other_header" = "Andre";
 "help_install_and_troubleshoot" = "Installation og fejlfinding";
 "help_tech_articles" = "Tekniske artikler";
@@ -762,7 +762,7 @@
 "twitter" = "Twitter";
 "monitoring_min_distance" = "Min. forskydning";
 "logging_min_distance_descr" = "Filter: minimumsafstand for at logge et nyt punkt";
-"logging_min_accuracy" = "Min. nøjagtighed";
+"monitoring_min_accuracy" = "Min. nøjagtighed";
 "logging_min_accuracy_descr" = "Filter: Ingen logning medmindre nøjagtigheden er nået";
 "logging_min_speed" = "Min. hastighed";
 "auto_split_gap_descr" = "Start et nyt segment efter ophold på 6 min., en ny rute efter 2 timer eller en ny fil efter et længere ophold";
@@ -776,7 +776,7 @@
 "help_first_use" = "Første anvendelse";
 "help_first_use_descr" = "Hvordan man henter kort og angiver de grundlæggende indstillinger";
 "help_navigation_descr" = "Hvordan man opsætter navigation";
-"help_faq" = "OSS";
+"faq_item" = "OSS";
 "help_faq_descr" = "Ofte stillede spørgsmål";
 "help_features" = "Funktioner";
 "help_map_viewing" = "Kortvisning";
@@ -894,9 +894,9 @@
 "osm_opens_at" = "Åbner kl:";
 "osm_closes_at" = "Lukker kl:";
 "osm_editing_contact_info" = "Kontaktoplysninger";
-"osm_str_name" = "Gadenavn";
+"map_widget_top_text" = "Gadenavn";
 "osm_building_num" = "Bygningsnummer";
-"osm_phone" = "Telefon";
+"phone" = "Telefon";
 "osm_website" = "Hjemmeside";
 "osm_add_place" = "Tilføj sted";
 "osm_modify_place" = "Ændre sted";
@@ -910,10 +910,10 @@
 "modify_poi_short" = "Ændr interessepunkt";
 "create_poi_short" = "Opret interessepunkt";
 "modify_edit_short" = "Rediger OSM-ændring";
-"open_osm_note" = "Åbn OSM-note";
+"context_menu_item_open_note" = "Åbn OSM-note";
 "edit_osm_note" = "Rediger OSM-note";
 "osm_alert_title" = "Udfør";
-"osm_alert_message" = "Meddelelse";
+"osb_comment_dialog_message" = "Meddelelse";
 "osm_alert_button_ok" = "Opret note";
 "modify_poi" = "Ændre IP oplysninger";
 "product_title_osm_editing" = "OpenStreetMap redigering";
@@ -1075,7 +1075,7 @@
 "quick_action_no_underlay" = "Ingen underlejring";
 "quick_action_add_underlay" = "Tilføj underlejring";
 "quick_action_list_descr" = "Tryk på denne genvejsknap gennemløber nedenstående liste";
-"map_overlays" = "Kortoverlejringer";
+"quick_action_map_overlay_title" = "Kortoverlejringer";
 "map_underlays" = "Kortunderlejring";
 "vector_data" = "Offline vektorkort";
 "add_map_source" = "Tilføj en kortkilde";
@@ -1107,7 +1107,7 @@
 "toggle_day_night" = "Skift dag/nat tilstand";
 "show_hide_gpx" = "Vis/skjul ruter";
 "search_results" = "Søgeresultater";
-"quick_action_name_str" = "Genvejsnavn";
+"shared_string_action_name" = "Genvejsnavn";
 "quick_action_name_alert" = "Navnet på genvej ændret til %@ for at undgå dubletter.";
 "quick_action_screen_header" = "Skærm %ld";
 "group_properties" = "Gruppeegenskaber";
@@ -1124,7 +1124,7 @@
 "quick_action_template_name" = "Skabelonnavn";
 "quick_action_name_footer" = "Lad være tomt for at bruge adressen eller stedets navn.";
 "quick_action_select_group" = "Vælg gruppen, som favoritten skal gemmes i.";
-"quick_action_add_poi_category" = "Tilføj en kategori";
+"quick_action_add_category" = "Tilføj en kategori";
 "quick_action_add_category_descr" = "Der kan vælges flere IP-kategorier.";
 "quick_action_show_poi_descr" = "Tilføj en eller flere IP-kategorier, der skal vises på kortet.";
 "quick_action_fill_params_alert" = "Udfyld parametrene først";
@@ -1134,7 +1134,7 @@
 "quick_action_tags" = "Mærker";
 "quick_action_get_info" = "Få oplysninger";
 "quick_action_enter_message" = "Indtast besked";
-"osm_note_action_field_descr" = "Meddelelsen inkluderes i kommentarfeltet.";
+"quick_action_bug_descr" = "Meddelelsen inkluderes i kommentarfeltet.";
 "quick_action_source_switch_descr" = "Tryk på denne genvejsknap gennemløber nedenstående liste.";
 "quick_action_poi_add_descr" = "Ved at trykke på denne genvejsknap kan du hurtigt tilføje et interessepunkt på kortet med foruddefineret type og mærke.";
 "quick_action_day_night_descr" = "Trykkes på denne genvejsknap skiftes der mellem dag-og natkort-tilstand.";
@@ -1221,7 +1221,7 @@
 "hide_contour_lines" = "Skjul højdekurver";
 // World Regions
 "region_antarctica" = "Antarktis";
-"region_others" = "Andre kort";
+"download_select_map_types" = "Andre kort";
 "download_depth_countours" = "Havdybdekurver";
 // Route info
 "gpx_avg_altitude" = "Gennemsnitshøjde";
@@ -1544,7 +1544,7 @@
 "res_expire_warning" = "Udløbstiden skal være et tal mellem 0 og 10.000.000";
 "res_source_format" = "Kildeformat";
 "sqlite_db_file" = "SQLiteDB fil";
-"res_source_one_per_tile" = "En billedfil pr. kortflise";
+"one_image_per_tile" = "En billedfil pr. kortflise";
 "res_zoom_invalid_value" = "Zoomværdier skal være inden for området 1 - 22";
 "online_raster_map" = "Online rasterkort";
 "offline_raster_map" = "Offline rasterkort";
@@ -1628,7 +1628,7 @@
 "enable_hillshade" = "Aktivér visning af terrændata";
 "hide_terrain" = "Skjul terræn";
 "show_terrain" = "Vis terræn";
-"map_settings_legend" = "Tegnforklaring";
+"shared_string_legend" = "Tegnforklaring";
 "map_settings_add_maps_slopes" = "Yderligere kort er nødvendige for at se hældninger på kortet.";
 "map_settings_add_maps_hillshade" = "Yderligere kort er nødvendige for at se terrænskygger på kortet";
 "map_settings_zoom_level_description" = "Indstil minimum og maksimum zoomniveau for at få vist laget";
@@ -1673,7 +1673,7 @@
 "update_tile" = "Opdater kort";
 "shared_string_exit" = "Afslut";
 "select_nav_profile_dialog_message" = "Navigationstype' bestemmer hvordan ruter beregnes.";
-"nav_type_straight_line" = "Lige linje";
+"routing_profile_straightline" = "Lige linje";
 "vehicle_parameters" = "Køretøjsparametre";
 "screen_alerts" = "Alarmer på skærmen";
 "voice_anounces" = "Talevejledning";
@@ -1733,7 +1733,7 @@
 "shared_string_copy" = "Kopier";
 "shared_string_meters" = "meter";
 "tones" = "toner";
-"announce" = "Annoncere";
+"accessibility_announce" = "Annoncere";
 "only_manually" = "Kun manuelt";
 "select_distance_for_recalculation" = "Vælg afstanden, hvorefter ruten genberegnes.";
 "recalculate_route_distance_promo" = "Ruten genberegnes, hvis afstanden fra ruten til den aktuelle placering er større end den valgte værdi.";
@@ -1742,7 +1742,7 @@
 "special_routing" = "Speciel ruteberegning";
 "osmand_routing" = "OsmAnd ruteberegning";
 "repeat_after" = "Gentag efter";
-"nav_type_geocoding" = "Geokodning";
+"routing_profile_geocoding" = "Geokodning";
 "routing_profile_ski" = "Ski";
 "nav_type_brouter" = "BRouter";
 "plugin_settings_reset" = "Nulstil udvidelser-indstillinger til standard";
@@ -1762,7 +1762,7 @@
 "add_to_track" = "Føj til et spor";
 "save_new_track" = "Gem som nyt spor";
 "save_changes" = "Gemændringer";
-"route_betw_points" = "Rute mellem punkter";
+"route_between_points" = "Rute mellem punkter";
 "points_count" = "Punkter:";
 "point_num" = "Punkt %d";
 "add_point" = "Tilføj punkt";
@@ -1833,13 +1833,13 @@
 "replace_favorite_confirmation" = "Erstat Favorit %@?";
 "select_another_track" = "Vælg et andet spor";
 "sport" = "Sport";
-"octagon" = "Oktagon";
+"shared_string_octagon" = "Oktagon";
 "travel" = "Rejse";
 "icon" = "Ikon";
 "hide_compass_ruler" = "Skjul kompas lineal";
 "segnet_num" = "Segment %d";
 "shared_string_resources" = "Ressourcer";
-"emergency" = "Nødsituation";
+"amenity_type_emergency" = "Nødsituation";
 "plan_route_open_existing_track" = "Åbn eksisterende spor";
 "open_saved_track" = "Åben gemt spor";
 "fav_points_not_exist" = "Der findes ingen favoritpunkter";
@@ -1889,7 +1889,7 @@
 "coordinates_widget" = "Koordinat-modul";
 "attach_to_the_roads" = "Fastgør til veje";
 "plan_route_split_after" = "Opdel efter";
-"special" = "Særlig";
+"icon_group_special" = "Særlig";
 "plan_route_create_new_route" = "Opret en ny rute";
 "weight_limit_description" = "Oplys din køretøjsvægt, da der kan gælde visse ruterestriktioner for tunge køretøjer.";
 "height_limit_description" = "Oplys din køretøjshøjde, da der kan gælde visse ruterestriktioner for høje køretøjer.";
@@ -2062,7 +2062,7 @@
 "use_of_downloaded_map" = "Du kan nu bruge dette kort offline som den primære kortkilde eller som over-/underlejrings-lag";
 "select_group_descr" = "Vælg gruppe eller tilføj en ny";
 "available_groups" = "Tilgængelige grupper";
-"shape" = "Form";
+"shared_string_shape" = "Form";
 "rearrange_profile_descr" = "OsmAnd-standardprofiler kan ikke slettes, men du kan deaktivere dem på den forrige skærm eller trække dem til bunden af listen.";
 "preparing_file" = "Forbereder fil";
 "tracks_on_map" = "Spor på kort";
@@ -2114,8 +2114,8 @@
 "delete_waypoints" = "Slet rutepunkter";
 "delete_group_confirm_short" = "Slet gruppe?";
 "parked_at" = "Parkeret ved";
-"industrial" = "Industriel";
-"education" = "Uddannelse";
+"icon_group_industrial" = "Industriel";
+"amenity_type_education" = "Uddannelse";
 "route_points" = "Rutepunkter";
 "connect_rp" = "Forbind rutepunkter";
 "lang_al" = "Albansk";
@@ -2317,7 +2317,7 @@
 "weather_temp_unit_c" = "Celsius";
 "weather_temperature_fahrenheit" = "Fahrenheit";
 "weather_pressure_unit_hpa" = "Hektopascal";
-"weather_pressure_unit_mmhg" = "Millimeter kviksølv";
+"weather_pressure_millimeters_of_mercury" = "Millimeter kviksølv";
 "weather_pressure_unit_inhg" = "Tommer kviksølv";
 "weather_wind_unit_m_s" = "Meter/sekund";
 "weather_precip_inches" = "Tommer";
@@ -2343,11 +2343,11 @@
 "cloud_no_online_backup" = "Du har endnu ikke nogen online sikkerhedskopi";
 "cloud_set_up_backup" = "Indstil sikkerhedskopiering";
 "cloud_welcome_back" = "Velkommen tilbage!";
-"cloud_restore_now" = "Gendan nu";
+"backup_restore_now" = "Gendan nu";
 "cloud_last_backup" = "Seneste sikkerhedskopiering";
 "cloud_backup" = "Sikkerhedskopi";
 "cloud_backup_now" = "Sikkerhedskopiér nu";
-"cloud_make_backup" = "Lav en sikkerhedskopi";
+"make_backup" = "Lav en sikkerhedskopi";
 "cloud_make_backup_descr" = "Der er mangeændringer på denne enhed. Tag en sikkerhedskopi af disse data for ikke at miste dem.";
 "cloud_conflicts" = "Konflikter";
 "cloud_conflicts_descr" = "Nogle filer kunne ikke uploades til serveren, fordi en nyere version er gemt på serveren.";
@@ -2642,7 +2642,7 @@
 "backup_conflicts_descr" = "Nyere version af disse filer er gemt på serveren. Du skal vælge en handling";
 "cloud_contains_newer_changes" = "OsmAnd Cloud-version indeholder nyere ændringer.";
 "cloud_all_changes_uploaded" = "Alle ændringer er uploadet";
-"recorded_voice" = "Optaget";
+"shared_string_recorded" = "Optaget";
 "weather_forecast_entire_world" = "Vejrudsigt for hele verden";
 "weather_entire_world" = "Hele verden";
 "map_download_privacy_descr" = "Ved at downloade kort accepterer du <a href='https://osmand.net/docs/legal/terms-of-use'>Brugsbetingelser</a> og <a href='https://osmand.net/docs/legal/privacy-policy'>Privatlivspolitik</a>.";

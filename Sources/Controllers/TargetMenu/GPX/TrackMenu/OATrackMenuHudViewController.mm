@@ -482,7 +482,7 @@
     NSString *oldPath = self.gpx.gpxFilePath;
     NSString *sourcePath = [_app.gpxPath stringByAppendingPathComponent:oldPath];
 
-    NSString *newFolder = [newFolderName isEqualToString:OALocalizedString(@"tracks")] ? @"" : newFolderName;
+    NSString *newFolder = [newFolderName isEqualToString:OALocalizedString(@"shared_string_gpx_tracks")] ? @"" : newFolderName;
     NSString *newFolderPath = [_app.gpxPath stringByAppendingPathComponent:newFolder];
     NSString *newName = self.gpx.gpxFileName;
 
@@ -1288,7 +1288,7 @@
 - (NSString *)getDirName
 {
     NSString *dirName = [OAUtilities capitalizeFirstLetter:self.gpx.gpxFolderName];
-    return dirName.length > 0 ? dirName : OALocalizedString(@"tracks");
+    return dirName.length > 0 ? dirName : OALocalizedString(@"shared_string_gpx_tracks");
 }
 
 - (NSString *)getGpxFileSize

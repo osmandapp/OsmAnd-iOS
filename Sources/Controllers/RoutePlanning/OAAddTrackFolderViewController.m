@@ -192,7 +192,7 @@
 
 - (BOOL) isFolderExist:(NSString *)name
 {
-    BOOL hasReservedName = [name.lowerCase isEqualToString:OALocalizedString(@"tracks").lowerCase] ||
+    BOOL hasReservedName = [name.lowerCase isEqualToString:OALocalizedString(@"shared_string_gpx_tracks").lowerCase] ||
                             [name.lowerCase isEqualToString:@"rec"] ;
     NSString *folderPath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:name];
     return hasReservedName || [NSFileManager.defaultManager fileExistsAtPath:folderPath];

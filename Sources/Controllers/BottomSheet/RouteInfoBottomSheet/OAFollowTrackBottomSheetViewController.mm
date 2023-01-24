@@ -208,7 +208,7 @@
 	
 	[data addObject:items];
     
-    NSString *navTypeTitle1 = OALocalizedString(@"nav_type_straight_line");
+    NSString *navTypeTitle1 = OALocalizedString(@"routing_profile_straightline");
     NSString *navTypeTitle2 = OARoutingHelper.sharedInstance.getAppMode.toHumanString;
     BOOL useRtePt = params.useIntermediatePointsRTE;
     [data addObject:@[

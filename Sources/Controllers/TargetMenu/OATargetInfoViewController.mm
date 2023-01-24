@@ -130,7 +130,7 @@
         NSArray<OATransportStopRoute *> *nearbyTransportRoutes = [self getNearbyTransportStopRoutes];
         if (localTransportRoutes.count > 0)
         {
-            OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:nil icon:nil textPrefix:nil text:OALocalizedString(@"transport_routes") textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
+            OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:nil icon:nil textPrefix:nil text:OALocalizedString(@"transport_Routes") textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
             rowInfo.collapsable = YES;
             rowInfo.collapsed = NO;
             rowInfo.collapsableView = [[OACollapsableTransportStopRoutesView alloc] initWithFrame:CGRectMake([OAUtilities getLeftMargin], 0, 320, 100)];
@@ -743,7 +743,7 @@
         if (self.delegate.isInFullMode)
             [cell.button setTitle:OALocalizedString(@"shared_string_collapse").upperCase forState:UIControlStateNormal];
         else
-            [cell.button setTitle:OALocalizedString(@"res_details").upperCase forState:UIControlStateNormal];
+            [cell.button setTitle:OALocalizedString(@"shared_string_details").upperCase forState:UIControlStateNormal];
        
         return cell;
     }

@@ -38,7 +38,7 @@
 "shared_string_previous" = "Prethodno";
 "shared_string_next" = "Sledeće";
 "route_stops_before" = "%@ stops before";
-"transport_routes" = "Putevi";
+"transport_Routes" = "Putevi";
 "transport_nearby_routes_within" = "Prevoz u blizini";
 "transport_nearby_routes" = "Blizu";
 "transport_stop" = "Zaustavi";
@@ -131,7 +131,7 @@
 "monitoring_min_distance" = "Minimalni pomeraj";
 "logging_min_distance_descr" = "Filter: minimum distance to log a new point";
 "logging_accuracy" = "Tačnost beleženja";
-"logging_min_accuracy" = "Minimalna preciznost";
+"monitoring_min_accuracy" = "Minimalna preciznost";
 "logging_min_accuracy_descr" = "Filter: no logging unless the accuracy is reached";
 "logging_min_speed" = "Minimalna brzina";
 "logging_min_speed_descr" = "Filter: no logging below selected speed";
@@ -207,7 +207,7 @@
 
 // Route info
 
-"units_seconds" = "sekunde";
+"int_seconds" = "sekunde";
 "shared_string_never" = "Nikad";
 "shared_setting_always_ask" = "Uvek pitaj";
 "general_settings_2" = "Opšte postavke";
@@ -231,11 +231,11 @@
 "change_map_behavior" = "Change map behavior during navigation";
 "nav_type_descr" = "Select how to calculate a route for this profile";
 "nav_type_osmand" = "OsmAnd (offline routing)";
-"nav_type_straight_line" = "Prava linija";
+"routing_profile_straightline" = "Prava linija";
 "nav_type_direct_to" = "Dikretno-na-tačku";
 "nav_type_brouter" = "BRouter";
 "routing_profile_ski" = "Skijanje";
-"nav_type_geocoding" = "Geokodiranje";
+"routing_profile_geocoding" = "Geokodiranje";
 "fast_route_mode_descr" = "Uključite da računate najbrži put ili isključite da računate put sa najvećom uštednjom goriva.";
 "avoid_in_routing_title" = "Izbegavati…";
 "avoid_in_routing_descr_" = "Avoid toll roads, unpaved, ferries";
@@ -377,8 +377,8 @@
 "traffic_warning_railways" = "Pružni prelaz";
 "traffic_warning_pedestrian" = "Pešački prelaz";
 "traffic_warning_hazard" = "Opasnost";
-"traffic_warning_tunnel" = "Tunel ispred";
-"announce" = "Objavi";
+"tunnel_warning" = "Tunel ispred";
+"accessibility_announce" = "Objavi";
 "driving_region_japan" = "Japan";
 "driving_region_us" = "Sjedinjene Američke Države";
 "driving_region_canada" = "Kanada";
@@ -399,7 +399,7 @@
 "si_min_m" = "Minuta po milji";
 "si_nm_h" = "Nautical miles per hour (knot)";
 "units_nm_h" = "nmi/h";
-"units_min_mi" = "min/m";
+"min_mile" = "min/m";
 "units_min_km" = "min/km";
 "units_m_s" = "m/s";
 "tones" = "tona";
@@ -444,7 +444,7 @@
 "shared_string_remove" = "Ukloni";
 "shared_string_dismiss" = "Otkaži";
 "shared_string_add" = "Dodaj";
-"shared_string_buy" = "Kupi";
+"buy" = "Kupi";
 "shared_string_buy_for" = "for";
 "shared_string_or" = "ili";
 "shared_string_and" = "i";
@@ -488,7 +488,7 @@
 "shared_string_none" = "Ništa";
 "restart" = "Restart";
 "offline_maps" = "Offline Maps";
-"download_map" = "Preuzmi kartu";
+"shared_string_download_map" = "Preuzmi kartu";
 "download_map_dialog" = "Dijalog preuzimanja karte";
 "update_tile" = "Ažuriraj kartu";
 "download_pending" = "Download pending";
@@ -547,7 +547,7 @@
 "name_and_descr" = "Name & description";
 "select_group" = "Odaberite grupu";
 "icon" = "Ikonica";
-"shape" = "Oblik";
+"shared_string_shape" = "Oblik";
 "fav_point_dublicate" = "Dat duplikat imena omiljene tačke";
 "fav_point_dublicate_message" = "Favorite renamed to \'%@\' to avoid duplication.";
 "fav_point_emoticons_message" = "Favorite renamed to \'%@\' to save the string containing emoticons to a file.";
@@ -559,7 +559,7 @@
 
 // Shapes
 "circle" = "Krug";
-"octagon" = "Oktagon";
+"shared_string_octagon" = "Oktagon";
 "square" = "Kvadrat";
 
 // POI
@@ -570,13 +570,13 @@
 
 // My Places
 "favorites" = "Omiljeno";
-"tracks" = "Putanje";
+"shared_string_gpx_tracks" = "Putanje";
 "personal_category_name" = "Lični";
 "visible" = "Vidljivo";
 
 // GPX
 "gpx_point" = "Tačka";
-"gpx_waypoint" = "Prolazna tačka";
+"shared_string_waypoint" = "Prolazna tačka";
 "gpx_waypoints" = "Prolazne tačke";
 "gpx_points" = "Point(s)";
 "shared_string_export" = "Izvezi";
@@ -621,7 +621,7 @@
 "track_new_segment" = "Pokreni novi odsečak";
 "track_save" = "Sačuvaj trenutnu putanju";
 "displayed_route_save" = "Save to OsmAnd Tracks";
-"track_save_descr" = "Sačuvaj odmah trenutnu putanju kao GPX fajl.";
+"save_current_track_descr" = "Sačuvaj odmah trenutnu putanju kao GPX fajl.";
 "track_continue_rec" = "Continue recording";
 "track_continue_rec_q" = "Do you want to continue recording?";
 "save_track_interval_globally" = "Interval beleženja";
@@ -683,7 +683,7 @@
 "map_settings_zoom_level_description" = "Set the minimum and maximum zoom level to display the layer";
 "map_settings_add_maps_hillshade" = "Additional maps are needed to view hillshades on the map";
 "map_settings_add_maps_slopes" = "Additional maps are needed to view slopes on the map";
-"map_settings_legend" = "Legenda";
+"shared_string_legend" = "Legenda";
 "map_settings_show_slider_map" = "Show slider on the map";
 "map_settings_add_online_source" = "Dodaj mrežni izvor";
 "map_settings_hide_polygons" = "Hide polygons";
@@ -993,7 +993,7 @@
 "add_point" = "Dodaj tačku";
 "point_num" = "Point %d";
 "points_count" = "Points:";
-"route_betw_points" = "Ruta između tačaka";
+"route_between_points" = "Ruta između tačaka";
 "save_changes" = "Snimite izmene";
 "save_new_track" = "Sačuvaj kao novu stazu";
 "add_to_track" = "Dodajte stazi";
@@ -1116,7 +1116,7 @@
 "res_cancel_inst_q" = "You're going to cancel %@ installation.";
 "res_uninst_managed_q" = "You're going to uninstall %@. You can reinstall it later from catalog.";
 "res_uninst_unmanaged_q" = "You're going to delete %@. It's not from catalog, so please be sure you have a backup if needed.";
-"res_details" = "Detalji";
+"shared_string_details" = "Detalji";
 "res_type" = "Tip";
 "res_unknown" = "Unknown";
 "res_size" = "Veličina";
@@ -1138,7 +1138,7 @@
 "res_pseudo_mercator" = "Pseudo-Merkator projekcija";
 "res_source_format" = "Source format";
 "sqlite_db_file" = "SQLiteDB fajl";
-"res_source_one_per_tile" = "Jedan fajl po sličici";
+"one_image_per_tile" = "Jedan fajl po sličici";
 "res_zoom_levels_desc" = "This parameters will affect the map display when used as a map type or overlay/underlay.\n\nMap type: the map will be limited to the selected zooms.\n\nOverlay / Underlay: Zoom levels at which tiles will be visible. Upscale or downscale will occur above or below the set values.";
 "res_expire_time_desc" = "Expiration time in minutes. Cached tiles will be reloaded after specified time. Leave this field empty if you do not need to reload tiles for this source.\nOne day is 1440 minutes.\nOne week is 10 080 minutes.\n30 days are 43 200 minutes.";
 "res_name_warning" = "File name cannot be empty";
@@ -1157,7 +1157,7 @@
 
 // Menu
 "shared_string_menu" = "Meni";
-"menu_my_places" = "Moja mesta";
+"shared_string_my_places" = "Moja mesta";
 "menu_my_trips" = "My Tracks";
 "menu_feedback" = "Povratne informacije";
 "menu_help" = "Pomoć";
@@ -1193,9 +1193,9 @@
 "osm_opens_at" = "Opens at:";
 "osm_closes_at" = "Closes at:";
 "osm_editing_contact_info" = "Kontakt informacije";
-"osm_str_name" = "Naziv ulice";
+"map_widget_top_text" = "Naziv ulice";
 "osm_building_num" = "Building number";
-"osm_phone" = "Telefon";
+"phone" = "Telefon";
 "osm_website" = "Veb strana";
 "population_num" = "Population";
 "osm_add_place" = "Add place";
@@ -1280,7 +1280,7 @@
 "show_coordinates" = "Show coordinates";
 "hide_coordinates" = "Hide coordinates";
 "quick_action_coordinates_widget_descr" = "Tapping this action button shows or hides the Coordinates widget.";
-"map_overlays" = "Slojevi iznad karte";
+"quick_action_map_overlay_title" = "Slojevi iznad karte";
 "map_underlays" = "Slojevi ispod karte";
 "vector_data" = "Vektorske karte van mreže";
 "add_map_source" = "Dodaj izvor karte";
@@ -1341,7 +1341,7 @@
 "show_edits" = "Show local edits";
 "hide_edits" = "Hide local edits";
 "search_results" = "Search results";
-"quick_action_name_str" = "Ime radnje";
+"shared_string_action_name" = "Ime radnje";
 "quick_action_name_alert" = "Quick action name was changed to %@ to avoid duplication.";
 "quick_action_screen_header" = "Screen %ld";
 "confirm_bulk_delete" = "Do you want to delete %ld items?";
@@ -1351,7 +1351,7 @@
 "quick_action_template_name" = "Template name";
 "quick_action_name_footer" = "Ostavite prazno da se koristi adresa ili ime mesta.";
 "quick_action_select_group" = "Select the group to save the favorite in.";
-"quick_action_add_poi_category" = "Dodaj kategoriju";
+"quick_action_add_category" = "Dodaj kategoriju";
 "quick_action_add_category_descr" = "You can select multiple POI categories.";
 "quick_action_show_poi_descr" = "Add one or more POI categories to be displayed on the map.";
 "quick_action_fill_params_alert" = "Please fill out the parameters first";
@@ -1361,7 +1361,7 @@
 "quick_action_tags" = "Oznake";
 "quick_action_get_info" = "Get info";
 "quick_action_enter_message" = "Enter message";
-"osm_note_action_field_descr" = "Ova poruke je uključena u polje sa komentarima.";
+"quick_action_bug_descr" = "Ova poruke je uključena u polje sa komentarima.";
 "quick_action_source_switch_descr" = "Tapping this action button pages through the list below.";
 "quick_action_poi_add_descr" = "Tapping this action button allows you to quickly add POI on the map with predefined type and tags.";
 "quick_action_day_night_descr" = "Tapping this action button switches between Day and Night map mode.";
@@ -1423,10 +1423,10 @@
 "modify_poi_short" = "Izmena POI";
 "create_poi_short" = "Napravi tačku od interesa";
 "modify_edit_short" = "Promeni OSM izmenu";
-"open_osm_note" = "Otvori belešku OSM-a";
+"context_menu_item_open_note" = "Otvori belešku OSM-a";
 "edit_osm_note" = "Edit OSM Note";
 "osm_alert_title" = "Predaj";
-"osm_alert_message" = "Poruka";
+"osb_comment_dialog_message" = "Poruka";
 "osm_alert_button_ok" = "Napravi belešku";
 "modify_poi" = "Modify the POI information";
 "actions" = "Radnje";
@@ -1443,7 +1443,7 @@
 // Units
 "units_mi" = "mi";
 "units_yd" = "yd";
-"units_ft" = "ft";
+"foot" = "ft";
 "units_nm" = "nmi";
 "units_km_h" = "km/h";
 "units_mph" = "mph";
@@ -1458,7 +1458,7 @@
 "help_first_use" = "Prvo korišćenje";
 "help_first_use_descr" = "How to download maps and set basic settings";
 "help_navigation_descr" = "How to set up navigation";
-"help_faq" = "ČPP";
+"faq_item" = "ČPP";
 "help_faq_descr" = "Frequently asked questions";
 "help_features" = "Funkcionalnosti";
 "help_map_viewing" = "Pregled karte";
@@ -1469,7 +1469,7 @@
 "help_osmand_live" = "Članarina - OsmAnd uživo";
 "help_travel" = "Travel (Wikipedia & Wikivoyage)";
 "mapillary_item" = "OsmAnd + Mapillary";
-"help_legend" = "Legenda na karti";
+"map_legend" = "Legenda na karti";
 "help_legend_descr" = "The guide to map's symbols";
 "help_other_header" = "Ostalo";
 "help_what_is_new" = "What\'s new";
@@ -1517,16 +1517,16 @@
 
 // World Regions
 "region_antarctica" = "Antarktik";
-"region_africa" = "Afrika";
+"index_name_africa" = "Afrika";
 "index_name_asia" = "Azija";
-"region_ausralia_and_oceania" = "Australija i Okeanija";
+"index_name_oceania" = "Australija i Okeanija";
 "region_central_america" = "Centralna Amerika";
 "region_europe" = "Evropa";
-"region_north_america" = "Severna Amerika";
+"index_name_north_america" = "Severna Amerika";
 "region_russia" = "Rusija";
 "region_south_america" = "Južna Amerika";
 "region_nautical" = "Pomorske karte";
-"region_others" = "Ostale karte";
+"download_select_map_types" = "Ostale karte";
 
 // Help
 "help_quiz" = "Quiz";
@@ -1564,7 +1564,7 @@
 "product_title_openplacereviews" = "OpenPlaceReviews";
 "product_desc_openplacereviews" = "Send photos, reviews, and links about public places";
 "product_desc_ext_openplacereviews" = "Send photos, reviews, and links about public places such as restaurants, hotels, museums, and waypoints as open data https://openplacereviews.org/data/.\n\nRead more at https://openplacereviews.org";
-"product_title_africa" = "Afrika";
+"index_name_africa" = "Afrika";
 "product_desc_africa" = "Unlimited map downloads for Africa";
 "product_title_antarctica" = "Antarktik";
 "product_desc_antarctica" = "Unlimited map downloads for Antarctica";
@@ -1588,7 +1588,7 @@
 "product_desc_southamerica_short" = "South America region maps";
 "product_title_allworld" = "All World Maps";
 "product_desc_allworld" = "Maps of All World";
-"product_title_asia" = "Azija";
+"index_name_asia" = "Azija";
 "product_desc_asia" = "Unlimited map downloads for Asia";
 "product_desc_asia_short" = "Asia region maps";
 "product_title_wiki" = "Vikipedija";
@@ -1611,7 +1611,7 @@
 "all_categories" = "All categories";
 "get_unlimited_access" = "Uzmi neograničeni pristup";
 "latitude" = "Geografskaširina";
-"longitude" = "Geografska dužina";
+"navigate_point_longitude" = "Geografska dužina";
 "track_save_short_q" = "Track is too short, do you want to save?";
 "add_as" = "Add as";
 "make_call" = "Make a call";
@@ -1622,7 +1622,7 @@
 "enter_fav_name" = "Enter favorite name";
 "res_installing" = "Installing…";
 "res_roads" = "Putevi";
-"res_wiki" = "Vikipedija";
+"download_wikipedia_maps" = "Vikipedija";
 "shared_string_hillshade" = "Senke brda";
 "res_slope" = "Nagib";
 "res_standard" = "Uobičajena karta";
@@ -1653,11 +1653,11 @@
 "you_searching" = "You are searching";
 "from_location" = "away";
 "show_alt_in_drive" = "Show altitude in Drive mode";
-"purchase_get" = "Preuzmi";
+"shared_string_get" = "Preuzmi";
 "srtm_disabled" = "Izohipse su isključene";
 "prch_wiki_info" = "Wikipedia addon enables wikipedia information for maps you are entitled, purchased or downloaded within free limit.";
 "prch_srtm_info" = "Contour lines addon enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
-"time_open" = "Otvoreno";
+"shared_string_open" = "Otvoreno";
 "time_closed" = "Closed";
 "time_will_close" = "Will close in";
 "time_will_open" = "Will open in";
@@ -1833,7 +1833,7 @@
 "postcode" = "Poštanski broj";
 "show_something_on_map" = "Prikaži na karti %@";
 "search_POI_level_btn" = "Increase search radius";
-"shared_string_street" = "Ulica";
+"search_address_street" = "Ulica";
 "shared_string_building" = "Zgrada";
 "shared_string_street_intersection" = "Street intersection";
 "shared_string_address" = "Adresa";
@@ -2205,15 +2205,15 @@
 
 //Icon categories
 "amenity" = "Ameniti";
-"emergency" = "Hitna pomoć";
-"special" = "Special";
+"amenity_type_emergency" = "Hitna pomoć";
+"icon_group_special" = "Special";
 "sport" = "Sport";
 "symbols" = "Simboli";
 "transport" = "Prevoz";
 "travel" = "Putovanje";
 "nautical" = "Pomorsko";
-"industrial" = "Industrija";
-"education" = "Obrazovanje";
+"icon_group_industrial" = "Industrija";
+"amenity_type_education" = "Obrazovanje";
 "settings_item_read_error" = "Could not read %@.";
 "app_mode_default" = "Pregled karte";
 "app_mode_car" = "Vožnja";
@@ -2342,7 +2342,7 @@
 "shared_string_start" = "Počni";
 "wikipedia_and_wikivoyage_offline" = "Vikipedia i Vikivojaž van mreže";
 "ltr_or_rtl_combine_via_or" = "%@ ili %@";
-"cloud_restore_now" = "Povrati sada";
+"backup_restore_now" = "Povrati sada";
 "manage_subscription" = "Upravljajtečlanarinom";
 "routing_attr_only_permitted_ways_name" = "Izričito dozvoljeni putevi";
 "routing_attr_prefer_horse_routes_description" = "Preferiraj rute konja";
@@ -2413,7 +2413,7 @@
 "map_widget_speed" = "Brzina";
 "product_desc_ext_development" = "Podešavanja za razvoj i otklanjanje grrešaka kao što su simulacija navođenja, performanse iscrtavanja ili glasovni upiti. Namenjeno programerima, nepotrebno prilikom normalnog korišćenja.";
 "simulation_constant_mode_title" = "Fiksna brzina";
-"cloud_make_backup" = "Napravite rezervnu kopiju";
+"make_backup" = "Napravite rezervnu kopiju";
 "simulation_preview_mode_desc" = "Brzina simulacijeće biti maksimalna na pravim deonicama i usporiti samo na raskrsnicama.";
 "purchases_feature_desc_unlimited_map_download" = "Nabavite neograničena preuzimanja oflajn mapa za sve kontinente i regione.";
 "shared_string_stop" = "Zaustavi";

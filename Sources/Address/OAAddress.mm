@@ -74,7 +74,7 @@
         case ADDRESS_TYPE_CITY:
             return OALocalizedString(@"city_type_city");
         case ADDRESS_TYPE_STREET:
-            return OALocalizedString(@"shared_string_street");
+            return OALocalizedString(@"search_address_street");
         case ADDRESS_TYPE_BUILDING:
             return OALocalizedString(@"shared_string_building");
         case ADDRESS_TYPE_STREET_INTERSECTION:

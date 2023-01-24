@@ -168,8 +168,8 @@ static const NSInteger _contactInfoSectionCount = 5;
 {
     _floatingTextFieldControllers = [[NSMutableArray alloc] initWithCapacity:_contactInfoSectionCount];
     NSMutableArray *dataArr = [NSMutableArray new];
-    NSArray *hints = @[OALocalizedString(@"osm_str_name"), OALocalizedString(@"osm_building_num"),
-                       OALocalizedString(@"osm_phone"), OALocalizedString(@"osm_website"), OALocalizedString(@"description")];
+    NSArray *hints = @[OALocalizedString(@"map_widget_top_text"), OALocalizedString(@"osm_building_num"),
+                       OALocalizedString(@"phone"), OALocalizedString(@"osm_website"), OALocalizedString(@"description")];
     for (NSInteger i = 0; i < _contactInfoSectionCount; i++)
     {
         OATextInputFloatingCell *cell = [self getInputCellWithHint:hints[i] text:[self getDataForField:i] isFloating:YES tag:i];

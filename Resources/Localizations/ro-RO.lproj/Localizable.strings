@@ -29,7 +29,7 @@
 "osm_edit_deleted_poi" = "POI OSMșters";
 "shared_string_my_location" = "Poziția mea";
 "osmand_live_available_maps" = "Hărți disponibile";
-"help_faq" = "Întrebări frecvente";
+"faq_item" = "Întrebări frecvente";
 "fast_route_mode_descr" = "Activați pentru a calcula cel mai rapid traseu sau dezactivați pentru un traseu de economisire a combustibilului";
 "loading_poi_obj" = "Seîncarcă POI…";
 "stop_routing_confirm" = "Sunteți sigur că doriți să opriți navigația?";
@@ -55,7 +55,7 @@
 "voice_provider" = "Vocea pentru ghidare";
 "pause_resume_nav" = "Pauză/reluare navigație";
 "shared_string_and" = "și";
-"units_seconds" = "secunde";
+"int_seconds" = "secunde";
 "product_title_northamerica" = "America de Nord";
 "fav_replace" = "Înlocuiește";
 "categories" = "Categorii";
@@ -63,7 +63,7 @@
 "shared_string_time_of_day" = "Ora din zi";
 "help_faq_descr" = "Întrebări frecvente";
 "shared_string_remove" = "Elimină";
-"purchase_get" = "Obțineți";
+"shared_string_get" = "Obțineți";
 "rendering_value_browse_map_name" = "Derulează hartă";
 "fav_color" = "Culoare";
 "shared_string_go" = "Pleacă";
@@ -93,7 +93,7 @@
 "shared_string_update" = "Actualizare";
 "select_city" = "Selectați orașul";
 "osm_edits_basic" = "De bază";
-"osm_alert_message" = "Mesaj";
+"osb_comment_dialog_message" = "Mesaj";
 "driving_region_automatic" = "Automat";
 "shared_string_show_all" = "Arată tot";
 "arrival_distance" = "Anunţ de sosire";
@@ -127,7 +127,7 @@
 "cancel_route" = "Renunță la rută";
 "select_street" = "Selectează strada";
 "units_min" = "min.";
-"longitude" = "Longitudine";
+"navigate_point_longitude" = "Longitudine";
 "shared_string_is_open_24_7" = "Deschis 24/7";
 "speak_street_names" = "numele Străzilor (TTS)";
 "poi_remove_success" = "Șters";
@@ -146,9 +146,9 @@
 "coords_search" = "Căutare coordonate";
 "osm_live_routing" = "Navigație live OsmAnd";
 "shared_string_select" = "Selectați";
-"shared_string_buy" = "Cumpărați";
+"buy" = "Cumpărați";
 "driving_region_us" = "Statele Unite";
-"units_min_mi" = "min/m";
+"min_mile" = "min/m";
 "map_widget_altitude" = "Altitudine";
 "hide_contour_lines" = "Ascunde conturul liniilor";
 "mapillary_get_title" = "Înbunătățiți acoperirea foto cu Mapillary";
@@ -162,7 +162,7 @@
 "moving_time" = "Timp în mișcare";
 "shared_string_search" = "Căutați";
 "settings_preset" = "Profil utilizator";
-"osm_phone" = "Telefon";
+"phone" = "Telefon";
 "mapillary_image" = "Imagine Mapillary";
 "opening_changeset" = "Se deschide modificarea…";
 "change_color" = "Schimbă culoarea";
@@ -184,14 +184,14 @@
 "guidance_preferences_descr" = "Preferințe navigație";
 "app_mode_bus" = "Autobuz";
 "intermediate_point" = "Destinație intermediară %@";
-"open_osm_note" = "Deschideți OSM Notițe";
+"context_menu_item_open_note" = "Deschideți OSM Notițe";
 "parking_time_limited" = "Timp de parcare limitat la";
 "road_blocked" = "Drum blocat";
 "ending_point_too_far" = "Punctul terminus este prea departe de vreun drum.";
 "arrival_distance_factor_normally" = "Normal";
 "time_overdue" = "Întârziat";
 "shared_string_no" = "Nu";
-"product_title_asia" = "Asia";
+"index_name_asia" = "Asia";
 "region_russia" = "Rusia";
 "postcode" = "Cod poștal";
 "unknown_location" = "Poziția nu este încă cunoscută";
@@ -202,7 +202,7 @@
 "in_app_purchase_desc" = "O singură plată";
 "shared_string_near" = "Apropiere";
 "unlock_all_features" = "Deblochează toate funcționalitățile OsmAnd";
-"time_open" = "Deschide";
+"shared_string_open" = "Deschide";
 "map_widget_appearance_rem" = "Elemente rămase";
 "show_warnings_title" = "Afișați alerte…";
 "shared_string_address" = "Adresa";
@@ -213,7 +213,7 @@
 "add_intermediate" = "Adăugați punct intermediar";
 "show_cameras" = "Radare de viteză";
 "daynight_mode_auto" = "Răsărit/Apus";
-"product_title_africa" = "Africa";
+"index_name_africa" = "Africa";
 "traffic_warning" = "Avertizare trafic";
 "osm_live_subscription" = "Abonament OsmAnd Live";
 "shared_string_distance" = "Distanță";
@@ -236,7 +236,7 @@
 "map_markers" = "Marcaje de hartă";
 "osmand_live_update_now" = "Actualizați acum";
 "download" = "Descărcați";
-"res_details" = "Detalii";
+"shared_string_details" = "Detalii";
 "show_pedestrian_warnings" = "Treceri pietonale";
 "si_kmh" = "Kilometrii pe oră";
 "shared_string_io_error" = "Eroare de citire/scriere";
@@ -245,7 +245,7 @@
 "keep_and_add_destination_point" = "Adăugați ca destinație subsecventă";
 "transport_stop" = "Stop";
 "osm_note_upload_anonymously" = "Încarcă anonim";
-"shared_string_street" = "Stradă";
+"search_address_street" = "Stradă";
 "download_srtm_maps" = "Hărți SRTM";
 "keep_informing" = "Repetați instrucțiunile de navigare";
 "default_speed_system_descr" = "Definiți unitatea de viteză";
@@ -255,7 +255,7 @@
 "units_mph" = "mph";
 "osn_bug_name" = "Notă OSM";
 "layer_map_appearance" = "Configurare ecran";
-"menu_my_places" = "Locurile mele";
+"shared_string_my_places" = "Locurile mele";
 "routing_settings" = "Navigare (funcție de profil)";
 "animate_routing_route_not_calculated" = "Vă rog mai întâi calculați ruta";
 "search_poi_category_hint" = "Caută pentru toate punctele de interes";
@@ -344,13 +344,13 @@
 "gpx_descent" = "Descendență";
 "select_map_marker" = "Selectați marcajul pe hartă";
 "online_map" = "Hartă online";
-"units_ft" = "picior";
+"foot" = "picior";
 "shared_string_save" = "Salvați";
 "shared_string_category" = "Categoria";
 "poi_clear" = "Curăță";
 "save_track_interval_globally" = "Interval de salvare";
 "route_kr" = "Țineți pe dreapta și mergeți";
-"help_legend" = "Legendă hartă";
+"map_legend" = "Legendă hartă";
 "arrival_distance_factor_late" = "Târziu";
 "shared_string_all" = "Toate";
 "rendering_category_details" = "Detalii";
@@ -368,15 +368,15 @@
 "map_settings_show" = "Arată pe hartă";
 "tile_cache" = "Memoria cache pentru gresie";
 "driving_region" = "regiunea de conducere";
-"osm_str_name" = "Numele străzii";
+"map_widget_top_text" = "Numele străzii";
 "shared_string_building" = "Număr";
 "fast_route_mode" = "Cea mai rapidă rută";
-"region_ausralia_and_oceania" = "Australiași Oceania";
+"index_name_oceania" = "Australiași Oceania";
 "map_widget_left" = "Panou stânga";
 "open_till" = "Deschide până";
 "vector_data" = "Hărți vectoriale offline";
 "map_settings_text_size" = "Mărimea textului";
-"region_north_america" = "America de Nord";
+"index_name_north_america" = "America de Nord";
 "city_type_hamlet" = "Cătun";
 "res_roads" = "Drumuri";
 "gpx_average_speed" = "Viteza medie";
@@ -388,7 +388,7 @@
 "osm_editing_offline" = "Editare offline";
 "units_yd" = "yd";
 "map_settings_night" = "Noapte";
-"region_others" = "Alte hărți";
+"download_select_map_types" = "Alte hărți";
 "poi_filter_closest_poi" = "Cel mai apropiat POI";
 "units_nm" = "nmi ( nautic miles)";
 "traffic_warning_pedestrian" = "Trecere de pietoni";
@@ -446,7 +446,7 @@
 "osm_website" = "Site web";
 "latitude" = "Latitudine";
 "speak_speed_limit" = "Limita de viteză";
-"gpx_waypoint" = "Punct de reper";
+"shared_string_waypoint" = "Punct de reper";
 "shared_string_is_open" = "Deschide";
 "coordinates_example" = "Exemplu";
 "snap_to_road" = "Poziționează pe drum";
@@ -461,10 +461,10 @@
 "poi_dialog_poi_type" = "Tip POI";
 "try_again" = "Reîncercați";
 "shared_string_current" = "Actual";
-"transport_routes" = "Rute";
+"transport_Routes" = "Rute";
 "free_memory" = "Gratis %@";
 "menu_help" = "Ajutor";
-"res_wiki" = "Wikipedia (wiki)";
+"download_wikipedia_maps" = "Wikipedia (wiki)";
 "shared_string_read_more" = "Citește mai mult";
 "map_widget_ruler_control" = "Riglă circulară";
 "replace_destination" = "Înlocuiește destinația";
@@ -484,11 +484,11 @@
 "osm_close_changeset" = "Închideți setul de modificări";
 "shared_string_ok" = "OK";
 "osm_live_enter_email" = "Vă rugăm să introduceți o adresă de e-mail validă";
-"download_map" = "Descarcă harta";
+"shared_string_download_map" = "Descarcă harta";
 "sett_arr_loc" = "Locație";
 "traffic_warning_border_control" = "Control graniță";
 "routing_preferences_descr" = "Preferințe rutare";
-"region_africa" = "Africa";
+"index_name_africa" = "Africa";
 "help_tech_articles" = "Articole tehnice";
 "map_settings_style" = "Stil randare";
 "res_url" = "URL";
@@ -794,7 +794,7 @@
 "shared_string_preparing" = "Se pregătește";
 "map_settings_add_online_source" = "Adăugare surse online";
 "two" = "Două";
-"announce" = "Anunț";
+"accessibility_announce" = "Anunț";
 "shared_string_min_speed" = "Viteza minimă";
 "configure_screen_descr" = "Selectați opțiunile ecranului pentru profil";
 "select_icon" = "Selectați icoana";
@@ -805,7 +805,7 @@
 "exit_at" = "Ieșire la";
 "base_profile_descr_bicycle" = "MTB, Moped, Cal";
 "shared_string_password" = "Parolă";
-"nav_type_straight_line" = "Linie dreaptă";
+"routing_profile_straightline" = "Linie dreaptă";
 "app_profiles" = "profile aplicație";
 "whole_track" = "Întreg traseul";
 "profile_alert_delete_title" = "Ștergeți profilul";
@@ -817,7 +817,7 @@
 "create_profile_descr" = "Profilul personalizat pe unul dintre profilurile ale aplicației implicite, acest lucru definește configurarea de bază, cum ar fi vizibilitatea implicită a widgets și unități de viteză și distanță.Acestea sunt profilurile de aplicație implicite, împreună cu exemple de profiluri personalizate pot fi extinse la:";
 "routing_profile_ski" = "Schi";
 "show_direction" = "Indicație distanță";
-"logging_min_accuracy" = "Acuratețe minimă";
+"monitoring_min_accuracy" = "Acuratețe minimă";
 "copy_from_other_profile" = "Copiați din alt profil";
 "next_segment" = "Segmentul următor";
 "monitoring_min_distance" = "Deplasare minimă";
@@ -826,7 +826,7 @@
 "profile_appearance" = "Aspectul profilului";
 "importing_from" = "Se importă date de la %@";
 "shared_string_continue" = "Continuă";
-"nav_type_geocoding" = "Geocodare";
+"routing_profile_geocoding" = "Geocodare";
 "num_stops" = "stații";
 "map_look_descr" = "Aspect hartă";
 "consider_limitations_param" = "Luați în considerare limitările temporare";
@@ -884,9 +884,9 @@
 "coordinates_widget" = "Coordonatele widget";
 "map_during_navigation" = "Hartă în timpul navigării";
 "join_segments" = "Alăturați segmente";
-"tracks" = "Traseele mele";
+"shared_string_gpx_tracks" = "Traseele mele";
 "favorite_places_category" = "Locuri";
-"track_save_descr" = "Salvează traseul curent ca fișier GPX acum.";
+"save_current_track_descr" = "Salvează traseul curent ca fișier GPX acum.";
 "gpx_curr_new_track" = "Pista curentă";
 "shared_string_gpx_track" = "Track(pistă)";
 "plan_route_open_existing_track" = "Deschideți o rută existentă";
@@ -908,7 +908,7 @@
 "navigation_over_track" = "Pornesc navigarea de-a lungul traseului\?";
 "add_custom_category" = "Adăugați o categorie personalizată";
 "track_save" = "Salvează traseul curent";
-"emergency" = "Urgență";
+"amenity_type_emergency" = "Urgență";
 "visible" = "Vizibil";
 "map_mode" = "Mod hartă";
 "new_plugin_added" = "A fost adăugat un plugin nou";
@@ -1273,7 +1273,7 @@
 "map_settings_hide_polygons_desc" = "Această opțiune afectează doar hărțile vectoriale OsmAnd Offline";
 "map_settings_hide_polygons" = "Ascundeți poligoanele";
 "map_settings_show_slider_map" = "Afișați cursorul pe hartă";
-"map_settings_legend" = "Legenda";
+"shared_string_legend" = "Legenda";
 "map_settings_add_maps_slopes" = "Sunt necesare hărți suplimentare pentru a vizualiza pantele pe hartă";
 "map_settings_add_maps_hillshade" = "Sunt necesare hărți suplimentare pentru a vizualiza dealurile pe hartă";
 "map_settings_zoom_level_description" = "Setați nivelul minim și maxim de zoom pentru afișarea stratului";
@@ -1344,14 +1344,14 @@
 // POI
 "poi_insrease_radius" = "Creșteți raza de căutare la";
 "square" = "Pătrat";
-"octagon" = "Octogonul";
+"shared_string_octagon" = "Octogonul";
 
 // Shapes
 "circle" = "Cerc";
 "default_color_descr" = "Această culoare va fi utilizată pentru toate favoritele noi adăugate la grup.";
 "fav_point_emoticons_message" = "Favorit redenumit în '%@' pentru a salva șirul care conține emoticoane într-un fișier.";
 "fav_point_dublicate_message" = "Favorit redenumit în \"%@\" pentru a evita duplicarea.";
-"shape" = "Formă";
+"shared_string_shape" = "Formă";
 "name_and_descr" = "Nume și descriere";
 "add_favorite" = "Adăugați favorit";
 "add_group" = "Adăugați un grup";
@@ -1417,7 +1417,7 @@
 "left_side_navigation" = "Trafic pe stânga";
 "driving_region_uk" = "Marea Britanie, India & similare";
 "driving_region_europe_asia" = "Europa, Asia, America Latină & similare";
-"traffic_warning_tunnel" = "Tunelîn față";
+"tunnel_warning" = "Tunelîn față";
 "route_roundabout_short" = "Ia %d ieși și mergi";
 "route_roundabout" = "Sens giratoriu: ia %d ieși și mergi";
 "intermediate_point_too_far" = "Punctul de destinație intermediar %@ este prea departe de cel mai apropiat drum.";
@@ -1467,7 +1467,7 @@
 "delete_point" = "Ștergeți punctul";
 "change_route_type_after" = "Schimbați tipul de rută după acest punct";
 "move_point" = "Punct de mișcare";
-"route_betw_points" = "Traseuîntre puncte";
+"route_between_points" = "Traseuîntre puncte";
 "points_count" = "Puncte:";
 "point_num" = "Punct %d";
 "downloading" = "Descărcarea";
@@ -1508,7 +1508,7 @@
 "settings_item_read_error" = "Nu s-a putut citi %@.";
 "travel" = "Călătorie";
 "symbols" = "Simboluri";
-"special" = "Special";
+"icon_group_special" = "Special";
 
 
 //Poi catagories
@@ -1789,7 +1789,7 @@
 "add_map_style" = "Adăugați un stil de hartă";
 "add_map_source" = "Adăugați sursa hărții";
 "map_underlays" = "Substraturi pentru hărți";
-"map_overlays" = "Suprapuneri de hărți";
+"quick_action_map_overlay_title" = "Suprapuneri de hărți";
 "quick_action_coordinates_widget_descr" = "Atingerea acestui buton de acțiune afișează sau ascunde widgetul Coordonate.";
 "hide_coordinates" = "Ascundeți coordonatele";
 "show_coordinates" = "Afișați coordonatele";
@@ -1874,7 +1874,7 @@
 "res_name_warning" = "Numele fișierului nu poate fi gol";
 "res_expire_time_desc" = "Timpul de expirare în minute. Plăcile din memoria cache vor fi reîncărcate după timpul specificat. Lăsați acest câmp gol dacă nu este nevoie să reîncărcați dalele pentru această sursă.\nO zi reprezintă 1440 de minute.\nO săptămână reprezintă 10 080 de minute.\n30 de zile reprezintă 43 200 de minute.";
 "res_zoom_levels_desc" = "Acești parametri vor afecta afișarea hărții atunci când este utilizată ca tip de hartă sau ca suprapunere/subpunere.\n\nMap type (Tip de hartă): harta va fi limitată la zoom-urile selectate.\n\nOverlay / Underlay (suprapunere/subpunere): Nivelurile de zoom la care vor fi vizibile dalele. Upscale sau downscale va avea loc peste sau sub valorile setate.";
-"res_source_one_per_tile" = "Un fișier de imagine pe planșă";
+"one_image_per_tile" = "Un fișier de imagine pe planșă";
 "res_source_format" = "Format sursă";
 "res_elliptic_mercator" = "Mercator eliptic";
 "res_mercator" = "Proiecție Mercator";
@@ -1970,7 +1970,7 @@
 "quick_action_day_night_descr" = "Atingerea acestui buton de acțiune permite comutarea între modul de hartă de zi și cel de noapte.";
 "quick_action_poi_add_descr" = "Atingerea acestui buton de acțiune vă permite să adăugați rapid POI pe hartă cu tipul și etichetele predefinite.";
 "quick_action_source_switch_descr" = "Dacă atingeți acest buton de acțiune, parcurgeți lista de mai jos.";
-"osm_note_action_field_descr" = "Acest mesaj este inclusîn câmpul de comentarii.";
+"quick_action_bug_descr" = "Acest mesaj este inclusîn câmpul de comentarii.";
 "quick_action_enter_message" = "Introduceți mesajul";
 "quick_action_get_info" = "Obțineți informații";
 "quick_action_add_tag" = "Adăugați eticheta";
@@ -1979,7 +1979,7 @@
 "quick_action_fill_params_alert" = "Vă rugăm să completați mai întâi parametrii";
 "quick_action_show_poi_descr" = "Adăugați una sau mai multe categorii de POI care să fie afișate pe hartă.";
 "quick_action_add_category_descr" = "Puteți selecta mai multe categorii de POI.";
-"quick_action_add_poi_category" = "Adăugați o categorie";
+"quick_action_add_category" = "Adăugați o categorie";
 "quick_action_select_group" = "Selectați grupul în care doriți să salvați favorita.";
 "quick_action_name_footer" = "Lăsați spațiul gol pentru a utiliza adresa sau denumirea localității.";
 "quick_action_template_name" = "Numele șablonului";
@@ -1989,7 +1989,7 @@
 "confirm_bulk_delete" = "Doriți să ștergeți %ld elemente?";
 "quick_action_screen_header" = "Ecran %ld";
 "quick_action_name_alert" = "Numele acțiunii rapide a fost schimbat în %@ pentru a evita duplicarea.";
-"quick_action_name_str" = "Denumirea acțiunii";
+"shared_string_action_name" = "Denumirea acțiunii";
 "search_results" = "Rezultatele căutării";
 "hide_edits" = "Ascundeți editările locale";
 "show_edits" = "Afișarea editărilor locale";
@@ -2094,8 +2094,8 @@
 "shared_string_end_time" = "Timpul final";
 "distance_moving" = "Distanța corectată";
 "parked_at" = "Parcat la";
-"industrial" = "Industrială";
-"education" = "Educație";
+"icon_group_industrial" = "Industrială";
+"amenity_type_education" = "Educație";
 "route_points" = "Puncte de traseu";
 "connect_rp" = "Conectarea punctelor de rută";
 "lang_al" = "Albaneză";
@@ -2292,8 +2292,8 @@
 "osmand_cloud_login_descr" = "Vă rugăm să introduceți adresa de e-mail cu care v-ați înregistrat. O parolă unică pentru următorul pas va fi trimisă la aceasta.";
 "cloud_conflicts_descr" = "Unele fișiere nu au putut fi încărcate pe server deoarece o versiune mai nouă este stocată pe server.";
 "user_login" = "Conectare";
-"cloud_make_backup" = "Efectuați o copie de siguranță";
-"cloud_restore_now" = "Restaurați acum";
+"make_backup" = "Efectuați o copie de siguranță";
+"backup_restore_now" = "Restaurați acum";
 "backup_error_size_is_exceeded" = "Dimensiunea maximă a OsmAnd Cloud a depășit %@";
 "resend_verification_code" = "Trimiteți din nou";
 "verify_email_address_descr" = "Codul de verificare a fost trimis la %@. Vă rugăm să îl introduceți în câmpul de mai jos.";
@@ -2391,7 +2391,7 @@
 "simulate_in_progress" = "În curs de desfășurare";
 "product_desc_development" = "Pentru dezvoltatori și utilizatori experimentați";
 "plugin_popup_nautical_ask" = "Vă rugăm să activați plugin-ul Nautical";
-"weather_pressure_unit_mmhg" = "Milimetri de mercur";
+"weather_pressure_millimeters_of_mercury" = "Milimetri de mercur";
 "weather_precip_unit_mm" = "Milimetri";
 "weather_precip_inches" = "Inci";
 "restore_purchase" = "Restabilirea achiziției";
@@ -2554,7 +2554,7 @@
 "weather_accuracy_forecast_description" = "Prognoza offline este disponibilă până la: %@.\nPrecizie: %@, din oră în oră. %@ la fiecare 3 ore.";
 "weather_forecast" = "Prognoza meteo";
 "weather_updates_automatically" = "OsmAnd va descărca automat actualizări atunci când este în funcțiune.";
-"recorded_voice" = "Înregistrată";
+"shared_string_recorded" = "Înregistrată";
 "cloud_pause_all" = "Pauză toate";
 "shared_string_changed" = "Modificat";
 "shared_string_refresh" = "Reîmprospătare";

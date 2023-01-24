@@ -1998,7 +1998,7 @@ static BOOL _repositoryUpdated = NO;
         if (section == _regionMapSection)
             return OALocalizedString(@"res_world_map");
         if (section == _otherMapsSection)
-            return OALocalizedString(@"region_others");
+            return OALocalizedString(@"download_select_map_types");
         if (section == _nauticalMapsSection)
             return OALocalizedString(@"region_nautical");
 
@@ -2012,7 +2012,7 @@ static BOOL _repositoryUpdated = NO;
     if (section == _regionMapSection)
         return OALocalizedString(@"res_region_map");
     if (section == _otherMapsSection)
-        return OALocalizedString(@"region_others");
+        return OALocalizedString(@"download_select_map_types");
     if (section == _nauticalMapsSection)
         return OALocalizedString(@"region_nautical");
 
@@ -2228,7 +2228,7 @@ static BOOL _repositoryUpdated = NO;
         else if (indexPath.section == _otherMapsSection)
         {
             cellTypeId = subregionCell;
-            title = OALocalizedString(@"region_others");
+            title = OALocalizedString(@"download_select_map_types");
         }
         else if (indexPath.section == _nauticalMapsSection)
         {
@@ -2612,7 +2612,7 @@ static BOOL _repositoryUpdated = NO;
                 labelGet.font = [UIFont systemFontOfSize:13 weight:UIFontWeightSemibold];
                 labelGet.textAlignment = NSTextAlignmentCenter;
                 labelGet.textColor = [UIColor colorWithRed:0.992f green:0.561f blue:0.149f alpha:1.00f];
-                labelGet.text = [OALocalizedString(@"purchase_get") uppercaseStringWithLocale:[NSLocale currentLocale]];
+                labelGet.text = [OALocalizedString(@"shared_string_get") uppercaseStringWithLocale:[NSLocale currentLocale]];
                 
                 [labelGet sizeToFit];
                 CGSize priceSize = CGSizeMake(MAX(kPriceMinTextWidth, labelGet.bounds.size.width), MAX(kPriceMinTextHeight, labelGet.bounds.size.height));

@@ -61,7 +61,7 @@
         [_markersListController present];
     }];
     
-    CPGridButton *btnTracks = [[CPGridButton alloc] initWithTitleVariants:@[OALocalizedString(@"tracks")] image:[UIImage imageNamed:@"ic_carplay_tracks"] handler:^(CPGridButton * _Nonnull barButton) {
+    CPGridButton *btnTracks = [[CPGridButton alloc] initWithTitleVariants:@[OALocalizedString(@"shared_string_gpx_tracks")] image:[UIImage imageNamed:@"ic_carplay_tracks"] handler:^(CPGridButton * _Nonnull barButton) {
         _tracksListController = [[OACarPlayTracksListController alloc] initWithInterfaceController:self.interfaceController];
         [_tracksListController present];
     }];

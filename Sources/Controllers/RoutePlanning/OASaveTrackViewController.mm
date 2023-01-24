@@ -97,7 +97,7 @@
 {
     NSString *folderName = [filePath stringByDeletingLastPathComponent];
     if (folderName.length == 0)
-        return OALocalizedString(@"tracks");
+        return OALocalizedString(@"shared_string_gpx_tracks");
     else
         return folderName;
 }
@@ -256,7 +256,7 @@
     {        
         [self dismissViewControllerAnimated:NO completion:nil];
         NSString *savingPath;
-        if ([_selectedFolderName isEqualToString:OALocalizedString(@"tracks")])
+        if ([_selectedFolderName isEqualToString:OALocalizedString(@"shared_string_gpx_tracks")])
             savingPath = _fileName;
         else
             savingPath = [_selectedFolderName stringByAppendingPathComponent:_fileName];
@@ -531,7 +531,7 @@
 - (BOOL) isFileExist:(NSString *)name
 {
     NSString *folderPath = OsmAndApp.instance.gpxPath;
-    if (_selectedFolderName.length > 0 && ![_selectedFolderName isEqualToString:OALocalizedString(@"tracks")])
+    if (_selectedFolderName.length > 0 && ![_selectedFolderName isEqualToString:OALocalizedString(@"shared_string_gpx_tracks")])
         folderPath = [folderPath stringByAppendingPathComponent:_selectedFolderName];
         
     NSString *filePath = [[folderPath stringByAppendingPathComponent:name] stringByAppendingPathExtension:@"gpx"];

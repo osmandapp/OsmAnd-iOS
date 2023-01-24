@@ -44,7 +44,7 @@
 "shared_string_previous" = "Previous";
 "shared_string_next" = "Next";
 "route_stops_before" = "%@ stops before";
-"transport_routes" = "Routes";
+"transport_Routes" = "Routes";
 "transport_nearby_routes_within" = "Nearby routes within";
 "transport_nearby_routes" = "Within";
 "transport_stop" = "Stop";
@@ -158,7 +158,7 @@
 "monitoring_min_distance" = "Minimum displacement";
 "logging_min_distance_descr" = "Filter: minimum distance to log a new point";
 "logging_accuracy" = "Logging accuracy";
-"logging_min_accuracy" = "Minimum accuracy";
+"monitoring_min_accuracy" = "Minimum accuracy";
 "logging_min_accuracy_descr" = "Filter: no logging unless the accuracy is reached";
 "logging_min_speed" = "Minimum speed";
 "logging_min_speed_descr" = "Filter: no logging below selected speed";
@@ -266,11 +266,11 @@
 "change_map_behavior" = "Change map behavior during navigation";
 "nav_type_descr" = "Select how to calculate a route for this profile";
 "nav_type_osmand" = "OsmAnd (offline routing)";
-"nav_type_straight_line" = "Straight line";
+"routing_profile_straightline" = "Straight line";
 "nav_type_direct_to" = "Direct-to-point";
 "nav_type_brouter" = "BRouter";
 "routing_profile_ski" = "Ski";
-"nav_type_geocoding" = "Geocoding";
+"routing_profile_geocoding" = "Geocoding";
 "fast_route_mode_descr" = "Enable to calculate fastest route or disable for fuel-saving route";
 "avoid_in_routing_title" = "Avoid…";
 "avoid_in_routing_descr_" = "Avoid toll roads, unpaved, ferries";
@@ -424,8 +424,8 @@
 "traffic_warning_railways" = "Railroad crossing";
 "traffic_warning_pedestrian" = "Pedestrian crosswalk";
 "traffic_warning_hazard" = "Hazard";
-"traffic_warning_tunnel" = "Tunnel ahead";
-"announce" = "Announce";
+"tunnel_warning" = "Tunnel ahead";
+"accessibility_announce" = "Announce";
 
 "driving_region_japan" = "Japan";
 "driving_region_us" = "United States";
@@ -492,7 +492,7 @@
 "shared_string_remove" = "Remove";
 "shared_string_dismiss" = "Dismiss";
 "shared_string_add" = "Add";
-"shared_string_buy" = "Buy";
+"buy" = "Buy";
 "shared_string_buy_for" = "for";
 "shared_string_or" = "or";
 "shared_string_and" = "and";
@@ -551,7 +551,7 @@
 "restart" = "Restart";
 
 "offline_maps" = "Offline Maps";
-"download_map" = "Download map";
+"shared_string_download_map" = "Download map";
 "download_map_dialog" = "Download map dialog";
 "update_tile" = "Update map";
 "download_pending" = "Download pending";
@@ -610,7 +610,7 @@
 "name_and_descr" = "Name & description";
 "select_group" = "Select group";
 "icon" = "Icon";
-"shape" = "Shape";
+"shared_string_shape" = "Shape";
 "fav_point_dublicate" = "Duplicate Favorite name specified";
 "fav_point_dublicate_message" = "Favorite renamed to \'%@\' to avoid duplication.";
 "fav_point_emoticons_message" = "Favorite renamed to \'%@\' to save the string containing emoticons to a file.";
@@ -623,7 +623,7 @@
 
 // Shapes
 "circle" = "Circle";
-"octagon" = "Octagon";
+"shared_string_octagon" = "Octagon";
 "square" = "Square";
 
 // POI
@@ -634,13 +634,13 @@
 
 // My Places
 "favorites" = "Favorites";
-"tracks" = "Tracks";
+"shared_string_gpx_tracks" = "Tracks";
 "personal_category_name" = "Personal";
 "visible" = "Visible";
 
 // GPX
 "gpx_point" = "Point";
-"gpx_waypoint" = "Waypoint";
+"shared_string_waypoint" = "Waypoint";
 "gpx_waypoints" = "Waypoints";
 "gpx_points" = "Point(s)";
 "shared_string_export" = "Export";
@@ -692,7 +692,7 @@
 "track_new_segment" = "Start new segment";
 "track_save" = "Save current track";
 "displayed_route_save" = "Save to OsmAnd Tracks";
-"track_save_descr" = "Save current track as GPX file now.";
+"save_current_track_descr" = "Save current track as GPX file now.";
 "track_continue_rec" = "Continue recording";
 "track_continue_rec_q" = "Do you want to continue recording?";
 "save_track_interval_globally" = "Logging interval";
@@ -760,7 +760,7 @@
 "map_settings_zoom_level_description" = "Set the minimum and maximum zoom level to display the layer";
 "map_settings_add_maps_hillshade" = "Additional maps are needed to view hillshades on the map";
 "map_settings_add_maps_slopes" = "Additional maps are needed to view slopes on the map";
-"map_settings_legend" = "Legend";
+"shared_string_legend" = "Legend";
 
 "map_settings_show_slider_map" = "Show slider on the map";
 "map_settings_add_online_source" = "Add online source";
@@ -1110,7 +1110,7 @@
 "add_point" = "Add point";
 "point_num" = "Point %d";
 "points_count" = "Points:";
-"route_betw_points" = "Route between points";
+"route_between_points" = "Route between points";
 "save_changes" = "Save changes";
 "save_new_track" = "Save as new track";
 "add_to_track" = "Add to a track";
@@ -1236,7 +1236,7 @@
 "res_cancel_inst_q" = "You're going to cancel %@ installation.";
 "res_uninst_managed_q" = "You're going to uninstall %@. You can reinstall it later from catalog.";
 "res_uninst_unmanaged_q" = "You're going to delete %@. It's not from catalog, so please be sure you have a backup if needed.";
-"res_details" = "Details";
+"shared_string_details" = "Details";
 "res_type" = "Type";
 "res_unknown" = "Unknown";
 "res_size" = "Size";
@@ -1258,7 +1258,7 @@
 "res_pseudo_mercator" = "Pseudo-Mercator projection";
 "res_source_format" = "Source format";
 "sqlite_db_file" = "SQLiteDB file";
-"res_source_one_per_tile" = "One image file per tile";
+"one_image_per_tile" = "One image file per tile";
 "res_zoom_levels_desc" = "This parameters will affect the map display when used as a map type or overlay/underlay.\n\nMap type: the map will be limited to the selected zooms.\n\nOverlay / Underlay: Zoom levels at which tiles will be visible. Upscale or downscale will occur above or below the set values.";
 "res_expire_time_desc" = "Expiration time in minutes. Cached tiles will be reloaded after specified time. Leave this field empty if you do not need to reload tiles for this source.\nOne day is 1440 minutes.\nOne week is 10 080 minutes.\n30 days are 43 200 minutes.";
 "res_name_warning" = "File name cannot be empty";
@@ -1277,7 +1277,7 @@
 
 // Menu
 "shared_string_menu" = "Menu";
-"menu_my_places" = "My Places";
+"shared_string_my_places" = "My Places";
 "menu_my_trips" = "My Tracks";
 "menu_feedback" = "Feedback";
 "menu_help" = "Help";
@@ -1337,9 +1337,9 @@
 "osm_opens_at" = "Opens at:";
 "osm_closes_at" = "Closes at:";
 "osm_editing_contact_info" = "Contact info";
-"osm_str_name" = "Street name";
+"map_widget_top_text" = "Street name";
 "osm_building_num" = "Building number";
-"osm_phone" = "Phone";
+"phone" = "Phone";
 "osm_website" = "Website";
 "population_num" = "Population";
 "osm_add_place" = "Add place";
@@ -1424,7 +1424,7 @@
 "show_coordinates" = "Show coordinates";
 "hide_coordinates" = "Hide coordinates";
 "quick_action_coordinates_widget_descr" = "Tapping this action button shows or hides the Coordinates widget.";
-"map_overlays" = "Map overlays";
+"quick_action_map_overlay_title" = "Map overlays";
 "map_underlays" = "Map underlays";
 "vector_data" = "Offline vector maps";
 "add_map_source" = "Add map source";
@@ -1500,7 +1500,7 @@
 "show_edits" = "Show local edits";
 "hide_edits" = "Hide local edits";
 "search_results" = "Search results";
-"quick_action_name_str" = "Action name";
+"shared_string_action_name" = "Action name";
 "quick_action_name_alert" = "Quick action name was changed to %@ to avoid duplication.";
 "quick_action_screen_header" = "Screen %ld";
 "confirm_bulk_delete" = "Do you want to delete %ld items?";
@@ -1510,7 +1510,7 @@
 "quick_action_template_name" = "Template name";
 "quick_action_name_footer" = "Leave blank to use the address or place name.";
 "quick_action_select_group" = "Select the group to save the favorite in.";
-"quick_action_add_poi_category" = "Add a category";
+"quick_action_add_category" = "Add a category";
 "quick_action_add_category_descr" = "You can select multiple POI categories.";
 "quick_action_show_poi_descr" = "Add one or more POI categories to be displayed on the map.";
 "quick_action_fill_params_alert" = "Please fill out the parameters first";
@@ -1520,7 +1520,7 @@
 "quick_action_tags" = "Tags";
 "quick_action_get_info" = "Get info";
 "quick_action_enter_message" = "Enter message";
-"osm_note_action_field_descr" = "This message is included in the comment field.";
+"quick_action_bug_descr" = "This message is included in the comment field.";
 "quick_action_source_switch_descr" = "Tapping this action button pages through the list below.";
 "quick_action_poi_add_descr" = "Tapping this action button allows you to quickly add POI on the map with predefined type and tags.";
 "quick_action_day_night_descr" = "Tapping this action button switches between Day and Night map mode.";
@@ -1584,10 +1584,10 @@
 "modify_poi_short" = "Modify POI";
 "create_poi_short" = "Create POI";
 "modify_edit_short" = "Modify OSM change";
-"open_osm_note" = "Open OSM Note";
+"context_menu_item_open_note" = "Open OSM Note";
 "edit_osm_note" = "Edit OSM Note";
 "osm_alert_title" = "Commit";
-"osm_alert_message" = "Message";
+"osb_comment_dialog_message" = "Message";
 "osm_alert_button_ok" = "Create note";
 "modify_poi" = "Modify the POI information";
 "actions" = "Actions";
@@ -1605,13 +1605,13 @@
 "units_cubic_m" = "m³";
 "units_mi" = "mi";
 "units_yd" = "yd";
-"units_ft" = "ft";
+"foot" = "ft";
 "units_nm" = "nmi";
 
 "units_km_h" = "km/h";
 "units_mph" = "mph";
 "units_nm_h" = "nmi/h";
-"units_min_mi" = "min/m";
+"min_mile" = "min/m";
 "units_min_km" = "min/km";
 "units_m_s" = "m/s";
 
@@ -1621,14 +1621,14 @@
 "units_min" = "min.";
 "units_sec" = "sec";
 "units_sec_short" = "s";
-"units_seconds" = "seconds";
+"int_seconds" = "seconds";
 
 // Help
 "help_first_steps" = "First steps";
 "help_first_use" = "First use";
 "help_first_use_descr" = "How to download maps and set basic settings";
 "help_navigation_descr" = "How to set up navigation";
-"help_faq" = "FAQ";
+"faq_item" = "FAQ";
 "help_faq_descr" = "Frequently asked questions";
 "help_features" = "Features";
 "help_map_viewing" = "Map viewing";
@@ -1639,7 +1639,7 @@
 "help_osmand_live" = "Subscription - OsmAnd Live";
 "help_travel" = "Travel (Wikipedia & Wikivoyage)";
 "mapillary_item" = "OsmAnd + Mapillary";
-"help_legend" = "Map legend";
+"map_legend" = "Map legend";
 "help_legend_descr" = "The guide to map's symbols";
 "help_other_header" = "Other";
 "help_what_is_new" = "What\'s new";
@@ -1687,16 +1687,16 @@
 
 // World Regions
 "region_antarctica" = "Antarctica";
-"region_africa" = "Africa";
+"index_name_africa" = "Africa";
 "index_name_asia" = "Asia";
-"region_ausralia_and_oceania" = "Australia and Oceania";
+"index_name_oceania" = "Australia and Oceania";
 "region_central_america" = "Central America";
 "region_europe" = "Europe";
-"region_north_america" = "North America";
+"index_name_north_america" = "North America";
 "region_russia" = "Russia";
 "region_south_america" = "South America";
 "region_nautical" = "Nautical maps";
-"region_others" = "Other maps";
+"download_select_map_types" = "Other maps";
 
 // Help
 "help_quiz" = "Quiz";
@@ -1744,7 +1744,7 @@
 "product_desc_development" = "Settings for development and debugging features";
 "product_desc_ext_development" = "Settings for development and debugging features, like navigation simulation, rendering performance, or voice prompting. Intended for developers, not needed for normal app use.";
 
-"product_title_africa" = "Africa";
+"index_name_africa" = "Africa";
 "product_desc_africa" = "Unlimited map downloads for Africa";
 "product_title_antarctica" = "Antarctica";
 "product_desc_antarctica" = "Unlimited map downloads for Antarctica";
@@ -1768,7 +1768,7 @@
 "product_desc_southamerica_short" = "South America region maps";
 "product_title_allworld" = "All World Maps";
 "product_desc_allworld" = "Maps of All World";
-"product_title_asia" = "Asia";
+"index_name_asia" = "Asia";
 "product_desc_asia" = "Unlimited map downloads for Asia";
 "product_desc_asia_short" = "Asia region maps";
 
@@ -1796,7 +1796,7 @@
 "get_unlimited_access" = "Get unlimited access";
 
 "latitude" = "Latitude";
-"longitude" = "Longitude";
+"navigate_point_longitude" = "Longitude";
 "track_save_short_q" = "Track is too short, do you want to save?";
 "add_as" = "Add as";
 "make_call" = "Make a call";
@@ -1810,7 +1810,7 @@
 "enter_fav_name" = "Enter favorite name";
 "res_installing" = "Installing…";
 "res_roads" = "Roads";
-"res_wiki" = "Wikipedia";
+"download_wikipedia_maps" = "Wikipedia";
 "shared_string_hillshade" = "Hillshade";
 "res_slope" = "Slope";
 "res_standard" = "Standard map";
@@ -1846,12 +1846,12 @@
 "from_location" = "away";
 
 "show_alt_in_drive" = "Show altitude in Drive mode";
-"purchase_get" = "Get";
+"shared_string_get" = "Get";
 "srtm_disabled" = "Contour lines disabled";
 "prch_wiki_info" = "Wikipedia addon enables wikipedia information for maps you are entitled, purchased or downloaded within free limit.";
 "prch_srtm_info" = "Contour lines addon enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
 
-"time_open" = "Open";
+"shared_string_open" = "Open";
 "time_closed" = "Closed";
 "time_will_close" = "Will close in";
 "time_will_open" = "Will open in";
@@ -1932,7 +1932,7 @@
 "weather_temperature_fahrenheit" = "Fahrenheit";
 
 "weather_pressure_unit_hpa" = "Hectopascals";
-"weather_pressure_unit_mmhg" = "Millimeters of mercury";
+"weather_pressure_millimeters_of_mercury" = "Millimeters of mercury";
 "weather_pressure_unit_inhg" = "Inches of mercury";
 
 "weather_wind_unit_m_s" = "Meters/Second";
@@ -2079,7 +2079,7 @@
 "show_something_on_map" = "Show %@ on the map";
 "search_POI_level_btn" = "Increase search radius";
 
-"shared_string_street" = "Street";
+"search_address_street" = "Street";
 "shared_string_building" = "Building";
 "shared_string_street_intersection" = "Street intersection";
 "shared_string_address" = "Address";
@@ -2497,15 +2497,15 @@
 
 //Icon categories
 "amenity" = "Amenity";
-"emergency" = "Emergency";
-"special" = "Special";
+"amenity_type_emergency" = "Emergency";
+"icon_group_special" = "Special";
 "sport" = "Sport";
 "symbols" = "Symbols";
 "transport" = "Transport";
 "travel" = "Travel";
 "nautical" = "Nautical";
-"industrial" = "Industrial";
-"education" = "Education";
+"icon_group_industrial" = "Industrial";
+"amenity_type_education" = "Education";
 
 "settings_item_read_error" = "Could not read %@.";
 "app_mode_default" = "Browse map";
@@ -2585,11 +2585,11 @@
 "cloud_no_online_backup_descr" = "Set up an automatic backup so you don't have to worry about lost data.";
 "cloud_set_up_backup" = "Set up backup";
 "cloud_welcome_back" = "Welcome back!";
-"cloud_restore_now" = "Restore now";
+"backup_restore_now" = "Restore now";
 "cloud_backup" = "Backup";
 "cloud_last_backup" = "Last backup";
 "cloud_backup_now" = "Backup now";
-"cloud_make_backup" = "Make a backup";
+"make_backup" = "Make a backup";
 "cloud_make_backup_descr" = "There are many changes on this device, please make a backup of this data so as not to lose it.";
 "cloud_conflicts" = "Conflicts";
 "cloud_conflicts_descr" = "Some files could not be uploaded to the server because a newer version is stored on the server.";

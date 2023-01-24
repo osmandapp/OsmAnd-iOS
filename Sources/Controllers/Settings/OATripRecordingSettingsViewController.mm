@@ -147,7 +147,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
             [dataArr addObject:
              @[@{
                    @"name" : @"logging_min_accuracy",
-                   @"title" : OALocalizedString(@"logging_min_accuracy"),
+                   @"title" : OALocalizedString(@"monitoring_min_accuracy"),
                    @"description" : OALocalizedString(@"logging_min_accuracy_descr"),
                    @"value" : minPrecision,
                    @"type" : [OAIconTitleValueCell getCellIdentifier] }
@@ -201,7 +201,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
                  @"value" : @([_settings.autoSplitRecording get:self.appMode]),
                  @"type" : [OASwitchTableViewCell getCellIdentifier] }]];
             
-            NSString *menuPath = [NSString stringWithFormat:@"%@ — %@ — %@", OALocalizedString(@"shared_string_menu"), OALocalizedString(@"menu_my_places"), OALocalizedString(@"menu_my_trips")];
+            NSString *menuPath = [NSString stringWithFormat:@"%@ — %@ — %@", OALocalizedString(@"shared_string_menu"), OALocalizedString(@"shared_string_my_places"), OALocalizedString(@"menu_my_trips")];
             NSString *actionsDescr = [NSString stringWithFormat:OALocalizedString(@"trip_rec_actions_descr"), menuPath];
             NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithString:actionsDescr attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:15], NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer)}];
             [str addAttributes:@{NSFontAttributeName : [UIFont systemFontOfSize:15 weight:UIFontWeightSemibold]} range:[actionsDescr rangeOfString:menuPath]];
@@ -214,7 +214,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
                 },
                 @{
                     @"type" : [OATitleRightIconCell getCellIdentifier],
-                    @"title" : OALocalizedString(@"tracks"),
+                    @"title" : OALocalizedString(@"shared_string_gpx_tracks"),
                     @"img" : @"ic_custom_folder",
                     @"name" : @"open_trips"
                 },
@@ -227,7 +227,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
                 // TODO: add copy from profile
 //                @{
 //                    @"type" : [OATitleRightIconCell getCellIdentifier],
-//                    @"title" : OALocalizedString(@"tracks"),
+//                    @"title" : OALocalizedString(@"shared_string_gpx_tracks"),
 //                    @"img" : @"ic_custom_folder",
 //                    @"key" : @"open_trips"
 //                }
@@ -270,7 +270,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
             break;
         }
         case kTripRecordingSettingsScreenAccuracy:
-            self.titleLabel.text = OALocalizedString(@"logging_min_accuracy");
+            self.titleLabel.text = OALocalizedString(@"monitoring_min_accuracy");
             for (int i = 0; i < trackPrecisionValues.count; i++)
             {
                 [dataArr addObject: @{

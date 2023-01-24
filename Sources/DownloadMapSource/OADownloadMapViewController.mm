@@ -160,7 +160,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void) applyLocalization
 {
-    [self setTitle:OALocalizedString(@"download_map")];
+    [self setTitle:OALocalizedString(@"shared_string_download_map")];
     [self.cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
     [self.downloadButton setTitle:OALocalizedString(@"download") forState:UIControlStateNormal];
 }

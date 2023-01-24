@@ -690,7 +690,7 @@ static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsap
             valueAsDouble *= FEET_IN_ONE_METER;
             formattedValue = [NSString stringWithFormat:@"%@ %@",
                     [numberFormatter stringFromNumber:@(valueAsDouble)],
-                    OALocalizedString(@"units_ft")];
+                    OALocalizedString(@"foot")];
         }
         else if (metricSystem == MILES_AND_YARDS)
         {

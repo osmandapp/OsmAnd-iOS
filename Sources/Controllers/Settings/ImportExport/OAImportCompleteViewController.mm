@@ -224,7 +224,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     if (gpxFilesCount > 0)
     {
         [_data addObject: @{
-            @"label": OALocalizedString(@"tracks"),
+            @"label": OALocalizedString(@"shared_string_gpx_tracks"),
             @"iconName": @"ic_custom_trip",
             @"count": [NSString stringWithFormat:@"%ld", gpxFilesCount],
             @"category" : @(EOAImportDataTypeGpxTrips)

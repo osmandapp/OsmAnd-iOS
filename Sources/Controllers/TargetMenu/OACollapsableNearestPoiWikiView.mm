@@ -226,7 +226,7 @@
         OAProduct *product = [helper product:kInAppId_Addon_Wiki];
         NSString *price;
         if (!product.free)
-            price = [OALocalizedString(@"shared_string_buy") upperCase];
+            price = [OALocalizedString(@"buy") upperCase];
         [_bannerButton setTitle:price forState:UIControlStateNormal];
     }
     

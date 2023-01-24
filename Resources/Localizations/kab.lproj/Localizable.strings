@@ -6,7 +6,7 @@
 "shared_string_delete" = "Ekkes";
 "menu_help" = "Tallelt";
 "time_left" = "id iguran";
-"region_africa" = "Tafriqt";
+"index_name_africa" = "Tafriqt";
 "days_5" = "Ussan";
 "rendering_attr_surface_sand_name" = "Ijdi";
 "map_an_region" = "Tamnaḍt:";
@@ -33,7 +33,7 @@
 "si_nm" = "Miles iwlalen";
 "years_5" = "Iseggasen";
 "units_mph" = "m/tasint";
-"product_title_africa" = "Tafriqt";
+"index_name_africa" = "Tafriqt";
 "favorites" = "Inurifen";
 "rendering_category_transport" = "Amesni";
 "shared_string_yes" = "Ih";
@@ -50,7 +50,7 @@
 "map_settings_map" = "Takarḍa";
 "sett_arr_loc" = "Adig";
 "rendering_value_purple_name" = "Amidadi";
-"quick_action_name_str" = "Isem n tigawt";
+"shared_string_action_name" = "Isem n tigawt";
 "rendering_value_fine_name" = "Ṣeggem akken iwat anadi-ik";
 "rendering_value_pink_name" = "Axuxi";
 "rendering_value_medium_name" = "Alemmas";
@@ -91,7 +91,7 @@
 "city_type_city" = "Tiɣremt";
 "night_mode" = "Iḍ:";
 "year" = "Aseggas";
-"res_wiki" = "Wikipedia";
+"download_wikipedia_maps" = "Wikipedia";
 "coordinates_example" = "Amedya";
 "search_radius_proximity" = "Deg";
 "arrival_distance_factor_normally" = "Amagnu";
@@ -105,21 +105,21 @@
 "get_discount_second_part" = "di  %@";
 "shared_string_in_name" = "\"di  %@\"";
 "driving_region_canada" = "Kanada";
-"download_map" = "Sider";
+"shared_string_download_map" = "Sider";
 "shared_string_go" = "Ddu";
 "coords_search" = "Asemmezdi n unadi";
 "rendering_category_details" = "Talqayt";
-"units_min_mi" = "tasint";
+"min_mile" = "tasint";
 "shared_string_add" = "Rnu";
 "shared_string_reset" = "Ales awennez";
 "region_south_america" = "Marikan n Unẓul";
 "shared_string_io_error" = "Tuccḍa I/O";
 "shared_string_none" = "Ulac";
-"osm_phone" = "Tiliɣri";
+"phone" = "Tiliɣri";
 "shared_string_building" = "Azadaɣ";
 "rendering_attr_roadStyle_description" = "Aɣanib:";
 "shared_string_off" = "Yensa";
-"longitude" = "Tazegrart";
+"navigate_point_longitude" = "Tazegrart";
 "traffic_warning_speed_camera" = "Takamiṛat n urured";
 "col_magenta" = "_Magenta:";
 "shared_string_show_more" = "Sken-ed ugar";
@@ -136,7 +136,7 @@
 "map_settings_show" = "\"Skenɣef  tkarḍa\"";
 "shared_string_unexpected_error" = "Tuccḍa tarussint.";
 "rendering_attr_highway_class_state_road_name" = "Aɣrem";
-"shared_string_street" = "Abrid";
+"search_address_street" = "Abrid";
 "rendering_attr_hideIcons_name" = "Tigniyin";
 "shared_string_clear_all" = "Sfeḍ kullec";
 "week" = "Imalas";
@@ -150,7 +150,7 @@
 "select_all" = "Fren kulec";
 "driving_region_automatic" = "Awurman";
 "day" = "Ass";
-"open_osm_note" = "Ldi tamawt n OSM";
+"context_menu_item_open_note" = "Ldi tamawt n OSM";
 "rendering_value_bold_name" = "Azuran";
 "region_russia" = "Rruss";
 "shared_string_from" = "sɣur";
@@ -183,11 +183,11 @@
 "map_settings_online" = "Iqqen";
 "nearest_cities" = "Timdinin ig qarben";
 "rendering_category_hide" = "Ffer";
-"help_legend" = "Taneffust";
+"map_legend" = "Taneffust";
 "rendering_value_browse_map_name" = "Snirem";
 "map_markers" = "Ticraḍ n tkarḍa";
 "fav_name" = "Isem";
-"units_seconds" = "Tasinin";
+"int_seconds" = "Tasinin";
 "res_world_region" = "azul-i-medden-meṛṛa";
 "delete_filter" = "Kkes imzizdig";
 "unit_of_length" = "Tayunin n teɣzef";
@@ -198,7 +198,7 @@
 "cancel_navigation" = "Seḥbes tunigin";
 "rotate_map_to_bearing" = "Taɣda n tkarḍa";
 "app_mode_osm" = "Rnu neɣ ẓreg ifarisen n OSM";
-"osm_str_name" = "Isem n webrid";
+"map_widget_top_text" = "Isem n webrid";
 "shared_string_cancel" = "Sefsex";
 "res_roads" = "Iberdan";
 "try_again" = "Ɛreḍ tikkelt nniḍen";
@@ -254,7 +254,7 @@
 "work_pt" = "Amahil";
 "restore" = "Err-d";
 "osmand_live_last_live_update" = "Asedɣi aneggaru : %@";
-"osm_alert_message" = "Izen";
+"osb_comment_dialog_message" = "Izen";
 "parking" = "Aneɣsar";
 "arrival_distance_factor_late" = "Iɛedda lḥal";
 "fav_replace" = "Semselsi";
@@ -275,7 +275,7 @@
 "shared_string_save_as" = "Sekles s yisem";
 "route_tr" = "Brenɣer tama tayeffust t edfreḍ";
 "gpx_point" = "Taneqqiḍt";
-"time_open" = "Ldi";
+"shared_string_open" = "Ldi";
 "shared_string_category" = "Taggayt";
 "help_first_use" = "Amezwaru";
 "type_address" = "Gred tansa";
@@ -287,7 +287,7 @@
 "apply_filters" = "Snes tistayin";
 "day_mode" = "ass";
 "rendering_attr_hidePOILabels_name" = "Tib&zimin";
-"help_faq" = "Isteqsiyen FAQ";
+"faq_item" = "Isteqsiyen FAQ";
 "price_free" = "Ilelli";
 "create_poi_short" = "rnu";
 "rendering_attr_noAdminboundaries_name" = "Ajemmeq n uḍris";
@@ -308,7 +308,7 @@
 "months_2_4" = "Ayyuren";
 "subcategories" = "Adutaggayin";
 "units_hour" = "s";
-"quick_action_add_poi_category" = "Rnu taggayt tamaynutt";
+"quick_action_add_category" = "Rnu taggayt tamaynutt";
 "rendering_attr_surface_metal_name" = "Métal";
 "gpx_slope" = "Taseksert";
 "rendering_attr_currentTrackColor_description" = "Ini";
@@ -320,7 +320,7 @@
 "osm_alert_button_ok" = "rnu";
 "prefer_in_routing_title" = "Smenyif…";
 "app_mode_utv" = "Côte à côte";
-"shared_string_buy" = "AΓ";
+"buy" = "AΓ";
 "actions" = "Tigawin";
 "intro_next" = "Ar zdat";
 "no_inet_connection" = "Ulac tuqqna n Internet";
@@ -343,11 +343,11 @@
 "shared_string_road" = "Abrid";
 "favorite" = "Menyif";
 "shared_string_close" = "Mdel";
-"res_details" = "Talqayt";
-"product_title_asia" = "Asya";
+"shared_string_details" = "Talqayt";
+"index_name_asia" = "Asya";
 "osm_live_subscribe_btn" = "S\'abonner";
 "purchase_unlim_title" = "%1$S";
-"transport_routes" = "Iberdan";
+"transport_Routes" = "Iberdan";
 "poi_clear" = "Sfeḍ";
 "fav_color" = "Ini";
 "units_yd" = "yd";
@@ -358,7 +358,7 @@
 "osmand_live_updates" = "Isdɣiten usriden";
 "shared_string_search" = "Nadi";
 "rendering_attr_highway_class_track_name" = "Piste";
-"region_north_america" = "Marikan n Ugafa";
+"index_name_north_america" = "Marikan n Ugafa";
 "shared_string_edit" = "Ẓreg";
 "rendering_value_car_name" = "Takeṛṛust";
 "menu_feedback" = "Tikti";
@@ -382,7 +382,7 @@
 "shared_string_remove" = "Kkes";
 "select_city" = "Ffren tamdint";
 "res_url" = "URL";
-"purchase_get" = "Awi";
+"shared_string_get" = "Awi";
 "shared_string_widgets" = "Iwiǧiten";
 "rendering_attr_highway_class_road_name" = "Abrid";
 "app_mode_taxi" = "Aṭaksi";
@@ -391,7 +391,7 @@
 "shared_string_reload" = "Smiren";
 "postcode" = "Tangalt n lpusṭa";
 "rendering_value_yellow_name" = "Awraɣ";
-"region_others" = "Wayeḍ";
+"download_select_map_types" = "Wayeḍ";
 "home_pt" = "Agejdan";
 "poi_remove_success" = "Yettwakkes";
 "shared_string_my_location" = "ideg";
@@ -481,7 +481,7 @@
 "help_osmand_live" = "Ajerred - OsmAnd Srid";
 "help_nav_profiles" = "Imuɣna n tunigin";
 "shared_string_next" = "Ar zdat";
-"units_ft" = "ft";
+"foot" = "ft";
 "select_color" = "Fren ini";
 "new_profile" = "Nouveau profil";
 "shared_string_poi_types" = "Tiwsiyin";
@@ -513,7 +513,7 @@
 "light_theme" = "Aceɛlal";
 "configure_profile" = "Sbadu amaɣnu";
 "shared_string_max" = "Afellay";
-"nav_type_straight_line" = "Ajerriḍ usrid";
+"routing_profile_straightline" = "Ajerriḍ usrid";
 "reverse_route" = "Abrid yettin";
 "shared_string_deselect_all" = "Kkes afran i meṛṛa";
 "shared_string_uninstall" = "Désinstaller";
@@ -521,7 +521,7 @@
 "public_transport_menu" = "Amesni";
 "total" = "Amatu";
 "update_tile" = "leqqem";
-"map_settings_legend" = "Tawaṭṭfa";
+"shared_string_legend" = "Tawaṭṭfa";
 "shared_string_preparing" = "Aheyyi";
 "shared_string_finish" = "Fakk";
 "help_purchases" = "Tiɣin deg OsmAnd";
@@ -531,7 +531,7 @@
 "enter_profile_name" = "Sekcem isem amaynut n umaɣnu";
 "profile_type_custom_string" = "Amaɣnu Gaia udmawan…";
 "profile_alert_delete_title" = "Kkes amaɣnu";
-"route_betw_points" = "Abrid gar wagazen";
+"route_between_points" = "Abrid gar wagazen";
 "quick_action_map_source_title" = "Iɣbula";
 "recalculate_route_distance_promo" = "Abrid ad yettwasiḍen ticki ameccaq gar ubrid akked wadig-ik yugar azal i d-yettwammlen.";
 "shared_string_profiles" = "Imeɣna";
@@ -548,7 +548,7 @@
 "shared_string_gpx_track" = "Abrid";
 "ctx_mnu_direction" = "marker";
 "square" = "Amkuẓ";
-"emergency" = "Annar n trusi n utrab";
+"amenity_type_emergency" = "Annar n trusi n utrab";
 "extra_maps" = "Tikarḍiwin-nniḍen";
 "shared_string_disable" = "Désactiver";
 "shared_string_gpx_points" = "Tineqqiḍin";
@@ -564,7 +564,7 @@
 "group_name" = "Isem n wegraw";
 "plan_route_create_new_route" = "Rnu abrid amaynut";
 "copied_to_clipboard" = "Aḍris yettwanɣel ɣef afus";
-"tracks" = "Iberdan-iw";
+"shared_string_gpx_tracks" = "Iberdan-iw";
 "map_mode" = "Takarḍa";
 "searching_gps" = "Anadi...";
 "default_color" = "Fren ini n lexṣas";
@@ -584,7 +584,7 @@
 "welmode_download_maps" = "Sider";
 "shared_string_time_span" = "Akud";
 "gpx_split_interval_none_descr" = "Fren iɣewwaṛen n unegzum i tebɣiḍ: s wakud neɣ s umeccaq.";
-"education" = "Asegmi";
+"amenity_type_education" = "Asegmi";
 "gpx_dir_arrows" = "Ineccaben n tnila";
 "shared_string_start_time" = "Temps de début";
 "shared_string_width" = "Largeur";

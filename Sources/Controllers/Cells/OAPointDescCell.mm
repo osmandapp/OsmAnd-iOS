@@ -48,7 +48,7 @@
     NSDate *newTime = [NSDate dateWithTimeIntervalSince1970:[NSDate date].timeIntervalSince1970 + intervalMinutes * 60];
     bool isOpened = parser->isOpenedForTime([newTime toTm]);
     if (isOpened == isOpenedNow)
-        return (isOpenedNow ? OALocalizedString(@"time_open") : OALocalizedString(@"time_closed"));
+        return (isOpenedNow ? OALocalizedString(@"shared_string_open") : OALocalizedString(@"time_closed"));
 
     int imax = arrLength - 1;
     int imin = 0;

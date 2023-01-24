@@ -42,7 +42,7 @@
 
 -(void)applyLocalization
 {
-    _titleView.text = OALocalizedString(@"res_details");
+    _titleView.text = OALocalizedString(@"shared_string_details");
 }
 
 -(void)viewDidLoad
@@ -381,7 +381,7 @@
 - (NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     if (section == 0)
-        return OALocalizedStringUp(@"res_details");
+        return OALocalizedStringUp(@"shared_string_details");
     else
         return OALocalizedStringUp(@"actions");
 }

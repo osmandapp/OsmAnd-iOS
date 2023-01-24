@@ -151,6 +151,8 @@
                 [nearbyStops addObject:stop];
             }
         }
+        [self sortTransportStopsExits:amenityLocation stops:localStops];
+        [self sortTransportStopsExits:amenityLocation stops:nearbyStops];
         for (OATransportStop *stop in nearbyStops)
         {
             auto dist = OsmAnd::Utilities::distance(stop.stop->location.longitude, stop.stop->location.latitude, self.poi.longitude, self.poi.latitude);
@@ -161,8 +163,6 @@
             auto dist = OsmAnd::Utilities::distance(stop.stop->location.longitude, stop.stop->location.latitude, self.poi.longitude, self.poi.latitude);
             [self addRoutes:localRoutes dataInterface:dataInterface s:stop.stop lang:prefLang transliterate:transliterate dist:dist isSubwayEntrance:isSubwayEntrance];
         }
-//        sortTransportStopsExits(amenityLocation, stopAggregated.getLocalTransportStops());
-//        sortTransportStopsExits(amenityLocation, stopAggregated.getNearbyTransportStops());
     }
     
     NSComparisonResult(^comparator)(OATransportStopRoute* _Nonnull o1, OATransportStopRoute* _Nonnull o2) = ^NSComparisonResult(OATransportStopRoute* _Nonnull o1, OATransportStopRoute* _Nonnull o2){
@@ -184,22 +184,21 @@
     self.nearbyRoutes = nearbyRoutes;
 }
 
-- (void) sortTransportStopsExits:(CLLocation *)latLon transportStops:(NSMutableArray<OATransportStop *> *)transportStops
+- (void) sortTransportStopsExits:(OsmAnd::LatLon)latLon stops:(NSMutableArray<OATransportStop *> *)stops
 {
-//    for (TransportStop transportStop : transportStops) {
-//        for (TransportStopExit exit : transportStop.getExits()) {
-//            int distance = (int) MapUtils.getDistance(latLon, exit.getLocation());
-//            if (transportStop.distance > distance) {
-//                transportStop.distance = distance;
-//            }
-//        }
-//    }
-//    Collections.sort(transportStops, new Comparator<TransportStop>() {
-//        @Override
-//        public int compare(TransportStop s1, TransportStop s2) {
-//            return Algorithms.compare(s1.distance, s2.distance);
-//        }
-//    });
+    for (OATransportStop *transportStop in stops)
+    {
+        for (const auto &exit : transportStop.stop->exits)
+        {
+            int distance = (int) OsmAnd::Utilities::distance(latLon, exit->location);
+            if (transportStop.distance > distance) {
+                transportStop.distance = distance;
+            }
+        }
+    }
+    [stops sortUsingComparator:^NSComparisonResult(OATransportStop * _Nonnull obj1, OATransportStop * _Nonnull obj2) {
+        return [@(obj1.distance) compare:@(obj2.distance)];
+    }];
 }
 
 - (void) addRoutes:(NSMutableArray<OATransportStopRoute *> *)routes dataInterface:(std::shared_ptr<OsmAnd::ObfDataInterface>)dataInterface s:(std::shared_ptr<const OsmAnd::TransportStop>)s lang:(NSString *)lang transliterate:(BOOL)transliterate dist:(int)dist isSubwayEntrance:(BOOL)isSubwayEntrance

@@ -181,7 +181,7 @@
         @"rows" : layerRowData
     }];
     
-    NSString * layerTitle = _weatherBand ? _weatherBand.getMeasurementName : OALocalizedString(@"map_settings_weather_contours");
+    NSString * layerTitle = _weatherBand ? _weatherBand.getMeasurementName : OALocalizedString(@"shared_string_contours");
     [layerRowData addObject:@{
         @"cellId" : OASwitchTableViewCell.getCellIdentifier,
         @"type" : kSwitchCell,

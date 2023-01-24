@@ -137,7 +137,7 @@
                         @"type" : [OASwitchTableViewCell getCellIdentifier],
                         @"key" : kDistanceIndication,
                         @"value" : @([_settings.distanceIndicationVisibility get]),
-                        @"title" : OALocalizedString(@"distance_indication"),
+                        @"title" : OALocalizedString(@"show_direction"),
                         }];
     
     [distanceIndicationArr addObject:@{
@@ -328,7 +328,7 @@
         case 0:
             return OALocalizedString(@"active_markers");
         case 1:
-            return OALocalizedString(@"distance_indication");
+            return OALocalizedString(@"show_direction");
         case 2:
             return OALocalizedString(@"appearance_on_map");
         default:

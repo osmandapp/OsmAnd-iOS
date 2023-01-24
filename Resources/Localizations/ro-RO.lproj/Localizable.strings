@@ -26,7 +26,7 @@
 "edit_filter" = "Editează categoriile";
 "shared_string_previous" = "Precedentul";
 "poi_filter_by_name" = "Căutare după nume";
-"osm_target_deleted" = "POI OSMșters";
+"osm_edit_deleted_poi" = "POI OSMșters";
 "shared_string_my_location" = "Poziția mea";
 "osmand_live_available_maps" = "Hărți disponibile";
 "help_faq" = "Întrebări frecvente";
@@ -198,7 +198,7 @@
 "traffic_warning_hazard" = "Pericol";
 "route_tshl" = "Virați brusc al stânga și continuați";
 "rendering_category_routes" = "Rute";
-"intro_skip" = "Omiteți";
+"shared_string_skip" = "Omiteți";
 "in_app_purchase_desc" = "O singură plată";
 "shared_string_near" = "Apropiere";
 "unlock_all_features" = "Deblochează toate funcționalitățile OsmAnd";
@@ -274,7 +274,7 @@
 "si_m_s" = "Metri pe secundă";
 "osm_live_ask_for_purchase" = "Vă rugăm să achiziționați mai întâi abonamentul OsmAnd Live";
 "units_m_s" = "m/s";
-"my_places" = "Locurile mele";
+"shared_string_my_places" = "Locurile mele";
 "route_descr_destination" = "Destinație";
 "app_mode_truck" = "Camion";
 "help_about" = "Despre";
@@ -374,7 +374,7 @@
 "region_ausralia_and_oceania" = "Australiași Oceania";
 "map_widget_left" = "Panou stânga";
 "open_till" = "Deschide până";
-"offline_vector_maps" = "Hărți vectoriale offline";
+"vector_data" = "Hărți vectoriale offline";
 "map_settings_text_size" = "Mărimea textului";
 "region_north_america" = "America de Nord";
 "city_type_hamlet" = "Cătun";
@@ -471,10 +471,10 @@
 "apply_filters" = "Aplică filtrele";
 "selected_categories" = "Categoriile selectate";
 "rendering_category_hide" = "Ascunde";
-"prev_route" = "Ruta anterioară";
+"previous_route" = "Ruta anterioară";
 "sort_by_name" = "Sortare după nume";
 "show_traffic_warnings" = "Avertismente de trafic";
-"gpx_start" = "Start";
+"shared_string_control_start" = "Start";
 "prefer_in_routing_title" = "Preferă…";
 "wake_on_voice" = "Pornește ecranul";
 "routing_settings_2" = "Setări de navigație";
@@ -757,7 +757,7 @@
 "app_mode_horse" = "Cal";
 "app_mode_personal_transporter" = "Transportator personal";
 "app_mode_wagon" = "Căruță";
-"map_settings_base_transp" = "Transparență hartă de bază";
+"map_transparency" = "Transparență hartă de bază";
 "app_mode_car" = "Conduceți";
 "app_mode_bicycle" = "Ciclism";
 "app_mode_scooter" = "Scuter";
@@ -775,8 +775,8 @@
 "quick_action_mapillary_show" = "Afișare Mapillary";
 "total" = "Total";
 "shared_string_deselect_all" = "Deselect tot";
-"res_source_sqlite" = "Fișier SQLiteDB";
-"menu" = "Meniu";
+"sqlite_db_file" = "Fișier SQLiteDB";
+"shared_string_menu" = "Meniu";
 "res_slope" = "Pantă";
 "special_routing" = "Rutare specială";
 "public_transport_empty_warning_descr" = "Încercați să modificați setările.";
@@ -795,7 +795,7 @@
 "map_settings_add_online_source" = "Adăugare surse online";
 "two" = "Două";
 "announce" = "Anunț";
-"min_speed" = "Viteza minimă";
+"shared_string_min_speed" = "Viteza minimă";
 "configure_screen_descr" = "Selectați opțiunile ecranului pentru profil";
 "select_icon" = "Selectați icoana";
 "add_to_track" = "Adăugați la un traseu";
@@ -816,11 +816,11 @@
 "vehicle_parameters" = "Parametrii vehicul";
 "create_profile_descr" = "Profilul personalizat pe unul dintre profilurile ale aplicației implicite, acest lucru definește configurarea de bază, cum ar fi vizibilitatea implicită a widgets și unități de viteză și distanță.Acestea sunt profilurile de aplicație implicite, împreună cu exemple de profiluri personalizate pot fi extinse la:";
 "routing_profile_ski" = "Schi";
-"distance_indication" = "Indicație distanță";
+"show_direction" = "Indicație distanță";
 "logging_min_accuracy" = "Acuratețe minimă";
 "copy_from_other_profile" = "Copiați din alt profil";
 "next_segment" = "Segmentul următor";
-"logging_min_distance" = "Deplasare minimă";
+"monitoring_min_distance" = "Deplasare minimă";
 "base_profile_descr_boat" = "Navă, Canotaj, Navigație";
 "configure_profile" = "Configurează profilul";
 "profile_appearance" = "Aspectul profilului";
@@ -866,7 +866,7 @@
 "ltr_or_rtl_combine_via_colon" = "%@: %@";
 "import_duplicates_title" = "Unele elemente există deja";
 "res_pseudo_mercator" = "Proiecție pseudo-Mercator";
-"edit_profile_list" = "Editează lista de profiluri";
+"reorder_profiles" = "Editează lista de profiluri";
 "shared_string_next" = "Următorul";
 "default_speed_dialog_msg" = "Estimarea timpului de sosire pentru tipurile de drumuri necunoscuteși limitarea vitezei pe toate drumurile (poate afecta traseul)";
 "update_tile" = "Actualizare hartă";
@@ -1439,7 +1439,7 @@
 "osmand_live_donations_enter_email" = "Introduceți adresa dumneavoastră de e-mail";
 "osmand_live_donation_switch_descr" = "O parte din donația dumneavoastră este distribuită între utilizatorii OSM care trimit modificări la OpenStreetMap. Costul abonamentului rămâne același";
 "osmand_live_wifi_only" = "Actualizare numai prin WiFi";
-"osmand_live_upd_frequency" = "Frecvența de actualizare";
+"update_frequency" = "Frecvența de actualizare";
 "osmand_live_server_date" = "Ultima actualizare a serverului: %@";
 "osmand_live_reports" = "Rapoarte";
 "osmand_live_not_updated" = "Neactualizat încă";
@@ -1984,7 +1984,7 @@
 "quick_action_name_footer" = "Lăsați spațiul gol pentru a utiliza adresa sau denumirea localității.";
 "quick_action_template_name" = "Numele șablonului";
 "quick_action_dialog_descr" = "Activați pentru a afișa dialogul înainte de a aplica acțiunea";
-"quick_actions_show_dialog" = "Afișați un dialog intermediar";
+"quick_action_interim_dialog" = "Afișați un dialog intermediar";
 "quick_action_add_actions_descr" = "Adăugați acțiuni pentru a le accesa rapid de pe hartă.";
 "confirm_bulk_delete" = "Doriți să ștergeți %ld elemente?";
 "quick_action_screen_header" = "Ecran %ld";
@@ -2009,7 +2009,7 @@
 "add_start" = "Adăugați punctul de plecare";
 "add_destination" = "Adăugați destinația";
 "change_map_underlay" = "Modificați subiectul hărții";
-"change_map_overlay" = "Modificarea suprapunerii hărții";
+"quick_action_map_overlay" = "Modificarea suprapunerii hărții";
 "change_map_source" = "Schimbați sursa hărții";
 "change_map_style" = "Schimbați stilul hărții";
 "add_poi" = "Adăugați POI";
@@ -2393,7 +2393,7 @@
 "plugin_popup_nautical_ask" = "Vă rugăm să activați plugin-ul Nautical";
 "weather_pressure_unit_mmhg" = "Milimetri de mercur";
 "weather_precip_unit_mm" = "Milimetri";
-"weather_precip_unit_in" = "Inci";
+"weather_precip_inches" = "Inci";
 "restore_purchase" = "Restabilirea achiziției";
 "osm_live_payment_year_cost_descr" = "%@ / an";
 "routing_attr_hazmat_category_name" = "Transportul de materiale periculoase";
@@ -2409,7 +2409,7 @@
 "empty_purchases_description" = "Dacă achizițiile dumneavoastră nu apar aici, apăsați pe \"%@\" sau contactați echipa noastră de asistență.";
 "osm_live_payment_subscription_management_aid" = "Plata va fi debitată în contul ID-ului dumneavoastră Apple la confirmarea achiziției.\n\nAbonamentul se reînnoiește automat, cu excepția cazului în care este anulat cu cel puțin 24 de ore înainte de sfârșitul perioadei curente. Contul dumneavoastră va fi debitat pentru reînnoire cu 24 de ore înainte de sfârșitul perioadei curente.\n\nPuteți gestiona și anula abonamentele dumneavoastră accesând setările contului dumneavoastră din App Store după achiziționare";
 "map_settings_weather_layers" = "Straturi";
-"map_settings_weather_contours" = "Contururi";
+"shared_string_contours" = "Contururi";
 "weather_cloud_enable_descr" = "Activați vizualizarea stratului de nori pe hartă.";
 "toggle_cloud" = "Afișați / ascundeți - Strat de nor";
 "cloud_hide" = "Ascunde nor";
@@ -2507,7 +2507,7 @@
 "shared_string_restoring" = "Restaurarea";
 "restoring_from" = "Restaurarea datelor selectate din cloud";
 "restore_backup_descr" = "Restaurați datele de pe dispozitiv fără a face backup-uri online";
-"restore_data" = "Restaurarea datelor";
+"backup_restore_data" = "Restaurarea datelor";
 "choose_what_to_restore" = "Alegeți elementele de restaurat";
 "renew_subscription" = "Reînnoiți abonamentul";
 "backup_complete" = "Copie de rezervă completă";
@@ -2620,7 +2620,7 @@
 "sign_in_with_open_street_map" = "Conectați-vă cu OpenStreetMap";
 "use_login_and_password" = "Utilizați login și parolă";
 "use_login_and_password_description" = "Utilizați e-mailul/loginul și parola dumneavoastră pentru a vă conecta la OpenStreetMap.org.";
-"tts" = "TTS";
+"tts_title" = "TTS";
 "ltr_or_rtl_combine_via_slash" = "%@/%@";
 "backup_error_failed_to_fetch_remote_items" = "Nu s-a reușit preluarea listei de fișiere de pe server.";
 "error_contact_support" = "Dacă problema persistă, vă rugăm să contactați echipa noastră de asistență.";

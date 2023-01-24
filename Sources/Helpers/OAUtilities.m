@@ -741,7 +741,7 @@
     if ([self.symbol isEqualToString:NSUnitLength.millimeters.symbol])
         return OALocalizedString(@"weather_precip_unit_mm");
     else if ([self.symbol isEqualToString:NSUnitLength.inches.symbol])
-        return OALocalizedString(@"weather_precip_unit_in");
+        return OALocalizedString(@"weather_precip_inches");
     return nil;
 }
 

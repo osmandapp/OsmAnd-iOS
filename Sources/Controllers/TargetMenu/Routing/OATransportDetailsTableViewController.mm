@@ -451,7 +451,7 @@
             cell.detailsButton.tag = _routeIndex;
             [cell.detailsButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.detailsButton addTarget:self action:@selector(onTransportDetailsPressed:) forControlEvents:UIControlEventTouchUpInside];
-            [cell.showOnMapButton setTitle:OALocalizedString(@"gpx_start") forState:UIControlStateNormal];
+            [cell.showOnMapButton setTitle:OALocalizedString(@"shared_string_control_start") forState:UIControlStateNormal];
             cell.showOnMapButton.tag = _routeIndex;
             [cell.showOnMapButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.showOnMapButton addTarget:self action:@selector(onStartPressed:) forControlEvents:UIControlEventTouchUpInside];

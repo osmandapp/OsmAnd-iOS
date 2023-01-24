@@ -106,7 +106,7 @@
 "gpx_route_time" = "Час маршруту";
 "gpx_uphldownhl" = "Уздымы/Спускі";
 "gpx_average_speed" = "Сярэдняя хуткасць";
-"gpx_start" = "Пачатак";
+"shared_string_control_start" = "Пачатак";
 "gpx_avg_elev" = "Сярэдняя вышыня";
 "gpx_elev_range" = "Рознасць вышынь";
 "gpx_updown" = "Уверх/Уніз";
@@ -118,7 +118,7 @@
 "shared_string_transparency" = "Празрыстасць";
 "map_settings_avail_lay" = "Даступныя пласты";
 // Intro
-"intro_skip" = "Прамінуць";
+"shared_string_skip" = "Прамінуць";
 "intro_promo" = "Сусветныя аўтаномныя мапы";
 "intro_placeholder" = "увядзіце назву рэгіёна";
 "sett_units" = "Адзінкі вымярэння";
@@ -821,7 +821,7 @@
 "quick_action_add_poi_category" = "Дадаць катэгорыю";
 "osm_note_action_field_descr" = "Гэтае паведамленне дададзена ў поле камэнтара.";
 "osm_alert_title" = "Пацвердзіць";
-"offline_vector_maps" = "Пазасеціўныя вектарныя мапы";
+"vector_data" = "Пазасеціўныя вектарныя мапы";
 "modify_poi_short" = "Змяніць POI";
 "osmand_live_donations" = "Ахвяраванні";
 "osm_note_upload_anonymously" = "Адправіць ананімна";
@@ -836,7 +836,7 @@
 "osmand_live_support_reg_title" = "Падтрымліваемы рэгіён";
 "gpx_ascent" = "Пад\'ём";
 "help_tech_articles" = "Тэхнічныя артыкулы";
-"quick_actions_show_dialog" = "Паказваць прамежкавы дыялог";
+"quick_action_interim_dialog" = "Паказваць прамежкавы дыялог";
 "mapillary_get_title" = "Палепшыць фотапакрыццё Mapillary";
 "osm_website" = "Вэб-сайт";
 "osm_edits_advanced" = "Пашыранае";
@@ -845,7 +845,7 @@
 "directions_more_options" = "Маршрут адсюль";
 "osm_notes_online_layer" = "OSM-нататкі (у сеціве)";
 "osmand_live_weekly" = "Штотыднёва";
-"osm_target_deleted" = "OSM POIвыдаленая";
+"osm_edit_deleted_poi" = "OSM POIвыдаленая";
 "work_pt" = "Праца";
 "osm_phone" = "Тэлефон";
 "change_map_underlay" = "Змяніць падкладку мапы";
@@ -858,11 +858,11 @@
 "product_desc_ext_wikivoyage" = "Дапаможнік па самым цікавым месцам на планеце ўнутры OsmAnd без злучэння з Інтэрнэтам.";
 "osm_working_days" = "Працоўныя дні";
 "osmand_live_hourly" = "Штогадзінна";
-"prev_route" = "Папярэдні маршрут";
+"previous_route" = "Папярэдні маршрут";
 "day_mode" = "Дзённы рэжым";
 "help_trip_planning" = "Планаванне паездкі";
 "region_others" = "Іншыя мапы";
-"my_places" = "Мае мясціны";
+"shared_string_my_places" = "Мае мясціны";
 "help_legend" = "Легенда мапы";
 "mapil_pano_only" = "Паказаць толькі 360° малюнкі";
 "osm_edits_basic" = "Асноўнае";
@@ -904,7 +904,7 @@
 "osm_editing_lost_changes_title" = "Выйсці без захавання\?";
 "quick_action_add_underlay" = "Дадаць падкладку";
 "auto_split_gap" = "Аўтаматычнае дзяленне запісаў пасля перапынку";
-"change_map_overlay" = "Змяніць накладзеную мапу";
+"quick_action_map_overlay" = "Змяніць накладзеную мапу";
 "home_pt" = "Дом";
 "traffic_warning_tunnel" = "Наперадзе тунэль";
 "nearby_search" = "Шукаць навокал";
@@ -1243,7 +1243,7 @@
 "all_group_points" = "Усе пункты групы";
 "map_settings_appearance" = "Выгляд";
 "wiki_sheet_title" = "Як адкрыць артыкулы Вікіпедыі?";
-"map_settings_base_transp" = "Празрыстасць асноўнай мапы";
+"map_transparency" = "Празрыстасць асноўнай мапы";
 "app_mode_ufo" = "НЛА";
 "app_mode_default" = "Прагляд мапы";
 "open_wiki_online" = "Адкрыць артыкул у сеціве";
@@ -1298,7 +1298,7 @@
 "weight_limit_description" = "Пазначце вагу аўтамабіля, для цяжкіх транспартных сродкаў на маршруце могуць ужывацца абмежаванні.";
 "osmand_live_donation_header" = "Налады ахвяраванняў";
 "osmand_live_wifi_only" = "Абнаўленне толькі па Wi-Fi";
-"osmand_live_upd_frequency" = "Чашчыня абнаўлення";
+"update_frequency" = "Чашчыня абнаўлення";
 "osmand_live_server_date" = "Апошняе абнаўленне сервера: %@";
 "osmand_live_reports" = "Справаздачы";
 "osmand_live_not_updated" = "Яшчэ не абноўлена";
@@ -1322,7 +1322,7 @@
 "position_icon_at_rest" = "Значок пазіцыі";
 "select_icon" = "Абраць значок";
 "enter_profile_name" = "Увядзіце назву профілю";
-"edit_profile_list" = "Рэдагаваць спіс профіляў";
+"reorder_profiles" = "Рэдагаваць спіс профіляў";
 "ui_customization_descr" = "Элементы панэлі, кантэкстнае меню";
 "ui_customization" = "Наладжванне інтэрфейсу";
 "profile_appearance_descr" = "Значок, колер і назва";
@@ -1457,11 +1457,11 @@
 "plugin_settings_reset" = "Скід налад убудовы да прадвызначаных";
 "auto_split_gap_descr" = "Распачне новы сегмент пасля прыпынку ў 6 хвілін, новы след пасля 2 гадзін альбо новы файл пасля працяглага прыпынку";
 "logging_min_speed" = "Мінімальная хуткасць";
-"min_speed" = "Мінімальная хуткасць";
+"shared_string_min_speed" = "Мінімальная хуткасць";
 "send_anonymous_data_desc" = "Адпраўце ў OsmAnd статыстыку спампоўванняў мапаў. Мы не збіраем даныя месцазнаходжання і іншыя асабістыя звесткі.";
 "do_not_show_discount_desc" = "Хавае дысконтныя прапановы і адмысловыя мясцовыя падзеі.";
 "direction_lines" = "Лініі кірунку";
-"distance_indication" = "Індыкацыя адлегласці";
+"show_direction" = "Індыкацыя адлегласці";
 // Dirrection appearance
 "one" = "Адзін";
 "configure_screen_descr" = "Абярыце параметры экрана для профілю";
@@ -1471,7 +1471,7 @@
 "logging_min_accuracy" = "Мінімальная дакладнасць";
 "logging_accuracy" = "Дакладнасць рэгістрацыі";
 "logging_min_distance_descr" = "Фільтр: мінімальная адлегласць для рэгістрацыі новай кропкі";
-"logging_min_distance" = "Мінімальны зрух";
+"monitoring_min_distance" = "Мінімальны зрух";
 "max_speed" = "Максімальная хуткасць";
 "default_speed_setting_title" = "Прадвызначаная хуткасць";
 "driving_region_descr" = "Абярыце рэгіён кіравання: ЗША, Еўропа, Вялікабрытанія, Азія і іншыя.";
@@ -1547,7 +1547,7 @@
 "osm_upload_failed_descr" = "Калі ласка, праверце вашы даныя для ўваходу і злучэнне з інтэрнэтам, і паўтарыце спробу.";
 "osm_upload_failed_title" = "Не атрымалася запампаваць";
 // Menu
-"menu" = "Меню";
+"shared_string_menu" = "Меню";
 "res_online_source_cache_alert" = "Калі ўжыць гэтыя змены, то кэшаваныя даныя гэтай крыніцы страцяцца";
 "res_offlineSQL_URL_warning" = "Не падтрымліваецца для гэтага тыпу мапаў";
 "res_zoom_invalid_value" = "Значэнні маштабавання мусяць быць у дыяпазоне 1 - 22";
@@ -1558,7 +1558,7 @@
 "res_name_warning" = "Назва файла не можа быць пустой";
 "res_zoom_levels_desc" = "Гэтыя параметры будуць уплываць на адлюстраванне мапы пры выкарыстанні ў якасці тыпу Мары альбо накладкі ці падкладкі.\n\nТып мапы: карта будзе абмяжоўвацца абранымі маштабамі.\n\nНакладка / падкладка: узроўні маштабавання, на якіх фрагменты будуць бачныя. Павелічэнне ці памяншэнне маштабу будзе адбывацца вышэй або ніжэй вызначаных значэнняў.";
 "res_source_one_per_tile" = "Кожны фрагмент у асобным файле";
-"res_source_sqlite" = "Файл SQLiteDB";
+"sqlite_db_file" = "Файл SQLiteDB";
 "res_source_format" = "Фармат крыніцы";
 "res_pseudo_mercator" = "Псеўда-праекцыя Меркатара";
 "res_mercator" = "Праекцыя Меркатара";
@@ -2121,7 +2121,7 @@
 "routeInfo_surface_description" = "Пастаўляе інфармацыю пра фізічнае пакрыццё дарогі/пешаходнай дарожкі.";
 "shared_string_interval" = "Дыяпазон";
 "map_settings_weather_layers" = "Слаі";
-"map_settings_weather_contours" = "Контуры";
+"shared_string_contours" = "Контуры";
 "population_num" = "Насельніцтва";
 "restart" = "Перазапусціць";
 "shared_string_capacity" = "Ёмістасць";
@@ -2141,7 +2141,7 @@
 "app_restart_required" = "Для ўжывання некаторых налад патрабуецца перазапуск праграмы.";
 "activity" = "Дзейнасць";
 "weather_wind_unit_knots" = "Вузлы";
-"weather_precip_unit_in" = "Цалі";
+"weather_precip_inches" = "Цалі";
 "weather_precip_unit_mm" = "Міліметры";
 "routeInfo_horse_scale_name" = "Складанасць конных сцежак";
 "routeInfo_horse_scale_description" = "Адлюстроўваць шляхі ў залежнасці ад складанасці конных сцежак";

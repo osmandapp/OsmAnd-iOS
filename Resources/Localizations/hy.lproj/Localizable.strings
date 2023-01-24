@@ -130,7 +130,7 @@
 "driving_region_automatic" = "Ավտոմատ";
 "routing_attr_length_name" = "Երկարության սահմանապակումը";
 "default_speed_setting_title" = "Default speed";
-"min_speed" = "Min. speed";
+"shared_string_min_speed" = "Min. speed";
 "max_speed" = "Max. speed";
 "road_speeds_descr" = "These parameters can affect the route calculation.";
 "road_min_speed_descr" = "Sets the minimum travel speed for all roads in the route. Raises priority for roads with recommended speeds less than the minimum.";
@@ -141,7 +141,7 @@
 "save_global_track_interval_descr" = "Choose logging interval for the general track recording (enabled via the GPX logging widget on the map).";
 "logging_interval_navigation" = "Նավիգացիայի ընթացքում մուտքագրման ժամանակի ընդմիջումը";
 "logging_interval_navigation_descr" = "Choose logging interval for track recording during navigation";
-"logging_min_distance" = "Minimum displacement";
+"monitoring_min_distance" = "Minimum displacement";
 "logging_min_distance_descr" = "Filter: minimum distance to log a new point";
 "logging_accuracy" = "Logging accuracy";
 "logging_min_accuracy" = "Minimum accuracy";
@@ -214,7 +214,7 @@
 // Dirrection appearance
 "one" = "Մեկ";
 "two" = "Երկու";
-"distance_indication" = "Հեռավորության ցուցիչ";
+"show_direction" = "Հեռավորության ցուցիչ";
 "arrows_on_map" = "Arrows on the map";
 "direction_lines" = "Direction lines";
 "active_markers" = "Ակտիվ մարկերներ";
@@ -348,7 +348,7 @@
 "route_is_too_long_v2" = "This route may be too long to calculate. Please add intermediate destinations if no result is found within 10 minutes.";
 "navigation_over_track" = "Ցանկանում եք սկսել նավարկությունը ըստ տրեկի?";
 "use_displayed_track_for_navigation" = "Do you want to use displayed track for navigation?";
-"prev_route" = "Previous route";
+"previous_route" = "Previous route";
 "shared_string_ellipsis" = "…";
 "shared_string_select_on_map" = "Ընտրել քարտեզի վրա";
 "selected_roads" = "Selected roads";
@@ -546,7 +546,7 @@
 "poi_overlay" = "POI Overlay";
 "poi_dialog_poi_type" = "POIտեսակը";
 "my_favorites" = "My Favorites";
-"my_places" = "Իմ վայրերը";
+"shared_string_my_places" = "Իմ վայրերը";
 "fav_no_group" = "No group";
 "fav_add_new_group" = "Add new group";
 "select_group_descr" = "Select group or add a new one";
@@ -638,7 +638,7 @@
 "gpx_route_time" = "Route time";
 "gpx_uphldownhl" = "Uphills/Downhills";
 "gpx_average_speed" = "Միջին արագությունը";
-"gpx_start" = "ձայնագրել";
+"shared_string_control_start" = "ձայնագրել";
 "gpx_avg_elev" = "Average elevation";
 "gpx_elev_range" = "Elevation range";
 "gpx_avg_altitude" = "Միջին բարձրություն";
@@ -710,7 +710,7 @@
 "map_settings_offline" = "Styles for offline maps";
 "map_settings_online" = "Առցանց քարտեզներ";
 "shared_string_transparency" = "Transparency";
-"map_settings_base_transp" = "Հիմնական քարտեզը թափանցիկությունը";
+"map_transparency" = "Հիմնական քարտեզը թափանցիկությունը";
 "map_settings_avail_lay" = "Available layers";
 "mapillary" = "Մափիլարի(Mapillary)";
 "street_level_imagery" = "Street-level imagery";
@@ -749,7 +749,7 @@
 "plugin_settings_descr" = "Plugin settings for the selected profile.";
 
 // Intro
-"intro_skip" = "Բաց թողնել";
+"shared_string_skip" = "Բաց թողնել";
 "intro_download" = "Download\nmap";
 "intro_next" = "Հաջորդը";
 "intro_welcome" = "Welcome to\nOsmAnd";
@@ -988,7 +988,7 @@
 "profile_appearance_descr" = "Icon, color, and name";
 "ui_customization" = "UI customization";
 "ui_customization_descr" = "Drawer items, context menu";
-"edit_profile_list" = "Edit profile list";
+"reorder_profiles" = "Edit profile list";
 "enter_profile_name" = "Enter profile name";
 "select_color" = "Select color";
 "select_icon" = "Select icon";
@@ -1129,7 +1129,7 @@
 "osmand_live_weekly" = "Շաբաթական";
 "osmand_live_reports" = "Reports";
 "osmand_live_server_date" = "Last server update: %@";
-"osmand_live_upd_frequency" = "Update frequency";
+"update_frequency" = "Update frequency";
 "osmand_live_wifi_only" = "Update only via WiFi";
 "osmand_live_donation_header" = "Donation settings";
 "osmand_live_donations" = "Նվիրատվություններ";
@@ -1192,7 +1192,7 @@
 "res_elliptic_mercator" = "Elliptic mercator";
 "res_pseudo_mercator" = "Մերկատորի կեղծ նախագծումը";
 "res_source_format" = "Source format";
-"res_source_sqlite" = "Файл SQLiteDB";
+"sqlite_db_file" = "Файл SQLiteDB";
 "res_source_one_per_tile" = "Յուրաքանչյուր սալիկ իր ֆայլում";
 "res_zoom_levels_desc" = "This parameters will affect the map display when used as a map type or overlay/underlay.\n\nMap type: the map will be limited to the selected zooms.\n\nOverlay / Underlay: Zoom levels at which tiles will be visible. Upscale or downscale will occur above or below the set values.";
 "res_expire_time_desc" = "Expiration time in minutes. Cached tiles will be reloaded after specified time. Leave this field empty if you do not need to reload tiles for this source.\nOne day is 1440 minutes.\nOne week is 10 080 minutes.\n30 days are 43 200 minutes.";
@@ -1211,7 +1211,7 @@
 "shared_string_feet" = "feet";
 
 // Menu
-"menu" = "Menu";
+"shared_string_menu" = "Menu";
 "menu_my_places" = "Իմ վայրերը";
 "menu_my_trips" = "My Tracks";
 "menu_feedback" = "Արձագանք";
@@ -1259,7 +1259,7 @@
 "osm_modify_place" = "Modify place";
 "osm_poi_delete_title" = "POIջնջում";
 "osm_edit_modified_poi" = "Փոփոխված OSM POI";
-"osm_target_deleted" = "Ջնջված է OSM POI";
+"osm_edit_deleted_poi" = "Ջնջված է OSM POI";
 "osm_target_created" = "Ստեղծեք OSM POI";
 "osm_note_created" = "OSMնշում ստեղծվել է";
 "osm_note_create" = "Create OSM Note";
@@ -1339,7 +1339,7 @@
 "quick_action_coordinates_widget_descr" = "Tapping this action button shows or hides the Coordinates widget.";
 "map_overlays" = "Քարտեզներ";
 "map_underlays" = "Քարտեզի նեքեվի շերտը";
-"offline_vector_maps" = "Տեղական վեկտորային(Offline) քարտեզներ";
+"vector_data" = "Տեղական վեկտորային(Offline) քարտեզներ";
 "add_map_source" = "Ավելացնել քարտեզի աղբյուրները";
 "add_map_style" = "Add map style";
 "map_styles" = "Քարտեզների ոճը";
@@ -1366,7 +1366,7 @@
 "add_poi" = "Ավելացնել POI";
 "change_map_style" = "Փոխել քարտեզի ոճը";
 "change_map_source" = "Փոխել քարտեզի աղբյուրը";
-"change_map_overlay" = "Փոխել արտեզը";
+"quick_action_map_overlay" = "Փոխել արտեզը";
 "change_map_underlay" = "Փոխել քարտեզի նեքեվի շերտը";
 "replace_destination" = "Փոխարինել նպատակակետը";
 "add_destination" = "Add destination";
@@ -1403,7 +1403,7 @@
 "quick_action_screen_header" = "Screen %ld";
 "confirm_bulk_delete" = "Do you want to delete %ld items?";
 "quick_action_add_actions_descr" = "Add actions to access them quickly from the map.";
-"quick_actions_show_dialog" = "Ցույց տալ միջանկյալ երկխոսությունը";
+"quick_action_interim_dialog" = "Ցույց տալ միջանկյալ երկխոսությունը";
 "quick_action_dialog_descr" = "Turn on to show dialog before applying the action";
 "quick_action_template_name" = "Template name";
 "quick_action_name_footer" = "Թողնել դատարկ, որ օգտագործել հասցե կամ վայրի անվանումը.";

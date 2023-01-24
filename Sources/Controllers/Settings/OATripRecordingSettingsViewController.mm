@@ -138,7 +138,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
             [dataArr addObject:
              @[@{
                    @"name" : @"logging_min_distance",
-                   @"title" : OALocalizedString(@"logging_min_distance"),
+                   @"title" : OALocalizedString(@"monitoring_min_distance"),
                    @"description" : OALocalizedString(@"logging_min_distance_descr"),
                    @"value" : minDistValue,
                    @"type" : [OAIconTitleValueCell getCellIdentifier] }
@@ -201,7 +201,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
                  @"value" : @([_settings.autoSplitRecording get:self.appMode]),
                  @"type" : [OASwitchTableViewCell getCellIdentifier] }]];
             
-            NSString *menuPath = [NSString stringWithFormat:@"%@ — %@ — %@", OALocalizedString(@"menu"), OALocalizedString(@"menu_my_places"), OALocalizedString(@"menu_my_trips")];
+            NSString *menuPath = [NSString stringWithFormat:@"%@ — %@ — %@", OALocalizedString(@"shared_string_menu"), OALocalizedString(@"menu_my_places"), OALocalizedString(@"menu_my_trips")];
             NSString *actionsDescr = [NSString stringWithFormat:OALocalizedString(@"trip_rec_actions_descr"), menuPath];
             NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithString:actionsDescr attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:15], NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer)}];
             [str addAttributes:@{NSFontAttributeName : [UIFont systemFontOfSize:15 weight:UIFontWeightSemibold]} range:[actionsDescr rangeOfString:menuPath]];
@@ -292,7 +292,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
             }
             break;
         case kTripRecordingSettingsScreenMinDistance:
-            self.titleLabel.text = OALocalizedString(@"logging_min_distance");
+            self.titleLabel.text = OALocalizedString(@"monitoring_min_distance");
             for (int i = 0; i < minTrackDistanceValues.count; i++)
             {
                 [dataArr addObject: @{

@@ -108,7 +108,7 @@
 "save_global_track_interval_descr" = "Choose logging interval for the general trip recording (enabled via the GPX logging widget on the map).";
 "logging_interval_navigation" = "Interwal nahrawanja w běhu nawigacije";
 "logging_interval_navigation_descr" = "Choose logging interval for trip recording during navigation";
-"logging_min_distance" = "Minimum logging distance";
+"monitoring_min_distance" = "Minimum logging distance";
 "logging_min_distance_descr" = "Filter: minimum distance to log a new point";
 "logging_min_accuracy" = "Minimum logging accuracy";
 "logging_min_accuracy_descr" = "Filter: no logging unless the accuracy is reached";
@@ -248,7 +248,7 @@
 "route_is_too_long_v2" = "This route may be too long to calculate. Please add intermediate destinations if no result is found within 10 minutes.";
 "navigation_over_track" = "Start navigation along trip?";
 "use_displayed_track_for_navigation" = "Do you want to use displayed trip for navigation?";
-"prev_route" = "Previous route";
+"previous_route" = "Previous route";
 "shared_string_ellipsis" = "…";
 "shared_string_select_on_map" = "Na karće wubrać";
 "selected_roads" = "Selected roads";
@@ -390,7 +390,7 @@
 "poi_overlay" = "POI Overlay";
 "poi_dialog_poi_type" = "POI Type";
 "my_favorites" = "My Favorites";
-"my_places" = "Moje městna";
+"shared_string_my_places" = "Moje městna";
 "fav_no_group" = "No group";
 "fav_remove_q" = "Remove favorite?";
 "fav_import_title" = "Import favorite";
@@ -441,7 +441,7 @@
 "gpx_route_time" = "Route time";
 "gpx_uphldownhl" = "Uphills/Downhills";
 "gpx_average_speed" = "přerěznu spěšnosć";
-"gpx_start" = "Start";
+"shared_string_control_start" = "Start";
 "gpx_avg_elev" = "Average elevation";
 "gpx_elev_range" = "Elevation range";
 "gpx_updown" = "Up/Down";
@@ -494,7 +494,7 @@
 "map_settings_avail_lay" = "Available layers";
 "mapillary" = "Mapillary";
 // Intro
-"intro_skip" = "přeskočić";
+"shared_string_skip" = "přeskočić";
 "intro_download" = "Download\nmap";
 "intro_next" = "Přichodne";
 "intro_welcome" = "Welcome to\nOsmAnd";
@@ -561,7 +561,7 @@
 "osmand_live_weekly" = "tydźensce";
 "osmand_live_reports" = "Reports";
 "osmand_live_server_date" = "Last server update: %@";
-"osmand_live_upd_frequency" = "Update frequency";
+"update_frequency" = "Update frequency";
 "osmand_live_wifi_only" = "Update only via WiFi";
 "osmand_live_donation_header" = "Donation settings";
 "osmand_live_donations" = "Dary";
@@ -655,7 +655,7 @@
 "osm_modify_place" = "Modify place";
 "osm_poi_delete_title" = "POI wušmórnyć";
 "osm_edit_modified_poi" = "Změnjene OSM POI-dypki";
-"osm_target_deleted" = "Wotstronjene OSM POI-dypki";
+"osm_edit_deleted_poi" = "Wotstronjene OSM POI-dypki";
 "osm_target_created" = "OSM POI-dypk wutworjeny";
 "osm_note_created" = "OSM-notica je so wutworiła";
 "osm_note_create" = "Create OSM Note";
@@ -725,7 +725,7 @@
 "quick_action_list_descr" = "Tapping this action button pages through the list below";
 "map_overlays" = "Map overlays";
 "map_underlays" = "Kartowe podłohi";
-"offline_vector_maps" = "Offline vector maps";
+"vector_data" = "Offline vector maps";
 "add_map_source" = "Kartowežórło dodać";
 "add_map_style" = "Add map style";
 "map_styles" = "Kartowe stile";
@@ -749,7 +749,7 @@
 "add_poi" = "Add POI";
 "change_map_style" = "Stil karty změnić";
 "change_map_source" = "Kartowežórło změnić";
-"change_map_overlay" = "Change map overlay";
+"quick_action_map_overlay" = "Change map overlay";
 "change_map_underlay" = "Kartowu podłohu změnić";
 "replace_destination" = "Cil zarunać";
 "add_destination" = "Add destination";
@@ -785,7 +785,7 @@
 "quick_action_screen_header" = "Screen %ld";
 "confirm_bulk_delete" = "Do you want to delete %ld items?";
 "quick_action_add_actions_descr" = "Add actions to access them quickly from the map.";
-"quick_actions_show_dialog" = "Show an interim dialog";
+"quick_action_interim_dialog" = "Show an interim dialog";
 "quick_action_dialog_descr" = "Turn on to show dialog before applying the action";
 "quick_action_template_name" = "Template name";
 "quick_action_name_footer" = "Leave blank to use the address or place name.";
@@ -1322,7 +1322,7 @@
 "online_webpage_warning" = "Strona steji jenož online k dispoziciji. Chceš ju w browseru wočinić?";
 "app_mode_default" = "Kartu wobhladać";
 "app_mode_car" = "Jězdźenje";
-"map_settings_base_transp" = "Transparenca zakładneje karty";
+"map_transparency" = "Transparenca zakładneje karty";
 "map_settings_appearance" = "Napohlad";
 "shared_string_warning" = "Warnowanje";
 "map_settings_color_scheme" = "Barbnyšema";

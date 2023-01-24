@@ -318,7 +318,7 @@
 "gpx_route_time" = "Route time";
 "gpx_uphldownhl" = "Uphills/Downhills";
 "gpx_average_speed" = "Average speed";
-"gpx_start" = "Start";
+"shared_string_control_start" = "Start";
 "gpx_avg_elev" = "Average elevation";
 "gpx_elev_range" = "Elevation range";
 "gpx_updown" = "Up/Down";
@@ -360,7 +360,7 @@
 "shared_string_transparency" = "Transparency";
 "map_settings_avail_lay" = "Available layers";
 // Intro
-"intro_skip" = "Skip";
+"shared_string_skip" = "Skip";
 "intro_download" = "Download\nmap";
 "intro_next" = "Next";
 "intro_welcome" = "Welcome to\nOsmAnd";
@@ -749,7 +749,7 @@
 "osm_edit_without_name" = "နာမည်မရှိဘဲ";
 "poi_remove_success" = "ဖျက်လိုက်သည်";
 "purchase_unlim_title" = "၀ယ်ပါ - %@";
-"prev_route" = "ယခင်လမ်းကြောင်း";
+"previous_route" = "ယခင်လမ်းကြောင်း";
 "coordinates_example" = "ဥပမာ";
 "help_other_header" = "အခြား";
 "work_pt" = "အလုပ်";

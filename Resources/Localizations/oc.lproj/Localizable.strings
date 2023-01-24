@@ -108,7 +108,7 @@
 "save_global_track_interval_descr" = "Determinatz l'intervalle d'enregistrament dei desplaçaments (aquò s'activa per la vinheta d'enregistrament GPX de la mapa).";
 "logging_interval_navigation" = "Intervalle d'enregistrament dau temps de la navigacion";
 "logging_interval_navigation_descr" = "Chausissètz l'intervalle d'enregistrament per la traça de la navigacion";
-"logging_min_distance" = "Desplaçament minimau";
+"monitoring_min_distance" = "Desplaçament minimau";
 "logging_min_distance_descr" = "Filtre: distància minimala per enregistrar un ponch nòu";
 "logging_min_accuracy" = "Precision minimala";
 "logging_min_accuracy_descr" = "Filtre: pas d'enregistrament se la precision minimala es pas sufisenta";
@@ -248,7 +248,7 @@
 "route_is_too_long_v2" = "Aqueste percors sembla tròp lòng de carcular. Ajustatz-li una etapa intermediària si vos dona pas lo resultat avans de 10 minutas.";
 "navigation_over_track" = "Començar la navigacion sus lo percors \?";
 "use_displayed_track_for_navigation" = "Volètz utilizar lo percors visualizat per la navigacion ?";
-"prev_route" = "Itinerari precedent";
+"previous_route" = "Itinerari precedent";
 "shared_string_ellipsis" = "…";
 "shared_string_select_on_map" = "Chausir sus la mapa";
 "selected_roads" = "Vias seleccionadas";
@@ -390,7 +390,7 @@
 "poi_overlay" = "Superpausar lei PDI";
 "poi_dialog_poi_type" = "Mena de PDI";
 "my_favorites" = "Mei preferits";
-"my_places" = "Mei luòcs preferits";
+"shared_string_my_places" = "Mei luòcs preferits";
 "fav_no_group" = "Ges de grop";
 "fav_remove_q" = "Volètz suprimir lo preferit?";
 "fav_import_title" = "Importar un preferit";
@@ -441,7 +441,7 @@
 "gpx_route_time" = "Temps dau percors";
 "gpx_uphldownhl" = "Montadas/devalada";
 "gpx_average_speed" = "Velocitat mejana";
-"gpx_start" = "Partença";
+"shared_string_control_start" = "Partença";
 "gpx_avg_elev" = "Elevacion mejana";
 "gpx_elev_range" = "Gamma d'elevacion";
 "gpx_updown" = "Amont/Avau";
@@ -492,7 +492,7 @@
 "map_settings_avail_lay" = "Jaças disponiblas";
 "mapillary" = "Mapillary";
 // Intro
-"intro_skip" = "Sautar";
+"shared_string_skip" = "Sautar";
 "intro_download" = "Teledescargar \nla mapa";
 "intro_next" = "Seguent";
 "intro_welcome" = "La benvenguda sus\nOsmAnd";
@@ -558,7 +558,7 @@
 "osmand_live_weekly" = "Cada setmana";
 "osmand_live_reports" = "Rapòrts";
 "osmand_live_server_date" = "Darriera actualizacion de servidor: %@";
-"osmand_live_upd_frequency" = "Frequéncia de l\'actualizacion";
+"update_frequency" = "Frequéncia de l\'actualizacion";
 "osmand_live_wifi_only" = "Actualizar per WiFi solament";
 "osmand_live_donation_header" = "Configuracion de donacion";
 "osmand_live_donations" = "Donacions";
@@ -652,7 +652,7 @@
 "osm_modify_place" = "Modificar lo luòc";
 "osm_poi_delete_title" = "Eliminar lo PDI";
 "osm_edit_modified_poi" = "Lo PDI d'OSM es estat modificat";
-"osm_target_deleted" = "Lo PDI d'OSM es escafat";
+"osm_edit_deleted_poi" = "Lo PDI d'OSM es escafat";
 "osm_target_created" = "Un PDI OSM es estat creat";
 "osm_note_created" = "Una Nòta OSM es estada creada";
 "osm_note_create" = "Crear una Nòta OSM";
@@ -721,7 +721,7 @@
 "quick_action_list_descr" = "De clicar sus aquest boton debana la lista çai-sota";
 "map_overlays" = "Superposicions de mapa";
 "map_underlays" = "Fons de mapa";
-"offline_vector_maps" = "Mapas de vector fòra de linha";
+"vector_data" = "Mapas de vector fòra de linha";
 "add_map_source" = "Ajustar una fònt a l'imatge";
 "add_map_style" = "Ajustatz un rendut de mapa";
 "map_styles" = "Representacions de la mapa";
@@ -745,7 +745,7 @@
 "add_poi" = "Ajustar un PDI";
 "change_map_style" = "Modificar la representacion de la mapa";
 "change_map_source" = "Modificar la fònt de la mapa";
-"change_map_overlay" = "Modificar la superposicion de la mapa";
+"quick_action_map_overlay" = "Modificar la superposicion de la mapa";
 "change_map_underlay" = "Modificar lo fons de la mapa";
 "replace_destination" = "Remplaçar la destinacion";
 "add_destination" = "Ajustar una destinacion";
@@ -781,7 +781,7 @@
 "quick_action_screen_header" = "Ecran %ld";
 "confirm_bulk_delete" = "Volètz escafar %ld elements ?";
 "quick_action_add_actions_descr" = "Ajustar d'accions que seràn a posita lèu partent de la mapa.";
-"quick_actions_show_dialog" = "Mostrar una fenèstra de dialòg intermediària";
+"quick_action_interim_dialog" = "Mostrar una fenèstra de dialòg intermediària";
 "quick_action_dialog_descr" = "D'activar per demandar confirmacion abans de l'applicacion de l'accion";
 "quick_action_template_name" = "Nom dau modèl(e)";
 "quick_action_name_footer" = "De laissar vuege se volètz que s'emplegue l'adreiça ò lo nom d'un luòc.";
@@ -1274,14 +1274,14 @@
 "app_mode_ufo" = "UFO";
 "app_mode_shuttle_bus" = "Bus naveta";
 "app_mode_monowheel" = "Monocicleta";
-"distance_indication" = "Indicacion de la distància";
+"show_direction" = "Indicacion de la distància";
 "base_profile_descr_pedestrian" = "Passejada, Escorreguda, Corsa";
 "create_profile_descr" = "Començatz vòstre perfiu personalizat d'un perfiu predeterminat de l'aplicacion, es eu que fixa la configuracion basica, leis extensions e leis unitats de velocitat de distància. Vaicí lei perfius d'aplicacion predeterminats, amb d’exemples de personalizacion que se pòdon ajustar:";
 "nav_type_geocoding" = "Geocodatge";
 "base_profile_descr_public_transport" = "Mena de transpòrt public";
 "base_profile_descr_boat" = "Barca, Aviron, Vela";
 "save_changes" = "Sauvagardar lei cambiaments";
-"min_speed" = "Velocitat minimala";
+"shared_string_min_speed" = "Velocitat minimala";
 "public_transport_empty_warning_descr" = "Assajatz de cambiar lei paramètres.";
 "units_t" = "t";
 "base_profile_descr_aircraft" = "Avion, Planador";
@@ -1368,7 +1368,7 @@
 "send_anonymous_data_desc" = "Mandar a OsmAnd leis estadisticas de cargament dei mapas, sachent que recampam ges de donadas de localizacion nimai d'informacions personalas.";
 "default_profile_descr" = "Seleccionatz lo perfiu que s'utilizarà per aviar l'aplicacion.";
 "download_depth_countours" = "Isobates";
-"map_settings_base_transp" = "Opacitat de la mapa de basa";
+"map_transparency" = "Opacitat de la mapa de basa";
 "map_settings_layer_transparency" = "Transparéncia de la jaça";
 "map_settings_slopes_legend" = "Podètz trobar mai d'informacion subre lei pistes dins Wikipèdia";
 "map_settings_zoom_level_description" = "Reglatz lei nivèus de zoom minimau e maximaus que se mostrarà la mapa";
@@ -1393,7 +1393,7 @@
 "map_settings_hillshade_description" = "Lei mapas dau relèu ombrejat mòstran lei pistas, cimas e vaus amb diferents nivèus de gris";
 "map_settings_install_more" = "Installar mai...";
 "configure_screen_quick_action" = "Accion dirècta";
-"edit_profile_list" = "Editar la lista de perfius";
+"reorder_profiles" = "Editar la lista de perfius";
 "selected_seg_recalc_descr" = "L'estirada seleccionada soleta se tornarà calcular amb lo perfiu chausit";
 "shared_string_all_languages" = "Totei lei lengas";
 "available_languages" = "Lengas disponiblas";
@@ -2005,7 +2005,7 @@
 "res_pseudo_mercator" = "Projeccion Pseudo-Mercator";
 "res_expire_time_desc" = "Escasença de temps en minutas. Lei teules en memòria se tornaràn cargar après una durada especificada. Laissatz aquest camp vueje se volètz pas recargar lei teules d'aquesta fònt.\nUn jorn son 1 440 minutas.\nUna setmana son 10 080 minutas.\n30 jorns son 43.200 minutas.";
 "folder_already_exsists" = "Un repertòri d'aquest nom existís ja";
-"res_source_sqlite" = "Fichier SQLiteDB";
+"sqlite_db_file" = "Fichier SQLiteDB";
 "err_profile_import" = "Error a la lectura de l'element de donadas : %@";
 "all_application_profiles" = "Totei lei perfius de l'aplicacion";
 "rearrange_profile_descr" = "Lei perfius predeterminats d'Osmand se pòdon pas escafar mai lei podètz desactivar au menut precedents o lei desplaçar a la fin de la lista.";
@@ -2044,7 +2044,7 @@
 "hidden_categories" = "Categorias amagadas";
 
 // Menu
-"menu" = "Menut";
+"shared_string_menu" = "Menut";
 "shared_string_loading" = "A se telecargar…";
 "create_custom_categories_list_promo" = "Podètz filtrar de categorias personalizadas, amagar lei categorias que trobatz pas necessàrias e modificar l'òrdre de la lista. Lei categorias personalizadas se pòdon importar emai exportar amb lei perfius.";
 "add_custom_category" = "Ajustar una categoria personalizada";
@@ -2170,7 +2170,7 @@
 "shared_string_undefined" = "Indefinida";
 "copied_to_clipboard" = "Copiat dins lo sauvamemòria";
 "toggle_contour_lines" = "Mostrar & Amagar lei corbas de nivèu";
-"map_settings_weather_contours" = "Corbas e contorns";
+"shared_string_contours" = "Corbas e contorns";
 "backup_and_restore" = "Sauvagardar & Restaurar";
 "shared_string_account_add" = "Ajustar un còmpte";
 "screen_settings_weather_toolbar" = "Bendèu dau temps que fa";
@@ -2299,10 +2299,10 @@
 "navigate_point_format_MGRS" = "STCM (Military Grid Reference System)";
 "mgrs_description" = "OsmAnd se sièrv dau format MGRS qu'es identic au TUM NATO.";
 "shared_string_online_cache" = "Memòria virtuala en linha";
-"tts" = "TTS";
+"tts_title" = "TTS";
 "routing_attr_goods_restrictions_name" = "Liurasons de bens";
 "default_speed_descr" = "Estimar l'ora d'arribada si la mena de vias es pas conoissuda e en aplicant lei limitacions de velocitat en totei lei carrieras (aquò podriá afectar la navigacion)";
-"weather_precip_unit_in" = "Poces";
+"weather_precip_inches" = "Poces";
 "help_what_is_new" = "Noveutats";
 "product_desc_ext_openplacereviews" = "Vos permet de collaborar au projècte OpenPlaceRewiews. Ambe de fòtos, de criticas, de ligames sus lei luòcs publics que trevatz taus coma de restaurants, d'ostalariás, de musèus e de ponchs d'interès. \n\nTrovaretz leis instruccions per o faire sus lo site Oèb : https://osmand.net/docs/user/plugins/openplacereviews";
 "read_full_description" = "Legir la descripcion completa";
@@ -2404,7 +2404,7 @@
 "plugin_popup_osm_editing_title" = "Activar l'edicion d'OpenStreetMap";
 "weather_wind_unit_knots" = "Nos";
 "weather_precip_unit_mm" = "Millimètres";
-"restore_data" = "Restaurar lei donadas";
+"backup_restore_data" = "Restaurar lei donadas";
 "syncing_progress" = "A se sincronizar...";
 "key_hint_recenter_map" = "Recentrar la mapa";
 "routeInfo_surface_name" = "Superficia";

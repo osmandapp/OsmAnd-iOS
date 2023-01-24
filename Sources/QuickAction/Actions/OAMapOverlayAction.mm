@@ -135,7 +135,7 @@ static OAQuickActionType *TYPE;
     [data setObject:@[@{
                           @"type" : [OASwitchTableViewCell getCellIdentifier],
                           @"key" : KEY_DIALOG,
-                          @"title" : OALocalizedString(@"quick_actions_show_dialog"),
+                          @"title" : OALocalizedString(@"quick_action_interim_dialog"),
                           @"value" : @([self.getParams[KEY_DIALOG] boolValue]),
                           },
                       @{
@@ -184,7 +184,7 @@ static OAQuickActionType *TYPE;
 + (OAQuickActionType *) TYPE
 {
     if (!TYPE)
-        TYPE = [[OAQuickActionType alloc] initWithIdentifier:15 stringId:@"mapoverlay.change" class:self.class name:OALocalizedString(@"change_map_overlay") category:CONFIGURE_MAP iconName:@"ic_custom_overlay_map" secondaryIconName:nil];
+        TYPE = [[OAQuickActionType alloc] initWithIdentifier:15 stringId:@"mapoverlay.change" class:self.class name:OALocalizedString(@"quick_action_map_overlay") category:CONFIGURE_MAP iconName:@"ic_custom_overlay_map" secondaryIconName:nil];
        
     return TYPE;
 }

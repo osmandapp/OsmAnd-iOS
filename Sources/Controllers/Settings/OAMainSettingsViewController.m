@@ -166,7 +166,7 @@
     }];
 
     [profilesSection addObject:@{
-        @"title" : OALocalizedString(@"edit_profile_list"),
+        @"title" : OALocalizedString(@"reorder_profiles"),
         @"img" : @"ic_custom_edit",
         @"type" : [OATitleRightIconCell getCellIdentifier],
         @"name" : @"edit_profiles"

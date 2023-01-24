@@ -246,7 +246,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     
     if (!_routingHelper.isPublicTransportMode)
     {
-        [_goButton setTitle:OALocalizedString(@"gpx_start") forState:UIControlStateNormal];
+        [_goButton setTitle:OALocalizedString(@"shared_string_control_start") forState:UIControlStateNormal];
         [_goButton setImage:[UIImage templateImageNamed:@"ic_custom_navigation_arrow"] forState:UIControlStateNormal];
     }
     else
@@ -1893,7 +1893,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         return nil;
     
     if (section == _prevRouteSection)
-        return OALocalizedString(@"prev_route");
+        return OALocalizedString(@"previous_route");
     else if (section == _gpxTripSection)
         return OALocalizedString(@"tracks_on_map");
     else if (section == _mapMarkerSection)

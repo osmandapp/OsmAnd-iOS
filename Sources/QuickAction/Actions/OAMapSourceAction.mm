@@ -108,7 +108,7 @@ static OAQuickActionType *TYPE;
 - (NSString *)getTranslatedItemName:(NSString *)item
 {
     if ([item isEqualToString:LAYER_OSM_VECTOR])
-        return OALocalizedString(@"offline_vector_maps");
+        return OALocalizedString(@"vector_data");
     else
         return item;
     return nil;
@@ -140,7 +140,7 @@ static OAQuickActionType *TYPE;
     [data setObject:@[@{
                           @"type" : [OASwitchTableViewCell getCellIdentifier],
                           @"key" : KEY_DIALOG,
-                          @"title" : OALocalizedString(@"quick_actions_show_dialog"),
+                          @"title" : OALocalizedString(@"quick_action_interim_dialog"),
                           @"value" : @([self.getParams[KEY_DIALOG] boolValue]),
                           },
                       @{

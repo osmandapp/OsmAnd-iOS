@@ -1286,11 +1286,11 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         if (currentLocation)
         {
             double azimuth = [location1 bearingTo:currentLocation];
-            cell.descriptionView.text = [NSString stringWithFormat:@"%@ • %@ • %@", OALocalizedString(@"gpx_start"), [OAOsmAndFormatter getFormattedDistance:[location1 distanceFromLocation:currentLocation]], [OAOsmAndFormatter getFormattedAzimuth:azimuth]];
+            cell.descriptionView.text = [NSString stringWithFormat:@"%@ • %@ • %@", OALocalizedString(@"shared_string_control_start"), [OAOsmAndFormatter getFormattedDistance:[location1 distanceFromLocation:currentLocation]], [OAOsmAndFormatter getFormattedAzimuth:azimuth]];
         }
         else
         {
-            cell.descriptionView.text = OALocalizedString(@"gpx_start");
+            cell.descriptionView.text = OALocalizedString(@"shared_string_control_start");
         }
     }
     else

@@ -65,7 +65,7 @@
 "gpx_route_time" = "Время маршрута";
 "gpx_uphldownhl" = "Подъемы/Спуски";
 "gpx_average_speed" = "Средняя скорость";
-"gpx_start" = "Старт";
+"shared_string_control_start" = "Старт";
 "gpx_avg_elev" = "Средняя высота";
 "gpx_elev_range" = "Разность высот";
 "gpx_updown" = "Вверх/Вниз";
@@ -92,7 +92,7 @@
 "shared_string_transparency" = "Прозрачность";
 "map_settings_avail_lay" = "Доступные слои";
 // Intro
-"intro_skip" = "Пропустить";
+"shared_string_skip" = "Пропустить";
 "intro_download" = "Загрузить\nкарту";
 "intro_next" = "Далее";
 "intro_welcome" = "Добро пожаловать\nOsmAnd";
@@ -662,7 +662,7 @@
 "osm_editing_lost_changes_title" = "Выйти без сохранения?";
 "osm_value" = "Значение";
 "osm_note_comment" = "Комментарий";
-"my_places" = "Мои места";
+"shared_string_my_places" = "Мои места";
 "osm_edits_all" = "Все правки";
 "osm_edits_notes" = "Заметки";
 "shared_string_time" = "Время";
@@ -894,7 +894,7 @@
 "osmand_live_last_live_update" = "Дата обновления: %@";
 "osmand_live_not_updated" = "Ещё не обновлено";
 "osmand_live_hourly" = "Ежечасно";
-"osmand_live_upd_frequency" = "Частота обновления";
+"update_frequency" = "Частота обновления";
 "product_title_wikivoyage" = "Путеводитель";
 "osmand_live_donations_enter_email" = "Введите адрес электронной почты";
 "osmand_live_support_reg_title" = "Поддерживаемый регион";
@@ -924,7 +924,7 @@
 "quick_action_no_underlay" = "Без подложки";
 "quick_action_add_underlay" = "Добавить подложку";
 "map_underlays" = "Подложки";
-"offline_vector_maps" = "Локальные векторные карты";
+"vector_data" = "Локальные векторные карты";
 "add_map_style" = "Добавить стиль карты";
 "map_styles" = "Стили карты";
 "add_action" = "Добавить";
@@ -977,7 +977,7 @@
 "selected_roads" = "Выбранные дороги";
 "shared_string_clear_all" = "Очистить все";
 "select_route_intermediate" = "Выберите промежуточную точку";
-"prev_route" = "Предыдущий маршрут";
+"previous_route" = "Предыдущий маршрут";
 "map_settings_install_maps" = "Выберите карты для установки или обновления";
 "online_map" = "Онлайн-карта";
 "show_hillshade" = "Показать затенение рельефа";
@@ -994,7 +994,7 @@
 "map_widget_next_next_turn" = "Второй след. поворот";
 "unknown_location" = "Местоположение ещё не определено.";
 "logging_interval_navigation_descr" = "Выберите интервал регистрации местоположения для записи трека во время навигации";
-"logging_min_distance" = "Минимальное смещение";
+"monitoring_min_distance" = "Минимальное смещение";
 "logging_min_distance_descr" = "Фильтр: минимальное расстояние, необходимое для регистрации новой точки";
 "logging_min_accuracy" = "Минимальная точность";
 "logging_min_accuracy_descr" = "Фильтр: не регистрировать, пока не достигнута необходимая точность";
@@ -1074,7 +1074,7 @@
 "osm_opens_at" = "Открывается в:";
 "osm_closes_at" = "Закрывается в:";
 "osm_edit_modified_poi" = "Отредактированная OSM POI";
-"osm_target_deleted" = "Удалённая OSM POI";
+"osm_edit_deleted_poi" = "Удалённая OSM POI";
 "osm_target_created" = "Создана OSM POI";
 "osm_confirm_upload" = "Отправить правки?";
 "osm_close_changeset" = "Закрыть пакет правок";
@@ -1146,7 +1146,7 @@
 "create_items" = "Действия";
 "toggle_online_notes" = "Показать/спрятать заметки OSM";
 "toggle_local_edits" = "Показать/спрятать локальные правки OSM";
-"change_map_overlay" = "Сменить карту наложения";
+"quick_action_map_overlay" = "Сменить карту наложения";
 "replace_destination" = "Заменить пункт назначения";
 "show_hide_gpx" = "Показать/спрятать путешествия";
 "quick_action_name_str" = "Название действия";
@@ -1209,7 +1209,7 @@
 "osmand_live_updates_size" = "Размер скачиваемых обновлений";
 "utm_description" = "Обратите внимание, что OsmAnd использует стандартный формат UTM, который похож, но не идентичен UTM NATO.";
 "add_map_source" = "Добавить источник карты";
-"quick_actions_show_dialog" = "Показывать промежуточный диалог";
+"quick_action_interim_dialog" = "Показывать промежуточный диалог";
 "quick_action_dialog_descr" = "Включите, чтоб отображать диалоговое окно перед применением действия";
 "quick_action_name_footer" = "Если оставить это поле пустым, то оно будет автоматически заполнено адресом или названием места.";
 "quick_action_select_group" = "Выберите группу для сохранения избранного.";
@@ -1568,7 +1568,7 @@
 "app_mode_wagon" = "Фургон";
 "app_mode_utv" = "Мотовездеход";
 "online_raster_map" = "Онлайн растровая карта";
-"res_source_sqlite" = "Файл SQLiteDB";
+"sqlite_db_file" = "Файл SQLiteDB";
 "open_wiki_online" = "Открыть статью в интернете";
 "wiki_sheet_title" = "Как открыть статьи Википедии?";
 "import_raster_map_failed" = "Не удалось импортировать растровую карту";
@@ -1589,7 +1589,7 @@
 "map_settings_add_online_source" = "Добавить онлайн-источник";
 "gpx_analyze" = "Анализировать";
 "shared_string_warning" = "Предупреждение";
-"map_settings_base_transp" = "Прозрачность основной карты";
+"map_transparency" = "Прозрачность основной карты";
 "map_settings_color_scheme" = "Цвет";
 "res_zoom_levels" = "Уровни масштаба";
 "map_settings_appearance" = "Внешний вид";
@@ -1599,7 +1599,7 @@
 "public_transport_warning_title" = "Навигация на общественном транспорте в настоящее время проходит бета-тестирование, возможны ошибки и неточности.";
 "active_markers" = "Активные маркеры";
 "arrows_on_map" = "Стрелки на карте";
-"distance_indication" = "Указатель расстояния";
+"show_direction" = "Указатель расстояния";
 "two" = "Два";
 // Dirrection appearance
 "one" = "Один";
@@ -1696,7 +1696,7 @@
 "select_icon" = "Выберите значок";
 "select_color" = "Выберите цвет";
 "enter_profile_name" = "Введите имя профиля";
-"edit_profile_list" = "Редактировать список профилей";
+"reorder_profiles" = "Редактировать список профилей";
 "new_profile" = "Новый профиль";
 "profile_type_custom_string" = "Пользовательский профиль";
 "create_profile" = "Создать профиль";
@@ -1733,7 +1733,7 @@
 "nav_type_brouter" = "BRouter";
 "voice_announces" = "Голосовые подсказки";
 "max_speed" = "Макс. скорость";
-"min_speed" = "Мин. скорость";
+"shared_string_min_speed" = "Мин. скорость";
 "default_speed_setting_title" = "Скорость по умолчанию";
 "routing_attr_length_name" = "Предельная длина";
 "do_not_rotate" = "Не вращать";
@@ -1755,7 +1755,7 @@
 "osm_editing_access_descr" = "Вы можете просмотреть все свои локальные правки и заметки в %@. Уже загруженные точки не отображаются в OsmAnd.";
 "osm_editing_settings_descr" = "Настройки этого плагина глобальны и применяются ко всем профилям.";
 // Menu
-"menu" = "Меню";
+"shared_string_menu" = "Меню";
 "export_profile_descr" = "Вы можете экспортировать все настройки профиля, скопировать все настройки из другого профиля или сбросить все настройки профиля до состояния по умолчанию.";
 "profile_sett_descr" = "Влияет на выбранный профиль приложения";
 "app_profiles" = "Профили приложения";
@@ -2388,7 +2388,7 @@
 "precipitation_show" = "Показать осадки";
 "precipitation_hide" = "Скрыть осадки";
 "weather_temperature_fahrenheit" = "Фаренгейт";
-"weather_precip_unit_in" = "Дюймы";
+"weather_precip_inches" = "Дюймы";
 "login_footer_full_text" = "Нужна помощь? Пожалуйста, свяжитесь с нами по адресу\nsupport@osmand.net";
 "login_footer_email_part" = "support@osmand.net";
 "login_help_email_title" = "OsmAnd iOS Cloud";

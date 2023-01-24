@@ -760,7 +760,7 @@
     if (sourceFormat == EOASourceFormatOnline)
         return OALocalizedString(@"res_source_one_per_tile");
     else if (sourceFormat == EOASourceFormatSQLite)
-        return OALocalizedString(@"res_source_sqlite");
+        return OALocalizedString(@"sqlite_db_file");
     
     return @"";
 }

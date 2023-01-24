@@ -252,7 +252,7 @@
     self.navigationController.delegate = self;
     
     [_menuButtonMaps setTitle:OALocalizedString(@"configure_map") forState:UIControlStateNormal];
-    [_menuButtonMyData setTitle:OALocalizedString(@"my_places") forState:UIControlStateNormal];
+    [_menuButtonMyData setTitle:OALocalizedString(@"shared_string_my_places") forState:UIControlStateNormal];
     [_menuButtonMyWaypoints setTitle:OALocalizedString(@"map_markers") forState:UIControlStateNormal];
     [_menuButtonMapsAndResources setTitle:OALocalizedString(@"res_mapsres") forState:UIControlStateNormal];
     [_menuButtonConfigureScreen setTitle:OALocalizedString(@"layer_map_appearance") forState:UIControlStateNormal];

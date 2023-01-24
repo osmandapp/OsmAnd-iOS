@@ -150,7 +150,7 @@
         {
             OAFileSettingsItem *fileItem = (OAFileSettingsItem *) settingsItem;
             if (fileItem.subtype == EOASettingsItemFileSubtypeVoiceTTS)
-                name = [NSString stringWithFormat:@"%@ (%@)", name, OALocalizedString(@"tts")];
+                name = [NSString stringWithFormat:@"%@ (%@)", name, OALocalizedString(@"tts_title")];
             else if (fileItem.subtype == EOASettingsItemFileSubtypeVoice)
                 name = [NSString stringWithFormat:@"%@ (%@)", name, OALocalizedString(@"recorded_voice")];
         }

@@ -116,7 +116,7 @@
 "driving_region_automatic" = "Automātiski";
 "routing_attr_length_name" = "Length limit";
 "default_speed_setting_title" = "Noklusētais ātrums";
-"min_speed" = "Min.ātrums";
+"shared_string_min_speed" = "Min.ātrums";
 "max_speed" = "Max. speed";
 "road_speeds_descr" = "These parameters can affect the route calculation.";
 "road_min_speed_descr" = "Sets the minimum travel speed for all roads in the route. Raises priority for roads with recommended speeds less than the minimum.";
@@ -127,7 +127,7 @@
 "save_global_track_interval_descr" = "Choose logging interval for the general track recording (enabled via the GPX logging widget on the map).";
 "logging_interval_navigation" = "Logošanas intervāls navigācijas laikā";
 "logging_interval_navigation_descr" = "Choose logging interval for track recording during navigation";
-"logging_min_distance" = "Minimālā pārvietošanās";
+"monitoring_min_distance" = "Minimālā pārvietošanās";
 "logging_min_distance_descr" = "Filter: minimum distance to log a new point";
 "logging_accuracy" = "žurnalēšanas precizitāte";
 "logging_min_accuracy" = "Minimālā precizitāte";
@@ -195,7 +195,7 @@
 // Dirrection appearance
 "one" = "Viens";
 "two" = "Divi";
-"distance_indication" = "Distances indikācija";
+"show_direction" = "Distances indikācija";
 "arrows_on_map" = "Arrows on the map";
 "direction_lines" = "Direction lines";
 "active_markers" = "Aktīvie marķieri";
@@ -327,7 +327,7 @@
 "route_is_too_long_v2" = "This route may be too long to calculate. Please add intermediate destinations if no result is found within 10 minutes.";
 "navigation_over_track" = "Sākt navigāciju pa trasi?";
 "use_displayed_track_for_navigation" = "Do you want to use displayed track for navigation?";
-"prev_route" = "Iepriekšējais maršruts";
+"previous_route" = "Iepriekšējais maršruts";
 "shared_string_ellipsis" = "…";
 "shared_string_select_on_map" = "Norādīt uz kartes";
 "selected_roads" = "Selected roads";
@@ -517,7 +517,7 @@
 "poi_overlay" = "POI Overlay";
 "poi_dialog_poi_type" = "POI tips";
 "my_favorites" = "My Favorites";
-"my_places" = "Izlase";
+"shared_string_my_places" = "Izlase";
 "fav_no_group" = "No group";
 "fav_add_new_group" = "Add new group";
 "select_group_descr" = "Select group or add a new one";
@@ -604,7 +604,7 @@
 "gpx_route_time" = "Route time";
 "gpx_uphldownhl" = "Uphills/Downhills";
 "gpx_average_speed" = "Vidējais ātrums";
-"gpx_start" = "Sākt";
+"shared_string_control_start" = "Sākt";
 "gpx_avg_elev" = "Average elevation";
 "gpx_elev_range" = "Elevation range";
 "gpx_avg_altitude" = "Vidējā altitūda";
@@ -670,7 +670,7 @@
 "map_settings_offline" = "Styles for offline maps";
 "map_settings_online" = "Tiešsaistes kartes";
 "shared_string_transparency" = "Transparency";
-"map_settings_base_transp" = "Bāzes kartes caurspīdīgums";
+"map_transparency" = "Bāzes kartes caurspīdīgums";
 "map_settings_avail_lay" = "Available layers";
 "mapillary" = "Mapillary";
 "street_level_imagery" = "Street-level imagery";
@@ -707,7 +707,7 @@
 "plugin_settings_descr" = "Plugin settings for the selected profile.";
 
 // Intro
-"intro_skip" = "Izlaist";
+"shared_string_skip" = "Izlaist";
 "intro_download" = "Download\nmap";
 "intro_next" = "Tālāk";
 "intro_welcome" = "Welcome to\nOsmAnd";
@@ -935,7 +935,7 @@
 "profile_appearance_descr" = "Icon, color, and name";
 "ui_customization" = "UI customization";
 "ui_customization_descr" = "Drawer items, context menu";
-"edit_profile_list" = "Rediģēt profilu sarakstu";
+"reorder_profiles" = "Rediģēt profilu sarakstu";
 "enter_profile_name" = "Ievadiet profila vārdu";
 "select_color" = "Select color";
 "select_icon" = "Izvēlieties ikonu";
@@ -1072,7 +1072,7 @@
 "osmand_live_weekly" = "Katru nedēļu";
 "osmand_live_reports" = "Reports";
 "osmand_live_server_date" = "Last server update: %@";
-"osmand_live_upd_frequency" = "Update frequency";
+"update_frequency" = "Update frequency";
 "osmand_live_wifi_only" = "Update only via WiFi";
 "osmand_live_donation_header" = "Donation settings";
 "osmand_live_donations" = "Ziedojumi";
@@ -1135,7 +1135,7 @@
 "res_elliptic_mercator" = "Elliptic mercator";
 "res_pseudo_mercator" = "Pseudo-Mercator projection";
 "res_source_format" = "Source format";
-"res_source_sqlite" = "SQLiteDB file";
+"sqlite_db_file" = "SQLiteDB file";
 "res_source_one_per_tile" = "One image file per tile";
 "res_zoom_levels_desc" = "This parameters will affect the map display when used as a map type or overlay/underlay.\n\nMap type: the map will be limited to the selected zooms.\n\nOverlay / Underlay: Zoom levels at which tiles will be visible. Upscale or downscale will occur above or below the set values.";
 "res_expire_time_desc" = "Expiration time in minutes. Cached tiles will be reloaded after specified time. Leave this field empty if you do not need to reload tiles for this source.\nOne day is 1440 minutes.\nOne week is 10 080 minutes.\n30 days are 43 200 minutes.";
@@ -1154,7 +1154,7 @@
 "shared_string_feet" = "feet";
 
 // Menu
-"menu" = "Izvēlne";
+"shared_string_menu" = "Izvēlne";
 "menu_my_places" = "Izlase";
 "menu_my_trips" = "My Tracks";
 "menu_feedback" = "Atsauksmes";
@@ -1200,7 +1200,7 @@
 "osm_modify_place" = "Modify place";
 "osm_poi_delete_title" = "Dzēst POI";
 "osm_edit_modified_poi" = "Labots OSM POI";
-"osm_target_deleted" = "OSM POI ir izdzēsts";
+"osm_edit_deleted_poi" = "OSM POI ir izdzēsts";
 "osm_target_created" = "Izveidots OSM POI";
 "osm_note_created" = "Izveidota OSM piezīme";
 "osm_note_create" = "Create OSM Note";
@@ -1280,7 +1280,7 @@
 "quick_action_coordinates_widget_descr" = "Tapping this action button shows or hides the Coordinates widget.";
 "map_overlays" = "Kartes virsklāji";
 "map_underlays" = "Kartes apakšklāji";
-"offline_vector_maps" = "Bezsaistes vektoru kartes";
+"vector_data" = "Bezsaistes vektoru kartes";
 "add_map_source" = "Pievienot kartes avotu";
 "add_map_style" = "Add map style";
 "map_styles" = "Kartes stili";
@@ -1307,7 +1307,7 @@
 "add_poi" = "Pievienot POI";
 "change_map_style" = "Mainīt kartes stilu";
 "change_map_source" = "Nomainīt kartes avotu";
-"change_map_overlay" = "Nomainīt kartes virsklāju";
+"quick_action_map_overlay" = "Nomainīt kartes virsklāju";
 "change_map_underlay" = "Nomainīt kartes apakšklāju";
 "replace_destination" = "Nomainīt mērķi";
 "add_destination" = "Add destination";
@@ -1344,7 +1344,7 @@
 "quick_action_screen_header" = "Screen %ld";
 "confirm_bulk_delete" = "Do you want to delete %ld items?";
 "quick_action_add_actions_descr" = "Add actions to access them quickly from the map.";
-"quick_actions_show_dialog" = "Rādīt interim dialogu";
+"quick_action_interim_dialog" = "Rādīt interim dialogu";
 "quick_action_dialog_descr" = "Turn on to show dialog before applying the action";
 "quick_action_template_name" = "Template name";
 "quick_action_name_footer" = "Atstājiet tukšu, lai automātiski lietotu adreses vai vietas nosaukumu";

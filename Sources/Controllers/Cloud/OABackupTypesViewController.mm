@@ -140,7 +140,7 @@
 
     NSMutableArray<NSMutableDictionary *> *myPlacesCells = [NSMutableArray array];
     NSMutableDictionary *myPlacesSection = [NSMutableDictionary dictionary];
-    myPlacesSection[@"header"] = OALocalizedString(@"my_places");
+    myPlacesSection[@"header"] = OALocalizedString(@"shared_string_my_places");
     myPlacesSection[@"cells"] = myPlacesCells;
     [data addObject:myPlacesSection];
 

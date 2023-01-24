@@ -77,7 +77,7 @@
 "gpx_route_time" = "路線時間";
 "gpx_uphldownhl" = "上坡 / 下坡";
 "gpx_average_speed" = "平均速率";
-"gpx_start" = "開始";
+"shared_string_control_start" = "開始";
 "gpx_avg_elev" = "平均海拔";
 "gpx_elev_range" = "海拔幅度";
 "gpx_updown" = "向上/向下";
@@ -115,7 +115,7 @@
 "shared_string_transparency" = "透明度";
 "map_settings_avail_lay" = "可用的圖層";
 // Intro
-"intro_skip" = "跳過";
+"shared_string_skip" = "跳過";
 "intro_download" = "下載\n地圖";
 "intro_next" = "下頁";
 "intro_welcome" = "歡迎使用\nOsmAnd";
@@ -743,7 +743,7 @@
 "traffic_warning_tunnel" = "前方有隧道";
 "logging_interval_navigation" = "在導航期間的記錄間隔";
 "logging_interval_navigation_descr" = "在導航期間，選擇軌跡錄製的記錄間隔";
-"logging_min_distance" = "最小偏移";
+"monitoring_min_distance" = "最小偏移";
 "logging_min_distance_descr" = "篩選：記錄新標點的最小距離";
 "logging_min_accuracy" = "最低精密度";
 "logging_min_accuracy_descr" = "篩選：除非達到精確度，否則不進行記錄";
@@ -811,7 +811,7 @@
 "default_price_currency_format" = "%@ %@";
 "osm_live_payment_header" = "選擇適合您的付款期：";
 "osm_live_payment_contribute_descr" = "部分收入歸 OpenStreetMap 的貢獻者所有。";
-"osmand_live_upd_frequency" = "更新頻率";
+"update_frequency" = "更新頻率";
 "osmand_live_wifi_only" = "只透過 WiFi 更新";
 "purchase_dialog_title" = "選擇計畫";
 "purchase_dialog_travel_description" = "購買以下的其中一項即可得到離線旅遊指南功能：";
@@ -871,7 +871,7 @@
 // GPX colors
 "shared_string_upload" = "上傳";
 "poi_dialog_poi_type" = "POI類型";
-"my_places" = "我的地點";
+"shared_string_my_places" = "我的地點";
 // OSM Editing actions
 "opening_changeset" = "正在開啟異動清單…";
 "closing_changeset" = "正在結束異動清單…";
@@ -895,7 +895,7 @@
 "osm_website" = "網站";
 "osm_poi_delete_title" = "刪除 POI";
 "osm_edit_modified_poi" = "已修改 OSM 的 POI";
-"osm_target_deleted" = "已刪除 OSM 的 POI";
+"osm_edit_deleted_poi" = "已刪除 OSM 的 POI";
 "osm_target_created" = "建立 OSM 的 POI";
 "osm_note_created" = "建立 OSM 的註解";
 "osm_note_create" = "建立 OSM 的註解";
@@ -969,7 +969,7 @@
 "quick_action_name_footer" = "保留為空白以使用地址或地點名稱。";
 "quick_action_add_poi_category" = "增加一項類別";
 "quick_action_tags" = "標籤";
-"prev_route" = "前一個路線";
+"previous_route" = "前一個路線";
 "gpx_ascent" = "上坡";
 "mapil_pano_only" = "只顯示 360° 圖片";
 "add_map_source" = "增加地圖來源";
@@ -979,7 +979,7 @@
 "toggle_nav" = "開始/停止導航";
 "map_settings_text_size" = "文字大小";
 "quick_action_pause_nav_descr" = "輕點此按鈕以暫停或繼續導航。";
-"quick_actions_show_dialog" = "顯示臨時的對話方塊";
+"quick_action_interim_dialog" = "顯示臨時的對話方塊";
 "key_hint_deselect" = "取消選擇";
 "quick_action_add_overlay" = "增加上圖層";
 "map_settings_map_magnifier" = "地圖放大鏡";
@@ -1001,7 +1001,7 @@
 "work_pt" = "工作";
 "gpx_slope" = "斜坡";
 "toggle_voice" = "聲音開/關";
-"change_map_overlay" = "更改地圖上圖層";
+"quick_action_map_overlay" = "更改地圖上圖層";
 "quick_action_no_underlay" = "無下圖層";
 "gpx_alt_range" = "海拔高度範圍";
 "display_starting_at_zoom_level" = "自此縮放等級開始顯示";
@@ -1027,7 +1027,7 @@
 "shared_string_show_more" = "顯示更多";
 "shared_string_filter" = "篩選";
 "edit_action" = "編輯動作";
-"offline_vector_maps" = "離線向量地圖";
+"vector_data" = "離線向量地圖";
 "sett_ext_input" = "外部輸入裝置";
 "quick_action_start_stop_nav_descr" = "輕點此按鈕以開始或停止導航。";
 "region_nautical" = "航海地圖";
@@ -1354,7 +1354,7 @@
 "open_wiki_online" = "線上開啟文章";
 "region_antarctica" = "南極洲";
 "shared_string_warning" = "警示";
-"map_settings_base_transp" = "底圖透明度";
+"map_transparency" = "底圖透明度";
 "exit_at" = "離開於";
 "public_transport_warning_title" = "大眾運輸導航目前正在測試階段，可能會有錯誤與不準確的地方。";
 "active_markers" = "活躍標記";
@@ -1448,8 +1448,8 @@
 "plugin_settings_reset" = "重設外掛程式設定為預設值";
 "nav_type_straight_line" = "直線";
 "importing_from" = "正在從 %@ 匯入資料";
-"edit_profile_list" = "編輯設定檔清單";
-"min_speed" = "最低速度";
+"reorder_profiles" = "編輯設定檔清單";
+"shared_string_min_speed" = "最低速度";
 "total" = "總計";
 "map_settings_add_online_source" = "新增線上來源";
 "quick_action_switch_profile_descr" = "點擊動作按鈕會在選取的設定檔間切換。";
@@ -1472,8 +1472,8 @@
 "logging_accuracy" = "記錄精度";
 "walk" = "步行";
 "res_online_source_cache_alert" = "套用這些變更將會清除這個圖磚來源的快取資料";
-"distance_indication" = "距離指示";
-"menu" = "選單";
+"show_direction" = "距離指示";
+"shared_string_menu" = "選單";
 "ltr_or_rtl_combine_via_colon" = "%@: %@";
 "vessel_width_limit_description" = "設定船艦寬度以避免窄橋";
 "arrived_at_destination" = "您已抵達。";
@@ -1499,7 +1499,7 @@
 "quick_action_showhide_mapillary_title" = "顯示／隱藏 Mapillary";
 "units_t" = "公噸";
 "next_segment" = "下一段";
-"res_source_sqlite" = "SQLiteDB檔案";
+"sqlite_db_file" = "SQLiteDB檔案";
 "tones" = "色調";
 "map_during_navigation" = "導航時的地圖";
 "osmand_settings" = "OsmAnd設定";

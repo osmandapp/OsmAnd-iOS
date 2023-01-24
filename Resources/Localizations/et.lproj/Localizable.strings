@@ -109,7 +109,7 @@
 "save_global_track_interval_descr" = "Määra üldisel teekonna salvestamisel kasutatav logimisvälp (lülitatakse sisse kaardil asuvast teekonna salvestamise vidinast).";
 "logging_interval_navigation" = "Logimise ajavahemik navigeerimise ajal";
 "logging_interval_navigation_descr" = "Vali logimise intervall teekonna salvestamiseks navigeerimise ajal";
-"logging_min_distance" = "Vähim kõrvalekalle";
+"monitoring_min_distance" = "Vähim kõrvalekalle";
 "logging_min_distance_descr" = "Filter: vähim vahemaa, mille järel uus punkt logida";
 "logging_min_accuracy" = "Vähim täpsus";
 "logging_min_accuracy_descr" = "Filter: mitte logida kuni täpsus pole saavutatud";
@@ -250,7 +250,7 @@
 "route_is_too_long_v2" = "See teekond võib olla arvutamiseks liiga pikk. Lisa vahesihtkohad kui 10 minuti jooksul tulemust ei leita.";
 "navigation_over_track" = "Alusta teekonna navigeerimist\?";
 "use_displayed_track_for_navigation" = "Kas soovid navigeerimiseks kasutada kuvatud teekonda?";
-"prev_route" = "Eelmine teekond";
+"previous_route" = "Eelmine teekond";
 "shared_string_ellipsis" = "…";
 "shared_string_select_on_map" = "Vali kaardil";
 "selected_roads" = "Valitud teed";
@@ -392,7 +392,7 @@
 "poi_overlay" = "HP ülekate";
 "poi_dialog_poi_type" = "Huvipunkti liik";
 "my_favorites" = "Minu lemmikud";
-"my_places" = "Minu kohad";
+"shared_string_my_places" = "Minu kohad";
 "fav_no_group" = "Gruppi pole";
 "fav_remove_q" = "Eemaldada lemmik?";
 "fav_import_title" = "Impordi lemmik";
@@ -443,7 +443,7 @@
 "gpx_route_time" = "Teekonna time";
 "gpx_uphldownhl" = "Ülesmäge/allamäge";
 "gpx_average_speed" = "Keskmine kiirus";
-"gpx_start" = "Start";
+"shared_string_control_start" = "Start";
 "gpx_avg_elev" = "Keskmine kõrgus";
 "gpx_elev_range" = "Kõrguse vahemik";
 "gpx_avg_altitude" = "Keskmine kõrgus";
@@ -501,7 +501,7 @@
 "map_settings_avail_lay" = "Saadaolevad kihid";
 "mapillary" = "Mapillary";
 // Intro
-"intro_skip" = "Jäta vahele";
+"shared_string_skip" = "Jäta vahele";
 "intro_download" = "Laadi kaart\nalla";
 "intro_next" = "Järgmine";
 "intro_welcome" = "Tere tulemast\nOsmAnd-i";
@@ -568,7 +568,7 @@
 "osmand_live_weekly" = "Iga nädal";
 "osmand_live_reports" = "Aruanded";
 "osmand_live_server_date" = "Viimane serveri uuendus: %@";
-"osmand_live_upd_frequency" = "Värskenduste kontrolli sagedus";
+"update_frequency" = "Värskenduste kontrolli sagedus";
 "osmand_live_wifi_only" = "Uuenda ainult WiFi kaudu";
 "osmand_live_donation_header" = "Annetuste seaded";
 "osmand_live_donations" = "Annetused";
@@ -662,7 +662,7 @@
 "osm_modify_place" = "Muuda kohta";
 "osm_poi_delete_title" = "Kustuta huvipunkt";
 "osm_edit_modified_poi" = "Muudetud OSM huvipunkt";
-"osm_target_deleted" = "Kustutatud OSM huvipunkt";
+"osm_edit_deleted_poi" = "Kustutatud OSM huvipunkt";
 "osm_target_created" = "OSM huvipunkt loodud";
 "osm_note_created" = "Loodud OSM märge";
 "osm_note_create" = "Loo OSM märkus";
@@ -732,7 +732,7 @@
 "quick_action_list_descr" = "Sellel nupul vajutamine liigub lehekülgede kaupa läbi alloleva nimekirja";
 "map_overlays" = "Kaardiülekatted";
 "map_underlays" = "Kaardi aluskihid";
-"offline_vector_maps" = "Võrguühenduseta vektorkaardid";
+"vector_data" = "Võrguühenduseta vektorkaardid";
 "add_map_source" = "Lisa kaardiallikas";
 "add_map_style" = "Lisa kaardi stiil";
 "map_styles" = "Kaardistiilid";
@@ -756,7 +756,7 @@
 "add_poi" = "Lisa huvipunkt";
 "change_map_style" = "Muuda kaardi stiili";
 "change_map_source" = "Muuda kaardiallikat";
-"change_map_overlay" = "Muuda kaardiülekatet";
+"quick_action_map_overlay" = "Muuda kaardiülekatet";
 "change_map_underlay" = "Muuda kaardi aluskihti";
 "replace_destination" = "Asenda sihtkoht";
 "add_destination" = "Lisa sihtkoht";
@@ -792,7 +792,7 @@
 "quick_action_screen_header" = "Screen %ld";
 "confirm_bulk_delete" = "Kas soovid kustutada %ld kirjet?";
 "quick_action_add_actions_descr" = "Lisa tegevused, et neile kiiresti kaardilt juurde pääseda.";
-"quick_actions_show_dialog" = "Kuva vahedialoog";
+"quick_action_interim_dialog" = "Kuva vahedialoog";
 "quick_action_dialog_descr" = "Enne tegevuse sooritamist lülita sisse dialoogi kuvamine";
 "quick_action_template_name" = "Template name";
 "quick_action_name_footer" = "Aadressi või koha nime kasutamiseks jäta väli tühjaks.";
@@ -1530,7 +1530,7 @@
 "app_mode_osm" = "OSM";
 "map_settings_color_scheme" = "Värviskeem";
 "app_mode_horse" = "Hobune";
-"map_settings_base_transp" = "Aluskaardi läbipaistvus";
+"map_transparency" = "Aluskaardi läbipaistvus";
 "online_webpage_warning" = "Lehekülg saadaval ainult veebis. Avada veebilehitsejas\?";
 "app_mode_subway" = "Metroo";
 "shared_string_warning" = "Hoiatus";
@@ -1575,12 +1575,12 @@
 "select_online_source" = "Vali andmeallikas";
 "appearance_on_map" = "Välimus kaardil";
 "choose_how_display_distance" = "Vali kuidas peaksime kuvama vahemaad aktiivsete markeriteni";
-"min_speed" = "Vähim kiirus";
+"shared_string_min_speed" = "Vähim kiirus";
 "direction_lines" = "Suunajooned";
 "arrows_on_map" = "Nooled kaardil";
 // Dirrection appearance
 "one" = "Üks";
-"distance_indication" = "Vahemaa näit";
+"show_direction" = "Vahemaa näit";
 "two" = "Kaks";
 "max_speed" = "Suurim kiirus";
 "default_speed_setting_title" = "Vaikimisi kiirus";
@@ -1618,7 +1618,7 @@
 "res_name_warning" = "Faili nimi ei tohi olla tühi";
 "res_expire_time_desc" = "Aegumine minutites. Puhverdatud paanid laaditakse uuesti peale etteantud aja möödumist. Kui sa ei soovi selle kaardiallika paane uuendada, siis jäta see väli tühjaks.\nÜks päev on 1440 minutit.\nÜks nädal on 10080 minutit.\n30 päeva on 43200 minutit.";
 "res_source_one_per_tile" = "Üks pildifail paani kohta";
-"res_source_sqlite" = "SQLiteDB fail";
+"sqlite_db_file" = "SQLiteDB fail";
 "res_source_format" = "Lähtevorming";
 "res_pseudo_mercator" = "Pseudo-Mercatori projektsioon";
 "res_mercator" = "Mercatori projektsioon";
@@ -1675,7 +1675,7 @@
 "map_look_descr" = "Kaardi välimus";
 "osm_editing_settings_descr" = "Selle lisaprogrammi seaded kehtivad kogu rakenduses ja rakenduvad kõikidele profiilidele.";
 // Menu
-"menu" = "Menüü";
+"shared_string_menu" = "Menüü";
 "res_edit_map_source" = "Muuda kaardi allikat";
 "downloading" = "Laadin alla";
 "app_profiles" = "Rakenduse profiilid";
@@ -1683,7 +1683,7 @@
 "not_available_profile_name" = "Sellise nimega fail on juba olemas.";
 "profile_import_success" = "Rakenduse profiili import õnnestus";
 "enter_profile_name" = "Sisesta profiili nimi";
-"edit_profile_list" = "Muuda profiililoendit";
+"reorder_profiles" = "Muuda profiililoendit";
 "ui_customization" = "Kasutajaliidese kohendamine";
 "profile_appearance_descr" = "Ikoon, värv ja nimi";
 "profile_settings" = "Profiili seaded";
@@ -2257,7 +2257,7 @@
 "weather_wind_unit_km_per_hour" = "Kilomeetrit tunnis";
 "weather_wind_unit_knots" = "sõlme";
 "weather_precip_unit_mm" = "millimeetrit";
-"weather_precip_unit_in" = "tolli";
+"weather_precip_inches" = "tolli";
 "weather_cloud_data_description" = "Ilmaandmed laaditakse alla vaadeldava ala kohta iga kord.";
 "obf_import_already_exists_short" = "Selle nimega fail on juba olemas.";
 "shared_string_hide_all" = "Peida kõik";

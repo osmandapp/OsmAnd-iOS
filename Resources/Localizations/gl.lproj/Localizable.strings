@@ -71,7 +71,7 @@
 "save_global_track_interval_descr" = "Escolle o intre de rexistro para a gravación xeral de pistas (activar mediante trebello da gravación do GPX no mapa).";
 "logging_interval_navigation" = "Intre de rexistro durante a navegación";
 "logging_interval_navigation_descr" = "Choose logging interval for track recording during navigation";
-"logging_min_distance" = "Desprazamiento mínimo";
+"monitoring_min_distance" = "Desprazamiento mínimo";
 "logging_min_distance_descr" = "Filter: minimum distance to log a new point";
 "logging_min_accuracy" = "Precisión mínima";
 "logging_min_accuracy_descr" = "Filter: no logging unless the accuracy is reached";
@@ -370,7 +370,7 @@
 "gpx_route_time" = "Route time";
 "gpx_uphldownhl" = "Uphills/Downhills";
 "gpx_average_speed" = "Velocidade media";
-"gpx_start" = "Comezar";
+"shared_string_control_start" = "Comezar";
 "gpx_avg_elev" = "Average elevation";
 "gpx_elev_range" = "Elevation range";
 "gpx_updown" = "Up/Down";
@@ -416,7 +416,7 @@
 "shared_string_transparency" = "Transparencia";
 "map_settings_avail_lay" = "Available layers";
 // Intro
-"intro_skip" = "Omitir";
+"shared_string_skip" = "Omitir";
 "intro_download" = "Download\nmap";
 "intro_next" = "Seguinte";
 "intro_welcome" = "Welcome to\nOsmAnd";
@@ -822,7 +822,7 @@
 "change_map_style" = "Mudar o estilo do mapa";
 "night_mode" = "Modo noite";
 "quick_action_add_overlay" = "Engadir sobreposición";
-"quick_actions_show_dialog" = "Amosar un diálogo temporal";
+"quick_action_interim_dialog" = "Amosar un diálogo temporal";
 "shared_string_email_address" = "Enderezo de correo";
 "create_poi_short" = "Crear un PDI";
 "gpx_descent" = "Descenso";
@@ -836,7 +836,7 @@
 "add_home" = "Engadir a miña casa";
 "mapillary" = "Mapillary";
 "shared_string_distance" = "Distancia";
-"offline_vector_maps" = "Mapas vectoriais sen conexión";
+"vector_data" = "Mapas vectoriais sen conexión";
 "osm_alert_button_ok" = "Crear unha nota";
 "modify_poi_short" = "Modificar o PDI";
 "shared_string_time" = "Tempo";
@@ -849,7 +849,7 @@
 "osm_editing_lost_changes_title" = "Saír sen gardar?";
 "create_items" = "Crear elementos";
 "add_intermediate" = "Engadir punto intermedio";
-"osm_target_deleted" = "PDI do OSM eliminado";
+"osm_edit_deleted_poi" = "PDI do OSM eliminado";
 "osm_working_days" = "Días laborábeis";
 "osmand_live_update_now" = "Actualizar agora";
 "route_parameters" = "Parámetros de ruta";
@@ -908,13 +908,13 @@
 "gpx_slope" = "Costa";
 "open_osm_note" = "Abrir nota do OSM";
 "mapil_pano_only" = "Amosar só imaxes 360°";
-"change_map_overlay" = "Mudar mapa sobreposto";
+"quick_action_map_overlay" = "Mudar mapa sobreposto";
 "osm_edit_modified_poi" = "Modificouse un PDI do OSM";
 "shared_string_milliradians" = "Milirradiáns";
 "add_poi" = "Engadir un PDI";
 "osm_live_payment_renews_annually" = "Renovación anual";
 "osm_website" = "Sitio web";
-"my_places" = "Os meus lugares";
+"shared_string_my_places" = "Os meus lugares";
 "show_tunnels" = "Túneles";
 "osm_live_payment_renews_quarterly" = "Renovación trimestral";
 "daily" = "Cada día";
@@ -939,7 +939,7 @@
 "shared_string_io_error" = "Erro do E/S";
 "mapillary_get_title" = "Mellorar a cobertura das imaxes co Mapillary";
 "res_world_region" = "Mundo";
-"prev_route" = "Ruta anterior";
+"previous_route" = "Ruta anterior";
 "shared_string_off" = "Non";
 "osmand_live_last_live_update" = "Última actualización: %@";
 "quick_action_no_overlay" = "Sen capas sobrepostas";
@@ -1273,7 +1273,7 @@
 "app_mode_horse" = "Cabalo";
 "region_antarctica" = "Antártida";
 "map_settings_color_scheme" = "Esquema de cores";
-"map_settings_base_transp" = "Transparencia do mapa base";
+"map_transparency" = "Transparencia do mapa base";
 "app_mode_ufo" = "OVNI";
 "map_settings_appearance" = "Aparencia";
 "shared_string_warning" = "Aviso";
@@ -1307,7 +1307,7 @@
 "profile_type_osmand_string" = "Perfil do OsmAnd";
 "next_segment" = "Seguinte segmento";
 "nav_type_direct_to" = "Directoó punto";
-"edit_profile_list" = "Editar a listaxe de perfís";
+"reorder_profiles" = "Editar a listaxe de perfís";
 "amenity" = "Instalación";
 "profile_type_custom_string" = "Perfil personalizado";
 "position_icon_at_rest" = "Icona de posición en asueto";
@@ -1319,7 +1319,7 @@
 "quick_action_remove_next_destination_descr" = "Elimina o seguinte destino da ruta. Seé o destino final, a navegación será detida.";
 "profile_alert_delete_title" = "Eliminar perfil";
 "consider_limitations_param" = "Considerar limitacións temporais";
-"menu" = "Menú";
+"shared_string_menu" = "Menú";
 "shared_string_account" = "Conta";
 "shared_string_add_profile" = "Engadir perfil";
 "quick_action_map_source_title" = "Fontes de mapas";
@@ -1330,7 +1330,7 @@
 "base_profile_descr_boat" = "Embarcación, remo, vela";
 "weight_limit_description" = "Fornece o peso do teu vehículo, algunhas restricións de ruta poden ser aplicadas a vehículos pesados.";
 "shared_string_copy" = "Copiar";
-"distance_indication" = "Indicación de distancia";
+"show_direction" = "Indicación de distancia";
 "osm_note_close" = "Pechar nota do OSM";
 "shared_string_routing" = "Enrutamento";
 "save_new_track" = "Gardar coma nova pista";
@@ -1352,7 +1352,7 @@
 "quick_action_switch_profile_descr" = "O botón de acción troca entre os perfís escollidos.";
 "voice_announces" = "Indicacións por voz";
 "shared_string_continue" = "Continuar";
-"res_source_sqlite" = "Ficheiro SQLiteDB";
+"sqlite_db_file" = "Ficheiro SQLiteDB";
 "shared_string_importing" = "Estase a importar";
 "shared_string_next" = "Seguinte";
 "logging_accuracy" = "Precisión de rexistro";
@@ -1432,7 +1432,7 @@
 "res_source_one_per_tile" = "Un ficheiro de imaxe por tesela";
 "recalculate_route_distance_promo" = "A ruta será recalculada se a distancia á localización actual é maior que o valor escollido.";
 "height_limit_description" = "Fornece a altura do teu vehículo, algunhas restricións de ruta poden ser aplicadas para vehículos altos.";
-"min_speed" = "Velocidade mínima";
+"shared_string_min_speed" = "Velocidade mínima";
 "total" = "Total";
 "select_color" = "Escoller a cor";
 "quick_action_mapillary_hide" = "Agochar o Mapillary";
@@ -1477,7 +1477,7 @@
 "replace_favorite_confirmation" = "Tes a certeza de querer substituír o favorito \"%@\"\?";
 "nearest_point" = "Punto máis preto";
 "favorite_friends_category" = "Amizades";
-"osmand_live_upd_frequency" = "Frecuencia de actualización";
+"update_frequency" = "Frecuencia de actualización";
 "plan_route_select_folder" = "Seleccionar cartafol";
 "start_of_the_track" = "Comezo da pista";
 "search_history" = "Historial de procura";

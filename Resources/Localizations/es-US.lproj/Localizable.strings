@@ -116,7 +116,7 @@
 "driving_region_automatic" = "Automático";
 "routing_attr_length_name" = "Límite de longitud";
 "default_speed_setting_title" = "Velocidad predefinida";
-"min_speed" = "Velocidad mín.";
+"shared_string_min_speed" = "Velocidad mín.";
 "max_speed" = "Velocidad máx.";
 "road_speeds_descr" = "Estos parámetros pueden afectar al cálculo de la ruta.";
 "road_min_speed_descr" = "Define la velocidad mínima de viaje para todos los caminos de la ruta. Aumenta la prioridad para los caminos con velocidades recomendadas inferiores a la mínima.";
@@ -127,7 +127,7 @@
 "save_global_track_interval_descr" = "Intervalo de registro para la grabación general de trazas (activar mediante el widget de grabación GPX sobre el mapa).";
 "logging_interval_navigation" = "Intervalo de registro durante la navegación";
 "logging_interval_navigation_descr" = "Intervalo de registro de trazas durante la navegación";
-"logging_min_distance" = "Desplazamiento mínimo";
+"monitoring_min_distance" = "Desplazamiento mínimo";
 "logging_min_distance_descr" = "Filtro: distancia mínima para registrar un nuevo punto";
 "logging_accuracy" = "Precisión de registro";
 "logging_min_accuracy" = "Precisión mínima";
@@ -195,7 +195,7 @@
 // Dirrection appearance
 "one" = "Uno";
 "two" = "Dos";
-"distance_indication" = "Indicación de distancia";
+"show_direction" = "Indicación de distancia";
 "arrows_on_map" = "Flechas en el mapa";
 "direction_lines" = "Líneas de dirección";
 "active_markers" = "Marcadores activos";
@@ -327,7 +327,7 @@
 "route_is_too_long_v2" = "Esta ruta puede ser muy larga para calcular. Añade destinos intermedios si no se encuentran resultados dentro de los 10 minutos.";
 "navigation_over_track" = "¿Iniciar la navegación a lo largo de la traza?";
 "use_displayed_track_for_navigation" = "¿Usar la traza mostrada para la navegación?";
-"prev_route" = "Ruta anterior";
+"previous_route" = "Ruta anterior";
 "shared_string_ellipsis" = "…";
 "shared_string_select_on_map" = "Marcar en el mapa";
 "selected_roads" = "Caminos marcados";
@@ -516,7 +516,7 @@
 "poi_overlay" = "Superposición de PDI";
 "poi_dialog_poi_type" = "Tipo de PDI";
 "my_favorites" = "Mis favoritos";
-"my_places" = "Mis sitios";
+"shared_string_my_places" = "Mis sitios";
 "fav_no_group" = "Sin grupo";
 "fav_add_new_group" = "Añadir un grupo";
 "select_group_descr" = "Elige un grupo o añade uno nuevo";
@@ -603,7 +603,7 @@
 "gpx_route_time" = "Tiempo del recorrido";
 "gpx_uphldownhl" = "Ascensos/Descensos";
 "gpx_average_speed" = "Velocidad media";
-"gpx_start" = "Iniciar";
+"shared_string_control_start" = "Iniciar";
 "gpx_avg_elev" = "Elevación media";
 "gpx_elev_range" = "Rango de elevación";
 "gpx_avg_altitude" = "Altitud media";
@@ -669,7 +669,7 @@
 "map_settings_offline" = "Estilos de mapas sin conexión";
 "map_settings_online" = "Mapas en línea";
 "shared_string_transparency" = "Transparencia";
-"map_settings_base_transp" = "Transparencia del mapa base";
+"map_transparency" = "Transparencia del mapa base";
 "map_settings_avail_lay" = "Capas disponibles";
 "mapillary" = "Mapillary";
 "street_level_imagery" = "Imágenes a nivel de calle";
@@ -706,7 +706,7 @@
 "plugin_settings_descr" = "Ajustes del complemento para el perfil elegido.";
 
 // Intro
-"intro_skip" = "Omitir";
+"shared_string_skip" = "Omitir";
 "intro_download" = "Descargar\nmapa";
 "intro_next" = "Siguiente";
 "intro_welcome" = "Te damos la bienvenida a\nOsmAnd";
@@ -934,7 +934,7 @@
 "profile_appearance_descr" = "Icono, color y nombre";
 "ui_customization" = "Personalización de interfaz";
 "ui_customization_descr" = "Elementos del menú lateral y menú contextual";
-"edit_profile_list" = "Editar la lista de perfiles";
+"reorder_profiles" = "Editar la lista de perfiles";
 "enter_profile_name" = "Ingresa el nombre del perfil";
 "select_color" = "Elegir el color";
 "select_icon" = "Elegir icono";
@@ -1071,7 +1071,7 @@
 "osmand_live_weekly" = "Cada semana";
 "osmand_live_reports" = "Informes";
 "osmand_live_server_date" = "Última actualización del servidor: %@";
-"osmand_live_upd_frequency" = "Frecuencia de actualización";
+"update_frequency" = "Frecuencia de actualización";
 "osmand_live_wifi_only" = "Actualizar sólo con WiFi";
 "osmand_live_donation_header" = "Ajustes de la donación";
 "osmand_live_donations" = "Donaciones";
@@ -1134,7 +1134,7 @@
 "res_elliptic_mercator" = "Mercator elíptica";
 "res_pseudo_mercator" = "Proyección de pseudo-Mercator";
 "res_source_format" = "Formato de fuente";
-"res_source_sqlite" = "Archivo SQLiteDB";
+"sqlite_db_file" = "Archivo SQLiteDB";
 "res_source_one_per_tile" = "Un archivo de imagen por tesela";
 "res_zoom_levels_desc" = "Estos parámetros afectarán a la visualización del mapa cuando se utilice como un tipo de mapa o como superposición/subyacencia.\n\nTipo de mapa: el mapa se limitará a los zums elegidos.\n\nSuperposición/Subyacencia: Niveles de zum en los que las teselas serán visibles. Se producirá un aumento o disminución de la escala por encima o por debajo de los valores definidos.";
 "res_expire_time_desc" = "Tiempo de expiración en minutos. Las teselas almacenadas serán recargadas luego del tiempo definido. Deja este campo vacío si no necesitas recargar las teselas para este repositorio.\nUn día son 1440 minutos.\nUna semana son 10080 minutos.\n30 días son 43200 minutos.";
@@ -1153,7 +1153,7 @@
 "shared_string_feet" = "pies";
 
 // Menu
-"menu" = "Menú";
+"shared_string_menu" = "Menú";
 "menu_my_places" = "Mis sitios";
 "menu_my_trips" = "Mis trazas";
 "menu_feedback" = "Encuesta";
@@ -1199,7 +1199,7 @@
 "osm_modify_place" = "Editar lugar";
 "osm_poi_delete_title" = "Borrar PDI";
 "osm_edit_modified_poi" = "PDI de OSM modificado";
-"osm_target_deleted" = "PDI de OSM borrado";
+"osm_edit_deleted_poi" = "PDI de OSM borrado";
 "osm_target_created" = "PDI de OSM creado";
 "osm_note_created" = "Nota de OSM creada";
 "osm_note_create" = "Crear nota de OSM";
@@ -1279,7 +1279,7 @@
 "quick_action_coordinates_widget_descr" = "Un botón que muestra u oculta el widget de coordenadas en el mapa.";
 "map_overlays" = "Mapas superpuestos";
 "map_underlays" = "Mapas subyacentes";
-"offline_vector_maps" = "Mapas vectoriales sin conexión";
+"vector_data" = "Mapas vectoriales sin conexión";
 "add_map_source" = "Añadir repositorio del mapa";
 "add_map_style" = "Añadir estilo de mapa";
 "map_styles" = "Estilos de mapa";
@@ -1306,7 +1306,7 @@
 "add_poi" = "Añadir PDI";
 "change_map_style" = "Alternar estilo del mapa";
 "change_map_source" = "Alternar repositorio del mapa";
-"change_map_overlay" = "Alternar mapa superpuesto";
+"quick_action_map_overlay" = "Alternar mapa superpuesto";
 "change_map_underlay" = "Alternar mapa subyacente";
 "replace_destination" = "Reemplazar destino";
 "add_destination" = "Añadir destino";
@@ -1343,7 +1343,7 @@
 "quick_action_screen_header" = "Pantalla %ld";
 "confirm_bulk_delete" = "¿Borrar %ld elementos?";
 "quick_action_add_actions_descr" = "Añade acciones para acceder a ellas rápidamente desde el mapa.";
-"quick_actions_show_dialog" = "Mostrar un diálogo temporal";
+"quick_action_interim_dialog" = "Mostrar un diálogo temporal";
 "quick_action_dialog_descr" = "Activar para mostrar el diálogo antes de aplicar la acción";
 "quick_action_template_name" = "Nombre de la plantilla";
 "quick_action_name_footer" = "Dejar el campo vacío para usar la dirección o el nombre del lugar.";
@@ -2330,7 +2330,7 @@
 "weather_wind_unit_km_per_hour" = "Kilómetros por hora";
 "weather_wind_unit_knots" = "Nudos";
 "weather_precip_unit_mm" = "Milímetros";
-"weather_precip_unit_in" = "Pulgadas";
+"weather_precip_inches" = "Pulgadas";
 "weather_cloud_data_description" = "Los datos meteorológicos serán descargados para verlos cada vez.";
 "user_login" = "Ingresar";
 "login_footer_full_text" = "¿Necesitas ayuda? Contáctanos en\nsupport@osmand.net";
@@ -2395,7 +2395,7 @@
 "shared_string_capacity" = "Capacidad";
 "altitude_ascent" = "Ascenso";
 "altitude_descent" = "Descenso";
-"map_settings_weather_contours" = "Contornos";
+"shared_string_contours" = "Contornos";
 "map_settings_weather_layers" = "Capas";
 "weather_pressure_enable_descr" = "Permite ver la capa de presión en el mapa.";
 "weather_wind_enable_descr" = "Permite ver la capa de viento en el mapa.";
@@ -2538,7 +2538,7 @@
 "weather_plugin" = "Complemento meteorológico";
 "shared_string_leave" = "Salir";
 "shared_string_delete_data" = "Borrar datos";
-"restore_data" = "Restaurar datos";
+"backup_restore_data" = "Restaurar datos";
 "backup_complete" = "Copia de seguridad completa";
 "backup_version_history" = "Historial de versiones";
 "select_backup_data_descr" = "Marca los datos y carpetas para la copia de seguridad.";
@@ -2647,7 +2647,7 @@
 "cloud_contains_newer_changes" = "La versión de OsmAnd Cloud contiene cambios más recientes.";
 "upload_local_version" = "Cargar versión local";
 "recorded_voice" = "Grabado";
-"tts" = "TTS";
+"tts_title" = "TTS";
 "cloud_no_conflicts_descr" = "Los datos en el dispositivo y en OsmAnd Cloud son los mismos.";
 "dowload_cloud_version" = "Descargar la versión de la nube";
 "shared_string_profile" = "Perfil";

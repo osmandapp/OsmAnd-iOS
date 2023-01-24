@@ -42,7 +42,7 @@
 "gpx_cannot_import" = "Kan ikke importere angivne GPX fil";
 "gpx_stat" = "Statistikker";
 "gpx_average_speed" = "Gennemsnitshastighed";
-"gpx_start" = "Start";
+"shared_string_control_start" = "Start";
 "save_track_interval_globally" = "Logningsinterval";
 "rec_interval_minimum" = "Minimum";
 "track_interval_remember" = "Husk valg";
@@ -214,7 +214,7 @@
 "map_settings_offline" = "Stil for offline kort";
 "shared_string_transparency" = "Gennemsigtighed";
 // Intro
-"intro_skip" = "Spring over";
+"shared_string_skip" = "Spring over";
 "intro_promo" = "Globale offline kort";
 "intro_placeholder" = "Indtast navnet på regionen";
 "sett_ml" = "Mil";
@@ -760,7 +760,7 @@
 "help_follow_us" = "Følg os";
 "facebook" = "Facebook";
 "twitter" = "Twitter";
-"logging_min_distance" = "Min. forskydning";
+"monitoring_min_distance" = "Min. forskydning";
 "logging_min_distance_descr" = "Filter: minimumsafstand for at logge et nyt punkt";
 "logging_min_accuracy" = "Min. nøjagtighed";
 "logging_min_accuracy_descr" = "Filter: Ingen logning medmindre nøjagtigheden er nået";
@@ -812,7 +812,7 @@
 "default_price_currency_format" = "%@ %@";
 "osm_live_payment_header" = "Vælg en passende betalingsperiode:";
 "osm_live_payment_contribute_descr" = "En del af indtægterne går til OpenStreetMap bidragsydere.";
-"osmand_live_upd_frequency" = "Opdateringsfrekvens";
+"update_frequency" = "Opdateringsfrekvens";
 "osmand_live_wifi_only" = "Opdatering kun via WiFi";
 "purchase_dialog_title" = "Vælg abonnement";
 "purchase_dialog_travel_description" = "Køb en af følgende for at læse rejseartikler offline:";
@@ -902,7 +902,7 @@
 "osm_modify_place" = "Ændre sted";
 "osm_poi_delete_title" = "Slet interessepunkt";
 "osm_edit_modified_poi" = "Ændret OSM IP";
-"osm_target_deleted" = "Slettet OSM IP";
+"osm_edit_deleted_poi" = "Slettet OSM IP";
 "osm_target_created" = "Oprettede OSM IP";
 "osm_confirm_delete" = "Slet interessepunkt?";
 "osm_confirm_upload" = "Overfør ændringer?";
@@ -947,7 +947,7 @@
 "osm_note_reopen" = "Genåbn";
 "osm_edits_offline_layer" = "OSM redigeringer/noter (offline)";
 "osm_notes_online_layer" = "OSM-noter (online)";
-"my_places" = "Mine steder";
+"shared_string_my_places" = "Mine steder";
 "osm_edits_basic" = "Grundlæggende";
 "osm_edits_advanced" = "Avanceret";
 "osm_edits_all" = "Alle redigeringer";
@@ -1077,7 +1077,7 @@
 "quick_action_list_descr" = "Tryk på denne genvejsknap gennemløber nedenstående liste";
 "map_overlays" = "Kortoverlejringer";
 "map_underlays" = "Kortunderlejring";
-"offline_vector_maps" = "Offline vektorkort";
+"vector_data" = "Offline vektorkort";
 "add_map_source" = "Tilføj en kortkilde";
 "add_map_style" = "Tilføj en kortstilart";
 "map_styles" = "Kortstilarter";
@@ -1096,7 +1096,7 @@
 "add_poi" = "Tilføj IP";
 "change_map_style" = "Skift kortstil";
 "change_map_source" = "Skift kortkilde";
-"change_map_overlay" = "Skift kortoverlejring";
+"quick_action_map_overlay" = "Skift kortoverlejring";
 "change_map_underlay" = "Skift kortunderlejring";
 "replace_destination" = "Udskift destination";
 "add_destination" = "Tilføj destination";
@@ -1119,7 +1119,7 @@
 "select_underlay" = "Vælg kort til underlejring";
 "confirm_bulk_delete" = "Slet %ld elementer?";
 "quick_action_add_actions_descr" = "Tilføj genveje og få hurtigt adgang til dem fra kortet.";
-"quick_actions_show_dialog" = "Vis en midlertidig dialogboks";
+"quick_action_interim_dialog" = "Vis en midlertidig dialogboks";
 "quick_action_dialog_descr" = "Aktivér for at vise dialogboks, før genvejen anvendes";
 "quick_action_template_name" = "Skabelonnavn";
 "quick_action_name_footer" = "Lad være tomt for at bruge adressen eller stedets navn.";
@@ -1200,7 +1200,7 @@
 "select_route_intermediate" = "Vælg et mellemliggende punkt";
 "select_home" = "Vælg hjemmeplacering";
 "select_work_point" = "Vælg arbejdssted";
-"prev_route" = "Forrige rute";
+"previous_route" = "Forrige rute";
 "shared_string_on" = "Til";
 "shared_string_off" = "Fra";
 "shared_string_show_more" = "Vis mere";
@@ -1543,7 +1543,7 @@
 "res_zoom_warning" = "Minimum zoomværdi må ikke være lig med eller større end maksimal zoom";
 "res_expire_warning" = "Udløbstiden skal være et tal mellem 0 og 10.000.000";
 "res_source_format" = "Kildeformat";
-"res_source_sqlite" = "SQLiteDB fil";
+"sqlite_db_file" = "SQLiteDB fil";
 "res_source_one_per_tile" = "En billedfil pr. kortflise";
 "res_zoom_invalid_value" = "Zoomværdier skal være inden for området 1 - 22";
 "online_raster_map" = "Online rasterkort";
@@ -1595,7 +1595,7 @@
 "map_settings_contour_zoom_level_descr" = "Vælg zoomniveau, hvorfra højdekurver vises";
 "map_settings_line_density" = "Linjetæthed";
 "map_settings_color_scheme" = "Farveskema";
-"map_settings_base_transp" = "Gennemsigtighed for basiskort";
+"map_transparency" = "Gennemsigtighed for basiskort";
 "map_coords" = "Kort: Lat %.5f Lon %.5f";
 "num_stops" = "Stoppesteder";
 "by_transport_type" = "Ved %@";
@@ -1643,7 +1643,7 @@
 "active_markers" = "Aktive markører";
 "direction_lines" = "Retningslinjer";
 "arrows_on_map" = "Pile på kortet";
-"distance_indication" = "Afstandsangivelse";
+"show_direction" = "Afstandsangivelse";
 "two" = "To";
 // Dirrection appearance
 "one" = "En";
@@ -1665,7 +1665,7 @@
 "select_icon" = "Vælg ikon";
 "select_color" = "Vælg farve";
 "enter_profile_name" = "Indtast profilnavn";
-"edit_profile_list" = "Rediger profilliste";
+"reorder_profiles" = "Rediger profilliste";
 "new_profile" = "Ny profil";
 "profile_type_custom_string" = "Brugerdefineret profil";
 "create_profile" = "Opret profil";
@@ -1679,7 +1679,7 @@
 "voice_anounces" = "Talevejledning";
 "voice_announces" = "Stemmemeddelelser";
 "configure_screen_descr" = "Vælg skærmindstillinger for profilen";
-"min_speed" = "Min. hastighed";
+"shared_string_min_speed" = "Min. hastighed";
 "shared_string_account" = "Konto";
 "default_speed_dialog_msg" = "Anslår ankomsttid for ukendte vejtyper og begrænser hastigheden for alle veje (kan påvirke ruteberegning)";
 "profile_type_base_string" = "Basisprofil";
@@ -1700,7 +1700,7 @@
 "osm_editing_settings_descr" = "Indstillinger for udvidelsen er globale, og gælder for alle profiler.";
 
 // Menu
-"menu" = "Menu";
+"shared_string_menu" = "Menu";
 "profile_sett_descr" = "Påvirker den valgte app-profil";
 "app_profiles" = "App-profiler";
 "osmand_profile" = "OsmAnd profil";
@@ -2320,7 +2320,7 @@
 "weather_pressure_unit_mmhg" = "Millimeter kviksølv";
 "weather_pressure_unit_inhg" = "Tommer kviksølv";
 "weather_wind_unit_m_s" = "Meter/sekund";
-"weather_precip_unit_in" = "Tommer";
+"weather_precip_inches" = "Tommer";
 "weather_cloud_data_description" = "Vejrdata vil blive downloadet til vist område hver gang.";
 "user_login" = "Login";
 "login_footer_full_text" = "Har du brug for hjælp? Kontakt os på\nsupport@osmand.net";
@@ -2398,7 +2398,7 @@
 "weather_temp_enable_descr" = "Aktiver for at få vist temperaturlag på kortet.";
 "map_settings_weather_layers" = "Lag";
 "copy_to_map_favorites" = "Kopier til favoritter";
-"map_settings_weather_contours" = "Konturer";
+"shared_string_contours" = "Konturer";
 "weather_pressure_enable_descr" = "Aktiver for at få vist lufttryklag på kortet.";
 "weather_wind_enable_descr" = "Aktiver for at få vist vindlag på kortet.";
 "weather_cloud_enable_descr" = "Aktiver for at få vist skylag på kortet.";
@@ -2541,7 +2541,7 @@
 "all_maps_are_up_to_date" = "Alle kort er ajourført";
 "shared_string_restoring" = "Gendannelse";
 "restoring_from" = "Gendannelse af udvalgte data fra skyen";
-"restore_data" = "Gendan data";
+"backup_restore_data" = "Gendan data";
 "choose_what_to_restore" = "Vælg de elementer, der skal gendannes";
 "renew_subscription" = "Forny abonnement";
 "fetching_from_server" = "Henter data fra serveren";
@@ -2632,7 +2632,7 @@
 "cloud_no_conflicts" = "Der er ingen konflikter";
 "backup_conflicts_action_descr" = "En anden version af denne fil er gemt på serveren. Du skal vælge handling";
 "upload_local_version" = "Upload lokal version";
-"tts" = "TTS";
+"tts_title" = "TTS";
 "dowload_cloud_version" = "Download cloud-version";
 "shared_string_changed" = "Ændret";
 "cloud_recent_changes" = "Ændringer";

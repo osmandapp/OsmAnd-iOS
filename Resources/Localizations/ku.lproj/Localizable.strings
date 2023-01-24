@@ -32,7 +32,7 @@
 "m_style_car" = "Trimbêl";
 "gpx_route" = "Rêgeh";
 "gpx_route_time" = "Dema Rêgeh";
-"gpx_start" = "Dest pê bike";
+"shared_string_control_start" = "Dest pê bike";
 "map_settings_map" = "Nexşe";
 "map_settings_show" = "Li ser nexşeyê nîşan bide";
 "map_settings_type" = "Cureya nexşeyê";

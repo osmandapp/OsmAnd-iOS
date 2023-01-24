@@ -125,7 +125,7 @@
     _headers[@(data.count - 1)] = OALocalizedString(@"actions");
 
     NSString *menuPath = [NSString stringWithFormat:@"%@ — %@ — %@",
-                          OALocalizedString(@"menu"), OALocalizedString(@"menu_my_places"), OALocalizedString(@"osm_edits_title")];
+                          OALocalizedString(@"shared_string_menu"), OALocalizedString(@"menu_my_places"), OALocalizedString(@"osm_edits_title")];
     NSString *actionsDescr = [NSString stringWithFormat:OALocalizedString(@"osm_editing_access_descr"), menuPath];
     NSMutableAttributedString *actionsDescrAttr =
             [[NSMutableAttributedString alloc] initWithString:actionsDescr

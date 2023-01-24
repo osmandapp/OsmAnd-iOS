@@ -97,7 +97,7 @@
 "map_settings_online" = "Cartes en ligne";
 "shared_string_transparency" = "Transparence";
 // Intro
-"intro_skip" = "Ignorer";
+"shared_string_skip" = "Ignorer";
 "intro_next" = "Suivant";
 // Settings
 "sett_km" = "Kilomètres";
@@ -284,7 +284,7 @@
 "gpx_import_already_exists" = "Le fichier de trace spécifié existe déjà dans la liste. Choisissez une action.";
 "gpx_import_desc" = "Pour importer vos fichiers GPX (format d'enregistrement classique de données GPS) depuis Dropbox, un courriel ou toute autre source utilisez la fonction « Copier vers OsmAnd Maps »";
 "gpx_uphldownhl" = "Montées/Descentes";
-"gpx_start" = "Démarrer";
+"shared_string_control_start" = "Démarrer";
 "gpx_uphills_total" = "Total de montées";
 "track_recording" = "Enregistrement du trajet";
 "track_recording_name" = "Enregistrement d\'itinéraire en cours";
@@ -737,7 +737,7 @@
 "facebook" = "Facebook";
 "twitter" = "Twitter";
 "logging_interval_navigation_descr" = "Choisissez l'intervalle d'enregistrement de votre trace durant la navigation";
-"logging_min_distance" = "Déplacement minimum";
+"monitoring_min_distance" = "Déplacement minimum";
 "logging_min_distance_descr" = "Filtre : distance minimale entre deux points d'enregistrement";
 "logging_min_accuracy" = "Précision minimale";
 "logging_min_accuracy_descr" = "Filtre : pas d'enregistrement tant que la précision n'est pas atteinte";
@@ -758,7 +758,7 @@
 "osmand_live_not_updated" = "Pas encore mis à jour";
 "daily" = "Journalière";
 "osmand_live_weekly" = "Hebdomadaire";
-"osmand_live_upd_frequency" = "Fréquence de mise à jour";
+"update_frequency" = "Fréquence de mise à jour";
 "osmand_live_wifi_only" = "Mettre à jour uniquement via WiFi";
 "osmand_live_donations_enter_email" = "Entrez votre adresse courriel";
 "res_world_region" = "Monde";
@@ -861,7 +861,7 @@
 "osm_modify_place" = "Modifier le lieu";
 "osm_poi_delete_title" = "Supprimer le point d\'intérêt";
 "amenity" = "Loisir";
-"my_places" = "Lieux favoris";
+"shared_string_my_places" = "Lieux favoris";
 "shared_string_password" = "Mot de passe";
 "shared_string_category" = "Catégorie";
 "poi_opening_hours" = "Heures d\'ouverture";
@@ -886,7 +886,7 @@
 "osm_closes_at" = "Ferme à :";
 "osm_building_num" = "Numéro de bâtiment";
 "osm_edit_modified_poi" = "Point d\'intérêt OSM modifié";
-"osm_target_deleted" = "Point d\'intérêt OSM supprimé";
+"osm_edit_deleted_poi" = "Point d\'intérêt OSM supprimé";
 "osm_target_created" = "Point d\'intérêt créé sur OSM";
 "osm_note_created" = "Note OSM créée";
 "osm_note_create" = "Note OSM créée";
@@ -1018,8 +1018,8 @@
 "coordinates_example" = "Exemple";
 "shared_string_time_of_day" = "Heure de la journée";
 "gpx_avg_altitude" = "Altitude moyenne";
-"offline_vector_maps" = "Cartes vectorielles OSM";
-"quick_actions_show_dialog" = "Afficher une fenêtre intermédiaire";
+"vector_data" = "Cartes vectorielles OSM";
+"quick_action_interim_dialog" = "Afficher une fenêtre intermédiaire";
 "toggle_poi" = "Afficher / Masquer les points d'intérêt";
 "map_settings_map_magnifier" = "Zoom de la carte";
 "change_map_style" = "Modifier le style de carte";
@@ -1047,7 +1047,7 @@
 "mapillary" = "Mapillary";
 "quick_action_name_str" = "Nom de l\'action";
 "download_depth_countours" = "Lignes de sondes marines";
-"change_map_overlay" = "Modifier la sur-couche de carte";
+"quick_action_map_overlay" = "Modifier la sur-couche de carte";
 "shared_string_show_more" = "Afficher plus";
 "mapil_pano_only" = "N\'afficher que les imagesà 360°";
 "poi_list" = "Liste des points d\'intérêt";
@@ -1058,7 +1058,7 @@
 "mapil_add_photos" = "Ajouter des photos";
 "gpx_alt_range" = "Amplitude altimétrique";
 "display_starting_at_zoom_level" = "Afficher à partir du niveau de zoom";
-"prev_route" = "Itinéraire précédent";
+"previous_route" = "Itinéraire précédent";
 "add_parking_place" = "Ajouter un emplacement de stationnement";
 "sett_ext_input" = "Périphériques externes d\'entrée";
 "quick_action_add_overlay" = "Ajouter une sur-couche";
@@ -1480,7 +1480,7 @@
 "osm_edit_uploading" = "Téléversement…";
 "osm_succsessful_uploads" = "Réussi";
 "osm_failed_uploads" = "Échec";
-"res_source_sqlite" = "Fichier SQLiteDB";
+"sqlite_db_file" = "Fichier SQLiteDB";
 "res_pseudo_mercator" = "Pseudo-projection de Mercator";
 "res_mercator" = "Projection Mercator";
 "res_confirmation_delete" = "Êtes vous sûr de vouloir supprimer %@ ?";
@@ -1489,7 +1489,7 @@
 "select_map_style" = "Choisissez un style de carte";
 "res_zoom_levels" = "Niveaux de zoom";
 "all_group_points" = "Tous les points du groupe";
-"map_settings_base_transp" = "Transparence de la carte";
+"map_transparency" = "Transparence de la carte";
 "map_settings_color_scheme" = "Couleur du thème";
 "map_settings_appearance" = "Apparence";
 "res_expire_warning" = "Le délai d'expiration doit être un nombre compris entre 0 et 10 000 000";
@@ -1553,7 +1553,7 @@
 "arrows_on_map" = "Flèches sur la carte";
 "two" = "Deux";
 "max_speed" = "Vitesse Max.";
-"min_speed" = "Vitesse Min.";
+"shared_string_min_speed" = "Vitesse Min.";
 "default_speed_setting_title" = "Vitesse par défaut";
 "routing_attr_length_name" = "Limite de longueur";
 "send_anonymous_data_desc" = "Envoyez à OsmAnd des statistiques de téléchargement des cartes. Nous ne collectons aucune donnée de localisation, ni aucune information personnelle.";
@@ -1586,7 +1586,7 @@
 "configure_screen_descr" = "Sélectionnez les paramètres d\'affichage écran pour ce profil";
 "logging_accuracy" = "Précision de l\'enregistrement";
 "get_discount_first_few_parts" = "%@ pour premier %@";
-"distance_indication" = "Indication de distance";
+"show_direction" = "Indication de distance";
 "create_profile" = "Créer un profil";
 "export_profile" = "Exporter";
 "avoid_by_type" = "Éviter par type";
@@ -1662,7 +1662,7 @@
 "will_be_show_while_moving" = "Ce sera affiché pendant le déplacement";
 "select_icon" = "Sélectionnez une icône";
 "enter_profile_name" = "Entrez le nom du profil";
-"edit_profile_list" = "Modifiez la liste des profils";
+"reorder_profiles" = "Modifiez la liste des profils";
 "ui_customization" = "Personnalisation de l'interface";
 "profile_appearance_descr" = "Icône, couleur et nom";
 "profile_appearance" = "Apparence du profil";
@@ -1736,7 +1736,7 @@
 "walk" = "Marche";
 "res_online_source_cache_alert" = "Appliquer ces modifications effacera les données mises en cache pour cette source de tuiles";
 "res_slope" = "Pente";
-"menu" = "Menu";
+"shared_string_menu" = "Menu";
 "profile_type_osmand_string" = "Profil OsmAnd";
 "map_look_descr" = "Apparence de la carte";
 "quick_action_remove_next_destination_descr" = "Supprime la prochaineétape de votre route. S\'il s\'agit de la destination finale, le guidage s\'arrêtera.";
@@ -2353,7 +2353,7 @@
 "altitude_ascent" = "Montée";
 "map_settings_weather_layers" = "Couches";
 "shared_string_capacity" = "Capacité";
-"map_settings_weather_contours" = "Contours";
+"shared_string_contours" = "Contours";
 "animate_my_location_descr" = "Transition lisse de la position sur la carte pendant la navigation";
 "altitude_descent" = "Descente";
 "simulation_real_mode_desc" = "• Sur les sections de route droites, la vitesse sera approximative à la limite de vitesse.\n• Au intersections, la simulation ralentira.\n• Des pénalités supplémentaires seront appliqués aux feu tricolores, panneaux stop, etc.";
@@ -2404,7 +2404,7 @@
 "weather_wind_unit_knots" = "Noeuds";
 "weather_precip_unit_mm" = "Millimètres";
 "weather_wind_unit_m_s" = "Mètres/seconde";
-"weather_precip_unit_in" = "Pouces";
+"weather_precip_inches" = "Pouces";
 "backup_error_invalid_token" = "Le jeton n'est pas valide";
 "osmand_cloud_create_account_descr" = "Veuillez saisir votre adresse électronique, un code de vérification y sera envoyé, et toutes vos données y seront liées.";
 "cloud_no_online_backup_descr" = "Configurez une sauvegarde automatique pour ne pas avoir à vous soucier de la perte de données.";
@@ -2541,7 +2541,7 @@
 "lang_ckb" = "Sorani";
 "shared_string_restoring" = "Restauration";
 "restoring_from" = "Restauration des données sélectionnées dans le nuage";
-"restore_data" = "Restaurer les données";
+"backup_restore_data" = "Restaurer les données";
 "choose_what_to_restore" = "Choisir les éléments à restaurer";
 "duration_ago" = "il y a %@";
 "backup_complete" = "Sauvegarde terminée";
@@ -2648,7 +2648,7 @@
 "backup_error_failed_to_fetch_remote_items" = "La liste des fichiers n'a pas pu être téléchargée sur le serveur.";
 "error_contact_support" = "Si le problème persiste, merci de contacter notre équipe de support.";
 "recorded_voice" = "Enregistré";
-"tts" = "Synthèse vocale";
+"tts_title" = "Synthèse vocale";
 "syncing_progress" = "Synchronisation en cours...";
 "remote_item" = "Élément distant";
 "download_all" = "Tout télécharger";

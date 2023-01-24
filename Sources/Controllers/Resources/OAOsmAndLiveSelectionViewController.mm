@@ -89,7 +89,7 @@ static const NSInteger groupCount = 1;
 
 -(void) applyLocalization
 {
-    _titleView.text = _settingsScreen == ELiveSettingsScreenMain ? _titleName : OALocalizedString(@"osmand_live_upd_frequency");
+    _titleView.text = _settingsScreen == ELiveSettingsScreenMain ? _titleName : OALocalizedString(@"update_frequency");
     [_cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
     [_applyButton setTitle:OALocalizedString(@"shared_string_apply") forState:UIControlStateNormal];
 }
@@ -187,7 +187,7 @@ static const NSInteger groupCount = 1;
             [dataArr addObject:
              @{
                @"name" : @"update_frequency",
-               @"title" : OALocalizedString(@"osmand_live_upd_frequency"),
+               @"title" : OALocalizedString(@"update_frequency"),
                @"value" : [OAOsmAndLiveHelper getFrequencyString:_updatingFrequency],
                @"img" : @"menu_cell_pointer.png",
                @"type" : [OASettingsTableViewCell getCellIdentifier] }

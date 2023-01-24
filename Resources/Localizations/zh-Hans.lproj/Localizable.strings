@@ -96,7 +96,7 @@
 "gpx_route_time" = "";
 "gpx_uphldownhl" = "";
 "gpx_average_speed" = "平均速度";
-"gpx_start" = "开始";
+"shared_string_control_start" = "开始";
 "gpx_avg_elev" = "";
 "gpx_elev_range" = "";
 "gpx_updown" = "";
@@ -138,7 +138,7 @@
 "shared_string_transparency" = "透明度";
 "map_settings_avail_lay" = "";
 // Intro
-"intro_skip" = "跳过";
+"shared_string_skip" = "跳过";
 "intro_download" = "下载\n地图";
 "intro_next" = "下一页";
 "intro_welcome" = "";
@@ -571,7 +571,7 @@
 "simulate_routing_descr" = "使用已计算的路线模拟您的位置";
 "do_not_send_anonymous_data_desc" = "我们不收集位置信息，只收集应用使用和地图下载统计信息。";
 "rotate_map_none_opt" = "不要旋转（北朝上）";
-"logging_min_distance" = "最小位移";
+"monitoring_min_distance" = "最小位移";
 "shared_string_near" = "邻近";
 "access_arrival_time" = "到达时间";
 "map_widget_time" = "剩余时间";
@@ -735,7 +735,7 @@
 "osm_website" = "网站";
 "shared_string_password" = "密码";
 "poi_opening_hours" = "营业时间";
-"my_places" = "我的地点";
+"shared_string_my_places" = "我的地点";
 "shared_string_time" = "时间";
 "shared_string_distance" = "距离";
 "angular_units_descr" = "改变方位测量单位。";
@@ -790,7 +790,7 @@
 "osm_working_days" = "工作日";
 "add_action" = "添加动作";
 "display_starting_at_zoom_level" = "从缩放级别开始显示";
-"osm_target_deleted" = "已删除 OSM POI";
+"osm_edit_deleted_poi" = "已删除 OSM POI";
 "osm_phone" = "电话";
 "osm_notes_online_layer" = "OSM错误";
 "gpx_descent" = "下坡";
@@ -818,7 +818,7 @@
 "osm_live_enter_email" = "请输入有效的电子邮件地址";
 "shared_string_show_more" = "显示更多";
 "region_others" = "其它地图";
-"offline_vector_maps" = "离线矢量地图";
+"vector_data" = "离线矢量地图";
 "help_map_viewing" = "地图浏览";
 "osm_editing_lost_changes_title" = "不保存退出？";
 "add_first_inermediate" = "添加第一个途径地";
@@ -867,7 +867,7 @@
 "map_styles" = "地图样式";
 "poi_list" = "POI列表";
 "osm_live_cancel_subscription" = "取消订阅";
-"prev_route" = "上一条路径";
+"previous_route" = "上一条路径";
 "osm_alert_title" = "提交";
 "help_tech_articles" = "技术文章";
 "change_map_source" = "改变地图来源";
@@ -884,7 +884,7 @@
 "help_first_use" = "初次使用";
 "toggle_poi" = "显示/隐藏 POI";
 "actions" = "操作";
-"change_map_overlay" = "更改地图覆盖";
+"quick_action_map_overlay" = "更改地图覆盖";
 "pause_resume_nav" = "暂停/继续导航";
 "edit_action" = "编辑动作";
 "modify_poi_short" = "修改 POI";
@@ -896,7 +896,7 @@
 "osm_note_action_field_descr" = "此消息将会自动填写注释字段。";
 "directions_more_options" = "设为起点";
 "mapil_pano_only" = "仅显示 360° 图像";
-"quick_actions_show_dialog" = "显示一个临时的对话框";
+"quick_action_interim_dialog" = "显示一个临时的对话框";
 "units_nm" = "浬";
 "quick_action_start_stop_nav_descr" = "点击该按钮以开始或结束导航。";
 "create_items" = "创建项目";
@@ -1144,7 +1144,7 @@
 "map_settings_appearance" = "外观";
 "shared_string_warning" = "警告";
 "all_group_points" = "组中所有的点";
-"map_settings_base_transp" = "基础地图透明度";
+"map_transparency" = "基础地图透明度";
 "routing_attr_width_description" = "指定路线上允许的车辆宽度。";
 "app_mode_skiing" = "滑雪";
 "open_wiki_online" = "在线打开条目";
@@ -1227,8 +1227,8 @@
 "whole_track" = "整个轨迹";
 "res_zoom_levels" = "缩放等级";
 "arrived_at_destination" = "你已到达。";
-"min_speed" = "最低速率";
-"res_source_sqlite" = "SQLiteDB文件";
+"shared_string_min_speed" = "最低速率";
+"sqlite_db_file" = "SQLiteDB文件";
 "res_pseudo_mercator" = "球面正轴等角圆柱投影";
 "map_settings_add_online_source" = "添加在线资源";
 "nav_type_geocoding" = "地理编码";
@@ -1236,7 +1236,7 @@
 "exit_at" = "在该站下车";
 "shared_string_deselect_all" = "全部取消";
 "avoid_road" = "避开道路";
-"menu" = "菜单";
+"shared_string_menu" = "菜单";
 "announce" = "公告";
 "active_markers" = "激活标记";
 "public_transport_hide" = "隐藏公共交通";
@@ -1405,7 +1405,7 @@
 "group_name" = "组名称";
 "search_history" = "搜索历史记录";
 "shared_string_gpx_track" = "轨迹";
-"distance_indication" = "距离指示";
+"show_direction" = "距离指示";
 "search_preogress" = "正在搜索…";
 "osm_note_comment_title" = "评论 OSM 注记";
 "transport" = "交通工具";
@@ -1423,7 +1423,7 @@
 "favorite_friends_category" = "朋友";
 "plan_route_select_folder" = "选择文件夹";
 "address_search" = "地址搜索";
-"osmand_live_upd_frequency" = "更新频率";
+"update_frequency" = "更新频率";
 "visible" = "可见性";
 "track_save_descr" = "将当前轨迹保存为 GPX 文件。";
 "fav_points_not_exist" = "无收藏点存在";
@@ -1714,7 +1714,7 @@
 "segnet_num" = "路段 %d";
 "altitude" = "海拔";
 "backup_error_token_is_not_valid" = "所提供的设备 ID 或令牌有问题";
-"edit_profile_list" = "编辑配置文件列表";
+"reorder_profiles" = "编辑配置文件列表";
 "backup_error_gzip_only_supported_upload" = "该文件应以 .gzip 格式发送";
 "logging_min_speed" = "最低速度";
 "osmand_cloud" = "OsmAnd云";

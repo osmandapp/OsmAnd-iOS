@@ -108,7 +108,7 @@
 "save_global_track_interval_descr" = "経路ログ全般の記録間隔を選択します(マップ上のGPXログウィジェットで有効化)";
 "logging_interval_navigation" = "ナビゲーション中の経路記録間隔";
 "logging_interval_navigation_descr" = "ナビゲーション中に行う経路ログの記録間隔を選択します";
-"logging_min_distance" = "最小移動量";
+"monitoring_min_distance" = "最小移動量";
 "logging_min_distance_descr" = "フィルター: ログに記録を許可する最後に記録した地点からの最低移動距離を設定します";
 "logging_min_accuracy" = "最小精度";
 "logging_min_accuracy_descr" = "フィルター: ログに記録を許可する最低精度を設定します";
@@ -248,7 +248,7 @@
 "route_is_too_long_v2" = "このルートは長すぎて計算できません。 10分以内にルート検索が終わらない場合は、出発地点と目的地の間に経由地点をいくつか追加してみてください。";
 "navigation_over_track" = "経路に沿ってナビゲーションを開始しますか？";
 "use_displayed_track_for_navigation" = "表示された経路をナビゲーションに使用しますか？";
-"prev_route" = "前回のルート";
+"previous_route" = "前回のルート";
 "shared_string_ellipsis" = "…";
 "shared_string_select_on_map" = "マップ上で選択";
 "selected_roads" = "選択された道路";
@@ -390,7 +390,7 @@
 "poi_overlay" = "POIのオーバーレイ";
 "poi_dialog_poi_type" = "POIの種類";
 "my_favorites" = "お気に入り";
-"my_places" = "ブックマーク";
+"shared_string_my_places" = "ブックマーク";
 "fav_no_group" = "グループなし";
 "fav_remove_q" = "お気に入りを削除してもよろしいですか？";
 "fav_import_title" = "お気に入りのインポート";
@@ -441,7 +441,7 @@
 "gpx_route_time" = "所要時間";
 "gpx_uphldownhl" = "上り坂/下り坂";
 "gpx_average_speed" = "平均速度";
-"gpx_start" = "開始";
+"shared_string_control_start" = "開始";
 "gpx_avg_elev" = "平均標高";
 "gpx_elev_range" = "標高範囲";
 "gpx_updown" = "上り/下り";
@@ -494,7 +494,7 @@
 "map_settings_avail_lay" = "利用可能なレイヤー";
 "mapillary" = "Mapillary";
 // Intro
-"intro_skip" = "スキップ";
+"shared_string_skip" = "スキップ";
 "intro_download" = "ダウンロード\nマップ";
 "intro_next" = "次へ";
 "intro_welcome" = "ようこそ\nOsmAndへ";
@@ -561,7 +561,7 @@
 "osmand_live_weekly" = "毎週";
 "osmand_live_reports" = "Reports";
 "osmand_live_server_date" = "サーバー側の最終更新: %@";
-"osmand_live_upd_frequency" = "更新間隔";
+"update_frequency" = "更新間隔";
 "osmand_live_wifi_only" = "Wi-Fi接続時のみ更新";
 "osmand_live_donation_header" = "寄付の設定";
 "osmand_live_donations" = "寄付額";
@@ -655,7 +655,7 @@
 "osm_modify_place" = "場所を変更";
 "osm_poi_delete_title" = "POIを削除";
 "osm_edit_modified_poi" = "OSMのPOIが変更されました";
-"osm_target_deleted" = "OSMのPOIが削除されました";
+"osm_edit_deleted_poi" = "OSMのPOIが削除されました";
 "osm_target_created" = "OSMのPOIが作成されました";
 "osm_note_created" = "OSMに注釈を作成しました";
 "osm_note_create" = "OSMメモの作成";
@@ -725,7 +725,7 @@
 "quick_action_list_descr" = "このアクションボタンをタップするとリスト順に切り替わります";
 "map_overlays" = "オーバーレイマップ";
 "map_underlays" = "アンダーレイマップ";
-"offline_vector_maps" = "オフラインベクターマップ";
+"vector_data" = "オフラインベクターマップ";
 "add_map_source" = "ソースマップを追加";
 "add_map_style" = "マップスタイルの追加";
 "map_styles" = "マップスタイル";
@@ -749,7 +749,7 @@
 "add_poi" = "POIを追加";
 "change_map_style" = "マップスタイルの変更";
 "change_map_source" = "ソースマップの変更";
-"change_map_overlay" = "オーバーレイマップの変更";
+"quick_action_map_overlay" = "オーバーレイマップの変更";
 "change_map_underlay" = "アンダーレイマップの変更";
 "replace_destination" = "目的地を置き換え";
 "add_destination" = "目的地を追加";
@@ -785,7 +785,7 @@
 "quick_action_screen_header" = "Screen %ld";
 "confirm_bulk_delete" = "%ld個のアイテムを削除してもよろしいですか？";
 "quick_action_add_actions_descr" = "マップ画面からすばやく実行したいアクションを追加します。";
-"quick_actions_show_dialog" = "実行時に入力画面を表示";
+"quick_action_interim_dialog" = "実行時に入力画面を表示";
 "quick_action_dialog_descr" = "アクションを実行する前に選択リストや確認のダイアログを表示します";
 "quick_action_template_name" = "Template name";
 "quick_action_name_footer" = "住所または場所の名前を利用する場合は空白のままにします";
@@ -1531,7 +1531,7 @@
 "res_zoom_warning" = "最小ズーム値は最大ズーム以上にすることはできません";
 "res_expire_warning" = "有効期限は0〜10000000の数値である必要があります";
 "res_source_format" = "ソースフォーマット";
-"res_source_sqlite" = "SQLiteDBファイル";
+"sqlite_db_file" = "SQLiteDBファイル";
 "res_source_one_per_tile" = "タイルごとに1つの画像ファイル";
 "res_zoom_invalid_value" = "ズーム値は1～22の範囲でなければなりません";
 "online_raster_map" = "オンラインラスターマップ";
@@ -1546,7 +1546,7 @@
 "map_settings_hide_polygons" = "ポリゴンを非表示";
 "map_settings_add_online_source" = "オンラインソースを追加";
 "map_settings_show_slider_map" = "マップにスライダーを表示";
-"map_settings_base_transp" = "ベースマップ透明度";
+"map_transparency" = "ベースマップ透明度";
 "shared_string_warning" = "注意";
 "app_mode_osm" = "OSM";
 "import_raster_map_failed" = "ラスターマップのインポートに失敗しました";
@@ -1601,7 +1601,7 @@
 "rearrange_profiles" = "プロファイルを整理";
 "create_profile_descr" = "カスタムプロファイルは標準のアプリケーションプロファイルを元に作成します。ウィジェットなどの表示設定や速度と距離の単位などの標準設定をプロファイルごとに定義可能です。これらは標準のアプリプロファイルを基本としており、今後それらと共に拡張される可能性があります:";
 "create_profile" = "プロファイルを作成";
-"edit_profile_list" = "プロファイルリストの編集";
+"reorder_profiles" = "プロファイルリストの編集";
 "new_profile" = "新規プロファイル";
 "app_profiles" = "アプリプロファイル";
 "selected_profile" = "現在選択中のプロファイル";
@@ -1651,7 +1651,7 @@
 "direction_lines" = "案内線を表示";
 "arrows_on_map" = "マップ上に矢印を表示";
 "choose_how_display_distance" = "アクティブマーカーまでの距離を示す情報をどこに表示するか選択してください";
-"distance_indication" = "距離表示";
+"show_direction" = "距離表示";
 "specify_number_of_dir_indicators" = "マーカーの方向と距離を示すインジケーターの数を指定してください。以下の設定すべてに影響します。";
 "active_markers" = "アクティブマーカー";
 "avoid_transport_type" = "避けたい移動手段の種類";
@@ -1668,7 +1668,7 @@
 "empty_profile_name_warning" = "プロファイル名は空にできません。";
 
 // Menu
-"menu" = "メニュー";
+"shared_string_menu" = "メニュー";
 "after_tapping_done" = "『完了』をタップすると、削除したプロファイルは完全に失われます。";
 "all_application_profiles" = "すべてのアプリケーションプロファイル";
 "units_t" = "トン";
@@ -1774,7 +1774,7 @@
 "public_transport_show" = "公共交通機関を表示";
 "quick_action_mapillary_show" = "Mapillaryを表示";
 "shared_string_add_profile" = "プロファイルの追加";
-"min_speed" = "予想最低速度";
+"shared_string_min_speed" = "予想最低速度";
 "shared_string_quick_actions" = "クイックアクション";
 "shared_string_deselect_all" = "全て選択解除";
 "shared_string_importing" = "インポート中";
@@ -2372,7 +2372,7 @@
 "login_open_street_map_org" = "OpenStreetMap.orgにログイン";
 "contributions_may_calculate_with_delay" = "貢献度の計算には数時間遅れる場合があります。";
 "weather_forecast" = "天気予報";
-"tts" = "TTS";
+"tts_title" = "TTS";
 "rendering_attr_monorailRoutes_name" = "モノレールでのルート";
 "product_title_pro" = "OsmAnd Pro";
 "product_title_plus" = "Maps+";

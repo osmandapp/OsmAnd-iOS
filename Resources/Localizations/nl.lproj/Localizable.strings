@@ -353,7 +353,7 @@
 "gpx_route_time" = "Route time";
 "gpx_uphldownhl" = "Uphills/Downhills";
 "gpx_average_speed" = "Gemiddelde snelheid";
-"gpx_start" = "Start";
+"shared_string_control_start" = "Start";
 "gpx_avg_elev" = "Average elevation";
 "gpx_elev_range" = "Elevation range";
 "gpx_updown" = "Up/Down";
@@ -395,7 +395,7 @@
 "shared_string_transparency" = "Transparantie";
 "map_settings_avail_lay" = "Available layers";
 // Intro
-"intro_skip" = "Overslaan";
+"shared_string_skip" = "Overslaan";
 "intro_download" = "Download\nmap";
 "intro_next" = "Volgende";
 "intro_welcome" = "Welcome to\nOsmAnd";
@@ -851,7 +851,7 @@
 "osm_poi_delete_title" = "POI verwijderen";
 "create_items" = "Items aanmaken";
 "help_follow_us" = "Volg ons";
-"osm_target_deleted" = "Gewiste OSM POI";
+"osm_edit_deleted_poi" = "Gewiste OSM POI";
 "osm_note_upload_anonymously" = "Anoniem uploaden";
 "closing_changeset" = "Wijzigingenset sluiten…";
 "daily" = "Elke dag";
@@ -862,7 +862,7 @@
 "osm_editing_lost_changes_descr" = "Niet-bewaarde wijzigingen gaan verloren. Doorgaan?";
 "modify_edit_short" = "Verander OSM-wijziging";
 "map_widget_ruler_control" = "Cirkel";
-"prev_route" = "Vorige route";
+"previous_route" = "Vorige route";
 "product_title_wikivoyage" = "Reisgids";
 "quick_action_add_underlay" = "Achtergrondkaart toevoegen";
 "add_first_inermediate" = "Eerste tussenpunt toevoegen";
@@ -874,7 +874,7 @@
 "region_others" = "Andere kaarten";
 "osmand_live_hourly" = "Elk uur";
 "mapillary_get_title" = "Verbeter de fotocollectie van Mapillary";
-"quick_actions_show_dialog" = "Bewerkingsdialoog tonen";
+"quick_action_interim_dialog" = "Bewerkingsdialoog tonen";
 "hide_contour_lines" = "Verberg de hoogtelijnen";
 "osm_edits_title" = "OSM-aanpassingen";
 "osm_note_action_field_descr" = "Dit bericht wordt automatisch ingevuld in het commentaarveld.";
@@ -884,7 +884,7 @@
 "gpx_ascent" = "Stijging";
 "get_discount_second_part" = "daarna %@";
 "key_hint_deselect" = "Deselecteren";
-"my_places" = "Mijn plaatsen";
+"shared_string_my_places" = "Mijn plaatsen";
 "quick_action_add_poi_category" = "Categorie toevoegen";
 "osm_edit_without_name" = "Zonder naam";
 "map_overlays" = "Extra kaartlagen";
@@ -934,7 +934,7 @@
 "osm_alert_button_ok" = "Notitie aanmaken";
 "osm_edits_advanced" = "Geavanceerd";
 "quick_action_name_footer" = "Leeg laten om adres of plaatsnaam te gebruiken.";
-"offline_vector_maps" = "OsmAnd Offline vectorkaart";
+"vector_data" = "OsmAnd Offline vectorkaart";
 "osm_live_routing" = "OsmAnd Live navigatie";
 "home_pt" = "Thuis";
 "osm_live_payment_month_cost_descr" = "%@ / maand";
@@ -946,7 +946,7 @@
 "osm_str_name" = "Straatnaam";
 "osm_working_days" = "Werkdagen";
 "osm_live_cancel_subscription" = "Abonnement beëindigen";
-"change_map_overlay" = "Extra kaartlaag wijzigen";
+"quick_action_map_overlay" = "Extra kaartlaag wijzigen";
 "osm_note_reopen" = "Heropenen";
 "quick_action_no_underlay" = "Geen achtergrondlaag";
 "map_styles" = "Kaartstijlen";
@@ -1261,7 +1261,7 @@
 "app_mode_subway" = "Metro";
 "app_mode_camper" = "Caravan";
 "app_mode_offroad" = "Offroad";
-"map_settings_base_transp" = "Basiskaart-transparantie";
+"map_transparency" = "Basiskaart-transparantie";
 "shared_string_warning" = "Waarschuwing";
 "open_wiki_online" = "Artikel online openen";
 "app_mode_osm" = "OSM";
@@ -1287,7 +1287,7 @@
 "logging_min_speed" = "Minimum snelheid";
 "logging_min_accuracy_descr" = "Filter: geen logging tenzij de nauwkeurigheid bereikt is";
 "logging_min_distance_descr" = "Filter: minimale afstand voor opname van een nieuw punt";
-"logging_min_distance" = "Minimum verplaatsing";
+"monitoring_min_distance" = "Minimum verplaatsing";
 "logging_interval_navigation_descr" = "Selecteer het loggings-interval voor de track-opname tijdens navigatie";
 "no_active_route" = "Geen actieve route";
 "select_avoid_descr" = "Selecteer wegen die je wilt vermijden tijdens navigatie. Je kunt wegen selecteren op de kaart of uit onderstaande lijst kiezen.";
@@ -1381,7 +1381,7 @@
 "walk" = "Loop";
 "public_transport_show" = "OV-informatie tonen";
 "amenity" = "Voorziening";
-"res_source_sqlite" = "SQLiteDB-bestand";
+"sqlite_db_file" = "SQLiteDB-bestand";
 "recalculate_route_distance_promo" = "De route wordt herberekend als de afstand van de route tot de huidige locatie groter is dan de geselecteerde waarde.";
 "save_changes" = "Wijzigingen opslaan";
 "save_new_track" = "Bewaar als nieuwe track";
@@ -1399,8 +1399,8 @@
 "enter_profile_name" = "Profielnaam invoeren";
 "voice_announces" = "Gesproken instructies";
 "plugin_settings_reset" = "Herstel plugin instellingen naar standaard";
-"menu" = "Menu";
-"edit_profile_list" = "Wijzig lijst met profielen";
+"shared_string_menu" = "Menu";
+"reorder_profiles" = "Wijzig lijst met profielen";
 "res_zoom_levels" = "Zoomniveaus";
 "import_profile_select_descr" = "Kies de te importeren gegevens.";
 "osm_note_comment_title" = "Opmerking maken bij OSM-nota";
@@ -1421,7 +1421,7 @@
 "osmand_routing" = "OsmAnd routering";
 "consider_limitations_param" = "Houd rekening met tijdelijke beperkingen";
 "map_settings_add_online_source" = "Online bron toevoegen";
-"distance_indication" = "Toon afstand";
+"show_direction" = "Toon afstand";
 "select_distance_for_recalculation" = "Selecteer de afstand waarbij de route wordt herberekend.";
 "shared_string_max" = "Max";
 "route_betw_points" = "Route tussen punten";
@@ -1447,7 +1447,7 @@
 "help_nav_profiles" = "Navigatieprofielen";
 "osm_note_close" = "Sluit OSM Note";
 "routing_profile_ski" = "Ski";
-"min_speed" = "Minimumsnelheid";
+"shared_string_min_speed" = "Minimumsnelheid";
 "create_profile_descr" = "Baseer je aangepaste profiel opéén van de standaard profielen, dit bepaalt de algemene opzet zoals standaard zichtbaarheid van widgets en eenheden van snelheid en afstand. Dit zijn de standaard profielen samen met voorbeelden van aangepaste profielen die uitgebreid kunnen worden:";
 "profile_type_osmand_string" = "OsmAnd-profiel";
 "nav_type_geocoding" = "Geocoderen";
@@ -1519,7 +1519,7 @@
 "search_history" = "Zoekgeschiedenis";
 "visible" = "Zichtbaar";
 "shared_string_others" = "Overige";
-"osmand_live_upd_frequency" = "Update frequentie";
+"update_frequency" = "Update frequentie";
 "replace_favorite_confirmation" = "Wil je Favoriet %@ inderdaad vervangen\?";
 "address_search" = "Adres zoeken";
 "fav_points_not_exist" = "Er zijn geen favoriete punten";
@@ -1894,7 +1894,7 @@
 "map_settings_weather_pressure" = "Luchtdruk";
 "map_settings_weather_cloud" = "Wolk";
 "map_settings_weather_precip" = "Neerslag";
-"map_settings_weather_contours" = "Contouren";
+"shared_string_contours" = "Contouren";
 "points_count" = "Punten:";
 "delete_point" = "Punt verwijderen";
 "plan_route_folder" = "Folder";

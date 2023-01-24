@@ -353,7 +353,7 @@
 "gpx_route_time" = "وقت التوجيه";
 "gpx_uphldownhl" = "الصعود والهبوط";
 "gpx_average_speed" = "متوسط السرعة";
-"gpx_start" = "بدء";
+"shared_string_control_start" = "بدء";
 "gpx_avg_elev" = "متوسط الارتفاع";
 "gpx_elev_range" = "نطاق الارتفاع";
 "gpx_updown" = "أعلى/أسفل";
@@ -395,7 +395,7 @@
 "shared_string_transparency" = "الشفافية";
 "map_settings_avail_lay" = "الطبقات المتاحة";
 // Intro
-"intro_skip" = "تخط";
+"shared_string_skip" = "تخط";
 "intro_download" = "تحميل\nخريطة";
 "intro_next" = "التالي";
 "intro_welcome" = "مرحبا مع\nأوسماند";
@@ -788,7 +788,7 @@
 "traffic_warning_tunnel" = "مكان نفق";
 "logging_interval_navigation" = "الفاصل الزمني للتسجيل أثناء الملاحة";
 "logging_interval_navigation_descr" = "اختر الفاصل الزمني للتسجيل لتسجيل المسار أثناء الملاحة";
-"logging_min_distance" = "الحد الأدنى للإزاحة";
+"monitoring_min_distance" = "الحد الأدنى للإزاحة";
 "logging_min_distance_descr" = "تصفية: الحد الأدنى للمسافة لتسجيل نقطة جديدة";
 "logging_min_accuracy" = "دقة الحد الأدنى";
 "logging_min_accuracy_descr" = "تصفية: لا تسجيل ما لم يتم الوصول إلى دقة";
@@ -853,7 +853,7 @@
 "default_price_currency_format" = "%@ %@";
 "osm_live_payment_header" = "حدد فترة الدفع المناسبة لك:";
 "osm_live_payment_contribute_descr" = "جزء من الدخل يذهب إلى المساهمين خريطة الشارع المفتوح.";
-"osmand_live_upd_frequency" = "معدل التحديث";
+"update_frequency" = "معدل التحديث";
 "osmand_live_wifi_only" = "تحديث واي فاي فقط";
 "free_version_message" = "يمكنك تنزيل الخرائط%d أو تحديثها";
 "get_osmand_live" = "الحصول علي أوسماند لايف لفتح جميع الميزات:";
@@ -928,7 +928,7 @@
 "osm_modify_place" = "تعديل المكان";
 "osm_poi_delete_title" = "حذف POI";
 "osm_edit_modified_poi" = "OSM POIمعدل";
-"osm_target_deleted" = "حذف OSM POI";
+"osm_edit_deleted_poi" = "حذف OSM POI";
 "osm_target_created" = "إنشاء OSM POI";
 "osm_confirm_delete" = "حذف POI؟";
 "osm_confirm_upload" = "رفع التعديلات؟";
@@ -973,7 +973,7 @@
 "osm_note_reopen" = "أعد فتح";
 "osm_edits_offline_layer" = "تعديلات / ملاحظات OSM (غير متصل)";
 "osm_notes_online_layer" = "ملاحظات OSM (غير متصل)";
-"my_places" = "المعالم المفضلة";
+"shared_string_my_places" = "المعالم المفضلة";
 "osm_edits_basic" = "أساسي";
 "osm_edits_advanced" = "متقدم";
 "osm_edits_all" = "جميع التعديلات";
@@ -1073,7 +1073,7 @@
 "quick_action_list_descr" = "النقر على صفحات زر هذا الإجراء من خلال القائمة أدناه";
 "map_overlays" = "طبقة الخريطة العلوية";
 "map_underlays" = "طبقة الخريطة السفلية";
-"offline_vector_maps" = "الخريطة المحملة";
+"vector_data" = "الخريطة المحملة";
 "add_map_source" = "إضافة مصدر خريطة";
 "add_map_style" = "إضافة نمط خريطة";
 "map_styles" = "أنماط الخريطة";
@@ -1092,7 +1092,7 @@
 "add_poi" = "إضافة POI";
 "change_map_style" = "نمط الخريطة";
 "change_map_source" = "مصدر الخريطة";
-"change_map_overlay" = "الخريطة العلوية";
+"quick_action_map_overlay" = "الخريطة العلوية";
 "change_map_underlay" = "الخريطة السفلية";
 "replace_destination" = "تبديل الوجهة";
 "add_destination" = "إضافة وجهة";
@@ -1115,7 +1115,7 @@
 "select_underlay" = "الخريطة السفلية";
 "confirm_bulk_delete" = "هل تريد حذف % ld عناصر؟";
 "quick_action_add_actions_descr" = "أضف إجراءات للوصول إليها بسرعة من الخريطة.";
-"quick_actions_show_dialog" = "عرض مربع الحوار مؤقتاً";
+"quick_action_interim_dialog" = "عرض مربع الحوار مؤقتاً";
 "quick_action_dialog_descr" = "تشغيل لإظهار مربع الحوار قبل تطبيق الاجراء";
 "quick_action_template_name" = "اسم القالب";
 "quick_action_name_footer" = "دع الحقل فارغا إن كنت ترغب في استعمال العنوان أو اسم المكان.";
@@ -1195,7 +1195,7 @@
 "select_route_intermediate" = "اختر نقطة وسيطة";
 "select_home" = "حدد نقطة المنزل";
 "select_work_point" = "حدد نقطة العمل";
-"prev_route" = "الطريق السابق";
+"previous_route" = "الطريق السابق";
 "shared_string_on" = "تشغيل";
 "shared_string_off" = "إيقاف";
 "shared_string_show_more" = "اعرض المزيد";
@@ -1537,7 +1537,7 @@
 "rendering_attr_surface_sand_name" = "الرمال";
 "rendering_value_car_name" = "سيارة";
 "res_source_format" = "صيغة المصدر";
-"res_source_sqlite" = "ملف SQLiteDB";
+"sqlite_db_file" = "ملف SQLiteDB";
 "res_source_one_per_tile" = "ملف صورة واحد لكل إطار متجانب";
 "res_zoom_invalid_value" = "يجب أن تكون قيم التكبير في النطاق 1 - 22";
 "online_raster_map" = "خريطة نقطية على الانترنت";
@@ -1590,7 +1590,7 @@
 "map_settings_contour_zoom_level_descr" = "حدد مستوى التكبير،سيتم عرض خطوط الكنتور";
 "map_settings_line_density" = "كثافة الخط";
 "map_settings_color_scheme" = "لون الخطوط الكنتورية";
-"map_settings_base_transp" = "شفافية الخريطة";
+"map_transparency" = "شفافية الخريطة";
 "board_at" = "توقف عند";
 "map_coords" = "خريطة: خط العرض%.5f خط الطول %.5f";
 "num_stops" = "مواقف";
@@ -1637,7 +1637,7 @@
 "active_markers" = "عدد خطوط التوجيه";
 "direction_lines" = "خطوط الاتجاه";
 "arrows_on_map" = "الأسهم على الخريطة";
-"distance_indication" = "مؤشر المسافة";
+"show_direction" = "مؤشر المسافة";
 "two" = "خطين";
 // Dirrection appearance
 "one" = "خط";
@@ -1668,7 +1668,7 @@
 "position_icon_at_rest" = "حدد أيقونه الخريطة";
 "select_icon" = "اختر أيقونة";
 "enter_profile_name" = "أدخل اسم الوضع";
-"edit_profile_list" = "تحرير قائمة الأوضاع";
+"reorder_profiles" = "تحرير قائمة الأوضاع";
 "new_profile" = "وضع جديد";
 "profile_type_custom_string" = "وضع مخصص";
 "create_profile_descr" = "إسناد الوضع المخصص الخاص بك إلى أحد أوضاع التطبيق الافتراضية ، يحدد الإعداد الأساسي مثل الرؤية الافتراضية لعناصر واجهة المستخدم ووحدات السرعة والمسافة. وهذه هي أوضاع التطبيق الافتراضية ، إلى جانب أمثلة لأوضاع مخصصة يمكن تمديدها إلى:";
@@ -1722,7 +1722,7 @@
 "nav_type_brouter" = "التوجيه عبر BRouter";
 "voice_announces" = "المطالبات الصوتية";
 "max_speed" = "السرعة القصوى";
-"min_speed" = "الحد الأدنى للسرعة";
+"shared_string_min_speed" = "الحد الأدنى للسرعة";
 "default_speed_setting_title" = "السرعة الافتراضية";
 "units_and_formats" = "الوحدات والأشكال";
 "routing_attr_length_name" = "حد الطول";
@@ -1765,7 +1765,7 @@
 "osm_editing_access_descr" = "يمكنك عرض كافة عمليات التحرير والملاحظات المحلية في %@. لم يتم سرد النقاط التي تم تحميلها بالفعل في أوسماند.";
 "osm_editing_settings_descr" = "إعدادات المكون الإضافي هذه شاملة، وتنطبق على جميع الملفات الشخصية.";
 // Menu
-"menu" = "القائمة";
+"shared_string_menu" = "القائمة";
 "plugin_settings_reset" = "إعادة ضبط الملحقات للافتراضي";
 "trip_rec_actions_descr" = "يمكنك العثور على جميع المسارات المسجلة في % @";
 "logging_accuracy" = "دقة التسجيل";
@@ -2353,7 +2353,7 @@
 "local_backup_descr" = "النسخ الاحتياطي أو استعادة البيانات من ملف محلي.";
 "cloud_backup" = "نسخ احتياطي";
 "copy_to_map_favorites" = "نسخ إلى المفضلة";
-"map_settings_weather_contours" = "الخطوط المحيطية";
+"shared_string_contours" = "الخطوط المحيطية";
 "weather_wind_enable_descr" = "تمكين لعرض طبقة الرياح على الخريطة.";
 "weather_precip_enable_descr" = "تمكين لعرض طبقة هطول الأمطار على الخريطة.";
 "weather_contours_enable_descr" = "تمكين لعرض طبقة خطوط التضاريس على الخريطة.";
@@ -2395,7 +2395,7 @@
 "wind_show" = "عرض الرياح";
 "weather_wind_unit_knots" = "عقدة";
 "weather_precip_unit_mm" = "مليمترات";
-"weather_precip_unit_in" = "بوصات";
+"weather_precip_inches" = "بوصات";
 "osmand_cloud_create_account_descr" = "يرجى إدخال عنوان بريدك الإلكتروني ، وسيتم إرسال رمز التحقق، وسيتم ربط جميع بياناتك به.";
 "weather_pressure_enable_descr" = "تمكين لعرض طبقة الضغط على الخريطة.";
 "weather_temp_enable_descr" = "تمكين لعرض طبقة درجة الحرارة على الخريطة.";
@@ -2542,7 +2542,7 @@
 "weather_offline_forecast_only_desc" = "ستكون التوقعات متاحة فقط للبلدان التي لديها بيانات تم تنزيلها مسبقا.";
 "weather_clear_online_cache" = "سيؤدي ذلك إلى مسح جميع ذاكرة التخزين المؤقت لطبقات الطقس المتصلة بالانترنت.";
 "restoring_from" = "استعادة البيانات المحددة من السحابة";
-"restore_data" = "استعادة البيانات";
+"backup_restore_data" = "استعادة البيانات";
 "weather_data_provider" = "مزود البيانات GFS.";
 "shared_string_always_visible" = "مرئي دائما";
 "shared_string_always_hidden" = "مخفي دائما";
@@ -2630,7 +2630,7 @@
 "benefits_for_contributors" = "فوائد للمساهمين النشطين في OSM";
 "benefits_for_contributors_primary_descr" = "قد يحق للمساهمين النشطين في OpenStreetMap.org الحصول على تحديثات خرائط غير محدودة كل ساعة.";
 "sign_in_with_open_street_map" = "تسجيل الدخول عبر الشارع المفتوح";
-"tts" = "تحويل النص إلى كلام";
+"tts_title" = "تحويل النص إلى كلام";
 "recorded_voice" = "المسافة";
 "cloud_recent_changes" = "التغييرات";
 "cloud_conflict" = "نزاع";

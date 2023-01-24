@@ -15,7 +15,7 @@
 "driving_region_japan" = "Japoni";
 "app_mode_hiking" = "Eskursion";
 "snap_to_road" = "Shko tek rruga";
-"my_places" = "Vendet e mia";
+"shared_string_my_places" = "Vendet e mia";
 "app_mode_motorcycle" = "Motoçikletë";
 "speak_cameras" = "Njofto kamerat e shpejtësisë";
 "traffic_warning_pedestrian" = "Mbikalim për këmbësorë";
@@ -23,7 +23,7 @@
 "home_pt" = "Shtëpia";
 "help_about" = "Rreth";
 "speak_street_names" = "Njofto emrat e rrugëve (TTS)";
-"gpx_start" = "Fillo";
+"shared_string_control_start" = "Fillo";
 "rendering_attr_hideHouseNumbers_name" = "Hiç numrat e shtëpive";
 "routing_attr_no_new_routing_name" = "Jo v1.9 rregullat e llogaritjes së rrugëtimit";
 "rendering_attr_roadStyle_name" = "Stil i rrugës";

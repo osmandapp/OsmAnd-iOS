@@ -99,7 +99,7 @@
 "shared_string_transparency" = "Przejrzystość";
 "map_settings_avail_lay" = "Dostępne warstwy";
 // Intro
-"intro_skip" = "Pomiń";
+"shared_string_skip" = "Pomiń";
 "intro_download" = "Pobierz\nmapę";
 "intro_next" = "Dalej";
 "intro_welcome" = "Witamy w\nOsmAnd";
@@ -138,7 +138,7 @@
 "device_memory" = "Pamięć urządzenia";
 "free_memory" = "Wolne %@";
 "gpx_waypoint" = "Punkt trasy";
-"gpx_start" = "Start";
+"shared_string_control_start" = "Start";
 "gpx_max_speed" = "Prędkość maksymalna";
 "gpx_speed" = "Prędkość";
 // Map settings
@@ -712,7 +712,7 @@
 "show_region_on_map_go" = "Przejdź do mapy";
 "logging_interval_navigation" = "Częstość rejestrowania podczas nawigacji";
 "logging_interval_navigation_descr" = "Wybierz interwał dla nagrywania trasy podczas nawigacji";
-"logging_min_distance" = "Minimalne przemieszczenie";
+"monitoring_min_distance" = "Minimalne przemieszczenie";
 "logging_min_distance_descr" = "Filtr: minimalna odległość do zarejestrowania nowego punktu";
 "logging_min_accuracy" = "Minimalna dokładność";
 "logging_min_accuracy_descr" = "Filtr: brak rejestrowania, chyba że zostanie osiągnięta dokładność";
@@ -810,7 +810,7 @@
 "default_price_currency_format" = "%@ %@";
 "osm_live_payment_header" = "Wybierz dogodny okres płatności:";
 "osm_live_payment_contribute_descr" = "Część dochodu przeznacza się na współtwórców OpenStreetMap.";
-"osmand_live_upd_frequency" = "Częstotliwość aktualizacji";
+"update_frequency" = "Częstotliwość aktualizacji";
 "osmand_live_wifi_only" = "Aktualizuj tylko przez Wi-Fi";
 "purchase_dialog_title" = "Wybierz plan";
 "purchase_dialog_travel_description" = "Kup jedną z poniższych opcji, aby otrzymać funkcję przewodnika offline:";
@@ -900,7 +900,7 @@
 "osm_modify_place" = "Zmodyfikuj miejsce";
 "osm_poi_delete_title" = "Usuń użyteczne miejsce";
 "osm_edit_modified_poi" = "Zmodyfikowane użyteczne miejsce OSM";
-"osm_target_deleted" = "Usunięto użyteczne miejce OSM";
+"osm_edit_deleted_poi" = "Usunięto użyteczne miejce OSM";
 "osm_target_created" = "Utworzone użyteczne miejsce OSM";
 "osm_confirm_delete" = "Usunąć Miejsce Użyteczne?";
 "osm_confirm_upload" = "Przesłać modyfikacje?";
@@ -941,7 +941,7 @@
 "osm_note_close" = "Zamknij uwagę OSM";
 "osm_note_comment" = "Komentarz";
 "osm_note_reopen" = "Otwórz ponownie";
-"my_places" = "Moje miejsca";
+"shared_string_my_places" = "Moje miejsca";
 "osm_confirm_bulk_delete" = "Usunąć %d zmiany?";
 "osm_edits_basic" = "Podstawowe";
 "osm_edits_advanced" = "Zaawansowane";
@@ -1075,7 +1075,7 @@
 "quick_action_list_descr" = "Naciśnięcie tego przycisku czynności powoduje przejście do poniższej listy";
 "map_overlays" = "Nakładki mapy";
 "map_underlays" = "Podkłady map";
-"offline_vector_maps" = "Wektorowe mapy offline";
+"vector_data" = "Wektorowe mapy offline";
 "add_map_source" = "Dodaj zasób mapy";
 "add_map_style" = "Dodaj styl mapy";
 "map_styles" = "Style map";
@@ -1093,7 +1093,7 @@
 "add_poi" = "Dodaj użyteczne miejsce";
 "change_map_style" = "Zmień styl mapy";
 "change_map_source" = "Zmień zasób mapy";
-"change_map_overlay" = "Zmień nakładkę mapy";
+"quick_action_map_overlay" = "Zmień nakładkę mapy";
 "change_map_underlay" = "Zmień podkład mapy";
 "replace_destination" = "Zastąp cel trasy";
 "add_destination" = "Dodaj cel trasy";
@@ -1115,7 +1115,7 @@
 "select_underlay" = "Wybierz podkładkę mapy";
 "confirm_bulk_delete" = "Usunąć %ld elementy?";
 "quick_action_add_actions_descr" = "Dodaj czynności, by mieć do nich szybki dostęp z mapy.";
-"quick_actions_show_dialog" = "Okno pośrednie";
+"quick_action_interim_dialog" = "Okno pośrednie";
 "quick_action_dialog_descr" = "Włącz, aby wyświetlić okno dialogowe przed zastosowaniem czynności";
 "quick_action_template_name" = "Nazwa szablonu";
 "quick_action_name_footer" = "Proszę pozostawić pole puste, aby użyć adresu lub nazwy miejsca.";
@@ -1196,7 +1196,7 @@
 "select_route_intermediate" = "Wybierz punkt pośredni";
 "select_home" = "Wybierz punkt domu";
 "select_work_point" = "Wybierz punkt pracy";
-"prev_route" = "Poprzednia trasa";
+"previous_route" = "Poprzednia trasa";
 "shared_string_on" = "Włączone";
 "shared_string_off" = "Wyłączone";
 "shared_string_show_more" = "Wyświetl więcej";
@@ -1511,7 +1511,7 @@
 "routing_attr_piste_type_sled_name" = "Sanki";
 "rendering_attr_surface_paved_name" = "Utwardzone";
 "res_source_one_per_tile" = "Jeden plik obrazu na kafelek";
-"res_source_sqlite" = "Plik SQLiteDB";
+"sqlite_db_file" = "Plik SQLiteDB";
 "res_source_format" = "Format źródła";
 "res_pseudo_mercator" = "Zmodyfikowane odwzorowanie Merkatora";
 "res_mercator" = "Projekcja Mercatora";
@@ -1559,7 +1559,7 @@
 "app_mode_car" = "Jazda";
 "map_settings_appearance" = "Wygląd";
 "app_mode_offroad" = "Off-road";
-"map_settings_base_transp" = "Przezroczystość mapy podstawowej";
+"map_transparency" = "Przezroczystość mapy podstawowej";
 "map_settings_color_scheme" = "Zestaw kolorów";
 "app_mode_osm" = "OSM";
 "app_mode_personal_transporter" = "Transporter osobisty";
@@ -1664,11 +1664,11 @@
 "active_markers" = "Aktywne znaczniki";
 "direction_lines" = "Linie kierunków";
 "configure_screen_descr" = "Wybiera opcje ekranu";
-"min_speed" = "Minimalna prędkość";
+"shared_string_min_speed" = "Minimalna prędkość";
 // Dirrection appearance
 "one" = "Jeden";
 "arrows_on_map" = "Strzałki na mapie";
-"distance_indication" = "Wskaźnik odległości";
+"show_direction" = "Wskaźnik odległości";
 "two" = "Dwa";
 "max_speed" = "Maksymalna prędkość";
 "default_speed_setting_title" = "Domyślna prędkość";
@@ -1688,7 +1688,7 @@
 "osm_editing_settings_descr" = "Ustawienia tej wtyczki są globalne i dotyczą wszystkich profili.";
 
 // Menu
-"menu" = "Menu";
+"shared_string_menu" = "Menu";
 "downloading" = "Pobieranie";
 "app_profiles" = "Profile aplikacji";
 "selected_profile" = "Wybrany profil";
@@ -1786,7 +1786,7 @@
 "position_icon_at_rest" = "Ikona położenia podczas spoczynku";
 "select_icon" = "Wybierz ikonę";
 "enter_profile_name" = "Proszę wprowadzić nazwę profilu";
-"edit_profile_list" = "Edytuj listę profili";
+"reorder_profiles" = "Edytuj listę profili";
 "ui_customization_descr" = "Elementy menu bocznego, menu podręczne";
 "ui_customization" = "Ustawienia interfejsu użytkownika";
 "profile_appearance_descr" = "Ikona, kolor i nazwa";
@@ -2377,7 +2377,7 @@
 "app_restart_required" = "Wymagane ponowne uruchomienie aplikacji w celu zastosowania niektórych ustawień.";
 "navigate_point_format_unknown" = "Nieznany format";
 "product_title_weather" = "Pogoda";
-"weather_precip_unit_in" = "Cale";
+"weather_precip_inches" = "Cale";
 "copy_to_map_favorites" = "Skopiuj do Ulubionych";
 "map_settings_weather_precip" = "Opady deszczu";
 "weather_cloud_enable_descr" = "Włacz by wyświetlić warstwę chmur na mapie.";
@@ -2398,7 +2398,7 @@
 "map_settings_weather_pressure" = "Ciśnienie";
 "map_settings_weather_wind" = "Wiatr";
 "map_settings_weather_cloud" = "Chmury";
-"map_settings_weather_contours" = "Kontury";
+"shared_string_contours" = "Kontury";
 "map_settings_weather_layers" = "Warstwy";
 "backup_and_restore" = "Utwórz kopię zapasową i przywróć";
 "ltr_or_rtl_combine_via_dash" = "%@ - %@";

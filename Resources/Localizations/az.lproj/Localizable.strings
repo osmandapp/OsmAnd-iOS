@@ -116,7 +116,7 @@
 "driving_region_automatic" = "Avtomatik";
 "routing_attr_length_name" = "Uzunluq limiti";
 "default_speed_setting_title" = "Standart sürət";
-"min_speed" = "Min. sürət";
+"shared_string_min_speed" = "Min. sürət";
 "max_speed" = "Max. speed";
 "road_speeds_descr" = "These parameters can affect the route calculation.";
 "road_min_speed_descr" = "Sets the minimum travel speed for all roads in the route. Raises priority for roads with recommended speeds less than the minimum.";
@@ -127,7 +127,7 @@
 "save_global_track_interval_descr" = "Choose logging interval for the general track recording (enabled via the GPX logging widget on the map).";
 "logging_interval_navigation" = "Logging interval during navigation";
 "logging_interval_navigation_descr" = "Choose logging interval for track recording during navigation";
-"logging_min_distance" = "Minimum displacement";
+"monitoring_min_distance" = "Minimum displacement";
 "logging_min_distance_descr" = "Filter: minimum distance to log a new point";
 "logging_accuracy" = "Logging accuracy";
 "logging_min_accuracy" = "Minimum accuracy";
@@ -195,7 +195,7 @@
 // Dirrection appearance
 "one" = "Bir";
 "two" = "İki";
-"distance_indication" = "Məsafə göstəricisi";
+"show_direction" = "Məsafə göstəricisi";
 "arrows_on_map" = "Arrows on the map";
 "direction_lines" = "Direction lines";
 "active_markers" = "Aktiv işarələr";
@@ -327,7 +327,7 @@
 "route_is_too_long_v2" = "This route may be too long to calculate. Please add intermediate destinations if no result is found within 10 minutes.";
 "navigation_over_track" = "İz boyu naviqasiya başladılsın?";
 "use_displayed_track_for_navigation" = "Do you want to use displayed track for navigation?";
-"prev_route" = "Əvvəlki marşrut";
+"previous_route" = "Əvvəlki marşrut";
 "shared_string_ellipsis" = "…";
 "shared_string_select_on_map" = "Xəritədə seç";
 "selected_roads" = "Selected roads";
@@ -516,7 +516,7 @@
 "poi_overlay" = "POI Overlay";
 "poi_dialog_poi_type" = "POI növü";
 "my_favorites" = "My Favorites";
-"my_places" = "Yerlərim";
+"shared_string_my_places" = "Yerlərim";
 "fav_no_group" = "No group";
 "fav_add_new_group" = "Add new group";
 "select_group_descr" = "Select group or add a new one";
@@ -603,7 +603,7 @@
 "gpx_route_time" = "Route time";
 "gpx_uphldownhl" = "Uphills/Downhills";
 "gpx_average_speed" = "Ortalama sürət";
-"gpx_start" = "Başlat";
+"shared_string_control_start" = "Başlat";
 "gpx_avg_elev" = "Average elevation";
 "gpx_elev_range" = "Elevation range";
 "gpx_avg_altitude" = "Ortalama yüksəklik";
@@ -669,7 +669,7 @@
 "map_settings_offline" = "Styles for offline maps";
 "map_settings_online" = "Onlayn xəritələr";
 "shared_string_transparency" = "Şəffaflıq";
-"map_settings_base_transp" = "Base map transparency";
+"map_transparency" = "Base map transparency";
 "map_settings_avail_lay" = "Available layers";
 "mapillary" = "Mapillary";
 "street_level_imagery" = "Küçə səviyyəsində şəkillər";
@@ -706,7 +706,7 @@
 "plugin_settings_descr" = "Plugin settings for the selected profile.";
 
 // Intro
-"intro_skip" = "Keç";
+"shared_string_skip" = "Keç";
 "intro_download" = "Download\nmap";
 "intro_next" = "Sonrakı";
 "intro_welcome" = "Welcome to\nOsmAnd";
@@ -934,7 +934,7 @@
 "profile_appearance_descr" = "Icon, color, and name";
 "ui_customization" = "UI customization";
 "ui_customization_descr" = "Siyirmə elementləri, kontekst menyusu";
-"edit_profile_list" = "Profil siyahısına düzəliş et";
+"reorder_profiles" = "Profil siyahısına düzəliş et";
 "enter_profile_name" = "Profil adını daxil edin";
 "select_color" = "Rəng seçin";
 "select_icon" = "İkon seçin";
@@ -1071,7 +1071,7 @@
 "osmand_live_weekly" = "Həftəlik";
 "osmand_live_reports" = "Reports";
 "osmand_live_server_date" = "Last server update: %@";
-"osmand_live_upd_frequency" = "Update frequency";
+"update_frequency" = "Update frequency";
 "osmand_live_wifi_only" = "Update only via WiFi";
 "osmand_live_donation_header" = "Donation settings";
 "osmand_live_donations" = "İanələr";
@@ -1134,7 +1134,7 @@
 "res_elliptic_mercator" = "Elliptic mercator";
 "res_pseudo_mercator" = "Pseudo-Mercator projection";
 "res_source_format" = "Source format";
-"res_source_sqlite" = "SQLiteDB faylı";
+"sqlite_db_file" = "SQLiteDB faylı";
 "res_source_one_per_tile" = "One image file per tile";
 "res_zoom_levels_desc" = "This parameters will affect the map display when used as a map type or overlay/underlay.\n\nMap type: the map will be limited to the selected zooms.\n\nOverlay / Underlay: Zoom levels at which tiles will be visible. Upscale or downscale will occur above or below the set values.";
 "res_expire_time_desc" = "Expiration time in minutes. Cached tiles will be reloaded after specified time. Leave this field empty if you do not need to reload tiles for this source.\nOne day is 1440 minutes.\nOne week is 10 080 minutes.\n30 days are 43 200 minutes.";
@@ -1153,7 +1153,7 @@
 "shared_string_feet" = "fut";
 
 // Menu
-"menu" = "Menyu";
+"shared_string_menu" = "Menyu";
 "menu_my_places" = "Yerlərim";
 "menu_my_trips" = "My Tracks";
 "menu_feedback" = "Əks əlaqə";
@@ -1199,7 +1199,7 @@
 "osm_modify_place" = "Modify place";
 "osm_poi_delete_title" = "POI-ni sil";
 "osm_edit_modified_poi" = "Dəyişdirilmiş OSM POI";
-"osm_target_deleted" = "Silinmiş OSM POI";
+"osm_edit_deleted_poi" = "Silinmiş OSM POI";
 "osm_target_created" = "Yaradılmış OSM POI";
 "osm_note_created" = "Yaradılmış OSM qeydi";
 "osm_note_create" = "Create OSM Note";
@@ -1279,7 +1279,7 @@
 "quick_action_coordinates_widget_descr" = "Tapping this action button shows or hides the Coordinates widget.";
 "map_overlays" = "Xəritə örtükləri";
 "map_underlays" = "Xəritə altlıqları";
-"offline_vector_maps" = "Oflayn vektor xəritələr";
+"vector_data" = "Oflayn vektor xəritələr";
 "add_map_source" = "Xəritə mənbəyi əlavə et";
 "add_map_style" = "Add map style";
 "map_styles" = "Xəritə stilləri";
@@ -1306,7 +1306,7 @@
 "add_poi" = "POIəlavə et";
 "change_map_style" = "Xəritə stilini dəyiş";
 "change_map_source" = "Xəritə mənbəyini dəyiş";
-"change_map_overlay" = "Xəritə örtüyünü dəyiş";
+"quick_action_map_overlay" = "Xəritə örtüyünü dəyiş";
 "change_map_underlay" = "Xəritə altlığını dəyiş";
 "replace_destination" = "Təyinatı əvəz et";
 "add_destination" = "Add destination";
@@ -1343,7 +1343,7 @@
 "quick_action_screen_header" = "Screen %ld";
 "confirm_bulk_delete" = "Do you want to delete %ld items?";
 "quick_action_add_actions_descr" = "Add actions to access them quickly from the map.";
-"quick_actions_show_dialog" = "Aralıq dialoqu göstər";
+"quick_action_interim_dialog" = "Aralıq dialoqu göstər";
 "quick_action_dialog_descr" = "Turn on to show dialog before applying the action";
 "quick_action_template_name" = "Template name";
 "quick_action_name_footer" = "Ünvanı və ya yer adını istifadə etmək üçün boş saxlayın.";

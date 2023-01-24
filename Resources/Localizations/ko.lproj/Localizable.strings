@@ -22,7 +22,7 @@
 "send_anonymous_data_desc" = "OsmAnd 지도 다운로드 통계로 전송, 위치 데이터나 개인 정보를 수집하지 않습니다.";
 "rotate_map_to_bearing_descr" = "지도 화면 정렬을 선택하십시오.";
 "driving_region" = "운전 지역";
-"min_speed" = "최소. 속도";
+"shared_string_min_speed" = "최소. 속도";
 "road_speeds_descr" = "이러한 매개변수는 경로 계산에 영향을 미칠 수 있다.";
 "shared_string_cancel" = "취소";
 "shared_string_close" = "닫기";
@@ -102,7 +102,7 @@
 "map_settings_show" = "지도에 표시";
 
 // Intro
-"intro_skip" = "건너뛰기";
+"shared_string_skip" = "건너뛰기";
 "prch_nau_q3" = "나중에 지도 & 리소스를 통해 설치할 수 있습니다.";
 "search_another_country" = "다른 지역 선택";
 "download_depth_countours" = "해상 깊이 등고선";
@@ -218,7 +218,7 @@
 "groups" = "그룹";
 "poi_dialog_poi_type" = "POI유형";
 "my_favorites" = "내 즐겨찾기";
-"my_places" = "저장소";
+"shared_string_my_places" = "저장소";
 "fav_no_group" = "그룹 없음";
 "fav_add_new_group" = "새 그룹 추가";
 "select_group_descr" = "그룹을 선택하거나 새 그룹을 추가하십시오.";
@@ -258,7 +258,7 @@
 "import_export" = "가져오기/내보내기";
 "gpx_uphldownhl" = "업힐/다운힐";
 "gpx_average_speed" = "평균 속도";
-"gpx_start" = "시작";
+"shared_string_control_start" = "시작";
 "gpx_avg_elev" = "평균 표고";
 "gpx_descent" = "내리막";
 "gpx_updown" = "위/아래";
@@ -288,7 +288,7 @@
 "speak_poi" = "인근 POI";
 "speak_pedestrian" = "보행자 횡단보도";
 "show_tunnels" = "터널";
-"distance_indication" = "거리 표시";
+"show_direction" = "거리 표시";
 "arrows_on_map" = "지도 위의 화살표";
 "direction_lines" = "방향선";
 "choose_how_display_distance" = "활성 마커까지의 거리를 표시하는 방법 선택";
@@ -453,7 +453,7 @@
 "res_details" = "세부 사항";
 "res_type" = "유형";
 "res_unknown" = "알 수 없음";
-"res_source_sqlite" = "SQLiteDB 파일";
+"sqlite_db_file" = "SQLiteDB 파일";
 "res_source_one_per_tile" = "타일당 하나의 이미지 파일";
 "add_work" = "직장 추가";
 "profile_type_osmand_string" = "OsmAnd프로필";
@@ -598,7 +598,7 @@
 "city_type_suburb" = "교외";
 "map_widget_left" = "왼쪽 패널";
 "routing_attr_no_new_routing_name" = "No v1.9라우팅 규칙";
-"map_settings_base_transp" = "언더레이 투명도";
+"map_transparency" = "언더레이 투명도";
 "app_mode_truck" = "트럭";
 "map_markers_other" = "기타 마커";
 "shared_string_is_open" = "열기";
@@ -698,7 +698,7 @@
 "rendering_value_walkingRoutesOSMC_name" = "OSMC에 따라 색상변경";
 "rendering_value_boldOutline_name" = "큰 선";
 "gpx_deactivated" = "비활성화";
-"offline_vector_maps" = "오프라인 벡터 맵";
+"vector_data" = "오프라인 벡터 맵";
 "units_hour" = "h";
 "transport" = "대중교통";
 "lang_al" = "알바니아어";
@@ -1025,7 +1025,7 @@
 "plan_route_folder" = "폴더";
 "plan_route_create_new_route" = "새 경로 만들기";
 "res_updates_avail_q" = "업데이트가 있습니다.";
-"edit_profile_list" = "‎프로파일‎‎ 목록 편집‎";
+"reorder_profiles" = "‎프로파일‎‎ 목록 편집‎";
 "plan_route_change_folder" = "폴더 변경";
 "plan_route_select_folder" = "폴더 선택";
 "routing_attr_allow_gate_description" = "게이트 사용 허용";
@@ -1085,7 +1085,7 @@
 "help_install_and_troubleshoot" = "설치 및 문제 해결";
 "user_login" = "로그인";
 "routing_attr_allow_gate_name" = "게이트 사용 허용";
-"osmand_live_upd_frequency" = "업데이트 빈도";
+"update_frequency" = "업데이트 빈도";
 "lang_tt" = "타타르어";
 "routing_attr_only_permitted_streets_name" = "명시적으로 허용된 거리";
 "region_nautical" = "항해 지도";

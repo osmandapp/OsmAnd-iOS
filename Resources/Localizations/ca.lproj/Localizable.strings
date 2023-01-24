@@ -65,7 +65,7 @@
 "gpx_stat" = "Estadístiques";
 "gpx_route_time" = "Temps de ruta";
 "gpx_average_speed" = "Velocitat mitjana";
-"gpx_start" = "Comença";
+"shared_string_control_start" = "Comença";
 "fav_select" = "Si us plau seleccioneu preferits";
 "poi_max_radius_reached" = "Radi de cerca màxim assolit";
 "poi_search_near_center" = "La cerca es realitza prop del centre del mapa";
@@ -101,7 +101,7 @@
 "shared_string_transparency" = "Transparència";
 "map_settings_avail_lay" = "Capes disponibles";
 // Intro
-"intro_skip" = "Omet";
+"shared_string_skip" = "Omet";
 "intro_download" = "Baixa\nel mapa";
 "intro_next" = "Endavant";
 "intro_welcome" = "Benvinguts a\nl'OsmAnd";
@@ -744,7 +744,7 @@
 "traffic_warning_tunnel" = "Túnel encarat";
 "logging_interval_navigation" = "Interval d\'enregistrament durant la navegació";
 "logging_interval_navigation_descr" = "Seleccioneu l'interval d'enregistrament en generar la traça de la navegació";
-"logging_min_distance" = "Desplaçament mínim";
+"monitoring_min_distance" = "Desplaçament mínim";
 "logging_min_distance_descr" = "Filtre: distància mínima per enregistrar un punt nou";
 "logging_min_accuracy" = "Precisió mínima";
 "logging_min_accuracy_descr" = "Filtre: no s'enregistra sense assolir la precisió mínima";
@@ -812,7 +812,7 @@
 "default_price_currency_format" = "%@ %@";
 "osm_live_payment_header" = "Seleccioneu el període de pagament que us convingui:";
 "osm_live_payment_contribute_descr" = "Una part dels ingressos és pels col·laboradors d'OpenStreetMap.";
-"osmand_live_upd_frequency" = "Freqüència d'actualització";
+"update_frequency" = "Freqüència d'actualització";
 "osmand_live_wifi_only" = "Actualitza només per wifi";
 "purchase_dialog_title" = "Seleccioneu un pla";
 "purchase_dialog_travel_description" = "Compreu un dels elements següents per disposar la funcionalitat de guies de viatge sense connexió:";
@@ -902,7 +902,7 @@
 "osm_modify_place" = "Modifica lloc";
 "osm_poi_delete_title" = "Elimina el PDI";
 "osm_edit_modified_poi" = "S\'ha modificat PDI d\'OSM";
-"osm_target_deleted" = "S\'ha eliminat PDI d\'OSM";
+"osm_edit_deleted_poi" = "S\'ha eliminat PDI d\'OSM";
 "osm_target_created" = "S\'ha creat un PDI a OSM";
 "osm_confirm_delete" = "Voleu eliminar el PDI?";
 "osm_confirm_upload" = "Voleu pujar les modificacions?";
@@ -948,7 +948,7 @@
 "osm_note_reopen" = "Reobre";
 "osm_edits_offline_layer" = "Edicions/Notes OSM (en local)";
 "osm_notes_online_layer" = "Notes d'OSM (en línia)";
-"my_places" = "Preferits";
+"shared_string_my_places" = "Preferits";
 "osm_edits_basic" = "Bàsic";
 "osm_edits_advanced" = "Estès";
 "osm_edits_all" = "Totes les edicions";
@@ -1076,7 +1076,7 @@
 "quick_action_add_underlay" = "Afegeix fons";
 "map_overlays" = "Superposicions de mapa";
 "map_underlays" = "Fons de mapa";
-"offline_vector_maps" = "Mapes de vectors fora de línia";
+"vector_data" = "Mapes de vectors fora de línia";
 "add_map_source" = "Afegeix origen del mapa";
 "add_map_style" = "Afegeix estil del mapa";
 "map_styles" = "Estils de mapa";
@@ -1095,7 +1095,7 @@
 "add_poi" = "Afegeix PDI";
 "change_map_style" = "canvia l\'estil del mapa";
 "change_map_source" = "Canvia l\'origen del mapa";
-"change_map_overlay" = "Modifica la superposició del mapa";
+"quick_action_map_overlay" = "Modifica la superposició del mapa";
 "change_map_underlay" = "Modifica el fons del mapa";
 "replace_destination" = "Substitueix destinació";
 "add_destination" = "Afegeix destinació";
@@ -1119,7 +1119,7 @@
 "select_underlay" = "Seleccioneu el mapa de fons";
 "confirm_bulk_delete" = "Voleu eliminar %ld elements?";
 "quick_action_add_actions_descr" = "Afegiu accions per accedir-hi ràpidament des del mapa.";
-"quick_actions_show_dialog" = "Mostra un diàleg provisional";
+"quick_action_interim_dialog" = "Mostra un diàleg provisional";
 "quick_action_dialog_descr" = "Activeu-ho per demanar confirmació abans de fer l'acció";
 "quick_action_template_name" = "Nom de la plantilla";
 "quick_action_name_footer" = "Deixeu-lo buit per utilitzar l\'adreça o el nom d\'un lloc.";
@@ -1176,7 +1176,7 @@
 "shared_string_clear_all" = "Neteja-ho tot";
 "select_home" = "Seleccioneu el punt d’inici";
 "select_work_point" = "Seleccioneu el punt de treball";
-"prev_route" = "Ruta anterior";
+"previous_route" = "Ruta anterior";
 "shared_string_on" = "Activa";
 "shared_string_off" = "Inactiva";
 "shared_string_show_more" = "Mostra\'n més";
@@ -1539,7 +1539,7 @@
 "res_expire_time" = "Caducitat";
 "res_pseudo_mercator" = "Projecció Pseudo-Mercator";
 "res_source_format" = "Format de la font";
-"res_source_sqlite" = "Fitxer SQLiteDB";
+"sqlite_db_file" = "Fitxer SQLiteDB";
 "res_source_one_per_tile" = "Un fitxer d\'imatge per tessel·la";
 "res_zoom_invalid_value" = "Els valors del zoom han de estar entre 1 - 22";
 "rendering_attr_piste_type_sled_name" = "Trineu";
@@ -1594,7 +1594,7 @@
 "map_settings_contour_zoom_level_descr" = "Seleccioneu el nivell de zoom inicial on ja es mostraran les corbes de nivell";
 "map_settings_line_density" = "Densitat de la línia";
 "map_settings_color_scheme" = "Combinació de colors";
-"map_settings_base_transp" = "Opacitat del mapa base";
+"map_transparency" = "Opacitat del mapa base";
 "help_osmand_live" = "Subscripció - OsmAnd Live";
 "help_purchases" = "Compres OsmAnd";
 "enable_hillshade" = "Activa la representació de dades del terreny";
@@ -1620,7 +1620,7 @@
 "active_markers" = "Marcadors actius";
 "direction_lines" = "Línies de direcció";
 "arrows_on_map" = "Fletxes al mapa";
-"distance_indication" = "Indicació de la distància";
+"show_direction" = "Indicació de la distància";
 "two" = "Dos";
 // Dirrection appearance
 "one" = "Un";
@@ -1676,7 +1676,7 @@
 "screen_alerts" = "Alertes de pantalla";
 "voice_announces" = "Anuncis de veu";
 "max_speed" = "Velocitat màxima";
-"min_speed" = "Velocitat mínima";
+"shared_string_min_speed" = "Velocitat mínima";
 "default_speed_setting_title" = "Velocitat predeterminada";
 "routing_attr_length_name" = "Llargada màxima";
 "create_profile_descr" = "Comenceu el vostre perfil personalitzat des d\'un perfil predeterminat de l\'aplicació,que defineixi la configuració bàsica com visibilitat predeterminada, extensions i unitats de velocitat i distància. Aquests són els perfils d\'aplicació predeterminats, junt amb exemples de personalització que es poden anar ampliant:";
@@ -1736,7 +1736,7 @@
 "select_icon" = "Selecciona icona";
 "select_color" = "Seleccioneu el color";
 "enter_profile_name" = "Introduïu el nom del perfil";
-"edit_profile_list" = "Edita la llista de perfils";
+"reorder_profiles" = "Edita la llista de perfils";
 "profile_appearance_descr" = "Icona, color i nom";
 "profile_settings" = "Configuració del perfil";
 "configure_profile" = "Configura el perfil";
@@ -1763,7 +1763,7 @@
 "osm_editing_access_descr" = "Podeu veure totes les vostres edicions i anotacions locals a %@. Els punts que ja heu pujat no es mostren a OsmAnd.";
 "osm_editing_settings_descr" = "Aquesta configuració del connector és global i afecta tots els perfils.";
 // Menu
-"menu" = "Menú";
+"shared_string_menu" = "Menú";
 "plugin_settings_reset" = "Restableix la configuració predeterminada del complement";
 "trip_rec_actions_descr" = "Podeu trobar totes les vostres tracs gravades a %@";
 "logging_accuracy" = "Precisió de registre";

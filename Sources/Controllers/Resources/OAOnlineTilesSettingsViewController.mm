@@ -102,7 +102,7 @@ typedef NS_ENUM(NSInteger, EOAOnlineSourceSetting)
         case EOAOnlineSourceSettingSourceFormat:
         {
             [data addObject:@{
-                                @"text": OALocalizedString(@"res_source_sqlite"),
+                                @"text": OALocalizedString(@"sqlite_db_file"),
                                 @"img": _sourceFormat == EOASourceFormatSQLite ? @"menu_cell_selected.png" : @""
             }];
             [data addObject:@{

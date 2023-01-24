@@ -82,7 +82,7 @@
 "gpx_route_time" = "Tími á leiðinni";
 "gpx_uphldownhl" = "Brekkur upp/niður";
 "gpx_average_speed" = "Meðalhraði";
-"gpx_start" = "Upphaf";
+"shared_string_control_start" = "Upphaf";
 "gpx_avg_elev" = "Meðalhæð";
 "gpx_elev_range" = "Hæðarsvið";
 "gpx_updown" = "Upp/Niður";
@@ -124,7 +124,7 @@
 "shared_string_transparency" = "Gegnsæi";
 "map_settings_avail_lay" = "Tiltæk lög";
 // Intro
-"intro_skip" = "Sleppa";
+"shared_string_skip" = "Sleppa";
 "intro_download" = "Sækja\nkort";
 "intro_next" = "Næsta";
 "intro_welcome" = "Velkomin í\nOsmAnd";
@@ -738,7 +738,7 @@
 "shared_string_previous" = "Fyrra";
 "logging_interval_navigation" = "Millibil skráninga á meðan leiðsögn stendur";
 "logging_interval_navigation_descr" = "Veldu millibil skráninga í ferilskráningu á meðan leiðsögn stendur";
-"logging_min_distance" = "Lágmarkshreyfing";
+"monitoring_min_distance" = "Lágmarkshreyfing";
 "logging_min_distance_descr" = "Sía: Stilltu lágmarksfjarlægð frá síðustu staðsetningu þar sem punktur er tekinn í skráningu";
 "logging_min_accuracy" = "Lágmarksnákvæmni";
 "logging_min_accuracy_descr" = "Sía: Stilltu lágmarksnákvæmni punkts til að hann sé tekinn í skráningu";
@@ -809,7 +809,7 @@
 "default_price_currency_format" = "%@ %@";
 "osm_live_payment_header" = "Veldu þann greiðslumáta sem þér hentar:";
 "osm_live_payment_contribute_descr" = "Hluti innkomunnar fer til þeirra sem leggja OpenStreetMap lið.";
-"osmand_live_upd_frequency" = "Uppfærslutíðni";
+"update_frequency" = "Uppfærslutíðni";
 "osmand_live_wifi_only" = "Aðeins uppfæra um WiFi";
 "osmand_live_donation_header" = "Stillingar á styrkjum";
 "osmand_live_donations" = "Styrkir";
@@ -899,7 +899,7 @@
 "osm_modify_place" = "Breyta stað";
 "osm_poi_delete_title" = "Eyða merkisstað";
 "osm_edit_modified_poi" = "Breyttur OSM-merkisstaður";
-"osm_target_deleted" = "Eyddi OSM-merkisstað";
+"osm_edit_deleted_poi" = "Eyddi OSM-merkisstað";
 "osm_target_created" = "Bjó til OSM-merkisstað";
 "osm_confirm_delete" = "Eyða merkisstað?";
 "osm_confirm_upload" = "Senda inn breytingar?";
@@ -938,7 +938,7 @@
 "osm_note_upload_immediately" = "Senda inn strax";
 "osm_note_upload_anonymously" = "Senda inn nafnlaust";
 "osm_note_empty_message" = "Skrifaðu skilaboðin í þessum minnispunkti.";
-"my_places" = "Staðirnir mínir";
+"shared_string_my_places" = "Staðirnir mínir";
 "osm_note_close" = "Loka OSM-minnispunkti";
 "osm_note_comment_title" = "Gera athugasemd við OSM-minnispunkt";
 "osm_note_reopen_title" = "Opna aftur OSM-minnispunkt";
@@ -1074,7 +1074,7 @@
 "quick_action_list_descr" = "Ef ýtt er á þennan aðgerðahnapp verður flett í gegnum listann hér fyrir neðan";
 "map_overlays" = "Þekjur korts";
 "map_underlays" = "Undirlög korts";
-"offline_vector_maps" = "Ónettengd vektorkort";
+"vector_data" = "Ónettengd vektorkort";
 "add_map_source" = "Bæta við gagnagjafa korts";
 "add_map_style" = "Bæta við kortastíl";
 "map_styles" = "Stílar landakorta";
@@ -1093,7 +1093,7 @@
 "add_poi" = "Bæta við merkisstað";
 "change_map_style" = "Breyta stíl korts";
 "change_map_source" = "Breyta gagnagjafa korts";
-"change_map_overlay" = "Breytaþekju korts";
+"quick_action_map_overlay" = "Breytaþekju korts";
 "change_map_underlay" = "Breyta undirlagi korts";
 "replace_destination" = "Skiptaút áfangastað";
 "add_destination" = "Bæta við áfangastað";
@@ -1116,7 +1116,7 @@
 "select_underlay" = "Veldu undirlagskort";
 "confirm_bulk_delete" = "Viltu eyða %ld atriðum?";
 "quick_action_add_actions_descr" = "Bættu við aðgerðum til að fá fljótlegan aðgang að þeim af kortinu.";
-"quick_actions_show_dialog" = "Birta millistigsglugga";
+"quick_action_interim_dialog" = "Birta millistigsglugga";
 "quick_action_dialog_descr" = "Kveiktu á til að birta upplýsingaglugga áður en aðgerðinni er beitt";
 "quick_action_template_name" = "Heiti sniðmáts";
 "quick_action_name_footer" = "Skilduþetta eftir autt til að nota heimilisfangið eða staðarheiti.";
@@ -1197,7 +1197,7 @@
 "select_route_intermediate" = "Veldu millipunkt";
 "select_home" = "Veldu heimapunkt";
 "select_work_point" = "Veldu vinnupunkt";
-"prev_route" = "Fyrri leið";
+"previous_route" = "Fyrri leið";
 "shared_string_on" = "Kveikt";
 "shared_string_off" = "Slökkt";
 "shared_string_show_more" = "Sýna meira";
@@ -1540,7 +1540,7 @@
 "rendering_attr_piste_difficulty_extreme_name" = "Ofur";
 "rendering_attr_noPolygons_description" = "Gera allar svæðamerkingar á korti gegnsæjar.";
 "res_source_format" = "Snið frumkóða";
-"res_source_sqlite" = "SQLiteDB-skrá";
+"sqlite_db_file" = "SQLiteDB-skrá";
 "res_source_one_per_tile" = "Ein myndskrá á hverja kortaflís";
 "res_zoom_invalid_value" = "Aðdráttargildi ætti að vera á bilinu 1 - 22";
 "online_raster_map" = "Nettengt rastakort";
@@ -1593,7 +1593,7 @@
 "map_settings_contour_zoom_level_descr" = "Veldu aðdráttarstig frá og með hverju hæðarlínur verða birtar";
 "map_settings_line_density" = "Þéttleiki línu";
 "map_settings_color_scheme" = "Litastef";
-"map_settings_base_transp" = "Gegnsæi grunnkorts";
+"map_transparency" = "Gegnsæi grunnkorts";
 "arrows_direction_to_markers" = "Örvar sýna stefnu á virkt kortamerki ef það er fyrir utan skjáinn. Stefnulínur teikna línu í átt að virkum kortamerkjum.";
 "allow_3d_descr" = "Virkjaðu þetta til að geta skoðað kortið í 2.5D fjarvídd";
 "two" = "Tvö";
@@ -1647,7 +1647,7 @@
 "public_transport_empty_warning_descr" = "Prófaðu að breyta stillingunum.";
 "map_settings_layer_transparency" = "Gegnsæi lags";
 "map_settings_slopes_description" = "Til að sýna brekkur eru notaðir mismunandi litir við framsetningu yfirborðsins";
-"distance_indication" = "Fjarlægðarvísir";
+"show_direction" = "Fjarlægðarvísir";
 "quick_action_dir_from_descr" = "Ýttu á þessa aðgerð til að fara frá punktinum sem núna er á miðjum skjánum.";
 "announce" = "Tilkynna";
 "will_be_show_while_moving" = "Verður birt á hreyfingu";
@@ -1680,7 +1680,7 @@
 "selected_profile" = "Valið snið";
 "vessel_height_limit_description" = "Settu hæð skips til að geta forðast lágar brýr. Hafðu í huga að ef um hreyfanlega brú er að ræða, þá er miðað við hæð í opinni stöðu.";
 "configure_screen_descr" = "Veldu valkosti skjás fyrir sniðið";
-"min_speed" = "Lágmarkshraði";
+"shared_string_min_speed" = "Lágmarkshraði";
 "enter_profile_name" = "Settu inn heitiá notkunarsniði";
 "device_settings" = "Stillingar tækis";
 "profile_type_custom_string" = "Sérsniðið notandasnið";
@@ -1705,7 +1705,7 @@
 "email_example_hint" = "tolvupostfang@midlari.is";
 "profile_settings" = "Stillingar notandasniðs";
 "lenght_limit_description" = "Settu inn lengd farartækisins, takmarkanir geta verið á sumum leiðum varðandi lengd farartækja.";
-"edit_profile_list" = "Breyta lista yfir snið";
+"reorder_profiles" = "Breyta lista yfir snið";
 "nav_type_brouter" = "BRouter";
 "only_manually" = "Einungis handvirkt";
 "profile_appearance_descr" = "Táknmynd, litur og nafn";
@@ -1752,7 +1752,7 @@
 "select_online_source" = "Veldu uppruna";
 "create_profile_descr" = "Sérstillt notkunarsnið ættu að vera byggð á einu af sjálfgefnu forritssniðunum. Valda sniðið skilgreinir grunnstillingar: sýnileika viðmótshluta, einingar fyrir hraða og vegalengdir. Þetta eru sjálfgefnu forritssniðin, ásamt dæmum um sérsnið sem hægt er að útvíkka þau með:";
 // Menu
-"menu" = "Valmynd";
+"shared_string_menu" = "Valmynd";
 "routing_attr_length_name" = "Takmörk á lengd";
 "send_anonymous_data" = "Senda nafnlaus gögn";
 "map_during_navigation" = "Skrá á meðan leiðsögn stendur";
@@ -2341,7 +2341,7 @@
 "delete_tracks_bottom_sheet_description_bold_part" = "%d ferlar?";
 "delete_tracks_bottom_sheet_title" = "Eyða ferlum?";
 "measurement_units" = "Mælieiningar";
-"weather_precip_unit_in" = "Tommur";
+"weather_precip_inches" = "Tommur";
 "rendering_attr_funicularRoutes_name" = "Leiðir kláfbrauta";
 "rendering_attr_showFitnessTrails_description" = "Sýna fitness-leiðir";
 "routing_attr_avoid_tunnels_description" = "Forðast veggöng";
@@ -2353,7 +2353,7 @@
 "route_preferred_terrain_less_hilly" = "Styttri, minna hæðóttar leiðir.";
 "local_backup_descr" = "Öryggisafritun eða endurheimting úr skrá á tækinu.";
 "backup_into_file" = "Öryggisafritun í skrá";
-"map_settings_weather_contours" = "Hæðarlínur";
+"shared_string_contours" = "Hæðarlínur";
 "map_settings_weather_layers" = "Lög";
 "weather_temp_enable_descr" = "Virkja til að skoða hitastigslag á kortinu.";
 "weather_pressure_enable_descr" = "Virkja til að skoða loftþrýstingslag á kortinu.";
@@ -2540,7 +2540,7 @@
 "duration_ago" = "fyrir %@ síðan";
 "shared_string_leave" = "Fara";
 "shared_string_restoring" = "Endurheimti";
-"restore_data" = "Endurheimta gögn";
+"backup_restore_data" = "Endurheimta gögn";
 "backup_complete" = "Öryggisafritun lokið";
 "backup_delete_all_data" = "Eyða öllum mínum gögnum";
 "backup_delete_old_data" = "Fjarlægja eldri útgáfur";
@@ -2594,7 +2594,7 @@
 "update_parameters" = "Uppfæra breytur";
 "backup_delete_all_data_finished" = "Öllum gögnum þínum hefur verið eytt af OsmAnd-tölvuskýinu.";
 "carplay_available_in_sub_plans" = "Kauptu OsmAnd Pro eða Maps+ til að nota OsmAnd með CarPlay.";
-"tts" = "TTS texti-í-tal";
+"tts_title" = "TTS texti-í-tal";
 "recorded_voice" = "Skráð";
 "restoring_from" = "Endurheimti valin gögn úr gagnaskýinu";
 "service_is_not_available_please_try_later" = "Þjónustan er ekki tiltæk í augnablikinu. Reyndu aftur síðar.";

@@ -102,7 +102,7 @@
 "rec_interval_minimum" = "Minimum";
 "track_interval_remember" = "Meine Auswahl merken";
 // Intro
-"intro_skip" = "Überspringen";
+"shared_string_skip" = "Überspringen";
 "sett_deg" = "Grad";
 "incur_high_charges" = "Dies kann hohe Kosten verursachen.";
 "prch_failed" = "Kauf von \"%@\" ist fehlgeschlagen";
@@ -160,7 +160,7 @@
 // Help
 "help_quiz" = "Rätsel";
 "import_export" = "Import/Export";
-"gpx_start" = "Start";
+"shared_string_control_start" = "Start";
 "track_recording_name" = "Momentane Track-Aufzeichnung";
 "track_stop_rec" = "Aufzeichnung stoppen";
 "track_new_segment" = "Neues Segment starten";
@@ -749,7 +749,7 @@
 "poi_clear" = "Löschen";
 "track_during_nav" = "Automatische Trackaufzeichnung";
 "logging_interval_navigation_descr" = "Wählen Sie das Aufzeichnungsintervall für die Trackaufzeichnung während der Navigation aus";
-"logging_min_distance" = "Minimale Verschiebung";
+"monitoring_min_distance" = "Minimale Verschiebung";
 "logging_min_distance_descr" = "Filter: minimale Entfernung zum Aufzeichnen eines neuen Punktes";
 "logging_min_accuracy" = "Minimale Genauigkeit";
 "logging_min_accuracy_descr" = "Filter: keine Aufzeichnung bis die Genauigkeit erreicht ist";
@@ -800,7 +800,7 @@
 "osmand_live_weekly" = "Wöchentlich";
 "osmand_live_reports" = "Berichte";
 "osmand_live_server_date" = "Letztes Server-Update: %@";
-"osmand_live_upd_frequency" = "Aktualisierungsintervall";
+"update_frequency" = "Aktualisierungsintervall";
 "osmand_live_wifi_only" = "Update nur über WLAN";
 "osmand_live_donation_header" = "Spendeneinstellungen";
 "osmand_live_donations" = "Spenden";
@@ -904,7 +904,7 @@
 "osm_modify_place" = "Ort bearbeiten";
 "osm_poi_delete_title" = "Lösche POI";
 "osm_edit_modified_poi" = "Geänderter OSM-POI";
-"osm_target_deleted" = "Gelöschter OSM-POI";
+"osm_edit_deleted_poi" = "Gelöschter OSM-POI";
 "osm_target_created" = "OSM-POI erstellt";
 "osm_confirm_delete" = "POI löschen?";
 "osm_confirm_upload" = "Änderungen hochladen?";
@@ -950,7 +950,7 @@
 "osm_note_reopen" = "Wiederöffnen";
 "osm_edits_offline_layer" = "OSM Bearbeitungen/Hinweise (Offline)";
 "osm_notes_online_layer" = "OSM Hinweise (Online)";
-"my_places" = "Meine Orte";
+"shared_string_my_places" = "Meine Orte";
 "osm_edits_basic" = "Basis";
 "osm_edits_advanced" = "Fortgeschritten";
 "osm_edits_all" = "Alle Bearbeitungen";
@@ -1078,7 +1078,7 @@
 "quick_action_add_underlay" = "Underlay hinzufügen";
 "map_overlays" = "Karten-Overlays";
 "map_underlays" = "Karten-Underlays";
-"offline_vector_maps" = "Offline-Vektorkarten";
+"vector_data" = "Offline-Vektorkarten";
 "add_map_source" = "Kartenquelle hinzufügen";
 "configure_map" = "Karte konfigurieren";
 "add_map_style" = "Kartenstil hinzufügen";
@@ -1097,7 +1097,7 @@
 "add_poi" = "POI hinzufügen";
 "change_map_style" = "Kartendarstellungändern";
 "change_map_source" = "Kartenquelleändern";
-"change_map_overlay" = "Overlay-Karteändern";
+"quick_action_map_overlay" = "Overlay-Karteändern";
 "change_map_underlay" = "Karten-Underlayändern";
 "replace_destination" = "Ziel ersetzen";
 "add_destination" = "Ziel hinzufügen";
@@ -1142,7 +1142,7 @@
 "quick_action_voice_descr" = "Drücken diesen Buttons deaktiviert oder aktiviert die Sprachführung zur Navigation.";
 "quick_action_list_descr" = "Wenn Sie auf diese Aktionstaste tippen, wird die Liste unten durchsucht";
 "add_first_inermediate" = "Ersten Zwischenstopp hinzufügen";
-"quick_actions_show_dialog" = "Dialog zum Bearbeiten anzeigen";
+"quick_action_interim_dialog" = "Dialog zum Bearbeiten anzeigen";
 "quick_action_dialog_descr" = "Aktivieren Sie diese Option, um den Dialog anzuzeigen, bevor Sie die Aktion anwenden";
 "quick_action_add_dest_descr" = "Durch Antippen dieser Aktionstaste wird das Ziel auf die Kartenmitte gesetzt. Jedes zuvor ausgewählte Ziel wird zum letzten Zwischenziel.";
 "quick_action_first_intermediate_descr" = "Durch Antippen dieser Aktionstaste wird das erste Zwischenziel am Kartenmittelpunkt hinzugefügt.";
@@ -1202,7 +1202,7 @@
 "select_route_intermediate" = "Zwischenpunkt auswählen";
 "select_home" = "Heimatort auswählen";
 "select_work_point" = "Arbeitsort auswählen";
-"prev_route" = "Vorherige Route";
+"previous_route" = "Vorherige Route";
 "shared_string_on" = "Ein";
 "shared_string_off" = "Aus";
 "shared_string_show_more" = "Mehr anzeigen";
@@ -1538,7 +1538,7 @@
 "rendering_attr_piste_difficulty_expert_name" = "Experte";
 "rendering_attr_showRoadMaps_description" = "Wählen Sie aus, wann reine Straßenkarten angezeigt werden sollen:";
 "rendering_value_thin_name" = "Dünn";
-"res_source_sqlite" = "SQLiteDB-Datei";
+"sqlite_db_file" = "SQLiteDB-Datei";
 "res_source_one_per_tile" = "Eine Bilddatei pro Kachel";
 "res_zoom_invalid_value" = "Zoomwerte sollten im Bereich 1 - 22 liegen";
 "res_edit_map_source" = "Kartenquelle bearbeiten";
@@ -1598,7 +1598,7 @@
 "map_settings_contour_zoom_level_descr" = "Zoomstufe wählen, ab der die Konturlinien angezeigt werden sollen";
 "map_settings_line_density" = "Liniendichte";
 "map_settings_color_scheme" = "Farbschema";
-"map_settings_base_transp" = "Kartentransparenz";
+"map_transparency" = "Kartentransparenz";
 "map_coords" = "Karte: Breite %.5f Länge %.5f";
 "num_stops" = "Haltestellen";
 "by_transport_type" = "Nach Typ";
@@ -1628,7 +1628,7 @@
 "active_markers" = "Aktive Kartenmarkierungen";
 "direction_lines" = "Richtungslinien";
 "arrows_on_map" = "Pfeile auf der Karte";
-"distance_indication" = "Entfernungsangabe";
+"show_direction" = "Entfernungsangabe";
 "two" = "Zwei";
 // Dirrection appearance
 "one" = "Eins";
@@ -1669,7 +1669,7 @@
 "vehicle_parameters" = "Fahrzeugparameter";
 "select_nav_profile_dialog_message" = "Der 'Navigationstyp' bestimmt, wie die Routen berechnet werden.";
 "select_color" = "Farbe wählen";
-"edit_profile_list" = "Profilliste bearbeiten";
+"reorder_profiles" = "Profilliste bearbeiten";
 "profile_type_custom_string" = "Benutzerdefiniertes Profil";
 "create_profile" = "Profil erstellen";
 "online_sources" = "Online-Quellen";
@@ -1726,7 +1726,7 @@
 "nav_type_brouter" = "BRouter";
 "voice_announces" = "Sprachansagen";
 "max_speed" = "Max. Geschwindigkeit";
-"min_speed" = "Min. Geschwindigkeit";
+"shared_string_min_speed" = "Min. Geschwindigkeit";
 "default_speed_setting_title" = "Standardgeschwindigkeit";
 "routing_attr_length_name" = "Längenbegrenzung";
 "default_profile_descr" = "Wählen Sie ein Profil, das beim Start der Anwendung verwendet wird.";
@@ -1776,7 +1776,7 @@
 "osm_editing_access_descr" = "Sie können alle Ihre lokalen Bearbeitungen und Notizen in %@ anzeigen. Bereits hochgeladene Punkte werden nicht in OsmAnd aufgelistet.";
 "osm_editing_settings_descr" = "Die Einstellungen dieses Plugins sind global und gelten für alle Profile.";
 // Menu
-"menu" = "Menü";
+"shared_string_menu" = "Menü";
 "reset_to_default" = "Auf Voreinstellung zurücksetzen";
 "copy_from_other_profile_descr" = "Sie können alle Einstellungen aus jedem Profil in das ausgewählte Profil kopieren: ";
 "copy_from_other_profile" = "Aus anderem Profil kopieren";
@@ -2335,7 +2335,7 @@
 "weather_wind_unit_km_per_hour" = "Kilometer pro Stunde";
 "weather_wind_unit_knots" = "Knoten";
 "weather_precip_unit_mm" = "Millimeter";
-"weather_precip_unit_in" = "Zoll";
+"weather_precip_inches" = "Zoll";
 "weather_cloud_data_description" = "Wetterdaten werden jedes Mal für die verwendete Ansicht heruntergeladen.";
 "user_login" = "Anmelden";
 "osmand_cloud_login_descr" = "Bitte geben Sie die E-Mail-Adresse ein, mit der Sie sich registriert haben. An diese wird ein Einmal-Passwort für den nächsten Schritt gesendet.";
@@ -2419,7 +2419,7 @@
 "weather_cloud_enable_descr" = "Zeige Wolkenebene auf der Karte an.";
 "weather_precip_enable_descr" = "Zeige Regenwahrscheinlichkeitsebene auf der Karte.";
 "units_cubic_m" = "m³";
-"map_settings_weather_contours" = "Konturen";
+"shared_string_contours" = "Konturen";
 "weather_contours_enable_descr" = "Zeige Ebene mit isobaren Linien auf der Karte.";
 "copy_poi_name" = "Kopiere POI Name";
 "routeInfo_horse_scale_name" = "Schwierigkeitsgrad von Reitwegen";
@@ -2552,7 +2552,7 @@
 "weather_data_provider" = "Datenanbieter GFS.";
 "weather_clear_online_cache" = "Dadurch wird der gesamte Cache für die Online-Wetterkachel gelöscht.";
 "shared_string_restoring" = "Wiederherstellen";
-"restore_data" = "Daten wiederherstellen";
+"backup_restore_data" = "Daten wiederherstellen";
 "choose_what_to_restore" = "Wählen Sie Elemente zum Wiederherstellen aus";
 "renew_subscription" = "Abonnement erneuern";
 "fetching_from_server" = "Daten vom Server abrufen";
@@ -2643,7 +2643,7 @@
 "backup_conflicts_descr" = "Eine neuere Version dieser Dateien ist auf dem Server gespeichert. Sie müssen eine Aktion auswählen";
 "recorded_voice" = "Aufgezeichnet";
 "backup_conflicts_action_descr" = "Eine andere Version dieser Datei ist auf dem Server gespeichert. Sie müssen eine Aktion auswählen";
-"tts" = "TTS";
+"tts_title" = "TTS";
 "shared_string_changed" = "Geändert";
 "cloud_conflict" = "Konflikt";
 "cloud_no_conflicts_descr" = "Die Daten auf dem Gerät und in der OsmAnd Cloud sind gleich.";

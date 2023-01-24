@@ -68,7 +68,7 @@
 "gpx_cannot_import" = "Ni mogoče uvoziti določene datoteke GPX";
 "gpx_export_title" = "Izvozi pot potovanja";
 "gpx_export_select_track" = "Izbor poti za izvoz";
-"gpx_start" = "Začni";
+"shared_string_control_start" = "Začni";
 "gpx_avg_elev" = "Povprečna višina";
 "track_continue_rec_q" = "Ali želite nadaljevati z beleženjem sledi?";
 "save_track_interval_globally" = "Interval beleženja";
@@ -89,7 +89,7 @@
 "map_settings_online" = "Spletni zemljevidi";
 "shared_string_transparency" = "Prosojnost";
 // Intro
-"intro_skip" = "Preskoči";
+"shared_string_skip" = "Preskoči";
 "intro_download" = "Prejem\nzemljevida";
 "intro_next" = "Naslenja";
 "intro_welcome" = "Dobrodošli v\nOsmAnd";
@@ -610,7 +610,7 @@
 "route_stops_before" = "%@ se zaustavi pred";
 "transport_routes" = "Poti";
 "logging_interval_navigation" = "Interval beleženja med navigacijo";
-"logging_min_distance" = "Najmanjša razdalja";
+"monitoring_min_distance" = "Najmanjša razdalja";
 "logging_min_distance_descr" = "Filter: najmanjša razdalja za beleženje nove točke";
 "menu_help" = "Pomoč";
 "actions" = "Dejanja";
@@ -670,7 +670,7 @@
 "daily" = "Dnevno";
 "osmand_live_weekly" = "Tedensko";
 "osmand_live_reports" = "Poročila";
-"osmand_live_upd_frequency" = "Pogostost posodabljanja";
+"update_frequency" = "Pogostost posodabljanja";
 "osmand_live_donations" = "Donacije";
 "osmand_live_donation_switch_title" = "Donacija skupnosti OpenStreetMap";
 "osmand_live_support_reg_title" = "Podpora regiji";
@@ -695,7 +695,7 @@
 "osm_modify_place" = "Spremeni mesto";
 "osm_poi_delete_title" = "Izbriši točko POI";
 "osm_edit_modified_poi" = "Spremenjena točka POI";
-"osm_target_deleted" = "Izbrisana točka POI";
+"osm_edit_deleted_poi" = "Izbrisana točka POI";
 "osm_target_created" = "Ustvarjena točka POI";
 "osm_confirm_delete" = "Ali želite izbrisati točko POI?";
 "osm_close_changeset" = "Zapri paket sprememb";
@@ -829,7 +829,7 @@
 "shared_string_off" = "Izključeno";
 "online_map" = "Spletni zemljevid";
 "osm_live_cancel_subscription" = "Prekliči naročnino";
-"quick_actions_show_dialog" = "Pokaži vmesno pogovorno okno";
+"quick_action_interim_dialog" = "Pokaži vmesno pogovorno okno";
 "map_settings_text_size" = "Velikost napisov";
 "gpx_descent" = "Spust";
 "purchase_unlim_title" = "Kupi - %@";
@@ -837,7 +837,7 @@
 "free_memory" = "Na voljo ješe %@";
 "map_styles" = "Slogi zemljevida";
 "toggle_nav" = "Začni/Končaj navigacijo";
-"prev_route" = "Predhodna pot";
+"previous_route" = "Predhodna pot";
 "gpx_slope" = "Naklon";
 "add_map_source" = "Dodaj vir zemljevida";
 "shared_string_retry" = "Poskusi znova";
@@ -850,7 +850,7 @@
 "route_parameters" = "Parametri poti";
 "quick_action_tags" = "Oznake";
 "osm_editing_lost_changes_descr" = "Vse neshranjene spremembe bodo izgubljene. Aliželite nadaljevati?";
-"change_map_overlay" = "Spremeni prekrivno plast zemljevida";
+"quick_action_map_overlay" = "Spremeni prekrivno plast zemljevida";
 "quick_action_name_str" = "Ime dejanja";
 "history" = "Zgodovina";
 "gpx_ascent" = "Vzpon";
@@ -867,7 +867,7 @@
 "product_desc_ext_wikivoyage" = "Krajevno shranjeni vodniki po najbolj zanimivih krajih sveta, prikazani v programu OsmAnd, tudi na mestih, kjer ni povezave z internetom.";
 "osm_note_action_field_descr" = "Sporočilo bo dodano v polje opombe.";
 "product_title_wikivoyage" = "Popotniški vodniki";
-"offline_vector_maps" = "Vektorski zemljevidi za delo brez povezave";
+"vector_data" = "Vektorski zemljevidi za delo brez povezave";
 "poi_opening_hours" = "Delovničas";
 "add_map_marker" = "Dodaj označbo na zemljevidu";
 "shared_string_filter" = "Filter";
@@ -886,7 +886,7 @@
 "map_settings_map_magnifier" = "Velikost zemljevida";
 "map_downloaded" = "Zemljevid je prejet";
 "add_poi" = "Dodaj točko POI";
-"my_places" = "Shranjene točke";
+"shared_string_my_places" = "Shranjene točke";
 "add_action" = "Dodaj dejanje";
 "gpx_alt_range" = "Obseg nadmorske višine";
 "quick_action_start_stop_nav_descr" = "Pritisnite gumb,če želite začeti ali končati navigacijo.";
@@ -1200,7 +1200,7 @@
 "app_mode_ufo" = "Štopanje NLP (brisača obvezna)";
 "open_wiki_online" = "Odpri prispevek na spletni strani";
 "app_mode_offroad" = "Terenska vožnja (po brezpotju)";
-"map_settings_base_transp" = "Prozornost osnovnega zemljevida";
+"map_transparency" = "Prozornost osnovnega zemljevida";
 "app_mode_shuttle_bus" = "Prevoz z minibusom";
 "allow_3d" = "Dovoljen 2.5D pogled";
 "base_profile_descr_public_transport" = "Za uporabo javnega prevoza";
@@ -1270,7 +1270,7 @@
 "copy_from_other_profile" = "Kopiraj iz drugega profila";
 "position_icon_at_rest" = "Ikona položaja v mirovanju";
 "shared_string_preparing" = "Poteka priprava ...";
-"min_speed" = "Najmanjša hitrost";
+"shared_string_min_speed" = "Najmanjša hitrost";
 "shared_string_finish" = "Cilj";
 "base_profile_descr_pedestrian" = "Za hojo, pohodništvo, tek ...";
 "default_speed_dialog_msg" = "Oceničas prihoda za neznane vrste cest in omeji hitrost na vseh cestah (lahko vpliva na načrtovanje poti)";
@@ -1290,9 +1290,9 @@
 "shared_string_profiles" = "Profili";
 "res_slope" = "Naklon";
 "create_profile_descr" = "Profil zasnujte na podlagi enega izmed osnovnih profilov, s katerimi so določene osnovne nastavitve, na primer privzet nabor gradnikov, enoti za hitrost in razdaljo. Osnovni profili, ki so privzeto na voljo so:";
-"edit_profile_list" = "Uredi seznam profilov";
+"reorder_profiles" = "Uredi seznam profilov";
 "public_transport_warning_title" = "Možnost navigacije z javnim prevozom je še preizkusna, zato je pričakovati netočnosti in napake.";
-"distance_indication" = "Kazalec smeri";
+"show_direction" = "Kazalec smeri";
 "avoid_road" = "Izogni se cesti";
 "icon" = "Ikona";
 "new_plugin_added" = "Dodan je nov vstavek";
@@ -1710,7 +1710,7 @@
 "mapillary_item" = "OsmAnd + Mapillary";
 "simulation_preview_mode_desc" = "Hitrost simulacije bo največja na ravnih odsekih in se bo upočasnila le na križiščih.";
 "complete_purchase" = "Dokončaj nakup";
-"res_source_sqlite" = "Datoteka SQLiteDB";
+"sqlite_db_file" = "Datoteka SQLiteDB";
 "navigate_point_format_MGRS" = "MGRS";
 "simulation_constant_mode_title" = "Fiksna hitrost";
 "rendering_attr_monorailRoutes_name" = "Proge enotirnihželeznic";
@@ -1733,7 +1733,7 @@
 "backup_error_size_is_exceeded" = "Največja velikost OsmAnd Cloud je presežena %@";
 "shared_string_start" = "Začni";
 "cloud_last_backup" = "Zadnja varnostna kopija";
-"menu" = "Meni";
+"shared_string_menu" = "Meni";
 "continue_with" = "Nadaljuj z %@";
 "cloud_description" = "Nikoli ne izgubi svojih podatkov. Preprosto varnostno kopirajte in obnovitev vseh podatkov.";
 "expired" = "Poteklo";

@@ -117,7 +117,7 @@
 "driving_region_automatic" = "Automatsko";
 "routing_attr_length_name" = "Limit dužine";
 "default_speed_setting_title" = "Podrazumevana brzina";
-"min_speed" = "Min. brzina";
+"shared_string_min_speed" = "Min. brzina";
 "max_speed" = "Max. speed";
 "road_speeds_descr" = "These parameters can affect the route calculation.";
 "road_min_speed_descr" = "Sets the minimum travel speed for all roads in the route. Raises priority for roads with recommended speeds less than the minimum.";
@@ -128,7 +128,7 @@
 "save_global_track_interval_descr" = "Choose logging interval for the general track recording (enabled via the GPX logging widget on the map).";
 "logging_interval_navigation" = "Interval beleženja za vreme navođenja";
 "logging_interval_navigation_descr" = "Choose logging interval for track recording during navigation";
-"logging_min_distance" = "Minimalni pomeraj";
+"monitoring_min_distance" = "Minimalni pomeraj";
 "logging_min_distance_descr" = "Filter: minimum distance to log a new point";
 "logging_accuracy" = "Tačnost beleženja";
 "logging_min_accuracy" = "Minimalna preciznost";
@@ -196,7 +196,7 @@
 // Dirrection appearance
 "one" = "Jedan";
 "two" = "Dva";
-"distance_indication" = "Prikaz udaljenosti";
+"show_direction" = "Prikaz udaljenosti";
 "arrows_on_map" = "Arrows on the map";
 "direction_lines" = "Direction lines";
 "active_markers" = "Broj aktivnih oznaka";
@@ -328,7 +328,7 @@
 "route_is_too_long_v2" = "This route may be too long to calculate. Please add intermediate destinations if no result is found within 10 minutes.";
 "navigation_over_track" = "Da započnem navođenje duž putanje\?";
 "use_displayed_track_for_navigation" = "Do you want to use displayed track for navigation?";
-"prev_route" = "Prethodni put";
+"previous_route" = "Prethodni put";
 "shared_string_ellipsis" = "…";
 "shared_string_select_on_map" = "Izaberi na karti";
 "selected_roads" = "Selected roads";
@@ -517,7 +517,7 @@
 "poi_overlay" = "POI Overlay";
 "poi_dialog_poi_type" = "Tip tačke od interesa";
 "my_favorites" = "My Favorites";
-"my_places" = "Moja mesta";
+"shared_string_my_places" = "Moja mesta";
 "fav_no_group" = "No group";
 "fav_add_new_group" = "Add new group";
 "select_group_descr" = "Select group or add a new one";
@@ -605,7 +605,7 @@
 "gpx_route_time" = "Route time";
 "gpx_uphldownhl" = "Uphills/Downhills";
 "gpx_average_speed" = "Prosečna brzina";
-"gpx_start" = "Počni";
+"shared_string_control_start" = "Počni";
 "gpx_avg_elev" = "Average elevation";
 "gpx_elev_range" = "Elevation range";
 "gpx_avg_altitude" = "Prosečna visina";
@@ -671,7 +671,7 @@
 "map_settings_offline" = "Styles for offline maps";
 "map_settings_online" = "Mrežne karte";
 "shared_string_transparency" = "Providnost";
-"map_settings_base_transp" = "Providnost osnovne karte";
+"map_transparency" = "Providnost osnovne karte";
 "map_settings_avail_lay" = "Available layers";
 "mapillary" = "Mapillary";
 "street_level_imagery" = "Slike na nivou ulice";
@@ -708,7 +708,7 @@
 "plugin_settings_descr" = "Plugin settings for the selected profile.";
 
 // Intro
-"intro_skip" = "Preskoči";
+"shared_string_skip" = "Preskoči";
 "intro_download" = "Download\nmap";
 "intro_next" = "Sledeće";
 "intro_welcome" = "Welcome to\nOsmAnd";
@@ -937,7 +937,7 @@
 "profile_appearance_descr" = "Icon, color, and name";
 "ui_customization" = "UI customization";
 "ui_customization_descr" = "Elementi Fioke, Kontekst meni";
-"edit_profile_list" = "Izmeni listu profila";
+"reorder_profiles" = "Izmeni listu profila";
 "enter_profile_name" = "Unesite ime profila";
 "select_color" = "Odaberite boju";
 "select_icon" = "Odaberite ikonicu";
@@ -1074,7 +1074,7 @@
 "osmand_live_weekly" = "Sedmično";
 "osmand_live_reports" = "Reports";
 "osmand_live_server_date" = "Last server update: %@";
-"osmand_live_upd_frequency" = "Učestalost ažuriranja";
+"update_frequency" = "Učestalost ažuriranja";
 "osmand_live_wifi_only" = "Update only via WiFi";
 "osmand_live_donation_header" = "Donation settings";
 "osmand_live_donations" = "Prilozi";
@@ -1137,7 +1137,7 @@
 "res_elliptic_mercator" = "Elliptic mercator";
 "res_pseudo_mercator" = "Pseudo-Merkator projekcija";
 "res_source_format" = "Source format";
-"res_source_sqlite" = "SQLiteDB fajl";
+"sqlite_db_file" = "SQLiteDB fajl";
 "res_source_one_per_tile" = "Jedan fajl po sličici";
 "res_zoom_levels_desc" = "This parameters will affect the map display when used as a map type or overlay/underlay.\n\nMap type: the map will be limited to the selected zooms.\n\nOverlay / Underlay: Zoom levels at which tiles will be visible. Upscale or downscale will occur above or below the set values.";
 "res_expire_time_desc" = "Expiration time in minutes. Cached tiles will be reloaded after specified time. Leave this field empty if you do not need to reload tiles for this source.\nOne day is 1440 minutes.\nOne week is 10 080 minutes.\n30 days are 43 200 minutes.";
@@ -1156,7 +1156,7 @@
 "shared_string_feet" = "stope";
 
 // Menu
-"menu" = "Meni";
+"shared_string_menu" = "Meni";
 "menu_my_places" = "Moja mesta";
 "menu_my_trips" = "My Tracks";
 "menu_feedback" = "Povratne informacije";
@@ -1202,7 +1202,7 @@
 "osm_modify_place" = "Modify place";
 "osm_poi_delete_title" = "Brisanje POI";
 "osm_edit_modified_poi" = "Izmenjene OSM tačke od interesa";
-"osm_target_deleted" = "Izbrisane OSM tačke od interesa";
+"osm_edit_deleted_poi" = "Izbrisane OSM tačke od interesa";
 "osm_target_created" = "OSM tačka od interesa je napravljena";
 "osm_note_created" = "Napravi belešku OSM-a";
 "osm_note_create" = "Create OSM Note";
@@ -1282,7 +1282,7 @@
 "quick_action_coordinates_widget_descr" = "Tapping this action button shows or hides the Coordinates widget.";
 "map_overlays" = "Slojevi iznad karte";
 "map_underlays" = "Slojevi ispod karte";
-"offline_vector_maps" = "Vektorske karte van mreže";
+"vector_data" = "Vektorske karte van mreže";
 "add_map_source" = "Dodaj izvor karte";
 "add_map_style" = "Add map style";
 "map_styles" = "Stilovi karte";
@@ -1309,7 +1309,7 @@
 "add_poi" = "Dodaj tačku od interesa";
 "change_map_style" = "Izmeni stil karte";
 "change_map_source" = "Izmeni izvor karte";
-"change_map_overlay" = "Izmeni sloj nad kartom";
+"quick_action_map_overlay" = "Izmeni sloj nad kartom";
 "change_map_underlay" = "Izmeni sloj ispod karte";
 "replace_destination" = "Zameni odredište";
 "add_destination" = "Add destination";
@@ -1346,7 +1346,7 @@
 "quick_action_screen_header" = "Screen %ld";
 "confirm_bulk_delete" = "Do you want to delete %ld items?";
 "quick_action_add_actions_descr" = "Add actions to access them quickly from the map.";
-"quick_actions_show_dialog" = "Prikaži dijalog međuvremena";
+"quick_action_interim_dialog" = "Prikaži dijalog međuvremena";
 "quick_action_dialog_descr" = "Turn on to show dialog before applying the action";
 "quick_action_template_name" = "Template name";
 "quick_action_name_footer" = "Ostavite prazno da se koristi adresa ili ime mesta.";

@@ -138,7 +138,7 @@ typedef enum
     // Init wizard
     _lbTitle.text = OALocalizedString(@"download_map");
     _lbDescription.text = OALocalizedString(@"first_usage_wizard_desc");
-    [_btnSkip setTitle:OALocalizedString(@"intro_skip") forState:UIControlStateNormal];
+    [_btnSkip setTitle:OALocalizedString(@"shared_string_skip") forState:UIControlStateNormal];
     
     // Init no location view
     _lbLocationNotFound.text = OALocalizedString(@"location_not_found");
@@ -284,7 +284,7 @@ typedef enum
 
 - (IBAction)skipPress:(id)sender
 {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"skip_map_downloading") message:OALocalizedString(@"skip_map_downloading_desc_ios") delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_cancel") otherButtonTitles:OALocalizedString(@"intro_skip"), OALocalizedString(@"shared_string_select"), nil];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"skip_map_downloading") message:OALocalizedString(@"skip_map_downloading_desc_ios") delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_cancel") otherButtonTitles:OALocalizedString(@"shared_string_skip"), OALocalizedString(@"shared_string_select"), nil];
     alert.tag = ALERT_SKIP;
     [alert show];
 }

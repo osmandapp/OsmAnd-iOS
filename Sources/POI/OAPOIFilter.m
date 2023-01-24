@@ -9,6 +9,7 @@
 #import "OAPOIFilter.h"
 #import "OAUtilities.h"
 #import "OAPOIType.h"
+#import "OAAppSettings.h"
 
 @implementation OAPOIFilter
 
@@ -50,6 +51,9 @@
 
 - (void)addPoiType:(OAPOIType *)poiType
 {
+    if ([[OAAppSettings sharedManager] isTypeForbidden:poiType.name])
+        return;
+
     if (!_poiTypes)
     {
         _poiTypes = @[poiType];

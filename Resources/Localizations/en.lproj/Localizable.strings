@@ -604,6 +604,7 @@
 "shared_string_uploaded" = "Uploaded";
 "shared_string_does_not_exist" = "Does not exist";
 "shared_string_legal" = "Legal";
+"shared_string_keep_active" = "Keep active";
 
 "restart" = "Restart";
 
@@ -2960,6 +2961,9 @@
 "co2_mission" = "CO2 emission";
 
 "uninstall_speed_cameras" = "Uninstall speed cameras";
+"speed_camera_pois" = "Speed camera POI’s";
+"speed_cameras_legal_descr" = "In some countries or regions, the use of speed camera warning apps is prohibited by law.\n\nYou need to make a choice depending on the law of your country.\n\nSelect %@ and you will receive alerts and warnings about speed cameras.\n\nSelect %@. All data related to speed cameras: alerts, notifications, POIs will be deleted until OsmAnd is completely reinstalled.";
+"speed_cameras_alert" = "Speed cameras alerts in some countries is prohibited by the law.";
 
 // Release Notes
 // instruction:

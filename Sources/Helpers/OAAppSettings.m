@@ -3403,6 +3403,7 @@
     OADayNightHelper *_dayNightHelper;
     
     NSObject *_settingsLock;
+    NSSet<NSString *> *_forbiddenTypes;
 }
 
 @synthesize settingShowMapRulet=_settingShowMapRulet, settingMapLanguageShowLocal=_settingMapLanguageShowLocal;
@@ -4976,6 +4977,19 @@
 - (void) setLastProfileModifiedTime:(long)timestamp mode:(OAApplicationMode *)mode
 {
     [[NSUserDefaults standardUserDefaults] setObject:@(timestamp) forKey:[NSString stringWithFormat:@"%@_%@", lastProfileSettingsModifiedTimeKey, mode.stringKey]];
+}
+
+- (void)setTypeForbidden:(NSSet<NSString *> *)forbiddenTypes
+{
+    _forbiddenTypes = forbiddenTypes;
+}
+
+- (BOOL)isTypeForbidden:(NSString *)typeName
+{
+    if ([_forbiddenTypes containsObject:typeName])
+        return YES;
+
+    return [_forbiddenTypes containsObject:typeName];
 }
 
 @end

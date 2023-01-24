@@ -368,22 +368,25 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
             }
         }
 
-        _currentPOICategory = [[OAPOICategory alloc] initWithName:name];
-        _currentPOICategory.tag = tag;
-        _currentPOICategory.top = top;
-        _currentPOICategory.nonEditableOsm = nonEditable;
-        
-        if (poiAdditionalCategories.count > 0)
-            [_currentCategoryPoiAdditionalsCategories addObjectsFromArray:poiAdditionalCategories];
-        if (excludedPoiAdditionalCategories.count > 0)
+        if (![[OAAppSettings sharedManager] isTypeForbidden:name])
         {
-            [_currentPOICategory addExcludedPoiAdditionalCategories:excludedPoiAdditionalCategories];
-            [_currentCategoryPoiAdditionalsCategories minusSet:[NSSet setWithArray:_currentPOICategory.excludedPoiAdditionalCategories]];
-        }
-        
-        if (![_pCategories containsObject:_currentPOICategory])
-        {
-            [_pCategories addObject:_currentPOICategory];
+            _currentPOICategory = [[OAPOICategory alloc] initWithName:name];
+            _currentPOICategory.tag = tag;
+            _currentPOICategory.top = top;
+            _currentPOICategory.nonEditableOsm = nonEditable;
+            
+            if (poiAdditionalCategories.count > 0)
+                [_currentCategoryPoiAdditionalsCategories addObjectsFromArray:poiAdditionalCategories];
+            if (excludedPoiAdditionalCategories.count > 0)
+            {
+                [_currentPOICategory addExcludedPoiAdditionalCategories:excludedPoiAdditionalCategories];
+                [_currentCategoryPoiAdditionalsCategories minusSet:[NSSet setWithArray:_currentPOICategory.excludedPoiAdditionalCategories]];
+            }
+            
+            if (![_pCategories containsObject:_currentPOICategory])
+            {
+                [_pCategories addObject:_currentPOICategory];
+            }
         }
     }
     else if (0 == strncmp((const char *)localname, kPoiFilterElementName, kPoiFilterElementNameLength))
@@ -434,27 +437,30 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
                 excludedPoiAdditionalCategories = [value componentsSeparatedByString:@","];
             }
         }
-        
-        _currentPOIFilter = [[OAPOIFilter alloc] initWithName:name category:_currentPOICategory];
-        _currentPOIFilter.top = top;
-        
-        [_currentFilterPoiAdditionalsCategories addObjectsFromArray:[_currentCategoryPoiAdditionalsCategories allObjects]];
-        if (poiAdditionalCategories.count > 0)
-            [_currentFilterPoiAdditionalsCategories addObjectsFromArray:poiAdditionalCategories];
-        if (excludedPoiAdditionalCategories.count > 0)
-        {
-            [_currentPOIFilter addExcludedPoiAdditionalCategories:excludedPoiAdditionalCategories];
-            [_currentFilterPoiAdditionalsCategories minusSet:[NSSet setWithArray:_currentPOIFilter.excludedPoiAdditionalCategories]];
-        }
 
-        if (_currentPOICategory)
+        if (![[OAAppSettings sharedManager] isTypeForbidden:name])
         {
-            [_currentPOICategory addPoiFilter:_currentPOIFilter];
-        }
-
-        if (![_pFilters containsObject:_currentPOIFilter])
-        {
-            [_pFilters addObject:_currentPOIFilter];
+            _currentPOIFilter = [[OAPOIFilter alloc] initWithName:name category:_currentPOICategory];
+            _currentPOIFilter.top = top;
+            
+            [_currentFilterPoiAdditionalsCategories addObjectsFromArray:[_currentCategoryPoiAdditionalsCategories allObjects]];
+            if (poiAdditionalCategories.count > 0)
+                [_currentFilterPoiAdditionalsCategories addObjectsFromArray:poiAdditionalCategories];
+            if (excludedPoiAdditionalCategories.count > 0)
+            {
+                [_currentPOIFilter addExcludedPoiAdditionalCategories:excludedPoiAdditionalCategories];
+                [_currentFilterPoiAdditionalsCategories minusSet:[NSSet setWithArray:_currentPOIFilter.excludedPoiAdditionalCategories]];
+            }
+            
+            if (_currentPOICategory)
+            {
+                [_currentPOICategory addPoiFilter:_currentPOIFilter];
+            }
+            
+            if (![_pFilters containsObject:_currentPOIFilter])
+            {
+                [_pFilters addObject:_currentPOIFilter];
+            }
         }
     }
     else if (0 == strncmp((const char *)localname, kPoiTypeElementName, kPoiTypeElementNameLength) ||
@@ -509,24 +515,26 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
         }
         
         OAPOIType *baseType = [self parsePoiAdditional:localname attributeCount:attributeCount attributes:attributes lang:nil baseType:nil];
-        if (lang)
+        if (![[OAAppSettings sharedManager] isTypeForbidden:baseType.name])
         {
-            for (NSString *lng in [[OAAppSettings sharedManager] mapLanguages])
+            if (lang)
             {
-                [self parsePoiAdditional:localname attributeCount:attributeCount attributes:attributes lang:lng baseType:baseType];
+                for (NSString *lng in [[OAAppSettings sharedManager] mapLanguages])
+                {
+                    [self parsePoiAdditional:localname attributeCount:attributeCount attributes:attributes lang:lng baseType:baseType];
+                }
+                [self parsePoiAdditional:localname attributeCount:attributeCount attributes:attributes lang:@"en" baseType:nil];
             }
-            [self parsePoiAdditional:localname attributeCount:attributeCount attributes:attributes lang:@"en" baseType:nil];
-        }
-        
-        if (_currentPOIAdditionalCategory)
-        {
-            NSMutableArray<OAPOIType *> *categoryAdditionals = [_categoryPoiAdditionalMap objectForKey:_currentPOIAdditionalCategory];
-            if (!categoryAdditionals)
+            if (_currentPOIAdditionalCategory)
             {
-                categoryAdditionals = [NSMutableArray array];
-                [_categoryPoiAdditionalMap setObject:categoryAdditionals forKey:_currentPOIAdditionalCategory];
+                NSMutableArray<OAPOIType *> *categoryAdditionals = [_categoryPoiAdditionalMap objectForKey:_currentPOIAdditionalCategory];
+                if (!categoryAdditionals)
+                {
+                    categoryAdditionals = [NSMutableArray array];
+                    [_categoryPoiAdditionalMap setObject:categoryAdditionals forKey:_currentPOIAdditionalCategory];
+                }
+                [categoryAdditionals addObject:baseType];
             }
-            [categoryAdditionals addObject:baseType];
         }
     }
 }
@@ -546,7 +554,8 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
     {
         if (_currentCategoryPoiAdditionalsCategories.count > 0)
         {
-            [_abstractTypeAdditionalCategories setObject:[NSMutableSet setWithSet:_currentCategoryPoiAdditionalsCategories] forKey:_currentPOICategory];
+            if (_currentPOICategory && ![[OAAppSettings sharedManager] isTypeForbidden:_currentPOICategory.name])
+                [_abstractTypeAdditionalCategories setObject:[NSMutableSet setWithSet:_currentCategoryPoiAdditionalsCategories] forKey:_currentPOICategory];
             [_currentCategoryPoiAdditionalsCategories removeAllObjects];
         }
         _currentPOICategory = nil;
@@ -756,49 +765,53 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
         [_deprecatedTags setObject:deprecatedOf forKey:name];
         return nil;
     }
-    
-    OAPOIType *poiType = [[OAPOIType alloc] initWithName:name category:_currentPOICategory];
-    poiType.filter = _currentPOIFilter;
-    poiType.tag = tag ? tag : _currentPOICategory.tag;
-    poiType.value = value;
-    poiType.tag2 = tag2;
-    poiType.value2 = value2;
-    poiType.nonEditableOsm = nonEditable;
-    poiType.top = top;
-    poiType.editTag = editTag;
-    poiType.editValue = editValue;
-    poiType.reference = reference;
-    poiType.mapOnly = mapOnly;
-    poiType.order = order;
-    poiType.isText = isText;
 
-    [_pTypes addObject:poiType];
-    if (!reference)
-        [_pTypesByName setObject:poiType forKey:poiType.name];
-
-    [_currentTypePoiAdditionalsCategories addObjectsFromArray:[_currentCategoryPoiAdditionalsCategories allObjects]];
-    [_currentTypePoiAdditionalsCategories addObjectsFromArray:[_currentFilterPoiAdditionalsCategories allObjects]];
-    if (poiAdditionalCategories.count > 0)
-        [_currentTypePoiAdditionalsCategories addObjectsFromArray:poiAdditionalCategories];
-    if (excludedPoiAdditionalCategories.count > 0)
+    if (![[OAAppSettings sharedManager] isTypeForbidden:name])
     {
-        [poiType addExcludedPoiAdditionalCategories:excludedPoiAdditionalCategories];
-        [_currentTypePoiAdditionalsCategories minusSet:[NSSet setWithArray:poiType.excludedPoiAdditionalCategories]];
+        OAPOIType *poiType = [[OAPOIType alloc] initWithName:name category:_currentPOICategory];
+        poiType.filter = _currentPOIFilter;
+        poiType.tag = tag ? tag : _currentPOICategory.tag;
+        poiType.value = value;
+        poiType.tag2 = tag2;
+        poiType.value2 = value2;
+        poiType.nonEditableOsm = nonEditable;
+        poiType.top = top;
+        poiType.editTag = editTag;
+        poiType.editValue = editValue;
+        poiType.reference = reference;
+        poiType.mapOnly = mapOnly;
+        poiType.order = order;
+        poiType.isText = isText;
+        
+        [_pTypes addObject:poiType];
+        if (!reference)
+            [_pTypesByName setObject:poiType forKey:poiType.name];
+        
+        [_currentTypePoiAdditionalsCategories addObjectsFromArray:[_currentCategoryPoiAdditionalsCategories allObjects]];
+        [_currentTypePoiAdditionalsCategories addObjectsFromArray:[_currentFilterPoiAdditionalsCategories allObjects]];
+        if (poiAdditionalCategories.count > 0)
+            [_currentTypePoiAdditionalsCategories addObjectsFromArray:poiAdditionalCategories];
+        if (excludedPoiAdditionalCategories.count > 0)
+        {
+            [poiType addExcludedPoiAdditionalCategories:excludedPoiAdditionalCategories];
+            [_currentTypePoiAdditionalsCategories minusSet:[NSSet setWithArray:poiType.excludedPoiAdditionalCategories]];
+        }
+        
+        // Category
+        if (_currentPOICategory)
+        {
+            [_currentPOICategory addPoiType:poiType];
+        }
+        
+        // Filter
+        if (_currentPOIFilter)
+        {
+            [_currentPOIFilter addPoiType:poiType];
+        }
+        
+        return poiType;
     }
-
-    // Category
-    if (_currentPOICategory)
-    {
-        [_currentPOICategory addPoiType:poiType];
-    }
-    
-    // Filter
-    if (_currentPOIFilter)
-    {
-        [_currentPOIFilter addPoiType:poiType];
-    }
-    
-    return poiType;
+    return nil;
 }
 
 - (OAPOIType *)parsePoiAdditional:(const xmlChar *)localname attributeCount:(int)attributeCount
@@ -947,45 +960,49 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
     {
         tag = [tag stringByAppendingString:[NSString stringWithFormat:@":%@", lang]];
     }
-    
-    OAPOIType *poiType = [[OAPOIType alloc] initWithName:name category:_currentPOICategory];
-    poiType.filter = _currentPOIFilter;
-    poiType.tag = _currentPOICategory.tag;
-    poiType.baseLangType = baseType;
-    poiType.lang = lang;
-    poiType.tag = tag ? tag : _currentPOICategory.tag;
-    poiType.value = value;
-    poiType.tag2 = tag2;
-    poiType.value2 = value2;
-    poiType.editTag = editTag;
-    poiType.editValue = editValue;
-    poiType.nonEditableOsm = nonEditable;
-    poiType.reference = reference;
-    poiType.mapOnly = mapOnly;
-    poiType.order = order;
-    poiType.isText = isText;
-    poiType.filterOnly = filterOnly;
-    poiType.top = top;
-    [poiType setAdditional:_currentPOIType ? _currentPOIType : (_currentPOIFilter ? _currentPOIFilter : _currentPOICategory)];
-    poiType.poiAdditionalCategory = _currentPOIAdditionalCategory;
-    
-    if (isText)
-        [_textPoiAdditionals addObject:poiType];
-    
-    if (_currentPOIType)
+
+    if (![[OAAppSettings sharedManager] isTypeForbidden:name])
     {
-        [_currentPOIType addPoiAdditional:poiType];
+        OAPOIType *poiType = [[OAPOIType alloc] initWithName:name category:_currentPOICategory];
+        poiType.filter = _currentPOIFilter;
+        poiType.tag = _currentPOICategory.tag;
+        poiType.baseLangType = baseType;
+        poiType.lang = lang;
+        poiType.tag = tag ? tag : _currentPOICategory.tag;
+        poiType.value = value;
+        poiType.tag2 = tag2;
+        poiType.value2 = value2;
+        poiType.editTag = editTag;
+        poiType.editValue = editValue;
+        poiType.nonEditableOsm = nonEditable;
+        poiType.reference = reference;
+        poiType.mapOnly = mapOnly;
+        poiType.order = order;
+        poiType.isText = isText;
+        poiType.filterOnly = filterOnly;
+        poiType.top = top;
+        [poiType setAdditional:_currentPOIType ? _currentPOIType : (_currentPOIFilter ? _currentPOIFilter : _currentPOICategory)];
+        poiType.poiAdditionalCategory = _currentPOIAdditionalCategory;
+        
+        if (isText)
+            [_textPoiAdditionals addObject:poiType];
+        
+        if (_currentPOIType)
+        {
+            [_currentPOIType addPoiAdditional:poiType];
+        }
+        else if (_currentPOIFilter)
+        {
+            [_currentPOIFilter addPoiAdditional:poiType];
+        }
+        else if (_currentPOICategory)
+        {
+            [_currentPOICategory addPoiAdditional:poiType];
+        }
+        
+        return poiType;
     }
-    else if (_currentPOIFilter)
-    {
-        [_currentPOIFilter addPoiAdditional:poiType];
-    }
-    else if (_currentPOICategory)
-    {
-        [_currentPOICategory addPoiAdditional:poiType];
-    }
-    
-    return poiType;
+    return nil;
 }
 
 @end

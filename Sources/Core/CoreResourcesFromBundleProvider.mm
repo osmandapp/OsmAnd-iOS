@@ -14,6 +14,8 @@
 #import <CoreFoundation/CoreFoundation.h>
 #import <Foundation/Foundation.h>
 
+#import "OAAppSettings.h"
+#import "OAPOIHelper.h"
 #import "OALog.h"
 
 CoreResourcesFromBundleProvider::CoreResourcesFromBundleProvider()
@@ -286,6 +288,9 @@ NSString* CoreResourcesFromBundleProvider::getResourcePath(const QString& name,
         OALog(@"Unrecognized resource name '%@'", name.toNSString());
         return nil;
     }
+
+    if ([resourceName hasSuffix:SPEED_CAMERA] && [[OAAppSettings sharedManager] isTypeForbidden:SPEED_CAMERA])
+        return nil;
 
     NSString* resourcePath = [[NSBundle mainBundle] pathForResource:resourceName
                                                              ofType:resourceType

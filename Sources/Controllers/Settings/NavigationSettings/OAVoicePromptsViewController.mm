@@ -11,10 +11,12 @@
 #import "OAIconTitleValueCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OASettingsTableViewCell.h"
+#import "OACardTableViewCell.h"
 #import "OANavigationLanguageViewController.h"
 #import "OASpeedLimitToleranceViewController.h"
 #import "OARepeatNavigationInstructionsViewController.h"
 #import "OAArrivalAnnouncementViewController.h"
+#import "OAUninstallSpeedCamerasViewController.h"
 #import "OAAppSettings.h"
 #import "OAApplicationMode.h"
 #import "OARoutingHelper.h"
@@ -25,7 +27,7 @@
 
 #include <OsmAndCore/Utilities.h>
 
-@interface OAVoicePromptsViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface OAVoicePromptsViewController () <UITableViewDelegate, UITableViewDataSource, OAUninstallSpeedCamerasDelegate>
 
 @end
 
@@ -157,13 +159,24 @@
         @"value" : value,
         @"key" : @"speedLimitTolerance",
     }];
-    
-    [fourthSection addObject:@{
-        @"type" : [OASwitchTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"speak_cameras"),
-        @"value" : _settings.speakCameras,
-        @"key" : @"speedCameras",
-    }];
+
+    if (![_settings.speedCamerasUninstalled get])
+    {
+        [fourthSection addObject:@{
+            @"type" : [OASwitchTableViewCell getCellIdentifier],
+            @"title" : OALocalizedString(@"speak_cameras"),
+            @"value" : _settings.speakCameras,
+            @"key" : @"speedCameras",
+        }];
+        [fourthSection addObject:@{
+            @"type" : [OACardTableViewCell getCellIdentifier],
+            @"title" : OALocalizedString(@"speed_cameras_alert"),
+            @"buttonTitle" : OALocalizedString(@"shared_string_read_more"),
+            @"icon" : @"ic_custom_alert_color",
+            @"key" : @"speed_cameras_read_more"
+        }];
+    }
+
     [fourthSection addObject:@{
         @"type" : [OASwitchTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"speak_tunnels"),
@@ -233,7 +246,9 @@
         {
             BOOL hasIcon = [item.allKeys containsObject:@"icon"];
 
-            cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + (hasIcon ? kPaddingToLeftOfContentWithIcon : kPaddingOnSideOfContent), 0., 0.);
+            CGFloat leftInset = [item[@"key"] isEqualToString:@"speedCameras"] ? CGFLOAT_MAX
+                : [OAUtilities getLeftMargin] + (hasIcon ? kPaddingToLeftOfContentWithIcon : kPaddingOnSideOfContent);
+            cell.separatorInset = UIEdgeInsetsMake(0., leftInset, 0., 0.);
             cell.titleLabel.text = item[@"title"];
 
             [cell leftIconVisibility:hasIcon];
@@ -302,6 +317,27 @@
         }
         return cell;
     }
+    else if ([cellType isEqualToString:[OACardTableViewCell getCellIdentifier]])
+    {
+        OACardTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OACardTableViewCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OACardTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OACardTableViewCell *) nib[0];
+            [cell topBackgroundMarginVisibility:NO];
+        }
+        if (cell)
+        {
+            cell.titleLabel.text = item[@"title"];
+            cell.leftIconView.image = [UIImage imageNamed:item[@"icon"]];
+
+            [cell.button setTitle:item[@"buttonTitle"] forState:UIControlStateNormal];
+            cell.button.tag = indexPath.section << 10 | indexPath.row;
+            [cell.button removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
+            [cell.button addTarget:self action:@selector(onButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        }
+        return cell;
+    }
     return nil;
 }
 
@@ -360,7 +396,7 @@
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
-#pragma mark - Switch
+#pragma mark - Selectors
 
 - (void) updateTableView
 {
@@ -406,6 +442,31 @@
     }
     if (self.delegate)
         [self.delegate onSettingsChanged];
+}
+
+
+- (void)onButtonPressed:(id)sender
+{
+    UIButton *button = (UIButton *) sender;
+    if (button)
+    {
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:button.tag & 0x3FF inSection:button.tag >> 10];
+        NSDictionary *item = _data[indexPath.section][indexPath.row];
+        if ([item[@"key"] isEqualToString:@"speed_cameras_read_more"])
+        {
+            OAUninstallSpeedCamerasViewController *speedCamerasViewController = [[OAUninstallSpeedCamerasViewController alloc] init];
+            speedCamerasViewController.delegate = self;
+            [self presentViewController:speedCamerasViewController animated:YES completion:nil];
+        }
+    }
+}
+
+#pragma mark - OAUninstallSpeedCamerasDelegate
+
+- (void)onUninstallSpeedCameras
+{
+    [self setupView];
+    [self.tableView reloadData];
 }
 
 @end

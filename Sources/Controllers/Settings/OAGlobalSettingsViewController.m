@@ -7,6 +7,7 @@
 //
 
 #import "OAGlobalSettingsViewController.h"
+#import "OAUninstallSpeedCamerasViewController.h"
 #import "OAAppSettings.h"
 #import "OASimpleTableViewCell.h"
 #import "OARightIconTableViewCell.h"
@@ -19,7 +20,7 @@
 #import "OAColors.h"
 #import "OASizes.h"
 
-@interface OAGlobalSettingsViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface OAGlobalSettingsViewController () <UITableViewDelegate, UITableViewDataSource, OAUninstallSpeedCamerasDelegate>
 
 @end
 
@@ -138,14 +139,17 @@
             }];
             [_data addSection:dialogsSection];
 
-            OATableSectionData *speedCameraSection = [OATableSectionData sectionData];
-            [speedCameraSection setHeaderText:OALocalizedString(@"shared_string_legal")];
-            [speedCameraSection addRowFromDictionary:@{
-                kCellKeyKey : @"uninstall_speed_cameras",
-                kCellTitleKey : OALocalizedString(@"uninstall_speed_cameras"),
-                kCellTypeKey : [OASimpleTableViewCell getCellIdentifier],
-            }];
-            [_data addSection:speedCameraSection];
+            if (![_settings.speedCamerasUninstalled get])
+            {
+                OATableSectionData *speedCameraSection = [OATableSectionData sectionData];
+                [speedCameraSection setHeaderText:OALocalizedString(@"shared_string_legal")];
+                [speedCameraSection addRowFromDictionary:@{
+                    kCellKeyKey : @"uninstall_speed_cameras",
+                    kCellTitleKey : OALocalizedString(@"uninstall_speed_cameras"),
+                    kCellTypeKey : [OASimpleTableViewCell getCellIdentifier],
+                }];
+                [_data addSection:speedCameraSection];
+            }
 
             break;
         }
@@ -394,15 +398,29 @@
     {
         case EOAGlobalSettingsMain:
         {
-            OAGlobalSettingsViewController *settingsViewController = nil;
+            UIViewController *settingsViewController = nil;
             if ([item.key isEqualToString:@"settings_preset"])
                 settingsViewController = [[OAGlobalSettingsViewController alloc] initWithSettingsType:EOADefaultProfile];
             else if ([item.key isEqualToString:@"carplay_profile"])
                 settingsViewController = [[OAGlobalSettingsViewController alloc] initWithSettingsType:EOACarplayProfile];
             else if ([item.key isEqualToString:@"dialogs_and_notif"])
                 settingsViewController = [[OAGlobalSettingsViewController alloc] initWithSettingsType:EOADialogsAndNotifications];
+
             if (settingsViewController)
+            {
                 [self.navigationController pushViewController:settingsViewController animated:YES];
+            }
+            else
+            {
+                if ([item.key isEqualToString:@"uninstall_speed_cameras"])
+                {
+                    settingsViewController = [[OAUninstallSpeedCamerasViewController alloc] init];
+                    ((OAUninstallSpeedCamerasViewController *) settingsViewController).delegate = self;
+                }
+
+                if (settingsViewController)
+                    [self presentViewController:settingsViewController animated:YES completion:nil];
+            }
             break;
         }
         case EOADefaultProfile:
@@ -478,6 +496,14 @@
             [self updateTableView];
         }
     }
+}
+
+#pragma mark - OAUninstallSpeedCamerasDelegate
+
+- (void)onUninstallSpeedCameras
+{
+    [self generateData];
+    [self.tableView reloadData];
 }
 
 @end

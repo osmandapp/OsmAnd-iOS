@@ -1135,4 +1135,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 - (long) getLastProfileSettingsModifiedTime:(OAApplicationMode *)mode;
 - (void) setLastProfileModifiedTime:(long)timestamp mode:(OAApplicationMode *)mode;
 
+- (void)setTypeForbidden:(NSSet<NSString *> *)forbiddenTypes;
+- (BOOL)isTypeForbidden:(NSString *)typeName;
+
 @end

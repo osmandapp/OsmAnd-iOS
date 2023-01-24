@@ -600,20 +600,20 @@
 
 - (void) calculateAlarms:(OARouteCalculationResult *)route array:(NSMutableArray<OALocationPointWrapper *> *)array mode:(OAApplicationMode *)mode
 {
-    OAAlarmInfo *prevSpeedCam = nil;
     OAAppSettings *settings = [OAAppSettings sharedManager];
+    if (![settings.showRoutingAlarms get:mode])
+        return;
+
+    OAAlarmInfo *prevSpeedCam = nil;
     for (OAAlarmInfo *i in route.alarmInfo)
     {
         if (i.type == AIT_SPEED_CAMERA)
         {
-            if (([settings.showRoutingAlarms get:mode] && [settings.showCameras get:mode]) || [settings.speakCameras get:mode])
+            if ([settings.showCameras get:mode] || [settings.speakCameras get:mode])
             {
                 OALocationPointWrapper *lw = [[OALocationPointWrapper alloc] initWithRouteCalculationResult:route type:LPW_ALARMS point:i deviationDistance:0 routeIndex:i.locationIndex];
-                if (prevSpeedCam && [[[CLLocation alloc] initWithLatitude:prevSpeedCam.coordinate.latitude longitude:prevSpeedCam.coordinate.longitude] distanceFromLocation:[[CLLocation alloc] initWithLatitude:i.coordinate.latitude longitude:i.coordinate.longitude]] < [self.class DISTANCE_IGNORE_DOUBLE_SPEEDCAMS])
-                {
-                    // ignore double speed cams
-                }
-                else
+                // ignore double speed cams
+                if (!prevSpeedCam || [[[CLLocation alloc] initWithLatitude:prevSpeedCam.coordinate.latitude longitude:prevSpeedCam.coordinate.longitude] distanceFromLocation:[[CLLocation alloc] initWithLatitude:i.coordinate.latitude longitude:i.coordinate.longitude]] >= [self.class DISTANCE_IGNORE_DOUBLE_SPEEDCAMS])
                 {
                     [lw setAnnounce:[settings.speakCameras get:mode]];
                     [array addObject:lw];
@@ -623,7 +623,7 @@
         }
         else
         {
-            if (([settings.showRoutingAlarms get:mode] && [settings.showTrafficWarnings get:mode]) || [settings.speakTrafficWarnings get:mode])
+            if ([settings.showTrafficWarnings get:mode] || [settings.speakTrafficWarnings get:mode])
             {
                 OALocationPointWrapper *lw = [[OALocationPointWrapper alloc] initWithRouteCalculationResult:route type:LPW_ALARMS point:i deviationDistance:0 routeIndex:i.locationIndex];
                 [lw setAnnounce:[settings.speakTrafficWarnings get:mode]];

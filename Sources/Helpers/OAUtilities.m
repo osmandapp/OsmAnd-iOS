@@ -2119,6 +2119,45 @@ static const double d180PI = 180.0 / M_PI_2;
     return [self setupTableHeaderViewWithText:text font:font tintColor:tintColor icon:[UIImage imageNamed:iconName] iconFrameSize:34.];
 }
 
++ (UIView *) setupTableHeaderViewWithAttributedText:(NSAttributedString *)attributedText topCenterIconName:(NSString *)iconName iconSize:(CGFloat)iconSize
+{
+    BOOL hasIcon = iconName != nil && iconName.length > 0 && iconSize > 0;
+    BOOL hasText = attributedText != nil && attributedText.length > 0;
+
+    UIImageView *imageView;
+    if (hasIcon)
+    {
+        imageView = [[UIImageView alloc] initWithFrame:CGRectMake(DeviceScreenWidth / 2 - iconSize / 2, 8., iconSize, iconSize)];
+        imageView.image = [UIImage imageNamed:iconName];
+    }
+
+    UILabel *label;
+    if (hasText)
+    {
+        CGSize textSize = [self calculateTextBounds:attributedText width:DeviceScreenWidth - ([OAUtilities getLeftMargin] + 20) * 2];
+        label = [[UILabel alloc] initWithFrame:CGRectMake(
+            DeviceScreenWidth / 2 - textSize.width / 2,
+            (imageView ? imageView.frame.origin.y + imageView.frame.size.height + 34. : 4.),
+            textSize.width,
+            textSize.height)];
+        label.attributedText = attributedText;
+    }
+
+    CGFloat headerHeight = 0.;
+    if (imageView && !label)
+        headerHeight = imageView.frame.origin.y + imageView.frame.size.height + 8.;
+    else
+        headerHeight = label.frame.origin.y + label.frame.size.height + 4.;
+    
+    UIView *tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0., 0., DeviceScreenWidth, headerHeight)];
+    if (imageView)
+        [tableHeaderView addSubview:imageView];
+    if (label)
+        [tableHeaderView addSubview:label];
+
+    return tableHeaderView;
+}
+
 + (CGFloat) heightForHeaderViewText:(NSString *)text width:(CGFloat)width font:(UIFont *)font lineSpacing:(CGFloat)lineSpacing
 {
     NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];

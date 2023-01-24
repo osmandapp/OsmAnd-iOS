@@ -28,6 +28,7 @@
 #import "OATargetPoint.h"
 #import "OAWaypointHelper.h"
 #import "OAAddWaypointBottomSheetViewController.h"
+#import "OAUninstallSpeedCamerasViewController.h"
 
 #define START_TRACK_POINT_MY_LOCATION_RADIUS_METERS 50 * 1000
 
@@ -107,8 +108,12 @@
         [[OARootViewController instance].mapPanel showRouteInfo];
 
     if ([targets hasTooLongDistanceToNavigate])
-    {
         [_app showToastMessage:OALocalizedString(@"route_is_too_long_v2")];
+
+    if (![_settings.speedCamerasAlertShowed get])
+    {
+        OAUninstallSpeedCamerasViewController *speedCamerasViewController = [[OAUninstallSpeedCamerasViewController alloc] init];
+        [[OARootViewController instance] presentViewController:speedCamerasViewController animated:YES completion:nil];
     }
 }
 

@@ -155,12 +155,12 @@
 
 - (IBAction)backImageButtonPressed:(id)sender
 {
-    [self.navigationController popViewControllerAnimated:YES];
+    [self dismissViewController];
 }
 
 - (IBAction)backButtonPressed:(id)sender
 {
-    [self.navigationController popViewControllerAnimated:YES];
+    [self dismissViewController];
 }
 
 - (IBAction)additionalNavBarButtonPressed:(id)sender

@@ -35,4 +35,19 @@
         _location = CLLocationCoordinate2DMake(stop->location.latitude, stop->location.longitude);
 }
 
+- (BOOL)isEqual:(OATransportStop *)object
+{
+    if (self == object)
+        return YES;
+    if (self == nil && object == nil)
+        return YES;
+    if (self.stop == object.stop)
+        return YES;
+    BOOL equal = NO;
+    equal |= self.stop->id == object.stop->id;
+    equal |= self.stop->location == object.stop->location;
+    equal |= self.stop->localizedName == object.stop->localizedName;
+    return equal;
+}
+
 @end

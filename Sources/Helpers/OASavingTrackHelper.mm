@@ -619,7 +619,8 @@
                 record = false;
             }
             float precision = [settings.saveTrackPrecision get];
-            if(precision > 0 && (location.horizontalAccuracy < 0 || location.horizontalAccuracy > precision))
+            CLLocationAccuracy hdop = location.horizontalAccuracy;
+            if(isnan(hdop) || hdop <= 0 || (precision > 0 && hdop > precision))
             {
                 record = false;
             }
@@ -631,7 +632,7 @@
             
             if (record)
             {
-                [self insertDataLat:location.coordinate.latitude lon:location.coordinate.longitude alt:location.altitude speed:location.speed hdop:location.horizontalAccuracy time:[location.timestamp timeIntervalSince1970] heading:headingNew];
+                [self insertDataLat:location.coordinate.latitude lon:location.coordinate.longitude alt:location.altitude speed:location.speed hdop:hdop time:[location.timestamp timeIntervalSince1970] heading:headingNew];
                 
                 [[_app trackRecordingObservable] notifyEvent];
             }

@@ -63,17 +63,6 @@
     [self setupView];
 }
 
-- (NSString *)addSpaceToValue:(NSString *)descr
-{
-    NSString *editedDescr;
-    NSRange range = [descr rangeOfCharacterFromSet:[NSCharacterSet letterCharacterSet]];
-    if (range.location != NSNotFound && descr.length > 1)
-        editedDescr = [[[descr substringToIndex:range.location] stringByAppendingString:@" "] stringByAppendingString:[descr substringFromIndex:range.location]];
-    else
-        editedDescr = descr;
-    return editedDescr;
-}
-
 - (void) setupView
 {
     NSMutableArray *tableData = [NSMutableArray array];
@@ -124,18 +113,15 @@
                     double vl = floorf(p.possibleValues[i] * 100 + 0.5) / 100;
                     [possibleValues addObject:@(vl)];
                     NSString *descr = [NSString stringWithUTF8String:p.possibleValueDescriptions[i].c_str()];
-                    NSString *editedDescr = [self addSpaceToValue:descr];
-                    [valueDescriptions addObject:editedDescr];
+                    [valueDescriptions addObject:descr];
                     if (vl == d)
-                    {
                         index = i;
-                    }
                 }
 
                 if (index == 0)
                     value = OALocalizedString([paramId isEqualToString:@"motor_type"] ? @"not_selected" : @"shared_string_none");
                 else if (index != -1)
-                    value = [self addSpaceToValue:[NSString stringWithUTF8String:p.possibleValueDescriptions[index].c_str()]];
+                    value = [NSString stringWithUTF8String:p.possibleValueDescriptions[index].c_str()];
                 else
                     value = [NSString stringWithFormat:@"%@ %@", value, [paramId isEqualToString:@"weight"] ? OALocalizedString(@"units_t") : OALocalizedString(@"units_m")];
                 [isMotorType ? exraParametersArr : parametersArr addObject:

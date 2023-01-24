@@ -9,12 +9,9 @@
 #import "OASettingsModalPresentationViewController.h"
 #import "Localization.h"
 #import "OAColors.h"
+#import "OASizes.h"
 
 #define kSidePadding 16
-
-@interface OASettingsModalPresentationViewController()
-
-@end
 
 @implementation OASettingsModalPresentationViewController
 
@@ -31,12 +28,26 @@
 - (void) viewDidLoad
 {
     [super viewDidLoad];
+    [self setupNavBarHeight];
+}
+
+- (void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        [self setupNavBarHeight];
+    } completion:nil];
 }
 
 - (void) applyLocalization
 {
     [super applyLocalization];
     _subtitleLabel.text = _appMode.toHumanString;
+}
+
+- (void) setupNavBarHeight
+{
+    self.navBarHeightConstraint.constant = [self isModal] ? [OAUtilities isLandscape] ? defaultNavBarHeight : modalNavBarHeight : defaultNavBarHeight;
 }
 
 - (IBAction) cancelButtonPressed:(id)sender

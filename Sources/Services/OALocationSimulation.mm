@@ -132,7 +132,7 @@
                 {
                     speed = (meters / intervalTime * coeff);
                 }
-                if (current.horizontalAccuracy < 0 || isnan(current.horizontalAccuracy) || (realistic && speed < 10))
+                if (current.horizontalAccuracy <= 0 || isnan(current.horizontalAccuracy) || (realistic && speed < 10))
                 {
                     accuracy = 5;
                 }

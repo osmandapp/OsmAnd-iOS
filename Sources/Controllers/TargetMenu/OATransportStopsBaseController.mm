@@ -16,6 +16,10 @@
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Search/TransportStopsInAreaSearch.h>
 #include <OsmAndCore/ObfDataInterface.h>
+#include <OsmAndCore/Data/TransportStopExit.h>
+
+#define ROUNDING_ERROR 3
+#define SHOW_SUBWAY_STOPS_FROM_ENTRANCES_RADIUS_METERS 400
 
 @implementation OATransportStopsBaseController
 
@@ -56,6 +60,74 @@
     return filteredRoutes;
 }
 
+- (void)processTransportStop:(const std::shared_ptr<OsmAnd::ObfDataInterface> &)dataInterface isSubwayEntrance:(BOOL)isSubwayEntrance localRoutes:(NSMutableArray<OATransportStopRoute *> *)localRoutes nearbyRoutes:(NSMutableArray<OATransportStopRoute *> *)nearbyRoutes prefLang:(NSString *)prefLang stops:(NSMutableArray<OATransportStop *> *)stops transliterate:(BOOL)transliterate {
+    OATransportStop *localStop = nil;
+    NSMutableArray<OATransportStop *> *nearbyStops = [NSMutableArray array];
+    for (OATransportStop *stop in stops)
+    {
+        if (localStop != nil && [stop isEqual:self.transportStop])
+        {
+            localStop = stop;
+        }
+        else
+        {
+            [nearbyStops addObject:stop];
+        }
+    }
+    localStop = localStop ? localStop : self.transportStop;
+    
+    if (localStop)
+    {
+        auto dist = OsmAnd::Utilities::distance(localStop.stop->location.longitude, localStop.stop->location.latitude, self.poi.longitude, self.poi.latitude);
+        [self addRoutes:localRoutes dataInterface:dataInterface s:localStop.stop lang:prefLang transliterate:transliterate dist:dist isSubwayEntrance:isSubwayEntrance];
+    }
+    
+    for (OATransportStop *stop in nearbyStops)
+    {
+        auto dist = OsmAnd::Utilities::distance(stop.stop->location.longitude, stop.stop->location.latitude, self.poi.longitude, self.poi.latitude);
+        [self addRoutes:nearbyRoutes dataInterface:dataInterface s:stop.stop lang:prefLang transliterate:transliterate dist:dist isSubwayEntrance:isSubwayEntrance];
+    }
+}
+
+- (void)processPoiTransportStop:(const std::shared_ptr<OsmAnd::ObfDataInterface> &)dataInterface isSubwayEntrance:(BOOL)isSubwayEntrance localRoutes:(NSMutableArray<OATransportStopRoute *> *)localRoutes nearbyRoutes:(NSMutableArray<OATransportStopRoute *> *)nearbyRoutes prefLang:(NSString *)prefLang stops:(NSMutableArray<OATransportStop *> *)stops transliterate:(BOOL)transliterate
+{
+    const auto amenityLocation = OsmAnd::LatLon(self.poi.latitude, self.poi.longitude);
+    NSMutableArray<OATransportStop *> *localStops = [NSMutableArray array];
+    NSMutableArray<OATransportStop *> *nearbyStops = [NSMutableArray array];
+    for (OATransportStop *stop in stops)
+    {
+        const auto stopExits = stop.stop->exits;
+        BOOL stopOnSameExitAdded = NO;
+        for (const auto exit : stopExits)
+        {
+            const auto loc = exit->location;
+            if (OsmAnd::Utilities::distance(loc, amenityLocation) < ROUNDING_ERROR)
+            {
+                stopOnSameExitAdded = YES;
+                [localStops addObject:stop];
+                break;
+            }
+        }
+        if (!stopOnSameExitAdded && OsmAnd::Utilities::distance(stop.stop->location, amenityLocation)
+            <= SHOW_SUBWAY_STOPS_FROM_ENTRANCES_RADIUS_METERS)
+        {
+            [nearbyStops addObject:stop];
+        }
+    }
+    [self sortTransportStopsExits:amenityLocation stops:localStops];
+    [self sortTransportStopsExits:amenityLocation stops:nearbyStops];
+    for (OATransportStop *stop in nearbyStops)
+    {
+        auto dist = OsmAnd::Utilities::distance(stop.stop->location.longitude, stop.stop->location.latitude, self.poi.longitude, self.poi.latitude);
+        [self addRoutes:nearbyRoutes dataInterface:dataInterface s:stop.stop lang:prefLang transliterate:transliterate dist:dist isSubwayEntrance:isSubwayEntrance];
+    }
+    for (OATransportStop *stop in localStops)
+    {
+        auto dist = OsmAnd::Utilities::distance(stop.stop->location.longitude, stop.stop->location.latitude, self.poi.longitude, self.poi.latitude);
+        [self addRoutes:localRoutes dataInterface:dataInterface s:stop.stop lang:prefLang transliterate:transliterate dist:dist isSubwayEntrance:isSubwayEntrance];
+    }
+}
+
 - (void) processTransportStop
 {
     NSMutableArray<OATransportStopRoute *> *localRoutes = [NSMutableArray array];
@@ -79,14 +151,24 @@
     const auto dataInterface = obfsCollection->obtainDataInterface(&tbbox31, OsmAnd::MinZoomLevel, OsmAnd::MaxZoomLevel, OsmAnd::ObfDataTypesMask().set(OsmAnd::ObfDataType::Transport));
 
     const auto search = std::make_shared<const OsmAnd::TransportStopsInAreaSearch>(obfsCollection);
+    NSMutableArray<OATransportStop *> *stops = [NSMutableArray array];
     search->performSearch(*searchCriteria,
-                          [self, localRoutes, nearbyRoutes, dataInterface, prefLang, transliterate, isSubwayEntrance]
+                          [stops]
                           (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
                           {
-                              const auto transportStop = ((OsmAnd::TransportStopsInAreaSearch::ResultEntry&)resultEntry).transportStop;
-                              auto dist = OsmAnd::Utilities::distance(transportStop->location.longitude, transportStop->location.latitude, self.poi.longitude, self.poi.latitude);
-                              [self addRoutes:localRoutes nearbyRoutes:nearbyRoutes dataInterface:dataInterface s:transportStop lang:prefLang transliterate:transliterate dist:dist isSubwayEntrance:isSubwayEntrance];
+                                OATransportStop *stop = [[OATransportStop alloc] init];
+                                stop.stop = ((OsmAnd::TransportStopsInAreaSearch::ResultEntry&)resultEntry).transportStop;
+                                [stops addObject:stop];
                           });
+    
+    if (self.transportStop && !isSubwayEntrance)
+    {
+        [self processTransportStop:dataInterface isSubwayEntrance:isSubwayEntrance localRoutes:localRoutes nearbyRoutes:nearbyRoutes prefLang:prefLang stops:stops transliterate:transliterate];
+    }
+    if (self.poi)
+    {
+        [self processPoiTransportStop:dataInterface isSubwayEntrance:isSubwayEntrance localRoutes:localRoutes nearbyRoutes:nearbyRoutes prefLang:prefLang stops:stops transliterate:transliterate];
+    }
     
     NSComparisonResult(^comparator)(OATransportStopRoute* _Nonnull o1, OATransportStopRoute* _Nonnull o2) = ^NSComparisonResult(OATransportStopRoute* _Nonnull o1, OATransportStopRoute* _Nonnull o2){
         if (o1.distance != o2.distance)
@@ -107,7 +189,24 @@
     self.nearbyRoutes = nearbyRoutes;
 }
 
-- (void) addRoutes:(NSMutableArray<OATransportStopRoute *> *)localRoutes nearbyRoutes:(NSMutableArray<OATransportStopRoute *> *)nearbyRoutes dataInterface:(std::shared_ptr<OsmAnd::ObfDataInterface>)dataInterface s:(std::shared_ptr<const OsmAnd::TransportStop>)s lang:(NSString *)lang transliterate:(BOOL)transliterate dist:(int)dist isSubwayEntrance:(BOOL)isSubwayEntrance
+- (void) sortTransportStopsExits:(OsmAnd::LatLon)latLon stops:(NSMutableArray<OATransportStop *> *)stops
+{
+    for (OATransportStop *transportStop in stops)
+    {
+        for (const auto &exit : transportStop.stop->exits)
+        {
+            int distance = (int) OsmAnd::Utilities::distance(latLon, exit->location);
+            if (transportStop.distance > distance) {
+                transportStop.distance = distance;
+            }
+        }
+    }
+    [stops sortUsingComparator:^NSComparisonResult(OATransportStop * _Nonnull obj1, OATransportStop * _Nonnull obj2) {
+        return [@(obj1.distance) compare:@(obj2.distance)];
+    }];
+}
+
+- (void) addRoutes:(NSMutableArray<OATransportStopRoute *> *)routes dataInterface:(std::shared_ptr<OsmAnd::ObfDataInterface>)dataInterface s:(std::shared_ptr<const OsmAnd::TransportStop>)s lang:(NSString *)lang transliterate:(BOOL)transliterate dist:(int)dist isSubwayEntrance:(BOOL)isSubwayEntrance
 {
     QList< std::shared_ptr<const OsmAnd::TransportRoute> > rts;
     auto stringTable = std::make_shared<OsmAnd::ObfSectionInfo::StringTable>();
@@ -135,10 +234,7 @@
             }
             
             r.distance = dist;
-            if (r.refStop && r.refStop->getName("", false) == r.stop->getName("", false))
-                [localRoutes addObject:r];
-            else
-                [nearbyRoutes addObject:r];
+            [routes addObject:r];
         }
     }
 }

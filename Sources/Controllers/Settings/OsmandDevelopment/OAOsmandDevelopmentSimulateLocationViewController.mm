@@ -97,7 +97,7 @@ CGFloat const kDefaultHeaderHeight = 40.0;
 - (void) applyLocalization
 {
     [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"simulate_routing");
+    self.titleLabel.text = OALocalizedString(@"simulate_your_location");
     _headerDescription = OALocalizedString(@"simulate_your_location_gpx_descr");
 }
 

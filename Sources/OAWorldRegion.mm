@@ -397,7 +397,7 @@
     regionsLookupTable[australiaAndOceaniaRegion.regionId] = australiaAndOceaniaRegion;
 
     OAWorldRegion *centralAmericaRegion = [OAWorldRegion createRegionAs:OsmAnd::WorldRegions::CentralAmericaRegionId
-                                                      withLocalizedName:OALocalizedString(@"region_central_america")
+                                                      withLocalizedName:OALocalizedString(@"index_name_central_america")
                                                                    from:loadedWorldRegions];
     [entireWorld addSubregion:centralAmericaRegion];
     regionsLookupTable[centralAmericaRegion.regionId] = centralAmericaRegion;

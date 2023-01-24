@@ -98,7 +98,7 @@ static OASubscriptionState *EXPIRED;
 + (OASubscriptionState *) PAUSED
 {
     if (!PAUSED)
-        PAUSED = [[OASubscriptionState alloc] initWithStateStr:@"paused" localizedName:OALocalizedString(@"paused")];
+        PAUSED = [[OASubscriptionState alloc] initWithStateStr:@"paused" localizedName:OALocalizedString(@"shared_string_paused")];
     return PAUSED;
 }
 

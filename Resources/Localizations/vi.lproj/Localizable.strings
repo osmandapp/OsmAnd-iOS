@@ -81,7 +81,7 @@
 "avoid_roads_msg" = "You can trigger an alternative route by selecting roads to avoid";
 "shared_string_go" = "Go";
 "shared_string_info" = "Info";
-"simulate_routing" = "Simulate your position";
+"simulate_your_location" = "Simulate your position";
 "simulate_navigation" = "Simulate navigation";
 "simulate_routing_descr" = "Simulate your position using a calculated route";
 "select_avoid_descr" = "Select roads you want to avoid during navigation. You can either select a road on the map or choose a type from the list below.";
@@ -129,7 +129,7 @@
 "logging_interval_navigation_descr" = "Choose logging interval for track recording during navigation";
 "monitoring_min_distance" = "Minimum displacement";
 "logging_min_distance_descr" = "Filter: minimum distance to log a new point";
-"logging_accuracy" = "Logging accuracy";
+"save_track_logging_accuracy" = "Logging accuracy";
 "monitoring_min_accuracy" = "Minimum accuracy";
 "logging_min_accuracy_descr" = "Filter: no logging unless the accuracy is reached";
 "logging_min_speed" = "Minimum speed";
@@ -194,7 +194,7 @@
 
 // Dirrection appearance
 "one" = "One";
-"two" = "Two";
+"shared_string_two" = "Two";
 "show_direction" = "Distance indication";
 "arrows_on_map" = "Arrows on the map";
 "direction_lines" = "Direction lines";
@@ -277,7 +277,7 @@
 "recalculate_route" = "Recalculate route in case of deviation";
 "recalculate_wrong_dir" = "Recalculate route in case of reverse direction";
 "recalculate_route_distance_promo" = "The route will be recalculated if the distance from the route to the current location is more than selected value.";
-"select_distance_for_recalculation" = "Select the distance after which the route will be recalculated.";
+"select_distance_route_will_recalc" = "Select the distance after which the route will be recalculated.";
 "speed_limit_tolerance_descr" = "Select the speed limit tolerance margin above which you will receive a voice warning.";
 "only_manually" = "Only manually";
 "instructions_repeat" = "Tap \"Next turn\" widget to repeat instructions";
@@ -303,7 +303,7 @@
 "impassable_road" = "Avoid roads";
 "road_speeds" = "Road speeds";
 "avoid_transport_type" = "Avoid transport types";
-"consider_limitations_param" = "Consider temporary limitations";
+"temporary_conditional_routing" = "Consider temporary limitations";
 "impassable_road_desc" = "Select roads you want to avoid during navigation";
 "interrupt_music_descr" = "Fully pause any music during voice prompts (not just lower its volume)";
 "interrupt_music" = "Pause music";
@@ -498,7 +498,7 @@
 "preview_of_selected_zoom_levels" = "Preview of selected zoom levels";
 "select_online_source" = "Select source";
 "online_sources" = "Online sources";
-"size_of_downloaded_data" = "The big difference between zoom levels can increase the size of the downloaded data.";
+"zoom_levels_difference_description" = "The big difference between zoom levels can increase the size of the downloaded data.";
 "use_of_downloaded_map" = "You can now use this map offline as main map source or as overlay/underlay layer";
 "map_update_warning" = "Do you want to reload tile data from the Internet?";
 
@@ -646,20 +646,20 @@
 "gpx_distance_points" = "Distance (points)";
 "gpx_max_speed" = "Max speed";
 "gpx_speed" = "Speed";
-"gpx_slope" = "Slope";
+"shared_string_slope" = "Slope";
 "stats_select_graph_data" = "Select graph data";
 
 // Map settings
 "m_style_car" = "Ô tô";
 "poi_filter_public_transport" = "Public transport";
-"map_settings_map" = "Map";
+"shared_string_map" = "Map";
 "layer_amenity_label" = "Point Labels (POI, Favorites)";
 "map_settings_show" = "Hiện trên bản đồ";
 "map_settings_type" = "Map type";
 "map_mode" = "Map mode";
 "map_settings_map_magnifier" = "Map magnifier";
-"map_settings_text_size" = "Text size";
-"map_settings_night" = "Đêm";
+"text_size" = "Text size";
+"daynight_mode_night" = "Đêm";
 "map_settings_style" = "Map style";
 "map_settings_overunder" = "Overlay / Underlay";
 "map_settings_over" = "Overlay";
@@ -683,7 +683,7 @@
 "map_settings_add_maps_slopes" = "Additional maps are needed to view slopes on the map";
 "shared_string_legend" = "Legend";
 "map_settings_show_slider_map" = "Show slider on the map";
-"map_settings_add_online_source" = "Add online source";
+"add_online_source" = "Add online source";
 "map_settings_hide_polygons" = "Hide polygons";
 "map_settings_hide_polygons_desc" = "This option affects only OsmAnd Offline vector maps";
 "map_settings_add_maps_desc" = "You can add new maps via link, or by importing SQLite files.";
@@ -991,9 +991,9 @@
 "point_num" = "Point %d";
 "points_count" = "Points:";
 "route_between_points" = "Route between points";
-"save_changes" = "Lưu thay đổi";
+"profile_alert_need_save_title" = "Lưu thay đổi";
 "save_new_track" = "Save as new track";
-"add_to_track" = "Add to a track";
+"add_to_a_track" = "Add to a track";
 "move_point" = "Move point";
 "move_point_descr" = "Move map to change the position of this point.";
 "add_before" = "Add points before";
@@ -1084,7 +1084,7 @@
 "osmand_live_public_name" = "Enter your public name";
 "osmand_live_subscription_canceled" = "You have cancelled OsmAnd Live Subscription";
 "osmand_live_cancel_descr" = "Renew the subscription to continue using the full functionality:";
-"osmand_live_update_now" = "Update now";
+"update_now" = "Update now";
 "osmand_live_updates_size" = "Downloaded updates size";
 "osmand_live_deleted_object" = "Deleted object";
 "res_search_world" = "Search worldwide";
@@ -1116,7 +1116,7 @@
 "shared_string_details" = "Details";
 "res_type" = "Loại";
 "res_unknown" = "Unknown";
-"res_size" = "Size";
+"shared_string_size" = "Size";
 "res_created_on" = "Created on";
 "res_update_all" = "Update all";
 "res_updates_no_space" = "Not enough space to install %d update(s). %@ is needed. Please free up some space.";
@@ -1132,7 +1132,7 @@
 "res_expire_time" = "Expire time";
 "res_mercator" = "Mercator Projection";
 "res_elliptic_mercator" = "Elliptic mercator";
-"res_pseudo_mercator" = "Pseudo-Mercator projection";
+"pseudo_mercator_projection" = "Pseudo-Mercator projection";
 "res_source_format" = "Source format";
 "sqlite_db_file" = "SQLiteDB file";
 "one_image_per_tile" = "One image file per tile";
@@ -1144,7 +1144,7 @@
 "res_expire_warning" = "Expiration time should be a number between 0 and 10000000";
 "res_zoom_invalid_value" = "Zoom values should be in range 1 - 22";
 "res_offlineSQL_URL_warning" = "Not supported for this map type";
-"res_online_source_cache_alert" = "Applying these changes will clear the cached data for this tile source";
+"clear_tiles_warning" = "Applying these changes will clear the cached data for this tile source";
 "welmode_download_maps" = "Download maps";
 "srtm_unit_format" = "Contour lines unit format";
 "srtm_download_single_help_message" = "Please select the needed format. You will need to re-download the file to change the format.";
@@ -1157,7 +1157,7 @@
 "shared_string_my_places" = "My Places";
 "menu_my_trips" = "My Tracks";
 "menu_feedback" = "Feedback";
-"menu_help" = "Help";
+"shared_string_help" = "Help";
 
 // OSM Editing actions
 "opening_changeset" = "Mở các sửa đổi…";
@@ -1167,7 +1167,7 @@
 "shared_string_loading" = "Loading…";
 "osm_upload_failed_title" = "Upload failed";
 "osm_upload_failed_descr" = "Please check your login details and Internet connection and try again.";
-"osm_editing_lost_changes_title" = "Exit without saving?";
+"exit_without_saving" = "Exit without saving?";
 "osm_editing_lost_changes_descr" = "Any unsaved changes will be lost. Continue?";
 "osm_upload_no_internet" = "Please check your Internet connection and try again.";
 "osm_delete_confirmation_descr" = "Are you sure you want to delete this POI?";
@@ -1177,7 +1177,7 @@
 "osn_bug_name" = "OSM Note";
 "osm_created" = "Created";
 "poi_remove_success" = "Đã xóa địa điểm thành công";
-"osm_modified" = "Modified";
+"shared_string_modified" = "Modified";
 "osm_reopened" = "Reopened";
 "osm_name" = "OpenStreetMap username";
 "osm_pass" = "OpenStreetMap password";
@@ -1189,7 +1189,7 @@
 "osm_around_the_clock" = "Around the clock (24/7)";
 "osm_opens_at" = "Opens at:";
 "osm_closes_at" = "Closes at:";
-"osm_editing_contact_info" = "Contact info";
+"contact_info" = "Contact info";
 "map_widget_top_text" = "Street name";
 "osm_building_num" = "Building number";
 "phone" = "Điện thoại";
@@ -1221,7 +1221,7 @@
 "osm_note_reopen" = "Reopen";
 "osm_edits_offline_layer" = "OSM Edits/Notes (offline)";
 "osm_notes_online_layer" = "OSM Notes (online)";
-"osm_edits_basic" = "Basic";
+"tab_title_basic" = "Basic";
 "osm_edits_advanced" = "Advanced";
 "osm_edits_all" = "All edits";
 "osm_edits_poi" = "POI edits";
@@ -1256,7 +1256,7 @@
 "shared_string_reload" = "Reload";
 "shared_string_show_more" = "Show more";
 "mapil_reload_cache" = "Reload tiles to see the newest data";
-"shared_string_filter" = "Bộ lọc";
+"filter_current_poiButton" = "Bộ lọc";
 "mapil_filter_user_descr" = "Filter images by user";
 "mapil_filter_date" = "Filter images by date";
 "mapil_usernames" = "Usernames";
@@ -1283,9 +1283,9 @@
 "add_map_source" = "Add map source";
 "add_map_style" = "Add map style";
 "map_styles" = "Map styles";
-"add_action" = "Add action";
+"quick_action_new_action" = "Add action";
 "unsupported_items" = "Unsupported items";
-"create_items" = "Create items";
+"quick_action_add_create_items" = "Create items";
 "configure_map" = "Configure map";
 "map_look_descr" = "Map appearance";
 "add_map_marker" = "Add map marker";
@@ -1303,11 +1303,11 @@
 "add_osm_note" = "Add OSM note";
 "toggle_online_notes" = "Toggle OSM notes";
 "toggle_local_edits" = "Toggle local OSM edits";
-"add_poi" = "Add POI";
+"quick_action_add_poi" = "Add POI";
 "change_map_style" = "Change map style";
-"change_map_source" = "Change map source";
+"quick_action_map_source" = "Change map source";
 "quick_action_map_overlay" = "Change map overlay";
-"change_map_underlay" = "Change map underlay";
+"quick_action_map_underlay" = "Change map underlay";
 "replace_destination" = "Replace destination";
 "add_destination" = "Add destination";
 "add_start" = "Add starting point";
@@ -1353,9 +1353,9 @@
 "quick_action_show_poi_descr" = "Add one or more POI categories to be displayed on the map.";
 "quick_action_fill_params_alert" = "Please fill out the parameters first";
 "quick_action_dialog" = "Dialog";
-"edit_action" = "Edit action";
+"quick_action_edit_action" = "Edit action";
 "quick_action_add_tag" = "Add tag";
-"quick_action_tags" = "Tags";
+"gpx_tags_txt" = "Tags";
 "quick_action_get_info" = "Get info";
 "quick_action_enter_message" = "Enter message";
 "quick_action_bug_descr" = "This message is included in the comment field.";
@@ -1424,7 +1424,7 @@
 "edit_osm_note" = "Edit OSM Note";
 "osm_alert_title" = "Phạm";
 "osb_comment_dialog_message" = "Nội dung";
-"osm_alert_button_ok" = "Create note";
+"osn_add_dialog_title" = "Create note";
 "modify_poi" = "Modify the POI information";
 "actions" = "Actions";
 "time_limited" = "Time limited";
@@ -1433,7 +1433,7 @@
 "add_notification_calendar" = "Add notification to Calendar";
 "parking_time_limited" = "Parking time limited to";
 "time_left" = "left";
-"time_overdue" = "overdue";
+"osmand_parking_overdue" = "overdue";
 "cannot_add_marker" = "Cannot add Parking";
 "cannot_add_marker_desc" = "Please remove one direction at least and retry";
 "cannot_add_destination" = "Cannot add Direction";
@@ -1444,7 +1444,7 @@
 "units_nm" = "nmi";
 "units_km_h" = "km/h";
 "units_mph" = "mph";
-"units_hour" = "h";
+"int_hour" = "h";
 "units_min" = "phút";
 "units_sec" = "sec";
 "units_sec_short" = "s";
@@ -1461,7 +1461,7 @@
 "help_map_viewing" = "Map viewing";
 "help_search" = "Map search";
 "help_trip_planning" = "Lập kế hoạch cho một chuyến đi";
-"help_nav_profiles" = "Navigation profiles";
+"navigation_profiles_item" = "Navigation profiles";
 "help_purchases" = "OsmAnd purchases";
 "help_osmand_live" = "Subscription - OsmAnd Live";
 "help_travel" = "Travel (Wikipedia & Wikivoyage)";
@@ -1509,7 +1509,7 @@
 "loc_access_denied_desc" = "Access to location service has been denied";
 // Colors
 "col_gray" = "Gray";
-"col_magenta" = "Magenta";
+"shared_string_color_magenta" = "Magenta";
 // GPX colors
 
 // World Regions
@@ -1517,7 +1517,7 @@
 "index_name_africa" = "Africa";
 "index_name_asia" = "Asia";
 "index_name_oceania" = "Australia and Oceania";
-"region_central_america" = "Central America";
+"index_name_central_america" = "Central America";
 "region_europe" = "Europe";
 "index_name_north_america" = "North America";
 "region_russia" = "Russia";
@@ -1577,7 +1577,7 @@
 "product_title_northamerica" = "North America";
 "product_desc_northamerica" = "Unlimited map downloads for North America";
 "product_desc_northamerica_short" = "North America region maps";
-"product_title_russia" = "Russia";
+"index_name_russia" = "Russia";
 "product_desc_russia" = "Unlimited map downloads for Russia";
 "product_desc_russia_short" = "Maps of Russia regions";
 "product_title_southamerica" = "South America";
@@ -1622,7 +1622,7 @@
 "download_wikipedia_maps" = "Wikipedia";
 "shared_string_hillshade" = "Hillshade";
 "res_slope" = "Slope";
-"res_standard" = "Standard map";
+"download_regular_maps" = "Standard map";
 "select_language" = "Select language";
 "language_short" = "Lang";
 "open_url" = "Open page in browser";
@@ -1630,7 +1630,7 @@
 "wpt_remove_q" = "Remove waypoint?";
 "gpx_select_track" = "Select track";
 "gpx_curr_new_track" = "Current track";
-"gpx_dir_arrows" = "Direction arrows";
+"gpx_direction_arrows" = "Direction arrows";
 "gpx_split_interval" = "Split interval";
 "gpx_split_interval_descr" = "Select the interval at which marks with distance or time on the track will be displayed.";
 "gpx_join_gaps" = "Join gaps";
@@ -1646,7 +1646,7 @@
 "duplicate_track" = "Duplicate track";
 "enter_name" = "Enter name";
 "not_selected" = "Chưa được chọn";
-"language" = "Language";
+"shared_string_language" = "Language";
 "you_searching" = "You are searching";
 "from_location" = "away";
 "show_alt_in_drive" = "Show altitude in Drive mode";
@@ -1665,13 +1665,13 @@
 "public_transport_warning_title" = "Public transport navigation is currently in beta testing, expect errors and inaccuracies.";
 "public_transport_warning_descr_blog" = "Read more about OsmAnd routing in our blog.";
 "public_transport_empty_warning_title" = "Unfortunately, OsmAnd could not find a route for your settings.";
-"public_transport_empty_warning_descr" = "Try changing the settings.";
+"public_transport_try_change_settings" = "Try changing the settings.";
 "total" = "Total";
 "walk" = "Walk";
 "board_at" = "Board at";
 "exit_at" = "Exit at";
 "by_transport_type" = "By %@";
-"num_stops" = "Dừng";
+"transport_stops" = "Dừng";
 "total_time" = "Total time";
 "moving_time" = "Moving time";
 "change_group" = "Change group";
@@ -1688,7 +1688,7 @@
 "shared_string_overview" = "Overview";
 "activity" = "Activity";
 "gpx_cancel_route_q" = "Do you want to cancel this route?";
-"gpx_deactivated" = "Sao lưu";
+"local_indexes_cat_backup" = "Sao lưu";
 "gpx_trip_groups" = "Track groups";
 "gpx_group_select" = "Group Select";
 "shared_string_show_all" = "Show all";
@@ -1801,7 +1801,7 @@
 "search_poi_types_descr" = "You can combine POI types from different categories.";
 "email_example_hint" = "user@example.com";
 "shared_string_required" = "Required";
-"shared_string_account" = "Account";
+"login_account" = "Account";
 "shared_string_account_add" = "Add account";
 "shared_string_email" = "Email";
 "shared_string_password" = "Mật khẩu";
@@ -1813,9 +1813,9 @@
 "edit_filter_delete_dialog_title" = "Delete selected filter?";
 "apply_filters" = "Apply filters";
 "filter_poi_hint" = "Filter by name";
-"shared_string_category" = "Category";
+"rendering_value_category_name" = "Category";
 "poi_category_and_type" = "Category and POI Type";
-"poi_opening_hours" = "Giờ mở cửa";
+"opening_hours" = "Giờ mở cửa";
 "poi_select_category" = "Select category";
 "poi_select_type" = "Select type";
 "shared_a_z" = "A - Z";

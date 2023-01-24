@@ -124,7 +124,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
             self.titleLabel.text = OALocalizedString(@"plan_route_open_existing_track");
             break;
         case EOAAddToATrack:
-            self.titleLabel.text = OALocalizedString(@"add_to_track");
+            self.titleLabel.text = OALocalizedString(@"add_to_a_track");
             break;
         case EOAFollowTrack:
             self.titleLabel.text = OALocalizedString(@"follow_track");
@@ -168,7 +168,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     
     [existingTracksSection addObject:@{
         @"type" : [OASegmentTableViewCell getCellIdentifier],
-        @"title0" : OALocalizedString(@"osm_modified"),
+        @"title0" : OALocalizedString(@"shared_string_modified"),
         @"title1" : OALocalizedString(@"shared_a_z"),
         @"title2" : OALocalizedString(@"shared_z_a"),
         @"key" : @"segment_control"

@@ -107,7 +107,7 @@
     }];
     [firstSection addObject:@{
         @"type" : [OAIconTitleValueCell getCellIdentifier],
-        @"title" : OALocalizedString(@"language"),
+        @"title" : OALocalizedString(@"shared_string_language"),
         @"value" : selectedLanguage,
         @"icon" : @"ic_custom_map_languge",
         @"isOn" : @NO,

@@ -87,7 +87,7 @@
 
     [arr addObject:@{
         @"type" : [OATitleIconRoundCell getCellIdentifier],
-        @"title" : OALocalizedString(@"gpx_slope"),
+        @"title" : OALocalizedString(@"shared_string_slope"),
         @"img" : @"ic_custom_ascent",
         @"mode" : @(EOARouteStatisticsModeSlope),
         @"round_bottom" : @(NO),
@@ -105,7 +105,7 @@
 
     [arr addObject:@{
             @"type" : [OATitleIconRoundCell getCellIdentifier],
-            @"title" : [NSString stringWithFormat:@"%@/%@", OALocalizedString(@"map_widget_altitude"), OALocalizedString(@"gpx_slope")],
+            @"title" : [NSString stringWithFormat:@"%@/%@", OALocalizedString(@"map_widget_altitude"), OALocalizedString(@"shared_string_slope")],
             @"img" : @"ic_custom_altitude_and_slope",
             @"mode" : @(EOARouteStatisticsModeAltitudeSlope),
             @"round_bottom" : @(NO),

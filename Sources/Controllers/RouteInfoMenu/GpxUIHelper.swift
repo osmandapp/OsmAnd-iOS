@@ -22,7 +22,7 @@ import Charts.Swift
             case .SPEED:
                 return OAUtilities.getLocalizedString("gpx_speed");
             case .SLOPE:
-                return OAUtilities.getLocalizedString("gpx_slope");
+                return OAUtilities.getLocalizedString("shared_string_slope");
         }
     }
     

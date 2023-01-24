@@ -312,7 +312,7 @@
         [parametersArr addObject:
         @{
             @"key" : @"temp_limitation",
-            @"title" : OALocalizedString(@"consider_limitations_param"),
+            @"title" : OALocalizedString(@"temporary_conditional_routing"),
             @"icon" : @"ic_custom_alert",
             @"value" : @([_settings.enableTimeConditionalRouting get:self.appMode]),
             @"type" : [OASwitchTableViewCell getCellIdentifier] }

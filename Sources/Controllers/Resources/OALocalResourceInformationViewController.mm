@@ -143,7 +143,7 @@
     [tValues addObject:isOnlineSql ? OALocalizedString(@"online_raster_map") : OALocalizedString(@"offline_raster_map")];
     
     // Size
-    [tKeys addObject:OALocalizedString(@"res_size")];
+    [tKeys addObject:OALocalizedString(@"shared_string_size")];
     [tValues addObject:[NSByteCountFormatter stringFromByteCount:item.size countStyle:NSByteCountFormatterCountStyleFile]];
     
     // Timestamp
@@ -186,7 +186,7 @@
     [tKeys addObject:OALocalizedString(@"res_type")];
     [tValues addObject:[OASQLiteTileSource isOnlineTileSource:item.path] ? OALocalizedString(@"online_raster_map") : OALocalizedString(@"offline_raster_map")];
     
-    [tKeys addObject:OALocalizedString(@"res_size")];
+    [tKeys addObject:OALocalizedString(@"shared_string_size")];
     [tValues addObject:[NSByteCountFormatter stringFromByteCount:item.size countStyle:NSByteCountFormatterCountStyleFile]];
     
     NSError *error;
@@ -226,7 +226,7 @@
     [tValues addObject:OALocalizedString(@"online_map")];
     
     // Size
-    [tKeys addObject:OALocalizedString(@"res_size")];
+    [tKeys addObject:OALocalizedString(@"shared_string_size")];
     [tValues addObject:OALocalizedString(@"calculating_progress")];
     
     [tButtons addObject:@"clear_cache"];
@@ -253,7 +253,7 @@
             [tValues addObject:OALocalizedString(@"online_map")];
             
             // Size
-            [tKeys addObject:OALocalizedString(@"res_size")];
+            [tKeys addObject:OALocalizedString(@"shared_string_size")];
             [tValues addObject:size];
             
             tableKeys = tKeys;
@@ -300,7 +300,7 @@
     [tValues addObject:typeLocalized];
 
     // Size
-    [tKeys addObject:OALocalizedString(@"res_size")];
+    [tKeys addObject:OALocalizedString(@"shared_string_size")];
     [tValues addObject:[NSByteCountFormatter stringFromByteCount:localResource->size countStyle:NSByteCountFormatterCountStyleFile]];
 
     if (installedResource)

@@ -189,7 +189,7 @@ static OAQuickActionType *TYPE;
 + (OAQuickActionType *) TYPE
 {
     if (!TYPE)
-        TYPE = [[OAQuickActionType alloc] initWithIdentifier:17 stringId:@"mapsource.change" class:self.class name:OALocalizedString(@"change_map_source") category:CONFIGURE_MAP iconName:@"ic_custom_show_on_map" secondaryIconName:nil];
+        TYPE = [[OAQuickActionType alloc] initWithIdentifier:17 stringId:@"mapsource.change" class:self.class name:OALocalizedString(@"quick_action_map_source") category:CONFIGURE_MAP iconName:@"ic_custom_show_on_map" secondaryIconName:nil];
        
     return TYPE;
 }

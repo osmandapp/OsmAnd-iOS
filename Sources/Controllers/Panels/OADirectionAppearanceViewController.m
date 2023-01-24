@@ -128,7 +128,7 @@
                         @"type" : [OASettingsCheckmarkCell getCellIdentifier],
                         @"section" : kActiveMarkers,
                         @"key" : kTwoActiveMarkers,
-                        @"title" : OALocalizedString(@"two"),
+                        @"title" : OALocalizedString(@"shared_string_two"),
                         @"img" : [self drawDeviceImage:@"ic_custom_direction_topbar_two" bgColor:UIColorFromRGB(color_chart_orange)],
                         @"img_inactive" : [self drawDeviceImage:@"ic_custom_direction_topbar_two"  bgColor:UIColorFromRGB(color_tint_gray)]
                         }];

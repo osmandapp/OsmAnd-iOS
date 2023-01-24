@@ -589,7 +589,7 @@ static const NSInteger panoImageFilterSection = 2;
 {
     switch (section) {
         case dateFilterSection:
-            return OALocalizedString(@"shared_string_filter");
+            return OALocalizedString(@"filter_current_poiButton");
         default:
             return nil;
     }

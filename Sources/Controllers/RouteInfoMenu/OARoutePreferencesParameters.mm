@@ -808,7 +808,7 @@
 
 - (NSString *) getText
 {
-    return OALocalizedString(@"consider_limitations_param");
+    return OALocalizedString(@"temporary_conditional_routing");
 }
 
 - (UIImage *) getIcon

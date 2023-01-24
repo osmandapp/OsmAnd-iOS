@@ -405,7 +405,7 @@
         case EOACompassVisible:
             return OALocalizedString(@"shared_string_always_visible");
         case EOACompassHidden:
-            return OALocalizedString(@"shared_string_always_hidden");
+            return OALocalizedString(@"compass_always_hidden");
         default:
             return OALocalizedString(@"compass_visible_in_rotated_mode");
     }
@@ -912,7 +912,7 @@
         case EOAGradientScaleTypeAltitude:
             return OALocalizedString(@"map_widget_altitude");
         case EOAGradientScaleTypeSlope:
-            return OALocalizedString(@"gpx_slope");
+            return OALocalizedString(@"shared_string_slope");
         default:
             return @"";
     }

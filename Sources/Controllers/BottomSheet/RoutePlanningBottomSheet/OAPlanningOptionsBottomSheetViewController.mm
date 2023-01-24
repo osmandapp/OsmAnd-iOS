@@ -112,7 +112,7 @@
     [data addObject:@[
         @{
             @"type" : [OATitleIconRoundCell getCellIdentifier],
-            @"title" : OALocalizedString(@"save_changes"),
+            @"title" : OALocalizedString(@"profile_alert_need_save_title"),
             @"img" : @"ic_custom_save_to_file",
             @"tintColor" : UIColorFromRGB(color_primary_purple),
             @"key" : @"save_changes"
@@ -126,7 +126,7 @@
         },
         @{
             @"type" : [OATitleIconRoundCell getCellIdentifier],
-            @"title" : OALocalizedString(@"add_to_track"),
+            @"title" : OALocalizedString(@"add_to_a_track"),
             @"img" : @"ic_custom_add_to_track",
             @"tintColor" : UIColorFromRGB(color_primary_purple),
             @"key" : @"add_to_track"

@@ -72,7 +72,7 @@
 }
 -(void)applyLocalization
 {
-    _titleView.text = _isNewItem ? OALocalizedString(@"map_settings_add_online_source") : OALocalizedString(@"res_edit_map_source");
+    _titleView.text = _isNewItem ? OALocalizedString(@"add_online_source") : OALocalizedString(@"res_edit_map_source");
     [_saveButton setTitle:OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
 }
 
@@ -481,7 +481,7 @@
     {
         if ([self needsClearCache] && [self isOnlineSource])
         {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"shared_string_warning") message:OALocalizedString(@"res_online_source_cache_alert") preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"shared_string_warning") message:OALocalizedString(@"clear_tiles_warning") preferredStyle:UIAlertControllerStyleAlert];
             [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleDefault handler:nil]];
             [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 [self clearAndUpdateSource];
@@ -672,7 +672,7 @@
 
 - (void)showExitWithoutChangesDialog
 {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"osm_editing_lost_changes_title") message:OALocalizedString(@"osm_editing_lost_changes_descr") preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"exit_without_saving") message:OALocalizedString(@"osm_editing_lost_changes_descr") preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleDefault handler:nil]];
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self.navigationController popViewControllerAnimated:YES];
@@ -845,7 +845,7 @@
             NSString *key = item[@"key"];
             if ([key isEqualToString:@"mercator_sett"])
             {
-                cell.descriptionView.text = _isEllipticYTile ? OALocalizedString(@"res_elliptic_mercator") : OALocalizedString(@"res_pseudo_mercator");
+                cell.descriptionView.text = _isEllipticYTile ? OALocalizedString(@"res_elliptic_mercator") : OALocalizedString(@"pseudo_mercator_projection");
             }
             else if ([key isEqualToString:@"format_sett"])
             {

@@ -113,7 +113,7 @@ static NSString * const _unitsmps = OALocalizedString(@"units_m_s");
     else
     {
         if (hours > 0)
-            [time appendFormat:@"%d %@", hours, OALocalizedString(@"units_hour")];
+            [time appendFormat:@"%d %@", hours, OALocalizedString(@"int_hour")];
         if (minutes > 0)
         {
             if (time.length > 0)

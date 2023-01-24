@@ -82,7 +82,7 @@ NSString *const kSimulateLocationKey = @"kSimulateLocationKey";
     [simulationSection addRowFromDictionary:@{
         kCellTypeKey : [OAIconTitleValueCell getCellIdentifier],
         kCellKeyKey : kSimulateLocationKey,
-        kCellTitleKey : OALocalizedString(@"simulate_routing"),
+        kCellTitleKey : OALocalizedString(@"simulate_your_location"),
         kCellDescrKey : isRouteAnimating ? OALocalizedString(@"simulate_in_progress") : @"",
         @"actionBlock" : (^void(){ [weakSelf openSimulateLocationSettings]; })
     }];

@@ -42,7 +42,7 @@ static const NSInteger groupCount = 5;
 
 -(void) applyLocalization
 {
-    _titleView.text = OALocalizedString(@"menu_help");
+    _titleView.text = OALocalizedString(@"shared_string_help");
 }
 
 - (void) viewDidLoad
@@ -146,7 +146,7 @@ static const NSInteger groupCount = 5;
     [dataArr addObject:
      @{
        @"name" : @"help_navigation_profiles",
-       @"title" : OALocalizedString(@"help_nav_profiles"),
+       @"title" : OALocalizedString(@"navigation_profiles_item"),
        @"type" : kLinkInternalType,
        @"html" : @"navigation-profiles"
        }];

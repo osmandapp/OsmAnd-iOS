@@ -202,7 +202,7 @@ static OAQuickActionType *TYPE;
 + (OAQuickActionType *) TYPE
 {
     if (!TYPE)
-        TYPE = [[OAQuickActionType alloc] initWithIdentifier:16 stringId:@"mapunderlay.change" class:self.class name:OALocalizedString(@"change_map_underlay") category:CONFIGURE_MAP iconName:@"ic_custom_underlay_map" secondaryIconName:nil];
+        TYPE = [[OAQuickActionType alloc] initWithIdentifier:16 stringId:@"mapunderlay.change" class:self.class name:OALocalizedString(@"quick_action_map_underlay") category:CONFIGURE_MAP iconName:@"ic_custom_underlay_map" secondaryIconName:nil];
        
     return TYPE;
 }

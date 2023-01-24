@@ -169,7 +169,7 @@ static NSInteger kButtonsSection;
     NSMutableArray *buttonsArray = [NSMutableArray new];
     [buttonsArray addObject:@{
                         @"type" : kCellTypeButton,
-                        @"title" : OALocalizedString(@"map_settings_add_online_source"),
+                        @"title" : OALocalizedString(@"add_online_source"),
                          }];
     [buttonsArray addObject:@{
                         @"type" : kCellTypeButton,

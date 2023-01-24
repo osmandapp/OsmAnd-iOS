@@ -131,7 +131,7 @@
     }
     else if (_type == EOAWeatherOnlineData)
     {
-        sizeTitle = OALocalizedString(@"res_size");
+        sizeTitle = OALocalizedString(@"shared_string_size");
         size = _weatherHelper.onlineCacheSize;
     }
     else if (_type == EOAWeatherOfflineData)
@@ -260,7 +260,7 @@
                     NSString *sizeString = [NSByteCountFormatter stringFromByteCount:size countStyle:NSByteCountFormatterCountStyleFile];
                     cells[_sizeIndexPath.row] = @{
                             @"key": @"size",
-                            @"title": OALocalizedString(_type == EOAWeatherOnlineData ? @"res_size" : @"shared_string_total_size"),
+                            @"title": OALocalizedString(_type == EOAWeatherOnlineData ? @"shared_string_size" : @"shared_string_total_size"),
                             @"value": sizeString,
                             @"type": [OAValueTableViewCell getCellIdentifier]
                     };

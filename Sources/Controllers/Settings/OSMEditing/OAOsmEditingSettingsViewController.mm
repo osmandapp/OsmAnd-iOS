@@ -85,7 +85,7 @@
 
     NSMutableArray<NSMutableDictionary *> *credentialCells = [NSMutableArray array];
     [data addObject:credentialCells];
-    _headers[@(data.count - 1)] = OALocalizedString(@"shared_string_account");
+    _headers[@(data.count - 1)] = OALocalizedString(@"login_account");
 
     NSMutableDictionary *credentialData = [NSMutableDictionary dictionary];
     credentialData[@"key"] = @"edit_credentials";

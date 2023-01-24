@@ -297,7 +297,7 @@ static BOOL _purchasesUpdated;
             @"tint_color": UIColorFromRGB(color_primary_purple)
         }
     ]];
-    _headers[@(data.count - 1)] = OALocalizedString(@"menu_help");
+    _headers[@(data.count - 1)] = OALocalizedString(@"shared_string_help");
 
     _data = data;
 }

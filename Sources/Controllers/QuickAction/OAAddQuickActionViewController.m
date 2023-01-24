@@ -130,7 +130,7 @@
 
 - (void)applyLocalization
 {
-    _titleView.text = OALocalizedString(@"add_action");
+    _titleView.text = OALocalizedString(@"quick_action_new_action");
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator

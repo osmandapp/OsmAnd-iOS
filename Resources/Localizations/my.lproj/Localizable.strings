@@ -7,7 +7,7 @@
 "avoid_roads_msg" = "You can trigger an alternative route by selecting roads to avoid";
 "shared_string_go" = "သွားမည်";
 "shared_string_info" = "သိသင့်သောအချက်များ";
-"simulate_routing" = "Simulate your position";
+"simulate_your_location" = "Simulate your position";
 "simulate_routing_descr" = "Simulate your position using a calculated route";
 "day_night_info_description" = "နေထွက်ချိန်: %@\nနေဝင်ချိန်: %@";
 "day_night_info" = "နေ့/ည ပတ်သက်သောအချက်များ";
@@ -345,11 +345,11 @@
 // Map settings
 "rendering_value_browse_map_name" = "Overview";
 "m_style_car" = "Car";
-"map_settings_map" = "Map";
+"shared_string_map" = "Map";
 "map_settings_show" = "Show on map";
 "map_settings_type" = "Map type";
 "map_mode" = "Application mode";
-"map_settings_night" = "Night";
+"daynight_mode_night" = "Night";
 "map_settings_style" = "Map style";
 "map_settings_overunder" = "Overlay / Underlay";
 "map_settings_over" = "Overlay";
@@ -430,7 +430,7 @@
 "shared_string_details" = "Details";
 "res_type" = "Type";
 "res_unknown" = "Unknown";
-"res_size" = "Size";
+"shared_string_size" = "Size";
 "res_created_on" = "Created on";
 "res_update_all" = "Update all";
 "res_updates_no_space" = "Not enough space to install %d update(s). %@ is needed. Please free up some space.";
@@ -455,7 +455,7 @@
 "add_notification_calendar" = "Add notification to Calendar";
 "parking_time_limited" = "Parking time limited to";
 "time_left" = "left";
-"time_overdue" = "overdue";
+"osmand_parking_overdue" = "overdue";
 "cannot_add_marker" = "Cannot add Parking";
 "cannot_add_marker_desc" = "Please remove one direction at least and retry";
 "cannot_add_destination" = "Cannot add Direction";
@@ -465,7 +465,7 @@
 "foot" = "ft";
 "units_km_h" = "km/h";
 "units_mph" = "mph";
-"units_hour" = "h";
+"int_hour" = "h";
 "units_min" = "min";
 "units_sec" = "sec";
 // Map
@@ -490,12 +490,12 @@
 "loc_access_denied_desc" = "Access to location service has been denied";
 // Colors
 "col_gray" = "Gray";
-"col_magenta" = "ပန်းခရမ်းရောင်";
+"shared_string_color_magenta" = "ပန်းခရမ်းရောင်";
 // World Regions
 "index_name_africa" = "Africa";
 "index_name_asia" = "Asia";
 "index_name_oceania" = "Australia and Oceania";
-"region_central_america" = "Central America";
+"index_name_central_america" = "Central America";
 "region_europe" = "Europe";
 "index_name_north_america" = "North America";
 "region_russia" = "Russia";
@@ -536,7 +536,7 @@
 "product_desc_europe" = "Map of Europe";
 "product_title_northamerica" = "North America";
 "product_desc_northamerica" = "Map of North America";
-"product_title_russia" = "Russia";
+"index_name_russia" = "Russia";
 "product_desc_russia" = "Map of Russia";
 "product_title_southamerica" = "South America";
 "product_desc_southamerica" = "Map of South America";
@@ -574,7 +574,7 @@
 "gpx_curr_new_track" = "Current trip";
 "enter_name" = "Enter name";
 "not_selected" = "Not selected";
-"language" = "Language";
+"shared_string_language" = "Language";
 "you_searching" = "You are searching";
 "from_location" = "away";
 "show_alt_in_drive" = "Show altitude in Drive mode";
@@ -600,7 +600,7 @@
 "gpx_rename_q" = "Rename trip";
 "gpx_enter_new_name" = "Please enter new name for the trip";
 "gpx_cancel_route_q" = "Do you want to cancel this route?";
-"gpx_deactivated" = "Deactivated";
+"local_indexes_cat_backup" = "Deactivated";
 "gpx_trip_groups" = "Trip groups";
 "gpx_group_select" = "Group Select";
 "shared_string_show_all" = "Show all";
@@ -837,7 +837,7 @@
 "osm_notes" = "OSMမှတ်စုများ";
 "appearance_on_map" = "မြေပုံပေါ်တွင်ပုံပန်းသဏ္ဌာန်";
 "base_profile_descr_pedestrian" = "လမ်းလျှောက်, တောင်တက်, အပြေး";
-"save_changes" = "ပြောင်းလဲမှုများကိုသိမ်းပါ";
+"profile_alert_need_save_title" = "ပြောင်းလဲမှုများကိုသိမ်းပါ";
 "screen_alerts" = "ဖန်သားပြင်သတိပေးချက်များ";
 "poi_filter_public_transport" = "ပြည်သူပို့ဆောင်ရေး";
 "base_profile_descr_bicycle" = "MTB, moped,မြင်း";

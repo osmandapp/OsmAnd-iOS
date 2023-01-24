@@ -78,7 +78,7 @@
             @[@{
                     @"key" : @"size_cell",
                     @"type" : [OAValueTableViewCell getCellIdentifier],
-                    @"title" : OALocalizedString(@"res_size"),
+                    @"title" : OALocalizedString(@"shared_string_size"),
                     @"value" : _size
             }],
             @[@{

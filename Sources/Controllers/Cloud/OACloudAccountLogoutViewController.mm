@@ -30,7 +30,7 @@
 - (void)applyLocalization
 {
     [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"shared_string_account");
+    self.titleLabel.text = OALocalizedString(@"login_account");
 }
 
 - (void)viewDidLoad

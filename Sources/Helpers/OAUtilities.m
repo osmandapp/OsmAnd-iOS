@@ -655,7 +655,7 @@
 - (NSString *)name
 {
     if ([self.symbol isEqualToString:NSUnitTemperature.celsius.symbol])
-        return OALocalizedString(@"weather_temp_unit_c");
+        return OALocalizedString(@"weather_temperature_celsius");
     else if ([self.symbol isEqualToString:NSUnitTemperature.fahrenheit.symbol])
         return OALocalizedString(@"weather_temperature_fahrenheit");
     return nil;
@@ -739,7 +739,7 @@
 - (NSString *)name
 {
     if ([self.symbol isEqualToString:NSUnitLength.millimeters.symbol])
-        return OALocalizedString(@"weather_precip_unit_mm");
+        return OALocalizedString(@"weather_precip_milimeters");
     else if ([self.symbol isEqualToString:NSUnitLength.inches.symbol])
         return OALocalizedString(@"weather_precip_inches");
     return nil;

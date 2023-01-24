@@ -369,7 +369,7 @@
     else if ([filePath hasSuffix:BINARY_SRTM_MAP_INDEX_EXT])
         return OALocalizedString(@"download_srtm_maps");
     else if ([filePath hasSuffix:BINARY_MAP_INDEX_EXT])
-        return OALocalizedString(@"res_standard");
+        return OALocalizedString(@"download_regular_maps");
     return @"";
 }
 

@@ -138,7 +138,7 @@ static const NSInteger _contactInfoSectionCount = 5;
     NSMutableArray *dataArr = [NSMutableArray new];
     [dataArr addObject:@{
                          @"name" : @"poi_category",
-                         @"title" : OALocalizedString(@"shared_string_category"),
+                         @"title" : OALocalizedString(@"rendering_value_category_name"),
                          @"value" : _poiData.getPoiCategory != [OAPOIHelper sharedInstance].otherPoiCategory ? _poiData.getPoiCategory.nameLocalized :
                              OALocalizedString(@"shared_string_select"),
                          @"type" : [OASettingsTableViewCell getCellIdentifier],
@@ -332,9 +332,9 @@ static const NSInteger _contactInfoSectionCount = 5;
     else if (section == _poiSectionIndex)
         return OALocalizedString(@"poi_category_and_type");
     else if (section == _hoursSectionIndex)
-        return OALocalizedString(@"poi_opening_hours");
+        return OALocalizedString(@"opening_hours");
     else if (section == _contactInfoSectionIndex)
-        return OALocalizedString(@"osm_editing_contact_info");
+        return OALocalizedString(@"contact_info");
     else
         return @"";
 }

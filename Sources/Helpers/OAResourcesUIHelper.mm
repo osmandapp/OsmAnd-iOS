@@ -61,7 +61,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     {
         case OsmAndResourceType::MapRegion:
         case OsmAndResourceType::DepthContourRegion:
-            return OALocalizedString(@"map_settings_map");
+            return OALocalizedString(@"shared_string_map");
         case OsmAndResourceType::DepthMapRegion:
             return OALocalizedString(@"nautical_depth");
         case OsmAndResourceType::SrtmMapRegion:

@@ -300,7 +300,7 @@
     OAGPXTableCellData *directionCellData = [OAGPXTableCellData withData:@{
             kTableKey:@"direction_arrows",
             kCellType:[OASwitchTableViewCell getCellIdentifier],
-            kCellTitle:OALocalizedString(@"gpx_dir_arrows")
+            kCellTitle:OALocalizedString(@"gpx_direction_arrows")
     }];
 
     OAGPXTableCellData *startFinishCellData = [OAGPXTableCellData withData:@{

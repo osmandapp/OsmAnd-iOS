@@ -80,7 +80,7 @@
     OAGPXTableCellData *sizeCellData = [OAGPXTableCellData withData:@{
             kTableKey: @"size",
             kCellType: [OAIconTitleValueCell getCellIdentifier],
-            kCellTitle: OALocalizedString(@"res_size"),
+            kCellTitle: OALocalizedString(@"shared_string_size"),
             kCellDesc: self.trackMenuDelegate ? [self.trackMenuDelegate getGpxFileSize] : @""
     }];
     [infoSectionData.subjects addObject:sizeCellData];

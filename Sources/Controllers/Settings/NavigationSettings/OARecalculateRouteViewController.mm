@@ -236,7 +236,7 @@
 
 - (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
-    return section == 0 ? OALocalizedString(@"recalculate_route_distance_promo") : OALocalizedString(@"select_distance_for_recalculation");
+    return section == 0 ? OALocalizedString(@"recalculate_route_distance_promo") : OALocalizedString(@"select_distance_route_will_recalc");
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section

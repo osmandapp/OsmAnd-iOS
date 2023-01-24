@@ -310,7 +310,7 @@
     
     NSMutableString *time = [NSMutableString string];
     if (hours > 0)
-        [time appendFormat:@"%d %@", hours, OALocalizedString(@"units_hour")];
+        [time appendFormat:@"%d %@", hours, OALocalizedString(@"int_hour")];
     if (minutes > 0)
     {
         if (time.length > 0)
@@ -334,7 +334,7 @@
     else
     {
         if (!shortText)
-            return [NSString stringWithFormat:@"%@ %@", time, OALocalizedString(@"time_overdue")];
+            return [NSString stringWithFormat:@"%@ %@", time, OALocalizedString(@"osmand_parking_overdue")];
         else
             return [NSString stringWithFormat:@"%@", time];
     }

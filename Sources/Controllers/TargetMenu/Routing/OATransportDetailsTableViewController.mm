@@ -150,7 +150,7 @@
     NSMutableArray<NSIndexPath *> *indexPaths = [NSMutableArray new];
     [collapsableCell setObject:[OAPublicTransportCollapsableCell getCellIdentifier] forKey:@"cell"];
     [collapsableCell setObject:[NSString stringWithFormat:OALocalizedString(@"by_transport_type"), [r getTypeStr]] forKey:@"descr"];
-    [collapsableCell setObject:[NSString stringWithFormat:@"%lu %@ • %@", stops.size() - 1, OALocalizedString(@"num_stops"), [OAOsmAndFormatter getFormattedDistance:segment->getTravelDist()]] forKey:@"title"];
+    [collapsableCell setObject:[NSString stringWithFormat:@"%lu %@ • %@", stops.size() - 1, OALocalizedString(@"transport_stops"), [OAOsmAndFormatter getFormattedDistance:segment->getTravelDist()]] forKey:@"title"];
     [collapsableCell setObject:@(YES) forKey:@"collapsed"];
     [collapsableCell setObject:color forKey:@"line_color"];
     NSInteger row = arr.count;

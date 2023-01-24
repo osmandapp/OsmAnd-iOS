@@ -81,7 +81,7 @@
 "avoid_roads_msg" = "Du kan aktivera en alternativ rutt genom att välja vägar att undvika";
 "shared_string_go" = "Kör";
 "shared_string_info" = "Info";
-"simulate_routing" = "Simulera din plats";
+"simulate_your_location" = "Simulera din plats";
 "simulate_navigation" = "Simulera navigering";
 "simulate_routing_descr" = "Simulera din position med hjälp av en beräknad rutt";
 "select_avoid_descr" = "Välj vägar du vill undvika under navigering. Du kan antingen välja en väg på kartan eller välja en typ från listan nedan.";
@@ -129,7 +129,7 @@
 "logging_interval_navigation_descr" = "Välj loggningsintervall för spårregistrering under navigering";
 "monitoring_min_distance" = "Minsta förskjutning";
 "logging_min_distance_descr" = "Filter: minsta avstånd för att logga en ny punkt";
-"logging_accuracy" = "Loggningsnoggrannhet";
+"save_track_logging_accuracy" = "Loggningsnoggrannhet";
 "monitoring_min_accuracy" = "Minsta noggrannhet";
 "logging_min_accuracy_descr" = "Filter: ingen loggning om inte noggrannheten uppnås";
 "logging_min_speed" = "Minsta hastighet";
@@ -194,7 +194,7 @@
 
 // Dirrection appearance
 "one" = "En";
-"two" = "Två";
+"shared_string_two" = "Två";
 "show_direction" = "Avståndsindikering";
 "arrows_on_map" = "Pilar på kartan";
 "direction_lines" = "Riktningslinjer";
@@ -277,7 +277,7 @@
 "recalculate_route" = "Recalculate route in case of deviation";
 "recalculate_wrong_dir" = "Recalculate route in case of reverse direction";
 "recalculate_route_distance_promo" = "Om avståndet från rutten till nuvarande plats är större än valt värde kommer rutten att beräknas om.";
-"select_distance_for_recalculation" = "Välj efter vilket avstånd rutten ska beräknas om.";
+"select_distance_route_will_recalc" = "Välj efter vilket avstånd rutten ska beräknas om.";
 "speed_limit_tolerance_descr" = "Select the speed limit tolerance margin above which you will receive a voice warning.";
 "only_manually" = "Only manually";
 "instructions_repeat" = "Tap \"Next turn\" widget to repeat instructions";
@@ -303,7 +303,7 @@
 "impassable_road" = "Avoid roads";
 "road_speeds" = "Road speeds";
 "avoid_transport_type" = "Avoid transport types";
-"consider_limitations_param" = "Ta tillfälliga begränsningar i beaktande";
+"temporary_conditional_routing" = "Ta tillfälliga begränsningar i beaktande";
 "impassable_road_desc" = "Välj de vägar du vill undvika under navigering.";
 "interrupt_music_descr" = "Fully pause any music during voice prompts (not just lower its volume)";
 "interrupt_music" = "Pausa musiken";
@@ -498,7 +498,7 @@
 "preview_of_selected_zoom_levels" = "Preview of selected zoom levels";
 "select_online_source" = "Select source";
 "online_sources" = "Online sources";
-"size_of_downloaded_data" = "The big difference between zoom levels can increase the size of the downloaded data.";
+"zoom_levels_difference_description" = "The big difference between zoom levels can increase the size of the downloaded data.";
 "use_of_downloaded_map" = "You can now use this map offline as main map source or as overlay/underlay layer";
 "map_update_warning" = "Do you want to reload tile data from the Internet?";
 
@@ -646,20 +646,20 @@
 "gpx_distance_points" = "Distance (points)";
 "gpx_max_speed" = "Max speed";
 "gpx_speed" = "Hastighet";
-"gpx_slope" = "Sluttning";
+"shared_string_slope" = "Sluttning";
 "stats_select_graph_data" = "Select graph data";
 
 // Map settings
 "m_style_car" = "Fordonskörning";
 "poi_filter_public_transport" = "Kollektivtrafik";
-"map_settings_map" = "Karta";
+"shared_string_map" = "Karta";
 "layer_amenity_label" = "Punktetiketter (POI, Favoriter)";
 "map_settings_show" = "Visa på kartan";
 "map_settings_type" = "Map type";
 "map_mode" = "Kartläge";
 "map_settings_map_magnifier" = "Kartförstoring";
-"map_settings_text_size" = "Textstorlek";
-"map_settings_night" = "Natt";
+"text_size" = "Textstorlek";
+"daynight_mode_night" = "Natt";
 "map_settings_style" = "Kartutseende";
 "map_settings_overunder" = "Overlay / Underlay";
 "map_settings_over" = "Overlay";
@@ -683,7 +683,7 @@
 "map_settings_add_maps_slopes" = "Additional maps are needed to view slopes on the map";
 "shared_string_legend" = "Teckenförklaring";
 "map_settings_show_slider_map" = "Show slider on the map";
-"map_settings_add_online_source" = "Lägg till onlinekälla";
+"add_online_source" = "Lägg till onlinekälla";
 "map_settings_hide_polygons" = "Hide polygons";
 "map_settings_hide_polygons_desc" = "This option affects only OsmAnd Offline vector maps";
 "map_settings_add_maps_desc" = "You can add new maps via link, or by importing SQLite files.";
@@ -991,9 +991,9 @@
 "point_num" = "Point %d";
 "points_count" = "Points:";
 "route_between_points" = "Rutt mellan punkter";
-"save_changes" = "Sparaändringar";
+"profile_alert_need_save_title" = "Sparaändringar";
 "save_new_track" = "Spara som nytt spår";
-"add_to_track" = "Lägg till i ett spår";
+"add_to_a_track" = "Lägg till i ett spår";
 "move_point" = "Move point";
 "move_point_descr" = "Move map to change the position of this point.";
 "add_before" = "Add points before";
@@ -1084,7 +1084,7 @@
 "osmand_live_public_name" = "Enter your public name";
 "osmand_live_subscription_canceled" = "You have cancelled OsmAnd Live Subscription";
 "osmand_live_cancel_descr" = "Renew the subscription to continue using the full functionality:";
-"osmand_live_update_now" = "Uppdatera nu";
+"update_now" = "Uppdatera nu";
 "osmand_live_updates_size" = "Downloaded updates size";
 "osmand_live_deleted_object" = "Deleted object";
 "res_search_world" = "Search worldwide";
@@ -1116,7 +1116,7 @@
 "shared_string_details" = "Detaljer";
 "res_type" = "Typ";
 "res_unknown" = "Okänd";
-"res_size" = "Storlek";
+"shared_string_size" = "Storlek";
 "res_created_on" = "Skapad";
 "res_update_all" = "Update all";
 "res_updates_no_space" = "Not enough space to install %d update(s). %@ is needed. Please free up some space.";
@@ -1132,7 +1132,7 @@
 "res_expire_time" = "Expire time";
 "res_mercator" = "Mercator Projection";
 "res_elliptic_mercator" = "Elliptic mercator";
-"res_pseudo_mercator" = "Pseudo-Mercator-projektion";
+"pseudo_mercator_projection" = "Pseudo-Mercator-projektion";
 "res_source_format" = "Source format";
 "sqlite_db_file" = "SQLiteDB-fil";
 "one_image_per_tile" = "One image file per tile";
@@ -1144,7 +1144,7 @@
 "res_expire_warning" = "Expiration time should be a number between 0 and 10000000";
 "res_zoom_invalid_value" = "Zoom values should be in range 1 - 22";
 "res_offlineSQL_URL_warning" = "Not supported for this map type";
-"res_online_source_cache_alert" = "Om du använder dessa ändringar raderas cachade data för denna kakelkälla";
+"clear_tiles_warning" = "Om du använder dessa ändringar raderas cachade data för denna kakelkälla";
 "welmode_download_maps" = "Hämta kartor";
 "srtm_unit_format" = "Contour lines unit format";
 "srtm_download_single_help_message" = "Please select the needed format. You will need to re-download the file to change the format.";
@@ -1157,7 +1157,7 @@
 "shared_string_my_places" = "Mina platser";
 "menu_my_trips" = "My Tracks";
 "menu_feedback" = "Återkoppling";
-"menu_help" = "Hjälp";
+"shared_string_help" = "Hjälp";
 
 // OSM Editing actions
 "opening_changeset" = "Öppnar changeset …";
@@ -1167,7 +1167,7 @@
 "shared_string_loading" = "Loading…";
 "osm_upload_failed_title" = "Upload failed";
 "osm_upload_failed_descr" = "Please check your login details and Internet connection and try again.";
-"osm_editing_lost_changes_title" = "Avsluta utan att spara?";
+"exit_without_saving" = "Avsluta utan att spara?";
 "osm_editing_lost_changes_descr" = "Alla osparadeändringar kommer att förloras. Fortsätta ändå?";
 "osm_upload_no_internet" = "Please check your Internet connection and try again.";
 "osm_delete_confirmation_descr" = "Are you sure you want to delete this POI?";
@@ -1177,7 +1177,7 @@
 "osn_bug_name" = "OSM-anteckning";
 "osm_created" = "Created";
 "poi_remove_success" = "Raderad";
-"osm_modified" = "Ändrad";
+"shared_string_modified" = "Ändrad";
 "osm_reopened" = "Reopened";
 "osm_name" = "OpenStreetMap username";
 "osm_pass" = "OpenStreetMap password";
@@ -1189,7 +1189,7 @@
 "osm_around_the_clock" = "Around the clock (24/7)";
 "osm_opens_at" = "Opens at:";
 "osm_closes_at" = "Closes at:";
-"osm_editing_contact_info" = "Kontaktinformation";
+"contact_info" = "Kontaktinformation";
 "map_widget_top_text" = "Gatunamn";
 "osm_building_num" = "Building number";
 "phone" = "Telefon";
@@ -1221,7 +1221,7 @@
 "osm_note_reopen" = "Öppna igen";
 "osm_edits_offline_layer" = "OSM Edits/Notes (offline)";
 "osm_notes_online_layer" = "OSM Notes (online)";
-"osm_edits_basic" = "Grundläggande";
+"tab_title_basic" = "Grundläggande";
 "osm_edits_advanced" = "Avancerat";
 "osm_edits_all" = "All edits";
 "osm_edits_poi" = "POI edits";
@@ -1256,7 +1256,7 @@
 "shared_string_reload" = "Uppdatera";
 "shared_string_show_more" = "Visa mer";
 "mapil_reload_cache" = "Reload tiles to see the newest data";
-"shared_string_filter" = "Filter";
+"filter_current_poiButton" = "Filter";
 "mapil_filter_user_descr" = "Filter images by user";
 "mapil_filter_date" = "Filter images by date";
 "mapil_usernames" = "Usernames";
@@ -1283,9 +1283,9 @@
 "add_map_source" = "Lägg till kartkälla";
 "add_map_style" = "Add map style";
 "map_styles" = "Kartstilar";
-"add_action" = "Lägg till åtgärd";
+"quick_action_new_action" = "Lägg till åtgärd";
 "unsupported_items" = "Unsupported items";
-"create_items" = "Skapa poster";
+"quick_action_add_create_items" = "Skapa poster";
 "configure_map" = "Konfigurera kartan";
 "map_look_descr" = "Kartans utseende";
 "add_map_marker" = "Lägg till kartmarkör";
@@ -1303,11 +1303,11 @@
 "add_osm_note" = "Add OSM note";
 "toggle_online_notes" = "Toggle OSM notes";
 "toggle_local_edits" = "Toggle local OSM edits";
-"add_poi" = "Lägg till intressepunkt";
+"quick_action_add_poi" = "Lägg till intressepunkt";
 "change_map_style" = "Byt kartstil";
-"change_map_source" = "Ändra kartkälla";
+"quick_action_map_source" = "Ändra kartkälla";
 "quick_action_map_overlay" = "Ändra kartöversikt";
-"change_map_underlay" = "Ändra kartunderlägg";
+"quick_action_map_underlay" = "Ändra kartunderlägg";
 "replace_destination" = "Ersätt destination";
 "add_destination" = "Add destination";
 "add_start" = "Add starting point";
@@ -1353,9 +1353,9 @@
 "quick_action_show_poi_descr" = "Add one or more POI categories to be displayed on the map.";
 "quick_action_fill_params_alert" = "Please fill out the parameters first";
 "quick_action_dialog" = "Dialog";
-"edit_action" = "Redigeraåtgärd";
+"quick_action_edit_action" = "Redigeraåtgärd";
 "quick_action_add_tag" = "Add tag";
-"quick_action_tags" = "Taggar";
+"gpx_tags_txt" = "Taggar";
 "quick_action_get_info" = "Get info";
 "quick_action_enter_message" = "Enter message";
 "quick_action_bug_descr" = "Detta meddelande ingår i kommentarsfältet.";
@@ -1424,7 +1424,7 @@
 "edit_osm_note" = "Edit OSM Note";
 "osm_alert_title" = "Skicka in";
 "osb_comment_dialog_message" = "Meddelande";
-"osm_alert_button_ok" = "Skapa anteckning";
+"osn_add_dialog_title" = "Skapa anteckning";
 "modify_poi" = "Modify the POI information";
 "actions" = "Åtgärder";
 "time_limited" = "Time limited";
@@ -1433,7 +1433,7 @@
 "add_notification_calendar" = "Add notification to Calendar";
 "parking_time_limited" = "Tidsbegränsad parkering till";
 "time_left" = "kvar";
-"time_overdue" = "över tiden";
+"osmand_parking_overdue" = "över tiden";
 "cannot_add_marker" = "Cannot add Parking";
 "cannot_add_marker_desc" = "Please remove one direction at least and retry";
 "cannot_add_destination" = "Cannot add Direction";
@@ -1444,7 +1444,7 @@
 "units_nm" = "di";
 "units_km_h" = "km/h";
 "units_mph" = "mph";
-"units_hour" = "h";
+"int_hour" = "h";
 "units_min" = "min.";
 "units_sec" = "sek";
 "units_sec_short" = "s";
@@ -1461,7 +1461,7 @@
 "help_map_viewing" = "Kartvisning";
 "help_search" = "Map search";
 "help_trip_planning" = "Att planera en resa";
-"help_nav_profiles" = "Navigeringsprofiler";
+"navigation_profiles_item" = "Navigeringsprofiler";
 "help_purchases" = "OsmAnd-köp";
 "help_osmand_live" = "Prenumeration - OsmAnd Live";
 "help_travel" = "Travel (Wikipedia & Wikivoyage)";
@@ -1509,7 +1509,7 @@
 "loc_access_denied_desc" = "Access to location service has been denied";
 // Colors
 "col_gray" = "Gray";
-"col_magenta" = "Magenta";
+"shared_string_color_magenta" = "Magenta";
 // GPX colors
 
 // World Regions
@@ -1517,7 +1517,7 @@
 "index_name_africa" = "Afrika";
 "index_name_asia" = "Asien";
 "index_name_oceania" = "Oceanien";
-"region_central_america" = "Centralamerika";
+"index_name_central_america" = "Centralamerika";
 "region_europe" = "Europa";
 "index_name_north_america" = "Nordamerika";
 "region_russia" = "Ryssland";
@@ -1577,7 +1577,7 @@
 "product_title_northamerica" = "Nordamerika";
 "product_desc_northamerica" = "Unlimited map downloads for North America";
 "product_desc_northamerica_short" = "North America region maps";
-"product_title_russia" = "Ryssland";
+"index_name_russia" = "Ryssland";
 "product_desc_russia" = "Unlimited map downloads for Russia";
 "product_desc_russia_short" = "Maps of Russia regions";
 "product_title_southamerica" = "Sydamerika";
@@ -1622,7 +1622,7 @@
 "download_wikipedia_maps" = "Wikipedia";
 "shared_string_hillshade" = "Höjdskugga";
 "res_slope" = "Sluttning";
-"res_standard" = "Standardkartor";
+"download_regular_maps" = "Standardkartor";
 "select_language" = "Select language";
 "language_short" = "Lang";
 "open_url" = "Open page in browser";
@@ -1630,7 +1630,7 @@
 "wpt_remove_q" = "Remove waypoint?";
 "gpx_select_track" = "Select track";
 "gpx_curr_new_track" = "Nuvarande spår";
-"gpx_dir_arrows" = "Dirigeringspilar";
+"gpx_direction_arrows" = "Dirigeringspilar";
 "gpx_split_interval" = "Split-intervall";
 "gpx_split_interval_descr" = "Välj intervall med vilket markeringar med avstånd eller tid på spåret ska visas.";
 "gpx_join_gaps" = "Ta bort mellanrum";
@@ -1646,7 +1646,7 @@
 "duplicate_track" = "Duplicate track";
 "enter_name" = "Skriv in namn";
 "not_selected" = "Inte markerad";
-"language" = "Språk";
+"shared_string_language" = "Språk";
 "you_searching" = "You are searching";
 "from_location" = "away";
 "show_alt_in_drive" = "Show altitude in Drive mode";
@@ -1665,13 +1665,13 @@
 "public_transport_warning_title" = "Kollektivtrafiksnavigeringär för närvarande på betastadiet, var beredd på felaktigheter.";
 "public_transport_warning_descr_blog" = "Read more about OsmAnd routing in our blog.";
 "public_transport_empty_warning_title" = "Unfortunately, OsmAnd could not find a route for your settings.";
-"public_transport_empty_warning_descr" = "Try changing the settings.";
+"public_transport_try_change_settings" = "Try changing the settings.";
 "total" = "Totalt";
 "walk" = "Gå";
 "board_at" = "Board at";
 "exit_at" = "Exit at";
 "by_transport_type" = "By %@";
-"num_stops" = "hållplatser";
+"transport_stops" = "hållplatser";
 "total_time" = "Total time";
 "moving_time" = "Moving time";
 "change_group" = "Change group";
@@ -1688,7 +1688,7 @@
 "shared_string_overview" = "Översikt";
 "activity" = "Activity";
 "gpx_cancel_route_q" = "Do you want to cancel this route?";
-"gpx_deactivated" = "Inaktiverade";
+"local_indexes_cat_backup" = "Inaktiverade";
 "gpx_trip_groups" = "Track groups";
 "gpx_group_select" = "Group Select";
 "shared_string_show_all" = "Visa alla";
@@ -1801,7 +1801,7 @@
 "search_poi_types_descr" = "You can combine POI types from different categories.";
 "email_example_hint" = "user@example.com";
 "shared_string_required" = "Required";
-"shared_string_account" = "Konto";
+"login_account" = "Konto";
 "shared_string_account_add" = "Add account";
 "shared_string_email" = "Email";
 "shared_string_password" = "Lösenord";
@@ -1813,9 +1813,9 @@
 "edit_filter_delete_dialog_title" = "Delete selected filter?";
 "apply_filters" = "Applicera filter";
 "filter_poi_hint" = "Filtrera efter namn";
-"shared_string_category" = "Kategori";
+"rendering_value_category_name" = "Kategori";
 "poi_category_and_type" = "Category and POI Type";
-"poi_opening_hours" = "Öppettider";
+"opening_hours" = "Öppettider";
 "poi_select_category" = "Select category";
 "poi_select_type" = "Select type";
 "shared_a_z" = "A - Z";
@@ -2324,7 +2324,7 @@
 "plugin_popup_weather_title" = "Slå på Väder";
 "measurement_units" = "Måttenheter";
 "product_desc_weather" = "24-timmarsprognos & 7-dagarsprognos var 3:e timme";
-"weather_temp_unit_c" = "Celsius";
+"weather_temperature_celsius" = "Celsius";
 "weather_temperature_fahrenheit" = "Fahrenheit";
 "weather_pressure_unit_hpa" = "Hektopascal";
 "weather_pressure_millimeters_of_mercury" = "Millimeter kvicksilver";
@@ -2401,7 +2401,7 @@
 "shared_string_data" = "Data";
 "on_hold" = "Pausad";
 "in_grace_period" = "I nådeperioden";
-"paused" = "Pausad";
+"shared_string_paused" = "Pausad";
 "shared_string_delete_all" = "Ta bort alla";
 "restore_from_osmand_cloud" = "Återställ från OsmAnd Cloud";
 "simulation_real_mode_title" = "Realistisk simulering";
@@ -2432,7 +2432,7 @@
 "upload_all" = "Ladda upp alla";
 "cloud_all_changes_uploaded" = "Alla ändringar har laddats upp";
 "shared_string_always_visible" = "Alltid synlig";
-"shared_string_always_hidden" = "Alltid dold";
+"compass_always_hidden" = "Alltid dold";
 "local_changes" = "Lokala ändringar";
 "last_sync" = "Senaste synkronisering";
 "speed_mode" = "Hastighetsmetod";

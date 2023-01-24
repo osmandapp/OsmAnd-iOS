@@ -96,11 +96,11 @@
 // Map settings
 "rendering_value_browse_map_name" = "Explorar o mapa";
 "m_style_car" = "Condução";
-"map_settings_map" = "Mapa";
+"shared_string_map" = "Mapa";
 "map_settings_show" = "Mostrar no mapa";
 "map_settings_type" = "Tipo de mapa";
 "map_mode" = "Modo do mapa";
-"map_settings_night" = "Noite";
+"daynight_mode_night" = "Noite";
 "map_settings_style" = "Estilo de renderização";
 "map_settings_overunder" = "Camada superior / inferior";
 "map_settings_over" = "Camada superior";
@@ -177,7 +177,7 @@
 "shared_string_details" = "Detalhes";
 "res_type" = "Tipo";
 "res_unknown" = "Desconhecido";
-"res_size" = "Tamanho";
+"shared_string_size" = "Tamanho";
 "res_created_on" = "Criado em";
 "res_update_all" = "Atualizar tudo";
 "res_updates_no_space" = "Não há espaço suficiente para instalar %d atualização(s). É necessário %@. Por favor liberte algum espaço.";
@@ -199,7 +199,7 @@
 "add_notification_calendar" = "Adicionar notificação ao calendário";
 "parking_time_limited" = "Tempo de estacionamento limitado a";
 "time_left" = "restante";
-"time_overdue" = "atrasado";
+"osmand_parking_overdue" = "atrasado";
 "cannot_add_marker" = "Não foi possível adicionar o estacionamento";
 "cannot_add_marker_desc" = "Remova pelo menos uma direção e tente novamente";
 "cannot_add_destination" = "Não é possível adicionar a direção";
@@ -209,7 +209,7 @@
 "foot" = "ft";
 "units_km_h" = "km/h";
 "units_mph" = "mi/h";
-"units_hour" = "h";
+"int_hour" = "h";
 "units_min" = "min.";
 "units_sec" = "seg";
 // Map
@@ -234,12 +234,12 @@
 "loc_access_denied_desc" = "Foi negado acesso ao serviço de localização";
 // Colors
 "col_gray" = "Cinza";
-"col_magenta" = "Magenta";
+"shared_string_color_magenta" = "Magenta";
 // World Regions
 "index_name_africa" = "África";
 "index_name_asia" = "Ásia";
 "index_name_oceania" = "Austrália e Oceania";
-"region_central_america" = "América Central";
+"index_name_central_america" = "América Central";
 "region_europe" = "Europa";
 "index_name_north_america" = "América do Norte";
 "region_russia" = "Rússia";
@@ -268,7 +268,7 @@
 "product_desc_europe" = "Descarregamentos ilimitados de mapas da Europa";
 "product_title_northamerica" = "América do Norte";
 "product_desc_northamerica" = "Descarregamentos ilimitados de mapas da América do Norte";
-"product_title_russia" = "Rússia";
+"index_name_russia" = "Rússia";
 "product_desc_russia" = "Descarregamentos ilimitados de mapas da Rússia";
 "product_title_southamerica" = "América do Sul";
 "product_desc_southamerica" = "Descarregamentos ilimitados de mapas da América do Sul";
@@ -385,7 +385,7 @@
 "poi_filter_closest_poi" = "POIs mais próximos";
 "facebook" = "Facebook";
 "twitter" = "Twitter";
-"poi_opening_hours" = "Horário de abertura";
+"opening_hours" = "Horário de abertura";
 "unlimited_downloads" = "Descarregamentos ilimitados";
 "transport_stop" = "Paragem";
 "cancel_navigation" = "Parar navegação";
@@ -400,7 +400,7 @@
 "starting_point" = "Ponto de partida";
 "shared_string_go" = "Ir";
 "shared_string_info" = "Info";
-"simulate_routing" = "Simular a minha posição";
+"simulate_your_location" = "Simular a minha posição";
 "day_night_info" = "Informação dia/noite";
 "daynight_mode_auto" = "Nascer/pôr do sol";
 "auto_follow_location_enabled" = "Mapa automaticamente centrado.";
@@ -555,23 +555,23 @@
 "osmand_live_weekly" = "Semanalmente";
 "osmand_live_donations" = "Donativos";
 "osmand_live_support_reg_title" = "Região de suporte";
-"osmand_live_update_now" = "Atualizar agora";
+"update_now" = "Atualizar agora";
 "res_world_region" = "Mundo";
-"menu_help" = "Ajuda";
+"shared_string_help" = "Ajuda";
 // OSM Editing actions
 "opening_changeset" = "A abrir o conjunto de alterações…";
 "closing_changeset" = "A fechar o conjunto de alterações…";
 "commiting_node" = "A enviar o nó…";
 "loading_poi_obj" = "A carregar POI…";
 "osm_upload_failed_title" = "O envio falhou";
-"osm_editing_lost_changes_title" = "Sair sem guardar?";
+"exit_without_saving" = "Sair sem guardar?";
 "osm_editing_lost_changes_descr" = "Quaisquer alterações por guardar serão perdidas. Continuar\?";
 "osn_bug_name" = "Nota do OSM";
 "poi_remove_success" = "Eliminado";
 "osm_editing_offline" = "Edição offline";
 "osm_working_days" = "Dias úteis";
 "osm_opening_hours_time" = "Tempo";
-"osm_editing_contact_info" = "Informações de contacto";
+"contact_info" = "Informações de contacto";
 "map_widget_top_text" = "Nome da rua";
 "phone" = "Telefone";
 "osm_website" = "Site";
@@ -586,7 +586,7 @@
 "osm_note_comment" = "Comentar";
 "osm_note_reopen" = "Reabrir";
 "osm_notes_online_layer" = "Notas do OSM (online)";
-"osm_edits_basic" = "Básico";
+"tab_title_basic" = "Básico";
 "osm_edits_advanced" = "Avançado";
 "osm_edits_notes" = "Notas";
 "modify_poi_short" = "Alterar POI OSM";
@@ -595,7 +595,7 @@
 "context_menu_item_open_note" = "Criar nota OSM";
 "osm_alert_title" = "Enviar";
 "osb_comment_dialog_message" = "Mensagem";
-"osm_alert_button_ok" = "Adicionar nota ao OSM";
+"osn_add_dialog_title" = "Adicionar nota ao OSM";
 "actions" = "Ações";
 "help_first_use" = "Primeira utilização";
 "faq_item" = "Perguntas frequentes";
@@ -623,7 +623,7 @@
 "shared_string_open" = "Aberto";
 "menu_active_trips" = "Ativo";
 "moving_time" = "Tempo em movimento";
-"gpx_deactivated" = "Desativado";
+"local_indexes_cat_backup" = "Desativado";
 "shared_string_show_all" = "Mostrar tudo";
 "get_directions" = "Direções";
 "parking" = "Estacionamento";
@@ -644,7 +644,7 @@
 "shared_string_save_as" = "Guardar como";
 "edit_filter_delete_dialog_title" = "Eliminar o filtro selecionado?";
 "filter_poi_hint" = "Filtrar por nome";
-"shared_string_category" = "Categoria";
+"rendering_value_category_name" = "Categoria";
 "poi_select_category" = "Selecionar categoria";
 "city_type_suburb" = "Subúrbio";
 "city_type_hamlet" = "Aldeia / lugar";
@@ -782,7 +782,7 @@
 "gpx_distance_points" = "Distância (pontos)";
 "gpx_max_speed" = "Velocidade máxima";
 "map_settings_map_magnifier" = "Lupa do mapa";
-"map_settings_text_size" = "Tamanho do texto";
+"text_size" = "Tamanho do texto";
 "osmand_live_title" = "OsmAnd Live";
 "osmand_live_last_changed" = "Última alteração no mapa: %@";
 "osmand_live_last_live_update" = "Última atualização: %@";
@@ -806,7 +806,7 @@
 "osm_upload_no_internet" = "Por favor verifique a sua ligação à Internet e tente novamente.";
 "osm_delete_confirmation_descr" = "Tem a certeza de quer eliminar este POI?";
 "osm_created" = "Criado";
-"osm_modified" = "Alterado";
+"shared_string_modified" = "Alterado";
 "osm_reopened" = "Reaberto";
 "osm_name" = "Nome de utilizador do OpenStreetMap";
 "osm_pass" = "Palavra-passe do OpenStreetMap";
@@ -878,7 +878,7 @@
 "wpt_remove_q" = "Remover ponto da rota?";
 "gpx_select_track" = "Selecionar trilho";
 "gpx_curr_new_track" = "Trilho atual";
-"language" = "Idioma";
+"shared_string_language" = "Idioma";
 "you_searching" = "Está a pesquisar";
 "from_location" = "longe";
 "show_alt_in_drive" = "Mostrar altitude em modo de navegação";
@@ -1009,7 +1009,7 @@
 "price_free" = "Grátis";
 "months_3" = "Três meses";
 "tile_cache" = "Ficheiros temporários dos mosaicos";
-"shared_string_filter" = "Filtro";
+"filter_current_poiButton" = "Filtro";
 "mapil_pano_only" = "Mostrar apenas imagens de 360°";
 "osm_failed_uploads" = "Falha";
 "osm_edit_without_name" = "Sem nome";
@@ -1028,8 +1028,8 @@
 "vector_data" = "Mapas vetoriais offline";
 "add_map_source" = "Adicionar origem do mapa";
 "map_styles" = "Estilos de mapa";
-"add_action" = "Adicionar ação";
-"create_items" = "Criar itens";
+"quick_action_new_action" = "Adicionar ação";
+"quick_action_add_create_items" = "Criar itens";
 "configure_map" = "Configurar mapa";
 "add_map_marker" = "Adicionar marcador de mapa";
 "add_gpx_waypoint" = "Acrescentar ponto GPX";
@@ -1039,11 +1039,11 @@
 "toggle_voice" = "Ativar/desativar voz";
 "add_osm_note" = "Adicionar nota OSM";
 "toggle_online_notes" = "Mostrar/esconder notas do OSM";
-"add_poi" = "Adicionar POI";
+"quick_action_add_poi" = "Adicionar POI";
 "change_map_style" = "Mudar estilo do mapa";
-"change_map_source" = "Alterar origem do mapa";
+"quick_action_map_source" = "Alterar origem do mapa";
 "quick_action_map_overlay" = "Mudar mapa da camada superior";
-"change_map_underlay" = "Mudar mapa da camada inferior";
+"quick_action_map_underlay" = "Mudar mapa da camada inferior";
 "replace_destination" = "Substituir destino";
 "add_destination" = "Adicionar destino";
 "add_first_inermediate" = "Adicionar primeiro intermédio";
@@ -1056,9 +1056,9 @@
 "quick_action_interim_dialog" = "Editar etiquetas ao aplicar";
 "quick_action_name_footer" = "Deixe em branco para usar automaticamente o endereço ou nome do lugar.";
 "quick_action_add_category" = "Adicionar uma categoria";
-"edit_action" = "Editar botão de ação rápida";
+"quick_action_edit_action" = "Editar botão de ação rápida";
 "quick_action_add_tag" = "Adicionar etiqueta";
-"quick_action_tags" = "Etiquetas";
+"gpx_tags_txt" = "Etiquetas";
 "quick_action_bug_descr" = "Esta mensagem está incluída no campo de comentário.";
 "quick_action_source_switch_descr" = "Tocar no botão de ação irá percorrer a lista abaixo.";
 "quick_action_voice_descr" = "Tocar no botão de ação irá ativar ou desativar a orientação por voz durante a navegação.";
@@ -1173,7 +1173,7 @@
 "hide_edits" = "Ocultar edições locais";
 "quick_action_edit_list" = "Editar lista de ações";
 "shared_string_time_of_day" = "Hora do dia";
-"gpx_slope" = "Declive";
+"shared_string_slope" = "Declive";
 "simulate_navigation" = "Simular navegação";
 "select_avoid_descr" = "Selecione as estradas que quer evitar durante a navegação. Pode selecionar uma estrada no mapa ou escolher um tipo na lista abaixo.";
 "route_parameters" = "Parâmetros da rota";
@@ -1596,16 +1596,16 @@
 "help_osmand_live" = "Subscrição - OsmAnd Live";
 "quick_action_mapillary_hide" = "Ocultar Mapillary";
 "one_image_per_tile" = "Um ficheiro de imagem por mosaico";
-"help_nav_profiles" = "Perfis de navegação";
+"navigation_profiles_item" = "Perfis de navegação";
 "quick_action_remove_next_destination_descr" = "Elimina o próximo destino na sua rota. Se for o destino final, a navegação será interrompida.";
 "osmand_routing" = "Roteamento OsmAnd";
-"map_settings_add_online_source" = "Adicionar origem online";
+"add_online_source" = "Adicionar origem online";
 "add_point" = "Adicionar ponto";
 "ltr_or_rtl_combine_via_space" = "%@ %@";
 "ui_customization_descr" = "Itens da gaveta, menu de contexto";
-"add_to_track" = "Adicionar a um trilho";
+"add_to_a_track" = "Adicionar a um trilho";
 "quick_action_mapillary_show" = "Mostrar Mapillary";
-"public_transport_empty_warning_descr" = "Tente alterar a configuração.";
+"public_transport_try_change_settings" = "Tente alterar a configuração.";
 "mapillary_item" = "OsmAnd + Mapillary";
 "special_routing" = "Roteamento especial";
 "shared_string_menu" = "Menu";
@@ -1615,11 +1615,11 @@
 "ltr_or_rtl_combine_via_colon" = "%@: %@";
 "configure_screen_descr" = "Selecionar opções de ecrã para o perfil";
 "quick_action_showhide_mapillary_title" = "Mostrar/ocultar Mapillary";
-"select_distance_for_recalculation" = "Selecione a distância após a qual o percurso será recalculado.";
+"select_distance_route_will_recalc" = "Selecione a distância após a qual o percurso será recalculado.";
 "appearance_on_map" = "Aparência no mapa";
-"save_changes" = "Guardar alterações";
+"profile_alert_need_save_title" = "Guardar alterações";
 "vessel_width_limit_description" = "Defina a largura da embarcação para evitar pontes estreitas";
-"logging_accuracy" = "Precisão do registo";
+"save_track_logging_accuracy" = "Precisão do registo";
 "arrived_at_destination" = "Chegou ao destino.";
 "next_segment" = "Próximo segmento";
 "default_speed_setting_title" = "Velocidade predefinida";
@@ -1632,21 +1632,21 @@
 "shared_string_terrain" = "Terreno";
 "accessibility_announce" = "Avisar por voz";
 "profile_prefs_reset_successful" = "Todas as configurações do perfil foram repostas para os valores de origem";
-"consider_limitations_param" = "Aplicar limitações temporárias (obras...)";
-"two" = "Dois";
+"temporary_conditional_routing" = "Aplicar limitações temporárias (obras...)";
+"shared_string_two" = "Dois";
 "shared_string_max" = "Máximo";
 "routing_profile_straightline" = "Linha reta";
 "light_theme" = "Claro";
-"res_online_source_cache_alert" = "A aplicação dessas alterações limpará os dados temporários desta origem de mosaicos";
+"clear_tiles_warning" = "A aplicação dessas alterações limpará os dados temporários desta origem de mosaicos";
 "importing_from" = "A importar dados de %@";
 "reverse_route" = "Rota inversa";
 "listed_exist" = "%@ listado já existe no OsmAnd.";
 "public_transport_hide" = "Ocultar o transporte público";
 "public_transport_menu" = "Transporte";
 "total" = "Total";
-"num_stops" = "paragens";
+"transport_stops" = "paragens";
 "update_tile" = "Atualizar mapa";
-"shared_string_account" = "Conta";
+"login_account" = "Conta";
 "shared_string_legend" = "Legenda";
 "position_icon_at_rest" = "Ícone de posição quando parado";
 "shared_string_min_speed" = "Velocidade mínima";
@@ -1670,7 +1670,7 @@
 "enter_profile_name" = "Introduzir o nome do perfil";
 "res_slope" = "Declive";
 "quick_action_switch_profile_descr" = "O botão de ação alterna entre os perfis selecionados.";
-"res_pseudo_mercator" = "Projeção pseudo-Mercator";
+"pseudo_mercator_projection" = "Projeção pseudo-Mercator";
 "create_profile_descr" = "Baseie o seu perfil personalizado num dos perfis predefinidos, para definir a configuração básica, como a visibilidade predefinida de widgets e unidades de velocidade e distância. Estes são os perfis predefinidos, juntamente com exemplos de perfis personalizados para os quais eles podem ser personalizados:";
 "show_direction" = "Indicação da distância";
 "nav_type_direct_to" = "Direto ao ponto";
@@ -1922,7 +1922,7 @@
 "fav_add_new_group" = "Adicionar novo grupo";
 "map_update_warning" = "Quer recarregar os dados dos mosaicos a partir da Internet?";
 "use_of_downloaded_map" = "Agora pode usar este mapa offline como origem principal do mapa, numa camada superior ou inferior";
-"size_of_downloaded_data" = "A grande diferença entre os níveis de ampliação pode aumentar o tamanho dos dados descarregados.";
+"zoom_levels_difference_description" = "A grande diferença entre os níveis de ampliação pode aumentar o tamanho dos dados descarregados.";
 "online_sources" = "Origens online";
 "select_online_source" = "Selecionar origem";
 "preview_of_selected_zoom_levels" = "Vista prévia dos níveis de ampliação selecionados";
@@ -1977,7 +1977,7 @@
 "profile_type_osmand_string" = "Perfil OsmAnd";
 "profile_type_user_string" = "Perfil do utilizador";
 "shared_string_gpx_points" = "Pontos";
-"res_standard" = "Mapa padrão";
+"download_regular_maps" = "Mapa padrão";
 
 // Resources
 "shared_string_resources" = "Recursos";
@@ -2089,7 +2089,7 @@
 "coords_format_descr_quick_search" = "Pode alterar o formato das coordenadas para o perfil nas configurações gerais";
 "navigate_point_olc_short" = "OLC";
 "gpx_split_interval" = "Intervalo de divisão";
-"gpx_dir_arrows" = "Setas de direção";
+"gpx_direction_arrows" = "Setas de direção";
 "navigate_point_format_unknown" = "Formato desconhecido";
 "read_full_description" = "Ler a descrição completa";
 "gpx_split_interval_none_descr" = "Selecione a opção de divisão desejada: por tempo ou por distância.";
@@ -2315,7 +2315,7 @@
 "product_desc_weather" = "Previsão de 24h a cada hora com 7 dias de antecedência no mapa";
 "product_desc_ext_weather" = "Habilite o complemento meteorológico para planear uma rota considerando as previsões meteorológicas. Veja o mapa colorido da previsão do tempo, que é atualizado de hora em hora para hoje, amanhã e a semana que vem. \n\nDurante a viagem, veja painéis de informações baseadas na sua localização com temperatura, precipitação, velocidade do vento e pressão. \n\nÉ útil para caminhadas e longas viagens de bicicleta ou motorizada.";
 "measurement_units" = "Unidades de medida";
-"weather_temp_unit_c" = "Celsius";
+"weather_temperature_celsius" = "Celsius";
 "weather_temperature_fahrenheit" = "Fahrenheit";
 "weather_pressure_unit_hpa" = "Hectopascals";
 "weather_pressure_millimeters_of_mercury" = "Milímetros de mercúrio";
@@ -2323,7 +2323,7 @@
 "weather_wind_unit_m_s" = "Metros/segundo";
 "weather_wind_unit_km_per_hour" = "Quilómetros por hora";
 "weather_wind_unit_knots" = "Nós";
-"weather_precip_unit_mm" = "Milímetros";
+"weather_precip_milimeters" = "Milímetros";
 "weather_precip_inches" = "Polegadas";
 "osmand_cloud_login_descr" = "Introduza o endereço de email que usou para o registo da conta. Enviaremos uma palavra-passe única, que será necessária para o próximo passo.";
 "login_footer_full_text" = "Precisa de ajuda? Por favor contacte-nos em\nsupport@osmand.net";
@@ -2498,7 +2498,7 @@
 "osm_live_banner_desc" = "Obtenha descarregamentos ilimitados de mapas, para além de atualizações semanais, diárias ou de hora a hora.";
 "new_device_account" = "Novo dispositivo / nova conta";
 "on_hold" = "Em espera";
-"paused" = "Pausado";
+"shared_string_paused" = "Pausado";
 "shared_string_undefined" = "Não definido";
 "promo_subscription" = "OsmAnd Pro (promoção)";
 "promo" = "Promoção";
@@ -2531,7 +2531,7 @@
 "restore_backup_descr" = "Restaure dados para o aparelho utilizando cópias de segurança online";
 "backup_complete" = "Cópia de segurança completada";
 "shared_string_always_visible" = "Sempre visível";
-"shared_string_always_hidden" = "Sempre oculto";
+"compass_always_hidden" = "Sempre oculto";
 "shared_string_data" = "Dados";
 "shared_string_online_cache" = "Cache de online";
 "shared_string_clear_online_cache" = "Limpar a cache de online";

@@ -148,7 +148,7 @@ static OAQuickActionType *ACTION_TYPE;
                      @"type" : [OAButtonTableViewCell getCellIdentifier],
                      @"target" : @"addTagValue:"
                      }];
-    [data setObject:arr forKey:OALocalizedString(@"quick_action_tags")];
+    [data setObject:arr forKey:OALocalizedString(@"gpx_tags_txt")];
    
     return data;
 }
@@ -194,7 +194,7 @@ static OAQuickActionType *ACTION_TYPE;
 + (OAQuickActionType *) TYPE
 {
     if (!ACTION_TYPE)
-        ACTION_TYPE = [[OAQuickActionType alloc] initWithIdentifier:13 stringId:@"osmpoi.add" class:self.class name:OALocalizedString(@"add_poi") category:CREATE_CATEGORY iconName:@"ic_action_create_poi" secondaryIconName:nil];
+        ACTION_TYPE = [[OAQuickActionType alloc] initWithIdentifier:13 stringId:@"osmpoi.add" class:self.class name:OALocalizedString(@"quick_action_add_poi") category:CREATE_CATEGORY iconName:@"ic_action_create_poi" secondaryIconName:nil];
        
     return ACTION_TYPE;
 }

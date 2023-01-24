@@ -257,7 +257,7 @@
                 }
                 else
                 {
-                    NSString *oname = [start getOnlyName].length > 0 ? [start getOnlyName] : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"map_settings_map"), [NSString stringWithFormat:@"%@ %.3f %@ %.3f", OALocalizedString(@"Lat"), [start getLatitude], OALocalizedString(@"Lon"), [start getLongitude]]];
+                    NSString *oname = [start getOnlyName].length > 0 ? [start getOnlyName] : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"shared_string_map"), [NSString stringWithFormat:@"%@ %.3f %@ %.3f", OALocalizedString(@"Lat"), [start getLatitude], OALocalizedString(@"Lon"), [start getLongitude]]];
                     
                     start = [OARTargetPoint createStartPoint:[[CLLocation alloc] initWithLatitude:[start getLatitude] longitude:[start getLongitude]] name:[[OAPointDescription alloc] initWithType:POINT_TYPE_LOCATION name:oname]];
                 }

@@ -39,7 +39,7 @@
 #import "OASizes.h"
 
 #define kColorDayMode OALocalizedString(@"day")
-#define kColorNightMode OALocalizedString(@"map_settings_night")
+#define kColorNightMode OALocalizedString(@"daynight_mode_night")
 
 #define kAppearanceLineMargin 20.
 

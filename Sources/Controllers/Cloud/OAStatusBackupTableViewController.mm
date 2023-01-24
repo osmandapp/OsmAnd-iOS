@@ -410,13 +410,13 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     switch (operation)
     {
         case EOABackupSyncOperationDownload:
-            return OALocalizedString(localFile ? @"osm_modified" : @"shared_string_added");
+            return OALocalizedString(localFile ? @"shared_string_modified" : @"shared_string_added");
         case EOABackupSyncOperationUpload:
-            return OALocalizedString(remoteFile ? @"osm_modified" : @"shared_string_added");
+            return OALocalizedString(remoteFile ? @"shared_string_modified" : @"shared_string_added");
         case EOABackupSyncOperationDelete:
             return OALocalizedString(@"poi_remove_success");
         default:
-            return OALocalizedString(@"osm_modified");
+            return OALocalizedString(@"shared_string_modified");
     }
 }
 

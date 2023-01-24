@@ -127,7 +127,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
             
             [dataArr addObject:
              @[@{
-                   @"header" : OALocalizedString(@"logging_accuracy"),
+                   @"header" : OALocalizedString(@"save_track_logging_accuracy"),
                    @"name" : @"rec_interval",
                    @"title" : OALocalizedString(@"save_global_track_interval"),
                    @"description" : OALocalizedString(@"save_global_track_interval_descr"),

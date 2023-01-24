@@ -119,7 +119,7 @@
 
 - (void)applyLocalization
 {
-    self.titleLabel.text = _isLogged ? OALocalizedString(@"shared_string_account") : OALocalizedString(@"shared_string_account_add");
+    self.titleLabel.text = _isLogged ? OALocalizedString(@"login_account") : OALocalizedString(@"shared_string_account_add");
     [self.backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
 }
 

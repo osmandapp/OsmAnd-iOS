@@ -112,7 +112,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaLangSection)
 
 - (void)applyLocalization
 {
-    self.titleLabel.text = OALocalizedString(@"language");
+    self.titleLabel.text = OALocalizedString(@"shared_string_language");
     [self.cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
     [self.doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
 }

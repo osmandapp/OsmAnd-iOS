@@ -90,7 +90,7 @@
         case DELETE:
             return OALocalizedString(@"poi_remove_success");
         case MODIFY:
-            return OALocalizedString(@"osm_modified");
+            return OALocalizedString(@"shared_string_modified");
         case REOPEN:
             return OALocalizedString(@"osm_reopened");
         default:

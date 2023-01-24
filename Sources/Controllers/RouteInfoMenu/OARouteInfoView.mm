@@ -1282,7 +1282,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
                 if (point)
                 {
                     [cell.imgView setImage:[UIImage imageNamed:@"ic_custom_start_point"]];
-                    NSString *oname = [point getOnlyName].length > 0 ? [point getOnlyName] : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"map_settings_map"), [self getRoutePointDescription:[point getLatitude] lon:[point getLongitude]]];
+                    NSString *oname = [point getOnlyName].length > 0 ? [point getOnlyName] : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"shared_string_map"), [self getRoutePointDescription:[point getLatitude] lon:[point getLongitude]]];
                     cell.addressLabel.text = oname;
                 }
                 else
@@ -1838,7 +1838,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 - (NSAttributedString *) getAttributedEmptyRouteWarning
 {
     NSString *mainText = OALocalizedString(@"public_transport_empty_warning_title");
-    NSString *additionalText = OALocalizedString(@"public_transport_empty_warning_descr");
+    NSString *additionalText = OALocalizedString(@"public_transport_try_change_settings");
     NSString *settingName = OALocalizedString(@"avoid_transport_type");
     NSDictionary *attributes = @{NSFontAttributeName: [UIFont systemFontOfSize:15], NSForegroundColorAttributeName: UIColorFromRGB(color_text_footer)};
     

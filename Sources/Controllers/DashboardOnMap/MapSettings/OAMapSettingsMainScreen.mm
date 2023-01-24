@@ -351,7 +351,7 @@
         if ([_settings.appearanceMode get] == APPEARANCE_MODE_DAY)
             modeStr = OALocalizedString(@"day");
         else if ([_settings.appearanceMode get] == APPEARANCE_MODE_NIGHT)
-            modeStr = OALocalizedString(@"map_settings_night");
+            modeStr = OALocalizedString(@"daynight_mode_night");
         else if ([_settings.appearanceMode get] == APPEARANCE_MODE_AUTO)
             modeStr = OALocalizedString(@"daynight_mode_auto");
         else
@@ -373,7 +373,7 @@
                 @"key": @"map_magnifier"
         }];
         [mapStyleSectionData addObject:@{
-                @"name": OALocalizedString(@"map_settings_text_size"),
+                @"name": OALocalizedString(@"text_size"),
                 @"value": [self getPercentString:[_settings.textSize get:_settings.applicationMode.get]],
                 @"image": @"ic_custom_text_size",
                 @"type": [OAValueTableViewCell getCellIdentifier],
@@ -469,7 +469,7 @@
     }];
 
     [data addObject:@{
-            @"group_name": OALocalizedString(@"language"),
+            @"group_name": OALocalizedString(@"shared_string_language"),
             @"cells": @[@{
                     @"name": OALocalizedString(@"sett_lang"),
                     @"value": [self getMapLangValueStr],

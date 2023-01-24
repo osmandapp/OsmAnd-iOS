@@ -112,7 +112,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
         [dataArr addObject:@[@{
                         @"type": [OAIconTitleValueCell getCellIdentifier],
                         @"img": @"ic_custom_map_languge",
-                        @"title": OALocalizedString(@"language")
+                        @"title": OALocalizedString(@"shared_string_language")
                 }]];
     }
 

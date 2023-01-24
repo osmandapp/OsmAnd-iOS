@@ -588,7 +588,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
-    return section == kZoomSection ? OALocalizedString(@"size_of_downloaded_data") : @"";
+    return section == kZoomSection ? OALocalizedString(@"zoom_levels_difference_description") : @"";
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath

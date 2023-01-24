@@ -95,7 +95,7 @@ static NSArray<OAColoringType *> * TRACK_COLORING_TYPES = @[OAColoringType.TRACK
 {
    if (!SLOPE)
    {
-       SLOPE = [[OAColoringType alloc] initWithName:@"slope" title:OALocalizedString(@"gpx_slope") iconName:@"ic_custom_altitude_and_slope"];
+       SLOPE = [[OAColoringType alloc] initWithName:@"slope" title:OALocalizedString(@"shared_string_slope") iconName:@"ic_custom_altitude_and_slope"];
    }
     return SLOPE;
 }

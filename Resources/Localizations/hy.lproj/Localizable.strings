@@ -2424,3 +2424,5 @@
 "animate_my_location" = "Անիմացնել իմ դիրքը";
 "recording_delete_confirm" = "Ջնջել այս գրառումը\?";
 "position_on_map_center" = "Կենտրոնում";
+
+"routing_attr_length_description" = "Նշեք թույլատրելի տրանսպորտային միջոցի երկարությունը երթուղով երթևեկության համար։";

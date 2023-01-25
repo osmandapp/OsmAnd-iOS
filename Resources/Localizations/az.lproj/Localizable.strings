@@ -2413,3 +2413,6 @@
 "shared_string_selected" = "Seçilmiş";
 "backup_into_file" = "Fayl olaraq nüsxələ";
 "local_backup" = "Yerli nüsxə";
+
+"routing_attr_length_description" = "Marşrutlarda icazə veriləcək nəqliyyat vasitəsinin uzunluğunu təyin edin.";
+"rendering_value_all_name" = "Hamısı";

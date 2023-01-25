@@ -2307,3 +2307,21 @@
 "shared_string_angle" = "კუთხე";
 "use_login_and_password" = "გამოიყენეთ მომხმარებლის სახელი და პაროლი";
 "sign_in_with_open_street_map" = "OsmAnd-ში შესვლა";
+
+"rendering_attr_OSMMapperAssistantFixme_description" = "fixmeჭდეების ჩვენება";
+"rendering_value_omit_name" = "გამოტოვება";
+"rendering_attr_showWaterwayTunnels_name" = "წყლის გვირაბები";
+"rendering_attr_OSMMapperAssistantIconsLowZooms_description" = "დაბალი გადიდებისას ხატულების სქემატური ჩვენება";
+"rendering_attr_OSMMapperAssistantFixme_name" = "fixmeჭდეები";
+"routing_attr_prefer_hiking_routes_name" = "საფეხმავლო ბილიკებისთვის პრიორიტეტის მიცემა";
+"rendering_attr_OSMMapperAssistantNote_description" = "შენიშვნების ჭდეების ჩვენება";
+"routing_attr_allow_streams_description" = "არხების და ნაკადულების ჩვენება";
+"rendering_attr_seabedDetail_name" = "ზღვის ფსკერის დეტალები";
+"routing_attr_prefer_hiking_routes_description" = "საფეხმავლო ბილიკებისთვის პრიორიტეტის მიცემა";
+"rendering_value_all_name" = "ყველა";
+"routing_attr_avoid_footways_name" = "საცალფეხო ფზების არიდება";
+"rendering_attr_OSMMapperAssistantIconsLowZooms_name" = "ხატულები დაბალი გადიდებისას";
+"rendering_attr_OSMMapperAssistantNote_name" = "შენიშვნების ჭდეები";
+"routing_attr_avoid_footways_description" = "საცალფეხო გზების არიდება";
+"routing_attr_allow_streams_name" = "არხების და რუების ჩვენება";
+"rendering_attr_showWaterwayTunnels_description" = "წყლის გვირაბების ჩვენება";

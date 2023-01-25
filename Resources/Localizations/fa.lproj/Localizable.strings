@@ -2058,3 +2058,26 @@
 "select_folder_descr" = "پوشه را انتخاب کنید یا یکی جدید اضافه نمایید";
 "tracks_on_map" = "ردهای نمایان";
 "backup_pause_all" = "مکث همه";
+
+"rendering_attr_horse_scale_dangerous_name" = "خطرناک";
+"routing_attr_difficulty_preference_expert_name" = "کارشناس";
+"routing_attr_avoid_footways_name" = "راه‌های پیاده";
+"rendering_attr_horse_scale_difficult_name" = "دشوار";
+"rendering_attr_noNatureReserveBoundaries_description" = "پنهان‌کردن مرز ذخیره‌گاه‌های طبیعی، مناطق حفاظت‌شده و پارک‌های ملی.";
+"routing_attr_allow_intermittent_name" = "آبراه‌های غیردائمی مجاز باشد";
+"routing_attr_length_description" = "طول مجاز خودرو در مسیرها را مشخص کنید.";
+"routing_attr_driving_style_description" = "هدف رانندگی را انتخاب نمایید تا مسیری کوتاه‌تر، سریع‌تر یا ایمن‌تر دریافت کنید";
+"rendering_attr_horse_scale_critical_name" = "بحرانی";
+"routing_attr_allow_intermittent_description" = "مسیریابی از آبراه‌های دوره‌ای و غیردائمی را مجاز می‌کند";
+"routing_attr_difficulty_preference_beginner_name" = "مبتدی";
+"rendering_attr_horse_scale_impossible_name" = "غیر ممکن";
+"routing_attr_freeride_policy_allow_name" = "اجازه";
+"routing_attr_allow_streams_name" = "رودهای کوچک و نهرهای مصنوعی مجاز باشد";
+"routing_attr_allow_streams_description" = "مسیریابی از رودهای کوچک (stream) و نهرهای مصنوعی (drain) مجاز باشد";
+"rendering_attr_noNatureReserveBoundaries_name" = "مرزهای حفاظت محیط‌زیست";
+"routing_attr_prefer_hiking_routes_name" = "ترجیح مسیرهای پیاده‌گردی";
+"routing_attr_prefer_hiking_routes_description" = "ترجیح مسیرهای پیاده‌گردی";
+"routing_attr_avoid_footways_description" = "از راه‌های پیاده پرهیز کنید";
+"rendering_attr_horse_scale_common_name" = "مشترک";
+"rendering_value_all_name" = "همه";
+"routing_attr_difficulty_preference_advanced_name" = "پیشرفته";

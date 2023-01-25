@@ -2415,3 +2415,26 @@
 "login_open_street_map_org" = "Kirjaudu sisään OpenStreetMap.org";
 "tts_title" = "TTS";
 "delete_all_confirmation" = "Kyllä, poista kaikki";
+
+"rendering_attr_noNatureReserveBoundaries_description" = "Piilota luonnonsuojelualueiden, suojelualueiden ja kansallispuistojen rajat.";
+"rendering_attr_OSMMapperAssistantIconsLowZooms_name" = "Ikonit matalalla tarkkuudella";
+"rendering_attr_OSMMapperAssistantFixme_name" = "Fixme tunnisteet";
+"rendering_attr_OSMMapperAssistantNote_name" = "Huomautustunnisteet";
+"routing_attr_avoid_footways_name" = "Vältä kävelyteitä";
+"routing_attr_prefer_hiking_routes_name" = "Suosi patikointireittejä";
+"routing_attr_prefer_hiking_routes_description" = "Suosi patikointireittejä";
+"rendering_attr_showWaterwayTunnels_description" = "Älä piilota vesiväylien tunneleita";
+"rendering_attr_OSMMapperAssistantIconsLowZooms_description" = "Ikonien yksinkertaistettu esittäminen matalilla tarkkuuksilla";
+"routing_attr_allow_streams_description" = "Sallii virrat ja viemärit";
+"rendering_attr_showTrainRoutes_name" = "Junareitit";
+"rendering_value_all_name" = "Kaikki";
+"rendering_attr_showTramRoutes_name" = "Raitiovaunureitit";
+"rendering_attr_noNatureReserveBoundaries_name" = "Luonnon rajat";
+"routing_attr_driving_style_description" = "Valitse ajotarkoitus saadaksesi lyhyemmän, nopeamman tai turvallisemman reitin";
+"routing_attr_allow_intermittent_name" = "Salli ajoittaiset vesireitit";
+"rendering_attr_OSMMapperAssistantFixme_description" = "Näytä fixme tunnisteet";
+"rendering_attr_OSMMapperAssistantNote_description" = "Näytä huomautustunnisteet";
+"routing_attr_allow_streams_name" = "Salli virrat ja viemärit";
+"routing_attr_avoid_footways_description" = "Vältä kävelyteitä";
+"rendering_attr_showWaterwayTunnels_name" = "Vesiväylien tunnelit";
+"routing_attr_allow_intermittent_description" = "Sallii ajoittaiset vesireitit";

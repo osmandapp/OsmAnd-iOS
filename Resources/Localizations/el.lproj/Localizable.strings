@@ -1543,3 +1543,20 @@
 "confirm_usage_speed_cameras" = "Σε πολλές χώρες (Γερμανία, Γαλλία, Ιταλία κ.α) η χρήση προειδοποιήσεων κάμερας ταχύτητας είναι παράνομη. Το OsmAnd δεν αναλαμβάνει καμία ευθύνη, εάν παραβιάζετε τον νόμο. Παρακαλούμε πατήστε \'Ναι\' μόνο εάν δικαιούστε να χρησιμοποιήσετε αυτό το γνώρισμα.";
 "add_waypoint" = "Προσθήκη σημείου διαδρομής";
 "gpx_selection_segment_title" = "Τμήμα";
+
+"routing_attr_allow_streams_name" = "Επιτρέψτε ρέματα και οχετούς";
+"rendering_attr_showShareTaxiRoutes_name" = "Δρομολόγια shuttle";
+"routing_attr_prefer_hiking_routes_description" = "Προτιμήστε διαδρομή για πεζοπορία";
+"rendering_attr_showWaterwayTunnels_description" = "Μη απόκρυψη σηραγγών νερού";
+"rendering_attr_showWaterwayTunnels_name" = "Σήραγγες οδών νερού";
+"routing_attr_prefer_hiking_routes_name" = "Προτιμήστε διαδρομές για πεζοπορία";
+"rendering_attr_showTramRoutes_name" = "Δρομολόγια τραμ";
+"routing_attr_allow_intermittent_name" = "Επιτρέψτε διακοπτόμενες οδούς νερού";
+"routing_attr_allow_streams_description" = "Επιτρέψτε ρέματα και οχετούς";
+"routing_attr_length_description" = "Καθορίστε μήκος οχήματος που επιτρέπεται στους δρόμους.";
+"routing_attr_allow_intermittent_description" = "Επιτρέψτε διακοπτόμενες οδούς νερού";
+"rendering_attr_showTrainRoutes_name" = "Δρομολόγια τραίνου";
+"rendering_attr_showBusRoutes_name" = "Δρομολόγια λεωφορείου";
+"routing_attr_avoid_footways_name" = "Αποφυγή μονοπατιών πεζών";
+"rendering_attr_showTrolleybusRoutes_name" = "Δρομολόγια τρόλεϊ";
+"routing_attr_avoid_footways_description" = "Αποφυγή μονοπατιών πεζών";

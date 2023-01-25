@@ -2595,3 +2595,19 @@
 \n
 \nThe current version of the data will be saved on the server, but you will not be able to revert to the previously made changes.";
 "shared_string_recorded" = "Recorded";
+
+"routing_attr_allow_streams_name" = "Allow streams and drains";
+"routing_attr_allow_streams_description" = "Allow streams and drains";
+"routing_attr_avoid_footways_description" = "Avoid footways";
+"routing_attr_avoid_footways_name" = "Avoid footways";
+"routing_attr_driving_style_description" = "Select driving purpose to get shorter, faster or safer route";
+"routing_attr_prefer_tactile_paving_description" = "Prefer tactile paving";
+"routing_attr_prefer_hiking_routes_description" = "Prefer hiking routes";
+"rendering_attr_noNatureReserveBoundaries_name" = "Nature boundaries";
+"rendering_attr_noNatureReserveBoundaries_description" = "Hide nature reserve, protected areas, and national park boundaries.";
+"routing_attr_length_description" = "Specify vehicle length to be permitted on routes.";
+"routing_attr_allow_intermittent_name" = "Allow intermittent water ways";
+"routing_attr_prefer_tactile_paving_name" = "Prefer tactile paving";
+"routing_attr_allow_intermittent_description" = "Allow intermittent water ways";
+"rendering_attr_natureReserves_name" = "Nature reserve";
+"routing_attr_prefer_hiking_routes_name" = "Prefer hiking routes";

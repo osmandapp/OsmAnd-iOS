@@ -1849,3 +1849,16 @@ Lon %@";
 "download_all" = "Baixar todo";
 "gpx_upload_public_visibility_descr" = "\"Público\" significa que a pista amosarase de xeito público na túa listaxe de pistas e nas listaxes de pistas GPS públicas con marcas de tempo en bruto. Os datos servidos a través da API no farán referencia á túa pácina de pistas. As marcaxes de tempo dos puntos da pista non estarán dispoñíbeis a través da API pública de GPS, aínda que os puntos son ordenados de xeito cronolóxico.";
 "osm_live_payment_desc" = "Cobraráseche unha subscrición polo período escollido. Podes desbotar a túa subscrición na Google Play en calquera intre.";
+
+"routing_attr_driving_style_description" = "Escolle o propósito da condución para obter unha ruta máis curta, máis rápida ou máis segura";
+"routing_attr_allow_intermittent_name" = "Permitir canles de auga intermitentes";
+"routing_attr_allow_streams_description" = "Permitir regatos e cunetas";
+"rendering_attr_noNatureReserveBoundaries_name" = "Espazos naturais";
+"routing_attr_avoid_footways_description" = "Evitar sendas peonís, camiños e beirarrúas";
+"routing_attr_prefer_hiking_routes_description" = "Preferir rutas de sendeirismo";
+"routing_attr_prefer_hiking_routes_name" = "Preferir rutas de sendeirismo";
+"routing_attr_avoid_footways_name" = "Evitar sendas peonís";
+"routing_attr_length_description" = "Especifica a lonxitude do vehículo para ser permitido nas rutas.";
+"routing_attr_allow_streams_name" = "Permitir regatos e cunetas";
+"rendering_attr_noNatureReserveBoundaries_description" = "Agochar reservas naturais,áreas protexidas e de parques nacionais.";
+"routing_attr_allow_intermittent_description" = "Permitir canles de auga intermitentes";

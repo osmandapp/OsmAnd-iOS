@@ -2761,7 +2761,6 @@
 "rendering_attr_weatherWindSpeedContours_name" = "Izolinii rafale de vânt";
 "rendering_attr_seabedDetail_name" = "Detalii privind fundul mării";
 "routing_attr_difficulty_preference_beginner_name" = "Începător";
-"shared_string_file_cloud" = "Cloud";
 "local_backup_empty_file" = "Fișierul backup nu conține niciun element pentru restaurare.";
 "backup_delete_from_cloud" = "Șterge de pe cloud";
 "position_on_map" = "Amplasare poziție";

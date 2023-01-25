@@ -190,6 +190,17 @@ class Main {
         IOSWriter.addTranslations()
     }
     
+    static func pringDebugLog(prefix: String, iosKey: String, iosValue: String, androidKey: String, androidValue: String) {
+        
+        if (LOGGING) {
+            print("#### " + prefix + ":   ios key       :  " + iosKey)
+            print("#### " + prefix + ":   ios value     :  " + iosValue)
+            print("#### " + prefix + ":   android key   :  " + androidKey)
+            print("#### " + prefix + ":   android value :  " + androidValue)
+            print("#### " + prefix + ":   ===========================================================================================")
+        }
+    }
+    
 }
 
 
@@ -213,24 +224,8 @@ class Initialiser {
         for iosTranslation in iosDict
         {
             if let androidTranslationValue = androidDict[iosTranslation.key] {
-                
-                //TODO: NEW variant
-                /*
                 commonTranslations[iosTranslation.key] = iosTranslation.value
-                pringDebugLog(prefix: "SUCCESS", iosKey: iosTranslation.key, iosValue: iosTranslation.value, androidKey: iosTranslation.key, androidValue: androidTranslationValue)
-                 */
-                
-                //We don't skip founded translations anymore
-                if androidTranslationValue == iosTranslation.value || equaslWithoutDots(str1: androidTranslationValue, str2: iosTranslation.value) {
-                    /// iosKey == androidKey && iosEnValue == androidEnValue
-                    commonTranslations[iosTranslation.key] = iosTranslation.value
-                    pringDebugLog(prefix: "SUCCESS", iosKey: iosTranslation.key, iosValue: iosTranslation.value, androidKey: iosTranslation.key, androidValue: androidTranslationValue)
-                } else {
-                    /// iosKey == androidKey && iosEnValue != androidEnValue
-                    /// ignoring
-                    pringDebugLog(prefix: "IGNORED", iosKey: iosTranslation.key, iosValue: iosTranslation.value, androidKey: iosTranslation.key, androidValue: androidTranslationValue)
-                }
-                 
+                 Main.pringDebugLog(prefix: "FOUND", iosKey: iosTranslation.key, iosValue: iosTranslation.value, androidKey: iosTranslation.key, androidValue: androidTranslationValue)
             }
             else {
                 /// iosKey != androidKey.
@@ -239,14 +234,14 @@ class Initialiser {
                 if androidDict.values.contains(iosTranslation.value) {
                     keys = (androidDict as NSDictionary).allKeys(for: iosTranslation.value) as! [String]
                     commonValuesDict[iosTranslation.key] = keys
-                    pringDebugLog(prefix: "GUESSED", iosKey: iosTranslation.key, iosValue: iosTranslation.value, androidKey: keys.first!, androidValue: androidDict[keys.first!]!)
+                    Main.pringDebugLog(prefix: "GUESSED", iosKey: iosTranslation.key, iosValue: iosTranslation.value, androidKey: keys.first!, androidValue: androidDict[keys.first!]!)
                 }
                 else if iosTranslation.value.last == "." && androidDict.values.contains(String(iosTranslation.value.dropLast())) {
                     keys = (androidDict as NSDictionary).allKeys(for: String(iosTranslation.value.dropLast())) as! [String]
                     commonValuesDict[iosTranslation.key] = keys
-                    pringDebugLog(prefix: "GUESSED", iosKey: iosTranslation.key, iosValue: iosTranslation.value, androidKey: keys.first!, androidValue: androidDict[keys.first!]!)
+                    Main.pringDebugLog(prefix: "GUESSED", iosKey: iosTranslation.key, iosValue: iosTranslation.value, androidKey: keys.first!, androidValue: androidDict[keys.first!]!)
                 } else {
-                    pringDebugLog(prefix: "NOT_FOUND", iosKey: iosTranslation.key, iosValue: iosTranslation.value, androidKey: "", androidValue: "")
+                    Main.pringDebugLog(prefix: "NOT_FOUND", iosKey: iosTranslation.key, iosValue: iosTranslation.value, androidKey: "", androidValue: "")
                 }
             }
         }
@@ -259,18 +254,6 @@ class Initialiser {
             return true
         }
         return false
-    }
-
-    
-    static func pringDebugLog(prefix: String, iosKey: String, iosValue: String, androidKey: String, androidValue: String)
-    {
-        if (LOGGING) {
-            print("#### " + prefix + ":   ios key       :  " + iosKey)
-            print("#### " + prefix + ":   ios value     :  " + iosValue)
-            print("#### " + prefix + ":   android key   :  " + androidKey)
-            print("#### " + prefix + ":   android value :  " + androidValue)
-            print("#### " + prefix + ":   ===========================================================================================")
-        }
     }
     
 }
@@ -291,29 +274,20 @@ class IOSReader {
     static func replacePlaceholders(androidDict: [String : String]) -> [String : String] {
         var updatedDict = androidDict
         for elem in updatedDict {
-            let range = NSRange(location: 0, length: elem.value.utf16.count)
+            var modString = elem.value;
             
-            let regex = try! NSRegularExpression(pattern: "%[0-9]*[$]?[sdt.]")
-            if regex.firstMatch(in: elem.value, options: [], range: range) != nil {
-                let modString = regex.stringByReplacingMatches(in: elem.value, options: [], range: NSMakeRange(0, elem.value.utf16.count), withTemplate: replace(str: elem.value))
-                updatedDict.updateValue(modString, forKey: elem.key)
+            for i in 1 ..< 10 {
+                let pattern = "%" + String(i) + "$"
+                modString = modString.replacingOccurrences(of: pattern, with: "%")
             }
+            
+            modString = modString.replacingOccurrences(of: "%s", with: "%@")
+            modString = modString.replacingOccurrences(of: "%tF", with: "%@")
+            modString = modString.replacingOccurrences(of: "%tT", with: "%@")
+            
+            updatedDict.updateValue(modString, forKey: elem.key)
         }
         return updatedDict
-    }
-    
-    
-    static func replace(str: String) -> String {
-        let range = NSRange(location: 0, length: str.utf16.count)
-        var regex = try! NSRegularExpression(pattern: "%[0-9]*[$]?[s]")
-        if regex.firstMatch(in: str, options: [], range: range) != nil {
-            return "%@"
-        }
-        regex = try! NSRegularExpression(pattern: "%[0-9]*[$]?[d]")
-        if regex.firstMatch(in: str, options: [], range: range) != nil {
-            return "%d"
-        }
-        return str
     }
     
 }
@@ -324,9 +298,11 @@ class IOSWriter {
     
     static func addTranslations() {
         
+        //print("\nTRANSLATING: English \n")
         IOSWriter.makeNewDict(language: iosEnglishKey, iosDict: iosEnglishDict, androidDict: androidEnglishDict)
         
         for language in languageDict {
+            //print("\nTRANSLATING: " + language.key + " \n")
             let iosDict = IOSReader.parseTranslationFile(language: language.key)
             let androidDict = AndroidReader.parseTranslationFile(language: language.key)
             IOSWriter.makeNewDict(language: language.key, iosDict: iosDict, androidDict: androidDict)

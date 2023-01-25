@@ -178,9 +178,9 @@ class Main {
     static private func addRoutingParametersIfNeeded(_ arguments: [String], _ osmandRepositoriesFolder: URL) {
         print("RUN: Main.addRoutingParametersIfNeeded() \n")
         System.changeDir(osmandRepositoriesFolder.appendingPathComponent("ios/").path)
-        if (arguments.count == 2) && (arguments[1] == "-routing") || DEBUG {
+        //if (arguments.count == 2) && (arguments[1] == "-routing") || DEBUG {
             RoutingParamsHelper.addRoutingParams()
-        }
+        //}
     }
     
     
@@ -212,7 +212,7 @@ class Initialiser {
         System.changeDir(osmandRepositoriesFolder.appendingPathComponent("ios/").path)
         
         iosEnglishDict = IOSReader.parseTranslationFile(language: iosEnglishKey)
-        androidEnglishDictOrig = AndroidReader.parseTranslationFile(language: androidEnglishKey) //TODO: DELETE?
+        androidEnglishDictOrig = AndroidReader.parseTranslationFile(language: androidEnglishKey)
         androidEnglishDict = IOSReader.replacePlaceholders(androidDict: androidEnglishDictOrig)
         compareDicts(iosDict: iosEnglishDict, androidDict: androidEnglishDict)
     }
@@ -298,11 +298,11 @@ class IOSWriter {
     
     static func addTranslations() {
         
-        //print("\nTRANSLATING: English \n")
+        print("\nTRANSLATING: English \n")
         IOSWriter.makeNewDict(language: iosEnglishKey, iosDict: iosEnglishDict, androidDict: androidEnglishDict)
         
         for language in languageDict {
-            //print("\nTRANSLATING: " + language.key + " \n")
+            print("\nTRANSLATING: " + language.key + " \n")
             let iosDict = IOSReader.parseTranslationFile(language: language.key)
             let androidDict = AndroidReader.parseTranslationFile(language: language.key)
             IOSWriter.makeNewDict(language: language.key, iosDict: iosDict, androidDict: androidDict)
@@ -386,6 +386,16 @@ class IOSWriter {
         var resultString = fullString
         resultString.replaceSubrange(startIndex ..< endIndex, with: newValue)
         return resultString
+    }
+    
+    
+    static func getKey(inFullString fullString: String) -> String {
+        let quotationMarkIndexes = getAllSubstringIndexes(fullString: fullString, subString: "\"")
+        guard (quotationMarkIndexes.count >= 4) else {return fullString}
+        
+        let startIndex = fullString.index(fullString.startIndex, offsetBy: quotationMarkIndexes[0] + 1)
+        let endIndex = fullString.index(fullString.startIndex, offsetBy: quotationMarkIndexes[1])
+        return String( fullString[startIndex ..< endIndex])
     }
     
     
@@ -538,7 +548,6 @@ class Parser: NSObject, XMLParserDelegate {
 }
 
 
-//TODO: Debug it!
 class RoutingParamsHelper {
     
     static func addRoutingParams() {
@@ -549,8 +558,9 @@ class RoutingParamsHelper {
     }
     
     static func addParams (language: String) {
+        //print("\nROUTE_PARAMS_TRANSLATING: " + language + "\n")
         var routeDict: [String:String] = [:]
-        var outputArray: [String] = []
+        var addedStringsArray: [String] = []
         
         let url = URL(fileURLWithPath: "./Resources/Localizations/" + language + ".lproj/Localizable.strings")
         let path = url.path
@@ -579,21 +589,37 @@ class RoutingParamsHelper {
             }
         }
         
+        var updatedCount = 0
+        var foundedKeys = [String]()
         for elem in iosArr {
             if elem.hasPrefix("\"routeInfo_") || elem.hasPrefix("\"routing_attr_") || elem.hasPrefix("\"rendering_attr_") || elem.hasPrefix("\"rendering_value_") {
+                
                 if let index = iosArr.firstIndex(of: elem) {
-                    iosArr.remove(at: index)
+                    let iosString = iosArr[index];
+                    let key = IOSWriter.getKey(inFullString: iosString)
+                    
+                    if let androidValue = androidDict[key] {
+                        foundedKeys.append(key)
+                        let updatedSrting = IOSWriter.replaceValueText(newValue: IOSWriter.filterUnsafeChars(androidValue), inFullString: iosString)
+//                        updatedSrting = IOSWriter.filterUnsafeChars(androidValue)
+                        if (iosString != updatedSrting) {
+                            iosArr[index] = updatedSrting
+                            updatedCount += 1
+                        }
+                    }
                 }
             }
         }
         
         for elem in routeDict {
-            outputArray.append(makeOutputString(str1: elem.key, str2: elem.value))
+            if (!foundedKeys.contains(elem.key)) {
+                addedStringsArray.append(makeOutputString(str1: elem.key, str2: elem.value))
+            }
         }
-        print(language, outputArray.count)
         let joined1 = iosArr.joined(separator: "\n")
-        let joined2 = outputArray.joined(separator: "")
-        let joined = joined1 + joined2
+        let joined2 = addedStringsArray.joined(separator: "\n")
+        let joined = joined1 + "\n" + joined2
+        print("route_params : ", language, " added : ", addedStringsArray.count, " updated: ", updatedCount)
         do {
             try joined.write(to: url, atomically: false, encoding: .utf8)
         }

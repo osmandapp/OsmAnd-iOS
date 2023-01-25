@@ -51,7 +51,7 @@
 "gpx_no_tracks" = "Keine Tracks vorhanden";
 "gpx_remove" = "Track entfernen?";
 "shared_string_statistics" = "Statistiken";
-"gpx_average_speed" = "Durchschnittsgeschwindigkeit";
+"map_widget_average_speed" = "Durchschnittsgeschwindigkeit";
 "gpx_avg_elev" = "Durchschnittshöhe";
 "gpx_updown" = "hoch/runter";
 "track_save" = "Aktuellen Track speichern";
@@ -82,7 +82,7 @@
 "sett_show" = "Anzeigen";
 "sett_notshow" = "nicht zeigen";
 "sett_deg_min" = "Grad und Minuten";
-"maps" = "Karten";
+"shared_string_maps" = "Karten";
 "prch_ski_q" = "Bitte den \"Ski Karten\" Stil einschalten in den Karten Einstellungen";
 "proceed_q" = "fortfahren?";
 "shared_string_download" = "Herunterladen";
@@ -163,7 +163,7 @@
 "shared_string_control_start" = "Start";
 "shared_string_currently_recording_track" = "Momentane Track-Aufzeichnung";
 "track_stop_rec" = "Aufzeichnung stoppen";
-"track_new_segment" = "Neues Segment starten";
+"gpx_start_new_segment" = "Neues Segment starten";
 "track_start_rec" = "Trackaufzeichnung beginnen";
 "track_rec_addon_q" = "Bitte die Trackaufzeichnungs-Erweiterung zum Aufnehmen und Speichern der Strecken aktivieren";
 "sett_loc_fmt" = "Koordinatenformat";
@@ -220,7 +220,7 @@
 "prch_nau_q2_wifi" = "Das Herunterladen über ein WiFi-Netzwerk benötigt %@.";
 "res_inst_avail_cell_q" = "Installation von %@ benötigt %@ beim Download über das Mobilfunknetz.";
 "res_inst_avail_wifi_q" = "Installation von %@ benötigt %@ beim Download über das WLAN.";
-"parking_time_limited" = "Parkzeit begrenzt auf";
+"parking_place_limited" = "Parkzeit begrenzt auf";
 "time_left" = "verbleibend";
 "osmand_parking_overdue" = "überfällig";
 "int_hour" = "h";
@@ -231,7 +231,7 @@
 "product_title_parking" = "Park-Position";
 "product_desc_parking" = "Verfolgen Sie Parkdauer und Standort Ihres Autos";
 "product_title_skimap" = "Ski-Karte";
-"product_title_track_recording" = "Streckenaufzeichnung";
+"monitoring_settings" = "Streckenaufzeichnung";
 "product_desc_track_recording" = "Aufzeichnen und Speichern Ihrer Fahrten als GPX-Tracks";
 "index_name_africa" = "Afrika";
 "product_desc_africa" = "Unbegrenzte Kartendownloads für Afrika";
@@ -280,7 +280,7 @@
 "product_title_allworld" = "Alle Weltkarten";
 "product_desc_allworld" = "Karten der ganzen Welt";
 "get_unlimited_access" = "Erhalten Sie unbegrenzten Zugang";
-"latitude" = "Breitengrad";
+"navigate_point_latitude" = "Breitengrad";
 "navigate_point_longitude" = "Längengrad";
 "track_save_short_q" = "Track ist zu kurz, wollen Sie diesen speichern?";
 "add_as" = "ergänzen als";
@@ -318,7 +318,7 @@
 "no_other_translations" = "Es gibt keine anderen Übersetzungen";
 "wpt_remove_q" = "Wegpunkt entfernen?";
 "gpx_select_track" = "Track auswählen";
-"gpx_curr_new_track" = "Aktueller Track";
+"current_track" = "Aktueller Track";
 "access_hint_enter_name" = "Namen eingeben";
 "shared_string_not_selected" = "Nicht ausgewählt";
 "shared_string_language" = "Sprache";
@@ -374,7 +374,7 @@
 "sett_lang_show_trans" = "Namen transliterieren";
 "edit_waypoint_short" = "Wegpunkt bearbeiten";
 "map_creator" = "Kartengenerator";
-"local_names" = "Lokale Namen";
+"local_map_names" = "Lokale Namen";
 "history" = "Verlauf";
 "today" = "Heute";
 "yesterday" = "Gestern";
@@ -482,7 +482,7 @@
 "do_not_send_anonymous_data" = "Keine anonymen Daten senden";
 "wiki_buy_description" = "Kaufen Sie das Wikipedia Plugin und laden Sie die Daten von %@ herunter, damit Sie komplette Artikel lesen können";
 "wiki_download_description" = "Laden Sie die Wikipedia Daten von %@ herunter um komplette Artikel lesen zu können";
-"map_an_region" = "diese Region";
+"download_wiki_region_placeholder" = "diese Region";
 "right_side_navigation" = "Rechtsverkehr";
 "si_mi_meters" = "Meilen/Meter";
 "no_address_found" = "Keine Adresse bekannt";
@@ -713,7 +713,7 @@
 "will_open_on" = "Öffnet um";
 "will_open_tomorrow_at" = "Öffnet morgen um";
 "shared_string_search" = "Suchen";
-"targets" = "Ziele";
+"shared_string_target_points" = "Ziele";
 "search_radius_proximity" = "Innerhalb";
 "poi" = "POI";
 // Shared Strings
@@ -737,7 +737,7 @@
 "search_radius" = "Suchradius";
 "transport_Routes" = "Routen";
 "transport_nearby_routes_within" = "Nahe gelegene Routen innerhalb von";
-"transport_stop" = "Haltestelle";
+"shared_string_control_stop" = "Haltestelle";
 "transport_nearby_routes" = "Innerhalb";
 "route_stops_before" = "%@ Haltestellen davor";
 "shared_string_previous" = "Zurück";
@@ -746,7 +746,7 @@
 "confirm_every_run" = "Immer fragen";
 "tunnel_warning" = "Tunnel voraus";
 "save_current_track_descr" = "Aktuellen Track jetzt als GPX-Datei speichern.";
-"poi_clear" = "Löschen";
+"shared_string_clear" = "Löschen";
 "track_during_nav" = "Automatische Trackaufzeichnung";
 "logging_interval_navigation_descr" = "Wählen Sie das Aufzeichnungsintervall für die Trackaufzeichnung während der Navigation aus";
 "monitoring_min_distance" = "Minimale Verschiebung";
@@ -774,7 +774,7 @@
 "help_search" = "Kartensuche";
 "help_trip_planning" = "Eine Strecke planen";
 "map_legend" = "Kartenlegende";
-"help_other_header" = "Anderes";
+"other_location" = "Anderes";
 "help_install_and_troubleshoot" = "Installation und Problembehebung";
 "techical_articles_item" = "Technische Themen";
 "help_versions" = "Versionen";
@@ -784,20 +784,20 @@
 "shared_string_close" = "Schließen";
 "actions" = "Aktionen";
 "context_menu_item_directions_from" = "Navigiere von";
-"nearby_search" = "In der Nähe suchen";
+"search_nearby" = "In der Nähe suchen";
 "map_widget_ruler_control" = "Zirkel";
 "import_from_docs" = "Aus Dokumenten importieren";
-"osm_live_routing" = "OsmAnd-Live-Navigation";
+"use_osm_live_routing" = "OsmAnd-Live-Navigation";
 "osm_live_routing_descr" = "Verwenden Sie OsmAnd Live-Updates zur Navigation";
-"osmand_live_title" = "OsmAnd Live";
-"osmand_live_updates" = "Live-Aktualisierungen";
+"osmand_live" = "OsmAnd Live";
+"live_updates" = "Live-Aktualisierungen";
 "osmand_live_available_maps" = "Verfügbare Karten";
 "osmand_live_last_changed" = "Letzte Kartenänderung: %@";
 "last_update" = "Letzte Aktualisierung: %@";
 "osmand_live_not_updated" = "Noch nicht aktualisiert";
-"osmand_live_hourly" = "Stündlich";
+"hourly" = "Stündlich";
 "daily" = "Täglich";
-"osmand_live_weekly" = "Wöchentlich";
+"weekly" = "Wöchentlich";
 "osmand_live_reports" = "Berichte";
 "osmand_live_server_date" = "Letztes Server-Update: %@";
 "update_frequency" = "Aktualisierungsintervall";
@@ -808,17 +808,17 @@
 "osmand_live_donation_switch_descr" = "Ein Teil Ihrer Spende wird an die OSM-Benutzer verteilt, die Änderungen an OpenStreetMap vornehmen. Die Kosten für das Abonnement bleiben gleich";
 "osmand_live_donations_enter_email" = "Geben Sie ihre E-Mail-Adresse ein";
 "osmand_live_donations_email_descr" = "Bitte geben Sie Ihre E-Mail-Adresse an, um die Spendenberichte zu erhalten";
-"osmand_live_support_reg_title" = "Unterstützte Region";
+"osm_live_support_region" = "Unterstützte Region";
 "osmand_live_support_reg_descr" = "Teile Ihrer Spende werden an OSM-Mitwirkende weitergegeben, die diese Region bearbeiten";
 "osmand_live_public_name" = "Geben Sie Ihren Namen ein";
 "osmand_live_subscription_canceled" = "Sie haben ihr OsmAnd Live-Abonnement gekündigt";
-"res_world_region" = "Welt";
+"shared_string_world" = "Welt";
 "product_title_wikivoyage" = "Reiseführer";
 "osm_live_plan_pricing" = "Tarife & Preise";
 "osm_live_payment_monthly_title" = "Monatlich bezahlen";
 "shared_string_unexpected_error" = "Unerwarteter Fehler";
 "osmand_live_cancel_descr" = "Erneuern Sie das Abonnement, um die volle Funktionalität weiterhin nutzen zu können:";
-"product_desc_wikivoyage" = "Der kostenlose weltweite Reiseführer, den jeder bearbeiten kann.";
+"start_editing_card_image_text" = "Der kostenlose weltweite Reiseführer, den jeder bearbeiten kann.";
 "osm_live_payment_3_months_title" = "Alle 3 Monate bezahlen";
 "osm_live_payment_annual_title" = "Einmal im Jahr bezahlen";
 "osm_live_payment_month_cost_descr" = "%@ / Monat";
@@ -833,7 +833,7 @@
 "osm_live_payment_contribute_descr" = "Ein Teil der Einnahmen geht an OpenStreetMap-Mitwirkende.";
 "purchase_dialog_title" = "Plan auswählen";
 "purchase_dialog_travel_description" = "Für die Offline-Reiseführerfunktionalität kaufen Sie einen der folgenden Artikel:";
-"product_desc_ext_wikivoyage" = "Führt innerhalb von OsmAnd ohne Internetverbindung zu den interessantesten Orten der Welt.";
+"wikivoyage_travel_guide_descr" = "Führt innerhalb von OsmAnd ohne Internetverbindung zu den interessantesten Orten der Welt.";
 "update_now" = "Jetzt aktualisieren";
 "product_desc_sea_depth_contours" = "Meeresbodenkonturlinien und Seezeichen";
 "free_version_message" = "Sie können %d Karten herunterladen oder aktualisieren";
@@ -921,7 +921,7 @@
 "product_title_osm_editing" = "OpenStreetMap Bearbeitung";
 "product_desc_osm_editing" = "Machen Sie Ihr Mobiltelefon zum Kartierungswerkzeug";
 "product_desc_ext_osm_editing" = "Ermöglicht es Ihnen, Beiträge zu OpenStreetMap zu leisten, einer globalen Gemeinschaft, deren Ziel es ist, eine umfassende Karte der Welt zu erstellen und jedem Nutzer aktuelle Open-Source-Daten zur Verfügung zu stellen. \n\nEine Anleitung zur Bearbeitung der Karte finden Sie auf unserer Website https://osmand.net/docs/user/plugins/osm-editing";
-"shared_string_password" = "Passwort";
+"user_password" = "Passwort";
 "rendering_value_category_name" = "Kategorie";
 "poi_category_and_type" = "Kategorie und POI-Typ";
 "opening_hours" = "Öffnungszeiten";
@@ -944,7 +944,7 @@
 "osm_note_upload_anonymously" = "Anonym hochladen";
 "osm_note_empty_message" = "Bitte geben Sie die Nachricht für diesen Hinweis an.";
 "osm_note_close" = "OSM-Hinweis schließen";
-"osm_note_comment_title" = "OSM-Hinweis kommentieren";
+"osm_edit_comment_note" = "OSM-Hinweis kommentieren";
 "osm_note_reopen_title" = "OSM-Hinweis wieder öffnen";
 "osm_note_comment" = "Kommentar";
 "poi_dialog_reopen" = "Wiederöffnen";
@@ -952,7 +952,7 @@
 "osm_notes_online_layer" = "OSM Hinweise (Online)";
 "shared_string_my_places" = "Meine Orte";
 "tab_title_basic" = "Basis";
-"osm_edits_advanced" = "Fortgeschritten";
+"tab_title_advanced" = "Fortgeschritten";
 "osm_edits_all" = "Alle Bearbeitungen";
 "osm_edits_poi" = "POI Bearbeitungen";
 "osm_edits_notes" = "Notizen";
@@ -991,7 +991,7 @@
 "shared_string_end_date" = "Enddatum";
 "shared_string_not_set" = "Nicht festgelegt";
 "shared_string_reset" = "Zurücksetzen";
-"tile_cache" = "Kachelzwischenspeicher";
+"mapillary_menu_title_tile_cache" = "Kachelzwischenspeicher";
 "shared_string_reload" = "Neu laden";
 "mapil_reload_cache" = "Kacheln neu laden, um die neuesten Daten zu sehen";
 "filter_current_poiButton" = "Filter";
@@ -1079,10 +1079,10 @@
 "quick_action_map_overlay_title" = "Karten-Overlays";
 "map_underlays" = "Karten-Underlays";
 "vector_data" = "Offline-Vektorkarten";
-"add_map_source" = "Kartenquelle hinzufügen";
+"quick_action_map_source_action" = "Kartenquelle hinzufügen";
 "configure_map" = "Karte konfigurieren";
 "add_map_style" = "Kartenstil hinzufügen";
-"map_styles" = "Kartenstile";
+"quick_action_map_styles" = "Kartenstile";
 "quick_action_new_action" = "Aktion hinzufügen";
 "quick_action_add_create_items" = "Objekte erstellen";
 "add_map_marker" = "Kartenmarker hinzufügen";
@@ -1090,7 +1090,7 @@
 "toggle_fav" = "Favoriten anzeigen/verstecken";
 "toggle_poi" = "POIs anzeigen/verstecken";
 "add_parking_place" = "Parkposition festlegen";
-"toggle_voice" = "Sprachausgabe ein/aus";
+"quick_action_navigation_voice" = "Sprachausgabe ein/aus";
 "add_osm_note" = "OSM-Hinweis hinzufügen";
 "toggle_online_notes" = "OSM-Hinweise umschalten";
 "toggle_local_edits" = "Lokale OSM-Bearbeitungen umschalten";
@@ -1099,11 +1099,11 @@
 "quick_action_map_source" = "Kartenquelleändern";
 "quick_action_map_overlay" = "Overlay-Karteändern";
 "quick_action_map_underlay" = "Karten-Underlayändern";
-"replace_destination" = "Ziel ersetzen";
+"quick_action_replace_destination" = "Ziel ersetzen";
 "add_destination" = "Ziel hinzufügen";
 "toggle_auto_zoom" = "Auto-Zoom an/aus";
 "quick_action_resume_pause_navigation" = "Navigation pausieren/fortsetzen";
-"toggle_nav" = "Navigation starten/beenden";
+"quick_action_start_stop_navigation" = "Navigation starten/beenden";
 "toggle_day_night" = "Tag-/Nacht-Modus umschalten";
 "show_hide_gpx" = "Tracks ein-/ausblenden";
 "search_results" = "Suchergebnisse";
@@ -1175,7 +1175,7 @@
 "show_edits" = "Lokale Bearbeitungen anzeigen";
 "hide_edits" = "Lokale Bearbeitungen ausblenden";
 "quick_action_edit_list" = "Aktionsliste bearbeiten";
-"shared_string_time_of_day" = "Tageszeit";
+"time_of_day" = "Tageszeit";
 "shared_string_slope" = "Hangneigung";
 "simulate_navigation" = "Navigation simulieren";
 "select_avoid_descr" = "Wählen Sie während der Navigation die Straßen aus, die Sie meiden möchten. Sie können entweder eine Straße auf der Karte auswählen oder einen Typ aus der untenstehenden Liste auswählen.";
@@ -1215,7 +1215,7 @@
 "hide_hillshade" = "Schummerung ausblenden";
 "toggle_contour_lines" = "Ein-/Ausblenden von Höhenlinien";
 "toggle_hillshade" = "Gelände ein-/ausblenden";
-"display_starting_at_zoom_level" = "Anzeige beginnt bei Zoomstufe";
+"show_from_zoom_level" = "Anzeige beginnt bei Zoomstufe";
 "quick_action_contour_lines_descr" = "Ein Umschalter zum Ein- und Ausblenden von Höhenlinien auf der Karte.";
 "hide_contour_lines" = "Höhenlinien ausblenden";
 "calculating_progress" = "Berechnen.....";
@@ -1234,7 +1234,7 @@
 "stats_select_graph_data" = "Diagrammdaten auswählen";
 "available_map_styles" = "Verfügbare Kartenstile";
 "available_map_sources" = "Verfügbare Kartenquellen";
-"res_url" = "URL";
+"edit_tilesource_url_to_load" = "URL";
 "res_elliptic_mercator" = "Elliptischer Merkator";
 "shared_string_clear_cache" = "Cache löschen";
 "gpx_analyze" = "Analysieren";
@@ -1622,7 +1622,7 @@
 "map_settings_layer_transparency" = "Transparenz der Ebene";
 "shared_string_terrain" = "Gelände";
 "arrows_direction_to_markers" = "Pfeile zeigen die Richtung zur aktiven Markierung an, wenn sie sich außerhalb des Bildschirms befindet. Richtungslinien zeichnen eine Linie zu aktiven Markierungen.";
-"appearance_on_map" = "Darstellung auf der Karte";
+"appearance_on_the_map" = "Darstellung auf der Karte";
 "choose_how_display_distance" = "Wählen Sie, wie die Entfernung zu aktiven Markierungen angezeigt werden soll";
 "specify_number_of_dir_indicators" = "Geben Sie die Anzahl der Fahrtrichtungsanzeiger an, sie wirkt sich auf alle Einstellungen unten aus.";
 "active_markers" = "Aktive Kartenmarkierungen";
@@ -1677,7 +1677,7 @@
 "download_size" = "Downloadgröße";
 "update_tile" = "Karte aktualisieren";
 "enter_profile_name" = "Profilnamen eingeben";
-"position_icon_while_moving" = "Positionssymbol in Bewegung";
+"select_navigation_icon" = "Positionssymbol in Bewegung";
 "position_icon_at_rest" = "Positionssymbol im Ruhezustand";
 "select_icon_profile_dialog_title" = "Symbol auswählen";
 "rearrange_profiles" = "Profile neu anordnen";
@@ -1763,7 +1763,7 @@
 "profile_appearance" = "Profildarstellung";
 "export_profile" = "Export";
 "global_settings_descr" = "Betreffen die ganze Anwendung.";
-"configure_screen_descr" = "Bildschirmoptionen für das Profil auswählen";
+"edit_profile_screen_options_subtitle" = "Bildschirmoptionen für das Profil auswählen";
 "send_anonymous_data_desc" = "Karten-Download-Statistik an OsmAnd senden. Wir sammeln keine Standortdaten oder persönliche Informationen.";
 "login_account" = "Konto";
 "profile_alert_delete_msg" = "Möchten Sie das Profil „%@“ wirklich löschen?";
@@ -1783,7 +1783,7 @@
 "shared_string_copy" = "Kopieren";
 "recalculate_wrong_dir" = "Neuberechnung der Route im Falle einer Umkehrung der Richtung";
 "repeat_after" = "Wiederholen nach";
-"plugin_settings_reset" = "Plugin-Einstellungen auf Voreinstellung zurücksetzen";
+"reset_plugin_to_default" = "Plugin-Einstellungen auf Voreinstellung zurücksetzen";
 "trip_rec_actions_descr" = "Sie finden alle Ihre aufgezeichneten Tracks in %@";
 "save_track_logging_accuracy" = "Genauigkeit der Protokollierung";
 "profile_prefs_reset_successful" = "Alle Profileinstellungen auf Standard zurückgesetzt";
@@ -1916,7 +1916,7 @@
 "gpx_saved_successfully" = "GPX Datei nach %@ gespeichert";
 "plan_route_exit_message" = "Sind Sie sicher, dass Sie die Routenplanung schließen wollen, ohne zu speichern? Sie verlieren dann alle Änderungen.";
 "route_between_points_add_track_desc" = "Wählen Sie eine Trackdatei, für die ein neues Segment hinzugefügt werden soll.";
-"plan_route_last_modified" = "Zuletzt geändert";
+"sort_last_modified" = "Zuletzt geändert";
 "plan_route_open_existing_track" = "Vorhandenen Tracköffnen";
 "track_is_saved" = "%@\nwurde gespeichert!";
 "plan_route_create_new_route" = "Neue Route erstellen";
@@ -1945,11 +1945,11 @@
 "plan_route_folder" = "Ordner";
 "street_level_imagery" = "Bilder auf Straßenebene";
 "map_widget_distance_by_tap" = "Entfernung durch Antippen";
-"segnet_num" = "Segment %d";
+"segments_count" = "Segment %d";
 "track_multiple_segments_select" = "%@ hat mehr als ein Segment. Bitte wählen Sie einen Teil des Tracks aus, den Sie für die Navigation verwenden möchten.";
 "select_segment" = "Segment auswählen";
 "select_track_to_follow" = "Track auswählen, welchem gefolgt werden soll";
-"travel" = "Reisen";
+"icon_group_travel" = "Reisen";
 "transport" = "ÖPNV";
 "icon_group_symbols" = "Symbole";
 "icon_group_sport" = "Sport";
@@ -2012,7 +2012,7 @@
 "new_plugin_added" = "Neues Plugin hinzugefügt";
 "extra_maps_menu_group" = "Zusätzliche Karten";
 "custom_plugins" = "Benutzerdefinierte Erweiterungen";
-"custom_osmand_plugin_name" = "Benutzerdefinierte OsmAnd Erweiterung";
+"custom_osmand_plugin" = "Benutzerdefinierte OsmAnd Erweiterung";
 "shared_string_disable" = "Deaktivieren";
 
 // Shared Strings
@@ -2059,7 +2059,7 @@
 "product_desc_ext_mapillary" = "Bringt Ansichten auf Straßenebene. Wo Bildmaterial fehlt, können Sie es einfach selbst hinzufügen, damit andere es nutzen können. Um die Mapillary-Ebene zu aktivieren, schalten Sie die Option \"Straßenbilder\" im Menü \"Karte konfigurieren\" ein.";
 "suggested_maps" = "Vorgeschlagene Karten";
 "product_desc_openplacereviews" = "Teilen Sie Ihre Meinung zu öffentlichen Orten";
-"product_title_openplacereviews" = "OpenPlaceReviews";
+"open_place_reviews" = "OpenPlaceReviews";
 "welmode_download_maps" = "Kartenverwaltung";
 "shared_strings_all_regions" = "Alle Regionen";
 "srtm_download_single_help_message" = "Bitte wählen Sie die gewünschte Variante. Sie müssen die Datei erneut herunterladen, um das Format zu ändern.";
@@ -2352,7 +2352,7 @@
 "resend_verification_code" = "Erneut senden";
 "osmand_cloud_authorize_descr" = "Keine Daten mehr verlieren, problemlos alle Informationen sichern und wiederherstellen.";
 "cloud_create_account" = "Konto anlegen";
-"cloud_existing_account" = "Ich habe bereits ein Konto";
+"register_opr_have_account" = "Ich habe bereits ein Konto";
 "local_backup_descr" = "Daten lokal sichern oder wiederherstellen.";
 "backup_into_file" = "Als Datei sichern";
 "restore_from_file" = "Von Datei wiederherstellen";
@@ -2377,7 +2377,7 @@
 "cloud_view_conflicts" = "Konflikte anzeigen";
 "product_desc_ext_weather" = "Aktivieren Sie das Wetter-Plugin, um eine Route unter Berücksichtigung des Wetters zu planen. Achten Sie auf die farbige Karte der Wettervorhersage, die stündlich für heute, morgen und die kommende Woche aktualisiert wird. \n\nWährend der Reise sehen Sie standortbasierte Info-Widgets mit Temperatur, Niederschlag, Windgeschwindigkeit, Druck. \n\nNützlich für Wanderungen und lange Reisen mit dem Fahrrad oder Motorrad.";
 "backup_error_no_valid_subscription" = "Kein gültiges Abonnement vorhanden";
-"rendering_attr_funicularRoutes_name" = "Kabelgetriebene Linien";
+"rendering_attr_showFunicularRoutes_name" = "Kabelgetriebene Linien";
 "rendering_attr_showLightRailRoutes_name" = "Stadtbahnlinien";
 "backup_error_subscription_was_expired_descr" = "Ihr OsmAnd Pro-Abonnement ist abgelaufen. Erneuern Sie es, um die Datensicherung zu nutzen. Sie können weiterhin Daten aus der Cloud wiederherstellen.";
 "backup_error_user_is_already_registered" = "Diese E-Mail-Adresse wird in einem anderen Konto verwendet";
@@ -2524,7 +2524,7 @@
 "simulate_location_movement_speed_x2_desc" = "Die Geschwindigkeit, mit der sich der Standort während der Simulation bewegt, ist um das 2-fache höher als die Geschwindigkeit in der ausgewählten Datei.";
 "empty_purchases_description" = "Wenn Ihre Einkäufe hier nicht angezeigt werden, tippen Sie auf \"%@\", oder kontaktieren Sie unser Support-Team.";
 "osm_live_payment_subscription_management_aid" = "Die Zahlung wird Ihrem Apple ID Konto bei der Kaufbestätigung belastet.\n\nDas Abonnement verlängert sich automatisch, wenn es nicht mindestens 24 Stunden vor Ablauf des aktuellen Zeitraums gekündigt wird. Ihr Konto wird innerhalb von 24 Stunden vor dem Ende des aktuellen Zeitraums für die Verlängerung belastet.\n\nSie können Ihre Abonnements verwalten und kündigen, indem Sie nach dem Kauf zu Ihren Kontoeinstellungen im App Store gehen";
-"expires" = "Verfällt";
+"shared_string_expires" = "Verfällt";
 "screen_settings_weather_toolbar" = "Wetter-Symbolleiste";
 "shared_string_now" = "Jetzt";
 "subscription_banner_osmand_pro_title" = "Mit OsmAnd Pro erhalten Sie stündliche, tägliche oder wöchentliche Kartenaktualisierungen.";
@@ -2534,10 +2534,10 @@
 "purchases_feature_weather" = "Stündliche Vorhersage der nächsten 7 Tage farbig auf der Karte dargestellt";
 "restore_from_osmand_cloud" = "Wiederherstellung aus der OsmAnd Cloud";
 "all_maps_are_up_to_date" = "Alle Karten sind auf dem neuesten Stand";
-"shared_string_always_visible" = "Immer sichtbar";
+"compass_always_visible" = "Immer sichtbar";
 "compass_always_hidden" = "Immer ausgeblendet";
 "data_settings" = "Daten";
-"shared_string_online_cache" = "Online-Cache";
+"weather_online_cache" = "Online-Cache";
 "shared_string_clear_online_cache" = "Online-Cache leeren";
 "shared_string_total_size" = "Gesamtgröße";
 "shared_string_delete_all" = "Alle löschen";
@@ -2666,7 +2666,7 @@
 "error_contact_support" = "Wenn das Problem weiterhin besteht, wenden Sie sich bitte an unser Support-Team.";
 "select_another_colorization" = "Bitte wählen Sie eine andere Einfärbung.";
 "ltr_or_rtl_combine_via_slash" = "%@/% @";
-"rendering_value_showMtbScaleIMBATrails_description" = "International Mountain Bicycling Association";
+"mtb_imba_full" = "International Mountain Bicycling Association";
 "mountain_bike" = "Mountainbike";
 "rendering_attr_showMtbScaleIMBATrails_name" = "IMBA";
 "show_map_symbols" = "Karten-Symbole anzeigen";

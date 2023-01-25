@@ -259,7 +259,7 @@
         [OAAlertBottomSheetViewController showAlertWithTitle:OALocalizedString(@"track_recording")
                                                    titleIcon:@"ic_custom_route"
                                                  cancelTitle:OALocalizedString(@"shared_string_cancel")
-                                       selectableItemsTitles:@[ OALocalizedString(@"track_stop_rec"), OALocalizedString(@"show_info"), OALocalizedString(@"track_new_segment"), OALocalizedString(@"track_save") ]
+                                       selectableItemsTitles:@[ OALocalizedString(@"track_stop_rec"), OALocalizedString(@"show_info"), OALocalizedString(@"gpx_start_new_segment"), OALocalizedString(@"track_save") ]
                                        selectableItemsImages:@[@"track_recording_stop.png", @"icon_info.png", @"track_new_segement.png" , @"track_save.png"]
                                           selectColpletition:^(NSInteger selectedIndex) {
             

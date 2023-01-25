@@ -37,7 +37,7 @@
 "transport_Routes" = "Čary";
 "transport_nearby_routes_within" = "Bliske linije w radiusu";
 "transport_nearby_routes" = "Within";
-"transport_stop" = "Zastanišćo";
+"shared_string_control_stop" = "Zastanišćo";
 "cancel_navigation" = "Stop navigation";
 "start_navigation" = "Start navigation";
 "intermediate_items_sort_by_distance" = "Sort door-to-door";
@@ -57,7 +57,7 @@
 "show_poi_over_map" = "Show POI";
 "shared_string_search" = "Pytać";
 "search_radius" = "Search radius";
-"targets" = "Cile";
+"shared_string_target_points" = "Cile";
 "search_radius_proximity" = "Within";
 "poi" = "POI";
 "day_off_label" = "off";
@@ -205,7 +205,7 @@
 "voice_provider_descr" = "Select voice guidance for navigation";
 "choose_audio_stream" = "Hłós nawigacije";
 "choose_audio_stream_descr" = "Select speaker to play voice guidance";
-"osm_live_routing" = "OsmAnd live-nawigacija";
+"use_osm_live_routing" = "OsmAnd live-nawigacija";
 "osm_live_routing_descr" = "Use OsmAnd Live updates for navigation";
 "guidance_preferences_descr" = "Nastajenja nawigacije";
 "routing_preferences_descr" = "Nastajenja za wobličenje čarow";
@@ -362,7 +362,7 @@
 "shared_string_all" = "All";
 "shared_string_from" = "wot";
 "shared_string_time" = "Čas";
-"shared_string_time_of_day" = "Time of day";
+"time_of_day" = "Time of day";
 "shared_string_distance" = "Distance";
 "shared_string_retry" = "Znowa spytać";
 "shared_string_enabled" = "Enabled";
@@ -440,7 +440,7 @@
 "gpx_route" = "Route";
 "gpx_route_time" = "Route time";
 "gpx_uphldownhl" = "Uphills/Downhills";
-"gpx_average_speed" = "přerěznu spěšnosć";
+"map_widget_average_speed" = "přerěznu spěšnosć";
 "shared_string_control_start" = "Start";
 "gpx_avg_elev" = "Average elevation";
 "gpx_elev_range" = "Elevation range";
@@ -449,7 +449,7 @@
 "track_recording" = "Track recording";
 "shared_string_currently_recording_track" = "Tuchwilne nahrawanje puća";
 "track_stop_rec" = "Stop recording";
-"track_new_segment" = "Nowy wotrězk zahajić";
+"gpx_start_new_segment" = "Nowy wotrězk zahajić";
 "track_save" = "Tuchwilnučaru składować";
 "save_current_track_descr" = "Tuchwilnučaru nětko jako GPX-dataju składować.";
 "track_continue_rec" = "Continue recording";
@@ -463,7 +463,7 @@
 "track_clear_q" = "Do you want to clear current trip?";
 "show_info" = "Show Info";
 "record_trip" = "Record your trip";
-"poi_clear" = "Wotstronić";
+"shared_string_clear" = "Wotstronić";
 "poi_list" = "\"Lisćina  POI\"";
 "track_during_nav" = "Auto-record trip during navigation";
 "track_during_nav_descr" = "A trip is automatically saved during navigation";
@@ -526,7 +526,7 @@
 "sett_pref_lang" = "Preferred Language";
 "sett_lang_show_local" = "Show local names";
 "sett_lang_show_trans" = "Mjena transliterować";
-"maps" = "Karty";
+"shared_string_maps" = "Karty";
 "purchases" = "Purchases";
 "select_map_style" = "Select map style";
 "select_map_source" = "Select map source";
@@ -550,15 +550,15 @@
 // Resources
 "res_mapsres" = "Maps & Resources";
 "download_tab_local" = "Składowane";
-"osmand_live_title" = "OsmAnd Live";
-"osmand_live_updates" = "Live updates";
+"osmand_live" = "OsmAnd Live";
+"live_updates" = "Live updates";
 "osmand_live_available_maps" = "Přistupne karty";
 "osmand_live_last_changed" = "Last map change: %@";
 "last_update" = "Poslednje aktualizowanje: %@";
 "osmand_live_not_updated" = "Not yet updated";
-"osmand_live_hourly" = "Hourly";
+"hourly" = "Hourly";
 "daily" = "Daily";
-"osmand_live_weekly" = "tydźensce";
+"weekly" = "tydźensce";
 "osmand_live_reports" = "Reports";
 "osmand_live_server_date" = "Last server update: %@";
 "update_frequency" = "Update frequency";
@@ -569,7 +569,7 @@
 "osmand_live_donation_switch_descr" = "Part of your donation is distributed among the OSM users who submit changes to OpenStreetMap. The cost of the subscription remains the same";
 "osmand_live_donations_enter_email" = "Enter your email address";
 "osmand_live_donations_email_descr" = "Please provide your e-mail address to get the donation reports";
-"osmand_live_support_reg_title" = "Region podpěrać";
+"osm_live_support_region" = "Region podpěrać";
 "osmand_live_support_reg_descr" = "Part of your donation will be sent to OSM users who submit changes to the map in that region";
 "osmand_live_public_name" = "Enter your public name";
 "osmand_live_subscription_canceled" = "You have cancelled OsmAnd Live Subscription";
@@ -580,7 +580,7 @@
 "res_search_world" = "Search worldwide";
 "res_catalog_upd" = "Catalog update";
 "res_world_map" = "World map";
-"res_world_region" = "World";
+"shared_string_world" = "World";
 "res_updates" = "Aktualizacije";
 "res_worldwide" = "Worldwide";
 "res_region_map" = "Region map";
@@ -661,7 +661,7 @@
 "osm_note_create" = "Create OSM Note";
 "upload_osm_note" = "OSM-noticu nahrać";
 "osm_note_close" = "Close OSM Note";
-"osm_note_comment_title" = "Comment OSM Note";
+"osm_edit_comment_note" = "Comment OSM Note";
 "osm_note_reopen_title" = "Reopen OSM Note";
 "osm_confirm_bulk_delete" = "Delete %d edits?";
 "osm_confirm_delete" = "Delete POI?";
@@ -678,7 +678,7 @@
 "osm_edits_offline_layer" = "OSM Edits/Notes (offline)";
 "osm_notes_online_layer" = "OSM Notes (online)";
 "tab_title_basic" = "Basic";
-"osm_edits_advanced" = "pokročene";
+"tab_title_advanced" = "pokročene";
 "osm_edits_all" = "All edits";
 "osm_edits_poi" = "POI edits";
 "osm_edits_notes" = "Notes";
@@ -706,7 +706,7 @@
 "mapillary_descr" = "Online street photos for everyone. Discover places, collaborate, capture the world";
 "mapillary_turn_on_widget" = "Turn on Mapillary widget";
 "mapillary_turn_on_widget_descr" = "This allows you to quickly contribute to Mapillary";
-"tile_cache" = "Tile cache";
+"mapillary_menu_title_tile_cache" = "Tile cache";
 "tile_data" = "Tile data";
 "shared_string_reload" = "wobnowić";
 "show_more" = "Show more";
@@ -726,9 +726,9 @@
 "quick_action_map_overlay_title" = "Map overlays";
 "map_underlays" = "Kartowe podłohi";
 "vector_data" = "Offline vector maps";
-"add_map_source" = "Kartowežórło dodać";
+"quick_action_map_source_action" = "Kartowežórło dodać";
 "add_map_style" = "Add map style";
-"map_styles" = "Kartowe stile";
+"quick_action_map_styles" = "Kartowe stile";
 "quick_action_new_action" = "Add action";
 "quick_action_add_create_items" = "Create items";
 "configure_map" = "Napohlad karty";
@@ -742,7 +742,7 @@
 "hide_poi_action" = "Hide POI";
 "add_parking_place" = "Add parking place";
 "parking_place" = "Parking place";
-"toggle_voice" = "Voice on/off";
+"quick_action_navigation_voice" = "Voice on/off";
 "add_osm_note" = "Add OSM note";
 "toggle_online_notes" = "Toggle OSM notes";
 "toggle_local_edits" = "Toggle local OSM edits";
@@ -751,7 +751,7 @@
 "quick_action_map_source" = "Kartowežórło změnić";
 "quick_action_map_overlay" = "Change map overlay";
 "quick_action_map_underlay" = "Kartowu podłohu změnić";
-"replace_destination" = "Cil zarunać";
+"quick_action_replace_destination" = "Cil zarunać";
 "add_destination" = "Add destination";
 "add_start" = "Add starting point";
 "add_intermediate" = "Add intermediate point";
@@ -766,7 +766,7 @@
 "quick_action_resume_pause_navigation" = "Nawigaciju přetorhnyć/znowa startować";
 "resume_nav" = "Continue navigation";
 "pause_nav" = "Pause navigation";
-"toggle_nav" = "Nawigaciju zahajić/přetorhnyć";
+"quick_action_start_stop_navigation" = "Nawigaciju zahajić/přetorhnyć";
 "toggle_day_night" = "Switch Day/Night mode";
 "quick_action_switch_night_mode" = "Night mode";
 "quick_action_switch_day_mode" = "Day mode";
@@ -837,7 +837,7 @@
 "pickup_car" = "Pickup the car";
 "pickup_car_at" = "Pickup the car at";
 "add_notification_calendar" = "Add notification to Calendar";
-"parking_time_limited" = "Parking time limited to";
+"parking_place_limited" = "Parking time limited to";
 "time_left" = "wyše";
 "osmand_parking_overdue" = "overdue";
 "cannot_add_marker" = "Cannot add Parking";
@@ -865,7 +865,7 @@
 "help_search" = "Map search";
 "help_trip_planning" = "Jězbu planować";
 "map_legend" = "Legenda karty";
-"help_other_header" = "Druhe";
+"other_location" = "Druhe";
 "help_install_and_troubleshoot" = "Instalacija a rozrisowanje problemow";
 "techical_articles_item" = "Technical articles";
 "help_versions" = "Wersije";
@@ -929,7 +929,7 @@
 "product_title_skimap" = "Ski map";
 "product_desc_skimap" = "Ski slopes for all ski resorts in the world";
 "product_desc_ext_skimap" = "OsmAnd Ski Maps is a plugin to OsmAnd Maps&Navigation app designed to navigate at winter sports locations. It gives the information about ski pistes, ski lift markers and even colored lines indicating the complexity of each track. You get the info about ski tracks themselves as well as the surrounding infrastructure.\n\nUsage Instructions: Enable the plugin in OsmAnd application, tap the map button and set the map type to Ski maps.";
-"product_title_track_recording" = "Trip recording";
+"monitoring_settings" = "Trip recording";
 "product_desc_track_recording" = "Activates the functionality to record and save your trips";
 "product_desc_ext_track_recording" = "Record your trips and save them manually using OsmAnd Trip recording plugin. Export your trip as a gpx file, share it or even use it to contribute to OpenStreetMap project.  A handy tool for runners, hikers and anyone interested in recording their trips.";
 "product_title_trip_planning" = "Trip planning";
@@ -970,13 +970,13 @@
 "product_desc_srtm" = "Display of contour lines";
 "product_desc_ext_srtm" = "This plugin provides contour lines and hillshade, which can be displayed in OsmAnd offline maps. Contour lines provide the information about heights of the area while hillshade is their visualization. See the names of mountain peaks and specific features of terrain using this plugin.\n\nThe global data (between 70 degrees north and 70 degrees south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA's Earth Observing System. ASTER is a cooperative effort between NASA, Japan's Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
 "product_title_wikivoyage" = "Travel Guides";
-"product_desc_wikivoyage" = "Swobodny pućowanski přewodnik, kotryž móže kóždy wobdźěłać.";
-"product_desc_ext_wikivoyage" = "Guides to the most interesting places on the planet, inside OsmAnd, without a connection to the Internet.";
+"start_editing_card_image_text" = "Swobodny pućowanski přewodnik, kotryž móže kóždy wobdźěłać.";
+"wikivoyage_travel_guide_descr" = "Guides to the most interesting places on the planet, inside OsmAnd, without a connection to the Internet.";
 "product_desc_sea_depth_contours" = "Sea depth contour lines and seamarks";
 "my_location" = "My Location";
 "all_categories" = "All categories";
 "get_unlimited_access" = "Wobstaraj sej njewobmjezowany přistup";
-"latitude" = "šěrina";
+"navigate_point_latitude" = "šěrina";
 "navigate_point_longitude" = "dołhota";
 "track_save_short_q" = "Trip is too short, do you want to save?";
 "add_as" = "Add as";
@@ -994,7 +994,7 @@
 "no_other_translations" = "There are no other translations";
 "wpt_remove_q" = "Remove waypoint?";
 "gpx_select_track" = "Select trip";
-"gpx_curr_new_track" = "Tuchwilnačara";
+"current_track" = "Tuchwilnačara";
 "access_hint_enter_name" = "Zapodajće mjeno";
 "shared_string_not_selected" = "Njeje wubrane";
 "shared_string_language" = "Language";
@@ -1030,7 +1030,7 @@
 "get_directions" = "Nawigacija";
 "parking" = "Parkowanišćo";
 "context_menu_item_directions_from" = "Nawigacija wottud";
-"nearby_search" = "We wokolinje pytać";
+"search_nearby" = "We wokolinje pytać";
 "est_travel_time" = "Estimate travel time";
 "pedestrian" = "Pedestrian";
 "sorting" = "Sorting";
@@ -1070,7 +1070,7 @@
 "map_creator" = "Map Creator";
 "online_map" = "Online map";
 "calculating_progress" = "Calculating...";
-"local_names" = "Lokalne mjena";
+"local_map_names" = "Lokalne mjena";
 "history" = "Stawizny";
 "today" = "dźensa";
 "yesterday" = "wčera";
@@ -1107,7 +1107,7 @@
 "create_custom_poi" = "Create custom filter";
 "selected_categories" = "Wubrane kategorije";
 "new_filter_desc" = "Please enter a name for the new filter, this will be added to your Categories tab.";
-"shared_string_password" = "Waše hesło pola OSM";
+"user_password" = "Waše hesło pola OSM";
 "shared_string_filters" = "Filtry";
 "edit_filter" = "Kategorije wobdźěłać";
 "edit_filter_save_as_menu_item" = "Składuj jako";
@@ -1147,7 +1147,7 @@
 "key_hint_goback" = "Go Back";
 "wiki_buy_description" = "To read full articles - buy Wikipedia plugin and download Wikipedia data of %@";
 "wiki_download_description" = "To read full articles - download Wikipedia data of %@";
-"map_an_region" = "an region";
+"download_wiki_region_placeholder" = "an region";
 "osm_live_plan_pricing" = "Plans & Pricing";
 "osm_live_payment_monthly_title" = "Pay monthly";
 "osm_live_payment_3_months_title" = "Pay once in 3 months";
@@ -1206,7 +1206,7 @@
 "gpx_ascent" = "Postup";
 "hide_contour_lines" = "Schowaj wysokostne linije";
 "nautical_maps" = "Nawtiske karty";
-"display_starting_at_zoom_level" = "Pokazać wot zoomoweje runiny";
+"show_from_zoom_level" = "Pokazać wot zoomoweje runiny";
 "rendering_value__name" = "Standard";
 "rendering_attr_piste_difficulty_easy_name" = "lochko";
 "routing_attr_avoid_toll_description" = "Mawtowe dróhi wobeńć";

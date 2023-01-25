@@ -174,7 +174,7 @@
     else if (_screenType == TYPE_REOPEN)
         title = OALocalizedString(@"osm_note_reopen_title");
     else if (_screenType == TYPE_MODIFY)
-        title = OALocalizedString(@"osm_note_comment_title");
+        title = OALocalizedString(@"osm_edit_comment_note");
     
     return title;
 }

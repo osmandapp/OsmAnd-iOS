@@ -171,7 +171,7 @@ static const NSInteger groupCount = 1;
             [dataArr addObject:
              @{
                @"name" : @"osm_live_enabled",
-               @"title" : OALocalizedString(@"osmand_live_updates"),
+               @"title" : OALocalizedString(@"live_updates"),
                @"value" : @(_isLiveUpdatesEnabled),
                @"type" : [OASwitchTableViewCell getCellIdentifier]
                }];
@@ -214,7 +214,7 @@ static const NSInteger groupCount = 1;
             [dataArr addObject:
              @{
                @"name" : @"hourly_freq",
-               @"title" : OALocalizedString(@"osmand_live_hourly"),
+               @"title" : OALocalizedString(@"hourly"),
                @"img" : currentFrequency == ELiveUpdateFrequencyHourly ? @"menu_cell_selected.png" : @"",
                @"type" : [OASettingsTitleTableViewCell getCellIdentifier] }
              ];
@@ -230,7 +230,7 @@ static const NSInteger groupCount = 1;
             [dataArr addObject:
              @{
                @"name" : @"weekly_freq",
-               @"title" : OALocalizedString(@"osmand_live_weekly"),
+               @"title" : OALocalizedString(@"weekly"),
                @"img" : currentFrequency == ELiveUpdateFrequencyWeekly ? @"menu_cell_selected.png" : @"",
                @"type" : [OASettingsTitleTableViewCell getCellIdentifier] }
              ];

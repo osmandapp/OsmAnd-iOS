@@ -9,7 +9,7 @@
 "index_name_africa" = "Tafriqt";
 "days_5" = "Ussan";
 "rendering_attr_surface_sand_name" = "Ijdi";
-"map_an_region" = "Tamnaḍt:";
+"download_wiki_region_placeholder" = "Tamnaḍt:";
 "context_menu_points_of_group" = "Akk tinqiḍin n ugraw";
 "shared_string_no_thanks" = "Ala, tanmirt";
 "access_hint_enter_name" = "Ger isem";
@@ -44,7 +44,7 @@
 "add_home" = "Agejdan";
 "route_descr_destination" = "Taniɣert";
 "shared_string_download" = "Sider";
-"gpx_average_speed" = "Arured alemmas";
+"map_widget_average_speed" = "Arured alemmas";
 "days_2_4" = "Ussan";
 "shared_string_on" = "Yermed";
 "shared_string_map" = "Takarḍa";
@@ -79,7 +79,7 @@
 "local_indexes_cat_backup" = "Tamahilt-agi tensa akka tura.";
 "rendering_value_blue_name" = "Azegzaw";
 "m_s" = "m/s";
-"osmand_live_weekly" = "Yal imalas";
+"weekly" = "Yal imalas";
 "rendering_value_default_name" = "Lexṣas";
 "rendering_value_red_name" = "Azeggaɣ";
 "follow_us" = "Ḍfer aɣ";
@@ -130,7 +130,7 @@
 "map_widget_left" = "Agalis azelmaḍ";
 "rendering_value_default13_name" = "(Amezwer)";
 "rendering_attr_moreDetailed_name" = "Ugar n telqayt";
-"maps" = "Tikarḍiwin";
+"shared_string_maps" = "Tikarḍiwin";
 "poi_list" = "Umuɣ";
 "product_title_europe" = "Turuft";
 "shared_string_show_on_map" = "\"Skenɣef  tkarḍa\"";
@@ -144,7 +144,7 @@
 "purchase_dialog_title" = "Fren";
 "rendering_attr_piste_difficulty_easy_name" = "Fessus";
 "driving_region_us" = "Iwanaken-Yeddukklen-N-Temrikt";
-"latitude" = "Turrut";
+"navigate_point_latitude" = "Turrut";
 "osm_alert_title" = "Wennet";
 "general_settings_2" = "Iɣewwaren imuta";
 "select_all" = "Fren kulec";
@@ -178,7 +178,7 @@
 "rendering_attr_smoothness_good_name" = "Igerrez";
 "routing_settings" = "Asnirem";
 "route_kr" = "Ttef tama tayeffust t defred";
-"osm_edits_advanced" = "Talqayt";
+"tab_title_advanced" = "Talqayt";
 "rendering_attr_currentTrackWidth_name" = "Tehri";
 "shared_string_online_maps" = "Iqqen";
 "nearest_cities" = "Timdinin ig qarben";
@@ -188,7 +188,7 @@
 "map_markers" = "Ticraḍ n tkarḍa";
 "fav_name" = "Isem";
 "int_seconds" = "Tasinin";
-"res_world_region" = "azul-i-medden-meṛṛa";
+"shared_string_world" = "azul-i-medden-meṛṛa";
 "delete_filter" = "Kkes imzizdig";
 "unit_of_length" = "Tayunin n teɣzef";
 "rendering_attr_smoothness_excellent_name" = "Yufrar ($1)";
@@ -222,12 +222,12 @@
 "online_map" = "Iqqen";
 "voice_pref_title" = "Taɣuct";
 "rendering_value_dark_brown_name" = "Aqehwi";
-"transport_stop" = "Seḥbes";
+"shared_string_control_stop" = "Seḥbes";
 "rendering_value_lightgreen_name" = "Adal afessas";
 "free" = "%1$S";
 "shared_string_distance" = "Ameccaq";
 "add_work" = "Rnu";
-"nearby_search" = "Nadi di liqrib";
+"search_nearby" = "Nadi di liqrib";
 "res_updates" = "Isedɣiten";
 "change_color" = "Snifel ini";
 "rendering_attr_piste_difficulty_advanced_name" = "Talqayt";
@@ -242,7 +242,7 @@
 "sett_show" = "Sken";
 "shared_string_email_address" = "Tansa imayl";
 "gpx_route" = "Abrid";
-"help_other_header" = "Wayeḍ";
+"other_location" = "Wayeḍ";
 "rendering_attr_smoothness_very_bad_name" = "Dirit";
 "clear_all_intermediates" = "Sfeḍ akk tineqqiḍin";
 "shared_string_appearance" = "Udem";
@@ -279,7 +279,7 @@
 "rendering_value_category_name" = "Taggayt";
 "first_usage_item" = "Amezwaru";
 "type_address" = "Gred tansa";
-"map_styles" = "Iɣunab";
+"quick_action_map_styles" = "Iɣunab";
 "routing_engine_vehicle_type_driving" = "Anehheṛ";
 "type_postcode" = "Sekcem angal n tesreqqest";
 "today" = "Ass-a";
@@ -348,14 +348,14 @@
 "osm_live_subscribe_btn" = "S\'abonner";
 "purchase_unlim_title" = "%1$S";
 "transport_Routes" = "Iberdan";
-"poi_clear" = "Sfeḍ";
+"shared_string_clear" = "Sfeḍ";
 "shared_string_color" = "Ini";
 "units_yd" = "yd";
 "app_mode_pedestrian" = "Amsebrid";
 "description" = "Asnummel";
 "filter_poi_hint" = "Sizdeg s";
 "driving_region_japan" = "Japun";
-"osmand_live_updates" = "Isdɣiten usriden";
+"live_updates" = "Isdɣiten usriden";
 "shared_string_search" = "Nadi";
 "rendering_attr_highway_class_track_name" = "Piste";
 "index_name_north_america" = "Marikan n Ugafa";
@@ -368,7 +368,7 @@
 "poi_filter_custom_filter" = "Imsizdeg udmawan";
 "rendering_value_translucent_lightgreen_name" = "Amumad afessas";
 "shared_string_select" = "Fren";
-"osmand_live_hourly" = "s usrag";
+"hourly" = "s usrag";
 "rendering_attr_hideWaterPolygons_description" = "Aman";
 "months_5" = "Ayyuren";
 "weeks_2_4" = "Imalasen";
@@ -381,7 +381,7 @@
 "no_overlay" = "Incrustations";
 "shared_string_remove" = "Kkes";
 "select_city" = "Ffren tamdint";
-"res_url" = "URL";
+"edit_tilesource_url_to_load" = "URL";
 "shared_string_get" = "Awi";
 "shared_string_widgets" = "Iwiǧiten";
 "rendering_attr_highway_class_road_name" = "Abrid";
@@ -396,8 +396,8 @@
 "poi_remove_success" = "Yettwakkes";
 "shared_string_my_location" = "ideg";
 "get_started" = "Aha bdu tura";
-"product_title_track_recording" = "Asekles";
-"tile_cache" = "Tuffirt";
+"monitoring_settings" = "Asekles";
+"mapillary_menu_title_tile_cache" = "Tuffirt";
 "day_off_label" = "off";
 "rendering_value_orange_name" = "Ačinawi";
 "shared_string_export" = "Sifeḍ";
@@ -415,7 +415,7 @@
 "week_short" = "mls";
 "day_short" = "S";
 "units_nm_h" = "nmi/h";
-"shared_string_password" = "Awal-ik uffir n OSM";
+"user_password" = "Awal-ik uffir n OSM";
 "by_name" = "S yisem";
 "si_mi_meters" = "Amayel / Amitr";
 "si_km_m" = "Ikilumitren/imitren";
@@ -441,7 +441,7 @@
 "will_open_at" = "Ad yeldi ɣef";
 "will_close_at" = "Ad yemdel ɣef";
 "will_open_on" = "Ad yeldi deg";
-"targets" = "Tiɣerwaḍin";
+"shared_string_target_points" = "Tiɣerwaḍin";
 "first_intermediate_dest_description" = "Rnu aḥbas amezwaru deg ubrid";
 "make_as_start_point" = "Err-t d taneqqiḍt n tazwara";
 "replace_destination_point" = "Semselsi taɣerwaḍt";
@@ -473,7 +473,7 @@
 "one" = "Yiwet";
 "speak_speed_limit" = "Talast n urured";
 "show_lanes" = "Izirigen";
-"configure_screen_descr" = "Fren Iɣewwaṛen n ugdil i umaɣnu";
+"edit_profile_screen_options_subtitle" = "Fren Iɣewwaṛen n ugdil i umaɣnu";
 "layer_map_appearance" = "Swel agdil";
 "map_widget_right" = "Agalis ayeffus";
 "map_widget_appearance_rem" = "Iferdisen i d-iqqimen";
@@ -557,7 +557,7 @@
 "download_tab_local" = "Adigan";
 "coordinates" = "Tisidag";
 "searching" = "Anadi…";
-"custom_osmand_plugin_name" = "Azegrir OsmAnd udmawan";
+"custom_osmand_plugin" = "Azegrir OsmAnd udmawan";
 "visible" = "Uman";
 "address_search_desc" = "Anadiɣef tansa";
 "download_regular_maps" = "tizeɣt";

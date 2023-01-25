@@ -47,7 +47,7 @@
 "transport_Routes" = "Routes";
 "transport_nearby_routes_within" = "Nearby routes within";
 "transport_nearby_routes" = "Within";
-"transport_stop" = "Stop";
+"shared_string_control_stop" = "Stop";
 
 "cancel_navigation" = "Stop navigation";
 "start_navigation" = "Start navigation";
@@ -75,7 +75,7 @@
 "shared_string_search" = "Search";
 "address_search_desc" = "Address search";
 "search_radius" = "Search radius";
-"targets" = "Destinations";
+"shared_string_target_points" = "Destinations";
 "search_radius_proximity" = "Within";
 "poi" = "POI";
 "search_more" = "Search more…";
@@ -165,7 +165,7 @@
 "auto_split_gap" = "Auto-split recordings after gap";
 "auto_split_gap_descr" = "Start a new segment after 6 min gap, new track after 2 h gap, or new file after a longer gap";
 "trip_rec_actions_descr" = "You can find all your recorded tracks in %@";
-"plugin_settings_reset" = "Reset plugin settings to default";
+"reset_plugin_to_default" = "Reset plugin settings to default";
 "save_heading" = "Include heading";
 "save_heading_descr" = "Save heading information for each recorded point";
 
@@ -203,7 +203,7 @@
 "map_widget_right" = "Right panel";
 "map_widget_left" = "Left panel";
 "layer_map_appearance" = "Configure screen";
-"configure_screen_descr" = "Select screen options for the profile";
+"edit_profile_screen_options_subtitle" = "Select screen options for the profile";
 "map_markers" = "Map markers";
 "markers_history" = "Markers history";
 "confirm_usage_speed_cameras" = "In many countries (Germany, France, Italy, and others) the use of speed camera warnings is not permitted by law. OsmAnd does not assume any liability if you violate the law. Please tap yes only if you are eligible to use this feature.";
@@ -244,7 +244,7 @@
 "active_markers" = "Active markers";
 "specify_number_of_dir_indicators" = "Specify number of direction indicators, it affects all settings below.";
 "choose_how_display_distance" = "Choose how to display the distance to active markers";
-"appearance_on_map" = "Appearance on the map";
+"appearance_on_the_map" = "Appearance on the map";
 "arrows_direction_to_markers" = "Arrows show direction to active marker if it’s located outside the screen. Direction lines draw a line to active markers.";
 
 // Route info
@@ -312,7 +312,7 @@
 "voice_provider_descr" = "Select voice guidance for navigation";
 "choose_audio_stream" = "Voice guidance output";
 "choose_audio_stream_descr" = "Select speaker to play voice guidance";
-"osm_live_routing" = "OsmAnd Live navigation";
+"use_osm_live_routing" = "OsmAnd Live navigation";
 "osm_live_routing_descr" = "Use OsmAnd Live updates for navigation";
 "select_nav_profile_dialog_message" = "The 'Navigation type' governs how routes are calculated.";
 "osmand_routing" = "OsmAnd routing";
@@ -519,7 +519,7 @@
 "shared_string_all" = "All";
 "shared_string_from" = "from";
 "shared_string_time" = "Time";
-"shared_string_time_of_day" = "Time of day";
+"time_of_day" = "Time of day";
 "shared_string_distance" = "Distance";
 "shared_string_time_span" = "Time span";
 "shared_string_start_time" = "Start time";
@@ -563,10 +563,10 @@
 "shared_string_purchased" = "Purchased";
 "shared_string_start" = "Start";
 "shared_string_control_stop" = "Stop";
-"shared_string_always_visible" = "Always visible";
+"compass_always_visible" = "Always visible";
 "compass_always_hidden" = "Always hidden";
 "data_settings" = "Data";
-"shared_string_online_cache" = "Online cache";
+"weather_online_cache" = "Online cache";
 "shared_string_clear_online_cache" = "Clear online cache";
 "shared_string_clear_offline_cache" = "Clear offline cache";
 "shared_string_total_size" = "Total size";
@@ -720,7 +720,7 @@
 "gpx_analyze" = "Analyze";
 "gpx_route_time" = "Route time";
 "gpx_uphldownhl" = "Uphills/Downhills";
-"gpx_average_speed" = "Average speed";
+"map_widget_average_speed" = "Average speed";
 "shared_string_control_start" = "Start";
 "gpx_avg_elev" = "Average elevation";
 "gpx_elev_range" = "Elevation range";
@@ -736,7 +736,7 @@
 "track_recording" = "Track recording";
 "shared_string_currently_recording_track" = "Currently recording track";
 "track_stop_rec" = "Stop recording";
-"track_new_segment" = "Start new segment";
+"gpx_start_new_segment" = "Start new segment";
 "track_save" = "Save current track";
 "displayed_route_save" = "Save to OsmAnd Tracks";
 "save_current_track_descr" = "Save current track as GPX file now.";
@@ -751,7 +751,7 @@
 "track_clear_q" = "Do you want to clear current track?";
 "show_info" = "Show Info";
 "record_trip" = "Record your track";
-"poi_clear" = "Clear";
+"shared_string_clear" = "Clear";
 "poi_list" = "POI list";
 
 "gpxup_public" = "Public";
@@ -1030,7 +1030,7 @@
 "lang_zhminnan" = "Southern Min";
 "lang_zhyue" = "Cantonese";
 
-"maps" = "Maps";
+"shared_string_maps" = "Maps";
 "purchases" = "Purchases";
 
 "select_map_style" = "Select map style";
@@ -1051,7 +1051,7 @@
 "nav_type_hint" = "Navigation type";
 "shared_string_nothing_selected" = "Nothing selected";
 "export_failed" = "Could not export profile";
-"custom_osmand_plugin_name" = "Custom OsmAnd plugin";
+"custom_osmand_plugin" = "Custom OsmAnd plugin";
 "custom_plugins" = "Custom plugins";
 "extra_maps_menu_group" = "Extra maps";
 
@@ -1110,7 +1110,7 @@
 "select_color" = "Select color";
 "select_icon_profile_dialog_title" = "Select icon";
 "position_icon_at_rest" = "Position icon at rest";
-"position_icon_while_moving" = "Position icon while moving";
+"select_navigation_icon" = "Position icon while moving";
 "will_be_show_while_moving" = "It will be show while moving";
 "base_profile_descr_car" = "Car, truck, motorcycle";
 "base_profile_descr_bicycle" = "Mountain bike, moped, horse";
@@ -1199,7 +1199,7 @@
 "plan_route_create_new_route" = "Create new route";
 "track_is_saved" = "%@\nis saved!";
 "plan_route_open_existing_track" = "Open existing track";
-"plan_route_last_modified" = "Last modified";
+"sort_last_modified" = "Last modified";
 "route_between_points_add_track_desc" = "Select a track file for which a new segment will be added.";
 "route_between_points_warning_desc" = "Next, snap your track to the nearest allowed road with one of your navigation profiles to use this option.";
 "plan_route_exit_message" = "Are you sure you want to close Plan route without saving? You will lose all changes.";
@@ -1226,7 +1226,7 @@
 "add_folder" = "Add folder";
 "select_segment" = "Select segment";
 "track_multiple_segments_select" = "%@ has more than one segment. Please select a part of the track you want to use for navigation.";
-"segnet_num" = "Segment %d";
+"segments_count" = "Segment %d";
 "threshold_distance" = "Threshold distance";
 "select_profile" = "Select profile";
 
@@ -1234,15 +1234,15 @@
 "shared_string_resources" = "Resources";
 "res_mapsres" = "Maps & Resources";
 "download_tab_local" = "Local";
-"osmand_live_title" = "OsmAnd Live";
-"osmand_live_updates" = "Live updates";
+"osmand_live" = "OsmAnd Live";
+"live_updates" = "Live updates";
 "osmand_live_available_maps" = "Available maps";
 "osmand_live_last_changed" = "Last map change: %@";
 "last_update" = "Last update: %@";
 "osmand_live_not_updated" = "Not yet updated";
-"osmand_live_hourly" = "Hourly";
+"hourly" = "Hourly";
 "daily" = "Daily";
-"osmand_live_weekly" = "Weekly";
+"weekly" = "Weekly";
 "osmand_live_reports" = "Reports";
 "osmand_live_server_date" = "Last server update: %@";
 "update_frequency" = "Update frequency";
@@ -1253,7 +1253,7 @@
 "osmand_live_donation_switch_descr" = "Part of your donation is distributed among the OSM users who submit changes to OpenStreetMap. The cost of the subscription remains the same";
 "osmand_live_donations_enter_email" = "Enter your email address";
 "osmand_live_donations_email_descr" = "Please provide your e-mail address to get the donation reports";
-"osmand_live_support_reg_title" = "Support region";
+"osm_live_support_region" = "Support region";
 "osmand_live_support_reg_descr" = "Part of your donation will be sent to OSM users who submit changes to the map in that region";
 "osmand_live_public_name" = "Enter your public name";
 "osmand_live_subscription_canceled" = "You have cancelled OsmAnd Live Subscription";
@@ -1264,7 +1264,7 @@
 "res_search_world" = "Search worldwide";
 "res_catalog_upd" = "Catalog update";
 "res_world_map" = "World map";
-"res_world_region" = "World";
+"shared_string_world" = "World";
 "res_updates" = "Updates";
 "res_worldwide" = "Worldwide";
 "res_region_map" = "Region map";
@@ -1301,7 +1301,7 @@
 "res_edit_map_source" = "Edit map source";
 "res_online_name_descr" = "Provide name for online source";
 "res_online_url_descr" = "Enter or copy and paste URL for online source";
-"res_url" = "URL";
+"edit_tilesource_url_to_load" = "URL";
 "res_zoom_levels" = "Zoom levels";
 "res_expire_time" = "Expire time";
 "res_mercator" = "Mercator Projection";
@@ -1406,7 +1406,7 @@
 "osm_note_create" = "Create OSM Note";
 "upload_osm_note" = "Upload OSM Note";
 "osm_note_close" = "Close OSM Note";
-"osm_note_comment_title" = "Comment OSM Note";
+"osm_edit_comment_note" = "Comment OSM Note";
 "osm_note_reopen_title" = "Reopen OSM Note";
 "osm_confirm_bulk_delete" = "Delete %d edits?";
 "osm_confirm_delete" = "Delete POI?";
@@ -1423,7 +1423,7 @@
 "osm_edits_offline_layer" = "OSM Edits/Notes (offline)";
 "osm_notes_online_layer" = "OSM Notes (online)";
 "tab_title_basic" = "Basic";
-"osm_edits_advanced" = "Advanced";
+"tab_title_advanced" = "Advanced";
 "osm_edits_all" = "All edits";
 "osm_edits_poi" = "POI edits";
 "osm_edits_notes" = "Notes";
@@ -1453,7 +1453,7 @@
 "mapillary_descr" = "Online street photos for everyone. Discover places, collaborate, capture the world";
 "mapillary_turn_on_widget" = "Turn on Mapillary widget";
 "mapillary_turn_on_widget_descr" = "This allows you to quickly contribute to Mapillary";
-"tile_cache" = "Tile cache";
+"mapillary_menu_title_tile_cache" = "Tile cache";
 "shared_string_reload" = "Reload";
 "show_more" = "Show more";
 "mapil_reload_cache" = "Reload tiles to see the newest data";
@@ -1481,9 +1481,9 @@
 "quick_action_map_overlay_title" = "Map overlays";
 "map_underlays" = "Map underlays";
 "vector_data" = "Offline vector maps";
-"add_map_source" = "Add map source";
+"quick_action_map_source_action" = "Add map source";
 "add_map_style" = "Add map style";
-"map_styles" = "Map styles";
+"quick_action_map_styles" = "Map styles";
 "quick_action_new_action" = "Add action";
 "unsupported_items" = "Unsupported items";
 "quick_action_add_create_items" = "Create items";
@@ -1515,7 +1515,7 @@
 "hide_poi_action" = "Hide POI";
 "add_parking_place" = "Add parking place";
 "parking_place" = "Parking place";
-"toggle_voice" = "Voice on/off";
+"quick_action_navigation_voice" = "Voice on/off";
 "add_osm_note" = "Add OSM note";
 "toggle_online_notes" = "Toggle OSM notes";
 "toggle_local_edits" = "Toggle local OSM edits";
@@ -1524,7 +1524,7 @@
 "quick_action_map_source" = "Change map source";
 "quick_action_map_overlay" = "Change map overlay";
 "quick_action_map_underlay" = "Change map underlay";
-"replace_destination" = "Replace destination";
+"quick_action_replace_destination" = "Replace destination";
 "add_destination" = "Add destination";
 "add_start" = "Add starting point";
 "add_intermediate" = "Add intermediate point";
@@ -1540,7 +1540,7 @@
 "quick_action_resume_pause_navigation" = "Pause/resume navigation";
 "resume_nav" = "Continue navigation";
 "pause_nav" = "Pause navigation";
-"toggle_nav" = "Start/stop navigation";
+"quick_action_start_stop_navigation" = "Start/stop navigation";
 "toggle_day_night" = "Switch Day/Night mode";
 "quick_action_switch_night_mode" = "Night mode";
 "quick_action_switch_day_mode" = "Day mode";
@@ -1596,7 +1596,7 @@
 "hide_terrain" = "Hide Terrain";
 "toggle_contour_lines" = "Show/Hide contour lines";
 "toggle_hillshade" = "Show/Hide terrain";
-"display_starting_at_zoom_level" = "Displaying starts at zoom level";
+"show_from_zoom_level" = "Displaying starts at zoom level";
 "quick_action_contour_lines_descr" = "Tapping this action button shows or hides contour lines layer.";
 "hide_contour_lines" = "Hide contour lines";
 "enable_contour_lines" = "Enable to view contour lines on the map";
@@ -1649,7 +1649,7 @@
 "pickup_car" = "Pickup the car";
 "pickup_car_at" = "Pickup the car at";
 "add_notification_calendar" = "Add notification to Calendar";
-"parking_time_limited" = "Parking time limited to";
+"parking_place_limited" = "Parking time limited to";
 "time_left" = "left";
 "osmand_parking_overdue" = "overdue";
 "cannot_add_marker" = "Cannot add Parking";
@@ -1695,7 +1695,7 @@
 "mapillary_item" = "OsmAnd + Mapillary";
 "map_legend" = "Map legend";
 "help_legend_descr" = "The guide to map's symbols";
-"help_other_header" = "Other";
+"other_location" = "Other";
 "help_what_is_new" = "What\'s new";
 "help_install_and_troubleshoot" = "Installation and troubleshooting";
 "techical_articles_item" = "Technical articles";
@@ -1780,7 +1780,7 @@
 "product_desc_skimap" = "Up-to-date ski trail map with lifts and slopes";
 "product_desc_ext_skimap" = "Designed to navigate at winter sports locations. Watch ski pistes, ski lift markers and colored lines indicating the complexity of each track. To use after enabling go to Configure map and choose \"Winter and ski\" map type.";
 
-"product_title_track_recording" = "Trip recording";
+"monitoring_settings" = "Trip recording";
 "product_desc_track_recording" = "Record and save your trips as GPX tracks";
 "product_desc_ext_track_recording" = "Allows you to record, save and analyze your training or movement data, such as speed, ascents, descents or route relief, which can then be reused, improved, supplemented or shared with friends. \n\nHow to - https://osmand.net/docs/user/plugins/trip-recording";
 
@@ -1790,7 +1790,7 @@
 "product_desc_mapillary" = "Street-level views to check out the surroundings";
 "product_desc_ext_mapillary" = "Brings street-level views. Where imagery is missing, you can just add it yourself so that others can make use of it. To enable the Mapillary layer turn on the \"Street-level imagery\" in Configure map menu.";
 
-"product_title_openplacereviews" = "OpenPlaceReviews";
+"open_place_reviews" = "OpenPlaceReviews";
 "product_desc_openplacereviews" = "Share your opinion about public places";
 "product_desc_ext_openplacereviews" = "Allows you to make contributions to OpenPlaceReviews project. Such as photos, reviews, links about public places such as restaurants, hotels, museums and waypoints. \n\nYou can find instruction on how to contribute on out website - https://osmand.net/docs/user/plugins/openplacereviews";
 
@@ -1841,8 +1841,8 @@
 "product_desc_ext_srtm" = "Terrain information, such as contour lines, hillshades and slopes, helps you visually assess the shape of the land surface, considering curvature, extremes, steepness, points of equal height, and more. Topographic information on a map can be represented by slope shading, contour lines for the uphill and downhill, and the colour of the slope angle deviation from flat. Data from SRTM and ASTER. \n\nHow to - https://osmand.net/docs/user/plugins/contour-lines";
 
 "product_title_wikivoyage" = "Travel Guides";
-"product_desc_wikivoyage" = "The free worldwide travel guide anyone can edit.";
-"product_desc_ext_wikivoyage" = "Guides to the most interesting places on the planet, inside OsmAnd, without a connection to the Internet.";
+"start_editing_card_image_text" = "The free worldwide travel guide anyone can edit.";
+"wikivoyage_travel_guide_descr" = "Guides to the most interesting places on the planet, inside OsmAnd, without a connection to the Internet.";
 "product_desc_sea_depth_contours" = "Sea depth contour lines and seamarks";
 "depth_contour_lines" = "Depth contour lines";
 
@@ -1854,7 +1854,7 @@
 "all_categories" = "All categories";
 "get_unlimited_access" = "Get unlimited access";
 
-"latitude" = "Latitude";
+"navigate_point_latitude" = "Latitude";
 "navigate_point_longitude" = "Longitude";
 "track_save_short_q" = "Track is too short, do you want to save?";
 "add_as" = "Add as";
@@ -1880,7 +1880,7 @@
 "no_other_translations" = "There are no other translations";
 "wpt_remove_q" = "Remove waypoint?";
 "gpx_select_track" = "Select track";
-"gpx_curr_new_track" = "Current track";
+"current_track" = "Current track";
 "gpx_direction_arrows" = "Direction arrows";
 "gpx_split_interval" = "Split interval";
 "gpx_split_interval_descr" = "Select the interval at which marks with distance or time on the track will be displayed.";
@@ -1955,7 +1955,7 @@
 "parked_at" = "Parked at";
 
 "context_menu_item_directions_from" = "Directions from";
-"nearby_search" = "Search nearby";
+"search_nearby" = "Search nearby";
 "change_object_posiotion" = "Change object's position";
 "change_position_descr" = "Move the map to change object's position";
 
@@ -2039,7 +2039,7 @@
 "online_raster_maps" = "Online raster maps";
 "online_map" = "Online map";
 "calculating_progress" = "Calculating...";
-"local_names" = "Local names";
+"local_map_names" = "Local names";
 "history" = "History";
 "today" = "Today";
 "yesterday" = "Yesterday";
@@ -2114,7 +2114,7 @@
 "login_account" = "Account";
 "shared_string_account_add" = "Add account";
 "shared_string_email" = "Email";
-"shared_string_password" = "Password";
+"user_password" = "Password";
 "shared_string_filters" = "Filters";
 "edit_filter" = "Edit categories";
 "edit_filter_save_as_menu_item" = "Save As";
@@ -2163,7 +2163,7 @@
 
 "wiki_buy_description" = "To read full articles - buy Wikipedia plugin and download Wikipedia data of %@";
 "wiki_download_description" = "To read full articles - download Wikipedia data of %@";
-"map_an_region" = "this region";
+"download_wiki_region_placeholder" = "this region";
 
 "osm_live_plan_pricing" = "Plans & Pricing";
 "osm_live_payment_monthly_title" = "Pay monthly";
@@ -2270,7 +2270,7 @@
 "mountain_bike" = "Mountain bike";
 "rendering_attr_showMtbScale_name" = "MTB Scale";
 "rendering_attr_showMtbScaleIMBATrails_name" = "IMBA";
-"rendering_value_showMtbScaleIMBATrails_description" = "International Mountain Bicycling Association";
+"mtb_imba_full" = "International Mountain Bicycling Association";
 "rendering_attr_tracktype_grade5_name" = "Soft";
 "routing_attr_avoid_share_taxi_description" = "Avoids share taxi";
 "routing_attr_width_description" = "Specify permitted vehicle width limit on routes.";
@@ -2306,7 +2306,7 @@
 "rendering_attr_shareTaxiRoutes_name" = "Share taxi routes";
 "rendering_attr_showLightRailRoutes_name" = "Light rail routes";
 "rendering_attr_showMonorailRoutes_name" = "Monorail routes";
-"rendering_attr_funicularRoutes_name" = "Funicular routes";
+"rendering_attr_showFunicularRoutes_name" = "Funicular routes";
 "routing_attr_relief_smoothness_factor_hills_name" = "Hilly";
 "rendering_attr_contourWidth_name" = "Contour line width";
 "routing_attr_piste_type_sled_description" = "Slopes for sled usage.";
@@ -2585,7 +2585,7 @@
 "icon_group_sport" = "Sport";
 "icon_group_symbols" = "Symbols";
 "transport" = "Transport";
-"travel" = "Travel";
+"icon_group_travel" = "Travel";
 "nautical" = "Nautical";
 "icon_group_industrial" = "Industrial";
 "amenity_type_education" = "Education";
@@ -2672,7 +2672,7 @@
 "deleted_file" = "Deleted file";
 "osmand_cloud_authorize_descr" = "Never lose your data. Back up and restore all info easily.";
 "cloud_create_account" = "Create account";
-"cloud_existing_account" = "I already have an account";
+"register_opr_have_account" = "I already have an account";
 "local_backup" = "Local Backup";
 "local_backup_descr" = "Backup or restore data from a local file.";
 "local_backup_empty_file" = "The backup file does not contain any items to restore.";
@@ -2801,7 +2801,7 @@
 "redeem_promo_code" = "Redeem promo code";
 "new_device_account" = "New device / new account";
 "expired" = "Expired";
-"expires" = "Expires";
+"shared_string_expires" = "Expires";
 "manage_subscription" = "Manage subscription";
 "subscription" = "Subscription";
 "google_play" = "Google Play";

@@ -121,7 +121,7 @@
         if (_product.purchaseState == PSTATE_NOT_PURCHASED)
             purchasedType = OALocalizedString(@"expired");
         else if (isSubscription)
-            purchasedType = OALocalizedString(@"expires");
+            purchasedType = OALocalizedString(@"shared_string_expires");
     }
 
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
@@ -190,7 +190,7 @@
     if (!state.isActive)
         purchasedType = OALocalizedString(@"expired");
     else
-        purchasedType = OALocalizedString(@"expires");
+        purchasedType = OALocalizedString(@"shared_string_expires");
 
     NSDate *expirationDate = [_settings.backupPurchaseExpireTime get] > 0 ? [NSDate dateWithTimeIntervalSince1970:_settings.backupPurchaseExpireTime.get] : nil;
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];

@@ -41,7 +41,7 @@
 "yesterday" = "Duh";
 "today" = "Îro";
 "history" = "Borî";
-"local_names" = "";
+"local_map_names" = "";
 "map_creator" = "Çêkirina Nexşe";
 "show_region_on_map_go" = "Here Nexşe";
 "map_downloaded" = "Nexşe hate daxistin";
@@ -61,7 +61,7 @@
 "res_installing" = "Tê barkirin...";
 "description" = "Danasîn";
 "navigate_point_longitude" = "Hêlîlar";
-"latitude" = "Hêlîpan";
+"navigate_point_latitude" = "Hêlîpan";
 "my_location" = "Cihê min";
 "download_wikipedia_maps" = "Wîkîpediya";
 "product_desc_asia" = "Nexşeya Asyayê";
@@ -134,13 +134,13 @@
 "help_features" = "Taybetmendî";
 "actions" = "Çalakî";
 "plugins_menu_group" = "Lehikan";
-"osmand_live_weekly" = "Hefteyî";
-"product_title_track_recording" = "Qeydkirina gerrê";
-"osm_edits_advanced" = "Pêş";
+"weekly" = "Hefteyî";
+"monitoring_settings" = "Qeydkirina gerrê";
+"tab_title_advanced" = "Pêş";
 "edit_filter_save_as_menu_item" = "Bi awayekî cuda qeyd bike";
 "osm_working_days" = "Rojên Karê";
 "intro_next" = "Dû re";
-"transport_stop" = "Rawestgeh";
+"shared_string_control_stop" = "Rawestgeh";
 "transport_nearby_routes" = "NÊZÎK";
 "poi_remove_success" = "Jêbirî";
 "poi_dialog_poi_type" = "Cureya POIyê";
@@ -151,7 +151,7 @@
 "osm_edit_without_name" = "Bêyî nav";
 "clear_all_intermediates" = "Hemû nuqteyên li navberê paqij bike";
 "osmand_live_available_maps" = "Nexşeyên ku hene";
-"help_other_header" = "A din";
+"other_location" = "A din";
 "rendering_attr_hidePOILabels_name" = "Nîşana POIyê";
 "rendering_attr_whiteWaterSports_name" = "Werzîşên avê yên ekstrem";
 "rendering_attr_horseRoutes_name" = "Riyên Hespan";

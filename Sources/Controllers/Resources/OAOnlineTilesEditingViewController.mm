@@ -280,7 +280,7 @@
                         @"footer" : OALocalizedString(@"res_online_name_descr")
                         }];
     [sectionArr addObject:@{
-                        @"header" : OALocalizedString(@"res_url"),
+                        @"header" : OALocalizedString(@"edit_tilesource_url_to_load"),
                         @"footer" : OALocalizedString(@"res_online_url_descr")
                         }];
     [sectionArr addObject:@{

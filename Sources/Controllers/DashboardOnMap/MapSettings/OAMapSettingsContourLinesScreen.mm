@@ -258,7 +258,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         {
             [zoomArr addObject:@{
                 @"type" : kCellTypeValue,
-                @"title" : OALocalizedString(@"display_starting_at_zoom_level"),
+                @"title" : OALocalizedString(@"show_from_zoom_level"),
                 @"parameter" : param
             }];
         }

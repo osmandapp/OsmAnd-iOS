@@ -37,7 +37,7 @@
 "transport_Routes" = "ルート";
 "transport_nearby_routes_within" = "近辺のルート";
 "transport_nearby_routes" = "内";
-"transport_stop" = "停止";
+"shared_string_control_stop" = "停止";
 "cancel_navigation" = "ナビゲーションの停止";
 "start_navigation" = "ナビゲーションの開始";
 "intermediate_items_sort_by_distance" = "移動距離を最短で並べ替え";
@@ -57,7 +57,7 @@
 "show_poi_over_map" = "POIの表示";
 "shared_string_search" = "検索";
 "search_radius" = "検索範囲";
-"targets" = "目的地";
+"shared_string_target_points" = "目的地";
 "search_radius_proximity" = "以内";
 "poi" = "POI";
 "day_off_label" = "OFF";
@@ -205,7 +205,7 @@
 "voice_provider_descr" = "ナビゲーション時に使用する案内音声を選択します";
 "choose_audio_stream" = "音声案内出力";
 "choose_audio_stream_descr" = "音声案内を再生するスピーカー(出力先)を選択してください";
-"osm_live_routing" = "OsmAnd Liveナビゲーション";
+"use_osm_live_routing" = "OsmAnd Liveナビゲーション";
 "osm_live_routing_descr" = "OsmAnd Liveの更新情報を利用してナビゲーションをおこないます";
 "guidance_preferences_descr" = "ナビゲーション設定";
 "routing_preferences_descr" = "ルート検索などに関する設定をおこないます";
@@ -362,7 +362,7 @@
 "shared_string_all" = "全て";
 "shared_string_from" = "から";
 "shared_string_time" = "時間";
-"shared_string_time_of_day" = "時刻";
+"time_of_day" = "時刻";
 "shared_string_distance" = "距離";
 "shared_string_retry" = "再試行";
 "shared_string_enabled" = "有効";
@@ -440,7 +440,7 @@
 "gpx_route" = "ルート";
 "gpx_route_time" = "所要時間";
 "gpx_uphldownhl" = "上り坂/下り坂";
-"gpx_average_speed" = "平均速度";
+"map_widget_average_speed" = "平均速度";
 "shared_string_control_start" = "開始";
 "gpx_avg_elev" = "平均標高";
 "gpx_elev_range" = "標高範囲";
@@ -449,7 +449,7 @@
 "track_recording" = "経路記録";
 "shared_string_currently_recording_track" = "現在の経路を記録";
 "track_stop_rec" = "記録の停止";
-"track_new_segment" = "新しいセグメントの開始";
+"gpx_start_new_segment" = "新しいセグメントの開始";
 "track_save" = "現在の経路を保存";
 "save_current_track_descr" = "現在の経路を今すぐメモリーカードに保存します。";
 "track_continue_rec" = "記録の続行";
@@ -463,7 +463,7 @@
 "track_clear_q" = "現在の経路を消去しますか？";
 "show_info" = "詳細を表示";
 "record_trip" = "経路を記録";
-"poi_clear" = "削除";
+"shared_string_clear" = "削除";
 "poi_list" = "POI一覧";
 "track_during_nav" = "経路の自動記録";
 "track_during_nav_descr" = "経路はナビゲーション中に自動で記録されます";
@@ -526,7 +526,7 @@
 "sett_pref_lang" = "優先言語";
 "sett_lang_show_local" = "ローカル名(その国の言語)で表示";
 "sett_lang_show_trans" = "名称を翻字";
-"maps" = "マップ";
+"shared_string_maps" = "マップ";
 "purchases" = "購入";
 "select_map_style" = "マップスタイルを選択";
 "select_map_source" = "マップソースを選択";
@@ -550,15 +550,15 @@
 // Resources
 "res_mapsres" = "マップ＆リソース";
 "download_tab_local" = "保存済み";
-"osmand_live_title" = "OsmAnd Live";
-"osmand_live_updates" = "ライブ更新";
+"osmand_live" = "OsmAnd Live";
+"live_updates" = "ライブ更新";
 "osmand_live_available_maps" = "利用可能なマップ";
 "osmand_live_last_changed" = "最後のマップ変更: %@";
 "last_update" = "最後の更新: %@";
 "osmand_live_not_updated" = "未更新です";
-"osmand_live_hourly" = "毎時間";
+"hourly" = "毎時間";
 "daily" = "毎日";
-"osmand_live_weekly" = "毎週";
+"weekly" = "毎週";
 "osmand_live_reports" = "Reports";
 "osmand_live_server_date" = "サーバー側の最終更新: %@";
 "update_frequency" = "更新間隔";
@@ -569,7 +569,7 @@
 "osmand_live_donation_switch_descr" = "寄付の一部は、OpenStreetMapの更新に寄与するOSMユーザーに分配されます。それによってサブスクリプションのコストが変わることはありません";
 "osmand_live_donations_enter_email" = "メールアドレスを入力";
 "osmand_live_donations_email_descr" = "寄付レポートを入手するには、メールアドレスを入力してください";
-"osmand_live_support_reg_title" = "サポート地域";
+"osm_live_support_region" = "サポート地域";
 "osmand_live_support_reg_descr" = "寄付の一部は、その地域の地図更新に寄与したOSMユーザーに送られます";
 "osmand_live_public_name" = "公開用の名前を入力";
 "osmand_live_subscription_canceled" = "OsmAnd Liveのサブスクリプションをキャンセルしました";
@@ -580,7 +580,7 @@
 "res_search_world" = "全世界で検索";
 "res_catalog_upd" = "カタログ更新";
 "res_world_map" = "世界地図";
-"res_world_region" = "全世界";
+"shared_string_world" = "全世界";
 "res_updates" = "アップデート";
 "res_worldwide" = "全世界";
 "res_region_map" = "地域マップ";
@@ -661,7 +661,7 @@
 "osm_note_create" = "OSMメモの作成";
 "upload_osm_note" = "OSMメモをアップロード";
 "osm_note_close" = "OSMメモを閉じる";
-"osm_note_comment_title" = "OSMメモへのコメント";
+"osm_edit_comment_note" = "OSMメモへのコメント";
 "osm_note_reopen_title" = "OSMメモを再度開く";
 "osm_confirm_bulk_delete" = "%d個の編集を削除しますか？";
 "osm_confirm_delete" = "POIを削除しますか？";
@@ -678,7 +678,7 @@
 "osm_edits_offline_layer" = "OSM編集/メモ (オフライン)";
 "osm_notes_online_layer" = "OSMメモ (オンライン)";
 "tab_title_basic" = "基本";
-"osm_edits_advanced" = "上級者向け";
+"tab_title_advanced" = "上級者向け";
 "osm_edits_all" = "すべての編集";
 "osm_edits_poi" = "POIの編集";
 "osm_edits_notes" = "メモ";
@@ -706,7 +706,7 @@
 "mapillary_descr" = "皆で作るオンラインストリート写真。発見した場所を皆でコラボレーションし、全世界を写真におさめよう";
 "mapillary_turn_on_widget" = "MapillaryウィジェットをONにする";
 "mapillary_turn_on_widget_descr" = "この機能によりMapillaryに簡単にアクセスし貢献することができます";
-"tile_cache" = "タイルキャッシュ";
+"mapillary_menu_title_tile_cache" = "タイルキャッシュ";
 "tile_data" = "タイルデータ";
 "shared_string_reload" = "再読み込み";
 "show_more" = "さらに表示";
@@ -726,9 +726,9 @@
 "quick_action_map_overlay_title" = "オーバーレイマップ";
 "map_underlays" = "アンダーレイマップ";
 "vector_data" = "オフラインベクターマップ";
-"add_map_source" = "ソースマップを追加";
+"quick_action_map_source_action" = "ソースマップを追加";
 "add_map_style" = "マップスタイルの追加";
-"map_styles" = "マップスタイル";
+"quick_action_map_styles" = "マップスタイル";
 "quick_action_new_action" = "アクションを追加";
 "quick_action_add_create_items" = "アイテムを作成";
 "configure_map" = "マップ設定";
@@ -742,7 +742,7 @@
 "hide_poi_action" = "POIを非表示";
 "add_parking_place" = "駐車場所を追加";
 "parking_place" = "駐車場";
-"toggle_voice" = "音声のON/OFF";
+"quick_action_navigation_voice" = "音声のON/OFF";
 "add_osm_note" = "OSMメモを追加";
 "toggle_online_notes" = "OSMメモを切替";
 "toggle_local_edits" = "ローカルOSM編集を切替";
@@ -751,7 +751,7 @@
 "quick_action_map_source" = "ソースマップの変更";
 "quick_action_map_overlay" = "オーバーレイマップの変更";
 "quick_action_map_underlay" = "アンダーレイマップの変更";
-"replace_destination" = "目的地を置き換え";
+"quick_action_replace_destination" = "目的地を置き換え";
 "add_destination" = "目的地を追加";
 "add_start" = "出発地点を追加";
 "add_intermediate" = "中間経由地点を追加";
@@ -766,7 +766,7 @@
 "quick_action_resume_pause_navigation" = "ナビゲーションの再開/一時停止";
 "resume_nav" = "ナビゲーションを続ける";
 "pause_nav" = "Pause navigation";
-"toggle_nav" = "ナビゲーションの開始/停止";
+"quick_action_start_stop_navigation" = "ナビゲーションの開始/停止";
 "toggle_day_night" = "昼間/夜間モードの切替";
 "quick_action_switch_night_mode" = "夜モード";
 "quick_action_switch_day_mode" = "昼モード";
@@ -822,7 +822,7 @@
 "hide_hillshade" = "陰影起伏図を非表示";
 "toggle_contour_lines" = "等高線の表示/非表示";
 "toggle_hillshade" = "地形の表示/非表示";
-"display_starting_at_zoom_level" = "ズームレベルを表示";
+"show_from_zoom_level" = "ズームレベルを表示";
 "quick_action_contour_lines_descr" = "このアクションボタンをタップすると、等高線レイヤーの表示/非表示を切り替えます。";
 "hide_contour_lines" = "等高線を非表示";
 "other_options" = "Other options";
@@ -845,7 +845,7 @@
 "pickup_car" = "駐車車両の回収";
 "pickup_car_at" = "駐車場の制限時間：";
 "add_notification_calendar" = "カレンダーに通知を追加";
-"parking_time_limited" = "駐車場の制限時間";
+"parking_place_limited" = "駐車場の制限時間";
 "time_left" = "駐車可能です";
 "osmand_parking_overdue" = "超過しています";
 "cannot_add_marker" = "駐車場を追加できません";
@@ -873,7 +873,7 @@
 "help_search" = "マップ内検索";
 "help_trip_planning" = "ルートの指定方法";
 "map_legend" = "マップの簡易説明";
-"help_other_header" = "その他";
+"other_location" = "その他";
 "help_install_and_troubleshoot" = "インストールとトラブルシューティング";
 "techical_articles_item" = "技術的項目";
 "help_versions" = "バージョン履歴";
@@ -937,7 +937,7 @@
 "product_title_skimap" = "スキーマップ";
 "product_desc_skimap" = "リフトとスロープを備えた最新のスキートレイルマップ";
 "product_desc_ext_skimap" = "OsmAndスキーマップは『OsmAnd Maps&Navigation』アプリのプラグインの一つで、ウィンタースポーツに関する場所へのナビゲートができるように設計されています。このツールはスキーゲレンデ、スキーリフトマーカー、および各経路の難易度などを色付きの線で示しそれらの情報を提供します。周辺のインフラだけでなく、スキー場自体に関する情報も得られます。\n\n使用方法:プラグインをOsmAndアプリ内で有効にし、『マップ設定』＞『マップスタイル』をタップしてマップの種類を『スキーマップ』に変更するか、アプリプロファイルを『スキー』に設定してください。";
-"product_title_track_recording" = "旅程・経路記録";
+"monitoring_settings" = "旅程・経路記録";
 "product_desc_track_recording" = "旅程・経路を記録してGPXとして保存";
 "product_desc_ext_track_recording" = "経路記録プラグインを使用して、経路を記録し手動で保存します。経路をGPXファイルとして書き出して共有したり、OpenStreetMapプロジェクトに貢献するために使用することもできます。ランナーやハイカーなど通った経路の記録に関心のある人なら誰でも使える便利なツールです。";
 "product_title_trip_planning" = "旅程計画";
@@ -978,13 +978,13 @@
 "product_desc_srtm" = "等高線の表示";
 "product_desc_ext_srtm" = "このプラグインは等高線と陰影起伏図を提供し、それらをOsmAndオフラインマップに重ねて表示できます。等高線は各地点の標高に関する情報を提供し、陰影起伏図は陰影(グラデーション)によりそれを視覚化したものです。このプラグインを使用すると、峰ごとの名称や地形の特徴などが一目で分かりやすくなります。\n\nこのグローバルデータ(北緯70°から南緯70°の間)はSRTM(スペースシャトル立体地形データ)とNASAの地球観測衛星であるテラ(Terra)に搭載されたASTER(資源探査用将来型センサ)と呼ばれる機器の観測結果をベースにしたものです。 ASTERはNASAと日本の経済産業省(METI)、そして宇宙システム開発利用推進機構(J-spacesystems)の共同作業によるものです。";
 "product_title_wikivoyage" = "旅行ガイド";
-"product_desc_wikivoyage" = "誰でも自由に編集できる世界規模の旅行ガイドです。";
-"product_desc_ext_wikivoyage" = "インターネットへ接続せずにOsmAnd上で地球上のあらゆる興味深いスポットのガイドを利用することができます。";
+"start_editing_card_image_text" = "誰でも自由に編集できる世界規模の旅行ガイドです。";
+"wikivoyage_travel_guide_descr" = "インターネットへ接続せずにOsmAnd上で地球上のあらゆる興味深いスポットのガイドを利用することができます。";
 "product_desc_sea_depth_contours" = "海洋等深線と航路標識";
 "my_location" = "現在地";
 "all_categories" = "すべてのカテゴリー";
 "get_unlimited_access" = "無制限のアクセスを取得";
-"latitude" = "緯度";
+"navigate_point_latitude" = "緯度";
 "navigate_point_longitude" = "経度";
 "track_save_short_q" = "非常に短い経路ですが保存しますか？";
 "add_as" = "以下のものを保存：";
@@ -1002,7 +1002,7 @@
 "no_other_translations" = "他に翻訳はありません";
 "wpt_remove_q" = "経由地点を削除しますか？";
 "gpx_select_track" = "経路の選択";
-"gpx_curr_new_track" = "現在の経路";
+"current_track" = "現在の経路";
 "access_hint_enter_name" = "名前の入力";
 "shared_string_not_selected" = "指定しない";
 "shared_string_language" = "言語";
@@ -1038,7 +1038,7 @@
 "get_directions" = "ナビ開始";
 "parking" = "駐車場";
 "context_menu_item_directions_from" = "ここから出発";
-"nearby_search" = "近くを検索";
+"search_nearby" = "近くを検索";
 "est_travel_time" = "所要時間の見積もり";
 "pedestrian" = "徒歩";
 "sorting" = "並び替え";
@@ -1078,7 +1078,7 @@
 "map_creator" = "Map Creator";
 "online_map" = "オンラインマップ";
 "calculating_progress" = "計算中...";
-"local_names" = "ローカル名(その国の言語)";
+"local_map_names" = "ローカル名(その国の言語)";
 "history" = "履歴";
 "today" = "今日";
 "yesterday" = "昨日";
@@ -1115,7 +1115,7 @@
 "create_custom_poi" = "カスタムフィルターを作成";
 "selected_categories" = "選択したカテゴリー";
 "new_filter_desc" = "新しいフィルターの名前を入力してください。これは『カテゴリー』タブに追加されます。";
-"shared_string_password" = "パスワード";
+"user_password" = "パスワード";
 "shared_string_filters" = "フィルター";
 "edit_filter" = "カテゴリーを編集";
 "edit_filter_save_as_menu_item" = "名前をつけて保存";
@@ -1155,7 +1155,7 @@
 "key_hint_goback" = "戻る";
 "wiki_buy_description" = "記事全文を読むにはWikipediaプラグインを購入し、%@のWikipediaデータをダウンロードする必要があります";
 "wiki_download_description" = "記事全文を読むには、%@のWikipediaデータをダウンロードしてください";
-"map_an_region" = "当該地域";
+"download_wiki_region_placeholder" = "当該地域";
 "osm_live_plan_pricing" = "プランと料金";
 "osm_live_payment_monthly_title" = "1ヶ月分支払い";
 "osm_live_payment_3_months_title" = "3ヶ月分支払い";
@@ -1216,7 +1216,7 @@
 "gpx_descent" = "下り";
 "download_depth_countours" = "海洋等深線データ";
 "gpx_avg_altitude" = "平均標高";
-"res_url" = "URL";
+"edit_tilesource_url_to_load" = "URL";
 "res_elliptic_mercator" = "楕円メルカトル";
 "routing_attr_avoid_shuttle_train_description" = "移動手段にカートレインを使用しません";
 "rendering_value_low_name" = "低";
@@ -1608,7 +1608,7 @@
 "osmand_settings" = "OsmAnd設定";
 "save_track_logging_accuracy" = "ロギング精度";
 "trip_rec_actions_descr" = "記録された経路は %@ にあります";
-"plugin_settings_reset" = "プラグイン設定を初期値に戻す";
+"reset_plugin_to_default" = "プラグイン設定を初期値に戻す";
 "profile_appearance" = "プロファイルの外観";
 "device_settings" = "端末の設定";
 "units_of_speed" = "速度の単位";
@@ -1658,8 +1658,8 @@
 "reset_to_default" = "標準設定に戻す";
 "copy_from_other_profile" = "他のプロファイルからコピー";
 "shared_string_exit" = "終了";
-"position_icon_while_moving" = "移動中の位置アイコン";
-"appearance_on_map" = "マップ画面での表示設定";
+"select_navigation_icon" = "移動中の位置アイコン";
+"appearance_on_the_map" = "マップ画面での表示設定";
 "select_icon_profile_dialog_title" = "アイコン選択";
 "select_color" = "プロファイルの色";
 "profile_settings" = "プロファイル設定";
@@ -1709,7 +1709,7 @@
 "shared_string_account_add" = "アカウント追加";
 "login_account" = "アカウント";
 "res_slope" = "勾配";
-"configure_screen_descr" = "指定プロファイルの画面構成";
+"edit_profile_screen_options_subtitle" = "指定プロファイルの画面構成";
 "help_legend_descr" = "地図記号の説明";
 "map_coords" = "マップ: 緯度 %.5f 経度 %.5f";
 "vessel_height_limit_description" = "低い橋を避けるために船の高さを設定します。注：橋が可動式の場合は、開いた状態の高さで計算されます。";
@@ -1839,7 +1839,7 @@
 
 // Resources
 "shared_string_resources" = "リソース";
-"segnet_num" = "%dセグメント";
+"segments_count" = "%dセグメント";
 "track_multiple_segments_select" = "%@ 複数のセグメントがあります。ナビゲーションに使用する部分の経路を選択してください。";
 "select_segment" = "セグメントの選択";
 "add_folder" = "フォルダを追加";
@@ -1865,7 +1865,7 @@
 "gpx_saved_successfully" = "%@としてGPSファイルが保存されました";
 "plan_route_exit_message" = "計画したルートを保存せずにを終了してもよろしいですか？すべての変更が失われます。";
 "route_between_points_add_track_desc" = "新しいセグメントを追加する経路ファイルを選択します。";
-"plan_route_last_modified" = "最終更新日";
+"sort_last_modified" = "最終更新日";
 "plan_route_open_existing_track" = "既存の経路を開く";
 "track_is_saved" = "%@\nセーブされました！";
 "plan_route_create_new_route" = "新しいルートの作成";
@@ -1941,7 +1941,7 @@
 "markers_history" = "マーカー履歴";
 "desert" = "砂漠";
 "settings_item_read_error" = "%@が読み込めませんでした。";
-"travel" = "旅行";
+"icon_group_travel" = "旅行";
 "transport" = "交通";
 "icon_group_symbols" = "記号";
 "icon_group_special" = "特別";
@@ -1999,7 +1999,7 @@
 "coordinates" = "座標";
 "shared_string_disable" = "無効化";
 "shared_string_enable" = "有効化";
-"custom_osmand_plugin_name" = "OsmAndプラグインのカスタマイズ";
+"custom_osmand_plugin" = "OsmAndプラグインのカスタマイズ";
 "extra_maps_menu_group" = "追加マップ";
 "search_more" = "さらに検索…";
 "gpx_upload_public_visibility_descr" = "\"パブリック\"とはトレース内容がGPSトレースと公的GPSトレースリストに公開され、タイムスタンプが生の形式で公開トレースリストに表示されることを意味します。 APIを介して提供されるデータは、トレースページを参照しません。トレースポイントのタイムスタンプは、パブリックなGPS APIからは利用できません。また、トレースポイントは時系列で並べられていません。";
@@ -2020,7 +2020,7 @@
 "wiki_menu_download_descr" = "ウィキペディアPOIをマップ上に表示するには、追加マップが必要です。";
 "shared_string_navigation" = "ナビゲーション";
 "gpxup_trackable" = "追跡可能";
-"product_title_openplacereviews" = "OpenPlaceReviews";
+"open_place_reviews" = "OpenPlaceReviews";
 "shared_string_turn_off" = "OFFにする";
 "navigate_point_northing" = "北進";
 "srtm_download_list_help_message" = "OsmAndはメートルとフィートでの等高線データを提供します。フォーマットを変更するには、ファイルを再ダウンロードする必要があります。";
@@ -2238,7 +2238,7 @@
 "navigate_point_format_MGRS" = "MGRS(Military Grid Reference System)";
 "weather_wind_kilimeters_per_hour" = "キロメートル毎時";
 "backup_error_subscription_was_expired_descr" = "OsmAnd Proのサブスクリプション期限が切れているので、データのバックアップを継続利用するのであれば更新してください。引き続きクラウドからデータを復元できるようになります。";
-"cloud_existing_account" = "私はすでにアカウントを持っています";
+"register_opr_have_account" = "私はすでにアカウントを持っています";
 "save_heading" = "見出しを含める";
 "last_backup" = "最終バックアップ";
 "backup_error_token_is_not_valid_or_expired" = "無効または期限切れの検証コード";
@@ -2377,7 +2377,7 @@
 "product_title_pro" = "OsmAnd Pro";
 "product_title_plus" = "Maps+";
 "map_widget_rendering_fps" = "マップ描画FPS";
-"shared_string_online_cache" = "オンラインキャッシュ";
+"weather_online_cache" = "オンラインキャッシュ";
 "shared_string_clear_online_cache" = "オンラインキャッシュを消去";
 "shared_string_clear_offline_cache" = "オフラインキャッシュを消去";
 "shared_string_total_size" = "合計サイズ";
@@ -2401,10 +2401,10 @@
 "selected_tracks_count" = "経路 - %d";
 "select_tracks" = "経路を選択";
 "delete_tracks_bottom_sheet_title" = "経路を削除しますか？";
-"shared_string_always_visible" = "常に表示";
+"compass_always_visible" = "常に表示";
 "compass_always_hidden" = "常に非表示";
 "rendering_attr_showLightRailRoutes_name" = "軽量軌道交通(LRT)でのルート";
-"rendering_attr_funicularRoutes_name" = "ケーブルカーでのルート";
+"rendering_attr_showFunicularRoutes_name" = "ケーブルカーでのルート";
 "login_help_email_title" = "OsmAnd iOS Cloud";
 "huawei_appgallery" = "Huawei AppGallery";
 "amazon_appstore" = "Amazon Appstore";

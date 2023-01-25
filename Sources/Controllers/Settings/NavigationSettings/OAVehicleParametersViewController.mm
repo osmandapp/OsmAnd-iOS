@@ -189,7 +189,7 @@
 - (NSString *)getTitleForHeader:(NSInteger)section
 {
     if (section == _otherSection)
-        return OALocalizedString(@"help_other_header");
+        return OALocalizedString(@"other_location");
 
     return nil;
 }

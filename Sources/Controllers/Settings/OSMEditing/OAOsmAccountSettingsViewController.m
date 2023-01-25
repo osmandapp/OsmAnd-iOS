@@ -364,7 +364,7 @@
             BOOL isEmail = [item[@"key"] isEqualToString:@"email_input_cell"];
             BOOL isPassword = [item[@"key"] isEqualToString:@"password_input_cell"];
 
-            cell.titleLabel.text = isEmail ? OALocalizedString(@"shared_string_email") : OALocalizedString(@"shared_string_password");
+            cell.titleLabel.text = isEmail ? OALocalizedString(@"shared_string_email") : OALocalizedString(@"user_password");
             cell.titleLabel.textColor = [UIColor blackColor];
 
             cell.inputField.userInteractionEnabled = !_isLogged;

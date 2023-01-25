@@ -330,7 +330,7 @@
         case 1:
             return OALocalizedString(@"show_direction");
         case 2:
-            return OALocalizedString(@"appearance_on_map");
+            return OALocalizedString(@"appearance_on_the_map");
         default:
             return @"";
     }

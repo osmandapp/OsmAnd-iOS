@@ -96,7 +96,7 @@
         }
         else
         {
-            regionName = OALocalizedString(@"map_an_region");
+            regionName = OALocalizedString(@"download_wiki_region_placeholder");
         }
         
         if (_resourceItem && app.resourcesManager->isResourceInstalled(_resourceItem.resourceId))

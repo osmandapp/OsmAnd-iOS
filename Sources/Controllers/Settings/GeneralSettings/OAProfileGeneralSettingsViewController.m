@@ -413,7 +413,7 @@
     else if (section == 1)
         return OALocalizedString(@"units_and_formats");
     else
-        return OALocalizedString(@"help_other_header");
+        return OALocalizedString(@"other_location");
 }
 
 #pragma mark - Switch

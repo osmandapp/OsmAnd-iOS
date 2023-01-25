@@ -244,7 +244,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     if (mapsCount > 0)
     {
         [_data addObject: @{
-            @"label": OALocalizedString(@"maps"),
+            @"label": OALocalizedString(@"shared_string_maps"),
             @"iconName": @"ic_custom_map",
             @"count": [NSString stringWithFormat:@"%ld", mapsCount],
             @"category" : @(EOAImportDataTypeMaps)

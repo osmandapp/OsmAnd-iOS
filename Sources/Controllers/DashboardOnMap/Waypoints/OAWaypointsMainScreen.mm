@@ -628,7 +628,7 @@
     switch (type)
     {
         case LPW_TARGETS:
-            return OALocalizedString(@"targets");
+            return OALocalizedString(@"shared_string_target_points");
         case LPW_ALARMS:
             return OALocalizedString(@"show_traffic_warnings");
         case LPW_FAVORITES:

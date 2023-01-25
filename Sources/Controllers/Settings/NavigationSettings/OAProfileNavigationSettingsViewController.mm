@@ -302,7 +302,7 @@
         case 0:
             return OALocalizedString(@"routing_settings");
         case 1:
-            return OALocalizedString(@"help_other_header");
+            return OALocalizedString(@"other_location");
         default:
             return @"";
     }

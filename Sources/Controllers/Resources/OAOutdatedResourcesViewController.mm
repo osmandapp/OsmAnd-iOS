@@ -410,7 +410,7 @@
         if (indexPath.row == _liveUpdatesRow)
         {
             cellTypeId = liveUpdatesCell;
-            title = OALocalizedString(@"osmand_live_updates");
+            title = OALocalizedString(@"live_updates");
         }
         else if (indexPath.row == _weatherForecastsRow)
         {

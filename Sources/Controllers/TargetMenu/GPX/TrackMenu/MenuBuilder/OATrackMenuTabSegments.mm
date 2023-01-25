@@ -148,7 +148,7 @@
     if (self.trackMenuDelegate)
         segmentTitle = [self.trackMenuDelegate getTrackSegmentTitle:segment];
     if (!segmentTitle)
-        segmentTitle = [NSString stringWithFormat:OALocalizedString(@"segnet_num"), index];
+        segmentTitle = [NSString stringWithFormat:OALocalizedString(@"segments_count"), index];
 
     OAGPXTableCellData *segmentCellData = index != 0 ? [OAGPXTableCellData withData:@{
             kTableKey: [NSString stringWithFormat:@"segment_%p", (__bridge void *) segment],
@@ -318,7 +318,7 @@
         }
         case EOARouteStatisticsModeSpeed:
         {
-            titles[@"top_left_title_string_value"] = OALocalizedString(@"gpx_average_speed");
+            titles[@"top_left_title_string_value"] = OALocalizedString(@"map_widget_average_speed");
             titles[@"top_right_title_string_value"] = OALocalizedString(@"gpx_max_speed");
             titles[@"bottom_left_title_string_value"] = OALocalizedString(@"shared_string_time_moving");
             titles[@"bottom_right_title_string_value"] = OALocalizedString(@"distance_moving");

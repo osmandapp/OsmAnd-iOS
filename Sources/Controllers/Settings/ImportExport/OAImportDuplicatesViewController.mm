@@ -262,7 +262,7 @@
     if (mapFiles.count > 0)
     {
         NSMutableArray *mapsSection = [NSMutableArray new];
-        [mapsSection addObject:[[OAHeaderType alloc] initWithTitle:OALocalizedString(@"maps")]];
+        [mapsSection addObject:[[OAHeaderType alloc] initWithTitle:OALocalizedString(@"shared_string_maps")]];
         [mapsSection addObjectsFromArray:mapFiles];
         [duplicates addObject:mapsSection];
     }

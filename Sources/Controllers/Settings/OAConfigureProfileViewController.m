@@ -128,7 +128,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     [profileSettings addObject:@{
         @"type" : [OAIconTextDescCell getCellIdentifier],
         @"title" : OALocalizedString(@"layer_map_appearance"),
-        @"descr" : OALocalizedString(@"configure_screen_descr"),
+        @"descr" : OALocalizedString(@"edit_profile_screen_options_subtitle"),
         @"img" : @"left_menu_configure_screen",
         @"key" : @"configure_screen"
     }];

@@ -204,7 +204,7 @@ static BOOL _purchasesUpdated;
                     OASubscriptionState *state = [settings.backupPurchaseState get];
                     BOOL isPromo = ((EOASubscriptionOrigin) [settings.proSubscriptionOrigin get]) == EOASubscriptionOriginPromo;
                     if (state != OASubscriptionState.EXPIRED)
-                        datePattern = OALocalizedString(@"expires");
+                        datePattern = OALocalizedString(@"shared_string_expires");
                     else
                         datePattern = OALocalizedString(@"expired");
                     long expiretime = [settings.backupPurchaseExpireTime get];
@@ -320,7 +320,7 @@ static BOOL _purchasesUpdated;
     if (product.purchaseState == PSTATE_NOT_PURCHASED)
         datePattern = OALocalizedString(@"expired");
     else if ([product isKindOfClass:OASubscription.class])
-        datePattern = OALocalizedString(@"expires");
+        datePattern = OALocalizedString(@"shared_string_expires");
     else if ([product isKindOfClass:OAProduct.class])
         datePattern = OALocalizedString(@"shared_string_purchased");
 

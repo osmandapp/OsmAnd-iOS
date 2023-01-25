@@ -37,7 +37,7 @@
 "transport_Routes" = "Percors e itineraris";
 "transport_nearby_routes_within" = "Percors pròches dins";
 "transport_nearby_routes" = "Dins";
-"transport_stop" = "Arrèst";
+"shared_string_control_stop" = "Arrèst";
 "cancel_navigation" = "Arrestar la navigacion";
 "start_navigation" = "Començar la navigacion";
 "intermediate_items_sort_by_distance" = "Ordenar pòrta a pòrta";
@@ -57,7 +57,7 @@
 "show_poi_over_map" = "Mòstrar lei PDI";
 "shared_string_search" = "Cercar";
 "search_radius" = "Rai de recèrca";
-"targets" = "Destinacions";
+"shared_string_target_points" = "Destinacions";
 "search_radius_proximity" = "Dins";
 "poi" = "PDI";
 "day_off_label" = "Barrat";
@@ -205,7 +205,7 @@
 "voice_provider_descr" = "Seleccionatz la lenga de guidatge per la navigacion";
 "choose_audio_stream" = "Canau de sortida de la votz de guidatge";
 "choose_audio_stream_descr" = "Seleccionatz lo canau audio per reprodurre lo guidatge vocau";
-"osm_live_routing" = "Navigacion OsmAnd Live";
+"use_osm_live_routing" = "Navigacion OsmAnd Live";
 "osm_live_routing_descr" = "Utilizar leis actualizacions OsmAnd Live per la navigacion";
 "guidance_preferences_descr" = "Preferéncias de navigacion";
 "routing_preferences_descr" = "Preferéncies de calcul dau percors";
@@ -362,7 +362,7 @@
 "shared_string_all" = "Tot";
 "shared_string_from" = "de";
 "shared_string_time" = "Durada";
-"shared_string_time_of_day" = "Ora de la jornada";
+"time_of_day" = "Ora de la jornada";
 "shared_string_distance" = "Distància";
 "shared_string_retry" = "Tornatz assajar";
 "shared_string_enabled" = "Activat";
@@ -440,7 +440,7 @@
 "gpx_route" = "Percors";
 "gpx_route_time" = "Temps dau percors";
 "gpx_uphldownhl" = "Montadas/devalada";
-"gpx_average_speed" = "Velocitat mejana";
+"map_widget_average_speed" = "Velocitat mejana";
 "shared_string_control_start" = "Partença";
 "gpx_avg_elev" = "Elevacion mejana";
 "gpx_elev_range" = "Gamma d'elevacion";
@@ -449,7 +449,7 @@
 "track_recording" = "Enregistrament de la traça";
 "shared_string_currently_recording_track" = "Enregistrament de la traça en cors";
 "track_stop_rec" = "Arrestar l'enregistrament";
-"track_new_segment" = "Començar una estirada novèla";
+"gpx_start_new_segment" = "Començar una estirada novèla";
 "track_save" = "Sauvagardar la traça correnta";
 "save_current_track_descr" = "Sauvagardar, tot d'un temps, la traça actuala per fichier GPX.";
 "track_continue_rec" = "Continuar l'enregistrament";
@@ -463,7 +463,7 @@
 "track_clear_q" = "Volètz escafar lo percors actuau ?";
 "show_info" = "Mostrar leis informacions";
 "record_trip" = "Enregistratz lo percors";
-"poi_clear" = "Escafar";
+"shared_string_clear" = "Escafar";
 "poi_list" = "Lista de PDI";
 "track_during_nav" = "Enregistrament automatic dau percors";
 "track_during_nav_descr" = "Activar per enregistrar automaticament la traça de la navigacion";
@@ -523,7 +523,7 @@
 "sett_pref_lang" = "Lenga preferida";
 "sett_lang_show_local" = "Mostrar lei noms locaus";
 "sett_lang_show_trans" = "Transliterar lei noms";
-"maps" = "Mapas";
+"shared_string_maps" = "Mapas";
 "purchases" = "Cròmpas";
 "select_map_style" = "Chausissètz l'estile de la mapa";
 "select_map_source" = "Chausissètz la fònt de la mapa";
@@ -547,15 +547,15 @@
 // Resources
 "res_mapsres" = "Mapas & Ressorsas";
 "download_tab_local" = "Installat en locau";
-"osmand_live_title" = "OsmAnd Live";
-"osmand_live_updates" = "Actualizacions sus lo còp";
+"osmand_live" = "OsmAnd Live";
+"live_updates" = "Actualizacions sus lo còp";
 "osmand_live_available_maps" = "Mapas disponiblas";
 "osmand_live_last_changed" = "Darriera modificacion de la mapa: %@";
 "last_update" = "Darriera actualizacion: %@";
 "osmand_live_not_updated" = "Pas encara actualizat";
-"osmand_live_hourly" = "Cada ora";
+"hourly" = "Cada ora";
 "daily" = "Cada jorn";
-"osmand_live_weekly" = "Cada setmana";
+"weekly" = "Cada setmana";
 "osmand_live_reports" = "Rapòrts";
 "osmand_live_server_date" = "Darriera actualizacion de servidor: %@";
 "update_frequency" = "Frequéncia de l\'actualizacion";
@@ -566,7 +566,7 @@
 "osmand_live_donation_switch_descr" = "Una part de la vòstra donacion es distribuida entre leis utilisators d'OSM que mandan de modificacions a OpenStreetMap. Lo còst de l'abonament a pas aumentat";
 "osmand_live_donations_enter_email" = "Marcatz vòstra adreiça electronica";
 "osmand_live_donations_email_descr" = "Per recebre leis informacions de donacion, marcatz vòstra adreiça electronica";
-"osmand_live_support_reg_title" = "Sostenir la region";
+"osm_live_support_region" = "Sostenir la region";
 "osmand_live_support_reg_descr" = "Una part de vòstra donacion serà distribuida ais contributors d'OSM que mandan de modificacions per la mapa d'aquesta zòna";
 "osmand_live_public_name" = "Marcatz vòstre escais public";
 "osmand_live_subscription_canceled" = "Avètz anullat vòstre abonament a OsmAnd Live";
@@ -577,7 +577,7 @@
 "res_search_world" = "Recercar dins lo monde entier";
 "res_catalog_upd" = "Actualizacion dau catalòg";
 "res_world_map" = "Mapa mondiala";
-"res_world_region" = "Monde";
+"shared_string_world" = "Monde";
 "res_updates" = "Actualizacions";
 "res_worldwide" = "A l'escala mondiala";
 "res_region_map" = "Mapa regionala";
@@ -658,7 +658,7 @@
 "osm_note_create" = "Crear una Nòta OSM";
 "upload_osm_note" = "Telecargar una nòta OSM";
 "osm_note_close" = "Plegar la nòta d'OSM";
-"osm_note_comment_title" = "Comentari de la nòta d\'OSM";
+"osm_edit_comment_note" = "Comentari de la nòta d\'OSM";
 "osm_note_reopen_title" = "Redobertura de la nòta d'OSM";
 "osm_confirm_bulk_delete" = "Escafar %d modificacions ?";
 "osm_confirm_delete" = "Eliminar lo PDI ?";
@@ -675,7 +675,7 @@
 "osm_edits_offline_layer" = "Edicions/Nòtas OSM (en locau)";
 "osm_notes_online_layer" = "Nòtas d'OSM (en linha)";
 "tab_title_basic" = "Basic";
-"osm_edits_advanced" = "Avançat -da";
+"tab_title_advanced" = "Avançat -da";
 "osm_edits_all" = "Totei leis modificacions";
 "osm_edits_poi" = "Modificacions de PDI";
 "osm_edits_notes" = "Nòtas";
@@ -703,7 +703,7 @@
 "mapillary_descr" = "Fotografias de carrieras en linha per totei. Descobrètz de luòcs, collaboratz, fotografiatz lo monde";
 "mapillary_turn_on_widget" = "Activar la vinheta de Mapillary";
 "mapillary_turn_on_widget_descr" = "Aiçò vos permet de collaborar rapidament amb Mapillary";
-"tile_cache" = "Memòria temporària de teules";
+"mapillary_menu_title_tile_cache" = "Memòria temporària de teules";
 "shared_string_reload" = "Actualizar";
 "show_more" = "Mostrar mai";
 "mapil_reload_cache" = "Actualizar lei teules per veire lei donadas mai recentas";
@@ -722,9 +722,9 @@
 "quick_action_map_overlay_title" = "Superposicions de mapa";
 "map_underlays" = "Fons de mapa";
 "vector_data" = "Mapas de vector fòra de linha";
-"add_map_source" = "Ajustar una fònt a l'imatge";
+"quick_action_map_source_action" = "Ajustar una fònt a l'imatge";
 "add_map_style" = "Ajustatz un rendut de mapa";
-"map_styles" = "Representacions de la mapa";
+"quick_action_map_styles" = "Representacions de la mapa";
 "quick_action_new_action" = "Ajustar una accion";
 "quick_action_add_create_items" = "Crear d'elements";
 "configure_map" = "Configurar la mapa";
@@ -738,7 +738,7 @@
 "hide_poi_action" = "Amagar lei PDI";
 "add_parking_place" = "Ajustar un luòc d'aparcament";
 "parking_place" = "Luòc d'aparcament";
-"toggle_voice" = "Votz activa/desactivada";
+"quick_action_navigation_voice" = "Votz activa/desactivada";
 "add_osm_note" = "Ajustar una nòta OSM";
 "toggle_online_notes" = "Activar/desactivar lei nòtas d'OSM";
 "toggle_local_edits" = "Activar/desactivar lei modificacions localas OSM";
@@ -747,7 +747,7 @@
 "quick_action_map_source" = "Modificar la fònt de la mapa";
 "quick_action_map_overlay" = "Modificar la superposicion de la mapa";
 "quick_action_map_underlay" = "Modificar lo fons de la mapa";
-"replace_destination" = "Remplaçar la destinacion";
+"quick_action_replace_destination" = "Remplaçar la destinacion";
 "add_destination" = "Ajustar una destinacion";
 "add_start" = "Ajustatz un ponch de partença";
 "add_intermediate" = "Ajustar un ponch intermediari";
@@ -762,7 +762,7 @@
 "quick_action_resume_pause_navigation" = "Pausa/Represa de la navigacion";
 "resume_nav" = "Continuar la navigacion";
 "pause_nav" = "Metre en pausa la navigacion";
-"toggle_nav" = "Començar/arrestar la navigacion";
+"quick_action_start_stop_navigation" = "Començar/arrestar la navigacion";
 "toggle_day_night" = "Modificar lo mòde diurne/nocturne";
 "quick_action_switch_night_mode" = "Mòde nocturne";
 "quick_action_switch_day_mode" = "Mòde diurne";
@@ -833,7 +833,7 @@
 "pickup_car" = "Represa de la veitura";
 "pickup_car_at" = "Reprenètz la veitura a";
 "add_notification_calendar" = "Ajustar la notificacion au Calendier";
-"parking_time_limited" = "Durada d'aparcament limitada a";
+"parking_place_limited" = "Durada d'aparcament limitada a";
 "time_left" = "pendent";
 "osmand_parking_overdue" = "tardier";
 "cannot_add_marker" = "Impossible d'ajustar l'Aparcament";
@@ -861,7 +861,7 @@
 "help_search" = "Recèrca sus la mapa";
 "help_trip_planning" = "Planificacion d'un viatge";
 "map_legend" = "Legenda de la mapa";
-"help_other_header" = "Autres";
+"other_location" = "Autres";
 "help_install_and_troubleshoot" = "Installacion e solucion de dificultats";
 "techical_articles_item" = "Articles tecnics";
 "help_versions" = "Versions";
@@ -925,7 +925,7 @@
 "product_title_skimap" = "Mapa d'esquilh";
 "product_desc_skimap" = "Lei pistas d'esquilh actualizadas e lei remontadors";
 "product_desc_ext_skimap" = "Pensat per navigar sus lei pistas d'esquilh. Vos avisa dei remontadors e la color de cada pista indica la dificultat. Configuratz leis informacions visiblas e chausissètz la mapa \"Ivèrn e esquilh\".";
-"product_title_track_recording" = "Registrament dau percors";
+"monitoring_settings" = "Registrament dau percors";
 "product_desc_track_recording" = "Enregistra e sauva lei percors coma traças GPX";
 "product_desc_ext_track_recording" = "Permet d'enregistrar, de sauvegardar emai d'analisar lei donadas d'assai ò de percors, coma la velocitat, lei montadas e lei devaladas, lo relèu… e que se pòdon puei partejar amb leis amics.\n\nDe consultar - https://osmand.net/docs/user/plugins/trip-recording";
 "product_title_trip_planning" = "Trip planning";
@@ -966,13 +966,13 @@
 "product_desc_srtm" = "Mostrar lei corbas de nivèu";
 "product_desc_ext_srtm" = "Leis informacions de terren coma lei corbas de nivèu, l'ombra de relèu e la penda, vos ajudan a visualizar l'aspècte de la superficia. Amb aquest ajust podretz veire lo nom dei montanhas e lei caracteristicas particularas a l'encontrada. Donadas SRTM e ASTER.\n\nPer n'en sacher mai : https://osmand.net/docs/user/plugins/contour-lines";
 "product_title_wikivoyage" = "Guida de viatge";
-"product_desc_wikivoyage" = "La guida toristica libra dau monde entier que cadun i pòt collaborar.";
-"product_desc_ext_wikivoyage" = "Guida dei lòcs pus interessants de la planeta, integrada a OsmAnd, sensa connexion a Internet.";
+"start_editing_card_image_text" = "La guida toristica libra dau monde entier que cadun i pòt collaborar.";
+"wikivoyage_travel_guide_descr" = "Guida dei lòcs pus interessants de la planeta, integrada a OsmAnd, sensa connexion a Internet.";
 "product_desc_sea_depth_contours" = "Isobates e caleson nautica";
 "my_location" = "Vòstra posicion";
 "all_categories" = "Totei lei categorias";
 "get_unlimited_access" = "Obtenètz un accès illimitat";
-"latitude" = "Latitude";
+"navigate_point_latitude" = "Latitude";
 "navigate_point_longitude" = "Longitude";
 "track_save_short_q" = "Lo percors es fòrça brèu, es segur que lo vouguètz sauvagardar ?";
 "add_as" = "Ajustar per";
@@ -990,7 +990,7 @@
 "no_other_translations" = "Pas d'autrei traduccions";
 "wpt_remove_q" = "Escafar lo ponch d'etapa ?";
 "gpx_select_track" = "Chausir un percors";
-"gpx_curr_new_track" = "Traça actuala";
+"current_track" = "Traça actuala";
 "access_hint_enter_name" = "Marcatz lo nom";
 "shared_string_not_selected" = "Non seleccionat";
 "shared_string_language" = "Lenga";
@@ -1026,7 +1026,7 @@
 "get_directions" = "Indicacions";
 "parking" = "Aparcament";
 "context_menu_item_directions_from" = "Indicacions partent de";
-"nearby_search" = "Recercar dins la vesinança";
+"search_nearby" = "Recercar dins la vesinança";
 "est_travel_time" = "Durada dau percors estimada";
 "pedestrian" = "Pedon";
 "sorting" = "A classificar";
@@ -1064,7 +1064,7 @@
 "sqlitedb_import_title" = "Importar lo fichier raster";
 "sqlitedb_import_already_exists" = "Lo fichier sqlitedb indicat ja existís. Que fau faire ?";
 "map_creator" = "Map Creator";
-"local_names" = "Denominacions localas";
+"local_map_names" = "Denominacions localas";
 "history" = "Istoric";
 "today" = "Uei";
 "yesterday" = "Ièr";
@@ -1101,7 +1101,7 @@
 "create_custom_poi" = "Crear un filtre personalizat";
 "selected_categories" = "Categorias seleccionadas";
 "new_filter_desc" = "Nomatz lo novèu filtre. Serà ajustat a la lista dei Categorias.";
-"shared_string_password" = "Senhau";
+"user_password" = "Senhau";
 "shared_string_filters" = "Filtres";
 "edit_filter" = "Modificar lei categorias";
 "edit_filter_save_as_menu_item" = "Sauvagardar per";
@@ -1141,7 +1141,7 @@
 "key_hint_goback" = "S'entornar";
 "wiki_buy_description" = "Se volètz legir d'articles entiers, crompètz l'ajust de la Wikipèdia e teledescargatz lei donadas de %@";
 "wiki_download_description" = "Se volètz legir d'articles entiers - teledescargatz lei donadas de la Wikipèdia de %@";
-"map_an_region" = "aqueste país";
+"download_wiki_region_placeholder" = "aqueste país";
 "osm_live_plan_pricing" = "Opcions e pretz";
 "osm_live_payment_monthly_title" = "Pagament mesadier";
 "osm_live_payment_3_months_title" = "Pagament trimestrau";
@@ -1291,13 +1291,13 @@
 "exit_at" = "Sortida a";
 "shared_string_two" = "Dos/ Doas";
 "shared_string_total" = "Totau";
-"appearance_on_map" = "Aparénçia de la mapa";
+"appearance_on_the_map" = "Aparénçia de la mapa";
 "public_transport_warning_title" = "La navigacion per lo transpòrt public es ara a l\'espròva, avís dei errors ò imprecisions.";
 "walk" = "Caminada";
 "base_profile_descr_bicycle" = "Bicicleta de montanha, ciclomotor, cavau";
 "shared_string_exit" = "Sortir";
 "default_speed_setting_title" = "Velocitat per defaut";
-"configure_screen_descr" = "Seleccionatz leis opcions d’ecran per lo perfiu";
+"edit_profile_screen_options_subtitle" = "Seleccionatz leis opcions d’ecran per lo perfiu";
 "routing_profile_ski" = "Esquilh";
 "profile_alert_delete_title" = "Eliminar lo perfiu";
 "profile_type_base_string" = "Perfiu de basa";
@@ -1361,7 +1361,7 @@
 "select_nav_profile_dialog_message" = "La 'mena de navigacion' determina coma leis itineraris se carculan.";
 "arrows_direction_to_markers" = "Lei sagetas mòstran la direccion vèrs lo marcador actiu s'es fòra de l'ecran. Leis endrechieras traçan una linha vèrs lei marcadors actius.";
 "specify_number_of_dir_indicators" = "Donatz lo nombre d'indicadors de direccion, aquò afectarà totei lei paramètres que seguisson.";
-"plugin_settings_reset" = "Restablir la configuracion per defaut de l\'ajust";
+"reset_plugin_to_default" = "Restablir la configuracion per defaut de l\'ajust";
 "trip_rec_actions_descr" = "Podètz trobar totei vòstrei traças registradas a %@";
 "save_track_logging_accuracy" = "Precision dau registrament";
 "max_speed" = "Velocitat maximala";
@@ -1416,14 +1416,14 @@
 "plugin_settings_descr" = "Configuracion de l'ajust per lo perfiu seleccionat.";
 "select_color" = "Chausissètz la color";
 "position_icon_at_rest" = "Icona de posicion en repaus";
-"position_icon_while_moving" = "Icòna de posicion en movement";
+"select_navigation_icon" = "Icòna de posicion en movement";
 "move_point_descr" = "Mòure la mapa per cambiar la posicion d'aquest ponch.";
 "start_of_the_track" = "Començament de la traça";
 "select_another_track" = "Chausissètz una autra traça";
 "select_profile" = "Seleccionar un perfiu";
 "res_offlineSQL_URL_warning" = "Aquò s'admet pas per aquesta mena de mapa";
 "toggle_hillshade" = "Mostrar & Amagar lo relèu";
-"display_starting_at_zoom_level" = "Mostrar partent d'un nivèu de zoom";
+"show_from_zoom_level" = "Mostrar partent d'un nivèu de zoom";
 "offline_raster_maps" = "Mapas raster (imatge) en locau";
 "arrived_at_destination" = "Siatz arribat";
 "show_terrain" = "Mostrar lo relèu";
@@ -1483,7 +1483,7 @@
 "plan_route_open_existing_track" = "Dobrir una traça existenta";
 "route_between_points_add_track_desc" = "Chausissètz un fichier de pista que li volètz ajustar una novèla estirada.";
 "select_segment" = "Chausir una estirada";
-"segnet_num" = "Segment %d";
+"segments_count" = "Segment %d";
 "welmode_download_maps" = "Teledescargar de mapas";
 "default_speed_dialog_msg" = "Estimar l'ora d'arribada dei rotas desconegudas e limitar la velocitat de totei lei vias (podriá afectar lo percors)";
 "new_plugin_added" = "Ajust novèu apondut";
@@ -1900,7 +1900,7 @@
 "available_map_styles" = "Estils de mapa disponibles";
 "available_map_sources" = "Fònts de mapa disponiblas";
 "shared_string_import" = "Importar";
-"custom_osmand_plugin_name" = "Ajust d'OsmAnd adaptat";
+"custom_osmand_plugin" = "Ajust d'OsmAnd adaptat";
 "custom_plugins" = "Ajusts complementaris personalizats";
 "import_duplicates_title" = "D'uneis elements ja existisson";
 "import_duplicates_description" = "D'elements importats pòrtan de noms pariers a aquelei qu'a OsmAnd.\n\nSeleccionatz una accion.";
@@ -1915,7 +1915,7 @@
 "checking_for_duplicates" = "Verificacion dei doblons...";
 "reverse_route" = "Inversar lo percors";
 "track_is_saved" = "%@\nes sauvagardat !";
-"plan_route_last_modified" = "Darriera modificacion";
+"sort_last_modified" = "Darriera modificacion";
 "select_track_to_follow" = "Chausir la traça de seguir";
 "attach_to_the_roads" = "Limitar ai rotas";
 "point_to_navigate" = "Navigar vèrs";
@@ -1999,7 +1999,7 @@
 "route_between_points_warning_desc" = "Alinhatz puei la traça sus la carriera permesa pus vesina amb un de vòstrei perfius de navigacion per emplegar aquesta opcion.";
 "track_multiple_segments_select" = "%@ a mai d'un segment. Seleccionatz una partida de la traça que volètz emplegar per la navigacion.";
 "res_online_name_descr" = "Donar nom a la fònt de la mapa en linha";
-"res_url" = "URL";
+"edit_tilesource_url_to_load" = "URL";
 "res_mercator" = "Projeccion de Mercator";
 "res_expire_time" = "Escasença";
 "pseudo_mercator_projection" = "Projeccion Pseudo-Mercator";
@@ -2062,7 +2062,7 @@
 "routing_attr_only_permitted_ways_name" = "Via expressament permesa";
 "start_point" = "Partença";
 "nautical" = "Nautic";
-"cloud_existing_account" = "Avètz ja un còmpte";
+"register_opr_have_account" = "Avètz ja un còmpte";
 "backup_error_subscription_was_expired_descr" = "Vòstre abonament OsmAnd Pro es despassat, renovelatz-lo per utilizar la sauvagarda. Podètz pasmens totjorn restaurar lei donadas dau Nívol.";
 "routing_attr_only_permitted_ways_description" = "Utilizar ren de lei traças, camins, draias e draiòus expressament autorizats";
 "cloud_set_up_backup" = "Configurar la sauvagarda";
@@ -2071,8 +2071,8 @@
 "routeInfo_smoothness_description" = "Classificacion de la carrosabilitat de la rota/ dau camin per lei veïcles de ròdas, particularament per tot çò relatiu a la regularitat, au plan e au clòt de la superficia.";
 "route_line_use_map_style_width" = "Emplegar la larjor predefinida per la representacion de la mapa (%@).";
 "icon_group_symbols" = "Simbòl";
-"product_title_openplacereviews" = "OpenPlaceReviews";
-"travel" = "Viatge";
+"open_place_reviews" = "OpenPlaceReviews";
+"icon_group_travel" = "Viatge";
 "make_backup_descr" = "Lei modificacions sus l'aparelh son nombrosas, vos recomandam de sauvagardar aquestei donadas per lei pas perdre.";
 "icon_group_industrial" = "Industriau";
 "context_menu_edit_descr" = "Modificar la descripcion";
@@ -2223,7 +2223,7 @@
 "quick_action_mapillary_hide" = "Amagar Mapillary";
 "quick_action_mapillary_show" = "Mostrar Mapillary";
 "map_settings_weather_pressure" = "Pression";
-"shared_string_always_visible" = "Totjorn visible";
+"compass_always_visible" = "Totjorn visible";
 "compass_always_hidden" = "Totjorn amagat";
 "shared_string_weather" = "Cèu e Temps que fa";
 "quick_action_contour_lines_descr" = "De quichar aquest boton mòstra ò amaga lei corbas de nivèu.";
@@ -2298,7 +2298,7 @@
 "carplay_available_in_sub_plans" = "Crompar OsmAnd Pro ò Maps+ per poder utilizar OsmAnd amb CarPlay.";
 "navigate_point_format_MGRS" = "STCM (Military Grid Reference System)";
 "mgrs_description" = "OsmAnd se sièrv dau format MGRS qu'es identic au TUM NATO.";
-"shared_string_online_cache" = "Memòria virtuala en linha";
+"weather_online_cache" = "Memòria virtuala en linha";
 "tts_title" = "TTS";
 "routing_attr_goods_restrictions_name" = "Liurasons de bens";
 "default_speed_descr" = "Estimar l'ora d'arribada si la mena de vias es pas conoissuda e en aplicant lei limitacions de velocitat en totei lei carrieras (aquò podriá afectar la navigacion)";

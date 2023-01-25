@@ -62,7 +62,7 @@
     if (_region)
         self.titleLabel.text = OALocalizedString(@"shared_string_updates_size");
     else if (_type == EOAWeatherOnlineData)
-        self.titleLabel.text = OALocalizedString(@"shared_string_online_cache");
+        self.titleLabel.text = OALocalizedString(@"weather_online_cache");
     else if (_type == EOAWeatherOfflineData)
         self.titleLabel.text = OALocalizedString(@"weather_offline_forecast");
 }
@@ -159,7 +159,7 @@
     if (_region)
         clearTitle = OALocalizedString(@"shared_string_delete");
     else if (_type == EOAWeatherOnlineData)
-        clearTitle = OALocalizedString(@"poi_clear");
+        clearTitle = OALocalizedString(@"shared_string_clear");
     else if (_type == EOAWeatherOfflineData)
         clearTitle = OALocalizedString(@"shared_string_delete_all");
     [_type == EOAWeatherOnlineData ? clearCells : infoCells addObject:@{
@@ -442,7 +442,7 @@
                                                              }
        ];
 
-        UIAlertAction *clearCacheAction = [UIAlertAction actionWithTitle:OALocalizedString(@"poi_clear")
+        UIAlertAction *clearCacheAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_clear")
                                                                    style:UIAlertActionStyleDefault
                                                                  handler:^(UIAlertAction * _Nonnull action)
                                                                  {

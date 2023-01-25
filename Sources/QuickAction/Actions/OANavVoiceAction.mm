@@ -47,7 +47,7 @@ static OAQuickActionType *TYPE;
 + (OAQuickActionType *) TYPE
 {
     if (!TYPE)
-        TYPE = [[OAQuickActionType alloc] initWithIdentifier:11 stringId:@"nav.voice" class:self.class name:OALocalizedString(@"toggle_voice") category:NAVIGATION iconName:@"ic_custom_sound" secondaryIconName:nil editable:NO];
+        TYPE = [[OAQuickActionType alloc] initWithIdentifier:11 stringId:@"nav.voice" class:self.class name:OALocalizedString(@"quick_action_navigation_voice") category:NAVIGATION iconName:@"ic_custom_sound" secondaryIconName:nil editable:NO];
        
     return TYPE;
 }

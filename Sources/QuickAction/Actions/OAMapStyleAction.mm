@@ -200,7 +200,7 @@ static OAQuickActionType *TYPE;
                      @"type" : [OAButtonTableViewCell getCellIdentifier],
                      @"target" : @"addMapStyle"
                      }];
-    [data setObject:[NSArray arrayWithArray:arr] forKey:OALocalizedString(@"map_styles")];
+    [data setObject:[NSArray arrayWithArray:arr] forKey:OALocalizedString(@"quick_action_map_styles")];
     return data;
 }
 

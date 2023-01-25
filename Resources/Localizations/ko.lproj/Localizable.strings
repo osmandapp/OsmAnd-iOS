@@ -36,9 +36,9 @@
 "export_profile_descr" = "모든 프로파일 설정을 내보내거나, 다른 프로파일에서 모든 설정을 복사하거나, 모든 프로파일 설정을 기본 상태로 재설정할 수 있다.";
 "plan_route_exit_message" = "저장하지 않고 경로 계획을 닫으시겠습니까? 모든 변경 사항을 잃게 됩니다.";
 "select_another_track" = "다른 트랙 선택";
-"osmand_live_support_reg_title" = "지원 지역";
+"osm_live_support_region" = "지원 지역";
 "osmand_live_subscription_canceled" = "당신은 OsmAnd Live Subscription을 취소";
-"res_world_region" = "월드";
+"shared_string_world" = "월드";
 "res_wmap" = "전 세계 개요 지도";
 "res_dmap" = "상세개요지도";
 "osm_closes_at" = "닫기 시간:";
@@ -69,7 +69,7 @@
 "transport_Routes" = "경로";
 "transport_nearby_routes_within" = "다음 내 인근 경로";
 "transport_nearby_routes" = "안쪽";
-"transport_stop" = "정지";
+"shared_string_control_stop" = "정지";
 "cancel_navigation" = "운행 중지";
 "start_navigation" = "탐색 시작";
 "intermediate_items_sort_by_distance" = "정렬 도어 투 도어";
@@ -122,7 +122,7 @@
 "switch_start_finish" = "역방향 출발점 & 목적지";
 "first_intermediate_dest_description" = "경로에 첫 번째 중지 추가";
 "add_as_first_destination_point" = "첫번째 경유지로 추가";
-"targets" = "경유지";
+"shared_string_target_points" = "경유지";
 "search_radius_proximity" = "근접에서";
 "driving_region_canada" = "캐나다";
 "res_region_map" = "지역지도";
@@ -163,7 +163,7 @@
 // Track recording settings
 "save_global_track_interval" = "일반 로깅 간격";
 "shared_string_later" = "계속하세요";
-"plugin_settings_reset" = "플러그인 설정을 기본값으로 재설정";
+"reset_plugin_to_default" = "플러그인 설정을 기본값으로 재설정";
 "routing_settings_2" = "운행 설정";
 "route_kr" = "오른쪽으로 가십시오.";
 "si_mi_feet" = "마일리지/피트";
@@ -257,7 +257,7 @@
 "gpx_selection_segment_title" = "세그먼트";
 "import_export" = "가져오기/내보내기";
 "gpx_uphldownhl" = "업힐/다운힐";
-"gpx_average_speed" = "평균 속도";
+"map_widget_average_speed" = "평균 속도";
 "shared_string_control_start" = "시작";
 "gpx_avg_elev" = "평균 표고";
 "gpx_descent" = "내리막";
@@ -266,7 +266,7 @@
 "gpx_uphills_total" = "업힐 총계";
 "shared_string_currently_recording_track" = "현재 기록중인 경로";
 "track_stop_rec" = "녹화 중지";
-"track_new_segment" = "새로운 세그먼트 시작";
+"gpx_start_new_segment" = "새로운 세그먼트 시작";
 "gpx_upload_private_visibility_descr" = "\"Private\"는 추적이 공개 목록에 나타나지 않음을 의미하지만, 그 추적이 비동기적 순서로 된 추적점은 타임스탬프 없이 공개 GPS API를 통해 이용할 수 있습니다.";
 "wiki_menu_download_descr" = "지도에서 위키피디아 POI를 보려면 추가 지도가 필요합니다.";
 "rendering_attr_piste_type_downhill_name" = "내리막";
@@ -292,7 +292,7 @@
 "arrows_on_map" = "지도 위의 화살표";
 "direction_lines" = "방향선";
 "choose_how_display_distance" = "활성 마커까지의 거리를 표시하는 방법 선택";
-"appearance_on_map" = "지도상의 모양";
+"appearance_on_the_map" = "지도상의 모양";
 "arrows_direction_to_markers" = "화면 외부에 있는 경우 화살표는 활성 마커의 방향을 보여준다. 방향 선은 활성 마커에 선을 그린다.";
 "int_seconds" = "초";
 "prefer_in_routing_descr" = "전용도로 선호";
@@ -607,12 +607,12 @@
 "rendering_attr_lessDetailed_name" = "덜 상세";
 "osm_poi_delete_title" = "POI삭제";
 "map_widget_altitude" = "고도";
-"res_url" = "URL";
+"edit_tilesource_url_to_load" = "URL";
 "map_widget_intermediate_distance" = "경유지";
 "lang_ka" = "그루지안어";
 "rendering_attr_hideWoodScrubs_name" = "나무와 스크럽 숨기기";
 "destination_point" = "도착지 %@";
-"local_names" = "로컬 이름";
+"local_map_names" = "로컬 이름";
 "contact_info" = "연락처 정보";
 "rendering_attr_pisteGrooming_name" = "Piste grooming (손질)";
 "lang_pl" = "폴란드어";
@@ -636,7 +636,7 @@
 "poi_remove_success" = "POI가 성공적으로 삭제되었습니다";
 "rendering_attr_noPolygons_name" = "폴리곤 숨기기";
 "rendering_value_translucent_blue_name" = "반투명 블루";
-"tile_cache" = "타일 캐시";
+"mapillary_menu_title_tile_cache" = "타일 캐시";
 "rendering_value_yellow_name" = "노랑";
 "lang_eu" = "바스크어";
 "rendering_attr_subwayMode_name" = "지하철 노선";
@@ -649,7 +649,7 @@
 "text_size" = "텍스트 크기";
 "rendering_attr_contourLines_name" = "등고선 표시";
 "rendering_attr_streetLighting_name" = "거리 조명";
-"poi_clear" = "지우기";
+"shared_string_clear" = "지우기";
 "routing_attr_avoid_motorway_description" = "전용도로 회피하기";
 "filter_poi_hint" = "이름으로 필터링";
 "upload_osm_note" = "OSM노트 올리기";
@@ -713,7 +713,7 @@
 "lang_sh" = "세르보-크로아티아어";
 "rendering_value_americanRoadAtlas_name" = "미국 도로 지도";
 "rendering_category_routes" = "노선 (Routes)";
-"latitude" = "위도";
+"navigate_point_latitude" = "위도";
 "lang_bs" = "보스니아어";
 "download_wikipedia_maps" = "위키백과";
 "try_again" = "다시 시도하십시오";
@@ -756,7 +756,7 @@
 "lang_no" = "노르웨이어";
 "routing_attr_height_description" = "도로에 통행가능한 차량중량을 지정";
 "lang_ga" = "아일랜드어";
-"maps" = "지도";
+"shared_string_maps" = "지도";
 "route_tr" = "우회전 후 직진";
 "lang_ceb" = "세부아노어";
 "purchases" = "구입 내역";
@@ -777,7 +777,7 @@
 "navigate_point_zone" = "존(지역)";
 "units_mi" = "마일";
 "shared_string_help" = "도움말";
-"product_desc_ext_wikivoyage" = "\'탐색\' → \'옵션\'에서 항상 사용 가능.";
+"wikivoyage_travel_guide_descr" = "\'탐색\' → \'옵션\'에서 항상 사용 가능.";
 "app_mode_motorcycle" = "모터사이클";
 "lang_sq" = "알바니아어";
 "choose_audio_stream" = "음성 안내 출력";
@@ -788,7 +788,7 @@
 "shared_string_off" = "끄기";
 "access_arrival_time" = "도착 시간";
 "rendering_value_red_name" = "빨강";
-"nearby_search" = "근처 검색";
+"search_nearby" = "근처 검색";
 "map_widget_plain_time" = "현재 시간";
 "nm" = "nm";
 "route_points" = "루트 포인트";
@@ -824,7 +824,7 @@
 "lang_he" = "히브리어";
 "welmode_download_maps" = "지도 다운로드";
 "rendering_value_pink_name" = "분홍";
-"help_other_header" = "기타";
+"other_location" = "기타";
 "index_name_africa" = "아프리카";
 "lang_te" = "텔루구어";
 "route_tshl" = "급한 좌회전 후 직진";
@@ -868,12 +868,12 @@
 "lang_sv" = "스웨덴어";
 "lang_lt" = "리투아니아어";
 "route_tsll" = "약한 좌회전 후 직진";
-"osmand_live_title" = "OsmAnd라이브";
+"osmand_live" = "OsmAnd라이브";
 "shared_string_all" = "모두";
 "osn_bug_name" = "OSM노트";
 "routing_attr_avoid_shuttle_train_name" = "셔틀 열차 피하기";
 "rendering_value_germanRoadAtlas_name" = "독일 도로 지도";
-"parking_time_limited" = "주차 시간 제한";
+"parking_place_limited" = "주차 시간 제한";
 "lang_vo" = "볼라퓌크어";
 "rendering_category_others" = "다른 지도 속성";
 "routing_attr_avoid_shuttle_train_description" = "셔틀 열차 피하기";
@@ -895,7 +895,7 @@
 "rendering_category_transport" = "교통";
 "region_russia" = "유럽/아시아 - 러시아";
 "context_menu_item_create_poi" = "POI생성";
-"shared_string_password" = "OSM패스워드";
+"user_password" = "OSM패스워드";
 "show_more" = "추가 표시";
 "rendering_attr_publicTransportMode_name" = "버스, 무궤도전차, 셔틀 노선";
 "shared_string_enabled" = "활성화";
@@ -906,10 +906,10 @@
 "routing_attr_height_name" = "높이 제한";
 "lang_hu" = "헝가리어";
 "lang_ml" = "말라얄람어";
-"osmand_live_updates" = "실시간 업데이트";
+"live_updates" = "실시간 업데이트";
 "lang_ca" = "카탈로니아어";
 "rendering_value_translucent_orange_name" = "반투명 오렌지";
-"osm_edits_advanced" = "고급";
+"tab_title_advanced" = "고급";
 "rendering_value_default13_name" = "기본 (13)";
 "city_type_hamlet" = "시골";
 "routing_attr_avoid_toll_description" = "유료도로 회피하기";
@@ -951,7 +951,7 @@
 "lang_en" = "영어";
 "shared_string_unexpected_error" = "예기치 않은 오류가 발생 했습니다";
 "lang_ar" = "아랍어";
-"osm_note_comment_title" = "OSM노트 주석달기";
+"osm_edit_comment_note" = "OSM노트 주석달기";
 "rendering_attr_highway_class_bridleway_name" = "둘레길";
 "profile_type_base_string" = "기준 프로파일";
 "simplified_track_description" = "경로선만 저장되고 경유지는 삭제됩니다.";
@@ -1014,7 +1014,7 @@
 // Route planning
 "plan_route" = "경로 계획";
 "plan_route_open_existing_track" = "기존 트랙 열기";
-"plan_route_last_modified" = "마지막 수정";
+"sort_last_modified" = "마지막 수정";
 "proceed_q" = "진행할까요?";
 "route_descr_select_destination" = "도착지 선택";
 "profile_type_custom_string" = "맞춤 프로필";
@@ -1035,7 +1035,7 @@
 "help_map_viewing" = "지도 보기";
 "routing_attr_only_permitted_ways_name" = "명시적으로 허용된 방법";
 "nautical" = "해양";
-"cloud_existing_account" = "이미 계정이 있다면 로그인";
+"register_opr_have_account" = "이미 계정이 있다면 로그인";
 "shared_string_color_magenta" = "마젠타";
 "lang_my" = "버마어 미얀마";
 "lang_gu" = "구자라트어 인도방언";
@@ -1048,7 +1048,7 @@
 "icon_group_symbols" = "기호";
 "lang_min" = "미낭카바우어 인도네시아방언";
 "first_usage_item" = "처음 사용";
-"travel" = "여행";
+"icon_group_travel" = "여행";
 "context_menu_edit_descr" = "설명 편집";
 "osmand_live_donations" = "후원";
 "lang_tg" = "타지크어";
@@ -1079,7 +1079,7 @@
 "lang_kk" = "카자흐어 카자흐스탄방언";
 "lang_yo" = "요루바어";
 "shared_string_appearance" = "모양";
-"osm_live_routing" = "OsmAnd Live탐색";
+"use_osm_live_routing" = "OsmAnd Live탐색";
 "routeInfo_winter_ice_road_description" = "동절기 도로 분류를 기준으로 노선 또는 선로를 색칠합니다.";
 "any_poi" = "어떤";
 "help_install_and_troubleshoot" = "설치 및 문제 해결";
@@ -1190,7 +1190,7 @@
 "shared_string_routing" = "라우팅";
 "custom_plugins" = "사용자 정의 플러그인";
 "shared_string_rendering_style" = "렌더링 스타일";
-"custom_osmand_plugin_name" = "사용자 정의 OsmAnd 플러그인";
+"custom_osmand_plugin" = "사용자 정의 OsmAnd 플러그인";
 "intro_promo" = "글로벌 오프라인 맵";
 "shared_string_nothing_selected" = "선택한 항목 없음";
 "quick_action_map_source_title" = "지도 소스";

@@ -97,7 +97,7 @@
                       @"img" : @"ic_action_directions_from",
                       @"type" : [OAMenuSimpleCell getCellIdentifier] } ];
     // Search nearby
-    [arr addObject:@{ @"title" : OALocalizedString(@"nearby_search"),
+    [arr addObject:@{ @"title" : OALocalizedString(@"search_nearby"),
                       @"key" : @"nearby_search",
                       @"img" : @"ic_custom_search",
                       @"type" : [OAMenuSimpleCell getCellIdentifier] } ];

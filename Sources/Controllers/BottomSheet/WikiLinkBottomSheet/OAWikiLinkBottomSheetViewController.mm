@@ -64,7 +64,7 @@
     if (viewController.localItem)
         _regionName = [viewController.localItem title];
     else
-        _regionName = OALocalizedString(@"map_an_region");
+        _regionName = OALocalizedString(@"download_wiki_region_placeholder");
     
     vwController = viewController;
     tblView = tableView;

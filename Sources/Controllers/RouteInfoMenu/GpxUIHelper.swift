@@ -50,7 +50,7 @@ import Charts.Swift
         case .TIME:
             return OAUtilities.getLocalizedString("shared_string_time");
         case .TIMEOFDAY:
-            return OAUtilities.getLocalizedString("shared_string_time_of_day");
+            return OAUtilities.getLocalizedString("time_of_day");
         }
     }
 

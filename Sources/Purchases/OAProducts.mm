@@ -1155,7 +1155,7 @@
 
 - (NSString *) localizedTitle
 {
-    return OALocalizedString(@"osmand_live_title");
+    return OALocalizedString(@"osmand_live");
 }
 
 - (void) setPrice:(NSDecimalNumber *)price
@@ -1232,7 +1232,7 @@
 
 - (NSString *) localizedTitle
 {
-    return OALocalizedString(@"osmand_live_title");
+    return OALocalizedString(@"osmand_live");
 }
 
 - (void) setPrice:(NSDecimalNumber *)price
@@ -1298,7 +1298,7 @@
 
 - (NSString *) localizedTitle
 {
-    return OALocalizedString(@"osmand_live_title");
+    return OALocalizedString(@"osmand_live");
 }
 
 - (void) setPrice:(NSDecimalNumber *)price
@@ -2480,7 +2480,7 @@
     
     if ([self.openPlaceReviews isPurchased])
     {
-        OAFunctionalAddon *addon = [[OAFunctionalAddon alloc] initWithAddonId:kInAppId_Addon_OpenPlaceReview titleShort:OALocalizedString(@"product_title_openplacereviews") titleWide:OALocalizedString(@"product_title_openplacereviews") imageName:@"ic_custom_mapillary_symbol"];
+        OAFunctionalAddon *addon = [[OAFunctionalAddon alloc] initWithAddonId:kInAppId_Addon_OpenPlaceReview titleShort:OALocalizedString(@"open_place_reviews") titleWide:OALocalizedString(@"open_place_reviews") imageName:@"ic_custom_mapillary_symbol"];
         addon.sortIndex = 3;
         [arr addObject:addon];
     }

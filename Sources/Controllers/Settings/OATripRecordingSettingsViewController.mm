@@ -84,7 +84,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
 - (void) applyLocalization
 {
     [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"product_title_track_recording");
+    self.titleLabel.text = OALocalizedString(@"monitoring_settings");
 }
 
 - (void) viewDidLoad
@@ -194,7 +194,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
             
             [dataArr addObject:
              @[@{
-                 @"header" : OALocalizedString(@"help_other_header"),
+                 @"header" : OALocalizedString(@"other_location"),
                  @"name" : @"auto_split_gap",
                  @"title" : OALocalizedString(@"auto_split_gap"),
                  @"description" : OALocalizedString(@"auto_split_gap_descr"),
@@ -220,7 +220,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
                 },
                 @{
                     @"type" : [OATitleRightIconCell getCellIdentifier],
-                    @"title" : OALocalizedString(@"plugin_settings_reset"),
+                    @"title" : OALocalizedString(@"reset_plugin_to_default"),
                     @"img" : @"ic_custom_reset",
                     @"name" : @"reset_plugin"
                 },

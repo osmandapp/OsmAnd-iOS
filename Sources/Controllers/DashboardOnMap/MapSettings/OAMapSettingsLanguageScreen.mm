@@ -63,7 +63,7 @@
     if (_prefLangId)
         _prefLang = [[[NSLocale currentLocale] displayNameForKey:NSLocaleIdentifier value:_prefLangId] capitalizedStringWithLocale:[NSLocale currentLocale]];
     else
-        _prefLang = OALocalizedString(@"local_names");
+        _prefLang = OALocalizedString(@"local_map_names");
     
     [tblView reloadData];
 }

@@ -75,7 +75,7 @@ static const NSInteger sectionCount = 2;
 
 - (void) applyLocalization
 {
-    _titleView.text = OALocalizedString(@"osmand_live_updates");
+    _titleView.text = OALocalizedString(@"live_updates");
     [_segmentControl setTitle:OALocalizedString(@"res_updates") forSegmentAtIndex:0];
     [_segmentControl setTitle:OALocalizedString(@"osmand_live_reports") forSegmentAtIndex:1];
 }
@@ -546,7 +546,7 @@ static const NSInteger sectionCount = 2;
                 label.tag = kEnabledLabelTag;
                 label.textColor = [[UIColor blackColor] colorWithAlphaComponent:0.5];
                 [label setFont:[UIFont systemFontOfSize:13]];
-                [label setText:[OALocalizedString(@"osmand_live_updates") upperCase]];
+                [label setText:[OALocalizedString(@"live_updates") upperCase]];
                 [button setOn:_settings.settingOsmAndLiveEnabled.get && [OAIAPHelper isSubscribedToLiveUpdates]];
                 [button addTarget:self action:@selector(sectionHeaderButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
                 [headerView addSubview:button];

@@ -403,7 +403,7 @@
     switch (cm)
     {
         case EOACompassVisible:
-            return OALocalizedString(@"shared_string_always_visible");
+            return OALocalizedString(@"compass_always_visible");
         case EOACompassHidden:
             return OALocalizedString(@"compass_always_hidden");
         default:

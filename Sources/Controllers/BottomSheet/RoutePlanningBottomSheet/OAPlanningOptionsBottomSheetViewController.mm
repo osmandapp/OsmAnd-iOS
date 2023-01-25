@@ -72,7 +72,7 @@
         [data addObject:@[
             @{
                 @"type" : [OATitleIconRoundCell getCellIdentifier],
-                @"title" : OALocalizedString(@"track_new_segment"),
+                @"title" : OALocalizedString(@"gpx_start_new_segment"),
                 @"img" : @"ic_custom_new_segment",
                 @"tintColor" : UIColorFromRGB(color_primary_purple),
                 @"key" : @"start_new_segment"

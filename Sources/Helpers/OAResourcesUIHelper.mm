@@ -1806,7 +1806,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     message = [NSString stringWithFormat:OALocalizedString(@"res_confirmation_clear_cache"), title];
 
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *okAction = [UIAlertAction actionWithTitle:OALocalizedString(@"poi_clear") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_clear") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self.class clearCacheOf:item executeAfterSuccess:block];
     }];
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleDefault handler:nil];

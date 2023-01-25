@@ -269,7 +269,7 @@
                             @"string_value": [OAOsmAndFormatter getFormattedSpeed:analysis.avgSpeed],
                             @"int_value": @(EOARouteStatisticsModeSpeed)
                     },
-                    kCellTitle: OALocalizedString(@"gpx_average_speed"),
+                    kCellTitle: OALocalizedString(@"map_widget_average_speed"),
                     kCellRightIconName: @"ic_small_speed"
             }]];
             [statisticCells addObject:[OAGPXTableCellData withData:@{

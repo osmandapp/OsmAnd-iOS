@@ -135,7 +135,7 @@ static const NSInteger panoImageFilterSection = 2;
                              },
                          @{
                              @"type" : [OAButtonTableViewCell getCellIdentifier],
-                             @"title" : OALocalizedString(@"tile_cache"),
+                             @"title" : OALocalizedString(@"mapillary_menu_title_tile_cache"),
                              @"btnTitle" : OALocalizedString(@"shared_string_reload"),
                              @"description" : @"",
                              @"img" : @"ic_custom_overlay_map.png"

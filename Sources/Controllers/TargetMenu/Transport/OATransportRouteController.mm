@@ -156,7 +156,7 @@ static OATransportRouteToolbarViewController *toolbarController;
 
 + (NSString *) getStopType:(OATransportStopRoute *)transportRoute
 {
-    return [NSString stringWithFormat:@"%@ %@", [transportRoute getTypeStr], [OALocalizedString(@"transport_stop") lowerCase]];
+    return [NSString stringWithFormat:@"%@ %@", [transportRoute getTypeStr], [OALocalizedString(@"shared_string_control_stop") lowerCase]];
 }
 
 - (void) cancelPressed

@@ -116,7 +116,7 @@ static OAQuickActionType *TYPE;
 
 -(NSString *) getAddBtnText
 {
-    return OALocalizedString(@"add_map_source");
+    return OALocalizedString(@"quick_action_map_source_action");
 }
 
 - (NSString *)getDescrHint
@@ -159,7 +159,7 @@ static OAQuickActionType *TYPE;
                          }];
     }
     [arr addObject:@{
-                     @"title" : OALocalizedString(@"add_map_source"),
+                     @"title" : OALocalizedString(@"quick_action_map_source_action"),
                      @"type" : [OAButtonTableViewCell getCellIdentifier],
                      @"target" : @"addMapSource"
                      }];

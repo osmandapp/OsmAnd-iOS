@@ -286,7 +286,7 @@
     }];
     [profileMapAppearanceArr addObject:@{
         @"type" : [OALocationIconsTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"position_icon_while_moving"),
+        @"title" : OALocalizedString(@"select_navigation_icon"),
         @"description" : OALocalizedString(@"will_be_show_while_moving"),
     }];
     [tableData addObject:profileNameArr];
@@ -493,7 +493,7 @@
     else if (section == 1)
         return OALocalizedString(@"shared_string_appearance");
     else if (section == 2)
-        return OALocalizedString(@"appearance_on_map");
+        return OALocalizedString(@"appearance_on_the_map");
     return @"";
 }
 

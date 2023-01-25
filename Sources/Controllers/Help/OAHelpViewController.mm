@@ -229,7 +229,7 @@ static const NSInteger groupCount = 5;
     [dataArr addObject:
      @{
        @"name" : @"trip_recording",
-       @"title" : OALocalizedString(@"product_title_track_recording"),
+       @"title" : OALocalizedString(@"monitoring_settings"),
        @"type" : kLinkInternalType,
        @"html" : @"trip-recording-plugin"
        }];
@@ -448,7 +448,7 @@ static const NSInteger groupCount = 5;
     else if (section == pluginsIndex)
         return OALocalizedString(@"plugins_menu_group");
     else if (section == otherIndex)
-        return OALocalizedString(@"help_other_header");
+        return OALocalizedString(@"other_location");
     else if (section == followIndex)
         return OALocalizedString(@"follow_us");
     

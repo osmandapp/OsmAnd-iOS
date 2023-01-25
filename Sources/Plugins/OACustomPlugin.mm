@@ -83,7 +83,7 @@
 
 - (NSString *)getName
 {
-    return [OAJsonHelper getLocalizedResFromMap:_names defValue:OALocalizedString(@"custom_osmand_plugin_name")];
+    return [OAJsonHelper getLocalizedResFromMap:_names defValue:OALocalizedString(@"custom_osmand_plugin")];
 }
 
 - (NSString *)getDescription

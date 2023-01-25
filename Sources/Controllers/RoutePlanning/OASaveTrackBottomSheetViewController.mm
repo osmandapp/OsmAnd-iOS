@@ -72,7 +72,7 @@
 {
     [self.openSavedTrackButton setTitle:OALocalizedString(@"open_saved_track") forState:UIControlStateNormal];
     [self.createNewRouteButton setTitle:OALocalizedString(@"plan_route_create_new_route") forState:UIControlStateNormal];
-    [self.shareButton setTitle:OALocalizedString(@"ctx_mnu_share") forState:UIControlStateNormal];
+    [self.shareButton setTitle:OALocalizedString(@"shared_string_share") forState:UIControlStateNormal];
 
     [self.leftButton setTitle:OALocalizedString(@"shared_string_close") forState:UIControlStateNormal];
 }

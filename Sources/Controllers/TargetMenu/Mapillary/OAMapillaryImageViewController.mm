@@ -50,7 +50,7 @@
     self.titleView.text = OALocalizedString(@"mapillary");
     self.noConnectionLabel.text = OALocalizedString(@"no_inet_connection");
     self.noConnectionDescr.text = OALocalizedString(@"mapil_no_inet_descr");
-    [self.retryButton setTitle:OALocalizedString(@"shared_string_retry") forState:UIControlStateNormal];
+    [self.retryButton setTitle:OALocalizedString(@"retry") forState:UIControlStateNormal];
 }
 
 - (void) viewDidLoad

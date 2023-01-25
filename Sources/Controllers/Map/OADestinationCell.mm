@@ -321,7 +321,7 @@
     {
         if (time.length > 0)
             [time appendString:@" "];
-        [time appendFormat:@"%d %@", seconds, OALocalizedString(@"units_sec")];
+        [time appendFormat:@"%d %@", seconds, OALocalizedString(@"shared_string_sec")];
     }
     
     if (timeInterval > 0.0)

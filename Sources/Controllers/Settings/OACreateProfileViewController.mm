@@ -88,7 +88,7 @@
     [description setTextColor: UIColorFromRGB(color_text_footer)];
     NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
     [style setLineSpacing:6];
-    description.attributedText = [[NSAttributedString alloc] initWithString:OALocalizedString(@"create_profile_descr") attributes:@{NSParagraphStyleAttributeName : style}];
+    description.attributedText = [[NSAttributedString alloc] initWithString:OALocalizedString(@"select_base_profile_dialog_message") attributes:@{NSParagraphStyleAttributeName : style}];
     description.numberOfLines = 0;
     [vw addSubview:description];
     return vw;
@@ -96,7 +96,7 @@
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    _heightForHeader = [self heightForLabel:OALocalizedString(@"create_profile_descr")];
+    _heightForHeader = [self heightForLabel:OALocalizedString(@"select_base_profile_dialog_message")];
     return _heightForHeader + kSidePadding + kTopPadding;
 }
 

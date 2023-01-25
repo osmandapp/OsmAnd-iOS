@@ -203,7 +203,7 @@
             }
             else
             {
-                cell.titleLabel.text = OALocalizedString(@"sett_lang_show_trans");
+                cell.titleLabel.text = OALocalizedString(@"translit_names");
                 cell.titleLabel.textColor = [UIColor blackColor];
 
                 cell.switchView.enabled = YES;

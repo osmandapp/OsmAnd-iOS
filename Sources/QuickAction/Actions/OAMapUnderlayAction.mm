@@ -122,7 +122,7 @@ static OAQuickActionType *TYPE;
 - (NSString *) getTranslatedItemName:(NSString *)item
 {
     if ([item isEqualToString:KEY_NO_UNDERLAY])
-        return OALocalizedString(@"quick_action_no_underlay");
+        return OALocalizedString(@"no_underlay");
     else
         return item;
 }

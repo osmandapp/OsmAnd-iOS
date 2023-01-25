@@ -53,7 +53,7 @@ static OATransportRouteToolbarViewController *toolbarController;
         self.leftControlButton = [[OATargetMenuControlButton alloc] init];
         self.leftControlButton.title = OALocalizedString(@"shared_string_previous");
         self.rightControlButton = [[OATargetMenuControlButton alloc] init];
-        self.rightControlButton.title = OALocalizedString(@"intro_next");
+        self.rightControlButton.title = OALocalizedString(@"next_proceed");
     }
     return self;
 }

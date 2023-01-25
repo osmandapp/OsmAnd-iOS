@@ -455,7 +455,7 @@
     [appearanceSections addObject:[OAGPXTableSectionData withData:@{
             kTableSubjects: @[resetCellData],
             kSectionHeaderHeight: @42.,
-            kSectionHeader:OALocalizedString(@"actions"),
+            kSectionHeader:OALocalizedString(@"shared_string_actions"),
             kSectionFooterHeight: @60.
     }]];
 

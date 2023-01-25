@@ -412,7 +412,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
     switch (section)
     {
         case EOAMapSettingsWikipediaSectionAvailable:
-            return _mapItems.count > 0 ? OALocalizedString(@"osmand_live_available_maps") : @"";
+            return _mapItems.count > 0 ? OALocalizedString(@"available_maps") : @"";
         default:
             return @"";
     }

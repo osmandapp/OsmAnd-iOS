@@ -264,7 +264,7 @@ static NSArray<OAExportSettingsType *> *allValues;
 + (OAExportSettingsType *)SEARCH_HISTORY
 {
     if (!SEARCH_HISTORY)
-        SEARCH_HISTORY = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"search_history") name:@"SEARCH_HISTORY" itemName:@"SEARCH_HISTORY" icon:[UIImage templateImageNamed:@"ic_custom_search"]];
+        SEARCH_HISTORY = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"shared_string_search_history") name:@"SEARCH_HISTORY" itemName:@"SEARCH_HISTORY" icon:[UIImage templateImageNamed:@"ic_custom_search"]];
     return SEARCH_HISTORY;
 }
 

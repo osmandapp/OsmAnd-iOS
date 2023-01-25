@@ -139,7 +139,7 @@
     NSMutableArray *tButtons = [NSMutableArray array];
     
     // Type
-    [tKeys addObject:OALocalizedString(@"res_type")];
+    [tKeys addObject:OALocalizedString(@"shared_string_type")];
     [tValues addObject:isOnlineSql ? OALocalizedString(@"online_raster_map") : OALocalizedString(@"offline_raster_map")];
     
     // Size
@@ -153,7 +153,7 @@
     [fileUrl getResourceValue:&d forKey:NSURLCreationDateKey error:&error];
     if (!error)
     {
-        [tKeys addObject:OALocalizedString(@"res_created_on")];
+        [tKeys addObject:OALocalizedString(@"created_on")];
         
         if (!formatter)
         {
@@ -183,7 +183,7 @@
     NSMutableArray *tKeys = [NSMutableArray array];
     NSMutableArray *tValues = [NSMutableArray array];
     
-    [tKeys addObject:OALocalizedString(@"res_type")];
+    [tKeys addObject:OALocalizedString(@"shared_string_type")];
     [tValues addObject:[OASQLiteTileSource isOnlineTileSource:item.path] ? OALocalizedString(@"online_raster_map") : OALocalizedString(@"offline_raster_map")];
     
     [tKeys addObject:OALocalizedString(@"shared_string_size")];
@@ -195,7 +195,7 @@
     [fileUrl getResourceValue:&d forKey:NSURLCreationDateKey error:&error];
     if (!error)
     {
-        [tKeys addObject:OALocalizedString(@"res_created_on")];
+        [tKeys addObject:OALocalizedString(@"created_on")];
         
         if (!formatter)
         {
@@ -222,7 +222,7 @@
     NSMutableArray *tButtons = [NSMutableArray array];
     
     // Type
-    [tKeys addObject:OALocalizedString(@"res_type")];
+    [tKeys addObject:OALocalizedString(@"shared_string_type")];
     [tValues addObject:OALocalizedString(@"online_map")];
     
     // Size
@@ -249,7 +249,7 @@
             NSMutableArray *tValues = [NSMutableArray array];
             
             // Type
-            [tKeys addObject:OALocalizedString(@"res_type")];
+            [tKeys addObject:OALocalizedString(@"shared_string_type")];
             [tValues addObject:OALocalizedString(@"online_map")];
             
             // Size
@@ -293,7 +293,7 @@
     const auto installedResource = std::dynamic_pointer_cast<const OsmAnd::ResourcesManager::InstalledResource>(localResource);
 
     // Type
-    [tKeys addObject:OALocalizedString(@"res_type")];
+    [tKeys addObject:OALocalizedString(@"shared_string_type")];
     NSString *typeLocalized = [OAResourceType resourceTypeLocalized:localResource->type];
     if ([OAResourceType isSRTMResourceType:resource])
         typeLocalized = [NSString stringWithFormat:@"%@ (%@)", typeLocalized, [OAResourceType getSRTMFormatResource:resource longFormat:NO]];
@@ -318,7 +318,7 @@
         NSString *dateStr = [formatter stringFromDate:d];
         if (dateStr.length > 0)
         {
-            [tKeys addObject:OALocalizedString(@"res_created_on")];
+            [tKeys addObject:OALocalizedString(@"created_on")];
             [tValues addObject:[NSString stringWithFormat:@"%@", dateStr]];
         }
         [tButtons addObject:@"delete"];
@@ -383,7 +383,7 @@
     if (section == 0)
         return OALocalizedStringUp(@"shared_string_details");
     else
-        return OALocalizedStringUp(@"actions");
+        return OALocalizedStringUp(@"shared_string_actions");
 }
 
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

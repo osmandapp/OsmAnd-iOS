@@ -597,9 +597,9 @@
 
     section = [NSMutableArray new];
     [section addObject:@{
-        @"header" : OALocalizedString(@"actions").upperCase,
+        @"header" : OALocalizedString(@"shared_string_actions").upperCase,
         @"type" : [OATitleRightIconCell getCellIdentifier],
-        @"title" : OALocalizedString(@"fav_replace"),
+        @"title" : OALocalizedString(@"update_existing"),
         @"img" : @"ic_custom_replace",
         @"color" : UIColorFromRGB(color_primary_purple),
         @"key" : kReplaceKey
@@ -1402,7 +1402,7 @@
 - (void)onFavoriteReplaced:(OAFavoriteItem *)favoriteItem;
 {
     NSString *message = [NSString stringWithFormat:OALocalizedString(@"replace_favorite_confirmation"), [favoriteItem getDisplayName]];
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"fav_replace") message:message preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"update_existing") message:message preferredStyle:UIAlertControllerStyleAlert];
     
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_no") style:UIAlertActionStyleDefault handler:nil]];
     
@@ -1430,7 +1430,7 @@
 - (void) onWaypointReplaced:(OAGpxWptItem *)waypointItem
 {
     NSString *message = [NSString stringWithFormat:OALocalizedString(@"replace_waypoint_confirmation"), waypointItem.point.name];
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"fav_replace") message:message preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"update_existing") message:message preferredStyle:UIAlertControllerStyleAlert];
 
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_no") style:UIAlertActionStyleDefault handler:nil]];
 

@@ -44,11 +44,11 @@
 {
     NSMutableDictionary<NSString *, OARoutingProfileDataObject *> *profilesObjects = [NSMutableDictionary new];
     OARoutingProfileDataObject *straightLine = [[OARoutingProfileDataObject alloc] initWithResource:EOARoutingProfilesResourceStraightLine];
-    straightLine.descr = OALocalizedString(@"special_routing");
+    straightLine.descr = OALocalizedString(@"special_routing_type");
     [profilesObjects setObject:straightLine forKey:[OARoutingProfileDataObject getProfileKey:EOARoutingProfilesResourceStraightLine]];
     
     OARoutingProfileDataObject *directTo = [[OARoutingProfileDataObject alloc] initWithResource:EOARoutingProfilesResourceDirectTo];
-    directTo.descr = OALocalizedString(@"special_routing");
+    directTo.descr = OALocalizedString(@"special_routing_type");
     [profilesObjects setObject:directTo forKey:[OARoutingProfileDataObject getProfileKey:EOARoutingProfilesResourceDirectTo]];
     
 //    if (context.getBRouterService() != null) {

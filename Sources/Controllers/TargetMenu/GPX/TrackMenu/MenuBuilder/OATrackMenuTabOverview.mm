@@ -154,7 +154,7 @@
     return [OAGPXTableCellData withData:@{
             kTableKey: @"created_on",
             kCellType: [OAIconTitleValueCell getCellIdentifier],
-            kCellTitle: OALocalizedString(@"res_created_on"),
+            kCellTitle: OALocalizedString(@"created_on"),
             kCellDesc: [self generateCreatedOnString]
     }];
 }

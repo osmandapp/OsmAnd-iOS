@@ -69,7 +69,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         case OsmAndResourceType::WikiMapRegion:
             return OALocalizedString(@"download_wikipedia_maps");
         case OsmAndResourceType::RoadMapRegion:
-            return OALocalizedString(@"res_roads");
+            return OALocalizedString(@"roads");
         case OsmAndResourceType::HillshadeRegion:
             return OALocalizedString(@"shared_string_hillshade");
         case OsmAndResourceType::SlopeRegion:

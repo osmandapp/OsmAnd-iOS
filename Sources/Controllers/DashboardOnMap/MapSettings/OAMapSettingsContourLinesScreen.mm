@@ -356,7 +356,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         if (_mapMultipleItems.count > 0)
         {
             [sectionArr addObject:@{
-                            @"header" : OALocalizedString(@"osmand_live_available_maps"),
+                            @"header" : OALocalizedString(@"available_maps"),
                             @"footer" : OALocalizedString(@"map_settings_available_srtm_maps_descr")
                             }];
         }

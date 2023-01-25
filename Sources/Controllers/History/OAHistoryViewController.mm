@@ -102,7 +102,7 @@
 
 - (void)applyLocalization
 {
-    _titleView.text = OALocalizedString(@"history");
+    _titleView.text = OALocalizedString(@"shared_string_history");
 }
 
 - (void)viewDidLoad

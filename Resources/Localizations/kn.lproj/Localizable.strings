@@ -109,7 +109,7 @@
 
 "settings_preset" = "Default profile";
 "default_profile_descr" = "Select a profile that will be used the application launch.";
-"dialogs_and_notifications" = "ಸಂವಾದಗಳು ಮತ್ತು ಅಧಿಸೂಚನೆಗಳು";
+"dialogs_and_notifications_title" = "ಸಂವಾದಗಳು ಮತ್ತು ಅಧಿಸೂಚನೆಗಳು";
 "dialogs_and_notifications_descr" = "Control pop-ups, dialogs, and notifications";
 "settings_preset_descr" = "Map view and navigation settings are remembered per use profile. Set your default profile here.";
 "unit_of_length" = "Units of length";
@@ -146,9 +146,9 @@
 "save_track_logging_accuracy" = "Logging accuracy";
 "monitoring_min_accuracy" = "Minimum accuracy";
 "logging_min_accuracy_descr" = "Filter: no logging unless the accuracy is reached";
-"logging_min_speed" = "Minimum speed";
+"monitoring_min_speed" = "Minimum speed";
 "logging_min_speed_descr" = "Filter: no logging below selected speed";
-"auto_split_gap" = "Auto-split recordings after gap";
+"auto_split_recording_title" = "Auto-split recordings after gap";
 "auto_split_gap_descr" = "Start a new segment after 6 min gap, new track after 2 h gap, or new file after a longer gap";
 "trip_rec_actions_descr" = "You can find all your recorded tracks in %@";
 "reset_plugin_to_default" = "Reset plugin settings to default";
@@ -191,7 +191,7 @@
 "tracks_empty" = "Your track list is empty";
 "favorites_empty" = "You have not saved any favorite points";
 
-"last_used" = "Last used";
+"shared_string_last_used" = "Last used";
 
 "carplay_active_message" = "Map is displayed via CarPlay";
 "carplay_profile" = "CarPlay profile";
@@ -205,14 +205,14 @@
 "speak_speed_limit" = "Speed limit";
 "speak_cameras" = "Speed cameras";
 "speak_traffic_warnings" = "Traffic warnings";
-"announce_gpx_waypoints" = "Track waypoints";
+"shared_string_gpx_waypoints" = "Track waypoints";
 "speak_favorites" = "Nearby Favorites";
 "speak_poi" = "Nearby POI";
 "speak_pedestrian" = "Pedestrian crosswalks";
 "show_tunnels" = "Tunnels";
 
 // Dirrection appearance
-"one" = "One";
+"shared_string_one" = "One";
 "shared_string_two" = "Two";
 "show_direction" = "Distance indication";
 "arrows_on_map" = "Arrows on the map";
@@ -292,7 +292,7 @@
 "osm_live_routing_descr" = "Use OsmAnd Live updates for navigation";
 "select_nav_profile_dialog_message" = "The 'Navigation type' governs how routes are calculated.";
 "osmand_default_routing" = "OsmAnd routing";
-"special_routing" = "Special routing";
+"special_routing_type" = "Special routing";
 "import_routing_file_descr" = "You can import routing file from any cloud storage app by opening it in OsmAnd.";
 "recalculate_route" = "Recalculate route in case of deviation";
 "recalculate_wrong_dir" = "Recalculate route in case of reverse direction";
@@ -427,7 +427,7 @@
 "min_mile" = "min/m";
 "min_km" = "min/km";
 "m_s" = "m/s";
-"tones" = "tones";
+"shared_string_tones" = "tones";
 
 "nothing_found" = "Nothing found";
 "nothing_found_descr" = "Modify the search query or increase the search radius";
@@ -442,7 +442,7 @@
 "type_address" = "ವಿಳಾಸವನ್ನು ಟೈಪಿಸು";
 "search_poi_category_hint" = "ಎಲ್ಲವನ್ನು ಹುಡುಕಲು ಟೈಪಿಸಿ";
 "poi_categories" = "POI categories";
-"search_history" = "Search history";
+"shared_string_search_history" = "Search history";
 
 "track_coloring_solid" = "Solid";
 "attribute" = "Attribute";
@@ -488,7 +488,7 @@
 "shared_string_start_time" = "Start time";
 "shared_string_end_time" = "End time";
 "shared_string_time_moving" = "Time moving";
-"shared_string_retry" = "Retry";
+"retry" = "Retry";
 "shared_string_enabled" = "ಅಳವುಗೊಳಿಸಲಾಗಿದೆ";
 "shared_string_start_date" = "Start date";
 "shared_string_end_date" = "End date";
@@ -563,7 +563,7 @@
 "fav_exists" = "Favorite with name \"%@\" already exists";
 "fav_ignore" = "Ignore";
 "shared_string_rename" = "ಮರುಹೆಸರಿಸಿ";
-"fav_replace" = "Replace";
+"update_existing" = "Replace";
 "replace_favorite_confirmation" = "Are you sure you want to replace Favorite %@?";
 "fav_points_not_exist" = "No Favorite points exist";
 "fav_rename_q" = "Rename favorite";
@@ -590,7 +590,7 @@
 // Shapes
 "shared_string_circle" = "Circle";
 "shared_string_octagon" = "Octagon";
-"square" = "Square";
+"shared_string_square" = "Square";
 
 // POI
 "poi_insrease_radius" = "Increase search radius to";
@@ -641,7 +641,7 @@
 "shared_string_control_start" = "ಶುರುಮಾಡು";
 "gpx_avg_elev" = "Average elevation";
 "gpx_elev_range" = "Elevation range";
-"gpx_avg_altitude" = "Average altitude";
+"average_altitude" = "Average altitude";
 "altitude_range" = "Altitude range";
 "gpx_ascent" = "Ascent";
 "gpx_descent" = "Descent";
@@ -652,7 +652,7 @@
 "shared_string_currently_recording_track" = "ಈಗ ದಾಖಲಿಸಿಕೊಳ್ಳುತ್ತಿರುವ ಟ್ರ್ಯಾಕ್";
 "track_stop_rec" = "Stop recording";
 "gpx_start_new_segment" = "Start new segment";
-"track_save" = "Save current track";
+"save_current_track" = "Save current track";
 "displayed_route_save" = "Save to OsmAnd Tracks";
 "save_current_track_descr" = "Save current track as GPX file now.";
 "track_continue_rec" = "Continue recording";
@@ -667,7 +667,7 @@
 "show_info" = "Show Info";
 "record_trip" = "Record your track";
 "shared_string_clear" = "ತೆಳಿಸಿ";
-"poi_list" = "POI list";
+"quick_action_poi_list" = "POI list";
 
 "gpxup_public" = "Public";
 "gpxup_identifiable" = "Identifiable";
@@ -698,7 +698,7 @@
 "shared_string_show_on_map" = "ನಕ್ಷೆಯಲ್ಲಿ ತೋರಿಸು";
 "map_settings_type" = "Map type";
 "map_mode" = "Map mode";
-"map_settings_map_magnifier" = "Map magnifier";
+"map_magnifier" = "Map magnifier";
 "text_size" = "ಪಠ್ಯದ ಗಾತ್ರ";
 "daynight_mode_night" = "ರಾತ್ರಿ";
 "map_widget_renderer" = "Map style";
@@ -751,7 +751,7 @@
 // Intro
 "shared_string_skip" = "Skip";
 "intro_download" = "Download\nmap";
-"intro_next" = "ಮುಂದಿನ";
+"next_proceed" = "ಮುಂದಿನ";
 "intro_welcome" = "Welcome to\nOsmAnd";
 "intro_promo" = "Global offline maps";
 "intro_placeholder" = "enter the name of your region";
@@ -783,13 +783,13 @@
 "navigate_point_olc_short" = "OLC";
 "approximate_file_size" = "Approximate file size";
 
-"coordinates_example" = "Example";
+"shared_string_example" = "Example";
 "utm_description" = "Please note, OsmAnd uses UTM Standard format which is similar but not identical to UTM NATO.";
 "coordinates_copy_descr" = "Tap to copy coordintates to clipboard.";
 "sett_lang_trans" = "translit";
 "sett_pref_lang" = "Preferred Language";
 "sett_lang_show_local" = "Show local names";
-"sett_lang_show_trans" = "Transliterate names";
+"translit_names" = "Transliterate names";
 
 "lang_af" = "Afrikaan";
 "lang_al" = "Albanian";
@@ -979,7 +979,7 @@
 "copy_from_other_profile_descr" = "You can copy all settings from any profile to the selected profile: ";
 "profile_alert_delete_title" = "Delete profile";
 "profile_alert_delete_msg" = "Are you sure you want to completly delete \"%@\" profile?";
-"create_profile_descr" = "Base your custom profile on one of the default app profiles, this defines the basic setup like default visibility of widgets and units of speed and distance. These are the default app profiles, together with examples of custom profiles they may be extended to:";
+"select_base_profile_dialog_message" = "Base your custom profile on one of the default app profiles, this defines the basic setup like default visibility of widgets and units of speed and distance. These are the default app profiles, together with examples of custom profiles they may be extended to:";
 "profile_type_custom_string" = "Custom profile";
 "new_profile" = "New profile";
 "configure_profile" = "Configure profile";
@@ -1045,7 +1045,7 @@
 
 // Route planning
 "plan_route" = "Plan a route";
-"add_point" = "Add point";
+"coord_input_add_point" = "Add point";
 "point_num" = "Point %d";
 "points_count" = "Points:";
 "route_between_points" = "Route between points";
@@ -1104,7 +1104,7 @@
 "start_of_the_track" = "Start of the track";
 "nearest_point" = "Nearest point";
 "plan_route_folder" = "Folder";
-"plan_route_change_folder" = "Change folder";
+"change_folder" = "Change folder";
 "select_folder" = "Select folder";
 "select_folder_descr" = "Select folder or add a new one";
 "add_folder" = "Add folder";
@@ -1120,7 +1120,7 @@
 "download_tab_local" = "ಸ್ಥಳಿಯ";
 "osmand_live" = "OsmAnd Live";
 "live_updates" = "Live updates";
-"osmand_live_available_maps" = "ಲಭ್ಯವಿರುವ ನಕ್ಷೆಗಳು";
+"available_maps" = "ಲಭ್ಯವಿರುವ ನಕ್ಷೆಗಳು";
 "osmand_live_last_changed" = "Last map change: %@";
 "last_update" = "Last update: %@";
 "osmand_live_not_updated" = "Not yet updated";
@@ -1132,7 +1132,7 @@
 "update_frequency" = "Update frequency";
 "osmand_live_wifi_only" = "Update only via WiFi";
 "osmand_live_donation_header" = "Donation settings";
-"osmand_live_donations" = "ದೇಣಿಗೆಗಳು";
+"donations" = "ದೇಣಿಗೆಗಳು";
 "osmand_live_donation_switch_title" = "Donation to OpenStreetMap community";
 "osmand_live_donation_switch_descr" = "Part of your donation is distributed among the OSM users who submit changes to OpenStreetMap. The cost of the subscription remains the same";
 "osmand_live_donations_enter_email" = "Enter your email address";
@@ -1149,7 +1149,7 @@
 "res_catalog_upd" = "Catalog update";
 "res_world_map" = "World map";
 "shared_string_world" = "World";
-"res_updates" = "ಇಂದಿನವುಗಳು";
+"download_tab_updates" = "ಇಂದಿನವುಗಳು";
 "res_worldwide" = "Worldwide";
 "res_region_map" = "Region map";
 "res_updates_avail" = "Updates available";
@@ -1172,10 +1172,10 @@
 "res_uninst_managed_q" = "You're going to uninstall %@. You can reinstall it later from catalog.";
 "res_uninst_unmanaged_q" = "You're going to delete %@. It's not from catalog, so please be sure you have a backup if needed.";
 "shared_string_details" = "ವಿವರಣೆಗಳು";
-"res_type" = "Type";
+"shared_string_type" = "Type";
 "res_unknown" = "Unknown";
 "shared_string_size" = "Size";
-"res_created_on" = "Created on";
+"created_on" = "Created on";
 "res_update_all" = "Update all";
 "res_updates_no_space" = "Not enough space to install %d update(s). %@ is needed. Please free up some space.";
 "res_updates_avail_q" = "update(s) are available.";
@@ -1243,9 +1243,9 @@
 "osm_pass" = "OpenStreetMap password";
 "osm_offline_editing" = "Always use offline editing";
 "osm_editing_login_and_pass" = "Login and password";
-"osm_editing_offline" = "Offline editing";
+"offline_edition" = "Offline editing";
 "osm_add_timespan" = "Add timespan";
-"osm_working_days" = "Working days";
+"working_days" = "Working days";
 "osm_around_the_clock" = "Around the clock (24/7)";
 "osm_opens_at" = "Opens at:";
 "osm_closes_at" = "Closes at:";
@@ -1261,7 +1261,7 @@
 "osm_edit_modified_poi" = "Modified OSM POI";
 "osm_edit_deleted_poi" = "Deleted OSM POI";
 "osm_edit_created_poi" = "Created OSM POI";
-"osm_note_created" = "ಸೃಷ್ಟಿಸಲಾದ ಒಎಸ್ಎಂ ಟಿಪ್ಪಣಿ";
+"osm_edit_created_note" = "ಸೃಷ್ಟಿಸಲಾದ ಒಎಸ್ಎಂ ಟಿಪ್ಪಣಿ";
 "osm_note_create" = "Create OSM Note";
 "upload_osm_note" = "ಒಎಸ್ಎಂ ಟಿಪ್ಪಣಿಯನ್ನು ಅಪ್ಲೋಡ್ ಮಾಡಿ";
 "osm_edit_close_note" = "Close OSM Note";
@@ -1292,7 +1292,7 @@
 "upload_to_osm" = "Upload modifications to OSM";
 "osm_edit_show_on_map" = "Show modification on the map";
 "osm_edit_show_on_map_descr" = "Open the map centered on this point";
-"osm_edit_without_name" = "Without name";
+"shared_string_without_name" = "Without name";
 "osm_edit_uploading" = "Uploading...";
 "osm_upload_complete" = "Upload complete";
 "osm_tag_too_long_message" = "The maximum value length for tag %@ is 255 characters. \nPlease make it shorter to continue.";
@@ -1329,8 +1329,8 @@
 "copied_to_clipboard" = "Copied to clipboard";
 // Quick action
 "no_overlay" = "No overlay";
-"quick_action_add_overlay" = "Add overlay";
-"quick_action_no_underlay" = "No underlay";
+"quick_action_map_overlay_action" = "Add overlay";
+"no_underlay" = "No underlay";
 "quick_action_map_underlay_action" = "Add underlay";
 "quick_action_list_descr" = "Tapping this action button pages through the list below";
 "toggle_coordinates" = "Show/hide coordinates widget";
@@ -1357,7 +1357,7 @@
 "fav_hide" = "Hide favorites";
 "toggle_poi" = "Show/hide POI";
 "hide_poi_action" = "Hide POI";
-"add_parking_place" = "Add parking place";
+"quick_action_add_parking" = "Add parking place";
 "parking_place" = "Parking place";
 "quick_action_navigation_voice" = "Voice on/off";
 "add_osm_note" = "Add OSM note";
@@ -1487,7 +1487,7 @@
 "osb_comment_dialog_message" = "ಸಂದೇಶ";
 "osn_add_dialog_title" = "ಟಿಪ್ಪಣಿಯನ್ನು ಹಾಕಿರಿ";
 "modify_poi" = "Modify the POI information";
-"actions" = "Actions";
+"shared_string_actions" = "Actions";
 "time_limited" = "Time limited";
 "pickup_car" = "Pickup the car";
 "pickup_car_at" = "Pickup the car at";
@@ -1500,15 +1500,15 @@
 "cannot_add_destination" = "Cannot add Direction";
 // Units
 "mile" = "mi";
-"units_yd" = "yd";
+"yard" = "yd";
 "foot" = "ft";
 "nm" = "nmi";
-"units_km_h" = "km/h";
-"units_mph" = "mph";
+"km_h" = "km/h";
+"mile_per_hour" = "mph";
 
 "int_hour" = "ಗಂಟೆ";
 "int_min" = "ನಿಮಿಷ";
-"units_sec" = "sec";
+"shared_string_sec" = "sec";
 "units_sec_short" = "s";
 
 "metric_ton" = "t";
@@ -1521,7 +1521,7 @@
 "faq_item" = "FAQ";
 "help_faq_descr" = "Frequently asked questions";
 "features_menu_group" = "Features";
-"help_map_viewing" = "Map viewing";
+"map_viewing_item" = "Map viewing";
 "help_search" = "Map search";
 "planning_trip_item" = "Planning a trip";
 "navigation_profiles_item" = "Navigation profiles";
@@ -1533,9 +1533,9 @@
 "help_legend_descr" = "The guide to map's symbols";
 "other_location" = "Other";
 "help_what_is_new" = "What\'s new";
-"help_install_and_troubleshoot" = "Installation and troubleshooting";
+"instalation_troubleshooting_item" = "Installation and troubleshooting";
 "techical_articles_item" = "Technical articles";
-"help_versions" = "Versions";
+"versions_item" = "Versions";
 "help_contact_us" = "Contact us";
 "shared_string_about" = "About";
 "follow_us" = "Follow us";
@@ -1564,7 +1564,7 @@
 // Context menu
 "ctx_mnu_edit_fav" = "Edit favorite";
 "ctx_mnu_add_fav" = "Add favorite";
-"ctx_mnu_share" = "ಹಂಚಿಕೊ";
+"shared_string_share" = "ಹಂಚಿಕೊ";
 "map_marker" = "ನಕಾಶೆಯ ಗುರುತು";
 
 // Location Services
@@ -1583,7 +1583,7 @@
 "index_name_central_america" = "Central America";
 "index_name_europe" = "Europe";
 "index_name_north_america" = "North America";
-"region_russia" = "Russia";
+"index_name_russia" = "Russia";
 "index_name_south_america" = "South America";
 "nautical_maps" = "Nautical maps";
 "download_select_map_types" = "Other maps";
@@ -1637,10 +1637,10 @@
 "product_desc_africa_short" = "Africa region maps";
 "product_desc_australia" = "Unlimited map downloads for Australia";
 "product_desc_australia_short" = "Australia region maps";
-"product_title_centralamerica" = "Central America";
+"index_name_central_america" = "Central America";
 "product_desc_centralamerica" = "Unlimited map downloads for Central America";
 "product_desc_centralamerica_short" = "Central America region maps";
-"product_title_europe" = "Europe";
+"index_name_europe" = "Europe";
 "product_desc_europe" = "Unlimited map downloads for Europe";
 "product_desc_europe_short" = "Europe region maps";
 "index_name_north_america" = "North America";
@@ -1693,7 +1693,7 @@
 "read_full_description" = "Read full description";
 "enter_fav_name" = "Enter favorite name";
 "res_installing" = "Installing…";
-"res_roads" = "Roads";
+"roads" = "Roads";
 "download_wikipedia_maps" = "ವಿಕಿಪೀಡಿಯ";
 "shared_string_hillshade" = "Hillshade";
 "shared_string_slope" = "Slope";
@@ -1729,7 +1729,7 @@
 
 "show_alt_in_drive" = "Show altitude in Drive mode";
 "shared_string_get" = "Get";
-"srtm_disabled" = "Contour lines disabled";
+"srtm_plugin_disabled" = "Contour lines disabled";
 "prch_wiki_info" = "Wikipedia addon enables wikipedia information for maps you are entitled, purchased or downloaded within free limit.";
 "prch_srtm_info" = "Contour lines addon enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
 
@@ -1738,7 +1738,7 @@
 "time_will_close" = "Will close in";
 "time_will_open" = "Will open in";
 
-"menu_active_trips" = "Active";
+"osm_live_active" = "Active";
 "menu_all_trips" = "All Tracks";
 
 "public_transport_ped_route_title" = "The route on foot is approximately %@, and may be faster than by public transport.";
@@ -1775,7 +1775,7 @@
 "gpx_trip_groups" = "Track groups";
 "gpx_group_select" = "Group Select";
 "shared_string_show_all" = "ಎಲ್ಲಾವನ್ನು ತೋರಿಸು";
-"parking" = "Parking";
+"poi_filter_parking" = "Parking";
 "parked_at" = "Parked at";
 
 "context_menu_item_directions_from" = "Directions from";
@@ -1835,7 +1835,7 @@
 "online_map" = "ಮಿಂಬಲೆ ನಕ್ಷೆ";
 "calculating_progress" = "Calculating...";
 "local_map_names" = "Local names";
-"history" = "ಇತಿಹಾಸ";
+"shared_string_history" = "ಇತಿಹಾಸ";
 "today" = "ಇಂದು";
 "yesterday" = "ನಾಳೆ";
 "hist_select_remove" = "Please select history items to remove";
@@ -1892,7 +1892,7 @@
 "shared_string_is_open" = "ತೆರೆ";
 "poi_filter_by_name" = "Search by name";
 "subcategories" = "Subcategories";
-"select_all" = "ಎಲ್ಲವನ್ನು ಆಯ್ಕೆಮಾಡಿ";
+"shared_string_select_all" = "ಎಲ್ಲವನ್ನು ಆಯ್ಕೆಮಾಡಿ";
 "create_custom_poi" = "Create custom filter";
 "selected_categories" = "Selected categories";
 "new_filter_desc" = "Please enter a name for the new filter, this will be added to your Categories tab.";
@@ -1937,7 +1937,7 @@
 "search_POI_level_btn" = "Increase search radius";
 
 "search_address_street" = "Street";
-"shared_string_building" = "Building";
+"search_address_building_option" = "Building";
 "shared_string_street_intersection" = "Street intersection";
 "shared_string_address" = "ಒಕ್ಕಣೆ";
 
@@ -1945,13 +1945,13 @@
 "send_anonymous_data" = "Send anonymous data";
 
 "sett_ext_input_desc" = "Select a device such as a generic keyboard or WunderLINQ for external controls.";
-"sett_ext_input" = "External input devices";
+"external_input_device" = "External input devices";
 "sett_generic_ext_input" = "Generic Keyboard";
 "sett_wunderlinq_ext_input" = "WunderLINQ";
 
 "key_hint_zoom_in" = "Zoom In";
 "key_hint_zoom_out" = "Zoom Out";
-"key_hint_deselect" = "ನಿರಾಕರಿಸು";
+"shared_string_deselect" = "ನಿರಾಕರಿಸು";
 "key_hint_goback" = "Go Back";
 "key_hint_recenter_map" = "Recenter Map";
 
@@ -1979,7 +1979,7 @@
 "free_version_message" = "%@ maps to download or update.";
 "get_osmand_live" = "Get OsmAnd Live to unlock all features:";
 "osm_live_subscription" = "OsmAnd Live subscription";
-"osm_live_cancel_subscription" = "Cancel subscription";
+"cancel_subscription" = "Cancel subscription";
 
 "wikivoyage_offline" = "Wikivoyage offline";
 "unlimited_downloads" = "Unlimited downloads";
@@ -2318,14 +2318,14 @@
 
 
 //Icon categories
-"amenity" = "Amenity";
+"icon_group_amenity" = "Amenity";
 "amenity_type_emergency" = "Emergency";
 "icon_group_special" = "Special";
 "icon_group_sport" = "Sport";
 "icon_group_symbols" = "Symbols";
 "transport" = "Transport";
 "icon_group_travel" = "Travel";
-"nautical" = "Nautical";
+"icon_group_nautical" = "Nautical";
 "icon_group_industrial" = "Industrial";
 "amenity_type_education" = "Education";
 

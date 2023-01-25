@@ -438,7 +438,7 @@ typedef enum : NSUInteger {
             }];
 
             UIAlertAction *replaceButtonItem = [UIAlertAction
-                                            actionWithTitle:OALocalizedString(@"fav_replace")
+                                            actionWithTitle:OALocalizedString(@"update_existing")
                                             style:UIAlertActionStyleDefault
                                             handler:^(UIAlertAction * _Nonnull action) {
                                     [self installSqliteDbFile:path newFileName:nil];
@@ -475,7 +475,7 @@ typedef enum : NSUInteger {
                 [OAUtilities denyAccessToFile:path removeFromInbox:YES];
             }]];
             
-            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"fav_replace") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"update_existing") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 [self importObfFile:path newFileName:nil];
             }]];
             

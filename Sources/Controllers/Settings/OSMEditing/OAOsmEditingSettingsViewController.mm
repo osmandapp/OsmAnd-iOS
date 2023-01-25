@@ -105,7 +105,7 @@
     NSMutableDictionary *offlieneEditingData = [NSMutableDictionary dictionary];
     offlieneEditingData[@"key"] = @"offline_editing";
     offlieneEditingData[@"type"] = [OASwitchTableViewCell getCellIdentifier];
-    offlieneEditingData[@"title"] = OALocalizedString(@"osm_editing_offline");
+    offlieneEditingData[@"title"] = OALocalizedString(@"offline_edition");
     [offlieneEditingCells addObject:offlieneEditingData];
 
     NSMutableArray<NSMutableDictionary *> *mappersCells = [NSMutableArray array];
@@ -122,7 +122,7 @@
 
     NSMutableArray<NSMutableDictionary *> *actionsCells = [NSMutableArray array];
     [data addObject:actionsCells];
-    _headers[@(data.count - 1)] = OALocalizedString(@"actions");
+    _headers[@(data.count - 1)] = OALocalizedString(@"shared_string_actions");
 
     NSString *menuPath = [NSString stringWithFormat:@"%@ — %@ — %@",
                           OALocalizedString(@"shared_string_menu"), OALocalizedString(@"shared_string_my_places"), OALocalizedString(@"osm_edits_title")];

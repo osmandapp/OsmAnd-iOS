@@ -213,7 +213,7 @@
 - (NSString *) getMeasurementUnit:(NSString *)parameter
 {
     if ([parameter isEqualToString:@"weight"])
-        return OALocalizedString(@"tones");
+        return OALocalizedString(@"shared_string_tones");
     else if ([parameter isEqualToString:@"height"] || [parameter isEqualToString:@"width"] || [parameter isEqualToString:@"length"])
         return OALocalizedString(@"shared_string_meters");
     return @"";

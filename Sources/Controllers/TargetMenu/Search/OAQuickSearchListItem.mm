@@ -300,7 +300,7 @@
         case RECENT_OBJ:
         {
             OAHistoryItem *item = (OAHistoryItem *) searchResult.object;
-            return item.typeName && item.name ? item.typeName : OALocalizedString(@"history");
+            return item.typeName && item.name ? item.typeName : OALocalizedString(@"shared_string_history");
         }
         case WPT:
         {

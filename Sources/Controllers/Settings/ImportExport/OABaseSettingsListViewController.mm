@@ -109,7 +109,7 @@
     [super applyLocalization];
     
     [self.backButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
-    [self.additionalNavBarButton setTitle:OALocalizedString(@"select_all") forState:UIControlStateNormal];
+    [self.additionalNavBarButton setTitle:OALocalizedString(@"shared_string_select_all") forState:UIControlStateNormal];
     [self.primaryBottomButton setTitle:OALocalizedString(@"shared_string_continue") forState:UIControlStateNormal];
 }
 
@@ -126,7 +126,7 @@
 - (void) updateNavigationBarItem
 {
     BOOL selected = [self hasSelection];
-    [self.additionalNavBarButton setTitle:selected ? OALocalizedString(@"shared_string_deselect_all") : OALocalizedString(@"select_all") forState:UIControlStateNormal];
+    [self.additionalNavBarButton setTitle:selected ? OALocalizedString(@"shared_string_deselect_all") : OALocalizedString(@"shared_string_select_all") forState:UIControlStateNormal];
 }
 
 - (void) setupButtonView

@@ -67,7 +67,7 @@
             _title = OALocalizedString(@"angular_measurment_units");
             break;
         case EOAProfileGeneralSettingsExternalInputDevices:
-            _title = OALocalizedString(@"sett_ext_input");
+            _title = OALocalizedString(@"external_input_device");
             break;
         default:
             break;

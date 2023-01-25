@@ -500,7 +500,7 @@ static UIViewController *parentController;
 
 - (void) updateHeaderLabels
 {
-    [_selectAllButton setTitle:OALocalizedString(@"select_all") forState:UIControlStateNormal];
+    [_selectAllButton setTitle:OALocalizedString(@"shared_string_select_all") forState:UIControlStateNormal];
     [_doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
     
     if (_editActive)
@@ -766,12 +766,12 @@ static UIViewController *parentController;
     OAGpxTableGroup* actionsGroup = [[OAGpxTableGroup alloc] init];
     actionsGroup.isMenu = YES;
     actionsGroup.type = [OAIconTextTableViewCell getCellIdentifier];
-    actionsGroup.header = OALocalizedString(@"actions");
+    actionsGroup.header = OALocalizedString(@"shared_string_actions");
     self.menuItems = @[@{@"type" : [OAIconTextTableViewCell getCellIdentifier],
                          @"key" : @"import_track",
                          @"title": OALocalizedString(@"gpx_import_title"),
                          @"icon": @"ic_custom_import",
-                         @"header" : OALocalizedString(@"actions")},
+                         @"header" : OALocalizedString(@"shared_string_actions")},
                        @{@"type" : [OAIconTextTableViewCell getCellIdentifier],
                          @"key" : @"create_new_trip",
                          @"title": OALocalizedString(@"create_new_trip"),

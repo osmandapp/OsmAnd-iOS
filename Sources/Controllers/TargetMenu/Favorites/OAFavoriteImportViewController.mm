@@ -69,7 +69,7 @@
         for(const auto& localFavorite : _app.favoritesCollection->getFavoriteLocations())
         {
             if ([favoriteTitle isEqualToString:localFavorite->getTitle().toNSString()] && ![self.ignoredNames containsObject:favoriteTitle] ) {
-                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:[NSString stringWithFormat:OALocalizedString(@"fav_exists"), favoriteTitle] delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_cancel") otherButtonTitles:OALocalizedString(@"fav_ignore"), OALocalizedString(@"shared_string_rename"), OALocalizedString(@"fav_replace"), OALocalizedString(@"replace_all"), nil];
+                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:[NSString stringWithFormat:OALocalizedString(@"fav_exists"), favoriteTitle] delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_cancel") otherButtonTitles:OALocalizedString(@"fav_ignore"), OALocalizedString(@"shared_string_rename"), OALocalizedString(@"update_existing"), OALocalizedString(@"replace_all"), nil];
                 alert.tag = kAlertConflictWarning;
                 [alert show];
                 self.conflictedName = favoriteTitle;

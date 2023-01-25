@@ -143,7 +143,7 @@
     NSString *value = nil;
     if ([_settings.metricSystem get] == KILOMETERS_AND_METERS)
     {
-        value = [NSString stringWithFormat:@"%d %@", (int)[_settings.speedLimitExceedKmh get:self.appMode], OALocalizedString(@"units_km_h")];
+        value = [NSString stringWithFormat:@"%d %@", (int)[_settings.speedLimitExceedKmh get:self.appMode], OALocalizedString(@"km_h")];
     }
     else
     {
@@ -172,7 +172,7 @@
     }];
     [fourthSection addObject:@{
         @"type" : [OASwitchTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"announce_gpx_waypoints"),
+        @"title" : OALocalizedString(@"shared_string_gpx_waypoints"),
         @"value" : _settings.announceWpt,
         @"key" : @"GPXWaypoints",
     }];

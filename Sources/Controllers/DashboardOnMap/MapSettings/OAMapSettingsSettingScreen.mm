@@ -84,7 +84,7 @@
     }
     else if ([settingKeyName isEqualToString:mapDensityKey])
     {
-        title = OALocalizedString(@"map_settings_map_magnifier");
+        title = OALocalizedString(@"map_magnifier");
         double value = [_settings.mapDensity get];
         
         data = @[

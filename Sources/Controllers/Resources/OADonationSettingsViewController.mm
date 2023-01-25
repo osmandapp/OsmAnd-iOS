@@ -92,7 +92,7 @@
 
 -(void) applyLocalization
 {
-    _titleView.text = OALocalizedString(@"osmand_live_donations");
+    _titleView.text = OALocalizedString(@"donations");
 }
 
 - (void) viewDidLoad

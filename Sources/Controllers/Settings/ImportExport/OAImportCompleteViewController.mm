@@ -304,7 +304,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     if (searchHistoryCount > 0)
     {
         [_data addObject: @{
-            @"label": OALocalizedString(@"search_history"),
+            @"label": OALocalizedString(@"shared_string_search_history"),
             @"iconName": @"ic_custom_history",
             @"count": [NSString stringWithFormat:@"%ld", searchHistoryCount],
             @"category" : @(EOAImportDataTypeSearchHistory)

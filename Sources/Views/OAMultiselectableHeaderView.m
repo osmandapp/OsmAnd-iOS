@@ -45,10 +45,10 @@ static UIFont *_btnFont;
     
     _selectAllBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     CGFloat width = self.frame.size.width;
-    CGSize textSize = [OAUtilities calculateTextBounds:[OALocalizedString(@"key_hint_deselect") uppercaseStringWithLocale:[NSLocale currentLocale]] width:width font:_btnFont];
+    CGSize textSize = [OAUtilities calculateTextBounds:[OALocalizedString(@"shared_string_deselect") uppercaseStringWithLocale:[NSLocale currentLocale]] width:width font:_btnFont];
     _selectAllBtn.frame = CGRectMake(width - textSize.width - OAUtilities.getLeftMargin - kMargin, 12.0, textSize.width, 30.0);
     [_selectAllBtn setTitle:[OALocalizedString(@"shared_string_select") uppercaseStringWithLocale:[NSLocale currentLocale]] forState:UIControlStateNormal];
-    [_selectAllBtn setTitle:[OALocalizedString(@"key_hint_deselect") uppercaseStringWithLocale:[NSLocale currentLocale]] forState:UIControlStateSelected];
+    [_selectAllBtn setTitle:[OALocalizedString(@"shared_string_deselect") uppercaseStringWithLocale:[NSLocale currentLocale]] forState:UIControlStateSelected];
     [_selectAllBtn setTitleColor:UIColorFromRGB(color_primary_purple) forState:UIControlStateNormal];
     [_selectAllBtn.titleLabel setFont:_btnFont];
     [_selectAllBtn addTarget:self action:@selector(checkPress:) forControlEvents:UIControlEventTouchUpInside];

@@ -599,7 +599,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         // actions section
         OAGPXTableSectionData *resetSectionData = [OAGPXTableSectionData withData:@{
                 kTableKey: @"section_reset",
-                kSectionHeader:OALocalizedString(@"actions"),
+                kSectionHeader:OALocalizedString(@"shared_string_actions"),
                 kSectionFooterHeight: @60.
         }];
         [_tableData.subjects addObject:resetSectionData];

@@ -65,7 +65,7 @@
 {
     [super applyLocalization];
     
-    _titleView.text = OALocalizedString(@"res_updates");
+    _titleView.text = OALocalizedString(@"download_tab_updates");
     [_updateAllButton setTitle:OALocalizedString(@"res_update_all") forState:UIControlStateNormal];
 }
 

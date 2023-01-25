@@ -156,7 +156,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
             [dataArr addObject:
              @[@{
                    @"name" : @"logging_min_speed",
-                   @"title" : OALocalizedString(@"logging_min_speed"),
+                   @"title" : OALocalizedString(@"monitoring_min_speed"),
                    @"description" : OALocalizedString(@"logging_min_speed_descr"),
                    @"value" : minSpeed,
                    @"type" : [OAIconTitleValueCell getCellIdentifier] }
@@ -196,7 +196,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
              @[@{
                  @"header" : OALocalizedString(@"other_location"),
                  @"name" : @"auto_split_gap",
-                 @"title" : OALocalizedString(@"auto_split_gap"),
+                 @"title" : OALocalizedString(@"auto_split_recording_title"),
                  @"description" : OALocalizedString(@"auto_split_gap_descr"),
                  @"value" : @([_settings.autoSplitRecording get:self.appMode]),
                  @"type" : [OASwitchTableViewCell getCellIdentifier] }]];
@@ -210,7 +210,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
                 @{
                     @"type" : [OAIconTextTableViewCell getCellIdentifier],
                     @"title" : str,
-                    @"header" : OALocalizedString(@"actions")
+                    @"header" : OALocalizedString(@"shared_string_actions")
                 },
                 @{
                     @"type" : [OATitleRightIconCell getCellIdentifier],
@@ -281,7 +281,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
             }
             break;
         case kTripRecordingSettingsScreenMinSpeed:
-            self.titleLabel.text = OALocalizedString(@"logging_min_speed");
+            self.titleLabel.text = OALocalizedString(@"monitoring_min_speed");
             for (int i = 0; i < minTrackSpeedValues.count; i++)
             {
                 [dataArr addObject: @{

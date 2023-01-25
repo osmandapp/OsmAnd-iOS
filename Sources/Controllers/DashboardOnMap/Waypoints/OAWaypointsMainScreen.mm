@@ -847,7 +847,7 @@
         
         OAPOIFiltersHelper *helper = [OAPOIFiltersHelper sharedInstance];
         NSString *descEx = [helper isShowingAnyPoi] ? OALocalizedString(@"poi") : [helper getSelectedPoiFiltersName];
-        [cell setButtonRightTitle:[OALocalizedString(@"res_type") stringByAppendingString:@":"] description:descEx];
+        [cell setButtonRightTitle:[OALocalizedString(@"shared_string_type") stringByAppendingString:@":"] description:descEx];
         
         [cell.buttonLeft removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
         cell.buttonLeft.tag = [self encodePos:indexPath];

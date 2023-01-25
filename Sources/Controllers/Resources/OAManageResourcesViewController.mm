@@ -1070,7 +1070,7 @@ static BOOL _repositoryUpdated = NO;
 
             if (repositoryResource->type == OsmAndResourceType::SrtmMapRegion)
             {
-                item.title = OALocalizedString(@"srtm_disabled");
+                item.title = OALocalizedString(@"srtm_plugin_disabled");
                 item.size = 0;
                 item.sizePkg = 0;
             }
@@ -2187,7 +2187,7 @@ static BOOL _repositoryUpdated = NO;
         {
             BOOL isLocalCell = indexPath.row == 0 && [self hasLocalResources];
             cellTypeId = isLocalCell ? installedResourcesSubmenuCell : outdatedResourcesSubmenuCell;
-            title = OALocalizedString(isLocalCell ? @"download_tab_local" : @"res_updates");
+            title = OALocalizedString(isLocalCell ? @"download_tab_local" : @"download_tab_updates");
 
             if (isLocalCell)
             {

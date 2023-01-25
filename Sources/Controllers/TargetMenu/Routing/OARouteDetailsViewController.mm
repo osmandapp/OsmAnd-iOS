@@ -136,7 +136,7 @@
 - (void)populateElevationSection:(NSMutableDictionary *)dataArr section:(NSInteger &)section {
     NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARouteInfoAltitudeCell getCellIdentifier] owner:self options:nil];
     OARouteInfoAltitudeCell *altCell = (OARouteInfoAltitudeCell *)[nib objectAtIndex:0];
-    altCell.avgAltitudeTitle.text = OALocalizedString(@"gpx_avg_altitude");
+    altCell.avgAltitudeTitle.text = OALocalizedString(@"average_altitude");
     altCell.altRangeTitle.text = OALocalizedString(@"altitude_range");
     altCell.ascentTitle.text = OALocalizedString(@"gpx_ascent");
     altCell.descentTitle.text = OALocalizedString(@"gpx_descent");

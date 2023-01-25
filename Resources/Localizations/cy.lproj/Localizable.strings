@@ -95,7 +95,7 @@
 "animate_routing_route_not_calculated" = "Cyfrifwch y llwybr yn gyntaf";
 "settings_preset" = "Proffil rhagosodedig";
 "default_profile_descr" = "Select a profile that will be used the application launch.";
-"dialogs_and_notifications" = "Deialogau a hysbysiadau";
+"dialogs_and_notifications_title" = "Deialogau a hysbysiadau";
 "dialogs_and_notifications_descr" = "Control pop-ups, dialogs, and notifications";
 "settings_preset_descr" = "Mae gosodiadau llywio a golwg map yn cael eu cofio ynôl proffil defnyddwyr. Gosodwch broffil fan hyn.";
 "unit_of_length" = "Unedau hyd";
@@ -132,9 +132,9 @@
 "save_track_logging_accuracy" = "Cywirdeb logio";
 "monitoring_min_accuracy" = "Isafswm cywirdeb";
 "logging_min_accuracy_descr" = "Filter: no logging unless the accuracy is reached";
-"logging_min_speed" = "Isafswm cyflymder";
+"monitoring_min_speed" = "Isafswm cyflymder";
 "logging_min_speed_descr" = "Filter: no logging below selected speed";
-"auto_split_gap" = "Auto-hollti recordiadau arôl bwlch";
+"auto_split_recording_title" = "Auto-hollti recordiadau arôl bwlch";
 "auto_split_gap_descr" = "Start a new segment after 6 min gap, new track after 2 h gap, or new file after a longer gap";
 "trip_rec_actions_descr" = "You can find all your recorded tracks in %@";
 "reset_plugin_to_default" = "Ailosod yr ategyn i\'r rhagosodiad";
@@ -174,7 +174,7 @@
 "map_markers_empty" = "You have no active map markers";
 "tracks_empty" = "Your track list is empty";
 "favorites_empty" = "You have not saved any favorite points";
-"last_used" = "Defnyddiwyd diwethaf";
+"shared_string_last_used" = "Defnyddiwyd diwethaf";
 "carplay_active_message" = "Map is displayed via CarPlay";
 "carplay_profile" = "CarPlay profile";
 "carplay_profile_descr" = "Profile that will be used while connected to CarPlay.";
@@ -186,14 +186,14 @@
 "speak_speed_limit" = "Terfyn cyflymder";
 "speak_cameras" = "Camerâu cyflymder";
 "speak_traffic_warnings" = "Rhybuddion traffig";
-"announce_gpx_waypoints" = "Cyfeirbwyntiau trac";
+"shared_string_gpx_waypoints" = "Cyfeirbwyntiau trac";
 "speak_favorites" = "Nearby Favorites";
 "speak_poi" = "MODdau gerllaw";
 "speak_pedestrian" = "Croesfannau cerddwyr";
 "show_tunnels" = "Twneli";
 
 // Dirrection appearance
-"one" = "Un";
+"shared_string_one" = "Un";
 "shared_string_two" = "Dau";
 "show_direction" = "Arwydd pellter";
 "arrows_on_map" = "Arrows on the map";
@@ -272,7 +272,7 @@
 "osm_live_routing_descr" = "Use OsmAnd Live updates for navigation";
 "select_nav_profile_dialog_message" = "The 'Navigation type' governs how routes are calculated.";
 "osmand_default_routing" = "Llwybro OsmA";
-"special_routing" = "Llwybro arbennig";
+"special_routing_type" = "Llwybro arbennig";
 "import_routing_file_descr" = "You can import routing file from any cloud storage app by opening it in OsmAnd.";
 "recalculate_route" = "Recalculate route in case of deviation";
 "recalculate_wrong_dir" = "Recalculate route in case of reverse direction";
@@ -401,7 +401,7 @@
 "min_mile" = "mun/m";
 "min_km" = "mun/km";
 "m_s" = "m/e";
-"tones" = "tonau";
+"shared_string_tones" = "tonau";
 "nothing_found" = "Nothing found";
 "nothing_found_descr" = "Modify the search query or increase the search radius";
 "select_street" = "Dewiswch stryd";
@@ -415,7 +415,7 @@
 "type_address" = "Rhowch gyfeiriad";
 "search_poi_category_hint" = "Teipiwch i chwilio\'r cyfan";
 "poi_categories" = "POI categories";
-"search_history" = "Hanes chwilio";
+"shared_string_search_history" = "Hanes chwilio";
 "track_coloring_solid" = "Solet";
 "attribute" = "Priodoledd";
 
@@ -460,7 +460,7 @@
 "shared_string_start_time" = "Amser dechrau";
 "shared_string_end_time" = "Amser gorffen";
 "shared_string_time_moving" = "Amser yn symud";
-"shared_string_retry" = "Ail geisio";
+"retry" = "Ail geisio";
 "shared_string_enabled" = "Galluogwyd";
 "shared_string_start_date" = "Start date";
 "shared_string_end_date" = "End date";
@@ -533,7 +533,7 @@
 "fav_exists" = "Favorite with name \"%@\" already exists";
 "fav_ignore" = "Ignore";
 "shared_string_rename" = "Ailenwi";
-"fav_replace" = "Amnewid";
+"update_existing" = "Amnewid";
 "replace_favorite_confirmation" = "Are you sure you want to replace Favorite %@?";
 "fav_points_not_exist" = "No Favorite points exist";
 "fav_rename_q" = "Rename favorite";
@@ -559,7 +559,7 @@
 // Shapes
 "shared_string_circle" = "Cyclh";
 "shared_string_octagon" = "Octagon";
-"square" = "Sgwâr";
+"shared_string_square" = "Sgwâr";
 
 // POI
 "poi_insrease_radius" = "Increase search radius to";
@@ -606,7 +606,7 @@
 "shared_string_control_start" = "Dechrau";
 "gpx_avg_elev" = "Average elevation";
 "gpx_elev_range" = "Elevation range";
-"gpx_avg_altitude" = "Uchder cyfartalog";
+"average_altitude" = "Uchder cyfartalog";
 "altitude_range" = "Ystyr uchder";
 "gpx_ascent" = "Ascent";
 "gpx_descent" = "Descent";
@@ -617,7 +617,7 @@
 "shared_string_currently_recording_track" = "Yn recordio trac ar hyn o bryd";
 "track_stop_rec" = "Stop recording";
 "gpx_start_new_segment" = "Start new segment";
-"track_save" = "Cadw\'r trac cyfredol";
+"save_current_track" = "Cadw\'r trac cyfredol";
 "displayed_route_save" = "Save to OsmAnd Tracks";
 "save_current_track_descr" = "Cadw\'r trac cyfredol fel ffeil GPX nawr.";
 "track_continue_rec" = "Continue recording";
@@ -632,7 +632,7 @@
 "show_info" = "Show Info";
 "record_trip" = "Record your track";
 "shared_string_clear" = "Clirio";
-"poi_list" = "Rhestr MODdau";
+"quick_action_poi_list" = "Rhestr MODdau";
 "gpxup_public" = "Cyhoeddus";
 "gpxup_identifiable" = "Adnabyddadwy";
 "gpxup_trackable" = "Traciadwy";
@@ -657,7 +657,7 @@
 "shared_string_show_on_map" = "Dangos ar y map";
 "map_settings_type" = "Map type";
 "map_mode" = "Modd map";
-"map_settings_map_magnifier" = "Chwyddwr y map";
+"map_magnifier" = "Chwyddwr y map";
 "text_size" = "Maint testun";
 "daynight_mode_night" = "Nos";
 "map_widget_renderer" = "Arddull map";
@@ -708,7 +708,7 @@
 // Intro
 "shared_string_skip" = "Neidio";
 "intro_download" = "Download\nmap";
-"intro_next" = "Nesaf";
+"next_proceed" = "Nesaf";
 "intro_welcome" = "Welcome to\nOsmAnd";
 "intro_promo" = "Global offline maps";
 "intro_placeholder" = "enter the name of your region";
@@ -739,13 +739,13 @@
 "navigate_point_olc" = "Cod Lleoliad Agored";
 "navigate_point_olc_short" = "OLC";
 "approximate_file_size" = "Approximate file size";
-"coordinates_example" = "Enghraifft";
+"shared_string_example" = "Enghraifft";
 "utm_description" = "Please note, OsmAnd uses UTM Standard format which is similar but not identical to UTM NATO.";
 "coordinates_copy_descr" = "Tap to copy coordintates to clipboard.";
 "sett_lang_trans" = "translit";
 "sett_pref_lang" = "Preferred Language";
 "sett_lang_show_local" = "Show local names";
-"sett_lang_show_trans" = "Trawslythrennu enwau";
+"translit_names" = "Trawslythrennu enwau";
 "lang_af" = "Affricaneg";
 "lang_al" = "Albanieg";
 "lang_als" = "Albaneg (Tosk)";
@@ -925,7 +925,7 @@
 "copy_from_other_profile_descr" = "You can copy all settings from any profile to the selected profile: ";
 "profile_alert_delete_title" = "Dileu proffil";
 "profile_alert_delete_msg" = "Are you sure you want to completly delete \"%@\" profile?";
-"create_profile_descr" = "Seilia dy broffil personol ar un o\'r proffiliau ap rhagosodedig, mae hyn yn diffinio\'r gosodiad sylfaenol fel gwelededd rhagosodedig teclynnau ac unedau cyflymder a phellter. Dyma\'r proffiliau ap rhagosodedig, ynghyd ag enghreifftiau o broffiliau personol y gellir eu hymestyn i:";
+"select_base_profile_dialog_message" = "Seilia dy broffil personol ar un o\'r proffiliau ap rhagosodedig, mae hyn yn diffinio\'r gosodiad sylfaenol fel gwelededd rhagosodedig teclynnau ac unedau cyflymder a phellter. Dyma\'r proffiliau ap rhagosodedig, ynghyd ag enghreifftiau o broffiliau personol y gellir eu hymestyn i:";
 "profile_type_custom_string" = "Proffil dy hun";
 "new_profile" = "Proffil newydd";
 "configure_profile" = "Addasu proffil";
@@ -987,7 +987,7 @@
 
 // Route planning
 "plan_route" = "Plan a route";
-"add_point" = "Ychwanegu pwynt";
+"coord_input_add_point" = "Ychwanegu pwynt";
 "point_num" = "Point %d";
 "points_count" = "Points:";
 "route_between_points" = "Llwybr rhwng dau bwynt";
@@ -1046,7 +1046,7 @@
 "start_of_the_track" = "Dechrau\'r trac";
 "nearest_point" = "Y pwynt agosaf";
 "plan_route_folder" = "Folder";
-"plan_route_change_folder" = "Newid ffolder";
+"change_folder" = "Newid ffolder";
 "select_folder" = "Dewiswch ffolder";
 "select_folder_descr" = "Select folder or add a new one";
 "add_folder" = "Add folder";
@@ -1062,7 +1062,7 @@
 "download_tab_local" = "Lleol";
 "osmand_live" = "OsmAnd Live";
 "live_updates" = "Diweddariadau byw";
-"osmand_live_available_maps" = "Mapiau ar gael";
+"available_maps" = "Mapiau ar gael";
 "osmand_live_last_changed" = "Last map change: %@";
 "last_update" = "Last update: %@";
 "osmand_live_not_updated" = "Not yet updated";
@@ -1074,7 +1074,7 @@
 "update_frequency" = "Amlder diweddaru";
 "osmand_live_wifi_only" = "Update only via WiFi";
 "osmand_live_donation_header" = "Donation settings";
-"osmand_live_donations" = "Rhoddion";
+"donations" = "Rhoddion";
 "osmand_live_donation_switch_title" = "Donation to OpenStreetMap community";
 "osmand_live_donation_switch_descr" = "Part of your donation is distributed among the OSM users who submit changes to OpenStreetMap. The cost of the subscription remains the same";
 "osmand_live_donations_enter_email" = "Enter your email address";
@@ -1091,7 +1091,7 @@
 "res_catalog_upd" = "Catalog update";
 "res_world_map" = "World map";
 "shared_string_world" = "Byd";
-"res_updates" = "Diweddariadau";
+"download_tab_updates" = "Diweddariadau";
 "res_worldwide" = "Worldwide";
 "res_region_map" = "Region map";
 "res_updates_avail" = "Updates available";
@@ -1114,10 +1114,10 @@
 "res_uninst_managed_q" = "You're going to uninstall %@. You can reinstall it later from catalog.";
 "res_uninst_unmanaged_q" = "You're going to delete %@. It's not from catalog, so please be sure you have a backup if needed.";
 "shared_string_details" = "Manylion";
-"res_type" = "Math";
+"shared_string_type" = "Math";
 "res_unknown" = "Unknown";
 "shared_string_size" = "Maint";
-"res_created_on" = "Crëwyd ar";
+"created_on" = "Crëwyd ar";
 "res_update_all" = "Update all";
 "res_updates_no_space" = "Not enough space to install %d update(s). %@ is needed. Please free up some space.";
 "res_updates_avail_q" = "update(s) are available.";
@@ -1183,9 +1183,9 @@
 "osm_pass" = "OpenStreetMap password";
 "osm_offline_editing" = "Always use offline editing";
 "osm_editing_login_and_pass" = "Login and password";
-"osm_editing_offline" = "Golygu all-lein";
+"offline_edition" = "Golygu all-lein";
 "osm_add_timespan" = "Add timespan";
-"osm_working_days" = "Dyddiau gwaith";
+"working_days" = "Dyddiau gwaith";
 "osm_around_the_clock" = "Around the clock (24/7)";
 "osm_opens_at" = "Opens at:";
 "osm_closes_at" = "Closes at:";
@@ -1201,7 +1201,7 @@
 "osm_edit_modified_poi" = "POI OSM wedi\'i Addasu";
 "osm_edit_deleted_poi" = "POI OSM wedi\'i ddileu";
 "osm_edit_created_poi" = "Wedi creu OSM POI";
-"osm_note_created" = "Wedi creu Nodyn OSM";
+"osm_edit_created_note" = "Wedi creu Nodyn OSM";
 "osm_note_create" = "Create OSM Note";
 "upload_osm_note" = "Llwythwch Nodyn OSM i fyny";
 "osm_edit_close_note" = "Cau Nodyn OSM";
@@ -1232,7 +1232,7 @@
 "upload_to_osm" = "Upload modifications to OSM";
 "osm_edit_show_on_map" = "Show modification on the map";
 "osm_edit_show_on_map_descr" = "Open the map centered on this point";
-"osm_edit_without_name" = "Heb enw";
+"shared_string_without_name" = "Heb enw";
 "osm_edit_uploading" = "Uploading...";
 "osm_upload_complete" = "Upload complete";
 "osm_tag_too_long_message" = "The maximum value length for tag %@ is 255 characters. \nPlease make it shorter to continue.";
@@ -1269,8 +1269,8 @@
 "copied_to_clipboard" = "Wedi\'i gopïo i\'r clipfwrdd";
 // Quick action
 "no_overlay" = "Dim troshaen";
-"quick_action_add_overlay" = "Ychwanegu troshaen";
-"quick_action_no_underlay" = "Dim is-haen";
+"quick_action_map_overlay_action" = "Ychwanegu troshaen";
+"no_underlay" = "Dim is-haen";
 "quick_action_map_underlay_action" = "Ychwanegu is-haen";
 "quick_action_list_descr" = "Tapping this action button pages through the list below";
 "toggle_coordinates" = "Show/hide coordinates widget";
@@ -1297,7 +1297,7 @@
 "fav_hide" = "Hide favorites";
 "toggle_poi" = "Show/hide POI";
 "hide_poi_action" = "Hide POI";
-"add_parking_place" = "Ychwanegu man parcio";
+"quick_action_add_parking" = "Ychwanegu man parcio";
 "parking_place" = "Parking place";
 "quick_action_navigation_voice" = "Llais ymlaen/i ffwrdd";
 "add_osm_note" = "Add OSM note";
@@ -1426,7 +1426,7 @@
 "osb_comment_dialog_message" = "Neges";
 "osn_add_dialog_title" = "Creu nodyn";
 "modify_poi" = "Modify the POI information";
-"actions" = "Gweithredoedd";
+"shared_string_actions" = "Gweithredoedd";
 "time_limited" = "Time limited";
 "pickup_car" = "Pickup the car";
 "pickup_car_at" = "Pickup the car at";
@@ -1439,14 +1439,14 @@
 "cannot_add_destination" = "Cannot add Direction";
 // Units
 "mile" = "mi";
-"units_yd" = "llth";
+"yard" = "llth";
 "foot" = "td";
 "nm" = "nmi";
-"units_km_h" = "km/a";
-"units_mph" = "mya";
+"km_h" = "km/a";
+"mile_per_hour" = "mya";
 "int_hour" = "a";
 "int_min" = "mun.";
-"units_sec" = "eil";
+"shared_string_sec" = "eil";
 "units_sec_short" = "s";
 "metric_ton" = "t";
 
@@ -1458,7 +1458,7 @@
 "faq_item" = "C&A";
 "help_faq_descr" = "Frequently asked questions";
 "features_menu_group" = "Nodweddion";
-"help_map_viewing" = "Map viewing";
+"map_viewing_item" = "Map viewing";
 "help_search" = "Map search";
 "planning_trip_item" = "Planning a trip";
 "navigation_profiles_item" = "Proffiliau llywio";
@@ -1470,9 +1470,9 @@
 "help_legend_descr" = "The guide to map's symbols";
 "other_location" = "Eraill";
 "help_what_is_new" = "What\'s new";
-"help_install_and_troubleshoot" = "Installation and troubleshooting";
+"instalation_troubleshooting_item" = "Installation and troubleshooting";
 "techical_articles_item" = "Erthyglau technegol";
-"help_versions" = "Fersiynau";
+"versions_item" = "Fersiynau";
 "help_contact_us" = "Contact us";
 "shared_string_about" = "Ynghylch";
 "follow_us" = "Dilyna ni";
@@ -1501,7 +1501,7 @@
 // Context menu
 "ctx_mnu_edit_fav" = "Edit favorite";
 "ctx_mnu_add_fav" = "Add favorite";
-"ctx_mnu_share" = "Rhannu";
+"shared_string_share" = "Rhannu";
 "map_marker" = "Nod map";
 
 // Location Services
@@ -1520,7 +1520,7 @@
 "index_name_central_america" = "Canolbarth America";
 "index_name_europe" = "Ewrop";
 "index_name_north_america" = "Gogledd America";
-"region_russia" = "Rwsia";
+"index_name_russia" = "Rwsia";
 "index_name_south_america" = "De America";
 "nautical_maps" = "Mapiau morwrol";
 "download_select_map_types" = "Mapiau eraill";
@@ -1568,10 +1568,10 @@
 "product_desc_africa_short" = "Africa region maps";
 "product_desc_australia" = "Unlimited map downloads for Australia";
 "product_desc_australia_short" = "Australia region maps";
-"product_title_centralamerica" = "Canolbarth America";
+"index_name_central_america" = "Canolbarth America";
 "product_desc_centralamerica" = "Unlimited map downloads for Central America";
 "product_desc_centralamerica_short" = "Central America region maps";
-"product_title_europe" = "Ewrop";
+"index_name_europe" = "Ewrop";
 "product_desc_europe" = "Unlimited map downloads for Europe";
 "product_desc_europe_short" = "Europe region maps";
 "index_name_north_america" = "Gogledd America";
@@ -1618,7 +1618,7 @@
 "read_full_description" = "Read full description";
 "enter_fav_name" = "Enter favorite name";
 "res_installing" = "Installing…";
-"res_roads" = "Ffyrdd";
+"roads" = "Ffyrdd";
 "download_wikipedia_maps" = "Wicipedia";
 "shared_string_hillshade" = "Cysgodion bryniau";
 "shared_string_slope" = "Llethr";
@@ -1651,14 +1651,14 @@
 "from_location" = "away";
 "show_alt_in_drive" = "Show altitude in Drive mode";
 "shared_string_get" = "Cael";
-"srtm_disabled" = "Llinellau cyfuchlin wedi\'u hanalluogi";
+"srtm_plugin_disabled" = "Llinellau cyfuchlin wedi\'u hanalluogi";
 "prch_wiki_info" = "Wikipedia addon enables wikipedia information for maps you are entitled, purchased or downloaded within free limit.";
 "prch_srtm_info" = "Contour lines addon enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
 "shared_string_open" = "Agor";
 "time_closed" = "Closed";
 "time_will_close" = "Will close in";
 "time_will_open" = "Will open in";
-"menu_active_trips" = "Gweithredol";
+"osm_live_active" = "Gweithredol";
 "menu_all_trips" = "All Tracks";
 "public_transport_ped_route_title" = "The route on foot is approximately %@, and may be faster than by public transport.";
 "calc_pedestrian_route" = "Calculate pedestrian route";
@@ -1692,7 +1692,7 @@
 "gpx_trip_groups" = "Track groups";
 "gpx_group_select" = "Group Select";
 "shared_string_show_all" = "Dangos y cwbl";
-"parking" = "Parcio";
+"poi_filter_parking" = "Parcio";
 "parked_at" = "Parked at";
 "context_menu_item_directions_from" = "Cyfarwyddiadau o";
 "search_nearby" = "Chwilio gerllaw";
@@ -1743,7 +1743,7 @@
 "online_map" = "Map arlein";
 "calculating_progress" = "Calculating...";
 "local_map_names" = "Enwau lleol";
-"history" = "Hanes";
+"shared_string_history" = "Hanes";
 "today" = "Heddiw";
 "yesterday" = "Ddoe";
 "hist_select_remove" = "Please select history items to remove";
@@ -1789,7 +1789,7 @@
 "shared_string_is_open" = "Ar agor nawr";
 "poi_filter_by_name" = "Chwilio enw";
 "subcategories" = "Is-gategorïau";
-"select_all" = "Dewis y cwbl";
+"shared_string_select_all" = "Dewis y cwbl";
 "create_custom_poi" = "Creu hidlydd cyfaddas";
 "selected_categories" = "Categorïau dethol";
 "new_filter_desc" = "Please enter a name for the new filter, this will be added to your Categories tab.";
@@ -1831,18 +1831,18 @@
 "show_something_on_map" = "Dangos %@ ar y map";
 "search_POI_level_btn" = "Increase search radius";
 "search_address_street" = "Stryd/Ffordd/Heol";
-"shared_string_building" = "Adeilad";
+"search_address_building_option" = "Adeilad";
 "shared_string_street_intersection" = "Street intersection";
 "shared_string_address" = "Cyfeiriad";
 "do_not_show_discount" = "Do not show promotions";
 "send_anonymous_data" = "Send anonymous data";
 "sett_ext_input_desc" = "Select a device such as a generic keyboard or WunderLINQ for external controls.";
-"sett_ext_input" = "External input devices";
+"external_input_device" = "External input devices";
 "sett_generic_ext_input" = "Generic Keyboard";
 "sett_wunderlinq_ext_input" = "WunderLINQ";
 "key_hint_zoom_in" = "Zoom In";
 "key_hint_zoom_out" = "Zoom Out";
-"key_hint_deselect" = "Dad-ddewis";
+"shared_string_deselect" = "Dad-ddewis";
 "key_hint_goback" = "Go Back";
 "key_hint_recenter_map" = "Recenter Map";
 "wiki_buy_description" = "To read full articles - buy Wikipedia plugin and download Wikipedia data of %@";
@@ -1867,7 +1867,7 @@
 "free_version_message" = "%@ maps to download or update.";
 "get_osmand_live" = "Get OsmAnd Live to unlock all features:";
 "osm_live_subscription" = "Tanysgrifiad OsmAnd Live";
-"osm_live_cancel_subscription" = "Diddymu\'r tanysgrifiad";
+"cancel_subscription" = "Diddymu\'r tanysgrifiad";
 "wikivoyage_offline" = "Wikivoyage all-lein";
 "unlimited_downloads" = "Dadlwythiadau diderfyn";
 "wikipedia_offline" = "Wicipedia all-lein";
@@ -2201,14 +2201,14 @@
 
 
 //Icon categories
-"amenity" = "Amwynder";
+"icon_group_amenity" = "Amwynder";
 "amenity_type_emergency" = "Argyfwng";
 "icon_group_special" = "Arbennig";
 "icon_group_sport" = "Chwaraeon";
 "icon_group_symbols" = "Symbolau";
 "transport" = "Trafnidiaeth";
 "icon_group_travel" = "Teithio";
-"nautical" = "Morwrol";
+"icon_group_nautical" = "Morwrol";
 "icon_group_industrial" = "Diwydiannol";
 "amenity_type_education" = "Addysg";
 "settings_item_read_error" = "Could not read %@.";
@@ -2307,7 +2307,7 @@
 "make_backup" = "Cadw copi wrth gefn";
 "backup_welcome_back" = "Croeso nôl!";
 "make_backup_descr" = "Mae yna lawer o newidiadau ar y ddyfais hon. Cadwch gopi wrth gefn o\'r data er mwyn peidio ei golli.";
-"cloud_set_up_backup" = "Gosod wrth gefn";
+"set_up_backup" = "Gosod wrth gefn";
 "routing_attr_only_permitted_ways_description" = "Defnyddio dim ond llwybrau (traciau, llwybrau, ayyb) y\'i caniateir yn benodol";
 "backup_error_subscription_was_expired_descr" = "Mae dy danysgrifiad OsmAnd Pro wedi dod i ben. Adnewydda i ddefnyddio cadw wrth gefn. Gellir dal i adfer data o\'r cwmwl.";
 "routing_attr_allow_private_for_truck_name" = "Caniatáu mynediad preifat (lori)";
@@ -2329,7 +2329,7 @@
 "share_geo" = "geo:";
 "debugging_and_development" = "Datblygiad OsmAnd";
 "weather_wind_kilimeters_per_hour" = "Cilomedr yr awr";
-"navigate_point_format_MGRS" = "MGRS";
+"navigate_point_mgrs" = "MGRS";
 "osm_live_subscriptions" = "Tanysgrifiadau";
 "manage_subscription" = "Rheoli tanysgrifiad";
 "explore_osmnad_plans_to_find_suitable" = "Edrych ar gynlluniau OsmAnd i ganfod un sy\'n addas ar eich cyfer.";

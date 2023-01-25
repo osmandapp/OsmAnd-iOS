@@ -301,7 +301,7 @@
                 }
             }
             NSDictionary *routeData = @{
-                    @"name": isMountainBike ? OALocalizedString(@"mountain_bike") : routeParameter.title,
+                    @"name": isMountainBike ? OALocalizedString(@"activity_type_mountainbike_name") : routeParameter.title,
                     @"image": [self getImageForParameterOrCategory:routeParameter.name],
                     @"key": [NSString stringWithFormat:@"routes_%@", routeParameter.name],
                     @"type": [hasParameters containsObject:routeParameter.name]
@@ -366,7 +366,7 @@
                 @"key": @"map_mode"
         }];
         [mapStyleSectionData addObject:@{
-                @"name": OALocalizedString(@"map_settings_map_magnifier"),
+                @"name": OALocalizedString(@"map_magnifier"),
                 @"value": [self getPercentString:[_settings.mapDensity get]],
                 @"image": @"ic_custom_magnifier",
                 @"type": [OAValueTableViewCell getCellIdentifier],

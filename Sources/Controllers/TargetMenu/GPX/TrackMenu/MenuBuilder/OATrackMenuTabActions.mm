@@ -26,7 +26,7 @@
 
 - (NSString *)getTabTitle
 {
-    return OALocalizedString(@"actions");
+    return OALocalizedString(@"shared_string_actions");
 }
 
 - (UIImage *)getTabIcon
@@ -87,7 +87,7 @@
             kTableKey: @"share",
             kCellType: [OATitleIconRoundCell getCellIdentifier],
             kCellRightIconName: @"ic_custom_export",
-            kCellTitle: OALocalizedString(@"ctx_mnu_share")
+            kCellTitle: OALocalizedString(@"shared_string_share")
     }];
     [shareSectionData.subjects addObject:shareCellData];
 
@@ -129,7 +129,7 @@
             kCellType: [OATitleDescriptionIconRoundCell getCellIdentifier],
             kCellDesc: [self generateDirName],
             kCellRightIconName: @"ic_custom_folder_move",
-            kCellTitle: OALocalizedString(@"plan_route_change_folder")
+            kCellTitle: OALocalizedString(@"change_folder")
     }];
     [changeSectionData.subjects addObject:moveCellData];
 

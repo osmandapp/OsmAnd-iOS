@@ -96,7 +96,7 @@
 {
     _titleView.text = OALocalizedString(@"configure_screen_quick_action");
     [_deleteAction setTitle:OALocalizedString(@"shared_string_delete") forState:UIControlStateNormal];
-    [_selectAllAction setTitle:OALocalizedString(@"select_all") forState:UIControlStateNormal];
+    [_selectAllAction setTitle:OALocalizedString(@"shared_string_select_all") forState:UIControlStateNormal];
     [_btnCancel setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
     [_btnDone setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
 }

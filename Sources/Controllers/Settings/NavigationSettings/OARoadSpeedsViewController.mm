@@ -77,10 +77,10 @@
 
 - (NSAttributedString *) getFooterDescription
 {
-    NSString *minimumSpeedDescriptionString = [NSString stringWithFormat:@"%@:\n%@\n", OALocalizedString(@"logging_min_speed"), OALocalizedString(@"road_min_speed_descr")];
+    NSString *minimumSpeedDescriptionString = [NSString stringWithFormat:@"%@:\n%@\n", OALocalizedString(@"monitoring_min_speed"), OALocalizedString(@"road_min_speed_descr")];
     NSString *maximumSpeedDescriptionString = [NSString stringWithFormat:@"%@:\n%@", OALocalizedString(@"max_speed"), OALocalizedString(@"road_max_speed_descr")];
 
-    NSMutableAttributedString *minSpeedAttrString = [OAUtilities getStringWithBoldPart:minimumSpeedDescriptionString mainString:OALocalizedString(@"road_min_speed_descr") boldString:OALocalizedString(@"logging_min_speed") lineSpacing:1. fontSize:13.];
+    NSMutableAttributedString *minSpeedAttrString = [OAUtilities getStringWithBoldPart:minimumSpeedDescriptionString mainString:OALocalizedString(@"road_min_speed_descr") boldString:OALocalizedString(@"monitoring_min_speed") lineSpacing:1. fontSize:13.];
     NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
     [style setParagraphSpacing:12.];
     CGFloat breakLinePosition = [minimumSpeedDescriptionString indexOf:@"\n"] + 1;
@@ -120,14 +120,14 @@
             break;
         case MINUTES_PER_KILOMETER:
             _ratio = 3600. / METERS_IN_KILOMETER;
-            _units = OALocalizedString(@"units_km_h");
+            _units = OALocalizedString(@"km_h");
             break;
         case NAUTICALMILES_PER_HOUR:
             _ratio = 3600. / METERS_IN_ONE_NAUTICALMILE;
             break;
         case MINUTES_PER_MILE:
             _ratio = 3600. / METERS_IN_ONE_MILE;
-            _units = OALocalizedString(@"units_mph");
+            _units = OALocalizedString(@"mile_per_hour");
             break;
         case METERS_PER_SECOND:
             _ratio = 1;
@@ -151,7 +151,7 @@
     NSMutableArray *tableData = [NSMutableArray array];
     [tableData addObject:@{
         @"type" : [OATimeTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"logging_min_speed"),
+        @"title" : OALocalizedString(@"monitoring_min_speed"),
         @"value" : [NSString stringWithFormat:@"%ld %@", _minValue, _units],
     }];
     [tableData addObject:@{

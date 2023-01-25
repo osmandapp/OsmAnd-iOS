@@ -84,7 +84,7 @@
 {
     self.titleLabel.text = OALocalizedString(@"delete_waypoints");
     [self.cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
-    [self.selectAllButton setTitle:OALocalizedString(@"select_all") forState:UIControlStateNormal];
+    [self.selectAllButton setTitle:OALocalizedString(@"shared_string_select_all") forState:UIControlStateNormal];
 }
 
 - (void)updateDistanceAndDirection

@@ -363,7 +363,7 @@
     if (isDir /*|| file.getName().endsWith(IndexConstants.BINARY_WIKIVOYAGE_MAP_INDEX_EXT)*/)
         return OALocalizedString(@"online_map");
     if ([filePath hasSuffix:BINARY_ROAD_MAP_INDEX_EXT])
-        return OALocalizedString(@"res_roads");
+        return OALocalizedString(@"roads");
     else if ([filePath hasSuffix:BINARY_WIKI_MAP_INDEX_EXT])
         return OALocalizedString(@"download_wikipedia_maps");
     else if ([filePath hasSuffix:BINARY_SRTM_MAP_INDEX_EXT])
@@ -478,7 +478,7 @@
         }
         if (cell)
         {
-            NSString *selectionText = _selectedItems.count > 0 ? OALocalizedString(@"shared_string_deselect_all") : OALocalizedString(@"select_all");
+            NSString *selectionText = _selectedItems.count > 0 ? OALocalizedString(@"shared_string_deselect_all") : OALocalizedString(@"shared_string_select_all");
             [cell.selectDeselectButton setTitle:selectionText forState:UIControlStateNormal];
             [cell.selectDeselectButton removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
             [cell.selectDeselectButton addTarget:self action:@selector(selectDeselectGroup:) forControlEvents:UIControlEventTouchUpInside];

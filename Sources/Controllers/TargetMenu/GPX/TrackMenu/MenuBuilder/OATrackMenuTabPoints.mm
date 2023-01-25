@@ -156,7 +156,7 @@
     }
     OAGPXTableSectionData *actionsSectionData = [OAGPXTableSectionData withData:@{
             kTableKey: @"actions_section",
-            kSectionHeader: OALocalizedString(@"actions"),
+            kSectionHeader: OALocalizedString(@"shared_string_actions"),
             kSectionHeaderHeight: @56.
     }];
     [self.tableData.subjects addObject:actionsSectionData];

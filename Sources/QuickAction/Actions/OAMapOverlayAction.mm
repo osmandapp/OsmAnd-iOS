@@ -111,7 +111,7 @@ static OAQuickActionType *TYPE;
 
 -(NSString *) getAddBtnText
 {
-    return OALocalizedString(@"quick_action_add_overlay");
+    return OALocalizedString(@"quick_action_map_overlay_action");
 }
 
 - (NSString *)getDescrHint
@@ -154,7 +154,7 @@ static OAQuickActionType *TYPE;
                          }];
     }
     [arr addObject:@{
-                     @"title" : OALocalizedString(@"quick_action_add_overlay"),
+                     @"title" : OALocalizedString(@"quick_action_map_overlay_action"),
                      @"type" : [OAButtonTableViewCell getCellIdentifier],
                      @"target" : @"addMapOverlay"
                      }];

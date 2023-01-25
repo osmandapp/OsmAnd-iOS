@@ -70,7 +70,7 @@ static OASubscriptionState *EXPIRED;
 + (OASubscriptionState *) ACTIVE
 {
     if (!ACTIVE)
-        ACTIVE = [[OASubscriptionState alloc] initWithStateStr:@"active" localizedName:OALocalizedString(@"menu_active_trips")];
+        ACTIVE = [[OASubscriptionState alloc] initWithStateStr:@"active" localizedName:OALocalizedString(@"osm_live_active")];
     return ACTIVE;
 }
 

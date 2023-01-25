@@ -275,7 +275,7 @@
     }];
     [otherArr addObject:@{
         @"type" : [OASettingsTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"sett_ext_input"),
+        @"title" : OALocalizedString(@"external_input_device"),
         @"value" : externalInputDeviceValue,
         @"key" : @"externalImputDevice",
     }];

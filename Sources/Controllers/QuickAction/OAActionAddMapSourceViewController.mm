@@ -129,7 +129,7 @@
         case EOAMapSourceTypeOverlay:
             return OALocalizedString(@"no_overlay");
         case EOAMapSourceTypeUnderlay:
-            return OALocalizedString(@"quick_action_no_underlay");
+            return OALocalizedString(@"no_underlay");
         default:
             return @"";
     }

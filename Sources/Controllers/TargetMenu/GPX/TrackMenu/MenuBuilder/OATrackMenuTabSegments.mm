@@ -297,7 +297,7 @@
         }
         case EOARouteStatisticsModeAltitudeSlope:
         {
-            titles[@"top_left_title_string_value"] = OALocalizedString(@"gpx_avg_altitude");
+            titles[@"top_left_title_string_value"] = OALocalizedString(@"average_altitude");
             titles[@"top_right_title_string_value"] = OALocalizedString(@"altitude_range");
             titles[@"bottom_left_title_string_value"] = OALocalizedString(@"altitude_ascent");
             titles[@"bottom_right_title_string_value"] = OALocalizedString(@"altitude_descent");

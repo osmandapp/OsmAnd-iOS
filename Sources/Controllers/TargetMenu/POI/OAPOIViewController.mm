@@ -697,7 +697,7 @@ static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsap
             valueAsDouble *= YARDS_IN_ONE_METER;
             formattedValue = [NSString stringWithFormat:@"%@ %@",
                     [numberFormatter stringFromNumber:@(valueAsDouble)],
-                    OALocalizedString(@"units_yd")];
+                    OALocalizedString(@"yard")];
         }
         else
         {

@@ -862,7 +862,7 @@ import Charts.Swift
                 mainUnitStr = OAUtilities.getLocalizedString("foot")
             } else if (mc == EOAMetricsConstant.MILES_AND_YARDS) {
                 divX = Double(1.0 / GpxUIHelper.YARDS_IN_ONE_METER)
-                mainUnitStr = OAUtilities.getLocalizedString("units_yd")
+                mainUnitStr = OAUtilities.getLocalizedString("yard")
             } else {
                 divX = 1.0;
                 mainUnitStr = OAUtilities.getLocalizedString("units_m")

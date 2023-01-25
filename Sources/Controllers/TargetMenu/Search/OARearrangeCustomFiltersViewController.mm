@@ -421,7 +421,7 @@
     else if (section == kHiddenFiltersSection)
         title = OALocalizedString(@"hidden_categories");
     else
-        title = OALocalizedString(@"actions");
+        title = OALocalizedString(@"shared_string_actions");
     return title;
 }
 

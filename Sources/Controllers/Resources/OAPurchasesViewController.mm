@@ -232,7 +232,7 @@ static BOOL _purchasesUpdated;
                     }];
                 }
                 [data addObject:active];
-                _headers[@(data.count - 1)] = OALocalizedString(@"menu_active_trips");
+                _headers[@(data.count - 1)] = OALocalizedString(@"osm_live_active");
             }
             if (expiredProducts.count > 0)
             {

@@ -233,7 +233,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
     [_pageController setViewControllers:@[_historyViewController] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:nil];
 
-    [_tabs setTitle:OALocalizedString(@"history") forSegmentAtIndex:0];
+    [_tabs setTitle:OALocalizedString(@"shared_string_history") forSegmentAtIndex:0];
     [_tabs setTitle:OALocalizedString(@"search_categories") forSegmentAtIndex:1];
     [_tabs setTitle:OALocalizedString(@"shared_string_address") forSegmentAtIndex:2];
     [_tabs setSelectedSegmentIndex:0];

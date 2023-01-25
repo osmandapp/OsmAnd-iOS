@@ -98,7 +98,7 @@ static OABackupStatus *ERROR;
                                                              warningIconName:@"ic_custom_wifi_off"
                                                                 warningTitle:OALocalizedString(@"no_inet_connection")
                                                           warningDescription:OALocalizedString(@"osm_upload_no_internet")
-                                                                 actionTitle:OALocalizedString(@"shared_string_retry")
+                                                                 actionTitle:OALocalizedString(@"retry")
                                                                    iconColor:profile_icon_color_green_light];
     }
     return NO_INTERNET_CONNECTION;

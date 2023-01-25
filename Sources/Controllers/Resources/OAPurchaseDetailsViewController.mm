@@ -109,7 +109,7 @@
 
     [data addObject:@{
             @"type": [OAIconTitleValueCell getCellIdentifier],
-            @"title": OALocalizedString(@"res_type"),
+            @"title": OALocalizedString(@"shared_string_type"),
             @"description": isSubscription || [OAIAPHelper isFullVersion:_product]
                     ? [_product getTitle:17.].string
                     : OALocalizedString(@"in_app_purchase_desc")
@@ -181,7 +181,7 @@
 
     [data addObject:@{
             @"type": [OAIconTitleValueCell getCellIdentifier],
-            @"title": OALocalizedString(@"res_type"),
+            @"title": OALocalizedString(@"shared_string_type"),
             @"description": OALocalizedString(@"subscription")
     }];
 

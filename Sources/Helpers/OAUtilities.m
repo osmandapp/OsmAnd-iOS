@@ -718,7 +718,7 @@
     else if ([self.symbol isEqualToString:NSUnitPressure.millimetersOfMercury.symbol])
         return OALocalizedString(@"weather_pressure_millimeters_of_mercury");
     else if ([self.symbol isEqualToString:NSUnitPressure.inchesOfMercury.symbol])
-        return OALocalizedString(@"weather_pressure_unit_inhg");
+        return OALocalizedString(@"weather_pressure_inches_of_mercury");
     return nil;
 }
 
@@ -1334,7 +1334,7 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
 {
     BOOL kilometers = [[OAAppSettings sharedManager].metricSystem get] == KILOMETERS_AND_METERS;
     value = kilometers ? value : round(value / 0.3048f);
-    NSString *distUnitsFormat = [@"%g " stringByAppendingString:kilometers ? OALocalizedString(@"units_km_h") : OALocalizedString(@"units_mph")];
+    NSString *distUnitsFormat = [@"%g " stringByAppendingString:kilometers ? OALocalizedString(@"km_h") : OALocalizedString(@"mile_per_hour")];
     return value == 0.f ? OALocalizedString(@"shared_string_not_selected") : value == 0.000001f ? @">0" : [NSString stringWithFormat:distUnitsFormat, value];
 }
 

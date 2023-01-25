@@ -164,7 +164,7 @@
     _poiData = _dataProvider.getData;
     _fieldPairs = [NSMutableArray new];
     OAPOIType *pt = _poiData.getCurrentPoiType;
-    NSString *hint = OALocalizedString(@"amenity");
+    NSString *hint = OALocalizedString(@"icon_group_amenity");
     NSString *value = @"";
     if (pt && !pt.nonEditableOsm)
     {

@@ -240,7 +240,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         }];
     }
     [data addObject:settingsActions];
-    [sectionHeaderTitles addObject:OALocalizedString(@"actions")];
+    [sectionHeaderTitles addObject:OALocalizedString(@"shared_string_actions")];
     [sectionFooterTitles addObject:OALocalizedString(@"export_profile_descr")];
 
     _data = data;

@@ -196,7 +196,7 @@
     }
     else if (_selectedTab == EOATrackMenuHudActionsTab)
     {
-        [self.titleView setText:OALocalizedString(@"actions")];
+        [self.titleView setText:OALocalizedString(@"shared_string_actions")];
         self.titleIconView.image = nil;
         [self makeOnlyHeader:NO];
     }

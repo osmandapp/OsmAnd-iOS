@@ -122,7 +122,7 @@ static const NSInteger groupCount = 5;
     [dataArr addObject:
      @{
        @"name" : @"help_map_viewing",
-       @"title" : OALocalizedString(@"help_map_viewing"),
+       @"title" : OALocalizedString(@"map_viewing_item"),
        @"type" : kLinkInternalType,
        @"html" : @"map-viewing"
        }];
@@ -288,7 +288,7 @@ static const NSInteger groupCount = 5;
     [dataArr addObject:
      @{
        @"name" : @"install_and_troublesoot",
-       @"title" : OALocalizedString(@"help_install_and_troubleshoot"),
+       @"title" : OALocalizedString(@"instalation_troubleshooting_item"),
        @"type" : kLinkInternalType,
        @"html" : @"installation-and-troubleshooting"
        }];
@@ -298,7 +298,7 @@ static const NSInteger groupCount = 5;
     [dataArr addObject:
      @{
        @"name" : @"versions",
-       @"title" : OALocalizedString(@"help_versions"),
+       @"title" : OALocalizedString(@"versions_item"),
        @"type" : kLinkInternalType,
        @"html" : @"changes"
        }];

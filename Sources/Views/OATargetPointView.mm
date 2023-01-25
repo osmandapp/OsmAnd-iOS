@@ -177,7 +177,7 @@ static const NSInteger _buttonsCount = 4;
     [self doUpdateUI];
 
     [_buttonFavorite setTitle:OALocalizedString(@"ctx_mnu_add_fav") forState:UIControlStateNormal];
-    [_buttonShare setTitle:OALocalizedString(@"ctx_mnu_share") forState:UIControlStateNormal];
+    [_buttonShare setTitle:OALocalizedString(@"shared_string_share") forState:UIControlStateNormal];
     [_buttonDirection setTitle:OALocalizedString(@"map_marker") forState:UIControlStateNormal];
     [_buttonShowInfo setTitle:[OALocalizedString(@"info_button") upperCase] forState:UIControlStateNormal];
     [_buttonRoute setTitle:[OALocalizedString(@"shared_string_navigation") upperCase] forState:UIControlStateNormal];
@@ -651,7 +651,7 @@ static const NSInteger _buttonsCount = 4;
         [self insertSubview:self.customController.contentView atIndex:0];
     
     [self.buttonMore setImage:[UIImage imageNamed:@"three_dots.png"] forState:UIControlStateNormal];
-    [self.buttonMore setTitle:OALocalizedString(@"actions") forState:UIControlStateNormal];
+    [self.buttonMore setTitle:OALocalizedString(@"shared_string_actions") forState:UIControlStateNormal];
         
     if (self.customController.hasDismissButton)
     {

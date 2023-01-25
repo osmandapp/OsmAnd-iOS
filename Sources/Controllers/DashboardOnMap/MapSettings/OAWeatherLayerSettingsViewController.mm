@@ -264,7 +264,7 @@
                         
             _menuHeight += kNonEmptyHeaderHeight;
             [data addObject:@{
-                @"sectionTitle" : OALocalizedString(@"res_type"),
+                @"sectionTitle" : OALocalizedString(@"shared_string_type"),
                 @"rows" : contoursTypesRows
             }];
             

@@ -116,7 +116,7 @@
     UIColor *colorClosed = UIColorFromRGB(color_ctx_menu_amenity_closed_text);
     if (_osmPoint.getGroup == BUG)
     {
-        [str appendAttributedString:[[NSAttributedString alloc] initWithString:OALocalizedString(@"osm_note_created")]];
+        [str appendAttributedString:[[NSAttributedString alloc] initWithString:OALocalizedString(@"osm_edit_created_note")]];
     }
     else if (_osmPoint.getGroup == POI)
     {

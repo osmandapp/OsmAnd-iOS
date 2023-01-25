@@ -1899,7 +1899,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     else if (section == _mapMarkerSection)
         return OALocalizedString(@"map_markers");
     else if (section == _historySection)
-        return OALocalizedString(@"history");
+        return OALocalizedString(@"shared_string_history");
         
     return nil;
 }

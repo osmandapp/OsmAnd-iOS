@@ -415,7 +415,7 @@
     regionsLookupTable[northAmericaRegion.regionId] = northAmericaRegion;
 
     OAWorldRegion *russiaRegion = [OAWorldRegion createRegionAs:OsmAnd::WorldRegions::RussiaRegionId
-                                              withLocalizedName:OALocalizedString(@"region_russia")
+                                              withLocalizedName:OALocalizedString(@"index_name_russia")
                                                            from:loadedWorldRegions];
     [entireWorld addSubregion:russiaRegion];
     regionsLookupTable[russiaRegion.regionId] = russiaRegion;

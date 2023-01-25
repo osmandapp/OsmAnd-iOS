@@ -183,7 +183,7 @@
     [self.bottomToolBar setShadowImage:[UIImage new] forToolbarPosition:UIBarPositionAny];
     CGFloat bottomMargin = [OAUtilities getBottomMargin];
     _toolBarHeight.constant += bottomMargin;
-    _historyViewButton.title = OALocalizedString(@"history");
+    _historyViewButton.title = OALocalizedString(@"shared_string_history");
     _appearanceViewButton.title = OALocalizedString(@"shared_string_appearance");
 }
 

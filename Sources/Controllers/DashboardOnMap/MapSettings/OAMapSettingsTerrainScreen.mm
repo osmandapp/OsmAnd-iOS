@@ -231,7 +231,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
     
     [sectionArr addObject:@{
-        @"header" : OALocalizedString(@"osmand_live_available_maps"),
+        @"header" : OALocalizedString(@"available_maps"),
         @"footer" : availableSectionFooter
     }];
     _sectionHeaderFooterTitles = [NSArray arrayWithArray:sectionArr];

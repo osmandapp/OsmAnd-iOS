@@ -667,7 +667,7 @@
 "do_not_show_discount_desc" = "Unterdrückt Meldungen zu App-Sonderangeboten und besonderen lokalen Ereignissen.";
 "save_global_track_interval" = "Intervall für generelle Aufzeichnung";
 "save_global_track_interval_descr" = "Aufzeichnungsintervall für die generelle Track-Aufzeichnung festlegen (wird über die Schaltfläche \'Routenaufzeichnung\' auf dem Kartenbildschirm angeschaltet).";
-"rotate_map_to_bearing" = "Kartenrotation";
+"rotate_map_to" = "Kartenrotation";
 "rotate_map_to_bearing_descr" = "Art der Kartenausrichtung wählen.";
 "rotate_map_compass_opt" = "Nach Kompass";
 "rotate_map_bearing_opt" = "Nach Bewegungsrichtung";

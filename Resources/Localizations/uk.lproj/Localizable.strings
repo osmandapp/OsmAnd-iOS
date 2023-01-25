@@ -673,7 +673,7 @@
 "route_simulation" = "Імітація маршруту";
 "save_global_track_interval" = "Загальний інтервал між точками";
 "save_global_track_interval_descr" = "Оберіть загальну частоту записування точок треку (вмикається через віджет «Запис треку» на мапі).";
-"rotate_map_to_bearing" = "Орієнтація мапи";
+"rotate_map_to" = "Орієнтація мапи";
 "rotate_map_to_bearing_descr" = "Виберіть спосіб обертання мапи.";
 "rotate_map_compass_opt" = "За компасом";
 "rotate_map_bearing_opt" = "За напрямком руху";

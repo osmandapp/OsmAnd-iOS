@@ -60,7 +60,7 @@
 "do_not_send_anonymous_data_desc" = "We are not collecting location data. Only app usage and map downloading statistics.";
 "save_global_track_interval" = "Standaard logging-interval";
 "save_global_track_interval_descr" = "Specificeer het registratie-interval voor de algemene trackregistratie (ingeschakeld via de track-widget op de kaart).";
-"rotate_map_to_bearing" = "Kaartoriëntatie";
+"rotate_map_to" = "Kaartoriëntatie";
 "rotate_map_to_bearing_descr" = "Selecteer de kaart-uitlijning.";
 "rotate_map_compass_opt" = "Volgens kompas";
 "rotate_map_bearing_opt" = "In beweegrichting";

@@ -218,7 +218,7 @@
 //    }];
     [appearanceArr addObject:@{
         @"type" : [OAIconTitleValueCell getCellIdentifier],
-        @"title" : OALocalizedString(@"rotate_map_to_bearing"),
+        @"title" : OALocalizedString(@"rotate_map_to"),
         @"value" : rotateMapValue,
         @"icon" : rotateMapIcon,
         @"key" : @"map_orientation",

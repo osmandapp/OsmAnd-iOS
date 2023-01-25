@@ -660,7 +660,7 @@
 "do_not_send_anonymous_data_desc" = "Non semus collinde datos de positzione. Petzi s'impreu de s'aplicatzione e istatìsticas de sos iscarrigamentos de sas mapas.";
 "save_global_track_interval" = "Intervallu de registratzione generale";
 "save_global_track_interval_descr" = "Dislinda s’intervallu pro sa registratzione generale de sas rastas (allutu pro mèdiu de su widget \'Registratzione GPX\' in sa mapa).";
-"rotate_map_to_bearing" = "Orientamentu de sa mapa";
+"rotate_map_to" = "Orientamentu de sa mapa";
 "rotate_map_to_bearing_descr" = "Issèbera s’alliniamentu de sa mapa a s’ischermu.";
 "rotate_map_compass_opt" = "Diretzione de sa bùssola";
 "rotate_map_bearing_opt" = "Diretzione de sa mòvida";

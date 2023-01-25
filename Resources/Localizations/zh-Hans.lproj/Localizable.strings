@@ -492,7 +492,7 @@
 "unit_of_length_descr" = "改变测量的距离。";
 "coords_format" = "坐标格式";
 "coords_format_descr" = "地理坐标的格式。";
-"rotate_map_to_bearing" = "地图朝向";
+"rotate_map_to" = "地图朝向";
 "app_mode_bus" = "公交车";
 "app_mode_train" = "火车";
 "app_mode_truck" = "卡车";

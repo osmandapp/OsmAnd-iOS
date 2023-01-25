@@ -191,7 +191,7 @@
 "shared_string_back" = "Uɣal";
 "shared_string_read_more" = "Γer uggar";
 "cancel_navigation" = "Seḥbes tunigin";
-"rotate_map_to_bearing" = "Taɣda n tkarḍa";
+"rotate_map_to" = "Taɣda n tkarḍa";
 "app_mode_osm" = "Rnu neɣ ẓreg ifarisen n OSM";
 "map_widget_top_text" = "Isem n webrid";
 "shared_string_cancel" = "Sefsex";

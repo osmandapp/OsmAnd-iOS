@@ -623,7 +623,7 @@
 "voice_pref_title" = "Голос";
 "map_widget_compass" = "Компас";
 "map_widget_next_turn" = "Следующий поворот";
-"rotate_map_to_bearing" = "Ориентация карты";
+"rotate_map_to" = "Ориентация карты";
 "rotate_map_compass_opt" = "по направлению компаса";
 "rotate_map_bearing_opt" = "по направлению движения";
 "day_night_info_description" = "Восход: %@ 

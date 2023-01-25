@@ -252,7 +252,7 @@
 "mapillary_menu_title_pano" = "Εμφάνιση μόνο εικόνων 360°";
 "route_parameters" = "Παράμετροι διαδρομής";
 "shared_string_name" = "Όνομα";
-"rotate_map_to_bearing" = "Προσανατολισμός χάρτη";
+"rotate_map_to" = "Προσανατολισμός χάρτη";
 "city_type_city" = "Πόλη";
 "shared_string_speed" = "Ταχύτητα";
 "plugins_menu_group" = "Πρόσθετα";

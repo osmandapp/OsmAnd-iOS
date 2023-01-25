@@ -578,7 +578,7 @@
 "settings_preset_descr" = "Le impostazioni di navigazione e di visualizzazione della mappa vengono ricordate per ciascun profilo di utilizzo. Impostare qui il profilo predefinito.";
 "unit_of_length" = "Unità di misura di lunghezza";
 "save_global_track_interval_descr" = "Specifica l\'intervallo per la registrazione delle tracce (avviata attraverso il pulsante di \'Registrazione del viaggio\' sulla mappa).";
-"rotate_map_to_bearing" = "Orientamento della mappa";
+"rotate_map_to" = "Orientamento della mappa";
 "map_widget_transparent" = "Widget trasparenti";
 "map_widget_next_turn" = "Prossima svolta";
 "map_widget_next_turn_small" = "Prossima svolta (piccola)";

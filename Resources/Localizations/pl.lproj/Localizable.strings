@@ -498,7 +498,7 @@
 "do_not_show_discount_desc" = "Ogranicza wyświetlanie rabatów aplikacji i wiadomości o specjalnych wydarzeniach lokalnych.";
 "save_global_track_interval" = "Ogólna częstość rejestrowania";
 "save_global_track_interval_descr" = "Określ interwał dla nagrywania trasy (włączonego przez widżet „Nagrywanie podróży” na mapie).";
-"rotate_map_to_bearing" = "Orientacja mapy";
+"rotate_map_to" = "Orientacja mapy";
 "rotate_map_compass_opt" = "Względem kompasu";
 "rotate_map_bearing_opt" = "Względem kierunku ruchu";
 "rotate_map_none_opt" = "Bez obracania (północ na górze)";

@@ -509,7 +509,7 @@
 "coords_format_descr" = "Zapis geografskih koordinat.";
 "save_global_track_interval" = "Interval beleženja";
 "save_global_track_interval_descr" = "Določi interval beleženja za splošno snemanje sledi (vklopljeno prek pripomočka »Snemanje poti« na zemljevidu).";
-"rotate_map_to_bearing" = "Usmerjenost zemljevida";
+"rotate_map_to" = "Usmerjenost zemljevida";
 "rotate_map_to_bearing_descr" = "Izbor poravnave zaslona zemljevida.";
 "rotate_map_compass_opt" = "– obračanje zemljevida po kompasu";
 "rotate_map_bearing_opt" = "– obračanje zemljevida glede na smer premikanja";

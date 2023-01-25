@@ -107,7 +107,7 @@
 "coords_format_descr" = "Format för geografiska koordinater.";
 "do_not_show_discount_desc" = "Undertrycker visning av apprabatter och särskilda meddelanden om lokala evenemang.";
 "send_anonymous_data_desc" = "Skicka till OsmAnd kartnedladdningsstatistik, vi samlar inte in platsdata eller någon personlig information.";
-"rotate_map_to_bearing" = "Kartorientering";
+"rotate_map_to" = "Kartorientering";
 "rotate_map_to_bearing_descr" = "Välj kartskärmens justering.";
 "rotate_map_compass_opt" = "Kompassriktning";
 "rotate_map_bearing_opt" = "Färdriktning";

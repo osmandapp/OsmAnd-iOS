@@ -684,7 +684,7 @@
 "do_not_send_anonymous_data_desc" = "No recopilamos datos de ubicación. Sólo estadísticas de uso de la aplicación y descarga de mapas.";
 "save_global_track_interval" = "Intervalo de registro general";
 "save_global_track_interval_descr" = "Intervalo de registro para la grabación general de trazas (activado desde el widget «Grabación de viaje» en el mapa).";
-"rotate_map_to_bearing" = "Orientación del mapa";
+"rotate_map_to" = "Orientación del mapa";
 "rotate_map_compass_opt" = "Dirección de la brújula";
 "driving_region_descr" = "Región de conducción: EEUU, Europa, Reino Unido, Asia u otras.";
 "map_widget_magnetic_bearing" = "Rumbo magnético";

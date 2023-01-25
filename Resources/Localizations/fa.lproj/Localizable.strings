@@ -26,7 +26,7 @@
 "do_not_send_anonymous_data_desc" = "We are not collecting location data. Only app usage and map downloading statistics.";
 "save_global_track_interval" = "تناوب ردنگاری عمومی";
 "save_global_track_interval_descr" = "تناوب ردنگاری عمومی را انتخاب کنید (که از طریق ابزارک ضبط سفر روی نقشه روشن می‌شود).";
-"rotate_map_to_bearing" = "جهت نقشه";
+"rotate_map_to" = "جهت نقشه";
 "rotate_map_to_bearing_descr" = "نحوهٔ چرخش نقشه را انتخاب کنید.";
 "rotate_map_compass_opt" = "در جهت قطب‌نما";
 "rotate_map_bearing_opt" = "در جهت حرکت";

@@ -663,7 +663,7 @@
 "shared_string_near" = "Prop de";
 "settings_preset" = "Perfil predeterminat";
 "settings_preset_descr" = "La configuració de la representació del mapa i de la navegació segueix un perfil d\'utilització. Seleccioneu aquí el vostre perfil predeterminat.";
-"rotate_map_to_bearing" = "Orientació del mapa";
+"rotate_map_to" = "Orientació del mapa";
 "rotate_map_to_bearing_descr" = "Seleccioneu l'alineació de la pantalla del mapa.";
 "unit_of_length" = "Unitats de longitud";
 "unit_of_length_descr" = "Canvieu en què es mesuren les distàncies.";

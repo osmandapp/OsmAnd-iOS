@@ -512,7 +512,7 @@
 "coords_format_descr" = "Snið fyrir landfræðileg hnit.";
 "do_not_show_discount_desc" = "Lokar á skilaboð um afslætti og sérstaka viðburði í grenndinni.";
 "save_global_track_interval" = "Almennt millibil skráninga";
-"rotate_map_to_bearing" = "Stefna korts";
+"rotate_map_to" = "Stefna korts";
 "rotate_map_to_bearing_descr" = "Veldu stefnu korts miðað við skjá.";
 "rotate_map_compass_opt" = "Eftiráttavita";
 "rotate_map_bearing_opt" = "Eftirátt hreyfingar";

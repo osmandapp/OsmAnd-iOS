@@ -121,7 +121,7 @@
 "coords_format_descr" = "ഭൂമിശാസ്ത്ര കോഓര്‍ഡിനേറ്റുകളുടെ ഘടന";
 "do_not_show_discount_desc" = "Suppresses displaying app discounts & special local event messages.";
 "send_anonymous_data_desc" = "Send to OsmAnd map download statistics, we are not collecting location data, or any personal info.";
-"rotate_map_to_bearing" = "ഭൂപട ദിശ : വടക്കോട്ട് ദര്‍ശനം/സഞ്ചാര ദിശ";
+"rotate_map_to" = "ഭൂപട ദിശ : വടക്കോട്ട് ദര്‍ശനം/സഞ്ചാര ദിശ";
 "rotate_map_to_bearing_descr" = "Select the map screen alignment.";
 "rotate_map_compass_opt" = "വടക്ക്നോക്കിയുടെ ദിശയില്‍";
 "rotate_map_bearing_opt" = "യാത്രാ ദിശയില്‍";

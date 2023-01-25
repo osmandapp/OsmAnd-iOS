@@ -107,7 +107,7 @@
 "coords_format_descr" = "Formato de las coordenadas geográficas.";
 "do_not_show_discount_desc" = "Oculta los descuentos de la aplicación y los mensajes especiales de eventos locales.";
 "send_anonymous_data_desc" = "Enviar a OsmAnd las estadísticas de descarga de mapas, no se recopilan datos personales, ni de ubicación.";
-"rotate_map_to_bearing" = "Orientación del mapa";
+"rotate_map_to" = "Orientación del mapa";
 "rotate_map_to_bearing_descr" = "Elige la alineación del mapa.";
 "rotate_map_compass_opt" = "Dirección de la brújula";
 "rotate_map_bearing_opt" = "Dirección del movimiento";

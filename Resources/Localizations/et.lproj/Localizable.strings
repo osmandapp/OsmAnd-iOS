@@ -97,7 +97,7 @@
 "coords_format_descr" = "Geograafiliste koordinaatide formaat.";
 "do_not_show_discount_desc" = "Lülita välja rakenduste allahindluste ja kohalike sündmuste erisõnumite kuvamine.";
 "do_not_send_anonymous_data_desc" = "Me ei kogu asukoha andmeid. Ainult rakenduste kasutamist ja statistika allalaadimist kaardil.";
-"rotate_map_to_bearing" = "Kaardi orientatsioon";
+"rotate_map_to" = "Kaardi orientatsioon";
 "rotate_map_to_bearing_descr" = "Vali kaardi ekraani orientatsioon.";
 "rotate_map_compass_opt" = "Kompassi suund";
 "rotate_map_bearing_opt" = "Liikumissuund";

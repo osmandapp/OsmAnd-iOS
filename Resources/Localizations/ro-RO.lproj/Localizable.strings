@@ -413,7 +413,7 @@
 "create_custom_poi" = "Crează filtru personalizat";
 "map_widget_plain_time" = "Ora curentă";
 "map_widget_time" = "Timp rămas";
-"rotate_map_to_bearing" = "Orientare hartă";
+"rotate_map_to" = "Orientare hartă";
 "wikivoyage_travel_guide" = "Ghiduri de călătorie";
 "traffic_warning_speed_camera" = "Cameră trafic";
 "si_mi_feet" = "Mile/picior";

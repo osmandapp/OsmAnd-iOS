@@ -403,7 +403,7 @@
 "settings_preset_descr" = "Configurações de exibição e navegação de mapa são gravadas por perfil de uso. Defina seu perfil padrão aqui.";
 "coords_format" = "Formato de coordenada";
 "coords_format_descr" = "Formato para as coordenadas geográficas.";
-"rotate_map_to_bearing" = "Orientação do mapa";
+"rotate_map_to" = "Orientação do mapa";
 // Trip recording settings
 "save_global_track_interval" = "Intervalo de registro geral";
 "save_track_interval" = "Intervalo de registro durante a navegação";

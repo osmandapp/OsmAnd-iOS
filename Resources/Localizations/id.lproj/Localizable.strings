@@ -107,7 +107,7 @@
 "coords_format_descr" = "Format untuk koordinat geografis.";
 "do_not_show_discount_desc" = "Jangan menampilkan pesan diskon aplikasi & acara lokal khusus.";
 "send_anonymous_data_desc" = "Kirim ke OsmAnd statistik unduhan peta, kami tidak mengumpulkan data lokasi, atau info pribadi apa pun.";
-"rotate_map_to_bearing" = "Orientasi peta";
+"rotate_map_to" = "Orientasi peta";
 "rotate_map_to_bearing_descr" = "Pilih perataan layar peta.";
 "rotate_map_compass_opt" = "Arah kompas";
 "rotate_map_bearing_opt" = "Arah gerakan";

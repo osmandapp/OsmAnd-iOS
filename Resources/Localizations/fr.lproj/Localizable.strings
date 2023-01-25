@@ -644,7 +644,7 @@
 "coords_format_descr" = "Format des coordonnées géographiques.";
 "save_global_track_interval" = "Intervalle d\'enregistrement par défaut";
 "save_global_track_interval_descr" = "Définit la fréquence d’enregistrement des points du parcours (activable depuis le widget \"Enregistrement\" sur la carte).";
-"rotate_map_to_bearing" = "Orientation de la carte";
+"rotate_map_to" = "Orientation de la carte";
 "rotate_map_to_bearing_descr" = "Orientation de la carte.";
 "rotate_map_compass_opt" = "D\'après la boussole";
 "rotate_map_bearing_opt" = "Dans la direction du déplacement";

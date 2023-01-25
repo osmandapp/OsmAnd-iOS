@@ -96,7 +96,7 @@
 "coords_format_descr" = "表示される地理座標を指定の形式に変更します。";
 "do_not_show_discount_desc" = "アプリの割引情報や特別なローカルイベントメッセージの表示を抑制します。";
 "do_not_send_anonymous_data_desc" = "収集データはアプリの使用状況とマップのダウンロード統計情報に限られ、利用者の位置データは収集しておりません。";
-"rotate_map_to_bearing" = "マップの向き";
+"rotate_map_to" = "マップの向き";
 "rotate_map_to_bearing_descr" = "マップ画面の向きを選択します。";
 "rotate_map_compass_opt" = "コンパスに従う";
 "rotate_map_bearing_opt" = "移動方向に従う";

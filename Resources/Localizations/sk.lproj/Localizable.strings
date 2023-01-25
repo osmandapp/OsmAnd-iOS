@@ -657,7 +657,7 @@
 "map_widget_next_next_turn" = "Druhá nasled. odbočka";
 "settings_preset" = "Prednastavený profil";
 "settings_preset_descr" = "Nastavenia mapy a navigácie sú zapamätané pre jednotlivé profily použitia. Nastavte svoj predvolený profil tu.";
-"rotate_map_to_bearing" = "Otáčanie mapy";
+"rotate_map_to" = "Otáčanie mapy";
 "rotate_map_to_bearing_descr" = "Vyberte spôsob otáčania mapy.";
 "unit_of_length" = "Jednotky dĺžky";
 "unit_of_length_descr" = "Zmeňte v čom sa meria vzdialenosť.";

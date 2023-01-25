@@ -96,7 +96,7 @@
 "coords_format_descr" = "Format for geografiske koordinater.";
 "do_not_show_discount_desc" = "Suppresses displaying app discounts & special local event messages.";
 "do_not_send_anonymous_data_desc" = "We are not collecting location data. Only app usage and map downloading statistics.";
-"rotate_map_to_bearing" = "Kartorientering";
+"rotate_map_to" = "Kartorientering";
 "rotate_map_to_bearing_descr" = "Select the map screen alignment.";
 "rotate_map_compass_opt" = "Kompassretning";
 "rotate_map_bearing_opt" = "Bevegelsesretning";

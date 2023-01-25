@@ -61,7 +61,7 @@
 "do_not_send_anonymous_data_desc" = "نحن لا نجمع بيانات الموقع. فقط لإحصائية استخدام التطبيق وتنزيلات الخريطة.";
 "save_global_track_interval" = "الفاصل الزمني العام للتسجيل";
 "save_global_track_interval_descr" = "حدد الفاصل الزمني للإدخال الخاص بالتسجيل العام للمسار (مفعل من خلال ودجت \"تسجيل الرحلة\" على الخريطة).";
-"rotate_map_to_bearing" = "اتجاه الخريطة";
+"rotate_map_to" = "اتجاه الخريطة";
 "rotate_map_to_bearing_descr" = "محاذاة الخريطة.";
 "rotate_map_compass_opt" = "حسب البوصلة";
 "rotate_map_bearing_opt" = "اتجاه الحركة";

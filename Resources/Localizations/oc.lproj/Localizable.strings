@@ -95,7 +95,7 @@
 "coords_format_descr" = "Format dei coordenadas geograficas.";
 "do_not_show_discount_desc" = "Amagar la promocion d'aplicacions e lei messatges d'eveniments locaus particulars.";
 "do_not_send_anonymous_data_desc" = "We are not collecting location data. Only app usage and map downloading statistics.";
-"rotate_map_to_bearing" = "Orientacion de la mapa";
+"rotate_map_to" = "Orientacion de la mapa";
 "rotate_map_to_bearing_descr" = "Chausissètz l'alinhament de l'ecran de la mapa.";
 "rotate_map_compass_opt" = "Segon la bossòla";
 "rotate_map_bearing_opt" = "Segon la direccion dau movement";

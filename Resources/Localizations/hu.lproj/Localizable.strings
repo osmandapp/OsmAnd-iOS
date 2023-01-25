@@ -690,7 +690,7 @@
 "map_widget_next_next_turn" = "Második kanyarodás";
 "map_widget_transparent" = "Átlátszó widgetek";
 "settings_preset_descr" = "Az egyes felhasználási profilok megjegyzik a térképnézetet és a navigációs beállításokat. Alapértelmezett profilját itt adhatja meg.";
-"rotate_map_to_bearing" = "Térkép forgatása";
+"rotate_map_to" = "Térkép forgatása";
 "replace_destination_point" = "Célpont lecserélése";
 "keep_and_add_destination_point" = "Hozzáadás következő célpontként";
 "add_as_first_destination_point" = "Hozzáadás első köztes célpontként";

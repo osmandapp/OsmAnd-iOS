@@ -103,7 +103,7 @@
 "coords_format_descr" = "Maantieteellisten koordinaattien muoto.";
 "do_not_show_discount_desc" = "Suppresses displaying app discounts & special local event messages.";
 "send_anonymous_data_desc" = "Send to OsmAnd map download statistics, we are not collecting location data, or any personal info.";
-"rotate_map_to_bearing" = "Kartan orientaatio";
+"rotate_map_to" = "Kartan orientaatio";
 "rotate_map_to_bearing_descr" = "Valitse karttaruudun suunta.";
 "rotate_map_compass_opt" = "Kompassi";
 "rotate_map_bearing_opt" = "Liikkumissuunta";

@@ -49,7 +49,7 @@
 {
     switch (_settingsType) {
         case EOAProfileGeneralSettingsMapOrientation:
-            _title = OALocalizedString(@"rotate_map_to_bearing");
+            _title = OALocalizedString(@"rotate_map_to");
             break;
         case EOAProfileGeneralSettingsDisplayPosition:
             _title = OALocalizedString(@"position_on_map");

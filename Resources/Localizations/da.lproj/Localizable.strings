@@ -662,7 +662,7 @@
 "shared_string_near" = "I nærheden af";
 "settings_preset" = "Standardprofil";
 "settings_preset_descr" = "Kortvisnings- og navigationsindstillinger gemmes på hver profil. Indstil standardprofilen her.";
-"rotate_map_to_bearing" = "Kortorientering";
+"rotate_map_to" = "Kortorientering";
 "rotate_map_to_bearing_descr" = "Vælg justering af skærmen.";
 "unit_of_length" = "Længdeenheder";
 "unit_of_length_descr" = "Ændr enhed for afstand.";

@@ -133,7 +133,7 @@
 "address_search_desc" = "주소 검색";
 "poi" = "POI";
 "shared_string_select_avoid_road_on_map" = "라우팅 중에 피할 도로 선택";
-"rotate_map_to_bearing" = "지도 방향";
+"rotate_map_to" = "지도 방향";
 "open_till" = "까지 열기";
 "will_close_at" = "종료 위치";
 "will_open_at" = "다음 위치에서 열림";

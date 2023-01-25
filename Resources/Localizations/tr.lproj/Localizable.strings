@@ -611,7 +611,7 @@
 "city_type_district" = "İlçe";
 "city_type_neighbourhood" = "Mahalle";
 "postcode" = "Posta-kodu";
-"rotate_map_to_bearing" = "Harita yönlendirme";
+"rotate_map_to" = "Harita yönlendirme";
 "map_widget_bearing" = "Nispi yön";
 "map_widget_transparent" = "Şeffaf widget\'lar";
 "map_widget_intermediate_distance" = "Seyahatte ara hedef";

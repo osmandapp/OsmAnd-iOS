@@ -59,7 +59,7 @@
 "coords_format_descr" = "Formato das coordenadas xeográficas.";
 "do_not_show_discount_desc" = "Suppresses displaying app discounts & special local event messages.";
 "do_not_send_anonymous_data_desc" = "We are not collecting location data. Only app usage and map downloading statistics.";
-"rotate_map_to_bearing" = "Orientación do mapa";
+"rotate_map_to" = "Orientación do mapa";
 "rotate_map_to_bearing_descr" = "Select the map screen alignment.";
 "rotate_map_compass_opt" = "Dirección do compás";
 "rotate_map_bearing_opt" = "Dirección do movemento";

@@ -2795,3 +2795,4 @@
 "routing_attr_motor_type_hybrid_name" = "Гібрид";
 "si_nm_ft" = "Морські милі/фути";
 "si_nm_mt" = "Морські милі/метри";
+"shared_string_does_not_exist" = "Не існує";

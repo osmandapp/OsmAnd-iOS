@@ -471,7 +471,7 @@
     [data addObject:@{
             @"group_name": OALocalizedString(@"shared_string_language"),
             @"cells": @[@{
-                    @"name": OALocalizedString(@"sett_lang"),
+                    @"name": OALocalizedString(@"map_locale"),
                     @"value": [self getMapLangValueStr],
                     @"image": @"ic_custom_map_languge",
                     @"type": [OAValueTableViewCell getCellIdentifier],

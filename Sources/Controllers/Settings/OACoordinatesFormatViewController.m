@@ -104,7 +104,7 @@
         @"name" : @"mgrs_format",
         @"title" : OALocalizedString(@"MGRS"),
         @"selected" : @([_settings.settingGeoFormat get:self.appMode] == MAP_GEO_MGRS_FORMAT),
-        @"description" : [NSString stringWithFormat:@"%@: %@\n%@\n%@\n", OALocalizedString(@"shared_string_example"), [OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_MGRS], OALocalizedString(@"mgrs_description"), OALocalizedString(@"shared_string_read_more")],
+        @"description" : [NSString stringWithFormat:@"%@: %@\n%@\n%@\n", OALocalizedString(@"shared_string_example"), [OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_MGRS], OALocalizedString(@"mgrs_format_descr"), OALocalizedString(@"shared_string_read_more")],
         @"url" : kUrlWikipediaMgrsFormat,
         @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
     }];

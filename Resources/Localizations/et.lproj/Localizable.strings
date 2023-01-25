@@ -472,8 +472,8 @@
 "record_trip" = "Salvesta oma teekond";
 "shared_string_clear" = "Tühjenda";
 "quick_action_poi_list" = "HP nimekiri";
-"track_during_nav" = "Automaatsalvesta teekond";
-"track_during_nav_descr" = "Sisselülitatult salvestatakse navigeerimise ajal teekond automaatselt";
+"save_track_to_gpx" = "Automaatsalvesta teekond";
+"save_track_to_gpx_descrp" = "Sisselülitatult salvestatakse navigeerimise ajal teekond automaatselt";
 "gpx_distance_points" = "Kaugus (punktid)";
 "gpx_max_speed" = "Suurim kiirus";
 "shared_string_speed" = "Kiirus";
@@ -510,7 +510,7 @@
 "intro_placeholder" = "sisesta oma piirkonna nimi";
 // Settings
 "sett_units" = "Ühikud";
-"sett_lang" = "Kaardi keel";
+"map_locale" = "Kaardi keel";
 "sett_km" = "Kilomeetrid";
 "sett_ml" = "Miilid";
 "sett_zoom" = "Suurendamise nupp";
@@ -750,7 +750,7 @@
 "quick_action_add_parking" = "Lisa parkimiskoht";
 "parking_place" = "Parkimiskoht";
 "quick_action_navigation_voice" = "Hääl sisse/välja";
-"add_osm_note" = "Lisa OSM märge";
+"quick_action_add_osm_bug" = "Lisa OSM märge";
 "toggle_online_notes" = "Lülita OSM märkmed sisse/välja";
 "toggle_local_edits" = "Lülita kohalikud OSM muudatused sisse/välja";
 "quick_action_add_poi" = "Lisa huvipunkt";
@@ -812,7 +812,7 @@
 "quick_action_poi_add_descr" = "Selle toimingunupu puudutamine võimaldab kiiresti lisada kaardile eelmääratud liigi ja siltidega HP.";
 "quick_action_day_night_descr" = "Selle toimingunupu puudutamine lülitab päevarežiimi ja öörežiimi vahel ümber.";
 "quick_action_parking_descr" = "Selle toimingunupu puudutamine lisab parkimiskoha kaardi keskpunkti.";
-"quick_action_marker_descr" = "Selle toimingunupu puudutamine lisab kaardimarkeri kaardi keskpunkti.";
+"quick_action_add_marker_descr" = "Selle toimingunupu puudutamine lisab kaardimarkeri kaardi keskpunkti.";
 "quick_action_show_gpx_descr" = "Selle toimingunupu puudutamisel kuvatakse või peidetakse praegu kuvatud GPX teekonnad.";
 "quick_action_voice_descr" = "Selle toimingunupu puudutamine keelab või lubab navigeerimise ajal hääljuhised.";
 "quick_action_add_dest_descr" = "Selle toimingunupu puudutamine seab kaardi keskkoha sihtpunktiks. Mis tahes varem valitud sihtpunktist saab viimane vahesihtkoht.";
@@ -944,18 +944,18 @@
 "product_title_parking" = "Parking Position";
 "product_desc_parking" = "Võimaldab kergelt meelde jätta, millal auto pargiti ja kui palju aega on jäänud, kui parkimine on ajaliselt piiratud";
 "product_desc_ext_parking" = "OsmAnd Parking Plugin tuletab meelde parkimiskoha. See on rakenduse OsmAnd Maps & Navigation lisa.\nVali ajast sõltumatu meeldetuletus (ainult marker kaardil) või ajaliselt piiratud meeldetuletus koos parkimisaja lõppemise meeldetuletusega (sisaldab ka markerit kaardil). Lisaprogrammi kasutamiseks luba see lisaprogrammide menüüs.";
-"product_title_skimap" = "Suusakaart";
+"plugin_ski_name" = "Suusakaart";
 "product_desc_skimap" = "Kogu maailma suusakuurortide suusanõlvad";
-"product_desc_ext_skimap" = "OsmAnd Ski Maps on OsmAnd Maps & Navigation rakenduse lisaprogramm, mis on mõeldud navigeerimiseks talispordi kohtades. See annab teavet suusaradade, suusatõstukite markerite ja isegi värviliste joonte kohta, mis näitavad iga suusaraja keerukust. Saad teavet nii suusaradade endi kui ka ümbritseva taristu kohta.\n\nKasutusjuhised: luba lisa rakenduses OsmAnd, koputa kaardinuppu ja määra kaardi liigiks suusakaardid.";
+"plugin_ski_descr" = "OsmAnd Ski Maps on OsmAnd Maps & Navigation rakenduse lisaprogramm, mis on mõeldud navigeerimiseks talispordi kohtades. See annab teavet suusaradade, suusatõstukite markerite ja isegi värviliste joonte kohta, mis näitavad iga suusaraja keerukust. Saad teavet nii suusaradade endi kui ka ümbritseva taristu kohta.\n\nKasutusjuhised: luba lisa rakenduses OsmAnd, koputa kaardinuppu ja määra kaardi liigiks suusakaardid.";
 "monitoring_settings" = "Matka salvestamine";
 "product_desc_track_recording" = "Aktiveerib teekondade jooksva salvestamise ja hilisema jäädava talletamise funktsionaalsuse";
 "product_desc_ext_track_recording" = "Salvesta oma teekonnad jooksvalt ja talleta need käsitsi, kasutades lisaprogrammi OsmAnd Track. Ekspordi oma teekond GPX failina, jaga seda või isegi kasuta seda OpenStreetMap projekti panustamiseks. Käepärane vahend jooksjatele, matkajatele ja kõigile, kes on huvitatud oma teekondade registreerimisest.";
 "product_title_trip_planning" = "Reisi planeerimine";
 "product_desc_trip_planning" = "Planeeri oma reis, lisa teekonnapunktid, mõõda selle lisaprogrammi abil kaugus sihtkohta";
 "product_desc_ext_trip_planning" = "Reisi planeerimise lisa võimaldab sul oma reisi kaardil luua, selle salvestada, mõõta sirgjoontega ühendatud punktide vahelist kaugust jne. Loodud reisi ettevalmistamiseks, mitte põhjaliku marsruudi loomiseks.";
-"product_title_osm_editing" = "OpenStreetMap muutmine";
+"osm_editing_plugin_name" = "OpenStreetMap muutmine";
 "product_desc_osm_editing" = "Tee OpenStreetMap muudatusi otse OsmAnd rakendusest";
-"product_desc_ext_osm_editing" = "OSM redigeerimise lisaprogrammi saab kasutada OSM kaastööde tegemiseks, näiteks huvipunktide loomiseks või muutmiseks, OSM märkmete avamiseks või kommenteerimiseks ning salvestatud GPX failide lisamiseks. OSM on kogukonna juhitav globaalne üldkasutatava kaardistamise projekt. Lisateavet leiad aadressilt https://osm.org. Kui määrad rakenduses oma OSM kasutajatunnused, saad kaastöid teha otse OsmAnd rakendusest.";
+"osm_editing_plugin_description" = "OSM redigeerimise lisaprogrammi saab kasutada OSM kaastööde tegemiseks, näiteks huvipunktide loomiseks või muutmiseks, OSM märkmete avamiseks või kommenteerimiseks ning salvestatud GPX failide lisamiseks. OSM on kogukonna juhitav globaalne üldkasutatava kaardistamise projekt. Lisateavet leiad aadressilt https://osm.org. Kui määrad rakenduses oma OSM kasutajatunnused, saad kaastöid teha otse OsmAnd rakendusest.";
 "product_desc_africa" = "Piiramatud Aafrika kaartide allalaadimised";
 "product_desc_africa_short" = "Aafrika piirkondade kaardid";
 "product_desc_australia" = "Piiramatud Austraalia kaartide allalaadimised";
@@ -2235,7 +2235,7 @@
 "shared_string_weather" = "Ilm";
 "backup_and_restore" = "Varunda ja taasta";
 "navigate_point_mgrs" = "MGRS";
-"mgrs_description" = "OsmAnd kasutab UTM NATO-ga identset MGRS-formaati.";
+"mgrs_format_descr" = "OsmAnd kasutab UTM NATO-ga identset MGRS-formaati.";
 "ltr_or_rtl_combine_via_dash" = "%@— %@";
 "selected_tracks_count" = "Rajad - %d";
 "delete_tracks_bottom_sheet_title" = "Kustutada rajad?";
@@ -2502,4 +2502,4 @@
 "rendering_attr_horse_scale_dangerous_name" = "Ohtlik";
 "rendering_attr_noNatureReserveBoundaries_name" = "Looduse piirid";
 "routing_attr_length_description" = "Täpsusta marsruutidel lubatud sõiduki pikkus.";
-"download_wikipedia_data" = "Laadi alla Vikipeedia andm
+"download_wikipedia_data" = "Laadi alla Vikipe

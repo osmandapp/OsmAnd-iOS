@@ -465,8 +465,8 @@
 "record_trip" = "Enregistratz lo percors";
 "shared_string_clear" = "Escafar";
 "quick_action_poi_list" = "Lista de PDI";
-"track_during_nav" = "Enregistrament automatic dau percors";
-"track_during_nav_descr" = "Activar per enregistrar automaticament la traça de la navigacion";
+"save_track_to_gpx" = "Enregistrament automatic dau percors";
+"save_track_to_gpx_descrp" = "Activar per enregistrar automaticament la traça de la navigacion";
 "gpx_distance_points" = "Distància (ponchs)";
 "gpx_max_speed" = "Velocitat maximala";
 "shared_string_speed" = "Velocitat";
@@ -500,7 +500,7 @@
 "intro_placeholder" = "marcatz lo nom de vòstre país";
 // Settings
 "sett_units" = "Unitats";
-"sett_lang" = "Lenga de la mapa";
+"map_locale" = "Lenga de la mapa";
 "sett_km" = "Quilomètres";
 "sett_ml" = "Milas";
 "sett_zoom" = "Boton de zoom";
@@ -737,7 +737,7 @@
 "quick_action_add_parking" = "Ajustar un luòc d'aparcament";
 "parking_place" = "Luòc d'aparcament";
 "quick_action_navigation_voice" = "Votz activa/desactivada";
-"add_osm_note" = "Ajustar una nòta OSM";
+"quick_action_add_osm_bug" = "Ajustar una nòta OSM";
 "toggle_online_notes" = "Activar/desactivar lei nòtas d'OSM";
 "toggle_local_edits" = "Activar/desactivar lei modificacions localas OSM";
 "quick_action_add_poi" = "Ajustar un PDI";
@@ -799,7 +799,7 @@
 "quick_action_poi_add_descr" = "De clicar sus aquest boton vos permet d'ajustar lèu un PDI a la mapa, amb un tipe e d'etiquetas predeterminats.";
 "quick_action_day_night_descr" = "D'accionar aquest boton passatz dau mòde diurne a nocturne.";
 "quick_action_parking_descr" = "Aquest boton vos permet d'ajustar lèu una posicion d'aparcament au centre de l'ecran.";
-"quick_action_marker_descr" = "De quichar sus aquest boton d'accion ajustaretz un marcador de mapa dins lo centre de l'ecran.";
+"quick_action_add_marker_descr" = "De quichar sus aquest boton d'accion ajustaretz un marcador de mapa dins lo centre de l'ecran.";
 "quick_action_show_gpx_descr" = "Aquest boton mòstra ò amaga lei traças GPX actualament visualizadas.";
 "quick_action_voice_descr" = "De quichar sus aquest boton d'accion activatz ò arrestatz lo guidatge a la votz de la navigacion.";
 "quick_action_add_dest_descr" = "Aquest boton establís per destinacion lo ponch centrau de la mapa. Tota destinacion qu'auriatz seleccionada de per avans devèn lo darrier ponch d'etapa.";
@@ -920,18 +920,18 @@
 "product_title_parking" = "Posicion d'aparcament";
 "product_desc_parking" = "Memoriza onte parcatz la veitura e còmpta lo temps d'aparcament";
 "product_desc_ext_parking" = "Placatz un marcador sus la mapa a l'endrech onte laissatz lo veïcul e quichatz sus \"Ajustar un aparcament\". L'ajust Aparcament d'OsmAnd memoriza la posicion de l'aparcament e lo temps se descòmpta.";
-"product_title_skimap" = "Mapa d'esquilh";
+"plugin_ski_name" = "Mapa d'esquilh";
 "product_desc_skimap" = "Lei pistas d'esquilh actualizadas e lei remontadors";
-"product_desc_ext_skimap" = "Pensat per navigar sus lei pistas d'esquilh. Vos avisa dei remontadors e la color de cada pista indica la dificultat. Configuratz leis informacions visiblas e chausissètz la mapa \"Ivèrn e esquilh\".";
+"plugin_ski_descr" = "Pensat per navigar sus lei pistas d'esquilh. Vos avisa dei remontadors e la color de cada pista indica la dificultat. Configuratz leis informacions visiblas e chausissètz la mapa \"Ivèrn e esquilh\".";
 "monitoring_settings" = "Enregistrament d\'escorregudas";
 "product_desc_track_recording" = "Enregistra e sauva lei percors coma traças GPX";
 "product_desc_ext_track_recording" = "Permet d'enregistrar, de sauvegardar emai d'analisar lei donadas d'assai ò de percors, coma la velocitat, lei montadas e lei devaladas, lo relèu… e que se pòdon puei partejar amb leis amics.\n\nDe consultar - https://osmand.net/docs/user/plugins/trip-recording";
 "product_title_trip_planning" = "Trip planning";
 "product_desc_trip_planning" = "Plan your trip, add waypoints, measure the distance to your destination using this plugin";
 "product_desc_ext_trip_planning" = "Trip planning plugin allows you to create your trip on the map, save it, measure the distance between points connected with straight lines, etc. Created for preliminary trip planning rather than thorough route building.";
-"product_title_osm_editing" = "Modificar OpenStreetMap";
+"osm_editing_plugin_name" = "Modificar OpenStreetMap";
 "product_desc_osm_editing" = "Modificatz OpenStreetMap amb vòstre telefonet";
-"product_desc_ext_osm_editing" = "Vos permet de collaborar a OpenStreetMap, una comunautat mondiala per crear la mapa pus completa dau monde e fornir de donadas liuras en cadun.\n\nPer mai d'informacion, consultatz : https://osmand.net/docs/user/plugins/osm-editing";
+"osm_editing_plugin_description" = "Vos permet de collaborar a OpenStreetMap, una comunautat mondiala per crear la mapa pus completa dau monde e fornir de donadas liuras en cadun.\n\nPer mai d'informacion, consultatz : https://osmand.net/docs/user/plugins/osm-editing";
 "product_desc_africa" = "Teledescargaments illimitats de mapas d'Africa";
 "product_desc_africa_short" = "Mapas d'Africa";
 "product_desc_australia" = "Teledescargament illimitat dei mapas d'Autralia";
@@ -2287,7 +2287,7 @@
 "shared_string_progress" = "Avançament";
 "carplay_available_in_sub_plans" = "Crompar OsmAnd Pro ò Maps+ per poder utilizar OsmAnd amb CarPlay.";
 "navigate_point_mgrs" = "STCM (Military Grid Reference System)";
-"mgrs_description" = "OsmAnd se sièrv dau format MGRS qu'es identic au TUM NATO.";
+"mgrs_format_descr" = "OsmAnd se sièrv dau format MGRS qu'es identic au TUM NATO.";
 "weather_online_cache" = "Memòria virtuala en linha";
 "tts_title" = "TTS";
 "routing_attr_goods_restrictions_name" = "Liurasons de bens";
@@ -2513,4 +2513,4 @@
 "rendering_value_omit_name" = "Evitar";
 "routing_attr_allow_streams_description" = "Permetre rius e vabres";
 "rendering_attr_OSMMapperAssistantFixme_description" = "Veire lei balisas fixme";
-"rendering_attr_OSMMapperAssistantNote_description" = "Mostrar lei nòtas de bali
+"rendering_attr_OSMMapperAssistantNote_description" = "Mostrar lei nòt

@@ -91,7 +91,7 @@
 "intro_placeholder" = "zadajte názov svojho regiónu";
 // Settings
 "sett_units" = "Jednotky";
-"sett_lang" = "Jazyk mapy";
+"map_locale" = "Jazyk mapy";
 "sett_km" = "Kilometre";
 "sett_ml" = "Míle";
 "sett_zoom" = "Tlačidlo priblíženia";
@@ -295,7 +295,7 @@
 "product_title_nautical" = "Námorná mapa";
 "product_desc_nautical" = "Námorná mapa celého sveta";
 "product_title_parking" = "Parkovacie miesto";
-"product_title_skimap" = "Lyžiarska mapa";
+"plugin_ski_name" = "Lyžiarska mapa";
 "product_desc_skimap" = "Zjazdovky pre všetky lyžiarske strediská vo svete";
 "monitoring_settings" = "Zaznamenávanie výletu";
 "product_title_trip_planning" = "Plánovanie cesty";
@@ -394,7 +394,7 @@
 "product_desc_ext_parking" = "Parkovací modul Vám pripomína miesto zaparkovania. Je to zásuvný modul do aplikácie OsmAnd Mapy&Navigácia.\nZvoľte si časovo neobmedzenú pripomienku (len značku na mape) alebo časovo obmedzenú s upozornením, keď vyprší čas (tiež so značkou na mape). Pre používanie tohto modulu ho zapnite v menu Zásuvné moduly.";
 "product_desc_ext_track_recording" = "Použite modul OsmAnd Nahrávanie stôp pre nahratie a uloženie Vašich stôp. Exportujte trasu ako súbor GPX, zdieľajte ju alebo odošlite do projektu OpenStreetMap. Užitočná pomôcka pre bežcov, turistov a ostatných, čo potrebujú zaznamenať svoju stopu.";
 "product_desc_ext_srtm" = "Tento modul poskytuje vrstevnice a tieňované svahy, ktoré môžu byť použité v offline mapách OsmAnd. Vrstevnice poskytujú informácie o nadmorskej výške oblasti a tieňovanie svahov ju zviditeľňuje. Uvidíte názvy vrcholov a terénnych útvarov.\n\nCelosvetové údaje (medzi 70 stupňami severnej šírky a 70 stupňami južnej šírky) sú založené na meraniach SRTM (Shuttle Radar Topography Mission) a ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), čo sú zariadenia na satelite Terra, vlajkovej lodi NASA v projekte Earth Observing System. ASTER je spoločný projekt NASA, Japonského ministerstva hospodárstva, obchodu a priemyslu (METI) a Japonskej firmy Space Systems (J-spacesystems).";
-"product_desc_ext_skimap" = "Lyžiarske mapy OsmAnd sú modulom do aplikácie OsmAnd Mapy&Navigácia, určeným na navigáciu v lyžiarskych strediskách. Poskytuje informácie o lyžiarskych zjazdovkých, vlekoch, značkách a náročnostiach trás farebným zvýraznením. Získate informácie o samotných lyžiarskych trasách a okolitej infraštruktúre.\n\nPoužitie: Zapnite modul v aplikácii OsmAnd, stlačte tlačidlo mapy a nastavte typ mapy na Lyžiarske mapy.";
+"plugin_ski_descr" = "Lyžiarske mapy OsmAnd sú modulom do aplikácie OsmAnd Mapy&Navigácia, určeným na navigáciu v lyžiarskych strediskách. Poskytuje informácie o lyžiarskych zjazdovkých, vlekoch, značkách a náročnostiach trás farebným zvýraznením. Získate informácie o samotných lyžiarskych trasách a okolitej infraštruktúre.\n\nPoužitie: Zapnite modul v aplikácii OsmAnd, stlačte tlačidlo mapy a nastavte typ mapy na Lyžiarske mapy.";
 "product_desc_ext_nautical" = "Námorné mapy OsmAnd sú zásuvným modulom pre aplikáciu OsmAnd Mapy & Navigácia. Obsahuje detailné znázornenie oceánov, morí, pobreží a riek. Mapy poskytujú informácie o námorných trasách, navigačných svetlách, nebezpečných oblastiach, miestach kde sa nesmie plaviť alebo kotviť, atď.\n\nPoužitie: odporúča sa stiahnuť základnú námornú mapu, aby bolo možné vidieť mapy bez ohľadu na to, či je stiahnutá aj podrobná mapa. Pre zapnutie Námorných máp, stlačte tlačidlo mapy a nastavte typ mapy na Námorné.\n\nPoznámka: Všetci profesionálni moreplavci sú povinní mať na svojich lodiach oficiálne námorné mapy.\n\nNámorné mapy OsmAnd sú založené na údajoch z projektu OpenSeaMap. Mapy OpenSeaMap v súčasnosti nemôžu konkurovať oficiálnym námorným mapám, môžu však byť použité rekreačnými lodivodmi na orientáciu a plánovanie trasy.";
 "device_memory" = "Pamäť zariadenia";
 "free" = "%@ voľných";
@@ -746,8 +746,8 @@
 "poi_overlay" = "Prekryvná vrstva POI";
 "save_current_track_descr" = "Uložiť aktuálnu stopu ako súbor GPX.";
 "shared_string_clear" = "Vymazať";
-"track_during_nav" = "Automaticky zaznamenávať stopu";
-"track_during_nav_descr" = "Zapnite pre automatické uloženie stopy počas navigácie";
+"save_track_to_gpx" = "Automaticky zaznamenávať stopu";
+"save_track_to_gpx_descrp" = "Zapnite pre automatické uloženie stopy počas navigácie";
 "shared_string_help" = "Pomoc";
 // Help
 "help_first_steps" = "Prvé kroky";
@@ -885,7 +885,7 @@
 "osn_add_dialog_title" = "Vytvoriť poznámku";
 "modify_poi" = "Upraviť informácie o POI";
 // GPX colors
-"product_title_osm_editing" = "Upravovanie OpenStreetMap";
+"osm_editing_plugin_name" = "Upravovanie OpenStreetMap";
 "product_desc_osm_editing" = "Urobte zmeny v OpenStreetMap priamo z OsmAnd";
 "wikivoyage_travel_guide" = "Turistickí sprievodcovia";
 "start_editing_card_image_text" = "Voľný cestovný sprievodca po svete, ktorý môže upravovať každý.";
@@ -947,7 +947,7 @@
 "already_has_subscription" = "Predplatné OsmAnd Live už máte a všetky funkcie sú odomknuté.";
 "already_has_inapp" = "Už máte predplatné %@.";
 "inapp_not_found" = "%@ sa v OsmAnd nenašlo. Pravdepodobne bolo zrušené.";
-"product_desc_ext_osm_editing" = "Modul OSM upravovanie môže byť použitý na prispievanie do OSM, na vytváranie a úpravy bodov záujmu (POI), otváranie a komentovanie OSM poznámok a odosielanie zaznamenané súbory GPX. OSM je celosvetový komunitný projekt. Pre viac informácií pozrite https://osm.org. Príspevky môžu byť vykonané priamo z OsmAnd, ak zadáte svoje prihlasovacie údaje z OSM.";
+"osm_editing_plugin_description" = "Modul OSM upravovanie môže byť použitý na prispievanie do OSM, na vytváranie a úpravy bodov záujmu (POI), otváranie a komentovanie OSM poznámok a odosielanie zaznamenané súbory GPX. OSM je celosvetový komunitný projekt. Pre viac informácií pozrite https://osm.org. Príspevky môžu byť vykonané priamo z OsmAnd, ak zadáte svoje prihlasovacie údaje z OSM.";
 "subscriptions_public_info" = "Platba bude stiahnutá z vášho účtu iTunes pri potvrdení nákup. Predplatné bude automaticky obnovené, ak nevypnete voľbu automatického predlžovania aspoň 24 hodín pred koncom aktuálneho obdobia. Z vášho účtu bude platba za predĺženie stiahnutá podľa typu predplatného najskôr 24 hodín pred skončením aktuálneho obdobia. Nastavenie automatického predlžovania (obnovovania) môžete spravovať alebo vypnúť v Nastaveniach účtu, až po nákupe. Ak si zakúpite predplatné počas skúšobného obdobia zdarma, nevyužitá časť tohto obdobia vám prepadne.";
 "osm_closes_at" = "Zatvorí o:";
 "osm_confirm_bulk_delete" = "Odstrániť %d úprav?";
@@ -2322,4 +2322,4 @@
 "routing_attr_prefer_hiking_routes_name" = "Uprednostniť turistické trasy";
 "rendering_attr_weatherWindSpeedContours_name" = "Izočiary nárazov vetra";
 "routing_attr_allow_streams_name" = "Povoliť potoky a odtokové kanály";
-"download_wikipedia_data" = "Stiahnuť údaje Wikipéd
+"download_wikipedia_data" = "Stiahnuť údaj

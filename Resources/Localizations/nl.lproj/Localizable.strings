@@ -403,7 +403,7 @@
 "intro_placeholder" = "enter the name of your region";
 // Settings
 "sett_units" = "Units";
-"sett_lang" = "Map Language";
+"map_locale" = "Map Language";
 "sett_km" = "Kilometer";
 "sett_ml" = "Mijl";
 "sett_zoom" = "Zoom button";
@@ -553,9 +553,9 @@
 "product_title_parking" = "Parking Position";
 "product_desc_parking" = "Let you easily memorize when the car was parked and how much time left if the parking is limited by time";
 "product_desc_ext_parking" = "OsmAnd Parking Plugin reminds you of your parking position. It is a plugin for OsmAnd Maps&Navigation app.\nChoose a time-independent reminder (only a marker on the map) or a time-limited one with alarm upon time expiration (includes also a marker on the map). To use the plugin, enable it in the Plugins menu.";
-"product_title_skimap" = "Ski map";
+"plugin_ski_name" = "Ski map";
 "product_desc_skimap" = "Ski slopes for all ski resorts in the world";
-"product_desc_ext_skimap" = "OsmAnd Ski Maps is a plugin to OsmAnd Maps&Navigation app designed to navigate at winter sports locations. It gives the information about ski pistes, ski lift markers and even colored lines indicating the complexity of each track. You get the info about ski tracks themselves as well as the surrounding infrastructure.\n\nUsage Instructions: Enable the plugin in OsmAnd application, tap the map button and set the map type to Ski maps.";
+"plugin_ski_descr" = "OsmAnd Ski Maps is a plugin to OsmAnd Maps&Navigation app designed to navigate at winter sports locations. It gives the information about ski pistes, ski lift markers and even colored lines indicating the complexity of each track. You get the info about ski tracks themselves as well as the surrounding infrastructure.\n\nUsage Instructions: Enable the plugin in OsmAnd application, tap the map button and set the map type to Ski maps.";
 "monitoring_settings" = "Track opnemen";
 "product_desc_track_recording" = "Activates the functionality to record and save your tracks";
 "product_desc_ext_track_recording" = "Record your trips and save them manually using OsmAnd Trip recording plugin. Export your trip as a gpx file, share it or even use it to contribute to OpenStreetMap project.  A handy tool for runners, hikers and anyone interested in recording their trips.";
@@ -2205,4 +2205,4 @@
 "routing_attr_difficulty_preference_advanced_name" = "Gevorderde";
 "routing_attr_difficulty_preference_beginner_name" = "Beginner";
 "routing_attr_avoid_highway_description" = "Snelwegen vermijden";
-"download_wikipedia_data" = "Wikipedia-gegevens download
+"download_wikipedia_data" = "Wikipedia-gegevens 

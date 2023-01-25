@@ -466,8 +466,8 @@
 "record_trip" = "Record your trip";
 "shared_string_clear" = "Slett";
 "quick_action_poi_list" = "Interessepunktliste";
-"track_during_nav" = "Auto-record trip during navigation";
-"track_during_nav_descr" = "A trip is automatically saved during navigation";
+"save_track_to_gpx" = "Auto-record trip during navigation";
+"save_track_to_gpx_descrp" = "A trip is automatically saved during navigation";
 "gpx_distance_points" = "Distance (points)";
 "gpx_max_speed" = "Max speed";
 "shared_string_speed" = "Hastighet";
@@ -501,7 +501,7 @@
 "intro_placeholder" = "enter the name of your region";
 // Settings
 "sett_units" = "Units";
-"sett_lang" = "Språk på kart";
+"map_locale" = "Språk på kart";
 "sett_km" = "Kilometers";
 "sett_ml" = "Miles";
 "sett_zoom" = "Zoom button";
@@ -739,7 +739,7 @@
 "quick_action_add_parking" = "Legg til parkeringsplass";
 "parking_place" = "Parkeringsplass";
 "quick_action_navigation_voice" = "Tale på/av";
-"add_osm_note" = "Legg til OSM-notat";
+"quick_action_add_osm_bug" = "Legg til OSM-notat";
 "toggle_online_notes" = "Vis/skjul OSM-notater";
 "toggle_local_edits" = "Toggle local OSM edits";
 "quick_action_add_poi" = "Legg til interessepunkt";
@@ -801,7 +801,7 @@
 "quick_action_poi_add_descr" = "Tapping this action button allows you to quickly add POI on the map with predefined type and tags.";
 "quick_action_day_night_descr" = "Tapping this action button switches between Day and Night map mode.";
 "quick_action_parking_descr" = "Tapping this action button adds a parking location at the map center point.";
-"quick_action_marker_descr" = "Tapping this action button adds a map marker at the map center point.";
+"quick_action_add_marker_descr" = "Tapping this action button adds a map marker at the map center point.";
 "quick_action_show_gpx_descr" = "Tapping this action button shows or hides currently displayed GPX tracks.";
 "quick_action_voice_descr" = "Tapping this action button disables or enables voice guidance during navigation.";
 "quick_action_add_dest_descr" = "Tapping this action button sets the destination to the map center. Any previously selected destination becomes the last intermediate destination.";
@@ -922,18 +922,18 @@
 "product_title_parking" = "Parkeringsposisjon";
 "product_desc_parking" = "Let you easily memorize when the car was parked and how much time left if the parking is limited by time";
 "product_desc_ext_parking" = "OsmAnd Parking Plugin reminds you of your parking position. It is a plugin for OsmAnd Maps&Navigation app.\nChoose a time-independent reminder (only a marker on the map) or a time-limited one with alarm upon time expiration (includes also a marker on the map). To use the plugin, enable it in the Plugins menu.";
-"product_title_skimap" = "Ski map";
+"plugin_ski_name" = "Ski map";
 "product_desc_skimap" = "Ski slopes for all ski resorts in the world";
-"product_desc_ext_skimap" = "OsmAnd Ski Maps is a plugin to OsmAnd Maps&Navigation app designed to navigate at winter sports locations. It gives the information about ski pistes, ski lift markers and even colored lines indicating the complexity of each track. You get the info about ski tracks themselves as well as the surrounding infrastructure.\n\nUsage Instructions: Enable the plugin in OsmAnd application, tap the map button and set the map type to Ski maps.";
+"plugin_ski_descr" = "OsmAnd Ski Maps is a plugin to OsmAnd Maps&Navigation app designed to navigate at winter sports locations. It gives the information about ski pistes, ski lift markers and even colored lines indicating the complexity of each track. You get the info about ski tracks themselves as well as the surrounding infrastructure.\n\nUsage Instructions: Enable the plugin in OsmAnd application, tap the map button and set the map type to Ski maps.";
 "monitoring_settings" = "Turopptak";
 "product_desc_track_recording" = "Activates the functionality to record and save your trips";
 "product_desc_ext_track_recording" = "Allows you to record, save and analyze your training or movement data, such as speed, ascents, descents or route relief, which can then be reused, improved, supplemented or shared with friends. \n\nHow to - https://osmand.net/docs/user/plugins/trip-recording";
 "product_title_trip_planning" = "Trip planning";
 "product_desc_trip_planning" = "Plan your trip, add waypoints, measure the distance to your destination using this plugin";
 "product_desc_ext_trip_planning" = "Trip planning plugin allows you to create your trip on the map, save it, measure the distance between points connected with straight lines, etc. Created for preliminary trip planning rather than thorough route building.";
-"product_title_osm_editing" = "OpenStreetMap Editing";
+"osm_editing_plugin_name" = "OpenStreetMap Editing";
 "product_desc_osm_editing" = "Make changes to OpenStreetMap directly from OsmAnd";
-"product_desc_ext_osm_editing" = "OSM Editing plugin can be used to make OSM contributions like creating or modifying POI objects, opening or commenting on OSM Notes, and contributing recorded GPX files. OSM is a community driven global public domain mapping project. For more information, please refer to https://osm.org. Contributions can be made directly from OsmAnd, if you specify your OSM credentials in the app.";
+"osm_editing_plugin_description" = "OSM Editing plugin can be used to make OSM contributions like creating or modifying POI objects, opening or commenting on OSM Notes, and contributing recorded GPX files. OSM is a community driven global public domain mapping project. For more information, please refer to https://osm.org. Contributions can be made directly from OsmAnd, if you specify your OSM credentials in the app.";
 "product_desc_africa" = "Unlimited map downloads for Africa";
 "product_desc_africa_short" = "Africa region maps";
 "product_desc_australia" = "Unlimited map downloads for Australia";
@@ -2488,4 +2488,4 @@
 "rendering_attr_horse_scale_impossible_name" = "Umulig";
 "rendering_attr_OSMMapperAssistantFixme_description" = "Vis fiksmeg-etiketter";
 "rendering_attr_showWaterwayTunnels_name" = "Vannveistunneler";
-"download_wikipedia_data" = "Last ned Wikipedia-da
+"download_wikipedia_data" = "Last ned Wiki

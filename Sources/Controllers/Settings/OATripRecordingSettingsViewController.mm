@@ -177,8 +177,8 @@ static NSArray<NSString *> *minTrackSpeedNames;
              @[@{
                    @"header" : OALocalizedString(@"routing_settings"),
                    @"name" : @"track_during_nav",
-                   @"title" : OALocalizedString(@"track_during_nav"),
-                   @"description" : [NSString stringWithFormat:@"%@ %@", OALocalizedString(@"track_during_nav_descr"), OALocalizedString(@"logging_interval_navigation_descr")],
+                   @"title" : OALocalizedString(@"save_track_to_gpx"),
+                   @"description" : [NSString stringWithFormat:@"%@ %@", OALocalizedString(@"save_track_to_gpx_descrp"), OALocalizedString(@"logging_interval_navigation_descr")],
                    @"value" : _settings.saveTrackToGPX,
                    @"img" : @"ic_custom_navigation",
                    @"type" : [OASwitchTableViewCell getCellIdentifier] },

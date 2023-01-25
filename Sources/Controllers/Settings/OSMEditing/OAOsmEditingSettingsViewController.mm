@@ -39,7 +39,7 @@
 
 - (void) applyLocalization
 {
-    _titleView.text = OALocalizedString(@"product_title_osm_editing");
+    _titleView.text = OALocalizedString(@"osm_editing_plugin_name");
 }
 
 - (void) viewDidLoad

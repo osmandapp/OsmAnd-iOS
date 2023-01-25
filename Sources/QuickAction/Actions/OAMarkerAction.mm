@@ -34,7 +34,7 @@ static OAQuickActionType *TYPE;
 
 - (NSString *)getActionText
 {
-    return OALocalizedString(@"quick_action_marker_descr");
+    return OALocalizedString(@"quick_action_add_marker_descr");
 }
 
 + (OAQuickActionType *) TYPE

@@ -260,7 +260,7 @@ static const NSInteger groupCount = 5;
     [dataArr addObject:
     @{
       @"name" : @"osm_editing",
-      @"title" : OALocalizedString(@"product_title_osm_editing"),
+      @"title" : OALocalizedString(@"osm_editing_plugin_name"),
       @"type" : kLinkInternalType,
       @"html" : @"osm-editing-plugin"
       }];
@@ -268,7 +268,7 @@ static const NSInteger groupCount = 5;
     [dataArr addObject:
      @{
        @"name" : @"ski_map",
-       @"title" : OALocalizedString(@"product_title_skimap"),
+       @"title" : OALocalizedString(@"product_desc_skimap"),
        @"type" : kLinkInternalType,
        @"html" : @"ski-plugin"
        }];

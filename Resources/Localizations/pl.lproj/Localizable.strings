@@ -107,7 +107,7 @@
 "intro_placeholder" = "Proszę wprowadzić nazwę swojego regionu";
 // Settings
 "sett_units" = "Jednostki";
-"sett_lang" = "Język mapy";
+"map_locale" = "Język mapy";
 "sett_km" = "Kilometry";
 "sett_ml" = "Mile";
 "sett_loc_fmt" = "Format lokalizacji";
@@ -606,7 +606,7 @@
 "import_choose_type" = "Proszę wybrać elementy do zaimportowania";
 "reminder_not_set_text" = "Przypomnienie nie zostało ustawione, ponieważ nie masz praw dostępu do kalendarza";
 "do_not_send_anonymous_data_desc" = "Nie zbieramy danych o lokalizacji, tylko wykorzystanie aplikacji i statystyki pobierania map.";
-"product_title_skimap" = "Mapa tras narciarskich";
+"plugin_ski_name" = "Mapa tras narciarskich";
 "product_title_trip_planning" = "Planowanie podróży";
 "product_desc_wiki" = "Dane z Wikipedii";
 "get_unlimited_access" = "Uzyskaj nieograniczony dostęp";
@@ -719,8 +719,8 @@
 "tunnel_warning" = "Zbliżasz się do tunelu";
 "poi_overlay" = "Nakładka użytecznego miejsca";
 "save_current_track_descr" = "Zapisz bieżącą trasę jako plik GPX.";
-"track_during_nav" = "Automatycznie rejestruj ścieżkę";
-"track_during_nav_descr" = "Włącz, aby automatycznie zapisywać trasę podczas nawigacji";
+"save_track_to_gpx" = "Automatycznie rejestruj ścieżkę";
+"save_track_to_gpx_descrp" = "Włącz, aby automatycznie zapisywać trasę podczas nawigacji";
 "shared_string_close" = "Zamknij";
 "shared_string_help" = "Pomoc";
 "shared_string_actions" = "Czynności";
@@ -746,7 +746,7 @@
 "twitter" = "Twitter";
 "show_alt_in_drive" = "Pokaż wysokość w trybie jazdy";
 "shared_string_about" = "Informacje";
-"product_desc_ext_skimap" = "OsmAnd Mapy tras narciarskich to wtyczka do aplikacji OsmAnd Mapy i Nawigacja zaprojektowana do nawigacji w miejscach sportów zimowych. Daje on informacje o trasach narciarskich, znacznikach narciarskich, a nawet kolorowych liniach wskazujących na złożoność każdego toru. Otrzymasz informacje o trasach narciarskich, a także o otaczającej infrastrukturze.\n\nInstrukcje dotyczące użytkowania: Włącz wtyczkę w aplikacji OsmAnd, naciśnij przycisk mapy i ustaw typ mapy na Mapy tras narciarskich.";
+"plugin_ski_descr" = "OsmAnd Mapy tras narciarskich to wtyczka do aplikacji OsmAnd Mapy i Nawigacja zaprojektowana do nawigacji w miejscach sportów zimowych. Daje on informacje o trasach narciarskich, znacznikach narciarskich, a nawet kolorowych liniach wskazujących na złożoność każdego toru. Otrzymasz informacje o trasach narciarskich, a także o otaczającej infrastrukturze.\n\nInstrukcje dotyczące użytkowania: Włącz wtyczkę w aplikacji OsmAnd, naciśnij przycisk mapy i ustaw typ mapy na Mapy tras narciarskich.";
 "product_desc_trip_planning" = "Zaplanuj podróż, dodaj waypointy, zmierz odległość do miejsca docelowego za pomocą tej wtyczki";
 "product_desc_ext_trip_planning" = "Wtyczka planowania podróży umożliwia tworzenie podróży na mapie, zapisywanie jej, mierzenie odległości między punktami połączonymi liniami prostymi itp. Została stworzona do wstępnego planowania podróży, a nie do dokładnego budowania trasy.";
 "product_desc_ext_wiki" = "Uzyskaj informacje o ciekawych miejscach z Wikipedii. Jest to kieszonkowy przewodnik offline - wystarczy włączyć wtyczkę do Wikipedii i przeczytać artykuły o obiektach wokół ciebie.";
@@ -907,9 +907,9 @@
 "osb_comment_dialog_message" = "Wiadomość";
 "osn_add_dialog_title" = "Utwórz uwagę";
 "modify_poi" = "Zmodyfikuj informacje o Użytecznym Miejscu";
-"product_title_osm_editing" = "Edytowanie OpenStreetMap";
+"osm_editing_plugin_name" = "Edytowanie OpenStreetMap";
 "product_desc_osm_editing" = "Zmieniaj OpenStreetMap bezpośrednio z OsmAnd";
-"product_desc_ext_osm_editing" = "Wtyczka Edytowania OSM może być używana do wspierania OSM poprzez tworzenie i modyfikowanie użytecznych miejsc, otwieranie i komentowanie Uwag OSM i zatwierdzanie nagranych plików GPX. OSM jest projektem mapowania kierowanym przez domenę publiczną. W celu uzyskania więcej informacji, zapoznaj się z https://osm.org. Wkład może zostać dokonany bezpośrednio z OsmAnd, jeśli podasz informacje uwierzytelniące w aplikacji.";
+"osm_editing_plugin_description" = "Wtyczka Edytowania OSM może być używana do wspierania OSM poprzez tworzenie i modyfikowanie użytecznych miejsc, otwieranie i komentowanie Uwag OSM i zatwierdzanie nagranych plików GPX. OSM jest projektem mapowania kierowanym przez domenę publiczną. W celu uzyskania więcej informacji, zapoznaj się z https://osm.org. Wkład może zostać dokonany bezpośrednio z OsmAnd, jeśli podasz informacje uwierzytelniące w aplikacji.";
 "user_password" = "Hasło";
 "rendering_value_category_name" = "Kategoria";
 "poi_category_and_type" = "Kategoria i rodzaj Użytecznego Miejsca";
@@ -1080,7 +1080,7 @@
 "toggle_poi" = "Wyświetl/Ukryj użyteczne miejsca";
 "quick_action_add_parking" = "Dodaj położenie parkowania";
 "quick_action_navigation_voice" = "Przełącz wyciszenie dźwięku";
-"add_osm_note" = "Dodaj uwagę OSM";
+"quick_action_add_osm_bug" = "Dodaj uwagę OSM";
 "toggle_online_notes" = "Przełącz uwagi OSM";
 "toggle_local_edits" = "Przełącz lokalne edycje OSM";
 "quick_action_add_poi" = "Dodaj użyteczne miejsce";
@@ -1128,7 +1128,7 @@
 "quick_action_poi_add_descr" = "Naciśnięcie tego przycisku czynności umożliwia szybkie dodawanie UM na mapie za pomocą predefiniowanych typów i etykiet.";
 "quick_action_day_night_descr" = "Naciśnięcie tego przycisku czynności powoduje przełączenie między trybem dziennym i nocnym.";
 "quick_action_parking_descr" = "Naciśnięcie tego przycisku czynności powoduje dodanie miejsca parkingowego na środku mapy.";
-"quick_action_marker_descr" = "Naciśnięcie tego przycisku czynności powoduje dodanie znacznika mapy na środku mapy.";
+"quick_action_add_marker_descr" = "Naciśnięcie tego przycisku czynności powoduje dodanie znacznika mapy na środku mapy.";
 "quick_action_show_gpx_descr" = "Naciśnięcie tego przycisku czynności powoduje wyświetlenie lub ukrycie aktualnie wyświetlanych tras GPX.";
 "quick_action_voice_descr" = "Naciśnięcie tego przycisku czynności powoduje wyłączenie lub włączenie nawigacji głosowej.";
 "quick_action_add_dest_descr" = "Naciśnięcie tego przycisku czynności ustawia cel podróży na środku mapy. Każdy wcześniej wybrany cel podróży staje się ostatnim pośrednim celem podróży.";
@@ -4305,4 +4305,4 @@
 "lang_pt_br" = "Portugalski (Brazylia)";
 "routing_attr_motor_type_name" = "Silnik pojazdu";
 "lang_nv" = "Nawaho";
-"walking_route_osmc_description" = "Przypisz kolor trasom na podstawie ich indywidualnie przypisanego lokalnie koloru (jeśli dostępny w OpenStreetMap) i typu (międzynarodowe, regionalne, lokalne
+"walking_route_osmc_description" = "Przypisz kolor trasom na podstawie ich indywidualnie przypisanego lokalnie koloru (jeśli dostępny w OpenStreetMap) i typu (międzynarodowe, regionalne

@@ -32,7 +32,7 @@
         _app = [OsmAndApp instance];
         _settings = [OAAppSettings sharedManager];
         
-        title = OALocalizedString(@"sett_lang");
+        title = OALocalizedString(@"map_locale");
         settingsScreen = EMapSettingsScreenLanguage;
         
         vwController = viewController;

@@ -466,8 +466,8 @@
 "record_trip" = "経路を記録";
 "shared_string_clear" = "削除";
 "quick_action_poi_list" = "POI一覧";
-"track_during_nav" = "経路の自動記録";
-"track_during_nav_descr" = "経路はナビゲーション中に自動で記録されます";
+"save_track_to_gpx" = "経路の自動記録";
+"save_track_to_gpx_descrp" = "経路はナビゲーション中に自動で記録されます";
 "gpx_distance_points" = "Distance (points)";
 "gpx_max_speed" = "最大速度";
 "shared_string_speed" = "速度";
@@ -503,7 +503,7 @@
 "intro_placeholder" = "居住地域の名前を入力してください";
 // Settings
 "sett_units" = "単位";
-"sett_lang" = "マップ内言語";
+"map_locale" = "マップ内言語";
 "sett_km" = "キロメートル";
 "sett_ml" = "マイル";
 "sett_zoom" = "ズームボタン";
@@ -742,7 +742,7 @@
 "quick_action_add_parking" = "駐車場所を追加";
 "parking_place" = "駐車場";
 "quick_action_navigation_voice" = "音声のON/OFF";
-"add_osm_note" = "OSMメモを追加";
+"quick_action_add_osm_bug" = "OSMメモを追加";
 "toggle_online_notes" = "OSMメモを切替";
 "toggle_local_edits" = "ローカルOSM編集を切替";
 "quick_action_add_poi" = "POIを追加";
@@ -804,7 +804,7 @@
 "quick_action_poi_add_descr" = "このアクションボタンをタップすると、定義済みの種類とタグを利用してマップにすばやくPOIを追加することができます。";
 "quick_action_day_night_descr" = "このアクションボタンをタップすると、昼と夜のマップモードが切り替わります。";
 "quick_action_parking_descr" = "このアクションボタンをタップすると、マップの中心が駐車位置としてマーキングされます。";
-"quick_action_marker_descr" = "このアクションボタンをタップすると、マップの中心にマップマーカーが追加されます。";
+"quick_action_add_marker_descr" = "このアクションボタンをタップすると、マップの中心にマップマーカーが追加されます。";
 "quick_action_show_gpx_descr" = "このアクションボタンをタップすると、現在表示されているGPX経路の表示/非表示が切り替わります。";
 "quick_action_voice_descr" = "このアクションボタンをタップすると、ナビゲーション音声案内の有無が切り替わります。";
 "quick_action_add_dest_descr" = "このアクションボタンをタップすると、マップの中心が目的地として設定されます。その前に選択した目的地は最後の経由地点になります。";
@@ -933,18 +933,18 @@
 "product_title_parking" = "駐車場";
 "product_desc_parking" = "車の駐車時間と駐車場所の追跡";
 "product_desc_ext_parking" = "OsmAnd駐車場プラグインは『OsmAnd Maps＆Navigation』アプリのプラグインの一つで、駐車位置を記録しておくことができます。\n制限時間の無い駐車乗用リマインダー(マップ上マーカーのみ)、または時間制限のある駐車場向けの時間切れ時にアラームが鳴るリマインダー(マップ上のマーカーも含む)を選択できます。使用するには『プラグイン』メニューで有効にしてください。";
-"product_title_skimap" = "スキーマップ";
+"plugin_ski_name" = "スキーマップ";
 "product_desc_skimap" = "リフトとスロープを備えた最新のスキートレイルマップ";
-"product_desc_ext_skimap" = "OsmAndスキーマップは『OsmAnd Maps&Navigation』アプリのプラグインの一つで、ウィンタースポーツに関する場所へのナビゲートができるように設計されています。このツールはスキーゲレンデ、スキーリフトマーカー、および各経路の難易度などを色付きの線で示しそれらの情報を提供します。周辺のインフラだけでなく、スキー場自体に関する情報も得られます。\n\n使用方法:プラグインをOsmAndアプリ内で有効にし、『マップ設定』＞『マップスタイル』をタップしてマップの種類を『スキーマップ』に変更するか、アプリプロファイルを『スキー』に設定してください。";
+"plugin_ski_descr" = "OsmAndスキーマップは『OsmAnd Maps&Navigation』アプリのプラグインの一つで、ウィンタースポーツに関する場所へのナビゲートができるように設計されています。このツールはスキーゲレンデ、スキーリフトマーカー、および各経路の難易度などを色付きの線で示しそれらの情報を提供します。周辺のインフラだけでなく、スキー場自体に関する情報も得られます。\n\n使用方法:プラグインをOsmAndアプリ内で有効にし、『マップ設定』＞『マップスタイル』をタップしてマップの種類を『スキーマップ』に変更するか、アプリプロファイルを『スキー』に設定してください。";
 "monitoring_settings" = "旅程・経路記録";
 "product_desc_track_recording" = "旅程・経路を記録してGPXとして保存";
 "product_desc_ext_track_recording" = "経路記録プラグインを使用して、経路を記録し手動で保存します。経路をGPXファイルとして書き出して共有したり、OpenStreetMapプロジェクトに貢献するために使用することもできます。ランナーやハイカーなど通った経路の記録に関心のある人なら誰でも使える便利なツールです。";
 "product_title_trip_planning" = "旅程計画";
 "product_desc_trip_planning" = "このプラグインは旅程の計画、細かな経由地点の追加、目的地までの距離の算出に役立ちます";
 "product_desc_ext_trip_planning" = "旅程計画プラグインを使用すると、マップ上に旅程を作成したあと保存し、直線で接続されたポイント間の距離も測定できます。ルートの策定よりも、事前の旅程計画を詰める用途のために作成されました。";
-"product_title_osm_editing" = "OpenStreetMap編集";
+"osm_editing_plugin_name" = "OpenStreetMap編集";
 "product_desc_osm_editing" = "スマートフォンを地図作成ツールに変える";
-"product_desc_ext_osm_editing" = "OSM編集プラグインを使用すると、POIオブジェクトの作成や修正、OSMメモの参照やコメント付け、記録されたGPXファイルの提出などOSMへの情報提供を行うことができます。OSMはコミュニティ主導のグローバルパブリックドメインマッピングプロジェクトです。詳細については、https://osm.orgを参照してください。アプリケーションでOSM認証情報を入力すると、OsmAndから情報の編集やデータ提供を行うことができます。";
+"osm_editing_plugin_description" = "OSM編集プラグインを使用すると、POIオブジェクトの作成や修正、OSMメモの参照やコメント付け、記録されたGPXファイルの提出などOSMへの情報提供を行うことができます。OSMはコミュニティ主導のグローバルパブリックドメインマッピングプロジェクトです。詳細については、https://osm.orgを参照してください。アプリケーションでOSM認証情報を入力すると、OsmAndから情報の編集やデータ提供を行うことができます。";
 "product_desc_africa" = "アフリカ向けマップの無制限ダウンロード";
 "product_desc_africa_short" = "アフリカ地域のマップ";
 "product_desc_australia" = "オーストラリア向けマップの無制限ダウンロード";
@@ -2520,4 +2520,4 @@
 "rendering_attr_natureReserves_description" = "自然保護区、保護地域、国立公園を表示します。";
 "routing_attr_driving_style_description" = "運転の目的を選択することで、より短くより速くより安全なルートを取得します";
 "routing_attr_avoid_footways_name" = "歩道を避ける";
-"download_wikipedia_data" = "Wikipediaデータのダウンロ
+"download_wikipedia_data" = "Wikipedia

@@ -644,8 +644,8 @@
 "gpx_upload_identifiable_visibility_descr" = "«Identificable» significa que la traza se mostrará públicamente en tus trazas GPS y en las listas públicas de trazas GPS, es decir que otros usuarios podrán descargar la traza en bruto y asociarla a tu nombre de usuario. Los datos públicos servidos a través de la API con marcas de tiempo GPSharán referencia a la página original de la traza.";
 "gpx_upload_trackable_visibility_descr" = "«Trazable» significa que la traza no aparece en ninguna lista pública, pero el conjunto de puntos procesados con marcas de tiempo (no se pueden asociar directamente con usted) estarán disponibles a través de la API pública de GPS.";
 "gpx_upload_private_visibility_descr" = "«Privado» significa que la traza no aparecerá en ninguna lista pública, pero el conjunto de puntos seguirá estando disponible en orden cronológico a través de la API pública de GPS y sin marcas de tiempo.";
-"track_during_nav" = "Grabar traza automáticamente";
-"track_during_nav_descr" = "Activar para guardar automáticamente una traza al navegar";
+"save_track_to_gpx" = "Grabar traza automáticamente";
+"save_track_to_gpx_descrp" = "Activar para guardar automáticamente una traza al navegar";
 "gpx_distance_points" = "Distancia (puntos)";
 "gpx_max_speed" = "Velocidad máx.";
 "shared_string_speed" = "Velocidad";
@@ -717,7 +717,7 @@
 "intro_placeholder" = "Ingresa el nombre de la región";
 // Settings
 "sett_units" = "Unidades";
-"sett_lang" = "Idioma del mapa";
+"map_locale" = "Idioma del mapa";
 "sett_km" = "Kilómetros";
 "sett_ml" = "Millas";
 "sett_zoom" = "Botón de zum";
@@ -1307,7 +1307,7 @@
 "quick_action_add_parking" = "Añadir lugar de estacionamiento";
 "parking_place" = "Lugar de estacionamiento";
 "quick_action_navigation_voice" = "Alternar activación de voz";
-"add_osm_note" = "Añadir nota de OSM";
+"quick_action_add_osm_bug" = "Añadir nota de OSM";
 "toggle_online_notes" = "Alternar notas de OSM";
 "toggle_local_edits" = "Alternar ediciones locales de OSM";
 "quick_action_add_poi" = "Añadir PDI";
@@ -1370,7 +1370,7 @@
 "quick_action_poi_add_descr" = "Este botón de acción, añade rápidamente un PDI al mapa con tipos y etiquetas predefinidos.";
 "quick_action_day_night_descr" = "Este botón de acción, cambia entre el modo de mapa Diurno y Nocturno.";
 "quick_action_parking_descr" = "Este botón de acción, añade una ubicación de estacionamiento en el punto central del mapa.";
-"quick_action_marker_descr" = "Este botón de acción, añade un marcador del mapa en el punto central del mapa.";
+"quick_action_add_marker_descr" = "Este botón de acción, añade un marcador del mapa en el punto central del mapa.";
 "quick_action_show_gpx_descr" = "Este botón de acción, muestra u oculta las trazas GPX elegidas en el mapa.";
 "quick_action_voice_descr" = "Este botón de acción, des/activa las indicaciones por voz durante la navegación.";
 "quick_action_add_dest_descr" = "Este botón de acción, añade un destino en el centro de la pantalla. Cualquier destino previamente elegido, se mueve como último destino intermedio.";
@@ -1554,15 +1554,15 @@
 "product_title_parking" = "Ubicación de estacionamiento";
 "product_desc_parking" = "Rastrea el tiempo de estacionamiento y la ubicación de su vehículo";
 "product_desc_ext_parking" = "Permite registrar un punto en el mapa en donde el vehículo es dejado en la calle y crea un recordatorio en el calendario sobre el inicio del estacionamiento. El complemento ayuda a seguir el tiempo del estacionamiento y la ubicación del vehículo. Para colocar un marcador, elige un lugar en el mapa, luego ve a «Acciones» y pulsa «Añadir estacionamiento».";
-"product_title_skimap" = "Mapa de esquí";
+"plugin_ski_name" = "Mapa de esquí";
 "product_desc_skimap" = "Mapa actualizado de las pistas de esquí con remontes y pendientes";
-"product_desc_ext_skimap" = "Diseñado para navegar en lugares de deportes de invierno. Observa las pistas de esquí, los marcadores de los remontes y las líneas de color que indican la complejidad de cada pista. Para usarlo luego de activarlo, ve a «Configurar mapa» y elige el tipo de mapa «Invierno y esquí».";
+"plugin_ski_descr" = "Diseñado para navegar en lugares de deportes de invierno. Observa las pistas de esquí, los marcadores de los remontes y las líneas de color que indican la complejidad de cada pista. Para usarlo luego de activarlo, ve a «Configurar mapa» y elige el tipo de mapa «Invierno y esquí».";
 "monitoring_settings" = "Grabación de viaje";
 "product_desc_track_recording" = "Graba y guarda tus viajes como trazas GPX";
 "product_desc_ext_track_recording" = "Permite registrar, guardar y analizar tus datos de entrenamiento o movimiento, como la velocidad, los ascensos, los descensos o el relieve del camino, que luego puedes reutilizar, mejorar, complementar o compartir con tus amigos.\n\nVéase - https://osmand.net/docs/user/plugins/trip-recording";
-"product_title_osm_editing" = "Edición de OpenStreetMap";
+"osm_editing_plugin_name" = "Edición de OpenStreetMap";
 "product_desc_osm_editing" = "Convierte tu dispositivo en una herramienta de mapeo";
-"product_desc_ext_osm_editing" = "Permite hacer contribuciones en OpenStreetMap, un proyecto de mapeo de dominio público, global, libre e impulsado por la comunidad.\n\nEn nuestro sitio web, puedes encontrar una guía de como colaborar en el mapa - https://osmand.net/docs/user/plugins/osm-editing";
+"osm_editing_plugin_description" = "Permite hacer contribuciones en OpenStreetMap, un proyecto de mapeo de dominio público, global, libre e impulsado por la comunidad.\n\nEn nuestro sitio web, puedes encontrar una guía de como colaborar en el mapa - https://osmand.net/docs/user/plugins/osm-editing";
 "product_desc_mapillary" = "Vistas a nivel de calle para conocer el entorno";
 "product_desc_ext_mapillary" = "Ofrece vistas a nivel de calle. Si faltan imágenes, puedes añadirlas tú mismo para que otros puedan usarlas. Para activar la capa «Mapillary», activa las «Imágenes a nivel de calle» en el menú «Configurar mapa».";
 "open_place_reviews" = "OpenPlaceReviews";
@@ -2262,7 +2262,7 @@
 "any_poi" = "Cualquiera";
 "map_settings_weather_isolines" = "Isolíneas";
 "navigate_point_mgrs" = "MGRS";
-"mgrs_description" = "OsmAnd utiliza el formato MGRS que es idéntico al UTM de la OTAN.";
+"mgrs_format_descr" = "OsmAnd utiliza el formato MGRS que es idéntico al UTM de la OTAN.";
 "delete_tracks_bottom_sheet_description_regular_part" = "¿Quieres borrar ";
 "delete_tracks_bottom_sheet_description_bold_part" = "%d trazas?";
 "delete_tracks_bottom_sheet_title" = "¿Borrar trazas?";
@@ -2803,4 +2803,4 @@
 "routing_attr_allow_intermittent_description" = "Permite cursos de agua intermitentes";
 "rendering_value_all_name" = "Todo";
 "routing_attr_avoid_footways_description" = "Evita pasar por veredas o aceras";
-"download_wikipedia_data" = "Descargar datos de Wikiped
+"download_wikipedia_data" = "Descargar datos d

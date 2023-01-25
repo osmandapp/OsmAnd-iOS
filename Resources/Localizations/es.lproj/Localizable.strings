@@ -256,7 +256,7 @@
 "product_title_nautical" = "Mapa náutico";
 "product_desc_nautical" = "Mapas vectoriales adecuados para la navegación náutica";
 "product_title_parking" = "Ubicación de aparcamiento";
-"product_title_skimap" = "Mapa de esquí";
+"plugin_ski_name" = "Mapa de esquí";
 "monitoring_settings" = "Grabación de viaje";
 "product_desc_track_recording" = "Graba y guarda tus viajes como trazas GPX";
 "product_desc_africa" = "Descargas ilimitadas de mapas para África";
@@ -282,7 +282,7 @@
 "track_save_short_q" = "La traza es muy corta, ¿quieres guardarla?";
 "shared_string_and" = "y";
 "fav_select" = "Elige los favoritos";
-"sett_lang" = "Idioma del mapa";
+"map_locale" = "Idioma del mapa";
 "sett_lang_trans" = "transliterar";
 "sett_pref_lang" = "Idioma preferido";
 "sett_lang_show_local" = "Mostrar nombres locales";
@@ -370,7 +370,7 @@
 "plugin_popup_nautical_desc" = "Primero descargue los mapas náuticos.\nLuego vaya a los <b>Ajustes del mapa</b> > <b>Tipo de mapa</b> y active el estilo <b>Náutico</b>";
 "go_to_downloads" = "Ir a descargas";
 "product_desc_ext_srtm" = "La información del terreno, como las curvas de nivel, los sombreados y las pendientes, ayudan a evaluar visualmente la forma de la superficie del terreno, considerando la curvatura, los extremos, la inclinación, los puntos de igual altura, etc. La información topográfica en un mapa puede representarse mediante el sombreado de la pendiente, las curvas de nivel para ascensos y descensos, y el color de la desviación del ángulo de la pendiente con respecto al plano. Datos de SRTM y ASTER.\n\nVéase - https://osmand.net/docs/user/plugins/contour-lines";
-"product_desc_ext_skimap" = "Diseñado para navegar en lugares de deportes de invierno. Observa las pistas de esquí, los marcadores de los remontes y las líneas de color que indican la complejidad de cada pista. Para usarlo luego de activarlo, ve a «Configurar mapa» y elige el tipo de mapa «Invierno y esquí».";
+"plugin_ski_descr" = "Diseñado para navegar en lugares de deportes de invierno. Observa las pistas de esquí, los marcadores de los remontes y las líneas de color que indican la complejidad de cada pista. Para usarlo luego de activarlo, ve a «Configurar mapa» y elige el tipo de mapa «Invierno y esquí».";
 "product_title_trip_planning" = "Planificación de viaje";
 "plugin_popup_wiki_ask" = "Para descargar los datos de Wikipedia, necesita activar el complemento: <b>Wikipedia</b>";
 "plugin_popup_srtm_ask" = "Para descargar las Curvas de nivel, necesita activar el complemento: <b>Curvas de nivel</b>";
@@ -753,8 +753,8 @@
 "tunnel_warning" = "Túnel adelante";
 "shared_string_close" = "Cerrar";
 "save_current_track_descr" = "Guarda la traza actual como archivo GPX ahora.";
-"track_during_nav" = "Grabar traza automáticamente";
-"track_during_nav_descr" = "Activar para guardar automáticamente una traza al navegar";
+"save_track_to_gpx" = "Grabar traza automáticamente";
+"save_track_to_gpx_descrp" = "Activar para guardar automáticamente una traza al navegar";
 "shared_string_help" = "Ayuda";
 "shared_string_actions" = "Acciones";
 // Help
@@ -917,9 +917,9 @@
 "osb_comment_dialog_message" = "Mensaje";
 "osn_add_dialog_title" = "Crear nota";
 "modify_poi" = "Editar la información del PDI";
-"product_title_osm_editing" = "Edición de OpenStreetMap";
+"osm_editing_plugin_name" = "Edición de OpenStreetMap";
 "product_desc_osm_editing" = "Convierte tu dispositivo en una herramienta de mapeo";
-"product_desc_ext_osm_editing" = "Permite hacer contribuciones en OpenStreetMap, un proyecto de mapeo de dominio público, global, libre e impulsado por la comunidad.\n\nEn nuestro sitio web, puedes encontrar una guía de como colaborar en el mapa - https://osmand.net/docs/user/plugins/osm-editing";
+"osm_editing_plugin_description" = "Permite hacer contribuciones en OpenStreetMap, un proyecto de mapeo de dominio público, global, libre e impulsado por la comunidad.\n\nEn nuestro sitio web, puedes encontrar una guía de como colaborar en el mapa - https://osmand.net/docs/user/plugins/osm-editing";
 "user_password" = "Contraseña";
 "rendering_value_category_name" = "Categoría";
 "poi_category_and_type" = "Categoría y tipo de PDI";
@@ -1085,7 +1085,7 @@
 "toggle_poi" = "Mostrar/ocultar PDI";
 "quick_action_add_parking" = "Añadir lugar de aparcamiento";
 "quick_action_navigation_voice" = "Alternar activación de voz";
-"add_osm_note" = "Añadir nota de OSM";
+"quick_action_add_osm_bug" = "Añadir nota de OSM";
 "toggle_online_notes" = "Alternar notas de OSM";
 "toggle_local_edits" = "Alternar ediciones locales de OSM";
 "quick_action_add_poi" = "Añadir PDI";
@@ -1134,7 +1134,7 @@
 "quick_action_poi_add_descr" = "Este botón de acción, añade rápidamente un PDI al mapa con tipos y etiquetas predefinidos.";
 "quick_action_day_night_descr" = "Este botón de acción, cambia entre el modo de mapa Diurno y Nocturno.";
 "quick_action_parking_descr" = "Este botón de acción, añade una ubicación de aparcamiento en el punto central del mapa.";
-"quick_action_marker_descr" = "Este botón de acción, añade un marcador del mapa en el punto central del mapa.";
+"quick_action_add_marker_descr" = "Este botón de acción, añade un marcador del mapa en el punto central del mapa.";
 "quick_action_show_gpx_descr" = "Este botón de acción, muestra u oculta las trazas GPX elegidas en el mapa.";
 "quick_action_voice_descr" = "Este botón de acción, des/activa las indicaciones por voz durante la navegación.";
 "quick_action_add_dest_descr" = "Este botón de acción, añade un destino en el centro de la pantalla. Cualquier destino previamente elegido, se mueve como último destino intermedio.";
@@ -2244,7 +2244,7 @@
 "shared_string_weather" = "Meteorología";
 "backup_and_restore" = "Copia de seguridad y restauración";
 "approximate_file_size" = "Tamaño aproximado del archivo";
-"mgrs_description" = "OsmAnd utiliza el formato MGRS que es idéntico al UTM de la OTAN.";
+"mgrs_format_descr" = "OsmAnd utiliza el formato MGRS que es idéntico al UTM de la OTAN.";
 "ltr_or_rtl_combine_via_dash" = "%@– %@";
 "invalid_format" = "Formato inválido";
 "folder_already_exsists" = "Una carpeta con este nombre ya existe";
@@ -2792,4 +2792,4 @@
 "rendering_attr_horse_scale_impossible_name" = "Imposible";
 "routing_attr_avoid_highway_description" = "Evita circular por caminos viales";
 "shared_string_does_not_exist" = "No existe";
-"download_wikipedia_data" = "Descargar datos de Wikiped
+"download_wikipedia_data" = "Descargar datos d

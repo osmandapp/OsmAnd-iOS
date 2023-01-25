@@ -218,7 +218,7 @@
 "shared_string_currently_recording_track" = "Beleženje sledi";
 "gpx_start_new_segment" = "Začni nov odsek";
 "intro_placeholder" = "Vpišite naziv regije";
-"sett_lang" = "Jezik zemljevida";
+"map_locale" = "Jezik zemljevida";
 "sett_arr_map" = "Sredina  zemljevida";
 "sett_pref_lang" = "Prednostni jezik";
 "res_catalog_upd" = "Posodobitev kataloga";
@@ -316,7 +316,7 @@
 // Help
 "help_quiz" = "Anketa";
 "product_title_parking" = "Parkiranje (mesto in čas)";
-"product_title_skimap" = "Zemljevid smučišč";
+"plugin_ski_name" = "Zemljevid smučišč";
 "product_desc_skimap" = "Smučarske poti vseh smučišč na svetu";
 "monitoring_settings" = "Beleženje potovanja";
 "product_desc_africa" = "Neomejeno prenašanje zemljevidov Afrike";
@@ -655,7 +655,7 @@
 "tunnel_warning" = "Predor";
 "save_current_track_descr" = "Shrani trenutno sled v datoteko GPX.";
 "shared_string_clear" = "Počisti";
-"track_during_nav" = "Samodejno beleži sled med navigacijo";
+"save_track_to_gpx" = "Samodejno beleži sled med navigacijo";
 "osmand_live" = "OsmAnd Live";
 "live_updates" = "Posodobitve vživo";
 "available_maps" = "Razpoložljivi zemljevidi";
@@ -2048,4 +2048,4 @@
 "routing_attr_avoid_footways_description" = "Izogibaj se pešpoti";
 "rendering_attr_showTrainRoutes_name" = "Proge vlakov";
 "routing_attr_avoid_highway_description" = "Izogibaj se avtocest";
-"download_wikipedia_data" = "Prejmi podatke Wikipedi
+"download_wikipedia_data" = "Prejmi podatke 

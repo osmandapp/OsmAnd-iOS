@@ -394,8 +394,8 @@
 "show_info" = "Show Info";
 "record_trip" = "Record your trip";
 "shared_string_clear" = "Limpar";
-"track_during_nav" = "Auto-record track during navigation";
-"track_during_nav_descr" = "A GPX track is automatically saved during navigation";
+"save_track_to_gpx" = "Auto-record track during navigation";
+"save_track_to_gpx_descrp" = "A GPX track is automatically saved during navigation";
 "gpx_distance_points" = "Distance (points)";
 "gpx_max_speed" = "Max speed";
 "shared_string_speed" = "Velocidade";
@@ -425,7 +425,7 @@
 "intro_placeholder" = "enter the name of your region";
 // Settings
 "sett_units" = "Units";
-"sett_lang" = "Map Language";
+"map_locale" = "Map Language";
 "sett_km" = "Kilometers";
 "sett_ml" = "Miles";
 "sett_zoom" = "Zoom button";
@@ -596,9 +596,9 @@
 "product_title_parking" = "Parking Position";
 "product_desc_parking" = "Let you easily memorize when the car was parked and how much time left if the parking is limited by time";
 "product_desc_ext_parking" = "OsmAnd Parking Plugin reminds you of your parking position. It is a plugin for OsmAnd Maps&Navigation app.\nChoose a time-independent reminder (only a marker on the map) or a time-limited one with alarm upon time expiration (includes also a marker on the map). To use the plugin, enable it in the Plugins menu.";
-"product_title_skimap" = "Ski map";
+"plugin_ski_name" = "Ski map";
 "product_desc_skimap" = "Ski slopes for all ski resorts in the world";
-"product_desc_ext_skimap" = "OsmAnd Ski Maps is a plugin to OsmAnd Maps&Navigation app designed to navigate at winter sports locations. It gives the information about ski pistes, ski lift markers and even colored lines indicating the complexity of each track. You get the info about ski tracks themselves as well as the surrounding infrastructure.\n\nUsage Instructions: Enable the plugin in OsmAnd application, tap the map button and set the map type to Ski maps.";
+"plugin_ski_descr" = "OsmAnd Ski Maps is a plugin to OsmAnd Maps&Navigation app designed to navigate at winter sports locations. It gives the information about ski pistes, ski lift markers and even colored lines indicating the complexity of each track. You get the info about ski tracks themselves as well as the surrounding infrastructure.\n\nUsage Instructions: Enable the plugin in OsmAnd application, tap the map button and set the map type to Ski maps.";
 "monitoring_settings" = "Gravación de viaxes";
 "product_desc_track_recording" = "Activates the functionality to record and save your tracks";
 "product_desc_ext_track_recording" = "Permíteche gravar, gardar e analizalos teus datos do adestramento ou movementos, coma velocidade, ascensos, descensos ou alivio da ruta, que logo se poden reutilizar, mellorar, complementar ou compartir cos amigos.. \n\nComo - https://osmand.net/docs/user/plugins/trip-recording";
@@ -1862,4 +1862,4 @@ Lon %@";
 "routing_attr_allow_streams_name" = "Permitir regatos e cunetas";
 "rendering_attr_noNatureReserveBoundaries_description" = "Agochar reservas naturais,áreas protexidas e de parques nacionais.";
 "routing_attr_allow_intermittent_description" = "Permitir canles de auga intermitentes";
-"download_wikipedia_data" = "Baixar datos da Wikiped
+"download_wikipedia_data" = "Baixar datos d

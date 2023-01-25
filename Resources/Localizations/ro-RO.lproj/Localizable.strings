@@ -1245,7 +1245,7 @@
 "sett_zoom" = "Butonul Zoom";
 "sett_ml" = "Mile";
 "sett_km" = "Kilometri";
-"sett_lang" = "Limba hărții";
+"map_locale" = "Limba hărții";
 "sett_units" = "Unități";
 "intro_placeholder" = "introduceți numele regiunii dumneavoastră";
 "intro_promo" = "Hărți globale offline";
@@ -1288,8 +1288,8 @@
 "stats_select_graph_data" = "Selectați datele din grafic";
 "gpx_max_speed" = "Viteza maximă";
 "gpx_distance_points" = "Distanța (puncte)";
-"track_during_nav_descr" = "Activați pentru a salva automat un track în timpul navigării";
-"track_during_nav" = "Înregistrare automată a pistei";
+"save_track_to_gpx_descrp" = "Activați pentru a salva automat un track în timpul navigării";
+"save_track_to_gpx" = "Înregistrare automată a pistei";
 "gpxup_private" = "Privat";
 "gpxup_trackable" = "Urmăribil";
 "gpxup_identifiable" = "Identificabil";
@@ -1666,17 +1666,17 @@
 "product_desc_antarctica" = "Descărcări nelimitate de hărți pentru Antarctica";
 "index_name_antarctica" = "Antarctica";
 "product_desc_africa" = "Descărcări nelimitate de hărți pentru Africa";
-"product_desc_ext_osm_editing" = "Vă permite să contribuiți la OpenStreetMap, o comunitate globală care are ca scop crearea unei hărți cuprinzătoare a lumii și furnizarea de date open-source actualizate pentru fiecare utilizator. \n\nPuteți găsi instrucțiuni despre cum să editați harta pe site-ul https://osmand.net/docs/user/plugins/osm-editing";
+"osm_editing_plugin_description" = "Vă permite să contribuiți la OpenStreetMap, o comunitate globală care are ca scop crearea unei hărți cuprinzătoare a lumii și furnizarea de date open-source actualizate pentru fiecare utilizator. \n\nPuteți găsi instrucțiuni despre cum să editați harta pe site-ul https://osmand.net/docs/user/plugins/osm-editing";
 "product_desc_osm_editing" = "Transformați-vă telefonul mobil într-un instrument de cartografiere";
-"product_title_osm_editing" = "Editarea OpenStreetMap";
+"osm_editing_plugin_name" = "Editarea OpenStreetMap";
 "product_desc_ext_trip_planning" = "Plugin-ul de planificare a călătoriilor vă permite să vă creați călătoria pe hartă, să o salvați, să măsurați distanța dintre punctele conectate cu linii drepte etc. Creat pentru planificarea preliminară a călătoriei, mai degrabă decât pentru construirea temeinică a traseului.";
 "product_desc_trip_planning" = "Planifică-ți călătoria, adaugă puncte de trecere, măsoară distanța până la destinație folosind acest plugin";
 "product_title_trip_planning" = "Planificarea călătoriei";
 "product_desc_ext_track_recording" = "Vă permite să înregistrați, să salvați și să analizați datele de antrenament sau de mișcare, cum ar fi viteza, urcările, coborârile sau reliefarea traseului, care pot fi apoi reutilizate, îmbunătățite, completate sau împărtășite cu prietenii. \n\nCum se utilizează - https://osmand.net/docs/user/plugins/trip-recording";
 "product_desc_track_recording" = "Înregistrați și salvați călătoriile ca piese GPX";
-"product_desc_ext_skimap" = "Conceput pentru a naviga în locațiile de sporturi de iarnă. Urmăriți pistele de schi, marcajele teleschiurilor și liniile colorate care indică complexitatea fiecărei piste. Pentru a o utiliza după activare, accesați Configurare hartă și alegeți tipul de hartă \"Winter and ski\".";
+"plugin_ski_descr" = "Conceput pentru a naviga în locațiile de sporturi de iarnă. Urmăriți pistele de schi, marcajele teleschiurilor și liniile colorate care indică complexitatea fiecărei piste. Pentru a o utiliza după activare, accesați Configurare hartă și alegeți tipul de hartă \"Winter and ski\".";
 "product_desc_skimap" = "Harta actualizată a pârtiilor de schi cu teleschiuri și pârtii";
-"product_title_skimap" = "Harta de schi";
+"plugin_ski_name" = "Harta de schi";
 "product_desc_ext_parking" = "Permiteți să setați un punct de pe hartă în care mașina dumneavoastră este lăsată pe stradă și să vă anunțați calendarul când începe timpul de parcare. Plugin-ul ajută la urmărirea timpului de parcare și a locației mașinii dumneavoastră. Pentru a plasa un marcaj, alegeți un loc pe hartă, apoi mergeți la Acțiuni și apăsați \"Adăugare parcare\".";
 "product_desc_parking" = "Urmăriți timpul de parcare și locația mașinii dumneavoastră";
 "product_title_parking" = "Poziția de parcare";
@@ -1959,7 +1959,7 @@
 "quick_action_add_dest_descr" = "Atingerea acestui buton de acțiune stabilește destinația în centrul hărții. Orice destinație selectată anterior devine ultima destinație intermediară.";
 "quick_action_voice_descr" = "Atingerea acestui buton de acțiune dezactivează sau activează ghidarea vocală în timpul navigației.";
 "quick_action_show_gpx_descr" = "Atingerea acestui buton de acțiune afișează sau ascunde pistele GPX afișate în prezent.";
-"quick_action_marker_descr" = "Atingerea acestui buton de acțiune adaugă un marker de hartă în punctul central al hărții.";
+"quick_action_add_marker_descr" = "Atingerea acestui buton de acțiune adaugă un marker de hartă în punctul central al hărții.";
 "quick_action_parking_descr" = "Atingerea acestui buton de acțiune adaugă o locație de parcare în punctul central al hărții.";
 "quick_action_day_night_descr" = "Atingerea acestui buton de acțiune permite comutarea între modul de hartă de zi și cel de noapte.";
 "quick_action_poi_add_descr" = "Atingerea acestui buton de acțiune vă permite să adăugați rapid POI pe hartă cu tipul și etichetele predefinite.";
@@ -2009,7 +2009,7 @@
 "quick_action_add_poi" = "Adăugați POI";
 "toggle_local_edits" = "Comutați editările OSM locale";
 "toggle_online_notes" = "Comutați notele OSM";
-"add_osm_note" = "Adăugați o notă OSM";
+"quick_action_add_osm_bug" = "Adăugați o notă OSM";
 "quick_action_navigation_voice" = "Voce pornit/oprit";
 "population_num" = "Populație";
 "shared_string_turn_off" = "Opriți";
@@ -2235,7 +2235,7 @@
 "shared_string_weather" = "Meteo";
 "add_description" = "Adăugați o descriere";
 "navigate_point_mgrs" = "MGRS";
-"mgrs_description" = "OsmAnd utilizează formatul MGRS, care este identic cu UTM NATO.";
+"mgrs_format_descr" = "OsmAnd utilizează formatul MGRS, care este identic cu UTM NATO.";
 "routeInfo_surface_description" = "Furnizați informații despre suprafața fizică a drumului/căii pietonale.";
 "routeInfo_smoothness_description" = "Clasificarea manevrabilității drumurilor/căilor pietonale pentru vehiculele pe roți, în special în ceea ce privește regularitatea/planeitatea suprafeței.";
 "routeInfo_tracktype_description" = "Colorează traseul sau linia de cale ferată în funcție de compoziția suprafeței sale. Se aplică de obicei atunci când rețeaua de drumuri este în mare parte neasfaltată.";
@@ -2774,4 +2774,4 @@
 "use_heightmap_setting" = "Folosește hartă relief 3D";
 "units_kg" = "kg";
 "amazon_appstore" = "Amazon Appstore";
-"download_wikipedia_data" = "Descărcați datele Wikiped
+"download_wikipedia_data" = "Descărcați datel

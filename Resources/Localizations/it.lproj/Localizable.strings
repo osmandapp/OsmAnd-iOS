@@ -244,7 +244,7 @@
 "track_clear_q" = "Vuoi cancellare il viaggio attuale?";
 "show_info" = "Mostra le Informazioni";
 "record_trip" = "Registra il tuo viaggio";
-"sett_lang" = "Linguaggio mappa";
+"map_locale" = "Linguaggio mappa";
 "sett_pref_lang" = "Lingua preferita";
 "sett_lang_show_local" = "Mostra i nomi locali";
 "translit_names" = "Traslittera i nomi";
@@ -266,7 +266,7 @@
 "int_hour" = "h";
 "int_min" = "min.";
 "shared_string_sec" = "sec";
-"product_title_skimap" = "Mappe sciistiche";
+"plugin_ski_name" = "Mappe sciistiche";
 "product_desc_africa" = "Scaricamenti illimitati delle mappe per l'Africa";
 "product_desc_australia" = "Scaricamenti illimitati delle mappe per l'Australia";
 "product_desc_centralamerica" = "Scaricamenti illimitati delle mappe per L'America Centrale";
@@ -1271,8 +1271,8 @@
 "choose_audio_stream_descr" = "Seleziona l\'altoparlante per la guida vocale.";
 "poi_overlay" = "Sovrapposizione PDI";
 "save_current_track_descr" = "Salva adesso la traccia come file GPX.";
-"track_during_nav" = "Registrazione automatica del viaggio";
-"track_during_nav_descr" = "Attivare per salvare automaticamente un viaggio durante la navigazione";
+"save_track_to_gpx" = "Registrazione automatica del viaggio";
+"save_track_to_gpx_descrp" = "Attivare per salvare automaticamente un viaggio durante la navigazione";
 // Help
 "help_first_steps" = "Primi passi";
 "help_first_use_descr" = "Come scaricare mappe e fare le impostazioni di base";
@@ -1317,7 +1317,7 @@
 "osm_confirm_upload" = "Caricare le modifiche?";
 "edit_osm_note" = "Modifica Nota OSM";
 "modify_poi" = "Modifica le informazioni del PDI";
-"product_title_osm_editing" = "Modiche OpenStreetMap";
+"osm_editing_plugin_name" = "Modiche OpenStreetMap";
 "product_desc_osm_editing" = "Trasforma il tuo telefono cellulare in uno strumento di mappatura";
 "poi_category_and_type" = "Categorie e tipi PDI";
 "poi_select_category" = "Seleziona categoria";
@@ -1382,7 +1382,7 @@
 "quick_action_list_descr" = "Tappando questo pulsante azione scorrerai fra la lista sotto";
 "add_map_style" = "Aggiungi stile mappa";
 "toggle_fav" = "Mostra/nascondi preferiti";
-"add_osm_note" = "Aggiungi nota OSM";
+"quick_action_add_osm_bug" = "Aggiungi nota OSM";
 "toggle_online_notes" = "Attiva/disattiva le note di OSM";
 "toggle_local_edits" = "Attiva/disattiva modifiche locali OSM";
 "add_destination" = "Aggiungi destinazione";
@@ -2371,7 +2371,7 @@
 "empty_filename" = "Nome del file vuoto";
 "osm_around_the_clock" = "Tutto il giorno (24 ore su 24, 7 giorni su 7)";
 "screen_settings_weather_toolbar" = "Barra degli strumenti meteo";
-"mgrs_description" = "OsmAnd utilizza il formato MGRS che è identico a UTM NATO.";
+"mgrs_format_descr" = "OsmAnd utilizza il formato MGRS che è identico a UTM NATO.";
 "after_tapping_done" = "Dopo aver toccato Fine, i profili eliminati andranno persi completamente.";
 "route_preferred_terrain_flat" = "Percorsi con un profilo di rilievo piatto. La lunghezza può aumentare.";
 "route_preferred_terrain_any" = "Il profilo del terreno non viene preso in considerazione quando si sceglie un percorso.";
@@ -2383,7 +2383,7 @@
 "profile_import_success" = "Il profilo dell'applicazione è stato importato correttamente";
 "quick_action_source_switch_descr" = "Toccando questo pulsante si sfoglia l'elenco sottostante.";
 "quick_action_parking_descr" = "Toccando questo pulsante si aggiunge una posizione di parcheggio nel punto centrale della mappa.";
-"quick_action_marker_descr" = "Toccando questo pulsante si aggiunge un indicatore nel punto centrale della mappa.";
+"quick_action_add_marker_descr" = "Toccando questo pulsante si aggiunge un indicatore nel punto centrale della mappa.";
 "quick_action_voice_descr" = "Toccando questo pulsante si attiva o disattiva la guida vocale durante la navigazione.";
 "quick_action_autozoom_descr" = "Toccando questo pulsante si attiva/disattiva la modalità di zoom automatico della mappa in base alla velocità attuale.";
 "toggle_contour_lines" = "Mostra/Nascondi curve di livello";
@@ -2445,11 +2445,11 @@
 "toggle_precipitation" = "Mostra/nascondi - Livello delle precipitazioni";
 "tts_title" = "TTS";
 "delete_group_confirm" = "Sicuro di volere cancellare il gruppo \"%@\"?";
-"product_desc_ext_osm_editing" = "Consente di contribuire a OpenStreetMap, una comunità globale volta a creare una mappa completa del mondo e a fornire dati open source aggiornati a ogni utente.\n\nPuoi trovare istruzioni su come modificare la mappa sul nostro sito web https://osmand.net/docs/user/plugins/osm-editing";
+"osm_editing_plugin_description" = "Consente di contribuire a OpenStreetMap, una comunità globale volta a creare una mappa completa del mondo e a fornire dati open source aggiornati a ogni utente.\n\nPuoi trovare istruzioni su come modificare la mappa sul nostro sito web https://osmand.net/docs/user/plugins/osm-editing";
 "replace_waypoint_confirmation" = "Sicuro di volere sostituire il waypoint %@?";
 "shared_string_uploaded" = "Inviato";
 "shared_string_do_not_exist" = "Non esiste";
-"product_desc_ext_skimap" = "Progettato per navigare in luoghi di sport invernali. Guarda le piste da sci, gli indicatori degli impianti di risalita e le linee colorate che indicano la complessità di ogni traccia. Per utilizzare dopo aver abilitato vai su Configura mappa e scegli il tipo di mappa \"Inverno e sci\".";
+"plugin_ski_descr" = "Progettato per navigare in luoghi di sport invernali. Guarda le piste da sci, gli indicatori degli impianti di risalita e le linee colorate che indicano la complessità di ogni traccia. Per utilizzare dopo aver abilitato vai su Configura mappa e scegli il tipo di mappa \"Inverno e sci\".";
 "help_travel" = "Viaggi (Wikipedia e Wikivoyage)";
 "help_legend_descr" = "Guida ai simboli della mappa";
 "download_heightmap_maps" = "Mappa altimetrica";
@@ -2780,4 +2780,4 @@
 "rendering_attr_OSMMapperAssistantIconsLowZooms_description" = "Visualizzazione schematica delle icone a basso zoom";
 "rendering_attr_horse_scale_dangerous_name" = "Pericoloso";
 "shared_string_does_not_exist" = "Non esiste";
-"download_wikipedia_data" = "Scarica dati di Wikiped
+"download_wikipedia_data" = "Scarica dati d

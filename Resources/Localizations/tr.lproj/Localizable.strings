@@ -127,7 +127,7 @@
 "intro_placeholder" = "bölgenizin adını girin";
 // Settings
 "sett_units" = "Birimler";
-"sett_lang" = "Harita Dili";
+"map_locale" = "Harita Dili";
 "sett_km" = "Kilometre";
 "sett_ml" = "Mil";
 "sett_zoom" = "Yakınlaştırma düğmesi";
@@ -273,7 +273,7 @@
 "product_desc_nautical" = "Tüm dünya deniz haritası";
 "product_title_parking" = "Park pozisyonu";
 "product_desc_parking" = "İzin kolayca ezberlemek ne zaman araba park edilmişti ve zamanla sınırlı otopark Eğer ne kadar kalan süre";
-"product_title_skimap" = "Kayak göster";
+"plugin_ski_name" = "Kayak göster";
 "product_desc_skimap" = "Dünyadaki tüm Kayak Merkezleri için Kayak tesisi";
 "monitoring_settings" = "Seyahat kaydetme";
 "product_desc_track_recording" = "İzlediğiniz yolları kaydetme işlevini etkinleştirir";
@@ -390,7 +390,7 @@
 "translit_names" = "Adlara harfçevirisi yap";
 "product_desc_ext_nautical" = "OsmAnd Deniz Grafikleri, OsmAnd Haritalar & Navigasyon uygulaması için bir eklentidir. Okyanusların, denizlerin, kıyı alanlarının ve nehirlerin ayrıntılı bir grafiksel gösterimidir. Çizelgeler, yelken rotaları, navigasyon ışıkları, tehlikeli alanlar, yelken açılmasına veya yanaşmasına izin verilen ya da izin verilmeyen alanlar vb. gibi çeşitli bilgiler içerebilir.\n\nKullanım Talimatları: Ayrıntılı haritanın olmasına bakılmaksızın haritaları görmek için deniz temel haritasının indirilmesi önemle tavsiye edilir. Deniz çizelgelerini açmak için harita düğmesine dokunun ve harita türünü Deniz olarak ayarlayın.\n\nNot: Tüm profesyonel denizciler gemilerinde resmi deniz çizelgeleri bulundurmak zorundadırlar.\n\nOsmAnd Deniz çizelgeleri, OpenSeaMap projesi verilerini temel almaktadır. Şu anda OpenSeaMap çizelgeleri resmi deniz çizelgeleri ile rekabet edemese de, eğlence amaçlı yelkenciler tarafından yönlendirme veya rota planlama için kullanılabilir.";
 "product_desc_ext_parking" = "OsmAnd Park Etme Eklentisi size park konumunuzu hatırlatır. OsmAnd Haritalar&Navigasyon uygulaması için bir eklentidir.\nZamandan bağımsız bir hatırlatıcı (sadece harita üzerinde bir işaretleyici) veya zaman aşımına uğradığında alarmlı zaman sınırlı bir hatırlatıcı seçin (harita üzerinde bir işaretleyici de içerir). Eklentiyi kullanmak için Eklentiler menüsünden etkinleştirin.";
-"product_desc_ext_skimap" = "OsmAnd Kayak Haritaları, kış sporları konumlarında gezinmek için tasarlanmış bir OsmAnd Haritalar&Navigasyon uygulaması eklentisidir. Kayak pistleri, telesiyej işaretleri hakkında bilgiler vermekte ve hatta her parkurun karmaşıklığını gösteren renkli çizgiler sağlamaktadır. Kayak pistleri ve çevresindeki altyapı hakkında bilgiler edinebilirsiniz.\n\nKullanım Talimatları: OsmAnd uygulamasında eklentiyi etkinleştirin, harita düğmesine dokunun ve harita türünü Kayak haritaları olarak ayarlayın.";
+"plugin_ski_descr" = "OsmAnd Kayak Haritaları, kış sporları konumlarında gezinmek için tasarlanmış bir OsmAnd Haritalar&Navigasyon uygulaması eklentisidir. Kayak pistleri, telesiyej işaretleri hakkında bilgiler vermekte ve hatta her parkurun karmaşıklığını gösteren renkli çizgiler sağlamaktadır. Kayak pistleri ve çevresindeki altyapı hakkında bilgiler edinebilirsiniz.\n\nKullanım Talimatları: OsmAnd uygulamasında eklentiyi etkinleştirin, harita düğmesine dokunun ve harita türünü Kayak haritaları olarak ayarlayın.";
 "product_desc_ext_track_recording" = "İzlediğiniz yolları OsmAnd Yol kaydı eklentisini kullanarak elle kaydedin. İzlediğiniz yolu bir gpx dosyası olarak dışa aktarın, paylaşın ve hatta OpenStreetMap projesine katkıda bulunmak için kullanın. Koşucular, yürüyüşçüler ve izledikleri yolları kaydetmek isteyen herkes için kullanışlı bir araçtır.";
 "product_desc_ext_srtm" = "Bu eklenti, OsmAnd çevrim dışı haritalarında görüntülenebilen eş yükselti eğrileri ve tepe gölgelemesi sağlamaktadır. Eş yükselti eğrileri, alandaki yükseklikler hakkında bilgi sağlarken, tepe gölgeleri bunları görselleştirmektedir. Bu eklentiyi kullanarak dağ zirvelerinin adlarını ve arazinin belirli özelliklerini görün.\n\nKüresel veriler (70° kuzey ve 70° güney arasındaki) SRTM (Shuttle Radar Topography Mission) ve ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), NASA'nın Dünya Gözlem Sisteminin amiral uydusu olan Terra üzerindeki bir görüntüleme aracı, tarafından yapılan ölçümlere dayanmaktadır. ASTER NASA, Japonya Ekonomi, Ticaret ve Sanayi Bakanlığı (METI) , ve Japon Uzay Sistemleri (J-spacesystems) arasında ortak bir çalışmadır.";
 "shared_string_hillshade" = "Tepe gölgesi";
@@ -983,8 +983,8 @@
 "poi_overlay" = "POI Üst Katmanı";
 "auto_split_gap_descr" = "6 dakikalık boşluktan sonra yeni bölüm, 2 saatlik boşluktan sonra yeni yol veya daha uzun bir boşluktan sonra yeni dosya başlat";
 "save_current_track_descr" = "Geçerli rotayı şimdi GPX dosyası olarak kaydedin.";
-"track_during_nav" = "İzlenen yolu otomatik kaydet";
-"track_during_nav_descr" = "Navigasyon sırasında izlenen yolu otomatik olarak kaydetmek için açın";
+"save_track_to_gpx" = "İzlenen yolu otomatik kaydet";
+"save_track_to_gpx_descrp" = "Navigasyon sırasında izlenen yolu otomatik olarak kaydetmek için açın";
 // Help
 "help_first_steps" = "İlk adımlar";
 "help_first_use_descr" = "Nasıl harita indirilir ve temel ayarlar belirlenir";
@@ -1050,9 +1050,9 @@
 "osm_confirm_upload" = "Değişiklikler karşıya yüklensin mi?";
 "edit_osm_note" = "OSM Notunu Düzenle";
 "modify_poi" = "POI bilgilerini değiştir";
-"product_title_osm_editing" = "OpenStreetMap Düzenleme";
+"osm_editing_plugin_name" = "OpenStreetMap Düzenleme";
 "product_desc_osm_editing" = "Doğrudan OsmAnd'den OpenStreetMap'te değişiklikler yapın";
-"product_desc_ext_osm_editing" = "OSM Düzenleme eklentisi, POI nesneleri oluşturma veya değiştirme, OSM Notlarını açma veya yorum yapma ve kaydedilen GPX dosyaları ile katkıda bulunma gibi OSM'ye katkıda bulunmak için kullanılabilir. OSM, topluluk tarafından yönlendirilen küresel bir kamu malı haritalama projesidir. Daha fazla bilgi için lütfen https://osm.org adresine bakın. Uygulamada OSM kimlik bilgilerinizi belirtirseniz, doğrudan OsmAnd'dan katkıda bulunabilirsiniz.";
+"osm_editing_plugin_description" = "OSM Düzenleme eklentisi, POI nesneleri oluşturma veya değiştirme, OSM Notlarını açma veya yorum yapma ve kaydedilen GPX dosyaları ile katkıda bulunma gibi OSM'ye katkıda bulunmak için kullanılabilir. OSM, topluluk tarafından yönlendirilen küresel bir kamu malı haritalama projesidir. Daha fazla bilgi için lütfen https://osm.org adresine bakın. Uygulamada OSM kimlik bilgilerinizi belirtirseniz, doğrudan OsmAnd'dan katkıda bulunabilirsiniz.";
 "poi_category_and_type" = "Kategori ve POI Türü";
 "poi_select_category" = "Kategori seç";
 "poi_select_type" = "Tür seç";
@@ -1132,7 +1132,7 @@
 "quick_action_list_descr" = "Bu eylem düğmesine dokunmak, aşağıdaki listeyi sayfalar halinde gösterir";
 "add_map_style" = "Harita tarzı ekle";
 "toggle_fav" = "Sık kullanılanları göster/gizle";
-"add_osm_note" = "OSM notu ekle";
+"quick_action_add_osm_bug" = "OSM notu ekle";
 "toggle_online_notes" = "OSM notlarını aç/kapat";
 "toggle_local_edits" = "Yerel OSM düzenlemelerini aç/kapat";
 "add_destination" = "Hedef ekle";
@@ -1164,7 +1164,7 @@
 "quick_action_poi_add_descr" = "Bu eylem düğmesine dokunmak, önceden tanımlanmış tür ve etiketlerle haritaya hızlı bir şekilde POI eklemenizi sağlar.";
 "quick_action_day_night_descr" = "Bu eylem düğmesine dokunmak, Gündüz ve Gece harita modu arasında geçiş yapar.";
 "quick_action_parking_descr" = "Bu eylem düğmesine dokunmak, haritanın merkez noktasına bir park yeri ekler.";
-"quick_action_marker_descr" = "Bu eylem düğmesine dokunmak, haritanın merkez noktasına bir harita işaretleyicisi ekler.";
+"quick_action_add_marker_descr" = "Bu eylem düğmesine dokunmak, haritanın merkez noktasına bir harita işaretleyicisi ekler.";
 "quick_action_show_gpx_descr" = "Bu eylem düğmesine dokunmak, o anda görüntülenen GPX yollarını gösterir veya gizler.";
 "quick_action_voice_descr" = "Bu eylem düğmesine dokunmak, navigasyon sırasında sesli yönlendirmeyi devre dışı bırakır veya etkinleştirir.";
 "quick_action_add_dest_descr" = "Bu eylem düğmesine dokunmak, harita merkezini hedef olarak ayarlar. Önceden seçilen herhangi bir hedef son ara hedef haline gelir.";
@@ -2268,7 +2268,7 @@
 "navigate_point_mgrs" = "MGRS";
 "turn_arrows" = "Dönüş Okları";
 "shared_string_min_height" = "Asgari yükseklik";
-"mgrs_description" = "OsmAnd, UTM NATO ile aynı olan MGRS biçimini kullanmaktadır.";
+"mgrs_format_descr" = "OsmAnd, UTM NATO ile aynı olan MGRS biçimini kullanmaktadır.";
 "routeInfo_surface_description" = "Yol/patika fiziksel yüzey bilgisi sağla.";
 "routeInfo_smoothness_description" = "Tekerlekli araçlar için, özellikle yüzey düzgünlüğü/düzlüğü ile ilgili olarak, yol/patika manevra kabiliyeti sınıflandırması.";
 "routeInfo_winter_ice_road_description" = "Kış yolu sınıflandırmasına göre rota veya yol hattını renklendir.";
@@ -2688,4 +2688,4 @@
 "rendering_attr_noNatureReserveBoundaries_name" = "Doğa sınırları";
 "routing_attr_difficulty_preference_advanced_name" = "İleri";
 "rendering_value_omit_name" = "Atla";
-"download_wikipedia_data" = "Wikipedia verilerini ind
+"download_wikipedia_data" = "Wikipedia veril

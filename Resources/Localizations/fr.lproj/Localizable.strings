@@ -289,7 +289,7 @@
 "map_settings_offline" = "Styles de cartes hors ligne";
 "intro_download" = "Télécharger\nla carte";
 "intro_placeholder" = "entrez le nom de votre région";
-"sett_lang" = "Langue de la carte";
+"map_locale" = "Langue de la carte";
 "sett_lang_show_local" = "Afficher les noms locaux";
 "sett_lang_trans" = "Translitération";
 "translit_names" = "Transcrire les noms";
@@ -334,7 +334,7 @@
 "help_quiz" = "Jeu-questionnaire";
 "product_title_parking" = "Emplacement de stationnement";
 "product_desc_parking" = "Suivre le temps et la position de stationnement de votre voiture";
-"product_title_skimap" = "Plan des pistes";
+"plugin_ski_name" = "Plan des pistes";
 "product_desc_skimap" = "Carte à jour des pistes de ski avec inclinaison";
 "product_desc_track_recording" = "Enregistre et sauvegarde vos trajets dans des traces GPX";
 "product_desc_trip_planning" = "Planifiez votre trajets, ajoutez des points de passage, mesurez la distance à votre destination avec ce greffon";
@@ -741,8 +741,8 @@
 "osm_live_routing_descr" = "Utiliser les mises à jour d'OsmAnd Live pour la navigation";
 "tunnel_warning" = "En approche d\'un tunnel";
 "save_current_track_descr" = "Enregistrer la trace en cours comme fichier GPX.";
-"track_during_nav" = "Auto-enregistrement de la trace";
-"track_during_nav_descr" = "Activez pour enregistrer automatiquement une trace durant la navigation";
+"save_track_to_gpx" = "Auto-enregistrement de la trace";
+"save_track_to_gpx_descrp" = "Activez pour enregistrer automatiquement une trace durant la navigation";
 "osmand_live" = "OsmAnd Live";
 "live_updates" = "Misesà jour en temps réel";
 "available_maps" = "Cartes disponibles";
@@ -927,11 +927,11 @@
 // GPX colors
 "product_desc_ext_nautical" = "Activez cette carte pour enrichir l'application d'informations sur les routes navigables, les feux de navigation, les zones dangereuses et où il est autorisé ou interdit de naviguer ou d'accoster, etc. Pour télécharger et activer les cartes maritimes, appuyez sur le bouton Carte et réglez le type de carte sur Nautical.\n\nPlus d'informations - https://osmand.net/docs/user/plugins/nautical-charts";
 "product_desc_ext_parking" = "Activez-le pour mettre un point sur la carte à l'endroit où votre voiture est garée et ajoutez un rappel à votre calendrier lorsque le temps restant de stationnement est écoulé. Cette extension vous aide à surveiller le temps restant de stationnement ainsi que la localisation de votre voiture. Pour placer un point, choisissez un endroit sur la carte, allez dans \"Actions\" et sélectionnez \"Stationnement\".";
-"product_desc_ext_skimap" = "Conçu pour naviguer sur les sites de sports d'hiver. Observez les pistes de ski, les balises des remontées mécaniques et les lignes de couleur indiquant la complexité de chaque piste. Pour l'utiliser après l'activation, allez dans Configurer la carte et choisissez le type de carte \"Hiver et ski\".";
+"plugin_ski_descr" = "Conçu pour naviguer sur les sites de sports d'hiver. Observez les pistes de ski, les balises des remontées mécaniques et les lignes de couleur indiquant la complexité de chaque piste. Pour l'utiliser après l'activation, allez dans Configurer la carte et choisissez le type de carte \"Hiver et ski\".";
 "product_desc_ext_trip_planning" = "Le plugin de planification de trajet vous permet de créer votre trajet sur la carte, de le sauvegarder, de mesurer la distance entre les points reliés par des lignes droites, etc. Conçu pour la planification préliminaire des trajets plutôt que pour la construction d'un itinéraire complet.";
-"product_title_osm_editing" = "Edition d'OpenStreetMap";
+"osm_editing_plugin_name" = "Edition d'OpenStreetMap";
 "product_desc_osm_editing" = "Transformez votre téléphone mobile en outil de cartographie";
-"product_desc_ext_osm_editing" = "Vous permet de contribuer à OpenStreetMap, une communauté mondiale dont l'objectif est de créer une carte complète du monde et de mettre à la disposition de tous les utilisateurs des données à jour en libre accès. \n\nVous trouverez des instructions sur la façon de modifier la carte sur notre site Web https://osmand.net/docs/user/plugins/osm-editing";
+"osm_editing_plugin_description" = "Vous permet de contribuer à OpenStreetMap, une communauté mondiale dont l'objectif est de créer une carte complète du monde et de mettre à la disposition de tous les utilisateurs des données à jour en libre accès. \n\nVous trouverez des instructions sur la façon de modifier la carte sur notre site Web https://osmand.net/docs/user/plugins/osm-editing";
 "product_desc_ext_srtm" = "Les informations sur le terrain, telles que les courbes de niveau, les ombres des collines et les pentes, vous aident à évaluer visuellement la forme de la surface terrestre, en tenant compte de la courbure, des extrêmes, de la pente, des points de même hauteur, etc. Les informations topographiques sur une carte peuvent être représentées par des ombres de pente, des courbes de niveau pour la montée et la descente, et la couleur de l'écart de l'angle de pente par rapport au plat. Données provenant de SRTM et ASTER.\n\nComment faire - https://osmand.net/docs/user/plugins/contour-lines";
 "wikivoyage_travel_guide_descr" = "Guides des lieux les plus intéressants au monde depuis OsmAnd et sans connexion Internet.";
 "product_desc_sea_depth_contours" = "Bathymétrie et balisage maritime";
@@ -1460,7 +1460,7 @@
 "toggle_auto_zoom" = "Autozoom marche/arrêt";
 "add_start" = "Ajouter un point de départ";
 "add_destination" = "Ajouter une destination";
-"add_osm_note" = "Ajouter une note OSM";
+"quick_action_add_osm_bug" = "Ajouter une note OSM";
 "parking_place" = "Lieu de stationnement";
 "hide_poi_action" = "Masquer le POI";
 "fav_hide" = "Masquer les favoris";
@@ -1888,7 +1888,7 @@
 "quick_action_add_dest_descr" = "Appuyez pour définir la destination au centre de la carte. Toute destination précédemment sélectionnée devient la dernière destination intermédiaire.";
 "quick_action_voice_descr" = "Appuyer pour activer/désactiver le guidage vocal pendant la navigation.";
 "quick_action_show_gpx_descr" = "Appuyez pour afficher/masquer les traces GPX actuellement affichées.";
-"quick_action_marker_descr" = "Appuyez pour ajouter une marque au centre de la carte.";
+"quick_action_add_marker_descr" = "Appuyez pour ajouter une marque au centre de la carte.";
 "quick_action_parking_descr" = "Appuyez pour ajouter un emplacement de stationnement au point central de la carte.";
 "quick_action_source_switch_descr" = "Appuyez pour faire défiler la liste ci-dessous.";
 "quick_action_dialog" = "Boîte de dialogue";
@@ -2266,7 +2266,7 @@
 "map_settings_weather_pressure" = "Pression";
 "map_settings_weather_wind" = "Vent";
 "navigate_point_mgrs" = "MGRS";
-"mgrs_description" = "OsmAnd utilise le format MGRS qui est identique à celui de l'OTAN UTM.";
+"mgrs_format_descr" = "OsmAnd utilise le format MGRS qui est identique à celui de l'OTAN UTM.";
 "routeInfo_surface_description" = "Fournit des informations sur la surface des routes / chemins.";
 "routeInfo_smoothness_description" = "Classification des caractéristiques physiques des voies pour les véhicules à roues, notamment la nature et la régularité de leurs surfaces.";
 "route_line_use_map_style_width" = "Utiliser la largeur par défaut du style de carte (%@).";
@@ -2793,4 +2793,4 @@
 "routing_attr_carriage_restrictions_name" = "Restrictions de chariot";
 "routing_attr_avoid_footways_description" = "Éviter les trottoirs";
 "shared_string_does_not_exist" = "N'existe pas";
-"download_wikipedia_data" = "Télécharger les données Wikiped
+"download_wikipedia_data" = "Télécharger les donnée

@@ -78,7 +78,7 @@
 "product_title_nautical" = "Søkort";
 "product_desc_nautical" = "Vektorkort, der er egnede til navigation på sejlruter";
 "product_title_parking" = "Parkering";
-"product_title_skimap" = "Skikort";
+"plugin_ski_name" = "Skikort";
 "product_desc_skimap" = "Opdateret kort over skispor med lifte og pister";
 "monitoring_settings" = "Optagelse af tur";
 "product_desc_track_recording" = "Optag og gem dine ture som GPX-spor";
@@ -277,7 +277,7 @@
 "loc_access_denied_desc" = "Adgang til placeringstjeneste er blevet nægtet";
 "make_call" = "Foretag et opkald";
 "shared_string_and" = "og";
-"sett_lang" = "Sprog på kort";
+"map_locale" = "Sprog på kort";
 "sett_lang_trans" = "Translitteration";
 "sett_pref_lang" = "Foretrukket sprog";
 "sett_lang_show_local" = "Vis lokale navne";
@@ -362,7 +362,7 @@
 "go_to_downloads" = "Hent";
 "product_desc_ext_nautical" = "Slå til for at berige dit kort med oplysninger om sejlruter, navigationslys, farligezoner, områder, hvor det er tilladt eller forbudt at sejle eller lægge til, osv. For at bruge dette skal du hente nautiske kort og aktivere Søkort-typen i \"Konfigurer kort\".\n\nVejledning - https://osmand.net/docs/user/plugins/nautical-charts";
 "product_desc_ext_parking" = "Aktivér for at lave et punkt på kortet, hvor din bil står på gaden, og giv besked til din kalender, når parkeringstiden begynder. Udvidelsen hjælper med at holde styr på parkeringstiden og placeringen af din bil. For at placere en markør skal du vælge et sted på kortet, gå til Handlinger og tryk på \"Tilføj parkering\".";
-"product_desc_ext_skimap" = "Designet til at navigere på vintersportssteder. Se oplysninger om skipister, skiliftsmarkører og endda farvede linjer med angivelse af spor kompleksitet. Brugsvejledning: Efter aktiveret skal du gå til \"Konfigurer Kort\" og sætte korttype til Skikort.";
+"plugin_ski_descr" = "Designet til at navigere på vintersportssteder. Se oplysninger om skipister, skiliftsmarkører og endda farvede linjer med angivelse af spor kompleksitet. Brugsvejledning: Efter aktiveret skal du gå til \"Konfigurer Kort\" og sætte korttype til Skikort.";
 "product_desc_ext_track_recording" = "Giver dig mulighed for at registrere, gemme og analysere dine trænings- eller bevægelsesdata, f.eks. hastighed, stigninger, nedstigninger eller ruteprofil, som du derefter kan genbruge, forbedre, supplere eller dele med venner.\n\nVejledning - https://osmand.net/docs/user/plugins/trip-recording";
 "product_desc_ext_wiki" = "Med offline Wikipedia på din rejse kan du lære mere om de steder, du besøger. Den er tilgængelig offline og viser Wikipedia-artikler om interessepunkter direkte på kortet. Glem ikke at downloade Wikipedia-kort for den valgte region.";
 "product_desc_ext_srtm" = "Terrænoplysninger, f.eks. højdekurver, bakkeskygger og skråninger, hjælper dig med at vurdere terrænets form visuelt, idet du tager højde for krumning, ekstremer, stejlhed, punkter med samme højde og meget mere. Topografiske oplysninger på et kort kan repræsenteres ved skravering af skråninger, konturlinjer for op- og nedstigninger og farven på skråningsvinklens afvigelse fra det flade. Data fra SRTM og ASTER.\n\nVejledning - https://osmand.net/docs/user/plugins/contour-lines";
@@ -738,7 +738,7 @@
 "auto_split_recording_title" = "Opdel automatisk optagelser efter et ophold";
 "confirm_every_run" = "Spørg altid";
 "save_current_track_descr" = "Gem det aktuelle spor som en GPX-fil nu.";
-"track_during_nav" = "Automatisk optagelse af rute under navigation";
+"save_track_to_gpx" = "Automatisk optagelse af rute under navigation";
 "logging_interval_navigation_descr" = "Vælg logningsinterval for ruteoptagelse under navigation";
 "logging_min_speed_descr" = "Filter: Ingen logning under denne hastighed";
 "planning_trip_item" = "Turplanlægning";
@@ -760,7 +760,7 @@
 "auto_split_gap_descr" = "Start et nyt segment efter ophold på 6 min., en ny rute efter 2 timer eller en ny fil efter et længere ophold";
 "recording_preferences_descr" = "Indstillinger for optagelse af ture";
 "shared_string_close" = "Luk";
-"track_during_nav_descr" = "Ruten gemmes automatisk under navigationen";
+"save_track_to_gpx_descrp" = "Ruten gemmes automatisk under navigationen";
 "shared_string_help" = "Hjælp";
 "shared_string_actions" = "Handlinger";
 // Help
@@ -908,9 +908,9 @@
 "osb_comment_dialog_message" = "Meddelelse";
 "osn_add_dialog_title" = "Opret note";
 "modify_poi" = "Ændre IP oplysninger";
-"product_title_osm_editing" = "OpenStreetMap redigering";
+"osm_editing_plugin_name" = "OpenStreetMap redigering";
 "product_desc_osm_editing" = "Forvandl din mobiltelefon til et kortlægningsværktøj";
-"product_desc_ext_osm_editing" = "Giver dig mulighed for at bidrage til OpenStreetMap, et globalt fællesskab, der har til formål at skabe et omfattende kort over verden og stille ajourførte open source-data til rådighed for alle brugere\n\nDu kan finde en vejledning om, hvordan du redigerer kortet, på vores websted https://osmand.net/docs/user/plugins/osm-editing";
+"osm_editing_plugin_description" = "Giver dig mulighed for at bidrage til OpenStreetMap, et globalt fællesskab, der har til formål at skabe et omfattende kort over verden og stille ajourførte open source-data til rådighed for alle brugere\n\nDu kan finde en vejledning om, hvordan du redigerer kortet, på vores websted https://osmand.net/docs/user/plugins/osm-editing";
 "user_password" = "Adgangskode";
 "rendering_value_category_name" = "Kategori";
 "poi_category_and_type" = "Kategori og IP-type";
@@ -1082,7 +1082,7 @@
 "toggle_poi" = "Vis/skjul intetessepunkt (IP)";
 "quick_action_add_parking" = "Tilføj parkeringssted";
 "quick_action_navigation_voice" = "Talevejledning til/fra";
-"add_osm_note" = "Tilføj OSM-note";
+"quick_action_add_osm_bug" = "Tilføj OSM-note";
 "toggle_online_notes" = "Skift visning af OSM-noter";
 "toggle_local_edits" = "Skift visning af lokale OSM-noter";
 "quick_action_add_poi" = "Tilføj IP";
@@ -1131,7 +1131,7 @@
 "quick_action_poi_add_descr" = "Ved at trykke på denne genvejsknap kan du hurtigt tilføje et interessepunkt på kortet med foruddefineret type og mærke.";
 "quick_action_day_night_descr" = "Trykkes på denne genvejsknap skiftes der mellem dag-og natkort-tilstand.";
 "quick_action_parking_descr" = "Ved tryk på genvejsknappen tilføjes en parkeringsplacering ved kortets midtpunkt.";
-"quick_action_marker_descr" = "Tryk på genvejsknappen tilføjer en kortmarkør på midten af skærmen.";
+"quick_action_add_marker_descr" = "Tryk på genvejsknappen tilføjer en kortmarkør på midten af skærmen.";
 "quick_action_show_gpx_descr" = "Tryk på genvejsknappen viser eller skjuler de aktuelt viste GPX-spor.";
 "quick_action_voice_descr" = "Tryk på genvejsknappen deaktiverer eller aktivere stemmevejledning under navigation.";
 "quick_action_add_dest_descr" = "Tryk på denne genvejsknap tilføjer en destination på skærmens centrum. Enhver tidligere valgt destination bliver den sidste mellemliggende destination.";
@@ -2261,7 +2261,7 @@
 "shared_string_max_height" = "Maks. højde";
 "routeInfo_surface_description" = "Giv oplysninger om veje/gangstiers fysiske overflade.";
 "navigate_point_mgrs" = "MGRS";
-"mgrs_description" = "OsmAnd anvender MGRS-format, som er identisk med UTM NATO.";
+"mgrs_format_descr" = "OsmAnd anvender MGRS-format, som er identisk med UTM NATO.";
 "shared_string_min_height" = "Min. højde";
 "routeInfo_smoothness_description" = "Klassificering af vej- og gangstiers fremkommelighed for hjulkøretøjer, navnligt med hensyn til overfladens regelmæssighed/fladhed.";
 "routeInfo_winter_ice_road_description" = "Farvelæg ruten eller sporlinjen efter dens vintervejklassificering.";
@@ -2796,4 +2796,4 @@
 "routing_attr_avoid_highway_name" = "Undgå motorveje";
 "rendering_attr_showMtbScaleUphill_description" = "Vis spor efter MTB-skala op ad bakke.";
 "shared_string_does_not_exist" = "Eksisterer ikke";
-"download_wikipedia_data" = "Hent Wikipedia-da
+"download_wikipedia_data" = "Hent Wiki

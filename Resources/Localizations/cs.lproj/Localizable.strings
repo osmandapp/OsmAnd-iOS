@@ -404,7 +404,7 @@
 "intro_placeholder" = "zadejte název své oblasti";
 // Settings
 "sett_units" = "Jednotky";
-"sett_lang" = "Jazyk mapy";
+"map_locale" = "Jazyk mapy";
 "sett_km" = "Kilometry";
 "sett_ml" = "Míle";
 "sett_zoom" = "Tlačítko přiblížení";
@@ -554,9 +554,9 @@
 "product_title_parking" = "Parking Position";
 "product_desc_parking" = "Sledování doby parkování a polohy vašeho vozu";
 "product_desc_ext_parking" = "Umožňuje nastavit bod na mapě, kde je vaše auto ponecháno na ulici, a upozornit váš kalendář na začátek doby parkování. Plugin pomáhá sledovat dobu parkování a polohu vašeho vozu. Chcete-li umístit značku, vyberte místo na mapě, přejděte do části Akce a stiskněte tlačítko \"Přidat parkování\".";
-"product_title_skimap" = "Lyžařská mapa";
+"plugin_ski_name" = "Lyžařská mapa";
 "product_desc_skimap" = "Aktuální mapa lyžařských tratí s vleky a sjezdovkami";
-"product_desc_ext_skimap" = "Navrženo pro navigaci v místech zimních sportů. Sledujte sjezdovky, značky lyžařských vleků a barevné čáry označující náročnost jednotlivých tratí. Pro použití po zapnutí přejděte na Konfigurace mapy a vyberte typ mapy \"Zimní a lyžařská\".";
+"plugin_ski_descr" = "Navrženo pro navigaci v místech zimních sportů. Sledujte sjezdovky, značky lyžařských vleků a barevné čáry označující náročnost jednotlivých tratí. Pro použití po zapnutí přejděte na Konfigurace mapy a vyberte typ mapy \"Zimní a lyžařská\".";
 "monitoring_settings" = "Záznam cesty";
 "product_desc_track_recording" = "Zaznamenávejte a ukládejte své cesty jako GPX stopy";
 "product_desc_ext_track_recording" = "Umožňuje zaznamenávat, ukládat a analyzovat údaje o tréninku nebo pohybu, jako je rychlost, stoupání, klesání nebo reliéf trasy, které lze následně znovu použít, vylepšit, doplnit nebo sdílet s přáteli. \n\nJak na to - https://osmand.net/docs/user/plugins/trip-recording";
@@ -744,8 +744,8 @@
 "confirm_every_run" = "Vždy se zeptat";
 "recording_preferences_descr" = "Možnosti ukládání stopy";
 "save_current_track_descr" = "Uložit aktuální trasu jako soubor GPX.";
-"track_during_nav" = "Automaticky ukládat stopu";
-"track_during_nav_descr" = "Zapněte pro automatický záznam stopy během navigace";
+"save_track_to_gpx" = "Automaticky ukládat stopu";
+"save_track_to_gpx_descrp" = "Zapněte pro automatický záznam stopy během navigace";
 "shared_string_help" = "Nápověda";
 // Help
 "help_first_steps" = "První kroky";
@@ -1640,7 +1640,7 @@
 "add_destination" = "Přidat cíl";
 "toggle_local_edits" = "Přepnout lokální úpravy OSM";
 "toggle_online_notes" = "Přepnout OSM poznámky";
-"add_osm_note" = "Přidat OSM poznámku";
+"quick_action_add_osm_bug" = "Přidat OSM poznámku";
 "parking_place" = "Místo parkování";
 "hide_poi_action" = "Skrýt body zájmu";
 "fav_hide" = "Skrýt oblíbené";
@@ -1862,9 +1862,9 @@
 "product_desc_australia_short" = "Mapy australské oblasti";
 "product_desc_africa_short" = "Mapy africké oblasti";
 "product_desc_antarctica" = "Neomezené stahování map Antarktidy";
-"product_desc_ext_osm_editing" = "Umožňuje přispívat do OpenStreetMap, globální komunity, jejímž cílem je vytvořit komplexní mapu světa a poskytovat aktuální open-source data každému uživateli. \n\nNávod, jak mapu upravovat, najdete na webových stránkách https://osmand.net/docs/user/plugins/osm-editing";
+"osm_editing_plugin_description" = "Umožňuje přispívat do OpenStreetMap, globální komunity, jejímž cílem je vytvořit komplexní mapu světa a poskytovat aktuální open-source data každému uživateli. \n\nNávod, jak mapu upravovat, najdete na webových stránkách https://osmand.net/docs/user/plugins/osm-editing";
 "product_desc_osm_editing" = "Proměňte svůj mobilní telefon v mapovací nástroj";
-"product_title_osm_editing" = "Editace OpenStreetMap";
+"osm_editing_plugin_name" = "Editace OpenStreetMap";
 "trip_hint" = "Vložte název stopy";
 "trip_name" = "Název stopy";
 "vk" = "VK";
@@ -1901,7 +1901,7 @@
 "quick_action_add_dest_descr" = "Klepnutím na toto tlačítko akce nastavíte střed mapy jako nový cíl. Původně nastavený cíl se stane posledním mezicílem.";
 "quick_action_voice_descr" = "Klepnutím na toto tlačítko akce vypnete nebo zapnete hlasové pokyny během navigace.";
 "quick_action_show_gpx_descr" = "Klepnutím na toto tlačítko akce zobrazíte nebo skryjete aktuálně vybrané GPX stopy.";
-"quick_action_marker_descr" = "Klepnutím na toto tlačítko akce přidáte mapovou značku do středu mapy.";
+"quick_action_add_marker_descr" = "Klepnutím na toto tlačítko akce přidáte mapovou značku do středu mapy.";
 "quick_action_parking_descr" = "Klepnutím na toto tlačítko akce přidáte parkovací místo do středu mapy.";
 "quick_action_day_night_descr" = "Klepnutím na toto tlačítko akce přepnete mezi denním a nočním režimem mapy.";
 "quick_action_poi_add_descr" = "Klepnutím na toto tlačítko akce snadno přidáte na mapu bod zájmu s předdefinovaným typem a značkami.";
@@ -2267,7 +2267,7 @@
 "routeInfo_tracktype_description" = "Obarvitčáru trasy nebo stopy podle složení jejího povrchu. Obvykle se používá, pokud je silniční síť převážně nezpevněná.";
 "routing_attr_only_permitted_ways_description" = "Použít pouze výslovně povolené cesty (polní cesty, stezky, atd.)";
 "routeInfo_winter_ice_road_description" = "Obarvitčáru trasy nebo stopy podle její zimní klasifikace.";
-"mgrs_description" = "OsmAnd používá formát MGRS, který je identický s UTM NATO.";
+"mgrs_format_descr" = "OsmAnd používá formát MGRS, který je identický s UTM NATO.";
 "routeInfo_surface_description" = "Poskytnout informaci o fyzickém povrchu silnic/pěšin.";
 "routing_attr_allow_gate_name" = "Povolit použití bran";
 "save_heading" = "Ukládat směr";
@@ -2743,4 +2743,4 @@
 "routing_attr_allow_intermittent_name" = "Povolit občasné vodní cesty";
 "routing_attr_allow_intermittent_description" = "Povolit občasné vodní cesty";
 "rendering_attr_natureReserves_name" = "Přírodní rezervace";
-"download_wikipedia_data" = "Stahování dat z Wikiped
+"download_wikipedia_data" = "Stahování dat 

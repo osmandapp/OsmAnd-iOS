@@ -146,7 +146,7 @@
 "intro_placeholder" = "";
 // Settings
 "sett_units" = "";
-"sett_lang" = "地图的语言";
+"map_locale" = "地图的语言";
 "sett_km" = "千米";
 "sett_ml" = "英里";
 "sett_zoom" = "";
@@ -296,9 +296,9 @@
 "product_title_parking" = "";
 "product_desc_parking" = "";
 "product_desc_ext_parking" = "";
-"product_title_skimap" = "";
+"plugin_ski_name" = "";
 "product_desc_skimap" = "";
-"product_desc_ext_skimap" = "";
+"plugin_ski_descr" = "";
 "monitoring_settings" = "行程录制";
 "product_desc_track_recording" = "";
 "product_desc_ext_track_recording" = "";
@@ -699,7 +699,7 @@
 "shared_string_previous" = "上一页";
 "shared_string_clear" = "清除";
 "confirm_every_run" = "总是询问";
-"track_during_nav" = "自动记录行程";
+"save_track_to_gpx" = "自动记录行程";
 "shared_string_help" = "帮助";
 "twitter" = "推特";
 "shared_string_close" = "关闭";
@@ -1320,7 +1320,7 @@
 "profile_type_user_string" = "用户配置文件";
 "map_settings_install_maps" = "选择要安装或更新的地图";
 "stats_select_graph_data" = "选择图形数据";
-"track_during_nav_descr" = "打开以在导航过程中自动保存轨迹";
+"save_track_to_gpx_descrp" = "打开以在导航过程中自动保存轨迹";
 "select_favorite" = "选择收藏";
 "logging_interval_navigation_descr" = "选择导航过程中记录轨迹的记录时间间隔";
 "allow_3d_descr" = "启用此选项，可以在2.5D视角下查看地图";
@@ -2115,4 +2115,4 @@
 "rendering_value_all_name" = "全部";
 "rendering_attr_weatherPressureContours_name" = "等压线";
 "rendering_attr_hideMilitaryAreas_name" = "隐藏军事区域";
-"download_wikipedia_data" = "下载维基百科
+"download_wikipedia_data" 

@@ -407,7 +407,7 @@
         case EOACompassHidden:
             return OALocalizedString(@"compass_always_hidden");
         default:
-            return OALocalizedString(@"compass_visible_in_rotated_mode");
+            return OALocalizedString(@"compass_visible_if_map_rotated");
     }
 }
 
@@ -586,11 +586,11 @@
         case MILES_PER_HOUR:
             return OALocalizedString(@"units_mph");
         case METERS_PER_SECOND:
-            return OALocalizedString(@"units_m_s");
+            return OALocalizedString(@"m_s");
         case MINUTES_PER_MILE:
             return OALocalizedString(@"min_mile");
         case MINUTES_PER_KILOMETER:
-            return OALocalizedString(@"units_min_km");
+            return OALocalizedString(@"min_km");
         case NAUTICALMILES_PER_HOUR:
             return OALocalizedString(@"units_nm_h");
 
@@ -4727,7 +4727,7 @@
     if (value == 0)
         res = OALocalizedString(@"rec_interval_minimum");
     else if (value > 90)
-        res = [NSString stringWithFormat:@"%d %@", (int)(value / 60.0), OALocalizedString(@"units_min")];
+        res = [NSString stringWithFormat:@"%d %@", (int)(value / 60.0), OALocalizedString(@"int_min")];
     else
         res = [NSString stringWithFormat:@"%d %@", value, OALocalizedString(@"units_sec")];
     return res;

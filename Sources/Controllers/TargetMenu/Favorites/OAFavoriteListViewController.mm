@@ -114,7 +114,7 @@ static UIViewController *parentController;
 
     _sortedHeaderView = [[OAMultiselectableHeaderView alloc] initWithFrame:CGRectMake(0.0, 1.0, 100.0, 44.0)];
     _sortedHeaderView.delegate = self;
-    [_sortedHeaderView setTitleText:OALocalizedString(@"favorites")];
+    [_sortedHeaderView setTitleText:OALocalizedString(@"favorites_item")];
 
     _menuHeaderView = [[OAMultiselectableHeaderView alloc] initWithFrame:CGRectMake(0.0, 1.0, 100.0, 44.0)];
     _menuHeaderView.editable = NO;

@@ -140,7 +140,7 @@ static OAQuickActionType *TYPE;
                      @"type" : [OAButtonTableViewCell getCellIdentifier],
                      @"target" : @"addProfile"
                      }];
-    [data setObject:[NSArray arrayWithArray:arr] forKey:OALocalizedString(@"app_profiles")];
+    [data setObject:[NSArray arrayWithArray:arr] forKey:OALocalizedString(@"application_profiles")];
     return data;
 }
 

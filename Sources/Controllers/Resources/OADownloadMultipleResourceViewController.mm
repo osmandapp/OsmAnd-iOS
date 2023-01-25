@@ -128,7 +128,7 @@
             sizePkgSum += [OsmAndApp instance].resourcesManager->getResourceInRepository(item.resourceId)->packageSize;
     }
 
-    [self.downloadButton setTitle:sizePkgSum != 0 ? [NSString stringWithFormat:@"%@ - %@", OALocalizedString(@"download"), [NSByteCountFormatter stringFromByteCount:sizePkgSum countStyle:NSByteCountFormatterCountStyleFile]] : OALocalizedString(@"download") forState:UIControlStateNormal];
+    [self.downloadButton setTitle:sizePkgSum != 0 ? [NSString stringWithFormat:@"%@ - %@", OALocalizedString(@"shared_string_download"), [NSByteCountFormatter stringFromByteCount:sizePkgSum countStyle:NSByteCountFormatterCountStyleFile]] : OALocalizedString(@"shared_string_download") forState:UIControlStateNormal];
 }
 
 - (NSString *)getTitleForSection:(NSInteger)section

@@ -28,7 +28,7 @@
 
 -(NSString *) getCommonTypeStr
 {
-    return OALocalizedString(@"ctx_mnu_direction");
+    return OALocalizedString(@"map_marker");
 }
 
 - (void) viewDidLoad

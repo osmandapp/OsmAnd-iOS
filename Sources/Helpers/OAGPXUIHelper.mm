@@ -112,7 +112,7 @@
 + (NSString *) getDescription:(OAGPX *)gpx
 {
     NSString *dist = [OAOsmAndFormatter getFormattedDistance:gpx.totalDistance];
-    NSString *wpts = [NSString stringWithFormat:@"%@: %d", OALocalizedString(@"gpx_waypoints"), gpx.wptPoints];
+    NSString *wpts = [NSString stringWithFormat:@"%@: %d", OALocalizedString(@"shared_string_waypoints"), gpx.wptPoints];
     return [NSString stringWithFormat:@"%@ • %@", dist, wpts];
 }
 

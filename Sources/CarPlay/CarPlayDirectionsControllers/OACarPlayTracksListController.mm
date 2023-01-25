@@ -92,7 +92,7 @@
     {
         if (needsSeparator)
             [res appendString:@" • "];
-        [res appendFormat:@"%@: %d", OALocalizedString(@"gpx_waypoints"), gpx.wptPoints];
+        [res appendFormat:@"%@: %d", OALocalizedString(@"shared_string_waypoints"), gpx.wptPoints];
     }
     return res;
 }

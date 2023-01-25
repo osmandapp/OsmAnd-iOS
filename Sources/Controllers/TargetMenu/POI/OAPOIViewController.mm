@@ -716,7 +716,7 @@ static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsap
     }
     else if ([key isEqualToString:@"capacity"] && [self isNumericValue:value] && ([amenity.subType isEqualToString:@"water_tower"] || [amenity.subType isEqualToString:@"storage_tank"]))
     {
-        formattedValue = [NSString stringWithFormat:@"%@ %@", value, OALocalizedString(@"units_cubic_m")];
+        formattedValue = [NSString stringWithFormat:@"%@ %@", value, OALocalizedString(@"cubic_m")];
     }
     else if ([key isEqualToString:@"maxweight"] && [self isNumericValue:value])
     {
@@ -728,7 +728,7 @@ static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsap
     }
     else if ([key isEqualToString:@"wikipedia"])
     {
-        formattedPrefix = OALocalizedString(@"product_title_wiki");
+        formattedPrefix = OALocalizedString(@"download_wikipedia_maps");
     }
     return @[formattedPrefix, formattedValue];
 }

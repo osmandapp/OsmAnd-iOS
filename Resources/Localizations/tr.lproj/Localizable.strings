@@ -27,7 +27,7 @@
 "hud_heading" = "Başlık";
 "hud_no_movement" = "Hiç hareket yok";
 // Favorites
-"fav_color" = "Renk";
+"shared_string_color" = "Renk";
 "fav_colors" = "Renkler";
 "fav_name" = "Ad";
 "fav_group" = "Grup";
@@ -55,11 +55,11 @@
 "poi_search_near_center" = "Arama haritanın merkezine yakın yapılır";
 "shared_string_hide" = "Gizle";
 // My Places
-"favorites" = "Sık Kullanılanlar";
+"favorites_item" = "Sık Kullanılanlar";
 "shared_string_gpx_tracks" = "İzlenen yollar";
 // GPX
 "plugin_distance_point" = "Mevki";
-"gpx_waypoints" = "Yol işaretleri";
+"shared_string_waypoints" = "Yol işaretleri";
 "gpx_points" = "Noktalarının";
 "shared_string_export" = "Dışa aktar";
 "import_export" = "Alma/verme";
@@ -83,7 +83,7 @@
 "gpx_updown" = "Yukarı/aşağı";
 "gpx_uphills_total" = "Uphills toplam";
 "track_recording" = "Yol kaydı";
-"track_recording_name" = "Şu anda kaydedilen yol";
+"shared_string_currently_recording_track" = "Şu anda kaydedilen yol";
 "track_stop_rec" = "Kaydetmeyi durdur";
 "track_new_segment" = "Yeni bir segment başlat";
 "track_save" = "Mevcut rotayı kaydet";
@@ -103,7 +103,7 @@
 "gpx_speed" = "Hız";
 // Map settings
 "rendering_value_browse_map_name" = "Haritaya göz at";
-"m_style_car" = "Araba sürme";
+"routing_engine_vehicle_type_driving" = "Araba sürme";
 "shared_string_map" = "Harita";
 "shared_string_show_on_map" = "Haritada göster";
 "map_settings_type" = "Harita türü";
@@ -151,7 +151,7 @@
 "prch_nau_q2_wifi" = "İndirme %@ WiFi ağ üzerinden gerektirir.";
 "prch_nau_q3" = "Daha sonra Haritalar & Kaynaklar aracılığıyla kurabilirsiniz.";
 "proceed_q" = "Devam edilsin mi?";
-"download" = "İndir";
+"shared_string_download" = "İndir";
 "shared_string_no_thanks" = "Hayır, teşekkürler";
 "download_now" = "Şimdi harita indir";
 "prch_failed" = "Bir satın alma \"%@\" başarısız oldu";
@@ -222,7 +222,7 @@
 "units_km_h" = "km/h";
 "units_mph" = "mph";
 "int_hour" = "sa";
-"units_min" = "dk.";
+"int_min" = "dk.";
 "units_sec" = "sn";
 // Map
 "map_inst_det_map_q" = "Konumlarınız hakkında daha fazla bilgi almak için ayrıntılı genel bakış haritasını yükleyin.";
@@ -241,7 +241,7 @@
 "ctx_mnu_edit_fav" = "Sık kullanılanı düzenle";
 "ctx_mnu_add_fav" = "Sık kullanılanlara ekle";
 "ctx_mnu_share" = "Paylaş";
-"ctx_mnu_direction" = "Harita işaretleyici";
+"map_marker" = "Harita işaretleyici";
 // Location Services
 "loc_access_denied" = "Erişim engellendi";
 "loc_access_denied_desc" = "Konumu hizmetine erişimi reddedildi";
@@ -256,7 +256,7 @@
 "region_europe" = "Avrupa";
 "index_name_north_america" = "Kuzey Amerika";
 "region_russia" = "Rusya";
-"region_south_america" = "Güney Amerika";
+"index_name_south_america" = "Güney Amerika";
 // Help
 "help_quiz" = "Bilgi yarışması";
 // Rendering categories
@@ -297,7 +297,7 @@
 "product_desc_allworld" = "Tüm Dünya Haritaları";
 "index_name_asia" = "Asya";
 "product_desc_asia" = "Asya için sınırsız harita indirme";
-"product_title_wiki" = "Wikipedia";
+"download_wikipedia_maps" = "Wikipedia";
 "product_desc_wiki" = "Vikipedi veri";
 "product_desc_ext_wiki" = "Wikipedia'dan ilgi çekici yerler hakkında bilgi alın. Bu sizin çevrim dışı cep rehberinizdir - sadece Wikipedia eklentisini etkinleştirin ve etrafınızdaki nesneler hakkında makalelerin tadını çıkarın.";
 "download_srtm_maps" = "Eş yükselti eğrileri";
@@ -323,7 +323,7 @@
 "wpt_remove_q" = "Yol noktasını kaldırılsın mı?";
 "gpx_select_track" = "Yol seç";
 "gpx_curr_new_track" = "Şimdiki yol";
-"enter_name" = "Ad gir";
+"access_hint_enter_name" = "Ad gir";
 "shared_string_not_selected" = "Seçilmedi";
 "shared_string_language" = "Dil";
 "you_searching" = "Aradığınız";
@@ -360,7 +360,7 @@
 "est_travel_time" = "Tahmini seyahat süresi";
 "pedestrian" = "Yaya";
 "sorting" = "Sıralama";
-"plugins" = "Eklentiler";
+"plugins_menu_group" = "Eklentiler";
 "open_map_settings" = "Harita ayarlarını aç";
 "plugin_popup_ski_title" = "Kayak haritası tarzını aç";
 "plugin_popup_wiki_title" = "Wikipedia'yı indir";
@@ -405,7 +405,7 @@
 "plugin_popup_ski_desc" = "<b>Kayak haritası</b> tarzını açmak için lütfen <b>Harita Ayarları</b> > <b> Harita türü</b>'ne gidin";
 "plugin_popup_nautical_desc" = "Lütfen önce Deniz haritalarını indirin.\nArdından <b>Harita Ayarları</b> > <b> Harita türü</b>'ne gidin ve <b>Deniz</b> tarzını açın";
 "device_memory" = "Aygıt belleği";
-"free_memory" = "%@ boş";
+"free" = "%@ boş";
 "edit_filter_delete_dialog_title" = "Seçilen süzgeç silinsin mi?";
 "try_again" = "Tekrar deneyin";
 "search_another_country" = "Başka bölge seç";
@@ -473,8 +473,8 @@
 "si_nm_h" = "Deniz mili/saat (knot)";
 "units_nm_h" = "nmi/h";
 "min_mile" = "min/m";
-"units_min_km" = "min/km";
-"units_m_s" = "m/s";
+"min_km" = "min/km";
+"m_s" = "m/s";
 "coords_format" = "Koordinat biçimi";
 "shared_string_info" = "Bilgi";
 "simulate_your_location" = "Konumunuzu simüle et";
@@ -777,7 +777,7 @@
 "transport_Routes" = "Rotalar";
 "transport_stop" = "Durak";
 "route_stops_before" = "%@ durak önce";
-"logging_interval_navigation" = "Navigasyon sırasında kayıt aralığı";
+"save_track_interval" = "Navigasyon sırasında kayıt aralığı";
 "logging_interval_navigation_descr" = "Navigasyon sırasında yol kaydı için kayıt aralığını seçin";
 "monitoring_min_distance" = "Asgari yer değiştirme";
 "logging_min_distance_descr" = "Filtre: yeni bir nokta kaydetmek için asgari mesafe";
@@ -814,15 +814,15 @@
 "osm_live_routing" = "OsmAnd Live navigasyon";
 "exit_without_saving" = "Kaydetmedençık?";
 "osm_note_created" = "Oluşturulmuş OSM Notu";
-"osmand_live_last_live_update" = "Son güncelleme: %@";
+"last_update" = "Son güncelleme: %@";
 "phone" = "Telefon";
 "mapillary_menu_title_pano" = "Sadece 360° resimleri göster";
 "shared_string_in_name" = "%@ \'de";
 "map_legend" = "Harita lejandı";
 "osmand_live_updates" = "Canlı güncellemeler";
-"help_about" = "Hakkında";
+"shared_string_about" = "Hakkında";
 "osmand_live_donations" = "Bağışlar";
-"osm_note_reopen" = "Yeniden Açmak";
+"poi_dialog_reopen" = "Yeniden Açmak";
 "tab_title_basic" = "Temel";
 "mapillary" = "Mapillary";
 "techical_articles_item" = "Teknik makaleler";
@@ -830,16 +830,16 @@
 "add_map_source" = "Harita kaynağı ekle";
 "update_now" = "Şimdi güncelle";
 "relief_smoothness_factor_descr" = "Tercih edilen arazi: düz veya engebeli.";
-"pause_resume_nav" = "Navigasyonu duraklat/devam ettir";
+"quick_action_resume_pause_navigation" = "Navigasyonu duraklat/devam ettir";
 "show_something_on_map" = "%@ \'ı haritada göster";
 "quick_action_add_poi" = "POI ekle";
 "select_all" = "Hepsini seç";
 "search_address_street" = "Sokak";
 "help_faq_descr" = "Sık Sorulan Sorular";
 "osm_note_comment" = "Yorum";
-"shared_string_save_as" = "Farklı kaydet";
+"edit_filter_save_as_menu_item" = "Farklı kaydet";
 "toggle_voice" = "Ses açık/kapalı";
-"day_mode" = "Gündüz modu";
+"quick_action_switch_day_mode" = "Gündüz modu";
 "osm_edits_notes" = "Notlar";
 "filter_current_poiButton" = "Süzgeç";
 "osmand_live_support_reg_title" = "Destek bölgesi";
@@ -858,11 +858,11 @@
 "shared_string_my_places" = "Yerlerim";
 "close_changeset" = "Değişiklik listesini kapat";
 "shared_string_add_photos" = "Fotoğraf ekle";
-"create_poi_short" = "POI oluştur";
+"context_menu_item_create_poi" = "POI oluştur";
 "help_other_header" = "Diğer";
 "get_discount_second_part" = "sonra %@";
 "osm_editing_lost_changes_descr" = "Kaydedilmemiş değişiklikler kaybolacak. Devam edilsin mi\?";
-"region_nautical" = "Deniz haritaları";
+"nautical_maps" = "Deniz haritaları";
 "quick_action_add_create_items" = "Öge oluştur";
 "favorite_home_category" = "Ev";
 "osm_edits_title" = "OSM Düzenlemeleri";
@@ -871,22 +871,22 @@
 "quick_action_add_underlay" = "Alt katman ekle";
 "osmand_live_available_maps" = "Mevcut haritalar";
 "no_overlay" = "Üst katman yok";
-"categories" = "Kategoriler";
+"search_categories" = "Kategoriler";
 "context_menu_item_open_note" = "OSM Not\'u aç";
 "shared_string_help" = "Yardım";
-"osm_note_upload" = "OSM Not yükle";
+"upload_osm_note" = "OSM Not yükle";
 "osb_comment_dialog_message" = "Mesaj";
 "display_starting_at_zoom_level" = "Yakınlaştırma seviyesinde başlayarak görüntüle";
-"mapillary_get_title" = "Mapillary ile fotoğraf kapsama alanını geliştir";
+"improve_coverage_mapillary" = "Mapillary ile fotoğraf kapsama alanını geliştir";
 "shared_string_time_of_day" = "Günün zamanı";
 "rendering_value_category_name" = "Kategori";
-"osm_target_created" = "Oluşturulmuş OSM POI\'si";
-"help_first_use" = "İlk kullanım";
+"osm_edit_created_poi" = "Oluşturulmuş OSM POI\'si";
+"first_usage_item" = "İlk kullanım";
 "nearby_search" = "Yakınlarda ara";
 "toggle_nav" = "Navigasyonu başlat/durdur";
 "poi_clear" = "Temizle";
 "contact_info" = "İletişim Bilgileri";
-"change_map_style" = "Harita tarzını değiştir";
+"quick_action_map_style" = "Harita tarzını değiştir";
 "res_world_region" = "Dünya";
 "map_settings_map_magnifier" = "Harita büyüteci";
 "quick_action_no_underlay" = "Altlık yok";
@@ -913,7 +913,7 @@
 "map_styles" = "Harita tarzları";
 "poi_dialog_poi_type" = "POI Türü";
 "poi_context_menu_modify" = "POI düzenle";
-"osm_website" = "Web sitesi";
+"website" = "Web sitesi";
 "gpx_ascent" = "Çıkış";
 "map_underlays" = "Harita alt katmanları";
 "quick_action_map_overlay" = "Haritaüst katmanını değiştir";
@@ -927,15 +927,15 @@
 "purchase_unlim_title" = "Satın al - %@";
 "help_features" = "Özellikler";
 "quick_action_add_overlay" = "Üst katman ekle";
-"shared_setting_always_ask" = "Her zaman sor";
+"confirm_every_run" = "Her zaman sor";
 "quick_action_map_overlay_title" = "Haritaüst katmanları";
 "keep_informing_descr" = "Navigasyon talimatlarını düzenli aralıklarla yeniden duyurun.";
 "quick_action_map_underlay" = "Harita alt katmanını değiştir";
-"help_follow_us" = "Bizi takip edin";
+"follow_us" = "Bizi takip edin";
 "osm_edit_without_name" = "Ad olmadan";
 "osn_bug_name" = "OSM Notu";
 "shared_string_building" = "Bina";
-"add_first_inermediate" = "Seyahatteki ilk ara-noktayı ekleyin";
+"quick_action_add_first_intermediate" = "Seyahatteki ilk ara-noktayı ekleyin";
 "route_roundabout_short" = "%dçıkışa gir ve ilerle";
 "product_desc_wikivoyage" = "Herkesin düzenleyebileceği ücretsiz dünya çapında seyahat rehberi.";
 "osm_live_cancel_subscription" = "Aboneliği iptal et";
@@ -946,7 +946,7 @@
 "product_desc_ext_wikivoyage" = "İnternete bağlantısı olmadan, OsmAnd\'ın içinde, gezegendeki en ilgi çekici yerlere ait rehberler.";
 "quick_action_new_action" = "Eylem ekle";
 "osm_notes_online_layer" = "OSM Notları (çevrim içi)";
-"directions_more_options" = "Yol tarifi";
+"context_menu_item_directions_from" = "Yol tarifi";
 "gpx_descent" = "İniş";
 "quick_action_start_stop_nav_descr" = "Navigasyonu başlatmak ya da sonlandırmak için bu düğmeye tıklayınız.";
 "gpx_avg_altitude" = "Ortalama yükseklik";
@@ -1595,7 +1595,7 @@
 "transport_stops" = "durak";
 "by_transport_type" = "%@ göre";
 "walk" = "Yürüme";
-"total" = "Toplam";
+"shared_string_total" = "Toplam";
 "public_transport_warning_descr_blog" = "OsmAnd'ın rotaları hakkında blogumuzda daha fazla bilgi edinin.";
 "calc_pedestrian_route" = "Yürüme rotasını hesapla";
 "public_transport_ped_route_title" = "Yürüme rotası yaklaşık %@, ve toplu taşıma araçlarına göre daha hızlı olabilir.";
@@ -1608,7 +1608,7 @@
 "allow_3d" = "2.5B görüntülemeye izin ver";
 "allow_3d_descr" = "Haritayı 2.5B görünümünde görüntülemek için bu seçeneği etkinleştirin";
 "product_desc_antarctica" = "Antarktika için sınırsız harita indirme";
-"product_title_antarctica" = "Antarktika";
+"index_name_antarctica" = "Antarktika";
 "board_at" = "Bin";
 "public_transport_try_change_settings" = "Ayarları değiştirmeyi deneyin.";
 "public_transport_empty_warning_title" = "Maalesef, OsmAnd ayarlarınız için bir rota bulamadı.";
@@ -1660,7 +1660,7 @@
 "will_be_show_while_moving" = "Hareket ederken gösterilecek";
 "position_icon_while_moving" = "Hareket halindeyken konum simgesi";
 "position_icon_at_rest" = "Dinlenme anında konum simgesi";
-"select_icon" = "Simge seçin";
+"select_icon_profile_dialog_title" = "Simge seçin";
 "enter_profile_name" = "Profil adı girin";
 "reorder_profiles" = "Profil listesini düzenle";
 "profile_type_custom_string" = "Özel profil";
@@ -1747,7 +1747,7 @@
 "map_look_descr" = "Harita görünümü";
 "export_profile_descr" = "Tüm profil ayarlarını dışa aktarabilir, başka bir profilden kopyalayabilir veya varsayılan durumlarına sıfırlayabilirsiniz.";
 "profile_sett_descr" = "Seçili uygulama profilini etkiler";
-"app_profiles" = "Uygulama profilleri";
+"application_profiles" = "Uygulama profilleri";
 "selected_profile" = "Seçilen profil";
 "osmand_profile" = "OsmAnd profili";
 "ui_customization_descr" = "Çekmece ögeleri, içerik menüsü";
@@ -1891,7 +1891,7 @@
 "key_hint_recenter_map" = "Haritayı Yeniden Ortala";
 "shared_z_a" = "Z - A";
 "shared_a_z" = "A - Z";
-"units_nm" = "nmi";
+"nm" = "nmi";
 "select_application_profile" = "Uygulama profili seç";
 "change_application_profile" = "Uygulama profilini değiştir";
 "quick_action_showhide_mapillary_descr" = "Bu eylem düğmesine dokunmak harita üzerinde Mapillary katmanını gösterir veya gizler.";
@@ -1933,14 +1933,14 @@
 "address_search_desc" = "Adres arama";
 "add_folder" = "Klasör ekle";
 "select_folder_descr" = "Klasör seçin veya yeni bir tane ekleyin";
-"plan_route_select_folder" = "Klasör seç";
+"select_folder" = "Klasör seç";
 "plan_route_change_folder" = "Klasörü değiştir";
 "plan_route_folder" = "Klasör";
 "street_level_imagery" = "Sokak düzeyinde görüntüler";
 "travel" = "Seyahat";
 "transport" = "Ulaşım";
-"symbols" = "Semboller";
-"sport" = "Spor";
+"icon_group_symbols" = "Semboller";
+"icon_group_sport" = "Spor";
 "icon_group_special" = "Özel";
 "amenity_type_emergency" = "Acil durum";
 "shared_string_gpx_points" = "Noktalar";
@@ -2003,7 +2003,7 @@
 "visible_categories" = "Görünür kategoriler";
 "rearrange_categories" = "Kategorileri yeniden düzenle";
 "new_plugin_added" = "Yeni eklenti eklendi";
-"extra_maps" = "Ek haritalar";
+"extra_maps_menu_group" = "Ek haritalar";
 "custom_plugins" = "Özel eklentiler";
 "custom_osmand_plugin_name" = "Özel OsmAnd eklentisi";
 "shared_string_disable" = "Devre dışı bırak";
@@ -2343,7 +2343,7 @@
 "verification_code_missing_description" = "10 dakikaya kadar sürebilir. Spam klasörünüzde değilse aşağıdaki düğmeyi kullanın.";
 "resend_verification_code" = "Yeniden gönder";
 "osmand_cloud" = "OsmAnd Cloud";
-"cloud_description" = "Verilerinizi asla kaybetmeyin. Tüm bilgileri kolayca yedekleyin ve geri yükleyin.";
+"osmand_cloud_authorize_descr" = "Verilerinizi asla kaybetmeyin. Tüm bilgileri kolayca yedekleyin ve geri yükleyin.";
 "cloud_create_account" = "Hesap oluştur";
 "cloud_existing_account" = "Zaten bir hesabım var";
 "local_backup" = "Yerel Yedekleme";
@@ -2354,8 +2354,8 @@
 "cloud_welcome_back" = "Tekrar hoş geldiniz!";
 "backup_restore_now" = "Şimdi geri yükle";
 "cloud_backup" = "Yedekle";
-"cloud_last_backup" = "Son yedekleme";
-"cloud_backup_now" = "Şimdi yedekle";
+"last_backup" = "Son yedekleme";
+"backup_now" = "Şimdi yedekle";
 "make_backup" = "Yedekle";
 "cloud_conflicts_descr" = "Sunucuda daha yeni bir sürüm bulunduğu için bazı dosyalar sunucuya yüklenemedi.";
 "cloud_view_conflicts" = "Çakışmaları görüntüle";
@@ -2417,7 +2417,7 @@
 "shared_string_capacity" = "Kapasite";
 "altitude_descent" = "Yokuş aşağı";
 "altitude_ascent" = "Yokuş yukarı";
-"units_cubic_m" = "m³";
+"cubic_m" = "m³";
 "ios_release_4_2" = "• Güzergah çizgisi görünümü: genişlik ve renk ayarlama özelliği eklendi\n• İzlenen yollar: aynı anda birkaç yolu silme seçeneği eklendi\n• İzlenen yol içerik menüsü: ara nokta gruplarıyla birlikte kaydırma çubuğu eklendi\n• Harita görünümü: her kategoriden ayrı ayrı etkinleştirme özelliğiyle türe göre bölünmüş ek güzergahlar\n• Binicilik: yeni navigasyon türü ve uygulama profili eklendi\n• OsmAnd dosyaları artık \"Dosyalar\" uygulamasında görülebilir\n• \"Yükseklik verisi kullan\" ve \"Yükseklikte dalgalanma seç\" seçenekleri için kullanıcı deneyimi iyileştirildi, birleştirildi ve şu anda \"Bisiklet\" ve \"Yaya\" profilleri için kullanılabilir olan \"Tercih edilen arazi\" olarak yeniden adlandırıldı.\n• İzlenen yol kaydı için yeni \"Yönü dahil et\" seçeneği\n• Sokak adı widget'ı: artık navigasyon sırasında trafik işaret levhalarını ve çıkış numarasını göster\n• Haritada yeni Fitness ve koşu güzergahları\n• CarPlay hata düzeltmeleri, dokunmatik ekranlar için eklenen hareketler\n• GPX dosyalarının OSF paketinden içe aktarılması düzeltildi\n• Dahil edilen dosyalarla özel eklentilerin içe aktarılması düzeltildi\n• Güzergah planlama modundaki çeşitli çökmeler düzeltildi\n• Navigasyon sırasındaki çökmeler düzeltildi\n";
 "simulation_constant_mode_title" = "Sabit hız";
 "simulation_preview_mode_desc" = "Simülasyonun hızı düz kısımlarda azami olacak ve yalnızca kavşaklarda yavaşlayacaktır.";
@@ -2497,7 +2497,7 @@
 "product_desc_ext_development" = "Navigasyon simülasyonu, görselleştirme performansı veya sesli komutlar gibi geliştirme ve hata ayıklama özellikleri için ayarlar. Geliştiriciler için tasarlanmıştır, normal uygulama kullanımı için gerekli değildir.";
 "terrain_maps" = "Arazi haritaları";
 "purchases_feature_desc_unlimited_map_download" = "Tüm kıtalar ve bölgelerin çevrim dışı haritaları için sınırsız indirme elde edin.";
-"subscriptions" = "Abonelikler";
+"osm_live_subscriptions" = "Abonelikler";
 "expired" = "Süresi doldu";
 "osm_live_payment_subscription_management_aid" = "Ödeme, satın alma onayında Apple ID hesabınızdan tahsil edilecektir.\n\nAbonelik, geçerli dönemin bitiminden en az 24 saat önce iptal edilmediği sürece otomatik olarak yenilenir. Geçerli dönemin bitiminden önceki 24 saat içinde hesabınızdan yenileme ücreti tahsil edilecektir.\n\nSatın aldıktan sonra App Store'daki hesap ayarlarınıza giderek aboneliklerinizi yönetebilir ve iptal edebilirsiniz";
 "new_device_account" = "Yeni aygıt / yeni hesap";
@@ -2525,7 +2525,7 @@
 "subscription_banner_osmand_pro_title" = "OsmAnd Pro ile saatlik, günlük veya haftalık harita güncellemeleri alın.";
 "subscription_banner_no_free_maps_title" = "Tüm ücretsiz indirmeleri harcadınız";
 "shared_string_always_visible" = "Her zaman görünür";
-"compass_visible_in_rotated_mode" = "Harita döndürülürse görünür";
+"compass_visible_if_map_rotated" = "Harita döndürülürse görünür";
 "compass_visible_in_rotated_mode_descr" = "Kuzey yukarı olduğunda gizli";
 "compass_options_description" = "Harita yönlendirme modunu değiştirmek için pusulaya tıklayın";
 "compass_always_hidden" = "Her zaman gizli";

@@ -30,7 +30,7 @@
 #define unitsMi OALocalizedString(@"units_mi")
 #define unitsYd OALocalizedString(@"units_yd")
 #define unitsFt OALocalizedString(@"foot")
-#define unitsNm OALocalizedString(@"units_nm")
+#define unitsNm OALocalizedString(@"nm")
 
 typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     EOACarPlayButtonTypeDismiss = 0,

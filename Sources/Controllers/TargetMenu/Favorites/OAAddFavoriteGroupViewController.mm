@@ -83,7 +83,7 @@
             @"header" : OALocalizedString(@"default_color"),
             @"footer" : OALocalizedString(@"default_color_descr"),
             @"type" : [OAColorsTableViewCell getCellIdentifier],
-            @"title" : OALocalizedString(@"fav_color"),
+            @"title" : OALocalizedString(@"shared_string_color"),
             @"value" : _selectedColor.name,
             @"index" : [NSNumber numberWithInt:_selectedColorIndex],
         }
@@ -193,7 +193,7 @@
 {
     if (textView.text.length == 0 ||
         [self isIncorrectFileName: textView.text] ||
-        [textView.text isEqualToString:OALocalizedString(@"favorites")] ||
+        [textView.text isEqualToString:OALocalizedString(@"favorites_item")] ||
         [textView.text isEqualToString:OALocalizedString(@"personal_category_name")] ||
         [textView.text isEqualToString:kPersonalCategory] ||
         [OAFavoritesHelper getGroupByName:textView.text])

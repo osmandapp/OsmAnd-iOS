@@ -153,7 +153,7 @@
 - (void) buildWaypointsView:(NSMutableArray<OARowInfo *> *)rows
 {
     NSString *name = OALocalizedString(@"context_menu_points_of_group");
-    NSString *gpxName = self.wpt.docPath == nil ? OALocalizedString(@"track_recording_name") : [self.wpt.docPath.lastPathComponent stringByDeletingPathExtension];
+    NSString *gpxName = self.wpt.docPath == nil ? OALocalizedString(@"shared_string_currently_recording_track") : [self.wpt.docPath.lastPathComponent stringByDeletingPathExtension];
     UIColor *color = [self getItemColor];
     UIImage *icon = [UIImage templateImageNamed:@"ic_custom_folder"];
     

@@ -20,7 +20,7 @@
 "shared_string_later" = "Paşê";
 "shared_string_download_map" = "Nexşeyê daxe";
 // Favorites
-"fav_color" = "Reng";
+"shared_string_color" = "Reng";
 "fav_colors" = "Reng";
 "fav_name" = "Nav";
 "fav_replace" = "Biguherîne";
@@ -29,7 +29,7 @@
 "shared_string_statistics" = "Amar (statîstîk)";
 "gpx_updown" = "Jor/Jêr";
 "gpx_speed" = "Lez";
-"m_style_car" = "Trimbêl";
+"routing_engine_vehicle_type_driving" = "Trimbêl";
 "gpx_route" = "Rêgeh";
 "gpx_route_time" = "Dema Rêgeh";
 "shared_string_control_start" = "Dest pê bike";
@@ -54,7 +54,7 @@
 "shared_string_open" = "Vekirî";
 "from_location" = "ji dûr ve";
 "shared_string_language" = "Ziman";
-"enter_name" = "Nav bi kevne";
+"access_hint_enter_name" = "Nav bi kevne";
 "language_short" = "Ziman";
 "download_wikipedia_maps" = "Wîkîpediya";
 "res_roads" = "Riyan";
@@ -63,7 +63,7 @@
 "navigate_point_longitude" = "Hêlîlar";
 "latitude" = "Hêlîpan";
 "my_location" = "Cihê min";
-"product_title_wiki" = "Wîkîpediya";
+"download_wikipedia_maps" = "Wîkîpediya";
 "product_desc_asia" = "Nexşeya Asyayê";
 "index_name_asia" = "Asya";
 "product_desc_allworld" = "Nexşeya Cîhanê";
@@ -85,11 +85,11 @@
 "index_name_asia" = "Asya";
 // World Regions
 "index_name_africa" = "Afrîka";
-"ctx_mnu_direction" = "Alî";
+"map_marker" = "Alî";
 "ctx_mnu_share" = "Parve bike";
 "units_mph" = "mph";
 "int_hour" = "st";
-"units_min" = "dq";
+"int_min" = "dq";
 "units_km_h" = "km/h";
 "foot" = "ft";
 "units_yd" = "yd";
@@ -133,11 +133,11 @@
 "feedback" = "Gotinên we";
 "help_features" = "Taybetmendî";
 "actions" = "Çalakî";
-"plugins" = "Lehikan";
+"plugins_menu_group" = "Lehikan";
 "osmand_live_weekly" = "Hefteyî";
 "product_title_track_recording" = "Qeydkirina gerrê";
 "osm_edits_advanced" = "Pêş";
-"shared_string_save_as" = "Bi awayekî cuda qeyd bike";
+"edit_filter_save_as_menu_item" = "Bi awayekî cuda qeyd bike";
 "osm_working_days" = "Rojên Karê";
 "intro_next" = "Dû re";
 "transport_stop" = "Rawestgeh";
@@ -157,7 +157,7 @@
 "rendering_attr_horseRoutes_name" = "Riyên Hespan";
 "context_menu_points_of_group" = "Hemû nuqteyên komê";
 "shared_string_two" = "Du";
-"total" = "Yekûn";
+"shared_string_total" = "Yekûn";
 "one" = "Yek";
 "shared_string_finish" = "Xilasek";
 "osm_notes" = "Notên OSMê";

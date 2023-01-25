@@ -162,7 +162,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     [self setTitle:OALocalizedString(@"shared_string_download_map")];
     [self.cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
-    [self.downloadButton setTitle:OALocalizedString(@"download") forState:UIControlStateNormal];
+    [self.downloadButton setTitle:OALocalizedString(@"shared_string_download") forState:UIControlStateNormal];
 }
 
 - (NSAttributedString *) getAttributedTypeStr

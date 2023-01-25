@@ -126,7 +126,7 @@
     CGFloat size = 0.;
     if (_region)
     {
-        sizeTitle = OALocalizedString(@"total");
+        sizeTitle = OALocalizedString(@"shared_string_total");
         size = [_weatherHelper getOfflineForecastSizeInfo:_region.regionId local:YES];
     }
     else if (_type == EOAWeatherOnlineData)
@@ -237,7 +237,7 @@
                                                                           countStyle:NSByteCountFormatterCountStyleFile];
                     cells[_sizeIndexPath.row] = @{
                         @"key": @"size",
-                        @"title": OALocalizedString(@"total"),
+                        @"title": OALocalizedString(@"shared_string_total"),
                         @"value": sizeString,
                         @"type": [OAValueTableViewCell getCellIdentifier]
                     };

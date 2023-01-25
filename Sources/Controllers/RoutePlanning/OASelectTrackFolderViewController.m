@@ -67,7 +67,7 @@
 - (void) applyLocalization
 {
     [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"plan_route_select_folder");
+    self.titleLabel.text = OALocalizedString(@"select_folder");
 }
 
 - (void) generateData:(NSMutableArray<NSString *> *)allFolderNames foldersData:(NSMutableDictionary *)foldersData

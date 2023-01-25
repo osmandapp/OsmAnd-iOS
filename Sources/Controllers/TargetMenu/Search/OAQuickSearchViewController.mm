@@ -234,7 +234,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     [_pageController setViewControllers:@[_historyViewController] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:nil];
 
     [_tabs setTitle:OALocalizedString(@"history") forSegmentAtIndex:0];
-    [_tabs setTitle:OALocalizedString(@"categories") forSegmentAtIndex:1];
+    [_tabs setTitle:OALocalizedString(@"search_categories") forSegmentAtIndex:1];
     [_tabs setTitle:OALocalizedString(@"shared_string_address") forSegmentAtIndex:2];
     [_tabs setSelectedSegmentIndex:0];
 
@@ -2010,7 +2010,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 - (UIAlertController *)createSaveFilterDialog:(OAPOIUIFilter *)filter customSaveAction:(BOOL)customSaveAction
 {
-    UIAlertController *saveDialog = [UIAlertController alertControllerWithTitle:OALocalizedString(@"enter_name") message:OALocalizedString(@"new_filter_desc") preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *saveDialog = [UIAlertController alertControllerWithTitle:OALocalizedString(@"access_hint_enter_name") message:OALocalizedString(@"new_filter_desc") preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction* actionCancel = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil];
     [saveDialog addAction:actionCancel];
 

@@ -156,7 +156,7 @@ static const NSInteger sectionCount = 2;
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"MMM dd, yyyy HH:mm"];
     NSString *dateString = timestamp == -1.0 ? OALocalizedString(@"osmand_live_not_updated") :
-            [NSString stringWithFormat:OALocalizedString(@"osmand_live_last_live_update"), [formatter stringFromDate:date]];
+            [NSString stringWithFormat:OALocalizedString(@"last_update"), [formatter stringFromDate:date]];
     ELiveUpdateFrequency frequency = [OAOsmAndLiveHelper getPreferenceFrequencyForLocalIndex:regionName];
     NSString *frequencyString = [OAOsmAndLiveHelper getFrequencyString:frequency];
     NSString *description = [NSString stringWithFormat:@"%@ • %@", frequencyString, dateString];

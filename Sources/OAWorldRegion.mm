@@ -421,14 +421,14 @@
     regionsLookupTable[russiaRegion.regionId] = russiaRegion;
 
     OAWorldRegion *southAmericaRegion = [OAWorldRegion createRegionAs:OsmAnd::WorldRegions::SouthAmericaRegionId
-                                                    withLocalizedName:OALocalizedString(@"region_south_america")
+                                                    withLocalizedName:OALocalizedString(@"index_name_south_america")
                                                                  from:loadedWorldRegions];
     [entireWorld addSubregion:southAmericaRegion];
     regionsLookupTable[southAmericaRegion.regionId] = southAmericaRegion;
 
     OAWorldRegion *nauticalRegion = [[OAWorldRegion alloc] initWithId:OsmAnd::WorldRegions::NauticalRegionId.toNSString()
                                                  andAcceptedExtension:BINARY_DEPTH_MAP_INDEX_EXT
-                                                     andLocalizedName:OALocalizedString(@"region_nautical")];
+                                                     andLocalizedName:OALocalizedString(@"nautical_maps")];
     [entireWorld addSubregion:nauticalRegion];
     regionsLookupTable[nauticalRegion.regionId] = nauticalRegion;
     

@@ -250,11 +250,11 @@
 "si_min_km" = "Minut na kilometr";
 "si_min_m" = "Minut na míli";
 "si_nm_h" = "Námořní míle za hodinu (uzly)";
-"units_nm" = "nmi";
+"nm" = "nmi";
 "units_nm_h" = "nmi/h";
 "min_mile" = "min/m";
-"units_min_km" = "min/km";
-"units_m_s" = "m/s";
+"min_km" = "min/km";
+"m_s" = "m/s";
 "nothing_found" = "Nic nenalezeno: %@";
 "nothing_found_descr" = "Změňte vyhledávací dotaz nebo zvětšete okruh hledání";
 "select_street" = "Vyberte ulici";
@@ -300,7 +300,7 @@
 "hud_heading" = "Azimut";
 "hud_no_movement" = "Žádný pohyb";
 // Favorites
-"fav_color" = "Barva";
+"shared_string_color" = "Barva";
 "fav_colors" = "Barvy";
 "fav_name" = "Jméno";
 "fav_group" = "Skupina";
@@ -329,12 +329,12 @@
 "poi_search_near_center" = "Vyhledává se v blízkosti středu mapy";
 "shared_string_hide" = "Skrýt";
 // My Places
-"favorites" = "Oblíbené";
+"favorites_item" = "Oblíbené";
 "shared_string_gpx_tracks" = "Stopy";
 // GPX
 "plugin_distance_point" = "bod";
 "shared_string_waypoint" = "Bod na trase";
-"gpx_waypoints" = "Body na trase";
+"shared_string_waypoints" = "Body na trase";
 "gpx_points" = "Point(s)";
 "shared_string_export" = "Export";
 "import_export" = "Import/Export";
@@ -359,7 +359,7 @@
 "gpx_updown" = "Up/Down";
 "gpx_uphills_total" = "Celkem do kopce";
 "track_recording" = "Záznam stopy";
-"track_recording_name" = "Právě zaznamenávaná trasa";
+"shared_string_currently_recording_track" = "Právě zaznamenávaná trasa";
 "track_stop_rec" = "Zastavit záznam";
 "track_new_segment" = "Začít nový segment";
 "track_save" = "Uložit aktuální trasu";
@@ -379,7 +379,7 @@
 "gpx_speed" = "Aktuální rychlost";
 // Map settings
 "rendering_value_browse_map_name" = "Standardní";
-"m_style_car" = "Řízení vozidla";
+"routing_engine_vehicle_type_driving" = "Řízení vozidla";
 "shared_string_map" = "Mapa";
 "shared_string_show_on_map" = "Zobrazit na mapě";
 "map_settings_type" = "Typ mapy";
@@ -429,7 +429,7 @@
 "prch_nau_q2_wifi" = "Stahování vyžaduje %@ přes WiFi síť.";
 "prch_nau_q3" = "Instalaci lze provést později přes Mapy a zdroje.";
 "proceed_q" = "Pokračovat?";
-"download" = "Stáhnout";
+"shared_string_download" = "Stáhnout";
 "shared_string_no_thanks" = "Ne, díky";
 "download_now" = "Stáhnout mapu nyní";
 "prch_failed" = "Nákup \"%@\" se nezdařil";
@@ -501,7 +501,7 @@
 "units_km_h" = "km/h";
 "units_mph" = "mph";
 "int_hour" = "h";
-"units_min" = "min.";
+"int_min" = "min.";
 "units_sec" = "sek.";
 // Map
 "map_inst_det_map_q" = "Nainstalujte si detailní přehledovou mapu, abyste získali více informací o svých místech.";
@@ -519,7 +519,7 @@
 "ctx_mnu_edit_fav" = "Upravit oblíbené";
 "ctx_mnu_add_fav" = "Přidat oblíbené";
 "ctx_mnu_share" = "Sdílet";
-"ctx_mnu_direction" = "Mapová značka";
+"map_marker" = "Mapová značka";
 // Location Services
 "loc_access_denied" = "Přístup zamítnut";
 "loc_access_denied_desc" = "Přístup ke službě zjišťování polohy byl zamítnut";
@@ -534,7 +534,7 @@
 "region_europe" = "Evropa";
 "index_name_north_america" = "Severní Amerika";
 "region_russia" = "Rusko";
-"region_south_america" = "Jižní Amerika";
+"index_name_south_america" = "Jižní Amerika";
 // Help
 "help_quiz" = "Kvíz";
 // Rendering categories
@@ -579,7 +579,7 @@
 "product_desc_allworld" = "Mapy celého světa";
 "index_name_asia" = "Asie";
 "product_desc_asia" = "Neomezené stahování map Asie";
-"product_title_wiki" = "Wikipedie";
+"download_wikipedia_maps" = "Wikipedie";
 "product_desc_wiki" = "Umístění článků Wikipedie na mapě";
 "product_desc_ext_wiki" = "Offline Wikipedie na cestách vám pomůže dozvědět se více o navštívených místech. Je dostupná offline a zobrazuje články Wikipedie v souvislosti s místy zájmu přímo na mapě. Nezapomeňte si stáhnout mapy Wikipedie pro vybraný region.";
 "download_srtm_maps" = "Vrstevnice";
@@ -607,7 +607,7 @@
 "wpt_remove_q" = "Odstranit bod trasy?";
 "gpx_select_track" = "Vybrat stopu";
 "gpx_curr_new_track" = "Současná trasa";
-"enter_name" = "Zadejte název";
+"access_hint_enter_name" = "Zadejte název";
 "shared_string_not_selected" = "Nevybrané";
 "shared_string_language" = "Jazyk";
 "you_searching" = "Hledáte";
@@ -644,7 +644,7 @@
 "est_travel_time" = "Odhadovaný čas jízdy";
 "pedestrian" = "Chodec";
 "sorting" = "Řazení";
-"plugins" = "Moduly";
+"plugins_menu_group" = "Moduly";
 "open_map_settings" = "Otevřít nastavení mapy";
 "plugin_popup_ski_title" = "Zapnout lyžařský mapový styl";
 "plugin_popup_ski_desc" = "Pro zapnutí <b>lyžařského</b> stylu mapy, přejděte prosím do <b>Nastavení mapy</b> > <b>Typ mapy</b>";
@@ -680,7 +680,7 @@
 "gpx_edit_mode" = "Režim úprav";
 "go_to_map" = "Přejít na mapu";
 "device_memory" = "Paměť zařízení";
-"free_memory" = "%@ volných";
+"free" = "%@ volných";
 "first_usage_greeting" = "Nechejte se navigovat a objevte nová místa bez nutnosti připojení k Internetu";
 "get_started" = "Začít";
 "first_usage_wizard_desc" = "Povolit OsmAndu určit vaši polohu a navrhnout mapy pro tuto oblast.";
@@ -695,7 +695,7 @@
 "skip_map_downloading" = "Přeskočit stahování map";
 "skip_map_downloading_desc_ios" = "Nemáte nainstalovanou žádnou offline mapu. Můžete vybrat mapu ze seznamu, nebo stáhnout mapy později přes Menu - Spravovat mapové soubory";
 "wiki_around" = "Články Wikipedie v okolí";
-"categories" = "Kategorie";
+"search_categories" = "Kategorie";
 "items_selected" = "%d vybraných";
 "custom_search" = "Vlastní vyhledávání";
 "poi_filter_custom_filter" = "Vlastní filtr";
@@ -710,7 +710,7 @@
 "new_filter_desc" = "Zadejte prosím název pro nový filtr, který bude přidán na záložku Kategorie.";
 "shared_string_filters" = "Filtry";
 "edit_filter" = "Upravit kategorie";
-"shared_string_save_as" = "Uložit jako";
+"edit_filter_save_as_menu_item" = "Uložit jako";
 "delete_filter" = "Odstranit filtr";
 "save_filter" = "Uložit filtr";
 "edit_filter_delete_dialog_title" = "Smazat vybraný filtr?";
@@ -738,7 +738,7 @@
 "poi_overlay" = "POI překryv";
 "poi_clear" = "Vyčistit";
 "tunnel_warning" = "Blíží se tunel";
-"logging_interval_navigation" = "Interval ukládání trasy během navigace";
+"save_track_interval" = "Interval ukládání trasy během navigace";
 "logging_interval_navigation_descr" = "Zvolte interval ukládání stopy během navigace";
 "monitoring_min_distance" = "Minimální posun";
 "logging_min_distance_descr" = "Filtr: minimální vzdálenost pro uložení nového bodu";
@@ -748,7 +748,7 @@
 "logging_min_speed_descr" = "Filtr: neukládat při nižší než zvolené rychlosti";
 "auto_split_gap" = "Při pauze automaticky rozdělovat nahrávky";
 "auto_split_gap_descr" = "Začít nový segment po 6minutové pauze, novou stopu po 2hodinové pauze a nový soubor po delší pauze";
-"shared_setting_always_ask" = "Vždy se zeptat";
+"confirm_every_run" = "Vždy se zeptat";
 "recording_preferences_descr" = "Možnosti ukládání stopy";
 "save_current_track_descr" = "Uložit aktuální trasu jako soubor GPX.";
 "track_during_nav" = "Automaticky ukládat stopu";
@@ -756,7 +756,7 @@
 "shared_string_help" = "Nápověda";
 // Help
 "help_first_steps" = "První kroky";
-"help_first_use" = "První použití";
+"first_usage_item" = "První použití";
 "help_first_use_descr" = "Jak stahovat mapy a zvolit základní nastavení";
 "help_navigation_descr" = "Jak nastavit navigaci";
 "faq_item" = "Často kladené dotazy";
@@ -771,13 +771,13 @@
 "techical_articles_item" = "Technické články";
 "help_versions" = "Verze";
 "help_contact_us" = "Kontaktujte nás";
-"help_about" = "O aplikaci";
-"help_follow_us" = "Sledujte nás";
+"shared_string_about" = "O aplikaci";
+"follow_us" = "Sledujte nás";
 "facebook" = "Facebook";
 "twitter" = "Twitter";
 "shared_string_close" = "Zavřít";
 "actions" = "Akce";
-"directions_more_options" = "Navigovat odsud";
+"context_menu_item_directions_from" = "Navigovat odsud";
 "nearby_search" = "Hledat v okolí";
 "map_widget_ruler_control" = "Kruhové pravítko";
 "import_from_docs" = "Import z dokumentů";
@@ -787,7 +787,7 @@
 "osmand_live_updates" = "Okamžité aktualizace";
 "osmand_live_available_maps" = "Dostupné mapy";
 "osmand_live_last_changed" = "Poslední změna mapy: %@";
-"osmand_live_last_live_update" = "Poslední aktualizace: %@";
+"last_update" = "Poslední aktualizace: %@";
 "osmand_live_not_updated" = "Zatím neaktualizováno";
 "osmand_live_hourly" = "Každou hodinu";
 "daily" = "Každý den";
@@ -905,14 +905,14 @@
 "download_select_map_types" = "Ostatní mapy";
 "gpx_descent" = "Klesání";
 "select_map_marker" = "Vyberte mapovou značku";
-"osm_website" = "Webová stránka";
+"website" = "Webová stránka";
 "quick_action_map_underlay" = "Změna mapy podkladu";
 "quick_action_no_underlay" = "Bez podkladové vrstvy";
 "poi_context_menu_modify_osm_change" = "Upravit změnu OSM";
 "osm_working_days" = "Pracovní dny";
 "map_underlays" = "Mapa podkladu";
 "sett_ext_input" = "Externí vstupní zařízení";
-"region_nautical" = "Námořní mapy";
+"nautical_maps" = "Námořní mapy";
 "route_parameters" = "Parametry trasy";
 "no_overlay" = "Bez překryvné vrstvy";
 "tile_cache" = "Vyrovnávací paměť dlaždic";
@@ -948,7 +948,7 @@
 "osm_editing_lost_changes_descr" = "Neuložené změny budou ztraceny. Pokračovat?";
 "shared_string_on" = "Zapnuto";
 "rendering_value_category_name" = "Kategorie";
-"osm_note_reopen" = "Znovuotevřít";
+"poi_dialog_reopen" = "Znovuotevřít";
 "display_starting_at_zoom_level" = "Zobrazení začíná na úrovni přiblížení";
 "add_work" = "Přidat práci";
 "add_parking_place" = "Přidat parkovací místo";
@@ -959,14 +959,14 @@
 "osm_edit_without_name" = "Bez názvu";
 "replace_destination" = "Nahradit cíl";
 "osm_poi_delete_title" = "Smazat POI";
-"osm_target_created" = "Vytvořen OSM POI";
+"osm_edit_created_poi" = "Vytvořen OSM POI";
 "quick_action_fav_name_descr" = "Ponecháte-li prázdné, bude použita adresa nebo název místa.";
 "poi_context_menu_modify" = "Upravit POI";
 "add_intermediate" = "Přidat mezicíl";
 "osm_alert_title" = "Uložit";
 "favorite_home_category" = "Domov";
 "simulate_navigation" = "Simulovat navigaci";
-"add_first_inermediate" = "Přidat první mezicíl";
+"quick_action_add_first_intermediate" = "Přidat první mezicíl";
 "mapillary_menu_title_pano" = "Zobrazit pouze 360° obrázky";
 "exit_without_saving" = "Ukončit bez uložení?";
 "gpx_alt_range" = "Výškový rozdíl";
@@ -988,23 +988,23 @@
 "quick_action_map_source" = "Změnit zdroj mapy";
 "osm_edits_title" = "OSMúpravy";
 "quick_action_switch_night_mode" = "Noční režim";
-"pause_resume_nav" = "Pozastavit/pokračovat v navigaci";
-"mapillary_get_title" = "Zlepšit pokrytí fotografií s Mapillary";
+"quick_action_resume_pause_navigation" = "Pozastavit/pokračovat v navigaci";
+"improve_coverage_mapillary" = "Zlepšit pokrytí fotografií s Mapillary";
 "shared_string_slope" = "Svah";
-"create_poi_short" = "Vytvořit POI";
+"context_menu_item_create_poi" = "Vytvořit POI";
 "quick_action_map_overlay_title" = "Překryvy mapy";
 "work_pt" = "Práce";
 "osm_edit_modified_poi" = "Upravený OSM POI";
-"day_mode" = "Denní režim";
+"quick_action_switch_day_mode" = "Denní režim";
 "osm_edit_deleted_poi" = "Smazaný OSM POI";
 "osn_add_dialog_title" = "Vytvořit poznámku";
-"osm_note_upload" = "Nahrát OSM poznámku";
+"upload_osm_note" = "Nahrát OSM poznámku";
 "osm_notes_online_layer" = "OSM Poznámky (on-line)";
 "gpx_tags_txt" = "Tagy";
 "quick_action_add_poi" = "Přidat POI";
 "shared_string_distance" = "Vzdálenost";
 "toggle_voice" = "Hlas zapnout/vypnout";
-"change_map_style" = "Změnit styl mapy";
+"quick_action_map_style" = "Změnit styl mapy";
 "poi_list" = "Seznam POI";
 "osm_note_comment" = "Komentář";
 "tab_title_basic" = "Základní";
@@ -1420,7 +1420,7 @@
 "add_to_a_track" = "Přidat ke stopě";
 "one" = "Jedna";
 "base_profile_descr_bicycle" = "Horské kolo, moped, kůň";
-"select_icon" = "Zvolit ikonu";
+"select_icon_profile_dialog_title" = "Zvolit ikonu";
 "accessibility_announce" = "Oznámení";
 "public_transport_menu" = "Doprava";
 "light_theme" = "Světlý";
@@ -1458,7 +1458,7 @@
 "quick_action_mapillary_show" = "Zobrazit Mapillary";
 "save_new_track" = "Uložit jako novou stopu";
 "public_transport_try_change_settings" = "Zkuste změnit nastavení.";
-"app_profiles" = "Profily aplikace";
+"application_profiles" = "Profily aplikace";
 "default_speed_setting_title" = "Výchozí rychlost";
 "route_between_points" = "Trasa mezi body";
 "quick_action_remove_next_destination_descr" = "Vymaže následující cíl na trase. Jestliže to je poslední cíl, navigace se zastaví.";
@@ -1477,7 +1477,7 @@
 "mapillary_item" = "OsmAnd + Mapillary";
 "appearance_on_map" = "Vzhled na mapě";
 "quick_action_switch_profile_descr" = "Tlačítko akce přepne mezi zvolenými profily.";
-"total" = "Celkem";
+"shared_string_total" = "Celkem";
 "personal_category_name" = "Osobní";
 "shared_string_settings" = "Nastavení";
 "profile_type_osmand_string" = "Profil OsmAnd";
@@ -1485,7 +1485,7 @@
 "quick_action_map_source_title" = "Mapové zdroje";
 "tones" = "tuny";
 "voice_announces" = "Hlasová oznámení";
-"product_title_antarctica" = "Antarktida";
+"index_name_antarctica" = "Antarktida";
 "walk" = "Chůze";
 "shared_string_exit" = "Konec";
 "routing_profile_ski" = "Lyžování";
@@ -1920,7 +1920,7 @@
 "quick_action_dialog_descr" = "Zapněte pro zobrazení dialogu před provedením akce";
 "add_folder" = "Přidat složku";
 "select_folder_descr" = "Zvolte složku nebo vytvořte novou";
-"plan_route_select_folder" = "Zvolte složku";
+"select_folder" = "Zvolte složku";
 "plan_route_change_folder" = "Změnit složku";
 "plan_route_folder" = "Složka";
 "street_level_imagery" = "Snímky z úrovně ulice";
@@ -1930,8 +1930,8 @@
 "select_segment" = "Vyberte úsek";
 "select_track_to_follow" = "Vyberte stopu k následování";
 "travel" = "Cestování";
-"symbols" = "Symboly";
-"sport" = "Sport";
+"icon_group_symbols" = "Symboly";
+"icon_group_sport" = "Sport";
 "icon_group_special" = "Speciální";
 "amenity_type_emergency" = "Pohotovost";
 "search_poi_types_descr" = "Můžete kombinovat body zájmu různých kategorií.";
@@ -1949,7 +1949,7 @@
 "incorrect_symbols" = "Zadány neplatné znaky";
 "preparing_file" = "Příprava souboru";
 "reading_file" = "Čtení souboru";
-"extra_maps" = "Další mapy";
+"extra_maps_menu_group" = "Další mapy";
 "custom_plugins" = "Vlastní moduly";
 "custom_osmand_plugin_name" = "Vlastní modul pro OsmAnd";
 "export_failed" = "Nepodařilo se exportovat profil";
@@ -2303,7 +2303,7 @@
 "restore_from_file" = "Obnovit ze souboru";
 "rendering_attr_showFitnessTrails_name" = "Fitness trasy";
 "backup_error_subscription_was_expired" = "Předplatné vypršelo";
-"cloud_last_backup" = "Poslední záloha";
+"last_backup" = "Poslední záloha";
 "backup_error_token_is_not_valid_or_expired" = "Neplatný nebo propadlý ověřovací kód";
 "rendering_attr_showFitnessTrails_description" = "Zobrazit fitness trasy";
 "cloud_welcome_back" = "Vítejte zpět!";
@@ -2324,10 +2324,10 @@
 "backup_error_token_is_not_valid" = "Něco není v pořádku s poskytnutým identifikátorem zařízení";
 "cloud_set_up_backup" = "Nastavit zálohování";
 "user_login" = "Přihlásit se";
-"cloud_description" = "Nikdy již neztraťte svá data. Zálohujte a obnovujte všechny informace jednoduše.";
+"osmand_cloud_authorize_descr" = "Nikdy již neztraťte svá data. Zálohujte a obnovujte všechny informace jednoduše.";
 "osmand_cloud_login_descr" = "Zadejte prosím e-mailovou adresu, se kterou jste se registrovali. Bude na ni zasláno jednorázové heslo potřebné pro další krok.";
 "make_backup" = "Vytvořit zálohu";
-"cloud_backup_now" = "Zálohovat";
+"backup_now" = "Zálohovat";
 "backup_error_subscription_was_expired_descr" = "Vaše předplatné OsmAnd Pro expirovalo, obnovte ho, abyste mohli zálohovat. Stále ovšem můžete obnovit data z Cloudu.";
 "backup_error_subscription_was_used" = "Předplatné nebo promo kód je použito v jiném účtu %@";
 "cloud_email_not_registered" = "Tato emailová adresa není registrována pro OsmAnd Cloud";
@@ -2347,7 +2347,7 @@
 "copy_coordinates" = "Kopírovat souřadnice";
 "monthly_subscription" = "Měsíční předplatné";
 "annual_subscription" = "Roční předplatné";
-"units_cubic_m" = "m³";
+"cubic_m" = "m³";
 "expired" = "Expirovalo";
 "purchases_feature_desc_pro_widgets" = "Získejte přístup k pokročilým funkcím OsmAnd: obarvení tras a další.";
 "purchases_feature_desc_unlimited_map_download" = "Získejte neomezené stahování offline map všech kontinentů a oblastí.";
@@ -2374,7 +2374,7 @@
 "purchases_feature_desc_wikipedia" = "Prozkoumejte Wikipedii offline.Články jsou rozdělené podle zemí a oblastí a jsou dostupné ve všech jazycích.";
 "product_desc_ext_development" = "Umožňuje konfigurovat OsmAnd pro testování: simulovat navigační trasy, kontrolovat výkon vykreslování obrazovky atd. Zásuvný modul není pro běžné používání aplikace vyžadován.";
 "shared_string_learn_more" = "Zjistit více";
-"subscriptions" = "Předplatné";
+"osm_live_subscriptions" = "Předplatné";
 "copy_address" = "Kopírovat adresu";
 "complete_purchase" = "Dokončit nákup";
 "explore_osmnad_plans_to_find_suitable" = "Prozkoumejte předplatné OsmAnd a najděte si takové, které vám bude vyhovovat.";
@@ -2656,7 +2656,7 @@
 "loading_purchase_information" = "Načítání informací o nákupu";
 "subscription_banner_free_maps_title" = "Můžete si zdarma stáhnout %i map.";
 "subscription_banner_no_free_maps_title" = "Využili jste všechna bezplatná stahování";
-"compass_visible_in_rotated_mode" = "Viditelné, pokud je mapa otočena";
+"compass_visible_if_map_rotated" = "Viditelné, pokud je mapa otočena";
 "subscription_banner_osmand_pro_title" = "Získávejte hodinové, denní nebo týdenní aktualizace map s předplatným OsmAnd Pro.";
 "compass_visible_in_rotated_mode_descr" = "Skryté, když je sever nahoře";
 "weather_forecast" = "Předpověď počasí";

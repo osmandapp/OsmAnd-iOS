@@ -7,7 +7,7 @@
 "driving_region_canada" = "Kanada";
 "app_mode_boat" = "Varkë";
 "auto_zoom_none" = "Nuk ka afrim automatik";
-"track_recording_name" = "Gjurmët e deritanishme të rregjistruara";
+"shared_string_currently_recording_track" = "Gjurmët e deritanishme të rregjistruara";
 "animate_routing_route_not_calculated" = "Ju lutem, fillimisht llogaritni rrugën";
 "driving_region_us" = "Shtetet e Bashkuara";
 "app_mode_aircraft" = "Avion";
@@ -21,7 +21,7 @@
 "traffic_warning_pedestrian" = "Mbikalim për këmbësorë";
 "speak_title" = "Njofto…";
 "favorite_home_category" = "Shtëpia";
-"help_about" = "Rreth";
+"shared_string_about" = "Rreth";
 "speak_street_names" = "Njofto emrat e rrugëve (TTS)";
 "shared_string_control_start" = "Fillo";
 "rendering_attr_hideHouseNumbers_name" = "Hiç numrat e shtëpive";

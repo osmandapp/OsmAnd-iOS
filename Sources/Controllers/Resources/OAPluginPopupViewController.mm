@@ -293,7 +293,7 @@ static NSMutableArray *activePopups;
         
         title = OALocalizedString(@"turn_on_plugin");
         descText = OALocalizedString(@"plugin_popup_wiki_ask");
-        okButtonName = OALocalizedString(@"plugins");
+        okButtonName = OALocalizedString(@"plugins_menu_group");
         cancelButtonName = OALocalizedString(@"shared_string_cancel");
         
         [popup.okButton addTarget:popup action:@selector(goToPlugins) forControlEvents:UIControlEventTouchUpInside];
@@ -305,7 +305,7 @@ static NSMutableArray *activePopups;
         
         title = OALocalizedString(@"turn_on_plugin");
         descText = OALocalizedString(@"plugin_popup_srtm_ask");
-        okButtonName = OALocalizedString(@"plugins");
+        okButtonName = OALocalizedString(@"plugins_menu_group");
         cancelButtonName = OALocalizedString(@"shared_string_cancel");
         
         [popup.okButton addTarget:popup action:@selector(goToPlugins) forControlEvents:UIControlEventTouchUpInside];
@@ -317,7 +317,7 @@ static NSMutableArray *activePopups;
         
         title = OALocalizedString(@"plugin_popup_osm_editing_title");
         descText = OALocalizedString(@"plugin_popup_osm_editing_ask");
-        okButtonName = OALocalizedString(@"plugins");
+        okButtonName = OALocalizedString(@"plugins_menu_group");
         cancelButtonName = OALocalizedString(@"shared_string_cancel");
         
         [popup.okButton addTarget:popup action:@selector(goToPlugins) forControlEvents:UIControlEventTouchUpInside];
@@ -329,7 +329,7 @@ static NSMutableArray *activePopups;
 
         title = OALocalizedString(@"plugin_popup_weather_title");
         descText = OALocalizedString(@"plugin_popup_weather_ask");
-        okButtonName = OALocalizedString(@"plugins");
+        okButtonName = OALocalizedString(@"plugins_menu_group");
         cancelButtonName = OALocalizedString(@"shared_string_cancel");
 
         [popup.okButton addTarget:popup action:@selector(goToPlugins) forControlEvents:UIControlEventTouchUpInside];
@@ -340,7 +340,7 @@ static NSMutableArray *activePopups;
 
         title = OALocalizedString(@"product_title_nautical");
         descText = OALocalizedString(@"plugin_popup_nautical_ask");
-        okButtonName = OALocalizedString(@"plugins");
+        okButtonName = OALocalizedString(@"plugins_menu_group");
         cancelButtonName = OALocalizedString(@"shared_string_cancel");
         iconName = @"ic_custom_nautical_depth_colored_day";
 
@@ -352,7 +352,7 @@ static NSMutableArray *activePopups;
 
         title = OALocalizedString(@"rendering_attr_depthContours_name");
         descText = OALocalizedString(@"option_available_only_by_subscription");
-        okButtonName = OALocalizedString(@"subscriptions");
+        okButtonName = OALocalizedString(@"osm_live_subscriptions");
         cancelButtonName = OALocalizedString(@"shared_string_cancel");
         iconName = @"ic_custom_nautical_depth_colored_day";
         popup.okButton.tag = EOAFeatureNautical;
@@ -365,7 +365,7 @@ static NSMutableArray *activePopups;
 
         title = OALocalizedString(@"carplay");
         descText = OALocalizedString(@"option_available_only_by_subscription");
-        okButtonName = OALocalizedString(@"subscriptions");
+        okButtonName = OALocalizedString(@"osm_live_subscriptions");
         cancelButtonName = OALocalizedString(@"shared_string_cancel");
         iconName = @"ic_custom_carplay_colored";
         popup.okButton.tag = EOAFeatureCarPlay;
@@ -378,7 +378,7 @@ static NSMutableArray *activePopups;
 
         title = OALocalizedString(@"pro_features");
         descText = OALocalizedString(@"purchases_feature_desc_pro_widgets");
-        okButtonName = OALocalizedString(@"subscriptions");
+        okButtonName = OALocalizedString(@"osm_live_subscriptions");
         cancelButtonName = OALocalizedString(@"shared_string_cancel");
         iconName = @"ic_custom_advanced_widgets_colored_day";
         popup.okButton.tag = EOAFeatureAdvancedWidgets;
@@ -484,7 +484,7 @@ static NSMutableArray *activePopups;
                 {
                     NSString* stringifiedSize = [NSByteCountFormatter stringFromByteCount:repositoryMap->packageSize
                                                                                countStyle:NSByteCountFormatterCountStyleFile];
-                    okButtonName = [NSString stringWithFormat:@"%@ (%@)", OALocalizedString(@"download"), stringifiedSize];
+                    okButtonName = [NSString stringWithFormat:@"%@ (%@)", OALocalizedString(@"shared_string_download"), stringifiedSize];
                 }
                 else
                 {

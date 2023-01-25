@@ -266,7 +266,7 @@
         NSArray<OAFavoriteGroup *> *allGroups = [OAFavoritesHelper getFavoriteGroups];
 
         if (![[OAFavoritesHelper getGroups].allKeys containsObject:@""]) {
-            [names addObject:OALocalizedString(@"favorites")];
+            [names addObject:OALocalizedString(@"favorites_item")];
             [sizes addObject:@0];
             [colors addObject:[OADefaultFavorite getDefaultColor]];
         }
@@ -575,7 +575,7 @@
 
     [section addObject:@{
         @"type" : [OAColorsTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"fav_color"),
+        @"title" : OALocalizedString(@"shared_string_color"),
         @"value" : _selectedColor.name,
         @"index" : @(_selectedColorIndex),
     }];
@@ -789,7 +789,7 @@
         {
             if (!_pointHandler.gpxWptDelegate)
                 _pointHandler.gpxWptDelegate = self.gpxWptDelegate;
-            if ([savingGroup isEqualToString:OALocalizedString(@"gpx_waypoints")])
+            if ([savingGroup isEqualToString:OALocalizedString(@"shared_string_waypoints")])
                 savingGroup = @"";
         }
 
@@ -1313,7 +1313,7 @@
     [self updateHeaderIcon];
     
     if ([self.groupTitle isEqualToString:@""])
-        self.groupTitle = OALocalizedString(@"favorites");
+        self.groupTitle = OALocalizedString(@"favorites_item");
     [self generateData];
     
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_selectCategoryLabelRowIndex inSection:_selectCategorySectionIndex], [NSIndexPath indexPathForRow:_poiIconRowIndex inSection:_appearenceSectionIndex], [NSIndexPath indexPathForRow:_colorRowIndex inSection:_appearenceSectionIndex], [NSIndexPath indexPathForRow:_shapeRowIndex inSection:_appearenceSectionIndex]] withRowAnimation:UITableViewRowAnimationNone];

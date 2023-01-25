@@ -136,7 +136,7 @@
     NSString *textGroups = [NSString stringWithFormat:@"\n%@ %li, %@ %li",
                     OALocalizedString(@"shared_string_groups"),
                                                       selectedGroupsCount,
-                                                      OALocalizedString(@"gpx_waypoints").lowerCase,
+                                                      OALocalizedString(@"shared_string_waypoints").lowerCase,
                                                       selectedWaypointsCount];
 
     UIFont *fontCategories = [UIFont systemFontOfSize:13];

@@ -137,7 +137,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
 
 - (void)setupView
 {
-    title = OALocalizedString(@"product_title_wiki");
+    title = OALocalizedString(@"download_wikipedia_maps");
 
     self.tblView.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + 16., 0., 0.);
     [self.tblView.tableFooterView removeFromSuperview];

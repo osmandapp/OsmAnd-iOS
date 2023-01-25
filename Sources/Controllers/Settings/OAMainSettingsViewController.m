@@ -364,7 +364,7 @@
     if (section == 1)
         return OALocalizedString(@"selected_profile");
     else if (section == 2)
-        return OALocalizedString(@"app_profiles");
+        return OALocalizedString(@"application_profiles");
     else if (section == 3)
         return OALocalizedString(@"local_backup");
     return nil;

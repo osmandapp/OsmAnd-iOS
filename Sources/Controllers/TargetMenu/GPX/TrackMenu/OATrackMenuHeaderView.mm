@@ -126,7 +126,7 @@
 
     if (_selectedTab != EOATrackMenuHudActionsTab)
     {
-        [self.titleView setText:currentTrack ? OALocalizedString(@"track_recording_name") : title];
+        [self.titleView setText:currentTrack ? OALocalizedString(@"shared_string_currently_recording_track") : title];
         self.titleIconView.image = [UIImage templateImageNamed:@"ic_custom_trip"];
         self.titleIconView.tintColor = UIColorFromRGB(color_icon_inactive);
     }

@@ -51,7 +51,7 @@
 
 - (void) applyLocalization
 {
-    _titleView.text = OALocalizedString(@"plugins");
+    _titleView.text = OALocalizedString(@"plugins_menu_group");
     [_doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
 }
 

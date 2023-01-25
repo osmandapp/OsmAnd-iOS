@@ -201,7 +201,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     if (plugins.count > 0)
     {
         [data addObject:plugins];
-        [sectionHeaderTitles addObject:OALocalizedString(@"plugins")];
+        [sectionHeaderTitles addObject:OALocalizedString(@"plugins_menu_group")];
         [sectionFooterTitles addObject:OALocalizedString(@"plugin_settings_descr")];
     }
     

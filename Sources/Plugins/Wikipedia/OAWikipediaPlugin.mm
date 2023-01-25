@@ -60,7 +60,7 @@
 
 - (NSString *)getName
 {
-    return OALocalizedString(@"product_title_wiki");
+    return OALocalizedString(@"download_wikipedia_maps");
 }
 
 - (NSString *)getDescription

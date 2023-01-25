@@ -103,7 +103,7 @@
     {
         if (cell)
         {
-            [cell.textView setText:OALocalizedString(@"track_recording_name")];
+            [cell.textView setText:OALocalizedString(@"shared_string_currently_recording_track")];
             [cell.descriptionDistanceView setText:[OAOsmAndFormatter getFormattedDistance:helper.distance]];
             [cell.descriptionPointsView setText:[NSString stringWithFormat:@"%d %@", helper.points, [OALocalizedString(@"gpx_points") lowercaseStringWithLocale:[NSLocale currentLocale]]]];
             

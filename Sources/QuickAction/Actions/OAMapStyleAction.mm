@@ -161,7 +161,7 @@ static OAQuickActionType *TYPE;
 
 - (NSString *)getDescrTitle
 {
-    return OALocalizedString(@"change_map_style");
+    return OALocalizedString(@"quick_action_map_style");
 }
 
 - (NSString *)getListKey
@@ -231,7 +231,7 @@ static OAQuickActionType *TYPE;
 + (OAQuickActionType *) TYPE
 {
     if (!TYPE)
-        TYPE = [[OAQuickActionType alloc] initWithIdentifier:14 stringId:@"mapstyle.change" class:self.class name:OALocalizedString(@"change_map_style") category:CONFIGURE_MAP iconName:@"ic_custom_map_style" secondaryIconName:nil];
+        TYPE = [[OAQuickActionType alloc] initWithIdentifier:14 stringId:@"mapstyle.change" class:self.class name:OALocalizedString(@"quick_action_map_style") category:CONFIGURE_MAP iconName:@"ic_custom_map_style" secondaryIconName:nil];
        
     return TYPE;
 }

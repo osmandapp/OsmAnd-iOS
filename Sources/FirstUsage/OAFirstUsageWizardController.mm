@@ -151,15 +151,15 @@ typedef enum
 
     // Init searching location view
     _lbSearchingLocation.text = OALocalizedString(@"search_location");
-    [_btnSearchingLocation setTitle:OALocalizedString(@"download") forState:UIControlStateNormal];
+    [_btnSearchingLocation setTitle:OALocalizedString(@"shared_string_download") forState:UIControlStateNormal];
 
     // Init searching map view
     _lbSearchingMap.text = OALocalizedString(@"search_map");
-    [_btnSearchingMap setTitle:OALocalizedString(@"download") forState:UIControlStateNormal];
+    [_btnSearchingMap setTitle:OALocalizedString(@"shared_string_download") forState:UIControlStateNormal];
 
     // Init download map view
     [self updateDownloadButtonLayer];
-    [_btnDownload setTitle:OALocalizedString(@"download") forState:UIControlStateNormal];
+    [_btnDownload setTitle:OALocalizedString(@"shared_string_download") forState:UIControlStateNormal];
     [_btnSelectMap setTitle:OALocalizedString(@"search_another_country") forState:UIControlStateNormal];
 
     // Init progress view

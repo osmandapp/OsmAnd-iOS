@@ -219,7 +219,7 @@
     OAIAPHelper *helper = [OAIAPHelper sharedInstance];
     if ([helper.wiki isPurchased])
     {
-        [_bannerButton setTitle:[OALocalizedString(@"download") upperCase] forState:UIControlStateNormal];
+        [_bannerButton setTitle:[OALocalizedString(@"shared_string_download") upperCase] forState:UIControlStateNormal];
     }
     else
     {

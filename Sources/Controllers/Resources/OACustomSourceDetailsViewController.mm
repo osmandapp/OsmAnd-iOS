@@ -140,7 +140,7 @@
     NSMutableArray<OADownloadActionButton *> *actionButtons = [NSMutableArray arrayWithArray:_item.descriptionInfo.getActionButtons];
     BOOL isDownloading = [[OsmAndApp instance].downloadsManager.keysOfDownloadTasks containsObject:[NSString stringWithFormat:@"resource:%@", _item.resourceId.toNSString()]];
     if (actionButtons.count == 0 && _item && !_item.isInstalled && !isDownloading)
-        downloadButton = [[OADownloadActionButton alloc] initWithActionType:DOWNLOAD_BUTTON_ACTION name:OALocalizedString(@"download") url:nil];
+        downloadButton = [[OADownloadActionButton alloc] initWithActionType:DOWNLOAD_BUTTON_ACTION name:OALocalizedString(@"shared_string_download") url:nil];
     
     NSMutableArray<NSDictionary *> *additionalButtons = [NSMutableArray array];
     for (OADownloadActionButton *actionButton in actionButtons)

@@ -139,7 +139,7 @@
 // Track recording settings
 "save_global_track_interval" = "General logging interval";
 "save_global_track_interval_descr" = "Choose logging interval for the general track recording (enabled via the GPX logging widget on the map).";
-"logging_interval_navigation" = "Logging interval during navigation";
+"save_track_interval" = "Logging interval during navigation";
 "logging_interval_navigation_descr" = "Choose logging interval for track recording during navigation";
 "monitoring_min_distance" = "Minimum displacement";
 "logging_min_distance_descr" = "Filter: minimum distance to log a new point";
@@ -227,7 +227,7 @@
 
 "int_seconds" = "segundos";
 "shared_string_never" = "Enxamás";
-"shared_setting_always_ask" = "Entrugar siempres";
+"confirm_every_run" = "Entrugar siempres";
 "general_settings_2" = "Axustes xenerales";
 "general_settings_descr" = "App theme, units, region";
 "routing_settings_descr" = "Configure navigation";
@@ -425,8 +425,8 @@
 "si_nm_h" = "Nautical miles per hour (knot)";
 "units_nm_h" = "nmi/h";
 "min_mile" = "min/m";
-"units_min_km" = "min/km";
-"units_m_s" = "m/s";
+"min_km" = "min/km";
+"m_s" = "m/s";
 "tones" = "tonelaes";
 
 "nothing_found" = "Nothing found";
@@ -537,7 +537,7 @@
 "hud_no_movement" = "No movement";
 
 // Favorites
-"fav_color" = "Color";
+"shared_string_color" = "Color";
 "fav_colors" = "Colors";
 "fav_name" = "Nome";
 "fav_group" = "Group";
@@ -599,7 +599,7 @@
 "shared_string_hide" = "Anubrir";
 
 // My Places
-"favorites" = "Favoritos";
+"favorites_item" = "Favoritos";
 "shared_string_gpx_tracks" = "Trazaos";
 "personal_category_name" = "Personal";
 "visible" = "Visible";
@@ -607,7 +607,7 @@
 // GPX
 "plugin_distance_point" = "Point";
 "shared_string_waypoint" = "Waypoint";
-"gpx_waypoints" = "Waypoints";
+"shared_string_waypoints" = "Waypoints";
 "gpx_points" = "Point(s)";
 "shared_string_export" = "Esportar";
 "gpx_selection_segment_title" = "Segments";
@@ -649,7 +649,7 @@
 "gpx_uphills_total" = "Uphills total";
 "distance_moving" = "Distance corrected";
 "track_recording" = "Track recording";
-"track_recording_name" = "Currently recording track";
+"shared_string_currently_recording_track" = "Currently recording track";
 "track_stop_rec" = "Stop recording";
 "track_new_segment" = "Aniciar un segmentu nuevu";
 "track_save" = "Save current track";
@@ -690,7 +690,7 @@
 "stats_select_graph_data" = "Select graph data";
 
 // Map settings
-"m_style_car" = "Driving";
+"routing_engine_vehicle_type_driving" = "Driving";
 "poi_filter_public_transport" = "Tresporte público";
 
 "shared_string_map" = "Mapa";
@@ -942,7 +942,7 @@
 "export_failed" = "Could not export profile";
 "custom_osmand_plugin_name" = "Custom OsmAnd plugin";
 "custom_plugins" = "Custom plugins";
-"extra_maps" = "Mapes adicionales";
+"extra_maps_menu_group" = "Mapes adicionales";
 
 "import_duplicates_title" = "Some items already exist";
 "import_duplicates_description" = "OsmAnd already has elements with the same names as those imported.\n\nSelect an action.";
@@ -991,7 +991,7 @@
 "reorder_profiles" = "Editar la llista de perfiles";
 "enter_profile_name" = "Enter profile name";
 "select_color" = "Esbilla d\'un color";
-"select_icon" = "Esbilla d\'un iconu";
+"select_icon_profile_dialog_title" = "Esbilla d\'un iconu";
 "position_icon_at_rest" = "Iconu de posición en reposu";
 "position_icon_while_moving" = "Iconu de posición en movimientu";
 "will_be_show_while_moving" = "It will be show while moving";
@@ -1014,7 +1014,7 @@
 "not_available_profile_name" = "Profile with this name already exists.";
 "profile_type_base_string" = "Base profile";
 "selected_profile" = "Perfil esbilláu";
-"app_profiles" = "Perfiles de l\'aplicación";
+"application_profiles" = "Perfiles de l\'aplicación";
 "profile_sett_descr" = "Affect selected application profile";
 "import_profile_descr" = "To import a profile, tap on the needed file (*.osf) in any application and select \"Copy to OsmAnd Maps\"";
 "export_profile_descr" = "You can export all profile settings, copy all settings from another profile or reset all profile settings to default state.";
@@ -1036,7 +1036,7 @@
 "prch_nau_q3" = "You may install it later through the Maps & Resources.";
 "proceed_q" = "Proceed?";
 
-"download" = "Baxar";
+"shared_string_download" = "Baxar";
 "shared_string_no_thanks" = "Non, gracies";
 "download_now" = "Download map now";
 "prch_failed" = "Purchase of \"%@\" has failed";
@@ -1105,7 +1105,7 @@
 "nearest_point" = "Nearest point";
 "plan_route_folder" = "Folder";
 "plan_route_change_folder" = "Change folder";
-"plan_route_select_folder" = "Select folder";
+"select_folder" = "Select folder";
 "select_folder_descr" = "Select folder or add a new one";
 "add_folder" = "Add folder";
 "select_segment" = "Select segment";
@@ -1122,7 +1122,7 @@
 "osmand_live_updates" = "Anovamientos en direuto";
 "osmand_live_available_maps" = "Mapes disponibles";
 "osmand_live_last_changed" = "Last map change: %@";
-"osmand_live_last_live_update" = "Last update: %@";
+"last_update" = "Last update: %@";
 "osmand_live_not_updated" = "Not yet updated";
 "osmand_live_hourly" = "Cada hora";
 "daily" = "Caldía";
@@ -1253,17 +1253,17 @@
 "map_widget_top_text" = "Street name";
 "osm_building_num" = "Building number";
 "phone" = "Phone";
-"osm_website" = "Sitiu web";
+"website" = "Sitiu web";
 "population_num" = "Population";
 "osm_add_place" = "Add place";
 "osm_modify_place" = "Modify place";
 "osm_poi_delete_title" = "Delete POI";
 "osm_edit_modified_poi" = "Modified OSM POI";
 "osm_edit_deleted_poi" = "Deleted OSM POI";
-"osm_target_created" = "Created OSM POI";
+"osm_edit_created_poi" = "Created OSM POI";
 "osm_note_created" = "Created OSM Note";
 "osm_note_create" = "Create OSM Note";
-"osm_note_upload" = "Upload OSM Note";
+"upload_osm_note" = "Upload OSM Note";
 "osm_note_close" = "Close OSM Note";
 "osm_note_comment_title" = "Comment OSM Note";
 "osm_note_reopen_title" = "Reopen OSM Note";
@@ -1278,7 +1278,7 @@
 "osm_note_upload_anonymously" = "Upload anonymously";
 "osm_note_empty_message" = "Please specify the message for this note.";
 "osm_note_comment" = "Comment";
-"osm_note_reopen" = "Reopen";
+"poi_dialog_reopen" = "Reopen";
 "osm_edits_offline_layer" = "OSM Edits/Notes (offline)";
 "osm_notes_online_layer" = "OSM Notes (online)";
 "tab_title_basic" = "Basic";
@@ -1306,7 +1306,7 @@
 "mapil_images_nearby" = "Images nearby";
 "mapil_no_images" = "We do not have photos for this location.";
 "shared_string_add_photos" = "Amestar semeyes";
-"mapillary_get_title" = "Improve photo coverage with Mapillary";
+"improve_coverage_mapillary" = "Improve photo coverage with Mapillary";
 "mapillary_get_descr" = "Get Mapillary to add photos to this location";
 "mapil_contribute" = "Contribute your own street level imagery";
 "mapillary_descr" = "Online street photos for everyone. Discover places, collaborate, capture the world";
@@ -1364,7 +1364,7 @@
 "toggle_online_notes" = "Toggle OSM notes";
 "toggle_local_edits" = "Toggle local OSM edits";
 "quick_action_add_poi" = "Amestar un PdI";
-"change_map_style" = "Change map style";
+"quick_action_map_style" = "Change map style";
 "quick_action_map_source" = "Change map source";
 "quick_action_map_overlay" = "Change map overlay";
 "quick_action_map_underlay" = "Change map underlay";
@@ -1377,17 +1377,17 @@
 "favorite_home_category" = "Casa";
 "work_pt" = "Trabayu";
 "map_widget_parking" = "Parking spot";
-"add_first_inermediate" = "Amestar el primer puntu intermediu";
+"quick_action_add_first_intermediate" = "Amestar el primer puntu intermediu";
 "toggle_auto_zoom" = "Auto zoom on/off";
 "auto_zoom_on" = "Auto zoom on";
 "auto_zoom_off" = "Auto zoom off";
-"pause_resume_nav" = "Posar la navegación o siguir con ella";
+"quick_action_resume_pause_navigation" = "Posar la navegación o siguir con ella";
 "resume_nav" = "Continue navigation";
 "pause_nav" = "Pause navigation";
 "toggle_nav" = "Aniciar/parar la navegación";
 "toggle_day_night" = "Switch Day/Night mode";
 "quick_action_switch_night_mode" = "Mou nocherniegu";
-"day_mode" = "Mou diurnu";
+"quick_action_switch_day_mode" = "Mou diurnu";
 "mute_voice" = "Mute voice";
 "unmute_voice" = "Unmute voice";
 "show_hide_gpx" = "Show/hide tracks";
@@ -1479,7 +1479,7 @@
 "replace_waypoint_confirmation" = "Are you sure you want to replace Waypoint %@?";
 "no_waypoints_found" = "No waypoints found";
 "poi_context_menu_modify" = "Modify POI";
-"create_poi_short" = "Create POI";
+"context_menu_item_create_poi" = "Create POI";
 "poi_context_menu_modify_osm_change" = "Modify OSM change";
 "context_menu_item_open_note" = "Open OSM Note";
 "edit_osm_note" = "Edit OSM Note";
@@ -1502,12 +1502,12 @@
 "units_mi" = "mi";
 "units_yd" = "yd";
 "foot" = "ft";
-"units_nm" = "nmi";
+"nm" = "nmi";
 "units_km_h" = "km/h";
 "units_mph" = "mph";
 
 "int_hour" = "h";
-"units_min" = "min.";
+"int_min" = "min.";
 "units_sec" = "sec";
 "units_sec_short" = "s";
 
@@ -1515,7 +1515,7 @@
 
 // Help
 "help_first_steps" = "First steps";
-"help_first_use" = "El primer usu";
+"first_usage_item" = "El primer usu";
 "help_first_use_descr" = "How to download maps and set basic settings";
 "help_navigation_descr" = "How to set up navigation";
 "faq_item" = "FAQ";
@@ -1537,8 +1537,8 @@
 "techical_articles_item" = "Artículos téunicos";
 "help_versions" = "Versiones";
 "help_contact_us" = "Contact us";
-"help_about" = "About";
-"help_follow_us" = "Follow us";
+"shared_string_about" = "About";
+"follow_us" = "Follow us";
 "facebook" = "Facebook";
 "twitter" = "Twitter";
 "reddit" = "Reddit";
@@ -1565,7 +1565,7 @@
 "ctx_mnu_edit_fav" = "Edit favorite";
 "ctx_mnu_add_fav" = "Add favorite";
 "ctx_mnu_share" = "Compartir";
-"ctx_mnu_direction" = "Marcador del mapa";
+"map_marker" = "Marcador del mapa";
 
 // Location Services
 "loc_access_denied" = "Access denied";
@@ -1584,8 +1584,8 @@
 "region_europe" = "Europa";
 "index_name_north_america" = "Norteamérica";
 "region_russia" = "Rusia";
-"region_south_america" = "Suramérica";
-"region_nautical" = "Mapes náuticos";
+"index_name_south_america" = "Suramérica";
+"nautical_maps" = "Mapes náuticos";
 "download_select_map_types" = "Otros mapes";
 
 // Help
@@ -1632,7 +1632,7 @@
 
 "index_name_africa" = "África";
 "product_desc_africa" = "Unlimited map downloads for Africa";
-"product_title_antarctica" = "L\'Antártida";
+"index_name_antarctica" = "L\'Antártida";
 "product_desc_antarctica" = "Unlimited map downloads for Antarctica";
 "product_desc_africa_short" = "Africa region maps";
 "product_desc_australia" = "Unlimited map downloads for Australia";
@@ -1658,7 +1658,7 @@
 "product_desc_asia" = "Unlimited map downloads for Asia";
 "product_desc_asia_short" = "Asia region maps";
 
-"product_title_wiki" = "Wikipedia";
+"download_wikipedia_maps" = "Wikipedia";
 "product_desc_wiki" = "Wikipedia data";
 "product_desc_ext_wiki" = "Get information about points of interest from Wikipedia. It is your pocket offline guide - just enable Wikipedia plugin and enjoy articles about objects around you.";
 "shared_string_all_languages" = "Toles llingües";
@@ -1720,7 +1720,7 @@
 "upload_to_openstreetmap" = "Upload to OpenStreetMap";
 "edit_track" = "Edit track";
 "duplicate_track" = "Duplicate track";
-"enter_name" = "Enter name";
+"access_hint_enter_name" = "Enter name";
 "shared_string_not_selected" = "Nun s\'esbilló";
 "shared_string_language" = "Llingua";
 
@@ -1748,7 +1748,7 @@
 "public_transport_empty_warning_title" = "Unfortunately, OsmAnd could not find a route for your settings.";
 "public_transport_try_change_settings" = "Prueba a camudar los axustes.";
 
-"total" = "Total";
+"shared_string_total" = "Total";
 "walk" = "Walk";
 "board_at" = "Board at";
 "exit_at" = "Exit at";
@@ -1778,7 +1778,7 @@
 "parking" = "Parking";
 "parked_at" = "Parked at";
 
-"directions_more_options" = "Directions from";
+"context_menu_item_directions_from" = "Directions from";
 "nearby_search" = "Search nearby";
 "change_object_posiotion" = "Change object's position";
 "change_position_descr" = "Move the map to change object's position";
@@ -1788,7 +1788,7 @@
 "sorting" = "Sorting";
 "default_speed_descr" = "Estimates arrival time for unknown road types and limits speed for all roads (may affect routing)";
 
-"plugins" = "Plugins";
+"plugins_menu_group" = "Plugins";
 "open_map_settings" = "Open Map Settings";
 
 "plugin_popup_ski_title" = "Turn on Ski map style";
@@ -1846,7 +1846,7 @@
 "import_raster_map_failed" = "Raster map import failed";
 
 "device_memory" = "Memoria del preséu";
-"free_memory" = "Espaciu llibre: %@";
+"free" = "Espaciu llibre: %@";
 
 "first_usage_greeting" = "Get directions and discover new places without Internet connection";
 "get_started" = "Entamar";
@@ -1874,7 +1874,7 @@
 "skip_map_downloading_desc_ios" = "You have no offline map installed. You may choose a map from the list or download maps later via Menu - Manage map files";
 
 "wiki_around" = "Artículos de Wikipedia cercanos";
-"categories" = "Estayes";
+"search_categories" = "Estayes";
 "items_selected" = "%d selected";
 
 "wiki_sheet_title" = "¿Cómo abrir los artículos de Wikipedia\?";
@@ -1911,7 +1911,7 @@
 "shared_string_password" = "Contraseña";
 "shared_string_filters" = "Peñeres";
 "edit_filter" = "Edit categories";
-"shared_string_save_as" = "Save As";
+"edit_filter_save_as_menu_item" = "Save As";
 "delete_filter" = "Delete filter";
 "save_filter" = "Guardar la peñera";
 "edit_filter_delete_dialog_title" = "Delete selected filter?";
@@ -2321,8 +2321,8 @@
 "amenity" = "Amenity";
 "amenity_type_emergency" = "Emergency";
 "icon_group_special" = "Special";
-"sport" = "Sport";
-"symbols" = "Símbolos";
+"icon_group_sport" = "Sport";
+"icon_group_symbols" = "Símbolos";
 "transport" = "Tresporte";
 "travel" = "Travel";
 "nautical" = "Nautical";
@@ -2415,7 +2415,7 @@
 "backup_error_user_is_not_registered" = "No user registered with that e-mail address";
 "start_point" = "Start";
 "verify_email_address_descr" = "El códigu de verificación unvióse a %@. Introduzlu nel campu d\'abaxo.";
-"cloud_description" = "Never lose your data. Back up and restore all info easily.";
+"osmand_cloud_authorize_descr" = "Never lose your data. Back up and restore all info easily.";
 "routing_attr_prefer_horse_routes_description" = "Prefer horse routes";
 "save_heading" = "Include heading";
 "routing_attr_only_permitted_streets_name" = "Expressly permitted streets";
@@ -2442,7 +2442,7 @@
 "cloud_existing_account" = "Yá tengo una cuenta";
 "routing_attr_allow_gate_name" = "Allow gate usage";
 "register_opr_create_new_account" = "Crear una cuenta";
-"cloud_last_backup" = "Last backup";
+"last_backup" = "Last backup";
 "shared_string_min_height" = "Min. height";
 "backup_error_size_is_exceeded" = "Maximum size of OsmAnd Cloud exceeded %@";
 "routing_attr_only_permitted_streets_description" = "Only use streets which are expressly permitted";
@@ -2458,7 +2458,7 @@
 "routeInfo_smoothness_description" = "Provides a classification scheme regarding the physical usability of a way for wheeled vehicles, particularly regarding surface regularity/flatness.";
 "cloud_conflicts_descr" = "Some files could not be uploaded to the server because a newer version is stored on the server.";
 "make_backup_descr" = "Hai munchos cambeos nel preséu, fai una copia de seguranza d\'estos datos pa nun los perder.";
-"cloud_backup_now" = "Backup now";
+"backup_now" = "Backup now";
 "backup_error_subscription_was_expired_descr" = "Your OsmAnd Pro subscription is expired, renew it to use backup. You can still restore data from the Cloud.";
 "context_menu_edit_descr" = "Edit description";
 "backup_error_token_is_not_valid_or_expired" = "El pase nun ye válidu o caducó";
@@ -2468,7 +2468,7 @@
 "any_poi" = "Any";
 "expired" = "Expired";
 "product_desc_ext_development" = "Los axustes pal desendolcu y pa la depuración de carauterístiques como la simulación de la navegación, el rindimientu de la renderización o los avisos per voz. Esti plugin ta diseñáu pa desendolcadores, nun se precisa pa l\'usu normal de l\'aplicación.";
-"subscriptions" = "Soscripciones";
+"osm_live_subscriptions" = "Soscripciones";
 "shared_string_control_stop" = "Stop";
 "shared_string_start" = "Aniciar";
 "purchases_feature_desc_unlimited_map_download" = "Get unlimited downloads for all continents and regions offline maps.";
@@ -2478,7 +2478,7 @@
 "restore_purchases" = "Restaurar les compres";
 "copy_coordinates" = "Copiar les coordenaes";
 "shared_string_purchased" = "Purchased";
-"units_cubic_m" = "m³";
+"cubic_m" = "m³";
 "purchases_feature_desc_monthly_map_updates" = "Get access to regular monthly updates for offline maps.";
 "new_device_account" = "Preséu nuevu / cuenta nueva";
 "copy_to_map_favorites" = "Copy to favorites";

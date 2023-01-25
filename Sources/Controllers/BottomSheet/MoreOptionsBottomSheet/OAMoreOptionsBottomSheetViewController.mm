@@ -92,7 +92,7 @@
     [vwController.cancelButton setTitle:OALocalizedString(@"shared_string_close") forState:UIControlStateNormal];
     NSMutableArray *arr = [NSMutableArray array];
     // Directions from here
-    [arr addObject:@{ @"title" : OALocalizedString(@"directions_more_options"),
+    [arr addObject:@{ @"title" : OALocalizedString(@"context_menu_item_directions_from"),
                       @"key" : @"directions_more_options",
                       @"img" : @"ic_action_directions_from",
                       @"type" : [OAMenuSimpleCell getCellIdentifier] } ];
@@ -159,7 +159,7 @@
                 if ([_editingAddon isEnabled])
                 {
                     BOOL createNewPoi = (_targetPoint.obfId == 0 && _targetPoint.type != OATargetTransportStop && _targetPoint.type != OATargetOsmEdit) || _targetPoint.type == OATargetOsmNote;
-                    [arr addObject:@{ @"title" : createNewPoi ? OALocalizedString(@"create_poi_short") : _targetPoint.type == OATargetOsmEdit ?
+                    [arr addObject:@{ @"title" : createNewPoi ? OALocalizedString(@"context_menu_item_create_poi") : _targetPoint.type == OATargetOsmEdit ?
                                       OALocalizedString(@"poi_context_menu_modify_osm_change") : OALocalizedString(@"poi_context_menu_modify"),
                                       @"key" : @"addon_edit_poi_modify",
                                       @"img" : createNewPoi ? @"ic_action_create_poi" : @"ic_custom_edit",
@@ -352,7 +352,7 @@
         else if ([key isEqualToString:@"addon_edit_poi_modify"] && _editingAddon)
         {
             [mapPanel targetHide];
-            if ([item[@"title"] isEqualToString:OALocalizedString(@"create_poi_short")])
+            if ([item[@"title"] isEqualToString:OALocalizedString(@"context_menu_item_create_poi")])
             {
                 OAOsmEditingViewController *editingScreen = [[OAOsmEditingViewController alloc] initWithLat:_targetPoint.location.latitude lon:_targetPoint.location.longitude];
                 [mapPanel.navigationController pushViewController:editingScreen animated:YES];

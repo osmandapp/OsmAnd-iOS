@@ -827,7 +827,7 @@ import Charts.Swift
             mainUnitStr = OAUtilities.getLocalizedString("units_km")
             mainUnitInMeters = GpxUIHelper.METERS_IN_KILOMETER
         } else if (mc == EOAMetricsConstant.NAUTICAL_MILES_AND_METERS || mc == EOAMetricsConstant.NAUTICAL_MILES_AND_FEET) {
-            mainUnitStr = OAUtilities.getLocalizedString("units_nm")
+            mainUnitStr = OAUtilities.getLocalizedString("nm")
             mainUnitInMeters = GpxUIHelper.METERS_IN_ONE_NAUTICALMILE
         } else {
             mainUnitStr = OAUtilities.getLocalizedString("units_mi")

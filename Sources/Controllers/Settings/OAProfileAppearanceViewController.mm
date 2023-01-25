@@ -276,7 +276,7 @@
     }];
     [profileAppearanceArr addObject:@{
         @"type" : [OAIconsTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"select_icon"),
+        @"title" : OALocalizedString(@"select_icon_profile_dialog_title"),
         @"value" : @"",
     }];
     [profileMapAppearanceArr addObject:@{

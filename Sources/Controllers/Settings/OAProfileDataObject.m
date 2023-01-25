@@ -151,7 +151,7 @@ static NSDictionary<NSString *, OARoutingProfileDataObject *> *_rpValues;
         case EOARoutingProfilesResourceBrouter:
             return OALocalizedString(@"nav_type_brouter");
         case EOARoutingProfilesResourceCar:
-            return OALocalizedString(@"m_style_car");
+            return OALocalizedString(@"routing_engine_vehicle_type_driving");
         case EOARoutingProfilesResourcePedestrian:
             return OALocalizedString(@"rendering_value_pedestrian_name");
         case EOARoutingProfilesResourceBicycle:

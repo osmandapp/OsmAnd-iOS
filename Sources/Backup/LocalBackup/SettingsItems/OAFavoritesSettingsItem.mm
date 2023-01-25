@@ -76,7 +76,7 @@
     NSString *fileName = self.fileName;
     if (groupName.length > 0)
     {
-        return [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_space"), OALocalizedString(@"favorites"), groupName];
+        return [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_space"), OALocalizedString(@"favorites_item"), groupName];
     }
     else if (fileName.length > 0)
     {
@@ -84,11 +84,11 @@
         if ([groupName hasPrefix:app.favoritesGroupNameSeparator])
             groupName = [groupName substringFromIndex:1];
 
-        return [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_space"), OALocalizedString(@"favorites"), groupName];
+        return [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_space"), OALocalizedString(@"favorites_item"), groupName];
     }
     else
     {
-        return OALocalizedString(@"favorites");
+        return OALocalizedString(@"favorites_item");
     }
 }
 

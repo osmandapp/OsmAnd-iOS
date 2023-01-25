@@ -120,7 +120,7 @@
     }
     else if (_osmPoint.getGroup == POI)
     {
-        [str appendAttributedString:[[NSAttributedString alloc] initWithString:_osmPoint.getAction == MODIFY ? OALocalizedString(@"osm_edit_modified_poi") : _osmPoint.getAction == DELETE ? OALocalizedString(@"osm_edit_deleted_poi") : OALocalizedString(@"osm_target_created")]];
+        [str appendAttributedString:[[NSAttributedString alloc] initWithString:_osmPoint.getAction == MODIFY ? OALocalizedString(@"osm_edit_modified_poi") : _osmPoint.getAction == DELETE ? OALocalizedString(@"osm_edit_deleted_poi") : OALocalizedString(@"osm_edit_created_poi")]];
     }
     
     [str addAttribute:NSForegroundColorAttributeName value:_osmPoint.getAction == DELETE ? colorClosed : colorOpen range:NSMakeRange(0, str.length)];

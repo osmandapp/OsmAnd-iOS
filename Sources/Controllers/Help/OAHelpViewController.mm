@@ -82,7 +82,7 @@ static const NSInteger groupCount = 5;
     [dataArr addObject:
      @{
        @"name" : @"help_first_use",
-       @"title" : OALocalizedString(@"help_first_use"),
+       @"title" : OALocalizedString(@"first_usage_item"),
        @"description" : OALocalizedString(@"help_first_use_descr"),
        @"type" : kLinkInternalType,
        @"html" : @"start"
@@ -170,7 +170,7 @@ static const NSInteger groupCount = 5;
     [dataArr addObject:
     @{
       @"name" : @"help_favorites",
-      @"title" : OALocalizedString(@"favorites"),
+      @"title" : OALocalizedString(@"favorites_item"),
       @"type" : kLinkInternalType,
       @"html" : @"favourites"
       }];
@@ -323,7 +323,7 @@ static const NSInteger groupCount = 5;
     [dataArr addObject:
      @{
        @"name" : @"about",
-       @"title" : OALocalizedString(@"help_about"),
+       @"title" : OALocalizedString(@"shared_string_about"),
        @"description" : [NSString stringWithFormat:@"%@ %@", @"OsmAnd", OAAppVersionDependentConstants.getVersion],
        @"type" : kLinkInternalType,
        @"html" : @"about"
@@ -446,11 +446,11 @@ static const NSInteger groupCount = 5;
     else if (section == featuresIndex)
         return OALocalizedString(@"help_features");
     else if (section == pluginsIndex)
-        return OALocalizedString(@"plugins");
+        return OALocalizedString(@"plugins_menu_group");
     else if (section == otherIndex)
         return OALocalizedString(@"help_other_header");
     else if (section == followIndex)
-        return OALocalizedString(@"help_follow_us");
+        return OALocalizedString(@"follow_us");
     
     return 0;
 }

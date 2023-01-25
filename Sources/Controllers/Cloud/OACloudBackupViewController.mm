@@ -179,7 +179,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
                 kCellTypeKey: OALargeImageTitleDescrTableViewCell.getCellIdentifier,
                 kCellKeyKey: @"existingOnlineBackup",
                 kCellTitleKey: OALocalizedString(@"cloud_welcome_back"),
-                kCellDescrKey: OALocalizedString(@"cloud_description"),
+                kCellDescrKey: OALocalizedString(@"osmand_cloud_authorize_descr"),
                 kCellIconNameKey: @"ic_action_cloud_smile_face_colored"
             }];
            

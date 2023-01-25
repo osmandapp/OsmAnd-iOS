@@ -315,7 +315,7 @@
     {
         if (time.length > 0)
             [time appendString:@" "];
-        [time appendFormat:@"%d %@", minutes, OALocalizedString(@"units_min")];
+        [time appendFormat:@"%d %@", minutes, OALocalizedString(@"int_min")];
     }
     if (minutes == 0 && hours == 0)
     {

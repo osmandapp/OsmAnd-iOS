@@ -208,7 +208,7 @@
 
 - (NSString *) getCommonTypeStr
 {
-    return OALocalizedString(@"favorites");
+    return OALocalizedString(@"favorites_item");
 }
 
 - (NSAttributedString *) getAttributedTypeStr

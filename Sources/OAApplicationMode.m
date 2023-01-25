@@ -107,7 +107,7 @@ static OAApplicationMode *_HORSE;
     _DEFAULT.descr = OALocalizedString(@"profile_type_base_string");
     [_DEFAULT reg];
     
-    _CAR = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_car") stringKey:@"car"];
+    _CAR = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"routing_engine_vehicle_type_driving") stringKey:@"car"];
     _CAR.descr = OALocalizedString(@"base_profile_descr_car");
     [_CAR reg];
     

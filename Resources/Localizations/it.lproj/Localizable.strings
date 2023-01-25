@@ -22,7 +22,7 @@
 "hud_heading" = "Titolo";
 "hud_no_movement" = "Nessuno spostamento";
 // Favorites
-"fav_color" = "Colore";
+"shared_string_color" = "Colore";
 "fav_colors" = "Colori";
 "fav_name" = "Nome";
 "fav_group" = "Gruppo";
@@ -49,11 +49,11 @@
 "poi_search_near_center" = "La ricerca è svolta vicino al centro della mappa";
 "shared_string_hide" = "Nascondi";
 // My Places
-"favorites" = "Preferiti";
+"favorites_item" = "Preferiti";
 "shared_string_gpx_tracks" = "Tracce";
 // GPX
 "plugin_distance_point" = "Punto";
-"gpx_waypoints" = "Punti intermedi";
+"shared_string_waypoints" = "Punti intermedi";
 "gpx_points" = "Punto(i)";
 "shared_string_export" = "Esporta";
 "import_export" = "Importa/Esporta";
@@ -78,7 +78,7 @@
 "gpx_uphills_total" = "Totale salite";
 // Map settings
 "rendering_value_browse_map_name" = "Esplorazione mappa";
-"m_style_car" = "Guida autoveicoli";
+"routing_engine_vehicle_type_driving" = "Guida autoveicoli";
 "shared_string_map" = "Mappa";
 "shared_string_show_on_map" = "Mostra sulla mappa";
 "map_settings_type" = "Tipo mappa";
@@ -124,7 +124,7 @@
 "prch_nau_q2_wifi" = "Il download richiede %@ sulla rete WIFI.";
 "prch_nau_q3" = "Puoi installarle successivamente da Mappe & Risorse.";
 "proceed_q" = "Procedere?";
-"download" = "Scarica";
+"shared_string_download" = "Scarica";
 "shared_string_no_thanks" = "No, grazie";
 "download_now" = "Scarica la mappa";
 "prch_failed" = "L'acquisto di \"%@\" è fallito";
@@ -194,7 +194,7 @@
 "ctx_mnu_edit_fav" = "Modifica il preferito";
 "ctx_mnu_add_fav" = "Aggiungi un preferito";
 "ctx_mnu_share" = "Condividi";
-"ctx_mnu_direction" = "Marcatore";
+"map_marker" = "Marcatore";
 // Location Services
 "loc_access_denied" = "Accesso negato";
 "loc_access_denied_desc" = "L'accesso al servizio di posizionamento è stato negato";
@@ -205,7 +205,7 @@
 "index_name_central_america" = "America Centrale";
 "region_europe" = "Europa";
 "index_name_north_america" = "Nord America";
-"region_south_america" = "Sud America";
+"index_name_south_america" = "Sud America";
 // Help
 "help_quiz" = "Quiz";
 // World Regions
@@ -229,7 +229,7 @@
 "my_favorites" = "I miei Preferiti";
 "fav_select" = "Prego, selezionare i favoriti";
 "track_recording" = "Registrazione traccia";
-"track_recording_name" = "Traccia in corso di registrazione";
+"shared_string_currently_recording_track" = "Traccia in corso di registrazione";
 "track_stop_rec" = "Ferma la registrazione";
 "track_new_segment" = "Inizia un nuovo segmento";
 "track_save" = "Salva la traccia corrente";
@@ -264,7 +264,7 @@
 "osmand_parking_overdue" = "obsoleto";
 "cannot_add_marker" = "Impossibile aggiungere Parcheggio";
 "int_hour" = "h";
-"units_min" = "min.";
+"int_min" = "min.";
 "units_sec" = "sec";
 "product_title_skimap" = "Mappe sciistiche";
 "index_name_africa" = "Africa";
@@ -284,7 +284,7 @@
 "product_desc_allworld" = "Mappe di Tutto il Mondo";
 "index_name_asia" = "Asia";
 "product_desc_asia" = "Scaricamenti illimitati delle mappe per l'Asia";
-"product_title_wiki" = "Wikipedia";
+"download_wikipedia_maps" = "Wikipedia";
 "product_desc_wiki" = "Articoli di Wikipedia basati sulla posizione sulla mappa";
 "download_srtm_maps" = "Linee isoipse";
 "product_desc_srtm" = "Valutazione visiva della forma della superficie terrestre";
@@ -310,7 +310,7 @@
 "wpt_remove_q" = "Rimuovere il punto intermedio?";
 "gpx_select_track" = "Scegli un viaggio";
 "gpx_curr_new_track" = "Traccia attuale";
-"enter_name" = "Inserisci il nome";
+"access_hint_enter_name" = "Inserisci il nome";
 "shared_string_not_selected" = "Non selezionato";
 "shared_string_language" = "Lingua";
 "you_searching" = "Stai cercando";
@@ -367,9 +367,9 @@
 "gpx_group_select" = "Scelta gruppo";
 "get_directions" = "Indicazioni";
 "sorting" = "Ordinamento";
-"plugins" = "Componenti aggiuntivi";
+"plugins_menu_group" = "Componenti aggiuntivi";
 "device_memory" = "Memoria dispositivo";
-"free_memory" = "Libera %@";
+"free" = "Libera %@";
 "shared_string_waypoint" = "Tappa";
 "product_desc_ext_parking" = "Abilita per impostare un punto sulla mappa in cui puoi parcheggiare la tua auto e ti avvisa sul tuo calendario quando inizia il tempo di parcheggio. Il plugin aiuta a tenere traccia del tempo di parcheggio e della posizione della tua auto. Per posizionare un indicatore scegli un luogo sulla mappa, poi vai su Azioni e premi \"Aggiungi parcheggio\".";
 "shared_string_of" = "di";
@@ -384,7 +384,7 @@
 "create_custom_poi" = "Crea un filtro personalizzato";
 "selected_categories" = "Categorie selezionate";
 "shared_string_filters" = "Filtri";
-"shared_string_save_as" = "Salva come";
+"edit_filter_save_as_menu_item" = "Salva come";
 "delete_filter" = "Elimina filtro";
 "save_filter" = "Salva filtro";
 "edit_filter_delete_dialog_title" = "Eliminare il filtro selezionato?";
@@ -458,8 +458,8 @@
 "si_min_m" = "Minuti al miglio";
 "si_nm_h" = "Miglia nautiche all'ora (nodi)";
 "min_mile" = "min/m";
-"units_min_km" = "min/km";
-"units_m_s" = "m/s";
+"min_km" = "min/km";
+"m_s" = "m/s";
 "nothing_found" = "Nessun risultato: %@";
 "select_street" = "Seleziona la strada";
 "select_city" = "Seleziona la città";
@@ -523,7 +523,7 @@
 "shared_string_my_location" = "La mia posizione";
 "shared_string_address" = "Indirizzi";
 "map_widget_battery" = "Livello della batteria";
-"units_nm" = "nmi";
+"nm" = "nmi";
 "show_traffic_warnings" = "Avvisi di traffico";
 "snap_to_road" = "Blocca sulle strade";
 "coords_format_descr" = "Formato delle coordinate geografiche.";
@@ -733,7 +733,7 @@
 "transport_Routes" = "Percorsi";
 "transport_stop" = "Ferma";
 "route_stops_before" = "%@ fermate prima";
-"logging_interval_navigation" = "Intervallo di registrazione durante la navigazione";
+"save_track_interval" = "Intervallo di registrazione durante la navigazione";
 "logging_interval_navigation_descr" = "Scegli l'intervallo di registrazione per la registrazione del viaggio durante la navigazione";
 "monitoring_min_distance" = "Minimo spostamento";
 "logging_min_distance_descr" = "Filtro: minima distanza per registrare un nuovo punto";
@@ -801,15 +801,15 @@
 "add_map_marker" = "Aggiungi marcatore mappa";
 "map_styles" = "Stili mappa";
 "help_versions" = "Versioni";
-"mapillary_get_title" = "Migliora la copertura fotografica con Mapillary";
+"improve_coverage_mapillary" = "Migliora la copertura fotografica con Mapillary";
 "actions" = "Azioni";
 "display_starting_at_zoom_level" = "La visualizzazione inizia al livello di zoom";
-"osm_note_upload" = "Carica nota OSM";
-"osm_website" = "Sito web";
+"upload_osm_note" = "Carica nota OSM";
+"website" = "Sito web";
 "shared_string_help" = "Aiuto";
 "quick_action_switch_night_mode" = "Modalità notte";
 "quick_action_no_underlay" = "Nessun strato di sfondo";
-"create_poi_short" = "Crea PDI";
+"context_menu_item_create_poi" = "Crea PDI";
 "poi_context_menu_modify" = "Modifica PDI";
 "gpx_tags_txt" = "Etichette";
 "add_parking_place" = "Aggiungi la posizione di parcheggio";
@@ -821,8 +821,8 @@
 "rendering_value_category_name" = "Categoria";
 "quick_action_new_action" = "Aggiungi azione";
 "product_title_wikivoyage" = "Guide Viaggi";
-"pause_resume_nav" = "Riprendi/sospendi la navigazione";
-"osm_target_created" = "PDI di OSM creato";
+"quick_action_resume_pause_navigation" = "Riprendi/sospendi la navigazione";
+"osm_edit_created_poi" = "PDI di OSM creato";
 "osm_edits_notes" = "Note";
 "shared_string_retry" = "Riprova";
 "poi_context_menu_modify_osm_change" = "Modifica i cambiamenti di OSM";
@@ -831,24 +831,24 @@
 "osb_comment_dialog_message" = "Messaggio";
 "favorite_home_category" = "Casa";
 "shared_string_in_name" = "in %@";
-"osm_note_reopen" = "Riapre";
+"poi_dialog_reopen" = "Riapre";
 "sett_ext_input" = "Dispositivi di input esterni";
 "exit_without_saving" = "Uscire senza salvare?";
-"add_first_inermediate" = "Aggiungi il primo intermedio";
+"quick_action_add_first_intermediate" = "Aggiungi il primo intermedio";
 "quick_action_map_source" = "Cambia la sorgente della mappa";
 "help_other_header" = "Altro";
-"help_follow_us" = "Seguici";
+"follow_us" = "Seguici";
 "map_underlays" = "Mappa di sottofondo";
 "key_hint_deselect" = "Deseleziona";
 "osm_edits_advanced" = "Esteso";
 "product_desc_ext_wikivoyage" = "Guide dei luoghi più interessanti del pianeta, integrata in OsmAnd, senza connessione a Internet.";
 "destination_point" = "Destinazione %@";
 "faq_item" = "FAQ";
-"categories" = "Categorie";
+"search_categories" = "Categorie";
 "osm_editing_offline" = "Modifiche offline";
 "osm_edit_without_name" = "Senza nome";
 "osm_note_comment" = "Commenta";
-"help_about" = "Informazioni";
+"shared_string_about" = "Informazioni";
 "help_faq_descr" = "Domande frequenti";
 "quick_action_map_underlay" = "Cambia la mappa di sottofondo";
 "osm_edits_title" = "Modifiche OSM";
@@ -857,27 +857,27 @@
 "tab_title_basic" = "Semplice";
 "product_desc_wikivoyage" = "La guida turistica libera in tutto il mondo che chiunque può modificare.";
 "osm_note_upload_anonymously" = "Carica anonimamente";
-"change_map_style" = "Cambia lo stile della mappa";
+"quick_action_map_style" = "Cambia lo stile della mappa";
 "osmand_live_weekly" = "Settimanale";
 "osm_editing_lost_changes_descr" = "Tutte le modifiche non salvate andranno perse. Continuare?";
 "map_widget_ruler_control" = "Righello radiale";
 "osm_live_routing" = "Navigazione OsmAnd Live";
 "osmand_live_hourly" = "Orario";
 "intermediate_point" = "Destinazione intermedia %@";
-"osmand_live_last_live_update" = "Ultimo aggiornamento: %@";
+"last_update" = "Ultimo aggiornamento: %@";
 "res_world_region" = "Mondo";
 "update_now" = "Aggiorna ora";
 "quick_action_add_underlay" = "Aggiungi sottofondo";
 "osmand_live_updates" = "Aggiornamenti automatici";
 "toggle_poi" = "Mostra/nascondi PDI";
 "shared_string_restore" = "Ripristina";
-"region_nautical" = "Mappe nautiche";
+"nautical_maps" = "Mappe nautiche";
 "map_settings_map_magnifier" = "Ingrandimento mappa";
 "local_names" = "Nomi locali";
 "quick_action_map_overlay_title" = "Mappa di sovrapposizione";
 "poi_dialog_poi_type" = "Tipo di PDI";
 "quick_action_add_poi" = "Aggiungi PDI";
-"directions_more_options" = "Indicazioni da";
+"context_menu_item_directions_from" = "Indicazioni da";
 "map_downloaded" = "Mappa scaricata";
 "quick_action_interim_dialog" = "Mostra una finestra di dialogo temporanea";
 "prefer_in_routing_descr" = "Preferisci autostrade";
@@ -887,9 +887,9 @@
 "toggle_voice" = "Voce accesa/spenta";
 "osn_bug_name" = "Nota di OSM";
 "quick_action_edit_action" = "Modifica azione";
-"day_mode" = "Modalità giorno";
+"quick_action_switch_day_mode" = "Modalità giorno";
 "nearby_search" = "Cerca nelle vicinanze";
-"help_first_use" = "Primo utilizzo";
+"first_usage_item" = "Primo utilizzo";
 "osn_add_dialog_title" = "Crea nota";
 "mapillary_menu_title_pano" = "Mostra solo immagini a 360°";
 "routing_settings_descr" = "Configura la navigazione";
@@ -923,7 +923,7 @@
 "previous_route" = "Percorsi precedenti";
 "help_install_and_troubleshoot" = "Installazione e risoluzione dei problemi";
 "mapillary" = "Mapillary";
-"shared_setting_always_ask" = "Chiedi sempre";
+"confirm_every_run" = "Chiedi sempre";
 "text_size" = "Dimensione del testo";
 "history" = "Cronologia";
 "help_trip_planning" = "Pianifica un viaggio";
@@ -1671,14 +1671,14 @@
 "profile_prefs_reset_successful" = "Tutte le impostazioni dei profili sono state riportate ai predefiniti";
 "walk" = "A piedi";
 "position_icon_at_rest" = "Icona della posizione da fermi";
-"app_profiles" = "Profili app";
+"application_profiles" = "Profili app";
 "add_to_a_track" = "Aggiungi ad una traccia";
 "save_new_track" = "Salva come nuova traccia";
 "mapillary_item" = "OsmAnd + Mapillary";
 "arrived_at_destination" = "Sei arrivato";
 "base_profile_descr_public_transport" = "Tipi di trasporto pubblico";
 "listed_exist" = "Gli elencati %@, esistono già in OsmAnd.";
-"product_title_antarctica" = "Antartide";
+"index_name_antarctica" = "Antartide";
 "vessel_width_limit_description" = "Imposta la larghezza dell'imbarcazione per evitare i ponti stretti.";
 "add_point" = "Aggiungi punto";
 "personal_category_name" = "Personale";
@@ -1693,7 +1693,7 @@
 "map_look_descr" = "Aspetto della mappa";
 "import_complete_description" = "Tutti i dati sono stati importati da %@, puoi utilizzare i bottoni sottostanti per aprire e gestire le parti dell'applicazione di cui necessiti";
 "public_transport_menu" = "Trasporti pubblici";
-"select_icon" = "Seleziona icona";
+"select_icon_profile_dialog_title" = "Seleziona icona";
 "position_icon_while_moving" = "Icona della posizione in movimento";
 "quick_action_mapillary_show" = "Mostra Mapillary";
 "quick_action_showhide_mapillary_title" = "Mostra/nascondi Mapillary";
@@ -1713,7 +1713,7 @@
 "navigation_profiles_item" = "Profili di navigazione";
 "quick_action_remove_next_destination_descr" = "Elimina la destinazione successiva nel percorso. Se questa è la destinazione finale, la navigazione si fermerà.";
 "units_t" = "t";
-"total" = "Totale";
+"shared_string_total" = "Totale";
 "height_limit_description" = "Indica l\'altezza del veicolo, alcune restrizioni stradali potrebbero essere applicate per veicoli alti.";
 "shared_string_menu" = "Menu";
 "nearest_point" = "Punto più vicino";
@@ -1740,8 +1740,8 @@
 "circle" = "Cerchio";
 "search_history" = "Cronologia di ricerca";
 "add_custom_category" = "Aggiungi categoria personalizzata";
-"extra_maps" = "Mappe extra";
-"sport" = "Sport";
+"extra_maps_menu_group" = "Mappe extra";
+"icon_group_sport" = "Sport";
 "plan_route_last_modified" = "Cronologico";
 "visible" = "Visibile";
 "default_color" = "Colore preimpostato";
@@ -1761,7 +1761,7 @@
 "select_group" = "Seleziona il gruppo";
 "searching_gps" = "Ricerca GPS";
 "square" = "Quadrato";
-"plan_route_select_folder" = "Seleziona una cartella";
+"select_folder" = "Seleziona una cartella";
 "attach_to_the_roads" = "Blocca sulle strade";
 "coordinates_widget" = "Widget coordinate";
 "favorite_places_category" = "Luoghi";
@@ -1771,7 +1771,7 @@
 "replace_favorite_confirmation" = "Sei sicuro di voler sostituire il preferito %@?";
 "start_of_the_track" = "Inizio della traccia";
 "group_name" = "Nome del gruppo";
-"symbols" = "Simboli";
+"icon_group_symbols" = "Simboli";
 "coordinates" = "Coordinate";
 "rearrange_categories" = "Sistema categorie";
 "custom_osmand_plugin_name" = "Componente aggiuntivo OsmAnd personalizzato";
@@ -1887,7 +1887,7 @@
 "lang_hr" = "Croato";
 "lang_ru" = "Russo";
 "track_show_start_finish_icons" = "Mostra le icone di inizio e fine";
-"cloud_description" = "Non perdere mai i tuoi dati. Salva e ripristina tutte le informazioni facilmente.";
+"osmand_cloud_authorize_descr" = "Non perdere mai i tuoi dati. Salva e ripristina tutte le informazioni facilmente.";
 "lang_nap" = "Napoletano";
 "lang_ne" = "Nepalese";
 "lang_ber" = "Berbero";
@@ -1940,7 +1940,7 @@
 "lang_vi" = "Vietnamita";
 "lang_sv" = "Svedese";
 "lang_tr" = "Turco";
-"cloud_backup_now" = "Backup adesso";
+"backup_now" = "Backup adesso";
 "lang_es_us" = "Spagnolo americano";
 "lang_pt_br" = "Portoghese (Brasile)";
 "gpx_split_interval_descr" = "Seleziona l\'intervallo a cui i segnaposti con distanza o orario sulla traccia verranno mostrati.";
@@ -1994,7 +1994,7 @@
 "lang_lo" = "Laotiano";
 "verify_email_address_descr" = "Codice di verifica inviato a %@. Per favore immettilo nel campo sottostante.";
 "shared_string_interval" = "Intervallo";
-"cloud_last_backup" = "Ultimo salvataggio";
+"last_backup" = "Ultimo salvataggio";
 "routing_attr_prefer_horse_routes_description" = "Preferisci i percorsi per cavalli";
 "lang_uz" = "Uzbeco";
 "backup_error_token_is_not_valid_or_expired" = "Codice di verifica non valido o scaduto";
@@ -2094,7 +2094,7 @@
 "manage_subscription" = "Gestisci la sottoscrizione";
 "shared_string_learn_more" = "Approfondisci";
 "annual_subscription" = "Sottoscrizione annuale";
-"units_cubic_m" = "m³";
+"cubic_m" = "m³";
 "transport_hazmat_no_desc" = "In alcune strade e tunnel il trasporto di materiale pericolosoè proibito.";
 "transport_hazmat_yes_desc" = "Hai bisogno di scegliere la categoria appropriata.";
 "purchases_feature_desc_wikipedia" = "Esplora Wikipedia offline. Articoli divisi per nazione e regione e disponibile in tutte le lingue.";
@@ -2103,7 +2103,7 @@
 "daily_map_updates" = "Aggiornamento della mappa: orario";
 "terrain_maps" = "Mappe terreno";
 "shared_string_start" = "Avvia";
-"subscriptions" = "Sottoscrizioni";
+"osm_live_subscriptions" = "Sottoscrizioni";
 "wikipedia_and_wikivoyage_offline" = "Wikipedia e Wikivoyage offline";
 "simulation_preview_mode_title" = "Modalità anteprima rapida";
 "altitude_descent" = "Discesa";
@@ -2637,7 +2637,7 @@
 "backup_delete_data_type_description" = "Questo eliminerà tutti i dati %@ da OsmAnd Cloud. Questa azione non può essere annullata.";
 "cloud_confirm_delete_type" = "Sei sicuro di voler eliminare \"%@\" da OsmAnd Cloud?";
 "cloud_all_changes_uploaded_descr" = "Tutte le modifiche su questo dispositivo sono state sincronizzate con OsmAnd Cloud.";
-"compass_visible_in_rotated_mode" = "Visibile se la mappa è ruotata";
+"compass_visible_if_map_rotated" = "Visibile se la mappa è ruotata";
 "rendering_attr_showMtbScale_name" = "Scala di difficoltà per MTB";
 "routing_attr_motor_type_petrol_name" = "Benzina";
 "shared_string_cloud" = "Cloud";

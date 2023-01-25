@@ -254,7 +254,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     if (favoritesCount > 0)
     {
         [_data addObject: @{
-            @"label": OALocalizedString(@"favorites"),
+            @"label": OALocalizedString(@"favorites_item"),
             @"iconName": @"ic_custom_favorites",
             @"count": [NSString stringWithFormat:@"%ld", favoritesCount],
             @"category" : @(EOAImportDataTypeFavorites)

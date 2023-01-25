@@ -170,14 +170,14 @@ static OAQuickActionType *TYPE;
                           @"type" : [OAIconTitleValueCell getCellIdentifier],
                           @"key" : KEY_CATEGORY_NAME,
                           @"title" : OALocalizedString(@"fav_group"),
-                          @"value" : self.getParams[KEY_CATEGORY_NAME] ? self.getParams[KEY_CATEGORY_NAME] : OALocalizedString(@"favorites"),
+                          @"value" : self.getParams[KEY_CATEGORY_NAME] ? self.getParams[KEY_CATEGORY_NAME] : OALocalizedString(@"favorites_item"),
                           @"color" : @(defaultColor),
                           @"img" : @"ic_custom_folder"
                           },
                       @{
                           @"type" : [OAIconTitleValueCell getCellIdentifier],
                           @"key" : KEY_CATEGORY_COLOR,
-                          @"title" : OALocalizedString(@"fav_color"),
+                          @"title" : OALocalizedString(@"shared_string_color"),
                           @"value" : color ? color.name : @"",
                           @"color" : @(defaultColor)
                           },

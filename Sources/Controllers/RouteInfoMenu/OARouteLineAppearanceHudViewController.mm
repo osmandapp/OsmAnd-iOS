@@ -443,7 +443,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 {
     NSString *headerTitle = @"";
     if (sectionIndex == 0)
-        headerTitle = OALocalizedString(@"fav_color");
+        headerTitle = OALocalizedString(@"shared_string_color");
 
     OAGPXTableSectionData *sectionData = _tableData.subjects[sectionIndex];
     if (sectionData.header)

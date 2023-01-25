@@ -95,7 +95,7 @@
         
         _calculatingRoute = NO;
         
-        title = OALocalizedString(@"gpx_waypoints");
+        title = OALocalizedString(@"shared_string_waypoints");
         waypointsScreen = EWaypointsScreenMain;
         
         vwController = viewController;
@@ -634,7 +634,7 @@
         case LPW_FAVORITES:
             return OALocalizedString(@"my_favorites");
         case LPW_WAYPOINTS:
-            return OALocalizedString(@"gpx_waypoints");
+            return OALocalizedString(@"shared_string_waypoints");
         case LPW_POI:
             return OALocalizedString(@"poi");
             
@@ -754,7 +754,7 @@
             case LPW_FAVORITES:
             {
                 OAFavoriteItem *favPoint = (OAFavoriteItem *)p.point;
-                pointDescription = favPoint.favorite->getGroup().isEmpty() ? OALocalizedString(@"favorites") : favPoint.favorite->getGroup().toNSString();
+                pointDescription = favPoint.favorite->getGroup().isEmpty() ? OALocalizedString(@"favorites_item") : favPoint.favorite->getGroup().toNSString();
                 break;
             }
         }

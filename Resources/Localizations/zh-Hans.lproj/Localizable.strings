@@ -43,7 +43,7 @@
 "hud_heading" = "";
 "hud_no_movement" = "";
 // Favorites
-"fav_color" = "颜色";
+"shared_string_color" = "颜色";
 "fav_colors" = "颜色";
 "fav_name" = "名称";
 "fav_group" = "";
@@ -72,12 +72,12 @@
 "poi_search_near_center" = "";
 "shared_string_hide" = "隐藏";
 // My Places
-"favorites" = "收藏";
+"favorites_item" = "收藏";
 "shared_string_gpx_tracks" = "轨迹";
 // GPX
 "plugin_distance_point" = "点";
 "shared_string_waypoint" = "路点";
-"gpx_waypoints" = "路标";
+"shared_string_waypoints" = "路标";
 "gpx_points" = "";
 "shared_string_export" = "导出";
 "import_export" = "导入／导出";
@@ -102,7 +102,7 @@
 "gpx_updown" = "";
 "gpx_uphills_total" = "";
 "track_recording" = "";
-"track_recording_name" = "当前正在录制轨迹";
+"shared_string_currently_recording_track" = "当前正在录制轨迹";
 "track_stop_rec" = "";
 "track_new_segment" = "开始新区段";
 "track_save" = "保存当前轨迹";
@@ -122,7 +122,7 @@
 "gpx_speed" = "速度";
 // Map settings
 "rendering_value_browse_map_name" = "浏览地图";
-"m_style_car" = "驾驶";
+"routing_engine_vehicle_type_driving" = "驾驶";
 "shared_string_map" = "地图";
 "shared_string_show_on_map" = "在地图上显示";
 "map_settings_type" = "地图类型";
@@ -172,7 +172,7 @@
 "prch_nau_q2_wifi" = "";
 "prch_nau_q3" = "";
 "proceed_q" = "";
-"download" = "下载";
+"shared_string_download" = "下载";
 "shared_string_no_thanks" = "谢谢，不用了";
 "download_now" = "现在下载地图";
 "prch_failed" = "";
@@ -244,7 +244,7 @@
 "units_km_h" = "千米/时";
 "units_mph" = "英里";
 "int_hour" = "小时";
-"units_min" = "分钟";
+"int_min" = "分钟";
 "units_sec" = "秒";
 // Map
 "map_inst_det_map_q" = "";
@@ -262,7 +262,7 @@
 "ctx_mnu_edit_fav" = "";
 "ctx_mnu_add_fav" = "";
 "ctx_mnu_share" = "分享";
-"ctx_mnu_direction" = "地图标记";
+"map_marker" = "地图标记";
 // Location Services
 "loc_access_denied" = "";
 "loc_access_denied_desc" = "";
@@ -277,7 +277,7 @@
 "region_europe" = "欧洲";
 "index_name_north_america" = "北美";
 "region_russia" = "欧洲/亚洲 - 俄罗斯";
-"region_south_america" = "南美洲";
+"index_name_south_america" = "南美洲";
 // Help
 "help_quiz" = "";
 // Rendering categories
@@ -322,7 +322,7 @@
 "product_desc_allworld" = "";
 "index_name_asia" = "亚洲";
 "product_desc_asia" = "";
-"product_title_wiki" = "维基百科";
+"download_wikipedia_maps" = "维基百科";
 "product_desc_wiki" = "";
 "product_desc_ext_wiki" = "";
 "download_srtm_maps" = "等高线";
@@ -350,7 +350,7 @@
 "wpt_remove_q" = "";
 "gpx_select_track" = "";
 "gpx_curr_new_track" = "当前轨迹";
-"enter_name" = "输入名称";
+"access_hint_enter_name" = "输入名称";
 "shared_string_not_selected" = "未选取";
 "shared_string_language" = "语言";
 "you_searching" = "";
@@ -387,7 +387,7 @@
 "est_travel_time" = "";
 "pedestrian" = "行人";
 "sorting" = "";
-"plugins" = "插件";
+"plugins_menu_group" = "插件";
 "open_map_settings" = "";
 "plugin_popup_ski_title" = "";
 "plugin_popup_ski_desc" = "";
@@ -423,7 +423,7 @@
 "gpx_edit_mode" = "";
 "go_to_map" = "去地图";
 "device_memory" = "设备内存";
-"free_memory" = "%@可用";
+"free" = "%@可用";
 "first_usage_greeting" = "在没有互联网连接的情况下，取得指引与探索新地点";
 "get_started" = "使用入门";
 "first_usage_wizard_desc" = "让 OsmAnd 确定您所在的位置，建议下载该区域的地图。";
@@ -438,7 +438,7 @@
 "skip_map_downloading" = "跳过下载地图";
 "skip_map_downloading_desc_ios" = "";
 "wiki_around" = "附近的维基百科文章";
-"categories" = "分类";
+"search_categories" = "分类";
 "items_selected" = "%d 已选中";
 "custom_search" = "自定义搜索";
 "poi_filter_custom_filter" = "自定义过滤器";
@@ -453,7 +453,7 @@
 "new_filter_desc" = "请输入新的筛选名称。这会加到您的类别标签里。";
 "shared_string_filters" = "过滤器";
 "edit_filter" = "编辑分类";
-"shared_string_save_as" = "另存为";
+"edit_filter_save_as_menu_item" = "另存为";
 "delete_filter" = "删除过滤器";
 "save_filter" = "保存过滤器";
 "edit_filter_delete_dialog_title" = "是否删除选中的过滤器？";
@@ -534,7 +534,7 @@
 "make_as_start_point" = "标记该点为起始点";
 "poi" = "兴趣点";
 "will_open_on" = "开始营业于";
-"units_m_s" = "米/秒";
+"m_s" = "米/秒";
 // Shared Strings
 "shared_string_apply" = "应用";
 "transport_Routes" = "路线";
@@ -706,7 +706,7 @@
 "route_stops_before" = "%@ 之前停止";
 "shared_string_previous" = "上一页";
 "poi_clear" = "清除";
-"shared_setting_always_ask" = "总是询问";
+"confirm_every_run" = "总是询问";
 "track_during_nav" = "自动记录行程";
 "shared_string_help" = "帮助";
 "twitter" = "推特";
@@ -732,7 +732,7 @@
 "commiting_node" = "正在提交节点…";
 "loading_poi_obj" = "正在加载 POI…";
 "osm_pass" = "OpenStreetMap密码";
-"osm_website" = "网站";
+"website" = "网站";
 "shared_string_password" = "密码";
 "opening_hours" = "营业时间";
 "shared_string_my_places" = "我的地点";
@@ -764,7 +764,7 @@
 "driving_region_descr" = "选择驾驶区域：美国、欧洲、英国、亚洲及其它。";
 "transport_nearby_routes" = "之间";
 "tunnel_warning" = "前方隧道";
-"logging_interval_navigation" = "日志记录时间间隔";
+"save_track_interval" = "日志记录时间间隔";
 "osm_live_routing" = "OsmAnd实时导航";
 "osmand_live_updates" = "实时更新";
 "osmand_live_available_maps" = "可用地图";
@@ -797,19 +797,19 @@
 "shared_string_add_photos" = "添加照片";
 "faq_item" = "常见问题";
 "shared_string_clear_all" = "全部清除";
-"osm_note_upload" = "上传 OSM 注记";
-"osmand_live_last_live_update" = "最后更新: %@";
+"upload_osm_note" = "上传 OSM 注记";
+"last_update" = "最后更新: %@";
 "simulate_navigation" = "模拟导航";
 "shared_string_time_of_day" = "当前时间";
 "configure_map" = "配置地图";
-"osm_target_created" = "已创建 OSM 兴趣点";
+"osm_edit_created_poi" = "已创建 OSM 兴趣点";
 "purchase_unlim_title" = "购买 - %@";
 "quick_action_add_overlay" = "添加覆盖";
 "shared_string_reload" = "重新载入";
 "osm_live_payment_month_cost_descr" = "%@ /每月";
 "shared_string_action_name" = "操作名称";
 "toggle_nav" = "开始/停止导航";
-"mapillary_get_title" = "提高 Mapillary 照片覆盖的范围";
+"improve_coverage_mapillary" = "提高 Mapillary 照片覆盖的范围";
 "quick_action_fav_name_descr" = "留空以使用地址或地名。";
 "help_features" = "功能";
 "contact_info" = "联系信息";
@@ -821,7 +821,7 @@
 "vector_data" = "离线矢量地图";
 "help_map_viewing" = "地图浏览";
 "exit_without_saving" = "不保存退出？";
-"add_first_inermediate" = "添加第一个途径地";
+"quick_action_add_first_intermediate" = "添加第一个途径地";
 "help_versions" = "版本信息";
 "download_depth_countours" = "航海等深线";
 "osm_edits_notes" = "注解";
@@ -833,7 +833,7 @@
 "no_overlay" = "无覆盖层";
 "select_map_marker" = "选择地图标记";
 "gpx_alt_range" = "海拔高度范围";
-"create_poi_short" = "创建POI";
+"context_menu_item_create_poi" = "创建POI";
 "osm_edits_advanced" = "高级";
 "quick_action_pause_nav_descr" = "点击该按钮以暂停或恢复导航。";
 "quick_action_add_poi" = "添加 POI";
@@ -842,7 +842,7 @@
 "quick_action_switch_night_mode" = "夜间模式";
 "osm_live_ask_for_purchase" = "请先购买 Osmand Live 的订阅";
 "close_changeset" = "关闭修改集";
-"help_about" = "关于";
+"shared_string_about" = "关于";
 "gpx_ascent" = "上坡";
 "replace_destination" = "更换目的地";
 "shared_string_off" = "关";
@@ -852,14 +852,14 @@
 "shared_string_slope" = "坡度";
 "gpx_avg_altitude" = "平均海拔";
 "work_pt" = "工作地点";
-"day_mode" = "日间模式";
-"osm_note_reopen" = "重新打开";
+"quick_action_switch_day_mode" = "日间模式";
+"poi_dialog_reopen" = "重新打开";
 "add_parking_place" = "添加停车场";
 "quick_action_map_overlay_title" = "地图覆盖";
 "filter_current_poiButton" = "筛选器";
 "osm_editing_lost_changes_descr" = "任何未保存的更改将会丢失。要继续吗？";
 "osn_add_dialog_title" = "创建注记";
-"units_min_km" = "分/千米";
+"min_km" = "分/千米";
 "help_install_and_troubleshoot" = "安装和疑难解答";
 "shared_string_io_error" = "I/O错误";
 "help_other_header" = "其它";
@@ -872,20 +872,20 @@
 "techical_articles_item" = "技术文章";
 "quick_action_map_source" = "改变地图来源";
 "add_gpx_waypoint" = "添加 GPX 地标";
-"change_map_style" = "更改地图样式";
+"quick_action_map_style" = "更改地图样式";
 "osm_note_comment" = "評論";
 "help_faq_descr" = "常见问题";
-"region_nautical" = "航海地图";
-"help_follow_us" = "跟随我们";
+"nautical_maps" = "航海地图";
+"follow_us" = "跟随我们";
 "poi_remove_success" = "已删除";
 "online_map" = "在线地图";
 "map_underlays" = "地图衬底层";
 "shared_string_on" = "开";
-"help_first_use" = "初次使用";
+"first_usage_item" = "初次使用";
 "toggle_poi" = "显示/隐藏 POI";
 "actions" = "操作";
 "quick_action_map_overlay" = "更改地图覆盖";
-"pause_resume_nav" = "暂停/继续导航";
+"quick_action_resume_pause_navigation" = "暂停/继续导航";
 "quick_action_edit_action" = "编辑动作";
 "poi_context_menu_modify" = "修改 POI";
 "osm_note_created" = "已创建 OSM 注记";
@@ -894,10 +894,10 @@
 "favorite_home_category" = "家";
 "osm_note_upload_anonymously" = "匿名上传";
 "quick_action_bug_descr" = "此消息将会自动填写注释字段。";
-"directions_more_options" = "设为起点";
+"context_menu_item_directions_from" = "设为起点";
 "mapillary_menu_title_pano" = "仅显示 360° 图像";
 "quick_action_interim_dialog" = "显示一个临时的对话框";
-"units_nm" = "浬";
+"nm" = "浬";
 "quick_action_start_stop_nav_descr" = "点击该按钮以开始或结束导航。";
 "quick_action_add_create_items" = "创建项目";
 "tile_cache" = "区片缓存";
@@ -1272,7 +1272,7 @@
 "quick_action_mapillary_hide" = "隐藏Mapillary";
 "region_antarctica" = "南极洲";
 "shared_string_two" = "二";
-"app_profiles" = "应用程序配置文件";
+"application_profiles" = "应用程序配置文件";
 "profile_alert_need_save_title" = "保存更改";
 "public_transport_show" = "显示公共交通";
 "shared_string_min" = "最小";
@@ -1283,7 +1283,7 @@
 "shared_string_legend" = "图例";
 "select_data_to_import" = "选择要导入的数据。";
 "tones" = "色调";
-"total" = "一共";
+"shared_string_total" = "一共";
 "shared_string_importing" = "正在导入";
 "shared_string_meters" = "米";
 "shared_string_terrain" = "地形";
@@ -1292,7 +1292,7 @@
 "add_to_a_track" = "添加到轨迹";
 "osmand_routing" = "OsmAnd路线规划";
 "special_routing" = "特殊路线规划";
-"product_title_antarctica" = "南极洲";
+"index_name_antarctica" = "南极洲";
 "res_slope" = "坡度";
 "update_tile" = "更新地图";
 "layer_amenity_label" = "兴趣点覆盖标签";
@@ -1302,7 +1302,7 @@
 "default_speed_dialog_msg" = "估计未知道路类型的到达时间，并限制所有道路的速度（可能会影响路线）";
 "quick_action_remove_next_destination_descr" = "删除路线上的下一个目的地。如果该目的地是最终目的地，导航将停止。";
 "configure_screen_quick_action" = "快捷操作";
-"select_icon" = "选择图标";
+"select_icon_profile_dialog_title" = "选择图标";
 "one" = "一";
 "export_profile" = "导出配置文件";
 "osm_notes" = "OSM注记";
@@ -1414,21 +1414,21 @@
 "shared_string_import" = "导入";
 "shared_string_disable" = "禁用";
 "plan_route_last_modified" = "上次修改";
-"sport" = "运动";
+"icon_group_sport" = "运动";
 "select_group" = "选择组";
 "create_profile_descr" = "基于你的自定义配置文件的默认应用程序配置文件之一，这定义了基本的设置，如部件的默认可见性和速度和距离的单位。这些是默认的应用程序配置文件，以及它们可以扩展到的自定义配置文件的例子：";
 "mapillary_item" = "OsmAnd + Mapillary";
 "plan_route_change_folder" = "更改文件夹";
 "shared_string_icon" = "图标";
 "favorite_friends_category" = "朋友";
-"plan_route_select_folder" = "选择文件夹";
+"select_folder" = "选择文件夹";
 "address_search_desc" = "地址搜索";
 "update_frequency" = "更新频率";
 "visible" = "可见性";
 "save_current_track_descr" = "将当前轨迹保存为 GPX 文件。";
 "fav_points_not_exist" = "无收藏点存在";
 "default_color" = "默认颜色";
-"extra_maps" = "额外地图";
+"extra_maps_menu_group" = "额外地图";
 "searching_gps" = "正在搜索 GPS";
 "shared_string_resources" = "资源";
 "travel" = "旅行";
@@ -1443,7 +1443,7 @@
 "shared_string_gpx_points" = "点";
 "amenity" = "便利设施";
 "product_desc_wikivoyage" = "任何人都可以编辑的自由的全球旅游指南。";
-"symbols" = "符号";
+"icon_group_symbols" = "符号";
 "copied_to_clipboard" = "复制到剪贴板";
 "replace_favorite_confirmation" = "你确定你想要替换收藏的 %@？";
 "profile_appearance" = "配置外观";
@@ -1692,10 +1692,10 @@
 "backup_error_user_is_not_registered" = "不存在用该电子邮件地址注册的用户";
 "backup_error_subscription_was_used" = "订阅或促销活动由另一个账户使用 %@";
 "any_poi" = "任何";
-"cloud_backup_now" = "立即备份";
+"backup_now" = "立即备份";
 "profile_prefs_reset_successful" = "所有的配置文件设置都已恢复为默认值。";
 "customize_route_line" = "自定义路径线";
-"cloud_last_backup" = "上次备份";
+"last_backup" = "上次备份";
 "backup_error_no_valid_subscription" = "没有有效的订阅";
 "routeInfo_winter_ice_road_description" = "按冬季道路分类为路线或轨迹线着色。";
 "backup_error_user_is_already_registered" = "此电子邮件地址正被另一个帐户使用";
@@ -1719,7 +1719,7 @@
 "logging_min_speed" = "最低速度";
 "osmand_cloud" = "OsmAnd云";
 "rendering_attr_funicularRoutes_name" = "缆车线路";
-"cloud_description" = "永不丢失你的数据。轻易备份和恢复所有信息。";
+"osmand_cloud_authorize_descr" = "永不丢失你的数据。轻易备份和恢复所有信息。";
 "points_delete_multiple" = "删除 %d 个点？";
 "plugin_settings_reset" = "重置插件设置为默认值";
 "backup_error_subscription_was_expired" = "订阅已过期";
@@ -1748,7 +1748,7 @@
 "terrain_maps" = "地形图";
 "copy_coordinates" = "复制坐标";
 "annual_subscription" = "年度订阅";
-"units_cubic_m" = "立方米";
+"cubic_m" = "立方米";
 "purchases_feature_desc_monthly_map_updates" = "获得离线地图的定期月度更新。";
 "restore_purchases" = "恢复购买内容";
 "ltr_or_rtl_combine_via_or" = "%@或 %@";
@@ -1761,7 +1761,7 @@
 "shared_string_control_stop" = "停止";
 "altitude_ascent" = "上坡";
 "added_profiles_descr" = "插件所添加的配置文件";
-"subscriptions" = "订阅";
+"osm_live_subscriptions" = "订阅";
 "routeInfo_horse_scale_description" = "根据马道的难度级别渲染路径";
 "purchases_feature_desc_nautical" = "适合航海路线导航的矢量地图";
 "simulation_constant_mode_desc" = "模拟将在所选择的恒定速度下进行。";

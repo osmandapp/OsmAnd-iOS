@@ -193,7 +193,7 @@
     if ([_settings.keepInforming get:self.appMode] == 0)
         val = OALocalizedString(@"only_manually");
     else
-        val = [NSString stringWithFormat:@"%d %@", [_settings.keepInforming get:self.appMode], OALocalizedString(@"units_min")];
+        val = [NSString stringWithFormat:@"%d %@", [_settings.keepInforming get:self.appMode], OALocalizedString(@"int_min")];
     
     [fifthSection addObject:@{
         @"type" : [OASettingsTableViewCell getCellIdentifier],

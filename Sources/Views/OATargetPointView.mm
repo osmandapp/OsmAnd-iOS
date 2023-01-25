@@ -178,7 +178,7 @@ static const NSInteger _buttonsCount = 4;
 
     [_buttonFavorite setTitle:OALocalizedString(@"ctx_mnu_add_fav") forState:UIControlStateNormal];
     [_buttonShare setTitle:OALocalizedString(@"ctx_mnu_share") forState:UIControlStateNormal];
-    [_buttonDirection setTitle:OALocalizedString(@"ctx_mnu_direction") forState:UIControlStateNormal];
+    [_buttonDirection setTitle:OALocalizedString(@"map_marker") forState:UIControlStateNormal];
     [_buttonShowInfo setTitle:[OALocalizedString(@"shared_string_info") upperCase] forState:UIControlStateNormal];
     [_buttonRoute setTitle:[OALocalizedString(@"shared_string_navigation") upperCase] forState:UIControlStateNormal];
 
@@ -663,7 +663,7 @@ static const NSInteger _buttonsCount = 4;
     }
     else
     {
-        [_buttonDirection setTitle:OALocalizedString(@"ctx_mnu_direction") forState:UIControlStateNormal];
+        [_buttonDirection setTitle:OALocalizedString(@"map_marker") forState:UIControlStateNormal];
         [_buttonDirection setTitleColor:UIColorFromRGB(0x666666) forState:UIControlStateNormal];
         [_buttonDirection setImage:[UIImage imageNamed:@"menu_direction_icon_2"] forState:UIControlStateNormal];
         [_buttonDirection setTintColor:UIColorFromRGB(0x666666)];

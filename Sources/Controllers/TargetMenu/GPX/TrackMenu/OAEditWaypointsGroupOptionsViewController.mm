@@ -129,7 +129,7 @@
                                 @"int_value": @([OAUtilities colorToNumber:_selectedColor.color]),
                                 @"array_value": _colors
                         },
-                        kCellTitle: OALocalizedString(@"fav_color"),
+                        kCellTitle: OALocalizedString(@"shared_string_color"),
                         kCellDesc: _selectedColor.name
                 }]],
                 kSectionHeader: OALocalizedString(@"default_color"),
@@ -512,7 +512,7 @@
     if (newGroupName.length == 0 ||
             [self isIncorrectFileName:textView.text] ||
             [OAFavoritesHelper getGroupByName:newGroupName] ||
-            [newGroupName isEqualToString:OALocalizedString(@"favorites")] ||
+            [newGroupName isEqualToString:OALocalizedString(@"favorites_item")] ||
             [newGroupName isEqualToString:OALocalizedString(@"personal_category_name")] ||
             [newGroupName isEqualToString:kPersonalCategory] ||
             (_screenType != EOAEditWaypointsGroupCopyToFavoritesScreen && [newGroupName isEqualToString:_groupName]))

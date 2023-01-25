@@ -639,7 +639,7 @@
         if ([self showRegionNameOnDownloadButton])
             self.downloadControlButton.title = _localMapIndexItem.title;
         else
-            self.downloadControlButton.title = OALocalizedString(@"download");
+            self.downloadControlButton.title = OALocalizedString(@"shared_string_download");
         [self.delegate contentChanged];
     }
     else if (self.delegate && [self.delegate respondsToSelector:@selector(hideProgressBar)])

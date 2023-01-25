@@ -41,7 +41,7 @@
 
 - (NSArray<CPGridButton *> *) generateGridButtons
 {
-    CPGridButton *btnFav = [[CPGridButton alloc] initWithTitleVariants:@[OALocalizedString(@"favorites")] image:[UIImage imageNamed:@"ic_carplay_favorites"] handler:^(CPGridButton * _Nonnull barButton) {
+    CPGridButton *btnFav = [[CPGridButton alloc] initWithTitleVariants:@[OALocalizedString(@"favorites_item")] image:[UIImage imageNamed:@"ic_carplay_favorites"] handler:^(CPGridButton * _Nonnull barButton) {
         _favoritesListController = [[OACarPlayFavoritesListController alloc] initWithInterfaceController:self.interfaceController];
         [_favoritesListController present];
     }];

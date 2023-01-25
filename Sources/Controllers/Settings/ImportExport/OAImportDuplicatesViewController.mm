@@ -269,7 +269,7 @@
     if (favoriteItems.count > 0)
     {
         NSMutableArray *favoritesSection = [NSMutableArray new];
-        [favoritesSection addObject:[[OAHeaderType alloc] initWithTitle:OALocalizedString(@"favorites")]];
+        [favoritesSection addObject:[[OAHeaderType alloc] initWithTitle:OALocalizedString(@"favorites_item")]];
         [favoritesSection addObjectsFromArray:favoriteItems];
         [duplicates addObject:favoritesSection];
     }

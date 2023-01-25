@@ -661,7 +661,7 @@ static UIViewController *parentController;
     
     if ([_iapHelper.trackRecording isActive])
         [trackRecordingGroup.groupItems addObject:@{
-            @"title" : OALocalizedString(@"track_recording_name"),
+            @"title" : OALocalizedString(@"shared_string_currently_recording_track"),
             @"icon" : @"ic_custom_reverse_direction.png",
             @"type" : [OAGPXRecTableViewCell getCellIdentifier],
             @"key" : @"track_recording"}
@@ -1170,9 +1170,9 @@ static UIViewController *parentController;
             }
             if (_recCell)
             {
-                [_recCell.textView setText:OALocalizedString(@"track_recording_name")];
+                [_recCell.textView setText:OALocalizedString(@"shared_string_currently_recording_track")];
                 
-                _recCell.descriptionPointsView.text = [NSString stringWithFormat:@"%d %@", _savingHelper.points, [OALocalizedString(@"gpx_waypoints") lowercaseStringWithLocale:[NSLocale currentLocale]]];
+                _recCell.descriptionPointsView.text = [NSString stringWithFormat:@"%d %@", _savingHelper.points, [OALocalizedString(@"shared_string_waypoints") lowercaseStringWithLocale:[NSLocale currentLocale]]];
                 _recCell.descriptionDistanceView.text = [OAOsmAndFormatter getFormattedDistance:_savingHelper.distance];
                 
                 [_recCell.btnStartStopRec removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];

@@ -128,7 +128,7 @@
 
     NSMutableArray *showSectionData = [NSMutableArray array];
     [showSectionData addObject:@{
-            @"name": OALocalizedString(@"favorites"),
+            @"name": OALocalizedString(@"favorites_item"),
             @"image": @"ic_custom_favorites",
             @"type": [OASwitchTableViewCell getCellIdentifier],
             @"key": @"favorites"
@@ -152,7 +152,7 @@
     if (!hasWiki || !_iapHelper.wiki.disabled)
     {
         [showSectionData addObject:@{
-                @"name": OALocalizedString(@"product_title_wiki"),
+                @"name": OALocalizedString(@"download_wikipedia_maps"),
                 @"image": hasWiki ? @"ic_custom_wikipedia" : @"ic_custom_wikipedia_download_colored",
                 hasWiki ? @"has_options" : @"desc": hasWiki ? @YES : OALocalizedString(@"explore_wikipedia_offline"),
                 @"type": hasWiki ? [OASwitchTableViewCell getCellIdentifier] : [OAButtonTableViewCell getCellIdentifier],

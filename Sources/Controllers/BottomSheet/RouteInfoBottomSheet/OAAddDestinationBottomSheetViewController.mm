@@ -76,7 +76,7 @@
 {
     NSMutableArray *arr = [NSMutableArray new];
     [arr addObject:@{
-        @"title" : OALocalizedString(@"favorites"),
+        @"title" : OALocalizedString(@"favorites_item"),
         @"key" : @"favorites",
         @"color" : UIColorFromRGB(color_primary_purple),
         @"img" : @"ic_custom_favorites"
@@ -112,7 +112,7 @@
         NSString *groupName = item.favorite->getGroup().toNSString();
         [arr addObject:@{
             @"title" : item.favorite->getTitle().toNSString(),
-            @"descr" : groupName == nil || groupName.length == 0 ? OALocalizedString(@"favorites") : groupName,
+            @"descr" : groupName == nil || groupName.length == 0 ? OALocalizedString(@"favorites_item") : groupName,
             @"color" : item.getColor,
             @"img" : @"ic_custom_favorites",
             @"point" : item

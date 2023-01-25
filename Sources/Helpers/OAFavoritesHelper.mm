@@ -832,7 +832,7 @@ static BOOL _favoritesLoaded = NO;
     if ([OAFavoriteGroup isPersonal:name])
         return OALocalizedString(@"personal_category_name");
     else if (name.length == 0)
-        return OALocalizedString(@"favorites");
+        return OALocalizedString(@"favorites_item");
     else
         return name;
 }
@@ -841,7 +841,7 @@ static BOOL _favoritesLoaded = NO;
 {
     if ([self isPersonalCategoryDisplayName:name])
         return kPersonalCategory;
-    else if ([name isEqualToString:OALocalizedString(@"favorites")])
+    else if ([name isEqualToString:OALocalizedString(@"favorites_item")])
         return @"";
     return name;
 }

@@ -131,7 +131,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
                    @"name" : @"rec_interval",
                    @"title" : OALocalizedString(@"save_global_track_interval"),
                    @"description" : OALocalizedString(@"save_global_track_interval_descr"),
-                   @"value" : ![settings.mapSettingSaveTrackIntervalApproved get:self.appMode] ? OALocalizedString(@"shared_setting_always_ask") : recIntervalValue,
+                   @"value" : ![settings.mapSettingSaveTrackIntervalApproved get:self.appMode] ? OALocalizedString(@"confirm_every_run") : recIntervalValue,
                    @"type" : [OAIconTitleValueCell getCellIdentifier] }
              ]];
             
@@ -184,7 +184,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
                    @"type" : [OASwitchTableViewCell getCellIdentifier] },
                @{
                    @"name" : @"logging_interval_navigation",
-                   @"title" : OALocalizedString(@"logging_interval_navigation"),
+                   @"title" : OALocalizedString(@"save_track_interval"),
                    @"value" : navIntervalValue,
                    @"img" : @"ic_custom_timer",
                    @"type" : [OAIconTitleValueCell getCellIdentifier],
@@ -240,7 +240,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
             self.titleLabel.text = OALocalizedString(@"save_track_interval_globally");
             BOOL alwaysAsk = ![settings.mapSettingSaveTrackIntervalApproved get:self.appMode];
             [dataArr addObject:@{
-                @"title" : OALocalizedString(@"shared_setting_always_ask"),
+                @"title" : OALocalizedString(@"confirm_every_run"),
                 @"value" : @"always_ask",
                 @"img" : alwaysAsk ? @"menu_cell_selected.png" : @"",
                 @"type" : kCellTypeCheck

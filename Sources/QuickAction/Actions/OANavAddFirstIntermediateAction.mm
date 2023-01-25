@@ -48,7 +48,7 @@ static OAQuickActionType *TYPE;
 + (OAQuickActionType *) TYPE
 {
     if (!TYPE)
-        TYPE = [[OAQuickActionType alloc] initWithIdentifier:22 stringId:@"nav.intermediate.add" class:self.class name:OALocalizedString(@"add_first_inermediate") category:NAVIGATION iconName:@"ic_action_intermediate" secondaryIconName:@"ic_custom_compound_action_add" editable:NO];
+        TYPE = [[OAQuickActionType alloc] initWithIdentifier:22 stringId:@"nav.intermediate.add" class:self.class name:OALocalizedString(@"quick_action_add_first_intermediate") category:NAVIGATION iconName:@"ic_action_intermediate" secondaryIconName:@"ic_custom_compound_action_add" editable:NO];
        
     return TYPE;
 }

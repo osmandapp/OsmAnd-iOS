@@ -750,7 +750,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     NSInteger travelDist = (NSInteger) res->getTravelDist() + walkDistance;
     NSString *travelDistStr = [OAOsmAndFormatter getFormattedDistance:travelDist];
 
-    [attributedStr appendAttributedString:[[NSAttributedString alloc] initWithString:[OALocalizedString(@"total") stringByAppendingString:@" "] attributes:secondaryAttributes]];
+    [attributedStr appendAttributedString:[[NSAttributedString alloc] initWithString:[OALocalizedString(@"shared_string_total") stringByAppendingString:@" "] attributes:secondaryAttributes]];
     
     [attributedStr appendAttributedString:[[NSAttributedString alloc] initWithString:travelTimeStr attributes:mainAttributes]];
     

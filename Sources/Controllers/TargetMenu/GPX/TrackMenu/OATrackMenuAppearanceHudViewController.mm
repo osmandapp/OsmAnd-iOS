@@ -317,7 +317,7 @@
             kTableKey: @"color_title",
             kCellType: [OAIconTitleValueCell getCellIdentifier],
             kTableValues: @{ @"string_value": _selectedItem.title },
-            kCellTitle: OALocalizedString(@"fav_color")
+            kCellTitle: OALocalizedString(@"shared_string_color")
     }];
 
     [colorsCells addObject:colorTitleCellData];
@@ -338,7 +338,7 @@
                 @"array_value": trackColoringTypes,
                 @"selected_integer_value": @([_availableColoringTypes indexOfObject:_selectedItem])
             },
-            kCellTitle: OALocalizedString(@"fav_color")
+            kCellTitle: OALocalizedString(@"shared_string_color")
     }];
     [colorsCells addObject:colorValuesCellData];
 

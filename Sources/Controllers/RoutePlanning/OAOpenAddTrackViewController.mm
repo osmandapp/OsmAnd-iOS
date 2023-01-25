@@ -180,7 +180,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     {
         [existingTracksSection addObject:@{
                 @"type" : [OAGPXTrackCell getCellIdentifier],
-                @"title" : OALocalizedString(@"track_recording_name"),
+                @"title" : OALocalizedString(@"shared_string_currently_recording_track"),
                 @"distance" : [OAOsmAndFormatter getFormattedDistance:gpxRecHelper.distance],
                 @"time" : [OAOsmAndFormatter getFormattedTimeInterval:0 shortFormat:YES],
                 @"wpt" : [NSString stringWithFormat:@"%d", gpxRecHelper.points],

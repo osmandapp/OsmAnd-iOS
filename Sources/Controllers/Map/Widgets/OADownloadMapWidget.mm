@@ -101,7 +101,7 @@
 - (void) applyLocalization
 {
     [self.closeButton setTitle:OALocalizedString(@"shared_string_close") forState:UIControlStateNormal];
-    [self.downloadButton setTitle:OALocalizedString(@"download") forState:UIControlStateNormal];
+    [self.downloadButton setTitle:OALocalizedString(@"shared_string_download") forState:UIControlStateNormal];
 }
 
 - (void) layoutSubviews

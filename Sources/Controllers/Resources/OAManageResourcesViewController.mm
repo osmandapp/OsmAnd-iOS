@@ -1992,29 +1992,29 @@ static BOOL _repositoryUpdated = NO;
         }
 
         if (section == _extraMapsSection)
-            return OALocalizedString(@"extra_maps");
+            return OALocalizedString(@"extra_maps_menu_group");
         if (section == _resourcesSection)
-            return OALocalizedString([self isNauticalScope] ? @"region_nautical" : @"res_worldwide");
+            return OALocalizedString([self isNauticalScope] ? @"nautical_maps" : @"res_worldwide");
         if (section == _regionMapSection)
             return OALocalizedString(@"res_world_map");
         if (section == _otherMapsSection)
             return OALocalizedString(@"download_select_map_types");
         if (section == _nauticalMapsSection)
-            return OALocalizedString(@"region_nautical");
+            return OALocalizedString(@"nautical_maps");
 
         return nil;
     }
 
     if (section == _extraMapsSection)
-        return OALocalizedString(@"extra_maps");
+        return OALocalizedString(@"extra_maps_menu_group");
     if (section == _resourcesSection)
-        return OALocalizedString([self isNauticalScope] ? @"region_nautical" : @"res_mapsres");
+        return OALocalizedString([self isNauticalScope] ? @"nautical_maps" : @"res_mapsres");
     if (section == _regionMapSection)
         return OALocalizedString(@"res_region_map");
     if (section == _otherMapsSection)
         return OALocalizedString(@"download_select_map_types");
     if (section == _nauticalMapsSection)
-        return OALocalizedString(@"region_nautical");
+        return OALocalizedString(@"nautical_maps");
 
     return nil;
 }
@@ -2233,7 +2233,7 @@ static BOOL _repositoryUpdated = NO;
         else if (indexPath.section == _nauticalMapsSection)
         {
             cellTypeId = subregionCell;
-            title = OALocalizedString(@"region_nautical");
+            title = OALocalizedString(@"nautical_maps");
         }
         else if (indexPath.section == _resourcesSection && _resourcesSection >= 0)
         {

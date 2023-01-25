@@ -598,7 +598,7 @@
 "opening_changeset" = "변경사항 여는중…";
 "col_red" = "빨강";
 "rendering_value_translucent_green_name" = "반투명 녹색";
-"lang_nb" = "노르웨이 보크몰어";
+"lang_nb" = "노르웨이 부크몰어";
 "emergency" = "비상";
 "translucent_green" = "반투명 녹색";
 "product_title_wiki" = "위키백과";
@@ -711,7 +711,7 @@
 "osm_editing_lost_changes_descr" = "저장되지 않은 변경 내용이 손실 됩니다. 계속 하시겠습니까?";
 "osm_note_created" = "생성된 OSM 노트";
 "yellow" = "노랑";
-"lang_nn" = "노르웨이어(니노르스크)";
+"lang_nn" = "노르웨이 뉘노르스크어";
 "rendering_attr_showRoadMaps_description" = "도로 전용 지도를 표시할 경우에 선택합니다 :";
 "route_kl" = "왼쪽을 유지하고 가기";
 "rendering_attr_tramTrainRoutes_name" = "전차 및 기차 노선";
@@ -782,7 +782,7 @@
 "rendering_attr_appMode_description" = "~에 대한 지도를 최적화";
 "rendering_value__name" = "기본값";
 "lang_is" = "아이슬란드어";
-"lang_no" = "노르웨이어";
+"lang_no" = "노르웨이 부크몰어";
 "routing_attr_height_description" = "도로에 통행가능한 차량중량을 지정";
 "lang_ga" = "아일랜드어";
 "maps" = "지도";

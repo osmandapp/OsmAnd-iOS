@@ -40,7 +40,7 @@ static OAQuickActionType *TYPE;
 + (OAQuickActionType *) TYPE
 {
     if (!TYPE)
-        TYPE = [[OAQuickActionType alloc] initWithIdentifier:2 stringId:@"marker.add" class:self.class name:OALocalizedString(@"add_map_marker") category:CREATE_CATEGORY iconName:@"ic_custom_favorites" secondaryIconName:@"ic_custom_compound_action_add"];
+        TYPE = [[OAQuickActionType alloc] initWithIdentifier:2 stringId:@"marker.add" class:self.class name:OALocalizedString(@"quick_action_add_marker") category:CREATE_CATEGORY iconName:@"ic_custom_favorites" secondaryIconName:@"ic_custom_compound_action_add"];
        
     return TYPE;
 }

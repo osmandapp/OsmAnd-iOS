@@ -175,7 +175,7 @@ static OAQuickActionType *TYPE;
 
 - (NSString *)getActionStateName
 {
-    return [NSString stringWithFormat:@"%@ %@", ![self isCurrentFilters] ? OALocalizedString(@"sett_show") : OALocalizedString(@"rendering_category_hide"), self.getName];
+    return [NSString stringWithFormat:@"%@ %@", ![self isCurrentFilters] ? OALocalizedString(@"recording_context_menu_show") : OALocalizedString(@"rendering_category_hide"), self.getName];
 }
 
 - (NSString *)getTitle:(NSArray *)filters

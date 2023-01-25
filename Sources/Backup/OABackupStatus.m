@@ -83,7 +83,7 @@ static OABackupStatus *ERROR;
                                                 warningIconName:@"ic_custom_alert"
                                                    warningTitle:nil
                                              warningDescription:nil
-                                                    actionTitle:OALocalizedString(@"cloud_view_conflicts")
+                                                    actionTitle:OALocalizedString(@"backup_view_conflicts")
                                                       iconColor:color_primary_red];
     }
     return CONFLICTS;

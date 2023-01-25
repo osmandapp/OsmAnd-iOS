@@ -115,7 +115,7 @@
                         kCellTitle: _groupName,
                         kCellDesc: OALocalizedString(@"fav_enter_group_name")
                 }]],
-                kSectionHeader: _screenType == EOAEditWaypointsGroupRenameScreen ? OALocalizedString(@"fav_name") : OALocalizedString(@"group_name")
+                kSectionHeader: _screenType == EOAEditWaypointsGroupRenameScreen ? OALocalizedString(@"shared_string_name") : OALocalizedString(@"favorite_group_name")
         }];
     }
     else if (_screenType == EOAEditWaypointsGroupColorScreen)
@@ -132,7 +132,7 @@
                         kCellTitle: OALocalizedString(@"shared_string_color"),
                         kCellDesc: _selectedColor.name
                 }]],
-                kSectionHeader: OALocalizedString(@"default_color"),
+                kSectionHeader: OALocalizedString(@"access_default_color"),
                 kSectionFooter: OALocalizedString(@"default_color_descr")
         }];
     }

@@ -79,7 +79,7 @@
     NSMutableDictionary<NSNumber *, NSArray *> *dict = [NSMutableDictionary new];
     [dict setObject:@[@{
                          @"type" : [OABottomSheetHeaderDescrButtonCell getCellIdentifier],
-                         @"title" : OALocalizedString(@"wiki_sheet_title"),
+                         @"title" : OALocalizedString(@"how_to_open_wiki_title"),
                          @"description" : _url,
                          @"img" : @"ic_custom_wikipedia"
     }] forKey:@(0)];

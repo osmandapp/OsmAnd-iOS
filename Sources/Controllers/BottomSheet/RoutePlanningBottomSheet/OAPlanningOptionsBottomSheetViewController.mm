@@ -119,7 +119,7 @@
         },
         @{
             @"type" : [OATitleIconRoundCell getCellIdentifier],
-            @"title" : OALocalizedString(@"save_new_track"),
+            @"title" : OALocalizedString(@"save_as_new_track"),
             @"img" : @"ic_custom_save_as_new_file",
             @"tintColor" : UIColorFromRGB(color_primary_purple),
             @"key" : @"save_new_track"

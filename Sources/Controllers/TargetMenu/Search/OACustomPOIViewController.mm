@@ -166,7 +166,7 @@
             }
         }
 
-        NSString *textShow = OALocalizedString(@"sett_show");
+        NSString *textShow = OALocalizedString(@"recording_context_menu_show");
         UIFont *fontShow = [UIFont systemFontOfSize:15 weight:UIFontWeightSemibold];
         UIColor *colorShow = _countShowCategories != 0 ? UIColor.whiteColor : UIColorFromRGB(color_text_footer);
         NSMutableAttributedString *attrShow = [[NSMutableAttributedString alloc] initWithString:textShow attributes:@{NSFontAttributeName: fontShow, NSForegroundColorAttributeName: colorShow}];

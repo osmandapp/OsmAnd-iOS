@@ -144,7 +144,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 //        @{
 //            @"type" : [OAIconTextDescCell getCellIdentifier],
 //            @"title" : OALocalizedString(@"ui_customization"),
-//            @"descr" : OALocalizedString(@"ui_customization_descr"),
+//            @"descr" : OALocalizedString(@"ui_customization_short_descr"),
 //            @"img" : todo,
 //            @"key" : @"ui_customization"
 //        }

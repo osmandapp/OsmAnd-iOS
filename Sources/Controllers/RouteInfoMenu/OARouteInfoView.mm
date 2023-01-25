@@ -754,7 +754,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     
     [attributedStr appendAttributedString:[[NSAttributedString alloc] initWithString:travelTimeStr attributes:mainAttributes]];
     
-    [attributedStr appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@", %@  •  %@ ", travelDistStr, OALocalizedString(@"walk")] attributes:secondaryAttributes]];
+    [attributedStr appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@", %@  •  %@ ", travelDistStr, OALocalizedString(@"shared_string_walk")] attributes:secondaryAttributes]];
     
     [attributedStr appendAttributedString:[[NSAttributedString alloc] initWithString:walkTimeStr attributes:mainAttributes]];
     
@@ -1612,7 +1612,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             cell.detailsButton.tag = routeIndex;
             [cell.detailsButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.detailsButton addTarget:self action:@selector(onTransportDetailsPressed:) forControlEvents:UIControlEventTouchUpInside];
-            [cell.showOnMapButton setTitle:OALocalizedString(@"sett_show") forState:UIControlStateNormal];
+            [cell.showOnMapButton setTitle:OALocalizedString(@"recording_context_menu_show") forState:UIControlStateNormal];
             cell.showOnMapButton.tag = routeIndex;
             [cell.showOnMapButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.showOnMapButton addTarget:self action:@selector(onTransportShowOnMapPressed:) forControlEvents:UIControlEventTouchUpInside];

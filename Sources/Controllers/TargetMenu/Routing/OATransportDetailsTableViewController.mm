@@ -83,7 +83,7 @@
     [arr addObject:@{
         @"cell" : [OAPublicTransportPointCell getCellIdentifier],
         @"img" : @"ic_profile_pedestrian",
-        @"title" : [NSString stringWithFormat:@"%@ ~%@, %@", OALocalizedString(@"walk"), [OAOsmAndFormatter getFormattedTimeInterval:time shortFormat:NO], [OAOsmAndFormatter getFormattedDistance:walkDist]],
+        @"title" : [NSString stringWithFormat:@"%@ ~%@, %@", OALocalizedString(@"shared_string_walk"), [OAOsmAndFormatter getFormattedTimeInterval:time shortFormat:NO], [OAOsmAndFormatter getFormattedDistance:walkDist]],
         @"top_route_line" : @(NO),
         @"bottom_route_line" : @(NO),
         @"coords" : seg != nil ? seg.getImmutableAllLocations : @[]
@@ -106,7 +106,7 @@
     [arr addObject:@{
         @"cell" : [OAPublicTransportPointCell getCellIdentifier],
         @"img" : @"ic_profile_pedestrian",
-        @"title" : [NSString stringWithFormat:@"%@ ~%@, %@", OALocalizedString(@"walk"), [OAOsmAndFormatter getFormattedTimeInterval:time shortFormat:NO], [OAOsmAndFormatter getFormattedDistance:walkDist]],
+        @"title" : [NSString stringWithFormat:@"%@ ~%@, %@", OALocalizedString(@"shared_string_walk"), [OAOsmAndFormatter getFormattedTimeInterval:time shortFormat:NO], [OAOsmAndFormatter getFormattedDistance:walkDist]],
         @"top_route_line" : @(NO),
         @"bottom_route_line" : @(NO),
         @"coords" : seg != nil ? seg.getImmutableAllLocations : @[],
@@ -301,7 +301,7 @@
                     [arr addObject:@{
                         @"cell" : [OAPublicTransportPointCell getCellIdentifier],
                         @"img" : @"ic_profile_pedestrian",
-                        @"title" : [NSString stringWithFormat:@"%@ ~%@, %@", OALocalizedString(@"walk"), [OAOsmAndFormatter getFormattedTimeInterval:time shortFormat:NO], [OAOsmAndFormatter getFormattedDistance:walkDist]],
+                        @"title" : [NSString stringWithFormat:@"%@ ~%@, %@", OALocalizedString(@"shared_string_walk"), [OAOsmAndFormatter getFormattedTimeInterval:time shortFormat:NO], [OAOsmAndFormatter getFormattedDistance:walkDist]],
                         @"top_route_line" : @(NO),
                         @"bottom_route_line" : @(NO),
                         @"coords" : seg != nil ? seg.getImmutableAllLocations : @[]
@@ -418,7 +418,7 @@
     
     [attributedStr appendAttributedString:[[NSAttributedString alloc] initWithString:travelTimeStr attributes:mainAttributes]];
     
-    [attributedStr appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@", %@  •  %@ ", travelDistStr, OALocalizedString(@"walk")] attributes:secondaryAttributes]];
+    [attributedStr appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@", %@  •  %@ ", travelDistStr, OALocalizedString(@"shared_string_walk")] attributes:secondaryAttributes]];
     
     [attributedStr appendAttributedString:[[NSAttributedString alloc] initWithString:walkTimeStr attributes:mainAttributes]];
     

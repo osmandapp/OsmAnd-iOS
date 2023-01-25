@@ -80,7 +80,7 @@
 "shared_string_road" = "Пут";
 "avoid_roads_msg" = "Можете покренути алтернативну руту бирањем путева које треба избегавати";
 "shared_string_go" = "Иди";
-"shared_string_info" = "Информације";
+"info_button" = "Информације";
 "simulate_your_location" = "Опонашај свој положај";
 "simulate_navigation" = "Симулирај навођење";
 "simulate_routing_descr" = "Симулирајте своју позицију користећи израчунату руту";
@@ -271,7 +271,7 @@
 "use_osm_live_routing" = "Навођење уживо ОСМ-а";
 "osm_live_routing_descr" = "Користите OsmAnd уживо ажурирања за навигацију";
 "select_nav_profile_dialog_message" = "’Тип навођења’ одређује како се руте израчунавају.";
-"osmand_routing" = "OsmAndрутирање";
+"osmand_default_routing" = "OsmAndрутирање";
 "special_routing" = "Специјално рутирање";
 "import_routing_file_descr" = "Можете да увезете датотеку за рутирање из било које апликације за складиштење у облаку тако што ћете је отворити у OsmAnd-у.";
 "recalculate_route" = "Прерачунај руту у случају одступања";
@@ -449,13 +449,13 @@
 "shared_string_and" = "и";
 "shared_string_edit" = "Уреди";
 "shared_string_modify" = "Модификуј";
-"shared_string_later" = "Касније";
+"first_time_continue" = "Касније";
 "shared_string_of" = "of";
 "shared_string_all" = "Све";
 "shared_string_from" = "из";
 "shared_string_time" = "Време";
 "time_of_day" = "Доба дана";
-"shared_string_distance" = "Растојање";
+"map_widget_trip_recording_distance" = "Растојање";
 "shared_string_time_span" = "Временски распон";
 "shared_string_start_time" = "Време поласка";
 "shared_string_end_time" = "Време доласка";
@@ -471,7 +471,7 @@
 "shared_string_off" = "Искључено";
 "shared_string_clear_cache" = "Обриши кеш меморију";
 "shared_string_maximum" = "Maximum";
-"shared_string_warning" = "Упозорење";
+"osmand_parking_warning" = "Упозорење";
 "shared_string_copy" = "Умножи";
 "shared_string_continue" = "Настави";
 "shared_string_deselect_all" = "Означи све";
@@ -509,7 +509,7 @@
 // Favorites
 "shared_string_color" = "Боја";
 "fav_colors" = "Боје";
-"fav_name" = "Име";
+"shared_string_name" = "Име";
 "fav_group" = "Група";
 "shared_string_groups" = "Групе";
 "favorite" = "Омиљено";
@@ -521,7 +521,7 @@
 "fav_add_new_group" = "Додај нову групу";
 "select_group_descr" = "Изаберите групу или додајте нову";
 "available_groups" = "Доступне групе";
-"group_name" = "Име групе";
+"favorite_group_name" = "Име групе";
 "fav_remove_q" = "Уклонити омиљено?";
 "fav_import_title" = "Увези омиљено";
 "fav_export_title" = "Извези омиљено";
@@ -550,14 +550,14 @@
 "fav_point_dublicate" = "Дат дупликат имена омиљене тачке";
 "fav_point_dublicate_message" = "Омиљено име је измењено у ‚%@‘ да се избегне дуплирање.";
 "fav_point_emoticons_message" = "Омиљени је преименован у ‚%@‘ да би се сачувао текст који садржи емоџије у фајл.";
-"default_color" = "Подразумевана боја";
+"access_default_color" = "Подразумевана боја";
 "default_color_descr" = "Ова боја ће се користити за све нове омиљене додате у групу.";
 "favorite_friends_category" = "Пријатељи";
 "favorite_places_category" = "Места";
 "shared_string_others" = "Остало";
 
 // Shapes
-"circle" = "Круг";
+"shared_string_circle" = "Круг";
 "shared_string_octagon" = "Октагон";
 "square" = "Квадрат";
 
@@ -571,7 +571,7 @@
 "favorites_item" = "Омиљени";
 "shared_string_gpx_tracks" = "Путање";
 "personal_category_name" = "Лични";
-"visible" = "Видљиво";
+"shared_string_visible" = "Видљиво";
 
 // GPX
 "plugin_distance_point" = "Тачка";
@@ -598,7 +598,7 @@
 "gpx_export_failed" = "Није могуће сачувати креирану руту";
 "gpx_remove" = "Уклонити путању?";
 "shared_string_statistics" = "Статистике";
-"gpx_route" = "Рута";
+"layer_route" = "Рута";
 "gpx_analyze" = "Анализирај";
 "gpx_route_time" = "Време руте";
 "gpx_uphldownhl" = "Узбрдо/низбрдо";
@@ -607,7 +607,7 @@
 "gpx_avg_elev" = "Просечна надморска висина";
 "gpx_elev_range" = "Распон надморске висине";
 "gpx_avg_altitude" = "Просечна висина";
-"gpx_alt_range" = "Распон висине";
+"altitude_range" = "Распон висине";
 "gpx_ascent" = "Успон";
 "gpx_descent" = "Спуст";
 "gpx_updown" = "Up/Down";
@@ -645,7 +645,7 @@
 "track_during_nav_descr" = "Укључите да аутоматски сачувате путању током навигације";
 "gpx_distance_points" = "Distance (points)";
 "gpx_max_speed" = "Максимална брзина";
-"gpx_speed" = "Брзина";
+"shared_string_speed" = "Брзина";
 "shared_string_slope" = "Нагиб";
 "stats_select_graph_data" = "Изаберите податке графикона";
 
@@ -687,7 +687,7 @@
 "map_settings_hide_polygons" = "Сакриј полигоне";
 "map_settings_hide_polygons_desc" = "Ова опција утиче само на OsmAnd ванмрежне векторске мапе";
 "map_settings_add_maps_desc" = "Можете додати нове мапе преко везе или увозом SQLite датотека.";
-"map_settings_color_scheme" = "Образац боја";
+"srtm_color_scheme" = "Образац боја";
 "map_settings_line_density" = "Густина линија";
 "map_settings_contour_zoom_level_descr" = "Изаберите ниво зумирања, при коме ће се приказати изохипсе";
 "shared_string_appearance" = "Изглед";
@@ -718,7 +718,7 @@
 "sett_km" = "Километри";
 "sett_ml" = "Миље";
 "sett_zoom" = "Дугме за зумирање";
-"sett_show" = "Прикажи";
+"recording_context_menu_show" = "Прикажи";
 "sett_notshow" = "Не приказуј";
 "sett_deg180" = "180 степена";
 "sett_deg360" = "360 степена";
@@ -933,12 +933,12 @@
 "profile_appearance" = "Изглед профила";
 "profile_appearance_descr" = "Иконица, боја и име";
 "ui_customization" = "Прилагођавање корисничког интерфејса";
-"ui_customization_descr" = "Елементи Фиоке, Контекст мени";
+"ui_customization_short_descr" = "Елементи Фиоке, Контекст мени";
 "reorder_profiles" = "Измени листу профила";
-"enter_profile_name" = "Унесите име профила";
+"profile_alert_need_profile_name_title" = "Унесите име профила";
 "select_color" = "Одаберите боју";
 "select_icon_profile_dialog_title" = "Одаберите иконицу";
-"position_icon_at_rest" = "Позиција иконице при мировању";
+"select_map_icon" = "Позиција иконице при мировању";
 "select_navigation_icon" = "Иконица положаја док се крећете";
 "will_be_show_while_moving" = "Биће приказано док се крећете";
 "base_profile_descr_car" = "Кола, камион, мотор";
@@ -992,7 +992,7 @@
 "points_count" = "Points:";
 "route_between_points" = "Рута између тачака";
 "profile_alert_need_save_title" = "Сачувај измене";
-"save_new_track" = "Сачувај као нову стазу";
+"save_as_new_track" = "Сачувај као нову стазу";
 "add_to_a_track" = "Додајте стази";
 "move_point" = "Помери тачку";
 "move_point_descr" = "Померите мапу да промените позицију ове тачке.";
@@ -1128,7 +1128,7 @@
 "res_online_name_descr" = "Наведите име за онлајн извор";
 "res_online_url_descr" = "Унесите или копирајте и налепите УРЛ за онлајн извор";
 "edit_tilesource_url_to_load" = "URL";
-"res_zoom_levels" = "Нивои увећања";
+"shared_string_zoom_levels" = "Нивои увећања";
 "res_expire_time" = "Време истека";
 "res_mercator" = "Меркатор пројекција";
 "res_elliptic_mercator" = "Елиптични меркатор";
@@ -1168,7 +1168,7 @@
 "osm_upload_failed_title" = "Отпремање није успело";
 "osm_upload_failed_descr" = "Проверите своје податке за пријаву и интернет везу и покушајте поново.";
 "exit_without_saving" = "Изађи пре чувања?";
-"osm_editing_lost_changes_descr" = "Све несачуване измене ће бити изгубљене. Да наставим?";
+"unsaved_changes_will_be_lost" = "Све несачуване измене ће бити изгубљене. Да наставим?";
 "osm_upload_no_internet" = "Проверите своју интернет везу и покушајте поново.";
 "osm_delete_confirmation_descr" = "Да ли сте сигурни да желите да избришете овај POI?";
 "osm_succsessful_uploads" = "Успешно";
@@ -1197,14 +1197,14 @@
 "population_num" = "Популација";
 "osm_add_place" = "Додај место";
 "osm_modify_place" = "Измените место";
-"osm_poi_delete_title" = "Брисање POI";
+"poi_remove_title" = "Брисање POI";
 "osm_edit_modified_poi" = "Измењене ОСМ тачке од интереса";
 "osm_edit_deleted_poi" = "Избрисане ОСМ тачке од интереса";
 "osm_edit_created_poi" = "OSMтачка од интереса је направљена";
 "osm_note_created" = "Направи белешку ОСМ-а";
 "osm_note_create" = "Креирајте ОСМ белешку";
 "upload_osm_note" = "Отпреми белешку ОСМ-а";
-"osm_note_close" = "Затвори ОСМ белешку";
+"osm_edit_close_note" = "Затвори ОСМ белешку";
 "osm_edit_comment_note" = "Коментар ОСМ напомене";
 "osm_note_reopen_title" = "Поново отворите ОСМ белешку";
 "osm_confirm_bulk_delete" = "Избрисати %d измене?";
@@ -1215,9 +1215,9 @@
 "osm_value" = "Вредност";
 "osm_note_upload_info" = "Белешку можете да отпремите анонимно или користећи свој OpenStreetMap профил.";
 "osm_note_upload_immediately" = "Одмах отпремите";
-"osm_note_upload_anonymously" = "Отпреми безимено";
+"upload_anonymously" = "Отпреми безимено";
 "osm_note_empty_message" = "Наведите поруку за ову белешку.";
-"osm_note_comment" = "Коментар";
+"poi_dialog_comment" = "Коментар";
 "poi_dialog_reopen" = "Поново отвори";
 "osm_edits_offline_layer" = "OSM измене/белешке (ван мреже)";
 "osm_notes_online_layer" = "OSM Notes (online)";
@@ -1271,14 +1271,14 @@
 "no_overlay" = "Без слоја над картом";
 "quick_action_add_overlay" = "Додај слој над картом";
 "quick_action_no_underlay" = "Без подвлачења";
-"quick_action_add_underlay" = "Додај слој испод карте";
+"quick_action_map_underlay_action" = "Додај слој испод карте";
 "quick_action_list_descr" = "Додиром на ово дугме листају се странице на листи испод";
 "toggle_coordinates" = "Прикажи/сакриј виџет за координате";
 "show_coordinates" = "Прикажи координате";
 "hide_coordinates" = "Сакриј координате";
 "quick_action_coordinates_widget_descr" = "Додиром на ово дугме приказује се или сакрива виџет Координате.";
 "quick_action_map_overlay_title" = "Слојеви изнад карте";
-"map_underlays" = "Слојеви испод карте";
+"quick_action_map_underlay_title" = "Слојеви испод карте";
 "vector_data" = "Векторске карте ван мреже";
 "quick_action_map_source_action" = "Додај извор карте";
 "add_map_style" = "Додајте стил мапе";
@@ -1288,7 +1288,7 @@
 "quick_action_add_create_items" = "Направи ставке";
 "configure_map" = "Подеси карту";
 "map_look_descr" = "Изглед карте";
-"add_map_marker" = "Додај ознаку на карти";
+"quick_action_add_marker" = "Додај ознаку на карти";
 "select_map_marker" = "Изаберите ознаку карте";
 "add_gpx_waypoint" = "Додај GPX пролазну тачку";
 "context_menu_item_edit_waypoint" = "Измени пролазну тачку ГПИкс-а";
@@ -1315,7 +1315,7 @@
 "add_home" = "Додај кућу";
 "add_work" = "Додај посао";
 "favorite_home_category" = "Кућа";
-"work_pt" = "Посао";
+"work_button" = "Посао";
 "map_widget_parking" = "Место за паркирање";
 "quick_action_add_first_intermediate" = "Додај прву пролазну међутачку";
 "toggle_auto_zoom" = "Аутоматско зумирање укључено/искључено";
@@ -1422,7 +1422,7 @@
 "poi_context_menu_modify_osm_change" = "Промени ОСМ измену";
 "context_menu_item_open_note" = "Отвори белешку ОСМ-а";
 "edit_osm_note" = "Уредите OSM белешку";
-"osm_alert_title" = "Предај";
+"shared_string_commit" = "Предај";
 "osb_comment_dialog_message" = "Порука";
 "osn_add_dialog_title" = "Направи белешку";
 "modify_poi" = "Измените информације о POI";
@@ -1432,13 +1432,13 @@
 "pickup_car_at" = "Покупите ауто у";
 "add_notification_calendar" = "Додајте обавештење у Календар";
 "parking_place_limited" = "Време паркирања је ограничено на";
-"time_left" = "преостало";
+"osmand_parking_time_left" = "преостало";
 "osmand_parking_overdue" = "закаснео";
 "cannot_add_marker" = "Није могуће додати паркинг";
 "cannot_add_marker_desc" = "Уклоните барем један правац и покушајте поново";
 "cannot_add_destination" = "Није могуће додати смер";
 // Units
-"units_mi" = "mi";
+"mile" = "mi";
 "units_yd" = "yd";
 "foot" = "ft";
 "nm" = "нми";
@@ -1448,7 +1448,7 @@
 "int_min" = "мин.";
 "units_sec" = "сек";
 "units_sec_short" = "s";
-"units_t" = "t";
+"metric_ton" = "t";
 
 // Help
 "help_first_steps" = "Први кораци";
@@ -1457,10 +1457,10 @@
 "help_navigation_descr" = "Како подесити навигацију";
 "faq_item" = "ЧПП";
 "help_faq_descr" = "Често постављана питања";
-"help_features" = "Функционалности";
+"features_menu_group" = "Функционалности";
 "help_map_viewing" = "Преглед карте";
 "help_search" = "Претрага на мапи";
-"help_trip_planning" = "Планирање пута";
+"planning_trip_item" = "Планирање пута";
 "navigation_profiles_item" = "Профили навођења";
 "osmand_purchases_item" = "OsmAndкуповине";
 "subscription_osmandlive_item" = "Чланарина - OsmAnd уживо";
@@ -1513,12 +1513,12 @@
 // GPX colors
 
 // World Regions
-"region_antarctica" = "Антарктик";
+"index_name_antarctica" = "Антарктик";
 "index_name_africa" = "Африка";
 "index_name_asia" = "Азија";
 "index_name_oceania" = "Аустралија и Океанија";
 "index_name_central_america" = "Централна Америка";
-"region_europe" = "Европа";
+"index_name_europe" = "Европа";
 "index_name_north_america" = "Северна Америка";
 "region_russia" = "Русија";
 "index_name_south_america" = "Јужна Америка";
@@ -1600,7 +1600,7 @@
 "download_srtm_maps" = "Изохипсе";
 "product_desc_srtm" = "Приказ контурних линија";
 "product_desc_ext_srtm" = "Овај додатак пружа контурне линије и сенчење, који се могу приказати на ОсмАнд ванмрежним мапама. Контурне линије пружају информације о висинама подручја, док је сенка њихова визуелизација. Погледајте називе планинских врхова и специфичне карактеристике терена користећи овај додатак.\n\nГлобални подаци (између 70 степени северно и 70 степени јужно) засновани су на мерењима SRTM (Шатл мисија радиометријске топографије) и ASTER (Напредни орбитални термоемисиони и рефлексиони радиометар), инструмента за снимање на Тери, водећем сателиту система NASA-е за посматрање Земље. ASTER је заједнички напор NASA-е, јапанског Министарства економије, трговине и индустрије (METI) и Јапанског Свемирског Програма (J-spacesystems).";
-"product_title_wikivoyage" = "Туристички водичи";
+"wikivoyage_travel_guide" = "Туристички водичи";
 "start_editing_card_image_text" = "Бесплатни светски туристички водич који свако може да уређује.";
 "wikivoyage_travel_guide_descr" = "Водичи за најзанимљивија места на планети, унутар OsmAnd-а, без потребе за интернет конекцијом.";
 "product_desc_sea_depth_contours" = "Изобате мора (изохипсе дубине) и карте поморских ознака";
@@ -1614,14 +1614,14 @@
 "make_call" = "Позивање";
 "context_menu_points_of_group" = "Све тачке групе";
 "enter_description" = "Enter description";
-"description" = "Опис";
+"shared_string_description" = "Опис";
 "read_full_description" = "Прочитајте цео опис";
 "enter_fav_name" = "Унесите име омиљеног";
 "res_installing" = "Инсталирање…";
 "res_roads" = "Путеви";
 "download_wikipedia_maps" = "Википедија";
 "shared_string_hillshade" = "Сенке брда";
-"res_slope" = "Нагиб";
+"shared_string_slope" = "Нагиб";
 "download_regular_maps" = "Уобичајена карта";
 "select_language" = "Изаберите језик";
 "language_short" = "Lang";
@@ -1667,7 +1667,7 @@
 "public_transport_empty_warning_title" = "Нажалост, ОсмАнд није могао да пронађе руту за ваша подешавања.";
 "public_transport_try_change_settings" = "Покушајте са променом поставки.";
 "shared_string_total" = "Укупно";
-"walk" = "Пешке";
+"shared_string_walk" = "Пешке";
 "board_at" = "Укрцавање у";
 "exit_at" = "Излаз на";
 "by_transport_type" = "By %@";
@@ -1681,7 +1681,7 @@
 "create_new_trip" = "Креирајте нову путању";
 "editing_waypoints" = "Уређивање пролазних тачака";
 "select_wpt_on_map" = "Изаберите тачку на мапи коју желите да додате путањи";
-"gpx_rename_q" = "Преименуј путању";
+"rename_track" = "Преименуј путању";
 "gpx_enter_new_name" = "Унесите нови назив за путању";
 "map_coords" = "Мапа: Шир %.5f Дуж %.5f";
 "shared_string_gpx_points" = "Тачке";
@@ -1775,7 +1775,7 @@
 "wiki_around" = "Чланци Википедије о околини";
 "search_categories" = "Категорије";
 "items_selected" = "%d изабрано";
-"wiki_sheet_title" = "Како да отворите чланке са Википедије?";
+"how_to_open_wiki_title" = "Како да отворите чланке са Википедије?";
 "download_wiki_data" = "Download Wikipedia data for %@";
 "open_in_browser_wiki" = "Отвори чланак на интернету";
 "explore_wikipedia_offline" = "Истражите Википедију ван мреже.";
@@ -2299,7 +2299,7 @@
 "route_preferred_terrain_hilly" = "Руте са брдовитим профилом рељефа.";
 "start_point" = "Почетак";
 "altitude" = "Висина";
-"map_widget_speed" = "Брзина";
+"shared_string_speed" = "Брзина";
 "save_heading" = "Урачунај правац";
 "save_heading_descr" = "Сачувајте информације о правцу за сваку снимљену тачку";
 "select_tracks" = "Изаберите путање";
@@ -2320,7 +2320,7 @@
 "rendering_attr_showFitnessTrails_description" = "Приказ стаза за фитнес";
 "plugin_popup_weather_ask" = "Омогућите додатак за временску прогнозу";
 "measurement_units" = "Мерне јединице";
-"weather_pressure_unit_hpa" = "Хектопаскали";
+"weather_pressure_hectopascals" = "Хектопаскали";
 "weather_wind_kilimeters_per_hour" = "Километара на сат";
 "weather_precip_milimeters" = "Милиметара";
 "weather_precip_inches" = "Инча";
@@ -2342,7 +2342,7 @@
 "restore_from_file" = "Врати из датотеке";
 "cloud_no_online_backup" = "Још увек немате резервну копију на мрежи";
 "cloud_set_up_backup" = "Подеси резервну копију";
-"cloud_welcome_back" = "Добродошли назад!";
+"backup_welcome_back" = "Добродошли назад!";
 "backup_restore_now" = "Поврати сада";
 "cloud_backup" = "Резервна копија";
 "last_backup" = "Последња резервна копија";
@@ -2350,7 +2350,7 @@
 "make_backup_descr" = "На овом уређају има много промена, направите резервну копију ових података како их не бисте изгубили.";
 "cloud_conflicts" = "Сукоб";
 "cloud_conflicts_descr" = "Неке датотеке није могуће отпремити на сервер јер на серверу новија верзија.";
-"cloud_view_conflicts" = "Погледајте сукобе";
+"backup_view_conflicts" = "Погледајте сукобе";
 "backup_and_restore" = "Резервна копија и враћање";
 "plugin_popup_weather_title" = "Укључите Време";
 "product_desc_weather" = "Прогноза за 24 сата по сату и 7 дана на свака 3 сата";
@@ -2407,7 +2407,7 @@
 "shared_string_capacity" = "Капацитет";
 "altitude_ascent" = "Узбрдо";
 "shared_string_contours" = "Контуре";
-"map_settings_weather_layers" = "Слојеви";
+"shared_string_layers" = "Слојеви";
 "weather_pressure_enable_descr" = "Омогућите да видите слој притиска на мапи.";
 "weather_cloud_enable_descr" = "Омогућите да видите слој облака на мапи.";
 "weather_precip_enable_descr" = "Омогућите да видите слој падавина на мапи.";
@@ -2449,7 +2449,7 @@
 "purchases_feature_desc_combined_wiki" = "Истражујте чланке на Википедији у покрету, без интернет везе. Офлајн подаци су подељени по земљама и доступни на свим језицима.";
 "product_desc_ext_development" = "Подешавања за развој и отклањање гррешака као што су симулација навођења, перформансе исцртавања или гласовни упити. Намењено програмерима, непотребно приликом нормалног коришћења.";
 "terrain_maps" = "Мапе терена";
-"shared_string_start" = "Почетак";
+"shared_string_control_start" = "Почетак";
 "private_access_routing_req" = "Ваше одредиште се налази на приватном поседу. Дозволити коришћење приватних путева на овом путовању\?";
 "purchases_feature_desc_terrain" = "Изохипсе терена, цела карта рељефа са тамним сенчењем и мапе нагиба са бојама за приказ, врхова и низија.";
 "monthly_subscription" = "Месечна чланарина";

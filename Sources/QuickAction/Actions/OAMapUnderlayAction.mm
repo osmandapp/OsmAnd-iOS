@@ -129,7 +129,7 @@ static OAQuickActionType *TYPE;
 
 -(NSString *) getAddBtnText
 {
-    return OALocalizedString(@"quick_action_add_underlay");
+    return OALocalizedString(@"quick_action_map_underlay_action");
 }
 
 - (NSString *) getDescrHint
@@ -139,7 +139,7 @@ static OAQuickActionType *TYPE;
 
 - (NSString *) getDescrTitle
 {
-    return OALocalizedString(@"map_underlays");
+    return OALocalizedString(@"quick_action_map_underlay_title");
 }
 
 - (NSString *) getListKey
@@ -172,11 +172,11 @@ static OAQuickActionType *TYPE;
                          }];
     }
     [arr addObject:@{
-                     @"title" : OALocalizedString(@"quick_action_add_underlay"),
+                     @"title" : OALocalizedString(@"quick_action_map_underlay_action"),
                      @"type" : [OAButtonTableViewCell getCellIdentifier],
                      @"target" : @"addMapUnderlay"
                      }];
-    [data setObject:[NSArray arrayWithArray:arr] forKey:OALocalizedString(@"map_underlays")];
+    [data setObject:[NSArray arrayWithArray:arr] forKey:OALocalizedString(@"quick_action_map_underlay_title")];
     return data;
 }
 

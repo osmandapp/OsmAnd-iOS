@@ -80,7 +80,7 @@
 "shared_string_road" = "Kelias";
 "avoid_roads_msg" = "You can trigger an alternative route by selecting roads to avoid";
 "shared_string_go" = "Pirmyn";
-"shared_string_info" = "Info";
+"info_button" = "Info";
 "simulate_your_location" = "Imituoti jūsų padėtį";
 "simulate_navigation" = "Simulate navigation";
 "simulate_routing_descr" = "Simulate your position using a calculated route";
@@ -271,7 +271,7 @@
 "use_osm_live_routing" = "OsmAnd Live navigacija";
 "osm_live_routing_descr" = "Use OsmAnd Live updates for navigation";
 "select_nav_profile_dialog_message" = "The 'Navigation type' governs how routes are calculated.";
-"osmand_routing" = "OsmAnd routing";
+"osmand_default_routing" = "OsmAnd routing";
 "special_routing" = "Special routing";
 "import_routing_file_descr" = "You can import routing file from any cloud storage app by opening it in OsmAnd.";
 "recalculate_route" = "Recalculate route in case of deviation";
@@ -449,13 +449,13 @@
 "shared_string_and" = "ir";
 "shared_string_edit" = "Redaguoti";
 "shared_string_modify" = "Modify";
-"shared_string_later" = "Vėliau";
+"first_time_continue" = "Vėliau";
 "shared_string_of" = "of";
 "shared_string_all" = "Visi";
 "shared_string_from" = "iš";
 "shared_string_time" = "Laikas";
 "time_of_day" = "Dienos metas";
-"shared_string_distance" = "Atstumas";
+"map_widget_trip_recording_distance" = "Atstumas";
 "shared_string_time_span" = "Trukmė";
 "shared_string_start_time" = "Pradžios laikas";
 "shared_string_end_time" = "Pabaigos laikas";
@@ -471,7 +471,7 @@
 "shared_string_off" = "Išjungta";
 "shared_string_clear_cache" = "Clear cache";
 "shared_string_maximum" = "Maximum";
-"shared_string_warning" = "Dėmesio";
+"osmand_parking_warning" = "Dėmesio";
 "shared_string_copy" = "Kopijuoti";
 "shared_string_continue" = "Tęsti";
 "shared_string_deselect_all" = "Nuimtižymėjimą viskam";
@@ -509,7 +509,7 @@
 // Favorites
 "shared_string_color" = "Spalva";
 "fav_colors" = "Colors";
-"fav_name" = "Pavadinimas";
+"shared_string_name" = "Pavadinimas";
 "fav_group" = "Group";
 "shared_string_groups" = "Grupės";
 "favorite" = "Įsimintos vietos";
@@ -521,7 +521,7 @@
 "fav_add_new_group" = "Add new group";
 "select_group_descr" = "Select group or add a new one";
 "available_groups" = "Available groups";
-"group_name" = "Grupės pavadinimas";
+"favorite_group_name" = "Grupės pavadinimas";
 "fav_remove_q" = "Remove favorite?";
 "fav_import_title" = "Import favorite";
 "fav_export_title" = "Export favorite";
@@ -550,14 +550,14 @@
 "fav_point_dublicate" = "Pasikartojantisįsimintinos vietos pavadinimas";
 "fav_point_dublicate_message" = "Favorite renamed to \'%@\' to avoid duplication.";
 "fav_point_emoticons_message" = "Favorite renamed to \'%@\' to save the string containing emoticons to a file.";
-"default_color" = "Numatytoji spalva";
+"access_default_color" = "Numatytoji spalva";
 "default_color_descr" = "This color wil be used for all new favorites added to the group.";
 "favorite_friends_category" = "Draugai";
 "favorite_places_category" = "Vietos";
 "shared_string_others" = "Kitos";
 
 // Shapes
-"circle" = "Circle";
+"shared_string_circle" = "Circle";
 "shared_string_octagon" = "Octagon";
 "square" = "Square";
 
@@ -571,7 +571,7 @@
 "favorites_item" = "Įsimintos vietos";
 "shared_string_gpx_tracks" = "Keliai";
 "personal_category_name" = "Asmeninis";
-"visible" = "Matomas";
+"shared_string_visible" = "Matomas";
 
 // GPX
 "plugin_distance_point" = "Taškas";
@@ -598,7 +598,7 @@
 "gpx_export_failed" = "Could not save created route";
 "gpx_remove" = "Remove track?";
 "shared_string_statistics" = "Statistics";
-"gpx_route" = "Maršrutas";
+"layer_route" = "Maršrutas";
 "gpx_analyze" = "Analyze";
 "gpx_route_time" = "Route time";
 "gpx_uphldownhl" = "Uphills/Downhills";
@@ -607,7 +607,7 @@
 "gpx_avg_elev" = "Average elevation";
 "gpx_elev_range" = "Elevation range";
 "gpx_avg_altitude" = "Vidutinis aukštis virš jūros lygio";
-"gpx_alt_range" = "Aukščio diapazonas";
+"altitude_range" = "Aukščio diapazonas";
 "gpx_ascent" = "Pakilimas";
 "gpx_descent" = "Nusileidimas";
 "gpx_updown" = "Up/Down";
@@ -645,7 +645,7 @@
 "track_during_nav_descr" = "Turn on to automatically save a track during navigation";
 "gpx_distance_points" = "Distance (points)";
 "gpx_max_speed" = "Max speed";
-"gpx_speed" = "Greitis";
+"shared_string_speed" = "Greitis";
 "shared_string_slope" = "Nuolydis";
 "stats_select_graph_data" = "Select graph data";
 
@@ -687,7 +687,7 @@
 "map_settings_hide_polygons" = "Hide polygons";
 "map_settings_hide_polygons_desc" = "This option affects only OsmAnd Offline vector maps";
 "map_settings_add_maps_desc" = "You can add new maps via link, or by importing SQLite files.";
-"map_settings_color_scheme" = "Spalvų schema";
+"srtm_color_scheme" = "Spalvų schema";
 "map_settings_line_density" = "Line density";
 "map_settings_contour_zoom_level_descr" = "Select zoom level, from wich contour lines will be displayed";
 "shared_string_appearance" = "Išvaizda";
@@ -718,7 +718,7 @@
 "sett_km" = "Kilometers";
 "sett_ml" = "Miles";
 "sett_zoom" = "Zoom button";
-"sett_show" = "Rodyti";
+"recording_context_menu_show" = "Rodyti";
 "sett_notshow" = "Don't show";
 "sett_deg180" = "Degrees 180";
 "sett_deg360" = "Degrees 360";
@@ -933,12 +933,12 @@
 "profile_appearance" = "Profile appearance";
 "profile_appearance_descr" = "Icon, color, and name";
 "ui_customization" = "UI customization";
-"ui_customization_descr" = "Drawer items, context menu";
+"ui_customization_short_descr" = "Drawer items, context menu";
 "reorder_profiles" = "Edit profile list";
-"enter_profile_name" = "Enter profile name";
+"profile_alert_need_profile_name_title" = "Enter profile name";
 "select_color" = "Select color";
 "select_icon_profile_dialog_title" = "Select icon";
-"position_icon_at_rest" = "Position icon at rest";
+"select_map_icon" = "Position icon at rest";
 "select_navigation_icon" = "Position icon while moving";
 "will_be_show_while_moving" = "It will be show while moving";
 "base_profile_descr_car" = "Car, truck, motorcycle";
@@ -992,7 +992,7 @@
 "points_count" = "Points:";
 "route_between_points" = "Maršrutas tarp taškų";
 "profile_alert_need_save_title" = "Išsaugoti pakeitimus";
-"save_new_track" = "Save as new track";
+"save_as_new_track" = "Save as new track";
 "add_to_a_track" = "Pridėti į maršrutą";
 "move_point" = "Move point";
 "move_point_descr" = "Move map to change the position of this point.";
@@ -1128,7 +1128,7 @@
 "res_online_name_descr" = "Provide name for online source";
 "res_online_url_descr" = "Enter or copy and paste URL for online source";
 "edit_tilesource_url_to_load" = "Nuoroda";
-"res_zoom_levels" = "Zoom levels";
+"shared_string_zoom_levels" = "Zoom levels";
 "res_expire_time" = "Expire time";
 "res_mercator" = "Mercator Projection";
 "res_elliptic_mercator" = "Elliptic mercator";
@@ -1168,7 +1168,7 @@
 "osm_upload_failed_title" = "Upload failed";
 "osm_upload_failed_descr" = "Please check your login details and Internet connection and try again.";
 "exit_without_saving" = "Ar norite išeiti neįrašę?";
-"osm_editing_lost_changes_descr" = "Neišsaugoti duomenys bus prarasti. Ar norite tęsti?";
+"unsaved_changes_will_be_lost" = "Neišsaugoti duomenys bus prarasti. Ar norite tęsti?";
 "osm_upload_no_internet" = "Please check your Internet connection and try again.";
 "osm_delete_confirmation_descr" = "Are you sure you want to delete this POI?";
 "osm_succsessful_uploads" = "Successful";
@@ -1197,14 +1197,14 @@
 "population_num" = "Population";
 "osm_add_place" = "Add place";
 "osm_modify_place" = "Modify place";
-"osm_poi_delete_title" = "Ištrinti LV";
+"poi_remove_title" = "Ištrinti LV";
 "osm_edit_modified_poi" = "Redaguota OSM LV";
 "osm_edit_deleted_poi" = "OSM LV ištrinta";
 "osm_edit_created_poi" = "Sukurta OSM LV";
 "osm_note_created" = "OSM pastaba sukurta";
 "osm_note_create" = "Create OSM Note";
 "upload_osm_note" = "Įkelti OSM pastabą";
-"osm_note_close" = "Close OSM Note";
+"osm_edit_close_note" = "Close OSM Note";
 "osm_edit_comment_note" = "Comment OSM Note";
 "osm_note_reopen_title" = "Reopen OSM Note";
 "osm_confirm_bulk_delete" = "Delete %d edits?";
@@ -1215,9 +1215,9 @@
 "osm_value" = "Value";
 "osm_note_upload_info" = "You can upload the note anonymously or by using your OpenStreetMap profile.";
 "osm_note_upload_immediately" = "Upload immediately";
-"osm_note_upload_anonymously" = "Siųsti anonimiškai";
+"upload_anonymously" = "Siųsti anonimiškai";
 "osm_note_empty_message" = "Please specify the message for this note.";
-"osm_note_comment" = "Komentaras";
+"poi_dialog_comment" = "Komentaras";
 "poi_dialog_reopen" = "Atidaryti iš naujo";
 "osm_edits_offline_layer" = "OSM Edits/Notes (offline)";
 "osm_notes_online_layer" = "OSM Notes (online)";
@@ -1271,14 +1271,14 @@
 "no_overlay" = "Jokio viršutinio sluoksnio";
 "quick_action_add_overlay" = "Add overlay";
 "quick_action_no_underlay" = "Jokio apatnio sluoksnio";
-"quick_action_add_underlay" = "Add underlay";
+"quick_action_map_underlay_action" = "Add underlay";
 "quick_action_list_descr" = "Tapping this action button pages through the list below";
 "toggle_coordinates" = "Show/hide coordinates widget";
 "show_coordinates" = "Show coordinates";
 "hide_coordinates" = "Hide coordinates";
 "quick_action_coordinates_widget_descr" = "Tapping this action button shows or hides the Coordinates widget.";
 "quick_action_map_overlay_title" = "Map overlays";
-"map_underlays" = "Map underlays";
+"quick_action_map_underlay_title" = "Map underlays";
 "vector_data" = "Parsiųsti vektoriniai žemėlapiai";
 "quick_action_map_source_action" = "Pridėti žemėlapio šaltinį";
 "add_map_style" = "Add map style";
@@ -1288,7 +1288,7 @@
 "quick_action_add_create_items" = "Sukurti elementus";
 "configure_map" = "Konfigūruoti žemėlapį";
 "map_look_descr" = "Map appearance";
-"add_map_marker" = "Pridėti žemėlapio žymeklį";
+"quick_action_add_marker" = "Pridėti žemėlapio žymeklį";
 "select_map_marker" = "Pasirinitežemėlapio žymę";
 "add_gpx_waypoint" = "Add GPX waypoint";
 "context_menu_item_edit_waypoint" = "Redaguoti GPX tašką";
@@ -1315,7 +1315,7 @@
 "add_home" = "Pridėti namus";
 "add_work" = "Pridėti darbą";
 "favorite_home_category" = "Namai";
-"work_pt" = "Darbas";
+"work_button" = "Darbas";
 "map_widget_parking" = "Parking spot";
 "quick_action_add_first_intermediate" = "Pridėti pirmąjį tarpinį tašką";
 "toggle_auto_zoom" = "Auto zoom on/off";
@@ -1422,7 +1422,7 @@
 "poi_context_menu_modify_osm_change" = "Redaguoti LV";
 "context_menu_item_open_note" = "Pridėti OSM pastabą";
 "edit_osm_note" = "Edit OSM Note";
-"osm_alert_title" = "Patvirtinti";
+"shared_string_commit" = "Patvirtinti";
 "osb_comment_dialog_message" = "Žinutė";
 "osn_add_dialog_title" = "Sukurti pastabą";
 "modify_poi" = "Modify the POI information";
@@ -1432,13 +1432,13 @@
 "pickup_car_at" = "Pickup the car at";
 "add_notification_calendar" = "Add notification to Calendar";
 "parking_place_limited" = "Parkavimas apribotas iki";
-"time_left" = "liko";
+"osmand_parking_time_left" = "liko";
 "osmand_parking_overdue" = "pradelsta";
 "cannot_add_marker" = "Cannot add Parking";
 "cannot_add_marker_desc" = "Please remove one direction at least and retry";
 "cannot_add_destination" = "Cannot add Direction";
 // Units
-"units_mi" = "my";
+"mile" = "my";
 "units_yd" = "jardai";
 "foot" = "pėd";
 "nm" = "jm";
@@ -1448,7 +1448,7 @@
 "int_min" = "min.";
 "units_sec" = "sec";
 "units_sec_short" = "s";
-"units_t" = "t";
+"metric_ton" = "t";
 
 // Help
 "help_first_steps" = "First steps";
@@ -1457,10 +1457,10 @@
 "help_navigation_descr" = "How to set up navigation";
 "faq_item" = "DUK";
 "help_faq_descr" = "Frequently asked questions";
-"help_features" = "Galimybės";
+"features_menu_group" = "Galimybės";
 "help_map_viewing" = "Žemėlapio peržiūra";
 "help_search" = "Map search";
-"help_trip_planning" = "Kelionės planavimas";
+"planning_trip_item" = "Kelionės planavimas";
 "navigation_profiles_item" = "Navigation profiles";
 "osmand_purchases_item" = "OsmAnd purchases";
 "subscription_osmandlive_item" = "Subscription - OsmAnd Live";
@@ -1513,12 +1513,12 @@
 // GPX colors
 
 // World Regions
-"region_antarctica" = "Antarktida";
+"index_name_antarctica" = "Antarktida";
 "index_name_africa" = "Afrika";
 "index_name_asia" = "Azija";
 "index_name_oceania" = "Australija ir Okeanija";
 "index_name_central_america" = "Centrinė Amerika";
-"region_europe" = "Europa";
+"index_name_europe" = "Europa";
 "index_name_north_america" = "Šiaurės Amerika";
 "region_russia" = "Rusija";
 "index_name_south_america" = "Pietų Amerika";
@@ -1600,7 +1600,7 @@
 "download_srtm_maps" = "SRTMžemėlapiai";
 "product_desc_srtm" = "Display of contour lines";
 "product_desc_ext_srtm" = "This plugin provides contour lines and hillshade, which can be displayed in OsmAnd offline maps. Contour lines provide the information about heights of the area while hillshade is their visualization. See the names of mountain peaks and specific features of terrain using this plugin.\n\nThe global data (between 70 degrees north and 70 degrees south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA's Earth Observing System. ASTER is a cooperative effort between NASA, Japan's Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
-"product_title_wikivoyage" = "Kelionių vadovas";
+"wikivoyage_travel_guide" = "Kelionių vadovas";
 "start_editing_card_image_text" = "Atviras pasaulinis kelionių vadovas, kurie kiekvienas gali redaguoti.";
 "wikivoyage_travel_guide_descr" = "Maršrutai į pačius įdomiausius objektus planetoje, panaudojant OsmAnd nereikalingas interneto ryšis.";
 "product_desc_sea_depth_contours" = "Sea depth contour lines and seamarks";
@@ -1614,14 +1614,14 @@
 "make_call" = "Make a call";
 "context_menu_points_of_group" = "Visi grupės taškai";
 "enter_description" = "Enter description";
-"description" = "Aprašymas";
+"shared_string_description" = "Aprašymas";
 "read_full_description" = "Read full description";
 "enter_fav_name" = "Enter favorite name";
 "res_installing" = "Installing…";
 "res_roads" = "Keliai";
 "download_wikipedia_maps" = "Vikipedija";
 "shared_string_hillshade" = "Hillshade";
-"res_slope" = "Nuolydis";
+"shared_string_slope" = "Nuolydis";
 "download_regular_maps" = "Įprastiniai žemėlapiai";
 "select_language" = "Select language";
 "language_short" = "Lang";
@@ -1667,7 +1667,7 @@
 "public_transport_empty_warning_title" = "Unfortunately, OsmAnd could not find a route for your settings.";
 "public_transport_try_change_settings" = "Try changing the settings.";
 "shared_string_total" = "Iš viso";
-"walk" = "Pėsčiomis";
+"shared_string_walk" = "Pėsčiomis";
 "board_at" = "Board at";
 "exit_at" = "Exit at";
 "by_transport_type" = "By %@";
@@ -1681,7 +1681,7 @@
 "create_new_trip" = "Create new track";
 "editing_waypoints" = "Editing waypoints";
 "select_wpt_on_map" = "Select point on map to add to the track";
-"gpx_rename_q" = "Rename track";
+"rename_track" = "Rename track";
 "gpx_enter_new_name" = "Please enter new name for the track";
 "map_coords" = "Map: Lat %.5f Lon %.5f";
 "shared_string_gpx_points" = "Taškai";
@@ -1775,7 +1775,7 @@
 "wiki_around" = "Šalia esantys Vikipedijos straipsniai";
 "search_categories" = "Kategorijos";
 "items_selected" = "%d selected";
-"wiki_sheet_title" = "Kaip atidaryti Wikipedia straipsnius?";
+"how_to_open_wiki_title" = "Kaip atidaryti Wikipedia straipsnius?";
 "download_wiki_data" = "Download Wikipedia data for %@";
 "open_in_browser_wiki" = "Open article online";
 "explore_wikipedia_offline" = "Explore Wikipedia offline.";
@@ -2250,7 +2250,7 @@
 "ios_release_3_90" = "• Introduced a \"Plan a route\" feature for planning future trips with the ability to create track segments using different navigation types\n• Added an option to enable a сompass over the \"Radius Ruler\" tool\n• Added \"POI label overlays\" option that allows to show names for favorites, track waypoints and markers on the map\n• Added new Quick actions for visibility of contour lines and terrain on the map, changing an application profile, deleting a nearest intermediate point\n• Fixed issues with missing Wikipedia search category\n• Settings Import: fixed bugs, added support for all data types available in OsmAnd\n• OpenStreetMap editing: fixed the time picker and inability to change the changeset comment\n";
 "ios_release_4_0" = "• New! \"Add favorite\" screen with options to select the custom icon, color, and shape\n• Added new \"Coordinates widget\" with coordinates of the current location\n• Added ability to import custom user-defined plugins\n• Significantly extended the import/export functionality\n• Distance by tap moved from the Radius ruler into a separate option\n• Fixed CarPlay app freezes when iPhone screen is turned off\n• Plugins screen moved from the Maps & Resources to the main menu\n• Added Finnish localization\n• Fixed UI in landscape orientation for \"Plan a route\" screen\n• Added support for custom routing and rendering files\n• Fixed performance of markers direction line\n • Fixed issue with importing GPX files with uppercase extensions\n• Fixed issue with \"Follow track\" menu\n• Fixed import of OBF files\n";
 "ios_release_4_1" = "• Completely redesigned interaction with tracks: a new menu with charts, statistics, ability to change the appearance, coloring by speed, height and slope, and track selection on the map• New screen for searching by coordinates in different formats\n• Improved coordinate search in OLC format\n• New user-friendly menu for choosing languages to display Wikipedia articles on the map\n• Added ability to easily load maps of all regions of the country with a couple of clicks.\n• Added contour lines in feet (You need to download additional files)\n• Added ability to download maps by selecting the desired region or country on the map, as well as adding a dialog box with the suggestion to load a missing map of a displayed region\n• New appearance the map control buttons and the ability to change map zoom by double-tapping and swiping.\n• Routes visibility settings are moved higher in the \"Configure map\" screen and are re-organized for better flexibility\n";
-"cloud_welcome_back" = "Sveiki sugrįžę!";
+"backup_welcome_back" = "Sveiki sugrįžę!";
 "altitude" = "Aukštis";
 "backup_error_subscription_was_used" = "Prenumerata arba akcijos kodas, naudojama kitoje paskyroje %@";
 "points_delete_multiple" = "Jūs ketinate trinti %d punktą (- us). Ar tikrai?";
@@ -2269,7 +2269,7 @@
 "cloud_set_up_backup" = "Nustatyti atsarginę kopiją";
 "purchases_feature_desc_terrain" = "Reljefo kontūrinės linijos, pilnas kalvų žemėlapis su tamsiais atspalviais ir šlaitų žemėlapiai su spalvomis, rodančiomis viršūnes ir žemumas.";
 "ltr_or_rtl_combine_via_or" = "%@ arba %@";
-"shared_string_start" = "Įrašyti";
+"shared_string_control_start" = "Įrašyti";
 "redeem_promo_code" = "Išgryninti promo kodą";
 "shared_string_capacity" = "Talpa";
 "altitude_ascent" = "Sukilimas";
@@ -2344,7 +2344,7 @@
 "are_you_sure" = "Ar esate tikri?";
 "delete_all_confirmation" = "Taip, ištrinti viską";
 "shared_string_contours" = "Kontūrai";
-"cloud_view_conflicts" = "Peržiūrėti konfliktus";
+"backup_view_conflicts" = "Peržiūrėti konfliktus";
 "copy_to_map_favorites" = "Kopijuoti į mėgstamiausius";
 "screen_settings_weather_toolbar" = "Orų įrankių juosta";
 "simulate_location_movement_speed" = "Judėjimo greitis";
@@ -2355,7 +2355,7 @@
 "save_heading" = "Įtraukti antraštę";
 "animate_my_location" = "Animuoti vietos pasikeitimą";
 "shared_string_open_street_map" = "OpenStreetMap";
-"map_widget_speed" = "Greitis";
+"shared_string_speed" = "Greitis";
 "shared_string_not_included" = "Neįtraukta";
 "map_settings_weather_precip" = "Krituliai";
 "verification" = "Patvirtinimas";
@@ -2403,14 +2403,14 @@
 "simulation_preview_mode_title" = "Greitas peržiūros režimas";
 "simulate_location_movement_speed_x4" = "x4";
 "weather_temperature_celsius" = "Celsijus";
-"weather_pressure_unit_hpa" = "Hektopaskaliai";
+"weather_pressure_hectopascals" = "Hektopaskaliai";
 "weather_temperature_fahrenheit" = "Farenheitas";
 "shared_string_angle" = "Kampas";
 "map_settings_weather_pressure" = "Slėgis";
 "map_settings_weather_wind" = "Vėjas";
 "map_settings_weather_cloud" = "Debesys";
 "shared_string_weather" = "Orai";
-"map_settings_weather_layers" = "Sluoksniai";
+"shared_string_layers" = "Sluoksniai";
 "backup_and_restore" = "Atsarginė kopija ir atkūrimas";
 "ltr_or_rtl_combine_via_slash" = "%@/%@";
 "simulate_location_movement_speed_x2" = "x2";
@@ -2442,7 +2442,7 @@
 "backup_data" = "Sukurti atsarginę duomenų kopiją";
 "backup_version_history" = "Versijų istorija";
 "cloud_recent_changes" = "Paskiausi pakeitimai";
-"cloud_pause_all" = "Pristabdyti viską";
+"backup_pause_all" = "Pristabdyti viską";
 "backup_delete_old_data" = "Pašalinti senas versijas";
 "cloud_all_changes_uploaded" = "Visi pakeitimai įkelti";
 "shared_string_cross_buy" = "Kryžminis pirkimas";

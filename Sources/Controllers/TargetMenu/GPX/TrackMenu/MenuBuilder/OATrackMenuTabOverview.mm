@@ -48,7 +48,7 @@
 
     OAGPXTableSectionData *descriptionSectionData = [OAGPXTableSectionData withData:@{
             kTableKey: @"section_description",
-            kSectionHeader: OALocalizedString(@"description"),
+            kSectionHeader: OALocalizedString(@"shared_string_description"),
             kSectionHeaderHeight: @56.
     }];
     [self.tableData.subjects addObject:descriptionSectionData];
@@ -72,7 +72,7 @@
 
     OAGPXTableSectionData *infoSectionData = [OAGPXTableSectionData withData:@{
             kTableKey: @"section_info",
-            kSectionHeader: OALocalizedString(@"shared_string_info"),
+            kSectionHeader: OALocalizedString(@"info_button"),
             kSectionHeaderHeight: @56.
     }];
     [self.tableData.subjects addObject:infoSectionData];

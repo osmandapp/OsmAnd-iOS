@@ -88,7 +88,7 @@
 - (void) applyLocalization
 {
     [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"save_new_track");
+    self.titleLabel.text = OALocalizedString(@"save_as_new_track");
     [self.cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
     [self.saveButton setTitle:OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
 }
@@ -157,7 +157,7 @@
         @{
             @"type" : [OATextMultilineTableViewCell getCellIdentifier],
             @"fileName" : _fileName,
-            @"header" : OALocalizedString(@"fav_name"),
+            @"header" : OALocalizedString(@"shared_string_name"),
             @"key" : @"input_name",
         }
     ]];

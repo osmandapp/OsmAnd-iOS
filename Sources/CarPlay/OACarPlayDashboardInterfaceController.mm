@@ -27,7 +27,7 @@
 
 #define unitsKm OALocalizedString(@"units_km")
 #define unitsM OALocalizedString(@"units_m")
-#define unitsMi OALocalizedString(@"units_mi")
+#define unitsMi OALocalizedString(@"mile")
 #define unitsYd OALocalizedString(@"units_yd")
 #define unitsFt OALocalizedString(@"foot")
 #define unitsNm OALocalizedString(@"nm")

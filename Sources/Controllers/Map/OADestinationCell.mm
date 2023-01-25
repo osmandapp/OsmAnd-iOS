@@ -327,7 +327,7 @@
     if (timeInterval > 0.0)
     {
         if (!shortText)
-            return [NSString stringWithFormat:@"%@ %@", time, OALocalizedString(@"time_left")];
+            return [NSString stringWithFormat:@"%@ %@", time, OALocalizedString(@"osmand_parking_time_left")];
         else
             return [NSString stringWithFormat:@"%@", time];
     }

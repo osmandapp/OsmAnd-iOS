@@ -186,7 +186,7 @@
 - (NSString*) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     if (section == kLayersSection)
-        return OALocalizedString(@"map_settings_weather_layers");
+        return OALocalizedString(@"shared_string_layers");
     return @"";
 }
 

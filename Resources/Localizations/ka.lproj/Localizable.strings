@@ -80,7 +80,7 @@
 "shared_string_road" = "გზა";
 "avoid_roads_msg" = "You can trigger an alternative route by selecting roads to avoid";
 "shared_string_go" = "წინ";
-"shared_string_info" = "ინფორმაცია";
+"info_button" = "ინფორმაცია";
 "simulate_your_location" = "Simulate your position";
 "simulate_navigation" = "ნავიგაციის სიმულაცია";
 "simulate_routing_descr" = "Simulate your position using a calculated route";
@@ -271,7 +271,7 @@
 "use_osm_live_routing" = "OsmAndცოცხალი ნავიგაცია";
 "osm_live_routing_descr" = "Use OsmAnd Live updates for navigation";
 "select_nav_profile_dialog_message" = "The 'Navigation type' governs how routes are calculated.";
-"osmand_routing" = "OsmAnd routing";
+"osmand_default_routing" = "OsmAnd routing";
 "special_routing" = "Special routing";
 "import_routing_file_descr" = "You can import routing file from any cloud storage app by opening it in OsmAnd.";
 "recalculate_route" = "Recalculate route in case of deviation";
@@ -449,13 +449,13 @@
 "shared_string_and" = "და";
 "shared_string_edit" = "ჩასწორება";
 "shared_string_modify" = "Modify";
-"shared_string_later" = "გვიან";
+"first_time_continue" = "გვიან";
 "shared_string_of" = "of";
 "shared_string_all" = "ყველა";
 "shared_string_from" = "-დან";
 "shared_string_time" = "დრო";
 "time_of_day" = "დღის დრო";
-"shared_string_distance" = "მანძილი";
+"map_widget_trip_recording_distance" = "მანძილი";
 "shared_string_time_span" = "დროის შუალედი";
 "shared_string_start_time" = "საწყისი დრო";
 "shared_string_end_time" = "დამთავრების დრო";
@@ -471,7 +471,7 @@
 "shared_string_off" = "გამორთული";
 "shared_string_clear_cache" = "Clear cache";
 "shared_string_maximum" = "Maximum";
-"shared_string_warning" = "გაფრთხილება";
+"osmand_parking_warning" = "გაფრთხილება";
 "shared_string_copy" = "ასლი";
 "shared_string_continue" = "გაგრძელება";
 "shared_string_deselect_all" = "შენიშვნის მოხსნა";
@@ -509,7 +509,7 @@
 // Favorites
 "shared_string_color" = "ფერი";
 "fav_colors" = "Colors";
-"fav_name" = "სახელი";
+"shared_string_name" = "სახელი";
 "fav_group" = "Group";
 "shared_string_groups" = "ჯგუფები";
 "favorite" = "რჩეული";
@@ -521,7 +521,7 @@
 "fav_add_new_group" = "Add new group";
 "select_group_descr" = "Select group or add a new one";
 "available_groups" = "Available groups";
-"group_name" = "ჯგუფის სახელი";
+"favorite_group_name" = "ჯგუფის სახელი";
 "fav_remove_q" = "Remove favorite?";
 "fav_import_title" = "Import favorite";
 "fav_export_title" = "Export favorite";
@@ -550,14 +550,14 @@
 "fav_point_dublicate" = "Duplicate Favorite name specified";
 "fav_point_dublicate_message" = "Favorite renamed to \'%@\' to avoid duplication.";
 "fav_point_emoticons_message" = "Favorite renamed to \'%@\' to save the string containing emoticons to a file.";
-"default_color" = "ნაგულისხმევი ფერი";
+"access_default_color" = "ნაგულისხმევი ფერი";
 "default_color_descr" = "This color wil be used for all new favorites added to the group.";
 "favorite_friends_category" = "მეგობრები";
 "favorite_places_category" = "ადგილები";
 "shared_string_others" = "სხვა";
 
 // Shapes
-"circle" = "წრეწირი";
+"shared_string_circle" = "წრეწირი";
 "shared_string_octagon" = "რვაკუთხედი";
 "square" = "ოთხკუთხედი";
 
@@ -571,7 +571,7 @@
 "favorites_item" = "რჩეულები";
 "shared_string_gpx_tracks" = "გზები";
 "personal_category_name" = "პირადი";
-"visible" = "ხილვადი";
+"shared_string_visible" = "ხილვადი";
 
 // GPX
 "plugin_distance_point" = "წერტილი";
@@ -598,7 +598,7 @@
 "gpx_export_failed" = "Could not save created route";
 "gpx_remove" = "Remove track?";
 "shared_string_statistics" = "სტატისტიკა";
-"gpx_route" = "გზა";
+"layer_route" = "გზა";
 "gpx_analyze" = "Analyze";
 "gpx_route_time" = "Route time";
 "gpx_uphldownhl" = "Uphills/Downhills";
@@ -607,7 +607,7 @@
 "gpx_avg_elev" = "Average elevation";
 "gpx_elev_range" = "Elevation range";
 "gpx_avg_altitude" = "საშუალო სიმაღლე";
-"gpx_alt_range" = "სიმაღლის შუალედი";
+"altitude_range" = "სიმაღლის შუალედი";
 "gpx_ascent" = "Ascent";
 "gpx_descent" = "Descent";
 "gpx_updown" = "Up/Down";
@@ -645,7 +645,7 @@
 "track_during_nav_descr" = "Turn on to automatically save a track during navigation";
 "gpx_distance_points" = "Distance (points)";
 "gpx_max_speed" = "Max speed";
-"gpx_speed" = "სიჩქარე";
+"shared_string_speed" = "სიჩქარე";
 "shared_string_slope" = "დაქანება";
 "stats_select_graph_data" = "Select graph data";
 
@@ -687,7 +687,7 @@
 "map_settings_hide_polygons" = "Hide polygons";
 "map_settings_hide_polygons_desc" = "This option affects only OsmAnd Offline vector maps";
 "map_settings_add_maps_desc" = "You can add new maps via link, or by importing SQLite files.";
-"map_settings_color_scheme" = "ფერთა გამა";
+"srtm_color_scheme" = "ფერთა გამა";
 "map_settings_line_density" = "Line density";
 "map_settings_contour_zoom_level_descr" = "Select zoom level, from wich contour lines will be displayed";
 "shared_string_appearance" = "გარეგნობა";
@@ -718,7 +718,7 @@
 "sett_km" = "Kilometers";
 "sett_ml" = "Miles";
 "sett_zoom" = "Zoom button";
-"sett_show" = "ჩვენება";
+"recording_context_menu_show" = "ჩვენება";
 "sett_notshow" = "Don't show";
 "sett_deg180" = "Degrees 180";
 "sett_deg360" = "Degrees 360";
@@ -933,12 +933,12 @@
 "profile_appearance" = "პროფილის გარეგნობა";
 "profile_appearance_descr" = "Icon, color, and name";
 "ui_customization" = "UI customization";
-"ui_customization_descr" = "Drawer items, context menu";
+"ui_customization_short_descr" = "Drawer items, context menu";
 "reorder_profiles" = "პროფილები სიის ჩასწორება";
-"enter_profile_name" = "შეიყვანეთ პროფილის სახელი";
+"profile_alert_need_profile_name_title" = "შეიყვანეთ პროფილის სახელი";
 "select_color" = "აირჩიეთ ფერი";
 "select_icon_profile_dialog_title" = "აირჩიეთ ხატულა";
-"position_icon_at_rest" = "Position icon at rest";
+"select_map_icon" = "Position icon at rest";
 "select_navigation_icon" = "Position icon while moving";
 "will_be_show_while_moving" = "It will be show while moving";
 "base_profile_descr_car" = "მანქანა, მოტოციკლი";
@@ -992,7 +992,7 @@
 "points_count" = "Points:";
 "route_between_points" = "წერტილებს შორის გზა";
 "profile_alert_need_save_title" = "ცვლილებების შენახვა";
-"save_new_track" = "Save as new track";
+"save_as_new_track" = "Save as new track";
 "add_to_a_track" = "კურსისთვის დამატება";
 "move_point" = "Move point";
 "move_point_descr" = "Move map to change the position of this point.";
@@ -1128,7 +1128,7 @@
 "res_online_name_descr" = "Provide name for online source";
 "res_online_url_descr" = "Enter or copy and paste URL for online source";
 "edit_tilesource_url_to_load" = "ბმული";
-"res_zoom_levels" = "გადიდების დონე";
+"shared_string_zoom_levels" = "გადიდების დონე";
 "res_expire_time" = "Expire time";
 "res_mercator" = "Mercator Projection";
 "res_elliptic_mercator" = "Elliptic mercator";
@@ -1168,7 +1168,7 @@
 "osm_upload_failed_title" = "Upload failed";
 "osm_upload_failed_descr" = "Please check your login details and Internet connection and try again.";
 "exit_without_saving" = "Exit without saving?";
-"osm_editing_lost_changes_descr" = "Any unsaved changes will be lost. Continue?";
+"unsaved_changes_will_be_lost" = "Any unsaved changes will be lost. Continue?";
 "osm_upload_no_internet" = "Please check your Internet connection and try again.";
 "osm_delete_confirmation_descr" = "Are you sure you want to delete this POI?";
 "osm_succsessful_uploads" = "Successful";
@@ -1197,14 +1197,14 @@
 "population_num" = "Population";
 "osm_add_place" = "Add place";
 "osm_modify_place" = "Modify place";
-"osm_poi_delete_title" = "POI-ს წაშლა";
+"poi_remove_title" = "POI-ს წაშლა";
 "osm_edit_modified_poi" = "OSM POI-ს შეცვლა";
 "osm_edit_deleted_poi" = "OSM POIწაშლილია";
 "osm_edit_created_poi" = "Created OSM POI";
 "osm_note_created" = "Created OSM Note";
 "osm_note_create" = "Create OSM Note";
 "upload_osm_note" = "Upload OSM Note";
-"osm_note_close" = "OSMსანიშნის დახურვა";
+"osm_edit_close_note" = "OSMსანიშნის დახურვა";
 "osm_edit_comment_note" = "Comment OSM Note";
 "osm_note_reopen_title" = "Reopen OSM Note";
 "osm_confirm_bulk_delete" = "Delete %d edits?";
@@ -1215,9 +1215,9 @@
 "osm_value" = "Value";
 "osm_note_upload_info" = "You can upload the note anonymously or by using your OpenStreetMap profile.";
 "osm_note_upload_immediately" = "Upload immediately";
-"osm_note_upload_anonymously" = "ანონიმურად ატვირთვა";
+"upload_anonymously" = "ანონიმურად ატვირთვა";
 "osm_note_empty_message" = "Please specify the message for this note.";
-"osm_note_comment" = "კომენტარი";
+"poi_dialog_comment" = "კომენტარი";
 "poi_dialog_reopen" = "თავიდან გახნა";
 "osm_edits_offline_layer" = "OSM Edits/Notes (offline)";
 "osm_notes_online_layer" = "OSM Notes (online)";
@@ -1271,14 +1271,14 @@
 "no_overlay" = "No overlay";
 "quick_action_add_overlay" = "შრის დამატება";
 "quick_action_no_underlay" = "No underlay";
-"quick_action_add_underlay" = "Add underlay";
+"quick_action_map_underlay_action" = "Add underlay";
 "quick_action_list_descr" = "Tapping this action button pages through the list below";
 "toggle_coordinates" = "Show/hide coordinates widget";
 "show_coordinates" = "Show coordinates";
 "hide_coordinates" = "Hide coordinates";
 "quick_action_coordinates_widget_descr" = "Tapping this action button shows or hides the Coordinates widget.";
 "quick_action_map_overlay_title" = "რუკის შრეები";
-"map_underlays" = "Map underlays";
+"quick_action_map_underlay_title" = "Map underlays";
 "vector_data" = "გათიშული ვექტორული რუკები";
 "quick_action_map_source_action" = "რუკის წყაროს დამატება";
 "add_map_style" = "Add map style";
@@ -1288,7 +1288,7 @@
 "quick_action_add_create_items" = "შექმნა";
 "configure_map" = "რუკის გამართვა";
 "map_look_descr" = "რუკის გარეგნობა";
-"add_map_marker" = "რუკის სანიშნის დამატება";
+"quick_action_add_marker" = "რუკის სანიშნის დამატება";
 "select_map_marker" = "აირჩიეთ რუკის სანიშნი";
 "add_gpx_waypoint" = "Add GPX waypoint";
 "context_menu_item_edit_waypoint" = "Edit GPX waypoint";
@@ -1315,7 +1315,7 @@
 "add_home" = "სახლის დამატება";
 "add_work" = "სამსახურის დამატება";
 "favorite_home_category" = "სახლი";
-"work_pt" = "სამუშაო";
+"work_button" = "სამუშაო";
 "map_widget_parking" = "Parking spot";
 "quick_action_add_first_intermediate" = "Add first intermediate";
 "toggle_auto_zoom" = "Auto zoom on/off";
@@ -1422,7 +1422,7 @@
 "poi_context_menu_modify_osm_change" = "Modify OSM change";
 "context_menu_item_open_note" = "Open OSM Note";
 "edit_osm_note" = "Edit OSM Note";
-"osm_alert_title" = "დამატება";
+"shared_string_commit" = "დამატება";
 "osb_comment_dialog_message" = "შეტყობინება";
 "osn_add_dialog_title" = "შენიშვნის შექმნა";
 "modify_poi" = "Modify the POI information";
@@ -1432,13 +1432,13 @@
 "pickup_car_at" = "Pickup the car at";
 "add_notification_calendar" = "Add notification to Calendar";
 "parking_place_limited" = "პარკინგის დროის ლიმიტი";
-"time_left" = "დარჩა";
+"osmand_parking_time_left" = "დარჩა";
 "osmand_parking_overdue" = "გადაცილებულია";
 "cannot_add_marker" = "Cannot add Parking";
 "cannot_add_marker_desc" = "Please remove one direction at least and retry";
 "cannot_add_destination" = "Cannot add Direction";
 // Units
-"units_mi" = "მილი";
+"mile" = "მილი";
 "units_yd" = "იარდი";
 "foot" = "ფტ";
 "nm" = "ნმ";
@@ -1448,7 +1448,7 @@
 "int_min" = "წთ.";
 "units_sec" = "წმ";
 "units_sec_short" = "s";
-"units_t" = "ტ";
+"metric_ton" = "ტ";
 
 // Help
 "help_first_steps" = "First steps";
@@ -1457,10 +1457,10 @@
 "help_navigation_descr" = "How to set up navigation";
 "faq_item" = "კითხვაპასუხი";
 "help_faq_descr" = "Frequently asked questions";
-"help_features" = "მახასიათებლები";
+"features_menu_group" = "მახასიათებლები";
 "help_map_viewing" = "რუკის თვალიერება";
 "help_search" = "Map search";
-"help_trip_planning" = "მოგზაურობის დაგეგმვა";
+"planning_trip_item" = "მოგზაურობის დაგეგმვა";
 "navigation_profiles_item" = "ნავიგაციის პროფილები";
 "osmand_purchases_item" = "OsmAnd-ის შესყიდვები";
 "subscription_osmandlive_item" = "გამოწერა - მიმდინარე OsmAnd-ი";
@@ -1513,12 +1513,12 @@
 // GPX colors
 
 // World Regions
-"region_antarctica" = "ანტარქტიკა";
+"index_name_antarctica" = "ანტარქტიკა";
 "index_name_africa" = "აფრიკა";
 "index_name_asia" = "აზია";
 "index_name_oceania" = "ავსტრალია და ოკეანეთი";
 "index_name_central_america" = "ცენტრალური ამერიკა";
-"region_europe" = "ევროპა";
+"index_name_europe" = "ევროპა";
 "index_name_north_america" = "ჩრდილო ამერიკა";
 "region_russia" = "რუსეთი";
 "index_name_south_america" = "სამხრეთ ამერიკა";
@@ -1600,7 +1600,7 @@
 "download_srtm_maps" = "კოტურული ხაზების მონაცემები";
 "product_desc_srtm" = "Display of contour lines";
 "product_desc_ext_srtm" = "This plugin provides contour lines and hillshade, which can be displayed in OsmAnd offline maps. Contour lines provide the information about heights of the area while hillshade is their visualization. See the names of mountain peaks and specific features of terrain using this plugin.\n\nThe global data (between 70 degrees north and 70 degrees south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA's Earth Observing System. ASTER is a cooperative effort between NASA, Japan's Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
-"product_title_wikivoyage" = "მოგზაურთა გიდები";
+"wikivoyage_travel_guide" = "მოგზაურთა გიდები";
 "start_editing_card_image_text" = "The free worldwide travel guide anyone can edit.";
 "wikivoyage_travel_guide_descr" = "Guides to the most interesting places on the planet, inside OsmAnd, without a connection to the Internet.";
 "product_desc_sea_depth_contours" = "Sea depth contour lines and seamarks";
@@ -1614,14 +1614,14 @@
 "make_call" = "Make a call";
 "context_menu_points_of_group" = "All points of the group";
 "enter_description" = "Enter description";
-"description" = "აღწერა";
+"shared_string_description" = "აღწერა";
 "read_full_description" = "Read full description";
 "enter_fav_name" = "Enter favorite name";
 "res_installing" = "Installing…";
 "res_roads" = "გზები";
 "download_wikipedia_maps" = "Wikipedia";
 "shared_string_hillshade" = "ბორცვი";
-"res_slope" = "დაქანება";
+"shared_string_slope" = "დაქანება";
 "download_regular_maps" = "ჩვეულებრივი რუკები";
 "select_language" = "Select language";
 "language_short" = "Lang";
@@ -1667,7 +1667,7 @@
 "public_transport_empty_warning_title" = "Unfortunately, OsmAnd could not find a route for your settings.";
 "public_transport_try_change_settings" = "Try changing the settings.";
 "shared_string_total" = "ჯამში";
-"walk" = "სიარული";
+"shared_string_walk" = "სიარული";
 "board_at" = "Board at";
 "exit_at" = "გამოსვლა";
 "by_transport_type" = "By %@";
@@ -1681,7 +1681,7 @@
 "create_new_trip" = "Create new track";
 "editing_waypoints" = "Editing waypoints";
 "select_wpt_on_map" = "Select point on map to add to the track";
-"gpx_rename_q" = "Rename track";
+"rename_track" = "Rename track";
 "gpx_enter_new_name" = "Please enter new name for the track";
 "map_coords" = "Map: Lat %.5f Lon %.5f";
 "shared_string_gpx_points" = "წერტილი";
@@ -1775,7 +1775,7 @@
 "wiki_around" = "უახლოესი სტატიები Wikipedia-ზე";
 "search_categories" = "კატეგორიები";
 "items_selected" = "%d selected";
-"wiki_sheet_title" = "როგორ გავხსნათ Wikipedia-ს სტატიები\?";
+"how_to_open_wiki_title" = "როგორ გავხსნათ Wikipedia-ს სტატიები\?";
 "download_wiki_data" = "Download Wikipedia data for %@";
 "open_in_browser_wiki" = "Open article online";
 "explore_wikipedia_offline" = "Explore Wikipedia offline.";
@@ -2267,11 +2267,11 @@
 "navigate_point_format_MGRS" = "MGRS";
 "any_poi" = "ნებისმიერი";
 "weather_wind_kilimeters_per_hour" = "კილომეტრი საათში";
-"cloud_welcome_back" = "კეთილი იყოს თქვენი დაბრუნება!";
+"backup_welcome_back" = "კეთილი იყოს თქვენი დაბრუნება!";
 "turn_arrows" = "მოხვევის ისრები";
 "shared_string_includes" = "შეიცავს";
 "osm_live_subscriptions" = "გამოწერები";
-"shared_string_start" = "დაწყება";
+"shared_string_control_start" = "დაწყება";
 "product_desc_ext_development" = "დამატება გაძლევთ საშუალებას განახორციელოთ შეცდომების კონტროლი და განვითარება მახასიათებლებისა როგორიცაა ანიმირებული ნავიგაცია.";
 "shared_string_learn_more" = "მეტის ნახვა";
 "terrain_maps" = "რელიეფის რუკები";

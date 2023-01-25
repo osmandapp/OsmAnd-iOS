@@ -17,20 +17,20 @@
 "shared_string_and" = "û";
 "shared_string_edit" = "Biguherîne";
 "shared_string_modify" = "Biguherîne";
-"shared_string_later" = "Paşê";
+"first_time_continue" = "Paşê";
 "shared_string_download_map" = "Nexşeyê daxe";
 // Favorites
 "shared_string_color" = "Reng";
 "fav_colors" = "Reng";
-"fav_name" = "Nav";
+"shared_string_name" = "Nav";
 "fav_replace" = "Biguherîne";
 "shared_string_hide" = "Veşêre";
 "gpx_overwrite" = "Li Ser Bi nivîsena";
 "shared_string_statistics" = "Amar (statîstîk)";
 "gpx_updown" = "Jor/Jêr";
-"gpx_speed" = "Lez";
+"shared_string_speed" = "Lez";
 "routing_engine_vehicle_type_driving" = "Trimbêl";
-"gpx_route" = "Rêgeh";
+"layer_route" = "Rêgeh";
 "gpx_route_time" = "Dema Rêgeh";
 "shared_string_control_start" = "Dest pê bike";
 "shared_string_map" = "Nexşe";
@@ -59,7 +59,7 @@
 "download_wikipedia_maps" = "Wîkîpediya";
 "res_roads" = "Riyan";
 "res_installing" = "Tê barkirin...";
-"description" = "Danasîn";
+"shared_string_description" = "Danasîn";
 "navigate_point_longitude" = "Hêlîlar";
 "navigate_point_latitude" = "Hêlîpan";
 "my_location" = "Cihê min";
@@ -81,7 +81,7 @@
 // Rendering categories
 "rendering_category_hide" = "Veşêre";
 "region_russia" = "Rûsya";
-"region_europe" = "Ewropa";
+"index_name_europe" = "Ewropa";
 "index_name_asia" = "Asya";
 // World Regions
 "index_name_africa" = "Afrîka";
@@ -94,7 +94,7 @@
 "foot" = "ft";
 "units_yd" = "yd";
 // Units
-"time_left" = "çep";
+"osmand_parking_time_left" = "çep";
 "menu_about" = "Derbar";
 "gpx_group_select" = "Kome hilbijêre";
 "shared_string_show_all" = "Hemûyan nîşan bide";
@@ -131,7 +131,7 @@
 "buy" = "Bikirre";
 "update_now" = "Niha rojane bike";
 "feedback" = "Gotinên we";
-"help_features" = "Taybetmendî";
+"features_menu_group" = "Taybetmendî";
 "actions" = "Çalakî";
 "plugins_menu_group" = "Lehikan";
 "weekly" = "Hefteyî";
@@ -146,7 +146,7 @@
 "poi_dialog_poi_type" = "Cureya POIyê";
 "daily" = "Rojane";
 "help_map_viewing" = "Dîtina nexşeyê";
-"sett_show" = "Nîşan bide";
+"recording_context_menu_show" = "Nîşan bide";
 "shared_string_upload" = "Bar bike";
 "osm_edit_without_name" = "Bêyî nav";
 "clear_all_intermediates" = "Hemû nuqteyên li navberê paqij bike";
@@ -161,8 +161,8 @@
 "one" = "Yek";
 "shared_string_finish" = "Xilasek";
 "osm_notes" = "Notên OSMê";
-"group_name" = "Navê komê";
+"favorite_group_name" = "Navê komê";
 "regions" = "Herêman";
 "shared_string_control_stop" = "Rawestgeh";
-"shared_string_start" = "Dest pê bike";
+"shared_string_control_start" = "Dest pê bike";
 "share_geo" = "Cih:";

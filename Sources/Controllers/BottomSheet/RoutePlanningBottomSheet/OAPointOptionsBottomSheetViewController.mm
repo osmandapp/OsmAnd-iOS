@@ -272,7 +272,7 @@
     double speed = pt.speed;
     if (speed != 0)
     {
-        NSString *speedString = [OALocalizedString(@"map_widget_speed") substringWithRange:NSMakeRange(0, 1)];
+        NSString *speedString = [OALocalizedString(@"shared_string_speed") substringWithRange:NSMakeRange(0, 1)];
         [description appendString:[NSString stringWithFormat:@"  %@: ", speedString]];
         [description appendString:[OAOsmAndFormatter getFormattedSpeed:speed]];
     }

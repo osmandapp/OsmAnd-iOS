@@ -373,7 +373,7 @@
     // Create main regions:
 
     OAWorldRegion *antarcticaRegion = [OAWorldRegion createRegionAs:OsmAnd::WorldRegions::AntarcticaRegionId
-                                              withLocalizedName:OALocalizedString(@"region_antarctica")
+                                              withLocalizedName:OALocalizedString(@"index_name_antarctica")
                                                            from:loadedWorldRegions];
     [entireWorld addSubregion:antarcticaRegion];
     regionsLookupTable[antarcticaRegion.regionId] = antarcticaRegion;
@@ -403,7 +403,7 @@
     regionsLookupTable[centralAmericaRegion.regionId] = centralAmericaRegion;
 
     OAWorldRegion *europeRegion = [OAWorldRegion createRegionAs:OsmAnd::WorldRegions::EuropeRegionId
-                                              withLocalizedName:OALocalizedString(@"region_europe")
+                                              withLocalizedName:OALocalizedString(@"index_name_europe")
                                                            from:loadedWorldRegions];
     [entireWorld addSubregion:europeRegion];
     regionsLookupTable[europeRegion.regionId] = europeRegion;

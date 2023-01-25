@@ -163,7 +163,7 @@
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     if (section == 0)
-        return OALocalizedString(@"osmand_routing");
+        return OALocalizedString(@"osmand_default_routing");
     else
         return _fileNames[section - 1].lastPathComponent;
 }

@@ -40,7 +40,7 @@
 "shared_string_road" = "طريق";
 "avoid_roads_msg" = "يمكنك تشغيل مسار بديل بتحديد طرق متجنبة";
 "shared_string_go" = "اذهب";
-"shared_string_info" = "معلومات";
+"info_button" = "معلومات";
 "simulate_your_location" = "محاكاة تخيلية";
 "simulate_routing_descr" = "محاكاة موقفك باستخدام مسار محسوب";
 "day_night_info_description" = "شروق: %@\nغروب: %@";
@@ -290,7 +290,7 @@
 "shared_string_and" = "و";
 "shared_string_edit" = "تعديل";
 "shared_string_modify" = "تعديل";
-"shared_string_later" = "لاحقاً";
+"first_time_continue" = "لاحقاً";
 "shared_string_of" = "من";
 "shared_string_all" = "الكل";
 "shared_string_from" = "من";
@@ -302,7 +302,7 @@
 // Favorites
 "shared_string_color" = "اللون";
 "fav_colors" = "الألوان";
-"fav_name" = "الاسم";
+"shared_string_name" = "الاسم";
 "fav_group" = "مجموعة";
 "shared_string_groups" = "مجموعات";
 "favorite" = "مفضلة";
@@ -349,7 +349,7 @@
 "gpx_no_tracks" = "لا توجد مسارات";
 "gpx_remove" = "إزالة المسار؟";
 "shared_string_statistics" = "إحصائيات";
-"gpx_route" = "طريق";
+"layer_route" = "طريق";
 "gpx_route_time" = "وقت التوجيه";
 "gpx_uphldownhl" = "الصعود والهبوط";
 "map_widget_average_speed" = "متوسط السرعة";
@@ -376,7 +376,7 @@
 "record_trip" = "تسجيل رحلتك";
 "gpx_distance_points" = "المسافة (نقاط)";
 "gpx_max_speed" = "السرعة القصوى";
-"gpx_speed" = "السرعة";
+"shared_string_speed" = "السرعة";
 // Map settings
 "rendering_value_browse_map_name" = "استعراض";
 "routing_engine_vehicle_type_driving" = "القيادة";
@@ -407,7 +407,7 @@
 "sett_km" = "كيلومترات";
 "sett_ml" = "أميال";
 "sett_zoom" = "زر التكبير/التصغير";
-"sett_show" = "عرض";
+"recording_context_menu_show" = "عرض";
 "sett_notshow" = "عدم الإظهار";
 "sett_loc_fmt" = "Location format";
 "sett_deg" = "Degrees";
@@ -489,13 +489,13 @@
 "pickup_car_at" = "سيارة بيك أب في";
 "add_notification_calendar" = "إضافة إشعار إلى التقويم";
 "parking_place_limited" = "وقت وقوف السيارات يقتصر على";
-"time_left" = "يسار";
+"osmand_parking_time_left" = "يسار";
 "osmand_parking_overdue" = "متأخر";
 "cannot_add_marker" = "لا يمكن إضافة موقف سيارات";
 "cannot_add_marker_desc" = "الرجاء إزالة اتجاه واحد على الأقل وإعادة المحاولة";
 "cannot_add_destination" = "لا يمكن إضافة اتجاه";
 // Units
-"units_mi" = "ميل";
+"mile" = "ميل";
 "units_yd" = "ياردة";
 "foot" = "قدم";
 "units_km_h" = "كم/س";
@@ -531,7 +531,7 @@
 "index_name_asia" = "آسيا";
 "index_name_oceania" = "أستراليا و أوقيانوسيا";
 "index_name_central_america" = "أمريكا الوسطى";
-"region_europe" = "أوروبا";
+"index_name_europe" = "أوروبا";
 "index_name_north_america" = "أمريكا الشمالية";
 "region_russia" = "أوروبا/آسيا - روسيا";
 "index_name_south_america" = "أمريكا الجنوبية";
@@ -594,7 +594,7 @@
 "add_as" = "إضافة";
 "make_call" = "إجراء مكالمة";
 "enter_description" = "ادخل الوصف";
-"description" = "الوصف";
+"shared_string_description" = "الوصف";
 "enter_fav_name" = "أدخل اسم المفضلة";
 "res_installing" = "تثبيت…";
 "res_roads" = "الطرق";
@@ -632,7 +632,7 @@
 "create_new_trip" = "إنشاء مسار جديد";
 "editing_waypoints" = "تحرير نقاط الطريق";
 "select_wpt_on_map" = "حدد نقطة على الخريطة لإضافتها إلى المسار";
-"gpx_rename_q" = "تسمية المسار";
+"rename_track" = "تسمية المسار";
 "gpx_enter_new_name" = "الرجاء إدخال اسم جديد للمسار";
 "gpx_cancel_route_q" = "هل تريد إلغاء هذا المسار؟";
 "local_indexes_cat_backup" = "معطلة";
@@ -809,10 +809,10 @@
 "help_navigation_descr" = "كيفية إعداد الملاحة";
 "faq_item" = "الأسئلة المتداولة";
 "help_faq_descr" = "الأسئلة المتداولة";
-"help_features" = "ميزات";
+"features_menu_group" = "ميزات";
 "help_map_viewing" = "شاهد الخريطة";
 "help_search" = "خريطة البحث";
-"help_trip_planning" = "التخطيط لرحلة";
+"planning_trip_item" = "التخطيط لرحلة";
 "map_legend" = "مفتاح الخريطة";
 "other_location" = "أخرى";
 "help_install_and_troubleshoot" = "التثبيت واستكشاف الأخطاء وإصلاحها";
@@ -866,7 +866,7 @@
 "daily_map_updates" = "تحديثات الخريطة كل ساعة";
 "donation_to_osm" = "التبرع لمجتمع خريطة الشارع المفتوح";
 "purchase_unlim_title" = "اشتري - %@";
-"product_title_wikivoyage" = "أدلة السفر";
+"wikivoyage_travel_guide" = "أدلة السفر";
 "start_editing_card_image_text" = "دليل السفر إلى جميع أنحاء العالم مجاناً.";
 "wikivoyage_travel_guide_descr" = "أدلةالسفر إلى الأماكن الأكثر إثارة على هذا الكوكب, داخل أوسماند دون اتصال بالإنترنت.";
 "product_desc_sea_depth_contours" = "مجموعة من الخرائط التي تحوي نقاط أعماق البحر وخطوطه الكنتورية";
@@ -926,7 +926,7 @@
 "website" = "الموقع";
 "osm_add_place" = "أضف مكان";
 "osm_modify_place" = "تعديل المكان";
-"osm_poi_delete_title" = "حذف POI";
+"poi_remove_title" = "حذف POI";
 "osm_edit_modified_poi" = "OSM POIمعدل";
 "osm_edit_deleted_poi" = "حذف OSM POI";
 "osm_edit_created_poi" = "إنشاء OSM POI";
@@ -938,7 +938,7 @@
 "poi_context_menu_modify_osm_change" = "تعديل OSM";
 "context_menu_item_open_note" = "فتح ملاحظة OSM";
 "edit_osm_note" = "تحرير ملاحظة OSM";
-"osm_alert_title" = "تقديم";
+"shared_string_commit" = "تقديم";
 "osb_comment_dialog_message" = "رسالة";
 "osn_add_dialog_title" = "إنشاء الملاحظة";
 "modify_poi" = "تعديل معلومات POI";
@@ -953,7 +953,7 @@
 "osm_upload_failed_title" = "فشل التحميل";
 "osm_upload_failed_descr" = "يرجى التحقق من تفاصيل تسجيل الدخول واتصال الإنترنت والمحاولة مرة أخرى.";
 "exit_without_saving" = "خروج بدون الحفظ؟";
-"osm_editing_lost_changes_descr" = "ستفقد التعديلات الغير محفوظة. هل تريد المتابعة ؟";
+"unsaved_changes_will_be_lost" = "ستفقد التعديلات الغير محفوظة. هل تريد المتابعة ؟";
 "osm_upload_no_internet" = "يرجى التحقق من اتصالك بالإنترنت والمحاولة مرة أخرى.";
 "osm_delete_confirmation_descr" = "هل أنت متأكد من أنك تريد حذف نقطة الاهتمام هذه؟";
 "amenity" = "راحة";
@@ -964,12 +964,12 @@
 "upload_osm_note" = "رفع ملاحظة OSM";
 "osm_note_upload_info" = "يمكنك رفع ملاحظاتك إلى OSM كمستخدم مجهول أو استخدام حسابك على openstreetmap.org .";
 "osm_note_upload_immediately" = "رفع فوري";
-"osm_note_upload_anonymously" = "رفع كمستخدم مجهول";
+"upload_anonymously" = "رفع كمستخدم مجهول";
 "osm_note_empty_message" = "يرجى تحديد الرسالة لهذه الملاحظة.";
-"osm_note_close" = "أغلاق ملاحظة OSM";
+"osm_edit_close_note" = "أغلاق ملاحظة OSM";
 "osm_edit_comment_note" = "تعليق ملاحظة OSM";
 "osm_note_reopen_title" = "أعد فتح ملاحظة OSM";
-"osm_note_comment" = "ملاحظة";
+"poi_dialog_comment" = "ملاحظة";
 "poi_dialog_reopen" = "أعد فتح";
 "osm_edits_offline_layer" = "تعديلات / ملاحظات OSM (غير متصل)";
 "osm_notes_online_layer" = "ملاحظات OSM (غير متصل)";
@@ -988,7 +988,7 @@
 "osm_confirm_bulk_delete" = "حذف %d التعديلات؟";
 "access_intermediate_arrival_time" = "متوسط وقت الوصول";
 "map_widget_intermediate_time" = "متوسط الوقت";
-"shared_string_distance" = "المسافة";
+"map_widget_trip_recording_distance" = "المسافة";
 "angular_units" = "وحدات قياس الزاوي";
 "angular_units_descr" = "تغيير قياس زاوية الازيموث.";
 "show_tunnels" = "الأنفاق";
@@ -1069,10 +1069,10 @@
 "no_overlay" = "بدون طبقة";
 "quick_action_add_overlay" = "إضافة طبقة علوية";
 "quick_action_no_underlay" = "بدون طبقة";
-"quick_action_add_underlay" = "إضافة طبقة سفلية";
+"quick_action_map_underlay_action" = "إضافة طبقة سفلية";
 "quick_action_list_descr" = "النقر على صفحات زر هذا الإجراء من خلال القائمة أدناه";
 "quick_action_map_overlay_title" = "طبقة الخريطة العلوية";
-"map_underlays" = "طبقة الخريطة السفلية";
+"quick_action_map_underlay_title" = "طبقة الخريطة السفلية";
 "vector_data" = "الخريطة المحملة";
 "quick_action_map_source_action" = "إضافة مصدر خريطة";
 "add_map_style" = "إضافة نمط خريطة";
@@ -1080,7 +1080,7 @@
 "quick_action_new_action" = "إضافة إجراء";
 "quick_action_add_create_items" = "إنشاء عناصر";
 "configure_map" = "ضبط الخريطة";
-"add_map_marker" = "إضافة توجيه مباشر للخريطة";
+"quick_action_add_marker" = "إضافة توجيه مباشر للخريطة";
 "add_gpx_waypoint" = "إضافة الإحداثية GPX";
 "toggle_fav" = "إظهار/إخفاء المفضلة";
 "toggle_poi" = "إظهار/إخفاء POI";
@@ -1187,7 +1187,7 @@
 "add_home" = "إضافة المنزل";
 "add_work" = "إضافة العمل";
 "favorite_home_category" = "المنزل";
-"work_pt" = "العمل";
+"work_button" = "العمل";
 "no_active_route" = "لا يوجد مسار نشط";
 "selected_roads" = "طرق مختارة";
 "shared_string_clear_all" = "مسح الكل";
@@ -1215,13 +1215,13 @@
 "quick_action_contour_lines_descr" = "يؤدي النقر فوق زر الإجراء هذا إلى إظهار أو إخفاء الخطوط الكنتورية.";
 "hide_contour_lines" = "إخفاء الخطوط الكنتورية";
 // World Regions
-"region_antarctica" = "القارة القطبية الجنوبية";
+"index_name_antarctica" = "القارة القطبية الجنوبية";
 "download_select_map_types" = "خرائط أخرى";
 "gpx_descent" = "منحدر";
 "gpx_avg_altitude" = "متوسط الارتفاع";
 "gpx_ascent" = "مرتفع";
 "download_depth_countours" = "ملامح العمق البحري";
-"gpx_alt_range" = "مدى الارتفاع";
+"altitude_range" = "مدى الارتفاع";
 "nautical_maps" = "الخرائط البحرية";
 "stats_select_graph_data" = "حدد بيانات الرسم البياني";
 "available_map_styles" = "أنماط الخريطة المتاحة";
@@ -1239,7 +1239,7 @@
 "shared_string_maximum" = "الحد الاقصي";
 "res_online_name_descr" = "اكتب اسمًا للمصدر عبر الإنترنت";
 "res_online_url_descr" = "أدخل أو انسخ والصق عنوان URL للمصدر عبر الإنترنت";
-"res_zoom_levels" = "مستويات التكبير";
+"shared_string_zoom_levels" = "مستويات التكبير";
 "res_expire_time" = "وقت انتهاء الصلاحية";
 "res_mercator" = "إسقاط مركاتور";
 "pseudo_mercator_projection" = "إسقاط ميركاتور الوهمي";
@@ -1545,7 +1545,7 @@
 "offline_raster_maps" = "خرائط نقطية دون اتصال";
 "res_edit_map_source" = "تحرير مصدر الخريطة";
 "res_offlineSQL_URL_warning" = "هذا النوع من الخرائط غير معتمدة";
-"shared_string_warning" = "تحذير";
+"osmand_parking_warning" = "تحذير";
 "clear_tiles_warning" = "سيؤدي تطبيق التغييرات إلى مسح البيانات المخزنة مؤقتاً للمصدر هذا";
 "change_object_posiotion" = "تغيير موضع الكائن";
 "change_position_descr" = "انقل الخريطة لتغيير موضع الكائن";
@@ -1558,7 +1558,7 @@
 "map_settings_hide_polygons_desc" = "يؤثر هذا الخيار على خرائط متجهات أوسماند دون اتصال فقط";
 "map_settings_add_maps_desc" = "يمكنك إضافة خرائط جديدة عبر الرابط، أو عن طريق استيراد ملفات SQLite.";
 "context_menu_points_of_group" = "جميع نقاط هذه المجموعة";
-"wiki_sheet_title" = "بأي طريقة تود فتح مقالات ويكيبيديا ؟";
+"how_to_open_wiki_title" = "بأي طريقة تود فتح مقالات ويكيبيديا ؟";
 "download_wiki_data" = "تنزيل بيانات ويكيبيديا ل٪ @";
 "open_in_browser_wiki" = "فتح المقالة على الويب";
 "online_webpage_warning" = "الصفحة متاحة على الإنترنت فقط. فتح في متصفح الويب؟";
@@ -1589,14 +1589,14 @@
 "shared_string_appearance" = "المظهر";
 "map_settings_contour_zoom_level_descr" = "حدد مستوى التكبير،سيتم عرض خطوط الكنتور";
 "map_settings_line_density" = "كثافة الخط";
-"map_settings_color_scheme" = "لون الخطوط الكنتورية";
+"srtm_color_scheme" = "لون الخطوط الكنتورية";
 "map_transparency" = "شفافية الخريطة";
 "board_at" = "توقف عند";
 "map_coords" = "خريطة: خط العرض%.5f خط الطول %.5f";
 "transport_stops" = "مواقف";
 "by_transport_type" = "بواسطة %@";
 "exit_at" = "خروج عند";
-"walk" = "المشي";
+"shared_string_walk" = "المشي";
 "shared_string_total" = "الإجمالي";
 "public_transport_warning_descr_blog" = "تعرف على المزيد حول كيفية حساب أوسماند للطرق في مدونتنا.";
 "public_transport_warning_title" = "يخضع التنقل في وسائل النقل العام حاليًا للاختبار التجريبي ، ويتوقع أن يكون فيه أخطاء .";
@@ -1614,7 +1614,7 @@
 "map_settings_add_maps_hillshade" = "تحتاج إلى خرائط إضافية لعرض التضاريس على الخريطة";
 "public_transport_try_change_settings" = "حاول تغيير الإعدادات.";
 "public_transport_empty_warning_title" = "لسوء الحظ، تعذر على أوسماند العثور على مسار للإعدادات الخاصة بك.";
-"res_slope" = "الانحدار";
+"shared_string_slope" = "الانحدار";
 "help_legend_descr" = "دليل رموز الخريطة";
 "mapillary_item" = "أوسماند+ مابيلاري";
 "help_travel" = "السفر (ويكيبيديا وويكيفويا)";
@@ -1665,9 +1665,9 @@
 "base_profile_descr_car" = "سيارة ، شاحنة ، دراجة نارية";
 "will_be_show_while_moving" = "سيتم عرضه أثناء الحركة";
 "select_navigation_icon" = "حدد رمز التنقل";
-"position_icon_at_rest" = "حدد أيقونه الخريطة";
+"select_map_icon" = "حدد أيقونه الخريطة";
 "select_icon_profile_dialog_title" = "اختر أيقونة";
-"enter_profile_name" = "أدخل اسم الوضع";
+"profile_alert_need_profile_name_title" = "أدخل اسم الوضع";
 "reorder_profiles" = "تحرير قائمة الأوضاع";
 "new_profile" = "وضع جديد";
 "profile_type_custom_string" = "وضع مخصص";
@@ -1676,7 +1676,7 @@
 "import_from_files" = "استيراد من الملف";
 "shared_string_exit" = "خروج";
 "import_routing_file_descr" = "يمكنك استيراد ملف التوجيه من أي تطبيق تخزين سحابي أو بوضعه في مجلد التوجيه في آيتوينز.";
-"osmand_routing" = "توجيه أوسماند";
+"osmand_default_routing" = "توجيه أوسماند";
 "select_nav_profile_dialog_message" = "يؤثر نوع التنقل على كييفية حساب المسارات.";
 "vehicle_parameters" = "معلمات المركبات";
 "screen_alerts" = "تنبيهات الشاشة";
@@ -1749,7 +1749,7 @@
 "application_profiles" = "أوضاع التطبيق";
 "selected_profile" = "الوضع المحدد";
 "osmand_profile" = "ملف تعريف أوسماند";
-"ui_customization_descr" = "عناصر الدرج، قائمة السياق";
+"ui_customization_short_descr" = "عناصر الدرج، قائمة السياق";
 "ui_customization" = "تخصيص واجهة المستخدم";
 "profile_appearance_descr" = "اختر الايقونة واللون والاسم";
 "profile_appearance" = "مظهر الوضع";
@@ -1769,7 +1769,7 @@
 "reset_plugin_to_default" = "إعادة ضبط الملحقات للافتراضي";
 "trip_rec_actions_descr" = "يمكنك العثور على جميع المسارات المسجلة في % @";
 "save_track_logging_accuracy" = "دقة التسجيل";
-"units_t" = "t";
+"metric_ton" = "t";
 "recalculate_wrong_dir" = "إعادة حساب المسار في حالة الانحراف";
 "repeat_after" = "إعادة بعد";
 "profile_alert_delete_msg" = "هل أنت متأكد أنك تريد حذف ملف تعريف \"٪ @\" بالكامل؟";
@@ -1798,7 +1798,7 @@
 "move_point_descr" = "حرك الخريطة لتغيير موضع هذه النقطة.";
 "move_point" = "نقل نقطة";
 "add_to_a_track" = "إضافة إلى مسار";
-"save_new_track" = "حفظ كمسار جديد";
+"save_as_new_track" = "حفظ كمسار جديد";
 "profile_alert_need_save_title" = "حفظ التغييرات";
 "route_between_points" = "المسار بين النقاط";
 "points_count" = "النقاط:";
@@ -1920,7 +1920,7 @@
 "simplified_track_description" = "سيتم حفظ خط الطريق فقط، وسيتم حذف نقاط المسار.";
 "open_saved_track" = "فتح المسار المحفوظ";
 "tracks_on_map" = "المسارات على الخريطة";
-"visible" = "المعروضة على الخريطة";
+"shared_string_visible" = "المعروضة على الخريطة";
 "searching" = "جار البحث…";
 "shared_string_loading" = "جارٍ التحميل…";
 "poi_categories" = "فئات النقاط";
@@ -1951,12 +1951,12 @@
 "shared_string_octagon" = "مثمن";
 
 // Shapes
-"circle" = "دائرة";
+"shared_string_circle" = "دائرة";
 "shared_string_others" = "أخرى";
 "favorite_places_category" = "الأماكن";
 "favorite_friends_category" = "أصدقاء";
 "default_color_descr" = "سيتم استخدام هذا اللون لجميع المفضلات الجديدة المضافة إلى المجموعة.";
-"default_color" = "اللون الافتراضي";
+"access_default_color" = "اللون الافتراضي";
 "fav_point_emoticons_message" = "تم تعديل اسم النقطة المفضلة إلى %1$s لتسهيل حفظ النص مع الوجوه التعبيرية بشكل صحيح إلى ملف.";
 "fav_point_dublicate_message" = "تم تغيير اسم النقطة إلى '%@' لتجنب تكرار الأسماء.";
 "fav_point_dublicate" = "اسم مكرر";
@@ -1967,7 +1967,7 @@
 "add_favorite" = "إضافة للمفضلة";
 "fav_points_not_exist" = "لا يوجد نقاط مفضلة";
 "replace_favorite_confirmation" = "هل تريد استبدال المفضلة %@؟";
-"group_name" = "اسم المجموعة";
+"favorite_group_name" = "اسم المجموعة";
 "available_groups" = "المجموعات المتوفرة";
 "select_group_descr" = "اختيار أو إضافة مجموعة جديدة";
 "fav_add_new_group" = "إضافة مجموعة جديدة";
@@ -2284,7 +2284,7 @@
 "selected_tracks_count" = "المسارات - %d";
 "delete_tracks_bottom_sheet_description_regular_part" = "هل أنت متأكد من أنك تريد الحذف ";
 "altitude" = "الارتفاع";
-"map_widget_speed" = "السرعة";
+"shared_string_speed" = "السرعة";
 "save_heading_descr" = "حفظ معلومات العنوان لكل نقطة مسجلة";
 "select_tracks" = "حدد المسارات";
 "routeInfo_winter_ice_road_description" = "قم بتلوين المسار أو خط المسار حسب تصنيف طرقاته الشتوية.";
@@ -2296,7 +2296,7 @@
 "rendering_attr_showFitnessTrails_name" = "مسارات اللياقة البدنية";
 "backup_error_subscription_was_expired" = "انتهت صلاحية الاشتراك";
 "backup_error_subscription_was_used" = "تم استخدام الاشتراك أو العرض الترويجي من قبل حساب آخر %@";
-"cloud_welcome_back" = "مرحبا بعودتك!";
+"backup_welcome_back" = "مرحبا بعودتك!";
 "routing_attr_only_permitted_ways_name" = "الطرق المسموحة بها علنا";
 "rendering_attr_showRunningRoutes_description" = "عرض مسارات الجري";
 "verify_email_address_descr" = "أرسلنا رمز التحقق إلى %@ ، يرجى إدخاله في الحقل أدناه.";
@@ -2339,7 +2339,7 @@
 "backup_error_token_is_not_valid_or_expired" = "رمز التحقق غير صالح أو منتهي الصلاحية";
 "osmand_cloud_authorize_descr" = "تجنب فقد بياناتك ، وقم بالنسخ الاحتياطي واستعادة جميع المعلومات دون مشاكل.";
 "backup_error_no_valid_subscription" = "لا يوجد اشتراك صالح";
-"cloud_view_conflicts" = "عرض التعارضات";
+"backup_view_conflicts" = "عرض التعارضات";
 "last_backup" = "النسخ الاحتياطي الأخير";
 "backup_and_restore" = "النسخ الاحتياطي والاستعادة";
 "plugin_popup_weather_title" = "تشغيل الطقس";
@@ -2361,7 +2361,7 @@
 "product_desc_weather" = "توقعات الطقس على مدار 24 ساعة و 7 أيام توقعات كل 3 ساعات";
 "weather_temperature_celsius" = "درجة مئوية";
 "weather_temperature_fahrenheit" = "فهرنهايت";
-"weather_pressure_unit_hpa" = "هيكتوباسكال";
+"weather_pressure_hectopascals" = "هيكتوباسكال";
 "weather_pressure_millimeters_of_mercury" = "ملليمتر زئبقي";
 "weather_pressure_unit_inhg" = "بوصة من الزئبق";
 "weather_cloud_data_description" = "سيتم تنزيل بيانات الطقس للمنطقة المعروضة في كل مرة.";
@@ -2385,7 +2385,7 @@
 "login_footer_email_part" = "support@osmand.net";
 "verification" = "التحقق";
 "toggle_precipitation" = "إظهار / إخفاء - طبقة هطول الأمطار";
-"map_settings_weather_layers" = "الطبقات";
+"shared_string_layers" = "الطبقات";
 "routeInfo_horse_scale_description" = "تفضيل المسارات وفقا لصعوبة مسارات الخيل";
 "weather_cloud_enable_descr" = "تمكين لعرض طبقة السحابة على الخريطة.";
 "toggle_temperature" = "إظهار/إخفاء - طبقة درجة الحرارة";
@@ -2434,7 +2434,7 @@
 "shared_string_learn_more" = "التعرف على المزيد";
 "shared_string_includes" = "يتضمن";
 "shared_string_purchased" = "تم شراؤه";
-"shared_string_start" = "بدء";
+"shared_string_control_start" = "بدء";
 "shared_string_control_stop" = "موقف";
 "ltr_or_rtl_combine_via_or" = "%@من %@";
 "osmand_depelopment_simulate_location_section" = "محاكاة";
@@ -2634,7 +2634,7 @@
 "shared_string_recorded" = "المسافة";
 "cloud_recent_changes" = "التغييرات";
 "cloud_conflict" = "نزاع";
-"cloud_pause_all" = "إيقاف الكل";
+"backup_pause_all" = "إيقاف الكل";
 "cloud_all_changes_uploaded" = "جميع التغييرات المحملة";
 "backup_conflicts_descr" = "أحدث نسخة من هذه الملفات مخزنة على الخادم. تحتاج إلى تحديد الإجراء";
 "cloud_contains_newer_changes" = "يحتوي إصدار أوسماند كلاود على تغييرات حديثة.";

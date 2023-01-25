@@ -225,8 +225,8 @@
     _scrollCellsState = [[OACollectionViewCellState alloc] init];
     
     _floatingTextFieldControllers = [NSMutableArray array];
-    _nameTextField = [self getInputCellWithHint:OALocalizedString(@"fav_name") text:(self.name ? self.name : @"") tag:0 isEditable:![_pointHandler isSpecialPoint]];
-    _descTextField = [self getInputCellWithHint:OALocalizedString(@"description") text:(self.desc ? self.desc : @"") tag:1 isEditable:YES];
+    _nameTextField = [self getInputCellWithHint:OALocalizedString(@"shared_string_name") text:(self.name ? self.name : @"") tag:0 isEditable:![_pointHandler isSpecialPoint]];
+    _descTextField = [self getInputCellWithHint:OALocalizedString(@"shared_string_description") text:(self.desc ? self.desc : @"") tag:1 isEditable:YES];
     _addressTextField = [self getInputCellWithHint:OALocalizedString(@"shared_string_address") text:(self.address ? self.address : @"") tag:2 isEditable:YES];
 
     [self initLastUsedIcons];

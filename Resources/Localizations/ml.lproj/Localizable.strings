@@ -91,7 +91,7 @@
 "shared_string_road" = "\"വഴി \"";
 "avoid_roads_msg" = "You can trigger an alternative route by selecting roads to avoid";
 "shared_string_go" = "പോവുക";
-"shared_string_info" = "വിവരം";
+"info_button" = "വിവരം";
 "simulate_your_location" = "\"നിങ്ങളുടെ സ്ഥാനം  സിമുലേറ്റ് ചെയ്യുക \"";
 "simulate_navigation" = "നാവിഗേഷൻ സിമുലേറ്റ് ചെയ്യുക";
 "simulate_routing_descr" = "Simulate your position using a calculated route";
@@ -291,7 +291,7 @@
 "use_osm_live_routing" = "\"ഓ എസ് എം  ലൈവ് നാവിഗേഷന്‍\"";
 "osm_live_routing_descr" = "Use OsmAnd Live updates for navigation";
 "select_nav_profile_dialog_message" = "The 'Navigation type' governs how routes are calculated.";
-"osmand_routing" = "OsmAnd routing";
+"osmand_default_routing" = "OsmAnd routing";
 "special_routing" = "Special routing";
 "import_routing_file_descr" = "You can import routing file from any cloud storage app by opening it in OsmAnd.";
 "recalculate_route" = "Recalculate route in case of deviation";
@@ -477,13 +477,13 @@
 "shared_string_and" = "and";
 "shared_string_edit" = "തിരുത്തുക(എഡിറ്റ്)";
 "shared_string_modify" = "Modify";
-"shared_string_later" = "\"പിന്നീട് \"";
+"first_time_continue" = "\"പിന്നീട് \"";
 "shared_string_of" = "of";
 "shared_string_all" = "എല്ലാം";
 "shared_string_from" = "ഫ്രം";
 "shared_string_time" = "സമയം";
 "time_of_day" = "ദിവസത്തിന്റെ സമയം";
-"shared_string_distance" = "ദൂരം";
+"map_widget_trip_recording_distance" = "ദൂരം";
 "shared_string_time_span" = "സമയ ദൈര്‍ഖ്യം";
 "shared_string_start_time" = "പ്രാരംഭ സമയം";
 "shared_string_end_time" = "അവസാന സമയം";
@@ -499,7 +499,7 @@
 "shared_string_off" = "ഓഫ്";
 "shared_string_clear_cache" = "Clear cache";
 "shared_string_maximum" = "Maximum";
-"shared_string_warning" = "മുന്നറിയിപ്പു്";
+"osmand_parking_warning" = "മുന്നറിയിപ്പു്";
 "shared_string_copy" = "പകര്‍ത്തുക";
 "shared_string_continue" = "തുടരൂ";
 "shared_string_deselect_all" = "\"ഒന്നും തെരഞ്ഞെടുക്കാതിരിക്കുക \"";
@@ -539,7 +539,7 @@
 // Favorites
 "shared_string_color" = "നിറം";
 "fav_colors" = "Colors";
-"fav_name" = "പേര‍്";
+"shared_string_name" = "പേര‍്";
 "fav_group" = "Group";
 "shared_string_groups" = "ഗ്രൂപ്പുകൾ";
 "favorite" = "താല്‍പര്യമുള്ളവ";
@@ -551,7 +551,7 @@
 "fav_add_new_group" = "Add new group";
 "select_group_descr" = "Select group or add a new one";
 "available_groups" = "Available groups";
-"group_name" = "ഗ്രൂപ്പ് നാമം";
+"favorite_group_name" = "ഗ്രൂപ്പ് നാമം";
 "fav_remove_q" = "Remove favorite?";
 "fav_import_title" = "Import favorite";
 "fav_export_title" = "Export favorite";
@@ -580,7 +580,7 @@
 "fav_point_dublicate" = "ഇഷ്ടമുള്ളവയുടെ പേര് ഓന്നിലധികം പകര്‍പ്പിലുണ്ട്";
 "fav_point_dublicate_message" = "Favorite renamed to \'%@\' to avoid duplication.";
 "fav_point_emoticons_message" = "Favorite renamed to \'%@\' to save the string containing emoticons to a file.";
-"default_color" = "സ്വതേയുള്ള നിറം";
+"access_default_color" = "സ്വതേയുള്ള നിറം";
 "default_color_descr" = "This color wil be used for all new favorites added to the group.";
 
 "favorite_friends_category" = "ചങ്ങാതിമാര്‍";
@@ -588,7 +588,7 @@
 "shared_string_others" = "\"മറ്റുള്ളവ \"";
 
 // Shapes
-"circle" = "Circle";
+"shared_string_circle" = "Circle";
 "shared_string_octagon" = "Octagon";
 "square" = "Square";
 
@@ -602,7 +602,7 @@
 "favorites_item" = "ഇഷ്ടമുളളവ";
 "shared_string_gpx_tracks" = "\"എന്റെ  പാതകള്‍\"";
 "personal_category_name" = "Personal";
-"visible" = "ദൃശ്യമായ";
+"shared_string_visible" = "ദൃശ്യമായ";
 
 // GPX
 "plugin_distance_point" = "ബിന്ദൂ(പോയിന്റ്)";
@@ -633,7 +633,7 @@
 
 "gpx_remove" = "Remove track?";
 "shared_string_statistics" = "Statistics";
-"gpx_route" = "മാര്‍ഗം";
+"layer_route" = "മാര്‍ഗം";
 "gpx_analyze" = "Analyze";
 "gpx_route_time" = "Route time";
 "gpx_uphldownhl" = "Uphills/Downhills";
@@ -642,7 +642,7 @@
 "gpx_avg_elev" = "Average elevation";
 "gpx_elev_range" = "Elevation range";
 "gpx_avg_altitude" = "ശരാശരി ഉയരം";
-"gpx_alt_range" = "\"ഉയര വ്യത്യാസം\"";
+"altitude_range" = "\"ഉയര വ്യത്യാസം\"";
 "gpx_ascent" = "Ascent";
 "gpx_descent" = "Descent";
 "gpx_updown" = "Up/Down";
@@ -684,7 +684,7 @@
 
 "gpx_distance_points" = "Distance (points)";
 "gpx_max_speed" = "Max speed";
-"gpx_speed" = "വേഗത";
+"shared_string_speed" = "വേഗത";
 "shared_string_slope" = "ചരിവ്";
 
 "stats_select_graph_data" = "Select graph data";
@@ -729,7 +729,7 @@
 "map_settings_hide_polygons" = "Hide polygons";
 "map_settings_hide_polygons_desc" = "This option affects only OsmAnd Offline vector maps";
 "map_settings_add_maps_desc" = "You can add new maps via link, or by importing SQLite files.";
-"map_settings_color_scheme" = "നിറങ്ങളുടെ സ്കീം";
+"srtm_color_scheme" = "നിറങ്ങളുടെ സ്കീം";
 "map_settings_line_density" = "Line density";
 "map_settings_contour_zoom_level_descr" = "Select zoom level, from wich contour lines will be displayed";
 "shared_string_appearance" = "ദൃശ്യരൂപം";
@@ -761,7 +761,7 @@
 "sett_km" = "Kilometers";
 "sett_ml" = "Miles";
 "sett_zoom" = "Zoom button";
-"sett_show" = "കാണിക്കുക";
+"recording_context_menu_show" = "കാണിക്കുക";
 "sett_notshow" = "Don't show";
 "sett_deg180" = "Degrees 180";
 "sett_deg360" = "Degrees 360";
@@ -987,12 +987,12 @@
 "profile_appearance" = "Profile appearance";
 "profile_appearance_descr" = "Icon, color, and name";
 "ui_customization" = "UI customization";
-"ui_customization_descr" = "Drawer items, context menu";
+"ui_customization_short_descr" = "Drawer items, context menu";
 "reorder_profiles" = "Edit profile list";
-"enter_profile_name" = "Enter profile name";
+"profile_alert_need_profile_name_title" = "Enter profile name";
 "select_color" = "Select color";
 "select_icon_profile_dialog_title" = "Select icon";
-"position_icon_at_rest" = "Position icon at rest";
+"select_map_icon" = "Position icon at rest";
 "select_navigation_icon" = "Position icon while moving";
 "will_be_show_while_moving" = "It will be show while moving";
 "base_profile_descr_car" = "Car, truck, motorcycle";
@@ -1050,7 +1050,7 @@
 "points_count" = "Points:";
 "route_between_points" = "Route between points";
 "profile_alert_need_save_title" = "മാറ്റങ്ങള്‍ പരിരക്ഷിക്കുക";
-"save_new_track" = "Save as new track";
+"save_as_new_track" = "Save as new track";
 "add_to_a_track" = "Add to a track";
 "move_point" = "Move point";
 "move_point_descr" = "Move map to change the position of this point.";
@@ -1186,7 +1186,7 @@
 "res_online_name_descr" = "Provide name for online source";
 "res_online_url_descr" = "Enter or copy and paste URL for online source";
 "edit_tilesource_url_to_load" = "വെബ് വിലാസം";
-"res_zoom_levels" = "Zoom levels";
+"shared_string_zoom_levels" = "Zoom levels";
 "res_expire_time" = "Expire time";
 "res_mercator" = "Mercator Projection";
 "res_elliptic_mercator" = "Elliptic mercator";
@@ -1227,7 +1227,7 @@
 "osm_upload_failed_title" = "Upload failed";
 "osm_upload_failed_descr" = "Please check your login details and Internet connection and try again.";
 "exit_without_saving" = "സൂക്ഷിക്കാതെ പുറത്ത് പോവുക\?";
-"osm_editing_lost_changes_descr" = "സംരക്ഷിക്കാത്ത മാറ്റങ്ങൾ നഷ്ടപ്പെടും. തുടരണോ\?";
+"unsaved_changes_will_be_lost" = "സംരക്ഷിക്കാത്ത മാറ്റങ്ങൾ നഷ്ടപ്പെടും. തുടരണോ\?";
 "osm_upload_no_internet" = "Please check your Internet connection and try again.";
 "osm_delete_confirmation_descr" = "Are you sure you want to delete this POI?";
 "osm_succsessful_uploads" = "Successful";
@@ -1257,14 +1257,14 @@
 "population_num" = "Population";
 "osm_add_place" = "Add place";
 "osm_modify_place" = "Modify place";
-"osm_poi_delete_title" = "താല്‍പര്യ ബിന്ദു (പിഓഐ) നീക്കം ചെയ്യുക";
+"poi_remove_title" = "താല്‍പര്യ ബിന്ദു (പിഓഐ) നീക്കം ചെയ്യുക";
 "osm_edit_modified_poi" = "പരിഷ്കരിച്ച OSM POI";
 "osm_edit_deleted_poi" = "OSM POIഇല്ലാതാക്കി";
 "osm_edit_created_poi" = "OSM POIസൃഷ്ടിച്ചു";
 "osm_note_created" = "OSMകുറിപ്പു് സൃഷ്ടിച്ചു";
 "osm_note_create" = "Create OSM Note";
 "upload_osm_note" = "ഓഎസ്എം കുറിപ്പ് അപ്ലോഡ് ചെയ്യുക";
-"osm_note_close" = "Close OSM Note";
+"osm_edit_close_note" = "Close OSM Note";
 "osm_edit_comment_note" = "Comment OSM Note";
 "osm_note_reopen_title" = "Reopen OSM Note";
 "osm_confirm_bulk_delete" = "Delete %d edits?";
@@ -1275,9 +1275,9 @@
 "osm_value" = "Value";
 "osm_note_upload_info" = "You can upload the note anonymously or by using your OpenStreetMap profile.";
 "osm_note_upload_immediately" = "Upload immediately";
-"osm_note_upload_anonymously" = "പേര് പറയാതെ കയറ്റിവിടട്ടെ (അപ്ലോഡ്)";
+"upload_anonymously" = "പേര് പറയാതെ കയറ്റിവിടട്ടെ (അപ്ലോഡ്)";
 "osm_note_empty_message" = "Please specify the message for this note.";
-"osm_note_comment" = "അഭിപ്രായം";
+"poi_dialog_comment" = "അഭിപ്രായം";
 "poi_dialog_reopen" = "വീണ്ടും തുറക്കുക";
 "osm_edits_offline_layer" = "OSM Edits/Notes (offline)";
 "osm_notes_online_layer" = "OSM Notes (online)";
@@ -1331,14 +1331,14 @@
 "no_overlay" = "ഓവർലേ ഇല്ല";
 "quick_action_add_overlay" = "ഓവർലേ(മേല്‍പ്പാളി) ചേർക്കുക";
 "quick_action_no_underlay" = "അണ്ടര്‍ലേ ഇല്ല";
-"quick_action_add_underlay" = "അണ്ടര്‍ലേയ്സ്(കീഴ്പാളികള്‍) ചേര്‍ക്കുക";
+"quick_action_map_underlay_action" = "അണ്ടര്‍ലേയ്സ്(കീഴ്പാളികള്‍) ചേര്‍ക്കുക";
 "quick_action_list_descr" = "Tapping this action button pages through the list below";
 "toggle_coordinates" = "Show/hide coordinates widget";
 "show_coordinates" = "Show coordinates";
 "hide_coordinates" = "Hide coordinates";
 "quick_action_coordinates_widget_descr" = "Tapping this action button shows or hides the Coordinates widget.";
 "quick_action_map_overlay_title" = "മാപ്പ് ഓവർലേകൾ";
-"map_underlays" = "മാപ്പ് അണ്ടര്‍ലേയ്സ്(കീഴ്പാളികള്‍)";
+"quick_action_map_underlay_title" = "മാപ്പ് അണ്ടര്‍ലേയ്സ്(കീഴ്പാളികള്‍)";
 "vector_data" = "ഓഫ്ലൈന്‍ വെക്ടര്‍ ഭൂപടങ്ങള്‍";
 "quick_action_map_source_action" = "ഭൂപട ഉറവിടം ചേര്‍ക്കു";
 "add_map_style" = "Add map style";
@@ -1348,7 +1348,7 @@
 "quick_action_add_create_items" = "ഇനങ്ങൾ സൃഷ്ടിക്കുക";
 "configure_map" = "ഭൂപടം സജ്ജീകരിക്കുക";
 "map_look_descr" = "Map appearance";
-"add_map_marker" = "മാപ്പ് മാർക്കർ ചേർക്കുക";
+"quick_action_add_marker" = "മാപ്പ് മാർക്കർ ചേർക്കുക";
 "select_map_marker" = "മാപ് മാര്‍ക്കര്‍ തിരഞ്ഞെടുക്കുക";
 "add_gpx_waypoint" = "Add GPX waypoint";
 "context_menu_item_edit_waypoint" = "ജിപിഎക്സ് പാതബിന്ദുക്കള്‍ ക്രമീകരിക്കുക(എഡിറ്റ്)";
@@ -1375,7 +1375,7 @@
 "add_home" = "വീട് ചേര്‍ക്കുക";
 "add_work" = "ഓഫീസ് ചേർക്കുക";
 "favorite_home_category" = "പൂമുഖം";
-"work_pt" = "ഓഫീസ്";
+"work_button" = "ഓഫീസ്";
 "map_widget_parking" = "Parking spot";
 "quick_action_add_first_intermediate" = "\"ഒന്നാമത്തെ ഇടലക്ഷ്യസ്ഥാനം ചേര്‍ക്കുക \"";
 "toggle_auto_zoom" = "Auto zoom on/off";
@@ -1483,7 +1483,7 @@
 "poi_context_menu_modify_osm_change" = "\"ഓഎസ്എം  മാറ്റ വരുത്തുക \"";
 "context_menu_item_open_note" = "ഓഎസ്എം കുറിപ്പ് തുറക്കുക";
 "edit_osm_note" = "Edit OSM Note";
-"osm_alert_title" = "ഉറപ്പിക്കുക (കമ്മിറ്റ്)";
+"shared_string_commit" = "ഉറപ്പിക്കുക (കമ്മിറ്റ്)";
 "osb_comment_dialog_message" = "സന്ദേശം";
 "osn_add_dialog_title" = "കുറിപ്പ് സൃഷ്ടിക്കുക";
 "modify_poi" = "Modify the POI information";
@@ -1493,13 +1493,13 @@
 "pickup_car_at" = "Pickup the car at";
 "add_notification_calendar" = "Add notification to Calendar";
 "parking_place_limited" = "പാർക്കിങ്ങ് സമയം നിയന്ത്രിതം";
-"time_left" = "മിച്ചം";
+"osmand_parking_time_left" = "മിച്ചം";
 "osmand_parking_overdue" = "കാലാവധി കഴിഞ്ഞൂ";
 "cannot_add_marker" = "Cannot add Parking";
 "cannot_add_marker_desc" = "Please remove one direction at least and retry";
 "cannot_add_destination" = "Cannot add Direction";
 // Units
-"units_mi" = "മൈ.";
+"mile" = "മൈ.";
 "units_yd" = "യാര്‍ഡ്";
 "foot" = "അടി";
 "nm" = "നോ. മൈല്‍";
@@ -1511,7 +1511,7 @@
 "units_sec" = "sec";
 "units_sec_short" = "s";
 
-"units_t" = "ടണ്‍";
+"metric_ton" = "ടണ്‍";
 
 // Help
 "help_first_steps" = "First steps";
@@ -1520,10 +1520,10 @@
 "help_navigation_descr" = "How to set up navigation";
 "faq_item" = "എഫ് ഏ ക്യൂ";
 "help_faq_descr" = "Frequently asked questions";
-"help_features" = "\"സവിശേഷതകള്‍ \"";
+"features_menu_group" = "\"സവിശേഷതകള്‍ \"";
 "help_map_viewing" = "ഭൂപടം കാണിക്കുക";
 "help_search" = "Map search";
-"help_trip_planning" = "ഒരു യാത്ര ആസൂത്രണം ചെയ്യുക";
+"planning_trip_item" = "ഒരു യാത്ര ആസൂത്രണം ചെയ്യുക";
 "navigation_profiles_item" = "Navigation profiles";
 "osmand_purchases_item" = "OsmAnd purchases";
 "subscription_osmandlive_item" = "Subscription - OsmAnd Live";
@@ -1576,12 +1576,12 @@
 // GPX colors
 
 // World Regions
-"region_antarctica" = "Antarctica";
+"index_name_antarctica" = "Antarctica";
 "index_name_africa" = "ആഫ്രിക്ക";
 "index_name_asia" = "ഏഷ്യ";
 "index_name_oceania" = "ഓസ്ട്രേലിയയും ഓഷ്യാനിയയും";
 "index_name_central_america" = "മദ്ധ്യ അമേരിക്ക";
-"region_europe" = "യൂറോപ്പ്";
+"index_name_europe" = "യൂറോപ്പ്";
 "index_name_north_america" = "വടക്കേ അമേരിക്ക";
 "region_russia" = "റഷ്യ";
 "index_name_south_america" = "തെക്കെ അമേരിക്കാ";
@@ -1672,7 +1672,7 @@
 "product_desc_srtm" = "Display of contour lines";
 "product_desc_ext_srtm" = "This plugin provides contour lines and hillshade, which can be displayed in OsmAnd offline maps. Contour lines provide the information about heights of the area while hillshade is their visualization. See the names of mountain peaks and specific features of terrain using this plugin.\n\nThe global data (between 70 degrees north and 70 degrees south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA's Earth Observing System. ASTER is a cooperative effort between NASA, Japan's Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
 
-"product_title_wikivoyage" = "യാത്ര സഹായികള്‍";
+"wikivoyage_travel_guide" = "യാത്ര സഹായികള്‍";
 "start_editing_card_image_text" = "ആർക്കും എഡിറ്റുചെയ്യാൻ കഴിയുന്ന സ്വതന്ത്ര ലോകവ്യാപക യാത്ര ഗൈഡ്.";
 "wikivoyage_travel_guide_descr" = "ഒസ്മാൻഡിനുള്ളിലുള്ള ലോകത്തേ പ്രധാനസ്ഥലങ്ങളുടെ യാത്രാസഹായി, ഇന്റർനെറ്റാവശ്യമില്ലാത്തത്.";
 "product_desc_sea_depth_contours" = "Sea depth contour lines and seamarks";
@@ -1689,14 +1689,14 @@
 
 "context_menu_points_of_group" = "ഗ്രൂപ്പിലെ എല്ലാ പോയിന്റുകളും";
 "enter_description" = "Enter description";
-"description" = "വിവരണം";
+"shared_string_description" = "വിവരണം";
 "read_full_description" = "Read full description";
 "enter_fav_name" = "Enter favorite name";
 "res_installing" = "Installing…";
 "res_roads" = "\"റോഡുകള്‍ \"";
 "download_wikipedia_maps" = "വിക്കിപീഡിയ";
 "shared_string_hillshade" = "Hillshade";
-"res_slope" = "ചരിവ്";
+"shared_string_slope" = "ചരിവ്";
 "download_regular_maps" = "സാധാരണ ഭൂപടം";
 
 "select_language" = "Select language";
@@ -1749,7 +1749,7 @@
 "public_transport_try_change_settings" = "ക്രമീകരണങ്ങൾ മാറ്റി ശ്രമിക്കുക.";
 
 "shared_string_total" = "മൊത്തം";
-"walk" = "നടക്കുക";
+"shared_string_walk" = "നടക്കുക";
 "board_at" = "Board at";
 "exit_at" = "പുറത്തേക്ക് എത്തുക";
 "by_transport_type" = "By %@";
@@ -1763,7 +1763,7 @@
 "create_new_trip" = "Create new track";
 "editing_waypoints" = "Editing waypoints";
 "select_wpt_on_map" = "Select point on map to add to the track";
-"gpx_rename_q" = "Rename track";
+"rename_track" = "Rename track";
 "gpx_enter_new_name" = "Please enter new name for the track";
 "map_coords" = "Map: Lat %.5f Lon %.5f";
 "shared_string_gpx_points" = "പോയിന്റുകള്‍";
@@ -1877,7 +1877,7 @@
 "search_categories" = "വിഭാഗങ്ങള്‍";
 "items_selected" = "%d selected";
 
-"wiki_sheet_title" = "വിക്കിപ്പീഡിയ ലേഖനം എങ്ങനെ തുറക്കാം\?";
+"how_to_open_wiki_title" = "വിക്കിപ്പീഡിയ ലേഖനം എങ്ങനെ തുറക്കാം\?";
 "download_wiki_data" = "Download Wikipedia data for %@";
 "open_in_browser_wiki" = "\"പൂര്‍ണ്ണ ലേഖനം ഓണ്‍ലൈനില്‍ വായിക്കുക \"";
 "explore_wikipedia_offline" = "Explore Wikipedia offline.";
@@ -2417,7 +2417,7 @@
 "private_access_routing_req" = "നിങ്ങളുടെ ലക്ഷ്യസ്ഥാനം പൊതുസ്ഥലമല്ല. ഈ യാത്രയില്‍ സ്വകാര്യ വഴികളില്‍ പ്രവേശിക്കാമോ\?";
 "cubic_m" = "m³";
 "debugging_and_development" = "ഓഎസ്എം ആന്റ് വികസനം";
-"shared_string_start" = "തുടക്കം";
+"shared_string_control_start" = "തുടക്കം";
 "altitude_ascent" = "കയറ്റം";
 "restore_purchases" = "വാങ്ങലുകൾ പുനഃസ്ഥാപിക്കുക";
 "product_desc_ext_development" = "\"റൂട്ടിംഗ്, സ്ക്രീൻ റെൻഡറിംഗ് പ്രകടനം, അല്ലെങ്കിൽ വോയ്സ് പ്രോംപ്റ്റിംഗ് എന്നിവ പരിശോധിക്കുന്നതിനോ മെച്ചപ്പെടുത്തുന്നതിനോ ഉള്ള ഡെവലപ്മെന്റ്, ഡീബഗ്ഗിംഗ് ഫീച്ചറുകൾക്കായുള്ള ക്രമീകരണങ്ങള്‍ കാണിക്കുന്ന പ്ലഗിൻ  . ഈ ക്രമീകരണങ്ങൾ ഡെവലപ്പർമാർക്ക് ഉദ്ദേശിച്ചതും പൊതു ഉപയോക്താവിനായി ആവശ്യമില്ലാത്തതുമാണ്.\"";

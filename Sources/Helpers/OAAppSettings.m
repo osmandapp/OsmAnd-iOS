@@ -908,7 +908,7 @@
     switch (gst)
     {
         case EOAGradientScaleTypeSpeed:
-            return OALocalizedString(@"gpx_speed");
+            return OALocalizedString(@"shared_string_speed");
         case EOAGradientScaleTypeAltitude:
             return OALocalizedString(@"map_widget_altitude");
         case EOAGradientScaleTypeSlope:

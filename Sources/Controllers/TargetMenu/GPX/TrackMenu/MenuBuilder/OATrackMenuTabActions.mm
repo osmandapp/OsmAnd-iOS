@@ -120,7 +120,7 @@
             kTableKey: @"change_rename",
             kCellType: [OATitleIconRoundCell getCellIdentifier],
             kCellRightIconName: @"ic_custom_edit",
-            kCellTitle: OALocalizedString(@"gpx_rename_q")
+            kCellTitle: OALocalizedString(@"rename_track")
     }];
     [changeSectionData.subjects addObject:renameCellData];
 

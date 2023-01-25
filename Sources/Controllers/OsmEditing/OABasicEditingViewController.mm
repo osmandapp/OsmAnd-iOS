@@ -156,7 +156,7 @@ static const NSInteger _contactInfoSectionCount = 5;
 - (void) setupView
 {
     _poiData = _dataProvider.getData;
-    _poiNameCell = [self getInputCellWithHint:OALocalizedString(@"fav_name")
+    _poiNameCell = [self getInputCellWithHint:OALocalizedString(@"shared_string_name")
                                          text:[_poiData getTag:[OAOSMSettings getOSMKey:NAME]] isFloating:NO tag:-1];
     [self populatePoiSection];
     [self populateOpeningHours];
@@ -328,7 +328,7 @@ static const NSInteger _contactInfoSectionCount = 5;
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     if (section == _nameSectionIndex)
-        return OALocalizedString(@"fav_name");
+        return OALocalizedString(@"shared_string_name");
     else if (section == _poiSectionIndex)
         return OALocalizedString(@"poi_category_and_type");
     else if (section == _hoursSectionIndex)

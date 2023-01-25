@@ -578,7 +578,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (NSString*) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return section == kZoomSection ? OALocalizedString(@"res_zoom_levels") : @"";
+    return section == kZoomSection ? OALocalizedString(@"shared_string_zoom_levels") : @"";
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section

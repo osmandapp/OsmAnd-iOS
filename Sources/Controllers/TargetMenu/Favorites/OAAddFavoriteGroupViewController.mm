@@ -72,7 +72,7 @@
     NSMutableArray *data = [NSMutableArray new];
     [data addObject:@[
         @{
-            @"header" : OALocalizedString(@"group_name"),
+            @"header" : OALocalizedString(@"favorite_group_name"),
             @"footer" : @"",
             @"type" : [OAInputTableViewCell getCellIdentifier],
             @"title" : @""
@@ -80,7 +80,7 @@
     ]];
     [data addObject:@[
         @{
-            @"header" : OALocalizedString(@"default_color"),
+            @"header" : OALocalizedString(@"access_default_color"),
             @"footer" : OALocalizedString(@"default_color_descr"),
             @"type" : [OAColorsTableViewCell getCellIdentifier],
             @"title" : OALocalizedString(@"shared_string_color"),

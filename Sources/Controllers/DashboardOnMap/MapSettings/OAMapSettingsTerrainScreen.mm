@@ -220,7 +220,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     [sectionArr addObject:@{}];
     [sectionArr addObject:@{}];
     [sectionArr addObject:@{
-        @"header" : OALocalizedString(@"res_zoom_levels"),
+        @"header" : OALocalizedString(@"shared_string_zoom_levels"),
         @"footer" : OALocalizedString(@"map_settings_zoom_level_description")
     }];
     if (terrainType == EOATerrainTypeSlope)

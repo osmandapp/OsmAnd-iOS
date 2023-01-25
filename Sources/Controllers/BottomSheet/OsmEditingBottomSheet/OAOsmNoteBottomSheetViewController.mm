@@ -144,7 +144,7 @@
         [arr addObject:@{
                          @"type" : [OASwitchTableViewCell getCellIdentifier],
                          @"name" : @"upload_anonymously",
-                         @"title" : OALocalizedString(@"osm_note_upload_anonymously"),
+                         @"title" : OALocalizedString(@"upload_anonymously"),
                          @"value" : @(_uploadAnonymously)
                          }];
         
@@ -170,7 +170,7 @@
 {
     NSString *title = OALocalizedString(@"osm_note_create");
     if (_screenType == TYPE_CLOSE)
-        title = OALocalizedString(@"osm_note_close");
+        title = OALocalizedString(@"osm_edit_close_note");
     else if (_screenType == TYPE_REOPEN)
         title = OALocalizedString(@"osm_note_reopen_title");
     else if (_screenType == TYPE_MODIFY)

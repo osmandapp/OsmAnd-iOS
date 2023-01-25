@@ -74,7 +74,7 @@
 "shared_string_road" = "Vei";
 "avoid_roads_msg" = "You can trigger an alternative route by selecting roads to avoid";
 "shared_string_go" = "Start";
-"shared_string_info" = "Info";
+"info_button" = "Info";
 "simulate_your_location" = "Simuler din posisjon";
 "simulate_navigation" = "Simuler navigering";
 "simulate_routing_descr" = "Simulate your position using a calculated route";
@@ -357,13 +357,13 @@
 "shared_string_and" = "og";
 "shared_string_edit" = "Rediger";
 "shared_string_modify" = "Modify";
-"shared_string_later" = "Senere";
+"first_time_continue" = "Senere";
 "shared_string_of" = "of";
 "shared_string_all" = "Alle";
 "shared_string_from" = "fra";
 "shared_string_time" = "Tid";
 "time_of_day" = "Tid på dagen";
-"shared_string_distance" = "Distanse";
+"map_widget_trip_recording_distance" = "Distanse";
 "shared_string_retry" = "Prøv igjen";
 "shared_string_enabled" = "Aktivert";
 "shared_string_start_date" = "Start date";
@@ -382,7 +382,7 @@
 // Favorites
 "shared_string_color" = "Farge";
 "fav_colors" = "Colors";
-"fav_name" = "Navn";
+"shared_string_name" = "Navn";
 "fav_group" = "Group";
 "shared_string_groups" = "Grupper";
 "favorite" = "Favoritt";
@@ -437,7 +437,7 @@
 "gpx_no_tracks" = "There are no trips";
 "gpx_remove" = "Remove trip?";
 "shared_string_statistics" = "Statistikk";
-"gpx_route" = "Rute";
+"layer_route" = "Rute";
 "gpx_route_time" = "Route time";
 "gpx_uphldownhl" = "Uphills/Downhills";
 "map_widget_average_speed" = "Gjennomsnittsfart";
@@ -469,7 +469,7 @@
 "track_during_nav_descr" = "A trip is automatically saved during navigation";
 "gpx_distance_points" = "Distance (points)";
 "gpx_max_speed" = "Max speed";
-"gpx_speed" = "Hastighet";
+"shared_string_speed" = "Hastighet";
 "shared_string_slope" = "Bakkehelning";
 // Map settings
 "rendering_value_browse_map_name" = "Se gjennom kart";
@@ -504,7 +504,7 @@
 "sett_km" = "Kilometers";
 "sett_ml" = "Miles";
 "sett_zoom" = "Zoom button";
-"sett_show" = "Vis";
+"recording_context_menu_show" = "Vis";
 "sett_notshow" = "Don't show";
 "sett_deg" = "Grader";
 "sett_deg_min" = "Degrees and minutes";
@@ -623,7 +623,7 @@
 "osm_upload_failed_title" = "Upload failed";
 "osm_upload_failed_descr" = "Please check your login details and Internet connection and try again.";
 "exit_without_saving" = "Avslutte utenå lagre\?";
-"osm_editing_lost_changes_descr" = "Ulagrede endringer vil gå tapt. Fortsette\?";
+"unsaved_changes_will_be_lost" = "Ulagrede endringer vil gå tapt. Fortsette\?";
 "osm_upload_no_internet" = "Please check your Internet connection and try again.";
 "osm_delete_confirmation_descr" = "Are you sure you want to delete this POI?";
 "osm_succsessful_uploads" = "Successful";
@@ -650,14 +650,14 @@
 "website" = "Nettsted";
 "osm_add_place" = "Add place";
 "osm_modify_place" = "Modify place";
-"osm_poi_delete_title" = "Slett interessepunkt";
+"poi_remove_title" = "Slett interessepunkt";
 "osm_edit_modified_poi" = "Modifisert OSM-interessepunkt";
 "osm_edit_deleted_poi" = "Slettet OSM-interessepunkt";
 "osm_edit_created_poi" = "Opprettet OSM-interessepunkt";
 "osm_note_created" = "Opprettet OSM-notat";
 "osm_note_create" = "Create OSM Note";
 "upload_osm_note" = "Last opp OSM-notat";
-"osm_note_close" = "Lukk OSM-notat";
+"osm_edit_close_note" = "Lukk OSM-notat";
 "osm_edit_comment_note" = "Kommenter OSM-notat";
 "osm_note_reopen_title" = "Reopen OSM Note";
 "osm_confirm_bulk_delete" = "Delete %d edits?";
@@ -668,9 +668,9 @@
 "osm_value" = "Value";
 "osm_note_upload_info" = "You can upload the note anonymously or by using your OpenStreetMap profile.";
 "osm_note_upload_immediately" = "Upload immediately";
-"osm_note_upload_anonymously" = "Last opp anonymt";
+"upload_anonymously" = "Last opp anonymt";
 "osm_note_empty_message" = "Please specify the message for this note.";
-"osm_note_comment" = "Kommentar";
+"poi_dialog_comment" = "Kommentar";
 "poi_dialog_reopen" = "Gjenåpne";
 "osm_edits_offline_layer" = "OSM Edits/Notes (offline)";
 "osm_notes_online_layer" = "OSM-notater (på nett)";
@@ -717,10 +717,10 @@
 "no_overlay" = "Ingen overlegg";
 "quick_action_add_overlay" = "Legg til overlegg";
 "quick_action_no_underlay" = "Ingen underlag";
-"quick_action_add_underlay" = "Legg til underlag";
+"quick_action_map_underlay_action" = "Legg til underlag";
 "quick_action_list_descr" = "Tapping this action button pages through the list below";
 "quick_action_map_overlay_title" = "Overleggskart";
-"map_underlays" = "Kartunderlag";
+"quick_action_map_underlay_title" = "Kartunderlag";
 "vector_data" = "Offline vektorkart";
 "quick_action_map_source_action" = "Legg til kartkilde";
 "add_map_style" = "Add map style";
@@ -728,7 +728,7 @@
 "quick_action_new_action" = "Legg til handling";
 "quick_action_add_create_items" = "Opprett elementer";
 "configure_map" = "Kartinnstilling";
-"add_map_marker" = "Legg til kartmarkør";
+"quick_action_add_marker" = "Legg til kartmarkør";
 "select_map_marker" = "Velg kartmarkør";
 "add_gpx_waypoint" = "Legg til GPX-rutepunkt";
 "toggle_fav" = "Vis/skjul favoritter";
@@ -754,7 +754,7 @@
 "add_home" = "Legg til bosted";
 "add_work" = "Legg til arbeidssted";
 "favorite_home_category" = "Hjem";
-"work_pt" = "Arbeid";
+"work_button" = "Arbeid";
 "quick_action_add_first_intermediate" = "Legg til første mellomliggende punkt";
 "toggle_auto_zoom" = "Auto zoom on/off";
 "auto_zoom_on" = "Auto zoom on";
@@ -824,7 +824,7 @@
 "poi_context_menu_modify_osm_change" = "Modifiser OSM-endring";
 "context_menu_item_open_note" = "Åpne OSM-notat";
 "edit_osm_note" = "Edit OSM Note";
-"osm_alert_title" = "Send inn";
+"shared_string_commit" = "Send inn";
 "osb_comment_dialog_message" = "Melding";
 "osn_add_dialog_title" = "Opprett notat";
 "modify_poi" = "Modify the POI information";
@@ -834,13 +834,13 @@
 "pickup_car_at" = "Pickup the car at";
 "add_notification_calendar" = "Add notification to Calendar";
 "parking_place_limited" = "Parkeringstid begrenset til";
-"time_left" = "igjen";
+"osmand_parking_time_left" = "igjen";
 "osmand_parking_overdue" = "utløpt";
 "cannot_add_marker" = "Cannot add Parking";
 "cannot_add_marker_desc" = "Please remove one direction at least and retry";
 "cannot_add_destination" = "Cannot add Direction";
 // Units
-"units_mi" = "mi";
+"mile" = "mi";
 "units_yd" = "yd";
 "foot" = "ft";
 "units_km_h" = "km/t";
@@ -856,10 +856,10 @@
 "help_navigation_descr" = "How to set up navigation";
 "faq_item" = "Ofte stilte spørsmål";
 "help_faq_descr" = "Ofte stilte spørsmål";
-"help_features" = "Funksjoner";
+"features_menu_group" = "Funksjoner";
 "help_map_viewing" = "Kartvisning";
 "help_search" = "Map search";
-"help_trip_planning" = "Turplanlegging";
+"planning_trip_item" = "Turplanlegging";
 "map_legend" = "Kartforklaring";
 "other_location" = "Annet";
 "help_install_and_troubleshoot" = "Installering og problemløsing";
@@ -900,7 +900,7 @@
 "index_name_asia" = "Asia";
 "index_name_oceania" = "Australia og Oseania";
 "index_name_central_america" = "Mellom-Amerika";
-"region_europe" = "Europa";
+"index_name_europe" = "Europa";
 "index_name_north_america" = "Nord-Amerika";
 "region_russia" = "Russland";
 "index_name_south_america" = "Sør-Amerika";
@@ -965,7 +965,7 @@
 "download_srtm_maps" = "Koter";
 "product_desc_srtm" = "Display of contour lines";
 "product_desc_ext_srtm" = "This plugin provides contour lines and hillshade, which can be displayed in OsmAnd offline maps. Contour lines provide the information about heights of the area while hillshade is their visualization. See the names of mountain peaks and specific features of terrain using this plugin.\n\nThe global data (between 70 degrees north and 70 degrees south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA's Earth Observing System. ASTER is a cooperative effort between NASA, Japan's Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
-"product_title_wikivoyage" = "Reiseguider";
+"wikivoyage_travel_guide" = "Reiseguider";
 "start_editing_card_image_text" = "Den frie verdensomspennende reiseguiden alle kan redigere.";
 "wikivoyage_travel_guide_descr" = "Guider til de mest spennende stedene, inne i OsmAnd, utenå ha internettforbindelse.";
 "product_desc_sea_depth_contours" = "Sea depth contour lines and seamarks";
@@ -978,7 +978,7 @@
 "add_as" = "Add as";
 "make_call" = "Make a call";
 "enter_description" = "Enter description";
-"description" = "Beskrivelse";
+"shared_string_description" = "Beskrivelse";
 "enter_fav_name" = "Oppfør favorittnavn";
 "res_installing" = "Installing…";
 "res_roads" = "Veier";
@@ -1016,7 +1016,7 @@
 "create_new_trip" = "Create new trip";
 "editing_waypoints" = "Editing waypoints";
 "select_wpt_on_map" = "Select point on map to add to the trip";
-"gpx_rename_q" = "Gi spor nytt navn";
+"rename_track" = "Gi spor nytt navn";
 "gpx_enter_new_name" = "Please enter new name for the trip";
 "gpx_cancel_route_q" = "Do you want to cancel this route?";
 "local_indexes_cat_backup" = "Deaktivert";
@@ -1198,7 +1198,7 @@
 "sett_deg180" = "180 grader";
 "sett_deg360" = "360 grader";
 "download_select_map_types" = "Andre kart";
-"gpx_alt_range" = "Høydeintervall";
+"altitude_range" = "Høydeintervall";
 "show_from_zoom_level" = "Vis fra og med forstørrelsesnivå";
 "gpx_avg_altitude" = "Gjennomsnittshøyde";
 "gpx_ascent" = "Stigning";
@@ -1502,18 +1502,18 @@
 "app_mode_wagon" = "Vogn";
 "app_mode_subway" = "T-bane";
 "app_mode_shuttle_bus" = "Skyttelbuss";
-"region_antarctica" = "Antarktis";
+"index_name_antarctica" = "Antarktis";
 "app_mode_car" = "Kjøring";
 "app_mode_pickup_truck" = "Pickup";
 "app_mode_helicopter" = "Helikopter";
 "app_mode_horse" = "Hest";
-"res_zoom_levels" = "Forstørrelsesnivåer";
-"map_settings_color_scheme" = "Fargevalg";
-"wiki_sheet_title" = "Hvordanåpne Wikipedia-artikler\?";
+"shared_string_zoom_levels" = "Forstørrelsesnivåer";
+"srtm_color_scheme" = "Fargevalg";
+"how_to_open_wiki_title" = "Hvordanåpne Wikipedia-artikler\?";
 "map_transparency" = "Gjennomsiktighet for basiskart";
 "app_mode_skiing" = "Stå på ski";
 "open_in_browser_wiki" = "Åpne artikkel på nettet";
-"shared_string_warning" = "Varsel";
+"osmand_parking_warning" = "Varsel";
 "app_mode_monowheel" = "Monohjul";
 "context_menu_points_of_group" = "Alle punkter i gruppen";
 "app_mode_osm" = "OSM";
@@ -1629,7 +1629,7 @@
 "base_profile_descr_boat" = "Skip, roing, seiling";
 "select_distance_route_will_recalc" = "Velg avstanden som skal til forå beregne ruten på nytt.";
 "base_profile_descr_aircraft" = "Fly, glidefly";
-"res_slope" = "Bakkehelning";
+"shared_string_slope" = "Bakkehelning";
 "replace_all_desc" = "Nåværende elementer vil erstattes med elementer fra filen";
 "shared_string_quick_actions" = "Hurtighandlinger";
 "arrived_at_destination" = "Du har ankommet.";
@@ -1664,12 +1664,12 @@
 "quick_action_remove_next_destination_descr" = "Nåværende målpunkt på ruten vil slettes. Hvis det er målet, vil navigasjonen stoppe.";
 "base_profile_descr_pedestrian" = "Gåing, vandring, løping";
 "reset_to_default" = "Tilbakestill til forvalg";
-"position_icon_at_rest" = "Posisjonsikon i hviletilstand";
+"select_map_icon" = "Posisjonsikon i hviletilstand";
 "voice_announces" = "Talemeldinger";
 "map_look_descr" = "Kartutseende";
 "profile_type_user_string" = "Brukerprofil";
 "shared_string_routing" = "Ruteplanlegging";
-"save_new_track" = "Lagre som nytt spor";
+"save_as_new_track" = "Lagre som nytt spor";
 "weight_limit_description" = "Angi kjøretøyvekt, noen rutebegrensninger for tunge kjøretøy kan tilkomme.";
 "profile_type_base_string" = "Grunnprofil";
 "osm_notes" = "OSM-notater";
@@ -1685,9 +1685,9 @@
 "shared_string_continue" = "Fortsett";
 "exit_at" = "Gå av på";
 "create_profile_descr" = "Baser din egendefinerte profil på en av de forvalgte programprofilene, dette definerer grunnleggende oppsett, som forvalg synliget for miniprogrammer, enheter for hastighet og distanse. Dette er de forvalgte programprofilene, sammen med eksempler på egentilpassede profiler de kan utvides til:";
-"ui_customization_descr" = "Skuffeelementer, lokalmeny";
+"ui_customization_short_descr" = "Skuffeelementer, lokalmeny";
 "routing_profile_straightline" = "Rett linje";
-"enter_profile_name" = "Skriv inn profilnavn";
+"profile_alert_need_profile_name_title" = "Skriv inn profilnavn";
 "shared_string_poi_types" = "Interessepunkttyper";
 "reverse_route" = "Snu rute";
 "importing_from" = "Importerer data fra %@";
@@ -1700,7 +1700,7 @@
 "quick_action_switch_profile_descr" = "Handlingsknappen veksler mellom valgte profiler.";
 "shared_string_legend" = "Tegnforklaring";
 "vessel_width_limit_description" = "Sett skipsbredde forå unngå smale broer";
-"walk" = "Gå";
+"shared_string_walk" = "Gå";
 "shared_string_settings" = "Innstillinger";
 "next_segment" = "Neste segment";
 "avoid_road" = "Unngå vei";
@@ -1713,11 +1713,11 @@
 "add_point" = "Legg til punkt";
 "subscription_osmandlive_item" = "Abonnement - OsmAnd Live";
 "application_profiles" = "Programprofiler";
-"osmand_routing" = "OsmAnd-ruting";
+"osmand_default_routing" = "OsmAnd-ruting";
 "select_navigation_icon" = "Posisjonsikon under bevegelse";
 "quick_action_mapillary_show" = "Vis Mapillary";
 "import_duplicates_title" = "Noen elementer finnes allerede";
-"units_t" = "t";
+"metric_ton" = "t";
 "layer_amenity_label" = "Punktpåskrifter (interessepunkter, favoritter)";
 "accessibility_announce" = "Kunngjør";
 
@@ -1794,7 +1794,7 @@
 "settings_app_theme" = "Drakt";
 "gpx_export_failed" = "Kunne ikke lagre opprettet rute";
 "tracks_on_map" = "Spor på kartet";
-"visible" = "Synlig";
+"shared_string_visible" = "Synlig";
 "only_manually" = "Kun manuelt";
 "repeat_after" = "Gjenta etter";
 "join_segments" = "Bind sammen segmenter";
@@ -1825,7 +1825,7 @@
 "amenity_type_emergency" = "Nødsituasjon";
 "copied_to_clipboard" = "Kopiert til utklippstavle";
 "shared_string_icon" = "Ikon";
-"default_color" = "Standardfarge";
+"access_default_color" = "Standardfarge";
 "rearrange_categories" = "Omorganiser kategorier";
 "icon_group_travel" = "Reise";
 "select_group" = "Velg gruppe";
@@ -1833,7 +1833,7 @@
 "shared_string_octagon" = "Oktogon";
 "new_plugin_added" = "Nytt programtillegg lagt til";
 "shared_string_gpx_points" = "Punkter";
-"group_name" = "Gruppenavn";
+"favorite_group_name" = "Gruppenavn";
 "add_custom_category" = "Legg til egendefinert kategori";
 "download_regular_maps" = "Standardkart";
 "favorite_places_category" = "Steder";
@@ -1842,7 +1842,7 @@
 "replace_favorite_confirmation" = "Er du sikker på at du vil erstatte favoritt %@\?";
 "segments_count" = "Segment %d";
 "search_history" = "Søkehistorikk";
-"circle" = "Sirkel";
+"shared_string_circle" = "Sirkel";
 "restart" = "Start på ny";
 "settings_item_read_error" = "Kunne ikke lese %@.";
 "change_position_descr" = "Flytt kartet for å endre objektets posisjon";
@@ -2044,7 +2044,7 @@
 "backup_error_no_valid_subscription" = "Mangler gyldig abonnement";
 "lang_ko" = "Koreansk";
 "add_description" = "Legg til beskrivelse";
-"cloud_view_conflicts" = "Vis konflikter";
+"backup_view_conflicts" = "Vis konflikter";
 "amenity_type_education" = "Utdanning";
 "user_login" = "Logg inn";
 "lang_min" = "Minangkabau";
@@ -2166,7 +2166,7 @@
 "lang_th" = "Thai";
 "restore_from_file" = "Gjenopprett fra fil";
 "lang_kn" = "Kannada";
-"cloud_welcome_back" = "Velkommen tilbake.";
+"backup_welcome_back" = "Velkommen tilbake.";
 "backup_error_subscription_was_used" = "Abonnement eller kupong brukt av en annen konto %@";
 "lang_an" = "Aragonesisk";
 "lang_et" = "Estisk";
@@ -2185,7 +2185,7 @@
 "routeInfo_horse_scale_description" = "Tegn stier i henhold til vanskelighetsgrad på rideveier";
 "routeInfo_horse_scale_name" = "Vanskelighetsgrad for rideveier";
 "routing_attr_allow_private_for_truck_name" = "Tillat privat adgang (lastebil)";
-"shared_string_start" = "Start";
+"shared_string_control_start" = "Start";
 "osmand_maps_plus_tagline" = "Få utvidede funksjoner";
 "purchases_feature_desc_hourly_map_updates" = "Få tilgang til hyppige kartoppdateringer. Timevise, daglige, eller ukentlige oppdateringer. Oppdateringer lastes ned i rekkefølge, kun for endret område.";
 "explore_osmnad_plans_to_find_suitable" = "Utforsk OsmAnd abonnementer forå finne et som passer deg.";
@@ -2193,7 +2193,7 @@
 "purchases_feature_desc_pro_widgets" = "Få tilgang til OsmAnd Pro-funksjoner. Rutefargelegging med mer.";
 "simulation_preview_mode_desc" = "Simuleringen går fortest på rette strekk, og bruker lenger tid på kryss.";
 "shared_string_purchased" = "Kjøpt";
-"map_widget_speed" = "Hastighet";
+"shared_string_speed" = "Hastighet";
 "purchases_feature_desc_wikipedia" = "Utforsk Wikipedia frakoblet. Artikler inndelt etter land og regioner og tilgjengelig på alle språk.";
 "osm_live_banner_desc" = "Få ubegrensede kartnedlastinger, som legger til ukentlige, daglige, og selv timevise oppdateringer.";
 "wikipedia_and_wikivoyage_offline" = "Frakoblet Wikipedia og Wikivoyage";

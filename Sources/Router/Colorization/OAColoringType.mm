@@ -77,7 +77,7 @@ static NSArray<OAColoringType *> * TRACK_COLORING_TYPES = @[OAColoringType.TRACK
 {
     if (!SPEED)
     {
-        SPEED = [[OAColoringType alloc] initWithName:@"speed" title:OALocalizedString(@"gpx_speed") iconName:@"ic_action_max_speed"];
+        SPEED = [[OAColoringType alloc] initWithName:@"speed" title:OALocalizedString(@"shared_string_speed") iconName:@"ic_action_max_speed"];
     }
     return SPEED;
 }

@@ -178,7 +178,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
             [existingBackupSection addRowFromDictionary:@{
                 kCellTypeKey: OALargeImageTitleDescrTableViewCell.getCellIdentifier,
                 kCellKeyKey: @"existingOnlineBackup",
-                kCellTitleKey: OALocalizedString(@"cloud_welcome_back"),
+                kCellTitleKey: OALocalizedString(@"backup_welcome_back"),
                 kCellDescrKey: OALocalizedString(@"osmand_cloud_authorize_descr"),
                 kCellIconNameKey: @"ic_action_cloud_smile_face_colored"
             }];

@@ -714,7 +714,7 @@
 - (NSString *)name
 {
     if ([self.symbol isEqualToString:NSUnitPressure.hectopascals.symbol])
-        return OALocalizedString(@"weather_pressure_unit_hpa");
+        return OALocalizedString(@"weather_pressure_hectopascals");
     else if ([self.symbol isEqualToString:NSUnitPressure.millimetersOfMercury.symbol])
         return OALocalizedString(@"weather_pressure_millimeters_of_mercury");
     else if ([self.symbol isEqualToString:NSUnitPressure.inchesOfMercury.symbol])

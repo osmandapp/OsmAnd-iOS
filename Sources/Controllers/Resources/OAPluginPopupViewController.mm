@@ -201,7 +201,7 @@ static NSMutableArray *activePopups;
     
     title = OALocalizedString(@"map_downloaded");
     descText = [NSString stringWithFormat:OALocalizedString(@"show_region_on_map_desc"), region.name];
-    cancelButtonName = OALocalizedString(@"shared_string_later");
+    cancelButtonName = OALocalizedString(@"first_time_continue");
     okButtonName = OALocalizedString(@"show_region_on_map_go");
     
     [popup.okButton addTarget:popup action:@selector(showOnMap) forControlEvents:UIControlEventTouchUpInside];
@@ -442,7 +442,7 @@ static NSMutableArray *activePopups;
             title = OALocalizedString(@"plugin_popup_wiki_title");
             descText = OALocalizedString(@"plugin_popup_wiki_desc");
             okButtonName = OALocalizedString(@"go_to_downloads");
-            cancelButtonName = OALocalizedString(@"shared_string_later");
+            cancelButtonName = OALocalizedString(@"first_time_continue");
             
             [popup.okButton addTarget:popup action:@selector(goToDownloads) forControlEvents:UIControlEventTouchUpInside];
         }
@@ -456,7 +456,7 @@ static NSMutableArray *activePopups;
             title = OALocalizedString(@"plugin_popup_srtm_title");
             descText = OALocalizedString(@"plugin_popup_srtm_desc");
             okButtonName = OALocalizedString(@"go_to_downloads");
-            cancelButtonName = OALocalizedString(@"shared_string_later");
+            cancelButtonName = OALocalizedString(@"first_time_continue");
             
             [popup.okButton addTarget:popup action:@selector(goToDownloads) forControlEvents:UIControlEventTouchUpInside];
         }
@@ -472,7 +472,7 @@ static NSMutableArray *activePopups;
                 
                 title = OALocalizedString(@"plugin_popup_nautical_title");
                 descText = OALocalizedString(@"plugin_popup_nautical_desc");
-                cancelButtonName = OALocalizedString(@"shared_string_later");
+                cancelButtonName = OALocalizedString(@"first_time_continue");
                 
                 [popup.okButton addTarget:popup action:@selector(downloadNautical) forControlEvents:UIControlEventTouchUpInside];
                 

@@ -20,7 +20,7 @@ import Charts.Swift
             case .ALTITUDE:
                 return OAUtilities.getLocalizedString("map_widget_altitude");
             case .SPEED:
-                return OAUtilities.getLocalizedString("gpx_speed");
+                return OAUtilities.getLocalizedString("shared_string_speed");
             case .SLOPE:
                 return OAUtilities.getLocalizedString("shared_string_slope");
         }
@@ -46,7 +46,7 @@ import Charts.Swift
     public func getName() -> String {
         switch self {
         case .DISTANCE:
-            return OAUtilities.getLocalizedString("shared_string_distance");
+            return OAUtilities.getLocalizedString("map_widget_trip_recording_distance");
         case .TIME:
             return OAUtilities.getLocalizedString("shared_string_time");
         case .TIMEOFDAY:
@@ -830,7 +830,7 @@ import Charts.Swift
             mainUnitStr = OAUtilities.getLocalizedString("nm")
             mainUnitInMeters = GpxUIHelper.METERS_IN_ONE_NAUTICALMILE
         } else {
-            mainUnitStr = OAUtilities.getLocalizedString("units_mi")
+            mainUnitStr = OAUtilities.getLocalizedString("mile")
             mainUnitInMeters = GpxUIHelper.METERS_IN_ONE_MILE
         }
         if (meters > 9.99 * mainUnitInMeters) {

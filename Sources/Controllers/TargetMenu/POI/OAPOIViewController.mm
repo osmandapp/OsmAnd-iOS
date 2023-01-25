@@ -712,7 +712,7 @@ static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsap
         else
             formattedValue = [OAOsmAndFormatter getFormattedDistance:valueAsFloatInMeters];
 
-        formattedPrefix = [self formatPrefix:prefix units:OALocalizedString(@"shared_string_distance")];
+        formattedPrefix = [self formatPrefix:prefix units:OALocalizedString(@"map_widget_trip_recording_distance")];
     }
     else if ([key isEqualToString:@"capacity"] && [self isNumericValue:value] && ([amenity.subType isEqualToString:@"water_tower"] || [amenity.subType isEqualToString:@"storage_tank"]))
     {
@@ -720,7 +720,7 @@ static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsap
     }
     else if ([key isEqualToString:@"maxweight"] && [self isNumericValue:value])
     {
-        formattedValue = [NSString stringWithFormat:@"%@ %@", value, OALocalizedString(@"units_t")];
+        formattedValue = [NSString stringWithFormat:@"%@ %@", value, OALocalizedString(@"metric_ton")];
     }
     else if (([key isEqualToString:@"students"] || [key isEqualToString:@"spots"] || [key isEqualToString:@"seats"]) && [self isNumericValue:value])
     {

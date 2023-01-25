@@ -227,7 +227,7 @@
                             @"string_value": [OAOsmAndFormatter getFormattedDistance:totalDistance],
                             @"int_value": @(EOARouteStatisticsModeAltitude)
                     },
-                    kCellTitle: OALocalizedString(@"shared_string_distance"),
+                    kCellTitle: OALocalizedString(@"map_widget_trip_recording_distance"),
                     kCellRightIconName: @"ic_small_distance"
             }]];
         }
@@ -257,7 +257,7 @@
                                                                         [OAOsmAndFormatter getFormattedAlt:analysis.maxElevation]],
                             @"int_value": @(EOARouteStatisticsModeAltitude)
                     },
-                    kCellTitle: OALocalizedString(@"gpx_alt_range"),
+                    kCellTitle: OALocalizedString(@"altitude_range"),
                     kCellRightIconName: @"ic_small_altitude_range"
             }]];
         }
@@ -318,7 +318,7 @@
                        options:UIViewAnimationOptionTransitionCrossDissolve | UIViewAnimationOptionAllowUserInteraction
                     animations:^(void) {
                         [self.showHideButton setTitle:shownTrack
-                                        ? OALocalizedString(@"shared_string_hide") : OALocalizedString(@"sett_show")
+                                        ? OALocalizedString(@"shared_string_hide") : OALocalizedString(@"recording_context_menu_show")
                                              forState:UIControlStateNormal];
                         [self.showHideButton setImage:[UIImage templateImageNamed:shownTrack
                                         ? @"ic_custom_hide" : @"ic_custom_show"]

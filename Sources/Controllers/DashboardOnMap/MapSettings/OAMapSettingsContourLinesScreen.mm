@@ -281,7 +281,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         {
             [linesArr addObject:@{
                 @"type" : kCellTypeCollection,
-                @"title" : OALocalizedString(@"map_settings_color_scheme"),
+                @"title" : OALocalizedString(@"srtm_color_scheme"),
                 @"parameter" : param
             }];
         }

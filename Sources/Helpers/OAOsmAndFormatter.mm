@@ -18,7 +18,7 @@
 
 static NSString * const _unitsKm = OALocalizedString(@"units_km");
 static NSString * const _unitsM = OALocalizedString(@"units_m");
-static NSString * const _unitsMi = OALocalizedString(@"units_mi");
+static NSString * const _unitsMi = OALocalizedString(@"mile");
 static NSString * const _unitsYd = OALocalizedString(@"units_yd");
 static NSString * const _unitsFt = OALocalizedString(@"foot");
 static NSString * const _unitsNm = OALocalizedString(@"nm");

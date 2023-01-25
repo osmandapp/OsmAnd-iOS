@@ -73,7 +73,7 @@
                     @"key" : @"home"
               },
               @{
-                    @"title" : OALocalizedString(@"work_pt"),
+                    @"title" : OALocalizedString(@"work_button"),
                     @"descr" : workName ? workName : OALocalizedString(@"shared_string_add"),
                     @"img" : @"ic_custom_work",
                     @"key" : @"work"

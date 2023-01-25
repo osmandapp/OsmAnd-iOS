@@ -182,7 +182,7 @@
     NSString *poiName = [_poiData getTag:[OAOSMSettings getOSMKey:NAME]];
     
     NSArray *nameTypePair = @[
-                              [self getDictionary:[OADescrTitleCell getCellIdentifier] hint:OALocalizedString(@"fav_name") value:poiName image:nil],
+                              [self getDictionary:[OADescrTitleCell getCellIdentifier] hint:OALocalizedString(@"shared_string_name") value:poiName image:nil],
                               [self getDictionary:[OADescrTitleCell getCellIdentifier] hint:hint value:value image:nil]
                               ];
     [_fieldPairs addObject:nameTypePair];

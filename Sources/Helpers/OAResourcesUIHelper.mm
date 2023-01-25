@@ -73,7 +73,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         case OsmAndResourceType::HillshadeRegion:
             return OALocalizedString(@"shared_string_hillshade");
         case OsmAndResourceType::SlopeRegion:
-            return OALocalizedString(@"res_slope");
+            return OALocalizedString(@"shared_string_slope");
         case OsmAndResourceType::SqliteFile:
             return OALocalizedString(@"online_map");
         case OsmAndResourceType::WeatherForecast:

@@ -138,7 +138,7 @@ static const NSInteger groupCount = 5;
     [dataArr addObject:
      @{
        @"name" : @"help_trip_planning",
-       @"title" : OALocalizedString(@"help_trip_planning"),
+       @"title" : OALocalizedString(@"planning_trip_item"),
        @"type" : kLinkInternalType,
        @"html" : @"trip-planning"
        }];
@@ -444,7 +444,7 @@ static const NSInteger groupCount = 5;
     if (section == firstStepsIndex)
         return OALocalizedString(@"help_first_steps");
     else if (section == featuresIndex)
-        return OALocalizedString(@"help_features");
+        return OALocalizedString(@"features_menu_group");
     else if (section == pluginsIndex)
         return OALocalizedString(@"plugins_menu_group");
     else if (section == otherIndex)

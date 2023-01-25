@@ -281,7 +281,7 @@
     }];
     [profileMapAppearanceArr addObject:@{
         @"type" : [OALocationIconsTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"position_icon_at_rest"),
+        @"title" : OALocalizedString(@"select_map_icon"),
         @"description" : @"",
     }];
     [profileMapAppearanceArr addObject:@{

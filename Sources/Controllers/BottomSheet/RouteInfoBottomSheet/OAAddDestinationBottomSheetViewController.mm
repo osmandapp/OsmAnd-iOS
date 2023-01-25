@@ -97,7 +97,7 @@
     {
         OARTargetPoint *work = [_pointsHelper getWorkPoint];
         [arr addObject:@{
-            @"title" : OALocalizedString(@"work_pt"),
+            @"title" : OALocalizedString(@"work_button"),
             @"descr" : work.pointDescription.name,
             @"color" : UIColorFromRGB(color_primary_purple),
             @"img" : @"ic_custom_work",

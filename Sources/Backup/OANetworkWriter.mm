@@ -56,15 +56,14 @@
 - (void)write:(OASettingsItem *)item
 {
     NSString *error = nil;
-    NSTimeInterval uploadTime = round([NSDate date].timeIntervalSince1970 * 1000);
     NSString *fileName = [OABackupHelper getItemFileName:item];
     OASettingsItemWriter *itemWriter = item.getWriter;
     if (itemWriter != nil)
     {
         @try {
-            error = [self uploadEntry:itemWriter fileName:fileName uploadTime:uploadTime];
+            error = [self uploadEntry:itemWriter fileName:fileName];
             if (error == nil)
-                error = [self uploadItemInfo:item fileName:[fileName stringByAppendingPathExtension:OABackupHelper.INFO_EXT] uploadTime:uploadTime];
+                error = [self uploadItemInfo:item fileName:[fileName stringByAppendingPathExtension:OABackupHelper.INFO_EXT]];
         }
         @catch (NSException *e)
         {
@@ -73,11 +72,11 @@
     }
     else
     {
-        error = [self uploadItemInfo:item fileName:[fileName stringByAppendingPathExtension:OABackupHelper.INFO_EXT] uploadTime:uploadTime];
+        error = [self uploadItemInfo:item fileName:[fileName stringByAppendingPathExtension:OABackupHelper.INFO_EXT]];
     }
     if (_listener != nil)
     {
-        [_listener onItemUploadDone:item fileName:fileName uploadTime:uploadTime error:error];
+        [_listener onItemUploadDone:item fileName:fileName error:error];
     }
     if (error != nil)
     {
@@ -88,21 +87,20 @@
 
 - (NSString *) uploadEntry:(OASettingsItemWriter *)itemWriter
                   fileName:(NSString *)fileName
-                uploadTime:(NSTimeInterval)uploadTime
 {
     if ([itemWriter.item isKindOfClass:OAFileSettingsItem.class])
     {
-        return [self uploadDirWithFiles:itemWriter fileName:fileName uploadTime:uploadTime];
+        return [self uploadDirWithFiles:itemWriter fileName:fileName];
     }
     else
     {
         _item = itemWriter.item;
         _isDirListener = NO;
-        return [self uploadItemFile:itemWriter fileName:fileName listener:self uploadTime:uploadTime];
+        return [self uploadItemFile:itemWriter fileName:fileName listener:self];
     }
 }
 
-- (NSString *) uploadItemInfo:(OASettingsItem *)item fileName:(NSString *)fileName uploadTime:(NSTimeInterval)uploadTime
+- (NSString *) uploadItemInfo:(OASettingsItem *)item fileName:(NSString *)fileName
 {
     @try
     {
@@ -125,7 +123,7 @@
             {
                 _item = item;
                 _isDirListener = NO;
-                return [_backupHelper uploadFile:fileName type:[OASettingsItemType typeName:item.type] data:[NSData dataWithContentsOfFile:filePath.toNSString() options:NSDataReadingMappedAlways error:NULL] size:-1 uploadTime:uploadTime listener:self];
+                return [_backupHelper uploadFile:fileName type:[OASettingsItemType typeName:item.type] data:[NSData dataWithContentsOfFile:filePath.toNSString() options:NSDataReadingMappedAlways error:NULL] size:-1 lastModifiedTime:item.lastModifiedTime * 1000 listener:self];
             }
         }
         return nil;
@@ -139,14 +137,14 @@
 - (NSString *)uploadItemFile:(OASettingsItemWriter *)itemWriter
                     fileName:(NSString *)fileName
                     listener:(id<OAOnUploadFileListener>)listener
-                  uploadTime:(NSTimeInterval)uploadTime
 {
     if ([self isCancelled]) {
         @throw [NSException exceptionWithName:@"InterruptedIOException" reason:@"Network upload was cancelled" userInfo:nil];
     }
     else
     {
-        NSString *type = [OASettingsItemType typeName:itemWriter.item.type];
+        OASettingsItem *item = itemWriter.item;
+        NSString *type = [OASettingsItemType typeName:item.type];
         NSData *data = [[NSData alloc] init];
         NSInteger size = -1;
         [self onFileUploadStarted:type fileName:fileName work:0];
@@ -154,7 +152,7 @@
         {
             OASettingsItem *item = itemWriter.item;
             NSString *fileName = item.fileName;
-            if ([fileName hasSuffix:@"WorldMiniBasemap.obf"])
+            if ([fileName hasSuffix:kWorldMiniBasemapKey])
                 return nil;
             if (!fileName || fileName.length == 0)
                 fileName = item.defaultFileName;
@@ -171,7 +169,6 @@
         }
         else
         {
-            OASettingsItem *item = itemWriter.item;
             if ([item isKindOfClass:OAFileSettingsItem.class])
             {
                 OAFileSettingsItem *flItem = (OAFileSettingsItem *) item;
@@ -179,7 +176,7 @@
                 size = attrs.fileSize / 1024;
             }
         }
-        return [_backupHelper uploadFile:fileName type:type data:data size:(int) size uploadTime:uploadTime listener:self];
+        return [_backupHelper uploadFile:fileName type:type data:data size:(int) size lastModifiedTime:(item.lastModifiedTime * 1000) listener:self];
     }
 }
 
@@ -198,10 +195,11 @@
 
 - (NSString *)uploadDirWithFiles:(OASettingsItemWriter *)itemWriter
                         fileName:(NSString *)fileName
-                      uploadTime:(NSTimeInterval)uploadTime
 {
     OAFileSettingsItem *item = (OAFileSettingsItem *) itemWriter.item;
     NSArray<NSString *> *filesToUpload = [_backupHelper collectItemFilesForUpload:item];
+    if (filesToUpload.count == 0)
+        return @"No files to upload";
     long size = 0;
     NSFileManager *fileManager = NSFileManager.defaultManager;
     for (NSString *file in filesToUpload)
@@ -221,7 +219,7 @@
     {
         item.filePath = file;
         NSString *name = [OABackupHelper getFileItemName:file fileSettingsItem:item];
-        NSString *error = [self uploadItemFile:itemWriter fileName:name listener:self uploadTime:uploadTime];
+        NSString *error = [self uploadItemFile:itemWriter fileName:name listener:self];
         if (error != nil)
             return error;
     }

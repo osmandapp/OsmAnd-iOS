@@ -501,7 +501,7 @@ typedef enum : NSUInteger {
     }
     else if ([ext caseInsensitiveCompare:@"gpx"] == NSOrderedSame)
     {
-        if ([fileName isEqual:@"favorites.gpx"] || [fileName isEqual:@"favourites.gpx"])
+        if (([fileName hasPrefix:@"favourites"] || [fileName hasPrefix:@"favorites"]) && [fileName.pathExtension isEqualToString:@"gpx"])
         {
             UIViewController* incomingURLViewController = [[OAFavoriteImportViewController alloc] initFor:url];
             if (incomingURLViewController == nil)

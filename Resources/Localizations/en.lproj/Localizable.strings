@@ -592,7 +592,7 @@
 "shared_string_angle" = "Angle";
 "shared_string_angle_param" = "Angle: %@°";
 "shared_string_uploaded" = "Uploaded";
-"shared_string_do_not_exist" = "Do not exist";
+"shared_string_does_not_exist" = "Does not exist";
 
 "restart" = "Restart";
 
@@ -2070,7 +2070,7 @@
 
 "how_to_open_wiki_title" = "How to open Wikipedia articles?";
 "download_wiki_data" = "Download Wikipedia data for %@";
-"open_in_browser_wiki" = "Open article online";
+"download_wikipedia_data" = "Download Wikipedia data";
 "explore_wikipedia_offline" = "Explore Wikipedia offline.";
 "online_webpage_warning" = "Page only available online. Open in web browser?";
 

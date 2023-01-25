@@ -17,6 +17,7 @@
 #import "OASettingsItemReader.h"
 #import "OASettingsItemWriter.h"
 #import "OARendererRegistry.h"
+#import "OASelectedGPXHelper.h"
 #import "OAFileNameTranslationHelper.h"
 
 @implementation OAFileSettingsItemFileSubtype
@@ -328,8 +329,12 @@
         {
             OAGPXDocument *doc = [[OAGPXDocument alloc] initWithGpxFile:destFilePath];
             [doc saveTo:destFilePath];
-            [[OAGPXDatabase sharedDb] addGpxItem:destFilePath title:doc.metadata.name desc:doc.metadata.desc bounds:doc.bounds document:doc];
+            OAGPX *gpx = [[OAGPXDatabase sharedDb] addGpxItem:destFilePath title:doc.metadata.name desc:doc.metadata.desc bounds:doc.bounds document:doc];
             [[OAGPXDatabase sharedDb] save];
+            const auto& activeGpx = OASelectedGPXHelper.instance.activeGpx;
+            if (activeGpx.find(QString::fromNSString(gpx.gpxFilePath)) != activeGpx.end())
+                [OAAppSettings.sharedManager showGpx:@[gpx.gpxFilePath]];
+
             break;
         }
         case EOASettingsItemFileSubtypeRenderingStyle:
@@ -411,6 +416,12 @@
 - (BOOL) exists
 {
     return [[NSFileManager defaultManager] fileExistsAtPath:self.filePath];
+}
+
+- (void)remove
+{
+    [super remove];
+    // TODO: remove file
 }
 
 - (NSString *) renameFile:(NSString*)filePath

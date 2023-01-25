@@ -12,10 +12,11 @@
 #import "OADeleteButtonTableViewCell.h"
 #import "OAColors.h"
 #import "OAQuickSearchHelper.h"
-#import "OAButtonRightIconCell.h"
+#import "OARightIconTableViewCell.h"
 #import "OAAppSettings.h"
 #import "OAQuickSearchButtonListItem.h"
 #import "OAPOIHelper.h"
+#import "OASizes.h"
 
 #define kAllFiltersSection 0
 #define kHiddenFiltersSection 1
@@ -311,7 +312,7 @@
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
 {
-    NSString *cellType = indexPath.section == kActionsSection ? [OAButtonRightIconCell getCellIdentifier] : [OADeleteButtonTableViewCell getCellIdentifier];
+    NSString *cellType = indexPath.section == kActionsSection ? [OARightIconTableViewCell getCellIdentifier] : [OADeleteButtonTableViewCell getCellIdentifier];
     if ([cellType isEqualToString:[OADeleteButtonTableViewCell getCellIdentifier]])
     {
         BOOL isAllFilters = indexPath.section == kAllFiltersSection;
@@ -352,24 +353,27 @@
             [cell updateConstraints];
         return cell;
     }
-    else if ([cellType isEqualToString:[OAButtonRightIconCell getCellIdentifier]])
+    else if ([cellType isEqualToString:[OARightIconTableViewCell getCellIdentifier]])
     {
-        OAButtonRightIconCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAButtonRightIconCell getCellIdentifier]];
+        OARightIconTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonRightIconCell getCellIdentifier] owner:self options:nil];
-            cell = nib[0];
-            cell.separatorInset = UIEdgeInsetsMake(0., 65., 0., 0.);
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OARightIconTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
+            cell.titleLabel.textColor = UIColorFromRGB(color_primary_purple);
+            cell.titleLabel.font = [UIFont systemFontOfSize:17. weight:UIFontWeightMedium];
+            cell.rightIconView.tintColor = UIColorFromRGB(color_primary_purple);
         }
-        if (cell) {
+        if (cell)
+        {
+            cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingOnSideOfContent, 0., 0.);
             OAActionItem *actionItem = _actionsItems[indexPath.row];
-            cell.iconView.image = [actionItem.icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
-            [cell.button setTitle:actionItem.title forState:UIControlStateNormal];
-            [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-            [cell.button addTarget:actionItem action:@selector(onClick) forControlEvents:UIControlEventTouchUpInside];
-            return cell;
+            cell.rightIconView.image = [actionItem.icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.titleLabel.text = actionItem.title;
         }
+        return cell;
     }
     return nil;
 }

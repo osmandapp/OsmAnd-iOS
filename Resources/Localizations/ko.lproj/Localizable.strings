@@ -750,7 +750,7 @@
 "rendering_attr_appMode_description" = "~에 대한 지도를 최적화";
 "rendering_value__name" = "기본값";
 "lang_is" = "아이슬란드어";
-"lang_no" = "노르웨이어";
+"lang_no" = "노르웨이 부크몰어";
 "routing_attr_height_description" = "도로에 통행가능한 차량중량을 지정";
 "lang_ga" = "아일랜드어";
 "shared_string_maps" = "지도";

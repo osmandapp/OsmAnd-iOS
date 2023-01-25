@@ -245,6 +245,11 @@
     return favouriteItems;
 }
 
+- (void)deleteItem:(OAFavoriteGroup *)item
+{
+    [OAFavoritesHelper deleteFavoriteGroups:@[item] andFavoritesItems:nil];
+}
+
 - (BOOL) shouldReadOnCollecting
 {
     return YES;

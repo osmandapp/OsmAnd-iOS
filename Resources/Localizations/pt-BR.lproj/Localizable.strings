@@ -2794,3 +2794,4 @@
 "rendering_attr_weatherCloudContours_name" = "Isolinhas de nuvens";
 "rendering_attr_horse_scale_impossible_name" = "Impossível";
 "routing_attr_carriage_restrictions_description" = "Considere as permissões de acesso para veículos puxados a cavalo";
+"shared_string_does_not_exist" = "Não existe";

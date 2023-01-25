@@ -182,7 +182,7 @@
     updatesSizeData[@"key"] = @"updates_size_cell";
     updatesSizeData[@"type"] = [OAValueTableViewCell getCellIdentifier];
     updatesSizeData[@"title"] = OALocalizedString(@"shared_string_updates_size");
-    updatesSizeData[@"value"] = [NSByteCountFormatter stringFromByteCount:[[OAWeatherHelper sharedInstance]getOfflineForecastSizeInfo:_region.regionId local:YES]
+    updatesSizeData[@"value"] = [NSByteCountFormatter stringFromByteCount:[[OAWeatherHelper sharedInstance]getOfflineForecastSizeInfo:regionId local:YES]
                                                                countStyle:NSByteCountFormatterCountStyleFile];
     updatesSizeData[@"value_color"] = UIColorFromRGB(color_text_footer);
     updatesSizeData[@"selection_style"] = @(UITableViewCellSelectionStyleDefault);

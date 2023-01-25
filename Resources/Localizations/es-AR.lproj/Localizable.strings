@@ -2802,3 +2802,4 @@
 "rendering_attr_showTrolleybusRoutes_name" = "Rutas de trolebús";
 "routing_attr_avoid_4wd_only_name" = "Evitar caminos para 4x4";
 "routing_attr_hazmat_category_description" = "Categoría de materiales peligrosos / Considera los permisos de acceso para vehículos con materiales peligrosos";
+"shared_string_does_not_exist" = "No existe";

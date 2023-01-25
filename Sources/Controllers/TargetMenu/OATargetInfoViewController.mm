@@ -16,6 +16,7 @@
 #import "Localization.h"
 #import "OAPOIHelper.h"
 #import "OAPOI.h"
+#import "OATransportStop.h"
 #import "OACollapsableNearestPoiWikiView.h"
 #import "OATransportStopRoute.h"
 #import "OACollapsableTransportStopRoutesView.h"
@@ -38,7 +39,7 @@
 #import "OAWikiImageCard.h"
 #import "OAWikipediaPlugin.h"
 #import "OAOsmAndFormatter.h"
-#import "OAButtonRightIconCell.h"
+#import "OASimpleTableViewCell.h"
 #import "OAMapillaryOsmTagHelper.h"
 #import "OACollapsableWaypointsView.h"
 #import "OATextMultilineTableViewCell.h"
@@ -124,39 +125,27 @@
 - (void) buildTopRows:(NSMutableArray<OARowInfo *> *)rows
 {
     [self buildDescription:rows];
-    if (self.routes.count > 0)
+    NSArray<OATransportStopRoute *> *localTransportRoutes = [self getLocalTransportStopRoutes];
+    NSArray<OATransportStopRoute *> *nearbyTransportRoutes = [self getNearbyTransportStopRoutes];
+    if (localTransportRoutes.count > 0)
     {
-        NSArray<OATransportStopRoute *> *localTransportRoutes = [self getLocalTransportStopRoutes];
-        NSArray<OATransportStopRoute *> *nearbyTransportRoutes = [self getNearbyTransportStopRoutes];
-        if (localTransportRoutes.count > 0)
-        {
-            OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:nil icon:nil textPrefix:nil text:OALocalizedString(@"transport_Routes") textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
-            rowInfo.collapsable = YES;
-            rowInfo.collapsed = NO;
-            rowInfo.collapsableView = [[OACollapsableTransportStopRoutesView alloc] initWithFrame:CGRectMake([OAUtilities getLeftMargin], 0, 320, 100)];
-            ((OACollapsableTransportStopRoutesView *)rowInfo.collapsableView).routes = localTransportRoutes;
-            [_rows addObject:rowInfo];
-        }
-        if (nearbyTransportRoutes.count > 0)
-        {
-            NSString *routesWithingDistance = [NSString stringWithFormat:@"%@ %@",  OALocalizedString(@"transport_nearby_routes_within"), [OAOsmAndFormatter getFormattedDistance:kShowStopsRadiusMeters]];
-            OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:nil icon:nil textPrefix:nil text:routesWithingDistance textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
-            rowInfo.collapsable = YES;
-            rowInfo.collapsed = NO;
-            rowInfo.collapsableView = [[OACollapsableTransportStopRoutesView alloc] initWithFrame:CGRectMake([OAUtilities getLeftMargin], 0, 320, 100)];
-            ((OACollapsableTransportStopRoutesView *)rowInfo.collapsableView).routes = nearbyTransportRoutes;
-            [_rows addObject:rowInfo];
-        }
+        OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:nil icon:nil textPrefix:nil text:OALocalizedString(@"transport_Routes") textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
+        rowInfo.collapsable = YES;
+        rowInfo.collapsed = NO;
+        rowInfo.collapsableView = [[OACollapsableTransportStopRoutesView alloc] initWithFrame:CGRectMake([OAUtilities getLeftMargin], 0, 320, 100)];
+        ((OACollapsableTransportStopRoutesView *)rowInfo.collapsableView).routes = localTransportRoutes;
+        [_rows addObject:rowInfo];
     }
-}
-
-- (BOOL) containsRef:(NSArray<OATransportStopRoute *> *)routes transportRoute:(OATransportStopRoute *)transportRoute
-{
-    for (OATransportStopRoute *route in routes)
-        if (route.route->type == transportRoute.route->type && route.route->ref == transportRoute.route->ref)
-            return YES;
-
-    return NO;
+    if (nearbyTransportRoutes.count > 0)
+    {
+        NSString *routesWithingDistance = [NSString stringWithFormat:@"%@ %@",  OALocalizedString(@"transport_nearby_routes_within"), [OAOsmAndFormatter getFormattedDistance:kShowStopsRadiusMeters]];
+        OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:nil icon:nil textPrefix:nil text:routesWithingDistance textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
+        rowInfo.collapsable = YES;
+        rowInfo.collapsed = NO;
+        rowInfo.collapsableView = [[OACollapsableTransportStopRoutesView alloc] initWithFrame:CGRectMake([OAUtilities getLeftMargin], 0, 320, 100)];
+        ((OACollapsableTransportStopRoutesView *)rowInfo.collapsableView).routes = nearbyTransportRoutes;
+        [_rows addObject:rowInfo];
+    }
 }
 
 - (void) buildDescription:(NSMutableArray<OARowInfo *> *)rows
@@ -209,16 +198,7 @@
             return NSOrderedDescending;
     }];
 
-    if ([self needCoords])
-    {
-        OARowInfo *coordinatesRow = [[OARowInfo alloc] initWithKey:nil icon:nil textPrefix:nil text:@"" textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
-        coordinatesRow.collapsed = YES;
-        coordinatesRow.collapsable = YES;
-        OACollapsableCoordinatesView *collapsableView = [[OACollapsableCoordinatesView alloc] initWithFrame:CGRectMake(0, 0, 320, 100) lat:self.location.latitude lon:self.location.longitude];
-        coordinatesRow.collapsableView = collapsableView;
-        [_rows addObject:coordinatesRow];
-    }
-    
+    [self buildCoordinateRows:rows];
     [self addNearbyImagesIfNeeded];
 
     _calculatedWidth = 0;
@@ -274,6 +254,19 @@
     {
         OARowInfo *commentRow = [[OARowInfo alloc] initWithKey:nil icon:[UIImage imageNamed:@"ic_description"] textPrefix:nil text:comment textColor:nil isText:YES needLinks:NO order:4 typeName:kCommentRowType isPhoneNumber:NO isUrl:NO];
         [rows addObject:commentRow];
+    }
+}
+
+- (void)buildCoordinateRows:(NSMutableArray<OARowInfo *> *)rows
+{
+    if ([self needCoords])
+    {
+        OARowInfo *coordinatesRow = [[OARowInfo alloc] initWithKey:nil icon:nil textPrefix:nil text:@"" textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
+        coordinatesRow.collapsed = YES;
+        coordinatesRow.collapsable = YES;
+        OACollapsableCoordinatesView *collapsableView = [[OACollapsableCoordinatesView alloc] initWithFrame:CGRectMake(0, 0, 320, 100) lat:self.location.latitude lon:self.location.longitude];
+        coordinatesRow.collapsableView = collapsableView;
+        [rows addObject:coordinatesRow];
     }
 }
 
@@ -450,14 +443,7 @@
 
 - (NSArray<OATransportStopRoute *> *) getSubTransportStopRoutes:(BOOL)nearby
 {
-    NSMutableArray<OATransportStopRoute *> *res = [NSMutableArray array];
-    for (OATransportStopRoute *route in self.routes)
-    {
-        BOOL isCurrentRouteNearby = route.refStop && route.refStop->getName("", false) != route.stop->getName("", false);
-        if ((nearby && isCurrentRouteNearby) || (!nearby && !isCurrentRouteNearby))
-            [res addObject:route];
-    }
-    return res;
+    return nearby ? self.nearbyRoutes : self.localRoutes;
 }
 
 - (void)sendNearbyOtherImagesRequest:(NSMutableArray <OAAbstractCard *> *)cards
@@ -723,28 +709,24 @@
     
     if ([info.typeName isEqualToString:kCollapseDetailsRowType])
     {
-        OAButtonRightIconCell *cell;
-        cell = (OAButtonRightIconCell *)[tableView dequeueReusableCellWithIdentifier:[OAButtonRightIconCell getCellIdentifier]];
-        
+        OASimpleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonRightIconCell getCellIdentifier] owner:self options:nil];
-            cell = (OAButtonRightIconCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASimpleTableViewCell *) nib[0];
             cell.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0);
             cell.backgroundColor = UIColorFromRGB(color_divider_light);
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
+            cell.titleLabel.textColor = UIColorFromRGB(color_dialog_buttons_light);
+            cell.titleLabel.font = [UIFont systemFontOfSize:13 weight:UIFontWeightSemibold];
+            [cell textIndentsStyle:EOATableViewCellTextIncreasedTopCenterIndentStyle];
+            [cell anchorContent:EOATableViewCellContentTopStyle];
         }
-        [cell setButtonTopOffset:18];
-        cell.iconView.hidden = YES;
-        cell.button.hidden = NO;
-        cell.button.userInteractionEnabled = NO;
-        [cell.button setTitleColor:UIColorFromRGB(color_dialog_buttons_light) forState:UIControlStateNormal];
-        [cell.button.titleLabel setFont:[UIFont systemFontOfSize:13 weight:UIFontWeightSemibold]];
-        
         if (self.delegate.isInFullMode)
-            [cell.button setTitle:OALocalizedString(@"shared_string_collapse").upperCase forState:UIControlStateNormal];
+            cell.titleLabel.text = OALocalizedString(@"shared_string_collapse").upperCase;
         else
-            [cell.button setTitle:OALocalizedString(@"shared_string_details").upperCase forState:UIControlStateNormal];
-       
+            cell.titleLabel.text = OALocalizedString(@"shared_string_details").upperCase;
         return cell;
     }
     else if ([info.typeName isEqualToString:kDescriptionRowType])

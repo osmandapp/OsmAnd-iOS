@@ -127,7 +127,7 @@
     if (_region)
     {
         sizeTitle = OALocalizedString(@"shared_string_total");
-        size = [_weatherHelper getOfflineForecastSizeInfo:_region.regionId local:YES];
+        size = [_weatherHelper getOfflineForecastSizeInfo:[OAWeatherHelper checkAndGetRegionId:_region] local:YES];
     }
     else if (_type == EOAWeatherOnlineData)
     {
@@ -196,7 +196,7 @@
                 regionData[@"key"] = [@"region_cell_" stringByAppendingString:regionId];
                 regionData[@"type"] = [OARightIconTableViewCell getCellIdentifier];
                 regionData[@"region"] = region;
-                regionData[@"description"] = [NSByteCountFormatter stringFromByteCount:[_weatherHelper getOfflineForecastSizeInfo:region.regionId local:YES]
+                regionData[@"description"] = [NSByteCountFormatter stringFromByteCount:[_weatherHelper getOfflineForecastSizeInfo:regionId local:YES]
                                                                             countStyle:NSByteCountFormatterCountStyleFile];;
                 [countryCells addObject:regionData];
             }

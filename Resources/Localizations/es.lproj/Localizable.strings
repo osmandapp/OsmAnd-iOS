@@ -2791,3 +2791,4 @@
 "routing_attr_avoid_4wd_only_description" = "Evita los caminos adecuados para vehículos todo terreno 4x4";
 "rendering_attr_horse_scale_impossible_name" = "Imposible";
 "routing_attr_avoid_highway_description" = "Evita circular por caminos viales";
+"shared_string_does_not_exist" = "No existe";

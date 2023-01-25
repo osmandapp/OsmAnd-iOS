@@ -144,6 +144,11 @@
         builder.location = CLLocationCoordinate2DMake([_favorite getLatitude], [_favorite getLongitude]);
         [builder buildRowsInternal:rows];
     }
+    else
+    {
+        [self buildCoordinateRows:rows];
+    }
+
     [self setRows:rows];
 }
 

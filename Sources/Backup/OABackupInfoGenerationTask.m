@@ -73,7 +73,6 @@
      */
     NSMutableArray<OARemoteFile *> *remoteFiles = [NSMutableArray arrayWithArray:_uniqueRemoteFiles.allValues];
     [remoteFiles addObjectsFromArray:_deletedRemoteFiles.allValues];
-    NSFileManager *fileManager = NSFileManager.defaultManager;
     for (OARemoteFile *remoteFile in remoteFiles)
     {
         OAExportSettingsType *exportType = [OAExportSettingsType getExportSettingsTypeForRemoteFile:remoteFile];
@@ -84,51 +83,42 @@
         OALocalFile *localFile = _localFiles[remoteFile.getTypeNamePath];
         if (localFile != nil)
         {
-            long remoteUploadTime = remoteFile.clienttimems;
-            long localUploadTime = localFile.uploadTime;
-            long localModifiedTime = localFile.localModifiedTime;
-
-            if (remoteFile.isDeleted)
+            BOOL fileChangedLocally = localFile.localModifiedTime > (localFile.uploadTime / 1000);
+            BOOL fileChangedRemotely = remoteFile.updatetimems > localFile.uploadTime;
+            if (fileChangedRemotely && fileChangedLocally)
             {
-                // Remote file deleted
-                [info.localFilesToDelete addObject:localFile];
+                [info.filesToMerge addObject:@[localFile, remoteFile]];
             }
-            else if (localModifiedTime > localUploadTime / 1000)
+            else if (fileChangedLocally)
             {
-                // Local file modified since last upload
-                if (remoteUploadTime > localUploadTime)
+                [info.filesToUpload addObject:localFile];
+            }
+            else if (fileChangedRemotely)
+            {
+                if (remoteFile.isDeleted)
                 {
-                    // Remote file modified also. Have conflict. Needs to be resolved.
-                    [info.filesToMerge addObject:@[localFile, remoteFile]];
+                    [info.localFilesToDelete addObject:localFile];
                 }
                 else
                 {
-                    // Remote file is non modified. Suggest to upload local file to the cloud.
-                    [info.filesToUpload addObject:localFile];
+                    [info.filesToDownload addObject:remoteFile];
                 }
             }
-            else if (remoteUploadTime > localUploadTime)
-            {
-                // Remote file modified. Suggest to download from the cloud.
-                [info.filesToDownload addObject:remoteFile];
-            }
-
-            NSDictionary *attributes = localFile.filePath ? [fileManager attributesOfItemAtPath:localFile.filePath error:NULL] : @{};
-            long localFileSize = attributes.fileSize;
-            long remoteFileSize = remoteFile.filesize;
-            if (remoteFileSize > 0 && localFileSize > 0 && localFileSize != remoteFileSize && ![info.filesToDownload containsObject:remoteFile])
-            {
-                [info.filesToDownload addObject:remoteFile];
-            }
         }
-        if (localFile == nil && !remoteFile.isDeleted)
+        else if (!remoteFile.isDeleted)
         {
             OAUploadedFileInfo *fileInfo = [OABackupDbHelper.sharedDatabase getUploadedFileInfo:remoteFile.type name:remoteFile.name];
             // suggest to remove only if file exists in db
-            if (fileInfo != nil)
+            if (fileInfo != nil && fileInfo.uploadTime >= remoteFile.updatetimems)
+            {
+                // conflicts not supported yet
+                // info.filesToMerge.add(new Pair<>(null, remoteFile));
                 [info.filesToDelete addObject:remoteFile];
+            }
             else
+            {
                 [info.filesToDownload addObject:remoteFile];
+            }
         }
     }
     for (OALocalFile *localFile in _localFiles.allValues)
@@ -158,7 +148,11 @@
     [_operationLog log:@"=== filesToDownload ==="];
     for (OARemoteFile *remoteFile in info.filesToDownload)
     {
-        [_operationLog log:remoteFile.toString];
+        OALocalFile *localFile = _localFiles[remoteFile.getTypeNamePath];
+        if (localFile)
+            [_operationLog log:[NSString stringWithFormat:@"%@ localUploadTime=%ld", remoteFile.toString, localFile.uploadTime]];
+        else
+            [_operationLog log:remoteFile.toString];
     }
     [_operationLog log:@"=== filesToDownload ==="];
     [_operationLog log:@"=== filesToDelete ==="];
@@ -167,6 +161,12 @@
         [_operationLog log:remoteFile.toString];
     }
     [_operationLog log:@"=== filesToDelete ==="];
+    [_operationLog log:@"=== localFilesToDelete ==="];
+    for (OALocalFile *localFile in info.localFilesToDelete)
+    {
+        [_operationLog log:localFile.toString];
+    }
+    [_operationLog log:@"=== localFilesToDelete ==="];
     [_operationLog log:@"=== filesToMerge ==="];
     for (NSArray *filePair in info.filesToMerge)
     {

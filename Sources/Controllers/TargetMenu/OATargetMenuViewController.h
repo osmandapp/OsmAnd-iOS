@@ -105,7 +105,8 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 @property (nonatomic) OATargetMenuControlButton *rightControlButton;
 @property (nonatomic) OATargetMenuControlButton *downloadControlButton;
 
-@property (nonatomic) NSArray<OATransportStopRoute *> *routes;
+@property (nonatomic) NSArray<OATransportStopRoute *> *nearbyRoutes;
+@property (nonatomic) NSArray<OATransportStopRoute *> *localRoutes;
 @property (nonatomic) OARepositoryResourceItem *localMapIndexItem;
 
 @property (weak, nonatomic) id<OATargetMenuViewControllerDelegate> delegate;

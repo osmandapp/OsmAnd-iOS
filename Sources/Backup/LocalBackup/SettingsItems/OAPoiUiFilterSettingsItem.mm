@@ -110,6 +110,11 @@
     return @"poi_ui_filters";
 }
 
+- (void)deleteItem:(OAPOIUIFilter *)item
+{
+    [_filtersHelper removePoiFilter:item];
+}
+
 - (BOOL) shouldReadOnCollecting
 {
     return YES;

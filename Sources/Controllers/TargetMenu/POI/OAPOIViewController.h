@@ -6,13 +6,11 @@
 //  Copyright © 2016 OsmAnd. All rights reserved.
 //
 
-#import "OATargetInfoViewController.h"
+#import "OATransportStopsBaseController.h"
 
 @class OAPOI;
 
-@interface OAPOIViewController : OATargetInfoViewController
-
-@property (nonatomic, readonly) OAPOI *poi;
+@interface OAPOIViewController : OATransportStopsBaseController
 
 - (id) initWithPOI:(OAPOI *)poi;
 

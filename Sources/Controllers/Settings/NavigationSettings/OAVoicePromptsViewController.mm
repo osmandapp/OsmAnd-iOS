@@ -228,13 +228,24 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASwitchTableViewCell *) nib[0];
             [cell descriptionVisibility:NO];
-            cell.separatorInset = UIEdgeInsetsMake(0., kPaddingToLeftOfContentWithIcon, 0., 0.);
         }
         if (cell)
         {
+            BOOL hasIcon = [item.allKeys containsObject:@"icon"];
+
+            cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + (hasIcon ? kPaddingToLeftOfContentWithIcon : kPaddingOnSideOfContent), 0., 0.);
             cell.titleLabel.text = item[@"title"];
-            cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
-            cell.leftIconView.tintColor = _voiceOn ? UIColorFromRGB(self.appMode.getIconColor) : UIColorFromRGB(color_icon_inactive);
+
+            [cell leftIconVisibility:hasIcon];
+            if (hasIcon)
+            {
+                cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
+                cell.leftIconView.tintColor = _voiceOn ? UIColorFromRGB(self.appMode.getIconColor) : UIColorFromRGB(color_icon_inactive);
+            }
+            else
+            {
+                cell.leftIconView.image = nil;
+            }
                                   
             id v = item[@"value"];
             [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
@@ -269,36 +280,6 @@
             cell.descriptionView.text = item[@"value"];
             cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
             cell.leftIconView.tintColor = UIColorFromRGB(self.appMode.getIconColor);
-        }
-        return cell;
-    }
-    else if ([cellType isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
-    {
-        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASwitchTableViewCell *) nib[0];
-            [cell leftIconVisibility:NO];
-            [cell descriptionVisibility:NO];
-        }
-        if (cell)
-        {
-            cell.titleLabel.text = item[@"title"];
-
-            id v = item[@"value"];
-            [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-            if ([v isKindOfClass:[OACommonBoolean class]])
-            {
-                OACommonBoolean *value = v;
-                cell.switchView.on = [value get:self.appMode];
-            }
-            else
-            {
-                cell.switchView.on = [v boolValue];
-            }
-            cell.switchView.tag = indexPath.section << 10 | indexPath.row;
-            [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
         }
         return cell;
     }

@@ -193,16 +193,28 @@
         OASyncBackupTask *syncTask = [[OASyncBackupTask alloc] initWithKey:key operation:operation];
         _syncBackupTasks[key] = syncTask;
         
-        NSString *fileName = [OABackupHelper getItemFileName:localFile ? localFile.item : remoteFile.item];
-        
         switch (operation)
         {
             case EOABackupSyncOperationDelete:
-                return [syncTask deleteItem:remoteFile.item fileName:fileName];
+            {
+                if (remoteFile)
+                    [syncTask deleteItem:remoteFile.item];
+                else if (localFile)
+                    [syncTask deleteLocalItem:localFile.item];
+                break;
+            }
             case EOABackupSyncOperationUpload:
-                return [syncTask uploadLocalItem:localFile.item fileName:fileName];
+            {
+                if (localFile)
+                    [syncTask uploadLocalItem:localFile.item];
+                break;
+            }
             case EOABackupSyncOperationDownload:
-                return [syncTask downloadRemoteVersion:remoteFile.item fileName:fileName];
+            {
+                if (remoteFile)
+                    [syncTask downloadRemoteVersion:remoteFile.item];
+                break;
+            }
             default:
                 return;
         }
@@ -250,11 +262,12 @@
 - (void) exportSettings:(NSString *)key
                   items:(NSArray<OASettingsItem *> *)items
           itemsToDelete:(NSArray<OASettingsItem *> *)itemsToDelete
+     localItemsToDelete:(NSArray<OASettingsItem *> *)localItemsToDelete
                listener:(id<OABackupExportListener>)listener
 {
     if (!_exportAsyncTasks[key])
     {
-        OAExportBackupTask *exportTask = [[OAExportBackupTask alloc] initWithKey:key items:items itemsToDelete:itemsToDelete listener:listener];
+        OAExportBackupTask *exportTask = [[OAExportBackupTask alloc] initWithKey:key items:items itemsToDelete:itemsToDelete localItemsToDelete:localItemsToDelete listener:listener];
         _exportAsyncTasks[key] = exportTask;
         [OABackupHelper.sharedInstance.executor addOperation:exportTask];
     }
@@ -268,7 +281,7 @@
                listener:(id<OABackupExportListener>)listener
                   items:(NSArray<OASettingsItem *> *)items
 {
-    [self exportSettings:key items:items itemsToDelete:@[] listener:listener];
+    [self exportSettings:key items:items itemsToDelete:@[] localItemsToDelete:@[] listener:listener];
 }
 
 @end

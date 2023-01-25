@@ -2795,3 +2795,4 @@
 "routing_attr_freeride_policy_only_if_necessary_name" = "Kun hvis nødvendigt";
 "routing_attr_avoid_highway_name" = "Undgå motorveje";
 "rendering_attr_showMtbScaleUphill_description" = "Vis spor efter MTB-skala op ad bakke.";
+"shared_string_does_not_exist" = "Eksisterer ikke";

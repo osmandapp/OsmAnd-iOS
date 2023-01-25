@@ -44,6 +44,7 @@ FOUNDATION_EXTERN NSInteger const kSettingsItemErrorCodeAlreadyRead;
 - (BOOL) shouldReadOnCollecting;
 - (BOOL) exists;
 - (void) apply;
+- (void) remove;
 - (void) applyAdditionalParams:(NSString *)filePath;
 - (BOOL) applyFileName:(NSString *)fileName;
 + (EOASettingsItemType) parseItemType:(id)json error:(NSError * _Nullable *)error;

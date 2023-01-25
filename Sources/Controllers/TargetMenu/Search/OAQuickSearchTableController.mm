@@ -42,6 +42,7 @@
 #import "OATargetPointsHelper.h"
 #import "OAReverseGeocoder.h"
 #import "OAColors.h"
+#import "OASizes.h"
 
 #import "OAIconTextTableViewCell.h"
 #import "OASearchMoreCell.h"
@@ -50,7 +51,7 @@
 #import "OAIconButtonCell.h"
 #import "OAMenuSimpleCell.h"
 #import "OAEmptySearchCell.h"
-#import "OAButtonRightIconCell.h"
+#import "OARightIconTableViewCell.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -741,25 +742,25 @@
     {
         if ([item getType] == ACTION_BUTTON)
         {
-            OAButtonRightIconCell *cell = [tableView dequeueReusableCellWithIdentifier:@"OAButtonRightIconCell"];
+            OARightIconTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAButtonRightIconCell" owner:self options:nil];
-                cell = nib[0];
-                cell.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
+                cell = (OARightIconTableViewCell *) nib[0];
+                [cell leftIconVisibility:NO];
+                [cell descriptionVisibility:NO];
+                cell.titleLabel.textColor = UIColorFromRGB(color_primary_purple);
+                cell.titleLabel.font = [UIFont systemFontOfSize:17. weight:UIFontWeightMedium];
+                cell.rightIconView.tintColor = UIColorFromRGB(color_primary_purple);
             }
             if (cell)
             {
+                cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingOnSideOfContent, 0., 0.);
                 OAQuickSearchButtonListItem *buttonItem = (OAQuickSearchButtonListItem *) item;
-                cell.iconView.image = [buttonItem.icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-                cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
-
-                [cell.button setTitle:[buttonItem getName] forState:UIControlStateNormal];
-
-                [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-                [cell.button addTarget:buttonItem action:@selector(onClick) forControlEvents:UIControlEventTouchUpInside];
-                return cell;
+                cell.rightIconView.image = [buttonItem.icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                cell.titleLabel.text = [buttonItem getName];
             }
+            return cell;
         }
         if ([item getType] == BUTTON)
         {

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21225" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21207"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -13,7 +13,7 @@
             <connections>
                 <outlet property="cancelButton" destination="UFR-7O-iUw" id="Ipk-Gf-ZUZ"/>
                 <outlet property="doneButton" destination="abx-zm-AMA" id="z5s-2t-A0I"/>
-                <outlet property="navBarHeightConstraint" destination="dOG-f4-Ref" id="FRe-Mw-UwG"/>
+                <outlet property="navBarHeightConstraint" destination="dOG-f4-Ref" id="joL-q2-UQS"/>
                 <outlet property="navBarView" destination="HXL-Aw-hVL" id="SLE-3f-tSb"/>
                 <outlet property="subtitleLabel" destination="WdP-gv-hMf" id="lZj-jg-fSS"/>
                 <outlet property="tableView" destination="ri9-DF-9Ij" id="BcB-52-Bj4"/>

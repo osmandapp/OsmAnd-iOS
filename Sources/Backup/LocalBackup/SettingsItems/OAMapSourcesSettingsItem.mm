@@ -221,6 +221,11 @@
     return @"map_sources";
 }
 
+- (void)deleteItem:(OATileSource *)item
+{
+    // TODO: delete map source
+}
+
 - (BOOL) shouldReadOnCollecting
 {
     return YES;

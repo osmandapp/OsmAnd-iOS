@@ -104,38 +104,60 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
 
 + (NSArray<OASettingsItem *> *) getItemsForRestore:(OABackupInfo *)info settingsItems:(NSArray<OASettingsItem *> *)settingsItems
 {
-    NSMutableSet<OASettingsItem *> *itemsForRestore = [NSMutableSet set];
+    NSMutableArray<OASettingsItem *> *itemsForRestore = [NSMutableArray array];
     if (info != nil)
     {
-        for (OARemoteFile *remoteFile in info.filteredFilesToDownload)
+        NSDictionary<OARemoteFile *, OASettingsItem *> *restoreItems = [self getRemoteFilesSettingsItems:settingsItems remoteFiles:info.filteredFilesToDownload infoFiles:NO];
+        for (OASettingsItem *restoreItem in restoreItems.allValues)
         {
-            OASettingsItem *restoreItem = [self getRestoreItem:settingsItems remoteFile:remoteFile];
             if ([restoreItem isKindOfClass:OACollectionSettingsItem.class])
             {
                 OACollectionSettingsItem *settingsItem = (OACollectionSettingsItem *) restoreItem;
                 [settingsItem processDuplicateItems];
                 settingsItem.shouldReplace = YES;
             }
-            if (restoreItem != nil && !restoreItem.exists)
+            if (restoreItem != nil)
                 [itemsForRestore addObject:restoreItem];
         }
     }
-    return itemsForRestore.allObjects;
+    return itemsForRestore;
 }
 
-+ (NSArray<NSArray *> *) getItemsMapForRestore:(OABackupInfo *)info settingsItems:(NSArray<OASettingsItem *> *)settingsItems
++ (NSDictionary<OARemoteFile *, OASettingsItem *> *) getItemsMapForRestore:(OABackupInfo *)info settingsItems:(NSArray<OASettingsItem *> *)settingsItems
 {
-    NSMutableSet<NSArray *> *itemsForRestore = [NSMutableSet set];
+    NSMutableDictionary<OARemoteFile *, OASettingsItem *> *itemsForRestore = [NSMutableDictionary dictionary];
     if (info != nil)
     {
-        for (OARemoteFile *remoteFile in info.filteredFilesToDownload)
-        {
-            OASettingsItem *restoreItem = [self getRestoreItem:settingsItems remoteFile:remoteFile];
-            if (restoreItem != nil && !restoreItem.exists)
-                [itemsForRestore addObject:@[remoteFile, restoreItem]];
-        }
+        [itemsForRestore addEntriesFromDictionary:[self getRemoteFilesSettingsItems:settingsItems remoteFiles:info.filteredFilesToDownload infoFiles:NO]];
     }
-    return itemsForRestore.allObjects;
+    return itemsForRestore;
+}
+
++ (NSDictionary<OARemoteFile *, OASettingsItem *> *) getRemoteFilesSettingsItems:(NSArray<OASettingsItem *> *)items
+                                                                            remoteFiles:(NSArray<OARemoteFile *> *)remoteFiles
+                                                                            infoFiles:(BOOL)infoFiles
+{
+    NSMutableDictionary<OARemoteFile *, OASettingsItem *> *res = [NSMutableDictionary dictionary];
+    NSMutableArray<OARemoteFile *> *files = [NSMutableArray arrayWithArray:remoteFiles];
+    for (OASettingsItem *item in items)
+    {
+        NSMutableArray<OARemoteFile *> *processedFiles = [NSMutableArray array];
+        for (OARemoteFile *file in files)
+        {
+            NSString *type = file.type;
+            NSString *name = file.name;
+            if (infoFiles && [name.pathExtension isEqualToString:INFO_EXT])
+                name = [name stringByDeletingPathExtension];
+            
+            if ([self applyItem:item type:type name:name])
+            {
+                res[file] = item;
+                [processedFiles addObject:file];
+            }
+        }
+        [files removeObjectsInArray:processedFiles];
+    }
+    return res;
 }
 
 + (OASettingsItem *) getRestoreItem:(NSArray<OASettingsItem *> *)items remoteFile:(OARemoteFile *)remoteFile
@@ -359,7 +381,7 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
     NSMutableArray<NSString *> *filesToUpload = [NSMutableArray array];
     OABackupInfo *info = self.backup.backupInfo;
     if (![self.class isLimitedFilesCollectionItem:item]
-        && info != nil && (info.filesToUpload.count > 0 || info.filesToMerge.count > 0))
+        && info != nil && (info.filesToUpload.count > 0 || info.filesToMerge.count > 0 || info.filesToDownload.count > 0))
     {
         for (OALocalFile *localFile in info.filesToUpload)
         {
@@ -373,6 +395,17 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
             NSString *filePath = localFile.filePath;
             if ([item isEqual:localFile.item] && filePath != nil)
                 [filesToUpload addObject:filePath];
+        }
+        for (OARemoteFile *remoteFile in info.filesToDownload)
+        {
+            if ([remoteFile.item isKindOfClass:OAFileSettingsItem.class])
+            {
+                NSString *fileName = remoteFile.item.fileName;
+                if (fileName != nil && [item applyFileName:fileName])
+                {
+                    [filesToUpload addObject:((OAFileSettingsItem *) remoteFile.item).filePath];
+                }
+            }
         }
     }
     else
@@ -722,7 +755,7 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
                      type:(NSString *)type
                      data:(NSData *)data
                      size:(int)size
-               uploadTime:(NSTimeInterval)uploadTime
+         lastModifiedTime:(long)lastModifiedTime
                  listener:(id<OAOnUploadFileListener>)listener
 {
     [self checkRegistered];
@@ -742,59 +775,41 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
     params[@"accessToken"] = [self getAccessToken];
     params[@"name"] = fileName;
     params[@"type"] = type;
-    params[@"clienttime"] = [NSString stringWithFormat:@"%.0f", uploadTime];
+    params[@"clienttime"] = [NSString stringWithFormat:@"%ld", lastModifiedTime];
     
     NSMutableDictionary<NSString *, NSString *> *headers = [NSMutableDictionary dictionary];
     headers[@"Accept-Encoding"] = @"deflate, gzip";
     
     OAOperationLog *operationLog = [[OAOperationLog alloc] initWithOperationName:@"uploadFile" debug:BACKUP_DEBUG_LOGS];
     [operationLog startOperation:[NSString stringWithFormat:@"%@ %@", type, fileName]];
+    __block NSData *resp = nil;
     __block NSString *error = nil;
     [listener onFileUploadStarted:type fileName:fileName work:hasSize ? size : data.length];
     [OANetworkUtilities uploadFile:UPLOAD_FILE_URL fileName:fileName params:params headers:headers data:data gzip:YES progress:progress onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable err) {
         if (((NSHTTPURLResponse *)response).statusCode != 200)
-        {
             error = data ? [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] : nil;
-        }
+        else
+            resp = data;
         if (hasSize)
             [listener onFileUploadProgress:type fileName:fileName progress:100 deltaWork:size];
     }];
-//    NetworkResult networkResult = AndroidNetworkUtils.uploadFile(UPLOAD_FILE_URL, streamWriter, fileName, true, params, headers,
-//                                                                 new AbstractProgress() {
-//
-//        private int work = 0;
-//        private int progress = 0;
-//        private int deltaProgress = 0;
-//
-//        @Override
-//        public void startWork(int work) {
-//            if (listener != null) {
-//                this.work = work > 0 ? work : 1;
-//                listener.onFileUploadStarted(type, fileName, work);
-//            }
-//        }
-//
-//        @Override
-//        public void progress(int deltaWork) {
-//            if (listener != null) {
-//                deltaProgress += deltaWork;
-//                if ((deltaProgress > (work / 100)) || ((progress + deltaProgress) >= work)) {
-//                    progress += deltaProgress;
-//                    listener.onFileUploadProgress(type, fileName, progress, deltaProgress);
-//                    deltaProgress = 0;
-//                }
-//            }
-//        }
-//
-//        @Override
-//        public boolean isInterrupted() {
-//            if (listener != null) {
-//                return listener.isUploadCancelled();
-//            }
-//            return super.isInterrupted();
-//        }
-//    });
-    if (error == nil)
+    long uploadTime = 0;
+    NSString *status = @"";
+    if (resp.length > 0)
+    {
+        NSError *jsonParsingError = nil;
+        NSDictionary *resultJson = [NSJSONSerialization JSONObjectWithData:resp options:NSJSONReadingMutableContainers error:&jsonParsingError];
+        if (!jsonParsingError)
+        {
+            status = resultJson[@"status"];
+            uploadTime = [resultJson[@"updatetime"] longValue];
+        }
+        else
+        {
+            NSLog(@"Cannot obtain updatetime after upload. Server response: %@", [[NSString alloc] initWithData:resp encoding:NSUTF8StringEncoding]);
+        }
+    }
+    if (error == nil && [status isEqualToString:@"ok"])
     {
         [self updateFileUploadTime:type fileName:fileName uploadTime:uploadTime];
     }

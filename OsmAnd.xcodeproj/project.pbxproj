@@ -15828,7 +15828,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd ${SRCROOT}/../resources/poi\n\"./copy_phrases.sh\"\n\n#cd ${SRCROOT}/../core/externals/xsb\n#\"./copy_resources.sh\"\n";
+			shellScript = "#cd ${SRCROOT}/../resources/poi\n#\"./copy_phrases.sh\"\n\n#cd ${SRCROOT}/../core/externals/xsb\n#\"./copy_resources.sh\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

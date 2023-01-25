@@ -2656,7 +2656,6 @@
 		DA5A84AF26C563A900F274C7 /* OAHistoryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7F9426C563A500F274C7 /* OAHistoryViewController.xib */; };
 		DA5A84B026C563A900F274C7 /* OAAddWaypointBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F9926C563A500F274C7 /* OAAddWaypointBottomSheetViewController.mm */; };
 		DA5A84B126C563A900F274C7 /* OATargetOptionsBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F9C26C563A500F274C7 /* OATargetOptionsBottomSheetViewController.mm */; };
-		DA5A84B226C563A900F274C7 /* OAWikiLinkBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F9F26C563A500F274C7 /* OAWikiLinkBottomSheetViewController.mm */; };
 		DA5A84B326C563A900F274C7 /* OAFirstMapillaryBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7FA226C563A500F274C7 /* OAFirstMapillaryBottomSheetViewController.mm */; };
 		DA5A84B426C563A900F274C7 /* OAInstallMapillaryBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7FA426C563A500F274C7 /* OAInstallMapillaryBottomSheetViewController.mm */; };
 		DA5A84B526C563A900F274C7 /* OAAddDestinationBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7FA726C563A500F274C7 /* OAAddDestinationBottomSheetViewController.mm */; };
@@ -2673,7 +2672,6 @@
 		DA5A84C026C563A900F274C7 /* OAPlanningOptionsBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7FBC26C563A500F274C7 /* OAPlanningOptionsBottomSheetViewController.mm */; };
 		DA5A84C126C563A900F274C7 /* OAProfileSelectionBottomSheetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7FC026C563A500F274C7 /* OAProfileSelectionBottomSheetViewController.m */; };
 		DA5A84C226C563A900F274C7 /* OABaseBottomSheetViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7FC226C563A500F274C7 /* OABaseBottomSheetViewController.xib */; };
-		DA5A84C326C563A900F274C7 /* OAPluginResetBottomSheetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7FC526C563A500F274C7 /* OAPluginResetBottomSheetViewController.m */; };
 		DA5A84C426C563A900F274C7 /* OAUploadProgressBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7FC726C563A500F274C7 /* OAUploadProgressBottomSheetViewController.mm */; };
 		DA5A84C526C563A900F274C7 /* OAOsmNoteBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7FC826C563A500F274C7 /* OAOsmNoteBottomSheetViewController.mm */; };
 		DA5A84C626C563A900F274C7 /* OAUploadFinishedBottomSheetViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7FCC26C563A500F274C7 /* OAUploadFinishedBottomSheetViewController.mm */; };
@@ -6811,8 +6809,6 @@
 		DA5A7F9926C563A500F274C7 /* OAAddWaypointBottomSheetViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAddWaypointBottomSheetViewController.mm; sourceTree = "<group>"; };
 		DA5A7F9B26C563A500F274C7 /* OATargetOptionsBottomSheetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OATargetOptionsBottomSheetViewController.h; sourceTree = "<group>"; };
 		DA5A7F9C26C563A500F274C7 /* OATargetOptionsBottomSheetViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OATargetOptionsBottomSheetViewController.mm; sourceTree = "<group>"; };
-		DA5A7F9E26C563A500F274C7 /* OAWikiLinkBottomSheetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWikiLinkBottomSheetViewController.h; sourceTree = "<group>"; };
-		DA5A7F9F26C563A500F274C7 /* OAWikiLinkBottomSheetViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWikiLinkBottomSheetViewController.mm; sourceTree = "<group>"; };
 		DA5A7FA126C563A500F274C7 /* OAFirstMapillaryBottomSheetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAFirstMapillaryBottomSheetViewController.h; sourceTree = "<group>"; };
 		DA5A7FA226C563A500F274C7 /* OAFirstMapillaryBottomSheetViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAFirstMapillaryBottomSheetViewController.mm; sourceTree = "<group>"; };
 		DA5A7FA326C563A500F274C7 /* OAInstallMapillaryBottomSheetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAInstallMapillaryBottomSheetViewController.h; sourceTree = "<group>"; };
@@ -6842,8 +6838,6 @@
 		DA5A7FC026C563A500F274C7 /* OAProfileSelectionBottomSheetViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAProfileSelectionBottomSheetViewController.m; sourceTree = "<group>"; };
 		DA5A7FC126C563A500F274C7 /* OAProfileSelectionBottomSheetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAProfileSelectionBottomSheetViewController.h; sourceTree = "<group>"; };
 		DA5A7FC226C563A500F274C7 /* OABaseBottomSheetViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OABaseBottomSheetViewController.xib; sourceTree = "<group>"; };
-		DA5A7FC426C563A500F274C7 /* OAPluginResetBottomSheetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAPluginResetBottomSheetViewController.h; sourceTree = "<group>"; };
-		DA5A7FC526C563A500F274C7 /* OAPluginResetBottomSheetViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAPluginResetBottomSheetViewController.m; sourceTree = "<group>"; };
 		DA5A7FC726C563A500F274C7 /* OAUploadProgressBottomSheetViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAUploadProgressBottomSheetViewController.mm; sourceTree = "<group>"; };
 		DA5A7FC826C563A500F274C7 /* OAOsmNoteBottomSheetViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAOsmNoteBottomSheetViewController.mm; sourceTree = "<group>"; };
 		DA5A7FC926C563A500F274C7 /* OAOsmEditActionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAOsmEditActionsViewController.h; sourceTree = "<group>"; };
@@ -12496,7 +12490,6 @@
 				DA5A7FB726C563A500F274C7 /* OABottomSheetViewController.mm */,
 				DA5A7FE326C563A500F274C7 /* OABottomSheetViewController.xib */,
 				DA5A7FC626C563A500F274C7 /* OsmEditingBottomSheet */,
-				DA5A7FC326C563A500F274C7 /* PluginResetBottomSheet */,
 				DA5A7FBF26C563A500F274C7 /* ProfileSelectionBottomSheet */,
 				DA5A7FB326C563A500F274C7 /* PublicTransportOptionsBottomSheet */,
 				DA5A7FE026C563A500F274C7 /* QuickActionBottomSheet */,
@@ -12506,7 +12499,6 @@
 				DA5A7FD326C563A500F274C7 /* SettingsActionBottomSheet */,
 				DA5A7F9A26C563A500F274C7 /* TargetOptionsBottomSheet */,
 				DA5A7FD926C563A500F274C7 /* WhatsNewBottomSheet */,
-				DA5A7F9D26C563A500F274C7 /* WikiLinkBottomSheet */,
 			);
 			path = BottomSheet;
 			sourceTree = "<group>";
@@ -12527,15 +12519,6 @@
 				DA5A7F9C26C563A500F274C7 /* OATargetOptionsBottomSheetViewController.mm */,
 			);
 			path = TargetOptionsBottomSheet;
-			sourceTree = "<group>";
-		};
-		DA5A7F9D26C563A500F274C7 /* WikiLinkBottomSheet */ = {
-			isa = PBXGroup;
-			children = (
-				DA5A7F9E26C563A500F274C7 /* OAWikiLinkBottomSheetViewController.h */,
-				DA5A7F9F26C563A500F274C7 /* OAWikiLinkBottomSheetViewController.mm */,
-			);
-			path = WikiLinkBottomSheet;
 			sourceTree = "<group>";
 		};
 		DA5A7FA026C563A500F274C7 /* MapillaryBottomSheet */ = {
@@ -12602,15 +12585,6 @@
 				DA5A7FC126C563A500F274C7 /* OAProfileSelectionBottomSheetViewController.h */,
 			);
 			path = ProfileSelectionBottomSheet;
-			sourceTree = "<group>";
-		};
-		DA5A7FC326C563A500F274C7 /* PluginResetBottomSheet */ = {
-			isa = PBXGroup;
-			children = (
-				DA5A7FC426C563A500F274C7 /* OAPluginResetBottomSheetViewController.h */,
-				DA5A7FC526C563A500F274C7 /* OAPluginResetBottomSheetViewController.m */,
-			);
-			path = PluginResetBottomSheet;
 			sourceTree = "<group>";
 		};
 		DA5A7FC626C563A500F274C7 /* OsmEditingBottomSheet */ = {
@@ -16177,7 +16151,6 @@
 				32C21CB727E0A66B00DE4266 /* OARecordSettingsBottomSheetViewController.m in Sources */,
 				DA5A850926C563A900F274C7 /* UITableViewCell+getTableView.m in Sources */,
 				DA5A83FF26C563A800F274C7 /* OAQuickSearchEmptyResultListItem.mm in Sources */,
-				DA5A84C326C563A900F274C7 /* OAPluginResetBottomSheetViewController.m in Sources */,
 				DA5A838926C563A800F274C7 /* OADonationSettingsViewController.mm in Sources */,
 				DA5A84BA26C563A900F274C7 /* OAMoreOptionsBottomSheetViewController.mm in Sources */,
 				DA5A812E26C563A700F274C7 /* OAMapMarkersCollection.mm in Sources */,
@@ -16645,7 +16618,6 @@
 				DA1A886427FC66DA00A82DF6 /* OABackupDbHelper.m in Sources */,
 				DA5A824E26C563A700F274C7 /* OAMapBehaviorViewController.m in Sources */,
 				DA5A83BD26C563A800F274C7 /* OAAddQuickActionViewController.m in Sources */,
-				DA5A84B226C563A900F274C7 /* OAWikiLinkBottomSheetViewController.mm in Sources */,
 				DA5A81DD26C563A700F274C7 /* OAStreetIntersection.mm in Sources */,
 				DA5A83E226C563A800F274C7 /* OAEditColorViewController.m in Sources */,
 				DA297C2E2811601F009C248E /* OACompoundIconUtils.mm in Sources */,

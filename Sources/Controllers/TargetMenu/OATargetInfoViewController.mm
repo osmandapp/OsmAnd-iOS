@@ -966,7 +966,6 @@
             OAIAPHelper *helper = [OAIAPHelper sharedInstance];
             if ([helper.wiki isPurchased])
             {
-                [self.delegate btnCancelPressed];
                 [OAWikiArticleHelper showWikiArticle:self.location url:info.text];
             }
             else

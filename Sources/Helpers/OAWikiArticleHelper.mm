@@ -10,7 +10,6 @@
 #import "OAWorldRegion.h"
 #import "OsmAndApp.h"
 #import "OAManageResourcesViewController.h"
-#import "OAWikiLinkBottomSheetViewController.h"
 #import "OAPOIHelper.h"
 #import "OAPOI.h"
 #import "OAWikiWebViewController.h"

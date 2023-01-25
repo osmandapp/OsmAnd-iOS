@@ -22,7 +22,6 @@
 #import "OAOsmEditingSettingsViewController.h"
 #import "OAOsmandDevelopmentPlugin.h"
 #import "OAOsmandDevelopmentViewController.h"
-#import "OAPluginResetBottomSheetViewController.h"
 #import "OASettingsHelper.h"
 #import "OAProfileSettingsItem.h"
 #import "OAMapStyleSettings.h"
@@ -51,7 +50,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     EOADashboardScreenTypeScreen
 };
 
-@interface OAConfigureProfileViewController () <UITableViewDelegate, UITableViewDataSource, OACopyProfileBottomSheetDelegate, OADeleteProfileBottomSheetDelegate, OAPluginResetBottomSheetDelegate, OASettingsImportExportDelegate>
+@interface OAConfigureProfileViewController () <UITableViewDelegate, UITableViewDataSource, OACopyProfileBottomSheetDelegate, OADeleteProfileBottomSheetDelegate, OASettingsImportExportDelegate>
 
 @end
 
@@ -613,13 +612,6 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 - (void) onDeleteProfileDismissed
 {
     [_cpyProfileViewUnderlay removeFromSuperview];
-}
-
-#pragma mark - OAPluginResetBottomSheetDelegate
-
-- (void) onPluginSettingsReset
-{
-    [self resetAppModePrefs:_appMode];
 }
 
 - (void) resetAppModePrefs:(OAApplicationMode *)appMode

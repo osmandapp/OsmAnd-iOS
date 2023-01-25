@@ -2784,3 +2784,4 @@
 "si_nm_ft" = "Millas náuticas/pies";
 "si_nm_mt" = "Millas/metros náuticos";
 "shared_string_does_not_exist" = "No existe";
+"download_wikipedia_data" = "Descargar los datos de la Wikipedia";

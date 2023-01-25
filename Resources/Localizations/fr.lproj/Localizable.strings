@@ -257,7 +257,7 @@
 "go_to_map" = "Afficher la carte";
 "current_track" = "Trace actuelle";
 "from_location" = "loin";
-"time_will_close" = "Fermera dans";
+"will_close_at" = "Fermera dans";
 "time_will_open" = "S'ouvrira dans";
 "change_group" = "Changer de groupe";
 "change_color" = "Modifier la couleur";
@@ -839,7 +839,7 @@
 "osn_bug_name" = "Note OSM";
 "poi_remove_success" = "Supprimé";
 "shared_string_modified" = "Modifié";
-"osm_reopened" = "Ré-ouvert";
+"osm_edit_reopened_note" = "Ré-ouvert";
 "osm_name" = "Identifiant OpenStreetMap";
 "osm_pass" = "Mot de passe OpenStreetMap";
 "osm_offline_editing" = "Toujours utiliser l'édition hors-ligne";
@@ -1425,7 +1425,7 @@
 "res_import_success" = "%@ a été importé avec succès";
 "obf_import_success" = "Le fichier a été importé avec succès";
 "obf_import_failed" = "Échec de l'import du fichier";
-"change_position_descr" = "Bouger la carte pour modifier la position de l'objet";
+"move_marker_bottom_sheet_title" = "Bouger la carte pour modifier la position de l'objet";
 "change_object_posiotion" = "Modifier la position de l'objet";
 "product_desc_asia_short" = "Cartes de l'Asie";
 "product_desc_southamerica_short" = "Cartes de l'Amérique du Sud";
@@ -1779,7 +1779,7 @@
 "simplified_track" = "Trace simplifiée";
 "prev_segs_recalc_descr" = "Tous les segments précédents seront recalculés avec le profil sélectionné";
 "next_segs_recalc_descr" = "Tous les segments suivants seront recalculés avec le profil sélectionné";
-"selected_seg_recalc_descr" = "Seul le segment sélectionné sera recalculé avec le profil sélectionné";
+"only_selected_segment_recalc" = "Seul le segment sélectionné sera recalculé avec le profil sélectionné";
 "prev_segs_dist" = "Tous les segments précédents %@";
 "prev_seg_dist" = "Segment précédent %@";
 "next_segs_dist" = "Tous les segments suivants %@";
@@ -2793,5 +2793,4 @@
 "routing_attr_carriage_restrictions_name" = "Restrictions de chariot";
 "routing_attr_avoid_footways_description" = "Éviter les trottoirs";
 "shared_string_does_not_exist" = "N'existe pas";
-"download_wikipedia_data" = "Télécharger les données Wikipedia";
-
+"download_wikipedia_data" = "Télécharger les données Wikiped

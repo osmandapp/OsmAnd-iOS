@@ -330,7 +330,7 @@
 "plugin_popup_wiki_ask" = "Pre stiahnutie údajov z Wikipédie údajov musíte aktivovať plugin: <b>Wikipedia</b>";
 "shared_string_open" = "Otvoriť";
 "time_closed" = "Zatvorené";
-"time_will_close" = "Zatvorí o";
+"will_close_at" = "Zatvorí o";
 "time_will_open" = "Otvorí o";
 "osm_live_active" = "Aktívne";
 "menu_all_trips" = "Všetky stopy";
@@ -823,7 +823,7 @@
 "osm_created" = "Vytvorená";
 "poi_remove_success" = "Odstránené";
 "shared_string_modified" = "Zmenené";
-"osm_reopened" = "Znovuotvorená";
+"osm_edit_reopened_note" = "Znovuotvorená";
 "osm_name" = "Prihlasovacie meno v OpenStreetMap";
 "osm_pass" = "Heslo v OpenStreetMap";
 "osm_offline_editing" = "Vždy použiť úpravy offline";
@@ -2322,5 +2322,4 @@
 "routing_attr_prefer_hiking_routes_name" = "Uprednostniť turistické trasy";
 "rendering_attr_weatherWindSpeedContours_name" = "Izočiary nárazov vetra";
 "routing_attr_allow_streams_name" = "Povoliť potoky a odtokové kanály";
-"download_wikipedia_data" = "Stiahnuť údaje Wikipédie";
-
+"download_wikipedia_data" = "Stiahnuť údaje Wikipéd

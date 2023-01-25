@@ -630,7 +630,7 @@
 "osm_created" = "Creat";
 "poi_remove_success" = "Eliminat";
 "shared_string_modified" = "Modificat";
-"osm_reopened" = "Tornat dobèrt";
+"osm_edit_reopened_note" = "Tornat dobèrt";
 "osm_name" = "Nom d'utilizator OpenStreetMap";
 "osm_pass" = "Senhau OpenStreetMap";
 "osm_offline_editing" = "Emplegar sempre l'edicion fòra de linha";
@@ -993,7 +993,7 @@
 "prch_srtm_info" = "L'ajust de Corbas de nivèu activa l'opcion 3D per lei mapas teledescargadas, compradas ò obtengudas dins lo limit a gratis.";
 "shared_string_open" = "Dobèrt";
 "time_closed" = "Clavat";
-"time_will_close" = "Se clavarà dins";
+"will_close_at" = "Se clavarà dins";
 "time_will_open" = "Se dobrirà dins";
 "osm_live_active" = "Actiu";
 "menu_all_trips" = "Totei lei traças";
@@ -1384,7 +1384,7 @@
 "map_settings_install_more" = "Installar mai...";
 "configure_screen_quick_action" = "Accion dirècta";
 "reorder_profiles" = "Editar la lista de perfius";
-"selected_seg_recalc_descr" = "L'estirada seleccionada soleta se tornarà calcular amb lo perfiu chausit";
+"only_selected_segment_recalc" = "L'estirada seleccionada soleta se tornarà calcular amb lo perfiu chausit";
 "shared_string_all_languages" = "Totei lei lengas";
 "available_languages" = "Lengas disponiblas";
 "preferred_languages" = "Lengas preferidas";
@@ -1451,7 +1451,7 @@
 "routing_attr_avoid_shuttle_train_description" = "Evitar lei trens naveta";
 "rendering_attr_busRoutes_name" = "Linhas de bus";
 "rendering_attr_pisteRoutes_name" = "Pistas d\'esquí";
-"change_position_descr" = "Mòure la mapa per cambiar la posicion de l'objècte";
+"move_marker_bottom_sheet_title" = "Mòure la mapa per cambiar la posicion de l'objècte";
 "quick_action_remove_next_destination" = "Suprimir lo ponch de destinacion pus pròche";
 "app_mode_offroad" = "Fòra de camin";
 "routing_attr_allow_private_name" = "Permetre l\'accès ai proprietats privadas";
@@ -2513,5 +2513,4 @@
 "rendering_value_omit_name" = "Evitar";
 "routing_attr_allow_streams_description" = "Permetre rius e vabres";
 "rendering_attr_OSMMapperAssistantFixme_description" = "Veire lei balisas fixme";
-"rendering_attr_OSMMapperAssistantNote_description" = "Mostrar lei nòtas de balisa";
-
+"rendering_attr_OSMMapperAssistantNote_description" = "Mostrar lei nòtas de bali

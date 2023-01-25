@@ -642,7 +642,7 @@
 "osm_created" = "Loodud";
 "poi_remove_success" = "Kustutatud";
 "shared_string_modified" = "Muudetud";
-"osm_reopened" = "Taasavatud";
+"osm_edit_reopened_note" = "Taasavatud";
 "osm_name" = "OpenStreetMap kasutajanimi";
 "osm_pass" = "OpenStreetMap salasõna";
 "osm_offline_editing" = "Kasuta alati võrguühenduseta muutmist";
@@ -1017,7 +1017,7 @@
 "prch_srtm_info" = "Kõrgusjoonte lisa tekitab kõrgusjooned kaartidel, mille jaoks sul on õigus, oled ostnud või alla laadinud tasuta allalaadimiste piires.";
 "shared_string_open" = "Avatud";
 "time_closed" = "Suletud";
-"time_will_close" = "Suletakse";
+"will_close_at" = "Suletakse";
 "time_will_open" = "Avatakse";
 "osm_live_active" = "Aktiivne";
 "menu_all_trips" = "Kõik teekonnad";
@@ -1639,7 +1639,7 @@
 "offline_raster_map" = "Võrguühenduseta rasterkaart";
 "online_raster_map" = "Võrgupõhine rasterkaart";
 "default_speed_descr" = "Hindab saabumisaega tundmatute teede korral ja kiirusepiiranguid kõikidel teedel (võib muuta teekonda)";
-"change_position_descr" = "Objekti asukoha muutmiseks liiguta kaarti";
+"move_marker_bottom_sheet_title" = "Objekti asukoha muutmiseks liiguta kaarti";
 "change_object_posiotion" = "Muuda objekti asukoha";
 "map_coords" = "Kaart: Laiuskraad %.5f Pikkuskraad %.5f";
 "default_speed_dialog_msg" = "Hindab saabumisaega tundmatute teede korral ja kiirusepiiranguid kõikidel teedel (võib muuta teekonda)";
@@ -1848,7 +1848,7 @@
 "prev_segs_recalc_descr" = "Kõik eelmised lõigud arvutatakse valitud profiili alusel ümber";
 "prev_segs_dist" = "Kõik eelmised lõigud %@";
 "prev_seg_dist" = "Eelmine lõik %@";
-"selected_seg_recalc_descr" = "Vaid valitud lõik arvutatakse valitud profiili alusel ümber";
+"only_selected_segment_recalc" = "Vaid valitud lõik arvutatakse valitud profiili alusel ümber";
 "next_segs_recalc_descr" = "Kõik järgnevad lõigud arvutatakse valitud profiili alusel ümber";
 "personal_category_name" = "Isiklik";
 "whole_track" = "Kogu teekond";
@@ -2502,5 +2502,4 @@
 "rendering_attr_horse_scale_dangerous_name" = "Ohtlik";
 "rendering_attr_noNatureReserveBoundaries_name" = "Looduse piirid";
 "routing_attr_length_description" = "Täpsusta marsruutidel lubatud sõiduki pikkus.";
-"download_wikipedia_data" = "Laadi alla Vikipeedia andmed";
-
+"download_wikipedia_data" = "Laadi alla Vikipeedia andm

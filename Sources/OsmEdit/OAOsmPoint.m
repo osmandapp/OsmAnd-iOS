@@ -92,7 +92,7 @@
         case MODIFY:
             return OALocalizedString(@"shared_string_modified");
         case REOPEN:
-            return OALocalizedString(@"osm_reopened");
+            return OALocalizedString(@"osm_edit_reopened_note");
         default:
             return @"";
     }

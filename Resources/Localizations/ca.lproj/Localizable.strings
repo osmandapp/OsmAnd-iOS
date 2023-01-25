@@ -314,7 +314,7 @@
 "prch_srtm_info" = "El complement de Corbes de nivell activa aquesta opcio 3D per als mapes que hàgiu titulat, comprat o baixat dins el límit gratuït.";
 "shared_string_open" = "Obre";
 "time_closed" = "Tancat";
-"time_will_close" = "Es tancarà en";
+"will_close_at" = "Es tancarà en";
 "time_will_open" = "S'obrirà en";
 "menu_my_trips" = "Els meus recorreguts";
 "osm_live_active" = "Activa";
@@ -874,7 +874,7 @@
 "osm_created" = "Creat";
 "poi_remove_success" = "Eliminat";
 "shared_string_modified" = "Modificat";
-"osm_reopened" = "Tornat a obrir";
+"osm_edit_reopened_note" = "Tornat a obrir";
 "osm_name" = "Nom d'usuari OpenStreetMap";
 "osm_pass" = "Contrasenya de OpenStreetMap";
 "osm_offline_editing" = "Utilitza sempre l'edició fora de línia";
@@ -1544,7 +1544,7 @@
 "osmand_parking_warning" = "Avís";
 "clear_tiles_warning" = "L\'aplicació d\'aquests canvis esborrarà les dades de la memòria cau per a aquesta font de tessel·les";
 "change_object_posiotion" = "Canvia la posició de l'objecte";
-"change_position_descr" = "Arrossegueu el mapa per canviar la posició de l'objecte";
+"move_marker_bottom_sheet_title" = "Arrossegueu el mapa per canviar la posició de l'objecte";
 "online_raster_maps" = "Mapes de bits en línia";
 "import_raster_map_success" = "S'ha importat el mapa de bits.Obriu Configuració de Mapes i activeu-lo via Superposició/Mapa de fons";
 "import_raster_map_failed" = "Ha fallat la importació del mapa de bits";
@@ -1858,7 +1858,7 @@
 "vk" = "VK";
 "prev_segs_recalc_descr" = "Tots els segments anteriors es tornaran a calcular amb el perfil seleccionat";
 "next_segs_recalc_descr" = "Tots els segments següents es tornaran a calcular amb el perfil seleccionat";
-"selected_seg_recalc_descr" = "Només es tornarà a calcular el segment seleccionat amb el perfil seleccionat";
+"only_selected_segment_recalc" = "Només es tornarà a calcular el segment seleccionat amb el perfil seleccionat";
 "prev_segs_dist" = "Tots els segments %@ anteriors";
 "prev_seg_dist" = "Segment %@ anterior";
 "next_segs_dist" = "Tots els segments %@ següents";
@@ -2327,5 +2327,4 @@
 "rendering_attr_weatherTempContours_name" = "Línies isotermes";
 "routing_attr_prefer_tactile_paving_name" = "Prefereix el paviment tàctil";
 "rendering_attr_weatherWindSpeedContours_name" = "Isolínies de les ràfegues de vent";
-"download_wikipedia_data" = "Baixa dades de la Viquipèdia";
-
+"download_wikipedia_data" = "Baixa dades de la Viquipèd

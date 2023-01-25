@@ -800,7 +800,7 @@
 "osm_delete_confirmation_descr" = "Tem a certeza de quer eliminar este POI?";
 "osm_created" = "Criado";
 "shared_string_modified" = "Alterado";
-"osm_reopened" = "Reaberto";
+"osm_edit_reopened_note" = "Reaberto";
 "osm_name" = "Nome de utilizador do OpenStreetMap";
 "osm_pass" = "Palavra-passe do OpenStreetMap";
 "osm_offline_editing" = "Usar sempre a edição offline";
@@ -877,7 +877,7 @@
 "prch_wiki_info" = "A extensão Wikipédia ativa informações para mapas da Wikipédia a que tem direito, comprado ou descarregado dentro do limite gratuito.";
 "prch_srtm_info" = "A extensão curvas de nível ativa curvas de nível para os mapas a que tem direito, comprado ou descarregado dentro do limite gratuito.";
 "time_closed" = "Fechado";
-"time_will_close" = "Fecha às";
+"will_close_at" = "Fecha às";
 "time_will_open" = "Abre às";
 "menu_all_trips" = "Todos os trilhos";
 "total_time" = "Tempo total";
@@ -1720,7 +1720,7 @@
 "plugin_popup_osm_editing_ask" = "Ative o complemento \"Editar o OpenStreetMap\" para adicionar elementos ao mapa e notas para outros editores";
 "plugin_popup_osm_editing_title" = "Ativar a edição do OpenStreetMap";
 "default_speed_descr" = "Estima a hora de chegada de categorias de estradas desconhecidas e limita a velocidade para todas as estradas (pode afetar o roteamento)";
-"change_position_descr" = "Mova o mapa para mudar a posição do objeto";
+"move_marker_bottom_sheet_title" = "Mova o mapa para mudar a posição do objeto";
 "change_object_posiotion" = "Alterar a posição do objeto";
 "map_coords" = "Mapa: Lat %.5f Lon %.5f";
 "by_transport_type" = "Por %@";
@@ -1811,7 +1811,7 @@
 "join_segments" = "Unir segmentos";
 "prev_segs_recalc_descr" = "Todos os segmentos anteriores serão recalculados usando o perfil selecionado";
 "next_segs_recalc_descr" = "Todos os segmentos subsequentes serão recalculados utilizando o perfil selecionado";
-"selected_seg_recalc_descr" = "Apenas o segmento selecionado será recalculado usando o perfil selecionado";
+"only_selected_segment_recalc" = "Apenas o segmento selecionado será recalculado usando o perfil selecionado";
 "prev_segs_dist" = "Todos os segmentos anteriores %@";
 "prev_seg_dist" = "Segmento anterior %@";
 "next_segs_dist" = "Todos os segmentos subsequentes %@";
@@ -2796,5 +2796,4 @@
 "routing_attr_difficulty_preference_expert_name" = "Especialista";
 "rendering_attr_weatherPrecipitationContours_name" = "Isolinhas de precipitação";
 "shared_string_does_not_exist" = "Não existe";
-"download_wikipedia_data" = "Descarregar dados da Wikipédia";
-
+"download_wikipedia_data" = "Descarregar dados da Wikipéd

@@ -632,7 +632,7 @@
 "osm_created" = "Created";
 "poi_remove_success" = "Slettet";
 "shared_string_modified" = "Modified";
-"osm_reopened" = "Reopened";
+"osm_edit_reopened_note" = "Reopened";
 "osm_name" = "OpenStreetMap username";
 "osm_pass" = "OpenStreetMap password";
 "osm_offline_editing" = "Always use offline editing";
@@ -995,7 +995,7 @@
 "prch_srtm_info" = "Contour lines addon enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
 "shared_string_open" = "Åpne";
 "time_closed" = "Closed";
-"time_will_close" = "Will close in";
+"will_close_at" = "Will close in";
 "time_will_open" = "Will open in";
 "osm_live_active" = "Aktiv";
 "menu_all_trips" = "All Trips";
@@ -1837,7 +1837,7 @@
 "shared_string_circle" = "Sirkel";
 "restart" = "Start på ny";
 "settings_item_read_error" = "Kunne ikke lese fra \"%@\".";
-"change_position_descr" = "Flytt kartet for å endre objektets posisjon";
+"move_marker_bottom_sheet_title" = "Flytt kartet for å endre objektets posisjon";
 "calc_pedestrian_route" = "Regn ut spaseringsrute";
 "product_desc_antarctica" = "Ubegrensede kartnedlastinger for Antarktis";
 "context_menu_item_edit_waypoint" = "Rediger GPX-rutepunkt";
@@ -2488,5 +2488,4 @@
 "rendering_attr_horse_scale_impossible_name" = "Umulig";
 "rendering_attr_OSMMapperAssistantFixme_description" = "Vis fiksmeg-etiketter";
 "rendering_attr_showWaterwayTunnels_name" = "Vannveistunneler";
-"download_wikipedia_data" = "Last ned Wikipedia-data";
-
+"download_wikipedia_data" = "Last ned Wikipedia-da

@@ -372,7 +372,7 @@
 "prch_srtm_info" = "Плагін Ізолінії показує ізолінії на мапах, на які Ви маєте право, які були придбані чи завантажені в межах вільного ліміту.";
 "shared_string_open" = "Відкрити";
 "time_closed" = "Зачинено";
-"time_will_close" = "Зачинеться через";
+"will_close_at" = "Зачинеться через";
 "time_will_open" = "Відкриється через";
 "osm_live_active" = "Увімкнено";
 "menu_all_trips" = "Усі треки";
@@ -816,7 +816,7 @@
 "osm_created" = "Створено";
 "poi_remove_success" = "Вилучено";
 "shared_string_modified" = "Змінено";
-"osm_reopened" = "Перевідкрито";
+"osm_edit_reopened_note" = "Перевідкрито";
 "osm_name" = "Ім'я користувача OpenStreetMap";
 "osm_pass" = "Пароль OpenStreetMap";
 "osm_offline_editing" = "Завжди редагувати в автономному режимі";
@@ -1543,7 +1543,7 @@
 "osmand_parking_warning" = "Попередження";
 "clear_tiles_warning" = "Застосування цих змін очистить дані, отримані з цього джерела тайлів";
 "change_object_posiotion" = "Змінити позицію об'єкта";
-"change_position_descr" = "Перемістіть мапу, щоб змінити положення об'єкта";
+"move_marker_bottom_sheet_title" = "Перемістіть мапу, щоб змінити положення об'єкта";
 "online_raster_maps" = "Мережеві растрові мапи";
 "import_raster_map_success" = "Растрову мапу імпортовано. Відкрийте Налаштування мапи та задійте її за допомогою Накладки/Підкладки";
 "import_raster_map_failed" = "Помилка імпорту растрової мапи";
@@ -1861,7 +1861,7 @@
 "personal_category_name" = "Особистий";
 "prev_segs_recalc_descr" = "Усі наступні відрізки будуть прокладені наново за допомогою вибраного профілю";
 "next_segs_recalc_descr" = "Усі наступні відрізки будуть прокладені наново за допомогою вибраного профілю";
-"selected_seg_recalc_descr" = "Лише вибраний відрізок буде прокладений наново за допомогою вибраного профілю";
+"only_selected_segment_recalc" = "Лише вибраний відрізок буде прокладений наново за допомогою вибраного профілю";
 "prev_segs_dist" = "Усі попередні відрізки %@";
 "prev_seg_dist" = "Попередній відрізок %@";
 "next_segs_dist" = "Усі наступні відрізки %@";
@@ -2803,5 +2803,4 @@
 "rendering_attr_horse_scale_difficult_name" = "Складність";
 "rendering_attr_weatherWindSpeedContours_name" = "Ізолінії поривів вітру";
 "shared_string_does_not_exist" = "Не існує";
-"download_wikipedia_data" = "Завантаження даних Вікіпедії";
-
+"download_wikipedia_data" = "Завантаження даних Вікіпед

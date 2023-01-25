@@ -341,7 +341,7 @@
 "srtm_plugin_disabled" = "Wyłączone poziomice";
 "shared_string_open" = "Otwórz";
 "time_closed" = "Zamknięte";
-"time_will_close" = "Zostanie zamknięte za";
+"will_close_at" = "Zostanie zamknięte za";
 "time_will_open" = "Zostanie otwarte za";
 "osm_live_active" = "Aktywny";
 "total_time" = "Całkowity czas";
@@ -872,7 +872,7 @@
 "osm_created" = "Utworzono";
 "poi_remove_success" = "Usunięto";
 "shared_string_modified" = "Zmieniony";
-"osm_reopened" = "Otwarto ponownie";
+"osm_edit_reopened_note" = "Otwarto ponownie";
 "osm_name" = "Nazwa użytkownika OpenStreetMap";
 "osm_pass" = "Hasło OpenStreetMap";
 "osm_offline_editing" = "Zawsze używaj edytowania offline";
@@ -1573,7 +1573,7 @@
 "app_mode_bicycle" = "Kolarstwo";
 "app_mode_helicopter" = "Śmigłowiec";
 "app_mode_horse" = "Konie";
-"change_position_descr" = "Przesuń mapę by zmienić położenie obiektu";
+"move_marker_bottom_sheet_title" = "Przesuń mapę by zmienić położenie obiektu";
 "map_coords" = "Mapa:Szer %.5f Dł %.5f";
 "transport_stops" = "przystanki";
 "by_transport_type" = "Użyto %@";
@@ -2016,7 +2016,7 @@
 "next_segs_dist" = "Wszystkie kolejne segmenty %@";
 "prev_segs_recalc_descr" = "Wszystkie poprzednie segmenty zostaną ponownie obliczone przy użyciu wybranego profilu";
 "next_segs_recalc_descr" = "Wszystkie kolejne segmenty zostaną ponownie obliczone przy użyciu wybranego profilu";
-"selected_seg_recalc_descr" = "Tylko wybrany segment zostanie ponownie obliczony przy użyciu wybranego profilu";
+"only_selected_segment_recalc" = "Tylko wybrany segment zostanie ponownie obliczony przy użyciu wybranego profilu";
 "whole_track_descr" = "Cała trasa zostanie ponownie obliczona przy użyciu wybranego profilu.";
 "route_betw_points_descr" = "Wybierz sposób łączenia punktów: z linią prostą lub obliczając trasę za pomocą jednego z profilii wymienionych poniżej.";
 "reset_profile_action_descr" = "Wszystkie ustawienia profilu zostaną przywrócone do stanu po instalacji. Naciśnięcie przycisku Resetuj spowoduje odrzucenie wszystkich zmian, tej czynności nie można cofnąć.";
@@ -4305,5 +4305,4 @@
 "lang_pt_br" = "Portugalski (Brazylia)";
 "routing_attr_motor_type_name" = "Silnik pojazdu";
 "lang_nv" = "Nawaho";
-"walking_route_osmc_description" = "Przypisz kolor trasom na podstawie ich indywidualnie przypisanego lokalnie koloru (jeśli dostępny w OpenStreetMap) i typu (międzynarodowe, regionalne, lokalne).";
-
+"walking_route_osmc_description" = "Przypisz kolor trasom na podstawie ich indywidualnie przypisanego lokalnie koloru (jeśli dostępny w OpenStreetMap) i typu (międzynarodowe, regionalne, lokalne

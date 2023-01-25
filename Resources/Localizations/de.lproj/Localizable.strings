@@ -322,7 +322,7 @@
 "srtm_plugin_disabled" = "Höhenlinien deaktiviert";
 "shared_string_open" = "Öffnen";
 "time_closed" = "Geschlossen";
-"time_will_close" = "Schließt in";
+"will_close_at" = "Schließt in";
 "time_will_open" = "Öffnet in";
 "osm_live_active" = "Aktiv";
 "menu_all_trips" = "Alle Tracks";
@@ -876,7 +876,7 @@
 "osm_created" = "Erstellt";
 "poi_remove_success" = "Gelöscht";
 "shared_string_modified" = "Geändert";
-"osm_reopened" = "Wieder geöffnet";
+"osm_edit_reopened_note" = "Wieder geöffnet";
 "osm_name" = "OpenStreetMap Benutzername";
 "osm_pass" = "OpenStreetMap Passwort";
 "osm_offline_editing" = "Immer Offline bearbeiten verwenden";
@@ -1547,7 +1547,7 @@
 "osmand_parking_warning" = "Warnung";
 "clear_tiles_warning" = "Durch die Anwendung dieserÄnderungen werden die zwischengespeicherten Daten für diese Kachelquelle gelöscht";
 "change_object_posiotion" = "Position des Objekts ändern";
-"change_position_descr" = "Bewegen Sie die Karte, um die Position des Objekts zu ändern";
+"move_marker_bottom_sheet_title" = "Bewegen Sie die Karte, um die Position des Objekts zu ändern";
 "online_raster_maps" = "Online-Rasterkarten";
 "import_raster_map_success" = "Rasterkarte wurde importiert. Öffnen Sie die Karteneinstellungen und aktivieren Sie diese über Overlay/Underlay-Karte";
 "import_raster_map_failed" = "Rasterkarten-Import fehlgeschlagen";
@@ -1867,7 +1867,7 @@
 "personal_category_name" = "Persönlich";
 "prev_segs_recalc_descr" = "Alle vorherigen Segmente werden unter Verwendung des ausgewählten Profils neu errechnet";
 "next_segs_recalc_descr" = "Alle weiteren Segmente werden unter Verwendung des gewählten Profils neu berechnet";
-"selected_seg_recalc_descr" = "Nur das ausgewählte Segment wird unter Verwendung des ausgewählten Profils neu berechnet";
+"only_selected_segment_recalc" = "Nur das ausgewählte Segment wird unter Verwendung des ausgewählten Profils neu berechnet";
 "prev_segs_dist" = "Alle vorherigen Segmente %@";
 "prev_seg_dist" = "Vorheriges Segment %@";
 "next_segs_dist" = "Alle weiteren Segmente %@";
@@ -2808,5 +2808,4 @@
 "rendering_attr_showBusRoutes_name" = "Buslinien";
 "rendering_attr_depthContourColorScheme_description" = "Farbschema der Tiefenlinien";
 "shared_string_does_not_exist" = "Nicht vorhanden";
-"download_wikipedia_data" = "Wikipedia-Daten herunterladen";
-
+"download_wikipedia_data" = "Wikipedia-Daten herunterlad

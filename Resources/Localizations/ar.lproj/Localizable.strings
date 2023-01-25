@@ -612,7 +612,7 @@
 "prch_srtm_info" = "يتيح ملحق ويكبيديا معلومات ويكيبيديا للخرائط التي يحق لك الحصول عليها أو شراؤها أو تنزيلها ضمن حدود مجانية.";
 "shared_string_open" = "فتح";
 "time_closed" = "مغلقة";
-"time_will_close" = "سيغلق في";
+"will_close_at" = "سيغلق في";
 "time_will_open" = "سيفتح في";
 "osm_live_active" = "نشط";
 "menu_all_trips" = "جميع المسارات";
@@ -901,7 +901,7 @@
 "osm_created" = "تم إنشاءة";
 "poi_remove_success" = "تم الحذف";
 "shared_string_modified" = "تم التعديل";
-"osm_reopened" = "إعادة فتح";
+"osm_edit_reopened_note" = "إعادة فتح";
 "osm_name" = "اسم مستخدم خريطة الشارع المفتوح";
 "osm_pass" = "كلمة مرور خريطة الشارع المفتوح";
 "osm_offline_editing" = "التعديل دون اتصال دائما";
@@ -1541,7 +1541,7 @@
 "osmand_parking_warning" = "تحذير";
 "clear_tiles_warning" = "سيؤدي تطبيق التغييرات إلى مسح البيانات المخزنة مؤقتاً للمصدر هذا";
 "change_object_posiotion" = "تغيير موضع الكائن";
-"change_position_descr" = "انقل الخريطة لتغيير موضع الكائن";
+"move_marker_bottom_sheet_title" = "انقل الخريطة لتغيير موضع الكائن";
 "online_raster_maps" = "خريطة نقطية على الانترنت";
 "import_raster_map_success" = "تم استيراد الخريطة النقطية. افتح \"إعدادات الخريطة\" وقم بتنشيطها عبر الخريطة \"العلوية / السفلية\"";
 "import_raster_map_failed" = "فشل استيراد الخريطة النقطية";
@@ -1858,7 +1858,7 @@
 "layer_amenity_label" = "تسميات النقاط ، أسماء المفضلة";
 "personal_category_name" = "شخصي";
 "next_segs_recalc_descr" = "سيتم إعادة حساب كافة الشرائح اللاحقة باستخدام ملف التعريف المحدد";
-"selected_seg_recalc_descr" = "سيتم إعادة حساب المقطع التالي فقط باستخدام ملف التعريف المحدد";
+"only_selected_segment_recalc" = "سيتم إعادة حساب المقطع التالي فقط باستخدام ملف التعريف المحدد";
 "prev_segs_recalc_descr" = "سيتم إعادة حساب كافة الشرائح السابقة باستخدام ملف التعريف المحدد";
 "prev_segs_dist" = "جميع المقاطع السابقة %@";
 "prev_seg_dist" = "الجزء السابق %@";
@@ -2799,5 +2799,4 @@
 "routing_attr_difficulty_preference_intermediate_name" = "متوسط";
 "rendering_attr_weatherTempContours_name" = "خطوط قياس درجة الحرارة";
 "shared_string_does_not_exist" = "غير موجود";
-"download_wikipedia_data" = "تنزيل بيانات ويكيبيديا";
-
+"download_wikipedia_data" = "تنزيل بيانات ويكيبيد

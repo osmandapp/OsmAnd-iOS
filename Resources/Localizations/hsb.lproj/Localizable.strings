@@ -635,7 +635,7 @@
 "osm_created" = "Created";
 "poi_remove_success" = "Zajimawostka je so wotstroniła";
 "shared_string_modified" = "Modified";
-"osm_reopened" = "Reopened";
+"osm_edit_reopened_note" = "Reopened";
 "osm_name" = "OpenStreetMap username";
 "osm_pass" = "OpenStreetMap password";
 "osm_offline_editing" = "Always use offline editing";
@@ -999,7 +999,7 @@
 "prch_srtm_info" = "Contour lines addon enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
 "shared_string_open" = "Wotewrjenskečasy";
 "time_closed" = "Closed";
-"time_will_close" = "Will close in";
+"will_close_at" = "Will close in";
 "time_will_open" = "Will open in";
 "osm_live_active" = "Aktiwne";
 "menu_all_trips" = "All Trips";
@@ -1543,5 +1543,4 @@
 "offline_edition_descr" = "Přeco offline wobdźěłać.";
 "recalculate_route" = "Čaru znowa wobličić";
 "icon_group_symbols" = "Symbole";
-"depth_contours" = "Hłubokostne kontury";
-
+"depth_contours" = "Hłubokostne kontu

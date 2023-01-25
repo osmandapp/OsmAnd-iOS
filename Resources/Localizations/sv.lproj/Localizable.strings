@@ -1015,7 +1015,7 @@
 "next_segs_dist" = "All subsequent segments %@";
 "prev_seg_dist" = "Previous segment %@";
 "prev_segs_dist" = "All Previous segments %@";
-"selected_seg_recalc_descr" = "Only the selected segment will be recalculated using the selected profile";
+"only_selected_segment_recalc" = "Only the selected segment will be recalculated using the selected profile";
 "next_segs_recalc_descr" = "All subsequent segments will be recalculated using the selected profile";
 "prev_segs_recalc_descr" = "All previous segments will be recalculated using the selected profile";
 "reverse_route" = "Omvänd rutt";
@@ -1179,7 +1179,7 @@
 "osm_created" = "Created";
 "poi_remove_success" = "Borttagen";
 "shared_string_modified" = "Ändrad";
-"osm_reopened" = "Reopened";
+"osm_edit_reopened_note" = "Reopened";
 "osm_name" = "OpenStreetMap username";
 "osm_pass" = "OpenStreetMap password";
 "osm_offline_editing" = "Always use offline editing";
@@ -1647,7 +1647,7 @@
 "prch_srtm_info" = "Contour lines addon enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
 "shared_string_open" = "Öppna";
 "time_closed" = "Closed";
-"time_will_close" = "Will close in";
+"will_close_at" = "Will close in";
 "time_will_open" = "Will open in";
 "osm_live_active" = "Aktiv";
 "menu_all_trips" = "All Tracks";
@@ -1688,7 +1688,7 @@
 "context_menu_item_directions_from" = "Vägvisning från";
 "search_nearby" = "Sök i närheten";
 "change_object_posiotion" = "Change object's position";
-"change_position_descr" = "Move the map to change object's position";
+"move_marker_bottom_sheet_title" = "Move the map to change object's position";
 "est_travel_time" = "Estimate travel time";
 "pedestrian" = "Pedestrian";
 "sorting" = "Sorting";
@@ -2576,5 +2576,4 @@
 "rendering_attr_depthContourWidth_description" = "Djupkurvornas linjebredd";
 "routing_attr_avoid_fords_name" = "Undvik vadställen";
 "rendering_attr_showMtbScaleIMBATrails_description" = "Visa dedikerade mountainbike-leder.";
-"download_wikipedia_data" = "Hämta Wikipedia-data";
-
+"download_wikipedia_data" = "Hämta Wikipedia-da

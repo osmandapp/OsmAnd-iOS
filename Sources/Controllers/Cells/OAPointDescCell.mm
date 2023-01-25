@@ -74,7 +74,7 @@
     if (minutes > 0)
         [timeStr appendFormat:@"%@%d %@", (timeStr.length > 0 ? @" " : @""), minutes, OALocalizedString(@"int_min")];
     
-    return (isOpenedNow ? [NSString stringWithFormat:@"%@ %@", OALocalizedString(@"time_will_close"), timeStr] : [NSString stringWithFormat:@"%@ %@", OALocalizedString(@"time_will_open"), timeStr]);
+    return (isOpenedNow ? [NSString stringWithFormat:@"%@ %@", OALocalizedString(@"will_close_at"), timeStr] : [NSString stringWithFormat:@"%@ %@", OALocalizedString(@"time_will_open"), timeStr]);
 }
 
 - (void) updateOpeningTimeInfo

@@ -327,7 +327,7 @@
 "prch_srtm_info" = "Eş yükselti eğrileri eklentisi, kazandığınız, satın alınan veya ücretsiz sınırlar içinde indirdiğiniz haritalar için eş yükselti eğrilerini etkinleştirir.";
 "shared_string_open" = "Aç";
 "time_closed" = "Kapalı";
-"time_will_close" = "Kapanacak";
+"will_close_at" = "Kapanacak";
 "time_will_open" = "Açılacak";
 "osm_live_active" = "Aktif";
 "menu_all_trips" = "Tüm İzlenen Yollar";
@@ -1034,7 +1034,7 @@
 "inapp_not_found" = "%@ OsmAnd'da bulunamadı. Muhtemelen iptal edildi.";
 "osm_created" = "Oluşturuldu";
 "shared_string_modified" = "Değiştirildi";
-"osm_reopened" = "Yeniden açıldı";
+"osm_edit_reopened_note" = "Yeniden açıldı";
 "osm_name" = "OpenStreetMap kullanıcı adı";
 "osm_pass" = "OpenStreetMap parolası";
 "osm_offline_editing" = "Her zaman çevrim dışı düzenlemeyi kullan";
@@ -1541,7 +1541,7 @@
 "osmand_parking_warning" = "Uyarı";
 "clear_tiles_warning" = "Bu değişiklikleri uygulamak, bu döşeme kaynağı için önbelleğe alınan verileri temizleyecektir";
 "change_object_posiotion" = "Nesnenin konumunu değiştir";
-"change_position_descr" = "Nesnenin konumunu değiştirmek için haritayı hareket ettirin";
+"move_marker_bottom_sheet_title" = "Nesnenin konumunu değiştirmek için haritayı hareket ettirin";
 "online_raster_maps" = "Çevrim içi raster haritaları";
 "import_raster_map_success" = "Raster haritası içe aktarıldı. Harita Ayarları'nı açın ve Üst katman/Alt katman ile etkinleştirin";
 "import_raster_map_failed" = "Raster harita içe aktarma başarısız oldu";
@@ -1857,7 +1857,7 @@
 "personal_category_name" = "Kişisel";
 "prev_segs_recalc_descr" = "Önceki tüm bölümler, seçilen profil kullanılarak yeniden hesaplanacak";
 "next_segs_recalc_descr" = "Sonraki tüm bölümler, seçilen profil kullanılarak yeniden hesaplanacak";
-"selected_seg_recalc_descr" = "Yalnızca seçilen bölüm, seçilen profil kullanılarak yeniden hesaplanacak";
+"only_selected_segment_recalc" = "Yalnızca seçilen bölüm, seçilen profil kullanılarak yeniden hesaplanacak";
 "prev_segs_dist" = "Önceki tüm bölümler %@";
 "prev_seg_dist" = "Önceki bölüm %@";
 "next_segs_dist" = "Sonraki tüm bölümler %@";
@@ -2688,5 +2688,4 @@
 "rendering_attr_noNatureReserveBoundaries_name" = "Doğa sınırları";
 "routing_attr_difficulty_preference_advanced_name" = "İleri";
 "rendering_value_omit_name" = "Atla";
-"download_wikipedia_data" = "Wikipedia verilerini indir";
-
+"download_wikipedia_data" = "Wikipedia verilerini ind

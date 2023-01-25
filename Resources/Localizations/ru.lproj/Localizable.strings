@@ -341,7 +341,7 @@
 "prch_srtm_info" = "Дополнение \"Контурные линии\" доступно для карт, которые Вы купили или загрузили бесплатно.";
 "shared_string_open" = "Открыть";
 "time_closed" = "Закрыто";
-"time_will_close" = "Закроется через";
+"will_close_at" = "Закроется через";
 "time_will_open" = "Откроется через";
 "shared_string_remove" = "Удалить";
 "my_favorites" = "Избранное";
@@ -1058,7 +1058,7 @@
 "osm_created" = "Создано";
 "poi_remove_success" = "Удалено";
 "shared_string_modified" = "Изменён";
-"osm_reopened" = "Переоткрыто";
+"osm_edit_reopened_note" = "Переоткрыто";
 "osm_offline_editing" = "Всегда редактировать офлайн";
 "offline_edition" = "Локальное редактирование";
 "osm_add_timespan" = "Добавить временной интервал";
@@ -1618,7 +1618,7 @@
 "clear_tiles_warning" = "Применение этих изменений приведёт к очистке кешированных данных этого источника тайлов";
 "res_zoom_invalid_value" = "Значения масштабирования должны находиться в диапазоне 1 - 22";
 "download_wiki_data" = "Скачать данные Википедии для %@";
-"change_position_descr" = "Переместите карту, чтобы изменить положение объекта";
+"move_marker_bottom_sheet_title" = "Переместите карту, чтобы изменить положение объекта";
 "change_object_posiotion" = "Изменить положение объекта";
 "one_image_per_tile" = "Каждый тайл в своём файле";
 "map_settings_hide_polygons_desc" = "Этот параметр влияет только на автономные векторные карты OsmAnd";
@@ -2024,7 +2024,7 @@
 "empty_filename" = "Пустое имя файла";
 "gpx_saved_successfully" = "GPX-файл сохранён в %@";
 "route_between_points_add_track_desc" = "Выберите трек, к которому будет добавлен новый сегмент.";
-"selected_seg_recalc_descr" = "Только выбранный сегмент будет перерассчитан с использованием выбранного профиля";
+"only_selected_segment_recalc" = "Только выбранный сегмент будет перерассчитан с использованием выбранного профиля";
 "whole_track_descr" = "Весь трек будет перерассчитан с использованием выбранного профиля.";
 "next_seg_descr" = "Следующий сегмент будет перерассчитан с использованием выбранного профиля.";
 "prev_segs_dist" = "Все Предыдущие сегменты %@";
@@ -2678,5 +2678,4 @@
 "routing_attr_freeride_policy_allow_name" = "Разрешить";
 "rendering_attr_OSMMapperAssistantIconsLowZooms_description" = "Схематическое отображение значков на мелком масштабе";
 "routing_attr_difficulty_preference_no_preference_name" = "Нет предпочтений";
-"download_wikipedia_data" = "Загрузка данных Википедии";
-
+"download_wikipedia_data" = "Загрузка данных Википед

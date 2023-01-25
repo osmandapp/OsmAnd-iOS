@@ -314,7 +314,7 @@
 "prch_srtm_info" = "等高線外掛您有資格為地圖啟用等高線，購買或在免費的期限內下載。";
 "shared_string_open" = "開啟";
 "time_closed" = "已關閉";
-"time_will_close" = "即將關閉";
+"will_close_at" = "即將關閉";
 "time_will_open" = "即將開啓";
 "menu_my_trips" = "我的旅程";
 "osm_live_active" = "活動";
@@ -2228,5 +2228,4 @@
 "routing_attr_avoid_footways_name" = "避免人行道";
 "routing_attr_avoid_fords_description" = "避免涉水";
 "rendering_attr_weatherPrecipitationContours_name" = "降水等值線";
-"download_wikipedia_data" = "下載維基百科資料";
-
+"download_wikipedia_data" = "下載維基百科

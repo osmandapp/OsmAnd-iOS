@@ -612,7 +612,7 @@
 "prch_srtm_info" = "Modul Vrstevnice zobrazuje vrstevnice na mapách, které máte zakoupené nebo zdarma stažené.";
 "shared_string_open" = "Otevřeno";
 "time_closed" = "Zavřeno";
-"time_will_close" = "Zavře v";
+"will_close_at" = "Zavře v";
 "time_will_open" = "Otevře v";
 "osm_live_active" = "Aktivní";
 "menu_all_trips" = "Všechny stopy";
@@ -1699,7 +1699,7 @@
 "osm_offline_editing" = "Vždy použít offline úpravy";
 "osm_pass" = "Heslo v OpenStreetMap";
 "osm_name" = "Přihlašovací jméno v OpenStreetMap";
-"osm_reopened" = "Znovu otevřeno";
+"osm_edit_reopened_note" = "Znovu otevřeno";
 "shared_string_modified" = "Upraveno";
 "osm_created" = "Vytvořeno";
 "osm_editing_settings_descr" = "Nastavení tohoto modulu jsou globální a ovlivní všechny profily.";
@@ -1753,7 +1753,7 @@
 "join_segments" = "Spojitúseky";
 "prev_segs_recalc_descr" = "Všechny předchozí úseky budou přepočítány ve vybraném profilu";
 "next_segs_recalc_descr" = "Všechny následující úseky budou přepočítány ve vybraném profilu";
-"selected_seg_recalc_descr" = "Pouze vybraný úsek bude přepočítán ve vybraném profilu";
+"only_selected_segment_recalc" = "Pouze vybraný úsek bude přepočítán ve vybraném profilu";
 "prev_segs_dist" = "Všechny předchozí úseky %@";
 "prev_seg_dist" = "Předchozí úsek %@";
 "next_segs_dist" = "Všechny následující úseky %@";
@@ -1844,7 +1844,7 @@
 "obf_import_title" = "Importovat offline soubor mapy";
 "plugin_popup_osm_editing_title" = "Zapnout Editaci OpenStreetMap";
 "default_speed_descr" = "Odhadne čas příjezdu pro neznámé typy cest a omezí rychlost na všech typech cest (může ovlivnit výpočet trasy)";
-"change_position_descr" = "Přesuňte mapu, abyste změnili pozici objektu";
+"move_marker_bottom_sheet_title" = "Přesuňte mapu, abyste změnili pozici objektu";
 "change_object_posiotion" = "Změnit pozici objektu";
 "map_coords" = "Mapa: šířka %.5f délka %.5f";
 "by_transport_type" = "Pomocí %@";
@@ -2743,5 +2743,4 @@
 "routing_attr_allow_intermittent_name" = "Povolit občasné vodní cesty";
 "routing_attr_allow_intermittent_description" = "Povolit občasné vodní cesty";
 "rendering_attr_natureReserves_name" = "Přírodní rezervace";
-"download_wikipedia_data" = "Stahování dat z Wikipedie";
-
+"download_wikipedia_data" = "Stahování dat z Wikiped

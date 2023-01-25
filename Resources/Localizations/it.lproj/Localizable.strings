@@ -317,7 +317,7 @@
 "menu_all_trips" = "Tutti i viaggi";
 "osm_live_active" = "Attivo";
 "time_will_open" = "Sarà aperto in";
-"time_will_close" = "Sarà chiuso in";
+"will_close_at" = "Sarà chiuso in";
 "time_closed" = "Chiuso";
 "shared_string_open" = "Apri";
 "prch_srtm_info" = "Il componente aggiuntivo Linee isocline aggiunge le linee di livello per le mappe che sono state scaricare gratuitamente o acquistate.";
@@ -1302,7 +1302,7 @@
 "osmand_live_cancel_descr" = "Rinnova la sottoscrizione per continuare a utilizzare la piena funzionalità:";
 "osm_created" = "Creato";
 "shared_string_modified" = "Modificato";
-"osm_reopened" = "Riaperto";
+"osm_edit_reopened_note" = "Riaperto";
 "osm_name" = "Username OpenStreetMap";
 "osm_pass" = "Password OpenStreetMap";
 "osm_offline_editing" = "Usa sempre la modifica offline";
@@ -2406,7 +2406,7 @@
 "quick_action_dir_from_descr" = "Tocca questa azione per navigare dal punto centrale dello schermo corrente.";
 "show_map_symbols" = "Mostra i simboli della mappa";
 "profile_sett_descr" = "Influisce sul profilo dell'applicazione selezionata";
-"selected_seg_recalc_descr" = "Solo il segmento selezionato verrà ricalcolato utilizzando il profilo selezionato";
+"only_selected_segment_recalc" = "Solo il segmento selezionato verrà ricalcolato utilizzando il profilo selezionato";
 "quick_action_hillshade_descr" = "Un controllo per mostrare o nascondere nella mappa le ombreggiature dei rilievi.";
 "enable_hillshade" = "Abilita per visualizzare i dati del terreno";
 "show_borders_of_downloaded_maps" = "Mostra i confini delle mappe scaricate";
@@ -2502,7 +2502,7 @@
 "product_desc_sea_depth_contours" = "Linee di contorno della profondità del mare e segni marini";
 "parked_at" = "parcheggiato alle";
 "change_object_posiotion" = "Cambia la posizione dell'oggetto";
-"change_position_descr" = "Muovi la mappa per cambiare la posizione dell'oggetto";
+"move_marker_bottom_sheet_title" = "Muovi la mappa per cambiare la posizione dell'oggetto";
 "restore_backup_descr" = "Ripristina i dati sul dispositivo senza utilizzare i backup online";
 "product_desc_weather" = "Previsioni orarie 24 ore su 24 con 7 giorni di anticipo sulla mappa";
 "import_raster_map_success" = "La mappa raster è stata importata. Apri Impostazioni mappa e attivalo tramite Overlay/Underlay";
@@ -2780,5 +2780,4 @@
 "rendering_attr_OSMMapperAssistantIconsLowZooms_description" = "Visualizzazione schematica delle icone a basso zoom";
 "rendering_attr_horse_scale_dangerous_name" = "Pericoloso";
 "shared_string_does_not_exist" = "Non esiste";
-"download_wikipedia_data" = "Scarica dati di Wikipedia";
-
+"download_wikipedia_data" = "Scarica dati di Wikiped

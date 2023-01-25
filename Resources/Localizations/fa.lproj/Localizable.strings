@@ -576,7 +576,7 @@
 "prch_srtm_info" = "Contour lines addon enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
 "shared_string_open" = "باز است";
 "time_closed" = "Closed";
-"time_will_close" = "Will close in";
+"will_close_at" = "Will close in";
 "time_will_open" = "Will open in";
 "osm_live_active" = "فعال";
 "menu_all_trips" = "همه ردها";
@@ -1573,7 +1573,7 @@
 "osm_edit_uploading" = "درحال بارگذاری...";
 "osm_failed_uploads" = "ناموفق";
 "osm_succsessful_uploads" = "موفقیت‌آمیز";
-"osm_reopened" = "دوباره بازشد";
+"osm_edit_reopened_note" = "دوباره بازشد";
 "osmand_live_reports" = "گزارش‌ها";
 "twitter" = "توییتر";
 "route_between_points_warning_desc" = "در ادامه، رد خود را به نزدیک‌ترین جادهٔ مجاز متناسب با یکی از نمایه‌های ناوبری‌تان بچسبانید، تا از این گزینه استفاده کنید.";
@@ -2081,5 +2081,4 @@
 "rendering_attr_horse_scale_common_name" = "مشترک";
 "rendering_value_all_name" = "همه";
 "routing_attr_difficulty_preference_advanced_name" = "پیشرفته";
-"download_wikipedia_data" = "بارگیری دادهٔ ویکی‌پدیا";
-
+"download_wikipedia_data" = "بارگیری دادهٔ ویکی‌پد

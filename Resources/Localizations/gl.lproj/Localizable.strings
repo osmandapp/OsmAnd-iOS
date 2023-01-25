@@ -654,7 +654,7 @@
 "prch_srtm_info" = "Contour lines addon enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
 "shared_string_open" = "Aberto";
 "time_closed" = "Closed";
-"time_will_close" = "Will close in";
+"will_close_at" = "Will close in";
 "time_will_open" = "Will open in";
 "osm_live_active" = "Activo";
 "menu_all_trips" = "All Trips";
@@ -1862,5 +1862,4 @@ Lon %@";
 "routing_attr_allow_streams_name" = "Permitir regatos e cunetas";
 "rendering_attr_noNatureReserveBoundaries_description" = "Agochar reservas naturais,áreas protexidas e de parques nacionais.";
 "routing_attr_allow_intermittent_description" = "Permitir canles de auga intermitentes";
-"download_wikipedia_data" = "Baixar datos da Wikipedia";
-
+"download_wikipedia_data" = "Baixar datos da Wikiped

@@ -634,7 +634,7 @@
 "osm_created" = "作成しました";
 "poi_remove_success" = "削除されました";
 "shared_string_modified" = "修正済み";
-"osm_reopened" = "再開しました";
+"osm_edit_reopened_note" = "再開しました";
 "osm_name" = "OpenStreetMapのユーザー名";
 "osm_pass" = "OpenStreetMapのパスワード";
 "osm_offline_editing" = "常にオフライン編集を使用する";
@@ -1006,7 +1006,7 @@
 "prch_srtm_info" = "等高線アドオンは、購入あるいは無料の制限内でダウンロードできた等高線情報をマップ内に反映表示することができます。";
 "shared_string_open" = "開く";
 "time_closed" = "営業時間外";
-"time_will_close" = "営業終了時間まで";
+"will_close_at" = "営業終了時間まで";
 "time_will_open" = "営業開始時間まで";
 "osm_live_active" = "アクティブ";
 "menu_all_trips" = "すべての経路";
@@ -1543,7 +1543,7 @@
 "import_raster_map_failed" = "ラスターマップのインポートに失敗しました";
 "import_raster_map_success" = "ラスターマップがインポートされました。マップ設定からオーバーレイ/アンダーレイの項目から表示が可能です";
 "online_raster_maps" = "オンラインラスターマップ";
-"change_position_descr" = "マップを動かしてオブジェクトの位置を変更します";
+"move_marker_bottom_sheet_title" = "マップを動かしてオブジェクトの位置を変更します";
 "change_object_posiotion" = "オブジェクト位置の変更";
 "context_menu_points_of_group" = "同じグループのお気に入り地点";
 "enable_contour_lines" = "このオプションを有効にすると、マップ上に等高線が表示されます";
@@ -1864,7 +1864,7 @@
 "join_segments" = "セグメントの接続";
 "prev_segs_recalc_descr" = "全ての先行セグメントは、選択したプロファイルを使用して再計算されます";
 "next_segs_recalc_descr" = "全ての後続セグメントは、選択したプロファイルを使用して再計算されます";
-"selected_seg_recalc_descr" = "指定のプロファイルを使用して、選択したセグメントのみが再計算されます";
+"only_selected_segment_recalc" = "指定のプロファイルを使用して、選択したセグメントのみが再計算されます";
 "prev_segs_dist" = "全ての先行セグメント %@";
 "next_segs_dist" = "全ての後続セグメント %@";
 "prev_seg_dist" = "前のセグメント %@";
@@ -2520,5 +2520,4 @@
 "rendering_attr_natureReserves_description" = "自然保護区、保護地域、国立公園を表示します。";
 "routing_attr_driving_style_description" = "運転の目的を選択することで、より短くより速くより安全なルートを取得します";
 "routing_attr_avoid_footways_name" = "歩道を避ける";
-"download_wikipedia_data" = "Wikipediaデータのダウンロード";
-
+"download_wikipedia_data" = "Wikipediaデータのダウンロ

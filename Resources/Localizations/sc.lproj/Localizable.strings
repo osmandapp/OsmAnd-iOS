@@ -322,7 +322,7 @@
 "prch_srtm_info" = "S’estensione Curvas de livellu abilitat sas curvas de livellu pro sas mapas iscarrigadas de badas o comporadas.";
 "shared_string_open" = "Aberi";
 "time_closed" = "Serradu";
-"time_will_close" = "At a serrare in";
+"will_close_at" = "At a serrare in";
 "time_will_open" = "At a abèrrere in";
 "osm_live_active" = "Ativu";
 "menu_all_trips" = "Totu sas rastas";
@@ -901,7 +901,7 @@
 "osm_created" = "Creadu";
 "poi_remove_success" = "Iscantzelladu";
 "shared_string_modified" = "Modificadu";
-"osm_reopened" = "Torradu a abèrrere";
+"osm_edit_reopened_note" = "Torradu a abèrrere";
 "osm_name" = "Nùmene impreadore de OpenStreetMap";
 "osm_pass" = "Crae de OpenStreetMap";
 "osm_offline_editing" = "Imprea semper sa modìfica chene lìnia";
@@ -1548,7 +1548,7 @@
 "osmand_parking_warning" = "Atentzione";
 "clear_tiles_warning" = "Aplichende custas modìficas as a isboidare sa memòria temporànea pro custa mitza de tasseddos";
 "change_object_posiotion" = "Muda sa positzione de s'ogetu";
-"change_position_descr" = "Moe sa mapa pro mudare sa positzione de s'ogetu";
+"move_marker_bottom_sheet_title" = "Moe sa mapa pro mudare sa positzione de s'ogetu";
 "online_raster_maps" = "Mapas raster in lìnia";
 "import_raster_map_success" = "As importadu sa mapa raster. Aberi sas impostatziones de sa mapa e ativa·la pro mèdiu de un'istratu superiore o inferiore";
 "import_raster_map_failed" = "Importadura de sa mapa raster fallida";
@@ -1868,7 +1868,7 @@
 "personal_category_name" = "Personale";
 "prev_segs_recalc_descr" = "Totu sos segmentos antepostos s'ant a torrare a carculare impreende su profilu ischertadu";
 "next_segs_recalc_descr" = "Totu sos segmentos imbenientes s'ant a torrare a carculare impreende su profilu ischertadu";
-"selected_seg_recalc_descr" = "Petzi su segmentu ischertadu s'at a torrare a carculare impreende su profilu ischertadu";
+"only_selected_segment_recalc" = "Petzi su segmentu ischertadu s'at a torrare a carculare impreende su profilu ischertadu";
 "prev_segs_dist" = "Totu sos segmentos antepostos %@";
 "prev_seg_dist" = "Segmentu antepostu %@";
 "next_segs_dist" = "Totu sos segmentos imbenientes %@";
@@ -2825,5 +2825,4 @@
 "use_heightmap_setting" = "Imprea mapas de sas artàrias 3D";
 "amazon_appstore" = "Butega de apl. de Amazon";
 "shared_string_does_not_exist" = "No esistit";
-"download_wikipedia_data" = "Iscàrriga sos datos de Wikipedia";
-
+"download_wikipedia_data" = "Iscàrriga sos datos de Wikiped

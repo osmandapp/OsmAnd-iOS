@@ -1450,7 +1450,7 @@
 "track_is_saved" = "%@\neste salvat!";
 "prev_segs_recalc_descr" = "Toate segmentele anterioare vor fi recalculate folosind profilul selectat";
 "next_segs_recalc_descr" = "Toate segmentele ulterioare vor fi recalculate folosind profilul selectat";
-"selected_seg_recalc_descr" = "Numai segmentul selectat va fi recalculat folosind profilul selectat";
+"only_selected_segment_recalc" = "Numai segmentul selectat va fi recalculat folosind profilul selectat";
 "prev_segs_dist" = "Toate segmentele anterioare %@";
 "prev_seg_dist" = "Segmentul anterior %@";
 "next_segs_dist" = "Toate segmentele ulterioare %@";
@@ -1587,7 +1587,7 @@
 "sorting" = "Sortare";
 "pedestrian" = "Pietonal";
 "est_travel_time" = "Estimarea timpului de călătorie";
-"change_position_descr" = "Mutarea hărții pentru a schimba poziția obiectului";
+"move_marker_bottom_sheet_title" = "Mutarea hărții pentru a schimba poziția obiectului";
 "change_object_posiotion" = "Modificarea poziției obiectului";
 "gpx_group_select" = "Selectare grup";
 "gpx_trip_groups" = "Grupuri de track-uri";
@@ -1610,7 +1610,7 @@
 "public_transport_ped_route_title" = "Traseul pe jos este de aproximativ %@,și poate fi mai rapid decât transportul public";
 "menu_all_trips" = "Toate track-urile";
 "time_will_open" = "Se va deschide în";
-"time_will_close" = "Se va închide în";
+"will_close_at" = "Se va închide în";
 "time_closed" = "Închis";
 "prch_srtm_info" = "Contour lines addon activează liniile de contur pentru hărțile la care aveți dreptul, achiziționate sau descărcate în limita gratuită.";
 "prch_wiki_info" = "Wikipedia addon permite obținerea de informații despre Wikipedia pentru hărțile la care aveți dreptul, achiziționate sau descărcate în limita gratuită.";
@@ -1846,7 +1846,7 @@
 "osm_offline_editing" = "Utilizați întotdeauna editarea offline";
 "osm_pass" = "Parola OpenStreetMap";
 "osm_name" = "Nume de utilizator OpenStreetMap";
-"osm_reopened" = "Redeschis";
+"osm_edit_reopened_note" = "Redeschis";
 "shared_string_modified" = "Modificat";
 "osm_created" = "Creat";
 "osm_editing_settings_descr" = "Setările acestui plugin sunt globale și se aplică tuturor profilurilor.";
@@ -2774,5 +2774,4 @@
 "use_heightmap_setting" = "Folosește hartă relief 3D";
 "units_kg" = "kg";
 "amazon_appstore" = "Amazon Appstore";
-"download_wikipedia_data" = "Descărcați datele Wikipedia";
-
+"download_wikipedia_data" = "Descărcați datele Wikiped

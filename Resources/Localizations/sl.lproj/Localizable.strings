@@ -354,7 +354,7 @@
 "srtm_plugin_disabled" = "Izris izohips je onemogočen";
 "shared_string_open" = "Odpri";
 "time_closed" = "Zaprto";
-"time_will_close" = "Zapre se čez";
+"will_close_at" = "Zapre se čez";
 "time_will_open" = "Odpre se čez";
 "menu_all_trips" = "Vsa potovanja";
 "total_time" = "Skupni čas";
@@ -2048,5 +2048,4 @@
 "routing_attr_avoid_footways_description" = "Izogibaj se pešpoti";
 "rendering_attr_showTrainRoutes_name" = "Proge vlakov";
 "routing_attr_avoid_highway_description" = "Izogibaj se avtocest";
-"download_wikipedia_data" = "Prejmi podatke Wikipedije";
-
+"download_wikipedia_data" = "Prejmi podatke Wikipedi

@@ -340,7 +340,7 @@
 "prch_srtm_info" = "Hæðarlínu-viðbótin virkjar hæðarlínur á þeim landakortum sem þú átt rétt á, hvort sem er keyptum eða sóttum með frjálsum kvóta.";
 "shared_string_open" = "Opið";
 "time_closed" = "Lokað";
-"time_will_close" = "Mun loka eftir";
+"will_close_at" = "Mun loka eftir";
 "time_will_open" = "Mun opna eftir";
 "osm_live_active" = "Virkt";
 "menu_all_trips" = "Allir ferlar";
@@ -871,7 +871,7 @@
 "osm_created" = "Búið til þann";
 "poi_remove_success" = "Eytt";
 "shared_string_modified" = "Breytt";
-"osm_reopened" = "Enduropnað";
+"osm_edit_reopened_note" = "Enduropnað";
 "osm_name" = "Notandanafn á OpenStreetMap";
 "osm_pass" = "Lykilorð á OpenStreetMap";
 "osm_offline_editing" = "Alltaf nota ónettengdar breytingar";
@@ -1544,7 +1544,7 @@
 "osmand_parking_warning" = "Aðvörun";
 "clear_tiles_warning" = "Séu þessar breytingar virkjaðar mun það hreinsa skyndiminnið fyrir þennan kortatíglagjafa";
 "change_object_posiotion" = "Breyta staðsetningu hlutar";
-"change_position_descr" = "Færa kortið til að breyta staðsetningu hlutarins";
+"move_marker_bottom_sheet_title" = "Færa kortið til að breyta staðsetningu hlutarins";
 "online_raster_maps" = "Rastakort á netinu";
 "import_raster_map_success" = "Rastakort var flutt inn. Opnaðu kortastillingar og virkjaðu það í gegnum Yfirlag/Undirlag";
 "import_raster_map_failed" = "Innflutningur rastakorts mistókst";
@@ -1865,7 +1865,7 @@
 "plugin_popup_osm_editing_title" = "Kveikja á breytingum á OpenStreetMap";
 "next_segs_recalc_descr" = "Allir bútar sem á eftir fylgja verða endurreiknaðir með völdu sniði";
 "whole_track" = "Allur ferillinn";
-"selected_seg_recalc_descr" = "Aðeins valinn bútur verður endurreiknaður með völdu sniði";
+"only_selected_segment_recalc" = "Aðeins valinn bútur verður endurreiknaður með völdu sniði";
 "next_seg_dist" = "Næsti bútur %@";
 "prev_segs_dist" = "Allir fyrri bútar %@";
 "layer_amenity_label" = "Merkingar punkta (merkisstaðir, eftirlæti)";
@@ -2793,5 +2793,4 @@
 "rendering_value_omit_name" = "Sleppa";
 "rendering_attr_horse_scale_difficult_name" = "Erfitt";
 "rendering_attr_weatherWindSpeedContours_name" = "Vindhviðulínur";
-"download_wikipedia_data" = "Sækja Wikipedia-gögn";
-
+"download_wikipedia_data" = "Sækja Wikipedia-gö

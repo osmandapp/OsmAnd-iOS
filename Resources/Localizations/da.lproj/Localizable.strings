@@ -313,7 +313,7 @@
 "prch_srtm_info" = "Højdekurve-modul viser højdekurver på kort, der er købt eller hentet inden for den gratis grænse.";
 "shared_string_open" = "Åbn";
 "time_closed" = "Lukket";
-"time_will_close" = "Lukker om";
+"will_close_at" = "Lukker om";
 "time_will_open" = "Åbner om";
 "menu_my_trips" = "Ruter";
 "osm_live_active" = "Aktiv";
@@ -873,7 +873,7 @@
 "osm_created" = "Oprettet";
 "poi_remove_success" = "Slettet";
 "shared_string_modified" = "Ændret";
-"osm_reopened" = "Genåbnet";
+"osm_edit_reopened_note" = "Genåbnet";
 "osm_name" = "OpenStreetMap brugernavn";
 "osm_pass" = "OpenStreetMap adgangskode";
 "osm_offline_editing" = "Brug altid offlineredigering";
@@ -1545,7 +1545,7 @@
 "res_offlineSQL_URL_warning" = "Ikke understøttet for denne type kort";
 "osmand_parking_warning" = "Advarsel";
 "change_object_posiotion" = "Skift objektets position";
-"change_position_descr" = "Flyt kortet for at ændre objektets position";
+"move_marker_bottom_sheet_title" = "Flyt kortet for at ændre objektets position";
 "online_raster_maps" = "Online rasterkort";
 "import_raster_map_success" = "Raster-kort er blevet importeret. Åbn Kort-Indstillinger, og aktiver via Over-/Underlejring";
 "import_raster_map_failed" = "Import af raster-kort mislykkedes";
@@ -2023,7 +2023,7 @@
 "speed_limit_tolerance_descr" = "Vælge den tolerancemargen for fartgrænser, over hvilken du vil modtage en stemmeadvarsel.";
 "road_speeds" = "Vejhastigheder";
 "prev_segs_dist" = "Alle tidligere segmenter %@";
-"selected_seg_recalc_descr" = "Kun det valgte segment genberegnes ved hjælp af den valgte profil";
+"only_selected_segment_recalc" = "Kun det valgte segment genberegnes ved hjælp af den valgte profil";
 "import_routing_file_descr" = "Du kan importere en ruteberegningsfil fra en hvilket som helst sky-app ved at åbne den i OsmAnd.";
 "hide_coordinates" = "Skjul koordinater";
 "unsupported_action_title" = "Handlingen understøttes ikke (%@)";
@@ -2796,5 +2796,4 @@
 "routing_attr_avoid_highway_name" = "Undgå motorveje";
 "rendering_attr_showMtbScaleUphill_description" = "Vis spor efter MTB-skala op ad bakke.";
 "shared_string_does_not_exist" = "Eksisterer ikke";
-"download_wikipedia_data" = "Hent Wikipedia-data";
-
+"download_wikipedia_data" = "Hent Wikipedia-da

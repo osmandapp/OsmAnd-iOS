@@ -354,7 +354,7 @@
 "prch_srtm_info" = "";
 "shared_string_open" = "打開";
 "time_closed" = "";
-"time_will_close" = "";
+"will_close_at" = "";
 "time_will_open" = "";
 "osm_live_active" = "有效";
 "menu_all_trips" = "";
@@ -2115,5 +2115,4 @@
 "rendering_value_all_name" = "全部";
 "rendering_attr_weatherPressureContours_name" = "等压线";
 "rendering_attr_hideMilitaryAreas_name" = "隐藏军事区域";
-"download_wikipedia_data" = "下载维基百科数据";
-
+"download_wikipedia_data" = "下载维基百科

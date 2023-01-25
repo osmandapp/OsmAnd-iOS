@@ -611,7 +611,7 @@
 "prch_srtm_info" = "Contour lines addon enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
 "shared_string_open" = "Openen";
 "time_closed" = "Closed";
-"time_will_close" = "Will close in";
+"will_close_at" = "Will close in";
 "time_will_open" = "Will open in";
 "osm_live_active" = "Actief";
 "menu_all_trips" = "All Trips";
@@ -1833,7 +1833,7 @@
 "osm_poi_id_label" = "POI-id:";
 "shared_string_leave" = "Verlaten";
 "shared_string_modified" = "Aangepast";
-"osm_reopened" = "Opnieuw geopend";
+"osm_edit_reopened_note" = "Opnieuw geopend";
 "add_group" = "Een groep toevoegen";
 "shared_string_shape" = "Vorm";
 "osm_confirm_delete" = "POI verwijderen?";
@@ -2205,5 +2205,4 @@
 "routing_attr_difficulty_preference_advanced_name" = "Gevorderde";
 "routing_attr_difficulty_preference_beginner_name" = "Beginner";
 "routing_attr_avoid_highway_description" = "Snelwegen vermijden";
-"download_wikipedia_data" = "Wikipedia-gegevens downloaden";
-
+"download_wikipedia_data" = "Wikipedia-gegevens download

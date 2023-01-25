@@ -316,7 +316,7 @@
 "menu_my_trips" = "Мае сляды";
 "shared_string_open" = "Гадзіны працы";
 "time_closed" = "Зачынена";
-"time_will_close" = "Зачыніцца праз";
+"will_close_at" = "Зачыніцца праз";
 "time_will_open" = "Адчыніцца праз";
 "osm_live_active" = "Актыўны";
 "menu_all_trips" = "Усе сляды";
@@ -1526,7 +1526,7 @@
 "osm_offline_editing" = "Заўсёды выкарыстоўваць аўтаномнае рэдагаванне";
 "osm_pass" = "Пароль OpenStreetMap";
 "osm_name" = "Імя карыстальніка OpenStreetMap";
-"osm_reopened" = "Адкрыта зноў";
+"osm_edit_reopened_note" = "Адкрыта зноў";
 "shared_string_modified" = "Зменена";
 "osm_created" = "Створана";
 "osm_editing_settings_descr" = "Налады гэтай убудовы глабальныя. Яны ўжываюцца да ўсіх профіляў.";
@@ -1697,7 +1697,7 @@
 "plugin_popup_srtm_title" = "Спампуйце контурныя лініі";
 "plugin_popup_wiki_desc" = "Каб пачаць выкарыстоўваць убудову Вікіпедыі, спачатку спампуйце даныя Вікіпедыі для рэгіёна";
 "plugin_popup_ski_desc" = "Каб уключыць стыль <b>Лыжная мапа</b> , перайдзіце ў <b>Налады мапы</b> > <b>Тып мапы</b>";
-"change_position_descr" = "Перамясціце мапу, каб змяніць пазіцыю аб’екта";
+"move_marker_bottom_sheet_title" = "Перамясціце мапу, каб змяніць пазіцыю аб’екта";
 "map_coords" = "Мапа: Шырата %.5f Даўгата %.5f";
 "by_transport_type" = "Ужыта %@";
 "shared_string_walk" = "Пешшу";
@@ -2530,5 +2530,4 @@
 "routing_attr_allow_intermittent_name" = "Дазволіць перапынныя водныя маршруты";
 "rendering_attr_OSMMapperAssistantFixme_name" = "Пазнакі Fixme";
 "rendering_attr_showShareTaxiRoutes_name" = "Трансферныя маршруты";
-"download_wikipedia_data" = "Спампаваць даныя Вікіпедыі";
-
+"download_wikipedia_data" = "Спампаваць даныя Вікіпед

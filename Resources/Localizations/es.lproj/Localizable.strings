@@ -326,7 +326,7 @@
 "prch_srtm_info" = "El complemento de Curvas de nivel activa las curvas de nivel para los mapas que tiene comprados o descargados con un límite gratuito.";
 "shared_string_open" = "Abrir";
 "time_closed" = "Cerrado";
-"time_will_close" = "Cerrará a las";
+"will_close_at" = "Cerrará a las";
 "time_will_open" = "Abrirá a las";
 "osm_live_active" = "Activo";
 "menu_all_trips" = "Todas las trazas";
@@ -882,7 +882,7 @@
 "osm_created" = "Creado";
 "poi_remove_success" = "Borrado";
 "shared_string_modified" = "Modificado";
-"osm_reopened" = "Reabierto";
+"osm_edit_reopened_note" = "Reabierto";
 "osm_name" = "Nombre de usuario de OpenStreetMap";
 "osm_pass" = "Contraseña de OpenStreetMap";
 "osm_offline_editing" = "Usar siempre la edición sin conexión";
@@ -1739,7 +1739,7 @@
 "settings_item_read_error" = "No se pudo leer desde«%@».";
 "settings_app_theme" = "Aspecto de la aplicación";
 "send_anonymous_data" = "Enviar datos anónimos";
-"selected_seg_recalc_descr" = "Sólo el segmento marcado será recalculado usando el perfil elegido";
+"only_selected_segment_recalc" = "Sólo el segmento marcado será recalculado usando el perfil elegido";
 "select_application_profile" = "Elegir perfil de la aplicación";
 "select_another_track" = "Elegir otra traza";
 "route_between_points_add_track_desc" = "Elige un archivo de traza al que se añadirá un nuevo segmento.";
@@ -1874,7 +1874,7 @@
 \nPuede llevar algún tiempo.";
 "change_route_type_before" = "Cambiar el tipo de ruta antes de este punto";
 "change_route_type_after" = "Cambiar el tipo de ruta después de este punto";
-"change_position_descr" = "Mueve el mapa para cambiar la ubicación del objeto";
+"move_marker_bottom_sheet_title" = "Mueve el mapa para cambiar la ubicación del objeto";
 "change_object_posiotion" = "Cambiar la ubicación del objeto";
 "change_application_profile" = "Cambiar perfil de la aplicación";
 "calculating_progress" = "Calculando....";
@@ -2792,5 +2792,4 @@
 "rendering_attr_horse_scale_impossible_name" = "Imposible";
 "routing_attr_avoid_highway_description" = "Evita circular por caminos viales";
 "shared_string_does_not_exist" = "No existe";
-"download_wikipedia_data" = "Descargar datos de Wikipedia";
-
+"download_wikipedia_data" = "Descargar datos de Wikiped

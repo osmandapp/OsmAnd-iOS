@@ -1021,7 +1021,7 @@
 "next_segs_dist" = "Todos los segmentos posteriores %@";
 "prev_seg_dist" = "Segmento anterior %@";
 "prev_segs_dist" = "Todos los segmentos anteriores %@";
-"selected_seg_recalc_descr" = "Sólo el segmento marcado será recalculado usando el perfil elegido";
+"only_selected_segment_recalc" = "Sólo el segmento marcado será recalculado usando el perfil elegido";
 "next_segs_recalc_descr" = "Todos los segmentos posteriores serán recalculados usando el perfil elegido";
 "prev_segs_recalc_descr" = "Todos los segmentos anteriores serán recalculados usando el perfil elegido";
 "reverse_route" = "Ruta inversa";
@@ -1185,7 +1185,7 @@
 "osm_created" = "Creado";
 "poi_remove_success" = "Borrado";
 "shared_string_modified" = "Editado";
-"osm_reopened" = "Reabierto";
+"osm_edit_reopened_note" = "Reabierto";
 "osm_name" = "Nombre de usuario de OpenStreetMap";
 "osm_pass" = "Contraseña de OpenStreetMap";
 "osm_offline_editing" = "Usar siempre la edición sin conexión";
@@ -1653,7 +1653,7 @@
 "prch_srtm_info" = "El complemento de Curvas de nivel activa las curvas de nivel para los mapas que tiene comprados o descargados con un límite gratuito.";
 "shared_string_open" = "Abrir";
 "time_closed" = "Cerrado";
-"time_will_close" = "Cerrará a las";
+"will_close_at" = "Cerrará a las";
 "time_will_open" = "Abrirá a las";
 "osm_live_active" = "Activo";
 "menu_all_trips" = "Todas las trazas";
@@ -1694,7 +1694,7 @@
 "context_menu_item_directions_from" = "Ir desde";
 "search_nearby" = "Buscar cerca";
 "change_object_posiotion" = "Cambiar la ubicación del objeto";
-"change_position_descr" = "Mueve el mapa para cambiar la ubicación del objeto";
+"move_marker_bottom_sheet_title" = "Mueve el mapa para cambiar la ubicación del objeto";
 "est_travel_time" = "Tiempo de viaje estimado";
 "pedestrian" = "Peatón";
 "sorting" = "Ordenar";
@@ -2803,5 +2803,4 @@
 "routing_attr_allow_intermittent_description" = "Permite cursos de agua intermitentes";
 "rendering_value_all_name" = "Todo";
 "routing_attr_avoid_footways_description" = "Evita pasar por veredas o aceras";
-"download_wikipedia_data" = "Descargar datos de Wikipedia";
-
+"download_wikipedia_data" = "Descargar datos de Wikiped

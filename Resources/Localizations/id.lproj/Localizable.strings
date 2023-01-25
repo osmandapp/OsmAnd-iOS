@@ -1021,7 +1021,7 @@
 "next_segs_dist" = "All subsequent segments %@";
 "prev_seg_dist" = "Previous segment %@";
 "prev_segs_dist" = "All Previous segments %@";
-"selected_seg_recalc_descr" = "Only the selected segment will be recalculated using the selected profile";
+"only_selected_segment_recalc" = "Only the selected segment will be recalculated using the selected profile";
 "next_segs_recalc_descr" = "All subsequent segments will be recalculated using the selected profile";
 "prev_segs_recalc_descr" = "All previous segments will be recalculated using the selected profile";
 "reverse_route" = "Balikkan rute";
@@ -1185,7 +1185,7 @@
 "osm_created" = "Created";
 "poi_remove_success" = "Terhapus";
 "shared_string_modified" = "Diubah";
-"osm_reopened" = "Reopened";
+"osm_edit_reopened_note" = "Reopened";
 "osm_name" = "OpenStreetMap username";
 "osm_pass" = "OpenStreetMap password";
 "osm_offline_editing" = "Always use offline editing";
@@ -1653,7 +1653,7 @@
 "prch_srtm_info" = "Contour lines addon enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
 "shared_string_open" = "Buka";
 "time_closed" = "Closed";
-"time_will_close" = "Will close in";
+"will_close_at" = "Will close in";
 "time_will_open" = "Will open in";
 "osm_live_active" = "Aktif";
 "menu_all_trips" = "All Tracks";
@@ -1694,7 +1694,7 @@
 "context_menu_item_directions_from" = "Arah dari";
 "search_nearby" = "Cari di sekitar";
 "change_object_posiotion" = "Change object's position";
-"change_position_descr" = "Move the map to change object's position";
+"move_marker_bottom_sheet_title" = "Move the map to change object's position";
 "est_travel_time" = "Estimate travel time";
 "pedestrian" = "Pedestrian";
 "sorting" = "Sorting";
@@ -2618,5 +2618,4 @@
 "routing_attr_allow_intermittent_description" = "Perbolehkan jalan air intermiten";
 "routing_attr_avoid_footways_description" = "Hindari jalan setapak";
 "rendering_value_all_name" = "Semua";
-"download_wikipedia_data" = "Unduh data Wikipedia";
-
+"download_wikipedia_data" = "Unduh data Wikiped

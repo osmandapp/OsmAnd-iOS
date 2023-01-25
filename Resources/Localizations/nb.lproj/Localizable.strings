@@ -124,7 +124,7 @@
 "map_widget_next_turn" = "Neste sving";
 "map_widget_next_turn_small" = "Neste sving (liten)";
 "map_widget_next_next_turn" = "Påfølgende sving";
-"always_center_position_on_map" = "Sentrer posisjon på kart";
+"always_center_position_on_map" = "Posisjonsplassering alltid i senter";
 "map_widget_appearance_rem" = "Resterende elementer";
 "map_widget_compass" = "Kompass";
 "map_widget_intermediate_distance" = "Mellomliggende reisemål";
@@ -2488,3 +2488,5 @@
 "rendering_attr_horse_scale_impossible_name" = "Umulig";
 "rendering_attr_OSMMapperAssistantFixme_description" = "Vis fiksmeg-etiketter";
 "rendering_attr_showWaterwayTunnels_name" = "Vannveistunneler";
+"download_wikipedia_data" = "Last ned Wikipedia-data";
+

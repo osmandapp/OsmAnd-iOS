@@ -2336,3 +2336,5 @@
 "rendering_attr_hideMilitaryAreas_name" = "Katonai területek elrejtése";
 "promo" = "Promó";
 "calc_pedestrian_route" = "Gyalogos útvonal tervezése";
+"download_wikipedia_data" = "Wikipédia adatok letöltése";
+

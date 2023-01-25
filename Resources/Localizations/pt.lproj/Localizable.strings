@@ -2796,3 +2796,5 @@
 "routing_attr_difficulty_preference_expert_name" = "Especialista";
 "rendering_attr_weatherPrecipitationContours_name" = "Isolinhas de precipitação";
 "shared_string_does_not_exist" = "Não existe";
+"download_wikipedia_data" = "Descarregar dados da Wikipédia";
+

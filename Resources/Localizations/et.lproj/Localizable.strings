@@ -2502,3 +2502,5 @@
 "rendering_attr_horse_scale_dangerous_name" = "Ohtlik";
 "rendering_attr_noNatureReserveBoundaries_name" = "Looduse piirid";
 "routing_attr_length_description" = "Täpsusta marsruutidel lubatud sõiduki pikkus.";
+"download_wikipedia_data" = "Laadi alla Vikipeedia andmed";
+

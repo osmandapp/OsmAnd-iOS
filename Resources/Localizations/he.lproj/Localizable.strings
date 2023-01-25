@@ -1121,7 +1121,7 @@
 "res_uninst_unmanaged_q" = "You're going to delete %@. It's not from catalog, so please be sure you have a backup if needed.";
 "shared_string_details" = "פרטים";
 "shared_string_type" = "סוג";
-"res_unknown" = "Unknown";
+"res_unknown" = "לא ידוע";
 "shared_string_size" = "גודל";
 "created_on" = "נוצר בתאריך";
 "res_update_all" = "Update all";
@@ -1182,7 +1182,7 @@
 "osn_bug_name" = "הערת OSM";
 "osm_created" = "Created";
 "poi_remove_success" = "נמחקה";
-"shared_string_modified" = "Modified";
+"shared_string_modified" = "נערך";
 "osm_reopened" = "Reopened";
 "osm_name" = "OpenStreetMap username";
 "osm_pass" = "OpenStreetMap password";
@@ -2293,7 +2293,7 @@
 "osmand_cloud_authorize_descr" = "הנתונים שלך לעולם לא ילכו לאיבוד. ניתן לגבות ולשחזר את המידע שלך בקלות.";
 "routing_attr_allow_gate_name" = "לאפשר שימוש בשערים";
 "register_opr_create_new_account" = "יצירת חשבון חדש";
-"set_up_backup" = "הקמת גיבוי";
+"set_up_backup" = "הגדרת גיבוי";
 "routing_attr_only_permitted_streets_description" = "להשתמש רק ברחובות שהורשו באופן מפורש";
 "resend_verification_code" = "לשלוח שוב";
 "rendering_attr_showRunningRoutes_description" = "הצגת מסלולי ריצה";
@@ -2559,3 +2559,6 @@
 "rendering_attr_horse_scale_impossible_name" = "בלתי אפשרי";
 "rendering_attr_OSMMapperAssistantNote_name" = "תגיות הערה";
 "rendering_attr_horse_scale_dangerous_name" = "מסוכן";
+"checking_progress" = "מתבצעת בדיקה…";
+"download_wikipedia_data" = "הורדת נתונים מוויקיפדיה";
+

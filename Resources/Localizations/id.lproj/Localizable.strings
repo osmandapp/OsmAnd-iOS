@@ -2618,3 +2618,5 @@
 "routing_attr_allow_intermittent_description" = "Perbolehkan jalan air intermiten";
 "routing_attr_avoid_footways_description" = "Hindari jalan setapak";
 "rendering_value_all_name" = "Semua";
+"download_wikipedia_data" = "Unduh data Wikipedia";
+

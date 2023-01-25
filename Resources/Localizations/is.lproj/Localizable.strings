@@ -2793,3 +2793,5 @@
 "rendering_value_omit_name" = "Sleppa";
 "rendering_attr_horse_scale_difficult_name" = "Erfitt";
 "rendering_attr_weatherWindSpeedContours_name" = "Vindhviðulínur";
+"download_wikipedia_data" = "Sækja Wikipedia-gögn";
+

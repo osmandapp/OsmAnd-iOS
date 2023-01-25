@@ -2416,3 +2416,5 @@
 
 "routing_attr_length_description" = "Marşrutlarda icazə veriləcək nəqliyyat vasitəsinin uzunluğunu təyin edin.";
 "rendering_value_all_name" = "Hamısı";
+"download_wikipedia_data" = "Vikipediya məlumatlarını endir";
+

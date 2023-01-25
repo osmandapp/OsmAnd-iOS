@@ -2674,3 +2674,5 @@
 "rendering_attr_weatherCloudContours_name" = "Линије обриса облака";
 "rendering_attr_horse_scale_impossible_name" = "Немогућа";
 "routing_attr_carriage_restrictions_description" = "Размотрите приступне дозволе за возила са коњском запрегом";
+"download_wikipedia_data" = "Преузми податке са Википедије";
+

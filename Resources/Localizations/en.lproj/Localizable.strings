@@ -3010,3 +3010,5 @@
 "routing_attr_avoid_4wd_only_description" = "Avoid roads only suitable for 4WD vehicles";
 "rendering_attr_OSMMapperAssistantIconsLowZooms_description" = "Schematic display of icons at low zooms";
 "routing_attr_difficulty_preference_beginner_name" = "Beginner";
+
+

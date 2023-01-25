@@ -2418,10 +2418,11 @@
 "shared_string_status" = "நிலைமை";
 "shared_string_added" = "சேர்க்கப்பட்டது";
 "recording_delete_confirm" = "இந்த உருப்படியை நீக்கவா\?";
+"download_wikipedia_data" = "விக்கிபீடியா கட்டுரையை பதிவிறக்கவும்";
 
-"rendering_attr_noAdminboundaries_description" = "பிராந்திய எல்லைகளை காட்சிப்படுத்த (நிர்வாகம் அளவு 5-9).
-\n";
 "routing_attr_avoid_toll_description" = "கட்டண சாலைகள் தவிர்க்கவும்
 \n";
 "rendering_attr_contourColorScheme_name" = "விளிம்பு கோடுகள் வண்ணங்கள்
+\n";
+"rendering_attr_noAdminboundaries_description" = "பிராந்திய எல்லைகளை காட்சிப்படுத்த (நிர்வாகம் அளவு 5-9).
 \n";

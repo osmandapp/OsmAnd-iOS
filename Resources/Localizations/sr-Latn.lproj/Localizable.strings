@@ -2582,3 +2582,5 @@
 "routing_attr_allow_streams_description" = "Dozvoljava potoke i odvoje";
 "rendering_attr_seabedDetail_name" = "Detalj morskog dna";
 "routing_attr_prefer_hiking_routes_name" = "Preferiraj planinske pešačke puteve";
+"download_wikipedia_data" = "Preuzmi podatke sa Vikipedije";
+

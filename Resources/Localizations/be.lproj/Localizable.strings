@@ -2530,3 +2530,5 @@
 "routing_attr_allow_intermittent_name" = "Дазволіць перапынныя водныя маршруты";
 "rendering_attr_OSMMapperAssistantFixme_name" = "Пазнакі Fixme";
 "rendering_attr_showShareTaxiRoutes_name" = "Трансферныя маршруты";
+"download_wikipedia_data" = "Спампаваць даныя Вікіпедыі";
+

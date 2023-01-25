@@ -2327,3 +2327,5 @@
 "rendering_attr_weatherTempContours_name" = "Línies isotermes";
 "routing_attr_prefer_tactile_paving_name" = "Prefereix el paviment tàctil";
 "rendering_attr_weatherWindSpeedContours_name" = "Isolínies de les ràfegues de vent";
+"download_wikipedia_data" = "Baixa dades de la Viquipèdia";
+

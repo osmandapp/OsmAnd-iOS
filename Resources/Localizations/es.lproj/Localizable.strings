@@ -54,7 +54,7 @@
 "shared_string_waypoints" = "Puntos de referencia";
 "gpx_points" = "Punto(s)";
 "shared_string_export" = "Exportar";
-"import_export" = "Importar/Exportar";
+"import_export" = "Importar/exportar";
 "import_tracks" = "Importar trazas";
 "gpx_import_already_exists" = "Ya existe el archivo de la traza indicada. Elige una acción.";
 "gpx_add_new" = "Añadir nuevo archivo";
@@ -591,7 +591,7 @@
 "speak_pedestrian" = "Pasos de peatones";
 "int_seconds" = "segundos";
 "shared_string_never" = "Nunca";
-"general_settings_2" = "Ajustes generales";
+"general_settings_2" = "Configuración general";
 "general_settings_descr" = "Configura la pantalla y ajustes globales de la aplicación.";
 "routing_settings_descr" = "Indica las opciones de navegación.";
 "auto_zoom_none" = "Sin zum automático";
@@ -1655,7 +1655,7 @@
 "search_activity" = "Buscar";
 "layer_amenity_label" = "Nombres de puntos (PDI, favoritos)";
 "shared_string_deselect_all" = "Desmarcar todo";
-"shared_string_settings" = "Ajustes";
+"shared_string_settings" = "Configuración";
 "avoid_road" = "Evitar camino";
 "shared_string_continue" = "Continuar";
 "shared_string_finish" = "Finalizar";
@@ -2570,7 +2570,7 @@
 "backup_delete_types_descr" = "¿Borrar de OsmAnd Cloud todos los tipos de datos obsoletos\?";
 "backup_delete_data_type_description" = "Esto borrará todos los datos de «%@» en OsmAnd Cloud. Esta acción no se puede deshacer.";
 "cloud_recent_changes" = "Cambios";
-"cloud_all_changes_uploaded" = "Subidos todos los cambios";
+"cloud_all_changes_uploaded" = "Se cargaron todos los cambios";
 "cloud_all_changes_uploaded_descr" = "Todos los cambios realizados en este dispositivo se sincronizan con OsmAnd Cloud.";
 "cloud_no_conflicts" = "No hay conflictos";
 "cloud_no_conflicts_descr" = "Los datos en el dispositivo y en OsmAnd Cloud son los mismos.";
@@ -2657,7 +2657,7 @@
 "show_map_symbols" = "Mostrar símbolos del mapa";
 "depth_contour_lines" = "Curvas de nivel de profundidad";
 "rendering_attr_depthContourWidth_name" = "Grosor de la línea";
-"rendering_attr_depthContourColorScheme_name" = "Esquema de color de las líneas";
+"rendering_attr_depthContourColorScheme_name" = "Combinación de colores de las líneas";
 "last_sync" = "Última sincronización";
 "sync_now" = "Sincronizar ahora";
 "local_changes" = "Cambios a nivel local";
@@ -2667,9 +2667,9 @@
 "routing_attr_goods_restrictions_header_name" = "Los vehículos de transporte de mercancías pueden tener restringido el acceso a algunas carreteras.";
 "routing_attr_goods_restrictions_footer_desc" = "Sólo se aplica a los vehículos que transportan mercancías que tienen al menos cuatro ruedas y no pesan más de 3,5 toneladas.\n\nSi el peso de su vehículo es superior a 3,5 toneladas, deberá utilizar el perfil de camión.";
 "download_all" = "Descargar todo";
-"cloud_all_changes_downloaded" = "Todos los cambios descargados";
+"cloud_all_changes_downloaded" = "Se descargaron todos los cambios";
 "shared_string_cloud" = "Nube";
-"upload_all" = "Subir todo";
+"upload_all" = "Cargar todo";
 "show_borders_of_downloaded_maps" = "Colorear mapas descargados";
 "shared_string_added" = "Añadido";
 "mtb_segment_classification" = "Segmentación";
@@ -2683,15 +2683,15 @@
 "recalc_angle_dialog_descr" = "Se muestra un segmento recto adicional entre la ubicación y la ruta calculada, hasta que la ruta sea recalculada";
 "remote_item" = "Elemento remoto";
 "local_backup_empty_file" = "La copia de seguridad no contiene ningún elemento que restaurar.";
-"new_file" = "Nuevo archivo";
+"new_file" = "Archivo nuevo";
 "modified_file" = "Archivo modificado";
 "last_synchronization" = "Última sincronización";
 "upload_change" = "Cargar el cambio";
 "cloud_version_will_be_removed" = "Se eliminará la versión en la nube";
-"cloud_changes_will_be_dismissed" = "Los cambios en la nube serán descartados";
+"cloud_changes_will_be_dismissed" = "Los cambios en la nube se descartarán";
 "local_file_will_be_restored" = "Se restaurará el archivo local";
-"checking_progress" = "Verificando…";
-"deleted_file" = "Archivo borrado";
+"checking_progress" = "Comprobando…";
+"deleted_file" = "Archivo eliminado";
 "shared_string_uploaded" = "Subido a";
 "shared_string_do_not_exist" = "No existe";
 "cloud_conflict_descr" = "Las versiones local y en la nube contienen cambios desde la última sincronización.";
@@ -2792,3 +2792,5 @@
 "rendering_attr_horse_scale_impossible_name" = "Imposible";
 "routing_attr_avoid_highway_description" = "Evita circular por caminos viales";
 "shared_string_does_not_exist" = "No existe";
+"download_wikipedia_data" = "Descargar datos de Wikipedia";
+

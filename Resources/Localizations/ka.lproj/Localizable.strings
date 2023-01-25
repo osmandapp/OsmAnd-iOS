@@ -2325,3 +2325,5 @@
 "routing_attr_avoid_footways_description" = "საცალფეხო გზების არიდება";
 "routing_attr_allow_streams_name" = "არხების და რუების ჩვენება";
 "rendering_attr_showWaterwayTunnels_description" = "წყლის გვირაბების ჩვენება";
+"download_wikipedia_data" = "ვიკიპედიის მონაცემების გადმოწერა";
+

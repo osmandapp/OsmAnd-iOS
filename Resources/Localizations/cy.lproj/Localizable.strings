@@ -2530,3 +2530,5 @@
 "rendering_attr_natureReserves_name" = "Gwarchodfa natur";
 "routing_attr_avoid_footways_name" = "Osgoi llwybrau troed";
 "routing_attr_carriage_restrictions_name" = "Cyfyngiadau cerbyd";
+"download_wikipedia_data" = "Llwytho data Wicipedia";
+

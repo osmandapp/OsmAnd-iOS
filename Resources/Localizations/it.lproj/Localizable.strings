@@ -2780,3 +2780,5 @@
 "rendering_attr_OSMMapperAssistantIconsLowZooms_description" = "Visualizzazione schematica delle icone a basso zoom";
 "rendering_attr_horse_scale_dangerous_name" = "Pericoloso";
 "shared_string_does_not_exist" = "Non esiste";
+"download_wikipedia_data" = "Scarica dati di Wikipedia";
+

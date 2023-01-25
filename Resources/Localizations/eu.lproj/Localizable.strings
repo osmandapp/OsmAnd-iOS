@@ -581,7 +581,7 @@
 "shared_string_export" = "Esportatu";
 "gpx_selection_segment_title" = "Segmentu";
 "route_points" = "Ibilbideko puntuak";
-"import_export" = "Import/Export";
+"import_export" = "Inportatu/Esportatu";
 "import_tracks" = "Inportatu arrastoak";
 "gpx_import_already_exists" = "The specified track file is already exists in the list. Please choose action.";
 "gpx_add_new" = "Add new file";
@@ -1119,7 +1119,7 @@
 "res_uninst_unmanaged_q" = "You're going to delete %@. It's not from catalog, so please be sure you have a backup if needed.";
 "shared_string_details" = "Xehetasunak";
 "shared_string_type" = "Mota";
-"res_unknown" = "Unknown";
+"res_unknown" = "Ezezaguna";
 "shared_string_size" = "Tamaina";
 "created_on" = "Noiz sortua";
 "res_update_all" = "Update all";
@@ -1180,7 +1180,7 @@
 "osn_bug_name" = "OSM oharra";
 "osm_created" = "Created";
 "poi_remove_success" = "Ezabatuta";
-"shared_string_modified" = "Modified";
+"shared_string_modified" = "Aldatua";
 "osm_reopened" = "Reopened";
 "osm_name" = "OpenStreetMap username";
 "osm_pass" = "OpenStreetMap password";
@@ -2488,7 +2488,7 @@
 "routing_attr_driving_style_description" = "Hautatu gidatzeko helburua ibilbide laburragoa, azkarragoa edo seguruagoa lortzeko";
 "routing_attr_prefer_hiking_routes_name" = "Hobetsi mendiko ibilbideak";
 "routing_attr_avoid_footways_description" = "Saihestu oinezkoen bideak";
-"rendering_attr_showMtbScaleIMBATrails_description" = "Erakutsi mendiko bizikletarako bereziki diseinatutako ibilbideak";
+"rendering_attr_showMtbScaleIMBATrails_description" = "Erakutsi mendiko bizikletako ibilbideak";
 "routing_attr_prefer_tactile_paving_name" = "Nahiago ukimenezko zoladura";
 "rendering_attr_OSMMapperAssistantNote_name" = "Ohar etiketak";
 "rendering_attr_OSMMapperAssistantIconsLowZooms_name" = "Zoom txikitako ikonoak";
@@ -2527,3 +2527,21 @@
 "worldwide_maps" = "Mundu osoko mapak";
 "cloud_recent_changes" = "Aldaketak";
 "cloud_all_changes_uploaded" = "Aldaketa guztiak kargatu dira";
+"weather_pressure_inches_of_mercury" = "Hazbete merkurio";
+"checking_progress" = "Egiaztatzen…";
+"mtb_imba_full" = "Mendiko Bizikletaren Nazioarteko Elkartea";
+"rendering_attr_weatherPrecipitationContours_name" = "Prezipitazio-isolineak";
+"rendering_attr_weatherCloudContours_name" = "Hodei isolineak";
+"rendering_attr_showMtbScale_name" = "Erakutsi MTB eskala";
+"shared_string_expires" = "Iraungitzen da";
+"weather_temperature_celsius" = "Celsius";
+"show_map_symbols" = "Erakutsi mapen ikurrak";
+"rendering_attr_showMtbScale_description" = "Erakutsi ibilbideak MTB eskalaren arabera.";
+"weather_pressure_millimeters_of_mercury" = "Milimetro merkurioa";
+"download_wikipedia_data" = "Deskargatu Wikipediako datuak";
+"weather_pressure_hectopascals" = "Hektopascalak";
+"weather_temperature_fahrenheit" = "Fahrenheit";
+"shared_string_cloud" = "Hodeia";
+"download_heightmap_maps" = "Altuera-mapa";
+"rendering_attr_weatherWindSpeedContours_name" = "Haize-boladen isolineak";
+

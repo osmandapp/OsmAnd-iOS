@@ -2576,3 +2576,5 @@
 "rendering_attr_depthContourWidth_description" = "Djupkurvornas linjebredd";
 "routing_attr_avoid_fords_name" = "Undvik vadställen";
 "rendering_attr_showMtbScaleIMBATrails_description" = "Visa dedikerade mountainbike-leder.";
+"download_wikipedia_data" = "Hämta Wikipedia-data";
+

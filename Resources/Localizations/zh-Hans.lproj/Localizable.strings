@@ -2115,3 +2115,5 @@
 "rendering_value_all_name" = "全部";
 "rendering_attr_weatherPressureContours_name" = "等压线";
 "rendering_attr_hideMilitaryAreas_name" = "隐藏军事区域";
+"download_wikipedia_data" = "下载维基百科数据";
+

@@ -449,7 +449,7 @@
 "left_side_navigation" = "Conduiteà gauche";
 "si_mi_feet" = "Miles/pieds";
 "si_mi_yard" = "Miles / yards";
-"si_km_m" = "Kilomètres / mètres";
+"si_km_m" = "Kilomètres/mètres";
 "no_address_found" = "Impossible de déterminer l\'adresse";
 "looking_up_address" = "Recherche de l\'adresse";
 "traffic_warning_hazard" = "Danger";
@@ -2793,3 +2793,5 @@
 "routing_attr_carriage_restrictions_name" = "Restrictions de chariot";
 "routing_attr_avoid_footways_description" = "Éviter les trottoirs";
 "shared_string_does_not_exist" = "N'existe pas";
+"download_wikipedia_data" = "Télécharger les données Wikipedia";
+

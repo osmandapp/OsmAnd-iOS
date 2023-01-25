@@ -2808,3 +2808,5 @@
 "rendering_attr_showBusRoutes_name" = "Buslinien";
 "rendering_attr_depthContourColorScheme_description" = "Farbschema der Tiefenlinien";
 "shared_string_does_not_exist" = "Nicht vorhanden";
+"download_wikipedia_data" = "Wikipedia-Daten herunterladen";
+

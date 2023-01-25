@@ -2438,3 +2438,5 @@
 "routing_attr_avoid_footways_description" = "Vältä kävelyteitä";
 "rendering_attr_showWaterwayTunnels_name" = "Vesiväylien tunnelit";
 "routing_attr_allow_intermittent_description" = "Sallii ajoittaiset vesireitit";
+"shared_string_tones" = "tonnia";
+

@@ -1862,3 +1862,5 @@ Lon %@";
 "routing_attr_allow_streams_name" = "Permitir regatos e cunetas";
 "rendering_attr_noNatureReserveBoundaries_description" = "Agochar reservas naturais,áreas protexidas e de parques nacionais.";
 "routing_attr_allow_intermittent_description" = "Permitir canles de auga intermitentes";
+"download_wikipedia_data" = "Baixar datos da Wikipedia";
+

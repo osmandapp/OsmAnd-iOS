@@ -87,7 +87,7 @@
     [super applyLocalization];
     if (_screenType == EOAEditWaypointsGroupRenameScreen)
     {
-        self.titleLabel.text = OALocalizedString(@"fav_rename");
+        self.titleLabel.text = OALocalizedString(@"shared_string_rename");
     }
     else if (_screenType == EOAEditWaypointsGroupColorScreen)
     {
@@ -95,7 +95,7 @@
     }
     else if (_screenType == EOAEditWaypointsGroupVisibleScreen)
     {
-        self.titleLabel.text = OALocalizedString(@"map_settings_show");
+        self.titleLabel.text = OALocalizedString(@"shared_string_show_on_map");
     }
     else if (_screenType == EOAEditWaypointsGroupCopyToFavoritesScreen)
     {
@@ -144,7 +144,7 @@
 
         _tableData = [OAGPXTableSectionData withData:@{
                 kTableKey: @"section",
-                kSectionHeader: OALocalizedString(@"groups"),
+                kSectionHeader: OALocalizedString(@"shared_string_groups"),
                 kTableValues: @{
                         @"groups_count": @([groups containsObject:OALocalizedString(@"route_points")]
                                 ? groups.count - 1

@@ -3832,7 +3832,7 @@
         _settingExternalInputDevice = [OACommonInteger withKey:settingExternalInputDeviceKey defValue:NO_EXTERNAL_DEVICE];
 
         [_profilePreferences setObject:_settingAllow3DView forKey:@"enable_3d_view"];
-        [_profilePreferences setObject:_drivingRegionAutomatic forKey:@"driving_region_automatic"];
+        [_profilePreferences setObject:_drivingRegionAutomatic forKey:@"shared_string_automatic"];
         [_profilePreferences setObject:_drivingRegion forKey:@"default_driving_region"];
         [_profilePreferences setObject:_metricSystem forKey:@"default_metric_system"];
         [_profilePreferences setObject:_metricSystemChangedManually forKey:@"metric_system_changed_manually"];

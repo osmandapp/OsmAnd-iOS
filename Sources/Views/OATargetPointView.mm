@@ -2594,7 +2594,7 @@ static const NSInteger _buttonsCount = 4;
                 [sms appendString:@"\n"];
             }
 
-            [sms appendString:OALocalizedString(@"sett_arr_loc")];
+            [sms appendString:OALocalizedString(@"shared_string_location")];
             [sms appendString:@": "];
 
             if ([self isDirectionRTL])

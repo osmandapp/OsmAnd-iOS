@@ -60,7 +60,7 @@
 "last_intermediate_dest_description" = "Adds the last stop along the route";
 "show_poi_over_map" = "Show POI";
 "shared_string_search" = "Meklēt";
-"address_search" = "Adreses meklēšana";
+"address_search_desc" = "Adreses meklēšana";
 "search_radius" = "Search radius";
 "targets" = "Galapunkti";
 "search_radius_proximity" = "Attālumā līdz";
@@ -113,7 +113,7 @@
 "rotate_map_none_opt" = "Do not rotate (north is up)";
 "driving_region_descr" = "Select the driving region: US, Europe, UK, Asia and others.";
 "driving_region" = "Apgabals";
-"driving_region_automatic" = "Automātiski";
+"shared_string_automatic" = "Automātiski";
 "routing_attr_length_name" = "Length limit";
 "default_speed_setting_title" = "Noklusētais ātrums";
 "shared_string_min_speed" = "Min.ātrums";
@@ -231,7 +231,7 @@
 "nav_type_descr" = "Select how to calculate a route for this profile";
 "nav_type_osmand" = "OsmAnd (offline routing)";
 "routing_profile_straightline" = "Taisnā līnija";
-"nav_type_direct_to" = "Direct-to-point";
+"routing_profile_direct_to" = "Direct-to-point";
 "nav_type_brouter" = "BRouter";
 "routing_profile_ski" = "Slēpes";
 "routing_profile_geocoding" = "Ģeodēzija";
@@ -512,7 +512,7 @@
 "fav_colors" = "Colors";
 "fav_name" = "Nosaukums";
 "fav_group" = "Group";
-"groups" = "Grupas";
+"shared_string_groups" = "Grupas";
 "favorite" = "Izlase";
 "poi_overlay" = "POI Overlay";
 "poi_dialog_poi_type" = "POI tips";
@@ -533,7 +533,7 @@
 "fav_enter_group_name" = "Enter group name";
 "fav_exists" = "Favorite with name \"%@\" already exists";
 "fav_ignore" = "Ignore";
-"fav_rename" = "Pārsaukt";
+"shared_string_rename" = "Pārsaukt";
 "fav_replace" = "Aizvietot";
 "replace_favorite_confirmation" = "Are you sure you want to replace Favorite %@?";
 "fav_points_not_exist" = "Izlases punkti neeksistē";
@@ -546,7 +546,7 @@
 "add_favorite" = "Add favorite";
 "name_and_descr" = "Name & description";
 "select_group" = "Select group";
-"icon" = "Ikona";
+"shared_string_icon" = "Ikona";
 "shared_string_shape" = "Shape";
 "fav_point_dublicate" = "Šāds vārds izlasē jau eksistē";
 "fav_point_dublicate_message" = "Favorite renamed to \'%@\' to avoid duplication.";
@@ -575,7 +575,7 @@
 "visible" = "Redzams";
 
 // GPX
-"gpx_point" = "Punkts";
+"plugin_distance_point" = "Punkts";
 "shared_string_waypoint" = "Ceļapunkts";
 "gpx_waypoints" = "Ceļapunkti";
 "gpx_points" = "Point(s)";
@@ -598,7 +598,7 @@
 "gpx_no_tracks" = "There are no tracks";
 "gpx_export_failed" = "Could not save created route";
 "gpx_remove" = "Remove track?";
-"gpx_stat" = "Statistics";
+"shared_string_statistics" = "Statistics";
 "gpx_route" = "Maršruts";
 "gpx_analyze" = "Analyze";
 "gpx_route_time" = "Route time";
@@ -655,20 +655,20 @@
 "poi_filter_public_transport" = "Sabiedriskais transports";
 "shared_string_map" = "Karte";
 "layer_amenity_label" = "POI nosaukumi";
-"map_settings_show" = "Rādīt uz kartes";
+"shared_string_show_on_map" = "Rādīt uz kartes";
 "map_settings_type" = "Map type";
 "map_mode" = "Apgaismojums";
 "map_settings_map_magnifier" = "Tālummaiņa";
 "text_size" = "Teksta izmērs";
 "daynight_mode_night" = "Nakts";
-"map_settings_style" = "Renderēšanas veids";
+"map_widget_renderer" = "Renderēšanas veids";
 "map_settings_overunder" = "Overlay / Underlay";
 "map_settings_over" = "Overlay";
 "map_settings_under" = "Underlay";
 "map_settings_install_maps" = "Choose maps to install or update";
 "map_settings_install_more" = "Install more...";
 "map_settings_offline" = "Styles for offline maps";
-"map_settings_online" = "Tiešsaistes kartes";
+"shared_string_online_maps" = "Tiešsaistes kartes";
 "shared_string_transparency" = "Transparency";
 "map_transparency" = "Bāzes kartes caurspīdīgums";
 "map_settings_avail_lay" = "Available layers";
@@ -691,7 +691,7 @@
 "map_settings_color_scheme" = "Krāsu shēma";
 "map_settings_line_density" = "Line density";
 "map_settings_contour_zoom_level_descr" = "Select zoom level, from wich contour lines will be displayed";
-"map_settings_appearance" = "Izskats";
+"shared_string_appearance" = "Izskats";
 "map_settings_line_density_slowdown_warning" = "High line density may slowdown map rendering";
 "map_settings_available_srtm_maps_descr" = "Additional maps are needed to view Hillshade on the map";
 "settings_app_theme" = "Application theme";
@@ -725,7 +725,7 @@
 "sett_deg360" = "Degrees 360";
 "sett_deg_min" = "Degrees and minutes";
 "sett_arr" = "Map arrows";
-"sett_arr_loc" = "Vieta";
+"shared_string_location" = "Vieta";
 "sett_arr_map" = "Map center";
 "short_location_on_map" = "Lat %@ Lon %@";
 "navigate_point_format_D" = "DDD.DDDDD";
@@ -887,7 +887,7 @@
 "export_profile" = "Export";
 "shared_string_import" = "Importēt";
 "create_profile" = "Create profile";
-"import_profile_select_descr" = "Select the data to be imported.";
+"select_data_to_import" = "Select the data to be imported.";
 "export_profile_select_descr" = "Select the data to be exported.";
 "selected_of" = "Selected - %d/%d";
 "nav_type_hint" = "Navigation type";
@@ -980,7 +980,7 @@
 "prch_nau_q3" = "You may install it later through the Maps & Resources.";
 "proceed_q" = "Proceed?";
 "download" = "Lejupielādēt";
-"nothanks" = "Nē, paldies";
+"shared_string_no_thanks" = "Nē, paldies";
 "download_now" = "Download map now";
 "prch_failed" = "Purchase of \"%@\" has failed";
 "prch_items_failed" = "item(s) were not restored. Please try again.";
@@ -1157,7 +1157,7 @@
 "shared_string_menu" = "Izvēlne";
 "shared_string_my_places" = "Izlase";
 "menu_my_trips" = "My Tracks";
-"menu_feedback" = "Atsauksmes";
+"feedback" = "Atsauksmes";
 "shared_string_help" = "Palīdzība";
 
 // OSM Editing actions
@@ -1211,7 +1211,7 @@
 "osm_confirm_bulk_delete" = "Delete %d edits?";
 "osm_confirm_delete" = "Delete POI?";
 "osm_confirm_upload" = "Upload modifications?";
-"osm_close_changeset" = "Aizvērt izmaiņu kopu";
+"close_changeset" = "Aizvērt izmaiņu kopu";
 "osm_tag" = "Tag";
 "osm_value" = "Value";
 "osm_note_upload_info" = "You can upload the note anonymously or by using your OpenStreetMap profile.";
@@ -1246,7 +1246,7 @@
 "mapil_no_inet_descr" = "You need Internet connection to view Mapillary photos.";
 "mapil_images_nearby" = "Images nearby";
 "mapil_no_images" = "We do not have photos for this location.";
-"mapil_add_photos" = "Pievienot fotogrāfijas";
+"shared_string_add_photos" = "Pievienot fotogrāfijas";
 "mapillary_get_title" = "Uzlabot bilžu pārklājumu ar Mapillary";
 "mapillary_get_descr" = "Get Mapillary to add photos to this location";
 "mapil_contribute" = "Contribute your own street level imagery";
@@ -1255,13 +1255,13 @@
 "mapillary_turn_on_widget_descr" = "This allows you to quickly contribute to Mapillary";
 "tile_cache" = "Bilžu kešatmiņa";
 "shared_string_reload" = "Pārlādēt";
-"shared_string_show_more" = "Parādīt vēl";
+"show_more" = "Parādīt vēl";
 "mapil_reload_cache" = "Reload tiles to see the newest data";
 "filter_current_poiButton" = "Filtrēt";
 "mapil_filter_user_descr" = "Filter images by user";
 "mapil_filter_date" = "Filter images by date";
 "mapil_usernames" = "Usernames";
-"mapil_pano_only" = "Rādīt tikai 360° bildes";
+"mapillary_menu_title_pano" = "Rādīt tikai 360° bildes";
 "mapil_select_user" = "Select user";
 
 // Coordinate widget
@@ -1269,7 +1269,7 @@
 "searching_gps" = "Meklē GPS";
 "copied_to_clipboard" = "Iekopēts starpliktuvē";
 // Quick action
-"quick_action_no_overlay" = "Nav virsklāja";
+"no_overlay" = "Nav virsklāja";
 "quick_action_add_overlay" = "Pievienot virsklāju";
 "quick_action_no_underlay" = "Nav apakšklāja";
 "quick_action_add_underlay" = "Pievienot apakšklāju";
@@ -1315,7 +1315,7 @@
 "add_intermediate" = "Pievienot starppunktu";
 "add_home" = "Pievienot dzīves vietu";
 "add_work" = "Pievienot darba vietu";
-"home_pt" = "Mājas";
+"favorite_home_category" = "Mājas";
 "work_pt" = "Darbs";
 "map_widget_parking" = "Parking spot";
 "add_first_inermediate" = "Pievienot pirmo starppunktu";
@@ -1327,7 +1327,7 @@
 "pause_nav" = "Pause navigation";
 "toggle_nav" = "Sākt/apturēt navigāciju";
 "toggle_day_night" = "Switch Day/Night mode";
-"night_mode" = "Nakts režīms";
+"quick_action_switch_night_mode" = "Nakts režīms";
 "day_mode" = "Dienas režīms";
 "mute_voice" = "Mute voice";
 "unmute_voice" = "Unmute voice";
@@ -1347,7 +1347,7 @@
 "quick_action_interim_dialog" = "Rādīt interim dialogu";
 "quick_action_dialog_descr" = "Turn on to show dialog before applying the action";
 "quick_action_template_name" = "Template name";
-"quick_action_name_footer" = "Atstājiet tukšu, lai automātiski lietotu adreses vai vietas nosaukumu";
+"quick_action_fav_name_descr" = "Atstājiet tukšu, lai automātiski lietotu adreses vai vietas nosaukumu";
 "quick_action_select_group" = "Select the group to save the favorite in.";
 "quick_action_add_category" = "Pievienot kategoriju";
 "quick_action_add_category_descr" = "You can select multiple POI categories.";
@@ -1418,9 +1418,9 @@
 "edit_waypoint_short" = "Edit waypoint";
 "replace_waypoint_confirmation" = "Are you sure you want to replace Waypoint %@?";
 "no_waypoints_found" = "Nav atrasts neviens ceļa punkts";
-"modify_poi_short" = "Labot POI";
+"poi_context_menu_modify" = "Labot POI";
 "create_poi_short" = "Izveidot POI";
-"modify_edit_short" = "Rediģēt POI";
+"poi_context_menu_modify_osm_change" = "Rediģēt POI";
 "context_menu_item_open_note" = "Atvērt OSM piezīmi";
 "edit_osm_note" = "Edit OSM Note";
 "osm_alert_title" = "Iesniegt";
@@ -1462,8 +1462,8 @@
 "help_search" = "Map search";
 "help_trip_planning" = "Ceļojuma plānošana";
 "navigation_profiles_item" = "Navigation profiles";
-"help_purchases" = "OsmAnd pirkumi";
-"help_osmand_live" = "Subscription - OsmAnd Live";
+"osmand_purchases_item" = "OsmAnd pirkumi";
+"subscription_osmandlive_item" = "Subscription - OsmAnd Live";
 "help_travel" = "Travel (Wikipedia & Wikivoyage)";
 "mapillary_item" = "OsmAnd + Mapillary";
 "map_legend" = "Kartes leģenda";
@@ -1471,7 +1471,7 @@
 "help_other_header" = "Cits";
 "help_what_is_new" = "What\'s new";
 "help_install_and_troubleshoot" = "Uzstādīšana un iespējamās problēmas";
-"help_tech_articles" = "Tehniskā dokumentācija";
+"techical_articles_item" = "Tehniskā dokumentācija";
 "help_versions" = "Versijas";
 "help_contact_us" = "Contact us";
 "help_about" = "Par";
@@ -1574,13 +1574,13 @@
 "product_title_europe" = "Eiropa";
 "product_desc_europe" = "Unlimited map downloads for Europe";
 "product_desc_europe_short" = "Europe region maps";
-"product_title_northamerica" = "Ziemeļamerika";
+"index_name_north_america" = "Ziemeļamerika";
 "product_desc_northamerica" = "Unlimited map downloads for North America";
 "product_desc_northamerica_short" = "North America region maps";
 "index_name_russia" = "Krievija";
 "product_desc_russia" = "Unlimited map downloads for Russia";
 "product_desc_russia_short" = "Maps of Russia regions";
-"product_title_southamerica" = "Dienvidamerika";
+"index_name_south_america" = "Dienvidamerika";
 "product_desc_southamerica" = "Unlimited map downloads for South America";
 "product_desc_southamerica_short" = "South America region maps";
 "product_title_allworld" = "All World Maps";
@@ -1612,7 +1612,7 @@
 "track_save_short_q" = "Track is too short, do you want to save?";
 "add_as" = "Add as";
 "make_call" = "Make a call";
-"all_group_points" = "Visi punkti grupā";
+"context_menu_points_of_group" = "Visi punkti grupā";
 "enter_description" = "Enter description";
 "description" = "Apraksts";
 "read_full_description" = "Read full description";
@@ -1645,7 +1645,7 @@
 "edit_track" = "Edit track";
 "duplicate_track" = "Duplicate track";
 "enter_name" = "Ievadiet vārdu";
-"not_selected" = "Nav izvēlēts";
+"shared_string_not_selected" = "Nav izvēlēts";
 "shared_string_language" = "Language";
 "you_searching" = "You are searching";
 "from_location" = "away";
@@ -1719,7 +1719,7 @@
 "go_to_downloads" = "Go to downloads";
 "turn_on_plugin" = "Turn on plugin";
 "all_world_popup_desc" = "Download World base map to see state names, borders and other information";
-"restore" = "Atjaunot";
+"shared_string_restore" = "Atjaunot";
 "restore_all_purchases" = "Restore all purchases";
 "no_statistics" = "No statistics";
 "no_internet_avail" = "No internet available";
@@ -1766,7 +1766,7 @@
 "no_inet_connection" = "Nav interneta savienojuma";
 "no_inet_connection_desc_map" = "Nepieciešams lejupielādēt kartes.";
 "try_again" = "Mēģiniet vēlreiz";
-"search_preogress" = "Meklē…";
+"searching" = "Meklē…";
 "search_location" = "Searching location…";
 "search_map" = "Searching map…";
 "search_another_country" = "Izvēlieties citu reģionu";
@@ -1777,7 +1777,7 @@
 "items_selected" = "%d selected";
 "wiki_sheet_title" = "Kā atvērt Vikipēdijas rakstus\?";
 "download_wiki_data" = "Download Wikipedia data for %@";
-"open_wiki_online" = "Atvērt rakstu internetā";
+"open_in_browser_wiki" = "Atvērt rakstu internetā";
 "explore_wikipedia_offline" = "Lasīt vikipēdiju bezsaistē.";
 "online_webpage_warning" = "Lappuse pieejama tikai tiešsaistē. Vai atvērt interneta pārlūku\?";
 "custom_search" = "Personalizētā meklēšana";
@@ -2263,13 +2263,13 @@
 "backup_restore_now" = "Atjaunot";
 "cloud_existing_account" = "Man jau ir konts";
 "backup_error_subscription_was_expired" = "Beidzies abonoments";
-"shared_string_any" = "Jebkurš";
+"any_poi" = "Jebkurš";
 "user_login" = "Lietotājs";
 "backup_error_user_is_not_registered" = "Lietotājs nav reģistrējies ar šādu epasta adresi";
-"weather_wind_unit_km_per_hour" = "Kilometri stundā";
+"weather_wind_kilimeters_per_hour" = "Kilometri stundā";
 "cloud_set_up_backup" = "Izveidot dublējumkopiju";
 "toast_empty_name_error" = "Bez vārda";
-"product_desc_plus" = "Iegūstiet paplašinātās iespējas";
+"osmand_maps_plus_tagline" = "Iegūstiet paplašinātās iespējas";
 "subscriptions" = "Abonomenti";
 "altitude_descent" = "Pazeminās";
 "restore_purchases" = "Atjaunot pirkumus";
@@ -2285,13 +2285,13 @@
 "units_cubic_m" = "m³";
 "private_access_routing_req" = "Galamērķis atrodas privātas teritorijas vietā. Vai iekļaut maršrutā ierobežotas piekļuves ceļus\?";
 "share_geo" = "ģeo:";
-"product_desc_pro" = "Iegūstiet maksimālās iespējas";
+"osmand_pro_tagline" = "Iegūstiet maksimālās iespējas";
 "copy_coordinates" = "Kopēt koordinātas";
 "unlimited_map_downloads" = "Neierobežotas karšu lejupielādes";
-"product_title_development" = "OsmAnd izstrāde";
+"debugging_and_development" = "OsmAnd izstrāde";
 "manage_subscription" = "Pārvaldīt abonomentu";
-"shared_string_stop" = "Pietura";
+"shared_string_control_stop" = "Pietura";
 "shared_string_delete_all" = "Dzēst visu";
-"shared_string_data" = "Dati";
+"data_settings" = "Dati";
 "shared_string_undefined" = "Nedefinēts";
 "shared_string_paused" = "Nopauzēts";

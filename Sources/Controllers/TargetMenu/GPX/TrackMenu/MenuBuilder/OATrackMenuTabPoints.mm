@@ -201,7 +201,7 @@
 
         NSString *name = !isRte
                 ? waypoint.point.name
-                : [NSString stringWithFormat:@"%@ %lu", OALocalizedString(@"gpx_point"),
+                : [NSString stringWithFormat:@"%@ %lu", OALocalizedString(@"plugin_distance_point"),
                         [waypoints indexOfObject:waypoint] + 1];
         OAGPXTableCellData *waypointCellData = [OAGPXTableCellData withData:@{
                 kTableKey: [NSString stringWithFormat:@"waypoint_%@", name],
@@ -264,7 +264,7 @@
             OAGpxWptItem *waypoint = tableData.values[@"waypoint"];
             NSString *name = ![sectionData.subjects.firstObject.values[@"is_rte"] boolValue]
                     ? waypoint.point.name
-                    : [NSString stringWithFormat:@"%@ %lu", OALocalizedString(@"gpx_point"),
+                    : [NSString stringWithFormat:@"%@ %lu", OALocalizedString(@"plugin_distance_point"),
                [sectionData.subjects indexOfObject:tableData]];
             [tableData setData:@{
                     kTableKey: [NSString stringWithFormat:@"waypoint_%@", name],

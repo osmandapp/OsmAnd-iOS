@@ -632,7 +632,7 @@ static BOOL _purchasesUpdated;
     {
         MFMailComposeViewController *mailCont = [[MFMailComposeViewController alloc] init];
         mailCont.mailComposeDelegate = self;
-        [mailCont setSubject:OALocalizedString(@"help_purchases")];
+        [mailCont setSubject:OALocalizedString(@"osmand_purchases_item")];
         [mailCont setToRecipients:@[OALocalizedString(@"login_footer_email_part")]];
         [mailCont setMessageBody:@"" isHTML:NO];
         [self presentViewController:mailCont animated:YES completion:nil];

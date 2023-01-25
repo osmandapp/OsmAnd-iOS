@@ -544,7 +544,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         OAGPXTableCellData *colorMapStyleCellData = [OAGPXTableCellData withData:@{
                 kTableKey:@"cell_color_map_style",
                 kCellType:[OASwitchTableViewCell getCellIdentifier],
-                kCellTitle:OALocalizedString(@"map_settings_style")
+                kCellTitle:OALocalizedString(@"map_widget_renderer")
         }];
         [colorsSectionData.subjects addObject:colorMapStyleCellData];
 
@@ -570,7 +570,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         OAGPXTableCellData *widthMapStyleCellData = [OAGPXTableCellData withData:@{
                 kTableKey:@"width_map_style",
                 kCellType:[OASwitchTableViewCell getCellIdentifier],
-                kCellTitle:OALocalizedString(@"map_settings_style")
+                kCellTitle:OALocalizedString(@"map_widget_renderer")
         }];
         [widthSectionData.subjects addObject:widthMapStyleCellData];
 

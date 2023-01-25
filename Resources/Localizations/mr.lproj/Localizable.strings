@@ -69,7 +69,7 @@
 
 "show_poi_over_map" = "Show POI";
 "shared_string_search" = "शोध";
-"address_search" = "पत्त्याचा शोध";
+"address_search_desc" = "पत्त्याचा शोध";
 "search_radius" = "Search radius";
 "targets" = "Destinations";
 "search_radius_proximity" = "Within";
@@ -127,7 +127,7 @@
 "rotate_map_none_opt" = "Do not rotate (north is up)";
 "driving_region_descr" = "Select the driving region: US, Europe, UK, Asia and others.";
 "driving_region" = "Driving region";
-"driving_region_automatic" = "Automatic";
+"shared_string_automatic" = "Automatic";
 "routing_attr_length_name" = "Length limit";
 "default_speed_setting_title" = "Default speed";
 "shared_string_min_speed" = "Min. speed";
@@ -251,7 +251,7 @@
 "nav_type_descr" = "Select how to calculate a route for this profile";
 "nav_type_osmand" = "OsmAnd (offline routing)";
 "routing_profile_straightline" = "Straight line";
-"nav_type_direct_to" = "Direct-to-point";
+"routing_profile_direct_to" = "Direct-to-point";
 "nav_type_brouter" = "BRouter";
 "routing_profile_ski" = "Ski";
 "routing_profile_geocoding" = "Geocoding";
@@ -541,7 +541,7 @@
 "fav_colors" = "Colors";
 "fav_name" = "नाव";
 "fav_group" = "Group";
-"groups" = "Groups";
+"shared_string_groups" = "Groups";
 "favorite" = "आवडते ठिकाण";
 "poi_overlay" = "POI Overlay";
 "poi_dialog_poi_type" = "POI Type";
@@ -562,7 +562,7 @@
 "fav_enter_group_name" = "Enter group name";
 "fav_exists" = "Favorite with name \"%@\" already exists";
 "fav_ignore" = "Ignore";
-"fav_rename" = "नाव बदला";
+"shared_string_rename" = "नाव बदला";
 "fav_replace" = "Replace";
 "replace_favorite_confirmation" = "Are you sure you want to replace Favorite %@?";
 "fav_points_not_exist" = "No Favorite points exist";
@@ -575,7 +575,7 @@
 "add_favorite" = "Add favorite";
 "name_and_descr" = "Name & description";
 "select_group" = "Select group";
-"icon" = "Icon";
+"shared_string_icon" = "Icon";
 "shared_string_shape" = "Shape";
 "fav_point_dublicate" = "Duplicate Favorite name specified";
 "fav_point_dublicate_message" = "Favorite renamed to \'%@\' to avoid duplication.";
@@ -605,7 +605,7 @@
 "visible" = "Visible";
 
 // GPX
-"gpx_point" = "Point";
+"plugin_distance_point" = "Point";
 "shared_string_waypoint" = "Waypoint";
 "gpx_waypoints" = "Waypoints";
 "gpx_points" = "Point(s)";
@@ -632,7 +632,7 @@
 "gpx_export_failed" = "Could not save created route";
 
 "gpx_remove" = "Remove track?";
-"gpx_stat" = "Statistics";
+"shared_string_statistics" = "Statistics";
 "gpx_route" = "मार्ग";
 "gpx_analyze" = "Analyze";
 "gpx_route_time" = "Route time";
@@ -695,20 +695,20 @@
 
 "shared_string_map" = "नकाशा";
 "layer_amenity_label" = "Point Labels (POI, Favorites)";
-"map_settings_show" = "नकाशावर दाखवा";
+"shared_string_show_on_map" = "नकाशावर दाखवा";
 "map_settings_type" = "Map type";
 "map_mode" = "Map mode";
 "map_settings_map_magnifier" = "Map magnifier";
 "text_size" = "Text size";
 "daynight_mode_night" = "रात्र";
-"map_settings_style" = "Map style";
+"map_widget_renderer" = "Map style";
 "map_settings_overunder" = "Overlay / Underlay";
 "map_settings_over" = "Overlay";
 "map_settings_under" = "Underlay";
 "map_settings_install_maps" = "Choose maps to install or update";
 "map_settings_install_more" = "Install more...";
 "map_settings_offline" = "Styles for offline maps";
-"map_settings_online" = "ऑनलाइन नकाशे";
+"shared_string_online_maps" = "ऑनलाइन नकाशे";
 "shared_string_transparency" = "Transparency";
 "map_transparency" = "Base map transparency";
 "map_settings_avail_lay" = "Available layers";
@@ -732,7 +732,7 @@
 "map_settings_color_scheme" = "Color scheme";
 "map_settings_line_density" = "Line density";
 "map_settings_contour_zoom_level_descr" = "Select zoom level, from wich contour lines will be displayed";
-"map_settings_appearance" = "Appearance";
+"shared_string_appearance" = "Appearance";
 "map_settings_line_density_slowdown_warning" = "High line density may slowdown map rendering";
 "map_settings_available_srtm_maps_descr" = "Additional maps are needed to view Hillshade on the map";
 
@@ -767,7 +767,7 @@
 "sett_deg360" = "Degrees 360";
 "sett_deg_min" = "Degrees and minutes";
 "sett_arr" = "Map arrows";
-"sett_arr_loc" = "Location";
+"shared_string_location" = "Location";
 "sett_arr_map" = "Map center";
 "short_location_on_map" = "Lat %@ Lon %@";
 "navigate_point_format_D" = "DDD.DDDDD";
@@ -934,7 +934,7 @@
 "export_profile" = "Export";
 "shared_string_import" = "आयात";
 "create_profile" = "Create profile";
-"import_profile_select_descr" = "Select the data to be imported.";
+"select_data_to_import" = "Select the data to be imported.";
 "export_profile_select_descr" = "Select the data to be exported.";
 "selected_of" = "Selected - %d/%d";
 "nav_type_hint" = "Navigation type";
@@ -1037,7 +1037,7 @@
 "proceed_q" = "Proceed?";
 
 "download" = "डाउनलोड";
-"nothanks" = "नाही, धन्यवाद";
+"shared_string_no_thanks" = "नाही, धन्यवाद";
 "download_now" = "Download map now";
 "prch_failed" = "Purchase of \"%@\" has failed";
 "prch_items_failed" = "item(s) were not restored. Please try again.";
@@ -1214,7 +1214,7 @@
 "shared_string_menu" = "Menu";
 "shared_string_my_places" = "माझी ठिकाणे";
 "menu_my_trips" = "My Tracks";
-"menu_feedback" = "Feedback";
+"feedback" = "Feedback";
 "shared_string_help" = "मदत";
 
 // OSM Editing actions
@@ -1270,7 +1270,7 @@
 "osm_confirm_bulk_delete" = "Delete %d edits?";
 "osm_confirm_delete" = "Delete POI?";
 "osm_confirm_upload" = "Upload modifications?";
-"osm_close_changeset" = "Close changeset";
+"close_changeset" = "Close changeset";
 "osm_tag" = "Tag";
 "osm_value" = "Value";
 "osm_note_upload_info" = "You can upload the note anonymously or by using your OpenStreetMap profile.";
@@ -1305,7 +1305,7 @@
 "mapil_no_inet_descr" = "You need Internet connection to view Mapillary photos.";
 "mapil_images_nearby" = "Images nearby";
 "mapil_no_images" = "We do not have photos for this location.";
-"mapil_add_photos" = "Add photos";
+"shared_string_add_photos" = "Add photos";
 "mapillary_get_title" = "Improve photo coverage with Mapillary";
 "mapillary_get_descr" = "Get Mapillary to add photos to this location";
 "mapil_contribute" = "Contribute your own street level imagery";
@@ -1314,13 +1314,13 @@
 "mapillary_turn_on_widget_descr" = "This allows you to quickly contribute to Mapillary";
 "tile_cache" = "Tile cache";
 "shared_string_reload" = "Reload";
-"shared_string_show_more" = "Show more";
+"show_more" = "Show more";
 "mapil_reload_cache" = "Reload tiles to see the newest data";
 "filter_current_poiButton" = "Filter";
 "mapil_filter_user_descr" = "Filter images by user";
 "mapil_filter_date" = "Filter images by date";
 "mapil_usernames" = "Usernames";
-"mapil_pano_only" = "Display only 360° images";
+"mapillary_menu_title_pano" = "Display only 360° images";
 "mapil_select_user" = "Select user";
 
 // Coordinate widget
@@ -1328,7 +1328,7 @@
 "searching_gps" = "Searching GPS";
 "copied_to_clipboard" = "Copied to clipboard";
 // Quick action
-"quick_action_no_overlay" = "No overlay";
+"no_overlay" = "No overlay";
 "quick_action_add_overlay" = "Add overlay";
 "quick_action_no_underlay" = "No underlay";
 "quick_action_add_underlay" = "Add underlay";
@@ -1374,7 +1374,7 @@
 "add_intermediate" = "Add intermediate point";
 "add_home" = "Add home";
 "add_work" = "Add work";
-"home_pt" = "घर";
+"favorite_home_category" = "घर";
 "work_pt" = "Work";
 "map_widget_parking" = "Parking spot";
 "add_first_inermediate" = "Add first intermediate";
@@ -1386,7 +1386,7 @@
 "pause_nav" = "Pause navigation";
 "toggle_nav" = "Start/stop navigation";
 "toggle_day_night" = "Switch Day/Night mode";
-"night_mode" = "Night mode";
+"quick_action_switch_night_mode" = "Night mode";
 "day_mode" = "Day mode";
 "mute_voice" = "Mute voice";
 "unmute_voice" = "Unmute voice";
@@ -1406,7 +1406,7 @@
 "quick_action_interim_dialog" = "Show an interim dialog";
 "quick_action_dialog_descr" = "Turn on to show dialog before applying the action";
 "quick_action_template_name" = "Template name";
-"quick_action_name_footer" = "Leave blank to use the address or place name.";
+"quick_action_fav_name_descr" = "Leave blank to use the address or place name.";
 "quick_action_select_group" = "Select the group to save the favorite in.";
 "quick_action_add_category" = "Add a category";
 "quick_action_add_category_descr" = "You can select multiple POI categories.";
@@ -1478,9 +1478,9 @@
 "edit_waypoint_short" = "Edit waypoint";
 "replace_waypoint_confirmation" = "Are you sure you want to replace Waypoint %@?";
 "no_waypoints_found" = "No waypoints found";
-"modify_poi_short" = "पिओआय बदला";
+"poi_context_menu_modify" = "पिओआय बदला";
 "create_poi_short" = "पिओआय तयार करा";
-"modify_edit_short" = "Modify OSM change";
+"poi_context_menu_modify_osm_change" = "Modify OSM change";
 "context_menu_item_open_note" = "Open OSM Note";
 "edit_osm_note" = "Edit OSM Note";
 "osm_alert_title" = "Commit";
@@ -1525,8 +1525,8 @@
 "help_search" = "Map search";
 "help_trip_planning" = "Planning a trip";
 "navigation_profiles_item" = "Navigation profiles";
-"help_purchases" = "OsmAnd purchases";
-"help_osmand_live" = "Subscription - OsmAnd Live";
+"osmand_purchases_item" = "OsmAnd purchases";
+"subscription_osmandlive_item" = "Subscription - OsmAnd Live";
 "help_travel" = "Travel (Wikipedia & Wikivoyage)";
 "mapillary_item" = "OsmAnd + Mapillary";
 "map_legend" = "Map legend";
@@ -1534,7 +1534,7 @@
 "help_other_header" = "इतर";
 "help_what_is_new" = "What\'s new";
 "help_install_and_troubleshoot" = "Installation and troubleshooting";
-"help_tech_articles" = "Technical articles";
+"techical_articles_item" = "Technical articles";
 "help_versions" = "Versions";
 "help_contact_us" = "Contact us";
 "help_about" = "About";
@@ -1643,13 +1643,13 @@
 "product_title_europe" = "युरोप";
 "product_desc_europe" = "Unlimited map downloads for Europe";
 "product_desc_europe_short" = "Europe region maps";
-"product_title_northamerica" = "उत्तर अमेरिका";
+"index_name_north_america" = "उत्तर अमेरिका";
 "product_desc_northamerica" = "Unlimited map downloads for North America";
 "product_desc_northamerica_short" = "North America region maps";
 "index_name_russia" = "रशिया";
 "product_desc_russia" = "Unlimited map downloads for Russia";
 "product_desc_russia_short" = "Maps of Russia regions";
-"product_title_southamerica" = "दक्षिण अमेरिका";
+"index_name_south_america" = "दक्षिण अमेरिका";
 "product_desc_southamerica" = "Unlimited map downloads for South America";
 "product_desc_southamerica_short" = "South America region maps";
 "product_title_allworld" = "All World Maps";
@@ -1687,7 +1687,7 @@
 "add_as" = "Add as";
 "make_call" = "Make a call";
 
-"all_group_points" = "All points of the group";
+"context_menu_points_of_group" = "All points of the group";
 "enter_description" = "Enter description";
 "description" = "वर्णन";
 "read_full_description" = "Read full description";
@@ -1721,7 +1721,7 @@
 "edit_track" = "Edit track";
 "duplicate_track" = "Duplicate track";
 "enter_name" = "Enter name";
-"not_selected" = "Not selected";
+"shared_string_not_selected" = "Not selected";
 "shared_string_language" = "भाषा";
 
 "you_searching" = "You are searching";
@@ -1808,7 +1808,7 @@
 "turn_on_plugin" = "Turn on plugin";
 
 "all_world_popup_desc" = "Download World base map to see state names, borders and other information";
-"restore" = "Restore";
+"shared_string_restore" = "Restore";
 "restore_all_purchases" = "Restore all purchases";
 
 "no_statistics" = "No statistics";
@@ -1865,7 +1865,7 @@
 "no_inet_connection_desc_map" = "नकशे डाउनलोड करण्यासाठी पाहिजे.";
 "try_again" = "Try again";
 
-"search_preogress" = "शोधत आहे…";
+"searching" = "शोधत आहे…";
 "search_location" = "Searching location…";
 "search_map" = "Searching map…";
 "search_another_country" = "इतर प्रदेश निवडा";
@@ -1879,7 +1879,7 @@
 
 "wiki_sheet_title" = "How to open Wikipedia articles?";
 "download_wiki_data" = "Download Wikipedia data for %@";
-"open_wiki_online" = "Open article online";
+"open_in_browser_wiki" = "Open article online";
 "explore_wikipedia_offline" = "Explore Wikipedia offline.";
 "online_webpage_warning" = "Page only available online. Open in web browser?";
 

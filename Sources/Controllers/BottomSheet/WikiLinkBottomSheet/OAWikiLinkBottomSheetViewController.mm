@@ -94,7 +94,7 @@
                       },
                       @{
                           @"type" : [OATitleIconRoundCell getCellIdentifier],
-                          @"title" : OALocalizedString(@"open_wiki_online"),
+                          @"title" : OALocalizedString(@"open_in_browser_wiki"),
                           @"img" : @"ic_custom_online",
                           @"round_bottom" : @(YES),
                           @"round_top" : @(NO),

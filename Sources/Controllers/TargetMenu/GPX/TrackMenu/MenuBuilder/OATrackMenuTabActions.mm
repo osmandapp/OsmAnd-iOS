@@ -49,7 +49,7 @@
     OAGPXTableCellData *showOnMapCellData = [OAGPXTableCellData withData:@{
             kTableKey: @"control_show_on_map",
             kCellType: [OATitleSwitchRoundCell getCellIdentifier],
-            kCellTitle: OALocalizedString(@"map_settings_show")
+            kCellTitle: OALocalizedString(@"shared_string_show_on_map")
     }];
     [controlSectionData.subjects addObject:showOnMapCellData];
 
@@ -57,7 +57,7 @@
             kTableKey: @"control_appearance",
             kCellType: [OATitleIconRoundCell getCellIdentifier],
             kCellRightIconName: @"ic_custom_appearance",
-            kCellTitle: OALocalizedString(@"map_settings_appearance")
+            kCellTitle: OALocalizedString(@"shared_string_appearance")
     }];
     [controlSectionData.subjects addObject:appearanceCellData];
 

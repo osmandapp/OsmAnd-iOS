@@ -50,7 +50,7 @@
 
 - (void) applyLocalization
 {
-    _titleView.text = OALocalizedString(@"map_settings_appearance");
+    _titleView.text = OALocalizedString(@"shared_string_appearance");
 }
 
 - (void) viewDidLoad

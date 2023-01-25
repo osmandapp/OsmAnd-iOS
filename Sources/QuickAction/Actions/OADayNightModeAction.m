@@ -44,7 +44,7 @@ static OAQuickActionType *TYPE;
 
 - (NSString *)getActionStateName
 {
-    return [OAAppSettings sharedManager].nightMode ? OALocalizedString(@"day_mode") : OALocalizedString(@"night_mode");
+    return [OAAppSettings sharedManager].nightMode ? OALocalizedString(@"day_mode") : OALocalizedString(@"quick_action_switch_night_mode");
 }
 
 + (OAQuickActionType *) TYPE

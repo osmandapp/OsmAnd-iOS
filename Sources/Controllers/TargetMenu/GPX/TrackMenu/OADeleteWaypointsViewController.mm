@@ -134,7 +134,7 @@
             selectedGroupsCount += 1;
     }
     NSString *textGroups = [NSString stringWithFormat:@"\n%@ %li, %@ %li",
-                    OALocalizedString(@"groups"),
+                    OALocalizedString(@"shared_string_groups"),
                                                       selectedGroupsCount,
                                                       OALocalizedString(@"gpx_waypoints").lowerCase,
                                                       selectedWaypointsCount];

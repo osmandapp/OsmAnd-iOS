@@ -67,7 +67,7 @@
     NSString *workName = workPoint ? [workPoint.pointDescription getSimpleName:NO] : nil;
     _data = @[
               @{
-                    @"title" : OALocalizedString(@"home_pt"),
+                    @"title" : OALocalizedString(@"favorite_home_category"),
                     @"descr" : homeName ? homeName : OALocalizedString(@"shared_string_add"),
                     @"img" : @"ic_custom_home",
                     @"key" : @"home"

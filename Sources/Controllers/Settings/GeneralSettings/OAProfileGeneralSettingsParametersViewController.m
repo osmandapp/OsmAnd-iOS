@@ -148,7 +148,7 @@
             self.tableView.rowHeight = 60.;
             [dataArr addObject:@{
                 @"name" : @"AUTOMATIC",
-                @"title" : OALocalizedString(@"driving_region_automatic"),
+                @"title" : OALocalizedString(@"shared_string_automatic"),
                 @"description" : OALocalizedString(@"device_settings"),
                 @"value" : @"",
                 @"selected" : @(automatic),

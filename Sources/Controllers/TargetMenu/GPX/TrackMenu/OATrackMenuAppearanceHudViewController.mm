@@ -245,7 +245,7 @@
 
 - (void)applyLocalization
 {
-    [self.titleView setText:OALocalizedString(@"map_settings_appearance")];
+    [self.titleView setText:OALocalizedString(@"shared_string_appearance")];
 }
 
 - (OAGPXTableCellData *) generateDescriptionCellData:(NSString *)key description:(NSString *)description

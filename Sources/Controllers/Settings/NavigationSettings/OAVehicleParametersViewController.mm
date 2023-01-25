@@ -133,7 +133,7 @@
                 }
 
                 if (index == 0)
-                    value = OALocalizedString([paramId isEqualToString:@"motor_type"] ? @"not_selected" : @"shared_string_none");
+                    value = OALocalizedString([paramId isEqualToString:@"motor_type"] ? @"shared_string_not_selected" : @"shared_string_none");
                 else if (index != -1)
                     value = [self addSpaceToValue:[NSString stringWithUTF8String:p.possibleValueDescriptions[index].c_str()]];
                 else

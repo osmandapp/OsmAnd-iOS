@@ -49,7 +49,7 @@ static NSArray<OAColoringType *> * TRACK_COLORING_TYPES = @[OAColoringType.TRACK
 {
     if (!DEFAULT)
     {
-        DEFAULT = [[OAColoringType alloc] initWithName:@"default" title:OALocalizedString(@"map_settings_style") iconName:@"ic_custom_map_style"];
+        DEFAULT = [[OAColoringType alloc] initWithName:@"default" title:OALocalizedString(@"map_widget_renderer") iconName:@"ic_custom_map_style"];
     }
     return DEFAULT;
 }

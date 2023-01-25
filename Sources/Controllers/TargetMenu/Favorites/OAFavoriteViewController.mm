@@ -167,7 +167,7 @@
         color = favoriteGroup.isVisible ? color : disabledColor;
         UIImage *icon = [UIImage templateImageNamed:@"ic_custom_folder"];
         NSString *name = [self.favorite getCategoryDisplayName];
-        NSString *description = OALocalizedString(@"all_group_points");
+        NSString *description = OALocalizedString(@"context_menu_points_of_group");
 
         OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:nil icon:icon textPrefix:description text:name textColor:color isText:NO needLinks:NO order:1 typeName:kGroupRowType isPhoneNumber:NO isUrl:NO];
         rowInfo.collapsed = YES;

@@ -191,7 +191,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         case kOfflineSourcesSection:
             return OALocalizedString(@"map_settings_offline");
         case kOnlineSourcesSection:
-            return OALocalizedString(@"map_settings_online");
+            return OALocalizedString(@"shared_string_online_maps");
             
         default:
             return nil;

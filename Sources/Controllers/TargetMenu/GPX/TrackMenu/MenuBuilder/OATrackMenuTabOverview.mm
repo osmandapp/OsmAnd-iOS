@@ -164,7 +164,7 @@
     return [OAGPXTableCellData withData:@{
             kTableKey: @"location",
             kCellType: [OAIconTitleValueCell getCellIdentifier],
-            kCellTitle: OALocalizedString(@"sett_arr_loc"),
+            kCellTitle: OALocalizedString(@"shared_string_location"),
             kCellDesc: [self generateDirName]
     }];
 }

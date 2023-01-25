@@ -79,7 +79,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         case OsmAndResourceType::WeatherForecast:
             return OALocalizedString(@"weather_forecast");
         case OsmAndResourceType::HeightmapRegion:
-            return OALocalizedString(@"res_heightmap");
+            return OALocalizedString(@"download_heightmap_maps");
         default:
             return OALocalizedString(@"res_unknown");
     }

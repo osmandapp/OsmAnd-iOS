@@ -60,7 +60,7 @@
 "last_intermediate_dest_description" = "Adds the last stop along the route";
 "show_poi_over_map" = "Show POI";
 "shared_string_search" = "Bilatu";
-"address_search" = "Helbide bilaketa";
+"address_search_desc" = "Helbide bilaketa";
 "search_radius" = "Search radius";
 "targets" = "Helburuak";
 "search_radius_proximity" = "Erradioa";
@@ -113,7 +113,7 @@
 "rotate_map_none_opt" = "Do not rotate (north is up)";
 "driving_region_descr" = "Select the driving region: US, Europe, UK, Asia and others.";
 "driving_region" = "Gidatze eremua";
-"driving_region_automatic" = "Automatikoa";
+"shared_string_automatic" = "Automatikoa";
 "routing_attr_length_name" = "Luzera muga";
 "default_speed_setting_title" = "Lehenetsitako abiadura";
 "shared_string_min_speed" = "Gutxieneko abiadura";
@@ -231,7 +231,7 @@
 "nav_type_descr" = "Select how to calculate a route for this profile";
 "nav_type_osmand" = "OsmAnd (offline routing)";
 "routing_profile_straightline" = "Lerro zuzena";
-"nav_type_direct_to" = "Zuzen puntura";
+"routing_profile_direct_to" = "Zuzen puntura";
 "nav_type_brouter" = "BRouter";
 "routing_profile_ski" = "Eskia";
 "routing_profile_geocoding" = "Geokodetzea";
@@ -511,7 +511,7 @@
 "fav_colors" = "Colors";
 "fav_name" = "Izena";
 "fav_group" = "Group";
-"groups" = "Taldeak";
+"shared_string_groups" = "Taldeak";
 "favorite" = "Gogokoa";
 "poi_overlay" = "POI Overlay";
 "poi_dialog_poi_type" = "Interesgune mota";
@@ -532,7 +532,7 @@
 "fav_enter_group_name" = "Enter group name";
 "fav_exists" = "Favorite with name \"%@\" already exists";
 "fav_ignore" = "Ignore";
-"fav_rename" = "Izenez aldatu";
+"shared_string_rename" = "Izenez aldatu";
 "fav_replace" = "Ordezkatu";
 "replace_favorite_confirmation" = "Are you sure you want to replace Favorite %@?";
 "fav_points_not_exist" = "Ez dago gogoko punturik";
@@ -545,7 +545,7 @@
 "add_favorite" = "Add favorite";
 "name_and_descr" = "Name & description";
 "select_group" = "Hautatu taldea";
-"icon" = "Ikonoa";
+"shared_string_icon" = "Ikonoa";
 "shared_string_shape" = "Forma";
 "fav_point_dublicate" = "Gogoko puntuaren izen bikoiztua";
 "fav_point_dublicate_message" = "Favorite renamed to \'%@\' to avoid duplication.";
@@ -574,7 +574,7 @@
 "visible" = "Ikusgai";
 
 // GPX
-"gpx_point" = "Puntua";
+"plugin_distance_point" = "Puntua";
 "shared_string_waypoint" = "Bide-puntua";
 "gpx_waypoints" = "Bide-puntuak";
 "gpx_points" = "Point(s)";
@@ -597,7 +597,7 @@
 "gpx_no_tracks" = "There are no tracks";
 "gpx_export_failed" = "Could not save created route";
 "gpx_remove" = "Remove track?";
-"gpx_stat" = "Estatistika";
+"shared_string_statistics" = "Estatistika";
 "gpx_route" = "Ibilbidea";
 "gpx_analyze" = "Analyze";
 "gpx_route_time" = "Route time";
@@ -654,20 +654,20 @@
 "poi_filter_public_transport" = "Garraio publikoa";
 "shared_string_map" = "Mapa";
 "layer_amenity_label" = "Interesguneen gainazalaren etiketak";
-"map_settings_show" = "Erakutsi mapan";
+"shared_string_show_on_map" = "Erakutsi mapan";
 "map_settings_type" = "Map type";
 "map_mode" = "Maparen argitasun-modua";
 "map_settings_map_magnifier" = "Mapa handitzailea";
 "text_size" = "Testu-tamaina";
 "daynight_mode_night" = "Gaua";
-"map_settings_style" = "Maparen errendatze-estiloa";
+"map_widget_renderer" = "Maparen errendatze-estiloa";
 "map_settings_overunder" = "Overlay / Underlay";
 "map_settings_over" = "Overlay";
 "map_settings_under" = "Underlay";
 "map_settings_install_maps" = "Choose maps to install or update";
 "map_settings_install_more" = "Install more...";
 "map_settings_offline" = "Styles for offline maps";
-"map_settings_online" = "Sareko mapak";
+"shared_string_online_maps" = "Sareko mapak";
 "shared_string_transparency" = "Gardentasuna";
 "map_transparency" = "Oinarri den maparen gardentasuna";
 "map_settings_avail_lay" = "Available layers";
@@ -690,7 +690,7 @@
 "map_settings_color_scheme" = "Kolore eskema";
 "map_settings_line_density" = "Line density";
 "map_settings_contour_zoom_level_descr" = "Select zoom level, from wich contour lines will be displayed";
-"map_settings_appearance" = "Itxura";
+"shared_string_appearance" = "Itxura";
 "map_settings_line_density_slowdown_warning" = "High line density may slowdown map rendering";
 "map_settings_available_srtm_maps_descr" = "Additional maps are needed to view Hillshade on the map";
 "settings_app_theme" = "Application theme";
@@ -724,7 +724,7 @@
 "sett_deg360" = "Degrees 360";
 "sett_deg_min" = "Degrees and minutes";
 "sett_arr" = "Map arrows";
-"sett_arr_loc" = "Kokapena";
+"shared_string_location" = "Kokapena";
 "sett_arr_map" = "Map center";
 "short_location_on_map" = "Lat %@ Lon %@";
 "navigate_point_format_D" = "DDD.DDDDD";
@@ -886,7 +886,7 @@
 "export_profile" = "Export";
 "shared_string_import" = "Inportatu";
 "create_profile" = "Create profile";
-"import_profile_select_descr" = "Hautatu inportatu beharreko datuak.";
+"select_data_to_import" = "Hautatu inportatu beharreko datuak.";
 "export_profile_select_descr" = "Select the data to be exported.";
 "selected_of" = "Selected - %d/%d";
 "nav_type_hint" = "Navigation type";
@@ -979,7 +979,7 @@
 "prch_nau_q3" = "You may install it later through the Maps & Resources.";
 "proceed_q" = "Proceed?";
 "download" = "Deskargatu";
-"nothanks" = "Ez, eskerrik asko";
+"shared_string_no_thanks" = "Ez, eskerrik asko";
 "download_now" = "Download map now";
 "prch_failed" = "Purchase of \"%@\" has failed";
 "prch_items_failed" = "item(s) were not restored. Please try again.";
@@ -1156,7 +1156,7 @@
 "shared_string_menu" = "Menua";
 "shared_string_my_places" = "Nire lekuak";
 "menu_my_trips" = "My Tracks";
-"menu_feedback" = "Iruzkinak";
+"feedback" = "Iruzkinak";
 "shared_string_help" = "Laguntza";
 
 // OSM Editing actions
@@ -1210,7 +1210,7 @@
 "osm_confirm_bulk_delete" = "Delete %d edits?";
 "osm_confirm_delete" = "Delete POI?";
 "osm_confirm_upload" = "Upload modifications?";
-"osm_close_changeset" = "Itxi aldaketa multzoa";
+"close_changeset" = "Itxi aldaketa multzoa";
 "osm_tag" = "Tag";
 "osm_value" = "Value";
 "osm_note_upload_info" = "You can upload the note anonymously or by using your OpenStreetMap profile.";
@@ -1245,7 +1245,7 @@
 "mapil_no_inet_descr" = "You need Internet connection to view Mapillary photos.";
 "mapil_images_nearby" = "Images nearby";
 "mapil_no_images" = "We do not have photos for this location.";
-"mapil_add_photos" = "Gehitu argazkiak";
+"shared_string_add_photos" = "Gehitu argazkiak";
 "mapillary_get_title" = "Eskuratu argazki gehiago Mapillary bitartez";
 "mapillary_get_descr" = "Get Mapillary to add photos to this location";
 "mapil_contribute" = "Contribute your own street level imagery";
@@ -1254,13 +1254,13 @@
 "mapillary_turn_on_widget_descr" = "This allows you to quickly contribute to Mapillary";
 "tile_cache" = "Lauzen katxea";
 "shared_string_reload" = "Birkargatu";
-"shared_string_show_more" = "Erakutsi gehiago";
+"show_more" = "Erakutsi gehiago";
 "mapil_reload_cache" = "Reload tiles to see the newest data";
 "filter_current_poiButton" = "Iragazkia";
 "mapil_filter_user_descr" = "Filter images by user";
 "mapil_filter_date" = "Filter images by date";
 "mapil_usernames" = "Usernames";
-"mapil_pano_only" = "Erakutsi 360º argazkiak besterik ez";
+"mapillary_menu_title_pano" = "Erakutsi 360º argazkiak besterik ez";
 "mapil_select_user" = "Select user";
 
 // Coordinate widget
@@ -1268,7 +1268,7 @@
 "searching_gps" = "GPSa bilatzen";
 "copied_to_clipboard" = "Arbelera kopiatuta";
 // Quick action
-"quick_action_no_overlay" = "Gain-azalik ez";
+"no_overlay" = "Gain-azalik ez";
 "quick_action_add_overlay" = "Gehitu gain-azala";
 "quick_action_no_underlay" = "Azpi-azalik ez";
 "quick_action_add_underlay" = "Gehitu azpi-azala";
@@ -1314,7 +1314,7 @@
 "add_intermediate" = "Gehitu tarteko puntua";
 "add_home" = "Gehitu etxea";
 "add_work" = "Gehitu lantokia";
-"home_pt" = "Etxea";
+"favorite_home_category" = "Etxea";
 "work_pt" = "Lantokia";
 "map_widget_parking" = "Parking spot";
 "add_first_inermediate" = "Gehitu lehen tartekoa";
@@ -1326,7 +1326,7 @@
 "pause_nav" = "Pause navigation";
 "toggle_nav" = "Hasi/amaitu nabigazioa";
 "toggle_day_night" = "Switch Day/Night mode";
-"night_mode" = "Gaueko modua";
+"quick_action_switch_night_mode" = "Gaueko modua";
 "day_mode" = "Eguneko modua";
 "mute_voice" = "Mute voice";
 "unmute_voice" = "Unmute voice";
@@ -1346,7 +1346,7 @@
 "quick_action_interim_dialog" = "Erakutsi barne elkarrizketa-koadroa";
 "quick_action_dialog_descr" = "Turn on to show dialog before applying the action";
 "quick_action_template_name" = "Template name";
-"quick_action_name_footer" = "Laga hutsik helbidea edo lekuaren izena erabiltzeko.";
+"quick_action_fav_name_descr" = "Laga hutsik helbidea edo lekuaren izena erabiltzeko.";
 "quick_action_select_group" = "Select the group to save the favorite in.";
 "quick_action_add_category" = "Gehitu kategoria bat";
 "quick_action_add_category_descr" = "You can select multiple POI categories.";
@@ -1417,9 +1417,9 @@
 "edit_waypoint_short" = "Edit waypoint";
 "replace_waypoint_confirmation" = "Are you sure you want to replace Waypoint %@?";
 "no_waypoints_found" = "Ez da bide-punturik aurkitu";
-"modify_poi_short" = "Aldatu POI-a";
+"poi_context_menu_modify" = "Aldatu POI-a";
 "create_poi_short" = "Sortu interesgune bat";
-"modify_edit_short" = "Eraldatu OSM aldaketa";
+"poi_context_menu_modify_osm_change" = "Eraldatu OSM aldaketa";
 "context_menu_item_open_note" = "Ireki OSM oharra";
 "edit_osm_note" = "Edit OSM Note";
 "osm_alert_title" = "Berretsi";
@@ -1462,8 +1462,8 @@
 "help_search" = "Map search";
 "help_trip_planning" = "Planifikatu bidaia";
 "navigation_profiles_item" = "Nabigazio profilak";
-"help_purchases" = "OsmAnd erosketak";
-"help_osmand_live" = "Harpidetza- OsmAnd Live";
+"osmand_purchases_item" = "OsmAnd erosketak";
+"subscription_osmandlive_item" = "Harpidetza- OsmAnd Live";
 "help_travel" = "Travel (Wikipedia & Wikivoyage)";
 "mapillary_item" = "OsmAnd + Mapillary";
 "map_legend" = "Maparen legenda";
@@ -1471,7 +1471,7 @@
 "help_other_header" = "Beste bat";
 "help_what_is_new" = "What\'s new";
 "help_install_and_troubleshoot" = "Instalazioa eta arazoen konponketa";
-"help_tech_articles" = "Artikulu teknikoak";
+"techical_articles_item" = "Artikulu teknikoak";
 "help_versions" = "Bertsioak";
 "help_contact_us" = "Contact us";
 "help_about" = "Honi buruz";
@@ -1574,13 +1574,13 @@
 "product_title_europe" = "Europa";
 "product_desc_europe" = "Unlimited map downloads for Europe";
 "product_desc_europe_short" = "Europe region maps";
-"product_title_northamerica" = "Ipar Amerika";
+"index_name_north_america" = "Ipar Amerika";
 "product_desc_northamerica" = "Unlimited map downloads for North America";
 "product_desc_northamerica_short" = "North America region maps";
 "index_name_russia" = "Errusia";
 "product_desc_russia" = "Unlimited map downloads for Russia";
 "product_desc_russia_short" = "Maps of Russia regions";
-"product_title_southamerica" = "Hego Amerika";
+"index_name_south_america" = "Hego Amerika";
 "product_desc_southamerica" = "Unlimited map downloads for South America";
 "product_desc_southamerica_short" = "South America region maps";
 "product_title_allworld" = "All World Maps";
@@ -1612,7 +1612,7 @@
 "track_save_short_q" = "Track is too short, do you want to save?";
 "add_as" = "Add as";
 "make_call" = "Make a call";
-"all_group_points" = "Taldeko puntu guztiak";
+"context_menu_points_of_group" = "Taldeko puntu guztiak";
 "enter_description" = "Enter description";
 "description" = "Deskribapena";
 "read_full_description" = "Read full description";
@@ -1645,7 +1645,7 @@
 "edit_track" = "Editatu arrastoa";
 "duplicate_track" = "Duplicate track";
 "enter_name" = "Sartu izena";
-"not_selected" = "Hautatu gabe";
+"shared_string_not_selected" = "Hautatu gabe";
 "shared_string_language" = "Hizkuntza";
 "you_searching" = "You are searching";
 "from_location" = "away";
@@ -1719,7 +1719,7 @@
 "go_to_downloads" = "Go to downloads";
 "turn_on_plugin" = "Turn on plugin";
 "all_world_popup_desc" = "Download World base map to see state names, borders and other information";
-"restore" = "Berreskuratu";
+"shared_string_restore" = "Berreskuratu";
 "restore_all_purchases" = "Restore all purchases";
 "no_statistics" = "No statistics";
 "no_internet_avail" = "No internet available";
@@ -1766,7 +1766,7 @@
 "no_inet_connection" = "Ez dago Internet konexiorik";
 "no_inet_connection_desc_map" = "Mapak deskargatzeko beharrezkoa da.";
 "try_again" = "Saiatu berriro";
-"search_preogress" = "Bilatzen…";
+"searching" = "Bilatzen…";
 "search_location" = "Searching location…";
 "search_map" = "Searching map…";
 "search_another_country" = "Bilatu beste eskualde bat";
@@ -1777,7 +1777,7 @@
 "items_selected" = "%d selected";
 "wiki_sheet_title" = "Nola ireki Wikipedia artikuluak?";
 "download_wiki_data" = "Download Wikipedia data for %@";
-"open_wiki_online" = "Ireki artikulua linean";
+"open_in_browser_wiki" = "Ireki artikulua linean";
 "explore_wikipedia_offline" = "Arakatu Wikipedia lineaz kanpo.";
 "online_webpage_warning" = "Orria sarean besterik ez dago eskuragarri. Web nabigatzaile batean ireki nahi duzu?";
 "custom_search" = "Bilaketa pertsonalizatua";
@@ -2277,9 +2277,9 @@
 "cloud_set_up_backup" = "Konfiguratu babeskopia";
 "routeInfo_surface_description" = "Errepideen/oinbideen gainazaleei buruzko informazio gehigarria eman.";
 "shared_string_min_height" = "Altuera minimoa";
-"cloud_make_backup_descr" = "Aldaketa asko daude gailu honetan, egin datuen babeskopia hauek ez galtzeko.";
+"make_backup_descr" = "Aldaketa asko daude gailu honetan, egin datuen babeskopia hauek ez galtzeko.";
 "route_line_use_map_style_width" = "Erabili maparen estiloa (%@) kolore lehenetsia.";
-"weather_wind_unit_km_per_hour" = "Kilometro orduko";
+"weather_wind_kilimeters_per_hour" = "Kilometro orduko";
 "turn_arrows" = "Biratze geziak";
 "register_opr_create_new_account" = "Sortu kontu berria";
 "shared_string_max_height" = "Altuera maximoa";
@@ -2291,7 +2291,7 @@
 "backup_restore_now" = "Leheneratu orain";
 "backup_error_user_is_not_registered" = "Ez da erabiltzailerik erregistratu helbide elektroniko horrekin";
 "backup_error_subscription_was_used" = "%@ beste kontu batek erabiltzen duen harpidetza edo promozioa";
-"shared_string_any" = "Edozein";
+"any_poi" = "Edozein";
 "cloud_backup_now" = "Egin babeskopia orain";
 "cloud_last_backup" = "Azken babeskopia";
 "rendering_attr_showFitnessTrails_name" = "Erakutsi fitness ibilbideak";
@@ -2322,7 +2322,7 @@
 "unlimited_map_downloads" = "Mapen deskarga mugagabea";
 "purchases_feature_desc_osmand_cloud" = "Lortu OsmAnd Cloud OsmAnd datu guztiak linean gordetzeko. Ez duzu informaziorik galduko berrinstalatzean, egin babeskopia eta leheneratu informazio guztia arazorik gabe.";
 "purchases_feature_desc_pro_widgets" = "Lortu OsmAnd Pro funtzioetarako sarbidea: Ibilbideak koloreztatu eta gehiago.";
-"shared_string_stop" = "Gelditu";
+"shared_string_control_stop" = "Gelditu";
 "copy_to_map_favorites" = "Kopiatu gogokoetan";
 "purchases_feature_desc_hourly_map_updates" = "Lortu sarrien erabiltzen dituzun mapen eguneraketak, aukeratu: orduko, eguneroko edo asteko eguneratzeak. Eguneratzeak modu mailakatuan deskargatzen dira, aldatutako eremurako soilik.";
 "continue_with" = "jarraitu %@-rekin";
@@ -2337,7 +2337,7 @@
 "osm_live_banner_desc" = "Deskargatu nahi beste mapa, baita astero, egunero, edo orduero.";
 "altitude_descent" = "Jaitsiera";
 "ltr_or_rtl_combine_via_or" = "%@ edo %@";
-"product_desc_plus" = "Lortu aparteko funtzioak";
+"osmand_maps_plus_tagline" = "Lortu aparteko funtzioak";
 "subscriptions" = "Harpidetzak";
 "monthly_subscription" = "Hilabeteko harpidetza";
 "shared_string_learn_more" = "Ikasi gehiago";
@@ -2352,7 +2352,7 @@
 "units_cubic_m" = "m³";
 "restore_purchases" = "Berreskuratu erosketak";
 "shared_string_start" = "Hasi";
-"product_desc_pro" = "Lortu funtzio guztiak";
+"osmand_pro_tagline" = "Lortu funtzio guztiak";
 "product_desc_ext_development" = "Garapen eta arazte ezaugarrientzako ezarpenak, ibilbide-kalkuluaren simulazioa edo marrazketaren errendimenduaren bistaratzea, edo ahots abisuak esaterako. Erabiltzaile arruntek ez dute hau behar.";
 "private_access_routing_req" = "Zure helburua sarbide pribatua duen gune batean dago. Baimendu errepide pribatuak erabiltzea bidai honetan\?";
 "complete_purchase" = "Erosketa osoa";
@@ -2362,14 +2362,14 @@
 "purchases_feature_desc_wikivoyage" = "Arakatu Wikipedia lineaz kanpo. Herrialde eta eskualdeen arabera eta hizkuntza guztietan eskuragarri dauden artikuluak.";
 "nautical_depth" = "Sakonera nautikoa";
 "copy_coordinates" = "Kopiatu koordenatuak";
-"product_title_development" = "OsmAnd garapena";
+"debugging_and_development" = "OsmAnd garapena";
 "restore_from_osmand_cloud" = "Leheneratu OsmAnd hodeitik";
 "on_hold" = "Zain";
 "shared_string_delete_all" = "Dena ezabatu";
 "shared_string_paused" = "Pausatua";
 "in_grace_period" = "Grazia aldian";
 "shared_string_undefined" = "Indefinitua";
-"shared_string_data" = "Datuak";
+"data_settings" = "Datuak";
 "map_settings_weather_precip" = "Prezipitazioak";
 "measurement_units" = "Neurketa-unitateak";
 "map_settings_weather_wind" = "Haizea";

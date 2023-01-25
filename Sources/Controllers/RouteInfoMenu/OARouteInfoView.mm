@@ -251,7 +251,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     }
     else
     {
-        [_goButton setTitle:OALocalizedString(@"map_settings_show") forState:UIControlStateNormal];
+        [_goButton setTitle:OALocalizedString(@"shared_string_show_on_map") forState:UIControlStateNormal];
         [_goButton setImage:[UIImage templateImageNamed:@"ic_custom_map"] forState:UIControlStateNormal];
     }
     [self layoutSubviews];
@@ -449,7 +449,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         {
             [section addObject:@{
                 @"cell" : [OAButtonTableViewCell getCellIdentifier],
-                @"title" : OALocalizedString(@"shared_string_show_more")
+                @"title" : OALocalizedString(@"show_more")
             }];
         }
         else

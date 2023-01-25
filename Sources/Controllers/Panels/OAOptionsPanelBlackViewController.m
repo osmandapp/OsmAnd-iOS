@@ -260,7 +260,7 @@
     [_menuButtonHelp setTitle:OALocalizedString(@"shared_string_help") forState:UIControlStateNormal];
     [_menuButtonNavigation setTitle:OALocalizedString(@"shared_string_navigation") forState:UIControlStateNormal];
     [_menuButtonPlanRoute setTitle:OALocalizedString(@"plan_route") forState:UIControlStateNormal];
-    [_menuButtonWeather setTitle:OALocalizedString(@"product_title_weather") forState:UIControlStateNormal];
+    [_menuButtonWeather setTitle:OALocalizedString(@"shared_string_weather") forState:UIControlStateNormal];
     [_menuButtonPlugins setTitle:OALocalizedString(@"plugins") forState:UIControlStateNormal];
     
     [_menuButtonMaps.layer addSublayer:_menuButtonMapsDiv];

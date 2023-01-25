@@ -154,7 +154,7 @@ static const NSInteger groupCount = 5;
     [dataArr addObject:
     @{
       @"name" : @"help_purchases",
-      @"title" : OALocalizedString(@"help_purchases"),
+      @"title" : OALocalizedString(@"osmand_purchases_item"),
       @"type" : kLinkInternalType,
       @"html" : @"osmand_purchases"
       }];
@@ -162,7 +162,7 @@ static const NSInteger groupCount = 5;
     [dataArr addObject:
     @{
       @"name" : @"help_osmand_live",
-      @"title" : OALocalizedString(@"help_osmand_live"),
+      @"title" : OALocalizedString(@"subscription_osmandlive_item"),
       @"type" : kLinkInternalType,
       @"html" : @"subscription"
       }];
@@ -222,7 +222,7 @@ static const NSInteger groupCount = 5;
     [dataArr addObject:
      @{
        @"name" : @"online_maps",
-       @"title" : OALocalizedString(@"map_settings_online"),
+       @"title" : OALocalizedString(@"shared_string_online_maps"),
        @"type" : kLinkInternalType,
        @"html" : @"online-maps-plugin"
        }];
@@ -314,7 +314,7 @@ static const NSInteger groupCount = 5;
     [dataArr addObject:
      @{
        @"name" : @"feedback",
-       @"title" : OALocalizedString(@"menu_feedback"),
+       @"title" : OALocalizedString(@"feedback"),
        @"description" : kOsmAndPoll,
        @"type" : kLinkExternalType
        }];

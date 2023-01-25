@@ -33,7 +33,7 @@
 "rotate_map_none_opt" = "Do not rotate (north is up)";
 "driving_region_descr" = "Select the driving region: US, Europe, UK, Asia and others.";
 "driving_region" = "Driving region";
-"driving_region_automatic" = "အော်တိုမက်တစ်";
+"shared_string_automatic" = "အော်တိုမက်တစ်";
 "map_widget_magnetic_bearing" = "သံလိုက် ဦးတည်ရာ";
 "map_widget_bearing" = "ကိုယ်နဲ့နှိုင်း ယှဉ် ဦးတည်ရာ";
 "map_widget_transparent" = "Transparent widgets";
@@ -269,7 +269,7 @@
 "fav_colors" = "Colors";
 "fav_name" = "Name";
 "fav_group" = "Group";
-"groups" = "Groups";
+"shared_string_groups" = "Groups";
 "favorite" = "Favorite";
 "my_favorites" = "My Favorites";
 "fav_no_group" = "No group";
@@ -283,7 +283,7 @@
 "fav_enter_group_name" = "Enter group name";
 "fav_exists" = "Favorite with name \"%@\" already exists";
 "fav_ignore" = "Ignore";
-"fav_rename" = "Rename";
+"shared_string_rename" = "Rename";
 "fav_replace" = "Replace";
 "fav_rename_q" = "Rename favorite";
 "fav_enter_new_name" = "Please enter new name for the favorite";
@@ -297,7 +297,7 @@
 "favorites" = "Favorites";
 "shared_string_gpx_tracks" = "Trips";
 // GPX
-"gpx_point" = "Point";
+"plugin_distance_point" = "Point";
 "shared_string_waypoint" = "Waypoint";
 "gpx_waypoints" = "Waypoints";
 "gpx_points" = "Point(s)";
@@ -313,7 +313,7 @@
 "gpx_import_desc" = "";
 "gpx_no_tracks" = "There are no trips";
 "gpx_remove" = "Remove trip?";
-"gpx_stat" = "Statistics";
+"shared_string_statistics" = "Statistics";
 "gpx_route" = "Route";
 "gpx_route_time" = "Route time";
 "gpx_uphldownhl" = "Uphills/Downhills";
@@ -346,17 +346,17 @@
 "rendering_value_browse_map_name" = "Overview";
 "m_style_car" = "Car";
 "shared_string_map" = "Map";
-"map_settings_show" = "Show on map";
+"shared_string_show_on_map" = "Show on map";
 "map_settings_type" = "Map type";
 "map_mode" = "Application mode";
 "daynight_mode_night" = "Night";
-"map_settings_style" = "Map style";
+"map_widget_renderer" = "Map style";
 "map_settings_overunder" = "Overlay / Underlay";
 "map_settings_over" = "Overlay";
 "map_settings_under" = "Underlay";
 "shared_string_none" = "None";
 "map_settings_offline" = "Styles for offline maps";
-"map_settings_online" = "Online maps";
+"shared_string_online_maps" = "Online maps";
 "shared_string_transparency" = "Transparency";
 "map_settings_avail_lay" = "Available layers";
 // Intro
@@ -378,7 +378,7 @@
 "sett_deg" = "Degrees";
 "sett_deg_min" = "Degrees and minutes";
 "sett_arr" = "Map arrows";
-"sett_arr_loc" = "Location";
+"shared_string_location" = "Location";
 "sett_arr_map" = "Map center";
 "sett_lang_trans" = "translit";
 "sett_pref_lang" = "Preferred Language";
@@ -395,7 +395,7 @@
 "prch_nau_q3" = "You may install it later through the Maps & Resources.";
 "proceed_q" = "Proceed?";
 "download" = "Download";
-"nothanks" = "No, thanks";
+"shared_string_no_thanks" = "No, thanks";
 "download_now" = "Download map now";
 "prch_failed" = "Purchase of \"%@\" has failed";
 "prch_items_failed" = "item(s) were not restored. Please try again.";
@@ -440,7 +440,7 @@
 "shared_string_my_places" = "My Places";
 "menu_my_trips" = "My Trips";
 "menu_my_directions" = "My Directions";
-"menu_feedback" = "Feedback";
+"feedback" = "Feedback";
 "menu_about" = "About";
 "other_options" = "Other options";
 "add_parking" = "Add as Parking position";
@@ -534,11 +534,11 @@
 "product_desc_centralamerica" = "Map of Central America";
 "product_title_europe" = "Europe";
 "product_desc_europe" = "Map of Europe";
-"product_title_northamerica" = "North America";
+"index_name_north_america" = "North America";
 "product_desc_northamerica" = "Map of North America";
 "index_name_russia" = "Russia";
 "product_desc_russia" = "Map of Russia";
-"product_title_southamerica" = "South America";
+"index_name_south_america" = "South America";
 "product_desc_southamerica" = "Map of South America";
 "product_title_allworld" = "All World Maps";
 "product_desc_allworld" = "Map of All World";
@@ -573,7 +573,7 @@
 "gpx_select_track" = "Select trip";
 "gpx_curr_new_track" = "Current trip";
 "enter_name" = "Enter name";
-"not_selected" = "Not selected";
+"shared_string_not_selected" = "Not selected";
 "shared_string_language" = "Language";
 "you_searching" = "You are searching";
 "from_location" = "away";
@@ -625,7 +625,7 @@
 "go_to_downloads" = "Go to downloads";
 "turn_on_plugin" = "Turn on plugin";
 "all_world_popup_desc" = "Download World base map to see state names, borders and other information";
-"restore" = "Restore";
+"shared_string_restore" = "Restore";
 "restore_all_purchases" = "Restore all purchases";
 "no_statistics" = "No statistics";
 "no_internet_avail" = "No internet available";
@@ -831,7 +831,7 @@
 "online_webpage_warning" = "စာမျက်နှာကိုအွန်လိုင်းသာရနိုင်သည်။ web browser ဖွင့်ရမလား\?";
 "app_mode_skiing" = "နှင်းလျှောစီး";
 "app_mode_helicopter" = "ရဟတ်ယာဉ်";
-"all_group_points" = "အုပ်စုထဲကအမှတ်အားလုံး";
+"context_menu_points_of_group" = "အုပ်စုထဲကအမှတ်အားလုံး";
 "app_mode_taxi" = "တက္ကစီ";
 "base_profile_descr_boat" = "သင်္ဘော၊ လှေလှော်ခြင်း၊ ရွက်လွှင့်ခြင်း";
 "osm_notes" = "OSMမှတ်စုများ";

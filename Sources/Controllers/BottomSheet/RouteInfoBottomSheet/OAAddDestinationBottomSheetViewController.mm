@@ -85,7 +85,7 @@
     {
         OARTargetPoint *home = [_pointsHelper getHomePoint];
         [arr addObject:@{
-            @"title" : OALocalizedString(@"home_pt"),
+            @"title" : OALocalizedString(@"favorite_home_category"),
             @"descr" : home.pointDescription.name,
             @"color" : UIColorFromRGB(color_primary_purple),
             @"img" : @"ic_custom_home",
@@ -438,7 +438,7 @@
         else if (_type == EOADestinationTypeWork)
             [mapPanel openSearch:OAQuickSearchType::WORK];
     }
-    else if ([item[@"key"] isEqualToString:@"address_search"])
+    else if ([item[@"key"] isEqualToString:@"address_search_desc"])
     {
         if (_type == EOADestinationTypeIntermediate)
             [mapPanel openSearch:OAQuickSearchType::INTERMEDIATE location:nil tabIndex:2];

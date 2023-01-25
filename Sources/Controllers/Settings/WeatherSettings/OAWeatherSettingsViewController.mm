@@ -122,7 +122,7 @@
 
     NSMutableArray<NSDictionary *> *cacheData = [NSMutableArray array];
     [data addObject:@{
-            @"header": OALocalizedString(@"shared_string_data"),
+            @"header": OALocalizedString(@"data_settings"),
             @"cells": cacheData,
             @"footer": OALocalizedString(@"weather_data_provider")
     }];

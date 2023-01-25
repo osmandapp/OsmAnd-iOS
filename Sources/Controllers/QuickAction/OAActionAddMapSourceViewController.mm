@@ -127,7 +127,7 @@
         case EOAMapSourceTypePrimary:
             return OALocalizedString(@"vector_data");
         case EOAMapSourceTypeOverlay:
-            return OALocalizedString(@"quick_action_no_overlay");
+            return OALocalizedString(@"no_overlay");
         case EOAMapSourceTypeUnderlay:
             return OALocalizedString(@"quick_action_no_underlay");
         default:

@@ -43,7 +43,7 @@
 "res_dmap" = "상세개요지도";
 "osm_closes_at" = "닫기 시간:";
 "osm_note_close" = "OSM노트 닫기";
-"osm_close_changeset" = "변경세트 닫기";
+"close_changeset" = "변경세트 닫기";
 "map_remind" = "나중에 알림";
 
 // Map
@@ -99,7 +99,7 @@
 "routing_settings_descr" = "탐색 구성";
 "download_map_dialog" = "지도 다운로드 대화상자";
 "shared_string_map" = "지도";
-"map_settings_show" = "지도에 표시";
+"shared_string_show_on_map" = "지도에 표시";
 
 // Intro
 "shared_string_skip" = "건너뛰기";
@@ -130,7 +130,7 @@
 "index_name_africa" = "아프리카";
 "osmand_live_cancel_descr" = "전체 기능을 계속 사용하려면 구독을 갱신하십시오:";
 "add_as_last_destination_point" = "마지막 경유지로 추가";
-"address_search" = "주소 검색";
+"address_search_desc" = "주소 검색";
 "poi" = "POI";
 "shared_string_select_avoid_road_on_map" = "라우팅 중에 피할 도로 선택";
 "rotate_map_to_bearing" = "지도 방향";
@@ -147,7 +147,7 @@
 "osmand_live_support_reg_descr" = "기부금의 일부는 해당 지역의 지도에 대한 변경 사항을 제출하는 OSM 사용자에게 보내질 것이다.";
 "select_avoid_descr" = "탐색 중에 피하려는 도로를 선택하십시오. 지도에서 도로를 선택하거나 아래 목록에서 유형을 선택할 수 있다.";
 "coords_format_descr" = "지리적 좌표에 대한 형식입니다.";
-"driving_region_automatic" = "자동";
+"shared_string_automatic" = "자동";
 "driving_region_japan" = "일본";
 "driving_region_us" = "미국";
 "driving_region_europe_asia" = "유럽, 아시아, 라틴 아메리카 및 유사";
@@ -215,7 +215,7 @@
 "fav_name" = "이름";
 "favorite" = "즐겨찾기";
 "poi_overlay" = "POI 오버레이";
-"groups" = "그룹";
+"shared_string_groups" = "그룹";
 "poi_dialog_poi_type" = "POI유형";
 "my_favorites" = "내 즐겨찾기";
 "shared_string_my_places" = "저장소";
@@ -227,13 +227,13 @@
 "fav_remove_q" = "즐겨찾기를 제거하시겠습니까?";
 "fav_enter_group_name" = "그룹명 입력";
 "fav_ignore" = "무시";
-"fav_rename" = "이름 바꾸기";
+"shared_string_rename" = "이름 바꾸기";
 "fav_rename_q" = "즐겨찾기 이름 바꾸기";
 "fav_enter_new_name" = "즐겨찾기의 새 이름을 입력";
 "fav_select" = "즐겨찾기를 선택";
 "select_favorite" = "즐겨찾기 선택";
 "add_favorite" = "즐겨찾기 추가";
-"icon" = "아이콘";
+"shared_string_icon" = "아이콘";
 "shared_string_shape" = "모양";
 "fav_point_dublicate" = "중복된 즐겨찾기 이름이 지정됨";
 "default_color" = "기본 색상";
@@ -346,7 +346,7 @@
 "name_and_descr" = "이름 & 설명";
 
 // GPX
-"gpx_point" = "포인트";
+"plugin_distance_point" = "포인트";
 "save_track_interval_globally" = "기록 간격";
 "track_clear_q" = "현재 트랙을 지우시겠습니까?";
 "record_trip" = "트랙 기록";
@@ -437,7 +437,7 @@
 "shared_string_hide" = "숨기기";
 "tracks_on_map" = "지도상의 트랙";
 "gpx_export_failed" = "생성된 경로를 저장할 수 없음";
-"gpx_stat" = "통계";
+"shared_string_statistics" = "통계";
 "track_continue_rec_q" = "녹화를 계속하시겠습니까?";
 "track_start_rec" = "트랙 기록 시작";
 "fav_import_title" = "즐겨찾기 가져오기";
@@ -535,7 +535,7 @@
 "map_settings_offline" = "오프라인 지도 스타일";
 "map_settings_install_maps" = "설치 또는 업데이트할 지도 선택";
 "map_settings_install_more" = "추가 설치...";
-"map_settings_online" = "온라인지도";
+"shared_string_online_maps" = "온라인지도";
 "osn_add_dialog_title" = "노트 만들기";
 "product_desc_europe" = "유럽을 위한 무제한 지도 다운로드";
 "product_desc_europe_short" = "유럽 지역 지도";
@@ -560,7 +560,7 @@
 "keep_informing_never" = "수동으로 (화살표를 누르세요)";
 "routing_attr_avoid_motorway_name" = "전용도로 회피";
 "rendering_attr_alpineHiking_description" = "SAC Scale에 따른 경로 렌더링";
-"home_pt" = "집";
+"favorite_home_category" = "집";
 "product_title_centralamerica" = "중앙 아메리카";
 "rendering_attr_moreDetailed_name" = "상세 접보";
 "osm_alert_title" = "반영";
@@ -577,7 +577,7 @@
 "shared_string_from" = "부터";
 "lang_ru" = "러시아어";
 "towards" = "쪽으로";
-"modify_poi_short" = "POI수정";
+"poi_context_menu_modify" = "POI수정";
 "routing_attr_no_new_routing_description" = "v1.9에서 도입된 라우팅 룰을 사용하지 마십시오";
 "units_min" = "분.";
 "search_address_street" = "거리";
@@ -801,7 +801,7 @@
 "icon_group_industrial" = "공업";
 "download_srtm_maps" = "등고선";
 "lang_vi" = "베트남어";
-"nothanks" = "필요없음";
+"shared_string_no_thanks" = "필요없음";
 "rendering_attr_trainLightrailRoutes_name" = "기차 노선";
 "context_menu_item_open_note" = "OSM노트 열기";
 "lang_bg" = "불가리아어";
@@ -860,7 +860,7 @@
 "plugins" = "플러그인";
 "lang_az" = "아제리어";
 "product_desc_ext_mapillary" = "모든 사람을 위한 거리 기반의 파노라마 영상 서비스. 장소를 탐색하고, 협업하고, 세상을 사로잡습니다.";
-"map_settings_style" = "지도 스타일";
+"map_widget_renderer" = "지도 스타일";
 "routing_attr_avoid_borders_description" = "타국의 국경 횡단 방지";
 "routing_attr_weight_name" = "중량 제한";
 "lang_sk" = "슬로바키아어";
@@ -889,14 +889,14 @@
 "lang_fi" = "핀란드어";
 "app_mode_default" = "지도 보기";
 "rendering_value_category_name" = "카테고리";
-"search_preogress" = "검색 중…";
+"searching" = "검색 중…";
 "rendering_attr_noAdminboundaries_description" = "지역 경계 표시를 억제 (관리자 레벨 5-9 )";
 "rendering_attr_noAdminboundaries_name" = "경계 숨기기";
 "rendering_category_transport" = "교통";
 "region_russia" = "유럽/아시아 - 러시아";
 "create_poi_short" = "POI생성";
 "shared_string_password" = "OSM패스워드";
-"shared_string_show_more" = "추가 표시";
+"show_more" = "추가 표시";
 "rendering_attr_publicTransportMode_name" = "버스, 무궤도전차, 셔틀 노선";
 "shared_string_enabled" = "활성화";
 "rendering_attr_roadStyle_name" = "도로 스타일";
@@ -915,7 +915,7 @@
 "routing_attr_avoid_toll_description" = "유료도로 회피하기";
 "route_tshr" = "급한 우회전 후 직진";
 "routing_attr_prefer_motorway_description" = "전용도로 선호";
-"product_title_southamerica" = "남아메리카";
+"index_name_south_america" = "남아메리카";
 "rendering_attr_showAccess_name" = "접근 제한 표시";
 "sort_by_distance" = "거리로 정렬";
 "rendering_attr_hikingRoutesOSMC_description" = "OSMC흔적에 따라 경로 렌더링";
@@ -932,7 +932,7 @@
 "lang_sr" = "세르비아어";
 "shared_string_address" = "주소";
 "map_widget_battery" = "배터리 잔량";
-"product_title_northamerica" = "북아메리카";
+"index_name_north_america" = "북아메리카";
 "help_about" = "소개";
 "res_roads" = "경로";
 "rendering_value_pedestrian_name" = "보행자";
@@ -1063,7 +1063,7 @@
 "shared_string_transparency" = "투명도";
 "map_look_descr" = "지도 모양";
 "osmand_live_last_live_update" = "마지막 업데이트: %@";
-"weather_wind_unit_km_per_hour" = "시간당 킬로미터";
+"weather_wind_kilimeters_per_hour" = "시간당 킬로미터";
 "help_versions" = "버전";
 "lang_ne" = "네팔어";
 "backup_restore_now" = "지금 복원";
@@ -1078,10 +1078,10 @@
 "cloud_backup_now" = "지금 백업";
 "lang_kk" = "카자흐어 카자흐스탄방언";
 "lang_yo" = "요루바어";
-"map_settings_appearance" = "모양";
+"shared_string_appearance" = "모양";
 "osm_live_routing" = "OsmAnd Live탐색";
 "routeInfo_winter_ice_road_description" = "동절기 도로 분류를 기준으로 노선 또는 선로를 색칠합니다.";
-"shared_string_any" = "어떤";
+"any_poi" = "어떤";
 "help_install_and_troubleshoot" = "설치 및 문제 해결";
 "user_login" = "로그인";
 "routing_attr_allow_gate_name" = "게이트 사용 허용";
@@ -1112,15 +1112,15 @@
 "osmand_cloud" = "‎오스엠앤‎‎드 클라우드‎";
 "restore_from_file" = "‎파일에서 복원‎";
 "new_device_account" = "‎새 ‎‎장치 / 새‎‎ 계정‎";
-"product_desc_plus" = "확장 피쳐 가져오기";
+"osmand_maps_plus_tagline" = "확장 피쳐 가져오기";
 "wikipedia_and_wikivoyage_offline" = "위키백과 및 위키보이지 오프라인";
 "restore_purchases" = "‎구매 ‎‎항목 복원‎";
 "terrain_maps" = "지형 지도";
 "explore_osmnad_plans_to_find_suitable" = "OsmAnd Plans을 탐색하여 귀하에게 적합한 계획을 찾으십시오.";
 "purchases_feature_desc_osmand_cloud" = "OsmAnd Cloud에서 모든 OsmAnd 데이터를 온라인으로 저장하십시오. 재설치 후 손실된 데이터가 없습니다. 모든 정보를 쉽게 백업 및 복원할 수 있습니다.";
 "annual_subscription" = "연간 구독";
-"product_desc_pro" = "최대 피쳐 가져오기";
-"shared_string_stop" = "정지";
+"osmand_pro_tagline" = "최대 피쳐 가져오기";
+"shared_string_control_stop" = "정지";
 "purchases_feature_desc_terrain" = "지형 등고선, 어두운 색조가 있는 완전한 언덕길 지도, 봉우리와 저지대를 보여주는 색상의 경사 지도.";
 "monthly_map_updates" = "월별 지도 업데이트";
 "purchases_feature_desc_wikipedia" = "오프라인에서 Wikipedia를 탐색합니다. 국가별, 지역별로 구분된 문서이며 모든 언어로 제공됩니다.";
@@ -1130,7 +1130,7 @@
 "cloud_description" = "‎데이터를 ‎‎잃지‎‎ 마십시오. 모든 정보를 쉽게 백업하고 복원하십시오.‎";
 "monthly_subscription" = "월 구독";
 "nautical_depth" = "해저 지형";
-"product_title_development" = "OsmAnd개발";
+"debugging_and_development" = "OsmAnd개발";
 "purchases_feature_desc_combined_wiki" = "인터넷 연결 없이 이동 중에 Wikipedia 문서를 탐색하십시오. 오프라인 데이터는 국가별로 구분되어 있으며 모든 언어로 제공됩니다.";
 "purchases_feature_desc_monthly_map_updates" = "오프라인 지도에 대한 정기적인 월간 업데이트에 액세스할 수 있습니다.";
 "product_desc_ext_development" = "모의 주행이나 렌더링 성능 표시와 같은 개발 및 디버깅 기능에 대한 설정을 표시합니다.";
@@ -1147,13 +1147,13 @@
 "transport_hazmat_yes_desc" = "적절한 카테고리를 선택해야 합니다.";
 "transport_hazmat_no_desc" = "일부 도로 및 터널에서는 유해 물질 운송이 금지되어 있습니다.";
 "online_webpage_warning" = "페이지는 온라인에서만 사용할 수 있습니다. 웹 브라우저에서 열었습니까\?";
-"shared_string_data" = "데이터";
+"data_settings" = "데이터";
 "route_line_use_map_style_width" = "지도 스타일(%@) 기본 너비를 사용합니다.";
 "on_hold" = "대기 중";
 "add_online_source" = "온라인 소스 추가";
 "route_line_use_map_style_color" = "지도 스타일(%@) 기본 색상을 사용합니다.";
 "restore_from_osmand_cloud" = "OsmAnd클라우드에서 복원";
-"menu_feedback" = "피드백";
+"feedback" = "피드백";
 "shared_string_undefined" = "정의되지 않음";
 "shared_string_delete_all" = "모두 삭제";
 "select_overlay" = "오버레이 맵 선택";
@@ -1182,7 +1182,7 @@
 "add_to_a_track" = "트랙에 추가";
 "move_point" = "포인트 이동";
 "keep_both_desc" = "가져온 항목은 접두사로 추가";
-"import_profile_select_descr" = "가져올 데이터를 선택합니다.";
+"select_data_to_import" = "가져올 데이터를 선택합니다.";
 "export_profile_select_descr" = "내보낼 데이터를 선택합니다.";
 "map_widget_speed" = "속도";
 "intro_welcome" = "오신 것을 환영합니다\nOsmAnd";

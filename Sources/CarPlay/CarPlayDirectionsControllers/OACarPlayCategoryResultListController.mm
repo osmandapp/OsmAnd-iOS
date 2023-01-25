@@ -71,7 +71,7 @@
 
 - (NSArray<CPListSection *> *) generateSections
 {
-    return [self generateSingleItemSectionWithTitle:OALocalizedString(@"search_preogress")];
+    return [self generateSingleItemSectionWithTitle:OALocalizedString(@"searching")];
 }
 
 - (void) searchAndDisplayResult

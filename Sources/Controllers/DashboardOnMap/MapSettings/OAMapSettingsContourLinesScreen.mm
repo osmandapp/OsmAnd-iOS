@@ -350,7 +350,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                             @"footer" : OALocalizedString(@"map_settings_contour_zoom_level_descr")
                             }];
         [sectionArr addObject:@{
-                            @"header" : OALocalizedString(@"map_settings_appearance"),
+                            @"header" : OALocalizedString(@"shared_string_appearance"),
                             @"footer" : OALocalizedString(@"map_settings_line_density_slowdown_warning")
                             }];
         if (_mapMultipleItems.count > 0)

@@ -20,7 +20,7 @@
 "speak_cameras" = "Njofto kamerat e shpejtësisë";
 "traffic_warning_pedestrian" = "Mbikalim për këmbësorë";
 "speak_title" = "Njofto…";
-"home_pt" = "Shtëpia";
+"favorite_home_category" = "Shtëpia";
 "help_about" = "Rreth";
 "speak_street_names" = "Njofto emrat e rrugëve (TTS)";
 "shared_string_control_start" = "Fillo";

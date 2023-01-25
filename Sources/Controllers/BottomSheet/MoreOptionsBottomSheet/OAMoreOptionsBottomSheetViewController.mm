@@ -160,7 +160,7 @@
                 {
                     BOOL createNewPoi = (_targetPoint.obfId == 0 && _targetPoint.type != OATargetTransportStop && _targetPoint.type != OATargetOsmEdit) || _targetPoint.type == OATargetOsmNote;
                     [arr addObject:@{ @"title" : createNewPoi ? OALocalizedString(@"create_poi_short") : _targetPoint.type == OATargetOsmEdit ?
-                                      OALocalizedString(@"modify_edit_short") : OALocalizedString(@"modify_poi_short"),
+                                      OALocalizedString(@"poi_context_menu_modify_osm_change") : OALocalizedString(@"poi_context_menu_modify"),
                                       @"key" : @"addon_edit_poi_modify",
                                       @"img" : createNewPoi ? @"ic_action_create_poi" : @"ic_custom_edit",
                                       @"type" : [OAMenuSimpleCell getCellIdentifier] }];
@@ -357,7 +357,7 @@
                 OAOsmEditingViewController *editingScreen = [[OAOsmEditingViewController alloc] initWithLat:_targetPoint.location.latitude lon:_targetPoint.location.longitude];
                 [mapPanel.navigationController pushViewController:editingScreen animated:YES];
             }
-            else if ([item[@"title"] isEqualToString:OALocalizedString(@"modify_poi_short")])
+            else if ([item[@"title"] isEqualToString:OALocalizedString(@"poi_context_menu_modify")])
             {
                 OAMapViewController *mapVC = [OARootViewController instance].mapPanel.mapViewController;
                 [mapVC showProgressHUDWithMessage:OALocalizedString(@"osm_editing_loading_poi")];

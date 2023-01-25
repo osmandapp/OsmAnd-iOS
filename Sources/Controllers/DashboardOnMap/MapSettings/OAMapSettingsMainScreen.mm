@@ -205,7 +205,7 @@
     }
 
     [data addObject:@{
-            @"group_name": OALocalizedString(@"map_settings_show"),
+            @"group_name": OALocalizedString(@"shared_string_show_on_map"),
             @"cells": showSectionData
     }];
 
@@ -421,7 +421,7 @@
         }
 
         [data addObject:@{
-                @"group_name": OALocalizedString(@"map_settings_style"),
+                @"group_name": OALocalizedString(@"map_widget_renderer"),
                 @"cells": mapStyleSectionData
         }];
     }
@@ -455,9 +455,9 @@
     if (!hasWeather || !_iapHelper.weather.disabled)
     {
         [overlayUnderlaySectionData addObject:@{
-                @"name": OALocalizedString(@"product_title_weather"),
+                @"name": OALocalizedString(@"shared_string_weather"),
                 @"image": @"ic_custom_umbrella",
-                hasWeather ? @"has_options" : @"desc": hasWeather ? @YES : OALocalizedString(@"product_title_weather"),
+                hasWeather ? @"has_options" : @"desc": hasWeather ? @YES : OALocalizedString(@"shared_string_weather"),
                 @"type": hasWeather ? [OASwitchTableViewCell getCellIdentifier] : [OAButtonTableViewCell getCellIdentifier],
                 @"key": @"weather_layer"
         }];

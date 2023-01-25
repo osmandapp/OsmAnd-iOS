@@ -119,7 +119,7 @@
     [arr addObject:@{
                      @"type" : [OASwitchTableViewCell getCellIdentifier],
                      @"name" : @"close_changeset",
-                     @"title" : OALocalizedString(@"osm_close_changeset"),
+                     @"title" : OALocalizedString(@"close_changeset"),
                      @"value" : @(_closeChangeset)
                      }];
     

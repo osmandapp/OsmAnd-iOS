@@ -34,7 +34,7 @@
 "fav_colors" = "Кольори";
 "fav_name" = "Назва";
 "fav_group" = "Група";
-"groups" = "Групи";
+"shared_string_groups" = "Групи";
 "my_favorites" = "Мої Закладки";
 "fav_no_group" = "Без групи";
 "fav_remove_q" = "Вилучити із закладок?";
@@ -48,18 +48,18 @@
 "shared_string_later" = "Далі";
 "fav_create_group" = "Створити нову групу";
 "fav_ignore" = "Ігнорувати";
-"fav_rename" = "Перейменувати";
+"shared_string_rename" = "Перейменувати";
 "fav_replace" = "Замінити";
 // POI
 "poi_insrease_radius" = "Збільшити радіус пошуку до";
 "shared_string_hide" = "Приховати";
 // GPX
-"gpx_point" = "Точка";
+"plugin_distance_point" = "Точка";
 "shared_string_export" = "Експорт";
 "import_export" = "Імпорт/експорт";
 "gpx_add_new" = "Додати новий файл";
 "gpx_overwrite" = "Перезаписати";
-"gpx_stat" = "Статистика";
+"shared_string_statistics" = "Статистика";
 "gpx_route" = "Маршрут";
 "gpx_average_speed" = "Рекомендована швидкість";
 "shared_string_control_start" = "Почати";
@@ -80,7 +80,7 @@
 "rendering_value_browse_map_name" = "Огляд мапи";
 "m_style_car" = "Автівка";
 "shared_string_map" = "Мапа";
-"map_settings_show" = "Показати";
+"shared_string_show_on_map" = "Показати";
 "map_settings_type" = "Тип мапи";
 "daynight_mode_night" = "Ніч";
 "shared_string_transparency" = "Прозорість";
@@ -90,12 +90,12 @@
 "sett_lang" = "Мова мапи";
 "sett_show" = "Показати";
 "sett_notshow" = "Не показувати";
-"sett_arr_loc" = "Розташування";
+"shared_string_location" = "Розташування";
 "sett_lang_trans" = "трансліт";
 "sett_pref_lang" = "Вибрана мова";
 "proceed_q" = "Продовжити?";
 "download" = "Завантажити";
-"nothanks" = "Ні, дякую";
+"shared_string_no_thanks" = "Ні, дякую";
 "res_catalog_upd" = "Оновлення каталогу";
 "res_world_map" = "Мапа світу";
 "res_updates" = "Оновлення";
@@ -183,13 +183,13 @@
 "record_trip" = "Записувати ваш трек";
 "gpx_max_speed" = "Макс. швидкість";
 "map_mode" = "Режим мапи";
-"map_settings_style" = "Стиль мапи";
+"map_widget_renderer" = "Стиль мапи";
 "map_settings_overunder" = "Накладка та підкладка";
 "map_settings_over" = "Накладка";
 "map_settings_under" = "Підкладка";
 "shared_string_none" = "Нема";
 "map_settings_offline" = "Стилі оффлайн мап";
-"map_settings_online" = "Онлайн мапи";
+"shared_string_online_maps" = "Онлайн мапи";
 "map_settings_avail_lay" = "Доступні шари";
 "intro_download" = "Завантажити\nмапу";
 "intro_next" = "Наступний";
@@ -244,7 +244,7 @@
 "res_updates_exp" = "Будь ласка, придбайте мапу(и) континенту(ів) для виконання оновлень мап";
 "menu_my_trips" = "Мої треки";
 "menu_my_directions" = "Мої напрямки";
-"menu_feedback" = "Зворотній зв’язок";
+"feedback" = "Зворотній зв’язок";
 "menu_about" = "Про програму";
 "other_options" = "Інші налаштування";
 "add_parking" = "Додати місце паркування";
@@ -331,11 +331,11 @@
 "product_desc_centralamerica" = "Завантаження мап Центральної Америки без обмежень";
 "product_title_europe" = "Європа";
 "product_desc_europe" = "Завантаження мап Європи без обмежень";
-"product_title_northamerica" = "Північна Америка";
+"index_name_north_america" = "Північна Америка";
 "product_desc_northamerica" = "Завантаження мап Північної Америки без обмежень";
 "index_name_russia" = "Росія";
 "product_desc_russia" = "Завантаження мап Росії без обмежень";
-"product_title_southamerica" = "Південна Америка";
+"index_name_south_america" = "Південна Америка";
 "product_desc_southamerica" = "Завантаження мап Північної Америки без обмежень";
 "product_title_allworld" = "Усі мапи світу";
 "product_desc_allworld" = "Мапи усього світу";
@@ -369,7 +369,7 @@
 "gpx_select_track" = "Оберіть трек";
 "gpx_curr_new_track" = "Поточний шлях";
 "enter_name" = "Додайте назву";
-"not_selected" = "Не вибрано";
+"shared_string_not_selected" = "Не вибрано";
 "shared_string_language" = "Мова";
 "you_searching" = "Ви шукаєте";
 "from_location" = "звідси";
@@ -420,7 +420,7 @@
 "go_to_downloads" = "Перейти в завантаження";
 "turn_on_plugin" = "Увімкніть плагін";
 "all_world_popup_desc" = "Завантажте оглядову мапу світу для відображення назв, кордонів країн та інших відомостей";
-"restore" = "Відновити";
+"shared_string_restore" = "Відновити";
 "restore_all_purchases" = "Відновити усі придбання";
 "no_statistics" = "Немає статистики";
 "no_internet_avail" = "Немає з'єднання з Інтернетом";
@@ -686,7 +686,7 @@
 "rotate_map_bearing_opt" = "За напрямком руху";
 "rotate_map_none_opt" = "Не обертати (північ угорі)";
 "driving_region_descr" = "Виберіть регіон водіння: США, Європа, Велика Британія, Азія та інші.";
-"driving_region_automatic" = "Автоматично";
+"shared_string_automatic" = "Автоматично";
 "map_widget_magnetic_bearing" = "Магнітний компас";
 "map_widget_bearing" = "Курсовий кут";
 "map_widget_transparent" = "Прозорі віджети";
@@ -774,7 +774,7 @@
 "map_legend" = "Легенда мапи";
 "help_other_header" = "Інше";
 "help_install_and_troubleshoot" = "Встановлення та розв'язання проблем";
-"help_tech_articles" = "Технічні статті";
+"techical_articles_item" = "Технічні статті";
 "help_versions" = "Версії";
 "help_contact_us" = "Зв’яжіться з нами";
 "help_about" = "Про застосунок";
@@ -847,7 +847,7 @@
 "osm_target_created" = "Створено точку інтересу OSM";
 "osm_confirm_delete" = "Вилучити точку інтересу?";
 "osm_confirm_upload" = "Надіслати зміни?";
-"osm_close_changeset" = "Закрити набір змін";
+"close_changeset" = "Закрити набір змін";
 "osm_upload_failed_title" = "Помилка надсилання";
 "osm_upload_failed_descr" = "Перевірте дані для входу та підключення до Інтернету та повторіть спробу.";
 "exit_without_saving" = "Вийти без збереження?";
@@ -938,7 +938,7 @@
 "mapil_no_inet_descr" = "Для перегляду знімків Mapillary потрібне підключення до Інтернету.";
 "mapil_images_nearby" = "Знімки поруч";
 "mapil_no_images" = "В цьому місці знімків немає.";
-"mapil_add_photos" = "Додати світлини";
+"shared_string_add_photos" = "Додати світлини";
 "mapillary_get_title" = "Поліпшити фотопокриття Mapillary";
 "shared_string_start_date" = "Початок";
 "shared_string_end_date" = "Кінець";
@@ -1074,7 +1074,7 @@
 "mapil_filter_user_descr" = "Фільтрувати зображення за користувачем";
 "mapil_filter_date" = "Фільтрувати зображення за датою";
 "mapil_usernames" = "Імена користувачів";
-"mapil_pano_only" = "Показувати лише панорами 360°";
+"mapillary_menu_title_pano" = "Показувати лише панорами 360°";
 "mapil_select_user" = "Вибрати користувача";
 "key_hint_zoom_in" = "Збільшити";
 "key_hint_goback" = "Повернутися назад";
@@ -1093,7 +1093,7 @@
 "map_styles" = "Стилі мапи";
 "quick_action_new_action" = "Додати дію";
 "key_hint_deselect" = "Зняти виділення";
-"shared_string_show_more" = "Показати більше";
+"show_more" = "Показати більше";
 "tile_data" = "Дані тайлів";
 "calculating_progress" = "Обчислення...";
 "product_title_wikivoyage" = "Туристичні путівники";
@@ -1103,9 +1103,9 @@
 "subscribe_email_desc" = "Підпишіться на наш список розсилки:<br/>• Отримайте 3 додаткові мапи для завантаження<br/>• Дізнавайтеся про знижки першими<br/>• Беріть участь у <a href='https://osmand.net/giveaway'>розіграшах промо-кодів</a>";
 "inapp_not_found" = "%@ не знайдений в OsmAnd. Ймовірно, його скасували.";
 // GPX colors
-"modify_poi_short" = "Редагувати POI";
+"poi_context_menu_modify" = "Редагувати POI";
 "create_poi_short" = "Додати POI";
-"modify_edit_short" = "Редагувати зміни OSM";
+"poi_context_menu_modify_osm_change" = "Редагувати зміни OSM";
 "context_menu_item_open_note" = "Відкрити Нотатку OSM";
 "edit_osm_note" = "Редагувати нотатку OSM";
 "osm_alert_title" = "Зберегти";
@@ -1137,7 +1137,7 @@
 "auto_zoom_off" = "Автоматичне масштабування вимк";
 "resume_nav" = "Продовжити навігацію";
 "pause_nav" = "Призупинити навігацію";
-"night_mode" = "Нічний режим";
+"quick_action_switch_night_mode" = "Нічний режим";
 "day_mode" = "Денний режим";
 "mute_voice" = "Вимкнути голос";
 "unmute_voice" = "Увімкнути голос";
@@ -1151,11 +1151,11 @@
 "avoid_by_type" = "Уникати за типом";
 "parking_place" = "Місце для паркування";
 "add_start" = "Додати точку початку маршруту";
-"home_pt" = "Дім";
+"favorite_home_category" = "Дім";
 "work_pt" = "Робота";
 "mapillary_descr" = "Світлини вулиць в мережі для всіх. Відкрийте для себе місця, діліться та оглядайте весь світ";
 // Rendering attributes
-"quick_action_no_overlay" = "Нема накладки мапи";
+"no_overlay" = "Нема накладки мапи";
 "quick_action_add_overlay" = "Додати накладку мапи";
 "quick_action_no_underlay" = "Підкладка вимкнена";
 "quick_action_add_underlay" = "Додати підкладку";
@@ -1179,7 +1179,7 @@
 "quick_action_interim_dialog" = "Показати проміжний діалог";
 "quick_action_dialog_descr" = "Увімкніть, щоб показати діалогове вікно перед застосуванням дії";
 "quick_action_template_name" = "Назва шаблона";
-"quick_action_name_footer" = "Залиште порожнім, щоб використати адресу або назву місця.";
+"quick_action_fav_name_descr" = "Залиште порожнім, щоб використати адресу або назву місця.";
 "quick_action_select_group" = "Виберіть групу для збереження закладок.";
 "quick_action_add_category" = "Додати категорію";
 "quick_action_add_category_descr" = "Ви можете вибрати кілька категорій точок інтересу.";
@@ -1560,10 +1560,10 @@
 "map_settings_hide_polygons" = "Сховати багатокутники";
 "map_settings_hide_polygons_desc" = "Цей параметр впливає тільки на безмережеві векторні мапи";
 "map_settings_add_maps_desc" = "Ви можете додавати нові мапи за посиланням чи імпортом файлів SQLite.";
-"all_group_points" = "Всі пункти групи";
+"context_menu_points_of_group" = "Всі пункти групи";
 "wiki_sheet_title" = "Як відкрити статті Вікіпедії?";
 "download_wiki_data" = "Завантажити дані Вікіпедії для %@";
-"open_wiki_online" = "Відкрити статтю в Інтернеті";
+"open_in_browser_wiki" = "Відкрити статтю в Інтернеті";
 "online_webpage_warning" = "Сторінка доступна лише онлайн. Відкрити в оглядачі\?";
 "app_mode_osm" = "OSM";
 "app_mode_utv" = "Мотовсюдихід";
@@ -1588,7 +1588,7 @@
 "app_mode_default" = "Огляд мапи";
 "map_transparency" = "Прозорість мапи";
 "map_settings_color_scheme" = "Схема кольорів";
-"map_settings_appearance" = "Зовнішній вигляд";
+"shared_string_appearance" = "Зовнішній вигляд";
 "enable_contour_lines" = "Вмикає показ ізоліній на мапі";
 "map_settings_available_srtm_maps_descr" = "Потрібні додаткові мапи для перегляду пагорбів";
 "map_settings_line_density_slowdown_warning" = "Висока щільність смуги може уповільнити відмалювання мапи";
@@ -1619,8 +1619,8 @@
 "help_legend_descr" = "Довідник умовних позначень мапи";
 "mapillary_item" = "OsmAnd + Mapillary";
 "help_travel" = "Подорожі (Wikipedia та Wikivoyage)";
-"help_osmand_live" = "Передплата - OsmAnd Live";
-"help_purchases" = "Придбання OsmAnd";
+"subscription_osmandlive_item" = "Передплата - OsmAnd Live";
+"osmand_purchases_item" = "Придбання OsmAnd";
 "enable_hillshade" = "Увімкнути для перегляду даних про рельєф";
 "hide_terrain" = "Сховати рельєф";
 "show_terrain" = "Показувати рельєф";
@@ -1643,7 +1643,7 @@
 // Dirrection appearance
 "one" = "Один";
 "active_markers" = "Наявні позначки";
-"nav_type_direct_to" = "Прямо-до-точки";
+"routing_profile_direct_to" = "Прямо-до-точки";
 "routing_profile_straightline" = "Пряма лінія";
 "nav_type_osmand" = "OsmAnd (автономний режим)";
 "nav_type_descr" = "Виберіть спосіб обчислення маршруту для цього профілю";
@@ -1836,7 +1836,7 @@
 "import_duplicates_title" = "Деякі елементи вже є";
 "shared_string_nothing_selected" = "Нічого не вибрано";
 "nav_type_hint" = "Тип навігації: %@";
-"import_profile_select_descr" = "Виберіть дані, які потрібно імпортувати.";
+"select_data_to_import" = "Виберіть дані, які потрібно імпортувати.";
 "shared_string_import" = "Імпорт";
 "shared_string_preparing" = "Підготування";
 "shared_string_deselect_all" = "Зняти виділення для всіх";
@@ -1924,7 +1924,7 @@
 "show_compass_ruler" = "Показати компас-лінійку";
 "tracks_on_map" = "Треки на мапі";
 "visible" = "Видимі";
-"search_preogress" = "Пошук…";
+"searching" = "Пошук…";
 "shared_string_loading" = "Завантаження…";
 "poi_categories" = "Категорії Точок Інтересу";
 "route_calc_progress" = "Обчислення: %d%%";
@@ -1932,7 +1932,7 @@
 "favorites_empty" = "Ви не зберегли жодної точки в закладки";
 "tracks_empty" = "Список треків пустий";
 "map_markers_empty" = "У вас немає активних позначок на мапі";
-"address_search" = "Пошук адреси";
+"address_search_desc" = "Пошук адреси";
 "add_folder" = "Додати Теку";
 "select_folder_descr" = "Виберіть теку або додайте нову";
 "plan_route_select_folder" = "Вибрати теку";
@@ -1964,7 +1964,7 @@
 "fav_point_dublicate_message" = "Закладку перейменовано на «%@», щоб уникнути дублювання.";
 "fav_point_dublicate" = "Дублювання назви закладки";
 "shared_string_shape" = "Форма";
-"icon" = "Піктограма";
+"shared_string_icon" = "Піктограма";
 "select_group" = "Вибрати групу";
 "name_and_descr" = "Назва та опис";
 "add_favorite" = "Додати закладку";
@@ -2260,7 +2260,7 @@
 "add_description" = "Додати опис";
 "map_settings_weather_pressure" = "Тиск";
 "map_settings_clear_raster_cache" = "Очистити растрові плитки";
-"product_title_weather" = "Погода";
+"shared_string_weather" = "Погода";
 "map_settings_weather_temp" = "Температура";
 "map_settings_weather_cloud" = "Хмари";
 "map_settings_weather_wind" = "Вітер";
@@ -2293,7 +2293,7 @@
 "horseback_riding" = "Верхова їзда";
 "routing_attr_prefer_horse_routes_description" = "Надавати перевагу кінним маршрутам";
 "route_preferred_terrain_flat" = "Маршрути обчислюються для рівнинних рельєфів. Довжина може збільшуватися.";
-"shared_string_any" = "Всі";
+"any_poi" = "Всі";
 "route_preferred_terrain_less_hilly" = "Коротші, менш горбисті маршрути.";
 "preferred_terrain" = "Бажаний рельєф";
 "route_preferred_terrain_any" = "Рельєф не враховується при виборі маршруту.";
@@ -2331,8 +2331,8 @@
 "product_desc_ext_weather" = "Увімкніть плагін погоди, щоб спланувати маршрут з урахуванням погоди. Переглядайте кольорову мапу прогнозу погоди, яка щогодини оновлюється на сьогодні, завтра та наступний тиждень.\n\nПід час подорожі переглядайте інформаційні віджети на основі розташування з температурою, опадами, швидкістю вітру, тиском.\n\nБуде корисним у походах і тривалих поїздках на велосипеді або мотоциклі.";
 "weather_pressure_unit_hpa" = "Гектопаскалі";
 "weather_wind_unit_m_s" = "Метри/Секунди";
-"weather_wind_unit_km_per_hour" = "Кілометрів на годину";
-"weather_wind_unit_knots" = "Вузлів";
+"weather_wind_kilimeters_per_hour" = "Кілометрів на годину";
+"weather_wind_knots" = "Вузлів";
 "weather_precip_inches" = "Дюйми";
 "user_login" = "Ім\'я користувача";
 "login_footer_email_part" = "support@osmand.net";
@@ -2357,7 +2357,7 @@
 "cloud_last_backup" = "Останнє резервне копіювання";
 "cloud_backup_now" = "Створити резервну копію зараз";
 "make_backup" = "Створити резервну копію";
-"cloud_make_backup_descr" = "На цьому пристрої є багато змін, зробіть резервну копію цих даних, щоб не втратити їх.";
+"make_backup_descr" = "На цьому пристрої є багато змін, зробіть резервну копію цих даних, щоб не втратити їх.";
 "cloud_conflicts" = "Неузгодженості";
 "cloud_email_already_registered" = "Ця адреса е-пошти вже зареєстрована.";
 "local_backup" = "Локальна резервна копія";
@@ -2383,7 +2383,7 @@
 "rendering_attr_funicularRoutes_name" = "Фунікулерні маршрути";
 "backup_error_token_is_not_valid_or_expired" = "Недійсний або нечинний код підтвердження";
 "backup_error_subscription_was_used" = "Передплату або акцію застосовано іншим обліковим записом %@";
-"rendering_attr_monorailRoutes_name" = "Монорейкові маршрути";
+"rendering_attr_showMonorailRoutes_name" = "Монорейкові маршрути";
 "backup_error_subscription_was_expired_descr" = "Термін дії передплати OsmAnd Pro завершився, поновіть її, щоб користуватись резервним копіюванням. Ви досі можете відновити дані з Хмари.";
 "rendering_attr_showLightRailRoutes_name" = "Маршрути легкорейкового транспорту";
 "temperature_show" = "Показати температуру";
@@ -2441,7 +2441,7 @@
 "simulate_location_movement_speed" = "Швидкість руху";
 "simulate_location_movement_speed_original" = "Оригінальна";
 "simulate_location_movement_speed_x2_desc" = "Швидкість руху під час імітування буде у 2 рази вищою за швидкість у вибраному файлі.";
-"product_title_development" = "Налагодження і розробка OsmAnd";
+"debugging_and_development" = "Налагодження і розробка OsmAnd";
 "osm_live_payment_year_cost_descr" = "%@ / рік";
 "routing_attr_hazmat_category_name" = "Транспортування небезпечних матеріалів";
 "transport_hazmat_yes_desc" = "Вам потрібно вибрати відповідну категорію.";
@@ -2460,14 +2460,14 @@
 "subscriptions" = "Передплати";
 "product_title_pro" = "OsmAnd Pro";
 "product_title_plus" = "Maps+";
-"product_desc_plus" = "Отримайте розширені можливості";
+"osmand_maps_plus_tagline" = "Отримайте розширені можливості";
 "complete_purchase" = "Завершити придбання";
 "explore_osmnad_plans_to_find_suitable" = "Ознайомтеся з тарифними планами OsmAnd, щоб знайти відповідний для вас.";
 "redeem_promo_code" = "Застосувати промокод";
 "expired" = "Термін дії закінчився";
 "expires" = "Діє до";
 "manage_subscription" = "Керувати передплатою";
-"shared_string_stop" = "Зупинка";
+"shared_string_control_stop" = "Зупинка";
 "shared_string_purchased" = "Придбано";
 "shared_string_start" = "Почати";
 "shared_string_includes" = "Включає";
@@ -2502,7 +2502,7 @@
 "quarterly_subscription" = "Щоквартальна передплата";
 "option_available_only_by_subscription" = "Доступно в передплатах";
 "continue_with" = "Продовжити з %@";
-"product_desc_pro" = "Отримайте найбільшу кількість можливостей";
+"osmand_pro_tagline" = "Отримайте найбільшу кількість можливостей";
 "subscription_cancel_description" = "Скасуйте будь-коли в AppStore.";
 "osm_live_payment_subscription_management_aid" = "Оплата стягується з вашого облікового запису Apple ID під час підтвердження купівлі.\n\nПередплата автоматично поновлюється, якщо її не буде скасовано принаймні за 24 години до кінця поточного періоду. Вашу оплату буде стягнуто за продовження за 24 годин до кінця поточного періоду.\n\nВи можете керувати та скасовувати передплати, перейшовши в налаштування свого облікового запису в App Store після придбання";
 "osm_live_banner_desc" = "Отримайте для мап необмежені завантаження та оновлення частіше ніж раз на місяць: щотижня, щодня або щогодини.";
@@ -2533,7 +2533,7 @@
 "compass_options_description" = "Натисніть на компас, щоб змінити режим орієнтації мапи";
 "compass_visible_in_rotated_mode_descr" = "Ховати, коли північ вгорі";
 "compass_visible_in_rotated_mode" = "Видно, якщо мапу повернути";
-"shared_string_data" = "Дані";
+"data_settings" = "Дані";
 "shared_string_online_cache" = "Мережевий кеш";
 "shared_string_total_size" = "Загальний розмір";
 "shared_string_delete_all" = "Видалити все";
@@ -2632,7 +2632,7 @@
 "benefits_for_contributors_primary_descr" = "Активні учасники OpenStreetMap.org мають право на необмежене погодинне оновлення мап.";
 "last_two_month_total" = "Загалом за останні два місяці";
 "carplay_available_in_sub_plans" = "Придбайте OsmAnd Pro або Maps+, щоб використовувати OsmAnd з CarPlay.";
-"cross_buy" = "Перехресна купівля";
+"shared_string_cross_buy" = "Перехресна купівля";
 "cloud_confirm_delete_type" = "Ви дійсно хочете видалити «%@» з OsmAnd Cloud?";
 "purchases_feature_desc_cross_buy" = "Користуйтеся всіма функціями передплатами на кількох платформах без додаткових витрат.";
 "tts_title" = "TTS";
@@ -2665,7 +2665,7 @@
 "rendering_attr_showMtbScaleIMBATrails_name" = "IMBA";
 "rendering_value_showMtbScaleIMBATrails_description" = "Міжнародна асоціація гірського велоспорту";
 "mountain_bike" = "Гірський велосипед";
-"map_settings_show_map_symbols" = "Показати символи мапи";
+"show_map_symbols" = "Показати символи мапи";
 "rendering_attr_depthContourColorScheme_name" = "Колірна схема ліній";
 "last_sync" = "Остання синхронізація";
 "depth_contour_lines" = "Ізолінії глибини";
@@ -2707,7 +2707,7 @@
 "local_changes_will_be_dismissed" = "Локальні зміни буде відхилено";
 "local_file_will_be_restored" = "Локальний файл буде відновлено";
 "checking_progress" = "Перевірка..";
-"res_heightmap" = "Мапа висот";
+"download_heightmap_maps" = "Мапа висот";
 "use_heightmap_setting" = "Використовувати 3D-мапи висот";
 "depth_contours" = "Ізолінії глибин";
 "huawei_appgallery" = "Huawei AppGallery";

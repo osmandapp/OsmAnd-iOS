@@ -177,7 +177,7 @@
         [buttons addObject:btn];
     }
 
-    OAButton *showOnMapButton = [self createButton:OALocalizedString(@"map_settings_show")
+    OAButton *showOnMapButton = [self createButton:OALocalizedString(@"shared_string_show_on_map")
                                          tapToCopy:NO
                                    longPressToCopy:NO];
     showOnMapButton.tag = _buttonShowOnMapIndex = i++;

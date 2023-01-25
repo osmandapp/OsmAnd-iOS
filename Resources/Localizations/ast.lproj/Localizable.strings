@@ -69,7 +69,7 @@
 
 "show_poi_over_map" = "Show POI";
 "shared_string_search" = "Search";
-"address_search" = "Address search";
+"address_search_desc" = "Address search";
 "search_radius" = "Search radius";
 "targets" = "Destinos";
 "search_radius_proximity" = "Nun radiu de";
@@ -127,7 +127,7 @@
 "rotate_map_none_opt" = "Do not rotate (north is up)";
 "driving_region_descr" = "Select the driving region: US, Europe, UK, Asia and others.";
 "driving_region" = "Driving region";
-"driving_region_automatic" = "Automatic";
+"shared_string_automatic" = "Automatic";
 "routing_attr_length_name" = "Llende de llongura";
 "default_speed_setting_title" = "Velocidá predeterminada";
 "shared_string_min_speed" = "Velocidá mínima";
@@ -251,7 +251,7 @@
 "nav_type_descr" = "Select how to calculate a route for this profile";
 "nav_type_osmand" = "OsmAnd (offline routing)";
 "routing_profile_straightline" = "Llinia reuta";
-"nav_type_direct_to" = "Direct-to-point";
+"routing_profile_direct_to" = "Direct-to-point";
 "nav_type_brouter" = "BRouter";
 "routing_profile_ski" = "Ski";
 "routing_profile_geocoding" = "Geocoding";
@@ -541,7 +541,7 @@
 "fav_colors" = "Colors";
 "fav_name" = "Nome";
 "fav_group" = "Group";
-"groups" = "Grupos";
+"shared_string_groups" = "Grupos";
 "favorite" = "Favorite";
 "poi_overlay" = "POI Overlay";
 "poi_dialog_poi_type" = "POI Type";
@@ -562,7 +562,7 @@
 "fav_enter_group_name" = "Enter group name";
 "fav_exists" = "Favorite with name \"%@\" already exists";
 "fav_ignore" = "Ignore";
-"fav_rename" = "Renomar";
+"shared_string_rename" = "Renomar";
 "fav_replace" = "Trocar";
 "replace_favorite_confirmation" = "Are you sure you want to replace Favorite %@?";
 "fav_points_not_exist" = "Nun esisten puntos favoritos";
@@ -575,7 +575,7 @@
 "add_favorite" = "Add favorite";
 "name_and_descr" = "Name & description";
 "select_group" = "Select group";
-"icon" = "Iconu";
+"shared_string_icon" = "Iconu";
 "shared_string_shape" = "Shape";
 "fav_point_dublicate" = "Duplicate Favorite name specified";
 "fav_point_dublicate_message" = "Favorite renamed to \'%@\' to avoid duplication.";
@@ -605,7 +605,7 @@
 "visible" = "Visible";
 
 // GPX
-"gpx_point" = "Point";
+"plugin_distance_point" = "Point";
 "shared_string_waypoint" = "Waypoint";
 "gpx_waypoints" = "Waypoints";
 "gpx_points" = "Point(s)";
@@ -632,7 +632,7 @@
 "gpx_export_failed" = "Could not save created route";
 
 "gpx_remove" = "Remove track?";
-"gpx_stat" = "Statistics";
+"shared_string_statistics" = "Statistics";
 "gpx_route" = "Route";
 "gpx_analyze" = "Analyze";
 "gpx_route_time" = "Route time";
@@ -695,20 +695,20 @@
 
 "shared_string_map" = "Mapa";
 "layer_amenity_label" = "Point Labels (POI, Favorites)";
-"map_settings_show" = "Amosar nel mapa";
+"shared_string_show_on_map" = "Amosar nel mapa";
 "map_settings_type" = "Map type";
 "map_mode" = "Mou del mapa";
 "map_settings_map_magnifier" = "Lente del mapa";
 "text_size" = "Text size";
 "daynight_mode_night" = "Nueche";
-"map_settings_style" = "Estilu del mapa";
+"map_widget_renderer" = "Estilu del mapa";
 "map_settings_overunder" = "Overlay / Underlay";
 "map_settings_over" = "Overlay";
 "map_settings_under" = "Underlay";
 "map_settings_install_maps" = "Choose maps to install or update";
 "map_settings_install_more" = "Install more...";
 "map_settings_offline" = "Styles for offline maps";
-"map_settings_online" = "Mapes en llinia";
+"shared_string_online_maps" = "Mapes en llinia";
 "shared_string_transparency" = "Tresparencia";
 "map_transparency" = "Base map transparency";
 "map_settings_avail_lay" = "Available layers";
@@ -732,7 +732,7 @@
 "map_settings_color_scheme" = "Color scheme";
 "map_settings_line_density" = "Line density";
 "map_settings_contour_zoom_level_descr" = "Select zoom level, from wich contour lines will be displayed";
-"map_settings_appearance" = "Aspeutu";
+"shared_string_appearance" = "Aspeutu";
 "map_settings_line_density_slowdown_warning" = "High line density may slowdown map rendering";
 "map_settings_available_srtm_maps_descr" = "Additional maps are needed to view Hillshade on the map";
 
@@ -767,7 +767,7 @@
 "sett_deg360" = "Degrees 360";
 "sett_deg_min" = "Degrees and minutes";
 "sett_arr" = "Map arrows";
-"sett_arr_loc" = "Allugamientu";
+"shared_string_location" = "Allugamientu";
 "sett_arr_map" = "Map center";
 "short_location_on_map" = "Lat %@ Lon %@";
 "navigate_point_format_D" = "DDD.DDDDD";
@@ -934,7 +934,7 @@
 "export_profile" = "Export";
 "shared_string_import" = "Importar";
 "create_profile" = "Create profile";
-"import_profile_select_descr" = "Select the data to be imported.";
+"select_data_to_import" = "Select the data to be imported.";
 "export_profile_select_descr" = "Select the data to be exported.";
 "selected_of" = "Selected - %d/%d";
 "nav_type_hint" = "Navigation type";
@@ -1037,7 +1037,7 @@
 "proceed_q" = "Proceed?";
 
 "download" = "Baxar";
-"nothanks" = "Non, gracies";
+"shared_string_no_thanks" = "Non, gracies";
 "download_now" = "Download map now";
 "prch_failed" = "Purchase of \"%@\" has failed";
 "prch_items_failed" = "item(s) were not restored. Please try again.";
@@ -1214,7 +1214,7 @@
 "shared_string_menu" = "Menú";
 "shared_string_my_places" = "Los mios llugares";
 "menu_my_trips" = "My Tracks";
-"menu_feedback" = "Feedback";
+"feedback" = "Feedback";
 "shared_string_help" = "Ayuda";
 
 // OSM Editing actions
@@ -1270,7 +1270,7 @@
 "osm_confirm_bulk_delete" = "Delete %d edits?";
 "osm_confirm_delete" = "Delete POI?";
 "osm_confirm_upload" = "Upload modifications?";
-"osm_close_changeset" = "Close changeset";
+"close_changeset" = "Close changeset";
 "osm_tag" = "Tag";
 "osm_value" = "Value";
 "osm_note_upload_info" = "You can upload the note anonymously or by using your OpenStreetMap profile.";
@@ -1305,7 +1305,7 @@
 "mapil_no_inet_descr" = "You need Internet connection to view Mapillary photos.";
 "mapil_images_nearby" = "Images nearby";
 "mapil_no_images" = "We do not have photos for this location.";
-"mapil_add_photos" = "Amestar semeyes";
+"shared_string_add_photos" = "Amestar semeyes";
 "mapillary_get_title" = "Improve photo coverage with Mapillary";
 "mapillary_get_descr" = "Get Mapillary to add photos to this location";
 "mapil_contribute" = "Contribute your own street level imagery";
@@ -1314,13 +1314,13 @@
 "mapillary_turn_on_widget_descr" = "This allows you to quickly contribute to Mapillary";
 "tile_cache" = "Caché de teseles";
 "shared_string_reload" = "Recargar";
-"shared_string_show_more" = "Amosar más";
+"show_more" = "Amosar más";
 "mapil_reload_cache" = "Reload tiles to see the newest data";
 "filter_current_poiButton" = "Filter";
 "mapil_filter_user_descr" = "Filter images by user";
 "mapil_filter_date" = "Filter images by date";
 "mapil_usernames" = "Usernames";
-"mapil_pano_only" = "Amosar namás les imáxenes a 360°";
+"mapillary_menu_title_pano" = "Amosar namás les imáxenes a 360°";
 "mapil_select_user" = "Select user";
 
 // Coordinate widget
@@ -1328,7 +1328,7 @@
 "searching_gps" = "Buscando la señal GPS";
 "copied_to_clipboard" = "Copióse nel cartafueyu";
 // Quick action
-"quick_action_no_overlay" = "No overlay";
+"no_overlay" = "No overlay";
 "quick_action_add_overlay" = "Add overlay";
 "quick_action_no_underlay" = "No underlay";
 "quick_action_add_underlay" = "Add underlay";
@@ -1374,7 +1374,7 @@
 "add_intermediate" = "Amestar un puntu intermediu";
 "add_home" = "Add home";
 "add_work" = "Add work";
-"home_pt" = "Casa";
+"favorite_home_category" = "Casa";
 "work_pt" = "Trabayu";
 "map_widget_parking" = "Parking spot";
 "add_first_inermediate" = "Amestar el primer puntu intermediu";
@@ -1386,7 +1386,7 @@
 "pause_nav" = "Pause navigation";
 "toggle_nav" = "Aniciar/parar la navegación";
 "toggle_day_night" = "Switch Day/Night mode";
-"night_mode" = "Mou nocherniegu";
+"quick_action_switch_night_mode" = "Mou nocherniegu";
 "day_mode" = "Mou diurnu";
 "mute_voice" = "Mute voice";
 "unmute_voice" = "Unmute voice";
@@ -1406,7 +1406,7 @@
 "quick_action_interim_dialog" = "Show an interim dialog";
 "quick_action_dialog_descr" = "Turn on to show dialog before applying the action";
 "quick_action_template_name" = "Template name";
-"quick_action_name_footer" = "Leave blank to use the address or place name.";
+"quick_action_fav_name_descr" = "Leave blank to use the address or place name.";
 "quick_action_select_group" = "Select the group to save the favorite in.";
 "quick_action_add_category" = "Add a category";
 "quick_action_add_category_descr" = "You can select multiple POI categories.";
@@ -1478,9 +1478,9 @@
 "edit_waypoint_short" = "Edit waypoint";
 "replace_waypoint_confirmation" = "Are you sure you want to replace Waypoint %@?";
 "no_waypoints_found" = "No waypoints found";
-"modify_poi_short" = "Modify POI";
+"poi_context_menu_modify" = "Modify POI";
 "create_poi_short" = "Create POI";
-"modify_edit_short" = "Modify OSM change";
+"poi_context_menu_modify_osm_change" = "Modify OSM change";
 "context_menu_item_open_note" = "Open OSM Note";
 "edit_osm_note" = "Edit OSM Note";
 "osm_alert_title" = "Commit";
@@ -1525,8 +1525,8 @@
 "help_search" = "Map search";
 "help_trip_planning" = "Planificación d\'un viaxe";
 "navigation_profiles_item" = "Perfiles de navegación";
-"help_purchases" = "Compres d\'OsmAnd";
-"help_osmand_live" = "Soscripción - OsmAnd Live";
+"osmand_purchases_item" = "Compres d\'OsmAnd";
+"subscription_osmandlive_item" = "Soscripción - OsmAnd Live";
 "help_travel" = "Travel (Wikipedia & Wikivoyage)";
 "mapillary_item" = "OsmAnd + Mapillary";
 "map_legend" = "Lleenda del mapa";
@@ -1534,7 +1534,7 @@
 "help_other_header" = "Other";
 "help_what_is_new" = "What\'s new";
 "help_install_and_troubleshoot" = "Instalación ya igua de problemes";
-"help_tech_articles" = "Artículos téunicos";
+"techical_articles_item" = "Artículos téunicos";
 "help_versions" = "Versiones";
 "help_contact_us" = "Contact us";
 "help_about" = "About";
@@ -1643,13 +1643,13 @@
 "product_title_europe" = "Europa";
 "product_desc_europe" = "Unlimited map downloads for Europe";
 "product_desc_europe_short" = "Europe region maps";
-"product_title_northamerica" = "Norteamérica";
+"index_name_north_america" = "Norteamérica";
 "product_desc_northamerica" = "Unlimited map downloads for North America";
 "product_desc_northamerica_short" = "North America region maps";
 "index_name_russia" = "Rusia";
 "product_desc_russia" = "Unlimited map downloads for Russia";
 "product_desc_russia_short" = "Maps of Russia regions";
-"product_title_southamerica" = "Suramérica";
+"index_name_south_america" = "Suramérica";
 "product_desc_southamerica" = "Unlimited map downloads for South America";
 "product_desc_southamerica_short" = "South America region maps";
 "product_title_allworld" = "All World Maps";
@@ -1687,7 +1687,7 @@
 "add_as" = "Add as";
 "make_call" = "Make a call";
 
-"all_group_points" = "Tolos puntos del grupu";
+"context_menu_points_of_group" = "Tolos puntos del grupu";
 "enter_description" = "Enter description";
 "description" = "Descripción";
 "read_full_description" = "Read full description";
@@ -1721,7 +1721,7 @@
 "edit_track" = "Edit track";
 "duplicate_track" = "Duplicate track";
 "enter_name" = "Enter name";
-"not_selected" = "Nun s\'esbilló";
+"shared_string_not_selected" = "Nun s\'esbilló";
 "shared_string_language" = "Llingua";
 
 "you_searching" = "You are searching";
@@ -1808,7 +1808,7 @@
 "turn_on_plugin" = "Turn on plugin";
 
 "all_world_popup_desc" = "Download World base map to see state names, borders and other information";
-"restore" = "Restore";
+"shared_string_restore" = "Restore";
 "restore_all_purchases" = "Restore all purchases";
 
 "no_statistics" = "No statistics";
@@ -1865,7 +1865,7 @@
 "no_inet_connection_desc_map" = "Required to download maps.";
 "try_again" = "Try again";
 
-"search_preogress" = "Buscando…";
+"searching" = "Buscando…";
 "search_location" = "Searching location…";
 "search_map" = "Searching map…";
 "search_another_country" = "Esbillar otra rexón";
@@ -1879,7 +1879,7 @@
 
 "wiki_sheet_title" = "¿Cómo abrir los artículos de Wikipedia\?";
 "download_wiki_data" = "Download Wikipedia data for %@";
-"open_wiki_online" = "Open article online";
+"open_in_browser_wiki" = "Open article online";
 "explore_wikipedia_offline" = "Esplora Wikipedia ensin internet.";
 "online_webpage_warning" = "Page only available online. Open in web browser\?";
 
@@ -2410,7 +2410,7 @@
 "add_description" = "Amestar una descripción";
 "routeInfo_surface_description" = "Provide additional information about the physical surface of roads/footpaths.";
 "cloud_email_not_registered" = "This e-mail address is not registered for OsmAnd Cloud";
-"weather_wind_unit_km_per_hour" = "Quilómetros per hora";
+"weather_wind_kilimeters_per_hour" = "Quilómetros per hora";
 "cloud_email_already_registered" = "This e-mail address is already registered.";
 "backup_error_user_is_not_registered" = "No user registered with that e-mail address";
 "start_point" = "Start";
@@ -2457,7 +2457,7 @@
 "restore_from_file" = "Restore from file";
 "routeInfo_smoothness_description" = "Provides a classification scheme regarding the physical usability of a way for wheeled vehicles, particularly regarding surface regularity/flatness.";
 "cloud_conflicts_descr" = "Some files could not be uploaded to the server because a newer version is stored on the server.";
-"cloud_make_backup_descr" = "Hai munchos cambeos nel preséu, fai una copia de seguranza d\'estos datos pa nun los perder.";
+"make_backup_descr" = "Hai munchos cambeos nel preséu, fai una copia de seguranza d\'estos datos pa nun los perder.";
 "cloud_backup_now" = "Backup now";
 "backup_error_subscription_was_expired_descr" = "Your OsmAnd Pro subscription is expired, renew it to use backup. You can still restore data from the Cloud.";
 "context_menu_edit_descr" = "Edit description";
@@ -2465,15 +2465,15 @@
 "cloud_view_conflicts" = "View conflicts";
 "routeInfo_tracktype_description" = "Coloring a route or track line according to the condition of the roads based on their surface composition. Typically applied to roads where the main road network consists of unpaved roads.";
 "routeInfo_roadClass_description" = "Colouring the route or track line according to road classification.";
-"shared_string_any" = "Any";
+"any_poi" = "Any";
 "expired" = "Expired";
 "product_desc_ext_development" = "Los axustes pal desendolcu y pa la depuración de carauterístiques como la simulación de la navegación, el rindimientu de la renderización o los avisos per voz. Esti plugin ta diseñáu pa desendolcadores, nun se precisa pa l\'usu normal de l\'aplicación.";
 "subscriptions" = "Soscripciones";
-"shared_string_stop" = "Stop";
+"shared_string_control_stop" = "Stop";
 "shared_string_start" = "Aniciar";
 "purchases_feature_desc_unlimited_map_download" = "Get unlimited downloads for all continents and regions offline maps.";
 "purchases_feature_desc_osmand_cloud" = "Get OsmAnd Cloud to store all OsmAnd data online. No lost data after reinstalling. Back up and restore all info easily.";
-"product_desc_pro" = "Get maximum features";
+"osmand_pro_tagline" = "Get maximum features";
 "share_geo" = "geo:";
 "restore_purchases" = "Restaurar les compres";
 "copy_coordinates" = "Copiar les coordenaes";
@@ -2486,7 +2486,7 @@
 "monthly_subscription" = "Soscripción mensual";
 "purchases_feature_desc_wikivoyage" = "Esplora Wikivoyage ensin internet. Los artículos dixébrense per países y rexones, y tán disponibles en toles llingües.";
 "complete_purchase" = "Completar la compra";
-"product_desc_plus" = "Get extended features";
+"osmand_maps_plus_tagline" = "Get extended features";
 "copy_address" = "Copiar la direición";
 "altitude_descent" = "Descent";
 "shared_string_includes" = "Inclúi";
@@ -2504,7 +2504,7 @@
 "not_available_with" = "Nun ta disponible con %@";
 "shared_string_capacity" = "Capacidá";
 "purchases_feature_desc_combined_wiki" = "Explore Wikipedia articles on the go, without an internet connection. Offline data divided by countries and available in all languages.";
-"product_title_development" = "Desendolcu d\'OsmAnd";
+"debugging_and_development" = "Desendolcu d\'OsmAnd";
 "purchases_feature_desc_wikipedia" = "Esplora Wikipedia ensin internet. Los artículos dixébrense per países y rexones, y tán disponibles en toles llingües.";
 "purchases_feature_desc_nautical" = "Get access to nautical depth information";
 "private_access_routing_req" = "Your destination is located in an area with private access. Allow using private roads for this trip\?";
@@ -2514,7 +2514,7 @@
 "continue_with" = "Siguir con %@";
 "nautical_depth" = "Nautical depth";
 "on_hold" = "On hold";
-"shared_string_data" = "Datos";
+"data_settings" = "Datos";
 "restore_from_osmand_cloud" = "Restore from OsmAnd Cloud";
 "in_grace_period" = "In grace period";
 "shared_string_delete_all" = "Desaniciar too";

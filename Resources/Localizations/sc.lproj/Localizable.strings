@@ -31,7 +31,7 @@
 "fav_colors" = "Colores";
 "fav_name" = "Nùmene";
 "fav_group" = "Grupu";
-"groups" = "Grupos";
+"shared_string_groups" = "Grupos";
 "fav_no_group" = "Grupu perunu";
 "add_as" = "Annanghe comente";
 "fav_import_title" = "Importa sos preferidos";
@@ -43,7 +43,7 @@
 "fav_enter_group_name" = "Inserta su nùmene de su grupu";
 "fav_exists" = "Su preferidu cun su nùmene \"%@\" esistit giai";
 "fav_ignore" = "Ignora";
-"fav_rename" = "Càmbia su nùmene";
+"shared_string_rename" = "Càmbia su nùmene";
 "fav_replace" = "Remplasa";
 "fav_rename_q" = "Torra a numenare su preferidu";
 "fav_enter_new_name" = "Pro piaghere inserta unu nùmene nou pro su preferidu";
@@ -56,7 +56,7 @@
 "favorites" = "Preferidos";
 "shared_string_gpx_tracks" = "Rastas";
 // GPX
-"gpx_point" = "Puntu";
+"plugin_distance_point" = "Puntu";
 "gpx_waypoints" = "Puntos de coladòrgiu";
 "gpx_points" = "Puntu(os)";
 "shared_string_export" = "Esporta";
@@ -71,7 +71,7 @@
 "gpx_import_desc" = "Pro importare sos documentos GPX tuos (formatu GPS comune) dae Dropbox, Email, o cale si siat àtera mitza, imprea s'optzione \"Còpia in sas mapas de OsmAnd\"";
 "gpx_no_tracks" = "Non bi sunt rastas";
 "gpx_remove" = "Bogare sa rasta?";
-"gpx_stat" = "Istatìsticas";
+"shared_string_statistics" = "Istatìsticas";
 "gpx_route_time" = "Tempus de s’àndala";
 "gpx_uphldownhl" = "Artziadas/Faladas";
 "gpx_average_speed" = "Lestresa mèdia";
@@ -104,17 +104,17 @@
 "m_style_overview" = "Resumu";
 "m_style_car" = "In vetura";
 "shared_string_map" = "Mapa";
-"map_settings_show" = "Ammustra in sa mapa";
+"shared_string_show_on_map" = "Ammustra in sa mapa";
 "map_settings_type" = "Casta de mapa";
 "map_settings_mode" = "Modalidade aplicatzione";
 "daynight_mode_night" = "Note";
-"map_settings_style" = "Istile de sa mapa";
+"map_widget_renderer" = "Istile de sa mapa";
 "map_settings_overunder" = "Subrapositzione/isfundu";
 "map_settings_over" = "Subrapositzione";
 "map_settings_under" = "Isfundu";
 "shared_string_none" = "Perunu";
 "map_settings_offline" = "Istiles pro sas mapas non in lìnia";
-"map_settings_online" = "Mapas in lìnia";
+"shared_string_online_maps" = "Mapas in lìnia";
 "shared_string_transparency" = "Trasparèntzia";
 "map_settings_avail_lay" = "Livellos disponìbiles";
 // Intro
@@ -136,7 +136,7 @@
 "sett_deg" = "Grados";
 "sett_deg_min" = "Grados e minutos";
 "sett_arr" = "Fritzas mapa";
-"sett_arr_loc" = "Positzione";
+"shared_string_location" = "Positzione";
 "sett_arr_map" = "Tzentru de sa mapa";
 "sett_lang_trans" = "transliteratzione";
 "sett_pref_lang" = "Limba preferida";
@@ -160,7 +160,7 @@
 "prch_nau_q3" = "As a lu pòdere installare prus a tardu dae Mapas e Resursas.";
 "proceed_q" = "Sighire?";
 "download" = "Iscàrriga";
-"nothanks" = "Nono, gràtzias";
+"shared_string_no_thanks" = "Nono, gràtzias";
 "download_now" = "Iscarriga sa mapa";
 "prch_failed" = "Sa còmpora de \"%@\" est faddida";
 "prch_items_failed" = "Sos elementos non sunt istados ripristinados. Torra a proare prus a tardu.";
@@ -203,7 +203,7 @@
 // Menu
 "shared_string_my_places" = "Logos meos";
 "menu_my_trips" = "Rastas meas";
-"menu_feedback" = "Sondàggiu";
+"feedback" = "Sondàggiu";
 "menu_about" = "Informatziones";
 "other_options" = "Àteras optziones";
 "add_parking" = "Annanghe comente positzione de parchègiu";
@@ -283,11 +283,11 @@
 "product_desc_centralamerica" = "Iscarrigamentos de mapas illimitados pro s’Amèrica tzentrale";
 "product_title_europe" = "Europa";
 "product_desc_europe" = "Iscarrigamentos de mapas illimitados pro s’Europa";
-"product_title_northamerica" = "Nord Amèrica";
+"index_name_north_america" = "Nord Amèrica";
 "product_desc_northamerica" = "Iscarrigamentos de mapas illimitados pro s’Amèrica setentrionale";
 "index_name_russia" = "Rùssia";
 "product_desc_russia" = "Iscarrigamentos de mapas illimitados pro sa Rùssia";
-"product_title_southamerica" = "Sud Amèrica";
+"index_name_south_america" = "Sud Amèrica";
 "product_desc_southamerica" = "Iscarrigamentos de mapas illimitados pro s’Amèrica meridionale";
 "product_title_allworld" = "Mapas de totu su mundu";
 "product_desc_allworld" = "Mapas de su mundu intreu";
@@ -319,7 +319,7 @@
 "gpx_select_track" = "Ischerta rasta";
 "gpx_curr_new_track" = "Rasta atuale";
 "enter_name" = "Inserta su nùmene";
-"not_selected" = "Non ischertadu";
+"shared_string_not_selected" = "Non ischertadu";
 "shared_string_language" = "Limba";
 "you_searching" = "Ses chircande";
 "from_location" = "indedda";
@@ -375,7 +375,7 @@
 "go_to_downloads" = "Bae a sos iscarrigamentos";
 "turn_on_plugin" = "Allue plugin";
 "all_world_popup_desc" = "Iscàrriga sa mapa de base de su mundu pro bìere sos nùmenes de sos istados, sas làcanas e àteras informatziones";
-"restore" = "Riprìstina";
+"shared_string_restore" = "Riprìstina";
 "restore_all_purchases" = "Riprìstina totu sos acuistos";
 "no_statistics" = "No istatìsticas";
 "no_internet_avail" = "Ìnternet non disponìbile";
@@ -674,7 +674,7 @@
 "rotate_map_bearing_opt" = "In sa diretzione de sa mòvida";
 "rotate_map_none_opt" = "Peruna rotatzione (nord in artu)";
 "driving_region_descr" = "Issèbera sa regione de ghia: USA, Europa, UK, Àsia e àteras.";
-"driving_region_automatic" = "Automàtica";
+"shared_string_automatic" = "Automàtica";
 "map_widget_magnetic_bearing" = "Bùssola magnètica";
 "map_widget_bearing" = "Bùssola relativa";
 "map_widget_transparent" = "Butones trasparentes";
@@ -767,7 +767,7 @@
 "map_legend" = "Legenda de sa mapa";
 "help_other_header" = "Àteru";
 "help_install_and_troubleshoot" = "Installatzione e solutziones a sos problemas";
-"help_tech_articles" = "Artìculos tècnicos";
+"techical_articles_item" = "Artìculos tècnicos";
 "help_versions" = "Versiones";
 "help_contact_us" = "Cuntata·nos";
 "help_about" = "Informatziones";
@@ -888,10 +888,10 @@
 "osm_edit_modified_poi" = "PDI OSM modificadu";
 "osm_edit_deleted_poi" = "PDI OSM iscantzelladu";
 "osm_target_created" = "PDI de OSM creadu";
-"osm_close_changeset" = "Serra sas modìficas";
-"modify_poi_short" = "Muda PDI";
+"close_changeset" = "Serra sas modìficas";
+"poi_context_menu_modify" = "Muda PDI";
 "create_poi_short" = "Crea PDI";
-"modify_edit_short" = "Modìfica càmbiu OSM";
+"poi_context_menu_modify_osm_change" = "Modìfica càmbiu OSM";
 "osm_alert_title" = "Imbia";
 "osb_comment_dialog_message" = "Messàgiu";
 "osn_add_dialog_title" = "Crea nota";
@@ -1006,7 +1006,7 @@
 "mapil_no_inet_descr" = "Tenes bisòngiu de una connessione a ìnternet pro bìdere sas fotografias de Mapillary.";
 "mapil_images_nearby" = "Immàgines a curtzu";
 "mapil_no_images" = "Non tenimus fotografias pro custu logu.";
-"mapil_add_photos" = "Annanghe fotografias";
+"shared_string_add_photos" = "Annanghe fotografias";
 "mapillary_get_title" = "Megiora sa cobertura fotogràfica cun Mapillary";
 "mapillary_get_descr" = "Installa Mapillary pro annànghere fotografias a custa positzione";
 "mapil_contribute" = "Contribui cun sas fotografias a livellu de caminu tuas";
@@ -1022,7 +1022,7 @@
 "mapil_filter_user_descr" = "Filtra sas immàgines pro impreadore";
 "mapil_filter_date" = "Filtra sas immàgines pro data";
 "mapil_usernames" = "Nùmenes de impreadores";
-"mapil_pano_only" = "Ammustra petzi immàgines a 360°";
+"mapillary_menu_title_pano" = "Ammustra petzi immàgines a 360°";
 "osmand_live_updates_size" = "Mannària de sos agiornamentos iscarrigados";
 "mapil_select_user" = "Ischerta s'impreadore";
 // Rendering attributes
@@ -1070,7 +1070,7 @@
 "download_pending" = "Iscarrigamentu in suspesu";
 "reddit" = "Reddit";
 // Quick action
-"quick_action_no_overlay" = "Perunu istratu superiore";
+"no_overlay" = "Perunu istratu superiore";
 "quick_action_add_overlay" = "Annaghe un\'istratu superiore";
 "quick_action_no_underlay" = "Perunu istratu inferiore";
 "quick_action_add_underlay" = "Annanghe un\'istratu inferiore";
@@ -1122,7 +1122,7 @@
 "quick_action_interim_dialog" = "Ammustra una ventana intermèdia";
 "quick_action_dialog_descr" = "Allughe·lu pro ammustrare unu diàlogu in antis de s'incumintzu de s'atzione";
 "quick_action_template_name" = "Nùmene de su modellu";
-"quick_action_name_footer" = "Lassa bòidu pro impreare s\'indiritzu o su nùmene de su logu.";
+"quick_action_fav_name_descr" = "Lassa bòidu pro impreare s\'indiritzu o su nùmene de su logu.";
 "quick_action_select_group" = "Ischerta su grupu in ue sarvare su preferidu.";
 "quick_action_add_category" = "Annanghe una categoria";
 "quick_action_add_category_descr" = "Podes ischertare prus categorias de PDI.";
@@ -1162,7 +1162,7 @@
 "auto_zoom_off" = "Ismanniamentu automàticu istudadu";
 "resume_nav" = "Sighi cun sa navigatzione";
 "pause_nav" = "Pone in pàusa sa navigatzione";
-"night_mode" = "Modalidade pro sa note";
+"quick_action_switch_night_mode" = "Modalidade pro sa note";
 "day_mode" = "Modalidade pro sa die";
 "mute_voice" = "Istuda sa boghe";
 "unmute_voice" = "Torra a allùghere sa boghe";
@@ -1191,7 +1191,7 @@
 "add_intermediate" = "Annaghe unu puntu de coladòrgiu";
 "add_home" = "Annanghe sa domo";
 "add_work" = "Annanghe su logu de traballu";
-"home_pt" = "Domo";
+"favorite_home_category" = "Domo";
 "work_pt" = "Traballu";
 "no_active_route" = "Peruna àndala ativa";
 "selected_roads" = "Caminos ischertados";
@@ -1203,7 +1203,7 @@
 "select_home" = "Ischerta su puntu de incumintzu";
 "select_work_point" = "Ischerta su puntu de su logu de traballu";
 "previous_route" = "Àndala anteposta";
-"shared_string_show_more" = "Ammustraàteru";
+"show_more" = "Ammustraàteru";
 "sett_deg180" = "180 grados";
 "sett_deg360" = "360 grados";
 "map_settings_install_maps" = "Issèbera mapas de installare o agiornare";
@@ -1565,10 +1565,10 @@
 "map_settings_hide_polygons" = "Cua sos polìgonos";
 "map_settings_hide_polygons_desc" = "Custa optzione influentzat sas mapas vetoriales non in lìnia de OsmAnd ebbia";
 "map_settings_add_maps_desc" = "Podes annànghere mapas noas pro mèdiu de unu ligàmene, o importende documentos SQLite.";
-"all_group_points" = "Totu sos puntos de su grupu";
+"context_menu_points_of_group" = "Totu sos puntos de su grupu";
 "wiki_sheet_title" = "Comente abèrrere sos artìculos de Wikipedia?";
 "download_wiki_data" = "Iscàrriga sos datos de Wikipedia pro %@";
-"open_wiki_online" = "Aberi un\'artìculu in lìnia";
+"open_in_browser_wiki" = "Aberi un\'artìculu in lìnia";
 "online_webpage_warning" = "Custa pàgina est a disponimentu in lìnia ebbia. La cheres abèrrere in s'esploradore/navigadore (browser) web?";
 "app_mode_pedestrian" = "A pee";
 "app_mode_bicycle" = "Bitzicleta";
@@ -1596,7 +1596,7 @@
 "map_settings_line_density_slowdown_warning" = "Una densidade de lìnias arta diat pòdere rallentare sa renderizatzione de sa mapa";
 "map_settings_contour_zoom_level_descr" = "Ischerta su livellu de ismanniamentu pro ammustrare sas curvas de livellu";
 "map_settings_line_density" = "Densidade de sas lìnias";
-"map_settings_appearance" = "Aparèntzia";
+"shared_string_appearance" = "Aparèntzia";
 "map_settings_color_scheme" = "Ischema de colores";
 "map_transparency" = "Trasparèntzia mapa de base";
 "public_transport_ped_route_title" = "Cust'àndala a pede est pagu prus o mancu de %1$s, e diat pòdere èssere prus lestra de su trasportu pùblicu.";
@@ -1622,8 +1622,8 @@
 "help_legend_descr" = "Sa ghia a sos sìmbulos de sa mapa";
 "mapillary_item" = "OsmAnd + Mapillary";
 "help_travel" = "Biàgiu (Wikipedia e Wikivoyage)";
-"help_osmand_live" = "Abbonamentos - OsmAnd Live";
-"help_purchases" = "Còmporas de OsmAnd";
+"subscription_osmandlive_item" = "Abbonamentos - OsmAnd Live";
+"osmand_purchases_item" = "Còmporas de OsmAnd";
 "hide_terrain" = "Cua su terrinu";
 "show_terrain" = "Ammustra su terrinu";
 "shared_string_legend" = "Legenda";
@@ -1650,7 +1650,7 @@
 // Dirrection appearance
 "one" = "Unu";
 "quick_action_dir_from_descr" = "Toca custa atzione pro navigare dae su puntu tzentrale de s'ischermu.";
-"nav_type_direct_to" = "Deretu a su puntu";
+"routing_profile_direct_to" = "Deretu a su puntu";
 "routing_profile_straightline" = "Lìnia dereta";
 "nav_type_osmand" = "OsmAnd (càrculu de s'àndala non in lìnia)";
 "nav_type_descr" = "Issèbera comente carculare un'àndala pro custu profilu";
@@ -1843,7 +1843,7 @@
 "import_duplicates_title" = "Unos cantos elementos esistint giai";
 "shared_string_nothing_selected" = "Nudda de ischertadu";
 "nav_type_hint" = "Casta de navigatzione: %@";
-"import_profile_select_descr" = "Ischerta sos datos de importare.";
+"select_data_to_import" = "Ischerta sos datos de importare.";
 "shared_string_import" = "Importa";
 "shared_string_preparing" = "Ammaniende";
 "shared_string_deselect_all" = "De-ischerta totu";
@@ -1932,7 +1932,7 @@
 "hide_compass_ruler" = "Cua su righellu de sa bùssola";
 "show_compass_ruler" = "Ammustra su righellu de sa bùssola";
 "map_widget_ruler_control" = "Medidura cun su raju";
-"search_preogress" = "Chirca…";
+"searching" = "Chirca…";
 "shared_string_loading" = "Carrighende…";
 "poi_categories" = "Categorias de sos PDI";
 "route_calc_progress" = "Carculende: %d%%";
@@ -1940,7 +1940,7 @@
 "favorites_empty" = "No as sarvadu perunu puntu preferidu";
 "tracks_empty" = "Sa lista de rastas tua est bòida";
 "map_markers_empty" = "Non tenes perunu marcadore de mapa ativu";
-"address_search" = "Chirca de sos indiritzos";
+"address_search_desc" = "Chirca de sos indiritzos";
 "download_tab_local" = "Installadas";
 "segnet_num" = "Segmentu %d";
 "track_multiple_segments_select" = "%@ tenet prus de unu segmentu. Ischerta una parte de sa rasta chi cheres impreare pro sa navigatzione.";
@@ -1981,7 +1981,7 @@
 "fav_point_dublicate_message" = "Preferidu mudadu de nùmene in '%@' pro non tènnere duplicados.";
 "fav_point_dublicate" = "Nùmene dòpiu in sos preferidos";
 "shared_string_shape" = "Forma";
-"icon" = "Icona";
+"shared_string_icon" = "Icona";
 "select_group" = "Ischerta su grupu";
 "name_and_descr" = "Nùmene e descritzione";
 "add_favorite" = "Annanghe unu preferidu";
@@ -2285,7 +2285,7 @@
 "map_settings_clear_geo_cache" = "Isbòida sos tasseddos geogràficos";
 "map_settings_clear_raster_cache" = "Isbòida sos tasseddos raster";
 "q_clear_weather_cache" = "Boles isboidare sa memòria temporànea de su mèteu?";
-"product_title_weather" = "Mèteu";
+"shared_string_weather" = "Mèteu";
 "map_settings_weather_wind" = "Bentu";
 "routeInfo_winter_ice_road_description" = "Colora s\'àndala o sa lìnia de sa rasta sighende sa classificatzione de su caminu ierrile suo.";
 "preferred_terrain" = "Terrinu preferidu";
@@ -2313,7 +2313,7 @@
 "shared_string_min_height" = "Artària mìn.";
 "shared_string_max_height" = "Artària màss.";
 "routing_attr_prefer_horse_routes_description" = "Preferi sasàndalas pro andare a caddu";
-"shared_string_any" = "Totus";
+"any_poi" = "Totus";
 "ltr_or_rtl_combine_via_dash" = "%@ - %@";
 "routing_attr_only_permitted_ways_name" = "Caminos autorizados a manera espressa";
 "routing_attr_prefer_horse_routes_name" = "Preferi sasàndalas a caddu";
@@ -2345,7 +2345,7 @@
 "osmand_cloud" = "OsmAnd Cloud";
 "cloud_email_not_registered" = "Custu indiritzu de posta no est registradu pro OsmAnd Cloud";
 "backup_error_subscription_was_expired" = "Abbonamentu iscadidu";
-"weather_wind_unit_km_per_hour" = "Chilòmetros a s\'ora";
+"weather_wind_kilimeters_per_hour" = "Chilòmetros a s\'ora";
 "osmand_cloud_login_descr" = "Pro praghere inserta su còdighe de posta eletrònica chi as impreadu pro sa registratzione. T\'amus a imbiare una crae temporànea pro su passu chi benit.";
 "cloud_view_conflicts" = "Pòmpia sos cunflitos";
 "register_opr_create_new_account" = "Crea unu contu nou";
@@ -2371,7 +2371,7 @@
 "cloud_set_up_backup" = "Imposta sa còpia de seguresa";
 "make_backup" = "Faghe una còpia de seguresa";
 "resend_verification_code" = "Torra a imbiare";
-"cloud_make_backup_descr" = "In custu dispositivu bi sunt modìficas medas. Faghe una còpia de seguresa de custos datos pro non los pèrdere.";
+"make_backup_descr" = "In custu dispositivu bi sunt modìficas medas. Faghe una còpia de seguresa de custos datos pro non los pèrdere.";
 "backup_and_restore" = "Sarvamentu e Riprìstinu";
 "weather_pressure_unit_hpa" = "Etopascàls";
 "weather_pressure_millimeters_of_mercury" = "Millìmetros de mercùriu";
@@ -2401,8 +2401,8 @@
 "rendering_attr_funicularRoutes_name" = "Àndalas funiculares";
 "local_backup_descr" = "Sarva o riprìstina sos datos dae unu documentu locale.";
 "weather_wind_unit_m_s" = "Metros/segundos";
-"weather_wind_unit_knots" = "Nodos";
-"rendering_attr_monorailRoutes_name" = "Àndalas de sas monorotajas";
+"weather_wind_knots" = "Nodos";
+"rendering_attr_showMonorailRoutes_name" = "Àndalas de sas monorotajas";
 "rendering_attr_showLightRailRoutes_name" = "Àndalas de sos trenos lèbios";
 "login_footer_full_text" = "Tenes bisòngiu de agiudu? Cuntata·nos a s'indiritzu \nsupport@osmand.net";
 "login_footer_email_part" = "support@osmand.net";
@@ -2472,24 +2472,24 @@
 "purchases_feature_desc_wikivoyage" = "Esplora Wikivoyage chene una lìnia ìnternet. Sos artìculos sunt partzidos pro istadu e regione e sunt a disponimentu in totu sas limbas.";
 "product_desc_ext_development" = "Ti permitit de cunfigurare OsmAnd pro fàghere proas: simulare àndalas de biàgiu, verificare su rendimentu de sa renderizatzione de s'ischermu etz. S'estensione no est netzessària pro s'impreu normale de s'aplicatzione.";
 "redeem_promo_code" = "Imprea su còdighe promotzionale";
-"shared_string_stop" = "Stop";
+"shared_string_control_stop" = "Stop";
 "purchases_feature_desc_nautical" = "Mapas vetoriales apropriadas pro sa navigatzione cun àndalas nàuticas";
 "subscriptions" = "Abbonamentos";
 "not_available_with" = "No a disponimentu cun %@";
 "speed_mode" = "Modalidade de lestresa";
 "shared_string_start" = "Incumintza";
 "new_device_account" = "Dispositivu nou / contu nou";
-"product_desc_plus" = "Otene funtzionalidades estèndidas";
+"osmand_maps_plus_tagline" = "Otene funtzionalidades estèndidas";
 "wikipedia_and_wikivoyage_offline" = "Wikipedia e Wikivoyage non in lìnia";
-"product_title_development" = "Isvilupu de OsmAnd";
+"debugging_and_development" = "Isvilupu de OsmAnd";
 "purchases_feature_desc_combined_wiki" = "Esplora sos artìculos de Wikipedia in totue, chene una connessione a ìnternet. Sos datos non in lìnia sunt partzidos pro istadu e sunt a disponimentu in totu sas limbas.";
 "purchases_feature_desc_monthly_map_updates" = "Otene atzessu a agiornamentos regulares mensiles pro sas mapas non in lìnia.";
 "purchases_feature_desc_osmand_cloud" = "Archìvia totu sos datos de OsmAnd in lìnia. No as a pèrdere prus sos datos a pustis de un'installatzione noa. Sarva e riprìstina totu sas informatziones in manera fàtzile.";
-"product_desc_pro" = "Otene su màssimu de sas funtzionalidades";
+"osmand_pro_tagline" = "Otene su màssimu de sas funtzionalidades";
 "shared_string_delete_all" = "Iscantzella totu";
 "shared_string_undefined" = "Non dessinidu";
 "on_hold" = "In isetu";
-"shared_string_data" = "Datos";
+"data_settings" = "Datos";
 "shared_string_paused" = "In pàusa";
 "in_grace_period" = "In perìodu de gràtzia";
 "restore_from_osmand_cloud" = "Riprìstina dae OsmAnd Cloud";
@@ -2652,7 +2652,7 @@
 "benefits_for_contributors_secondary_descr" = "Intra in OpenStreetMap pro averguare de èssere o nono idòneu pro retzire agiornamentos de sas mapas mensiles e cada ora.";
 "not_enough_contributions_descr" = "Unu mìnimu de %@ modìficas in s'ùrtimu bimestre %@ est netzessàriu pro tènnere atzessu a sos agiornamentos chene lìmites de sa mapa pro cada ora.";
 "enough_contributions_descr" = "Bene meda, as fatu contributziones bastantes a OpenStreetMap e como ti podes godire agiornamentos chene lìmites de sas mapas de OsmAnd!";
-"cross_buy" = "Còmpora multi-prataforma";
+"shared_string_cross_buy" = "Còmpora multi-prataforma";
 "purchases_feature_desc_cross_buy" = "Imprea totu sas funtzionalidades de s'abbonamentu in prataformas mùltiplas chene costos additzionales.";
 "cloud_confirm_delete_type" = "Ses seguru de bòlere iscantzellare \"%@\" dae OsmAnd Cloud?";
 "shared_string_changed" = "Cambiadu";
@@ -2681,7 +2681,7 @@
 "error_contact_support" = "Si su problema sighit cuntata s'iscuadra de suportu nostra.";
 "track_has_no_needed_data" = "Sa rasta non tenet sos datos currispondentes.";
 "select_another_colorization" = "Ischerta un'àtera casta de colorimentu.";
-"map_settings_show_map_symbols" = "Ammustra sos sìmbulos de sa mapa";
+"show_map_symbols" = "Ammustra sos sìmbulos de sa mapa";
 "mountain_bike" = "Bitzicleta de monte";
 "rendering_attr_showMtbScaleIMBATrails_name" = "IMBA";
 "rendering_value_showMtbScaleIMBATrails_description" = "Assòtziu Internatzionale de su Tziclismu de Monte (International Mountain Bicycling Association)";

@@ -408,11 +408,11 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                     if (word && word.result)
                         [_barActionTextButton setTitle:[NSString stringWithFormat:OALocalizedString(@"show_something_on_map"), word.result.localeName] forState:UIControlStateNormal];
                     else
-                        [_barActionTextButton setTitle:OALocalizedString(@"map_settings_show") forState:UIControlStateNormal];
+                        [_barActionTextButton setTitle:OALocalizedString(@"shared_string_show_on_map") forState:UIControlStateNormal];
                 }
                 else
                 {
-                    [_barActionTextButton setTitle:OALocalizedString(@"map_settings_show") forState:UIControlStateNormal];
+                    [_barActionTextButton setTitle:OALocalizedString(@"shared_string_show_on_map") forState:UIControlStateNormal];
                 }
 
                 [_barActionTextButton layoutIfNeeded];

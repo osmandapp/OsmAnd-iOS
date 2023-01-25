@@ -102,7 +102,7 @@
 "rotate_map_none_opt" = "Do not rotate (north is up)";
 "driving_region_descr" = "Select the driving region: US, Europe, UK, Asia and others.";
 "driving_region" = "Region jězdźenja";
-"driving_region_automatic" = "Awtomatisce";
+"shared_string_automatic" = "Awtomatisce";
 // Trip recording settings
 "save_global_track_interval" = "Powšitkowny interwal nahrawanja";
 "save_global_track_interval_descr" = "Choose logging interval for the general trip recording (enabled via the GPX logging widget on the map).";
@@ -384,7 +384,7 @@
 "fav_colors" = "Colors";
 "fav_name" = "Mjeno";
 "fav_group" = "Group";
-"groups" = "Skupiny";
+"shared_string_groups" = "Skupiny";
 "favorite" = "Faworit";
 "amenity" = "Amenity";
 "poi_overlay" = "POI Overlay";
@@ -402,7 +402,7 @@
 "fav_enter_group_name" = "Enter group name";
 "fav_exists" = "Favorite with name \"%@\" already exists";
 "fav_ignore" = "Ignore";
-"fav_rename" = "Přemjenować";
+"shared_string_rename" = "Přemjenować";
 "fav_replace" = "Zarunać";
 "fav_rename_q" = "Rename favorite";
 "fav_enter_new_name" = "Please enter new name for the favorite";
@@ -419,7 +419,7 @@
 "favorites" = "Fawority";
 "shared_string_gpx_tracks" = "Čary";
 // GPX
-"gpx_point" = "Dypk";
+"plugin_distance_point" = "Dypk";
 "shared_string_waypoint" = "Čarowy dypk";
 "gpx_waypoints" = "Waypoints";
 "gpx_points" = "Point(s)";
@@ -436,7 +436,7 @@
 "import_from_docs" = "Import from documents";
 "gpx_no_tracks" = "There are no trips";
 "gpx_remove" = "Remove trip?";
-"gpx_stat" = "Statistics";
+"shared_string_statistics" = "Statistics";
 "gpx_route" = "Route";
 "gpx_route_time" = "Route time";
 "gpx_uphldownhl" = "Uphills/Downhills";
@@ -475,13 +475,13 @@
 "rendering_value_browse_map_name" = "Overview";
 "m_style_car" = "Jězdźenje";
 "shared_string_map" = "Karta";
-"map_settings_show" = "Na karće pokazać";
+"shared_string_show_on_map" = "Na karće pokazać";
 "map_settings_type" = "Map type";
 "map_mode" = "Kartowy modus";
 "map_settings_map_magnifier" = "Powjetšenje karty";
 "text_size" = "Wulkosć teksta";
 "daynight_mode_night" = "Nóc";
-"map_settings_style" = "Stil karty";
+"map_widget_renderer" = "Stil karty";
 "map_settings_overunder" = "Overlay / Underlay";
 "map_settings_over" = "Overlay";
 "map_settings_under" = "Underlay";
@@ -489,7 +489,7 @@
 "map_settings_install_more" = "Install more...";
 "shared_string_none" = "žane";
 "map_settings_offline" = "Styles for offline maps";
-"map_settings_online" = "Online-karty";
+"shared_string_online_maps" = "Online-karty";
 "shared_string_transparency" = "Transparenca";
 "map_settings_avail_lay" = "Available layers";
 "mapillary" = "Mapillary";
@@ -512,7 +512,7 @@
 "sett_deg360" = "Degrees 360";
 "sett_deg_min" = "Degrees and minutes";
 "sett_arr" = "Map arrows";
-"sett_arr_loc" = "městno";
+"shared_string_location" = "městno";
 "sett_arr_map" = "Map center";
 "short_location_on_map" = "Lat %@ Lon %@";
 "navigate_point_format_D" = "DDD.DDDDD";
@@ -543,7 +543,7 @@
 "prch_nau_q3" = "You may install it later through the Maps & Resources.";
 "proceed_q" = "Proceed?";
 "download" = "Sćahnyć";
-"nothanks" = "Ně, dźakuju";
+"shared_string_no_thanks" = "Ně, dźakuju";
 "download_now" = "Download map now";
 "prch_failed" = "Purchase of \"%@\" has failed";
 "prch_items_failed" = "item(s) were not restored. Please try again.";
@@ -616,7 +616,7 @@
 "shared_string_my_places" = "Moje městna";
 "menu_my_trips" = "My Trips";
 "menu_my_directions" = "My Directions";
-"menu_feedback" = "Feedback";
+"feedback" = "Feedback";
 "shared_string_help" = "Pomoc";
 // OSM Editing actions
 "opening_changeset" = "Opening changeset…";
@@ -666,7 +666,7 @@
 "osm_confirm_bulk_delete" = "Delete %d edits?";
 "osm_confirm_delete" = "Delete POI?";
 "osm_confirm_upload" = "Upload modifications?";
-"osm_close_changeset" = "Začinić sadźbu změnow";
+"close_changeset" = "Začinić sadźbu změnow";
 "osm_tag" = "Tag";
 "osm_value" = "Value";
 "osm_note_upload_info" = "You can upload the note anonymously or by using your OpenStreetMap profile.";
@@ -699,7 +699,7 @@
 "mapil_no_inet_descr" = "You need Internet connection to view Mapillary photos.";
 "mapil_images_nearby" = "Images nearby";
 "mapil_no_images" = "We do not have photos for this location.";
-"mapil_add_photos" = "Wobrazy přidać";
+"shared_string_add_photos" = "Wobrazy přidać";
 "mapillary_get_title" = "Improve photo coverage with Mapillary";
 "mapillary_get_descr" = "Get Mapillary to add photos to this location";
 "mapil_contribute" = "Contribute your own street level imagery";
@@ -709,16 +709,16 @@
 "tile_cache" = "Tile cache";
 "tile_data" = "Tile data";
 "shared_string_reload" = "wobnowić";
-"shared_string_show_more" = "Show more";
+"show_more" = "Show more";
 "mapil_reload_cache" = "Reload tiles to see the newest data";
 "filter_current_poiButton" = "filter";
 "mapil_filter_user_descr" = "Filter images by user";
 "mapil_filter_date" = "Filter images by date";
 "mapil_usernames" = "Usernames";
-"mapil_pano_only" = "Pokaž jeničce 360°-wobrazy";
+"mapillary_menu_title_pano" = "Pokaž jeničce 360°-wobrazy";
 "mapil_select_user" = "Select user";
 // Quick action
-"quick_action_no_overlay" = "No overlay";
+"no_overlay" = "No overlay";
 "quick_action_add_overlay" = "Add overlay";
 "quick_action_no_underlay" = "No underlay";
 "quick_action_add_underlay" = "Podłohu dodać";
@@ -757,7 +757,7 @@
 "add_intermediate" = "Add intermediate point";
 "add_home" = "Doma dodać";
 "add_work" = "Dźěło dodać";
-"home_pt" = "Doma";
+"favorite_home_category" = "Doma";
 "work_pt" = "Work";
 "add_first_inermediate" = "Add first intermediate";
 "toggle_auto_zoom" = "Auto zoom on/off";
@@ -768,7 +768,7 @@
 "pause_nav" = "Pause navigation";
 "toggle_nav" = "Nawigaciju zahajić/přetorhnyć";
 "toggle_day_night" = "Switch Day/Night mode";
-"night_mode" = "Night mode";
+"quick_action_switch_night_mode" = "Night mode";
 "day_mode" = "Day mode";
 "mute_voice" = "Mute voice";
 "unmute_voice" = "Unmute voice";
@@ -788,7 +788,7 @@
 "quick_action_interim_dialog" = "Show an interim dialog";
 "quick_action_dialog_descr" = "Turn on to show dialog before applying the action";
 "quick_action_template_name" = "Template name";
-"quick_action_name_footer" = "Leave blank to use the address or place name.";
+"quick_action_fav_name_descr" = "Leave blank to use the address or place name.";
 "quick_action_select_group" = "Select the group to save the favorite in.";
 "quick_action_add_category" = "Kategoriju dodać";
 "quick_action_add_category_descr" = "You can select multiple POI categories.";
@@ -823,9 +823,9 @@
 "add_waypoint" = "Add waypoint to trip";
 "add_waypoint_short" = "Add waypoint";
 "edit_waypoint_short" = "Edit waypoint";
-"modify_poi_short" = "POI wobdźěłać";
+"poi_context_menu_modify" = "POI wobdźěłać";
 "create_poi_short" = "POI dodać";
-"modify_edit_short" = "Modify OSM change";
+"poi_context_menu_modify_osm_change" = "Modify OSM change";
 "context_menu_item_open_note" = "OSM-noticu wočinić";
 "edit_osm_note" = "Edit OSM Note";
 "osm_alert_title" = "Commit";
@@ -867,7 +867,7 @@
 "map_legend" = "Legenda karty";
 "help_other_header" = "Druhe";
 "help_install_and_troubleshoot" = "Instalacija a rozrisowanje problemow";
-"help_tech_articles" = "Technical articles";
+"techical_articles_item" = "Technical articles";
 "help_versions" = "Wersije";
 "help_contact_us" = "Contact us";
 "help_about" = "About";
@@ -949,13 +949,13 @@
 "product_title_europe" = "Europa";
 "product_desc_europe" = "Unlimited map downloads for Europe";
 "product_desc_europe_short" = "Europe region maps";
-"product_title_northamerica" = "Sewjerna Amerika";
+"index_name_north_america" = "Sewjerna Amerika";
 "product_desc_northamerica" = "Unlimited map downloads for North America";
 "product_desc_northamerica_short" = "North America region maps";
 "index_name_russia" = "Ruska";
 "product_desc_russia" = "Unlimited map downloads for Russia";
 "product_desc_russia_short" = "Maps of Russia regions";
-"product_title_southamerica" = "Južna Amerika";
+"index_name_south_america" = "Južna Amerika";
 "product_desc_southamerica" = "Unlimited map downloads for South America";
 "product_desc_southamerica_short" = "South America region maps";
 "product_title_allworld" = "All World Maps";
@@ -996,7 +996,7 @@
 "gpx_select_track" = "Select trip";
 "gpx_curr_new_track" = "Tuchwilnačara";
 "enter_name" = "Zapodajće mjeno";
-"not_selected" = "Njeje wubrane";
+"shared_string_not_selected" = "Njeje wubrane";
 "shared_string_language" = "Language";
 "you_searching" = "You are searching";
 "from_location" = "away";
@@ -1050,7 +1050,7 @@
 "go_to_downloads" = "Go to downloads";
 "turn_on_plugin" = "Turn on plugin";
 "all_world_popup_desc" = "Download World base map to see state names, borders and other information";
-"restore" = "Restore";
+"shared_string_restore" = "Restore";
 "restore_all_purchases" = "Restore all purchases";
 "no_statistics" = "No statistics";
 "no_internet_avail" = "No internet available";
@@ -1317,13 +1317,13 @@
 "routing_attr_avoid_stairs_description" = "Schody wobeńć";
 "routing_attr_driving_style_name" = "Stil jědźenja";
 "app_mode_pedestrian" = "Běhanje";
-"all_group_points" = "Wšě dypki tuteje skupiny";
+"context_menu_points_of_group" = "Wšě dypki tuteje skupiny";
 "app_mode_bicycle" = "Kolesowanje";
 "online_webpage_warning" = "Strona steji jenož online k dispoziciji. Chceš ju w browseru wočinić?";
 "app_mode_default" = "Kartu wobhladać";
 "app_mode_car" = "Jězdźenje";
 "map_transparency" = "Transparenca zakładneje karty";
-"map_settings_appearance" = "Napohlad";
+"shared_string_appearance" = "Napohlad";
 "shared_string_warning" = "Warnowanje";
 "map_settings_color_scheme" = "Barbnyšema";
 "base_profile_descr_pedestrian" = "Běžeć, pućować, běhać";
@@ -1365,7 +1365,7 @@
 "amenity_type_emergency" = "Nuzowy pad";
 "sport" = "Sport";
 "new_plugin_added" = "Nowy plugin přidaty";
-"address_search" = "Pytanje za adresu";
+"address_search_desc" = "Pytanje za adresu";
 "replace_favorite_confirmation" = "Sy sej wěsty/a, zo chceš narunać faworit %@?";
 "download_regular_maps" = "Standardna karta";
 "join_segments" = "Segmenty zwjazać";
@@ -1374,10 +1374,10 @@
 "visible" = "Widźomne";
 "group_name" = "Mjeno skupiny";
 "fav_points_not_exist" = "Njejsužane faworitowe dypki";
-"icon" = "Symbol";
+"shared_string_icon" = "Symbol";
 "favorite_places_category" = "Městna";
 "transport" = "Zjawny transport";
-"search_preogress" = "Pytam…";
+"searching" = "Pytam…";
 "none_point_error" = "Prošu dodaj znajmjeńša jedyn dypk.";
 "shared_string_import" = "Import";
 "coordinates" = "Koordinaty";
@@ -1404,7 +1404,7 @@
 "lang_sv" = "šwedšćina";
 "lang_uk" = "ukrainšćina";
 "lang_pt" = "portugalšćina";
-"shared_string_any" = "Wšě";
+"any_poi" = "Wšě";
 "lang_new" = "Newar / Nepal Bhasa";
 "lang_es" = "španišćina";
 "lang_iw" = "hebrejšćina";
@@ -1416,7 +1416,7 @@
 "lang_tl" = "tagalogšćina";
 "lang_de" = "němčina";
 "lang_ms" = "malajišćina";
-"weather_wind_unit_km_per_hour" = "Kilometrow za hodźinu";
+"weather_wind_kilimeters_per_hour" = "Kilometrow za hodźinu";
 "shared_string_start_time" = "čas wotjězda";
 "lang_eu" = "baskišćina";
 "lang_mk" = "makedonsce";
@@ -1505,7 +1505,7 @@
 "shared_string_import_complete" = "Import dokónčeny";
 "add_description" = "Wopisanje dodać";
 "private_access_routing_req" = "Twój cil leži w priwatnej kónčinje. Za tutu jězbu wužiwanje priwatnych pućow dowolić\?";
-"shared_string_stop" = "Zastanišćo";
+"shared_string_control_stop" = "Zastanišćo";
 "altitude_descent" = "Wotstup";
 "shared_string_start" = "Start";
 "osm_live_banner_desc" = "Za njewobmjezowane sćehnjenje kartow a aktualizacije husćišo hač jónu wob měsac: tydźensce, wšědnje abo hodźinsce.";
@@ -1513,7 +1513,7 @@
 "altitude_ascent" = "Postup";
 "shared_string_delete_all" = "Wšitke wotstronić";
 "shared_string_paused" = "Přetorhnjene";
-"shared_string_data" = "Daty";
+"data_settings" = "Daty";
 "shared_string_undefined" = "njedefinowane";
 "login_open_street_map_org" = "Přizjew so pola OpenStreetMap.org";
 "rendering_value_black_name" = "čorne";

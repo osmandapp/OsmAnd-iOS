@@ -689,11 +689,11 @@
     if ([self.symbol isEqualToString:NSUnitSpeed.metersPerSecond.symbol])
         return OALocalizedString(@"weather_wind_unit_m_s");
     else if ([self.symbol isEqualToString:NSUnitSpeed.kilometersPerHour.symbol])
-        return OALocalizedString(@"weather_wind_unit_km_per_hour");
+        return OALocalizedString(@"weather_wind_kilimeters_per_hour");
     else if ([self.symbol isEqualToString:NSUnitSpeed.milesPerHour.symbol])
         return OALocalizedString(@"si_mph");
     else if ([self.symbol isEqualToString:NSUnitSpeed.knots.symbol])
-        return OALocalizedString(@"weather_wind_unit_knots");
+        return OALocalizedString(@"weather_wind_knots");
     return nil;
 }
 
@@ -1327,7 +1327,7 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
 + (NSString *) appendMeters:(float)value
 {
     NSString *formattedValue = [OAOsmAndFormatter getFormattedDistance:value];
-    return value == 0.f ? OALocalizedString(@"not_selected") : formattedValue;
+    return value == 0.f ? OALocalizedString(@"shared_string_not_selected") : formattedValue;
 }
 
 + (NSString *) appendSpeed:(float)value
@@ -1335,7 +1335,7 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
     BOOL kilometers = [[OAAppSettings sharedManager].metricSystem get] == KILOMETERS_AND_METERS;
     value = kilometers ? value : round(value / 0.3048f);
     NSString *distUnitsFormat = [@"%g " stringByAppendingString:kilometers ? OALocalizedString(@"units_km_h") : OALocalizedString(@"units_mph")];
-    return value == 0.f ? OALocalizedString(@"not_selected") : value == 0.000001f ? @">0" : [NSString stringWithFormat:distUnitsFormat, value];
+    return value == 0.f ? OALocalizedString(@"shared_string_not_selected") : value == 0.000001f ? @">0" : [NSString stringWithFormat:distUnitsFormat, value];
 }
 
 + (NSArray<NSString *> *) arrayOfMeterValues:(NSArray<NSNumber *> *) values

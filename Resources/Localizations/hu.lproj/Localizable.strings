@@ -23,7 +23,7 @@
 "fav_colors" = "Színek";
 "fav_name" = "Név";
 "fav_group" = "Csoport";
-"groups" = "Csoportok";
+"shared_string_groups" = "Csoportok";
 "favorite" = "Kedvenc";
 "fav_no_group" = "Nincs csoport";
 "fav_remove_q" = "Kedvenc eltávolítása?";
@@ -35,7 +35,7 @@
 "fav_enter_group_name" = "Adja meg a csoport nevét";
 "fav_exists" = "Már létezik „%@” nevű kedvenc";
 "fav_ignore" = "Mellőzés";
-"fav_rename" = "Átnevezés";
+"shared_string_rename" = "Átnevezés";
 "fav_replace" = "Csere";
 "fav_rename_q" = "Kedvenc átnevezése";
 "fav_enter_new_name" = "Adja meg a kedvenc új nevét";
@@ -48,7 +48,7 @@
 "favorites" = "Kedvencek";
 "shared_string_gpx_tracks" = "Nyomvonalak";
 // GPX
-"gpx_point" = "Pont";
+"plugin_distance_point" = "Pont";
 "gpx_waypoints" = "Útpontok";
 "gpx_points" = "Pont(ok)";
 "shared_string_export" = "Exportálás";
@@ -62,7 +62,7 @@
 "gpx_export_select_track" = "Válasszon utazást az exportáláshoz";
 "gpx_no_tracks" = "Nincsenek utazások";
 "gpx_remove" = "Utazás eltávolítása?";
-"gpx_stat" = "Statisztika";
+"shared_string_statistics" = "Statisztika";
 "gpx_route_time" = "Menetidő";
 "gpx_uphldownhl" = "Hegynek fel / hegynek le";
 "gpx_average_speed" = "Átlagsebesség";
@@ -90,17 +90,17 @@
 "rendering_value_browse_map_name" = "Térképböngészés";
 "m_style_car" = "Autóvezetés";
 "shared_string_map" = "Térkép";
-"map_settings_show" = "Megjelenítés a térképen";
+"shared_string_show_on_map" = "Megjelenítés a térképen";
 "map_settings_type" = "Térképtípus";
 "map_mode" = "Térképmód";
 "daynight_mode_night" = "Éjszakai";
-"map_settings_style" = "Térképstílus";
+"map_widget_renderer" = "Térképstílus";
 "map_settings_overunder" = "Rátét / alátét";
 "map_settings_over" = "Rátét";
 "map_settings_under" = "Alátét";
 "shared_string_none" = "Nincs";
 "map_settings_offline" = "Kapcsolat nélküli térképek stílusai";
-"map_settings_online" = "Online térképek";
+"shared_string_online_maps" = "Online térképek";
 "shared_string_transparency" = "Áttetszőség";
 "map_settings_avail_lay" = "Elérhető rétegek";
 // Intro
@@ -122,7 +122,7 @@
 "sett_deg" = "Fok";
 "sett_deg_min" = "Fok és perc";
 "sett_arr" = "Térkép nyilak";
-"sett_arr_loc" = "Pozíció";
+"shared_string_location" = "Pozíció";
 "sett_arr_map" = "Térkép közepe";
 "sett_pref_lang" = "Előnyben részesített nyelv";
 "sett_lang_show_local" = "Helyi nevek megjelenítése";
@@ -139,7 +139,7 @@
 "prch_nau_q3" = "A Térképek és erőforrásokon keresztül később is telepítheti.";
 "proceed_q" = "Folytatja?";
 "download" = "Letöltés";
-"nothanks" = "Nem szükséges";
+"shared_string_no_thanks" = "Nem szükséges";
 "download_now" = "Térkép letöltése most";
 "prch_failed" = "A(z) „%@” vásárlása nem sikerült";
 "prch_items_failed" = "elem nem került visszaállításra. Próbálja újra.";
@@ -182,7 +182,7 @@
 "res_updates_exp" = "Vásároljon kontinenseket a térképek frissítéséhez";
 // Menu
 "shared_string_my_places" = "Saját helyek";
-"menu_feedback" = "Visszajelzés";
+"feedback" = "Visszajelzés";
 "menu_about" = "Névjegy";
 "other_options" = "Egyéb beállítások";
 "add_parking" = "Hozzáadás parkolási pozícióként";
@@ -270,11 +270,11 @@
 "product_desc_centralamerica" = "Korlátlan térképletöltés: Közép-Amerika";
 "product_title_europe" = "Európa";
 "product_desc_europe" = "Korlátlan térképletöltés: Európa";
-"product_title_northamerica" = "Észak-Amerika";
+"index_name_north_america" = "Észak-Amerika";
 "product_desc_northamerica" = "Korlátlan térképletöltés: Észak-Amerika";
 "index_name_russia" = "Oroszország";
 "product_desc_russia" = "Korlátlan térképletöltés: Oroszország";
-"product_title_southamerica" = "Dél-Amerika";
+"index_name_south_america" = "Dél-Amerika";
 "product_desc_southamerica" = "Korlátlan térképletöltés: Dél-Amerika";
 "product_title_allworld" = "Az összes világtérkép";
 "product_desc_allworld" = "Az egész világ térképei";
@@ -310,7 +310,7 @@
 "gpx_select_track" = "Utazás kiválasztása";
 "gpx_curr_new_track" = "Jelenlegi nyomvonal";
 "enter_name" = "Adj meg egy nevet";
-"not_selected" = "Nincs kijelölve";
+"shared_string_not_selected" = "Nincs kijelölve";
 "shared_string_language" = "Nyelv";
 "you_searching" = "Ezt keresi:";
 "from_location" = "távol";
@@ -374,7 +374,7 @@
 "go_to_downloads" = "Ugrás a letöltésekhez";
 "turn_on_plugin" = "Bővítmény bekapcsolása";
 "all_world_popup_desc" = "Világ alaptérkép letöltése államnevek, határok és egyéb információk megtekintéséhez";
-"restore" = "Visszaállítás";
+"shared_string_restore" = "Visszaállítás";
 "restore_all_purchases" = "Minden vásárlás visszaállítása";
 "no_statistics" = "Nincsenek statisztikák";
 "no_internet_avail" = "Nem érhető el az Internet";
@@ -538,7 +538,7 @@
 "save_global_track_interval_descr" = "Válasszon naplózási időközt az általános útrögzítéshez (a térképen lévő GPX naplózó felületi elemen keresztül engedélyezve).";
 "rotate_map_to_bearing_descr" = "Térkép forgatásának meghatározása.";
 "coords_format" = "Koordinátaformátum";
-"driving_region_automatic" = "Automatikus";
+"shared_string_automatic" = "Automatikus";
 "unit_of_length" = "Hosszmértékegységek";
 "route_descr_destination" = "Célpont";
 "map_widget_plain_time" = "Jelenlegi idő";
@@ -788,7 +788,7 @@
 "map_widget_top_text" = "Utcanév";
 "add_parking_place" = "Parkolóhely hozzáadása";
 "shared_string_my_places" = "Saját helyek";
-"modify_edit_short" = "OSM-szerkesztés módosítása";
+"poi_context_menu_modify_osm_change" = "OSM-szerkesztés módosítása";
 "mapillary_get_title" = "Fényképes lefedettség javítása a Mapillaryvel";
 "region_nautical" = "Hajózási térképek";
 "keep_informing_descr" = "Navigációs utasítások újra bemondása rendszeres időközönként.";
@@ -806,21 +806,21 @@
 "osm_edits_advanced" = "Haladó";
 "osm_editing_lost_changes_descr" = "A nem mentett változtatások el fognak veszni. Folytatod?";
 "previous_route" = "Előző útvonal";
-"quick_action_no_overlay" = "Nincs fedőréteg";
+"no_overlay" = "Nincs fedőréteg";
 "shared_string_action_name" = "Műveletnév";
 "get_discount_second_part" = "utána %@";
 "tab_title_basic" = "Alap";
 "quick_action_add_underlay" = "Alátétréteg hozzáadása";
-"mapil_add_photos" = "Fényképek hozzáadása";
+"shared_string_add_photos" = "Fényképek hozzáadása";
 "change_map_style" = "Térképstílus módosítás";
 "toggle_nav" = "Navigáció indítása/megállítása";
 "fast_route_mode_descr" = "Leggyorsabbútvonal kiszámításának engedélyezése vagy letiltása az üzemanyag-takarékos útvonal kedvéért.";
 "contact_info" = "Elérhetőségek";
 "actions" = "Műveletek";
 "osm_note_created" = "Létrehozott OSM Jegyzet";
-"help_tech_articles" = "Technikai cikkek";
+"techical_articles_item" = "Technikai cikkek";
 "angular_units_descr" = "Azimut mértékegységének módosítása.";
-"osm_close_changeset" = "Módosításkészlet lezárása";
+"close_changeset" = "Módosításkészlet lezárása";
 "gpx_descent" = "Lejtő";
 "update_now" = "Frissítés most";
 "routing_settings_descr" = "Navigáció testreszabása";
@@ -830,9 +830,9 @@
 "purchase_unlim_title" = "Vásárlás - %@";
 "product_title_wikivoyage" = "Útikalauzok";
 "osm_edits_title" = "OSM szerkesztések";
-"mapil_pano_only" = "Csak 360°-os képek megjelenítése";
+"mapillary_menu_title_pano" = "Csak 360°-os képek megjelenítése";
 "osm_website" = "Weboldal";
-"home_pt" = "Otthon";
+"favorite_home_category" = "Otthon";
 "prefer_in_routing_descr" = "Autópályák előnyben részesítése.";
 "osm_editing_offline" = "Offline szerkesztés";
 "route_parameters" = "Útvonal paraméterei";
@@ -851,7 +851,7 @@
 "osn_add_dialog_title" = "Jegyzet létrehozása";
 "wake_on_voice_descr" = "Az eszköz képernyőjének bekapcsolása (ha ki van kapcsolva) egy kanyarodáshoz közeledve.";
 "shared_string_help" = "Súgó";
-"shared_string_show_more" = "Továbbiak megjelenítése";
+"show_more" = "Továbbiak megjelenítése";
 "quick_action_add_poi" = "Érdekes pont (POI) hozzáadása";
 "sett_ext_input" = "Külső beviteli eszköz";
 "key_hint_deselect" = "Kijelölés megszüntetése";
@@ -863,9 +863,9 @@
 "map_settings_map_magnifier" = "Térképnagyító";
 "quick_action_interim_dialog" = "Ideiglenes dialógusablak megjelenítése";
 "help_other_header" = "Egyéb";
-"quick_action_name_footer" = "A cím vagy a hely nevének használatához hagyja üresen.";
+"quick_action_fav_name_descr" = "A cím vagy a hely nevének használatához hagyja üresen.";
 "directions_more_options" = "Navigáció innen";
-"night_mode" = "Éjszakai mód";
+"quick_action_switch_night_mode" = "Éjszakai mód";
 "osm_working_days" = "Munkanapok";
 "vector_data" = "Vektoros OSM térkép";
 "day_mode" = "Nappali mód";
@@ -915,7 +915,7 @@
 "poi_clear" = "Törlés";
 "osmand_live_donations" = "Adományok";
 "help_faq_descr" = "Gyakran ismételt kérdések";
-"modify_poi_short" = "POI módosítása";
+"poi_context_menu_modify" = "POI módosítása";
 "osm_note_reopen" = "Újranyitás";
 "quick_action_map_overlay_title" = "Térképfedőrétegek";
 "help_map_viewing" = "Térkép böngészése";
@@ -1217,8 +1217,8 @@
 "app_mode_helicopter" = "Helikopter";
 "app_mode_offroad" = "Terep";
 "app_mode_scooter" = "Roller";
-"map_settings_appearance" = "Megjelenés";
-"open_wiki_online" = "Szócikk megnyitása online";
+"shared_string_appearance" = "Megjelenés";
+"open_in_browser_wiki" = "Szócikk megnyitása online";
 "region_antarctica" = "Antarktika";
 "app_mode_skiing" = "Síelés";
 "app_mode_shuttle_bus" = "Shuttle bus (ingajárat)";
@@ -1230,7 +1230,7 @@
 "app_mode_camper" = "Lakókocsi";
 "app_mode_personal_transporter" = "Personal transporter (pl. Segway)";
 "wiki_sheet_title" = "Hogyan lehet Wikipédia szócikkeket megnyitni\?";
-"all_group_points" = "A csoportösszes pontja";
+"context_menu_points_of_group" = "A csoportösszes pontja";
 "app_mode_wagon" = "Családi autó";
 "app_mode_utv" = "UTV (kis terepautó)";
 "shared_string_warning" = "Figyelmeztetés";
@@ -1344,7 +1344,7 @@
 "units_t" = "t";
 "position_icon_while_moving" = "Mozgás közben látható pozícióikon";
 "logging_min_speed" = "Legkisebb sebesség";
-"nav_type_direct_to" = "Légvonalban";
+"routing_profile_direct_to" = "Légvonalban";
 "shared_string_max" = "Max";
 "quick_action_showhide_mapillary_title" = "Mapillary megjelenítése/elrejtése";
 "ui_customization_descr" = "Menü elemek, Opciók";
@@ -1358,12 +1358,12 @@
 "mapillary_item" = "OsmAnd + Mapillary";
 "import_complete_description" = "Összes adat importálva innen: %@, az alábbi gombokkal megnyithatja az alkalmazás megfelelő részét az adatok kezeléséhez.";
 "route_between_points" = "Útvonal pontok között";
-"help_osmand_live" = "Előfizetés - OsmAnd Live";
+"subscription_osmandlive_item" = "Előfizetés - OsmAnd Live";
 "osm_note_close" = "OSM-jegyzet lezárása";
 "light_theme" = "Világos";
 "position_icon_at_rest" = "Pozíció ikon álló helyzetben";
 "save_new_track" = "Mentés új nyomvonalként";
-"help_purchases" = "OsmAnd vásárlások";
+"osmand_purchases_item" = "OsmAnd vásárlások";
 "quick_action_mapillary_hide" = "Mapillary elrejtése";
 "shared_string_two" = "Kettő";
 "app_profiles" = "Alkalmazásprofilok";
@@ -1376,7 +1376,7 @@
 "default_speed_setting_title" = "Alapértelmezett sebesség";
 "routing_profile_ski" = "Sí";
 "shared_string_legend" = "Jelmagyarázat";
-"import_profile_select_descr" = "Válassza ki az importálandó adatot.";
+"select_data_to_import" = "Válassza ki az importálandó adatot.";
 "configure_screen_descr" = "A profil képernyő-beállításainak kijelölése";
 "create_profile_descr" = "A létrehozandó egyéni profil az alkalmazás egyik alapprofilján fog alapulni, ez határozza meg az alapvető beállításokat, mint például a widgetek láthatóságát vagy a sebesség és távolság mértékegységeit. Ezek az alapprofilok, néhány példával az egyéni profilokra, amelyekre kiterjeszthetők:";
 "tones" = "tonna";
@@ -1429,7 +1429,7 @@
 "vk" = "VKontakte";
 "group_name" = "Csoport megnevezése";
 "save_current_track_descr" = "Jelenlegi nyomvonal mentése GPX fájlba most.";
-"icon" = "Ikon";
+"shared_string_icon" = "Ikon";
 "icon_group_special" = "Különleges";
 "amenity_type_emergency" = "Vészhelyzet";
 "extra_maps" = "Egyéb térképek";
@@ -1440,7 +1440,7 @@
 "transport" = "Tömegközlekedés";
 "coordinates_widget" = "Koordináta-widget";
 "shared_string_others" = "Egyéb";
-"address_search" = "Címkeresés";
+"address_search_desc" = "Címkeresés";
 "circle" = "Kör";
 "segnet_num" = "%d szakasz";
 "replace_favorite_confirmation" = "Lecseréled a(z) %@ Kedvencet\?";
@@ -1464,7 +1464,7 @@
 "new_plugin_added" = "Új bővítmény hozzáadva";
 "fav_point_dublicate" = "Duplikált Kedvenc-név megadva";
 "square" = "Négyzet";
-"search_preogress" = "Keresés…";
+"searching" = "Keresés…";
 "rearrange_categories" = "Kategóriák átrendezése";
 "symbols" = "Jelképek";
 "custom_osmand_plugin_name" = "Egyéni OsmAnd bővítmény";
@@ -1633,7 +1633,7 @@
 "rendering_attr_showFitnessTrails_description" = "Erdei tornapályák megjelenítése";
 "lang_ro" = "román";
 "icon_group_industrial" = "Ipar";
-"weather_wind_unit_km_per_hour" = "km/h";
+"weather_wind_kilimeters_per_hour" = "km/h";
 "horseback_riding" = "Lovaglás";
 "route_line_use_map_style_width" = "A térképstílus (%@) alapértelmezett szélességének használata.";
 "lang_war" = "waray";
@@ -1725,7 +1725,7 @@
 "backup_error_no_valid_subscription" = "Jelenleg nincsérvényes előfizetése";
 "backup_error_token_is_not_valid_or_expired" = "Érvénytelen vagy lejárt ellenőrző kód";
 "lang_lv" = "lett";
-"rendering_attr_monorailRoutes_name" = "Egysínűvasút-vonalak";
+"rendering_attr_showMonorailRoutes_name" = "Egysínűvasút-vonalak";
 "lang_ca" = "katalán";
 "lang_sco" = "skót";
 "cloud_description" = "Soha ne veszítse el az adatait. Készítsen egyszerűen biztonsági mentést az összes adatáról, hogy szükség esetén könnyen visszaállíthassa azokat.";
@@ -1760,7 +1760,7 @@
 "routing_attr_prefer_horse_routes_description" = "Lovasútvonalak előnyben részesítése";
 "lang_gl" = "galiciai";
 "grey_color_undefined" = "Az adatok nélküli részek szürkék.";
-"cloud_make_backup_descr" = "Ezen az eszközön sok változás van, kérjük, készítsen biztonsági mentést ezekről az adatokról, hogy el ne vesszenek.";
+"make_backup_descr" = "Ezen az eszközön sok változás van, kérjük, készítsen biztonsági mentést ezekről az adatokról, hogy el ne vesszenek.";
 "gpx_split_interval" = "Felosztási intervallum";
 "lang_mn" = "mongol";
 "lang_bpy" = "bisnuprija manipuri";
@@ -1797,7 +1797,7 @@
 "lang_os" = "oszét";
 "distance_moving" = "Korrigált távolság";
 "routing_attr_allow_gate_name" = "Kapuhasználat engedélyezése";
-"shared_string_any" = "Bármely";
+"any_poi" = "Bármely";
 "lang_ja" = "japán";
 "lang_it" = "olasz";
 "lang_gn_py" = "guarani";
@@ -1809,7 +1809,7 @@
 "start_point" = "Start";
 "map_widget_speed" = "Sebesség";
 "routing_attr_allow_private_for_truck_name" = "Behajtás magánterületre (tehergépjármű)";
-"product_title_development" = "OsmAnd fejlesztés";
+"debugging_and_development" = "OsmAnd fejlesztés";
 "subscriptions" = "Előfizetések";
 "manage_subscription" = "Előfizetés kezelése";
 "simulation_preview_mode_desc" = "A szimuláció sebessége az egyenes szakaszokon maximális lesz és csak a kereszteződéseknél lassul le.";
@@ -1837,10 +1837,10 @@
 "transport_hazmat_yes_desc" = "Ki kell választania a megfelelő kategóriát.";
 "not_available_with" = "Ezzel együtt nem áll rendelkezésre: %@";
 "annual_subscription" = "Éves előfizetés";
-"product_desc_pro" = "Azösszes funkció beszerzése";
-"shared_string_stop" = "Leállítás";
+"osmand_pro_tagline" = "Azösszes funkció beszerzése";
+"shared_string_control_stop" = "Leállítás";
 "shared_string_start" = "Indítás";
-"product_desc_plus" = "Bővített funkciók beszerzése";
+"osmand_maps_plus_tagline" = "Bővített funkciók beszerzése";
 "purchases_feature_desc_wikivoyage" = "Fedezze fel a Wikivoyageútikönyvet offline módon. A cikkek országok és régiók szerint vannak felosztva, és minden nyelven elérhetők.";
 "copy_address" = "Cím másolása";
 "new_device_account" = "Új készülék / új fiók";
@@ -1871,7 +1871,7 @@
 "routing_attr_allow_private_for_truck_description" = "Tehergépjárművek számára a magánterületre való behajtás engedélyezése.";
 "routing_attr_hazmat_category_no_restrictions_name" = "„A” (nincs korlátozás)";
 "on_hold" = "Várakoztatva";
-"shared_string_data" = "Adat";
+"data_settings" = "Adat";
 "compass_visible_in_rotated_mode" = "Látható, ha a térkép el van forgatva";
 "compass_always_hidden" = "Mindig el van rejtve";
 "shared_string_delete_all" = "Összes törlése";
@@ -1904,7 +1904,7 @@
 "add_group" = "Csoport hozzáadása";
 "name_and_descr" = "Név és leírás";
 "map_settings_hide_polygons" = "Poligonok elrejtése";
-"product_title_weather" = "Időjárás";
+"shared_string_weather" = "Időjárás";
 "map_settings_line_density_slowdown_warning" = "A nagy vonalsűrűség lassíthatja a térkép megjelenítését";
 "map_settings_weather_wind" = "Szél";
 "backup_and_restore" = "Biztonsági másolat és visszaállítás";

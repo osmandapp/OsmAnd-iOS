@@ -129,7 +129,7 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
     
     if (_data.count > kMaxItemsCount - 1)
     {
-        OAButton *showMore = [self createButton:OALocalizedString(@"shared_string_show_more") tag:kMaxItemsCount];
+        OAButton *showMore = [self createButton:OALocalizedString(@"show_more") tag:kMaxItemsCount];
         [self addSubview:showMore];
         [buttons addObject:showMore];
         [showMore addTarget:self action:@selector(onShowMorePressed:) forControlEvents:UIControlEventTouchDown];

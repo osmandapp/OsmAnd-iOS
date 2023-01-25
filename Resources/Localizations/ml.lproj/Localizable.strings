@@ -69,7 +69,7 @@
 
 "show_poi_over_map" = "Show POI";
 "shared_string_search" = "തെരച്ചില്‍";
-"address_search" = "വിലാസം തെരയുക";
+"address_search_desc" = "വിലാസം തെരയുക";
 "search_radius" = "Search radius";
 "targets" = "ഉദ്ദിഷ്ടസ്ഥലങ്ങള്‍";
 "search_radius_proximity" = "\"അകത്ത് \"";
@@ -127,7 +127,7 @@
 "rotate_map_none_opt" = "Do not rotate (north is up)";
 "driving_region_descr" = "Select the driving region: US, Europe, UK, Asia and others.";
 "driving_region" = "ഡ്രൈ‌വിങ്ങ് റീജിയണ്‍(രാജ്യം)";
-"driving_region_automatic" = "തനിയെയുള്ള";
+"shared_string_automatic" = "തനിയെയുള്ള";
 "routing_attr_length_name" = "Length limit";
 "default_speed_setting_title" = "Default speed";
 "shared_string_min_speed" = "Min. speed";
@@ -251,7 +251,7 @@
 "nav_type_descr" = "Select how to calculate a route for this profile";
 "nav_type_osmand" = "OsmAnd (offline routing)";
 "routing_profile_straightline" = "Straight line";
-"nav_type_direct_to" = "Direct-to-point";
+"routing_profile_direct_to" = "Direct-to-point";
 "nav_type_brouter" = "BRouter";
 "routing_profile_ski" = "Ski";
 "routing_profile_geocoding" = "Geocoding";
@@ -541,7 +541,7 @@
 "fav_colors" = "Colors";
 "fav_name" = "പേര‍്";
 "fav_group" = "Group";
-"groups" = "ഗ്രൂപ്പുകൾ";
+"shared_string_groups" = "ഗ്രൂപ്പുകൾ";
 "favorite" = "താല്‍പര്യമുള്ളവ";
 "poi_overlay" = "POI Overlay";
 "poi_dialog_poi_type" = "POIതരം";
@@ -562,7 +562,7 @@
 "fav_enter_group_name" = "Enter group name";
 "fav_exists" = "Favorite with name \"%@\" already exists";
 "fav_ignore" = "Ignore";
-"fav_rename" = "പേരു് മാറ്റുക";
+"shared_string_rename" = "പേരു് മാറ്റുക";
 "fav_replace" = "പകരംവെക്കുക";
 "replace_favorite_confirmation" = "Are you sure you want to replace Favorite %@?";
 "fav_points_not_exist" = "\"ഇഷ്ടമുള്ള ബിന്ദുക്കളൊന്നും നിലവിലില്ല \"";
@@ -575,7 +575,7 @@
 "add_favorite" = "Add favorite";
 "name_and_descr" = "Name & description";
 "select_group" = "Select group";
-"icon" = "Icon";
+"shared_string_icon" = "Icon";
 "shared_string_shape" = "Shape";
 "fav_point_dublicate" = "ഇഷ്ടമുള്ളവയുടെ പേര് ഓന്നിലധികം പകര്‍പ്പിലുണ്ട്";
 "fav_point_dublicate_message" = "Favorite renamed to \'%@\' to avoid duplication.";
@@ -605,7 +605,7 @@
 "visible" = "ദൃശ്യമായ";
 
 // GPX
-"gpx_point" = "ബിന്ദൂ(പോയിന്റ്)";
+"plugin_distance_point" = "ബിന്ദൂ(പോയിന്റ്)";
 "shared_string_waypoint" = "പാതബിന്ദു(വേപോയിന്റ്)";
 "gpx_waypoints" = "വഴിത്തിരിവുകള്‍";
 "gpx_points" = "Point(s)";
@@ -632,7 +632,7 @@
 "gpx_export_failed" = "Could not save created route";
 
 "gpx_remove" = "Remove track?";
-"gpx_stat" = "Statistics";
+"shared_string_statistics" = "Statistics";
 "gpx_route" = "മാര്‍ഗം";
 "gpx_analyze" = "Analyze";
 "gpx_route_time" = "Route time";
@@ -695,20 +695,20 @@
 
 "shared_string_map" = "ഭൂപടം";
 "layer_amenity_label" = "ബിന്ദുവിന്റെ പേരുചീട്ട്";
-"map_settings_show" = "ഭൂപടത്തില്‍ കാണിക്കുക";
+"shared_string_show_on_map" = "ഭൂപടത്തില്‍ കാണിക്കുക";
 "map_settings_type" = "Map type";
 "map_mode" = "മാപ് രീതി";
 "map_settings_map_magnifier" = "മാപ് മാഗ്നിഫയര്‍";
 "text_size" = "അക്ഷരവലിപ്പം";
 "daynight_mode_night" = "\"രാത്രി \"";
-"map_settings_style" = "ഭൂപടത്തിന്റെ ശൈലി";
+"map_widget_renderer" = "ഭൂപടത്തിന്റെ ശൈലി";
 "map_settings_overunder" = "Overlay / Underlay";
 "map_settings_over" = "Overlay";
 "map_settings_under" = "Underlay";
 "map_settings_install_maps" = "Choose maps to install or update";
 "map_settings_install_more" = "Install more...";
 "map_settings_offline" = "Styles for offline maps";
-"map_settings_online" = "ഓണ്‍ലൈന്‍ ഭൂപടങ്ങള്‍";
+"shared_string_online_maps" = "ഓണ്‍ലൈന്‍ ഭൂപടങ്ങള്‍";
 "shared_string_transparency" = "Transparency";
 "map_transparency" = "അടിസ്ഥാന ഭൂപടത്തിന്റെ സുതാര്യത";
 "map_settings_avail_lay" = "Available layers";
@@ -732,7 +732,7 @@
 "map_settings_color_scheme" = "നിറങ്ങളുടെ സ്കീം";
 "map_settings_line_density" = "Line density";
 "map_settings_contour_zoom_level_descr" = "Select zoom level, from wich contour lines will be displayed";
-"map_settings_appearance" = "ദൃശ്യരൂപം";
+"shared_string_appearance" = "ദൃശ്യരൂപം";
 "map_settings_line_density_slowdown_warning" = "High line density may slowdown map rendering";
 "map_settings_available_srtm_maps_descr" = "Additional maps are needed to view Hillshade on the map";
 
@@ -767,7 +767,7 @@
 "sett_deg360" = "Degrees 360";
 "sett_deg_min" = "Degrees and minutes";
 "sett_arr" = "Map arrows";
-"sett_arr_loc" = "സ്ഥാനം";
+"shared_string_location" = "സ്ഥാനം";
 "sett_arr_map" = "Map center";
 "short_location_on_map" = "Lat %@ Lon %@";
 "navigate_point_format_D" = "DDD.DDDDD";
@@ -934,7 +934,7 @@
 "export_profile" = "Export";
 "shared_string_import" = "ഇംപോര്‍ട്ട് ചെയ്യുക";
 "create_profile" = "Create profile";
-"import_profile_select_descr" = "Select the data to be imported.";
+"select_data_to_import" = "Select the data to be imported.";
 "export_profile_select_descr" = "Select the data to be exported.";
 "selected_of" = "Selected - %d/%d";
 "nav_type_hint" = "Navigation type";
@@ -1037,7 +1037,7 @@
 "proceed_q" = "Proceed?";
 
 "download" = "\"ഡൗണ്‍ലോഡ്\"";
-"nothanks" = "വേണ്ട, നന്ദി";
+"shared_string_no_thanks" = "വേണ്ട, നന്ദി";
 "download_now" = "Download map now";
 "prch_failed" = "Purchase of \"%@\" has failed";
 "prch_items_failed" = "item(s) were not restored. Please try again.";
@@ -1214,7 +1214,7 @@
 "shared_string_menu" = "Menu";
 "shared_string_my_places" = "\"എന്റെ സ്ഥലങ്ങള്‍ \"";
 "menu_my_trips" = "My Tracks";
-"menu_feedback" = "പ്രതികരണം";
+"feedback" = "പ്രതികരണം";
 "shared_string_help" = "സഹായം";
 
 // OSM Editing actions
@@ -1270,7 +1270,7 @@
 "osm_confirm_bulk_delete" = "Delete %d edits?";
 "osm_confirm_delete" = "Delete POI?";
 "osm_confirm_upload" = "Upload modifications?";
-"osm_close_changeset" = "\"ചേഞ്ച്സെറ്റ്  അടയ്ക്കുക\"";
+"close_changeset" = "\"ചേഞ്ച്സെറ്റ്  അടയ്ക്കുക\"";
 "osm_tag" = "Tag";
 "osm_value" = "Value";
 "osm_note_upload_info" = "You can upload the note anonymously or by using your OpenStreetMap profile.";
@@ -1305,7 +1305,7 @@
 "mapil_no_inet_descr" = "You need Internet connection to view Mapillary photos.";
 "mapil_images_nearby" = "Images nearby";
 "mapil_no_images" = "We do not have photos for this location.";
-"mapil_add_photos" = "\"ഫോട്ടോകള്‍ ചേര്‍ക്കുക \"";
+"shared_string_add_photos" = "\"ഫോട്ടോകള്‍ ചേര്‍ക്കുക \"";
 "mapillary_get_title" = "മാപ്പില്ലാരിയിലെ ഫോട്ടോ കവറേജ് മെച്ചപ്പെടുത്തുക";
 "mapillary_get_descr" = "Get Mapillary to add photos to this location";
 "mapil_contribute" = "Contribute your own street level imagery";
@@ -1314,13 +1314,13 @@
 "mapillary_turn_on_widget_descr" = "This allows you to quickly contribute to Mapillary";
 "tile_cache" = "ടൈൽ കാഷെ";
 "shared_string_reload" = "വീണ്ടും ലോഡുചെയ്യുക";
-"shared_string_show_more" = "കൂടുതൽ കാണിക്കുക";
+"show_more" = "കൂടുതൽ കാണിക്കുക";
 "mapil_reload_cache" = "Reload tiles to see the newest data";
 "filter_current_poiButton" = "ഫില്‍റ്റര്‍";
 "mapil_filter_user_descr" = "Filter images by user";
 "mapil_filter_date" = "Filter images by date";
 "mapil_usernames" = "Usernames";
-"mapil_pano_only" = "360° ഇമേജുകൾ മാത്രം പ്രദർശിപ്പിക്കുക";
+"mapillary_menu_title_pano" = "360° ഇമേജുകൾ മാത്രം പ്രദർശിപ്പിക്കുക";
 "mapil_select_user" = "Select user";
 
 // Coordinate widget
@@ -1328,7 +1328,7 @@
 "searching_gps" = "Searching GPS";
 "copied_to_clipboard" = "\"ക്ലിപ്പ്ബോര്‍ഡിലേക്കു്  പകര്‍ത്തിയിരിക്കുന്നു\"";
 // Quick action
-"quick_action_no_overlay" = "ഓവർലേ ഇല്ല";
+"no_overlay" = "ഓവർലേ ഇല്ല";
 "quick_action_add_overlay" = "ഓവർലേ(മേല്‍പ്പാളി) ചേർക്കുക";
 "quick_action_no_underlay" = "അണ്ടര്‍ലേ ഇല്ല";
 "quick_action_add_underlay" = "അണ്ടര്‍ലേയ്സ്(കീഴ്പാളികള്‍) ചേര്‍ക്കുക";
@@ -1374,7 +1374,7 @@
 "add_intermediate" = "ഇന്റർമീഡിയറ്റ് പോയിന്റ് ചേർക്കുക";
 "add_home" = "വീട് ചേര്‍ക്കുക";
 "add_work" = "ഓഫീസ് ചേർക്കുക";
-"home_pt" = "പൂമുഖം";
+"favorite_home_category" = "പൂമുഖം";
 "work_pt" = "ഓഫീസ്";
 "map_widget_parking" = "Parking spot";
 "add_first_inermediate" = "\"ഒന്നാമത്തെ ഇടലക്ഷ്യസ്ഥാനം ചേര്‍ക്കുക \"";
@@ -1386,7 +1386,7 @@
 "pause_nav" = "Pause navigation";
 "toggle_nav" = "\"വഴികാട്ടി ആരംഭിക്കുക/നിര്‍ത്തുക \"";
 "toggle_day_night" = "Switch Day/Night mode";
-"night_mode" = "രാത്രി മോഡ്";
+"quick_action_switch_night_mode" = "രാത്രി മോഡ്";
 "day_mode" = "പകല്‍ മോഡ്";
 "mute_voice" = "Mute voice";
 "unmute_voice" = "Unmute voice";
@@ -1406,7 +1406,7 @@
 "quick_action_interim_dialog" = "ഒരു ഇടക്കാല ഡയലോഗ് കാണിക്കുക";
 "quick_action_dialog_descr" = "Turn on to show dialog before applying the action";
 "quick_action_template_name" = "Template name";
-"quick_action_name_footer" = "വിലാസം അല്ലെങ്കിൽ സ്ഥല നാമം ഉപയോഗിക്കാൻ ശൂന്യമായി വിടുക.";
+"quick_action_fav_name_descr" = "വിലാസം അല്ലെങ്കിൽ സ്ഥല നാമം ഉപയോഗിക്കാൻ ശൂന്യമായി വിടുക.";
 "quick_action_select_group" = "Select the group to save the favorite in.";
 "quick_action_add_category" = "ഒരു വിഭാഗം ചേർക്കുക";
 "quick_action_add_category_descr" = "You can select multiple POI categories.";
@@ -1478,9 +1478,9 @@
 "edit_waypoint_short" = "Edit waypoint";
 "replace_waypoint_confirmation" = "Are you sure you want to replace Waypoint %@?";
 "no_waypoints_found" = "\"വഴിത്തിരിവുകളൊന്നും കണ്ടെത്താനായില്ല \"";
-"modify_poi_short" = "POIപരിഷ്ക്കരിക്കുക";
+"poi_context_menu_modify" = "POIപരിഷ്ക്കരിക്കുക";
 "create_poi_short" = "\"പി ഓ ഐക്ക്  രുപം നല്‍കുക\"";
-"modify_edit_short" = "\"ഓഎസ്എം  മാറ്റ വരുത്തുക \"";
+"poi_context_menu_modify_osm_change" = "\"ഓഎസ്എം  മാറ്റ വരുത്തുക \"";
 "context_menu_item_open_note" = "ഓഎസ്എം കുറിപ്പ് തുറക്കുക";
 "edit_osm_note" = "Edit OSM Note";
 "osm_alert_title" = "ഉറപ്പിക്കുക (കമ്മിറ്റ്)";
@@ -1525,8 +1525,8 @@
 "help_search" = "Map search";
 "help_trip_planning" = "ഒരു യാത്ര ആസൂത്രണം ചെയ്യുക";
 "navigation_profiles_item" = "Navigation profiles";
-"help_purchases" = "OsmAnd purchases";
-"help_osmand_live" = "Subscription - OsmAnd Live";
+"osmand_purchases_item" = "OsmAnd purchases";
+"subscription_osmandlive_item" = "Subscription - OsmAnd Live";
 "help_travel" = "Travel (Wikipedia & Wikivoyage)";
 "mapillary_item" = "OsmAnd + Mapillary";
 "map_legend" = "മാപ്പ് ലെജൻഡ്";
@@ -1534,7 +1534,7 @@
 "help_other_header" = "മറ്റുളളവ";
 "help_what_is_new" = "What\'s new";
 "help_install_and_troubleshoot" = "ഇന്‍സ്റ്റലേഷനും പ്രശ്നപരിഹാരവും";
-"help_tech_articles" = "സാങ്കേതിക ലേഖനങ്ങള്‍";
+"techical_articles_item" = "സാങ്കേതിക ലേഖനങ്ങള്‍";
 "help_versions" = "പതിപ്പുകള്‍";
 "help_contact_us" = "Contact us";
 "help_about" = "വിവരണം";
@@ -1643,13 +1643,13 @@
 "product_title_europe" = "യൂറോപ്പ്";
 "product_desc_europe" = "Unlimited map downloads for Europe";
 "product_desc_europe_short" = "Europe region maps";
-"product_title_northamerica" = "വടക്കേ അമേരിക്ക";
+"index_name_north_america" = "വടക്കേ അമേരിക്ക";
 "product_desc_northamerica" = "Unlimited map downloads for North America";
 "product_desc_northamerica_short" = "North America region maps";
 "index_name_russia" = "റഷ്യ";
 "product_desc_russia" = "Unlimited map downloads for Russia";
 "product_desc_russia_short" = "Maps of Russia regions";
-"product_title_southamerica" = "തെക്കെ അമേരിക്കാ";
+"index_name_south_america" = "തെക്കെ അമേരിക്കാ";
 "product_desc_southamerica" = "Unlimited map downloads for South America";
 "product_desc_southamerica_short" = "South America region maps";
 "product_title_allworld" = "All World Maps";
@@ -1687,7 +1687,7 @@
 "add_as" = "Add as";
 "make_call" = "Make a call";
 
-"all_group_points" = "ഗ്രൂപ്പിലെ എല്ലാ പോയിന്റുകളും";
+"context_menu_points_of_group" = "ഗ്രൂപ്പിലെ എല്ലാ പോയിന്റുകളും";
 "enter_description" = "Enter description";
 "description" = "വിവരണം";
 "read_full_description" = "Read full description";
@@ -1721,7 +1721,7 @@
 "edit_track" = "Edit track";
 "duplicate_track" = "Duplicate track";
 "enter_name" = "പേര് തരുക";
-"not_selected" = "\"തിരഞ്ഞെടുത്തില്ല \"";
+"shared_string_not_selected" = "\"തിരഞ്ഞെടുത്തില്ല \"";
 "shared_string_language" = "Language";
 
 "you_searching" = "You are searching";
@@ -1808,7 +1808,7 @@
 "turn_on_plugin" = "Turn on plugin";
 
 "all_world_popup_desc" = "Download World base map to see state names, borders and other information";
-"restore" = "പുനഃസ്ഥാപിക്കുക";
+"shared_string_restore" = "പുനഃസ്ഥാപിക്കുക";
 "restore_all_purchases" = "Restore all purchases";
 
 "no_statistics" = "No statistics";
@@ -1865,7 +1865,7 @@
 "no_inet_connection_desc_map" = "ആവശ്യമുള്ള മാപ്പുകള്‍ ഡൗണ്‍ലോഡ് ചെയ്യാന്‍.";
 "try_again" = "\"ദയവായി വീണ്ടും ശ്രമിയ്ക്കുക\"";
 
-"search_preogress" = "തെരഞ്ഞുകൊണ്ടിരിക്കുന്നു…";
+"searching" = "തെരഞ്ഞുകൊണ്ടിരിക്കുന്നു…";
 "search_location" = "Searching location…";
 "search_map" = "Searching map…";
 "search_another_country" = "\"വേറോരു പ്രദേശം(region) തെരഞ്ഞെടുക്കുക \"";
@@ -1879,7 +1879,7 @@
 
 "wiki_sheet_title" = "വിക്കിപ്പീഡിയ ലേഖനം എങ്ങനെ തുറക്കാം\?";
 "download_wiki_data" = "Download Wikipedia data for %@";
-"open_wiki_online" = "\"പൂര്‍ണ്ണ ലേഖനം ഓണ്‍ലൈനില്‍ വായിക്കുക \"";
+"open_in_browser_wiki" = "\"പൂര്‍ണ്ണ ലേഖനം ഓണ്‍ലൈനില്‍ വായിക്കുക \"";
 "explore_wikipedia_offline" = "Explore Wikipedia offline.";
 "online_webpage_warning" = "ഈ പേ ജ് ഓണ്‍ലൈനിലെ ഉള്ളൂ. ബ്രൗവ്സറില്‍ തുറക്കട്ടേ\?";
 
@@ -2405,18 +2405,18 @@
 • Added ability to download maps by selecting the desired region or country on the map, as well as adding a dialog box with the suggestion to load a missing map of a displayed region\n
 • New appearance the map control buttons and the ability to change map zoom by double-tapping and swiping.\n
 • Routes visibility settings are moved higher in the \"Configure map\" screen and are re-organized for better flexibility\n";
-"weather_wind_unit_km_per_hour" = "കിലോമീറ്റര്‍/മണിക്കൂര്‍";
+"weather_wind_kilimeters_per_hour" = "കിലോമീറ്റര്‍/മണിക്കൂര്‍";
 "altitude" = "ഉയരം";
 "points_delete_multiple" = "നിങ്ങൾ %d പോയിന്റ് (കൾ) ഇല്ലാതാക്കാൻ പോകുന്നു. ഉറപ്പാണോ\?";
-"shared_string_any" = "ഏതെങ്കിലും";
+"any_poi" = "ഏതെങ്കിലും";
 "shared_string_capacity" = "അളവ്(വ്യാപ്തി)";
-"shared_string_stop" = "നിര്‍ത്തുക";
+"shared_string_control_stop" = "നിര്‍ത്തുക";
 "osm_live_banner_desc" = "പരിധിയില്ലാത്ത ഭൂപട ഡൗണ്‍ലോഡുകളും മണിക്കൂര്‍, ദിന, വാര അപ്ഡേറ്റുകളും നേടു.";
 "toast_empty_name_error" = "പേരില്ലാത്ത സ്ഥലം";
 "share_geo" = "ഭൗമമായ(geo):";
 "private_access_routing_req" = "നിങ്ങളുടെ ലക്ഷ്യസ്ഥാനം പൊതുസ്ഥലമല്ല. ഈ യാത്രയില്‍ സ്വകാര്യ വഴികളില്‍ പ്രവേശിക്കാമോ\?";
 "units_cubic_m" = "m³";
-"product_title_development" = "ഓഎസ്എം ആന്റ് വികസനം";
+"debugging_and_development" = "ഓഎസ്എം ആന്റ് വികസനം";
 "shared_string_start" = "തുടക്കം";
 "altitude_ascent" = "കയറ്റം";
 "restore_purchases" = "വാങ്ങലുകൾ പുനഃസ്ഥാപിക്കുക";
@@ -2424,6 +2424,6 @@
 "altitude_descent" = "ഇറക്കം";
 "subscriptions" = "സബ്സ്ക്രിപ്ഷനുകള്‍";
 "shared_string_undefined" = "നിഷ്കര്‍ഷിക്കപെടാത്തത്";
-"shared_string_data" = "വിവരങ്ങള്‍";
+"data_settings" = "വിവരങ്ങള്‍";
 "shared_string_delete_all" = "എല്ലാം നീക്കം ചെയ്യുക";
 "shared_string_paused" = "താല്‍ക്കാലികമായി നിര്‍ത്തിയിരിക്കുന്നു";

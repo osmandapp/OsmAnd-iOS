@@ -49,7 +49,7 @@
         _settings = [OAAppSettings sharedManager];
         _styleSettings = [OAMapStyleSettings sharedInstance];
         
-        title = OALocalizedString(@"product_title_weather");
+        title = OALocalizedString(@"shared_string_weather");
         settingsScreen = EMapSettingsScreenWeather;
         
         vwController = viewController;

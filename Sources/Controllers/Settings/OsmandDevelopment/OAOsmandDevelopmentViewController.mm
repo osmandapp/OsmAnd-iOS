@@ -69,7 +69,7 @@ NSString *const kSimulateLocationKey = @"kSimulateLocationKey";
 
 - (void) applyLocalization
 {
-    _titleView.text = OALocalizedString(@"product_title_development");
+    _titleView.text = OALocalizedString(@"debugging_and_development");
     _headerDescription = OALocalizedString(@"osm_editing_settings_descr");
 }
 

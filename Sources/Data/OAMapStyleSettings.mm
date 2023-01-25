@@ -276,7 +276,7 @@
     else if ([name isEqualToString:@"showFunicularRoutes"])
         return OALocalizedString(@"rendering_attr_funicularRoutes_name");
     else if ([name isEqualToString:@"showMonorailRoutes"])
-        return OALocalizedString(@"rendering_attr_monorailRoutes_name");
+        return OALocalizedString(@"rendering_attr_showMonorailRoutes_name");
     else
         return nil;
 }

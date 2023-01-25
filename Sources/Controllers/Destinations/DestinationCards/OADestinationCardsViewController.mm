@@ -184,7 +184,7 @@
     CGFloat bottomMargin = [OAUtilities getBottomMargin];
     _toolBarHeight.constant += bottomMargin;
     _historyViewButton.title = OALocalizedString(@"history");
-    _appearanceViewButton.title = OALocalizedString(@"map_settings_appearance");
+    _appearanceViewButton.title = OALocalizedString(@"shared_string_appearance");
 }
 
 -(void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration

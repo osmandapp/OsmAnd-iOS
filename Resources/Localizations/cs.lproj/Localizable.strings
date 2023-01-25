@@ -67,7 +67,7 @@
 "rotate_map_none_opt" = "Neotáčet (sever vždy nahoře)";
 "driving_region_descr" = "Vyberte dopravní oblast: USA, Evropa, Spojené království, Asie a další.";
 "driving_region" = "Dopravní oblast";
-"driving_region_automatic" = "Automaticky";
+"shared_string_automatic" = "Automaticky";
 "map_widget_magnetic_bearing" = "Magnetické směrování";
 "map_widget_bearing" = "Relativní směrování";
 "map_widget_transparent" = "Průhledné nástroje";
@@ -304,7 +304,7 @@
 "fav_colors" = "Barvy";
 "fav_name" = "Jméno";
 "fav_group" = "Skupina";
-"groups" = "Skupiny";
+"shared_string_groups" = "Skupiny";
 "favorite" = "Oblíbené";
 "my_favorites" = "Moje oblíbené";
 "fav_no_group" = "Žádná skupina";
@@ -318,7 +318,7 @@
 "fav_enter_group_name" = "Zadejte název skupiny";
 "fav_exists" = "Oblíbené místo s názvem \"%@\" již existuje";
 "fav_ignore" = "Ignore";
-"fav_rename" = "Přejmenovat";
+"shared_string_rename" = "Přejmenovat";
 "fav_replace" = "Nahradit";
 "fav_rename_q" = "Přejmenovat oblíbené místo";
 "fav_enter_new_name" = "Zadejte prosím nový název oblíbeného místa";
@@ -332,7 +332,7 @@
 "favorites" = "Oblíbené";
 "shared_string_gpx_tracks" = "Stopy";
 // GPX
-"gpx_point" = "bod";
+"plugin_distance_point" = "bod";
 "shared_string_waypoint" = "Bod na trase";
 "gpx_waypoints" = "Body na trase";
 "gpx_points" = "Point(s)";
@@ -348,7 +348,7 @@
 "gpx_import_desc" = "Pro importování souborů GPX (běžný datový formát pro GPS) z Dropboxu, emailu nebo jiného zdroje použijte funkci \"Kopírovat do OsmAnd map\"";
 "gpx_no_tracks" = "Žádné stopy zde nejsou";
 "gpx_remove" = "Odstranit stopu?";
-"gpx_stat" = "Statistiky";
+"shared_string_statistics" = "Statistiky";
 "gpx_route" = "Cesta";
 "gpx_route_time" = "Čas trasy";
 "gpx_uphldownhl" = "Do kopce/z kopce";
@@ -381,17 +381,17 @@
 "rendering_value_browse_map_name" = "Standardní";
 "m_style_car" = "Řízení vozidla";
 "shared_string_map" = "Mapa";
-"map_settings_show" = "Zobrazit na mapě";
+"shared_string_show_on_map" = "Zobrazit na mapě";
 "map_settings_type" = "Typ mapy";
 "map_mode" = "Režim mapy";
 "daynight_mode_night" = "Noc";
-"map_settings_style" = "Styl mapy";
+"map_widget_renderer" = "Styl mapy";
 "map_settings_overunder" = "Překryvná / podkladová";
 "map_settings_over" = "Překryvná";
 "map_settings_under" = "Podkladová";
 "shared_string_none" = "Žádná";
 "map_settings_offline" = "Styly pro offline mapy";
-"map_settings_online" = "On-line mapy";
+"shared_string_online_maps" = "On-line mapy";
 "shared_string_transparency" = "Průhlednost";
 "map_settings_avail_lay" = "Dostupné vrstvy";
 // Intro
@@ -413,7 +413,7 @@
 "sett_deg" = "Degrees";
 "sett_deg_min" = "Stupně a minuty";
 "sett_arr" = "Mapové šipky";
-"sett_arr_loc" = "Poloha";
+"shared_string_location" = "Poloha";
 "sett_arr_map" = "Střed mapy";
 "sett_lang_trans" = "transliterováno";
 "sett_pref_lang" = "Preferovaný jazyk";
@@ -430,7 +430,7 @@
 "prch_nau_q3" = "Instalaci lze provést později přes Mapy a zdroje.";
 "proceed_q" = "Pokračovat?";
 "download" = "Stáhnout";
-"nothanks" = "Ne, díky";
+"shared_string_no_thanks" = "Ne, díky";
 "download_now" = "Stáhnout mapu nyní";
 "prch_failed" = "Nákup \"%@\" se nezdařil";
 "prch_items_failed" = "položek nebylo obnoveno. Zkuste to prosím znovu.";
@@ -475,7 +475,7 @@
 "shared_string_my_places" = "Moje místa";
 "menu_my_trips" = "Moje stopy";
 "menu_my_directions" = "My Directions";
-"menu_feedback" = "Anketa";
+"feedback" = "Anketa";
 "menu_about" = "About";
 "other_options" = "Other options";
 "add_parking" = "Add as Parking position";
@@ -569,11 +569,11 @@
 "product_desc_centralamerica" = "Neomezené stahování map Střední Ameriky";
 "product_title_europe" = "Evropa";
 "product_desc_europe" = "Neomezené stahování map Evropy";
-"product_title_northamerica" = "Severní Amerika";
+"index_name_north_america" = "Severní Amerika";
 "product_desc_northamerica" = "Neomezené stahování map Severní Ameriky";
 "index_name_russia" = "Rusko";
 "product_desc_russia" = "Neomezené stahování map Ruska";
-"product_title_southamerica" = "Jižní Amerika";
+"index_name_south_america" = "Jižní Amerika";
 "product_desc_southamerica" = "Neomezené stahování map Jižní Ameriky";
 "product_title_allworld" = "Všechny světové mapy";
 "product_desc_allworld" = "Mapy celého světa";
@@ -608,7 +608,7 @@
 "gpx_select_track" = "Vybrat stopu";
 "gpx_curr_new_track" = "Současná trasa";
 "enter_name" = "Zadejte název";
-"not_selected" = "Nevybrané";
+"shared_string_not_selected" = "Nevybrané";
 "shared_string_language" = "Jazyk";
 "you_searching" = "Hledáte";
 "from_location" = "vzdálený";
@@ -660,7 +660,7 @@
 "go_to_downloads" = "Go to downloads";
 "turn_on_plugin" = "Zapnout modul";
 "all_world_popup_desc" = "Stáhněte si základní mapu světa, abyste viděli názvy států, hranice a další informace";
-"restore" = "Obnovit";
+"shared_string_restore" = "Obnovit";
 "restore_all_purchases" = "Obnovit všechny nákupy";
 "no_statistics" = "Žádné statistiky";
 "no_internet_avail" = "Internet není k dispozici";
@@ -768,7 +768,7 @@
 "map_legend" = "Legenda mapy";
 "help_other_header" = "Další";
 "help_install_and_troubleshoot" = "Instalace ařešení problémů";
-"help_tech_articles" = "Technické články";
+"techical_articles_item" = "Technické články";
 "help_versions" = "Verze";
 "help_contact_us" = "Kontaktujte nás";
 "help_about" = "O aplikaci";
@@ -908,16 +908,16 @@
 "osm_website" = "Webová stránka";
 "quick_action_map_underlay" = "Změna mapy podkladu";
 "quick_action_no_underlay" = "Bez podkladové vrstvy";
-"modify_edit_short" = "Upravit změnu OSM";
+"poi_context_menu_modify_osm_change" = "Upravit změnu OSM";
 "osm_working_days" = "Pracovní dny";
 "map_underlays" = "Mapa podkladu";
 "sett_ext_input" = "Externí vstupní zařízení";
 "region_nautical" = "Námořní mapy";
 "route_parameters" = "Parametry trasy";
-"quick_action_no_overlay" = "Bez překryvné vrstvy";
+"no_overlay" = "Bez překryvné vrstvy";
 "tile_cache" = "Vyrovnávací paměť dlaždic";
 "mapillary" = "Mapillary";
-"mapil_add_photos" = "Přidat fotografie";
+"shared_string_add_photos" = "Přidat fotografie";
 "get_discount_second_part" = "potom %@";
 "toggle_nav" = "Spustit/ukončit navigaci";
 "angular_units_descr" = "Změní jednotku měření azimutu.";
@@ -941,7 +941,7 @@
 "osn_bug_name" = "OSM poznámka";
 "download_depth_countours" = "Námořní hloubkové vrstevnice";
 "context_menu_item_open_note" = "Otevřít OSM poznámku";
-"shared_string_show_more" = "Ukázat více";
+"show_more" = "Ukázat více";
 "shared_string_my_places" = "Moje místa";
 "shared_string_off" = "Vypnuto";
 "phone" = "telefon";
@@ -960,14 +960,14 @@
 "replace_destination" = "Nahradit cíl";
 "osm_poi_delete_title" = "Smazat POI";
 "osm_target_created" = "Vytvořen OSM POI";
-"quick_action_name_footer" = "Ponecháte-li prázdné, bude použita adresa nebo název místa.";
-"modify_poi_short" = "Upravit POI";
+"quick_action_fav_name_descr" = "Ponecháte-li prázdné, bude použita adresa nebo název místa.";
+"poi_context_menu_modify" = "Upravit POI";
 "add_intermediate" = "Přidat mezicíl";
 "osm_alert_title" = "Uložit";
-"home_pt" = "Domov";
+"favorite_home_category" = "Domov";
 "simulate_navigation" = "Simulovat navigaci";
 "add_first_inermediate" = "Přidat první mezicíl";
-"mapil_pano_only" = "Zobrazit pouze 360° obrázky";
+"mapillary_menu_title_pano" = "Zobrazit pouze 360° obrázky";
 "exit_without_saving" = "Ukončit bez uložení?";
 "gpx_alt_range" = "Výškový rozdíl";
 "add_home" = "Přidat domov";
@@ -976,7 +976,7 @@
 "osm_editing_offline" = "Off-line editace";
 "quick_action_interim_dialog" = "Zobrazit dočasné okno";
 "quick_action_pause_nav_descr" = "Stiskněte toto tlačítko na pozastavení, nebo pokračování navigace.";
-"osm_close_changeset" = "Zavřít změny";
+"close_changeset" = "Zavřít změny";
 "quick_action_add_underlay" = "Přidat podklad";
 "poi_remove_success" = "Smazáno";
 "map_styles" = "Styly mapy";
@@ -987,7 +987,7 @@
 "quick_action_add_create_items" = "Vytvořit položky";
 "quick_action_map_source" = "Změnit zdroj mapy";
 "osm_edits_title" = "OSMúpravy";
-"night_mode" = "Noční režim";
+"quick_action_switch_night_mode" = "Noční režim";
 "pause_resume_nav" = "Pozastavit/pokračovat v navigaci";
 "mapillary_get_title" = "Zlepšit pokrytí fotografií s Mapillary";
 "shared_string_slope" = "Svah";
@@ -1288,7 +1288,7 @@
 "routing_attr_allow_classic_only_description" = "Trasy upravené pro klasické lyžování bez bruslení. Zahrnuje trasy upravené menšími sněžnými vozidly a stopy vytvořené samotnými lyžaři.";
 "routing_attr_allow_skating_only_name" = "Povolit pouze trasy pro bruslení na lyžích";
 "app_mode_pickup_truck" = "Pickup auto";
-"open_wiki_online" = "Otevřít článek online";
+"open_in_browser_wiki" = "Otevřít článek online";
 "online_webpage_warning" = "Stránka je k dispozici pouze online. Chcete ji otevřít v prohlížeči?";
 "app_mode_ufo" = "UFO";
 "map_settings_color_scheme" = "Barevné schéma";
@@ -1299,7 +1299,7 @@
 "app_mode_subway" = "Metro";
 "app_mode_car" = "Řízení vozidla";
 "app_mode_wagon" = "Dodávkové auto";
-"all_group_points" = "Všechny body ze skupiny";
+"context_menu_points_of_group" = "Všechny body ze skupiny";
 "app_mode_horse" = "Kůň";
 "res_zoom_levels" = "Úrovně přiblížení";
 "map_transparency" = "Průhlednost základní mapy";
@@ -1313,7 +1313,7 @@
 "app_mode_camper" = "Obytný přívěs";
 "app_mode_offroad" = "Terénní";
 "app_mode_default" = "Standardní";
-"map_settings_appearance" = "Vzhled";
+"shared_string_appearance" = "Vzhled";
 "shared_string_warning" = "Upozornění";
 "wiki_sheet_title" = "Jak otevřít články Wikipedie?";
 "routing_attr_length_name" = "Omezení délky";
@@ -1395,9 +1395,9 @@
 "select_distance_route_will_recalc" = "Zvolte vzdálenost, při které bude trasa přepočítána.";
 "avoid_road" = "Vyhnout se cestě";
 "shared_string_terrain" = "Terén";
-"import_profile_select_descr" = "Vyberte data k importu.";
+"select_data_to_import" = "Vyberte data k importu.";
 "position_icon_at_rest" = "Ikona polohy v klidu";
-"nav_type_direct_to" = "Přímo k bodu";
+"routing_profile_direct_to" = "Přímo k bodu";
 "vessel_width_limit_description" = "Nastavte šířku plavidla, abyste se vyhnuli úzkým mostům.";
 "copy_from_other_profile" = "Kopírovat z jiného profilu";
 "position_icon_while_moving" = "Ikona polohy při pohybu";
@@ -1405,7 +1405,7 @@
 "quick_action_remove_next_destination" = "Smazat nejbližší cílový bod";
 "reset_to_default" = "Obnovit do základního nastavení";
 "shared_string_two" = "Dvě";
-"help_osmand_live" = "Předplatné - OsmAnd Live";
+"subscription_osmandlive_item" = "Předplatné - OsmAnd Live";
 "create_profile_descr" = "Vlastní profil založte na jednom ze základních profilů. Ten určí základní nastavení jako viditelnost nástrojů, jednotky rychlosti a vzdálenosti. Toto jsou základní profily aplikace a návrhy vlastních profilů, na které mohou být rozšířeny:";
 "recalculate_route_distance_promo" = "Trasa bude přepočítána, pokud vzdálenost od trasy k aktuální poloze je větší než zvolená hodnota.";
 "shared_string_meters" = "metry";
@@ -1438,7 +1438,7 @@
 "keep_both_desc" = "Importované položky budou přidány s prefixem";
 "ltr_or_rtl_combine_via_colon" = "%@: %@";
 "shared_string_finish" = "Dokončit";
-"help_purchases" = "Nákupy v OsmAnd";
+"osmand_purchases_item" = "Nákupy v OsmAnd";
 "units_t" = "t";
 "special_routing" = "Speciální navigace";
 "base_profile_descr_aircraft" = "Letadlo, plachtění";
@@ -1800,7 +1800,7 @@
 "favorites_empty" = "Nemáte žádné uložené oblíbené body";
 "tracks_empty" = "Váš seznam stop je prázdný";
 "map_markers_empty" = "Nemáte žádné aktivní mapové značky";
-"address_search" = "Hledat adresu";
+"address_search_desc" = "Hledat adresu";
 "ios_release_3_90" = "• Nová funkce \"Plánování trasy\" pro plánování budoucích výletů s možností vytvářet úseky trasy pomocí různých typů navigace\n• Přidána možnost zobrazit kompas pro nástroj Kruhové pravítko\n• Nové nastavení \"Překryvné názvy POI\", které zobrazuje názvy oblíbených bodů, bodů na trase a mapových značek\n• Přidány nové rychlé akce pro zobrazení vrstevnic a terénu na mapě, změnu aplikačního profilu a mazání nejbližšího mezicíle\n• Opraveny problémy s chybějící kategorií vyhledávání ve Wikipedii\n• Import nastavení: opraveny chyby, přidána podpora všech datových typů dostupných v OsmAnd\n• Editace OpenStreetMap: opravena chyba ve výběru času a nemožnost změnit komentář u sady změn\n";
 "ios_release_3_80" = "• Nové \"profily aplikace\" s nezávislým nastavením\n• Nové uspořádání nastavení podle profilů a typů: navigace, obecné, mapa a obrazovka\n• Možnost importovat nebo exportovat nastavení profilu\n• Přidány zdroje dat pro online fotografie\n• Přidána možnost stahovat online mapy do mezipaměti\n• Vylepšené vyhledávací algoritmy\n";
 
@@ -1830,7 +1830,7 @@
 "shared_string_required" = "Vyžadováno";
 "email_example_hint" = "uzivatel@priklad.com";
 "download_wiki_data" = "Stáhněte si data z Wikipedie pro %@";
-"search_preogress" = "Hledání…";
+"searching" = "Hledání…";
 "import_raster_map_failed" = "Import rastrové mapy se nezdařil";
 "import_raster_map_success" = "Rastrová mapa byla importována. Otevřete Nastavení mapy a aktivujte ji jako překryvnou nebo podkladovou mapu";
 "calculating_progress" = "Počítám...";
@@ -1965,7 +1965,7 @@
 "fav_point_emoticons_message" = "Oblíbený bod přejmenován na '%@', protože není možné ukládat do souboru řetězce s emotikony.";
 "fav_point_dublicate_message" = "Oblíbený bod přejmenován na '%@', aby nevznikla duplicita.";
 "shared_string_shape" = "Tvar";
-"icon" = "Ikona";
+"shared_string_icon" = "Ikona";
 "name_and_descr" = "Název & popis";
 "add_favorite" = "Přidat oblíbené";
 "replace_favorite_confirmation" = "Opravdu chcete nahradit Oblíbené místo „%@“\?";
@@ -2242,7 +2242,7 @@
 "points_delete_multiple" = "Smazat %d bodů\?";
 "context_menu_edit_descr" = "Upravit popis";
 "add_description" = "Přidat popis";
-"product_title_weather" = "Počasí";
+"shared_string_weather" = "Počasí";
 "map_settings_weather_pressure" = "Tlak";
 "map_settings_weather_wind" = "Vítr";
 "map_settings_weather_cloud" = "Oblačnost";
@@ -2265,7 +2265,7 @@
 "route_preferred_terrain_any" = "Terénní profil neovlivňuje výběr trasy.";
 "route_preferred_terrain_less_hilly" = "Kratší, méně kopcovité trasy.";
 "route_preferred_terrain_hilly" = "Trasy s kopcovitým profilem.";
-"shared_string_any" = "Jakýkoli";
+"any_poi" = "Jakýkoli";
 "navigate_point_format_MGRS" = "MGRS";
 "ltr_or_rtl_combine_via_dash" = "%@ - %@";
 "routeInfo_tracktype_description" = "Obarvitčáru trasy nebo stopy podle složení jejího povrchu. Obvykle se používá, pokud je silniční síť převážně nezpevněná.";
@@ -2312,14 +2312,14 @@
 "backup_error_file_not_available" = "Soubor není dostupný";
 "register_opr_create_new_account" = "Vytvořit nový účet";
 "cloud_view_conflicts" = "Zobrazit konflikty";
-"weather_wind_unit_km_per_hour" = "Kilometry za hodinu";
+"weather_wind_kilimeters_per_hour" = "Kilometry za hodinu";
 "resend_verification_code" = "Poslat znovu";
 "backup_error_size_is_exceeded" = "Maximální velikost OsmAnd Cloudu přesahuje %@";
 "cloud_conflicts_descr" = "Některé soubory nebylo možné nahrát na server, protože tam už existují novější verze.";
 "osmand_cloud" = "OsmAnd Cloud";
 "backup_error_no_valid_subscription" = "Žádné předplatné není aktivní";
 "backup_error_user_is_not_registered" = "Tuto e-mailovou adresu nemá zaregistrovanou žádný uživatel";
-"cloud_make_backup_descr" = "Natomto zařízení je mnoho změn. Vytvořte si zálohu těchto údajů, ať o ně nepřijdete.";
+"make_backup_descr" = "Natomto zařízení je mnoho změn. Vytvořte si zálohu těchto údajů, ať o ně nepřijdete.";
 "verify_email_address_descr" = "Ověřovací kód odeslán na adresu %@. Zadejte jej prosím do níže uvedeného pole.";
 "backup_error_token_is_not_valid" = "Něco není v pořádku s poskytnutým identifikátorem zařízení";
 "cloud_set_up_backup" = "Nastavit zálohování";
@@ -2339,10 +2339,10 @@
 "wikipedia_and_wikivoyage_offline" = "Wikipedie a Wikivoyage offline";
 "osm_live_banner_desc" = "Získejte neomezené stahování map a aktualizace každý týden, den nebo dokonce hodinu.";
 "not_available_with" = "Není dostupné s %@";
-"product_desc_plus" = "Získejte rozšířené funkce";
-"product_title_development" = "Vývoj a ladění OsmAnd";
+"osmand_maps_plus_tagline" = "Získejte rozšířené funkce";
+"debugging_and_development" = "Vývoj a ladění OsmAnd";
 "purchases_feature_desc_wikivoyage" = "Prozkoumejte průvodce Wikivoyage offline. Články jsou rozdělené podle zemí a oblastí a jsou dostupné ve všech jazycích.";
-"shared_string_stop" = "Zastavit";
+"shared_string_control_stop" = "Zastavit";
 "toast_empty_name_error" = "Bezejmenné místo";
 "copy_coordinates" = "Kopírovat souřadnice";
 "monthly_subscription" = "Měsíční předplatné";
@@ -2364,7 +2364,7 @@
 "shared_string_capacity" = "Kapacita";
 "purchases_feature_desc_hourly_map_updates" = "Získejte přístup k častějším aktualizacím map. Hodinové, denní nebo týdenní aktualizace. Aktualizace se stahují inkrementálně, pouze pro změněnou oblast.";
 "restore_purchases" = "Obnovit nákupy";
-"product_desc_pro" = "Získejte maximum funkcí";
+"osmand_pro_tagline" = "Získejte maximum funkcí";
 "shared_string_purchased" = "Zakoupeno";
 "purchases_feature_desc_osmand_cloud" = "Ukládejte všechna data OsmAnd online. Po přeinstalování nedojde ke ztrátě dat. Snadné zálohování a obnovení všech informací.";
 "copy_to_map_favorites" = "Kopírovat do oblíbených";
@@ -2382,7 +2382,7 @@
 "on_hold" = "Pozastaveno";
 "shared_string_paused" = "Pozastaveno";
 "restore_from_osmand_cloud" = "Obnovit zOsmAnd Cloud";
-"shared_string_data" = "Data";
+"data_settings" = "Data";
 "in_grace_period" = "V období tolerance";
 "shared_string_undefined" = "Nedefinováno";
 "shared_string_leave" = "Opustit";
@@ -2469,7 +2469,7 @@
 "toggle_precipitation" = "Zobrazit/skrýt - Srážková vrstva";
 "tts_title" = "TTS";
 "shared_string_recorded" = "Zaznamenáno";
-"weather_wind_unit_knots" = "Námořní uzly";
+"weather_wind_knots" = "Námořní uzly";
 "backup_delete_all_data_finished" = "Všechna vaše data byla z OsmAnd Cloud úspěšně odstraněna.";
 "osm_live_payment_year_cost_descr" = "%@ / rok";
 "delete_all_confirmation" = "Ano, vymazat vše";
@@ -2532,7 +2532,7 @@
 "backup_into_file" = "Záloha do souboru";
 "cloud_conflict" = "Konflikt";
 "mountain_bike" = "Horské kolo";
-"rendering_attr_monorailRoutes_name" = "Trasy jednokolejné železnice";
+"rendering_attr_showMonorailRoutes_name" = "Trasy jednokolejné železnice";
 "cloud_backup" = "Zálohování";
 "backup_delete_all_data_or_versions_descr" = "Smazat všechna data v OsmAnd Cloud nebo pouze historii verzí. Místní data zůstanou nedotčena.";
 "backup_delete_all_data" = "Smazat všechna moje data";
@@ -2543,7 +2543,7 @@
 "expires" = "Platnost končí";
 "shared_string_do_not_exist" = "Neexistuje";
 "shared_string_uploaded" = "Nahráno";
-"map_settings_show_map_symbols" = "Zobrazit symboly mapy";
+"show_map_symbols" = "Zobrazit symboly mapy";
 "lang_ckb" = "Centrální kurdština";
 "shared_string_added" = "Přidáno";
 "depth_contour_lines" = "Hloubkové vrstevnice";
@@ -2606,9 +2606,9 @@
 "restore_backup_descr" = "Obnovit data v zařízení bez online zálohování";
 "routeInfo_horse_scale_name" = "Obtížnost stezek pro koně";
 "routeInfo_horse_scale_description" = "Vykreslení cest podle obtížnosti koňských stezek";
-"cross_buy" = "Křížový nákup";
+"shared_string_cross_buy" = "Křížový nákup";
 "cloud_create_account" = "Vytvořit účet";
-"res_heightmap" = "Výšková mapa";
+"download_heightmap_maps" = "Výšková mapa";
 "use_heightmap_setting" = "Použít 3D reliéfní výškové mapy";
 "nautical_depth_points" = "Plavební hloubkové body";
 "depth_contours" = "Hloubkové vrstevnice";

@@ -32,7 +32,7 @@
 
 - (void)applyLocalization
 {
-    _titleView.text = OALocalizedString(@"groups");
+    _titleView.text = OALocalizedString(@"shared_string_groups");
     [_saveButton setTitle:OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
 }
 
@@ -77,7 +77,7 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return [@[OALocalizedString(@"groups"), OALocalizedString(@"fav_create_group")] objectAtIndex:section];
+    return [@[OALocalizedString(@"shared_string_groups"), OALocalizedString(@"fav_create_group")] objectAtIndex:section];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section

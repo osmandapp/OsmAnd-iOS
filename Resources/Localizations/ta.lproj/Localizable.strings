@@ -69,7 +69,7 @@
 
 "show_poi_over_map" = "Show POI";
 "shared_string_search" = "தேடல்";
-"address_search" = "Address search";
+"address_search_desc" = "Address search";
 "search_radius" = "Search radius";
 "targets" = "Destinations";
 "search_radius_proximity" = "நேரத்திற்குள்";
@@ -127,7 +127,7 @@
 "rotate_map_none_opt" = "Do not rotate (north is up)";
 "driving_region_descr" = "Select the driving region: US, Europe, UK, Asia and others.";
 "driving_region" = "வாகனம் ஓட்டும் இடம்";
-"driving_region_automatic" = "Automatic";
+"shared_string_automatic" = "Automatic";
 "routing_attr_length_name" = "Length limit";
 "default_speed_setting_title" = "Default speed";
 "shared_string_min_speed" = "Min. speed";
@@ -253,7 +253,7 @@
 "nav_type_descr" = "Select how to calculate a route for this profile";
 "nav_type_osmand" = "OsmAnd (offline routing)";
 "routing_profile_straightline" = "Straight line";
-"nav_type_direct_to" = "Direct-to-point";
+"routing_profile_direct_to" = "Direct-to-point";
 "nav_type_brouter" = "BRouter";
 "routing_profile_ski" = "Ski";
 "routing_profile_geocoding" = "Geocoding";
@@ -544,7 +544,7 @@
 "fav_colors" = "Colors";
 "fav_name" = "Name";
 "fav_group" = "Group";
-"groups" = "குழுக்கள்";
+"shared_string_groups" = "குழுக்கள்";
 "favorite" = "Favorite";
 "poi_overlay" = "POI Overlay";
 "poi_dialog_poi_type" = "POI Type";
@@ -565,7 +565,7 @@
 "fav_enter_group_name" = "Enter group name";
 "fav_exists" = "Favorite with name \"%@\" already exists";
 "fav_ignore" = "Ignore";
-"fav_rename" = "மறுபெயரிடு";
+"shared_string_rename" = "மறுபெயரிடு";
 "fav_replace" = "மாற்றவும்";
 "replace_favorite_confirmation" = "Are you sure you want to replace Favorite %@?";
 "fav_points_not_exist" = "பிடித்த புள்ளிகள் இல்லை";
@@ -578,7 +578,7 @@
 "add_favorite" = "Add favorite";
 "name_and_descr" = "Name & description";
 "select_group" = "Select group";
-"icon" = "Icon";
+"shared_string_icon" = "Icon";
 "shared_string_shape" = "Shape";
 "fav_point_dublicate" = "பிடித்த புள்ளி பெயர் நகல்";
 "fav_point_dublicate_message" = "Favorite renamed to \'%@\' to avoid duplication.";
@@ -608,7 +608,7 @@
 "visible" = "Visible";
 
 // GPX
-"gpx_point" = "புள்ளி";
+"plugin_distance_point" = "புள்ளி";
 "shared_string_waypoint" = "பாதைப்புள்ளி";
 "gpx_waypoints" = "பாதை புள்ளிகளின்";
 "gpx_points" = "Point(s)";
@@ -635,7 +635,7 @@
 "gpx_export_failed" = "Could not save created route";
 
 "gpx_remove" = "Remove track?";
-"gpx_stat" = "Statistics";
+"shared_string_statistics" = "Statistics";
 "gpx_route" = "Route";
 "gpx_analyze" = "Analyze";
 "gpx_route_time" = "Route time";
@@ -698,20 +698,20 @@
 
 "shared_string_map" = "வரைபடம்";
 "layer_amenity_label" = "POIஓவர்லே லேபிள்கள்";
-"map_settings_show" = "வரைபடாத்தில் காட்டு";
+"shared_string_show_on_map" = "வரைபடாத்தில் காட்டு";
 "map_settings_type" = "Map type";
 "map_mode" = "வரைபட பயன்முறை";
 "map_settings_map_magnifier" = "வரைபடத்தின் உருப்பெருக்கம்";
 "text_size" = "உரை அளவு";
 "daynight_mode_night" = "Night";
-"map_settings_style" = "Map style";
+"map_widget_renderer" = "Map style";
 "map_settings_overunder" = "Overlay / Underlay";
 "map_settings_over" = "Overlay";
 "map_settings_under" = "Underlay";
 "map_settings_install_maps" = "Choose maps to install or update";
 "map_settings_install_more" = "Install more...";
 "map_settings_offline" = "Styles for offline maps";
-"map_settings_online" = "நிகழ்நிலை வரைபடம்";
+"shared_string_online_maps" = "நிகழ்நிலை வரைபடம்";
 "shared_string_transparency" = "Transparency";
 "map_transparency" = "அடிப்படை வரைபடத்தின் வெளிப்படைத்தன்மை";
 "map_settings_avail_lay" = "Available layers";
@@ -735,7 +735,7 @@
 "map_settings_color_scheme" = "Color scheme";
 "map_settings_line_density" = "Line density";
 "map_settings_contour_zoom_level_descr" = "Select zoom level, from wich contour lines will be displayed";
-"map_settings_appearance" = "Appearance";
+"shared_string_appearance" = "Appearance";
 "map_settings_line_density_slowdown_warning" = "High line density may slowdown map rendering";
 "map_settings_available_srtm_maps_descr" = "Additional maps are needed to view Hillshade on the map";
 
@@ -770,7 +770,7 @@
 "sett_deg360" = "Degrees 360";
 "sett_deg_min" = "Degrees and minutes";
 "sett_arr" = "Map arrows";
-"sett_arr_loc" = "Location";
+"shared_string_location" = "Location";
 "sett_arr_map" = "Map center";
 "short_location_on_map" = "Lat %@ Lon %@";
 "navigate_point_format_D" = "DDD.DDDDD";
@@ -937,7 +937,7 @@
 "export_profile" = "Export";
 "shared_string_import" = "இறக்குமதி";
 "create_profile" = "Create profile";
-"import_profile_select_descr" = "Select the data to be imported.";
+"select_data_to_import" = "Select the data to be imported.";
 "export_profile_select_descr" = "Select the data to be exported.";
 "selected_of" = "Selected - %d/%d";
 "nav_type_hint" = "Navigation type";
@@ -1040,7 +1040,7 @@
 "proceed_q" = "Proceed?";
 
 "download" = "பதிவிறக்கு";
-"nothanks" = "No, thanks";
+"shared_string_no_thanks" = "No, thanks";
 "download_now" = "Download map now";
 "prch_failed" = "Purchase of \"%@\" has failed";
 "prch_items_failed" = "item(s) were not restored. Please try again.";
@@ -1217,7 +1217,7 @@
 "shared_string_menu" = "Menu";
 "shared_string_my_places" = "என் இடங்கள்";
 "menu_my_trips" = "My Tracks";
-"menu_feedback" = "Feedback";
+"feedback" = "Feedback";
 "shared_string_help" = "உதவி";
 
 // OSM Editing actions
@@ -1273,7 +1273,7 @@
 "osm_confirm_bulk_delete" = "Delete %d edits?";
 "osm_confirm_delete" = "Delete POI?";
 "osm_confirm_upload" = "Upload modifications?";
-"osm_close_changeset" = "Close changeset";
+"close_changeset" = "Close changeset";
 "osm_tag" = "Tag";
 "osm_value" = "Value";
 "osm_note_upload_info" = "You can upload the note anonymously or by using your OpenStreetMap profile.";
@@ -1308,7 +1308,7 @@
 "mapil_no_inet_descr" = "You need Internet connection to view Mapillary photos.";
 "mapil_images_nearby" = "Images nearby";
 "mapil_no_images" = "We do not have photos for this location.";
-"mapil_add_photos" = "Add photos";
+"shared_string_add_photos" = "Add photos";
 "mapillary_get_title" = "Improve photo coverage with Mapillary";
 "mapillary_get_descr" = "Get Mapillary to add photos to this location";
 "mapil_contribute" = "Contribute your own street level imagery";
@@ -1317,13 +1317,13 @@
 "mapillary_turn_on_widget_descr" = "This allows you to quickly contribute to Mapillary";
 "tile_cache" = "Tile cache";
 "shared_string_reload" = "Reload";
-"shared_string_show_more" = "Show more";
+"show_more" = "Show more";
 "mapil_reload_cache" = "Reload tiles to see the newest data";
 "filter_current_poiButton" = "வடிகட்டி";
 "mapil_filter_user_descr" = "Filter images by user";
 "mapil_filter_date" = "Filter images by date";
 "mapil_usernames" = "Usernames";
-"mapil_pano_only" = "Display only 360° images";
+"mapillary_menu_title_pano" = "Display only 360° images";
 "mapil_select_user" = "Select user";
 
 // Coordinate widget
@@ -1331,7 +1331,7 @@
 "searching_gps" = "Searching GPS";
 "copied_to_clipboard" = "கிளிப்போர்டுக்கு நகலெடுக்கப்பட்டது";
 // Quick action
-"quick_action_no_overlay" = "No overlay";
+"no_overlay" = "No overlay";
 "quick_action_add_overlay" = "Add overlay";
 "quick_action_no_underlay" = "No underlay";
 "quick_action_add_underlay" = "Add underlay";
@@ -1377,7 +1377,7 @@
 "add_intermediate" = "Add intermediate point";
 "add_home" = "Add home";
 "add_work" = "Add work";
-"home_pt" = "Home";
+"favorite_home_category" = "Home";
 "work_pt" = "Work";
 "map_widget_parking" = "Parking spot";
 "add_first_inermediate" = "Add first intermediate";
@@ -1389,7 +1389,7 @@
 "pause_nav" = "Pause navigation";
 "toggle_nav" = "வழிசெலுத்தல் தொடங்க/நிருந்த";
 "toggle_day_night" = "Switch Day/Night mode";
-"night_mode" = "Night mode";
+"quick_action_switch_night_mode" = "Night mode";
 "day_mode" = "Day mode";
 "mute_voice" = "Mute voice";
 "unmute_voice" = "Unmute voice";
@@ -1409,7 +1409,7 @@
 "quick_action_interim_dialog" = "Show an interim dialog";
 "quick_action_dialog_descr" = "Turn on to show dialog before applying the action";
 "quick_action_template_name" = "Template name";
-"quick_action_name_footer" = "Leave blank to use the address or place name.";
+"quick_action_fav_name_descr" = "Leave blank to use the address or place name.";
 "quick_action_select_group" = "Select the group to save the favorite in.";
 "quick_action_add_category" = "Add a category";
 "quick_action_add_category_descr" = "You can select multiple POI categories.";
@@ -1481,9 +1481,9 @@
 "edit_waypoint_short" = "Edit waypoint";
 "replace_waypoint_confirmation" = "Are you sure you want to replace Waypoint %@?";
 "no_waypoints_found" = "எந்த வழியையும் காணவில்லை";
-"modify_poi_short" = "Modify POI";
+"poi_context_menu_modify" = "Modify POI";
 "create_poi_short" = "Create POI";
-"modify_edit_short" = "Modify OSM change";
+"poi_context_menu_modify_osm_change" = "Modify OSM change";
 "context_menu_item_open_note" = "Open OSM Note";
 "edit_osm_note" = "Edit OSM Note";
 "osm_alert_title" = "உறுதியளித்து";
@@ -1528,8 +1528,8 @@
 "help_search" = "Map search";
 "help_trip_planning" = "Planning a trip";
 "navigation_profiles_item" = "Navigation profiles";
-"help_purchases" = "OsmAnd purchases";
-"help_osmand_live" = "Subscription - OsmAnd Live";
+"osmand_purchases_item" = "OsmAnd purchases";
+"subscription_osmandlive_item" = "Subscription - OsmAnd Live";
 "help_travel" = "Travel (Wikipedia & Wikivoyage)";
 "mapillary_item" = "OsmAnd + Mapillary";
 "map_legend" = "Map legend";
@@ -1537,7 +1537,7 @@
 "help_other_header" = "மற்ற";
 "help_what_is_new" = "What\'s new";
 "help_install_and_troubleshoot" = "Installation and troubleshooting";
-"help_tech_articles" = "Technical articles";
+"techical_articles_item" = "Technical articles";
 "help_versions" = "Versions";
 "help_contact_us" = "Contact us";
 "help_about" = "பற்றி";
@@ -1646,13 +1646,13 @@
 "product_title_europe" = "Europe";
 "product_desc_europe" = "Unlimited map downloads for Europe";
 "product_desc_europe_short" = "Europe region maps";
-"product_title_northamerica" = "North America";
+"index_name_north_america" = "North America";
 "product_desc_northamerica" = "Unlimited map downloads for North America";
 "product_desc_northamerica_short" = "North America region maps";
 "index_name_russia" = "Russia";
 "product_desc_russia" = "Unlimited map downloads for Russia";
 "product_desc_russia_short" = "Maps of Russia regions";
-"product_title_southamerica" = "South America";
+"index_name_south_america" = "South America";
 "product_desc_southamerica" = "Unlimited map downloads for South America";
 "product_desc_southamerica_short" = "South America region maps";
 "product_title_allworld" = "All World Maps";
@@ -1690,7 +1690,7 @@
 "add_as" = "Add as";
 "make_call" = "Make a call";
 
-"all_group_points" = "குழுவின் அனைத்து புள்ளிகளும்";
+"context_menu_points_of_group" = "குழுவின் அனைத்து புள்ளிகளும்";
 "enter_description" = "Enter description";
 "description" = "விளக்கம்";
 "read_full_description" = "Read full description";
@@ -1724,7 +1724,7 @@
 "edit_track" = "Edit track";
 "duplicate_track" = "Duplicate track";
 "enter_name" = "பெயரை உள்ளிடுக";
-"not_selected" = "தேர்ந்தெடுக்கப்படவில்லை";
+"shared_string_not_selected" = "தேர்ந்தெடுக்கப்படவில்லை";
 "shared_string_language" = "Language";
 
 "you_searching" = "You are searching";
@@ -1811,7 +1811,7 @@
 "turn_on_plugin" = "Turn on plugin";
 
 "all_world_popup_desc" = "Download World base map to see state names, borders and other information";
-"restore" = "மீட்டெடு";
+"shared_string_restore" = "மீட்டெடு";
 "restore_all_purchases" = "Restore all purchases";
 
 "no_statistics" = "No statistics";
@@ -1870,7 +1870,7 @@
 \n";
 "try_again" = "Try again";
 
-"search_preogress" = "Searching…";
+"searching" = "Searching…";
 "search_location" = "Searching location…";
 "search_map" = "Searching map…";
 "search_another_country" = "மற்றொரு பகுதியைத் தேர்ந்தெடுக்கவும்";
@@ -1884,7 +1884,7 @@
 
 "wiki_sheet_title" = "எப்படி விக்கிபீடியா கட்டுரைகளை திறக்க வேண்டும்\?";
 "download_wiki_data" = "Download Wikipedia data for %@";
-"open_wiki_online" = "Open article online";
+"open_in_browser_wiki" = "Open article online";
 "explore_wikipedia_offline" = "Explore Wikipedia offline.";
 "online_webpage_warning" = "\"பக்கம் நிகழ்நிலையில்  மட்டுமே கிடைக்கும். வலை உலாவியில் திறக்கவா\?\"";
 
@@ -2418,7 +2418,7 @@
 "subscriptions" = "சந்தாக்கள்
 \n";
 "osm_live_banner_desc" = "வரம்பற்ற வரைபட பதிவிறக்கங்களைப் பெறுக, மேலும் ஒரு மாதத்திற்கு ஒருமுறை விட மேம்படுத்துங்கள்: வாராந்திர, தினசரிஅல்லது மணிநேரம்.";
-"shared_string_stop" = "நிறுத்து";
+"shared_string_control_stop" = "நிறுத்து";
 "shared_string_start" = "இயக்கு";
 "toast_empty_name_error" = "பெயரிடப்படாத இடம்";
 "shared_string_delete_all" = "அனைத்தையும் நீக்கு";

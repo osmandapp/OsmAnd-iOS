@@ -147,7 +147,7 @@
     
     [_data addObject:@{
         @"type" : [OASwitchTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"map_settings_show"),
+        @"title" : OALocalizedString(@"shared_string_show_on_map"),
         @"value" : @(_isShowOnMap),
         @"tag" : @(kShowOnMapTag)
     }];

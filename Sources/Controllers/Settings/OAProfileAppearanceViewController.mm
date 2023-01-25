@@ -491,7 +491,7 @@
     if (section == 0)
         return @"";
     else if (section == 1)
-        return OALocalizedString(@"map_settings_appearance");
+        return OALocalizedString(@"shared_string_appearance");
     else if (section == 2)
         return OALocalizedString(@"appearance_on_map");
     return @"";

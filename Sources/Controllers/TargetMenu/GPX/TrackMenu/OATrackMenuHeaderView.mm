@@ -169,7 +169,7 @@
                                 action:@selector(onShowHidePressed:)
                       forControlEvents:UIControlEventTouchUpInside];
 
-        [self.appearanceButton setTitle:OALocalizedString(@"map_settings_appearance")
+        [self.appearanceButton setTitle:OALocalizedString(@"shared_string_appearance")
                                forState:UIControlStateNormal];
         [self.appearanceButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
         [self.appearanceButton addTarget:self

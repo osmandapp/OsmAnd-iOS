@@ -26,7 +26,7 @@
 "fav_replace" = "Biguherîne";
 "shared_string_hide" = "Veşêre";
 "gpx_overwrite" = "Li Ser Bi nivîsena";
-"gpx_stat" = "Amar (statîstîk)";
+"shared_string_statistics" = "Amar (statîstîk)";
 "gpx_updown" = "Jor/Jêr";
 "gpx_speed" = "Lez";
 "m_style_car" = "Trimbêl";
@@ -34,10 +34,10 @@
 "gpx_route_time" = "Dema Rêgeh";
 "shared_string_control_start" = "Dest pê bike";
 "shared_string_map" = "Nexşe";
-"map_settings_show" = "Li ser nexşeyê nîşan bide";
+"shared_string_show_on_map" = "Li ser nexşeyê nîşan bide";
 "map_settings_type" = "Cureya nexşeyê";
 "daynight_mode_night" = "Şev";
-"map_settings_style" = "Cureya nexşeyê";
+"map_widget_renderer" = "Cureya nexşeyê";
 "yesterday" = "Duh";
 "today" = "Îro";
 "history" = "Borî";
@@ -123,14 +123,14 @@
 "transport_nearby_routes_within" = "Rotayên nêzî te";
 "exit_without_saving" = "Bêyî qeydkirin dixwazî derkevî?";
 "osm_live_subscribe_btn" = "Bibe abone";
-"sett_arr_loc" = "Cih";
+"shared_string_location" = "Cih";
 "tab_title_basic" = "Bingeh";
 "shared_string_details" = "Berfireh";
 "shared_string_current" = "Yê berdest";
 "osmand_live_donations" = "Bexş bike";
 "buy" = "Bikirre";
 "update_now" = "Niha rojane bike";
-"menu_feedback" = "Gotinên we";
+"feedback" = "Gotinên we";
 "help_features" = "Taybetmendî";
 "actions" = "Çalakî";
 "plugins" = "Lehikan";
@@ -155,7 +155,7 @@
 "rendering_attr_hidePOILabels_name" = "Nîşana POIyê";
 "rendering_attr_whiteWaterSports_name" = "Werzîşên avê yên ekstrem";
 "rendering_attr_horseRoutes_name" = "Riyên Hespan";
-"all_group_points" = "Hemû nuqteyên komê";
+"context_menu_points_of_group" = "Hemû nuqteyên komê";
 "shared_string_two" = "Du";
 "total" = "Yekûn";
 "one" = "Yek";
@@ -163,6 +163,6 @@
 "osm_notes" = "Notên OSMê";
 "group_name" = "Navê komê";
 "regions" = "Herêman";
-"shared_string_stop" = "Rawestgeh";
+"shared_string_control_stop" = "Rawestgeh";
 "shared_string_start" = "Dest pê bike";
 "share_geo" = "Cih:";

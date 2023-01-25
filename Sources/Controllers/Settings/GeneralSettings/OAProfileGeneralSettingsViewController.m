@@ -96,7 +96,7 @@
     
     NSString *drivingRegionValue;
     if ([_settings.drivingRegionAutomatic get:self.appMode])
-        drivingRegionValue = OALocalizedString(@"driving_region_automatic");
+        drivingRegionValue = OALocalizedString(@"shared_string_automatic");
     else
         drivingRegionValue = [OADrivingRegion getName:[_settings.drivingRegion get:self.appMode]];
     
@@ -409,7 +409,7 @@
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     if (section == 0)
-        return OALocalizedString(@"map_settings_appearance");
+        return OALocalizedString(@"shared_string_appearance");
     else if (section == 1)
         return OALocalizedString(@"units_and_formats");
     else

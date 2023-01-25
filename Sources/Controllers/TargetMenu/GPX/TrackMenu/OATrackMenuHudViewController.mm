@@ -1338,7 +1338,7 @@
         }
         case EOATrackMenuHudPointsTab:
         {
-            return [NSString stringWithFormat:@"%@: %li", OALocalizedString(@"groups"), _waypointGroups.allKeys.count];
+            return [NSString stringWithFormat:@"%@: %li", OALocalizedString(@"shared_string_groups"), _waypointGroups.allKeys.count];
         }
         default:
         {

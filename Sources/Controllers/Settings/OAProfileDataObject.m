@@ -145,7 +145,7 @@ static NSDictionary<NSString *, OARoutingProfileDataObject *> *_rpValues;
 {
     switch (res) {
         case EOARoutingProfilesResourceDirectTo:
-            return OALocalizedString(@"nav_type_direct_to");
+            return OALocalizedString(@"routing_profile_direct_to");
         case EOARoutingProfilesResourceStraightLine:
             return OALocalizedString(@"routing_profile_straightline");
         case EOARoutingProfilesResourceBrouter:

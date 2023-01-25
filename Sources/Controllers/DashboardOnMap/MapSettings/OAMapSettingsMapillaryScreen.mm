@@ -166,7 +166,7 @@ static const NSInteger panoImageFilterSection = 2;
                          @{ @"type" : [OADividerCell getCellIdentifier]},
                          @{
                              @"type" : [OASwitchTableViewCell getCellIdentifier],
-                             @"title" : OALocalizedString(@"mapil_pano_only"),
+                             @"title" : OALocalizedString(@"mapillary_menu_title_pano"),
                              @"description" : @"",
                              @"img" : @"ic_custom_coordinates.png",
                              @"key" : @"pano_only"

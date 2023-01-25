@@ -163,7 +163,7 @@ static OAQuickActionType *TYPE;
                           @"img" : @"ic_custom_text_field_name"
                           },
                       @{
-                          @"footer" : OALocalizedString(@"quick_action_name_footer")
+                          @"footer" : OALocalizedString(@"quick_action_fav_name_descr")
                           }
                       ] forKey:kSectionNoName];
     

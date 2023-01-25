@@ -434,7 +434,7 @@
 
 - (NSString *) getCommonTypeStr
 {
-    return OALocalizedString(@"sett_arr_loc");
+    return OALocalizedString(@"shared_string_location");
 }
 
 - (NSAttributedString *) getAttributedTypeStr

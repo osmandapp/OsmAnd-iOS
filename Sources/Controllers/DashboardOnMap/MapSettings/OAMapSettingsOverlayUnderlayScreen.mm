@@ -186,7 +186,7 @@ static NSInteger kButtonsSection;
     NSMutableArray *styleArray = [NSMutableArray new];
     [styleArray addObject:@{
         @"type" : kCellTypeSwitch,
-        @"title": OALocalizedString(@"map_settings_show_map_symbols"),
+        @"title": OALocalizedString(@"show_map_symbols"),
         @"tag" : kShowLabels
     }];
     if (_mapSettingType == EMapSettingUnderlay)

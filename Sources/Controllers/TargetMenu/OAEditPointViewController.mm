@@ -561,7 +561,7 @@
 
     section = [NSMutableArray new];
     [section addObject:@{
-        @"header" : OALocalizedString(@"map_settings_appearance"),
+        @"header" : OALocalizedString(@"shared_string_appearance"),
         @"type" : [OAPoiTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"icon"),
         @"value" : @"",

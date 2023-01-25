@@ -2800,3 +2800,4 @@
 "si_nm_ft" = "Seemeilen/Fuß";
 "si_nm_mt" = "Seemeilen/Meter";
 "shared_string_does_not_exist" = "Nicht vorhanden";
+"download_wikipedia_data" = "Wikipedia-Daten herunterladen";

@@ -330,7 +330,7 @@
 "routing_preferences_descr" = "Routing preferences";
 "recording_preferences_descr" = "Track recording preferences";
 "routing_settings" = "Navigation";
-"shared_string_navigation" = "Navigation";
+"shared_string_navigation" = "দিক নির্ণয়";
 "get_directions" = "Directions";
 "app_mode_bus" = "Bus";
 "app_mode_train" = "Train";
@@ -540,13 +540,13 @@
 "shared_string_copy" = "Copy";
 "shared_string_continue" = "Continue";
 "shared_string_deselect_all" = "Deselect all";
-"shared_string_preparing" = "Preparing";
+"shared_string_preparing" = "তৈরী করা হচ্ছে";
 "shared_string_min" = "Min.";
 "shared_string_max" = "Max.";
 "shared_string_wifi_only" = "Only on Wi-Fi";
 "shared_string_turn_off" = "Turn off";
 "shared_strings_all_regions" = "All regions";
-"regions" = "Regions";
+"regions" = "অঞ্চল";
 "shared_string_width" = "Width";
 "shared_string_interval" = "Interval";
 "shared_string_none" = "None";
@@ -562,7 +562,6 @@
 "shared_string_includes" = "Includes";
 "shared_string_purchased" = "Purchased";
 "shared_string_control_start" = "Start";
-"shared_string_control_stop" = "Stop";
 "compass_always_visible" = "Always visible";
 "compass_always_hidden" = "Always hidden";
 "data_settings" = "Data";
@@ -590,7 +589,7 @@
 "shared_string_changed" = "Changed";
 "shared_string_profile" = "Profile";
 "shared_string_download_update" = "Download update";
-"shared_string_angle" = "Angle";
+"shared_string_angle" = "কোন";
 "shared_string_angle_param" = "Angle: %@°";
 "shared_string_uploaded" = "Uploaded";
 "shared_string_do_not_exist" = "Do not exist";
@@ -721,7 +720,6 @@
 "gpx_route_time" = "Route time";
 "gpx_uphldownhl" = "Uphills/Downhills";
 "map_widget_average_speed" = "Average speed";
-"shared_string_control_start" = "Start";
 "gpx_avg_elev" = "Average elevation";
 "gpx_elev_range" = "Elevation range";
 "average_altitude" = "Average altitude";
@@ -769,7 +767,6 @@
 
 "gpx_distance_points" = "Distance (points)";
 "gpx_max_speed" = "Max speed";
-"shared_string_speed" = "Speed";
 "shared_string_slope" = "Slope";
 
 "stats_select_graph_data" = "Select graph data";
@@ -1049,7 +1046,7 @@
 "export_profile_select_descr" = "Select the data to be exported.";
 "selected_of" = "Selected - %d/%d";
 "nav_type_hint" = "Navigation type";
-"shared_string_nothing_selected" = "Nothing selected";
+"shared_string_nothing_selected" = "কিছু নির্বাচন করা হয়নি";
 "export_failed" = "Could not export profile";
 "custom_osmand_plugin" = "Custom OsmAnd plugin";
 "custom_plugins" = "Custom plugins";
@@ -1089,7 +1086,7 @@
 "shared_string_import_complete" = "Import complete";
 "import_complete_description" = "All data from the %@ is imported, you can use buttons below to open needed part of the app to manage it";
 "app_restart_required" = "Application restart required to apply some settings.";
-"shared_string_finish" = "Finish";
+"shared_string_finish" = "সম্পূর্ণ";
 "added_items" = "Added items: %@";
 
 "copy_from_other_profile" = "Copy from another profile";
@@ -1161,7 +1158,7 @@
 "downloading" = "Downloading";
 
 // Route planning
-"plan_route" = "Plan a route";
+"plan_route" = "রাস্তা পরিকল্পনা";
 "coord_input_add_point" = "Add point";
 "point_num" = "Point %d";
 "points_count" = "Points:";
@@ -1329,7 +1326,6 @@
 
 // Menu
 "shared_string_menu" = "Menu";
-"shared_string_my_places" = "My Places";
 "menu_my_trips" = "My Tracks";
 "feedback" = "Feedback";
 "shared_string_help" = "Help";
@@ -1660,14 +1656,14 @@
 "mile" = "mi";
 "yard" = "yd";
 "foot" = "ft";
-"nm" = "nmi";
+"nm" = "নটিকাল মাইল";
 
 "km_h" = "km/h";
 "mile_per_hour" = "mph";
 "units_nm_h" = "nmi/h";
 "min_mile" = "min/m";
 "min_km" = "min/km";
-"m_s" = "m/s";
+"m_s" = "মি/সে";
 
 "metric_ton" = "t";
 
@@ -1688,8 +1684,8 @@
 "map_viewing_item" = "Map viewing";
 "help_search" = "Map search";
 "planning_trip_item" = "Planning a trip";
-"navigation_profiles_item" = "Navigation profiles";
-"osmand_purchases_item" = "OsmAnd purchases";
+"navigation_profiles_item" = "ন্যাভিগেশন প্রোফাইল";
+"osmand_purchases_item" = "ওএসএমও কেনাকাটা";
 "subscription_osmandlive_item" = "Subscription - OsmAnd Live";
 "help_travel" = "Travel (Wikipedia & Wikivoyage)";
 "mapillary_item" = "OsmAnd + Mapillary";
@@ -1797,32 +1793,23 @@
 "debugging_and_development" = "OsmAnd development";
 "product_desc_development" = "For developers and experienced users";
 "product_desc_ext_development" = "Allows to configure OsmAnd for testing: simulate navigation routes, check the screen rendering performance, etc. Plugin is not required for normal application use.";
-
-"index_name_africa" = "Africa";
 "product_desc_africa" = "Unlimited map downloads for Africa";
-"index_name_antarctica" = "Antarctica";
 "product_desc_antarctica" = "Unlimited map downloads for Antarctica";
 "product_desc_africa_short" = "Africa region maps";
 "product_desc_australia" = "Unlimited map downloads for Australia";
 "product_desc_australia_short" = "Australia region maps";
-"index_name_central_america" = "Central America";
 "product_desc_centralamerica" = "Unlimited map downloads for Central America";
 "product_desc_centralamerica_short" = "Central America region maps";
-"index_name_europe" = "Europe";
 "product_desc_europe" = "Unlimited map downloads for Europe";
 "product_desc_europe_short" = "Europe region maps";
-"index_name_north_america" = "North America";
 "product_desc_northamerica" = "Unlimited map downloads for North America";
 "product_desc_northamerica_short" = "North America region maps";
-"index_name_russia" = "Russia";
 "product_desc_russia" = "Unlimited map downloads for Russia";
 "product_desc_russia_short" = "Maps of Russia regions";
-"index_name_south_america" = "South America";
 "product_desc_southamerica" = "Unlimited map downloads for South America";
 "product_desc_southamerica_short" = "South America region maps";
 "product_title_allworld" = "All World Maps";
 "product_desc_allworld" = "Maps of All World";
-"index_name_asia" = "Asia";
 "product_desc_asia" = "Unlimited map downloads for Asia";
 "product_desc_asia_short" = "Asia region maps";
 
@@ -1850,7 +1837,7 @@
 "depth_contours" = "Depth contours";
 "worldwide_maps" = "Worldwide maps";
 
-"my_location" = "My Location";
+"my_location" = "আমার অবস্থান";
 "all_categories" = "All categories";
 "get_unlimited_access" = "Get unlimited access";
 
@@ -1869,9 +1856,7 @@
 "enter_fav_name" = "Enter favorite name";
 "res_installing" = "Installing…";
 "roads" = "Roads";
-"download_wikipedia_maps" = "Wikipedia";
 "shared_string_hillshade" = "Hillshade";
-"shared_string_slope" = "Slope";
 "download_regular_maps" = "Standard map";
 
 "select_language" = "Select language";
@@ -2234,7 +2219,7 @@
 "routing_attr_height_obstacles_name" = "Use elevation data";
 "routing_attr_avoid_toll_name" = "No toll roads";
 "rendering_attr_appMode_description" = "Optimize map for";
-"routing_attr_avoid_ice_roads_fords_name" = "No ice roads or fords";
+"routing_attr_avoid_ice_roads_fords_name" = "বরফাবৃত, জলমগ্ন রাস্তা পরিত্যক্ত করুন";
 "rendering_value_germanRoadAtlas_name" = "German road atlas";
 "rendering_attr_hikingRoutesOSMC_name" = "Hiking routes";
 "rendering_attr_showRoadMaps_name" = "Roads-only maps";
@@ -2456,7 +2441,7 @@
 "rendering_attr_highway_class_path_name" = "Path";
 "rendering_value_white_name" = "White";
 "rendering_value_blue_name" = "Blue";
-"routing_attr_avoid_ice_roads_fords_description" = "Avoids ice roads and fords.";
+"routing_attr_avoid_ice_roads_fords_description" = "বরফাবৃত এবং জলমগ্ন রাস্তা পরিত্যক্ত করুন";
 "routing_attr_allow_advanced_name" = "Allow advanced routes";
 "rendering_attr_surface_grass_paver_name" = "Grass paver";
 "rendering_attr_hideAccess_name" = "Access restrictions";
@@ -2873,8 +2858,8 @@
 "last_two_month_total" = "Last two month total";
 "auth_error" = "Authorization Error";
 
-"recalc_angle_dialog_title" = "Minimum angle between my location and route";
-"recalc_angle_dialog_descr" = "Extra straight segment between my location and calculated route will be displayed until the route is recalculated";
+"recalc_angle_dialog_title" = "আমার অবস্থান ও গন্তব্য এর মধ্যকার সর্বনিম্ন কোন";
+"recalc_angle_dialog_descr" = "আমার নিজের অবস্থান এবং গন্তব্য এর হিসাব করা অতিরিক্ত সরলরেখাংশ গুলো দেখানো হবে, যতক্ষণ না গন্তব্যে পৌছানোর রাস্তাটি আবার খুঁজে পাওয়া যাচ্ছে";
 
 "checking_progress" = "Checking..";
 

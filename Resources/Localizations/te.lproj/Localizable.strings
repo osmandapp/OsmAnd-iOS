@@ -142,7 +142,7 @@
 "shared_string_automatic" = "Automatic";
 "routing_attr_length_name" = "Length limit";
 "default_speed_setting_title" = "Default speed";
-"shared_string_min_speed" = "Min. speed";
+"shared_string_min_speed" = "కనిష్ట వేగం";
 "max_speed" = "Max. speed";
 "road_speeds_descr" = "These parameters can affect the route calculation.";
 "road_min_speed_descr" = "Sets the minimum travel speed for all roads in the route. Raises priority for roads with recommended speeds less than the minimum.";
@@ -155,12 +155,12 @@
 "save_global_track_interval_descr" = "Choose logging interval for the general track recording (enabled via the GPX logging widget on the map).";
 "save_track_interval" = "Logging interval during navigation";
 "logging_interval_navigation_descr" = "Choose logging interval for track recording during navigation";
-"monitoring_min_distance" = "Minimum displacement";
+"monitoring_min_distance" = "కనిష్ట స్థానభ్రంశం";
 "logging_min_distance_descr" = "Filter: minimum distance to log a new point";
 "save_track_logging_accuracy" = "Logging accuracy";
-"monitoring_min_accuracy" = "Minimum accuracy";
+"monitoring_min_accuracy" = "కనిష్ట ఖచ్చితత్వం";
 "logging_min_accuracy_descr" = "Filter: no logging unless the accuracy is reached";
-"monitoring_min_speed" = "Minimum speed";
+"monitoring_min_speed" = "కనిష్ట వేగం";
 "logging_min_speed_descr" = "Filter: no logging below selected speed";
 "auto_split_recording_title" = "Auto-split recordings after gap";
 "auto_split_gap_descr" = "Start a new segment after 6 min gap, new track after 2 h gap, or new file after a longer gap";
@@ -353,7 +353,7 @@
 "impassable_road" = "Avoid roads";
 "road_speeds" = "Road speeds";
 "avoid_transport_type" = "Avoid transport types";
-"temporary_conditional_routing" = "Consider temporary limitations";
+"temporary_conditional_routing" = "తాత్కాలిక హద్దులు ఎన్నుకో";
 "impassable_road_desc" = "Select roads you want to avoid during navigation";
 "interrupt_music_descr" = "Fully pause any music during voice prompts (not just lower its volume)";
 "interrupt_music" = "Pause music";
@@ -547,7 +547,7 @@
 "shared_string_turn_off" = "Turn off";
 "shared_strings_all_regions" = "All regions";
 "regions" = "Regions";
-"shared_string_width" = "Width";
+"shared_string_width" = "వెడల్పు";
 "shared_string_interval" = "Interval";
 "shared_string_none" = "None";
 "shared_string_hide_all" = "Hide all";
@@ -557,12 +557,11 @@
 "shared_string_gpx_track" = "Track";
 "shared_string_open_street_map" = "OpenStreetMap";
 "any_poi" = "Any";
-"shared_string_capacity" = "Capacity";
+"shared_string_capacity" = "సామర్ధ్యం";
 "shared_string_learn_more" = "Learn more";
 "shared_string_includes" = "Includes";
 "shared_string_purchased" = "Purchased";
 "shared_string_control_start" = "Start";
-"shared_string_control_stop" = "Stop";
 "compass_always_visible" = "Always visible";
 "compass_always_hidden" = "Always hidden";
 "data_settings" = "Data";
@@ -721,7 +720,6 @@
 "gpx_route_time" = "Route time";
 "gpx_uphldownhl" = "Uphills/Downhills";
 "map_widget_average_speed" = "Average speed";
-"shared_string_control_start" = "Start";
 "gpx_avg_elev" = "Average elevation";
 "gpx_elev_range" = "Elevation range";
 "average_altitude" = "Average altitude";
@@ -769,7 +767,6 @@
 
 "gpx_distance_points" = "Distance (points)";
 "gpx_max_speed" = "Max speed";
-"shared_string_speed" = "Speed";
 "shared_string_slope" = "Slope";
 
 "stats_select_graph_data" = "Select graph data";
@@ -1065,7 +1062,7 @@
 "shared_string_quick_actions" = "Quick actions";
 "shared_string_poi_types" = "POI types";
 "quick_action_map_source_title" = "Map sources";
-"shared_string_routing" = "Routing";
+"shared_string_routing" = "రూటింగ్";
 "shared_string_rendering_style" = "Rendering styles";
 "avoid_road" = "Avoid road";
 "shared_string_importing" = "Importing";
@@ -1162,7 +1159,7 @@
 
 // Route planning
 "plan_route" = "Plan a route";
-"coord_input_add_point" = "Add point";
+"coord_input_add_point" = "పాయింట్ జోడించండి";
 "point_num" = "Point %d";
 "points_count" = "Points:";
 "route_between_points" = "Route between points";
@@ -1328,8 +1325,7 @@
 "shared_string_feet" = "feet";
 
 // Menu
-"shared_string_menu" = "Menu";
-"shared_string_my_places" = "My Places";
+"shared_string_menu" = "జాబితా";
 "menu_my_trips" = "My Tracks";
 "feedback" = "Feedback";
 "shared_string_help" = "Help";
@@ -1531,7 +1527,7 @@
 "add_home" = "Add home";
 "add_work" = "Add work";
 "favorite_home_category" = "Home";
-"work_button" = "Work";
+"work_button" = "పని";
 "map_widget_parking" = "Parking spot";
 "quick_action_add_first_intermediate" = "Add first intermediate";
 "toggle_auto_zoom" = "Auto zoom on/off";
@@ -1797,32 +1793,23 @@
 "debugging_and_development" = "OsmAnd development";
 "product_desc_development" = "For developers and experienced users";
 "product_desc_ext_development" = "Allows to configure OsmAnd for testing: simulate navigation routes, check the screen rendering performance, etc. Plugin is not required for normal application use.";
-
-"index_name_africa" = "Africa";
 "product_desc_africa" = "Unlimited map downloads for Africa";
-"index_name_antarctica" = "Antarctica";
 "product_desc_antarctica" = "Unlimited map downloads for Antarctica";
 "product_desc_africa_short" = "Africa region maps";
 "product_desc_australia" = "Unlimited map downloads for Australia";
 "product_desc_australia_short" = "Australia region maps";
-"index_name_central_america" = "Central America";
 "product_desc_centralamerica" = "Unlimited map downloads for Central America";
 "product_desc_centralamerica_short" = "Central America region maps";
-"index_name_europe" = "Europe";
 "product_desc_europe" = "Unlimited map downloads for Europe";
 "product_desc_europe_short" = "Europe region maps";
-"index_name_north_america" = "North America";
 "product_desc_northamerica" = "Unlimited map downloads for North America";
 "product_desc_northamerica_short" = "North America region maps";
-"index_name_russia" = "Russia";
 "product_desc_russia" = "Unlimited map downloads for Russia";
 "product_desc_russia_short" = "Maps of Russia regions";
-"index_name_south_america" = "South America";
 "product_desc_southamerica" = "Unlimited map downloads for South America";
 "product_desc_southamerica_short" = "South America region maps";
 "product_title_allworld" = "All World Maps";
 "product_desc_allworld" = "Maps of All World";
-"index_name_asia" = "Asia";
 "product_desc_asia" = "Unlimited map downloads for Asia";
 "product_desc_asia_short" = "Asia region maps";
 
@@ -1869,9 +1856,7 @@
 "enter_fav_name" = "Enter favorite name";
 "res_installing" = "Installing…";
 "roads" = "Roads";
-"download_wikipedia_maps" = "Wikipedia";
 "shared_string_hillshade" = "Hillshade";
-"shared_string_slope" = "Slope";
 "download_regular_maps" = "Standard map";
 
 "select_language" = "Select language";
@@ -2090,7 +2075,7 @@
 "online_webpage_warning" = "Page only available online. Open in web browser?";
 
 "custom_search" = "Custom search";
-"add_custom_category" = "Add custom category";
+"add_custom_category" = "కస్టమ్ కేటగిరీ జోడించు";
 "poi_filter_custom_filter" = "Custom filter";
 "delete_custom_categories" = "Delete custom categories";
 "poi_filter_closest_poi" = "Nearest POIs";
@@ -2102,7 +2087,7 @@
 "create_custom_poi" = "Create custom filter";
 "selected_categories" = "Selected categories";
 "new_filter_desc" = "Please enter a name for the new filter, this will be added to your Categories tab.";
-"rearrange_categories" = "Rearrange categories";
+"rearrange_categories" = "కేటగిరీలను తిరిగి అమర్చండి";
 "visible_categories" = "Visible categories";
 "hidden_categories" = "Hidden categories";
 "create_custom_categories_list_promo" = "You can add custom categories, hide categories that you don’t find necessary, and change the sort order of the list. Custom categories can be imported and exported with profiles.";
@@ -2271,7 +2256,7 @@
 "rendering_attr_showMtbScale_name" = "MTB Scale";
 "rendering_attr_showMtbScaleIMBATrails_name" = "IMBA";
 "mtb_imba_full" = "International Mountain Bicycling Association";
-"rendering_attr_tracktype_grade5_name" = "Soft";
+"rendering_attr_tracktype_grade5_name" = "మ్రుదువైన";
 "routing_attr_avoid_share_taxi_description" = "Avoids share taxi";
 "routing_attr_width_description" = "Specify permitted vehicle width limit on routes.";
 "rendering_attr_showSurfaceGrade_name" = "Show road quality";
@@ -2279,10 +2264,10 @@
 "rendering_attr_contourLines_description" = "Display from zoom level (requires contour data):";
 "routing_attr_avoid_stairs_description" = "Avoids stairs";
 "rendering_attr_surface_mud_name" = "Mud";
-"rendering_attr_ice_road_name" = "Ice road";
+"rendering_attr_ice_road_name" = "మంచు దారి";
 "rendering_attr_highway_class_track_grade4_name" = "Grade 4";
 "rendering_attr_piste_difficulty_connection_name" = "Connection";
-"rendering_attr_streetLightingNight_name" = "Show only at night";
+"rendering_attr_streetLightingNight_name" = "రాత్రిపూట మాత్రమే చూపించు";
 "rendering_attr_piste_difficulty_aerialway_name" = "Aerialway";
 "routing_attr_freeride_policy_name" = "Off-piste";
 "routing_attr_relief_smoothness_factor_more_plains_name" = "Flat";
@@ -2357,7 +2342,7 @@
 "rendering_attr_surface_sett_name" = "Sett";
 "rendering_attr_roadStyle_name" = "Road style";
 "rendering_attr_surface_gravel_name" = "Gravel";
-"routing_attr_max_num_changes_name" = "Number of changes";
+"routing_attr_max_num_changes_name" = "మార్పుల సంఖ్య";
 "rendering_attr_publicTransportMode_name" = "Bus, trolleybus, shuttle routes";
 "rendering_attr_hideNonVehicleHighways_name" = "Non-vehicle highways";
 "rendering_value_translucent_pink_name" = "Translucent pink";
@@ -2378,11 +2363,11 @@
 "rendering_attr_piste_difficulty_undefined_name" = "Undefined";
 "routing_attr_allow_motorway_name" = "Use motorways";
 "rendering_value_black_name" = "Black";
-"routeInfo_winter_ice_road_name" = "Winter and ice roads";
+"routeInfo_winter_ice_road_name" = "శీతకాలం మరియు మంచు దారులు";
 "routeInfo_winter_ice_road_description" = "Color the route or track line by its winter road classification.";
 "rendering_attr_hideBuildings_name" = "Buildings";
-"routing_attr_max_num_changes_description" = "Specify upper limit of changes";
-"rendering_attr_winter_road_name" = "Winter road";
+"routing_attr_max_num_changes_description" = "గరిష్ట సంఖ్యలొ మర్పులను పేర్కొనండి";
+"rendering_attr_winter_road_name" = "శీతాకాలపు దారి";
 "rendering_attr_tramTrainRoutes_name" = "Tram and train routes";
 "rendering_attr_smoothness_intermediate_name" = "Intermediate";
 "rendering_attr_surface_snow_name" = "Snow";
@@ -2398,7 +2383,7 @@
 "routing_attr_prefer_motorway_description" = "Prefer motorways";
 "routing_attr_avoid_ferries_name" = "No ferries";
 "rendering_attr_highway_class_track_name" = "Track";
-"rendering_attr_tracktype_grade4_name" = "Mostly soft";
+"rendering_attr_tracktype_grade4_name" = "ఎక్కువగ మ్రుదువైనది";
 "rendering_value_disabled_name" = "Disabled";
 "rendering_attr_contourColorScheme_name" = "Contour lines color scheme";
 "routing_attr_short_way_name" = "Fuel-efficient way";
@@ -2451,7 +2436,7 @@
 "routing_attr_allow_private_name" = "Allow private access";
 "routing_attr_allow_private_for_truck_name" = "Allow private access (truck)";
 "private_access_routing_req" = "Your destination is located in an area with private access. Allow using private roads for this trip?";
-"routeInfo_tracktype_name" = "Surface firmness";
+"routeInfo_tracktype_name" = "ధ్రుడవైన ఉపరితలం";
 "routeInfo_tracktype_description" = "Color the route or track line by its surface composition. Typically apply when the road network is largely unpaved.";
 "rendering_attr_highway_class_path_name" = "Path";
 "rendering_value_white_name" = "White";
@@ -2477,7 +2462,7 @@
 "rendering_value_walkingRoutesOSMCNodes_name" = "Node networks";
 "rendering_attr_piste_difficulty_expert_name" = "Expert";
 "rendering_attr_buildings15zoom_name" = "Buildings on zoom 15";
-"rendering_attr_tracktype_grade1_name" = "Solid (paved)";
+"rendering_attr_tracktype_grade1_name" = "మెరుగైన";
 "routing_attr_avoid_train_description" = "Avoids trains";
 "routing_attr_avoid_shuttle_train_name" = "No shuttle train";
 "rendering_attr_contourColorScheme_description" = "Contour lines color scheme";
@@ -2604,11 +2589,11 @@
 "horseback_riding" = "Horseback riding";
 "app_mode_personal_transporter" = "Personal transporter";
 "app_mode_monowheel" = "Monowheel";
-"app_mode_scooter" = "Scooter";
+"app_mode_scooter" = "మోటారు బండి";
 "app_mode_ufo" = "UFO";
-"app_mode_offroad" = "Offroad";
-"app_mode_camper" = "Camper";
-"app_mode_campervan" = "Campervan (RV)";
+"app_mode_offroad" = "దారికి దూరంగ";
+"app_mode_camper" = "మకాం వేసే వ్యక్తి";
+"app_mode_campervan" = "తాత్కాలిక హడ్డులు ఎంచుకో";
 "app_mode_wagon" = "Wagon";
 "app_mode_pickup_truck" = "Pickup truck";
 "app_mode_utv" = "Side by Side";
@@ -2706,7 +2691,7 @@
 "cloud_conflicts" = "Conflicts";
 "cloud_conflict" = "Conflict";
 "upload_all" = "Upload all";
-"download_all" = "Download all";
+"download_all" = "అన్ని దింపుకోండి";
 "backup_view_conflicts" = "View conflicts";
 "backup_data" = "Backup data";
 "backup_version_history" = "Version history";

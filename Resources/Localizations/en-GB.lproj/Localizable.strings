@@ -187,7 +187,7 @@
 "speak_cameras" = "Speed cameras";
 "speak_traffic_warnings" = "Traffic warnings";
 "shared_string_gpx_waypoints" = "Track waypoints";
-"speak_favorites" = "Nearby Favorites";
+"speak_favorites" = "Nearby Favourites";
 "speak_poi" = "Nearby POI";
 "speak_pedestrian" = "Pedestrian crosswalks";
 "show_tunnels" = "Tunnels";
@@ -242,10 +242,10 @@
 "prefer_in_routing_descr" = "Prefer motorways";
 "relief_smoothness_factor_descr" = "Preferred terrain: flat or hilly";
 "choose_auto_follow_route" = "Auto-centre map view";
-"choose_auto_follow_route_descr" = "Time until map view synchronizes with current position";
+"choose_auto_follow_route_descr" = "Time until the map view synchronises with the current position.";
 "choose_auto_center_map_view_descr" = "Time until map view synchronizes with current position after moving";
 "auto_zoom_map" = "Auto zoom map";
-"auto_zoom_map_descr" = "Auto zoom map according to your speed (while map is synchronized with current position)";
+"auto_zoom_map_descr" = "Zoom level according to your speed (while the map is synchronised with current position).";
 "snap_to_road" = "Snap to road";
 "snap_to_road_descr" = "Snap position to roads during navigation";
 "show_warnings_title" = "Show alerts…";
@@ -534,7 +534,7 @@
 "fav_ignore" = "Ignore";
 "shared_string_rename" = "Rename";
 "update_existing" = "Replace";
-"replace_favorite_confirmation" = "Are you sure you want to replace Favorite %@?";
+"replace_favorite_confirmation" = "Are you sure you want to replace favourite %@?";
 "fav_points_not_exist" = "No favourite points exist";
 "fav_rename_q" = "Rename favorite";
 "fav_enter_new_name" = "Please enter new name for the favorite";
@@ -548,8 +548,8 @@
 "shared_string_icon" = "Icon";
 "shared_string_shape" = "Shape";
 "fav_point_dublicate" = "Favourite point name duplicate";
-"fav_point_dublicate_message" = "Favorite renamed to \'%@\' to avoid duplication.";
-"fav_point_emoticons_message" = "Favorite renamed to \'%@\' to save the string containing emoticons to a file.";
+"fav_point_dublicate_message" = "Specified favourite name already in use, was changed to %@ to avoid duplication.";
+"fav_point_emoticons_message" = "The favourite point name has been modified to %@ to facilitate properly saving the string with emoticons to a file.";
 "access_default_color" = "Default colour";
 "default_color_descr" = "This color wil be used for all new favorites added to the group.";
 "favorite_friends_category" = "Friends";
@@ -568,7 +568,7 @@
 "shared_string_hide" = "Hide";
 
 // My Places
-"favorites_item" = "My Favourites";
+"favorites_item" = "Favourites";
 "shared_string_gpx_tracks" = "Tracks";
 "personal_category_name" = "Personal";
 "shared_string_visible" = "Visible";
@@ -1154,7 +1154,6 @@
 
 // Menu
 "shared_string_menu" = "Menu";
-"shared_string_my_places" = "My Places";
 "menu_my_trips" = "My Tracks";
 "feedback" = "Feedback";
 "shared_string_help" = "Help";
@@ -1561,31 +1560,23 @@
 "open_place_reviews" = "OpenPlaceReviews";
 "product_desc_openplacereviews" = "Send photos, reviews, and links about public places";
 "product_desc_ext_openplacereviews" = "Send photos, reviews, and links about public places such as restaurants, hotels, museums, and waypoints as open data https://openplacereviews.org/data/.\n\nRead more at https://openplacereviews.org";
-"index_name_africa" = "Africa";
 "product_desc_africa" = "Unlimited map downloads for Africa";
-"index_name_antarctica" = "Antarctica";
 "product_desc_antarctica" = "Unlimited map downloads for Antarctica";
 "product_desc_africa_short" = "Africa region maps";
 "product_desc_australia" = "Unlimited map downloads for Australia";
 "product_desc_australia_short" = "Australia region maps";
-"index_name_central_america" = "Central America";
 "product_desc_centralamerica" = "Unlimited map downloads for Central America";
 "product_desc_centralamerica_short" = "Central America region maps";
-"index_name_europe" = "Europe";
 "product_desc_europe" = "Unlimited map downloads for Europe";
 "product_desc_europe_short" = "Europe region maps";
-"index_name_north_america" = "North America";
 "product_desc_northamerica" = "Unlimited map downloads for North America";
 "product_desc_northamerica_short" = "North America region maps";
-"index_name_russia" = "Russia";
 "product_desc_russia" = "Unlimited map downloads for Russia";
 "product_desc_russia_short" = "Maps of Russia regions";
-"index_name_south_america" = "South America";
 "product_desc_southamerica" = "Unlimited map downloads for South America";
 "product_desc_southamerica_short" = "South America region maps";
 "product_title_allworld" = "All World Maps";
 "product_desc_allworld" = "Maps of All World";
-"index_name_asia" = "Asia";
 "product_desc_asia" = "Unlimited map downloads for Asia";
 "product_desc_asia_short" = "Asia region maps";
 "download_wikipedia_maps" = "Wikipedia";
@@ -1619,9 +1610,7 @@
 "enter_fav_name" = "Enter favorite name";
 "res_installing" = "Installing…";
 "roads" = "Roads";
-"download_wikipedia_maps" = "Wikipedia";
 "shared_string_hillshade" = "Hillshade";
-"shared_string_slope" = "Slope";
 "download_regular_maps" = "Standard map";
 "select_language" = "Select language";
 "language_short" = "Lang";
@@ -1640,7 +1629,7 @@
 "route_line_color_elevation_description" = "Route line will be colorized depending on the elevation profile of the route.";
 "gpx_split_interval_none_descr" = "Select the desired splitting option: by time or by distance.";
 "slope_grey_color_descr" = "Grey color is used when slope is undefined.";
-"analyze_on_map" = "Analyze on map";
+"analyze_on_map" = "Analyse on map";
 "upload_to_openstreetmap" = "Upload to OpenStreetMap";
 "edit_track" = "Edit track";
 "duplicate_track" = "Duplicate track";
@@ -1854,7 +1843,7 @@
 "osm_live_payment_annual_title" = "Pay once a year";
 "osm_live_payment_month_cost_descr" = "%@ / month";
 "osm_live_payment_month_cost_descr_ex" = "%.2f %@ / month";
-"osm_live_payment_discount_descr" = "Save %@!";
+"osm_live_payment_discount_descr" = "Save %@";
 "osm_live_payment_current_subscription" = "Your current subscription";
 "osm_live_payment_renews_monthly" = "Renews monthly";
 "osm_live_payment_renews_quarterly" = "Renews quarterly";
@@ -1951,7 +1940,7 @@
 "rendering_attr_surface_concrete_name" = "Concrete";
 "rendering_attr_piste_difficulty_intermediate_name" = "Intermediate";
 "routeInfo_piste_difficulty_name" = "Piste difficulty";
-"routing_attr_short_way_description" = "Use fuel-efficient way (usually shorter).";
+"routing_attr_short_way_description" = "Optimised shorter route (energy saving)";
 "rendering_attr_highway_class_track_grade3_name" = "Grade 3";
 "routing_attr_freeride_policy_description" = "\'Freeride\' and \'Off-piste\' are unofficial routes and passages. Typically ungroomed, unmaintained and not checked in the evening. Enter at your own risk.";
 "rendering_attr_highway_class_street_name" = "Street";
@@ -2253,3 +2242,4 @@
 "customize_route_line" = "Customise route line";
 "routing_attr_allow_private_for_truck_name" = "Allow private access (lorry)";
 "routing_attr_allow_private_for_truck_description" = "Allow access to private areas for lorries.";
+"position_on_map_center" = "Centre";

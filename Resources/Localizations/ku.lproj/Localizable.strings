@@ -48,7 +48,7 @@
 "no_internet_avail" = "Înternet Nîne";
 "plugin_popup_nautical_title" = "Nexşen deryavanî bi daxinin";
 "plugin_popup_wiki_title" = "Wîkîpediyayê daxe";
-"go_to_map" = "Hera Nexşe";
+"go_to_map" = "Nexşeyê nîşan bide";
 "no_statistics" = "Statîstîk tine ye";
 "time_closed" = "Girtî";
 "shared_string_open" = "Vekirî";
@@ -63,7 +63,6 @@
 "navigate_point_longitude" = "Hêlîlar";
 "navigate_point_latitude" = "Hêlîpan";
 "my_location" = "Cihê min";
-"download_wikipedia_maps" = "Wîkîpediya";
 "product_desc_asia" = "Nexşeya Asyayê";
 "index_name_asia" = "Asya";
 "product_desc_allworld" = "Nexşeya Cîhanê";
@@ -80,11 +79,6 @@
 "rendering_category_details" = "Berfireh";
 // Rendering categories
 "rendering_category_hide" = "Veşêre";
-"index_name_russia" = "Rûsya";
-"index_name_europe" = "Ewropa";
-"index_name_asia" = "Asya";
-// World Regions
-"index_name_africa" = "Afrîka";
 "map_marker" = "Alî";
 "shared_string_share" = "Parve bike";
 "mile_per_hour" = "mph";
@@ -140,7 +134,7 @@
 "edit_filter_save_as_menu_item" = "Bi awayekî cuda qeyd bike";
 "working_days" = "Rojên Karê";
 "next_proceed" = "Dû re";
-"shared_string_control_stop" = "Rawestgeh";
+"shared_string_control_stop" = "Bisekine";
 "transport_nearby_routes" = "NÊZÎK";
 "poi_remove_success" = "Jêbirî";
 "poi_dialog_poi_type" = "Cureya POIyê";
@@ -163,6 +157,13 @@
 "osm_notes" = "Notên OSMê";
 "favorite_group_name" = "Navê komê";
 "regions" = "Herêman";
-"shared_string_control_stop" = "Rawestgeh";
-"shared_string_control_start" = "Dest pê bike";
 "share_geo" = "Cih:";
+"make_as_start_point" = "Bike Nuqteya Destpêkê";
+"shared_string_added" = "Zêdekirî";
+"last_intermediate_dest_description" = "Rawestgeha dawîn îlaweyî rotayê dike";
+"parked_at" = "parkkirî ye li";
+"subsequent_dest_description" = "Cihê ku tu dixwazî herî bi jor de bibe an jî çêbike";
+"plan_route" = "Plana rêgehê";
+"first_intermediate_dest_description" = "Rawetgeha pêşîn îlaweyî rotayê dike";
+"sort_by" = "Tesnîfkirina gorî";
+"are_you_sure" = "Te biryar da?";

@@ -9,19 +9,19 @@
 "months_short" = "Mos";
 "year_short" = "Yr";
 "years_short" = "Yrs";
-"day" = "Day";
+"day" = "Көн";
 "days_2_4" = "Days";
 "days_5" = "Days";
-"week" = "Week";
+"week" = "Атна";
 "weeks_2_4" = "Weeks";
 "weeks_5" = "Weeks";
-"month" = "Month";
+"month" = "Ай";
 "months_2_4" = "Months";
 "months_5" = "Months";
 "year" = "Year";
 "years_2_4" = "Years";
 "years_5" = "Years";
-"months_3" = "Three months";
+"months_3" = "Өч ай";
 
 "price_free" = "Free";
 
@@ -139,11 +139,11 @@
 "rotate_map_none_opt" = "Do not rotate (north is up)";
 "driving_region_descr" = "Select the driving region: US, Europe, UK, Asia and others.";
 "driving_region" = "Driving region";
-"shared_string_automatic" = "Automatic";
+"shared_string_automatic" = "Автоматик";
 "routing_attr_length_name" = "Length limit";
 "default_speed_setting_title" = "Default speed";
 "shared_string_min_speed" = "Min. speed";
-"max_speed" = "Max. speed";
+"max_speed" = "Максималь тизлек";
 "road_speeds_descr" = "These parameters can affect the route calculation.";
 "road_min_speed_descr" = "Sets the minimum travel speed for all roads in the route. Raises priority for roads with recommended speeds less than the minimum.";
 "road_max_speed_descr" = "Sets the maximum travel speed for all roads in the route. Lowers the priority for roads with a possible speed higher than the maximum.";
@@ -211,7 +211,7 @@
 "tracks_empty" = "Your track list is empty";
 "favorites_empty" = "You have not saved any favorite points";
 
-"shared_string_last_used" = "Last used";
+"shared_string_last_used" = "Соңгы кулланылган";
 
 "carplay_available_in_sub_plans" = "Purchase OsmAnd Pro or Maps+ to use OsmAnd with CarPlay.";
 "carplay_active_message" = "Map is displayed via CarPlay";
@@ -236,8 +236,8 @@
 "shared_string_recorded" = "Recorded";
 
 // Dirrection appearance
-"shared_string_one" = "One";
-"shared_string_two" = "Two";
+"shared_string_one" = "Бер";
+"shared_string_two" = "Ике";
 "show_direction" = "Distance indication";
 "arrows_on_map" = "Arrows on the map";
 "direction_lines" = "Direction lines";
@@ -498,11 +498,11 @@
 "shared_string_no" = "No";
 "shared_string_yes" = "Yes";
 "shared_string_save" = "Save";
-"shared_string_done" = "Done";
+"shared_string_done" = "Булды";
 "shared_string_clear_all" = "Clear all";
 "shared_string_update" = "Update";
-"shared_string_install" = "Install";
-"shared_string_uninstall" = "Uninstall";
+"shared_string_install" = "Урнаштыру";
+"shared_string_uninstall" = "Бетерү";
 "shared_string_delete" = "Delete";
 "shared_string_upload" = "Upload";
 "shared_string_remove" = "Remove";
@@ -518,7 +518,7 @@
 "shared_string_of" = "of";
 "shared_string_all" = "All";
 "shared_string_from" = "from";
-"shared_string_time" = "Time";
+"shared_string_time" = "Вакыт";
 "time_of_day" = "Time of day";
 "map_widget_trip_recording_distance" = "Distance";
 "shared_string_time_span" = "Time span";
@@ -530,7 +530,7 @@
 "shared_string_start_date" = "Start date";
 "shared_string_end_date" = "End date";
 "shared_string_not_set" = "Not set";
-"shared_string_reset" = "Reset";
+"shared_string_reset" = "Бетерү";
 "shared_string_read_more" = "Read more";
 "shared_string_on" = "On";
 "shared_string_off" = "Off";
@@ -544,7 +544,7 @@
 "shared_string_min" = "Min.";
 "shared_string_max" = "Max.";
 "shared_string_wifi_only" = "Only on Wi-Fi";
-"shared_string_turn_off" = "Turn off";
+"shared_string_turn_off" = "Сүндерү";
 "shared_strings_all_regions" = "All regions";
 "regions" = "Regions";
 "shared_string_width" = "Width";
@@ -562,7 +562,6 @@
 "shared_string_includes" = "Includes";
 "shared_string_purchased" = "Purchased";
 "shared_string_control_start" = "Start";
-"shared_string_control_stop" = "Stop";
 "compass_always_visible" = "Always visible";
 "compass_always_hidden" = "Always hidden";
 "data_settings" = "Data";
@@ -590,7 +589,7 @@
 "shared_string_changed" = "Changed";
 "shared_string_profile" = "Profile";
 "shared_string_download_update" = "Download update";
-"shared_string_angle" = "Angle";
+"shared_string_angle" = "Почмак";
 "shared_string_angle_param" = "Angle: %@°";
 "shared_string_uploaded" = "Uploaded";
 "shared_string_do_not_exist" = "Do not exist";
@@ -618,14 +617,14 @@
 "hud_no_movement" = "No movement";
 
 // Favorites
-"shared_string_color" = "Color";
+"shared_string_color" = "Төс";
 "fav_colors" = "Colors";
 "shared_string_name" = "Name";
 "fav_group" = "Group";
 "shared_string_groups" = "Groups";
 "favorite" = "Favorite";
 "poi_overlay" = "POI Overlay";
-"poi_dialog_poi_type" = "POI Type";
+"poi_dialog_poi_type" = "POIтибы";
 "my_favorites" = "My Favorites";
 "shared_string_my_places" = "My Places";
 "fav_no_group" = "No group";
@@ -721,7 +720,6 @@
 "gpx_route_time" = "Route time";
 "gpx_uphldownhl" = "Uphills/Downhills";
 "map_widget_average_speed" = "Average speed";
-"shared_string_control_start" = "Start";
 "gpx_avg_elev" = "Average elevation";
 "gpx_elev_range" = "Elevation range";
 "average_altitude" = "Average altitude";
@@ -769,7 +767,6 @@
 
 "gpx_distance_points" = "Distance (points)";
 "gpx_max_speed" = "Max speed";
-"shared_string_speed" = "Speed";
 "shared_string_slope" = "Slope";
 
 "stats_select_graph_data" = "Select graph data";
@@ -904,11 +901,11 @@
 "lang_af" = "Afrikaans";
 "lang_al" = "Albanian";
 "lang_als" = "Albanian (Tosk)";
-"lang_an" = "Aragonese";
+"lang_an" = "Арагон";
 "lang_ar" = "Arabic";
 "lang_ast" = "Asturian";
 "lang_az" = "Azerbaijani";
-"lang_ba" = "Bashkir";
+"lang_ba" = "Башкир";
 "lang_bar" = "Bavarian";
 "lang_be" = "Belarusian";
 "lang_be_by" = "Belarusian (Latin)";
@@ -1015,14 +1012,14 @@
 "lang_th" = "Thai";
 "lang_tl" = "Tagalog";
 "lang_tr" = "Turkish";
-"lang_tt" = "Tatar";
+"lang_tt" = "Татар";
 "lang_uk" = "Ukrainian";
 "lang_ur" = "Urdu";
 "lang_uz" = "Uzbek";
 "lang_vi" = "Vietnamese";
 "lang_vo" = "Volapuk";
 "lang_war" = "Waray";
-"lang_yo" = "Yoruba";
+"lang_yo" = "Йоруба";
 "lang_zh" = "Chinese";
 "lang_zh_cn" = "Chinese (Simplified)";
 "lang_zh_hk" = "Chinese (Hong Kong)";
@@ -1080,7 +1077,7 @@
 
 "ltr_or_rtl_combine_via_space" = "%@ %@";
 "ltr_or_rtl_combine_via_colon" = "%@: %@";
-"ltr_or_rtl_combine_via_dash" = "%@ - %@";
+"ltr_or_rtl_combine_via_dash" = "%@— %@";
 "ltr_or_rtl_combine_via_or" = "%@ or %@";
 "ltr_or_rtl_combine_via_slash" = "%@/%@";
 
@@ -1107,7 +1104,7 @@
 "ui_customization_short_descr" = "Drawer items, context menu";
 "reorder_profiles" = "Edit profile list";
 "profile_alert_need_profile_name_title" = "Enter profile name";
-"select_color" = "Select color";
+"select_color" = "Төсне сайлау";
 "select_icon_profile_dialog_title" = "Select icon";
 "select_map_icon" = "Position icon at rest";
 "select_navigation_icon" = "Position icon while moving";
@@ -1130,7 +1127,7 @@
 "profile_prefs_reset_successful" = "All profile settings restored to default";
 "not_available_profile_name" = "Profile with this name already exists.";
 "profile_type_base_string" = "Base profile";
-"selected_profile" = "Selected profile";
+"selected_profile" = "Сайланган профиль";
 "application_profiles" = "App profiles";
 "profile_sett_descr" = "Affect selected application profile";
 "import_profile_descr" = "To import a profile, tap on the needed file (*.osf) in any application and select \"Copy to OsmAnd Maps\"";
@@ -1199,7 +1196,7 @@
 "plan_route_create_new_route" = "Create new route";
 "track_is_saved" = "%@\nis saved!";
 "plan_route_open_existing_track" = "Open existing track";
-"sort_last_modified" = "Last modified";
+"sort_last_modified" = "Соңгы үзгәртелде";
 "route_between_points_add_track_desc" = "Select a track file for which a new segment will be added.";
 "route_between_points_warning_desc" = "Next, snap your track to the nearest allowed road with one of your navigation profiles to use this option.";
 "plan_route_exit_message" = "Are you sure you want to close Plan route without saving? You will lose all changes.";
@@ -1220,7 +1217,7 @@
 "start_of_the_track" = "Start of the track";
 "nearest_point" = "Nearest point";
 "plan_route_folder" = "Folder";
-"change_folder" = "Change folder";
+"change_folder" = "Папканы үзгәртү";
 "select_folder" = "Select folder";
 "select_folder_descr" = "Select folder or add a new one";
 "add_folder" = "Add folder";
@@ -1264,7 +1261,7 @@
 "res_search_world" = "Search worldwide";
 "res_catalog_upd" = "Catalog update";
 "res_world_map" = "World map";
-"shared_string_world" = "World";
+"shared_string_world" = "Дөнья";
 "download_tab_updates" = "Updates";
 "res_worldwide" = "Worldwide";
 "res_region_map" = "Region map";
@@ -1308,7 +1305,7 @@
 "res_elliptic_mercator" = "Elliptic mercator";
 "pseudo_mercator_projection" = "Pseudo-Mercator projection";
 "res_source_format" = "Source format";
-"sqlite_db_file" = "SQLiteDB file";
+"sqlite_db_file" = "SQLiteDBфайл";
 "one_image_per_tile" = "One image file per tile";
 "res_zoom_levels_desc" = "This parameters will affect the map display when used as a map type or overlay/underlay.\n\nMap type: the map will be limited to the selected zooms.\n\nOverlay / Underlay: Zoom levels at which tiles will be visible. Upscale or downscale will occur above or below the set values.";
 "res_expire_time_desc" = "Expiration time in minutes. Cached tiles will be reloaded after specified time. Leave this field empty if you do not need to reload tiles for this source.\nOne day is 1440 minutes.\nOne week is 10 080 minutes.\n30 days are 43 200 minutes.";
@@ -1324,12 +1321,11 @@
 "srtm_unit_format" = "Contour lines unit format";
 "srtm_download_single_help_message" = "Please select the needed format. You will need to re-download the file to change the format.";
 "srtm_download_list_help_message" = "OsmAnd provides contour lines data in meters and feet. You will need to re-download the file to change the format.";
-"shared_string_meters" = "meters";
+"shared_string_meters" = "метр";
 "shared_string_feet" = "feet";
 
 // Menu
-"shared_string_menu" = "Menu";
-"shared_string_my_places" = "My Places";
+"shared_string_menu" = "Меню";
 "menu_my_trips" = "My Tracks";
 "feedback" = "Feedback";
 "shared_string_help" = "Help";
@@ -1374,7 +1370,7 @@
 "simulate_location_movement_speed_x4_desc" = "The location movement speed during the simulation will be x4 bigger to the speed in the selected file.";
 "use_heightmap_setting" = "Use 3D relief heightmaps";
 
-"shared_string_added" = "Added";
+"shared_string_added" = "Өстәлде";
 "osn_bug_name" = "OSM Note";
 "osm_created" = "Created";
 "poi_remove_success" = "Deleted";
@@ -1656,7 +1652,7 @@
 "cannot_add_marker_desc" = "Please remove one direction at least and retry";
 "cannot_add_destination" = "Cannot add Direction";
 // Units
-"cubic_m" = "m³";
+"cubic_m" = "м³";
 "mile" = "mi";
 "yard" = "yd";
 "foot" = "ft";
@@ -1669,11 +1665,11 @@
 "min_km" = "min/km";
 "m_s" = "m/s";
 
-"metric_ton" = "t";
+"metric_ton" = "т";
 
 "int_hour" = "h";
 "int_min" = "min.";
-"shared_string_sec" = "sec";
+"shared_string_sec" = "сек";
 "units_sec_short" = "s";
 "int_seconds" = "seconds";
 
@@ -1797,39 +1793,30 @@
 "debugging_and_development" = "OsmAnd development";
 "product_desc_development" = "For developers and experienced users";
 "product_desc_ext_development" = "Allows to configure OsmAnd for testing: simulate navigation routes, check the screen rendering performance, etc. Plugin is not required for normal application use.";
-
-"index_name_africa" = "Africa";
 "product_desc_africa" = "Unlimited map downloads for Africa";
-"index_name_antarctica" = "Antarctica";
 "product_desc_antarctica" = "Unlimited map downloads for Antarctica";
 "product_desc_africa_short" = "Africa region maps";
 "product_desc_australia" = "Unlimited map downloads for Australia";
 "product_desc_australia_short" = "Australia region maps";
-"index_name_central_america" = "Central America";
 "product_desc_centralamerica" = "Unlimited map downloads for Central America";
 "product_desc_centralamerica_short" = "Central America region maps";
-"index_name_europe" = "Europe";
 "product_desc_europe" = "Unlimited map downloads for Europe";
 "product_desc_europe_short" = "Europe region maps";
-"index_name_north_america" = "North America";
 "product_desc_northamerica" = "Unlimited map downloads for North America";
 "product_desc_northamerica_short" = "North America region maps";
-"index_name_russia" = "Russia";
 "product_desc_russia" = "Unlimited map downloads for Russia";
 "product_desc_russia_short" = "Maps of Russia regions";
-"index_name_south_america" = "South America";
 "product_desc_southamerica" = "Unlimited map downloads for South America";
 "product_desc_southamerica_short" = "South America region maps";
 "product_title_allworld" = "All World Maps";
 "product_desc_allworld" = "Maps of All World";
-"index_name_asia" = "Asia";
 "product_desc_asia" = "Unlimited map downloads for Asia";
 "product_desc_asia_short" = "Asia region maps";
 
 "download_wikipedia_maps" = "Wikipedia";
 "product_desc_wiki" = "Location based Wikipedia articles on the map";
 "product_desc_ext_wiki" = "Having offline Wikipedia on your trip helps you learn more about the places you visit. It is available offline and shows Wikipedia articles in relation to the points of interest right on the map. Don't forget to download Wikipedia maps for chosen region.";
-"shared_string_all_languages" = "All languages";
+"shared_string_all_languages" = "Барлык телләр";
 "select_wikipedia_article_langs" = "Select the languages in which Wikipedia articles will appear on the map. You can switch between all available languages while reading the article.";
 "wiki_menu_download_descr" = "Additional maps are needed to view Wikipedia POIs on the map.";
 "some_articles_may_not_available_in_lang" = "Some Wikipedia articles may not be available in your language.";
@@ -1869,9 +1856,7 @@
 "enter_fav_name" = "Enter favorite name";
 "res_installing" = "Installing…";
 "roads" = "Roads";
-"download_wikipedia_maps" = "Wikipedia";
 "shared_string_hillshade" = "Hillshade";
-"shared_string_slope" = "Slope";
 "download_regular_maps" = "Standard map";
 
 "select_language" = "Select language";
@@ -1899,7 +1884,7 @@
 "duplicate_track" = "Duplicate track";
 "access_hint_enter_name" = "Enter name";
 "shared_string_not_selected" = "Not selected";
-"shared_string_language" = "Language";
+"shared_string_language" = "Тел";
 
 "you_searching" = "You are searching";
 "from_location" = "away";
@@ -2041,8 +2026,8 @@
 "calculating_progress" = "Calculating...";
 "local_map_names" = "Local names";
 "shared_string_history" = "History";
-"today" = "Today";
-"yesterday" = "Yesterday";
+"today" = "Бүген";
+"yesterday" = "Кичә";
 "tomorrow" = "Tomorrow";
 "hist_select_remove" = "Please select history items to remove";
 "hist_remove_q" = "Do you want to remove history items?";
@@ -2094,7 +2079,7 @@
 "poi_filter_custom_filter" = "Custom filter";
 "delete_custom_categories" = "Delete custom categories";
 "poi_filter_closest_poi" = "Nearest POIs";
-"shared_string_is_open_24_7" = "Open 24/7";
+"shared_string_is_open_24_7" = "24/7ачык";
 "shared_string_is_open" = "Open now";
 "poi_filter_by_name" = "Search by name";
 "subcategories" = "Subcategories";
@@ -2111,10 +2096,10 @@
 
 "email_example_hint" = "user@example.com";
 "shared_string_required" = "Required";
-"login_account" = "Account";
+"login_account" = "Хисап язмасы";
 "shared_string_account_add" = "Add account";
 "shared_string_email" = "Email";
-"user_password" = "Password";
+"user_password" = "Парол";
 "shared_string_filters" = "Filters";
 "edit_filter" = "Edit categories";
 "edit_filter_save_as_menu_item" = "Save As";
@@ -2138,7 +2123,7 @@
 "city_type_city" = "City";
 "city_type_district" = "District";
 "city_type_neighbourhood" = "Neighbourhood";
-"postcode" = "Postcode";
+"postcode" = "Почта индексы";
 "show_something_on_map" = "Show %@ on the map";
 "search_POI_level_btn" = "Increase search radius";
 
@@ -2169,15 +2154,15 @@
 "osm_live_payment_monthly_title" = "Pay monthly";
 "osm_live_payment_3_months_title" = "Pay once in 3 months";
 "osm_live_payment_annual_title" = "Pay once a year";
-"osm_live_payment_month_cost_descr" = "%@ / month";
+"osm_live_payment_month_cost_descr" = "%@ /ай";
 "osm_live_payment_year_cost_descr" = "%@ / year";
-"osm_live_payment_month_cost_descr_ex" = "%.2f %@ / month";
-"osm_live_payment_discount_descr" = "Save %@!";
+"osm_live_payment_month_cost_descr_ex" = "%.2f %@ /ай";
+"osm_live_payment_discount_descr" = "%@саклау";
 "osm_live_payment_current_subscription" = "Your current subscription";
 "osm_live_payment_renews_monthly" = "Renews monthly";
 "osm_live_payment_renews_quarterly" = "Renews quarterly";
 "osm_live_payment_renews_annually" = "Renews annually";
-"default_price_currency_format" = "%@ %@";
+"default_price_currency_format" = "%.2f %@";
 "osm_live_payment_header" = "Select the payment period convenient for you:";
 "osm_live_payment_contribute_descr" = "Part of income goes to OpenStreetMap contributors.";
 
@@ -2188,15 +2173,15 @@
 "osm_live_subscription" = "OsmAnd Live subscription";
 "cancel_subscription" = "Cancel subscription";
 
-"wikivoyage_offline" = "Wikivoyage offline";
+"wikivoyage_offline" = "Wikivoyageоффлайн";
 "unlimited_downloads" = "Unlimited downloads";
-"wikipedia_offline" = "Wikipedia offline";
+"wikipedia_offline" = "Wikipediaоффлайн";
 "contour_lines_hillshade_maps" = "Terrain maps: contour lines, hillshades, slope";
 "monthly_map_updates" = "Monthly map updates";
 "daily_map_updates" = "Hourly map updates";
 "index_item_depth_contours_osmand_ext" = "Nautical depth contours";
 "donation_to_osm" = "Donation to OpenStreetMap community";
-"purchase_unlim_title" = "Buy - %@";
+"purchase_unlim_title" = "Сатып алу - %@";
 "in_app_purchase" = "In-app purchase";
 "in_app_purchase_desc" = "One-time payment";
 "in_app_purchase_desc_ex" = "Once purchased, it will be permanently available to you.";
@@ -2259,7 +2244,7 @@
 "rendering_value_light_brown_name" = "Light brown";
 "rendering_attr_surface_ice_name" = "Ice";
 "routing_attr_piste_type_sled_name" = "Sled";
-"rendering_attr_smoothness_bad_name" = "Bad";
+"rendering_attr_smoothness_bad_name" = "Начар";
 "routing_attr_allow_expert_description" = "Extremely difficult routes, with dangerous obstacles and surroundings.";
 "routeInfo_surface_name" = "Surface";
 "routeInfo_surface_description" = "Provide road/footpath physical surface info.";
@@ -2281,7 +2266,7 @@
 "rendering_attr_surface_mud_name" = "Mud";
 "rendering_attr_ice_road_name" = "Ice road";
 "rendering_attr_highway_class_track_grade4_name" = "Grade 4";
-"rendering_attr_piste_difficulty_connection_name" = "Connection";
+"rendering_attr_piste_difficulty_connection_name" = "Бәйләнеш";
 "rendering_attr_streetLightingNight_name" = "Show only at night";
 "rendering_attr_piste_difficulty_aerialway_name" = "Aerialway";
 "routing_attr_freeride_policy_name" = "Off-piste";
@@ -2422,7 +2407,7 @@
 "rendering_attr_highway_class_state_road_name" = "State road";
 "routing_attr_avoid_sett_name" = "No cobblestone or sett";
 "rendering_value_translucent_lightblue_name" = "Translucent light blue";
-"rendering_attr_smoothness_good_name" = "Good";
+"rendering_attr_smoothness_good_name" = "Яхшы";
 "routing_attr_weight_name" = "Weight limit";
 "rendering_value_bold_name" = "Bold";
 "rendering_attr_surface_stone_name" = "Stone";
@@ -2444,7 +2429,7 @@
 "rendering_attr_depthContourColorScheme_name" = "Lines color scheme";
 "rendering_attr_piste_difficulty_freeride_name" = "Freeride";
 "routeInfo_steepness_name" = "Steepness";
-"rendering_attr_smoothness_very_bad_name" = "Very bad";
+"rendering_attr_smoothness_very_bad_name" = "Бик начар";
 "rendering_attr_surface_compacted_name" = "Compacted";
 "rendering_attr_undefined_name" = "Undefined";
 "rendering_value_red_name" = "Red";
@@ -2454,7 +2439,7 @@
 "routeInfo_tracktype_name" = "Surface firmness";
 "routeInfo_tracktype_description" = "Color the route or track line by its surface composition. Typically apply when the road network is largely unpaved.";
 "rendering_attr_highway_class_path_name" = "Path";
-"rendering_value_white_name" = "White";
+"rendering_value_white_name" = "Ак";
 "rendering_value_blue_name" = "Blue";
 "routing_attr_avoid_ice_roads_fords_description" = "Avoids ice roads and fords.";
 "routing_attr_allow_advanced_name" = "Allow advanced routes";
@@ -2464,7 +2449,7 @@
 "rendering_attr_smoothness_very_horrible_name" = "Very horrible";
 "routing_attr_allow_intermediate_name" = "Allow intermediate routes";
 "rendering_attr_trolleybusRoutes_name" = "Trolleybus routes";
-"rendering_attr_hideWaterPolygons_description" = "Water";
+"rendering_attr_hideWaterPolygons_description" = "Су";
 "rendering_attr_piste_difficulty_extreme_name" = "Extreme";
 "rendering_value_low_name" = "Low";
 "rendering_value_lightgreen_name" = "Light green";
@@ -2582,7 +2567,7 @@
 "icon_group_amenity" = "Amenity";
 "amenity_type_emergency" = "Emergency";
 "icon_group_special" = "Special";
-"icon_group_sport" = "Sport";
+"icon_group_sport" = "Спорт";
 "icon_group_symbols" = "Symbols";
 "transport" = "Transport";
 "icon_group_travel" = "Travel";
@@ -2595,10 +2580,10 @@
 "app_mode_car" = "Driving";
 "app_mode_bicycle" = "Cycling";
 "app_mode_pedestrian" = "Walking";
-"app_mode_taxi" = "Taxi";
+"app_mode_taxi" = "Такси";
 "app_mode_shuttle_bus" = "Shuttle bus";
 "app_mode_subway" = "Subway";
-"app_mode_horse" = "Horse";
+"app_mode_horse" = "Ат";
 "app_mode_helicopter" = "Helicopter";
 "app_mode_skiing" = "Skiing";
 "horseback_riding" = "Horseback riding";
@@ -2615,7 +2600,7 @@
 "app_mode_osm" = "OSM";
 "desert" = "Desert";
 
-"user_login" = "Login";
+"user_login" = "Логин";
 "osmand_cloud_login_descr" = "Please enter the e-mail address you registred with. A one-time password for the next step will be sent to it.";
 "login_footer_full_text" = "Need help? Please contact us at \nsupport@osmand.net";
 "login_footer_email_part" = "support@osmand.net";
@@ -2706,7 +2691,7 @@
 "cloud_conflicts" = "Conflicts";
 "cloud_conflict" = "Conflict";
 "upload_all" = "Upload all";
-"download_all" = "Download all";
+"download_all" = "Барысын да йөкләү";
 "backup_view_conflicts" = "View conflicts";
 "backup_data" = "Backup data";
 "backup_version_history" = "Version history";

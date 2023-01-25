@@ -562,7 +562,6 @@
 "shared_string_includes" = "Includes";
 "shared_string_purchased" = "Purchased";
 "shared_string_control_start" = "Start";
-"shared_string_control_stop" = "Stop";
 "compass_always_visible" = "Always visible";
 "compass_always_hidden" = "Always hidden";
 "data_settings" = "Data";
@@ -721,7 +720,6 @@
 "gpx_route_time" = "Route time";
 "gpx_uphldownhl" = "Uphills/Downhills";
 "map_widget_average_speed" = "Average speed";
-"shared_string_control_start" = "Start";
 "gpx_avg_elev" = "Average elevation";
 "gpx_elev_range" = "Elevation range";
 "average_altitude" = "Average altitude";
@@ -769,7 +767,6 @@
 
 "gpx_distance_points" = "Distance (points)";
 "gpx_max_speed" = "Max speed";
-"shared_string_speed" = "Speed";
 "shared_string_slope" = "Slope";
 
 "stats_select_graph_data" = "Select graph data";
@@ -1329,7 +1326,6 @@
 
 // Menu
 "shared_string_menu" = "Menu";
-"shared_string_my_places" = "My Places";
 "menu_my_trips" = "My Tracks";
 "feedback" = "Feedback";
 "shared_string_help" = "Help";
@@ -1797,32 +1793,23 @@
 "debugging_and_development" = "OsmAnd development";
 "product_desc_development" = "For developers and experienced users";
 "product_desc_ext_development" = "Allows to configure OsmAnd for testing: simulate navigation routes, check the screen rendering performance, etc. Plugin is not required for normal application use.";
-
-"index_name_africa" = "Africa";
 "product_desc_africa" = "Unlimited map downloads for Africa";
-"index_name_antarctica" = "Antarctica";
 "product_desc_antarctica" = "Unlimited map downloads for Antarctica";
 "product_desc_africa_short" = "Africa region maps";
 "product_desc_australia" = "Unlimited map downloads for Australia";
 "product_desc_australia_short" = "Australia region maps";
-"index_name_central_america" = "Central America";
 "product_desc_centralamerica" = "Unlimited map downloads for Central America";
 "product_desc_centralamerica_short" = "Central America region maps";
-"index_name_europe" = "Europe";
 "product_desc_europe" = "Unlimited map downloads for Europe";
 "product_desc_europe_short" = "Europe region maps";
-"index_name_north_america" = "North America";
 "product_desc_northamerica" = "Unlimited map downloads for North America";
 "product_desc_northamerica_short" = "North America region maps";
-"index_name_russia" = "Russia";
 "product_desc_russia" = "Unlimited map downloads for Russia";
 "product_desc_russia_short" = "Maps of Russia regions";
-"index_name_south_america" = "South America";
 "product_desc_southamerica" = "Unlimited map downloads for South America";
 "product_desc_southamerica_short" = "South America region maps";
 "product_title_allworld" = "All World Maps";
 "product_desc_allworld" = "Maps of All World";
-"index_name_asia" = "Asia";
 "product_desc_asia" = "Unlimited map downloads for Asia";
 "product_desc_asia_short" = "Asia region maps";
 
@@ -1869,9 +1856,7 @@
 "enter_fav_name" = "Enter favorite name";
 "res_installing" = "Installing…";
 "roads" = "Roads";
-"download_wikipedia_maps" = "Wikipedia";
 "shared_string_hillshade" = "Hillshade";
-"shared_string_slope" = "Slope";
 "download_regular_maps" = "Standard map";
 
 "select_language" = "Select language";
@@ -2709,7 +2694,7 @@
 "download_all" = "Download all";
 "backup_view_conflicts" = "View conflicts";
 "backup_data" = "Backup data";
-"backup_version_history" = "Version history";
+"backup_version_history" = "Chronologia del versiones";
 "select_backup_data_descr" = "Select data and folders to backup.";
 "backup_danger_zone" = "Danger zone";
 "backup_delete_all_data_or_versions_descr" = "Delete all data on OsmAnd Cloud or only version history. Local data will stay untouched.";

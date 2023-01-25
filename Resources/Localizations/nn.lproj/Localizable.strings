@@ -47,9 +47,9 @@
 "transport_Routes" = "Routes";
 "transport_nearby_routes_within" = "Nearby routes within";
 "transport_nearby_routes" = "Within";
-"shared_string_control_stop" = "Stop";
+"shared_string_control_stop" = "Stopp";
 
-"cancel_navigation" = "Stop navigation";
+"cancel_navigation" = "Stopp navigering";
 "start_navigation" = "Start navigation";
 "intermediate_items_sort_by_distance" = "Sort door-to-door";
 "switch_start_finish" = "Reverse starting point & destination";
@@ -119,7 +119,7 @@
 "simulation_preview_mode_title" = "Fast preview mode";
 "speed_mode" = "Speed mode";
 
-"settings_preset" = "Default profile";
+"settings_preset" = "Standardprofil";
 "default_profile_descr" = "Select a profile that will be used the application launch.";
 "dialogs_and_notifications_title" = "Dialogs and notifications";
 "dialogs_and_notifications_descr" = "Control pop-ups, dialogs, and notifications";
@@ -187,8 +187,8 @@
 "monitoring_control_start" = "REC";
 "map_widget_altitude" = "Altitude";
 "map_widget_battery" = "Battery level";
-"map_widget_plain_time" = "Current time";
-"map_widget_max_speed" = "Speed limit";
+"map_widget_plain_time" = "Gjeldande klokkeslett";
+"map_widget_max_speed" = "Fartsgrense";
 "access_arrival_time" = "Arrival time";
 "map_widget_time" = "Time to go";
 "map_widget_ruler_control" = "Radius ruler";
@@ -282,17 +282,17 @@
 "fast_route_mode_descr" = "Enable to calculate fastest route or disable for fuel-saving route";
 "avoid_in_routing_title" = "Avoid…";
 "avoid_in_routing_descr_" = "Avoid toll roads, unpaved, ferries";
-"prefer_in_routing_title" = "Prefer…";
-"prefer_in_routing_descr" = "Prefer motorways";
+"prefer_in_routing_title" = "Føretrekk …";
+"prefer_in_routing_descr" = "Føretrekk motorvegar";
 "relief_smoothness_factor_descr" = "Preferred terrain: flat or hilly";
 "choose_auto_follow_route" = "Auto-center map view";
 "choose_auto_follow_route_descr" = "Time until map view synchronizes with current position";
 "choose_auto_center_map_view_descr" = "Time until map view synchronizes with current position after moving";
 "auto_zoom_map" = "Auto zoom map";
 "auto_zoom_map_descr" = "Auto zoom map according to your speed (while map is synchronized with current position)";
-"snap_to_road" = "Snap to road";
+"snap_to_road" = "Lås på veg";
 "snap_to_road_descr" = "Snap position to roads during navigation";
-"show_warnings_title" = "Show alerts…";
+"show_warnings_title" = "Vis alarmar…";
 "show_warnings_descr" = "Configure traffic warnings (speed limits, forced stops, speed bumps, tunnels), speed camera warnings, and lane information";
 "speak_title" = "Announce…";
 "speak_descr" = "Configure to announce street names, traffic warnings (forced stops, speed bumps), speed camera warnings, speed limits";
@@ -326,7 +326,7 @@
 "only_manually" = "Only manually";
 "instructions_repeat" = "Tap \"Next turn\" widget to repeat instructions";
 
-"guidance_preferences_descr" = "Navigation preferences";
+"guidance_preferences_descr" = "Navigasjonsval";
 "routing_preferences_descr" = "Routing preferences";
 "recording_preferences_descr" = "Track recording preferences";
 "routing_settings" = "Navigation";
@@ -334,11 +334,11 @@
 "get_directions" = "Directions";
 "app_mode_bus" = "Bus";
 "app_mode_train" = "Train";
-"app_mode_truck" = "Truck";
-"app_mode_hiking" = "Hiking";
-"app_mode_motorcycle" = "Motorcycle";
-"app_mode_boat" = "Boat";
-"app_mode_aircraft" = "Aircraft";
+"app_mode_truck" = "Lastebil";
+"app_mode_hiking" = "Fottur";
+"app_mode_motorcycle" = "Motorsykkel";
+"app_mode_boat" = "Båt";
+"app_mode_aircraft" = "Fly";
 "gpx_option_calculate_first_last_segment" = "Calculate OsmAnd route for first and last route segment";
 "gpx_option_from_start_point" = "Pass along entire track";
 "gpx_option_reverse_route" = "Reverse GPX direction";
@@ -356,7 +356,7 @@
 "temporary_conditional_routing" = "Consider temporary limitations";
 "impassable_road_desc" = "Select roads you want to avoid during navigation";
 "interrupt_music_descr" = "Fully pause any music during voice prompts (not just lower its volume)";
-"interrupt_music" = "Pause music";
+"interrupt_music" = "Avbryt musikk";
 "shared_string_do_not_use" = "Do not use";
 "shared_string_sound" = "Sound";
 "select_route_start_on_map" = "Select start point of the route";
@@ -364,8 +364,8 @@
 "select_route_intermediate" = "Select an intermediate point";
 "select_home" = "Select home point";
 "select_work_point" =  "Select work point";
-"sort_by_distance" = "Sort by distance";
-"sort_by_name" = "Sort by name";
+"sort_by_distance" = "Sorter etter avstand";
+"sort_by_name" = "Sorter etter namn";
 "by_name" = "By name";
 "by_dist" = "By distance";
 "sort_by" = "Sort";
@@ -379,14 +379,14 @@
 "use_displayed_track_for_navigation" = "Do you want to use displayed track for navigation?";
 "previous_route" = "Previous route";
 "shared_string_ellipsis" = "…";
-"shared_string_select_on_map" = "Select on map";
+"shared_string_select_on_map" = "Vel på kartet …";
 "selected_roads" = "Selected roads";
 "shared_string_my_location" = "My Position";
-"route_descr_select_destination" = "Select Destination";
+"route_descr_select_destination" = "Vel mål";
 "swap_points" = "Swap start and destination";
-"route_to" = "To";
-"route_via" = "Via";
-"route_from" = "From";
+"route_to" = "Til:";
+"route_via" = "Via:";
+"route_from" = "Frå:";
 "transfers" = "Transfers:";
 "lat" = "Lat";
 "lon" = "Lon";
@@ -394,7 +394,7 @@
 "route_calc_progress" = "Calculating: %d%%";
 "internet_connection_required_for_online_route" = "An online navigation service is selected but no Internet connection is available.";
 "empty_route_calculated" = "Error: Calculated route is empty";
-"destination_point" = "Destination %@";
+"destination_point" = "Mål %@";
 "intermediate_point" = "Intermediate destination %@";
 "arrived_at_intermediate_point" = "You have arrived at your intermediate destination";
 "starting_point_too_far" = "Starting point too far from nearest road.";
@@ -436,9 +436,9 @@
 "accessibility_announce" = "Announce";
 
 "driving_region_japan" = "Japan";
-"driving_region_us" = "United States";
+"driving_region_us" = "USA";
 "driving_region_canada" = "Canada";
-"driving_region_europe_asia" = "Europe, Asia, Latin America & similar";
+"driving_region_europe_asia" = "Europa og Asia";
 "driving_region_uk" = "UK, India & similar";
 "driving_region_australia" = "Australia";
 
@@ -510,8 +510,8 @@
 "shared_string_add" = "Add";
 "buy" = "Buy";
 "shared_string_buy_for" = "for";
-"shared_string_or" = "or";
-"shared_string_and" = "and";
+"shared_string_or" = "eller";
+"shared_string_and" = "og";
 "shared_string_edit" = "Edit";
 "shared_string_modify" = "Modify";
 "first_time_continue" = "Later";
@@ -562,7 +562,6 @@
 "shared_string_includes" = "Includes";
 "shared_string_purchased" = "Purchased";
 "shared_string_control_start" = "Start";
-"shared_string_control_stop" = "Stop";
 "compass_always_visible" = "Always visible";
 "compass_always_hidden" = "Always hidden";
 "data_settings" = "Data";
@@ -570,7 +569,7 @@
 "shared_string_clear_online_cache" = "Clear online cache";
 "shared_string_clear_offline_cache" = "Clear offline cache";
 "shared_string_total_size" = "Total size";
-"shared_string_delete_all" = "Delete all";
+"shared_string_delete_all" = "Slett alt";
 "shared_string_countries" = "Countries";
 "shared_string_status" = "Status";
 "shared_string_selected" = "Selected";
@@ -627,7 +626,7 @@
 "poi_overlay" = "POI Overlay";
 "poi_dialog_poi_type" = "POI Type";
 "my_favorites" = "My Favorites";
-"shared_string_my_places" = "My Places";
+"shared_string_my_places" = "Mine stadar";
 "fav_no_group" = "No group";
 "fav_add_new_group" = "Add new group";
 "select_group_descr" = "Select group or add a new one";
@@ -686,8 +685,8 @@
 "shared_string_visible" = "Visible";
 
 // GPX
-"plugin_distance_point" = "Point";
-"shared_string_waypoint" = "Waypoint";
+"plugin_distance_point" = "Punkt";
+"shared_string_waypoint" = "Vegpunkt";
 "shared_string_waypoints" = "Waypoints";
 "gpx_points" = "Point(s)";
 "shared_string_export" = "Export";
@@ -721,7 +720,6 @@
 "gpx_route_time" = "Route time";
 "gpx_uphldownhl" = "Uphills/Downhills";
 "map_widget_average_speed" = "Average speed";
-"shared_string_control_start" = "Start";
 "gpx_avg_elev" = "Average elevation";
 "gpx_elev_range" = "Elevation range";
 "average_altitude" = "Average altitude";
@@ -769,16 +767,15 @@
 
 "gpx_distance_points" = "Distance (points)";
 "gpx_max_speed" = "Max speed";
-"shared_string_speed" = "Speed";
 "shared_string_slope" = "Slope";
 
 "stats_select_graph_data" = "Select graph data";
 
 // Map settings
 "routing_engine_vehicle_type_driving" = "Driving";
-"poi_filter_public_transport" = "Public transport";
+"poi_filter_public_transport" = "Kollektivtransport";
 
-"shared_string_map" = "Map";
+"shared_string_map" = "Kart";
 "layer_amenity_label" = "Point Labels (POI, Favorites)";
 "show_borders_of_downloaded_maps" = "Show borders of downloaded maps";
 "shared_string_show_on_map" = "Show on map";
@@ -869,7 +866,7 @@
 "sett_km" = "Kilometers";
 "sett_ml" = "Miles";
 "sett_zoom" = "Zoom button";
-"recording_context_menu_show" = "Show";
+"recording_context_menu_show" = "Vis";
 "sett_notshow" = "Don't show";
 "sett_deg180" = "Degrees 180";
 "sett_deg360" = "Degrees 360";
@@ -902,76 +899,76 @@
 "translit_names" = "Transliterate names";
 
 "lang_af" = "Afrikaans";
-"lang_al" = "Albanian";
+"lang_al" = "Albansk";
 "lang_als" = "Albanian (Tosk)";
 "lang_an" = "Aragonese";
-"lang_ar" = "Arabic";
+"lang_ar" = "Arabisk";
 "lang_ast" = "Asturian";
 "lang_az" = "Azerbaijani";
 "lang_ba" = "Bashkir";
 "lang_bar" = "Bavarian";
-"lang_be" = "Belarusian";
+"lang_be" = "Kviterussisk";
 "lang_be_by" = "Belarusian (Latin)";
 "lang_ber" = "Berber";
-"lang_bg" = "Bulgarian";
+"lang_bg" = "Bulgarsk";
 "lang_bn" = "Bengali";
 "lang_bpy" = "Bishnupriya";
 "lang_br" = "Breton";
-"lang_bs" = "Bosnian";
-"lang_ca" = "Catalan";
+"lang_bs" = "Bosnisk";
+"lang_ca" = "Katalansk";
 "lang_ce" = "Chechen";
 "lang_ceb" = "Cebuano";
 "lang_ckb" = "Central Kurdish";
-"lang_cs" = "Czech";
+"lang_cs" = "Tsjekkisk";
 "lang_cv" = "Chuvash";
-"lang_cy" = "Welsh";
-"lang_da" = "Danish";
-"lang_de" = "German";
+"lang_cy" = "Walisisk";
+"lang_da" = "Dansk";
+"lang_de" = "Tysk";
 "lang_de_casual" = "German (casual)";
-"lang_el" = "Greek";
-"lang_en" = "English";
+"lang_el" = "Gresk";
+"lang_en" = "Engelsk";
 "lang_en_gb" = "English (United Kingdom)";
 "lang_eo" = "Esperanto";
-"lang_es" = "Spanish";
+"lang_es" = "Spansk";
 "lang_es_ar" = "Spanish (Argentina)";
 "lang_es_us" = "Spanish (American)";
 "lang_et" = "Estonian";
-"lang_eu" = "Basque";
-"lang_fa" = "Persian";
-"lang_fi" = "Finnish";
-"lang_fr" = "French";
+"lang_eu" = "Baskisk";
+"lang_fa" = "Persisk";
+"lang_fi" = "Finsk";
+"lang_fr" = "Fransk";
 "lang_fy" = "Frysk";
 "lang_ga" = "Irish";
 "lang_gl" = "Galician";
 "lang_gn_py" = "Guaraní";
 "lang_gu" = "Gujarati";
-"lang_he" = "Hebrew";
+"lang_he" = "Hebraisk";
 "lang_hi" = "Hindi";
-"lang_hr" = "Croatian";
+"lang_hr" = "Kroatisk";
 "lang_hsb" = "Sorbian (Upper)";
 "lang_ht" = "Haitian";
-"lang_hu" = "Hungarian";
+"lang_hu" = "Ungarsk";
 "lang_hu_formal" = "Hungarian (formal)";
-"lang_hy" = "Armenian";
-"lang_id" = "Indonesian";
+"lang_hy" = "Armensk";
+"lang_id" = "Indonesisk";
 "lang_is" = "Icelandic";
-"lang_it" = "Italian";
-"lang_iw" = "Hebrew";
-"lang_ja" = "Japanese";
+"lang_it" = "Italiensk";
+"lang_iw" = "Hebraisk";
+"lang_ja" = "Japansk";
 "lang_jv" = "Javanese";
-"lang_ka" = "Georgian";
+"lang_ka" = "Georgisk";
 "lang_kab" = "Kabyle";
 "lang_kk" = "Kazakh";
 "lang_kn" = "Kannada";
-"lang_ko" = "Korean";
+"lang_ko" = "Koreansk";
 "lang_ku" = "Kurdish";
 "lang_ky" = "Kyrgyz";
 "lang_la" = "Latin";
 "lang_lb" = "Luxembourgish";
 "lang_lmo" = "Lombard";
 "lang_lo" = "Lao";
-"lang_lt" = "Lithuanian";
-"lang_lv" = "Latvian";
+"lang_lt" = "Litauisk";
+"lang_lv" = "Latvisk";
 "lang_mg" = "Malagasy";
 "lang_min" = "Minangkabau";
 "lang_mk" = "Macedonian";
@@ -985,48 +982,48 @@
 "lang_nds" = "Low German";
 "lang_ne" = "Nepali";
 "lang_new" = "Newar / Nepal Bhasa";
-"lang_nl" = "Dutch";
+"lang_nl" = "Nederlandsk";
 "lang_nn" = "Norwegian Nynorsk";
-"lang_no" = "Norwegian Bokmål";
+"lang_no" = "Norsk";
 "lang_nv" = "Navajo";
 "lang_oc" = "Occitan";
 "lang_os" = "Ossetian";
-"lang_pl" = "Polish";
+"lang_pl" = "Polsk";
 "lang_pms" = "Piedmontese";
 "lang_pnb" = "Punjabi";
-"lang_pt" = "Portuguese";
-"lang_pt_br" = "Portuguese (Brazil)";
-"lang_ro" = "Romanian";
-"lang_ru" = "Russian";
-"lang_sc" = "Sardinian";
+"lang_pt" = "Portugisisk";
+"lang_pt_br" = "Portugisisk (Brasil)";
+"lang_ro" = "Rumensk";
+"lang_ru" = "Russisk";
+"lang_sc" = "Sardisk";
 "lang_scn" = "Sicilian";
 "lang_sco" = "Scots";
 "lang_sh" = "Serbo-Croatian";
-"lang_sk" = "Slovak";
-"lang_sl" = "Slovenian";
+"lang_sk" = "Slovakisk";
+"lang_sl" = "Slovensk";
 "lang_sq" = "Albanian";
-"lang_sr" = "Serbian (cyrillic)";
+"lang_sr" = "Serbisk";
 "lang_sr_latn" = "Serbian (latin)";
-"lang_sv" = "Swedish";
+"lang_sv" = "Svensk";
 "lang_sw" = "Swahili";
 "lang_ta" = "Tamil";
 "lang_te" = "Telugu";
 "lang_tg" = "Tajik";
 "lang_th" = "Thai";
 "lang_tl" = "Tagalog";
-"lang_tr" = "Turkish";
+"lang_tr" = "Tyrkisk";
 "lang_tt" = "Tatar";
-"lang_uk" = "Ukrainian";
+"lang_uk" = "Ukrainsk";
 "lang_ur" = "Urdu";
 "lang_uz" = "Uzbek";
-"lang_vi" = "Vietnamese";
+"lang_vi" = "Vietnamesisk";
 "lang_vo" = "Volapuk";
 "lang_war" = "Waray";
 "lang_yo" = "Yoruba";
-"lang_zh" = "Chinese";
-"lang_zh_cn" = "Chinese (Simplified)";
+"lang_zh" = "Kinesisk";
+"lang_zh_cn" = "Kinesisk– forenkla";
 "lang_zh_hk" = "Chinese (Hong Kong)";
-"lang_zh_tw" = "Chinese (Traditional)";
+"lang_zh_tw" = "Kinesisk– tradisjonell";
 "lang_zhminnan" = "Southern Min";
 "lang_zhyue" = "Cantonese";
 
@@ -1301,7 +1298,7 @@
 "res_edit_map_source" = "Edit map source";
 "res_online_name_descr" = "Provide name for online source";
 "res_online_url_descr" = "Enter or copy and paste URL for online source";
-"edit_tilesource_url_to_load" = "URL";
+"edit_tilesource_url_to_load" = "Adresse";
 "shared_string_zoom_levels" = "Zoom levels";
 "res_expire_time" = "Expire time";
 "res_mercator" = "Mercator Projection";
@@ -1329,7 +1326,6 @@
 
 // Menu
 "shared_string_menu" = "Menu";
-"shared_string_my_places" = "My Places";
 "menu_my_trips" = "My Tracks";
 "feedback" = "Feedback";
 "shared_string_help" = "Help";
@@ -1393,8 +1389,8 @@
 "contact_info" = "Contact info";
 "map_widget_top_text" = "Street name";
 "osm_building_num" = "Building number";
-"phone" = "Phone";
-"website" = "Website";
+"phone" = "Telefonnummer";
+"website" = "Nettside";
 "population_num" = "Population";
 "osm_add_place" = "Add place";
 "osm_modify_place" = "Modify place";
@@ -1411,7 +1407,7 @@
 "osm_confirm_bulk_delete" = "Delete %d edits?";
 "osm_confirm_delete" = "Delete POI?";
 "osm_confirm_upload" = "Upload modifications?";
-"close_changeset" = "Close changeset";
+"close_changeset" = "Lukk endringssett";
 "osm_tag" = "Tag";
 "osm_value" = "Value";
 "osm_note_upload_info" = "You can upload the note anonymously or by using your OpenStreetMap profile.";
@@ -1695,13 +1691,13 @@
 "mapillary_item" = "OsmAnd + Mapillary";
 "map_legend" = "Map legend";
 "help_legend_descr" = "The guide to map's symbols";
-"other_location" = "Other";
+"other_location" = "Annan";
 "help_what_is_new" = "What\'s new";
 "instalation_troubleshooting_item" = "Installation and troubleshooting";
 "techical_articles_item" = "Technical articles";
 "versions_item" = "Versions";
 "help_contact_us" = "Contact us";
-"shared_string_about" = "About";
+"shared_string_about" = "Om";
 "follow_us" = "Follow us";
 "facebook" = "Facebook";
 "twitter" = "Twitter";
@@ -1750,7 +1746,7 @@
 "index_name_russia" = "Russia";
 "index_name_south_america" = "South America";
 "nautical_maps" = "Nautical maps";
-"download_select_map_types" = "Other maps";
+"download_select_map_types" = "Andre kart";
 
 // Help
 "help_quiz" = "Quiz";
@@ -1797,32 +1793,23 @@
 "debugging_and_development" = "OsmAnd development";
 "product_desc_development" = "For developers and experienced users";
 "product_desc_ext_development" = "Allows to configure OsmAnd for testing: simulate navigation routes, check the screen rendering performance, etc. Plugin is not required for normal application use.";
-
-"index_name_africa" = "Africa";
 "product_desc_africa" = "Unlimited map downloads for Africa";
-"index_name_antarctica" = "Antarctica";
 "product_desc_antarctica" = "Unlimited map downloads for Antarctica";
 "product_desc_africa_short" = "Africa region maps";
 "product_desc_australia" = "Unlimited map downloads for Australia";
 "product_desc_australia_short" = "Australia region maps";
-"index_name_central_america" = "Central America";
 "product_desc_centralamerica" = "Unlimited map downloads for Central America";
 "product_desc_centralamerica_short" = "Central America region maps";
-"index_name_europe" = "Europe";
 "product_desc_europe" = "Unlimited map downloads for Europe";
 "product_desc_europe_short" = "Europe region maps";
-"index_name_north_america" = "North America";
 "product_desc_northamerica" = "Unlimited map downloads for North America";
 "product_desc_northamerica_short" = "North America region maps";
-"index_name_russia" = "Russia";
 "product_desc_russia" = "Unlimited map downloads for Russia";
 "product_desc_russia_short" = "Maps of Russia regions";
-"index_name_south_america" = "South America";
 "product_desc_southamerica" = "Unlimited map downloads for South America";
 "product_desc_southamerica_short" = "South America region maps";
 "product_title_allworld" = "All World Maps";
 "product_desc_allworld" = "Maps of All World";
-"index_name_asia" = "Asia";
 "product_desc_asia" = "Unlimited map downloads for Asia";
 "product_desc_asia_short" = "Asia region maps";
 
@@ -1836,7 +1823,7 @@
 "available_languages" = "Available languages";
 "preferred_languages" = "Preferred languages";
 
-"download_srtm_maps" = "Contour lines";
+"download_srtm_maps" = "Høgdekurver";
 "product_desc_srtm" = "Visual assessment of the shape of the land surface";
 "product_desc_ext_srtm" = "Terrain information, such as contour lines, hillshades and slopes, helps you visually assess the shape of the land surface, considering curvature, extremes, steepness, points of equal height, and more. Topographic information on a map can be represented by slope shading, contour lines for the uphill and downhill, and the colour of the slope angle deviation from flat. Data from SRTM and ASTER. \n\nHow to - https://osmand.net/docs/user/plugins/contour-lines";
 
@@ -1862,17 +1849,15 @@
 
 "context_menu_points_of_group" = "All points of the group";
 "enter_description" = "Enter description";
-"shared_string_description" = "Description";
+"shared_string_description" = "Skildring";
 "read_full_description" = "Read full description";
 "context_menu_edit_descr" = "Edit description";
 "add_description" = "Add description";
 "enter_fav_name" = "Enter favorite name";
 "res_installing" = "Installing…";
 "roads" = "Roads";
-"download_wikipedia_maps" = "Wikipedia";
 "shared_string_hillshade" = "Hillshade";
-"shared_string_slope" = "Slope";
-"download_regular_maps" = "Standard map";
+"download_regular_maps" = "Vanlege kart";
 
 "select_language" = "Select language";
 "language_short" = "Lang";
@@ -1951,7 +1936,7 @@
 "local_indexes_cat_backup" = "Deactivated";
 "gpx_trip_groups" = "Track groups";
 "gpx_group_select" = "Group Select";
-"poi_filter_parking" = "Parking";
+"poi_filter_parking" = "Parkering";
 "parked_at" = "Parked at";
 
 "context_menu_item_directions_from" = "Directions from";
@@ -2039,7 +2024,7 @@
 "online_raster_maps" = "Online raster maps";
 "online_map" = "Online map";
 "calculating_progress" = "Calculating...";
-"local_map_names" = "Local names";
+"local_map_names" = "Lokale namn";
 "shared_string_history" = "History";
 "today" = "Today";
 "yesterday" = "Yesterday";
@@ -2237,8 +2222,8 @@
 "routing_attr_avoid_ice_roads_fords_name" = "No ice roads or fords";
 "rendering_value_germanRoadAtlas_name" = "German road atlas";
 "rendering_attr_hikingRoutesOSMC_name" = "Hiking routes";
-"rendering_attr_showRoadMaps_name" = "Roads-only maps";
-"routing_attr_avoid_ferries_description" = "Avoids ferries";
+"rendering_attr_showRoadMaps_name" = "Kart med berre vegar";
+"routing_attr_avoid_ferries_description" = "Unngå ferjer";
 "rendering_attr_contourWidth_description" = "Contour line width";
 "routing_attr_driving_style_name" = "Driving style";
 "rendering_attr_surface_pebblestone_name" = "Pebblestone";
@@ -2274,7 +2259,7 @@
 "rendering_attr_tracktype_grade5_name" = "Soft";
 "routing_attr_avoid_share_taxi_description" = "Avoids share taxi";
 "routing_attr_width_description" = "Specify permitted vehicle width limit on routes.";
-"rendering_attr_showSurfaceGrade_name" = "Show road quality";
+"rendering_attr_showSurfaceGrade_name" = "Vis vegkvalitet";
 "rendering_attr_currentTrackColor_name" = "GPX color";
 "rendering_attr_contourLines_description" = "Display from zoom level (requires contour data):";
 "routing_attr_avoid_stairs_description" = "Avoids stairs";
@@ -2318,7 +2303,7 @@
 "rendering_attr_showLez_description" = "Show Low Emission Zones on the map. Does not affect routing.";
 "rendering_attr_surfaceIntegrity_name" = "Road surface integrity";
 "routing_attr_allow_intermediate_description" = "More difficult routes with steeper sections. Generally some obstacles that should be avoided.";
-"rendering_attr_coloredBuildings_name" = "Color-code buildings by type";
+"rendering_attr_coloredBuildings_name" = "Farga bygningar";
 "rendering_attr_piste_difficulty_advanced_name" = "Advanced";
 "routeInfo_road_types_name" = "Road types";
 "rendering_attr_showRoadMaps_description" = "Choose when to display roads-only maps:";
@@ -2335,10 +2320,10 @@
 "routing_attr_avoid_borders_name" = "No border crossings";
 "rendering_value_walkingRoutesScopeOSMC_name" = "Network affiliation";
 "rendering_attr_smoothness_excellent_name" = "Excellent";
-"rendering_value_pink_name" = "Pink";
+"rendering_value_pink_name" = "rosa";
 "routing_attr_allow_expert_name" = "Allow expert routes";
 "rendering_attr_showCycleNodeNetworkRoutes_name" = "Show node network cycle routes";
-"rendering_attr_hideText_name" = "Text";
+"rendering_attr_hideText_name" = "Gøym tekst";
 "rendering_attr_contourDensity_name" = "Contour line density";
 "rendering_attr_showRunningRoutes_name" = "Running routes";
 "rendering_attr_showRunningRoutes_description" = "Show running routes";
@@ -2350,7 +2335,7 @@
 "routing_attr_avoid_low_emission_zone_description" = "Avoids low emission zones";
 "routing_attr_avoid_tunnels_name" = "No tunnels";
 "routing_attr_avoid_tunnels_description" = "Avoids tunnels";
-"rendering_attr_hideWoodScrubs_name" = "Wood and scrubs";
+"rendering_attr_hideWoodScrubs_name" = "Gøym skog og kratt";
 "rendering_attr_surface_wood_name" = "Wood";
 "rendering_attr_smoothness_horrible_name" = "Horrible";
 "rendering_attr_smoothness_impassable_name" = "Impassable";
@@ -2359,7 +2344,7 @@
 "rendering_attr_surface_gravel_name" = "Gravel";
 "routing_attr_max_num_changes_name" = "Number of changes";
 "rendering_attr_publicTransportMode_name" = "Bus, trolleybus, shuttle routes";
-"rendering_attr_hideNonVehicleHighways_name" = "Non-vehicle highways";
+"rendering_attr_hideNonVehicleHighways_name" = "Gøym vegar som ikkje er for køyretøy";
 "rendering_value_translucent_pink_name" = "Translucent pink";
 "rendering_attr_surface_ground_name" = "Ground";
 "routing_attr_height_obstacles_description" = "Factor in terrain elevation (via SRTM, ASTER, and EU-DEM data).";
@@ -2369,18 +2354,18 @@
 "rendering_attr_hikingRoutesOSMC_description" = "Render paths according to OSMC traces.";
 "rendering_value_car_name" = "Driving";
 "routing_attr_avoid_unpaved_name" = "No unpaved roads";
-"rendering_attr_lessDetailed_name" = "Fewer details";
+"rendering_attr_lessDetailed_name" = "Mindre detaljert";
 "routing_attr_avoid_borders_description" = "Avoids crossing national borders";
 "rendering_attr_highway_class_steps_name" = "Steps";
 "routing_attr_avoid_tram_name" = "No trams";
 "rendering_attr_piste_type_downhill_name" = "Downhill";
-"rendering_attr_moreDetailed_name" = "More details";
+"rendering_attr_moreDetailed_name" = "Meir detaljert";
 "rendering_attr_piste_difficulty_undefined_name" = "Undefined";
 "routing_attr_allow_motorway_name" = "Use motorways";
 "rendering_value_black_name" = "Black";
 "routeInfo_winter_ice_road_name" = "Winter and ice roads";
 "routeInfo_winter_ice_road_description" = "Color the route or track line by its winter road classification.";
-"rendering_attr_hideBuildings_name" = "Buildings";
+"rendering_attr_hideBuildings_name" = "Gøym bygningar";
 "routing_attr_max_num_changes_description" = "Specify upper limit of changes";
 "rendering_attr_winter_road_name" = "Winter road";
 "rendering_attr_tramTrainRoutes_name" = "Tram and train routes";
@@ -2396,13 +2381,13 @@
 "routing_attr_prefer_unpaved_description" = "Prefer unpaved roads.";
 "rendering_attr_roadStyle_description" = "Road style";
 "routing_attr_prefer_motorway_description" = "Prefer motorways";
-"routing_attr_avoid_ferries_name" = "No ferries";
+"routing_attr_avoid_ferries_name" = "Unngår ferjer";
 "rendering_attr_highway_class_track_name" = "Track";
 "rendering_attr_tracktype_grade4_name" = "Mostly soft";
 "rendering_value_disabled_name" = "Disabled";
 "rendering_attr_contourColorScheme_name" = "Contour lines color scheme";
 "routing_attr_short_way_name" = "Fuel-efficient way";
-"rendering_attr_alpineHiking_name" = "Alpine hiking scale (SAC)";
+"rendering_attr_alpineHiking_name" = "Fjellturkart";
 "rendering_attr_showLez_name" = "Show Low Emission Zones";
 "rendering_value_green_name" = "Green";
 "routing_attr_piste_type_nordic_description" = "Trails for nordic or cross-country skiing.";
@@ -2411,7 +2396,7 @@
 "rendering_value_bicycle_name" = "Cycling";
 "rendering_value_translucent_lightgreen_name" = "Translucent light green";
 "rendering_attr_contourLines_name" = "Show contour lines";
-"rendering_attr_showAccess_name" = "Show access restrictions and toll";
+"rendering_attr_showAccess_name" = "Vis tilgangstype";
 "rendering_attr_surface_dirt_name" = "Dirt";
 "routing_attr_piste_type_skitour_name" = "Ski touring";
 "routing_attr_driving_style_prefer_unpaved_name" = "Prefer unpaved roads";
@@ -2423,13 +2408,13 @@
 "routing_attr_avoid_sett_name" = "No cobblestone or sett";
 "rendering_value_translucent_lightblue_name" = "Translucent light blue";
 "rendering_attr_smoothness_good_name" = "Good";
-"routing_attr_weight_name" = "Weight limit";
+"routing_attr_weight_name" = "Maksvekt";
 "rendering_value_bold_name" = "Bold";
 "rendering_attr_surface_stone_name" = "Stone";
 "rendering_attr_pisteGrooming_name" = "Piste grooming";
-"rendering_attr_noAdminboundaries_name" = "Boundaries";
+"rendering_attr_noAdminboundaries_name" = "Gøym grenser";
 "rendering_attr_tracktype_grade3_name" = "Mostly solid";
-"rendering_attr_showSurfaces_name" = "Show road surface";
+"rendering_attr_showSurfaces_name" = "Vis vegdekke";
 "routing_attr_allow_advanced_description" = "Difficult routes, with dangerous obstacles and steep sections.";
 "osm_notes" = "OSM notes";
 "rendering_attr_hidePOILabels_name" = "POI labels";
@@ -2459,7 +2444,7 @@
 "routing_attr_avoid_ice_roads_fords_description" = "Avoids ice roads and fords.";
 "routing_attr_allow_advanced_name" = "Allow advanced routes";
 "rendering_attr_surface_grass_paver_name" = "Grass paver";
-"rendering_attr_hideAccess_name" = "Access restrictions";
+"rendering_attr_hideAccess_name" = "Gøym tilgangstype";
 "rendering_value__name" = "Default";
 "rendering_attr_smoothness_very_horrible_name" = "Very horrible";
 "routing_attr_allow_intermediate_name" = "Allow intermediate routes";
@@ -2476,7 +2461,7 @@
 "rendering_attr_transportStops_name" = "Transport stops";
 "rendering_value_walkingRoutesOSMCNodes_name" = "Node networks";
 "rendering_attr_piste_difficulty_expert_name" = "Expert";
-"rendering_attr_buildings15zoom_name" = "Buildings on zoom 15";
+"rendering_attr_buildings15zoom_name" = "Bygningar ved zoomnivå 15";
 "rendering_attr_tracktype_grade1_name" = "Solid (paved)";
 "routing_attr_avoid_train_description" = "Avoids trains";
 "routing_attr_avoid_shuttle_train_name" = "No shuttle train";
@@ -2504,7 +2489,7 @@
 "routing_attr_avoid_bus_name" = "No buses";
 "rendering_value_highContrastRoads_name" = "High contrast roads";
 "rendering_attr_highway_class_service_name" = "Service";
-"rendering_attr_showCycleRoutes_name" = "Cycle routes";
+"rendering_attr_showCycleRoutes_name" = "Vis sykkelruter";
 "rendering_attr_surface_metal_name" = "Metal";
 "rendering_value_translucent_purple_name" = "Translucent purple";
 "rendering_attr_hmRendered_description" = "Increase amount of map detail shown.";
@@ -2534,9 +2519,9 @@
 "routing_attr_prefer_unpaved_name" = "Prefer unpaved roads";
 "rendering_value_default_name" = "Default";
 "routing_attr_no_new_routing_name" = "No v1.9 routing rules";
-"rendering_attr_subwayMode_name" = "Subway routes";
+"rendering_attr_subwayMode_name" = "T-banemodus";
 "rendering_attr_highway_class_motorway_name" = "Motorway";
-"rendering_value_brown_name" = "Brown";
+"rendering_value_brown_name" = "brun";
 "rendering_attr_hideIcons_name" = "POI icons";
 "rendering_attr_roadColors_description" = "Select a road color scheme:";
 "rendering_value_browse_map_name" = "Browse map";
@@ -2549,7 +2534,7 @@
 "routing_attr_avoid_train_name" = "No trains";
 "routing_attr_allow_motorway_description" = "Allows motorways.";
 "rendering_attr_hmRendered_name" = "Show more map detail";
-"rendering_attr_roadColors_name" = "Road color scheme";
+"rendering_attr_roadColors_name" = "Vegfargetema";
 "routing_attr_allow_gate_name" ="Allow gate usage";
 "routing_attr_allow_gate_description" = "Allow usage of gates";
 "routing_attr_only_permitted_streets_description" = "Only use streets which are expressly permitted";
@@ -2591,7 +2576,7 @@
 "amenity_type_education" = "Education";
 
 "settings_item_read_error" = "Could not read %@.";
-"app_mode_default" = "Browse map";
+"app_mode_default" = "Vis kart";
 "app_mode_car" = "Driving";
 "app_mode_bicycle" = "Cycling";
 "app_mode_pedestrian" = "Walking";

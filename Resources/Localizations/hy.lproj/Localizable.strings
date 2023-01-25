@@ -25,10 +25,10 @@
 
 "price_free" = "Անվճար";
 
-"get_discount_title" = "Get %d %@ at %d%% off.";
+"get_discount_title" = "Ստացեք %d %@ at %@ off.";
 "get_free_trial_title" = "Start your %d %@ free trial.";
 "get_discount_short_descr" = "%@ for %d %@, then %@";
-"get_discount_first_part" = "%@ for first %@";
+"get_discount_first_part" = "%@առաջինի %@";
 "get_discount_first_few_parts" = "%@ for first %@";
 "get_discount_second_part" = "then %@";
 
@@ -43,31 +43,31 @@
 "map_widget_intermediate_time" = "Միջանկյալ նպատակակետ ժամանելու ժամը";
 "shared_string_previous" = "Նախորդ";
 "shared_string_next" = "Հաջորդը";
-"route_stops_before" = "%@ stops before";
+"route_stops_before" = "%@կանգառներ մինչև ընտրված";
 "transport_Routes" = "Երթուղիներ";
 "transport_nearby_routes_within" = "Մոտակա երթուղիները";
 "transport_nearby_routes" = "Ներսում";
-"shared_string_control_stop" = "Դադարեցնել";
+"shared_string_control_stop" = "Կանգնել";
 
 "cancel_navigation" = "Վերջացնել նավիգացիան";
 "start_navigation" = "Start navigation";
 "intermediate_items_sort_by_distance" = "Դասավորել ըստ հեռավորության";
-"switch_start_finish" = "Reverse starting point & destination";
+"switch_start_finish" = "Հակադարձ մեկնարկային կետ և ուղղություն";
 "clear_all_intermediates" = "Մաքրել բոլոր միջանկյալ կետերը";
 
 "shared_string_options" = "Ընտրանքներ";
-"new_destination_point_dialog" = "You have already set a destination";
+"new_destination_point_dialog" = "Դուք արդեն ունեք նշանակած նպատակակետ՝";
 "replace_destination_point" = "Փոխարինել նպատակակետը";
 "shared_string_current" = "Ընթացիկ";
-"make_as_start_point" = "Make this the start point";
+"make_as_start_point" = "Դարձրեք մեկնարկման կետ";
 "keep_and_add_destination_point" = "Ավելացնել որպես նպատակակետ";
-"subsequent_dest_description" = "Move destination up, and create destination";
+"subsequent_dest_description" = "Տեղափոխեք նպատակակետը և ստեղծել այն";
 "add_as_first_destination_point" = "Ավելացնել որպես առաջին միջանկյալ նպատակակետ";
-"first_intermediate_dest_description" = "Adds the first stop on the route";
+"first_intermediate_dest_description" = "Ավելացնում է առաջին կանգար";
 "add_as_last_destination_point" = "Ավելացնել որպես վերջին միջանկյալ նպատակակետ";
-"last_intermediate_dest_description" = "Adds the last stop along the route";
+"last_intermediate_dest_description" = "Ավելացնում է միջանկյալ կանգար";
 
-"show_poi_over_map" = "Show POI";
+"show_poi_over_map" = "Ցույց տալ POI-ի";
 "shared_string_search" = "Որոնում";
 "address_search_desc" = "Որոնում ըստ հասցեի";
 "search_radius" = "Search radius";
@@ -79,17 +79,17 @@
 "day_off_label" = "Ոչ աշխ․ օր";
 "open_from" = "Բացվում է";
 "open_till" = "Բաց Է մինև";
-"will_close_at" = "Will close at";
-"will_open_at" = "Will open at";
-"will_open_on" = "Will open on";
-"will_open_tomorrow_at" = "Will open tomorrow at";
+"will_close_at" = "Կփակվի";
+"will_open_at" = "Կբացվի";
+"will_open_on" = "Կբացվի";
+"will_open_tomorrow_at" = "Վաղը կբացվի";
 
 "error_avoid_specific_road" = "Շրջանցում չի գտնվել";
-"road_blocked" = "Blocked road";
+"road_blocked" = "Ճանապարհը փակված է";
 "starting_point" = "Սկզբնական կետ";
 "shared_string_select_avoid_road_on_map" = "Select a road to be avoided during the routing";
 "shared_string_road" = "Ճանապարհ";
-"avoid_roads_msg" = "You can trigger an alternative route by selecting roads to avoid";
+"avoid_roads_msg" = "Ընտրել այլընտրանքային երթուղի, ընտրելով ճանապարհներ, որոնք պետք է խուսափել";
 "shared_string_go" = "Գնացինք";
 "info_button" = "Տեղեկատվություն";
 "simulate_your_location" = "Խթանել ձեր դիրքորոշումը";
@@ -98,7 +98,8 @@
 "select_avoid_descr" = "Select roads you want to avoid during navigation. You can either select a road on the map or choose a type from the list below.";
 "no_active_route" = "No active route";
 
-"day_night_info_description" = "Sunrise: %@\nSunset: %@";
+"day_night_info_description" = "Արևածագ՝ %@
+\nՄայրամուտ՝ %@";
 "day_night_info" = "Արևածագ/մայրամուտ";
 "daynight_mode_auto" = "Արևածագ/մայրամուտ";
 
@@ -113,8 +114,8 @@
 "dialogs_and_notifications_descr" = "Control pop-ups, dialogs, and notifications";
 "settings_preset_descr" = "Ընտրեք ծրագրերի պրոֆիլը (յուրաքանչյուր պրոֆիլի պարամետրերը պահպանվում են առանձին)։";
 "unit_of_length" = "Հեռավորության չափման միավոր";
-"unit_of_length_descr" = "Change units of length.";
-"coords_format" = "Coordinates format";
+"unit_of_length_descr" = "Փոխել հեռավորության չափման միավորը։";
+"coords_format" = "Կոորդինատների ձևաչափ";
 "coords_format_descr_quick_search" = "You can change coordinates format for profile in General settings";
 "coordinates" = "Կոորդինատներ";
 "coords_format_descr" = "Աշխարհագրական կոորդինատների ձևաչափ։";
@@ -122,16 +123,16 @@
 "send_anonymous_data_desc" = "Send to OsmAnd map download statistics, we are not collecting location data, or any personal info.";
 "rotate_map_to_bearing" = "Քարտեզի կողմնորոշումը";
 "rotate_map_to_bearing_descr" = "Select the map screen alignment.";
-"rotate_map_compass_opt" = "To compass";
-"rotate_map_bearing_opt" = "To direction of movement";
+"rotate_map_compass_opt" = "Կողմնացույցի ուղղությամբ";
+"rotate_map_bearing_opt" = "Շարժման ուղղությամբ";
 "rotate_map_none_opt" = "Do not rotate (north is up)";
-"driving_region_descr" = "Select the driving region: US, Europe, UK, Asia and others.";
+"driving_region_descr" = "Ընտրեք վարելու տարածաշրջանը՝ ԱՄՆ, Եվրոպա, Մեծ Բրիտանիա, Ասիա և այլն։";
 "driving_region" = "Վարելու տարածաշրջանը";
 "shared_string_automatic" = "Ավտոմատ";
 "routing_attr_length_name" = "Երկարության սահմանապակումը";
 "default_speed_setting_title" = "Default speed";
 "shared_string_min_speed" = "Min. speed";
-"max_speed" = "Max. speed";
+"max_speed" = "Առավելագույն արագություն";
 "road_speeds_descr" = "These parameters can affect the route calculation.";
 "road_min_speed_descr" = "Sets the minimum travel speed for all roads in the route. Raises priority for roads with recommended speeds less than the minimum.";
 "road_max_speed_descr" = "Sets the maximum travel speed for all roads in the route. Lowers the priority for roads with a possible speed higher than the maximum.";
@@ -186,7 +187,7 @@
 "edit_profile_screen_options_subtitle" = "Select screen options for the profile";
 "map_markers" = "Մարկերներ";
 "markers_history" = "Markers history";
-"confirm_usage_speed_cameras" = "In many countries (Germany, France, Italy, and others) the use of speed camera warnings is not permitted by law. OsmAnd does not assume any liability if you violate the law. Please tap yes only if you are eligible to use this feature.";
+"confirm_usage_speed_cameras" = "Շատ երկրներում (Գերմանիա, Ֆրանսիա, Իտալիա եւ այլն) արագության խցիկի մասին զգուշացումների օգտագործումը անօրինական է։ OsmAnd-ը ոչ մի պատասխանատվություն չի կրում, եթե Դուք խախտում եք օրենքը ։ Ընտրեք «այո», միայն այն դեպքում, եթե դուք իրավասու եք օգտագործել այս հնարավորությունը:";
 "map_markers_empty" = "You have no active map markers";
 "tracks_empty" = "Your track list is empty";
 "favorites_empty" = "You have not saved any favorite points";
@@ -206,7 +207,7 @@
 "speak_cameras" = "Արագության վերահսկման տեսախցիկներ";
 "speak_traffic_warnings" = "Երթևեկության նախազգուշացումներ";
 "shared_string_gpx_waypoints" = "Տրեկի (track) կետերը";
-"speak_favorites" = "Nearby Favorites";
+"speak_favorites" = "Մոտակա «Սիրված»-եր";
 "speak_poi" = "Մոտակա POI";
 "speak_pedestrian" = "Հետիոտնային անցումներ";
 "show_tunnels" = "Թունելներ";
@@ -229,8 +230,8 @@
 "shared_string_never" = "Երբեք";
 "confirm_every_run" = "Միշտ հարցնել";
 "general_settings_2" = "Ընդհանուր կարգավորումները";
-"general_settings_descr" = "App theme, units, region";
-"routing_settings_descr" = "Configure navigation";
+"general_settings_descr" = "Էկրանի պարամետրերը, տեղայնացում, միավորներ և այլն։";
+"routing_settings_descr" = "Նշեք նավարկության ընտրանքները։";
 "auto_zoom_none" = "Առանց ավտո մասշտաբի";
 "auto_zoom_close" = "Մոտեցնել";
 "auto_zoom_far" = "Միջին պլանի";
@@ -262,16 +263,16 @@
 "prefer_in_routing_descr" = "Նախնտրել մայրուղիներ։";
 "relief_smoothness_factor_descr" = "Նախընտրելի տեղանք`հարթ կամ լեռնոտ։";
 "choose_auto_follow_route" = "Քարտեզի ավտոմատ վերադարձման կարգավորումները";
-"choose_auto_follow_route_descr" = "Time until map view synchronizes with current position";
+"choose_auto_follow_route_descr" = "Ընտրեք այն ժամանակը, երբ քարտեզը կվերադառնա ընթացիկ դիրքին։";
 "choose_auto_center_map_view_descr" = "Time until map view synchronizes with current position after moving";
 "auto_zoom_map" = "Ավտո-մասշտաբ";
-"auto_zoom_map_descr" = "Auto zoom map according to your speed (while map is synchronized with current position)";
+"auto_zoom_map_descr" = "Ավտոմատ կերպով փոխել քարտեզի մասշտաբը ըստ արագությանը։";
 "snap_to_road" = "Կապել ճանապարհին";
 "snap_to_road_descr" = "Snap position to roads during navigation";
 "show_warnings_title" = "Ցույց տալ ազդանշանները…";
-"show_warnings_descr" = "Configure traffic warnings (speed limits, forced stops, speed bumps, tunnels), speed camera warnings, and lane information";
+"show_warnings_descr" = "Նշեք արագության սահմանափակումները, արագաչափ տեսախցիկները, թունելները և արհեստական անհարթությունները (speed bumps)։";
 "speak_title" = "Հայտարարել…";
-"speak_descr" = "Configure to announce street names, traffic warnings (forced stops, speed bumps), speed camera warnings, speed limits";
+"speak_descr" = "Նշեք հնչեցումը՝ Փողոցների անվանումների, նախազգուշացումների (պառկած ոստիկանների, «Շարժումը առանց դադարեցնելու արգելված է»), արագության տեսախցիկներ, արագության սահմանափակումներ։";
 "keep_informing" = "Կրկնել նավիգացիոն հրահանգները";
 "repeat_after" = "Repeat after";
 "keep_informing_descr" = "Կրկնել նավիգացիոն հրահանգները պարբերաբար։";
@@ -280,21 +281,21 @@
 "default_speed_system" = "Արագության չափման միավորը";
 "default_speed_system_descr" = "Ընտրեք արագության չափման միավորնը։";
 "speed_limit_exceed" = "Արագության թույլատրելի գերազանցումը";
-"speed_limit_exceed_message" = "Select speed limit tolerance margin, above which you will receive a voice warning.";
+"speed_limit_exceed_message" = "Ընտրեք արագության գերազանցման թույլատրելի արժեքը, որի գերազանցման դեպքում դուք կստանաք ձայնային նախազգուշացում։";
 "wake_on_voice" = "Ինքնաբերաբար միացնել էկրանը շրջադարձից առաջ";
 "wake_on_voice_descr" = "Միացնել սարքի էկրանը(եթե անջատված է), երբ մոտենում եք շրջադարձին։";
 "voice_pref_title" = "Ձայն";
 "voice_provider" = "Ձայնի ուղեցույց";
-"voice_provider_descr" = "Select voice guidance for navigation";
+"voice_provider_descr" = "Ընտրեք ձայնային ուղեցույցի լեզուն նավիգացիայի համար։";
 "choose_audio_stream" = "Ձայնային հրահանգներ";
-"choose_audio_stream_descr" = "Select speaker to play voice guidance";
+"choose_audio_stream_descr" = "Ընտրեք ձայնային հրահանգների համար։";
 "use_osm_live_routing" = "OsmAnd Liveնավիգացիա";
 "osm_live_routing_descr" = "Use OsmAnd Live updates for navigation";
 "select_nav_profile_dialog_message" = "The 'Navigation type' governs how routes are calculated.";
 "osmand_default_routing" = "OsmAnd routing";
 "special_routing_type" = "Special routing";
 "import_routing_file_descr" = "You can import routing file from any cloud storage app by opening it in OsmAnd.";
-"recalculate_route" = "Recalculate route in case of deviation";
+"recalculate_route" = "Վերահաշվարկել երթուղին";
 "recalculate_wrong_dir" = "Recalculate route in case of reverse direction";
 "recalculate_route_distance_promo" = "The route will be recalculated if the distance from the route to the current location is more than selected value.";
 "select_distance_route_will_recalc" = "Select the distance after which the route will be recalculated.";
@@ -317,18 +318,18 @@
 "app_mode_aircraft" = "Ինքնաթիռ";
 "gpx_option_calculate_first_last_segment" = "Հաշվարկել երթուղին առաջին և վերջին հատվածի OsmAnd երթուղու սեգմենտին";
 "gpx_option_from_start_point" = "Անցնել ամբողջ երթուղին";
-"gpx_option_reverse_route" = "Reverse GPX direction";
+"gpx_option_reverse_route" = "Ընտրել հակառակ ուղղությունը";
 "use_points_as_intermediates" = "Հաշվեք երթուղին կետերի միջև";
-"calculate_osmand_route_without_internet" = "Calculate OsmAnd route segment without Internet";
+"calculate_osmand_route_without_internet" = "Հաշվարկել OsmAnd-ի երթուղու հատվածը անցանց";
 "routing_settings_2" = "Նավիգացիայի կարգավորումները";
-"impassable_road" = "Avoid roads";
+"impassable_road" = "Խուսափել ճանապարհներից…";
 "road_speeds" = "Road speeds";
 "avoid_transport_type" = "Avoid transport types";
 "temporary_conditional_routing" = "Consider temporary limitations";
 "impassable_road_desc" = "Ընտրեք ճանապարհներ, որոնք ցանկանում եք խուսափել նավարկության ժամանակ։";
-"interrupt_music_descr" = "Fully pause any music during voice prompts (not just lower its volume)";
+"interrupt_music_descr" = "Ձայնային հրահանգներ դադարեցնում են երաժշտության նվագումը։";
 "interrupt_music" = "Ընդհատել երաժշտությունը";
-"shared_string_do_not_use" = "Do not use";
+"shared_string_do_not_use" = "Չօգտագործել";
 "shared_string_sound" = "Ձայն";
 "select_route_start_on_map" = "Select start point of the route";
 "select_route_finish_on_map" = "Select end point of the route";
@@ -339,42 +340,42 @@
 "sort_by_name" = "Դասակարգել ըստ անունի";
 "by_name" = "By name";
 "by_dist" = "By distance";
-"sort_by" = "Sort";
+"sort_by" = "Դասավորել ըստ";
 "map_markers_other"= "Այլ մարկերներ";
 "directions_other"= "Other directions";
 "shared_string_turn" = "Turn";
-"stop_routing_confirm" = "Are you sure you want to stop the navigation?";
-"cancel_route" = "Dismiss route";
-"route_is_too_long_v2" = "This route may be too long to calculate. Please add intermediate destinations if no result is found within 10 minutes.";
+"stop_routing_confirm" = "Վստահ ե՞ք որ ցանկանում եք դադարեցնել նավիգացիան?";
+"cancel_route" = "Դադարեցնել երթուղին";
+"route_is_too_long_v2" = "Երկար հեռավորությունների վրա՝ Խնդրում ենք ավելացնել մեկ կամ ավելի միջանկյալ նպատակակետեր երթուղու վրա, եթե հաշվարկը չի ավարտվել 10 րոպեից։";
 "navigation_over_track" = "Ցանկանում եք սկսել նավարկությունը ըստ տրեկի?";
-"use_displayed_track_for_navigation" = "Do you want to use displayed track for navigation?";
+"use_displayed_track_for_navigation" = "Օգտագործել նավարկության համար ցուցադրված track-ը?";
 "previous_route" = "Previous route";
 "shared_string_ellipsis" = "…";
 "shared_string_select_on_map" = "Ընտրել քարտեզի վրա";
 "selected_roads" = "Selected roads";
 "shared_string_my_location" = "Իմ դիրքը";
-"route_descr_select_destination" = "Select Destination";
+"route_descr_select_destination" = "Նշել նպատակակետը";
 "swap_points" = "Swap start and destination";
-"route_to" = "To";
-"route_via" = "Via";
-"route_from" = "From";
+"route_to" = "Դեպի՝";
+"route_via" = "Վրայով՝";
+"route_from" = "Սկսած՝";
 "transfers" = "Transfers:";
 "lat" = "Lat";
 "lon" = "Lon";
-"error_calculating_route" = "Error calculating route";
+"error_calculating_route" = "Հնարավոր չէ հաշվարկել երթուղին։";
 "route_calc_progress" = "Calculating: %d%%";
-"internet_connection_required_for_online_route" = "An online navigation service is selected but no Internet connection is available.";
-"empty_route_calculated" = "Error: Calculated route is empty";
+"internet_connection_required_for_online_route" = "Դուք պատրաստվում եք օգտագործել Ինտերնետ երթուղիները, սակայն ակտիվ ինտերնետ կապ չեք ունենում:";
+"empty_route_calculated" = "Հնարավոր չէ երթուղին հաշվարկել։";
 "destination_point" = "Նպատակակետ %@";
 "intermediate_point" = "Միջանկյալ նպատակակետ %@";
-"arrived_at_intermediate_point" = "You have arrived at your intermediate destination";
-"starting_point_too_far" = "Starting point too far from nearest road.";
+"arrived_at_intermediate_point" = "Հասել եք ձեր միջանկյալ նպատակակետին";
+"starting_point_too_far" = "Մեկնման կետը շատ հեռու է մոտակա ճանապարհից:";
 "ending_point_too_far" = "Վերջնակետը շատ հեռու է մոտակա ճանապարհից:";
-"intermediate_point_too_far" = "Intermediate destination %@ is too far from the nearest road.";
+"intermediate_point_too_far" = "Միջանկյալ նպատակակետը %@ շատ հեռու է մոտակա ճանապարհից:";
 "arrived_at_destination" = "Դուք ժամանել եք։";
 
 "towards" = "դեպի";
-"route_roundabout" = "Roundabout: take %d exit and go";
+"route_roundabout" = "Շրջանաձև երթևեկություն %d ելք";
 "route_roundabout_short" = "Վերցրեք %d ելքը";
 "route_kl" = "Պահեք ձախ կողմում";
 "route_kr" = "Պահեք աջ կողմում";
@@ -405,12 +406,12 @@
 "driving_region_japan" = "Ճապոնիա";
 "driving_region_us" = "Ամերիկայի Միացյալ Նահանգներ";
 "driving_region_canada" = "Կանադա";
-"driving_region_europe_asia" = "Europe, Asia, Latin America & similar";
-"driving_region_uk" = "UK, India & similar";
+"driving_region_europe_asia" = "Եվրոպա, Ասիա, Լատինական Ամերիկայում և նմանատիպ";
+"driving_region_uk" = "Մեծ Բրիտանիան, Հնդկաստանը և այլն";
 "driving_region_australia" = "Ավստրալիա";
 
-"left_side_navigation" = "Left-hand driving";
-"right_side_navigation" = "Right-hand driving";
+"left_side_navigation" = "Ձախակողմյան երթևեկություն";
+"right_side_navigation" = "Աջակողմյա երթևեկություն";
 
 "si_mi_feet" = "Մղոններ/ֆուտ";
 "si_mi_yard" = "Մղոններ/յարդեր";
@@ -422,20 +423,20 @@
 "si_m_s" = "Մետր վայրկյանում";
 "si_min_km" = "Րոպե կիլոմետր";
 "si_min_m" = "Րոպե մղոն";
-"si_nm_h" = "Nautical miles per hour (knot)";
+"si_nm_h" = "Ծովային մղոն ժամում (հանգույց)";
 "units_nm_h" = "nmi/h";
 "min_mile" = "րոպե/մ";
 "min_km" = "րոպե/կմ";
 "m_s" = "մ/վ";
 "shared_string_tones" = "տոնն";
 
-"nothing_found" = "Nothing found";
-"nothing_found_descr" = "Modify the search query or increase the search radius";
+"nothing_found" = "Ոչինչ չի գտնվել";
+"nothing_found_descr" = "Փոխել հարցումը կամ ավելացնել որոնման շառավիղը։";
 "select_street" = "Ընտրեք փողոցը";
 "shared_string_in_name" = "%@";
 "select_city" = "Ընտրեք քաղաքը";
-"type_city_town" = "Type city or town";
-"select_postcode" = "Select postcode";
+"type_city_town" = "Մուտքագրեք քաղաք/վայր";
+"select_postcode" = "Փոստային կոդը փնտրում";
 "type_postcode" = "Մուտքագրեք փոստային կոդը";
 "coords_search" = "Որոնել ըստ կոորդինատների";
 "nearest_cities" = "Մոտակա քաղաքները";
@@ -564,22 +565,22 @@
 "fav_ignore" = "Ignore";
 "shared_string_rename" = "Վերանվանել";
 "update_existing" = "Փոխարինել";
-"replace_favorite_confirmation" = "Are you sure you want to replace Favorite %@?";
+"replace_favorite_confirmation" = "Վստահ եք, որ ցանկանում եք փոխարինել Սիրածները %@\?";
 "fav_points_not_exist" = "Չկան «Սիրված» կետեր";
 "fav_rename_q" = "Rename favorite";
 "fav_enter_new_name" = "Please enter new name for the favorite";
 "fav_select" = "Please select favorites";
 "select_favorite" = "Select favorite";
 "group_properties" = "Group preoperties";
-"add_group" = "Add group";
+"add_group" = "Ավելացնել խումբ";
 "add_favorite" = "Add favorite";
 "name_and_descr" = "Name & description";
 "select_group" = "Select group";
 "shared_string_icon" = "Icon";
 "shared_string_shape" = "Shape";
 "fav_point_dublicate" = "Կրկնօրինակել «Սիրված» կետի անունը";
-"fav_point_dublicate_message" = "Favorite renamed to \'%@\' to avoid duplication.";
-"fav_point_emoticons_message" = "Favorite renamed to \'%@\' to save the string containing emoticons to a file.";
+"fav_point_dublicate_message" = "«Սիրված» կետը վերանվանվել է %@, անունների կրկնօրինակումը կանխելու համար:";
+"fav_point_emoticons_message" = "«Սիրված» կետի անունը փոխվել է %@, որպեսզի հնարավոր լինի «սմայլիկ» պարունակող տողերը պահպանել ֆայլում։";
 "access_default_color" = "Սկզբնադիր գույնը";
 "default_color_descr" = "This color wil be used for all new favorites added to the group.";
 
@@ -600,7 +601,7 @@
 
 // My Places
 "favorites_item" = "Սիրված";
-"shared_string_gpx_tracks" = "Տրեկները";
+"shared_string_gpx_tracks" = "Տրեկեր";
 "personal_category_name" = "Personal";
 "shared_string_visible" = "Տեսանելի";
 
@@ -610,7 +611,7 @@
 "shared_string_waypoints" = "Կետեր";
 "gpx_points" = "Point(s)";
 "shared_string_export" = "Արտահանել";
-"gpx_selection_segment_title" = "Segments";
+"gpx_selection_segment_title" = "Սեգմենտ";
 "route_points" = "Երթուղու կետերը";
 
 "import_export" = "Import/Export";
@@ -700,7 +701,7 @@
 "map_mode" = "Քարտեզի ռեժիմը";
 "map_magnifier" = "Խոշորացույց";
 "text_size" = "Տեքստի չափը";
-"daynight_mode_night" = "Գիշեր";
+"daynight_mode_night" = "Գիշերային";
 "map_widget_renderer" = "Քարտեզի ոճը";
 "map_settings_overunder" = "Overlay / Underlay";
 "map_settings_over" = "Overlay";
@@ -742,7 +743,7 @@
 "allow_3D_view" = "2.5D view";
 "units_of_speed" = "Units of speed";
 "angular_measurment_units" = "Angular measurment units";
-"units_and_formats" = "Units & formats";
+"units_and_formats" = "Չափման միավորներ և ձեւաչափեր";
 "device_settings" = "Device settings";
 "osmand_settings" = "OsmAnd settings";
 "global_settings_descr" = "Affect the entire application.";
@@ -769,7 +770,8 @@
 "sett_arr" = "Map arrows";
 "shared_string_location" = "Գտնվելու վայրը";
 "sett_arr_map" = "Map center";
-"short_location_on_map" = "Lat %@ Lon %@";
+"short_location_on_map" = "Լայնությունը %@
+\nԵրկայնությունը %@";
 "navigate_point_format_D" = "DDD.DDDDD";
 "navigate_point_format_DM" = "DDD MM.MMM";
 "navigate_point_format_DMS" = "DDD MM SS.S";
@@ -978,12 +980,12 @@
 "copy_from_other_profile" = "Copy from another profile";
 "copy_from_other_profile_descr" = "You can copy all settings from any profile to the selected profile: ";
 "profile_alert_delete_title" = "Delete profile";
-"profile_alert_delete_msg" = "Are you sure you want to completly delete \"%@\" profile?";
+"profile_alert_delete_msg" = "Դուք համոզված եք՞, որ ցանկանում եք ջնջել \"%@\" պրոֆիլը";
 "select_base_profile_dialog_message" = "Base your custom profile on one of the default app profiles, this defines the basic setup like default visibility of widgets and units of speed and distance. These are the default app profiles, together with examples of custom profiles they may be extended to:";
 "profile_type_custom_string" = "Custom profile";
 "new_profile" = "New profile";
 "configure_profile" = "Կարգավորել պրոֆիլը";
-"profile_settings" = "Profile settings";
+"profile_settings" = "Պրոֆիլի կարգավորումները";
 "profile_appearance" = "Profile appearance";
 "profile_appearance_descr" = "Icon, color, and name";
 "ui_customization" = "UI customization";
@@ -1044,7 +1046,7 @@
 "downloading" = "Downloading";
 
 // Route planning
-"plan_route" = "Plan a route";
+"plan_route" = "Պլանավորել երթուղին";
 "coord_input_add_point" = "Ավելացնել նոր կետ";
 "point_num" = "Point %d";
 "points_count" = "Points:";
@@ -1052,7 +1054,7 @@
 "profile_alert_need_save_title" = "Պահպանել փոփոխությունները";
 "save_as_new_track" = "Save as new track";
 "add_to_a_track" = "Add to a track";
-"move_point" = "Move point";
+"move_point" = "Տեղափոխել կետը";
 "move_point_descr" = "Move map to change the position of this point.";
 "add_before" = "Add points before";
 "add_after" = "Add points after";
@@ -1060,7 +1062,7 @@
 "trim_after" = "Trim after this point";
 "change_route_type_before" = "Change route type before this point";
 "change_route_type_after" = "Change route type after this point";
-"delete_point" = "Delete point";
+"delete_point" = "Ջնջել կետը";
 "add_one_more_pnt" = "Add one more point";
 "route_betw_points_descr" = "Choose how to connect the points: with a straight line or by calculating a route using one of profiles listed below.";
 "next_seg_descr" = "The next segment will be recalculated using selected profile.";
@@ -1119,7 +1121,7 @@
 "res_mapsres" = "Maps & Resources";
 "download_tab_local" = "Տեղական";
 "osmand_live" = "OsmAnd Live";
-"live_updates" = "Ավտո-թարմացում";
+"live_updates" = "Liveթարմացումներ";
 "available_maps" = "Հասանելի քարտեզներ";
 "osmand_live_last_changed" = "Last map change: %@";
 "last_update" = "Վերջին թարմացումը՝ %@";
@@ -1212,7 +1214,6 @@
 
 // Menu
 "shared_string_menu" = "Menu";
-"shared_string_my_places" = "Իմ վայրերը";
 "menu_my_trips" = "My Tracks";
 "feedback" = "Արձագանք";
 "shared_string_help" = "Օգնություն";
@@ -1236,7 +1237,7 @@
 
 "osn_bug_name" = "OSMնշում";
 "osm_created" = "Created";
-"poi_remove_success" = "Ջնջված է";
+"poi_remove_success" = "Նջված է";
 "shared_string_modified" = "Modified";
 "osm_reopened" = "Reopened";
 "osm_name" = "OpenStreetMap username";
@@ -1296,7 +1297,7 @@
 "osm_edit_uploading" = "Uploading...";
 "osm_upload_complete" = "Upload complete";
 "osm_tag_too_long_message" = "The maximum value length for tag %@ is 255 characters. \nPlease make it shorter to continue.";
-"save_poi_without_poi_type_message" = "Do you want to save POI without type?";
+"save_poi_without_poi_type_message" = "Վստահ եք, որ ցանկանում եք POI-ին պահպանել առանց տեսակը նշելու?";
 "save_poi_too_many_uppercase" = "Անունը պարունակում է չափազանց շատ մեծ տառեր: Շարունակել\?";
 "osm_editing_loading_poi" = "Loading POI information";
 "osm_editing_access_descr" = "You can view all your local edits and notes in %@. Already uploaded points are not listed in OsmAnd.";
@@ -1309,7 +1310,7 @@
 "improve_coverage_mapillary" = "Կատարելագործել լուսանկարի ծածկույթը Mapillary- ի միջոցով";
 "mapillary_get_descr" = "Get Mapillary to add photos to this location";
 "mapil_contribute" = "Contribute your own street level imagery";
-"mapillary_descr" = "Online street photos for everyone. Discover places, collaborate, capture the world";
+"mapillary_descr" = "Առցանց փողոցային նկարներ բոլորի համար: Բացահայտեք վայրերը, համագործակցեք, նկարեք աշխարհը:";
 "mapillary_turn_on_widget" = "Turn on Mapillary widget";
 "mapillary_turn_on_widget_descr" = "This allows you to quickly contribute to Mapillary";
 "mapillary_menu_title_tile_cache" = "Սալիկներ կեշ";
@@ -1358,7 +1359,7 @@
 "toggle_poi" = "Show/hide POI";
 "hide_poi_action" = "Hide POI";
 "quick_action_add_parking" = "Ավելացնել ավտոկայանատեղ";
-"parking_place" = "Parking place";
+"parking_place" = "Ավտոկայանատեղ";
 "quick_action_navigation_voice" = "Ձայնը on/off";
 "add_osm_note" = "Add OSM note";
 "toggle_online_notes" = "Toggle OSM notes";
@@ -1376,7 +1377,7 @@
 "add_work" = "Add work";
 "favorite_home_category" = "Տուն";
 "work_button" = "Work";
-"map_widget_parking" = "Parking spot";
+"map_widget_parking" = "Կայանատեղ";
 "quick_action_add_first_intermediate" = "Ավելացնել առաջին միջանկյալ կետը";
 "toggle_auto_zoom" = "Auto zoom on/off";
 "auto_zoom_on" = "Auto zoom on";
@@ -1447,17 +1448,17 @@
 "enable_hillshade" = "Enable to view terrain data";
 "contour_lines_hillshades_slope" = "Contour lines, hillshades, slope";
 "quick_action_dir_from_descr" = "Tap this action to navigate from the current screen center point.";
-"quick_action_transport_descr" = "Tap this action to show or hide public transport routes / stops on the map.";
+"quick_action_transport_descr" = "Կոճակ, որը ցույց է տալիս կամ թաքցնում է հասարակական տրանսպորտը քարտեզի վրա:";
 "toggle_public_transport" = "Show/hide public transport";
 "public_transport_show" = "Show public transport";
 "public_transport_hide" = "Hide public transport";
 "quick_action_showhide_mapillary_title" = "Show/hide Mapillary";
-"quick_action_showhide_mapillary_descr" = "Tapping this action button shows or hides the Mapillary layer on the map.";
+"quick_action_showhide_mapillary_descr" = "Անջատիչ - Mapillary շերտը ցույց տալու կամ թաքցնել ու քարտեզի վրա:";
 "quick_action_mapillary_hide" = "Hide Mapillary";
 "quick_action_mapillary_show" = "Show Mapillary";
 "quick_action_remove_next_destination" = "Ջնջել հաջորդ նպատակակետը";
 "quick_action_remove_next_destination_descr" = "Երթուղու ընթացիկ նպատակակետը կջնջվի: Եթե դա նպատակակետն է, նավարկումը կդադարի։";
-"change_application_profile" = "Change application profile";
+"change_application_profile" = "Փոխել hավելվածի պրոֆիլը";
 "select_application_profile" = "Select application profile";
 "shared_string_add_profile" = "Ավելացնել պրոֆիլ";
 "quick_action_switch_profile_descr" = "Սեղմելով «Գործողության կոճակը» փոխում է ընտրված պրոֆիլների միջև:";
@@ -1470,7 +1471,7 @@
 "other_options" = "Other options";
 "add_parking" = "Add as Parking position";
 "add_parking_short" = "Add Parking";
-"add_waypoint" = "Add waypoint to track";
+"add_waypoint" = "Ավելացնել կետ";
 "add_waypoint_short" = "Add waypoint";
 "delete_waypoints" = "Delete waypoints";
 "delete_group_confirm_short" = "Delete group?";
@@ -1484,7 +1485,7 @@
 "context_menu_item_open_note" = "Ավելացնել OSM նշումը";
 "edit_osm_note" = "Edit OSM Note";
 "shared_string_commit" = "Հաստատել";
-"osb_comment_dialog_message" = "Հաղորդագրություն";
+"osb_comment_dialog_message" = "Մեկնաբանություն";
 "osn_add_dialog_title" = "Ստեղծել նշում";
 "modify_poi" = "Modify the POI information";
 "shared_string_actions" = "Գործողություններ";
@@ -1616,7 +1617,7 @@
 "product_desc_skimap" = "Ski slopes for all ski resorts in the world";
 "product_desc_ext_skimap" = "OsmAnd Ski Maps is a plugin to OsmAnd Maps&Navigation app designed to navigate at winter sports locations. It gives the information about ski pistes, ski lift markers and even colored lines indicating the complexity of each track. You get the info about ski tracks themselves as well as the surrounding infrastructure.\n\nUsage Instructions: Enable the plugin in OsmAnd application, tap the map button and set the map type to Ski maps.";
 
-"monitoring_settings" = "Track recording";
+"monitoring_settings" = "Ուղևորության գրանցում";
 "product_desc_track_recording" = "Activates the functionality to record and save your tracks";
 "product_desc_ext_track_recording" = "Record your tracks and save them manually using OsmAnd Track recording plugin. Export your track as a gpx file, share it or even use it to contribute to OpenStreetMap project.  A handy tool for runners, hikers and anyone interested in recording their tracks.";
 
@@ -1629,46 +1630,37 @@
 "open_place_reviews" = "OpenPlaceReviews";
 "product_desc_openplacereviews" = "Send photos, reviews, and links about public places";
 "product_desc_ext_openplacereviews" = "Send photos, reviews, and links about public places such as restaurants, hotels, museums, and waypoints as open data https://openplacereviews.org/data/.\n\nRead more at https://openplacereviews.org";
-
-"index_name_africa" = "Աֆրիկա";
 "product_desc_africa" = "Unlimited map downloads for Africa";
-"index_name_antarctica" = "Antarctica";
 "product_desc_antarctica" = "Unlimited map downloads for Antarctica";
 "product_desc_africa_short" = "Africa region maps";
 "product_desc_australia" = "Unlimited map downloads for Australia";
 "product_desc_australia_short" = "Australia region maps";
-"index_name_central_america" = "Կենտրոնական Ամերիկա";
 "product_desc_centralamerica" = "Unlimited map downloads for Central America";
 "product_desc_centralamerica_short" = "Central America region maps";
-"index_name_europe" = "Եվրոպա";
 "product_desc_europe" = "Unlimited map downloads for Europe";
 "product_desc_europe_short" = "Europe region maps";
-"index_name_north_america" = "Հյուսիսային Ամերիկա";
 "product_desc_northamerica" = "Unlimited map downloads for North America";
 "product_desc_northamerica_short" = "North America region maps";
-"index_name_russia" = "Ռուսաստան";
 "product_desc_russia" = "Unlimited map downloads for Russia";
 "product_desc_russia_short" = "Maps of Russia regions";
-"index_name_south_america" = "Հարավային Ամերիկա";
 "product_desc_southamerica" = "Unlimited map downloads for South America";
 "product_desc_southamerica_short" = "South America region maps";
 "product_title_allworld" = "All World Maps";
 "product_desc_allworld" = "Maps of All World";
-"index_name_asia" = "Ասիա";
 "product_desc_asia" = "Unlimited map downloads for Asia";
 "product_desc_asia_short" = "Asia region maps";
 
-"download_wikipedia_maps" = "Վիքիփեդիա";
+"download_wikipedia_maps" = "Վիքիպեդիա";
 "product_desc_wiki" = "Wikipedia data";
 "product_desc_ext_wiki" = "Get information about points of interest from Wikipedia. It is your pocket offline guide - just enable Wikipedia plugin and enjoy articles about objects around you.";
 "shared_string_all_languages" = "Բոլոր լեզուները";
-"select_wikipedia_article_langs" = "Select the languages in which Wikipedia articles will appear on the map. You can switch between all available languages while reading the article.";
+"select_wikipedia_article_langs" = "Ընտրեք լեզուները, Վիքիպեդիայի հոդվածների համար քարտեզի վրա ցուցադրելու համար: Դուք կկարողանաք փոխել լեզուները, հոդվածը կարդու ժամանակ։";
 "wiki_menu_download_descr" = "Վիքիպեդիա-ի POI-րը քարտեզի վրա դիտելու համար անհրաժեշտ են լրացուցիչ քարտեր:";
 "some_articles_may_not_available_in_lang" = "Որոշ Վիքիփեդիայի հոդվածներ կարող են անհասանելի լինել ձեր լեզվի համար:";
 "available_languages" = "Available languages";
 "preferred_languages" = "Preferred languages";
 
-"download_srtm_maps" = "Բարձունքների գծեր";
+"download_srtm_maps" = "Քարտեզ SRTM (բարձունքների գծեր)";
 "product_desc_srtm" = "Display of contour lines";
 "product_desc_ext_srtm" = "This plugin provides contour lines and hillshade, which can be displayed in OsmAnd offline maps. Contour lines provide the information about heights of the area while hillshade is their visualization. See the names of mountain peaks and specific features of terrain using this plugin.\n\nThe global data (between 70 degrees north and 70 degrees south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA's Earth Observing System. ASTER is a cooperative effort between NASA, Japan's Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
 
@@ -1677,7 +1669,7 @@
 "wikivoyage_travel_guide_descr" = "Տեսեք ուղեցույցները, OsmAnd-ում աշխարհի ամենահետաքրքիր վայրերը, առանց ինտերնետին միանալու:";
 "product_desc_sea_depth_contours" = "Sea depth contour lines and seamarks";
 
-"my_location" = "My Location";
+"my_location" = "Իմ դիրքը";
 "all_categories" = "All categories";
 "get_unlimited_access" = "Ստանալ անսահմանափակ մուտք";
 
@@ -1694,9 +1686,7 @@
 "enter_fav_name" = "Enter favorite name";
 "res_installing" = "Installing…";
 "roads" = "Ճանապարհներ";
-"download_wikipedia_maps" = "Վիքիփեդիա";
 "shared_string_hillshade" = "Hillshade";
-"shared_string_slope" = "Լանջ";
 "download_regular_maps" = "Ստանդարտ քարտեզ";
 
 "select_language" = "Select language";
@@ -1755,7 +1745,7 @@
 "by_transport_type" = "By %@";
 "transport_stops" = "կանգառներ";
 "total_time" = "Total time";
-"moving_time" = "Moving time";
+"moving_time" = "Ժամանակն շարժման մեջ";
 "change_group" = "Change group";
 "change_color" = "Փոխել գույնը";
 "wpt_select" = "Please select waypoints";
@@ -1775,8 +1765,8 @@
 "gpx_trip_groups" = "Track groups";
 "gpx_group_select" = "Group Select";
 "shared_string_show_all" = "Ցույց տալ ամբողջը";
-"poi_filter_parking" = "Կայանատեղ";
-"parked_at" = "Parked at";
+"poi_filter_parking" = "Ավտոկայանատեղեր";
+"parked_at" = "կայանված է";
 
 "context_menu_item_directions_from" = "Մեկնման կետ";
 "search_nearby" = "Որոնել մոտակայքում";
@@ -1788,7 +1778,7 @@
 "sorting" = "Sorting";
 "default_speed_descr" = "Estimates arrival time for unknown road types and limits speed for all roads (may affect routing)";
 
-"plugins_menu_group" = "Պլագիններ";
+"plugins_menu_group" = "Պլագիններ (Plugins)";
 "open_map_settings" = "Open Map Settings";
 
 "plugin_popup_ski_title" = "Turn on Ski map style";
@@ -1841,14 +1831,14 @@
 "hist_select_remove" = "Please select history items to remove";
 "hist_remove_q" = "Do you want to remove history items?";
 "gpx_edit_mode" = "Edit mode";
-"go_to_map" = "Go to Map";
+"go_to_map" = "Ցույց տալ քարտեզը";
 "import_raster_map_success" = "Raster map has been imported. Open Map Settings and activate it via Overlay/Underlay";
 "import_raster_map_failed" = "Raster map import failed";
 
 "device_memory" = "Սարքի հիշողությունը";
 "free" = "Ազատ է %@";
 
-"first_usage_greeting" = "Get directions and discover new places without Internet connection";
+"first_usage_greeting" = "Ստացեք երթուղիներ և հայտնաբերեք նոր վայրեր առանց ինտերնետ կապի";
 "get_started" = "Սկսել";
 
 "first_usage_wizard_desc" = "OsmAnd-ը կորոշի ձեր դիրքը և առաջարկի քարտեզներ ներբեռնման համար այդ տարածաշրջանի համար:";
@@ -1859,15 +1849,15 @@
 "added_profiles_descr" = "Profiles added by plugin";
 
 "location_not_found" = "Չհաջողվեց բացահայտել դիրքը";
-"search_my_location" = "Search my location";
+"search_my_location" = "Գտնել իմ դիրքը";
 
 "no_inet_connection" = "Ինտերնետ կապ չկա";
 "no_inet_connection_desc_map" = "Պահանջվում է ներբեռնել քարտեզներ։";
 "try_again" = "Կրկին փորձեք";
 
 "searching" = "Որոնում…";
-"search_location" = "Searching location…";
-"search_map" = "Searching map…";
+"search_location" = "Դիրքի որոնմում…";
+"search_map" = "Քարտեզների որոնում…";
 "search_another_country" = "Ընտրեք այլ տարածաշրջան";
 
 "skip_map_downloading" = "Բաց թողնել քարտեզների ներբեռնումը";
@@ -1895,7 +1885,7 @@
 "shared_string_select_all" = "Ընտրել բոլորը";
 "create_custom_poi" = "Ստեղծել custom ֆիլտր";
 "selected_categories" = "Ընտրված կատեգորիաները";
-"new_filter_desc" = "Please enter a name for the new filter, this will be added to your Categories tab.";
+"new_filter_desc" = "Մուտքագրեք նոր ֆիլտրի անունը: Դուք կարող եք գտնել այն \"Կատեգորիաների\" ցանկում:";
 "rearrange_categories" = "Rearrange categories";
 "visible_categories" = "Visible categories";
 "hidden_categories" = "Hidden categories";
@@ -1914,7 +1904,7 @@
 "edit_filter_save_as_menu_item" = "Հիշել որպես";
 "delete_filter" = "Ջնջել ֆիլտրը";
 "save_filter" = "Պահպանել ֆիլտրը";
-"edit_filter_delete_dialog_title" = "Delete selected filter?";
+"edit_filter_delete_dialog_title" = "Ջնջե՞լ տվյալ ֆիլտրը?";
 "apply_filters" = "Կիրառել ֆիլտրերը";
 "filter_poi_hint" = "Ֆիլտրում անունով";
 "rendering_value_category_name" = "Կատեգորիա";
@@ -1934,7 +1924,7 @@
 "city_type_neighbourhood" = "Թաղամաս";
 "postcode" = "Փոստային կոդը";
 "show_something_on_map" = "Ցույց տալ %@ քարտեզի վրա";
-"search_POI_level_btn" = "Increase search radius";
+"search_POI_level_btn" = "Գտնել ավելին";
 
 "search_address_street" = "Փողոց";
 "search_address_building_option" = "Շենք";
@@ -1976,31 +1966,31 @@
 
 "purchase_dialog_title" = "Ընտրեք Փաթեթ";
 "purchase_dialog_travel_description" = "Գնեք հետեւյալներից մեկը, որպեսզի ստանաք ճանապարհորդական հոդվածները անցանց՝";
-"free_version_message" = "%@ maps to download or update.";
-"get_osmand_live" = "Get OsmAnd Live to unlock all features:";
+"free_version_message" = "Դուք կարող եք ներբեռնել կամ թարմացնել %@ քարտեզներ։";
+"get_osmand_live" = "Ձեռք բերեք OsmAnd Live, որպեսզի կարողանաք օգտվել բոլոր հնարավորություններից՝ քարտեզների օրական թարմացում անսահմանափակ ներբեռնում, բոլոր plugin-րը Wikipedia, Wikivoyage և շատ ավելին։";
 "osm_live_subscription" = "OsmAnd Liveբաժանորդագրություն";
 "cancel_subscription" = "Cancel subscription";
 
 "wikivoyage_offline" = "Վիքիուղեցույցը անցանց ռեժիմում";
 "unlimited_downloads" = "Անսահմանափակ ներբեռնում";
 "wikipedia_offline" = "Վիքիպեդիա (անցանց)";
-"contour_lines_hillshade_maps" = "Contour lines & Hillshade maps";
+"contour_lines_hillshade_maps" = "Contour lines&HillshadeՔարտեզներ";
 "monthly_map_updates" = "Քարտեզների թարմացումներ`ամսական";
 "daily_map_updates" = "Քարտեզների թարմացումները`ամեն ժամ";
 "index_item_depth_contours_osmand_ext" = "Ծովային խորքային ուրվագծեր";
-"donation_to_osm" = "Donation to OpenStreetMap community";
+"donation_to_osm" = "Նվիրատվություն OSM համայնքին";
 "purchase_unlim_title" = "Գնել - %@";
 "in_app_purchase" = "Գնում հավելվածում";
 "in_app_purchase_desc" = "Մեկանգամյա վճարում";
 "in_app_purchase_desc_ex" = "Մի անգամ գնելուց հետո այն մշտապես մատչելի կլինի ձեզ համար:";
 "unlock_all_features" = "Ստանալ OsmAnd բոլոր գործառույթները";
-"subscribe_email_desc" = "Subscribe to our mailing list:<br/>• Get 3 extra maps to download<br/>• Hear about discounts first<br/>• Participate in promocodes <a href='https://osmand.net/giveaway'>giveaways</a>";
+"subscribe_email_desc" = "Բաժանորդագրվեք մեր էլեկտրոնային փոստի առաքմանը `OsmAnd զեղչերի մասին և ստացիր 3 լրացուցիչ քարտեզների ներբեռնում:";
 "osm_live_subscribe_btn" = "Բաժանորդագրվել";
 "shared_string_email_address" = "Էլեկտրոնային հասցե";
 "osm_live_enter_email" = "Խնդրում ենք մուտքագրեք ճիշտ e-mail հասցեն";
-"osm_live_enter_user_name" = "Please enter public name";
+"osm_live_enter_user_name" = "Մուտքագրեք հանրային անուն";
 "shared_string_unexpected_error" = "Անսպասելի սխալ";
-"osm_live_payment_desc" = "You can manage and cancel your subscriptions in your App Store account settings after purchase";
+"osm_live_payment_desc" = "Բաժանորդային վճարը գանձվում է ամսական կտրվածքով:Դուք կարող եք չեղարկել բաժանորդագրությունը Google Play-յում ցանկացած պահի:";
 "osm_live_unlock_all" = "Unlock all features";
 "osm_live_unlock_updates" = "Unlock hourly map updates";
 "osm_live_banner_descr" = "Subscribe to OsmAnd Live and get unlimited <b>hourly</b> map updates and <b>all features</b> included from %@";
@@ -2134,7 +2124,7 @@
 "routing_attr_driving_style_speed_name" = "Կարճ երթուղիները";
 "routing_attr_avoid_sett_description" = "Avoids cobblestone and sett";
 "rendering_attr_hikingRoutesOSMC_description" = "Ճանապարհի արտացոլումը ըստ OSMC երթուղիների։";
-"rendering_value_car_name" = "Driving";
+"rendering_value_car_name" = "Ավտոմեքենա";
 "routing_attr_avoid_unpaved_name" = "Առանց հողածածկ ճանապարհներից";
 "rendering_attr_lessDetailed_name" = "Ավելի քիչ մանրամասներ";
 "routing_attr_avoid_borders_description" = "Խուսափել երկրի սահմանի հատումը";
@@ -2174,7 +2164,7 @@
 "routing_attr_piste_type_nordic_description" = "Trails for nordic or cross-country skiing.";
 "rendering_attr_surface_unpaved_name" = "Unpaved";
 "rendering_attr_noAdminboundaries_description" = "Թաքցնել տարածաշրջանային սահմանները (admin levels 5–9)։";
-"rendering_value_bicycle_name" = "Cycling";
+"rendering_value_bicycle_name" = "Հեծանիվ";
 "rendering_value_translucent_lightgreen_name" = "Կիսաթափանցիկ բաց կանաչ";
 "rendering_attr_contourLines_name" = "Ցույց տալ եզրագծերը (contour lines)";
 "rendering_attr_showAccess_name" = "Ցույց տալ մուտքի սահմանափակումները";
@@ -2310,9 +2300,9 @@
 "rendering_attr_roadColors_name" = "Ճանապարհների գունավորման սխեման";
 "weight_limit_description" = "Նշեք մեքենայի քաշը, երթուղու վրա կարող են կիրառվել սահմանափակումներ ծանր տրանսպորտային միջոցների համար։";
 "height_limit_description" = "Նշեք մեքենայի բարձրությունը, երթուղու վրա կարող են կիրառվել սահմանափակումներ ծանր տրանսպորտային միջոցների համար։";
-"lenght_limit_description" = "Provide your vehicle length, some route restrictions may be applied for long vehicles.";
+"lenght_limit_description" = "Նշեք մեքենայի երկարությունը, երկար տրանսպորտային միջոցների համար կարող են կիրառվել երթուղու սահմանափակումներ։";
 "width_limit_description" = "Նշեք մեքենայի լայնությունը, երթուղու վրա կարող են կիրառվել սահմանափակումներ ծանր տրանսպորտային միջոցների համար։";
-"vessel_height_limit_description" = "Set vessel height to avoid low bridges. Keep in mind, if the bridge is movable, the calculation uses its height in the open state.";
+"vessel_height_limit_description" = "Սահմանեք նավի բարձրությունը`խուսափելու համար ցածր կամուրջներից: Հիշեք, եթե կամուրջը շարժական է, մենք կօգտագործենք դրա բարձրությունը բաց վիճակում:";
 "vessel_width_limit_description" = "Նեղ կամուրջներից խուսափելու համար նշեք նավի լայնությունը";
 "default_speed_dialog_msg" = "Estimates arrival time for unknown road types, and limits speed for all roads (may affect routing)";
 
@@ -2329,7 +2319,7 @@
 "icon_group_industrial" = "Industrial";
 "amenity_type_education" = "Կրթություն";
 
-"settings_item_read_error" = "Could not read %@.";
+"settings_item_read_error" = "Անհնար է կարդալ «%@»։";
 "app_mode_default" = "Դիտել քարտեզը";
 "app_mode_car" = "Ավտոմեքենա";
 "app_mode_bicycle" = "Հեծանիվ";
@@ -2409,14 +2399,12 @@
 "altitude" = "Բարձրություն";
 "any_poi" = "Ցանկացած";
 "weather_wind_kilimeters_per_hour" = "Կիլոմետր ժամում";
-"shared_string_control_start" = "ձայնագրել";
 "private_access_routing_req" = "Նպատակակետը գտնվում է մասնավոր տարածքում: Թույլատրել այս ուղևորությանը մասնավոր ճանապարհներ մուտք գործել\?";
 "altitude_ascent" = "Վերելք";
 "toast_empty_name_error" = "Դիրքը անուն չունի";
 "debugging_and_development" = "OsmAnd-ի կարգավորումը և զարգացումը";
 "restore_purchases" = "Գնումների վերականգնում";
 "altitude_descent" = "Վայրեջք";
-"shared_string_control_stop" = "Դադարեցնել";
 "product_desc_ext_development" = "Կարգավորումներ զարգացման եւ կարգաբերման գործառույթների համար, ինչպիսիք են երթուղու ստուգումը կամ մոդելավորումը,քարտեզի ցուցադրման կատարումը, ձայնային հուշումները ստուգելը: Այս կարգավորումները մշակողների համար են և հասարակ օգտագործողների համար անհրաժեշտ չեն:";
 "osm_live_banner_desc" = "Ստացեք քարտեզի անսահմանափակ ներբեռնման հնարավորութուն նաև քարտեզների թարմացում ամիսը մեկ անգամ, շաբաթական, ամենօրյա կամ ամեն ժամ:";
 "share_geo" = "գեո:";
@@ -2424,3 +2412,15 @@
 "shared_string_delete_all" = "Ջնջել բոլորը";
 "shared_string_undefined" = "Անորոշ է";
 "data_settings" = "Տվյալներ";
+"shared_string_recorded" = "Գրանցված է";
+"are_you_sure" = "Վստա՞հ եք?";
+"download_all" = "Ներբեռնել բոլորը";
+"position_on_map_bottom" = "Ներքևում";
+"shared_string_status" = "Կարգավիճակ";
+"shared_string_added" = "Ավելացված է";
+"shared_string_selected" = "Ընտրված";
+"shared_string_refresh" = "Թարմացնել";
+"offline_edition_descr" = "Միշտ օգտագործել անցանց խմբագրումը։";
+"animate_my_location" = "Անիմացնել իմ դիրքը";
+"recording_delete_confirm" = "Ջնջել այս գրառումը\?";
+"position_on_map_center" = "Կենտրոնում";

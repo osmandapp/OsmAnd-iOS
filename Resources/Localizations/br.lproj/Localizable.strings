@@ -45,8 +45,8 @@
 "shared_string_next" = "Next";
 "route_stops_before" = "%@ stops before";
 "transport_Routes" = "Routes";
-"transport_nearby_routes_within" = "Nearby routes within";
-"transport_nearby_routes" = "Within";
+"transport_nearby_routes_within" = "Trehentadoù e-kichen";
+"transport_nearby_routes" = "NEPELL";
 "shared_string_control_stop" = "Stop";
 
 "cancel_navigation" = "Stop navigation";
@@ -58,14 +58,14 @@
 "shared_string_options" = "Options";
 "new_destination_point_dialog" = "You have already set a destination";
 "replace_destination_point" = "Replace the destination";
-"shared_string_current" = "Current";
-"make_as_start_point" = "Make this the start point";
+"shared_string_current" = "Bremanel";
+"make_as_start_point" = "Merkañ evel lec\'h loc\'hañ";
 "keep_and_add_destination_point" = "Add as subsequent destination";
-"subsequent_dest_description" = "Move destination up, and create destination";
+"subsequent_dest_description" = "Pignat ha krouiñ un arvoned";
 "add_as_first_destination_point" = "Add as first intermediate destination";
-"first_intermediate_dest_description" = "Adds the first stop on the route";
+"first_intermediate_dest_description" = "Ouzhpennañ a ra an arsav kentañ war an hent";
 "add_as_last_destination_point" = "Add as last intermediate destination";
-"last_intermediate_dest_description" = "Adds the last stop along the route";
+"last_intermediate_dest_description" = "Ouzhpenn a ra an arsav diwezhañ war an hent";
 
 "start_point" = "Start";
 "altitude" = "Altitude";
@@ -97,7 +97,7 @@
 "shared_string_go" = "Go";
 "info_button" = "Info";
 "simulate_your_location" = "Simulate your position";
-"simulate_navigation" = "Simulate navigation";
+"simulate_navigation" = "Darvanañ ar merdeiñ";
 "simulate_routing_descr" = "Simulate your position using a calculated route";
 "select_avoid_descr" = "Select roads you want to avoid during navigation. You can either select a road on the map or choose a type from the list below.";
 "no_active_route" = "No active route";
@@ -312,7 +312,7 @@
 "voice_provider_descr" = "Select voice guidance for navigation";
 "choose_audio_stream" = "Voice guidance output";
 "choose_audio_stream_descr" = "Select speaker to play voice guidance";
-"use_osm_live_routing" = "OsmAnd Live navigation";
+"use_osm_live_routing" = "Merdeiñ gant OsmAnd Live";
 "osm_live_routing_descr" = "Use OsmAnd Live updates for navigation";
 "select_nav_profile_dialog_message" = "The 'Navigation type' governs how routes are calculated.";
 "osmand_default_routing" = "OsmAnd routing";
@@ -330,7 +330,7 @@
 "routing_preferences_descr" = "Routing preferences";
 "recording_preferences_descr" = "Track recording preferences";
 "routing_settings" = "Navigation";
-"shared_string_navigation" = "Navigation";
+"shared_string_navigation" = "Merdeiñ";
 "get_directions" = "Directions";
 "app_mode_bus" = "Bus";
 "app_mode_train" = "Train";
@@ -344,7 +344,7 @@
 "gpx_option_reverse_route" = "Reverse GPX direction";
 "use_points_as_intermediates" = "Calculate route between points";
 "calculate_osmand_route_without_internet" = "Calculate OsmAnd route segment without Internet";
-"routing_settings_2" = "Navigation settings";
+"routing_settings_2" = "Arventennoù ar merdeiñ";
 "customize_route_line" = "Customize route line";
 "route_line_use_map_style_color" = "Use map style (%@) default color.";
 "route_line_use_map_style_width" = "Use map style (%@) default width.";
@@ -354,7 +354,7 @@
 "road_speeds" = "Road speeds";
 "avoid_transport_type" = "Avoid transport types";
 "temporary_conditional_routing" = "Consider temporary limitations";
-"impassable_road_desc" = "Select roads you want to avoid during navigation";
+"impassable_road_desc" = "Choazit an hentoù n\'hoc\'h eus ket c\'hoant implijout e-pad ar merdeiñ.";
 "interrupt_music_descr" = "Fully pause any music during voice prompts (not just lower its volume)";
 "interrupt_music" = "Pause music";
 "shared_string_do_not_use" = "Do not use";
@@ -562,7 +562,6 @@
 "shared_string_includes" = "Includes";
 "shared_string_purchased" = "Purchased";
 "shared_string_control_start" = "Start";
-"shared_string_control_stop" = "Stop";
 "compass_always_visible" = "Always visible";
 "compass_always_hidden" = "Always hidden";
 "data_settings" = "Data";
@@ -721,7 +720,6 @@
 "gpx_route_time" = "Route time";
 "gpx_uphldownhl" = "Uphills/Downhills";
 "map_widget_average_speed" = "Average speed";
-"shared_string_control_start" = "Start";
 "gpx_avg_elev" = "Average elevation";
 "gpx_elev_range" = "Elevation range";
 "average_altitude" = "Average altitude";
@@ -769,7 +767,6 @@
 
 "gpx_distance_points" = "Distance (points)";
 "gpx_max_speed" = "Max speed";
-"shared_string_speed" = "Speed";
 "shared_string_slope" = "Slope";
 
 "stats_select_graph_data" = "Select graph data";
@@ -1048,7 +1045,7 @@
 "select_data_to_import" = "Select the data to be imported.";
 "export_profile_select_descr" = "Select the data to be exported.";
 "selected_of" = "Selected - %d/%d";
-"nav_type_hint" = "Navigation type";
+"nav_type_hint" = "Doare Merdeiñ";
 "shared_string_nothing_selected" = "Nothing selected";
 "export_failed" = "Could not export profile";
 "custom_osmand_plugin" = "Custom OsmAnd plugin";
@@ -1329,7 +1326,6 @@
 
 // Menu
 "shared_string_menu" = "Menu";
-"shared_string_my_places" = "My Places";
 "menu_my_trips" = "My Tracks";
 "feedback" = "Feedback";
 "shared_string_help" = "Help";
@@ -1537,10 +1533,10 @@
 "toggle_auto_zoom" = "Auto zoom on/off";
 "auto_zoom_on" = "Auto zoom on";
 "auto_zoom_off" = "Auto zoom off";
-"quick_action_resume_pause_navigation" = "Pause/resume navigation";
+"quick_action_resume_pause_navigation" = "Ehanañ / Kenderc\'hel gant ar merdeiñ";
 "resume_nav" = "Continue navigation";
 "pause_nav" = "Pause navigation";
-"quick_action_start_stop_navigation" = "Start/stop navigation";
+"quick_action_start_stop_navigation" = "Kregiñ/Echuiñ ar merdeiñ";
 "toggle_day_night" = "Switch Day/Night mode";
 "quick_action_switch_night_mode" = "Night mode";
 "quick_action_switch_day_mode" = "Day mode";
@@ -1797,32 +1793,23 @@
 "debugging_and_development" = "OsmAnd development";
 "product_desc_development" = "For developers and experienced users";
 "product_desc_ext_development" = "Allows to configure OsmAnd for testing: simulate navigation routes, check the screen rendering performance, etc. Plugin is not required for normal application use.";
-
-"index_name_africa" = "Africa";
 "product_desc_africa" = "Unlimited map downloads for Africa";
-"index_name_antarctica" = "Antarctica";
 "product_desc_antarctica" = "Unlimited map downloads for Antarctica";
 "product_desc_africa_short" = "Africa region maps";
 "product_desc_australia" = "Unlimited map downloads for Australia";
 "product_desc_australia_short" = "Australia region maps";
-"index_name_central_america" = "Central America";
 "product_desc_centralamerica" = "Unlimited map downloads for Central America";
 "product_desc_centralamerica_short" = "Central America region maps";
-"index_name_europe" = "Europe";
 "product_desc_europe" = "Unlimited map downloads for Europe";
 "product_desc_europe_short" = "Europe region maps";
-"index_name_north_america" = "North America";
 "product_desc_northamerica" = "Unlimited map downloads for North America";
 "product_desc_northamerica_short" = "North America region maps";
-"index_name_russia" = "Russia";
 "product_desc_russia" = "Unlimited map downloads for Russia";
 "product_desc_russia_short" = "Maps of Russia regions";
-"index_name_south_america" = "South America";
 "product_desc_southamerica" = "Unlimited map downloads for South America";
 "product_desc_southamerica_short" = "South America region maps";
 "product_title_allworld" = "All World Maps";
 "product_desc_allworld" = "Maps of All World";
-"index_name_asia" = "Asia";
 "product_desc_asia" = "Unlimited map downloads for Asia";
 "product_desc_asia_short" = "Asia region maps";
 
@@ -1869,9 +1856,7 @@
 "enter_fav_name" = "Enter favorite name";
 "res_installing" = "Installing…";
 "roads" = "Roads";
-"download_wikipedia_maps" = "Wikipedia";
 "shared_string_hillshade" = "Hillshade";
-"shared_string_slope" = "Slope";
 "download_regular_maps" = "Standard map";
 
 "select_language" = "Select language";
@@ -2097,10 +2082,10 @@
 "shared_string_is_open_24_7" = "Open 24/7";
 "shared_string_is_open" = "Open now";
 "poi_filter_by_name" = "Search by name";
-"subcategories" = "Subcategories";
+"subcategories" = "Isrummadoù";
 "shared_string_select_all" = "Select all";
-"create_custom_poi" = "Create custom filter";
-"selected_categories" = "Selected categories";
+"create_custom_poi" = "Krouiñ lec\'hioù dedenn personelaet";
+"selected_categories" = "Rummadoù diuzet";
 "new_filter_desc" = "Please enter a name for the new filter, this will be added to your Categories tab.";
 "rearrange_categories" = "Rearrange categories";
 "visible_categories" = "Visible categories";
@@ -2116,7 +2101,7 @@
 "shared_string_email" = "Email";
 "user_password" = "Password";
 "shared_string_filters" = "Filters";
-"edit_filter" = "Edit categories";
+"edit_filter" = "Embann ar sil";
 "edit_filter_save_as_menu_item" = "Save As";
 "delete_filter" = "Delete filter";
 "save_filter" = "Save filter";

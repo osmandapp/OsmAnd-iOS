@@ -1074,7 +1074,7 @@
 "osm_upload_complete" = "Envio terminado";
 "osm_tag_too_long_message" = "O comprimento máximo do valor da etiqueta %@ é de 255 caracteres.\nUtilize menos caracteres para continuar.";
 "save_poi_without_poi_type_message" = "Salvar o POI sem especificar o tipo\?";
-"osm_edit_uploading" = "A enviar...";
+"local_openstreetmap_uploading" = "A enviar...";
 "short_location_on_map" = "Latitude %@
 \nLongitude %@";
 "navigate_point_format_OLC" = "Código de localização aberto (OLC)";
@@ -1098,8 +1098,8 @@
 "pause_nav" = "Pausar navegação";
 "quick_action_switch_night_mode" = "Modo noturno";
 "quick_action_switch_day_mode" = "Modo diurno";
-"mute_voice" = "Desativar voz";
-"unmute_voice" = "Ativar voz";
+"quick_action_navigation_voice_on" = "Desativar voz";
+"quick_action_navigation_voice_off" = "Ativar voz";
 "show_notes" = "Mostrar notas do OSM";
 "hide_notes" = "Esconder notas do OSM";
 "by_name" = "Por nome";
@@ -1129,9 +1129,9 @@
 "res_import_unsupported" = "Tipo incorreto de ficheiro. Apenas ficheiros routing.xml e *.render.xml são suportados.";
 "routing_import_please_restart" = "Para usar o novo routing.xml, por favor reinicie a aplicação.";
 "quick_action_list_descr" = "Toque nas páginas deste botão de ação na lista abaixo";
-"add_map_style" = "Adicionar estilo do mapa";
+"quick_action_map_style_action" = "Adicionar estilo do mapa";
 "toggle_local_edits" = "Alternar edições locais do OSM";
-"toggle_auto_zoom" = "Ampliação automática ligada/desligada";
+"quick_action_auto_zoom" = "Ampliação automática ligada/desligada";
 "search_results" = "Procurar resultados";
 "quick_action_name_alert" = "O nome da ação rápida foi alterado para %@ para evitar duplicação.";
 "quick_action_screen_header" = "Ecrã %ld";
@@ -1179,7 +1179,7 @@
 "avoid_by_type" = "Evitar por tipo";
 "select_map_marker" = "Selecione marcador de mapa";
 "parking_place" = "Vaga de estacionamento";
-"add_start" = "Adicionar ponto de partida";
+"route_add_start_point" = "Adicionar ponto de partida";
 "add_intermediate" = "Adicionar ponto intermediário";
 "add_home" = "Adicionar endereço da casa";
 "add_work" = "Adicionar endereço do trabalho";
@@ -1209,7 +1209,7 @@
 "gpx_descent" = "Descida";
 "download_select_map_types" = "Outros mapas";
 "edit_tilesource_url_to_load" = "URL";
-"res_elliptic_mercator" = "Mercator elíptico";
+"edit_tilesource_elliptic_tile" = "Mercator elíptico";
 "rendering_attr_smoothness_bad_name" = "Ruim";
 "rendering_value_translucent_orange_name" = "Laranja translúcido";
 "rendering_attr_highway_class_track_grade4_name" = "Grau 4";
@@ -1826,8 +1826,8 @@
 "change_route_type_before" = "Alterar o tipo de rota antes deste ponto";
 "trim_after" = "Cortar depois deste ponto";
 "trim_before" = "Cortar antes deste ponto";
-"add_after" = "Adicionar pontos posteriores";
-"add_before" = "Adicionar pontos anteriores";
+"add_point_after" = "Adicionar pontos posteriores";
+"add_point_before" = "Adicionar pontos anteriores";
 "move_point_descr" = "Mova o mapa para mudar a posição deste ponto.";
 "move_point" = "Mover ponto";
 "points_count" = "Pontos:";
@@ -2605,7 +2605,7 @@
 "open_street_map_login_mode_simple" = "Você pericentral para enviar as suas alterações.";
 "contributions_may_calculate_with_delay" = "O cálculo das contribuições pode levar várias horas.";
 "map_updates_are_unavailable_yet" = "As atualizações do mapa ainda não estão disponíveis :-(";
-"auth_error" = "Erro de autorização";
+"auth_failed" = "Erro de autorização";
 "shared_string_cross_buy" = "Compra cruzada";
 "login_open_street_map_org" = "Entrar com OpenStreetMap.org";
 "map_updates_for_mappers" = "Atualizações de mapas para mapeadores";
@@ -2795,4 +2795,4 @@
 "rendering_attr_horse_scale_impossible_name" = "Impossível";
 "routing_attr_carriage_restrictions_description" = "Considere as permissões de acesso para veículos puxados a cavalo";
 "shared_string_does_not_exist" = "Não existe";
-"download_wikipedia_data" = "Baixar dados d
+"download_wikipedia_data" = "Baix

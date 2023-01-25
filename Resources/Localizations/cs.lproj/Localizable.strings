@@ -1010,7 +1010,7 @@
 "previous_route" = "Předchozí trasa";
 "show_notes" = "Zobrazit OSM poznámky";
 "edit_tilesource_url_to_load" = "URL";
-"res_elliptic_mercator" = "Eliptický mercator";
+"edit_tilesource_elliptic_tile" = "Eliptický mercator";
 "hide_notes" = "Skrýt OSM poznámky";
 "rendering_attr_surface_gravel_name" = "Štěrk";
 "rendering_value_high_name" = "Velká";
@@ -1628,15 +1628,15 @@
 "hide_gpx" = "Skrýt stopu";
 "show_gpx" = "Stopy";
 "show_hide_gpx" = "Skrýt/zobrazit stopy";
-"unmute_voice" = "Zapnout hlas";
-"mute_voice" = "Ztlumit hlas";
+"quick_action_navigation_voice_off" = "Zapnout hlas";
+"quick_action_navigation_voice_on" = "Ztlumit hlas";
 "toggle_day_night" = "Přepnout denní/noční režim";
 "pause_nav" = "Pozastavit navigaci";
 "resume_nav" = "Pokračovat v navigaci";
 "auto_zoom_off" = "Automatické přibližování vypnuto";
 "auto_zoom_on" = "Automatické přibližování zapnuto";
-"toggle_auto_zoom" = "Automatické přibližování zap/vyp";
-"add_start" = "Přidat počáteční bod";
+"quick_action_auto_zoom" = "Automatické přibližování zap/vyp";
+"route_add_start_point" = "Přidat počáteční bod";
 "add_destination" = "Přidat cíl";
 "toggle_local_edits" = "Přepnout lokální úpravy OSM";
 "toggle_online_notes" = "Přepnout OSM poznámky";
@@ -1647,7 +1647,7 @@
 "fav_show" = "Zobrazit oblíbené";
 "toggle_fav" = "Skrýt/zobrazit oblíbené";
 "unsupported_items" = "Nepodporované položky";
-"add_map_style" = "Přidat styl mapy";
+"quick_action_map_style_action" = "Přidat styl mapy";
 "quick_action_list_descr" = "Klepnutím na tlačítko akce procházíte seznam níže";
 "mapil_select_user" = "Zvolte uživatele";
 "mapil_usernames" = "Jména uživatelů";
@@ -1669,7 +1669,7 @@
 "save_poi_without_poi_type_message" = "Uložit bod zájmu bez uvedení typu\?";
 "osm_tag_too_long_message" = "Maximální délka hodnoty pro značku %@ je 255 znaků.\nProsím zkraťte ji, abyste mohli pokračovat.";
 "osm_upload_complete" = "Odeslání dokončeno";
-"osm_edit_uploading" = "Odesílám...";
+"local_openstreetmap_uploading" = "Odesílám...";
 "osm_edit_show_on_map_descr" = "Zobrazit mapu okolo tohoto bodu";
 "osm_edit_show_on_map" = "Zobrazit změnu na mapě";
 "upload_to_osm" = "Odeslat změny do OSM";
@@ -1767,8 +1767,8 @@
 "change_route_type_before" = "Změnit typ trasy před tímto bodem";
 "trim_after" = "Smazat po tomto bodu";
 "trim_before" = "Smazat před tímto bodem";
-"add_after" = "Přidat body po";
-"add_before" = "Přidat body před";
+"add_point_after" = "Přidat body po";
+"add_point_before" = "Přidat body před";
 "move_point_descr" = "Pozici tohoto bodu změníte posunutím mapy.";
 "move_point" = "Přesunout bod";
 "points_count" = "Body:";
@@ -2672,7 +2672,7 @@
 "weather_clear_online_cache" = "Tím vymažete veškerou mezipaměť pro online dlaždice počasí.";
 "contributions_may_calculate_with_delay" = "Výpočet příspěvků může trvat několik hodin.";
 "benefits_for_contributors_secondary_descr" = "Přihlaste se do OpenStreetMap a zkontrolujte, zda máte nárok na neomezené měsíční a hodinové aktualizace map.";
-"auth_error" = "Chyba autorizace";
+"auth_failed" = "Chyba autorizace";
 "benefits_for_contributors" = "Výhody pro aktivní přispěvatele OSM";
 "weather_accuracy_forecast_description" = "Offline předpověď je k dispozici do: %@.\nPřesnost: %@, hodinová. %@ pro každé 3 hodiny.";
 "map_updates_for_mappers" = "Aktualizace map pro mappery";
@@ -2743,4 +2743,4 @@
 "routing_attr_allow_intermittent_name" = "Povolit občasné vodní cesty";
 "routing_attr_allow_intermittent_description" = "Povolit občasné vodní cesty";
 "rendering_attr_natureReserves_name" = "Přírodní rezervace";
-"download_wikipedia_data" = "Stahování dat 
+"download_wikipedia_data" = "Stah

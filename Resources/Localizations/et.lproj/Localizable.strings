@@ -696,7 +696,7 @@
 "osm_edit_show_on_map" = "Kuva muudatus kaardil";
 "osm_edit_show_on_map_descr" = "Ava kaart keskkohaga selles punktis";
 "shared_string_without_name" = "Ilma nimeta";
-"osm_edit_uploading" = "Üleslaadimine...";
+"local_openstreetmap_uploading" = "Üleslaadimine...";
 "osm_upload_complete" = "Üleslaadimine lõpetatud";
 "osm_tag_too_long_message" = "Sildi %@ väärtuse maksimaalne pikkus on 255 tähemärki. \nJätkamiseks palun muuda see lühemaks.";
 "save_poi_without_poi_type_message" = "Salvesta POI ilma liigita\?";
@@ -734,7 +734,7 @@
 "quick_action_map_underlay_title" = "Kaardi aluskihid";
 "vector_data" = "Võrguühenduseta vektorkaardid";
 "quick_action_map_source_action" = "Lisa kaardiallikas";
-"add_map_style" = "Lisa kaardi stiil";
+"quick_action_map_style_action" = "Lisa kaardi stiil";
 "quick_action_map_styles" = "Kaardistiilid";
 "quick_action_new_action" = "Lisa tegevus";
 "quick_action_add_create_items" = "Loo kirjeid";
@@ -760,14 +760,14 @@
 "quick_action_map_underlay" = "Muuda kaardi aluskihti";
 "quick_action_replace_destination" = "Asenda sihtkoht";
 "add_destination" = "Lisa sihtkoht";
-"add_start" = "Lisa lähtepunkt";
+"route_add_start_point" = "Lisa lähtepunkt";
 "add_intermediate" = "Lisa vahepunkt";
 "add_home" = "Lisa kodu";
 "add_work" = "Lisa töökoht";
 "favorite_home_category" = "Kodu";
 "work_button" = "Töökoht";
 "quick_action_add_first_intermediate" = "Lisa esimene vahepealne";
-"toggle_auto_zoom" = "Automaatne suurendamine sees/väljas";
+"quick_action_auto_zoom" = "Automaatne suurendamine sees/väljas";
 "auto_zoom_on" = "Automaatne suurendamine sees";
 "auto_zoom_off" = "Automaatne suurendamine väljas";
 "quick_action_resume_pause_navigation" = "Peata/jätka navigeerimist";
@@ -777,8 +777,8 @@
 "toggle_day_night" = "Vaheta päeva-/öörežiim";
 "quick_action_switch_night_mode" = "Öörežiim";
 "quick_action_switch_day_mode" = "Päevarežiim";
-"mute_voice" = "Vaigista hääl";
-"unmute_voice" = "Tühista hääle vaigistus";
+"quick_action_navigation_voice_on" = "Vaigista hääl";
+"quick_action_navigation_voice_off" = "Tühista hääle vaigistus";
 "show_hide_gpx" = "Kuva/peida teekonnad";
 "show_gpx" = "Rajad";
 "hide_gpx" = "Peida teekond";
@@ -1217,7 +1217,7 @@
 "res_confirmation_delete" = "Kas oled kindel, et soovid kustutada %@?";
 "res_confirmation_clear_cache" = "Kas oled kindel, et soovid tühjendada %@ puhvri?";
 "res_del_cache_not_supported" = "Võrguühenduseta SQLite kaartide puhvri kustutamine ei ole toetatud";
-"res_elliptic_mercator" = "Elliptiline merkator";
+"edit_tilesource_elliptic_tile" = "Elliptiline merkator";
 "edit_tilesource_url_to_load" = "URL";
 "routing_attr_avoid_shuttle_train_name" = "Kiirrongita";
 "rendering_attr_ice_road_name" = "Jäätee";
@@ -1807,8 +1807,8 @@
 "change_route_type_before" = "Muuda teekonna tüüpi enne seda punkti";
 "trim_after" = "Kärbi pärast seda punkti";
 "trim_before" = "Kärbi enne seda punkti";
-"add_after" = "Lisa punkt peale";
-"add_before" = "Lisa punkte enne";
+"add_point_after" = "Lisa punkt peale";
+"add_point_before" = "Lisa punkte enne";
 "move_point_descr" = "Selle punkti asukoha muutmiseks liiguta kaarti.";
 "move_point" = "Teisalda punkt";
 "add_to_a_track" = "Lisa rajale";
@@ -2502,4 +2502,4 @@
 "rendering_attr_horse_scale_dangerous_name" = "Ohtlik";
 "rendering_attr_noNatureReserveBoundaries_name" = "Looduse piirid";
 "routing_attr_length_description" = "Täpsusta marsruutidel lubatud sõiduki pikkus.";
-"download_wikipedia_data" = "Laadi alla Vikipe
+"download_wikipedia_data" = "Laadi al

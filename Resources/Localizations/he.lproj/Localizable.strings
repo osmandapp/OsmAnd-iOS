@@ -1002,8 +1002,8 @@
 "add_to_a_track" = "הוספה למסלול";
 "move_point" = "הזזת נקודה";
 "move_point_descr" = "Move map to change the position of this point.";
-"add_before" = "Add points before";
-"add_after" = "Add points after";
+"add_point_before" = "Add points before";
+"add_point_after" = "Add points after";
 "trim_before" = "Trim before this point";
 "trim_after" = "Trim after this point";
 "change_route_type_before" = "Change route type before this point";
@@ -1137,7 +1137,7 @@
 "shared_string_zoom_levels" = "רמות תקריב";
 "res_expire_time" = "Expire time";
 "res_mercator" = "Mercator Projection";
-"res_elliptic_mercator" = "Elliptic mercator";
+"edit_tilesource_elliptic_tile" = "Elliptic mercator";
 "pseudo_mercator_projection" = "היטל דמוי מרקטור";
 "res_source_format" = "Source format";
 "sqlite_db_file" = "קובץ SQLiteDB";
@@ -1238,7 +1238,7 @@
 "osm_edit_show_on_map" = "Show modification on the map";
 "osm_edit_show_on_map_descr" = "Open the map centered on this point";
 "shared_string_without_name" = "ללא שם";
-"osm_edit_uploading" = "Uploading...";
+"local_openstreetmap_uploading" = "Uploading...";
 "osm_upload_complete" = "Upload complete";
 "osm_tag_too_long_message" = "The maximum value length for tag %@ is 255 characters. \nPlease make it shorter to continue.";
 "save_poi_without_poi_type_message" = "לשמור נקודת עניין ללא סוג\?";
@@ -1286,7 +1286,7 @@
 "quick_action_map_underlay_title" = "מפות שמתחת";
 "vector_data" = "מפות וקטוריות בלתי מקוונות";
 "quick_action_map_source_action" = "הוספת מקור מפה";
-"add_map_style" = "Add map style";
+"quick_action_map_style_action" = "Add map style";
 "quick_action_map_styles" = "סגנונות מפה";
 "quick_action_new_action" = "הוספת פעולה";
 "unsupported_items" = "Unsupported items";
@@ -1315,7 +1315,7 @@
 "quick_action_map_underlay" = "החלפת המפה שמתחת";
 "quick_action_replace_destination" = "החלפת יעד";
 "add_destination" = "Add destination";
-"add_start" = "Add starting point";
+"route_add_start_point" = "Add starting point";
 "add_intermediate" = "הוספת נקודת ביניים";
 "add_home" = "הוספת בית";
 "add_work" = "הוספת עבודה";
@@ -1323,7 +1323,7 @@
 "work_button" = "עבודה";
 "map_widget_parking" = "חנייה";
 "quick_action_add_first_intermediate" = "הוספת נקודת ביניים ראשונה";
-"toggle_auto_zoom" = "Auto zoom on/off";
+"quick_action_auto_zoom" = "Auto zoom on/off";
 "auto_zoom_on" = "Auto zoom on";
 "auto_zoom_off" = "Auto zoom off";
 "quick_action_resume_pause_navigation" = "הפסקה/המשך בניווט";
@@ -1333,8 +1333,8 @@
 "toggle_day_night" = "Switch Day/Night mode";
 "quick_action_switch_night_mode" = "מצב לילה";
 "quick_action_switch_day_mode" = "מצב יום";
-"mute_voice" = "Mute voice";
-"unmute_voice" = "Unmute voice";
+"quick_action_navigation_voice_on" = "Mute voice";
+"quick_action_navigation_voice_off" = "Unmute voice";
 "show_hide_gpx" = "Show/hide tracks";
 "show_gpx" = "מסלולים";
 "hide_gpx" = "Hide track";
@@ -2560,4 +2560,4 @@
 "rendering_attr_OSMMapperAssistantNote_name" = "תגיות הערה";
 "rendering_attr_horse_scale_dangerous_name" = "מסוכן";
 "checking_progress" = "מתבצעת בדיקה…";
-"download_wikipedia_data" = "הורדת נתונים 
+"download_wikipedia_data" = "הור

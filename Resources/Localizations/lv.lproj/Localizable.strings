@@ -997,8 +997,8 @@
 "add_to_a_track" = "Add to a track";
 "move_point" = "Pārvietot punktu";
 "move_point_descr" = "Move map to change the position of this point.";
-"add_before" = "Add points before";
-"add_after" = "Add points after";
+"add_point_before" = "Add points before";
+"add_point_after" = "Add points after";
 "trim_before" = "Trim before this point";
 "trim_after" = "Trim after this point";
 "change_route_type_before" = "Change route type before this point";
@@ -1132,7 +1132,7 @@
 "shared_string_zoom_levels" = "Zoom levels";
 "res_expire_time" = "Expire time";
 "res_mercator" = "Mercator Projection";
-"res_elliptic_mercator" = "Elliptic mercator";
+"edit_tilesource_elliptic_tile" = "Elliptic mercator";
 "pseudo_mercator_projection" = "Pseudo-Mercator projection";
 "res_source_format" = "Source format";
 "sqlite_db_file" = "SQLiteDB file";
@@ -1233,7 +1233,7 @@
 "osm_edit_show_on_map" = "Show modification on the map";
 "osm_edit_show_on_map_descr" = "Open the map centered on this point";
 "shared_string_without_name" = "Bez vārda";
-"osm_edit_uploading" = "Uploading...";
+"local_openstreetmap_uploading" = "Uploading...";
 "osm_upload_complete" = "Upload complete";
 "osm_tag_too_long_message" = "The maximum value length for tag %@ is 255 characters. \nPlease make it shorter to continue.";
 "save_poi_without_poi_type_message" = "Vai saglabāt POI, nenorādot tā tipu?";
@@ -1281,7 +1281,7 @@
 "quick_action_map_underlay_title" = "Kartes apakšklāji";
 "vector_data" = "Bezsaistes vektoru kartes";
 "quick_action_map_source_action" = "Pievienot kartes avotu";
-"add_map_style" = "Add map style";
+"quick_action_map_style_action" = "Add map style";
 "quick_action_map_styles" = "Kartes stili";
 "quick_action_new_action" = "Pievienot darbību";
 "unsupported_items" = "Unsupported items";
@@ -1310,7 +1310,7 @@
 "quick_action_map_underlay" = "Nomainīt kartes apakšklāju";
 "quick_action_replace_destination" = "Nomainīt mērķi";
 "add_destination" = "Add destination";
-"add_start" = "Add starting point";
+"route_add_start_point" = "Add starting point";
 "add_intermediate" = "Pievienot starppunktu";
 "add_home" = "Pievienot dzīves vietu";
 "add_work" = "Pievienot darba vietu";
@@ -1318,7 +1318,7 @@
 "work_button" = "Darbs";
 "map_widget_parking" = "Autostāvvietas";
 "quick_action_add_first_intermediate" = "Pievienot pirmo starppunktu";
-"toggle_auto_zoom" = "Auto zoom on/off";
+"quick_action_auto_zoom" = "Auto zoom on/off";
 "auto_zoom_on" = "Auto zoom on";
 "auto_zoom_off" = "Auto zoom off";
 "quick_action_resume_pause_navigation" = "Pauzēt/atsākt navigāciju";
@@ -1328,8 +1328,8 @@
 "toggle_day_night" = "Switch Day/Night mode";
 "quick_action_switch_night_mode" = "Nakts režīms";
 "quick_action_switch_day_mode" = "Dienas režīms";
-"mute_voice" = "Mute voice";
-"unmute_voice" = "Unmute voice";
+"quick_action_navigation_voice_on" = "Mute voice";
+"quick_action_navigation_voice_off" = "Unmute voice";
 "show_hide_gpx" = "Show/hide tracks";
 "show_gpx" = "Show track";
 "hide_gpx" = "Hide track";
@@ -2315,4 +2315,4 @@ kas tiks pievienots jūsu Kategorijas sadaļai.";
 "rendering_value_all_name" = "Visu";
 "routing_attr_avoid_footways_name" = "Izvairīties no gājēju celiņiem";
 "rendering_attr_seabedDetail_description" = "Paplašināts teksts ar dibena klasifikāciju, apvienotiem reljefu tipiem, jūraszāļu kategorijas un taksoni";
-"download_wikipedia_data" = "Lejupielādēt Vikipē
+"download_wikipedia_data" = "Lejupielād

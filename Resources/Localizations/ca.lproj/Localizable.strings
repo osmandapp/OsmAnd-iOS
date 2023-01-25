@@ -1010,7 +1010,7 @@
 "osm_failed_uploads" = "Ha fallat";
 "shared_string_without_name" = "Sense nom";
 "osm_upload_complete" = "Pujada finalitzada";
-"osm_edit_uploading" = "S'està pujant…";
+"local_openstreetmap_uploading" = "S'està pujant…";
 "sett_generic_ext_input" = "Teclat";
 "sett_wunderlinq_ext_input" = "WunderLINQ";
 "shared_string_read_more" = "Més informació";
@@ -1070,7 +1070,7 @@
 "quick_action_map_underlay_title" = "Fons de mapa";
 "vector_data" = "Mapes de vectors fora de línia";
 "quick_action_map_source_action" = "Afegeix origen del mapa";
-"add_map_style" = "Afegeix estil del mapa";
+"quick_action_map_style_action" = "Afegeix estil del mapa";
 "quick_action_map_styles" = "Estils de mapa";
 "quick_action_new_action" = "Afegeix acció";
 "quick_action_add_create_items" = "Crea elements";
@@ -1092,7 +1092,7 @@
 "quick_action_replace_destination" = "Substitueix destinació";
 "add_destination" = "Afegeix destinació";
 "quick_action_add_first_intermediate" = "Afegeix primer intermedi";
-"toggle_auto_zoom" = "Zoom automàtic actiu/inactiu";
+"quick_action_auto_zoom" = "Zoom automàtic actiu/inactiu";
 "quick_action_resume_pause_navigation" = "Atura o reprèn la navegació";
 "quick_action_start_stop_navigation" = "Inicia/atura la navegació";
 "toggle_day_night" = "Canvia mode diürn/nocturn";
@@ -1173,7 +1173,7 @@
 "shared_string_off" = "Inactiva";
 "show_more" = "Mostra\'n més";
 "parking_place" = "Lloc per aparcar";
-"add_start" = "Afegiu el punt inicial";
+"route_add_start_point" = "Afegiu el punt inicial";
 "add_intermediate" = "Afegiu un punt intermedi";
 "add_home" = "Afegeix casa meva";
 "add_work" = "Afegeix lloc de la feina";
@@ -1189,8 +1189,8 @@
 "pause_nav" = "Suspèn la navegació";
 "quick_action_switch_night_mode" = "Mode nocturn";
 "quick_action_switch_day_mode" = "Mode diürn";
-"mute_voice" = "Desactiva la veu";
-"unmute_voice" = "Torna a activar la veu";
+"quick_action_navigation_voice_on" = "Desactiva la veu";
+"quick_action_navigation_voice_off" = "Torna a activar la veu";
 "show_gpx" = "Traces";
 "hide_gpx" = "Amaga trajectes";
 "show_notes" = "Mostra notes OSM";
@@ -1230,7 +1230,7 @@
 "displayed_route_save" = "Desa a OsmAnd Trips";
 "trip_name" = "Nom del viatge";
 "trip_hint" = "Introduïu el nom del viatge";
-"res_elliptic_mercator" = "Mercator el·líptica";
+"edit_tilesource_elliptic_tile" = "Mercator el·líptica";
 "edit_tilesource_url_to_load" = "URL";
 "shared_string_maximum" = "Màxim";
 "res_online_name_descr" = "Proporcioneu un nom per a la font en línia";
@@ -1807,8 +1807,8 @@
 "change_route_type_before" = "Canvia el tipus de ruta abans d'aquest punt";
 "trim_after" = "Retalla després d'aquest punt";
 "trim_before" = "Retalla abans d'aquest punt";
-"add_after" = "Afegeix punts després";
-"add_before" = "Afegeix punts abans";
+"add_point_after" = "Afegeix punts després";
+"add_point_before" = "Afegeix punts abans";
 "move_point_descr" = "Mou el mapa per canviar la posició d'aquest punt.";
 "move_point" = "Mou punt";
 "add_to_a_track" = "Afegeix a una ruta";
@@ -2327,4 +2327,4 @@
 "rendering_attr_weatherTempContours_name" = "Línies isotermes";
 "routing_attr_prefer_tactile_paving_name" = "Prefereix el paviment tàctil";
 "rendering_attr_weatherWindSpeedContours_name" = "Isolínies de les ràfegues de vent";
-"download_wikipedia_data" = "Baixa dades de la 
+"download_wikipedia_data" = "Baixa d

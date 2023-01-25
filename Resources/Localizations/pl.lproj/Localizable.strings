@@ -1022,7 +1022,7 @@
 "osm_tag_too_long_message" = "Maksymalna wartość długości tagu %@ wynosi 255 znaków.\nSkróć go, aby kontynuować.";
 "save_poi_without_poi_type_message" = "Zapisać POI bez podawania typu\?";
 "save_poi_too_many_uppercase" = "Nazwa zawiera zbyt wiele wielkich liter. Kontynuować?";
-"osm_edit_uploading" = "Przesyłanie...";
+"local_openstreetmap_uploading" = "Przesyłanie...";
 "key_hint_zoom_out" = "Oddal";
 "shared_string_read_more" = "Przeczytaj więcej";
 "short_location_on_map" = "Szerokość %@
@@ -1070,7 +1070,7 @@
 "quick_action_map_underlay_title" = "Podkłady map";
 "vector_data" = "Wektorowe mapy offline";
 "quick_action_map_source_action" = "Dodaj zasób mapy";
-"add_map_style" = "Dodaj styl mapy";
+"quick_action_map_style_action" = "Dodaj styl mapy";
 "quick_action_map_styles" = "Style map";
 "quick_action_new_action" = "Dodaj czynność";
 "quick_action_add_create_items" = "Utwórz elementy";
@@ -1091,7 +1091,7 @@
 "quick_action_replace_destination" = "Zastąp cel trasy";
 "add_destination" = "Dodaj cel trasy";
 "quick_action_add_first_intermediate" = "Dodaj pierwszy pośredni cel trasy";
-"toggle_auto_zoom" = "Włącz/Wyłącz auto-przybliżenie";
+"quick_action_auto_zoom" = "Włącz/Wyłącz auto-przybliżenie";
 "quick_action_resume_pause_navigation" = "Wstrzymaj/wznów nawigację";
 "quick_action_start_stop_navigation" = "Rozpocznij/zakończ nawigację";
 "toggle_day_night" = "Zmień tryb dzienny/nocny";
@@ -1153,8 +1153,8 @@
 "pause_nav" = "Wstrzymaj nawigację";
 "quick_action_switch_night_mode" = "Tryb nocny";
 "quick_action_switch_day_mode" = "Tryb dzienny";
-"mute_voice" = "Wycisz głos";
-"unmute_voice" = "Włącz głos";
+"quick_action_navigation_voice_on" = "Wycisz głos";
+"quick_action_navigation_voice_off" = "Włącz głos";
 "show_gpx" = "Trasy";
 "hide_gpx" = "Ukryj trasę";
 "show_notes" = "Wyświetl uwagi OSM";
@@ -1176,7 +1176,7 @@
 "avoid_by_type" = "Unikaj według typu";
 "select_map_marker" = "Wybierz znacznik mapy";
 "parking_place" = "Miejsce parkingowe";
-"add_start" = "Dodaj punkt początkowy";
+"route_add_start_point" = "Dodaj punkt początkowy";
 "add_intermediate" = "Dodaj punkt pośredni";
 "add_home" = "Dodaj dom";
 "add_work" = "Dodaj pracę";
@@ -1215,7 +1215,7 @@
 "stats_select_graph_data" = "Wybierz dane wykresu";
 "nautical_maps" = "Mapy morskie";
 "edit_tilesource_url_to_load" = "Adres URL";
-"res_elliptic_mercator" = "Eliptyczna Merkatora";
+"edit_tilesource_elliptic_tile" = "Eliptyczna Merkatora";
 "rendering_attr_roadColors_description" = "Wybierz zestaw kolorów dróg:";
 "rendering_attr_showMtbRoutes_name" = "Górskie trasy rowerowe";
 "rendering_attr_showRoadMaps_description" = "Wybierz kiedy wyświetlać tylko mapy samochodowe:";
@@ -1817,8 +1817,8 @@
 "help_what_is_new" = "Co nowego";
 "toggle_public_transport" = "Pokaż/ukryj transport publiczny";
 "add_one_more_pnt" = "Dodaj jeszcze jeden punkt";
-"add_after" = "Dodaj punkty po";
-"add_before" = "Dodaj punkty przed";
+"add_point_after" = "Dodaj punkty po";
+"add_point_before" = "Dodaj punkty przed";
 "layer_amenity_label" = "Etykiety punktów (użyteczne miejsca, ulubione)";
 "personal_category_name" = "Osobiste";
 "road_speeds_descr" = "Te parametry mogą mieć wpływ na obliczanie trasy.";
@@ -4305,4 +4305,4 @@
 "lang_pt_br" = "Portugalski (Brazylia)";
 "routing_attr_motor_type_name" = "Silnik pojazdu";
 "lang_nv" = "Nawaho";
-"walking_route_osmc_description" = "Przypisz kolor trasom na podstawie ich indywidualnie przypisanego lokalnie koloru (jeśli dostępny w OpenStreetMap) i typu (międzynarodowe, regionalne
+"walking_route_osmc_description" = "Przypisz kolor trasom na podstawie ich indywidualnie przypisanego lokalnie koloru (jeśli dostępny w OpenStreetMap) i typu (międzynarodowe, re

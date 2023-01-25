@@ -1002,8 +1002,8 @@
 "add_to_a_track" = "Ychwanegu at drac";
 "move_point" = "Symud Pwynt";
 "move_point_descr" = "Move map to change the position of this point.";
-"add_before" = "Add points before";
-"add_after" = "Add points after";
+"add_point_before" = "Add points before";
+"add_point_after" = "Add points after";
 "trim_before" = "Trim before this point";
 "trim_after" = "Trim after this point";
 "change_route_type_before" = "Change route type before this point";
@@ -1137,7 +1137,7 @@
 "shared_string_zoom_levels" = "Lefelau chwyddo";
 "res_expire_time" = "Expire time";
 "res_mercator" = "Mercator Projection";
-"res_elliptic_mercator" = "Elliptic mercator";
+"edit_tilesource_elliptic_tile" = "Elliptic mercator";
 "pseudo_mercator_projection" = "Taluniad ffug-Mercator";
 "res_source_format" = "Source format";
 "sqlite_db_file" = "Ffeil SQLiteDB";
@@ -1238,7 +1238,7 @@
 "osm_edit_show_on_map" = "Show modification on the map";
 "osm_edit_show_on_map_descr" = "Open the map centered on this point";
 "shared_string_without_name" = "Heb enw";
-"osm_edit_uploading" = "Uploading...";
+"local_openstreetmap_uploading" = "Uploading...";
 "osm_upload_complete" = "Upload complete";
 "osm_tag_too_long_message" = "The maximum value length for tag %@ is 255 characters. \nPlease make it shorter to continue.";
 "save_poi_without_poi_type_message" = "Do you want to save POI without type?";
@@ -1286,7 +1286,7 @@
 "quick_action_map_underlay_title" = "Is-haenau mapiau";
 "vector_data" = "Offline vector maps";
 "quick_action_map_source_action" = "Add map source";
-"add_map_style" = "Add map style";
+"quick_action_map_style_action" = "Add map style";
 "quick_action_map_styles" = "Arddulliau mapiau";
 "quick_action_new_action" = "Ychwanegu gweithred";
 "unsupported_items" = "Unsupported items";
@@ -1315,7 +1315,7 @@
 "quick_action_map_underlay" = "Change map underlay";
 "quick_action_replace_destination" = "Newid y gyrchfan";
 "add_destination" = "Add destination";
-"add_start" = "Add starting point";
+"route_add_start_point" = "Add starting point";
 "add_intermediate" = "Ychwanegu pwynt canolradd";
 "add_home" = "Ychwanegu cartref";
 "add_work" = "Ychwanegu gwaith";
@@ -1323,7 +1323,7 @@
 "work_button" = "Gwaith";
 "map_widget_parking" = "Parcio";
 "quick_action_add_first_intermediate" = "Ychwanegu\'r rhyngol cyntaf";
-"toggle_auto_zoom" = "Auto zoom on/off";
+"quick_action_auto_zoom" = "Auto zoom on/off";
 "auto_zoom_on" = "Auto zoom on";
 "auto_zoom_off" = "Auto zoom off";
 "quick_action_resume_pause_navigation" = "Oedi/ailddechrau llywio";
@@ -1333,8 +1333,8 @@
 "toggle_day_night" = "Switch Day/Night mode";
 "quick_action_switch_night_mode" = "Modd nos";
 "quick_action_switch_day_mode" = "Modd dydd";
-"mute_voice" = "Mute voice";
-"unmute_voice" = "Unmute voice";
+"quick_action_navigation_voice_on" = "Mute voice";
+"quick_action_navigation_voice_off" = "Unmute voice";
 "show_hide_gpx" = "Show/hide tracks";
 "show_gpx" = "Traciau";
 "hide_gpx" = "Hide track";
@@ -2530,4 +2530,4 @@
 "rendering_attr_natureReserves_name" = "Gwarchodfa natur";
 "routing_attr_avoid_footways_name" = "Osgoi llwybrau troed";
 "routing_attr_carriage_restrictions_name" = "Cyfyngiadau cerbyd";
-"download_wikipedia_data" = "Llwytho dat
+"download_wikipedia_data" = "Ll

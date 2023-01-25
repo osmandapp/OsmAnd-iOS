@@ -1003,8 +1003,8 @@
 "add_to_a_track" = "Aldoni al spuro";
 "move_point" = "Movi punkton";
 "move_point_descr" = "Move map to change the position of this point.";
-"add_before" = "Add points before";
-"add_after" = "Add points after";
+"add_point_before" = "Add points before";
+"add_point_after" = "Add points after";
 "trim_before" = "Trim before this point";
 "trim_after" = "Trim after this point";
 "change_route_type_before" = "Change route type before this point";
@@ -1138,7 +1138,7 @@
 "shared_string_zoom_levels" = "Skal-niveloj";
 "res_expire_time" = "Expire time";
 "res_mercator" = "Mercator Projection";
-"res_elliptic_mercator" = "Elliptic mercator";
+"edit_tilesource_elliptic_tile" = "Elliptic mercator";
 "pseudo_mercator_projection" = "Kvazaŭ-merkatora projekcio";
 "res_source_format" = "Source format";
 "sqlite_db_file" = "SQLiteDB-dosiero";
@@ -1239,7 +1239,7 @@
 "osm_edit_show_on_map" = "Show modification on the map";
 "osm_edit_show_on_map_descr" = "Open the map centered on this point";
 "shared_string_without_name" = "Sennoma";
-"osm_edit_uploading" = "Uploading...";
+"local_openstreetmap_uploading" = "Uploading...";
 "osm_upload_complete" = "Upload complete";
 "osm_tag_too_long_message" = "The maximum value length for tag %@ is 255 characters. \nPlease make it shorter to continue.";
 "save_poi_without_poi_type_message" = "Ĉu konservi interesejon sen determinita speco\?";
@@ -1287,7 +1287,7 @@
 "quick_action_map_underlay_title" = "Mapaj subtavoloj";
 "vector_data" = "Malkonektaj vektoraj mapoj";
 "quick_action_map_source_action" = "Aldoni map-fonton";
-"add_map_style" = "Add map style";
+"quick_action_map_style_action" = "Add map style";
 "quick_action_map_styles" = "Map-stiloj";
 "quick_action_new_action" = "Aldoni agon";
 "unsupported_items" = "Unsupported items";
@@ -1316,7 +1316,7 @@
 "quick_action_map_underlay" = "Ŝanĝi mapan subtavolon";
 "quick_action_replace_destination" = "Anstataŭigi celon";
 "add_destination" = "Add destination";
-"add_start" = "Add starting point";
+"route_add_start_point" = "Add starting point";
 "add_intermediate" = "Aldoni intercelon";
 "add_home" = "Aldoni hejmon";
 "add_work" = "Aldoni laborejon";
@@ -1324,7 +1324,7 @@
 "work_button" = "Laborejo";
 "map_widget_parking" = "Parkumejo";
 "quick_action_add_first_intermediate" = "Aldoni unuan intercelon";
-"toggle_auto_zoom" = "Auto zoom on/off";
+"quick_action_auto_zoom" = "Auto zoom on/off";
 "auto_zoom_on" = "Auto zoom on";
 "auto_zoom_off" = "Auto zoom off";
 "quick_action_resume_pause_navigation" = "Paŭzigi/daŭrigi navigadon";
@@ -1334,8 +1334,8 @@
 "toggle_day_night" = "Switch Day/Night mode";
 "quick_action_switch_night_mode" = "Nokta reĝimo";
 "quick_action_switch_day_mode" = "Taga reĝimo";
-"mute_voice" = "Mute voice";
-"unmute_voice" = "Unmute voice";
+"quick_action_navigation_voice_on" = "Mute voice";
+"quick_action_navigation_voice_off" = "Unmute voice";
 "show_hide_gpx" = "Show/hide tracks";
 "show_gpx" = "Spuroj";
 "hide_gpx" = "Hide track";
@@ -2615,4 +2615,4 @@
 "routing_attr_freeride_policy_do_not_go_offpiste_name" = "ne eniri neoficialajn skivojojn";
 "routing_attr_avoid_highway_name" = "Evitiĉefajn vojojn";
 "routing_attr_allow_streams_description" = "Permesi navigi per riveretoj kaj fosaĵoj defluigaj";
-"download_wikipedia_data" = "Elŝuti datumojn d
+"download_wikipedia_data" = "Elŝuti d

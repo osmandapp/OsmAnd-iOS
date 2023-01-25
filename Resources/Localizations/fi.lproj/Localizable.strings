@@ -832,8 +832,8 @@
 "add_to_a_track" = "Lisää jälkeen";
 "move_point" = "Siirrä piste";
 "move_point_descr" = "Move map to change the position of this point.";
-"add_before" = "Lisää pisteitä ennen";
-"add_after" = "Lisää pisteitä jälkeen";
+"add_point_before" = "Lisää pisteitä ennen";
+"add_point_after" = "Lisää pisteitä jälkeen";
 "trim_before" = "Trim before this point";
 "trim_after" = "Trim after this point";
 "change_route_type_before" = "Change route type before this point";
@@ -963,7 +963,7 @@
 "shared_string_zoom_levels" = "Zoomaustasot";
 "res_expire_time" = "Expire time";
 "res_mercator" = "Mercator Projection";
-"res_elliptic_mercator" = "Elliptic mercator";
+"edit_tilesource_elliptic_tile" = "Elliptic mercator";
 "pseudo_mercator_projection" = "Pseudo-Mercator projection";
 "res_source_format" = "Source format";
 "sqlite_db_file" = "SQLiteDB -tiedosto";
@@ -1057,7 +1057,7 @@
 "osm_edit_show_on_map" = "Show modification on the map";
 "osm_edit_show_on_map_descr" = "Open the map centered on this point";
 "shared_string_without_name" = "Ilman nimeä";
-"osm_edit_uploading" = "Uploading...";
+"local_openstreetmap_uploading" = "Uploading...";
 "osm_upload_complete" = "Upload complete";
 "osm_tag_too_long_message" = "The maximum value length for tag %@ is 255 characters. \nPlease make it shorter to continue.";
 "save_poi_without_poi_type_message" = "Haluatko todella tallentaa KP:n ilman tyyppiä\?";
@@ -1105,7 +1105,7 @@
 "quick_action_map_underlay_title" = "Map underlays";
 "vector_data" = "Offline vektorikartat";
 "quick_action_map_source_action" = "Lisää karttalähde";
-"add_map_style" = "Add map style";
+"quick_action_map_style_action" = "Add map style";
 "quick_action_map_styles" = "Karttatyylit";
 "quick_action_new_action" = "Add action";
 "unsupported_items" = "Unsupported items";
@@ -1133,14 +1133,14 @@
 "quick_action_map_underlay" = "Change map underlay";
 "quick_action_replace_destination" = "Korvaa määränpää";
 "add_destination" = "Add destination";
-"add_start" = "Lisää aloituspiste";
+"route_add_start_point" = "Lisää aloituspiste";
 "add_intermediate" = "Add intermediate point";
 "add_home" = "Lisää koti";
 "add_work" = "Lisää työ";
 "favorite_home_category" = "Koti";
 "work_button" = "Työ";
 "quick_action_add_first_intermediate" = "Lisää ensimmäinen välietappi";
-"toggle_auto_zoom" = "Auto zoom on/off";
+"quick_action_auto_zoom" = "Auto zoom on/off";
 "auto_zoom_on" = "Auto zoom on";
 "auto_zoom_off" = "Auto zoom off";
 "quick_action_resume_pause_navigation" = "Pysäytä/jatka navigointia";
@@ -1150,8 +1150,8 @@
 "toggle_day_night" = "Switch Day/Night mode";
 "quick_action_switch_night_mode" = "Night mode";
 "quick_action_switch_day_mode" = "Day mode";
-"mute_voice" = "Mute voice";
-"unmute_voice" = "Unmute voice";
+"quick_action_navigation_voice_on" = "Mute voice";
+"quick_action_navigation_voice_off" = "Unmute voice";
 "show_hide_gpx" = "Show/hide tracks";
 "show_gpx" = "Jäljet";
 "hide_gpx" = "Hide track";
@@ -2438,4 +2438,4 @@
 "routing_attr_avoid_footways_description" = "Vältä kävelyteitä";
 "rendering_attr_showWaterwayTunnels_name" = "Vesiväylien tunnelit";
 "routing_attr_allow_intermittent_description" = "Sallii ajoittaiset vesireitit";
-"shared_string_tone
+"shared_str

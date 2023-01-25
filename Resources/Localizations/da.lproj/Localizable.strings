@@ -1028,7 +1028,7 @@
 "osm_tag_too_long_message" = "Den maksimale værdilængde for mærke %@ er 255 tegn.\nGør det kortere for at fortsætte.";
 "save_poi_without_poi_type_message" = "Gem IP uden at angive type\?";
 "save_poi_too_many_uppercase" = "Navnet indeholder for mange store bogstaver. Fortsæt?";
-"osm_edit_uploading" = "Overfører…";
+"local_openstreetmap_uploading" = "Overfører…";
 "key_hint_zoom_out" = "Zoom ud";
 "shared_string_read_more" = "Læs mere";
 "short_location_on_map" = "Breddegrad %@
@@ -1071,7 +1071,7 @@
 "quick_action_map_underlay_title" = "Kortunderlejring";
 "vector_data" = "Offline vektorkort";
 "quick_action_map_source_action" = "Tilføj en kortkilde";
-"add_map_style" = "Tilføj en kortstilart";
+"quick_action_map_style_action" = "Tilføj en kortstilart";
 "quick_action_map_styles" = "Kortstilarter";
 "quick_action_new_action" = "Tilføj genvej";
 "quick_action_add_create_items" = "Opret elementer";
@@ -1093,7 +1093,7 @@
 "quick_action_replace_destination" = "Udskift destination";
 "add_destination" = "Tilføj destination";
 "quick_action_add_first_intermediate" = "Tilføj første mellemliggende punkt";
-"toggle_auto_zoom" = "Automatisk zoom til/fra";
+"quick_action_auto_zoom" = "Automatisk zoom til/fra";
 "quick_action_resume_pause_navigation" = "Pause/genoptag navigation";
 "quick_action_start_stop_navigation" = "Start/stop navigation";
 "toggle_day_night" = "Skift dag/nat tilstand";
@@ -1156,8 +1156,8 @@
 "pause_nav" = "Pause navigation";
 "quick_action_switch_night_mode" = "Nattilstand";
 "quick_action_switch_day_mode" = "Dagstilstand";
-"mute_voice" = "Deaktiver talevejledning";
-"unmute_voice" = "Aktiver talevejledning";
+"quick_action_navigation_voice_on" = "Deaktiver talevejledning";
+"quick_action_navigation_voice_off" = "Aktiver talevejledning";
 "show_gpx" = "Spor";
 "hide_gpx" = "Skjul ruter";
 "show_notes" = "Vis OSM-noter";
@@ -1179,7 +1179,7 @@
 "avoid_by_type" = "Undgå efter type";
 "select_map_marker" = "Vælg kortmarkør";
 "parking_place" = "Parkeringsplads";
-"add_start" = "Tilføj startpunkt";
+"route_add_start_point" = "Tilføj startpunkt";
 "add_intermediate" = "Tilføj mellemliggende punkt";
 "add_home" = "Tilføj hjem";
 "add_work" = "Tilføj arbejdssted";
@@ -1229,7 +1229,7 @@
 "res_confirmation_clear_cache" = "Bekræft sletning af cache for %@?";
 "res_del_cache_not_supported" = "Sletning af cache for offline-SQLite-kort understøttes ikke";
 "edit_tilesource_url_to_load" = "URL";
-"res_elliptic_mercator" = "Elliptisk mercator";
+"edit_tilesource_elliptic_tile" = "Elliptisk mercator";
 "rendering_attr_tracktype_grade4_name" = "Mest blød";
 "rendering_attr_hideIcons_name" = "IP ikoner";
 "rendering_attr_noPolygons_description" = "Gør alle overflader på kortet transparent.";
@@ -1745,8 +1745,8 @@
 "change_route_type_before" = "Skift rutetype før punktet";
 "trim_after" = "Trim efter punktet";
 "trim_before" = "Trim før punktet";
-"add_after" = "Tilføj punkt efter";
-"add_before" = "Tilføj punkt før";
+"add_point_after" = "Tilføj punkt efter";
+"add_point_before" = "Tilføj punkt før";
 "move_point_descr" = "Flyt kortet for at ændre placeringen af punktet.";
 "move_point" = "Flyt punkt";
 "add_to_a_track" = "Føj til et spor";
@@ -2624,7 +2624,7 @@
 "map_updates_are_unavailable_yet" = "Kortopdateringer er endnu ikke tilgængelige. :-(";
 "not_enough_contributions_descr" = "Der kræves mindst %@ ændringer i løbet af de sidste to måneder %@ for at få adgang til ubegrænsede kortopdateringer hver time.";
 "last_two_month_total" = "De sidste to måneder i alt";
-"auth_error" = "Godkendelsesfejl";
+"auth_failed" = "Godkendelsesfejl";
 "carplay_available_in_sub_plans" = "Køb OsmAnd Pro eller Maps+ for at bruge OsmAnd med CarPlay.";
 "cloud_confirm_delete_type" = "Er du sikker på, at du ønsker at slette \"%@\" fra OsmAnd Cloud?";
 "shared_string_cross_buy" = "Krydskøb";
@@ -2796,4 +2796,4 @@
 "routing_attr_avoid_highway_name" = "Undgå motorveje";
 "rendering_attr_showMtbScaleUphill_description" = "Vis spor efter MTB-skala op ad bakke.";
 "shared_string_does_not_exist" = "Eksisterer ikke";
-"download_wikipedia_data" = "Hent Wiki
+"download_wikipedia_data" = "

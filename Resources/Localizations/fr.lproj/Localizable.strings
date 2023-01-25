@@ -1068,7 +1068,7 @@
 "show_notes" = "Afficher les notes OSM";
 "hide_notes" = "Masquer les notes OSM";
 "edit_tilesource_url_to_load" = "Lien";
-"res_elliptic_mercator" = "Mercator elliptique";
+"edit_tilesource_elliptic_tile" = "Mercator elliptique";
 "routing_attr_freeride_policy_description" = "Le hors-piste (ou \'freeride\') emprunte des itinéraires non-officiels. Ces itinéraires ne sont généralement ni balisés ni damés et ne font l’objet d\'aucune surveillance. Vous pratiquez cette activité à vos risques et périls.";
 "rendering_value_bold_name" = "Épais";
 "rendering_attr_undefined_name" = "Non défini";
@@ -1457,8 +1457,8 @@
 "resume_nav" = "Poursuivre la navigation";
 "auto_zoom_off" = "Autozoom désactivé";
 "auto_zoom_on" = "Auto zoom on";
-"toggle_auto_zoom" = "Autozoom marche/arrêt";
-"add_start" = "Ajouter un point de départ";
+"quick_action_auto_zoom" = "Autozoom marche/arrêt";
+"route_add_start_point" = "Ajouter un point de départ";
 "add_destination" = "Ajouter une destination";
 "quick_action_add_osm_bug" = "Ajouter une note OSM";
 "parking_place" = "Lieu de stationnement";
@@ -1466,10 +1466,10 @@
 "fav_hide" = "Masquer les favoris";
 "fav_show" = "Afficher les favoris";
 "toggle_fav" = "Afficher/masquer les favoris";
-"add_map_style" = "Ajouter un style de carte";
+"quick_action_map_style_action" = "Ajouter un style de carte";
 "mapil_images_nearby" = "Images à proximité";
 "osm_upload_complete" = "Téléversement terminé";
-"osm_edit_uploading" = "Téléversement…";
+"local_openstreetmap_uploading" = "Téléversement…";
 "osm_succsessful_uploads" = "Réussi";
 "osm_failed_uploads" = "Échec";
 "sqlite_db_file" = "Fichier SQLiteDB";
@@ -1491,8 +1491,8 @@
 "subscription_osmandlive_item" = "Abonnement - OsmAnd Live";
 "osmand_purchases_item" = "Achats OsmAnd";
 "hide_terrain" = "Masquer le relief";
-"unmute_voice" = "Activer le son";
-"mute_voice" = "Couper le son";
+"quick_action_navigation_voice_off" = "Activer le son";
+"quick_action_navigation_voice_on" = "Couper le son";
 "pause_nav" = "Mettre en pause la navigation";
 "toggle_local_edits" = "Activer les modifications OSM locales";
 "toggle_online_notes" = "Activer les notes OSM";
@@ -1948,8 +1948,8 @@
 "change_route_type_before" = "Modifier le type d’itinéraire avant ce point";
 "trim_after" = "Couper après ce point";
 "trim_before" = "Couper avant ce point";
-"add_after" = "Ajouter des points après";
-"add_before" = "Ajouter des points avant";
+"add_point_after" = "Ajouter des points après";
+"add_point_before" = "Ajouter des points avant";
 "unsupported_action_title" = "Action non prise en charge (%@)";
 "enable_contour_lines" = "Activer pour afficher les courbes de niveau sur la carte";
 "quick_action_enter_message" = "Entrer un message";
@@ -2617,7 +2617,7 @@
 "contributions_may_calculate_with_delay" = "Le calcul des contributions peut durer plusieurs heures.";
 "enough_contributions_descr" = "Félicitations, vous avez suffisamment contribué à OpenStreetMap pour profiter de mises à jour illimitées des cartes OsmAnd !";
 "last_two_month_total" = "Total des deux derniers mois";
-"auth_error" = "Erreur d'authentification";
+"auth_failed" = "Erreur d'authentification";
 "shared_string_unavailable" = "Indisponible";
 "shared_string_contributions" = "Contributions";
 "shared_string_refresh" = "Recharger";
@@ -2793,4 +2793,4 @@
 "routing_attr_carriage_restrictions_name" = "Restrictions de chariot";
 "routing_attr_avoid_footways_description" = "Éviter les trottoirs";
 "shared_string_does_not_exist" = "N'existe pas";
-"download_wikipedia_data" = "Télécharger les donnée
+"download_wikipedia_data" = "Télécharger l

@@ -1001,8 +1001,8 @@
 "add_to_a_track" = "İzə əlavə et";
 "move_point" = "Nöqtəni daşı";
 "move_point_descr" = "Move map to change the position of this point.";
-"add_before" = "Add points before";
-"add_after" = "Add points after";
+"add_point_before" = "Add points before";
+"add_point_after" = "Add points after";
 "trim_before" = "Trim before this point";
 "trim_after" = "Trim after this point";
 "change_route_type_before" = "Change route type before this point";
@@ -1136,7 +1136,7 @@
 "shared_string_zoom_levels" = "Zoom levels";
 "res_expire_time" = "Expire time";
 "res_mercator" = "Mercator Projection";
-"res_elliptic_mercator" = "Elliptic mercator";
+"edit_tilesource_elliptic_tile" = "Elliptic mercator";
 "pseudo_mercator_projection" = "Pseudo-Mercator projection";
 "res_source_format" = "Source format";
 "sqlite_db_file" = "SQLiteDB faylı";
@@ -1237,7 +1237,7 @@
 "osm_edit_show_on_map" = "Show modification on the map";
 "osm_edit_show_on_map_descr" = "Open the map centered on this point";
 "shared_string_without_name" = "Ad olmadan";
-"osm_edit_uploading" = "Uploading...";
+"local_openstreetmap_uploading" = "Uploading...";
 "osm_upload_complete" = "Upload complete";
 "osm_tag_too_long_message" = "The maximum value length for tag %@ is 255 characters. \nPlease make it shorter to continue.";
 "save_poi_without_poi_type_message" = "POI növ olmadan yadda saxlansın\?";
@@ -1285,7 +1285,7 @@
 "quick_action_map_underlay_title" = "Xəritə altlıqları";
 "vector_data" = "Oflayn vektor xəritələr";
 "quick_action_map_source_action" = "Xəritə mənbəyi əlavə et";
-"add_map_style" = "Add map style";
+"quick_action_map_style_action" = "Add map style";
 "quick_action_map_styles" = "Xəritə stilləri";
 "quick_action_new_action" = "Fəaliyyət əlavə et";
 "unsupported_items" = "Unsupported items";
@@ -1314,7 +1314,7 @@
 "quick_action_map_underlay" = "Xəritə altlığını dəyiş";
 "quick_action_replace_destination" = "Təyinatı əvəz et";
 "add_destination" = "Add destination";
-"add_start" = "Add starting point";
+"route_add_start_point" = "Add starting point";
 "add_intermediate" = "Add intermediate point";
 "add_home" = "Evəlavə et";
 "add_work" = "İş əlavə et";
@@ -1322,7 +1322,7 @@
 "work_button" = "İş";
 "map_widget_parking" = "Parkinq";
 "quick_action_add_first_intermediate" = "Birinci aralığı əlavə et";
-"toggle_auto_zoom" = "Auto zoom on/off";
+"quick_action_auto_zoom" = "Auto zoom on/off";
 "auto_zoom_on" = "Auto zoom on";
 "auto_zoom_off" = "Auto zoom off";
 "quick_action_resume_pause_navigation" = "Naviqasiyaya fasilə/davam";
@@ -1332,8 +1332,8 @@
 "toggle_day_night" = "Switch Day/Night mode";
 "quick_action_switch_night_mode" = "Gecə rejimi";
 "quick_action_switch_day_mode" = "Gündüz rejimi";
-"mute_voice" = "Mute voice";
-"unmute_voice" = "Unmute voice";
+"quick_action_navigation_voice_on" = "Mute voice";
+"quick_action_navigation_voice_off" = "Unmute voice";
 "show_hide_gpx" = "Show/hide tracks";
 "show_gpx" = "İzlər";
 "hide_gpx" = "Hide track";
@@ -2416,4 +2416,4 @@
 
 "routing_attr_length_description" = "Marşrutlarda icazə veriləcək nəqliyyat vasitəsinin uzunluğunu təyin edin.";
 "rendering_value_all_name" = "Hamısı";
-"download_wikipedia_data" = "Vikipediya məlumatl
+"download_wikipedia_data" = "Vikipediya 

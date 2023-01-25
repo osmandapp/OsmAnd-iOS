@@ -1026,7 +1026,7 @@
 "quick_action_map_source" = "更改地圖來源";
 "edit_tilesource_url_to_load" = "URL";
 "hide_notes" = "隱藏 OSM 註記";
-"res_elliptic_mercator" = "橢圓麥卡托投影";
+"edit_tilesource_elliptic_tile" = "橢圓麥卡托投影";
 "show_notes" = "顯示 OSM 註記";
 "routing_attr_weight_name" = "重量限制";
 "rendering_attr_smoothness_bad_name" = "差";
@@ -2228,4 +2228,4 @@
 "routing_attr_avoid_footways_name" = "避免人行道";
 "routing_attr_avoid_fords_description" = "避免涉水";
 "rendering_attr_weatherPrecipitationContours_name" = "降水等值線";
-"download_wikipedia_data" 
+"download_wikiped

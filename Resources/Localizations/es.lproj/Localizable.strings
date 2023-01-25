@@ -1022,7 +1022,7 @@
 "key_hint_goback" = "Volver";
 "osm_tag_too_long_message" = "La longitud máxima del valor para la etiqueta %@ es de 255 caracteres.\nPara continuar debes acortarla.";
 "save_poi_without_poi_type_message" = "¿Guardar el PDI sin especificar el tipo\?";
-"osm_edit_uploading" = "Subiendo...";
+"local_openstreetmap_uploading" = "Subiendo...";
 "key_hint_zoom_out" = "Alejar";
 "shared_string_read_more" = "Leer más";
 "short_location_on_map" = "Lat %@
@@ -1074,7 +1074,7 @@
 "quick_action_map_underlay_title" = "Mapas subyacentes";
 "vector_data" = "Mapas vectoriales sin conexión";
 "quick_action_map_source_action" = "Añadir repositorio del mapa";
-"add_map_style" = "Añadir estilo de mapa";
+"quick_action_map_style_action" = "Añadir estilo de mapa";
 "quick_action_map_styles" = "Estilos de mapa";
 "quick_action_new_action" = "Añadir acción";
 "quick_action_add_create_items" = "Crear elementos";
@@ -1096,7 +1096,7 @@
 "quick_action_replace_destination" = "Reemplazar destino";
 "add_destination" = "Añadir destino";
 "quick_action_add_first_intermediate" = "Añadir primer destino intermedio";
-"toggle_auto_zoom" = "Alternar zum automático del mapa";
+"quick_action_auto_zoom" = "Alternar zum automático del mapa";
 "quick_action_resume_pause_navigation" = "Pausar o reanudar navegación";
 "quick_action_start_stop_navigation" = "Iniciar o parar navegación";
 "toggle_day_night" = "Alternar modos diurno/nocturno";
@@ -1159,8 +1159,8 @@
 "pause_nav" = "Pausar navegación";
 "quick_action_switch_night_mode" = "Modo nocturno";
 "quick_action_switch_day_mode" = "Modo diurno";
-"mute_voice" = "Silenciar voz";
-"unmute_voice" = "Activar voz";
+"quick_action_navigation_voice_on" = "Silenciar voz";
+"quick_action_navigation_voice_off" = "Activar voz";
 "show_gpx" = "Trazas";
 "hide_gpx" = "Ocultar traza";
 "show_notes" = "Mostrar notas de OSM";
@@ -1181,7 +1181,7 @@
 "avoid_by_type" = "Evitar por tipo";
 "select_map_marker" = "Elegir marcador del mapa";
 "parking_place" = "Lugar de aparcamiento";
-"add_start" = "Añadir punto de partida";
+"route_add_start_point" = "Añadir punto de partida";
 "add_intermediate" = "Añadir punto intermedio";
 "add_home" = "Añadir como «Casa»";
 "add_work" = "Añadir como «Trabajo»";
@@ -1211,7 +1211,7 @@
 "nautical_maps" = "Mapas náuticos";
 "gpx_ascent" = "Ascenso";
 "gpx_descent" = "Descenso";
-"res_elliptic_mercator" = "Mercator elíptica";
+"edit_tilesource_elliptic_tile" = "Mercator elíptica";
 "edit_tilesource_url_to_load" = "URL";
 "rendering_attr_hmRendered_name" = "Mostrar más detalle del mapa";
 "routing_attr_avoid_ice_roads_fords_name" = "Sin caminos de hielo ni vados";
@@ -1915,8 +1915,8 @@
 "after_tapping_done" = "Después de pulsar «Listo», los perfiles borrados se perderán completamente.";
 "added_items" = "Elementos añadidos: %@";
 "add_one_more_pnt" = "Añadir un punto más";
-"add_before" = "Añadir punto anterior";
-"add_after" = "Añadir punto posterior";
+"add_point_before" = "Añadir punto anterior";
+"add_point_after" = "Añadir punto posterior";
 
 // Coordinate widget
 "coordinates_widget" = "Widget de coordenadas";
@@ -2521,7 +2521,7 @@
 "benefits_for_contributors_secondary_descr" = "Accede a OpenStreetMap para comprobar si tienes derecho a actualizaciones mensuales y horarias ilimitadas de los mapas.";
 "not_enough_contributions_descr" = "Necesitas un mínimo de %@ cambios en el último bimestre %@ para obtener acceso a actualizaciones ilimitadas de mapas por hora.";
 "enough_contributions_descr" = "¡Felicitaciones, has hecho suficientes contribuciones a OpenStreetMap y ahora puedes disfrutar de actualizaciones ilimitadas de los mapas de OsmAnd!";
-"auth_error" = "Error de autorización";
+"auth_failed" = "Error de autorización";
 "backup_delete_all_data_or_versions_descr" = "Borra todos los datos en OsmAnd Cloud o sólo el historial de versiones. Los datos locales permanecerán intactos.";
 "backup_delete_old_data" = "Quitar versiones antiguas";
 "backup_deleting_all_data" = "Borrando todos los datos…";
@@ -2792,4 +2792,4 @@
 "rendering_attr_horse_scale_impossible_name" = "Imposible";
 "routing_attr_avoid_highway_description" = "Evita circular por caminos viales";
 "shared_string_does_not_exist" = "No existe";
-"download_wikipedia_data" = "Descargar datos d
+"download_wikipedia_data" = "Descarg

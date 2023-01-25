@@ -1004,8 +1004,8 @@
 "add_to_a_track" = "Añadir a una traza";
 "move_point" = "Mover punto";
 "move_point_descr" = "Mueve el mapa para cambiar la ubicación de este punto.";
-"add_before" = "Añadir punto anterior";
-"add_after" = "Añadir punto posterior";
+"add_point_before" = "Añadir punto anterior";
+"add_point_after" = "Añadir punto posterior";
 "trim_before" = "Recortar antes de este punto";
 "trim_after" = "Recortar después de este punto";
 "change_route_type_before" = "Cambiar el tipo de ruta antes de este punto";
@@ -1139,7 +1139,7 @@
 "shared_string_zoom_levels" = "Niveles de zum";
 "res_expire_time" = "Tiempo de expiración";
 "res_mercator" = "Proyección de Mercator";
-"res_elliptic_mercator" = "Mercator elíptica";
+"edit_tilesource_elliptic_tile" = "Mercator elíptica";
 "pseudo_mercator_projection" = "Proyección de pseudo-Mercator";
 "res_source_format" = "Formato de fuente";
 "sqlite_db_file" = "Archivo SQLiteDB";
@@ -1240,7 +1240,7 @@
 "osm_edit_show_on_map" = "Mostrar edición en el mapa";
 "osm_edit_show_on_map_descr" = "Abrir el mapa centrado en este punto";
 "shared_string_without_name" = "Sin nombre";
-"osm_edit_uploading" = "Subiendo...";
+"local_openstreetmap_uploading" = "Subiendo...";
 "osm_upload_complete" = "Subida completa";
 "osm_tag_too_long_message" = "La longitud máxima del valor para la etiqueta %@ es de 255 caracteres.\nPara continuar debes acortarla.";
 "save_poi_without_poi_type_message" = "¿Guardar el PDI sin especificar el tipo\?";
@@ -1288,7 +1288,7 @@
 "quick_action_map_underlay_title" = "Mapas subyacentes";
 "vector_data" = "Mapas vectoriales sin conexión";
 "quick_action_map_source_action" = "Añadir repositorio del mapa";
-"add_map_style" = "Añadir estilo de mapa";
+"quick_action_map_style_action" = "Añadir estilo de mapa";
 "quick_action_map_styles" = "Estilos de mapa";
 "quick_action_new_action" = "Añadir acción";
 "unsupported_items" = "Elementos no admitidos";
@@ -1317,7 +1317,7 @@
 "quick_action_map_underlay" = "Alternar mapa subyacente";
 "quick_action_replace_destination" = "Reemplazar destino";
 "add_destination" = "Añadir destino";
-"add_start" = "Añadir punto de partida";
+"route_add_start_point" = "Añadir punto de partida";
 "add_intermediate" = "Añadir punto intermedio";
 "add_home" = "Añadir como «Casa»";
 "add_work" = "Añadir como «Trabajo»";
@@ -1325,7 +1325,7 @@
 "work_button" = "Trabajo";
 "map_widget_parking" = "Estacionamiento";
 "quick_action_add_first_intermediate" = "Añadir primer destino intermedio";
-"toggle_auto_zoom" = "Alternar zum automático del mapa";
+"quick_action_auto_zoom" = "Alternar zum automático del mapa";
 "auto_zoom_on" = "Zum automático activado";
 "auto_zoom_off" = "Zum automático desactivado";
 "quick_action_resume_pause_navigation" = "Pausar o reanudar navegación";
@@ -1335,8 +1335,8 @@
 "toggle_day_night" = "Alternar modos diurno/nocturno";
 "quick_action_switch_night_mode" = "Modo nocturno";
 "quick_action_switch_day_mode" = "Modo diurno";
-"mute_voice" = "Silenciar voz";
-"unmute_voice" = "Activar voz";
+"quick_action_navigation_voice_on" = "Silenciar voz";
+"quick_action_navigation_voice_off" = "Activar voz";
 "show_hide_gpx" = "Mostrar/ocultar trazas";
 "show_gpx" = "Trazas";
 "hide_gpx" = "Ocultar traza";
@@ -2559,7 +2559,7 @@
 "benefits_for_contributors_secondary_descr" = "Accede a OpenStreetMap para comprobar si tienes derecho a actualizaciones mensuales y horarias ilimitadas de los mapas.";
 "enough_contributions_descr" = "¡Felicitaciones, has hecho suficientes contribuciones a OpenStreetMap y ahora puedes disfrutar de actualizaciones ilimitadas de los mapas de OsmAnd!";
 "last_two_month_total" = "Total del último bimestre";
-"auth_error" = "Error de autorización";
+"auth_failed" = "Error de autorización";
 "cloud_confirm_delete_type" = "¿Borrar «%@» de OsmAnd Cloud?";
 "shared_string_cross_buy" = "Compra cruzada";
 "purchases_feature_desc_cross_buy" = "Usa las funciones de la suscripción en diferentes plataformas (Android/iOS/web) sin costo adicional.";
@@ -2803,4 +2803,4 @@
 "routing_attr_allow_intermittent_description" = "Permite cursos de agua intermitentes";
 "rendering_value_all_name" = "Todo";
 "routing_attr_avoid_footways_description" = "Evita pasar por veredas o aceras";
-"download_wikipedia_data" = "Descargar datos d
+"download_wikipedia_data" = "Descarg

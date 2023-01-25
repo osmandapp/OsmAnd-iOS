@@ -951,7 +951,7 @@
 "osmand_live_donation_switch_title" = "Doneer aan de OpenStreetMap-gemeenschap";
 "edit_tilesource_url_to_load" = "URL";
 "show_notes" = "Toon OSM-opmerkingen";
-"res_elliptic_mercator" = "Elliptische Mercator";
+"edit_tilesource_elliptic_tile" = "Elliptische Mercator";
 "hide_notes" = "Verberg OSM-opmerkingen";
 "routing_attr_allow_classic_only_description" = "Routes alleen geprepareerd voor klassieke stijl zonder skating sporen. Inclusief routes geprepareerd door kleinere sneeuwscooters met lossere piste en tracks gemaakt door skiërs.";
 "rendering_value_black_name" = "Zwart";
@@ -1909,7 +1909,7 @@
 "map_settings_weather_temp" = "Temperatuur";
 "point_num" = "Punt %d";
 "osm_building_num" = "Gebouwnummer";
-"osm_edit_uploading" = "Uploaden...";
+"local_openstreetmap_uploading" = "Uploaden...";
 "shared_string_total_size" = "Totale grootte";
 "shared_string_countries" = "Landen";
 "shared_string_status" = "Status";
@@ -2205,4 +2205,4 @@
 "routing_attr_difficulty_preference_advanced_name" = "Gevorderde";
 "routing_attr_difficulty_preference_beginner_name" = "Beginner";
 "routing_attr_avoid_highway_description" = "Snelwegen vermijden";
-"download_wikipedia_data" = "Wikipedia-gegevens 
+"download_wikipedia_data" = "Wikipedia-

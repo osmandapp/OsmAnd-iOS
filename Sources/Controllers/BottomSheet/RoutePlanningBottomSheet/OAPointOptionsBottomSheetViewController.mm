@@ -73,14 +73,14 @@
     [data addObject:@[
         @{
             @"type" : [OATitleIconRoundCell getCellIdentifier],
-            @"title" : OALocalizedString(@"add_before"),
+            @"title" : OALocalizedString(@"add_point_before"),
             @"img" : @"ic_custom_add_point_before",
             @"key" : @"add_points",
             @"value" : @(EOAAddPointModeBefore)
         },
         @{
             @"type" : [OATitleIconRoundCell getCellIdentifier],
-            @"title" : OALocalizedString(@"add_after"),
+            @"title" : OALocalizedString(@"add_point_after"),
             @"img" : @"ic_custom_add_point_after",
             @"key" : @"add_points",
             @"value" : @(EOAAddPointModeAfter)

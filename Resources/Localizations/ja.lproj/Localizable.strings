@@ -688,7 +688,7 @@
 "osm_edit_show_on_map" = "マップに修正を反映表示";
 "osm_edit_show_on_map_descr" = "この点を中心にマップを開きます";
 "shared_string_without_name" = "名無し";
-"osm_edit_uploading" = "アップロード中...";
+"local_openstreetmap_uploading" = "アップロード中...";
 "osm_upload_complete" = "アップロード完了";
 "osm_tag_too_long_message" = "タグ%@の最大文字数は255文字です。\n編集を続けるには文字数を短くしてください。";
 "save_poi_without_poi_type_message" = "種類を指定せずにPOIを保存しますか？";
@@ -726,7 +726,7 @@
 "quick_action_map_underlay_title" = "アンダーレイマップ";
 "vector_data" = "オフラインベクターマップ";
 "quick_action_map_source_action" = "ソースマップを追加";
-"add_map_style" = "マップスタイルの追加";
+"quick_action_map_style_action" = "マップスタイルの追加";
 "quick_action_map_styles" = "マップスタイル";
 "quick_action_new_action" = "アクションを追加";
 "quick_action_add_create_items" = "アイテムを作成";
@@ -752,14 +752,14 @@
 "quick_action_map_underlay" = "アンダーレイマップの変更";
 "quick_action_replace_destination" = "目的地を置き換え";
 "add_destination" = "目的地を追加";
-"add_start" = "出発地点を追加";
+"route_add_start_point" = "出発地点を追加";
 "add_intermediate" = "中間経由地点を追加";
 "add_home" = "自宅を追加";
 "add_work" = "勤務先を追加";
 "favorite_home_category" = "自宅";
 "work_button" = "職場";
 "quick_action_add_first_intermediate" = "最初の中間地点を追加";
-"toggle_auto_zoom" = "自動ズームのON/OFF";
+"quick_action_auto_zoom" = "自動ズームのON/OFF";
 "auto_zoom_on" = "Auto zoom on";
 "auto_zoom_off" = "自動ズームをOFF";
 "quick_action_resume_pause_navigation" = "ナビゲーションの再開/一時停止";
@@ -769,8 +769,8 @@
 "toggle_day_night" = "昼間/夜間モードの切替";
 "quick_action_switch_night_mode" = "夜モード";
 "quick_action_switch_day_mode" = "昼モード";
-"mute_voice" = "音声をミュート";
-"unmute_voice" = "音声ミュートを解除";
+"quick_action_navigation_voice_on" = "音声をミュート";
+"quick_action_navigation_voice_off" = "音声ミュートを解除";
 "show_hide_gpx" = "経路の表示/非表示";
 "show_gpx" = "経路";
 "hide_gpx" = "経路を非表示";
@@ -1208,7 +1208,7 @@
 "download_depth_countours" = "海洋等深線データ";
 "average_altitude" = "平均標高";
 "edit_tilesource_url_to_load" = "URL";
-"res_elliptic_mercator" = "楕円メルカトル";
+"edit_tilesource_elliptic_tile" = "楕円メルカトル";
 "routing_attr_avoid_shuttle_train_description" = "移動手段にカートレインを使用しません";
 "rendering_value_low_name" = "低";
 "rendering_value__name" = "標準";
@@ -1881,8 +1881,8 @@
 "change_route_type_before" = "選択地点より前のルートタイプを変更";
 "trim_after" = "選択地点の後を削除";
 "trim_before" = "選択地点の前を削除";
-"add_before" = "選択地点の前に追加";
-"add_after" = "選択地点の後に追加";
+"add_point_before" = "選択地点の前に追加";
+"add_point_after" = "選択地点の後に追加";
 "move_point_descr" = "マップを動かし、この地点の位置を変更・調整します。";
 "move_point" = "ポイントの移動";
 "points_count" = "地点:";
@@ -2520,4 +2520,4 @@
 "rendering_attr_natureReserves_description" = "自然保護区、保護地域、国立公園を表示します。";
 "routing_attr_driving_style_description" = "運転の目的を選択することで、より短くより速くより安全なルートを取得します";
 "routing_attr_avoid_footways_name" = "歩道を避ける";
-"download_wikipedia_data" = "Wikipedia
+"download_wikipedia_data" = "W

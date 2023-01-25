@@ -965,7 +965,7 @@
 "osm_upload_complete" = "Надсилання завершено";
 "osm_tag_too_long_message" = "Максимальна довжина значення для теґу %@ становить 255 символів. \nЩоб продовжити, зробіть його коротшим.";
 "save_poi_without_poi_type_message" = "Зберегти POI без типу\?";
-"osm_edit_uploading" = "Надсилання…";
+"local_openstreetmap_uploading" = "Надсилання…";
 "short_location_on_map" = "Шир %@\nДов %@";
 "navigate_point_format_OLC" = "Open Location Code (OLC)";
 "shared_string_example" = "Приклад";
@@ -1081,7 +1081,7 @@
 // Quick action
 "vector_data" = "Оффлайн векторні мапи";
 "quick_action_map_source_action" = "Додати джерело мапи";
-"add_map_style" = "Додати стиль мапи";
+"quick_action_map_style_action" = "Додати стиль мапи";
 "quick_action_map_styles" = "Стилі мапи";
 "quick_action_new_action" = "Додати дію";
 "shared_string_deselect" = "Зняти виділення";
@@ -1116,7 +1116,7 @@
 "quick_action_replace_destination" = "Замінити пункт призначення";
 "add_destination" = "Додати пункт призначення";
 "quick_action_add_first_intermediate" = "Додати першу проміжну точку";
-"toggle_auto_zoom" = "Автоматичне масштабування увімк/вимк";
+"quick_action_auto_zoom" = "Автоматичне масштабування увімк/вимк";
 "quick_action_resume_pause_navigation" = "Призупинити/відновити навігацію";
 "quick_action_start_stop_navigation" = "Почати/зупинити навігацію";
 "toggle_day_night" = "Перемкнути Денний/Нічний режим";
@@ -1131,8 +1131,8 @@
 "pause_nav" = "Призупинити навігацію";
 "quick_action_switch_night_mode" = "Нічний режим";
 "quick_action_switch_day_mode" = "Денний режим";
-"mute_voice" = "Вимкнути голос";
-"unmute_voice" = "Увімкнути голос";
+"quick_action_navigation_voice_on" = "Вимкнути голос";
+"quick_action_navigation_voice_off" = "Увімкнути голос";
 "show_gpx" = "Треки";
 "hide_gpx" = "Сховати трек";
 "show_notes" = "Показати нотатки OSM";
@@ -1142,7 +1142,7 @@
 "select_manually" = "Вибрати вручну";
 "avoid_by_type" = "Уникати за типом";
 "parking_place" = "Місце для стоянки";
-"add_start" = "Додати точку початку маршруту";
+"route_add_start_point" = "Додати точку початку маршруту";
 "favorite_home_category" = "Дім";
 "work_button" = "Робота";
 "mapillary_descr" = "Світлини вулиць в мережі для всіх. Відкрийте для себе нові місця, співпрацюйте та знімайте світ.";
@@ -1237,7 +1237,7 @@
 "shared_string_zoom_levels" = "Масштаб";
 "res_expire_time" = "Строк дії";
 "res_mercator" = "Проєкція Меркатора";
-"res_elliptic_mercator" = "Еліптичний меркатор";
+"edit_tilesource_elliptic_tile" = "Еліптичний меркатор";
 "pseudo_mercator_projection" = "Проєкція Псевдо-Меркатора";
 "res_zoom_levels_desc" = "Ці параметри впливатимуть на показ мапи під час використання в якості виду мапи або накладання/підкладки.\n\nВид мапи: мапа буде обмежена вибраними масштабами.\n\nНакладка / Підкладка: рівні масштабу, на яких буде видно плитки. Збільшення або зменшення масштабу відбуватиметься більше або менше встановлених значень.";
 "res_expire_time_desc" = "Строк дії в хвилинах. Кешована плитка буде завантажена через визначений час. Залиште це поле порожнім, якщо вам не потрібно перезавантажувати плитки для цього джерела.\nОдин день - 1440 хвилин.\nОдин тиждень - 10 080 хвилин.\n30 днів - 43 200 хвилин.";
@@ -1785,8 +1785,8 @@
 "change_route_type_before" = "Змінити тип маршруту перед цією точкою";
 "trim_after" = "Обрізати після цієї точки";
 "trim_before" = "Обрізати до цієї точки";
-"add_after" = "Додати точки після";
-"add_before" = "Додати точки перед";
+"add_point_after" = "Додати точки після";
+"add_point_before" = "Додати точки перед";
 "move_point_descr" = "Посуньте мапу, щоб змінити розташування цієї точки.";
 "move_point" = "Перемістити точку";
 "add_to_a_track" = "Додати до треку";
@@ -2620,7 +2620,7 @@
 "benefits_for_contributors" = "Переваги для активних учасників OSM";
 "not_enough_contributions_descr" = "Щоб отримати безплатні щогодинні оновлення, зробіть щонайменше %@ змін за останні два місяці %@.";
 "enough_contributions_descr" = "Вітаємо, ви зробили достатньо змін в OpenStreetMap і тепер можете насолоджуватися необмеженою кількістю оновлень мап OsmAnd!";
-"auth_error" = "Помилка авторизації";
+"auth_failed" = "Помилка авторизації";
 "shared_string_contributions" = "Кількість змін";
 "contributions_may_calculate_with_delay" = "Обробка внесків може тривати кілька годин.";
 "shared_string_refresh" = "Перезавантажити";
@@ -2803,4 +2803,4 @@
 "rendering_attr_horse_scale_difficult_name" = "Складність";
 "rendering_attr_weatherWindSpeedContours_name" = "Ізолінії поривів вітру";
 "shared_string_does_not_exist" = "Не існує";
-"download_wikipedia_data" = "Завантаження дани
+"download_wikipedia_data" = "Завантаж

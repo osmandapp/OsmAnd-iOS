@@ -845,7 +845,7 @@
             NSString *key = item[@"key"];
             if ([key isEqualToString:@"mercator_sett"])
             {
-                cell.descriptionView.text = _isEllipticYTile ? OALocalizedString(@"res_elliptic_mercator") : OALocalizedString(@"pseudo_mercator_projection");
+                cell.descriptionView.text = _isEllipticYTile ? OALocalizedString(@"edit_tilesource_elliptic_tile") : OALocalizedString(@"pseudo_mercator_projection");
             }
             else if ([key isEqualToString:@"format_sett"])
             {

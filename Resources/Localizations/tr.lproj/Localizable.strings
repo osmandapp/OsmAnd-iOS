@@ -1105,7 +1105,7 @@
 "key_hint_goback" = "Geri Git";
 "osm_tag_too_long_message" = "%@ etiketi için azami değer uzunluğu 255 karakterdir.\nLütfen devam etmek için daha kısa yapın.";
 "save_poi_without_poi_type_message" = "POI tür olmadan kaydedilsin mi\?";
-"osm_edit_uploading" = "Karşıya yükleniyor...";
+"local_openstreetmap_uploading" = "Karşıya yükleniyor...";
 "key_hint_zoom_out" = "Uzaklaştır";
 "short_location_on_map" = "Enlem %@
 \nBoylam %@";
@@ -1130,13 +1130,13 @@
 "routing_import_please_restart" = "Yeni routing.xml dosyasını kullanmak için lütfen uygulamayı yeniden başlatın.";
 "download_pending" = "İndirme bekleniyor";
 "quick_action_list_descr" = "Bu eylem düğmesine dokunmak, aşağıdaki listeyi sayfalar halinde gösterir";
-"add_map_style" = "Harita tarzı ekle";
+"quick_action_map_style_action" = "Harita tarzı ekle";
 "toggle_fav" = "Sık kullanılanları göster/gizle";
 "quick_action_add_osm_bug" = "OSM notu ekle";
 "toggle_online_notes" = "OSM notlarını aç/kapat";
 "toggle_local_edits" = "Yerel OSM düzenlemelerini aç/kapat";
 "add_destination" = "Hedef ekle";
-"toggle_auto_zoom" = "Otomatik yakınlaştırma açık/kapalı";
+"quick_action_auto_zoom" = "Otomatik yakınlaştırma açık/kapalı";
 "toggle_day_night" = "Gündüz/Gece modunu değiştir";
 "show_hide_gpx" = "Yolları göster/gizle";
 "search_results" = "Arama sonuçları";
@@ -1183,8 +1183,8 @@
 "auto_zoom_off" = "Otomatik yakınlaştırma kapalı";
 "resume_nav" = "Navigasyona devam et";
 "pause_nav" = "Navigasyonu duraklat";
-"mute_voice" = "Sesi kapat";
-"unmute_voice" = "Sesi aç";
+"quick_action_navigation_voice_on" = "Sesi kapat";
+"quick_action_navigation_voice_off" = "Sesi aç";
 "show_gpx" = "İzlenen yollar";
 "hide_gpx" = "İzlenen yolları gizle";
 "show_notes" = "OSM notlarını göster";
@@ -1199,7 +1199,7 @@
 "select_manually" = "Elle seç";
 "avoid_by_type" = "Türe göre kaçın";
 "parking_place" = "Park yeri";
-"add_start" = "Başlangıç noktası ekle";
+"route_add_start_point" = "Başlangıç noktası ekle";
 "selected_roads" = "Seçilen yollar";
 "units_sec_short" = "s";
 "select_home" = "Ev noktasını seç";
@@ -1234,7 +1234,7 @@
 "shared_string_zoom_levels" = "Yakınlaştırma seviyeleri";
 "res_expire_time" = "Geçerliliğin sona erme süresi";
 "res_mercator" = "Mercator Projeksiyonu";
-"res_elliptic_mercator" = "Eliptik mercator";
+"edit_tilesource_elliptic_tile" = "Eliptik mercator";
 "pseudo_mercator_projection" = "Pseudo-Mercator projeksiyon";
 "res_zoom_levels_desc" = "Bu parametreler, harita türü veya üst/alt katman olarak kullanıldığında harita görüntüsünü etkileyecektir.\n\nHarita türü: Harita seçilen yakınlaştırmalarla sınırlı olacaktır.\n\nÜst / Alt katman: Döşemelerin görüneceği yakınlaştırma seviyeleri. Ölçeği arttırma veya azaltma, ayarlanan değerlerin üstünde veya altında meydana gelecektir.";
 "res_expire_time_desc" = "Dakika cinsinden geçerliliğin sona erme süresi. Önbelleğe alınan döşemeler belirtilen süreden sonra yeniden yüklenecektir. Bu kaynak için döşemeleri yeniden yüklemeniz gerekmiyorsa bu alanı boş bırakın.\nBir gün 1440 dakikadır.\nBir hafta 10 080 dakikadır.\n30 gün 43 200 dakikadır.";
@@ -1781,8 +1781,8 @@
 "change_route_type_before" = "Bu noktadan önce güzergah türünü değiştir";
 "trim_after" = "Bu noktadan sonra kırp";
 "trim_before" = "Bu noktadan önce kırp";
-"add_after" = "Sonrasında nokta ekle";
-"add_before" = "Öncesinde nokta ekle";
+"add_point_after" = "Sonrasında nokta ekle";
+"add_point_before" = "Öncesinde nokta ekle";
 "move_point_descr" = "Bu noktanın konumunu değiştirmek için haritayı hareket ettirin.";
 "move_point" = "Noktayı Taşı";
 "add_to_a_track" = "İzlemeye ekle";
@@ -2688,4 +2688,4 @@
 "rendering_attr_noNatureReserveBoundaries_name" = "Doğa sınırları";
 "routing_attr_difficulty_preference_advanced_name" = "İleri";
 "rendering_value_omit_name" = "Atla";
-"download_wikipedia_data" = "Wikipedia veril
+"download_wikipedia_data" = "Wikipe

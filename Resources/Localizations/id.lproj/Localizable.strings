@@ -1004,8 +1004,8 @@
 "add_to_a_track" = "Tambahkan pada sebuah trek";
 "move_point" = "Pindahkan Titik";
 "move_point_descr" = "Move map to change the position of this point.";
-"add_before" = "Add points before";
-"add_after" = "Add points after";
+"add_point_before" = "Add points before";
+"add_point_after" = "Add points after";
 "trim_before" = "Trim before this point";
 "trim_after" = "Trim after this point";
 "change_route_type_before" = "Change route type before this point";
@@ -1139,7 +1139,7 @@
 "shared_string_zoom_levels" = "Tingkat perbesaran";
 "res_expire_time" = "Expire time";
 "res_mercator" = "Mercator Projection";
-"res_elliptic_mercator" = "Elliptic mercator";
+"edit_tilesource_elliptic_tile" = "Elliptic mercator";
 "pseudo_mercator_projection" = "Proyeksi Pseudo-Mercator";
 "res_source_format" = "Source format";
 "sqlite_db_file" = "Berkas SQLiteDB";
@@ -1240,7 +1240,7 @@
 "osm_edit_show_on_map" = "Show modification on the map";
 "osm_edit_show_on_map_descr" = "Open the map centered on this point";
 "shared_string_without_name" = "Tanpa nama";
-"osm_edit_uploading" = "Uploading...";
+"local_openstreetmap_uploading" = "Uploading...";
 "osm_upload_complete" = "Upload complete";
 "osm_tag_too_long_message" = "The maximum value length for tag %@ is 255 characters. \nPlease make it shorter to continue.";
 "save_poi_without_poi_type_message" = "Simpan POI tanpa tipe\?";
@@ -1288,7 +1288,7 @@
 "quick_action_map_underlay_title" = "Dasaran peta";
 "vector_data" = "Peta vektor luring";
 "quick_action_map_source_action" = "Tambahkan sumber peta";
-"add_map_style" = "Add map style";
+"quick_action_map_style_action" = "Add map style";
 "quick_action_map_styles" = "Gaya peta";
 "quick_action_new_action" = "Tambahkan tindakan";
 "unsupported_items" = "Unsupported items";
@@ -1317,7 +1317,7 @@
 "quick_action_map_underlay" = "Ubah dasaran peta";
 "quick_action_replace_destination" = "Ubah tujuan";
 "add_destination" = "Add destination";
-"add_start" = "Add starting point";
+"route_add_start_point" = "Add starting point";
 "add_intermediate" = "Tambahkan titik perantara";
 "add_home" = "Tambah lokasi rumah";
 "add_work" = "Tambah lokasi kantor";
@@ -1325,7 +1325,7 @@
 "work_button" = "Kantor";
 "map_widget_parking" = "Parkiran";
 "quick_action_add_first_intermediate" = "Tambahkan perantara pertama";
-"toggle_auto_zoom" = "Auto zoom on/off";
+"quick_action_auto_zoom" = "Auto zoom on/off";
 "auto_zoom_on" = "Auto zoom on";
 "auto_zoom_off" = "Auto zoom off";
 "quick_action_resume_pause_navigation" = "Jeda/lanjutkan navigasi";
@@ -1335,8 +1335,8 @@
 "toggle_day_night" = "Switch Day/Night mode";
 "quick_action_switch_night_mode" = "Mode malam";
 "quick_action_switch_day_mode" = "Mode siang";
-"mute_voice" = "Mute voice";
-"unmute_voice" = "Unmute voice";
+"quick_action_navigation_voice_on" = "Mute voice";
+"quick_action_navigation_voice_off" = "Unmute voice";
 "show_hide_gpx" = "Show/hide tracks";
 "show_gpx" = "Trek";
 "hide_gpx" = "Hide track";
@@ -2618,4 +2618,4 @@
 "routing_attr_allow_intermittent_description" = "Perbolehkan jalan air intermiten";
 "routing_attr_avoid_footways_description" = "Hindari jalan setapak";
 "rendering_value_all_name" = "Semua";
-"download_wikipedia_data" = "Unduh dat
+"download_wikipedia_data" = "

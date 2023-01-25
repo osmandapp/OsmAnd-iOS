@@ -1030,7 +1030,7 @@
 "osm_tag_too_long_message" = "Die maximale Wertlänge für den tag %@ beträgt 255 Zeichen. \nBitte machen Sie ihn kürzer, um fortzufahren.";
 "save_poi_without_poi_type_message" = "POI wirklich ohne Typ speichern\?";
 "save_poi_too_many_uppercase" = "Der Name enthält zu viele Großbuchstaben. Vorgang fortsetzen?";
-"osm_edit_uploading" = "Hochladen...";
+"local_openstreetmap_uploading" = "Hochladen...";
 "key_hint_zoom_out" = "Herauszoomen";
 "mapil_contribute" = "Steuern Sie Ihre eigenen Straßenansichten bei";
 "shared_string_read_more" = "Mehr lesen";
@@ -1074,7 +1074,7 @@
 "vector_data" = "Offline-Vektorkarten";
 "quick_action_map_source_action" = "Kartenquelle hinzufügen";
 "configure_map" = "Karte konfigurieren";
-"add_map_style" = "Kartenstil hinzufügen";
+"quick_action_map_style_action" = "Kartenstil hinzufügen";
 "quick_action_map_styles" = "Kartenstile";
 "quick_action_new_action" = "Aktion hinzufügen";
 "quick_action_add_create_items" = "Objekte erstellen";
@@ -1094,7 +1094,7 @@
 "quick_action_map_underlay" = "Karten-Underlayändern";
 "quick_action_replace_destination" = "Ziel ersetzen";
 "add_destination" = "Ziel hinzufügen";
-"toggle_auto_zoom" = "Auto-Zoom an/aus";
+"quick_action_auto_zoom" = "Auto-Zoom an/aus";
 "quick_action_resume_pause_navigation" = "Navigation pausieren/fortsetzen";
 "quick_action_start_stop_navigation" = "Navigation starten/beenden";
 "toggle_day_night" = "Tag-/Nacht-Modus umschalten";
@@ -1159,8 +1159,8 @@
 "pause_nav" = "Navigation pausieren";
 "quick_action_switch_night_mode" = "Nacht-Modus";
 "quick_action_switch_day_mode" = "Tag-Modus";
-"mute_voice" = "Sprachausgabe stummschalten";
-"unmute_voice" = "Sprachausgabe aktivieren";
+"quick_action_navigation_voice_on" = "Sprachausgabe stummschalten";
+"quick_action_navigation_voice_off" = "Sprachausgabe aktivieren";
 "show_gpx" = "Tracks";
 "hide_gpx" = "Tracks ausblenden";
 "show_notes" = "OSM-Hinweise einblenden";
@@ -1182,7 +1182,7 @@
 "avoid_by_type" = "Typ vermeiden";
 "select_map_marker" = "Kartenmarkierung auswählen";
 "parking_place" = "Parkbucht";
-"add_start" = "Startpunkt hinzufügen";
+"route_add_start_point" = "Startpunkt hinzufügen";
 "add_intermediate" = "Zwischenpunkt hinzufügen";
 "add_home" = "Zuhause hinzufügen";
 "add_work" = "Arbeitsadresse hinzufügen";
@@ -1228,7 +1228,7 @@
 "available_map_styles" = "Verfügbare Kartenstile";
 "available_map_sources" = "Verfügbare Kartenquellen";
 "edit_tilesource_url_to_load" = "URL";
-"res_elliptic_mercator" = "Elliptischer Merkator";
+"edit_tilesource_elliptic_tile" = "Elliptischer Merkator";
 "shared_string_clear_cache" = "Cache löschen";
 "gpx_analyze" = "Analysieren";
 "shared_string_maximum" = "Maximum";
@@ -1791,8 +1791,8 @@
 "change_route_type_before" = "Routentyp vor diesem Punkt ändern";
 "trim_after" = "Nach diesem Punkt beschneiden";
 "trim_before" = "Vor diesem Punkt beschneiden";
-"add_after" = "Punkte danach hinzufügen";
-"add_before" = "Punkte davor hinzufügen";
+"add_point_after" = "Punkte danach hinzufügen";
+"add_point_before" = "Punkte davor hinzufügen";
 "move_point_descr" = "Karte verschieben, um die Position dieses Punktes zu ändern.";
 "move_point" = "Punkt verschieben";
 "add_to_a_track" = "Zu einem Track hinzufügen";
@@ -2637,7 +2637,7 @@
 "benefits_for_contributors_secondary_descr" = "Melden Sie sich bei OpenStreetMap an, um zu prüfen, ob Sie Anspruch auf unbegrenzte monatliche und stündliche Kartenaktualisierungen haben.";
 "not_enough_contributions_descr" = "Ein Minimum von %@Änderungen in den letzten zwei Monaten %@ ist erforderlich, um Zugang zu unbegrenzten stündlichen Kartenaktualisierungen zu erhalten.";
 "enough_contributions_descr" = "Herzlichen Glückwunsch, Sie haben genügend Beiträge zu OpenStreetMap geleistet und können nun unbegrenzte Kartenaktualisierungen genießen!";
-"auth_error" = "Autorisierungsfehler";
+"auth_failed" = "Autorisierungsfehler";
 "cloud_confirm_delete_type" = "Sind Sie sicher, dass sie „%@” aus OsmAnd Cloud löschen möchten?";
 "purchases_feature_desc_cross_buy" = "Nutzen Sie Ihre Abonnementfunktionen auf verschiedenen Plattformen (Android/iOS/Web) ohne zusätzliche Kosten.";
 "cloud_recent_changes" = "Änderungen";
@@ -2808,4 +2808,4 @@
 "rendering_attr_showBusRoutes_name" = "Buslinien";
 "rendering_attr_depthContourColorScheme_description" = "Farbschema der Tiefenlinien";
 "shared_string_does_not_exist" = "Nicht vorhanden";
-"download_wikipedia_data" = "Wikipedia-Daten her
+"download_wikipedia_data" = "Wikipedia-

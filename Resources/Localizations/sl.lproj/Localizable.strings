@@ -903,7 +903,7 @@
 "mapillary_menu_title_tile_cache" = "Predpomnilnik sličic";
 "nautical_maps" = "Navtični zemljevidi";
 "local_map_names" = "Krajevna imena";
-"res_elliptic_mercator" = "Mercatorjeva projekcija";
+"edit_tilesource_elliptic_tile" = "Mercatorjeva projekcija";
 "show_notes" = "Pokaži Opombe OSM";
 "edit_tilesource_url_to_load" = "Spletni naslov";
 "hide_notes" = "Skrij Opombe OSM";
@@ -2048,4 +2048,4 @@
 "routing_attr_avoid_footways_description" = "Izogibaj se pešpoti";
 "rendering_attr_showTrainRoutes_name" = "Proge vlakov";
 "routing_attr_avoid_highway_description" = "Izogibaj se avtocest";
-"download_wikipedia_data" = "Prejmi podatke 
+"download_wikipedia_data" = "Prejm

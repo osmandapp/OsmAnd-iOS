@@ -1185,8 +1185,8 @@
 "change_route_type_before" = "Schimbați tipul de rută înainte de acest punct";
 "trim_after" = "Tăiați după acest punct";
 "trim_before" = "Tăiați înainte de acest punct";
-"add_after" = "Adăugați puncte după";
-"add_before" = "Adăugați puncte înainte de";
+"add_point_after" = "Adăugați puncte după";
+"add_point_before" = "Adăugați puncte înainte de";
 "move_point_descr" = "Mutați harta pentru a modifica poziția acestui punct.";
 
 // Route planning
@@ -1780,7 +1780,7 @@
 "unsupported_items" = "Elemente nesuportate";
 "quick_action_new_action" = "Adăugați o acțiune";
 "quick_action_map_styles" = "Stiluri de hartă";
-"add_map_style" = "Adăugați un stil de hartă";
+"quick_action_map_style_action" = "Adăugați un stil de hartă";
 "quick_action_map_source_action" = "Adăugați sursa hărții";
 "quick_action_map_underlay_title" = "Substraturi pentru hărți";
 "quick_action_map_overlay_title" = "Suprapuneri de hărți";
@@ -1814,7 +1814,7 @@
 "save_poi_without_poi_type_message" = "Salvați POI fără tip\?";
 "osm_tag_too_long_message" = "Lungimea maximă a valorii pentru eticheta %@ este de 255 de caractere. \nVă rugăm să o faceți mai scurtă pentru a continua.";
 "osm_upload_complete" = "Încărcare completă";
-"osm_edit_uploading" = "Încărcarea...";
+"local_openstreetmap_uploading" = "Încărcarea...";
 "osm_edit_show_on_map_descr" = "Deschideți harta centrată pe acest punct";
 "osm_edit_show_on_map" = "Afișați modificarea pe hartă";
 "upload_to_osm" = "Încărcați modificările în OSM";
@@ -1870,7 +1870,7 @@
 "res_zoom_levels_desc" = "Acești parametri vor afecta afișarea hărții atunci când este utilizată ca tip de hartă sau ca suprapunere/subpunere.\n\nMap type (Tip de hartă): harta va fi limitată la zoom-urile selectate.\n\nOverlay / Underlay (suprapunere/subpunere): Nivelurile de zoom la care vor fi vizibile dalele. Upscale sau downscale va avea loc peste sau sub valorile setate.";
 "one_image_per_tile" = "Un fișier de imagine pe planșă";
 "res_source_format" = "Format sursă";
-"res_elliptic_mercator" = "Mercator eliptic";
+"edit_tilesource_elliptic_tile" = "Mercator eliptic";
 "res_mercator" = "Proiecție Mercator";
 "res_expire_time" = "Timp de expirare";
 "shared_string_zoom_levels" = "Niveluri de zoom";
@@ -1990,17 +1990,17 @@
 "hide_gpx" = "Ascundeți traseul";
 "show_gpx" = "Track-uri";
 "show_hide_gpx" = "Afișați/ascundeți track-urile";
-"unmute_voice" = "Dezactivare voce";
-"mute_voice" = "Dezactivarea vocii";
+"quick_action_navigation_voice_off" = "Dezactivare voce";
+"quick_action_navigation_voice_on" = "Dezactivarea vocii";
 "quick_action_switch_day_mode" = "Mod zi";
 "toggle_day_night" = "Comutarea modului zi/noapte";
 "pause_nav" = "Pauză de navigare";
 "resume_nav" = "Continuați navigarea";
 "auto_zoom_off" = "Zoom automat oprit";
 "auto_zoom_on" = "Zoom automat activat";
-"toggle_auto_zoom" = "Zoom automat pornit/oprit";
+"quick_action_auto_zoom" = "Zoom automat pornit/oprit";
 "map_widget_parking" = "Parcare";
-"add_start" = "Adăugați punctul de plecare";
+"route_add_start_point" = "Adăugați punctul de plecare";
 "add_destination" = "Adăugați destinația";
 "quick_action_map_underlay" = "Modificați subiectul hărții";
 "quick_action_map_overlay" = "Modificarea suprapunerii hărții";
@@ -2603,7 +2603,7 @@
 \nVa trebui să vă conectați din nou pentru a face backup sau a restaura date.";
 "backup_delete_all_data_in_progress" = "Vă rugăm să așteptați până când OsmAnd va șterge toate datele dumneavoastră din cloud. Toate datele de pe dispozitiv rămân neatinse.";
 "backup_delete_types_descr" = "Șterge toate datele pentru tipurile de date depreciate din OsmAnd Cloud\?";
-"auth_error" = "Eroare de autorizare";
+"auth_failed" = "Eroare de autorizare";
 "weather_entire_world" = "Întreaga lume";
 "weather_forecast_entire_world" = "Prognoza meteo pentru întreaga lume";
 "last_two_month_total" = "Totalul ultimelor două luni";
@@ -2774,4 +2774,4 @@
 "use_heightmap_setting" = "Folosește hartă relief 3D";
 "units_kg" = "kg";
 "amazon_appstore" = "Amazon Appstore";
-"download_wikipedia_data" = "Descărcați datel
+"download_wikipedia_data" = "Descărc

@@ -1027,7 +1027,7 @@
 "osm_tag_too_long_message" = "Maximálna dĺžka hodnoty pre značku %@ je 255 znakov. \nProsím skráťte ju, aby ste mohli pokračovať.";
 "save_poi_without_poi_type_message" = "Uložiť bod záujmu bez uvedenia typu\?";
 "save_poi_too_many_uppercase" = "Názov obsahuje príliš veľa veľkých písmen. Pokračovať?";
-"osm_edit_uploading" = "Odosiela sa...";
+"local_openstreetmap_uploading" = "Odosiela sa...";
 "key_hint_zoom_out" = "Vzdialiť";
 "shared_string_read_more" = "Prečítať viac";
 "short_location_on_map" = "Šírka %@
@@ -1135,7 +1135,7 @@
 "quick_action_map_styles" = "Štýly mapy";
 "vector_data" = "Vektorové OSM mapy";
 "quick_action_add_first_intermediate" = "Pridať prvý prechodný bod";
-"res_elliptic_mercator" = "Eliptický mercator";
+"edit_tilesource_elliptic_tile" = "Eliptický mercator";
 "edit_tilesource_url_to_load" = "URL";
 "show_notes" = "Zobraziť OSM poznámky";
 "hide_notes" = "Skryť OSM poznámky";
@@ -2322,4 +2322,4 @@
 "routing_attr_prefer_hiking_routes_name" = "Uprednostniť turistické trasy";
 "rendering_attr_weatherWindSpeedContours_name" = "Izočiary nárazov vetra";
 "routing_attr_allow_streams_name" = "Povoliť potoky a odtokové kanály";
-"download_wikipedia_data" = "Stiahnuť údaj
+"download_wikipedia_data" = "Stia

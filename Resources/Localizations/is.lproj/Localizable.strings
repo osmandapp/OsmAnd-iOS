@@ -1026,7 +1026,7 @@
 "osm_tag_too_long_message" = "Hámarkslengd gildis merkisins \"%@\" er 255 stafir. \nStyttu gildið áður en áfram er haldið.";
 "save_poi_without_poi_type_message" = "Vista merkisstað á þess að gefa upp tegund hans\?";
 "save_poi_too_many_uppercase" = "Nafnið inniheldur of marga hástafi. Viltu halda áfram?";
-"osm_edit_uploading" = "Sendi inn…";
+"local_openstreetmap_uploading" = "Sendi inn…";
 "key_hint_zoom_out" = "Renna frá";
 "shared_string_read_more" = "Lesa meira";
 "short_location_on_map" = "Bre %@
@@ -1069,7 +1069,7 @@
 "quick_action_map_underlay_title" = "Undirlög korts";
 "vector_data" = "Ónettengd vektorkort";
 "quick_action_map_source_action" = "Bæta við gagnagjafa korts";
-"add_map_style" = "Bæta við kortastíl";
+"quick_action_map_style_action" = "Bæta við kortastíl";
 "quick_action_map_styles" = "Stílar landakorta";
 "quick_action_new_action" = "Bæta við aðgerð";
 "quick_action_add_create_items" = "Búa til atriði";
@@ -1091,7 +1091,7 @@
 "quick_action_replace_destination" = "Skiptaút áfangastað";
 "add_destination" = "Bæta við áfangastað";
 "quick_action_add_first_intermediate" = "Bæta við fyrsta milliáfanga";
-"toggle_auto_zoom" = "Sjálfvirkur aðdráttur af/á";
+"quick_action_auto_zoom" = "Sjálfvirkur aðdráttur af/á";
 "quick_action_resume_pause_navigation" = "Haldaáfram/Setja leiðsögn í bið";
 "quick_action_start_stop_navigation" = "Hefja/Stöðva leiðsögn";
 "toggle_day_night" = "Skipta á milli Dags/Næturhams";
@@ -1154,8 +1154,8 @@
 "pause_nav" = "Setja leiðsögn í bið";
 "quick_action_switch_night_mode" = "Næturhamur";
 "quick_action_switch_day_mode" = "Dagshamur";
-"mute_voice" = "Þagga niður í tali";
-"unmute_voice" = "Kveikja á tali";
+"quick_action_navigation_voice_on" = "Þagga niður í tali";
+"quick_action_navigation_voice_off" = "Kveikja á tali";
 "show_gpx" = "Ferlar";
 "hide_gpx" = "Fela feril";
 "show_notes" = "Birta OSM-minnispunkta";
@@ -1177,7 +1177,7 @@
 "avoid_by_type" = "Forðast eftir gerðum";
 "select_map_marker" = "Veldu kortamerki";
 "parking_place" = "Bílastæði";
-"add_start" = "Bæta við upphafspunkti";
+"route_add_start_point" = "Bæta við upphafspunkti";
 "add_intermediate" = "Bæta við millipunkti";
 "add_home" = "Bæta við \"Heima\"";
 "add_work" = "Bæta við \"Vinna\"";
@@ -1237,7 +1237,7 @@
 "shared_string_zoom_levels" = "Aðdráttarstig";
 "res_expire_time" = "Tími þegar rennur út";
 "res_mercator" = "Mercatorvörpun";
-"res_elliptic_mercator" = "Sporöskjulagað Mercator";
+"edit_tilesource_elliptic_tile" = "Sporöskjulagað Mercator";
 "pseudo_mercator_projection" = "Gervi-Mercatorvörpun";
 "res_zoom_levels_desc" = "Þessar breytur hafa áhrif á birtingu landakorts þegar það er notað sem tegund korts eða sem yfirlag/undirlag.\n\nTegund korts: landakortið verður takmarkað við valin aðdráttarstig.\n\nYfirlag / Undirlag: Aðdráttarstig þar sem kortaflísar eru sýnilegar. Uppkvörðun eða niðurkvörðun munu eiga sér stað yfir eða undir stilltum gildum.";
 "res_expire_time_desc" = "Gildistími í mínútum. Kortaflísar í skyndiminni verða endurlesnar eftir tiltekinn tíma. Skildu þennan reit eftir auðan ef þú þarft ekki að láta endurlesa kortaflísar frá þessum kortagjafa.\nEinn dagur er 1.440 mínútur.\nEin vika er 10.080 mínútur.\n30 dagar eru 43.200 mínútur.";
@@ -1809,9 +1809,9 @@
 "plan_route" = "Skipuleggja leið";
 "select_data_to_import" = "Velduþau gögn sem á að flytja inn.";
 "trim_after" = "Klippa á eftir þessum punkti";
-"add_before" = "Bæta við punktum á undan";
+"add_point_before" = "Bæta við punktum á undan";
 "add_one_more_pnt" = "Bæta við einum punkti";
-"add_after" = "Bæta við punktum á eftir";
+"add_point_after" = "Bæta við punktum á eftir";
 "quick_action_map_source_title" = "Gagnagjafar korta";
 "configure_screen_quick_action" = "Flýtiaðgerð";
 "search_activity" = "Leita";
@@ -2531,7 +2531,7 @@
 "backup_data" = "Gögn öryggisafrits";
 "cloud_storage_used" = "%@ af %@ notað";
 "cloud_recent_changes" = "Breytingar";
-"auth_error" = "Villa í auðkenningu";
+"auth_failed" = "Villa í auðkenningu";
 "shared_string_logout" = "Skrá út";
 "shared_string_progress" = "Framvinda";
 "duration_ago" = "fyrir %@ síðan";
@@ -2793,4 +2793,4 @@
 "rendering_value_omit_name" = "Sleppa";
 "rendering_attr_horse_scale_difficult_name" = "Erfitt";
 "rendering_attr_weatherWindSpeedContours_name" = "Vindhviðulínur";
-"download_wikipedia_data" = "Sækja Wiki
+"download_wikipedia_data" = "S

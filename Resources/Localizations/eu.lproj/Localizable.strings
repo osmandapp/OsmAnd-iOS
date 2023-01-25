@@ -1000,8 +1000,8 @@
 "add_to_a_track" = "Gehitu lorratz batera";
 "move_point" = "Mugitu puntua";
 "move_point_descr" = "Move map to change the position of this point.";
-"add_before" = "Add points before";
-"add_after" = "Add points after";
+"add_point_before" = "Add points before";
+"add_point_after" = "Add points after";
 "trim_before" = "Trim before this point";
 "trim_after" = "Trim after this point";
 "change_route_type_before" = "Change route type before this point";
@@ -1135,7 +1135,7 @@
 "shared_string_zoom_levels" = "Zoom mailak";
 "res_expire_time" = "Expire time";
 "res_mercator" = "Mercator Projection";
-"res_elliptic_mercator" = "Elliptic mercator";
+"edit_tilesource_elliptic_tile" = "Elliptic mercator";
 "pseudo_mercator_projection" = "Sasi-Mercator proiekzioa";
 "res_source_format" = "Source format";
 "sqlite_db_file" = "SQLiteDB fitxategia";
@@ -1236,7 +1236,7 @@
 "osm_edit_show_on_map" = "Show modification on the map";
 "osm_edit_show_on_map_descr" = "Open the map centered on this point";
 "shared_string_without_name" = "Izenik gabe";
-"osm_edit_uploading" = "Uploading...";
+"local_openstreetmap_uploading" = "Uploading...";
 "osm_upload_complete" = "Upload complete";
 "osm_tag_too_long_message" = "The maximum value length for tag %@ is 255 characters. \nPlease make it shorter to continue.";
 "save_poi_without_poi_type_message" = "Ziur interesgunea mota gabe gorde nahi duzula\?";
@@ -1284,7 +1284,7 @@
 "quick_action_map_underlay_title" = "Maparen azpi-azalak";
 "vector_data" = "Lineaz kanpoko bektore mapak";
 "quick_action_map_source_action" = "Gehitu mapa-iturria";
-"add_map_style" = "Add map style";
+"quick_action_map_style_action" = "Add map style";
 "quick_action_map_styles" = "Mapa-estiloak";
 "quick_action_new_action" = "Gehitu ekintza";
 "unsupported_items" = "Unsupported items";
@@ -1313,7 +1313,7 @@
 "quick_action_map_underlay" = "Aldatu maparen azpi-azala";
 "quick_action_replace_destination" = "Ordeztu helburua";
 "add_destination" = "Add destination";
-"add_start" = "Add starting point";
+"route_add_start_point" = "Add starting point";
 "add_intermediate" = "Gehitu tarteko puntua";
 "add_home" = "Gehitu etxea";
 "add_work" = "Gehitu lantokia";
@@ -1321,7 +1321,7 @@
 "work_button" = "Lantokia";
 "map_widget_parking" = "Aparkalekua";
 "quick_action_add_first_intermediate" = "Gehitu lehen tartekoa";
-"toggle_auto_zoom" = "Auto zoom on/off";
+"quick_action_auto_zoom" = "Auto zoom on/off";
 "auto_zoom_on" = "Auto zoom on";
 "auto_zoom_off" = "Auto zoom off";
 "quick_action_resume_pause_navigation" = "Pausatu/jarraitu nabigazioa";
@@ -1331,8 +1331,8 @@
 "toggle_day_night" = "Switch Day/Night mode";
 "quick_action_switch_night_mode" = "Gaueko modua";
 "quick_action_switch_day_mode" = "Eguneko modua";
-"mute_voice" = "Mute voice";
-"unmute_voice" = "Unmute voice";
+"quick_action_navigation_voice_on" = "Mute voice";
+"quick_action_navigation_voice_off" = "Unmute voice";
 "show_hide_gpx" = "Show/hide tracks";
 "show_gpx" = "Lorratzak";
 "hide_gpx" = "Hide track";
@@ -2543,4 +2543,4 @@
 "weather_temperature_fahrenheit" = "Fahrenheit";
 "shared_string_cloud" = "Hodeia";
 "download_heightmap_maps" = "Altuera-mapa";
-"rendering_attr_weatherWindSpeedContours_name" = "Haize-bolade
+"rendering_attr_weatherWindSpeedContours_name" = "Haiz

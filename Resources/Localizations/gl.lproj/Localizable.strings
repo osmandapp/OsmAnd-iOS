@@ -962,7 +962,7 @@
 "favorite_home_category" = "Casa";
 "show_notes" = "Amosar notas do OSM";
 "hide_notes" = "Agochar notas do OSM";
-"res_elliptic_mercator" = "Mercator elíptico";
+"edit_tilesource_elliptic_tile" = "Mercator elíptico";
 "edit_tilesource_url_to_load" = "URL";
 "rendering_value_dark_brown_name" = "Marrón escuro";
 "rendering_attr_currentTrackColor_description" = "Cor de GPX";
@@ -1862,4 +1862,4 @@ Lon %@";
 "routing_attr_allow_streams_name" = "Permitir regatos e cunetas";
 "rendering_attr_noNatureReserveBoundaries_description" = "Agochar reservas naturais,áreas protexidas e de parques nacionais.";
 "routing_attr_allow_intermittent_description" = "Permitir canles de auga intermitentes";
-"download_wikipedia_data" = "Baixar datos d
+"download_wikipedia_data" = "Baix

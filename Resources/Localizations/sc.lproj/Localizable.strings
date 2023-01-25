@@ -1032,7 +1032,7 @@
 "key_hint_goback" = "Torra in segus";
 "osm_tag_too_long_message" = "Sa longària màssima de su valore de s'eticheta %@ est de 255 caràteres. \nPro praghere incurtzia·la in antis de sighire.";
 "save_poi_without_poi_type_message" = "Boles sarvare su PDI chene dislindare sa casta sua\?";
-"osm_edit_uploading" = "Carrighende...";
+"local_openstreetmap_uploading" = "Carrighende...";
 "key_hint_zoom_out" = "Mìnima";
 "short_location_on_map" = "Lat %@
 \nLon %@";
@@ -1088,14 +1088,14 @@
 "quick_action_replace_destination" = "Muda sa destinatzione";
 "add_destination" = "Annanghe una destinatzione";
 "quick_action_add_first_intermediate" = "Annanghe su primu puntu de coladòrgiu";
-"toggle_auto_zoom" = "Ismanniamentu automàticu allutu/istudadu";
+"quick_action_auto_zoom" = "Ismanniamentu automàticu allutu/istudadu";
 "quick_action_resume_pause_navigation" = "Pone in pàusa/faghe sighire sa navigatzione";
 "quick_action_start_stop_navigation" = "Incumintza/Acaba sa navigatzione";
 "search_results" = "Risultados de sa chirca";
 "shared_string_action_name" = "Nùmene de s\'atzione";
 "quick_action_screen_header" = "Ischermu %ld";
 "quick_action_list_descr" = "Incarcare custu butone de atzione faghet iscùrrere sa lista in suta";
-"add_map_style" = "Annanghe un'istile de mapa";
+"quick_action_map_style_action" = "Annanghe un'istile de mapa";
 "toggle_fav" = "Ammustra/cua sos preferidos";
 "toggle_online_notes" = "Ammustra/cua sas notas OSM";
 "toggle_local_edits" = "Ammustra/cua sas modìficas locales de OSM";
@@ -1156,8 +1156,8 @@
 "pause_nav" = "Pone in pàusa sa navigatzione";
 "quick_action_switch_night_mode" = "Modalidade pro sa note";
 "quick_action_switch_day_mode" = "Modalidade pro sa die";
-"mute_voice" = "Istuda sa boghe";
-"unmute_voice" = "Torra a allùghere sa boghe";
+"quick_action_navigation_voice_on" = "Istuda sa boghe";
+"quick_action_navigation_voice_off" = "Torra a allùghere sa boghe";
 "show_gpx" = "Rastas";
 "hide_gpx" = "Cua sa rasta";
 "show_notes" = "Ammustra sas notas OSM";
@@ -1179,7 +1179,7 @@
 "avoid_by_type" = "Istransi pro casta";
 "select_map_marker" = "Ischerta marcadore mapa";
 "parking_place" = "Parchègiu";
-"add_start" = "Annanghe unu puntu de incumintzu";
+"route_add_start_point" = "Annanghe unu puntu de incumintzu";
 "add_intermediate" = "Annaghe unu puntu de coladòrgiu";
 "add_home" = "Annanghe sa domo";
 "add_work" = "Annanghe su logu de traballu";
@@ -1232,7 +1232,7 @@
 "displayed_route_save" = "Sarva in Rastas OsmAnd";
 "trip_name" = "Nùmene de sa rasta";
 "trip_hint" = "Inserta su nùmene de sa rasta";
-"res_elliptic_mercator" = "Mercatore ellitticu";
+"edit_tilesource_elliptic_tile" = "Mercatore ellitticu";
 "edit_tilesource_url_to_load" = "URL";
 "shared_string_maximum" = "Màssimu";
 "res_edit_online_map" = "Modìfica sa mitza de sa mapa in lìnia";
@@ -1792,8 +1792,8 @@
 "change_route_type_before" = "Càmbia sa casta de àndala in antis de custu puntu";
 "trim_after" = "Trunca a pustis de custu puntu";
 "trim_before" = "Trunca in antis de custu puntu";
-"add_after" = "Annanghe puntos a pustis";
-"add_before" = "Annanghe puntos in antis";
+"add_point_after" = "Annanghe puntos a pustis";
+"add_point_before" = "Annanghe puntos in antis";
 "move_point_descr" = "Moe sa mapa pro mudare sa positzione de custu puntu.";
 "move_point" = "Move puntu";
 "add_to_a_track" = "Annanghe a una rasta";
@@ -2639,7 +2639,7 @@
 "open_street_map_login_mode_simple" = "Depes intrare pro pòdere carrigare sas modìficas tuas.";
 "map_updates_are_unavailable_yet" = "Non bi sunt galu agiornamentos a disponimentu pro sas mapas :-(";
 "last_two_month_total" = "Totale de sos ùrtimos duos meses";
-"auth_error" = "Errore de autorizatzione";
+"auth_failed" = "Errore de autorizatzione";
 "benefits_for_contributors" = "Benefìtzios pro sos cuntribuidores ativos a OSM";
 "carplay_available_in_sub_plans" = "Còmpora OsmAnd Pro o Maps+ pro impreare OsmAnd cun CarPlay.";
 "shared_string_contributions" = "Contributziones";
@@ -2825,4 +2825,4 @@
 "use_heightmap_setting" = "Imprea mapas de sas artàrias 3D";
 "amazon_appstore" = "Butega de apl. de Amazon";
 "shared_string_does_not_exist" = "No esistit";
-"download_wikipedia_data" = "Iscàrriga sos datos d
+"download_wikipedia_data" = "Iscàrriga s

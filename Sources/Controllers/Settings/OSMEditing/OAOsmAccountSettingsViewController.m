@@ -252,7 +252,7 @@
         {
             [_settings.osmUserName resetToDefault];
             [_settings.osmUserPassword resetToDefault];
-            _errorMessage = OALocalizedString(@"auth_error");
+            _errorMessage = OALocalizedString(@"auth_failed");
 
             [self generateData];
             [self.tableView performBatchUpdates:^{

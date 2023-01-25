@@ -168,7 +168,7 @@
         case EOADestinationTypeWork:
             return OALocalizedString(@"add_work");
         case EOADestinationTypeStart:
-            return OALocalizedString(@"add_start");
+            return OALocalizedString(@"route_add_start_point");
         case EOADestinationTypeFinish:
             return OALocalizedString(@"add_destination");
         case EOADestinationTypeIntermediate:

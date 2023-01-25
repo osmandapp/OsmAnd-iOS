@@ -469,7 +469,7 @@
 "map_widget_top_text" = "Όνομα οδού";
 "si_mi_meters" = "Μίλια/μέτρα";
 "speak_street_names" = "Ονόματα οδών (TTS)";
-"res_elliptic_mercator" = "Ελλειπτικό Μερκάτωρ";
+"edit_tilesource_elliptic_tile" = "Ελλειπτικό Μερκάτωρ";
 "quick_action_map_source_action" = "Προσθήκη παρόχου χάρτη";
 "shared_string_add" = "Προσθήκη";
 "faq_item" = "Συχνές ερωτήσεις";
@@ -1560,4 +1560,4 @@
 "routing_attr_avoid_footways_name" = "Αποφυγή μονοπατιών πεζών";
 "rendering_attr_showTrolleybusRoutes_name" = "Δρομολόγια τρόλεϊ";
 "routing_attr_avoid_footways_description" = "Αποφυγή μονοπατιών πεζών";
-"download_wikipedia_data" = "Λήψη δεδομένων βι
+"download_wikipedia_data" = "Λήψη δεδ

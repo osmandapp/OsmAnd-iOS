@@ -916,7 +916,7 @@
 "hide_contour_lines" = "Szintvonalak elrejtése";
 "hide_notes" = "OSM-jegyzetek elrejtése";
 "show_notes" = "OSM-jegyzetek megjelenítése";
-"res_elliptic_mercator" = "Elliptikus Merkátor";
+"edit_tilesource_elliptic_tile" = "Elliptikus Merkátor";
 "edit_tilesource_url_to_load" = "URL";
 "rendering_attr_currentTrackWidth_description" = "GPX-nyomvonal vastagsága";
 "rendering_attr_piste_difficulty_aerialway_name" = "Kötélpályás felvonó";
@@ -2336,4 +2336,4 @@
 "rendering_attr_hideMilitaryAreas_name" = "Katonai területek elrejtése";
 "promo" = "Promó";
 "calc_pedestrian_route" = "Gyalogos útvonal tervezése";
-"download_wikipedia_data" = "Wikipédia adato
+"download_wikipedia_data" = "Wikipé

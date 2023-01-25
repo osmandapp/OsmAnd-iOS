@@ -1028,7 +1028,7 @@
 "osm_tag_too_long_message" = "الحد الأقصى لطول قيمة الوسم٪ @ 255 حرفًا.\nيرجى جعله أقصر للمتابعة.";
 "save_poi_without_poi_type_message" = "حفظ موضع الاهتمام بدون نوع؟";
 "save_poi_too_many_uppercase" = "الاسم يحتوي على الكثير من الأحرف الكبيرة . هل تريد الاستمرار؟";
-"osm_edit_uploading" = "رفع...";
+"local_openstreetmap_uploading" = "رفع...";
 "key_hint_zoom_out" = "تصغير";
 "shared_string_read_more" = "اقرأ المزيد";
 "short_location_on_map" = "دائرة العرض %@
@@ -1068,7 +1068,7 @@
 "quick_action_map_underlay_title" = "طبقة الخريطة السفلية";
 "vector_data" = "الخريطة المحملة";
 "quick_action_map_source_action" = "إضافة مصدر خريطة";
-"add_map_style" = "إضافة نمط خريطة";
+"quick_action_map_style_action" = "إضافة نمط خريطة";
 "quick_action_map_styles" = "أنماط الخريطة";
 "quick_action_new_action" = "إضافة إجراء";
 "quick_action_add_create_items" = "إنشاء عناصر";
@@ -1090,7 +1090,7 @@
 "quick_action_replace_destination" = "تبديل الوجهة";
 "add_destination" = "إضافة وجهة";
 "quick_action_add_first_intermediate" = "إضافة وجهة وسطى";
-"toggle_auto_zoom" = "تكبير/تصغير التلقائي";
+"quick_action_auto_zoom" = "تكبير/تصغير التلقائي";
 "quick_action_resume_pause_navigation" = "إيقاف/مواصلة الملاحة";
 "quick_action_start_stop_navigation" = "بدء/إنهاء الملاحة";
 "toggle_day_night" = "نمط ليلي/نهاري";
@@ -1152,8 +1152,8 @@
 "pause_nav" = "توقيف الملاحة مؤقتاً";
 "quick_action_switch_night_mode" = "عرض ليلي";
 "quick_action_switch_day_mode" = "عرض نهاري";
-"mute_voice" = "كتم الصوت";
-"unmute_voice" = "إلغاء كتم الصوت";
+"quick_action_navigation_voice_on" = "كتم الصوت";
+"quick_action_navigation_voice_off" = "إلغاء كتم الصوت";
 "show_gpx" = "المسارات";
 "hide_gpx" = "إخفاء المسارات";
 "show_notes" = "إظهار ملاحظات OSM";
@@ -1175,7 +1175,7 @@
 "avoid_by_type" = "تجنب حسب النوع";
 "select_map_marker" = "حدد توجيه مباشر";
 "parking_place" = "موقف السيارات";
-"add_start" = "إضافه نقطه البداية";
+"route_add_start_point" = "إضافه نقطه البداية";
 "add_intermediate" = "إضافة نقطة وسيطة";
 "add_home" = "إضافة المنزل";
 "add_work" = "إضافة العمل";
@@ -1227,7 +1227,7 @@
 "displayed_route_save" = "حفظ إلى مسارات أوسماند";
 "trip_name" = "اسم المسار";
 "trip_hint" = "إدخال اسم المسار";
-"res_elliptic_mercator" = "نموذج مركتور البيضوي";
+"edit_tilesource_elliptic_tile" = "نموذج مركتور البيضوي";
 "edit_tilesource_url_to_load" = "الرابط";
 "shared_string_maximum" = "الحد الاقصي";
 "res_online_name_descr" = "اكتب اسمًا للمصدر عبر الإنترنت";
@@ -1786,8 +1786,8 @@
 "change_route_type_before" = "تغيير نوع المسار قبل هذه النقطة";
 "trim_after" = "قص ما بعد هذه النقطة";
 "trim_before" = "قص ما قبل هذه النقطة";
-"add_after" = "إضافة نقاط بعد";
-"add_before" = "إضافة نقاط قبل";
+"add_point_after" = "إضافة نقاط بعد";
+"add_point_before" = "إضافة نقاط قبل";
 "move_point_descr" = "حرك الخريطة لتغيير موضع هذه النقطة.";
 "move_point" = "نقل نقطة";
 "add_to_a_track" = "إضافة إلى مسار";
@@ -2624,7 +2624,7 @@
 "map_updates_are_unavailable_yet" = "تحديث الخريطة غير متوفرة بعد :-(";
 "last_two_month_total" = "إجمالي الشهرين الماضيين";
 "shared_string_refresh" = "تحديث";
-"auth_error" = "خطأ في التفويض";
+"auth_failed" = "خطأ في التفويض";
 "offline_edition_descr" = "إذا تم تمكين التحرير دون اتصال ، فسيتم حفظ التغييرات محليًا أولاً ثم رفعها حسب الطلب ، أو سيتم رفع التغييرات على الفور.";
 "open_street_map_login_mode_simple" = "تحتاج إلى تسجيل الدخول لتحميل التغييرات.";
 "use_login_and_password" = "استخدم اسم المستخدم وكلمة المرور";
@@ -2799,4 +2799,4 @@
 "routing_attr_difficulty_preference_intermediate_name" = "متوسط";
 "rendering_attr_weatherTempContours_name" = "خطوط قياس درجة الحرارة";
 "shared_string_does_not_exist" = "غير موجود";
-"download_wikipedia_data" = "تنزيل بيانا
+"download_wikipedia_data" = "تن

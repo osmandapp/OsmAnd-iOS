@@ -925,7 +925,7 @@
 "osm_edit_modified_poi" = "PDI di OSM modificato";
 "route_roundabout_short" = "Prendere la %d uscita e proseguire";
 "edit_tilesource_url_to_load" = "URL";
-"res_elliptic_mercator" = "Mercatore ellittico";
+"edit_tilesource_elliptic_tile" = "Mercatore ellittico";
 "show_notes" = "Mostra le note OSM";
 "hide_notes" = "Nascondi le note OSM";
 "rendering_attr_trolleybusRoutes_name" = "Percorsi in filobus";
@@ -1368,7 +1368,7 @@
 "key_hint_goback" = "Torna indietro";
 "osm_tag_too_long_message" = "Il valore massimo per l'etichetta %@ è 255 caratteri. \nPer favore accorciala per proseguire.";
 "save_poi_without_poi_type_message" = "Salvare il PDI senza specificarne il tipo\?";
-"osm_edit_uploading" = "Caricamento...";
+"local_openstreetmap_uploading" = "Caricamento...";
 "key_hint_zoom_out" = "Diminuisci zoom";
 "short_location_on_map" = "Lat %@
 \nLon %@";
@@ -1380,13 +1380,13 @@
 "download_pending" = "Download in attesa";
 "reddit" = "Reddit";
 "quick_action_list_descr" = "Tappando questo pulsante azione scorrerai fra la lista sotto";
-"add_map_style" = "Aggiungi stile mappa";
+"quick_action_map_style_action" = "Aggiungi stile mappa";
 "toggle_fav" = "Mostra/nascondi preferiti";
 "quick_action_add_osm_bug" = "Aggiungi nota OSM";
 "toggle_online_notes" = "Attiva/disattiva le note di OSM";
 "toggle_local_edits" = "Attiva/disattiva modifiche locali OSM";
 "add_destination" = "Aggiungi destinazione";
-"toggle_auto_zoom" = "Zoom automatico acceso/spento";
+"quick_action_auto_zoom" = "Zoom automatico acceso/spento";
 "toggle_day_night" = "Inverti modo Giorno/Notte";
 "show_hide_gpx" = "Mostra/nascondi viaggi";
 "search_results" = "Cerca risultati";
@@ -1419,8 +1419,8 @@
 "auto_zoom_off" = "Zoom automatico spento";
 "resume_nav" = "Continua la navigazione";
 "pause_nav" = "Metti in pausa la navigazione";
-"mute_voice" = "Azzera il volume della voce";
-"unmute_voice" = "Ripristina il volume della voce";
+"quick_action_navigation_voice_on" = "Azzera il volume della voce";
+"quick_action_navigation_voice_off" = "Ripristina il volume della voce";
 "show_gpx" = "Tracce";
 "hide_gpx" = "Nascondi viaggi";
 "show_edits" = "Mostra le modifiche locali";
@@ -1430,7 +1430,7 @@
 "select_manually" = "Seleziona manualmente";
 "avoid_by_type" = "Evita per tipo";
 "parking_place" = "Parcheggio (singolo)";
-"add_start" = "Aggiungi luogo di partenza";
+"route_add_start_point" = "Aggiungi luogo di partenza";
 "units_sec_short" = "s";
 "sett_deg180" = "180 gradi";
 "sett_deg360" = "360 gradi";
@@ -2190,7 +2190,7 @@
 "weather_remove_forecast" = "Rimuovi previsioni";
 "all_maps_are_up_to_date" = "Tutte le mappe sono aggiornate";
 "update_parameters" = "Aggiorna parametri";
-"auth_error" = "Errore autorizzazione";
+"auth_failed" = "Errore autorizzazione";
 "point_num" = "Punto %d";
 "downloading" = "In download";
 "product_title_plus" = "Maps+";
@@ -2346,8 +2346,8 @@
 "approximate_file_size" = "Dimesione approssimativa del file";
 "ltr_or_rtl_combine_via_slash" = "%@/%@";
 "rearrange_profile_descr" = "I profili OsmAnd predefiniti non possono essere eliminati, ma puoi disabilitarli nella schermata precedente o trascinarli in fondo all'elenco.";
-"add_before" = "Aggiungi dei punti prima";
-"add_after" = "Aggiungi dei punti dopo";
+"add_point_before" = "Aggiungi dei punti prima";
+"add_point_after" = "Aggiungi dei punti dopo";
 "trim_before" = "Taglia prima di questo punto";
 "trim_after" = "Taglia dopo di questo punto";
 "change_route_type_before" = "Cambia tipo di percorso prima di questo punto";
@@ -2780,4 +2780,4 @@
 "rendering_attr_OSMMapperAssistantIconsLowZooms_description" = "Visualizzazione schematica delle icone a basso zoom";
 "rendering_attr_horse_scale_dangerous_name" = "Pericoloso";
 "shared_string_does_not_exist" = "Non esiste";
-"download_wikipedia_data" = "Scarica dati d
+"download_wikipedia_data" = "Scar

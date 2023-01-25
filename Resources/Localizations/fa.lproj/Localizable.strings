@@ -955,7 +955,7 @@
 "shared_string_actions" = "کنش‌ها";
 "quick_action_bug_descr" = "این نوشته در قسمت پیام درج می‌شود.";
 "hide_notes" = "پنهان‌کردن یادداشت‌های OSM";
-"res_elliptic_mercator" = "مرکاتور بیضوی";
+"edit_tilesource_elliptic_tile" = "مرکاتور بیضوی";
 "edit_tilesource_url_to_load" = "نشانی اینترنتی";
 "show_notes" = "آشکارکردن یادداشت‌های OSM";
 "routing_attr_piste_type_sled_name" = "سورتمه";
@@ -1570,7 +1570,7 @@
 "sort_by" = "ترتیب بر اساس";
 "quick_action_dialog" = "گفتگو";
 "reddit" = "ردیت";
-"osm_edit_uploading" = "درحال بارگذاری...";
+"local_openstreetmap_uploading" = "درحال بارگذاری...";
 "osm_failed_uploads" = "ناموفق";
 "osm_succsessful_uploads" = "موفقیت‌آمیز";
 "osm_edit_reopened_note" = "دوباره بازشد";
@@ -2081,4 +2081,4 @@
 "rendering_attr_horse_scale_common_name" = "مشترک";
 "rendering_value_all_name" = "همه";
 "routing_attr_difficulty_preference_advanced_name" = "پیشرفته";
-"download_wikipedia_data" = "بارگیری داده
+"download_wikipedia_data" = "بار

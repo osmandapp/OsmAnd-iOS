@@ -1436,7 +1436,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     _infoView.frame = self.scrollableView.bounds;
     _infoView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     _infoView.leftIconView.image = addBefore ? [UIImage imageNamed:@"ic_custom_add_point_before"] : [UIImage imageNamed:@"ic_custom_add_point_after"];
-    _infoView.titleView.text = addBefore ? OALocalizedString(@"add_before") : OALocalizedString(@"add_after");
+    _infoView.titleView.text = addBefore ? OALocalizedString(@"add_point_before") : OALocalizedString(@"add_point_after");
     _infoView.headerViewText = OALocalizedString(@"move_point_descr");
     [_infoView.leftButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
     [_infoView.rightButton setTitle:OALocalizedString(@"shared_string_apply") forState:UIControlStateNormal];

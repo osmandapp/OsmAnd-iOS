@@ -90,7 +90,7 @@ typedef NS_ENUM(NSInteger, EOAOnlineSourceSetting)
         {
             
             [data addObject:@{
-                                @"text": OALocalizedString(@"res_elliptic_mercator"),
+                                @"text": OALocalizedString(@"edit_tilesource_elliptic_tile"),
                                 @"img": _isEllipticYTile ? @"menu_cell_selected.png" : @""
             }];
             [data addObject:@{

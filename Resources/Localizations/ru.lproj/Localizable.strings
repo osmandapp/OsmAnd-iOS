@@ -907,7 +907,7 @@
 "filter_current_poiButton" = "Фильтровать";
 "mapil_usernames" = "Имена пользователей";
 "osm_upload_complete" = "Отправка завершена";
-"osm_edit_uploading" = "Отправка…";
+"local_openstreetmap_uploading" = "Отправка…";
 "shared_string_read_more" = "Подробнее";
 "shared_string_example" = "Пример";
 "product_desc_russia_short" = "Карты регионов России";
@@ -917,7 +917,7 @@
 "quick_action_map_underlay_action" = "Добавить подложку";
 "quick_action_map_underlay_title" = "Подложки";
 "vector_data" = "Локальные векторные карты";
-"add_map_style" = "Добавить стиль карты";
+"quick_action_map_style_action" = "Добавить стиль карты";
 "quick_action_map_styles" = "Стили карты";
 "quick_action_new_action" = "Добавить действие";
 "toggle_poi" = "Показать/скрыть POI";
@@ -961,7 +961,7 @@
 "by_dist" = "По расстоянию";
 "sort_by" = "Сортировка";
 "select_manually" = "Выбрать вручную";
-"add_start" = "Добавить отправную точку";
+"route_add_start_point" = "Добавить отправную точку";
 "add_intermediate" = "Добавить промежуточную точку";
 "favorite_home_category" = "Дом";
 "work_button" = "Работа";
@@ -1017,7 +1017,7 @@
 "quick_action_navigation_voice" = "Голосовая навигация";
 "quick_action_add_osm_bug" = "Добавить заметку OSM";
 "quick_action_add_first_intermediate" = "Первый промежуточный пункт";
-"toggle_auto_zoom" = "Автоматическое масштабирование вкл/выкл";
+"quick_action_auto_zoom" = "Автоматическое масштабирование вкл/выкл";
 "quick_action_resume_pause_navigation" = "Пауза/возобновление навигации";
 "auto_zoom_on" = "Автоматическое масштабирование вкл";
 "auto_zoom_off" = "Автоматическое масштабирование выкл";
@@ -1149,8 +1149,8 @@
 "confirm_bulk_delete" = "Вы действительно желаете удалить %ld элементов?";
 "quick_action_edit_action" = "Редактировать действие";
 "osm_editing_loading_poi" = "Загрузка информации POI";
-"mute_voice" = "Выключить голос";
-"unmute_voice" = "Включить голос";
+"quick_action_navigation_voice_on" = "Выключить голос";
+"quick_action_navigation_voice_off" = "Включить голос";
 "swap_points" = "Поменять местами пункты отправления и назначения";
 "select_favorite" = "Выберите избранное";
 "avoid_by_type" = "Исключение по типу";
@@ -1246,7 +1246,7 @@
 "gpx_descent" = "Спуск";
 "stats_select_graph_data" = "Выбрать данные графика";
 "nautical_maps" = "Морские карты";
-"res_elliptic_mercator" = "Эллиптическая проекция Меркатора";
+"edit_tilesource_elliptic_tile" = "Эллиптическая проекция Меркатора";
 "edit_tilesource_url_to_load" = "URL";
 "routing_attr_driving_style_name" = "Стиль езды";
 "routeInfo_tracktype_name" = "Твёрдость поверхности";
@@ -1810,8 +1810,8 @@
 "change_route_type_before" = "Изменить тип маршрута до этой точки";
 "trim_after" = "Обрезать после этой точки";
 "trim_before" = "Обрезать до этой точки";
-"add_after" = "Добавить точки после";
-"add_before" = "Добавить точки до";
+"add_point_after" = "Добавить точки после";
+"add_point_before" = "Добавить точки до";
 "add_to_a_track" = "Добавить к треку";
 "save_as_new_track" = "Сохранить как новый трек";
 "profile_alert_need_save_title" = "Сохранить изменения";
@@ -2678,4 +2678,4 @@
 "routing_attr_freeride_policy_allow_name" = "Разрешить";
 "rendering_attr_OSMMapperAssistantIconsLowZooms_description" = "Схематическое отображение значков на мелком масштабе";
 "routing_attr_difficulty_preference_no_preference_name" = "Нет предпочтений";
-"download_wikipedia_data" = "Загрузка данны
+"download_wikipedia_data" = "Загру

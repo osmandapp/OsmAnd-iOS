@@ -902,7 +902,7 @@
 "shared_string_without_name" = "没有名称";
 "min_mile" = "分钟每米";
 "edit_tilesource_url_to_load" = "URL";
-"res_elliptic_mercator" = "椭圆墨卡托";
+"edit_tilesource_elliptic_tile" = "椭圆墨卡托";
 "hide_notes" = "隐藏 OSM 笔记";
 "show_notes" = "显示 OSM 笔记";
 "rendering_attr_hideUnderground_name" = "隐藏地下物体";
@@ -2115,4 +2115,4 @@
 "rendering_value_all_name" = "全部";
 "rendering_attr_weatherPressureContours_name" = "等压线";
 "rendering_attr_hideMilitaryAreas_name" = "隐藏军事区域";
-"download_wikipedia_data" 
+"download_wikiped

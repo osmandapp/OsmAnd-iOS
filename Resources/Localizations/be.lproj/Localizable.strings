@@ -930,7 +930,7 @@
 "poi_dialog_comment" = "Каментар";
 "map_widget_ruler_control" = "Радыусная лінейка";
 "no_underlay" = "Няма падкладкі";
-"res_elliptic_mercator" = "Эліптычны меркатар";
+"edit_tilesource_elliptic_tile" = "Эліптычны меркатар";
 "hide_notes" = "Схаваць OSM-нататкі";
 "edit_tilesource_url_to_load" = "URL";
 "show_notes" = "Паказаць OSM-нататкі";
@@ -1473,7 +1473,7 @@
 "fav_show" = "Паказаць улюбёныя мясціны";
 "toggle_fav" = "Паказаць/схаваць улюбёныя мясціны";
 "map_look_descr" = "Выгляд мапы";
-"add_map_style" = "Дадаць стыль мапы";
+"quick_action_map_style_action" = "Дадаць стыль мапы";
 "quick_action_list_descr" = "Націск на гэтую кнопку прагортвае старонкі дадзенага спіса";
 "mapil_select_user" = "Абраць карыстальніка";
 "mapil_usernames" = "Імёны карыстальнікаў";
@@ -1494,7 +1494,7 @@
 "save_poi_without_poi_type_message" = "Захаваць POI без тыпу\?";
 "osm_tag_too_long_message" = "Максімальнае значэнне даўжыні пазнакі %@ - 255 сімвалаў. \nКалі ласка, скараціце яе, каб працягнуць.";
 "osm_upload_complete" = "Запампавана";
-"osm_edit_uploading" = "Запампоўка…";
+"local_openstreetmap_uploading" = "Запампоўка…";
 "osm_edit_show_on_map_descr" = "Адкрыць мапу з цэнтрам у гэтым пункце";
 "osm_edit_show_on_map" = "Паказаць змены на мапе";
 "upload_to_osm" = "Запампоўка змен у OSM";
@@ -1596,15 +1596,15 @@
 "hide_gpx" = "Схаваць след";
 "show_gpx" = "Сляды";
 "show_hide_gpx" = "Паказаць/схаваць сляды";
-"unmute_voice" = "Уключыць голас";
-"mute_voice" = "Прыглушыць голас";
+"quick_action_navigation_voice_off" = "Уключыць голас";
+"quick_action_navigation_voice_on" = "Прыглушыць голас";
 "toggle_day_night" = "Пераключыць дзённы/начны рэжым";
 "pause_nav" = "Прыпыніць навігацыю";
 "resume_nav" = "Працягнуць навігацыю";
 "auto_zoom_off" = "Аўтаматычнае маштабаванне выкл";
 "auto_zoom_on" = "Аўтаматычнае маштабаванне ўкл";
-"toggle_auto_zoom" = "Аўтаматычнае маштабаванне ўкл/выкл";
-"add_start" = "Дадаць пачатковы пункт";
+"quick_action_auto_zoom" = "Аўтаматычнае маштабаванне ўкл/выкл";
+"route_add_start_point" = "Дадаць пачатковы пункт";
 "add_destination" = "Дадаць пункт прызначэння";
 "toggle_local_edits" = "Паказаць/Схаваць лакальныя праўкі OSM";
 "toggle_online_notes" = "Паказаць/схаваць нататкі OSM";
@@ -2330,7 +2330,7 @@
 "approximate_file_size" = "Прыблізны памер файла";
 "mgrs_format_descr" = "OsmAnd выкарыстоўвае фармат MGRS, які ідэнтычны фармату UTM NATO.";
 "move_point_descr" = "Каб змяніць месцазнаходжанне гэтай кропкі перамясціце мапу.";
-"add_after" = "Дадаць кропку пасля";
+"add_point_after" = "Дадаць кропку пасля";
 "trim_before" = "Абрэзаць перад гэтай кропкай";
 "trim_after" = "Абрэзаць пасля гэтай кропкі";
 "weather_wind_enable_descr" = "Уключыць прагляд пласта ветру на мапе.";
@@ -2344,7 +2344,7 @@
 "preparing_file" = "Падрыхтоўка файла";
 "custom_plugins" = "Карыстальніцкія ўбудовы";
 "checking_for_duplicates" = "Праверка на наяўнасць дублікатаў...";
-"add_before" = "Дадаць кропку перад";
+"add_point_before" = "Дадаць кропку перад";
 "shared_string_countries" = "Краіны";
 "selected_of" = "Абрана - %d/%d";
 "added_items" = "Дададзеныя элементы: %@";
@@ -2530,4 +2530,4 @@
 "routing_attr_allow_intermittent_name" = "Дазволіць перапынныя водныя маршруты";
 "rendering_attr_OSMMapperAssistantFixme_name" = "Пазнакі Fixme";
 "rendering_attr_showShareTaxiRoutes_name" = "Трансферныя маршруты";
-"download_wikipedia_data" = "Спампаваць даны
+"download_wikipedia_data" = "Спампа

@@ -41,7 +41,7 @@ static OAQuickActionType *TYPE;
 
 - (NSString *)getActionStateName
 {
-    return [self isActionWithSlash] ? OALocalizedString(@"mute_voice") : OALocalizedString(@"unmute_voice");
+    return [self isActionWithSlash] ? OALocalizedString(@"quick_action_navigation_voice_on") : OALocalizedString(@"quick_action_navigation_voice_off");
 }
 
 + (OAQuickActionType *) TYPE

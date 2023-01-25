@@ -686,7 +686,7 @@
 "osm_edit_show_on_map" = "Show modification on the map";
 "osm_edit_show_on_map_descr" = "Open the map centered on this point";
 "shared_string_without_name" = "Uten navn";
-"osm_edit_uploading" = "Uploading...";
+"local_openstreetmap_uploading" = "Uploading...";
 "osm_upload_complete" = "Upload complete";
 "osm_tag_too_long_message" = "The maximum value length for tag %@ is 255 characters. \nPlease make it shorter to continue.";
 "save_poi_without_poi_type_message" = "Vil du lagre interessepunkt utenå angi type\?";
@@ -723,7 +723,7 @@
 "quick_action_map_underlay_title" = "Kartunderlag";
 "vector_data" = "Offline vektorkart";
 "quick_action_map_source_action" = "Legg til kartkilde";
-"add_map_style" = "Add map style";
+"quick_action_map_style_action" = "Add map style";
 "quick_action_map_styles" = "Kartstiler";
 "quick_action_new_action" = "Legg til handling";
 "quick_action_add_create_items" = "Opprett elementer";
@@ -749,14 +749,14 @@
 "quick_action_map_underlay" = "Endre kartunderlag";
 "quick_action_replace_destination" = "Erstatt reisemål";
 "add_destination" = "Add destination";
-"add_start" = "Add starting point";
+"route_add_start_point" = "Add starting point";
 "add_intermediate" = "Legg til mellomliggende punkt";
 "add_home" = "Legg til bosted";
 "add_work" = "Legg til arbeidssted";
 "favorite_home_category" = "Hjem";
 "work_button" = "Arbeid";
 "quick_action_add_first_intermediate" = "Legg til første mellomliggende punkt";
-"toggle_auto_zoom" = "Auto zoom on/off";
+"quick_action_auto_zoom" = "Auto zoom on/off";
 "auto_zoom_on" = "Auto zoom on";
 "auto_zoom_off" = "Auto zoom off";
 "quick_action_resume_pause_navigation" = "Navigering: sett på pause/gjenoppta";
@@ -766,8 +766,8 @@
 "toggle_day_night" = "Veksle dag-/nattmodus";
 "quick_action_switch_night_mode" = "Nattmodus";
 "quick_action_switch_day_mode" = "Dagmodus";
-"mute_voice" = "Slå av tale";
-"unmute_voice" = "Slå på tale";
+"quick_action_navigation_voice_on" = "Slå av tale";
+"quick_action_navigation_voice_off" = "Slå på tale";
 "show_hide_gpx" = "Show/hide trips";
 "show_gpx" = "Spor";
 "hide_gpx" = "Hide trips";
@@ -1200,7 +1200,7 @@
 "gpx_descent" = "Nedstigning";
 "nautical_maps" = "Sjøkart";
 "edit_tilesource_url_to_load" = "Nettadresse";
-"res_elliptic_mercator" = "Elliptisk mercator";
+"edit_tilesource_elliptic_tile" = "Elliptisk mercator";
 "routing_attr_avoid_shuttle_train_name" = "Ingen pendeltog";
 "rendering_attr_ice_road_name" = "Isvei";
 "rendering_attr_surface_snow_name" = "Snø";
@@ -1765,8 +1765,8 @@
 "change_route_type_before" = "Endre rutetype før dette punktet";
 "trim_after" = "Forkort etter dette punktet";
 "trim_before" = "Forkort før dette punktet";
-"add_after" = "Legg til punkter etter";
-"add_before" = "Legg til punkter før";
+"add_point_after" = "Legg til punkter etter";
+"add_point_before" = "Legg til punkter før";
 "move_point" = "Flytt punkt";
 "points_count" = "Punkter:";
 "point_num" = "Punkt %d";
@@ -2488,4 +2488,4 @@
 "rendering_attr_horse_scale_impossible_name" = "Umulig";
 "rendering_attr_OSMMapperAssistantFixme_description" = "Vis fiksmeg-etiketter";
 "rendering_attr_showWaterwayTunnels_name" = "Vannveistunneler";
-"download_wikipedia_data" = "Last ned Wiki
+"download_wikipedia_data" = "Las

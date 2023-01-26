@@ -1944,7 +1944,6 @@
 "plan_route_create_new_route" = "Utwórz nową trasę";
 "open_saved_track" = "Otwórz zapisaną ścieżkę";
 "new_plugin_added" = "Dodano nową wtyczkę";
-;
 "icon_group_special" = "Specjalny";
 "start_of_the_track" = "Początek trasy";
 "shared_string_square" = "Kwadrat";
@@ -3348,7 +3347,6 @@
 \nW sytuacjach sygnalizatorów, znaków stopu itp. mają zastosowanie dodatkowe kary.";
 "dialogs_and_notifications_title" = "Dialogi i powiadomienia";
 "lang_tr" = "Turecki";
-"search_poi_types_descr" = "Łącz rodzaje użytecznych miejsc z różnych kategorii. Naciśnij przełącznik, aby zaznaczyć wszystko; naciśnij lewą stronę, aby wybrać kategorię.";
 "dialogs_and_notifications_descr" = "Kontroluje wyskakujące okienka, okna dialogowe i powiadomienia.";
 "lang_ga" = "Irlandzki";
 "rendering_attr_showFitnessTrails_name" = "Ścieżki zdrowia";
@@ -3755,7 +3753,6 @@
 "purchases_feature_desc_terrain" = "Poziomice terenu, pełna mapa cieniowana w ciemnych odcieniach oraz mapy nachylenia z kolorami pokazującymi szczyty i niziny.";
 "icon_group_industrial" = "Przemysłowe";
 "lang_fr" = "Francuski";
-"search_poi_types_descr" = "Łącz rodzaje użytecznych miejsc z różnych kategorii. Naciśnij przełącznik, aby zaznaczyć wszystko; naciśnij lewą stronę, aby wybrać kategorię.";
 "lang_en_gb" = "Angielski (Wielka Brytania)";
 "pro_features" = "Funkcje Pro";
 "shared_string_uploaded" = "Przesłano";
@@ -4305,4 +4302,3 @@
 "lang_pt_br" = "Portugalski (Brazylia)";
 "routing_attr_motor_type_name" = "Silnik pojazdu";
 "lang_nv" = "Nawaho";
-"walking_route_osmc_description" = "Przypisz kolor trasom na podstawie ich indywidualnie przypisanego lokalnie koloru (jeśli dostępny w OpenStreetMap) i typu (międzynarodowe, re

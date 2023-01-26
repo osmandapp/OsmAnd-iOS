@@ -2486,7 +2486,6 @@
 "backup_delete_old_data_warning" = "Siatz a mand d\'escafar l\'istoric dei modificacions ai donadas cargadas precedentament.
 \n
 \nLa version correnta dei donadas serà telecargada sus lo servidor mai vos serà pus possible de restaurar lei modificacions precedentas.";
-"offline_edition_descr" = "Sensa connexion, la modificacion es activada, mai lei cambis se devon sauvagardar localament en premier, se telecargaràn au besonh; autrament s\'actualizan immediatament.";
 "backup_delete_all_data" = "Escafar totei mei donadas";
 
 "rendering_value_all_name" = "Tot";
@@ -2513,4 +2512,3 @@
 "rendering_value_omit_name" = "Evitar";
 "routing_attr_allow_streams_description" = "Permetre rius e vabres";
 "rendering_attr_OSMMapperAssistantFixme_description" = "Veire lei balisas fixme";
-"rendering_attr_OSMMapperAssistantNote_description" = "Mostr

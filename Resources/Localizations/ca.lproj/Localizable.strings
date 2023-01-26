@@ -2208,7 +2208,6 @@
 "select_another_colorization" = "Seleccioneu un altre tipus de coloració.";
 "cloud_conflict" = "Conflicte";
 "weather_pressure_inches_of_mercury" = "Polzades de mercuri";
-"offline_edition_descr" = "En desconnexió la edició està activada, però llavors els canvis es desen localment primer i ja es pujaran quan es demani; altrament els canvis s\'actualitzen immediatament.";
 "dialogs_and_notifications_descr" = "Finestres emergents de control, diàlegs i notificacions.";
 "shared_string_selected" = "Seleccionat";
 "weather_offline_forecast" = "Previsió fora de línia";
@@ -2327,4 +2326,3 @@
 "rendering_attr_weatherTempContours_name" = "Línies isotermes";
 "routing_attr_prefer_tactile_paving_name" = "Prefereix el paviment tàctil";
 "rendering_attr_weatherWindSpeedContours_name" = "Isolínies de les ràfegues de vent";
-"download_wikipedia_data" = "Baixa d

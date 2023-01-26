@@ -1861,7 +1861,6 @@
 "prev_segs_recalc_descr" = "Allir fyrri bútar verða endurreiknaðir með völdu sniði";
 "next_segs_dist" = "Allir bútar í kjölfarið %@";
 "whole_track_descr" = "Allur ferillinn verður endurreiknaður með völdu sniði.";
-"route_betw_points_descr" = "Veldu hvernig eigi að tengja punktana; með beinni línu eða reikna leið milli þeirra eins og tiltekið er í einu af snuðunum hér fyrir neðan.";
 "plugin_popup_osm_editing_title" = "Kveikja á breytingum á OpenStreetMap";
 "next_segs_recalc_descr" = "Allir bútar sem á eftir fylgja verða endurreiknaðir með völdu sniði";
 "whole_track" = "Allur ferillinn";
@@ -2793,4 +2792,3 @@
 "rendering_value_omit_name" = "Sleppa";
 "rendering_attr_horse_scale_difficult_name" = "Erfitt";
 "rendering_attr_weatherWindSpeedContours_name" = "Vindhviðulínur";
-"download_wikipedia_data" = "S

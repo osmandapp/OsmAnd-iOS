@@ -1362,7 +1362,7 @@
 "quick_action_poi_add_descr" = "Tapping this action button allows you to quickly add POI on the map with predefined type and tags.";
 "quick_action_day_night_descr" = "Tapping this action button switches between Day and Night map mode.";
 "quick_action_parking_descr" = "Tapping this action button adds a parking location at the map center point.";
-"quick_action_add_marker_descr" = "Tapping this action button adds a map marker at the map center point.";
+"quick_action_add_marker_descr" = "Tapping the action button will add a map marker at the screen centre location.";
 "quick_action_show_gpx_descr" = "Tapping this action button shows or hides currently displayed GPX tracks.";
 "quick_action_voice_descr" = "Tapping this action button disables or enables voice guidance during navigation.";
 "quick_action_add_dest_descr" = "Tapping this action button sets the destination to the map center. Any previously selected destination becomes the last intermediate destination.";
@@ -1645,7 +1645,6 @@
 "prch_srtm_info" = "Contour lines addon enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
 "shared_string_open" = "Open";
 "time_closed" = "Closed";
-"will_close_at" = "Will close in";
 "time_will_open" = "Will open in";
 "osm_live_active" = "Active";
 "menu_all_trips" = "All Tracks";
@@ -2244,5 +2243,5 @@
 "routing_attr_allow_private_for_truck_description" = "Allow access to private areas for lorries.";
 "position_on_map_center" = "Centre";
 
-"routing_attr_avoid_highway_description" = "Avoid motorways";
-"routing_attr_avoid_highway_nam
+"routing_attr_avoid_highway_description" = "Avoid motorways";;
+"routing_attr_avoid_highway_name" = "Avoid motorways";

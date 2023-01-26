@@ -2646,7 +2646,6 @@
 "shared_string_profile" = "Perfil";
 "weather_entire_world" = "Mundo inteiro";
 "map_widget_rendering_fps" = "FPS da renderização do mapa";
-"ios_release_4_3" = "- Animação suave em alterações de localização durante o movimento\n- CarPlay: adicionadas vias de trânsito (faixas), vista 2.5D; problemas de som corrigidos em conexões por Bluetooth\n- Introdução de novos planos de compra: subscrições \"OsmAnd Pro\" com acesso a todas as funcionalidades e compra \"Mapas+\" com descarregamentos ilimitados de mapas e acesso pago a complementos (plug-ins).\n- Adicionada opção de cópia de segurança na nuvem e previsão meteorológica off-line para utilizadores OsmAnd Pro\n- Novo e conveniente ecrã de \"Compra\" com a lista de todas as compras\n- Benefícios para colaboradores ativos do OpenStreetMap.org\n- Os trilhos podem agora ser coloridos por altitude, velocidade ou declive\n- Os mapas off-line estão agora acessíveis através da aplicação Ficheiros\n- Favoritos: adicionada opção de geração de cópias de segurança no dispositivo após cada alteração, as cópias de segurança são acessíveis a partir da aplicação Ficheiros\n- POIs guardados nos favoritos armazenam e mostram todos os dados de POI mesmo sem um mapa off-line\n- Suporte de GPX para link, cmt, desc tags e para quaisquer extensões personalizadas\n- Modo adicionado para o botão Bússola\n- Corrigido um problema com o formato coordenadas UTM\n- Corrigido um problema com pontos intermédios na navegação\n";
 "weather_forecast_entire_world" = "Previsão do tempo em todo o mundo";
 "map_download_privacy_descr" = "Ao descarregar os mapas concorda com os <a href='https://osmand.net/docs/legal/terms-of-use'>Termos de utilização</a> e a <a href='https://osmand.net/docs/legal/privacy-policy'>Política de privacidade</a>.";
 "shared_string_download_update" = "Descarregar atualização";
@@ -2796,4 +2795,3 @@
 "routing_attr_difficulty_preference_expert_name" = "Especialista";
 "rendering_attr_weatherPrecipitationContours_name" = "Isolinhas de precipitação";
 "shared_string_does_not_exist" = "Não existe";
-"download_wikipedia_data" = "Descarreg

@@ -1177,9 +1177,7 @@
 "not_available_profile_name" = "Υπάρχει ήδη προφίλ με αυτο το όνομα.";
 "est_travel_time" = "Εκτιμώμενος χρόνος ταξιδιού";
 "show_region_on_map_desc" = "Ο χάρτης %@ ελήφθη. Πηγαίντε στον χάρτη για να αρχίσετε να τον χρησιμοποιείτε.";
-"gpx_edit_mode" = "Λειτουργία επεξεργασίας";
-"delete_tracks_bottom_sheet_title" = "Διαγραφή ιχνών;";
-"delete_tracks_bottom_sheet_description_bold_part" = "%d ίχνη;";
+"gpx_edit_mode" = "Λειτουργία επεξεργασίας";";";
 "restore_all_purchases" = "Επαναφορά όλων των αγορών";
 "calculating_progress" = "Υπολογισμός...";
 "plugin_popup_nautical_title" = "Λήψη ναυτικών χαρτών";
@@ -1194,8 +1192,7 @@
 "no_internet_avail" = "Δεν υπάρχει διαθέσιμο διαδίκτυο";
 "no_statistics" = "Δεν υπάρχουν στατιστικά";
 "plugin_popup_osm_editing_title" = "Ενεργοποιήση επεξεργασίας OpenStreetMap";
-"plugin_popup_srtm_title" = "Λήψη ισοϋψών καμπυλών";
-"gpx_cancel_route_q" = "Θέλετε να ακυρώσετε αυτήν τη διαδρομή;";
+"plugin_popup_srtm_title" = "Λήψη ισοϋψών καμπυλών";";
 "rename_track" = "Μετονομασία ίχνους";
 "no_other_translations" = "Δεν υπάρχουν άλλες μεταφράσεις";
 "no_internet_avail_desc_first" = "Παρακαλώ ενεργοποιήστε τη σύνδεση στο Διαδίκτυο για λήψη της λίστας των χαρτών";
@@ -1560,4 +1557,3 @@
 "routing_attr_avoid_footways_name" = "Αποφυγή μονοπατιών πεζών";
 "rendering_attr_showTrolleybusRoutes_name" = "Δρομολόγια τρόλεϊ";
 "routing_attr_avoid_footways_description" = "Αποφυγή μονοπατιών πεζών";
-"download_wikipedia_data" = "Λήψη δεδ

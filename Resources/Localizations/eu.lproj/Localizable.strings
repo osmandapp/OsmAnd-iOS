@@ -2451,7 +2451,6 @@
 "simulate_your_location_gpx_descr" = "Simulatu zure posizioa grabatutako GPX lorratz bat erabiliz.";
 "benefits_for_contributors_primary_descr" = "Mapen ordueroko mugarik gabeko eguneraketez baliatzen ahal zara baldin eta OpenStreetMap.org-en kolaboratzaile aktiboa bazara.";
 "routing_attr_avoid_low_emission_zone_name" = "Saihestu emisio baxuko zonak";
-"verification_code_missing_description" = "Kodearen itxaronaldia 10 minutukoa izan daiteke; gainera, Zaborra karpeta egiaztatu dezakezu. Laguntzen ez badizu, erabili beheko botoia.";
 "pro_features" = "Pro ezaugarriak";
 "shared_string_not_included" = "Ez dago barne";
 "shared_string_cross_buy" = "Erosketa gurutzatua";
@@ -2543,4 +2542,3 @@
 "weather_temperature_fahrenheit" = "Fahrenheit";
 "shared_string_cloud" = "Hodeia";
 "download_heightmap_maps" = "Altuera-mapa";
-"rendering_attr_weatherWindSpeedContours_name" = "Haiz

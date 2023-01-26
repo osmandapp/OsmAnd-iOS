@@ -270,7 +270,6 @@
 "choose_audio_stream_descr" = "Elekti laŭtparolilon por ludi voĉajn anoncojn.";
 "use_osm_live_routing" = "OsmAnd-Live navigado";
 "osm_live_routing_descr" = "Use OsmAnd Live updates for navigation";
-"select_nav_profile_dialog_message" = "Profilo de navigo influas al la maniero kiel kalkuli kurson; eblas elekti malkonektan aŭ enretan navigilon.";
 "osmand_default_routing" = "OsmAnd-navigilo";
 "special_routing_type" = "Speciala navigilo";
 "import_routing_file_descr" = "You can import routing file from any cloud storage app by opening it in OsmAnd.";
@@ -2448,7 +2447,6 @@
 "compass_always_hidden" = "Ĉiam kaŝita";
 "shared_string_progress" = "Progreso";
 "routing_attr_goods_restrictions_name" = "Malpeza varaŭtomobilo";
-"offline_edition_descr" = "Se malkonekta redaktado estasŝaltita, ŝanĝoj estos unua konservitaj loke kaj alŝutitaj al OSM je peto; alie ŝanĝoj estos alŝutitaj tuj.";
 "sign_in_with_open_street_map" = "Ensaluti per OpenStreetMap";
 "benefits_for_contributors_primary_descr" = "Aktivaj OpenStreetMap-kontribuantoj povas esti rekompencitaj per senlimajĉiuhoraj ĝisdatigoj de mapoj.";
 "position_on_map_center" = "Centre";
@@ -2615,4 +2613,3 @@
 "routing_attr_freeride_policy_do_not_go_offpiste_name" = "ne eniri neoficialajn skivojojn";
 "routing_attr_avoid_highway_name" = "Evitiĉefajn vojojn";
 "routing_attr_allow_streams_description" = "Permesi navigi per riveretoj kaj fosaĵoj defluigaj";
-"download_wikipedia_data" = "Elŝuti d

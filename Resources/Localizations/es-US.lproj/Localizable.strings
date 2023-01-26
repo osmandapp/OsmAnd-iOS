@@ -2079,7 +2079,6 @@
 "routing_attr_allow_advanced_description" = "Rutas difíciles, con obstáculos peligrosos y tramos empinados.";
 "osm_notes" = "Notas de OSM";
 "rendering_attr_hidePOILabels_name" = "Etiquetas de PDI";
-"rendering_attr_piste_difficulty_novice_name" = "Novato;Principiante";
 "rendering_attr_hideUnderground_name" = "Objetos subterráneos";
 "rendering_value_dark_brown_name" = "Marrón oscuro";
 "routeInfo_piste_type_name" = "Tipo de pista";
@@ -2803,4 +2802,3 @@
 "routing_attr_allow_intermittent_description" = "Permite cursos de agua intermitentes";
 "rendering_value_all_name" = "Todo";
 "routing_attr_avoid_footways_description" = "Evita pasar por veredas o aceras";
-"download_wikipedia_data" = "Descarg

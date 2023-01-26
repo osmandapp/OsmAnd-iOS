@@ -762,8 +762,8 @@
 "gpx_upload_trackable_visibility_descr" = "\"Trackable\" means the trace does not show up in any public listings, but processed trackpoints with timestamps from it (that can\'t be associated with you directly) do through downloads from the public GPS API.";
 "gpx_upload_private_visibility_descr" = "\"Private\" means the trace does not show up in any public listings, but trackpoints from it in unchronological order are available through the public GPS API without timestamps.";
 
-"save_track_to_gpx" = "Auto-record track";
-"save_track_to_gpx_descrp" = "Turn on to automatically save a track during navigation";
+"save_track_to_gpx" = "Auto-record track during navigation";
+"save_track_to_gpx_descrp" = "Auto-start track recording while navigating and auto-save afterwards.";
 
 "gpx_distance_points" = "Distance (points)";
 "gpx_max_speed" = "Max speed";
@@ -862,7 +862,7 @@
 "intro_placeholder" = "enter the name of your region";
 // Settings
 "sett_units" = "Units";
-"map_locale" = "Map Language";
+"map_locale" = "Map language";
 "sett_km" = "Kilometers";
 "sett_ml" = "Miles";
 "sett_zoom" = "Zoom button";
@@ -891,7 +891,7 @@
 
 "shared_string_example" = "Example";
 "utm_description" = "Please note, OsmAnd uses UTM Standard format which is similar but not identical to UTM NATO.";
-"mgrs_format_descr" = "OsmAnd uses MGRS format which is identical to UTM NATO.";
+"mgrs_format_descr" = "OsmAnd uses MGRS, which is similar to the UTM NATO format.";
 "coordinates_copy_descr" = "Tap to copy coordintates to clipboard.";
 "sett_lang_trans" = "translit";
 "sett_pref_lang" = "Preferred Language";
@@ -1168,8 +1168,8 @@
 "add_to_a_track" = "Add to a track";
 "move_point" = "Move Point";
 "move_point_descr" = "Move map to change the position of this point.";
-"add_point_before" = "Add points before";
-"add_point_after" = "Add points after";
+"add_point_before" = "Add point before";
+"add_point_after" = "Add point after";
 "trim_before" = "Trim before this point";
 "trim_after" = "Trim after this point";
 "change_route_type_before" = "Change route type before this point";
@@ -1185,7 +1185,7 @@
 "next_segs_dist" = "All subsequent segments %@";
 "prev_seg_dist" = "Previous segment %@";
 "prev_segs_dist" = "All Previous segments %@";
-"only_selected_segment_recalc" = "Only the selected segment will be recalculated using the selected profile";
+"only_selected_segment_recalc" = "Only the selected segment will be recalculated using the selected profile.";
 "next_segs_recalc_descr" = "All subsequent segments will be recalculated using the selected profile";
 "prev_segs_recalc_descr" = "All previous segments will be recalculated using the selected profile";
 "reverse_route" = "Reverse route";
@@ -1302,7 +1302,7 @@
 "shared_string_zoom_levels" = "Zoom levels";
 "res_expire_time" = "Expire time";
 "res_mercator" = "Mercator Projection";
-"edit_tilesource_elliptic_tile" = "Elliptic mercator";
+"edit_tilesource_elliptic_tile" = "Elliptic Mercator projection";
 "pseudo_mercator_projection" = "Pseudo-Mercator projection";
 "res_source_format" = "Source format";
 "sqlite_db_file" = "SQLiteDB file";
@@ -1375,7 +1375,7 @@
 "osm_created" = "Created";
 "poi_remove_success" = "Deleted";
 "shared_string_modified" = "Modified";
-"osm_edit_reopened_note" = "Reopened";
+"osm_edit_reopened_note" = "Reopened OSM Note";
 "osm_name" = "OpenStreetMap username";
 "osm_pass" = "OpenStreetMap password";
 "osm_offline_editing" = "Always use offline editing";
@@ -1430,7 +1430,7 @@
 "osm_edit_show_on_map" = "Show modification on the map";
 "osm_edit_show_on_map_descr" = "Open the map centered on this point";
 "shared_string_without_name" = "Without name";
-"local_openstreetmap_uploading" = "Uploading...";
+"local_openstreetmap_uploading" = "Uploading…";
 "osm_upload_complete" = "Upload complete";
 "osm_tag_too_long_message" = "The maximum value length for tag %@ is 255 characters. \nPlease make it shorter to continue.";
 "save_poi_without_poi_type_message" = "Save POI without type?";
@@ -1478,7 +1478,7 @@
 "quick_action_map_underlay_title" = "Map underlays";
 "vector_data" = "Offline vector maps";
 "quick_action_map_source_action" = "Add map source";
-"quick_action_map_style_action" = "Add map style";
+"quick_action_map_style_action" = "Add a map style";
 "quick_action_map_styles" = "Map styles";
 "quick_action_new_action" = "Add action";
 "unsupported_items" = "Unsupported items";
@@ -1512,7 +1512,7 @@
 "quick_action_add_parking" = "Add parking place";
 "parking_place" = "Parking spot";
 "quick_action_navigation_voice" = "Voice on/off";
-"quick_action_add_osm_bug" = "Add OSM note";
+"quick_action_add_osm_bug" = "Add OSM Note";
 "toggle_online_notes" = "Toggle OSM notes";
 "toggle_local_edits" = "Toggle local OSM edits";
 "quick_action_add_poi" = "Add POI";
@@ -1522,7 +1522,7 @@
 "quick_action_map_underlay" = "Change map underlay";
 "quick_action_replace_destination" = "Replace destination";
 "add_destination" = "Add destination";
-"route_add_start_point" = "Add starting point";
+"route_add_start_point" = "Add point of departure";
 "add_intermediate" = "Add intermediate point";
 "add_home" = "Add home";
 "add_work" = "Add work";
@@ -1530,7 +1530,7 @@
 "work_button" = "Work";
 "map_widget_parking" = "Parking";
 "quick_action_add_first_intermediate" = "Add first intermediate";
-"quick_action_auto_zoom" = "Auto zoom on/off";
+"quick_action_auto_zoom" = "Auto zoom map on/off";
 "auto_zoom_on" = "Auto zoom on";
 "auto_zoom_off" = "Auto zoom off";
 "quick_action_resume_pause_navigation" = "Pause/resume navigation";
@@ -1540,8 +1540,8 @@
 "toggle_day_night" = "Switch Day/Night mode";
 "quick_action_switch_night_mode" = "Night mode";
 "quick_action_switch_day_mode" = "Day mode";
-"quick_action_navigation_voice_on" = "Mute voice";
-"quick_action_navigation_voice_off" = "Unmute voice";
+"quick_action_navigation_voice_on" = "Mute Voice";
+"quick_action_navigation_voice_off" = "Unmute Voice";
 "show_hide_gpx" = "Show/hide tracks";
 "show_gpx" = "Tracks";
 "hide_gpx" = "Hide track";
@@ -1575,7 +1575,7 @@
 "quick_action_poi_add_descr" = "Tapping this action button allows you to quickly add POI on the map with predefined type and tags.";
 "quick_action_day_night_descr" = "Tapping this action button switches between Day and Night map mode.";
 "quick_action_parking_descr" = "Tapping this action button adds a parking location at the map center point.";
-"quick_action_add_marker_descr" = "Tapping this action button adds a map marker at the map center point.";
+"quick_action_add_marker_descr" = "A button to add a map marker at the screen center location.";
 "quick_action_show_gpx_descr" = "Tapping this action button shows or hides currently displayed GPX tracks.";
 "quick_action_voice_descr" = "Tapping this action button disables or enables voice guidance during navigation.";
 "quick_action_add_dest_descr" = "Tapping this action button sets the destination to the map center. Any previously selected destination becomes the last intermediate destination.";
@@ -1772,17 +1772,17 @@
 "product_desc_parking" = "Track the parking time and location of your car";
 "product_desc_ext_parking" = "Enable to set a point on the map where your car is left on the street and notify your calendar when parking time starts. Plugin helps to track the parking time and location of your car. To place a marker choose a place on the map, then go to Actions and press \"Add parking\".";
 
-"plugin_ski_name" = "Ski map";
+"plugin_ski_name" = "Ski map view";
 "product_desc_skimap" = "Up-to-date ski trail map with lifts and slopes";
-"plugin_ski_descr" = "Designed to navigate at winter sports locations. Watch ski pistes, ski lift markers and colored lines indicating the complexity of each track. To use after enabling go to Configure map and choose \"Winter and ski\" map type.";
+"plugin_ski_descr" = "Designed to navigate winter sports areas: See ski pistes and ski lifts, and cross country ski tracks, with colored lines indicating the difficulty ratings. To use, enable this plugin and also go to \"Configure map\" and choose the \"Winter and ski\" map style.";
 
 "monitoring_settings" = "Trip recording";
 "product_desc_track_recording" = "Record and save your trips as GPX tracks";
 "product_desc_ext_track_recording" = "Allows you to record, save and analyze your training or movement data, such as speed, ascents, descents or route relief, which can then be reused, improved, supplemented or shared with friends. \n\nHow to - https://osmand.net/docs/user/plugins/trip-recording";
 
-"osm_editing_plugin_name" = "OpenStreetMap Editing";
+"osm_editing_plugin_name" = "OpenStreetMap editing";
 "product_desc_osm_editing" = "Turn your mobile phone into a mapping tool";
-"osm_editing_plugin_description" = "Allows you to make contributions to OpenStreetMap, a global community aimed at creating a comprehensive map of the world and providing up-to date open-source data to every user. \n\nYou can find instruction on how to edit the map on out website https://osmand.net/docs/user/plugins/osm-editing";
+"osm_editing_plugin_description" = "Make contributions to OpenStreetMap, a global community maintaining a comprehensive map of the world and providing up-to date open-source data to every user. \n\nYou can find instructions on how to edit the map on our website https://osmand.net/docs/user/plugins/osm-editing .";
 "product_desc_mapillary" = "Street-level views to check out the surroundings";
 "product_desc_ext_mapillary" = "Brings street-level views. Where imagery is missing, you can just add it yourself so that others can make use of it. To enable the Mapillary layer turn on the \"Street-level imagery\" in Configure map menu.";
 
@@ -1897,7 +1897,6 @@
 
 "shared_string_open" = "Open";
 "time_closed" = "Closed";
-"will_close_at" = "Will close in";
 "time_will_open" = "Will open in";
 
 "osm_live_active" = "Active";
@@ -1942,7 +1941,7 @@
 "context_menu_item_directions_from" = "Directions from";
 "search_nearby" = "Search nearby";
 "change_object_posiotion" = "Change object's position";
-"move_marker_bottom_sheet_title" = "Move the map to change object's position";
+"move_marker_bottom_sheet_title" = "Move the map to change marker position";
 
 "est_travel_time" = "Estimate travel time";
 "pedestrian" = "Pedestrian";
@@ -2856,7 +2855,7 @@
 "not_enough_contributions_descr" = "A minimum of %@ changes over last two-month period %@ is required to get access for unlimited hourly map updates.";
 "enough_contributions_descr" = "Congratulations, you have provided enough OpenStreetMap contributions and can now enjoy unlimited OsmAnd map updates!";
 "last_two_month_total" = "Last two month total";
-"auth_failed" = "Authorization Error";
+"auth_failed" = "Authorization failed";
 
 "recalc_angle_dialog_title" = "Minimum angle between my location and route";
 "recalc_angle_dialog_descr" = "Extra straight segment between my location and calculated route will be displayed until the route is recalculated";
@@ -3008,5 +3007,4 @@
 "rendering_attr_showShareTaxiRoutes_name" = "Shuttle routes";
 "routing_attr_prefer_tactile_paving_description" = "Prefer tactile paving";
 "routing_attr_avoid_4wd_only_description" = "Avoid roads only suitable for 4WD vehicles";
-"rendering_attr_OSMMapperAssistantIconsLowZooms_description" = "Schematic display of icons at low zooms";
-"routing_attr_difficulty_preference_beginn
+"rendering_attr_OSMMapperAssistantIconsLowZooms_description" = "Schematic display of icons at low zooms";;

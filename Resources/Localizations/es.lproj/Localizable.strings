@@ -1240,7 +1240,6 @@
 "rendering_attr_busRoutes_name" = "Rutas de autobús";
 "rendering_attr_surface_wood_name" = "Madera";
 "routing_attr_difficulty_preference_name" = "Dificultad preferida";
-"rendering_attr_piste_difficulty_novice_name" = "Novato;Principiante";
 "rendering_attr_roadColors_name" = "Esquema de color del camino";
 "routing_attr_piste_type_sled_description" = "Pendientes para uso de trineos.";
 "rendering_attr_surface_sand_name" = "Arena";
@@ -2792,4 +2791,3 @@
 "rendering_attr_horse_scale_impossible_name" = "Imposible";
 "routing_attr_avoid_highway_description" = "Evita circular por caminos viales";
 "shared_string_does_not_exist" = "No existe";
-"download_wikipedia_data" = "Descarg

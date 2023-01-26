@@ -1798,7 +1798,6 @@
 "lang_fr" = "francia";
 "lang_nl" = "holland";
 "lang_ur" = "urdu";
-"backup_error_subscription_was_expired_descr" = "Az OsmAnd Pro előfizetése lejárt; a biztonsági mentés használatához meg kell újítania. A felhőből továbbra is visszaállíthatja az adatokat.";
 "start_point" = "Start";
 "routing_attr_allow_private_for_truck_name" = "Behajtás magánterületre (tehergépjármű)";
 "debugging_and_development" = "OsmAnd fejlesztés";
@@ -2336,4 +2335,3 @@
 "rendering_attr_hideMilitaryAreas_name" = "Katonai területek elrejtése";
 "promo" = "Promó";
 "calc_pedestrian_route" = "Gyalogos útvonal tervezése";
-"download_wikipedia_data" = "Wikipé

@@ -1474,7 +1474,6 @@
 \n
 \nEste posibil să dureze ceva timp.";
 "checking_for_duplicates" = "Verificarea duplicatelor...";
-"reset_profile_action_descr" = "Resetați toate setările de profil la valorile implicite de instalare. Dacă atingeți Reset (Resetare), toate modificările efectuate vor fi anulate; această acțiune nu poate fi anulată.";
 "import_profile_descr" = "Pentru a importa un profil, atingeți fișierul necesar (*.osf) în orice aplicație și selectați \"Copy to OsmAnd Maps\"";
 "profile_sett_descr" = "Afectează profilul de aplicație selectat";
 "not_available_profile_name" = "Profilul cu acest nume există deja.";
@@ -2774,4 +2773,3 @@
 "use_heightmap_setting" = "Folosește hartă relief 3D";
 "units_kg" = "kg";
 "amazon_appstore" = "Amazon Appstore";
-"download_wikipedia_data" = "Descărc

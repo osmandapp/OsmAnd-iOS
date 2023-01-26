@@ -2431,7 +2431,6 @@
 "simulation_preview_mode_desc" = "Брзина симулације ће бити максимална на правим деоницама и успорити само на раскрсницама.";
 "simulation_preview_mode_title" = "Режим брзог прегледа";
 "speed_mode" = "Режим брзине";
-"purchases_feature_desc_pro_widgets" = "Добавите приступ могућностима професионалног ОсмАнд-а; бојење путева и још штошта.";
 "osmand_maps_plus_tagline" = "Набавите проширене функције";
 "purchases_feature_desc_wikipedia" = "Приказује све чланке повезаних места Википедије ван мреже, помажући Вам да сазнате нешто о тим местима које ћете посетити на пропутовању једноставним тапкањем на карти. Не заборавите да преузмете датотеке карата Википедије за одговарајуће области.";
 "osmand_pro_tagline" = "Добавите максималне функције";
@@ -2674,4 +2673,3 @@
 "rendering_attr_weatherCloudContours_name" = "Линије обриса облака";
 "rendering_attr_horse_scale_impossible_name" = "Немогућа";
 "routing_attr_carriage_restrictions_description" = "Размотрите приступне дозволе за возила са коњском запрегом";
-"download_wikipedia_data" = "Преузми п

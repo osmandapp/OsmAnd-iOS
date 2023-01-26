@@ -2926,18 +2926,3 @@
 • Fixed import of custom plugins with included files\n
 • Fixed various crashes in the Route planning mode\n
 • Fixed crashes during Navigation\n";
-
-"ios_release_4_3" = "• Smooth animation for location changes during movement\n
-• CarPlay: added lanes, 2.5D view, fixed sound issues while connected over Bluetooth\n
-• Introducing new purchase plans: \"OsmAnd Pro\" subscriptions with access to all features and \"Maps+\" purchase with unlimited map downloads and paid plugins access.\n
-• Added Cloud backup and Offline Weather forecast for OsmAnd Pro users\n
-• New convenient \"Purchase\" screen with the list of all purchases\n
-• Benefits for active OpenStreetMap.org contributors\n
-• Tracks can now be colored by altitude, speed, or slope\n
-• Offline maps are now accessible via the Files app\n
-• Favorites: added local backups generation after each change, backups accessible from the Files app\n
-• POI saved to favorites will store and show all POI data even without an offline map\n
-• GPX added support for link, cmt, desc tags and for any custom extensions\n
-• Added mode for the Compass button\n
-• Fixed an issue with UTM Coordinates format\n
-• Fixed an issue with intermediate po

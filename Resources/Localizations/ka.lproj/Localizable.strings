@@ -641,7 +641,7 @@
 "gpx_upload_identifiable_visibility_descr" = "\"Identifiable\" means that the trace will be shown publicly in your GPS traces and in public GPS trace listings, i.e. other users will be able to download the raw trace and associate it with your username. Public timestamped tracepoint data from the GPS API served via the trackpoints API will reference your original trace page.";
 "gpx_upload_trackable_visibility_descr" = "\"Trackable\" means the trace does not show up in any public listings, but processed trackpoints with timestamps from it (that can\'t be associated with you directly) do through downloads from the public GPS API.";
 "gpx_upload_private_visibility_descr" = "\"Private\" means the trace does not show up in any public listings, but trackpoints from it in unchronological order are available through the public GPS API without timestamps.";
-"save_track_to_gpx" = "Auto-record track";
+"save_track_to_gpx" = "დევნის GPX-ში ჟურნალირება";
 "save_track_to_gpx_descrp" = "Turn on to automatically save a track during navigation";
 "gpx_distance_points" = "Distance (points)";
 "gpx_max_speed" = "Max speed";
@@ -714,7 +714,7 @@
 "intro_placeholder" = "enter the name of your region";
 // Settings
 "sett_units" = "Units";
-"map_locale" = "Map Language";
+"map_locale" = "რუკის ენა";
 "sett_km" = "Kilometers";
 "sett_ml" = "Miles";
 "sett_zoom" = "Zoom button";
@@ -1233,7 +1233,7 @@
 "osm_edit_show_on_map" = "Show modification on the map";
 "osm_edit_show_on_map_descr" = "Open the map centered on this point";
 "shared_string_without_name" = "სახელის გარეშე";
-"local_openstreetmap_uploading" = "Uploading...";
+"local_openstreetmap_uploading" = "ატვირთვა…";
 "osm_upload_complete" = "Upload complete";
 "osm_tag_too_long_message" = "The maximum value length for tag %@ is 255 characters. \nPlease make it shorter to continue.";
 "save_poi_without_poi_type_message" = "Do you want to save POI without type?";
@@ -1281,7 +1281,7 @@
 "quick_action_map_underlay_title" = "Map underlays";
 "vector_data" = "გათიშული ვექტორული რუკები";
 "quick_action_map_source_action" = "რუკის წყაროს დამატება";
-"quick_action_map_style_action" = "Add map style";
+"quick_action_map_style_action" = "რუკის სტილის დამატება";
 "quick_action_map_styles" = "რუკის სტილი";
 "quick_action_new_action" = "მოქმედების დამატება";
 "unsupported_items" = "Unsupported items";
@@ -1300,7 +1300,7 @@
 "quick_action_add_parking" = "პარკინგის ადგილის დამატება";
 "parking_place" = "პარკინგის ადგილი";
 "quick_action_navigation_voice" = "ხმის ჩართვა/გამორთვა";
-"quick_action_add_osm_bug" = "Add OSM note";
+"quick_action_add_osm_bug" = "OSMშენიშვნის დამატება";
 "toggle_online_notes" = "Toggle OSM notes";
 "toggle_local_edits" = "Toggle local OSM edits";
 "quick_action_add_poi" = "POI-ს დამატება";
@@ -1310,7 +1310,7 @@
 "quick_action_map_underlay" = "Change map underlay";
 "quick_action_replace_destination" = "დანიშნულების წერტილის შეცვლა";
 "add_destination" = "Add destination";
-"route_add_start_point" = "Add starting point";
+"route_add_start_point" = "საწყისი წერტილის დამატება";
 "add_intermediate" = "შუალედური წერტილის დამატება";
 "add_home" = "სახლის დამატება";
 "add_work" = "სამსახურის დამატება";
@@ -1318,7 +1318,7 @@
 "work_button" = "სამუშაო";
 "map_widget_parking" = "პარკინგი";
 "quick_action_add_first_intermediate" = "Add first intermediate";
-"quick_action_auto_zoom" = "Auto zoom on/off";
+"quick_action_auto_zoom" = "რუკის თვითგადიდების ჩართვა/გამორთვა";
 "auto_zoom_on" = "Auto zoom on";
 "auto_zoom_off" = "Auto zoom off";
 "quick_action_resume_pause_navigation" = "ნავიგაციის პაუზა/გაგრძელება";
@@ -1328,8 +1328,8 @@
 "toggle_day_night" = "Switch Day/Night mode";
 "quick_action_switch_night_mode" = "ღამის რეჟიმი";
 "quick_action_switch_day_mode" = "დღის რეჟიმი";
-"quick_action_navigation_voice_on" = "Mute voice";
-"quick_action_navigation_voice_off" = "Unmute voice";
+"quick_action_navigation_voice_on" = "ხმის გაჩუმება";
+"quick_action_navigation_voice_off" = "გაჩუმების გამორთვა";
 "show_hide_gpx" = "Show/hide tracks";
 "show_gpx" = "გზები";
 "hide_gpx" = "Hide track";
@@ -1553,9 +1553,9 @@
 "monitoring_settings" = "მოგზაურობის ჩაწერა";
 "product_desc_track_recording" = "Activates the functionality to record and save your tracks";
 "product_desc_ext_track_recording" = "Record your tracks and save them manually using OsmAnd Track recording plugin. Export your track as a gpx file, share it or even use it to contribute to OpenStreetMap project.  A handy tool for runners, hikers and anyone interested in recording their tracks.";
-"osm_editing_plugin_name" = "OpenStreetMap Editing";
+"osm_editing_plugin_name" = "OpenStreetMap-ის გამართვა";
 "product_desc_osm_editing" = "Make changes to OpenStreetMap directly from OsmAnd";
-"osm_editing_plugin_description" = "OSM Editing plugin can be used to make OSM contributions like creating or modifying POI objects, opening or commenting on OSM Notes, and contributing recorded GPX files. OSM is a community driven global public domain mapping project. For more information, please refer to https://osm.org. Contributions can be made directly from OsmAnd, if you specify your OSM credentials in the app.";
+"osm_editing_plugin_description" = "ეს დამატება გაძლევთ საშუალებას გააცნოთ OSM-ს თქვენი აზრი, გახსნა/დახურვა OSM-ის ხოჭოების შესახებ და მიაწოდოთ პროექტსთქვენი ჩაწერილი GPX ფაილები.";
 "product_desc_mapillary" = "Online street-level photos for everyone";
 "product_desc_ext_mapillary" = "Online street-level photos for everyone. Discover places, collaborate, capture the world.";
 "open_place_reviews" = "OpenPlaceReviews";
@@ -1646,7 +1646,6 @@
 "prch_srtm_info" = "Contour lines addon enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
 "shared_string_open" = "გახსნა";
 "time_closed" = "Closed";
-"will_close_at" = "Will close in";
 "time_will_open" = "Will open in";
 "osm_live_active" = "აქტიური";
 "menu_all_trips" = "All Tracks";
@@ -1687,7 +1686,7 @@
 "context_menu_item_directions_from" = "მიმართულება";
 "search_nearby" = "ახლო ძიება";
 "change_object_posiotion" = "Change object's position";
-"move_marker_bottom_sheet_title" = "Move the map to change object's position";
+"move_marker_bottom_sheet_title" = "მარკერის შესაცვლელად გაამოძრავეთ რუკა";
 "est_travel_time" = "Estimate travel time";
 "pedestrian" = "Pedestrian";
 "sorting" = "Sorting";
@@ -2324,5 +2323,6 @@
 "rendering_attr_OSMMapperAssistantNote_name" = "შენიშვნების ჭდეები";
 "routing_attr_avoid_footways_description" = "საცალფეხო გზების არიდება";
 "routing_attr_allow_streams_name" = "არხების და რუების ჩვენება";
-"rendering_attr_showWaterwayTunnels_description" = "წყლის გვირაბების ჩვენება";
-"download_wikipedia_data" = "ვიკიპედიის მო
+"rendering_attr_showWaterwayTunnels_description" = "წყლის გვირაბების ჩვენება";;
+"auth_failed" = "ავტორიზაცია წარუმატებელია";
+"download_wikipedia_data" = "ვიკიპედიის მონაცემების გადმოწერა";

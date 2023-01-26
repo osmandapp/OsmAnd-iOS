@@ -315,9 +315,9 @@
 "product_title_parking" = "Розташування припаркованого авто";
 "product_desc_parking" = "Стежте за часом стоянки та місцем перебування свого автомобіля";
 "product_desc_ext_parking" = "Увімкніть, щоб установити точку на мапі, де ви залишили авто, і додайте у свій календар час початку паркування. Плагін допомагає стежити за часом паркування та місця перебування вашого авто. Щоб поставити позначку, оберіть місце на мапі, потім перейдіть до Дії та натисніть «Додати місце стоянки».";
-"plugin_ski_name" = "Лижна мапа";
+"plugin_ski_name" = "Лижні мапи";
 "product_desc_skimap" = "Актуальна мапа лижних трас з витягами та схилами";
-"plugin_ski_descr" = "Призначений для навігації на локаціях зимових видів спорту. Переглядайте лижні траси, позначки витягів і кольорові лінії, що вказують на складність кожної траси. Для використання після ввімкнення перейдіть до налаштувань мапи та оберіть вигляд мапи «Зимовий/лижний».";
+"plugin_ski_descr" = "Призначено для навігації зонами зимових видів спорту: перегляд гірськолижних трас і підіймачів, а також трас для бігових лиж з кольоровими лініями, що позначають ступінь складності. Для використання увімкніть цей плагін, а також перейдіть в «Налаштування мапи» та оберіть вигляд мапи «Зимовий/лижний».";
 "monitoring_settings" = "Запис треків";
 "product_desc_track_recording" = "Запис і збереження ваших поїздок як треків GPX";
 "product_desc_ext_track_recording" = "Дає змогу записувати, зберігати та аналізувати дані про тренування або пересування, як-от швидкість, підйоми, спуски або рельєф маршруту, які можна потім повторно використовувати, покращувати, доповнювати або ділитися з друзями.\n\nЯк це зробити - https://osmand.net/docs/user/plugins/trip-recording";
@@ -372,7 +372,7 @@
 "prch_srtm_info" = "Плагін Ізолінії показує ізолінії на мапах, на які Ви маєте право, які були придбані чи завантажені в межах вільного ліміту.";
 "shared_string_open" = "Відкрити";
 "time_closed" = "Зачинено";
-"will_close_at" = "Зачинеться через";
+"will_close_at" = "Закриється о";
 "time_will_open" = "Відкриється через";
 "osm_live_active" = "Увімкнено";
 "menu_all_trips" = "Усі треки";
@@ -697,7 +697,6 @@
 "day_off_label" = "вих.";
 "open_from" = "Відкрито з";
 "open_till" = "Відкрито до";
-"will_close_at" = "Закриється о";
 "will_open_at" = "Відкриється о";
 "will_open_on" = "Відкриється о";
 "will_open_tomorrow_at" = "Відкриється завтра о";
@@ -746,8 +745,8 @@
 "poi_overlay" = "Накладка з точками інтересу";
 "save_current_track_descr" = "Зберегти поточний трек як GPX-файл.";
 "shared_string_clear" = "Очистити";
-"save_track_to_gpx" = "Автозапис треку";
-"save_track_to_gpx_descrp" = "Увімкніть для автоматичного запису треку під час навігації";
+"save_track_to_gpx" = "Автоматично записувати трек під час навігації";
+"save_track_to_gpx_descrp" = "Автозапуск запису треку під час навігації та автоматичне збереження після завершення.";
 "shared_string_close" = "Закрити";
 "facebook" = "Facebook";
 "twitter" = "Twitter";
@@ -816,7 +815,7 @@
 "osm_created" = "Створено";
 "poi_remove_success" = "Вилучено";
 "shared_string_modified" = "Змінено";
-"osm_edit_reopened_note" = "Перевідкрито";
+"osm_edit_reopened_note" = "Перевідкрити Нотатку OSM";
 "osm_name" = "Ім'я користувача OpenStreetMap";
 "osm_pass" = "Пароль OpenStreetMap";
 "osm_offline_editing" = "Завжди редагувати в автономному режимі";
@@ -990,9 +989,11 @@
 "online_map" = "Онлайн мапа";
 "terms_of_use" = "Умови використання";
 "privacy_policy" = "Політика конфіденційності";
-"osm_editing_plugin_name" = "OpenStreetMap редактор";
+"osm_editing_plugin_name" = "Редагування OpenStreetMap";
 "product_desc_osm_editing" = "Перетворіть свій мобільний телефон на картографічний інструмент";
-"osm_editing_plugin_description" = "Дає змогу робити внески до OpenStreetMap, глобальної спільноти, мета якої — створення повної мапи світу та надання актуальних відкритих даних кожному користувачеві.\n\nВи можете переглянути інструкції про редагування мапи на нашому вебсайті https://osmand.net/docs/user/plugins/osm-editing";
+"osm_editing_plugin_description" = "Зробіть внесок у розвиток OpenStreetMap — всесвітню спільноту, яка підтримує повну мапу світу та надає актуальні відкриті дані кожному користувачеві.
+\n
+\nІнструкції з редагування мапи можна знайти на нашому сайті https://osmand.net/docs/user/plugins/osm-editing .";
 "product_desc_africa_short" = "Мапи Африканського регіону";
 "product_desc_australia_short" = "Мапи Австралійського регіону";
 "product_desc_centralamerica_short" = "Мапи Центрально-американського регіону";
@@ -1109,14 +1110,14 @@
 "toggle_poi" = "Показати/сховати точки інтересу";
 "quick_action_add_parking" = "Додати місце стоянки";
 "quick_action_navigation_voice" = "Голос увімк/вимк";
-"quick_action_add_osm_bug" = "Додати нотатку OSM";
+"quick_action_add_osm_bug" = "Додати Нотатку OSM";
 "quick_action_add_poi" = "Додати POI";
 "quick_action_map_style" = "Змінити стиль мапи";
 "quick_action_map_source" = "Змінити джерело мапи";
 "quick_action_replace_destination" = "Замінити пункт призначення";
 "add_destination" = "Додати пункт призначення";
 "quick_action_add_first_intermediate" = "Додати першу проміжну точку";
-"quick_action_auto_zoom" = "Автоматичне масштабування увімк/вимк";
+"quick_action_auto_zoom" = "Автомасштаб мапи увімк/вимк";
 "quick_action_resume_pause_navigation" = "Призупинити/відновити навігацію";
 "quick_action_start_stop_navigation" = "Почати/зупинити навігацію";
 "toggle_day_night" = "Перемкнути Денний/Нічний режим";
@@ -1131,8 +1132,8 @@
 "pause_nav" = "Призупинити навігацію";
 "quick_action_switch_night_mode" = "Нічний режим";
 "quick_action_switch_day_mode" = "Денний режим";
-"quick_action_navigation_voice_on" = "Вимкнути голос";
-"quick_action_navigation_voice_off" = "Увімкнути голос";
+"quick_action_navigation_voice_on" = "Приглушити голос";
+"quick_action_navigation_voice_off" = "Вимкнути приглушення голосу";
 "show_gpx" = "Треки";
 "hide_gpx" = "Сховати трек";
 "show_notes" = "Показати нотатки OSM";
@@ -1142,7 +1143,7 @@
 "select_manually" = "Вибрати вручну";
 "avoid_by_type" = "Уникати за типом";
 "parking_place" = "Місце для стоянки";
-"route_add_start_point" = "Додати точку початку маршруту";
+"route_add_start_point" = "Додати точку відправлення";
 "favorite_home_category" = "Дім";
 "work_button" = "Робота";
 "mapillary_descr" = "Світлини вулиць в мережі для всіх. Відкрийте для себе нові місця, співпрацюйте та знімайте світ.";
@@ -1188,7 +1189,7 @@
 "quick_action_poi_add_descr" = "Ця кнопка дозволяє швидко додавати точки інтересу на мапу з попередньо визначеним типом та теґами.";
 "quick_action_day_night_descr" = "Ця кнопка дії перемикає між денним та нічним режимом мапи.";
 "quick_action_parking_descr" = "Натискання на цю кнопку додасть місце стоянки в центрі екрана.";
-"quick_action_add_marker_descr" = "Натискання на цю кнопку додасть позначку на мапі в центрі екрана.";
+"quick_action_add_marker_descr" = "Кнопка для додавання позначки мапи посередині екрану.";
 "quick_action_show_gpx_descr" = "Натискання на цю кнопку покаже чи сховає GPX-треки, що зараз використовуються.";
 "quick_action_voice_descr" = "Натискання на цю кнопку увімкне чи вимкне голосовий супровід під час навігації.";
 "quick_action_add_dest_descr" = "Натискання на цю кнопку встановить пункт призначення в центрі екрана мапи. Будь-яке раніше обране місце призначення стане останнім проміжним пунктом призначення.";
@@ -1237,7 +1238,7 @@
 "shared_string_zoom_levels" = "Масштаб";
 "res_expire_time" = "Строк дії";
 "res_mercator" = "Проєкція Меркатора";
-"edit_tilesource_elliptic_tile" = "Еліптичний меркатор";
+"edit_tilesource_elliptic_tile" = "Еліптична проєкція Меркатора";
 "pseudo_mercator_projection" = "Проєкція Псевдо-Меркатора";
 "res_zoom_levels_desc" = "Ці параметри впливатимуть на показ мапи під час використання в якості виду мапи або накладання/підкладки.\n\nВид мапи: мапа буде обмежена вибраними масштабами.\n\nНакладка / Підкладка: рівні масштабу, на яких буде видно плитки. Збільшення або зменшення масштабу відбуватиметься більше або менше встановлених значень.";
 "res_expire_time_desc" = "Строк дії в хвилинах. Кешована плитка буде завантажена через визначений час. Залиште це поле порожнім, якщо вам не потрібно перезавантажувати плитки для цього джерела.\nОдин день - 1440 хвилин.\nОдин тиждень - 10 080 хвилин.\n30 днів - 43 200 хвилин.";
@@ -1543,7 +1544,7 @@
 "osmand_parking_warning" = "Попередження";
 "clear_tiles_warning" = "Застосування цих змін очистить дані, отримані з цього джерела тайлів";
 "change_object_posiotion" = "Змінити позицію об'єкта";
-"move_marker_bottom_sheet_title" = "Перемістіть мапу, щоб змінити положення об'єкта";
+"move_marker_bottom_sheet_title" = "Пересуньте мапу, щоб змінити положення позначки";
 "online_raster_maps" = "Мережеві растрові мапи";
 "import_raster_map_success" = "Растрову мапу імпортовано. Відкрийте Налаштування мапи та задійте її за допомогою Накладки/Підкладки";
 "import_raster_map_failed" = "Помилка імпорту растрової мапи";
@@ -1785,8 +1786,8 @@
 "change_route_type_before" = "Змінити тип маршруту перед цією точкою";
 "trim_after" = "Обрізати після цієї точки";
 "trim_before" = "Обрізати до цієї точки";
-"add_point_after" = "Додати точки після";
-"add_point_before" = "Додати точки перед";
+"add_point_after" = "Додати точку опісля";
+"add_point_before" = "Додати точку перед";
 "move_point_descr" = "Посуньте мапу, щоб змінити розташування цієї точки.";
 "move_point" = "Перемістити точку";
 "add_to_a_track" = "Додати до треку";
@@ -1861,7 +1862,7 @@
 "personal_category_name" = "Особистий";
 "prev_segs_recalc_descr" = "Усі наступні відрізки будуть прокладені наново за допомогою вибраного профілю";
 "next_segs_recalc_descr" = "Усі наступні відрізки будуть прокладені наново за допомогою вибраного профілю";
-"only_selected_segment_recalc" = "Лише вибраний відрізок буде прокладений наново за допомогою вибраного профілю";
+"only_selected_segment_recalc" = "Лише вибраний відрізок буде обчислено за допомогою вибраного профілю.";
 "prev_segs_dist" = "Усі попередні відрізки %@";
 "prev_seg_dist" = "Попередній відрізок %@";
 "next_segs_dist" = "Усі наступні відрізки %@";
@@ -2268,7 +2269,7 @@
 "turn_arrows" = "Стрілки повороту";
 "customize_route_line" = "Налаштувати лінію маршруту";
 "shared_string_max_height" = "Макс. висота";
-"mgrs_format_descr" = "OsmAnd використовує формат MGRS, ідентичний формату UTM NATO.";
+"mgrs_format_descr" = "OsmAndвикористовує MGRS, який подібний формату UTM NATO.";
 "route_line_use_map_style_color" = "Застосовувати типовий колір стилю мапи (%@).";
 "routeInfo_winter_ice_road_description" = "Забарвлення маршруту або треку за класифікацією зимових доріг.";
 "routeInfo_roadClass_description" = "Забарвлення маршруту або треку відповідно до класифікації доріг.";
@@ -2646,7 +2647,7 @@
 "backup_pause_all" = "Призупинити все";
 "cloud_all_changes_uploaded" = "Усі зміни вивантажено";
 "cloud_all_changes_uploaded_descr" = "Усі зміни, зроблені на цьому пристрої, синхронізуються з OsmAnd Cloud.";
-"cloud_no_conflicts" = "Неузгодженостей немає";
+"cloud_no_conflicts" = "Неузгодженостей немає.";
 "backup_conflicts_action_descr" = "Ще одна версія цього файлу зберігається на сервері. Потрібно вибрати дію";
 "cloud_contains_newer_changes" = "Версія на OsmAnd Cloud містить новіші зміни.";
 "upload_local_version" = "Вивантажити локальну версію";
@@ -2734,7 +2735,7 @@
 "routing_attr_carriage_restrictions_name" = "Обмеження на перевезення";
 "routing_attr_avoid_4wd_only_description" = "Уникати доріг, призначених для лише повнопривідних автомобілів";
 "routing_attr_prefer_tactile_paving_description" = "Надавати перевагу тактильному покриттю";
-"rendering_attr_showMtbScale_description" = "Показати траси згідно зі шкалою MTB.";
+"rendering_attr_showMtbScale_description" = "Показати траси згідно з їхньою шкалою MTB.";
 "rendering_attr_weatherPressureContours_name" = "Ізолінії тиску";
 "rendering_attr_OSMMapperAssistantFixme_name" = "Теґи fixme";
 "rendering_attr_OSMMapperAssistantNote_description" = "Показувати теґи note";
@@ -2801,5 +2802,7 @@
 "rendering_attr_hideMilitaryAreas_name" = "Сховати військові райони";
 "rendering_value_omit_name" = "Пропустити";
 "rendering_attr_horse_scale_difficult_name" = "Складність";
-"rendering_attr_weatherWindSpeedContours_name" = "Ізолінії поривів вітру";
+"rendering_attr_weatherWindSpeedContours_name" = "Ізолінії швидкості вітру";
 "shared_string_does_not_exist" = "Не існує";
+"download_wikipedia_data" = "Завантаження даних Вікіпедії";
+

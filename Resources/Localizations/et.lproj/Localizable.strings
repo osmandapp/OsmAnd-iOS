@@ -472,7 +472,7 @@
 "record_trip" = "Salvesta oma teekond";
 "shared_string_clear" = "Tühjenda";
 "quick_action_poi_list" = "HP nimekiri";
-"save_track_to_gpx" = "Automaatsalvesta teekond";
+"save_track_to_gpx" = "Salvesta rada automaatselt navigeerimise ajal";
 "save_track_to_gpx_descrp" = "Sisselülitatult salvestatakse navigeerimise ajal teekond automaatselt";
 "gpx_distance_points" = "Kaugus (punktid)";
 "gpx_max_speed" = "Suurim kiirus";
@@ -642,7 +642,7 @@
 "osm_created" = "Loodud";
 "poi_remove_success" = "Kustutatud";
 "shared_string_modified" = "Muudetud";
-"osm_edit_reopened_note" = "Taasavatud";
+"osm_edit_reopened_note" = "Uuesti avatud OSM märge";
 "osm_name" = "OpenStreetMap kasutajanimi";
 "osm_pass" = "OpenStreetMap salasõna";
 "osm_offline_editing" = "Kasuta alati võrguühenduseta muutmist";
@@ -696,7 +696,7 @@
 "osm_edit_show_on_map" = "Kuva muudatus kaardil";
 "osm_edit_show_on_map_descr" = "Ava kaart keskkohaga selles punktis";
 "shared_string_without_name" = "Ilma nimeta";
-"local_openstreetmap_uploading" = "Üleslaadimine...";
+"local_openstreetmap_uploading" = "Üles laadimine…";
 "osm_upload_complete" = "Üleslaadimine lõpetatud";
 "osm_tag_too_long_message" = "Sildi %@ väärtuse maksimaalne pikkus on 255 tähemärki. \nJätkamiseks palun muuda see lühemaks.";
 "save_poi_without_poi_type_message" = "Salvesta POI ilma liigita\?";
@@ -767,7 +767,7 @@
 "favorite_home_category" = "Kodu";
 "work_button" = "Töökoht";
 "quick_action_add_first_intermediate" = "Lisa esimene vahepealne";
-"quick_action_auto_zoom" = "Automaatne suurendamine sees/väljas";
+"quick_action_auto_zoom" = "Automaatne kaardi suurendamine sisse/välja";
 "auto_zoom_on" = "Automaatne suurendamine sees";
 "auto_zoom_off" = "Automaatne suurendamine väljas";
 "quick_action_resume_pause_navigation" = "Peata/jätka navigeerimist";
@@ -812,7 +812,7 @@
 "quick_action_poi_add_descr" = "Selle toimingunupu puudutamine võimaldab kiiresti lisada kaardile eelmääratud liigi ja siltidega HP.";
 "quick_action_day_night_descr" = "Selle toimingunupu puudutamine lülitab päevarežiimi ja öörežiimi vahel ümber.";
 "quick_action_parking_descr" = "Selle toimingunupu puudutamine lisab parkimiskoha kaardi keskpunkti.";
-"quick_action_add_marker_descr" = "Selle toimingunupu puudutamine lisab kaardimarkeri kaardi keskpunkti.";
+"quick_action_add_marker_descr" = "Nupp kaardimarkeri lisamiseks ekraani keskkoha asukohta.";
 "quick_action_show_gpx_descr" = "Selle toimingunupu puudutamisel kuvatakse või peidetakse praegu kuvatud GPX teekonnad.";
 "quick_action_voice_descr" = "Selle toimingunupu puudutamine keelab või lubab navigeerimise ajal hääljuhised.";
 "quick_action_add_dest_descr" = "Selle toimingunupu puudutamine seab kaardi keskkoha sihtpunktiks. Mis tahes varem valitud sihtpunktist saab viimane vahesihtkoht.";
@@ -944,18 +944,20 @@
 "product_title_parking" = "Parking Position";
 "product_desc_parking" = "Võimaldab kergelt meelde jätta, millal auto pargiti ja kui palju aega on jäänud, kui parkimine on ajaliselt piiratud";
 "product_desc_ext_parking" = "OsmAnd Parking Plugin tuletab meelde parkimiskoha. See on rakenduse OsmAnd Maps & Navigation lisa.\nVali ajast sõltumatu meeldetuletus (ainult marker kaardil) või ajaliselt piiratud meeldetuletus koos parkimisaja lõppemise meeldetuletusega (sisaldab ka markerit kaardil). Lisaprogrammi kasutamiseks luba see lisaprogrammide menüüs.";
-"plugin_ski_name" = "Suusakaart";
+"plugin_ski_name" = "Suusakaardi vaade";
 "product_desc_skimap" = "Kogu maailma suusakuurortide suusanõlvad";
-"plugin_ski_descr" = "OsmAnd Ski Maps on OsmAnd Maps & Navigation rakenduse lisaprogramm, mis on mõeldud navigeerimiseks talispordi kohtades. See annab teavet suusaradade, suusatõstukite markerite ja isegi värviliste joonte kohta, mis näitavad iga suusaraja keerukust. Saad teavet nii suusaradade endi kui ka ümbritseva taristu kohta.\n\nKasutusjuhised: luba lisa rakenduses OsmAnd, koputa kaardinuppu ja määra kaardi liigiks suusakaardid.";
+"plugin_ski_descr" = "See OsmAnd laiendus toob sõrmeulatusse üksikasjad globaalsete mäesuusatamise nõlvade, murdmaasuusaradade, mäesuusaradade, köisraudteede ja suusaliftide kohta. Teekonnad ja suusaradade raskusastmed on tähistatud värvikoodidega ning kujutatud spetsiaalses talvises kaardistiilis, mis sulab ühte lumivalge talvemaastikuga.
+\n
+\nSelle vaate aktiveerimine muudab kaardi stiili väärtuseks \'Talv ja suusk\', mis näitab kõiki maastikuomadusi talvetingimustes. Selle vaate saab tagasi lülitada, aktiveerides selle siin uuesti või muutes vastavalt vajadusele jaotises \'Kaardi seadistamine\' \'Kaardistiil\'.";
 "monitoring_settings" = "Matka salvestamine";
 "product_desc_track_recording" = "Aktiveerib teekondade jooksva salvestamise ja hilisema jäädava talletamise funktsionaalsuse";
 "product_desc_ext_track_recording" = "Salvesta oma teekonnad jooksvalt ja talleta need käsitsi, kasutades lisaprogrammi OsmAnd Track. Ekspordi oma teekond GPX failina, jaga seda või isegi kasuta seda OpenStreetMap projekti panustamiseks. Käepärane vahend jooksjatele, matkajatele ja kõigile, kes on huvitatud oma teekondade registreerimisest.";
 "product_title_trip_planning" = "Reisi planeerimine";
 "product_desc_trip_planning" = "Planeeri oma reis, lisa teekonnapunktid, mõõda selle lisaprogrammi abil kaugus sihtkohta";
 "product_desc_ext_trip_planning" = "Reisi planeerimise lisa võimaldab sul oma reisi kaardil luua, selle salvestada, mõõta sirgjoontega ühendatud punktide vahelist kaugust jne. Loodud reisi ettevalmistamiseks, mitte põhjaliku marsruudi loomiseks.";
-"osm_editing_plugin_name" = "OpenStreetMap muutmine";
+"osm_editing_plugin_name" = "OpenStreetMap\'i muutmine";
 "product_desc_osm_editing" = "Tee OpenStreetMap muudatusi otse OsmAnd rakendusest";
-"osm_editing_plugin_description" = "OSM redigeerimise lisaprogrammi saab kasutada OSM kaastööde tegemiseks, näiteks huvipunktide loomiseks või muutmiseks, OSM märkmete avamiseks või kommenteerimiseks ning salvestatud GPX failide lisamiseks. OSM on kogukonna juhitav globaalne üldkasutatava kaardistamise projekt. Lisateavet leiad aadressilt https://osm.org. Kui määrad rakenduses oma OSM kasutajatunnused, saad kaastöid teha otse OsmAnd rakendusest.";
+"osm_editing_plugin_description" = "Tee OsmAnd\'i abil OSM\'i kaastöid, näiteks loo või muuda OSM\'i huvipunkte, ava või kommenteeri OSM\'i märkmeid ning lisa salvestatud GPX faile. Selleks sisesta oma OSM\'i kasutajanimi ja salasõna. OSM on kogukonna juhitud globaalne vaba litsentsi alusel avaldatud kaardistamisprojekt.";
 "product_desc_africa" = "Piiramatud Aafrika kaartide allalaadimised";
 "product_desc_africa_short" = "Aafrika piirkondade kaardid";
 "product_desc_australia" = "Piiramatud Austraalia kaartide allalaadimised";
@@ -1017,7 +1019,6 @@
 "prch_srtm_info" = "Kõrgusjoonte lisa tekitab kõrgusjooned kaartidel, mille jaoks sul on õigus, oled ostnud või alla laadinud tasuta allalaadimiste piires.";
 "shared_string_open" = "Avatud";
 "time_closed" = "Suletud";
-"will_close_at" = "Suletakse";
 "time_will_open" = "Avatakse";
 "osm_live_active" = "Aktiivne";
 "menu_all_trips" = "Kõik teekonnad";
@@ -1217,7 +1218,7 @@
 "res_confirmation_delete" = "Kas oled kindel, et soovid kustutada %@?";
 "res_confirmation_clear_cache" = "Kas oled kindel, et soovid tühjendada %@ puhvri?";
 "res_del_cache_not_supported" = "Võrguühenduseta SQLite kaartide puhvri kustutamine ei ole toetatud";
-"edit_tilesource_elliptic_tile" = "Elliptiline merkator";
+"edit_tilesource_elliptic_tile" = "Mercatori elliptiline projektsioon";
 "edit_tilesource_url_to_load" = "URL";
 "routing_attr_avoid_shuttle_train_name" = "Kiirrongita";
 "rendering_attr_ice_road_name" = "Jäätee";
@@ -1639,7 +1640,7 @@
 "offline_raster_map" = "Võrguühenduseta rasterkaart";
 "online_raster_map" = "Võrgupõhine rasterkaart";
 "default_speed_descr" = "Hindab saabumisaega tundmatute teede korral ja kiirusepiiranguid kõikidel teedel (võib muuta teekonda)";
-"move_marker_bottom_sheet_title" = "Objekti asukoha muutmiseks liiguta kaarti";
+"move_marker_bottom_sheet_title" = "Liiguta kaarti markeri asukoha muutmiseks";
 "change_object_posiotion" = "Muuda objekti asukoha";
 "map_coords" = "Kaart: Laiuskraad %.5f Pikkuskraad %.5f";
 "default_speed_dialog_msg" = "Hindab saabumisaega tundmatute teede korral ja kiirusepiiranguid kõikidel teedel (võib muuta teekonda)";
@@ -1808,7 +1809,7 @@
 "trim_after" = "Kärbi pärast seda punkti";
 "trim_before" = "Kärbi enne seda punkti";
 "add_point_after" = "Lisa punkt peale";
-"add_point_before" = "Lisa punkte enne";
+"add_point_before" = "Lisa punkt ennem";
 "move_point_descr" = "Selle punkti asukoha muutmiseks liiguta kaarti.";
 "move_point" = "Teisalda punkt";
 "add_to_a_track" = "Lisa rajale";
@@ -1848,7 +1849,7 @@
 "prev_segs_recalc_descr" = "Kõik eelmised lõigud arvutatakse valitud profiili alusel ümber";
 "prev_segs_dist" = "Kõik eelmised lõigud %@";
 "prev_seg_dist" = "Eelmine lõik %@";
-"only_selected_segment_recalc" = "Vaid valitud lõik arvutatakse valitud profiili alusel ümber";
+"only_selected_segment_recalc" = "Ainult valitud segment arvutatakseümber vastavalt valitud profiilile.";
 "next_segs_recalc_descr" = "Kõik järgnevad lõigud arvutatakse valitud profiili alusel ümber";
 "personal_category_name" = "Isiklik";
 "whole_track" = "Kogu teekond";
@@ -2235,7 +2236,7 @@
 "shared_string_weather" = "Ilm";
 "backup_and_restore" = "Varunda ja taasta";
 "navigate_point_mgrs" = "MGRS";
-"mgrs_format_descr" = "OsmAnd kasutab UTM NATO-ga identset MGRS-formaati.";
+"mgrs_format_descr" = "OsmAnd kasutab MGRS-vormingut, mis on sarnane NATO UTM-vormingule.";
 "ltr_or_rtl_combine_via_dash" = "%@— %@";
 "selected_tracks_count" = "Rajad - %d";
 "delete_tracks_bottom_sheet_title" = "Kustutada rajad?";
@@ -2502,3 +2503,6 @@
 "rendering_attr_horse_scale_dangerous_name" = "Ohtlik";
 "rendering_attr_noNatureReserveBoundaries_name" = "Looduse piirid";
 "routing_attr_length_description" = "Täpsusta marsruutidel lubatud sõiduki pikkus.";
+"auth_failed" = "Autoriseerimine ebaõnnestus";
+"download_wikipedia_data" = "Laadi alla Vikipeedia andmed";
+

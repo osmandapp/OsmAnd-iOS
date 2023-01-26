@@ -1292,7 +1292,7 @@
 "osm_edit_show_on_map" = "Show modification on the map";
 "osm_edit_show_on_map_descr" = "Open the map centered on this point";
 "shared_string_without_name" = "Without name";
-"local_openstreetmap_uploading" = "Uploading...";
+"local_openstreetmap_uploading" = "अपलोड करत आहे …";
 "osm_upload_complete" = "Upload complete";
 "osm_tag_too_long_message" = "The maximum value length for tag %@ is 255 characters. \nPlease make it shorter to continue.";
 "save_poi_without_poi_type_message" = "Do you want to save POI without type?";
@@ -1723,7 +1723,6 @@
 
 "shared_string_open" = "\"उघडे असण्याची वेळ\"";
 "time_closed" = "Closed";
-"will_close_at" = "Will close in";
 "time_will_open" = "Will open in";
 
 "osm_live_active" = "Active";
@@ -2397,3 +2396,5 @@
 "any_poi" = "कुठलाही";
 "altitude" = "उंची";
 "position_on_map_bottom" = "खाली";
+"data_settings" = "डेटा";
+

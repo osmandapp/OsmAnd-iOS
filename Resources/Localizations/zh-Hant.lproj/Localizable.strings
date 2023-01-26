@@ -253,7 +253,7 @@
 "product_desc_nautical" = "全世界的航海地圖";
 "product_title_parking" = "停車地點";
 "product_desc_parking" = "如果停車受時間限制的話，當把車停放的時候，能讓您很容易的記住，還剩餘多少時間";
-"plugin_ski_name" = "滑雪地圖";
+"plugin_ski_name" = "檢視滑雪地圖";
 "product_desc_skimap" = "全世界所有滑雪勝地的滑雪坡";
 "monitoring_settings" = "旅程錄製";
 "product_desc_africa" = "非洲的地圖";
@@ -314,7 +314,7 @@
 "prch_srtm_info" = "等高線外掛您有資格為地圖啟用等高線，購買或在免費的期限內下載。";
 "shared_string_open" = "開啟";
 "time_closed" = "已關閉";
-"will_close_at" = "即將關閉";
+"will_close_at" = "結束於";
 "time_will_open" = "即將開啓";
 "menu_my_trips" = "我的旅程";
 "osm_live_active" = "活動";
@@ -371,7 +371,7 @@
 "product_desc_ext_wiki" = "取得關於維基百科興趣點的資訊。這是您的口袋離線指南 - 只要啟用維基百科的外掛元件，和享用在您目標周圍的文章。";
 "product_desc_ext_parking" = "OsmAnd 停車外掛元件提醒您的停車位置。這是一個 OsmAnd 地圖和導航應用程式的外掛元件。\n選擇一個非時間的提醒（只是在地圖上標記）或在時間屆滿時的時限報警（也包括在地圖上的標記）。若要使用該外掛元件，在外掛元件的選單中啟用它。";
 "product_desc_ext_nautical" = "OsmAnd 航海圖是一個 OsmAnd 地圖和導航應用程式的外掛元件。它是海洋、海域、沿海區域和江河的詳細圖解表示。這些圖表可以包含各種資訊，如航行航線、航行燈、危險區域，何處允許或不允許航行或碼頭等。\n\n使用說明：強烈建議下載航海底圖，不要只看地圖而不關心這詳盡的地圖存在。要打開航海圖，點擊地圖按鈕，設定地圖類型為航海。\n\n注意︰所有專業船員們，在他們的船隻上必要有官方的航海圖。\n\nOsmAnd 航海圖基本上是來自於 OpenSeaMap 專案的資料。雖然目前 OpenSeaMap 圖表，無法與官方航海圖並駕齊驅，但是可以用來給消遣休閒的船員們定方位或航路規劃。";
-"plugin_ski_descr" = "OsmAnd 滑雪地圖是一個為 OsmAnd 地圖與導航應用程式的外掛元件，設計給冬季運動時所在地點的導航。它提供了滑雪道、滑雪纜車標誌，甚至是彩色的路線指示，每個滑道的錯綜度等相關的資訊。您得到關於滑雪滑道本身以及周遭基礎設施的資訊。\n\n使用說明：在 OsmAnd 應用程式中啟用該外掛元件，點擊地圖按鈕並設定地圖類型為滑雪地圖。";
+"plugin_ski_descr" = "用來在冬季運動區導航：檢視滑雪道、滑雪纜車以及越野滑雪道，彩色線條指示難度等級。要使用，請啟用此外掛程式並到「設定地圖」然後選擇「冬季和滑雪」地圖樣式。";
 "product_desc_ext_track_recording" = "手動使用 OsmAnd 旅程記錄外掛元件，記錄您的旅程並將其儲存。匯出您的旅程為 GPX 檔案，將它分享甚或用它來向 OpenStreetMap 專案作出貢獻。跑步、徒步旅行和任何有興趣記錄他們旅程的人，的一個便利工具。";
 "product_title_trip_planning" = "旅程規劃";
 "no_statistics" = "沒有統計資料";
@@ -697,7 +697,6 @@
 "day_off_label" = "關閉";
 "open_from" = "開始營業從";
 "open_till" = "營業至";
-"will_close_at" = "結束於";
 "will_open_at" = "營業於";
 "will_open_on" = "營業於";
 "will_open_tomorrow_at" = "明天營業於";
@@ -748,7 +747,7 @@
 "auto_split_gap_descr" = "在 6 分鐘的間隔後開始新的區段，在 2 小時的間隔後開始新的軌跡，或是在更長的間隔後開始新的檔案";
 "recording_preferences_descr" = "旅程錄製偏好";
 "shared_string_close" = "關閉";
-"save_track_to_gpx_descrp" = "在導航期間，GPX 軌跡會自動儲存在 track";
+"save_track_to_gpx_descrp" = "在導航時自動開始紀錄軌跡，並在之後自動儲存。";
 "shared_string_help" = "幫助";
 "shared_string_actions" = "操作";
 // Help
@@ -2228,3 +2227,24 @@
 "routing_attr_avoid_footways_name" = "避免人行道";
 "routing_attr_avoid_fords_description" = "避免涉水";
 "rendering_attr_weatherPrecipitationContours_name" = "降水等值線";
+"quick_action_navigation_voice_off" = "取消靜音";
+"auth_failed" = "授權失敗";
+"quick_action_navigation_voice_on" = "靜音";
+"osm_editing_plugin_name" = "OpenStreetMap編輯";
+"quick_action_auto_zoom" = "自動縮放地圖開/關";
+"osm_editing_plugin_description" = "對 OpenStreetMap 做出貢獻，這是一個維護世界綜合地圖並向每位使用者提供最新開放原始碼資料的全球社群。
+\n
+\n您可以在網站 https://osmand.net/docs/user/plugins/osm-editing 上找到關於如何編輯地圖的說明。";
+"only_selected_segment_recalc" = "僅選定的部分會使用選定的設定檔重新計算。";
+"add_point_after" = "增加標點之後";
+"osm_edit_reopened_note" = "重新開啟 OSM 註解";
+"quick_action_add_osm_bug" = "增加 OSM 的註解";
+"local_openstreetmap_uploading" = "正在上傳 …";
+"add_point_before" = "增加標點之前";
+"move_marker_bottom_sheet_title" = "移動地圖到要變更標記的位置";
+"route_add_start_point" = "新增出發地";
+"quick_action_map_style_action" = "增加一個地圖樣式";
+"mgrs_format_descr" = "OsmAnd使用 MGRS，其類似於 UTM NATO 格式。";
+"quick_action_add_marker_descr" = "在畫面中央新增地圖標記的按鈕。";
+"download_wikipedia_data" = "下載維基百科資料";
+

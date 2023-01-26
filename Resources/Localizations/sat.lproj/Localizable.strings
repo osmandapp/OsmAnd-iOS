@@ -863,7 +863,7 @@
 "intro_placeholder" = "enter the name of your region";
 // Settings
 "sett_units" = "Units";
-"map_locale" = "Map Language";
+"map_locale" = "ᱱᱚᱠᱥᱟ ᱨᱮᱭᱟᱜ ᱯᱟᱹᱨᱥᱤ";
 "sett_km" = "Kilometers";
 "sett_ml" = "Miles";
 "sett_zoom" = "Zoom button";
@@ -1781,7 +1781,7 @@
 "product_desc_track_recording" = "Record and save your trips as GPX tracks";
 "product_desc_ext_track_recording" = "Allows you to record, save and analyze your training or movement data, such as speed, ascents, descents or route relief, which can then be reused, improved, supplemented or shared with friends. \n\nHow to - https://osmand.net/docs/user/plugins/trip-recording";
 
-"osm_editing_plugin_name" = "OpenStreetMap Editing";
+"osm_editing_plugin_name" = "OpenStreetMapᱨᱮᱭᱟᱜ ᱥᱟᱯᱲᱟᱣ";
 "product_desc_osm_editing" = "Turn your mobile phone into a mapping tool";
 "osm_editing_plugin_description" = "Allows you to make contributions to OpenStreetMap, a global community aimed at creating a comprehensive map of the world and providing up-to date open-source data to every user. \n\nYou can find instruction on how to edit the map on out website https://osmand.net/docs/user/plugins/osm-editing";
 "product_desc_mapillary" = "Street-level views to check out the surroundings";
@@ -1898,7 +1898,6 @@
 
 "shared_string_open" = "Open";
 "time_closed" = "Closed";
-"will_close_at" = "Will close in";
 "time_will_open" = "Will open in";
 
 "osm_live_active" = "Active";
@@ -2961,3 +2960,5 @@
 "rendering_attr_showTramRoutes_name" = "ᱴᱨᱟᱢ ᱦᱚᱨ ᱠᱚ";
 "routing_attr_difficulty_preference_advanced_name" = "ᱞᱟᱦᱟᱱᱛᱤ";
 "routing_attr_freeride_policy_only_if_necessary_name" = "ᱡᱩᱫᱤ ᱮᱠᱟᱱ ᱞᱟᱹᱠᱛᱤ ᱜᱮᱭᱟ";
+"rendering_attr_horse_scale_critical_name" = "ᱟᱝᱴ";
+

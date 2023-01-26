@@ -582,7 +582,7 @@
 "shared_string_export" = "Ekspor";
 "gpx_selection_segment_title" = "Segmen";
 "route_points" = "Titik rute";
-"import_export" = "Impor/Ekspor";
+"import_export" = "Impor/ekspor";
 "import_tracks" = "Impor trek";
 "gpx_import_already_exists" = "The specified track file is already exists in the list. Please choose action.";
 "gpx_add_new" = "Add new file";
@@ -644,8 +644,8 @@
 "gpx_upload_identifiable_visibility_descr" = "\"Dapat diidentifikasi\" berarti bahwa jejak akan ditampilkan secara publik di jejak GPS Anda dan di daftar jejak GPS publik, yaitu pengguna lain akan dapat mengunduh jejak mentah dan mengaitkannya dengan nama pengguna Anda. Data tracepoint berstempel waktu publik dari API GPS yang disajikan melalui API trackpoint akan mereferensikan halaman pelacakan asli Anda.";
 "gpx_upload_trackable_visibility_descr" = "\"Dapat dilacak\" berarti jejak tidak muncul di daftar publik mana pun, tetapi titik jejak yang diproses dengan stempel waktu darinya (yang tidak dapat dikaitkan dengan Anda secara langsung) dilakukan melalui unduhan dari API GPS publik.";
 "gpx_upload_private_visibility_descr" = "\"Pribadi\" berarti jejak tidak muncul di daftar publik mana pun, tetapi titik jejak darinya dalam urutan yang tidak berurutan tersedia melalui API GPS publik tanpa stempel waktu.";
-"save_track_to_gpx" = "Auto-record track";
-"save_track_to_gpx_descrp" = "Turn on to automatically save a track during navigation";
+"save_track_to_gpx" = "Rekam trek secara otomatis selama navigasi";
+"save_track_to_gpx_descrp" = "Mulai perekaman trek secara otomatis saat menavigasi dan simpan secara otomatis setelahnya.";
 "gpx_distance_points" = "Distance (points)";
 "gpx_max_speed" = "Max speed";
 "shared_string_speed" = "Kecepatan";
@@ -717,7 +717,7 @@
 "intro_placeholder" = "enter the name of your region";
 // Settings
 "sett_units" = "Units";
-"map_locale" = "Map Language";
+"map_locale" = "Bahasa peta";
 "sett_km" = "Kilometers";
 "sett_ml" = "Miles";
 "sett_zoom" = "Zoom button";
@@ -1004,8 +1004,8 @@
 "add_to_a_track" = "Tambahkan pada sebuah trek";
 "move_point" = "Pindahkan Titik";
 "move_point_descr" = "Move map to change the position of this point.";
-"add_point_before" = "Add points before";
-"add_point_after" = "Add points after";
+"add_point_before" = "Tambah titik sebelum";
+"add_point_after" = "Tambah titik setelah";
 "trim_before" = "Trim before this point";
 "trim_after" = "Trim after this point";
 "change_route_type_before" = "Change route type before this point";
@@ -1021,7 +1021,7 @@
 "next_segs_dist" = "All subsequent segments %@";
 "prev_seg_dist" = "Previous segment %@";
 "prev_segs_dist" = "All Previous segments %@";
-"only_selected_segment_recalc" = "Only the selected segment will be recalculated using the selected profile";
+"only_selected_segment_recalc" = "Hanya segmen yang dipilih yang akan dihitung ulang menggunakan profil yang dipilih.";
 "next_segs_recalc_descr" = "All subsequent segments will be recalculated using the selected profile";
 "prev_segs_recalc_descr" = "All previous segments will be recalculated using the selected profile";
 "reverse_route" = "Balikkan rute";
@@ -1139,7 +1139,7 @@
 "shared_string_zoom_levels" = "Tingkat perbesaran";
 "res_expire_time" = "Expire time";
 "res_mercator" = "Mercator Projection";
-"edit_tilesource_elliptic_tile" = "Elliptic mercator";
+"edit_tilesource_elliptic_tile" = "Proyeksi Elliptic Mercator";
 "pseudo_mercator_projection" = "Proyeksi Pseudo-Mercator";
 "res_source_format" = "Source format";
 "sqlite_db_file" = "Berkas SQLiteDB";
@@ -1185,7 +1185,7 @@
 "osm_created" = "Created";
 "poi_remove_success" = "Terhapus";
 "shared_string_modified" = "Diubah";
-"osm_edit_reopened_note" = "Reopened";
+"osm_edit_reopened_note" = "Dibuka Ulang Catatan OSM";
 "osm_name" = "OpenStreetMap username";
 "osm_pass" = "OpenStreetMap password";
 "osm_offline_editing" = "Always use offline editing";
@@ -1240,7 +1240,7 @@
 "osm_edit_show_on_map" = "Show modification on the map";
 "osm_edit_show_on_map_descr" = "Open the map centered on this point";
 "shared_string_without_name" = "Tanpa nama";
-"local_openstreetmap_uploading" = "Uploading...";
+"local_openstreetmap_uploading" = "Mengunggah…";
 "osm_upload_complete" = "Upload complete";
 "osm_tag_too_long_message" = "The maximum value length for tag %@ is 255 characters. \nPlease make it shorter to continue.";
 "save_poi_without_poi_type_message" = "Simpan POI tanpa tipe\?";
@@ -1288,7 +1288,7 @@
 "quick_action_map_underlay_title" = "Dasaran peta";
 "vector_data" = "Peta vektor luring";
 "quick_action_map_source_action" = "Tambahkan sumber peta";
-"quick_action_map_style_action" = "Add map style";
+"quick_action_map_style_action" = "Tambahkan sebuah gaya peta";
 "quick_action_map_styles" = "Gaya peta";
 "quick_action_new_action" = "Tambahkan tindakan";
 "unsupported_items" = "Unsupported items";
@@ -1307,7 +1307,7 @@
 "quick_action_add_parking" = "Tambahkan tempat parkir";
 "parking_place" = "Tempat parkir";
 "quick_action_navigation_voice" = "Suara nyala/mati";
-"quick_action_add_osm_bug" = "Add OSM note";
+"quick_action_add_osm_bug" = "Tambahkan Catatan OSM";
 "toggle_online_notes" = "Toggle OSM notes";
 "toggle_local_edits" = "Toggle local OSM edits";
 "quick_action_add_poi" = "Tambahkan POI";
@@ -1317,7 +1317,7 @@
 "quick_action_map_underlay" = "Ubah dasaran peta";
 "quick_action_replace_destination" = "Ubah tujuan";
 "add_destination" = "Add destination";
-"route_add_start_point" = "Add starting point";
+"route_add_start_point" = "Tambahkan titik keberangkatan";
 "add_intermediate" = "Tambahkan titik perantara";
 "add_home" = "Tambah lokasi rumah";
 "add_work" = "Tambah lokasi kantor";
@@ -1325,7 +1325,7 @@
 "work_button" = "Kantor";
 "map_widget_parking" = "Parkiran";
 "quick_action_add_first_intermediate" = "Tambahkan perantara pertama";
-"quick_action_auto_zoom" = "Auto zoom on/off";
+"quick_action_auto_zoom" = "Perbesar otomatis peta nyala/mati";
 "auto_zoom_on" = "Auto zoom on";
 "auto_zoom_off" = "Auto zoom off";
 "quick_action_resume_pause_navigation" = "Jeda/lanjutkan navigasi";
@@ -1335,8 +1335,8 @@
 "toggle_day_night" = "Switch Day/Night mode";
 "quick_action_switch_night_mode" = "Mode malam";
 "quick_action_switch_day_mode" = "Mode siang";
-"quick_action_navigation_voice_on" = "Mute voice";
-"quick_action_navigation_voice_off" = "Unmute voice";
+"quick_action_navigation_voice_on" = "Bisukan Suara";
+"quick_action_navigation_voice_off" = "Suarakan Suara";
 "show_hide_gpx" = "Show/hide tracks";
 "show_gpx" = "Trek";
 "hide_gpx" = "Hide track";
@@ -1370,7 +1370,7 @@
 "quick_action_poi_add_descr" = "Tapping this action button allows you to quickly add POI on the map with predefined type and tags.";
 "quick_action_day_night_descr" = "Tapping this action button switches between Day and Night map mode.";
 "quick_action_parking_descr" = "Tapping this action button adds a parking location at the map center point.";
-"quick_action_add_marker_descr" = "Tapping this action button adds a map marker at the map center point.";
+"quick_action_add_marker_descr" = "Sebuah tombol untuk menambahkan penanda peta di tengah lokasi layar.";
 "quick_action_show_gpx_descr" = "Tapping this action button shows or hides currently displayed GPX tracks.";
 "quick_action_voice_descr" = "Tapping this action button disables or enables voice guidance during navigation.";
 "quick_action_add_dest_descr" = "Tapping this action button sets the destination to the map center. Any previously selected destination becomes the last intermediate destination.";
@@ -1554,15 +1554,17 @@
 "product_title_parking" = "Parking Position";
 "product_desc_parking" = "Lacak waktu parkir dan lokasi mobil Anda";
 "product_desc_ext_parking" = "Aktifkan untuk menetapkan titik di peta di mana mobil Anda ditinggal di jalan dan beri tahu kalender Anda ketika waktu parkir dimulai. Plubin membantu melacak waktu parkir dan lokasi mobil Anda. Untuk menaruh penanda pilih tempat di peta, lalu pergi ke Tindakan dan tekan \"Tambahkan parkir\".";
-"plugin_ski_name" = "Ski map";
+"plugin_ski_name" = "Tampilan peta ski";
 "product_desc_skimap" = "Peta jalur ski terkini dengan angkatan dan lempengan";
-"plugin_ski_descr" = "OsmAnd Ski Maps is a plugin to OsmAnd Maps&Navigation app designed to navigate at winter sports locations. It gives the information about ski pistes, ski lift markers and even colored lines indicating the complexity of each track. You get the info about ski tracks themselves as well as the surrounding infrastructure.\n\nUsage Instructions: Enable the plugin in OsmAnd application, tap the map button and set the map type to Ski maps.";
+"plugin_ski_descr" = "Dirancang untuk bernavigasi di area olahraga musim dingin. Lihat jalur dan lift ski, dan trek ski perbatasan negara, dengan garis berwarna yang menandakan nilai kerumitan. Untuk menggunakan, aktifkan plugin ini dan juga pergi ke \"Konfigurasi peta\" dan pilih gaya peta \"Musim dingin dan ski\".";
 "monitoring_settings" = "Perekaman perjalanan";
 "product_desc_track_recording" = "Activates the functionality to record and save your tracks";
 "product_desc_ext_track_recording" = "Record your tracks and save them manually using OsmAnd Track recording plugin. Export your track as a gpx file, share it or even use it to contribute to OpenStreetMap project.  A handy tool for runners, hikers and anyone interested in recording their tracks.";
-"osm_editing_plugin_name" = "OpenStreetMap Editing";
+"osm_editing_plugin_name" = "Penyuntingan OpenStreetMap";
 "product_desc_osm_editing" = "Make changes to OpenStreetMap directly from OsmAnd";
-"osm_editing_plugin_description" = "OSM Editing plugin can be used to make OSM contributions like creating or modifying POI objects, opening or commenting on OSM Notes, and contributing recorded GPX files. OSM is a community driven global public domain mapping project. For more information, please refer to https://osm.org. Contributions can be made directly from OsmAnd, if you specify your OSM credentials in the app.";
+"osm_editing_plugin_description" = "Buat kontribusi ke OpenStreetMap, sebuah komunitas global yang membuat peta dunia dan menyediakan data sumber terbuka terbaru kepada pengguna siapa pun.
+\n
+\nAnda dapat menemukan petunjuk cara menyunting peta di situs web kami https://osmand.net/docs/user/plugins/osm-editing .";
 "product_desc_mapillary" = "Online street-level photos for everyone";
 "product_desc_ext_mapillary" = "Foto tingkat jalanan daring untuk semuanya. Jelajahi tempat, kolaborasi, tangkap dunia.";
 "open_place_reviews" = "OpenPlaceReviews";
@@ -1653,7 +1655,6 @@
 "prch_srtm_info" = "Contour lines addon enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
 "shared_string_open" = "Buka";
 "time_closed" = "Closed";
-"will_close_at" = "Will close in";
 "time_will_open" = "Will open in";
 "osm_live_active" = "Aktif";
 "menu_all_trips" = "All Tracks";
@@ -1694,7 +1695,7 @@
 "context_menu_item_directions_from" = "Arah dari";
 "search_nearby" = "Cari di sekitar";
 "change_object_posiotion" = "Change object's position";
-"move_marker_bottom_sheet_title" = "Move the map to change object's position";
+"move_marker_bottom_sheet_title" = "Pindahkan peta untuk mengubah posisi penanda";
 "est_travel_time" = "Estimate travel time";
 "pedestrian" = "Pedestrian";
 "sorting" = "Sorting";
@@ -2392,7 +2393,7 @@
 "weather_offline_forecast" = "Prakiraan luring";
 "cloud_recent_changes" = "Perubahan";
 "cloud_all_changes_uploaded" = "Semua perubahan diunggah";
-"cloud_no_conflicts" = "Tidak ada konflik";
+"cloud_no_conflicts" = "Tidak ada konflik.";
 "cloud_all_changes_uploaded_descr" = "Semua perubahan yang dibuat di perangkat ini disinkron dengan OsmAnd Cloud.";
 "new_file" = "Berkas baru";
 "sync_now" = "Sinkron sekarang";
@@ -2575,7 +2576,7 @@
 "routing_attr_difficulty_preference_beginner_name" = "Pemula";
 "rendering_attr_showBusRoutes_name" = "Rute bus";
 "routing_attr_avoid_4wd_only_description" = "Hindari jalan yang hanya cocok untuk kendaraan 4WD saja";
-"rendering_attr_weatherWindSpeedContours_name" = "Garis isometris embusan angin";
+"rendering_attr_weatherWindSpeedContours_name" = "Garis isometris kecepatanangin";
 "routing_attr_avoid_highway_description" = "Hindari jalan tol";
 "rendering_attr_OSMMapperAssistantFixme_description" = "Tampilkan tanda fixme";
 "routing_attr_avoid_highway_name" = "Hindari jalan tol";
@@ -2618,5 +2619,7 @@
 "routing_attr_allow_intermittent_description" = "Perbolehkan jalan air intermiten";
 "routing_attr_avoid_footways_description" = "Hindari jalan setapak";
 "rendering_value_all_name" = "Semua";
-"download_wikipedia_data" = "
-;
+"auth_failed" = "Otorisasi gagal";
+"mgrs_format_descr" = "OsmAnd menggunakan MGRS, yang mirip dengan format UTM NATO.";
+"download_wikipedia_data" = "Unduh data Wikipedia";
+

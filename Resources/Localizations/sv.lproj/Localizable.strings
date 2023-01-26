@@ -2572,7 +2572,7 @@
 "rendering_attr_natureReserves_description" = "Visa naturreservat, skyddade områden och nationalparker.";
 "rendering_attr_depthContourWidth_description" = "Djupkurvornas linjebredd";
 "routing_attr_avoid_fords_name" = "Undvik vadställen";
-"rendering_attr_showMtbScaleIMBATrails_description" = "Visa dedikerade mountainbike-leder.";;
+"rendering_attr_showMtbScaleIMBATrails_description" = "Visa dedikerade mountainbike-leder.";
 "auth_failed" = "Åtkomst nekades";
 "height_limit_description" = "Ange höjden på ditt fordon; vissa ruttrestriktioner kan gälla för höga fordon.";
 "weight_limit_description" = "Ange ditt fordons vikt; vissa ruttrestriktioner kan gälla för tunga fordon.";

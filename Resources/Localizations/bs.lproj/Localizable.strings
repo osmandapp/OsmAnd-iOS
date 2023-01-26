@@ -1897,7 +1897,6 @@
 
 "shared_string_open" = "Open";
 "time_closed" = "Closed";
-"will_close_at" = "Will close in";
 "time_will_open" = "Will open in";
 
 "osm_live_active" = "Active";
@@ -2926,3 +2925,4 @@
 • Fixed import of custom plugins with included files\n
 • Fixed various crashes in the Route planning mode\n
 • Fixed crashes during Navigation\n";
+

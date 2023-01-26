@@ -503,7 +503,7 @@
 "intro_placeholder" = "enter the name of your region";
 // Settings
 "sett_units" = "Units";
-"map_locale" = "Map Language";
+"map_locale" = "Rěč na karće";
 "sett_km" = "Kilometers";
 "sett_ml" = "Miles";
 "sett_zoom" = "Zoom button";
@@ -689,7 +689,7 @@
 "osm_edit_show_on_map" = "Show modification on the map";
 "osm_edit_show_on_map_descr" = "Open the map centered on this point";
 "shared_string_without_name" = "Bjez mjena";
-"local_openstreetmap_uploading" = "Uploading...";
+"local_openstreetmap_uploading" = "Nahrawanje…";
 "osm_upload_complete" = "Upload complete";
 "osm_tag_too_long_message" = "The maximum value length for tag %@ is 255 characters. \nPlease make it shorter to continue.";
 "save_poi_without_poi_type_message" = "Do you want to save POI without type?";
@@ -727,7 +727,7 @@
 "quick_action_map_underlay_title" = "Kartowe podłohi";
 "vector_data" = "Offline vector maps";
 "quick_action_map_source_action" = "Kartowežórło dodać";
-"quick_action_map_style_action" = "Add map style";
+"quick_action_map_style_action" = "Kartowy stil dodać";
 "quick_action_map_styles" = "Kartowe stile";
 "quick_action_new_action" = "Add action";
 "quick_action_add_create_items" = "Create items";
@@ -935,7 +935,7 @@
 "product_title_trip_planning" = "Trip planning";
 "product_desc_trip_planning" = "Plan your trip, add waypoints, measure the distance to your destination using this plugin";
 "product_desc_ext_trip_planning" = "Trip planning plugin allows you to create your trip on the map, save it, measure the distance between points connected with straight lines, etc. Created for preliminary trip planning rather than thorough route building.";
-"osm_editing_plugin_name" = "OpenStreetMap Editing";
+"osm_editing_plugin_name" = "Wobdźěłanje OSM";
 "product_desc_osm_editing" = "Make changes to OpenStreetMap directly from OsmAnd";
 "osm_editing_plugin_description" = "OSM Editing plugin can be used to make OSM contributions like creating or modifying POI objects, opening or commenting on OSM Notes, and contributing recorded GPX files. OSM is a community driven global public domain mapping project. For more information, please refer to https://osm.org. Contributions can be made directly from OsmAnd, if you specify your OSM credentials in the app.";
 "product_desc_africa" = "Unlimited map downloads for Africa";
@@ -999,7 +999,6 @@
 "prch_srtm_info" = "Contour lines addon enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
 "shared_string_open" = "Wotewrjenskečasy";
 "time_closed" = "Closed";
-"will_close_at" = "Will close in";
 "time_will_open" = "Will open in";
 "osm_live_active" = "Aktiwne";
 "menu_all_trips" = "All Trips";
@@ -1543,5 +1542,9 @@
 "offline_edition_descr" = "Přeco offline wobdźěłać.";
 "recalculate_route" = "Čaru znowa wobličić";
 "icon_group_symbols" = "Symbole";
-"depth_contours" = "
-;
+"auth_failed" = "Awtorizacija njeje so poradźiła";
+"add_point_before" = "Předchadny dypk dodać";
+"add_point_after" = "Přichodny dypk dodać";
+"depth_contours" = "Hłubokostne kontury";
+"move_marker_bottom_sheet_title" = "Pohibńće kartu, zo by so pozicija pokazowaka změniła";
+

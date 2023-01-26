@@ -403,7 +403,7 @@
 "intro_placeholder" = "enter the name of your region";
 // Settings
 "sett_units" = "Units";
-"map_locale" = "Map Language";
+"map_locale" = "Taal van de kaart";
 "sett_km" = "Kilometer";
 "sett_ml" = "Mijl";
 "sett_zoom" = "Zoom button";
@@ -553,9 +553,11 @@
 "product_title_parking" = "Parking Position";
 "product_desc_parking" = "Let you easily memorize when the car was parked and how much time left if the parking is limited by time";
 "product_desc_ext_parking" = "OsmAnd Parking Plugin reminds you of your parking position. It is a plugin for OsmAnd Maps&Navigation app.\nChoose a time-independent reminder (only a marker on the map) or a time-limited one with alarm upon time expiration (includes also a marker on the map). To use the plugin, enable it in the Plugins menu.";
-"plugin_ski_name" = "Ski map";
+"plugin_ski_name" = "Ski kaartweergave";
 "product_desc_skimap" = "Ski slopes for all ski resorts in the world";
-"plugin_ski_descr" = "OsmAnd Ski Maps is a plugin to OsmAnd Maps&Navigation app designed to navigate at winter sports locations. It gives the information about ski pistes, ski lift markers and even colored lines indicating the complexity of each track. You get the info about ski tracks themselves as well as the surrounding infrastructure.\n\nUsage Instructions: Enable the plugin in OsmAnd application, tap the map button and set the map type to Ski maps.";
+"plugin_ski_descr" = "Toon gedetailleerde informatie over slalompistes, langlaufroutes, alpine ski routes, kabelbanen en skiliften wereldwijd. Routes en pistes worden getoond in een kleurcode naar moeilijkheidsgraad, en afgebeeld in een speciale \'Winter en ski\' kaartstijl die lijkt op een besneeuwd winterlandschap. 
+\n 
+\nHet activeren van deze weergave verandert de kaartstijl in \'Winter en ski\', met alle kenmerken van het landschap onder winterse omstandigheden. Deze weergave kan worden teruggezet door het deactiveren van de plug-in, of door het veranderen van de \'Kaart stijl\' onder \'Kaart Instellen\'.";
 "monitoring_settings" = "Track opnemen";
 "product_desc_track_recording" = "Activates the functionality to record and save your tracks";
 "product_desc_ext_track_recording" = "Record your trips and save them manually using OsmAnd Trip recording plugin. Export your trip as a gpx file, share it or even use it to contribute to OpenStreetMap project.  A handy tool for runners, hikers and anyone interested in recording their trips.";
@@ -611,7 +613,6 @@
 "prch_srtm_info" = "Contour lines addon enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
 "shared_string_open" = "Openen";
 "time_closed" = "Closed";
-"will_close_at" = "Will close in";
 "time_will_open" = "Will open in";
 "osm_live_active" = "Actief";
 "menu_all_trips" = "All Trips";
@@ -951,7 +952,7 @@
 "osmand_live_donation_switch_title" = "Doneer aan de OpenStreetMap-gemeenschap";
 "edit_tilesource_url_to_load" = "URL";
 "show_notes" = "Toon OSM-opmerkingen";
-"edit_tilesource_elliptic_tile" = "Elliptische Mercator";
+"edit_tilesource_elliptic_tile" = "Elliptische Mercator-projectie";
 "hide_notes" = "Verberg OSM-opmerkingen";
 "routing_attr_allow_classic_only_description" = "Routes alleen geprepareerd voor klassieke stijl zonder skating sporen. Inclusief routes geprepareerd door kleinere sneeuwscooters met lossere piste en tracks gemaakt door skiërs.";
 "rendering_value_black_name" = "Zwart";
@@ -1833,7 +1834,7 @@
 "osm_poi_id_label" = "POI-id:";
 "shared_string_leave" = "Verlaten";
 "shared_string_modified" = "Aangepast";
-"osm_edit_reopened_note" = "Opnieuw geopend";
+"osm_edit_reopened_note" = "OSM-opmerking opnieuw activeren";
 "add_group" = "Een groep toevoegen";
 "shared_string_shape" = "Vorm";
 "osm_confirm_delete" = "POI verwijderen?";
@@ -1909,7 +1910,7 @@
 "map_settings_weather_temp" = "Temperatuur";
 "point_num" = "Punt %d";
 "osm_building_num" = "Gebouwnummer";
-"local_openstreetmap_uploading" = "Uploaden...";
+"local_openstreetmap_uploading" = "Uploaden…";
 "shared_string_total_size" = "Totale grootte";
 "shared_string_countries" = "Landen";
 "shared_string_status" = "Status";
@@ -2205,3 +2206,22 @@
 "routing_attr_difficulty_preference_advanced_name" = "Gevorderde";
 "routing_attr_difficulty_preference_beginner_name" = "Beginner";
 "routing_attr_avoid_highway_description" = "Snelwegen vermijden";
+"save_track_to_gpx_descrp" = "Automatisch starten met opname van pad tijdens navigeren, en achteraf automatisch opslaan.";
+"add_point_after" = "Punt erna toevoegen";
+"move_marker_bottom_sheet_title" = "Verplaats de kaart om de positie van de markering te wijzigen";
+"quick_action_add_marker_descr" = "Een toets om een Markeervlaggetje toe te voegen in het midden van het scherm.";
+"quick_action_auto_zoom" = "Autozoom kaart aan/uit";
+"save_track_to_gpx" = "GPX-Track automatisch opnemen tijdens navigatie";
+"quick_action_navigation_voice_on" = "Stembegeleiding uit";
+"route_add_start_point" = "Vertrekpunt toevoegen";
+"auth_failed" = "Authorisatie mislukt";
+"osm_editing_plugin_name" = "OpenStreetMap bewerken";
+"osm_editing_plugin_description" = "Draag actief bij aan OSM, bijvoorbeeld door het aanmaken of wijzigen van OSM-POI-objecten, aanmaken of becommentariëren van OSM-opmerkingen, en door GPX-tracks te uploaden die met OsmAnd zijn opgenomen door je gebruikersnaam en wachtwoord in te voeren. OpenStreetMap.org is een gemeenschappelijk public domain project om de wereld in kaart te brengen.";
+"add_point_before" = "Punt ervoor toevoegen";
+"quick_action_add_osm_bug" = "OSM-opmerking toevoegen";
+"only_selected_segment_recalc" = "Alleen het geselecteerde segment wordt opnieuw berekend met het geselecteerde profiel.";
+"quick_action_navigation_voice_off" = "Stembegeleiding aan";
+"download_wikipedia_data" = "Wikipedia-gegevens downloaden";
+"quick_action_map_style_action" = "Kaartstijl toevoegen";
+"mgrs_format_descr" = "OsmAnd gebruikt MGRS, die sterk lijkt op het UTM-NATO-formaat.";
+

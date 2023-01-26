@@ -759,3 +759,13 @@
 "type_city_town" = "Sekcem tiɣremt neɣ tamdint";
 "move_point" = "Taneqqiḍt";
 "ui_customization" = "Amuddu n udem i ugrudem n useqdac";
+"osm_editing_plugin_name" = "Taẓrigt OpenStreetMap";
+"add_point_before" = "Rnu tanqiḍt ɣer sdeffir";
+"shared_string_logout" = "Tuffɣa";
+"local_openstreetmap_uploading" = "Asali...";
+"map_locale" = "Tutlayt n tgertilt";
+"osm_editing_plugin_description" = "Ttekki deg OpenStreetMap (OSM) srid seg usnas OSMAnd. Amedya: rnu neɣ beddel agazen yelhan n OSM, rnu neɣ beddel tizmilin OSM sakin azen iberdan-ik GPX (aya ilaq umiḍan OSM). OpenStreetMap d tarbaɛt yeldin, tamaḍalant n tkarḍa tazayazt.";
+"add_point_after" = "Rnu tanqiḍt ɣer sdat";
+"quick_action_map_style_action" = "Rnu aɣanib n tkarḍa";
+"quick_action_navigation_voice_on" = "Taɣect:";
+

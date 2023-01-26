@@ -680,7 +680,7 @@
 "gpx_upload_trackable_visibility_descr" = "\"Trackable\" means the trace does not show up in any public listings, but processed trackpoints with timestamps from it (that can\'t be associated with you directly) do through downloads from the public GPS API.";
 "gpx_upload_private_visibility_descr" = "\"Private\" means the trace does not show up in any public listings, but trackpoints from it in unchronological order are available through the public GPS API without timestamps.";
 
-"save_track_to_gpx" = "Auto-record track";
+"save_track_to_gpx" = "നാവിഗേഷൻ സമയത്ത് ട്രാക്ക് ഓട്ടോമാറ്റിക്കായി റെക്കോർഡ് ചെയ്യുക";
 "save_track_to_gpx_descrp" = "Turn on to automatically save a track during navigation";
 
 "gpx_distance_points" = "Distance (points)";
@@ -758,7 +758,7 @@
 "intro_placeholder" = "enter the name of your region";
 // Settings
 "sett_units" = "Units";
-"map_locale" = "Map Language";
+"map_locale" = "ഭൂപട ഭാഷ(Map Language)";
 "sett_km" = "Kilometers";
 "sett_ml" = "Miles";
 "sett_zoom" = "Zoom button";
@@ -1056,8 +1056,8 @@
 "add_to_a_track" = "Add to a track";
 "move_point" = "പോയിന്റ് നീക്കുക";
 "move_point_descr" = "Move map to change the position of this point.";
-"add_point_before" = "Add points before";
-"add_point_after" = "Add points after";
+"add_point_before" = "\"മുന്‍ ബിന്ദുവായ്  ചേര്‍ക്കുക \"";
+"add_point_after" = "\"അടുത്ത ബിന്ദുവായ്  ചേര്‍ക്കുക \"";
 "trim_before" = "Trim before this point";
 "trim_after" = "Trim after this point";
 "change_route_type_before" = "Change route type before this point";
@@ -1191,7 +1191,7 @@
 "shared_string_zoom_levels" = "Zoom levels";
 "res_expire_time" = "Expire time";
 "res_mercator" = "Mercator Projection";
-"edit_tilesource_elliptic_tile" = "Elliptic mercator";
+"edit_tilesource_elliptic_tile" = "എലിപ്ടിക് മെര്‍കേറ്റര്‍";
 "pseudo_mercator_projection" = "Pseudo-Mercator projection";
 "res_source_format" = "Source format";
 "sqlite_db_file" = "SQLiteDB file";
@@ -1239,7 +1239,7 @@
 "osm_created" = "Created";
 "poi_remove_success" = "താല്‍പര്യ ബിന്ദു (പിഓഐ) വിജയകരമായി നീക്കം ചെയ്തിരിക്കുന്നു";
 "shared_string_modified" = "Modified";
-"osm_edit_reopened_note" = "Reopened";
+"osm_edit_reopened_note" = "OSMകുറിപ്പ് വീണ്ടും തുറന്നു";
 "osm_name" = "OpenStreetMap username";
 "osm_pass" = "OpenStreetMap password";
 "osm_offline_editing" = "Always use offline editing";
@@ -1294,7 +1294,7 @@
 "osm_edit_show_on_map" = "Show modification on the map";
 "osm_edit_show_on_map_descr" = "Open the map centered on this point";
 "shared_string_without_name" = "\"നാമമില്ലാത്തത് \"";
-"local_openstreetmap_uploading" = "Uploading...";
+"local_openstreetmap_uploading" = "വിവരങ്ങള്‍ അപ്ലോഡ് ചെയ്തുകൊണ്ടിരിക്കുന്നു…";
 "osm_upload_complete" = "Upload complete";
 "osm_tag_too_long_message" = "The maximum value length for tag %@ is 255 characters. \nPlease make it shorter to continue.";
 "save_poi_without_poi_type_message" = "\"ഈ POI അതിന്റെ  തരം ഇല്ലാ തെസംരക്ഷിക്കണോ\?\"";
@@ -1342,7 +1342,7 @@
 "quick_action_map_underlay_title" = "മാപ്പ് അണ്ടര്‍ലേയ്സ്(കീഴ്പാളികള്‍)";
 "vector_data" = "ഓഫ്ലൈന്‍ വെക്ടര്‍ ഭൂപടങ്ങള്‍";
 "quick_action_map_source_action" = "ഭൂപട ഉറവിടം ചേര്‍ക്കു";
-"quick_action_map_style_action" = "Add map style";
+"quick_action_map_style_action" = "ഒരു മാപ്പ് ശൈലി ചേർക്കുക";
 "quick_action_map_styles" = "മാപ്പ് ശൈലികൾ";
 "quick_action_new_action" = "പ്രവർത്തനം ചേർക്കുക";
 "unsupported_items" = "Unsupported items";
@@ -1361,7 +1361,7 @@
 "quick_action_add_parking" = "പാർക്കിംഗ് സ്ഥലം ചേർക്കുക";
 "parking_place" = "പാര്‍ക്ക് ചെയ്ത സ്ഥലം";
 "quick_action_navigation_voice" = "വോയ്സ് ഓൺ / ഓഫ്";
-"quick_action_add_osm_bug" = "Add OSM note";
+"quick_action_add_osm_bug" = "OSMകുറിപ്പ് ചേർക്കുക";
 "toggle_online_notes" = "Toggle OSM notes";
 "toggle_local_edits" = "Toggle local OSM edits";
 "quick_action_add_poi" = "POIചേർക്കുക";
@@ -1371,7 +1371,7 @@
 "quick_action_map_underlay" = "മാപ്പ് അണ്ടർലേ മാറ്റുക";
 "quick_action_replace_destination" = "\"ലക്ഷ്യസ്ഥാനം മാറ്റുക \"";
 "add_destination" = "Add destination";
-"route_add_start_point" = "Add starting point";
+"route_add_start_point" = "ആരംഭ പോയിന്റ് ചേർക്കുക";
 "add_intermediate" = "ഇന്റർമീഡിയറ്റ് പോയിന്റ് ചേർക്കുക";
 "add_home" = "വീട് ചേര്‍ക്കുക";
 "add_work" = "ഓഫീസ് ചേർക്കുക";
@@ -1379,7 +1379,7 @@
 "work_button" = "ഓഫീസ്";
 "map_widget_parking" = "പാര്‍ക്കിങ്ങ്";
 "quick_action_add_first_intermediate" = "\"ഒന്നാമത്തെ ഇടലക്ഷ്യസ്ഥാനം ചേര്‍ക്കുക \"";
-"quick_action_auto_zoom" = "Auto zoom on/off";
+"quick_action_auto_zoom" = "മാപ്പ് ഓട്ടോ സൂം ഓൺ / ഓഫ്";
 "auto_zoom_on" = "Auto zoom on";
 "auto_zoom_off" = "Auto zoom off";
 "quick_action_resume_pause_navigation" = "\"വഴികാട്ടി തുടരുക/നിര്‍ജീവമാക്കുക \"";
@@ -1389,8 +1389,8 @@
 "toggle_day_night" = "Switch Day/Night mode";
 "quick_action_switch_night_mode" = "രാത്രി മോഡ്";
 "quick_action_switch_day_mode" = "പകല്‍ മോഡ്";
-"quick_action_navigation_voice_on" = "Mute voice";
-"quick_action_navigation_voice_off" = "Unmute voice";
+"quick_action_navigation_voice_on" = "ശബ്ദം മ്യൂട്ടുചെയ്യുക";
+"quick_action_navigation_voice_off" = "ശബ്ദം അൺമ്യൂട്ട് ചെയ്യുക";
 "show_hide_gpx" = "Show/hide tracks";
 "show_gpx" = "Show track";
 "hide_gpx" = "Hide track";
@@ -1424,7 +1424,7 @@
 "quick_action_poi_add_descr" = "Tapping this action button allows you to quickly add POI on the map with predefined type and tags.";
 "quick_action_day_night_descr" = "Tapping this action button switches between Day and Night map mode.";
 "quick_action_parking_descr" = "Tapping this action button adds a parking location at the map center point.";
-"quick_action_add_marker_descr" = "Tapping this action button adds a map marker at the map center point.";
+"quick_action_add_marker_descr" = "ഈ പ്രവർത്തന ബട്ടൺ ടാപ്പുചെയ്യുന്നത് സ്ക്രീനിന്റെ നടുക്കായ് ഒരു മാപ്പ് മാർക്കർ ചേർക്കുന്നു.";
 "quick_action_show_gpx_descr" = "Tapping this action button shows or hides currently displayed GPX tracks.";
 "quick_action_voice_descr" = "Tapping this action button disables or enables voice guidance during navigation.";
 "quick_action_add_dest_descr" = "Tapping this action button sets the destination to the map center. Any previously selected destination becomes the last intermediate destination.";
@@ -1613,7 +1613,7 @@
 "product_desc_parking" = "Let you easily memorize when the car was parked and how much time left if the parking is limited by time";
 "product_desc_ext_parking" = "OsmAnd Parking Plugin reminds you of your parking position. It is a plugin for OsmAnd Maps&Navigation app.\nChoose a time-independent reminder (only a marker on the map) or a time-limited one with alarm upon time expiration (includes also a marker on the map). To use the plugin, enable it in the Plugins menu.";
 
-"plugin_ski_name" = "Ski map";
+"plugin_ski_name" = "സ്കീ ഭൂപടവിന്യാസം";
 "product_desc_skimap" = "Ski slopes for all ski resorts in the world";
 "plugin_ski_descr" = "OsmAnd Ski Maps is a plugin to OsmAnd Maps&Navigation app designed to navigate at winter sports locations. It gives the information about ski pistes, ski lift markers and even colored lines indicating the complexity of each track. You get the info about ski tracks themselves as well as the surrounding infrastructure.\n\nUsage Instructions: Enable the plugin in OsmAnd application, tap the map button and set the map type to Ski maps.";
 
@@ -1621,9 +1621,9 @@
 "product_desc_track_recording" = "Activates the functionality to record and save your tracks";
 "product_desc_ext_track_recording" = "Record your tracks and save them manually using OsmAnd Track recording plugin. Export your track as a gpx file, share it or even use it to contribute to OpenStreetMap project.  A handy tool for runners, hikers and anyone interested in recording their tracks.";
 
-"osm_editing_plugin_name" = "OpenStreetMap Editing";
+"osm_editing_plugin_name" = "ഓഎസ്എം തിരുത്തലുകള്‍";
 "product_desc_osm_editing" = "Make changes to OpenStreetMap directly from OsmAnd";
-"osm_editing_plugin_description" = "OSM Editing plugin can be used to make OSM contributions like creating or modifying POI objects, opening or commenting on OSM Notes, and contributing recorded GPX files. OSM is a community driven global public domain mapping project. For more information, please refer to https://osm.org. Contributions can be made directly from OsmAnd, if you specify your OSM credentials in the app.";
+"osm_editing_plugin_description" = "\"ഈ OSM കോണ്ട്രിബൂഷന്‍ പ്ലഗിൻ ഉപയോഗിച്ച് ഒഎസ്എം POI ഒബ്ജക്റ്റുകൾ സൃഷ്ടിക്കുക, പരിഷ്കരിക്കുക, OSM Notes തുറക്കുകയും അഭിപ്രായമിടുകയുംറിക്കോഡ് ചെയ്ത GPX ഫയലുകൾ സംഭാവന ചെയ്യുകയും ചെയ്യാം. OSM ഒരു  ആഗോള  പബ്ലിക് ഡൊമെയ്ൻ - പങ്കാളിത്ത മാപ്പിംഗ് പ്രോജക്ട് ആണ്. കൂടുതൽ വിവരങ്ങൾക്ക് https://openstreetmap.org സന്ദർശിക്കുക. സജീവ പങ്കാളിത്തം വിലമതിക്കപ്പെടുന്നു, കൂടാതെ താങ്കളുടെ വ്യക്തിഗത OSM ക്രെഡൻഷ്യലുകൾ ആപ്ലിക്കേഷനിൽ വ്യക്തമാക്കിയിട്ടുണ്ടെങ്കിൽ, OSM സംഭാവനകൾ നേരിട്ട് നൽകാവുന്നതാണ്.\"";
 "product_desc_mapillary" = "Online street-level photos for everyone";
 "product_desc_ext_mapillary" = "എല്ലാവർക്കുമായി ഓൺലൈൻ സ്ട്രീറ്റ്-ലെവൽ ഫോട്ടോകൾ. സ്ഥലങ്ങൾ കണ്ടെത്തുക, സഹകരിക്കുക, ലോകം ചിത്രത്തിലാക്കുക.";
 
@@ -1725,7 +1725,6 @@
 
 "shared_string_open" = "പ്രവേശനം";
 "time_closed" = "Closed";
-"will_close_at" = "Will close in";
 "time_will_open" = "Will open in";
 
 "osm_live_active" = "\"സജീവം \"";
@@ -1771,7 +1770,7 @@
 "context_menu_item_directions_from" = "ദിശ ഇവിടെ നിന്നും";
 "search_nearby" = "സമീപത്തു തിരയുക";
 "change_object_posiotion" = "Change object's position";
-"move_marker_bottom_sheet_title" = "Move the map to change object's position";
+"move_marker_bottom_sheet_title" = "മാര്‍ക്കറിന്റെ സ്ഥാനം മാറ്റാനായി ഭൂപടം നീക്കുക";
 
 "est_travel_time" = "Estimate travel time";
 "pedestrian" = "Pedestrian";
@@ -2427,3 +2426,6 @@
 "shared_string_recorded" = "റിക്കോഡ് ചെയ്തത്";
 "position_on_map_center" = "മദ്ധ്യത്തില്‍";
 "position_on_map_bottom" = "താഴെ";
+"auth_failed" = "\"പ്രവേശനാനുമതി കിട്ടിയില്ല \"";
+"download_wikipedia_data" = "\"വിക്കിപ്പീഡിയ വിവരങ്ങള്‍ ഡൗണ്‍ലോഡ്  ചെയ്യുക \"";
+

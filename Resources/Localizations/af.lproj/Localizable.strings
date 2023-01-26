@@ -1302,7 +1302,7 @@
 "shared_string_zoom_levels" = "Zoom levels";
 "res_expire_time" = "Expire time";
 "res_mercator" = "Mercator Projection";
-"edit_tilesource_elliptic_tile" = "Elliptic mercator";
+"edit_tilesource_elliptic_tile" = "Elliptiese merkator";
 "pseudo_mercator_projection" = "Pseudo-Mercator projection";
 "res_source_format" = "Source format";
 "sqlite_db_file" = "SQLiteDB file";
@@ -1430,7 +1430,7 @@
 "osm_edit_show_on_map" = "Show modification on the map";
 "osm_edit_show_on_map_descr" = "Open the map centered on this point";
 "shared_string_without_name" = "Without name";
-"local_openstreetmap_uploading" = "Uploading...";
+"local_openstreetmap_uploading" = "Besig om op te laai…";
 "osm_upload_complete" = "Upload complete";
 "osm_tag_too_long_message" = "The maximum value length for tag %@ is 255 characters. \nPlease make it shorter to continue.";
 "save_poi_without_poi_type_message" = "Do you want to save POI without type?";
@@ -1780,9 +1780,9 @@
 "product_desc_track_recording" = "Record and save your trips as GPX tracks";
 "product_desc_ext_track_recording" = "Allows you to record, save and analyze your training or movement data, such as speed, ascents, descents or route relief, which can then be reused, improved, supplemented or shared with friends. \n\nHow to - https://osmand.net/docs/user/plugins/trip-recording";
 
-"osm_editing_plugin_name" = "OpenStreetMap Editing";
+"osm_editing_plugin_name" = "OSM veranderings";
 "product_desc_osm_editing" = "Turn your mobile phone into a mapping tool";
-"osm_editing_plugin_description" = "Allows you to make contributions to OpenStreetMap, a global community aimed at creating a comprehensive map of the world and providing up-to date open-source data to every user. \n\nYou can find instruction on how to edit the map on out website https://osmand.net/docs/user/plugins/osm-editing";
+"osm_editing_plugin_description" = "Wys stellings nodig vir OSM terugvoer bv. versamel / aanpas van OSM POI voorwerpe, oopmaak / komentaarlewer op OSM foute, en bydra van opgeneemde GPX dokumente (vereis OSM inlog besonderhede).";
 "product_desc_mapillary" = "Street-level views to check out the surroundings";
 "product_desc_ext_mapillary" = "Brings street-level views. Where imagery is missing, you can just add it yourself so that others can make use of it. To enable the Mapillary layer turn on the \"Street-level imagery\" in Configure map menu.";
 
@@ -1897,7 +1897,6 @@
 
 "shared_string_open" = "Open";
 "time_closed" = "Closed";
-"will_close_at" = "Will close in";
 "time_will_open" = "Will open in";
 
 "osm_live_active" = "Active";
@@ -2856,7 +2855,7 @@
 "not_enough_contributions_descr" = "A minimum of %@ changes over last two-month period %@ is required to get access for unlimited hourly map updates.";
 "enough_contributions_descr" = "Congratulations, you have made enough OpenStreetMap contributions and can now enjoy unlimited OsmAnd map updates!";
 "last_two_month_total" = "Last two month total";
-"auth_failed" = "Authorization Error";
+"auth_failed" = "Magtiging het misluk";
 
 "recalc_angle_dialog_title" = "Minimum angle between my location and route";
 "recalc_angle_dialog_descr" = "Extra straight segment between my location and calculated route will be displayed until the route is recalculated";
@@ -2926,3 +2925,4 @@
 • Fixed import of custom plugins with included files\n
 • Fixed various crashes in the Route planning mode\n
 • Fixed crashes during Navigation\n";
+

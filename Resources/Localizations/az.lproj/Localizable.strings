@@ -2414,7 +2414,10 @@
 "local_backup" = "Yerli nüsxə";
 
 "routing_attr_length_description" = "Marşrutlarda icazə veriləcək nəqliyyat vasitəsinin uzunluğunu təyin edin.";
-"rendering_value_all_name" = "Hamısı";;
+"rendering_value_all_name" = "Hamısı";
 "auth_failed" = "İcazə uğursuz oldu";
 "download_wikipedia_data" = "Vikipediya məlumatlarını endir";
 "mgrs_format_descr" = "OsmAnd UTM NATO formatına bənzəyən MGRS istifadə edir.";
+"download_wikipedia_data" = "Vikipediya məlumatlarını endir";
+"auth_failed" = "İcazə uğursuz oldu";
+

@@ -765,8 +765,8 @@
 "gpx_upload_trackable_visibility_descr" = "„Može da se sledi“ znači deka tragata ne se pojavuva na nitu eden javen oglas, tuku obrabotenite točki za sledenje so vremenski pečati od nego (koi ne možat direktno da se povrzat so vas) go pravat preku prezemanja od javnoto GPS API.";
 "gpx_upload_private_visibility_descr" = "„Privatno“ znači deka tragata ne se pojavuva na nitu eden javen oglas, no točkite za sledenje od nea po nehronološki redosled se dostapni preku javnoto GPS API bez vremenski oznaki.";
 
-"save_track_to_gpx" = "Auto-record track";
-"save_track_to_gpx_descrp" = "Turn on to automatically save a track during navigation";
+"save_track_to_gpx" = "Avtomatsko sledenje za vreme na navigacijata";
+"save_track_to_gpx_descrp" = "Avtomatski startuvajte go snimanjeto na zapisite dodeka se dvižite, a potoa avtomatski začuvajte.";
 
 "gpx_distance_points" = "Distance (points)";
 "gpx_max_speed" = "Max speed";
@@ -865,7 +865,7 @@
 "intro_placeholder" = "enter the name of your region";
 // Settings
 "sett_units" = "Units";
-"map_locale" = "Map Language";
+"map_locale" = "Jazik na kartata";
 "sett_km" = "Kilometers";
 "sett_ml" = "Miles";
 "sett_zoom" = "Zoom button";
@@ -895,7 +895,7 @@
 
 "shared_string_example" = "Primer";
 "utm_description" = "Please note, OsmAnd uses UTM Standard format which is similar but not identical to UTM NATO.";
-"mgrs_format_descr" = "OsmAnd uses MGRS format which is identical to UTM NATO.";
+"mgrs_format_descr" = "OsmAnd koristi MGRS, koj e sličen na UTM NATO formatot.";
 "coordinates_copy_descr" = "Tap to copy coordintates to clipboard.";
 "sett_lang_trans" = "translit";
 "sett_pref_lang" = "Preferred Language";
@@ -1176,8 +1176,8 @@
 "add_to_a_track" = "Dodadi na zapisot";
 "move_point" = "Pomestete ja tockata";
 "move_point_descr" = "Move map to change the position of this point.";
-"add_point_before" = "Add points before";
-"add_point_after" = "Add points after";
+"add_point_before" = "Dodadete točka prethodno";
+"add_point_after" = "Dodadete posle točka";
 "trim_before" = "Trim before this point";
 "trim_after" = "Trim after this point";
 "change_route_type_before" = "Change route type before this point";
@@ -1193,7 +1193,7 @@
 "next_segs_dist" = "All subsequent segments %@";
 "prev_seg_dist" = "Previous segment %@";
 "prev_segs_dist" = "All Previous segments %@";
-"only_selected_segment_recalc" = "Only the selected segment will be recalculated using the selected profile";
+"only_selected_segment_recalc" = "Samo izbraniot segment ḱe se presmetuva povtorno so koristenje na izbraniot profil.";
 "next_segs_recalc_descr" = "All subsequent segments will be recalculated using the selected profile";
 "prev_segs_recalc_descr" = "All previous segments will be recalculated using the selected profile";
 "reverse_route" = "Obratna ruta";
@@ -1310,7 +1310,7 @@
 "shared_string_zoom_levels" = "Nivoa na zumot";
 "res_expire_time" = "Expire time";
 "res_mercator" = "Mercator Projection";
-"edit_tilesource_elliptic_tile" = "Elliptic mercator";
+"edit_tilesource_elliptic_tile" = "Eliptična proekcija na Merkator";
 "pseudo_mercator_projection" = "Pseudo-Mercator proekcija";
 "res_source_format" = "Source format";
 "sqlite_db_file" = "SQLiteDB datoteka";
@@ -1383,7 +1383,7 @@
 "osm_created" = "Created";
 "poi_remove_success" = "Izbrisano";
 "shared_string_modified" = "Modified";
-"osm_edit_reopened_note" = "Reopened";
+"osm_edit_reopened_note" = "Povtorno otvorena beleška za OSM";
 "osm_name" = "OpenStreetMap username";
 "osm_pass" = "OpenStreetMap password";
 "osm_offline_editing" = "Always use offline editing";
@@ -1438,7 +1438,7 @@
 "osm_edit_show_on_map" = "Show modification on the map";
 "osm_edit_show_on_map_descr" = "Open the map centered on this point";
 "shared_string_without_name" = "Bez ime";
-"local_openstreetmap_uploading" = "Uploading...";
+"local_openstreetmap_uploading" = "Se prikačuva…";
 "osm_upload_complete" = "Upload complete";
 "osm_tag_too_long_message" = "The maximum value length for tag %@ is 255 characters. \nPlease make it shorter to continue.";
 "save_poi_without_poi_type_message" = "Da se začuva POI bez tip\?";
@@ -1486,7 +1486,7 @@
 "quick_action_map_underlay_title" = "Podlogi na kartata";
 "vector_data" = "Oflajn vektorski karti";
 "quick_action_map_source_action" = "Dodadete izvor na kartata";
-"quick_action_map_style_action" = "Add map style";
+"quick_action_map_style_action" = "Dodajte stil na mapa";
 "quick_action_map_styles" = "Stilovi na karta";
 "quick_action_new_action" = "Dodadete dejstvie";
 "unsupported_items" = "Unsupported items";
@@ -1520,7 +1520,7 @@
 "quick_action_add_parking" = "Dodadete mesto za parkiranje";
 "parking_place" = "Mesto za parkiranje";
 "quick_action_navigation_voice" = "Vklučuvanje/isklučuvanje na glasot";
-"quick_action_add_osm_bug" = "Add OSM note";
+"quick_action_add_osm_bug" = "Dodadete OSM beleska";
 "toggle_online_notes" = "Toggle OSM notes";
 "toggle_local_edits" = "Toggle local OSM edits";
 "quick_action_add_poi" = "Dodadete POI";
@@ -1530,7 +1530,7 @@
 "quick_action_map_underlay" = "Promenete ja podlogata na kartata";
 "quick_action_replace_destination" = "Zameni ja destinacijata";
 "add_destination" = "Add destination";
-"route_add_start_point" = "Add starting point";
+"route_add_start_point" = "Dodadete točka na poaǵanje";
 "add_intermediate" = "Dodadi sredna tocka";
 "add_home" = "Dodadi doma";
 "add_work" = "Dodadi rabota";
@@ -1538,7 +1538,7 @@
 "work_button" = "Rabota";
 "map_widget_parking" = "Parkiranje";
 "quick_action_add_first_intermediate" = "Dodadi prvo sredno";
-"quick_action_auto_zoom" = "Auto zoom on/off";
+"quick_action_auto_zoom" = "Vklučuvanje/isklučuvanje na mapata za avtomatsko zumiranje";
 "auto_zoom_on" = "Auto zoom on";
 "auto_zoom_off" = "Auto zoom off";
 "quick_action_resume_pause_navigation" = "Pauzirajte/prodolžete so navigacijata";
@@ -1548,8 +1548,8 @@
 "toggle_day_night" = "Switch Day/Night mode";
 "quick_action_switch_night_mode" = "Nocen rezim";
 "quick_action_switch_day_mode" = "Dneven rezIm";
-"quick_action_navigation_voice_on" = "Mute voice";
-"quick_action_navigation_voice_off" = "Unmute voice";
+"quick_action_navigation_voice_on" = "Iskluči zvuk na glasot";
+"quick_action_navigation_voice_off" = "Vkluči zvuk na glasot";
 "show_hide_gpx" = "Show/hide tracks";
 "show_gpx" = "Trasi";
 "hide_gpx" = "Hide track";
@@ -1583,7 +1583,7 @@
 "quick_action_poi_add_descr" = "Tapping this action button allows you to quickly add POI on the map with predefined type and tags.";
 "quick_action_day_night_descr" = "Tapping this action button switches between Day and Night map mode.";
 "quick_action_parking_descr" = "Tapping this action button adds a parking location at the map center point.";
-"quick_action_add_marker_descr" = "Tapping this action button adds a map marker at the map center point.";
+"quick_action_add_marker_descr" = "Kopče za dodavanje marker na mapa na lokacijata vo centarot na ekranot.";
 "quick_action_show_gpx_descr" = "Tapping this action button shows or hides currently displayed GPX tracks.";
 "quick_action_voice_descr" = "Tapping this action button disables or enables voice guidance during navigation.";
 "quick_action_add_dest_descr" = "Tapping this action button sets the destination to the map center. Any previously selected destination becomes the last intermediate destination.";
@@ -1780,17 +1780,19 @@
 "product_desc_parking" = "Track the parking time and location of your car";
 "product_desc_ext_parking" = "Enable to set a point on the map where your car is left on the street and notify your calendar when parking time starts. Plugin helps to track the parking time and location of your car. To place a marker choose a place on the map, then go to Actions and press \"Add parking\".";
 
-"plugin_ski_name" = "Ski map";
+"plugin_ski_name" = "Prikaz na karta za skijanje";
 "product_desc_skimap" = "Up-to-date ski trail map with lifts and slopes";
-"plugin_ski_descr" = "Designed to navigate at winter sports locations. Watch ski pistes, ski lift markers and colored lines indicating the complexity of each track. To use after enabling go to Configure map and choose \"Winter and ski\" map type.";
+"plugin_ski_descr" = "Ovoj priklučok za OsmAnd vi gi stava na dofat detalite za globalnite skijački pateki, kros-kantri skijački pateki, alpskite ski pateki, žičarnicite i ski-liftovite. Patekite i patekite se prikažani vo boja spored teškotija i prikažani vo specijalen stil na mapa „Zimski“ koj asimilira zimski pejzažoboen so sneg.
+\n
+\nAktiviranjeto na ovoj prikaz go menuva stilot na kartata vo „Zima i skijanje“, prikažuvajḱi gi site karakteristiki na pejzažot vo zimski uslovi. Ovoj prikaz može da se vrati ili so deaktiviranje povtorno ovde ili so menuvanje na „stilot na karta“ pod „Konfigurirajmapa“ po želba.";
 
 "monitoring_settings" = "Snimanje na patuvanje";
 "product_desc_track_recording" = "Record and save your trips as GPX tracks";
 "product_desc_ext_track_recording" = "Allows you to record, save and analyze your training or movement data, such as speed, ascents, descents or route relief, which can then be reused, improved, supplemented or shared with friends. \n\nHow to - https://osmand.net/docs/user/plugins/trip-recording";
 
-"osm_editing_plugin_name" = "OpenStreetMap Editing";
+"osm_editing_plugin_name" = "Ureduvanje na OpenStreetMap";
 "product_desc_osm_editing" = "Turn your mobile phone into a mapping tool";
-"osm_editing_plugin_description" = "Allows you to make contributions to OpenStreetMap, a global community aimed at creating a comprehensive map of the world and providing up-to date open-source data to every user. \n\nYou can find instruction on how to edit the map on out website https://osmand.net/docs/user/plugins/osm-editing";
+"osm_editing_plugin_description" = "Napravete pridonesi za OSM kako kreiranje ili menuvanje objekti na OSM POI, otvoranje ili komentiranje beleški za OSM i pridonesuvanje snimeni GPX-datoteki vo OsmAnd so dostavuvanje na vašeto korisničko ime i lozinka. OpenStreetMap.org e globalen proekt za mapiranje na javen domen upravuvan od zaednicata.";
 "product_desc_mapillary" = "Street-level views to check out the surroundings";
 "product_desc_ext_mapillary" = "Brings street-level views. Where imagery is missing, you can just add it yourself so that others can make use of it. To enable the Mapillary layer turn on the \"Street-level imagery\" in Configure map menu.";
 
@@ -1905,7 +1907,6 @@
 
 "shared_string_open" = "Open";
 "time_closed" = "Closed";
-"will_close_at" = "Will close in";
 "time_will_open" = "Will open in";
 
 "osm_live_active" = "Aktiven";
@@ -1950,7 +1951,7 @@
 "context_menu_item_directions_from" = "Pravci od";
 "search_nearby" = "Prebaruvajte vo blizina";
 "change_object_posiotion" = "Change object's position";
-"move_marker_bottom_sheet_title" = "Move the map to change object's position";
+"move_marker_bottom_sheet_title" = "Pomestete ja kartata za da ja promenite pozicijata na markerot";
 
 "est_travel_time" = "Estimate travel time";
 "pedestrian" = "Pedestrian";
@@ -2870,7 +2871,7 @@
 "not_enough_contributions_descr" = "Potreben e minimum %@ promeni vo posledniot dvomesečen period %@ za da se dobie pristap za neograničeni časovni ažuriranja na kartata.";
 "enough_contributions_descr" = "Čestitki, obezbedivte dovolno pridonesi za OpenStreetMap i sega možete da uživate vo neograničenite ažuriranja na kartata OsmAnd!";
 "last_two_month_total" = "Last two month total";
-"auth_failed" = "Authorization Error";
+"auth_failed" = "Ovlastuvanjeto ne uspea";
 
 "recalc_angle_dialog_title" = "Minimalen agol pomeǵu mojata lokacija i maršrutata";
 "recalc_angle_dialog_descr" = "Ekstra direkten segment pomeǵu mojata lokacija i presmetanata maršruta ḱe se prikažuva dodeka maršrutata ne se presmeta povtorno";
@@ -3020,3 +3021,5 @@
 "rendering_attr_weatherPressureContours_name" = "Izolinii na pritisok";
 "routing_attr_freeride_policy_do_not_go_offpiste_name" = "Ne izleguvajte nadvor od patekata";
 "routing_attr_avoid_highway_name" = "Izbegnuvajte avtopatista";
+"download_wikipedia_data" = "Prezemete podatoci od Vikipedija";
+

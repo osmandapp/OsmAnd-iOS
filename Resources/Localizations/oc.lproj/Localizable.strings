@@ -465,7 +465,7 @@
 "record_trip" = "Enregistratz lo percors";
 "shared_string_clear" = "Escafar";
 "quick_action_poi_list" = "Lista de PDI";
-"save_track_to_gpx" = "Enregistrament automatic dau percors";
+"save_track_to_gpx" = "Enregistra automaticament la traça dau temps de la navigacion";
 "save_track_to_gpx_descrp" = "Activar per enregistrar automaticament la traça de la navigacion";
 "gpx_distance_points" = "Distància (ponchs)";
 "gpx_max_speed" = "Velocitat maximala";
@@ -721,7 +721,7 @@
 "quick_action_map_underlay_title" = "Fons de mapa";
 "vector_data" = "Mapas de vector fòra de linha";
 "quick_action_map_source_action" = "Ajustar una fònt a l'imatge";
-"quick_action_map_style_action" = "Ajustatz un rendut de mapa";
+"quick_action_map_style_action" = "Ajustatz un mòde de representacion de la mapa";
 "quick_action_map_styles" = "Representacions de la mapa";
 "quick_action_new_action" = "Ajustar una accion";
 "quick_action_add_create_items" = "Crear d'elements";
@@ -747,7 +747,7 @@
 "quick_action_map_underlay" = "Modificar lo fons de la mapa";
 "quick_action_replace_destination" = "Remplaçar la destinacion";
 "add_destination" = "Ajustar una destinacion";
-"route_add_start_point" = "Ajustatz un ponch de partença";
+"route_add_start_point" = "Ajustatz lo ponch de partença";
 "add_intermediate" = "Ajustar un ponch intermediari";
 "add_home" = "Ajustar lo domicile";
 "add_work" = "Ajustar l\'obrador";
@@ -765,7 +765,7 @@
 "quick_action_switch_night_mode" = "Mòde nocturne";
 "quick_action_switch_day_mode" = "Mòde diurne";
 "quick_action_navigation_voice_on" = "Desactivar la votz";
-"quick_action_navigation_voice_off" = "Tornar activar la votz";
+"quick_action_navigation_voice_off" = "Activar la votz";
 "show_hide_gpx" = "Mostrar & Amagar lei percors traçats";
 "show_gpx" = "Traças";
 "hide_gpx" = "Amagar lei traças";
@@ -799,7 +799,7 @@
 "quick_action_poi_add_descr" = "De clicar sus aquest boton vos permet d'ajustar lèu un PDI a la mapa, amb un tipe e d'etiquetas predeterminats.";
 "quick_action_day_night_descr" = "D'accionar aquest boton passatz dau mòde diurne a nocturne.";
 "quick_action_parking_descr" = "Aquest boton vos permet d'ajustar lèu una posicion d'aparcament au centre de l'ecran.";
-"quick_action_add_marker_descr" = "De quichar sus aquest boton d'accion ajustaretz un marcador de mapa dins lo centre de l'ecran.";
+"quick_action_add_marker_descr" = "Un boton per ajustar un marcador de mapa au centre de l\'ecran.";
 "quick_action_show_gpx_descr" = "Aquest boton mòstra ò amaga lei traças GPX actualament visualizadas.";
 "quick_action_voice_descr" = "De quichar sus aquest boton d'accion activatz ò arrestatz lo guidatge a la votz de la navigacion.";
 "quick_action_add_dest_descr" = "Aquest boton establís per destinacion lo ponch centrau de la mapa. Tota destinacion qu'auriatz seleccionada de per avans devèn lo darrier ponch d'etapa.";
@@ -920,7 +920,7 @@
 "product_title_parking" = "Posicion d'aparcament";
 "product_desc_parking" = "Memoriza onte parcatz la veitura e còmpta lo temps d'aparcament";
 "product_desc_ext_parking" = "Placatz un marcador sus la mapa a l'endrech onte laissatz lo veïcul e quichatz sus \"Ajustar un aparcament\". L'ajust Aparcament d'OsmAnd memoriza la posicion de l'aparcament e lo temps se descòmpta.";
-"plugin_ski_name" = "Mapa d'esquilh";
+"plugin_ski_name" = "Vista de la mapa d\'esquí";
 "product_desc_skimap" = "Lei pistas d'esquilh actualizadas e lei remontadors";
 "plugin_ski_descr" = "Pensat per navigar sus lei pistas d'esquilh. Vos avisa dei remontadors e la color de cada pista indica la dificultat. Configuratz leis informacions visiblas e chausissètz la mapa \"Ivèrn e esquilh\".";
 "monitoring_settings" = "Enregistrament d\'escorregudas";
@@ -993,7 +993,6 @@
 "prch_srtm_info" = "L'ajust de Corbas de nivèu activa l'opcion 3D per lei mapas teledescargadas, compradas ò obtengudas dins lo limit a gratis.";
 "shared_string_open" = "Dobèrt";
 "time_closed" = "Clavat";
-"will_close_at" = "Se clavarà dins";
 "time_will_open" = "Se dobrirà dins";
 "osm_live_active" = "Actiu";
 "menu_all_trips" = "Totei lei traças";
@@ -1451,7 +1450,7 @@
 "routing_attr_avoid_shuttle_train_description" = "Evitar lei trens naveta";
 "rendering_attr_busRoutes_name" = "Linhas de bus";
 "rendering_attr_pisteRoutes_name" = "Pistas d\'esquí";
-"move_marker_bottom_sheet_title" = "Mòure la mapa per cambiar la posicion de l'objècte";
+"move_marker_bottom_sheet_title" = "Desplacatz la mapa per modificar la posicion dau marcador";
 "quick_action_remove_next_destination" = "Suprimir lo ponch de destinacion pus pròche";
 "app_mode_offroad" = "Fòra de camin";
 "routing_attr_allow_private_name" = "Permetre l\'accès ai proprietats privadas";
@@ -1956,7 +1955,7 @@
 // Route planning
 "plan_route" = "Planificar un percors";
 "point_num" = "Ponch %d";
-"add_point_before" = "Ajustar un ponch avans";
+"add_point_before" = "Ajustar un ponch avans de";
 "trim_before" = "Retalhar avans aquest ponch";
 "add_one_more_pnt" = "Ajustar un ponch de mai";
 "route_betw_points_descr" = "Chausissètz coma connectar lei ponchs : d'una linha drecha ò calcular un percors amb l'ajuda d'un dei perfius listats çai-sota.";
@@ -1982,7 +1981,7 @@
 "profile_prefs_reset_successful" = "Totei lei configuracions dei perfius son estadas restablidas per defaut";
 "import_profile_descr" = "Per importar un perfiu, clicatz necessariament sus un archiu (*.osf) dins una aplicacion e seleccionatz \"Còpia vèrs OsmAnd\"";
 "trim_after" = "Retalhar après aquest ponch";
-"add_point_after" = "Ajustar un ponch après";
+"add_point_after" = "Ajustar un ponch après de";
 "change_route_type_after" = "Modificar la mena de percors après aquest ponch";
 "change_route_type_before" = "Modificar la mena de percors avans aquest ponch";
 "follow_track" = "Seguir la traça";
@@ -2512,3 +2511,6 @@
 "rendering_value_omit_name" = "Evitar";
 "routing_attr_allow_streams_description" = "Permetre rius e vabres";
 "rendering_attr_OSMMapperAssistantFixme_description" = "Veire lei balisas fixme";
+"rendering_attr_OSMMapperAssistantNote_description" = "Mostrar lei nòtas de balisa";
+"offline_edition_descr" = "Sensa connexion, la modificacion es activada, mai lei cambis se devon sauvagardar localament en premier, se telecargaràn au besonh; autrament s\'actualizan immediatament.";
+

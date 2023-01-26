@@ -539,7 +539,7 @@
 "layer_route" = "Rota";
 "save_current_track_descr" = "Guardar agora o trilho atual num ficheiro GPX.";
 "shared_string_clear" = "Limpar";
-"save_track_to_gpx" = "Gravar o trilho automaticamente";
+"save_track_to_gpx" = "Gravar trilho automaticamente durante a navegação";
 "shared_string_speed" = "Velocidade";
 "live_updates" = "Atualizações sincronizadas";
 "available_maps" = "Mapas disponíveis";
@@ -771,7 +771,7 @@
 "fav_select" = "Por favor, selecione favoritos";
 "import_from_docs" = "Importar de documentos";
 "record_trip" = "Gravar o trilho";
-"save_track_to_gpx_descrp" = "É gravado um trilho automaticamente durante a navegação.";
+"save_track_to_gpx_descrp" = "Iniciar a gravação do trilho automaticamente e quando terminar a faixa será guardada automaticamente.";
 "gpx_distance_points" = "Distância (pontos)";
 "gpx_max_speed" = "Velocidade máxima";
 "map_magnifier" = "Lupa do mapa";
@@ -800,7 +800,7 @@
 "osm_delete_confirmation_descr" = "Tem a certeza de quer eliminar este POI?";
 "osm_created" = "Criado";
 "shared_string_modified" = "Alterado";
-"osm_edit_reopened_note" = "Reaberto";
+"osm_edit_reopened_note" = "Nota do OSM reaberta";
 "osm_name" = "Nome de utilizador do OpenStreetMap";
 "osm_pass" = "Palavra-passe do OpenStreetMap";
 "osm_offline_editing" = "Usar sempre a edição offline";
@@ -845,14 +845,16 @@
 // GPX colors
 "product_desc_ext_nautical" = "Ative-o para enriquecer o seu mapa com informações sobre rotas de navegação, balizas luminosas de navegação, zonas perigosas, zonas onde é permitido ou proibido navegar ou atracar, etc. Permite descarregar mapas náuticos e ativar o \"Mapa náutico\" em Configurar mapa.\n\nComo fazer: https://osmand.net/docs/user/plugins/nautical-charts";
 "product_desc_ext_parking" = "Permite indicar um ponto no mapa onde o seu veículo foi estacionado e indica ao calendário quando o tempo de estacionamento começa. Isto ajuda a controlar o tempo de estacionamento e a localização do veículo. Para colocar o marcador, faça um toque prolongado no mapa, toque no botão \"Ações\" e depois no botão \"Adicionar estacionamento\".";
-"plugin_ski_descr" = "Concebido para navegar em locais de desportos de Inverno. Observar pistas de esqui, marcadores de esqui e linhas coloridas indicando a complexidade de cada pista. Para utilizar depois de ativar este complemento, vá ao menu e escolhe \"Configurar mapa\", \"Estilo do mapa\", selecione o tipo de mapa \"Inverno e esqui\"e carregue no botão \"Aplicar\".";
+"plugin_ski_descr" = "Projetado para navegar emáreas de desportos de Inverno: Veja pistas de esqui, teleféricos e pistas de esqui cross country, com linhas coloridas indicando as classificações de dificuldade. Para o utilizar, após o ativar, vá a Configurar mapa e em \"Estilo de mapa\" escolha \"Inverno e esqui\".";
 "product_desc_ext_track_recording" = "Permite-lhe registar, guardar e analisar os seus dados de treino ou movimento, tais como velocidade, subidas, descidas e planaltos na rota, que podem depois ser reutilizados, melhorados ou partilhados com amigos. \n\nInstruções para o fazer em https://osmand.net/docs/user/plugins/trip-recording";
 "product_title_trip_planning" = "Planeamento de viagem";
 "product_desc_trip_planning" = "Planeie a sua viagem, adicione pontos de paragem, meça a distância para o seu destino usando este complemento";
 "product_desc_ext_trip_planning" = "O complemento de planeamento de viagem permite que crie a sua viagem no mapa, guarde, meça a distância entre os pontos ligados com linhas retas, etc. Criado por planeamento de viagem preliminar em vez de rota por endereço.";
 "osm_editing_plugin_name" = "Editar o OpenStreetMap";
 "product_desc_osm_editing" = "Transforme o seu telemóvel numa ferramenta de mapeamento";
-"osm_editing_plugin_description" = "Permite-lhe fazer contribuições para o OpenStreetMap, uma comunidade global destinada a criar um mapa abrangente do mundo e fornecer dados atualizados sob uma licença livre a todos os utilizadores. \n\nPode encontrar instruções sobre como editar o mapa em https://osmand.net/docs/user/plugins/osm-editing";
+"osm_editing_plugin_description" = "Faça contribuições para o OpenStreetMap, uma comunidade global que mantém um mapa abrangente do mundo e fornece dados atualizados sob uma licença livre a todos os utilizadores.
+\n
+\nPode encontrar instruções sobre como editar o mapa em https://osmand.net/docs/user/plugins/osm-editing .";
 "product_desc_wiki" = "Artigos da Wikipédia baseados em localização no mapa";
 "product_desc_ext_wiki" = "Aceder a artigos da Wikipédia na sua viagem ajuda-o a saber mais sobre os locais que visita. Está disponível para descarregamento, para poder vê-los desligado da Internet e mostra artigos da Wikipédia relacionados com os pontos de interesse diretamente no mapa. Não se esqueça de descarregar os mapas da Wikipédia para a região escolhida.";
 "download_srtm_maps" = "Curvas de nível";
@@ -877,7 +879,6 @@
 "prch_wiki_info" = "A extensão Wikipédia ativa informações para mapas da Wikipédia a que tem direito, comprado ou descarregado dentro do limite gratuito.";
 "prch_srtm_info" = "A extensão curvas de nível ativa curvas de nível para os mapas a que tem direito, comprado ou descarregado dentro do limite gratuito.";
 "time_closed" = "Fechado";
-"will_close_at" = "Fecha às";
 "time_will_open" = "Abre às";
 "menu_all_trips" = "Todos os trilhos";
 "total_time" = "Tempo total";
@@ -1073,7 +1074,7 @@
 "osm_upload_complete" = "Envio terminado";
 "osm_tag_too_long_message" = "O comprimento máximo do valor da etiqueta %@ é de 255 caracteres.\nUtilize menos caracteres para continuar.";
 "save_poi_without_poi_type_message" = "Guardar POI sem especificar o tipo\?";
-"local_openstreetmap_uploading" = "A enviar...";
+"local_openstreetmap_uploading" = "A enviar…";
 "short_location_on_map" = "Latitude %@
 \nLongitude %@";
 "navigate_point_format_OLC" = "Código de localização aberto (OLC)";
@@ -1128,9 +1129,9 @@
 "res_import_unsupported" = "Tipo incorreto de ficheiro. Apenas ficheiros routing.xml e *.render.xml são suportados.";
 "routing_import_please_restart" = "Para usar o novo routing.xml, por favor reinicie a aplicação.";
 "quick_action_list_descr" = "Toque nas páginas deste botão de ação na lista abaixo";
-"quick_action_map_style_action" = "Adicionar estilo do mapa";
+"quick_action_map_style_action" = "Adicionar um estilo de mapa";
 "toggle_local_edits" = "Alternar edições locais do OSM";
-"quick_action_auto_zoom" = "Ampliação automática ligada/desligada";
+"quick_action_auto_zoom" = "Ampliação automática do mapa ativada/desativada";
 "search_results" = "Procurar resultados";
 "quick_action_name_alert" = "O nome da ação rápida foi alterado para %@ para evitar duplicação.";
 "quick_action_screen_header" = "Ecrã %ld";
@@ -1148,7 +1149,7 @@
 "quick_action_poi_add_descr" = "Tocar neste botão de ação permite adicionar POI rapidamente no mapa com etiquetas e tipos predefinidos.";
 "quick_action_day_night_descr" = "Tocar neste botão de ação alterna entre o modo de mapa diurno e noturno.";
 "quick_action_parking_descr" = "Tocar neste botão de ação adiciona um local de estacionamento no ponto central do mapa.";
-"quick_action_add_marker_descr" = "Tocar neste botão de ação adiciona um marcador de mapa no ponto central do mapa.";
+"quick_action_add_marker_descr" = "Um botão para adicionar um marcador no centro do ecrã.";
 "quick_action_show_gpx_descr" = "Tocar neste botão de ação mostra ou oculta as faixas GPX mostradas atualmente.";
 "quick_action_add_dest_descr" = "Tocar neste botão de ação define o destino para o centro do mapa. Qualquer destino previamente selecionado torna-se o último destino intermédio.";
 "quick_action_first_intermediate_descr" = "Tocar neste botão de ação adiciona o primeiro destino intermédio no ponto central do mapa.";
@@ -1208,7 +1209,7 @@
 "gpx_descent" = "Descida";
 "download_select_map_types" = "Outros mapas";
 "edit_tilesource_url_to_load" = "URL";
-"edit_tilesource_elliptic_tile" = "Mercator elíptico";
+"edit_tilesource_elliptic_tile" = "Projeção elíptica de Mercator";
 "rendering_attr_smoothness_bad_name" = "Má";
 "rendering_value_translucent_orange_name" = "Laranja translúcido";
 "rendering_attr_highway_class_track_grade4_name" = "Grau 4";
@@ -1720,7 +1721,7 @@
 "plugin_popup_osm_editing_ask" = "Ative o complemento \"Editar o OpenStreetMap\" para adicionar elementos ao mapa e notas para outros editores";
 "plugin_popup_osm_editing_title" = "Ativar a edição do OpenStreetMap";
 "default_speed_descr" = "Estima a hora de chegada de categorias de estradas desconhecidas e limita a velocidade para todas as estradas (pode afetar o roteamento)";
-"move_marker_bottom_sheet_title" = "Mova o mapa para mudar a posição do objeto";
+"move_marker_bottom_sheet_title" = "Desloque o mapa para alterar a posição do marcador";
 "change_object_posiotion" = "Alterar a posição do objeto";
 "map_coords" = "Mapa: Lat %.5f Lon %.5f";
 "by_transport_type" = "Por %@";
@@ -1811,7 +1812,7 @@
 "join_segments" = "Unir segmentos";
 "prev_segs_recalc_descr" = "Todos os segmentos anteriores serão recalculados usando o perfil selecionado";
 "next_segs_recalc_descr" = "Todos os segmentos subsequentes serão recalculados utilizando o perfil selecionado";
-"only_selected_segment_recalc" = "Apenas o segmento selecionado será recalculado usando o perfil selecionado";
+"only_selected_segment_recalc" = "Apenas o segmento selecionado será recalculado a usar o perfil selecionado.";
 "prev_segs_dist" = "Todos os segmentos anteriores %@";
 "prev_seg_dist" = "Segmento anterior %@";
 "next_segs_dist" = "Todos os segmentos subsequentes %@";
@@ -1825,8 +1826,8 @@
 "change_route_type_before" = "Alterar o tipo de rota antes deste ponto";
 "trim_after" = "Cortar depois deste ponto";
 "trim_before" = "Cortar antes deste ponto";
-"add_point_after" = "Adicionar pontos posteriores";
-"add_point_before" = "Adicionar pontos anteriores";
+"add_point_after" = "Adicionar ponto depois";
+"add_point_before" = "Adicionar ponto antes";
 "move_point_descr" = "Mova o mapa para mudar a posição deste ponto.";
 "move_point" = "Mover ponto";
 "points_count" = "Pontos:";
@@ -2265,7 +2266,7 @@
 "map_settings_weather_pressure" = "Pressão";
 "map_settings_weather_cloud" = "Nuvens";
 "navigate_point_mgrs" = "MGRS";
-"mgrs_format_descr" = "OsmAnd usa o formato MGRS idêntico ao UTM NATO.";
+"mgrs_format_descr" = "O OsmAnd utiliza o MGRS, queé semelhante ao formato UTM NATO.";
 "routeInfo_surface_description" = "Fornecer informações sobre a superfície da estrada/caminho.";
 "routeInfo_smoothness_description" = "Classificação de manobrabilidade da estrada/caminho para veículos de rodas, em particular no que diz respeito à regularidade/lisura da superfície.";
 "routeInfo_tracktype_description" = "Colorir a rota ou linha da pista pela sua composição da superfície. Normalmente aplica-se quando a rede de estradas não é predominantemente pavimentada.";
@@ -2623,7 +2624,7 @@
 "map_updates_for_mappers" = "Atualizações de mapas para mapeadores";
 "open_street_map_login_mode_simple" = "Tem de iniciar sessão para enviar as suas alterações.";
 "not_enough_contributions_descr" = "É necessário um mínimo de %@ alterações nos últimos dois meses %@ para ter acesso a atualizações de mapas a cada hora ilimitadas.";
-"auth_failed" = "Erro de autorização";
+"auth_failed" = "Falha na autorização";
 "carplay_available_in_sub_plans" = "Comprar OsmAnd Pro ou Maps+ para usar o OsmAnd com CarPlay.";
 "cloud_confirm_delete_type" = "Tem a certeza que quer eliminar \"%@\" do OsmAnd Cloud?";
 "shared_string_cross_buy" = "Compra cruzada";
@@ -2795,3 +2796,5 @@
 "routing_attr_difficulty_preference_expert_name" = "Especialista";
 "rendering_attr_weatherPrecipitationContours_name" = "Isolinhas de precipitação";
 "shared_string_does_not_exist" = "Não existe";
+"download_wikipedia_data" = "Descarregar dados da Wikipédia";
+

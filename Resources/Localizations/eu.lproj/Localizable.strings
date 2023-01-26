@@ -641,8 +641,8 @@
 "gpx_upload_identifiable_visibility_descr" = "\"Identifikagarria\" esan nahi du lorratza publikoki erakutsiko dela Zure GPS lorratzetan eta GPS lorratz zerrenda publikoetan, hau da, beste erabiltzaileek lorratz gordina deskargatu eta zure erabiltzaile izenarekin lotu ahal izango dute. Bide-puntuen APIaren bidez hornitutako GPS APIaren denbora-markadu bide-puntuak jatorrizko lorratzari egingo diote erreferentzia.";
 "gpx_upload_trackable_visibility_descr" = "\"Jarraigarria\" esan nahi du lorratza ez dela inolako zerrenda publikoetan agertzen, baina prozesatutako puntuak bere denbora markekin (zurekin zuzenean lotu ezin direnak) GPS API publikoaren deskargen bidez agertzen dira.";
 "gpx_upload_private_visibility_descr" = "\"Pribatua\" esan nahi du lorratza ez dela inolako zerrenda publikoetan agertzen, baina ordena ez kronologikoan dauden bide-puntuak GPS API publikoaren bidez eskuragarri daude denbora-markarik gabe.";
-"save_track_to_gpx" = "Auto-record track";
-"save_track_to_gpx_descrp" = "Turn on to automatically save a track during navigation";
+"save_track_to_gpx" = "Erregistratu lorratza automatikoki nabigazioan zehar";
+"save_track_to_gpx_descrp" = "Hasi automatikoki pista grabatzen nabigatzen duzun bitartean eta gorde automatikoki ondoren.";
 "gpx_distance_points" = "Distance (points)";
 "gpx_max_speed" = "Max speed";
 "shared_string_speed" = "Abiadura";
@@ -714,7 +714,7 @@
 "intro_placeholder" = "enter the name of your region";
 // Settings
 "sett_units" = "Units";
-"map_locale" = "Map Language";
+"map_locale" = "Maparen hizkuntza";
 "sett_km" = "Kilometers";
 "sett_ml" = "Miles";
 "sett_zoom" = "Zoom button";
@@ -1000,8 +1000,8 @@
 "add_to_a_track" = "Gehitu lorratz batera";
 "move_point" = "Mugitu puntua";
 "move_point_descr" = "Move map to change the position of this point.";
-"add_point_before" = "Add points before";
-"add_point_after" = "Add points after";
+"add_point_before" = "Gehitu puntua aurretik";
+"add_point_after" = "Gehitu puntua atzetik";
 "trim_before" = "Trim before this point";
 "trim_after" = "Trim after this point";
 "change_route_type_before" = "Change route type before this point";
@@ -1017,7 +1017,7 @@
 "next_segs_dist" = "All subsequent segments %@";
 "prev_seg_dist" = "Previous segment %@";
 "prev_segs_dist" = "All Previous segments %@";
-"only_selected_segment_recalc" = "Only the selected segment will be recalculated using the selected profile";
+"only_selected_segment_recalc" = "Aukeratutako segmentua soilik birkalkulatuko da hautatutako profila erabiliz.";
 "next_segs_recalc_descr" = "All subsequent segments will be recalculated using the selected profile";
 "prev_segs_recalc_descr" = "All previous segments will be recalculated using the selected profile";
 "reverse_route" = "Alderantzizko ibilbidea";
@@ -1135,7 +1135,7 @@
 "shared_string_zoom_levels" = "Zoom mailak";
 "res_expire_time" = "Expire time";
 "res_mercator" = "Mercator Projection";
-"edit_tilesource_elliptic_tile" = "Elliptic mercator";
+"edit_tilesource_elliptic_tile" = "Mercator eliptikoa proiekzioa";
 "pseudo_mercator_projection" = "Sasi-Mercator proiekzioa";
 "res_source_format" = "Source format";
 "sqlite_db_file" = "SQLiteDB fitxategia";
@@ -1181,7 +1181,7 @@
 "osm_created" = "Created";
 "poi_remove_success" = "Ezabatuta";
 "shared_string_modified" = "Aldatua";
-"osm_edit_reopened_note" = "Reopened";
+"osm_edit_reopened_note" = "OSM oharra berrireki da";
 "osm_name" = "OpenStreetMap username";
 "osm_pass" = "OpenStreetMap password";
 "osm_offline_editing" = "Always use offline editing";
@@ -1236,7 +1236,7 @@
 "osm_edit_show_on_map" = "Show modification on the map";
 "osm_edit_show_on_map_descr" = "Open the map centered on this point";
 "shared_string_without_name" = "Izenik gabe";
-"local_openstreetmap_uploading" = "Uploading...";
+"local_openstreetmap_uploading" = "Igotzen…";
 "osm_upload_complete" = "Upload complete";
 "osm_tag_too_long_message" = "The maximum value length for tag %@ is 255 characters. \nPlease make it shorter to continue.";
 "save_poi_without_poi_type_message" = "Ziur interesgunea mota gabe gorde nahi duzula\?";
@@ -1284,7 +1284,7 @@
 "quick_action_map_underlay_title" = "Maparen azpi-azalak";
 "vector_data" = "Lineaz kanpoko bektore mapak";
 "quick_action_map_source_action" = "Gehitu mapa-iturria";
-"quick_action_map_style_action" = "Add map style";
+"quick_action_map_style_action" = "Gehitu mapa estilo bat";
 "quick_action_map_styles" = "Mapa-estiloak";
 "quick_action_new_action" = "Gehitu ekintza";
 "unsupported_items" = "Unsupported items";
@@ -1303,7 +1303,7 @@
 "quick_action_add_parking" = "Gehitu aparkalekua";
 "parking_place" = "Aparkalekua";
 "quick_action_navigation_voice" = "Ahotsa bai/ez";
-"quick_action_add_osm_bug" = "Add OSM note";
+"quick_action_add_osm_bug" = "Gehitu OSM oharra";
 "toggle_online_notes" = "Toggle OSM notes";
 "toggle_local_edits" = "Toggle local OSM edits";
 "quick_action_add_poi" = "Gehitu POI";
@@ -1313,7 +1313,7 @@
 "quick_action_map_underlay" = "Aldatu maparen azpi-azala";
 "quick_action_replace_destination" = "Ordeztu helburua";
 "add_destination" = "Add destination";
-"route_add_start_point" = "Add starting point";
+"route_add_start_point" = "Gehitu irteera puntua";
 "add_intermediate" = "Gehitu tarteko puntua";
 "add_home" = "Gehitu etxea";
 "add_work" = "Gehitu lantokia";
@@ -1321,7 +1321,7 @@
 "work_button" = "Lantokia";
 "map_widget_parking" = "Aparkalekua";
 "quick_action_add_first_intermediate" = "Gehitu lehen tartekoa";
-"quick_action_auto_zoom" = "Auto zoom on/off";
+"quick_action_auto_zoom" = "Maparen zoom automatikoa bai/ez";
 "auto_zoom_on" = "Auto zoom on";
 "auto_zoom_off" = "Auto zoom off";
 "quick_action_resume_pause_navigation" = "Pausatu/jarraitu nabigazioa";
@@ -1331,8 +1331,8 @@
 "toggle_day_night" = "Switch Day/Night mode";
 "quick_action_switch_night_mode" = "Gaueko modua";
 "quick_action_switch_day_mode" = "Eguneko modua";
-"quick_action_navigation_voice_on" = "Mute voice";
-"quick_action_navigation_voice_off" = "Unmute voice";
+"quick_action_navigation_voice_on" = "Mututu ahotsa";
+"quick_action_navigation_voice_off" = "Desmututu ahotsa";
 "show_hide_gpx" = "Show/hide tracks";
 "show_gpx" = "Lorratzak";
 "hide_gpx" = "Hide track";
@@ -1366,7 +1366,7 @@
 "quick_action_poi_add_descr" = "Tapping this action button allows you to quickly add POI on the map with predefined type and tags.";
 "quick_action_day_night_descr" = "Tapping this action button switches between Day and Night map mode.";
 "quick_action_parking_descr" = "Tapping this action button adds a parking location at the map center point.";
-"quick_action_add_marker_descr" = "Tapping this action button adds a map marker at the map center point.";
+"quick_action_add_marker_descr" = "Pantailaren erdian mapa markatzaile bat gehitzeko botoia.";
 "quick_action_show_gpx_descr" = "Tapping this action button shows or hides currently displayed GPX tracks.";
 "quick_action_voice_descr" = "Tapping this action button disables or enables voice guidance during navigation.";
 "quick_action_add_dest_descr" = "Tapping this action button sets the destination to the map center. Any previously selected destination becomes the last intermediate destination.";
@@ -1550,15 +1550,17 @@
 "product_title_parking" = "Parking Position";
 "product_desc_parking" = "Let you easily memorize when the car was parked and how much time left if the parking is limited by time";
 "product_desc_ext_parking" = "OsmAnd Parking Plugin reminds you of your parking position. It is a plugin for OsmAnd Maps&Navigation app.\nChoose a time-independent reminder (only a marker on the map) or a time-limited one with alarm upon time expiration (includes also a marker on the map). To use the plugin, enable it in the Plugins menu.";
-"plugin_ski_name" = "Ski map";
+"plugin_ski_name" = "Ski-mapa ikuspegia";
 "product_desc_skimap" = "Ski slopes for all ski resorts in the world";
-"plugin_ski_descr" = "OsmAnd Ski Maps is a plugin to OsmAnd Maps&Navigation app designed to navigate at winter sports locations. It gives the information about ski pistes, ski lift markers and even colored lines indicating the complexity of each track. You get the info about ski tracks themselves as well as the surrounding infrastructure.\n\nUsage Instructions: Enable the plugin in OsmAnd application, tap the map button and set the map type to Ski maps.";
+"plugin_ski_descr" = "Gehigarri honek zure eskura jartzen ditu mundu osoko eskiatzeko aldapak, fondoko eski zirkuituak, trabesiako eski ibilbideak, teleferikoak, eta abar. Ibilbideak eta pistak zailtasunaren arabera koloreztatu dira, eta elurtutako paisaiaren itxura duen \'Negu\' estiloko mapa batean adierazten dira.
+\n
+\nHau aktibatzean ikuspegia \'Negua eta eskia\' estilora aldatzen da, paisaia neguko egoeran bistaratuz. Hau atzera aldatu daiteke gehigarri hau desgaituz eta \'Konfiguratu mapa\' menuko \'Mapa estiloa\' aldatuz.";
 "monitoring_settings" = "Bidai grabaketa";
 "product_desc_track_recording" = "Activates the functionality to record and save your tracks";
 "product_desc_ext_track_recording" = "Record your tracks and save them manually using OsmAnd Track recording plugin. Export your track as a gpx file, share it or even use it to contribute to OpenStreetMap project.  A handy tool for runners, hikers and anyone interested in recording their tracks.";
-"osm_editing_plugin_name" = "OpenStreetMap Editing";
+"osm_editing_plugin_name" = "OpenStreetMap edizioa";
 "product_desc_osm_editing" = "Make changes to OpenStreetMap directly from OsmAnd";
-"osm_editing_plugin_description" = "OSM Editing plugin can be used to make OSM contributions like creating or modifying POI objects, opening or commenting on OSM Notes, and contributing recorded GPX files. OSM is a community driven global public domain mapping project. For more information, please refer to https://osm.org. Contributions can be made directly from OsmAnd, if you specify your OSM credentials in the app.";
+"osm_editing_plugin_description" = "Egin OSM ekarpenak, esaterako interesgune objektuak sortzea edo eraldatzea, OSM oharrak irekitzea edo komentatzea, eta sortutako GPX fitxategiak bidaltzea, aplikazioan OSM kredentzialak zehaztuta. OpenStreetMap.org elkarlanean egindako, domeinu publikoko mapa proiektu global bat da.";
 "product_desc_mapillary" = "Online street-level photos for everyone";
 "product_desc_ext_mapillary" = "Kale mailako argazkiak denontzat. Deskubritu tokiak, parte hartu, eskuratu mundua.";
 "open_place_reviews" = "OpenPlaceReviews";
@@ -1649,7 +1651,6 @@
 "prch_srtm_info" = "Contour lines addon enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
 "shared_string_open" = "Ireki";
 "time_closed" = "Closed";
-"will_close_at" = "Will close in";
 "time_will_open" = "Will open in";
 "osm_live_active" = "Aktiboa";
 "menu_all_trips" = "All Tracks";
@@ -1690,7 +1691,7 @@
 "context_menu_item_directions_from" = "Jarraibideak hemendik";
 "search_nearby" = "Bilatu inguruan";
 "change_object_posiotion" = "Change object's position";
-"move_marker_bottom_sheet_title" = "Move the map to change object's position";
+"move_marker_bottom_sheet_title" = "Mugitu mapa markatzailearen posizioa aldatzeko";
 "est_travel_time" = "Estimate travel time";
 "pedestrian" = "Pedestrian";
 "sorting" = "Sorting";
@@ -2542,3 +2543,8 @@
 "weather_temperature_fahrenheit" = "Fahrenheit";
 "shared_string_cloud" = "Hodeia";
 "download_heightmap_maps" = "Altuera-mapa";
+"mgrs_format_descr" = "OsmAnd-ek MGRS erabiltzen du, UTM NATO formatuaren antzekoa da.";
+"auth_failed" = "Baimentzeak huts egin du";
+"rendering_attr_weatherWindSpeedContours_name" = "Haize-boladen isolineak";
+"verification_code_missing_description" = "Kodearen itxaronaldia 10 minutukoa izan daiteke; gainera, Zaborra karpeta egiaztatu dezakezu. Laguntzen ez badizu, erabili beheko botoia.";
+

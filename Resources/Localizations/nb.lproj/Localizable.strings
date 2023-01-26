@@ -466,8 +466,8 @@
 "record_trip" = "Record your trip";
 "shared_string_clear" = "Slett";
 "quick_action_poi_list" = "Interessepunktliste";
-"save_track_to_gpx" = "Auto-record trip during navigation";
-"save_track_to_gpx_descrp" = "A trip is automatically saved during navigation";
+"save_track_to_gpx" = "Auto-opptak av spor under navigering";
+"save_track_to_gpx_descrp" = "Auto-start sporopptak under navigasjon og auto-lagre etterpå.";
 "gpx_distance_points" = "Distance (points)";
 "gpx_max_speed" = "Max speed";
 "shared_string_speed" = "Hastighet";
@@ -632,7 +632,7 @@
 "osm_created" = "Created";
 "poi_remove_success" = "Slettet";
 "shared_string_modified" = "Modified";
-"osm_edit_reopened_note" = "Reopened";
+"osm_edit_reopened_note" = "Gjenåpnet OSM-notat";
 "osm_name" = "OpenStreetMap username";
 "osm_pass" = "OpenStreetMap password";
 "osm_offline_editing" = "Always use offline editing";
@@ -686,7 +686,7 @@
 "osm_edit_show_on_map" = "Show modification on the map";
 "osm_edit_show_on_map_descr" = "Open the map centered on this point";
 "shared_string_without_name" = "Uten navn";
-"local_openstreetmap_uploading" = "Uploading...";
+"local_openstreetmap_uploading" = "Laster opp…";
 "osm_upload_complete" = "Upload complete";
 "osm_tag_too_long_message" = "The maximum value length for tag %@ is 255 characters. \nPlease make it shorter to continue.";
 "save_poi_without_poi_type_message" = "Vil du lagre interessepunkt utenå angi type\?";
@@ -723,7 +723,7 @@
 "quick_action_map_underlay_title" = "Kartunderlag";
 "vector_data" = "Offline vektorkart";
 "quick_action_map_source_action" = "Legg til kartkilde";
-"quick_action_map_style_action" = "Add map style";
+"quick_action_map_style_action" = "Legg til en kartstil";
 "quick_action_map_styles" = "Kartstiler";
 "quick_action_new_action" = "Legg til handling";
 "quick_action_add_create_items" = "Opprett elementer";
@@ -749,14 +749,14 @@
 "quick_action_map_underlay" = "Endre kartunderlag";
 "quick_action_replace_destination" = "Erstatt reisemål";
 "add_destination" = "Add destination";
-"route_add_start_point" = "Add starting point";
+"route_add_start_point" = "Legg til startpunkt";
 "add_intermediate" = "Legg til mellomliggende punkt";
 "add_home" = "Legg til bosted";
 "add_work" = "Legg til arbeidssted";
 "favorite_home_category" = "Hjem";
 "work_button" = "Arbeid";
 "quick_action_add_first_intermediate" = "Legg til første mellomliggende punkt";
-"quick_action_auto_zoom" = "Auto zoom on/off";
+"quick_action_auto_zoom" = "Auto-zoom på/av";
 "auto_zoom_on" = "Auto zoom on";
 "auto_zoom_off" = "Auto zoom off";
 "quick_action_resume_pause_navigation" = "Navigering: sett på pause/gjenoppta";
@@ -801,7 +801,7 @@
 "quick_action_poi_add_descr" = "Tapping this action button allows you to quickly add POI on the map with predefined type and tags.";
 "quick_action_day_night_descr" = "Tapping this action button switches between Day and Night map mode.";
 "quick_action_parking_descr" = "Tapping this action button adds a parking location at the map center point.";
-"quick_action_add_marker_descr" = "Tapping this action button adds a map marker at the map center point.";
+"quick_action_add_marker_descr" = "En knapp forå legge til en kartmarkør i skjermsenteret.";
 "quick_action_show_gpx_descr" = "Tapping this action button shows or hides currently displayed GPX tracks.";
 "quick_action_voice_descr" = "Tapping this action button disables or enables voice guidance during navigation.";
 "quick_action_add_dest_descr" = "Tapping this action button sets the destination to the map center. Any previously selected destination becomes the last intermediate destination.";
@@ -922,18 +922,18 @@
 "product_title_parking" = "Parkeringsposisjon";
 "product_desc_parking" = "Let you easily memorize when the car was parked and how much time left if the parking is limited by time";
 "product_desc_ext_parking" = "OsmAnd Parking Plugin reminds you of your parking position. It is a plugin for OsmAnd Maps&Navigation app.\nChoose a time-independent reminder (only a marker on the map) or a time-limited one with alarm upon time expiration (includes also a marker on the map). To use the plugin, enable it in the Plugins menu.";
-"plugin_ski_name" = "Ski map";
+"plugin_ski_name" = "Skikartvisning";
 "product_desc_skimap" = "Ski slopes for all ski resorts in the world";
-"plugin_ski_descr" = "OsmAnd Ski Maps is a plugin to OsmAnd Maps&Navigation app designed to navigate at winter sports locations. It gives the information about ski pistes, ski lift markers and even colored lines indicating the complexity of each track. You get the info about ski tracks themselves as well as the surrounding infrastructure.\n\nUsage Instructions: Enable the plugin in OsmAnd application, tap the map button and set the map type to Ski maps.";
+"plugin_ski_descr" = "Designet tilå navigere i vintersportsområder: Se skibakker, skiheiser og langrennsløyper, og med fargede linjer som indikerer vanskelighetsgrader. For å bruke, aktiver dette tillegget og gå også til \"Kartinnstilling\" og velg kartstilen \"Vinter og ski\".";
 "monitoring_settings" = "Turopptak";
 "product_desc_track_recording" = "Activates the functionality to record and save your trips";
 "product_desc_ext_track_recording" = "Allows you to record, save and analyze your training or movement data, such as speed, ascents, descents or route relief, which can then be reused, improved, supplemented or shared with friends. \n\nHow to - https://osmand.net/docs/user/plugins/trip-recording";
 "product_title_trip_planning" = "Trip planning";
 "product_desc_trip_planning" = "Plan your trip, add waypoints, measure the distance to your destination using this plugin";
 "product_desc_ext_trip_planning" = "Trip planning plugin allows you to create your trip on the map, save it, measure the distance between points connected with straight lines, etc. Created for preliminary trip planning rather than thorough route building.";
-"osm_editing_plugin_name" = "OpenStreetMap Editing";
+"osm_editing_plugin_name" = "OSM-redigering";
 "product_desc_osm_editing" = "Make changes to OpenStreetMap directly from OsmAnd";
-"osm_editing_plugin_description" = "OSM Editing plugin can be used to make OSM contributions like creating or modifying POI objects, opening or commenting on OSM Notes, and contributing recorded GPX files. OSM is a community driven global public domain mapping project. For more information, please refer to https://osm.org. Contributions can be made directly from OsmAnd, if you specify your OSM credentials in the app.";
+"osm_editing_plugin_description" = "Via dette programtillegget kan OsmAnd brukes tilå sende inn OSM-bidrag, som opprettelse eller endring av OSM-POI-objekter, åpning eller kommentering av OSM-notater, og bidrag til GPX-spor. OSM er et verdensomspennende kartprosjekt i offentlig eiendom. For detaljer, se https://openstreetmap.org. Aktiv deltagelse verdsettes, og bidrag kan gjøresdirekte fra OsmAnd, hvis du angir din personlige OSM-innloggingsinfo i programmet.";
 "product_desc_africa" = "Unlimited map downloads for Africa";
 "product_desc_africa_short" = "Africa region maps";
 "product_desc_australia" = "Unlimited map downloads for Australia";
@@ -995,7 +995,6 @@
 "prch_srtm_info" = "Contour lines addon enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
 "shared_string_open" = "Åpne";
 "time_closed" = "Closed";
-"will_close_at" = "Will close in";
 "time_will_open" = "Will open in";
 "osm_live_active" = "Aktiv";
 "menu_all_trips" = "All Trips";
@@ -1200,7 +1199,7 @@
 "gpx_descent" = "Nedstigning";
 "nautical_maps" = "Sjøkart";
 "edit_tilesource_url_to_load" = "Nettadresse";
-"edit_tilesource_elliptic_tile" = "Elliptisk mercator";
+"edit_tilesource_elliptic_tile" = "Elliptisk Mercator-projeksjon";
 "routing_attr_avoid_shuttle_train_name" = "Ingen pendeltog";
 "rendering_attr_ice_road_name" = "Isvei";
 "rendering_attr_surface_snow_name" = "Snø";
@@ -1765,8 +1764,8 @@
 "change_route_type_before" = "Endre rutetype før dette punktet";
 "trim_after" = "Forkort etter dette punktet";
 "trim_before" = "Forkort før dette punktet";
-"add_point_after" = "Legg til punkter etter";
-"add_point_before" = "Legg til punkter før";
+"add_point_after" = "Legg til punkt etter";
+"add_point_before" = "Legg til punkt før";
 "move_point" = "Flytt punkt";
 "points_count" = "Punkter:";
 "point_num" = "Punkt %d";
@@ -1837,7 +1836,7 @@
 "shared_string_circle" = "Sirkel";
 "restart" = "Start på ny";
 "settings_item_read_error" = "Kunne ikke lese fra \"%@\".";
-"move_marker_bottom_sheet_title" = "Flytt kartet for å endre objektets posisjon";
+"move_marker_bottom_sheet_title" = "Beveg kartet forå endre markørposisjon";
 "calc_pedestrian_route" = "Regn ut spaseringsrute";
 "product_desc_antarctica" = "Ubegrensede kartnedlastinger for Antarktis";
 "context_menu_item_edit_waypoint" = "Rediger GPX-rutepunkt";
@@ -2488,3 +2487,8 @@
 "rendering_attr_horse_scale_impossible_name" = "Umulig";
 "rendering_attr_OSMMapperAssistantFixme_description" = "Vis fiksmeg-etiketter";
 "rendering_attr_showWaterwayTunnels_name" = "Vannveistunneler";
+"mgrs_format_descr" = "OsmAnd bruker MGRS, som ligner på formatet UTM NATO.";
+"auth_failed" = "Identitetsbekreftelse mislyktes";
+"only_selected_segment_recalc" = "Kun det valgte segmentet blir beregnet på nytt med den valgte profilen.";
+"download_wikipedia_data" = "Last ned Wikipedia-data";
+

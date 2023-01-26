@@ -714,7 +714,7 @@
 "intro_placeholder" = "enter the name of your region";
 // Settings
 "sett_units" = "Units";
-"map_locale" = "Map Language";
+"map_locale" = "Език на картата";
 "sett_km" = "Kilometers";
 "sett_ml" = "Miles";
 "sett_zoom" = "Zoom button";
@@ -1018,7 +1018,7 @@
 "next_segs_dist" = "All subsequent segments %@";
 "prev_seg_dist" = "Previous segment %@";
 "prev_segs_dist" = "All Previous segments %@";
-"only_selected_segment_recalc" = "Only the selected segment will be recalculated using the selected profile";
+"only_selected_segment_recalc" = "Само избраният сегмент ще бъде преизчислен съобразно избрания профил.";
 "next_segs_recalc_descr" = "All subsequent segments will be recalculated using the selected profile";
 "prev_segs_recalc_descr" = "All previous segments will be recalculated using the selected profile";
 "reverse_route" = "Reverse route";
@@ -1136,7 +1136,7 @@
 "shared_string_zoom_levels" = "Нива на мащабиране";
 "res_expire_time" = "Expire time";
 "res_mercator" = "Mercator Projection";
-"edit_tilesource_elliptic_tile" = "Elliptic mercator";
+"edit_tilesource_elliptic_tile" = "Елиптична меркаторна проекция";
 "pseudo_mercator_projection" = "Pseudo-Mercator projection";
 "res_source_format" = "Source format";
 "sqlite_db_file" = "SQLiteDB file";
@@ -1182,7 +1182,7 @@
 "osm_created" = "Created";
 "poi_remove_success" = "Премахнато";
 "shared_string_modified" = "Modified";
-"osm_edit_reopened_note" = "Reopened";
+"osm_edit_reopened_note" = "Отворена отново бележка на OSM";
 "osm_name" = "OpenStreetMap username";
 "osm_pass" = "OpenStreetMap password";
 "osm_offline_editing" = "Always use offline editing";
@@ -1237,7 +1237,7 @@
 "osm_edit_show_on_map" = "Show modification on the map";
 "osm_edit_show_on_map_descr" = "Open the map centered on this point";
 "shared_string_without_name" = "Без име";
-"local_openstreetmap_uploading" = "Uploading...";
+"local_openstreetmap_uploading" = "Изпращане…";
 "osm_upload_complete" = "Upload complete";
 "osm_tag_too_long_message" = "The maximum value length for tag %@ is 255 characters. \nPlease make it shorter to continue.";
 "save_poi_without_poi_type_message" = "Наистина ли ще запазите POI без да укажете тип?";
@@ -1551,15 +1551,17 @@
 "product_title_parking" = "Parking Position";
 "product_desc_parking" = "Let you easily memorize when the car was parked and how much time left if the parking is limited by time";
 "product_desc_ext_parking" = "OsmAnd Parking Plugin reminds you of your parking position. It is a plugin for OsmAnd Maps&Navigation app.\nChoose a time-independent reminder (only a marker on the map) or a time-limited one with alarm upon time expiration (includes also a marker on the map). To use the plugin, enable it in the Plugins menu.";
-"plugin_ski_name" = "Ski map";
+"plugin_ski_name" = "Изглед за скиори";
 "product_desc_skimap" = "Ski slopes for all ski resorts in the world";
-"plugin_ski_descr" = "OsmAnd Ski Maps is a plugin to OsmAnd Maps&Navigation app designed to navigate at winter sports locations. It gives the information about ski pistes, ski lift markers and even colored lines indicating the complexity of each track. You get the info about ski tracks themselves as well as the surrounding infrastructure.\n\nUsage Instructions: Enable the plugin in OsmAnd application, tap the map button and set the map type to Ski maps.";
+"plugin_ski_descr" = "Тази добавка за OsmAnd показва ски писти, алпийски маршрути, кабинкови лифтове и ски лифтове. Маршрутите и пистите са оцветени съобразно тяхната трудност. Можете да ползвате специален картен стил \"Зима\", който оцветява пейзажа в съответните цветове.
+\n
+\nТози стил може да бъде деактивиран от това меню или чрез промяна в \"Стил на картата\" от менюто \"Настройки на картата\".";
 "monitoring_settings" = "Записване на изминатия път";
 "product_desc_track_recording" = "Activates the functionality to record and save your tracks";
 "product_desc_ext_track_recording" = "Record your tracks and save them manually using OsmAnd Track recording plugin. Export your track as a gpx file, share it or even use it to contribute to OpenStreetMap project.  A handy tool for runners, hikers and anyone interested in recording their tracks.";
-"osm_editing_plugin_name" = "OpenStreetMap Editing";
+"osm_editing_plugin_name" = "Редактиране на OSM";
 "product_desc_osm_editing" = "Make changes to OpenStreetMap directly from OsmAnd";
-"osm_editing_plugin_description" = "OSM Editing plugin can be used to make OSM contributions like creating or modifying POI objects, opening or commenting on OSM Notes, and contributing recorded GPX files. OSM is a community driven global public domain mapping project. For more information, please refer to https://osm.org. Contributions can be made directly from OsmAnd, if you specify your OSM credentials in the app.";
+"osm_editing_plugin_description" = "Добавка за изпращане на данни към OSM - обекти (POI), бележки, GPX записани маршрути. За подробности по проекта OSM посетете https://openstreetmap.org. Вашият принос към проекта ще бъдеоценен с благодарности. Необходимо е да се регистрирате на сайта на OSM и да въведете Вашето потребителско име и парола в това приложение.";
 "product_desc_mapillary" = "Online street-level photos for everyone";
 "product_desc_ext_mapillary" = "Online street-level photos for everyone. Discover places, collaborate, capture the world.";
 "open_place_reviews" = "OpenPlaceReviews";
@@ -1650,7 +1652,6 @@
 "prch_srtm_info" = "Contour lines addon enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
 "shared_string_open" = "Отворено";
 "time_closed" = "Closed";
-"will_close_at" = "Will close in";
 "time_will_open" = "Will open in";
 "osm_live_active" = "Активен";
 "menu_all_trips" = "All Tracks";
@@ -1691,7 +1692,7 @@
 "context_menu_item_directions_from" = "Упътване от тук";
 "search_nearby" = "Търси наблизо";
 "change_object_posiotion" = "Change object's position";
-"move_marker_bottom_sheet_title" = "Move the map to change object's position";
+"move_marker_bottom_sheet_title" = "Преместете картата за да смените позицията на маркера";
 "est_travel_time" = "Estimate travel time";
 "pedestrian" = "Pedestrian";
 "sorting" = "Sorting";
@@ -2405,3 +2406,7 @@
 "rendering_attr_weatherPressureContours_name" = "Изобари";
 "routing_attr_avoid_footways_name" = "Избягване на пътеки";
 "rendering_attr_hideMilitaryAreas_name" = "Скриване на военните зони";
+"routing_attr_prefer_hiking_routes_name" = "Предпочитане на пешеходни маршрути";
+"auth_failed" = "Неуспешно влизане";
+"mgrs_format_descr" = "OsmAndизползва MGRS, който е подобен на формата UTM на НАТО.";
+

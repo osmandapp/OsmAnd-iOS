@@ -683,7 +683,7 @@
 "gpx_upload_trackable_visibility_descr" = "\"Trackable\" means the trace does not show up in any public listings, but processed trackpoints with timestamps from it (that can\'t be associated with you directly) do through downloads from the public GPS API.";
 "gpx_upload_private_visibility_descr" = "\"Private\" means the trace does not show up in any public listings, but trackpoints from it in unchronological order are available through the public GPS API without timestamps.";
 
-"save_track_to_gpx" = "Auto-record track";
+"save_track_to_gpx" = "வழிசெலுத்தலின் போது தானாக பதிவுசெய்த பாதையில்";
 "save_track_to_gpx_descrp" = "Turn on to automatically save a track during navigation";
 
 "gpx_distance_points" = "Distance (points)";
@@ -1058,8 +1058,8 @@
 "add_to_a_track" = "Add to a track";
 "move_point" = "நகரும் புள்ளி";
 "move_point_descr" = "Move map to change the position of this point.";
-"add_point_before" = "Add points before";
-"add_point_after" = "Add points after";
+"add_point_before" = "முன் புள்ளி சேர்க்கவும்";
+"add_point_after" = "பிறகு புள்ளியைச் சேர்க்கவும்";
 "trim_before" = "Trim before this point";
 "trim_after" = "Trim after this point";
 "change_route_type_before" = "Change route type before this point";
@@ -1193,7 +1193,7 @@
 "shared_string_zoom_levels" = "Zoom levels";
 "res_expire_time" = "Expire time";
 "res_mercator" = "Mercator Projection";
-"edit_tilesource_elliptic_tile" = "Elliptic mercator";
+"edit_tilesource_elliptic_tile" = "எலிபிக் மெர்கேட்டர்";
 "pseudo_mercator_projection" = "Pseudo-Mercator projection";
 "res_source_format" = "Source format";
 "sqlite_db_file" = "SQLiteDB file";
@@ -1296,7 +1296,7 @@
 "osm_edit_show_on_map" = "Show modification on the map";
 "osm_edit_show_on_map_descr" = "Open the map centered on this point";
 "shared_string_without_name" = "பெயர் இல்லாமல்";
-"local_openstreetmap_uploading" = "Uploading...";
+"local_openstreetmap_uploading" = "பதிவேற்றப்படுகிறது…";
 "osm_upload_complete" = "Upload complete";
 "osm_tag_too_long_message" = "The maximum value length for tag %@ is 255 characters. \nPlease make it shorter to continue.";
 "save_poi_without_poi_type_message" = "Do you want to save POI without type?";
@@ -1727,7 +1727,6 @@
 
 "shared_string_open" = "Open";
 "time_closed" = "Closed";
-"will_close_at" = "Will close in";
 "time_will_open" = "Will open in";
 
 "osm_live_active" = "செயலில்";
@@ -1773,7 +1772,7 @@
 "context_menu_item_directions_from" = "\"திசைகள் இருந்து \"";
 "search_nearby" = "Search nearby";
 "change_object_posiotion" = "Change object's position";
-"move_marker_bottom_sheet_title" = "Move the map to change object's position";
+"move_marker_bottom_sheet_title" = "மார்க்கர் நிலையை மாற்ற வரைபடத்தை நகர்த்தவும்";
 
 "est_travel_time" = "Estimate travel time";
 "pedestrian" = "Pedestrian";
@@ -2419,8 +2418,11 @@
 "shared_string_added" = "சேர்க்கப்பட்டது";
 "recording_delete_confirm" = "இந்த உருப்படியை நீக்கவா\?";
 "download_wikipedia_data" = "விக்கிபீடியா கட்டுரையை பதிவிறக்கவும்";
+"auth_failed" = "அங்கீகாரம் தோல்வியடைந்தது";
 
 "routing_attr_avoid_toll_description" = "கட்டண சாலைகள் தவிர்க்கவும்
 \n";
 "rendering_attr_contourColorScheme_name" = "விளிம்பு கோடுகள் வண்ணங்கள்
+\n";
+"rendering_attr_noAdminboundaries_description" = "பிராந்திய எல்லைகளை காட்சிப்படுத்த (நிர்வாகம் அளவு 5-9).
 \n";

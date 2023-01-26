@@ -394,7 +394,7 @@
 "show_info" = "Show Info";
 "record_trip" = "Record your trip";
 "shared_string_clear" = "Limpar";
-"save_track_to_gpx" = "Auto-record track during navigation";
+"save_track_to_gpx" = "Gravar a pista de xeito automático ó navegar";
 "save_track_to_gpx_descrp" = "A GPX track is automatically saved during navigation";
 "gpx_distance_points" = "Distance (points)";
 "gpx_max_speed" = "Max speed";
@@ -425,7 +425,7 @@
 "intro_placeholder" = "enter the name of your region";
 // Settings
 "sett_units" = "Units";
-"map_locale" = "Map Language";
+"map_locale" = "Lingua do mapa";
 "sett_km" = "Kilometers";
 "sett_ml" = "Miles";
 "sett_zoom" = "Zoom button";
@@ -596,9 +596,11 @@
 "product_title_parking" = "Parking Position";
 "product_desc_parking" = "Let you easily memorize when the car was parked and how much time left if the parking is limited by time";
 "product_desc_ext_parking" = "OsmAnd Parking Plugin reminds you of your parking position. It is a plugin for OsmAnd Maps&Navigation app.\nChoose a time-independent reminder (only a marker on the map) or a time-limited one with alarm upon time expiration (includes also a marker on the map). To use the plugin, enable it in the Plugins menu.";
-"plugin_ski_name" = "Ski map";
+"plugin_ski_name" = "Vista dos mapas de esquí";
 "product_desc_skimap" = "Ski slopes for all ski resorts in the world";
-"plugin_ski_descr" = "OsmAnd Ski Maps is a plugin to OsmAnd Maps&Navigation app designed to navigate at winter sports locations. It gives the information about ski pistes, ski lift markers and even colored lines indicating the complexity of each track. You get the info about ski tracks themselves as well as the surrounding infrastructure.\n\nUsage Instructions: Enable the plugin in OsmAnd application, tap the map button and set the map type to Ski maps.";
+"plugin_ski_descr" = "Este plugin para o OsmAnd ponó teu acade detalles sobre pistas do esquí de baixada, de travesía, roteiros do esquí alpino, teleféricos e refachos a nivel mundial. As rotas e pistas amósanse polo código de cor en función da súa dificuldade e representados cun estilo do mapa especial \"Inverno\" que o asemella a unha paisaxe invernal nevada.
+\n 
+\nActivando esta vista, muda o estilo do mapa a «Inverno e esquí», amosando as características do terreo en condicións invernais. Esta vista pódese revertir desactivando de novo eiquí ou mudando o \"Estilo do mapa\" en \"Configurar mapa\" cando o desexes.";
 "monitoring_settings" = "Gravación de viaxes";
 "product_desc_track_recording" = "Activates the functionality to record and save your tracks";
 "product_desc_ext_track_recording" = "Permíteche gravar, gardar e analizalos teus datos do adestramento ou movementos, coma velocidade, ascensos, descensos ou alivio da ruta, que logo se poden reutilizar, mellorar, complementar ou compartir cos amigos.. \n\nComo - https://osmand.net/docs/user/plugins/trip-recording";
@@ -654,7 +656,6 @@
 "prch_srtm_info" = "Contour lines addon enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
 "shared_string_open" = "Aberto";
 "time_closed" = "Closed";
-"will_close_at" = "Will close in";
 "time_will_open" = "Will open in";
 "osm_live_active" = "Activo";
 "menu_all_trips" = "All Trips";
@@ -962,7 +963,7 @@
 "favorite_home_category" = "Casa";
 "show_notes" = "Amosar notas do OSM";
 "hide_notes" = "Agochar notas do OSM";
-"edit_tilesource_elliptic_tile" = "Mercator elíptico";
+"edit_tilesource_elliptic_tile" = "Proxección do Mercator elíptico";
 "edit_tilesource_url_to_load" = "URL";
 "rendering_value_dark_brown_name" = "Marrón escuro";
 "rendering_attr_currentTrackColor_description" = "Cor de GPX";
@@ -1862,3 +1863,22 @@ Lon %@";
 "routing_attr_allow_streams_name" = "Permitir regatos e cunetas";
 "rendering_attr_noNatureReserveBoundaries_description" = "Agochar reservas naturais,áreas protexidas e de parques nacionais.";
 "routing_attr_allow_intermittent_description" = "Permitir canles de auga intermitentes";
+"quick_action_navigation_voice_on" = "Desactivar a voz";
+"move_marker_bottom_sheet_title" = "Move o mapa para mudar a posición da marcaxe";
+"add_point_before" = "Engadir punto antes";
+"download_wikipedia_data" = "Baixar datos da Wikipedia";
+"auth_failed" = "Fallou a autorización";
+"local_openstreetmap_uploading" = "Estase a subir…";
+"quick_action_map_style_action" = "Engadir un estilo do mapa";
+"quick_action_add_osm_bug" = "Engadir unha nota do OSM";
+"osm_edit_reopened_note" = "Reabriuse a nota de OSM";
+"quick_action_add_marker_descr" = "Un botón que engade unha marcaxe no centro da pantalla.";
+"mgrs_format_descr" = "O OsmAnd emprega MGRS, queé semellante ó formato UTM NATO.";
+"osm_editing_plugin_name" = "Edición do OpenStreetMap";
+"route_add_start_point" = "Engadir punto de comezo";
+"add_point_after" = "Engadir punto despois";
+"only_selected_segment_recalc" = "Só o segmento marcado será recalculado empregando o perfil escollido.";
+"quick_action_navigation_voice_off" = "Activar a voz";
+"osm_editing_plugin_description" = "Fai contribucións no OSM, como o crear ou modificar obxectos PDI, abrir ou comentar notas do OSM e contribuír con ficheiros de pistas GPX gravados no OsmAnd, fornecendo o teu nome de usuario e contrasinal. O OpenStreetMap.org é un proxecto de cartografado de dominio público, global, ceibe e impulsado pola comunidade.";
+"quick_action_auto_zoom" = "Activar ou desactivar achegamento automático do mapa";
+

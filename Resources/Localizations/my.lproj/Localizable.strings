@@ -576,7 +576,7 @@
 "prch_srtm_info" = "Contour lines addon enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
 "shared_string_open" = "Open";
 "time_closed" = "Closed";
-"will_close_at" = "Will close in";
+"will_close_at" = "ပိတ်ချိန်";
 "time_will_open" = "Will open in";
 "osm_live_active" = "Active";
 "menu_all_trips" = "All Trips";
@@ -876,10 +876,12 @@
 "osm_live_payment_annual_title" = "နှစ်စဉ်";
 "nav_type_hint" = "လမ်းညွှန်အမျိုးအစား";
 "shared_string_added" = "ထည့်သည်";
-"will_close_at" = "ပိတ်ချိန်";
 "will_open_on" = "ဖွင့်ချိန်";
 "first_intermediate_dest_description" = "အစနေရာထည့်ပါ";
 "parked_at" = "မှာရပ်တယ်";
 "public_transport_ped_route_title" = "ခြေလျင်ဖြင့်သွားသောလမ်းကြောင်းသည်ခန့်မှန်းခြေအားဖြင့် %@ ဖြစ်ပြီးပြည်သူပို့ဆောင်ရေးထက်ပိုမြန်လိမ့်မည်";
 "will_open_tomorrow_at" = "မနက်ဖြန်ဖွင့်ချိန်";
 "osm_live_payment_contribute_descr" = "၀င်ငွေ၏တစိတ်တပိုင်းသည် OpenStreetMap ထောက်ပံ့သူများထံသို့သွားသည်။";
+"route_add_start_point" = "အစနေရာထည့်ပါ";
+"will_open_at" = "ဖွင့်ချိန်";
+

@@ -368,7 +368,7 @@
 "intro_placeholder" = "enter the name of your region";
 // Settings
 "sett_units" = "Units";
-"map_locale" = "Map Language";
+"map_locale" = "زبان نقشه";
 "sett_km" = "Kilometers";
 "sett_ml" = "Miles";
 "sett_zoom" = "Zoom button";
@@ -518,9 +518,11 @@
 "product_title_parking" = "Parking Position";
 "product_desc_parking" = "Let you easily memorize when the car was parked and how much time left if the parking is limited by time";
 "product_desc_ext_parking" = "OsmAnd Parking Plugin reminds you of your parking position. It is a plugin for OsmAnd Maps&Navigation app.\nChoose a time-independent reminder (only a marker on the map) or a time-limited one with alarm upon time expiration (includes also a marker on the map). To use the plugin, enable it in the Plugins menu.";
-"plugin_ski_name" = "Ski map";
+"plugin_ski_name" = "نمای اسکی برای نقشه";
 "product_desc_skimap" = "Ski slopes for all ski resorts in the world";
-"plugin_ski_descr" = "OsmAnd Ski Maps is a plugin to OsmAnd Maps&Navigation app designed to navigate at winter sports locations. It gives the information about ski pistes, ski lift markers and even colored lines indicating the complexity of each track. You get the info about ski tracks themselves as well as the surrounding infrastructure.\n\nUsage Instructions: Enable the plugin in OsmAnd application, tap the map button and set the map type to Ski maps.";
+"plugin_ski_descr" = "با این افزونه اطلاعات جهانی سراشیبی‌های اسکی، مسابقات اسکی صحرایی، مسیرهای اسکی آلپاین، تله‌کابین‌ها و نقاله‌های اسکی کاملاً در اختیارتان است. مسیرها و پیست‌هابر اساس دشواری رنگ‌بندی شده‌اند که در یک سبک زمستانی ارائه می‌شوند تا نمایی همگون با محیط زمستانی را برایتان ایجاد کند. 
+\n 
+\nبا فعال‌کردن این نما، سبک نقشه به «زمستان و اسکی» تغییر می‌کند که همهٔ خصوصیات زمین را با ظاهر زمستانی نشان می‌دهد. برای غیرفعال‌کردن این نما افزونه را غیرفعال کنید یا اینکه از طریق منو ← پیکربندی نقشه ←سبک نقشه، سبک دلخواهتان را انتخاب کنید.";
 "monitoring_settings" = "ضبط سفر";
 "product_desc_track_recording" = "Activates the functionality to record and save your tracks";
 "product_desc_ext_track_recording" = "Record your trips and save them manually using OsmAnd Trip recording plugin. Export your trip as a gpx file, share it or even use it to contribute to OpenStreetMap project.  A handy tool for runners, hikers and anyone interested in recording their trips.";
@@ -576,7 +578,7 @@
 "prch_srtm_info" = "Contour lines addon enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
 "shared_string_open" = "باز است";
 "time_closed" = "Closed";
-"will_close_at" = "Will close in";
+"will_close_at" = "ساعت تعطیل‌کردن";
 "time_will_open" = "Will open in";
 "osm_live_active" = "فعال";
 "menu_all_trips" = "همه ردها";
@@ -694,7 +696,6 @@
 "download_wiki_region_placeholder" = "این منطقه";
 "open_from" = "ساعت بازشدن";
 "open_till" = "ساعت کاری تا";
-"will_close_at" = "ساعت تعطیل‌کردن";
 "will_open_at" = "ساعت بازکردن";
 "will_open_on" = "زمان بازشدن";
 "will_open_tomorrow_at" = "فردا باز می‌شود، در ساعت";
@@ -955,7 +956,7 @@
 "shared_string_actions" = "کنش‌ها";
 "quick_action_bug_descr" = "این نوشته در قسمت پیام درج می‌شود.";
 "hide_notes" = "پنهان‌کردن یادداشت‌های OSM";
-"edit_tilesource_elliptic_tile" = "مرکاتور بیضوی";
+"edit_tilesource_elliptic_tile" = "فراتابی مرکاتور بیضوی";
 "edit_tilesource_url_to_load" = "نشانی اینترنتی";
 "show_notes" = "آشکارکردن یادداشت‌های OSM";
 "routing_attr_piste_type_sled_name" = "سورتمه";
@@ -1529,7 +1530,7 @@
 "osm_upload_failed_title" = "بارگذاری انجام نشد";
 "poi_select_type" = "نوع را انتخاب کنید";
 "poi_select_category" = "دسته‌بندی را انتخاب کنید";
-"osm_editing_plugin_name" = "ویرایش نقشه اوپن‌استریت‌مپ";
+"osm_editing_plugin_name" = "ویرایش OpenStreetMap";
 "osm_confirm_delete" = "POI حذف‌شود؟";
 "osm_modify_place" = "ویرایش مکان";
 "osm_add_place" = "افزودن مکان";
@@ -1548,7 +1549,7 @@
 
 // Help
 "help_first_steps" = "اولین مراحل";
-"save_track_to_gpx" = "ضبط خودکار رد";
+"save_track_to_gpx" = "ردنگاری خودکار در هنگام ناوبری";
 "gpxup_private" = "خصوصی";
 "gpxup_trackable" = "قابل ردیابی";
 "gpxup_public" = "عمومی";
@@ -1570,10 +1571,10 @@
 "sort_by" = "ترتیب بر اساس";
 "quick_action_dialog" = "گفتگو";
 "reddit" = "ردیت";
-"local_openstreetmap_uploading" = "درحال بارگذاری...";
+"local_openstreetmap_uploading" = "در حال بارگذاری…";
 "osm_failed_uploads" = "ناموفق";
 "osm_succsessful_uploads" = "موفقیت‌آمیز";
-"osm_edit_reopened_note" = "دوباره بازشد";
+"osm_edit_reopened_note" = "یادداشت OSM بازگشوده";
 "osmand_live_reports" = "گزارش‌ها";
 "twitter" = "توییتر";
 "route_between_points_warning_desc" = "در ادامه، رد خود را به نزدیک‌ترین جادهٔ مجاز متناسب با یکی از نمایه‌های ناوبری‌تان بچسبانید، تا از این گزینه استفاده کنید.";
@@ -2081,3 +2082,19 @@
 "rendering_attr_horse_scale_common_name" = "مشترک";
 "rendering_value_all_name" = "همه";
 "routing_attr_difficulty_preference_advanced_name" = "پیشرفته";
+"quick_action_navigation_voice_on" = "خاموش‌کردن گفتار";
+"move_marker_bottom_sheet_title" = "نقشه را جابه‌جا کنید تا موقعیت نشانه عوض شود";
+"auth_failed" = "احراز هویت انجام نشد";
+"add_point_after" = "افزودن نقطه بعد از آن";
+"quick_action_add_osm_bug" = "افزودن یادداشت OSM";
+"quick_action_auto_zoom" = "زوم خودکار روشن/خاموش";
+"mgrs_format_descr" = "‏OsmAnd از MGRS استفاده می‌کند که شبیه قالب UTM NATO است.";
+"add_point_before" = "افزودن نقطه قبل از آن";
+"download_wikipedia_data" = "بارگیری دادهٔ ویکی‌پدیا";
+"route_add_start_point" = "افزودن مبدأ";
+"quick_action_navigation_voice_off" = "روشن‌کردن گفتار";
+"only_selected_segment_recalc" = "فقط پارهٔ انتخاب‌شده با استفاده از نمایه انتخابی بازمحاسبه می‌شود.";
+"quick_action_add_marker_descr" = "دکمه‌ای برای ایجاد یک نشانه در مرکز صفحه.";
+"quick_action_map_style_action" = "افزودن یک سبک نقشه";
+"osm_editing_plugin_description" = "با ایجاد یا اصلاح نقاط توجه (POI)، ایجاد یادداشت‌های OSM یا نظردادن روی آن‌ها و بارگذاری پرونده‌های GPXای که ضبط کرده‌اید در تکمیل نقشهٔ OSM مشارکت کنید. برای این منظور لازم است نام کاربری و گذرواژهٔ خود را در OsmAnd وارد کنید. OpenStreetMap.org یک پروژهٔ نقشه‌کشی جامعه‌محور، جهانی و در مالکیت عمومی است.";
+

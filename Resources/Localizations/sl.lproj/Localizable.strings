@@ -316,7 +316,7 @@
 // Help
 "help_quiz" = "Anketa";
 "product_title_parking" = "Parkiranje (mesto in čas)";
-"plugin_ski_name" = "Zemljevid smučišč";
+"plugin_ski_name" = "Zemljevidi smučišč";
 "product_desc_skimap" = "Smučarske poti vseh smučišč na svetu";
 "monitoring_settings" = "Beleženje potovanja";
 "product_desc_africa" = "Neomejeno prenašanje zemljevidov Afrike";
@@ -354,7 +354,7 @@
 "srtm_plugin_disabled" = "Izris izohips je onemogočen";
 "shared_string_open" = "Odpri";
 "time_closed" = "Zaprto";
-"will_close_at" = "Zapre se čez";
+"will_close_at" = "Zapre se ob";
 "time_will_open" = "Odpre se čez";
 "menu_all_trips" = "Vsa potovanja";
 "total_time" = "Skupni čas";
@@ -556,7 +556,6 @@
 "day_off_label" = "zaprto";
 "open_from" = "Odprto od";
 "open_till" = "Odprto do";
-"will_close_at" = "Zapre se ob";
 "will_open_at" = "Odpre se ob";
 "will_open_on" = "Odpre se ob";
 "will_open_tomorrow_at" = "Odpre se spet jutri ob";
@@ -903,7 +902,7 @@
 "mapillary_menu_title_tile_cache" = "Predpomnilnik sličic";
 "nautical_maps" = "Navtični zemljevidi";
 "local_map_names" = "Krajevna imena";
-"edit_tilesource_elliptic_tile" = "Mercatorjeva projekcija";
+"edit_tilesource_elliptic_tile" = "Eliptična Mercatorjeva projekcija";
 "show_notes" = "Pokaži Opombe OSM";
 "edit_tilesource_url_to_load" = "Spletni naslov";
 "hide_notes" = "Skrij Opombe OSM";
@@ -2048,3 +2047,26 @@
 "routing_attr_avoid_footways_description" = "Izogibaj se pešpoti";
 "rendering_attr_showTrainRoutes_name" = "Proge vlakov";
 "routing_attr_avoid_highway_description" = "Izogibaj se avtocest";
+"add_point_after" = "Dodaj točko za";
+"quick_action_map_style_action" = "Dodaj slog zemljevida";
+"download_wikipedia_data" = "Prejmi podatke Wikipedije";
+"plugin_ski_descr" = "Zasnovan za navigacijo po območjih zimskih športov: oglej si smučarske proge in vlečnice ter proge za tek na smučeh z barvnimi črtami, ki označujejo stopnje težavnosti. Za uporabo omogoči ta vtičnik in pojdi na »Konfiguriraj zemljevid« ter izberite slog zemljevida »Zima in smučanje«.";
+"save_track_to_gpx_descrp" = "Samodejni zagon snemanja sledi med navigacijo in samodejno shranjevanje po tem.";
+"move_marker_bottom_sheet_title" = "S premikom zemljevida se spremeni položaj označbe";
+"local_openstreetmap_uploading" = "Poteka pošiljanje …";
+"route_add_start_point" = "Dodajštartno točko";
+"quick_action_add_osm_bug" = "Vpiši opombo OSM";
+"add_point_before" = "Dodaj točko pred";
+"auth_failed" = "Pooblastitev je spodletela";
+"quick_action_add_marker_descr" = "Gumb za dodajanje oznake zemljevida na sredino zaslona.";
+"only_selected_segment_recalc" = "Samo izbrani segmenti bodo preračunani z izbranim profilom.";
+"osm_editing_plugin_description" = "Prispevaj v OpenStreetMap, globalno skupnost, ki vzdržuje celovit zemljevid sveta in vsakemu uporabniku zagotavlja posodobljene odprtokodne podatke.
+\n
+\nNavodila za urejanje zemljevida najdeš na spletni strani https://osmand.net/docs/user/plugins/osm-editing .";
+"osm_editing_plugin_name" = "Urejanje točk OSM";
+"quick_action_navigation_voice_off" = "Glasovno vodenje je onemogočeno.";
+"mgrs_format_descr" = "OsmAnd uporablja MGRS, ki je podoben formatu UTM NATO.";
+"quick_action_navigation_voice_on" = "Glasovno vodenje je omogočeno.";
+"quick_action_auto_zoom" = "Omogoči/Onemogoči samodejno približanje zemljevida";
+"osm_edit_reopened_note" = "Ponovno odprte opombe OSM";
+

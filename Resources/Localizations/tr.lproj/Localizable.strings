@@ -127,7 +127,7 @@
 "intro_placeholder" = "bölgenizin adını girin";
 // Settings
 "sett_units" = "Birimler";
-"map_locale" = "Harita Dili";
+"map_locale" = "Harita dili";
 "sett_km" = "Kilometre";
 "sett_ml" = "Mil";
 "sett_zoom" = "Yakınlaştırma düğmesi";
@@ -273,7 +273,7 @@
 "product_desc_nautical" = "Tüm dünya deniz haritası";
 "product_title_parking" = "Park pozisyonu";
 "product_desc_parking" = "İzin kolayca ezberlemek ne zaman araba park edilmişti ve zamanla sınırlı otopark Eğer ne kadar kalan süre";
-"plugin_ski_name" = "Kayak göster";
+"plugin_ski_name" = "Kayak haritası görünümü";
 "product_desc_skimap" = "Dünyadaki tüm Kayak Merkezleri için Kayak tesisi";
 "monitoring_settings" = "Seyahat kaydetme";
 "product_desc_track_recording" = "İzlediğiniz yolları kaydetme işlevini etkinleştirir";
@@ -327,7 +327,7 @@
 "prch_srtm_info" = "Eş yükselti eğrileri eklentisi, kazandığınız, satın alınan veya ücretsiz sınırlar içinde indirdiğiniz haritalar için eş yükselti eğrilerini etkinleştirir.";
 "shared_string_open" = "Aç";
 "time_closed" = "Kapalı";
-"will_close_at" = "Kapanacak";
+"will_close_at" = "Kapanır";
 "time_will_open" = "Açılacak";
 "osm_live_active" = "Aktif";
 "menu_all_trips" = "Tüm İzlenen Yollar";
@@ -390,7 +390,9 @@
 "translit_names" = "Adlara harfçevirisi yap";
 "product_desc_ext_nautical" = "OsmAnd Deniz Grafikleri, OsmAnd Haritalar & Navigasyon uygulaması için bir eklentidir. Okyanusların, denizlerin, kıyı alanlarının ve nehirlerin ayrıntılı bir grafiksel gösterimidir. Çizelgeler, yelken rotaları, navigasyon ışıkları, tehlikeli alanlar, yelken açılmasına veya yanaşmasına izin verilen ya da izin verilmeyen alanlar vb. gibi çeşitli bilgiler içerebilir.\n\nKullanım Talimatları: Ayrıntılı haritanın olmasına bakılmaksızın haritaları görmek için deniz temel haritasının indirilmesi önemle tavsiye edilir. Deniz çizelgelerini açmak için harita düğmesine dokunun ve harita türünü Deniz olarak ayarlayın.\n\nNot: Tüm profesyonel denizciler gemilerinde resmi deniz çizelgeleri bulundurmak zorundadırlar.\n\nOsmAnd Deniz çizelgeleri, OpenSeaMap projesi verilerini temel almaktadır. Şu anda OpenSeaMap çizelgeleri resmi deniz çizelgeleri ile rekabet edemese de, eğlence amaçlı yelkenciler tarafından yönlendirme veya rota planlama için kullanılabilir.";
 "product_desc_ext_parking" = "OsmAnd Park Etme Eklentisi size park konumunuzu hatırlatır. OsmAnd Haritalar&Navigasyon uygulaması için bir eklentidir.\nZamandan bağımsız bir hatırlatıcı (sadece harita üzerinde bir işaretleyici) veya zaman aşımına uğradığında alarmlı zaman sınırlı bir hatırlatıcı seçin (harita üzerinde bir işaretleyici de içerir). Eklentiyi kullanmak için Eklentiler menüsünden etkinleştirin.";
-"plugin_ski_descr" = "OsmAnd Kayak Haritaları, kış sporları konumlarında gezinmek için tasarlanmış bir OsmAnd Haritalar&Navigasyon uygulaması eklentisidir. Kayak pistleri, telesiyej işaretleri hakkında bilgiler vermekte ve hatta her parkurun karmaşıklığını gösteren renkli çizgiler sağlamaktadır. Kayak pistleri ve çevresindeki altyapı hakkında bilgiler edinebilirsiniz.\n\nKullanım Talimatları: OsmAnd uygulamasında eklentiyi etkinleştirin, harita düğmesine dokunun ve harita türünü Kayak haritaları olarak ayarlayın.";
+"plugin_ski_descr" = "OsmAnd için bu eklenti, küresel yokuş aşağı kayak pistlerinin, kros kayağı pistlerinin, Alp kayak pistlerinin, teleferiklerin ve telesiyejlerin ayrıntılarını parmaklarınızın ucuna getirir. Yollar ve pistler, zorluk derecesine göre renk kodlu olarak gösterilir ve kar renginde bir kış manzarasına benzeyen özel bir \'Kış\' harita tarzında gösterilir. 
+\n 
+\nBu görünümü etkinleştirmek, kış koşullarında tüm peyzaj özelliklerini gösteren harita tarzını \'Kış ve kayak\' olarak değiştirir. Bu görünüm, burada tekrar devre dışı bırakılarak veya \'Harita yapılandır\' altındaki \'Harita tarzını\' istediğiniz gibi değiştirerek geri döndürülebilir.";
 "product_desc_ext_track_recording" = "İzlediğiniz yolları OsmAnd Yol kaydı eklentisini kullanarak elle kaydedin. İzlediğiniz yolu bir gpx dosyası olarak dışa aktarın, paylaşın ve hatta OpenStreetMap projesine katkıda bulunmak için kullanın. Koşucular, yürüyüşçüler ve izledikleri yolları kaydetmek isteyen herkes için kullanışlı bir araçtır.";
 "product_desc_ext_srtm" = "Bu eklenti, OsmAnd çevrim dışı haritalarında görüntülenebilen eş yükselti eğrileri ve tepe gölgelemesi sağlamaktadır. Eş yükselti eğrileri, alandaki yükseklikler hakkında bilgi sağlarken, tepe gölgeleri bunları görselleştirmektedir. Bu eklentiyi kullanarak dağ zirvelerinin adlarını ve arazinin belirli özelliklerini görün.\n\nKüresel veriler (70° kuzey ve 70° güney arasındaki) SRTM (Shuttle Radar Topography Mission) ve ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), NASA'nın Dünya Gözlem Sisteminin amiral uydusu olan Terra üzerindeki bir görüntüleme aracı, tarafından yapılan ölçümlere dayanmaktadır. ASTER NASA, Japonya Ekonomi, Ticaret ve Sanayi Bakanlığı (METI) , ve Japon Uzay Sistemleri (J-spacesystems) arasında ortak bir çalışmadır.";
 "shared_string_hillshade" = "Tepe gölgesi";
@@ -757,7 +759,6 @@
 "driving_region_descr" = "Sürüş bölgesini seçin: ABD, Avrupa, İngiltere, Asya ve diğerleri.";
 "shared_string_select_avoid_road_on_map" = "Yönlendirme sırasında kaçınılması gereken bir yol seçin";
 "avoid_roads_msg" = "Kaçınılması gereken yolları seçerek alternatif bir rota tetikleyin";
-"will_close_at" = "Kapanır";
 "will_open_at" = "Açılış saati";
 "will_open_on" = "Açılış saati";
 "will_open_tomorrow_at" = "Yarın şu saatte açılıyor";
@@ -983,8 +984,8 @@
 "poi_overlay" = "POI Üst Katmanı";
 "auto_split_gap_descr" = "6 dakikalık boşluktan sonra yeni bölüm, 2 saatlik boşluktan sonra yeni yol veya daha uzun bir boşluktan sonra yeni dosya başlat";
 "save_current_track_descr" = "Geçerli rotayı şimdi GPX dosyası olarak kaydedin.";
-"save_track_to_gpx" = "İzlenen yolu otomatik kaydet";
-"save_track_to_gpx_descrp" = "Navigasyon sırasında izlenen yolu otomatik olarak kaydetmek için açın";
+"save_track_to_gpx" = "Navigasyon sırasında rotayı otomatik kaydet";
+"save_track_to_gpx_descrp" = "Navigasyon sırasında yol kaydını otomatik olarak başlatın ve bittiğinde otomatik olarak kaydedin.";
 // Help
 "help_first_steps" = "İlk adımlar";
 "help_first_use_descr" = "Nasıl harita indirilir ve temel ayarlar belirlenir";
@@ -1034,7 +1035,7 @@
 "inapp_not_found" = "%@ OsmAnd'da bulunamadı. Muhtemelen iptal edildi.";
 "osm_created" = "Oluşturuldu";
 "shared_string_modified" = "Değiştirildi";
-"osm_edit_reopened_note" = "Yeniden açıldı";
+"osm_edit_reopened_note" = "Yeniden açılmış OSM Notu";
 "osm_name" = "OpenStreetMap kullanıcı adı";
 "osm_pass" = "OpenStreetMap parolası";
 "osm_offline_editing" = "Her zaman çevrim dışı düzenlemeyi kullan";
@@ -1050,9 +1051,9 @@
 "osm_confirm_upload" = "Değişiklikler karşıya yüklensin mi?";
 "edit_osm_note" = "OSM Notunu Düzenle";
 "modify_poi" = "POI bilgilerini değiştir";
-"osm_editing_plugin_name" = "OpenStreetMap Düzenleme";
+"osm_editing_plugin_name" = "OpenStreetMap düzenleme";
 "product_desc_osm_editing" = "Doğrudan OsmAnd'den OpenStreetMap'te değişiklikler yapın";
-"osm_editing_plugin_description" = "OSM Düzenleme eklentisi, POI nesneleri oluşturma veya değiştirme, OSM Notlarını açma veya yorum yapma ve kaydedilen GPX dosyaları ile katkıda bulunma gibi OSM'ye katkıda bulunmak için kullanılabilir. OSM, topluluk tarafından yönlendirilen küresel bir kamu malı haritalama projesidir. Daha fazla bilgi için lütfen https://osm.org adresine bakın. Uygulamada OSM kimlik bilgilerinizi belirtirseniz, doğrudan OsmAnd'dan katkıda bulunabilirsiniz.";
+"osm_editing_plugin_description" = "Kullanıcı adınızı ve şifrenizi sağlayarak, OSM POI nesneleri oluşturma veya değiştirme, OSM notlarını açma veya yorum yapma ve kayıtlı GPX dosyaları ile OsmAnd\'a katkıda bulunma gibi OSM katkıları yapın. OpenStreetMap.org topluluk odaklı, küresel bir kamu malı haritalama projesidir.";
 "poi_category_and_type" = "Kategori ve POI Türü";
 "poi_select_category" = "Kategori seç";
 "poi_select_type" = "Tür seç";
@@ -1105,7 +1106,7 @@
 "key_hint_goback" = "Geri Git";
 "osm_tag_too_long_message" = "%@ etiketi için azami değer uzunluğu 255 karakterdir.\nLütfen devam etmek için daha kısa yapın.";
 "save_poi_without_poi_type_message" = "POI tür olmadan kaydedilsin mi\?";
-"local_openstreetmap_uploading" = "Karşıya yükleniyor...";
+"local_openstreetmap_uploading" = "Yükleniyor…";
 "key_hint_zoom_out" = "Uzaklaştır";
 "short_location_on_map" = "Enlem %@
 \nBoylam %@";
@@ -1132,11 +1133,11 @@
 "quick_action_list_descr" = "Bu eylem düğmesine dokunmak, aşağıdaki listeyi sayfalar halinde gösterir";
 "quick_action_map_style_action" = "Harita tarzı ekle";
 "toggle_fav" = "Sık kullanılanları göster/gizle";
-"quick_action_add_osm_bug" = "OSM notu ekle";
+"quick_action_add_osm_bug" = "OSM notu oluştur";
 "toggle_online_notes" = "OSM notlarını aç/kapat";
 "toggle_local_edits" = "Yerel OSM düzenlemelerini aç/kapat";
 "add_destination" = "Hedef ekle";
-"quick_action_auto_zoom" = "Otomatik yakınlaştırma açık/kapalı";
+"quick_action_auto_zoom" = "Otomatik görüntü-yakınlaştırma açık/kapalı";
 "toggle_day_night" = "Gündüz/Gece modunu değiştir";
 "show_hide_gpx" = "Yolları göster/gizle";
 "search_results" = "Arama sonuçları";
@@ -1164,7 +1165,7 @@
 "quick_action_poi_add_descr" = "Bu eylem düğmesine dokunmak, önceden tanımlanmış tür ve etiketlerle haritaya hızlı bir şekilde POI eklemenizi sağlar.";
 "quick_action_day_night_descr" = "Bu eylem düğmesine dokunmak, Gündüz ve Gece harita modu arasında geçiş yapar.";
 "quick_action_parking_descr" = "Bu eylem düğmesine dokunmak, haritanın merkez noktasına bir park yeri ekler.";
-"quick_action_add_marker_descr" = "Bu eylem düğmesine dokunmak, haritanın merkez noktasına bir harita işaretleyicisi ekler.";
+"quick_action_add_marker_descr" = "Ekranın merkez konumuna bir harita işaretleyici eklemek için bir düğme.";
 "quick_action_show_gpx_descr" = "Bu eylem düğmesine dokunmak, o anda görüntülenen GPX yollarını gösterir veya gizler.";
 "quick_action_voice_descr" = "Bu eylem düğmesine dokunmak, navigasyon sırasında sesli yönlendirmeyi devre dışı bırakır veya etkinleştirir.";
 "quick_action_add_dest_descr" = "Bu eylem düğmesine dokunmak, harita merkezini hedef olarak ayarlar. Önceden seçilen herhangi bir hedef son ara hedef haline gelir.";
@@ -1183,8 +1184,8 @@
 "auto_zoom_off" = "Otomatik yakınlaştırma kapalı";
 "resume_nav" = "Navigasyona devam et";
 "pause_nav" = "Navigasyonu duraklat";
-"quick_action_navigation_voice_on" = "Sesi kapat";
-"quick_action_navigation_voice_off" = "Sesi aç";
+"quick_action_navigation_voice_on" = "Sesi Kapat";
+"quick_action_navigation_voice_off" = "Sesi Aç";
 "show_gpx" = "İzlenen yollar";
 "hide_gpx" = "İzlenen yolları gizle";
 "show_notes" = "OSM notlarını göster";
@@ -1199,7 +1200,7 @@
 "select_manually" = "Elle seç";
 "avoid_by_type" = "Türe göre kaçın";
 "parking_place" = "Park yeri";
-"route_add_start_point" = "Başlangıç noktası ekle";
+"route_add_start_point" = "Kalkış noktası ekle";
 "selected_roads" = "Seçilen yollar";
 "units_sec_short" = "s";
 "select_home" = "Ev noktasını seç";
@@ -1234,7 +1235,7 @@
 "shared_string_zoom_levels" = "Yakınlaştırma seviyeleri";
 "res_expire_time" = "Geçerliliğin sona erme süresi";
 "res_mercator" = "Mercator Projeksiyonu";
-"edit_tilesource_elliptic_tile" = "Eliptik mercator";
+"edit_tilesource_elliptic_tile" = "Eliptik Merkatör projeksiyonu";
 "pseudo_mercator_projection" = "Pseudo-Mercator projeksiyon";
 "res_zoom_levels_desc" = "Bu parametreler, harita türü veya üst/alt katman olarak kullanıldığında harita görüntüsünü etkileyecektir.\n\nHarita türü: Harita seçilen yakınlaştırmalarla sınırlı olacaktır.\n\nÜst / Alt katman: Döşemelerin görüneceği yakınlaştırma seviyeleri. Ölçeği arttırma veya azaltma, ayarlanan değerlerin üstünde veya altında meydana gelecektir.";
 "res_expire_time_desc" = "Dakika cinsinden geçerliliğin sona erme süresi. Önbelleğe alınan döşemeler belirtilen süreden sonra yeniden yüklenecektir. Bu kaynak için döşemeleri yeniden yüklemeniz gerekmiyorsa bu alanı boş bırakın.\nBir gün 1440 dakikadır.\nBir hafta 10 080 dakikadır.\n30 gün 43 200 dakikadır.";
@@ -1541,7 +1542,7 @@
 "osmand_parking_warning" = "Uyarı";
 "clear_tiles_warning" = "Bu değişiklikleri uygulamak, bu döşeme kaynağı için önbelleğe alınan verileri temizleyecektir";
 "change_object_posiotion" = "Nesnenin konumunu değiştir";
-"move_marker_bottom_sheet_title" = "Nesnenin konumunu değiştirmek için haritayı hareket ettirin";
+"move_marker_bottom_sheet_title" = "İşaretleyici konumunu değiştirmek için haritayı hareket ettirin";
 "online_raster_maps" = "Çevrim içi raster haritaları";
 "import_raster_map_success" = "Raster haritası içe aktarıldı. Harita Ayarları'nı açın ve Üst katman/Alt katman ile etkinleştirin";
 "import_raster_map_failed" = "Raster harita içe aktarma başarısız oldu";
@@ -1857,7 +1858,7 @@
 "personal_category_name" = "Kişisel";
 "prev_segs_recalc_descr" = "Önceki tüm bölümler, seçilen profil kullanılarak yeniden hesaplanacak";
 "next_segs_recalc_descr" = "Sonraki tüm bölümler, seçilen profil kullanılarak yeniden hesaplanacak";
-"only_selected_segment_recalc" = "Yalnızca seçilen bölüm, seçilen profil kullanılarak yeniden hesaplanacak";
+"only_selected_segment_recalc" = "Yalnızca seçilen bölüm, seçilen profil kullanılarak yeniden hesaplanacak.";
 "prev_segs_dist" = "Önceki tüm bölümler %@";
 "prev_seg_dist" = "Önceki bölüm %@";
 "next_segs_dist" = "Sonraki tüm bölümler %@";
@@ -2268,7 +2269,7 @@
 "navigate_point_mgrs" = "MGRS";
 "turn_arrows" = "Dönüş Okları";
 "shared_string_min_height" = "Asgari yükseklik";
-"mgrs_format_descr" = "OsmAnd, UTM NATO ile aynı olan MGRS biçimini kullanmaktadır.";
+"mgrs_format_descr" = "OsmAnd, UTM NATO biçimine benzer olan MGRS\'yi kullanmaktadır.";
 "routeInfo_surface_description" = "Yol/patika fiziksel yüzey bilgisi sağla.";
 "routeInfo_smoothness_description" = "Tekerlekli araçlar için, özellikle yüzey düzgünlüğü/düzlüğü ile ilgili olarak, yol/patika manevra kabiliyeti sınıflandırması.";
 "routeInfo_winter_ice_road_description" = "Kış yolu sınıflandırmasına göre rota veya yol hattını renklendir.";
@@ -2688,3 +2689,6 @@
 "rendering_attr_noNatureReserveBoundaries_name" = "Doğa sınırları";
 "routing_attr_difficulty_preference_advanced_name" = "İleri";
 "rendering_value_omit_name" = "Atla";
+"auth_failed" = "Yetkilendirme başarısız";
+"download_wikipedia_data" = "Wikipedia verilerini indir";
+

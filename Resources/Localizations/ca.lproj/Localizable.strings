@@ -232,7 +232,7 @@
 "product_desc_nautical" = "Mapes vectorials adaptats per a la navegació marítima";
 "product_title_parking" = "Posició d'aparcament";
 "product_desc_parking" = "Us permet memoritzar fàcilment quan es va aparcar el vehicle i quant temps us queda si l'aparcament és per temps limitat";
-"plugin_ski_name" = "Mapa d'esquí";
+"plugin_ski_name" = "Vista mapa d\'esquí";
 "product_desc_skimap" = "Pistes d'esquí a totes les estacions d'esquí del món";
 "monitoring_settings" = "Enregistrament del trajecte";
 "product_desc_track_recording" = "Activa la funció d'enregistrar i desar els vostres trajectes";
@@ -314,7 +314,7 @@
 "prch_srtm_info" = "El complement de Corbes de nivell activa aquesta opcio 3D per als mapes que hàgiu titulat, comprat o baixat dins el límit gratuït.";
 "shared_string_open" = "Obre";
 "time_closed" = "Tancat";
-"will_close_at" = "Es tancarà en";
+"will_close_at" = "Tanca a les";
 "time_will_open" = "S'obrirà en";
 "menu_my_trips" = "Els meus recorreguts";
 "osm_live_active" = "Activa";
@@ -367,7 +367,9 @@
 "product_desc_ext_parking" = "El connector Aparcament d'OsmAnd us recorda la posició del vostre aparcament. Es tracta d'un connector de l'aplicació de mapes i navegació OsmAnd.\nSeleccioneu un recordatori fix (un marcador en el mapa) o lligat a una limitació del temps amb una alarma basada en la fi del termini (també inclou el marcador en el mapa). Per utilitzar aquest connector l'heu d'activar al menú Connectors.";
 "product_title_trip_planning" = "Planificació de viatges";
 "plugin_popup_ski_title" = "Activa l'estil de mapes Esquí";
-"plugin_ski_descr" = "Mapes d'esquí OsmAnd és un connector de l'aplicació de mapes i navegació OsmAnd dissenyat per navegar dins de centres esportius d'hivern. Us dona informació de pistes d'esquí, remuntadors i fins i tot del color de cada pista, que indica la seva dificultat. Obtindreu informació de les pistes així com de les infrastructures properes.\n\nInstruccions d'ús: Activeu el connector des l'aplicació OsmAnd prement el botó de configuració del mapa i seleccionant el seu tipus com Mapes d'esquí.";
+"plugin_ski_descr" = "Aquest connector per l\'OsmAnd us proporciona els detalls de les pistes d\'esquí en baixada, de travessa i alpí així com de telefèrics i remuntadors a tot el món. Les rutes i pistes es mostren amb el codi de colors que els correspon segons la seva dificultat i amb un estil de mapa especial «Hivern» que s\'associa a un paisatge nevat. 
+\n 
+\nEn activar aquests canvis devisualització l\'estil del mapa canvia a «Hivern i esquí», i es mostren totes les característiques del paisatge a l\'hivern. Aquesta vista es pot revertir tant en activar-la altra cop com en canviar-la a «Estil del mapa» dins «Configuració del mapa».";
 "product_desc_ext_track_recording" = "Enregistreu els vostres trajectes i deseu-los manualment utilitzant el connector d'enregistrament Trajecte OsmAnd. Exporteu el vostre trajecte com un fitxer GPX, compartiu-lo o fins i tot utilitzeu-lo per col·laborar amb el projecte Openstreetmap. Una eina pràctica.per corredors, senderistes i qualsevol interessat en enregistrar els seus trajectes.";
 "product_desc_ext_wiki" = "Obteniu informació de punts d'interès des la Viquipèdia. Serà la vostra guia de butxaca en desconnexió - només cal que activeu el connector Viquipèdia i fruireu dels articles que tracten de les coses que us rodegen.";
 "product_desc_ext_srtm" = "Aquest connector proporciona corbes de nivell i un ombrejat de relleu, que es poden veure als mapes locals d' OsmAnd. Les corbes de nivell informen de l'alçada d'una àrea mentre l'ombrejat permet la seva visualització. Utilitzant aquest connector podreu veure el nom dels de les muntanyes i de llocs concrets de la zona.\n\nLes dades globals (entre 70 graus nord i 70 graus sud) estan basades en mesures del SRTM (Shuttle Radar Topography Mission) i del ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), un instrument de generació d'imatges a bord de Terra, el satèl·lit insígnia del Sistema d'Observació de la Terra de la NASA. ASTER és un esforç de col·laboració entre la NASA, el Ministeri d'Economia i Comerç del Japó (METI) i la fundació Japan Space Systems (J-spacesystems).";
@@ -699,7 +701,6 @@
 "day_off_label" = "tancat";
 "open_from" = "Obert des de";
 "open_till" = "Obert fins a";
-"will_close_at" = "Tanca a les";
 "will_open_at" = "Obre a les";
 "will_open_on" = "Obre a les";
 "will_open_tomorrow_at" = "Obre demà a les";
@@ -748,8 +749,8 @@
 "confirm_every_run" = "Es demana confirmació";
 "recording_preferences_descr" = "Preferències d'enregistrament del viatge";
 "save_current_track_descr" = "Desa, tot seguit, la traça actual com un fitxer GPX.";
-"save_track_to_gpx" = "Enregistrament automàtic del trajecte";
-"save_track_to_gpx_descrp" = "Activa per enregistrar automàticament la traça durant la navegació";
+"save_track_to_gpx" = "Enregistra automàticament la traça durant la navegació";
+"save_track_to_gpx_descrp" = "Comença a gravar la ruta automàticament en iniciar la navegació i desa-la automàticament després.";
 "shared_string_help" = "Ajuda";
 // Help
 "help_first_steps" = "Primeres passes";
@@ -874,7 +875,7 @@
 "osm_created" = "Creat";
 "poi_remove_success" = "Eliminat";
 "shared_string_modified" = "Modificat";
-"osm_edit_reopened_note" = "Tornat a obrir";
+"osm_edit_reopened_note" = "S\'ha reobert nota d\'OSM";
 "osm_name" = "Nom d'usuari OpenStreetMap";
 "osm_pass" = "Contrasenya de OpenStreetMap";
 "osm_offline_editing" = "Utilitza sempre l'edició fora de línia";
@@ -909,9 +910,9 @@
 "osb_comment_dialog_message" = "Missatge";
 "osn_add_dialog_title" = "Crea nota";
 "modify_poi" = "Modifica la informació del PDI";
-"osm_editing_plugin_name" = "Edició d'OpenStreetMap";
+"osm_editing_plugin_name" = "Edició d\'OpenStreetMap";
 "product_desc_osm_editing" = "Feu canvis a l'OpenStreetMap directament des de OsmAnd";
-"osm_editing_plugin_description" = "El connector d'edició de OSM es pot utilitzar per fer contribucions a OSM, creant o modificant objectes PDI, creant o comentant notes OSM i aportant fitxers GPX enregistrats. OSM és un projecte de la comunitat global per disposar de cartografia de domini públic. Per a més informació, consulteu a https://osm.org. Les contribucions es poden fer directament des de OsmAnd, si heu especificat les vostres credencials OSM a l'aplicació.";
+"osm_editing_plugin_description" = "Permet fer contribucions a OSM com la creació o modificació de PDIs d\'OSM, obrir o comentar anotacions OSM i aportar fitxers enregistrats GPX amb OsmAnd en subministrar el vostre usuari i contrasenya. OpenStreetMap.org és un projecte gestionat per una comunitat, de domini públic i de cartografia global.";
 "user_password" = "Contrasenya";
 "rendering_value_category_name" = "Categoria";
 "poi_category_and_type" = "Categoria i tipus del PDI";
@@ -1010,7 +1011,7 @@
 "osm_failed_uploads" = "Ha fallat";
 "shared_string_without_name" = "Sense nom";
 "osm_upload_complete" = "Pujada finalitzada";
-"local_openstreetmap_uploading" = "S'està pujant…";
+"local_openstreetmap_uploading" = "S\'està pujant…";
 "sett_generic_ext_input" = "Teclat";
 "sett_wunderlinq_ext_input" = "WunderLINQ";
 "shared_string_read_more" = "Més informació";
@@ -1070,7 +1071,7 @@
 "quick_action_map_underlay_title" = "Fons de mapa";
 "vector_data" = "Mapes de vectors fora de línia";
 "quick_action_map_source_action" = "Afegeix origen del mapa";
-"quick_action_map_style_action" = "Afegeix estil del mapa";
+"quick_action_map_style_action" = "Afegiu un estil de mapa";
 "quick_action_map_styles" = "Estils de mapa";
 "quick_action_new_action" = "Afegeix acció";
 "quick_action_add_create_items" = "Crea elements";
@@ -1081,7 +1082,7 @@
 "toggle_poi" = "Mostra/amaga PDI";
 "quick_action_add_parking" = "Afegeix lloc d\'aparcament";
 "quick_action_navigation_voice" = "Veu activada/desactivada";
-"quick_action_add_osm_bug" = "Afegeix nota OSM";
+"quick_action_add_osm_bug" = "Afegeix una nota OSM";
 "toggle_online_notes" = "Commuta les notes OSM";
 "toggle_local_edits" = "Commuta edició local OSM";
 "quick_action_add_poi" = "Afegeix PDI";
@@ -1092,7 +1093,7 @@
 "quick_action_replace_destination" = "Substitueix destinació";
 "add_destination" = "Afegeix destinació";
 "quick_action_add_first_intermediate" = "Afegeix primer intermedi";
-"quick_action_auto_zoom" = "Zoom automàtic actiu/inactiu";
+"quick_action_auto_zoom" = "Escala automàtica del mapa activa/desactiva";
 "quick_action_resume_pause_navigation" = "Atura o reprèn la navegació";
 "quick_action_start_stop_navigation" = "Inicia/atura la navegació";
 "toggle_day_night" = "Canvia mode diürn/nocturn";
@@ -1131,7 +1132,7 @@
 "quick_action_poi_add_descr" = "Prement aquest botó d'acció podreu afegir directament un PDI al mapa, amb el tipus i etiquetes predeterminats.";
 "quick_action_day_night_descr" = "Prement aquest botó d'acció aneu canviant entre els modes diürn i nocturn.";
 "quick_action_parking_descr" = "Prement aquest botó d'acció afegireu una posició d'aparcament en el centre de la pantalla.";
-"quick_action_add_marker_descr" = "Prement aquest botó d'acció afegireu un marcador de mapa en el centre de la pantalla.";
+"quick_action_add_marker_descr" = "Un botó per afegir un marcador de mapa a la posició central de la pantalla.";
 "quick_action_show_gpx_descr" = "Prement aquest botó d'acció es mostra o s'amaga les traces GPX representades actualment.";
 "quick_action_voice_descr" = "Prement aquest botó d'acció s'atura o s'activa el guiatge de veu en la navegació.";
 "quick_action_add_dest_descr" = "Prement aquest botó d'acció s'estableix com destinació el punt central del mapa. Qualsevol selecció de destinació anterior es convertirà en el darrer punt de pas intermedi.";
@@ -1173,7 +1174,7 @@
 "shared_string_off" = "Inactiva";
 "show_more" = "Mostra\'n més";
 "parking_place" = "Lloc per aparcar";
-"route_add_start_point" = "Afegiu el punt inicial";
+"route_add_start_point" = "Afegiu punt de sortida";
 "add_intermediate" = "Afegiu un punt intermedi";
 "add_home" = "Afegeix casa meva";
 "add_work" = "Afegeix lloc de la feina";
@@ -1544,7 +1545,7 @@
 "osmand_parking_warning" = "Avís";
 "clear_tiles_warning" = "L\'aplicació d\'aquests canvis esborrarà les dades de la memòria cau per a aquesta font de tessel·les";
 "change_object_posiotion" = "Canvia la posició de l'objecte";
-"move_marker_bottom_sheet_title" = "Arrossegueu el mapa per canviar la posició de l'objecte";
+"move_marker_bottom_sheet_title" = "Desplaceu el mapa per canviar la posició del marcador";
 "online_raster_maps" = "Mapes de bits en línia";
 "import_raster_map_success" = "S'ha importat el mapa de bits.Obriu Configuració de Mapes i activeu-lo via Superposició/Mapa de fons";
 "import_raster_map_failed" = "Ha fallat la importació del mapa de bits";
@@ -1807,8 +1808,8 @@
 "change_route_type_before" = "Canvia el tipus de ruta abans d'aquest punt";
 "trim_after" = "Retalla després d'aquest punt";
 "trim_before" = "Retalla abans d'aquest punt";
-"add_point_after" = "Afegeix punts després";
-"add_point_before" = "Afegeix punts abans";
+"add_point_after" = "Afegeix un punt després de";
+"add_point_before" = "Afegeix un punt abans de";
 "move_point_descr" = "Mou el mapa per canviar la posició d'aquest punt.";
 "move_point" = "Mou punt";
 "add_to_a_track" = "Afegeix a una ruta";
@@ -1858,7 +1859,7 @@
 "vk" = "VK";
 "prev_segs_recalc_descr" = "Tots els segments anteriors es tornaran a calcular amb el perfil seleccionat";
 "next_segs_recalc_descr" = "Tots els segments següents es tornaran a calcular amb el perfil seleccionat";
-"only_selected_segment_recalc" = "Només es tornarà a calcular el segment seleccionat amb el perfil seleccionat";
+"only_selected_segment_recalc" = "Només es recalcularà el segment seleccionat mitjançant el perfil seleccionat.";
 "prev_segs_dist" = "Tots els segments %@ anteriors";
 "prev_seg_dist" = "Segment %@ anterior";
 "next_segs_dist" = "Tots els segments %@ següents";
@@ -2326,3 +2327,7 @@
 "rendering_attr_weatherTempContours_name" = "Línies isotermes";
 "routing_attr_prefer_tactile_paving_name" = "Prefereix el paviment tàctil";
 "rendering_attr_weatherWindSpeedContours_name" = "Isolínies de les ràfegues de vent";
+"download_wikipedia_data" = "Baixa dades de la Viquipèdia";
+"auth_failed" = "Ha fallat l\'autorització";
+"offline_edition_descr" = "En desconnexió la edició està activada, però llavors els canvis es desen localment primer i ja es pujaran quan es demani; altrament els canvis s\'actualitzen immediatament.";
+

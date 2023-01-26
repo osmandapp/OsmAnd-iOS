@@ -609,8 +609,8 @@
 "quick_action_poi_list" = "KP lista";
 
 
-"save_track_to_gpx" = "Auto-record track";
-"save_track_to_gpx_descrp" = "Turn on to automatically save a track during navigation";
+"save_track_to_gpx" = "Tallenna jälki automaattisesti suunnistuksen aikana";
+"save_track_to_gpx_descrp" = "Aloita reitin nauhoitus automaattisesti navigoinnin alkaessa. Navigoinnin päättyessä nauhoitus tallennetaan automaattisesti.";
 "gpx_distance_points" = "Distance (points)";
 "gpx_max_speed" = "Max speed";
 "shared_string_speed" = "Nopeus";
@@ -832,8 +832,8 @@
 "add_to_a_track" = "Lisää jälkeen";
 "move_point" = "Siirrä piste";
 "move_point_descr" = "Move map to change the position of this point.";
-"add_point_before" = "Lisää pisteitä ennen";
-"add_point_after" = "Lisää pisteitä jälkeen";
+"add_point_before" = "Lisää piste ennen";
+"add_point_after" = "Lisää piste jälkeen";
 "trim_before" = "Trim before this point";
 "trim_after" = "Trim after this point";
 "change_route_type_before" = "Change route type before this point";
@@ -849,7 +849,7 @@
 "next_segs_dist" = "All subsequent segments %@";
 "prev_seg_dist" = "Previous segment %@";
 "prev_segs_dist" = "All Previous segments %@";
-"only_selected_segment_recalc" = "Only the selected segment will be recalculated using the selected profile";
+"only_selected_segment_recalc" = "Vain valittu segmentti lasketaan uudelleen käyttämällä valittua profiilia.";
 "next_segs_recalc_descr" = "All subsequent segments will be recalculated using the selected profile";
 "prev_segs_recalc_descr" = "All previous segments will be recalculated using the selected profile";
 "reverse_route" = "Päinvastainen reitti";
@@ -963,7 +963,7 @@
 "shared_string_zoom_levels" = "Zoomaustasot";
 "res_expire_time" = "Expire time";
 "res_mercator" = "Mercator Projection";
-"edit_tilesource_elliptic_tile" = "Elliptic mercator";
+"edit_tilesource_elliptic_tile" = "elliptinen merkator";
 "pseudo_mercator_projection" = "Pseudo-Mercator projection";
 "res_source_format" = "Source format";
 "sqlite_db_file" = "SQLiteDB -tiedosto";
@@ -1003,7 +1003,7 @@
 "osm_created" = "Created";
 "poi_remove_success" = "KP poistettiin onnistuneesti";
 "shared_string_modified" = "Modified";
-"osm_edit_reopened_note" = "Reopened";
+"osm_edit_reopened_note" = "Uudelleen avattu OSM-huomautus";
 "osm_name" = "OpenStreetMap username";
 "osm_pass" = "OpenStreetMap password";
 "osm_offline_editing" = "Always use offline editing";
@@ -1057,7 +1057,7 @@
 "osm_edit_show_on_map" = "Show modification on the map";
 "osm_edit_show_on_map_descr" = "Open the map centered on this point";
 "shared_string_without_name" = "Ilman nimeä";
-"local_openstreetmap_uploading" = "Uploading...";
+"local_openstreetmap_uploading" = "Lähetetään…";
 "osm_upload_complete" = "Upload complete";
 "osm_tag_too_long_message" = "The maximum value length for tag %@ is 255 characters. \nPlease make it shorter to continue.";
 "save_poi_without_poi_type_message" = "Haluatko todella tallentaa KP:n ilman tyyppiä\?";
@@ -1105,7 +1105,7 @@
 "quick_action_map_underlay_title" = "Map underlays";
 "vector_data" = "Offline vektorikartat";
 "quick_action_map_source_action" = "Lisää karttalähde";
-"quick_action_map_style_action" = "Add map style";
+"quick_action_map_style_action" = "Lisää karttatyyli";
 "quick_action_map_styles" = "Karttatyylit";
 "quick_action_new_action" = "Add action";
 "unsupported_items" = "Unsupported items";
@@ -1123,7 +1123,7 @@
 "quick_action_add_parking" = "Add parking place";
 "parking_place" = "Pysäköintipaikka";
 "quick_action_navigation_voice" = "Ääni päälle / pois";
-"quick_action_add_osm_bug" = "Add OSM note";
+"quick_action_add_osm_bug" = "Lisää OSM-huomautus";
 "toggle_online_notes" = "Toggle OSM notes";
 "toggle_local_edits" = "Toggle local OSM edits";
 "quick_action_add_poi" = "Lisää KP";
@@ -1133,14 +1133,14 @@
 "quick_action_map_underlay" = "Change map underlay";
 "quick_action_replace_destination" = "Korvaa määränpää";
 "add_destination" = "Add destination";
-"route_add_start_point" = "Lisää aloituspiste";
+"route_add_start_point" = "Lisää lähtöpiste";
 "add_intermediate" = "Add intermediate point";
 "add_home" = "Lisää koti";
 "add_work" = "Lisää työ";
 "favorite_home_category" = "Koti";
 "work_button" = "Työ";
 "quick_action_add_first_intermediate" = "Lisää ensimmäinen välietappi";
-"quick_action_auto_zoom" = "Auto zoom on/off";
+"quick_action_auto_zoom" = "Kartan automaattinen tarkennus päälle/pois";
 "auto_zoom_on" = "Auto zoom on";
 "auto_zoom_off" = "Auto zoom off";
 "quick_action_resume_pause_navigation" = "Pysäytä/jatka navigointia";
@@ -1150,8 +1150,8 @@
 "toggle_day_night" = "Switch Day/Night mode";
 "quick_action_switch_night_mode" = "Night mode";
 "quick_action_switch_day_mode" = "Day mode";
-"quick_action_navigation_voice_on" = "Mute voice";
-"quick_action_navigation_voice_off" = "Unmute voice";
+"quick_action_navigation_voice_on" = "Mykistä ääni";
+"quick_action_navigation_voice_off" = "Poistaäänen mykistys";
 "show_hide_gpx" = "Show/hide tracks";
 "show_gpx" = "Jäljet";
 "hide_gpx" = "Hide track";
@@ -1185,7 +1185,7 @@
 "quick_action_poi_add_descr" = "Tapping this action button allows you to quickly add POI on the map with predefined type and tags.";
 "quick_action_day_night_descr" = "Tapping this action button switches between Day and Night map mode.";
 "quick_action_parking_descr" = "Tapping this action button adds a parking location at the map center point.";
-"quick_action_add_marker_descr" = "Tapping this action button adds a map marker at the map center point.";
+"quick_action_add_marker_descr" = "Painike karttamarkkerin lisäämiseen ruudun keskelle.";
 "quick_action_show_gpx_descr" = "Tapping this action button shows or hides currently displayed GPX tracks.";
 "quick_action_voice_descr" = "Tapping this action button disables or enables voice guidance during navigation.";
 "quick_action_add_dest_descr" = "Tapping this action button sets the destination to the map center. Any previously selected destination becomes the last intermediate destination.";
@@ -1363,7 +1363,7 @@
 "product_title_parking" = "Parking Position";
 "product_desc_parking" = "Let you easily memorize when the car was parked and how much time left if the parking is limited by time";
 "product_desc_ext_parking" = "OsmAnd Parking Plugin reminds you of your parking position. It is a plugin for OsmAnd Maps&Navigation app.\nChoose a time-independent reminder (only a marker on the map) or a time-limited one with alarm upon time expiration (includes also a marker on the map). To use the plugin, enable it in the Plugins menu.";
-"plugin_ski_name" = "Hiihtokartta";
+"plugin_ski_name" = "Hiihtokarttanäkymä";
 "product_desc_skimap" = "Ski slopes for all ski resorts in the world";
 "plugin_ski_descr" = "OsmAnd Ski Maps is a plugin to OsmAnd Maps&Navigation app designed to navigate at winter sports locations. It gives the information about ski pistes, ski lift markers and even colored lines indicating the complexity of each track. You get the info about ski tracks themselves as well as the surrounding infrastructure.\n\nUsage Instructions: Enable the plugin in OsmAnd application, tap the map button and set the map type to Ski maps.";
 "monitoring_settings" = "Matkan tallennus";
@@ -1372,7 +1372,7 @@
 "product_title_trip_planning" = "Trip planning";
 "product_desc_trip_planning" = "Plan your trip, add waypoints, measure the distance to your destination using this plugin";
 "product_desc_ext_trip_planning" = "Trip planning plugin allows you to create your trip on the map, save it, measure the distance between points connected with straight lines, etc. Created for preliminary trip planning rather than thorough route building.";
-"osm_editing_plugin_name" = "OpenStreetMap Editing";
+"osm_editing_plugin_name" = "OSM muokkaus";
 "product_desc_osm_editing" = "Make changes to OpenStreetMap directly from OsmAnd";
 "osm_editing_plugin_description" = "OSM Editing plugin can be used to make OSM contributions like creating or modifying POI objects, opening or commenting on OSM Notes, and contributing recorded GPX files. OSM is a community driven global public domain mapping project. For more information, please refer to https://osm.org. Contributions can be made directly from OsmAnd, if you specify your OSM credentials in the app.";
 "product_desc_africa" = "Unlimited map downloads for Africa";
@@ -1439,7 +1439,6 @@
 "prch_srtm_info" = "Contour lines addon enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
 "shared_string_open" = "Avoinna";
 "time_closed" = "Suljettu";
-"will_close_at" = "Will close in";
 "time_will_open" = "Will open in";
 "osm_live_active" = "Aktiivinen";
 "menu_all_trips" = "Kaikki jäljet";
@@ -1477,7 +1476,7 @@
 "context_menu_item_directions_from" = "Suunnat lähtien";
 "search_nearby" = "Etsi läheltä";
 "change_object_posiotion" = "Change object's position";
-"move_marker_bottom_sheet_title" = "Move the map to change object's position";
+"move_marker_bottom_sheet_title" = "Siirrä karttaa muuttaaksesi markkerin sijaintia";
 "est_travel_time" = "Estimate travel time";
 "pedestrian" = "Jalankulkija";
 "sorting" = "Sorting";
@@ -2438,3 +2437,6 @@
 "routing_attr_avoid_footways_description" = "Vältä kävelyteitä";
 "rendering_attr_showWaterwayTunnels_name" = "Vesiväylien tunnelit";
 "routing_attr_allow_intermittent_description" = "Sallii ajoittaiset vesireitit";
+"auth_failed" = "Valtuutus epäonnistui";
+"shared_string_tones" = "tonnia";
+

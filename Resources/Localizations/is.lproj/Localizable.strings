@@ -284,7 +284,7 @@
 "product_desc_ext_parking" = "Virkjaðu þetta til að geta sett punkt á kortið þar bílnum þínum er lagt og láta dagatalið þitt vita hvenær stöðumælir fer í gang. Viðbótin gefur til kynna hve langur tími er til stefnu áður en stöðumælir rennur út og hvar bíllinn er staðsettur. Til að merkja bílinn er valinn punktur á kortinu, síðan farið í 'Aðgerðir' og ýtt á \"Bæta við bílastæði\".";
 "plugin_ski_name" = "Skíðakort";
 "product_desc_skimap" = "Uppfært kort yfir skíðaleiðir með lyftum, brekkum og brautum";
-"plugin_ski_descr" = "Hannað til að rata um vetraríþróttasvæði. Skoðaðu skíðabrekkur, gönguskíðabrautir, fjallaskíðaleiðir, kláfa og skíðalyftur. Leiðir og brautir eru með litakóða eftir erfiðleikastigi. Til að nota þetta er viðbótin fyrst virkjuð, síðan farið í stillingar kortsins og 'Vetur og skíði' valið sem stíll þess.";
+"plugin_ski_descr" = "Hannað til að rata um vetraríþróttasvæði. Skoðaðu skíðabrekkur, gönguskíðabrautir, fjallaskíðaleiðir, kláfa og skíðalyftur. Leiðir og brautir eru með litakóða eftir erfiðleikastigi. Til að nota þetta er viðbótin fyrst virkjuð, síðan farið í stillingar kortsins og \'Veturog skíði\' valið sem stíll þess.";
 "monitoring_settings" = "Skráning ferðar";
 "product_desc_track_recording" = "Skráðu og vistaðu ferðirnar þínar í GPX-ferla";
 "product_desc_ext_track_recording" = "Gerir kleift að skrá, vista og greina ferla yfir hreyfingu, eins og til dæmis hraða, hækkun, lækkun eða hæðasnið leiða, sem þá er hægt að endurnýta, bæta eða deila með vinum.\n\nLeiðbeiningar - https://osmand.net/docs/user/plugins/trip-recording";
@@ -340,7 +340,7 @@
 "prch_srtm_info" = "Hæðarlínu-viðbótin virkjar hæðarlínur á þeim landakortum sem þú átt rétt á, hvort sem er keyptum eða sóttum með frjálsum kvóta.";
 "shared_string_open" = "Opið";
 "time_closed" = "Lokað";
-"will_close_at" = "Mun loka eftir";
+"will_close_at" = "Lokar klukkan";
 "time_will_open" = "Mun opna eftir";
 "osm_live_active" = "Virkt";
 "menu_all_trips" = "Allir ferlar";
@@ -696,7 +696,6 @@
 "day_off_label" = "slökkt";
 "open_from" = "Opið frá";
 "open_till" = "Opið til";
-"will_close_at" = "Lokar klukkan";
 "will_open_at" = "Opnar klukkan";
 "will_open_on" = "Opnar klukkan";
 "will_open_tomorrow_at" = "Opnará morgun klukkan";
@@ -745,8 +744,8 @@
 "poi_overlay" = "Þekja merkisstaða";
 "save_current_track_descr" = "Vista núverandi feril sem GPX-skrá núna.";
 "shared_string_clear" = "Hreinsa";
-"save_track_to_gpx" = "Skrá feril sjálfvirkt";
-"save_track_to_gpx_descrp" = "Kveikja á þessu til að ferill verði sjálfvirkt vistaður á meðan leiðsögn stendur";
+"save_track_to_gpx" = "Skrifa feril sjálfkrafa í GPX-skrá á meðan leiðsögn stendur";
+"save_track_to_gpx_descrp" = "Byrja skráningu ferils sjálfvirkt á meðan leiðsögn stendur og vista síðan ferillinn sjálfkrafa.";
 "shared_string_help" = "Hjálp";
 // Help
 "help_first_steps" = "Fyrstu skref";
@@ -871,7 +870,7 @@
 "osm_created" = "Búið til þann";
 "poi_remove_success" = "Eytt";
 "shared_string_modified" = "Breytt";
-"osm_edit_reopened_note" = "Enduropnað";
+"osm_edit_reopened_note" = "Enduropnaði OSM-minnispunkt";
 "osm_name" = "Notandanafn á OpenStreetMap";
 "osm_pass" = "Lykilorð á OpenStreetMap";
 "osm_offline_editing" = "Alltaf nota ónettengdar breytingar";
@@ -906,9 +905,11 @@
 "osb_comment_dialog_message" = "Skilaboð";
 "osn_add_dialog_title" = "Búa til minnispunkt";
 "modify_poi" = "Breyta upplýsingum merkisstaðar";
-"osm_editing_plugin_name" = "Breytingar á OpenStreetMap";
+"osm_editing_plugin_name" = "Breytingará OpenStreetMap";
 "product_desc_osm_editing" = "Breyttu snjalltækinu þínu í kortagerðartól";
-"osm_editing_plugin_description" = "Gerir þér kleift að bæta inn í OpenStreetMap, samfélagsdrifnu verkefni sem miðar að því að útbúa nytsamlegt landakort af heiminum og að útgáfu uppfærðra opinna gagna til hvaða notenda sem er.\n\nÞú finnur leiðbeiningar um hvernig bera sig á að við breytingar á vefsvæðinu okkar https://osmand.net/docs/user/plugins/osm-editing";
+"osm_editing_plugin_description" = "Bættu inn í OpenStreetMap, samfélagsdrifið verkefni sem miðar að því að útbúa nytsamlegt landakort af heiminum og að útgáfu uppfærðra opinna gagna til hvaða notenda sem er.
+\n
+\nÞú finnur leiðbeiningar um hvernig bera sig á að við breytingar á vefsvæðinu okkar https://osmand.net/docs/user/plugins/osm-editing .";
 "user_password" = "Lykilorð";
 "rendering_value_category_name" = "Flokkur";
 "poi_category_and_type" = "Flokkur og gerð merkisstaðar";
@@ -1091,7 +1092,7 @@
 "quick_action_replace_destination" = "Skiptaút áfangastað";
 "add_destination" = "Bæta við áfangastað";
 "quick_action_add_first_intermediate" = "Bæta við fyrsta milliáfanga";
-"quick_action_auto_zoom" = "Sjálfvirkur aðdráttur af/á";
+"quick_action_auto_zoom" = "Sjálfvirkur aðdráttur korts af/á";
 "quick_action_resume_pause_navigation" = "Haldaáfram/Setja leiðsögn í bið";
 "quick_action_start_stop_navigation" = "Hefja/Stöðva leiðsögn";
 "toggle_day_night" = "Skipta á milli Dags/Næturhams";
@@ -1129,7 +1130,7 @@
 "quick_action_poi_add_descr" = "Með því að ýta á þennan aðgerðarhnapp er hægt að bæta fljótt við merkisstað á kortið með fyrirfram skilgreindri gerð og merkjum.";
 "quick_action_day_night_descr" = "Ef ýtt er á þennan aðgerðahnapp verður skipt á milli dags- og næturhams.";
 "quick_action_parking_descr" = "Ef ýtt er á þennan aðgerðahnapp verður staðsetningu bílastæðis bætt á miðju skjásins.";
-"quick_action_add_marker_descr" = "Ef ýtt er á þennan aðgerðahnapp verður kortamerki bætt á miðju skjásins.";
+"quick_action_add_marker_descr" = "Hnappur til að bæta kortamerki á miðju skjásins.";
 "quick_action_show_gpx_descr" = "Ef ýtt er á þennan aðgerðahnapp mun það birta eða fela GPX-ferla á kortinu.";
 "quick_action_voice_descr" = "Ef ýtt er á þennan aðgerðahnapp verður raddleiðsögn virkjuð eða gerð óvirk á meðan leiðsögn stendur.";
 "quick_action_add_dest_descr" = "Ef ýtt er á þennan aðgerðahnapp verður áfangastað bætt á miðju skjásins. Fyrri áfangastaður mun verða að síðasta milliáfangastað.";
@@ -1155,7 +1156,7 @@
 "quick_action_switch_night_mode" = "Næturhamur";
 "quick_action_switch_day_mode" = "Dagshamur";
 "quick_action_navigation_voice_on" = "Þagga niður í tali";
-"quick_action_navigation_voice_off" = "Kveikja á tali";
+"quick_action_navigation_voice_off" = "Kveikjaá tali";
 "show_gpx" = "Ferlar";
 "hide_gpx" = "Fela feril";
 "show_notes" = "Birta OSM-minnispunkta";
@@ -1237,7 +1238,7 @@
 "shared_string_zoom_levels" = "Aðdráttarstig";
 "res_expire_time" = "Tími þegar rennur út";
 "res_mercator" = "Mercatorvörpun";
-"edit_tilesource_elliptic_tile" = "Sporöskjulagað Mercator";
+"edit_tilesource_elliptic_tile" = "Sporöskjulöguð Mercator";
 "pseudo_mercator_projection" = "Gervi-Mercatorvörpun";
 "res_zoom_levels_desc" = "Þessar breytur hafa áhrif á birtingu landakorts þegar það er notað sem tegund korts eða sem yfirlag/undirlag.\n\nTegund korts: landakortið verður takmarkað við valin aðdráttarstig.\n\nYfirlag / Undirlag: Aðdráttarstig þar sem kortaflísar eru sýnilegar. Uppkvörðun eða niðurkvörðun munu eiga sér stað yfir eða undir stilltum gildum.";
 "res_expire_time_desc" = "Gildistími í mínútum. Kortaflísar í skyndiminni verða endurlesnar eftir tiltekinn tíma. Skildu þennan reit eftir auðan ef þú þarft ekki að láta endurlesa kortaflísar frá þessum kortagjafa.\nEinn dagur er 1.440 mínútur.\nEin vika er 10.080 mínútur.\n30 dagar eru 43.200 mínútur.";
@@ -1544,7 +1545,7 @@
 "osmand_parking_warning" = "Aðvörun";
 "clear_tiles_warning" = "Séu þessar breytingar virkjaðar mun það hreinsa skyndiminnið fyrir þennan kortatíglagjafa";
 "change_object_posiotion" = "Breyta staðsetningu hlutar";
-"move_marker_bottom_sheet_title" = "Færa kortið til að breyta staðsetningu hlutarins";
+"move_marker_bottom_sheet_title" = "Færa kortið til að breyta staðsetningu kortamerkis";
 "online_raster_maps" = "Rastakort á netinu";
 "import_raster_map_success" = "Rastakort var flutt inn. Opnaðu kortastillingar og virkjaðu það í gegnum Yfirlag/Undirlag";
 "import_raster_map_failed" = "Innflutningur rastakorts mistókst";
@@ -1809,9 +1810,9 @@
 "plan_route" = "Skipuleggja leið";
 "select_data_to_import" = "Velduþau gögn sem á að flytja inn.";
 "trim_after" = "Klippa á eftir þessum punkti";
-"add_point_before" = "Bæta við punktum á undan";
+"add_point_before" = "Bæta við punkti á undan";
 "add_one_more_pnt" = "Bæta við einum punkti";
-"add_point_after" = "Bæta við punktum á eftir";
+"add_point_after" = "Bæta við punkti á eftir";
 "quick_action_map_source_title" = "Gagnagjafar korta";
 "configure_screen_quick_action" = "Flýtiaðgerð";
 "search_activity" = "Leita";
@@ -1864,7 +1865,7 @@
 "plugin_popup_osm_editing_title" = "Kveikja á breytingum á OpenStreetMap";
 "next_segs_recalc_descr" = "Allir bútar sem á eftir fylgja verða endurreiknaðir með völdu sniði";
 "whole_track" = "Allur ferillinn";
-"only_selected_segment_recalc" = "Aðeins valinn bútur verður endurreiknaður með völdu sniði";
+"only_selected_segment_recalc" = "Aðeins valinn bútur verður endurreiknaður með völdu sniði.";
 "next_seg_dist" = "Næsti bútur %@";
 "prev_segs_dist" = "Allir fyrri bútar %@";
 "layer_amenity_label" = "Merkingar punkta (merkisstaðir, eftirlæti)";
@@ -2368,7 +2369,7 @@
 "save_heading_descr" = "Vista stefnuí hvern ferilpunkt á meðan upptöku stendur.";
 "route_preferred_terrain_any" = "Yfirborðssnið er ekki tekið með í myndina þegar leið er valin.";
 "route_preferred_terrain_hilly" = "Leiðir með hæðóttu hæðasniði.";
-"mgrs_format_descr" = "OsmAnd notar MGRS-snið sem er eins og UTM-snið NATO.";
+"mgrs_format_descr" = "OsmAnd notar MGRS, sem er svipað og UTM-snið NATO.";
 "select_tracks" = "Veldu ferla";
 "selected_tracks_count" = "Ferlar - %d";
 "toggle_temperature" = "Birta/Fela hitastigslag";
@@ -2530,7 +2531,7 @@
 "backup_data" = "Gögn öryggisafrits";
 "cloud_storage_used" = "%@ af %@ notað";
 "cloud_recent_changes" = "Breytingar";
-"auth_failed" = "Villa í auðkenningu";
+"auth_failed" = "Auðkenning brást";
 "shared_string_logout" = "Skrá út";
 "shared_string_progress" = "Framvinda";
 "duration_ago" = "fyrir %@ síðan";
@@ -2792,3 +2793,5 @@
 "rendering_value_omit_name" = "Sleppa";
 "rendering_attr_horse_scale_difficult_name" = "Erfitt";
 "rendering_attr_weatherWindSpeedContours_name" = "Vindhviðulínur";
+"download_wikipedia_data" = "Sækja Wikipedia-gögn";
+

@@ -556,7 +556,7 @@
 "product_desc_ext_parking" = "قم بتمكين هذا الخيار لتعيين نقطة ومكان توقف سيارتك على الخريطة وربط التقويم الخاص بك وقت بدء وقت الوقوف. يساعد هذا الخيار على تتبع موقف السيارة ووقت الوقوف. لتحديد الموقف ، اختر مكانا على الخريطة ، ثم انتقل إلى الإجراءات واضغط على \"إضافة موقف سيارات\".";
 "plugin_ski_name" = "خريطة التزلج";
 "product_desc_skimap" = "خريطة حديثة لمسارات التزلج مع الارتفاع والمنحدرات";
-"plugin_ski_descr" = "خريطة أوسماند للتزلج هي مكون إضافي لتطبيق أوسماند للملاحة وهو مصمم للتنقل في مواقع الرياضات الشتوية. حيث يوفر معلومات حول مسارات التزلج وعلامات رفع التزلج وحتى الخطوط الملونة التي تشير إلى تعقيد كل مسار. يمكنك الحصول على معلومات حول مسارات التزلج نفسها وكذلك البنية التحتية المحيطة بها.تعليمات الاستخدام: قم بتمكين المكون الإضافي في تطبيق أوسماند ، واضغط على زر الخريطة واضبط نوع الخريطة على خرائط التزلج.";
+"plugin_ski_descr" = "مصممة للتنقل في مناطق الرياضات الشتوية: شاهد ممرات التزلج ومصاعد التزلج ومسارات التزلج ، مع خطوط ملونة تشير إلى تصنيفات الصعوبة. للاستخدام ، قم بتمكين هذا المكون الإضافي وانتقل أيضًا إلى \"تكوين الخريطة\" واختر نمط الخريطة \"الشتاء والتزلج\".";
 "monitoring_settings" = "تسجيل المسار";
 "product_desc_track_recording" = "تسجيل وحفظ رحلاتك كمسارات GPX";
 "product_desc_ext_track_recording" = "قم بتسجيل المسارات وحفظها يدويا باستخدام الملحق الإضافي لتسجيل الرحلة. قم بتصدير مساراتك كملف gpx أو شاركه أو استخدمه للمساهمة في مشروع خريطة الشارع المفتوح. أداة مفيدة للعدائين والمتنزهين وأي شخص مهتم بتسجيل مساراتهم.\n\nللمزيد - https://osmand.net/docs/user/plugins/trip-recording";
@@ -612,7 +612,6 @@
 "prch_srtm_info" = "يتيح ملحق ويكبيديا معلومات ويكيبيديا للخرائط التي يحق لك الحصول عليها أو شراؤها أو تنزيلها ضمن حدود مجانية.";
 "shared_string_open" = "فتح";
 "time_closed" = "مغلقة";
-"will_close_at" = "سيغلق في";
 "time_will_open" = "سيفتح في";
 "osm_live_active" = "نشط";
 "menu_all_trips" = "جميع المسارات";
@@ -793,7 +792,7 @@
 "recording_preferences_descr" = "تفضيلات تسجيل المسار";
 "save_current_track_descr" = "حفظ المسار الحالي إلى الذاكرة الآن.";
 "save_track_to_gpx" = "تسجيل المسار أثناء الملاحة";
-"save_track_to_gpx_descrp" = "سيتم حفظ المسار إلى مجلد المسارات أثناء الملاحة";
+"save_track_to_gpx_descrp" = "بدء تسجيل المسار تلقائيًا أثناء التنقل والحفظ التلقائي بعد ذلك.";
 "shared_string_help" = "مساعدة";
 // Help
 "help_first_steps" = "الخطوات الأولي";
@@ -901,7 +900,7 @@
 "osm_created" = "تم إنشاءة";
 "poi_remove_success" = "تم الحذف";
 "shared_string_modified" = "تم التعديل";
-"osm_edit_reopened_note" = "إعادة فتح";
+"osm_edit_reopened_note" = "ملاحظة OSM أعيد فتحها";
 "osm_name" = "اسم مستخدم خريطة الشارع المفتوح";
 "osm_pass" = "كلمة مرور خريطة الشارع المفتوح";
 "osm_offline_editing" = "التعديل دون اتصال دائما";
@@ -935,9 +934,11 @@
 "osb_comment_dialog_message" = "الرسالة";
 "osn_add_dialog_title" = "إنشاء الملاحظة";
 "modify_poi" = "تعديل معلومات POI";
-"osm_editing_plugin_name" = "تعديلات خريطة الشارع المفتوح";
+"osm_editing_plugin_name" = "تعديل خريطة الشارع المفتوحة";
 "product_desc_osm_editing" = "حوّل هاتفك إلى أداة رسم خرائط";
-"osm_editing_plugin_description" = "يمكن استخدام المكون الإضافي لتحرير OSM لتقديم مساهمات OSM مثل إنشاء أو تعديل كائنات POI ، وفتح أو التعليق على OSM Notes ، والمساهمة في ملفات GPX المسجلة. OSM هو مشروع رسم خرائط للمجال العام على مستوى المجتمع. لمزيد من المعلومات ، يرجى الرجوع إلى https://osm.org. يمكن إجراء المساهمات مباشرة من OsmAnd ، إذا قمت بتحديد بيانات اعتماد OSM الخاصة بك في التطبيق.\n\nيمكنك العثور على تعليمات حول كيفية تحرير الخريطة على الموقع الإلكتروني https://osmand.net/docs/user/plugins/osm-editing";
+"osm_editing_plugin_description" = "قدم مساهمات إلى خريطة الشارع المفتوحة ، وهو مجتمع عالمي يحتفظ بخريطة شاملة للعالم ويوفر بيانات محدثة مفتوحة المصدر لكل مستخدم.
+\n
+\nيمكنك العثور على تعليمات حول كيفيةتحرير الخريطة على موقعنا https://osmand.net/docs/user/plugins/osm-editing.";
 "user_password" = "كلمة المرور";
 "rendering_value_category_name" = "الفئة";
 "poi_category_and_type" = "الفئة ونوع POI";
@@ -1028,7 +1029,7 @@
 "osm_tag_too_long_message" = "الحد الأقصى لطول قيمة الوسم٪ @ 255 حرفًا.\nيرجى جعله أقصر للمتابعة.";
 "save_poi_without_poi_type_message" = "حفظ موضع الاهتمام بدون نوع؟";
 "save_poi_too_many_uppercase" = "الاسم يحتوي على الكثير من الأحرف الكبيرة . هل تريد الاستمرار؟";
-"local_openstreetmap_uploading" = "رفع...";
+"local_openstreetmap_uploading" = "يتم الرفع…";
 "key_hint_zoom_out" = "تصغير";
 "shared_string_read_more" = "اقرأ المزيد";
 "short_location_on_map" = "دائرة العرض %@
@@ -1079,7 +1080,7 @@
 "toggle_poi" = "إظهار/إخفاء POI";
 "quick_action_add_parking" = "إضافة مكان موقف";
 "quick_action_navigation_voice" = "تشغيل/إيقاف الصوت";
-"quick_action_add_osm_bug" = "إضافة ملاحظة OSM";
+"quick_action_add_osm_bug" = "إضافة خطأ إلى OSM";
 "toggle_online_notes" = "عرض/إخفاء الملاحظات";
 "toggle_local_edits" = "تبديل عمليات تحرير OSM المحلية";
 "quick_action_add_poi" = "إضافة POI";
@@ -1090,7 +1091,7 @@
 "quick_action_replace_destination" = "تبديل الوجهة";
 "add_destination" = "إضافة وجهة";
 "quick_action_add_first_intermediate" = "إضافة وجهة وسطى";
-"quick_action_auto_zoom" = "تكبير/تصغير التلقائي";
+"quick_action_auto_zoom" = "التكبير التلقائي";
 "quick_action_resume_pause_navigation" = "إيقاف/مواصلة الملاحة";
 "quick_action_start_stop_navigation" = "بدء/إنهاء الملاحة";
 "toggle_day_night" = "نمط ليلي/نهاري";
@@ -1128,7 +1129,7 @@
 "quick_action_poi_add_descr" = "يتيح لك النقر فوق زر الإجراء هذا إضافة POI بسرعة على الخريطة بنوع وعلامات محددة مسبقًا.";
 "quick_action_day_night_descr" = "يؤدي النقر فوق زر الإجراء هذا إلى التبديل بين وضع خريطة النهار والليل.";
 "quick_action_parking_descr" = "انقر على زر التشغيل هذا لإضافة موقف للسيارات في وسط الخريطة.";
-"quick_action_add_marker_descr" = "انقر على زر هذه العملية لإضافة توجيه مباشرعلى الخريطة في وسط الخريطة.";
+"quick_action_add_marker_descr" = "الضغط على زر الإجراء سيقوم بإضافة الموقع المحدد وسط الشاشة كعلامة.";
 "quick_action_show_gpx_descr" = "انقر على زر التشغيل هذا لعرض أو إخفاء المسارات الحالية GPX.";
 "quick_action_voice_descr" = "يؤدي النقر فوق هذا الإجراء إلى تعطيل التوجيه الصوتي أو تمكينه أثناء التنقل.";
 "quick_action_add_dest_descr" = "يؤدي النقر فوق زر الإجراء هذا إلى تعيين الوجهة إلى مركز الخريطة. تصبح أي وجهة محددة مسبقًا هي الوجهة الوسيطة الأخيرة.";
@@ -1152,8 +1153,8 @@
 "pause_nav" = "توقيف الملاحة مؤقتاً";
 "quick_action_switch_night_mode" = "عرض ليلي";
 "quick_action_switch_day_mode" = "عرض نهاري";
-"quick_action_navigation_voice_on" = "كتم الصوت";
-"quick_action_navigation_voice_off" = "إلغاء كتم الصوت";
+"quick_action_navigation_voice_on" = "الصوت مشغل";
+"quick_action_navigation_voice_off" = "الصوت معطل";
 "show_gpx" = "المسارات";
 "hide_gpx" = "إخفاء المسارات";
 "show_notes" = "إظهار ملاحظات OSM";
@@ -1175,7 +1176,7 @@
 "avoid_by_type" = "تجنب حسب النوع";
 "select_map_marker" = "حدد توجيه مباشر";
 "parking_place" = "موقف السيارات";
-"route_add_start_point" = "إضافه نقطه البداية";
+"route_add_start_point" = "إضافة نقطة البدء";
 "add_intermediate" = "إضافة نقطة وسيطة";
 "add_home" = "إضافة المنزل";
 "add_work" = "إضافة العمل";
@@ -1227,7 +1228,7 @@
 "displayed_route_save" = "حفظ إلى مسارات أوسماند";
 "trip_name" = "اسم المسار";
 "trip_hint" = "إدخال اسم المسار";
-"edit_tilesource_elliptic_tile" = "نموذج مركتور البيضوي";
+"edit_tilesource_elliptic_tile" = "نموذج مركتور البيضاوي";
 "edit_tilesource_url_to_load" = "الرابط";
 "shared_string_maximum" = "الحد الاقصي";
 "res_online_name_descr" = "اكتب اسمًا للمصدر عبر الإنترنت";
@@ -1541,7 +1542,7 @@
 "osmand_parking_warning" = "تحذير";
 "clear_tiles_warning" = "سيؤدي تطبيق التغييرات إلى مسح البيانات المخزنة مؤقتاً للمصدر هذا";
 "change_object_posiotion" = "تغيير موضع الكائن";
-"move_marker_bottom_sheet_title" = "انقل الخريطة لتغيير موضع الكائن";
+"move_marker_bottom_sheet_title" = "حرك الخريطة لتغيير مكان التوجيه المباشر";
 "online_raster_maps" = "خريطة نقطية على الانترنت";
 "import_raster_map_success" = "تم استيراد الخريطة النقطية. افتح \"إعدادات الخريطة\" وقم بتنشيطها عبر الخريطة \"العلوية / السفلية\"";
 "import_raster_map_failed" = "فشل استيراد الخريطة النقطية";
@@ -1786,8 +1787,8 @@
 "change_route_type_before" = "تغيير نوع المسار قبل هذه النقطة";
 "trim_after" = "قص ما بعد هذه النقطة";
 "trim_before" = "قص ما قبل هذه النقطة";
-"add_point_after" = "إضافة نقاط بعد";
-"add_point_before" = "إضافة نقاط قبل";
+"add_point_after" = "إضافة نقطة بعد";
+"add_point_before" = "إضافة نقطة قبل";
 "move_point_descr" = "حرك الخريطة لتغيير موضع هذه النقطة.";
 "move_point" = "نقل نقطة";
 "add_to_a_track" = "إضافة إلى مسار";
@@ -1858,7 +1859,7 @@
 "layer_amenity_label" = "تسميات النقاط ، أسماء المفضلة";
 "personal_category_name" = "شخصي";
 "next_segs_recalc_descr" = "سيتم إعادة حساب كافة الشرائح اللاحقة باستخدام ملف التعريف المحدد";
-"only_selected_segment_recalc" = "سيتم إعادة حساب المقطع التالي فقط باستخدام ملف التعريف المحدد";
+"only_selected_segment_recalc" = "سيتم إعادة حساب المقطع المحدد فقط باستخدام الوضع المحدد.";
 "prev_segs_recalc_descr" = "سيتم إعادة حساب كافة الشرائح السابقة باستخدام ملف التعريف المحدد";
 "prev_segs_dist" = "جميع المقاطع السابقة %@";
 "prev_seg_dist" = "الجزء السابق %@";
@@ -2258,7 +2259,7 @@
 "route_preferred_terrain_less_hilly" = "مسارات أقصر وأقل انحدارا.";
 "map_settings_weather_pressure" = "الضغط";
 "navigate_point_mgrs" = "النظام المرجعي للشبكة العسكرية";
-"mgrs_format_descr" = "أوسماند يستخدم تنسيق MGRS الذي يتطابق مع UTM NATO.";
+"mgrs_format_descr" = "OsmAndيستخدم MGRS، وهو مشابه لتنسيق UTM NATO .";
 "routeInfo_surface_description" = "توفير معلومات السطح المادي للطريق/ممر المشاة.";
 "shared_string_open_street_map" = "خريطة الشارع المفتوح";
 "map_settings_weather_temp" = "درجة الحرارة";
@@ -2624,7 +2625,7 @@
 "map_updates_are_unavailable_yet" = "تحديث الخريطة غير متوفرة بعد :-(";
 "last_two_month_total" = "إجمالي الشهرين الماضيين";
 "shared_string_refresh" = "تحديث";
-"auth_failed" = "خطأ في التفويض";
+"auth_failed" = "فشل الترخيص";
 "offline_edition_descr" = "إذا تم تمكين التحرير دون اتصال ، فسيتم حفظ التغييرات محليًا أولاً ثم رفعها حسب الطلب ، أو سيتم رفع التغييرات على الفور.";
 "open_street_map_login_mode_simple" = "تحتاج إلى تسجيل الدخول لتحميل التغييرات.";
 "use_login_and_password" = "استخدم اسم المستخدم وكلمة المرور";
@@ -2799,3 +2800,5 @@
 "routing_attr_difficulty_preference_intermediate_name" = "متوسط";
 "rendering_attr_weatherTempContours_name" = "خطوط قياس درجة الحرارة";
 "shared_string_does_not_exist" = "غير موجود";
+"download_wikipedia_data" = "تنزيل بيانات ويكيبيديا";
+

@@ -146,7 +146,7 @@
 "intro_placeholder" = "";
 // Settings
 "sett_units" = "";
-"map_locale" = "地图的语言";
+"map_locale" = "地图语言";
 "sett_km" = "千米";
 "sett_ml" = "英里";
 "sett_zoom" = "";
@@ -296,9 +296,9 @@
 "product_title_parking" = "";
 "product_desc_parking" = "";
 "product_desc_ext_parking" = "";
-"plugin_ski_name" = "";
+"plugin_ski_name" = "滑雪地图浏览";
 "product_desc_skimap" = "";
-"plugin_ski_descr" = "";
+"plugin_ski_descr" = "设计用于在冬季运动地点导航。观看滑雪道、滑雪缆车标记和彩色线条，指示每条轨道的复杂性。要在启用后使用，请转到配置地图并选择“冬季和滑雪”地图类型。";
 "monitoring_settings" = "行程录制";
 "product_desc_track_recording" = "";
 "product_desc_ext_track_recording" = "";
@@ -354,7 +354,7 @@
 "prch_srtm_info" = "";
 "shared_string_open" = "打開";
 "time_closed" = "";
-"will_close_at" = "";
+"will_close_at" = "关闭于";
 "time_will_open" = "";
 "osm_live_active" = "有效";
 "menu_all_trips" = "";
@@ -514,7 +514,6 @@
 "will_open_tomorrow_at" = "明日开始营业时间";
 "open_from" = "开始营业于";
 "open_till" = "营业至";
-"will_close_at" = "关闭于";
 "empty_route_calculated" = "计算出的路线为空。";
 "clear_all_intermediates" = "清空所有中间点";
 "shared_string_options" = "选项";
@@ -699,7 +698,7 @@
 "shared_string_previous" = "上一页";
 "shared_string_clear" = "清除";
 "confirm_every_run" = "总是询问";
-"save_track_to_gpx" = "自动记录行程";
+"save_track_to_gpx" = "导航时自动记录轨迹";
 "shared_string_help" = "帮助";
 "twitter" = "推特";
 "shared_string_close" = "关闭";
@@ -902,7 +901,7 @@
 "shared_string_without_name" = "没有名称";
 "min_mile" = "分钟每米";
 "edit_tilesource_url_to_load" = "URL";
-"edit_tilesource_elliptic_tile" = "椭圆墨卡托";
+"edit_tilesource_elliptic_tile" = "椭圆墨卡托投影";
 "hide_notes" = "隐藏 OSM 笔记";
 "show_notes" = "显示 OSM 笔记";
 "rendering_attr_hideUnderground_name" = "隐藏地下物体";
@@ -1320,7 +1319,7 @@
 "profile_type_user_string" = "用户配置文件";
 "map_settings_install_maps" = "选择要安装或更新的地图";
 "stats_select_graph_data" = "选择图形数据";
-"save_track_to_gpx_descrp" = "打开以在导航过程中自动保存轨迹";
+"save_track_to_gpx_descrp" = "导航开始时自动记录轨迹，并在导航结束后自动保存。";
 "select_favorite" = "选择收藏";
 "logging_interval_navigation_descr" = "选择导航过程中记录轨迹的记录时间间隔";
 "allow_3d_descr" = "启用此选项，可以在2.5D视角下查看地图";
@@ -2115,3 +2114,24 @@
 "rendering_value_all_name" = "全部";
 "rendering_attr_weatherPressureContours_name" = "等压线";
 "rendering_attr_hideMilitaryAreas_name" = "隐藏军事区域";
+"move_marker_bottom_sheet_title" = "移动地图以更改标记位置";
+"quick_action_navigation_voice_on" = "语音静音";
+"quick_action_auto_zoom" = "地图自动缩放开关";
+"quick_action_add_osm_bug" = "添加 OSM 注记";
+"quick_action_add_marker_descr" = "轻触动作按钮将会在屏幕中心的位置增加一个地图记号。";
+"quick_action_navigation_voice_off" = "取消静音";
+"osm_editing_plugin_name" = "OpenStreetMap编辑";
+"auth_failed" = "授权失败";
+"only_selected_segment_recalc" = "只有选定的片段将使用选定的配置文件重新计算。";
+"add_point_before" = "在之前添加点";
+"local_openstreetmap_uploading" = "正在上传…";
+"quick_action_map_style_action" = "添加地图样式";
+"osm_edit_reopened_note" = "重新打开 OSM 注记";
+"osm_editing_plugin_description" = "允许您为 OpenStreetMap 做出贡献，OpenStreetMap 是一个全球社区，旨在创建全面的世界地图并为每个用户提供最新的开源数据。
+\n
+\n您可以在网站上找到有关如何编辑地图的说明 https://osmand.net/docs/user/plugins/osm-editing";
+"add_point_after" = "在之后添加点";
+"mgrs_format_descr" = "OsmAnd使用MGRS，类似于UTM NATO格式。";
+"download_wikipedia_data" = "下载维基百科数据";
+"route_add_start_point" = "添加出发地";
+

@@ -135,7 +135,6 @@
 "shared_string_select_avoid_road_on_map" = "라우팅 중에 피할 도로 선택";
 "rotate_map_to" = "지도 방향";
 "open_till" = "까지 열기";
-"will_close_at" = "종료 위치";
 "will_open_at" = "다음 위치에서 열림";
 "will_open_on" = "열림";
 "info_button" = "정보";
@@ -441,7 +440,7 @@
 "track_continue_rec_q" = "녹화를 계속하시겠습니까?";
 "track_start_rec" = "트랙 기록 시작";
 "fav_import_title" = "즐겨찾기 가져오기";
-"save_track_to_gpx" = "자동 기록 트랙";
+"save_track_to_gpx" = "운행하는 동안 트랙을 GPX파일로 기록";
 "zoom_levels_difference_description" = "줌 수준 간의 큰 차이는 다운로드되는 데이터의 크기를 증가시킬 수 있다.";
 "prch_nau_q2_wifi" = "다운로드하려면 WiFi 네트워크를 통해 %@가 필요합니다.";
 "prch_nau_q2_cell" = "다운로드하려면 무선 네트워크를 통해 %@가 필요합니다.";
@@ -1419,3 +1418,15 @@
 "rendering_attr_OSMMapperAssistantIconsLowZooms_description" = "낮은 줌에서 아이콘의 도식적 표시";
 "routing_attr_avoid_footways_name" = "인도를 피하기";
 "routing_attr_freeride_policy_allow_name" = "허용";
+"osm_edit_reopened_note" = "OSM노트 다시 열기";
+"auth_failed" = "인증 실패";
+"edit_tilesource_elliptic_tile" = "타원 메르카토르";
+"osm_editing_plugin_description" = "\"이 플러그인을 통해,  OSM POI 생성 및 수정,  OSM 버그 열기 및 주석달기, 기록된  GPX 파일 기부처럼 OSM에 기여를 할 수 있도록  OsmAnd을 사용할 수 있습니다. 이 기능을 사용하려면 ,개인 OSM 자격 증명이 필요합니다.\"";
+"rendering_attr_weatherTempContours_name" = "온도 아이소라인";
+"local_openstreetmap_uploading" = "업로드 중…";
+"plugin_ski_descr" = "지도 스타일을 \' 겨울 스키\'로 변경하려면 뷰(View)를 활성화 합니다, 겨울 조건 하에서 모든 풍경을 보여줍니다.
+		\n\n(모든 스키 슬로프와 크로스 컨트리 스키 경로를 볼 수 있는)  글로벌 지도는 \'세계 스키 지도\'를 다운로드하여  사용할 수 있습니다.
+		\n\n다시 비활성화 하거나, 또는 \'지도 구성\' 의 하위메뉴인  \'지도 스타일\'을 변경하여 보기(View)를 되돌릴 수 있습니다.";
+"plugin_ski_name" = "스키 지도 보기";
+"osm_editing_plugin_name" = "OSM편집";
+

@@ -2800,3 +2800,5 @@
 "cloud_version_will_be_removed" = "La versión en la nube será quitada";
 "si_nm_mt" = "Millas/metros náuticos";
 "si_nm_ft" = "Millas/pies náuticos";
+"shared_string_does_not_exist" = "No existe";
+"download_wikipedia_data" = "Descargar datos de Wikipedia";

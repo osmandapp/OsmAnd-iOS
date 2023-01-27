@@ -2255,8 +2255,5 @@
 "rendering_attr_OSMMapperAssistantFixme_name" = "Thẻ fixme";
 "rendering_attr_OSMMapperAssistantFixme_description" = "Hiển thị các thẻ fixme";
 "rendering_attr_OSMMapperAssistantNote_name" = "Thẻ ghi chú";
-""rendering_attr_OSMMapperAssistantNote_description" 
-;" = "Hiển thị thẻ ghi chú";
 "auth_failed" = "Định danh thất bại";
-
 "rendering_attr_OSMMapperAssistantNote_description" = "Hiển thị thẻ ghi chú";

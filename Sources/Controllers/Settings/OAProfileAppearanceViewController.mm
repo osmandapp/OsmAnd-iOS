@@ -560,6 +560,7 @@
             cell.delegate = self;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.separatorInset = UIEdgeInsetsZero;
+            cell.valueLabel.hidden = YES;
         }
         if (cell)
         {

@@ -245,7 +245,7 @@
 "shared_string_control_stop" = "Stop";
 "upload_anonymously" = "Încarcă anonim";
 "search_address_street" = "Stradă";
-"srtm_plugin_name" = "Hărți SRTM";
+"srtm_plugin_name" = "Contur linii";
 "keep_informing" = "Repetați instrucțiunile de navigare";
 "default_speed_system_descr" = "Definiți unitatea de viteză.";
 "speak_pedestrian" = "Treceri pietonale";
@@ -282,7 +282,7 @@
 "shared_string_maps" = "Hărţi";
 "si_min_m" = "Minute pe milă";
 "routing_engine_vehicle_type_driving" = "Conducere";
-"record_plugin_name" = "Înregistrare călătorie";
+"record_plugin_name" = "Înregistrarea călătoriei";
 "city_type_city" = "Oraș";
 "osm_edit_created_poi" = "Punct de interes OSM creat";
 "shared_string_deselect" = "Deselectați";
@@ -1634,7 +1634,11 @@
 "product_desc_sea_depth_contours" = "Linii de contur ale adâncimii mării și marcaje marine";
 "wikivoyage_travel_guide_descr" = "Ghiduri către cele mai interesante locuri de pe planetă, în interiorul OsmAnd, fără conexiune la internet.";
 "start_editing_card_image_text" = "Ghidul de călătorie gratuit la nivel mondial pe care oricine îl poate edita.";
-"srtm_plugin_description" = "Informațiile privind terenul, cum ar fi curbele de nivel, pantele și pantele, vă ajută să evaluați vizual forma suprafeței terenului, luând în considerare curbura, extremele, abruptul, punctele de înălțime egală și multe altele. Informațiile topografice de pe o hartă pot fi reprezentate prin umbrirea pantei, curbele de nivel pentru urcare și coborâre, precum și prin culoarea abaterii unghiului de pantă față de plat. Date din SRTM și ASTER. \n\nCum se utilizează - https://osmand.net/docs/user/plugins/contour-lines";
+"srtm_plugin_description" = "Informațiile privind terenul, cum ar fi curbele de nivel, pantele și pantele, vă ajută să evaluați vizual poziția terenului și relieful, navigabilitatea și multe altele. Informațiile topografice pot fi reprezentate pe hartă prin umbrirea pantei, linii de contur și/sau colorarea abruptului.
+\n
+\nDatele de bază provin din SRTM și ASTER.
+\n
+\nPentru mai multe informații, consultați http://osmand.net/docs/user/plugins/contour-lines .";
 "product_desc_srtm" = "Evaluarea vizuală a formei suprafeței terenului";
 "preferred_languages" = "Limbi preferate";
 "available_languages" = "Limbi disponibile";
@@ -1642,7 +1646,7 @@
 "wiki_menu_download_descr" = "Sunt necesare hărți suplimentare pentru a vizualiza POI-urile Wikipedia pe hartă.";
 "select_wikipedia_article_langs" = "Selectați pe hartă limbile pentru articolele Wikipedia. Treceți la orice limbă disponibilă în timp ce citiți articolul.";
 "shared_string_all_languages" = "Toate limbile";
-"purchases_feature_desc_wikipedia" = "Având Wikipedia offline în timpul călătoriei, vă ajută să aflați mai multe despre locurile pe care le vizitați. Aceasta este disponibilă offline și afișează articolele Wikipedia în legătură cu punctele de interes chiar pe hartă. Nu uitați să descărcați hărțile Wikipedia pentru regiunea aleasă.";
+"purchases_feature_desc_wikipedia" = "Oferă toate articolele Wikipedia legate de locuri în mod offline, ajutându-vă să aflați mai multe despre locurile pe care le vizitați în timpul călătoriei prin simple atingeri pe hartă. Nu uitați să descărcați fișierele cu hărțile Wikipedia pentru regiunile respective.";
 "product_desc_wiki" = "Articole Wikipedia bazate pe localizare pe hartă";
 "product_desc_asia_short" = "Hărți ale regiunii Asia";
 "product_desc_asia" = "Descărcări nelimitate de hărți pentru Asia";
@@ -1672,19 +1676,22 @@
 "product_desc_ext_trip_planning" = "Plugin-ul de planificare a călătoriilor vă permite să vă creați călătoria pe hartă, să o salvați, să măsurați distanța dintre punctele conectate cu linii drepte etc. Creat pentru planificarea preliminară a călătoriei, mai degrabă decât pentru construirea temeinică a traseului.";
 "product_desc_trip_planning" = "Planifică-ți călătoria, adaugă puncte de trecere, măsoară distanța până la destinație folosind acest plugin";
 "product_title_trip_planning" = "Planificarea călătoriei";
-"record_plugin_description" = "Vă permite să înregistrați, să salvați și să analizați datele de antrenament sau de mișcare, cum ar fi viteza, urcările, coborârile sau reliefarea traseului, care pot fi apoi reutilizate, îmbunătățite, completate sau împărtășite cu prietenii. \n\nCum se utilizează - https://osmand.net/docs/user/plugins/trip-recording";
+"record_plugin_description" = "Înregistrați-vă călătoriile sau antrenamentele și analizați datele în ceea ce privește viteza, urcările și coborârile acumulate, profilul de altitudine etc. Piesele înregistrate pot fi arhivate, partajate cu prietenii, editate și post-procesate.
+\n
+\nPentru mai multe informații, consultați https://osmand.net/docs/user/plugins/trip-recording .";
 "product_desc_track_recording" = "Înregistrați și salvați călătoriile ca piese GPX";
 "plugin_ski_descr" = "Conceput pentru a navigaîn zonele de sporturi de iarnă: Vedeți pistele de schi și teleschiurile, precum și pârtiile de schi fond, cu linii colorate care indică gradele de dificultate. Pentru a-l utiliza, activați acest plugin și, de asemenea, mergeți la \"Configure map\" și alegeți stilul de hartă \"Winter andski\".";
 "product_desc_skimap" = "Harta actualizată a pârtiilor de schi cu teleschiuri și pârtii";
 "plugin_ski_name" = "Vedere harta de schi";
-"osmand_parking_plugin_description" = "Permiteți să setați un punct de pe hartă în care mașina dumneavoastră este lăsată pe stradă și să vă anunțați calendarul când începe timpul de parcare. Plugin-ul ajută la urmărirea timpului de parcare și a locației mașinii dumneavoastră. Pentru a plasa un marcaj, alegeți un loc pe hartă, apoi mergeți la Acțiuni și apăsați \"Adăugare parcare\".";
+"osmand_parking_plugin_description" = "Marcați locul în care este parcată mașina dumneavoastră și anunțați calendarul când va expira parcometrul. Pentru a plasa marcajul, alegeți un loc pe hartă, mergeți la \"Acțiuni\" și atingeți \"Adaugă parcare\".";
 "product_desc_parking" = "Urmăriți timpul de parcare și locația mașinii dumneavoastră";
-"osmand_parking_plugin_name" = "Poziția de parcare";
-"plugin_nautical_descr" = "Activați această funcție pentru a vă îmbogăți harta cu informații despre rutele de navigație, luminile de navigație, zonele periculoase, zonele în care este permisă sau interzisă navigarea sau acostarea etc. Pentru a utiliza descărcați hărți nautice și activați tipul \" Harta nautică\" în Configurare hartă. \n\nCum se utilizează - https://osmand.net/docs/user/plugins/nautical-charts";
+"osmand_parking_plugin_name" = "poziție parcare";
+"plugin_nautical_descr" = "Îmbogățește harta cu informații despre rutele de navigație, luminile de navigație, zonele de pericol nautic, zonele cu restricții de navigație sau de acostare etc. Pentru a le utiliza, descărcați hărțile nautice respective și activați stilul \"Nautical map\" în \"Configure map\".
+\n\nPentru mai multe informații, consultați https://osmand.net/docs/user/plugins/nautical-charts .";
 "product_desc_nautical" = "Hărți vectoriale adecvate pentru navigația pe rutele de navigație";
 
 //inapps
-"plugin_nautical_name" = "Harta nautică";
+"plugin_nautical_name" = "Vedere harta nautică";
 "reminder_not_set_text" = "Memento-ul nu a fost setat deoarece nu vi se permite accesul la Calendar";
 "cannot_access_calendar" = "Nu se poate accesa Calendarul";
 
@@ -2013,10 +2020,12 @@
 "quick_action_navigation_voice" = "Voce pornit/oprit";
 "population_num" = "Populație";
 "shared_string_turn_off" = "Opriți";
-"open_place_reviews_plugin_description" = "Vă permite să aduceți contribuții la proiectul OpenPlaceReviews. Cum ar fi fotografii, recenzii, link-uri despre locuri publice, cum ar fi restaurante, hoteluri, muzee și puncte de orientare. \n\nPuteți găsi instrucțiuni despre cum să contribuiți pe site-ul nostru - https://osmand.net/docs/user/plugins/openplacereviews";
+"open_place_reviews_plugin_description" = "Contribuiți la proiectul OpenPlaceReviews, cum ar fi fotografii, recenzii sau linkuri pentru locuri publice, cum ar fi restaurante, hoteluri sau muzee.
+\n
+\nGăsiți instrucțiuni despre cum să contribuiți pe site-ul nostru https://osmand.net/docs/user/plugins/openplacereviews .";
 "product_desc_openplacereviews" = "Împărtășește-ți opinia despre locurile publice";
 "open_place_reviews" = "OpenPlaceRecenzii";
-"plugin_mapillary_descr" = "Oferă vedere la nivelul străzii. Acolo unde lipsesc imaginile, le puteți adăuga dumneavoastră pentru ca alții să le poată folosi. Pentru a activa stratul Mapillary activați \" Imagine la nivel de stradă\" în meniul Configurare hartă.";
+"plugin_mapillary_descr" = "Imagini de la nivelul străzii. Puteți contribui și dumneavoastră. Pentru a vedea datele existente sub forma unui strat de hartă, activați \"Imagini la nivel de stradă\" în meniul \"Configurare hartă\".";
 "product_desc_mapillary" = "Vederi la nivelul străzii pentru a vedea împrejurimile";
 "added_profiles_descr" = "Profiluri adăugate de plugin";
 "added_profiles" = "Profiluri adăugate";
@@ -2320,7 +2329,6 @@
 "simulation_constant_mode_desc" = "Simularea se va efectua cu o viteză constantă selectată.";
 "purchases_feature_desc_unlimited_map_download" = "Obțineți descărcări nelimitate pentru toate hărțile offline ale continentelor și regiunilor.";
 "toast_empty_name_error" = "Locație fără nume";
-"purchases_feature_desc_wikipedia" = "Oferă toate articolele Wikipedia legate de locuri în mod offline, ajutându-vă să aflați mai multe despre locurile pe care le vizitați în timpul călătoriei prin simple atingeri pe hartă. Nu uitați să descărcați fișierele cu hărțile Wikipedia pentru regiunile respective.";
 "continue_with" = "Continuați cu %@";
 "purchases_feature_desc_terrain" = "Liniile de contur ale terenului, harta completă a dealurilor cu nuanțe întunecate și hărți de pantă cu culori pentru a arăta vârfurile și zonele joase.";
 "shared_string_includes" = "Include";
@@ -2358,7 +2366,7 @@
 "shared_string_learn_more" = "Aflați mai multe";
 "purchases_feature_desc_wikivoyage" = "Explorați Wikivoyage offline. Articole împărțite pe țări și regiuni și disponibile în toate limbile.";
 "rendering_attr_showFunicularRoutes_name" = "Rute de funicular";
-"osmand_development_plugin_description" = "Permite configurarea OsmAnd pentru testare: simulare de rute de navigare, verificarea performanțelor de redare a ecranului, etc. Plugin-ul nu este necesar pentru utilizarea normală a aplicației.";
+"osmand_development_plugin_description" = "Oferă funcționalități pentru testarea și depanarea OsmAnd: simulează rutele de navigare, monitorizează redarea ecranului, verifică performanța etc. Acest plugin nu este necesar pentru utilizarea normală a aplicației.";
 "routeInfo_horse_scale_description" = "Redă trasee în funcție de dificultatea traseelor de cai";
 "redeem_promo_code" = "Răscumpărați codul promoțional";
 "rendering_attr_showMonorailRoutes_name" = "Rute cu monorail";
@@ -2472,7 +2480,12 @@
 "gpx_import_already_exists_short" = "Fișierul de track specificat există deja în listă.";
 "plugin_popup_weather_ask" = "Vă rugăm să activați plugin-ul Weather";
 "product_desc_weather" = "Prognoza orară pe 24h cu 7 zile înainte pe hartă";
-"weather_plugin_description" = "Activați Weather Plugin pentru a planifica un traseu ținând cont de condițiile meteo. Urmăriți harta colorată a prognozei meteo, care este actualizată din oră în oră pentru astăzi, mâine și săptămâna viitoare. \n\nÎn timpul călătoriei, vedeți widget-uri de informații bazate pe locație cu temperatura, precipitațiile, viteza vântului, presiunea. \n\nVa fi util pentru drumeții și călătorii lungi cu bicicleta sau motocicleta.";
+"weather_plugin_description" = "Oferă
+\n- prognoza meteo pe 24 de ore și 7 zile cu 5 straturi
+\n- widget-uri bazate pe locație
+\n- izolatoarele de temperatură / presiune
+\n
+\nDatele meteorologice sunt furnizate de Sistemul global de prognoză (GFS, https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast ).";
 "weather_wind_knots" = "Noduri";
 "in_grace_period" = "În perioada de grație";
 "on_hold" = "În așteptare";
@@ -2775,3 +2788,5 @@
 "kg" = "kg";
 "amazon_appstore" = "Amazon Appstore";
 "download_wikipedia_data" = "Descărcați datele Wikipedia";
+"m" = "m";
+"km" = "km";

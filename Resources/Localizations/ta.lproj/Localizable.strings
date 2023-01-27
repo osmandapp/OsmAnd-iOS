@@ -1619,7 +1619,7 @@
 "product_desc_skimap" = "Ski slopes for all ski resorts in the world";
 "plugin_ski_descr" = "OsmAnd Ski Maps is a plugin to OsmAnd Maps&Navigation app designed to navigate at winter sports locations. It gives the information about ski pistes, ski lift markers and even colored lines indicating the complexity of each track. You get the info about ski tracks themselves as well as the surrounding infrastructure.\n\nUsage Instructions: Enable the plugin in OsmAnd application, tap the map button and set the map type to Ski maps.";
 
-"record_plugin_name" = "பயணம் பதிவு";
+"record_plugin_name" = "பயண பதிவுகள்";
 "product_desc_track_recording" = "Activates the functionality to record and save your tracks";
 "record_plugin_description" = "Record your tracks and save them manually using OsmAnd Track recording plugin. Export your track as a gpx file, share it or even use it to contribute to OpenStreetMap project.  A handy tool for runners, hikers and anyone interested in recording their tracks.";
 
@@ -1662,7 +1662,7 @@
 "available_languages" = "Available languages";
 "preferred_languages" = "Preferred languages";
 
-"srtm_plugin_name" = "சமநிலைக்கோடுகள்";
+"srtm_plugin_name" = "\"எல்லைகோடு  \"";
 "product_desc_srtm" = "Display of contour lines";
 "srtm_plugin_description" = "This plugin provides contour lines and hillshade, which can be displayed in OsmAnd offline maps. Contour lines provide the information about heights of the area while hillshade is their visualization. See the names of mountain peaks and specific features of terrain using this plugin.\n\nThe global data (between 70 degrees north and 70 degrees south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA's Earth Observing System. ASTER is a cooperative effort between NASA, Japan's Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
 
@@ -2161,7 +2161,7 @@
 "rendering_attr_highway_class_track_name" = "Track";
 "rendering_attr_tracktype_grade4_name" = "Mostly soft";
 "rendering_value_disabled_name" = "முடக்கியது";
-"rendering_attr_contourColorScheme_name" = "விளிம்பு கோடுகள் வண்ணங்கள்
+
 \n";
 "routing_attr_short_way_name" = "எரிபொருள்-திறனுள்ள வழி";
 "rendering_attr_alpineHiking_name" = "Alpine hiking scale (SAC)";
@@ -2169,7 +2169,7 @@
 "rendering_value_green_name" = "Green";
 "routing_attr_piste_type_nordic_description" = "Trails for nordic or cross-country skiing.";
 "rendering_attr_surface_unpaved_name" = "Unpaved";
-"rendering_attr_noAdminboundaries_description" = "பிராந்திய எல்லைகளை காட்சிப்படுத்த (நிர்வாகம் அளவு 5-9).
+
 \n";
 "rendering_value_bicycle_name" = "மிதிவண்டி";
 "rendering_value_translucent_lightgreen_name" = "Translucent light green";
@@ -2240,7 +2240,7 @@
 "routing_attr_avoid_shuttle_train_name" = "No shuttle train";
 "rendering_attr_contourColorScheme_description" = "Contour lines color scheme";
 "rendering_value_boldOutline_name" = "Bold outline";
-"routing_attr_avoid_toll_description" = "கட்டண சாலைகள் தவிர்க்கவும்
+
 \n";
 "rendering_attr_noPolygons_name" = "Polygons";
 "rendering_attr_piste_difficulty_easy_name" = "Easy";
@@ -2426,3 +2426,66 @@
 \n";
 "rendering_attr_noAdminboundaries_description" = "பிராந்திய எல்லைகளை காட்சிப்படுத்த (நிர்வாகம் அளவு 5-9).
 \n";
+
+"routing_attr_avoid_toll_description" = "கட்டண சாலைகள் தவிர்க்கவும்
+\n";
+"rendering_attr_contourColorScheme_name" = "விளிம்பு கோடுகள் வண்ணங்கள்
+\n";
+"rendering_attr_noAdminboundaries_description" = "பிராந்திய எல்லைகளை காட்சிப்படுத்த (நிர்வாகம் அளவு 5-9).
+\n";;
+"rendering_attr_hideAccess_name" = "அணுகல் கட்டுப்பாடுகள்";
+"amenity_type_education" = "கல்வி";
+"rendering_value_medium_name" = "நடுத்தர";
+"rendering_attr_trainLightrailRoutes_name" = "ரயில் பாதைகள்";
+"recording_delete_confirm" = "இந்த உருப்படியை நீக்கவா\?";
+"routing_attr_short_way_name" = "எரிபொருள்-திறனுள்ள வழி";
+"shared_string_delete_all" = "அனைத்தையும் நீக்கு";
+"shared_string_added" = "சேர்க்கப்பட்டது";
+"rendering_attr_showAccess_name" = "அணுகல் கட்டுப்பாடுகள் மற்றும் எண்ணிக்கை என்பதைக் காட்டு";
+"rendering_attr_showCycleRoutes_name" = "சுழற்சி வழிகளைக் காண்பி";
+"routing_attr_prefer_motorway_name" = "மோட்டார் வாகனங்களை விரும்புங்கள்";
+"rendering_value_pedestrian_name" = "பாதசாரிகள்";
+"rendering_attr_showSurfaces_name" = "சாலை மேற்பரப்பு காட்டு";
+"rendering_value_bicycle_name" = "மிதிவண்டி";
+"osm_live_banner_desc" = "வரம்பற்ற வரைபட பதிவிறக்கங்களைப் பெறுக, மேலும் ஒரு மாதத்திற்கு ஒருமுறை விட மேம்படுத்துங்கள்: வாராந்திர, தினசரிஅல்லது மணிநேரம்.";
+"download_wikipedia_data" = "விக்கிபீடியா கட்டுரையை பதிவிறக்கவும்";
+"offline_edition_descr" = "எப்போதும் ஆஃப்லைன் பதிப்பித்தலை பயன்படுத்தவும்.";
+"amenity_type_emergency" = "அவசர";
+"rendering_attr_hideUnderground_name" = "நிலத்தடி பொருட்கள்";
+"routing_attr_weight_description" = "அனுமதிக்கப்பட்ட வாகனம் எடை வரம்பை வழிகளில் குறிக்கவும்.";
+"shared_string_selected" = "தேர்ந்தெடுக்கப்பட்ட";
+"rendering_attr_contourColorScheme_name" = "விளிம்பு கோடுகள் வண்ணங்கள்
+\n";
+"rendering_attr_alpineHiking_description" = "SACஅளவின் படி பாதைகள் வழங்கவும்.";
+"rendering_attr_busRoutes_name" = "பேருந்து வழித்தடங்கள்";
+"rendering_value_bold_name" = "போல்ட்";
+"download_all" = "அனைத்தையும் பதிவிறக்கு";
+"toast_empty_name_error" = "பெயரிடப்படாத இடம்";
+"shared_string_refresh" = "புதுப்பி";
+"rendering_attr_noAdminboundaries_name" = "எல்லைகள்";
+"rendering_value_dark_brown_name" = "இருண்ட பழுப்பு";
+"rendering_attr_hideHouseNumbers_name" = "வீட்டு எண்";
+"rendering_attr_hideIcons_name" = "POIசின்னங்கள்";
+"rendering_value_thin_name" = "மெல்லிய";
+"routing_attr_weight_name" = "எடை வரம்பு";
+"altitude" = "உயரம்";
+"osm_notes" = "OSMகுறிப்புகள்";
+"m" = "மீ";
+"shared_string_recorded" = "பதிவு";
+"rendering_value_browse_map_name" = "வரைபடத்தை உலாவுக";
+"shared_string_status" = "நிலைமை";
+"app_mode_default" = "வரைபடத்தை உலாவுக";
+"osm_live_subscriptions" = "சந்தாக்கள்
+\n";
+"rendering_attr_trolleybusRoutes_name" = "ட்ரோலிபஸ் பாதை";
+"rendering_attr_noAdminboundaries_description" = "பிராந்திய எல்லைகளை காட்சிப்படுத்த (நிர்வாகம் அளவு 5-9).
+\n";
+"rendering_attr_buildings15zoom_name" = "ஜூம் 15 இல் கட்டிடங்கள்";
+"rendering_attr_whiteWaterSports_name" = "வெண்ணீர் விளையாட்டுகள்";
+"routing_attr_height_name" = "உயரம் வரம்பு";
+"rendering_attr_tramRoutes_name" = "டிராம் வழித்தடங்கள்";
+"rendering_attr_hidePOILabels_name" = "POIமுகப்புவரிச்சீட்டு";
+"routing_attr_avoid_toll_description" = "கட்டண சாலைகள் தவிர்க்கவும்
+\n";
+"auth_failed" = "அங்கீகாரம் தோல்வியடைந்தது";
+"km" = "கி.மீ.";

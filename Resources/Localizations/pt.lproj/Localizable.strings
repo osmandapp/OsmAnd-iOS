@@ -843,10 +843,14 @@
 "help_search" = "Pesquisa de mapa";
 "help_contact_us" = "Contacte-nos";
 // GPX colors
-"plugin_nautical_descr" = "Ative-o para enriquecer o seu mapa com informações sobre rotas de navegação, balizas luminosas de navegação, zonas perigosas, zonas onde é permitido ou proibido navegar ou atracar, etc. Permite descarregar mapas náuticos e ativar o \"Mapa náutico\" em Configurar mapa.\n\nComo fazer: https://osmand.net/docs/user/plugins/nautical-charts";
-"osmand_parking_plugin_description" = "Permite indicar um ponto no mapa onde o seu veículo foi estacionado e indica ao calendário quando o tempo de estacionamento começa. Isto ajuda a controlar o tempo de estacionamento e a localização do veículo. Para colocar o marcador, faça um toque prolongado no mapa, toque no botão \"Ações\" e depois no botão \"Adicionar estacionamento\".";
+"plugin_nautical_descr" = "Enriquece o mapa com informações sobre rotas de navegação, luzes de navegação, zonas de perigo náutico, zonas com restrições de navegação ou atracação, etc. Para utilizar, descarregue os respetivos mapas náuticos e ative o estilo \"Mapa Náutico\" em \"Configurar mapa\".
+\n
+\nVeja mais informações em https://osmand.net/docs/user/plugins/nautical-charts .";
+"osmand_parking_plugin_description" = "Marque onde seu carro está estacionado e seja avisado através da aplicação de calendário quando o tempo do parquímetro estiver a expirar. Para colocar um marcador, escolha um lugar no mapa, depois vá a \"Ações\" e escolha \"Estacionar aqui\".";
 "plugin_ski_descr" = "Projetado para navegar emáreas de desportos de Inverno: Veja pistas de esqui, teleféricos e pistas de esqui cross country, com linhas coloridas indicando as classificações de dificuldade. Para o utilizar, após o ativar, vá a Configurar mapa e em \"Estilo de mapa\" escolha \"Inverno e esqui\".";
-"record_plugin_description" = "Permite-lhe registar, guardar e analisar os seus dados de treino ou movimento, tais como velocidade, subidas, descidas e planaltos na rota, que podem depois ser reutilizados, melhorados ou partilhados com amigos. \n\nInstruções para o fazer em https://osmand.net/docs/user/plugins/trip-recording";
+"record_plugin_description" = "Grave as suas viagens ou treinos e analise os dados em termos de velocidade, subidas e descidas acumuladas, perfil de elevação, etc. Os trilhos gravados podem ser arquivados, partilhados com amigos, editados e pós-processados.
+\n
+\nVeja mais informações em https://osmand.net/docs/user/plugins/trip-recording .";
 "product_title_trip_planning" = "Planeamento de viagem";
 "product_desc_trip_planning" = "Planeie a sua viagem, adicione pontos de paragem, meça a distância para o seu destino usando este complemento";
 "product_desc_ext_trip_planning" = "O complemento de planeamento de viagem permite que crie a sua viagem no mapa, guarde, meça a distância entre os pontos ligados com linhas retas, etc. Criado por planeamento de viagem preliminar em vez de rota por endereço.";
@@ -856,10 +860,14 @@
 \n
 \nPode encontrar instruções sobre como editar o mapa em https://osmand.net/docs/user/plugins/osm-editing .";
 "product_desc_wiki" = "Artigos da Wikipédia baseados em localização no mapa";
-"purchases_feature_desc_wikipedia" = "Aceder a artigos da Wikipédia na sua viagem ajuda-o a saber mais sobre os locais que visita. Está disponível para descarregamento, para poder vê-los desligado da Internet e mostra artigos da Wikipédia relacionados com os pontos de interesse diretamente no mapa. Não se esqueça de descarregar os mapas da Wikipédia para a região escolhida.";
+"purchases_feature_desc_wikipedia" = "Fornece todos os artigos da Wikipédia relacionados a lugares, desligado da Internet, ajudando a aprender sobre os lugares que visita com simples toques no mapa. Não se esqueça de descarregar os ficheiros de mapas da Wikipédia para as respetivas regiões.";
 "srtm_plugin_name" = "Curvas de nível";
 "product_desc_srtm" = "Avaliação visual da forma da superfície do terreno";
-"srtm_plugin_description" = "Informações sobre o terreno, tais como curvas de nível, encostas e declives, ajudam a avaliar visualmente a forma da superfície do terreno, considerando a curvatura, extremos, declive, pontos de igual altura e muito mais. A informação topográfica num mapa pode ser representada por sombreamento da inclinação, linhas de contorno para a subida e descida e a cor do desvio do ângulo da inclinação em relação ao plano. Dados provenientes do SRTM e do ASTER. \n\nInstruções em https://osmand.net/docs/user/plugins/contour-lines";
+"srtm_plugin_description" = "As informações do terreno, como curvas de nível, sombras e declives, ajudam a avaliar visualmente a configuração do terreno e o relevo, a navegabilidade e muito mais. As informações topográficas podem ser representadas no mapa por sombreamento de encostas, linhas de contorno e/ou coloração da declividade.
+\n
+\nOs dados subjacentes têm origem em SRTM e ASTER.
+\n
+\nVeja mais informações em http://osmand.net/docs/user/plugins/contour-lines .";
 "product_desc_sea_depth_contours" = "Curvas de nível e balizas marítimas";
 "enter_description" = "Insira a descrição";
 "enter_fav_name" = "Digite o nome do favorito";
@@ -2039,10 +2047,12 @@
 "added_profiles" = "Perfis adicionados";
 "suggested_maps_descr" = "Estes mapas são necessários para o complemento.";
 "suggested_maps" = "Mapas sugeridos";
-"open_place_reviews_plugin_description" = "Permite contribuir para o projeto OpenPlaceReviews. Tais como fotografias, críticas, hiperligações sobre locais públicos tais como restaurantes, hotéis, museus e pontos de passagem. \n\nPode encontrar instruções sobre como contribuir em https://osmand.net/docs/user/plugins/openplacereviews";
+"open_place_reviews_plugin_description" = "Faça contribuições para o projeto OpenPlaceReviews, como fotos, comentários ou hiperligações para locais públicos, como restaurantes, hotéis ou museus.
+\n
+\nVeja as instruções sobre como contribuir em https://osmand.net/docs/user/plugins/openplacereviews .";
 "product_desc_openplacereviews" = "Partilhe a sua opinião sobre locais públicos";
 "open_place_reviews" = "OpenPlaceReviews";
-"plugin_mapillary_descr" = "Mostra a cobertura e as fotografias ao nível das ruas no Mapillary. Onde faltam fotografias, pode simplesmente adicioná-las você mesmo para que outros as possam utilizar. Para ativar a camada Mapillary, vá ao menu e selecione \"Configurar mapa\" e ative a opção \"Imagens das ruas\".";
+"plugin_mapillary_descr" = "Imagens de vistas ao nível da rua. Também pode contribuir. Para ver os dados existentes como uma camada de mapa, vá ao menu e selecione \"Configurar mapa\" e ative a opção \"Imagens das ruas\".";
 "product_desc_mapillary" = "Fotos online ao nível da rua";
 "shared_string_turn_off" = "Desativar";
 "welmode_download_maps" = "Descarregar mapas";
@@ -2310,7 +2320,12 @@
 "plugin_popup_weather_title" = "Mostrar previsão do tempo";
 "plugin_popup_weather_ask" = "Por favor ative o complemento de previsão do clima";
 "product_desc_weather" = "Previsão de 24h a cada hora com 7 dias de antecedência no mapa";
-"weather_plugin_description" = "Habilite o complemento meteorológico para planear uma rota considerando as previsões meteorológicas. Veja o mapa colorido da previsão do tempo, que é atualizado de hora em hora para hoje, amanhã e a semana que vem. \n\nDurante a viagem, veja painéis de informações baseadas na sua localização com temperatura, precipitação, velocidade do vento e pressão. \n\nÉ útil para caminhadas e longas viagens de bicicleta ou motorizada.";
+"weather_plugin_description" = "Fornece
+\n- a previsão meteorológica de 24h e 7 dias com 5 camadas
+\n- widgets baseados em localização
+\n- as isolinhas de temperatura / pressão
+\n
+\nOs dados meteorológicos são fornecidos pelo Global Forecast System (GFS, https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast ).";
 "measurement_units" = "Unidades de medida";
 "weather_temperature_celsius" = "Celsius";
 "weather_temperature_fahrenheit" = "Fahrenheit";
@@ -2482,9 +2497,8 @@
 "simulate_location_movement_speed_original_desc" = "A velocidade de deslocação da localização durante a simulação será igual à velocidade do ficheiro selecionado.";
 "simulate_location_movement_speed_x2_desc" = "A velocidade da deslocação da localização durante a simulação será no dobro da velocidade do ficheiro selecionado.";
 "simulate_location_movement_speed_x3_desc" = "A velocidade da deslocação da localização durante a simulação será no triplo da velocidade do ficheiro selecionado.";
-"osmand_development_plugin_description" = "Permite configurar o OsmAnd para testes: simular rotas de navegação, verificar o desempenho da renderização do ecrã, etc. Este complemento não é necessário para uma utilização normal da aplicação.";
+"osmand_development_plugin_description" = "Fornece a funcionalidade para testar e depurar o OsmAnd: simula rotas de navegação, verificar a renderização do ecrã, verificar o desempenho, etc. Este complemento não é necessário para uma utilização normal da aplicação.";
 "restore_purchases" = "Restaurar compras";
-"purchases_feature_desc_wikipedia" = "Fornece todos os artigos da Wikipédia relacionados a lugares, desligado da Internet, ajudando a aprender sobre os lugares que visita com simples toques no mapa. Não se esqueça de descarregar os ficheiros de mapas da Wikipédia para as respetivas regiões.";
 "purchases_feature_desc_wikivoyage" = "Explore o Wikivoyage offline. Os artigos estão divididos em conjuntos de países e regiões e disponíveis em todos os idiomas.";
 "purchases_feature_desc_carplay" = "Mostra os mapas offline do OsmAnd e a navegação no ecrã do seu veículo e integra-se nos comandos deste.";
 "quarterly_subscription" = "Subscrição trimestral";
@@ -2797,3 +2811,6 @@
 "rendering_attr_weatherPrecipitationContours_name" = "Isolinhas de precipitação";
 "shared_string_does_not_exist" = "Não existe";
 "download_wikipedia_data" = "Descarregar dados da Wikipédia";
+"km" = "km";
+"m" = "m";
+"kg" = "kg";

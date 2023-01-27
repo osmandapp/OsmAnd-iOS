@@ -1544,20 +1544,27 @@
 "reminder_not_set_text" = "The reminder was not set since you are not allowed access to the Calendar";
 
 //inapps
-"plugin_nautical_name" = "Nautical map";
+"plugin_nautical_name" = "Mapa nautikoa ikuspegia";
 "product_desc_nautical" = "Nautical map of all world";
-"plugin_nautical_descr" = "OsmAnd Nautical Charts is a plugin for OsmAnd Maps & Navigation app. It is a detailed graphical representation of oceans, seas, coastal areas and rivers. The charts can contain various information like sailing routes, navigation lights, dangerous areas, areas where it's allowed or not allowed to sail or dock, etc.\n\nUsage Instructions: it is highly recommended to download nautical basemap in order to see the maps regardless of detailed map presence. To turn on Nautical charts, tap the map button and set map type to Nautical.\n\nNote: All professional sailors are obliged to have official nautical charts on their ships.\n\nOsmAnd Nautical charts are based on the data from OpenSeaMap project. While OpenSeaMap charts at the moment cannot compete with official nautical charts, they can be used by recreational sailors for orientation or route planning.";
-"osmand_parking_plugin_name" = "Parking Position";
+"plugin_nautical_descr" = "\"Gehigarri honek OsmAnd mapa eta nabigazio aplikazioa hobetzen du, itsasaldi eta ur kiroletarako itsas mapak sor dezan ahalbidetuz.
+\n
+\nOsmAnd aplikaziorako gehigarri berezi honek itsas nabigaziorako marka eta ikur kartografikoak gehitzen ditu  itsaso zabalean zein kostatik hurbil. Itsas nabigaziorako marka bakoitzak identifikaziorako eta esanahia ulertzeko datuak dauzka (kategoria, forma, kolorea, zenbakia, erreferentzia, eta abar)
+\n
+\nOsmAnden ohiko mapa batetara itzultzeko, gehigarri hau desgaitu edo \'Mapa estiloa\' aldatu \'Konfiguratu mapa\' menuan.\"";
+"osmand_parking_plugin_name" = "Aparkalekuaren kokapena";
 "product_desc_parking" = "Let you easily memorize when the car was parked and how much time left if the parking is limited by time";
-"osmand_parking_plugin_description" = "OsmAnd Parking Plugin reminds you of your parking position. It is a plugin for OsmAnd Maps&Navigation app.\nChoose a time-independent reminder (only a marker on the map) or a time-limited one with alarm upon time expiration (includes also a marker on the map). To use the plugin, enable it in the Plugins menu.";
+"osmand_parking_plugin_description" = "Gorde aparkatutako kotxearen kokalekua, geratzen zaizun aparkaleku denbora barne. 
+\nKokalekua eta denbora OsmAnd kontrol panelean ikusgai daude eta mapa-trepeta batean. Alarma gehitu daiteke Android egutegira.";
 "plugin_ski_name" = "Ski-mapa ikuspegia";
 "product_desc_skimap" = "Ski slopes for all ski resorts in the world";
 "plugin_ski_descr" = "Gehigarri honek zure eskura jartzen ditu mundu osoko eskiatzeko aldapak, fondoko eski zirkuituak, trabesiako eski ibilbideak, teleferikoak, eta abar. Ibilbideak eta pistak zailtasunaren arabera koloreztatu dira, eta elurtutako paisaiaren itxura duen \'Negu\' estiloko mapa batean adierazten dira.
 \n
 \nHau aktibatzean ikuspegia \'Negua eta eskia\' estilora aldatzen da, paisaia neguko egoeran bistaratuz. Hau atzera aldatu daiteke gehigarri hau desgaituz eta \'Konfiguratu mapa\' menuko \'Mapa estiloa\' aldatuz.";
-"record_plugin_name" = "Bidai grabaketa";
+"record_plugin_name" = "Bidaiaren grabaketa";
 "product_desc_track_recording" = "Activates the functionality to record and save your tracks";
-"record_plugin_description" = "Record your tracks and save them manually using OsmAnd Track recording plugin. Export your track as a gpx file, share it or even use it to contribute to OpenStreetMap project.  A handy tool for runners, hikers and anyone interested in recording their tracks.";
+"record_plugin_description" = "Gehigarri honek zure lorratzak grabatu eta gordetzeko funtzionaltasuna gehitzen du, eskuz mapan GPX erregistratze trepeta sakatuz, edo automatikoki zure nabigazio guztia GPSX fitxategi batean zuzenean gordez. 
+\n 
+\nGrabatutako lorratzak lagunekin partekatu ditzakezu edo OSM kontribuzio gisa erabili. Kirolariek entrenamenduak grabatzeko erabili dezakete. Lorratzen oinarrizko analisi bat egin daiteke zuzenean OsmAnd erabiliz, bueltako denbora, batezbesteko abiadura, eta abar. eta jakina lorratzak kanpo tresna bereziekin aztertu daitezke ere.";
 "osm_editing_plugin_name" = "OpenStreetMap edizioa";
 "product_desc_osm_editing" = "Make changes to OpenStreetMap directly from OsmAnd";
 "osm_editing_plugin_description" = "Egin OSM ekarpenak, esaterako interesgune objektuak sortzea edo eraldatzea, OSM oharrak irekitzea edo komentatzea, eta sortutako GPX fitxategiak bidaltzea, aplikazioan OSM kredentzialak zehaztuta. OpenStreetMap.org elkarlanean egindako, domeinu publikoko mapa proiektu global bat da.";
@@ -1565,7 +1572,9 @@
 "plugin_mapillary_descr" = "Kale mailako argazkiak denontzat. Deskubritu tokiak, parte hartu, eskuratu mundua.";
 "open_place_reviews" = "OpenPlaceReviews";
 "product_desc_openplacereviews" = "Send photos, reviews, and links about public places";
-"open_place_reviews_plugin_description" = "Send photos, reviews, and links about public places such as restaurants, hotels, museums, and waypoints as open data https://openplacereviews.org/data/.\n\nRead more at https://openplacereviews.org";
+"open_place_reviews_plugin_description" = "Bidali leku publikoei buruzko argazkiak, iritziak eta estekak, hala nola jatetxe, hotel, museo eta bide-puntuei buruzko datu ireki gisa https://openplacereviews.org/data/.
+\n
+\nIrakurri gehiago https://openplacereviews.org helbidean";
 "product_desc_africa" = "Unlimited map downloads for Africa";
 "product_desc_antarctica" = "Unlimited map downloads for Antarctica";
 "product_desc_africa_short" = "Africa region maps";
@@ -1587,7 +1596,7 @@
 "product_desc_asia_short" = "Asia region maps";
 "download_wikipedia_maps" = "Wikipedia";
 "product_desc_wiki" = "Wikipedia data";
-"purchases_feature_desc_wikipedia" = "Get information about points of interest from Wikipedia. It is your pocket offline guide - just enable Wikipedia plugin and enjoy articles about objects around you.";
+"purchases_feature_desc_wikipedia" = "Arakatu Wikipedia lineaz kanpo. Herrialde eta eskualdeen arabera eta hizkuntza guztietan eskuragarri dauden artikuluak.";
 "shared_string_all_languages" = "Hizkuntza guztiak";
 "select_wikipedia_article_langs" = "Hautatu mapako Wikipediako artikuluen hizkuntzak. Hizkuntza eskuragarrien artean txandakatu dezakezu artikulua irakurtzean.";
 "wiki_menu_download_descr" = "Mapa osagarriak behar dira Wikipediaren POIak mapan ikusteko.";
@@ -1596,7 +1605,9 @@
 "preferred_languages" = "Preferred languages";
 "srtm_plugin_name" = "Sestra-kurbak";
 "product_desc_srtm" = "Display of contour lines";
-"srtm_plugin_description" = "This plugin provides contour lines and hillshade, which can be displayed in OsmAnd offline maps. Contour lines provide the information about heights of the area while hillshade is their visualization. See the names of mountain peaks and specific features of terrain using this plugin.\n\nThe global data (between 70 degrees north and 70 degrees south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA's Earth Observing System. ASTER is a cooperative effort between NASA, Japan's Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
+"srtm_plugin_description" = "Gehigarri honek OsmAnd-eko lineaz kanpoko mapetan agertu daitezkeen sestra-kurbak eta erliebe-itzalak eskaintzen ditu. Kirolariek, mendizaleek eta orokorrean paisaiaren erliebearen estrukturan interesa duen edonork gogoko izango du. 
+\n 
+\nDatu globalak (iparraldera 70 gradu eta hegoaldera 70 gradu bitartean) STRM (Shuttle Radar Topography Mission) eta ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer) neurrietan oinarrituak daude, espazioko Terra irudi tresna, NASAren Lurra Behatzeko Sistemaren satelite enblematikoa. ASTER NASAren, Japoniako Ekonomi, Merkataritza eta Industria Ministerioaren (EMIM), eta Japoneko Espazio Sistemaren (J-espaziosistema) elkarlanaren ondorioz sortua izan da.";
 "wikivoyage_travel_guide" = "Bidai-gidak";
 "start_editing_card_image_text" = "Edonork idatzi dezakeen mundu osoko doako gida.";
 "wikivoyage_travel_guide_descr" = "Planetako leku interesgarrienetarako gidak, OsmAnd-en bertan eta Internet konexiorik gabe.";
@@ -2322,7 +2333,6 @@
 "terrain_maps" = "Lurraren mapak";
 "toast_empty_name_error" = "Izen gabeko kokalekua";
 "new_device_account" = "Gailu berria / kontu berria";
-"purchases_feature_desc_wikipedia" = "Arakatu Wikipedia lineaz kanpo. Herrialde eta eskualdeen arabera eta hizkuntza guztietan eskuragarri dauden artikuluak.";
 "shared_string_purchased" = "Erosita";
 "copy_address" = "Kopiatu helbidea";
 "purchases_feature_desc_nautical" = "Izan eskura sakonera nautikoaren informazioa";
@@ -2547,3 +2557,11 @@
 "auth_failed" = "Baimentzeak huts egin du";
 "rendering_attr_weatherWindSpeedContours_name" = "Haize-boladen isolineak";
 "verification_code_missing_description" = "Kodearen itxaronaldia 10 minutukoa izan daiteke; gainera, Zaborra karpeta egiaztatu dezakezu. Laguntzen ez badizu, erabili beheko botoia.";
+"m" = "m";
+"weather_plugin_description" = "Ematen du
+\n- 24 orduko eta 7 eguneko eguraldiaren iragarpena 5 geruza dituena
+\n- Kokapenean oinarritutako widgetak
+\n- Tenperatura/presioaren isolineak
+\n
+\nEguraldiaren datuak Global Forecast System-ek (GFS, https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast) ematen ditu.";
+"km" = "km";

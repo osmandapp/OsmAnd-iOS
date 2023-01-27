@@ -1605,13 +1605,15 @@
 "reminder_not_set_text" = "The reminder was not set since you are not allowed access to the Calendar";
 
 //inapps
-"plugin_nautical_name" = "Nautical map";
+"plugin_nautical_name" = "കപ്പലോട്ട ഭൂപട വിന്യാസം";
 "product_desc_nautical" = "Nautical map of all world";
 "plugin_nautical_descr" = "OsmAnd Nautical Charts is a plugin for OsmAnd Maps & Navigation app. It is a detailed graphical representation of oceans, seas, coastal areas and rivers. The charts can contain various information like sailing routes, navigation lights, dangerous areas, areas where it's allowed or not allowed to sail or dock, etc.\n\nUsage Instructions: it is highly recommended to download nautical basemap in order to see the maps regardless of detailed map presence. To turn on Nautical charts, tap the map button and set map type to Nautical.\n\nNote: All professional sailors are obliged to have official nautical charts on their ships.\n\nOsmAnd Nautical charts are based on the data from OpenSeaMap project. While OpenSeaMap charts at the moment cannot compete with official nautical charts, they can be used by recreational sailors for orientation or route planning.";
 
-"osmand_parking_plugin_name" = "Parking Position";
+"osmand_parking_plugin_name" = "പാര്‍ക്കിങ്ങ് സ്ഥാനം";
 "product_desc_parking" = "Let you easily memorize when the car was parked and how much time left if the parking is limited by time";
-"osmand_parking_plugin_description" = "OsmAnd Parking Plugin reminds you of your parking position. It is a plugin for OsmAnd Maps&Navigation app.\nChoose a time-independent reminder (only a marker on the map) or a time-limited one with alarm upon time expiration (includes also a marker on the map). To use the plugin, enable it in the Plugins menu.";
+"osmand_parking_plugin_description" = "\"പാര്‍ക്കിങ്ങ് സ്ഥാന അനുബന്ധം എവിടെയാണ് കാര്‍ പാര്‍ക്ക് ചെയ്തത് എന്നും എത്രസമയം കൂടി ലഭ്യമാണ്(സമയപരിമിതമെങ്കില്‍) ഓര്‍മിപ്പിക്കുന്നു.
+
+പാര്‍ക്കിങ്ങ് സ്ഥലവും സമയവും ഓഎസ്എംആന്ഡിന്റെ ഡാഷ്ബോഡിലും ഭൂപത്തിലും കാണാവുന്നതാണ്.കൂടാതെ ആന്ഡ്രോയിഡ് കലണ്ടറിലൊരു  ഓര്‍മ്മക്കത്ത് ചേര്‍ക്കാവുന്നതാണ്.\"";
 
 "plugin_ski_name" = "സ്കീ ഭൂപടവിന്യാസം";
 "product_desc_skimap" = "Ski slopes for all ski resorts in the world";
@@ -1660,7 +1662,7 @@
 "available_languages" = "Available languages";
 "preferred_languages" = "Preferred languages";
 
-"srtm_plugin_name" = "കോണ്ടൂര്‍ ലൈനുക";
+"srtm_plugin_name" = "\"കോണ്ടൂര്‍ ലൈനുകള്‍ \"";
 "product_desc_srtm" = "Display of contour lines";
 "srtm_plugin_description" = "This plugin provides contour lines and hillshade, which can be displayed in OsmAnd offline maps. Contour lines provide the information about heights of the area while hillshade is their visualization. See the names of mountain peaks and specific features of terrain using this plugin.\n\nThe global data (between 70 degrees north and 70 degrees south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA's Earth Observing System. ASTER is a cooperative effort between NASA, Japan's Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
 
@@ -2428,3 +2430,5 @@
 "position_on_map_bottom" = "താഴെ";
 "auth_failed" = "\"പ്രവേശനാനുമതി കിട്ടിയില്ല \"";
 "download_wikipedia_data" = "\"വിക്കിപ്പീഡിയ വിവരങ്ങള്‍ ഡൗണ്‍ലോഡ്  ചെയ്യുക \"";
+"km" = "കി.മീ.";
+"m" = "മീ.";

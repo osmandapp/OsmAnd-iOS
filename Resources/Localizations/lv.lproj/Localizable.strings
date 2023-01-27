@@ -1540,25 +1540,31 @@
 "reminder_not_set_text" = "The reminder was not set since you are not allowed access to the Calendar";
 
 //inapps
-"plugin_nautical_name" = "Nautical map";
+"plugin_nautical_name" = "Jūras kartes";
 "product_desc_nautical" = "Nautical map of all world";
-"plugin_nautical_descr" = "OsmAnd Nautical Charts is a plugin for OsmAnd Maps & Navigation app. It is a detailed graphical representation of oceans, seas, coastal areas and rivers. The charts can contain various information like sailing routes, navigation lights, dangerous areas, areas where it's allowed or not allowed to sail or dock, etc.\n\nUsage Instructions: it is highly recommended to download nautical basemap in order to see the maps regardless of detailed map presence. To turn on Nautical charts, tap the map button and set map type to Nautical.\n\nNote: All professional sailors are obliged to have official nautical charts on their ships.\n\nOsmAnd Nautical charts are based on the data from OpenSeaMap project. While OpenSeaMap charts at the moment cannot compete with official nautical charts, they can be used by recreational sailors for orientation or route planning.";
-"osmand_parking_plugin_name" = "Parking Position";
+"plugin_nautical_descr" = "\"Spraudnis papildina OsmaAnd kartes ar jūras kartēm kuģošanai, ūdenslēpošanai un citiem ūdens sporta veidiem.
+\n
+\nSpeciāls kartes papildinājums rāda navigācijas ceļus, zīmes un simbolus uz ūdens un iekšzemē krastu tuvumā. Katra navigācijas zīme ir aprakstīta, lai to varētu viegli indentificēt un ir dots skaidrojumspar tās nozīmi (kategorija, izmēri, krāsa, secība, atsauces, u.t.t.).
+\n
+\nLai atgrieztos uz OsmAnd standarta kartēm, deaktivizējiet spraudni vai nomainiet karti galvenajā izvēlnē - kartes attēlošana. \"";
+"osmand_parking_plugin_name" = "Stāvvieta";
 "product_desc_parking" = "Let you easily memorize when the car was parked and how much time left if the parking is limited by time";
-"osmand_parking_plugin_description" = "OsmAnd Parking Plugin reminds you of your parking position. It is a plugin for OsmAnd Maps&Navigation app.\nChoose a time-independent reminder (only a marker on the map) or a time-limited one with alarm upon time expiration (includes also a marker on the map). To use the plugin, enable it in the Plugins menu.";
+"osmand_parking_plugin_description" = "Viegli pamanāms logrīks uz kartes norāda jūsu auto stāvvietu un atlikušo laiku (ja ir uzlikts laika limits). Vietas koordinātes un laiks redzami arī atsevišķā sadaļā Manā Izvēlnē. Ir iespējams pievienot laika atgādinātāju Android kalendārā.";
 "plugin_ski_name" = "Slēpošanas kartes";
 "product_desc_skimap" = "Ski slopes for all ski resorts in the world";
 "plugin_ski_descr" = "\"Šis OsmAnd spraudnis ļauj piekļūt datiem par slēpošanas trasēm un maršrutiem, trošu vagoniem un pacēlājiem. Maršruti un trases tiek rādīti pēc krāsām, atkarībā no grūtības pakāpes un tiek attēlotas īpašā \"ziemas\" kartes stilā.
 \n
 \nAktivizējot spraudni, kartes stils tiek nomainīts uz \"Ziema un slēpošana,\" attēlojot visus ainavas elementus ziemas apstākļiem atbilstošus. Deaktivizēt spraudni var vai nu šeit vai nomainot kartes stilu kartes uzstādījumos. \"";
-"record_plugin_name" = "Maršruta ieraksts";
+"record_plugin_name" = "Ceļa ieraksts";
 "product_desc_track_recording" = "Activates the functionality to record and save your tracks";
-"record_plugin_description" = "Record your tracks and save them manually using OsmAnd Track recording plugin. Export your track as a gpx file, share it or even use it to contribute to OpenStreetMap project.  A handy tool for runners, hikers and anyone interested in recording their tracks.";
+"record_plugin_description" = "Aršo spraudni jūs varat manuāli saglabāt trekus, nospiežot GPX ieraksta logrīku uz kartes vai veikt automātisku visu maršrutu ierakstu GPX failā.
+\n
+\nIerakstītie treki vēlāk var tikt izmantoti treka analīzei, koplietošanai ar draugiem vai OSM izstrādei. Atlēti var izmantot trekus, laimonitorētu treniņus. Pamata treku analīze var tikt veikta tieši caur OsmAnd kā piemēram, apļu laiki, vidējais ātrums utt., bet paplašinātai analīzei trekus var atvērt citās programmās.";
 "osm_editing_plugin_name" = "OSM labošana";
 "product_desc_osm_editing" = "Make changes to OpenStreetMap directly from OsmAnd";
 "osm_editing_plugin_description" = "Rādīt iestatījumus OSM pilnveidošanai - OSM POI objektu izveidei/labošanai, GPX treku izplatīšanai un ziņošanai par OSM kļūdām. Vairāk uzziniet https://openstreetmap.org vietnē. Ikviens ir aicināts ņemt aktīvu dalību, ko ir iespējams darīt caur OsmAnd aplikāciju, norādot jūsu OSM lietotāja datus.";
 "product_desc_mapillary" = "Online street-level photos for everyone";
-"plugin_mapillary_descr" = "Tiešsaistes ielas līmeņa fotoattēli ikvienam. Atklājiet vietas, kopīgojiet, iemūžiniet pasauli.";
+"plugin_mapillary_descr" = "Ielas līmeņa fotoattēli ikvienam - atklājiet vietas, kopīgojiet, iemūžiniet pasauli.";
 "open_place_reviews" = "OpenPlaceReviews";
 "product_desc_openplacereviews" = "Send photos, reviews, and links about public places";
 "open_place_reviews_plugin_description" = "Send photos, reviews, and links about public places such as restaurants, hotels, museums, and waypoints as open data https://openplacereviews.org/data/.\n\nRead more at https://openplacereviews.org";
@@ -1590,9 +1596,11 @@
 "some_articles_may_not_available_in_lang" = "Some Wikipedia articles may not be available in your language.";
 "available_languages" = "Available languages";
 "preferred_languages" = "Preferred languages";
-"srtm_plugin_name" = "Kontūrlīnijas";
+"srtm_plugin_name" = "Kontūrlīniju spraudnis";
 "product_desc_srtm" = "Display of contour lines";
-"srtm_plugin_description" = "This plugin provides contour lines and hillshade, which can be displayed in OsmAnd offline maps. Contour lines provide the information about heights of the area while hillshade is their visualization. See the names of mountain peaks and specific features of terrain using this plugin.\n\nThe global data (between 70 degrees north and 70 degrees south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA's Earth Observing System. ASTER is a cooperative effort between NASA, Japan's Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
+"srtm_plugin_description" = "\"Šis spraudnis dod iespēju rādīt kontūrlīniju un reljefu pārklājus uz standarta OsmAnd kartēm. Šo iespēju novērtēs dabas mīļotāji, aktīvās atpūtas cienītāji un jebkurš ar padziļinātu interesi par zemes reljefu. 
+\n
+\nGlobālie dati (starp 70° Z un 70° D) ir bāzēti uz SRTM(Shuttle Radar Topography Mission) un ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer) mērījumiem, attēlveidošanas rīks uz Terra\'s, vadošais NASA Zemes Novērošanas Sistēmas satelīts. ASTER ir kopējs veikums ar NASA, Japānas Ekonomikas Ministriju, Trade and Industry(METI) un Japānas Izplatījuma Sistēmām (J-spacesystems). \"";
 "wikivoyage_travel_guide" = "Ceļojumu gids";
 "start_editing_card_image_text" = "Brīvais pasaules ceļojumu gids, ko ikviens var papildināt.";
 "wikivoyage_travel_guide_descr" = "Interesantāko vietu apraksti uz planētas OsmAnd lietotnē bez pieslēguma internetam.";
@@ -2318,3 +2326,5 @@ kas tiks pievienots jūsu Kategorijas sadaļai.";
 "rendering_attr_seabedDetail_description" = "Paplašināts teksts ar dibena klasifikāciju, apvienotiem reljefu tipiem, jūraszāļu kategorijas un taksoni";
 "auth_failed" = "Autorizācija neizdevās";
 "download_wikipedia_data" = "Lejupielādēt Vikipēdijas datus";
+"km" = "km";
+"m" = "m";

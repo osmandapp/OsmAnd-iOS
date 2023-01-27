@@ -1768,9 +1768,9 @@
 "product_desc_nautical" = "Vector maps appropriate for sailing routes navigation";
 "plugin_nautical_descr" = "Turn on to enrich your map with information about sailing routes, navigation lights, danger zones, zones where it is allowed or prohibited to sail or dock, etc. To use download Nautical maps and enable \"Nautical map\" type in Configure map. \n\nHow to - https://osmand.net/docs/user/plugins/nautical-charts";
 
-"osmand_parking_plugin_name" = "Parking Position";
+"osmand_parking_plugin_name" = "Parkering Posisie Inlasmodule";
 "product_desc_parking" = "Track the parking time and location of your car";
-"osmand_parking_plugin_description" = "Enable to set a point on the map where your car is left on the street and notify your calendar when parking time starts. Plugin helps to track the parking time and location of your car. To place a marker choose a place on the map, then go to Actions and press \"Add parking\".";
+"osmand_parking_plugin_description" = "Hierdie inlasmodule laat toe dat die ligging van jou geparkeerde motor geberg kan word.";
 
 "plugin_ski_name" = "Ski map";
 "product_desc_skimap" = "Up-to-date ski trail map with lifts and slopes";
@@ -1792,7 +1792,7 @@
 
 "debugging_and_development" = "OsmAnd ontwikkeling";
 "product_desc_development" = "For developers and experienced users";
-"osmand_development_plugin_description" = "Allows to configure OsmAnd for testing: simulate navigation routes, check the screen rendering performance, etc. Plugin is not required for normal application use.";
+"osmand_development_plugin_description" = "Wys stellings vir ontwikkeling en ontfoutingsfunksies bv. bewegende navigasie of beeldvertoon werkverrigting.";
 "product_desc_africa" = "Unlimited map downloads for Africa";
 "product_desc_antarctica" = "Unlimited map downloads for Antarctica";
 "product_desc_africa_short" = "Africa region maps";
@@ -1823,9 +1823,9 @@
 "available_languages" = "Available languages";
 "preferred_languages" = "Preferred languages";
 
-"srtm_plugin_name" = "Kontoerlyne";
+"srtm_plugin_name" = "Kontoerlyn inlasmodule";
 "product_desc_srtm" = "Visual assessment of the shape of the land surface";
-"srtm_plugin_description" = "Terrain information, such as contour lines, hillshades and slopes, helps you visually assess the shape of the land surface, considering curvature, extremes, steepness, points of equal height, and more. Topographic information on a map can be represented by slope shading, contour lines for the uphill and downhill, and the colour of the slope angle deviation from flat. Data from SRTM and ASTER. \n\nHow to - https://osmand.net/docs/user/plugins/contour-lines";
+"srtm_plugin_description" = "Vergemoontlik dei aflaai van aflyn kontoerlyne en heuwelsakdus (\'Instellings\'->\'Inligtingsbestuur\' ->\'Aflaai\' ->Kies verlangde kaart-tipe).";
 
 "wikivoyage_travel_guide" = "Travel Guides";
 "start_editing_card_image_text" = "The free worldwide travel guide anyone can edit.";
@@ -2752,7 +2752,6 @@
 "purchases_feature_desc_unlimited_map_download" = "Get unlimited downloads for all continents and regions offline maps.";
 "purchases_feature_desc_carplay" = "Brings OsmAnd offline maps and navigation to your vehicle screen and integrates with your vehicle\'s controls.";
 "purchases_feature_desc_combined_wiki" = "Explore Wikipedia articles on the go, without an internet connection. Offline data divided by countries and available in all languages.";
-"purchases_feature_desc_wikipedia" = "Explore Wikipedia offline. Articles divided by countries and regions and available in all languages.";
 "purchases_feature_desc_wikivoyage" = "Explore Wikivoyage offline. Articles divided by countries and regions and available in all languages.";
 "purchases_feature_desc_terrain" = "Terrain contour lines, full hillshade map with dark shades and slope maps with colors to show peaks and lowlands.";
 "purchases_feature_desc_nautical" = "Vector maps appropriate for sailing routes navigation";
@@ -2925,3 +2924,5 @@
 • Fixed import of custom plugins with included files\n
 • Fixed various crashes in the Route planning mode\n
 • Fixed crashes during Navigation\n";
+"m" = "m";
+"km" = "km";

@@ -914,10 +914,10 @@
 "cannot_access_calendar" = "Impossible d'accedir au Calendier";
 "reminder_not_set_text" = "Lo sauvamemòria automatic es pas estat definit perque l'accès au Calendier li es pas consentit";
 //inapps
-"plugin_nautical_name" = "Mapa marina";
+"plugin_nautical_name" = "Vista de la mapa marina";
 "product_desc_nautical" = "Mapa vectoriala per la navigacion maritima";
 "plugin_nautical_descr" = "Activatz leis informacions sus lei rotas maritimas, lei fanaus, lei zònas perilhosas, lei zònas de restriccion...\n\nDe consultar - https://osmand.net/docs/user/plugins/nautical-charts";
-"osmand_parking_plugin_name" = "Posicion d'aparcament";
+"osmand_parking_plugin_name" = "Posicion d\'aparcament";
 "product_desc_parking" = "Memoriza onte parcatz la veitura e còmpta lo temps d'aparcament";
 "osmand_parking_plugin_description" = "Placatz un marcador sus la mapa a l'endrech onte laissatz lo veïcul e quichatz sus \"Ajustar un aparcament\". L'ajust Aparcament d'OsmAnd memoriza la posicion de l'aparcament e lo temps se descòmpta.";
 "plugin_ski_name" = "Vista de la mapa d\'esquí";
@@ -952,7 +952,7 @@
 "product_desc_asia_short" = "Mapas d'Asia";
 "download_wikipedia_maps" = "Wikipèdia";
 "product_desc_wiki" = "Notícias Wikipèdia localizadas sus la mapa";
-"purchases_feature_desc_wikipedia" = "Un guida de pòcha : avètz Wikipèdia per vòstre viatge e leis articles que tractan de l'environa de vòstre percors. Se pòt consultar fòra de linha mai oblidetz pas de teledescargar lei notícias Wikipèdia de la region de destinacion.";
+"purchases_feature_desc_wikipedia" = "Exploratz Wikipèdia fòra de linha. Articles segon lo país e disponibles dins totei lei lengas.";
 "srtm_plugin_name" = "Corbas de nivèu";
 "product_desc_srtm" = "Mostrar lei corbas de nivèu";
 "srtm_plugin_description" = "Leis informacions de terren coma lei corbas de nivèu, l'ombra de relèu e la penda, vos ajudan a visualizar l'aspècte de la superficia. Amb aquest ajust podretz veire lo nom dei montanhas e lei caracteristicas particularas a l'encontrada. Donadas SRTM e ASTER.\n\nPer n'en sacher mai : https://osmand.net/docs/user/plugins/contour-lines";
@@ -2149,7 +2149,6 @@
 "cubic_m" = "m3";
 "purchases_feature_desc_combined_wiki" = "Exploratz leis articles de Wikipèdia onte que vos trobetz, sensa connexion a Internet. Donadas fòra de linha segon lo país e disponiblas dins totei lei lengas.";
 "shared_string_learn_more" = "Legir mai";
-"purchases_feature_desc_wikipedia" = "Exploratz Wikipèdia fòra de linha. Articles segon lo país e disponibles dins totei lei lengas.";
 "on_hold" = "A l\'espèra";
 "restore_from_osmand_cloud" = "Restaurar de la Nívol OsmAnd";
 "in_grace_period" = "En periòde de gràcia";
@@ -2293,7 +2292,9 @@
 "default_speed_descr" = "Estimar l'ora d'arribada si la mena de vias es pas conoissuda e en aplicant lei limitacions de velocitat en totei lei carrieras (aquò podriá afectar la navigacion)";
 "weather_precip_inches" = "Poces";
 "help_what_is_new" = "Noveutats";
-"open_place_reviews_plugin_description" = "Vos permet de collaborar au projècte OpenPlaceRewiews. Ambe de fòtos, de criticas, de ligames sus lei luòcs publics que trevatz taus coma de restaurants, d'ostalariás, de musèus e de ponchs d'interès. \n\nTrovaretz leis instruccions per o faire sus lo site Oèb : https://osmand.net/docs/user/plugins/openplacereviews";
+"open_place_reviews_plugin_description" = "Mandatz de fòtos, de criticas e de liames sus de luòcs publics taus coma restaurants, ostalariás, musèus e etapas per donadas dobèrtas https://openplacereviews.org/data/.
+\n
+\nNe\'n saber mai sus : https://openplacereviews.org";
 "read_full_description" = "Legir la descripcion completa";
 "app_mode_car" = "Automobila";
 "add_description" = "Ajustar una descripcion";
@@ -2513,3 +2514,4 @@
 "rendering_attr_OSMMapperAssistantFixme_description" = "Veire lei balisas fixme";
 "rendering_attr_OSMMapperAssistantNote_description" = "Mostrar lei nòtas de balisa";
 "offline_edition_descr" = "Sensa connexion, la modificacion es activada, mai lei cambis se devon sauvagardar localament en premier, se telecargaràn au besonh; autrament s\'actualizan immediatament.";
+"m" = "m";

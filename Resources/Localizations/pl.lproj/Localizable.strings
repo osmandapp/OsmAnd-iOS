@@ -281,9 +281,9 @@
 "help_quiz" = "Quiz";
 "cannot_access_calendar" = "Nie można uzyskać dostępu do kalendarza";
 //inapps
-"plugin_nautical_name" = "Mapa morska";
+"plugin_nautical_name" = "Widok mapy morskiej";
 "product_desc_nautical" = "Morskie mapy całego świata";
-"osmand_parking_plugin_name" = "Położenie zaparkowanego samochodu";
+"osmand_parking_plugin_name" = "Miejsce parkingowe";
 "postcode" = "Kod pocztowy";
 "shared_string_from" = "z";
 "city_type_district" = "Dzielnica";
@@ -680,11 +680,13 @@
 "cannot_add_marker_desc" = "Usuń przynajmniej jeden kierunek i spróbuj ponownie";
 "cannot_add_destination" = "Nie można dodać kierunku";
 "map_marker" = "Znacznik mapy";
-"plugin_nautical_descr" = "OsmAnd Nautical Charts to wtyczka do aplikacji OsmAnd Maps & Navigation. Jest to szczegółowe przedstawienie graficzne oceanów, mórz, obszarów przybrzeżnych i rzek. Wykresy mogą zawierać różne informacje, takie jak szlaki żeglarskie, światła nawigacyjne, niebezpieczne obszary, obszary, w których dozwolone lub niedozwolone jest żeglowanie lub dokowanie itp.\n\nInstrukcje dotyczące użytkowania: zaleca się pobranie mapy bazowej nautycznej, aby zobaczyć mapy niezależnie od szczegółowej obecności na mapie. Aby włączyć mapy żeglarskie, dotknij przycisku mapy i ustaw typ mapy jako Nautyczny.\n\nUwaga: Wszyscy zawodowi marynarze są zobowiązani do posiadania oficjalnych map żeglarskich na swoich statkach.\n\nWykresy OsmAnd Nautical są oparte na danych z projektu OpenSeaMap. Podczas gdy wykresy OpenSeaMap w tej chwili nie mogą konkurować z oficjalnymi mapami żeglarskimi, mogą być używane przez żeglarzy rekreacyjnych do orientacji lub planowania trasy.";
+"plugin_nautical_descr" = "Wzbogaca mapę o informacje o szlakach żeglarskich, światłach nawigacyjnych, strefach niebezpiecznych dla żeglugi, strefach z ograniczeniami żeglugi lub dokowania itp. Aby użyć, pobierz odpowiednie mapy żeglarskie i włącz styl \"Mapa żeglarska\" w \"Konfiguracja mapy\".
+\n
+\nWięcej informacji na stronie https://osmand.net/docs/user/plugins/nautical-charts .";
 "product_desc_parking" = "Łatwo zapamiętasz, kiedy samochód był zaparkowany i ile czasu zostało, jeśli parkowanie jest ograniczone czasowo";
 "product_desc_skimap" = "Stoki narciarskie dla wszystkich ośrodków narciarskich na świecie";
 "product_desc_track_recording" = "Aktywuje funkcję nagrywania i zapisywania swoich tras";
-"osmand_parking_plugin_description" = "OsmAnd Parking Plugin pozwala łatwo zapamiętać, gdzie został zaparkowany samochód oraz ile pozostało czasu parkowania, jeśli jest on ograniczony.\nMiejsce parkowania oraz czas można znaleźć na karcie w panelu oraz na widżecie mapy. Wtyczka może dodać powiadomienie i przypomnienie do kalendarza.";
+"osmand_parking_plugin_description" = "Oznaczaj miejsca, w których zaparkowany jest Twój samochód, i powiadamiaj w kalendarzu, kiedy upłynie termin ważności parkometru. Aby umieścić znacznik, wybierz miejsce na mapie, przejdź do \"Akcje\" i stuknij \"Dodaj parking\".";
 "shared_string_clear" = "Wyczyść";
 "make_call" = "Zadzwoń";
 "gpx_select_track" = "Wybierz trasę";
@@ -708,7 +710,9 @@
 "logging_min_distance_descr" = "Filtr: minimalna odległość do zarejestrowania nowego punktu";
 "monitoring_min_accuracy" = "Minimalna dokładność";
 "logging_min_accuracy_descr" = "Filtr: brak rejestrowania, chyba że zostanie osiągnięta dokładność";
-"record_plugin_description" = "Aktywuje funkcje nagrywania i zapisywania tras za pomocą widżetu nagrywania tras GPX na ekranie mapy lub automatyczne nagrywa przebiegi wszystkich tras do plików GPX.  Nagrane trasy można udostępnić znajomym lub wykorzystać na rzecz rozwoju map OpenStreetMap. Sportowcy mogą korzystać z nagranych tras do monitorowania treningów. W tym celu OsmAnd udostępnia podstawowe informacje takie, jak czasy okrążeń, średnia prędkość itp. Trasy mogą być później analizowane w specjalnych narzędziach do analizy przygotowanych przez innych dostawców.";
+"record_plugin_description" = "Nagrywaj swoje wycieczki lub treningi i analizuj dane pod kątem prędkości, skumulowanych podjazdów i zjazdów, profilu wysokości itp. Zarejestrowane ścieżki można archiwizować, udostępniać znajomym, edytować i poddawać obróbce końcowej.
+\n
+\nWięcej informacji na stronie https://osmand.net/docs/user/plugins/trip-recording .";
 "monitoring_min_speed" = "Prędkość minimalna";
 "logging_min_speed_descr" = "Filtr: Brak rejestrowania poniżej wybranej prędkości";
 "auto_split_recording_title" = "Automatyczne dzielenie nagrań po przerwie";
@@ -748,7 +752,7 @@
 "plugin_ski_descr" = "Zaprojektowany do poruszania się po obszarach sportów zimowych: Zobacz trasy narciarskie i wyciągi narciarskie oraz trasy narciarstwa biegowego, z kolorowymi liniami wskazującymi stopnie trudności. Aby użyć, włącz tę wtyczkę, a także przejdź do „Konfiguruj mapę” i wybierz styl mapy „Zima i narty”.";
 "product_desc_trip_planning" = "Zaplanuj podróż, dodaj waypointy, zmierz odległość do miejsca docelowego za pomocą tej wtyczki";
 "product_desc_ext_trip_planning" = "Wtyczka planowania podróży umożliwia tworzenie podróży na mapie, zapisywanie jej, mierzenie odległości między punktami połączonymi liniami prostymi itp. Została stworzona do wstępnego planowania podróży, a nie do dokładnego budowania trasy.";
-"purchases_feature_desc_wikipedia" = "Uzyskaj informacje o ciekawych miejscach z Wikipedii. Jest to kieszonkowy przewodnik offline - wystarczy włączyć wtyczkę do Wikipedii i przeczytać artykuły o obiektach wokół ciebie.";
+"purchases_feature_desc_wikipedia" = "Udostępnia wszystkie artykuły Wikipedii związane z miejscami w trybie offline, pomagając Ci dowiedzieć się o miejscach, które odwiedzasz podczas podróży, za pomocą prostych dotknięć mapy. Nie zapomnij pobrać plików map Wikipedii dla odpowiednich regionów.";
 "prch_wiki_info" = "Dodatek do Wikipedii udostępnia informacje na temat Wikipedii dla map, do których jesteś uprawniony, kupowany lub pobierany w ramach bezpłatnego limitu.";
 "prch_srtm_info" = "Dodatek poziomic włącza poziomice dla map, do których masz prawo, a które zostały zakupione lub pobrane w ramach limitu bezpłatnego.";
 "context_menu_item_directions_from" = "Nawiguj z";
@@ -767,7 +771,11 @@
 "hist_remove_q" = "Czy chcesz usunąć elementy historii?";
 "gpx_edit_mode" = "Tryb edycji";
 "wiki_download_description" = "Aby przeczytać pełne artykuły - pobierz dane Wikipedii %@";
-"srtm_plugin_description" = "Ta wtyczka dostarcza poziomice i mapę cieniowaną, które mogą być wyświetlane na mapach offline OsmAnd. Poziomice dostarczają informacji o wysokościach obszaru, podczas gdy mapa cieniowana jest ich wizualizacją. Zobacz nazwy górskich szczytów i specyficzne cechy terenu za pomocą tej wtyczki.\n\nDane globalne (od 70 stopni na północ do 70 stopni na południe) są oparte na pomiarach przeprowadzanych przez SRTM (Shuttle Radar Topography Mission) i ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), instrument obrazujący na pokładzie Terra, flagowego satelity NASA Earth Observing System. ASTER to wspólny wysiłek NASA, Japońskiego Ministerstwa Gospodarki, Handlu i Przemysłu (METI) oraz Japan Space Systems (J-spacesystems).";
+"srtm_plugin_description" = "Informacje o terenie, takie jak linie konturowe, odcienie wzgórz i stoki, pomagają wizualnie ocenić układ terenu i rzeźbę terenu, żeglowność i inne. Informacje topograficzne mogą być na mapie reprezentowane przez cieniowanie stoków, linie konturowe i/lub kolorystykę stromości.
+\n
+\nDane bazowe pochodzą z SRTM i ASTER.
+\n
+\nWięcej informacji nastronie http://osmand.net/docs/user/plugins/contour-lines .";
 "plugin_popup_ski_desc" = "Aby włączyć styl <b>Mapa tras narciarskich</b>, przejdź do <b>Skonfiguruj mapę</b> > <b>Rodzaj mapy</b>";
 "plugin_popup_nautical_desc" = "Najpierw pobierz Mapy morskie.\nNastępnie przejdź do <b>Skonfiguruj mapę</b> > <b>Rodzaj mapy</b> i włącz styl <b>Morski</b>";
 "plugin_popup_trip_planning_ask" = "Aby rozpocząć planowanie podróży, musisz aktywować wtyczkę: <b>Planowanie podróży</b>";
@@ -2037,7 +2045,7 @@
 "import_profile_descr" = "Aby zaimportować profil, naciśnij potrzebny plik (*.osf) w dowolnej aplikacji i wybierz \"Kopiuj do OsmAnd Maps\"";
 "map_settings_hillshade_description" = "Mapy cieniowane wizualizują zbocza, szczyty i niziny z użyciem różnych poziomów szarości";
 "search_more" = "Wyszukaj więcej…";
-"plugin_mapillary_descr" = "Udostępnia zdjęcia w widoku ulicznym. Pozwala na odkrywanie miejsc, współpracę nad uchwyceniem świata.";
+"plugin_mapillary_descr" = "Zdjęcia widoków z poziomu ulicy. Możesz również samemu je zrobić. Aby zobaczyć istniejące dane jako warstwę mapy, włącz „Zdjęcia z poziomu ulicy” w menu „Konfiguruj mapę”.";
 "added_profiles" = "Dodano profile";
 "shared_string_turn_off" = "Wyłącz";
 "rendering_value_walkingRoutesOSMCNodes_description" = "Kolor trasy według typu sieci węzłów (międzynarodowy, regionalny, lokalny).";
@@ -2373,7 +2381,6 @@
 "purchases_feature_desc_pro_widgets" = "Uzyskaj dostęp do funkcji OsmAnd Pro: Kolorowanie tras i nie tylko.";
 "restore_purchases" = "Przywróć zakupy";
 "explore_osmnad_plans_to_find_suitable" = "Poznaj plany OsmAnd, aby znaleźć odpowiedni dla Ciebie.";
-"purchases_feature_desc_wikipedia" = "Udostępnia wszystkie artykuły Wikipedii związane z miejscami w trybie offline, pomagając Ci dowiedzieć się o miejscach, które odwiedzasz podczas podróży, za pomocą prostych dotknięć mapy. Nie zapomnij pobrać plików map Wikipedii dla odpowiednich regionów.";
 "osmand_pro_tagline" = "Uzyskaj maksymalną funkcjonalność";
 "annual_subscription" = "Roczna subskrypcja";
 "complete_purchase" = "Zakończ zakup";
@@ -2384,7 +2391,7 @@
 "osmand_maps_plus_tagline" = "Uzyskaj rozszerzoną funkcjonalność";
 "debugging_and_development" = "Rozwój OsmAnd";
 "shared_string_learn_more" = "Dowiedz się więcej";
-"osmand_development_plugin_description" = "Ustawienia funkcji programowania i debugowania, takie jak symulacja nawigacji, wydajność renderowania lub komunikaty głosowe. Przeznaczony dla programistów, niepotrzebny do normalnego użytkowania aplikacji.";
+"osmand_development_plugin_description" = "Zapewnia funkcjonalność do testowania i debugowania OsmAnd: symuluj trasy nawigacji, monitoruj renderowanie ekranu, sprawdzaj wydajność itp. Ta wtyczka nie jest wymagana do normalnego użytkowania aplikacji.";
 "continue_with" = "Kontynuuj z %@";
 "rendering_attr_showMonorailRoutes_name" = "Trasy kolei jednoszynowej";
 "not_available_with" = "Niedostępne z %@";
@@ -2631,3 +2638,15 @@
 "download_wikipedia_data" = "Pobierz dane z Wikipedii";
 "auth_failed" = "Nie udało się uwierzytelnić";
 "mgrs_format_descr" = "OsmAnd używa formatu MGRS, który jest podobny do UTM NATO.";
+"m" = "m";
+"open_place_reviews_plugin_description" = "Dodaj do projektu OpenPlaceReviews zdjęcia, recenzje i linki do miejsc publicznych takich jak restauracje, hotele czy muzea.
+\n
+\nZnajdź instrukcje jak to zrobić na naszej stronie https://osmand.net/docs/user/plugins/openplacereviews .";
+"weather_plugin_description" = "Zapewnia
+\n- 24-godzinną i 7-dniową prognozę pogody z 5 warstwami
+\n- widżety oparte na lokalizacji
+\n- izolinie temperatury / ciśnienia
+\n
+\nDane pogodowe są dostarczane przez Globalny System Prognoz (GFS, https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast ).";
+"km" = "km";
+"kg" = "kg";

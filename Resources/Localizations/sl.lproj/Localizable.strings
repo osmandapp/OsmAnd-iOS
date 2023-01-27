@@ -277,7 +277,7 @@
 "index_name_south_america" = "Južna Amerika";
 "cannot_access_calendar" = "Dostop do koledarja ni mogoč";
 //inapps
-"plugin_nautical_name" = "Navtični zemljevid";
+"plugin_nautical_name" = "Pomorski zemljevid";
 "product_desc_nautical" = "Navtični zemljevid sveta";
 "driving_region" = "Režim vožnje";
 "driving_region_japan" = "Japonska";
@@ -315,7 +315,7 @@
 "map_no_address" = "Naslov še ni znan";
 // Help
 "help_quiz" = "Anketa";
-"osmand_parking_plugin_name" = "Parkiranje (mesto in čas)";
+"osmand_parking_plugin_name" = "Parkirno mesto";
 "plugin_ski_name" = "Zemljevidi smučišč";
 "product_desc_skimap" = "Smučarske poti vseh smučišč na svetu";
 "record_plugin_name" = "Beleženje potovanja";
@@ -331,7 +331,7 @@
 "product_desc_asia" = "Neomejeno prenašanje zemljevidov Azije";
 "download_wikipedia_maps" = "Wikipedija";
 "product_desc_wiki" = "Podatki Wikipedije";
-"srtm_plugin_name" = "Podatki izohips";
+"srtm_plugin_name" = "Izohipse";
 "product_desc_srtm" = "Prikaz izohips na zemljevidu";
 "my_location" = "Moja trenutna točka";
 "all_categories" = "Vse kategorije";
@@ -1336,7 +1336,7 @@
 "gpxup_private" = "Zasebno";
 "navigate_point_easting" = "Koordinata v smeri proti vzhodu";
 "dialogs_and_notifications_title" = "Pogovorna okna in opozorila";
-"plugin_mapillary_descr" = "Spletne fotografije ulic za vsakogar. Odkrijte mesta, sodelujte in zajemite svet.";
+"plugin_mapillary_descr" = "Posnetki pogledov z ravni ulice. Prispevaš lahko tudi sam/a. Če si želiš ogledati obstoječe podatke kot sloj zemljevida, v meniju »Konfiguriraj zemljevid« vklopi »Posnetke na ravni ulice«.";
 "navigate_point_zone" = "Območje";
 "navigate_point_northing" = "Koordinata v smeri proti severu";
 "shared_string_navigation" = "Navigacija";
@@ -1660,7 +1660,7 @@
 "purchases_feature_desc_pro_widgets" = "Pridobi dostop do naprednih funkcij OsmAnd Pro: barvanje poti in drugo.";
 "routing_attr_allow_private_for_truck_description" = "Dovoli dostop do zasebnih površin za tovornjake.";
 "restore_purchases" = "Obnovi nakupe";
-"osmand_development_plugin_description" = "Nastavitve za razvojne funkcije in funkcije za odpravljanje napak, kot so simulacija navigacije, zmogljivost upodabljanja ali glasovni pozivi. Namenjeno razvijalcem, za običajno uporabo aplikacije ni potrebno.";
+"osmand_development_plugin_description" = "Zagotavlja funkcionalnost za testiranje in odpravljanje napak OsmAnd: simulacija poti za navigacijo, spremljanje upodabljanja zaslona, preverjanje delovanja itd. Ta vtičnik ni potreben za običajno uporabo aplikacije.";
 "ltr_or_rtl_combine_via_or" = "%@ ali %@";
 "icon_group_symbols" = "Simboli";
 "shared_string_purchased" = "Kupljeno";
@@ -2069,3 +2069,27 @@
 "quick_action_navigation_voice_on" = "Glasovno vodenje je omogočeno.";
 "quick_action_auto_zoom" = "Omogoči/Onemogoči samodejno približanje zemljevida";
 "osm_edit_reopened_note" = "Ponovno odprte opombe OSM";
+"srtm_plugin_description" = "Informacije o terenu, kot so izohipse, senčenje terena in naklon, ti pomagajo vizualno oceniti lego zemlje in relief, navigacijo in drugo. Topografske informacije na zemljevidu so lahko predstavljene s senčenjem naklonov, izohipsami in/ali barvanjem strmine.
+\n
+\nOsnovni podatki izvirajo iz SRTM in ASTER.
+\n
+\nNadaljnje branje na http://osmand.net/docs/user/plugins/contour-lines .";
+"kg" = "kg";
+"weather_plugin_description" = "Zagotavlja:
+\n- 24-urno in 7-dnevno vremensko napoved s petimi plastmi;
+\n- gradniki, ki temeljijo na lokaciji;
+\n- izoterme in izobare (izočrte temperature in zračnega tlaka).
+\n
+\nVremenske podatke zagotavlja globalni sistem napovedi (Global Forecast System - GFS, https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast ).";
+"plugin_nautical_descr" = "Obogati zemljevid z informacijami o plovnih poteh, navigacijskih lučeh, navtičnih nevarnih območjih, območjih z omejitvami jadranja ali privezovanja itd. Za uporabo prenesi ustrezne navtične karte in omogočite slog »Navtična karta« pod »Konfiguriraj zemljevid«.
+\n
+\nNadaljnje branje na https://osmand.net/docs/user/plugins/nautical-charts .";
+"open_place_reviews_plugin_description" = "Prispevaj k projektu OpenPlaceReviews, kot npr. fotografije, ocene, povezave o javnih mestih, kot so restavracije, hoteli, ali muzeji.
+\n
+\nNavodila za prispevanje najdeš na naši spletni strani https://osmand.net/docs/user/plugins/openplacereviews .";
+"m" = "m";
+"km" = "km";
+"record_plugin_description" = "Posnemi svoja potovanja ali treninge in analizirajte podatke v smislu hitrosti, skupnih vzponov in spustov, višinskega profila itd. Posnete poti je mogoče arhivirati, deliti s prijatelji, urejati in naknadno obdelati.
+\n
+\nNadaljnje branje na https://osmand.net/docs/user/plugins/trip-recording .";
+"osmand_parking_plugin_description" = "Označi, kje je tvoj avto parkiran, in obvesti koledar, kdaj se izteče parkirni števec. Če želiš dodati oznako, izberi mesto na zemljevidu, pojdi na »Dejanja« in tapni »Dodaj parkirišče«.";

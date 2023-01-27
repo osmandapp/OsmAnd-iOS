@@ -2753,7 +2753,6 @@
 "purchases_feature_desc_unlimited_map_download" = "Get unlimited downloads for all continents and regions offline maps.";
 "purchases_feature_desc_carplay" = "Brings OsmAnd offline maps and navigation to your vehicle screen and integrates with your vehicle\'s controls.";
 "purchases_feature_desc_combined_wiki" = "Explore Wikipedia articles on the go, without an internet connection. Offline data divided by countries and available in all languages.";
-"purchases_feature_desc_wikipedia" = "Explore Wikipedia offline. Articles divided by countries and regions and available in all languages.";
 "purchases_feature_desc_wikivoyage" = "Explore Wikivoyage offline. Articles divided by countries and regions and available in all languages.";
 "purchases_feature_desc_terrain" = "Terrain contour lines, full hillshade map with dark shades and slope maps with colors to show peaks and lowlands.";
 "purchases_feature_desc_nautical" = "Vector maps appropriate for sailing routes navigation";

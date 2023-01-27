@@ -1605,13 +1605,18 @@
 "reminder_not_set_text" = "The reminder was not set since you are not allowed access to the Calendar";
 
 //inapps
-"plugin_nautical_name" = "Nautical map";
+"plugin_nautical_name" = "Ծովային քարտեզի դիտում";
 "product_desc_nautical" = "Nautical map of all world";
-"plugin_nautical_descr" = "OsmAnd Nautical Charts is a plugin for OsmAnd Maps & Navigation app. It is a detailed graphical representation of oceans, seas, coastal areas and rivers. The charts can contain various information like sailing routes, navigation lights, dangerous areas, areas where it's allowed or not allowed to sail or dock, etc.\n\nUsage Instructions: it is highly recommended to download nautical basemap in order to see the maps regardless of detailed map presence. To turn on Nautical charts, tap the map button and set map type to Nautical.\n\nNote: All professional sailors are obliged to have official nautical charts on their ships.\n\nOsmAnd Nautical charts are based on the data from OpenSeaMap project. While OpenSeaMap charts at the moment cannot compete with official nautical charts, they can be used by recreational sailors for orientation or route planning.";
+"plugin_nautical_descr" = "Այս plugin-ը հարստացնում է OsmAnd նավարկության հավելվածը ինչպես նաև ծովային քարտեզներով նավակների համար, ծովագնացության և այլ տեսակի ջրային շրջաններում:
+\n
+\nOsmAnd-ի հատուկքարտեզների add-on-ը կտրամադրի բոլոր ծովային նավագնացության նշանները և աղյուսակը, ներքին, ինչպես նաև մոտակա նավարկության համար: Յուրաքանչյուր նավագնացության նշանի նկարագրությունը ապահովում է նրանց և դրանց իմաստը հայտնաբերելու համար անհրաժեշտ մանրամասները(կատեգորիա, ձև, գույն, հաջորդականություն, հղում և այլն):
+\n
+\nOsmAnd-ի ավանդականքարտեզի ոճերից մեկին վերադառնալու համար պարզապես կամ ապաակտիվացրեք այս հավելվածը կամ ըստ ցանկության փոխեք «Քարտեզի ոճը» «Քարտեզի կարգավորում» մենույում:";
 
-"osmand_parking_plugin_name" = "Parking Position";
+"osmand_parking_plugin_name" = "Ավտոկայանատեղ";
 "product_desc_parking" = "Let you easily memorize when the car was parked and how much time left if the parking is limited by time";
-"osmand_parking_plugin_description" = "OsmAnd Parking Plugin reminds you of your parking position. It is a plugin for OsmAnd Maps&Navigation app.\nChoose a time-independent reminder (only a marker on the map) or a time-limited one with alarm upon time expiration (includes also a marker on the map). To use the plugin, enable it in the Plugins menu.";
+"osmand_parking_plugin_description" = "Թույլ է տալիս գրանցել, թե որտեղ է ձեր մեքենան կայանել և որքան ժամանակ է մնացել ավտոկայանատեղը ազատելու (եթե առկա է ժամկետ): 
+\nԹե տեղը, թե ժամանակը տեսանելի են OsmAnd-ի վահանակի վրա, ինչպես նաև քարտեզի էկրանին ինչպես նաև վիդժետի մեջ: Android օրացույցին կարելի է միացնել որպես հիշեցում:";
 
 "plugin_ski_name" = "Դահուկային քարտեզի դիտում";
 "product_desc_skimap" = "Ski slopes for all ski resorts in the world";
@@ -1619,15 +1624,17 @@
 \n 
 \nԱյս տեսակը ակտիվացնելու դեպքում, քարտեզի ոճը փոխվում է «Ձմեռային եւ լեռնադահուկային սպորտին», ցույց տալով լանդշաֆտի բոլոր մանրամասները`ձմռանը նայելու ձևով: Այս (ձմեռային) տեսքը կարող է չեղյալ համարվել , այստեղ կրկին անջատելով այն, կամ եթե փոխեք «Քարտի ոճը» ցանկալի տեսք, «Քարտեզների կարգավորումը» ցանկում:";
 
-"record_plugin_name" = "Ուղևորության գրանցում";
+"record_plugin_name" = "Ուղեւորության գրանցում";
 "product_desc_track_recording" = "Activates the functionality to record and save your tracks";
-"record_plugin_description" = "Record your tracks and save them manually using OsmAnd Track recording plugin. Export your track as a gpx file, share it or even use it to contribute to OpenStreetMap project.  A handy tool for runners, hikers and anyone interested in recording their tracks.";
+"record_plugin_description" = "Այս plugin-նը ակտիվացնում է հետևյալ ֆունկցիաները`գրանցում և պահպանում ձեր տրեկերը, ձեռքով հպելով GPX-ի գրանցման վիջեթը քարտեզի էկրանին կամ ավտոմատ կերպով մուտքագրելուձեր բոլոր նավիգացիոն երթուղիները GPX ֆայլում:
+\n
+\nԳրանցված տրեկերը կարող են տարածվել ձեր ընկերների հետ կամ օգտագործել OSM-ի ներդրումների համար: Մարզիկները կարող են օգտվել արձանագրված տրեկերից, որոնք կարող են վերահսկել իրենց դասընթացները: Որոշ հիմնական տրեկերի վերլուծություն կարելի է իրականացնել ուղղակիորեն OsmAnd-ում, նման գրիչ անգամները, միջին արագությունը և այլն, և տրեկերը կարող են նաև վերլուծվել հատուկ 3-րդ կողմի վերլուծության գործիքներում:";
 
 "osm_editing_plugin_name" = "OSM-ի խմբագրում";
 "product_desc_osm_editing" = "Make changes to OpenStreetMap directly from OsmAnd";
 "osm_editing_plugin_description" = "Այս OsmAnd-ի plugin-ի միջոցով կարելի է ներդրում կատարել OSM-ի, ինչպիսիք են OSM POI-ի օբյեկտների ստեղծում կամ փոփոխում, OSM նշումների բացումը կամ մեկնաբանումը և վերբեռնում արձանագրված GPX ֆայլերը: OSM-ն գլոբալ հանրային քարտեզագրման նախագիծ է, որը կառավարվում է OSM համայնքի կողմից: Մանրամասների համար այցելեք https://openstreetmap.org: Ակտիվ մասնակցությունըգնահատվում է, և ներդրումները կարող են կատարվել ուղղակիորեն OsmAnd-ից, եթե նշեք ձեր անձնական OSM-ի հավատարմագրերը հավելվածում:";
 "product_desc_mapillary" = "Online street-level photos for everyone";
-"plugin_mapillary_descr" = "Առցանց փողոցային նկարներ բոլորի համար: Բացահայտեք վայրերը, համագործակցեք, նկարեք աշխարհը:";
+"plugin_mapillary_descr" = "Փողոցային նկարներ բոլորի համար: Բացահայտեք վայրերը, համագործակցեք, նկարեք աշխարհը:";
 
 "open_place_reviews" = "OpenPlaceReviews";
 "product_desc_openplacereviews" = "Send photos, reviews, and links about public places";
@@ -1662,9 +1669,11 @@
 "available_languages" = "Available languages";
 "preferred_languages" = "Preferred languages";
 
-"srtm_plugin_name" = "Քարտեզ SRTM (բարձունքների գծեր)";
+"srtm_plugin_name" = "Բարձունքների գծեր (եզրագծեր)";
 "product_desc_srtm" = "Display of contour lines";
-"srtm_plugin_description" = "This plugin provides contour lines and hillshade, which can be displayed in OsmAnd offline maps. Contour lines provide the information about heights of the area while hillshade is their visualization. See the names of mountain peaks and specific features of terrain using this plugin.\n\nThe global data (between 70 degrees north and 70 degrees south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA's Earth Observing System. ASTER is a cooperative effort between NASA, Japan's Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
+"srtm_plugin_description" = "Այս plugin-ը ապահովում է ինչպես եզրագծային կափարիչը, այնպես էլ (ռելիեֆը) բլուրային շերտ, որը ցուցադրվում է OsmAnd-ի ստանդարտ քարտեզների վրա: Այս ֆունկցիան շատ բարձր է գնահատվելու մարզիկների, զբոսաշրջիկների, և բոլոր նրանց կողմից, ովքեր հետաքրքրված են լանդշաֆտի կառուցվածքով: 
+\n 
+\nՀամաշխարհային տվյալները (70° հյուսիսից 70° հարավ) հիմնված են SRTM-ի (Shuttle Radar Topography Mission) և ASTER- ի (Advanced Spaceborne Thermal Emission and Reflection Radiometer) կողմից չափումների վրա, ՆԱՍԱ-ի Earth Watching-ի առաջատար արբանյակի Համակարգը: ASTER-ն համագործակցային ջանքէ ՆԱՍԱ-ի, Ճապոնիայի էկոնոմիկայի, առեւտրի եւ արդյունաբերության նախարարության (METI) և Ճապոնիայի տիեզերական համակարգերի (J-spacesystems) միջև:";
 
 "wikivoyage_travel_guide" = "Ճանապարհորդական ուղեցույցներ";
 "start_editing_card_image_text" = "Աշխարհի ուղեցույց, որը կարող է խմբագրել ցանկացած մեկը:";
@@ -2429,3 +2438,5 @@
 "routing_attr_length_description" = "Նշեք թույլատրելի տրանսպորտային միջոցի երկարությունը երթուղով երթևեկության համար։";
 "download_wikipedia_data" = "Ներբեռնել Wikipedia տվյալները";
 "auth_failed" = "Մուտք գործելը ձախողվեց";
+"km" = "կմ";
+"m" = "մ";

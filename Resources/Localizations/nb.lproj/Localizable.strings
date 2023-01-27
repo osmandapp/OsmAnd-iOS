@@ -916,18 +916,23 @@
 "cannot_access_calendar" = "Cannot access Calendar";
 "reminder_not_set_text" = "The reminder was not set since you are not allowed access to the Calendar";
 //inapps
-"plugin_nautical_name" = "Nautical map";
+"plugin_nautical_name" = "Sjøkartvisning";
 "product_desc_nautical" = "Nautical map of all world";
-"plugin_nautical_descr" = "OsmAnd Nautical Charts is a plugin for OsmAnd Maps & Navigation app. It is a detailed graphical representation of oceans, seas, coastal areas and rivers. The charts can contain various information like sailing routes, navigation lights, dangerous areas, areas where it's allowed or not allowed to sail or dock, etc.\n\nUsage Instructions: it is highly recommended to download nautical basemap in order to see the maps regardless of detailed map presence. To turn on Nautical charts, tap the map button and set map type to Nautical.\n\nNote: All professional sailors are obliged to have official nautical charts on their ships.\n\nOsmAnd Nautical charts are based on the data from OpenSeaMap project. While OpenSeaMap charts at the moment cannot compete with official nautical charts, they can be used by recreational sailors for orientation or route planning.";
+"plugin_nautical_descr" = "Beriker kartet ditt med informasjon om seilingsruter, navigasjonslys, nautiske faresoner, soner med seilings- og anløpsrestriksjoner etc. For å bruke, last ned de respektive sjøkartene og aktiver \"Sjøkart\"-stilen under \"Kartinnstilling\".
+\n
+\nMer lesing på https://osmand.net/docs/user/plugins/nautical-charts.";
 "osmand_parking_plugin_name" = "Parkeringsposisjon";
 "product_desc_parking" = "Let you easily memorize when the car was parked and how much time left if the parking is limited by time";
-"osmand_parking_plugin_description" = "OsmAnd Parking Plugin reminds you of your parking position. It is a plugin for OsmAnd Maps&Navigation app.\nChoose a time-independent reminder (only a marker on the map) or a time-limited one with alarm upon time expiration (includes also a marker on the map). To use the plugin, enable it in the Plugins menu.";
+"osmand_parking_plugin_description" = "Parkeringsplass-tillegget lar deg registrere hvor bilen din er parkert og hvor mye parkeringstid som gjenstår (hvis det er en tidsbegrensning). 
+\nBåde parkeringsplass og tid er synlige på dashbordet i OsmAnd såvel som i et miniprogram på kartet. En alarm kan legges til Android-kalenderen som en påminnelse.";
 "plugin_ski_name" = "Skikartvisning";
 "product_desc_skimap" = "Ski slopes for all ski resorts in the world";
 "plugin_ski_descr" = "Designet tilå navigere i vintersportsområder: Se skibakker, skiheiser og langrennsløyper, og med fargede linjer som indikerer vanskelighetsgrader. For å bruke, aktiver dette tillegget og gå også til \"Kartinnstilling\" og velg kartstilen \"Vinter og ski\".";
 "record_plugin_name" = "Turopptak";
 "product_desc_track_recording" = "Activates the functionality to record and save your trips";
-"record_plugin_description" = "Allows you to record, save and analyze your training or movement data, such as speed, ascents, descents or route relief, which can then be reused, improved, supplemented or shared with friends. \n\nHow to - https://osmand.net/docs/user/plugins/trip-recording";
+"record_plugin_description" = "Ta opp turene eller treningene dine og analyser dataene når det gjelder hastighet, akkumulerte opp- og nedstigninger, høydeprofil etc. Spor som er tatt opp kan arkiveres, deles med venner, redigeres og etterbehandles.
+\n
+\nMer lesing på https://osmand.net/docs/user/plugins/trip-recording.";
 "product_title_trip_planning" = "Trip planning";
 "product_desc_trip_planning" = "Plan your trip, add waypoints, measure the distance to your destination using this plugin";
 "product_desc_ext_trip_planning" = "Trip planning plugin allows you to create your trip on the map, save it, measure the distance between points connected with straight lines, etc. Created for preliminary trip planning rather than thorough route building.";
@@ -954,10 +959,14 @@
 "product_desc_asia_short" = "Asia region maps";
 "download_wikipedia_maps" = "Wikipedia";
 "product_desc_wiki" = "Wikipedia data";
-"purchases_feature_desc_wikipedia" = "Get information about points of interest from Wikipedia. It is your pocket offline guide - just enable Wikipedia plugin and enjoy articles about objects around you.";
+"purchases_feature_desc_wikipedia" = "Gir alle stedsrelaterte Wikipedia-artikler frakoblet, og hjelper degå lære om stedene du besøker på turen ved å trykke på kartet. Ikke glem å laste ned Wikipedia-kartfilene for de respektive regionene.";
 "srtm_plugin_name" = "Koter";
 "product_desc_srtm" = "Display of contour lines";
-"srtm_plugin_description" = "This plugin provides contour lines and hillshade, which can be displayed in OsmAnd offline maps. Contour lines provide the information about heights of the area while hillshade is their visualization. See the names of mountain peaks and specific features of terrain using this plugin.\n\nThe global data (between 70 degrees north and 70 degrees south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA's Earth Observing System. ASTER is a cooperative effort between NASA, Japan's Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
+"srtm_plugin_description" = "Terrenginformasjon som koter, relieffskygger og bakkehelninger, hjelper deg medå visuelt vurdere terrengforhold og relieff, navigerbarhet og mer. Topografisk informasjon på kartet kan representeres av helningsskyggelegging, koter og/eller fargelegging av bratthet.
+\n
+\nDe underliggende dataene kommer fra SRTM og ASTER.
+\n
+\nMer lesing på http://osmand.net/docs/user/plugins/contour-lines.";
 "wikivoyage_travel_guide" = "Reiseguider";
 "start_editing_card_image_text" = "Den frie verdensomspennende reiseguiden alle kan redigere.";
 "wikivoyage_travel_guide_descr" = "Guider til de mest spennende stedene, inne i OsmAnd, utenå ha internettforbindelse.";
@@ -1901,7 +1910,7 @@
 "gpx_upload_public_visibility_descr" = "«Offentlig» betyr at sporet vises offentlig i dine GPS-spor og i offentlige GPS-sporingsoppføringer, og i den offentlige spor-listen med tidsstempler i rå form. Data servert via API-et viser ikke til sporsiden din. Tidsstempler fra sporingspunkter er ikke tilgjengelig gjennom det offentlige GPS-API-et, og sporingspunkter sorteres ikke kronologisk.";
 "app_restart_required" = "Programomstart kreves forå bruke noen innstillinger.";
 "welmode_download_maps" = "Kartnedlasting";
-"plugin_mapillary_descr" = "Nettbaserte bilder på gatenivå for alle. Oppdag steder, samarbeid, fang inn verden.";
+"plugin_mapillary_descr" = "Foto på gatenivå for alle. Oppdag plasser, samarbeid, fang inn verden.";
 "open_place_reviews" = "OpenPlaceReviews";
 "explore_wikipedia_offline" = "Utforsk frakoblet Wikipedia.";
 "navigate_point_northing" = "Nordverdi";
@@ -2183,7 +2192,6 @@
 "purchases_feature_desc_pro_widgets" = "Få tilgang til OsmAnd Pro-funksjoner. Rutefargelegging med mer.";
 "simulation_preview_mode_desc" = "Simuleringen går fortest på rette strekk, og bruker lenger tid på kryss.";
 "shared_string_purchased" = "Kjøpt";
-"purchases_feature_desc_wikipedia" = "Gir alle stedsrelaterte Wikipedia-artikler frakoblet, og hjelper degå lære om stedene du besøker på turen ved å trykke på kartet. Ikke glem å laste ned Wikipedia-kartfilene for de respektive regionene.";
 "osm_live_banner_desc" = "Få ubegrensede kartnedlastinger, som legger til ukentlige, daglige, og selv timevise oppdateringer.";
 "wikipedia_and_wikivoyage_offline" = "Frakoblet Wikipedia og Wikivoyage";
 "routing_attr_allow_private_for_truck_description" = "Tillat adgang til private områder for lastebiler.";
@@ -2491,3 +2499,9 @@
 "auth_failed" = "Identitetsbekreftelse mislyktes";
 "only_selected_segment_recalc" = "Kun det valgte segmentet blir beregnet på nytt med den valgte profilen.";
 "download_wikipedia_data" = "Last ned Wikipedia-data";
+"km" = "km";
+"m" = "m";
+"kg" = "kg";
+"open_place_reviews_plugin_description" = "Gi bidrag til prosjektet OpenPlaceReviews som bilder, omtaler eller lenker om offentlige steder som restauranter, hoteller eller museer.
+\n
+\nFinn instruksjoner om hvordan du kan bidra på nettsiden vår https://osmand.net/docs/user/plugins/openplacereviews.";

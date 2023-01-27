@@ -1544,9 +1544,10 @@
 "plugin_nautical_name" = "Nautical map";
 "product_desc_nautical" = "Nautical map of all world";
 "plugin_nautical_descr" = "OsmAnd Nautical Charts is a plugin for OsmAnd Maps & Navigation app. It is a detailed graphical representation of oceans, seas, coastal areas and rivers. The charts can contain various information like sailing routes, navigation lights, dangerous areas, areas where it's allowed or not allowed to sail or dock, etc.\n\nUsage Instructions: it is highly recommended to download nautical basemap in order to see the maps regardless of detailed map presence. To turn on Nautical charts, tap the map button and set map type to Nautical.\n\nNote: All professional sailors are obliged to have official nautical charts on their ships.\n\nOsmAnd Nautical charts are based on the data from OpenSeaMap project. While OpenSeaMap charts at the moment cannot compete with official nautical charts, they can be used by recreational sailors for orientation or route planning.";
-"osmand_parking_plugin_name" = "Parking Position";
+"osmand_parking_plugin_name" = "პარკინგის მდებარეობა";
 "product_desc_parking" = "Let you easily memorize when the car was parked and how much time left if the parking is limited by time";
-"osmand_parking_plugin_description" = "OsmAnd Parking Plugin reminds you of your parking position. It is a plugin for OsmAnd Maps&Navigation app.\nChoose a time-independent reminder (only a marker on the map) or a time-limited one with alarm upon time expiration (includes also a marker on the map). To use the plugin, enable it in the Plugins menu.";
+"osmand_parking_plugin_description" = "დამატება გაძლევთ საშუალებას შეინახოთ
+\n მანქანის პარკინგის მდებარეობა.";
 "plugin_ski_name" = "Ski map";
 "product_desc_skimap" = "Ski slopes for all ski resorts in the world";
 "plugin_ski_descr" = "OsmAnd Ski Maps is a plugin to OsmAnd Maps&Navigation app designed to navigate at winter sports locations. It gives the information about ski pistes, ski lift markers and even colored lines indicating the complexity of each track. You get the info about ski tracks themselves as well as the surrounding infrastructure.\n\nUsage Instructions: Enable the plugin in OsmAnd application, tap the map button and set the map type to Ski maps.";
@@ -1589,9 +1590,10 @@
 "some_articles_may_not_available_in_lang" = "Some Wikipedia articles may not be available in your language.";
 "available_languages" = "Available languages";
 "preferred_languages" = "Preferred languages";
-"srtm_plugin_name" = "კოტურული ხაზების მონაცემები";
+"srtm_plugin_name" = "კონტურული ხაზების დამატება";
 "product_desc_srtm" = "Display of contour lines";
-"srtm_plugin_description" = "This plugin provides contour lines and hillshade, which can be displayed in OsmAnd offline maps. Contour lines provide the information about heights of the area while hillshade is their visualization. See the names of mountain peaks and specific features of terrain using this plugin.\n\nThe global data (between 70 degrees north and 70 degrees south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA's Earth Observing System. ASTER is a cooperative effort between NASA, Japan's Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
+"srtm_plugin_description" = "მოცემული დამატება აადვილებს კონტურული ხაზების ჩამოწერას 
+\n(გათიშული მონაცემების გადმოწერა ->მენიუ ->სხვა რუკები) გათიშულ რუკებთან გამოსაყენებლად.";
 "wikivoyage_travel_guide" = "მოგზაურთა გიდები";
 "start_editing_card_image_text" = "The free worldwide travel guide anyone can edit.";
 "wikivoyage_travel_guide_descr" = "Guides to the most interesting places on the planet, inside OsmAnd, without a connection to the Internet.";
@@ -2326,5 +2328,5 @@
 "rendering_attr_showWaterwayTunnels_description" = "წყლის გვირაბების ჩვენება";
 "auth_failed" = "ავტორიზაცია წარუმატებელია";
 "download_wikipedia_data" = "ვიკიპედიის მონაცემების გადმოწერა";
-"auth_failed" = "ავტორიზაცია წარუმატებელია";
-"download_wikipedia_data" = "ვიკიპედიის მონაცემების გადმოწერა";
+"km" = "კმ";
+"m" = "მ";

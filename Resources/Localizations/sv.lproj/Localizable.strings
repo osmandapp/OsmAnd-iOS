@@ -1542,12 +1542,17 @@
 "reminder_not_set_text" = "The reminder was not set since you are not allowed access to the Calendar";
 
 //inapps
-"plugin_nautical_name" = "Nautical map";
+"plugin_nautical_name" = "Sjökortsvy";
 "product_desc_nautical" = "Nautical map of all world";
-"plugin_nautical_descr" = "OsmAnd Nautical Charts is a plugin for OsmAnd Maps & Navigation app. It is a detailed graphical representation of oceans, seas, coastal areas and rivers. The charts can contain various information like sailing routes, navigation lights, dangerous areas, areas where it's allowed or not allowed to sail or dock, etc.\n\nUsage Instructions: it is highly recommended to download nautical basemap in order to see the maps regardless of detailed map presence. To turn on Nautical charts, tap the map button and set map type to Nautical.\n\nNote: All professional sailors are obliged to have official nautical charts on their ships.\n\nOsmAnd Nautical charts are based on the data from OpenSeaMap project. While OpenSeaMap charts at the moment cannot compete with official nautical charts, they can be used by recreational sailors for orientation or route planning.";
-"osmand_parking_plugin_name" = "Parking Position";
+"plugin_nautical_descr" = "Denna insticksmodul berikar OsmAnds kart- och navigationsapp för att också producera nautiska kartor för båtliv, segling och andra typer av vattensporter.
+\n
+\nEtt speciellt karttillägg för OsmAnd kommer att tillhandahålla alla nautiska navigationsmärken och kartsymboler, både för inland och för närliggande navigering. Beskrivningen av varje navigeringsmärke innehåller de detaljer som behövs för att identifiera dem och deras betydelse (kategori, form, färg, sekvens, referens etc.).
+\n
+\nFör att återgå till en av OsmAnds konventionella kartstilar, helt enkelt avaktivera denna insticksmodul igen, eller ändra \'Kartstil\' under \'Konfigurera karta\' efter önskemål.";
+"osmand_parking_plugin_name" = "Parkeringsplats";
 "product_desc_parking" = "Let you easily memorize when the car was parked and how much time left if the parking is limited by time";
-"osmand_parking_plugin_description" = "OsmAnd Parking Plugin reminds you of your parking position. It is a plugin for OsmAnd Maps&Navigation app.\nChoose a time-independent reminder (only a marker on the map) or a time-limited one with alarm upon time expiration (includes also a marker on the map). To use the plugin, enable it in the Plugins menu.";
+"osmand_parking_plugin_description" = "Låter dig spara var din bil är parkerad, inklusive hur mycket parkeringstid som finns kvar.
+\nBåde plats och tid är synliga både på instrumentpanelen och i en kartwidget. En larmpåminnelse kan läggas till i Android-kalendern.";
 "plugin_ski_name" = "Skidkartsvy";
 "product_desc_skimap" = "Ski slopes for all ski resorts in the world";
 "plugin_ski_descr" = "Detta plugin för OsmAnd ger dig detaljer om globala utförsåkning, längdskidspår, alpina skidvägar, linbanor och skidliftar. Rutter och pister visas färgkodade av svårigheter och avbildas i en speciell \"vinter\" -stil som liknar ett snöfärgat vinterlandskap.
@@ -1555,15 +1560,19 @@
 \nOm du aktiverar den här vyn ändras kartstilen till \"Vinter och skidor\" och visar alla landskapsfunktioner under vinterförhållanden. Denna vy kan återställas genom att antingen avaktivera den igen här, eller genom att ändra \'Kartstil\' under \'Konfigurera karta\' efter önskemål.";
 "record_plugin_name" = "Inspelning av resa";
 "product_desc_track_recording" = "Activates the functionality to record and save your tracks";
-"record_plugin_description" = "Record your tracks and save them manually using OsmAnd Track recording plugin. Export your track as a gpx file, share it or even use it to contribute to OpenStreetMap project.  A handy tool for runners, hikers and anyone interested in recording their tracks.";
+"record_plugin_description" = "Denna modul aktiverar funktionen att antingen spela in och spara dina spår genom att du trycker på widgeten GPX-loggning på kartskärmen eller att alla dina rutter sparas automatiskt i en GPX-fil.
+\n
+\nInspelade spår kan delas ut till vänner eller användas som bidrag till OSM. Idrottsmän kan använda inspelade spår för att följa sin träning. Viss grundläggande spåranalys kan göras direkt i OsmAnd, såsom varvtider, genomsnittshastighet o.s.v. och spår kan givetvis också analyseras i efterhand i speciella analysverktyg från tredje part.";
 "osm_editing_plugin_name" = "OpenStreetMap-redigering";
 "product_desc_osm_editing" = "Make changes to OpenStreetMap directly from OsmAnd";
 "osm_editing_plugin_description" = "Ge OSM-bidrag som att skapa eller modifiera OSM POI-objekt,öppna eller kommentera OSM-anteckningar och bidra med inspelade GPX-filer i OsmAnd genom att ange ditt användarnamn och lösenord. OpenStreetMap.org är ett community-driven, globalt kartläggningsprojekt för allmän domän.";
 "product_desc_mapillary" = "Online street-level photos for everyone";
-"plugin_mapillary_descr" = "Online gatunivåbilder för alla. Upptäck platser, samarbeta, fånga världen.";
+"plugin_mapillary_descr" = "Gatunivå bilder för alla. Upptäck platser, samarbeta, fånga världen.";
 "open_place_reviews" = "OpenPlaceReviews";
 "product_desc_openplacereviews" = "Send photos, reviews, and links about public places";
-"open_place_reviews_plugin_description" = "Send photos, reviews, and links about public places such as restaurants, hotels, museums, and waypoints as open data https://openplacereviews.org/data/.\n\nRead more at https://openplacereviews.org";
+"open_place_reviews_plugin_description" = "Skicka in foton, recensioner och länkar om offentliga platser som restauranger, hotell, museer och vägpunkter som öppen data https://openplacereviews.org/data/.
+\n
+\nLäs mer på: http://openplacereviews.org";
 "product_desc_africa" = "Unlimited map downloads for Africa";
 "product_desc_antarctica" = "Unlimited map downloads for Antarctica";
 "product_desc_africa_short" = "Africa region maps";
@@ -1585,16 +1594,20 @@
 "product_desc_asia_short" = "Asia region maps";
 "download_wikipedia_maps" = "Wikipedia";
 "product_desc_wiki" = "Wikipedia data";
-"purchases_feature_desc_wikipedia" = "Get information about points of interest from Wikipedia. It is your pocket offline guide - just enable Wikipedia plugin and enjoy articles about objects around you.";
+"purchases_feature_desc_wikipedia" = "Utforska Wikipedia i nedkopplat läge. Artiklar uppdelade efter länder och regioner och tillgängliga på alla språk.";
 "shared_string_all_languages" = "Alla språk";
 "select_wikipedia_article_langs" = "Välj språk för Wikipedia-artiklar på kartan. Byt till vilket annat tillgängligt språk som helst vid läsning av artikeln.";
 "wiki_menu_download_descr" = "Additional maps are needed to view Wikipedia POIs on the map.";
 "some_articles_may_not_available_in_lang" = "Vissa Wikipedia-artiklar finns kanske inte tillgängliga på ditt språk.";
 "available_languages" = "Available languages";
 "preferred_languages" = "Preferred languages";
-"srtm_plugin_name" = "Höjdkurvsdata";
+"srtm_plugin_name" = "Höjdkurvor";
 "product_desc_srtm" = "Display of contour lines";
-"srtm_plugin_description" = "This plugin provides contour lines and hillshade, which can be displayed in OsmAnd offline maps. Contour lines provide the information about heights of the area while hillshade is their visualization. See the names of mountain peaks and specific features of terrain using this plugin.\n\nThe global data (between 70 degrees north and 70 degrees south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA's Earth Observing System. ASTER is a cooperative effort between NASA, Japan's Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
+"srtm_plugin_description" = "Terränginformation som höjdkurvor, terrängskuggning och lutning hjälper dig visualisera hur landskapet och terrängen ser ut i verkligheten, vilket är en stor hjälp för navigering och kan uppskattas av idrottare, vandrare, terrängcyklister och alla som är intresserade av höjdskillnader i landskapet. Den topografiska informationen kan på kartan representeras av terrängskuggning, höjdkurvor och/eller färgläggning av lutning.
+\n
+\nUnderliggande data baseras på SRTM och ASTER.
+\n
+\nLäs mer på http://osmand.net/docs/user/plugins/contour-lines .";
 "wikivoyage_travel_guide" = "Reseguider";
 "start_editing_card_image_text" = "Den fria, världsomspännande reseguiden som alla kan redigera.";
 "wikivoyage_travel_guide_descr" = "Guider till de mest intressanta platserna i världen, inuti OsmAnd, utan en internetanslutning.";
@@ -2362,7 +2375,6 @@
 "copy_coordinates" = "Kopiera koordinater";
 "shared_string_capacity" = "Kapacitet";
 "ltr_or_rtl_combine_via_or" = "%@ eller %@";
-"purchases_feature_desc_wikipedia" = "Utforska Wikipedia i nedkopplat läge. Artiklar uppdelade efter länder och regioner och tillgängliga på alla språk.";
 "copy_address" = "Kopiera adress";
 "explore_osmnad_plans_to_find_suitable" = "Utforska OsmAnd Plans för att hitta en plan som passar dig.";
 "osm_live_subscriptions" = "Abonnemang";
@@ -2579,3 +2591,6 @@
 "download_wikipedia_data" = "Hämta Wikipedia-data";
 "lenght_limit_description" = "Ange längden på ditt fordon; vissa ruttrestriktioner kan gälla för långa fordon.";
 "width_limit_description" = "Ange bredden på ditt fordon; vissa ruttrestriktioner kan gälla för breda fordon.";
+"km" = "km";
+"m" = "m";
+"kg" = "kg";

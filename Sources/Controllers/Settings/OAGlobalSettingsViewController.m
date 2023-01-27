@@ -103,7 +103,7 @@
                 kCellKeyKey : @"settings_preset",
                 kCellTitleKey : OALocalizedString(@"settings_preset"),
                 kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
-                @"value" : _isUsingLastAppMode ? OALocalizedString(@"last_used") : [[_settings.defaultApplicationMode get] toHumanString]
+                @"value" : _isUsingLastAppMode ? OALocalizedString(@"shared_string_last_used") : [[_settings.defaultApplicationMode get] toHumanString]
             }];
             [_data addSection:defaultProfileSection];
 
@@ -133,7 +133,7 @@
             [dialogsSection setFooterText:OALocalizedString(@"dialogs_and_notifications_descr")];
             [dialogsSection addRowFromDictionary:@{
                 kCellKeyKey : @"dialogs_and_notif",
-                kCellTitleKey : OALocalizedString(@"dialogs_and_notifications"),
+                kCellTitleKey : OALocalizedString(@"dialogs_and_notifications_title"),
                 kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
                 @"value" : [self getDialogsAndNotificationsValue]
             }];
@@ -160,7 +160,7 @@
             OATableSectionData *lastUsedSection = [OATableSectionData sectionData];
             [lastUsedSection addRowFromDictionary:@{
                 kCellKeyKey : @"last_used",
-                kCellTitleKey : OALocalizedString(@"last_used"),
+                kCellTitleKey : OALocalizedString(@"shared_string_last_used"),
                 kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
                 @"value" : @(_isUsingLastAppMode),
             }];

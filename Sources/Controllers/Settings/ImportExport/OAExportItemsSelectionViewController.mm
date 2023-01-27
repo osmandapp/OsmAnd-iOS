@@ -367,7 +367,7 @@
     else if ([filePath hasSuffix:BINARY_WIKI_MAP_INDEX_EXT])
         return OALocalizedString(@"download_wikipedia_maps");
     else if ([filePath hasSuffix:BINARY_SRTM_MAP_INDEX_EXT])
-        return OALocalizedString(@"download_srtm_maps");
+        return OALocalizedString(@"srtm_plugin_name");
     else if ([filePath hasSuffix:BINARY_MAP_INDEX_EXT])
         return OALocalizedString(@"download_regular_maps");
     return @"";

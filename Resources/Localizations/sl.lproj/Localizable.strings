@@ -277,7 +277,7 @@
 "index_name_south_america" = "Južna Amerika";
 "cannot_access_calendar" = "Dostop do koledarja ni mogoč";
 //inapps
-"product_title_nautical" = "Navtični zemljevid";
+"plugin_nautical_name" = "Navtični zemljevid";
 "product_desc_nautical" = "Navtični zemljevid sveta";
 "driving_region" = "Režim vožnje";
 "driving_region_japan" = "Japonska";
@@ -315,10 +315,10 @@
 "map_no_address" = "Naslov še ni znan";
 // Help
 "help_quiz" = "Anketa";
-"product_title_parking" = "Parkiranje (mesto in čas)";
+"osmand_parking_plugin_name" = "Parkiranje (mesto in čas)";
 "plugin_ski_name" = "Zemljevidi smučišč";
 "product_desc_skimap" = "Smučarske poti vseh smučišč na svetu";
-"monitoring_settings" = "Beleženje potovanja";
+"record_plugin_name" = "Beleženje potovanja";
 "product_desc_africa" = "Neomejeno prenašanje zemljevidov Afrike";
 "product_desc_australia" = "Neomejeno prenašanje zemljevidov Avstralije";
 "product_desc_centralamerica" = "Neomejeno prenašanje zemljevidov srednje Amerike";
@@ -331,7 +331,7 @@
 "product_desc_asia" = "Neomejeno prenašanje zemljevidov Azije";
 "download_wikipedia_maps" = "Wikipedija";
 "product_desc_wiki" = "Podatki Wikipedije";
-"download_srtm_maps" = "Podatki izohips";
+"srtm_plugin_name" = "Podatki izohips";
 "product_desc_srtm" = "Prikaz izohips na zemljevidu";
 "my_location" = "Moja trenutna točka";
 "all_categories" = "Vse kategorije";
@@ -1336,7 +1336,7 @@
 "gpxup_private" = "Zasebno";
 "navigate_point_easting" = "Koordinata v smeri proti vzhodu";
 "dialogs_and_notifications_title" = "Pogovorna okna in opozorila";
-"product_desc_ext_mapillary" = "Spletne fotografije ulic za vsakogar. Odkrijte mesta, sodelujte in zajemite svet.";
+"plugin_mapillary_descr" = "Spletne fotografije ulic za vsakogar. Odkrijte mesta, sodelujte in zajemite svet.";
 "navigate_point_zone" = "Območje";
 "navigate_point_northing" = "Koordinata v smeri proti severu";
 "shared_string_navigation" = "Navigacija";
@@ -1660,7 +1660,7 @@
 "purchases_feature_desc_pro_widgets" = "Pridobi dostop do naprednih funkcij OsmAnd Pro: barvanje poti in drugo.";
 "routing_attr_allow_private_for_truck_description" = "Dovoli dostop do zasebnih površin za tovornjake.";
 "restore_purchases" = "Obnovi nakupe";
-"product_desc_ext_development" = "Nastavitve za razvojne funkcije in funkcije za odpravljanje napak, kot so simulacija navigacije, zmogljivost upodabljanja ali glasovni pozivi. Namenjeno razvijalcem, za običajno uporabo aplikacije ni potrebno.";
+"osmand_development_plugin_description" = "Nastavitve za razvojne funkcije in funkcije za odpravljanje napak, kot so simulacija navigacije, zmogljivost upodabljanja ali glasovni pozivi. Namenjeno razvijalcem, za običajno uporabo aplikacije ni potrebno.";
 "ltr_or_rtl_combine_via_or" = "%@ ali %@";
 "icon_group_symbols" = "Simboli";
 "shared_string_purchased" = "Kupljeno";
@@ -2069,4 +2069,3 @@
 "quick_action_navigation_voice_on" = "Glasovno vodenje je omogočeno.";
 "quick_action_auto_zoom" = "Omogoči/Onemogoči samodejno približanje zemljevida";
 "osm_edit_reopened_note" = "Ponovno odprte opombe OSM";
-

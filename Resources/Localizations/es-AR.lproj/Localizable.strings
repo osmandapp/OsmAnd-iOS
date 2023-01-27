@@ -1548,28 +1548,28 @@
 "reminder_not_set_text" = "No se ha definido un recordatorio, porque no se permite el acceso al calendario";
 
 //inapps
-"product_title_nautical" = "Mapa náutico";
+"plugin_nautical_name" = "Mapa náutico";
 "product_desc_nautical" = "Mapas vectoriales adecuados para la navegación náutica";
-"product_desc_ext_nautical" = "Al activarlo, enriquece el mapa con información sobre rutas náuticas, marcas de navegación náutica, zonas de peligro, zonas donde está permitido o prohibido navegar o atracar, etc. Para usarlo, descarga los mapas náuticos y activa «Mapa náutico» en «Configurar mapa».\n\nVéase - https://osmand.net/docs/user/plugins/nautical-charts";
-"product_title_parking" = "Ubicación de estacionamiento";
+"plugin_nautical_descr" = "Al activarlo, enriquece el mapa con información sobre rutas náuticas, marcas de navegación náutica, zonas de peligro, zonas donde está permitido o prohibido navegar o atracar, etc. Para usarlo, descarga los mapas náuticos y activa «Mapa náutico» en «Configurar mapa».\n\nVéase - https://osmand.net/docs/user/plugins/nautical-charts";
+"osmand_parking_plugin_name" = "Ubicación de estacionamiento";
 "product_desc_parking" = "Rastrea el tiempo de estacionamiento y la ubicación de su vehículo";
-"product_desc_ext_parking" = "Permite registrar un punto en el mapa en donde el vehículo es dejado en la calle y crea un recordatorio en el calendario sobre el inicio del estacionamiento. El complemento ayuda a seguir el tiempo del estacionamiento y la ubicación del vehículo. Para colocar un marcador, elige un lugar en el mapa, luego ve a «Acciones» y pulsa «Añadir estacionamiento».";
+"osmand_parking_plugin_description" = "Permite registrar un punto en el mapa en donde el vehículo es dejado en la calle y crea un recordatorio en el calendario sobre el inicio del estacionamiento. El complemento ayuda a seguir el tiempo del estacionamiento y la ubicación del vehículo. Para colocar un marcador, elige un lugar en el mapa, luego ve a «Acciones» y pulsa «Añadir estacionamiento».";
 "plugin_ski_name" = "Vista invernal";
 "product_desc_skimap" = "Mapa actualizado de las pistas de esquí con remontes y pendientes";
 "plugin_ski_descr" = "Diseñado para navegar en áreas deportivas de invierno. Vea las pistas de esquí, los remontes, etc. con líneas coloreadas que indican el nivel de complejidad. Para usarlo, activa este complemento, ve a «Configurar mapa» y elige el estilo de mapa «Invierno y esquí».";
-"monitoring_settings" = "Grabación de viaje";
+"record_plugin_name" = "Grabación de viaje";
 "product_desc_track_recording" = "Graba y guarda tus viajes como trazas GPX";
-"product_desc_ext_track_recording" = "Permite registrar, guardar y analizar tus datos de entrenamiento o movimiento, como la velocidad, los ascensos, los descensos o el relieve del camino, que luego puedes reutilizar, mejorar, complementar o compartir con tus amigos.\n\nVéase - https://osmand.net/docs/user/plugins/trip-recording";
+"record_plugin_description" = "Permite registrar, guardar y analizar tus datos de entrenamiento o movimiento, como la velocidad, los ascensos, los descensos o el relieve del camino, que luego puedes reutilizar, mejorar, complementar o compartir con tus amigos.\n\nVéase - https://osmand.net/docs/user/plugins/trip-recording";
 "osm_editing_plugin_name" = "Edición de OpenStreetMap";
 "product_desc_osm_editing" = "Convierte tu dispositivo en una herramienta de mapeo";
 "osm_editing_plugin_description" = "Haz contribuciones en OpenStreetMap, un proyecto de mapeo de dominio público, global, libre, abierto e impulsado por la comunidad.
 \n
 \nEn nuestro sitio web, puedes encontrar una guía de como colaborar en el mapa - https://osmand.net/docs/user/plugins/osm-editing .";
 "product_desc_mapillary" = "Vistas a nivel de calle para conocer el entorno";
-"product_desc_ext_mapillary" = "Ofrece vistas a nivel de calle. Si faltan imágenes, puedes añadirlas tú mismo para que otros puedan usarlas. Para activar la capa «Mapillary», activa las «Imágenes a nivel de calle» en el menú «Configurar mapa».";
+"plugin_mapillary_descr" = "Ofrece vistas a nivel de calle. Si faltan imágenes, puedes añadirlas tú mismo para que otros puedan usarlas. Para activar la capa «Mapillary», activa las «Imágenes a nivel de calle» en el menú «Configurar mapa».";
 "open_place_reviews" = "OpenPlaceReviews";
 "product_desc_openplacereviews" = "Comparte tus opiniones sobre lugares públicos";
-"product_desc_ext_openplacereviews" = "Permite hacer contribuciones al proyecto OpenPlaceReviews. Envía fotos, reseñas y enlaces sobre lugares públicos como restaurantes, hoteles, museos y puntos de referencia.\n\nEn nuestro sitio web, hay una guía de cómo contribuir - https://osmand.net/docs/user/plugins/openplacereviews";
+"open_place_reviews_plugin_description" = "Permite hacer contribuciones al proyecto OpenPlaceReviews. Envía fotos, reseñas y enlaces sobre lugares públicos como restaurantes, hoteles, museos y puntos de referencia.\n\nEn nuestro sitio web, hay una guía de cómo contribuir - https://osmand.net/docs/user/plugins/openplacereviews";
 "product_desc_africa" = "Descargas ilimitadas de mapas para África";
 "product_desc_antarctica" = "Descargas ilimitadas de mapas para la Antártida";
 "product_desc_africa_short" = "Mapas regionales de África";
@@ -1591,16 +1591,16 @@
 "product_desc_asia_short" = "Mapas regionales de Asia";
 "download_wikipedia_maps" = "Wikipedia";
 "product_desc_wiki" = "Artículos de Wikipedia basados en la ubicación del mapa";
-"product_desc_ext_wiki" = "Tener Wikipedia sin conexión en tu viaje, te ayuda a conocer mejor los lugares que visitas. Se encuentra disponible sin conexión y muestra los artículos de Wikipedia en relación con los puntos de interés en el mapa. No olvides descargar los mapas de Wikipedia de la región elegida.";
+"purchases_feature_desc_wikipedia" = "Tener Wikipedia sin conexión en tu viaje, te ayuda a conocer mejor los lugares que visitas. Se encuentra disponible sin conexión y muestra los artículos de Wikipedia en relación con los puntos de interés en el mapa. No olvides descargar los mapas de Wikipedia de la región elegida.";
 "shared_string_all_languages" = "Todos los idiomas";
 "select_wikipedia_article_langs" = "Marca los idiomas de los artículos de Wikipedia en el mapa. Cambia a cualquier idioma disponible mientras lees el artículo.";
 "wiki_menu_download_descr" = "Se necesitan mapas adicionales para ver los puntos de interés de Wikipedia en el mapa.";
 "some_articles_may_not_available_in_lang" = "Es posible que algunos artículos de Wikipedia no estén disponibles en tu idioma.";
 "available_languages" = "Idiomas disponibles";
 "preferred_languages" = "Idiomas preferidos";
-"download_srtm_maps" = "Curvas de nivel";
+"srtm_plugin_name" = "Curvas de nivel";
 "product_desc_srtm" = "Evaluación visual de la forma de la superficie terrestre";
-"product_desc_ext_srtm" = "La información del terreno, como las curvas de nivel, los sombreados y las pendientes, ayudan a evaluar visualmente la forma de la superficie del terreno, considerando la curvatura, los extremos, la inclinación, los puntos de igual altura, etc. La información topográfica en un mapa puede representarse mediante el sombreado de la pendiente, las curvas de nivel para ascensos y descensos, y el color de la desviación del ángulo de la pendiente con respecto al plano. Datos de SRTM y ASTER.\n\nVéase - https://osmand.net/docs/user/plugins/contour-lines";
+"srtm_plugin_description" = "La información del terreno, como las curvas de nivel, los sombreados y las pendientes, ayudan a evaluar visualmente la forma de la superficie del terreno, considerando la curvatura, los extremos, la inclinación, los puntos de igual altura, etc. La información topográfica en un mapa puede representarse mediante el sombreado de la pendiente, las curvas de nivel para ascensos y descensos, y el color de la desviación del ángulo de la pendiente con respecto al plano. Datos de SRTM y ASTER.\n\nVéase - https://osmand.net/docs/user/plugins/contour-lines";
 "wikivoyage_travel_guide" = "Guías turísticas";
 "start_editing_card_image_text" = "La guía turística libre global que cualquiera puede editar.";
 "wikivoyage_travel_guide_descr" = "Las guías de los sitios más interesantes del planeta, dentro de OsmAnd y sin conexión a Internet.";
@@ -2315,7 +2315,7 @@
 "rendering_attr_showRunningRoutes_description" = "Mostrar rutas para correr";
 "rendering_attr_showFitnessTrails_description" = "Muestra los circuitos aeróbicos";
 "plugin_popup_weather_title" = "Ver meteorología";
-"product_desc_ext_weather" = "Activa el complemento meteorológico para planificar una ruta teniendo en cuenta la meteorología. Mira el mapa colorido del pronóstico, que se actualiza cada hora para hoy, mañana y la próxima semana.\n\nMientras viajas, observa los widgets de temperatura, precipitación, velocidad del viento y presión, basados en la ubicación.\n\nEs útil para hacer senderismo y largos viajes en bicicleta o motocicleta.";
+"weather_plugin_description" = "Activa el complemento meteorológico para planificar una ruta teniendo en cuenta la meteorología. Mira el mapa colorido del pronóstico, que se actualiza cada hora para hoy, mañana y la próxima semana.\n\nMientras viajas, observa los widgets de temperatura, precipitación, velocidad del viento y presión, basados en la ubicación.\n\nEs útil para hacer senderismo y largos viajes en bicicleta o motocicleta.";
 "measurement_units" = "Unidades de medida";
 "weather_temperature_celsius" = "Celsius";
 "weather_temperature_fahrenheit" = "Fahrenheit";
@@ -2448,7 +2448,7 @@
 "simulate_location_movement_speed_x2_desc" = "La velocidad de desplazamiento de la ubicación durante la simulación será mayor (x2) a la velocidad en el archivo elegido.";
 "debugging_and_development" = "Desarrollo de OsmAnd";
 "product_desc_development" = "Para desarrolladores y usuarios experimentados";
-"product_desc_ext_development" = "Permite configurar OsmAnd para realizar pruebas: simular rutas de navegación, comprobar el rendimiento del renderizado de la pantalla, etc. El complemento no es necesario para el uso normal de la aplicación.";
+"osmand_development_plugin_description" = "Permite configurar OsmAnd para realizar pruebas: simular rutas de navegación, comprobar el rendimiento del renderizado de la pantalla, etc. El complemento no es necesario para el uso normal de la aplicación.";
 "ltr_or_rtl_combine_via_or" = "%@ o %@";
 "routing_attr_hazmat_category_name" = "Categoría de materiales peligrosos";
 "routing_attr_hazmat_category_no_restrictions_name" = "A (Sin restricciones)";
@@ -2805,4 +2805,3 @@
 "shared_string_does_not_exist" = "No existe";
 "download_wikipedia_data" = "Descargar datos de Wikipedia";
 "rendering_attr_piste_difficulty_novice_name" = "Novato;Principiante";
-

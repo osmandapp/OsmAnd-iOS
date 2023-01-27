@@ -1644,6 +1644,21 @@
     return @"img_plugin_skimap.jpg";
 }
 
+- (NSString *) localizedTitle
+{
+    return OALocalizedString(@"plugin_ski_name");
+}
+
+- (NSString *) localizedDescription
+{
+    return OALocalizedString(@"product_desc_skimap");
+}
+
+- (NSString *) localizedDescriptionExt
+{
+    return OALocalizedString(@"plugin_ski_descr");
+}
+
 @end
 
 @implementation OANauticalProduct
@@ -1679,6 +1694,21 @@
     return @"img_plugin_nautical.jpg";
 }
 
+- (NSString *) localizedTitle
+{
+    return OALocalizedString(@"plugin_nautical_name");
+}
+
+- (NSString *) localizedDescription
+{
+    return OALocalizedString(@"product_desc_nautical");
+}
+
+- (NSString *) localizedDescriptionExt
+{
+    return OALocalizedString(@"plugin_nautical_descr");
+}
+
 @end
 
 @implementation OATrackRecordingProduct
@@ -1707,6 +1737,21 @@
 - (NSString *) productScreenshotName
 {
     return @"img_plugin_trip_recording.jpg";
+}
+
+- (NSString *) localizedTitle
+{
+    return OALocalizedString(@"record_plugin_name");
+}
+
+- (NSString *) localizedDescription
+{
+    return OALocalizedString(@"product_desc_track_recording");
+}
+
+- (NSString *) localizedDescriptionExt
+{
+    return OALocalizedString(@"record_plugin_description");
 }
 
 @end
@@ -1739,6 +1784,21 @@
     return @"img_plugin_parking.jpg";
 }
 
+- (NSString *) localizedTitle
+{
+    return OALocalizedString(@"osmand_parking_plugin_name");
+}
+
+- (NSString *) localizedDescription
+{
+    return OALocalizedString(@"product_desc_parking");
+}
+
+- (NSString *) localizedDescriptionExt
+{
+    return OALocalizedString(@"osmand_parking_plugin_description");
+}
+
 @end
 
 @implementation OAWikiProduct
@@ -1767,6 +1827,21 @@
 - (NSString *) productScreenshotName
 {
     return @"img_plugin_wikipedia.jpg";
+}
+
+- (NSString *) localizedTitle
+{
+    return OALocalizedString(@"download_wikipedia_maps");
+}
+
+- (NSString *) localizedDescription
+{
+    return OALocalizedString(@"product_desc_wiki");
+}
+
+- (NSString *) localizedDescriptionExt
+{
+    return OALocalizedString(@"purchases_feature_desc_wikipedia");
 }
 
 @end
@@ -1799,6 +1874,21 @@
     return @"img_plugin_contourlines.jpg";
 }
 
+- (NSString *) localizedTitle
+{
+    return OALocalizedString(@"srtm_plugin_name");
+}
+
+- (NSString *) localizedDescription
+{
+    return OALocalizedString(@"product_desc_srtm");
+}
+
+- (NSString *) localizedDescriptionExt
+{
+    return OALocalizedString(@"srtm_plugin_description");
+}
+
 @end
 
 @implementation OAOsmEditingProduct
@@ -1827,6 +1917,21 @@
 - (NSString *) productScreenshotName
 {
     return @"img_plugin_osm_edits.jpg";
+}
+
+- (NSString *) localizedTitle
+{
+    return OALocalizedString(@"osm_editing_plugin_name");
+}
+
+- (NSString *) localizedDescription
+{
+    return OALocalizedString(@"product_desc_osm_editing");
+}
+
+- (NSString *) localizedDescriptionExt
+{
+    return OALocalizedString(@"osm_editing_plugin_description");
 }
 
 @end
@@ -1859,6 +1964,21 @@
     return @"img_plugin_mapillary.jpg";
 }
 
+- (NSString *) localizedTitle
+{
+    return OALocalizedString(@"mapillary");
+}
+
+- (NSString *) localizedDescription
+{
+    return OALocalizedString(@"product_desc_mapillary");
+}
+
+- (NSString *) localizedDescriptionExt
+{
+    return OALocalizedString(@"plugin_mapillary_descr");
+}
+
 @end
 
 @implementation OAOpenPlaceReviewsProduct
@@ -1889,6 +2009,21 @@
     return @"img_plugin_openplacereviews.jpg";
 }
 
+- (NSString *) localizedTitle
+{
+    return OALocalizedString(@"open_place_reviews");
+}
+
+- (NSString *) localizedDescription
+{
+    return OALocalizedString(@"product_desc_openplacereviews");
+}
+
+- (NSString *) localizedDescriptionExt
+{
+    return OALocalizedString(@"open_place_reviews_plugin_description");
+}
+
 @end
 
 @implementation OAWeatherProduct
@@ -1912,6 +2047,21 @@
 - (NSString *) productScreenshotName
 {
     return @"img_plugin_weather.jpg";
+}
+
+- (NSString *) localizedTitle
+{
+    return OALocalizedString(@"shared_string_weather");
+}
+
+- (NSString *) localizedDescription
+{
+    return OALocalizedString(@"product_desc_weather");
+}
+
+- (NSString *) localizedDescriptionExt
+{
+    return OALocalizedString(@"weather_plugin_description");
 }
 
 @end
@@ -1962,6 +2112,21 @@
 - (NSString *) productIconName
 {
     return @"ic_custom_laptop";
+}
+
+- (NSString *) localizedTitle
+{
+    return OALocalizedString(@"debugging_and_development");
+}
+
+- (NSString *) localizedDescription
+{
+    return OALocalizedString(@"product_desc_development");
+}
+
+- (NSString *) localizedDescriptionExt
+{
+    return OALocalizedString(@"osmand_development_plugin_description");
 }
 
 @end

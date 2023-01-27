@@ -276,18 +276,18 @@
 "cannot_access_calendar" = "Mistókst að fá aðgang að dagatali";
 "reminder_not_set_text" = "Ekki var hægt að stilla áminninguna því aðgangi að dagatalinu er hafnað";
 //inapps
-"product_title_nautical" = "Sjókort";
+"plugin_nautical_name" = "Sjókort";
 "product_desc_nautical" = "Vektorkort sem henta fyrir leiðsögn á siglingum";
-"product_desc_ext_nautical" = "Virkjaðu þetta til að bæta á kortið myndrænni framsetningu fyrir siglingaleiðir, ljósvita, hættusvæði, bannsvæði, hvar megi kasta akkerum, bryggjur, o.s.frv. Til að nota þetta skaltu sækja sjókortaviðbótina, fara í kortastillingarnar og setja stíl kortsins á 'Sjókort'.\n\nLeiðbeiningar - https://osmand.net/docs/user/plugins/nautical-charts";
-"product_title_parking" = "Staðsetning bílastæðis";
+"plugin_nautical_descr" = "Virkjaðu þetta til að bæta á kortið myndrænni framsetningu fyrir siglingaleiðir, ljósvita, hættusvæði, bannsvæði, hvar megi kasta akkerum, bryggjur, o.s.frv. Til að nota þetta skaltu sækja sjókortaviðbótina, fara í kortastillingarnar og setja stíl kortsins á 'Sjókort'.\n\nLeiðbeiningar - https://osmand.net/docs/user/plugins/nautical-charts";
+"osmand_parking_plugin_name" = "Staðsetning bílastæðis";
 "product_desc_parking" = "Mundu hvar bílnum var lagt og hve mikill tími sé eftir á stöðumæli";
-"product_desc_ext_parking" = "Virkjaðu þetta til að geta sett punkt á kortið þar bílnum þínum er lagt og láta dagatalið þitt vita hvenær stöðumælir fer í gang. Viðbótin gefur til kynna hve langur tími er til stefnu áður en stöðumælir rennur út og hvar bíllinn er staðsettur. Til að merkja bílinn er valinn punktur á kortinu, síðan farið í 'Aðgerðir' og ýtt á \"Bæta við bílastæði\".";
+"osmand_parking_plugin_description" = "Virkjaðu þetta til að geta sett punkt á kortið þar bílnum þínum er lagt og láta dagatalið þitt vita hvenær stöðumælir fer í gang. Viðbótin gefur til kynna hve langur tími er til stefnu áður en stöðumælir rennur út og hvar bíllinn er staðsettur. Til að merkja bílinn er valinn punktur á kortinu, síðan farið í 'Aðgerðir' og ýtt á \"Bæta við bílastæði\".";
 "plugin_ski_name" = "Skíðakort";
 "product_desc_skimap" = "Uppfært kort yfir skíðaleiðir með lyftum, brekkum og brautum";
 "plugin_ski_descr" = "Hannað til að rata um vetraríþróttasvæði. Skoðaðu skíðabrekkur, gönguskíðabrautir, fjallaskíðaleiðir, kláfa og skíðalyftur. Leiðir og brautir eru með litakóða eftir erfiðleikastigi. Til að nota þetta er viðbótin fyrst virkjuð, síðan farið í stillingar kortsins og \'Veturog skíði\' valið sem stíll þess.";
-"monitoring_settings" = "Skráning ferðar";
+"record_plugin_name" = "Skráning ferðar";
 "product_desc_track_recording" = "Skráðu og vistaðu ferðirnar þínar í GPX-ferla";
-"product_desc_ext_track_recording" = "Gerir kleift að skrá, vista og greina ferla yfir hreyfingu, eins og til dæmis hraða, hækkun, lækkun eða hæðasnið leiða, sem þá er hægt að endurnýta, bæta eða deila með vinum.\n\nLeiðbeiningar - https://osmand.net/docs/user/plugins/trip-recording";
+"record_plugin_description" = "Gerir kleift að skrá, vista og greina ferla yfir hreyfingu, eins og til dæmis hraða, hækkun, lækkun eða hæðasnið leiða, sem þá er hægt að endurnýta, bæta eða deila með vinum.\n\nLeiðbeiningar - https://osmand.net/docs/user/plugins/trip-recording";
 "product_title_trip_planning" = "Skipulagning ferða";
 "product_desc_trip_planning" = "Skipulegðu ferðina þína, bættu við ferilpunktum, mældu vegalengd á áfangastað - með aðstoð þessarar viðbótar";
 "product_desc_ext_trip_planning" = "Viðbótin fyrir skipulagningu ferða gerir þér kleift að búa til þína eigin ferð á kortinu, vista hana, mæla vegalengdir, o.s.frv. Hún er hugsuð fyrir fljótlegan undirbúning ferðar frekar en nákvæma samsetningu leiða.";
@@ -303,10 +303,10 @@
 "product_desc_asia" = "Ótakmörkuð niðurhöl korta af Asíu";
 "download_wikipedia_maps" = "Wikipedia";
 "product_desc_wiki" = "Staðsetningarháðar Wikipediu-greinar á landakortinu";
-"product_desc_ext_wiki" = "Það að hafa Wikipediu með á ferðalögum hjálpar þér að vita meira um staðina sem þú heimsækir. Hægt er að nota hana án nettengingar og birta greinar um áhugaverða staði beint á landakortinu. Ekki gleyma að sækja Wikipedia-kort fyrir svæðin sem þú hefur áhuga á.";
-"download_srtm_maps" = "Hæðarlínur";
+"purchases_feature_desc_wikipedia" = "Það að hafa Wikipediu með á ferðalögum hjálpar þér að vita meira um staðina sem þú heimsækir. Hægt er að nota hana án nettengingar og birta greinar um áhugaverða staði beint á landakortinu. Ekki gleyma að sækja Wikipedia-kort fyrir svæðin sem þú hefur áhuga á.";
+"srtm_plugin_name" = "Hæðarlínur";
 "product_desc_srtm" = "Sjónrænt mat á lögun yfirborðs landsins";
-"product_desc_ext_srtm" = "Yfirborðsupplýsingar, eins og hæðarlínur, hæðaskygging (relief hillshade) og brekkur, sem birtast ofan á staðalkortum OsmAnd, hjálpa við að meta landslag út frá atriðum á borð við sléttleika, hættur, halla, hæðarmismun og fleira. Yfirborðsupplýsingar á korti er hægt að túlka með skyggingum fyrir halla, hæðarlínum og litstiglum fyrir nismunandi frávik frá flötu landi. Gögnin koma frá SRTM (Shuttle Radar Topography Mission) og ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer).\n\nLeiðbeiningar - https://osmand.net/docs/user/plugins/contour-lines";
+"srtm_plugin_description" = "Yfirborðsupplýsingar, eins og hæðarlínur, hæðaskygging (relief hillshade) og brekkur, sem birtast ofan á staðalkortum OsmAnd, hjálpa við að meta landslag út frá atriðum á borð við sléttleika, hættur, halla, hæðarmismun og fleira. Yfirborðsupplýsingar á korti er hægt að túlka með skyggingum fyrir halla, hæðarlínum og litstiglum fyrir nismunandi frávik frá flötu landi. Gögnin koma frá SRTM (Shuttle Radar Topography Mission) og ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer).\n\nLeiðbeiningar - https://osmand.net/docs/user/plugins/contour-lines";
 "my_location" = "Staðsetning mín";
 "all_categories" = "Allir flokkar";
 "get_unlimited_access" = "Fáðu ótakmarkaðan aðgang";
@@ -2043,9 +2043,9 @@
 "suggested_maps_descr" = "Þessi kort eru nauðsynleg með forritsviðbótinni.";
 "suggested_maps" = "Kort sem stungið er upp á";
 "product_desc_openplacereviews" = "Deildu skoðunum þínum um opinbera staði";
-"product_desc_ext_openplacereviews" = "Gerir kleift að senda inn framlög í OpenPlaceReviews-verkefnið. Svo sem ljósmyndir, umsagnir og tengla í aðrar veitur um opinbera staði á borð við veitingastaði, hótel, söfn og leiðarpunkta.\n\nÞú getur lesið meira um hvernig þú getur tekið þátt á vefnum okkar - https://osmand.net/docs/user/plugins/openplacereviews";
+"open_place_reviews_plugin_description" = "Gerir kleift að senda inn framlög í OpenPlaceReviews-verkefnið. Svo sem ljósmyndir, umsagnir og tengla í aðrar veitur um opinbera staði á borð við veitingastaði, hótel, söfn og leiðarpunkta.\n\nÞú getur lesið meira um hvernig þú getur tekið þátt á vefnum okkar - https://osmand.net/docs/user/plugins/openplacereviews";
 "open_place_reviews" = "OpenPlaceReviews";
-"product_desc_ext_mapillary" = "Götumyndir fyrir alla. Þar sem myndefni vantar, geturðu einfaldlega bætt því við sjálf/ur svo aðrir geti nýtt sér það. Til að virkja Mapillary-götumyndalagið skaltu virkja \"myndefni í götuhæð\" í stillingum landakortsins.";
+"plugin_mapillary_descr" = "Götumyndir fyrir alla. Þar sem myndefni vantar, geturðu einfaldlega bætt því við sjálf/ur svo aðrir geti nýtt sér það. Til að virkja Mapillary-götumyndalagið skaltu virkja \"myndefni í götuhæð\" í stillingum landakortsins.";
 "product_desc_mapillary" = "Ljósmyndir í götuhæð til að skoða umhverfið";
 "population_num" = "Íbúafjöldi";
 "shared_string_turn_off" = "Slökkva";
@@ -2357,7 +2357,7 @@
 "weather_cloud_enable_descr" = "Virkja til að skoða skýjahululag á kortinu.";
 "weather_precip_enable_descr" = "Virkja til að skoða úrkomulag á kortinu.";
 "ltr_or_rtl_combine_via_dash" = "%@ - %@";
-"product_desc_ext_weather" = "Virkjaðu Veðurviðbótina til að skipuleggja leiðir með tilliti til veðurs. Skoðaðu litkóðað kort með veðurspá fyrir næstu klukkustundir, morgundaginn og viku fram í tímann.\n\nÁ ferðinni geturðu séð staðarháða viðmótshluti með upplýsingum um hitastig, úrkomu, vidhraða og loftþrýsting. \n\nVerður notadrjúgt í gönguferðum og lengri ferðum á reiðhjóli eða mótorhjóli.";
+"weather_plugin_description" = "Virkjaðu Veðurviðbótina til að skipuleggja leiðir með tilliti til veðurs. Skoðaðu litkóðað kort með veðurspá fyrir næstu klukkustundir, morgundaginn og viku fram í tímann.\n\nÁ ferðinni geturðu séð staðarháða viðmótshluti með upplýsingum um hitastig, úrkomu, vidhraða og loftþrýsting. \n\nVerður notadrjúgt í gönguferðum og lengri ferðum á reiðhjóli eða mótorhjóli.";
 "weather_cloud_data_description" = "Veðurgögn verða sótt fyrir skoðað svæði í hvert skipti.";
 "obf_import_already_exists_short" = "Skrá með þessu heiti er þegar til staðar.";
 "routing_attr_avoid_low_emission_zone_name" = "Forðast svæði með takmörkunum á útblæstri";
@@ -2449,7 +2449,7 @@
 "purchases_feature_desc_osmand_cloud" = "Fáðu aðgang að OsmAnd Cloud tölvuskýi til að geyma öll OsmAnd-gögn á netinu. Engin gögn tapast við enduruppsetningu. Taktu öryggisafrit og endurheimtu allar upplýsingar á einfaldan hátt.";
 "shared_string_capacity" = "Rýmd";
 "debugging_and_development" = "Þróun OsmAnd";
-"product_desc_ext_development" = "Gerir kleift að setja OsmAnd upp fyrir prófanir: leiðahermingu, upplýsingar um myndgerðarafköst, o.s.frv. Ætlað fyrir forritara en er ekki nauðsynlegt fyrir almenna notendur.";
+"osmand_development_plugin_description" = "Gerir kleift að setja OsmAnd upp fyrir prófanir: leiðahermingu, upplýsingar um myndgerðarafköst, o.s.frv. Ætlað fyrir forritara en er ekki nauðsynlegt fyrir almenna notendur.";
 "manage_subscription" = "Sýsla með áskrift";
 "simulation_real_mode_title" = "Raunsæ herming";
 "private_access_routing_req" = "Áfangastaður þinn er innan svæðis með einkaaðgangi. Viltu leyfa aðgang að einkavegum í þessari ferð?";
@@ -2794,4 +2794,3 @@
 "rendering_attr_horse_scale_difficult_name" = "Erfitt";
 "rendering_attr_weatherWindSpeedContours_name" = "Vindhviðulínur";
 "download_wikipedia_data" = "Sækja Wikipedia-gögn";
-

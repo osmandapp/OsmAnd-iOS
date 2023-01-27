@@ -249,13 +249,13 @@
 "map_inst_det_map_q" = "安裝詳細的地圖概覽，從您的位置中獲得週圍更多的詳細資訊。";
 "reminder_not_set_text" = "不設定提醒，因為您不允許存取日曆";
 //inapps
-"product_title_nautical" = "航海地圖";
+"plugin_nautical_name" = "航海地圖";
 "product_desc_nautical" = "全世界的航海地圖";
-"product_title_parking" = "停車地點";
+"osmand_parking_plugin_name" = "停車地點";
 "product_desc_parking" = "如果停車受時間限制的話，當把車停放的時候，能讓您很容易的記住，還剩餘多少時間";
 "plugin_ski_name" = "檢視滑雪地圖";
 "product_desc_skimap" = "全世界所有滑雪勝地的滑雪坡";
-"monitoring_settings" = "旅程錄製";
+"record_plugin_name" = "旅程錄製";
 "product_desc_africa" = "非洲的地圖";
 "product_desc_australia" = "澳洲的地圖";
 "product_desc_centralamerica" = "中美洲的地圖";
@@ -290,7 +290,7 @@
 "res_installing" = "正在安裝...";
 "download_wikipedia_maps" = "維基百科";
 "product_desc_wiki" = "維琪百科資料";
-"download_srtm_maps" = "等高線";
+"srtm_plugin_name" = "等高線";
 "product_desc_srtm" = "顯示等高線";
 "roads" = "道路";
 "select_language" = "選擇語言";
@@ -368,14 +368,14 @@
 "restore_all_purchases" = "恢復所有購買";
 "all_world_popup_desc" = "下載全球底圖，可以看到國家名稱、邊界和其它資訊";
 "plugin_popup_trip_planning_ask" = "要開始規劃旅程，您需要啟動外掛元件：<b>旅程規劃</b>";
-"product_desc_ext_wiki" = "取得關於維基百科興趣點的資訊。這是您的口袋離線指南 - 只要啟用維基百科的外掛元件，和享用在您目標周圍的文章。";
-"product_desc_ext_parking" = "OsmAnd 停車外掛元件提醒您的停車位置。這是一個 OsmAnd 地圖和導航應用程式的外掛元件。\n選擇一個非時間的提醒（只是在地圖上標記）或在時間屆滿時的時限報警（也包括在地圖上的標記）。若要使用該外掛元件，在外掛元件的選單中啟用它。";
-"product_desc_ext_nautical" = "OsmAnd 航海圖是一個 OsmAnd 地圖和導航應用程式的外掛元件。它是海洋、海域、沿海區域和江河的詳細圖解表示。這些圖表可以包含各種資訊，如航行航線、航行燈、危險區域，何處允許或不允許航行或碼頭等。\n\n使用說明：強烈建議下載航海底圖，不要只看地圖而不關心這詳盡的地圖存在。要打開航海圖，點擊地圖按鈕，設定地圖類型為航海。\n\n注意︰所有專業船員們，在他們的船隻上必要有官方的航海圖。\n\nOsmAnd 航海圖基本上是來自於 OpenSeaMap 專案的資料。雖然目前 OpenSeaMap 圖表，無法與官方航海圖並駕齊驅，但是可以用來給消遣休閒的船員們定方位或航路規劃。";
+"purchases_feature_desc_wikipedia" = "取得關於維基百科興趣點的資訊。這是您的口袋離線指南 - 只要啟用維基百科的外掛元件，和享用在您目標周圍的文章。";
+"osmand_parking_plugin_description" = "OsmAnd 停車外掛元件提醒您的停車位置。這是一個 OsmAnd 地圖和導航應用程式的外掛元件。\n選擇一個非時間的提醒（只是在地圖上標記）或在時間屆滿時的時限報警（也包括在地圖上的標記）。若要使用該外掛元件，在外掛元件的選單中啟用它。";
+"plugin_nautical_descr" = "OsmAnd 航海圖是一個 OsmAnd 地圖和導航應用程式的外掛元件。它是海洋、海域、沿海區域和江河的詳細圖解表示。這些圖表可以包含各種資訊，如航行航線、航行燈、危險區域，何處允許或不允許航行或碼頭等。\n\n使用說明：強烈建議下載航海底圖，不要只看地圖而不關心這詳盡的地圖存在。要打開航海圖，點擊地圖按鈕，設定地圖類型為航海。\n\n注意︰所有專業船員們，在他們的船隻上必要有官方的航海圖。\n\nOsmAnd 航海圖基本上是來自於 OpenSeaMap 專案的資料。雖然目前 OpenSeaMap 圖表，無法與官方航海圖並駕齊驅，但是可以用來給消遣休閒的船員們定方位或航路規劃。";
 "plugin_ski_descr" = "用來在冬季運動區導航：檢視滑雪道、滑雪纜車以及越野滑雪道，彩色線條指示難度等級。要使用，請啟用此外掛程式並到「設定地圖」然後選擇「冬季和滑雪」地圖樣式。";
-"product_desc_ext_track_recording" = "手動使用 OsmAnd 旅程記錄外掛元件，記錄您的旅程並將其儲存。匯出您的旅程為 GPX 檔案，將它分享甚或用它來向 OpenStreetMap 專案作出貢獻。跑步、徒步旅行和任何有興趣記錄他們旅程的人，的一個便利工具。";
+"record_plugin_description" = "手動使用 OsmAnd 旅程記錄外掛元件，記錄您的旅程並將其儲存。匯出您的旅程為 GPX 檔案，將它分享甚或用它來向 OpenStreetMap 專案作出貢獻。跑步、徒步旅行和任何有興趣記錄他們旅程的人，的一個便利工具。";
 "product_title_trip_planning" = "旅程規劃";
 "no_statistics" = "沒有統計資料";
-"product_desc_ext_srtm" = "這個外掛元件提供了等高線層和山體陰影層，它可以顯示在 OsmAnd 的離線地圖。等高線提供了該地區高度的相關資訊，而山體陰影則具體呈現出它們。使用這個外掛元件可看到山峰名稱和看到山峰和地勢的具體特徵。\n\n全球圖資（在北緯 70 度至南緯 70 度之間）的量測基礎在於 SRTM (Shuttle Radar Topography Mission)和 ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer)，安裝在美國太空總署地球觀測系統的旗艦衛星 Terra 上的遙測儀器，ASTER 是美國太空總署、日本經濟產業省(METI)、日本太空系統 (J-spacesystems)之間的通力合作產物。";
+"srtm_plugin_description" = "這個外掛元件提供了等高線層和山體陰影層，它可以顯示在 OsmAnd 的離線地圖。等高線提供了該地區高度的相關資訊，而山體陰影則具體呈現出它們。使用這個外掛元件可看到山峰名稱和看到山峰和地勢的具體特徵。\n\n全球圖資（在北緯 70 度至南緯 70 度之間）的量測基礎在於 SRTM (Shuttle Radar Topography Mission)和 ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer)，安裝在美國太空總署地球觀測系統的旗艦衛星 Terra 上的遙測儀器，ASTER 是美國太空總署、日本經濟產業省(METI)、日本太空系統 (J-spacesystems)之間的通力合作產物。";
 "no_internet_avail" = "無網路可用";
 "no_internet_avail_desc_first" = "請開啟網路連線以下載地圖清單";
 "map_downloaded" = "地圖已下載";
@@ -1577,7 +1577,7 @@
 "walking_route_osmc_description" = "按其各自的當地顏色（如果存在於 OpenStreetMap 之上的話）與類型（國際、區域、當地）為路線著色。";
 "suggested_maps_descr" = "這些地圖必須與外掛程式一起使用。";
 "travel_routes" = "旅行路線";
-"product_desc_ext_mapillary" = "把線上街道平面照片給每個人。發覺地點、協作、抓取世界。";
+"plugin_mapillary_descr" = "把線上街道平面照片給每個人。發覺地點、協作、抓取世界。";
 "routes_color_by_type" = "使用……為路線著色";
 "gpxup_private" = "私人的";
 "shared_string_all_languages" = "所有語言";
@@ -1906,7 +1906,7 @@
 "unlimited_map_downloads" = "無限制的地圖下載";
 "routing_attr_allow_private_for_truck_description" = "允取卡車進入私人區域。";
 "purchases_feature_desc_wikivoyage" = "離線瀏覽維基導遊。文章按國家與區域劃分，並以所有語言提供。";
-"product_desc_ext_development" = "供開發與除錯功能的設定，如導航模擬、算圖效能或語音通知等。適用於開發者，一般應用程式使用並不需要。";
+"osmand_development_plugin_description" = "供開發與除錯功能的設定，如導航模擬、算圖效能或語音通知等。適用於開發者，一般應用程式使用並不需要。";
 "routeInfo_horse_scale_description" = "根據馬道的難度繪製路徑";
 "redeem_promo_code" = "兌換折扣碼";
 "purchases_feature_desc_nautical" = "取得航海深度資訊";
@@ -2247,4 +2247,3 @@
 "mgrs_format_descr" = "OsmAnd使用 MGRS，其類似於 UTM NATO 格式。";
 "quick_action_add_marker_descr" = "在畫面中央新增地圖標記的按鈕。";
 "download_wikipedia_data" = "下載維基百科資料";
-

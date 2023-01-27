@@ -548,20 +548,20 @@
 "cannot_access_calendar" = "Nelze získat přistup do kalendáře";
 "reminder_not_set_text" = "Připomenutí nebylo nastaveno, protože nemáte povolený přístup ke kalendáři";
 //inapps
-"product_title_nautical" = "Námořní mapa";
+"plugin_nautical_name" = "Námořní mapa";
 "product_desc_nautical" = "Vektorové mapy vhodné pro navigaci na vodních trasách";
-"product_desc_ext_nautical" = "Zapnutím obohatíte mapu o informace o plavebních trasách, navigačních světlech, nebezpečných zónách, zónách, kde je povoleno nebo zakázáno plout či kotvit atd. Chcete-li modul použít, stáhněte si námořní mapy a zapněte styl \"Plavební\" v menu Nastavení mapy. \n\nJak na to - https://osmand.net/docs/user/plugins/nautical-charts";
-"product_title_parking" = "Parking Position";
+"plugin_nautical_descr" = "Zapnutím obohatíte mapu o informace o plavebních trasách, navigačních světlech, nebezpečných zónách, zónách, kde je povoleno nebo zakázáno plout či kotvit atd. Chcete-li modul použít, stáhněte si námořní mapy a zapněte styl \"Plavební\" v menu Nastavení mapy. \n\nJak na to - https://osmand.net/docs/user/plugins/nautical-charts";
+"osmand_parking_plugin_name" = "Parking Position";
 "product_desc_parking" = "Sledování doby parkování a polohy vašeho vozu";
-"product_desc_ext_parking" = "Umožňuje nastavit bod na mapě, kde je vaše auto ponecháno na ulici, a upozornit váš kalendář na začátek doby parkování. Plugin pomáhá sledovat dobu parkování a polohu vašeho vozu. Chcete-li umístit značku, vyberte místo na mapě, přejděte do části Akce a stiskněte tlačítko \"Přidat parkování\".";
+"osmand_parking_plugin_description" = "Umožňuje nastavit bod na mapě, kde je vaše auto ponecháno na ulici, a upozornit váš kalendář na začátek doby parkování. Plugin pomáhá sledovat dobu parkování a polohu vašeho vozu. Chcete-li umístit značku, vyberte místo na mapě, přejděte do části Akce a stiskněte tlačítko \"Přidat parkování\".";
 "plugin_ski_name" = "Lyžařský mapový pohled";
 "product_desc_skimap" = "Aktuální mapa lyžařských tratí s vleky a sjezdovkami";
 "plugin_ski_descr" = "Tento modul pro OsmAnd zobrazuje sjezdovky, běžecké tratě, skialpinistické trasy, lanovky a lyžařské vleky. Tratě a sjezdovky jsou zobrazeny barvami podle obtížnosti na speciálně barevně upravené zimní mapě. 
 \n 
 \nAktivováním tohoto pohledu se změní styl mapy na \"Zima a lyžování\", který zobrazuje krajinné útvary vzimních podmínkách. Tento pohled může být vypnut jeho deaktivováním zde, nebo změnou hodnoty ve \"Styl mapy\" v \"Nastavení mapy\".";
-"monitoring_settings" = "Záznam cesty";
+"record_plugin_name" = "Záznam cesty";
 "product_desc_track_recording" = "Zaznamenávejte a ukládejte své cesty jako GPX stopy";
-"product_desc_ext_track_recording" = "Umožňuje zaznamenávat, ukládat a analyzovat údaje o tréninku nebo pohybu, jako je rychlost, stoupání, klesání nebo reliéf trasy, které lze následně znovu použít, vylepšit, doplnit nebo sdílet s přáteli. \n\nJak na to - https://osmand.net/docs/user/plugins/trip-recording";
+"record_plugin_description" = "Umožňuje zaznamenávat, ukládat a analyzovat údaje o tréninku nebo pohybu, jako je rychlost, stoupání, klesání nebo reliéf trasy, které lze následně znovu použít, vylepšit, doplnit nebo sdílet s přáteli. \n\nJak na to - https://osmand.net/docs/user/plugins/trip-recording";
 "product_title_trip_planning" = "Plánování cesty";
 "product_desc_trip_planning" = "Pomocí tohoto modulu si naplánujete svůj výlet, přidáte trasové body a změříte vzdálenost do cíle";
 "product_desc_ext_trip_planning" = "Modul pro plánování trasy vám umožní vytvořit si cestu na mapě, uložit ji, změřit vzdálenost mezi body spojenými přímkami atd. Vytvořeno pro předběžné plánování cesty, nikoli pro důkladné budování trasy.";
@@ -577,10 +577,10 @@
 "product_desc_asia" = "Neomezené stahování map Asie";
 "download_wikipedia_maps" = "Wikipedie";
 "product_desc_wiki" = "Umístění článků Wikipedie na mapě";
-"product_desc_ext_wiki" = "Offline Wikipedie na cestách vám pomůže dozvědět se více o navštívených místech. Je dostupná offline a zobrazuje články Wikipedie v souvislosti s místy zájmu přímo na mapě. Nezapomeňte si stáhnout mapy Wikipedie pro vybraný region.";
-"download_srtm_maps" = "Vrstevnice";
+"purchases_feature_desc_wikipedia" = "Offline Wikipedie na cestách vám pomůže dozvědět se více o navštívených místech. Je dostupná offline a zobrazuje články Wikipedie v souvislosti s místy zájmu přímo na mapě. Nezapomeňte si stáhnout mapy Wikipedie pro vybraný region.";
+"srtm_plugin_name" = "Vrstevnice";
 "product_desc_srtm" = "Vizuální posouzení tvaru povrchu země";
-"product_desc_ext_srtm" = "Informace o terénu, jako jsou vrstevnice, stínování kopců a sklony, vám pomohou vizuálně posoudit tvar povrchu pozemku s ohledem na zakřivení, extrémy, strmost, body stejné výšky a další. Topografické informace na mapě mohou být reprezentovány stínováním sklonu, vrstevnicemi pro stoupání a klesání a barvou sklonu svahu od roviny. Data ze SRTM a ASTER. \n\nJak na to - https://osmand.net/docs/user/plugins/contour-lines";
+"srtm_plugin_description" = "Informace o terénu, jako jsou vrstevnice, stínování kopců a sklony, vám pomohou vizuálně posoudit tvar povrchu pozemku s ohledem na zakřivení, extrémy, strmost, body stejné výšky a další. Topografické informace na mapě mohou být reprezentovány stínováním sklonu, vrstevnicemi pro stoupání a klesání a barvou sklonu svahu od roviny. Data ze SRTM a ASTER. \n\nJak na to - https://osmand.net/docs/user/plugins/contour-lines";
 "my_location" = "Moje poloha";
 "all_categories" = "Všechny kategorie";
 "get_unlimited_access" = "Získejte neomezený přístup";
@@ -2034,7 +2034,7 @@
 "navigate_point_easting" = "Souřadnice X";
 "navigate_point_northing" = "Souřadnice Y";
 "navigate_point_zone" = "Zóna";
-"product_desc_ext_openplacereviews" = "Vkládejte fotografie, recenze a odkazy související s veřejnými místy jako jsou restaurace, hotely, muzea a body zájmu, a to jako otevřená data na https://openplacereviews.org/data/.\n\nPřečtěte si více na https://openplacereviews.org";
+"open_place_reviews_plugin_description" = "Vkládejte fotografie, recenze a odkazy související s veřejnými místy jako jsou restaurace, hotely, muzea a body zájmu, a to jako otevřená data na https://openplacereviews.org/data/.\n\nPřečtěte si více na https://openplacereviews.org";
 "open_place_reviews" = "OpenPlaceReviews";
 "routes_color_by_type" = "Obarvit trasy podle…";
 "rendering_value_walkingRoutesOSMC_description" = "Obarví trasy podle jejich individuální lokální barvy (pokud je nastavena v OpenStreetMap) a turistického značení.";
@@ -2047,7 +2047,7 @@
 "suggested_maps_descr" = "Tyto mapy jsou potřebné pro modul.";
 "suggested_maps" = "Navrhované mapy";
 "product_desc_openplacereviews" = "Sdílejte své názory na veřejná místa";
-"product_desc_ext_mapillary" = "Přináší výhled na ulici. Tam, kde snímky chybí, je můžete přidat sami, aby je mohli využít i ostatní. Chcete-li vrstvu Mapillary zapnout, zapněte v nabídce Konfigurace mapy položku \"Snímky na úrovni ulic\".";
+"plugin_mapillary_descr" = "Přináší výhled na ulici. Tam, kde snímky chybí, je můžete přidat sami, aby je mohli využít i ostatní. Chcete-li vrstvu Mapillary zapnout, zapněte v nabídce Konfigurace mapy položku \"Snímky na úrovni ulic\".";
 "product_desc_mapillary" = "Pohledy do ulice, abyste si mohli prohlédnout okolí";
 "shared_string_feet" = "stopy";
 "srtm_download_list_help_message" = "OsmAnd poskytuje data vrstevnic vmetrech a stopách. Pro změnu formátu budete muset soubor znovu stáhnout.";
@@ -2367,7 +2367,7 @@
 "nautical_depth" = "Námořní hloubka";
 "purchases_feature_desc_nautical" = "Získejte přístup k informacím o námořní hloubce";
 "purchases_feature_desc_wikipedia" = "Poskytuje všechny články z Wikipedie týkající se míst v režimu offline a pomáhá vám dozvědět se informace o místech, která navštívíte na své cestě, pouhým klepnutím na mapu. Nezapomeňte si stáhnout mapové soubory Wikipedie pro příslušné regiony.";
-"product_desc_ext_development" = "Umožňuje konfigurovat OsmAnd pro testování: simulovat navigační trasy, kontrolovat výkon vykreslování obrazovky atd. Zásuvný modul není pro běžné používání aplikace vyžadován.";
+"osmand_development_plugin_description" = "Umožňuje konfigurovat OsmAnd pro testování: simulovat navigační trasy, kontrolovat výkon vykreslování obrazovky atd. Zásuvný modul není pro běžné používání aplikace vyžadován.";
 "shared_string_learn_more" = "Zjistit více";
 "osm_live_subscriptions" = "Předplatné";
 "copy_address" = "Kopírovat adresu";
@@ -2544,7 +2544,7 @@
 "shared_string_added" = "Přidáno";
 "depth_contour_lines" = "Hloubkové vrstevnice";
 "product_desc_weather" = "24hodinová předpověď na 7 dní dopředu na mapě";
-"product_desc_ext_weather" = "Povolením pluginu Počasí můžete plánovat trasu s ohledem na počasí. Sledujte barevnou mapu předpovědi počasí, která je každou hodinu aktualizována na dnešek, zítřek a týden dopředu. \n\nPři cestování si prohlédněte informační widgety založené na poloze s teplotou, srážkami, rychlostí větru a tlakem. \n\nBude užitečné při pěší turistice a dlouhých cestách na kole nebo na motorce.";
+"weather_plugin_description" = "Povolením pluginu Počasí můžete plánovat trasu s ohledem na počasí. Sledujte barevnou mapu předpovědi počasí, která je každou hodinu aktualizována na dnešek, zítřek a týden dopředu. \n\nPři cestování si prohlédněte informační widgety založené na poloze s teplotou, srážkami, rychlostí větru a tlakem. \n\nBude užitečné při pěší turistice a dlouhých cestách na kole nebo na motorce.";
 "map_download_privacy_descr" = "Stažením map souhlasíte s <a href='https://osmand.net/docs/legal/terms-of-use'>Podmínkami používání</a> a <a href='https://osmand.net/docs/legal/privacy-policy'>Zásadami ochrany osobních údajů</a>.";
 "mtb_segment_classification" = "Klasifikaceúseku";
 "rendering_attr_showMtbScale_name" = "Zobrazit stupnici MTB";
@@ -2745,4 +2745,3 @@
 "routing_attr_allow_intermittent_description" = "Povolit občasné vodní cesty";
 "rendering_attr_natureReserves_name" = "Přírodní rezervace";
 "download_wikipedia_data" = "Stahování dat z Wikipedie";
-

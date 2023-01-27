@@ -290,18 +290,18 @@
 "cannot_access_calendar" = "无法访问日历";
 "reminder_not_set_text" = "";
 //inapps
-"product_title_nautical" = "";
+"plugin_nautical_name" = "";
 "product_desc_nautical" = "";
-"product_desc_ext_nautical" = "";
-"product_title_parking" = "";
+"plugin_nautical_descr" = "";
+"osmand_parking_plugin_name" = "";
 "product_desc_parking" = "";
-"product_desc_ext_parking" = "";
+"osmand_parking_plugin_description" = "";
 "plugin_ski_name" = "滑雪地图浏览";
 "product_desc_skimap" = "";
 "plugin_ski_descr" = "设计用于在冬季运动地点导航。观看滑雪道、滑雪缆车标记和彩色线条，指示每条轨道的复杂性。要在启用后使用，请转到配置地图并选择“冬季和滑雪”地图类型。";
-"monitoring_settings" = "行程录制";
+"record_plugin_name" = "行程录制";
 "product_desc_track_recording" = "";
-"product_desc_ext_track_recording" = "";
+"record_plugin_description" = "";
 "product_title_trip_planning" = "";
 "product_desc_trip_planning" = "";
 "product_desc_ext_trip_planning" = "";
@@ -317,10 +317,10 @@
 "product_desc_asia" = "";
 "download_wikipedia_maps" = "维基百科";
 "product_desc_wiki" = "";
-"product_desc_ext_wiki" = "";
-"download_srtm_maps" = "等高线";
+"purchases_feature_desc_wikipedia" = "";
+"srtm_plugin_name" = "等高线";
 "product_desc_srtm" = "";
-"product_desc_ext_srtm" = "";
+"srtm_plugin_description" = "";
 "my_location" = "我的位置";
 "all_categories" = "";
 "get_unlimited_access" = "获取无限访问权限";
@@ -1454,7 +1454,7 @@
 "shared_string_turn_off" = "关闭";
 "shared_string_navigation" = "导航";
 "download_map_dialog" = "下载地图对话框";
-"product_desc_ext_mapillary" = "供所有人使用的在线街景照片。在缺少图像的地方，您可以协作发现景点，捕捉世界之美。要启用 Mapillary 图层，请在配置地图菜单中打开“街道级图像”。";
+"plugin_mapillary_descr" = "供所有人使用的在线街景照片。在缺少图像的地方，您可以协作发现景点，捕捉世界之美。要启用 Mapillary 图层，请在配置地图菜单中打开“街道级图像”。";
 "shared_strings_all_regions" = "所有区域";
 "navigate_point_olc" = "开放地点编码(OLC)";
 "gpxup_trackable" = "可追踪";
@@ -1774,7 +1774,7 @@
 "debugging_and_development" = "OsmAnd开发";
 "routeInfo_horse_scale_name" = "马道难度";
 "daily_map_updates" = "每小时更新地图";
-"product_desc_ext_development" = "允许将OsmAnd配置为测试用，如模拟导航、查看屏幕渲染性能等。适用于开发人员，正常应用使用时不需要插件。";
+"osmand_development_plugin_description" = "允许将OsmAnd配置为测试用，如模拟导航、查看屏幕渲染性能等。适用于开发人员，正常应用使用时不需要插件。";
 "manage_subscription" = "管理订阅";
 "copy_to_map_favorites" = "复制到收藏";
 "suggested_maps_descr" = "插件需要这些地图。";
@@ -2134,4 +2134,3 @@
 "mgrs_format_descr" = "OsmAnd使用MGRS，类似于UTM NATO格式。";
 "download_wikipedia_data" = "下载维基百科数据";
 "route_add_start_point" = "添加出发地";
-

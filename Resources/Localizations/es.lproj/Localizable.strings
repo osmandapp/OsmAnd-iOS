@@ -253,11 +253,11 @@
 "show_info" = "Mostrar información";
 "buy" = "Comprar";
 //inapps
-"product_title_nautical" = "Mapa náutico";
+"plugin_nautical_name" = "Mapa náutico";
 "product_desc_nautical" = "Mapas vectoriales adecuados para la navegación náutica";
-"product_title_parking" = "Ubicación de aparcamiento";
+"osmand_parking_plugin_name" = "Ubicación de aparcamiento";
 "plugin_ski_name" = "Vista invernal";
-"monitoring_settings" = "Grabación de viaje";
+"record_plugin_name" = "Grabación de viaje";
 "product_desc_track_recording" = "Graba y guarda tus viajes como trazas GPX";
 "product_desc_africa" = "Descargas ilimitadas de mapas para África";
 "product_desc_australia" = "Descargas ilimitadas de mapas para Australia";
@@ -290,7 +290,7 @@
 "make_call" = "Hacer llamada";
 "download_wikipedia_maps" = "Wikipedia";
 "product_desc_wiki" = "Artículos de Wikipedia basados en la ubicación del mapa";
-"download_srtm_maps" = "Curvas de nivel";
+"srtm_plugin_name" = "Curvas de nivel";
 "product_desc_srtm" = "Evaluación visual de la forma de la superficie terrestre";
 "enter_description" = "Añade una descripción";
 "shared_string_description" = "Descripción";
@@ -355,10 +355,10 @@
 "sorting" = "Ordenar";
 "plugins_menu_group" = "Complementos";
 "first_time_continue" = "Después";
-"product_desc_ext_nautical" = "Al activarlo, enriquece el mapa con información sobre rutas náuticas, marcas de navegación náutica, zonas de peligro, zonas donde está permitido o prohibido navegar o atracar, etc. Para usarlo, descarga los mapas náuticos y activa «Mapa náutico» en «Configurar mapa».\n\nVéase - https://osmand.net/docs/user/plugins/nautical-charts";
-"product_desc_ext_parking" = "Permite registrar un punto en el mapa en donde el vehículo es dejado en la calle y crea un recordatorio en el calendario sobre el inicio del aparcamiento. El complemento ayuda a seguir el tiempo del aparcamiento y la ubicación del vehículo. Para colocar un marcador, elige un lugar en el mapa, luego ve a «Acciones» y pulsa «Añadir aparcamiento».";
-"product_desc_ext_track_recording" = "Permite registrar, guardar y analizar tus datos de entrenamiento o movimiento, como la velocidad, los ascensos, los descensos o el relieve del camino, que luego puedes reutilizar, mejorar, complementar o compartir con tus amigos.\n\nVéase - https://osmand.net/docs/user/plugins/trip-recording";
-"product_desc_ext_wiki" = "Tener Wikipedia sin conexión en tu viaje, te ayuda a conocer mejor los lugares que visitas. Se encuentra disponible sin conexión y muestra los artículos de Wikipedia en relación con los puntos de interés en el mapa. No olvides descargar los mapas de Wikipedia de la región elegida.";
+"plugin_nautical_descr" = "Al activarlo, enriquece el mapa con información sobre rutas náuticas, marcas de navegación náutica, zonas de peligro, zonas donde está permitido o prohibido navegar o atracar, etc. Para usarlo, descarga los mapas náuticos y activa «Mapa náutico» en «Configurar mapa».\n\nVéase - https://osmand.net/docs/user/plugins/nautical-charts";
+"osmand_parking_plugin_description" = "Permite registrar un punto en el mapa en donde el vehículo es dejado en la calle y crea un recordatorio en el calendario sobre el inicio del aparcamiento. El complemento ayuda a seguir el tiempo del aparcamiento y la ubicación del vehículo. Para colocar un marcador, elige un lugar en el mapa, luego ve a «Acciones» y pulsa «Añadir aparcamiento».";
+"record_plugin_description" = "Permite registrar, guardar y analizar tus datos de entrenamiento o movimiento, como la velocidad, los ascensos, los descensos o el relieve del camino, que luego puedes reutilizar, mejorar, complementar o compartir con tus amigos.\n\nVéase - https://osmand.net/docs/user/plugins/trip-recording";
+"purchases_feature_desc_wikipedia" = "Tener Wikipedia sin conexión en tu viaje, te ayuda a conocer mejor los lugares que visitas. Se encuentra disponible sin conexión y muestra los artículos de Wikipedia en relación con los puntos de interés en el mapa. No olvides descargar los mapas de Wikipedia de la región elegida.";
 "open_map_settings" = "Abrir ajustes del mapa";
 "plugin_popup_ski_title" = "Activar estilo del mapa a esquí";
 "plugin_popup_ski_desc" = "Para activar el estilo <b>Mapa de esquí</b>, vaya a los <b>Ajustes del mapa</b> > <b>Tipo de mapa</b>";
@@ -369,7 +369,7 @@
 "plugin_popup_nautical_title" = "Descargar mapas náuticos";
 "plugin_popup_nautical_desc" = "Primero descargue los mapas náuticos.\nLuego vaya a los <b>Ajustes del mapa</b> > <b>Tipo de mapa</b> y active el estilo <b>Náutico</b>";
 "go_to_downloads" = "Ir a descargas";
-"product_desc_ext_srtm" = "La información del terreno, como las curvas de nivel, los sombreados y las pendientes, ayudan a evaluar visualmente la forma de la superficie del terreno, considerando la curvatura, los extremos, la inclinación, los puntos de igual altura, etc. La información topográfica en un mapa puede representarse mediante el sombreado de la pendiente, las curvas de nivel para ascensos y descensos, y el color de la desviación del ángulo de la pendiente con respecto al plano. Datos de SRTM y ASTER.\n\nVéase - https://osmand.net/docs/user/plugins/contour-lines";
+"srtm_plugin_description" = "La información del terreno, como las curvas de nivel, los sombreados y las pendientes, ayudan a evaluar visualmente la forma de la superficie del terreno, considerando la curvatura, los extremos, la inclinación, los puntos de igual altura, etc. La información topográfica en un mapa puede representarse mediante el sombreado de la pendiente, las curvas de nivel para ascensos y descensos, y el color de la desviación del ángulo de la pendiente con respecto al plano. Datos de SRTM y ASTER.\n\nVéase - https://osmand.net/docs/user/plugins/contour-lines";
 "plugin_ski_descr" = "Diseñado para navegar por zonas de deportes de invierno: Vea las pistas de esquí y los remontes, así como las pistas de esquí de fondo, con líneas de color que indican los grados de dificultad. Para utilizarlo, activa este plugin y ve también a \"Configurar mapa\" y elige el estilo de mapa \"Invierno y esquí\".";
 "product_title_trip_planning" = "Planificación de viaje";
 "plugin_popup_wiki_ask" = "Para descargar los datos de Wikipedia, necesita activar el complemento: <b>Wikipedia</b>";
@@ -2005,7 +2005,7 @@
 "rendering_value_walkingRoutesScopeOSMC_description" = "Colorea según su red de afiliación.";
 "dialogs_and_notifications_title" = "Diálogos y notificaciones";
 "gpxup_public" = "Público";
-"product_desc_ext_mapillary" = "Ofrece vistas a nivel de calle. Si faltan imágenes, puedes añadirlas tú mismo para que otros puedan usarlas. Para activar la capa «Mapillary», activa las «Imágenes a nivel de calle» en el menú «Configurar mapa».";
+"plugin_mapillary_descr" = "Ofrece vistas a nivel de calle. Si faltan imágenes, puedes añadirlas tú mismo para que otros puedan usarlas. Para activar la capa «Mapillary», activa las «Imágenes a nivel de calle» en el menú «Configurar mapa».";
 "travel_routes" = "Rutas turísticas";
 "ios_release_4_1" = "• Interacción con trazas completamente rediseñada: un nuevo menú con gráficos, estadísticas, posibilidad de cambiar el aspecto, coloración por velocidad, altura y pendiente, y marcación de trazas en el mapa.\n• Nueva pantalla de búsqueda por coordenadas en diferentes formatos\n• Mejoras de la búsqueda por coordenadas en formato OLC\n• Nuevo menú de fácil manejo para elegir los idiomas en los que se muestran los artículos de Wikipedia en el mapa\n• Se ha añadido la posibilidad de cargar fácilmente los mapas de todas las regiones del país con un par de clics\n• Se han añadido curvas de nivel en pies (es deben descargar archivos adicionales)\n• Se ha añadido la posibilidad de descargar mapas marcando la región o el país deseado en el mapa, así como la adición de un cuadro de diálogo con la sugerencia de cargar un mapa faltante en la región visualizada\n• Nueva apariencia de los botones en el mapa y posibilidad de cambiar el zum del mapa pulsando dos veces y deslizando el dedo.\n• Los ajustes de visibilidad de las rutas se mueven más arriba en la sección «Configurar mapa» y se reorganizan para una mayor flexibilidad\n";
 "lang_pnb" = "Panyabí";
@@ -2327,7 +2327,7 @@
 "quick_action_coordinates_widget_descr" = "Un botón que muestra u oculta el widget de coordenadas en el mapa.";
 "activity" = "Actividad";
 "product_desc_weather" = "Pronóstico horario de 24 horas con 7 días de anticipación en el mapa";
-"product_desc_ext_weather" = "Activa el complemento del clima para planificar una ruta teniendo en cuenta la meteorología. Mira el mapa colorido del pronóstico, que se actualiza cada hora para hoy, mañana y la próxima semana.\n\nMientras viajas, observa los widgets de temperatura, precipitación, velocidad del viento y presión, basados en la ubicación.\n\nEs útil para hacer senderismo y largos viajes en bicicleta o motocicleta.";
+"weather_plugin_description" = "Activa el complemento del clima para planificar una ruta teniendo en cuenta la meteorología. Mira el mapa colorido del pronóstico, que se actualiza cada hora para hoy, mañana y la próxima semana.\n\nMientras viajas, observa los widgets de temperatura, precipitación, velocidad del viento y presión, basados en la ubicación.\n\nEs útil para hacer senderismo y largos viajes en bicicleta o motocicleta.";
 "measurement_units" = "Unidades de medida";
 "weather_temperature_celsius" = "Celsius";
 "weather_temperature_fahrenheit" = "Fahrenheit";
@@ -2346,7 +2346,7 @@
 "weather_wind_enable_descr" = "Permite ver la capa de viento en el mapa.";
 "weather_contours_enable_descr" = "Permite ver la capa de isolíneas en el mapa.";
 "replace_waypoint_confirmation" = "¿Reemplazar el punto de ruta «%@»?";
-"product_desc_ext_openplacereviews" = "Permite hacer contribuciones al proyecto OpenPlaceReviews. Envía fotos, reseñas y enlaces sobre lugares públicos como restaurantes, hoteles, museos y puntos de referencia.\n\nEn nuestro sitio web, hay una guía de cómo contribuir - https://osmand.net/docs/user/plugins/openplacereviews";
+"open_place_reviews_plugin_description" = "Permite hacer contribuciones al proyecto OpenPlaceReviews. Envía fotos, reseñas y enlaces sobre lugares públicos como restaurantes, hoteles, museos y puntos de referencia.\n\nEn nuestro sitio web, hay una guía de cómo contribuir - https://osmand.net/docs/user/plugins/openplacereviews";
 "route_line_color_elevation_description" = "La línea de la ruta se coloreará en función del perfil de elevación de la ruta.";
 "parked_at" = "aparcado a las";
 "plugin_popup_weather_title" = "Mostrar el clima";
@@ -2440,7 +2440,7 @@
 "purchases_feature_desc_combined_wiki" = "Explora los artículos de Wikipedia sobre la marcha, sin conexión a Internet. Datos sin conexión divididos por países y disponibles en todos los idiomas.";
 "restore_purchases" = "Restaurar compras";
 "purchases_feature_desc_terrain" = "Curvas de nivel del terreno, mapa completo de sombreados con tonos oscuros y mapas de pendientes con colores para mostrar picos y tierras bajas.";
-"product_desc_ext_development" = "Permite configurar OsmAnd para realizar pruebas: simular rutas de navegación, comprobar el rendimiento del renderizado de la pantalla, etc. El complemento no es necesario para el uso normal de la aplicación.";
+"osmand_development_plugin_description" = "Permite configurar OsmAnd para realizar pruebas: simular rutas de navegación, comprobar el rendimiento del renderizado de la pantalla, etc. El complemento no es necesario para el uso normal de la aplicación.";
 "altitude_ascent" = "Ascenso";
 "unlimited_map_downloads" = "Descargas de mapas ilimitadas";
 "purchases_feature_desc_osmand_cloud" = "Obtén OsmAnd Cloud para almacenar en línea todos los datos de OsmAnd. No pierdes los datos al reinstalar. Haz copias de seguridad y restaura toda la información fácilmente.";
@@ -2794,4 +2794,3 @@
 "shared_string_does_not_exist" = "No existe";
 "download_wikipedia_data" = "Descargar datos de Wikipedia";
 "rendering_attr_piste_difficulty_novice_name" = "Novato;Principiante";
-

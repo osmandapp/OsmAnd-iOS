@@ -219,9 +219,9 @@
 "cannot_access_calendar" = "Impossibile accedere al Calendario";
 "reminder_not_set_text" = "Il promemoria non è stato impostato poiché non ti è consentito l'accesso al Calendario";
 //inapps
-"product_title_nautical" = "Mappa nautica";
+"plugin_nautical_name" = "Mappa nautica";
 "product_desc_nautical" = "Mappe vettoriali adatte alla nautica";
-"product_title_parking" = "Posizione di Parcheggio";
+"osmand_parking_plugin_name" = "Posizione di Parcheggio";
 "product_desc_parking" = "Tieni traccia del tempo di parcheggio e della posizione della tua auto";
 "shared_string_remove" = "Rimuovi";
 "buy" = "Acquista";
@@ -279,7 +279,7 @@
 "product_desc_asia" = "Scaricamenti illimitati delle mappe per l'Asia";
 "download_wikipedia_maps" = "Wikipedia";
 "product_desc_wiki" = "Articoli di Wikipedia basati sulla posizione sulla mappa";
-"download_srtm_maps" = "Linee isoipse";
+"srtm_plugin_name" = "Linee isoipse";
 "product_desc_srtm" = "Valutazione visiva della forma della superficie terrestre";
 "my_location" = "Mia posizione";
 "all_categories" = "Tutte le categorie";
@@ -311,7 +311,7 @@
 "shared_string_get" = "Ottieni";
 "srtm_plugin_disabled" = "Linee isoipse disattivate";
 "res_updates_exp" = "Acquista uno o più continenti per aggiornare le mappe";
-"monitoring_settings" = "Registrazione viaggio";
+"record_plugin_name" = "Registrazione viaggio";
 "product_desc_track_recording" = "Registra e salva i tuoi percorsi come tracce GPX";
 "prch_wiki_info" = "Il componente aggiuntivo Wikipedia aggiunge le informazioni Wikipedia per le mappe che sono state scaricare gratuitamente o acquistate.";
 "menu_all_trips" = "Tutti i viaggi";
@@ -363,7 +363,7 @@
 "device_memory" = "Memoria dispositivo";
 "free" = "Libera %@";
 "shared_string_waypoint" = "Tappa";
-"product_desc_ext_parking" = "Abilita per impostare un punto sulla mappa in cui puoi parcheggiare la tua auto e ti avvisa sul tuo calendario quando inizia il tempo di parcheggio. Il plugin aiuta a tenere traccia del tempo di parcheggio e della posizione della tua auto. Per posizionare un indicatore scegli un luogo sulla mappa, poi vai su Azioni e premi \"Aggiungi parcheggio\".";
+"osmand_parking_plugin_description" = "Abilita per impostare un punto sulla mappa in cui puoi parcheggiare la tua auto e ti avvisa sul tuo calendario quando inizia il tempo di parcheggio. Il plugin aiuta a tenere traccia del tempo di parcheggio e della posizione della tua auto. Per posizionare un indicatore scegli un luogo sulla mappa, poi vai su Azioni e premi \"Aggiungi parcheggio\".";
 "shared_string_of" = "di";
 "shared_string_all" = "Tutti";
 "plugin_popup_ski_title" = "Attiva lo stile mappa Ski";
@@ -1797,7 +1797,7 @@
 "gpxup_private" = "Privato";
 "context_menu_item_edit_waypoint" = "Modifica i waypoint del GPX";
 "restart" = "Riavvia";
-"product_desc_ext_mapillary" = "Offre viste a livello stradale. Dove mancano le immagini, puoi semplicemente aggiungerle tu stesso in modo che altri possano utilizzarle. Per abilitare il layer Mapillary, attiva \"Immagini a livello stradale\" nel menu Configura mappa.";
+"plugin_mapillary_descr" = "Offre viste a livello stradale. Dove mancano le immagini, puoi semplicemente aggiungerle tu stesso in modo che altri possano utilizzarle. Per abilitare il layer Mapillary, attiva \"Immagini a livello stradale\" nel menu Configura mappa.";
 "search_more" = "Cerca di più …";
 "shared_string_wifi_only" = "Solo con WiFi";
 "download_map_dialog" = "Finestra di dialogo download mappe";
@@ -2042,7 +2042,7 @@
 "simulation_real_mode_title" = "Simulazione realistica";
 "copy_to_map_favorites" = "Copia nei preferiti";
 "purchases_feature_desc_terrain" = "Linee di contorno del terreno, mappa completa delle colline con ombre scure e mappe delle pendenze con colori per mostrare picchi e depressioni.";
-"product_desc_ext_development" = "Consente di configurare OsmAnd per i test: simula percorsi di navigazione, controlla le prestazioni di rendering dello schermo, ecc. Il plugin non è richiesto per il normale utilizzo dell'applicazione.";
+"osmand_development_plugin_description" = "Consente di configurare OsmAnd per i test: simula percorsi di navigazione, controlla le prestazioni di rendering dello schermo, ecc. Il plugin non è richiesto per il normale utilizzo dell'applicazione.";
 "complete_purchase" = "Completa l\'acquisto";
 "purchases_feature_desc_hourly_map_updates" = "Ottieni accesso ad aggiornamenti delle mappa più frequenti. Aggiornamenti orari, giornalieri o settimanali. Gli aggiornamenti sono incrementali, solo per le aree con cambiamenti.";
 "monthly_subscription" = "Sottoscrizione mensile";
@@ -2487,19 +2487,19 @@
 "product_desc_openplacereviews" = "Condividi la tua opinione sui luoghi pubblici";
 "product_desc_antarctica" = "Download illimitato di mappe per l'Antartide";
 "product_desc_russia_short" = "Mappe delle regioni della Russia";
-"product_desc_ext_track_recording" = "Ti consente di registrare, salvare e analizzare i tuoi dati di allenamento o movimento, come velocità, salite, discese o rilievo del percorso, che possono poi essere riutilizzati, migliorati, integrati o condivisi con gli amici.\n\nAltre info in - https://osmand.net/docs/user/plugins/trip-recording";
+"record_plugin_description" = "Ti consente di registrare, salvare e analizzare i tuoi dati di allenamento o movimento, come velocità, salite, discese o rilievo del percorso, che possono poi essere riutilizzati, migliorati, integrati o condivisi con gli amici.\n\nAltre info in - https://osmand.net/docs/user/plugins/trip-recording";
 "product_desc_mapillary" = "Viste a livello della strada per controllare i dintorni";
 "depth_contour_lines" = "Linee batimetriche";
-"product_desc_ext_srtm" = "Le informazioni sul terreno, come curve di livello, ombreggiature e pendii, ti aiutano a valutare visivamente la forma della superficie del terreno, considerando curvatura, estremi, pendenza, punti di uguale altezza e altro ancora. Le informazioni topografiche su una mappa possono essere rappresentate dall'ombreggiatura del pendio, dalle curve di livello per la salita e la discesa e dal colore della deviazione dell'angolo di pendenza dal piano. Dati da SRTM e ASTER.\n\nVedi in - https://osmand.net/docs/user/plugins/contour-lines";
-"product_desc_ext_openplacereviews" = "Ti permette di dare contributi al progetto OpenPlaceReviews. Come foto, recensioni, collegamenti a luoghi pubblici come ristoranti, hotel, musei e waypoint.\n\nPuoi trovare istruzioni su come contribuire sul nostro sito web - https://osmand.net/docs/user/plugins/openplacereviews";
-"product_desc_ext_wiki" = "Avere Wikipedia offline durante il tuo viaggio ti aiuta a saperne di più sui luoghi che visiti. È disponibile offline e mostra direttamente sulla mappa gli articoli di Wikipedia relativi ai punti di interesse. Non dimenticare di scaricare le mappe di Wikipedia per la regione scelta.";
+"srtm_plugin_description" = "Le informazioni sul terreno, come curve di livello, ombreggiature e pendii, ti aiutano a valutare visivamente la forma della superficie del terreno, considerando curvatura, estremi, pendenza, punti di uguale altezza e altro ancora. Le informazioni topografiche su una mappa possono essere rappresentate dall'ombreggiatura del pendio, dalle curve di livello per la salita e la discesa e dal colore della deviazione dell'angolo di pendenza dal piano. Dati da SRTM e ASTER.\n\nVedi in - https://osmand.net/docs/user/plugins/contour-lines";
+"open_place_reviews_plugin_description" = "Ti permette di dare contributi al progetto OpenPlaceReviews. Come foto, recensioni, collegamenti a luoghi pubblici come ristoranti, hotel, musei e waypoint.\n\nPuoi trovare istruzioni su come contribuire sul nostro sito web - https://osmand.net/docs/user/plugins/openplacereviews";
+"purchases_feature_desc_wikipedia" = "Avere Wikipedia offline durante il tuo viaggio ti aiuta a saperne di più sui luoghi che visiti. È disponibile offline e mostra direttamente sulla mappa gli articoli di Wikipedia relativi ai punti di interesse. Non dimenticare di scaricare le mappe di Wikipedia per la regione scelta.";
 "nautical_depth_points" = "Punti di profondità nautici";
 "read_full_description" = "Leggi la descrizione completa";
 "public_transport_warning_descr_blog" = "Leggi di più sul calcolo dei percorsi di OsmAnd sul nostro blog.";
 "public_transport_empty_warning_title" = "Sfortunatamente, OsmAnd non è riuscito a trovare un percorso con le tue impostazioni.";
 "public_transport_ped_route_title" = "Il percorso a piediè circa %@ e poterebbe essere più veloce di quello con i mezzi pubblici";
 "default_speed_descr" = "Stima l'ora di arrivo per i tipi di strada sconosciuti e limita la velocità per tutte le strade (può influire sul percorso)";
-"product_desc_ext_nautical" = "Attiva per arricchire la tua mappa con informazioni su rotte di navigazione, luci di navigazione, zone di pericolo, zone dove è consentita o vietata la navigazione o l'attracco, ecc. Per utilizzare scarica Mappe nautiche e abilita \"Mappa nautica\" in Configura mappa.\n\nAltre info in - https://osmand.net/docs/user/plugins/nautical-charts";
+"plugin_nautical_descr" = "Attiva per arricchire la tua mappa con informazioni su rotte di navigazione, luci di navigazione, zone di pericolo, zone dove è consentita o vietata la navigazione o l'attracco, ecc. Per utilizzare scarica Mappe nautiche e abilita \"Mappa nautica\" in Configura mappa.\n\nAltre info in - https://osmand.net/docs/user/plugins/nautical-charts";
 "product_desc_sea_depth_contours" = "Linee di contorno della profondità del mare e segni marini";
 "parked_at" = "parcheggiato alle";
 "change_object_posiotion" = "Cambia la posizione dell'oggetto";
@@ -2538,7 +2538,7 @@
 "wiki_buy_description" = "Per leggere gli articoli completi, acquista il plug-in di Wikipedia e scarica i dati di %@";
 "get_osmand_live" = "Acquista OsmAnd Live per sbloccare tutte le funzionalità: aggiornamenti quotidiani delle mappe con download illimitati, tutti i componenti aggiuntivi gratuiti e a pagamento, Wikipedia, Wikivoyage e molto altro.";
 "plugin_popup_weather_title" = "Attiva Meteo";
-"product_desc_ext_weather" = "Abilita il plugin Meteo per pianificare un percorso tenendo conto del meteo. Guarda la mappa colorata delle previsioni del tempo, aggiornata ogni ora per oggi, domani e la settimana successiva.\n\nDurante il viaggio visualizza i widget informativi basati sulla posizione con temperatura, precipitazioni, velocità del vento, pressione.\n\nSarà utile per escursioni e lunghi viaggi in bicicletta o in moto.";
+"weather_plugin_description" = "Abilita il plugin Meteo per pianificare un percorso tenendo conto del meteo. Guarda la mappa colorata delle previsioni del tempo, aggiornata ogni ora per oggi, domani e la settimana successiva.\n\nDurante il viaggio visualizza i widget informativi basati sulla posizione con temperatura, precipitazioni, velocità del vento, pressione.\n\nSarà utile per escursioni e lunghi viaggi in bicicletta o in moto.";
 "res_import_unsupported" = "Tipo di file errato. Sono supportati solo i file routing.xml e *.render.xml.";
 "subscriptions_public_info" = "Il pagamento verrà addebitato sul tuo account iTunes alla conferma dell'acquisto. L'abbonamento si rinnoverà automaticamente a meno che il rinnovo automatico non venga disattivato almeno 24 ore prima della fine del periodo corrente. Il tuo account verrà addebitato in base al tuo piano per il rinnovo entro 24 ore prima della fine del periodo corrente. Puoi gestire o disattivare il rinnovo automatico nelle Impostazioni account dopo l'acquisto. Se acquisti un abbonamento durante un periodo di prova gratuito, la parte inutilizzata di questo periodo verrà persa.";
 "map_download_privacy_descr" = "Scaricando le mappe accetti i <a href='https://osmand.net/docs/legal/terms-of-use'>Termini d'uso</a> e la <a href='https://osmand. net/docs/legal/privacy-policy'>Informativa sulla privacy</a>.";
@@ -2782,4 +2782,3 @@
 "rendering_attr_horse_scale_dangerous_name" = "Pericoloso";
 "shared_string_does_not_exist" = "Non esiste";
 "download_wikipedia_data" = "Scarica dati di Wikipedia";
-

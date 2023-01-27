@@ -1540,28 +1540,28 @@
 "reminder_not_set_text" = "The reminder was not set since you are not allowed access to the Calendar";
 
 //inapps
-"product_title_nautical" = "Nautical map";
+"plugin_nautical_name" = "Nautical map";
 "product_desc_nautical" = "Nautical map of all world";
-"product_desc_ext_nautical" = "OsmAnd Nautical Charts is a plugin for OsmAnd Maps & Navigation app. It is a detailed graphical representation of oceans, seas, coastal areas and rivers. The charts can contain various information like sailing routes, navigation lights, dangerous areas, areas where it's allowed or not allowed to sail or dock, etc.\n\nUsage Instructions: it is highly recommended to download nautical basemap in order to see the maps regardless of detailed map presence. To turn on Nautical charts, tap the map button and set map type to Nautical.\n\nNote: All professional sailors are obliged to have official nautical charts on their ships.\n\nOsmAnd Nautical charts are based on the data from OpenSeaMap project. While OpenSeaMap charts at the moment cannot compete with official nautical charts, they can be used by recreational sailors for orientation or route planning.";
-"product_title_parking" = "Parking Position";
+"plugin_nautical_descr" = "OsmAnd Nautical Charts is a plugin for OsmAnd Maps & Navigation app. It is a detailed graphical representation of oceans, seas, coastal areas and rivers. The charts can contain various information like sailing routes, navigation lights, dangerous areas, areas where it's allowed or not allowed to sail or dock, etc.\n\nUsage Instructions: it is highly recommended to download nautical basemap in order to see the maps regardless of detailed map presence. To turn on Nautical charts, tap the map button and set map type to Nautical.\n\nNote: All professional sailors are obliged to have official nautical charts on their ships.\n\nOsmAnd Nautical charts are based on the data from OpenSeaMap project. While OpenSeaMap charts at the moment cannot compete with official nautical charts, they can be used by recreational sailors for orientation or route planning.";
+"osmand_parking_plugin_name" = "Parking Position";
 "product_desc_parking" = "Let you easily memorize when the car was parked and how much time left if the parking is limited by time";
-"product_desc_ext_parking" = "OsmAnd Parking Plugin reminds you of your parking position. It is a plugin for OsmAnd Maps&Navigation app.\nChoose a time-independent reminder (only a marker on the map) or a time-limited one with alarm upon time expiration (includes also a marker on the map). To use the plugin, enable it in the Plugins menu.";
+"osmand_parking_plugin_description" = "OsmAnd Parking Plugin reminds you of your parking position. It is a plugin for OsmAnd Maps&Navigation app.\nChoose a time-independent reminder (only a marker on the map) or a time-limited one with alarm upon time expiration (includes also a marker on the map). To use the plugin, enable it in the Plugins menu.";
 "plugin_ski_name" = "Slēpošanas kartes";
 "product_desc_skimap" = "Ski slopes for all ski resorts in the world";
 "plugin_ski_descr" = "\"Šis OsmAnd spraudnis ļauj piekļūt datiem par slēpošanas trasēm un maršrutiem, trošu vagoniem un pacēlājiem. Maršruti un trases tiek rādīti pēc krāsām, atkarībā no grūtības pakāpes un tiek attēlotas īpašā \"ziemas\" kartes stilā.
 \n
 \nAktivizējot spraudni, kartes stils tiek nomainīts uz \"Ziema un slēpošana,\" attēlojot visus ainavas elementus ziemas apstākļiem atbilstošus. Deaktivizēt spraudni var vai nu šeit vai nomainot kartes stilu kartes uzstādījumos. \"";
-"monitoring_settings" = "Maršruta ieraksts";
+"record_plugin_name" = "Maršruta ieraksts";
 "product_desc_track_recording" = "Activates the functionality to record and save your tracks";
-"product_desc_ext_track_recording" = "Record your tracks and save them manually using OsmAnd Track recording plugin. Export your track as a gpx file, share it or even use it to contribute to OpenStreetMap project.  A handy tool for runners, hikers and anyone interested in recording their tracks.";
+"record_plugin_description" = "Record your tracks and save them manually using OsmAnd Track recording plugin. Export your track as a gpx file, share it or even use it to contribute to OpenStreetMap project.  A handy tool for runners, hikers and anyone interested in recording their tracks.";
 "osm_editing_plugin_name" = "OSM labošana";
 "product_desc_osm_editing" = "Make changes to OpenStreetMap directly from OsmAnd";
 "osm_editing_plugin_description" = "Rādīt iestatījumus OSM pilnveidošanai - OSM POI objektu izveidei/labošanai, GPX treku izplatīšanai un ziņošanai par OSM kļūdām. Vairāk uzziniet https://openstreetmap.org vietnē. Ikviens ir aicināts ņemt aktīvu dalību, ko ir iespējams darīt caur OsmAnd aplikāciju, norādot jūsu OSM lietotāja datus.";
 "product_desc_mapillary" = "Online street-level photos for everyone";
-"product_desc_ext_mapillary" = "Tiešsaistes ielas līmeņa fotoattēli ikvienam. Atklājiet vietas, kopīgojiet, iemūžiniet pasauli.";
+"plugin_mapillary_descr" = "Tiešsaistes ielas līmeņa fotoattēli ikvienam. Atklājiet vietas, kopīgojiet, iemūžiniet pasauli.";
 "open_place_reviews" = "OpenPlaceReviews";
 "product_desc_openplacereviews" = "Send photos, reviews, and links about public places";
-"product_desc_ext_openplacereviews" = "Send photos, reviews, and links about public places such as restaurants, hotels, museums, and waypoints as open data https://openplacereviews.org/data/.\n\nRead more at https://openplacereviews.org";
+"open_place_reviews_plugin_description" = "Send photos, reviews, and links about public places such as restaurants, hotels, museums, and waypoints as open data https://openplacereviews.org/data/.\n\nRead more at https://openplacereviews.org";
 "product_desc_africa" = "Unlimited map downloads for Africa";
 "product_desc_antarctica" = "Unlimited map downloads for Antarctica";
 "product_desc_africa_short" = "Africa region maps";
@@ -1583,16 +1583,16 @@
 "product_desc_asia_short" = "Asia region maps";
 "download_wikipedia_maps" = "Vikipēdija";
 "product_desc_wiki" = "Wikipedia data";
-"product_desc_ext_wiki" = "Get information about points of interest from Wikipedia. It is your pocket offline guide - just enable Wikipedia plugin and enjoy articles about objects around you.";
+"purchases_feature_desc_wikipedia" = "Get information about points of interest from Wikipedia. It is your pocket offline guide - just enable Wikipedia plugin and enjoy articles about objects around you.";
 "shared_string_all_languages" = "All languages";
 "select_wikipedia_article_langs" = "Select the languages in which Wikipedia articles will appear on the map. You can switch between all available languages while reading the article.";
 "wiki_menu_download_descr" = "Additional maps are needed to view Wikipedia POIs on the map.";
 "some_articles_may_not_available_in_lang" = "Some Wikipedia articles may not be available in your language.";
 "available_languages" = "Available languages";
 "preferred_languages" = "Preferred languages";
-"download_srtm_maps" = "Kontūrlīnijas";
+"srtm_plugin_name" = "Kontūrlīnijas";
 "product_desc_srtm" = "Display of contour lines";
-"product_desc_ext_srtm" = "This plugin provides contour lines and hillshade, which can be displayed in OsmAnd offline maps. Contour lines provide the information about heights of the area while hillshade is their visualization. See the names of mountain peaks and specific features of terrain using this plugin.\n\nThe global data (between 70 degrees north and 70 degrees south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA's Earth Observing System. ASTER is a cooperative effort between NASA, Japan's Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
+"srtm_plugin_description" = "This plugin provides contour lines and hillshade, which can be displayed in OsmAnd offline maps. Contour lines provide the information about heights of the area while hillshade is their visualization. See the names of mountain peaks and specific features of terrain using this plugin.\n\nThe global data (between 70 degrees north and 70 degrees south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA's Earth Observing System. ASTER is a cooperative effort between NASA, Japan's Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
 "wikivoyage_travel_guide" = "Ceļojumu gids";
 "start_editing_card_image_text" = "Brīvais pasaules ceļojumu gids, ko ikviens var papildināt.";
 "wikivoyage_travel_guide_descr" = "Interesantāko vietu apraksti uz planētas OsmAnd lietotnē bez pieslēguma internetam.";
@@ -2269,7 +2269,7 @@ kas tiks pievienots jūsu Kategorijas sadaļai.";
 "shared_string_includes" = "Iekļauts";
 "osm_live_banner_desc" = "Saņemt neierobežotas karšu lejupielādes un atjauninājumus biežāk nekā reizi mēnesī: reizi stundā, dienā vai nedēļā.";
 "shared_string_learn_more" = "Uzzināt vairāk";
-"product_desc_ext_development" = "Rādīt izstrādes un atkļūdošanas iestatījumus, kā piemēram, animētā navigācija, renderēšanas izpildījuma attēlošana vai balss uzvednes. Šie iestatījumi ir paredzēti izstrādātājiem un nav vajadzīgi gala lietotājam.";
+"osmand_development_plugin_description" = "Rādīt izstrādes un atkļūdošanas iestatījumus, kā piemēram, animētā navigācija, renderēšanas izpildījuma attēlošana vai balss uzvednes. Šie iestatījumi ir paredzēti izstrādātājiem un nav vajadzīgi gala lietotājam.";
 "complete_purchase" = "Pabeidziet pirkumu";
 "shared_string_capacity" = "Kapacitāte";
 "cubic_m" = "m³";
@@ -2318,4 +2318,3 @@ kas tiks pievienots jūsu Kategorijas sadaļai.";
 "rendering_attr_seabedDetail_description" = "Paplašināts teksts ar dibena klasifikāciju, apvienotiem reljefu tipiem, jūraszāļu kategorijas un taksoni";
 "auth_failed" = "Autorizācija neizdevās";
 "download_wikipedia_data" = "Lejupielādēt Vikipēdijas datus";
-

@@ -914,18 +914,18 @@
 "cannot_access_calendar" = "Impossible d'accedir au Calendier";
 "reminder_not_set_text" = "Lo sauvamemòria automatic es pas estat definit perque l'accès au Calendier li es pas consentit";
 //inapps
-"product_title_nautical" = "Mapa marina";
+"plugin_nautical_name" = "Mapa marina";
 "product_desc_nautical" = "Mapa vectoriala per la navigacion maritima";
-"product_desc_ext_nautical" = "Activatz leis informacions sus lei rotas maritimas, lei fanaus, lei zònas perilhosas, lei zònas de restriccion...\n\nDe consultar - https://osmand.net/docs/user/plugins/nautical-charts";
-"product_title_parking" = "Posicion d'aparcament";
+"plugin_nautical_descr" = "Activatz leis informacions sus lei rotas maritimas, lei fanaus, lei zònas perilhosas, lei zònas de restriccion...\n\nDe consultar - https://osmand.net/docs/user/plugins/nautical-charts";
+"osmand_parking_plugin_name" = "Posicion d'aparcament";
 "product_desc_parking" = "Memoriza onte parcatz la veitura e còmpta lo temps d'aparcament";
-"product_desc_ext_parking" = "Placatz un marcador sus la mapa a l'endrech onte laissatz lo veïcul e quichatz sus \"Ajustar un aparcament\". L'ajust Aparcament d'OsmAnd memoriza la posicion de l'aparcament e lo temps se descòmpta.";
+"osmand_parking_plugin_description" = "Placatz un marcador sus la mapa a l'endrech onte laissatz lo veïcul e quichatz sus \"Ajustar un aparcament\". L'ajust Aparcament d'OsmAnd memoriza la posicion de l'aparcament e lo temps se descòmpta.";
 "plugin_ski_name" = "Vista de la mapa d\'esquí";
 "product_desc_skimap" = "Lei pistas d'esquilh actualizadas e lei remontadors";
 "plugin_ski_descr" = "Pensat per navigar sus lei pistas d'esquilh. Vos avisa dei remontadors e la color de cada pista indica la dificultat. Configuratz leis informacions visiblas e chausissètz la mapa \"Ivèrn e esquilh\".";
-"monitoring_settings" = "Enregistrament d\'escorregudas";
+"record_plugin_name" = "Enregistrament d\'escorregudas";
 "product_desc_track_recording" = "Enregistra e sauva lei percors coma traças GPX";
-"product_desc_ext_track_recording" = "Permet d'enregistrar, de sauvegardar emai d'analisar lei donadas d'assai ò de percors, coma la velocitat, lei montadas e lei devaladas, lo relèu… e que se pòdon puei partejar amb leis amics.\n\nDe consultar - https://osmand.net/docs/user/plugins/trip-recording";
+"record_plugin_description" = "Permet d'enregistrar, de sauvegardar emai d'analisar lei donadas d'assai ò de percors, coma la velocitat, lei montadas e lei devaladas, lo relèu… e que se pòdon puei partejar amb leis amics.\n\nDe consultar - https://osmand.net/docs/user/plugins/trip-recording";
 "product_title_trip_planning" = "Trip planning";
 "product_desc_trip_planning" = "Plan your trip, add waypoints, measure the distance to your destination using this plugin";
 "product_desc_ext_trip_planning" = "Trip planning plugin allows you to create your trip on the map, save it, measure the distance between points connected with straight lines, etc. Created for preliminary trip planning rather than thorough route building.";
@@ -952,10 +952,10 @@
 "product_desc_asia_short" = "Mapas d'Asia";
 "download_wikipedia_maps" = "Wikipèdia";
 "product_desc_wiki" = "Notícias Wikipèdia localizadas sus la mapa";
-"product_desc_ext_wiki" = "Un guida de pòcha : avètz Wikipèdia per vòstre viatge e leis articles que tractan de l'environa de vòstre percors. Se pòt consultar fòra de linha mai oblidetz pas de teledescargar lei notícias Wikipèdia de la region de destinacion.";
-"download_srtm_maps" = "Corbas de nivèu";
+"purchases_feature_desc_wikipedia" = "Un guida de pòcha : avètz Wikipèdia per vòstre viatge e leis articles que tractan de l'environa de vòstre percors. Se pòt consultar fòra de linha mai oblidetz pas de teledescargar lei notícias Wikipèdia de la region de destinacion.";
+"srtm_plugin_name" = "Corbas de nivèu";
 "product_desc_srtm" = "Mostrar lei corbas de nivèu";
-"product_desc_ext_srtm" = "Leis informacions de terren coma lei corbas de nivèu, l'ombra de relèu e la penda, vos ajudan a visualizar l'aspècte de la superficia. Amb aquest ajust podretz veire lo nom dei montanhas e lei caracteristicas particularas a l'encontrada. Donadas SRTM e ASTER.\n\nPer n'en sacher mai : https://osmand.net/docs/user/plugins/contour-lines";
+"srtm_plugin_description" = "Leis informacions de terren coma lei corbas de nivèu, l'ombra de relèu e la penda, vos ajudan a visualizar l'aspècte de la superficia. Amb aquest ajust podretz veire lo nom dei montanhas e lei caracteristicas particularas a l'encontrada. Donadas SRTM e ASTER.\n\nPer n'en sacher mai : https://osmand.net/docs/user/plugins/contour-lines";
 "wikivoyage_travel_guide" = "Guida de viatge";
 "start_editing_card_image_text" = "La guida toristica libra dau monde entier que cadun i pòt collaborar.";
 "wikivoyage_travel_guide_descr" = "Guida dei lòcs pus interessants de la planeta, integrada a OsmAnd, sensa connexion a Internet.";
@@ -2293,14 +2293,14 @@
 "default_speed_descr" = "Estimar l'ora d'arribada si la mena de vias es pas conoissuda e en aplicant lei limitacions de velocitat en totei lei carrieras (aquò podriá afectar la navigacion)";
 "weather_precip_inches" = "Poces";
 "help_what_is_new" = "Noveutats";
-"product_desc_ext_openplacereviews" = "Vos permet de collaborar au projècte OpenPlaceRewiews. Ambe de fòtos, de criticas, de ligames sus lei luòcs publics que trevatz taus coma de restaurants, d'ostalariás, de musèus e de ponchs d'interès. \n\nTrovaretz leis instruccions per o faire sus lo site Oèb : https://osmand.net/docs/user/plugins/openplacereviews";
+"open_place_reviews_plugin_description" = "Vos permet de collaborar au projècte OpenPlaceRewiews. Ambe de fòtos, de criticas, de ligames sus lei luòcs publics que trevatz taus coma de restaurants, d'ostalariás, de musèus e de ponchs d'interès. \n\nTrovaretz leis instruccions per o faire sus lo site Oèb : https://osmand.net/docs/user/plugins/openplacereviews";
 "read_full_description" = "Legir la descripcion completa";
 "app_mode_car" = "Automobila";
 "add_description" = "Ajustar una descripcion";
 "preferred_terrain" = "Terren preferit";
 "unsupported_action_title" = "Accion non admesa (%@)";
 "rendering_attr_piste_type_sled_name" = "Tirassa";
-"product_desc_ext_development" = "Permet de configurar OsmAnd per leis assais : simular d'itineraris de navigacion, verificar lei performanças de rendut de l'ecran, eca. L'ajuston es pas necessari per l'emplec normau de l'aplicacion.";
+"osmand_development_plugin_description" = "Permet de configurar OsmAnd per leis assais : simular d'itineraris de navigacion, verificar lei performanças de rendut de l'ecran, eca. L'ajuston es pas necessari per l'emplec normau de l'aplicacion.";
 "login_footer_email_part" = "support@osmand.net";
 "change_application_profile" = "Cambiar lo perfiu de l'aplicacion";
 "trip_hint" = "Marcatz lo nom dau percors";
@@ -2320,7 +2320,7 @@
 
 // World Regions
 "index_name_antarctica" = "Antartida";
-"product_desc_ext_mapillary" = "Fornís la vista au plan de la carriera. Se mancan d'imatges, lei podètz ajustar vosautres e permetre a d'autres de ne'n beneficiar. Per activar la jaça Mapillary pron d'activar \"Imatges de carrieras\" dins lo menut de Configuracion.";
+"plugin_mapillary_descr" = "Fornís la vista au plan de la carriera. Se mancan d'imatges, lei podètz ajustar vosautres e permetre a d'autres de ne'n beneficiar. Per activar la jaça Mapillary pron d'activar \"Imatges de carrieras\" dins lo menut de Configuracion.";
 "product_desc_development" = "Per lei desvelopaires e leis utilisaires avançats";
 "some_articles_may_not_available_in_lang" = "Se pòt que d\'articles de la Wikipèdia siegan pas disponibles dins vòstra lenga.";
 "public_transport_ped_route_title" = "La caminada fa dins lei %@ e se podriá faire pus lèu amb lei transpòrts publics";
@@ -2513,4 +2513,3 @@
 "rendering_attr_OSMMapperAssistantFixme_description" = "Veire lei balisas fixme";
 "rendering_attr_OSMMapperAssistantNote_description" = "Mostrar lei nòtas de balisa";
 "offline_edition_descr" = "Sensa connexion, la modificacion es activada, mai lei cambis se devon sauvagardar localament en premier, se telecargaràn au besonh; autrament s\'actualizan immediatament.";
-

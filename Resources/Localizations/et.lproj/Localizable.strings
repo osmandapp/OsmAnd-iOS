@@ -938,20 +938,20 @@
 "cannot_access_calendar" = "Kalendrile ei pääse juurde";
 "reminder_not_set_text" = "Meeldetuletust ei seatud, sest kalendrile juurdepääs ei ole lubatud";
 //inapps
-"product_title_nautical" = "Merekaart";
+"plugin_nautical_name" = "Merekaart";
 "product_desc_nautical" = "Kogu maailma merekaart";
-"product_desc_ext_nautical" = "OsmAnd Nautical Charts on rakenduse OsmAnd Maps & Navigation lisa. See on ookeanide, merede, rannikualade ja jõgede detailne graafiline esitus. Kaardid võivad sisaldada mitmesugust teavet, näiteks purjetamise marsruudid, navigatsioonituled, ohtlikud alad, alad, kus on lubatud või keelatud purjetada või dokkida jne.\n\nKasutusjuhised: kaartide nägemiseks olenemata üksikasjalikust kaardist on tungivalt soovitatav alla laadida merepõhine põhikaart. Merekaartide sisselülitamiseks puuduta kaardinuppu ja määra kaardi tüübiks Merenduslik.\n\nMärkus: Kõigil kutselistel meremeestel on kohustus oma laevadel olla ametlikud merekaardid.\n\nOsmAnd Nautical diagrammid põhinevad OpenSeaMap projekti andmetel. Kuigi OpenSeaMapi kaardid ei saa praegu konkureerida ametlike merekaartidega, saavad harrastuspurjetajad neid kasutada orienteerumiseks või marsruudi kavandamiseks.";
-"product_title_parking" = "Parking Position";
+"plugin_nautical_descr" = "OsmAnd Nautical Charts on rakenduse OsmAnd Maps & Navigation lisa. See on ookeanide, merede, rannikualade ja jõgede detailne graafiline esitus. Kaardid võivad sisaldada mitmesugust teavet, näiteks purjetamise marsruudid, navigatsioonituled, ohtlikud alad, alad, kus on lubatud või keelatud purjetada või dokkida jne.\n\nKasutusjuhised: kaartide nägemiseks olenemata üksikasjalikust kaardist on tungivalt soovitatav alla laadida merepõhine põhikaart. Merekaartide sisselülitamiseks puuduta kaardinuppu ja määra kaardi tüübiks Merenduslik.\n\nMärkus: Kõigil kutselistel meremeestel on kohustus oma laevadel olla ametlikud merekaardid.\n\nOsmAnd Nautical diagrammid põhinevad OpenSeaMap projekti andmetel. Kuigi OpenSeaMapi kaardid ei saa praegu konkureerida ametlike merekaartidega, saavad harrastuspurjetajad neid kasutada orienteerumiseks või marsruudi kavandamiseks.";
+"osmand_parking_plugin_name" = "Parking Position";
 "product_desc_parking" = "Võimaldab kergelt meelde jätta, millal auto pargiti ja kui palju aega on jäänud, kui parkimine on ajaliselt piiratud";
-"product_desc_ext_parking" = "OsmAnd Parking Plugin tuletab meelde parkimiskoha. See on rakenduse OsmAnd Maps & Navigation lisa.\nVali ajast sõltumatu meeldetuletus (ainult marker kaardil) või ajaliselt piiratud meeldetuletus koos parkimisaja lõppemise meeldetuletusega (sisaldab ka markerit kaardil). Lisaprogrammi kasutamiseks luba see lisaprogrammide menüüs.";
+"osmand_parking_plugin_description" = "OsmAnd Parking Plugin tuletab meelde parkimiskoha. See on rakenduse OsmAnd Maps & Navigation lisa.\nVali ajast sõltumatu meeldetuletus (ainult marker kaardil) või ajaliselt piiratud meeldetuletus koos parkimisaja lõppemise meeldetuletusega (sisaldab ka markerit kaardil). Lisaprogrammi kasutamiseks luba see lisaprogrammide menüüs.";
 "plugin_ski_name" = "Suusakaardi vaade";
 "product_desc_skimap" = "Kogu maailma suusakuurortide suusanõlvad";
 "plugin_ski_descr" = "See OsmAnd laiendus toob sõrmeulatusse üksikasjad globaalsete mäesuusatamise nõlvade, murdmaasuusaradade, mäesuusaradade, köisraudteede ja suusaliftide kohta. Teekonnad ja suusaradade raskusastmed on tähistatud värvikoodidega ning kujutatud spetsiaalses talvises kaardistiilis, mis sulab ühte lumivalge talvemaastikuga.
 \n
 \nSelle vaate aktiveerimine muudab kaardi stiili väärtuseks \'Talv ja suusk\', mis näitab kõiki maastikuomadusi talvetingimustes. Selle vaate saab tagasi lülitada, aktiveerides selle siin uuesti või muutes vastavalt vajadusele jaotises \'Kaardi seadistamine\' \'Kaardistiil\'.";
-"monitoring_settings" = "Matka salvestamine";
+"record_plugin_name" = "Matka salvestamine";
 "product_desc_track_recording" = "Aktiveerib teekondade jooksva salvestamise ja hilisema jäädava talletamise funktsionaalsuse";
-"product_desc_ext_track_recording" = "Salvesta oma teekonnad jooksvalt ja talleta need käsitsi, kasutades lisaprogrammi OsmAnd Track. Ekspordi oma teekond GPX failina, jaga seda või isegi kasuta seda OpenStreetMap projekti panustamiseks. Käepärane vahend jooksjatele, matkajatele ja kõigile, kes on huvitatud oma teekondade registreerimisest.";
+"record_plugin_description" = "Salvesta oma teekonnad jooksvalt ja talleta need käsitsi, kasutades lisaprogrammi OsmAnd Track. Ekspordi oma teekond GPX failina, jaga seda või isegi kasuta seda OpenStreetMap projekti panustamiseks. Käepärane vahend jooksjatele, matkajatele ja kõigile, kes on huvitatud oma teekondade registreerimisest.";
 "product_title_trip_planning" = "Reisi planeerimine";
 "product_desc_trip_planning" = "Planeeri oma reis, lisa teekonnapunktid, mõõda selle lisaprogrammi abil kaugus sihtkohta";
 "product_desc_ext_trip_planning" = "Reisi planeerimise lisa võimaldab sul oma reisi kaardil luua, selle salvestada, mõõta sirgjoontega ühendatud punktide vahelist kaugust jne. Loodud reisi ettevalmistamiseks, mitte põhjaliku marsruudi loomiseks.";
@@ -978,10 +978,10 @@
 "product_desc_asia_short" = "Aasia piirkondade kaardid";
 "download_wikipedia_maps" = "Vikipeedia";
 "product_desc_wiki" = "Wikipedia data";
-"product_desc_ext_wiki" = "Hangi huviväärsuste kohta teavet Vikipeediast. See on sinu võrguühenduseta juhend - luba lihtsalt Vikipeedia lisaprogramm ja naudi artikleid enda ümber asuvate objektide kohta.";
-"download_srtm_maps" = "Kõrgusjooned";
+"purchases_feature_desc_wikipedia" = "Hangi huviväärsuste kohta teavet Vikipeediast. See on sinu võrguühenduseta juhend - luba lihtsalt Vikipeedia lisaprogramm ja naudi artikleid enda ümber asuvate objektide kohta.";
+"srtm_plugin_name" = "Kõrgusjooned";
 "product_desc_srtm" = "Kuva kõrgusjooned";
-"product_desc_ext_srtm" = "See lisaprogramm pakub kõrgusjooni ja künkavarjutust, mida saab kuvada OsmAnd võrguühenduseta kaartidel. Kõrgusjooned annavad teavet piirkonna kõrguse kohta, samas kui nende nähtavaks tegemine on künkavari. Selle lisaprogrammi abil saad vaadata mäetippude nimesid ja maastiku eripära.\n\nGlobaalsed andmed (vahemikus 70 kraadi põhja ja 70 kraadi lõuna vahel) põhinevad mõõtmistel, mille viivad läbi SRTM (süstiku radari topograafiamissioon) ja ASTER (täiustatud kosmose termilise emissiooni ja peegelduse radiomeeter), NASA maavaatlussatelliidi pildistamisinstrument Terra. Süsteem ASTER on NASA, Jaapani majandus-, kaubandus- ja tööstusministeeriumi (METI) ja Jaapani kosmosesüsteemide (J-kosmosesüsteemid) koostöö.";
+"srtm_plugin_description" = "See lisaprogramm pakub kõrgusjooni ja künkavarjutust, mida saab kuvada OsmAnd võrguühenduseta kaartidel. Kõrgusjooned annavad teavet piirkonna kõrguse kohta, samas kui nende nähtavaks tegemine on künkavari. Selle lisaprogrammi abil saad vaadata mäetippude nimesid ja maastiku eripära.\n\nGlobaalsed andmed (vahemikus 70 kraadi põhja ja 70 kraadi lõuna vahel) põhinevad mõõtmistel, mille viivad läbi SRTM (süstiku radari topograafiamissioon) ja ASTER (täiustatud kosmose termilise emissiooni ja peegelduse radiomeeter), NASA maavaatlussatelliidi pildistamisinstrument Terra. Süsteem ASTER on NASA, Jaapani majandus-, kaubandus- ja tööstusministeeriumi (METI) ja Jaapani kosmosesüsteemide (J-kosmosesüsteemid) koostöö.";
 "wikivoyage_travel_guide" = "Reisijuhid";
 "start_editing_card_image_text" = "Tasutaülemaailmne kõigi poolt täiendatav reisijuht.";
 "wikivoyage_travel_guide_descr" = "Juhised planeedi kõige huvitavamatesse kohtadesse, OsmAndi sees, ilma internetiühenduseta.";
@@ -2035,10 +2035,10 @@
 "added_profiles" = "Lisatud profiilid";
 "suggested_maps_descr" = "Need kaardid on laienduse kasutamisel nõutud.";
 "suggested_maps" = "Soovitatud kaardid";
-"product_desc_ext_openplacereviews" = "Saada fotosid, ülevaateid ja linke avalike kohtade, näiteks restoranide, hotellide, muuseumide ja teekonnapunktide kohta avatud andmetena https://openplacereviews.org/data/.\n\nLisateave aadressil https://openplacereviews.org";
+"open_place_reviews_plugin_description" = "Saada fotosid, ülevaateid ja linke avalike kohtade, näiteks restoranide, hotellide, muuseumide ja teekonnapunktide kohta avatud andmetena https://openplacereviews.org/data/.\n\nLisateave aadressil https://openplacereviews.org";
 "product_desc_openplacereviews" = "Saada fotosid, ülevaateid ja linke avalike kohtade kohta";
 "open_place_reviews" = "OpenPlaceReviews";
-"product_desc_ext_mapillary" = "Veebis tänavataseme fotod kõigile. Avasta kohti, tee kaastööd, jäädvusta maailma.";
+"plugin_mapillary_descr" = "Veebis tänavataseme fotod kõigile. Avasta kohti, tee kaastööd, jäädvusta maailma.";
 "product_desc_mapillary" = "Tänavatasemel fotod veebis kõigile";
 "population_num" = "Rahvaarv";
 "shared_string_feet" = "jalad";
@@ -2272,7 +2272,7 @@
 "delete_tracks_bottom_sheet_description_bold_part" = "%d rada?";
 "context_menu_edit_descr" = "Muuda kirjeldust";
 "add_description" = "Lisa kirjeldus";
-"product_desc_ext_weather" = "Ilma pistikprogramm pakub\n- 5 kihti... 24h tunnipõhine prognoos ja 7 päeva prognoos iga 3 tunni järel\n- asukohapõhised vidinad\n- temperatuuri / rõhu isojooned\nIlmaandmeid pakub GFS https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast.";
+"weather_plugin_description" = "Ilma pistikprogramm pakub\n- 5 kihti... 24h tunnipõhine prognoos ja 7 päeva prognoos iga 3 tunni järel\n- asukohapõhised vidinad\n- temperatuuri / rõhu isojooned\nIlmaandmeid pakub GFS https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast.";
 "weather_temperature_fahrenheit" = "F";
 "select_tracks" = "Vali rajad";
 "map_settings_weather_wind" = "Tuul";
@@ -2378,7 +2378,7 @@
 "toast_empty_name_error" = "Nimetu asukoht";
 "purchases_feature_desc_osmand_cloud" = "Hangi OsmAnd Cloud, et salvestada kõik OsmAnd\'i andmed pilves, et säilitada andmed pärast rakenduse uuesti paigaldamist. Varunda ja taasta kogu info hõlpsasti.";
 "shared_string_capacity" = "Mahutavus";
-"product_desc_ext_development" = "Arendus- ja silumisfunktsioonide seadistused, nagu teekonna simulatsioon, visualiseerimise jõudlus või hääljuhiste testimine. Need seaded on mõeldud arendajatele ja pole tavakasutaja jaoks vajalikud.";
+"osmand_development_plugin_description" = "Arendus- ja silumisfunktsioonide seadistused, nagu teekonna simulatsioon, visualiseerimise jõudlus või hääljuhiste testimine. Need seaded on mõeldud arendajatele ja pole tavakasutaja jaoks vajalikud.";
 "routeInfo_horse_scale_name" = "Hobuseradade raskusaste";
 "debugging_and_development" = "OsmAnd arendus";
 "manage_subscription" = "Halda tellimusi";
@@ -2505,4 +2505,3 @@
 "routing_attr_length_description" = "Täpsusta marsruutidel lubatud sõiduki pikkus.";
 "auth_failed" = "Autoriseerimine ebaõnnestus";
 "download_wikipedia_data" = "Laadi alla Vikipeedia andmed";
-

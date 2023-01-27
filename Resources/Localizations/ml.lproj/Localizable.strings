@@ -1605,31 +1605,31 @@
 "reminder_not_set_text" = "The reminder was not set since you are not allowed access to the Calendar";
 
 //inapps
-"product_title_nautical" = "Nautical map";
+"plugin_nautical_name" = "Nautical map";
 "product_desc_nautical" = "Nautical map of all world";
-"product_desc_ext_nautical" = "OsmAnd Nautical Charts is a plugin for OsmAnd Maps & Navigation app. It is a detailed graphical representation of oceans, seas, coastal areas and rivers. The charts can contain various information like sailing routes, navigation lights, dangerous areas, areas where it's allowed or not allowed to sail or dock, etc.\n\nUsage Instructions: it is highly recommended to download nautical basemap in order to see the maps regardless of detailed map presence. To turn on Nautical charts, tap the map button and set map type to Nautical.\n\nNote: All professional sailors are obliged to have official nautical charts on their ships.\n\nOsmAnd Nautical charts are based on the data from OpenSeaMap project. While OpenSeaMap charts at the moment cannot compete with official nautical charts, they can be used by recreational sailors for orientation or route planning.";
+"plugin_nautical_descr" = "OsmAnd Nautical Charts is a plugin for OsmAnd Maps & Navigation app. It is a detailed graphical representation of oceans, seas, coastal areas and rivers. The charts can contain various information like sailing routes, navigation lights, dangerous areas, areas where it's allowed or not allowed to sail or dock, etc.\n\nUsage Instructions: it is highly recommended to download nautical basemap in order to see the maps regardless of detailed map presence. To turn on Nautical charts, tap the map button and set map type to Nautical.\n\nNote: All professional sailors are obliged to have official nautical charts on their ships.\n\nOsmAnd Nautical charts are based on the data from OpenSeaMap project. While OpenSeaMap charts at the moment cannot compete with official nautical charts, they can be used by recreational sailors for orientation or route planning.";
 
-"product_title_parking" = "Parking Position";
+"osmand_parking_plugin_name" = "Parking Position";
 "product_desc_parking" = "Let you easily memorize when the car was parked and how much time left if the parking is limited by time";
-"product_desc_ext_parking" = "OsmAnd Parking Plugin reminds you of your parking position. It is a plugin for OsmAnd Maps&Navigation app.\nChoose a time-independent reminder (only a marker on the map) or a time-limited one with alarm upon time expiration (includes also a marker on the map). To use the plugin, enable it in the Plugins menu.";
+"osmand_parking_plugin_description" = "OsmAnd Parking Plugin reminds you of your parking position. It is a plugin for OsmAnd Maps&Navigation app.\nChoose a time-independent reminder (only a marker on the map) or a time-limited one with alarm upon time expiration (includes also a marker on the map). To use the plugin, enable it in the Plugins menu.";
 
 "plugin_ski_name" = "സ്കീ ഭൂപടവിന്യാസം";
 "product_desc_skimap" = "Ski slopes for all ski resorts in the world";
 "plugin_ski_descr" = "OsmAnd Ski Maps is a plugin to OsmAnd Maps&Navigation app designed to navigate at winter sports locations. It gives the information about ski pistes, ski lift markers and even colored lines indicating the complexity of each track. You get the info about ski tracks themselves as well as the surrounding infrastructure.\n\nUsage Instructions: Enable the plugin in OsmAnd application, tap the map button and set the map type to Ski maps.";
 
-"monitoring_settings" = "സഞ്ചാരം രേഖപെടുത്തുന്നു";
+"record_plugin_name" = "സഞ്ചാരം രേഖപെടുത്തുന്നു";
 "product_desc_track_recording" = "Activates the functionality to record and save your tracks";
-"product_desc_ext_track_recording" = "Record your tracks and save them manually using OsmAnd Track recording plugin. Export your track as a gpx file, share it or even use it to contribute to OpenStreetMap project.  A handy tool for runners, hikers and anyone interested in recording their tracks.";
+"record_plugin_description" = "Record your tracks and save them manually using OsmAnd Track recording plugin. Export your track as a gpx file, share it or even use it to contribute to OpenStreetMap project.  A handy tool for runners, hikers and anyone interested in recording their tracks.";
 
 "osm_editing_plugin_name" = "ഓഎസ്എം തിരുത്തലുകള്‍";
 "product_desc_osm_editing" = "Make changes to OpenStreetMap directly from OsmAnd";
 "osm_editing_plugin_description" = "\"ഈ OSM കോണ്ട്രിബൂഷന്‍ പ്ലഗിൻ ഉപയോഗിച്ച് ഒഎസ്എം POI ഒബ്ജക്റ്റുകൾ സൃഷ്ടിക്കുക, പരിഷ്കരിക്കുക, OSM Notes തുറക്കുകയും അഭിപ്രായമിടുകയുംറിക്കോഡ് ചെയ്ത GPX ഫയലുകൾ സംഭാവന ചെയ്യുകയും ചെയ്യാം. OSM ഒരു  ആഗോള  പബ്ലിക് ഡൊമെയ്ൻ - പങ്കാളിത്ത മാപ്പിംഗ് പ്രോജക്ട് ആണ്. കൂടുതൽ വിവരങ്ങൾക്ക് https://openstreetmap.org സന്ദർശിക്കുക. സജീവ പങ്കാളിത്തം വിലമതിക്കപ്പെടുന്നു, കൂടാതെ താങ്കളുടെ വ്യക്തിഗത OSM ക്രെഡൻഷ്യലുകൾ ആപ്ലിക്കേഷനിൽ വ്യക്തമാക്കിയിട്ടുണ്ടെങ്കിൽ, OSM സംഭാവനകൾ നേരിട്ട് നൽകാവുന്നതാണ്.\"";
 "product_desc_mapillary" = "Online street-level photos for everyone";
-"product_desc_ext_mapillary" = "എല്ലാവർക്കുമായി ഓൺലൈൻ സ്ട്രീറ്റ്-ലെവൽ ഫോട്ടോകൾ. സ്ഥലങ്ങൾ കണ്ടെത്തുക, സഹകരിക്കുക, ലോകം ചിത്രത്തിലാക്കുക.";
+"plugin_mapillary_descr" = "എല്ലാവർക്കുമായി ഓൺലൈൻ സ്ട്രീറ്റ്-ലെവൽ ഫോട്ടോകൾ. സ്ഥലങ്ങൾ കണ്ടെത്തുക, സഹകരിക്കുക, ലോകം ചിത്രത്തിലാക്കുക.";
 
 "open_place_reviews" = "OpenPlaceReviews";
 "product_desc_openplacereviews" = "Send photos, reviews, and links about public places";
-"product_desc_ext_openplacereviews" = "Send photos, reviews, and links about public places such as restaurants, hotels, museums, and waypoints as open data https://openplacereviews.org/data/.\n\nRead more at https://openplacereviews.org";
+"open_place_reviews_plugin_description" = "Send photos, reviews, and links about public places such as restaurants, hotels, museums, and waypoints as open data https://openplacereviews.org/data/.\n\nRead more at https://openplacereviews.org";
 "product_desc_africa" = "Unlimited map downloads for Africa";
 "product_desc_antarctica" = "Unlimited map downloads for Antarctica";
 "product_desc_africa_short" = "Africa region maps";
@@ -1652,7 +1652,7 @@
 
 "download_wikipedia_maps" = "വിക്കിപീഡിയ";
 "product_desc_wiki" = "Wikipedia data";
-"product_desc_ext_wiki" = "Get information about points of interest from Wikipedia. It is your pocket offline guide - just enable Wikipedia plugin and enjoy articles about objects around you.";
+"purchases_feature_desc_wikipedia" = "Get information about points of interest from Wikipedia. It is your pocket offline guide - just enable Wikipedia plugin and enjoy articles about objects around you.";
 "shared_string_all_languages" = "All languages";
 "select_wikipedia_article_langs" = "Select the languages in which Wikipedia articles will appear on the map. You can switch between all available languages while reading the article.";
 "wiki_menu_download_descr" = "Additional maps are needed to view Wikipedia POIs on the map.";
@@ -1660,9 +1660,9 @@
 "available_languages" = "Available languages";
 "preferred_languages" = "Preferred languages";
 
-"download_srtm_maps" = "കോണ്ടൂര്‍ ലൈനുക";
+"srtm_plugin_name" = "കോണ്ടൂര്‍ ലൈനുക";
 "product_desc_srtm" = "Display of contour lines";
-"product_desc_ext_srtm" = "This plugin provides contour lines and hillshade, which can be displayed in OsmAnd offline maps. Contour lines provide the information about heights of the area while hillshade is their visualization. See the names of mountain peaks and specific features of terrain using this plugin.\n\nThe global data (between 70 degrees north and 70 degrees south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA's Earth Observing System. ASTER is a cooperative effort between NASA, Japan's Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
+"srtm_plugin_description" = "This plugin provides contour lines and hillshade, which can be displayed in OsmAnd offline maps. Contour lines provide the information about heights of the area while hillshade is their visualization. See the names of mountain peaks and specific features of terrain using this plugin.\n\nThe global data (between 70 degrees north and 70 degrees south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA's Earth Observing System. ASTER is a cooperative effort between NASA, Japan's Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
 
 "wikivoyage_travel_guide" = "യാത്ര സഹായികള്‍";
 "start_editing_card_image_text" = "ആർക്കും എഡിറ്റുചെയ്യാൻ കഴിയുന്ന സ്വതന്ത്ര ലോകവ്യാപക യാത്ര ഗൈഡ്.";
@@ -2407,7 +2407,7 @@
 "debugging_and_development" = "ഓഎസ്എം ആന്റ് വികസനം";
 "altitude_ascent" = "കയറ്റം";
 "restore_purchases" = "വാങ്ങലുകൾ പുനഃസ്ഥാപിക്കുക";
-"product_desc_ext_development" = "\"റൂട്ടിംഗ്, സ്ക്രീൻ റെൻഡറിംഗ് പ്രകടനം, അല്ലെങ്കിൽ വോയ്സ് പ്രോംപ്റ്റിംഗ് എന്നിവ പരിശോധിക്കുന്നതിനോ മെച്ചപ്പെടുത്തുന്നതിനോ ഉള്ള ഡെവലപ്മെന്റ്, ഡീബഗ്ഗിംഗ് ഫീച്ചറുകൾക്കായുള്ള ക്രമീകരണങ്ങള്‍ കാണിക്കുന്ന പ്ലഗിൻ  . ഈ ക്രമീകരണങ്ങൾ ഡെവലപ്പർമാർക്ക് ഉദ്ദേശിച്ചതും പൊതു ഉപയോക്താവിനായി ആവശ്യമില്ലാത്തതുമാണ്.\"";
+"osmand_development_plugin_description" = "\"റൂട്ടിംഗ്, സ്ക്രീൻ റെൻഡറിംഗ് പ്രകടനം, അല്ലെങ്കിൽ വോയ്സ് പ്രോംപ്റ്റിംഗ് എന്നിവ പരിശോധിക്കുന്നതിനോ മെച്ചപ്പെടുത്തുന്നതിനോ ഉള്ള ഡെവലപ്മെന്റ്, ഡീബഗ്ഗിംഗ് ഫീച്ചറുകൾക്കായുള്ള ക്രമീകരണങ്ങള്‍ കാണിക്കുന്ന പ്ലഗിൻ  . ഈ ക്രമീകരണങ്ങൾ ഡെവലപ്പർമാർക്ക് ഉദ്ദേശിച്ചതും പൊതു ഉപയോക്താവിനായി ആവശ്യമില്ലാത്തതുമാണ്.\"";
 "altitude_descent" = "ഇറക്കം";
 "osm_live_subscriptions" = "സബ്സ്ക്രിപ്ഷനുകള്‍";
 "shared_string_undefined" = "നിഷ്കര്‍ഷിക്കപെടാത്തത്";
@@ -2428,4 +2428,3 @@
 "position_on_map_bottom" = "താഴെ";
 "auth_failed" = "\"പ്രവേശനാനുമതി കിട്ടിയില്ല \"";
 "download_wikipedia_data" = "\"വിക്കിപ്പീഡിയ വിവരങ്ങള്‍ ഡൗണ്‍ലോഡ്  ചെയ്യുക \"";
-

@@ -75,12 +75,12 @@
 "shared_string_download" = "Hent";
 "shared_string_no_thanks" = "Nej tak";
 //inapps
-"product_title_nautical" = "Søkort";
+"plugin_nautical_name" = "Søkort";
 "product_desc_nautical" = "Vektorkort, der er egnede til navigation på sejlruter";
-"product_title_parking" = "Parkering";
+"osmand_parking_plugin_name" = "Parkering";
 "plugin_ski_name" = "Skikort";
 "product_desc_skimap" = "Opdateret kort over skispor med lifte og pister";
-"monitoring_settings" = "Optagelse af tur";
+"record_plugin_name" = "Optagelse af tur";
 "product_desc_track_recording" = "Optag og gem dine ture som GPX-spor";
 "index_name_africa" = "Afrika";
 "product_desc_africa" = "Ubegrænset hentning af kort over Afrika";
@@ -289,7 +289,7 @@
 "res_installing" = "Installation…";
 "download_wikipedia_maps" = "Wikipedia";
 "product_desc_wiki" = "Placeringsbaserede Wikipedia-artikler på kortet";
-"download_srtm_maps" = "Højdekurver";
+"srtm_plugin_name" = "Højdekurver";
 "product_desc_srtm" = "Visuel bedømmelse af terrænets form";
 "roads" = "Veje";
 "select_language" = "Vælg sprog";
@@ -360,12 +360,12 @@
 "plugin_popup_nautical_title" = "Hent søkort";
 "plugin_popup_nautical_desc" = "Hent først søkort.\nGå til <b>Indstillinger for kort</b> > <b>kort type</b> og aktiver <b>Søkort</b> format";
 "go_to_downloads" = "Hent";
-"product_desc_ext_nautical" = "Slå til for at berige dit kort med oplysninger om sejlruter, navigationslys, farligezoner, områder, hvor det er tilladt eller forbudt at sejle eller lægge til, osv. For at bruge dette skal du hente nautiske kort og aktivere Søkort-typen i \"Konfigurer kort\".\n\nVejledning - https://osmand.net/docs/user/plugins/nautical-charts";
-"product_desc_ext_parking" = "Aktivér for at lave et punkt på kortet, hvor din bil står på gaden, og giv besked til din kalender, når parkeringstiden begynder. Udvidelsen hjælper med at holde styr på parkeringstiden og placeringen af din bil. For at placere en markør skal du vælge et sted på kortet, gå til Handlinger og tryk på \"Tilføj parkering\".";
+"plugin_nautical_descr" = "Slå til for at berige dit kort med oplysninger om sejlruter, navigationslys, farligezoner, områder, hvor det er tilladt eller forbudt at sejle eller lægge til, osv. For at bruge dette skal du hente nautiske kort og aktivere Søkort-typen i \"Konfigurer kort\".\n\nVejledning - https://osmand.net/docs/user/plugins/nautical-charts";
+"osmand_parking_plugin_description" = "Aktivér for at lave et punkt på kortet, hvor din bil står på gaden, og giv besked til din kalender, når parkeringstiden begynder. Udvidelsen hjælper med at holde styr på parkeringstiden og placeringen af din bil. For at placere en markør skal du vælge et sted på kortet, gå til Handlinger og tryk på \"Tilføj parkering\".";
 "plugin_ski_descr" = "Designet til at navigere i vintersportsområder: Se skipister, skilifter og langrendsspor med farvede linjer, der angiver sværhedsgraden. Hvis du vil gøre brug af dette, skal du aktivere denne udvidelse og også gå til \"Konfigurer kort\" og vælge kortstilen \"Vinter og ski\".";
-"product_desc_ext_track_recording" = "Giver dig mulighed for at registrere, gemme og analysere dine trænings- eller bevægelsesdata, f.eks. hastighed, stigninger, nedstigninger eller ruteprofil, som du derefter kan genbruge, forbedre, supplere eller dele med venner.\n\nVejledning - https://osmand.net/docs/user/plugins/trip-recording";
-"product_desc_ext_wiki" = "Med offline Wikipedia på din rejse kan du lære mere om de steder, du besøger. Den er tilgængelig offline og viser Wikipedia-artikler om interessepunkter direkte på kortet. Glem ikke at downloade Wikipedia-kort for den valgte region.";
-"product_desc_ext_srtm" = "Terrænoplysninger, f.eks. højdekurver, bakkeskygger og skråninger, hjælper dig med at vurdere terrænets form visuelt, idet du tager højde for krumning, ekstremer, stejlhed, punkter med samme højde og meget mere. Topografiske oplysninger på et kort kan repræsenteres ved skravering af skråninger, konturlinjer for op- og nedstigninger og farven på skråningsvinklens afvigelse fra det flade. Data fra SRTM og ASTER.\n\nVejledning - https://osmand.net/docs/user/plugins/contour-lines";
+"record_plugin_description" = "Giver dig mulighed for at registrere, gemme og analysere dine trænings- eller bevægelsesdata, f.eks. hastighed, stigninger, nedstigninger eller ruteprofil, som du derefter kan genbruge, forbedre, supplere eller dele med venner.\n\nVejledning - https://osmand.net/docs/user/plugins/trip-recording";
+"purchases_feature_desc_wikipedia" = "Med offline Wikipedia på din rejse kan du lære mere om de steder, du besøger. Den er tilgængelig offline og viser Wikipedia-artikler om interessepunkter direkte på kortet. Glem ikke at downloade Wikipedia-kort for den valgte region.";
+"srtm_plugin_description" = "Terrænoplysninger, f.eks. højdekurver, bakkeskygger og skråninger, hjælper dig med at vurdere terrænets form visuelt, idet du tager højde for krumning, ekstremer, stejlhed, punkter med samme højde og meget mere. Topografiske oplysninger på et kort kan repræsenteres ved skravering af skråninger, konturlinjer for op- og nedstigninger og farven på skråningsvinklens afvigelse fra det flade. Data fra SRTM og ASTER.\n\nVejledning - https://osmand.net/docs/user/plugins/contour-lines";
 "plugin_popup_wiki_ask" = "For at hente Wikipedia data, aktiver udvidelsen: <b>Wikipedia</b>";
 "plugin_popup_srtm_ask" = "For at hente højdekurver skal du aktivere udvidelsen: <b>Højdekurver</b>";
 "turn_on_plugin" = "Aktiver udvidelse";
@@ -1921,7 +1921,7 @@
 "dialogs_and_notifications_descr" = "Administrer pop-op-indstillinger, dialogbokse og meddelelser.";
 "road_speeds_descr" = "Disse parametre kan påvirke ruteberegningen.";
 "send_anonymous_data_desc" = "Send til OsmAnd kort-downloadstatistik, vi indsamler ikke placeringsdata eller andre personlige oplysninger.";
-"product_desc_ext_mapillary" = "Giver billeder på gadeniveau. Hvis der mangler billeder, kan du selv tilføje dem, så andre kan gøre brug af dem. For at aktivere Mapillary-laget skal du slå \"Fotos på gadeniveau\" til i menuen Konfigurer kort.";
+"plugin_mapillary_descr" = "Giver billeder på gadeniveau. Hvis der mangler billeder, kan du selv tilføje dem, så andre kan gøre brug af dem. For at aktivere Mapillary-laget skal du slå \"Fotos på gadeniveau\" til i menuen Konfigurer kort.";
 "added_profiles" = "Tilføjede profiler";
 "shared_string_wifi_only" = "Kun med Wi-Fi";
 "gpxup_private" = "Privat";
@@ -2030,7 +2030,7 @@
 "unsupported_action_title" = "Handlingen understøttes ikke (%@)";
 "unsupported_action" = "Handling ikke understøttet";
 "product_desc_mapillary" = "Billeder på gadeniveau til at tjekke omgivelserne";
-"product_desc_ext_openplacereviews" = "Giver dig mulighed for at bidrage til OpenPlaceReviews-projektet med f.eks. fotos, anmeldelser, links om offentlige steder som restauranter, hoteller, museer og ruterpunkter.\n\nDu kan finde vejledning om, hvordan du bidrager, på vores websted - https://osmand.net/docs/user/plugins/openplacereviews";
+"open_place_reviews_plugin_description" = "Giver dig mulighed for at bidrage til OpenPlaceReviews-projektet med f.eks. fotos, anmeldelser, links om offentlige steder som restauranter, hoteller, museer og ruterpunkter.\n\nDu kan finde vejledning om, hvordan du bidrager, på vores websted - https://osmand.net/docs/user/plugins/openplacereviews";
 "plugin_popup_osm_editing_ask" = "Aktiver udvidelse til redigering af OpenStreetMap for at tilføje og administrere kortredigeringer og noter";
 "key_hint_recenter_map" = "Centrer kortet igen";
 "select_application_profile" = "Vælg applikationsprofil";
@@ -2353,7 +2353,7 @@
 "osmand_cloud_login_descr" = "Indtast den e-mailadresse, du har registreret dig med. Der vil blive sendt en engangskode til det næste trin til den.";
 "plugin_popup_weather_ask" = "Aktiver venligst vejr-udvidelse";
 "product_desc_weather" = "24-timers prognose 7 dage frem på kortet";
-"product_desc_ext_weather" = "Aktiver vejrudvidelsen for at planlægge en rute under hensyntagen til vejret. Se det farvede kort over vejrudsigten, som opdateres hver time for i dag, i morgen og den kommende uge.\n\nMens du rejser, kan du se lokalitetsbaserede info-moduler med temperatur, nedbør, vindhastighed og lufttryk.\n\nVil være nyttigt til vandreture og lange ture på cykel eller motorcykel.";
+"weather_plugin_description" = "Aktiver vejrudvidelsen for at planlægge en rute under hensyntagen til vejret. Se det farvede kort over vejrudsigten, som opdateres hver time for i dag, i morgen og den kommende uge.\n\nMens du rejser, kan du se lokalitetsbaserede info-moduler med temperatur, nedbør, vindhastighed og lufttryk.\n\nVil være nyttigt til vandreture og lange ture på cykel eller motorcykel.";
 "weather_wind_knots" = "Knob";
 "weather_wind_kilimeters_per_hour" = "Kilometer i timen";
 "weather_precip_milimeters" = "Millimeter";
@@ -2435,7 +2435,7 @@
 "simulate_location_movement_speed_x4_desc" = "Bevægelseshastigheden af placeringen under simuleringen vil være det firedobbelte af hastigheden i den valgte fil.";
 "debugging_and_development" = "OsmAnd udvikling";
 "product_desc_development" = "For udviklere og erfarne brugere";
-"product_desc_ext_development" = "Gør det muligt at konfigurere OsmAnd til test: simulere navigationsruter, kontrollere skærmens gengivelse osv. Udvidelse er ikke påkrævet for normal brug af applikationen.";
+"osmand_development_plugin_description" = "Gør det muligt at konfigurere OsmAnd til test: simulere navigationsruter, kontrollere skærmens gengivelse osv. Udvidelse er ikke påkrævet for normal brug af applikationen.";
 "osmand_depelopment_simulate_location_section" = "Simulér";
 "simulate_your_location_gpx_descr" = "Simuler positionen ved hjælp af et optaget GPX-spor.";
 "simulate_location_track_select_descr" = "Vælg spor, der skal bruges som kilde til bevægelse af placering.";
@@ -2798,5 +2798,3 @@
 "rendering_attr_showMtbScaleUphill_description" = "Vis spor efter MTB-skala op ad bakke.";
 "shared_string_does_not_exist" = "Eksisterer ikke";
 "download_wikipedia_data" = "Hent Wikipedia-data";
-
-

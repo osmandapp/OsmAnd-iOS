@@ -1546,28 +1546,28 @@
 "reminder_not_set_text" = "The reminder was not set since you are not allowed access to the Calendar";
 
 //inapps
-"product_title_nautical" = "Nautical map";
+"plugin_nautical_name" = "Nautical map";
 "product_desc_nautical" = "Nautical map of all world";
-"product_desc_ext_nautical" = "OsmAnd Nautical Charts is a plugin for OsmAnd Maps & Navigation app. It is a detailed graphical representation of oceans, seas, coastal areas and rivers. The charts can contain various information like sailing routes, navigation lights, dangerous areas, areas where it's allowed or not allowed to sail or dock, etc.\n\nUsage Instructions: it is highly recommended to download nautical basemap in order to see the maps regardless of detailed map presence. To turn on Nautical charts, tap the map button and set map type to Nautical.\n\nNote: All professional sailors are obliged to have official nautical charts on their ships.\n\nOsmAnd Nautical charts are based on the data from OpenSeaMap project. While OpenSeaMap charts at the moment cannot compete with official nautical charts, they can be used by recreational sailors for orientation or route planning.";
-"product_title_parking" = "Parking Position";
+"plugin_nautical_descr" = "OsmAnd Nautical Charts is a plugin for OsmAnd Maps & Navigation app. It is a detailed graphical representation of oceans, seas, coastal areas and rivers. The charts can contain various information like sailing routes, navigation lights, dangerous areas, areas where it's allowed or not allowed to sail or dock, etc.\n\nUsage Instructions: it is highly recommended to download nautical basemap in order to see the maps regardless of detailed map presence. To turn on Nautical charts, tap the map button and set map type to Nautical.\n\nNote: All professional sailors are obliged to have official nautical charts on their ships.\n\nOsmAnd Nautical charts are based on the data from OpenSeaMap project. While OpenSeaMap charts at the moment cannot compete with official nautical charts, they can be used by recreational sailors for orientation or route planning.";
+"osmand_parking_plugin_name" = "Parking Position";
 "product_desc_parking" = "Let you easily memorize when the car was parked and how much time left if the parking is limited by time";
-"product_desc_ext_parking" = "OsmAnd Parking Plugin reminds you of your parking position. It is a plugin for OsmAnd Maps&Navigation app.\nChoose a time-independent reminder (only a marker on the map) or a time-limited one with alarm upon time expiration (includes also a marker on the map). To use the plugin, enable it in the Plugins menu.";
+"osmand_parking_plugin_description" = "OsmAnd Parking Plugin reminds you of your parking position. It is a plugin for OsmAnd Maps&Navigation app.\nChoose a time-independent reminder (only a marker on the map) or a time-limited one with alarm upon time expiration (includes also a marker on the map). To use the plugin, enable it in the Plugins menu.";
 "plugin_ski_name" = "Golwg map sgïo";
 "product_desc_skimap" = "Ski slopes for all ski resorts in the world";
 "plugin_ski_descr" = "Mae\'r ategyn hwn ar gyfer OsmAnd yn rhoi manylion llethrau sgïo lawr allt fyd-eang, rhediadau sgïo traws gwlad, llwybrau sgïo Alpaidd, ceir cebl a lifftiau sgïo ar flaenau eich bysedd. Mae llwybrau a pistes yn cael eu dangos â chod lliw yn ôl anhawster, a\'u darlunio mewn arddull map \'Gaeaf\' arbennig sy\'n cymathu tirwedd aeafol lliw eira.
 \n
 \nMae agor yr olwg hon yn newid arddull y map i \'Gaeaf a sgïo\', gan ddangos holl nodweddion y dirwedd dan amodau gaeafol. Gellir dychwelyd y wedd hon trwy naill ai ei gau eto yma, neu trwy newid yr \'Arddull Map\' o dan \'Ffurfweddu map\' fel y dymunir.";
-"monitoring_settings" = "Recordio teithiau";
+"record_plugin_name" = "Recordio teithiau";
 "product_desc_track_recording" = "Activates the functionality to record and save your tracks";
-"product_desc_ext_track_recording" = "Record your tracks and save them manually using OsmAnd Track recording plugin. Export your track as a gpx file, share it or even use it to contribute to OpenStreetMap project.  A handy tool for runners, hikers and anyone interested in recording their tracks.";
+"record_plugin_description" = "Record your tracks and save them manually using OsmAnd Track recording plugin. Export your track as a gpx file, share it or even use it to contribute to OpenStreetMap project.  A handy tool for runners, hikers and anyone interested in recording their tracks.";
 "osm_editing_plugin_name" = "Golygu OpenStreetMap";
 "product_desc_osm_editing" = "Make changes to OpenStreetMap directly from OsmAnd";
 "osm_editing_plugin_description" = "Gwnewch gyfraniadau OSM fel creu neu addasu gwrthrychau OSM POI, agor neu roi sylwadau ar nodiadau OSM, a chyfrannu ffeiliau GPX wedi\'u recordio yn OsmAnd trwy gyflenwi\'ch enw defnyddiwr a\'ch cyfrinair. Mae OpenStreetMap.org yn brosiect mapio parth cyhoeddus byd-eang a yrrir gan y gymuned.";
 "product_desc_mapillary" = "Online street-level photos for everyone";
-"product_desc_ext_mapillary" = "Lluniau lefel stryd ar-lein i bawb. Darganfod lleoedd, cydweithio, cipio\'r byd.";
+"plugin_mapillary_descr" = "Lluniau lefel stryd ar-lein i bawb. Darganfod lleoedd, cydweithio, cipio\'r byd.";
 "open_place_reviews" = "OpenPlaceReviews";
 "product_desc_openplacereviews" = "Send photos, reviews, and links about public places";
-"product_desc_ext_openplacereviews" = "Send photos, reviews, and links about public places such as restaurants, hotels, museums, and waypoints as open data https://openplacereviews.org/data/.\n\nRead more at https://openplacereviews.org";
+"open_place_reviews_plugin_description" = "Send photos, reviews, and links about public places such as restaurants, hotels, museums, and waypoints as open data https://openplacereviews.org/data/.\n\nRead more at https://openplacereviews.org";
 "product_desc_africa" = "Unlimited map downloads for Africa";
 "product_desc_antarctica" = "Unlimited map downloads for Antarctica";
 "product_desc_africa_short" = "Africa region maps";
@@ -1589,16 +1589,16 @@
 "product_desc_asia_short" = "Asia region maps";
 "download_wikipedia_maps" = "Wicipedia";
 "product_desc_wiki" = "Wikipedia data";
-"product_desc_ext_wiki" = "Get information about points of interest from Wikipedia. It is your pocket offline guide - just enable Wikipedia plugin and enjoy articles about objects around you.";
+"purchases_feature_desc_wikipedia" = "Get information about points of interest from Wikipedia. It is your pocket offline guide - just enable Wikipedia plugin and enjoy articles about objects around you.";
 "shared_string_all_languages" = "Pob iaith";
 "select_wikipedia_article_langs" = "Dewiswch iaith erthyglau Wicipedia ar y map.Newidiwch i unrhyw iaith sydd ar gael wrth ddarllen yr erthygl.";
 "wiki_menu_download_descr" = "Mae angen mapiau ychwanegol i weld POIs Wicipedia ar y map.";
 "some_articles_may_not_available_in_lang" = "Efallai na fydd rhai erthyglau Wicipedia ar gael yn eich iaith.";
 "available_languages" = "Available languages";
 "preferred_languages" = "Preferred languages";
-"download_srtm_maps" = "Cyfuchliniau";
+"srtm_plugin_name" = "Cyfuchliniau";
 "product_desc_srtm" = "Display of contour lines";
-"product_desc_ext_srtm" = "This plugin provides contour lines and hillshade, which can be displayed in OsmAnd offline maps. Contour lines provide the information about heights of the area while hillshade is their visualization. See the names of mountain peaks and specific features of terrain using this plugin.\n\nThe global data (between 70 degrees north and 70 degrees south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA's Earth Observing System. ASTER is a cooperative effort between NASA, Japan's Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
+"srtm_plugin_description" = "This plugin provides contour lines and hillshade, which can be displayed in OsmAnd offline maps. Contour lines provide the information about heights of the area while hillshade is their visualization. See the names of mountain peaks and specific features of terrain using this plugin.\n\nThe global data (between 70 degrees north and 70 degrees south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA's Earth Observing System. ASTER is a cooperative effort between NASA, Japan's Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
 "wikivoyage_travel_guide" = "Canllawiau Teithio";
 "start_editing_card_image_text" = "Y canllaw teithio byd-eang rhad ac am ddim y gall unrhyw un ei olygu.";
 "wikivoyage_travel_guide_descr" = "Canllawiau i\'r lleoedd mwyaf diddorol ar y blaned, y tu mewn i OsmAnd, heb gysylltiadâ\'r Rhyngrwyd.";
@@ -2368,7 +2368,7 @@
 "purchases_feature_desc_combined_wiki" = "Archwiliwch erthyglau Wicipedia wrth fynd, heb gysylltiad rhyngrwyd. Data all-lein wedi\'i rannu ynôl gwledydd ac ar gael ym mhob iaith.";
 "rendering_attr_showMonorailRoutes_name" = "Llwybrau monorail";
 "altitude_ascent" = "Am i fyny";
-"product_desc_ext_development" = "Gosodiadau ar gyfer nodweddion datblygu a dadfygio, megis efelychu llywio, perfformiad rendro, neu anogaeth llais. Bwriedir ar gyfer datblygwyr, heb fod ei angen wrth ddefnyddio\'r ap mewn dulliau arferol.";
+"osmand_development_plugin_description" = "Gosodiadau ar gyfer nodweddion datblygu a dadfygio, megis efelychu llywio, perfformiad rendro, neu anogaeth llais. Bwriedir ar gyfer datblygwyr, heb fod ei angen wrth ddefnyddio\'r ap mewn dulliau arferol.";
 "rendering_attr_showFunicularRoutes_name" = "Llwybrau ffyniciwlar";
 "unlimited_map_downloads" = "Dim cyfyngiad ar lawrlwytho mapiau";
 "transport_hazmat_no_desc" = "Ar rai ffyrdd a thwneli, mae cludo sylweddau peryglus wedi\'i wahardd.";
@@ -2534,4 +2534,3 @@
 "auth_failed" = "Method dilysiad";
 "mgrs_format_descr" = "Mae OsmAnd yn defnyddio MGRS, sy\'n debyg i fformat NATO UTM.";
 "download_wikipedia_data" = "Llwytho data Wicipedia";
-

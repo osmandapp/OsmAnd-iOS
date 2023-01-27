@@ -794,7 +794,7 @@
 "shared_string_deselect" = "선택 취소";
 "arrival_distance_factor_at_last" = "마지막 미터에서";
 "icon_group_industrial" = "공업";
-"download_srtm_maps" = "등고선";
+"srtm_plugin_name" = "등고선";
 "lang_vi" = "베트남어";
 "shared_string_no_thanks" = "필요없음";
 "rendering_attr_trainLightrailRoutes_name" = "기차 노선";
@@ -851,7 +851,7 @@
 "lang_lb" = "룩셈부르크어";
 "plugins_menu_group" = "플러그인";
 "lang_az" = "아제리어";
-"product_desc_ext_mapillary" = "모든 사람을 위한 거리 기반의 파노라마 영상 서비스. 장소를 탐색하고, 협업하고, 세상을 사로잡습니다.";
+"plugin_mapillary_descr" = "모든 사람을 위한 거리 기반의 파노라마 영상 서비스. 장소를 탐색하고, 협업하고, 세상을 사로잡습니다.";
 "map_widget_renderer" = "지도 스타일";
 "routing_attr_avoid_borders_description" = "타국의 국경 횡단 방지";
 "routing_attr_weight_name" = "중량 제한";
@@ -1121,7 +1121,7 @@
 "debugging_and_development" = "OsmAnd개발";
 "purchases_feature_desc_combined_wiki" = "인터넷 연결 없이 이동 중에 Wikipedia 문서를 탐색하십시오. 오프라인 데이터는 국가별로 구분되어 있으며 모든 언어로 제공됩니다.";
 "purchases_feature_desc_monthly_map_updates" = "오프라인 지도에 대한 정기적인 월간 업데이트에 액세스할 수 있습니다.";
-"product_desc_ext_development" = "모의 주행이나 렌더링 성능 표시와 같은 개발 및 디버깅 기능에 대한 설정을 표시합니다.";
+"osmand_development_plugin_description" = "모의 주행이나 렌더링 성능 표시와 같은 개발 및 디버깅 기능에 대한 설정을 표시합니다.";
 "purchases_feature_desc_hourly_map_updates" = "지도 업데이트에 더 자주 액세스하십시오. 매시간, 매일 또는 매주 업데이트. 업데이트는 변경된 영역에 대해서만 점진적으로 다운로드된다.";
 "complete_purchase" = "구매완료";
 "shared_string_includes" = "포함됨";
@@ -1353,7 +1353,7 @@
 "compass_always_visible" = "항상 표시";
 "co2_mission" = "CO2배출";
 "make_backup" = "백업 만들기";
-"monitoring_settings" = "여행 레코딩";
+"record_plugin_name" = "여행 레코딩";
 "shared_string_logout" = "로그아웃";
 "choose_what_to_restore" = "복원할 항목을 선택합니다.";
 "backup_view_conflicts" = "충돌 보기";
@@ -1429,4 +1429,3 @@
 		\n\n다시 비활성화 하거나, 또는 \'지도 구성\' 의 하위메뉴인  \'지도 스타일\'을 변경하여 보기(View)를 되돌릴 수 있습니다.";
 "plugin_ski_name" = "스키 지도 보기";
 "osm_editing_plugin_name" = "OSM편집";
-

@@ -65,7 +65,7 @@
     if (autoCenter == 0)
         autoCenterValue = OALocalizedString(@"shared_string_never");
     else
-        autoCenterValue = [NSString stringWithFormat:@"%lu %@", (unsigned long)autoCenter, OALocalizedString(@"units_seconds")];
+        autoCenterValue = [NSString stringWithFormat:@"%lu %@", (unsigned long)autoCenter, OALocalizedString(@"int_seconds")];
     
     NSString *autoZoomValue = nil;
     if (![_settings.autoZoomMap get:self.appMode])

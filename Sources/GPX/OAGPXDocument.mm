@@ -72,7 +72,7 @@
     NSString *segmentName = !segment.name || segment.name.length == 0
             ? [NSString stringWithFormat:@"%li", segmentIdx + 1]
             : segment.name;
-    NSString *segmentString = OALocalizedString(@"gpx_segment");
+    NSString *segmentString = OALocalizedString(@"gpx_selection_segment_title");
     return [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_space"), segmentString, segmentName];
 }
 

@@ -181,7 +181,7 @@
 - (void)updateFileSize
 {
     _itemsSize = [self calculateItemsSize:self.getSelectedItems];
-    _fileSize = [NSString stringWithFormat:OALocalizedString(@"approximate_file_size"), [NSByteCountFormatter stringFromByteCount:_itemsSize countStyle:NSByteCountFormatterCountStyleFile]];
+    _fileSize = [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"approximate_file_size"), [NSByteCountFormatter stringFromByteCount:_itemsSize countStyle:NSByteCountFormatterCountStyleFile]];
 }
 
 - (IBAction)primaryButtonPressed:(id)sender

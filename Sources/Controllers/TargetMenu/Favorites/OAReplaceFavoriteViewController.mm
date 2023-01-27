@@ -106,7 +106,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
 - (void) applyLocalization
 {
     [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"fav_replace");
+    self.titleLabel.text = OALocalizedString(@"update_existing");
 }
 
 - (void) generateData

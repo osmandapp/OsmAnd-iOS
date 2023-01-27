@@ -53,7 +53,7 @@
 
 - (NSString *)getPublicName
 {
-    return OALocalizedString(@"search_history");
+    return OALocalizedString(@"shared_string_search_history");
 }
 
 - (BOOL) shouldReadOnCollecting

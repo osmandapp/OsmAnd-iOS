@@ -428,7 +428,7 @@
     BOOL isInvalidEmail = ![_inputText isValidEmail] && _inputText.length > 0;
     if (isInvalidEmail)
     {
-        self.errorMessage = OALocalizedString(@"login_error_email_invalid");
+        self.errorMessage = OALocalizedString(@"osm_live_enter_email");
         [self generateData];
         [self.tableView performBatchUpdates:^{
             [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:1]] withRowAnimation:UITableViewRowAnimationAutomatic];

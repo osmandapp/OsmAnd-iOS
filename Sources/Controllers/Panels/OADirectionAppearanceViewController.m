@@ -50,7 +50,7 @@
 
 - (void) applyLocalization
 {
-    _titleView.text = OALocalizedString(@"map_settings_appearance");
+    _titleView.text = OALocalizedString(@"shared_string_appearance");
 }
 
 - (void) viewDidLoad
@@ -119,7 +119,7 @@
                         @"type" : [OASettingsCheckmarkCell getCellIdentifier],
                         @"section" : kActiveMarkers,
                         @"key" : kOneActiveMarker,
-                        @"title" : OALocalizedString(@"one"),
+                        @"title" : OALocalizedString(@"shared_string_one"),
                         @"img" : [self drawDeviceImage:@"ic_custom_direction_topbar_one" bgColor:UIColorFromRGB(color_chart_orange)],
                         @"img_inactive" : [self drawDeviceImage:@"ic_custom_direction_topbar_one" bgColor:UIColorFromRGB(color_tint_gray)]
                         }];
@@ -128,7 +128,7 @@
                         @"type" : [OASettingsCheckmarkCell getCellIdentifier],
                         @"section" : kActiveMarkers,
                         @"key" : kTwoActiveMarkers,
-                        @"title" : OALocalizedString(@"two"),
+                        @"title" : OALocalizedString(@"shared_string_two"),
                         @"img" : [self drawDeviceImage:@"ic_custom_direction_topbar_two" bgColor:UIColorFromRGB(color_chart_orange)],
                         @"img_inactive" : [self drawDeviceImage:@"ic_custom_direction_topbar_two"  bgColor:UIColorFromRGB(color_tint_gray)]
                         }];
@@ -137,7 +137,7 @@
                         @"type" : [OASwitchTableViewCell getCellIdentifier],
                         @"key" : kDistanceIndication,
                         @"value" : @([_settings.distanceIndicationVisibility get]),
-                        @"title" : OALocalizedString(@"distance_indication"),
+                        @"title" : OALocalizedString(@"show_direction"),
                         }];
     
     [distanceIndicationArr addObject:@{
@@ -328,9 +328,9 @@
         case 0:
             return OALocalizedString(@"active_markers");
         case 1:
-            return OALocalizedString(@"distance_indication");
+            return OALocalizedString(@"show_direction");
         case 2:
-            return OALocalizedString(@"appearance_on_map");
+            return OALocalizedString(@"appearance_on_the_map");
         default:
             return @"";
     }

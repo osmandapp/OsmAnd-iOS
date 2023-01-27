@@ -92,24 +92,24 @@
     [vwController.cancelButton setTitle:OALocalizedString(@"shared_string_close") forState:UIControlStateNormal];
     NSMutableArray *arr = [NSMutableArray array];
     // Directions from here
-    [arr addObject:@{ @"title" : OALocalizedString(@"directions_more_options"),
+    [arr addObject:@{ @"title" : OALocalizedString(@"context_menu_item_directions_from"),
                       @"key" : @"directions_more_options",
                       @"img" : @"ic_action_directions_from",
                       @"type" : [OAMenuSimpleCell getCellIdentifier] } ];
     // Search nearby
-    [arr addObject:@{ @"title" : OALocalizedString(@"nearby_search"),
+    [arr addObject:@{ @"title" : OALocalizedString(@"search_nearby"),
                       @"key" : @"nearby_search",
                       @"img" : @"ic_custom_search",
                       @"type" : [OAMenuSimpleCell getCellIdentifier] } ];
     // Download/Update online map
     if ([_app.data.lastMapSource.resourceId isEqualToString:@"online_tiles"] || [_app.data.lastMapSource.type isEqualToString:@"sqlitedb"])
     {
-        [arr addObject:@{ @"title" : OALocalizedString(@"download_map"),
+        [arr addObject:@{ @"title" : OALocalizedString(@"shared_string_download_map"),
                           @"key" : @"download_map",
                           @"img" : @"ic_custom_download",
                           @"type" : [OAMenuSimpleCell getCellIdentifier] } ];
 
-        [arr addObject:@{ @"title" : OALocalizedString(@"update_map"),
+        [arr addObject:@{ @"title" : OALocalizedString(@"update_tile"),
                           @"key" : @"update_map",
                           @"img" : @"ic_custom_update",
                           @"type" : [OAMenuSimpleCell getCellIdentifier] } ];
@@ -159,14 +159,14 @@
                 if ([_editingAddon isEnabled])
                 {
                     BOOL createNewPoi = (_targetPoint.obfId == 0 && _targetPoint.type != OATargetTransportStop && _targetPoint.type != OATargetOsmEdit) || _targetPoint.type == OATargetOsmNote;
-                    [arr addObject:@{ @"title" : createNewPoi ? OALocalizedString(@"create_poi_short") : _targetPoint.type == OATargetOsmEdit ?
-                                      OALocalizedString(@"modify_edit_short") : OALocalizedString(@"modify_poi_short"),
+                    [arr addObject:@{ @"title" : createNewPoi ? OALocalizedString(@"context_menu_item_create_poi") : _targetPoint.type == OATargetOsmEdit ?
+                                      OALocalizedString(@"poi_context_menu_modify_osm_change") : OALocalizedString(@"poi_context_menu_modify"),
                                       @"key" : @"addon_edit_poi_modify",
                                       @"img" : createNewPoi ? @"ic_action_create_poi" : @"ic_custom_edit",
                                       @"type" : [OAMenuSimpleCell getCellIdentifier] }];
                     
                     BOOL editOsmNote = _targetPoint.type == OATargetOsmNote;
-                    [arr addObject:@{ @"title" : editOsmNote ? OALocalizedString(@"edit_osm_note") : OALocalizedString(@"open_osm_note"),
+                    [arr addObject:@{ @"title" : editOsmNote ? OALocalizedString(@"edit_osm_note") : OALocalizedString(@"context_menu_item_open_note"),
                                       @"key" : @"addon_edit_poi_create_note",
                                       @"img" : editOsmNote ? @"ic_custom_edit" : @"ic_action_add_osm_note",
                                       @"type" : [OAMenuSimpleCell getCellIdentifier]}];
@@ -352,12 +352,12 @@
         else if ([key isEqualToString:@"addon_edit_poi_modify"] && _editingAddon)
         {
             [mapPanel targetHide];
-            if ([item[@"title"] isEqualToString:OALocalizedString(@"create_poi_short")])
+            if ([item[@"title"] isEqualToString:OALocalizedString(@"context_menu_item_create_poi")])
             {
                 OAOsmEditingViewController *editingScreen = [[OAOsmEditingViewController alloc] initWithLat:_targetPoint.location.latitude lon:_targetPoint.location.longitude];
                 [mapPanel.navigationController pushViewController:editingScreen animated:YES];
             }
-            else if ([item[@"title"] isEqualToString:OALocalizedString(@"modify_poi_short")])
+            else if ([item[@"title"] isEqualToString:OALocalizedString(@"poi_context_menu_modify")])
             {
                 OAMapViewController *mapVC = [OARootViewController instance].mapPanel.mapViewController;
                 [mapVC showProgressHUDWithMessage:OALocalizedString(@"osm_editing_loading_poi")];

@@ -88,7 +88,7 @@
     NSMutableArray *otherArr = [NSMutableArray array];
     [navigationArr addObject:@{
         @"type" : [OAIconTitleValueCell getCellIdentifier],
-        @"title" : OALocalizedString(@"nav_type_title"),
+        @"title" : OALocalizedString(@"nav_type_hint"),
         @"value" : routingData ? routingData.name : @"",
         @"icon" : routingData ? routingData.iconName : @"ic_custom_navigation",
         @"key" : @"navigationType",
@@ -302,7 +302,7 @@
         case 0:
             return OALocalizedString(@"routing_settings");
         case 1:
-            return OALocalizedString(@"help_other_header");
+            return OALocalizedString(@"other_location");
         default:
             return @"";
     }

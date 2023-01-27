@@ -119,7 +119,7 @@
 
 - (void)applyLocalization
 {
-    self.titleLabel.text = _isLogged ? OALocalizedString(@"shared_string_account") : OALocalizedString(@"shared_string_account_add");
+    self.titleLabel.text = _isLogged ? OALocalizedString(@"login_account") : OALocalizedString(@"shared_string_account_add");
     [self.backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
 }
 
@@ -252,7 +252,7 @@
         {
             [_settings.osmUserName resetToDefault];
             [_settings.osmUserPassword resetToDefault];
-            _errorMessage = OALocalizedString(@"auth_error");
+            _errorMessage = OALocalizedString(@"auth_failed");
 
             [self generateData];
             [self.tableView performBatchUpdates:^{
@@ -364,7 +364,7 @@
             BOOL isEmail = [item[@"key"] isEqualToString:@"email_input_cell"];
             BOOL isPassword = [item[@"key"] isEqualToString:@"password_input_cell"];
 
-            cell.titleLabel.text = isEmail ? OALocalizedString(@"shared_string_email") : OALocalizedString(@"shared_string_password");
+            cell.titleLabel.text = isEmail ? OALocalizedString(@"shared_string_email") : OALocalizedString(@"user_password");
             cell.titleLabel.textColor = [UIColor blackColor];
 
             cell.inputField.userInteractionEnabled = !_isLogged;

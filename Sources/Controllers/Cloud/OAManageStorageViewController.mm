@@ -85,7 +85,7 @@
     NSMutableDictionary *myPlacesData = [NSMutableDictionary dictionary];
     myPlacesData[@"key"] = @"my_places_storage_cell";
     myPlacesData[@"type"] = [OAIconTitleValueCell getCellIdentifier];
-    myPlacesData[@"title"] = OALocalizedString(@"my_places");
+    myPlacesData[@"title"] = OALocalizedString(@"shared_string_my_places");
     myPlacesData[@"has_empty_icon"] = @(YES);
     myPlacesData[@"icon_color"] = UIColorFromRGB(backup_restore_icons_yellow);
     [manageStorageCells addObject:myPlacesData];
@@ -100,7 +100,7 @@
 
     NSMutableArray<NSMutableDictionary *> *myPlacesCells = [NSMutableArray array];
     NSMutableDictionary *myPlacesSection = [NSMutableDictionary dictionary];
-    myPlacesSection[@"header"] = OALocalizedString(@"my_places");
+    myPlacesSection[@"header"] = OALocalizedString(@"shared_string_my_places");
     myPlacesSection[@"cells"] = myPlacesCells;
     [data addObject:myPlacesSection];
 

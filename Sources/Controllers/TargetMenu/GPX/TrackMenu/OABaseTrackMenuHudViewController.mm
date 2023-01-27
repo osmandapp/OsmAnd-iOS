@@ -202,7 +202,7 @@
         _savingHelper = [OASavingTrackHelper sharedInstance];
         _mapPanelViewController = [OARootViewController instance].mapPanel;
         _mapViewController = _mapPanelViewController.mapViewController;
-        _isCurrentTrack = gpx == nil || !gpx.gpxFileName || gpx.gpxFileName.length == 0 || [gpx.gpxTitle isEqualToString:OALocalizedString(@"track_recording_name")];
+        _isCurrentTrack = gpx == nil || !gpx.gpxFileName || gpx.gpxFileName.length == 0 || [gpx.gpxTitle isEqualToString:OALocalizedString(@"shared_string_currently_recording_track")];
         [self updateGpxData:gpx == nil updateDocument:YES];
         if (!_analysis)
             [self updateAnalysis];

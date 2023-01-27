@@ -83,7 +83,7 @@
     [arr addObject:@{
         @"cell" : [OAPublicTransportPointCell getCellIdentifier],
         @"img" : @"ic_profile_pedestrian",
-        @"title" : [NSString stringWithFormat:@"%@ ~%@, %@", OALocalizedString(@"walk"), [OAOsmAndFormatter getFormattedTimeInterval:time shortFormat:NO], [OAOsmAndFormatter getFormattedDistance:walkDist]],
+        @"title" : [NSString stringWithFormat:@"%@ ~%@, %@", OALocalizedString(@"shared_string_walk"), [OAOsmAndFormatter getFormattedTimeInterval:time shortFormat:NO], [OAOsmAndFormatter getFormattedDistance:walkDist]],
         @"top_route_line" : @(NO),
         @"bottom_route_line" : @(NO),
         @"coords" : seg != nil ? seg.getImmutableAllLocations : @[]
@@ -106,7 +106,7 @@
     [arr addObject:@{
         @"cell" : [OAPublicTransportPointCell getCellIdentifier],
         @"img" : @"ic_profile_pedestrian",
-        @"title" : [NSString stringWithFormat:@"%@ ~%@, %@", OALocalizedString(@"walk"), [OAOsmAndFormatter getFormattedTimeInterval:time shortFormat:NO], [OAOsmAndFormatter getFormattedDistance:walkDist]],
+        @"title" : [NSString stringWithFormat:@"%@ ~%@, %@", OALocalizedString(@"shared_string_walk"), [OAOsmAndFormatter getFormattedTimeInterval:time shortFormat:NO], [OAOsmAndFormatter getFormattedDistance:walkDist]],
         @"top_route_line" : @(NO),
         @"bottom_route_line" : @(NO),
         @"coords" : seg != nil ? seg.getImmutableAllLocations : @[],
@@ -129,7 +129,7 @@
         @"cell" : [OAPublicTransportPointCell getCellIdentifier],
         @"img" : @"ic_custom_destination",
         @"title" : title,
-        @"descr" : OALocalizedString(@"map_widget_distance"),
+        @"descr" : OALocalizedString(@"route_descr_destination"),
         @"top_route_line" : @(NO),
         @"bottom_route_line" : @(NO),
         @"time" : [OAOsmAndFormatter getFormattedTimeHM:startTime.firstObject.doubleValue],
@@ -149,8 +149,8 @@
     NSMutableArray *subItems = [NSMutableArray new];
     NSMutableArray<NSIndexPath *> *indexPaths = [NSMutableArray new];
     [collapsableCell setObject:[OAPublicTransportCollapsableCell getCellIdentifier] forKey:@"cell"];
-    [collapsableCell setObject:[NSString stringWithFormat:OALocalizedString(@"by_type"), [r getTypeStr]] forKey:@"descr"];
-    [collapsableCell setObject:[NSString stringWithFormat:@"%lu %@ • %@", stops.size() - 1, OALocalizedString(@"num_stops"), [OAOsmAndFormatter getFormattedDistance:segment->getTravelDist()]] forKey:@"title"];
+    [collapsableCell setObject:[NSString stringWithFormat:OALocalizedString(@"by_transport_type"), [r getTypeStr]] forKey:@"descr"];
+    [collapsableCell setObject:[NSString stringWithFormat:@"%lu %@ • %@", stops.size() - 1, OALocalizedString(@"transport_stops"), [OAOsmAndFormatter getFormattedDistance:segment->getTravelDist()]] forKey:@"title"];
     [collapsableCell setObject:@(YES) forKey:@"collapsed"];
     [collapsableCell setObject:color forKey:@"line_color"];
     NSInteger row = arr.count;
@@ -301,7 +301,7 @@
                     [arr addObject:@{
                         @"cell" : [OAPublicTransportPointCell getCellIdentifier],
                         @"img" : @"ic_profile_pedestrian",
-                        @"title" : [NSString stringWithFormat:@"%@ ~%@, %@", OALocalizedString(@"walk"), [OAOsmAndFormatter getFormattedTimeInterval:time shortFormat:NO], [OAOsmAndFormatter getFormattedDistance:walkDist]],
+                        @"title" : [NSString stringWithFormat:@"%@ ~%@, %@", OALocalizedString(@"shared_string_walk"), [OAOsmAndFormatter getFormattedTimeInterval:time shortFormat:NO], [OAOsmAndFormatter getFormattedDistance:walkDist]],
                         @"top_route_line" : @(NO),
                         @"bottom_route_line" : @(NO),
                         @"coords" : seg != nil ? seg.getImmutableAllLocations : @[]
@@ -414,11 +414,11 @@
     NSInteger travelDist = (NSInteger) res->getTravelDist() + walkDistance;
     NSString *travelDistStr = [OAOsmAndFormatter getFormattedDistance:travelDist];
 
-    [attributedStr appendAttributedString:[[NSAttributedString alloc] initWithString:[OALocalizedString(@"total") stringByAppendingString:@" "] attributes:secondaryAttributes]];
+    [attributedStr appendAttributedString:[[NSAttributedString alloc] initWithString:[OALocalizedString(@"shared_string_total") stringByAppendingString:@" "] attributes:secondaryAttributes]];
     
     [attributedStr appendAttributedString:[[NSAttributedString alloc] initWithString:travelTimeStr attributes:mainAttributes]];
     
-    [attributedStr appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@", %@  •  %@ ", travelDistStr, OALocalizedString(@"walk")] attributes:secondaryAttributes]];
+    [attributedStr appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@", %@  •  %@ ", travelDistStr, OALocalizedString(@"shared_string_walk")] attributes:secondaryAttributes]];
     
     [attributedStr appendAttributedString:[[NSAttributedString alloc] initWithString:walkTimeStr attributes:mainAttributes]];
     
@@ -447,11 +447,11 @@
             cell.topInfoLabel.attributedText = [self getFirstLineDescrAttributed:_transportHelper.getRoutes[_routeIndex]];
             cell.bottomInfoLabel.attributedText = [self getSecondLineDescrAttributed:_transportHelper.getRoutes[_routeIndex]];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            [cell.detailsButton setTitle:OALocalizedString(@"res_details") forState:UIControlStateNormal];
+            [cell.detailsButton setTitle:OALocalizedString(@"shared_string_details") forState:UIControlStateNormal];
             cell.detailsButton.tag = _routeIndex;
             [cell.detailsButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.detailsButton addTarget:self action:@selector(onTransportDetailsPressed:) forControlEvents:UIControlEventTouchUpInside];
-            [cell.showOnMapButton setTitle:OALocalizedString(@"gpx_start") forState:UIControlStateNormal];
+            [cell.showOnMapButton setTitle:OALocalizedString(@"shared_string_control_start") forState:UIControlStateNormal];
             cell.showOnMapButton.tag = _routeIndex;
             [cell.showOnMapButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.showOnMapButton addTarget:self action:@selector(onStartPressed:) forControlEvents:UIControlEventTouchUpInside];

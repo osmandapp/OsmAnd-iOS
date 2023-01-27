@@ -137,7 +137,7 @@
     }
     else
     {
-        _titleView.text = _isComment ? OALocalizedString(@"osm_note_comment") : OALocalizedString(@"description");
+        _titleView.text = _isComment ? OALocalizedString(@"poi_dialog_comment") : OALocalizedString(@"shared_string_description");
         _editButton.hidden = _readOnly;
         _saveButton.hidden = YES;
         _toolbarView.backgroundColor = UIColorFromRGB(color_chart_orange);

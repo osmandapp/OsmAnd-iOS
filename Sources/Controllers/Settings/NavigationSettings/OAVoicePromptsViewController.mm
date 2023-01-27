@@ -107,7 +107,7 @@
     }];
     [firstSection addObject:@{
         @"type" : [OAIconTitleValueCell getCellIdentifier],
-        @"title" : OALocalizedString(@"language"),
+        @"title" : OALocalizedString(@"shared_string_language"),
         @"value" : selectedLanguage,
         @"icon" : @"ic_custom_map_languge",
         @"isOn" : @NO,
@@ -143,7 +143,7 @@
     NSString *value = nil;
     if ([_settings.metricSystem get] == KILOMETERS_AND_METERS)
     {
-        value = [NSString stringWithFormat:@"%d %@", (int)[_settings.speedLimitExceedKmh get:self.appMode], OALocalizedString(@"units_km_h")];
+        value = [NSString stringWithFormat:@"%d %@", (int)[_settings.speedLimitExceedKmh get:self.appMode], OALocalizedString(@"km_h")];
     }
     else
     {
@@ -166,13 +166,13 @@
     }];
     [fourthSection addObject:@{
         @"type" : [OASwitchTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"speak_tunnels"),
+        @"title" : OALocalizedString(@"show_tunnels"),
         @"value" : _settings.speakTunnels,
         @"key" : @"tunnels",
     }];
     [fourthSection addObject:@{
         @"type" : [OASwitchTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"announce_gpx_waypoints"),
+        @"title" : OALocalizedString(@"shared_string_gpx_waypoints"),
         @"value" : _settings.announceWpt,
         @"key" : @"GPXWaypoints",
     }];
@@ -193,7 +193,7 @@
     if ([_settings.keepInforming get:self.appMode] == 0)
         val = OALocalizedString(@"only_manually");
     else
-        val = [NSString stringWithFormat:@"%d %@", [_settings.keepInforming get:self.appMode], OALocalizedString(@"units_min")];
+        val = [NSString stringWithFormat:@"%d %@", [_settings.keepInforming get:self.appMode], OALocalizedString(@"int_min")];
     
     [fifthSection addObject:@{
         @"type" : [OASettingsTableViewCell getCellIdentifier],
@@ -317,7 +317,7 @@
 
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return section == 1 ? OALocalizedString(@"announce") : @"";
+    return section == 1 ? OALocalizedString(@"accessibility_announce") : @"";
 }
 
 - (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section

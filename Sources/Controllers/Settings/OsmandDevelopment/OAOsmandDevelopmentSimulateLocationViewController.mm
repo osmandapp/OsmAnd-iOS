@@ -97,7 +97,7 @@ CGFloat const kDefaultHeaderHeight = 40.0;
 - (void) applyLocalization
 {
     [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"simulate_routing");
+    self.titleLabel.text = OALocalizedString(@"simulate_your_location");
     _headerDescription = OALocalizedString(@"simulate_your_location_gpx_descr");
 }
 
@@ -152,7 +152,7 @@ CGFloat const kDefaultHeaderHeight = 40.0;
     [actionsSection addObject:@{
         @"type" : [OATitleRightIconCell getCellIdentifier],
         @"key" : kStartStopButtonKey,
-        @"titleText" : isRouteAnimating ? OALocalizedString(@"shared_string_stop") : OALocalizedString(@"shared_string_start"),
+        @"titleText" : isRouteAnimating ? OALocalizedString(@"shared_string_stop") : OALocalizedString(@"shared_string_control_start"),
         @"icon" : isRouteAnimating ? @"ic_custom_stop" : @"ic_custom_play",
         @"color" : isGpxTrackSelected ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer),
         @"actionBlock" : (^void(){ [self setTrackAnimationEnabled:!isRouteAnimating]; }),

@@ -33,14 +33,14 @@ static OAExportSettingsCategory *RESOURCES;
 + (OAExportSettingsCategory *) SETTINGS
 {
     if (!SETTINGS)
-        SETTINGS = [[OAExportSettingsCategory alloc] initWithTitle:OALocalizedString(@"sett_settings")];
+        SETTINGS = [[OAExportSettingsCategory alloc] initWithTitle:OALocalizedString(@"shared_string_settings")];
     return SETTINGS;
 }
 
 + (OAExportSettingsCategory *) MY_PLACES
 {
     if (!MY_PLACES)
-        MY_PLACES = [[OAExportSettingsCategory alloc] initWithTitle:OALocalizedString(@"menu_my_places")];
+        MY_PLACES = [[OAExportSettingsCategory alloc] initWithTitle:OALocalizedString(@"shared_string_my_places")];
     return MY_PLACES;
 }
 

@@ -20,9 +20,9 @@ import Charts.Swift
             case .ALTITUDE:
                 return OAUtilities.getLocalizedString("map_widget_altitude");
             case .SPEED:
-                return OAUtilities.getLocalizedString("gpx_speed");
+                return OAUtilities.getLocalizedString("shared_string_speed");
             case .SLOPE:
-                return OAUtilities.getLocalizedString("gpx_slope");
+                return OAUtilities.getLocalizedString("shared_string_slope");
         }
     }
     
@@ -46,11 +46,11 @@ import Charts.Swift
     public func getName() -> String {
         switch self {
         case .DISTANCE:
-            return OAUtilities.getLocalizedString("shared_string_distance");
+            return OAUtilities.getLocalizedString("map_widget_trip_recording_distance");
         case .TIME:
             return OAUtilities.getLocalizedString("shared_string_time");
         case .TIMEOFDAY:
-            return OAUtilities.getLocalizedString("shared_string_time_of_day");
+            return OAUtilities.getLocalizedString("time_of_day");
         }
     }
 
@@ -608,7 +608,7 @@ import Charts.Swift
         } else {
             divX = setupAxisDistance(axisBase: xAxis, meters: Double(analysis.totalDistance))
         }
-        let mainUnitY: String = OAUtilities.getLocalizedString(useFeet ? "units_ft" : "units_m")
+        let mainUnitY: String = OAUtilities.getLocalizedString(useFeet ? "foot" : "units_m")
 
         var yAxis: YAxis
         if (useRightAxis) {
@@ -827,10 +827,10 @@ import Charts.Swift
             mainUnitStr = OAUtilities.getLocalizedString("units_km")
             mainUnitInMeters = GpxUIHelper.METERS_IN_KILOMETER
         } else if (mc == EOAMetricsConstant.NAUTICAL_MILES_AND_METERS || mc == EOAMetricsConstant.NAUTICAL_MILES_AND_FEET) {
-            mainUnitStr = OAUtilities.getLocalizedString("units_nm")
+            mainUnitStr = OAUtilities.getLocalizedString("nm")
             mainUnitInMeters = GpxUIHelper.METERS_IN_ONE_NAUTICALMILE
         } else {
-            mainUnitStr = OAUtilities.getLocalizedString("units_mi")
+            mainUnitStr = OAUtilities.getLocalizedString("mile")
             mainUnitInMeters = GpxUIHelper.METERS_IN_ONE_MILE
         }
         if (meters > 9.99 * mainUnitInMeters) {
@@ -859,10 +859,10 @@ import Charts.Swift
                 mainUnitStr = OAUtilities.getLocalizedString("units_m")
             } else if (mc == EOAMetricsConstant.MILES_AND_FEET || mc == EOAMetricsConstant.NAUTICAL_MILES_AND_FEET) {
                 divX = Double(1.0 / GpxUIHelper.FEET_IN_ONE_METER)
-                mainUnitStr = OAUtilities.getLocalizedString("units_ft")
+                mainUnitStr = OAUtilities.getLocalizedString("foot")
             } else if (mc == EOAMetricsConstant.MILES_AND_YARDS) {
                 divX = Double(1.0 / GpxUIHelper.YARDS_IN_ONE_METER)
-                mainUnitStr = OAUtilities.getLocalizedString("units_yd")
+                mainUnitStr = OAUtilities.getLocalizedString("yard")
             } else {
                 divX = 1.0;
                 mainUnitStr = OAUtilities.getLocalizedString("units_m")

@@ -140,7 +140,7 @@
     NSMutableArray<OADownloadActionButton *> *actionButtons = [NSMutableArray arrayWithArray:_item.descriptionInfo.getActionButtons];
     BOOL isDownloading = [[OsmAndApp instance].downloadsManager.keysOfDownloadTasks containsObject:[NSString stringWithFormat:@"resource:%@", _item.resourceId.toNSString()]];
     if (actionButtons.count == 0 && _item && !_item.isInstalled && !isDownloading)
-        downloadButton = [[OADownloadActionButton alloc] initWithActionType:DOWNLOAD_BUTTON_ACTION name:OALocalizedString(@"download") url:nil];
+        downloadButton = [[OADownloadActionButton alloc] initWithActionType:DOWNLOAD_BUTTON_ACTION name:OALocalizedString(@"shared_string_download") url:nil];
     
     NSMutableArray<NSDictionary *> *additionalButtons = [NSMutableArray array];
     for (OADownloadActionButton *actionButton in actionButtons)
@@ -169,7 +169,7 @@
 {
     _downloadButton = downloadButton;
     BOOL active = downloadButton != nil;
-    [self.actionButton setTitle:active ? downloadButton.name : OALocalizedString(@"show_region_on_map_title") forState:UIControlStateNormal];
+    [self.actionButton setTitle:active ? downloadButton.name : OALocalizedString(@"map_downloaded") forState:UIControlStateNormal];
     self.actionButton.backgroundColor = active ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_route_button_inactive);
     [self.actionButton setTitleColor:active ? UIColor.whiteColor : UIColorFromRGB(color_text_footer) forState:UIControlStateNormal];
     [self.actionButton setUserInteractionEnabled:active];

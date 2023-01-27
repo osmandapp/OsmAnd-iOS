@@ -220,7 +220,7 @@
     [self.doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
     _itemTitleView.text = _targetPoint.title;
     _typeView.text = _targetPoint.ctrlTypeStr;
-    _mainTitleView.text = OALocalizedString(@"change_position_descr");
+    _mainTitleView.text = OALocalizedString(@"move_marker_bottom_sheet_title");
 }
 
 - (CGFloat)contentHeight

@@ -44,13 +44,13 @@ static OAQuickActionType *TYPE;
 
 - (NSString *)getActionStateName
 {
-    return [OAAppSettings sharedManager].nightMode ? OALocalizedString(@"day_mode") : OALocalizedString(@"night_mode");
+    return [OAAppSettings sharedManager].nightMode ? OALocalizedString(@"quick_action_switch_day_mode") : OALocalizedString(@"quick_action_switch_night_mode");
 }
 
 + (OAQuickActionType *) TYPE
 {
     if (!TYPE)
-        TYPE = [[OAQuickActionType alloc] initWithIdentifier:27 stringId:@"daynight.switch" class:self.class name:OALocalizedString(@"day_mode") category:CONFIGURE_MAP iconName:@"ic_custom_sun" secondaryIconName:nil editable:NO];
+        TYPE = [[OAQuickActionType alloc] initWithIdentifier:27 stringId:@"daynight.switch" class:self.class name:OALocalizedString(@"quick_action_switch_day_mode") category:CONFIGURE_MAP iconName:@"ic_custom_sun" secondaryIconName:nil editable:NO];
        
     return TYPE;
 }

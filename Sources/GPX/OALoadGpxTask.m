@@ -55,7 +55,7 @@
         }
     }
     if (tracksFolder.count > 0)
-        [folders setObject:tracksFolder forKey:OALocalizedString(@"tracks")];
+        [folders setObject:tracksFolder forKey:OALocalizedString(@"shared_string_gpx_tracks")];
     return folders;
 }
 

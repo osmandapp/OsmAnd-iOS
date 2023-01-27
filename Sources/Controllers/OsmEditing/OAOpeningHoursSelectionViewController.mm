@@ -373,7 +373,7 @@ static const NSInteger timeSectionIndex = 1;
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     if (section == daysSectionIndex)
-        return OALocalizedString(@"osm_working_days");
+        return OALocalizedString(@"working_days");
     else if (section == timeSectionIndex)
         return OALocalizedString(@"shared_string_time");
     return @"";

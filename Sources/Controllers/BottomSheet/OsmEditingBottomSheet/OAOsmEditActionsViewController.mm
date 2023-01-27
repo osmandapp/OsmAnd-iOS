@@ -93,7 +93,7 @@
                       @"img" : @"ic_custom_show_on_map",
                       @"type" : [OAMenuSimpleCell getCellIdentifier] } ];
     
-    [arr addObject:@{ @"title" : OALocalizedString(@"modify_edit_short"),
+    [arr addObject:@{ @"title" : OALocalizedString(@"poi_context_menu_modify_osm_change"),
                       @"key" : @"poi_modify",
                       @"img" : @"ic_custom_edit",
                       @"type" : [OAMenuSimpleCell getCellIdentifier] }];

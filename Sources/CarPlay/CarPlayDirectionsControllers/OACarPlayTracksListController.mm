@@ -27,7 +27,7 @@
 
 - (NSString *)screenTitle
 {
-    return OALocalizedString(@"tracks");
+    return OALocalizedString(@"shared_string_gpx_tracks");
 }
 
 - (NSArray<CPListSection *> *)generateSections
@@ -92,7 +92,7 @@
     {
         if (needsSeparator)
             [res appendString:@" • "];
-        [res appendFormat:@"%@: %d", OALocalizedString(@"gpx_waypoints"), gpx.wptPoints];
+        [res appendFormat:@"%@: %d", OALocalizedString(@"shared_string_waypoints"), gpx.wptPoints];
     }
     return res;
 }

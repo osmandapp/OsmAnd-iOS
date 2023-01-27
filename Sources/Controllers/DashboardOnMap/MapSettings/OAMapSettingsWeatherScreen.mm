@@ -49,7 +49,7 @@
         _settings = [OAAppSettings sharedManager];
         _styleSettings = [OAMapStyleSettings sharedInstance];
         
-        title = OALocalizedString(@"product_title_weather");
+        title = OALocalizedString(@"shared_string_weather");
         settingsScreen = EMapSettingsScreenWeather;
         
         vwController = viewController;
@@ -142,7 +142,7 @@
         @{
             @"type"  : [OAIconTitleValueCell getCellIdentifier],
             @"name"  : kWeatherContourLines,
-            @"title" : OALocalizedString(@"map_settings_weather_contours"),
+            @"title" : OALocalizedString(@"shared_string_contours"),
             @"value" : selectedContourLinesName,
             @"image" : @"ic_custom_contour_lines"
         }];
@@ -186,7 +186,7 @@
 - (NSString*) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     if (section == kLayersSection)
-        return OALocalizedString(@"map_settings_weather_layers");
+        return OALocalizedString(@"shared_string_layers");
     return @"";
 }
 

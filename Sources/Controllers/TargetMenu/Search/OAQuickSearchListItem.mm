@@ -289,7 +289,7 @@
         case FAVORITE:
         {
             const auto& fav = searchResult.favorite;
-            return fav->getGroup().isNull() || fav->getGroup().isEmpty() == 0 ? OALocalizedString(@"favorites") : fav->getGroup().toNSString();
+            return fav->getGroup().isNull() || fav->getGroup().isEmpty() == 0 ? OALocalizedString(@"favorites_item") : fav->getGroup().toNSString();
         }
         case REGION:
         {
@@ -300,7 +300,7 @@
         case RECENT_OBJ:
         {
             OAHistoryItem *item = (OAHistoryItem *) searchResult.object;
-            return item.typeName && item.name ? item.typeName : OALocalizedString(@"history");
+            return item.typeName && item.name ? item.typeName : OALocalizedString(@"shared_string_history");
         }
         case WPT:
         {

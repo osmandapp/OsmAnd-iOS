@@ -55,7 +55,7 @@
             {
                 [statsModeCell.modeButton setTitle:[NSString stringWithFormat:@"%@/%@",
                                         OALocalizedString(@"map_widget_altitude"),
-                                        OALocalizedString(@"gpx_slope")]
+                                        OALocalizedString(@"shared_string_slope")]
                                           forState:UIControlStateNormal];
             }
             [GpxUIHelper refreshLineChartWithChartView:chart
@@ -74,7 +74,7 @@
                 {
                     [statsModeCell.modeButton setTitle:[NSString stringWithFormat:@"%@/%@",
                                             OALocalizedString(@"map_widget_altitude"),
-                                            OALocalizedString(@"gpx_speed")]
+                                            OALocalizedString(@"shared_string_speed")]
                                               forState:UIControlStateNormal];
                 }
                 [GpxUIHelper refreshLineChartWithChartView:chart
@@ -108,7 +108,7 @@
         case EOARouteStatisticsModeSlope:
         {
             if (statsModeCell)
-                [statsModeCell.modeButton setTitle:OALocalizedString(@"gpx_slope") forState:UIControlStateNormal];
+                [statsModeCell.modeButton setTitle:OALocalizedString(@"shared_string_slope") forState:UIControlStateNormal];
             [GpxUIHelper refreshLineChartWithChartView:chart
                                               analysis:analysis
                                    useGesturesAndScale:YES
@@ -120,7 +120,7 @@
         case EOARouteStatisticsModeSpeed:
         {
             if (statsModeCell)
-                [statsModeCell.modeButton setTitle:OALocalizedString(@"gpx_speed") forState:UIControlStateNormal];
+                [statsModeCell.modeButton setTitle:OALocalizedString(@"shared_string_speed") forState:UIControlStateNormal];
             [GpxUIHelper refreshLineChartWithChartView:chart
                                               analysis:analysis
                                    useGesturesAndScale:YES
@@ -595,7 +595,7 @@
     if (hours > 0)
     {
         NSAttributedString *val = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d", hours] attributes:numericAttributes];
-        NSAttributedString *units = [[NSAttributedString alloc] initWithString:OALocalizedString(@"units_hour") attributes:alphabeticAttributes];
+        NSAttributedString *units = [[NSAttributedString alloc] initWithString:OALocalizedString(@"int_hour") attributes:alphabeticAttributes];
         [time appendAttributedString:val];
         [time appendAttributedString:space];
         [time appendAttributedString:units];

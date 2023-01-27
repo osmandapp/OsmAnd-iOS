@@ -77,7 +77,7 @@
         return [[dict1 valueForKey:@"name"] localizedCompare:[dict2 valueForKey:@"name"]];
     }];
     
-    [arr insertObject:@{@"name": OALocalizedString(@"local_names"), @"value": @"", @"img": (prefLang == nil ? @"menu_cell_selected.png" : @"")} atIndex:0];
+    [arr insertObject:@{@"name": OALocalizedString(@"local_map_names"), @"value": @"", @"img": (prefLang == nil ? @"menu_cell_selected.png" : @"")} atIndex:0];
 
     NSString *lang = @"en";
     BOOL isSelected = (prefLang && [prefLang isEqualToString:lang]);

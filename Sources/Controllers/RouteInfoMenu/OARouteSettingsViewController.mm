@@ -33,7 +33,7 @@
 -(void) applyLocalization
 {
     [super applyLocalization];
-    self.titleView.text = OALocalizedString(@"sett_settings");
+    self.titleView.text = OALocalizedString(@"shared_string_settings");
 }
 
 - (void) viewDidLoad
@@ -98,7 +98,7 @@
     else if (section == 1)
         return OALocalizedString(@"route_parameters");
     else if (section == 2)
-        return OALocalizedString(@"osm_edits_advanced");
+        return OALocalizedString(@"tab_title_advanced");
     
     return nil;
 }

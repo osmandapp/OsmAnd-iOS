@@ -120,14 +120,14 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     [profileSettings addObject:@{
         @"type" : [OAIconTextDescCell getCellIdentifier],
         @"title" : OALocalizedString(@"configure_map"),
-        @"descr" : OALocalizedString(@"configure_map_descr"),
+        @"descr" : OALocalizedString(@"map_look_descr"),
         @"img" : @"left_menu_icon_map",
         @"key" : @"configure_map"
     }];
     [profileSettings addObject:@{
         @"type" : [OAIconTextDescCell getCellIdentifier],
         @"title" : OALocalizedString(@"layer_map_appearance"),
-        @"descr" : OALocalizedString(@"configure_screen_descr"),
+        @"descr" : OALocalizedString(@"edit_profile_screen_options_subtitle"),
         @"img" : @"left_menu_configure_screen",
         @"key" : @"configure_screen"
     }];
@@ -143,7 +143,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 //        @{
 //            @"type" : [OAIconTextDescCell getCellIdentifier],
 //            @"title" : OALocalizedString(@"ui_customization"),
-//            @"descr" : OALocalizedString(@"ui_customization_descr"),
+//            @"descr" : OALocalizedString(@"ui_customization_short_descr"),
 //            @"img" : todo,
 //            @"key" : @"ui_customization"
 //        }
@@ -200,7 +200,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     if (plugins.count > 0)
     {
         [data addObject:plugins];
-        [sectionHeaderTitles addObject:OALocalizedString(@"plugins")];
+        [sectionHeaderTitles addObject:OALocalizedString(@"plugins_menu_group")];
         [sectionFooterTitles addObject:OALocalizedString(@"plugin_settings_descr")];
     }
     
@@ -239,7 +239,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         }];
     }
     [data addObject:settingsActions];
-    [sectionHeaderTitles addObject:OALocalizedString(@"actions")];
+    [sectionHeaderTitles addObject:OALocalizedString(@"shared_string_actions")];
     [sectionFooterTitles addObject:OALocalizedString(@"export_profile_descr")];
 
     _data = data;

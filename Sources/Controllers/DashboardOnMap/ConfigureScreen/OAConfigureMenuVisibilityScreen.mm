@@ -130,12 +130,12 @@
             BOOL hideSelected = ![_r visibleCollapsed:mode] && ![_r visible:mode];
             BOOL collapsedSelected = [_r visibleCollapsed:mode];
 
-            [standardList addObject:[self createTableItem:OALocalizedString(@"sett_show")
+            [standardList addObject:[self createTableItem:OALocalizedString(@"recording_context_menu_show")
                                               description:@""
                                                       key:@"action_show"
                                                      icon:@"ic_action_view"
                                                  selected:showSelected]];
-            [standardList addObject:[self createTableItem:OALocalizedString(@"poi_hide")
+            [standardList addObject:[self createTableItem:OALocalizedString(@"shared_string_hide")
                                               description:@""
                                                       key:@"action_hide"
                                                      icon:@"ic_action_hide"

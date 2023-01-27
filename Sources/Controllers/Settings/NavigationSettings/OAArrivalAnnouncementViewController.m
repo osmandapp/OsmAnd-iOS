@@ -70,14 +70,14 @@
     [super viewDidLoad];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    [self setupTableHeaderViewWithText:OALocalizedString(@"arrival_announcement_frequency")];
+    [self setupTableHeaderViewWithText:OALocalizedString(@"arrival_distance_descr")];
 }
 
 - (void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        [self setupTableHeaderViewWithText:OALocalizedString(@"arrival_announcement_frequency")];
+        [self setupTableHeaderViewWithText:OALocalizedString(@"arrival_distance_descr")];
         [self.tableView reloadData];
     } completion:nil];
 }

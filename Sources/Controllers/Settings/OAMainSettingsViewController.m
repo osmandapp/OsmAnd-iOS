@@ -62,7 +62,7 @@
 
 - (void) applyLocalization
 {
-    _titleView.text = OALocalizedString(@"sett_settings");
+    _titleView.text = OALocalizedString(@"shared_string_settings");
 }
 
 - (void) viewDidLoad
@@ -166,7 +166,7 @@
     }];
 
     [profilesSection addObject:@{
-        @"title" : OALocalizedString(@"edit_profile_list"),
+        @"title" : OALocalizedString(@"reorder_profiles"),
         @"img" : @"ic_custom_edit",
         @"type" : [OATitleRightIconCell getCellIdentifier],
         @"name" : @"edit_profiles"
@@ -364,7 +364,7 @@
     if (section == 1)
         return OALocalizedString(@"selected_profile");
     else if (section == 2)
-        return OALocalizedString(@"app_profiles");
+        return OALocalizedString(@"application_profiles");
     else if (section == 3)
         return OALocalizedString(@"local_backup");
     return nil;

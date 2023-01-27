@@ -148,7 +148,7 @@
     if (self.trackMenuDelegate)
         segmentTitle = [self.trackMenuDelegate getTrackSegmentTitle:segment];
     if (!segmentTitle)
-        segmentTitle = [NSString stringWithFormat:OALocalizedString(@"segnet_num"), index];
+        segmentTitle = [NSString stringWithFormat:OALocalizedString(@"segments_count"), index];
 
     OAGPXTableCellData *segmentCellData = index != 0 ? [OAGPXTableCellData withData:@{
             kTableKey: [NSString stringWithFormat:@"segment_%p", (__bridge void *) segment],
@@ -221,7 +221,7 @@
     if (analysis.hasElevationData)
         values[@"tab_1_string_value"] = OALocalizedString(@"map_widget_altitude");
     if (analysis.isSpeedSpecified)
-        values[analysis.hasElevationData ? @"tab_2_string_value" : @"tab_1_string_value"] = OALocalizedString(@"gpx_speed");
+        values[analysis.hasElevationData ? @"tab_2_string_value" : @"tab_1_string_value"] = OALocalizedString(@"shared_string_speed");
     values[@"row_to_update_int_value"] = @([segmentSectionData.subjects indexOfObject:statisticsCellData]);
     values[@"selected_index_int_value"] = @0;
     [tabsCellData setData:@{ kTableValues: values }];
@@ -268,7 +268,7 @@
     {
         case EOARouteStatisticsModeAltitudeSpeed:
         {
-            titles[@"top_left_title_string_value"] = OALocalizedString(@"shared_string_distance");
+            titles[@"top_left_title_string_value"] = OALocalizedString(@"map_widget_trip_recording_distance");
             titles[@"top_right_title_string_value"] = OALocalizedString(@"shared_string_time_span");
             titles[@"bottom_left_title_string_value"] = OALocalizedString(@"shared_string_start_time");
             titles[@"bottom_right_title_string_value"] = OALocalizedString(@"shared_string_end_time");
@@ -297,8 +297,8 @@
         }
         case EOARouteStatisticsModeAltitudeSlope:
         {
-            titles[@"top_left_title_string_value"] = OALocalizedString(@"gpx_avg_altitude");
-            titles[@"top_right_title_string_value"] = OALocalizedString(@"gpx_alt_range");
+            titles[@"top_left_title_string_value"] = OALocalizedString(@"average_altitude");
+            titles[@"top_right_title_string_value"] = OALocalizedString(@"altitude_range");
             titles[@"bottom_left_title_string_value"] = OALocalizedString(@"altitude_ascent");
             titles[@"bottom_right_title_string_value"] = OALocalizedString(@"altitude_descent");
 
@@ -318,7 +318,7 @@
         }
         case EOARouteStatisticsModeSpeed:
         {
-            titles[@"top_left_title_string_value"] = OALocalizedString(@"gpx_average_speed");
+            titles[@"top_left_title_string_value"] = OALocalizedString(@"map_widget_average_speed");
             titles[@"top_right_title_string_value"] = OALocalizedString(@"gpx_max_speed");
             titles[@"bottom_left_title_string_value"] = OALocalizedString(@"shared_string_time_moving");
             titles[@"bottom_right_title_string_value"] = OALocalizedString(@"distance_moving");
@@ -552,7 +552,7 @@
                     NSString *value = tableData.values[[NSString stringWithFormat:@"tab_%li_string_value", selectedIndex]];
                     mode = [value isEqualToString:OALocalizedString(@"map_widget_altitude")]
                             ? EOARouteStatisticsModeAltitudeSlope
-                            : [value isEqualToString:OALocalizedString(@"gpx_speed")]
+                            : [value isEqualToString:OALocalizedString(@"shared_string_speed")]
                                     ? EOARouteStatisticsModeSpeed
                                     : EOARouteStatisticsModeAltitudeSpeed;
                 }

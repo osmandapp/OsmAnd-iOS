@@ -39,7 +39,7 @@
 
 - (void) applyLocalization
 {
-    _titleView.text = OALocalizedString(@"product_title_osm_editing");
+    _titleView.text = OALocalizedString(@"osm_editing_plugin_name");
 }
 
 - (void) viewDidLoad
@@ -85,7 +85,7 @@
 
     NSMutableArray<NSMutableDictionary *> *credentialCells = [NSMutableArray array];
     [data addObject:credentialCells];
-    _headers[@(data.count - 1)] = OALocalizedString(@"shared_string_account");
+    _headers[@(data.count - 1)] = OALocalizedString(@"login_account");
 
     NSMutableDictionary *credentialData = [NSMutableDictionary dictionary];
     credentialData[@"key"] = @"edit_credentials";
@@ -105,7 +105,7 @@
     NSMutableDictionary *offlieneEditingData = [NSMutableDictionary dictionary];
     offlieneEditingData[@"key"] = @"offline_editing";
     offlieneEditingData[@"type"] = [OASwitchTableViewCell getCellIdentifier];
-    offlieneEditingData[@"title"] = OALocalizedString(@"osm_editing_offline");
+    offlieneEditingData[@"title"] = OALocalizedString(@"offline_edition");
     [offlieneEditingCells addObject:offlieneEditingData];
 
     NSMutableArray<NSMutableDictionary *> *mappersCells = [NSMutableArray array];
@@ -122,10 +122,10 @@
 
     NSMutableArray<NSMutableDictionary *> *actionsCells = [NSMutableArray array];
     [data addObject:actionsCells];
-    _headers[@(data.count - 1)] = OALocalizedString(@"actions");
+    _headers[@(data.count - 1)] = OALocalizedString(@"shared_string_actions");
 
     NSString *menuPath = [NSString stringWithFormat:@"%@ — %@ — %@",
-                          OALocalizedString(@"menu"), OALocalizedString(@"menu_my_places"), OALocalizedString(@"osm_edits_title")];
+                          OALocalizedString(@"shared_string_menu"), OALocalizedString(@"shared_string_my_places"), OALocalizedString(@"osm_edits_title")];
     NSString *actionsDescr = [NSString stringWithFormat:OALocalizedString(@"osm_editing_access_descr"), menuPath];
     NSMutableAttributedString *actionsDescrAttr =
             [[NSMutableAttributedString alloc] initWithString:actionsDescr

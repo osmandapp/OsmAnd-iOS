@@ -96,7 +96,7 @@
     
     NSString *drivingRegionValue;
     if ([_settings.drivingRegionAutomatic get:self.appMode])
-        drivingRegionValue = OALocalizedString(@"driving_region_automatic");
+        drivingRegionValue = OALocalizedString(@"shared_string_automatic");
     else
         drivingRegionValue = [OADrivingRegion getName:[_settings.drivingRegion get:self.appMode]];
     
@@ -212,13 +212,13 @@
 //    [appearanceArr addObject:@{
 //        @"type" : [OAIconTitleValueCell getCellIdentifier],
 //        @"title" : OALocalizedString(@"settings_app_theme"),
-//        @"value" : OALocalizedString(@"app_theme_light"),
+//        @"value" : OALocalizedString(@"light_theme"),
 //        @"icon" : @"ic_custom_contrast",
 //        @"key" : @"app_theme",
 //    }];
     [appearanceArr addObject:@{
         @"type" : [OAIconTitleValueCell getCellIdentifier],
-        @"title" : OALocalizedString(@"rotate_map_to_bearing"),
+        @"title" : OALocalizedString(@"rotate_map_to"),
         @"value" : rotateMapValue,
         @"icon" : rotateMapIcon,
         @"key" : @"map_orientation",
@@ -275,7 +275,7 @@
     }];
     [otherArr addObject:@{
         @"type" : [OASettingsTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"sett_ext_input"),
+        @"title" : OALocalizedString(@"external_input_device"),
         @"value" : externalInputDeviceValue,
         @"key" : @"externalImputDevice",
     }];
@@ -409,11 +409,11 @@
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     if (section == 0)
-        return OALocalizedString(@"map_settings_appearance");
+        return OALocalizedString(@"shared_string_appearance");
     else if (section == 1)
         return OALocalizedString(@"units_and_formats");
     else
-        return OALocalizedString(@"help_other_header");
+        return OALocalizedString(@"other_location");
 }
 
 #pragma mark - Switch

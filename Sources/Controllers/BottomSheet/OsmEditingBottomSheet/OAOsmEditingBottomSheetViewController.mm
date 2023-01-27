@@ -113,13 +113,13 @@
     [arr addObject:@{
                      @"type" : [OATextInputFloatingCell getCellIdentifier],
                      @"name" : @"osm_message",
-                     @"cell" : [OAOsmNoteBottomSheetViewController getInputCellWithHint:OALocalizedString(@"osm_alert_message") text:message roundedCorners:UIRectCornerAllCorners hideUnderline:YES floatingTextFieldControllers:_floatingTextFieldControllers]
+                     @"cell" : [OAOsmNoteBottomSheetViewController getInputCellWithHint:OALocalizedString(@"osb_comment_dialog_message") text:message roundedCorners:UIRectCornerAllCorners hideUnderline:YES floatingTextFieldControllers:_floatingTextFieldControllers]
                      }];
     
     [arr addObject:@{
                      @"type" : [OASwitchTableViewCell getCellIdentifier],
                      @"name" : @"close_changeset",
-                     @"title" : OALocalizedString(@"osm_close_changeset"),
+                     @"title" : OALocalizedString(@"close_changeset"),
                      @"value" : @(_closeChangeset)
                      }];
     

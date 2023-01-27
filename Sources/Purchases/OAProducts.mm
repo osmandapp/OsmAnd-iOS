@@ -1155,7 +1155,7 @@
 
 - (NSString *) localizedTitle
 {
-    return OALocalizedString(@"osmand_live_title");
+    return OALocalizedString(@"osmand_live");
 }
 
 - (void) setPrice:(NSDecimalNumber *)price
@@ -1232,7 +1232,7 @@
 
 - (NSString *) localizedTitle
 {
-    return OALocalizedString(@"osmand_live_title");
+    return OALocalizedString(@"osmand_live");
 }
 
 - (void) setPrice:(NSDecimalNumber *)price
@@ -1298,7 +1298,7 @@
 
 - (NSString *) localizedTitle
 {
-    return OALocalizedString(@"osmand_live_title");
+    return OALocalizedString(@"osmand_live");
 }
 
 - (void) setPrice:(NSDecimalNumber *)price
@@ -1389,7 +1389,7 @@
 
 - (NSString *)localizedDescription
 {
-    return OALocalizedString(@"product_desc_pro");
+    return OALocalizedString(@"osmand_pro_tagline");
 }
 
 - (void) setPrice:(NSDecimalNumber *)price
@@ -1460,7 +1460,7 @@
 
 - (NSString *)localizedDescription
 {
-    return OALocalizedString(@"product_desc_pro");
+    return OALocalizedString(@"osmand_pro_tagline");
 }
 
 - (void) setPrice:(NSDecimalNumber *)price
@@ -1531,7 +1531,7 @@
 
 - (NSString *)localizedDescription
 {
-    return OALocalizedString(@"product_desc_plus");
+    return OALocalizedString(@"osmand_maps_plus_tagline");
 }
 
 - (NSDecimalNumber *) getDefaultPrice
@@ -1596,7 +1596,7 @@
 
 - (NSString *)localizedDescription
 {
-    return OALocalizedString(@"product_desc_plus");
+    return OALocalizedString(@"osmand_maps_plus_tagline");
 }
 
 - (NSString *) formattedPrice
@@ -2466,28 +2466,28 @@
     
     if ([self.osmEditing isPurchased])
     {
-        OAFunctionalAddon *addon = [[OAFunctionalAddon alloc] initWithAddonId:kId_Addon_OsmEditing_Edit_POI titleShort:OALocalizedString(@"modify_poi_short") titleWide:OALocalizedString(@"modify_poi") imageName:@"ic_plugin_osm_edit"];
+        OAFunctionalAddon *addon = [[OAFunctionalAddon alloc] initWithAddonId:kId_Addon_OsmEditing_Edit_POI titleShort:OALocalizedString(@"poi_context_menu_modify") titleWide:OALocalizedString(@"modify_poi") imageName:@"ic_plugin_osm_edit"];
         addon.sortIndex = 2;
         [arr addObject:addon];
     }
     
     if ([self.mapillary isPurchased])
     {
-        OAFunctionalAddon *addon = [[OAFunctionalAddon alloc] initWithAddonId:kInAppId_Addon_Mapillary titleShort:OALocalizedString(@"product_title_mapillary") titleWide:OALocalizedString(@"product_title_mapillary") imageName:@"ic_custom_mapillary_symbol"];
+        OAFunctionalAddon *addon = [[OAFunctionalAddon alloc] initWithAddonId:kInAppId_Addon_Mapillary titleShort:OALocalizedString(@"mapillary") titleWide:OALocalizedString(@"mapillary") imageName:@"ic_custom_mapillary_symbol"];
         addon.sortIndex = 3;
         [arr addObject:addon];
     }
     
     if ([self.openPlaceReviews isPurchased])
     {
-        OAFunctionalAddon *addon = [[OAFunctionalAddon alloc] initWithAddonId:kInAppId_Addon_OpenPlaceReview titleShort:OALocalizedString(@"product_title_openplacereviews") titleWide:OALocalizedString(@"product_title_openplacereviews") imageName:@"ic_custom_mapillary_symbol"];
+        OAFunctionalAddon *addon = [[OAFunctionalAddon alloc] initWithAddonId:kInAppId_Addon_OpenPlaceReview titleShort:OALocalizedString(@"open_place_reviews") titleWide:OALocalizedString(@"open_place_reviews") imageName:@"ic_custom_mapillary_symbol"];
         addon.sortIndex = 3;
         [arr addObject:addon];
     }
 
     if ([self.osmandDevelopment isPurchased])
     {
-        OAFunctionalAddon *addon = [[OAFunctionalAddon alloc] initWithAddonId:kInAppId_Addon_OsmandDevelopment titleShort:OALocalizedString(@"product_title_development") titleWide:OALocalizedString(@"product_title_development") imageName:@"ic_custom_laptop"];
+        OAFunctionalAddon *addon = [[OAFunctionalAddon alloc] initWithAddonId:kInAppId_Addon_OsmandDevelopment titleShort:OALocalizedString(@"debugging_and_development") titleWide:OALocalizedString(@"debugging_and_development") imageName:@"ic_custom_laptop"];
         addon.sortIndex = 3;
         [arr addObject:addon];
     }

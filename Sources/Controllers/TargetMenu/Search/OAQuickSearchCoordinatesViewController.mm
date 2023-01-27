@@ -257,7 +257,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     {
         [result addObject:@{
             @"type" : [OAInputTableViewCell getCellIdentifier],
-            @"title" : OALocalizedString(@"navigate_point_format_MGRS"),
+            @"title" : OALocalizedString(@"navigate_point_mgrs"),
             @"value" : _mgrsStr,
             @"tag" : @(EOAQuickSearchCoordinatesTextFieldMgrs),
         }];
@@ -266,14 +266,14 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     {
         [result addObject:@{
             @"type" : [OAInputTableViewCell getCellIdentifier],
-            @"title" : OALocalizedString(@"latitude"),
+            @"title" : OALocalizedString(@"navigate_point_latitude"),
             @"value" : _latStr,
             @"tag" : @(EOAQuickSearchCoordinatesTextFieldLat),
         }];
         
         [result addObject:@{
             @"type" : [OAInputTableViewCell getCellIdentifier],
-            @"title" : OALocalizedString(@"longitude"),
+            @"title" : OALocalizedString(@"navigate_point_longitude"),
             @"value" : _lonStr,
             @"tag" : @(EOAQuickSearchCoordinatesTextFieldLon),
         }];
@@ -314,7 +314,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
 {
     NSString *title = [OAPointDescription getLocationNamePlain:location.coordinate.latitude lon:location.coordinate.longitude];
     NSString *countryName = [_app.worldRegion getCountryNameAtLat:location.coordinate.latitude lon:location.coordinate.longitude];
-    NSString *subTitle = countryName ? countryName : OALocalizedString(@"sett_arr_loc");
+    NSString *subTitle = countryName ? countryName : OALocalizedString(@"shared_string_location");
     
     return @{
         @"type" : [OAQuickSearchResultTableViewCell getCellIdentifier],

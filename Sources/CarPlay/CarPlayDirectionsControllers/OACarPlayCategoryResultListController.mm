@@ -71,7 +71,7 @@
 
 - (NSArray<CPListSection *> *) generateSections
 {
-    return [self generateSingleItemSectionWithTitle:OALocalizedString(@"search_preogress")];
+    return [self generateSingleItemSectionWithTitle:OALocalizedString(@"searching")];
 }
 
 - (void) searchAndDisplayResult
@@ -149,7 +149,7 @@
         }
         return @[[[CPListSection alloc] initWithItems:items header:nil sectionIndexTitle:nil]];
     }
-    return [self generateSingleItemSectionWithTitle:OALocalizedString(@"nothing_found_empty")];
+    return [self generateSingleItemSectionWithTitle:OALocalizedString(@"nothing_found")];
 }
 
 - (CPListItem *) createListItem:(OAQuickSearchListItem *)item

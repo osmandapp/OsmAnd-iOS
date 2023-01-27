@@ -218,7 +218,7 @@ typedef NS_ENUM(NSInteger, EOARouteParamType) {
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     if (_isHazmatCategory && section == 1)
-        return OALocalizedString(@"shared_string_category");
+        return OALocalizedString(@"rendering_value_category_name");
 
     return nil;
 }

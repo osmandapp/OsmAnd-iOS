@@ -64,7 +64,7 @@
     _measurementRangeValuesArr = [NSArray arrayWithArray:_vehicleParameter[@"possibleValues"]];
     NSMutableArray *arr = [NSMutableArray arrayWithArray:_vehicleParameter[@"possibleValuesDescr"]];
     if ([arr[0] isEqualToString:@"-"])
-        [arr replaceObjectAtIndex:0 withObject:OALocalizedString(_isMotorType ? @"not_selected" : @"shared_string_none")];
+        [arr replaceObjectAtIndex:0 withObject:OALocalizedString(_isMotorType ? @"shared_string_not_selected" : @"shared_string_none")];
     _measurementRangeStringArr = [NSArray arrayWithArray:arr];
     _selectedParameter = _vehicleParameter[@"selectedItem"];
     NSString *valueString = _vehicleParameter[@"value"];
@@ -213,7 +213,7 @@
 - (NSString *) getMeasurementUnit:(NSString *)parameter
 {
     if ([parameter isEqualToString:@"weight"])
-        return OALocalizedString(@"tones");
+        return OALocalizedString(@"shared_string_tones");
     else if ([parameter isEqualToString:@"height"] || [parameter isEqualToString:@"width"] || [parameter isEqualToString:@"length"])
         return OALocalizedString(@"shared_string_meters");
     return @"";

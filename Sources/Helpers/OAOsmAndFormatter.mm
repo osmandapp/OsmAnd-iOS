@@ -18,15 +18,15 @@
 
 static NSString * const _unitsKm = OALocalizedString(@"units_km");
 static NSString * const _unitsM = OALocalizedString(@"units_m");
-static NSString * const _unitsMi = OALocalizedString(@"units_mi");
-static NSString * const _unitsYd = OALocalizedString(@"units_yd");
-static NSString * const _unitsFt = OALocalizedString(@"units_ft");
-static NSString * const _unitsNm = OALocalizedString(@"units_nm");
-static NSString * const _unitsKmh = OALocalizedString(@"units_km_h");
-static NSString * const _unitsMph = OALocalizedString(@"units_mph");
-static NSString * const _unitsMinKm = OALocalizedString(@"units_min_km");
-static NSString * const _unitsMinMi = OALocalizedString(@"units_min_mi");
-static NSString * const _unitsmps = OALocalizedString(@"units_m_s");
+static NSString * const _unitsMi = OALocalizedString(@"mile");
+static NSString * const _unitsYd = OALocalizedString(@"yard");
+static NSString * const _unitsFt = OALocalizedString(@"foot");
+static NSString * const _unitsNm = OALocalizedString(@"nm");
+static NSString * const _unitsKmh = OALocalizedString(@"km_h");
+static NSString * const _unitsMph = OALocalizedString(@"mile_per_hour");
+static NSString * const _unitsMinKm = OALocalizedString(@"min_km");
+static NSString * const _unitsMinMi = OALocalizedString(@"min_mile");
+static NSString * const _unitsmps = OALocalizedString(@"m_s");
 
 + (NSString*) getFormattedTimeHM:(NSTimeInterval)timeInterval
 {
@@ -46,17 +46,17 @@ static NSString * const _unitsmps = OALocalizedString(@"units_m_s");
     double intervalInUnits;
     if (interval < 60)
     {
-        unitsStr = OALocalizedString(@"units_sec");
+        unitsStr = OALocalizedString(@"shared_string_sec");
         intervalInUnits = interval;
     }
     else if (((int)interval) % 60 == 0)
     {
-        unitsStr = OALocalizedString(@"units_min");
+        unitsStr = OALocalizedString(@"int_min");
         intervalInUnits = ((int)interval) / 60;
     }
     else
     {
-        unitsStr = OALocalizedString(@"units_min");
+        unitsStr = OALocalizedString(@"int_min");
         intervalInUnits = interval / 60.0;
     }
     
@@ -77,7 +77,7 @@ static NSString * const _unitsmps = OALocalizedString(@"units_m_s");
         {
             NSString *formattedDuration;
             if (duration < 60)
-                formattedDuration = [NSString stringWithFormat:@"< 1 %@", OALocalizedString(@"units_min")];
+                formattedDuration = [NSString stringWithFormat:@"< 1 %@", OALocalizedString(@"int_min")];
             else
                 formattedDuration = [self getFormattedTimeInterval:duration];
             
@@ -113,18 +113,18 @@ static NSString * const _unitsmps = OALocalizedString(@"units_m_s");
     else
     {
         if (hours > 0)
-            [time appendFormat:@"%d %@", hours, OALocalizedString(@"units_hour")];
+            [time appendFormat:@"%d %@", hours, OALocalizedString(@"int_hour")];
         if (minutes > 0)
         {
             if (time.length > 0)
                 [time appendString:@" "];
-            [time appendFormat:@"%d %@", minutes, OALocalizedString(@"units_min")];
+            [time appendFormat:@"%d %@", minutes, OALocalizedString(@"int_min")];
         }
         if (minutes == 0 && hours == 0)
         {
             if (time.length > 0)
                 [time appendString:@" "];
-            [time appendFormat:@"%d %@", seconds, OALocalizedString(@"units_sec")];
+            [time appendFormat:@"%d %@", seconds, OALocalizedString(@"shared_string_sec")];
         }
     }
     return time;

@@ -192,7 +192,7 @@
     NSMutableDictionary *updateNowData = [NSMutableDictionary dictionary];
     updateNowData[@"key"] = @"update_now_cell";
     updateNowData[@"type"] = [OARightIconTableViewCell getCellIdentifier];
-    updateNowData[@"title"] = OALocalizedString(@"osmand_live_update_now");
+    updateNowData[@"title"] = OALocalizedString(@"update_now");
     updateNowData[@"title_color"] = UIColorFromRGB(color_primary_purple);
     updateNowData[@"title_font"] = [UIFont systemFontOfSize:17. weight:UIFontWeightMedium];
     updateNowData[@"right_icon"] = @"ic_custom_download";

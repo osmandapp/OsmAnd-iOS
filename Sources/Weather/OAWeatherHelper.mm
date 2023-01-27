@@ -812,7 +812,7 @@
     }
     else
     {
-        return OALocalizedString(@"osmand_live_weekly");
+        return OALocalizedString(@"weekly");
     }
 }
 

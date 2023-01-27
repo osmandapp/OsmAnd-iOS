@@ -42,7 +42,7 @@ static const NSInteger groupCount = 5;
 
 -(void) applyLocalization
 {
-    _titleView.text = OALocalizedString(@"menu_help");
+    _titleView.text = OALocalizedString(@"shared_string_help");
 }
 
 - (void) viewDidLoad
@@ -82,7 +82,7 @@ static const NSInteger groupCount = 5;
     [dataArr addObject:
      @{
        @"name" : @"help_first_use",
-       @"title" : OALocalizedString(@"help_first_use"),
+       @"title" : OALocalizedString(@"first_usage_item"),
        @"description" : OALocalizedString(@"help_first_use_descr"),
        @"type" : kLinkInternalType,
        @"html" : @"start"
@@ -100,7 +100,7 @@ static const NSInteger groupCount = 5;
     [dataArr addObject:
      @{
        @"name" : @"help_faq",
-       @"title" : OALocalizedString(@"help_faq"),
+       @"title" : OALocalizedString(@"faq_item"),
        @"description" : OALocalizedString(@"help_faq_descr"),
        @"type" : kLinkInternalType,
        @"html" : @"faq"
@@ -109,7 +109,7 @@ static const NSInteger groupCount = 5;
     [dataArr addObject:
     @{
       @"name" : @"help_legend",
-      @"title" : OALocalizedString(@"help_legend"),
+      @"title" : OALocalizedString(@"map_legend"),
       @"description" : OALocalizedString(@"help_legend_descr"),
       @"type" : kLinkInternalType,
       @"html" : @"map-legend"
@@ -122,7 +122,7 @@ static const NSInteger groupCount = 5;
     [dataArr addObject:
      @{
        @"name" : @"help_map_viewing",
-       @"title" : OALocalizedString(@"help_map_viewing"),
+       @"title" : OALocalizedString(@"map_viewing_item"),
        @"type" : kLinkInternalType,
        @"html" : @"map-viewing"
        }];
@@ -138,7 +138,7 @@ static const NSInteger groupCount = 5;
     [dataArr addObject:
      @{
        @"name" : @"help_trip_planning",
-       @"title" : OALocalizedString(@"help_trip_planning"),
+       @"title" : OALocalizedString(@"planning_trip_item"),
        @"type" : kLinkInternalType,
        @"html" : @"trip-planning"
        }];
@@ -146,7 +146,7 @@ static const NSInteger groupCount = 5;
     [dataArr addObject:
      @{
        @"name" : @"help_navigation_profiles",
-       @"title" : OALocalizedString(@"help_nav_profiles"),
+       @"title" : OALocalizedString(@"navigation_profiles_item"),
        @"type" : kLinkInternalType,
        @"html" : @"navigation-profiles"
        }];
@@ -154,7 +154,7 @@ static const NSInteger groupCount = 5;
     [dataArr addObject:
     @{
       @"name" : @"help_purchases",
-      @"title" : OALocalizedString(@"help_purchases"),
+      @"title" : OALocalizedString(@"osmand_purchases_item"),
       @"type" : kLinkInternalType,
       @"html" : @"osmand_purchases"
       }];
@@ -162,7 +162,7 @@ static const NSInteger groupCount = 5;
     [dataArr addObject:
     @{
       @"name" : @"help_osmand_live",
-      @"title" : OALocalizedString(@"help_osmand_live"),
+      @"title" : OALocalizedString(@"subscription_osmandlive_item"),
       @"type" : kLinkInternalType,
       @"html" : @"subscription"
       }];
@@ -170,7 +170,7 @@ static const NSInteger groupCount = 5;
     [dataArr addObject:
     @{
       @"name" : @"help_favorites",
-      @"title" : OALocalizedString(@"favorites"),
+      @"title" : OALocalizedString(@"favorites_item"),
       @"type" : kLinkInternalType,
       @"html" : @"favourites"
       }];
@@ -202,7 +202,7 @@ static const NSInteger groupCount = 5;
     [dataArr addObject:
     @{
       @"name" : @"help_quick_action",
-      @"title" : OALocalizedString(@"quick_action_name"),
+      @"title" : OALocalizedString(@"configure_screen_quick_action"),
       @"type" : kLinkInternalType,
       @"html" : @"quick-action"
       }];
@@ -222,21 +222,21 @@ static const NSInteger groupCount = 5;
     [dataArr addObject:
      @{
        @"name" : @"online_maps",
-       @"title" : OALocalizedString(@"map_settings_online"),
+       @"title" : OALocalizedString(@"shared_string_online_maps"),
        @"type" : kLinkInternalType,
        @"html" : @"online-maps-plugin"
        }];
     [dataArr addObject:
      @{
        @"name" : @"trip_recording",
-       @"title" : OALocalizedString(@"product_title_track_recording"),
+       @"title" : OALocalizedString(@"monitoring_settings"),
        @"type" : kLinkInternalType,
        @"html" : @"trip-recording-plugin"
        }];
     [dataArr addObject:
      @{
        @"name" : @"contour_lines",
-       @"title" : OALocalizedString(@"product_title_srtm"),
+       @"title" : OALocalizedString(@"download_srtm_maps"),
        @"type" : kLinkInternalType,
        @"html" : @"contour-lines-plugin"
        }];
@@ -260,7 +260,7 @@ static const NSInteger groupCount = 5;
     [dataArr addObject:
     @{
       @"name" : @"osm_editing",
-      @"title" : OALocalizedString(@"product_title_osm_editing"),
+      @"title" : OALocalizedString(@"osm_editing_plugin_name"),
       @"type" : kLinkInternalType,
       @"html" : @"osm-editing-plugin"
       }];
@@ -268,7 +268,7 @@ static const NSInteger groupCount = 5;
     [dataArr addObject:
      @{
        @"name" : @"ski_map",
-       @"title" : OALocalizedString(@"product_title_skimap"),
+       @"title" : OALocalizedString(@"product_desc_skimap"),
        @"type" : kLinkInternalType,
        @"html" : @"ski-plugin"
        }];
@@ -288,7 +288,7 @@ static const NSInteger groupCount = 5;
     [dataArr addObject:
      @{
        @"name" : @"install_and_troublesoot",
-       @"title" : OALocalizedString(@"help_install_and_troubleshoot"),
+       @"title" : OALocalizedString(@"instalation_troubleshooting_item"),
        @"type" : kLinkInternalType,
        @"html" : @"installation-and-troubleshooting"
        }];
@@ -298,7 +298,7 @@ static const NSInteger groupCount = 5;
     [dataArr addObject:
      @{
        @"name" : @"versions",
-       @"title" : OALocalizedString(@"help_versions"),
+       @"title" : OALocalizedString(@"versions_item"),
        @"type" : kLinkInternalType,
        @"html" : @"changes"
        }];
@@ -314,7 +314,7 @@ static const NSInteger groupCount = 5;
     [dataArr addObject:
      @{
        @"name" : @"feedback",
-       @"title" : OALocalizedString(@"menu_feedback"),
+       @"title" : OALocalizedString(@"feedback"),
        @"description" : kOsmAndPoll,
        @"type" : kLinkExternalType
        }];
@@ -323,7 +323,7 @@ static const NSInteger groupCount = 5;
     [dataArr addObject:
      @{
        @"name" : @"about",
-       @"title" : OALocalizedString(@"help_about"),
+       @"title" : OALocalizedString(@"shared_string_about"),
        @"description" : [NSString stringWithFormat:@"%@ %@", @"OsmAnd", OAAppVersionDependentConstants.getVersion],
        @"type" : kLinkInternalType,
        @"html" : @"about"
@@ -444,13 +444,13 @@ static const NSInteger groupCount = 5;
     if (section == firstStepsIndex)
         return OALocalizedString(@"help_first_steps");
     else if (section == featuresIndex)
-        return OALocalizedString(@"help_features");
+        return OALocalizedString(@"features_menu_group");
     else if (section == pluginsIndex)
-        return OALocalizedString(@"plugins");
+        return OALocalizedString(@"plugins_menu_group");
     else if (section == otherIndex)
-        return OALocalizedString(@"help_other_header");
+        return OALocalizedString(@"other_location");
     else if (section == followIndex)
-        return OALocalizedString(@"help_follow_us");
+        return OALocalizedString(@"follow_us");
     
     return 0;
 }

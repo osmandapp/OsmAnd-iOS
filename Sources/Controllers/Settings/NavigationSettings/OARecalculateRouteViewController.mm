@@ -110,7 +110,7 @@
     {
         [distanceArr addObject:@{
             @"type" : [OATimeTableViewCell getCellIdentifier],
-            @"title" : OALocalizedString(@"shared_string_distance"),
+            @"title" : OALocalizedString(@"map_widget_trip_recording_distance"),
         }];
         [distanceArr addObject:@{
             @"type" : [OACustomPickerTableViewCell getCellIdentifier],
@@ -236,7 +236,7 @@
 
 - (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
-    return section == 0 ? OALocalizedString(@"route_recalculation_descr") : OALocalizedString(@"select_distance_for_recalculation");
+    return section == 0 ? OALocalizedString(@"recalculate_route_distance_promo") : OALocalizedString(@"select_distance_route_will_recalc");
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section

@@ -133,7 +133,7 @@
 
 - (void)showChangesAlert
 {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"osm_editing_lost_changes_title") preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"exit_without_saving") preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_exit") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self.navigationController popViewControllerAnimated:YES];
     }]];
@@ -277,7 +277,7 @@
 
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return section == kAllApplicationProfilesSection ? OALocalizedString(@"all_application_profiles") : OALocalizedString(@"osm_deleted");
+    return section == kAllApplicationProfilesSection ? OALocalizedString(@"all_application_profiles") : OALocalizedString(@"poi_remove_success");
 }
 
 - (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section

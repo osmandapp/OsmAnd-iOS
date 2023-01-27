@@ -115,7 +115,7 @@
     {
         [existingTracksSection addObject:@{
             @"type" : [OAHeaderRoundCell getCellIdentifier],
-            @"title" : OALocalizedString(@"plan_route_last_modified"),
+            @"title" : OALocalizedString(@"sort_last_modified"),
             @"key" : @"header"
         }];
 

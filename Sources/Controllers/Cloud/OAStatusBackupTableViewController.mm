@@ -391,9 +391,9 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
         {
             OAFileSettingsItem *fileItem = (OAFileSettingsItem *) settingsItem;
             if (fileItem.subtype == EOASettingsItemFileSubtypeVoiceTTS)
-                name = [NSString stringWithFormat:@"%@ (%@)", name, OALocalizedString(@"tts")];
+                name = [NSString stringWithFormat:@"%@ (%@)", name, OALocalizedString(@"tts_title")];
             else if (fileItem.subtype == EOASettingsItemFileSubtypeVoice)
-                name = [NSString stringWithFormat:@"%@ (%@)", name, OALocalizedString(@"recorded_voice")];
+                name = [NSString stringWithFormat:@"%@ (%@)", name, OALocalizedString(@"shared_string_recorded")];
         }
         else if (!name)
         {
@@ -443,13 +443,13 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     switch (operation)
     {
         case EOABackupSyncOperationDownload:
-            return OALocalizedString(localFile ? @"osm_modified" : @"shared_string_added");
+            return OALocalizedString(localFile ? @"shared_string_modified" : @"shared_string_added");
         case EOABackupSyncOperationUpload:
-            return OALocalizedString(remoteFile ? @"osm_modified" : @"shared_string_added");
+            return OALocalizedString(remoteFile ? @"shared_string_modified" : @"shared_string_added");
         case EOABackupSyncOperationDelete:
-            return OALocalizedString(@"osm_deleted");
+            return OALocalizedString(@"poi_remove_success");
         default:
-            return OALocalizedString(@"osm_modified");
+            return OALocalizedString(@"shared_string_modified");
     }
 }
 

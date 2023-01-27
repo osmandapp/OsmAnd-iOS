@@ -65,7 +65,7 @@
 {
     [super applyLocalization];
     
-    _titleView.text = OALocalizedString(@"res_updates");
+    _titleView.text = OALocalizedString(@"download_tab_updates");
     [_updateAllButton setTitle:OALocalizedString(@"res_update_all") forState:UIControlStateNormal];
 }
 
@@ -410,7 +410,7 @@
         if (indexPath.row == _liveUpdatesRow)
         {
             cellTypeId = liveUpdatesCell;
-            title = OALocalizedString(@"osmand_live_updates");
+            title = OALocalizedString(@"live_updates");
         }
         else if (indexPath.row == _weatherForecastsRow)
         {

@@ -69,7 +69,7 @@
 {
     self.titleLabel.text = OALocalizedString(@"cloud_recent_changes");
     [self.segmentControl setTitle:OALocalizedString(@"download_tab_local") forSegmentAtIndex:EOARecentChangesLocal];
-    [self.segmentControl setTitle:OALocalizedString(@"shared_string_file_cloud") forSegmentAtIndex:EOARecentChangesRemote];
+    [self.segmentControl setTitle:OALocalizedString(@"shared_string_cloud") forSegmentAtIndex:EOARecentChangesRemote];
     [self.segmentControl setTitle:OALocalizedString(@"cloud_conflicts") forSegmentAtIndex:EOARecentChangesConflicts];
 }
 

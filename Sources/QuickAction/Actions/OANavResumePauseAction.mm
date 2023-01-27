@@ -69,7 +69,7 @@ static OAQuickActionType *TYPE;
 + (OAQuickActionType *) TYPE
 {
     if (!TYPE)
-        TYPE = [[OAQuickActionType alloc] initWithIdentifier:26 stringId:@"nav.resumepause" class:self.class name:OALocalizedString(@"pause_resume_nav") category:NAVIGATION iconName:@"ic_custom_navigation_arrow" secondaryIconName:@"ic_custom_compound_action_add" editable:NO];
+        TYPE = [[OAQuickActionType alloc] initWithIdentifier:26 stringId:@"nav.resumepause" class:self.class name:OALocalizedString(@"quick_action_resume_pause_navigation") category:NAVIGATION iconName:@"ic_custom_navigation_arrow" secondaryIconName:@"ic_custom_compound_action_add" editable:NO];
        
     return TYPE;
 }

@@ -217,14 +217,14 @@ static NSArray<OAExportSettingsType *> *allValues;
 + (OAExportSettingsType *)FAVORITES
 {
     if (!FAVORITES)
-        FAVORITES = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"favorites") name:@"FAVORITES" itemName:@"FAVOURITES" icon:[UIImage templateImageNamed:@"ic_custom_my_places"]];
+        FAVORITES = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"favorites_item") name:@"FAVORITES" itemName:@"FAVOURITES" icon:[UIImage templateImageNamed:@"ic_custom_my_places"]];
     return FAVORITES;
 }
 
 + (OAExportSettingsType *)TRACKS
 {
     if (!TRACKS)
-        TRACKS = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"tracks") name:@"TRACKS" itemName:@"GPX" icon:[UIImage templateImageNamed:@"ic_custom_trip"]];
+        TRACKS = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"shared_string_gpx_tracks") name:@"TRACKS" itemName:@"GPX" icon:[UIImage templateImageNamed:@"ic_custom_trip"]];
     return TRACKS;
 }
 
@@ -264,7 +264,7 @@ static NSArray<OAExportSettingsType *> *allValues;
 + (OAExportSettingsType *)SEARCH_HISTORY
 {
     if (!SEARCH_HISTORY)
-        SEARCH_HISTORY = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"search_history") name:@"SEARCH_HISTORY" itemName:@"SEARCH_HISTORY" icon:[UIImage templateImageNamed:@"ic_custom_search"]];
+        SEARCH_HISTORY = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"shared_string_search_history") name:@"SEARCH_HISTORY" itemName:@"SEARCH_HISTORY" icon:[UIImage templateImageNamed:@"ic_custom_search"]];
     return SEARCH_HISTORY;
 }
 
@@ -285,7 +285,7 @@ static NSArray<OAExportSettingsType *> *allValues;
 + (OAExportSettingsType *)MAP_SOURCES
 {
     if (!MAP_SOURCES)
-        MAP_SOURCES = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"map_sources") name:@"MAP_SOURCES" itemName:@"MAP_SOURCES" icon:[UIImage templateImageNamed:@"ic_custom_globe_latitude"]];
+        MAP_SOURCES = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"quick_action_map_source_title") name:@"MAP_SOURCES" itemName:@"MAP_SOURCES" icon:[UIImage templateImageNamed:@"ic_custom_globe_latitude"]];
     return MAP_SOURCES;
 }
 

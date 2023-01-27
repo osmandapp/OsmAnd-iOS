@@ -60,7 +60,7 @@
 - (void) applyLocalization
 {
     [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"language");
+    self.titleLabel.text = OALocalizedString(@"shared_string_language");
 }
 
 - (void) viewDidLoad

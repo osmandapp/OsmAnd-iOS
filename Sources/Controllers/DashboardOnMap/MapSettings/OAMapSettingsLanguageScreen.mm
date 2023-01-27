@@ -32,7 +32,7 @@
         _app = [OsmAndApp instance];
         _settings = [OAAppSettings sharedManager];
         
-        title = OALocalizedString(@"sett_lang");
+        title = OALocalizedString(@"map_locale");
         settingsScreen = EMapSettingsScreenLanguage;
         
         vwController = viewController;
@@ -63,7 +63,7 @@
     if (_prefLangId)
         _prefLang = [[[NSLocale currentLocale] displayNameForKey:NSLocaleIdentifier value:_prefLangId] capitalizedStringWithLocale:[NSLocale currentLocale]];
     else
-        _prefLang = OALocalizedString(@"local_names");
+        _prefLang = OALocalizedString(@"local_map_names");
     
     [tblView reloadData];
 }
@@ -203,7 +203,7 @@
             }
             else
             {
-                cell.titleLabel.text = OALocalizedString(@"sett_lang_show_trans");
+                cell.titleLabel.text = OALocalizedString(@"translit_names");
                 cell.titleLabel.textColor = [UIColor blackColor];
 
                 cell.switchView.enabled = YES;

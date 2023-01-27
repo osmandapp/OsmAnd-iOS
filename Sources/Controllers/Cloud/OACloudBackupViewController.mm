@@ -177,8 +177,8 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
             [existingBackupSection addRowFromDictionary:@{
                 kCellTypeKey: OALargeImageTitleDescrTableViewCell.getCellIdentifier,
                 kCellKeyKey: @"existingOnlineBackup",
-                kCellTitleKey: OALocalizedString(@"cloud_welcome_back"),
-                kCellDescrKey: OALocalizedString(@"cloud_description"),
+                kCellTitleKey: OALocalizedString(@"backup_welcome_back"),
+                kCellDescrKey: OALocalizedString(@"osmand_cloud_authorize_descr"),
                 kCellIconNameKey: @"ic_action_cloud_smile_face_colored"
             }];
            
@@ -210,7 +210,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
                 [noBackupRows addRowFromDictionary:@{
                     kCellTypeKey: OAFilledButtonCell.getCellIdentifier,
                     kCellKeyKey: @"onSetUpBackupButtonPressed",
-                    kCellTitleKey: OALocalizedString(@"cloud_set_up_backup")
+                    kCellTitleKey: OALocalizedString(@"set_up_backup")
                 }];
             }
             noBackupRows.headerText = OALocalizedString(@"shared_string_status");
@@ -256,7 +256,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
             OATableRowData *updatesRow = [[OATableRowData alloc] initWithData:@{
                 kCellTypeKey: OAValueTableViewCell.getCellIdentifier,
                 kCellKeyKey: @"remote_updates",
-                kCellTitleKey: OALocalizedString(@"res_updates"),
+                kCellTitleKey: OALocalizedString(@"download_tab_updates"),
                 kCellIconNameKey: @"ic_custom_cloud",
                 @"value": @([OABackupHelper getItemsMapForRestore:_info settingsItems:_backup.settingsItems].count)
             }];

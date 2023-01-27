@@ -64,7 +64,7 @@
     else if (_settingsType == EOADefaultProfile)
         self.titleLabel.text = OALocalizedString(@"settings_preset");
     else if (_settingsType == EOADialogsAndNotifications)
-        self.titleLabel.text = OALocalizedString(@"dialogs_and_notifications");
+        self.titleLabel.text = OALocalizedString(@"dialogs_and_notifications_title");
     else
         self.titleLabel.text = OALocalizedString(@"carplay_profile");
 }
@@ -104,7 +104,7 @@
                 @{
                     @"name" : @"settings_preset",
                     @"title" : OALocalizedString(@"settings_preset"),
-                    @"value" : _settings.useLastApplicationModeByDefault.get ? OALocalizedString(@"last_used") : _settings.defaultApplicationMode.get.toHumanString,
+                    @"value" : _settings.useLastApplicationModeByDefault.get ? OALocalizedString(@"shared_string_last_used") : _settings.defaultApplicationMode.get.toHumanString,
                     @"description" : OALocalizedString(@"default_profile_descr"),
                     @"img" : @"menu_cell_pointer.png",
                     @"type" : [OASettingsTableViewCell getCellIdentifier] },
@@ -117,7 +117,7 @@
                     @"type" : [OASettingsTableViewCell getCellIdentifier] },
                 @{
                     @"name" : @"dialogs_and_notif",
-                    @"title" : OALocalizedString(@"dialogs_and_notifications"),
+                    @"title" : OALocalizedString(@"dialogs_and_notifications_title"),
                     @"description" : OALocalizedString(@"dialogs_and_notifications_descr"),
                     @"value" : [self getDialogsAndNotificationsValue],
                     @"img" : @"menu_cell_pointer.png",
@@ -138,7 +138,7 @@
             NSMutableArray *arr = [NSMutableArray array];
             [arr addObject: @{
                 @"name" : @"last_used",
-                @"title" : OALocalizedString(@"last_used"),
+                @"title" : OALocalizedString(@"shared_string_last_used"),
                 @"value" : @(_isUsingLastAppMode),
                 @"type" : [OASwitchTableViewCell getCellIdentifier] }];
             

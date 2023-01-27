@@ -164,7 +164,7 @@
     _poiData = _dataProvider.getData;
     _fieldPairs = [NSMutableArray new];
     OAPOIType *pt = _poiData.getCurrentPoiType;
-    NSString *hint = OALocalizedString(@"amenity");
+    NSString *hint = OALocalizedString(@"icon_group_amenity");
     NSString *value = @"";
     if (pt && !pt.nonEditableOsm)
     {
@@ -182,7 +182,7 @@
     NSString *poiName = [_poiData getTag:[OAOSMSettings getOSMKey:NAME]];
     
     NSArray *nameTypePair = @[
-                              [self getDictionary:[OADescrTitleCell getCellIdentifier] hint:OALocalizedString(@"fav_name") value:poiName image:nil],
+                              [self getDictionary:[OADescrTitleCell getCellIdentifier] hint:OALocalizedString(@"shared_string_name") value:poiName image:nil],
                               [self getDictionary:[OADescrTitleCell getCellIdentifier] hint:hint value:value image:nil]
                               ];
     [_fieldPairs addObject:nameTypePair];

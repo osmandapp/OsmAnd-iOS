@@ -48,7 +48,7 @@
 
     OAGPXTableSectionData *descriptionSectionData = [OAGPXTableSectionData withData:@{
             kTableKey: @"section_description",
-            kSectionHeader: OALocalizedString(@"description"),
+            kSectionHeader: OALocalizedString(@"shared_string_description"),
             kSectionHeaderHeight: @56.
     }];
     [self.tableData.subjects addObject:descriptionSectionData];
@@ -72,7 +72,7 @@
 
     OAGPXTableSectionData *infoSectionData = [OAGPXTableSectionData withData:@{
             kTableKey: @"section_info",
-            kSectionHeader: OALocalizedString(@"shared_string_info"),
+            kSectionHeader: OALocalizedString(@"info_button"),
             kSectionHeaderHeight: @56.
     }];
     [self.tableData.subjects addObject:infoSectionData];
@@ -80,7 +80,7 @@
     OAGPXTableCellData *sizeCellData = [OAGPXTableCellData withData:@{
             kTableKey: @"size",
             kCellType: [OAIconTitleValueCell getCellIdentifier],
-            kCellTitle: OALocalizedString(@"res_size"),
+            kCellTitle: OALocalizedString(@"shared_string_size"),
             kCellDesc: self.trackMenuDelegate ? [self.trackMenuDelegate getGpxFileSize] : @""
     }];
     [infoSectionData.subjects addObject:sizeCellData];
@@ -154,7 +154,7 @@
     return [OAGPXTableCellData withData:@{
             kTableKey: @"created_on",
             kCellType: [OAIconTitleValueCell getCellIdentifier],
-            kCellTitle: OALocalizedString(@"res_created_on"),
+            kCellTitle: OALocalizedString(@"created_on"),
             kCellDesc: [self generateCreatedOnString]
     }];
 }
@@ -164,7 +164,7 @@
     return [OAGPXTableCellData withData:@{
             kTableKey: @"location",
             kCellType: [OAIconTitleValueCell getCellIdentifier],
-            kCellTitle: OALocalizedString(@"sett_arr_loc"),
+            kCellTitle: OALocalizedString(@"shared_string_location"),
             kCellDesc: [self generateDirName]
     }];
 }

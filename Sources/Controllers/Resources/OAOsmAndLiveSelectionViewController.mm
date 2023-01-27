@@ -89,7 +89,7 @@ static const NSInteger groupCount = 1;
 
 -(void) applyLocalization
 {
-    _titleView.text = _settingsScreen == ELiveSettingsScreenMain ? _titleName : OALocalizedString(@"osmand_live_upd_frequency");
+    _titleView.text = _settingsScreen == ELiveSettingsScreenMain ? _titleName : OALocalizedString(@"update_frequency");
     [_cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
     [_applyButton setTitle:OALocalizedString(@"shared_string_apply") forState:UIControlStateNormal];
 }
@@ -108,7 +108,7 @@ static const NSInteger groupCount = 1;
         _footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 55.0)];
         NSDictionary *attrs = @{ NSFontAttributeName : [UIFont systemFontOfSize:16.0],
                                  NSForegroundColorAttributeName : [UIColor whiteColor] };
-        NSAttributedString *text = [[NSAttributedString alloc] initWithString:OALocalizedString(@"osmand_live_update_now") attributes:attrs];
+        NSAttributedString *text = [[NSAttributedString alloc] initWithString:OALocalizedString(@"update_now") attributes:attrs];
         UIButton *updateNow = [UIButton buttonWithType:UIButtonTypeSystem];
         BOOL canUpdate = [OAAppSettings sharedManager].settingOsmAndLiveEnabled.get && [OAIAPHelper isSubscribedToLiveUpdates];
         updateNow.userInteractionEnabled = canUpdate;
@@ -171,7 +171,7 @@ static const NSInteger groupCount = 1;
             [dataArr addObject:
              @{
                @"name" : @"osm_live_enabled",
-               @"title" : OALocalizedString(@"osmand_live_updates"),
+               @"title" : OALocalizedString(@"live_updates"),
                @"value" : @(_isLiveUpdatesEnabled),
                @"type" : [OASwitchTableViewCell getCellIdentifier]
                }];
@@ -187,7 +187,7 @@ static const NSInteger groupCount = 1;
             [dataArr addObject:
              @{
                @"name" : @"update_frequency",
-               @"title" : OALocalizedString(@"osmand_live_upd_frequency"),
+               @"title" : OALocalizedString(@"update_frequency"),
                @"value" : [OAOsmAndLiveHelper getFrequencyString:_updatingFrequency],
                @"img" : @"menu_cell_pointer.png",
                @"type" : [OASettingsTableViewCell getCellIdentifier] }
@@ -214,7 +214,7 @@ static const NSInteger groupCount = 1;
             [dataArr addObject:
              @{
                @"name" : @"hourly_freq",
-               @"title" : OALocalizedString(@"osmand_live_hourly"),
+               @"title" : OALocalizedString(@"hourly"),
                @"img" : currentFrequency == ELiveUpdateFrequencyHourly ? @"menu_cell_selected.png" : @"",
                @"type" : [OASettingsTitleTableViewCell getCellIdentifier] }
              ];
@@ -230,7 +230,7 @@ static const NSInteger groupCount = 1;
             [dataArr addObject:
              @{
                @"name" : @"weekly_freq",
-               @"title" : OALocalizedString(@"osmand_live_weekly"),
+               @"title" : OALocalizedString(@"weekly"),
                @"img" : currentFrequency == ELiveUpdateFrequencyWeekly ? @"menu_cell_selected.png" : @"",
                @"type" : [OASettingsTitleTableViewCell getCellIdentifier] }
              ];

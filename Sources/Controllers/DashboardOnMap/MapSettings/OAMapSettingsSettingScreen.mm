@@ -73,18 +73,18 @@
                      @"value" : @"",
                      @"img" : mode == APPEARANCE_MODE_AUTO ? @"menu_cell_selected.png" : @"" },
                  @{
-                     @"name" : OALocalizedString(@"map_settings_day"),
+                     @"name" : OALocalizedString(@"day"),
                      @"value" : @"",
                      @"img" : mode == APPEARANCE_MODE_DAY ? @"menu_cell_selected.png" : @"" },
                  @{
-                     @"name" : OALocalizedString(@"map_settings_night"),
+                     @"name" : OALocalizedString(@"daynight_mode_night"),
                      @"value" : @"",
                      @"img" : mode == APPEARANCE_MODE_NIGHT ? @"menu_cell_selected.png" : @"" }
                  ];
     }
     else if ([settingKeyName isEqualToString:mapDensityKey])
     {
-        title = OALocalizedString(@"map_settings_map_magnifier");
+        title = OALocalizedString(@"map_magnifier");
         double value = [_settings.mapDensity get];
         
         data = @[
@@ -132,7 +132,7 @@
     }
     else if ([settingKeyName isEqualToString:textSizeKey])
     {
-        title = OALocalizedString(@"map_settings_text_size");
+        title = OALocalizedString(@"text_size");
         double value = [_settings.textSize get:_settings.applicationMode.get];
         
         data = @[

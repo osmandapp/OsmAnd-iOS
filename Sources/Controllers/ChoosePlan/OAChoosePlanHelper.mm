@@ -56,7 +56,7 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
         case EOAFeatureHourlyMapUpdates:
             return OALocalizedString(@"daily_map_updates");
         case EOAFeatureCrossBuy:
-            return OALocalizedString(@"cross_buy");
+            return OALocalizedString(@"shared_string_cross_buy");
         case EOAFeatureMonthlyMapUpdates:
             return OALocalizedString(@"monthly_map_updates");
         case EOAFeatureUnlimitedMapDownloads:
@@ -74,7 +74,7 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
         case EOAFeatureNautical:
             return OALocalizedString(@"nautical_depth");
         case EOAFeatureWeather:
-            return OALocalizedString(@"product_title_weather");
+            return OALocalizedString(@"shared_string_weather");
         case EOAFeatureRegionAfrica:
             return OALocalizedString(@"product_desc_africa");
         case EOAFeatureRegionRussia:

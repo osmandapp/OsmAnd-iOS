@@ -181,7 +181,7 @@
         @"rows" : layerRowData
     }];
     
-    NSString * layerTitle = _weatherBand ? _weatherBand.getMeasurementName : OALocalizedString(@"map_settings_weather_contours");
+    NSString * layerTitle = _weatherBand ? _weatherBand.getMeasurementName : OALocalizedString(@"shared_string_contours");
     [layerRowData addObject:@{
         @"cellId" : OASwitchTableViewCell.getCellIdentifier,
         @"type" : kSwitchCell,
@@ -206,7 +206,7 @@
         NSDictionary *transparencyRow = @{
             @"cellId" : OATitleSliderTableViewCell.getCellIdentifier,
             @"type" : kTransparencyCell,
-            @"title" : OALocalizedString(@"map_settings_transp"),
+            @"title" : OALocalizedString(@"shared_string_transparency"),
             @"value" : @([self getLayerAlphaValue])
         };
         
@@ -264,7 +264,7 @@
                         
             _menuHeight += kNonEmptyHeaderHeight;
             [data addObject:@{
-                @"sectionTitle" : OALocalizedString(@"res_type"),
+                @"sectionTitle" : OALocalizedString(@"shared_string_type"),
                 @"rows" : contoursTypesRows
             }];
             

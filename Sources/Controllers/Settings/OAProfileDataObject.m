@@ -145,27 +145,27 @@ static NSDictionary<NSString *, OARoutingProfileDataObject *> *_rpValues;
 {
     switch (res) {
         case EOARoutingProfilesResourceDirectTo:
-            return OALocalizedString(@"nav_type_direct_to");
+            return OALocalizedString(@"routing_profile_direct_to");
         case EOARoutingProfilesResourceStraightLine:
-            return OALocalizedString(@"nav_type_straight_line");
+            return OALocalizedString(@"routing_profile_straightline");
         case EOARoutingProfilesResourceBrouter:
             return OALocalizedString(@"nav_type_brouter");
         case EOARoutingProfilesResourceCar:
-            return OALocalizedString(@"m_style_car");
+            return OALocalizedString(@"routing_engine_vehicle_type_driving");
         case EOARoutingProfilesResourcePedestrian:
             return OALocalizedString(@"rendering_value_pedestrian_name");
         case EOARoutingProfilesResourceBicycle:
-            return OALocalizedString(@"m_style_bicycle");
+            return OALocalizedString(@"app_mode_bicycle");
         case EOARoutingProfilesResourceSki:
-            return OALocalizedString(@"nav_type_ski");
+            return OALocalizedString(@"routing_profile_ski");
         case EOARoutingProfilesResourcePublicTransport:
-            return OALocalizedString(@"m_style_pulic_transport");
+            return OALocalizedString(@"poi_filter_public_transport");
         case EOARoutingProfilesResourceBoat:
             return OALocalizedString(@"app_mode_boat");
         case EOARoutingProfilesResourceHorsebackriding:
             return OALocalizedString(@"horseback_riding");
         case EOARoutingProfilesResourceGeocoding:
-            return OALocalizedString(@"nav_type_geocoding");
+            return OALocalizedString(@"routing_profile_geocoding");
         default:
             return @"";
     };

@@ -12,6 +12,7 @@
 #import "OATableDataModel.h"
 #import "OATableSectionData.h"
 #import "OATableRowData.h"
+#import "OAPOIHelper.h"
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
 #import "OAUtilities.h"
@@ -133,6 +134,7 @@
 - (IBAction)secondaryButtonPressed:(id)sender
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
+    [settings setForbiddenTypes:[NSSet setWithObject:SPEED_CAMERA]];
     [settings.speedCamerasUninstalled set:YES];
     [settings.speakCameras set:NO];
     [settings.showCameras set:NO];

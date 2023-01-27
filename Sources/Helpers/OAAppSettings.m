@@ -4979,16 +4979,18 @@
     [[NSUserDefaults standardUserDefaults] setObject:@(timestamp) forKey:[NSString stringWithFormat:@"%@_%@", lastProfileSettingsModifiedTimeKey, mode.stringKey]];
 }
 
-- (void)setTypeForbidden:(NSSet<NSString *> *)forbiddenTypes
+- (void)setForbiddenTypes:(NSSet<NSString *> *)forbiddenTypes
 {
     _forbiddenTypes = forbiddenTypes;
 }
 
+- (NSSet<NSString *> *)getForbiddenTypes
+{
+    return _forbiddenTypes;
+}
+
 - (BOOL)isTypeForbidden:(NSString *)typeName
 {
-    if ([_forbiddenTypes containsObject:typeName])
-        return YES;
-
     return [_forbiddenTypes containsObject:typeName];
 }
 

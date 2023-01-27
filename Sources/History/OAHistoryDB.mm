@@ -299,12 +299,23 @@
                     if (sqlite3_column_text(statement, 8) != nil)
                         typeName = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 8)];
 
-                    if (([typeName isEqualToString:[poiHelper getPhraseByName:SPEED_CAMERA]] && [settings isTypeForbidden:SPEED_CAMERA])
-                        || (type == OAHistoryTypePOI && ![OAQuickSearchTableController findAmenity:name lat:lat lon:lon lang:lang ? lang : @"" transliterate:transliterate]))
+                    BOOL skipForbiddenResult = NO;
+                    NSSet<NSString *> *forbiddenPoiTypes = [settings getForbiddenTypes];
+                    for (NSString *forbiddenPoiType in forbiddenPoiTypes)
                     {
-                        //skip forbidden poi types
+                        if ([[poiHelper getPhraseByName:forbiddenPoiType] isEqualToString:typeName])
+                            skipForbiddenResult = YES;
                     }
-                    else
+                    if (!skipForbiddenResult)
+                    {
+                        skipForbiddenResult = type == OAHistoryTypePOI && ![OAQuickSearchTableController findAmenity:name
+                                                                                                                 lat:lat
+                                                                                                                 lon:lon
+                                                                                                                lang:lang ? lang : @""
+                                                                                                       transliterate:transliterate];
+                    }
+
+                    if (!skipForbiddenResult)
                     {
                         NSString *iconName;
                         if (sqlite3_column_text(statement, 7) != nil)

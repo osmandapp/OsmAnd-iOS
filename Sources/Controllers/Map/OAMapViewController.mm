@@ -1858,12 +1858,20 @@
                 langId = @"en";
             double mapDensity = [settings.mapDensity get];
             [_mapView setVisualZoomShift:mapDensity];
+            
+            QList<QString> forbiddenPoiTypes = QList<QString>();
+            for (NSString *forbiddenPoiType in [settings getForbiddenTypes])
+            {
+                forbiddenPoiTypes.append(QString::fromNSString(forbiddenPoiType));
+            }
             _mapPresentationEnvironment.reset(new OsmAnd::MapPresentationEnvironment(resolvedMapStyle,
                                                                                      self.displayDensityFactor,
                                                                                      mapDensity,
                                                                                      [settings.textSize get:settings.applicationMode.get],
                                                                                      QString::fromNSString(langId),
-                                                                                     langPreferences));
+                                                                                     langPreferences,
+                                                                                     nullptr,
+                                                                                     forbiddenPoiTypes));
             [OAWeatherHelper.sharedInstance updateMapPresentationEnvironment:self.mapPresentationEnv];
             
             _mapPrimitiviser.reset(new OsmAnd::MapPrimitiviser(_mapPresentationEnvironment));
@@ -2008,14 +2016,20 @@
             else if ([settings settingMapLanguageShowLocal] &&
                      settings.settingMapLanguageTranslit.get)
                 langId = @"en";
-            
-            
+
+            QList<QString> forbiddenPoiTypes = QList<QString>();
+            for (NSString *forbiddenPoiType in [settings getForbiddenTypes])
+            {
+                forbiddenPoiTypes.append(QString::fromNSString(forbiddenPoiType));
+            }
             _mapPresentationEnvironment.reset(new OsmAnd::MapPresentationEnvironment(resolvedMapStyle,
                                                                                      self.displayDensityFactor,
                                                                                      1.0,
                                                                                      1.0,
                                                                                      QString::fromNSString(langId),
-                                                                                     langPreferences));
+                                                                                     langPreferences,
+                                                                                     nullptr,
+                                                                                     forbiddenPoiTypes));
             
             
             _mapPrimitiviser.reset(new OsmAnd::MapPrimitiviser(_mapPresentationEnvironment));

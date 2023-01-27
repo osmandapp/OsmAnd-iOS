@@ -757,6 +757,8 @@
                                       return false;
                                   
                                   const auto& amenity = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
+                                  if ([[OAAppSettings sharedManager] isTypeForbidden:amenity->subType.toNSString()])
+                                      return false;
                                   
                                   NSString *poiID = [NSString stringWithFormat:@"%@_%lld", amenity->type.toNSString(), amenity->id.id];
                                   if ([ids containsObject:poiID])

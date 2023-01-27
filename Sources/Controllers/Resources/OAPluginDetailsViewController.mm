@@ -67,7 +67,7 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
 
 - (void) applyLocalization
 {
-    self.descLabel.text = OALocalizedStringUp(@"description");
+    self.descLabel.text = OALocalizedStringUp(@"shared_string_description");
 }
 
 - (void) viewDidLoad

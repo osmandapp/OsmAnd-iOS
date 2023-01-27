@@ -430,4 +430,14 @@
     }
 }
 
+- (NSString *) getName
+{
+    return OALocalizedString(@"record_plugin_name");
+}
+
+- (NSString *) getDescription
+{
+    return OALocalizedString(@"record_plugin_description");
+}
+
 @end

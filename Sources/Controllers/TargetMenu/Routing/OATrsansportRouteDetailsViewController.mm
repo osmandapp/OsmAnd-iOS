@@ -213,7 +213,7 @@
 
 - (void) applyLocalization
 {
-    _navBarTitleView.text = OALocalizedString(@"gpx_route");
+    _navBarTitleView.text = OALocalizedString(@"layer_route");
 }
 
 - (void)onMenuShown

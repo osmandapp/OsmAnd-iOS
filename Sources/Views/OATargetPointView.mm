@@ -177,9 +177,9 @@ static const NSInteger _buttonsCount = 4;
     [self doUpdateUI];
 
     [_buttonFavorite setTitle:OALocalizedString(@"ctx_mnu_add_fav") forState:UIControlStateNormal];
-    [_buttonShare setTitle:OALocalizedString(@"ctx_mnu_share") forState:UIControlStateNormal];
-    [_buttonDirection setTitle:OALocalizedString(@"ctx_mnu_direction") forState:UIControlStateNormal];
-    [_buttonShowInfo setTitle:[OALocalizedString(@"shared_string_info") upperCase] forState:UIControlStateNormal];
+    [_buttonShare setTitle:OALocalizedString(@"shared_string_share") forState:UIControlStateNormal];
+    [_buttonDirection setTitle:OALocalizedString(@"map_marker") forState:UIControlStateNormal];
+    [_buttonShowInfo setTitle:[OALocalizedString(@"info_button") upperCase] forState:UIControlStateNormal];
     [_buttonRoute setTitle:[OALocalizedString(@"shared_string_navigation") upperCase] forState:UIControlStateNormal];
 
     _backView4.hidden = YES;
@@ -651,7 +651,7 @@ static const NSInteger _buttonsCount = 4;
         [self insertSubview:self.customController.contentView atIndex:0];
     
     [self.buttonMore setImage:[UIImage imageNamed:@"three_dots.png"] forState:UIControlStateNormal];
-    [self.buttonMore setTitle:OALocalizedString(@"actions") forState:UIControlStateNormal];
+    [self.buttonMore setTitle:OALocalizedString(@"shared_string_actions") forState:UIControlStateNormal];
         
     if (self.customController.hasDismissButton)
     {
@@ -663,7 +663,7 @@ static const NSInteger _buttonsCount = 4;
     }
     else
     {
-        [_buttonDirection setTitle:OALocalizedString(@"ctx_mnu_direction") forState:UIControlStateNormal];
+        [_buttonDirection setTitle:OALocalizedString(@"map_marker") forState:UIControlStateNormal];
         [_buttonDirection setTitleColor:UIColorFromRGB(0x666666) forState:UIControlStateNormal];
         [_buttonDirection setImage:[UIImage imageNamed:@"menu_direction_icon_2"] forState:UIControlStateNormal];
         [_buttonDirection setTintColor:UIColorFromRGB(0x666666)];
@@ -2052,7 +2052,7 @@ static const NSInteger _buttonsCount = 4;
     if (_showFull || _showFullScreen)
         [_buttonShowInfo setTitle:[OALocalizedString(@"shared_string_collapse") upperCase] forState:UIControlStateNormal];
     else
-        [_buttonShowInfo setTitle:[OALocalizedString(@"res_details") upperCase] forState:UIControlStateNormal];
+        [_buttonShowInfo setTitle:[OALocalizedString(@"shared_string_details") upperCase] forState:UIControlStateNormal];
 }
 
 - (void) applyMapInteraction:(CGFloat)height animated:(BOOL)animated
@@ -2594,7 +2594,7 @@ static const NSInteger _buttonsCount = 4;
                 [sms appendString:@"\n"];
             }
 
-            [sms appendString:OALocalizedString(@"sett_arr_loc")];
+            [sms appendString:OALocalizedString(@"shared_string_location")];
             [sms appendString:@": "];
 
             if ([self isDirectionRTL])

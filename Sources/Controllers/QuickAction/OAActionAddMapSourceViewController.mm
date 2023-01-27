@@ -125,11 +125,11 @@
 {
     switch (_type) {
         case EOAMapSourceTypePrimary:
-            return OALocalizedString(@"offline_vector_maps");
+            return OALocalizedString(@"vector_data");
         case EOAMapSourceTypeOverlay:
-            return OALocalizedString(@"quick_action_no_overlay");
+            return OALocalizedString(@"no_overlay");
         case EOAMapSourceTypeUnderlay:
-            return OALocalizedString(@"quick_action_no_underlay");
+            return OALocalizedString(@"no_underlay");
         default:
             return @"";
     }

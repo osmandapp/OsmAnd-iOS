@@ -49,7 +49,7 @@
 {
     switch (_settingsType) {
         case EOAProfileGeneralSettingsMapOrientation:
-            _title = OALocalizedString(@"rotate_map_to_bearing");
+            _title = OALocalizedString(@"rotate_map_to");
             break;
         case EOAProfileGeneralSettingsDisplayPosition:
             _title = OALocalizedString(@"position_on_map");
@@ -67,7 +67,7 @@
             _title = OALocalizedString(@"angular_measurment_units");
             break;
         case EOAProfileGeneralSettingsExternalInputDevices:
-            _title = OALocalizedString(@"sett_ext_input");
+            _title = OALocalizedString(@"external_input_device");
             break;
         default:
             break;
@@ -148,7 +148,7 @@
             self.tableView.rowHeight = 60.;
             [dataArr addObject:@{
                 @"name" : @"AUTOMATIC",
-                @"title" : OALocalizedString(@"driving_region_automatic"),
+                @"title" : OALocalizedString(@"shared_string_automatic"),
                 @"description" : OALocalizedString(@"device_settings"),
                 @"value" : @"",
                 @"selected" : @(automatic),

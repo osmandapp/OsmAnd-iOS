@@ -155,8 +155,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     
     [switchArr addObject:@{
         @"type" : kCellTypeSegment,
-        @"title0" : OALocalizedString(@"map_settings_hillshade"),
-        @"title1" : OALocalizedString(@"gpx_slope")
+        @"title0" : OALocalizedString(@"shared_string_hillshade"),
+        @"title1" : OALocalizedString(@"shared_string_slope")
     }];
 
     NSMutableArray *transparencyArr = [NSMutableArray array];
@@ -220,18 +220,18 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     [sectionArr addObject:@{}];
     [sectionArr addObject:@{}];
     [sectionArr addObject:@{
-        @"header" : OALocalizedString(@"res_zoom_levels"),
+        @"header" : OALocalizedString(@"shared_string_zoom_levels"),
         @"footer" : OALocalizedString(@"map_settings_zoom_level_description")
     }];
     if (terrainType == EOATerrainTypeSlope)
     {
         [sectionArr addObject:@{
-            @"header" : OALocalizedString(@"map_settings_legend"),
+            @"header" : OALocalizedString(@"shared_string_legend"),
         }];
     }
     
     [sectionArr addObject:@{
-        @"header" : OALocalizedString(@"osmand_live_available_maps"),
+        @"header" : OALocalizedString(@"available_maps"),
         @"footer" : availableSectionFooter
     }];
     _sectionHeaderFooterTitles = [NSArray arrayWithArray:sectionArr];

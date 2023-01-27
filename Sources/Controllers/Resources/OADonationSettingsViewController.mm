@@ -92,7 +92,7 @@
 
 -(void) applyLocalization
 {
-    _titleView.text = OALocalizedString(@"osmand_live_donations");
+    _titleView.text = OALocalizedString(@"donations");
 }
 
 - (void) viewDidLoad
@@ -238,7 +238,7 @@
             [dataArr addObject:
              @[@{
                    @"name" : @"support_region",
-                   @"title" : OALocalizedString(@"osmand_live_support_reg_title"),
+                   @"title" : OALocalizedString(@"osm_live_support_region"),
                    @"value" : countryName,
                    @"img" : @"menu_cell_pointer",
                    @"type" : kCellTypeSingleSelectionList }]
@@ -343,7 +343,7 @@
     OAWorldRegion *worldRegion = [OsmAndApp instance].worldRegion;
     NSString *name = @"";
     if (region == worldRegion)
-        name = OALocalizedString(@"res_world_region");
+        name = OALocalizedString(@"shared_string_world");
     else if ([region getLevel] > 2 || ([region getLevel] == 2
                                       && [region.superregion.regionId isEqualToString:OsmAnd::WorldRegions::RussiaRegionId.toNSString()]))
     {

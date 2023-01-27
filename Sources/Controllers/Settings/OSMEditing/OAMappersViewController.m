@@ -96,7 +96,7 @@
     {
         availableTitle = OALocalizedString(@"map_updates_are_unavailable_yet");
         availableDescription = [NSString stringWithFormat:OALocalizedString(@"not_enough_contributions_descr"),
-                CHANGES_FOR_MAPPER_PROMO,
+                @(CHANGES_FOR_MAPPER_PROMO).stringValue,
                 [[@"(" stringByAppendingString:[self getMonthPeriod]] stringByAppendingString:@")"]];
         rightIcon = @"ic_custom_download_map_unavailable";
     }

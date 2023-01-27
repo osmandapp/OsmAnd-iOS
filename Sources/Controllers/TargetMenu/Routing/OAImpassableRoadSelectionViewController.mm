@@ -230,7 +230,7 @@
     self.titleView.text = OALocalizedString(@"impassable_road");
     [self.doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
     [self.clearAllButton setTitle:OALocalizedString(@"shared_string_clear_all") forState:UIControlStateNormal];
-    [self.selectButton setTitle:OALocalizedString(@"key_hint_select") forState:UIControlStateNormal];
+    [self.selectButton setTitle:OALocalizedString(@"shared_string_select") forState:UIControlStateNormal];
 }
 
 - (void) cancelPressed

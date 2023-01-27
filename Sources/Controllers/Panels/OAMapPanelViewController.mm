@@ -2646,13 +2646,13 @@ typedef enum
                 state:(OATrackMenuViewControllerState *)state
          trackHudMode:(EOATrackHudMode)trackHudMode
 {
-    BOOL showCurrentTrack = item == nil || !item.gpxFileName || item.gpxFileName.length == 0 || [item.gpxTitle isEqualToString:OALocalizedString(@"track_recording_name")];
+    BOOL showCurrentTrack = item == nil || !item.gpxFileName || item.gpxFileName.length == 0 || [item.gpxTitle isEqualToString:OALocalizedString(@"shared_string_currently_recording_track")];
     if (showCurrentTrack)
     {
         if (item == nil)
             item = [[OASavingTrackHelper sharedInstance] getCurrentGPX];
         if (!item.gpxTitle || item.gpxTitle.length == 0)
-            item.gpxTitle = OALocalizedString(@"track_recording_name");
+            item.gpxTitle = OALocalizedString(@"shared_string_currently_recording_track");
     }
 
     [self hideMultiMenuIfNeeded];

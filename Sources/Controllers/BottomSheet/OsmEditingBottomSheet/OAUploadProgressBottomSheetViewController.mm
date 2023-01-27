@@ -76,7 +76,7 @@
     NSMutableArray *arr = [NSMutableArray array];
     [arr addObject:@{
                      @"type" : [OABottomSheetHeaderCell getCellIdentifier],
-                     @"title" : OALocalizedString(@"osm_edit_uploading"),
+                     @"title" : OALocalizedString(@"local_openstreetmap_uploading"),
                      @"description" : @"",
                      }];
     

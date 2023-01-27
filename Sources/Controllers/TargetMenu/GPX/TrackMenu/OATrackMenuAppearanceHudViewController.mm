@@ -245,7 +245,7 @@
 
 - (void)applyLocalization
 {
-    [self.titleView setText:OALocalizedString(@"map_settings_appearance")];
+    [self.titleView setText:OALocalizedString(@"shared_string_appearance")];
 }
 
 - (OAGPXTableCellData *) generateDescriptionCellData:(NSString *)key description:(NSString *)description
@@ -300,7 +300,7 @@
     OAGPXTableCellData *directionCellData = [OAGPXTableCellData withData:@{
             kTableKey:@"direction_arrows",
             kCellType:[OASwitchTableViewCell getCellIdentifier],
-            kCellTitle:OALocalizedString(@"gpx_dir_arrows")
+            kCellTitle:OALocalizedString(@"gpx_direction_arrows")
     }];
 
     OAGPXTableCellData *startFinishCellData = [OAGPXTableCellData withData:@{
@@ -317,7 +317,7 @@
             kTableKey: @"color_title",
             kCellType: [OAIconTitleValueCell getCellIdentifier],
             kTableValues: @{ @"string_value": _selectedItem.title },
-            kCellTitle: OALocalizedString(@"fav_color")
+            kCellTitle: OALocalizedString(@"shared_string_color")
     }];
 
     [colorsCells addObject:colorTitleCellData];
@@ -338,7 +338,7 @@
                 @"array_value": trackColoringTypes,
                 @"selected_integer_value": @([_availableColoringTypes indexOfObject:_selectedItem])
             },
-            kCellTitle: OALocalizedString(@"fav_color")
+            kCellTitle: OALocalizedString(@"shared_string_color")
     }];
     [colorsCells addObject:colorValuesCellData];
 
@@ -455,7 +455,7 @@
     [appearanceSections addObject:[OAGPXTableSectionData withData:@{
             kTableSubjects: @[resetCellData],
             kSectionHeaderHeight: @42.,
-            kSectionHeader:OALocalizedString(@"actions"),
+            kSectionHeader:OALocalizedString(@"shared_string_actions"),
             kSectionFooterHeight: @60.
     }]];
 

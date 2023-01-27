@@ -73,14 +73,14 @@
     [data addObject:@[
         @{
             @"type" : [OATitleIconRoundCell getCellIdentifier],
-            @"title" : OALocalizedString(@"add_before"),
+            @"title" : OALocalizedString(@"add_point_before"),
             @"img" : @"ic_custom_add_point_before",
             @"key" : @"add_points",
             @"value" : @(EOAAddPointModeBefore)
         },
         @{
             @"type" : [OATitleIconRoundCell getCellIdentifier],
-            @"title" : OALocalizedString(@"add_after"),
+            @"title" : OALocalizedString(@"add_point_after"),
             @"img" : @"ic_custom_add_point_after",
             @"key" : @"add_points",
             @"value" : @(EOAAddPointModeAfter)
@@ -115,7 +115,7 @@
         [data addObject:@[
             @{
                 @"type" : [OATitleIconRoundCell getCellIdentifier],
-                @"title" : OALocalizedString(@"track_new_segment"),
+                @"title" : OALocalizedString(@"gpx_start_new_segment"),
                 @"img" : @"ic_custom_new_segment",
                 @"key" : @"new_segment"
             }
@@ -141,13 +141,13 @@
             [data addObject:@[
                 @{
                     @"type" : [OATitleIconRoundCell getCellIdentifier],
-                    @"title" : OALocalizedString(@"split_before"),
+                    @"title" : OALocalizedString(@"plan_route_split_before"),
                     @"img" : @"ic_custom_split_before",
                     @"key" : @"split_before"
                 },
                 @{
                     @"type" : [OATitleIconRoundCell getCellIdentifier],
-                    @"title" : OALocalizedString(@"split_after"),
+                    @"title" : OALocalizedString(@"plan_route_split_after"),
                     @"img" : @"ic_custom_split_after",
                     @"key" : @"split_after"
                 }
@@ -158,7 +158,7 @@
             [data addObject:@[
                 @{
                     @"type" : [OATitleIconRoundCell getCellIdentifier],
-                    @"title" : OALocalizedString(@"split_before"),
+                    @"title" : OALocalizedString(@"plan_route_split_before"),
                     @"img" : @"ic_custom_split_before",
                     @"key" : @"split_before"
                 }
@@ -169,7 +169,7 @@
             [data addObject:@[
                 @{
                     @"type" : [OATitleIconRoundCell getCellIdentifier],
-                    @"title" : OALocalizedString(@"split_after"),
+                    @"title" : OALocalizedString(@"plan_route_split_after"),
                     @"img" : @"ic_custom_split_after",
                     @"key" : @"split_after"
                 }
@@ -272,7 +272,7 @@
     double speed = pt.speed;
     if (speed != 0)
     {
-        NSString *speedString = [OALocalizedString(@"map_widget_speed") substringWithRange:NSMakeRange(0, 1)];
+        NSString *speedString = [OALocalizedString(@"shared_string_speed") substringWithRange:NSMakeRange(0, 1)];
         [description appendString:[NSString stringWithFormat:@"  %@: ", speedString]];
         [description appendString:[OAOsmAndFormatter getFormattedSpeed:speed]];
     }

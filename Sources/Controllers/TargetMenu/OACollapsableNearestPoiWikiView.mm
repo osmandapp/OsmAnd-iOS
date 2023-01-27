@@ -96,7 +96,7 @@
         }
         else
         {
-            regionName = OALocalizedString(@"map_an_region");
+            regionName = OALocalizedString(@"download_wiki_region_placeholder");
         }
         
         if (_resourceItem && app.resourcesManager->isResourceInstalled(_resourceItem.resourceId))
@@ -177,7 +177,7 @@
         [buttons addObject:btn];
     }
 
-    OAButton *showOnMapButton = [self createButton:OALocalizedString(@"map_settings_show")
+    OAButton *showOnMapButton = [self createButton:OALocalizedString(@"shared_string_show_on_map")
                                          tapToCopy:NO
                                    longPressToCopy:NO];
     showOnMapButton.tag = _buttonShowOnMapIndex = i++;
@@ -219,14 +219,14 @@
     OAIAPHelper *helper = [OAIAPHelper sharedInstance];
     if ([helper.wiki isPurchased])
     {
-        [_bannerButton setTitle:[OALocalizedString(@"download") upperCase] forState:UIControlStateNormal];
+        [_bannerButton setTitle:[OALocalizedString(@"shared_string_download") upperCase] forState:UIControlStateNormal];
     }
     else
     {
         OAProduct *product = [helper product:kInAppId_Addon_Wiki];
         NSString *price;
         if (!product.free)
-            price = [OALocalizedString(@"shared_string_buy") upperCase];
+            price = [OALocalizedString(@"buy") upperCase];
         [_bannerButton setTitle:price forState:UIControlStateNormal];
     }
     

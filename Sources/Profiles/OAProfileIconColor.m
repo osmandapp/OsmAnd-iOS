@@ -68,7 +68,7 @@
         case PROFILE_ICON_COLOR_DARK_YELLOW:
             return OALocalizedString(@"rendering_value_darkyellow_name");
         case PROFILE_ICON_COLOR_MAGENTA:
-            return OALocalizedString(@"col_magenta");
+            return OALocalizedString(@"shared_string_color_magenta");
         default:
             return @"";
     }

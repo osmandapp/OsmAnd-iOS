@@ -178,8 +178,8 @@ typedef NS_ENUM(NSInteger, EditingTab)
     _titleView.text = _isAddingNewPOI ? OALocalizedString(@"osm_add_place") : OALocalizedString(@"osm_modify_place");
     [_buttonDelete setTitle:OALocalizedString(@"shared_string_delete") forState:UIControlStateNormal];
     [_buttonApply setTitle:[self isOnlineEditing] ? OALocalizedString(@"shared_string_upload") : OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
-    [_segmentControl setTitle:OALocalizedString(@"osm_edits_basic") forSegmentAtIndex:0];
-    [_segmentControl setTitle:OALocalizedString(@"osm_edits_advanced") forSegmentAtIndex:1];
+    [_segmentControl setTitle:OALocalizedString(@"tab_title_basic") forSegmentAtIndex:0];
+    [_segmentControl setTitle:OALocalizedString(@"tab_title_advanced") forSegmentAtIndex:1];
 }
 
 - (void)setupPageController
@@ -454,7 +454,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
 - (IBAction)onBackPressed:(id)sender {
     if ([_editPoiData hasChangesBeenMade])
     {
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"osm_editing_lost_changes_title") message:OALocalizedString(@"osm_editing_lost_changes_descr") preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"exit_without_saving") message:OALocalizedString(@"unsaved_changes_will_be_lost") preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleDefault handler:nil]];
         [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             [self.navigationController popViewControllerAnimated:YES];

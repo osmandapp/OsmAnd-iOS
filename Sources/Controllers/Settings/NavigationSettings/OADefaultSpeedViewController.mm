@@ -56,7 +56,7 @@
 - (void) applyLocalization
 {
     [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"default_speed");
+    self.titleLabel.text = OALocalizedString(@"default_speed_setting_title");
     [self.cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
     [self.doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
 }
@@ -74,14 +74,14 @@
             break;
         case MINUTES_PER_KILOMETER:
             _ratio = 3600. / METERS_IN_KILOMETER;
-            _units = OALocalizedString(@"units_km_h");
+            _units = OALocalizedString(@"km_h");
             break;
         case NAUTICALMILES_PER_HOUR:
             _ratio = 3600. / METERS_IN_ONE_NAUTICALMILE;
             break;
         case MINUTES_PER_MILE:
             _ratio = 3600. / METERS_IN_ONE_MILE;
-            _units = OALocalizedString(@"units_mph");
+            _units = OALocalizedString(@"mile_per_hour");
             break;
         case METERS_PER_SECOND:
             _ratio = 1;
@@ -119,7 +119,7 @@
         _selectedValue = _defaultValue;
     [tableData addObject:@{
         @"type" : [OATimeTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"default_speed"),
+        @"title" : OALocalizedString(@"default_speed_setting_title"),
         @"value" : [NSString stringWithFormat:@"%ld %@", _selectedValue, _units],
     }];
     [tableData addObject:@{

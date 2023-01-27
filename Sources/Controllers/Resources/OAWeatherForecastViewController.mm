@@ -308,7 +308,7 @@
             NSMutableArray<NSMutableDictionary *> *dataCells = [NSMutableArray array];
             NSMutableDictionary *dataSection = [NSMutableDictionary dictionary];
             dataSection[@"key"] = @"data_section";
-            dataSection[@"header"] = OALocalizedString(@"shared_string_data");
+            dataSection[@"header"] = OALocalizedString(@"data_settings");
             dataSection[@"cells"] = dataCells;
 
             NSMutableDictionary *totalSizeData = [NSMutableDictionary dictionary];

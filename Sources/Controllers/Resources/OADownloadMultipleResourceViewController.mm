@@ -128,7 +128,7 @@
             sizePkgSum += [OsmAndApp instance].resourcesManager->getResourceInRepository(item.resourceId)->packageSize;
     }
 
-    [self.downloadButton setTitle:sizePkgSum != 0 ? [NSString stringWithFormat:@"%@ - %@", OALocalizedString(@"download"), [NSByteCountFormatter stringFromByteCount:sizePkgSum countStyle:NSByteCountFormatterCountStyleFile]] : OALocalizedString(@"download") forState:UIControlStateNormal];
+    [self.downloadButton setTitle:sizePkgSum != 0 ? [NSString stringWithFormat:@"%@ - %@", OALocalizedString(@"shared_string_download"), [NSByteCountFormatter stringFromByteCount:sizePkgSum countStyle:NSByteCountFormatterCountStyleFile]] : OALocalizedString(@"shared_string_download") forState:UIControlStateNormal];
 }
 
 - (NSString *)getTitleForSection:(NSInteger)section
@@ -387,7 +387,7 @@
         {
             NSUInteger selectedAmount = _selectedItems.count;
 
-            NSString *selectionText = selectedAmount > 0 ? OALocalizedString(@"shared_string_deselect_all") : OALocalizedString(@"select_all");
+            NSString *selectionText = selectedAmount > 0 ? OALocalizedString(@"shared_string_deselect_all") : OALocalizedString(@"shared_string_select_all");
             [cell.selectDeselectButton setTitle:selectionText forState:UIControlStateNormal];
             [cell.selectDeselectButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.selectDeselectButton addTarget:self action:@selector(selectDeselectGroup:) forControlEvents:UIControlEventTouchUpInside];

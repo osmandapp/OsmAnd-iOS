@@ -77,8 +77,8 @@
 - (void)setUpTableHeaderView
 {
     _headerView = [[OACloudIntroductionHeaderView alloc] init];
-    NSString *topButtonTitle = [OAIAPHelper isSubscribedToOsmAndPro] ? OALocalizedString(@"cloud_create_account") : OALocalizedString(@"purchase_get");
-    [_headerView setUpViewWithTitle:OALocalizedString(@"osmand_cloud") description:OALocalizedString(@"cloud_description") image:[UIImage imageNamed:@"ic_custom_cloud_upload_colored_day_big"] topButtonTitle:topButtonTitle bottomButtonTitle:OALocalizedString(@"cloud_existing_account")];
+    NSString *topButtonTitle = [OAIAPHelper isSubscribedToOsmAndPro] ? OALocalizedString(@"cloud_create_account") : OALocalizedString(@"shared_string_get");
+    [_headerView setUpViewWithTitle:OALocalizedString(@"osmand_cloud") description:OALocalizedString(@"osmand_cloud_authorize_descr") image:[UIImage imageNamed:@"ic_custom_cloud_upload_colored_day_big"] topButtonTitle:topButtonTitle bottomButtonTitle:OALocalizedString(@"register_opr_have_account")];
     CGRect frame = _headerView.frame;
     frame.size.height = [_headerView calculateViewHeight];
     _headerView.frame = frame;

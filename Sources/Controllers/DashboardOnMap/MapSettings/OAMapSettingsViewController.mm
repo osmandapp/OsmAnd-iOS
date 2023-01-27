@@ -101,7 +101,7 @@
 {
     [super applyLocalization];
     
-    self.titleView.text = OALocalizedString(@"map_settings_map");
+    self.titleView.text = OALocalizedString(@"shared_string_map");
 }
 
 - (void) setupView

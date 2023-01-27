@@ -53,7 +53,7 @@ static OATransportRouteToolbarViewController *toolbarController;
         self.leftControlButton = [[OATargetMenuControlButton alloc] init];
         self.leftControlButton.title = OALocalizedString(@"shared_string_previous");
         self.rightControlButton = [[OATargetMenuControlButton alloc] init];
-        self.rightControlButton.title = OALocalizedString(@"intro_next");
+        self.rightControlButton.title = OALocalizedString(@"next_proceed");
     }
     return self;
 }
@@ -156,7 +156,7 @@ static OATransportRouteToolbarViewController *toolbarController;
 
 + (NSString *) getStopType:(OATransportStopRoute *)transportRoute
 {
-    return [NSString stringWithFormat:@"%@ %@", [transportRoute getTypeStr], [OALocalizedString(@"transport_stop") lowerCase]];
+    return [NSString stringWithFormat:@"%@ %@", [transportRoute getTypeStr], [OALocalizedString(@"shared_string_control_stop") lowerCase]];
 }
 
 - (void) cancelPressed
@@ -231,7 +231,7 @@ static OATransportRouteToolbarViewController *toolbarController;
         startPosition = (currentStop == -1 ? 0 : currentStop);
         if (currentStop > 0)
         {
-            OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:@"button" icon:defaultIcon textPrefix:[NSString stringWithFormat:OALocalizedString(@"route_stops_before"), currentStop] text:OALocalizedString(@"sett_show") textColor:nil isText:YES needLinks:NO order:-1 typeName:@"" isPhoneNumber:NO isUrl:NO];
+            OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:@"button" icon:defaultIcon textPrefix:[NSString stringWithFormat:OALocalizedString(@"route_stops_before"), @(currentStop).stringValue] text:OALocalizedString(@"recording_context_menu_show") textColor:nil isText:YES needLinks:NO order:-1 typeName:@"" isPhoneNumber:NO isUrl:NO];
             rowInfo.delegate = self;
             [rows addObject:rowInfo];
         }

@@ -65,7 +65,7 @@ static OAQuickActionType *TYPE;
 
 - (NSString *)getActionStateName
 {
-    return [self isContourLinesOn] ? OALocalizedString(@"hide_contour_lines") : OALocalizedString(@"show_contour_lines");
+    return [self isContourLinesOn] ? OALocalizedString(@"hide_contour_lines") : OALocalizedString(@"rendering_attr_contourLines_name");
 }
 
 + (OAQuickActionType *) TYPE

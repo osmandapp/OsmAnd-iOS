@@ -75,7 +75,7 @@
                 NSString *sizeString = [NSByteCountFormatter stringFromByteCount:dbsSize countStyle:NSByteCountFormatterCountStyleFile];
                 cells[localData ? _useOfflineDataIndexPath.row : _onlineDataIndexPath.row] = @{
                         @"key": localData ? @"offline_forecast" : @"online_cache",
-                        @"title": OALocalizedString(localData ? @"weather_offline_forecast" : @"shared_string_online_cache"),
+                        @"title": OALocalizedString(localData ? @"weather_offline_forecast" : @"weather_online_cache"),
                         @"value": sizeString,
                         @"type": [OAValueTableViewCell getCellIdentifier]
                 };
@@ -122,7 +122,7 @@
 
     NSMutableArray<NSDictionary *> *cacheData = [NSMutableArray array];
     [data addObject:@{
-            @"header": OALocalizedString(@"shared_string_data"),
+            @"header": OALocalizedString(@"data_settings"),
             @"cells": cacheData,
             @"footer": OALocalizedString(@"weather_data_provider")
     }];
@@ -133,7 +133,7 @@
             : OALocalizedString(@"calculating_progress");
     [cacheData addObject:@{
             @"key": @"online_cache",
-            @"title": OALocalizedString(@"shared_string_online_cache"),
+            @"title": OALocalizedString(@"weather_online_cache"),
             @"value": onlineCacheSizeString,
             @"type": [OAValueTableViewCell getCellIdentifier]
     }];

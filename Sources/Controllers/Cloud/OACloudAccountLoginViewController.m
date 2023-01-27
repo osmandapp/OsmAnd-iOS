@@ -131,7 +131,7 @@
         {
             [otherCells addObject: @{
                 @"type" : [OAFilledButtonCell getCellIdentifier],
-                @"title" : OALocalizedString(@"purchase_get"),
+                @"title" : OALocalizedString(@"shared_string_get"),
                 @"buttonColor" : UIColorFromRGB(color_primary_purple),
                 @"textColor" : UIColor.whiteColor,
                 @"action" : @"getButtonPressed",

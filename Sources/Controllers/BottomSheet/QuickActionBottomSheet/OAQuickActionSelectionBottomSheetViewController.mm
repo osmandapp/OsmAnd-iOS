@@ -295,7 +295,7 @@
 - (void)applyLocalization
 {
     [self.cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
-    [self.doneButton setTitle:OALocalizedString(@"edit_action") forState:UIControlStateNormal];
+    [self.doneButton setTitle:OALocalizedString(@"quick_action_edit_action") forState:UIControlStateNormal];
 }
 
 @end

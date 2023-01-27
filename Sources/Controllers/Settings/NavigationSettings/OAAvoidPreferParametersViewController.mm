@@ -53,7 +53,7 @@
     [super viewDidLoad];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    [self setupTableHeaderViewWithText:OALocalizedString(@"avoid_routes_and_road")];
+    [self setupTableHeaderViewWithText:OALocalizedString(@"avoid_in_routing_descr_")];
     [self setupView];
 }
 
@@ -110,7 +110,7 @@
 {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        [self setupTableHeaderViewWithText:OALocalizedString(@"avoid_routes_and_road")];
+        [self setupTableHeaderViewWithText:OALocalizedString(@"avoid_in_routing_descr_")];
         [self.tableView reloadData];
     } completion:nil];
 }

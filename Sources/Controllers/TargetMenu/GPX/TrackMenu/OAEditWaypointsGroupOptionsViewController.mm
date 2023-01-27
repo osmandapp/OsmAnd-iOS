@@ -87,7 +87,7 @@
     [super applyLocalization];
     if (_screenType == EOAEditWaypointsGroupRenameScreen)
     {
-        self.titleLabel.text = OALocalizedString(@"fav_rename");
+        self.titleLabel.text = OALocalizedString(@"shared_string_rename");
     }
     else if (_screenType == EOAEditWaypointsGroupColorScreen)
     {
@@ -95,7 +95,7 @@
     }
     else if (_screenType == EOAEditWaypointsGroupVisibleScreen)
     {
-        self.titleLabel.text = OALocalizedString(@"map_settings_show");
+        self.titleLabel.text = OALocalizedString(@"shared_string_show_on_map");
     }
     else if (_screenType == EOAEditWaypointsGroupCopyToFavoritesScreen)
     {
@@ -115,7 +115,7 @@
                         kCellTitle: _groupName,
                         kCellDesc: OALocalizedString(@"fav_enter_group_name")
                 }]],
-                kSectionHeader: _screenType == EOAEditWaypointsGroupRenameScreen ? OALocalizedString(@"fav_name") : OALocalizedString(@"group_name")
+                kSectionHeader: _screenType == EOAEditWaypointsGroupRenameScreen ? OALocalizedString(@"shared_string_name") : OALocalizedString(@"favorite_group_name")
         }];
     }
     else if (_screenType == EOAEditWaypointsGroupColorScreen)
@@ -129,10 +129,10 @@
                                 @"int_value": @([OAUtilities colorToNumber:_selectedColor.color]),
                                 @"array_value": _colors
                         },
-                        kCellTitle: OALocalizedString(@"fav_color"),
+                        kCellTitle: OALocalizedString(@"shared_string_color"),
                         kCellDesc: _selectedColor.name
                 }]],
-                kSectionHeader: OALocalizedString(@"default_color"),
+                kSectionHeader: OALocalizedString(@"access_default_color"),
                 kSectionFooter: OALocalizedString(@"default_color_descr")
         }];
     }
@@ -144,7 +144,7 @@
 
         _tableData = [OAGPXTableSectionData withData:@{
                 kTableKey: @"section",
-                kSectionHeader: OALocalizedString(@"groups"),
+                kSectionHeader: OALocalizedString(@"shared_string_groups"),
                 kTableValues: @{
                         @"groups_count": @([groups containsObject:OALocalizedString(@"route_points")]
                                 ? groups.count - 1
@@ -512,7 +512,7 @@
     if (newGroupName.length == 0 ||
             [self isIncorrectFileName:textView.text] ||
             [OAFavoritesHelper getGroupByName:newGroupName] ||
-            [newGroupName isEqualToString:OALocalizedString(@"favorites")] ||
+            [newGroupName isEqualToString:OALocalizedString(@"favorites_item")] ||
             [newGroupName isEqualToString:OALocalizedString(@"personal_category_name")] ||
             [newGroupName isEqualToString:kPersonalCategory] ||
             (_screenType != EOAEditWaypointsGroupCopyToFavoritesScreen && [newGroupName isEqualToString:_groupName]))

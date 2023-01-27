@@ -53,7 +53,7 @@
         _isOpen = _point.opened;
         
         self.leftControlButton = [[OATargetMenuControlButton alloc] init];
-        self.leftControlButton.title = _isOpen ? OALocalizedString(@"osm_note_comment") : OALocalizedString(@"osm_note_reopen");
+        self.leftControlButton.title = _isOpen ? OALocalizedString(@"poi_dialog_comment") : OALocalizedString(@"poi_dialog_reopen");
         if (_isOpen)
         {
             self.rightControlButton = [[OATargetMenuControlButton alloc] init];

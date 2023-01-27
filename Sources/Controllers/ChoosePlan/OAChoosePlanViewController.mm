@@ -103,7 +103,7 @@
 - (void) applyLocalization
 {
     if (_type == EOAChoosePlan)
-        [self.buttonLater setTitle:OALocalizedString(@"shared_string_later") forState:UIControlStateNormal];
+        [self.buttonLater setTitle:OALocalizedString(@"first_time_continue") forState:UIControlStateNormal];
     [self.buttonRestore setTitle:OALocalizedString(@"restore_purchase") forState:UIControlStateNormal];
 }
 

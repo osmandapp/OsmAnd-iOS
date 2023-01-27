@@ -69,7 +69,7 @@ NSString *const kSimulateLocationKey = @"kSimulateLocationKey";
 
 - (void) applyLocalization
 {
-    _titleView.text = OALocalizedString(@"product_title_development");
+    _titleView.text = OALocalizedString(@"debugging_and_development");
     _headerDescription = OALocalizedString(@"osm_editing_settings_descr");
 }
 
@@ -82,7 +82,7 @@ NSString *const kSimulateLocationKey = @"kSimulateLocationKey";
     [simulationSection addRowFromDictionary:@{
         kCellTypeKey : [OAIconTitleValueCell getCellIdentifier],
         kCellKeyKey : kSimulateLocationKey,
-        kCellTitleKey : OALocalizedString(@"simulate_routing"),
+        kCellTitleKey : OALocalizedString(@"simulate_your_location"),
         kCellDescrKey : isRouteAnimating ? OALocalizedString(@"simulate_in_progress") : @"",
         @"actionBlock" : (^void(){ [weakSelf openSimulateLocationSettings]; })
     }];

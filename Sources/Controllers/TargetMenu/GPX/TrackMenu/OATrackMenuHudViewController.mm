@@ -482,7 +482,7 @@
     NSString *oldPath = self.gpx.gpxFilePath;
     NSString *sourcePath = [_app.gpxPath stringByAppendingPathComponent:oldPath];
 
-    NSString *newFolder = [newFolderName isEqualToString:OALocalizedString(@"tracks")] ? @"" : newFolderName;
+    NSString *newFolder = [newFolderName isEqualToString:OALocalizedString(@"shared_string_gpx_tracks")] ? @"" : newFolderName;
     NSString *newFolderPath = [_app.gpxPath stringByAppendingPathComponent:newFolder];
     NSString *newName = self.gpx.gpxFileName;
 
@@ -1288,7 +1288,7 @@
 - (NSString *)getDirName
 {
     NSString *dirName = [OAUtilities capitalizeFirstLetter:self.gpx.gpxFolderName];
-    return dirName.length > 0 ? dirName : OALocalizedString(@"tracks");
+    return dirName.length > 0 ? dirName : OALocalizedString(@"shared_string_gpx_tracks");
 }
 
 - (NSString *)getGpxFileSize
@@ -1338,7 +1338,7 @@
         }
         case EOATrackMenuHudPointsTab:
         {
-            return [NSString stringWithFormat:@"%@: %li", OALocalizedString(@"groups"), _waypointGroups.allKeys.count];
+            return [NSString stringWithFormat:@"%@: %li", OALocalizedString(@"shared_string_groups"), _waypointGroups.allKeys.count];
         }
         default:
         {
@@ -1549,7 +1549,7 @@
 {
     __weak OATrackMenuHudViewController *weakSelf = self;
 
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"gpx_rename_q")
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"rename_track")
                                                                    message:OALocalizedString(@"gpx_enter_new_name \"%@\"", [weakSelf.gpx.gpxTitle lastPathComponent])
                                                             preferredStyle:UIAlertControllerStyleAlert];
 

@@ -78,7 +78,7 @@ std::string preferredLanguage;
         _router = router;
         _settings = [OAAppSettings sharedManager];
         
-        NSString *prefLang =  _settings.settingPrefMapLanguage.get == nil ? OALocalizedString(@"local_names") : _settings.settingPrefMapLanguage.get;
+        NSString *prefLang =  _settings.settingPrefMapLanguage.get == nil ? OALocalizedString(@"local_map_names") : _settings.settingPrefMapLanguage.get;
         preferredLanguage = std::string([prefLang UTF8String]);
         
         _voicePromptDelayDistance = 0.0;

@@ -124,7 +124,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
             self.titleLabel.text = OALocalizedString(@"plan_route_open_existing_track");
             break;
         case EOAAddToATrack:
-            self.titleLabel.text = OALocalizedString(@"add_to_track");
+            self.titleLabel.text = OALocalizedString(@"add_to_a_track");
             break;
         case EOAFollowTrack:
             self.titleLabel.text = OALocalizedString(@"follow_track");
@@ -168,7 +168,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     
     [existingTracksSection addObject:@{
         @"type" : [OASegmentTableViewCell getCellIdentifier],
-        @"title0" : OALocalizedString(@"osm_modified"),
+        @"title0" : OALocalizedString(@"shared_string_modified"),
         @"title1" : OALocalizedString(@"shared_a_z"),
         @"title2" : OALocalizedString(@"shared_z_a"),
         @"key" : @"segment_control"
@@ -180,7 +180,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     {
         [existingTracksSection addObject:@{
                 @"type" : [OAGPXTrackCell getCellIdentifier],
-                @"title" : OALocalizedString(@"track_recording_name"),
+                @"title" : OALocalizedString(@"shared_string_currently_recording_track"),
                 @"distance" : [OAOsmAndFormatter getFormattedDistance:gpxRecHelper.distance],
                 @"time" : [OAOsmAndFormatter getFormattedTimeInterval:0 shortFormat:YES],
                 @"wpt" : [NSString stringWithFormat:@"%d", gpxRecHelper.points],
@@ -234,7 +234,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     else
     {
         NSString *selectedFolderName = _allFolders[_selectedFolderIndex - 1];
-        if ([selectedFolderName isEqualToString:OALocalizedString(@"tracks")])
+        if ([selectedFolderName isEqualToString:OALocalizedString(@"shared_string_gpx_tracks")])
             selectedFolderName = @"";
         
         return [data filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(OAGPX *object, NSDictionary *bindings) {

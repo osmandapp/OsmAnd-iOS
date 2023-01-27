@@ -135,7 +135,7 @@ static const NSInteger panoImageFilterSection = 2;
                              },
                          @{
                              @"type" : [OAButtonTableViewCell getCellIdentifier],
-                             @"title" : OALocalizedString(@"tile_cache"),
+                             @"title" : OALocalizedString(@"mapillary_menu_title_tile_cache"),
                              @"btnTitle" : OALocalizedString(@"shared_string_reload"),
                              @"description" : @"",
                              @"img" : @"ic_custom_overlay_map.png"
@@ -166,7 +166,7 @@ static const NSInteger panoImageFilterSection = 2;
                          @{ @"type" : [OADividerCell getCellIdentifier]},
                          @{
                              @"type" : [OASwitchTableViewCell getCellIdentifier],
-                             @"title" : OALocalizedString(@"mapil_pano_only"),
+                             @"title" : OALocalizedString(@"mapillary_menu_title_pano"),
                              @"description" : @"",
                              @"img" : @"ic_custom_coordinates.png",
                              @"key" : @"pano_only"
@@ -589,7 +589,7 @@ static const NSInteger panoImageFilterSection = 2;
 {
     switch (section) {
         case dateFilterSection:
-            return OALocalizedString(@"shared_string_filter");
+            return OALocalizedString(@"filter_current_poiButton");
         default:
             return nil;
     }

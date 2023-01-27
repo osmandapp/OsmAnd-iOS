@@ -124,7 +124,7 @@
 
     NSMutableArray<NSMutableDictionary *> *accountCells = [NSMutableArray array];
     [data addObject:accountCells];
-    _headers[@(data.count - 1)] = OALocalizedString(@"shared_string_account");
+    _headers[@(data.count - 1)] = OALocalizedString(@"login_account");
 
     NSMutableDictionary *accountData = [NSMutableDictionary dictionary];
     accountData[@"key"] = @"account_cell";

@@ -64,7 +64,7 @@
 
 - (NSString *)getPublicName
 {
-    return OALocalizedString(@"poi_type");
+    return OALocalizedString(@"poi_dialog_poi_type");
 }
 
 - (void) apply

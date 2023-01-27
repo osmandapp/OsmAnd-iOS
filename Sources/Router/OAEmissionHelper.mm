@@ -223,7 +223,7 @@ static OAMotorType * HYBRID;
         NSString *name = [NSString stringWithUTF8String:descriptions[j].c_str()];
         if ([name containsString:@"-"])
         {
-            [names addObject:OALocalizedString(@"not_selected")];
+            [names addObject:OALocalizedString(@"shared_string_not_selected")];
         }
         else
         {

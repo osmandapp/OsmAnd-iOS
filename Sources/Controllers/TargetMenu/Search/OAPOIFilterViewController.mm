@@ -278,7 +278,7 @@ typedef enum
 
     if (![_filter isStandardFilter])
     {
-        actionSaveTitle = OALocalizedString(@"shared_string_save_as");
+        actionSaveTitle = OALocalizedString(@"edit_filter_save_as_menu_item");
         UIAlertAction *actionDelete = [UIAlertAction actionWithTitle:OALocalizedString(@"delete_filter")
             style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
                     [self showDeleteFilterScreen];

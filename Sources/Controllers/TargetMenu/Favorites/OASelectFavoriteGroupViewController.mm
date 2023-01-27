@@ -98,7 +98,7 @@
             [cellFoldersData addObject:@{
                     @"type" : [OAMultiIconTextDescCell getCellIdentifier],
                     @"header" : OALocalizedString(@"available_groups"),
-                    @"title" : OALocalizedString(@"favorites"),
+                    @"title" : OALocalizedString(@"favorites_item"),
                     @"description" :@"0",
                     @"isSelected" : @([@"" isEqualToString:_selectedGroupName]),
                     @"color" : [OADefaultFavorite getDefaultColor],

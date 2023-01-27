@@ -51,7 +51,7 @@
 
 - (void) applyLocalization
 {
-    _titleView.text = OALocalizedString(@"plugins");
+    _titleView.text = OALocalizedString(@"plugins_menu_group");
     [_doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
 }
 
@@ -214,7 +214,7 @@
                 title = product.localizedTitle;
                 desc = product.localizedDescription;
                 if (!product.free)
-                    price = [OALocalizedString(@"shared_string_buy") uppercaseStringWithLocale:[NSLocale currentLocale]];
+                    price = [OALocalizedString(@"buy") uppercaseStringWithLocale:[NSLocale currentLocale]];
             }
             else if (indexPath.section == kCustomPluginsSection)
             {

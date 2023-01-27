@@ -190,7 +190,7 @@
         category = data.getLocalizedTypeString;
     }
     else if (point.getGroup == BUG)
-        category = OALocalizedString(@"osm_note");
+        category = OALocalizedString(@"osn_bug_name");
     
     return category;
 }

@@ -26,7 +26,7 @@
 
 - (NSString *)getTabTitle
 {
-    return OALocalizedString(@"actions");
+    return OALocalizedString(@"shared_string_actions");
 }
 
 - (UIImage *)getTabIcon
@@ -49,7 +49,7 @@
     OAGPXTableCellData *showOnMapCellData = [OAGPXTableCellData withData:@{
             kTableKey: @"control_show_on_map",
             kCellType: [OATitleSwitchRoundCell getCellIdentifier],
-            kCellTitle: OALocalizedString(@"map_settings_show")
+            kCellTitle: OALocalizedString(@"shared_string_show_on_map")
     }];
     [controlSectionData.subjects addObject:showOnMapCellData];
 
@@ -57,7 +57,7 @@
             kTableKey: @"control_appearance",
             kCellType: [OATitleIconRoundCell getCellIdentifier],
             kCellRightIconName: @"ic_custom_appearance",
-            kCellTitle: OALocalizedString(@"map_settings_appearance")
+            kCellTitle: OALocalizedString(@"shared_string_appearance")
     }];
     [controlSectionData.subjects addObject:appearanceCellData];
 
@@ -87,7 +87,7 @@
             kTableKey: @"share",
             kCellType: [OATitleIconRoundCell getCellIdentifier],
             kCellRightIconName: @"ic_custom_export",
-            kCellTitle: OALocalizedString(@"ctx_mnu_share")
+            kCellTitle: OALocalizedString(@"shared_string_share")
     }];
     [shareSectionData.subjects addObject:shareCellData];
 
@@ -120,7 +120,7 @@
             kTableKey: @"change_rename",
             kCellType: [OATitleIconRoundCell getCellIdentifier],
             kCellRightIconName: @"ic_custom_edit",
-            kCellTitle: OALocalizedString(@"gpx_rename_q")
+            kCellTitle: OALocalizedString(@"rename_track")
     }];
     [changeSectionData.subjects addObject:renameCellData];
 
@@ -129,7 +129,7 @@
             kCellType: [OATitleDescriptionIconRoundCell getCellIdentifier],
             kCellDesc: [self generateDirName],
             kCellRightIconName: @"ic_custom_folder_move",
-            kCellTitle: OALocalizedString(@"plan_route_change_folder")
+            kCellTitle: OALocalizedString(@"change_folder")
     }];
     [changeSectionData.subjects addObject:moveCellData];
 

@@ -100,7 +100,7 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
         [valuesArr addObject:@{
             @"type": [OARightIconTableViewCell getCellIdentifier],
             @"value": @"false",
-            @"title": OALocalizedString(@"gpx_route")
+            @"title": OALocalizedString(@"layer_route")
         }];
         [valuesArr addObject:@{
             @"type": [OARightIconTableViewCell getCellIdentifier],

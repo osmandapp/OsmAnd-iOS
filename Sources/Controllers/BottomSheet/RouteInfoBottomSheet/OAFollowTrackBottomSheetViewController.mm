@@ -156,7 +156,7 @@
     BOOL isSegment = _gpx.getNonEmptySegmentsCount > 1 && params != nil && params.selectedSegment != -1;
     if (isSegment)
     {
-        title = [NSString stringWithFormat:@"%@, %@", [NSString stringWithFormat:OALocalizedString(@"some_of"), params.selectedSegment + 1, _gpx.getNonEmptySegmentsCount], title];
+        title = [NSString stringWithFormat:@"%@, %@", [NSString stringWithFormat:OALocalizedString(@"of"), params.selectedSegment + 1, _gpx.getNonEmptySegmentsCount], title];
     }
     
     NSString *distance = gpxData ? [OAOsmAndFormatter getFormattedDistance:gpxData.totalDistance] : @"";
@@ -191,7 +191,7 @@
 	
 	[items addObject:@{
 		@"type" : [OASwitchTableViewCell getCellIdentifier],
-		@"title" : OALocalizedString(@"reverse_track_dir"),
+		@"title" : OALocalizedString(@"gpx_option_reverse_route"),
 		@"img" : @"ic_custom_swap",
 		@"key" : @"reverse_track"
 	}];
@@ -208,7 +208,7 @@
 	
 	[data addObject:items];
     
-    NSString *navTypeTitle1 = OALocalizedString(@"nav_type_straight_line");
+    NSString *navTypeTitle1 = OALocalizedString(@"routing_profile_straightline");
     NSString *navTypeTitle2 = OARoutingHelper.sharedInstance.getAppMode.toHumanString;
     BOOL useRtePt = params.useIntermediatePointsRTE;
     [data addObject:@[
@@ -218,13 +218,13 @@
         },
         @{
             @"type" : [OASegmentTableViewCell getCellIdentifier],
-            @"title0" : OALocalizedString(@"start_of_track"),
+            @"title0" : OALocalizedString(@"start_of_the_track"),
             @"title1" : OALocalizedString(@"nearest_point"),
             @"key" : @"point_to_start"
         },
         @{
             @"type" : [OATitleRightIconCell getCellIdentifier],
-            @"title" : useRtePt ? OALocalizedString(@"connect_rp") : OALocalizedString(@"nav_type_title")
+            @"title" : useRtePt ? OALocalizedString(@"connect_rp") : OALocalizedString(@"nav_type_hint")
         },
         @{
             @"type" : [OASegmentTableViewCell getCellIdentifier],

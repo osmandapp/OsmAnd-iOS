@@ -65,7 +65,7 @@
 
 - (void) applyLocalization
 {
-    self.titleView.text = OALocalizedString(@"osm_editing_lost_changes_title");
+    self.titleView.text = OALocalizedString(@"exit_without_saving");
     [self.exitButton setTitle:OALocalizedString(@"shared_string_exit") forState:UIControlStateNormal];
     [self.saveButton setTitle:OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
     [self.cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];

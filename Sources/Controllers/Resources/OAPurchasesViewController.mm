@@ -184,7 +184,7 @@ static BOOL _purchasesUpdated;
                             @"icon": [UIImage imageNamed:@"ic_custom_osmand_pro_logo_colored"],
                             @"title": OALocalizedString(@"product_title_pro"),
                             @"description": OALocalizedString(@"osm_live_banner_desc"),
-                            @"button_title": OALocalizedString(@"purchase_get"),
+                            @"button_title": OALocalizedString(@"shared_string_get"),
                             @"button_icon": [UIImage templateImageNamed:@"ic_custom_arrow_forward"],
                             @"button_icon_color": UIColorFromRGB(color_primary_purple)
                     }
@@ -204,7 +204,7 @@ static BOOL _purchasesUpdated;
                     OASubscriptionState *state = [settings.backupPurchaseState get];
                     BOOL isPromo = ((EOASubscriptionOrigin) [settings.proSubscriptionOrigin get]) == EOASubscriptionOriginPromo;
                     if (state != OASubscriptionState.EXPIRED)
-                        datePattern = OALocalizedString(@"expires");
+                        datePattern = OALocalizedString(@"shared_string_expires");
                     else
                         datePattern = OALocalizedString(@"expired");
                     long expiretime = [settings.backupPurchaseExpireTime get];
@@ -232,7 +232,7 @@ static BOOL _purchasesUpdated;
                     }];
                 }
                 [data addObject:active];
-                _headers[@(data.count - 1)] = OALocalizedString(@"menu_active_trips");
+                _headers[@(data.count - 1)] = OALocalizedString(@"osm_live_active");
             }
             if (expiredProducts.count > 0)
             {
@@ -287,7 +287,7 @@ static BOOL _purchasesUpdated;
         @{
             @"key": @"contact_support_description",
             @"type": [OAIconTitleValueCell getCellIdentifier],
-            @"title": OALocalizedString(@"contact_support_description"),
+            @"title": [NSString stringWithFormat: OALocalizedString(@"contact_support_description"), kSupportEmail],
             @"tint_color": UIColorFromRGB(color_text_footer)
         },
         @{
@@ -297,7 +297,7 @@ static BOOL _purchasesUpdated;
             @"tint_color": UIColorFromRGB(color_primary_purple)
         }
     ]];
-    _headers[@(data.count - 1)] = OALocalizedString(@"menu_help");
+    _headers[@(data.count - 1)] = OALocalizedString(@"shared_string_help");
 
     _data = data;
 }
@@ -320,7 +320,7 @@ static BOOL _purchasesUpdated;
     if (product.purchaseState == PSTATE_NOT_PURCHASED)
         datePattern = OALocalizedString(@"expired");
     else if ([product isKindOfClass:OASubscription.class])
-        datePattern = OALocalizedString(@"expires");
+        datePattern = OALocalizedString(@"shared_string_expires");
     else if ([product isKindOfClass:OAProduct.class])
         datePattern = OALocalizedString(@"shared_string_purchased");
 
@@ -524,7 +524,7 @@ static BOOL _purchasesUpdated;
             if (product)
             {
                 cell.textView.text = [product.productIdentifier isEqualToString:kInAppId_Addon_Nautical]
-                        ? OALocalizedString(@"product_title_sea_depth_contours")
+                        ? OALocalizedString(@"rendering_attr_depthContours_name")
                         : product.localizedTitle;
                 cell.imgView.image = [product isKindOfClass:OASubscription.class] || [OAIAPHelper isFullVersion:product]
                         ? [UIImage imageNamed:product.productIconName]
@@ -632,7 +632,7 @@ static BOOL _purchasesUpdated;
     {
         MFMailComposeViewController *mailCont = [[MFMailComposeViewController alloc] init];
         mailCont.mailComposeDelegate = self;
-        [mailCont setSubject:OALocalizedString(@"help_purchases")];
+        [mailCont setSubject:OALocalizedString(@"osmand_purchases_item")];
         [mailCont setToRecipients:@[OALocalizedString(@"login_footer_email_part")]];
         [mailCont setMessageBody:@"" isHTML:NO];
         [self presentViewController:mailCont animated:YES completion:nil];

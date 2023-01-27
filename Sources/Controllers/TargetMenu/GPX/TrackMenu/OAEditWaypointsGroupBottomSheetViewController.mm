@@ -128,7 +128,7 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
                 kTableKey: @"control_show_on_map",
                 kCellType: [OATitleSwitchRoundCell getCellIdentifier],
                 kTableValues: @{ @"bool_value": @(_isShown) },
-                kCellTitle: OALocalizedString(@"map_settings_show")
+                kCellTitle: OALocalizedString(@"shared_string_show_on_map")
         }];
         [controlsSectionData.subjects addObject:showOnMapCellData];
 
@@ -139,7 +139,7 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
                 kTableKey: @"rename",
                 kCellType: [OATitleIconRoundCell getCellIdentifier],
                 kCellRightIconName: @"ic_custom_edit",
-                kCellTitle: OALocalizedString(@"fav_rename")
+                kCellTitle: OALocalizedString(@"shared_string_rename")
         }];
         [changeSectionData.subjects addObject:renameCellData];
 

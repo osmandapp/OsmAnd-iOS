@@ -77,7 +77,7 @@
 
 - (void)resetAppearanceToOriginal
 {
-    OAGPXDocument *document = [_gpxTitle isEqualToString:OALocalizedString(@"track_recording_name")]
+    OAGPXDocument *document = [_gpxTitle isEqualToString:OALocalizedString(@"shared_string_currently_recording_track")]
             ? (OAGPXDocument *) [OASavingTrackHelper sharedInstance].currentTrack
             : [[OAGPXDocument alloc] initWithGpxFile:[[OsmAndApp instance].gpxPath stringByAppendingPathComponent:_gpxFilePath]];
     if (document)

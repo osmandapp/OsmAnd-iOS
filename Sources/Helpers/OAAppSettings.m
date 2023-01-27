@@ -403,11 +403,11 @@
     switch (cm)
     {
         case EOACompassVisible:
-            return OALocalizedString(@"shared_string_always_visible");
+            return OALocalizedString(@"compass_always_visible");
         case EOACompassHidden:
-            return OALocalizedString(@"shared_string_always_hidden");
+            return OALocalizedString(@"compass_always_hidden");
         default:
-            return OALocalizedString(@"compass_visible_in_rotated_mode");
+            return OALocalizedString(@"compass_visible_if_map_rotated");
     }
 }
 
@@ -582,15 +582,15 @@
     switch (sc)
     {
         case KILOMETERS_PER_HOUR:
-            return OALocalizedString(@"units_km_h");
+            return OALocalizedString(@"km_h");
         case MILES_PER_HOUR:
-            return OALocalizedString(@"units_mph");
+            return OALocalizedString(@"mile_per_hour");
         case METERS_PER_SECOND:
-            return OALocalizedString(@"units_m_s");
+            return OALocalizedString(@"m_s");
         case MINUTES_PER_MILE:
-            return OALocalizedString(@"units_min_mi");
+            return OALocalizedString(@"min_mile");
         case MINUTES_PER_KILOMETER:
-            return OALocalizedString(@"units_min_km");
+            return OALocalizedString(@"min_km");
         case NAUTICALMILES_PER_HOUR:
             return OALocalizedString(@"units_nm_h");
 
@@ -908,11 +908,11 @@
     switch (gst)
     {
         case EOAGradientScaleTypeSpeed:
-            return OALocalizedString(@"gpx_speed");
+            return OALocalizedString(@"shared_string_speed");
         case EOAGradientScaleTypeAltitude:
             return OALocalizedString(@"map_widget_altitude");
         case EOAGradientScaleTypeSlope:
-            return OALocalizedString(@"gpx_slope");
+            return OALocalizedString(@"shared_string_slope");
         default:
             return @"";
     }
@@ -3833,7 +3833,7 @@
         _settingExternalInputDevice = [OACommonInteger withKey:settingExternalInputDeviceKey defValue:NO_EXTERNAL_DEVICE];
 
         [_profilePreferences setObject:_settingAllow3DView forKey:@"enable_3d_view"];
-        [_profilePreferences setObject:_drivingRegionAutomatic forKey:@"driving_region_automatic"];
+        [_profilePreferences setObject:_drivingRegionAutomatic forKey:@"shared_string_automatic"];
         [_profilePreferences setObject:_drivingRegion forKey:@"default_driving_region"];
         [_profilePreferences setObject:_metricSystem forKey:@"default_metric_system"];
         [_profilePreferences setObject:_metricSystemChangedManually forKey:@"metric_system_changed_manually"];
@@ -3903,7 +3903,7 @@
         [_profilePreferences setObject:_speakPedestrian forKey:@"speak_pedestrian"];
         [_profilePreferences setObject:_speakSpeedLimit forKey:@"speak_speed_limit"];
         [_profilePreferences setObject:_speakCameras forKey:@"speak_cameras"];
-        [_profilePreferences setObject:_speakTunnels forKey:@"speak_tunnels"];
+        [_profilePreferences setObject:_speakTunnels forKey:@"show_tunnels"];
         [_profilePreferences setObject:_announceNearbyFavorites forKey:@"announce_nearby_favorites"];
         [_profilePreferences setObject:_announceNearbyPoi forKey:@"announce_nearby_poi"];
 
@@ -4728,9 +4728,9 @@
     if (value == 0)
         res = OALocalizedString(@"rec_interval_minimum");
     else if (value > 90)
-        res = [NSString stringWithFormat:@"%d %@", (int)(value / 60.0), OALocalizedString(@"units_min")];
+        res = [NSString stringWithFormat:@"%d %@", (int)(value / 60.0), OALocalizedString(@"int_min")];
     else
-        res = [NSString stringWithFormat:@"%d %@", value, OALocalizedString(@"units_sec")];
+        res = [NSString stringWithFormat:@"%d %@", value, OALocalizedString(@"shared_string_sec")];
     return res;
 }
 

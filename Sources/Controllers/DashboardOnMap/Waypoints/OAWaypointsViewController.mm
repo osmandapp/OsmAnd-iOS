@@ -94,7 +94,7 @@ static OAWaypointsViewControllerRequest *request = nil;
 {
     [super applyLocalization];
     
-    self.titleView.text = OALocalizedString(@"gpx_waypoints");
+    self.titleView.text = OALocalizedString(@"shared_string_waypoints");
 }
 
 - (void) setupView

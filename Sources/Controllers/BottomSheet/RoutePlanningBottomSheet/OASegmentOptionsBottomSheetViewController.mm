@@ -65,7 +65,7 @@
 
 - (void) applyLocalization
 {
-    self.titleView.text = OALocalizedString(@"route_betw_points");
+    self.titleView.text = OALocalizedString(@"route_between_points");
     [self.leftButton setTitle:OALocalizedString(@"shared_string_close") forState:UIControlStateNormal];
 }
 
@@ -84,7 +84,7 @@
     [data addObject:@[
         @{
             @"type" : [OATitleIconRoundCell getCellIdentifier],
-            @"title" : OALocalizedString(@"nav_type_straight_line"),
+            @"title" : OALocalizedString(@"routing_profile_straightline"),
             @"img" : @"ic_custom_straight_line",
             @"tintColor" : UIColorFromRGB(color_primary_purple),
             @"key" : @"straight_line_mode"
@@ -122,7 +122,7 @@
             switch (dialogMode)
             {
                 case EOARouteBetweenPointsDialogModeSingle:
-                    return OALocalizedString(@"next_seg");
+                    return OALocalizedString(@"next_segment");
                 case EOARouteBetweenPointsDialogModeAll:
                     return OALocalizedString(@"whole_track");
             }

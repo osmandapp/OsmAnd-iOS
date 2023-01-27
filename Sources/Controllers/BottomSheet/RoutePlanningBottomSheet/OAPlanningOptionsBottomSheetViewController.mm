@@ -72,7 +72,7 @@
         [data addObject:@[
             @{
                 @"type" : [OATitleIconRoundCell getCellIdentifier],
-                @"title" : OALocalizedString(@"track_new_segment"),
+                @"title" : OALocalizedString(@"gpx_start_new_segment"),
                 @"img" : @"ic_custom_new_segment",
                 @"tintColor" : UIColorFromRGB(color_primary_purple),
                 @"key" : @"start_new_segment"
@@ -86,7 +86,7 @@
     {
         if (_routeAppMode == nil || _routeAppMode == OAApplicationMode.DEFAULT)
         {
-            descr = OALocalizedString(@"nav_type_straight_line");
+            descr = OALocalizedString(@"routing_profile_straightline");
             icon = @"ic_custom_straight_line";
         } else
         {
@@ -103,7 +103,7 @@
     [data addObject:@[
         @{
             @"type" : [OATitleDescriptionIconRoundCell getCellIdentifier],
-            @"title" : OALocalizedString(@"route_betw_points"),
+            @"title" : OALocalizedString(@"route_between_points"),
             @"img" : icon,
             @"descr" : descr,
             @"key" : @"route_betw_points"
@@ -112,21 +112,21 @@
     [data addObject:@[
         @{
             @"type" : [OATitleIconRoundCell getCellIdentifier],
-            @"title" : OALocalizedString(@"save_changes"),
+            @"title" : OALocalizedString(@"profile_alert_need_save_title"),
             @"img" : @"ic_custom_save_to_file",
             @"tintColor" : UIColorFromRGB(color_primary_purple),
             @"key" : @"save_changes"
         },
         @{
             @"type" : [OATitleIconRoundCell getCellIdentifier],
-            @"title" : OALocalizedString(@"save_new_track"),
+            @"title" : OALocalizedString(@"save_as_new_track"),
             @"img" : @"ic_custom_save_as_new_file",
             @"tintColor" : UIColorFromRGB(color_primary_purple),
             @"key" : @"save_new_track"
         },
         @{
             @"type" : [OATitleIconRoundCell getCellIdentifier],
-            @"title" : OALocalizedString(@"add_to_track"),
+            @"title" : OALocalizedString(@"add_to_a_track"),
             @"img" : @"ic_custom_add_to_track",
             @"tintColor" : UIColorFromRGB(color_primary_purple),
             @"key" : @"add_to_track"

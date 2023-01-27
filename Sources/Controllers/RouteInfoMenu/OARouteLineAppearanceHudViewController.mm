@@ -38,8 +38,8 @@
 #import "OAProducts.h"
 #import "OASizes.h"
 
-#define kColorDayMode OALocalizedString(@"map_settings_day")
-#define kColorNightMode OALocalizedString(@"map_settings_night")
+#define kColorDayMode OALocalizedString(@"day")
+#define kColorNightMode OALocalizedString(@"daynight_mode_night")
 
 #define kAppearanceLineMargin 20.
 
@@ -443,7 +443,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 {
     NSString *headerTitle = @"";
     if (sectionIndex == 0)
-        headerTitle = OALocalizedString(@"fav_color");
+        headerTitle = OALocalizedString(@"shared_string_color");
 
     OAGPXTableSectionData *sectionData = _tableData.subjects[sectionIndex];
     if (sectionData.header)
@@ -544,7 +544,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         OAGPXTableCellData *colorMapStyleCellData = [OAGPXTableCellData withData:@{
                 kTableKey:@"cell_color_map_style",
                 kCellType:[OASwitchTableViewCell getCellIdentifier],
-                kCellTitle:OALocalizedString(@"map_settings_style")
+                kCellTitle:OALocalizedString(@"map_widget_renderer")
         }];
         [colorsSectionData.subjects addObject:colorMapStyleCellData];
 
@@ -570,7 +570,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         OAGPXTableCellData *widthMapStyleCellData = [OAGPXTableCellData withData:@{
                 kTableKey:@"width_map_style",
                 kCellType:[OASwitchTableViewCell getCellIdentifier],
-                kCellTitle:OALocalizedString(@"map_settings_style")
+                kCellTitle:OALocalizedString(@"map_widget_renderer")
         }];
         [widthSectionData.subjects addObject:widthMapStyleCellData];
 
@@ -599,7 +599,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         // actions section
         OAGPXTableSectionData *resetSectionData = [OAGPXTableSectionData withData:@{
                 kTableKey: @"section_reset",
-                kSectionHeader:OALocalizedString(@"actions"),
+                kSectionHeader:OALocalizedString(@"shared_string_actions"),
                 kSectionFooterHeight: @60.
         }];
         [_tableData.subjects addObject:resetSectionData];

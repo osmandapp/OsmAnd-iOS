@@ -200,7 +200,7 @@
 {
     if (section == _transportRoutesSection)
     {
-        return [OATableViewCustomHeaderView getHeight:OALocalizedString(@"transport_routes")
+        return [OATableViewCustomHeaderView getHeight:OALocalizedString(@"transport_Routes")
                                                 width:tableView.bounds.size.width
                                               yOffset:32
                                                  font:[UIFont systemFontOfSize:13]];
@@ -216,7 +216,7 @@
     if (section == _transportRoutesSection)
     {
         OATableViewCustomHeaderView *customHeader = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
-        customHeader.label.text = [OALocalizedString(@"transport_routes") upperCase];
+        customHeader.label.text = [OALocalizedString(@"transport_Routes") upperCase];
         customHeader.label.font = [UIFont systemFontOfSize:13];
         [customHeader setYOffset:32];
         return customHeader;

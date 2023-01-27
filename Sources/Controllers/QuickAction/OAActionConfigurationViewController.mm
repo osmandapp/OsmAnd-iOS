@@ -160,7 +160,7 @@
     [dataModel setObject:@[@{
             @"type" : [OAInputTableViewCell getCellIdentifier],
             @"title" : _action.getName
-    }] forKey:OALocalizedString(@"quick_action_name_str")];
+    }] forKey:OALocalizedString(@"shared_string_action_name")];
 
     OrderedDictionary *actionSpecific = _action.getUIModel;
     [dataModel addEntriesFromDictionary:actionSpecific];
@@ -176,7 +176,7 @@
 
 - (void)showExitDialog
 {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"osm_editing_lost_changes_title") preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"exit_without_saving") preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_exit") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [_action setName:_originalName];
         [self.navigationController popViewControllerAnimated:YES];
@@ -208,7 +208,7 @@
 
 -(void)onNameChanged:(UITextView *)textView
 {
-    NSString *nameKey = OALocalizedString(@"quick_action_name_str");
+    NSString *nameKey = OALocalizedString(@"shared_string_action_name");
     NSMutableDictionary *actionName = [NSMutableDictionary dictionaryWithDictionary:_data[nameKey].firstObject];
     NSString *newTitle = textView.text;
     [actionName setObject:newTitle forKey:@"title"];
@@ -879,8 +879,8 @@
     [items setObject:dest atIndexedSubscript:sourceIndexPath.row];
     NSArray *titles = [self getTitles:items];
     
-    NSMutableDictionary *actionName = [NSMutableDictionary dictionaryWithDictionary:_data[OALocalizedString(@"quick_action_name_str")].firstObject];
-    NSString *nameKey = OALocalizedString(@"quick_action_name_str");
+    NSMutableDictionary *actionName = [NSMutableDictionary dictionaryWithDictionary:_data[OALocalizedString(@"shared_string_action_name")].firstObject];
+    NSString *nameKey = OALocalizedString(@"shared_string_action_name");
     NSString *oldTitle = [_action getTitle:oldTitles];
     NSString *defaultName = [_action getDefaultName];
     if ([actionName[@"title"] isEqualToString:defaultName] || [actionName[@"title"] isEqualToString:oldTitle])
@@ -1010,7 +1010,7 @@
 
 - (void)renameAction:(NSMutableArray *)titles oldTitle:(NSString *)oldTitle
 {
-    NSString *nameKey = OALocalizedString(@"quick_action_name_str");
+    NSString *nameKey = OALocalizedString(@"shared_string_action_name");
     NSMutableDictionary *actionName = [NSMutableDictionary dictionaryWithDictionary:_data[nameKey].firstObject];
     NSString *defaultName = [_action getDefaultName];
     
@@ -1083,8 +1083,8 @@
     }
     [newItems addObject:button];
     [_data setObject:[NSArray arrayWithArray:newItems] forKey:key];
-    NSMutableDictionary *actionName = [NSMutableDictionary dictionaryWithDictionary:_data[OALocalizedString(@"quick_action_name_str")].firstObject];
-    NSString *nameKey = OALocalizedString(@"quick_action_name_str");
+    NSMutableDictionary *actionName = [NSMutableDictionary dictionaryWithDictionary:_data[OALocalizedString(@"shared_string_action_name")].firstObject];
+    NSString *nameKey = OALocalizedString(@"shared_string_action_name");
     NSString *oldTitle = [_action getTitle:_action.getParams[_action.getListKey]];
     NSString *defaultName = [_action getDefaultName];
     
@@ -1212,7 +1212,7 @@
 
 - (void)onPoiTypeSelected:(NSString *)name
 {
-    NSString *key = OALocalizedString(@"poi_type");
+    NSString *key = OALocalizedString(@"poi_dialog_poi_type");
     NSMutableArray *arr = [NSMutableArray arrayWithArray:_data[key]];
     NSMutableDictionary *item = [NSMutableDictionary dictionaryWithDictionary:arr.firstObject];
     [item setObject:name forKey:@"value"];

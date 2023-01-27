@@ -391,7 +391,7 @@
     BOOL isSuccessful = ((NSArray *) self.customParam).count == 0;
     [self.cancelButton setTitle:isSuccessful ? OALocalizedString(@"shared_string_close") : OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
     if (!isSuccessful)
-        [self.doneButton setTitle:OALocalizedString(@"shared_string_retry") forState:UIControlStateNormal];
+        [self.doneButton setTitle:OALocalizedString(@"retry") forState:UIControlStateNormal];
 }
 
 @end

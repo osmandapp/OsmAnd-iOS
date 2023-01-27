@@ -108,13 +108,13 @@
 {
     switch (frequency) {
         case ELiveUpdateFrequencyHourly:
-            return OALocalizedString(@"osmand_live_hourly");
+            return OALocalizedString(@"hourly");
             break;
         case ELiveUpdateFrequencyDaily:
             return OALocalizedString(@"osmand_live_daily");
             break;
         case ELiveUpdateFrequencyWeekly:
-            return OALocalizedString(@"osmand_live_weekly");
+            return OALocalizedString(@"weekly");
             break;
         default:
             return @"";

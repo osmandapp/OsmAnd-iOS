@@ -62,7 +62,7 @@
     if (_region)
         self.titleLabel.text = OALocalizedString(@"shared_string_updates_size");
     else if (_type == EOAWeatherOnlineData)
-        self.titleLabel.text = OALocalizedString(@"shared_string_online_cache");
+        self.titleLabel.text = OALocalizedString(@"weather_online_cache");
     else if (_type == EOAWeatherOfflineData)
         self.titleLabel.text = OALocalizedString(@"weather_offline_forecast");
 }
@@ -126,12 +126,12 @@
     CGFloat size = 0.;
     if (_region)
     {
-        sizeTitle = OALocalizedString(@"total");
+        sizeTitle = OALocalizedString(@"shared_string_total");
         size = [_weatherHelper getOfflineForecastSizeInfo:[OAWeatherHelper checkAndGetRegionId:_region] local:YES];
     }
     else if (_type == EOAWeatherOnlineData)
     {
-        sizeTitle = OALocalizedString(@"res_size");
+        sizeTitle = OALocalizedString(@"shared_string_size");
         size = _weatherHelper.onlineCacheSize;
     }
     else if (_type == EOAWeatherOfflineData)
@@ -159,7 +159,7 @@
     if (_region)
         clearTitle = OALocalizedString(@"shared_string_delete");
     else if (_type == EOAWeatherOnlineData)
-        clearTitle = OALocalizedString(@"poi_clear");
+        clearTitle = OALocalizedString(@"shared_string_clear");
     else if (_type == EOAWeatherOfflineData)
         clearTitle = OALocalizedString(@"shared_string_delete_all");
     [_type == EOAWeatherOnlineData ? clearCells : infoCells addObject:@{
@@ -237,7 +237,7 @@
                                                                           countStyle:NSByteCountFormatterCountStyleFile];
                     cells[_sizeIndexPath.row] = @{
                         @"key": @"size",
-                        @"title": OALocalizedString(@"total"),
+                        @"title": OALocalizedString(@"shared_string_total"),
                         @"value": sizeString,
                         @"type": [OAValueTableViewCell getCellIdentifier]
                     };
@@ -260,7 +260,7 @@
                     NSString *sizeString = [NSByteCountFormatter stringFromByteCount:size countStyle:NSByteCountFormatterCountStyleFile];
                     cells[_sizeIndexPath.row] = @{
                             @"key": @"size",
-                            @"title": OALocalizedString(_type == EOAWeatherOnlineData ? @"res_size" : @"shared_string_total_size"),
+                            @"title": OALocalizedString(_type == EOAWeatherOnlineData ? @"shared_string_size" : @"shared_string_total_size"),
                             @"value": sizeString,
                             @"type": [OAValueTableViewCell getCellIdentifier]
                     };
@@ -442,7 +442,7 @@
                                                              }
        ];
 
-        UIAlertAction *clearCacheAction = [UIAlertAction actionWithTitle:OALocalizedString(@"poi_clear")
+        UIAlertAction *clearCacheAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_clear")
                                                                    style:UIAlertActionStyleDefault
                                                                  handler:^(UIAlertAction * _Nonnull action)
                                                                  {

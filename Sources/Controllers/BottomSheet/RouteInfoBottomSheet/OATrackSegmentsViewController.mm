@@ -113,7 +113,7 @@
 
         NSString *segmentTitle = [self getTrackSegmentTitle:seg];
         if (!segmentTitle)
-            segmentTitle = [NSString stringWithFormat:OALocalizedString(@"segnet_num"), idx];
+            segmentTitle = [NSString stringWithFormat:OALocalizedString(@"segments_count"), idx];
 
         NSMutableDictionary *item = [NSMutableDictionary new];
         item[@"title"] = segmentTitle;

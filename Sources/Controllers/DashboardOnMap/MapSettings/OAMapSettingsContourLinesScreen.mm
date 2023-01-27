@@ -159,7 +159,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                                                                withHandler:@selector(onLocalResourcesChanged:withKey:)
                                                                 andObserve:_app.localResourcesChangedObservable];
     _styleSettings = [OAMapStyleSettings sharedInstance];
-    title = OALocalizedString(@"product_title_srtm");
+    title = OALocalizedString(@"download_srtm_maps");
     tblView.separatorInset = UIEdgeInsetsMake(0, [OAUtilities getLeftMargin] + 16, 0, 0);
     tblView.estimatedRowHeight = kEstimatedRowHeight;
     
@@ -258,7 +258,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         {
             [zoomArr addObject:@{
                 @"type" : kCellTypeValue,
-                @"title" : OALocalizedString(@"display_starting_at_zoom_level"),
+                @"title" : OALocalizedString(@"show_from_zoom_level"),
                 @"parameter" : param
             }];
         }
@@ -281,7 +281,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         {
             [linesArr addObject:@{
                 @"type" : kCellTypeCollection,
-                @"title" : OALocalizedString(@"map_settings_color_scheme"),
+                @"title" : OALocalizedString(@"srtm_color_scheme"),
                 @"parameter" : param
             }];
         }
@@ -291,7 +291,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             [linesArr addObject:@{
                 @"type" : kCellTypeSlider,
                 @"parameter" : param,
-                @"name" : OALocalizedString(@"map_settings_line_width")
+                @"name" : OALocalizedString(@"rendering_attr_depthContourWidth_name")
             }];
         }
         param = [_styleSettings getParameter:CONTOUR_DENSITY_ATTR];
@@ -350,13 +350,13 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                             @"footer" : OALocalizedString(@"map_settings_contour_zoom_level_descr")
                             }];
         [sectionArr addObject:@{
-                            @"header" : OALocalizedString(@"map_settings_appearance"),
+                            @"header" : OALocalizedString(@"shared_string_appearance"),
                             @"footer" : OALocalizedString(@"map_settings_line_density_slowdown_warning")
                             }];
         if (_mapMultipleItems.count > 0)
         {
             [sectionArr addObject:@{
-                            @"header" : OALocalizedString(@"osmand_live_available_maps"),
+                            @"header" : OALocalizedString(@"available_maps"),
                             @"footer" : OALocalizedString(@"map_settings_available_srtm_maps_descr")
                             }];
         }

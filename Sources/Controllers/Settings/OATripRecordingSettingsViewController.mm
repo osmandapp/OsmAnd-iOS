@@ -84,7 +84,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
 - (void) applyLocalization
 {
     [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"product_title_track_recording");
+    self.titleLabel.text = OALocalizedString(@"monitoring_settings");
 }
 
 - (void) viewDidLoad
@@ -127,18 +127,18 @@ static NSArray<NSString *> *minTrackSpeedNames;
             
             [dataArr addObject:
              @[@{
-                   @"header" : OALocalizedString(@"logging_accuracy"),
+                   @"header" : OALocalizedString(@"save_track_logging_accuracy"),
                    @"name" : @"rec_interval",
                    @"title" : OALocalizedString(@"save_global_track_interval"),
                    @"description" : OALocalizedString(@"save_global_track_interval_descr"),
-                   @"value" : ![settings.mapSettingSaveTrackIntervalApproved get:self.appMode] ? OALocalizedString(@"shared_setting_always_ask") : recIntervalValue,
+                   @"value" : ![settings.mapSettingSaveTrackIntervalApproved get:self.appMode] ? OALocalizedString(@"confirm_every_run") : recIntervalValue,
                    @"type" : [OAIconTitleValueCell getCellIdentifier] }
              ]];
             
             [dataArr addObject:
              @[@{
                    @"name" : @"logging_min_distance",
-                   @"title" : OALocalizedString(@"logging_min_distance"),
+                   @"title" : OALocalizedString(@"monitoring_min_distance"),
                    @"description" : OALocalizedString(@"logging_min_distance_descr"),
                    @"value" : minDistValue,
                    @"type" : [OAIconTitleValueCell getCellIdentifier] }
@@ -147,7 +147,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
             [dataArr addObject:
              @[@{
                    @"name" : @"logging_min_accuracy",
-                   @"title" : OALocalizedString(@"logging_min_accuracy"),
+                   @"title" : OALocalizedString(@"monitoring_min_accuracy"),
                    @"description" : OALocalizedString(@"logging_min_accuracy_descr"),
                    @"value" : minPrecision,
                    @"type" : [OAIconTitleValueCell getCellIdentifier] }
@@ -156,7 +156,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
             [dataArr addObject:
              @[@{
                    @"name" : @"logging_min_speed",
-                   @"title" : OALocalizedString(@"logging_min_speed"),
+                   @"title" : OALocalizedString(@"monitoring_min_speed"),
                    @"description" : OALocalizedString(@"logging_min_speed_descr"),
                    @"value" : minSpeed,
                    @"type" : [OAIconTitleValueCell getCellIdentifier] }
@@ -177,14 +177,14 @@ static NSArray<NSString *> *minTrackSpeedNames;
              @[@{
                    @"header" : OALocalizedString(@"routing_settings"),
                    @"name" : @"track_during_nav",
-                   @"title" : OALocalizedString(@"track_during_nav"),
-                   @"description" : [NSString stringWithFormat:@"%@ %@", OALocalizedString(@"track_during_nav_descr"), OALocalizedString(@"logging_interval_navigation_descr")],
+                   @"title" : OALocalizedString(@"save_track_to_gpx"),
+                   @"description" : [NSString stringWithFormat:@"%@ %@", OALocalizedString(@"save_track_to_gpx_descrp"), OALocalizedString(@"logging_interval_navigation_descr")],
                    @"value" : _settings.saveTrackToGPX,
                    @"img" : @"ic_custom_navigation",
                    @"type" : [OASwitchTableViewCell getCellIdentifier] },
                @{
                    @"name" : @"logging_interval_navigation",
-                   @"title" : OALocalizedString(@"logging_interval_navigation"),
+                   @"title" : OALocalizedString(@"save_track_interval"),
                    @"value" : navIntervalValue,
                    @"img" : @"ic_custom_timer",
                    @"type" : [OAIconTitleValueCell getCellIdentifier],
@@ -194,14 +194,14 @@ static NSArray<NSString *> *minTrackSpeedNames;
             
             [dataArr addObject:
              @[@{
-                 @"header" : OALocalizedString(@"help_other_header"),
+                 @"header" : OALocalizedString(@"other_location"),
                  @"name" : @"auto_split_gap",
-                 @"title" : OALocalizedString(@"auto_split_gap"),
+                 @"title" : OALocalizedString(@"auto_split_recording_title"),
                  @"description" : OALocalizedString(@"auto_split_gap_descr"),
                  @"value" : @([_settings.autoSplitRecording get:self.appMode]),
                  @"type" : [OASwitchTableViewCell getCellIdentifier] }]];
             
-            NSString *menuPath = [NSString stringWithFormat:@"%@ — %@ — %@", OALocalizedString(@"menu"), OALocalizedString(@"menu_my_places"), OALocalizedString(@"menu_my_trips")];
+            NSString *menuPath = [NSString stringWithFormat:@"%@ — %@ — %@", OALocalizedString(@"shared_string_menu"), OALocalizedString(@"shared_string_my_places"), OALocalizedString(@"menu_my_trips")];
             NSString *actionsDescr = [NSString stringWithFormat:OALocalizedString(@"trip_rec_actions_descr"), menuPath];
             NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithString:actionsDescr attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:15], NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer)}];
             [str addAttributes:@{NSFontAttributeName : [UIFont systemFontOfSize:15 weight:UIFontWeightSemibold]} range:[actionsDescr rangeOfString:menuPath]];
@@ -210,24 +210,24 @@ static NSArray<NSString *> *minTrackSpeedNames;
                 @{
                     @"type" : [OAIconTextTableViewCell getCellIdentifier],
                     @"title" : str,
-                    @"header" : OALocalizedString(@"actions")
+                    @"header" : OALocalizedString(@"shared_string_actions")
                 },
                 @{
                     @"type" : [OATitleRightIconCell getCellIdentifier],
-                    @"title" : OALocalizedString(@"tracks"),
+                    @"title" : OALocalizedString(@"shared_string_gpx_tracks"),
                     @"img" : @"ic_custom_folder",
                     @"name" : @"open_trips"
                 },
                 @{
                     @"type" : [OATitleRightIconCell getCellIdentifier],
-                    @"title" : OALocalizedString(@"plugin_settings_reset"),
+                    @"title" : OALocalizedString(@"reset_plugin_to_default"),
                     @"img" : @"ic_custom_reset",
                     @"name" : @"reset_plugin"
                 },
                 // TODO: add copy from profile
 //                @{
 //                    @"type" : [OATitleRightIconCell getCellIdentifier],
-//                    @"title" : OALocalizedString(@"tracks"),
+//                    @"title" : OALocalizedString(@"shared_string_gpx_tracks"),
 //                    @"img" : @"ic_custom_folder",
 //                    @"key" : @"open_trips"
 //                }
@@ -237,10 +237,10 @@ static NSArray<NSString *> *minTrackSpeedNames;
         }
         case kTripRecordingSettingsScreenRecInterval:
         {
-            self.titleLabel.text = OALocalizedString(@"rec_interval");
+            self.titleLabel.text = OALocalizedString(@"save_track_interval_globally");
             BOOL alwaysAsk = ![settings.mapSettingSaveTrackIntervalApproved get:self.appMode];
             [dataArr addObject:@{
-                @"title" : OALocalizedString(@"shared_setting_always_ask"),
+                @"title" : OALocalizedString(@"confirm_every_run"),
                 @"value" : @"always_ask",
                 @"img" : alwaysAsk ? @"menu_cell_selected.png" : @"",
                 @"type" : kCellTypeCheck
@@ -258,7 +258,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
         }
         case kTripRecordingSettingsScreenNavRecInterval:
         {
-            self.titleLabel.text = OALocalizedString(@"rec_interval");
+            self.titleLabel.text = OALocalizedString(@"save_track_interval_globally");
             for (NSNumber *num in settings.trackIntervalArray)
             {
                 [dataArr addObject: @{
@@ -270,7 +270,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
             break;
         }
         case kTripRecordingSettingsScreenAccuracy:
-            self.titleLabel.text = OALocalizedString(@"logging_min_accuracy");
+            self.titleLabel.text = OALocalizedString(@"monitoring_min_accuracy");
             for (int i = 0; i < trackPrecisionValues.count; i++)
             {
                 [dataArr addObject: @{
@@ -281,7 +281,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
             }
             break;
         case kTripRecordingSettingsScreenMinSpeed:
-            self.titleLabel.text = OALocalizedString(@"logging_min_speed");
+            self.titleLabel.text = OALocalizedString(@"monitoring_min_speed");
             for (int i = 0; i < minTrackSpeedValues.count; i++)
             {
                 [dataArr addObject: @{
@@ -292,7 +292,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
             }
             break;
         case kTripRecordingSettingsScreenMinDistance:
-            self.titleLabel.text = OALocalizedString(@"logging_min_distance");
+            self.titleLabel.text = OALocalizedString(@"monitoring_min_distance");
             for (int i = 0; i < minTrackDistanceValues.count; i++)
             {
                 [dataArr addObject: @{

@@ -64,7 +64,7 @@ static OAQuickActionType *TYPE;
 + (OAQuickActionType *) TYPE
 {
     if (!TYPE)
-        TYPE = [[OAQuickActionType alloc] initWithIdentifier:25 stringId:@"nav.startstop" class:self.class name:OALocalizedString(@"toggle_nav") category:NAVIGATION iconName:@"ic_custom_navigation_arrow" secondaryIconName:nil editable:NO];
+        TYPE = [[OAQuickActionType alloc] initWithIdentifier:25 stringId:@"nav.startstop" class:self.class name:OALocalizedString(@"quick_action_start_stop_navigation") category:NAVIGATION iconName:@"ic_custom_navigation_arrow" secondaryIconName:nil editable:NO];
        
     return TYPE;
 }

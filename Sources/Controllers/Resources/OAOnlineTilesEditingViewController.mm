@@ -72,7 +72,7 @@
 }
 -(void)applyLocalization
 {
-    _titleView.text = _isNewItem ? OALocalizedString(@"map_settings_add_online_source") : OALocalizedString(@"res_edit_map_source");
+    _titleView.text = _isNewItem ? OALocalizedString(@"add_online_source") : OALocalizedString(@"res_edit_map_source");
     [_saveButton setTitle:OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
 }
 
@@ -276,15 +276,15 @@
 
     NSMutableArray *sectionArr = [NSMutableArray new];
     [sectionArr addObject:@{
-                        @"header" : OALocalizedString(@"fav_name"),
+                        @"header" : OALocalizedString(@"shared_string_name"),
                         @"footer" : OALocalizedString(@"res_online_name_descr")
                         }];
     [sectionArr addObject:@{
-                        @"header" : OALocalizedString(@"res_url"),
+                        @"header" : OALocalizedString(@"edit_tilesource_url_to_load"),
                         @"footer" : OALocalizedString(@"res_online_url_descr")
                         }];
     [sectionArr addObject:@{
-                        @"header" : OALocalizedString(@"res_zoom_levels"),
+                        @"header" : OALocalizedString(@"shared_string_zoom_levels"),
                         @"footer" : OALocalizedString(@"res_zoom_levels_desc")
                         }];
     [sectionArr addObject:@{
@@ -481,7 +481,7 @@
     {
         if ([self needsClearCache] && [self isOnlineSource])
         {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"shared_string_warning") message:OALocalizedString(@"res_online_source_cache_alert") preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"osmand_parking_warning") message:OALocalizedString(@"clear_tiles_warning") preferredStyle:UIAlertControllerStyleAlert];
             [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleDefault handler:nil]];
             [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 [self clearAndUpdateSource];
@@ -672,7 +672,7 @@
 
 - (void)showExitWithoutChangesDialog
 {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"osm_editing_lost_changes_title") message:OALocalizedString(@"osm_editing_lost_changes_descr") preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"exit_without_saving") message:OALocalizedString(@"unsaved_changes_will_be_lost") preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleDefault handler:nil]];
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self.navigationController popViewControllerAnimated:YES];
@@ -758,9 +758,9 @@
 - (NSString *) getFormatString:(EOASourceFormat)sourceFormat
 {
     if (sourceFormat == EOASourceFormatOnline)
-        return OALocalizedString(@"res_source_one_per_tile");
+        return OALocalizedString(@"one_image_per_tile");
     else if (sourceFormat == EOASourceFormatSQLite)
-        return OALocalizedString(@"res_source_sqlite");
+        return OALocalizedString(@"sqlite_db_file");
     
     return @"";
 }
@@ -845,7 +845,7 @@
             NSString *key = item[@"key"];
             if ([key isEqualToString:@"mercator_sett"])
             {
-                cell.descriptionView.text = _isEllipticYTile ? OALocalizedString(@"res_elliptic_mercator") : OALocalizedString(@"res_pseudo_mercator");
+                cell.descriptionView.text = _isEllipticYTile ? OALocalizedString(@"edit_tilesource_elliptic_tile") : OALocalizedString(@"pseudo_mercator_projection");
             }
             else if ([key isEqualToString:@"format_sett"])
             {

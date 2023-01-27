@@ -105,7 +105,7 @@ typedef NS_ENUM(NSInteger, EOAPoiRowType) {
 - (void) initData
 {
     rows = [NSMutableArray array];
-    [rows addObject:[[OAPOIFilterTableRow alloc] initWithRowType:EOAPoiRowTypeButton icon:[UIImage imageNamed:@"icon_remove.png"] title:OALocalizedString(@"poi_clear")]];
+    [rows addObject:[[OAPOIFilterTableRow alloc] initWithRowType:EOAPoiRowTypeButton icon:[UIImage imageNamed:@"icon_remove.png"] title:OALocalizedString(@"shared_string_clear")]];
     NSArray<OAPOIUIFilter *> *filters = [OAPOIFiltersHelper.sharedInstance getSortedPoiFilters:YES];
     for (OAPOIUIFilter *filter in filters)
     {

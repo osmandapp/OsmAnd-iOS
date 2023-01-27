@@ -63,7 +63,7 @@
     else if (_settingsType == EOADefaultProfile)
         self.titleLabel.text = OALocalizedString(@"settings_preset");
     else if (_settingsType == EOADialogsAndNotifications)
-        self.titleLabel.text = OALocalizedString(@"dialogs_and_notifications");
+        self.titleLabel.text = OALocalizedString(@"dialogs_and_notifications_title");
     else
         self.titleLabel.text = OALocalizedString(@"carplay_profile");
 }

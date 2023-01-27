@@ -27,10 +27,10 @@
 
 #define unitsKm OALocalizedString(@"units_km")
 #define unitsM OALocalizedString(@"units_m")
-#define unitsMi OALocalizedString(@"units_mi")
-#define unitsYd OALocalizedString(@"units_yd")
-#define unitsFt OALocalizedString(@"units_ft")
-#define unitsNm OALocalizedString(@"units_nm")
+#define unitsMi OALocalizedString(@"mile")
+#define unitsYd OALocalizedString(@"yard")
+#define unitsFt OALocalizedString(@"foot")
+#define unitsNm OALocalizedString(@"nm")
 
 typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     EOACarPlayButtonTypeDismiss = 0,
@@ -141,7 +141,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     
     CPTrip *trip = [[CPTrip alloc] initWithOrigin:startItem destination:finishItem routeChoices:@[routeChoice]];
     
-    CPTripPreviewTextConfiguration *config = [[CPTripPreviewTextConfiguration alloc] initWithStartButtonTitle:OALocalizedString(@"gpx_start") additionalRoutesButtonTitle:nil overviewButtonTitle:nil];
+    CPTripPreviewTextConfiguration *config = [[CPTripPreviewTextConfiguration alloc] initWithStartButtonTitle:OALocalizedString(@"shared_string_control_start") additionalRoutesButtonTitle:nil overviewButtonTitle:nil];
     
     [_mapTemplate showTripPreviews:@[trip] textConfiguration:config];
     _mapTemplate.leadingNavigationBarButtons = @[[self createBarButton:EOACarPlayButtonTypeCancelRoute]];

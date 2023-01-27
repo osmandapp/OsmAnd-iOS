@@ -119,7 +119,7 @@
 
 - (void)applyLocalization
 {
-    _titleView.text = OALocalizedString(@"add_action");
+    _titleView.text = OALocalizedString(@"quick_action_new_action");
     _searchField.placeholder = OALocalizedString(@"shared_string_search");
     [_doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
 }

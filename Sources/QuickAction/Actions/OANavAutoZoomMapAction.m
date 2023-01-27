@@ -43,7 +43,7 @@ static OAQuickActionType *TYPE;
 + (OAQuickActionType *) TYPE
 {
     if (!TYPE)
-        TYPE = [[OAQuickActionType alloc] initWithIdentifier:23 stringId:@"nav.autozoom" class:self.class name:OALocalizedString(@"toggle_auto_zoom") category:NAVIGATION iconName:@"ic_navbar_search" secondaryIconName:nil editable:NO];
+        TYPE = [[OAQuickActionType alloc] initWithIdentifier:23 stringId:@"nav.autozoom" class:self.class name:OALocalizedString(@"quick_action_auto_zoom") category:NAVIGATION iconName:@"ic_navbar_search" secondaryIconName:nil editable:NO];
        
     return TYPE;
 }

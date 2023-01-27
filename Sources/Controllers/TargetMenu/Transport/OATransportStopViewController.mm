@@ -67,7 +67,7 @@
 
 - (NSString *) getTypeStr;
 {
-    return OALocalizedString(@"transport_stop");
+    return OALocalizedString(@"shared_string_control_stop");
 }
 
 - (id) getTargetObj

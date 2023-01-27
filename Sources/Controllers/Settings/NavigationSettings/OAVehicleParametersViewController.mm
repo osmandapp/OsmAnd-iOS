@@ -119,11 +119,11 @@
                 }
 
                 if (index == 0)
-                    value = OALocalizedString([paramId isEqualToString:@"motor_type"] ? @"not_selected" : @"shared_string_none");
+                    value = OALocalizedString([paramId isEqualToString:@"motor_type"] ? @"shared_string_not_selected" : @"shared_string_none");
                 else if (index != -1)
                     value = [NSString stringWithUTF8String:p.possibleValueDescriptions[index].c_str()];
                 else
-                    value = [NSString stringWithFormat:@"%@ %@", value, [paramId isEqualToString:@"weight"] ? OALocalizedString(@"units_t") : OALocalizedString(@"units_m")];
+                    value = [NSString stringWithFormat:@"%@ %@", value, [paramId isEqualToString:@"weight"] ? OALocalizedString(@"metric_ton") : OALocalizedString(@"units_m")];
                 [isMotorType ? exraParametersArr : parametersArr addObject:
                  @{
                      @"name" : paramId,
@@ -141,7 +141,7 @@
     }
     [defaultSpeedArr addObject:@{
         @"type" : [OAIconTextTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"default_speed"),
+        @"title" : OALocalizedString(@"default_speed_setting_title"),
         @"icon" : @"ic_action_speed",
         @"name" : @"defaultSpeed",
     }];
@@ -175,7 +175,7 @@
 - (NSString *)getTitleForHeader:(NSInteger)section
 {
     if (section == _otherSection)
-        return OALocalizedString(@"help_other_header");
+        return OALocalizedString(@"other_location");
 
     return nil;
 }

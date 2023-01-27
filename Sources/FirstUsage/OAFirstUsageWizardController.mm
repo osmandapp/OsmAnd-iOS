@@ -136,9 +136,9 @@ typedef enum
                                                                 andObserve:_app.downloadsManager.completedObservable];
 
     // Init wizard
-    _lbTitle.text = OALocalizedString(@"download_map");
+    _lbTitle.text = OALocalizedString(@"shared_string_download_map");
     _lbDescription.text = OALocalizedString(@"first_usage_wizard_desc");
-    [_btnSkip setTitle:OALocalizedString(@"intro_skip") forState:UIControlStateNormal];
+    [_btnSkip setTitle:OALocalizedString(@"shared_string_skip") forState:UIControlStateNormal];
     
     // Init no location view
     _lbLocationNotFound.text = OALocalizedString(@"location_not_found");
@@ -151,15 +151,15 @@ typedef enum
 
     // Init searching location view
     _lbSearchingLocation.text = OALocalizedString(@"search_location");
-    [_btnSearchingLocation setTitle:OALocalizedString(@"download") forState:UIControlStateNormal];
+    [_btnSearchingLocation setTitle:OALocalizedString(@"shared_string_download") forState:UIControlStateNormal];
 
     // Init searching map view
     _lbSearchingMap.text = OALocalizedString(@"search_map");
-    [_btnSearchingMap setTitle:OALocalizedString(@"download") forState:UIControlStateNormal];
+    [_btnSearchingMap setTitle:OALocalizedString(@"shared_string_download") forState:UIControlStateNormal];
 
     // Init download map view
     [self updateDownloadButtonLayer];
-    [_btnDownload setTitle:OALocalizedString(@"download") forState:UIControlStateNormal];
+    [_btnDownload setTitle:OALocalizedString(@"shared_string_download") forState:UIControlStateNormal];
     [_btnSelectMap setTitle:OALocalizedString(@"search_another_country") forState:UIControlStateNormal];
 
     // Init progress view
@@ -284,7 +284,7 @@ typedef enum
 
 - (IBAction)skipPress:(id)sender
 {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"skip_map_downloading") message:OALocalizedString(@"skip_map_downloading_desc") delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_cancel") otherButtonTitles:OALocalizedString(@"intro_skip"), OALocalizedString(@"shared_string_select"), nil];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"skip_map_downloading") message:OALocalizedString(@"skip_map_downloading_desc_ios") delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_cancel") otherButtonTitles:OALocalizedString(@"shared_string_skip"), OALocalizedString(@"shared_string_select"), nil];
     alert.tag = ALERT_SKIP;
     [alert show];
 }

@@ -863,6 +863,9 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonBoolean *speakSpeedLimit;
 @property (nonatomic) OACommonBoolean *speakCameras;
 @property (nonatomic) OACommonBoolean *speakTunnels;
+@property (nonatomic) OACommonBoolean *speakExitNumberNames;
+@property (nonatomic) OACommonBoolean *speakRouteRecalculation;
+@property (nonatomic) OACommonBoolean *speakGpsSignalStatus;
 @property (nonatomic) OACommonBoolean *announceNearbyFavorites;
 @property (nonatomic) OACommonBoolean *announceNearbyPoi;
 

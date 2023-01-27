@@ -3018,7 +3018,9 @@
 "rendering_attr_OSMMapperAssistantIconsLowZooms_description" = "Schematic display of icons at low zooms";
 "routing_attr_difficulty_preference_beginner_name" = "Beginner";
 
-
-
-
-
+"exit_number" = "Exit number";
+"announce_when_exceeded" = "Announce when exceeded";
+"speak_gps_signal_status" = "Announce GPS signal loss and recovery";
+"speak_route_recalculation" = "Announce route recalculation";
+"announcement_time_title" = "Announcement time";
+"user_points" = "User points";

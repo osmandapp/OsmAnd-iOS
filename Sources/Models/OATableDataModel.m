@@ -40,6 +40,24 @@
         [_sectionData insertObject:sectionData atIndex:index];
 }
 
+- (void)removeSection:(NSUInteger)section
+{
+    [_sectionData removeObjectAtIndex:section];
+}
+
+- (void)removeItemAtIndexPaths:(NSArray<NSIndexPath *> *)indexPaths
+{
+    for (NSIndexPath *indexPath in indexPaths)
+    {
+        if (_sectionData.count > indexPath.section && [_sectionData[indexPath.section] rowCount] > indexPath.row)
+            [_sectionData[indexPath.section] removeRowAtIndex:indexPath.row];
+    }
+    for (NSIndexPath *indexPath in indexPaths)
+    {
+        if ([_sectionData[indexPath.section] rowCount] == 0)
+            [self removeSection:indexPath.section];
+    }
+}
 
 - (OATableSectionData *)sectionDataForIndex:(NSUInteger)index
 {

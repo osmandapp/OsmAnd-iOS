@@ -252,7 +252,7 @@ std::string preferredLanguage;
         if (dist <= 0) {
             return;
         } else if ([self needsInforming]) {
-            [self playGoAhead:dist streetName:[self getSpeakableStreetName:currentSegment routeDirectionInfo:next includeDestination:NO]];
+            [self playGoAhead:dist next:next streetName:[self getSpeakableStreetName:currentSegment routeDirectionInfo:next includeDestination:NO]];
             return;
         } else if (currentStatus == STATUS_TOLD) {
             // nothing said possibly that's wrong case we should say before that
@@ -284,13 +284,13 @@ std::string preferredLanguage;
                 // Distance fon non-straights already announced in "Turn (now)"'s nextnext  code above
                 if (nextNextInfo != nil && nextNextInfo.directionInfo != nil && nextNextInfo.directionInfo.turnType->goAhead()) {
                     [self playThen];
-                    [self playGoAhead:nextNextInfo.distanceTo streetName:[NSMutableDictionary new]];
+                    [self playGoAhead:nextNextInfo.distanceTo next:next streetName:[NSMutableDictionary new]];
                 }
                 [self playAndArriveAtDestination:nextNextInfo];
             } else if (nextNextInfo.distanceTo < 1.2f * _TURN_IN_DISTANCE_END) {
                 // 1.2 is safety margin should the subsequent "Turn in" prompt not fit in amy more
                 [self playThen];
-                [self playGoAhead:nextNextInfo.distanceTo streetName:[NSMutableDictionary new]];
+                [self playGoAhead:nextNextInfo.distanceTo next:next streetName:[NSMutableDictionary new]];
                 [self playAndArriveAtDestination:nextNextInfo];
             }
         }
@@ -335,7 +335,7 @@ std::string preferredLanguage;
         [self nextStatusAfter:STATUS_UNKNOWN];
     } else if (repeat || ([self statusNotPassed:STATUS_PREPARE] && dist < playGoAheadDist)) {
         playGoAheadDist = 0;
-        [self playGoAhead:dist streetName:[self getSpeakableStreetName:currentSegment routeDirectionInfo:next includeDestination:NO]];
+        [self playGoAhead:dist next:next streetName:[self getSpeakableStreetName:currentSegment routeDirectionInfo:next includeDestination:NO]];
     }
 }
 
@@ -347,7 +347,7 @@ std::string preferredLanguage;
         BOOL isPlay = YES;
         OAExitInfo *exitInfo = next.exitInfo;
         if (tParam != nil) {
-            if (exitInfo != nil && exitInfo.ref.length > 0)
+            if (exitInfo != nil && exitInfo.ref.length > 0 && [_settings.speakExitNumberNames get])
             {
                 NSString *stringRef = [self getSpeakableExitRef:exitInfo.ref];
                 [play takeExit:tParam dist:dist exitString:stringRef exitInt:[self getIntRef:exitInfo.ref] streetName:[self getSpeakableExitName:next exitInfo:exitInfo includeDest:YES]];
@@ -411,7 +411,7 @@ std::string preferredLanguage;
     OARouteDirectionInfo *next = nextInfo.directionInfo;
     if ([self isTargetPoint:nextInfo] && (!playedAndArriveAtTarget || repeat)) {
         if (next.turnType->goAhead()) {
-            [self playGoAhead:nextInfo.distanceTo streetName:[self getSpeakableStreetName:currentSegment routeDirectionInfo:next includeDestination:NO]];
+            [self playGoAhead:nextInfo.distanceTo next:next streetName:[self getSpeakableStreetName:currentSegment routeDirectionInfo:next includeDestination:NO]];
             [self playAndArriveAtDestination:nextInfo];
             playedAndArriveAtTarget = true;
         } else if (nextInfo.distanceTo <= 2 * _TURN_IN_DISTANCE) {
@@ -437,12 +437,20 @@ std::string preferredLanguage;
     }
 }
 
-- (void) playGoAhead:(int) dist streetName:(NSMutableDictionary *)streetName
+- (void) playGoAhead:(int)dist next:(OARouteDirectionInfo *)next streetName:(NSMutableDictionary *)streetName
 {
-    OACommandBuilder *play = [self getNewCommandPlayerToPlay];
-    if (play != nil) {
-//        notifyOnVoiceMessage();
-        [[play goAhead:dist streetName:streetName] play];
+    OACommandBuilder *p = [self getNewCommandPlayerToPlay];
+    NSString *tParam = [self getTurnType:next.turnType];
+    OAExitInfo *exitInfo = next.exitInfo;
+    if (p)
+    {
+        //        notifyOnVoiceMessage();
+        [[p goAhead:dist streetName:streetName] play];
+        if (tParam && exitInfo && exitInfo.ref && exitInfo.ref.length > 0 && [_settings.speakExitNumberNames get])
+        {
+            NSString *stringRef = [self getSpeakableExitRef:exitInfo.ref];
+            [[p then] takeExit:tParam exitString:stringRef exitInt:[self getIntRef:exitInfo.ref] streetName:[self getSpeakableExitName:next exitInfo:exitInfo includeDest:YES]];
+        }
     }
 }
 
@@ -465,7 +473,7 @@ std::string preferredLanguage;
         OAExitInfo *exitInfo = nextInfo.exitInfo;
         BOOL isplay = YES;
         if (tParam != nil) {
-            if (exitInfo != nil && exitInfo.ref.length > 0)
+            if (exitInfo != nil && exitInfo.ref.length > 0 && [_settings.speakExitNumberNames get])
             {
                 NSString *stringRef = [self getSpeakableExitRef:exitInfo.ref];
                 [play takeExit:tParam exitString:stringRef exitInt:[self getIntRef:exitInfo.ref] streetName:[self getSpeakableExitName:nextInfo exitInfo:exitInfo includeDest:!suppressDest]];
@@ -607,13 +615,13 @@ std::string preferredLanguage;
         {
             [[builder routeRecalculated:[_router getLeftDistance] time:[_router getLeftTime]] play];
         }
-        else
+        else if ([_settings.speakRouteRecalculation get])
         {
             [[builder newRouteCalculated:[_router getLeftDistance] time:[_router getLeftTime]] play];
         }
         
     }
-    else if (player == nil)
+    else if (player == nil && (newRoute || [_settings.speakRouteRecalculation get]))
     {
         pendingCommand = [[OAVoiceCommandPending alloc] initWithType:((!newRoute) ? ROUTE_RECALCULATED : ROUTE_CALCULATED) voiceRouter:self];
     }
@@ -824,19 +832,27 @@ std::string preferredLanguage;
 
 - (void) gpsLocationLost
 {
-    OACommandBuilder *play = [self getNewCommandPlayerToPlay];
-    if (play != nil) {
-//        notifyOnVoiceMessage();
-        [[play gpsLocationLost] play];
+    if ([_settings.speakGpsSignalStatus get])
+    {
+        OACommandBuilder *play = [self getNewCommandPlayerToPlay];
+        if (play != nil)
+        {
+            //        notifyOnVoiceMessage();
+            [[play gpsLocationLost] play];
+        }
     }
 }
 
 - (void) gpsLocationRecover
 {
-    OACommandBuilder *play = [self getNewCommandPlayerToPlay];
-    if (play != nil) {
-        //        notifyOnVoiceMessage();
-        [[play gpsLocationRecover] play];
+    if ([_settings.speakGpsSignalStatus get])
+    {
+        OACommandBuilder *play = [self getNewCommandPlayerToPlay];
+        if (play != nil)
+        {
+            //        notifyOnVoiceMessage();
+            [[play gpsLocationRecover] play];
+        }
     }
 }
 

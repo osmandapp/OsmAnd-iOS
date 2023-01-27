@@ -7,16 +7,18 @@
 //
 
 #import "OAVoicePromptsViewController.h"
+#import "OAValueTableViewCell.h"
 #import "OASwitchTableViewCell.h"
-#import "OAIconTitleValueCell.h"
-#import "OASwitchTableViewCell.h"
-#import "OASettingsTableViewCell.h"
 #import "OACardTableViewCell.h"
 #import "OANavigationLanguageViewController.h"
 #import "OASpeedLimitToleranceViewController.h"
 #import "OARepeatNavigationInstructionsViewController.h"
 #import "OAArrivalAnnouncementViewController.h"
 #import "OAUninstallSpeedCamerasViewController.h"
+#import "OATableDataModel.h"
+#import "OATableSectionData.h"
+#import "OATableRowData.h"
+#import "OATableCollapsableRowData.h"
 #import "OAAppSettings.h"
 #import "OAApplicationMode.h"
 #import "OARoutingHelper.h"
@@ -33,9 +35,10 @@
 
 @implementation OAVoicePromptsViewController
 {
-    NSArray<NSArray *> *_data;
+    OATableDataModel *_data;
     OAAppSettings *_settings;
     BOOL _voiceOn;
+    NSArray<NSIndexPath *> *_speedCamerasIndexPaths;
 }
 
 - (instancetype) initWithAppMode:(OAApplicationMode *)appMode
@@ -57,28 +60,31 @@
 - (void) viewDidLoad
 {
     [super viewDidLoad];
+
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    [self setupView];
+
+    [self generateData];
 }
 
-- (void) viewWillAppear:(BOOL)animated
+- (void)generateData
 {
-    [super viewWillAppear:animated];
-    [self setupView];
-    [self.tableView reloadData];
-}
-
-- (void) setupView
-{
-    NSMutableArray *tableData = [NSMutableArray array];
-    NSMutableArray *firstSection = [NSMutableArray array]; // change
-    NSMutableArray *secondSection = [NSMutableArray array];
-    NSMutableArray *thirdSection = [NSMutableArray array];
-    NSMutableArray *fourthSection = [NSMutableArray array];
-    NSMutableArray *fifthSection = [NSMutableArray array];
-    
+    _data = [OATableDataModel model];
     _voiceOn = ![_settings.voiceMute get:self.appMode];
+
+    OATableSectionData *voicePromptsSection = [OATableSectionData sectionData];
+    [_data addSection:voicePromptsSection];
+
+    [voicePromptsSection addRowFromDictionary:@{
+        kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
+        kCellTitleKey : OALocalizedString(@"voice_announces"),
+        kCellKeyKey : @"voiceGuidance",
+        @"value" : _settings.voiceMute,
+    }];
+
+    if (!_voiceOn)
+        return;
+
     NSDictionary *screenVoiceProviders = [OAUtilities getSortedVoiceProviders];
     NSString *selectedLanguage = @"";
     NSString *selectedValue = [_settings.voiceProvider get:self.appMode];
@@ -87,63 +93,115 @@
         if ([screenVoiceProviders[key] isEqualToString:selectedValue])
             selectedLanguage = key;
     }
-    NSArray<NSNumber *> *arrivalValues = @[ @1.5f, @1.f, @0.5f, @0.25f ];
-    NSArray<NSString *> *arrivalNames =  @[ OALocalizedString(@"arrival_distance_factor_early"),
-                                            OALocalizedString(@"arrival_distance_factor_normally"),
-                                            OALocalizedString(@"arrival_distance_factor_late"),
-                                            OALocalizedString(@"arrival_distance_factor_at_last") ];
-    NSString *arrivalAnnouncementValue = nil;
-    NSInteger index = [arrivalValues indexOfObject:@([_settings.arrivalDistanceFactor get:self.appMode])];
-    if (index != NSNotFound)
-        arrivalAnnouncementValue = arrivalNames[index];
-    
+    [voicePromptsSection addRowFromDictionary:@{
+        kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
+        kCellTitleKey : OALocalizedString(@"shared_string_language"),
+        kCellKeyKey : @"language",
+        kCellIconNameKey : @"ic_custom_map_languge",
+        @"value" : selectedLanguage
+    }];
+
+    OATableSectionData *announceFirstSection = [OATableSectionData sectionData];
+    announceFirstSection.headerText = OALocalizedString(@"accessibility_announce");
+    [_data addSection:announceFirstSection];
+
+    [announceFirstSection addRowFromDictionary:@{
+        kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
+        kCellTitleKey : OALocalizedString(@"speak_street_names"),
+        kCellKeyKey : @"streetNames",
+        @"value" : _settings.speakStreetNames
+    }];
+    [announceFirstSection addRowFromDictionary:@{
+        kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
+        kCellTitleKey : OALocalizedString(@"exit_number"),
+        kCellKeyKey : @"exitNumber",
+        @"value" : _settings.speakExitNumberNames,
+    }];
+
+    OATableSectionData *announceSecondSection = [OATableSectionData sectionData];
+    [_data addSection:announceSecondSection];
+
+    [announceSecondSection addRowFromDictionary:@{
+        kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
+        kCellTitleKey : OALocalizedString(@"show_traffic_warnings"),
+        kCellKeyKey : @"trafficWarnings",
+        @"value" : _settings.speakTrafficWarnings,
+    }];
+    [announceSecondSection addRowFromDictionary:@{
+        kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
+        kCellTitleKey : OALocalizedString(@"traffic_warning_pedestrian"),
+        kCellKeyKey : @"pedestrianCrosswalks",
+        @"value" : _settings.speakPedestrian
+    }];
+
+    if (![_settings.speedCamerasUninstalled get])
+    {
+        [announceSecondSection addRowFromDictionary:@{
+            kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
+            kCellTitleKey : OALocalizedString(@"speak_cameras"),
+            kCellKeyKey : @"speedCameras",
+            @"value" : _settings.speakCameras
+        }];
+        NSIndexPath *speedCamerasIndexPath = [NSIndexPath indexPathForRow:[announceSecondSection rowCount] - 1 inSection:[_data sectionCount] - 1];
+        [announceSecondSection addRowFromDictionary:@{
+            kCellTypeKey : [OACardTableViewCell getCellIdentifier],
+            kCellTitleKey : OALocalizedString(@"speed_cameras_alert"),
+            kCellKeyKey : @"speed_cameras_read_more",
+            kCellIconNameKey : @"ic_custom_alert_color",
+            @"buttonTitle" : OALocalizedString(@"shared_string_read_more"),
+        }];
+        NSIndexPath *speedCamerasAlertIndexPath = [NSIndexPath indexPathForRow:[announceSecondSection rowCount] - 1 inSection:[_data sectionCount] - 1];
+
+        _speedCamerasIndexPaths = @[speedCamerasIndexPath, speedCamerasAlertIndexPath];
+    }
+
+    [announceSecondSection addRowFromDictionary:@{
+        kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
+        kCellTitleKey : OALocalizedString(@"show_tunnels"),
+        kCellKeyKey : @"tunnels",
+        @"value" : _settings.speakTunnels
+    }];
+
+    OATableSectionData *userPointsSection = [OATableSectionData sectionData];
+    userPointsSection.headerText = OALocalizedString(@"user_points");
+    [_data addSection:userPointsSection];
+
+    [userPointsSection addRowFromDictionary:@{
+        kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
+        kCellTitleKey : OALocalizedString(@"shared_string_gpx_waypoints"),
+        kCellKeyKey : @"GPXWaypoints",
+        @"value" : _settings.announceWpt
+    }];
+    [userPointsSection addRowFromDictionary:@{
+        kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
+        kCellTitleKey : OALocalizedString(@"speak_favorites"),
+        kCellKeyKey : @"nearbyFavorites",
+        @"value" : _settings.announceNearbyFavorites
+    }];
+    [userPointsSection addRowFromDictionary:@{
+        kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
+        kCellTitleKey : OALocalizedString(@"speak_poi"),
+        kCellKeyKey : @"nearbyPOI",
+        @"value" : _settings.announceNearbyPoi
+    }];
+
+    OATableSectionData *speedLimitSection = [OATableSectionData sectionData];
+    speedLimitSection.headerText = OALocalizedString(@"traffic_warning_speed_limit");
+    [_data addSection:speedLimitSection];
+
     NSArray<NSNumber *> *speedLimitsKm = @[ @0.f, @5.f, @7.f, @10.f, @15.f, @20.f ];
     NSArray<NSNumber *> *speedLimitsMiles = @[ @0.f, @3.f, @5.f, @7.f, @10.f, @15.f ];
-    
-    [firstSection addObject:@{
-        @"type" : [OASwitchTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"voice_provider"),
-        @"icon" : @"ic_custom_sound",
-        @"value" : _settings.voiceMute,
-        @"key" : @"voiceGuidance",
+
+    OATableCollapsableRowData *speedLimitCollapsableRow = [[OATableCollapsableRowData alloc] initWithData:@{
+        kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
+        kCellTitleKey : OALocalizedString(@"announce_when_exceeded"),
+        kCellKeyKey : @"speedLimit",
+        @"value" : _settings.speakSpeedLimit
     }];
-    [firstSection addObject:@{
-        @"type" : [OAIconTitleValueCell getCellIdentifier],
-        @"title" : OALocalizedString(@"shared_string_language"),
-        @"value" : selectedLanguage,
-        @"icon" : @"ic_custom_map_languge",
-        @"isOn" : @NO,
-        @"key" : @"language",
-    }];
-    
-    [secondSection addObject:@{
-        @"type" : [OASwitchTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"speak_street_names"),
-        @"value" : _settings.speakStreetNames,
-        @"key" : @"streetNames",
-    }];
-    [secondSection addObject:@{
-        @"type" : [OASwitchTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"show_traffic_warnings"),
-        @"value" : _settings.speakTrafficWarnings,
-        @"key" : @"trafficWarnings",
-    }];
-    [secondSection addObject:@{
-        @"type" : [OASwitchTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"show_pedestrian_warnings"),
-        @"value" : _settings.speakPedestrian,
-        @"key" : @"pedestrianCrosswalks",
-    }];
-    
-    [thirdSection addObject:@{
-        @"type" : [OASwitchTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"speak_speed_limit"),
-        @"value" : _settings.speakSpeedLimit,
-        @"key" : @"speedLimit",
-    }];
-    
-    NSString *value = nil;
-    if ([_settings.metricSystem get] == KILOMETERS_AND_METERS)
+    speedLimitCollapsableRow.collapsed = ![_settings.speakSpeedLimit get:self.appMode];
+    [speedLimitSection addRow:speedLimitCollapsableRow];
+    NSString *value = @"";
+    if ([_settings.metricSystem get:self.appMode] == KILOMETERS_AND_METERS)
     {
         value = [NSString stringWithFormat:@"%d %@", (int)[_settings.speedLimitExceedKmh get:self.appMode], OALocalizedString(@"km_h")];
     }
@@ -153,87 +211,71 @@
         if (index != NSNotFound)
             value = [NSString stringWithFormat:@"%d %@", speedLimitsMiles[index].intValue, OALocalizedString(@"units_mph")];
     }
-    [thirdSection addObject:@{
-        @"type" : [OASettingsTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"speed_limit_exceed"),
-        @"value" : value,
-        @"key" : @"speedLimitTolerance",
+    [speedLimitCollapsableRow addDependentRow:[[OATableRowData alloc] initWithData:@{
+        kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
+        kCellTitleKey : OALocalizedString(@"speed_limit_exceed"),
+        kCellKeyKey : @"speedLimitTolerance",
+        @"value" : value
+    }]];
+
+    OATableSectionData *otherSection = [OATableSectionData sectionData];
+    otherSection.headerText = OALocalizedString(@"other_location");
+    [_data addSection:otherSection];
+
+    [otherSection addRowFromDictionary:@{
+        kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
+        kCellTitleKey : OALocalizedString(@"speak_gps_signal_status"),
+        kCellKeyKey : @"speakGpsSignalStatus",
+        @"value" : _settings.speakGpsSignalStatus
+    }];
+    [otherSection addRowFromDictionary:@{
+        kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
+        kCellTitleKey : OALocalizedString(@"speak_route_recalculation"),
+        kCellKeyKey : @"speakRouteRecalculation",
+        @"value" : _settings.speakRouteRecalculation
     }];
 
-    if (![_settings.speedCamerasUninstalled get])
-    {
-        [fourthSection addObject:@{
-            @"type" : [OASwitchTableViewCell getCellIdentifier],
-            @"title" : OALocalizedString(@"speak_cameras"),
-            @"value" : _settings.speakCameras,
-            @"key" : @"speedCameras",
-        }];
-        [fourthSection addObject:@{
-            @"type" : [OACardTableViewCell getCellIdentifier],
-            @"title" : OALocalizedString(@"speed_cameras_alert"),
-            @"buttonTitle" : OALocalizedString(@"shared_string_read_more"),
-            @"icon" : @"ic_custom_alert_color",
-            @"key" : @"speed_cameras_read_more"
-        }];
-    }
+    OATableSectionData *optionsSection = [OATableSectionData sectionData];
+    optionsSection.headerText = OALocalizedString(@"shared_string_options");
+    [_data addSection:optionsSection];
 
-    [fourthSection addObject:@{
-        @"type" : [OASwitchTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"show_tunnels"),
-        @"value" : _settings.speakTunnels,
-        @"key" : @"tunnels",
-    }];
-    [fourthSection addObject:@{
-        @"type" : [OASwitchTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"shared_string_gpx_waypoints"),
-        @"value" : _settings.announceWpt,
-        @"key" : @"GPXWaypoints",
-    }];
-    [fourthSection addObject:@{
-        @"type" : [OASwitchTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"speak_favorites"),
-        @"value" : _settings.announceNearbyFavorites,
-        @"key" : @"nearbyFavorites",
-    }];
-    [fourthSection addObject:@{
-        @"type" : [OASwitchTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"speak_poi"),
-        @"value" : _settings.announceNearbyPoi,
-        @"key" : @"nearbyPOI",
-    }];
-    
     NSString *val;
     if ([_settings.keepInforming get:self.appMode] == 0)
         val = OALocalizedString(@"only_manually");
     else
         val = [NSString stringWithFormat:@"%d %@", [_settings.keepInforming get:self.appMode], OALocalizedString(@"int_min")];
-    
-    [fifthSection addObject:@{
-        @"type" : [OASettingsTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"keep_informing"),
-        @"value" : val,
-        @"key" : @"repeatInstructions",
+
+    [optionsSection addRowFromDictionary:@{
+        kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
+        kCellTitleKey : OALocalizedString(@"keep_informing"),
+        kCellKeyKey : @"repeatInstructions",
+        @"value" : val
     }];
-    [fifthSection addObject:@{
-        @"type" : [OASettingsTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"arrival_distance"),
-        @"value" : arrivalAnnouncementValue,
-        @"key" : @"arrivalAnnouncement",
+
+    NSArray<NSNumber *> *arrivalValues = @[ @1.5f, @1.f, @0.5f, @0.25f ];
+    NSArray<NSString *> *arrivalNames =  @[ OALocalizedString(@"arrival_distance_factor_early"),
+                                            OALocalizedString(@"arrival_distance_factor_normally"),
+                                            OALocalizedString(@"arrival_distance_factor_late"),
+                                            OALocalizedString(@"arrival_distance_factor_at_last") ];
+    NSString *arrivalAnnouncementValue = @"";
+    NSInteger index = [arrivalValues indexOfObject:@([_settings.arrivalDistanceFactor get:self.appMode])];
+    if (index != NSNotFound)
+        arrivalAnnouncementValue = arrivalNames[index];
+
+    [optionsSection addRowFromDictionary:@{
+        kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
+        kCellTitleKey : OALocalizedString(@"announcement_time_title"),
+        kCellKeyKey : @"arrivalAnnouncement",
+        @"value" : arrivalAnnouncementValue
     }];
-    [tableData addObject:firstSection];
-    [tableData addObject:secondSection];
-    [tableData addObject:thirdSection];
-    [tableData addObject:fourthSection];
-    [tableData addObject:fifthSection];
-    _data = [NSArray arrayWithArray:tableData];
 }
 
 #pragma mark - TableView
 
-- (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
-    NSDictionary *item = _data[indexPath.section][indexPath.row];
-    NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
+- (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
+{
+    OATableRowData *item = [_data itemForIndexPath:indexPath];
+    if ([item.cellType isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
         OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
@@ -244,17 +286,17 @@
         }
         if (cell)
         {
-            BOOL hasIcon = [item.allKeys containsObject:@"icon"];
+            BOOL isVoicePrompts = [item.key isEqualToString:@"voiceGuidance"];
 
-            CGFloat leftInset = [item[@"key"] isEqualToString:@"speedCameras"] ? CGFLOAT_MAX
-                : [OAUtilities getLeftMargin] + (hasIcon ? kPaddingToLeftOfContentWithIcon : kPaddingOnSideOfContent);
+            CGFloat leftInset = [item.key isEqualToString:@"speedCameras"] ? CGFLOAT_MAX
+                : [OAUtilities getLeftMargin] + (isVoicePrompts ? kPaddingToLeftOfContentWithIcon : kPaddingOnSideOfContent);
             cell.separatorInset = UIEdgeInsetsMake(0., leftInset, 0., 0.);
-            cell.titleLabel.text = item[@"title"];
+            cell.titleLabel.text = item.title;
 
-            [cell leftIconVisibility:hasIcon];
-            if (hasIcon)
+            [cell leftIconVisibility:isVoicePrompts];
+            if (isVoicePrompts)
             {
-                cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
+                cell.leftIconView.image = [UIImage templateImageNamed:_voiceOn ? @"ic_custom_sound" : @"ic_custom_sound_off"];
                 cell.leftIconView.tintColor = _voiceOn ? UIColorFromRGB(self.appMode.getIconColor) : UIColorFromRGB(color_icon_inactive);
             }
             else
@@ -262,7 +304,7 @@
                 cell.leftIconView.image = nil;
             }
                                   
-            id v = item[@"value"];
+            id v = [item objForKey:@"value"];
             [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             if ([v isKindOfClass:[OACommonBoolean class]])
             {
@@ -274,50 +316,42 @@
                 cell.switchView.on = [v boolValue];
             }
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
-            [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
+            [cell.switchView addTarget:self action:@selector(onSwitchButtonPressed:) forControlEvents:UIControlEventValueChanged];
         }
         return cell;
     }
-    else if ([cellType isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
+    else if ([item.cellType isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
-        static NSString* const identifierCell = [OAIconTitleValueCell getCellIdentifier];
-        OAIconTitleValueCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        OAValueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
-            cell = (OAIconTitleValueCell *)[nib objectAtIndex:0];
-            cell.rightIconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
-            cell.rightIconView.tintColor = UIColorFromRGB(color_tint_gray);
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAValueTableViewCell *) nib[0];
+            [cell descriptionVisibility:NO];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
         if (cell)
         {
-            cell.textView.text = item[@"title"];
-            cell.descriptionView.text = item[@"value"];
-            cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
-            cell.leftIconView.tintColor = UIColorFromRGB(self.appMode.getIconColor);
+            BOOL hasIcon = item.iconName.length > 0;
+            cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + (hasIcon ? kPaddingToLeftOfContentWithIcon : kPaddingOnSideOfContent), 0., 0.);
+
+            cell.titleLabel.text = item.title;
+            cell.valueLabel.text = [item objForKey:@"value"];
+
+            [cell leftIconVisibility:hasIcon];
+            if (hasIcon)
+            {
+                cell.leftIconView.image = [UIImage templateImageNamed:item.iconName];
+                cell.leftIconView.tintColor = UIColorFromRGB([self.appMode getIconColor]);
+            }
+            else
+            {
+                cell.leftIconView.image = nil;
+            }
         }
         return cell;
     }
-    else if ([cellType isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
-    {
-        static NSString* const identifierCell = [OASettingsTableViewCell getCellIdentifier];
-        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:identifierCell owner:self options:nil];
-            cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
-            cell.descriptionView.font = [UIFont systemFontOfSize:17.0];
-            cell.iconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
-            cell.iconView.tintColor = UIColorFromRGB(color_tint_gray);
-        }
-        if (cell)
-        {
-            cell.textView.text = item[@"title"];
-            cell.descriptionView.text = item[@"value"];
-        }
-        return cell;
-    }
-    else if ([cellType isEqualToString:[OACardTableViewCell getCellIdentifier]])
+    else if ([item.cellType isEqualToString:[OACardTableViewCell getCellIdentifier]])
     {
         OACardTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OACardTableViewCell getCellIdentifier]];
         if (cell == nil)
@@ -328,10 +362,12 @@
         }
         if (cell)
         {
-            cell.titleLabel.text = item[@"title"];
-            cell.leftIconView.image = [UIImage imageNamed:item[@"icon"]];
+            cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingOnSideOfContent, 0., 0.);
 
-            [cell.button setTitle:item[@"buttonTitle"] forState:UIControlStateNormal];
+            cell.titleLabel.text = item.title;
+            cell.leftIconView.image = [UIImage imageNamed:item.iconName];
+
+            [cell.button setTitle:[item stringForKey:@"buttonTitle"] forState:UIControlStateNormal];
             cell.button.tag = indexPath.section << 10 | indexPath.row;
             [cell.button removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
             [cell.button addTarget:self action:@selector(onButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
@@ -343,54 +379,35 @@
 
 - (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _voiceOn ? _data[section].count : 1;
+    return [[_data sectionDataForIndex:section] rowCount];
 }
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return _voiceOn ? _data.count : 1;
+    return [_data sectionCount];
 }
 
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return section == 1 ? OALocalizedString(@"accessibility_announce") : @"";
+    return [_data sectionDataForIndex:section].headerText;
 }
 
 - (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
-    return section == 0 ? OALocalizedString(@"speak_descr") : @"";
-}
-
--(void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
-{
-    UITableViewHeaderFooterView *vw = (UITableViewHeaderFooterView *) view;
-    [vw.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
-}
-
--(void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section
-{
-    UITableViewHeaderFooterView *vw = (UITableViewHeaderFooterView *) view;
-    [vw.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
-}
-
-- (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    return cell.selectionStyle == UITableViewCellSelectionStyleNone ? nil : indexPath;
+    return [_data sectionDataForIndex:section].footerText;
 }
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDictionary *item = _data[indexPath.section][indexPath.row];
-    NSString *itemKey = item[@"key"];
-    OABaseSettingsViewController* settingsViewController = nil;
-    if ([itemKey isEqualToString:@"language"])
+    OATableRowData *item = [_data itemForIndexPath:indexPath];
+    OABaseSettingsViewController *settingsViewController = nil;
+    if ([item.key isEqualToString:@"language"])
         settingsViewController = [[OANavigationLanguageViewController alloc] initWithAppMode:self.appMode];
-    else if ([itemKey isEqualToString:@"speedLimitTolerance"])
+    else if ([item.key isEqualToString:@"speedLimitTolerance"])
         settingsViewController = [[OASpeedLimitToleranceViewController alloc] initWithAppMode:self.appMode];
-    else if ([itemKey isEqualToString:@"repeatInstructions"])
+    else if ([item.key isEqualToString:@"repeatInstructions"])
         settingsViewController = [[OARepeatNavigationInstructionsViewController alloc] initWithAppMode:self.appMode];
-    else if ([itemKey isEqualToString:@"arrivalAnnouncement"])
+    else if ([item.key isEqualToString:@"arrivalAnnouncement"])
         settingsViewController = [[OAArrivalAnnouncementViewController alloc] initWithAppMode:self.appMode];
     [self showViewController:settingsViewController];
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -398,61 +415,14 @@
 
 #pragma mark - Selectors
 
-- (void) updateTableView
-{
-    if (_voiceOn)
-    {
-        [self.tableView beginUpdates];
-        [self.tableView insertSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, _data.count - 1)] withRowAnimation:UITableViewRowAnimationFade];
-        [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:0]] withRowAnimation:(UITableViewRowAnimation)UITableViewRowAnimationFade];
-        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
-        [self.tableView endUpdates];
-    }
-    else
-    {
-        [self.tableView beginUpdates];
-        [self.tableView deleteSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, _data.count - 1)] withRowAnimation:UITableViewRowAnimationFade];
-        [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
-        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
-        [self.tableView endUpdates];
-    }
-}
-
-- (void) applyParameter:(id)sender
-{
-    UISwitch *sw = (UISwitch *) sender;
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sw.tag & 0x3FF inSection:sw.tag >> 10];
-    NSDictionary *item = _data[indexPath.section][indexPath.row];
-    BOOL isChecked = ((UISwitch *) sender).on;
-    id v = item[@"value"];
-    if ([v isKindOfClass:[OACommonBoolean class]])
-    {
-        OACommonBoolean *value = v;
-        if ([[v key] isEqualToString:@"voiceMute"])
-        {
-            [value set:!isChecked mode:self.appMode];
-            [OARoutingHelper.sharedInstance.getVoiceRouter setMute:!isChecked];
-            _voiceOn = isChecked;
-            [self updateTableView];
-        }
-        else
-        {
-            [value set:isChecked mode:self.appMode];
-        }
-    }
-    if (self.delegate)
-        [self.delegate onSettingsChanged];
-}
-
-
 - (void)onButtonPressed:(id)sender
 {
     UIButton *button = (UIButton *) sender;
     if (button)
     {
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:button.tag & 0x3FF inSection:button.tag >> 10];
-        NSDictionary *item = _data[indexPath.section][indexPath.row];
-        if ([item[@"key"] isEqualToString:@"speed_cameras_read_more"])
+        OATableRowData *item = [_data itemForIndexPath:indexPath];
+        if ([item.key isEqualToString:@"speed_cameras_read_more"])
         {
             OAUninstallSpeedCamerasViewController *speedCamerasViewController = [[OAUninstallSpeedCamerasViewController alloc] init];
             speedCamerasViewController.delegate = self;
@@ -461,12 +431,92 @@
     }
 }
 
+- (void)onSwitchButtonPressed:(id)sender
+{
+    UISwitch *sw = (UISwitch *) sender;
+    if (sw)
+    {
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sw.tag & 0x3FF inSection:sw.tag >> 10];
+        OATableRowData *item = [_data itemForIndexPath:indexPath];
+        BOOL isChecked = ((UISwitch *) sender).on;
+        id v = [item objForKey:@"value"];
+        if ([v isKindOfClass:[OACommonBoolean class]])
+        {
+            OACommonBoolean *value = v;
+            if ([[v key] isEqualToString:@"voiceMute"])
+            {
+                [value set:!isChecked mode:self.appMode];
+                [OARoutingHelper.sharedInstance.getVoiceRouter setMute:!isChecked];
+                _voiceOn = isChecked;
+                [self onVoicePromptsPressed];
+            }
+            else
+            {
+                [value set:isChecked mode:self.appMode];
+            }
+        }
+        if (self.delegate)
+            [self.delegate onSettingsChanged];
+
+        if ([item.key isEqualToString:@"speedLimit"])
+            [self onSpeedLimitPressed:indexPath];
+    }
+}
+
+- (void) onVoicePromptsPressed
+{
+    [self.tableView performBatchUpdates:^{
+        if (_voiceOn)
+        {
+            [self generateData];
+            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]]
+                                  withRowAnimation:UITableViewRowAnimationAutomatic];
+            [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:0]]
+                                  withRowAnimation:(UITableViewRowAnimation)UITableViewRowAnimationFade];
+            [self.tableView insertSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, [_data sectionCount] - 1)]
+                          withRowAnimation:UITableViewRowAnimationFade];
+        }
+        else
+        {
+            [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:0]]
+                                  withRowAnimation:UITableViewRowAnimationFade];
+            [self.tableView deleteSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, [_data sectionCount] - 1)]
+                          withRowAnimation:UITableViewRowAnimationFade];
+            [self generateData];
+            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]]
+                                    withRowAnimation:UITableViewRowAnimationAutomatic];
+        }
+    } completion:nil];
+}
+
+- (void)onSpeedLimitPressed:(NSIndexPath *)indexPath
+{
+    OATableCollapsableRowData *collapsableRow = (OATableCollapsableRowData *) [_data itemForIndexPath:indexPath];
+    collapsableRow.collapsed = !collapsableRow.collapsed;
+    NSMutableArray<NSIndexPath *> *rowIndexes = [NSMutableArray array];
+    for (NSInteger i = 1; i <= collapsableRow.dependentRowsCount; i++)
+        [rowIndexes addObject:[NSIndexPath indexPathForRow:(indexPath.row + i) inSection:indexPath.section]];
+    
+    [self.tableView performBatchUpdates:^{
+        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        if (collapsableRow.collapsed)
+            [self.tableView deleteRowsAtIndexPaths:rowIndexes withRowAnimation:UITableViewRowAnimationBottom];
+        else
+            [self.tableView insertRowsAtIndexPaths:rowIndexes withRowAnimation:UITableViewRowAnimationBottom];
+    } completion:nil];
+}
+
 #pragma mark - OAUninstallSpeedCamerasDelegate
 
 - (void)onUninstallSpeedCameras
 {
-    [self setupView];
-    [self.tableView reloadData];
+    if (_speedCamerasIndexPaths && _speedCamerasIndexPaths.count > 0)
+    {
+        [self.tableView performBatchUpdates:^{
+            [self.tableView deleteRowsAtIndexPaths:_speedCamerasIndexPaths withRowAnimation:UITableViewRowAnimationBottom];
+            [_data removeItemAtIndexPaths:_speedCamerasIndexPaths];
+        } completion:nil];
+    }
 }
 
 @end

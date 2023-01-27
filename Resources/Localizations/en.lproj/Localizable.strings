@@ -1816,8 +1816,8 @@
 "product_desc_asia" = "Unlimited map downloads for Asia";
 "product_desc_asia_short" = "Asia region maps";
 
-"product_desc_wiki" = "Wikipedia";
-"download_wikipedia_maps" = "Location based Wikipedia articles on the map";
+"download_wikipedia_maps" = "Wikipedia";
+"product_desc_wiki" = "Location based Wikipedia articles on the map";
 "purchases_feature_desc_wikipedia" = "Having offline Wikipedia on your trip helps you learn more about the places you visit. It is available offline and shows Wikipedia articles in relation to the points of interest right on the map. Don't forget to download Wikipedia maps for chosen region.";
 "shared_string_all_languages" = "All languages";
 "select_wikipedia_article_langs" = "Select the languages forWikipedia articles on the map.​​ Switch to any available language while reading the article.";

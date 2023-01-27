@@ -2772,7 +2772,7 @@
 "deleted_item" = "Element șters";
 "remote_item" = "Element la distanță";
 "use_heightmap_setting" = "Folosește hartă relief 3D";
-"units_kg" = "kg";
+"kg" = "kg";
 "amazon_appstore" = "Amazon Appstore";
 "download_wikipedia_data" = "Descărcați datele Wikipedia";
 

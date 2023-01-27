@@ -168,8 +168,20 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
         return @"";
 
     NSString *propertyValueReplaced = [propertyValue stringByReplacingOccurrencesOfString:@"\\s+" withString:@"_"];
-    NSString *value = OALocalizedString([NSString stringWithFormat:@"rendering_value_%@_description", propertyValueReplaced]);
-    return value ? value : propertyValue;
+    
+    NSString *key = [NSString stringWithFormat:@"rendering_value_%@_description", propertyValueReplaced];
+    NSString *value = OALocalizedString(key);
+    
+    if (!value || [value isEqualToString:key]) {
+        key = [NSString stringWithFormat:@"rendering_attr_%@_description", propertyValueReplaced];
+        value = OALocalizedString(key);
+    }
+    
+    if (!value || [value isEqualToString:key]) {
+        value = propertyValue;
+    }
+    
+    return value;
 }
 
 - (NSString *)getTextForFooter:(NSInteger)section

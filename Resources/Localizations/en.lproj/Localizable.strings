@@ -1657,6 +1657,8 @@
 "yard" = "yd";
 "foot" = "ft";
 "nm" = "nmi";
+"km" = "km";
+"m" = "m";
 
 "km_h" = "km/h";
 "mile_per_hour" = "mph";
@@ -1666,6 +1668,7 @@
 "m_s" = "m/s";
 
 "metric_ton" = "t";
+"kg" = "kg";
 
 "int_hour" = "h";
 "int_min" = "min.";
@@ -3009,8 +3012,3 @@
 "routing_attr_avoid_4wd_only_description" = "Avoid roads only suitable for 4WD vehicles";
 "rendering_attr_OSMMapperAssistantIconsLowZooms_description" = "Schematic display of icons at low zooms";
 "routing_attr_difficulty_preference_beginner_name" = "Beginner";
-
-
-
-
-

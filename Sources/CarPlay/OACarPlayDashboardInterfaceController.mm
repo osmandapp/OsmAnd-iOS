@@ -25,8 +25,8 @@
 #import "OAOsmAndFormatter.h"
 #import "OALanesDrawable.h"
 
-#define unitsKm OALocalizedString(@"units_km")
-#define unitsM OALocalizedString(@"units_m")
+#define unitsKm OALocalizedString(@"km")
+#define unitsM OALocalizedString(@"m")
 #define unitsMi OALocalizedString(@"mile")
 #define unitsYd OALocalizedString(@"yard")
 #define unitsFt OALocalizedString(@"foot")

@@ -20,7 +20,7 @@
 - (void) addSection:(OATableSectionData *)sectionData;
 - (void) addSection:(OATableSectionData *)sectionData atIndex:(NSInteger)index;
 - (void)removeSection:(NSUInteger)section;
-- (void)removeItemAtIndexPaths:(NSArray<NSIndexPath *> *)indexPaths;
+- (void)removeItemsAtIndexPaths:(NSArray<NSIndexPath *> *)indexPaths;
 
 - (OATableSectionData *)sectionDataForIndex:(NSUInteger)index;
 - (OATableRowData *) itemForIndexPath:(NSIndexPath *)indexPath;

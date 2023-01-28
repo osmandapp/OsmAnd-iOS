@@ -45,7 +45,7 @@
     [_sectionData removeObjectAtIndex:section];
 }
 
-- (void)removeItemAtIndexPaths:(NSArray<NSIndexPath *> *)indexPaths
+- (void)removeItemsAtIndexPaths:(NSArray<NSIndexPath *> *)indexPaths
 {
     for (NSIndexPath *indexPath in indexPaths)
     {

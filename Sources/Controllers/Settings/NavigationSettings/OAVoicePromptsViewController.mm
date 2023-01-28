@@ -29,7 +29,7 @@
 
 #include <OsmAndCore/Utilities.h>
 
-@interface OAVoicePromptsViewController () <UITableViewDelegate, UITableViewDataSource, OAUninstallSpeedCamerasDelegate>
+@interface OAVoicePromptsViewController () <UITableViewDelegate, UITableViewDataSource, OAUninstallSpeedCamerasDelegate, OASettingsDataDelegate>
 
 @end
 
@@ -39,6 +39,7 @@
     OAAppSettings *_settings;
     BOOL _voiceOn;
     NSArray<NSIndexPath *> *_speedCamerasIndexPaths;
+    NSIndexPath *_selectedIndexPath;
 }
 
 - (instancetype) initWithAppMode:(OAApplicationMode *)appMode
@@ -85,21 +86,13 @@
     if (!_voiceOn)
         return;
 
-    NSDictionary *screenVoiceProviders = [OAUtilities getSortedVoiceProviders];
-    NSString *selectedLanguage = @"";
-    NSString *selectedValue = [_settings.voiceProvider get:self.appMode];
-    for (NSString *key in screenVoiceProviders.allKeys)
-    {
-        if ([screenVoiceProviders[key] isEqualToString:selectedValue])
-            selectedLanguage = key;
-    }
-    [voicePromptsSection addRowFromDictionary:@{
-        kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
-        kCellTitleKey : OALocalizedString(@"shared_string_language"),
-        kCellKeyKey : @"language",
-        kCellIconNameKey : @"ic_custom_map_languge",
-        @"value" : selectedLanguage
-    }];
+    OATableRowData *languageItem = [OATableRowData rowData];
+    languageItem.key = @"language";
+    languageItem.cellType = [OAValueTableViewCell getCellIdentifier];
+    languageItem.title = OALocalizedString(@"shared_string_language");
+    languageItem.iconName = @"ic_custom_map_languge";
+    [self generateValueForItem:languageItem];
+    [voicePromptsSection addRow:languageItem];
 
     OATableSectionData *announceFirstSection = [OATableSectionData sectionData];
     announceFirstSection.headerText = OALocalizedString(@"accessibility_announce");
@@ -189,9 +182,6 @@
     speedLimitSection.headerText = OALocalizedString(@"traffic_warning_speed_limit");
     [_data addSection:speedLimitSection];
 
-    NSArray<NSNumber *> *speedLimitsKm = @[ @0.f, @5.f, @7.f, @10.f, @15.f, @20.f ];
-    NSArray<NSNumber *> *speedLimitsMiles = @[ @0.f, @3.f, @5.f, @7.f, @10.f, @15.f ];
-
     OATableCollapsableRowData *speedLimitCollapsableRow = [[OATableCollapsableRowData alloc] initWithData:@{
         kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
         kCellTitleKey : OALocalizedString(@"announce_when_exceeded"),
@@ -200,23 +190,13 @@
     }];
     speedLimitCollapsableRow.collapsed = ![_settings.speakSpeedLimit get:self.appMode];
     [speedLimitSection addRow:speedLimitCollapsableRow];
-    NSString *value = @"";
-    if ([_settings.metricSystem get:self.appMode] == KILOMETERS_AND_METERS)
-    {
-        value = [NSString stringWithFormat:@"%d %@", (int)[_settings.speedLimitExceedKmh get:self.appMode], OALocalizedString(@"km_h")];
-    }
-    else
-    {
-        NSUInteger index = [speedLimitsKm indexOfObject:@([_settings.speedLimitExceedKmh get:self.appMode])];
-        if (index != NSNotFound)
-            value = [NSString stringWithFormat:@"%d %@", speedLimitsMiles[index].intValue, OALocalizedString(@"units_mph")];
-    }
-    [speedLimitCollapsableRow addDependentRow:[[OATableRowData alloc] initWithData:@{
-        kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
-        kCellTitleKey : OALocalizedString(@"speed_limit_exceed"),
-        kCellKeyKey : @"speedLimitTolerance",
-        @"value" : value
-    }]];
+
+    OATableRowData *speedLimitItem = [OATableRowData rowData];
+    speedLimitItem.key = @"speedLimitTolerance";
+    speedLimitItem.cellType = [OAValueTableViewCell getCellIdentifier];
+    speedLimitItem.title = OALocalizedString(@"speed_limit_exceed");
+    [self generateValueForItem:speedLimitItem];
+    [speedLimitCollapsableRow addDependentRow:speedLimitItem];
 
     OATableSectionData *otherSection = [OATableSectionData sectionData];
     otherSection.headerText = OALocalizedString(@"other_location");
@@ -239,35 +219,68 @@
     optionsSection.headerText = OALocalizedString(@"shared_string_options");
     [_data addSection:optionsSection];
 
-    NSString *val;
-    if ([_settings.keepInforming get:self.appMode] == 0)
-        val = OALocalizedString(@"only_manually");
-    else
-        val = [NSString stringWithFormat:@"%d %@", [_settings.keepInforming get:self.appMode], OALocalizedString(@"int_min")];
+    OATableRowData *repeatInstructionsItem = [OATableRowData rowData];
+    repeatInstructionsItem.key = @"repeatInstructions";
+    repeatInstructionsItem.cellType = [OAValueTableViewCell getCellIdentifier];
+    repeatInstructionsItem.title = OALocalizedString(@"keep_informing");
+    [self generateValueForItem:repeatInstructionsItem];
+    [optionsSection addRow:repeatInstructionsItem];
 
-    [optionsSection addRowFromDictionary:@{
-        kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
-        kCellTitleKey : OALocalizedString(@"keep_informing"),
-        kCellKeyKey : @"repeatInstructions",
-        @"value" : val
-    }];
+    OATableRowData *arrivalAnnouncementItem = [OATableRowData rowData];
+    arrivalAnnouncementItem.key = @"arrivalAnnouncement";
+    arrivalAnnouncementItem.cellType = [OAValueTableViewCell getCellIdentifier];
+    arrivalAnnouncementItem.title = OALocalizedString(@"announcement_time_title");
+    [self generateValueForItem:arrivalAnnouncementItem];
+    [optionsSection addRow:arrivalAnnouncementItem];
+}
 
-    NSArray<NSNumber *> *arrivalValues = @[ @1.5f, @1.f, @0.5f, @0.25f ];
-    NSArray<NSString *> *arrivalNames =  @[ OALocalizedString(@"arrival_distance_factor_early"),
-                                            OALocalizedString(@"arrival_distance_factor_normally"),
-                                            OALocalizedString(@"arrival_distance_factor_late"),
-                                            OALocalizedString(@"arrival_distance_factor_at_last") ];
-    NSString *arrivalAnnouncementValue = @"";
-    NSInteger index = [arrivalValues indexOfObject:@([_settings.arrivalDistanceFactor get:self.appMode])];
-    if (index != NSNotFound)
-        arrivalAnnouncementValue = arrivalNames[index];
-
-    [optionsSection addRowFromDictionary:@{
-        kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
-        kCellTitleKey : OALocalizedString(@"announcement_time_title"),
-        kCellKeyKey : @"arrivalAnnouncement",
-        @"value" : arrivalAnnouncementValue
-    }];
+- (void)generateValueForItem:(OATableRowData *)item
+{
+    NSString *value = @"";
+    if ([item.key isEqualToString:@"language"])
+    {
+        NSDictionary *screenVoiceProviders = [OAUtilities getSortedVoiceProviders];
+        NSString *selectedValue = [_settings.voiceProvider get:self.appMode];
+        for (NSString *key in screenVoiceProviders.allKeys)
+        {
+            if ([screenVoiceProviders[key] isEqualToString:selectedValue])
+                value = key;
+        }
+    }
+    else if ([item.key isEqualToString:@"speedLimitTolerance"])
+    {
+        NSArray<NSNumber *> *speedLimitsKm = @[ @0.f, @5.f, @7.f, @10.f, @15.f, @20.f ];
+        NSArray<NSNumber *> *speedLimitsMiles = @[ @0.f, @3.f, @5.f, @7.f, @10.f, @15.f ];
+        if ([_settings.metricSystem get:self.appMode] == KILOMETERS_AND_METERS)
+        {
+            value = [NSString stringWithFormat:@"%d %@", (int)[_settings.speedLimitExceedKmh get:self.appMode], OALocalizedString(@"km_h")];
+        }
+        else
+        {
+            NSUInteger index = [speedLimitsKm indexOfObject:@([_settings.speedLimitExceedKmh get:self.appMode])];
+            if (index != NSNotFound)
+                value = [NSString stringWithFormat:@"%d %@", speedLimitsMiles[index].intValue, OALocalizedString(@"units_mph")];
+        }
+    }
+    else if ([item.key isEqualToString:@"repeatInstructions"])
+    {
+        if ([_settings.keepInforming get:self.appMode] == 0)
+            value = OALocalizedString(@"only_manually");
+        else
+            value = [NSString stringWithFormat:@"%d %@", [_settings.keepInforming get:self.appMode], OALocalizedString(@"int_min")];
+    }
+    else if ([item.key isEqualToString:@"arrivalAnnouncement"])
+    {
+        NSArray<NSNumber *> *arrivalValues = @[ @1.5f, @1.f, @0.5f, @0.25f ];
+        NSArray<NSString *> *arrivalNames =  @[ OALocalizedString(@"arrival_distance_factor_early"),
+                                                OALocalizedString(@"arrival_distance_factor_normally"),
+                                                OALocalizedString(@"arrival_distance_factor_late"),
+                                                OALocalizedString(@"arrival_distance_factor_at_last") ];
+        NSInteger index = [arrivalValues indexOfObject:@([_settings.arrivalDistanceFactor get:self.appMode])];
+        if (index != NSNotFound)
+            value = arrivalNames[index];
+    }
+    [item setObj:value forKey:@"value"];
 }
 
 #pragma mark - TableView
@@ -400,6 +413,8 @@
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OATableRowData *item = [_data itemForIndexPath:indexPath];
+    if ([item.cellType isEqualToString:[OAValueTableViewCell getCellIdentifier]])
+        _selectedIndexPath = indexPath;
     OABaseSettingsViewController *settingsViewController = nil;
     if ([item.key isEqualToString:@"language"])
         settingsViewController = [[OANavigationLanguageViewController alloc] initWithAppMode:self.appMode];
@@ -409,6 +424,7 @@
         settingsViewController = [[OARepeatNavigationInstructionsViewController alloc] initWithAppMode:self.appMode];
     else if ([item.key isEqualToString:@"arrivalAnnouncement"])
         settingsViewController = [[OAArrivalAnnouncementViewController alloc] initWithAppMode:self.appMode];
+    settingsViewController.delegate = self;
     [self showViewController:settingsViewController];
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
@@ -514,9 +530,30 @@
     {
         [self.tableView performBatchUpdates:^{
             [self.tableView deleteRowsAtIndexPaths:_speedCamerasIndexPaths withRowAnimation:UITableViewRowAnimationBottom];
-            [_data removeItemAtIndexPaths:_speedCamerasIndexPaths];
+            [_data removeItemsAtIndexPaths:_speedCamerasIndexPaths];
         } completion:nil];
     }
+}
+
+#pragma mark - OAUninstallSpeedCamerasDelegate
+
+- (void)onSettingsChanged
+{
+    if (_selectedIndexPath)
+    {
+        OATableRowData *item = [_data itemForIndexPath:_selectedIndexPath];
+        [self generateValueForItem:item];
+        [self.tableView reloadRowsAtIndexPaths:@[_selectedIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    }
+    _selectedIndexPath = nil;
+}
+
+- (void)closeSettingsScreenWithRouteInfo
+{
+}
+
+- (void)openNavigationSettings
+{
 }
 
 @end

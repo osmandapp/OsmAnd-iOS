@@ -130,6 +130,8 @@
 - (void) selectArrivalDistanceFactor:(NSDictionary *)item
 {
     [_settings.arrivalDistanceFactor set:((NSNumber *)item[@"name"]).doubleValue mode:self.appMode];
+    if (self.delegate)
+        [self.delegate onSettingsChanged];
     [self dismissViewController];
 }
 

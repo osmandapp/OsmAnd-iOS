@@ -84,7 +84,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
 - (void) applyLocalization
 {
     [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"monitoring_settings");
+    self.titleLabel.text = OALocalizedString(@"record_plugin_name");
 }
 
 - (void) viewDidLoad

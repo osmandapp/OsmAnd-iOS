@@ -701,14 +701,14 @@ static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsap
         }
         else
         {
-            formattedValue = [NSString stringWithFormat:@"%@ %@", value, OALocalizedString(@"units_m")];
+            formattedValue = [NSString stringWithFormat:@"%@ %@", value, OALocalizedString(@"m")];
         }
     }
     else if ([key isEqualToString:@"distance"] && [self isNumericValue:value])
     {
         float valueAsFloatInMeters = [value floatValue] * 1000;
         if (metricSystem == KILOMETERS_AND_METERS)
-            formattedValue = [NSString stringWithFormat:@"%@ %@", value, OALocalizedString(@"units_km")];
+            formattedValue = [NSString stringWithFormat:@"%@ %@", value, OALocalizedString(@"km")];
         else
             formattedValue = [OAOsmAndFormatter getFormattedDistance:valueAsFloatInMeters];
 

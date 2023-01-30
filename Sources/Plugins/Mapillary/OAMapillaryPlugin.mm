@@ -68,6 +68,11 @@
     return OALocalizedString(@"mapillary");
 }
 
+- (NSString *) getDescription
+{
+    return OALocalizedString(@"plugin_mapillary_descr");
+}
+
 - (void) registerLayers
 {
     [self registerWidget];

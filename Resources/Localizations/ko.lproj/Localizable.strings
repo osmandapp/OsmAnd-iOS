@@ -794,7 +794,7 @@
 "shared_string_deselect" = "선택 취소";
 "arrival_distance_factor_at_last" = "마지막 미터에서";
 "icon_group_industrial" = "공업";
-"download_srtm_maps" = "등고선";
+"srtm_plugin_name" = "등고선";
 "lang_vi" = "베트남어";
 "shared_string_no_thanks" = "필요없음";
 "rendering_attr_trainLightrailRoutes_name" = "기차 노선";
@@ -851,7 +851,7 @@
 "lang_lb" = "룩셈부르크어";
 "plugins_menu_group" = "플러그인";
 "lang_az" = "아제리어";
-"product_desc_ext_mapillary" = "모든 사람을 위한 거리 기반의 파노라마 영상 서비스. 장소를 탐색하고, 협업하고, 세상을 사로잡습니다.";
+"plugin_mapillary_descr" = "모든 사람을 위한 거리 기반의 파노라마 영상 서비스. 장소를 탐색하고, 협업하고, 세상을 사로잡습니다.";
 "map_widget_renderer" = "지도 스타일";
 "routing_attr_avoid_borders_description" = "타국의 국경 횡단 방지";
 "routing_attr_weight_name" = "중량 제한";
@@ -1121,7 +1121,7 @@
 "debugging_and_development" = "OsmAnd개발";
 "purchases_feature_desc_combined_wiki" = "인터넷 연결 없이 이동 중에 Wikipedia 문서를 탐색하십시오. 오프라인 데이터는 국가별로 구분되어 있으며 모든 언어로 제공됩니다.";
 "purchases_feature_desc_monthly_map_updates" = "오프라인 지도에 대한 정기적인 월간 업데이트에 액세스할 수 있습니다.";
-"product_desc_ext_development" = "모의 주행이나 렌더링 성능 표시와 같은 개발 및 디버깅 기능에 대한 설정을 표시합니다.";
+"osmand_development_plugin_description" = "모의 주행이나 렌더링 성능 표시와 같은 개발 및 디버깅 기능에 대한 설정을 표시합니다.";
 "purchases_feature_desc_hourly_map_updates" = "지도 업데이트에 더 자주 액세스하십시오. 매시간, 매일 또는 매주 업데이트. 업데이트는 변경된 영역에 대해서만 점진적으로 다운로드된다.";
 "complete_purchase" = "구매완료";
 "shared_string_includes" = "포함됨";
@@ -1353,7 +1353,7 @@
 "compass_always_visible" = "항상 표시";
 "co2_mission" = "CO2배출";
 "make_backup" = "백업 만들기";
-"monitoring_settings" = "여행 레코딩";
+"record_plugin_name" = "여행 레코딩";
 "shared_string_logout" = "로그아웃";
 "choose_what_to_restore" = "복원할 항목을 선택합니다.";
 "backup_view_conflicts" = "충돌 보기";
@@ -1429,4 +1429,20 @@
 		\n\n다시 비활성화 하거나, 또는 \'지도 구성\' 의 하위메뉴인  \'지도 스타일\'을 변경하여 보기(View)를 되돌릴 수 있습니다.";
 "plugin_ski_name" = "스키 지도 보기";
 "osm_editing_plugin_name" = "OSM편집";
-
+"osmand_parking_plugin_name" = "주차 위치";
+"osmand_parking_plugin_description" = "이 플러그인은 주차된 차의 위치를 쉽게 기억하도록 개발되었습니다.";
+"kg" = "킬로그램";
+"open_place_reviews_plugin_description" = "식당, 호텔, 박물관 및 경유지와 같은 공공장소에 대한 사진, 리뷰 및 링크를 열린 데이터로 보냅니다 여기에 https://openplacereviews.org/data/.
+\n
+\nRead more at https://openplacereviews.org";
+"km" = "km";
+"plugin_nautical_name" = "항해 지도 보기";
+"record_plugin_description" = "\"이 플러그인은 지도 화면에서 GPX 기록 위젯을 터치하여 수동으로 경로를 기록하고 저장하기 위해 , 또는 GPX 파일에 운행 경로의 모든 것을 자동으로 기록하기 위해, 기능을 활성화합니다.
+\n↵\n↵\n기록된 트랙을 친구와 공유 할수 있습니다 또는 OSM 지도에 업로드할 수 있습니다. 운동 선수들은 자신의 훈련을 모니터 하기 위해 기록된 트랙을 사용할 수 있습니다. 몇 가지 기본 트랙 분석은 랩 시간, 평균 속도처럼, OsmAnd에서 직접 수행 할 수 있으며, 트랙을 나중에 특별한 서드파티 분석 도구를 사용하여 분석 할 수 있습니다. \"";
+"m" = "m";
+"srtm_plugin_description" = "\"오프라인 등고선 과 음영을 다운로드하기 위해 외부플러그인을 이용합니다 (설정→지도 관리→다운로드→ 원하는 지도 유형 선택). OsmAnd 오프라인 지도에서 조합하여 표시할 수 있습니다.
+\n↵\n↵\n이 플러그인은 등고선 오버레이와 음영레이어 모두 제공합니다. OsmAnd 오프라인 지도의 상단에 표시 할 수 있습니다. 이 기능은  운동선수, 하이커, 트레커등 음영에 관심이 있는 사람들이 즐겨 사용할 것이다.
+\n↵\n↵\n(70도 북쪽과 남쪽 70도 사이의) 글로벌데이터는  SRTM (Shuttle Radar Topography Mission:셔틀 레이더 지형 미션)과 ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer:고급 우주선 열 방출 및 반사 복사계)에 의한 측정을 기반으로 합니다, 테라 온보드 영상 측정, NASA의 지구 관찰 시스템의 주력 위성 . ASTER는 NASA, 일본 경제 산업성(METI), 일본 우주 시스템 (J-spacesystems) 사이의 협력적인 노력의 결과입니다. \"";
+"plugin_nautical_descr" = "지도 스타일을 항해 지도로 변경하려면 보기(View)를 활성화 합니다, 그러면 모든 해상 운행 마크와 차트 심볼을 볼 수 있습니다.
+		\n\n세계적으로 모든 항해 기호를 포함 하는 지도 파일은  \'세계 seamarks\' 라는 하나의 파일을 다운로드하여 이용할 수 있습니다.
+		\n\n다시 비활성화 하거나, 또는 \'지도 구성\' 의 하위메뉴인  \'지도 스타일\'을 변경하여 보기(View)를 되돌릴 수 있습니다.";

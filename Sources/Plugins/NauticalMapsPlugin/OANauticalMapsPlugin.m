@@ -9,6 +9,7 @@
 #import "OANauticalMapsPlugin.h"
 #import "OAApplicationMode.h"
 #import "OAIAPHelper.h"
+#import "Localization.h"
 
 #define PLUGIN_ID kInAppId_Addon_Nautical
 
@@ -22,6 +23,16 @@
 - (NSArray<OAApplicationMode *> *) getAddedAppModes
 {
     return @[OAApplicationMode.BOAT];
+}
+
+- (NSString *) getName
+{
+    return OALocalizedString(@"plugin_nautical_name");
+}
+
+- (NSString *) getDescription
+{
+    return OALocalizedString(@"plugin_nautical_descr");
 }
 
 @end

@@ -9,6 +9,7 @@
 #import "OASkiMapsPlugin.h"
 #import "OAApplicationMode.h"
 #import "OAIAPHelper.h"
+#import "Localization.h"
 
 #define PLUGIN_ID kInAppId_Addon_SkiMap
 
@@ -22,6 +23,16 @@
 - (NSArray<OAApplicationMode *> *) getAddedAppModes
 {
     return @[OAApplicationMode.SKI];
+}
+
+- (NSString *) getName
+{
+    return OALocalizedString(@"plugin_ski_name");
+}
+
+- (NSString *) getDescription
+{
+    return OALocalizedString(@"plugin_ski_descr");
 }
 
 @end

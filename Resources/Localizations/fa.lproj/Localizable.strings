@@ -512,20 +512,29 @@
 "cannot_access_calendar" = "Cannot access Calendar";
 "reminder_not_set_text" = "The reminder was not set since you are not allowed access to the Calendar";
 //inapps
-"product_title_nautical" = "Nautical map";
+"plugin_nautical_name" = "نمای دریایی نقشه";
 "product_desc_nautical" = "Nautical map of all world";
-"product_desc_ext_nautical" = "OsmAnd Nautical Charts is a plugin for OsmAnd Maps & Navigation app. It is a detailed graphical representation of oceans, seas, coastal areas and rivers. The charts can contain various information like sailing routes, navigation lights, dangerous areas, areas where it's allowed or not allowed to sail or dock, etc.\n\nUsage Instructions: it is highly recommended to download nautical basemap in order to see the maps regardless of detailed map presence. To turn on Nautical charts, tap the map button and set map type to Nautical.\n\nNote: All professional sailors are obliged to have official nautical charts on their ships.\n\nOsmAnd Nautical charts are based on the data from OpenSeaMap project. While OpenSeaMap charts at the moment cannot compete with official nautical charts, they can be used by recreational sailors for orientation or route planning.";
-"product_title_parking" = "Parking Position";
+"plugin_nautical_descr" = "این افزونه قابلیت ارائهٔ نقشه‌های دریایی را به OsmAnd اضافه می‌کند. این نقشه‌ها برای قایقرانی، بادبانی‌رانی و دیگر انواع ورزش‌های آبی مفید است. 
+\n 
+\nاین افزونه همهٔ نشانگرهای ناوبری دریایی و جدول نمادها را ارائه می‌کند؛ هم برای ناوبری درون‌سرزمینی و هم کنارهٔ ساحل. همچنین با ارائهٔ جزئیات لازم، هر نشانگر معرفی و مفهومش شرح دادهمی‌شود (دسته، شکل، رنگ، ترتیب و توالی، ارجاع و...). 
+\n 
+\nبرای برگشتن به سبک‌های عادی OsmAnd، این افزونه را غیرفعال کنید یا اینکه «سبک نقشه» را از طریق منوی «پیکربندی نقشه»به‌دلخواه خود تغییر دهید.";
+"osmand_parking_plugin_name" = "جای پارک";
 "product_desc_parking" = "Let you easily memorize when the car was parked and how much time left if the parking is limited by time";
-"product_desc_ext_parking" = "OsmAnd Parking Plugin reminds you of your parking position. It is a plugin for OsmAnd Maps&Navigation app.\nChoose a time-independent reminder (only a marker on the map) or a time-limited one with alarm upon time expiration (includes also a marker on the map). To use the plugin, enable it in the Plugins menu.";
+"osmand_parking_plugin_description" = "محل پارک‌کردن خودروی خود را ثبت کنید و حساب زمان پارکینگ را داشته باشید.
+\nهم مکان و هم زمان در پیشخوان و نیز در ابزارکی روی نقشه قابل‌رؤیت است. همچنین می‌توانید هشداری را به‌عنوان یادآور به تقویم اندروید اضافه کنید.";
 "plugin_ski_name" = "نمای اسکی برای نقشه";
 "product_desc_skimap" = "Ski slopes for all ski resorts in the world";
 "plugin_ski_descr" = "با این افزونه اطلاعات جهانی سراشیبی‌های اسکی، مسابقات اسکی صحرایی، مسیرهای اسکی آلپاین، تله‌کابین‌ها و نقاله‌های اسکی کاملاً در اختیارتان است. مسیرها و پیست‌هابر اساس دشواری رنگ‌بندی شده‌اند که در یک سبک زمستانی ارائه می‌شوند تا نمایی همگون با محیط زمستانی را برایتان ایجاد کند. 
 \n 
 \nبا فعال‌کردن این نما، سبک نقشه به «زمستان و اسکی» تغییر می‌کند که همهٔ خصوصیات زمین را با ظاهر زمستانی نشان می‌دهد. برای غیرفعال‌کردن این نما افزونه را غیرفعال کنید یا اینکه از طریق منو ← پیکربندی نقشه ←سبک نقشه، سبک دلخواهتان را انتخاب کنید.";
-"monitoring_settings" = "ضبط سفر";
+"record_plugin_name" = "ضبط سفر";
 "product_desc_track_recording" = "Activates the functionality to record and save your tracks";
-"product_desc_ext_track_recording" = "Record your trips and save them manually using OsmAnd Trip recording plugin. Export your trip as a gpx file, share it or even use it to contribute to OpenStreetMap project.  A handy tool for runners, hikers and anyone interested in recording their trips.";
+"record_plugin_description" = "این افزونه یک ابزارک ضبط GPX روی نقشه اضافه می‌کند و با انتخاب آن می‌توانید رد خود را ضبط و در قالب پروندهٔ GPX ذخیره کنید. همچنین این امکان را فراهم می‌کند که هنگام مسیریابی، به‌طور خودکار این کار برای شما انجام شود.
+\n
+\nردهای ضبط‌شده را با دوستان یا برای استفاده در مشارکت‌های OSM هم‌رسانی کنید.
+\nورزشکاران می‌توانند برای کنترل تمرین‌هایشان از ردهای ضبط‌شده استفاده کنند.
+\nبرنامهٔ OsmAnd پردازش‌های ساده‌ای مانند محاسبهٔ lap timeها، سرعت متوسط و... را روی ردهای ضبط‌شده انجام می‌دهد؛ البته می‌توانیداین ردها را در سایر نرم‌افزارهای تحلیلگر نیز تحلیل کنید.";
 "product_title_trip_planning" = "Trip planning";
 "product_desc_trip_planning" = "Plan your trip, add waypoints, measure the distance to your destination using this plugin";
 "product_desc_ext_trip_planning" = "Trip planning plugin allows you to create your trip on the map, save it, measure the distance between points connected with straight lines, etc. Created for preliminary trip planning rather than thorough route building.";
@@ -541,10 +550,15 @@
 "product_desc_asia" = "Map of Asia";
 "download_wikipedia_maps" = "ویکی‌پدیا";
 "product_desc_wiki" = "Wikipedia data";
-"product_desc_ext_wiki" = "Get information about points of interest from Wikipedia. It is your pocket offline guide - just enable Wikipedia plugin and enjoy articles about objects around you.";
-"download_srtm_maps" = "منحنی‌های میزان";
+"purchases_feature_desc_wikipedia" = "ویکی‌پدیا را آفلاین کاوش کنید. مقاله‌ها بر اساس کشور و منطقه تقسیم‌بندی شده و به همهٔ زبان‌ها موجود است.";
+"srtm_plugin_name" = "منحنی‌های میزان";
 "product_desc_srtm" = "Display of contour lines";
-"product_desc_ext_srtm" = "This plugin provides contour lines and hillshade, which can be displayed in OsmAnd offline maps. Contour lines provide the information about heights of the area while hillshade is their visualization. See the names of mountain peaks and specific features of terrain using this plugin.\n\nThe global data (between 70 degrees north and 70 degrees south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA's Earth Observing System. ASTER is a cooperative effort between NASA, Japan's Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
+"srtm_plugin_description" = "این افزونه دو لایهٔ منحنی‌های میزان و سایه‌روشن (پستی‌بلندی‌ها) را روی نقشه‌‌های استاندارد OsmAnd نمایش می‌دهد.
+\nورزشکاران، راه‌پیمایان، کوله‌گردان و همهٔ کسانیکه به ساختار پستی‌وبلندی‌های زمین علاقه‌مند هستند از این ویژگی بهره می‌برند. 
+\nمبنای دادهٔ جهانی یعنی بین ۷۰ درجهٔ شمالی و ۷۰ درجهٔ جنوبی اندازه‌گیری‌های SRTM (مأموریت توپوگرافی رادار شاتل) و ASTER (رادیومتر پیشرفتهٔ فضابرد بازتاب و گسیل حرارتی) است. 
+\n 
+\nاَستِر یک ابزار تصویربرداری است که بر روی ماهوارهٔ Terra نصب است و تِرا ماهوار‌ه‌ای فوق‌پیشرفته برای سامانهٔ دیده‌بانی زمینِ ناساست. 
+\nاَستِر محصول تلاش مشترک ناسا، وزارت اقتصاد، صنعت و تجارت ژاپن و سامانه‌های فضایی ژاپن است.";
 "my_location" = "موقعیت من";
 "all_categories" = "All categories";
 "get_unlimited_access" = "گرفتن دسترسی نامحدود";
@@ -1598,7 +1612,7 @@
 "navigate_point_northing" = "به‌طرف شمال";
 "rendering_value_walkingRoutesOSMC_description" = "مسیرها را بر اساس رنگ محلی و جداگانه‌ای که به آن‌ها داده شده (اگر در اوپن‌استریت‌مپ موجود است) و نماد پلاک پیاده‌گردی رنگ‌آمیزی کن.";
 "shared_string_wifi_only" = "فقط با وای‌فای";
-"product_desc_ext_mapillary" = "تصاویر آنلاین سطح خیابان برای همه. مکان‌ها را کشف کنید، همکاری کنید و جهان را به‌تصویر درآورید.";
+"plugin_mapillary_descr" = "تصاویر آنلاین سطح خیابان برای همه. مکان‌ها را کشف کنید، همکاری کنید و جهان را به‌تصویر درآورید.";
 "dialogs_and_notifications_title" = "کادرها و اعلان‌ها";
 "no_waypoints_found" = "هیچ راه‌نشانی پیدا نشد";
 "suggested_maps_descr" = "این نقشه‌ها برای افزونه لازم هستند.";
@@ -1845,7 +1859,6 @@
 "complete_purchase" = "تکمیل خرید";
 "purchases_feature_desc_unlimited_map_download" = "امکان بارگیری‌های نامحدود برای نقشهٔ آفلاین همهٔ قاره‌ها و مناطق.";
 "toast_empty_name_error" = "مکان بی‌نام";
-"purchases_feature_desc_wikipedia" = "ویکی‌پدیا را آفلاین کاوش کنید. مقاله‌ها بر اساس کشور و منطقه تقسیم‌بندی شده و به همهٔ زبان‌ها موجود است.";
 "continue_with" = "با %@ ادامه دهید";
 "purchases_feature_desc_terrain" = "نمایش بلندی‌ها و پستی‌ها با کمک خطوط میزان ناهمواری‌ها، نقشهٔ کامل سایه‌روشن با سایه‌های تیره و نقشه‌های رنگی شیب.";
 "shared_string_includes" = "شامل می‌شود";
@@ -1873,7 +1886,7 @@
 "share_geo" = "geo:";
 "purchases_feature_desc_wikivoyage" = "ویکی‌سفر را آفلاین کاوش کنید. مقاله‌ها بر اساس کشور و منطقه تقسیم‌بندی شده و به همهٔ زبان‌ها موجود است.";
 "unlimited_map_downloads" = "بارگیری‌های نامحدود نقشه";
-"product_desc_ext_development" = "تنظیمات توسعه‌ای و امکانات عیب‌یابی را مشاهده کنید؛ مانند شبیه‌سازی ناوبری، آزمایش عملکرد رندر یا امتحان‌کردن پیام‌های گفتاری. این تنظیمات برای توسعه‌دهندگان فراهم شده است و برای کاربردهای عادی برنامه لازم نیست.";
+"osmand_development_plugin_description" = "تنظیمات توسعه‌ای و امکانات عیب‌یابی را مشاهده کنید؛ مانند شبیه‌سازی ناوبری، آزمایش عملکرد رندر یا امتحان‌کردن پیام‌های گفتاری. این تنظیمات برای توسعه‌دهندگان فراهم شده است و برای کاربردهای عادی برنامه لازم نیست.";
 "icon_group_industrial" = "صنعتی";
 "redeem_promo_code" = "آزادسازی کد تبلیغی";
 "purchases_feature_desc_nautical" = "به اطلاعات عمق دریایی دست یابید.";
@@ -2097,4 +2110,9 @@
 "quick_action_add_marker_descr" = "دکمه‌ای برای ایجاد یک نشانه در مرکز صفحه.";
 "quick_action_map_style_action" = "افزودن یک سبک نقشه";
 "osm_editing_plugin_description" = "با ایجاد یا اصلاح نقاط توجه (POI)، ایجاد یادداشت‌های OSM یا نظردادن روی آن‌ها و بارگذاری پرونده‌های GPXای که ضبط کرده‌اید در تکمیل نقشهٔ OSM مشارکت کنید. برای این منظور لازم است نام کاربری و گذرواژهٔ خود را در OsmAnd وارد کنید. OpenStreetMap.org یک پروژهٔ نقشه‌کشی جامعه‌محور، جهانی و در مالکیت عمومی است.";
-
+"kg" = "کیلوگرم";
+"m" = "m";
+"open_place_reviews_plugin_description" = "برای مکان‌های عمومی مانند رستوران‌ها، هتل‌ها، موزه‌ها و نقاط بین‌راهی نگاره بفرستید، دیدگاه بنویسید و پیوند ثبت کنید؛ همگی این‌ها به‌عنوان دادهٔ باز ثبت خواهدشد. http://openplacereviews.org/data
+\n
+\nاینجا بیشتر بخوانید: http://openplacereviews.org";
+"km" = "km";

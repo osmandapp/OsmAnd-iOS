@@ -128,8 +128,8 @@ class Main {
         copyPhrasesFiles(path)
         
         Initialiser.initUpdatingTranslationKeyLists(path)
-        updateTranslations(path)
         addRoutingParametersIfNeeded(arguments, path)
+        updateTranslations(path)
         
         print("DONE: add_translations script \n")
     }
@@ -349,7 +349,11 @@ class IOSWriter {
                 for elem in existingLinesDict {
                     for i in 0 ..< strings.count {
                         if strings[i].contains("\"" + elem.key + "\"") {
-                            strings[i] = replaceValueText(newValue: filterUnsafeChars(elem.value), inFullString: strings[i] )
+                            if let updstedString = replaceValueText(newValue: filterUnsafeChars(elem.value), inFullString: strings[i] ) {
+                                strings[i] = updstedString
+                            } else {
+                                strings[i] = ""
+                            }
                         }
                     }
                 }
@@ -374,18 +378,25 @@ class IOSWriter {
     }
     
     
-    static func replaceValueText(newValue: String, inFullString fullString: String) -> String {
+    static func replaceValueText(newValue: String, inFullString fullString: String) -> String? {
         /// Localzable.strings  one string format:
         /// "key" = "value";
+        ///
+        ///
+        
         let quotationMarkIndexes = getAllSubstringIndexes(fullString: fullString, subString: "\"")
-        guard (quotationMarkIndexes.count >= 4) else {return fullString}
-        
-        let startIndex = fullString.index(fullString.startIndex, offsetBy: quotationMarkIndexes[2] + 1)
-        let endIndex = fullString.index(fullString.startIndex, offsetBy: quotationMarkIndexes.last!)
-        
-        var resultString = fullString
-        resultString.replaceSubrange(startIndex ..< endIndex, with: newValue)
-        return resultString
+        if (quotationMarkIndexes.count >= 4) {
+            let startIndex = fullString.index(fullString.startIndex, offsetBy: quotationMarkIndexes[2] + 1)
+            let endIndex = fullString.index(fullString.startIndex, offsetBy: quotationMarkIndexes.last!)
+            var resultString = fullString
+            resultString.replaceSubrange(startIndex ..< endIndex, with: newValue)
+            return resultString
+        } else if (quotationMarkIndexes.count >= 2) {
+            let key = getKey(inFullString: fullString)
+            return "\"" + key + "\" = \"" + newValue + "\""
+        } else {
+            return nil
+        }
     }
     
     
@@ -589,8 +600,10 @@ class RoutingParamsHelper {
             }
         }
         
-        var updatedCount = 0
-        var foundedKeys = [String]()
+        var uniqueIosKeys = Set<String>()
+        var foundedRenderingKeys = [String]()
+        var updatedStringsCount = 0
+        
         for elem in iosArr {
             if elem.hasPrefix("\"routeInfo_") || elem.hasPrefix("\"routing_attr_") || elem.hasPrefix("\"rendering_attr_") || elem.hasPrefix("\"rendering_value_") {
                 
@@ -598,13 +611,20 @@ class RoutingParamsHelper {
                     let iosString = iosArr[index];
                     let key = IOSWriter.getKey(inFullString: iosString)
                     
-                    if let androidValue = androidDict[key] {
-                        foundedKeys.append(key)
-                        let updatedSrting = IOSWriter.replaceValueText(newValue: IOSWriter.filterUnsafeChars(androidValue), inFullString: iosString)
-//                        updatedSrting = IOSWriter.filterUnsafeChars(androidValue)
-                        if (iosString != updatedSrting) {
-                            iosArr[index] = updatedSrting
-                            updatedCount += 1
+                    if (uniqueIosKeys.contains(key)) {
+                        iosArr[index] = ""
+                        updatedStringsCount += 1;
+                    } else {
+                        uniqueIosKeys.insert(key)
+                        if let androidValue = androidDict[key] {
+                            foundedRenderingKeys.append(key)
+                            if let updatedSrting = IOSWriter.replaceValueText(newValue: IOSWriter.filterUnsafeChars(androidValue), inFullString: iosString) {
+                                //updatedSrting = IOSWriter.filterUnsafeChars(androidValue)
+                                if (iosString != updatedSrting) {
+                                    iosArr[index] = updatedSrting
+                                    updatedStringsCount += 1
+                                }
+                            }
                         }
                     }
                 }
@@ -612,14 +632,18 @@ class RoutingParamsHelper {
         }
         
         for elem in routeDict {
-            if (!foundedKeys.contains(elem.key)) {
+            if (!foundedRenderingKeys.contains(elem.key)) {
                 addedStringsArray.append(makeOutputString(str1: elem.key, str2: elem.value))
             }
         }
         let joined1 = iosArr.joined(separator: "\n")
         let joined2 = addedStringsArray.joined(separator: "\n")
-        let joined = joined1 + "\n" + joined2
-        print("route_params : ", language, " added : ", addedStringsArray.count, " updated: ", updatedCount)
+        var joined = joined1
+        if (joined2.count > 0) {
+            joined = joined1 + "\n" + joined2
+        }
+
+        print("route_params : ", language, " added : ", addedStringsArray.count, " updated: ", updatedStringsCount)
         do {
             try joined.write(to: url, atomically: false, encoding: .utf8)
         }

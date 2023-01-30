@@ -590,20 +590,27 @@
 "cannot_access_calendar" = "Cannot access Calendar";
 "reminder_not_set_text" = "The reminder was not set since you are not allowed access to the Calendar";
 //inapps
-"product_title_nautical" = "Nautical map";
+"plugin_nautical_name" = "Vista do mapa náutico";
 "product_desc_nautical" = "Nautical map of all world";
-"product_desc_ext_nautical" = "OsmAnd Nautical Charts is a plugin for OsmAnd Maps & Navigation app. It is a detailed graphical representation of oceans, seas, coastal areas and rivers. The charts can contain various information like sailing routes, navigation lights, dangerous areas, areas where it's allowed or not allowed to sail or dock, etc.\n\nUsage Instructions: it is highly recommended to download nautical basemap in order to see the maps regardless of detailed map presence. To turn on Nautical charts, tap the map button and set map type to Nautical.\n\nNote: All professional sailors are obliged to have official nautical charts on their ships.\n\nOsmAnd Nautical charts are based on the data from OpenSeaMap project. While OpenSeaMap charts at the moment cannot compete with official nautical charts, they can be used by recreational sailors for orientation or route planning.";
-"product_title_parking" = "Parking Position";
+"plugin_nautical_descr" = "Este plugin enriquece a aplicación de mapas de navegación OsmAnd para que amose tamén mapas náuticos para viaxes en barco e outros tipos de deportes acuáticos. 
+\n 
+\nUnha extensión dos mapas especial para o OsmAnd fornece tódalas marcaxes náuticas e símbolos das cartas para a navegación en augas interiores e de cabotaxe. A descrición de cada marcaxe da navegación fornece os detalles precisos para identificala, así coma o seu significado (categoría, forma, cor, secuencia, referencia, etc.). 
+\n 
+\nPara voltar a un dos estilos do mapa convencionais do OsmAnd, sinxelamente hai que desactivar este plugin de novo ou mudar o \"Estilo do mapa\" en \"Configurar o mapa\" coma se desexe.";
+"osmand_parking_plugin_name" = "Posición de aparcamento";
 "product_desc_parking" = "Let you easily memorize when the car was parked and how much time left if the parking is limited by time";
-"product_desc_ext_parking" = "OsmAnd Parking Plugin reminds you of your parking position. It is a plugin for OsmAnd Maps&Navigation app.\nChoose a time-independent reminder (only a marker on the map) or a time-limited one with alarm upon time expiration (includes also a marker on the map). To use the plugin, enable it in the Plugins menu.";
+"osmand_parking_plugin_description" = "Rexistra onde foi aparcado o automóbil, incluíndo canto tempo falta. 
+\n Tanto a localización coma o tempo do aparcamento amósanse no menú principal e nun trebello sobre o mapa. Pódese engadir unha alarma de lembranza ó calendario do Android.";
 "plugin_ski_name" = "Vista dos mapas de esquí";
 "product_desc_skimap" = "Ski slopes for all ski resorts in the world";
 "plugin_ski_descr" = "Este plugin para o OsmAnd ponó teu acade detalles sobre pistas do esquí de baixada, de travesía, roteiros do esquí alpino, teleféricos e refachos a nivel mundial. As rotas e pistas amósanse polo código de cor en función da súa dificuldade e representados cun estilo do mapa especial \"Inverno\" que o asemella a unha paisaxe invernal nevada.
 \n 
 \nActivando esta vista, muda o estilo do mapa a «Inverno e esquí», amosando as características do terreo en condicións invernais. Esta vista pódese revertir desactivando de novo eiquí ou mudando o \"Estilo do mapa\" en \"Configurar mapa\" cando o desexes.";
-"monitoring_settings" = "Gravación de viaxes";
+"record_plugin_name" = "Gravación de viaxes";
 "product_desc_track_recording" = "Activates the functionality to record and save your tracks";
-"product_desc_ext_track_recording" = "Permíteche gravar, gardar e analizalos teus datos do adestramento ou movementos, coma velocidade, ascensos, descensos ou alivio da ruta, que logo se poden reutilizar, mellorar, complementar ou compartir cos amigos.. \n\nComo - https://osmand.net/docs/user/plugins/trip-recording";
+"record_plugin_description" = "Este plugin activa a funcionalidade para rexistrar e gardar as túas pistas de xeito manual premendo no trebello de gravación GPX no mapa, ou automáticamente rexistrando todas as túas rutas percorridas nun ficheiro GPX. 
+\n 
+\nAs pistas gravadas poden ser compartidas coas túas amizades ou ser empregadas para contribuír ó OSM. Os atletas poden empregar as pistas gravadas para seguir os seus adestramentos. Algunhas análises básicas de pistas pódense facer directamente no OsmAnd, coma tempos por volta, velocidade media, etc., e por suposto as pistas poden analizarse de xeito posterior con ferramentas de análise de terceiros.";
 "product_title_trip_planning" = "Trip planning";
 "product_desc_trip_planning" = "Plan your trip, add waypoints, measure the distance to your destination using this plugin";
 "product_desc_ext_trip_planning" = "Trip planning plugin allows you to create your trip on the map, save it, measure the distance between points connected with straight lines, etc. Created for preliminary trip planning rather than thorough route building.";
@@ -619,10 +626,12 @@
 "product_desc_asia" = "Map of Asia";
 "download_wikipedia_maps" = "Wikipedia";
 "product_desc_wiki" = "Wikipedia data";
-"product_desc_ext_wiki" = "Get information about points of interest from Wikipedia. It is your pocket offline guide - just enable Wikipedia plugin and enjoy articles about objects around you.";
-"download_srtm_maps" = "Curvas de nivel";
+"purchases_feature_desc_wikipedia" = "Get information about points of interest from Wikipedia. It is your pocket offline guide - just enable Wikipedia plugin and enjoy articles about objects around you.";
+"srtm_plugin_name" = "Curvas de nivel";
 "product_desc_srtm" = "Display of contour lines";
-"product_desc_ext_srtm" = "This plugin provides contour lines and hillshade, which can be displayed in OsmAnd offline maps. Contour lines provide the information about heights of the area while hillshade is their visualization. See the names of mountain peaks and specific features of terrain using this plugin.\n\nThe global data (between 70 degrees north and 70 degrees south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA's Earth Observing System. ASTER is a cooperative effort between NASA, Japan's Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
+"srtm_plugin_description" = "Este plugin fornece unha capa de sobreposición das curvas do nivel e unha capa de sombras da altitude (relevo) que poden ser amosadas nos mapas sen conexión do OsmAnd. Esta funcionalidade pode ser moi apreciada por atletas, camiñantes, sendeiristas e calquera que teña interese pola estrutura de relevo da paisaxe. (Ten en conta que as curvas do nivel e/ou os datos do relevo están dispoñíbeis en descargas adicionais separadas logo de activares o plugin) 
+\n 
+\nOs datos globais (entre os 70 graos norte e os 70 graos sul) están baseados nas medicións do SRTM (Misión Topográfica con Radar da Lanzadeira Espacial) e o ASTER (Radiómetro Espacial Avanzado de Emisión Térmica e Reflexión) e instrumentos de imaxes a bordo do Terra, o satélite máis importante do Sistema de Observación Terrestre da NASA. O ASTER é un esforzo cooperativo entre a NASA, o Ministerio de Economía do Xapón, Comercio e Industria (METI) e SistemasEspaciais Xaponeses (J-spaceystems).";
 "my_location" = "A miña posición";
 "all_categories" = "All categories";
 "get_unlimited_access" = "Obter acceso ilimitado";
@@ -1534,7 +1543,7 @@
 "shared_string_navigation" = "Navegación";
 "wiki_menu_download_descr" = "Precísanse mapas adicionais para ollar os PDI da Wikipedia no mapa.";
 "gpxup_public" = "Público";
-"product_desc_ext_mapillary" = "Imaxes a nivel de rúa en liña para todos. Descobre lugares, contribúe, captura o mundo.";
+"plugin_mapillary_descr" = "Imaxes a nivel de rúa para todos. Descobre lugares, contribúe, captura o mundo.";
 "register_opr_have_account" = "Xa teño unha conta";
 "lang_lmo" = "Lombardo";
 "lang_sq" = "Albanés";
@@ -1711,7 +1720,7 @@
 "expired" = "Expirado";
 "cubic_m" = "m³";
 "debugging_and_development" = "Desenvolvemento do OsmAnd";
-"product_desc_ext_development" = "Axusta as funcións de desenvolvemento e depuración, como a simulación de navegación, o rendemento do renderizado ou as indicacións por voz. Destinado para desenvolvedores, non é necesario para o normal uso da aplicación.";
+"osmand_development_plugin_description" = "Axusta as funcións de desenvolvemento e depuración, como a simulación de navegación, o rendemento do renderizado ou as indicacións por voz. Destinado para desenvolvedores, non é necesario para o normal uso da aplicación.";
 "toast_empty_name_error" = "Localización sen nome";
 "osm_live_subscriptions" = "Subscricións";
 "restore_purchases" = "Restaurar as compras";
@@ -1881,4 +1890,16 @@ Lon %@";
 "quick_action_navigation_voice_off" = "Activar a voz";
 "osm_editing_plugin_description" = "Fai contribucións no OSM, como o crear ou modificar obxectos PDI, abrir ou comentar notas do OSM e contribuír con ficheiros de pistas GPX gravados no OsmAnd, fornecendo o teu nome de usuario e contrasinal. O OpenStreetMap.org é un proxecto de cartografado de dominio público, global, ceibe e impulsado pola comunidade.";
 "quick_action_auto_zoom" = "Activar ou desactivar achegamento automático do mapa";
-
+"open_place_reviews_plugin_description" = "O OpenPlaceReviewsé un proxecto impulsado pola comunidade sobre lugares públicos como restaurantes, hoteis, museos, puntos de referencia. Recolle toda a información pública sobre eles como imaxes, recesións, ligazóns a outros servizos como OpenStreetMap e Wikipedia.
+\n
+\nTodos os datos do OpenPlaceReviews son abertos e están dispoñíbeis para todos: http://openplacereviews.org/data.
+\n
+\nPodes ler máis en: https://openplacereviews.org";
+"m" = "m";
+"km" = "km";
+"weather_plugin_description" = "Proporciona
+\n- a predición meteorolóxica das 24 horas e 7 días con 5 capas
+\n- complementos baseados na localización
+\n- as isolíneas da temperatura/presión
+\n
+\nA predición meteorolóxica e proporcionada polo Global Forecast System (GFS, https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast ).";

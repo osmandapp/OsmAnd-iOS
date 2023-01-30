@@ -228,10 +228,10 @@
 "shared_string_sec" = "Sek";
 "cannot_access_calendar" = "Kalender nicht aufrufbar";
 "reminder_not_set_text" = "Die Erinnerung wurde nicht gesetzt, da kein Zugangsrecht zum Kalender besteht";
-"product_title_parking" = "Park-Position";
+"osmand_parking_plugin_name" = "Parkposition";
 "product_desc_parking" = "Verfolgen Sie Parkdauer und Standort Ihres Autos";
 "plugin_ski_name" = "Skikarte";
-"monitoring_settings" = "Streckenaufzeichnung";
+"record_plugin_name" = "Streckenaufzeichnung";
 "product_desc_track_recording" = "Aufzeichnen und Speichern Ihrer Fahrten als GPX-Tracks";
 "product_desc_africa" = "Unbegrenzte Kartendownloads für Afrika";
 "product_desc_australia" = "Unbegrenzte Kartendownloads für Australien";
@@ -267,7 +267,7 @@
 "cannot_add_marker_desc" = "Bitte mindestens eine Richtung entfernen und nochmal versuchen";
 "cannot_add_destination" = "Kann nicht Richtung ergänzen";
 //inapps
-"product_title_nautical" = "Nautische Karte";
+"plugin_nautical_name" = "Seekarte";
 "product_desc_nautical" = "Vektorkarten für die Navigation von Segelrouten";
 "product_desc_skimap" = "Aktuelle Karte von Skigebieten mit Liften und Pisten";
 "product_title_allworld" = "Alle Weltkarten";
@@ -296,7 +296,7 @@
 "menu_my_trips" = "Meine Tracks";
 "product_title_trip_planning" = "Streckenplanung";
 "product_desc_wiki" = "Standortbezogene Wikipedia-Artikel auf der Karte";
-"download_srtm_maps" = "Höhenlinien";
+"srtm_plugin_name" = "Höhenlinien";
 "product_desc_srtm" = "Visuelle Übersetzung der Form der Landoberfläche";
 "enter_description" = "Beschreibung eingeben";
 "shared_string_description" = "Beschreibung";
@@ -382,16 +382,20 @@
 "plugin_popup_ski_desc" = "Um den <b>Skikartenstil</b> einzuschalten, gehen Sie bitte zu <b>Karte konfigurieren</b> > <b>Kartendarstellung</b>";
 "plugin_popup_wiki_desc" = "Laden Sie bitte zuerst die Wikipedia-Daten einer Region herunter, um das Wikipedia-Plugin verwenden zu können";
 "gpx_import_desc" = "Verwenden Sie die Option \"Nach OsmAnd-Karten kopieren\", um Ihre GPX-Dateien (gängiges GPS-Datenformat) aus Dropbox, E-Mail oder einer anderen Quelle zu importieren";
-"product_desc_ext_nautical" = "Aktivieren, um Ihre Karte mit Informationen anzureichern über Segelrouten, Navigationslichter, Gefahrenzonen, Zonen, in denen das Segeln oder Anlegen erlaubt oder verboten ist, usw. Laden Sie dazu die Nautischen Karten herunter und aktivieren Sie \"Nautische Karte\" in der Kartenkonfiguration. \n\nAnleitung - https://osmand.net/docs/user/plugins/nautical-charts";
-"product_desc_ext_parking" = "Ermöglicht das Festlegen eines Punktes auf der Karte, an dem Ihr Auto auf der Straße abgestellt ist, und benachrichtigt Ihren Kalender, wenn die Parkzeit beginnt. Das Plugin hilft dabei, die Parkzeit und den Standort Ihres Autos zu verfolgen. Um eine Markierung zu setzen, wählen Sie einen Ort auf der Karte, dann gehen Sie zu Aktionen und drücken Sie \"Parkplatz hinzufügen\".";
-"product_desc_ext_track_recording" = "Ermöglicht das Aufzeichnen, Speichern und Analysieren von Trainings- oder Bewegungsdaten wie Geschwindigkeit, Steigungen, Gefälle oder Streckenerleichterung, die Sie dann wiederverwenden, verbessern, ergänzen oder mit Freunden teilen können. \n\nAnleitungen - https://osmand.net/docs/user/plugins/trip-recording";
+"plugin_nautical_descr" = "Reichert Ihre Karte mit Informationenüber Segelrouten, Leuchtfeuer, nautische Gefahrenzonen, Zonen mit Segel- oder Anlegeverboten usw. an. Um sie zu verwenden, laden Sie die entsprechenden nautischen Karten herunter und aktivieren Sie den Stil \'Nautisch\' unter \'Menü → Karte konfigurieren → Kartendarstellung\'.
+\n
+\nWeitere Informationen unter https://osmand.net/docs/user/plugins/nautical-charts.";
+"osmand_parking_plugin_description" = "Markieren Sie, wo Ihr Auto geparkt ist, und informieren Sie Ihren Kalender, wann die Parkuhr abläuft. Um die Markierung zu setzen, wählen Sie einen Ort auf der Karte, gehen Sie zu \"Aktionen\" und tippen Sie auf \"Parkplatz hinzufügen\".";
+"record_plugin_description" = "Zeichnen Sie Ihre Fahrten oder Trainings auf und analysieren Sie die Daten in Bezug auf Geschwindigkeit, kumulierte Anstiege und Abfahrten, Höhenprofil usw. Die aufgezeichneten Strecken können archiviert, mit Freunden geteilt, bearbeitet und nachbearbeitet werden.
+\n
+\nWeitere Informationen unter https://osmand.net/docs/user/plugins/trip-recording.";
 "plugin_popup_wiki_ask" = "Um Wikipedia-Daten herunterladen zu können, müssen Sie das Plugin aktivieren: <b>Wikipedia</b>";
 "go_to_downloads" = "Gehe zu Downloads";
 "turn_on_plugin" = "Aktivieren Sie das Plugin";
 "all_world_popup_desc" = "Lade die Weltkarte herunter um Ländernamen, Grenzen und andere Informationen zu sehen";
 "sqlitedb_import_already_exists" = "Die angegebene sqlitedb Datei gibt es bereits. Bitte Aktion auswählen.";
 "plugin_ski_descr" = "Entwickelt für die Navigation in Wintersportgebieten: Sehen Sie Skipisten, Skilifte und Langlaufloipen, mit farbigen Linien, die Schwierigkeitsgrade anzeigen. Um diese Erweiterung zu verwenden, aktivieren Sie sie und wählen Sie unter \"Karte konfigurieren\" den Kartenstil \"Winter und Ski\".";
-"product_desc_ext_wiki" = "Mit der Offline-Wikipedia können Sie auf Ihrer Reise mehr über die Orte erfahren, die Sie besuchen. Sie ist offline verfügbar und zeigt Wikipedia-Artikel in Verbindung mit den Sehenswürdigkeiten direkt auf der Karte an. Vergessen Sie nicht, Wikipedia-Karten für die gewünschte Region herunterzuladen.";
+"purchases_feature_desc_wikipedia" = "Stellt alle ortsbezogenen Wikipedia-Artikel offline bereit und hilft Ihnen, mehrüber die Orte zu erfahren, die Sie auf Ihrer Reise besuchen, indem Sie einfach auf die Karte tippen. Vergessen Sie nicht, die Wikipedia-Kartendateien für die jeweiligen Regionen herunterzuladen.";
 "prch_wiki_info" = "Wikipedia-Addon aktiviert Wikipedia-Informationen für berechtigte Karten welche sie gekauft oder innerhalb des freien Limits heruntergeladen haben.";
 "prch_srtm_info" = "Höhenlinien-Addon aktiviert Höhenlinien für berechtigte Karten, die Sie gekauft oder innerhalb des freien Limits heruntergeladen haben.";
 "plugin_popup_srtm_desc" = "Um die Höhenlinien zu nutzen zu können, bitte die entsprechenden Höhendaten herunterladen";
@@ -399,7 +403,11 @@
 "plugin_popup_nautical_desc" = "Bitte erst die Seekarten herunterladen.\nDann unter <b>Karte konfigurieren</b> > <b>Kartendarstellung</b> die Darstellung <b>Nautical</b> aktiviere";
 "plugin_popup_trip_planning_ask" = "Um eine Strecke planen zu können, bitte das <b>Streckenplaner-Plugin</b> aktivieren";
 "product_desc_ext_trip_planning" = "Das Entfernungsmesser & Routen-Planer Plugin ermöglicht es dir deine Routen auf der Karte zu planen, zu speichern, die gerade Strecke zwischen Punkten zu messen, uvm. Erstellt eine vorläufige Routenplanung anstatt einer genauen Route.";
-"product_desc_ext_srtm" = "Geländeinformationen wie Höhenlinien, Hangschattierungen und Steigungen helfen Ihnen, die Form der Landoberfläche unter Berücksichtigung von Krümmung, Extremen, Steilheit, Punkten gleicher Höhe und mehr visuell zu beurteilen. Topografische Informationen auf einer Karte können durch Hangschattierungen, Höhenlinien für die Steigung und das Gefälle sowie durch die Farbe der Abweichung des Neigungswinkels von der Ebene dargestellt werden. Die Daten stammen von SRTM und ASTER. \n\nAnleitungen - https://osmand.net/docs/user/plugins/contour-lines";
+"srtm_plugin_description" = "Geländeinformationen wie Höhenlinien, Relief und Steigungen helfen Ihnen bei der visuellen Beurteilung des Geländes, des Reliefs, der Befahrbarkeit und vielem mehr. Die topografischen Informationen können auf der Karte durch Neigungsschattierungen, Höhenlinien und/oder Steilheitsfarben dargestelltwerden.
+\n
+\nDie zugrunde liegenden Daten stammen von SRTM und ASTER.
+\n
+\nWeitere Informationen unter https://osmand.net/docs/user/plugins/contour-lines.";
 "device_memory" = "Gerätespeicher";
 "free" = "Frei %@";
 "shared_string_waypoint" = "Wegpunkt";
@@ -2053,8 +2061,10 @@
 "product_desc_mapillary" = "Bilder auf Straßenebene, um die Umgebung zu erkunden";
 "shared_string_turn_off" = "Ausschalten";
 "suggested_maps_descr" = "Diese Karten werden für das Plugin benötigt.";
-"product_desc_ext_openplacereviews" = "Ermöglicht es Ihnen, Beiträge zum Projekt OpenPlaceReviews zu leisten. Dazu gehören Fotos, Bewertungen, Links zu öffentlichen Orten wie Restaurants, Hotels, Museen und Wegpunkten. \n\nAuf unserer Website finden Sie eine Anleitung, wie Sie einen Beitrag leisten können - https://osmand.net/docs/user/plugins/openplacereviews";
-"product_desc_ext_mapillary" = "Bringt Ansichten auf Straßenebene. Wo Bildmaterial fehlt, können Sie es einfach selbst hinzufügen, damit andere es nutzen können. Um die Mapillary-Ebene zu aktivieren, schalten Sie die Option \"Straßenbilder\" im Menü \"Karte konfigurieren\" ein.";
+"open_place_reviews_plugin_description" = "Tragen Sie zum OpenPlaceReviews-Projekt bei, z. B. mit Fotos, Bewertungen oder Links für öffentliche Orte wie Restaurants, Hotels oder Museen.
+\n
+\nAuf unserer Website https://osmand.net/docs/user/plugins/openplacereviews finden Sie Anweisungen, wie Sie einen Beitrag leisten können.";
+"plugin_mapillary_descr" = "Bildmaterial von Straßenansichten. Sie können auch selbst einen Beitrag leisten. Um die vorhandenen Daten als Kartenebene zu sehen, aktivieren Sie \"Straßenbilder\" im Menü \"Karte konfigurieren\".";
 "suggested_maps" = "Vorgeschlagene Karten";
 "product_desc_openplacereviews" = "Teilen Sie Ihre Meinung zu öffentlichen Orten";
 "open_place_reviews" = "OpenPlaceReviews";
@@ -2373,7 +2383,12 @@
 "local_backup" = "Lokales Backup";
 "cloud_conflicts" = "Konflikte";
 "backup_view_conflicts" = "Konflikte anzeigen";
-"product_desc_ext_weather" = "Aktivieren Sie das Wetter-Plugin, um eine Route unter Berücksichtigung des Wetters zu planen. Achten Sie auf die farbige Karte der Wettervorhersage, die stündlich für heute, morgen und die kommende Woche aktualisiert wird. \n\nWährend der Reise sehen Sie standortbasierte Info-Widgets mit Temperatur, Niederschlag, Windgeschwindigkeit, Druck. \n\nNützlich für Wanderungen und lange Reisen mit dem Fahrrad oder Motorrad.";
+"weather_plugin_description" = "Bietet
+\n- 24-Stunden- und 7-Tage-Wettervorhersage mit 5 Ebenen
+\n- Standortbasierte Widgets
+\n- Temperatur-/Luftdruck-Isolinien
+\n
+\nWetterdaten werden vom Global Forecast System (GFS, https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast) bereitgestellt.";
 "backup_error_no_valid_subscription" = "Kein gültiges Abonnement vorhanden";
 "rendering_attr_showFunicularRoutes_name" = "Kabelgetriebene Linien";
 "rendering_attr_showLightRailRoutes_name" = "Stadtbahnlinien";
@@ -2470,13 +2485,12 @@
 "purchases_feature_desc_combined_wiki" = "Erkunden Sie Wikipedia Artikel auch unterwegs, ohne Internetverbindung. Offline-Daten sind nach Ländern aufgeteilt und in allen Sprachen verfügbar.";
 "continue_with" = "Mit %@ fortfahren";
 "monthly_subscription" = "Monatliches Abo";
-"purchases_feature_desc_wikipedia" = "Stellt alle ortsbezogenen Wikipedia-Artikel offline bereit und hilft Ihnen, mehrüber die Orte zu erfahren, die Sie auf Ihrer Reise besuchen, indem Sie einfach auf die Karte tippen. Vergessen Sie nicht, die Wikipedia-Kartendateien für die jeweiligen Regionen herunterzuladen.";
 "expired" = "Abgelaufen";
 "osm_live_banner_desc" = "Erhalten Sie unbegrenzte Kartendownloads und fügen wöchentliche, tägliche oder sogar stündliche Updates hinzu.";
 "purchases_feature_desc_hourly_map_updates" = "Erhalten Sie Zugang zu häufigeren Kartenaktualisierungen. Wählen Sie zwischen stündlichen, täglichen oder wöchentlichen Aktualisierungen. Updates erfolgen inkrementell, nur der geänderte Bereich wird heruntergeladen.";
 "purchases_feature_desc_pro_widgets" = "Erhalten Sie Zugang zu den Funktionen von OsmAnd Pro: Routeneinfärbung und mehr.";
 "purchases_feature_desc_osmand_cloud" = "Holen Sie sich OsmAnd Cloud, um alle OsmAnd-Daten online zu speichern. Kein Datenverlust mehr nach einer Neuinstallation, alle Informationen problemlos sichern und wiederherstellen.";
-"product_desc_ext_development" = "Ermöglicht die Konfiguration von OsmAnd zu Testzwecken: Simulation von Navigationsrouten, Überprüfung der Bildschirmdarstellungsleistung usw. Das Plugin ist für die normale Nutzung der Anwendung nicht erforderlich.";
+"osmand_development_plugin_description" = "Bietet Funktionen zum Testen und Debuggen von OsmAnd: Simulieren von Navigationsrouten,Überwachen der Bildschirmdarstellung, Prüfen der Leistung usw. Diese Erweiterung ist für die normale Nutzung der App nicht erforderlich.";
 "osmand_depelopment_simulate_location_section" = "Simulieren";
 "shared_string_paused" = "Pausiert";
 
@@ -2810,4 +2824,6 @@
 "rendering_attr_depthContourColorScheme_description" = "Farbschema der Tiefenlinien";
 "shared_string_does_not_exist" = "Nicht vorhanden";
 "download_wikipedia_data" = "Wikipedia-Daten herunterladen";
-
+"m" = "m";
+"km" = "km";
+"kg" = "kg";

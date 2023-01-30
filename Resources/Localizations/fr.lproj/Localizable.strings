@@ -165,7 +165,7 @@
 "cannot_access_calendar" = "Impossible d'accéder à calendrier";
 "reminder_not_set_text" = "Le rappel n'a pas été établi car vous n'êtes pas autorisé à accéder au calendrier";
 //inapps
-"product_title_nautical" = "Carte marine";
+"plugin_nautical_name" = "Carte marine";
 "product_desc_nautical" = "Une carte vectorielle adapté à la navigation maritime";
 "product_desc_africa" = "Téléchargement illimité de cartes pour l'Afrique";
 "product_desc_australia" = "Téléchargement illimité de cartes pour l'Australie";
@@ -217,7 +217,7 @@
 "alert_inet_needed" = "Connexion Internet requise pour effectuer cette action. Veuillez vérifier votre connexion Internet.";
 "ctx_mnu_add_fav" = "Ajouter un favori";
 "loc_access_denied_desc" = "L'accès au service de localisation a été refusé";
-"monitoring_settings" = "Enregistrer le parcours";
+"record_plugin_name" = "Enregistrement d\'itinéraire";
 "product_title_trip_planning" = "Planification de voyage";
 "product_title_allworld" = "Toutes les cartes du monde";
 "product_desc_wiki" = "Articles Wikipédia sur la carte en fonction de la position";
@@ -332,14 +332,14 @@
 "col_gray" = "Gris";
 // Help
 "help_quiz" = "Jeu-questionnaire";
-"product_title_parking" = "Emplacement de stationnement";
+"osmand_parking_plugin_name" = "Stationnement";
 "product_desc_parking" = "Suivre le temps et la position de stationnement de votre voiture";
 "plugin_ski_name" = "Pistes de ski";
 "product_desc_skimap" = "Carte à jour des pistes de ski avec inclinaison";
 "product_desc_track_recording" = "Enregistre et sauvegarde vos trajets dans des traces GPX";
 "product_desc_trip_planning" = "Planifiez votre trajets, ajoutez des points de passage, mesurez la distance à votre destination avec ce greffon";
 "product_desc_allworld" = "Cartes du Monde";
-"download_srtm_maps" = "Courbes de niveau";
+"srtm_plugin_name" = "Courbes de niveau";
 "product_desc_srtm" = "Visualiser les formes de la surface du terrain";
 "track_save_short_q" = "La trace est trop courte, voulez-vous l'enregistrer ?";
 "enter_fav_name" = "Entrez le nom du favoris";
@@ -425,7 +425,9 @@
 "hud_heading" = "Cap";
 "map_settings_overunder" = "Sur-couche / Sous-couche";
 "cannot_add_marker_desc" = "Veuillez retirer au moins une direction et réessayer";
-"product_desc_ext_track_recording" = "Vous permet d'enregistrer, de sauvegarder et d'analyser vos données d'entraînement ou de mouvement, telles que la vitesse, les montées, les descentes ou le relief de l'itinéraire, qui peuvent ensuite être réutilisées, améliorées, complétées ou partagées avec des amis.\n\nComment faire - https://osmand.net/docs/user/plugins/trip-recording";
+"record_plugin_description" = "Enregistrez vos trajets ou entraînements et analysez les données : vitesse, dénivelés, altitude, etc. Les traces enregistrées peuvent être archivées, partagées avec des amis, modifiées et retravaillées.
+\n
+\nPlus d\'informations sur https://osmand.net/docs/user/plugins/trip-recording.";
 "right_side_navigation" = "Conduiteà droite";
 "si_mi_meters" = "Miles / Mètres";
 "nm" = "mn";
@@ -602,7 +604,7 @@
 "select_route_start_on_map" = "Sélectionnez le point de départ du trajet";
 "select_route_finish_on_map" = "Sélectionnez le point d'arrivée du trajet";
 "directions_other" = "Autres directions";
-"product_desc_ext_wiki" = "Avoir Wikipédia hors ligne lors de votre voyage vous aide à en savoir plus sur les lieux que vous visitez. Elle est disponible hors ligne et affiche les articles Wikipédia en relation avec les points d'intérêt directement sur la carte. N'oubliez pas de télécharger les cartes Wikipédia de la région choisie.";
+"purchases_feature_desc_wikipedia" = "Donne accès aux articles Wikipedia associés aux points d\'intérêts de la carte, permettant d\'en savoir plus sur un lieu en quelques clics. Pensez à télécharger les articles Wikipédia des régions de votre choix pour les consulter hors-ligne.";
 "make_call" = "Passer un appel";
 "select_wpt_on_map" = "Sélectionnez un point sur la carte à ajouter à la trace";
 "sorting" = "Tri";
@@ -924,8 +926,10 @@
 "planning_trip_item" = "Préparer un itinéraire";
 "instalation_troubleshooting_item" = "Installation et débogage";
 // GPX colors
-"product_desc_ext_nautical" = "Activez cette carte pour enrichir l'application d'informations sur les routes navigables, les feux de navigation, les zones dangereuses et où il est autorisé ou interdit de naviguer ou d'accoster, etc. Pour télécharger et activer les cartes maritimes, appuyez sur le bouton Carte et réglez le type de carte sur Nautical.\n\nPlus d'informations - https://osmand.net/docs/user/plugins/nautical-charts";
-"product_desc_ext_parking" = "Activez-le pour mettre un point sur la carte à l'endroit où votre voiture est garée et ajoutez un rappel à votre calendrier lorsque le temps restant de stationnement est écoulé. Cette extension vous aide à surveiller le temps restant de stationnement ainsi que la localisation de votre voiture. Pour placer un point, choisissez un endroit sur la carte, allez dans \"Actions\" et sélectionnez \"Stationnement\".";
+"plugin_nautical_descr" = "Enrichit la carte avec des informations sur les routes maritimes, le balisage, les zones de danger, les restrictions de mouillage, etc. Pour afficher cette vue, téléchargez la carte marine correspondante puis activez-la dans \"Paramétrer la carte\".
+\n
+\nPlus d\'informations sur https://osmand.net/docs/user/plugins/nautical-charts.";
+"osmand_parking_plugin_description" = "Mémorisez la position de votre véhicule et soyez alertés avant la fin de durée du stationnement. Pour placer le marqueur, sélectionnez un point sur la carte, allez dans \"Actions\" et sélectionnez \"Stationnement\".";
 "plugin_ski_descr" = "Affichage optimisé pour les zones de sports d\'hiver : visualisez les remontées mécaniques et les pistes de ski (y compris les itinéraires hors-piste) qui sont colorées selon leur niveau de difficulté. Pour afficher cette vue, activez cette extension puis allez dans \"Paramétrer la carte\" et enfin sélectionnez le style \"Hiver et Ski\".";
 "product_desc_ext_trip_planning" = "Le plugin de planification de trajet vous permet de créer votre trajet sur la carte, de le sauvegarder, de mesurer la distance entre les points reliés par des lignes droites, etc. Conçu pour la planification préliminaire des trajets plutôt que pour la construction d'un itinéraire complet.";
 "osm_editing_plugin_name" = "Édition OpenStreetMap";
@@ -933,7 +937,11 @@
 "osm_editing_plugin_description" = "Contribuezà OpenStreetMap, un projet communautaire global qui maintient à jour une carte complète du monde et fournit des données géographiques libres.
 \n
 \nPour découvrir comment modifier une carte, consultez notre site https://osmand.net/docs/user/plugins/osm-editing .";
-"product_desc_ext_srtm" = "Les informations sur le terrain, telles que les courbes de niveau, les ombres des collines et les pentes, vous aident à évaluer visuellement la forme de la surface terrestre, en tenant compte de la courbure, des extrêmes, de la pente, des points de même hauteur, etc. Les informations topographiques sur une carte peuvent être représentées par des ombres de pente, des courbes de niveau pour la montée et la descente, et la couleur de l'écart de l'angle de pente par rapport au plat. Données provenant de SRTM et ASTER.\n\nComment faire - https://osmand.net/docs/user/plugins/contour-lines";
+"srtm_plugin_description" = "Fournit des informations sur le terrain (ombrage du relief, courbes de niveau, pente) pour vous aiderà mieux interpréter le relief et l’accessibilité. Ces informations topographiques peuvent être représentées sur la carte par des ombres, des lignes d\'altitude et des couleurs variant selon la pente.
+\n
+\nLes données proviennent de SRTM et ASTER.
+\n
+\nPlus d\'informations sur http://osmand.net/docs/user/plugins/contour-lines.";
 "wikivoyage_travel_guide_descr" = "Guides des lieux les plus intéressants au monde depuis OsmAnd et sans connexion Internet.";
 "product_desc_sea_depth_contours" = "Bathymétrie et balisage maritime";
 "prch_wiki_info" = "L'addon Wikipedia permet d'activer les informations wikipedia pour les cartes que vous avez le droit, achetées ou téléchargées dans les limites de la limite de la gratuité.";
@@ -2045,10 +2053,12 @@
 "added_profiles" = "Profils ajoutés";
 "suggested_maps_descr" = "Ces cartes sont nécessaires pour utiliser l\'extension.";
 "suggested_maps" = "Cartes suggérées";
-"product_desc_ext_openplacereviews" = "Permet de contribuer au projet OpenPlaceReviews. Envoyez des photos, des avis et des liens sur des lieux publics tels que des restaurants, des hôtels, des musées et des waypoints.\n\nVous savoir comment contribuer, consultez le site internet - https://openplacereviews.org";
+"open_place_reviews_plugin_description" = "Envoyez vos photos, avis et liens sur des lieux publics tels que les restaurants, les hôtels ou les musées afin de contribuer au projet OpenPlaceReviews.
+\n
+\nPour en savoir plus, consultez https://osmand.net/docs/user/plugins/openplacereviews.";
 "product_desc_openplacereviews" = "Partager vos avis sur les lieux publics";
 "open_place_reviews" = "OpenPlaceReviews";
-"product_desc_ext_mapillary" = "Apporte des vues au niveau de la rue. Lorsque l'imagerie fait défaut, vous pouvez l'ajouter vous-même afin que d'autres puissent l'utiliser. Pour activer la couche Mapillary, activez l'option \"Street-level imagery\" dans le menu Configurer la carte.";
+"plugin_mapillary_descr" = "Photos de rues. Vous pouvez aussi contribuer vous-même. Pour voir les données existantes sous forme de surcouche, activez l\'option correspondante dans le menu \"Paramétrer la carte\".";
 "product_desc_mapillary" = "Des photos des rues pour vérifier les alentours";
 "no_waypoints_found" = "Aucun waypoint trouvé";
 "replace_waypoint_confirmation" = "Remplacer le Waypoint %@ ?";
@@ -2394,7 +2404,12 @@
 "plugin_popup_weather_title" = "Activer la météo";
 "plugin_popup_weather_ask" = "Veuillez activer le greffon Météo";
 "product_desc_weather" = "Prévisions horaires 24h/24 et sur 7 jours sur la carte";
-"product_desc_ext_weather" = "Activez le plugin météo pour planifier un itinéraire en tenant compte de la météo. Regardez la carte en couleur des prévisions météorologiques, qui sont mises à jour toutes les heures pour aujourd'hui, demain et la semaine à venir. \n\nPendant le voyage, voyez les widgets d'information basés sur l'emplacement avec la température, les précipitations, la vitesse du vent, la pression. \n\nSera utile pour les randonnées et les longs voyages en vélo ou en moto.";
+"weather_plugin_description" = "Fournit:
+\n- Les prévisions météorologiques pour les 24 prochaines heures et les 7 prochains jours, avec 5 sur-couches
+\n- Des widgets basés sur la position
+\n- Les cartes d\'isobares et d\'isothermes
+\n
+\nLes données météorologiques sont fournies par le modèle GFS (Global Forecast System, https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast).";
 "measurement_units" = "Unités de mesure";
 "weather_pressure_hectopascals" = "Hectopascals";
 "weather_pressure_millimeters_of_mercury" = "Millimètres de mercure";
@@ -2438,7 +2453,7 @@
 "osmand_pro_tagline" = "Bénéficiez d\'un maximum de fonctionnalités";
 "purchases_feature_desc_wikivoyage" = "Explorez Wikivoyage sans connexion Internet. Les articles sont découpés par pays et disponibles dans toutes les langues.";
 "unlimited_map_downloads" = "Téléchargements illimités de cartes";
-"product_desc_ext_development" = "Permet de configurer OsmAnd pour faire des tests : simulation du guidage, l'affichage des performances, etc. Cette extension n'est pas requise pour une utilisation normale de l'application.";
+"osmand_development_plugin_description" = "Permet d\'accéder à des fonctionnalités pour tester et déboguer OsmAnd : simuler des guidages, gérer les rendus, vérifier les performances, etc. Cette extension n\'est pas recommandée pour une utilisation normale de l\'application.";
 "manage_subscription" = "Gérer l\'abonnement";
 "private_access_routing_req" = "Votre destination se situe dans une zone privée. Souhaitez-vous autoriser l\'accès aux zones privées pour cet itinéraire \?";
 "purchases_feature_desc_osmand_cloud" = "Utilisez OsmAnd Cloud pour sauvegarder toutes les données d\'OsmAnd en ligne. Plus aucun risque de perdre vos données après une réinstallation. Sauvegardez et restaurez toutes vos informations sans difficulté.";
@@ -2462,7 +2477,6 @@
 "monthly_subscription" = "Abonnement mensuel";
 "nautical_depth" = "Profondeur bathymétrique";
 "expired" = "Expiré";
-"purchases_feature_desc_wikipedia" = "Donne accès aux articles Wikipedia associés aux points d\'intérêts de la carte, permettant d\'en savoir plus sur un lieu en quelques clics. Pensez à télécharger les articles Wikipédia des régions de votre choix pour les consulter hors-ligne.";
 "wikipedia_and_wikivoyage_offline" = "Wikipédia et Wikivoyage hors ligne";
 "on_hold" = "En attente";
 "osmand_depelopment_simulate_location_section" = "Simuler";
@@ -2795,4 +2809,6 @@
 "routing_attr_avoid_footways_description" = "Éviter les trottoirs";
 "shared_string_does_not_exist" = "N'existe pas";
 "download_wikipedia_data" = "Télécharger les données Wikipedia";
-
+"kg" = "kg";
+"km" = "km";
+"m" = "m";

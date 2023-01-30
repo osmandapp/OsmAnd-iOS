@@ -269,13 +269,13 @@
 "cannot_access_calendar" = "Takvim erişemiyor";
 "reminder_not_set_text" = "Takvimin erişimi izin verilmez çünkü hatırlatma set değildi";
 //inapps
-"product_title_nautical" = "Deniz haritası";
+"plugin_nautical_name" = "Deniz haritası görünümü";
 "product_desc_nautical" = "Tüm dünya deniz haritası";
-"product_title_parking" = "Park pozisyonu";
+"osmand_parking_plugin_name" = "Park etme pozisyonu";
 "product_desc_parking" = "İzin kolayca ezberlemek ne zaman araba park edilmişti ve zamanla sınırlı otopark Eğer ne kadar kalan süre";
 "plugin_ski_name" = "Kayak haritası görünümü";
 "product_desc_skimap" = "Dünyadaki tüm Kayak Merkezleri için Kayak tesisi";
-"monitoring_settings" = "Seyahat kaydetme";
+"record_plugin_name" = "Seyahat kaydetme";
 "product_desc_track_recording" = "İzlediğiniz yolları kaydetme işlevini etkinleştirir";
 "product_title_trip_planning" = "Seyahat planlama";
 "product_desc_trip_planning" = "Gezi planı, yol işaretleri eklemek, bu eklenti kullanarak hedefe Uzaklik ölçmek";
@@ -292,8 +292,8 @@
 "product_desc_asia" = "Asya için sınırsız harita indirme";
 "download_wikipedia_maps" = "Wikipedia";
 "product_desc_wiki" = "Vikipedi veri";
-"product_desc_ext_wiki" = "Wikipedia'dan ilgi çekici yerler hakkında bilgi alın. Bu sizin çevrim dışı cep rehberinizdir - sadece Wikipedia eklentisini etkinleştirin ve etrafınızdaki nesneler hakkında makalelerin tadını çıkarın.";
-"download_srtm_maps" = "Eş yükselti eğrileri";
+"purchases_feature_desc_wikipedia" = "Seyahatinizdeçevrim dışı Vikipedi\'ye sahip olmak, ziyaret ettiğiniz yerler hakkında daha fazla bilgi edinmenize yardımcı olur. Çevrim dışı olarak kullanılabilir ve Vikipedi makalelerini doğrudan harita üzerinde ilgi çekici noktalarla (POI) ilişkili olarak gösterir. Seçtiğiniz bölge için Vikipedi haritalarını indirmeyi unutmayın.";
+"srtm_plugin_name" = "Eş yükselti eğrileri";
 "product_desc_srtm" = "Eş yükselti eğrilerinin görüntülenmesi";
 "my_location" = "Konumum";
 "all_categories" = "Tüm kategoriler";
@@ -388,13 +388,22 @@
 "gpx_import_desc" = "GPX dosyalarınızı (yaygın GPS veri biçimi) Dropbox, E-posta veya başka bir kaynaktan içe aktarmak için \"OsmAnd Haritalara Kopyala\" seçeneğini kullanın";
 "sett_lang_trans" = "başka alfabeyle yaz";
 "translit_names" = "Adlara harfçevirisi yap";
-"product_desc_ext_nautical" = "OsmAnd Deniz Grafikleri, OsmAnd Haritalar & Navigasyon uygulaması için bir eklentidir. Okyanusların, denizlerin, kıyı alanlarının ve nehirlerin ayrıntılı bir grafiksel gösterimidir. Çizelgeler, yelken rotaları, navigasyon ışıkları, tehlikeli alanlar, yelken açılmasına veya yanaşmasına izin verilen ya da izin verilmeyen alanlar vb. gibi çeşitli bilgiler içerebilir.\n\nKullanım Talimatları: Ayrıntılı haritanın olmasına bakılmaksızın haritaları görmek için deniz temel haritasının indirilmesi önemle tavsiye edilir. Deniz çizelgelerini açmak için harita düğmesine dokunun ve harita türünü Deniz olarak ayarlayın.\n\nNot: Tüm profesyonel denizciler gemilerinde resmi deniz çizelgeleri bulundurmak zorundadırlar.\n\nOsmAnd Deniz çizelgeleri, OpenSeaMap projesi verilerini temel almaktadır. Şu anda OpenSeaMap çizelgeleri resmi deniz çizelgeleri ile rekabet edemese de, eğlence amaçlı yelkenciler tarafından yönlendirme veya rota planlama için kullanılabilir.";
-"product_desc_ext_parking" = "OsmAnd Park Etme Eklentisi size park konumunuzu hatırlatır. OsmAnd Haritalar&Navigasyon uygulaması için bir eklentidir.\nZamandan bağımsız bir hatırlatıcı (sadece harita üzerinde bir işaretleyici) veya zaman aşımına uğradığında alarmlı zaman sınırlı bir hatırlatıcı seçin (harita üzerinde bir işaretleyici de içerir). Eklentiyi kullanmak için Eklentiler menüsünden etkinleştirin.";
+"plugin_nautical_descr" = "Bu eklenti, bot, yelken ve diğer su sporları türleri için deniz haritaları üretmesi için OsmAnd harita ve navigasyon uygulamasını zenginleştirir. 
+\n 
+\nOsmAnd için özel bir harita eklentisi, tüm deniz navigasyon işaretlerini ve harita sembollerini, hem kıyıdan uzak hem de yakın navigasyon için sağlayacaktır. Her gezinme işaretinin açıklaması, onları tanımlamak için gereken ayrıntıları ve anlamlarını (kategori, şekil, renk, sıra, referans vb.) sağlar. 
+\n 
+\nOsmAnd\'ın geleneksel harita tarzlarından birine geri dönmek için, bu eklentiyi tekrar devre dışı bırakın ya da \'Haritayıyapılandırın\' altında \'Harita tarzını\' istediğiniz gibi değiştirin.";
+"osmand_parking_plugin_description" = "Aracınızın nerede park edildiğini ve alternatif olarak ne kadar park süresi kaldığını kaydetmenizi sağlar.
+\n Konum ve saat hem gösterge tablosunda hem de harita widget\'ında görülebilir. Android takvimine bir alarm hatırlatıcısı eklenebilir.";
 "plugin_ski_descr" = "OsmAnd için bu eklenti, küresel yokuş aşağı kayak pistlerinin, kros kayağı pistlerinin, Alp kayak pistlerinin, teleferiklerin ve telesiyejlerin ayrıntılarını parmaklarınızın ucuna getirir. Yollar ve pistler, zorluk derecesine göre renk kodlu olarak gösterilir ve kar renginde bir kış manzarasına benzeyen özel bir \'Kış\' harita tarzında gösterilir. 
 \n 
 \nBu görünümü etkinleştirmek, kış koşullarında tüm peyzaj özelliklerini gösteren harita tarzını \'Kış ve kayak\' olarak değiştirir. Bu görünüm, burada tekrar devre dışı bırakılarak veya \'Harita yapılandır\' altındaki \'Harita tarzını\' istediğiniz gibi değiştirerek geri döndürülebilir.";
-"product_desc_ext_track_recording" = "İzlediğiniz yolları OsmAnd Yol kaydı eklentisini kullanarak elle kaydedin. İzlediğiniz yolu bir gpx dosyası olarak dışa aktarın, paylaşın ve hatta OpenStreetMap projesine katkıda bulunmak için kullanın. Koşucular, yürüyüşçüler ve izledikleri yolları kaydetmek isteyen herkes için kullanışlı bir araçtır.";
-"product_desc_ext_srtm" = "Bu eklenti, OsmAnd çevrim dışı haritalarında görüntülenebilen eş yükselti eğrileri ve tepe gölgelemesi sağlamaktadır. Eş yükselti eğrileri, alandaki yükseklikler hakkında bilgi sağlarken, tepe gölgeleri bunları görselleştirmektedir. Bu eklentiyi kullanarak dağ zirvelerinin adlarını ve arazinin belirli özelliklerini görün.\n\nKüresel veriler (70° kuzey ve 70° güney arasındaki) SRTM (Shuttle Radar Topography Mission) ve ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), NASA'nın Dünya Gözlem Sisteminin amiral uydusu olan Terra üzerindeki bir görüntüleme aracı, tarafından yapılan ölçümlere dayanmaktadır. ASTER NASA, Japonya Ekonomi, Ticaret ve Sanayi Bakanlığı (METI) , ve Japon Uzay Sistemleri (J-spacesystems) arasında ortak bir çalışmadır.";
+"record_plugin_description" = "Bu eklenti, haritaüzerindeki GPX kayıt widget\'ına elle dokunarak gezinme rotalarınızı kaydetme işlevini, ya da tüm navigasyon rotalarınızı bir GPX dosyasına otomatik olarak kaydetme özelliğini etkinleştirir. 
+\n 
+\nKaydedilen yollar arkadaşlarınızla paylaşılabilir veya OSM\'ye katkıda bulunmak için kullanılabilir. Atletler antremanlarını izlemek için kayıtlı yolları kullanabilir. Tur zamanı, ortalama hız vs. gibi bazı basit yol analizi doğrudan OsmAnd içinde yapılabilir, ve tabii ki daha sonra özel üçüncü parti araçlarla da analiz edilebilir.";
+"srtm_plugin_description" = "Bu eklenti, OsmAnd\'ın standart haritalarının üstünde hem eş yükselti eğrisi üst katmanının hem de (kabartma) tepe gölgesi katmanının gösterilmesini sağlamaktadır. Bu işlevsellik sporcular, uzun yürüyüşçüler, doğa yürüyüşçüleri ve manzaranın kabartma yapısıyla ilgilenen herkes tarafından çok takdir edilecektir. (Eş yükselti eğrisi ve/veya kabartma verilerinin ayrı olduğunu, eklentiyi etkinleştirdikten sonra ek indirmelerin mevcut olduğunu lütfen unutmayın.) 
+\n 
+\nKüresel veriler (70° kuzey ve 70° güney arasındaki) SRTM (Shuttle Radar Topography Mission) ve ASTER(Advanced Spaceborne Thermal Emission and Reflection Radiometer), NASA\'nın Dünya Gözlem Sisteminin amiral uydusu olan Terra üzerindeki bir görüntüleme aracı, tarafından yapılan ölçümlere dayanmaktadır. ASTER NASA, Japonya Ekonomi, Ticaret ve Sanayi Bakanlığı (METI) , ve Japon UzaySistemleri (J-spacesystems) arasında ortak bir çalışmadır.";
 "shared_string_hillshade" = "Tepe gölgesi";
 "plugin_popup_ski_desc" = "<b>Kayak haritası</b> tarzını açmak için lütfen <b>Harita Ayarları</b> > <b> Harita türü</b>'ne gidin";
 "plugin_popup_nautical_desc" = "Lütfen önce Deniz haritalarını indirin.\nArdından <b>Harita Ayarları</b> > <b> Harita türü</b>'ne gidin ve <b>Deniz</b> tarzını açın";
@@ -2020,10 +2029,12 @@
 "wiki_menu_download_descr" = "Wikipedia POI\'lerini haritada görüntülemek için ek haritalara ihtiyaç vardır.";
 "select_wikipedia_article_langs" = "Haritadaki Wikipedia makalelerinin dillerini seçin. Makaleyi okurken kullanılabilir herhangi bir dile geçiş yapın.";
 "shared_string_all_languages" = "Tüm diller";
-"product_desc_ext_openplacereviews" = "Restoranlar, oteller, müzeler ve ara noktalar gibi halka açık yerler hakkında fotoğrafları, incelemeleri ve bağlantıları açık veri olarak gönderin https://openplacereviews.org/data/.\n\nhttps://openplacereviews.org adresinde daha fazlasını okuyun";
+"open_place_reviews_plugin_description" = "OpenPlaceReviews projesine katkıda bulunmanızı sağlar. Fotoğraflar, yorumlar, restoranlar, oteller, müzeler ve yol noktaları gibi halka açık yerler hakkında bağlantılar gibi.
+\n
+\nNasıl katkıda bulunacağınıza ilişkin talimatları web sitemizde bulabilirsiniz - https://osmand.net/docs/user/plugins/openplacereviews";
 "product_desc_openplacereviews" = "Halka açık yerler hakkında fotoğraflar, incelemeler ve bağlantılar gönderin";
 "open_place_reviews" = "OpenPlaceReviews";
-"product_desc_ext_mapillary" = "Herkes için çevrim içi sokak düzeyinde fotoğraflar. Yeni yerler keşfedin, işbirliği yapın, dünyayı yakalayın.";
+"plugin_mapillary_descr" = "Sokak düzeyinde görüntüler sunar. Görüntülerin eksik olduğu yerlerde, başkalarının kullanabilmesi için kendiniz görüntü ekleyebilirsiniz. Mapillary katmanını etkinleştirmek için Haritayı yapılandır menüsünden \"Sokak düzeyinde görüntüleri\" açın.";
 "product_desc_mapillary" = "Herkes için çevrim içi sokak düzeyinde fotoğraflar";
 "no_waypoints_found" = "Uğranacak ara nokta bulunamadı";
 "replace_waypoint_confirmation" = "%@ ara noktasını değiştirmek istediğinize emin misiniz?";
@@ -2357,7 +2368,12 @@
 "backup_view_conflicts" = "Çakışmaları görüntüle";
 "plugin_popup_weather_title" = "Hava Durumu'nu Etkinleştir";
 "plugin_popup_weather_ask" = "Lütfen Hava Durumu eklentisini etkinleştirin";
-"product_desc_ext_weather" = "Hava durumu eklentisi şunları sağlar:\n- 5 katman... gün boyunca saatlik tahmin ve her 3 saatte bir 7 günlük tahmin\n- konum tabanlı widget'lar\n- sıcaklık / basınç eş değer eğrileri\nHava durumu verileri GFS tarafından sağlanmaktadır (https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast).";
+"weather_plugin_description" = "Sağladıkları:
+\n- 5 katman içeren 24 saatlik ve 7 günlük hava tahmini
+\n- konum tabanlı widget\'lar
+\n- sıcaklık/basınç eş değer eğrileri
+\n
+\nHava durumu verileri Global Forecast System (GFS, https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast) tarafından sağlanır.";
 "osmand_cloud_login_descr" = "Lütfen kayıt olduğunuz e-posta adresini girin. Bu adrese bir sonraki adım için tek seferlik bir parola gönderilecek.";
 "login_footer_email_part" = "support@osmand.net";
 "cloud_email_not_registered" = "Bu e-posta adresi OsmAnd Cloud için kayıtlı değil";
@@ -2487,10 +2503,9 @@
 "product_desc_development" = "Geliştirme ve hata ayıklama özellikleri için ayarlar";
 "wikipedia_and_wikivoyage_offline" = "Çevrim dışı Wikipedia ve Wikivoyage";
 "purchases_feature_desc_osmand_cloud" = "Tüm OsmAnd verilerini çevrim içi depolamak için OsmAnd Cloud edinin. Yeniden kurduktan sonra veri kaybı yaşamayın. Tüm bilgileri kolayca yedekleyin ve geri yükleyin.";
-"purchases_feature_desc_wikipedia" = "Seyahatinizdeçevrim dışı Vikipedi\'ye sahip olmak, ziyaret ettiğiniz yerler hakkında daha fazla bilgi edinmenize yardımcı olur. Çevrim dışı olarak kullanılabilir ve Vikipedi makalelerini doğrudan harita üzerinde ilgi çekici noktalarla (POI) ilişkili olarak gösterir. Seçtiğiniz bölge için Vikipedi haritalarını indirmeyi unutmayın.";
 "purchases_feature_desc_wikivoyage" = "Wikivoyage\'ı çevrim dışı keşfedin. Makaleler ülkelere ve bölgelere göre ayrılmıştır ve tüm dillerde kullanılabilir.";
 "unlimited_map_downloads" = "Sınırsız harita indirme";
-"product_desc_ext_development" = "Navigasyon simülasyonu, görselleştirme performansı veya sesli komutlar gibi geliştirme ve hata ayıklama özellikleri için ayarlar. Geliştiriciler için tasarlanmıştır, normal uygulama kullanımı için gerekli değildir.";
+"osmand_development_plugin_description" = "Navigasyon simülasyonu, görselleştirme performansı veya sesli komutlar gibi geliştirme ve hata ayıklama özellikleri için ayarlar. Geliştiriciler için tasarlanmıştır, normal uygulama kullanımı için gerekli değildir.";
 "terrain_maps" = "Arazi haritaları";
 "purchases_feature_desc_unlimited_map_download" = "Tüm kıtalar ve bölgelerin çevrim dışı haritaları için sınırsız indirme elde edin.";
 "osm_live_subscriptions" = "Abonelikler";
@@ -2691,4 +2706,6 @@
 "rendering_value_omit_name" = "Atla";
 "auth_failed" = "Yetkilendirme başarısız";
 "download_wikipedia_data" = "Wikipedia verilerini indir";
-
+"m" = "m";
+"kg" = "kg";
+"km" = "km";

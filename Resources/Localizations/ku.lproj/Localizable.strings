@@ -75,7 +75,7 @@
 "product_desc_africa" = "Nexşeya Afrikayê";
 "index_name_africa" = "Afrîka";
 //inapps
-"product_title_nautical" = "Nexşa behrê";
+"plugin_nautical_name" = "Nexşa behrê";
 "rendering_category_details" = "Berfireh";
 // Rendering categories
 "rendering_category_hide" = "Veşêre";
@@ -129,7 +129,7 @@
 "shared_string_actions" = "Çalakî";
 "plugins_menu_group" = "Lehikan";
 "weekly" = "Hefteyî";
-"monitoring_settings" = "Qeydkirina gerrê";
+"record_plugin_name" = "Qeydkirina gerrê";
 "tab_title_advanced" = "Pêş";
 "edit_filter_save_as_menu_item" = "Bi awayekî cuda qeyd bike";
 "working_days" = "Rojên Karê";
@@ -167,4 +167,5 @@
 "first_intermediate_dest_description" = "Rawetgeha pêşîn îlaweyî rotayê dike";
 "sort_by" = "Tesnîfkirina gorî";
 "are_you_sure" = "Te biryar da?";
-
+"km" = "km";
+"m" = "m";

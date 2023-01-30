@@ -80,4 +80,14 @@
     });
 }
 
+- (NSString *) getName
+{
+    return OALocalizedString(@"debugging_and_development");
+}
+
+- (NSString *) getDescription
+{
+    return OALocalizedString(@"osmand_development_plugin_description");
+}
+
 @end

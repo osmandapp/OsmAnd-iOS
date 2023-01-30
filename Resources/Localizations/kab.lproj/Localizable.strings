@@ -388,7 +388,7 @@
 "poi_remove_success" = "Yettwakkes";
 "shared_string_my_location" = "ideg";
 "get_started" = "Aha bdu tura";
-"monitoring_settings" = "Asekles";
+"record_plugin_name" = "Asekles";
 "mapillary_menu_title_tile_cache" = "Tuffirt";
 "day_off_label" = "off";
 "rendering_value_orange_name" = "Ačinawi";
@@ -768,4 +768,6 @@
 "add_point_after" = "Rnu tanqiḍt ɣer sdat";
 "quick_action_map_style_action" = "Rnu aɣanib n tkarḍa";
 "quick_action_navigation_voice_on" = "Taɣect:";
-
+"osmand_parking_plugin_name" = "Amḍiq n aniɣsur";
+"km" = "km";
+"m" = "m";

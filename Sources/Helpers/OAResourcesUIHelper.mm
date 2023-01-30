@@ -65,7 +65,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         case OsmAndResourceType::DepthMapRegion:
             return OALocalizedString(@"nautical_depth");
         case OsmAndResourceType::SrtmMapRegion:
-            return OALocalizedString(@"download_srtm_maps");
+            return OALocalizedString(@"srtm_plugin_name");
         case OsmAndResourceType::WikiMapRegion:
             return OALocalizedString(@"download_wikipedia_maps");
         case OsmAndResourceType::RoadMapRegion:
@@ -305,7 +305,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 
 + (NSString *)getSRTMFormatShort:(BOOL)isSRTMF
 {
-    return isSRTMF ? OALocalizedString(@"foot") : OALocalizedString(@"units_m");
+    return isSRTMF ? OALocalizedString(@"foot") : OALocalizedString(@"m");
 }
 
 + (NSString *)getSRTMFormatLong:(BOOL)isSRTMF

@@ -1548,28 +1548,34 @@
 "reminder_not_set_text" = "The reminder was not set since you are not allowed access to the Calendar";
 
 //inapps
-"product_title_nautical" = "Nautical map";
+"plugin_nautical_name" = "Tampilan peta laut";
 "product_desc_nautical" = "Peta vektor cocok untuk navigasi rute pelayaran";
-"product_desc_ext_nautical" = "Nyalakan untuk memperkaya peta Anda dengan informasi tentang rute pelayaran, lampu navigasi, zona bahaya, zona yang diperbolehkan atau tidak diperbolehkan untuk berlayar atau dok, dll. Untuk menggunakan unduh Peta bahari dan aktifkan jenis \"Peta laut\" dalam Konfigurasi peta. \n\nCara penggunaan";
-"product_title_parking" = "Parking Position";
+"plugin_nautical_descr" = "Memperkaya peta Anda dengan informasi tentang rute pelayaran, lampu navigasi, zona bahaya bahari, zona dengan batasan pelayaran atau perkaitan, dll. Untuk menggunakan, unduh peta Bahari masing-masing dan aktifkan gaya \"Peta laut\" dalam \"Konfigurasi peta\".
+\n
+\nBaca lebih lanjut di https://osmand.net/docs/user/plugins/nautical-charts .";
+"osmand_parking_plugin_name" = "Posisi parkir";
 "product_desc_parking" = "Lacak waktu parkir dan lokasi mobil Anda";
-"product_desc_ext_parking" = "Aktifkan untuk menetapkan titik di peta di mana mobil Anda ditinggal di jalan dan beri tahu kalender Anda ketika waktu parkir dimulai. Plubin membantu melacak waktu parkir dan lokasi mobil Anda. Untuk menaruh penanda pilih tempat di peta, lalu pergi ke Tindakan dan tekan \"Tambahkan parkir\".";
+"osmand_parking_plugin_description" = "Tandai di mana mobil Anda diparkir, dan beri tahu kalender Anda ketika meteran parkir akan kedaluwarsa. Untuk menaruh penanda, pilih sebuah tempat di peta, pergi ke \"Tindakan\", dan ketuk \"Tambahkan parkir\".";
 "plugin_ski_name" = "Tampilan peta ski";
 "product_desc_skimap" = "Peta jalur ski terkini dengan angkatan dan lempengan";
 "plugin_ski_descr" = "Dirancang untuk bernavigasi di area olahraga musim dingin. Lihat jalur dan lift ski, dan trek ski perbatasan negara, dengan garis berwarna yang menandakan nilai kerumitan. Untuk menggunakan, aktifkan plugin ini dan juga pergi ke \"Konfigurasi peta\" dan pilih gaya peta \"Musim dingin dan ski\".";
-"monitoring_settings" = "Perekaman perjalanan";
+"record_plugin_name" = "Perekaman perjalanan";
 "product_desc_track_recording" = "Activates the functionality to record and save your tracks";
-"product_desc_ext_track_recording" = "Record your tracks and save them manually using OsmAnd Track recording plugin. Export your track as a gpx file, share it or even use it to contribute to OpenStreetMap project.  A handy tool for runners, hikers and anyone interested in recording their tracks.";
+"record_plugin_description" = "Rekam perjalanan atau latihan Anda, dan analisa data tentang kecepatan, kenaikan dan keturunan yang terjadi, profil ketinggian, dll. Trek yang direkam dapat diarsip, dibagikan kepada orang lain, disunting, dan diproses setelah itu.
+\n
+\nBaca lebih lanjut di https://osmand.net/docs/user/plugins/trip-recording .";
 "osm_editing_plugin_name" = "Penyuntingan OpenStreetMap";
 "product_desc_osm_editing" = "Make changes to OpenStreetMap directly from OsmAnd";
 "osm_editing_plugin_description" = "Buat kontribusi ke OpenStreetMap, sebuah komunitas global yang membuat peta dunia dan menyediakan data sumber terbuka terbaru kepada pengguna siapa pun.
 \n
 \nAnda dapat menemukan petunjuk cara menyunting peta di situs web kami https://osmand.net/docs/user/plugins/osm-editing .";
 "product_desc_mapillary" = "Online street-level photos for everyone";
-"product_desc_ext_mapillary" = "Foto tingkat jalanan daring untuk semuanya. Jelajahi tempat, kolaborasi, tangkap dunia.";
+"plugin_mapillary_descr" = "Citra tampilan tingkat jalan. Anda dapat berkontribusi sendiri. Untuk melihat data yang sudah ada sebagai lapisan peta, aktifkan \"Citra tingkat jalan\" dalam menu \"Konfigurasi peta\".";
 "open_place_reviews" = "OpenPlaceReviews";
 "product_desc_openplacereviews" = "Send photos, reviews, and links about public places";
-"product_desc_ext_openplacereviews" = "Send photos, reviews, and links about public places such as restaurants, hotels, museums, and waypoints as open data https://openplacereviews.org/data/.\n\nRead more at https://openplacereviews.org";
+"open_place_reviews_plugin_description" = "Buat kontribusi ke proyek OpenPlaceReviews, seperti foto, ulasan, atau tautan untuk tempat publik seperti restoran, hotel, atau museum.
+\n
+\nCari petunjuk cara berkontribusi di situs web kami https://osmand.net/docs/user/plugins/openplacereviews .";
 "product_desc_africa" = "Unlimited map downloads for Africa";
 "product_desc_antarctica" = "Unlimited map downloads for Antarctica";
 "product_desc_africa_short" = "Africa region maps";
@@ -1591,16 +1597,20 @@
 "product_desc_asia_short" = "Asia region maps";
 "download_wikipedia_maps" = "Wiki";
 "product_desc_wiki" = "Wikipedia data";
-"product_desc_ext_wiki" = "Get information about points of interest from Wikipedia. It is your pocket offline guide - just enable Wikipedia plugin and enjoy articles about objects around you.";
+"purchases_feature_desc_wikipedia" = "Menyediakan semua artikel Wikipedia berkaitan dengan tempat secara luring, membantu Anda untuk mempelajari tentang tempat-tempat yang Anda kunjungi saat perjalanan Anda dengan ketukan sederhana di peta. Jangan lupa untuk mengunduh berkas peta Wikipedia untuk wilayah sendiri-sendiri.";
 "shared_string_all_languages" = "Semua bahasa";
 "select_wikipedia_article_langs" = "Pilih bahasa untuk artikel Wikipedia pada peta. Beralih ke bahasa apa pun yang tersedia saat membaca artikel.";
 "wiki_menu_download_descr" = "Peta tambahan diperlukan untuk melihat POI Wikipedia pada peta.";
 "some_articles_may_not_available_in_lang" = "Beberapa artikel Wikipedia mungkin tidak tersedia dalam bahasa Anda.";
 "available_languages" = "Available languages";
 "preferred_languages" = "Preferred languages";
-"download_srtm_maps" = "Garis kontur";
+"srtm_plugin_name" = "Garis kontur";
 "product_desc_srtm" = "Display of contour lines";
-"product_desc_ext_srtm" = "This plugin provides contour lines and hillshade, which can be displayed in OsmAnd offline maps. Contour lines provide the information about heights of the area while hillshade is their visualization. See the names of mountain peaks and specific features of terrain using this plugin.\n\nThe global data (between 70 degrees north and 70 degrees south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA's Earth Observing System. ASTER is a cooperative effort between NASA, Japan's Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
+"srtm_plugin_description" = "Informasi medan seperti garis kontur, bayangan bukit, dan tanjakan, membantu Anda untuk menyelidiki bentuk permukaan tanah dan relief, navigasi, dan lain-lain. Informasi topografis di atas peta dapat ditampilkan dengan bayangan lereng, garis kontur, dan/atau pewarnaan kecuraman.
+\n
+\nData berasal dari SRTM dan ASTER.
+\n
+\nBaca lebih lanjut di http://osmand.net/docs/user/plugins/contour-lines .";
 "wikivoyage_travel_guide" = "Panduan Perjalanan";
 "start_editing_card_image_text" = "Penduan perjalanan gratis semua orang bisa berkontribusi.";
 "wikivoyage_travel_guide_descr" = "Panduan tempat-tempat paling menarik di planet ini, di dalam OsmAnd, tanpa perlu tersambung ke internet.";
@@ -2362,7 +2372,6 @@
 "navigate_point_mgrs" = "MGRS";
 "route_line_use_map_style_width" = "Gunakan lebar bawaan gaya peta (%@).";
 "osm_live_banner_desc" = "Dapatkan unduhan peta tak terbatas, menambahkan pembaruan setiap minggu, setiap hari, atau bahkan setiap jam.";
-"purchases_feature_desc_wikipedia" = "Menyediakan semua artikel Wikipedia berkaitan dengan tempat secara luring, membantu Anda untuk mempelajari tentang tempat-tempat yang Anda kunjungi saat perjalanan Anda dengan ketukan sederhana di peta. Jangan lupa untuk mengunduh berkas peta Wikipedia untuk wilayah sendiri-sendiri.";
 "backup_error_subscription_was_used" = "Langganan atau promo digunakan oleh akun lain %@";
 "nautical_depth" = "Kedalaman laut";
 "terrain_maps" = "Peta medan";
@@ -2622,4 +2631,13 @@
 "auth_failed" = "Otorisasi gagal";
 "mgrs_format_descr" = "OsmAnd menggunakan MGRS, yang mirip dengan format UTM NATO.";
 "download_wikipedia_data" = "Unduh data Wikipedia";
-
+"km" = "km";
+"m" = "m";
+"kg" = "kg";
+"osmand_development_plugin_description" = "Menyediakan kemampuan untuk uji dan awakutu OsmAnd: simulasi rute navigasi, periksa performa perenderan layar, periksa performa, dll. Plugin ini tidak dibutuhkan untuk penggunaan aplikasi normal.";
+"weather_plugin_description" = "Menyediakan
+\n- prakiraan cuaca 24 jam dan 7 hari memberikan 5 lapisan
+\n- widget berbasis lokasi
+\n- garis isometrik suhu/tekanan
+\n
+\nData cuaca disediakan oleh Sistem Prakiraan Global (GFS, https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast ).";

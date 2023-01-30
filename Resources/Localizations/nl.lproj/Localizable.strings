@@ -547,20 +547,27 @@
 "cannot_access_calendar" = "Cannot access Calendar";
 "reminder_not_set_text" = "The reminder was not set since you are not allowed access to the Calendar";
 //inapps
-"product_title_nautical" = "Nautical map";
+"plugin_nautical_name" = "Nautische kaartweergave";
 "product_desc_nautical" = "Nautical map of all world";
-"product_desc_ext_nautical" = "OsmAnd Nautical Charts is a plugin for OsmAnd Maps & Navigation app. It is a detailed graphical representation of oceans, seas, coastal areas and rivers. The charts can contain various information like sailing routes, navigation lights, dangerous areas, areas where it's allowed or not allowed to sail or dock, etc.\n\nUsage Instructions: it is highly recommended to download nautical basemap in order to see the maps regardless of detailed map presence. To turn on Nautical charts, tap the map button and set map type to Nautical.\n\nNote: All professional sailors are obliged to have official nautical charts on their ships.\n\nOsmAnd Nautical charts are based on the data from OpenSeaMap project. While OpenSeaMap charts at the moment cannot compete with official nautical charts, they can be used by recreational sailors for orientation or route planning.";
-"product_title_parking" = "Parking Position";
+"plugin_nautical_descr" = "Toon nautische gegevens op de kaart voor varen, zeilen, en andere vormen van watersport. Download ook het kaartbestand \'Zeebakens (wereld)\' om deze plugin te gebruiken.
+\n
+\nDeze plug-in biedt alle nautische navigatietekens en kaartsymbolen voor de binnenvaart en voor navigatie bij de kust. In de beschrijving van elke navigatieteken staat de informatie die nodig is om hem te identificeren en over de betekenis (categorie, vorm, kleur, volgorde, referentie, enz.) ervan.
+\n
+\nOm weer de gewone kaart te zien kun je de plug-in uitschakelen of de \'Kaart stijl\' onder \'Kaart instellen\' veranderen.";
+"osmand_parking_plugin_name" = "Parkeerlocatie";
 "product_desc_parking" = "Let you easily memorize when the car was parked and how much time left if the parking is limited by time";
-"product_desc_ext_parking" = "OsmAnd Parking Plugin reminds you of your parking position. It is a plugin for OsmAnd Maps&Navigation app.\nChoose a time-independent reminder (only a marker on the map) or a time-limited one with alarm upon time expiration (includes also a marker on the map). To use the plugin, enable it in the Plugins menu.";
+"osmand_parking_plugin_description" = "Bewaart de locatie waar je auto geparkeerd staat en de resterende parkeertijd. 
+\nDe parkeerlocatie en resterende parkeertijd staan op het Osmand dashboard en in een widget op de kaart. Er kan een alarmsignaal in de Android kalender geplaatst worden ter herinnering.";
 "plugin_ski_name" = "Ski kaartweergave";
 "product_desc_skimap" = "Ski slopes for all ski resorts in the world";
 "plugin_ski_descr" = "Toon gedetailleerde informatie over slalompistes, langlaufroutes, alpine ski routes, kabelbanen en skiliften wereldwijd. Routes en pistes worden getoond in een kleurcode naar moeilijkheidsgraad, en afgebeeld in een speciale \'Winter en ski\' kaartstijl die lijkt op een besneeuwd winterlandschap. 
 \n 
 \nHet activeren van deze weergave verandert de kaartstijl in \'Winter en ski\', met alle kenmerken van het landschap onder winterse omstandigheden. Deze weergave kan worden teruggezet door het deactiveren van de plug-in, of door het veranderen van de \'Kaart stijl\' onder \'Kaart Instellen\'.";
-"monitoring_settings" = "Track opnemen";
+"record_plugin_name" = "Track opnemen";
 "product_desc_track_recording" = "Activates the functionality to record and save your tracks";
-"product_desc_ext_track_recording" = "Record your trips and save them manually using OsmAnd Trip recording plugin. Export your trip as a gpx file, share it or even use it to contribute to OpenStreetMap project.  A handy tool for runners, hikers and anyone interested in recording their trips.";
+"record_plugin_description" = "Registreer je afgelegde weg als track in een GPX-bestand. Gebruik de opnameknop op het kaartscherm, of laat alle reizen automatisch opslaan.
+\n
+\nOpgenomen tracks kunnen worden gedeeld met vrienden of worden gebruikt als OSM-bijdragen. Atleten kunnen opgenomen tracks gebruiken om hun trainingen te volgen. OsmAnd kan tracks analyseren (ronde tijden, gemiddelde snelheid enz.) en tracks kunnen natuurlijk ook met andere programma\'s worden geanalyseerd.";
 "product_title_trip_planning" = "Trip planning";
 "product_desc_trip_planning" = "Plan your trip, add waypoints, measure the distance to your destination using this plugin";
 "product_desc_ext_trip_planning" = "Trip planning plugin allows you to create your trip on the map, save it, measure the distance between points connected with straight lines, etc. Created for preliminary trip planning rather than thorough route building.";
@@ -576,10 +583,12 @@
 "product_desc_asia" = "Map of Asia";
 "download_wikipedia_maps" = "Wikipedia";
 "product_desc_wiki" = "Wikipedia data";
-"product_desc_ext_wiki" = "Get information about points of interest from Wikipedia. It is your pocket offline guide - just enable Wikipedia plugin and enjoy articles about objects around you.";
-"download_srtm_maps" = "Hoogtelijnen";
+"purchases_feature_desc_wikipedia" = "Verken Wikipedia offline. Artikels zijn verdeeld over de landen en regio\'s en beschikbaar in alle talen.";
+"srtm_plugin_name" = "Hoogtelijnen";
 "product_desc_srtm" = "Display of contour lines";
-"product_desc_ext_srtm" = "This plugin provides contour lines and hillshade, which can be displayed in OsmAnd offline maps. Contour lines provide the information about heights of the area while hillshade is their visualization. See the names of mountain peaks and specific features of terrain using this plugin.\n\nThe global data (between 70 degrees north and 70 degrees south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA's Earth Observing System. ASTER is a cooperative effort between NASA, Japan's Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
+"srtm_plugin_description" = "Deze plug-in toont hoogtelijnen en een reliëfschaduwlaag bovenop de normale OsmAnd-kaart. Uitermate praktisch voor sporters, wandelaars, trekkers, en iedereen die geïnteresseerd is in de hoogteverschillen van een landschap. 
+\n 
+\nDe wereldwijde gegevens (van 70° noorderbreedte tot 70° zuiderbreedte) zijn gebaseerd op metingen door SRTM(Shuttle Radar Topography Mission) en ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), een beeldvormend instrument aan boord van de Terra-satelliet, het vlaggenschip van NASA\'s Earth Observing System. ASTER is een samenwerkingsverband tussen NASA, het Japanse Ministerie van Economie, Handel en Industrie (METI), en Japan Space Systems (J-spacesystems).";
 "my_location" = "Mijn positie";
 "all_categories" = "All categories";
 "get_unlimited_access" = "Krijg onbeperkte toegang";
@@ -1524,7 +1533,7 @@
 "added_profiles" = "Profielen toegevoegd";
 "context_menu_item_edit_waypoint" = "GPX-routepunt bewerken";
 "gpxup_public" = "Openbaar";
-"product_desc_ext_mapillary" = "Online foto\'s op straatniveau voor iedereen. Ontdek plaatsen, werk samen, leg de wereld vast.";
+"plugin_mapillary_descr" = "Foto\'s op straatniveau voor iedereen. Ontdek plaatsen, werk samen, leg de wereld vast.";
 "open_place_reviews" = "OpenPlaceReviews";
 "suggested_maps_descr" = "Deze kaarten zijn nodig voor de plugin.";
 "app_restart_required" = "Herstarten van de applicatie is vereist om bepaalde instellingen toe te passen.";
@@ -1782,7 +1791,6 @@
 "explore_osmnad_plans_to_find_suitable" = "Verken de verschillende OsmAnd abonnementen om diegene te vinden die hebt best bij jouw past.";
 "redeem_promo_code" = "Promotiecode bemachtigen";
 "share_geo" = "geo:";
-"purchases_feature_desc_wikipedia" = "Verken Wikipedia offline. Artikels zijn verdeeld over de landen en regio\'s en beschikbaar in alle talen.";
 "purchases_feature_desc_pro_widgets" = "Krijg toegang tot OsmAnd Pro functies zoals routekleuringen en meer.";
 "wikipedia_and_wikivoyage_offline" = "Wikipedia en Wikivoyage offline";
 "copy_to_map_favorites" = "Kopiëren naar Favorieten";
@@ -1815,7 +1823,7 @@
 "purchases_feature_desc_nautical" = "Verkrijg toegang tot zeediepte informatie";
 "purchases_feature_desc_unlimited_map_download" = "Krijg onbeperkte offline kaart downloads voor alle continenten en regio\'s.";
 "purchases_feature_desc_terrain" = "Hoogtelijnen van het terrein, volledige reliëfschaduwkaarten met donkere tinten en hellingskaarten waarin kleuren worden gebruikt om toppen en laaglanden te onderscheiden.";
-"product_desc_ext_development" = "Deze plug-in toont de instellingen voor ontwikkel- en debug-opties, zoals routetest en -simulatie, schermweergave-prestaties, en spraaksturing. Deze instellingen zijn bedoeld voor programmeurs die OsmAnd willen verbeteren en zijn niet nodig voor normaal gebruik.";
+"osmand_development_plugin_description" = "Deze plug-in toont de instellingen voor ontwikkel- en debug-opties, zoals routetest en -simulatie, schermweergave-prestaties, en spraaksturing. Deze instellingen zijn bedoeld voor programmeurs die OsmAnd willen verbeteren en zijn niet nodig voor normaal gebruik.";
 "restore_purchases" = "Aankopen herstellen";
 "purchases_feature_desc_combined_wiki" = "Verken Wikipedia artikelen onderweg zonder een internet connectie. De offline gegevens zijn verdeeld over de landen en zijn beschikbaar in alle talen.";
 "altitude_ascent" = "Stijging";
@@ -2224,4 +2232,17 @@
 "download_wikipedia_data" = "Wikipedia-gegevens downloaden";
 "quick_action_map_style_action" = "Kaartstijl toevoegen";
 "mgrs_format_descr" = "OsmAnd gebruikt MGRS, die sterk lijkt op het UTM-NATO-formaat.";
-
+"km" = "km";
+"weather_plugin_description" = "Toont
+\n- 24-uurs en 7-daagse weersvoorspelling met 5 lagen
+\n- widgets afgesteld op locatie
+\n- hoogtelijnen van temperatuur / luchtdruk
+\n
+\nDe weersgegevens worden geleverd door de Global Forecast System (GFS, https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast ).";
+"kg" = "kg";
+"m" = "m";
+"open_place_reviews_plugin_description" = "OpenPlaceReviews is een gemeenschaps gestuurd project over openbare plaatsen zoals restaurants, hotels, musea, way-points. Het verzamelt alle openbare informatie over hen, zoals foto\'s, recensies, links naar andere systemen die OpenStreetMap, Wikipedia linken.
+\n
+\nAlle OpenPlaceReview-gegevens zijn open en voor iedereen beschikbaar: http://openplacereviews.org/data.
+\n
+\nU kunt meer lezen op: http://openplacereviews.org";

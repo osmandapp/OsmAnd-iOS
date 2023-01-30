@@ -151,7 +151,7 @@
     {
         NSUInteger index = [speedLimitsKm indexOfObject:@([_settings.speedLimitExceedKmh get:self.appMode])];
         if (index != NSNotFound)
-            value = [NSString stringWithFormat:@"%d %@", speedLimitsMiles[index].intValue, OALocalizedString(@"units_mph")];
+            value = [NSString stringWithFormat:@"%d %@", speedLimitsMiles[index].intValue, OALocalizedString(@"mile_per_hour")];
     }
     [thirdSection addObject:@{
         @"type" : [OASettingsTableViewCell getCellIdentifier],

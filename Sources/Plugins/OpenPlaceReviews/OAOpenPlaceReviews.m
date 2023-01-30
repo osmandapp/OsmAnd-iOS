@@ -8,6 +8,7 @@
 
 #import "OAOpenPlaceReviews.h"
 #import "OAProducts.h"
+#import "Localization.h"
 
 #define PLUGIN_ID kInAppId_Addon_OpenPlaceReview
 
@@ -21,6 +22,16 @@
 - (BOOL)isEnableByDefault
 {
     return YES;
+}
+
+- (NSString *) getName
+{
+    return OALocalizedString(@"open_place_reviews");
+}
+
+- (NSString *) getDescription
+{
+    return OALocalizedString(@"open_place_reviews_plugin_description");
 }
 
 @end

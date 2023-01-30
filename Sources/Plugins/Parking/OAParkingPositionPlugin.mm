@@ -306,4 +306,14 @@
     return @[OAParkingAction.TYPE];
 }
 
+- (NSString *) getName
+{
+    return OALocalizedString(@"osmand_parking_plugin_name");
+}
+
+- (NSString *) getDescription
+{
+    return OALocalizedString(@"osmand_parking_plugin_description");
+}
+
 @end

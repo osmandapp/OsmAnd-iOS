@@ -290,18 +290,22 @@
 "cannot_access_calendar" = "无法访问日历";
 "reminder_not_set_text" = "";
 //inapps
-"product_title_nautical" = "";
+"plugin_nautical_name" = "航海地图视图";
 "product_desc_nautical" = "";
-"product_desc_ext_nautical" = "";
-"product_title_parking" = "";
+"plugin_nautical_descr" = "打开以丰富您的地图，其中包含有关航行路线、导航灯、危险区域、允许或禁止航行或停靠的区域等信息。如要使用，下载航海地图并在配置地图中启用“航海地图”类型。
+\n
+\n如何使用 - https://osmand.net/docs/user/plugins/nautical-charts";
+"osmand_parking_plugin_name" = "停车位置";
 "product_desc_parking" = "";
-"product_desc_ext_parking" = "";
+"osmand_parking_plugin_description" = "启用此选项可在地图上设置您的汽车停在街上的点，并在停车时间开始时通知您的日历。插件有助于跟踪停车时间和汽车位置。要放置标记，请在地图上选择一个地点，然后转到“操作”并按“添加停车地点”。";
 "plugin_ski_name" = "滑雪地图浏览";
 "product_desc_skimap" = "";
 "plugin_ski_descr" = "设计用于在冬季运动地点导航。观看滑雪道、滑雪缆车标记和彩色线条，指示每条轨道的复杂性。要在启用后使用，请转到配置地图并选择“冬季和滑雪”地图类型。";
-"monitoring_settings" = "行程录制";
+"record_plugin_name" = "旅行记录";
 "product_desc_track_recording" = "";
-"product_desc_ext_track_recording" = "";
+"record_plugin_description" = "允许您记录、保存和分析您的训练或运动数据，例如速度、上升、下降或路线缓解，然后可以重复使用、改进、补充或与朋友分享。
+\n
+\n功能介绍 - https://osmand.net/docs/user/plugins/trip-recording";
 "product_title_trip_planning" = "";
 "product_desc_trip_planning" = "";
 "product_desc_ext_trip_planning" = "";
@@ -317,10 +321,12 @@
 "product_desc_asia" = "";
 "download_wikipedia_maps" = "维基百科";
 "product_desc_wiki" = "";
-"product_desc_ext_wiki" = "";
-"download_srtm_maps" = "等高线";
+"purchases_feature_desc_wikipedia" = "离线提供所有与地点相关的维基百科文章，帮助您通过在地图上的简单点击来了解您在旅途中访问的地点。不要忘记下载相应地区的维基百科地图文件。";
+"srtm_plugin_name" = "等高线";
 "product_desc_srtm" = "";
-"product_desc_ext_srtm" = "";
+"srtm_plugin_description" = "地形信息，例如等高线、山体阴影和坡度，可帮助您直观地评估地表的形状，考虑曲率、极端、陡峭、等高点等。地图上的地形信息可以通过坡度阴影、用于上下山的等高线以及坡度角偏离平面的颜色来表示。来自 SRTM 和 ASTER 的数据。
+\n
+\n如何使用 - http://osmand.net/docs/user/plugins/contour-lines";
 "my_location" = "我的位置";
 "all_categories" = "";
 "get_unlimited_access" = "获取无限访问权限";
@@ -1454,7 +1460,7 @@
 "shared_string_turn_off" = "关闭";
 "shared_string_navigation" = "导航";
 "download_map_dialog" = "下载地图对话框";
-"product_desc_ext_mapillary" = "供所有人使用的在线街景照片。在缺少图像的地方，您可以协作发现景点，捕捉世界之美。要启用 Mapillary 图层，请在配置地图菜单中打开“街道级图像”。";
+"plugin_mapillary_descr" = "街道级视图的影像。您也可以自己贡献。要将现有数据视为地图图层，请在“配置地图”菜单中打开“街道级影像”。";
 "shared_strings_all_regions" = "所有区域";
 "navigate_point_olc" = "开放地点编码(OLC)";
 "gpxup_trackable" = "可追踪";
@@ -1731,7 +1737,6 @@
 "shared_string_purchased" = "已购买";
 "routing_attr_allow_expert_description" = "极其困难的路线，有危险的障碍物和周边环境。";
 "ltr_or_rtl_combine_via_colon" = "%@：%@";
-"purchases_feature_desc_wikipedia" = "离线提供所有与地点相关的维基百科文章，帮助您通过在地图上的简单点击来了解您在旅途中访问的地点。不要忘记下载相应地区的维基百科地图文件。";
 "osm_live_banner_desc" = "获取无限的地图下载，添加每周，每日甚至每小时的更新。";
 "wikipedia_and_wikivoyage_offline" = "离线维基百科和维基导游";
 "routing_attr_allow_private_for_truck_description" = "允许卡车进入私人区域。";
@@ -1774,7 +1779,7 @@
 "debugging_and_development" = "OsmAnd开发";
 "routeInfo_horse_scale_name" = "马道难度";
 "daily_map_updates" = "每小时更新地图";
-"product_desc_ext_development" = "允许将OsmAnd配置为测试用，如模拟导航、查看屏幕渲染性能等。适用于开发人员，正常应用使用时不需要插件。";
+"osmand_development_plugin_description" = "开发和调试功能的设置，如导航模拟、渲染性能或语音提示。适用于开发人员，正常应用使用时不需要。";
 "manage_subscription" = "管理订阅";
 "copy_to_map_favorites" = "复制到收藏";
 "suggested_maps_descr" = "插件需要这些地图。";
@@ -2134,4 +2139,15 @@
 "mgrs_format_descr" = "OsmAnd使用MGRS，类似于UTM NATO格式。";
 "download_wikipedia_data" = "下载维基百科数据";
 "route_add_start_point" = "添加出发地";
-
+"km" = "千米";
+"weather_plugin_description" = "提供
+\n- 24小时和7天的天气预报，包括5个图层
+\n- 基于位置的小工具
+\n- 等温线/等压线
+\n
+\n天气数据由全球预测系统（GFS，https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast ）提供。";
+"open_place_reviews_plugin_description" = "为 OpenPlaceReviews 项目做出贡献，例如照片、评论或公共场所（如餐馆、酒店或博物馆）的链接。
+\n
+\n在我们的网站上查找有关如何做出贡献的说明 https://osmand.net/docs/user/plugins/openplacereviews。";
+"kg" = "千克";
+"m" = "米";

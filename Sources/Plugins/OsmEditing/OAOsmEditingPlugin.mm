@@ -200,4 +200,14 @@
     return @[OAAddPOIAction.TYPE, OAAddOSMBugAction.TYPE, OAShowHideOSMBugAction.TYPE, OAShowHideLocalOSMChanges.TYPE];
 }
 
+- (NSString *) getName
+{
+    return OALocalizedString(@"osm_editing_plugin_name");
+}
+
+- (NSString *) getDescription
+{
+    return OALocalizedString(@"osm_editing_plugin_description");
+}
+
 @end

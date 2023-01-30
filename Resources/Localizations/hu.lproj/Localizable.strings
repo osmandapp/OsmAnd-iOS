@@ -253,15 +253,15 @@
 "cannot_access_calendar" = "Nem lehet hozzáférni a naptárhoz";
 "reminder_not_set_text" = "Az emlékeztető nem lett beállítva, mivel nem engedélyezte a naptárhoz való hozzáférést";
 //inapps
-"product_title_nautical" = "Hajózási térkép";
+"plugin_nautical_name" = "Hajózásitérkép-nézet";
 "product_desc_nautical" = "A vektor térképek alkalmasak a hajózási útvonalak navigálásához";
-"product_title_parking" = "Parkolási hely";
+"osmand_parking_plugin_name" = "Parkolási pozíció";
 "fav_import_desc" = "Importálhatja a kedvenceit a GPX-fájlban lévő útvonalpontokként (gyakori GPS adatformátum)\n\nA favorites.gpx fájl megosztásához megnyithatja a fájlt a Dropboxból, e-mailből vagy bármilyen más forrásból - Használja a Megnyitás ebben funkciót.";
 "gpx_import_desc" = "GPX-fájlok (gyakori GPS adatformátum) Dropboxból, e-mailből vagy más forrásból való importálásához használja a \"Másolás az OsmAnd térképekhez\" opciót";
 "product_desc_parking" = "Kövesse nyomon autója parkolási idejét és helyét";
 "plugin_ski_name" = "Sítérképnézet";
 "product_desc_skimap" = "Naprakész sípályatérkép felvonókkal és lejtőkkel";
-"monitoring_settings" = "Utazás felvétele";
+"record_plugin_name" = "Utazás felvétele";
 "product_desc_track_recording" = "Rögzítse és mentse útjait GPX track-ként";
 "product_desc_africa" = "Korlátlan térképletöltés: Afrika";
 "product_desc_australia" = "Korlátlan térképletöltés: Ausztrália";
@@ -290,7 +290,7 @@
 "res_installing" = "Telepítés…";
 "download_wikipedia_maps" = "Wikipédia";
 "product_desc_wiki" = "Helyalapú Wikipédia szócikkek a térképen";
-"download_srtm_maps" = "Szintvonalak";
+"srtm_plugin_name" = "Szintvonalak";
 "product_desc_srtm" = "A földfelszín alakjának vizuális megjelenítése";
 "roads" = "Utak";
 "select_language" = "Nyelv kiválasztása";
@@ -1526,7 +1526,7 @@
 "shared_string_feet" = "láb";
 "open_place_reviews" = "OpenPlaceReviews";
 "contour_lines_hillshades_slope" = "Szintvonalak, domborzatárnyékolás, lejtésviszonyok";
-"product_desc_ext_mapillary" = "Utcaszintű nézeteket mutat. Ahol hiányoznak a képek, ott egyszerűen Ön is hozzáadhatja őket, hogy mások is felhasználhassák. A Mapillary réteg engedélyezéséhez kapcsolja be az \"Utcaszintű képanyag\" opciót a Térkép konfigurálása menüben.";
+"plugin_mapillary_descr" = "Utcaszintű képek. Ön is közreműködhet. A meglévő adatok térképrétegként való megjelenítéséhez kapcsolja be a „Térkép beállítása” menüben az „Utcaszintű képek” lehetőséget.";
 "navigate_point_olc" = "Open Location Code (OLC)";
 "route_between_points_warning_desc" = "Ezután a beállítás használatához igazítsa a nyomvonalat a legközelebbi úthoz az egyik navigációs profil segítségével.";
 "gpxup_public" = "Nyilvános";
@@ -1849,7 +1849,7 @@
 "purchases_feature_desc_combined_wiki" = "Fedezze fel a Wikipédia szócikkeit útközben, internetkapcsolat nélkül. Offline adatok országok szerinti bontásban, minden nyelven.";
 "restore_purchases" = "Vásárlások visszaállítása";
 "purchases_feature_desc_terrain" = "Szintvonalak, teljes domborzati térkép domborzatárnyékolással és lejtőtérképek színekkel a csúcsok és síkságok megjelenítésére.";
-"product_desc_ext_development" = "Lehetővé teszi az OsmAnd konfigurálását teszteléshez: navigációs útvonalak szimulálása, a képernyő megjelenítési teljesítményének ellenőrzése stb. A plugin nem szükséges az alkalmazás használatához.";
+"osmand_development_plugin_description" = "Funkciókat biztosít az OsmAnd teszteléshez: navigációs útvonalak szimulálása, a képernyőn való megjelenítés, a teljesítmény ellenőrzése stb. Ez a bővítmény az alkalmazás normál használatához nem szükséges.";
 "altitude_ascent" = "Emelkedő";
 "simulation_real_mode_title" = "Realisztikus szimuláció";
 "unlimited_map_downloads" = "Korlátlan térképletöltés";
@@ -2357,4 +2357,27 @@
 "save_track_to_gpx" = "Nyomvonal automatikus felvétele navigáció közben";
 "add_point_before" = "Pont hozzáadása előtte";
 "backup_error_subscription_was_expired_descr" = "Az OsmAnd Pro előfizetése lejárt; a biztonsági mentés használatához meg kell újítania. A felhőből továbbra is visszaállíthatja az adatokat.";
-
+"osmand_parking_plugin_description" = "Jelölje meg, hol parkol az autója, és kapjon értesítést naptárából a parkolási idő lejártáról. A jelölés elhelyezéséhez válasszon egy helyet a térképen, menjen a „Műveletek” menüpontra, és koppintson a „Parkolóhely hozzáadása” lehetőségre.";
+"record_plugin_description" = "Rögzítse utazásait vagy edzéseit és elemezze az adatokat a sebesség, az összesített emelkedések és ereszkedések, a magasság profil szempontjából. A rögzített nyomvonalak archiválhatók, megoszthatók ismerősökkel, szerkeszthetők és utólag feldolgozhatók.
+\n
+\nTovábbi tudnivalók: https://osmand.net/docs/user/plugins/trip-recording .";
+"weather_plugin_description" = "Funkciók:
+\n- 24 órás és 7 napos időjárás-előrejelzés 5 rétegben
+\n- helyalapú widgetek,
+\n- hőmérsékleti és légnyomásvonalak (izobárok).
+\n
+\nAz időjárási adatok szolgáltatója a Global Forecast System (GFS, https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast).";
+"srtm_plugin_description" = "A domborzati információk, mint például a szintvonalak, domborzatárnyékolás és a lejtők, segítenek vizuálisan felmérni a terep fekvését, a domborzatot, a hajózhatóságot és még sokminden mást. A topográfiai információk a térképen lejtőárnyékolással, szintvonalakkal és/vagy meredekségszínezéssel ábrázolhatók.
+\n
+\nAz alapul szolgáló adatok az SRTM és az ASTER adataiból származnak.
+\n
+\nTovábbi információ a http://osmand.net/docs/user/plugins/contour-lines oldalon található.";
+"m" = "m";
+"km" = "km";
+"kg" = "kg";
+"plugin_nautical_descr" = "Gazdagítsa a térképet a hajózási útvonalakra, navigációs lámpákra, hajózási veszélyzónákra, hajózási vagy kikötési korlátozásokkal érintett zónákra stb. vonatkozó információkkal. Használatához töltse le a megfelelő tengeri térképeket, és engedélyezze a „Térkép beállítása” menüpontban a „Hajózási térkép” stílust.
+\n
+\nTovábbi olvasnivalók a https://osmand.net/docs/user/plugins/nautical-charts oldalon.";
+"open_place_reviews_plugin_description" = "Hozzájárulhat az OpenPlaceReviews projekthez, például éttermekről, szállodákról vagy múzeumokról készült fényképekkel, véleményekkel vagy linkekkel.
+\n
+\nA közreműködés módjáról olvashat a https://osmand.net/docs/user/plugins/openplacereviews weboldalunkon.";

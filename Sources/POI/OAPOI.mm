@@ -31,7 +31,9 @@
 
 - (UIImage *)icon
 {
-    if (_type)
+    if (_mapIconName && _mapIconName.length > 0)
+        return [UIImage imageNamed:[OAUtilities drawablePath:[NSString stringWithFormat:@"mx_%@", _mapIconName]]];
+    else if (_type)
         return [_type icon];
     else
         return nil;
@@ -39,7 +41,9 @@
 
 - (NSString *)iconName
 {
-    if (_type)
+    if (_mapIconName && _mapIconName.length > 0)
+        return [OAUtilities drawablePath:[NSString stringWithFormat:@"mx_%@", _mapIconName]];
+    else if (_type)
         return [_type iconName];
     else
         return nil;

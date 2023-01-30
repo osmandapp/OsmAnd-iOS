@@ -2695,14 +2695,10 @@
 "download_wikipedia_data" = "Загрузка данных Википедии";
 "auth_failed" = "Авторизация не произошла";
 "kg" = "кг";
-""weather_plugin_description" = "Плагин погоды предоставляет:
-\n- 24-часовой и 7-дневный прогноз с 5 слоями " = "Плагин погоды предоставляет:
+"m" = "м";
+"km" = "км";
+"weather_plugin_description" = "Плагин погоды предоставляет:
 \n- 24-часовой и 7-дневный прогноз с 5 слоями ;
 \n- виджеты на основе местоположения;
 \n- изолинии температуры / давления.
 \nДанные о погоде предоставляются GFS https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast";
-\n- виджеты на основе местоположения;
-\n- изолинии температуры / давления.
-\nДанные о погоде предоставляются GFS https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast";
-"m" = "м";
-"km" = "км";

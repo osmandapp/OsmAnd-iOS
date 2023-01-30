@@ -1548,28 +1548,37 @@
 "reminder_not_set_text" = "The reminder was not set since you are not allowed access to the Calendar";
 
 //inapps
-"product_title_nautical" = "Nautical map";
+"plugin_nautical_name" = "Pregled pomorske karte";
 "product_desc_nautical" = "Nautical map of all world";
-"product_desc_ext_nautical" = "OsmAnd Nautical Charts is a plugin for OsmAnd Maps & Navigation app. It is a detailed graphical representation of oceans, seas, coastal areas and rivers. The charts can contain various information like sailing routes, navigation lights, dangerous areas, areas where it's allowed or not allowed to sail or dock, etc.\n\nUsage Instructions: it is highly recommended to download nautical basemap in order to see the maps regardless of detailed map presence. To turn on Nautical charts, tap the map button and set map type to Nautical.\n\nNote: All professional sailors are obliged to have official nautical charts on their ships.\n\nOsmAnd Nautical charts are based on the data from OpenSeaMap project. While OpenSeaMap charts at the moment cannot compete with official nautical charts, they can be used by recreational sailors for orientation or route planning.";
-"product_title_parking" = "Parking Position";
+"plugin_nautical_descr" = "Ovaj dodatak obogaćuje OsmAnd aplikaciju da prikazuje i pomorske karte za vožnju brodova, jedrenje i druge tipove vodenih sportova.
+\n
+\nFajl karte koja sadrži sve opšte pomorske znake je dostupna u vidu jednog preuzimanja i naziva se „Svetske pomorske karte“.
+\n
+\nPregled može da se vrati na stari njegovimisključivanjem ovde, ili izmenom „Načina prikaza karte“ pod „Podesite kartu“.";
+"osmand_parking_plugin_name" = "Položaj parkiranja";
 "product_desc_parking" = "Let you easily memorize when the car was parked and how much time left if the parking is limited by time";
-"product_desc_ext_parking" = "OsmAnd Parking Plugin reminds you of your parking position. It is a plugin for OsmAnd Maps&Navigation app.\nChoose a time-independent reminder (only a marker on the map) or a time-limited one with alarm upon time expiration (includes also a marker on the map). To use the plugin, enable it in the Plugins menu.";
+"osmand_parking_plugin_description" = "Omogućava zapis položaja ostavljenog vozila i koliko je vremena preostalo.
+\n I vreme i položaj su vidljivi na komandnoj tabli, a i kao spravica na karti. Može se dodati alarm na Android kalendaru.";
 "plugin_ski_name" = "Pregled skijaške karte";
 "product_desc_skimap" = "Ski slopes for all ski resorts in the world";
 "plugin_ski_descr" = "Ovaj OsmAnd dodatak Vam pod prste stavlja detalje globalnih ski padina, kros kantri trka, alpskih ski ruta,žičara i ski liftova. Rute i piste su prikazane obojene po težini i nalaze se u specijalnom stilu karte zvanom \"Zima i skijanje\" koja vizuelno i podseća na zimske pejzaže.
 \n
 \nAktiviranjem ovog pregleda će se promeniti stil karte na „Zima i skijanje“ koja će prikazivati sve odlike oblasti u zimskih uslovima. Ovo može da se vrati ili tako što se deaktivira ovaj dodatak ovde, ili tako što se promeni stil karte na „Podesi kartu“ na novi, željeni stil.";
-"monitoring_settings" = "Snimanje putovanja";
+"record_plugin_name" = "Snimanje putovanja";
 "product_desc_track_recording" = "Activates the functionality to record and save your tracks";
-"product_desc_ext_track_recording" = "Record your tracks and save them manually using OsmAnd Track recording plugin. Export your track as a gpx file, share it or even use it to contribute to OpenStreetMap project.  A handy tool for runners, hikers and anyone interested in recording their tracks.";
+"record_plugin_description" = "Ovaj dodatak aktivira funkcionalnost snimanja ičuvanja Vaših putanja kada se pritisne GPX spravica za beleženje na karti, a može i da automatski beleži sve Vaše puteve kojima ste navođeni u GPX fajl.
+\n
+\nSnimljene putanje se mogu deliti sa prijateljima ili slati na OSM. Sportisti mogu da koriste snimljene putanje da prate svoje treninge.Direktno u OsmAnd-u može da se radi osnovna analiza putanja, kao što su računanje brzine kruga, prosečna brzina itd. Naravno, putanje se dalje mogu analizirati u drugim specijalnim alatima za analizu.";
 "osm_editing_plugin_name" = "OpenStreetMap uređivanje";
 "product_desc_osm_editing" = "Make changes to OpenStreetMap directly from OsmAnd";
 "osm_editing_plugin_description" = "Doprinosite OSM-u, preko pravljenja i izmena OSM objekata tačaka od interesa, otvaranja ili komentarisanja OSM beleški, i prilaganjem snimljenih GPX fajlova iz OsmAnd-a tako što date Vaše korisničko ime i lozinku. OpenStreetMap.org je globalni projekat mapiranja sveta u javnom domenu, vođen zajednicom.";
 "product_desc_mapillary" = "Online street-level photos for everyone";
-"product_desc_ext_mapillary" = "Mrežne slike ulica za sve. Otkrijte mesta, sarađujte, osvojite svet.";
+"plugin_mapillary_descr" = "Mrežne slike ulica za sve. Otkrijte mesta, sarađujte, osvojite svet.";
 "open_place_reviews" = "OpenPlaceReviews";
 "product_desc_openplacereviews" = "Send photos, reviews, and links about public places";
-"product_desc_ext_openplacereviews" = "Send photos, reviews, and links about public places such as restaurants, hotels, museums, and waypoints as open data https://openplacereviews.org/data/.\n\nRead more at https://openplacereviews.org";
+"open_place_reviews_plugin_description" = "Šaljite fotografije, recenzije i veze o javnim mestima kao što su restorani, hoteli, muzeji i putne tačke kao otvorene podatke na https://openplacereviews.org/data/.
+\n
+\nPročitajte više na https://openplacereviews.org";
 "product_desc_africa" = "Unlimited map downloads for Africa";
 "product_desc_antarctica" = "Unlimited map downloads for Antarctica";
 "product_desc_africa_short" = "Africa region maps";
@@ -1591,16 +1600,18 @@
 "product_desc_asia_short" = "Asia region maps";
 "download_wikipedia_maps" = "Vikipedija";
 "product_desc_wiki" = "Wikipedia data";
-"product_desc_ext_wiki" = "Get information about points of interest from Wikipedia. It is your pocket offline guide - just enable Wikipedia plugin and enjoy articles about objects around you.";
+"purchases_feature_desc_wikipedia" = "Istražite Vikipediju van mreže. Članci su podeljeni po zemljama i regionima i dostupni na svim jezicima.";
 "shared_string_all_languages" = "Svi jezici";
 "select_wikipedia_article_langs" = "Odaberite jezik za Vikipedijinečlanke na karti. Prebacite na bilo koji drugi dostupni jezik dok čitate članak.";
 "wiki_menu_download_descr" = "Za prikaz Vikipedijinih tačaka od interesa su potrebne dodatne karte.";
 "some_articles_may_not_available_in_lang" = "Nekičlanci sa Vikipedija su možda dostupni na Vašem jeziku.";
 "available_languages" = "Available languages";
 "preferred_languages" = "Preferred languages";
-"download_srtm_maps" = "Izohipse";
+"srtm_plugin_name" = "Izohipse";
 "product_desc_srtm" = "Display of contour lines";
-"product_desc_ext_srtm" = "This plugin provides contour lines and hillshade, which can be displayed in OsmAnd offline maps. Contour lines provide the information about heights of the area while hillshade is their visualization. See the names of mountain peaks and specific features of terrain using this plugin.\n\nThe global data (between 70 degrees north and 70 degrees south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA's Earth Observing System. ASTER is a cooperative effort between NASA, Japan's Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
+"srtm_plugin_description" = "Ovaj dodatak omogućava prikaz sloja izohipsi i reljefa iznad standardnih OsmAnd karti. Ovu funkcionalnost će najviše znati da cene sportisti, planinari, trekeri i svako koga zanima reljefna struktura predela (primetite da su izohipse i reljefni podaci odvojeni, posebna skidanja za njih su dostupna kada se ovaj dodatak aktivira.)
+\n
+\nGlobalni podaci (između 70° severno i 70° južno) se bazirani na SRTM (Shuttle Radar Topography Mission) i ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), instrumentima za slikanje na vodećem NASA-inom satelitu Terra. ASTER je zajednički napor NASA-e, japanskog ministarstva ekonomije, trgovine i industrije (METI), i japanskog svemirskog sistema (J-spacesystems).";
 "wikivoyage_travel_guide" = "Turistički vodiči";
 "start_editing_card_image_text" = "Besplatni svetski turistički vodič koji svako može da uređuje.";
 "wikivoyage_travel_guide_descr" = "Vodiči za najzanimljivija mesta na planeti, unutar OsmAnd-a, bez potrebe za internet konekcijom.";
@@ -2389,7 +2400,6 @@
 "turn_arrows" = "Strelice skretanja";
 "private_access_routing_req" = "Vaše odredište se nalazi na privatnom posedu. Dozvoliti korišćenje privatnih puteva na ovom putovanju\?";
 "routing_attr_allow_private_for_truck_name" = "Dozvoljen privatni pristup (kamion)";
-"purchases_feature_desc_wikipedia" = "Istražite Vikipediju van mreže. Članci su podeljeni po zemljama i regionima i dostupni na svim jezicima.";
 "routeInfo_winter_ice_road_description" = "Obojite rutu ili liniju putanje prema njenoj zimskoj klasifikaciji puteva.";
 "make_backup_descr" = "Na ovom uređaju ima mnogo promena, napravite rezervnu kopiju ovih podataka kako ih ne biste izgubili.";
 "shared_string_includes" = "Uključuje";
@@ -2403,7 +2413,7 @@
 "cloud_email_already_registered" = "Ova adresa e-pošte je već registrovana.";
 "backup_error_user_is_not_registered" = "Nijedan korisnik nije registrovan sa tom adresom e-pošte";
 "set_up_backup" = "Podesi rezervnu kopiju";
-"product_desc_ext_development" = "Podešavanja za razvoj i otklanjanje grrešaka kao što su simulacija navođenja, performanse iscrtavanja ili glasovni upiti. Namenjeno programerima, nepotrebno prilikom normalnog korišćenja.";
+"osmand_development_plugin_description" = "Podešavanja za razvoj i otklanjanje grrešaka kao što su simulacija navođenja, performanse iscrtavanja ili glasovni upiti. Namenjeno programerima, nepotrebno prilikom normalnog korišćenja.";
 "simulation_constant_mode_title" = "Fiksna brzina";
 "make_backup" = "Napravite rezervnu kopiju";
 "simulation_preview_mode_desc" = "Brzina simulacijeće biti maksimalna na pravim deonicama i usporiti samo na raskrsnicama.";
@@ -2586,4 +2596,6 @@
 "purchases_feature_desc_pro_widgets" = "Dobavite pristup mogućnostima profesionalnog OsmAnd-a; bojenje puteva i još štošta.";
 "mgrs_format_descr" = "OsmAnd koristi MGRS, koji je sličan UTM NATO formatu.";
 "auth_failed" = "Provera ovlašćenja nije uspela";
-
+"m" = "m";
+"km" = "km";
+"kg" = "kg";

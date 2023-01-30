@@ -824,7 +824,7 @@ import Charts.Swift
         var mainUnitStr: String
         var mainUnitInMeters: Double
         if mc == EOAMetricsConstant.KILOMETERS_AND_METERS {
-            mainUnitStr = OAUtilities.getLocalizedString("units_km")
+            mainUnitStr = OAUtilities.getLocalizedString("km")
             mainUnitInMeters = GpxUIHelper.METERS_IN_KILOMETER
         } else if (mc == EOAMetricsConstant.NAUTICAL_MILES_AND_METERS || mc == EOAMetricsConstant.NAUTICAL_MILES_AND_FEET) {
             mainUnitStr = OAUtilities.getLocalizedString("nm")
@@ -856,7 +856,7 @@ import Charts.Swift
             granularity = 1;
             if (mc == EOAMetricsConstant.KILOMETERS_AND_METERS || mc == EOAMetricsConstant.MILES_AND_METERS) {
                 divX = 1;
-                mainUnitStr = OAUtilities.getLocalizedString("units_m")
+                mainUnitStr = OAUtilities.getLocalizedString("m")
             } else if (mc == EOAMetricsConstant.MILES_AND_FEET || mc == EOAMetricsConstant.NAUTICAL_MILES_AND_FEET) {
                 divX = Double(1.0 / GpxUIHelper.FEET_IN_ONE_METER)
                 mainUnitStr = OAUtilities.getLocalizedString("foot")
@@ -865,7 +865,7 @@ import Charts.Swift
                 mainUnitStr = OAUtilities.getLocalizedString("yard")
             } else {
                 divX = 1.0;
-                mainUnitStr = OAUtilities.getLocalizedString("units_m")
+                mainUnitStr = OAUtilities.getLocalizedString("m")
             }
         }
         

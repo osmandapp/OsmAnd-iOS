@@ -412,7 +412,7 @@
         if (hasSRTM && !_iapHelper.srtm.disabled)
         {
             [mapStyleSectionData addObject:@{
-                    @"name": OALocalizedString(@"download_srtm_maps"),
+                    @"name": OALocalizedString(@"srtm_plugin_name"),
                     @"image": @"ic_custom_contour_lines",
                     @"has_options": @YES,
                     @"type": [OASwitchTableViewCell getCellIdentifier],

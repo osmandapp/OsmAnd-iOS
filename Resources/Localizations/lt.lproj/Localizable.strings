@@ -1541,28 +1541,35 @@
 "reminder_not_set_text" = "The reminder was not set since you are not allowed access to the Calendar";
 
 //inapps
-"product_title_nautical" = "Nautical map";
+"plugin_nautical_name" = "Jūriniai žemėlapiai";
 "product_desc_nautical" = "Nautical map of all world";
-"product_desc_ext_nautical" = "OsmAnd Nautical Charts is a plugin for OsmAnd Maps & Navigation app. It is a detailed graphical representation of oceans, seas, coastal areas and rivers. The charts can contain various information like sailing routes, navigation lights, dangerous areas, areas where it's allowed or not allowed to sail or dock, etc.\n\nUsage Instructions: it is highly recommended to download nautical basemap in order to see the maps regardless of detailed map presence. To turn on Nautical charts, tap the map button and set map type to Nautical.\n\nNote: All professional sailors are obliged to have official nautical charts on their ships.\n\nOsmAnd Nautical charts are based on the data from OpenSeaMap project. While OpenSeaMap charts at the moment cannot compete with official nautical charts, they can be used by recreational sailors for orientation or route planning.";
-"product_title_parking" = "Parking Position";
+"plugin_nautical_descr" = "Šis įskiepis papildo OsmAnd programą jūrlapiais skirtais laivybai, būriavimui ir kitoms vandens sporto veikloms.
+\n
+\nSpecialus OsmAnd žemėlapio įskiepis pateiks visus navigacinius ženklus ir jūrlapių simbolius reikalingus jūros ir vidaus vandenų navigacijai. Kiekvieno navigacinio ženklo aprašymas pateiks informaciją apie jų reikšmę (kategorija, forma, spalva, eiliškumas, nuoroda ir kt.).
+\n
+\nNorėdami grįžti į įprastinių OsmAnd žemėlapių atvaizdavimą paprasčiausiai išjunkite šį įskiepį arba \'Žemėlapio nustatymų\' skirsnyje pakeiskite \'Žemėlapio stilių\' į pageidaujamą.";
+"osmand_parking_plugin_name" = "Statymo vieta";
 "product_desc_parking" = "Let you easily memorize when the car was parked and how much time left if the parking is limited by time";
-"product_desc_ext_parking" = "OsmAnd Parking Plugin reminds you of your parking position. It is a plugin for OsmAnd Maps&Navigation app.\nChoose a time-independent reminder (only a marker on the map) or a time-limited one with alarm upon time expiration (includes also a marker on the map). To use the plugin, enable it in the Plugins menu.";
+"osmand_parking_plugin_description" = "Šis įskiepis leidžia įsiminti vietą, kurioje palikote savo automobilį ir kiek laiko liko iki parkavimo pabaigos . 
+\nTiek vieta, tiek laikas yra matomi OsmAnd valdymo skydelyje bei skydelyje žemėlapyje rodinyje. Šis įskiepis taip pat gali įrašyti priminimą į Android kalendorių.";
 "plugin_ski_name" = "Slidinėjimo žemėlapiai";
 "product_desc_skimap" = "Ski slopes for all ski resorts in the world";
 "plugin_ski_descr" = "Šis įskiepis suteikia priėjimą prie pasaulio kalnų slidinėjimo trasų, lygumų slidinėjimo trasų, kalnų slidinėjimo maršrutų, keltuvų ir slidinėjimo keltuvų duomenų. Maršrutai ir trasos yra nuspalvintos spalvomis atsižvelgiant į jų sudėtingumą bei atvaizduojami specialiu \"Žiemos\" žemėlapio stiliumi, kuris naudoja sniego spalvos žiemos peizažą. 
 \n
 \nAktyvavus šį žemėlapio stilių, kraštovaizdis atvaizduojamas taip, kaip jis atrodytų žiemą. Šis rodinys gali būti išjungtas arba deaktyvuojant jį arba pakeitus \"Žemėlapio stilių\" meniu \"Žemėlapio nustatymuose\", į norimą.";
-"monitoring_settings" = "Kelionės įrašymas";
+"record_plugin_name" = "Įrašyti savo keliones";
 "product_desc_track_recording" = "Activates the functionality to record and save your tracks";
-"product_desc_ext_track_recording" = "Record your tracks and save them manually using OsmAnd Track recording plugin. Export your track as a gpx file, share it or even use it to contribute to OpenStreetMap project.  A handy tool for runners, hikers and anyone interested in recording their tracks.";
+"record_plugin_description" = "Išsaugo kelionės istoriją vieno mygtuko ekrane paspaudimu bei pateikia nustatymus, leidžiančius kelionės istoriją išsaugoti GPX faile.
+\n
+\nĮrašytais maršrutais galima pasidalinti su draugais arba pridėti kaip kontribuciją OSM. Sportininkai gali naudoti įrašytus maršrutus norėdami stebėti savo treniruotes. Elementarią analizę, tokią kaip ratų laikai, vidutinis greitis, ir t.t., galima atlikti tiesiai OsmAnd bei, be abejo, vėliau išanalizuoti su trečių šalių progamine įranga.";
 "osm_editing_plugin_name" = "OSM redagavimas";
 "product_desc_osm_editing" = "Make changes to OpenStreetMap directly from OsmAnd";
 "osm_editing_plugin_description" = "Šis įskiepis leidžia kurti ar redaguoti LV, užregistruoti ar komentuoti OSM Pastabas, dalintis įrašytais GPX failais. OSM yra atviros visuomenės valdomas, viešas žemėlapio žymėjimo projektas. Dėl smulkesnės informacijos prašome kreiptis į https://openstreetmap.org. Aktyvus dalyvavimas yra labai vertinamas, prisidėti galite tiesiai OsmAnd, jei programoje nurodysite savo prisijungimo duomenis.";
 "product_desc_mapillary" = "Online street-level photos for everyone";
-"product_desc_ext_mapillary" = "Internetinės gatvės nuotraukos visiems. Atraskite vietas, bendradarbiaukite, fotografuokite pasaulį.";
+"plugin_mapillary_descr" = "Internetinės gatvės nuotraukos visiems. Atraskite vietas, bendradarbiaukite, fotografuokite pasaulį.";
 "open_place_reviews" = "OpenPlaceReviews";
 "product_desc_openplacereviews" = "Send photos, reviews, and links about public places";
-"product_desc_ext_openplacereviews" = "Send photos, reviews, and links about public places such as restaurants, hotels, museums, and waypoints as open data https://openplacereviews.org/data/.\n\nRead more at https://openplacereviews.org";
+"open_place_reviews_plugin_description" = "Send photos, reviews, and links about public places such as restaurants, hotels, museums, and waypoints as open data https://openplacereviews.org/data/.\n\nRead more at https://openplacereviews.org";
 "product_desc_africa" = "Unlimited map downloads for Africa";
 "product_desc_antarctica" = "Unlimited map downloads for Antarctica";
 "product_desc_africa_short" = "Africa region maps";
@@ -1584,16 +1591,18 @@
 "product_desc_asia_short" = "Asia region maps";
 "download_wikipedia_maps" = "Vikipedija";
 "product_desc_wiki" = "Wikipedia data";
-"product_desc_ext_wiki" = "Get information about points of interest from Wikipedia. It is your pocket offline guide - just enable Wikipedia plugin and enjoy articles about objects around you.";
+"purchases_feature_desc_wikipedia" = "Naršykite Wikipedia neprisijungę prie interneto. Straipsniai suskirstyti pagal šalis ir regionus ir pateikiami visomis kalbomis.";
 "shared_string_all_languages" = "All languages";
 "select_wikipedia_article_langs" = "Select the languages in which Wikipedia articles will appear on the map. You can switch between all available languages while reading the article.";
 "wiki_menu_download_descr" = "Additional maps are needed to view Wikipedia POIs on the map.";
 "some_articles_may_not_available_in_lang" = "Some Wikipedia articles may not be available in your language.";
 "available_languages" = "Available languages";
 "preferred_languages" = "Preferred languages";
-"download_srtm_maps" = "SRTMžemėlapiai";
+"srtm_plugin_name" = "Kontūrinės linijos";
 "product_desc_srtm" = "Display of contour lines";
-"product_desc_ext_srtm" = "This plugin provides contour lines and hillshade, which can be displayed in OsmAnd offline maps. Contour lines provide the information about heights of the area while hillshade is their visualization. See the names of mountain peaks and specific features of terrain using this plugin.\n\nThe global data (between 70 degrees north and 70 degrees south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA's Earth Observing System. ASTER is a cooperative effort between NASA, Japan's Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
+"srtm_plugin_description" = "Šis įskiepis įgalina tiek aukščio kontūrų linijų tiek ir (reljefo) kalnų šešėlių sluoksnių atvaizdavimą ant OsmAnd žemėlapių. Ši funkcija gali būti naudinga atletams, keliautojams ir visiems, kas aktuali reljefo struktūra. (Atkreipkite dėmesį į tai kad kontūrų linijos ir/arba reljefo duomenys yra atskiri, papildomi parsiuntimai prieinami aktyvavus įskiepį)
+\n
+\nPasaulio duomenys (tarp 70 laipsnių šiaurės ir 70 laipsnių pietų) yra paremti SRTM (Shuttle Radar Topography Mission) ir ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), vaizdo fiksavimo instrumento Terra, NASA Earth Observing System palydovo, matavimais. ASTER yra bendradarbiavimo tarp NASA, Japonijos ekonomikos, prekybos ir industrijos (METI) ministerijos ir Japan Space Systems (J-spacesystems) projektas.";
 "wikivoyage_travel_guide" = "Kelionių vadovas";
 "start_editing_card_image_text" = "Atviras pasaulinis kelionių vadovas, kurie kiekvienas gali redaguoti.";
 "wikivoyage_travel_guide_descr" = "Maršrutai į pačius įdomiausius objektus planetoje, panaudojant OsmAnd nereikalingas interneto ryšis.";
@@ -2263,7 +2272,7 @@
 "redeem_promo_code" = "Išgryninti promo kodą";
 "shared_string_capacity" = "Talpa";
 "altitude_ascent" = "Sukilimas";
-"product_desc_ext_development" = "Įskiepis rodo nustatymus kūrimo ir klaidų paieškos funkcionalumui: patikrinti arba imituoti navigaciją, ekrano generavimo efektyvumo, balso pranešimų patikrinimui. Šie nustatymui akrtualūs programuotojui ir nėra įdomūs eiliniam vartotojui.";
+"osmand_development_plugin_description" = "Įskiepis rodo nustatymus kūrimo ir klaidų paieškos funkcionalumui: patikrinti arba imituoti navigaciją, ekrano generavimo efektyvumo, balso pranešimų patikrinimui. Šie nustatymui akrtualūs programuotojui ir nėra įdomūs eiliniam vartotojui.";
 "osm_live_banner_desc" = "Gaukite neribotą kiekį žemėlapių parsiuntimų ir atnaujinimus dažniau nei kas mėnesį: kas savaitę, kas dieną ar kas valandą.";
 "complete_purchase" = "Užbaigti pirkimą";
 "shared_string_includes" = "Apima";
@@ -2277,7 +2286,6 @@
 "share_geo" = "geo:";
 "private_access_routing_req" = "Jūsų kelionės tikslas yra privačioje teritorijoje. Ar leisti keliauti privačiais keliais šioje kelionėje\?";
 "wikipedia_and_wikivoyage_offline" = "Wikipedia ir Wikivoyage be interneto";
-"purchases_feature_desc_wikipedia" = "Naršykite Wikipedia neprisijungę prie interneto. Straipsniai suskirstyti pagal šalis ir regionus ir pateikiami visomis kalbomis.";
 "nautical_depth" = "Jūrinis gylis";
 "cubic_m" = "m³";
 "terrain_maps" = "Reljefožemėlapiai";
@@ -2474,4 +2482,5 @@
 "offline_edition_descr" = "Visada redaguoti neprisijungus prie interneto.";
 "backup_delete_types_descr" = "Ar norite iš debesies ištrinti neįgalintų tipų duomenis\?";
 "download_wikipedia_data" = "Atsisiųsti Vikipedijos duomenys";
-
+"km" = "km";
+"m" = "m";

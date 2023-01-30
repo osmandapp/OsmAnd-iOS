@@ -1546,28 +1546,34 @@
 "reminder_not_set_text" = "The reminder was not set since you are not allowed access to the Calendar";
 
 //inapps
-"product_title_nautical" = "Nautical map";
+"plugin_nautical_name" = "Mara map-vido";
 "product_desc_nautical" = "Nautical map of all world";
-"product_desc_ext_nautical" = "OsmAnd Nautical Charts is a plugin for OsmAnd Maps & Navigation app. It is a detailed graphical representation of oceans, seas, coastal areas and rivers. The charts can contain various information like sailing routes, navigation lights, dangerous areas, areas where it's allowed or not allowed to sail or dock, etc.\n\nUsage Instructions: it is highly recommended to download nautical basemap in order to see the maps regardless of detailed map presence. To turn on Nautical charts, tap the map button and set map type to Nautical.\n\nNote: All professional sailors are obliged to have official nautical charts on their ships.\n\nOsmAnd Nautical charts are based on the data from OpenSeaMap project. While OpenSeaMap charts at the moment cannot compete with official nautical charts, they can be used by recreational sailors for orientation or route planning.";
-"product_title_parking" = "Parking Position";
+"plugin_nautical_descr" = "Pliriĉigas la mapon per naŭtikaj kursoj, navigadaj lumoj, danĝerejoj, zonoj (mal)permesataj por navigi, alligi akvoveturilon, ktp. Por uzi la kromprogramon, elŝutu marajn mapojn kaj aktivigu la map-aspekton “Marnavigada” per la menuo “Agordi mapon”.
+\n
+\nPliaj informoj: https://osmand.net/docs/user/plugins/nautical-charts.";
+"osmand_parking_plugin_name" = "Parkumeja pozicio";
 "product_desc_parking" = "Let you easily memorize when the car was parked and how much time left if the parking is limited by time";
-"product_desc_ext_parking" = "OsmAnd Parking Plugin reminds you of your parking position. It is a plugin for OsmAnd Maps&Navigation app.\nChoose a time-independent reminder (only a marker on the map) or a time-limited one with alarm upon time expiration (includes also a marker on the map). To use the plugin, enable it in the Plugins menu.";
+"osmand_parking_plugin_description" = "Ebligas marki kie vi parkumis vian aŭtomobilon kaj aldoni sciigon al via kalendaro pri parkumada templimo. Por aldoni markon, frapetadu lokon sur la mapo kaj elektu “Marki kiel pozicion de parkumado” el la menuo “Agoj”.";
 "plugin_ski_name" = "Skiada map-vido";
 "product_desc_skimap" = "Ski slopes for all ski resorts in the world";
 "plugin_ski_descr" = "Projektita por navigi en vintraj sportejoj. Vidigas descendejojn, skiliftojn kaj skikuradajn kursojn kiel kolorajn liniojn, kiuj indikas malfacilecon. Por uzi la kromprogramon, aktivigu la map-aspekton“Vintro kaj skiado” en la menuo “Agordi mapon”.";
-"monitoring_settings" = "Registrado de spuro";
+"record_plugin_name" = "Spur-registrilo";
 "product_desc_track_recording" = "Activates the functionality to record and save your tracks";
-"product_desc_ext_track_recording" = "Record your tracks and save them manually using OsmAnd Track recording plugin. Export your track as a gpx file, share it or even use it to contribute to OpenStreetMap project.  A handy tool for runners, hikers and anyone interested in recording their tracks.";
+"record_plugin_description" = "Ebligas registri viajn vojaĝojn aŭ trejnadojn kaj analizi ilin konsiderante rapidon, tutajn suprenirojn kaj malsuprenirojn, profilon de altitudo kaj pli. Registritajn spurojn oni povas arĥivigi, kunhavigi, redakti kaj pritrakti.
+\n
+\nPliaj informoj: https://osmand.net/docs/user/plugins/trip-recording.";
 "osm_editing_plugin_name" = "OSM-redaktilo";
 "product_desc_osm_editing" = "Make changes to OpenStreetMap directly from OsmAnd";
 "osm_editing_plugin_description" = "Ebligas kontribui al OpenStreetMap– tutmonda komunumo, kies celo estas prizorgi detalan mapon de la mondo kaj liveri aktualajn malfermajn datumojn por ĉiu uzanto.
 \n
 \nPliaj informoj pri kiel redakti la mapon OSM: https://osmand.net/docs/user/plugins/osm-editing.";
 "product_desc_mapillary" = "Online street-level photos for everyone";
-"product_desc_ext_mapillary" = "Enretaj strat-nivelaj fotoj porĉiuj. Esplori lokojn, kunlabori kaj foti la mondon.";
+"plugin_mapillary_descr" = "Liveras strat-nivelan fotaron. Vi ankaŭ povas kontribui per aldoni fotojn al la projekto. Por vidigi la ekzistajn datumojn kiel map-tavolon, aktivigu la agordon “Start-nivela fotaro” en la menuo “Agordi mapon”.";
 "open_place_reviews" = "OpenPlaceReviews";
 "product_desc_openplacereviews" = "Send photos, reviews, and links about public places";
-"product_desc_ext_openplacereviews" = "Send photos, reviews, and links about public places such as restaurants, hotels, museums, and waypoints as open data https://openplacereviews.org/data/.\n\nRead more at https://openplacereviews.org";
+"open_place_reviews_plugin_description" = "Ebligas kontribui al la projekto OpenPlaceReviews– per aldoni fotojn, opiniojn kaj ligilojn pri publikaj ejoj: restoracioj, hoteloj, muzeoj kaj pli.
+\n
+\nInstrukcioj (en la angla) pri kiel kontribui troviĝas sur la retpaĝo https://osmand.net/docs/user/plugins/openplacereviews.";
 "product_desc_africa" = "Unlimited map downloads for Africa";
 "product_desc_antarctica" = "Unlimited map downloads for Antarctica";
 "product_desc_africa_short" = "Africa region maps";
@@ -1589,16 +1595,20 @@
 "product_desc_asia_short" = "Asia region maps";
 "download_wikipedia_maps" = "Vikipedio";
 "product_desc_wiki" = "Wikipedia data";
-"product_desc_ext_wiki" = "Get information about points of interest from Wikipedia. It is your pocket offline guide - just enable Wikipedia plugin and enjoy articles about objects around you.";
+"purchases_feature_desc_wikipedia" = "Malkonekta aliro alĉiuj artikoloj de Vikipedio pri lokoj por ke vi povu sciiĝi pri la vizitataj ejoj per simple frapi la mapon. Ne forgesu elŝuti Vikipediajn mapojn de la dezirataj lokoj antaŭ komenci vojaĝon.";
 "shared_string_all_languages" = "Ĉiuj lingvoj";
 "select_wikipedia_article_langs" = "Elektu lingvojn por artikoloj de Vikipedio montrataj sur la mapo. Eblos baskuli interĉiuj disponeblaj lingvoj dum legi artikolon.";
 "wiki_menu_download_descr" = "Kromaj mapoj estas necesaj por vidigi punktojn de Vikipedio sur la mapo.";
 "some_articles_may_not_available_in_lang" = "Iuj artikoloj de Vikipedio povas ne esti disponeblaj en via lingvo.";
 "available_languages" = "Available languages";
 "preferred_languages" = "Preferred languages";
-"download_srtm_maps" = "Nivelkurboj";
+"srtm_plugin_name" = "Nivelkurboj";
 "product_desc_srtm" = "Display of contour lines";
-"product_desc_ext_srtm" = "This plugin provides contour lines and hillshade, which can be displayed in OsmAnd offline maps. Contour lines provide the information about heights of the area while hillshade is their visualization. See the names of mountain peaks and specific features of terrain using this plugin.\n\nThe global data (between 70 degrees north and 70 degrees south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA's Earth Observing System. ASTER is a cooperative effort between NASA, Japan's Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
+"srtm_plugin_description" = "Informoj pri tereno– kiel nivelkurboj, nivelombrumo kaj dekliveco – helpas al vi perokule taksi formon de la tereno, ĝian navigeblecon kaj pli. Topografiaj informoj povas esti reprezentataj sur la mapo per vidigi nivelkurbojn (nivelliniojn), ombrumi malebenaĵojn (reliefo) aŭ per vidigi angulon de dekliveco uzante kolorojn.
+\n
+\nDatumoj devenas de la projektoj SRTM ASTER.
+\n
+\nPliaj informoj: http://osmand.net/docs/user/plugins/contour-lines.";
 "wikivoyage_travel_guide" = "Vojaĝaj gvidiloj";
 "start_editing_card_image_text" = "Senpaga/libera vojaĝ-gvidilo redaktebla de ĉiu.";
 "wikivoyage_travel_guide_descr" = "Gvidlibroj de Vikivojaĝo pri la plej interesaj lokoj de la mondo, legeblaj en OsmAnd seninterrete.";
@@ -2322,7 +2332,6 @@
 "simulation_constant_mode_desc" = "La simulado estos farita kun la konstanta elektita rapido.";
 "purchases_feature_desc_unlimited_map_download" = "Akiru aliron al senlimaj elŝutoj de malkonektaj mapoj de ĉiuj kontinentoj kaj regionoj.";
 "toast_empty_name_error" = "Sennoma ejo";
-"purchases_feature_desc_wikipedia" = "Malkonekta aliro alĉiuj artikoloj de Vikipedio pri lokoj por ke vi povu sciiĝi pri la vizitataj ejoj per simple frapi la mapon. Ne forgesu elŝuti Vikipediajn mapojn de la dezirataj lokoj antaŭ komenci vojaĝon.";
 "continue_with" = "Pluigi kun %@";
 "purchases_feature_desc_terrain" = "Montrado de montpintoj, altaĵoj kaj malaltaĵoj per nivelkurboj, mapoj de nivelombrumo (tonoj de grizo) kaj mapoj de dekliveco (koloraj).";
 "shared_string_includes" = "Enhavas";
@@ -2357,7 +2366,7 @@
 "purchases_feature_desc_wikivoyage" = "Esploru Vikivojaĝon malkonekte. Artikoloj estas dividitaj laŭ landoj/regionoj kaj estas disponeblaj en ĉiuj lingvoj.";
 "routing_attr_allow_private_for_truck_description" = "Permesi aliron al privataj areoj por kamionoj.";
 "rendering_attr_showFunicularRoutes_name" = "Funikularaj kursoj";
-"product_desc_ext_development" = "Agordoj pri evoluigo kaj senerarigado de OsmAnd: simuladi kurson, efikeco de ekran‑bildigado, voĉaj anoncoj. Destinitaj por programistoj, ne bezonataj por kutimaj uzantoj.";
+"osmand_development_plugin_description" = "Liveras eblojn por testi kaj senerarigi OsmAnd: simuli navigajn kursojn, kontroli map-bildigadon, kontroli rendimenton kaj pli. La kromprogramo ne estas bezona por kutima uzado de la aplikaĵo.";
 "routeInfo_horse_scale_description" = "Bildigi vojojn laŭ facilo de ĉevalaj vojoj";
 "redeem_promo_code" = "Uzi reklamkodon";
 "rendering_attr_showMonorailRoutes_name" = "Unurel-fervojaj kursoj";
@@ -2619,4 +2628,12 @@
 "mgrs_format_descr" = "OsmAnd uzas MGRS, kiu estas simila al la formo UTMNATO.";
 "auth_failed" = "Rajtigo malsukcesis";
 "offline_edition_descr" = "Se malkonekta redaktado estasŝaltita, ŝanĝoj estos unua konservitaj loke kaj alŝutitaj al OSM je peto; alie ŝanĝoj estos alŝutitaj tuj.";
-
+"kg" = "kg";
+"m" = "m";
+"weather_plugin_description" = "Liveras:
+\n• 24-horan 7-tagan veterprognozojn kun 5 tavoloj
+\n • fenestraĵojn agordiĝantajn laŭ loko
+\n • egal-temperatur-liniojn kaj egal-aerprem-liniojn.
+\n
+\nDatumoj estas liverataj de «Global Forecast System» (GFS, https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast ).";
+"km" = "km";

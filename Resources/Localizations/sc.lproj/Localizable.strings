@@ -268,13 +268,13 @@
 "cannot_access_calendar" = "Impossìbile atzèdere a su Calendàriu";
 "reminder_not_set_text" = "Su promemòria no est istadu impostadu proite no est istadu possìbile atzedere a su Calendàriu";
 //inapps
-"product_title_nautical" = "Mapa nàutica";
+"plugin_nautical_name" = "Vista mapa nàutica";
 "product_desc_nautical" = "Mapas vetoriales apropriadas a sa navigatzione de rutas de nàvigu";
-"product_title_parking" = "Positzione de parchègiu";
+"osmand_parking_plugin_name" = "Positzione parchègiu";
 "product_desc_parking" = "Ammenta·ti su tempus de parchègiu e sa positzione de sa màchina tua";
 "plugin_ski_name" = "Vista mapa iscì";
 "product_desc_skimap" = "Pistas de iscì agiornadas cun funivias e pendèntzias";
-"monitoring_settings" = "Registratzione biàgios";
+"record_plugin_name" = "Registratzione biàgios";
 "product_desc_track_recording" = "Registra e sarva sos biàgios tuos comente rastas GPX";
 "product_desc_africa" = "Iscarrigamentos de mapas illimitados pro s’Àfrica";
 "product_desc_australia" = "Iscarrigamentos de mapas illimitados pro s'Austràlia";
@@ -288,7 +288,7 @@
 "product_desc_asia" = "Iscarrigamentos de mapas illimitados pro s’Àsia";
 "download_wikipedia_maps" = "Wikipedia";
 "product_desc_wiki" = "Artìculos de Wikipedia in sa mapa basados subra de sa positzione";
-"download_srtm_maps" = "Curvas de livellu";
+"srtm_plugin_name" = "Curvas de livellu";
 "product_desc_srtm" = "Valutatzione cun sa vista de sa forma de sa superfìtzie de su terrinu";
 "my_location" = "Positzione mea";
 "all_categories" = "Totu sas categorias";
@@ -717,8 +717,10 @@
 "new_destination_point_dialog" = "Tenes giai una destinatzione impostada:";
 "show_poi_over_map" = "Ammustra s\'istratu de sos PDI";
 "search_radius" = "Raju de chirca";
-"product_desc_ext_nautical" = "Allughe custa funtzionalidade pro arrichire sa mapa tua cun informatziones subra de sas àndalas de navigatzione, sas lughes de navigatziones, sas zonas de perìgulu, sas zonas in ue est permìtidu o proibidu navigare o aprodare etz. Pro l'impreare iscàrriga s'estensione Mapas nàuticas e abìlita sa casta \"Mapa nàutica\" in Cunfigura mapa. \n\nGhia de impreu - https://osmand.net/docs/user/plugins/nautical-charts";
-"product_desc_ext_parking" = "Abìlita custa estensione pro pònnere unu puntu in sa mapa in ue as lassadu sa màchina tua e notificare su calendàriu tuo de cando incumintzat su tempus de parchègiu. S'estensione agiudat a sighire su tempus de parchègiu e sa positzione de sa màchina tua. Pro pònnere unu marcadore in sa mapa bae a Atziones e incarca \"Annanghe unu parchègiu\".";
+"plugin_nautical_descr" = "Arrichit sa mapa tua cun informatziones subra de sasàndalas de navigatzione, sas lughes de navigatziones, sas zonas nàuticas de perìgulu, sas zonas cun restritziones de navigatzione o aprodu etz. Pro l\'impreare iscàrriga sas mapas nàuticas rispetivas e abìlita s\'istile \"Mapa nàutica\" in \"Cunfigura mapa\".
+\n
+\nÀteras informatziones in https://osmand.net/docs/user/plugins/nautical-charts .";
+"osmand_parking_plugin_description" = "Sinna in ue sa màchina tua est parchegiada, e notìfica su calendàriu tuo cando su parchìmetru at a iscadire. Pro pònnere su marcadore issèbera unu tretu in sa mapa, bae a \"Atziones\" e incarca \"Annanghe unu parchègiu\".";
 "transport_Routes" = "Àndalas";
 "transport_nearby_routes_within" = "Àndalas a curtzu intre";
 "shared_string_control_stop" = "Stop";
@@ -766,10 +768,16 @@
 "facebook" = "Facebook";
 "twitter" = "Twitter";
 "plugin_ski_descr" = "Progetada pro navigare in tretos de isports ierriles: pòmpia sas pistas de iscì e sas funivias , gasi comente sas pistas de iscì de fundu cun lìnias coloradas chi indicant sos livellos de cumplessidade. Pro l\'impreare abilita custa estensione e bae fintzas a \"Cunfigura mapa\" e issèbera s\'istile de mapa \"Ierru e iscì\".";
-"product_desc_ext_track_recording" = "Ti permitit de registrare, sarvare e analizare sos datos tuos de allenamentu o movimentu, che a sa lestresa, sas artziadas e sas achirradas de s'àndala, chi a pustis s'ant a pòdere ritziclare, megiorare, integrare cun àteros datos o cumpartzire cun sos amigos. \n\nGhia de impreu - https://osmand.net/docs/user/plugins/trip-recording";
+"record_plugin_description" = "Registra sos biàgios o sos allenamentos tuos, e analiza sos datos in tèrmines de lestresa, artziadas e achirradas cumuladas, profilu de s\'artària etc. Sas rastas registradas si podent archiviare, cumpartzire cun sos amigos, modificare e post-protzessare.
+\n
+\nÀteras informatziones in https://osmand.net/docs/user/plugins/trip-recording .";
 "product_desc_ext_trip_planning" = "S'estensione pro pranificare sos biàgios ti permitit de creare sos biàgios tuos in sa mapa, de los sarvare, de medire sa distàntzia intre puntos connessos cun lìnias retas etz. Est istadu creadu pro una pranificatzione preliminare, non pro carculare un'àndala cumprida.";
-"product_desc_ext_wiki" = "Su de tènnere Wikipedia non in lìnia in su biàgiu tuo t'agiudat a imparare prus cosas subra de sos logos chi bìsitas. Est a disponimentu chene lìnia e ammustrat artìculos de Wikipedia chi pertocant a sos puntos de interessu chi bi sunt in sa mapa. Non s'ismèntighes de iscarrigare sas mapas de Wikipedia pro sa regione isseberada.";
-"product_desc_ext_srtm" = "Sas informatziones de su terrinu, che a sas curvas de livellu, sas umbraduras de sos rilievos e sas pendèntzias, t'agiudant a valutare cun sos ogros tuos sa forma de sa superfìtzie de su terrinu, pighende in cunsideru sa curvadura, sos estremos, sas pendèntzias, sos puntos cun sa matessi artària e àteru. Sas informatziones topogràficas in una mapa si podent rapresentare cun s'umbradura de sas pendèntzias, curvas de livellu pro s'artziada e s'achirrada, e su colore de s'àngulu de deviatzione de sa pendèntzia dae su pranu. Datoa dae su SRTM e dae s'ASTER. \n\nGhia de impreu - https://osmand.net/docs/user/plugins/contour-lines";
+"purchases_feature_desc_wikipedia" = "Frunit chene lìnia totu sos artìculos de Wikipedia ligados a logos, agiudende·ti a imparare cosas subra de sos logos chi bìsitas in su biàgios tuos cun tocos simpres in sa mapa. Non s\'ismèntighes de iscarrigare sas mapas de Wikipedia pro sas regiones rispetivas.";
+"srtm_plugin_description" = "Sas informatziones de su terrinu, che a sas curvas de livellu, sas umbraduras de sos rilievos e sas pendèntzias, t\'agiudant a valutare cun sos ogros tuos sa dispositzione de su terrinu, sa navigabilidade e àteru. Sas informatziones topogràficas in una mapa si podent rapresentare cun s\'umbradura de sas pendèntzias, curvas de livellu e/o su colore de s\'àngulu de inclinatzione.
+\n
+\nSos datos impreados benint dae su SRTM e dae s\'ASTER.
+\n
+\nÀteras informatziones in http://osmand.net/docs/user/plugins/contour-lines .";
 "shared_string_close" = "Serra";
 "shared_string_actions" = "Atziones";
 "context_menu_item_directions_from" = "Indicatziones dae";
@@ -2066,10 +2074,12 @@
 "wiki_menu_download_descr" = "Pro bìdere sos PDI de Wikipedia in sa mapa b\'at bisòngiu de mapas agiuntivas.";
 "select_wikipedia_article_langs" = "Issèbera sa limba pro sos artìculos de Wikipedia in sa mapa. Cola dae una limba a disponimentu a s\'àtera cando ses leghende s\'artìculu.";
 "shared_string_all_languages" = "Totu sas limbas";
-"product_desc_ext_openplacereviews" = "Ti permitit de contribuire a su progetu de OpenPlaceReviews. Contributziones comente fotografias, retzensiones e ligàmenes de logos pùblicos che a ristorantes, albergos, museos e puntos de coladòrgiu. \n\nPodes agatare istrutziones subra de comente contribuire in su situ nostru - https://osmand.net/docs/user/plugins/openplacereviews";
+"open_place_reviews_plugin_description" = "Faghe contributziones a su progetu de OpenPlaceReviews comente fotografias, retzensiones o ligàmenes pro logos pùblicos che a ristorantes, albergos o museos.
+\n
+\nAtzapa istrutziones subra de comente contribuire in su situ nostru https://osmand.net/docs/user/plugins/openplacereviews .";
 "product_desc_openplacereviews" = "Cumpartzi s'opinione tua subra de sos logos pùblicos";
 "open_place_reviews" = "OpenPlaceReviews";
-"product_desc_ext_mapillary" = "Frunit fotografias a livellu de su caminu. In ue sas immàgines mancant, las pòdes annànghere tue matessi a manera chi sos àteros las potzant impreare. Pro abilitare s'istratu de Mapillary allughe s'optzione \"Immàgines a livellu de su caminu\" in su menù Cunfigura mapa.";
+"plugin_mapillary_descr" = "Immàgines de vistas a livellu de su caminu. Podes contribuire fintzas tue. Pro bìdere sos datos atuales comente un\'istratu de sa mapa, allughe s\'optzione \"Immàgines a livellu de su caminu\" in su menù \"Cunfigura mapa\".";
 "product_desc_mapillary" = "Vistas a livellu de su caminu pro compidare su logu a fùrriu";
 "population_num" = "Populatzione";
 "shared_string_turn_off" = "Istuda";
@@ -2427,7 +2437,12 @@
 "weather_temp_enable_descr" = "Abìlita·lu pro bìdere s'istratu de sa temperadura in sa mapa.";
 "weather_pressure_enable_descr" = "Abìlita·lu pro bìdere s'istratu de sa pressione in sa mapa.";
 "weather_contours_enable_descr" = "Abìlita·lu pro bìdere s'istratu de sas isolìnias in sa mapa.";
-"product_desc_ext_weather" = "Abìlita s'estensione pro su mèteu pro progetare un'àndala pighende in cunsideru su tempus atmosfèricu. Pòmpia sa mapa colorada de sas previsiones mèteu, chi est annoada cada ora pro oe, cras e sa chida chi intrat. \n\nDurante su biàgiu pòmpia sos widgets basados subra de sa positzione cun sa temperadura, sas pretzipitatziones, sa velotzidade de su bentu e sa pressione.\n\nAt a èssere ùtile pro s'escursionismu e biàgios longos in moto.";
+"weather_plugin_description" = "Frunit
+\n- sas previsiones meteorològicas pro 24 oras e 7 dies cun 5 istratos
+\n- basados subra de sa posidura
+\n- sas isolìnias de temperadura / pressione
+\n
+\nSos datos meteorològicos los frunit su Sistema de Previsiones Globale (GFS, https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast ).";
 "ios_release_4_2" = "Aspetu de sa lìnia de s'àndala: annanta sa possibilidade de impostare larghesa e colore\n• Rastas: annantu un'issèberu pro iscantzellare prus rastros in manera contemporànea\n• Menù cuntestuale rasta: agiunta barra de iscurrimentu cun grupos de puntos de coladòrgiu\n• Aspetu mapa: àndalas additzionales partzidas pro casta cun possibilidade de nd'abilitare una pro cada categoria in manera separada\n• Ecuitatzione: annantu unu tipu nou de navigatzione e de profilu de s'aplicatzione\n• Sos documentos OsmAnd sunt como visìbiles in s'aplicatzione \"Archìvios\".\n• Est istada megiorada s'interfache utente de sas optziones \"Imprea sos datos de s'artària\" e \"Ischerta su valore de variatzione de s'artària\", sunt istadas cumbinadas e torradas a numenare in \"Terrinu preferidu\", como a disponimentu pro sos profilos \"Bitzicleta\" e \"Pedone\".\n• Optzione noa \"Include sa diretzione\" pro sa registratzione de sas rastas\n• Widget nùmene de sa carrera: como ammustrat s'iscudu istradale e su nùmeru de essida durante sa navigatzione\n• Àndalas noas pro s'allenamentu e sa cursa in sa mapa\n• Curretziones de errores de CarPlay, annanta de gestos pro sos ischermos tàtiles\n• Risòlvidu su problema cun s'importatzione de archìvios GPX dae su pachete OSF\n• Acontzada s'importatzione de estensiones personalizadas cun documentos incluidos\n• Risoltos arrestos anòmalos vàrios in sa modalidade de pianificatzione de s'àndala\n• Risoltos arrestos anòmalos durante sa navigatzione\n";
 "routeInfo_horse_scale_name" = "Dificultade de sas camineras a caddu";
 "routeInfo_horse_scale_description" = "Disinna sasàndalas in base a sa dificultade de sas camineras a caddu";
@@ -2436,7 +2451,6 @@
 "simulation_constant_mode_desc" = "Sa simulatzione s\'at a fàghere a sa lestresa costante seletzionada.";
 "purchases_feature_desc_unlimited_map_download" = "Otene iscarrigamentos chene lìmites de mapas pro totu sos continentes e sas regiones.";
 "toast_empty_name_error" = "Logu chene nùmene";
-"purchases_feature_desc_wikipedia" = "Frunit chene lìnia totu sos artìculos de Wikipedia ligados a logos, agiudende·ti a imparare cosas subra de sos logos chi bìsitas in su biàgios tuos cun tocos simpres in sa mapa. Non s\'ismèntighes de iscarrigare sas mapas de Wikipedia pro sas regiones rispetivas.";
 "continue_with" = "Sighi cun %@";
 "purchases_feature_desc_terrain" = "Curvas de livellu, mapa totale de sas umbraduras de sos rilievos cun umbras iscuras e mapas de sas pendèntzias cun colores pro ammustrare cùcuros e pranos.";
 "shared_string_includes" = "Incluit";
@@ -2467,7 +2481,7 @@
 "unlimited_map_downloads" = "Iscarrigamentos chene lìmites de mapas";
 "simulation_real_mode_title" = "Simulatzione realìstica";
 "purchases_feature_desc_wikivoyage" = "Esplora Wikivoyage chene una lìnia ìnternet. Sos artìculos sunt partzidos pro istadu e regione e sunt a disponimentu in totu sas limbas.";
-"product_desc_ext_development" = "Ti permitit de cunfigurare OsmAnd pro fàghere proas: simulare àndalas de biàgiu, verificare su rendimentu de sa renderizatzione de s'ischermu etz. S'estensione no est netzessària pro s'impreu normale de s'aplicatzione.";
+"osmand_development_plugin_description" = "Frunit funtzionalidades pro proare OsmAnd e depurare su còdighe suo: simulare àndalas de biàgiu, verificare su rendimentu de sa renderizatzione de s\'ischermu etz. S\'estensione no est netzessària pro s\'impreu normale de s\'aplicatzione.";
 "redeem_promo_code" = "Imprea su còdighe promotzionale";
 "purchases_feature_desc_nautical" = "Otene atzessu a sas informatziones subra de sa profundidade nàutica";
 "osm_live_subscriptions" = "Abbonamentos";
@@ -2821,10 +2835,10 @@
 "rendering_attr_weatherTempContours_name" = "Isolìnias de sa temperadura";
 "position_on_map" = "Ammustra sa positzione";
 "res_heightmap" = "Mapa de sas artàrias";
-"units_kg" = "kg";
+"kg" = "kg";
 "huawei_appgallery" = "Butega de apl. de Huawei";
 "use_heightmap_setting" = "Imprea mapas de sas artàrias 3D";
 "amazon_appstore" = "Butega de apl. de Amazon";
 "shared_string_does_not_exist" = "No esistit";
 "download_wikipedia_data" = "Iscàrriga sos datos de Wikipedia";
-
+"m" = "m";

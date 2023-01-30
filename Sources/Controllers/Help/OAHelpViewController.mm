@@ -210,7 +210,7 @@ static const NSInteger groupCount = 5;
     [dataArr addObject:
     @{
       @"name" : @"help_mapillary",
-      @"title" : OALocalizedString(@"help_mapillary"),
+      @"title" : OALocalizedString(@"mapillary_item"),
       @"type" : kLinkInternalType,
       @"html" : @"mapillary"
       }];
@@ -229,14 +229,14 @@ static const NSInteger groupCount = 5;
     [dataArr addObject:
      @{
        @"name" : @"trip_recording",
-       @"title" : OALocalizedString(@"monitoring_settings"),
+       @"title" : OALocalizedString(@"record_plugin_name"),
        @"type" : kLinkInternalType,
        @"html" : @"trip-recording-plugin"
        }];
     [dataArr addObject:
      @{
        @"name" : @"contour_lines",
-       @"title" : OALocalizedString(@"download_srtm_maps"),
+       @"title" : OALocalizedString(@"srtm_plugin_name"),
        @"type" : kLinkInternalType,
        @"html" : @"contour-lines-plugin"
        }];
@@ -244,14 +244,14 @@ static const NSInteger groupCount = 5;
     [dataArr addObject:
      @{
        @"name" : @"parking_position",
-       @"title" : OALocalizedString(@"product_title_parking"),
+       @"title" : OALocalizedString(@"osmand_parking_plugin_name"),
        @"type" : kLinkInternalType,
        @"html" : @"parking-plugin"
        }];
     
     [dataArr addObject:
      @{
-       @"name" : @"nautical_maps",
+       @"name" : @"plugin_nautical_name",
        @"title" : OALocalizedString(@"product_title_nautical"),
        @"type" : kLinkInternalType,
        @"html" : @"nautical-charts"

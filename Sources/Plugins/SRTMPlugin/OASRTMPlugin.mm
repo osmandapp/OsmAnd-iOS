@@ -10,6 +10,7 @@
 #import "OAApplicationMode.h"
 #import "OAIAPHelper.h"
 #import "OAResourcesUIHelper.h"
+#import "Localization.h"
 
 #define PLUGIN_ID kInAppId_Addon_Srtm
 
@@ -35,6 +36,16 @@
     [suggestedMaps addObjectsFromArray:[OAResourcesUIHelper getMapsForType:OsmAnd::ResourcesManager::ResourceType::SlopeRegion latLon:latLon]];
     
     return suggestedMaps;
+}
+
+- (NSString *) getName
+{
+    return OALocalizedString(@"srtm_plugin_name");
+}
+
+- (NSString *) getDescription
+{
+    return OALocalizedString(@"srtm_plugin_description");
 }
 
 @end

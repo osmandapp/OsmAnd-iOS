@@ -228,13 +228,13 @@
 "cannot_access_calendar" = "No es pot accedir al calendari";
 "reminder_not_set_text" = "El recordatori automàtic no s'ha desat perquè no s'ha pogut accedir al calendari";
 //inapps
-"product_title_nautical" = "Mapa nàutic";
+"plugin_nautical_name" = "Vista cartes marines";
 "product_desc_nautical" = "Mapes vectorials adaptats per a la navegació marítima";
-"product_title_parking" = "Posició d'aparcament";
+"osmand_parking_plugin_name" = "Posició d\'aparcament";
 "product_desc_parking" = "Us permet memoritzar fàcilment quan es va aparcar el vehicle i quant temps us queda si l'aparcament és per temps limitat";
 "plugin_ski_name" = "Vista mapa d\'esquí";
 "product_desc_skimap" = "Pistes d'esquí a totes les estacions d'esquí del món";
-"monitoring_settings" = "Enregistrament del trajecte";
+"record_plugin_name" = "Enregistrament de trajectes";
 "product_desc_track_recording" = "Activa la funció d'enregistrar i desar els vostres trajectes";
 "product_desc_africa" = "Baixada il·limitada de mapes d'Àfrica";
 "product_desc_australia" = "Baixada il·limitada de mapes d'Austràlia";
@@ -286,7 +286,7 @@
 "help_quiz" = "Consulta";
 "download_wikipedia_maps" = "Viquipèdia";
 "product_desc_wiki" = "Dades de la Viquipèdia";
-"download_srtm_maps" = "Dades de corbes de nivell";
+"srtm_plugin_name" = "Corbes de nivell";
 "product_desc_srtm" = "Mostra les corbes de nivell";
 "enter_description" = "Introduïu la descripció";
 "shared_string_description" = "Descripció";
@@ -363,16 +363,25 @@
 "all_world_popup_desc" = "Baixa el mapa base del món per veure els noms dels estats, les fronteres i altres informacions";
 "shared_string_restore" = "Restaura";
 "restore_all_purchases" = "Recupera totes les compres";
-"product_desc_ext_nautical" = "Cartes nàutiques OsmAnd és un connector per l'aplicació de mapes i navegació OsmAnd. Es tracta d'una representació gràfica detallada d'oceans, mars, zones litorals i rius. Els gràfics poden incloure informació vària com rutes i llums de navegació, zones perilloses, àrees on es permet o no navegar, atracar, etc.\n\nInstruccions d'ús: es recomana fortament la baixada del mapa base nàutic per veure un mapa encara que pugui mancar el mapa més detallat. Per activa els gràfics nàutics premeu el botó de mapes i fixeu el tipus de mapa com nàutic.\n\nNota: Tots els navegants profesionals tenen la obligació de tenir cartes nàutiques oficials als seus vaixells.\n\nLes cartes nàutiques d'OsmAnd es fonamenten en les dades del projecte OpenSeaMap. Mentre les cartes de l'OpenSeaMap encara no siguin completes respecte les cartes nàutiques oficials només es poden utilitzar per navegants afeccionats per orientar-se i planificar rutes.";
-"product_desc_ext_parking" = "El connector Aparcament d'OsmAnd us recorda la posició del vostre aparcament. Es tracta d'un connector de l'aplicació de mapes i navegació OsmAnd.\nSeleccioneu un recordatori fix (un marcador en el mapa) o lligat a una limitació del temps amb una alarma basada en la fi del termini (també inclou el marcador en el mapa). Per utilitzar aquest connector l'heu d'activar al menú Connectors.";
+"plugin_nautical_descr" = "Aquest connector completa el mapa OsmAnd i la seva navegació en produir mapes nàutics per cabotatge, regates i altres tipus de esports d\'aigua.
+\n
+\nUn complement de mapa específic per OsmAnd us proporcionarà tot tipus de senyals nàutiques i símbols gràfics, per navegació interior o propera a la costa. La descripció de cada senyal de navegació usdonarà els detalls que calguin per identificar-les i del seu significat (categoria, forma, color, seqüència, referència, etc.).
+\n
+\nPer retornar a l\'estil habitual dels mapes d\'OsmAnd, només cal desactivar aquest connector o canviar a com es desitgi<<Estil del Mapa>>dins<<Configuració del Mapa>>.";
+"osmand_parking_plugin_description" = "Us permet registrar on està aparcat el vostre cotxe incloent quant temps li queda. 
+\nTant la situació com el temps que li queda es mostren al tauler així com en un giny al mapa. Es pot afegir una alarma al vostre calendari d\'Android com a recordatori.";
 "product_title_trip_planning" = "Planificació de viatges";
 "plugin_popup_ski_title" = "Activa l'estil de mapes Esquí";
 "plugin_ski_descr" = "Aquest connector per l\'OsmAnd us proporciona els detalls de les pistes d\'esquí en baixada, de travessa i alpí així com de telefèrics i remuntadors a tot el món. Les rutes i pistes es mostren amb el codi de colors que els correspon segons la seva dificultat i amb un estil de mapa especial «Hivern» que s\'associa a un paisatge nevat. 
 \n 
 \nEn activar aquests canvis devisualització l\'estil del mapa canvia a «Hivern i esquí», i es mostren totes les característiques del paisatge a l\'hivern. Aquesta vista es pot revertir tant en activar-la altra cop com en canviar-la a «Estil del mapa» dins «Configuració del mapa».";
-"product_desc_ext_track_recording" = "Enregistreu els vostres trajectes i deseu-los manualment utilitzant el connector d'enregistrament Trajecte OsmAnd. Exporteu el vostre trajecte com un fitxer GPX, compartiu-lo o fins i tot utilitzeu-lo per col·laborar amb el projecte Openstreetmap. Una eina pràctica.per corredors, senderistes i qualsevol interessat en enregistrar els seus trajectes.";
-"product_desc_ext_wiki" = "Obteniu informació de punts d'interès des la Viquipèdia. Serà la vostra guia de butxaca en desconnexió - només cal que activeu el connector Viquipèdia i fruireu dels articles que tracten de les coses que us rodegen.";
-"product_desc_ext_srtm" = "Aquest connector proporciona corbes de nivell i un ombrejat de relleu, que es poden veure als mapes locals d' OsmAnd. Les corbes de nivell informen de l'alçada d'una àrea mentre l'ombrejat permet la seva visualització. Utilitzant aquest connector podreu veure el nom dels de les muntanyes i de llocs concrets de la zona.\n\nLes dades globals (entre 70 graus nord i 70 graus sud) estan basades en mesures del SRTM (Shuttle Radar Topography Mission) i del ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), un instrument de generació d'imatges a bord de Terra, el satèl·lit insígnia del Sistema d'Observació de la Terra de la NASA. ASTER és un esforç de col·laboració entre la NASA, el Ministeri d'Economia i Comerç del Japó (METI) i la fundació Japan Space Systems (J-spacesystems).";
+"record_plugin_description" = "Us permet d\'enregistrar, desar i analitzar les dades d\'entrenaments i trajectes, com ara la velocitat, ascensions, descensos o relleu de la ruta, que podeu reutilitzar, millorar, complementar o compartir amb amics.
+\n
+\nCom es fa - https://osmand.net/docs/user/plugins/trip-recording";
+"purchases_feature_desc_wikipedia" = "Obteniu informació de punts d'interès des la Viquipèdia. Serà la vostra guia de butxaca en desconnexió - només cal que activeu el connector Viquipèdia i fruireu dels articles que tracten de les coses que us rodegen.";
+"srtm_plugin_description" = "Aquest connector proporciona tant corbes de nivell superposades com una capa d\'ombres amb efecte relleu per superposar als mapes de OsmAnd. Corredors, ciclistes, excursionistes i qualsevol interessat en el perfil de relleu del terreny ho agrairan força. (Fixeu-vos que les corbes de nivell i/o els efectes de relleu són baixades independents i complementàries, disponibles un cop s\'hagi activat el connector). 
+\n 
+\nLes dades globals (entre 70 ° nord i 70 ° sud) estan basades en mesures del SRTM (Shuttle Radar Topography Mission) i del ASTER(Advanced Spaceborne Thermal Emission and Reflection Radiometer), un instrument de generació d\'imatges a bord de Terra, el satèl·lit insígnia del Sistema d\'Observació de la Terra de la NASA. ASTER és un esforç de col·laboració entre la NASA, el Ministeri d\'Economia i Comerç del Japó (METI) i la fundació Japan Space Systems (J-spacesystems).";
 "plugin_popup_ski_desc" = "Per activar l'estil <b>Mapa d'esquí</b> , aneu a l<b>Configuració del mapa</b> > <b>Tipus de mapa </b>";
 "plugin_popup_wiki_desc" = "Per començar a utilitzar el connector de la Vikipèdia, primer baixeu les dades Viquipèdia d'una regió";
 "plugin_popup_nautical_desc" = "Primer baixeu els mapes nàutics.\nDesprès aneu a la <b>Configuració del mapa</b> <b>Tipus de mapa</b> i activeu l'estil <b>Nàutic</b>";
@@ -1951,7 +1960,7 @@
 "suggested_maps" = "Mapes suggerits";
 "context_menu_item_edit_waypoint" = "Edita la fita GPX";
 "dialogs_and_notifications_title" = "Diàlegs i notificacions";
-"product_desc_ext_mapillary" = "Fotografies a nivell de carrer a la xarxa per tothom. Descobriu llocs, col·laboreu, enregistreu el món.";
+"plugin_mapillary_descr" = "Fotografies a nivell de carrer per a tothom. Descobriu llocs, col·laboreu, enregistreu el món.";
 "shared_string_wifi_only" = "Només per wi-fi";
 "gpxup_identifiable" = "Identificable";
 "gpxup_public" = "Públic";
@@ -2133,7 +2142,7 @@
 "altitude_descent" = "Descens";
 "debugging_and_development" = "Desenvolupament de l\'OsmAnd";
 "routing_attr_allow_private_for_truck_description" = "Permet l\'accés a zones privades per a camions.";
-"product_desc_ext_development" = "Configuració de característiques per al desenvolupament i depuració, com simulació de navegació, rendiment de renderitzat o les indicacions de veu. Adreçat a desenvolupadorsimés que a usuaris normals de l\'aplicació.";
+"osmand_development_plugin_description" = "Configuració de característiques per al desenvolupament i depuració, com simulació de navegació, rendiment de renderitzat o les indicacions de veu. Adreçat a desenvolupadorsimés que a usuaris normals de l\'aplicació.";
 "osm_live_subscriptions" = "Subscripcions";
 "shared_string_capacity" = "Capacitat";
 "share_geo" = "geo:";
@@ -2330,4 +2339,11 @@
 "download_wikipedia_data" = "Baixa dades de la Viquipèdia";
 "auth_failed" = "Ha fallat l\'autorització";
 "offline_edition_descr" = "En desconnexió la edició està activada, però llavors els canvis es desen localment primer i ja es pujaran quan es demani; altrament els canvis s\'actualitzen immediatament.";
-
+"km" = "km";
+"weather_plugin_description" = "Proporciona
+\n- previsió meteorològica de 24 hores i 7 dies amb 5 capes
+\n- ginys basats en ubicació
+\n- isolínies de temperatura / de pressió
+\n
+\nLes dades meteorològiques són proporcionades per Global Forecast System (GFS, https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast ).";
+"m" = "m";

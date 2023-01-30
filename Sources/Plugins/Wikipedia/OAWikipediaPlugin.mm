@@ -65,7 +65,7 @@
 
 - (NSString *)getDescription
 {
-    return OALocalizedString(@"product_desc_ext_wiki");
+    return OALocalizedString(@"purchases_feature_desc_wikipedia");
 }
 
 - (NSArray<OAPOIUIFilter *> *)getCustomPoiFilters

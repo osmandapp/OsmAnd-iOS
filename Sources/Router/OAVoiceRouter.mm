@@ -20,7 +20,7 @@
 #import "OARouteDirectionInfo.h"
 #import "Localization.h"
 #import "OAExitInfo.h"
-
+#import "OAAnnounceTimeDistances.h"
 #import <AudioToolbox/AudioToolbox.h>
 
 #include <routeSegmentResult.h>
@@ -30,8 +30,7 @@
 {
     OARoutingHelper *_router;
     OAAppSettings *_settings;
-    
-    double _voicePromptDelayDistance;
+    OAAnnounceTimeDistances *_atd;
 }
 
 const int STATUS_UTWP_TOLD = -1;
@@ -80,22 +79,6 @@ std::string preferredLanguage;
         
         NSString *prefLang =  _settings.settingPrefMapLanguage.get == nil ? OALocalizedString(@"local_map_names") : _settings.settingPrefMapLanguage.get;
         preferredLanguage = std::string([prefLang UTF8String]);
-        
-        _voicePromptDelayDistance = 0.0;
-        //empty = new Struct("");
-        //voiceMessageListeners = new ConcurrentHashMap<VoiceRouter.VoiceMessageListener, Integer>();
-        
-        // Default speed to have comfortable announcements (Speed in m/s)
-        _DEFAULT_SPEED = 12;
-        _TURN_NOW_SPEED = 5;
-        
-        _PREPARE_LONG_DISTANCE = 0;
-        _PREPARE_LONG_DISTANCE_END = 0;
-        _PREPARE_DISTANCE = 0;
-        _PREPARE_DISTANCE_END = 0;
-        _TURN_IN_DISTANCE = 0;
-        _TURN_IN_DISTANCE_END = 0;
-        _TURN_NOW_DISTANCE = 0;
     }
     return self;
 }
@@ -145,61 +128,7 @@ std::string preferredLanguage;
 - (void) updateAppMode
 {
     OAApplicationMode *appMode = _router.getAppMode == nil ? _settings.applicationMode.get : _router.getAppMode;
-    // could be changed in future as others by default in settings is 45 kmh
-    if ([appMode isDerivedRoutingFrom:[OAApplicationMode CAR]])
-    {
-        _DEFAULT_SPEED = 14;                       //   ~50 km/h
-        //DEFAULT speed is configurable
-        //        } else if (router.getAppMode().isDerivedRoutingFrom(ApplicationMode.BICYCLE)) {
-        //            DEFAULT_SPEED = 2.77f;   //   10 km/h
-        //        } else if (router.getAppMode().isDerivedRoutingFrom(ApplicationMode.PEDESTRIAN)) {
-        //            DEFAULT_SPEED = 1.11f; //4 km/h 2f;     // 7,2 km/h
-    }
-    else
-    {
-        // minimal is 1 meter for turn now
-        _DEFAULT_SPEED = MAX([appMode getDefaultSpeed], 0.3);
-    }
-    // Do not play [issue 1411]: prepare_long_distance warning not needed, used only for goAhead prompt
-    // 300 sec: 4 200 - 3 500 m - car [ 115 - 95 sec @ 120 km/h]
-    _PREPARE_LONG_DISTANCE = (int) (_DEFAULT_SPEED * 300);
-    _PREPARE_LONG_DISTANCE_END = (int) (_DEFAULT_SPEED * 250) ;
-    
-    if (_DEFAULT_SPEED < 30) {
-        //        if (PREPARE_LONG_DISTANCE_END - PREPARE_DISTANCE < 4000) {
-        // Play only for high speed vehicle with speed > 110 km/h
-        _PREPARE_DISTANCE_END = _PREPARE_DISTANCE * 2;
-    }
-    
-    // *#8749: Here the change for bicycle: 40-30 sec, 200-150 m -> 115-90 sec, 320-250m [ need to be tested ]
-    // 115 sec: 1 500 m - car [45 sec @ 120 km/h], 320 m - bicycle [45 sec @ 25 km/h], 230 m - pedestrian
-    _PREPARE_DISTANCE = (int) (_DEFAULT_SPEED * 115);
-    // 90  sec: 1 200 m - car, 250 m - bicycle [36 sec @ 25 km/h],
-    _PREPARE_DISTANCE_END = (int) (_DEFAULT_SPEED * 90);
-    
-    // 22 sec: 310 m - car, 60 m - bicycle, 50m - pedestrian
-    _TURN_IN_DISTANCE = (int) (_DEFAULT_SPEED * 22);
-    // 15 sec: 210 m - car, 40 m - bicycle, 30 m - pedestrian
-    _TURN_IN_DISTANCE_END = (int) (_DEFAULT_SPEED * 15);
-    
-    // same as speed < 150/(90-22) m/s = 2.2 m/s = 8 km/h
-    if (_PREPARE_DISTANCE_END - _TURN_IN_DISTANCE < 150) {
-        // Do not play: for pedestrian and slow transport
-        _PREPARE_DISTANCE_END = _PREPARE_DISTANCE * 2;
-    }
-    
-    // Turn now: 3.5 sec normal speed, 7 second for halfspeed (default)
-    // float TURN_NOW_TIME = 7;
-    
-    // ** #8749 to keep 1m / 1 sec precision (GPS_TOLERANCE - 12 m)
-    // 1 kmh - 1 m, 4 kmh - 4 m (pedestrian), 10 kmh - 10 m (bicycle), 50 kmh - 50 m (car)
-    // TURN_NOW_DISTANCE = (int) (DEFAULT_SPEED * 3.6); // 3.6 sec
-    // 50 kmh - 48 m (car), 10 kmh - 20 m, 4 kmh - 15 m, 1 kmh - 12 m
-    _TURN_NOW_DISTANCE = (int) (OARoutingHelper.getGpsTolerance + _DEFAULT_SPEED * 2.5 * OARoutingHelper.getArrivalDistanceFactor); // 3.6 sec
-    // 1 kmh - 1 sec, 4 kmh - 2 sec (pedestrian), 10 kmh - 3 sec (*bicycle), 50 kmh - 7 sec (car)
-    double _TURN_NOW_TIME = MIN(sqrt(_DEFAULT_SPEED * 3.6), 8);
-    
-    _TURN_NOW_SPEED = _TURN_NOW_DISTANCE / _TURN_NOW_TIME;
+    _atd = [[OAAnnounceTimeDistances alloc] initWithAppMode:appMode];
 }
 
 - (void) arrivedIntermediatePoint:(NSString *)name
@@ -222,72 +151,85 @@ std::string preferredLanguage;
 
 - (void) updateStatus:(CLLocation *)currentLocation repeat:(BOOL)repeat
 {
-    float speed = _DEFAULT_SPEED;
-    if (currentLocation != nil && currentLocation.speed) {
-        speed = MAX(currentLocation.speed, speed);
-    }
-    
+    float speed = [_atd getSpeed:currentLocation];
+
     OANextDirectionInfo *nextInfo = [_router getNextRouteDirectionInfo:[[OANextDirectionInfo alloc] init] toSpeak:YES];
     const auto& currentSegment = [_router getCurrentSegmentResult];
     
-    if (nextInfo == nil || nextInfo.directionInfo == nil) {
+    if (nextInfo == nil || nextInfo.directionInfo == nil)
         return;
-    }
     int dist = nextInfo.distanceTo;
     OARouteDirectionInfo *next = nextInfo.directionInfo;
-    
+
     // If routing is changed update status to unknown
-    if (next != nextRouteDirection) {
+    if (next != nextRouteDirection)
+    {
         nextRouteDirection = next;
         currentStatus = STATUS_UNKNOWN;
-        suppressDest = false;
-        playedAndArriveAtTarget = false;
-        announceBackOnRoute = false;
-        if (playGoAheadDist != -1) {
+        suppressDest = NO;
+        playedAndArriveAtTarget = NO;
+        announceBackOnRoute = NO;
+        if (playGoAheadDist != -1)
             playGoAheadDist = 0;
-        }
     }
-    
-    if (!repeat) {
-        if (dist <= 0) {
+
+    if (!repeat)
+    {
+        if (dist <= 0)
+        {
             return;
-        } else if ([self needsInforming]) {
+        }
+        else if ([self needsInforming])
+        {
             [self playGoAhead:dist next:next streetName:[self getSpeakableStreetName:currentSegment routeDirectionInfo:next includeDestination:NO]];
             return;
-        } else if (currentStatus == STATUS_TOLD) {
+        }
+        else if (currentStatus == STATUS_TOLD)
+        {
             // nothing said possibly that's wrong case we should say before that
             // however it should be checked manually ?
             return;
         }
     }
 
-    if (currentStatus == STATUS_UNKNOWN) {
+    if (currentStatus == STATUS_UNKNOWN)
+    {
         // Play "Continue for ..." if (1) after route calculation no other prompt is due, or (2) after a turn if next turn is more than PREPARE_LONG_DISTANCE away
-        if ((playGoAheadDist == -1) || (dist > _PREPARE_LONG_DISTANCE)) {
-            playGoAheadDist = dist - 3 * _TURN_NOW_DISTANCE;
+        if ((playGoAheadDist == -1) || ![_atd isTurnStateActive:0 dist:dist turnType:kStateLongPrepareTurn])
+        {
+            // 10 seconds
+            playGoAheadDist = dist - 10 * speed;
         }
     }
 
-    OANextDirectionInfo *nextNextInfo = [_router getNextRouteDirectionInfoAfter:nextInfo to:[[OANextDirectionInfo alloc] init] toSpeak:YES];
+    OANextDirectionInfo *nextNextInfo = [_router getNextRouteDirectionInfoAfter:nextInfo to:[[OANextDirectionInfo alloc] init] toSpeak:YES];  //I think "true" is correct here, not "!repeat"
     // Note: getNextRouteDirectionInfoAfter(nextInfo, x, y).distanceTo is distance from nextInfo, not from current position!
-
     // STATUS_TURN = "Turn (now)"
-    if ((repeat || [self statusNotPassed:STATUS_TURN]) && [self isDistanceLess:speed dist:dist etalon:_TURN_NOW_DISTANCE defSpeed:_TURN_NOW_SPEED]) {
-        if ([nextNextInfo distanceTo] < _TURN_IN_DISTANCE_END && nextNextInfo != nil) {
+    if ((repeat || [self statusNotPassed:STATUS_TURN]) && [_atd isTurnStateActive:speed dist:dist turnType:kStateTurnNow])
+    {
+        if (nextNextInfo != nil && ![_atd isTurnStateNotPassed:0 dist:nextNextInfo.distanceTo turnType:kStateTurnIn])
+        {
             [self playMakeTurn:currentSegment routeDirectionInfo:next nextDirectionInfo:nextNextInfo];
-        } else {
+        }
+        else
+        {
             [self playMakeTurn:currentSegment routeDirectionInfo:next nextDirectionInfo:nil];
         }
-        if (!next.turnType->goAhead() && [self isTargetPoint:nextNextInfo]) {   // !goAhead() avoids isolated "and arrive.." prompt, as goAhead() is not pronounced
-            if (nextNextInfo.distanceTo < _TURN_IN_DISTANCE_END) {
+        if (!next.turnType->goAhead() && [self isTargetPoint:nextNextInfo] && nextNextInfo != nil)
+        {   // !goAhead() avoids isolated "and arrive.." prompt, as goAhead() is not pronounced
+            if (![_atd isTurnStateNotPassed:0 dist:nextNextInfo.distanceTo turnType:kStateTurnIn])
+            {
                 // Issue #2865: Ensure a distance associated with the destination arrival is always announced, either here, or in subsequent "Turn in" prompt
                 // Distance fon non-straights already announced in "Turn (now)"'s nextnext  code above
-                if (nextNextInfo != nil && nextNextInfo.directionInfo != nil && nextNextInfo.directionInfo.turnType->goAhead()) {
+                if (nextNextInfo != nil && nextNextInfo.directionInfo != nil && nextNextInfo.directionInfo.turnType->goAhead())
+                {
                     [self playThen];
                     [self playGoAhead:nextNextInfo.distanceTo next:next streetName:[NSMutableDictionary new]];
                 }
                 [self playAndArriveAtDestination:nextNextInfo];
-            } else if (nextNextInfo.distanceTo < 1.2f * _TURN_IN_DISTANCE_END) {
+            }
+            else if (![_atd isTurnStateNotPassed:0 dist:nextNextInfo.distanceTo / 1.2f turnType:kStateTurnIn])
+            {
                 // 1.2 is safety margin should the subsequent "Turn in" prompt not fit in amy more
                 [self playThen];
                 [self playGoAhead:nextNextInfo.distanceTo next:next streetName:[NSMutableDictionary new]];
@@ -297,43 +239,62 @@ std::string preferredLanguage;
         [self nextStatusAfter:STATUS_TURN];
 
         // STATUS_TURN_IN = "Turn in ..."
-    } else if ((repeat || [self statusNotPassed:STATUS_TURN_IN]) && [self isDistanceLess:speed dist:dist etalon:_TURN_IN_DISTANCE]) {
-        if (repeat || dist >= _TURN_IN_DISTANCE_END) {
-            if (([self isDistanceLess:speed dist:nextNextInfo.distanceTo etalon:_TURN_NOW_DISTANCE] || nextNextInfo.distanceTo < _TURN_IN_DISTANCE_END) &&
-                nextNextInfo != nil) {
-                [self playMakeTurnIn:currentSegment info:next dist:(dist - (int) _voicePromptDelayDistance) nextInfo:nextNextInfo.directionInfo];
-            } else {
-                [self playMakeTurnIn:currentSegment info:next dist:(dist - (int) _voicePromptDelayDistance) nextInfo:nil];
+    }
+    else if ((repeat || [self statusNotPassed:STATUS_TURN_IN]) && [_atd isTurnStateActive:speed dist:dist turnType:kStateTurnIn])
+    {
+        if (repeat || [_atd isTurnStateNotPassed:0 dist:dist turnType:kStateTurnIn])
+        {
+            if (nextNextInfo != nil && ([_atd isTurnStateActive:speed dist:nextNextInfo.distanceTo turnType:kStateTurnNow]
+                || ![_atd isTurnStateNotPassed:speed dist:nextNextInfo.distanceTo turnType:kStateTurnIn]))
+            {
+                [self playMakeTurnIn:currentSegment info:next dist:[_atd calcDistanceWithoutDelay:speed dist:dist] nextInfo:nextNextInfo.directionInfo];
+            }
+            else
+            {
+                [self playMakeTurnIn:currentSegment info:next dist:[_atd calcDistanceWithoutDelay:speed dist:dist] nextInfo:nil];
             }
             [self playGoAndArriveAtDestination:repeat nextInfo:nextInfo currSegment:currentSegment];
         }
         [self nextStatusAfter:STATUS_TURN_IN];
 
         // STATUS_PREPARE = "Turn after ..."
-    } else if ((repeat || [self statusNotPassed:STATUS_PREPARE]) && (dist <= _PREPARE_DISTANCE)) {
-        if (repeat || dist >= _PREPARE_DISTANCE_END) {
-            if (!repeat && (next.turnType->keepLeft() || next.turnType->keepRight())) {
+    }
+    else if ((repeat || [self statusNotPassed:STATUS_PREPARE]) && [_atd isTurnStateActive:0 dist:dist turnType:kStatePrepareTurn])
+    {
+        if (repeat || [_atd isTurnStateNotPassed:0 dist:dist turnType:kStatePrepareTurn])
+        {
+            if (!repeat && (next.turnType->keepLeft() || next.turnType->keepRight()))
+            {
                 // Do not play prepare for keep left/right
-            } else {
-                [self playPrepareTurn:currentSegment next:next dist:dist];
+            }
+            else
+            {
+                [self playPrepareTurn:currentSegment next:next dist: [_atd calcDistanceWithoutDelay:speed dist:dist]];
                 [self playGoAndArriveAtDestination:repeat nextInfo:nextInfo currSegment:currentSegment];
             }
         }
         [self nextStatusAfter:STATUS_PREPARE];
 
     // STATUS_LONG_PREPARE =  also "Turn after ...", we skip this now, users said this is obsolete
-    } else if ((repeat || [self statusNotPassed:STATUS_LONG_PREPARE]) && (dist <= _PREPARE_LONG_DISTANCE)) {
-        if (repeat || dist >= _PREPARE_LONG_DISTANCE_END) {
+    }
+    else if ((repeat || [self statusNotPassed:STATUS_LONG_PREPARE]) && [_atd isTurnStateActive:0 dist:dist turnType:kStateLongPrepareTurn])
+    {
+        if (repeat || [_atd isTurnStateNotPassed:0 dist:dist turnType:kStateLongPrepareTurn])
+        {
             [self playPrepareTurn:currentSegment next:next dist:dist];
             [self playGoAndArriveAtDestination:repeat nextInfo:nextInfo currSegment:currentSegment];
         }
         [self nextStatusAfter:STATUS_LONG_PREPARE];
 //
         // STATUS_UNKNOWN = "Continue for ..." if (1) after route calculation no other prompt is due, or (2) after a turn if next turn is more than PREPARE_LONG_DISTANCE away
-    } else if ([self statusNotPassed:STATUS_UNKNOWN]) {
+    }
+    else if ([self statusNotPassed:STATUS_UNKNOWN])
+    {
         // Strange how we get here but
         [self nextStatusAfter:STATUS_UNKNOWN];
-    } else if (repeat || ([self statusNotPassed:STATUS_PREPARE] && dist < playGoAheadDist)) {
+    }
+    else if (repeat || ([self statusNotPassed:STATUS_PREPARE] && dist < playGoAheadDist))
+    {
         playGoAheadDist = 0;
         [self playGoAhead:dist next:next streetName:[self getSpeakableStreetName:currentSegment routeDirectionInfo:next includeDestination:NO]];
     }
@@ -409,12 +370,16 @@ std::string preferredLanguage;
 - (void) playGoAndArriveAtDestination:(BOOL) repeat nextInfo:(OANextDirectionInfo *) nextInfo currSegment:(std::shared_ptr<RouteSegmentResult>) currentSegment
 {
     OARouteDirectionInfo *next = nextInfo.directionInfo;
-    if ([self isTargetPoint:nextInfo] && (!playedAndArriveAtTarget || repeat)) {
-        if (next.turnType->goAhead()) {
+    if ([self isTargetPoint:nextInfo] && (!playedAndArriveAtTarget || repeat))
+    {
+        if (next.turnType->goAhead())
+        {
             [self playGoAhead:nextInfo.distanceTo next:next streetName:[self getSpeakableStreetName:currentSegment routeDirectionInfo:next includeDestination:NO]];
             [self playAndArriveAtDestination:nextInfo];
             playedAndArriveAtTarget = true;
-        } else if (nextInfo.distanceTo <= 2 * _TURN_IN_DISTANCE) {
+        }
+        else if (nextInfo != nil && [_atd isTurnStateActive:0 dist:nextInfo.distanceTo / 2 turnType:kStateTurnIn])
+        {
             [self playAndArriveAtDestination:nextInfo];
             playedAndArriveAtTarget = true;
         }
@@ -590,20 +555,28 @@ std::string preferredLanguage;
 
 - (void) announceOffRoute:(double)dist
 {
-    long ms = CACurrentMediaTime() * 1000;
-    if (waitAnnouncedOffRoute == 0 || ms - lastAnnouncedOffRoute > waitAnnouncedOffRoute) {
-        OACommandBuilder *p = [self getNewCommandPlayerToPlay];
-        if (p != nil) {
-//            notifyOnVoiceMessage();
-            [[p offRoute:dist] play];
-            announceBackOnRoute = true;
+    if (dist > [_atd getOffRouteDistance])
+    {
+        long ms = CACurrentMediaTime() * 1000;
+        if (waitAnnouncedOffRoute == 0 || ms - lastAnnouncedOffRoute > waitAnnouncedOffRoute)
+        {
+            OACommandBuilder *p = [self getNewCommandPlayerToPlay];
+            if (p != nil)
+            {
+//                notifyOnVoiceMessage();
+                [[p offRoute:dist] play];
+                announceBackOnRoute = YES;
+            }
+            if (waitAnnouncedOffRoute == 0)
+            {
+                waitAnnouncedOffRoute = 60000;
+            }
+            else
+            {
+                waitAnnouncedOffRoute *= 2.5;
+            }
+            lastAnnouncedOffRoute = ms;
         }
-        if (waitAnnouncedOffRoute == 0) {
-            waitAnnouncedOffRoute = 60000;
-        } else {
-            waitAnnouncedOffRoute *= 2.5;
-        }
-        lastAnnouncedOffRoute = ms;
     }
 }
 
@@ -794,40 +767,7 @@ std::string preferredLanguage;
 }
 - (int) calculateImminent:(float)dist loc:(CLLocation *)loc
 {
-    float speed = _DEFAULT_SPEED;
-    if (loc && loc.speed >= 0)
-        speed = loc.speed;
-    
-    if ([self isDistanceLess:speed dist:dist etalon:_TURN_NOW_DISTANCE])
-        return 0;
-    else if (dist <= _PREPARE_DISTANCE)
-        return 1;
-    else if (dist <= _PREPARE_LONG_DISTANCE)
-        return 2;
-    else
-        return -1;
-}
-
-- (BOOL) isDistanceLess:(float)currentSpeed dist:(double)dist etalon:(double)etalon
-{
-    return [self isDistanceLess:currentSpeed dist:dist etalon:etalon defSpeed:_DEFAULT_SPEED];
-}
-
-- (BOOL) isDistanceLess:(float)currentSpeed dist:(double)dist etalon:(double)etalon defSpeed:(float)defSpeed
-{
-    if (currentSpeed <= 0)
-        currentSpeed = _DEFAULT_SPEED;
-    
-    // Trigger close prompts earlier if delayed for BT SCO connection establishment
-    // TODO: Java > Obj-C
-    //if ((settings.AUDIO_STREAM_GUIDANCE.getModeValue(router.getAppMode()) == 0) && !OAAbstractPrologCommandBuilder.btScoStatus) {
-    //    btScoDelayDistance = currentSpeed * (double) settings.BT_SCO_DELAY.get() / 1000;
-    //}
-    
-    if ((dist - _voicePromptDelayDistance < etalon) || ((dist - _voicePromptDelayDistance) / currentSpeed) < (etalon / defSpeed))
-        return YES;
-    
-    return NO;
+    return [_atd getImminentTurnStatus:dist loc:loc];
 }
 
 - (void) gpsLocationLost
@@ -1041,6 +981,16 @@ std::string preferredLanguage;
         });
     }
      */
+}
+
+- (OAAnnounceTimeDistances *)getAnnounceTimeDistances
+{
+    return _atd;
+}
+
+- (OARouteDirectionInfo *)getNextRouteDirection
+{
+    return nextRouteDirection;
 }
 
 @end

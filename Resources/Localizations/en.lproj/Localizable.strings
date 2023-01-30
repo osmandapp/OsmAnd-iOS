@@ -3024,3 +3024,6 @@
 "speak_route_recalculation" = "Announce route recalculation";
 "announcement_time_title" = "Announcement time";
 "user_points" = "User points";
+"speak_descr" = "Configure to announce street names, traffic warnings (forced stops, speed bumps), speed camera warnings, speed limits";
+"announcement_time_descr" = "The anouncement timing of different voice prompts depends on prompt type, current navigation speed, and default navigation speed.";
+"announcement_time_intervals" = "Time and distance intervals";

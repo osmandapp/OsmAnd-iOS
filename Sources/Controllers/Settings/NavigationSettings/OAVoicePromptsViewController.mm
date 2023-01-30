@@ -74,6 +74,7 @@
     _voiceOn = ![_settings.voiceMute get:self.appMode];
 
     OATableSectionData *voicePromptsSection = [OATableSectionData sectionData];
+    voicePromptsSection.footerText = OALocalizedString(@"speak_descr");
     [_data addSection:voicePromptsSection];
 
     [voicePromptsSection addRowFromDictionary:@{
@@ -511,7 +512,9 @@
     collapsableRow.collapsed = !collapsableRow.collapsed;
     NSMutableArray<NSIndexPath *> *rowIndexes = [NSMutableArray array];
     for (NSInteger i = 1; i <= collapsableRow.dependentRowsCount; i++)
+    {
         [rowIndexes addObject:[NSIndexPath indexPathForRow:(indexPath.row + i) inSection:indexPath.section]];
+    }
     
     [self.tableView performBatchUpdates:^{
         [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
@@ -535,7 +538,7 @@
     }
 }
 
-#pragma mark - OAUninstallSpeedCamerasDelegate
+#pragma mark - OASettingsDataDelegate
 
 - (void)onSettingsChanged
 {

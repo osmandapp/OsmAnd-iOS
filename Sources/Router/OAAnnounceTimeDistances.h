@@ -23,11 +23,13 @@
 
 - (instancetype)initWithAppMode:(OAApplicationMode *)appMode;
 
+- (void)setArrivalDistances:(float)arrivalDistanceFactor;
 - (int)getImminentTurnStatus:(float)dist loc:(CLLocation *)loc;
 - (BOOL)isTurnStateActive:(float)currentSpeed dist:(double)dist turnType:(int)turnType;
 - (BOOL)isTurnStateNotPassed:(float)currentSpeed dist:(double)dist turnType:(int)turnType;
 - (float)getSpeed:(CLLocation *)loc;
 - (float)getOffRouteDistance;
 - (int)calcDistanceWithoutDelay:(float)speed dist:(int)dist;
+- (NSAttributedString *)getIntervalsDescription;
 
 @end

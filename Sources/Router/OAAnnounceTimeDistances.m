@@ -12,6 +12,8 @@
 #import "OAApplicationMode.h"
 #import "OAAppSettings.h"
 #import "OsmAndApp.h"
+#import "OAColors.h"
+#import "Localization.h"
 
 // Avoids false negatives: Pre-pone close announcements by this distance to allow for the possible over-estimation of the 'true' lead distance due to positioning error.
 // A smaller value will increase the timing precision, but at the risk of missing prompts which do not meet the precision limit.
@@ -223,12 +225,100 @@
 
 - (float)getArrivalDistance
 {
-    return -_arrivalDistance;
+    return _arrivalDistance;
 }
 
 - (int)calcDistanceWithoutDelay:(float)speed dist:(int)dist
 {
     return dist - _voicePromptDelayTimeSec * speed;
+}
+
+- (void)appendTurnDesc:(NSMutableAttributedString *)builder name:(NSString *)name dist:(int)dist meter:(NSString *)meter second:(NSString *)second
+{
+    [self appendTurnDesc:builder name:name dist:dist speed:_defaultSpeed meter:meter second:second colorize:YES];
+}
+
+- (void)appendTurnDesc:(NSMutableAttributedString *)builder name:(NSString *)name dist:(int)dist speed:(float)speed meter:(NSString *)meter second:(NSString *)second colorize:(BOOL)colorize
+{
+    int minDist = (dist / 5) * 5;
+    int time = (int) (dist / speed);
+    if (time > 15)
+    {
+        // round to 5
+        time = (time / 5) * 5;
+    }
+    name = [name stringByAppendingString:@":"];
+    NSString *distStr = [NSString stringWithFormat:@"\n%@ %d - %d %@", name, minDist, minDist + 5, meter];
+    NSString *timeStr = [NSString stringWithFormat:@"%d %@.", time, second];
+    NSString *str = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_comma"), distStr, timeStr];
+    [builder addString:str fontWeight:UIFontWeightRegular size:colorize ? 15. : 17.];
+
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    paragraphStyle.minimumLineHeight = colorize ? 18 : 22.;
+    paragraphStyle.lineSpacing = colorize ? 19. : 25;
+    [builder addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:[builder.string rangeOfString:str]];
+
+    if (colorize)
+        [builder addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(color_text_footer) range:[builder.string rangeOfString:name options:NSBackwardsSearch]];
+}
+
+- (NSAttributedString *)getIntervalsDescription
+{
+    NSString *meter = OALocalizedString(@"m");
+    NSString *second = OALocalizedString(@"shared_string_sec");
+    NSString *turn = OALocalizedString(@"shared_string_turn");
+    NSString *arrive = OALocalizedString(@"announcement_time_arrive");
+    NSString *offRoute = OALocalizedString(@"announcement_time_off_route");
+    NSString *traffic = [@"\n" stringByAppendingString:OALocalizedString(@"speak_traffic_warnings")];
+    NSString *point = [NSString stringWithFormat:@"\n%@ / %@ / %@", OALocalizedString(@"shared_string_waypoint"), OALocalizedString(@"favorite"), OALocalizedString(@"poi")];
+
+    NSString *prepare = [@"   • " stringByAppendingString:OALocalizedString(@"announcement_time_prepare")];
+    NSString *longPrepare = [@"   • " stringByAppendingString:OALocalizedString(@"announcement_time_prepare_long")];
+    NSString *approach = [@"   • " stringByAppendingString:OALocalizedString(@"announcement_time_approach")];
+    NSString *passing = [@"   • " stringByAppendingString:OALocalizedString(@"announcement_time_passing")];
+
+    NSMutableAttributedString *builder = [[NSMutableAttributedString alloc] init];
+
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    paragraphStyle.minimumLineHeight = 22.;
+    paragraphStyle.lineSpacing = 25.;
+
+    // Turn
+    [builder addString:turn fontWeight:UIFontWeightRegular size:17.];
+    [builder addAttribute:NSParagraphStyleAttributeName
+                    value:paragraphStyle
+                    range:[builder.string rangeOfString:turn]];
+    if (_prepareDistanceEnd <= _prepareDistance)
+        [self appendTurnDesc:builder name:prepare dist:_prepareDistance meter:meter second:second];
+    if (_prepareLongDistanceEnd <= _prepareLongDistance)
+        [self appendTurnDesc:builder name:longPrepare dist:_prepareLongDistance meter:meter second:second];
+    [self appendTurnDesc:builder name:approach dist:_turnInDistance meter:meter second:second];
+    [self appendTurnDesc:builder name:passing dist:_turnNowDistance speed:_turnNowSpeed meter:meter second:second colorize:YES];
+
+    // Arrive at destination
+    [self appendTurnDesc:builder name:arrive dist:(int) [self getArrivalDistance] speed:_defaultSpeed meter:meter second:second colorize:NO];
+
+    // Off-route
+    if ([self getOffRouteDistance] > 0)
+        [self appendTurnDesc:builder name:offRoute dist:(int) [self getOffRouteDistance] speed:_defaultSpeed meter:meter second:second colorize:NO];
+
+    // Traffic warnings
+    [builder addString:traffic fontWeight:UIFontWeightRegular size:17.];
+    [builder addAttribute:NSParagraphStyleAttributeName
+                    value:paragraphStyle
+                    range:[builder.string rangeOfString:traffic]];
+    [self appendTurnDesc:builder name:approach dist:_longAlarmAnnounceRadius meter:meter second:second];
+    [self appendTurnDesc:builder name:passing dist:_shortAlarmAnnounceRadius meter:meter second:second];
+
+    // Waypoint / Favorite / POI
+    [builder addString:point fontWeight:UIFontWeightRegular size:17.];
+    [builder addAttribute:NSParagraphStyleAttributeName
+                    value:paragraphStyle
+                    range:[builder.string rangeOfString:point]];
+    [self appendTurnDesc:builder name:approach dist:_longPntAnnounceRadius meter:meter second:second];
+    [self appendTurnDesc:builder name:passing dist:_shortPntAnnounceRadius meter:meter second:second];
+
+    return builder;
 }
 
 @end

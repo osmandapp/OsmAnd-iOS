@@ -1082,6 +1082,7 @@
 "ltr_or_rtl_combine_via_dash" = "%@— %@";
 "ltr_or_rtl_combine_via_or" = "%@ or %@";
 "ltr_or_rtl_combine_via_slash" = "%@/%@";
+"ltr_or_rtl_combine_via_comma" = "%@, %@";
 
 "listed_exist" = "Listed %@, already exist in OsmAnd.";
 
@@ -3029,3 +3030,9 @@
 "speak_descr" = "Configure to announce street names, traffic warnings (forced stops, speed bumps), speed camera warnings, speed limits";
 "announcement_time_descr" = "The anouncement timing of different voice prompts depends on prompt type, current navigation speed, and default navigation speed.";
 "announcement_time_intervals" = "Time and distance intervals";
+"announcement_time_arrive" = "Arrive at destination";
+"announcement_time_off_route" = "Off route";
+"announcement_time_prepare" = "Prepare";
+"announcement_time_prepare_long" = "Long prepare";
+"announcement_time_approach" = "Approach";
+"announcement_time_passing" = "Passing";

@@ -8,10 +8,12 @@
 
 #import "OAArrivalAnnouncementViewController.h"
 #import "OARightIconTableViewCell.h"
+#import "OATextMultilineTableViewCell.h"
 #import "OATableDataModel.h"
 #import "OATableSectionData.h"
 #import "OATableRowData.h"
 #import "OATableCollapsableRowData.h"
+#import "OAAnnounceTimeDistances.h"
 #import "OAAppSettings.h"
 #import "OAApplicationMode.h"
 #import "Localization.h"
@@ -26,8 +28,10 @@
 @implementation OAArrivalAnnouncementViewController
 {
     OAAppSettings *_settings;
+    OAAnnounceTimeDistances *_announceTimeDistances;
     OATableDataModel *_data;
     NSIndexPath *_selectedIndexPath;
+    NSIndexPath *_collapsedCellIndexPath;
 }
 
 - (instancetype) initWithAppMode:(OAApplicationMode *)appMode
@@ -36,6 +40,7 @@
     if (self)
     {
         _settings = [OAAppSettings sharedManager];
+        _announceTimeDistances = [[OAAnnounceTimeDistances alloc] initWithAppMode:appMode];
     }
     return self;
 }
@@ -104,6 +109,10 @@
         kCellTitleKey : OALocalizedString(@"announcement_time_intervals")
     }];
     [infoSection addRow:infoCollapsableRow];
+
+    [infoCollapsableRow addDependentRow:[[OATableRowData alloc] initWithData:@{
+        kCellTypeKey : [OATextMultilineTableViewCell getCellIdentifier]
+    }]];
 }
 
 - (void)updateArrivalDistanceFactorValue
@@ -199,6 +208,22 @@
         }
         return cell;
     }
+    else if ([item.cellType isEqualToString:[OATextMultilineTableViewCell getCellIdentifier]])
+    {
+        OATextMultilineTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OATextMultilineTableViewCell getCellIdentifier]];
+        if (!cell)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextMultilineTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OATextMultilineTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell clearButtonVisibility:NO];
+        }
+        if (cell)
+        {
+            cell.textView.attributedText = [_announceTimeDistances getIntervalsDescription];
+        }
+        return cell;
+    }
     return nil;
 }
 
@@ -213,7 +238,22 @@
         NSIndexPath *oldSelectedIndexPath = _selectedIndexPath;
         _selectedIndexPath = indexPath;
         [self updateArrivalDistanceFactorValue];
-        [self.tableView reloadRowsAtIndexPaths:@[_selectedIndexPath, oldSelectedIndexPath] withRowAnimation:UITableViewRowAnimationNone];
+        [_announceTimeDistances setArrivalDistances:[_settings.arrivalDistanceFactor get:self.appMode]];
+        NSMutableArray<NSIndexPath *> *indexPaths = [NSMutableArray array];
+        [indexPaths addObject:_selectedIndexPath];
+        [indexPaths addObject:oldSelectedIndexPath];
+        if (_collapsedCellIndexPath)
+        {
+            OATableCollapsableRowData *collapsableRow = (OATableCollapsableRowData *) [_data itemForIndexPath:_collapsedCellIndexPath];
+            if (!collapsableRow.collapsed)
+            {
+                for (NSInteger i = 1; i <= collapsableRow.dependentRowsCount; i++)
+                {
+                    [indexPaths addObject:[NSIndexPath indexPathForRow:(_collapsedCellIndexPath.row + i) inSection:_collapsedCellIndexPath.section]];
+                }
+            }
+        }
+        [self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
     }
     else if ([[_data itemForIndexPath:indexPath].key isEqualToString:@"infoCollapsableCell"])
     {
@@ -223,6 +263,8 @@
 
 - (void)onCollapseButtonPressed:(NSIndexPath *)indexPath
 {
+    _collapsedCellIndexPath = indexPath;
+    [_announceTimeDistances setArrivalDistances:[_settings.arrivalDistanceFactor get:self.appMode]];
     OATableCollapsableRowData *collapsableRow = (OATableCollapsableRowData *) [_data itemForIndexPath:indexPath];
     collapsableRow.collapsed = !collapsableRow.collapsed;
     NSMutableArray<NSIndexPath *> *rowIndexes = [NSMutableArray array];
@@ -234,9 +276,9 @@
     [self.tableView performBatchUpdates:^{
         [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
         if (collapsableRow.collapsed)
-            [self.tableView deleteRowsAtIndexPaths:rowIndexes withRowAnimation:UITableViewRowAnimationBottom];
+            [self.tableView deleteRowsAtIndexPaths:rowIndexes withRowAnimation:UITableViewRowAnimationAutomatic];
         else
-            [self.tableView insertRowsAtIndexPaths:rowIndexes withRowAnimation:UITableViewRowAnimationBottom];
+            [self.tableView insertRowsAtIndexPaths:rowIndexes withRowAnimation:UITableViewRowAnimationAutomatic];
     } completion:nil];
 }
 

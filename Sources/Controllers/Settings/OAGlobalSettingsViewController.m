@@ -10,10 +10,13 @@
 #import "OAAppSettings.h"
 #import "OASettingsTableViewCell.h"
 #import "OASwitchTableViewCell.h"
+#import "OAValueTableViewCell.h"
+#import "OARightIconTableViewCell.h"
 #import "OAMultiIconTextDescCell.h"
 #import "OATableViewCustomHeaderView.h"
 #import "Localization.h"
 #import "OAColors.h"
+#import "OAHistorySettingsViewController.h"
 
 #define kCarplayHeaderTopMargin 40
 #define kDefaultProfileHeaderTopMargin 40
@@ -65,6 +68,8 @@
         self.titleLabel.text = OALocalizedString(@"settings_preset");
     else if (_settingsType == EOADialogsAndNotifications)
         self.titleLabel.text = OALocalizedString(@"dialogs_and_notifications");
+    else if (_settingsType == EOAHistory)
+        self.titleLabel.text = OALocalizedString(@"history_settings");
     else
         self.titleLabel.text = OALocalizedString(@"carplay_profile");
 }
@@ -102,34 +107,44 @@
         {
             _data = @[
                 @{
-                    @"name" : @"settings_preset",
-                    @"title" : OALocalizedString(@"settings_preset"),
-                    @"value" : _settings.useLastApplicationModeByDefault.get ? OALocalizedString(@"last_used") : _settings.defaultApplicationMode.get.toHumanString,
-                    @"description" : OALocalizedString(@"default_profile_descr"),
-                    @"img" : @"menu_cell_pointer.png",
-                    @"type" : [OASettingsTableViewCell getCellIdentifier] },
+                    @"header" : @"",
+                    @"footer" : OALocalizedString(@"default_profile_descr"),
+                    @"rows": @[@{@"name" : @"settings_preset",
+                                 @"title" : OALocalizedString(@"settings_preset"),
+                                 @"value" : _settings.useLastApplicationModeByDefault.get ? OALocalizedString(@"last_used") : _settings.defaultApplicationMode.get.toHumanString,
+                                 @"img" : @"menu_cell_pointer.png",
+                                 @"type" : [OASettingsTableViewCell getCellIdentifier] }]},
                 @{
-                    @"name" : @"carplay_profile",
-                    @"title" : OALocalizedString(@"carplay_profile"),
-                    @"value" : _settings.isCarPlayModeDefault.get ? OALocalizedString(@"settings_preset") : _settings.carPlayMode.get.toHumanString,
-                    @"description" : OALocalizedString(@"carplay_profile_descr"),
-                    @"img" : @"menu_cell_pointer.png",
-                    @"type" : [OASettingsTableViewCell getCellIdentifier] },
+                    @"header" : @"",
+                    @"footer" : OALocalizedString(@"carplay_profile_descr"),
+                    @"rows": @[@{ @"name" : @"carplay_profile",
+                                  @"title" : OALocalizedString(@"carplay_profile"),
+                                  @"value" : _settings.isCarPlayModeDefault.get ? OALocalizedString(@"settings_preset") : _settings.carPlayMode.get.toHumanString,
+                                  @"img" : @"menu_cell_pointer.png",
+                                  @"type" : [OASettingsTableViewCell getCellIdentifier] }]},
                 @{
-                    @"name" : @"dialogs_and_notif",
-                    @"title" : OALocalizedString(@"dialogs_and_notifications"),
-                    @"description" : OALocalizedString(@"dialogs_and_notifications_descr"),
-                    @"value" : [self getDialogsAndNotificationsValue],
-                    @"img" : @"menu_cell_pointer.png",
-                    @"type" : [OASettingsTableViewCell getCellIdentifier]
-                },
+                    @"header" : [OALocalizedString(@"privacy_and_security_header") upperCase],
+                    @"footer" : OALocalizedString(@"send_anonymous_data_desc"),
+                    @"rows": @[@{  @"name" : @"do_not_send_anonymous_data",
+                                   @"title" : OALocalizedString(@"send_anonymous_data"),
+                                   @"value" : @(_settings.sendAnonymousAppUsageData.get),
+                                   @"type" : [OASwitchTableViewCell getCellIdentifier], },
+                               @{
+                                   @"name" : @"history_settings",
+                                   @"title" : OALocalizedString(@"history_settings"),
+                                   @"value" : [self getDialogsAndNotificationsValue],
+                                   @"img" : @"menu_cell_pointer.png",
+                                   @"type" : [OASettingsTableViewCell getCellIdentifier] }]},
                 @{
-                    @"name" : @"do_not_send_anonymous_data",
-                    @"title" : OALocalizedString(@"send_anonymous_data"),
-                    @"description" : OALocalizedString(@"send_anonymous_data_desc"),
-                    @"value" : @(_settings.sendAnonymousAppUsageData.get),
-                    @"type" : [OASwitchTableViewCell getCellIdentifier], }
-            ];
+                    @"header" : @"",
+                    @"footer" : OALocalizedString(@"dialogs_and_notifications_descr"),
+                    @"rows": @[@{@"name" : @"dialogs_and_notif",
+                                 @"title" : OALocalizedString(@"dialogs_and_notifications"),
+                                 @"description" : OALocalizedString(@"dialogs_and_notifications_descr"),
+                                 @"value" : [self getDialogsAndNotificationsValue],
+                                 @"img" : @"menu_cell_pointer.png",
+                                 @"type" : [OASettingsTableViewCell getCellIdentifier]}]
+                }];
             break;
         }
         case EOADefaultProfile:
@@ -185,6 +200,46 @@
             _data = [NSArray arrayWithArray:arr];
             break;
         }
+        case EOAHistory:
+        {
+            _data = @[
+                @{
+                    @"header" : @"",
+                    @"footer" : OALocalizedString(@"history_footer_text"),
+                    @"rows": @[@{  @"name" : @"search_history",
+                                   @"title" : OALocalizedString(@"search_history"),
+                                   @"value" : [self getDialogsAndNotificationsValue],
+                                   @"icon" : @"ic_custom_search",
+                                   @"type" : [OAValueTableViewCell getCellIdentifier] },
+                               @{
+                                   @"name" : @"navigation_history",
+                                   @"title" : OALocalizedString(@"navigation_history"),
+                                   @"value" : [self getDialogsAndNotificationsValue],
+                                   @"icon" : @"ic_custom_navigation",
+                                   @"type" : [OAValueTableViewCell getCellIdentifier] },
+                               @{
+                                   @"name" : @"map_markers_history",
+                                   @"title" : OALocalizedString(@"map_markers_history"),
+                                   @"value" : [self getDialogsAndNotificationsValue],
+                                   @"icon" : @"ic_custom_marker",
+                                   @"type" : [OAValueTableViewCell getCellIdentifier] }]},
+                @{
+                    @"header" : [OALocalizedString(@"actions") upperCase],
+                    @"footer" : OALocalizedString(@"history_actions_footer_text"),
+                    @"rows": @[@{  @"name" : @"export_history",
+                                   @"title" : OALocalizedString(@"export_history"),
+                                   @"value" : @(_settings.sendAnonymousAppUsageData.get),
+                                   @"icon" : @"ic_custom_export",
+                                   @"type" : [OARightIconTableViewCell getCellIdentifier] },
+                               @{
+                                   @"name" : @"clear_history",
+                                   @"title" : OALocalizedString(@"clear_history"),
+                                   @"value" : [self getDialogsAndNotificationsValue],
+                                   @"icon" : @"ic_custom_remove_outlined",
+                                   @"type" : [OARightIconTableViewCell getCellIdentifier] }],
+                }];
+            break;
+        }
         case EOADialogsAndNotifications:
         {
             _data = @[
@@ -226,7 +281,13 @@
 
 - (NSDictionary *) getItem:(NSIndexPath *)indexPath
 {
-    if (_settingsType == EOAGlobalSettingsMain || _settingsType == EOADialogsAndNotifications)
+    if (_settingsType == EOAGlobalSettingsMain || _settingsType == EOAHistory)
+    {
+        NSDictionary *section = _data[indexPath.section];
+        NSArray *row = section[@"rows"];
+        return row[indexPath.row];
+    }
+    else if (_settingsType == EOADialogsAndNotifications)
         return _data[indexPath.section];
     else
         return _data[indexPath.row];
@@ -299,6 +360,52 @@
         [cell setOverflowVisibility:![item[@"isSelected"] boolValue]];
         return cell;
     }
+    else if ([cellType isEqualToString:[OAValueTableViewCell getCellIdentifier]])
+    {
+        OAValueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAValueTableViewCell *) nib[0];
+            [cell descriptionVisibility:NO];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        }
+        if (cell)
+        {
+            cell.titleLabel.text = item[@"title"];
+            NSString *iconName = item[@"icon"];
+            cell.leftIconView.image = [UIImage templateImageNamed:iconName];
+            cell.leftIconView.tintColor = UIColorFromRGB(color_primary_purple);
+        }
+        return cell;
+    }
+    else if ([cellType isEqualToString:[OARightIconTableViewCell getCellIdentifier]])
+    {
+        OARightIconTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OARightIconTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
+        }
+        if (cell)
+        {
+            cell.titleLabel.text = item[@"title"];
+            if ([item[@"title"] isEqualToString:@"Clear all history"])
+                cell.titleLabel.textColor = UIColorFromRGB(color_primary_red);
+            else
+                cell.titleLabel.textColor = UIColorFromRGB(color_primary_purple);
+            
+            cell.rightIconView.image = [UIImage templateImageNamed:item[@"icon"]];
+            if ([item[@"icon"] isEqualToString:@"ic_custom_remove_outlined"])
+                cell.rightIconView.tintColor = UIColorFromRGB(color_primary_red);
+            else
+                cell.rightIconView.tintColor = UIColorFromRGB(color_primary_purple);
+            
+        }
+        return cell;
+    }
     return nil;
 }
 
@@ -323,6 +430,8 @@
                     settingsViewController = [[OAGlobalSettingsViewController alloc] initWithSettingsType:EOADefaultProfile];
                 else if ([name isEqualToString:@"carplay_profile"])
                     settingsViewController = [[OAGlobalSettingsViewController alloc] initWithSettingsType:EOACarplayProfile];
+                else if ([name isEqualToString:@"history_settings"])
+                    settingsViewController = [[OAGlobalSettingsViewController alloc] initWithSettingsType:EOAHistory];
                 else if ([name isEqualToString:@"dialogs_and_notif"])
                     settingsViewController = [[OAGlobalSettingsViewController alloc] initWithSettingsType:EOADialogsAndNotifications];
                 [self.navigationController pushViewController:settingsViewController animated:YES];
@@ -346,6 +455,49 @@
                 [self backButtonClicked:nil];
                 break;
             }
+            case EOAHistory:
+            {
+                OAHistorySettingsViewController* historyViewController = nil;
+                if ([name isEqualToString:@"search_history"])
+                {
+                    historyViewController = [[OAHistorySettingsViewController alloc] initWithSettingsType:EOASearchHistoryProfile];
+                }
+                else if ([name isEqualToString:@"navigation_history"])
+                {
+                    historyViewController = [[OAHistorySettingsViewController alloc] initWithSettingsType:EOANavigationHistoryProfile];
+                }
+                else if ([name isEqualToString:@"map_markers_history"])
+                {
+                    historyViewController = [[OAHistorySettingsViewController alloc] initWithSettingsType:EOAMarkersHistoryProfile];
+                }
+                else if ([name isEqualToString:@"export_history"])
+                {
+                    
+                }
+                else if ([name isEqualToString:@"clear_history"])
+                {
+                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"history_clear_alert_title")
+                                                                                   message:OALocalizedString(@"history_clear_alert_message")
+                                                                            preferredStyle:UIAlertControllerStyleAlert];
+                    
+                    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel")
+                                                                           style:UIAlertActionStyleDefault
+                                                                         handler:nil
+                    ];
+                    UIAlertAction *clearAction = [UIAlertAction actionWithTitle:OALocalizedString(@"history_clear")
+                                                                          style:UIAlertActionStyleDestructive
+                                                                        handler:^(UIAlertAction * _Nonnull action) {
+                    }];
+                    
+                    [alert addAction:cancelAction];
+                    [alert addAction:clearAction];
+                    alert.preferredAction = clearAction;
+                    [self presentViewController:alert animated:YES completion:nil];
+                }
+                [self.navigationController pushViewController:historyViewController animated:YES];
+                [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+                break;
+            }
             default:
                 break;
         }
@@ -354,7 +506,13 @@
 
 - (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (_settingsType == EOAGlobalSettingsMain || _settingsType == EOADialogsAndNotifications)
+    if (_settingsType == EOAGlobalSettingsMain || _settingsType == EOAHistory)
+    {
+        NSDictionary *sections = _data[section];
+        NSArray *row = sections[@"rows"];
+        return row.count;
+    }
+    else if (_settingsType == EOADialogsAndNotifications)
         return 1;
     else if (_settingsType == EOADefaultProfile)
         return _isUsingLastAppMode ? 1 : _data.count;
@@ -366,7 +524,7 @@
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
 {
-    if (_settingsType == EOAGlobalSettingsMain || _settingsType == EOADialogsAndNotifications)
+    if (_settingsType == EOAGlobalSettingsMain || _settingsType == EOADialogsAndNotifications || _settingsType == EOAHistory)
         return _data.count;
     else
         return 1;
@@ -374,7 +532,12 @@
 
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    if (_settingsType == EOACarplayProfile)
+    if (_settingsType == EOAGlobalSettingsMain || _settingsType == EOAHistory)
+    {
+        NSDictionary *sections = _data[section];
+        return sections[@"header"];
+    }
+    else if (_settingsType == EOACarplayProfile)
         return OALocalizedString(@"carplay_profile_descr");
     else if (_settingsType == EOADefaultProfile)
         return OALocalizedString(@"default_profile_descr");
@@ -384,7 +547,12 @@
 
 - (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
-    if (_settingsType == EOAGlobalSettingsMain || _settingsType == EOADialogsAndNotifications)
+    if (_settingsType == EOAGlobalSettingsMain || _settingsType == EOAHistory)
+    {
+        NSDictionary *sections = _data[section];
+        return sections[@"footer"];
+    }
+    else if (_settingsType == EOADialogsAndNotifications)
     {
         NSDictionary *item = _data[section];
         return item[@"description"];
@@ -414,7 +582,12 @@
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    if (_settingsType == EOACarplayProfile)
+    if (_settingsType == EOAGlobalSettingsMain && section == 2)
+    {
+        NSString *title = [self tableView:tableView titleForHeaderInSection:section];
+        return [OATableViewCustomHeaderView getHeight:title width:tableView.bounds.size.width];
+    }
+    else if (_settingsType == EOACarplayProfile)
     {
         NSString *title = [self tableView:tableView titleForHeaderInSection:section];
         return [OATableViewCustomHeaderView getHeight:title width:tableView.bounds.size.width] + kCarplayHeaderTopMargin;
@@ -424,8 +597,20 @@
         NSString *title = [self tableView:tableView titleForHeaderInSection:section];
         return [OATableViewCustomHeaderView getHeight:title width:tableView.bounds.size.width] + kDefaultProfileHeaderTopMargin;
     }
+    else if (_settingsType == EOAHistory && section == 1)
+    {
+        NSString *title = [self tableView:tableView titleForHeaderInSection:section];
+        return [OATableViewCustomHeaderView getHeight:title width:tableView.bounds.size.width];
+    }
     else
         return section == 0 ? 18.0 : 16.0;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (_settingsType == EOAGlobalSettingsMain)
+        return 44.0;
+    return UITableViewAutomaticDimension;
 }
 
 #pragma mark - Switch

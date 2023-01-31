@@ -124,6 +124,9 @@
 "default_profile_descr" = "Select a profile that will be used the application launch.";
 "dialogs_and_notifications" = "Dialogs and notifications";
 "dialogs_and_notifications_descr" = "Control pop-ups, dialogs, and notifications";
+"history_settings" = "History";
+"history_footer_text" = "You can disable history logging individually for each history type.";
+"history_actions_footer_text" = "You can export history into a file. You can delete all history entries recorded until now.";
 "settings_preset_descr" = "Map view and navigation settings are remembered per use profile. Set your default profile here.";
 "unit_of_length" = "Units of length";
 "unit_of_length_descr" = "Change units of length.";
@@ -132,6 +135,7 @@
 "coordinates" = "Coordinates";
 "coords_format_descr" = "Format for geographical coordinates.";
 "do_not_show_discount_desc" = "Suppresses displaying app discounts & special local event messages.";
+"privacy_and_security_header" = "Privacy and security";
 "send_anonymous_data_desc" = "Send to OsmAnd map download statistics, we are not collecting location data, or any personal info.";
 "rotate_map_to_bearing" = "Map orientation";
 "rotate_map_to_bearing_descr" = "Select the map screen alignment.";
@@ -483,6 +487,13 @@
 "search_poi_category_hint" = "Type to search all";
 "poi_categories" = "POI categories";
 "search_history" = "Search history";
+"navigation_history" = "Navigation history";
+"map_markers_history" = "Map markers history";
+"clear_history" = "Clear all history";
+"export_history" = "Export";
+"history_clear_alert_title" = "Delete all history";
+"history_clear_alert_message" = "Are you sure you want delete all history items?";
+"history_clear" = "Clear";
 
 "track_coloring_solid" = "Solid";
 "attribute" = "Attribute";

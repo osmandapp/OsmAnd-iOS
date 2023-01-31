@@ -1570,6 +1570,11 @@
     [self presentViewController:alert animated:YES completion:nil];
 }
 
+- (void) openUploadToOSM
+{
+    NSLog(@"upload_to_openstreetmap !");
+}
+
 - (void)stopLocationServices
 {
     if (_locationServicesUpdateObserver)

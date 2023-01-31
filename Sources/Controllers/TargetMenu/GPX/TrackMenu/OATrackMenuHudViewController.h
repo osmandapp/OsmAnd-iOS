@@ -83,6 +83,7 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudTab)
 - (void)openWptOnMap:(OAGpxWptItem *)gpxWptItem;
 - (void)showAlertDeleteTrack;
 - (void)showAlertRenameTrack;
+- (void)openUploadToOSM;
 
 - (void)stopLocationServices;
 - (BOOL)openedFromMap;

@@ -90,6 +90,14 @@
             kCellTitle: OALocalizedString(@"shared_string_share")
     }];
     [shareSectionData.subjects addObject:shareCellData];
+    
+    OAGPXTableCellData *uploadToOSMCellData = [OAGPXTableCellData withData:@{
+            kTableKey: @"upload_to_openstreetmap",
+            kCellType: [OATitleIconRoundCell getCellIdentifier],
+            kCellRightIconName: @"ic_custom_upload_to_openstreetmap_outlined",
+            kCellTitle: OALocalizedString(@"upload_to_openstreetmap")
+    }];
+    [shareSectionData.subjects addObject:uploadToOSMCellData];
 
     OAGPXTableSectionData *editSectionData = [OAGPXTableSectionData withData:@{ kSectionHeaderHeight: @19. }];
     [self.tableData.subjects addObject:editSectionData];
@@ -218,6 +226,8 @@
         [self.trackMenuDelegate openMoveTrack];
     else if ([tableData.key isEqualToString:@"delete"] && self.trackMenuDelegate)
         [self.trackMenuDelegate showAlertDeleteTrack];
+    else if ([tableData.key isEqualToString:@"upload_to_openstreetmap"] && self.trackMenuDelegate)
+        [self.trackMenuDelegate openUploadToOSM];
 }
 
 @end

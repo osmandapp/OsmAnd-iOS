@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="pFL-rP-JjP">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="pFL-rP-JjP">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -104,10 +104,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3f4-ew-Wpp">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="88"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="92"/>
                                 <subviews>
                                     <button opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mD5-MP-Q0H">
-                                        <rect key="frame" x="16" y="51" width="30" height="30"/>
+                                        <rect key="frame" x="16" y="55" width="30" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="30" id="2E1-bZ-fdR"/>
                                             <constraint firstAttribute="height" constant="30" id="K3o-Oa-UxG"/>
@@ -119,7 +119,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gk2-gk-0ya">
-                                        <rect key="frame" x="329" y="51" width="30" height="30"/>
+                                        <rect key="frame" x="329" y="55" width="30" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="30" id="CEf-Cs-xUg"/>
                                             <constraint firstAttribute="height" constant="30" id="i40-q8-TAu"/>
@@ -134,7 +134,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Piu-7L-GLi">
-                                        <rect key="frame" x="367" y="51" width="30" height="30"/>
+                                        <rect key="frame" x="367" y="55" width="30" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="RPZ-8l-Vd5"/>
                                             <constraint firstAttribute="width" constant="30" id="yne-AX-Ua3"/>
@@ -149,7 +149,7 @@
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Favorite" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumScaleFactor="0.80000001192092896" translatesAutoresizingMaskIntoConstraints="NO" id="TMW-1h-fsN">
-                                        <rect key="frame" x="175" y="56" width="64" height="20"/>
+                                        <rect key="frame" x="175" y="59.5" width="64" height="20.5"/>
                                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
@@ -162,7 +162,7 @@
                                 </constraints>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" allowsSelectionDuringEditing="YES" allowsMultipleSelectionDuringEditing="YES" rowHeight="-1" estimatedRowHeight="48" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="eQR-uw-c2g">
-                                <rect key="frame" x="0.0" y="88" width="414" height="808"/>
+                                <rect key="frame" x="0.0" y="92" width="414" height="804"/>
                                 <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </tableView>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xuN-VR-7cz">
@@ -254,11 +254,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Jig-oO-m4v">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="88"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="92"/>
                                 <color key="backgroundColor" red="0.99015593530000001" green="0.4827104807" blue="0.032639358190000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SsY-mo-F9Q" userLabel="Cancel">
-                                <rect key="frame" x="16" y="49" width="53" height="33"/>
+                                <rect key="frame" x="16" y="53" width="53" height="33"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <state key="normal" title="Cancel"/>
@@ -267,13 +267,13 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tracks" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumScaleFactor="0.80000001192092896" translatesAutoresizingMaskIntoConstraints="NO" id="IHz-d7-XHh">
-                                <rect key="frame" x="180.5" y="55.5" width="53" height="20.5"/>
+                                <rect key="frame" x="180.5" y="59.5" width="53" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aK6-Js-xoN" userLabel="Selection mode">
-                                <rect key="frame" x="368" y="51" width="30" height="30"/>
+                                <rect key="frame" x="368" y="55" width="30" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="30" id="COs-Fa-pg1"/>
                                     <constraint firstAttribute="height" constant="30" id="i5o-uF-c6W"/>
@@ -285,7 +285,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uLq-ce-cBy">
-                                <rect key="frame" x="357" y="51" width="41" height="30"/>
+                                <rect key="frame" x="357" y="55" width="41" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="jzb-DV-Iwg"/>
                                 </constraints>
@@ -297,7 +297,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="P4W-pj-Ubf">
-                                <rect key="frame" x="16" y="51" width="30" height="30"/>
+                                <rect key="frame" x="16" y="55" width="30" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="4pd-w1-Q8v"/>
                                     <constraint firstAttribute="width" constant="30" id="dRc-aF-Bq4"/>
@@ -309,7 +309,7 @@
                                 </connections>
                             </button>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" allowsSelectionDuringEditing="YES" allowsMultipleSelectionDuringEditing="YES" rowHeight="-1" estimatedRowHeight="48" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="7U9-0B-5ap">
-                                <rect key="frame" x="0.0" y="88" width="414" height="808"/>
+                                <rect key="frame" x="0.0" y="92" width="414" height="804"/>
                                 <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </tableView>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2av-hy-ktm">
@@ -326,9 +326,9 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nI5-sn-XKQ">
-                                        <rect key="frame" x="162" y="0.0" width="90" height="44"/>
+                                        <rect key="frame" x="107" y="0.0" width="90" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" image="ic_custom_map_pin.png"/>
+                                        <state key="normal" image="ic_custom_map_pin_outlined.png"/>
                                         <connections>
                                             <action selector="showOnMapButtonClicked:" destination="rfa-sK-jEQ" eventType="touchUpInside" id="n6T-gV-vRN"/>
                                         </connections>
@@ -339,6 +339,14 @@
                                         <state key="normal" image="ic_custom_remove.png"/>
                                         <connections>
                                             <action selector="deleteButtonClicked:" destination="rfa-sK-jEQ" eventType="touchUpInside" id="Okn-LR-dhG"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0to-r4-yDh">
+                                        <rect key="frame" x="214" y="0.0" width="90" height="44"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" image="ic_custom_upload_to_openstreetmap_outlined.png"/>
+                                        <connections>
+                                            <action selector="uploadToOSMButtonClicked:" destination="rfa-sK-jEQ" eventType="touchUpInside" id="JeJ-eQ-bs7"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -382,6 +390,7 @@
                         <outlet property="selectionModeButton" destination="aK6-Js-xoN" id="WUB-WG-8tL"/>
                         <outlet property="showOnMapButton" destination="nI5-sn-XKQ" id="qXy-wY-p2u"/>
                         <outlet property="titleView" destination="IHz-d7-XHh" id="Tbv-vy-uSM"/>
+                        <outlet property="uploadToOSMButton" destination="0to-r4-yDh" id="7cF-Jy-gCF"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KmP-0y-Zhp" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -414,9 +423,10 @@
         <image name="delete_items.png" width="25" height="25"/>
         <image name="export_items.png" width="25" height="25"/>
         <image name="ic_custom_export.png" width="30" height="30"/>
-        <image name="ic_custom_map_pin.png" width="30" height="30"/>
+        <image name="ic_custom_map_pin_outlined.png" width="30" height="30"/>
         <image name="ic_custom_remove.png" width="30" height="30"/>
         <image name="ic_custom_upload.png" width="30" height="30"/>
+        <image name="ic_custom_upload_to_openstreetmap_outlined.png" width="30" height="30"/>
         <image name="ic_navbar_chevron.png" width="28" height="28"/>
         <image name="ic_navbar_overflow_menu_stroke.png" width="28" height="28"/>
         <image name="ic_tabbar_favorites.png" width="31" height="28"/>

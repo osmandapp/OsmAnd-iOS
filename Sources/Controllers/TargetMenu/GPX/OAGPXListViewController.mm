@@ -550,9 +550,11 @@ static UIViewController *parentController;
     
     _exportButton.tintColor = UIColorFromRGB(color_primary_purple);
     _showOnMapButton.tintColor = UIColorFromRGB(color_primary_purple);
+    _uploadToOSMButton.tintColor = UIColorFromRGB(color_primary_purple);
     _deleteButton.tintColor = UIColorFromRGB(color_primary_purple);
     [_exportButton setImage:[UIImage templateImageNamed:@"ic_custom_export.png"] forState:UIControlStateNormal];
-    [_showOnMapButton setImage:[UIImage templateImageNamed:@"ic_custom_map_pin.png"] forState:UIControlStateNormal];
+    [_showOnMapButton setImage:[UIImage templateImageNamed:@"ic_custom_map_pin_outlined.png"] forState:UIControlStateNormal];
+    [_uploadToOSMButton setImage:[UIImage templateImageNamed:@"ic_custom_upload_to_openstreetmap_outlined.png"] forState:UIControlStateNormal];
     [_deleteButton setImage:[UIImage templateImageNamed:@"ic_custom_remove.png"] forState:UIControlStateNormal];
     
     [self updateButtons];
@@ -1111,6 +1113,11 @@ static UIViewController *parentController;
         bottomSheet.delegate = self;
         [bottomSheet presentInViewController:self];
     }
+}
+
+- (IBAction) uploadToOSMButtonClicked:(id)sender
+{
+    NSLog(@"!! uploadToOSMButtonClicked");
 }
 
 #pragma mark - UITableViewDataSource

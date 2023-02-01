@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#include <OsmAndCore.h>
 
 @interface OATerrainLayer : NSObject
 
@@ -15,6 +16,7 @@
 
 - (BOOL) exists:(int)x y:(int)y zoom:(int)zoom;
 - (NSData *) getBytes:(int)x y:(int)y zoom:(int)zoom timeHolder:(NSNumber**)timeHolder;
+- (QByteArray) getByteArray:(int)x y:(int)y zoom:(int)zoom timeHolder:(NSNumber**)timeHolder;
 - (UIImage *) getImage:(int)x y:(int)y zoom:(int)zoom timeHolder:(NSNumber**)timeHolder;
 
 @end

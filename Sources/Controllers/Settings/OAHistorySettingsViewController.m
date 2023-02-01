@@ -59,6 +59,12 @@
         self.titleView.text = OALocalizedString(@"navigation_history");
     else if (_settingsType == EOAMarkersHistoryProfile)
         self.titleView.text = OALocalizedString(@"map_markers_history");
+    
+    [self.editButton setTitle:OALocalizedString(@"shared_string_edit") forState:UIControlStateNormal];
+    [self.selectAllButton setTitle:OALocalizedString(@"select_all") forState:UIControlStateNormal];
+    [self.cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
+    [self.exportButton setTitle:OALocalizedString(@"shared_string_export") forState:UIControlStateNormal];
+    [self.deleteButton setTitle:OALocalizedString(@"shared_string_delete") forState:UIControlStateNormal];
 }
 
 - (void) viewDidLoad
@@ -121,7 +127,7 @@
                     @"header" : [OALocalizedString(@"actions") upperCase],
                     @"footer" : OALocalizedString(@"history_actions_footer_text"),
                     @"rows": @[@{  @"name" : @"export_history",
-                                   @"title" : OALocalizedString(@"export_history"),
+                                   @"title" : OALocalizedString(@"shared_string_export"),
                                    @"value" : @(_settings.sendAnonymousAppUsageData.get),
                                    @"icon" : @"ic_custom_export",
                                    @"type" : [OARightIconTableViewCell getCellIdentifier] },
@@ -168,6 +174,7 @@
     _editToolbarView.frame = CGRectMake(0.0, DeviceScreenHeight + 1.0, DeviceScreenWidth, _editToolbarView.bounds.size.height);
     [_editToolbarView setHidden:NO];
     [UIView animateWithDuration:.3 animations:^{
+        _editToolbarView.frame = CGRectMake(0.0, DeviceScreenHeight - _editToolbarView.bounds.size.height, DeviceScreenWidth, _editToolbarView.bounds.size.height);
 //        self.tabBarController.tabBar.frame = CGRectMake(0.0, DeviceScreenHeight + 1.0, DeviceScreenWidth, self.tabBarController.tabBar.frame.size.height);
         [self applySafeAreaMargins];
     } completion:^(BOOL finished) {
@@ -183,7 +190,7 @@
 
 - (void) finishEditing
 {
-    _editToolbarView.frame = CGRectMake(0.0, DeviceScreenHeight - _editToolbarView.bounds.size.height, DeviceScreenWidth, _editToolbarView.bounds.size.height);
+//    _editToolbarView.frame = CGRectMake(0.0, DeviceScreenHeight - _editToolbarView.bounds.size.height, DeviceScreenWidth, _editToolbarView.bounds.size.height);
 //    self.tabBarController.tabBar.frame = CGRectMake(0.0, DeviceScreenHeight + 1, DeviceScreenWidth, self.tabBarController.tabBar.frame.size.height);
     [UIView animateWithDuration:.3 animations:^{
 //        [self.tabBarController.tabBar setHidden:NO];
@@ -254,6 +261,16 @@
 - (IBAction) selectAllButtonClick:(id)sender
 {
 
+}
+
+- (IBAction) exportButtonClicked:(id)sender
+{
+
+}
+
+- (IBAction) deleteButtonClicked:(id)sender
+{
+    
 }
 
 #pragma mark - TableView

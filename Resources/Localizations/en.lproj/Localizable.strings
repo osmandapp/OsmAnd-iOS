@@ -490,7 +490,6 @@
 "navigation_history" = "Navigation history";
 "map_markers_history" = "Map markers history";
 "clear_history" = "Clear all history";
-"export_history" = "Export";
 "history_clear_alert_title" = "Delete all history";
 "history_clear_alert_message" = "Are you sure you want delete all history items?";
 "history_clear" = "Clear";

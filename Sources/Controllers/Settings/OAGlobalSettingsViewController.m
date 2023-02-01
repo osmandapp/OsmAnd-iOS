@@ -227,7 +227,7 @@
                     @"header" : [OALocalizedString(@"actions") upperCase],
                     @"footer" : OALocalizedString(@"history_actions_footer_text"),
                     @"rows": @[@{  @"name" : @"export_history",
-                                   @"title" : OALocalizedString(@"export_history"),
+                                   @"title" : OALocalizedString(@"shared_string_export"),
                                    @"value" : @(_settings.sendAnonymousAppUsageData.get),
                                    @"icon" : @"ic_custom_export",
                                    @"type" : [OARightIconTableViewCell getCellIdentifier] },

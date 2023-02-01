@@ -99,11 +99,6 @@ OsmAnd::AlphaChannelPresence OASQLiteTileSourceMapLayerProvider::getAlphaChannel
     return OsmAnd::AlphaChannelPresence::Present;
 }
 
-QByteArray OASQLiteTileSourceMapLayerProvider::obtainImageData(const OsmAnd::ImageMapLayerProvider::Request& request)
-{
-    return nullptr;
-}
-
 QString OASQLiteTileSourceMapLayerProvider::getUrlToLoad(const OsmAnd::TileId tileId, const OsmAnd::ZoomLevel zoom)
 {
     int32_t x = tileId.x;
@@ -237,6 +232,11 @@ const sk_sp<SkImage> OASQLiteTileSourceMapLayerProvider::decodeBitmap(const QByt
     return image;
 }
 
+long long OASQLiteTileSourceMapLayerProvider::obtainImageData(const OsmAnd::ImageMapLayerProvider::Request& request, QByteArray& byteArray)
+{
+    return 0;
+}
+
 sk_sp<const SkImage> OASQLiteTileSourceMapLayerProvider::obtainImage(const OsmAnd::IMapTiledDataProvider::Request& request)
 {
     auto tileId = request.tileId;
@@ -311,12 +311,6 @@ sk_sp<const SkImage> OASQLiteTileSourceMapLayerProvider::obtainImage(const OsmAn
 bool OASQLiteTileSourceMapLayerProvider::supportsObtainImage() const
 {
     return true;
-}
-
-void OASQLiteTileSourceMapLayerProvider::obtainImageAsync(
-                                                   const OsmAnd::IMapTiledDataProvider::Request& request,
-                                                   const OsmAnd::ImageMapLayerProvider::AsyncImageData* asyncImageData)
-{
 }
 
 void OASQLiteTileSourceMapLayerProvider::lockTile(const OsmAnd::TileId tileId, const OsmAnd::ZoomLevel zoom)

@@ -84,6 +84,13 @@
     self.tableView.tableHeaderView = _tableHeaderView;
 }
 
+- (void) showCancelButtonWithBackButton
+{
+    self.backButton.hidden = NO;
+    self.cancelButton.hidden = NO;
+    self.cancelButtonLeftConstraint.constant = 8 + self.backButton.frame.size.width;
+}
+
 - (IBAction) backButtonPressed:(id)sender
 {
     [self dismissViewController];

@@ -32,6 +32,7 @@
 #import "OAExportItemsViewController.h"
 #import "OAIndexConstants.h"
 #import "OsmAndApp.h"
+#import "OAOsmUploadGPXViewConroller.h"
 
 #include <OsmAndCore/ArchiveReader.h>
 #include <OsmAndCore/IFavoriteLocation.h>
@@ -1117,7 +1118,11 @@ static UIViewController *parentController;
 
 - (IBAction) uploadToOSMButtonClicked:(id)sender
 {
-    NSLog(@"!! uploadToOSMButtonClicked");
+    if (_selectedItems.count > 0)
+    {
+        OAOsmUploadGPXViewConroller *vc = [[OAOsmUploadGPXViewConroller alloc] initWithGPXItems:_selectedItems];
+        [self.navigationController pushViewController:vc animated:YES];
+    }
 }
 
 #pragma mark - UITableViewDataSource

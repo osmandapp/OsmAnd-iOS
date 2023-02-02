@@ -227,7 +227,7 @@
     else if ([tableData.key isEqualToString:@"delete"] && self.trackMenuDelegate)
         [self.trackMenuDelegate showAlertDeleteTrack];
     else if ([tableData.key isEqualToString:@"upload_to_openstreetmap"] && self.trackMenuDelegate)
-        [self.trackMenuDelegate openUploadToOSM];
+        [self.trackMenuDelegate openUploadGpxToOSM];
 }
 
 @end

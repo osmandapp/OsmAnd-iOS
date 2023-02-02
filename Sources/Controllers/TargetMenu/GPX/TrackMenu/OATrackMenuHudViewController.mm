@@ -56,6 +56,7 @@
 #import "OAEditDescriptionViewController.h"
 #import "OAWikiArticleHelper.h"
 #import "OAMapHudViewController.h"
+#import "OAOsmUploadGPXViewConroller.h"
 
 #import <Charts/Charts-Swift.h>
 #import "OsmAnd_Maps-Swift.h"
@@ -1570,9 +1571,10 @@
     [self presentViewController:alert animated:YES completion:nil];
 }
 
-- (void) openUploadToOSM
+- (void) openUploadGpxToOSM
 {
-    NSLog(@"upload_to_openstreetmap !");
+    OAOsmUploadGPXViewConroller *vc = [[OAOsmUploadGPXViewConroller alloc] initWithGPXItems:@[self.gpx]];
+    [self presentViewController:vc animated:YES completion:nil];
 }
 
 - (void)stopLocationServices

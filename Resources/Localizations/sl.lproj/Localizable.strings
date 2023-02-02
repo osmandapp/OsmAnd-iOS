@@ -2076,8 +2076,8 @@
 \nNadaljnje branje na http://osmand.net/docs/user/plugins/contour-lines .";
 "kg" = "kg";
 "weather_plugin_description" = "Zagotavlja:
-\n- 24-urno in 7-dnevno vremensko napoved s petimi plastmi;
-\n- gradniki, ki temeljijo na lokaciji;
+\n- 24-urno in 7-dnevno vremensko napoved s petimi plastmi
+\n- gradniki, ki temeljijo na lokaciji
 \n- izoterme in izobare (izočrte temperature in zračnega tlaka).
 \n
 \nVremenske podatke zagotavlja globalni sistem napovedi (Global Forecast System - GFS, https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast ).";

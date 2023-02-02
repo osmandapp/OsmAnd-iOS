@@ -64,15 +64,11 @@ protected:
 public:
     OASQLiteTileSourceMapLayerProvider(const QString& fileName);
     virtual ~OASQLiteTileSourceMapLayerProvider();
-        
-    virtual QByteArray obtainImageData(const OsmAnd::ImageMapLayerProvider::Request& request);
-    virtual sk_sp<const SkImage> obtainImage(const OsmAnd::IMapTiledDataProvider::Request& request);
-    virtual bool supportsObtainImage() const;
 
-    virtual void obtainImageAsync(
-        const OsmAnd::IMapTiledDataProvider::Request& request,
-        const OsmAnd::ImageMapLayerProvider::AsyncImageData* asyncImageData);
-    
+    virtual bool supportsObtainImage() const;
+    virtual long long obtainImageData(const OsmAnd::ImageMapLayerProvider::Request& request, QByteArray& byteArray);
+    virtual sk_sp<const SkImage> obtainImage(const OsmAnd::IMapTiledDataProvider::Request& request);
+
     virtual OsmAnd::AlphaChannelPresence getAlphaChannelPresence() const;
     virtual OsmAnd::MapStubStyle getDesiredStubsStyle() const;
     

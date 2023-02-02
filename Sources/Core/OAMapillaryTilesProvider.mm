@@ -16,6 +16,7 @@
 #include <OsmAndCore/Map/MapDataProviderHelpers.h>
 #include <OsmAndCore/Data/Amenity.h>
 #include <OsmAndCore/Utilities.h>
+#include <OsmAndCore/SkiaUtilities.h>
 #include <OsmAndCore/Logging.h>
 #include <QStandardPaths>
 #include <OsmAndCore/LatLon.h>
@@ -331,12 +332,15 @@ std::shared_ptr<const OsmAnd::MvtReader::Tile> OAMapillaryTilesProvider::readGeo
     return localFile.exists() ? readGeometry(localFile, tileId) : nullptr;
 }
 
-QByteArray OAMapillaryTilesProvider::drawTile(const std::shared_ptr<const OsmAnd::MvtReader::Tile>& geometryTile,
-                                              const OsmAnd::TileId &tileId,
-                                              const OsmAnd::IMapTiledDataProvider::Request &req)
+bool OAMapillaryTilesProvider::drawTile(const std::shared_ptr<const OsmAnd::MvtReader::Tile>& geometryTile,
+                                        const OsmAnd::TileId &tileId,
+                                        const OsmAnd::IMapTiledDataProvider::Request &req,
+                                        QByteArray& rawData,
+                                        QByteArray& compressedData,
+                                        int& width, int& height)
 {
-    if (req.queryController != nullptr && req.queryController->isAborted())
-        return nullptr;
+    if (req.queryController && req.queryController->isAborted())
+        return false;
 
     SkBitmap bitmap;
     const auto tileSize = getTileSize();
@@ -347,7 +351,7 @@ QByteArray OAMapillaryTilesProvider::drawTile(const std::shared_ptr<const OsmAnd
                   "Failed to allocate bitmap of size %dx%d",
                   tileSize,
                   tileSize);
-        return nullptr;
+        return false;
     }
     
     bitmap.eraseColor(SK_ColorTRANSPARENT);
@@ -367,26 +371,33 @@ QByteArray OAMapillaryTilesProvider::drawTile(const std::shared_ptr<const OsmAnd
                   "Failed to encode bitmap of size %dx%d",
                   tileSize,
                   tileSize);
-        return nullptr;
+        return false;
     }
-    return QByteArray(reinterpret_cast<const char *>(data->bytes()), (int) data->size());
+    rawData = QByteArray(reinterpret_cast<const char *>(bitmap.getPixels()), (int) bitmap.computeByteSize());
+    compressedData = QByteArray(reinterpret_cast<const char *>(data->bytes()), (int) data->size());
+    return true;
 }
 
-QByteArray OAMapillaryTilesProvider::obtainImageData(const OsmAnd::ImageMapLayerProvider::Request& req)
+bool OAMapillaryTilesProvider::supportsObtainImage() const
+{
+    return true;
+}
+
+long long OAMapillaryTilesProvider::obtainImageData(const OsmAnd::ImageMapLayerProvider::Request& req, QByteArray& byteArray)
+{
+    return 0;
+}
+
+sk_sp<const SkImage> OAMapillaryTilesProvider::obtainImage(const OsmAnd::IMapTiledDataProvider::Request& req)
 {
     // Check provider can supply this zoom level
     if (req.zoom > getMaxZoom() || req.zoom < getMinZoom())
         return nullptr;
-    
+
     return getVectorTileImage(req);
 }
 
-sk_sp<const SkImage> OAMapillaryTilesProvider::obtainImage(const OsmAnd::IMapTiledDataProvider::Request& request)
-{
-    return nullptr;
-}
-
-QByteArray OAMapillaryTilesProvider::getVectorTileImage(const OsmAnd::IMapTiledDataProvider::Request& req)
+sk_sp<const SkImage> OAMapillaryTilesProvider::getVectorTileImage(const OsmAnd::IMapTiledDataProvider::Request& req)
 {
     QReadLocker scopedLocker(&_localCacheLock);
 
@@ -420,14 +431,14 @@ QByteArray OAMapillaryTilesProvider::getVectorTileImage(const OsmAnd::IMapTiledD
         {
             const auto& data = tileFile.readAll();
             tileFile.close();
-            return data;
+            return OsmAnd::SkiaUtilities::createImageFromData(data);
         }
         return nullptr;
     }
     
     QMutexLocker vectorTileLocker(&_vectorTileMutex);
 
-    if (req.queryController->isAborted()) {
+    if (req.queryController && req.queryController->isAborted()) {
         unlockTile(req.tileId, req.zoom);
         return nullptr;
     }
@@ -443,7 +454,7 @@ QByteArray OAMapillaryTilesProvider::getVectorTileImage(const OsmAnd::IMapTiledD
         {
             const auto& data = tileFile.readAll();
             tileFile.close();
-            return data;
+            return OsmAnd::SkiaUtilities::createImageFromData(data);
         }
         return nullptr;
     }
@@ -470,15 +481,19 @@ QByteArray OAMapillaryTilesProvider::getVectorTileImage(const OsmAnd::IMapTiledD
         
         const auto& geometryTile = readGeometry(localFile, tileId);
 
-        const auto& data = !geometryTile->empty() ? drawTile(geometryTile, tileId, req) : nullptr;
-        if (data != nullptr)
+        QByteArray rawData = QByteArray();
+        QByteArray compressedData = QByteArray();
+        int width = 0;
+        int height = 0;
+        bool hasData = !geometryTile->empty() ? drawTile(geometryTile, tileId, req, rawData, compressedData, width, height) : false;
+        if (hasData)
         {
             QFile tileFile(rasterFile.absoluteFilePath());
             // Ensure that all directories are created in path to local tile
             rasterFile.dir().mkpath(QLatin1String("."));
             if (tileFile.open(QIODevice::WriteOnly | QIODevice::Truncate))
             {
-                tileFile.write(data);
+                tileFile.write(compressedData);
                 tileFile.close();
                 
                 LogPrintf(OsmAnd::LogSeverityLevel::Debug,
@@ -494,8 +509,11 @@ QByteArray OAMapillaryTilesProvider::getVectorTileImage(const OsmAnd::IMapTiledD
         }
         // Unlock tile, since local storage work is done
         unlockTile(req.tileId, req.zoom);
-        
-        return data;
+
+        if (!rawData.isEmpty())
+            return OsmAnd::SkiaUtilities::createSkImageARGB888With(rawData, width, height);
+        else
+            return nullptr;
     }
     
     // Since tile is not in local cache (or cache is disabled, which is the same),
@@ -593,15 +611,20 @@ QByteArray OAMapillaryTilesProvider::getVectorTileImage(const OsmAnd::IMapTiledD
     requestResult.reset();
 
     const auto& geometryTile = readGeometry(localFile, tileId);
-    const auto& data = drawTile(geometryTile, tileId, req);
-    if (data != nullptr)
+
+    QByteArray rawData = QByteArray();
+    QByteArray compressedData = QByteArray();
+    int width = 0;
+    int height = 0;
+    bool hasData = drawTile(geometryTile, tileId, req, rawData, compressedData, width, height);
+    if (hasData)
     {
         QFile tileFile(rasterFile.absoluteFilePath());
         // Ensure that all directories are created in path to local tile
         rasterFile.dir().mkpath(QLatin1String("."));
         if (tileFile.open(QIODevice::WriteOnly | QIODevice::Truncate))
         {
-            tileFile.write(data);
+            tileFile.write(compressedData);
             tileFile.close();
             
             LogPrintf(OsmAnd::LogSeverityLevel::Debug,
@@ -618,13 +641,10 @@ QByteArray OAMapillaryTilesProvider::getVectorTileImage(const OsmAnd::IMapTiledD
     // Unlock tile, since local storage work is done
     unlockTile(req.tileId, req.zoom);
 
-    return data;
-}
-
-void OAMapillaryTilesProvider::obtainImageAsync(
-                                                const OsmAnd::IMapTiledDataProvider::Request& request,
-                                                const OsmAnd::ImageMapLayerProvider::AsyncImageData* asyncImageData)
-{
+    if (!rawData.isEmpty())
+        return OsmAnd::SkiaUtilities::createSkImageARGB888With(rawData, width, height);
+    else
+        return nullptr;
 }
 
 OsmAnd::MapStubStyle OAMapillaryTilesProvider::getDesiredStubsStyle() const

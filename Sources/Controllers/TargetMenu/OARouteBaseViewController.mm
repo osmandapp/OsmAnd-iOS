@@ -54,7 +54,7 @@
             if (statsModeCell)
             {
                 [statsModeCell.modeButton setTitle:[NSString stringWithFormat:@"%@/%@",
-                                        OALocalizedString(@"map_widget_altitude"),
+                                        OALocalizedString(@"altitude"),
                                         OALocalizedString(@"shared_string_slope")]
                                           forState:UIControlStateNormal];
             }
@@ -73,7 +73,7 @@
                 if (statsModeCell)
                 {
                     [statsModeCell.modeButton setTitle:[NSString stringWithFormat:@"%@/%@",
-                                            OALocalizedString(@"map_widget_altitude"),
+                                            OALocalizedString(@"altitude"),
                                             OALocalizedString(@"shared_string_speed")]
                                               forState:UIControlStateNormal];
                 }
@@ -96,7 +96,7 @@
         case EOARouteStatisticsModeAltitude:
         {
             if (statsModeCell)
-                [statsModeCell.modeButton setTitle:OALocalizedString(@"map_widget_altitude") forState:UIControlStateNormal];
+                [statsModeCell.modeButton setTitle:OALocalizedString(@"altitude") forState:UIControlStateNormal];
             [GpxUIHelper refreshLineChartWithChartView:chart
                                               analysis:analysis
                                    useGesturesAndScale:YES

@@ -219,7 +219,7 @@
     NSMutableDictionary *values = [NSMutableDictionary dictionary];
     values[@"tab_0_string_value"] = OALocalizedString(@"shared_string_overview");
     if (analysis.hasElevationData)
-        values[@"tab_1_string_value"] = OALocalizedString(@"map_widget_altitude");
+        values[@"tab_1_string_value"] = OALocalizedString(@"altitude");
     if (analysis.isSpeedSpecified)
         values[analysis.hasElevationData ? @"tab_2_string_value" : @"tab_1_string_value"] = OALocalizedString(@"gpx_speed");
     values[@"row_to_update_int_value"] = @([segmentSectionData.subjects indexOfObject:statisticsCellData]);
@@ -550,7 +550,7 @@
                 if (tableData.values.count > selectedIndex && selectedIndex != 0)
                 {
                     NSString *value = tableData.values[[NSString stringWithFormat:@"tab_%li_string_value", selectedIndex]];
-                    mode = [value isEqualToString:OALocalizedString(@"map_widget_altitude")]
+                    mode = [value isEqualToString:OALocalizedString(@"altitude")]
                             ? EOARouteStatisticsModeAltitudeSlope
                             : [value isEqualToString:OALocalizedString(@"gpx_speed")]
                                     ? EOARouteStatisticsModeSpeed

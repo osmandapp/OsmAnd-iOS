@@ -720,7 +720,7 @@
     OATextInfoWidget *maxspeed = [ric createMaxSpeedControl];
     [self registerSideWidget:maxspeed imageId:@"ic_action_speed_limit" message:OALocalizedString(@"map_widget_max_speed") key:@"max_speed" left:false priorityOrder:21];
     OATextInfoWidget *alt = [mic createAltitudeControl];
-    [self registerSideWidget:alt imageId:@"ic_action_altitude" message:OALocalizedString(@"map_widget_altitude") key:@"altitude" left:false priorityOrder:23];
+    [self registerSideWidget:alt imageId:@"ic_action_altitude" message:OALocalizedString(@"altitude") key:@"altitude" left:false priorityOrder:23];
 
     OATextInfoWidget *plainTime = [ric createPlainTimeControl];
     [self registerSideWidget:plainTime imageId:@"ic_action_time" message:OALocalizedString(@"map_widget_plain_time") key:@"plain_time" left:false priorityOrder:41];

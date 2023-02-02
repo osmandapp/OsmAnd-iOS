@@ -608,7 +608,7 @@ import Charts.Swift
         } else {
             divX = setupAxisDistance(axisBase: xAxis, meters: Double(analysis.totalDistance))
         }
-        let mainUnitY: String = OAUtilities.getLocalizedString(useFeet ? "units_ft" : "units_m")
+        let mainUnitY: String = OAUtilities.getLocalizedString(useFeet ? "foot" : "m")
 
         var yAxis: YAxis
         if (useRightAxis) {

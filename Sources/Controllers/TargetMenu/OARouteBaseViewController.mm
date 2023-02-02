@@ -605,7 +605,7 @@
         if (time.length > 0)
             [time appendAttributedString:space];
         NSAttributedString *val = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d", minutes] attributes:numericAttributes];
-        NSAttributedString *units = [[NSAttributedString alloc] initWithString:OALocalizedString(@"units_min_short") attributes:alphabeticAttributes];
+        NSAttributedString *units = [[NSAttributedString alloc] initWithString:OALocalizedString(@"m") attributes:alphabeticAttributes];
         [time appendAttributedString:val];
         [time appendAttributedString:space];
         [time appendAttributedString:units];

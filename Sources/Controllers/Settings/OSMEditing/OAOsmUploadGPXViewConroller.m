@@ -152,6 +152,12 @@
 
 #pragma mark - Actions
 
+- (IBAction)backButtonClicked:(id)sender
+{
+    //TODO: show alert
+    [super backButtonClicked:sender];
+}
+
 - (void) onVisibilityButtonClicked
 {
     OAOsmUploadGPXVisibilityViewConroller *vc = [[OAOsmUploadGPXVisibilityViewConroller alloc] initWithVisibility:_selectedVisibility];
@@ -178,11 +184,6 @@
 - (IBAction)onUploadButtonPressed:(id)sender
 {
     NSLog(@"onUploadButtonPressed");
-}
-
-- (IBAction)backButtonClicked:(id)sender
-{
-    [super backButtonClicked:sender];
 }
 
 #pragma mark - UITableViewDataSource

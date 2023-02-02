@@ -202,6 +202,26 @@
 
 @end
 
+@implementation UIFont (util)
+
+- (UIFont *)scaled
+{
+    return [[UIFontMetrics defaultMetrics] scaledFontForFont:self
+                                            maximumPointSize:[[UIFontMetrics defaultMetrics] scaledValueForValue:self.pointSize]];
+}
+
++ (UIFont *)scaledSystemFontOfSize:(CGFloat)fontSize
+{
+    return [[UIFont systemFontOfSize:fontSize] scaled];
+}
+
++ (UIFont *)scaledSystemFontOfSize:(CGFloat)fontSize weight:(UIFontWeight)weight
+{
+    return [[UIFont systemFontOfSize:fontSize weight:weight] scaled];
+}
+
+@end
+
 @implementation NSMutableAttributedString (util)
 
 - (void) addString:(NSString *)string fontWeight:(UIFontWeight)fontWeight size:(CGFloat)size

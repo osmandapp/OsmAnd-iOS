@@ -126,7 +126,13 @@
     
     self.headerDividerView.hidden = YES;
     self.buttonsSectionDividerView.hidden = YES;
-    
+
+    self.leftButton.titleLabel.adjustsFontForContentSizeCategory = YES;
+    self.leftButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
+
+    self.rightButton.titleLabel.adjustsFontForContentSizeCategory = YES;
+    self.rightButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
+
     [self.leftIconView setImage:[UIImage imageNamed:_titleIcon]];
     if (!_titleIcon)
     {

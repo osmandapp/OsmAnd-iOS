@@ -154,7 +154,6 @@
 
 - (void) onVisibilityButtonClicked
 {
-    NSLog(@"onVisibilityButtonClicked");
     OAOsmUploadGPXVisibilityViewConroller *vc = [[OAOsmUploadGPXVisibilityViewConroller alloc] initWithVisibility:_selectedVisibility];
     vc.visibilityDelegate = self;
     [self presentViewController:vc animated:YES completion:nil];
@@ -162,7 +161,6 @@
 
 - (void) onAccountButtonClicked
 {
-    NSLog(@"onAccountButtonClicked");
     if (_isLogged)
     {
         OAOsmAccountSettingsViewController *accountSettings = [[OAOsmAccountSettingsViewController alloc] init];
@@ -184,7 +182,6 @@
 
 - (IBAction)backButtonClicked:(id)sender
 {
-    NSLog(@"onbackButtonClicked");
     [super backButtonClicked:sender];
 }
 
@@ -240,6 +237,8 @@
             [cell.inputField removeTarget:self action:NULL forControlEvents:UIControlEventEditingChanged];
             [cell.inputField addTarget:self action:@selector(textViewDidChange:) forControlEvents:UIControlEventEditingChanged];
             cell.inputField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+            cell.inputField.autocorrectionType = UITextAutocorrectionTypeNo;
+            cell.inputField.spellCheckingType = UITextSpellCheckingTypeNo;
             cell.inputField.textAlignment = NSTextAlignmentNatural;
         }
         if (cell)
@@ -318,12 +317,10 @@
 {
     if (textView.tag == kDescriptionTextFieldTag)
     {
-        NSLog(@"DESC: %@", textView.text);
         _descriptionText = textView.text;
     }
     else if (textView.tag == kTagsTextFieldsTag)
     {
-        NSLog(@"TAGS: %@", textView.text);
         _tagsText = textView.text;
     }
 }
@@ -361,7 +358,6 @@
 
 - (void) onVisibilityChanged:(EOAOsmUploadGPXVisibility)visibility
 {
-    NSLog(@"onVisibilityChanged");
     _selectedVisibility = visibility;
     [self setupView];
     [self.tableView reloadData];

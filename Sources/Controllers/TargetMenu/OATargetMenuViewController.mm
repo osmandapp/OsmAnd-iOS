@@ -94,21 +94,28 @@
         case OATargetFavorite:
         {
             OAFavoriteItem *item;
-            for (const auto& favLoc : [OsmAndApp instance].favoritesCollection->getFavoriteLocations())
+            if (targetPoint.targetObj && [targetPoint.targetObj isKindOfClass:OAFavoriteItem.class])
             {
-                double favLon = OsmAnd::Utilities::get31LongitudeX(favLoc->getPosition31().x);
-                double favLat = OsmAnd::Utilities::get31LatitudeY(favLoc->getPosition31().y);
-                
-                if ([OAUtilities isCoordEqual:lat srcLon:lon destLat:favLat destLon:favLon])
+                item = targetPoint.targetObj;
+            }
+            else
+            {
+                for (const auto& favLoc : [OsmAndApp instance].favoritesCollection->getFavoriteLocations())
                 {
-                    item = [[OAFavoriteItem alloc] initWithFavorite:favLoc];
-                    break;
+                    double favLon = OsmAnd::Utilities::get31LongitudeX(favLoc->getPosition31().x);
+                    double favLat = OsmAnd::Utilities::get31LatitudeY(favLoc->getPosition31().y);
+                    
+                    if ([OAUtilities isCoordEqual:lat srcLon:lon destLat:favLat destLon:favLon])
+                    {
+                        item = [[OAFavoriteItem alloc] initWithFavorite:favLoc];
+                        break;
+                    }
                 }
             }
-            
+
             if (item.favorite)
                 controller = [[OAFavoriteViewController alloc] initWithItem:item headerOnly:headerOnly];
-            
+
             break;
         }
             

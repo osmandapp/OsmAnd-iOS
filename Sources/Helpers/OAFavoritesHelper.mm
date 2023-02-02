@@ -814,7 +814,7 @@ static BOOL _favoritesLoaded = NO;
 
 - (BOOL) isPersonal
 {
-    return [OAFavoriteGroup isPersonalCategoryDisplayName:self.name];
+    return [OAFavoriteGroup isPersonal:self.name];
 }
 
 + (BOOL) isPersonal:(NSString *)name
@@ -824,7 +824,7 @@ static BOOL _favoritesLoaded = NO;
 
 + (BOOL) isPersonalCategoryDisplayName:(NSString *)name
 {
-    return [name isEqualToString:kPersonalCategory];
+    return [name isEqualToString:OALocalizedString(@"personal_category_name")];
 }
 
 + (NSString *) getDisplayName:(NSString *)name

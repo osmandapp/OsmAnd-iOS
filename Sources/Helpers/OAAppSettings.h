@@ -1059,7 +1059,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 //@property (nonatomic) OACommonString *userAndroidId; //need ?
 
 @property (nonatomic) OACommonBoolean *speedCamerasUninstalled;
-@property (nonatomic) OACommonBoolean *speedCamerasAlertShowed;
+@property (nonatomic) OACommonBoolean *speedCamerasAlertShown;
 
 @property (nonatomic) OACommonLong *lastUpdatesCardRefresh;
 
@@ -1134,5 +1134,9 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 - (void) setLastGlobalModifiedTime:(long)timestamp;
 - (long) getLastProfileSettingsModifiedTime:(OAApplicationMode *)mode;
 - (void) setLastProfileModifiedTime:(long)timestamp mode:(OAApplicationMode *)mode;
+
+- (void)setDisabledTypes:(NSSet<NSString *> *)disabledTypes;
+- (NSSet<NSString *> *)getDisabledTypes;
+- (BOOL)isTypeDisabled:(NSString *)typeName;
 
 @end

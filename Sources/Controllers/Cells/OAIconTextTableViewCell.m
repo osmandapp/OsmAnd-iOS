@@ -19,7 +19,7 @@
 
 - (void) updateConstraints
 {
-    BOOL hasImage = self.iconView.image != nil && !self.iconView.hidden;
+    BOOL hasImage = !self.iconView.hidden && (self.iconView.image != nil || self.iconView.backgroundColor != nil);
     BOOL hasSecondaryImage = self.arrowIconView.image != nil && !self.arrowIconView.hidden;
 
     self.textLeftMargin.active = hasImage;

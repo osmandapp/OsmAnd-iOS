@@ -680,7 +680,9 @@
 
 - (NSString *)getGroupTitle
 {
-    return [_pointHandler getGroupTitle];
+    return _isNewItemAdding && _editPointType == EOAEditPointTypeFavorite
+        ? [OAFavoriteGroup getDisplayName:[[OAAppSettings sharedManager].lastFavCategoryEntered get]]
+        : [_pointHandler getGroupTitle];
 }
 
 - (void)viewDidLayoutSubviews

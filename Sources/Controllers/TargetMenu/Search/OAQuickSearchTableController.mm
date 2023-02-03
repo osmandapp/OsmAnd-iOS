@@ -130,12 +130,13 @@
                                                   {
                                                       return amenity != nullptr;
                                                   }));
+    OAAppSettings *settings = [OAAppSettings sharedManager];
     search->performSearch(*searchCriteria,
-                          [self, &amenity, &keyword]
+                          [self, &amenity, &keyword, settings]
                           (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
                           {
                               auto a = ((OsmAnd::AmenitiesInAreaSearch::ResultEntry&)resultEntry).amenity;
-                              if (a->nativeName == keyword || a->localizedNames.contains(keyword))
+                              if (![settings isTypeDisabled:a->subType.toNSString()] && (a->nativeName == keyword || a->localizedNames.contains(keyword)))
                                   amenity = qMove(a);
         
                           }, ctrl);

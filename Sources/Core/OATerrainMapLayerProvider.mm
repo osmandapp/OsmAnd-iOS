@@ -10,6 +10,8 @@
 #import "OATerrainLayer.h"
 #import "OsmAndApp.h"
 
+#include <OsmAndCore/SkiaUtilities.h>
+
 OATerrainMapLayerProvider::OATerrainMapLayerProvider()
 : minZoom(OsmAnd::ZoomLevel1),
 maxZoom(OsmAnd::ZoomLevel11)
@@ -31,29 +33,32 @@ OsmAnd::AlphaChannelPresence OATerrainMapLayerProvider::getAlphaChannelPresence(
     return OsmAnd::AlphaChannelPresence::Present;
 }
 
+bool OATerrainMapLayerProvider::supportsObtainImage() const
+{
+    return true;
+}
+
+long long OATerrainMapLayerProvider::obtainImageData(const OsmAnd::IMapTiledDataProvider::Request& request, QByteArray& byteArray)
+{
+    return 0;
+}
+
 sk_sp<const SkImage> OATerrainMapLayerProvider::obtainImage(const OsmAnd::IMapTiledDataProvider::Request& request)
 {
-    return nullptr;
-}
-
-QByteArray OATerrainMapLayerProvider::obtainImageData(const OsmAnd::ImageMapLayerProvider::Request& request)
-{
-    NSData *data;
+    QByteArray byteArray;
     OsmAndAppInstance app = [OsmAndApp instance];
     if (app.data.terrainType == EOATerrainTypeHillshade)
-        data = [[OATerrainLayer sharedInstanceHillshade] getBytes:request.tileId.x y:request.tileId.y zoom:request.zoom timeHolder:nil];
+        byteArray = [[OATerrainLayer sharedInstanceHillshade] getByteArray:request.tileId.x y:request.tileId.y zoom:request.zoom timeHolder:nil];
     else if (app.data.terrainType == EOATerrainTypeSlope)
-        data = [[OATerrainLayer sharedInstanceSlope] getBytes:request.tileId.x y:request.tileId.y zoom:request.zoom timeHolder:nil];
-    if (data)
-        return QByteArray::fromNSData(data);
+        byteArray = [[OATerrainLayer sharedInstanceSlope] getByteArray:request.tileId.x y:request.tileId.y zoom:request.zoom timeHolder:nil];
+    if (!byteArray.isEmpty())
+    {
+        return OsmAnd::SkiaUtilities::createImageFromData(byteArray);
+    }
     else
+    {
         return nullptr;
-}
-
-void OATerrainMapLayerProvider::obtainImageAsync(
-                      const OsmAnd::IMapTiledDataProvider::Request& request,
-                      const OsmAnd::ImageMapLayerProvider::AsyncImageData* asyncImageData)
-{
+    }
 }
 
 OsmAnd::MapStubStyle OATerrainMapLayerProvider::getDesiredStubsStyle() const

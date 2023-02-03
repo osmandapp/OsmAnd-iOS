@@ -76,6 +76,7 @@
         self.frame = CGRectMake(0, 0, 40., 40.);
         self.imageView.frame = self.frame;
         self.textView.frame = self.frame;
+        self.textView.textColor = UIColor.blackColor;
         self.bottomTextView.frame = CGRectMake(0, 24.4, 40., 9.);
         _carPlayMode = YES;
     }

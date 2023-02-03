@@ -1858,12 +1858,20 @@
                 langId = @"en";
             double mapDensity = [settings.mapDensity get];
             [_mapView setVisualZoomShift:mapDensity];
+            
+            QSet<QString> disabledPoiTypes = QSet<QString>();
+            for (NSString *disabledPoiType in [settings getDisabledTypes])
+            {
+                disabledPoiTypes.insert(QString::fromNSString(disabledPoiType));
+            }
             _mapPresentationEnvironment.reset(new OsmAnd::MapPresentationEnvironment(resolvedMapStyle,
                                                                                      self.displayDensityFactor,
                                                                                      mapDensity,
                                                                                      [settings.textSize get:settings.applicationMode.get],
                                                                                      QString::fromNSString(langId),
-                                                                                     langPreferences));
+                                                                                     langPreferences,
+                                                                                     nullptr,
+                                                                                     disabledPoiTypes));
             [OAWeatherHelper.sharedInstance updateMapPresentationEnvironment:self.mapPresentationEnv];
             
             _mapPrimitiviser.reset(new OsmAnd::MapPrimitiviser(_mapPresentationEnvironment));
@@ -2008,14 +2016,20 @@
             else if ([settings settingMapLanguageShowLocal] &&
                      settings.settingMapLanguageTranslit.get)
                 langId = @"en";
-            
-            
+
+            QSet<QString> disabledPoiTypes = QSet<QString>();
+            for (NSString *disabledPoiType in [settings getDisabledTypes])
+            {
+                disabledPoiTypes.insert(QString::fromNSString(disabledPoiType));
+            }
             _mapPresentationEnvironment.reset(new OsmAnd::MapPresentationEnvironment(resolvedMapStyle,
                                                                                      self.displayDensityFactor,
                                                                                      1.0,
                                                                                      1.0,
                                                                                      QString::fromNSString(langId),
-                                                                                     langPreferences));
+                                                                                     langPreferences,
+                                                                                     nullptr,
+                                                                                     disabledPoiTypes));
             
             
             _mapPrimitiviser.reset(new OsmAnd::MapPrimitiviser(_mapPresentationEnvironment));

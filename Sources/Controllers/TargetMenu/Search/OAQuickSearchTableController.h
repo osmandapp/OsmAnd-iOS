@@ -11,7 +11,7 @@
 #import "OACommonTypes.h"
 #import "OAIconTextDescCell.h"
 
-@class OAQuickSearchListItem, OASearchResult, OAHistoryItem;
+@class OAQuickSearchListItem, OASearchResult, OAHistoryItem, OAPOI;
 
 @protocol OAQuickSearchTableDelegate <NSObject>
 
@@ -45,5 +45,6 @@
 + (void) showHistoryItemOnMap:(OAHistoryItem *)item lang:(NSString *)lang transliterate:(BOOL)transliterate;
 + (OAIconTextDescCell *) getIconTextDescCell:(NSString *)name tableView:(UITableView *)tableView typeName:(NSString *)typeName icon:(UIImage *)icon;
 + (NSString *) applySynonyms:(OASearchResult *)res;
++ (OAPOI *) findAmenity:(NSString *)name lat:(double)lat lon:(double)lon lang:(NSString *)lang transliterate:(BOOL)transliterate;
 
 @end

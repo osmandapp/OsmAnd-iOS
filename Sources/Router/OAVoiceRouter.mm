@@ -843,61 +843,28 @@ std::string preferredLanguage;
 - (void) announceAlarm:(OAAlarmInfo *)info speed:(float)speed
 {
     EOAAlarmInfoType type = info.type;
-    NSString *typeName = [OAAlarmInfo getName:type];
     if (type == AIT_SPEED_LIMIT)
     {
         [self announceSpeedAlarm:info.intValue speed:speed];
     }
-    else if (type == AIT_SPEED_CAMERA)
-    {
-        if ([_settings.speakCameras get])
-        {
-            OACommandBuilder *p = [self getNewCommandPlayerToPlay];
-            if (p)
-            {
-                [self notifyOnVoiceMessage];
-                [[p attention:typeName] play];
-            }
-        }
-    }
-    else if (type == AIT_PEDESTRIAN)
-    {
-        if ([_settings.speakPedestrian get])
-        {
-            OACommandBuilder *p = [self getNewCommandPlayerToPlay];
-            if (p)
-            {
-                [self notifyOnVoiceMessage];
-                [[p attention:typeName] play];
-            }
-        }
-    }
-    else if (type == AIT_TUNNEL)
-    {
-        if ([_settings.speakTunnels get])
-        {
-            OACommandBuilder *p = [self getNewCommandPlayerToPlay];
-            if (p)
-            {
-                [self notifyOnVoiceMessage];
-                [[p attention:typeName] play];
-            }
-        }
-    }
     else
     {
-        if ([_settings.speakTrafficWarnings get])
+        BOOL speakTrafficWarnings = [_settings.speakTrafficWarnings get];
+        BOOL speakTunnels = type == AIT_TUNNEL && [_settings.speakTunnels get];
+        BOOL speakPedestrian = type == AIT_PEDESTRIAN && [_settings.speakPedestrian get];
+        BOOL speakSpeedCamera = type == AIT_SPEED_CAMERA && [_settings.speakCameras get];
+        BOOL speakPrefType = type == AIT_TUNNEL || type == AIT_PEDESTRIAN || type == AIT_SPEED_CAMERA;
+
+        if (speakSpeedCamera || speakPedestrian || speakTunnels || (speakTrafficWarnings && !speakPrefType))
         {
+            NSString *typeName = [OAAlarmInfo getName:type];
             OACommandBuilder *p = [self getNewCommandPlayerToPlay];
             if (p)
-            {
-                [self notifyOnVoiceMessage];
                 [[p attention:typeName] play];
-            }
+
             // See Issue 2377: Announce destination again - after some motorway tolls roads split shortly after the toll
-            if (type == AIT_TOLL_BOOTH) {
+            if (type == AIT_TOLL_BOOTH)
                 suppressDest = false;
-            }
         }
     }
 }

@@ -70,6 +70,7 @@
         [exportTask cancel];
         cancelled |= exportTask.isCancelled;
     }
+    [self.exportAsyncTasks removeAllObjects];
     return cancelled;
 }
 
@@ -81,6 +82,7 @@
         [importTask cancel];
         cancelled |= importTask.isCancelled;
     }
+    [self.importAsyncTasks removeAllObjects];
     return cancelled;
 }
 
@@ -89,6 +91,7 @@
     BOOL cancelled = YES;
     for (OASyncBackupTask *syncTask in self.syncBackupTasks.allValues)
         [syncTask cancel];
+    [self.syncBackupTasks removeAllObjects];
     return cancelled;
 }
 

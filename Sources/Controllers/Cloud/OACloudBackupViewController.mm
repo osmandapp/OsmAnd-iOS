@@ -290,7 +290,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
             }
         }
 
-        if (_backup == nil)
+        if (_backup == nil && !_settingsHelper.isBackupSyncing)
         {
             NSDictionary *checkingCell = @{
                 kCellTypeKey: [OASimpleTableViewCell getCellIdentifier],

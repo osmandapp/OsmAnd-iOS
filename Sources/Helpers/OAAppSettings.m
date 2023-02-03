@@ -910,7 +910,7 @@
         case EOAGradientScaleTypeSpeed:
             return OALocalizedString(@"shared_string_speed");
         case EOAGradientScaleTypeAltitude:
-            return OALocalizedString(@"map_widget_altitude");
+            return OALocalizedString(@"altitude");
         case EOAGradientScaleTypeSlope:
             return OALocalizedString(@"shared_string_slope");
         default:

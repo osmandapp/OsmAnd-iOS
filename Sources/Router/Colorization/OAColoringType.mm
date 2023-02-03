@@ -86,7 +86,7 @@ static NSArray<OAColoringType *> * TRACK_COLORING_TYPES = @[OAColoringType.TRACK
 {
     if (!ALTITUDE)
     {
-        ALTITUDE = [[OAColoringType alloc] initWithName:@"altitude" title:OALocalizedString(@"map_widget_altitude") iconName:@"ic_action_altitude"];
+        ALTITUDE = [[OAColoringType alloc] initWithName:@"altitude" title:OALocalizedString(@"altitude") iconName:@"ic_action_altitude"];
     }
     return ALTITUDE;
 }

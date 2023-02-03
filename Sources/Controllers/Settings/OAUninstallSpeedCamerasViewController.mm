@@ -126,19 +126,19 @@
     [_data addSection:descriptionSection];
 }
 
-- (void)setDialogShowed
+- (void)setDialogShown
 {
-    [[OAAppSettings sharedManager].speedCamerasAlertShowed set:YES];
+    [[OAAppSettings sharedManager].speedCamerasAlertShown set:YES];
 }
 
 - (IBAction)secondaryButtonPressed:(id)sender
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
-    [settings setForbiddenTypes:[NSSet setWithObject:SPEED_CAMERA]];
+    [settings setDisabledTypes:[NSSet setWithObject:SPEED_CAMERA]];
     [settings.speedCamerasUninstalled set:YES];
     [settings.speakCameras set:NO];
     [settings.showCameras set:NO];
-    [self setDialogShowed];
+    [self setDialogShown];
 
     [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
     [[OARootViewController instance].mapPanel refreshMap];
@@ -151,7 +151,7 @@
 
 - (IBAction)primaryButtonPressed:(id)sender
 {
-    [self setDialogShowed];
+    [self setDialogShown];
     [self dismissViewController];
 }
 

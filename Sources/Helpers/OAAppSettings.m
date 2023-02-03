@@ -322,7 +322,7 @@
 #define userAndroidIdKey @"userAndroidId"
 
 #define speedCamerasUninstalledKey @"speedCamerasUninstalled"
-#define speedCamerasAlertShowedKey @"speedCamerasAlertShowed"
+#define speedCamerasAlertShownKey @"speedCamerasAlertShown"
 
 #define lastUpdatesCardRefreshKey @"lastUpdatesCardRefresh"
 
@@ -913,7 +913,7 @@
         case EOAGradientScaleTypeSpeed:
             return OALocalizedString(@"shared_string_speed");
         case EOAGradientScaleTypeAltitude:
-            return OALocalizedString(@"map_widget_altitude");
+            return OALocalizedString(@"altitude");
         case EOAGradientScaleTypeSlope:
             return OALocalizedString(@"shared_string_slope");
         default:
@@ -3406,7 +3406,7 @@
     OADayNightHelper *_dayNightHelper;
     
     NSObject *_settingsLock;
-    NSSet<NSString *> *_forbiddenTypes;
+    NSSet<NSString *> *_disabledTypes;
 }
 
 @synthesize settingShowMapRulet=_settingShowMapRulet, settingMapLanguageShowLocal=_settingMapLanguageShowLocal;
@@ -3444,7 +3444,7 @@
 
         _rtlLanguages = @[@"ar",@"dv",@"he",@"iw",@"fa",@"nqo",@"ps",@"sd",@"ug",@"ur",@"yi"];
 
-        _ttsAvailableVoices = @[@"ar", @"cs", @"da", @"de", @"el", @"en-gb", @"en", @"es-ar", @"es", @"et", @"fa", @"fi", @"fr", @"hi", @"hr", @"hu-formal", @"hu", @"it", @"ja", @"ko", @"nb", @"nl", @"pl", @"pt-br", @"pt", @"ro", @"ru", @"sk", @"sv", @"tr", @"zh-hk", @"zh"];
+        _ttsAvailableVoices = @[@"ar", @"cs", @"ca", @"da", @"de", @"el", @"en-gb", @"en", @"es-ar", @"es", @"et", @"fa", @"fi", @"fr", @"hi", @"hr", @"hu-formal", @"hu", @"it", @"ja", @"ko", @"nb", @"nl", @"pl", @"pt-br", @"pt", @"ro", @"ru", @"sk", @"sv", @"tr", @"zh-hk", @"zh"];
 
         // Common Settings
         _settingMapLanguage = [[[OACommonInteger withKey:settingMapLanguageKey defValue:0] makeGlobal] makeShared];
@@ -4175,10 +4175,10 @@
 //        [_globalPreferences setObject:_userAndroidId forKey:@"user_android_id"];
 
         _speedCamerasUninstalled = [[[OACommonBoolean withKey:speedCamerasUninstalledKey defValue:NO] makeGlobal] makeShared];
-        _speedCamerasAlertShowed = [[[OACommonBoolean withKey:speedCamerasAlertShowedKey defValue:NO] makeGlobal] makeShared];
+        _speedCamerasAlertShown = [[[OACommonBoolean withKey:speedCamerasAlertShownKey defValue:NO] makeGlobal] makeShared];
 
         [_globalPreferences setObject:_speedCamerasUninstalled forKey:@"speed_cameras_uninstalled"];
-        [_globalPreferences setObject:_speedCamerasAlertShowed forKey:@"speed_cameras_alert_showed"];
+        [_globalPreferences setObject:_speedCamerasAlertShown forKey:@"speed_cameras_alert_showed"];
 
         _lastUpdatesCardRefresh = [[OACommonLong withKey:lastUpdatesCardRefreshKey defValue:0] makeGlobal];
         [_globalPreferences setObject:_lastUpdatesCardRefresh forKey:@"last_updates_card_refresh"];
@@ -4988,19 +4988,19 @@
     [[NSUserDefaults standardUserDefaults] setObject:@(timestamp) forKey:[NSString stringWithFormat:@"%@_%@", lastProfileSettingsModifiedTimeKey, mode.stringKey]];
 }
 
-- (void)setForbiddenTypes:(NSSet<NSString *> *)forbiddenTypes
+- (void)setDisabledTypes:(NSSet<NSString *> *)disabledTypes
 {
-    _forbiddenTypes = forbiddenTypes;
+    _disabledTypes = disabledTypes;
 }
 
-- (NSSet<NSString *> *)getForbiddenTypes
+- (NSSet<NSString *> *)getDisabledTypes
 {
-    return _forbiddenTypes;
+    return _disabledTypes;
 }
 
-- (BOOL)isTypeForbidden:(NSString *)typeName
+- (BOOL)isTypeDisabled:(NSString *)typeName
 {
-    return [_forbiddenTypes containsObject:typeName];
+    return [_disabledTypes containsObject:typeName];
 }
 
 @end

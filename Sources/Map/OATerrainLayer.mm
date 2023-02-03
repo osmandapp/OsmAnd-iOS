@@ -151,6 +151,27 @@ typedef NS_ENUM(NSInteger, EOATerrainLayerType)
     }
 }
 
+- (QByteArray) getByteArray:(int)x y:(int)y zoom:(int)zoom timeHolder:(NSNumber**)timeHolder
+{
+    @synchronized(_sync)
+    {
+        auto ts = [self getTileSources:x y:y zoom:zoom];
+        for (const auto t : ts)
+        {
+            QByteArray data;
+            int64_t time;
+            if (t->obtainTileData(OsmAnd::TileId::fromXY(x, y), (OsmAnd::ZoomLevel) zoom, data, timeHolder ? &time : nullptr) && data.length() > 0)
+            {
+                if (timeHolder)
+                    *timeHolder = [NSNumber numberWithLongLong:(long long)time];
+
+                return data;
+            }
+        }
+        return QByteArray();
+    }
+}
+
 - (UIImage *) getImage:(int)x y:(int)y zoom:(int)zoom timeHolder:(NSNumber**)timeHolder
 {
     @synchronized(_sync)

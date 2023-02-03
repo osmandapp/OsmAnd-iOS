@@ -190,7 +190,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 
 - (void) initPersonalType
 {
-    if ([[self getCategory] isEqualToString:kPersonalCategory])
+    if ([OAFavoriteGroup isPersonal:[self getCategory]])
     {
         for (OASpecialPointType *pointType in [OASpecialPointType VALUES])
         {
@@ -441,7 +441,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 
 - (NSString *) getCategoryDisplayName
 {
-    return [OAFavoriteGroup getDisplayName:[OAAppSettings.sharedManager.lastFavCategoryEntered get]];
+    return [OAFavoriteGroup getDisplayName:[self getCategory]];
 }
 
 

@@ -75,9 +75,12 @@ private:
 
     std::shared_ptr<const OsmAnd::MvtReader::Tile> readGeometry(const QFileInfo &localFile,
                                                                 const OsmAnd::TileId &tileId);
-    QByteArray drawTile(const std::shared_ptr<const OsmAnd::MvtReader::Tile>& geometryTile,
-                        const OsmAnd::TileId &tileId,
-                        const OsmAnd::IMapTiledDataProvider::Request& req);
+    bool drawTile(const std::shared_ptr<const OsmAnd::MvtReader::Tile>& geometryTile,
+                  const OsmAnd::TileId &tileId,
+                  const OsmAnd::IMapTiledDataProvider::Request& req,
+                  QByteArray& rawData,
+                  QByteArray& compressedData,
+                  int& width, int& height);
 
     void drawPoints(const OsmAnd::IMapTiledDataProvider::Request &req,
                     const OsmAnd::TileId &tileId,
@@ -94,7 +97,7 @@ private:
                    const std::shared_ptr<const OsmAnd::MvtReader::Tile>& geometryTile,
                    SkCanvas& canvas);
     
-    QByteArray getVectorTileImage(const OsmAnd::IMapTiledDataProvider::Request& req);
+    sk_sp<const SkImage> getVectorTileImage(const OsmAnd::IMapTiledDataProvider::Request& req);
     
     virtual void performAdditionalChecks(sk_sp<SkImage> bitmap);
     
@@ -105,11 +108,9 @@ public:
     OAMapillaryTilesProvider(const float displayDensityFactor = 1.0f, const unsigned long long physicalMemory = 0);
     virtual ~OAMapillaryTilesProvider();
     
-    virtual QByteArray obtainImageData(const OsmAnd::ImageMapLayerProvider::Request& request);
+    virtual bool supportsObtainImage() const;
+    virtual long long obtainImageData(const OsmAnd::ImageMapLayerProvider::Request& request, QByteArray& byteArray);
     virtual sk_sp<const SkImage> obtainImage(const OsmAnd::IMapTiledDataProvider::Request& request);
-    virtual void obtainImageAsync(
-                                  const OsmAnd::IMapTiledDataProvider::Request& request,
-                                  const OsmAnd::ImageMapLayerProvider::AsyncImageData* asyncImageData);
     
     virtual OsmAnd::AlphaChannelPresence getAlphaChannelPresence() const;
     virtual OsmAnd::MapStubStyle getDesiredStubsStyle() const;

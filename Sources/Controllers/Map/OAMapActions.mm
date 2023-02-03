@@ -110,7 +110,7 @@
     if ([targets hasTooLongDistanceToNavigate])
         [_app showToastMessage:OALocalizedString(@"route_is_too_long_v2")];
 
-    if (![_settings.speedCamerasAlertShowed get])
+    if (![_settings.speedCamerasAlertShown get])
     {
         OAUninstallSpeedCamerasViewController *speedCamerasViewController = [[OAUninstallSpeedCamerasViewController alloc] init];
         [[OARootViewController instance] presentViewController:speedCamerasViewController animated:YES completion:nil];

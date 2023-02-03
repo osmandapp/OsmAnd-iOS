@@ -1430,6 +1430,7 @@
 		BBA3AFDF197FC4BB0039D991 /* regions.ocbf in Resources */ = {isa = PBXBuildFile; fileRef = BBE1D2B5190D1C9600D90F0A /* regions.ocbf */; };
 		C53920C2291E4E770076D5BB /* ic_custom_van@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C53920C0291E4E770076D5BB /* ic_custom_van@2x.png */; };
 		C53920C3291E4E770076D5BB /* ic_custom_van@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C53920C1291E4E770076D5BB /* ic_custom_van@3x.png */; };
+		C588D1E0298BAB81001FEDBD /* ca_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = C588D1DF298BAB80001FEDBD /* ca_tts.js */; };
 		C5D8F809292F5B2900C01065 /* ic_custom_download_map@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5D8F808292F5B2900C01065 /* ic_custom_download_map@2x.png */; };
 		C5D8F80B292F5B3A00C01065 /* ic_custom_download_map@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5D8F80A292F5B3A00C01065 /* ic_custom_download_map@3x.png */; };
 		CA4ED03A64D6784BA1452142 /* OADeleteAllFilesCommand.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4EDB13C1566E5C9A2B0D3E /* OADeleteAllFilesCommand.mm */; };
@@ -4900,6 +4901,7 @@
 		BBE1D2B5190D1C9600D90F0A /* regions.ocbf */ = {isa = PBXFileReference; lastKnownFileType = file; name = regions.ocbf; path = "../resources/countries-info/regions.ocbf"; sourceTree = "<group>"; };
 		C53920C0291E4E770076D5BB /* ic_custom_van@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_van@2x.png"; path = "Resources/Icons/ic_custom_van@2x.png"; sourceTree = "<group>"; };
 		C53920C1291E4E770076D5BB /* ic_custom_van@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_van@3x.png"; path = "Resources/Icons/ic_custom_van@3x.png"; sourceTree = "<group>"; };
+		C588D1DF298BAB80001FEDBD /* ca_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = ca_tts.js; path = ../resources/voice/ca/ca_tts.js; sourceTree = "<group>"; };
 		C5D8F808292F5B2900C01065 /* ic_custom_download_map@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_download_map@2x.png"; path = "Resources/Icons/ic_custom_download_map@2x.png"; sourceTree = "<group>"; };
 		C5D8F80A292F5B3A00C01065 /* ic_custom_download_map@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_download_map@3x.png"; path = "Resources/Icons/ic_custom_download_map@3x.png"; sourceTree = "<group>"; };
 		CA4ED01DD17D02CD759BBC7C /* OAShowHidePressureAction.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAShowHidePressureAction.mm; sourceTree = "<group>"; };
@@ -13243,6 +13245,7 @@
 			isa = PBXGroup;
 			children = (
 				DAB985A72124231C0081F8F8 /* ar_tts.js */,
+				C588D1DF298BAB80001FEDBD /* ca_tts.js */,
 				DA0C641A21245B6600B2A350 /* fa_tts.js */,
 				DA86371621A5A0AD0064A85F /* nb_tts.js */,
 				DAB625B92125A98800E6AF2E /* sv_tts.js */,
@@ -13584,6 +13587,7 @@
 				DA5A828726C563A700F274C7 /* OARouteProgressBarCell.xib in Resources */,
 				DA8EE8112470142B00069A6D /* quick-action.html in Resources */,
 				156E91C62449F1CE00B181BA /* ic_custom_direction_topbar_one@2x.png in Resources */,
+				C588D1E0298BAB81001FEDBD /* ca_tts.js in Resources */,
 				8431E7BC1B3877B80063C9AF /* check@3x.png in Resources */,
 				DA98A02F2109EBC000BB32D0 /* pl_tts.js in Resources */,
 				DA45DA82230EE05A0083DFA2 /* img_mapstyle_topo@3x.png in Resources */,

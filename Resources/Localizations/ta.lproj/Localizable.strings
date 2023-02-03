@@ -2161,16 +2161,12 @@
 "rendering_attr_highway_class_track_name" = "Track";
 "rendering_attr_tracktype_grade4_name" = "Mostly soft";
 "rendering_value_disabled_name" = "முடக்கியது";
-
-\n";
 "routing_attr_short_way_name" = "எரிபொருள்-திறனுள்ள வழி";
 "rendering_attr_alpineHiking_name" = "Alpine hiking scale (SAC)";
 "rendering_attr_showLez_name" = "Show Low Emission Zones";
 "rendering_value_green_name" = "Green";
 "routing_attr_piste_type_nordic_description" = "Trails for nordic or cross-country skiing.";
 "rendering_attr_surface_unpaved_name" = "Unpaved";
-
-\n";
 "rendering_value_bicycle_name" = "மிதிவண்டி";
 "rendering_value_translucent_lightgreen_name" = "Translucent light green";
 "rendering_attr_contourLines_name" = "Show contour lines";
@@ -2240,8 +2236,6 @@
 "routing_attr_avoid_shuttle_train_name" = "No shuttle train";
 "rendering_attr_contourColorScheme_description" = "Contour lines color scheme";
 "rendering_value_boldOutline_name" = "Bold outline";
-
-\n";
 "rendering_attr_noPolygons_name" = "Polygons";
 "rendering_attr_piste_difficulty_easy_name" = "Easy";
 "routing_attr_weight_description" = "அனுமதிக்கப்பட்ட வாகனம் எடை வரம்பை வழிகளில் குறிக்கவும்.";

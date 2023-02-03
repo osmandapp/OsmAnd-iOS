@@ -51,7 +51,7 @@
 
 - (void)addPoiType:(OAPOIType *)poiType
 {
-    if ([[OAAppSettings sharedManager] isTypeForbidden:poiType.name])
+    if ([[OAAppSettings sharedManager] isTypeDisabled:poiType.name])
         return;
 
     if (!_poiTypes)

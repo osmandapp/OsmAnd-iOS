@@ -323,7 +323,7 @@ static UIViewController *parentController;
             NSString *gpxFilePath = [_importUrl.path stringByReplacingOccurrencesOfString:[_app.gpxPath stringByAppendingString:@"/"] withString:@""];
             if ([[OAGPXDatabase sharedDb] containsGPXItem:gpxFilePath])
             {
-                [self showImportGpxAlert:OALocalizedString(@"gpx_import_title")
+                [self showImportGpxAlert:OALocalizedString(@"import_tracks")
                                  message:OALocalizedString(@"gpx_import_already_exists_short")
                        cancelButtonTitle:OALocalizedString(@"shared_string_ok")
                        otherButtonTitles:@[]
@@ -331,7 +331,7 @@ static UIViewController *parentController;
             }
             else if (showAlerts)
             {
-                [self showImportGpxAlert:OALocalizedString(@"gpx_import_title")
+                [self showImportGpxAlert:OALocalizedString(@"import_tracks")
                                  message:OALocalizedString(@"gpx_import_already_exists")
                        cancelButtonTitle:OALocalizedString(@"shared_string_cancel")
                        otherButtonTitles:@[OALocalizedString(@"gpx_add_new"), OALocalizedString(@"gpx_overwrite")]
@@ -356,7 +356,7 @@ static UIViewController *parentController;
         
         if (showAlerts)
         {
-            [self showImportGpxAlert:OALocalizedString(@"gpx_import_title")
+            [self showImportGpxAlert:OALocalizedString(@"import_tracks")
                              message:OALocalizedString(@"gpx_cannot_import")
                    cancelButtonTitle:OALocalizedString(@"shared_string_ok")
                    otherButtonTitles:nil
@@ -769,7 +769,7 @@ static UIViewController *parentController;
     actionsGroup.header = OALocalizedString(@"shared_string_actions");
     self.menuItems = @[@{@"type" : [OAIconTextTableViewCell getCellIdentifier],
                          @"key" : @"import_track",
-                         @"title": OALocalizedString(@"gpx_import_title"),
+                         @"title": OALocalizedString(@"import_tracks"),
                          @"icon": @"ic_custom_import",
                          @"header" : OALocalizedString(@"shared_string_actions")},
                        @{@"type" : [OAIconTextTableViewCell getCellIdentifier],

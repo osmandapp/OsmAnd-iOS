@@ -368,7 +368,7 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
             }
         }
 
-        if (![[OAAppSettings sharedManager] isTypeForbidden:name])
+        if (![[OAAppSettings sharedManager] isTypeDisabled:name])
         {
             _currentPOICategory = [[OAPOICategory alloc] initWithName:name];
             _currentPOICategory.tag = tag;
@@ -438,7 +438,7 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
             }
         }
 
-        if (![[OAAppSettings sharedManager] isTypeForbidden:name])
+        if (![[OAAppSettings sharedManager] isTypeDisabled:name])
         {
             _currentPOIFilter = [[OAPOIFilter alloc] initWithName:name category:_currentPOICategory];
             _currentPOIFilter.top = top;
@@ -515,7 +515,7 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
         }
         
         OAPOIType *baseType = [self parsePoiAdditional:localname attributeCount:attributeCount attributes:attributes lang:nil baseType:nil];
-        if (![[OAAppSettings sharedManager] isTypeForbidden:baseType.name])
+        if (![[OAAppSettings sharedManager] isTypeDisabled:baseType.name])
         {
             if (lang)
             {
@@ -554,7 +554,7 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
     {
         if (_currentCategoryPoiAdditionalsCategories.count > 0)
         {
-            if (_currentPOICategory && ![[OAAppSettings sharedManager] isTypeForbidden:_currentPOICategory.name])
+            if (_currentPOICategory && ![[OAAppSettings sharedManager] isTypeDisabled:_currentPOICategory.name])
                 [_abstractTypeAdditionalCategories setObject:[NSMutableSet setWithSet:_currentCategoryPoiAdditionalsCategories] forKey:_currentPOICategory];
             [_currentCategoryPoiAdditionalsCategories removeAllObjects];
         }
@@ -766,7 +766,7 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
         return nil;
     }
 
-    if (![[OAAppSettings sharedManager] isTypeForbidden:name])
+    if (![[OAAppSettings sharedManager] isTypeDisabled:name])
     {
         OAPOIType *poiType = [[OAPOIType alloc] initWithName:name category:_currentPOICategory];
         poiType.filter = _currentPOIFilter;
@@ -961,7 +961,7 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
         tag = [tag stringByAppendingString:[NSString stringWithFormat:@":%@", lang]];
     }
 
-    if (![[OAAppSettings sharedManager] isTypeForbidden:name])
+    if (![[OAAppSettings sharedManager] isTypeDisabled:name])
     {
         OAPOIType *poiType = [[OAPOIType alloc] initWithName:name category:_currentPOICategory];
         poiType.filter = _currentPOIFilter;

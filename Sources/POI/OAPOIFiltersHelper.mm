@@ -224,7 +224,7 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
                     {
                         [m setObject:[OAPOIBaseType nullSet] forKey:a];
                     }
-                    else if (![[OAAppSettings sharedManager] isTypeForbidden:subCategory])
+                    else if (![[OAAppSettings sharedManager] isTypeDisabled:subCategory])
                     {
                         if (![m objectForKey:a])
                             [m setObject:[NSMutableSet set] forKey:a];

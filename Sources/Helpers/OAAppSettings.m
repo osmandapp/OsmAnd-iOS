@@ -319,7 +319,7 @@
 #define userAndroidIdKey @"userAndroidId"
 
 #define speedCamerasUninstalledKey @"speedCamerasUninstalled"
-#define speedCamerasAlertShowedKey @"speedCamerasAlertShowed"
+#define speedCamerasAlertShownKey @"speedCamerasAlertShown"
 
 #define lastUpdatesCardRefreshKey @"lastUpdatesCardRefresh"
 
@@ -3403,7 +3403,7 @@
     OADayNightHelper *_dayNightHelper;
     
     NSObject *_settingsLock;
-    NSSet<NSString *> *_forbiddenTypes;
+    NSSet<NSString *> *_disabledTypes;
 }
 
 @synthesize settingShowMapRulet=_settingShowMapRulet, settingMapLanguageShowLocal=_settingMapLanguageShowLocal;
@@ -4166,10 +4166,10 @@
 //        [_globalPreferences setObject:_userAndroidId forKey:@"user_android_id"];
 
         _speedCamerasUninstalled = [[[OACommonBoolean withKey:speedCamerasUninstalledKey defValue:NO] makeGlobal] makeShared];
-        _speedCamerasAlertShowed = [[[OACommonBoolean withKey:speedCamerasAlertShowedKey defValue:NO] makeGlobal] makeShared];
+        _speedCamerasAlertShown = [[[OACommonBoolean withKey:speedCamerasAlertShownKey defValue:NO] makeGlobal] makeShared];
 
         [_globalPreferences setObject:_speedCamerasUninstalled forKey:@"speed_cameras_uninstalled"];
-        [_globalPreferences setObject:_speedCamerasAlertShowed forKey:@"speed_cameras_alert_showed"];
+        [_globalPreferences setObject:_speedCamerasAlertShown forKey:@"speed_cameras_alert_showed"];
 
         _lastUpdatesCardRefresh = [[OACommonLong withKey:lastUpdatesCardRefreshKey defValue:0] makeGlobal];
         [_globalPreferences setObject:_lastUpdatesCardRefresh forKey:@"last_updates_card_refresh"];
@@ -4979,19 +4979,19 @@
     [[NSUserDefaults standardUserDefaults] setObject:@(timestamp) forKey:[NSString stringWithFormat:@"%@_%@", lastProfileSettingsModifiedTimeKey, mode.stringKey]];
 }
 
-- (void)setForbiddenTypes:(NSSet<NSString *> *)forbiddenTypes
+- (void)setDisabledTypes:(NSSet<NSString *> *)disabledTypes
 {
-    _forbiddenTypes = forbiddenTypes;
+    _disabledTypes = disabledTypes;
 }
 
-- (NSSet<NSString *> *)getForbiddenTypes
+- (NSSet<NSString *> *)getDisabledTypes
 {
-    return _forbiddenTypes;
+    return _disabledTypes;
 }
 
-- (BOOL)isTypeForbidden:(NSString *)typeName
+- (BOOL)isTypeDisabled:(NSString *)typeName
 {
-    return [_forbiddenTypes containsObject:typeName];
+    return [_disabledTypes containsObject:typeName];
 }
 
 @end

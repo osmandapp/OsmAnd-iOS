@@ -315,7 +315,7 @@
     BOOL resetSettings = [defaults boolForKey:@"reset_settings"];
     BOOL resetRouting = [defaults boolForKey:@"reset_routing"];
     OAAppSettings *settings = [OAAppSettings sharedManager];
-    [settings setForbiddenTypes:[settings.speedCamerasUninstalled get] ? [NSSet setWithObject:SPEED_CAMERA] : [NSSet set]];
+    [settings setDisabledTypes:[settings.speedCamerasUninstalled get] ? [NSSet setWithObject:SPEED_CAMERA] : [NSSet set]];
     if (hideAllGPX)
     {
         [settings.mapSettingVisibleGpx set:@[]];

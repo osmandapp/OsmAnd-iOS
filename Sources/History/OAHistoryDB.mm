@@ -299,23 +299,23 @@
                     if (sqlite3_column_text(statement, 8) != nil)
                         typeName = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 8)];
 
-                    BOOL skipForbiddenResult = NO;
-                    NSSet<NSString *> *forbiddenPoiTypes = [settings getForbiddenTypes];
-                    for (NSString *forbiddenPoiType in forbiddenPoiTypes)
+                    BOOL skipDisabledResult = NO;
+                    NSSet<NSString *> *disabledPoiTypes = [settings getDisabledTypes];
+                    for (NSString *disabledPoiType in disabledPoiTypes)
                     {
-                        if ([[poiHelper getPhraseByName:forbiddenPoiType] isEqualToString:typeName])
-                            skipForbiddenResult = YES;
+                        if ([[poiHelper getPhraseByName:disabledPoiType] isEqualToString:typeName])
+                            skipDisabledResult = YES;
                     }
-                    if (!skipForbiddenResult)
+                    if (!skipDisabledResult)
                     {
-                        skipForbiddenResult = type == OAHistoryTypePOI && ![OAQuickSearchTableController findAmenity:name
-                                                                                                                 lat:lat
-                                                                                                                 lon:lon
-                                                                                                                lang:lang ? lang : @""
-                                                                                                       transliterate:transliterate];
+                        skipDisabledResult = type == OAHistoryTypePOI && ![OAQuickSearchTableController findAmenity:name
+                                                                                                                lat:lat
+                                                                                                                lon:lon
+                                                                                                               lang:lang ? lang : @""
+                                                                                                      transliterate:transliterate];
                     }
 
-                    if (!skipForbiddenResult)
+                    if (!skipDisabledResult)
                     {
                         NSString *iconName;
                         if (sqlite3_column_text(statement, 7) != nil)

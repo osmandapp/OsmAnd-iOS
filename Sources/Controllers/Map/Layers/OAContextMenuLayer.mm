@@ -421,15 +421,15 @@
         {
             if ([layer conformsToProtocol:@protocol(OAContextMenuProvider)])
             {
-                NSMutableArray<OATargetPoint *> *currentFounded = [NSMutableArray array];
-                [((id<OAContextMenuProvider>)layer) collectObjectsFromPoint:coord touchPoint:touchPoint symbolInfo:&symbolInfo found:currentFounded unknownLocation:showUnknownLocation];
+                NSMutableArray<OATargetPoint *> *currentFound = [NSMutableArray array];
+                [((id<OAContextMenuProvider>)layer) collectObjectsFromPoint:coord touchPoint:touchPoint symbolInfo:&symbolInfo found:currentFound unknownLocation:showUnknownLocation];
                
-                for (OATargetPoint *point in currentFounded)
+                for (OATargetPoint *point in currentFound)
                 {
                     if ([point.targetObj isKindOfClass:OAPOI.class])
                         ((OAPOI *)point.targetObj).mapIconName = mapIconName;
                 }
-                [found addObjectsFromArray:currentFounded];
+                [found addObjectsFromArray:currentFound];
             }
         }
     }

@@ -32,6 +32,7 @@
 #import "OAOsmAndFormatter.h"
 #import "OAMapDownloadController.h"
 #import "OAShareMenuActivity.h"
+#import "OAPOI.h"
 
 #define kButtonsViewHeight 44.0
 #define kDefaultMapRulerMarginBottom 0
@@ -1601,7 +1602,14 @@ static const NSInteger _buttonsCount = 4;
         else
         {
             UIImage *icon = [self.customController getIcon];
-            _imageView.image = icon ? icon : _targetPoint.icon;
+            if (!icon)
+            {
+                if ([_targetPoint.targetObj isKindOfClass:OAPOI.class])
+                    icon = [((OAPOI *)_targetPoint.targetObj) icon];
+                else
+                    icon = _targetPoint.icon;
+            }
+            _imageView.image = icon;
             _imageView.hidden = NO;
         }
     }

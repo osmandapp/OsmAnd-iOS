@@ -31,6 +31,7 @@
 #include <OsmAndCore/Data/TransportStop.h>
 #include <OsmAndCore/Search/TransportStopsInAreaSearch.h>
 #include <OsmAndCore/ObfDataInterface.h>
+#include <OsmAndCore/Map/BillboardRasterMapSymbol.h>
 
 @interface OAContextMenuLayer () <CAAnimationDelegate>
 @end
@@ -352,6 +353,7 @@
     double lon = coord.longitude;
     double latTap = lat;
     double lonTap = lon;
+    NSString *mapIconName = nil;
     
     CLLocationCoordinate2D objectCoord = kCLLocationCoordinate2DInvalid;
     CGFloat delta = 10.0;
@@ -397,6 +399,13 @@
                 objectCoord = CLLocationCoordinate2DMake(lat, lon);
             }
         }
+        if (symbolInfo.mapSymbol->contentClass == OsmAnd::RasterMapSymbol::ContentClass::Icon)
+        {
+            if (const auto billboardRasterMapSymbol = std::static_pointer_cast<const OsmAnd::BillboardRasterMapSymbol>(symbolInfo.mapSymbol))
+            {
+                mapIconName = billboardRasterMapSymbol->content.toNSString();
+            }
+        }
         if (const auto markerGroup = dynamic_cast<OsmAnd::MapMarker::SymbolsGroup*>(symbolInfo.mapSymbol->groupPtr))
         {
             if (markerGroup->getMapMarker() == _contextPinMarker.get())
@@ -411,7 +420,17 @@
         for (OAMapLayer *layer in layers)
         {
             if ([layer conformsToProtocol:@protocol(OAContextMenuProvider)])
-               [((id<OAContextMenuProvider>)layer) collectObjectsFromPoint:coord touchPoint:touchPoint symbolInfo:&symbolInfo found:found unknownLocation:showUnknownLocation];
+            {
+                NSMutableArray<OATargetPoint *> *currentFound = [NSMutableArray array];
+                [((id<OAContextMenuProvider>)layer) collectObjectsFromPoint:coord touchPoint:touchPoint symbolInfo:&symbolInfo found:currentFound unknownLocation:showUnknownLocation];
+               
+                for (OATargetPoint *point in currentFound)
+                {
+                    if ([point.targetObj isKindOfClass:OAPOI.class])
+                        ((OAPOI *)point.targetObj).mapIconName = mapIconName;
+                }
+                [found addObjectsFromArray:currentFound];
+            }
         }
     }
     

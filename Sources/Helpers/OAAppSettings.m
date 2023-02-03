@@ -319,7 +319,7 @@
 #define userAndroidIdKey @"userAndroidId"
 
 #define speedCamerasUninstalledKey @"speedCamerasUninstalled"
-#define speedCamerasAlertShowedKey @"speedCamerasAlertShowed"
+#define speedCamerasAlertShownKey @"speedCamerasAlertShown"
 
 #define lastUpdatesCardRefreshKey @"lastUpdatesCardRefresh"
 
@@ -3403,6 +3403,7 @@
     OADayNightHelper *_dayNightHelper;
     
     NSObject *_settingsLock;
+    NSSet<NSString *> *_disabledTypes;
 }
 
 @synthesize settingShowMapRulet=_settingShowMapRulet, settingMapLanguageShowLocal=_settingMapLanguageShowLocal;
@@ -4165,10 +4166,10 @@
 //        [_globalPreferences setObject:_userAndroidId forKey:@"user_android_id"];
 
         _speedCamerasUninstalled = [[[OACommonBoolean withKey:speedCamerasUninstalledKey defValue:NO] makeGlobal] makeShared];
-        _speedCamerasAlertShowed = [[[OACommonBoolean withKey:speedCamerasAlertShowedKey defValue:NO] makeGlobal] makeShared];
+        _speedCamerasAlertShown = [[[OACommonBoolean withKey:speedCamerasAlertShownKey defValue:NO] makeGlobal] makeShared];
 
         [_globalPreferences setObject:_speedCamerasUninstalled forKey:@"speed_cameras_uninstalled"];
-        [_globalPreferences setObject:_speedCamerasAlertShowed forKey:@"speed_cameras_alert_showed"];
+        [_globalPreferences setObject:_speedCamerasAlertShown forKey:@"speed_cameras_alert_showed"];
 
         _lastUpdatesCardRefresh = [[OACommonLong withKey:lastUpdatesCardRefreshKey defValue:0] makeGlobal];
         [_globalPreferences setObject:_lastUpdatesCardRefresh forKey:@"last_updates_card_refresh"];
@@ -4976,6 +4977,21 @@
 - (void) setLastProfileModifiedTime:(long)timestamp mode:(OAApplicationMode *)mode
 {
     [[NSUserDefaults standardUserDefaults] setObject:@(timestamp) forKey:[NSString stringWithFormat:@"%@_%@", lastProfileSettingsModifiedTimeKey, mode.stringKey]];
+}
+
+- (void)setDisabledTypes:(NSSet<NSString *> *)disabledTypes
+{
+    _disabledTypes = disabledTypes;
+}
+
+- (NSSet<NSString *> *)getDisabledTypes
+{
+    return _disabledTypes;
+}
+
+- (BOOL)isTypeDisabled:(NSString *)typeName
+{
+    return [_disabledTypes containsObject:typeName];
 }
 
 @end

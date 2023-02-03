@@ -133,7 +133,7 @@
 - (void)setTableHeaderView:(NSString *)label
 {
     UIView *headerView = [OAUtilities setupTableHeaderViewWithText:label
-                                                              font:[UIFont systemFontOfSize:34.0 weight:UIFontWeightBold]
+                                                              font:[UIFont scaledSystemFontOfSize:34.0 weight:UIFontWeightBold]
                                                          textColor:UIColor.blackColor
                                                        lineSpacing:0.0
                                                            isTitle:YES];
@@ -194,7 +194,7 @@
     updateNowData[@"type"] = [OARightIconTableViewCell getCellIdentifier];
     updateNowData[@"title"] = OALocalizedString(@"update_now");
     updateNowData[@"title_color"] = UIColorFromRGB(color_primary_purple);
-    updateNowData[@"title_font"] = [UIFont systemFontOfSize:17. weight:UIFontWeightMedium];
+    updateNowData[@"title_font"] = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium];
     updateNowData[@"right_icon"] = @"ic_custom_download";
     updateNowData[@"right_icon_color"] = UIColorFromRGB(color_primary_purple);
     [infoCells addObject:updateNowData];
@@ -229,7 +229,7 @@
     removeForecastData[@"title"] = OALocalizedString(@"weather_remove_forecast");
     removeForecastData[@"title_color"] = UIColorFromRGB(color_primary_red);
     removeForecastData[@"title_alignment"] = @(NSTextAlignmentCenter);
-    removeForecastData[@"title_font"] = [UIFont systemFontOfSize:17. weight:UIFontWeightMedium];
+    removeForecastData[@"title_font"] = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium];
     [removeCells addObject:removeForecastData];
 
     _data = data;
@@ -346,7 +346,7 @@
             cell.titleLabel.text = item[@"title"];
             cell.titleLabel.textColor = [item.allKeys containsObject:@"title_color"] ? item[@"title_color"] : UIColor.blackColor;
             cell.titleLabel.textAlignment = [item.allKeys containsObject:@"title_alignment"] ? (NSTextAlignment) [item[@"title_alignment"] integerValue] : NSTextAlignmentNatural;
-            cell.titleLabel.font = [item.allKeys containsObject:@"title_font"] ? item[@"title_font"] : [UIFont systemFontOfSize:17.];
+            cell.titleLabel.font = [item.allKeys containsObject:@"title_font"] ? item[@"title_font"] : [UIFont scaledSystemFontOfSize:17.];
         }
         return cell;
     }
@@ -364,7 +364,7 @@
         {
             cell.titleLabel.text = item[@"title"];
             cell.titleLabel.textColor = [item.allKeys containsObject:@"title_color"] ? item[@"title_color"] : UIColor.blackColor;
-            cell.titleLabel.font = [item.allKeys containsObject:@"title_font"] ? item[@"title_font"] : [UIFont systemFontOfSize:17.];
+            cell.titleLabel.font = [item.allKeys containsObject:@"title_font"] ? item[@"title_font"] : [UIFont scaledSystemFontOfSize:17.];
 
             BOOL hasRightIcon = [item.allKeys containsObject:@"right_icon"];
             if (([item[@"key"] isEqualToString:@"update_now_cell"] && [OAWeatherHelper getPreferenceDownloadState:[OAWeatherHelper checkAndGetRegionId:_region]] == EOAWeatherForecastDownloadStateInProgress))
@@ -450,7 +450,7 @@
     if (section == _accuracySection)
     {
         customHeader.label.text = _headers[@(section)];
-        customHeader.label.font = [UIFont systemFontOfSize:13];
+        customHeader.label.font = [UIFont scaledSystemFontOfSize:13];
         [customHeader setYOffset:20.];
         return customHeader;
     }
@@ -468,11 +468,11 @@
                                                     width:tableView.bounds.size.width
                                                   xOffset:kPaddingOnSideOfContent
                                                   yOffset:20.
-                                                     font:[UIFont systemFontOfSize:13.]] + 15.;
+                                                     font:[UIFont scaledSystemFontOfSize:13.]] + 15.;
         }
         else
         {
-            UIFont *font = [UIFont systemFontOfSize:13.];
+            UIFont *font = [UIFont scaledSystemFontOfSize:13.];
             CGFloat headerHeight = [OAUtilities calculateTextBounds:header
                                                             width:tableView.frame.size.width - (kPaddingOnSideOfContent + [OAUtilities getLeftMargin]) * 2
                                                              font:font].height + kPaddingOnSideOfHeaderWithText;
@@ -488,7 +488,7 @@
     NSString *footer = _footers[@(section)];
     if (footer)
     {
-        UIFont *font = [UIFont systemFontOfSize:13.];
+        UIFont *font = [UIFont scaledSystemFontOfSize:13.];
         CGFloat footerHeight = [OAUtilities calculateTextBounds:[_footers objectForKey:@(section)]
                                                         width:tableView.frame.size.width - (kPaddingOnSideOfContent + [OAUtilities getLeftMargin]) * 2
                                                         font:font].height + kPaddingOnSideOfFooterWithText;

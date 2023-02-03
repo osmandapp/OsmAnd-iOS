@@ -1846,7 +1846,7 @@
             UIColor *tintColor = cellData.tintColor > 0 ? UIColorFromRGB(cellData.tintColor) : UIColor.blackColor;
 
             cell.textView.font = [cellData.values.allKeys containsObject:@"font_value"]
-                    ? cellData.values[@"font_value"] : [UIFont systemFontOfSize:17.];
+                    ? cellData.values[@"font_value"] : [UIFont scaledSystemFontOfSize:17.];
 
             cell.selectionStyle = cellData.toggle ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
             cell.textView.text = cellData.title;
@@ -1915,7 +1915,7 @@
         if (cell)
         {
             cell.titleView.font = [cellData.values.allKeys containsObject:@"font_value"]
-                    ? cellData.values[@"font_value"] : [UIFont systemFontOfSize:17];
+                    ? cellData.values[@"font_value"] : [UIFont scaledSystemFontOfSize:17];
             cell.titleView.text = cellData.title;
             cell.textColorNormal = cellData.tintColor > 0 ? UIColorFromRGB(cellData.tintColor) : UIColor.blackColor;
 
@@ -2146,7 +2146,7 @@
         {
             [cell.buttonLeft setTitle:cellData.values[@"left_title_string_value"] forState:UIControlStateNormal];
 
-            cell.buttonLeft.titleLabel.font = [UIFont systemFontOfSize:17 weight:UIFontWeightMedium];
+            cell.buttonLeft.titleLabel.font = [UIFont scaledSystemFontOfSize:17 weight:UIFontWeightMedium];
             cell.buttonLeft.tag = tag;
             [cell.buttonLeft removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
             [cell.buttonLeft addTarget:self
@@ -2171,7 +2171,7 @@
                 cell.buttonRight.imageEdgeInsets = UIEdgeInsetsMake(0., buttonWidth - imageWidth, 0., 0.);
 
                 [cell.buttonRight setTitle:cellData.values[@"right_title_string_value"] forState:UIControlStateNormal];
-                cell.buttonRight.titleLabel.font = [UIFont systemFontOfSize:17 weight:UIFontWeightMedium];
+                cell.buttonRight.titleLabel.font = [UIFont scaledSystemFontOfSize:17 weight:UIFontWeightMedium];
                 cell.buttonRight.tag = tag;
                 [cell.buttonRight removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
                 [cell.buttonRight addTarget:self

@@ -80,7 +80,7 @@
 - (CGFloat) initialHeight
 {
     CGFloat width = DeviceScreenWidth - 2 * kHorizontalMargin;
-    CGFloat contentHeight = self.iconImageView.frame.size.height + [OAUtilities calculateTextBounds:[NSString stringWithFormat:OALocalizedString(@"track_is_saved"), _fileName.lastPathComponent.stringByDeletingPathExtension] width:width font:[UIFont systemFontOfSize:15.]].height + self.openSavedTrackButton.frame.size.height + self.createNewRouteButton.frame.size.height + self.shareButton.frame.size.height + kVerticalMargin * 6;
+    CGFloat contentHeight = self.iconImageView.frame.size.height + [OAUtilities calculateTextBounds:[NSString stringWithFormat:OALocalizedString(@"track_is_saved"), _fileName.lastPathComponent.stringByDeletingPathExtension] width:width font:[UIFont scaledSystemFontOfSize:15.]].height + self.openSavedTrackButton.frame.size.height + self.createNewRouteButton.frame.size.height + self.shareButton.frame.size.height + kVerticalMargin * 6;
     CGFloat buttonsHeight = self.buttonsViewHeight + [OAUtilities getBottomMargin];
     return contentHeight + buttonsHeight + kVerticalMargin * 2;
 }

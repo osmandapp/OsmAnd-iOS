@@ -80,8 +80,8 @@
         _carPlayMode = YES;
     }
     
-    self.textView.font = [UIFont systemFontOfSize:12.];
-    self.bottomTextView.font = [UIFont systemFontOfSize:7.];
+    self.textView.font = [UIFont scaledSystemFontOfSize:12.];
+    self.bottomTextView.font = [UIFont scaledSystemFontOfSize:7.];
     self.imageView.contentMode = UIViewContentModeScaleAspectFit;
     
     [self commonInit];

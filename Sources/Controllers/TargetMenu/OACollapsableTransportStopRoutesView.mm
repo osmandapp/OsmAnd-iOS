@@ -62,7 +62,7 @@
             UIColor *imgColor = UIColorFromRGB(color_ctx_menu_bottom_view_icon_light);
             UIColor *descrColor = UIColorFromARGB(color_secondary_text_light_argb);
             [title addAttribute:NSForegroundColorAttributeName value:titleColor range:NSMakeRange(0, imgIndex - 1)];
-            [title addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15.0] range:NSMakeRange(0, imgIndex - 1)];
+            [title addAttribute:NSFontAttributeName value:[UIFont scaledSystemFontOfSize:15.0] range:NSMakeRange(0, imgIndex - 1)];
             
             int i = 0;
             for (;;)
@@ -87,7 +87,7 @@
             [title addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(imgIndex - 1, strWithImage.length + 1)];
             
             [title addAttribute:NSForegroundColorAttributeName value:descrColor range:NSMakeRange(imgIndex + strWithImage.length, title.length - imgIndex - strWithImage.length)];
-            [title addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:13.0] range:NSMakeRange(imgIndex + strWithImage.length, title.length - imgIndex - strWithImage.length)];
+            [title addAttribute:NSFontAttributeName value:[UIFont scaledSystemFontOfSize:13.0] range:NSMakeRange(imgIndex + strWithImage.length, title.length - imgIndex - strWithImage.length)];
             [title addAttribute:NSBaselineOffsetAttributeName value:@(3.0) range:NSMakeRange(imgIndex + strWithImage.length, title.length - imgIndex - strWithImage.length)];
         }
         

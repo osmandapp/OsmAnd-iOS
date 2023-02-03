@@ -100,7 +100,7 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
         [self.titleView.centerXAnchor constraintEqualToAnchor:self.headerView.centerXAnchor].active = true;
         self.titleView.attributedText =
                 [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_options")
-                                                attributes:@{ NSFontAttributeName : [UIFont boldSystemFontOfSize:17.] }];
+                                                attributes:@{ NSFontAttributeName : [UIFont scaledBoldSystemFontOfSize:17.] }];
     }
 
     [self setLeftIcon];
@@ -191,7 +191,7 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
             kTableKey: @"delete",
             kCellType: [OATitleIconRoundCell getCellIdentifier],
             kCellTitle: OALocalizedString(@"shared_string_delete"),
-            kTableValues: @{ @"font_value": [UIFont systemFontOfSize:17. weight:UIFontWeightMedium] },
+            kTableValues: @{ @"font_value": [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium] },
             kCellRightIconName: @"ic_custom_remove_outlined",
             kCellTintColor: @color_primary_red
     }];
@@ -459,7 +459,7 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
             cell.textColorNormal = cellData.tintColor > 0 ? UIColorFromRGB(cellData.tintColor) : UIColor.blackColor;
 
             cell.titleView.font = [cellData.values.allKeys containsObject:@"font_value"]
-                    ? cellData.values[@"font_value"] : [UIFont systemFontOfSize:17.];
+                    ? cellData.values[@"font_value"] : [UIFont scaledSystemFontOfSize:17.];
 
             cell.iconColorNormal = cellData.tintColor > 0
                     ? UIColorFromRGB(cellData.tintColor) : UIColorFromRGB(color_primary_purple);

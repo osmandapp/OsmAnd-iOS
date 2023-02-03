@@ -302,7 +302,7 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
 
 - (CGFloat) heightForLabel:(NSString *)text
 {
-    UIFont *labelFont = [UIFont systemFontOfSize: 15.0];
+    UIFont *labelFont = [UIFont scaledSystemFontOfSize: 15.0];
     CGFloat textWidth = _bottomSheetView.bounds.size.width - 32;
     return [OAUtilities heightForHeaderViewText:text width:textWidth font:labelFont lineSpacing:6.0];
 }

@@ -372,7 +372,7 @@
             _isMotorType ? kTopPaddingMotorType : 0.,
             textWidth,
             heightForHeader)];
-        UIFont *labelFont = [UIFont systemFontOfSize:_isMotorType ? 13. : 15.];
+        UIFont *labelFont = [UIFont scaledSystemFontOfSize:_isMotorType ? 13. : 15.];
         description.font = labelFont;
         [description setTextColor: UIColorFromRGB(color_text_footer)];
         NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];

@@ -935,7 +935,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
-            cell.descriptionView.font = [UIFont systemFontOfSize:17.0];
+            cell.descriptionView.font = [UIFont scaledSystemFontOfSize:17.0];
             cell.iconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
             cell.iconView.tintColor = UIColorFromRGB(color_tint_gray);
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -1242,9 +1242,9 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
             btn.layer.cornerRadius = 6.0;
             btn.titleLabel.numberOfLines = 1;
             if (@available(iOS 13.0, *)) {
-                btn.titleLabel.font = [UIFont monospacedSystemFontOfSize:17 weight:UIFontWeightSemibold];
+                btn.titleLabel.font = [UIFont scaledMonospacedSystemFontOfSize:17 weight:UIFontWeightSemibold];
             } else {
-                btn.titleLabel.font = [UIFont monospacedDigitSystemFontOfSize:17 weight:UIFontWeightSemibold];
+                btn.titleLabel.font = [UIFont scaledMonospacedDigitSystemFontOfSize:17 weight:UIFontWeightSemibold];
             }
             [btn setTitle:hint forState:UIControlStateNormal];
             [btn setTitleColor:UIColorFromRGB(color_primary_purple) forState:UIControlStateNormal];

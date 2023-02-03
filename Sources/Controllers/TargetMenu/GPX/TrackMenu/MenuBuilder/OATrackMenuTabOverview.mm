@@ -120,7 +120,7 @@
 {
     return [OAUtilities createAttributedString:
                     [[OAWikiArticleHelper getFirstParagraph:_description] componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]][0]
-                                          font:[UIFont systemFontOfSize:17]
+                                          font:[UIFont scaledSystemFontOfSize:17]
                                          color:UIColor.blackColor
                                    strokeColor:nil
                                    strokeWidth:0
@@ -182,7 +182,7 @@
     return [OAGPXTableCellData withData:@{
             kTableKey: @"add_description",
             kCellType: [OAIconTitleValueCell getCellIdentifier],
-            kTableValues: @{ @"font_value": [UIFont systemFontOfSize:17. weight:UIFontWeightMedium] },
+            kTableValues: @{ @"font_value": [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium] },
             kCellTitle: OALocalizedString(@"add_description"),
             kCellToggle: @YES,
             kCellTintColor: @color_primary_purple
@@ -203,7 +203,7 @@
     return [OAGPXTableCellData withData:@{
             kTableKey: @"edit_description",
             kCellType: [OAIconTitleValueCell getCellIdentifier],
-            kTableValues: @{ @"font_value": [UIFont systemFontOfSize:17. weight:UIFontWeightMedium] },
+            kTableValues: @{ @"font_value": [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium] },
             kCellTitle: OALocalizedString(@"context_menu_edit_descr"),
             kCellToggle: @YES,
             kCellTintColor: @color_primary_purple
@@ -215,7 +215,7 @@
     return [OAGPXTableCellData withData:@{
             kTableKey: @"read_full_description",
             kCellType: [OAIconTitleValueCell getCellIdentifier],
-            kTableValues: @{ @"font_value": [UIFont systemFontOfSize:17. weight:UIFontWeightMedium] },
+            kTableValues: @{ @"font_value": [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium] },
             kCellTitle: OALocalizedString(@"read_full_description"),
             kCellToggle: @YES,
             kCellTintColor: @color_primary_purple

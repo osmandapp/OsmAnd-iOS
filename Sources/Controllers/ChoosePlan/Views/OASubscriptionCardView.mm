@@ -94,8 +94,8 @@
 
 - (void)commonInit
 {
-    self.labelTitle.font = [UIFont systemFontOfSize:34 weight:UIFontWeightBold];
-    self.labelDescription.font = [UIFont systemFontOfSize:17];
+    self.labelTitle.font = [UIFont scaledSystemFontOfSize:34 weight:UIFontWeightBold];
+    self.labelDescription.font = [UIFont scaledSystemFontOfSize:17];
     self.labelDescription.textColor = UIColorFromRGB(color_text_footer);
     [self.labelPurchaseDescription setText:OALocalizedString(@"subscription_cancel_description")];
     self.viewChooseSubscriptionButtonsBorder.layer.borderWidth = 1.;
@@ -137,7 +137,7 @@
         OAFeatureCardRow *learnMoreButton = [self addSimpleRow:OALocalizedString(@"shared_string_learn_more")
                                                    showDivider:YES
                                                           icon:@"ic_custom_arrow_down_short"];
-        learnMoreButton.labelTitle.font = [UIFont systemFontOfSize:17. weight:UIFontWeightMedium];
+        learnMoreButton.labelTitle.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium];
         learnMoreButton.delegate = self;
         learnMoreButton.tag = [self.viewFeatureRowsContainer.subviews indexOfObject:learnMoreButton];
         _buttonLearnMoreIndex = learnMoreButton.tag;

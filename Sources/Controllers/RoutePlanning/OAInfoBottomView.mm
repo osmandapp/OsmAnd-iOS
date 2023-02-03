@@ -102,7 +102,7 @@
 - (void)setHeaderViewText:(NSString *)headerViewText
 {
     _headerViewText = headerViewText;
-    _tableHeaderView = [OAUtilities setupTableHeaderViewWithText:_headerViewText font:[UIFont systemFontOfSize:15.] textColor:UIColor.blackColor lineSpacing:0.0 isTitle:NO];
+    _tableHeaderView = [OAUtilities setupTableHeaderViewWithText:_headerViewText font:[UIFont scaledSystemFontOfSize:15.] textColor:UIColor.blackColor lineSpacing:0.0 isTitle:NO];
     _tableView.tableHeaderView = _tableHeaderView;
 }
 

@@ -243,7 +243,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaLangSection)
 
 - (CGFloat)getHeaderHeightForSection:(NSInteger)section
 {
-    return [OATableViewCustomHeaderView getHeight:[self getTextForHeader:section] width:self.tableView.frame.size.width yOffset:17. font:[UIFont systemFontOfSize:section == EOAMapSettingsWikipediaLangSectionAll ? 15.0 : 13.0]];
+    return [OATableViewCustomHeaderView getHeight:[self getTextForHeader:section] width:self.tableView.frame.size.width yOffset:17. font:[UIFont scaledSystemFontOfSize:section == EOAMapSettingsWikipediaLangSectionAll ? 15.0 : 13.0]];
 }
 
 - (void)selectDeselectItem:(NSIndexPath *)indexPath
@@ -396,7 +396,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaLangSection)
     OATableViewCustomHeaderView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
     NSString *text = [self getTextForHeader:section];
     vw.label.text = text;
-    vw.label.font = [UIFont systemFontOfSize:section == EOAMapSettingsWikipediaLangSectionAll ? 15.0 : 13.0];
+    vw.label.font = [UIFont scaledSystemFontOfSize:section == EOAMapSettingsWikipediaLangSectionAll ? 15.0 : 13.0];
     return vw;
 }
 

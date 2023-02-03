@@ -41,7 +41,7 @@ static UIFont *_btnFont;
 
 - (void)commonInit
 {
-    _btnFont = [UIFont systemFontOfSize:13.0];
+    _btnFont = [UIFont scaledSystemFontOfSize:13.0];
     
     _selectAllBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     CGFloat width = self.frame.size.width;

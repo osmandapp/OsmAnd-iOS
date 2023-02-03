@@ -634,7 +634,7 @@
     textField.clearButton.tag = tag;
     [textField.clearButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
     [textField.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-    textField.font = [UIFont systemFontOfSize:17.0];
+    textField.font = [UIFont scaledSystemFontOfSize:17.0];
     textField.clearButton.imageView.tintColor = UIColorFromRGB(color_icon_color);
     [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field.png"] forState:UIControlStateNormal];
     [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field.png"] forState:UIControlStateHighlighted];
@@ -642,7 +642,7 @@
     if (!_floatingTextFieldControllers)
         _floatingTextFieldControllers = [NSMutableArray new];
     MDCTextInputControllerUnderline *fieldController = [[MDCTextInputControllerUnderline alloc] initWithTextInput:textField];
-    fieldController.inlinePlaceholderFont = [UIFont systemFontOfSize:16.0];
+    fieldController.inlinePlaceholderFont = [UIFont scaledSystemFontOfSize:16.0];
     fieldController.floatingPlaceholderActiveColor = fieldController.floatingPlaceholderNormalColor;
     fieldController.textInput.textInsetsMode = MDCTextInputTextInsetsModeIfContent;
     [_floatingTextFieldControllers addObject:fieldController];
@@ -711,7 +711,7 @@
             _navBarHeightConstraint.constant = kCompressedHeaderHeight;
         }
 
-        self.titleLabel.font = [UIFont systemFontOfSize:17 * multiplier weight:UIFontWeightSemibold];
+        self.titleLabel.font = [UIFont scaledSystemFontOfSize:17 * multiplier weight:UIFontWeightSemibold];
         self.titleLabel.alpha = multiplier;
         self.titleLabel.hidden = NO;
     }
@@ -936,7 +936,7 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
             cell = nib[0];
-            cell.descriptionView.font = [UIFont systemFontOfSize:17.0];
+            cell.descriptionView.font = [UIFont scaledSystemFontOfSize:17.0];
             cell.descriptionView.numberOfLines = 1;
             cell.iconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
             cell.iconView.tintColor = UIColorFromRGB(color_tint_gray);
@@ -1036,7 +1036,7 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleRightIconCell getCellIdentifier] owner:self options:nil];
             cell = nib[0];
-            cell.titleView.font = [UIFont systemFontOfSize:17. weight:UIFontWeightSemibold];
+            cell.titleView.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightSemibold];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         cell.titleView.text = item[@"title"];

@@ -353,7 +353,7 @@
             NSRange fullRange = NSMakeRange(0, fullText.length);
             NSRange coloredRange = [fullText rangeOfString:coloredText];
             NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:fullText];
-            UIFont *font = [UIFont systemFontOfSize:17];
+            UIFont *font = [UIFont scaledSystemFontOfSize:17];
             [attributedString addAttribute:NSFontAttributeName value:font range:fullRange];
             [attributedString addAttribute:NSForegroundColorAttributeName value:UIColor.blackColor range:fullRange];
             [attributedString addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(color_text_footer) range:coloredRange];

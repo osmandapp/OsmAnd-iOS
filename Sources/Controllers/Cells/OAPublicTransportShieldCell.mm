@@ -327,7 +327,7 @@ static UIFont *_shieldFont;
     CGFloat margin = needsSafeArea ? OAUtilities.getLeftMargin : 0.;
     width = width - margin - kShieldMargin * 2;
     if (!_shieldFont)
-        _shieldFont = [UIFont systemFontOfSize:15 weight:UIFontWeightSemibold];
+        _shieldFont = [UIFont scaledSystemFontOfSize:15 weight:UIFontWeightSemibold];
     
     CGFloat currWidth = 0.0;
     NSInteger rowsCount = 1;

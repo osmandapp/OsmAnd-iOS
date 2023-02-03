@@ -59,16 +59,16 @@
     
     if (_firstRow)
     {
-        _primaryFont = [UIFont systemFontOfSize:18.0 weight:UIFontWeightBold];
-        _unitsFont = [UIFont systemFontOfSize:15.0 weight:UIFontWeightMedium];
-        _descFont = [UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold];
+        _primaryFont = [UIFont scaledSystemFontOfSize:18.0 weight:UIFontWeightBold];
+        _unitsFont = [UIFont scaledSystemFontOfSize:15.0 weight:UIFontWeightMedium];
+        _descFont = [UIFont scaledSystemFontOfSize:15.0 weight:UIFontWeightSemibold];
         _descColor = UIColorFromRGB(0x8ea2b9);
     }
     else
     {
-        _primaryFont = [UIFont systemFontOfSize:15.0 weight:UIFontWeightBold];
-        _unitsFont = [UIFont systemFontOfSize:13.0 weight:UIFontWeightMedium];
-        _descFont = [UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold];
+        _primaryFont = [UIFont scaledSystemFontOfSize:15.0 weight:UIFontWeightBold];
+        _unitsFont = [UIFont scaledSystemFontOfSize:13.0 weight:UIFontWeightMedium];
+        _descFont = [UIFont scaledSystemFontOfSize:15.0 weight:UIFontWeightSemibold];
         
         _descColor = UIColorFromRGB(0x6C95B1);
     }
@@ -247,7 +247,7 @@
     if (!self.infoLabel)
     {
         self.infoLabel = [[UILabel alloc] initWithFrame:CGRectMake(60.0 + _distanceLabel.frame.size.width, 7.0, self.infoLabelWidth, 21.0)];
-        _infoLabel.font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold];
+        _infoLabel.font = [UIFont scaledSystemFontOfSize:15.0 weight:UIFontWeightSemibold];
         _infoLabel.textAlignment = NSTextAlignmentRight;
         _infoLabel.textColor = UIColorFromRGB(0x8ea2b9);
         _infoLabel.minimumScaleFactor = 0.7;
@@ -368,7 +368,7 @@
     NSRange coloredRange = NSMakeRange(0, remainingTimeText.length);
     
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:fullText];
-    UIFont *font = [UIFont systemFontOfSize:15];
+    UIFont *font = [UIFont scaledSystemFontOfSize:15];
     [attributedString addAttribute:NSFontAttributeName value:font range:fullRange];
     [attributedString addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithRed:0.678f green:0.678f blue:0.678f alpha:1.00f] range:fullRange];
     if (pickupDate && timeInterval <= 0.0)

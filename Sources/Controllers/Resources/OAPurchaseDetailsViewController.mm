@@ -334,7 +334,7 @@
 
             UIColor *tintColor = isManageSubscription ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer);
             cell.textView.text = item[@"title"];
-            cell.textView.font = [UIFont systemFontOfSize:17. weight:isManageSubscription ? UIFontWeightMedium : UIFontWeightRegular];
+            cell.textView.font = [UIFont scaledSystemFontOfSize:17. weight:isManageSubscription ? UIFontWeightMedium : UIFontWeightRegular];
             cell.textView.textColor = tintColor;
             cell.descriptionView.text = isManageSubscription ? @"" : item[@"description"];
             cell.rightIconView.image = item[@"icon"];

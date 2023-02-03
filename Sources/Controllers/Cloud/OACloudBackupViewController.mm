@@ -490,7 +490,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleRightIconCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleRightIconCell *)[nib objectAtIndex:0];
             cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
-            cell.titleView.font = [UIFont systemFontOfSize:17.];
+            cell.titleView.font = [UIFont scaledSystemFontOfSize:17.];
         }
         cell.titleView.text = item.title;
         [cell.iconView setImage:[UIImage templateImageNamed:item.iconName]];
@@ -541,7 +541,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
             cell = (OAFilledButtonCell *)[nib objectAtIndex:0];
             cell.button.backgroundColor = UIColorFromRGB(color_primary_purple);
             [cell.button setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
-            cell.button.titleLabel.font = [UIFont systemFontOfSize:15. weight:UIFontWeightSemibold];
+            cell.button.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
             cell.button.layer.cornerRadius = 9.;
             cell.topMarginConstraint.constant = 9.;
             cell.bottomMarginConstraint.constant = 20.;
@@ -599,7 +599,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
             cell = (OARightIconTableViewCell *) nib[0];
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
-            cell.titleLabel.font = [UIFont systemFontOfSize:17. weight:UIFontWeightMedium];
+            cell.titleLabel.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium];
         }
         if (cell)
         {
@@ -642,9 +642,9 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTitleValueCell *)[nib objectAtIndex:0];
-            cell.textView.font = [UIFont systemFontOfSize:17. weight:UIFontWeightMedium];
+            cell.textView.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium];
             cell.textView.textColor = UIColorFromRGB(color_primary_purple);
-            cell.descriptionView.font = [UIFont systemFontOfSize:17.];
+            cell.descriptionView.font = [UIFont scaledSystemFontOfSize:17.];
             cell.descriptionView.textColor = UIColorFromRGB(color_text_footer);
             cell.rightIconView.tintColor = UIColorFromRGB(color_tint_gray);
             cell.rightIconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"];

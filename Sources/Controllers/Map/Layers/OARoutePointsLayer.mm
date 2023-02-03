@@ -139,7 +139,7 @@
         paragraphStyle.alignment = NSTextAlignmentCenter;
         attributes[NSParagraphStyleAttributeName] = paragraphStyle;
         attributes[NSForegroundColorAttributeName] = UIColor.blackColor;
-        UIFont *font = [UIFont systemFontOfSize:18.0];
+        UIFont *font = [UIFont scaledSystemFontOfSize:18.0];
         attributes[NSFontAttributeName] = font;
         
         CGFloat w2 = flagImage.size.width / 2.0;

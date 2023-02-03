@@ -111,9 +111,9 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.contentInset = UIEdgeInsetsMake(-16, 0, 0, 0);
     if (_screenType == EOAAddToATrack || _screenType == EOASelectTrack)
-        self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"route_between_points_add_track_desc") font:[UIFont systemFontOfSize:15.] textColor:UIColor.blackColor lineSpacing:0. isTitle:NO];
+        self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"route_between_points_add_track_desc") font:[UIFont scaledSystemFontOfSize:15.] textColor:UIColor.blackColor lineSpacing:0. isTitle:NO];
     else if (_screenType == EOAFollowTrack)
-        self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"select_track_to_follow") font:[UIFont systemFontOfSize:15.] textColor:UIColor.blackColor lineSpacing:0. isTitle:NO];
+        self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"select_track_to_follow") font:[UIFont scaledSystemFontOfSize:15.] textColor:UIColor.blackColor lineSpacing:0. isTitle:NO];
 }
 
 - (void) applyLocalization
@@ -144,7 +144,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     if (_screenType != EOAOpenExistingTrack)
     {
         [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-            self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:headerDescription font:[UIFont systemFontOfSize:15.] textColor:UIColor.blackColor lineSpacing:0. isTitle:NO];
+            self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:headerDescription font:[UIFont scaledSystemFontOfSize:15.] textColor:UIColor.blackColor lineSpacing:0. isTitle:NO];
             [self.tableView reloadData];
         } completion:nil];
     }

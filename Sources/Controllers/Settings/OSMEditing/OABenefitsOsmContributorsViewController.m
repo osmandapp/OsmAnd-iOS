@@ -71,7 +71,7 @@
                                              value:descriptionParagraphStyle
                                              range:NSMakeRange(0, descriptionAttributed.length)];
     [descriptionAttributed addAttribute:NSFontAttributeName
-                                             value:[UIFont systemFontOfSize:17.]
+                                             value:[UIFont scaledSystemFontOfSize:17.]
                                              range:NSMakeRange(0, descriptionAttributed.length)];
 
     NSMutableAttributedString *signInAttributed = [[NSMutableAttributedString alloc] initWithString:
@@ -82,7 +82,7 @@
                                   value:signInParagraphStyle
                                   range:NSMakeRange(0, signInAttributed.length)];
     [signInAttributed addAttribute:NSFontAttributeName
-                                  value:[UIFont systemFontOfSize:15.]
+                                  value:[UIFont scaledSystemFontOfSize:15.]
                                   range:NSMakeRange(0, signInAttributed.length)];
     [signInAttributed addAttribute:NSForegroundColorAttributeName
                                   value:UIColorFromRGB(color_text_footer)

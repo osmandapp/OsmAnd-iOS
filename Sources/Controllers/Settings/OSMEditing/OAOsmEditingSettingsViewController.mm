@@ -72,7 +72,7 @@
 - (void)updateTableHeaderView
 {
     self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"osm_editing_settings_descr")
-                                                                          font:[UIFont systemFontOfSize:15.]
+                                                                          font:[UIFont scaledSystemFontOfSize:15.]
                                                                      textColor:UIColorFromRGB(color_text_footer)
                                                                    lineSpacing:0.0
                                                                        isTitle:NO
@@ -92,7 +92,7 @@
     credentialData[@"type"] = [OASimpleTableViewCell getCellIdentifier];
     credentialData[@"title"] = _isLogged ? [_settings.osmUserName get] : OALocalizedString(@"login_open_street_map_org");
     credentialData[@"title_color"] = _isLogged ? UIColor.blackColor : UIColorFromRGB(color_primary_purple);
-    credentialData[@"title_font"] = [UIFont systemFontOfSize:17. weight:_isLogged ? UIFontWeightRegular : UIFontWeightMedium];
+    credentialData[@"title_font"] = [UIFont scaledSystemFontOfSize:17. weight:_isLogged ? UIFontWeightRegular : UIFontWeightMedium];
     credentialData[@"left_icon"] = @"ic_custom_user_profile";
     credentialData[@"accessory_type"] = _isLogged ? @(UITableViewCellAccessoryDisclosureIndicator) : @(UITableViewCellAccessoryNone);
     [credentialCells addObject:credentialData];
@@ -129,9 +129,9 @@
     NSString *actionsDescr = [NSString stringWithFormat:OALocalizedString(@"osm_editing_access_descr"), menuPath];
     NSMutableAttributedString *actionsDescrAttr =
             [[NSMutableAttributedString alloc] initWithString:actionsDescr
-                                                   attributes:@{ NSFontAttributeName : [UIFont systemFontOfSize:15],
+                                                   attributes:@{ NSFontAttributeName : [UIFont scaledSystemFontOfSize:15],
                                                                  NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer) }];
-    [actionsDescrAttr addAttributes:@{ NSFontAttributeName : [UIFont systemFontOfSize:15 weight:UIFontWeightSemibold] }
+    [actionsDescrAttr addAttributes:@{ NSFontAttributeName : [UIFont scaledSystemFontOfSize:15 weight:UIFontWeightSemibold] }
                               range:[actionsDescr rangeOfString:menuPath]];
     
     NSMutableParagraphStyle *actionsDescrParagraphStyle = [[NSMutableParagraphStyle alloc] init];
@@ -151,7 +151,7 @@
     editsData[@"type"] = [OARightIconTableViewCell getCellIdentifier];
     editsData[@"title"] = OALocalizedString(@"osm_edits_title");
     editsData[@"title_color"] = UIColorFromRGB(color_primary_purple);
-    editsData[@"title_font"] = [UIFont systemFontOfSize:17. weight:UIFontWeightMedium];
+    editsData[@"title_font"] = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium];
     editsData[@"right_icon"] = @"ic_custom_folder";
     editsData[@"right_icon_color"] = UIColorFromRGB(color_primary_purple);
     [actionsCells addObject:editsData];
@@ -230,7 +230,7 @@
             [cell titleVisibility:title != nil];
             cell.titleLabel.text = title;
             cell.titleLabel.textColor = [item.allKeys containsObject:@"title_color"] ? item[@"title_color"] : UIColor.blackColor;
-            cell.titleLabel.font = [item.allKeys containsObject:@"title_font"] ? item[@"title_font"] : [UIFont systemFontOfSize:17.];
+            cell.titleLabel.font = [item.allKeys containsObject:@"title_font"] ? item[@"title_font"] : [UIFont scaledSystemFontOfSize:17.];
 
             BOOL hasLeftIcon = [item.allKeys containsObject:@"left_icon"];
             [cell leftIconVisibility:hasLeftIcon];
@@ -270,7 +270,7 @@
         {
             cell.titleLabel.text = item[@"title"];
             cell.titleLabel.textColor = [item.allKeys containsObject:@"title_color"] ? item[@"title_color"] : UIColor.blackColor;
-            cell.titleLabel.font = [item.allKeys containsObject:@"title_font"] ? item[@"title_font"] : [UIFont systemFontOfSize:17.];
+            cell.titleLabel.font = [item.allKeys containsObject:@"title_font"] ? item[@"title_font"] : [UIFont scaledSystemFontOfSize:17.];
 
             BOOL hasRightIcon = [item.allKeys containsObject:@"right_icon"];
             cell.rightIconView.image = hasRightIcon ? [UIImage templateImageNamed:item[@"right_icon"]] : nil;
@@ -319,7 +319,7 @@
     NSString *header = _headers[@(section)];
     if (header)
     {
-        UIFont *font = [UIFont systemFontOfSize:13.];
+        UIFont *font = [UIFont scaledSystemFontOfSize:13.];
         CGFloat headerHeight = [OAUtilities calculateTextBounds:header
                                                           width:tableView.frame.size.width - (kPaddingOnSideOfContent + [OAUtilities getLeftMargin]) * 2
                                                            font:font].height + (section == _credentialIndexPath.section ? 20. : kPaddingOnSideOfHeaderWithText);
@@ -333,7 +333,7 @@
     NSString *footer = _footers[@(section)];
     if (footer)
     {
-        UIFont *font = [UIFont systemFontOfSize:13.];
+        UIFont *font = [UIFont scaledSystemFontOfSize:13.];
         CGFloat footerHeight = [OAUtilities calculateTextBounds:[_footers objectForKey:@(section)]
                                                         width:tableView.frame.size.width - (kPaddingOnSideOfContent + [OAUtilities getLeftMargin]) * 2
                                                         font:font].height + kPaddingOnSideOfFooterWithText;
@@ -400,7 +400,7 @@
         NSMutableDictionary *credentialData = _data[_credentialIndexPath.section][_credentialIndexPath.row];
         credentialData[@"title"] = _isLogged ? [_settings.osmUserName get] : OALocalizedString(@"login_open_street_map_org");
         credentialData[@"title_color"] = _isLogged ? UIColor.blackColor : UIColorFromRGB(color_primary_purple);
-        credentialData[@"title_font"] = [UIFont systemFontOfSize:17. weight:_isLogged ? UIFontWeightRegular : UIFontWeightMedium];
+        credentialData[@"title_font"] = [UIFont scaledSystemFontOfSize:17. weight:_isLogged ? UIFontWeightRegular : UIFontWeightMedium];
         credentialData[@"accessory_type"] = _isLogged ? @(UITableViewCellAccessoryDisclosureIndicator) : @(UITableViewCellAccessoryNone);
 
         NSMutableDictionary *mappersData = _data[_mappersIndexPath.section][_mappersIndexPath.row];

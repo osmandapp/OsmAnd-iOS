@@ -137,7 +137,7 @@
         [self.scrollViewContainerView addSubview:subscriptionCardView];
 
         _subscriptionManagement = [[UILabel alloc] init];
-        _subscriptionManagement.font = [UIFont systemFontOfSize:15.];
+        _subscriptionManagement.font = [UIFont scaledSystemFontOfSize:15.];
         _subscriptionManagement.textColor = UIColor.blackColor;
         _subscriptionManagement.numberOfLines = 0;
 
@@ -149,7 +149,7 @@
                                                  value:subscriptionManagementParagraphStyle
                                                  range:NSMakeRange(0, attributedSubscriptionManagement.length)];
         [attributedSubscriptionManagement addAttribute:NSFontAttributeName
-                                                 value:[UIFont systemFontOfSize:15.]
+                                                 value:[UIFont scaledSystemFontOfSize:15.]
                                                  range:NSMakeRange(0, attributedSubscriptionManagement.length)];
         _subscriptionManagement.attributedText = attributedSubscriptionManagement;
 
@@ -169,7 +169,7 @@
         [self.scrollView insertSubview:_viewIncludesSeparator belowSubview:self.buttonRestore];
 
         _labelIncludes = [[UILabel alloc] init];
-        _labelIncludes.font = [UIFont systemFontOfSize:17.];
+        _labelIncludes.font = [UIFont scaledSystemFontOfSize:17.];
         _labelIncludes.textColor = UIColor.blackColor;
         _labelIncludes.numberOfLines = 0;
         _labelIncludes.text = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_colon"),
@@ -195,7 +195,7 @@
         if (isMaps)
         {
             _labelNotIncluded = [[UILabel alloc] init];
-            _labelNotIncluded.font = [UIFont systemFontOfSize:17.];
+            _labelNotIncluded.font = [UIFont scaledSystemFontOfSize:17.];
             _labelNotIncluded.textColor = UIColor.blackColor;
             _labelNotIncluded.numberOfLines = 0;
             _labelNotIncluded.text = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_colon"),
@@ -226,10 +226,10 @@
 
     NSInteger index1 = [self.scrollView.subviews indexOfObject:_buttonTermsOfUse];
     _buttonTermsOfUse.tag = index1;
-    _buttonTermsOfUse.labelTitle.font = [UIFont systemFontOfSize:15. weight:UIFontWeightSemibold];
+    _buttonTermsOfUse.labelTitle.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
     NSInteger index2 = [self.scrollView.subviews indexOfObject:_buttonPrivacyPolicy];
     _buttonPrivacyPolicy.tag = index2;
-    _buttonPrivacyPolicy.labelTitle.font = [UIFont systemFontOfSize:15. weight:UIFontWeightSemibold];
+    _buttonPrivacyPolicy.labelTitle.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
 
     [self.buttonNavigationBack setTintColor:UIColorFromRGB(color_primary_purple)];
     [self.buttonNavigationBack setImage:[UIImage templateImageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
@@ -449,7 +449,7 @@
 - (void)setupButton:(UIButton *)button
 {
     [button setTitleColor:UIColorFromRGB(color_primary_purple) forState:UIControlStateNormal];
-    button.titleLabel.font = [UIFont systemFontOfSize:15. weight:UIFontWeightSemibold];
+    button.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
 }
 
 - (OAFeatureCardRow *)addSimpleRow:(NSString *)title

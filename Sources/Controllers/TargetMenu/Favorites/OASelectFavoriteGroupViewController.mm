@@ -63,7 +63,7 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.separatorColor = UIColorFromRGB(color_tint_gray);
-    self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"select_group_descr") font:[UIFont systemFontOfSize:15.] textColor:UIColor.blackColor lineSpacing:0. isTitle:NO];
+    self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"select_group_descr") font:[UIFont scaledSystemFontOfSize:15.] textColor:UIColor.blackColor lineSpacing:0. isTitle:NO];
 }
 
 - (void) applyLocalization
@@ -157,7 +157,7 @@
             cell = nib[0];
             cell.titleView.textColor = UIColorFromRGB(color_primary_purple);
             cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
-            cell.titleView.font = [UIFont systemFontOfSize:17. weight:UIFontWeightSemibold];
+            cell.titleView.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightSemibold];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         cell.titleView.text = item[@"title"];

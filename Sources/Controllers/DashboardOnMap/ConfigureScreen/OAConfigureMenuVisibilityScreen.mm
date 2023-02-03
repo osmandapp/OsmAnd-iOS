@@ -183,7 +183,7 @@
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextDescCell getCellIdentifier] owner:self options:nil];
         cell = (OAIconTextDescCell *) nib[0];
         cell.textView.numberOfLines = 0;
-        cell.descView.font = [UIFont systemFontOfSize:15.];
+        cell.descView.font = [UIFont scaledSystemFontOfSize:15.];
         cell.separatorInset = UIEdgeInsetsMake(0., 66., 0., 0.);
     }
     if (cell)

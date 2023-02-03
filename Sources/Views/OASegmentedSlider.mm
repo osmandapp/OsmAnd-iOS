@@ -136,7 +136,7 @@
             _currentMarkLabel = [[UILabel alloc] initWithFrame:CGRectMake(0., 0., 0., 0.)];
             _currentMarkLabel.numberOfLines = 1;
             _currentMarkLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-            _currentMarkLabel.font = [UIFont systemFontOfSize:13.];
+            _currentMarkLabel.font = [UIFont scaledSystemFontOfSize:13.];
             _currentMarkLabel.text = OALocalizedString(@"shared_string_now").lowercaseString;
             _currentMarkLabel.backgroundColor = UIColor.clearColor;
             [self addSubview:_currentMarkLabel];
@@ -248,7 +248,7 @@
                 UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0., 0., 0., 0.)];
                 titleLabel.numberOfLines = 1;
                 titleLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-                titleLabel.font = [UIFont systemFontOfSize:13.];
+                titleLabel.font = [UIFont scaledSystemFontOfSize:13.];
                 titleLabel.text = [(titleValue < 10 ? @"0" : @"") stringByAppendingString:[NSString stringWithFormat:@"%li", titleValue]];
                 titleLabel.backgroundColor = UIColor.clearColor;
                 titleLabel.tag = kTitleLabelTag + i;
@@ -543,7 +543,7 @@
 
         _selectingMarkTitle = [[UILabel alloc] initWithFrame:CGRectMake(0., 0., 0., 0.)];
         _selectingMarkTitle.numberOfLines = 1;
-        _selectingMarkTitle.font = [UIFont systemFontOfSize:13. weight:UIFontWeightMedium];
+        _selectingMarkTitle.font = [UIFont scaledSystemFontOfSize:13. weight:UIFontWeightMedium];
         _selectingMarkTitle.backgroundColor = UIColor.clearColor;
 
         [_selectingMarkTitleBackground addSubview:_selectingMarkTitle];

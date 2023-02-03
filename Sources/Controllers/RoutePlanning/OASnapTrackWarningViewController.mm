@@ -29,7 +29,7 @@
     [self.leftIconView setImage:[UIImage templateImageNamed:@"ic_custom_attach_track"]];
     self.leftIconView.tintColor = UIColorFromRGB(color_primary_purple);
     
-    self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"route_between_points_warning_desc") font:[UIFont systemFontOfSize:15.] textColor:UIColor.blackColor lineSpacing:0. isTitle:NO];
+    self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"route_between_points_warning_desc") font:[UIFont scaledSystemFontOfSize:15.] textColor:UIColor.blackColor lineSpacing:0. isTitle:NO];
 }
 
 - (void)applyLocalization
@@ -41,7 +41,7 @@
 
 - (CGFloat)initialHeight
 {
-    return OAUtilities.getBottomMargin + 75. + [OAUtilities calculateTextBounds:OALocalizedString(@"route_between_points_warning_desc") width:DeviceScreenWidth font:[UIFont systemFontOfSize:15.]].height + 16. + self.headerView.frame.size.height + 60.;
+    return OAUtilities.getBottomMargin + 75. + [OAUtilities calculateTextBounds:OALocalizedString(@"route_between_points_warning_desc") width:DeviceScreenWidth font:[UIFont scaledSystemFontOfSize:15.]].height + 16. + self.headerView.frame.size.height + 60.;
 }
 
 - (void)onRightButtonPressed

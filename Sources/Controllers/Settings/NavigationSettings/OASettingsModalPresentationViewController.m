@@ -70,7 +70,7 @@
     label.attributedText = [[NSAttributedString alloc] initWithString:text
                                                         attributes:@{NSParagraphStyleAttributeName : style,
                                                         NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer),
-                                                        NSFontAttributeName : [UIFont systemFontOfSize:15.0],
+                                                        NSFontAttributeName : [UIFont scaledSystemFontOfSize:15.0],
                                                         NSBackgroundColorAttributeName : UIColor.clearColor}];
     label.numberOfLines = 0;
     label.lineBreakMode = NSLineBreakByWordWrapping;
@@ -97,7 +97,7 @@
 
 - (CGFloat) heightForLabel:(NSString *)text
 {
-    UIFont *labelFont = [UIFont systemFontOfSize:15.0];
+    UIFont *labelFont = [UIFont scaledSystemFontOfSize:15.0];
     CGFloat textWidth = self.tableView.bounds.size.width - (kSidePadding + OAUtilities.getLeftMargin) * 2;
     return [OAUtilities heightForHeaderViewText:text width:textWidth font:labelFont lineSpacing:6.0];
 }

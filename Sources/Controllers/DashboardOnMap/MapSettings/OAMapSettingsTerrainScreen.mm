@@ -557,7 +557,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             cell = (OATitleRightIconCell *)[nib objectAtIndex:0];
             cell.iconView.image = [UIImage templateImageNamed:item[@"img"]];
             cell.titleView.text = item[@"title"];
-            cell.titleView.font = [UIFont systemFontOfSize:17. weight:UIFontWeightSemibold];
+            cell.titleView.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightSemibold];
             cell.titleView.textColor = UIColorFromRGB(color_primary_purple);
             cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
         }
@@ -657,11 +657,11 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             NSString *descr = item[@"descr"];
             if (descr && descr.length > 0)
             {
-                NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithString:descr attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:15]}];
+                NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithString:descr attributes:@{NSFontAttributeName: [UIFont scaledSystemFontOfSize:15]}];
                 NSRange range = [descr rangeOfString:@" " options:NSBackwardsSearch];
                 if (range.location != NSNotFound)
                 {
-                    NSDictionary *linkAttributes = @{NSLinkAttributeName: item[@"url"], NSFontAttributeName: [UIFont systemFontOfSize:15]};
+                    NSDictionary *linkAttributes = @{NSLinkAttributeName: item[@"url"], NSFontAttributeName: [UIFont scaledSystemFontOfSize:15]};
                     [str setAttributes:linkAttributes range:NSMakeRange(range.location + 1, descr.length - range.location - 1)];
                 }
                 cell.descView.attributedText = str;
@@ -700,8 +700,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                               reuseIdentifier:cellTypeId];
 
-                cell.textLabel.font = [UIFont systemFontOfSize:17.0];
-                cell.detailTextLabel.font = [UIFont systemFontOfSize:12.0];
+                cell.textLabel.font = [UIFont scaledSystemFontOfSize:17.0];
+                cell.detailTextLabel.font = [UIFont scaledSystemFontOfSize:12.0];
                 cell.detailTextLabel.textColor = UIColorFromRGB(0x929292);
 
                 UIImage* iconImage = [UIImage imageNamed:@"ic_custom_download"];
@@ -716,8 +716,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                               reuseIdentifier:cellTypeId];
 
-                cell.textLabel.font = [UIFont systemFontOfSize:17.0];
-                cell.detailTextLabel.font = [UIFont systemFontOfSize:12.0];
+                cell.textLabel.font = [UIFont scaledSystemFontOfSize:17.0];
+                cell.detailTextLabel.font = [UIFont scaledSystemFontOfSize:12.0];
                 cell.detailTextLabel.textColor = UIColorFromRGB(0x929292);
 
                 FFCircularProgressView* progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 25.0f, 25.0f)];

@@ -220,7 +220,7 @@
     NSMutableAttributedString *mutAttributedTypeStr = [[NSMutableAttributedString alloc] init];
     [mutAttributedTypeStr appendAttributedString:attributedTypeStr];
     [mutAttributedTypeStr appendAttributedString:[[NSAttributedString alloc] initWithString:address]];
-    [mutAttributedTypeStr addAttributes:@{ NSFontAttributeName : [UIFont systemFontOfSize:15],
+    [mutAttributedTypeStr addAttributes:@{ NSFontAttributeName : [UIFont scaledSystemFontOfSize:15],
                                            NSForegroundColorAttributeName : UIColorFromRGB(color_dialog_text_description_color_night) }
                                   range:NSMakeRange(0, mutAttributedTypeStr.length)];
     return mutAttributedTypeStr;

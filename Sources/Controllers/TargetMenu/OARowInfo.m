@@ -46,7 +46,7 @@
 
 - (UIFont *) getFont
 {
-    return [UIFont systemFontOfSize:17.0 weight:_isUrl ? UIFontWeightMedium : UIFontWeightRegular];
+    return [UIFont scaledSystemFontOfSize:17.0 weight:_isUrl ? UIFontWeightMedium : UIFontWeightRegular];
 }
 
 @end

@@ -65,7 +65,7 @@
     self.deleteButton.layer.cornerRadius = 9.;
     self.cancelButton.layer.cornerRadius = 9.;
     
-    self.titleView.font = [UIFont systemFontOfSize:17 weight:UIFontWeightMedium];
+    self.titleView.font = [UIFont scaledSystemFontOfSize:17 weight:UIFontWeightMedium];
     
     self.isFullScreenAvailable = NO;
 }
@@ -90,7 +90,7 @@
     width -= 2 * kHorizontalMargin;
     CGFloat headerHeight = self.headerView.frame.size.height;
     NSString *description = [OALocalizedString(@"delete_tracks_bottom_sheet_description_regular_part") stringByAppendingString:[NSString stringWithFormat:OALocalizedString(@"delete_tracks_bottom_sheet_description_bold_part"), self.deletingTracksCount]];;
-    CGFloat textHeight = [OAUtilities calculateTextBounds:description width:width font:[UIFont systemFontOfSize:17.]].height + kLabelVerticalMargin * 2;
+    CGFloat textHeight = [OAUtilities calculateTextBounds:description width:width font:[UIFont scaledSystemFontOfSize:17.]].height + kLabelVerticalMargin * 2;
     CGFloat contentHeight = textHeight + 1 * kButtonHeight + 1 * kButtonsVerticalMargin;
     CGFloat buttonsHeight = [self buttonsViewHeight];
     return headerHeight + contentHeight + buttonsHeight;

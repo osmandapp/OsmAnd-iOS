@@ -67,11 +67,8 @@
     BOOL cancelled = NO;
     for (OAExportBackupTask *exportTask in self.exportAsyncTasks.allValues)
     {
-        if (exportTask.isExecuting)
-        {
-            [exportTask cancel];
-            cancelled |= exportTask.isCancelled;
-        }
+        [exportTask cancel];
+        cancelled |= exportTask.isCancelled;
     }
     return cancelled;
 }
@@ -81,11 +78,8 @@
     BOOL cancelled = NO;
     for (OAImportBackupTask *importTask in self.importAsyncTasks.allValues)
     {
-        if (importTask != nil && importTask.isExecuting)
-        {
-            [importTask cancel];
-            cancelled |= importTask.isCancelled;
-        }
+        [importTask cancel];
+        cancelled |= importTask.isCancelled;
     }
     return cancelled;
 }

@@ -124,6 +124,7 @@
 - (void)cancel
 {
     _cancelled = YES;
+    [self onSyncFinished:nil];
 }
 
 - (void) uploadNewItems

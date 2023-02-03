@@ -220,6 +220,21 @@
     return [[UIFont systemFontOfSize:fontSize weight:weight] scaled];
 }
 
++ (UIFont *)scaledBoldSystemFontOfSize:(CGFloat)fontSize
+{
+    return [[UIFont boldSystemFontOfSize:fontSize] scaled];
+}
+
++ (UIFont *)scaledMonospacedDigitSystemFontOfSize:(CGFloat)fontSize weight:(UIFontWeight)weight
+{
+    return [[UIFont monospacedDigitSystemFontOfSize:fontSize weight:weight] scaled];
+}
+
++ (UIFont *)scaledMonospacedSystemFontOfSize:(CGFloat)fontSize weight:(UIFontWeight)weight
+{
+    return [[UIFont monospacedSystemFontOfSize:fontSize weight:weight] scaled];
+}
+
 @end
 
 @implementation NSMutableAttributedString (util)

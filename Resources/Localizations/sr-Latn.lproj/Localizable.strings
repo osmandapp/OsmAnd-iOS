@@ -2599,3 +2599,19 @@
 "m" = "m";
 "km" = "km";
 "kg" = "kg";
+"shared_string_legal" = "Pravno";
+"lang_sat" = "Santalski";
+"speed_cameras_alert" = "Upozorenja za radare su zakonom zabranjene u nekim državama.";
+"uninstall_speed_cameras" = "Izbriši radare";
+"lang_zh-Hant" = "Kineski (tradicionalni)";
+"speed_cameras_legal_descr" = "U nekim državama ili oblastima, korišćenje aplikacija za obaveštavanje o radarima na putu je zabranjeno zakonom.
+\n
+\nMorate napraviti izbor ovde, u zavisnosti od zakona Vaše države.
+\n
+\nOdaberite %@ i primažete obaveštenja i upozorenja o radarima i kamerama za brzinu.
+\n
+\nOdaberite %@. Svi podaci vezani za radere: upozorenja, obaveštenja, tačke od interesa će biti obrisane dok se OsmAnd ponovo ne instalira.";
+"speed_camera_pois" = "Radarske tačke od interesa";
+"privacy_and_security" = "Privatnost i bezbednost";
+"shared_string_height" = "Visina";
+"shared_string_keep_active" = "Drži aktivnim";

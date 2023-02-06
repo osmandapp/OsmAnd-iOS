@@ -2266,3 +2266,19 @@
 \n
 \n在我們的網站上找到關於如何貢獻的說明 https://osmand.net/docs/user/plugins/openplacereviews。";
 "kg" = "公斤";
+"lang_zh-Hant" = "中文（正體）";
+"shared_string_height" = "高度";
+"speed_cameras_alert" = "某些國家禁止使用測速照相的警報裝置。";
+"speed_cameras_legal_descr" = "在某些國家或地區，法律禁止使用測速照相的警報應用程式。
+\n
+\n您必須根據您所在國家的法律做出選擇。
+\n
+\n選取 %@，您將會收到關於測速照相的警報與警告。
+\n
+\n選取 %@。所有關於測速照相的：警報、通知與 POI 都將會被刪除，直到您完全重新安裝 OsmAnd 為止。";
+"privacy_and_security" = "隱私與安全";
+"shared_string_legal" = "法律";
+"speed_camera_pois" = "測速照相 POI 的";
+"lang_sat" = "桑塔利文";
+"shared_string_keep_active" = "保持啟用";
+"uninstall_speed_cameras" = "解除安裝測速照相";

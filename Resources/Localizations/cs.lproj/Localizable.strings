@@ -2762,3 +2762,18 @@
 "download_wikipedia_data" = "Stahování dat z Wikipedie";
 "m" = "m";
 "km" = "km";
+"lang_zh-Hant" = "Čínština (tradiční)";
+"shared_string_legal" = "Právní informace";
+"speed_cameras_alert" = "V některých zemích je varování před rychlostními radary zákonem zakázané.";
+"speed_cameras_legal_descr" = "V některých zemích nebo regionech je používání aplikací upozorňujících na rychlostní radary zakázáno zákonem.
+\n
+\nMusíte se rozhodnout v závislosti na zákonech vaší země.
+\n
+\nVyberte %@ a budete dostávat upozornění a varování o rychlostních radarech.
+\n
+\nVyberte %@. Všechna data týkající se rychlostních radarů: upozornění, oznámení, body zájmu budou smazána, dokud nebude aplikace OsmAnd zcela přeinstalována.";
+"shared_string_keep_active" = "Ponechat aktivní";
+"privacy_and_security" = "Soukromí a zabezpečení";
+"shared_string_height" = "Výška";
+"speed_camera_pois" = "Body rychlostních radarů";
+"uninstall_speed_cameras" = "Odinstalovat rychlostní radary";

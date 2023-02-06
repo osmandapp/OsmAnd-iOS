@@ -2274,7 +2274,7 @@
 "cloud_recent_changes" = "Endringer";
 "cloud_all_changes_uploaded" = "Alle endringer opplastet";
 "cloud_all_changes_downloaded" = "Alle endringer nedlastet";
-"cloud_no_conflicts" = "Ingen konflikter";
+"cloud_no_conflicts" = "Det er ingen konflikter.";
 "cloud_version_will_be_removed" = "Sky-versjon vil bli fjernet";
 "upload_all" = "Last opp alle";
 "position_on_map_center" = "Senter";
@@ -2505,3 +2505,19 @@
 "open_place_reviews_plugin_description" = "Gi bidrag til prosjektet OpenPlaceReviews som bilder, omtaler eller lenker om offentlige steder som restauranter, hoteller eller museer.
 \n
 \nFinn instruksjoner om hvordan du kan bidra på nettsiden vår https://osmand.net/docs/user/plugins/openplacereviews.";
+"privacy_and_security" = "Personvern og sikkerhet";
+"shared_string_height" = "Høyde";
+"speed_camera_pois" = "Fotoboks-interessepunkter";
+"speed_cameras_alert" = "Fotoboksvarsling er forbudt ved lov i noen land.";
+"lang_zh-Hant" = "Kinesisk (tradisjonell)";
+"uninstall_speed_cameras" = "Avinstaller fotobokser";
+"shared_string_keep_active" = "Behold på";
+"shared_string_legal" = "Juridisk";
+"lang_sat" = "Santali";
+"speed_cameras_legal_descr" = "I noen land og områder er bruk av fotoboksvarsling forbudt ved lov.
+\n
+\nDu må vurdere dette selv i henhold til lovene i ditt land.
+\n
+\nVelg %@ og du vil motta varsler og advarsler om fotobokser.
+\n
+\nVelg %@. Alle data som har med fotobokser å gjøre: varsler, meldinger og interessepunkter blir slettet til OsmAnd er fullstendig installert på nytt.";

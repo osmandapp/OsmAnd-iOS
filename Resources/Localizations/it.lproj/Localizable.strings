@@ -56,7 +56,7 @@
 "shared_string_waypoints" = "Punti intermedi";
 "gpx_points" = "Punto(i)";
 "shared_string_export" = "Esporta";
-"import_export" = "Importa/Esporta";
+"import_export" = "Importa/esporta";
 "import_tracks" = "Importa tracce";
 "gpx_import_already_exists" = "Il file del viaggio indicato è già presente nella lista. Per favore scegliere l'azione.";
 "gpx_add_new" = "Aggiungi un nuovo file";
@@ -2612,7 +2612,7 @@
 "login_help_email_title" = "OsmAnd iOS Cloud";
 "last_sync" = "Ultima sincronizzazione";
 "cloud_all_changes_downloaded" = "Tutte le modifiche sono state scaricate";
-"cloud_no_conflicts" = "Non ci sono conflitti";
+"cloud_no_conflicts" = "Non ci sono conflitti.";
 "backup_conflicts_action_descr" = "Un'altra versione di questo file è memorizzata sul server. Devi selezionare l'azione";
 "upload_local_version" = "Upload la versione locale";
 "routing_attr_avoid_low_emission_zone_description" = "Evita le zone a basse emissioni";
@@ -2737,7 +2737,7 @@
 "routing_attr_difficulty_preference_expert_name" = "Esperto";
 "rendering_attr_weatherPrecipitationContours_name" = "Isolinee delle precipitazioni";
 "routing_attr_allow_intermittent_name" = "Permetti le vie d\'acqua intermittenti";
-"rendering_attr_weatherWindSpeedContours_name" = "Isolinee delle raffiche di vento";
+"rendering_attr_weatherWindSpeedContours_name" = "Isolinee della velocità del vento";
 "rendering_attr_horse_scale_common_name" = "Comune";
 "routing_attr_freeride_policy_prefer_offpiste_name" = "Preferisci il fuoripista";
 "rendering_attr_seabedDetail_name" = "Dettagli del fondale marino";
@@ -2799,3 +2799,19 @@
 "km" = "km";
 "kg" = "kg";
 "m" = "m";
+"lang_sat" = "Santali";
+"shared_string_legal" = "Legale";
+"speed_camera_pois" = "PDI autovelox";
+"speed_cameras_legal_descr" = "In alcuni paesi o regioni, gli avvisi di presenza di autovelox sono proibiti dalla legge.
+\n
+\nDevi scegliere in base alle leggi del tuo paese.
+\n
+\nScegliendo %@ riceverai gli avvisi della presenza di autovelox.
+\n
+\nScegliendo %@ tutti i dati relativi agli autovelox come avvisi, notifiche, PDI saranno cancellati fino a quando OsmAnd non sarà completamente reinstallato.";
+"lang_zh-Hant" = "Cinese tradizionale";
+"shared_string_keep_active" = "Mantieni attivo";
+"speed_cameras_alert" = "Gli avvisi sulla presenza di autovelox in alcuni Paesi sono proibiti dalla legge.";
+"uninstall_speed_cameras" = "Disinstalla autovelox";
+"shared_string_height" = "Altezza";
+"privacy_and_security" = "Privacy e sicurezza";

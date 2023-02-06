@@ -2445,3 +2445,19 @@
 "auth_failed" = "Valtuutus epäonnistui";
 "km" = "km";
 "m" = "m";
+"uninstall_speed_cameras" = "Poista nopeuskamerat";
+"shared_string_keep_active" = "Pidä aktiivisena";
+"shared_string_height" = "Korkeus";
+"speed_cameras_alert" = "Nopeusvalvontakameroiden hälytykset on joissakin maissa kielletty lailla.";
+"shared_string_tones" = "tonnia";
+"shared_string_legal" = "Lakiasiat";
+"speed_camera_pois" = "Nopeuskameroiden KP:t";
+"speed_cameras_legal_descr" = "Joissain maissa tai alueilla nopeusvalvontakameroiden varoitussovellusten käyttö on lailla kielletty.
+\n
+\nSinun on tehtävä valinta maasi lainsäädännön mukaan.
+\n
+\nValitse %@, niin saat hälytyksiä ja varoituksia nopeuskameroista.
+\n
+\nValitse %@. Kaikki nopeuskameroihin liittyvät tiedot: hälytykset, ilmoitukset, KP:t poistetaan, kunnes OsmAnd asennetaan kokonaan uudelleen.";
+"lang_zh-Hant" = "Kiina (traditionaalinen)";
+"privacy_and_security" = "Yksityisyys ja turvallisuus";

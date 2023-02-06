@@ -2658,7 +2658,7 @@
 "dowload_cloud_version" = "تحميل النسخة السحابية";
 "shared_string_changed" = "تغيير";
 "cloud_all_changes_uploaded_descr" = "تتم مزامنة جميع التغييرات التي تم إجراؤها على هذا الجهاز مع أوسماند كلاود.";
-"cloud_no_conflicts" = "لا يوجد نزاع";
+"cloud_no_conflicts" = "لا يوجد نزاع.";
 "cloud_no_conflicts_descr" = "البيانات الموجودة على الجهاز على أوسماند كلاود متطابقة.";
 "backup_conflicts_action_descr" = "يتم تخزين أحدث إصدار من الملف على الخادم. تحتاج إلى تحديد الإجراء";
 "upload_local_version" = "تحميل الإصدار المحلي";
@@ -2714,7 +2714,7 @@
 "last_synchronization" = "آخر مزامنة";
 "cloud_conflict_descr" = "تحتوي الإصدارات المحلية والسحابة على تغييرات منذ آخر مزامنة.";
 "upload_change" = "تحميل التغيير";
-"cloud_version_will_be_removed" = "ستتم إزالة النسخة السحابية";
+"cloud_version_will_be_removed" = "سيتم إزالة النسخة السحابية";
 "cloud_changes_will_be_dismissed" = "سيتم رفض التغييرات السحابية";
 "local_file_will_be_restored" = "سيتم استعادة الملف المحلي";
 "local_changes_will_be_dismissed" = "سيتم رفض التغييرات المحلية";
@@ -2818,3 +2818,19 @@
 "kg" = "كلم";
 "m" = "م";
 "km" = "كم";
+"shared_string_legal" = "قانوني";
+"lang_sat" = "السنتالية";
+"shared_string_height" = "الارتفاع";
+"lang_zh-Hant" = "الصينية (التقليدية)";
+"uninstall_speed_cameras" = "إلغاء تثبيت كاميرات السرعة";
+"shared_string_keep_active" = "البقاء نشطا";
+"speed_cameras_legal_descr" = "في بعض البلدان أو المناطق، يحظر القانون استخدام تطبيقات التحذير من كاميرا السرعة.
+\n
+\nعليك أن تختار اعتمادا على قانون بلدك.
+\n
+\nحدد %@ وستتلقى تنبيهات وتحذيرات حول كاميرات السرعة.
+\n
+\nحدد %@. جميع البيانات المتعلقة كاميرات السرعة: التنبيهات، والإشعارات، سيتم حذف نقاط الاهتمام حتى يتم إعادة تثبيت أوسماند تماما.";
+"speed_camera_pois" = "POIكاميرا مراقبة السرعة";
+"privacy_and_security" = "الخصوصية والأمان";
+"speed_cameras_alert" = "يحظر القانون تنبيهات كاميرات السرعة في بعض البلدان.";

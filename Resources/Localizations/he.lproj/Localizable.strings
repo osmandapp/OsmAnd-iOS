@@ -582,7 +582,7 @@
 "shared_string_export" = "ייצוא";
 "gpx_selection_segment_title" = "מקטע";
 "route_points" = "נקודות נתיב";
-"import_export" = "Import/Export";
+"import_export" = "ייבוא/ייצוא";
 "import_tracks" = "ייבוא מסלולים";
 "gpx_import_already_exists" = "The specified track file is already exists in the list. Please choose action.";
 "gpx_add_new" = "Add new file";
@@ -1662,7 +1662,7 @@
 "srtm_plugin_disabled" = "קווי מתאר מושבתים";
 "prch_wiki_info" = "Wikipedia addon enables wikipedia information for maps you are entitled, purchased or downloaded within free limit.";
 "prch_srtm_info" = "Contour lines addon enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
-"shared_string_open" = "פתיחה";
+"shared_string_open" = "פתוח";
 "time_closed" = "Closed";
 "time_will_open" = "Will open in";
 "osm_live_active" = "פעיל";
@@ -2577,3 +2577,40 @@
 "kg" = "ק״ג";
 "m" = "מ׳";
 "km" = "ק״מ";
+"lang_zh-Hant" = "סינית מסורתית";
+"shared_string_keep_active" = "להשאיר פעיל";
+"cloud_all_changes_downloaded" = "כל השינויים נמשכו";
+"cloud_no_conflicts" = "אין סתירות.";
+"cloud_all_changes_uploaded" = "כל השינויים נדחפו";
+"local_changes" = "שינויים מקומיים";
+"deleted_file" = "קובץ שנמחק";
+"cloud_changes_will_be_dismissed" = "השינויים בענן יוחלפו";
+"upload_change" = "העלאת השינוי";
+"speed_camera_pois" = "נקודת עניין של מצלמת מהירות";
+"uninstall_speed_cameras" = "הסרת מצלמות מהירות";
+"new_file" = "קובץ חדש";
+"si_nm_mt" = "מיל/מטר ימי";
+"modified_file" = "קובץ שנערך";
+"shared_string_legal" = "משפטי";
+"speed_cameras_legal_descr" = "בחלק מהמדינות או האזורים השימוש ביישומוני אזהרה מפני מצלמות מהירות אסור על פי חוק.
+\n
+\nעליך להחליט כיצד לנהוג בהתאם לחוק במדינה שלך.
+\n
+\nבחירה באפשרות %@ תוביל לכך שתישלחנה אליך התרעות על מצלמות מהירות.
+\n
+\nבחירה באפשרות %@ תוביל לכך שנתונים שקשורים במצלמות מהירות: אזהרות, התרעות ונקודות עניין תימחקנה עד להתקנה מחדש של OsmAnd.";
+"shared_string_uploaded" = "הועלה";
+"cloud_version_will_be_removed" = "גרסת הענן תימחק";
+"local_file_will_be_restored" = "הקובץ המקומי ישוחזר";
+"si_nm_ft" = "מיל/רגל ימי";
+"upload_all" = "להעלות הכול";
+"last_sync" = "סנכרון אחרון";
+"speed_cameras_alert" = "אזהרות מפני מצלמות מהירות אסורות על פי חוק בחלק מהמדינות.";
+"cloud_conflict" = "סתירה";
+"shared_string_cloud" = "ענן";
+"cloud_recent_changes" = "שינויים";
+"lang_sat" = "סינטאלי";
+"local_changes_will_be_dismissed" = "השינויים המקומיים יימחקו";
+"privacy_and_security" = "פרטיות ואבטחה";
+"shared_string_height" = "גובה";
+"sync_now" = "לסנכרן כעת";

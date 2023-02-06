@@ -2330,3 +2330,8 @@
 "download_wikipedia_data" = "ვიკიპედიის მონაცემების გადმოწერა";
 "km" = "კმ";
 "m" = "მ";
+"uninstall_speed_cameras" = "სიჩქარის კამერების წაშლა";
+"shared_string_legal" = "იურიდიული ინფორმაცია";
+"lang_zh-Hant" = "ჩინური (ტრადიციული)";
+"shared_string_keep_active" = "აქტიურად დატოვება";
+"shared_string_height" = "სიმაღლე";

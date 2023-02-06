@@ -2515,3 +2515,6 @@
 "rendering_attr_OSMMapperAssistantNote_description" = "Mostrar lei nòtas de balisa";
 "offline_edition_descr" = "Sensa connexion, la modificacion es activada, mai lei cambis se devon sauvagardar localament en premier, se telecargaràn au besonh; autrament s\'actualizan immediatament.";
 "m" = "m";
+"speed_cameras_alert" = "Leis avís sus la preséncia de radars son interdits dins de país que i a.";
+"shared_string_height" = "Auçada";
+"privacy_and_security" = "Vida privada e seguretat";

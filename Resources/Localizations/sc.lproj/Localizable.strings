@@ -2842,3 +2842,19 @@
 "shared_string_does_not_exist" = "No esistit";
 "download_wikipedia_data" = "Iscàrriga sos datos de Wikipedia";
 "m" = "m";
+"uninstall_speed_cameras" = "Disinstalla sos autovelox";
+"lang_zh-Hant" = "Tzinesu (traditzionale)";
+"shared_string_keep_active" = "Mantene ativu";
+"privacy_and_security" = "Riservadesa e seguresa";
+"shared_string_height" = "Artària";
+"speed_camera_pois" = "PDI de sos autovelox";
+"shared_string_legal" = "Legale";
+"speed_cameras_alert" = "Sos avisos pro sos autovelox sunt proibidos dae sa lege in unos cantos istados.";
+"speed_cameras_legal_descr" = "In unos cantos istados o regiones, s\'impreu de aplicatziones pro avisare de sos autovelox est proibidu dae sa lege.
+\n
+\nDepes fàghere un\'issèberu chi dipendet dae sa lege de s\'istadu tuo.
+\n
+\nIscherta %@ e as a retzire avisos pro sos autovelox.
+\n
+\nIscherta %@. Totu sos datos relativos a sos autovelox: avisos, notìficas e PDI ant a èssere iscantzellados finas a cando OsmAnd no at a èssere torradu a installare dae nou.";
+"lang_sat" = "Santali";

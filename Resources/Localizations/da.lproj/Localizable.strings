@@ -2815,3 +2815,19 @@
 "km" = "km";
 "m" = "m";
 "kg" = "kg";
+"shared_string_keep_active" = "Hold aktiv";
+"lang_sat" = "Santali";
+"speed_cameras_alert" = "I nogle lande er indberetninger om hastighedskameraer forbudt i henhold til loven.";
+"uninstall_speed_cameras" = "Afinstaller fartkameraer";
+"speed_camera_pois" = "Fartkamera-IP\'er";
+"shared_string_height" = "Højde";
+"shared_string_legal" = "Juridisk";
+"lang_zh-Hant" = "Kinesisk (traditionelt)";
+"privacy_and_security" = "Privatliv og sikkerhed";
+"speed_cameras_legal_descr" = "I nogle lande eller regioner er det forbudt at anvende apps, som advarer om fartkameraer.
+\n
+\nDu må foretage et valg afhængig af landets lovgivning.
+\n
+\nVælg %@ og du vil modtage advarsler om fartkameraer.
+\n
+\nVælg %@. Alle date relateret til fartkameraer: advarsler, notifikationer, POI\'er vil blev slettet indtil OsmAnd er fuldstændig geninstalleret.";

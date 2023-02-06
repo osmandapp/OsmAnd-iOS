@@ -2347,3 +2347,18 @@
 \n
 \nLes dades meteorològiques són proporcionades per Global Forecast System (GFS, https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast ).";
 "m" = "m";
+"shared_string_legal" = "Informació legal";
+"speed_camera_pois" = "PDIs de càmeres de radar";
+"uninstall_speed_cameras" = "Desinstal·la les càmeres de radar";
+"speed_cameras_legal_descr" = "En alguns països o regions, l\'ús d\'aplicacions que avisen de la proximitat de càmeres de radar està prohibit. 
+\n
+\nCal que ho configureu segons la llei del vostre país. 
+\n
+\nSeleccioneu %@ i rebreu alertes i advertiments de les càmeres de radar. 
+\n
+\nSeleccioneu %@. Totes les dades relatives a les càmeres de radar (alertes, notificacions, PDIs) desapareixeran fins que es reinstal·li completament OsmAnd .";
+"shared_string_keep_active" = "Continua actiu";
+"speed_cameras_alert" = "Les alertes de proximitat a càmeres de radar estan prohibides en alguns països.";
+"privacy_and_security" = "Privadesa i seguretat";
+"shared_string_height" = "Alçada";
+"lang_zh-Hant" = "Xinès (tradicional)";

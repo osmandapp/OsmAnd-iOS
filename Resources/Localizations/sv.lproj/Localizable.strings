@@ -2594,3 +2594,10 @@
 "km" = "km";
 "m" = "m";
 "kg" = "kg";
+"speed_cameras_alert" = "Varning för hastighetskameror är i vissa länder förbjudet i lag.";
+"uninstall_speed_cameras" = "Avinstallera hastighetskameror";
+"shared_string_legal" = "Juridik";
+"lang_sat" = "Santali";
+"privacy_and_security" = "Sekretess och säkerhet";
+"shared_string_height" = "Höjd";
+"lang_zh-Hant" = "Kinesiska (traditionell)";

@@ -2627,3 +2627,18 @@
 "mgrs_format_descr" = "OsmAnd uses MGRS, which is similar to the UTM NATO format.";
 "m" = "m";
 "km" = "km";
+"speed_cameras_legal_descr" = "In some countries or regions, the use of speed camera warning applications is prohibited by law.
+\n
+\nYou need to make a choice depending on the law of your country.
+\n
+\nSelect %@ and you will receive alerts and warnings about speed cameras.
+\n
+\nSelect %@. All data related to speed cameras: alerts, notifications, POIs will be deleted until OsmAnd is completely reinstalled.";
+"speed_cameras_alert" = "Speed cameras alerts in some countries is prohibited by the law.";
+"lang_zh-Hant" = "Chinese (Traditional)";
+"uninstall_speed_cameras" = "Desinstalar los radares de velocidá";
+"shared_string_height" = "Altor";
+"privacy_and_security" = "Privacidá y seguranza";
+"shared_string_legal" = "Legal";
+"shared_string_keep_active" = "Keep active";
+"speed_camera_pois" = "PdI de radares de velocidá";

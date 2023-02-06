@@ -2822,3 +2822,19 @@
 "kg" = "kg";
 "km" = "km";
 "m" = "m";
+"shared_string_legal" = "Legal";
+"lang_sat" = "Santalí";
+"speed_cameras_legal_descr" = "En algunos países o regiones, las alertas de los radares de velocidad se encuentran prohibidas por ley.
+\n
+\nDebes elegir dependiendo de las leyes del país.
+\n
+\nPulsa en «%@», para recibir alertas y advertencias sobre los radares de velocidad.
+\n
+\nPulsa en «%@», para borrar todos los datos relacionados con los radares de velocidad (alertas, notificaciones y PDI) hasta reinstalar OsmAnd completamente.";
+"speed_cameras_alert" = "Las alertas de los radares de velocidad se encuentran prohibidas por ley en algunos países.";
+"speed_camera_pois" = "PDI de los radares de velocidad";
+"shared_string_height" = "Altura";
+"privacy_and_security" = "Privacidad y seguridad";
+"lang_zh-Hant" = "Chino (tradicional)";
+"uninstall_speed_cameras" = "Desinstalar radares de velocidad";
+"shared_string_keep_active" = "Mantener";

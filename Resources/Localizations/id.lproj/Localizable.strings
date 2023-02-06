@@ -2641,3 +2641,19 @@
 \n- garis isometrik suhu/tekanan
 \n
 \nData cuaca disediakan oleh Sistem Prakiraan Global (GFS, https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast ).";
+"lang_sat" = "Santali";
+"shared_string_height" = "Tinggi";
+"uninstall_speed_cameras" = "Copot kamera kecepatan";
+"lang_zh-Hant" = "Bahasa Mandarin (Tradisional)";
+"speed_cameras_legal_descr" = "Di beberapa negara atau wilayah, penggunaan aplikasi peringatan kamera kecepatan dilarang oleh undang-undang.
+\n
+\nAnda perlu membuat pilihan tergantung pada undang-undang negara Anda.
+\n
+\nPilih %@ dan Anda akan menerima peringatan dan peringatan tentang kamera kecepatan.
+\n
+\nPilih %@. Semua data yang terkait dengan kamera kecepatan: peringatan, pemberitahuan, POI akan dihapus hingga OsmAnd diinstal ulang sepenuhnya.";
+"shared_string_keep_active" = "Tetap aktif";
+"speed_camera_pois" = "POI kamera kecepatan";
+"privacy_and_security" = "Privasi dan keamanan";
+"shared_string_legal" = "Legal";
+"speed_cameras_alert" = "Peringatan kamera pengukur kecepatan di beberapa negara dilarang oleh undang-undang.";

@@ -2546,3 +2546,19 @@
 "download_wikipedia_data" = "Llwytho data Wicipedia";
 "m" = "m";
 "km" = "km";
+"shared_string_legal" = "Cyfreithiol";
+"privacy_and_security" = "Preifatrwydd a diogelwch";
+"speed_camera_pois" = "POI camerâu cyflymder";
+"shared_string_height" = "Uchder";
+"speed_cameras_legal_descr" = "Mewn rhai gwledydd neu ardaloedd, mae\'n anghyfreithlon defnyddio apiau sy\'n rhybuddio am gamerâu cyflymder.
+\n
+\nDylech ddewis yn ôl y gyfraith yn eich gwlad chi.
+\n
+\nDewiswch %@, a byddwch yn cael rhybudd am gamerâu cyflymder.
+\n
+\nDewiswch %@, a chaiff yr holl ddata yn ymwneud â chamerâu: rhybuddion, hysbysiadau, pwyntiau o wybodaeth, ei ddileu nes bod OsmAnd yn cael ei ail-osodo\'r newydd.";
+"lang_sat" = "Santali";
+"uninstall_speed_cameras" = "Dadosod camerâu cyflymder";
+"speed_cameras_alert" = "Mewn rhai gwledydd, mae\'n anghyfreithlon rhybuddio am gamerâu cyflymder.";
+"lang_zh-Hant" = "Tsieineeg (Traddodiadol)";
+"shared_string_keep_active" = "Cadw\'n fyw";

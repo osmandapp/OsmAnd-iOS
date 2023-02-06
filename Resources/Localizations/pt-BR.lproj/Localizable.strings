@@ -2812,3 +2812,19 @@
 "km" = "km";
 "m" = "m";
 "kg" = "kg";
+"speed_camera_pois" = "POIs de radares de velocidade";
+"uninstall_speed_cameras" = "Desinstalar radares de velocidade";
+"shared_string_height" = "Altura";
+"shared_string_keep_active" = "Manter ativo";
+"speed_cameras_alert" = "Os alertas de radares de velocidade em alguns países são proibidos por lei.";
+"lang_sat" = "Santáli";
+"speed_cameras_legal_descr" = "Em alguns países ou regiões, o uso de apps de alerta de radares é proibido por lei.
+\n
+\nVocê precisa fazer uma escolha, dependendo da lei do seu país.
+\n
+\nSelecione %@ e você receberá alertas e avisos sobre radares de velocidade.
+\n
+\nSelecione %@. Todos os dados relacionados a radares de velocidade: alertas, notificações, POIs serão excluídos até que o OsmAnd seja completamente reinstalado.";
+"lang_zh-Hant" = "Chinês tradicional";
+"privacy_and_security" = "Privacidade e segurança";
+"shared_string_legal" = "Legal";

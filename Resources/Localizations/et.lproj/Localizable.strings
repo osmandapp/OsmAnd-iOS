@@ -2517,3 +2517,18 @@
 "download_wikipedia_data" = "Laadi alla Vikipeedia andmed";
 "km" = "km";
 "m" = "m";
+"speed_camera_pois" = "Kiiruskaamerad";
+"shared_string_height" = "Kõrgus";
+"lang_zh-Hant" = "Hiina (traditsiooniline)";
+"shared_string_keep_active" = "Hoia kasutuses";
+"privacy_and_security" = "Privaatsus ja turvalisus";
+"shared_string_legal" = "Juriidiline teave";
+"uninstall_speed_cameras" = "Eemalda kiiruskaamerate andmed";
+"speed_cameras_legal_descr" = "Mõnedes riikides või piirkondades on kiiruskaamerate eest hoiatavad rakendused seadusega keelatud,
+\n
+\nVastavalt oma maa seadustele pead sa otsuse tegema.
+\n
+\nValides %@ sa saad kiiruskaamerate-kohaseid teateid ja hoiatusi.
+\n
+\nValides %@ kustutatakse kõik kiiruskaameratega seotud andmed, nagu hoiatused, teated ja huvipunktid seniks, kuni sa OsmAnd\'ile ei tee täiesti uut paigaldust.";
+"speed_cameras_alert" = "Kiiruskaamerate hoiatused on mõnedes riikides seadusega keelatud.";

@@ -2537,3 +2537,18 @@
 "open_place_reviews_plugin_description" = "レストラン、ホテル、美術館、中途経由地点などの公共の場所に関する写真、レビュー、リンクをオープンデータとして https://openplacereviews.org/data/ へ送信します。
 \n
 \n詳細は以下サイトをご覧ください。https://openplacereviews.org";
+"speed_cameras_legal_descr" = "一部の国や地域では、スピードカメラ警告機能の使用が法律で禁止されています。
+\n
+\n国の法律に基づいて、使用を望むかどうかを決定する必要があります。
+\n
+\n『%@』を選択すると、スピードカメラに関するアラートと警告機能を使用できます。
+\n
+\n『%@』を選択すると、スピードカメラに関するすべてのデータ(警告、通知、POI)が、OsmAndの再インストールを行うまで削除されます。";
+"lang_zh-Hant" = "中国語 (繁体字)";
+"privacy_and_security" = "プライバシーとセキュリティ";
+"speed_camera_pois" = "スピードカメラPOI";
+"shared_string_height" = "高さ";
+"uninstall_speed_cameras" = "スピードカメラデータの削除";
+"speed_cameras_alert" = "一部の国では、スピードカメラの事前警告は法律で禁止されています。";
+"shared_string_keep_active" = "機能を維持";
+"shared_string_legal" = "法的事項";

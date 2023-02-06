@@ -161,6 +161,8 @@
 {
     [super viewDidLoad];
     self.ignoredNames = [[NSMutableArray alloc] init];
+    self.importButton.titleLabel.font = [UIFont scaledSystemFontOfSize:14.];
+    self.cancelButton.titleLabel.font = [UIFont scaledSystemFontOfSize:14.];
 }
 
 - (void) viewWillAppear:(BOOL)animated

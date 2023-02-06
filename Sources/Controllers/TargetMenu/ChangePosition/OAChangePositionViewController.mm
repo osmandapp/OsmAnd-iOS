@@ -120,6 +120,10 @@
     [mapVC goToPosition:point andZoom:mapVC.mapView.zoomLevel animated:NO];
     
     [self onMapMoved];
+
+    self.coordinatesView.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
+    self.cancelButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
+    self.doneButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
 }
 
 - (void) setupToolBarButtonsWithWidth:(CGFloat)width

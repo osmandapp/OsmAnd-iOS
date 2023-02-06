@@ -43,6 +43,7 @@
     _saveChanges = NO;
     
     [self setupView];
+    self.saveButton.titleLabel.font = [UIFont scaledSystemFontOfSize:14.];
 }
 
 - (void)didReceiveMemoryWarning

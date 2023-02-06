@@ -102,6 +102,9 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
     self.tableView.tableHeaderView = [self getHeaderForTableView:self.tableView withFirstSectionText:self.descriptionText boldFragment:self.descriptionBoldText];
     
     [self setupView];
+
+    self.disableButton.titleLabel.font =  [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
+    self.enableButton.titleLabel.font =  [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
 }
 
 - (NSString *)descriptionText
@@ -330,7 +333,7 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
         }
         if (cell)
         {
-            cell.textView.attributedText = [OAUtilities attributedStringFromHtmlString:item[@"text"] fontSize:17];
+            cell.textView.attributedText = [OAUtilities attributedStringFromHtmlString:item[@"text"] fontSize:[UIFont scaledSystemFontOfSize:17.].pointSize];
             cell.textView.linkTextAttributes = @{NSForegroundColorAttributeName: UIColorFromRGB(color_primary_purple)};
             [cell.textView sizeToFit];
         }

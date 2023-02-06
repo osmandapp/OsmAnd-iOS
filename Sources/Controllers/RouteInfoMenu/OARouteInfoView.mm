@@ -218,8 +218,10 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     _currentState = EOARouteInfoMenuStateInitial;
     
     [_cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
-    
-    
+
+    _cancelButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
+    _goButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
+
     _cancelButton.layer.cornerRadius = 9.;
     _goButton.layer.cornerRadius = 9.;
 

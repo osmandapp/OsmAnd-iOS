@@ -255,6 +255,7 @@ static BOOL _repositoryUpdated = NO;
     {
         self.backButton.hidden = YES;
         self.doneButton.hidden = NO;
+        self.doneButton.titleLabel.font = [UIFont scaledSystemFontOfSize:14.];
     }
     
     if (self.region != _app.worldRegion)

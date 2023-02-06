@@ -87,6 +87,7 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
     self.buttonDeleteCustomPlugin.userInteractionEnabled = !self.buttonDeleteCustomPlugin.hidden;
 
     self.descTextView.delegate = self;
+    self.descLabel.font = [UIFont scaledSystemFontOfSize:13. weight:UIFontWeightSemibold];
 
     UIImage *screenshotImage;
     if (_screenType == EOAPluginScreenTypeProduct)

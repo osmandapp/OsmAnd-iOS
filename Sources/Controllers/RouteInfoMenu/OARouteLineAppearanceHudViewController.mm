@@ -1419,12 +1419,14 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
             cell.backgroundColor = UIColor.whiteColor;
             cell.segmentedControl.backgroundColor = [UIColorFromRGB(color_primary_purple) colorWithAlphaComponent:.1];
             [cell changeHeight:YES];
-
-            [cell.segmentedControl setTitleTextAttributes:@{NSForegroundColorAttributeName : UIColor.whiteColor}
+            UIFont *font = [UIFont scaledSystemFontOfSize:15.];
+            [cell.segmentedControl setTitleTextAttributes:@{
+                NSForegroundColorAttributeName : UIColor.whiteColor,
+                NSFontAttributeName : font }
                                                  forState:UIControlStateSelected];
             [cell.segmentedControl setTitleTextAttributes:@{
-                    NSForegroundColorAttributeName : UIColorFromRGB(color_primary_purple),
-                    NSFontAttributeName : [UIFont scaledBoldSystemFontOfSize:15.0f]}
+                NSForegroundColorAttributeName : UIColorFromRGB(color_primary_purple),
+                NSFontAttributeName : font }
                                                  forState:UIControlStateNormal];
 
             if (@available(iOS 13.0, *))

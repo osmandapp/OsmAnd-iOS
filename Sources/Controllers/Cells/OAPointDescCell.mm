@@ -27,6 +27,7 @@
     
     if ([UIView userInterfaceLayoutDirectionForSemanticContentAttribute:self.semanticContentAttribute] == UIUserInterfaceLayoutDirectionRightToLeft)
         _descView.textAlignment = NSTextAlignmentLeft;
+    self.titleView.font = [UIFont scaledSystemFontOfSize:14.];
 }
 
 - (NSString *)findOpeningHours

@@ -17,6 +17,7 @@
 
     self.btnPrice.layer.cornerRadius = 4;
     self.btnPrice.layer.masksToBounds = YES;
+    self.btnPrice.titleLabel.font = [UIFont scaledSystemFontOfSize:12. weight:UIFontWeightSemibold];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

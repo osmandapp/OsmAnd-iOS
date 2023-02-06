@@ -83,6 +83,9 @@
     self.contentView.frame = self.bounds;
     
     _animatedViews = [NSMutableArray array];
+    self.titleLabel.font = [UIFont scaledSystemFontOfSize:34. weight:UIFontWeightBold];
+    self.topButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
+    self.bottomButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
 }
 
 - (CGFloat)getCompoundImageWidth:(NSInteger)count

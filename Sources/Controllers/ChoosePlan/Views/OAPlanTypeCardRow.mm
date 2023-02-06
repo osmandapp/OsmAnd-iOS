@@ -223,6 +223,7 @@
             {
                 _badgeViewContainer.hidden = NO;
                 _badgeViewContainer.backgroundColor = hasSpecialOffer ? UIColorFromRGB(color_disount_offer) : UIColorFromRGB(color_discount_save);
+                _badgeLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
                 _badgeLabel.attributedText = descr;
             }
             

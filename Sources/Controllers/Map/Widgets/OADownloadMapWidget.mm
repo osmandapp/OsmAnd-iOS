@@ -96,6 +96,10 @@
     [self applyLocalization];
     [self updateInfo];
     [self updateColors];
+
+    self.descrView.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightBold];
+    self.closeButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
+    self.downloadButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
 }
 
 - (void) applyLocalization

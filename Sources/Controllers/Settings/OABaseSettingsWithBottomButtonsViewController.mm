@@ -35,6 +35,9 @@
     [super viewDidLoad];
     [self setupNavbar];
     [self setupBottomView];
+
+    self.primaryBottomButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
+    self.secondaryBottomButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
 }
 
 - (void) setupNavbar

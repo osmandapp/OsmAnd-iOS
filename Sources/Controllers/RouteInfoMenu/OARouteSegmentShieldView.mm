@@ -73,6 +73,8 @@ static UIFont *_shieldFont;
         _shieldImage.image = [[OATargetInfoViewController getIcon:_iconName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         _shieldImage.tintColor = tintColor;
     }
+
+    self.shieldLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
 }
 
 - (CGSize)intrinsicContentSize

@@ -51,6 +51,9 @@
         case EOAProfileGeneralSettingsMapOrientation:
             _title = OALocalizedString(@"rotate_map_to_bearing");
             break;
+        case EOAProfileGeneralSettingsDisplayPosition:
+            _title = OALocalizedString(@"position_on_map");
+            break;
         case EOAProfileGeneralSettingsDrivingRegion:
             _title = OALocalizedString(@"driving_region");
             break;
@@ -89,6 +92,7 @@
 {
     NSMutableArray *dataArr = [NSMutableArray array];
     NSInteger rotateMap = [_settings.rotateMap get:self.appMode];
+    EOAPositionPlacement positionMap = [_settings.positionPlacementOnMap get:self.appMode];
     BOOL automatic = [_settings.drivingRegionAutomatic get:self.appMode];
     NSInteger drivingRegion = [_settings.drivingRegion get:self.appMode];
     NSInteger metricSystem = [_settings.metricSystem get:self.appMode];
@@ -105,21 +109,45 @@
                 @"title" : OALocalizedString(@"rotate_map_none_opt"),
                 @"selected" : @(rotateMap == ROTATE_MAP_NONE),
                 @"icon" : @"ic_custom_direction_north",
-                @"type" : [OAIconTextTableViewCell getCellIdentifier],
+                @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
             }];
             [dataArr addObject:@{
                 @"name" : @"bearing",
                 @"title" : OALocalizedString(@"rotate_map_bearing_opt"),
                 @"selected" : @(rotateMap == ROTATE_MAP_BEARING),
                 @"icon" : @"ic_custom_direction_movement",
-                @"type" : [OAIconTextTableViewCell getCellIdentifier],
+                @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
             }];
             [dataArr addObject:@{
                @"name" : @"compass",
                @"title" : OALocalizedString(@"rotate_map_compass_opt"),
                @"selected" : @(rotateMap == ROTATE_MAP_COMPASS),
                @"icon" : @"ic_custom_direction_compass",
-               @"type" : [OAIconTextTableViewCell getCellIdentifier],
+               @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
+            }];
+            break;
+            
+        case EOAProfileGeneralSettingsDisplayPosition:
+            [dataArr addObject:@{
+                @"name" : @"auto",
+                @"title" : OALocalizedString(@"shared_string_automatic"),
+                @"selected" : @(positionMap == EOAPositionPlacementAuto),
+                @"icon" : @"ic_custom_display_position_automatic",
+                @"type" : [OAIconTextTableViewCell getCellIdentifier],
+            }];
+            [dataArr addObject:@{
+                @"name" : @"center",
+                @"title" : OALocalizedString(@"position_on_map_center"),
+                @"selected" : @(positionMap == EOAPositionPlacementCenter),
+                @"icon" : @"ic_custom_display_position_center",
+                @"type" : [OAIconTextTableViewCell getCellIdentifier],
+            }];
+            [dataArr addObject:@{
+                @"name" : @"bottom",
+                @"title" : OALocalizedString(@"position_on_map_bottom"),
+                @"selected" : @(positionMap == EOAPositionPlacementBottom),
+                @"icon" : @"ic_custom_display_position_bottom",
+                @"type" : [OAIconTextTableViewCell getCellIdentifier],
             }];
             break;
             
@@ -127,7 +155,7 @@
             self.tableView.rowHeight = 60.;
             [dataArr addObject:@{
                 @"name" : @"AUTOMATIC",
-                @"title" : OALocalizedString(@"driving_region_automatic"),
+                @"title" : OALocalizedString(@"shared_string_automatic"),
                 @"description" : OALocalizedString(@"device_settings"),
                 @"value" : @"",
                 @"selected" : @(automatic),
@@ -325,7 +353,7 @@
         {
             cell.textView.text = item[@"title"];
             cell.arrowIconView.hidden = ![item[@"selected"] boolValue];
-            cell.iconView.image = [UIImage templateImageNamed:@"ic_checkmark_default"];
+            cell.iconView.image = [UIImage templateImageNamed:item[@"icon"]];
             cell.iconView.tintColor = [item[@"selected"] boolValue] ? UIColorFromRGB(self.appMode.getIconColor) : UIColorFromRGB(color_icon_inactive);
         }
         return cell;
@@ -390,6 +418,9 @@
         case EOAProfileGeneralSettingsMapOrientation:
             [self selectMapOrientation:name];
             break;
+        case EOAProfileGeneralSettingsDisplayPosition:
+            [self selectDisplayPosition:(int)indexPath.row];
+            break;
         case EOAProfileGeneralSettingsDrivingRegion:
             [self selectDrivingRegion:name];
             break;
@@ -411,6 +442,7 @@
     [self setupView];
     [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationFade];
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+    [self.delegate onSettingsChanged];
     [self backButtonClicked:self];
 }
 
@@ -425,6 +457,11 @@
     
     [[OAMapViewTrackingUtilities instance] updateSettings];
     [OARootViewController.instance.mapPanel.mapViewController refreshMap];
+}
+
+- (void) selectDisplayPosition:(int)idx
+{
+    [_settings.positionPlacementOnMap set:idx mode:self.appMode];
 }
 
 - (void) selectDrivingRegion:(NSString *)name

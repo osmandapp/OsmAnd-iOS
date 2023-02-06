@@ -728,8 +728,15 @@
     {
         if ([_settings.rotateMap get] == ROTATE_MAP_NONE || _routePlanningMode)
             [self animatedAlignAzimuthToNorth];
-        
-        _mapViewController.mapPosition = ([_settings.rotateMap get] == ROTATE_MAP_BEARING && !_routePlanningMode && ![_settings.centerPositionOnMap get] ? BOTTOM_CONSTANT : CENTER_CONSTANT);
+        EOAPositionPlacement placement = (EOAPositionPlacement) [_settings.positionPlacementOnMap get];
+        if (placement == EOAPositionPlacementAuto)
+        {
+            _mapViewController.mapPosition = ([_settings.rotateMap get] == ROTATE_MAP_BEARING && !_routePlanningMode ? BOTTOM_CONSTANT : CENTER_CONSTANT);
+        }
+        else
+        {
+            _mapViewController.mapPosition = (placement == EOAPositionPlacementCenter || _routePlanningMode ? CENTER_CONSTANT : BOTTOM_CONSTANT);
+        }
     }
 }
 
@@ -761,7 +768,7 @@
 - (void) onProfileSettingSet:(NSNotification *)notification
 {
     OACommonPreference *obj = notification.object;
-    OACommonBoolean *centerPositionOnMap = [OAAppSettings sharedManager].centerPositionOnMap;
+    OACommonInteger *centerPositionOnMap = [OAAppSettings sharedManager].positionPlacementOnMap;
     if (obj)
     {
         if (obj == centerPositionOnMap)

@@ -388,30 +388,29 @@
     return resultValue * kWidthCorrectionValue;
 }
 
-- (OsmAnd::AreaI) calculateBounds:(NSArray<CLLocation *> *)pts
+- (OsmAnd::AreaI) calculateBounds:(const QVector<OsmAnd::PointI> &)pts
 {
-    double left = DBL_MAX, top = DBL_MIN, right = DBL_MIN, bottom = DBL_MAX;
-    for (NSInteger i = 0; i < pts.count; i++)
+    int left = INT_MAX, top = INT_MAX, right = INT_MIN, bottom = INT_MIN;
+    for (const auto& pt : pts)
     {
-        CLLocation *pt = pts[i];
-        right = MAX(right, pt.coordinate.longitude);
-        left = MIN(left, pt.coordinate.longitude);
-        top = MAX(top, pt.coordinate.latitude);
-        bottom = MIN(bottom, pt.coordinate.latitude);
+        right = MAX(right, pt.x);
+        left = MIN(left, pt.x);
+        top = MIN(top, pt.y);
+        bottom = MAX(bottom, pt.y);
     }
-    OsmAnd::PointI topLeft = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(top, left));
-    OsmAnd::PointI bottomRight = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(bottom, right));
+    OsmAnd::PointI topLeft(left, top);
+    OsmAnd::PointI bottomRight(right, bottom);
     return OsmAnd::AreaI(topLeft, bottomRight);
 }
 
-- (QVector<OsmAnd::PointI>) getTurnPoints:(const QVector<OsmAnd::PointI> &)points leftUp:(BOOL)leftUp
+- (QVector<OsmAnd::PointI>) getTurnPoints:(const OsmAnd::AreaI &)area leftUp:(BOOL)leftUp
 {
     QVector<OsmAnd::PointI> res;
     if (leftUp)
     {
-        const auto bottomLeft = points[0];
-        const auto center = points[1];
-        const auto centerTop = points[2];
+        const auto bottomLeft = area.bottomLeft();
+        const auto center = OsmAnd::PointI(area.center().x, area.bottom());
+        const auto centerTop = OsmAnd::PointI(area.center().x, area.top());
         int32_t leftDist = center.x - bottomLeft.x;
         int32_t upDist = centerTop.y - center.y;
         double ratio = (double) abs(leftDist) / (double) abs(upDist);
@@ -423,9 +422,9 @@
     }
     else
     {
-        const auto bottom = points[1];
-        const auto center = points[2];
-        const auto topRight = points[3];
+        const auto bottom = OsmAnd::PointI(area.center().x, area.bottom());
+        const auto center = OsmAnd::PointI(area.center().x, area.top());
+        const auto topRight = area.topRight();
         int32_t bottomDist = center.y - bottom.y;
         int32_t rightDist = topRight.x - center.x;
         double ratio = (double) abs(rightDist) / (double) abs(bottomDist);
@@ -443,7 +442,7 @@
     if ([self shouldShowTurnArrows])
     {
         [self.mapViewController runWithRenderSync:^{
-            if (_collection->getLines().isEmpty() || points.count() != 4) {
+            if (_collection->getLines().isEmpty() || points.count() < 4) {
                 [self.mapView removeKeyedSymbolsProvider:_actionLinesCollection];
                 _actionLinesCollection->removeAllLines();
                 return;
@@ -453,8 +452,9 @@
                 [self.mapView removeKeyedSymbolsProvider:_actionLinesCollection];
                 _actionLinesCollection->removeAllLines();
                 int baseOrder = self.baseOrder - 1000;
-                QVector<OsmAnd::PointI> turn1 = [self getTurnPoints:points leftUp:YES];
-                QVector<OsmAnd::PointI> turn2 = [self getTurnPoints:points leftUp:NO];
+                const auto area = [self calculateBounds:points];
+                QVector<OsmAnd::PointI> turn1 = [self getTurnPoints:area leftUp:YES];
+                QVector<OsmAnd::PointI> turn2 = [self getTurnPoints:area leftUp:NO];
                 OsmAnd::VectorLineBuilder builder1;
                 builder1.setBaseOrder(baseOrder--)
                     .setIsHidden(false)

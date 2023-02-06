@@ -997,6 +997,7 @@
 "lang_pt_br" = "Portuguese (Brazil)";
 "lang_ro" = "Romanian";
 "lang_ru" = "Russian";
+"lang_sat" = "Santali";
 "lang_sc" = "Sardinian";
 "lang_scn" = "Sicilian";
 "lang_sco" = "Scots";
@@ -1026,6 +1027,8 @@
 "lang_zh_cn" = "Chinese (Simplified)";
 "lang_zh_hk" = "Chinese (Hong Kong)";
 "lang_zh_tw" = "Chinese (Traditional)";
+"lang_zh-Hans" = "Chinese (Simplified)";
+"lang_zh-Hant" = "Chinese (Traditional)";
 "lang_zhminnan" = "Southern Min";
 "lang_zhyue" = "Cantonese";
 

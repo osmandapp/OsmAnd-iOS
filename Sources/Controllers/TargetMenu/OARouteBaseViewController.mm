@@ -530,13 +530,13 @@
 
         [res appendAttributedString:uphillIcon];
         [res appendAttributedString:[[NSAttributedString alloc] initWithString:
-                                     [NSString stringWithFormat:@" %@", [OAOsmAndFormatter getFormattedAlt:analysis.maxElevation]]
+                                     [NSString stringWithFormat:@" %@", [OAOsmAndFormatter getFormattedAlt:analysis.diffElevationUp]]
                                                                     attributes:textAttrs]];
         [res appendAttributedString:[[NSAttributedString alloc] initWithString:@"    "]];
 
         [res appendAttributedString:downhilIcon];
         [res appendAttributedString:[[NSAttributedString alloc] initWithString:
-                                     [NSString stringWithFormat:@" %@", [OAOsmAndFormatter getFormattedAlt:analysis.minElevation]]
+                                     [NSString stringWithFormat:@" %@", [OAOsmAndFormatter getFormattedAlt:analysis.diffElevationDown]]
                                                                     attributes:textAttrs]];
 
         return res;

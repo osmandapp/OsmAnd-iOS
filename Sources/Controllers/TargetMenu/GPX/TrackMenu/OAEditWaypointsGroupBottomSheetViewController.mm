@@ -98,6 +98,7 @@ typedef NS_ENUM(NSUInteger, EOAEditTrackScreenMode)
     else
     {
         [self.titleView.centerXAnchor constraintEqualToAnchor:self.headerView.centerXAnchor].active = true;
+        self.titleView.adjustsFontForContentSizeCategory = YES;
         self.titleView.attributedText =
                 [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_options")
                                                 attributes:@{ NSFontAttributeName : [UIFont scaledBoldSystemFontOfSize:17.] }];

@@ -138,6 +138,7 @@
 
         _subscriptionManagement = [[UILabel alloc] init];
         _subscriptionManagement.font = [UIFont scaledSystemFontOfSize:15.];
+        _subscriptionManagement.adjustsFontForContentSizeCategory = YES;
         _subscriptionManagement.textColor = UIColor.blackColor;
         _subscriptionManagement.numberOfLines = 0;
 
@@ -170,6 +171,7 @@
 
         _labelIncludes = [[UILabel alloc] init];
         _labelIncludes.font = [UIFont scaledSystemFontOfSize:17.];
+        _labelIncludes.adjustsFontForContentSizeCategory = YES;
         _labelIncludes.textColor = UIColor.blackColor;
         _labelIncludes.numberOfLines = 0;
         _labelIncludes.text = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_colon"),
@@ -196,6 +198,7 @@
         {
             _labelNotIncluded = [[UILabel alloc] init];
             _labelNotIncluded.font = [UIFont scaledSystemFontOfSize:17.];
+            _labelNotIncluded.adjustsFontForContentSizeCategory = YES;
             _labelNotIncluded.textColor = UIColor.blackColor;
             _labelNotIncluded.numberOfLines = 0;
             _labelNotIncluded.text = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_colon"),

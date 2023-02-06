@@ -206,6 +206,10 @@ static const NSInteger _buttonsCount = 4;
     [_backViewRoute.layer addSublayer:_horizontalRouteLine];
 
     _nearbyLabel.textColor = UIColorFromARGB(color_secondary_text_light_argb);
+    _descriptionLabel.font = [UIFont scaledSystemFontOfSize:13. weight:UIFontWeightMedium];
+    _buttonShadow.titleLabel.font = [UIFont scaledSystemFontOfSize:18.];
+    _buttonRoute.titleLabel.font = [UIFont scaledSystemFontOfSize:13. weight:UIFontWeightSemibold];
+    _buttonShowInfo.titleLabel.font = [UIFont scaledSystemFontOfSize:13. weight:UIFontWeightSemibold];
     
     [OsmAndApp instance].favoritesCollection->collectionChangeObservable.attach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self),
                                                                 [self]

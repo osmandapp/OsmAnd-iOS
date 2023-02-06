@@ -82,6 +82,7 @@
         }
     }];
     self.lbTitle.attributedText = titleStr;
+    self.lbTitle.adjustsFontForContentSizeCategory = YES;
     
     self.btnSubscribe = [UIButton buttonWithType:UIButtonTypeSystem];
     [self.btnSubscribe setTintColor:UIColorFromRGB(color_dialog_buttons_light)];

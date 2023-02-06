@@ -89,6 +89,7 @@
     textField.textView.delegate = self;
     textField.layoutDelegate = self;
     textField.font = [UIFont scaledSystemFontOfSize:17.0];
+    textField.adjustsFontForContentSizeCategory = YES;
     textField.clearButton.imageView.tintColor = UIColorFromRGB(color_icon_color);
     [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field"] forState:UIControlStateNormal];
     [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field"] forState:UIControlStateHighlighted];

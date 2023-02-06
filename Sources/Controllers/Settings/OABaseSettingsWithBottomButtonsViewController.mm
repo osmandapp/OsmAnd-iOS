@@ -106,6 +106,7 @@
         UILabel *description = [[UILabel alloc] initWithFrame:CGRectMake(16. + OAUtilities.getLeftMargin, 8., textWidth, heightForHeader)];
         UIFont *labelFont = [UIFont scaledSystemFontOfSize:15.0];
         description.font = labelFont;
+        description.adjustsFontForContentSizeCategory = YES;
         [description setTextColor: UIColorFromRGB(color_text_footer)];
         
         if (boldFragment && boldFragment.length > 0)

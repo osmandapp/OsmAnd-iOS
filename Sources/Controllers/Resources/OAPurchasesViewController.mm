@@ -110,6 +110,7 @@ static BOOL _purchasesUpdated;
     loadingLabel.text = OALocalizedString(@"loading_purchase_information");
     loadingLabel.textColor = UIColorFromRGB(color_text_footer);
     loadingLabel.font = labelFont;
+    loadingLabel.adjustsFontForContentSizeCategory = YES;
     [loadingContainerView addSubview:loadingLabel];
 
     UIActivityIndicatorView *loadingIndicator = [[UIActivityIndicatorView alloc] init];

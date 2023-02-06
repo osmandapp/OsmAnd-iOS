@@ -30,6 +30,7 @@
         _title = [[UILabel alloc] initWithFrame:CGRectMake(DESTINATION_CARD_BORDER, 0.0, w, _containerView.frame.size.height)];
         _title.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
         _title.font = [UIFont scaledSystemFontOfSize:13.0 weight:UIFontWeightSemibold];
+        _title.adjustsFontForContentSizeCategory = YES;
         _title.textColor = UIColorFromRGB(0x000000);
         [_containerView addSubview:self.title];
 

@@ -85,6 +85,7 @@
     UILabel *description = [[UILabel alloc] initWithFrame:CGRectMake(kSidePadding + OAUtilities.getLeftMargin, 6.0, textWidth, _heightForHeader)];
     UIFont *labelFont = [UIFont scaledSystemFontOfSize:15.0];
     description.font = labelFont;
+    description.adjustsFontForContentSizeCategory = YES;
     [description setTextColor: UIColorFromRGB(color_text_footer)];
     NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
     [style setLineSpacing:6];

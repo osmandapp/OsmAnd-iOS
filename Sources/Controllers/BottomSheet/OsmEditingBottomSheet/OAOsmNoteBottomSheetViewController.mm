@@ -515,6 +515,7 @@
     [textField.textView setText:text];
     textField.userInteractionEnabled = NO;
     textField.font = [UIFont scaledSystemFontOfSize:17.0];
+    textField.adjustsFontForContentSizeCategory = YES;
     textField.clearButton.imageView.tintColor = UIColorFromRGB(color_icon_color);
     [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field"] forState:UIControlStateNormal];
     [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field"] forState:UIControlStateHighlighted];
@@ -557,6 +558,7 @@
     [textField setSecureTextEntry:YES];
     textField.userInteractionEnabled = NO;
     textField.font = [UIFont scaledSystemFontOfSize:17.0];
+    textField.adjustsFontForContentSizeCategory = YES;
     textField.clearButtonMode = UITextFieldViewModeNever;
     textField.placeholderLabel.backgroundColor = [UIColor clearColor];
     [resultCell setupPasswordButton];

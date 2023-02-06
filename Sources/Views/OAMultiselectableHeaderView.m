@@ -56,6 +56,7 @@ static UIFont *_btnFont;
     _title = [[UILabel alloc] initWithFrame:CGRectMake(kMargin + OAUtilities.getLeftMargin, 12.0, self.frame.size.width - textSize.width - kMargin * 2 - OAUtilities.getLeftMargin * 2, self.frame.size.height - 10.0)];
     _title.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     _title.font = _btnFont;
+    _title.adjustsFontForContentSizeCategory = YES;
     _title.textColor = [UIColor colorWithRed:0.427f green:0.427f blue:0.447f alpha:1.00f]; //6D6D72
     [self addSubview:self.title];
     

@@ -63,6 +63,7 @@
     _label = [[UITextView alloc] init];
     _label.backgroundColor = [UIColor clearColor];
     _label.font = self.class.font;
+    _label.adjustsFontForContentSizeCategory = YES;
     _label.editable = NO;
     _label.scrollEnabled = NO;
     _label.userInteractionEnabled = YES;

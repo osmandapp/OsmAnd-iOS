@@ -138,7 +138,9 @@ typedef enum
     // Init wizard
     _lbTitle.text = OALocalizedString(@"shared_string_download_map");
     _lbDescription.text = OALocalizedString(@"first_usage_wizard_desc");
+    _lbDescription.font = [UIFont scaledSystemFontOfSize:14.];
     [_btnSkip setTitle:OALocalizedString(@"shared_string_skip") forState:UIControlStateNormal];
+    _btnSkip.titleLabel.font = [UIFont scaledSystemFontOfSize:14.];
     
     // Init no location view
     _lbLocationNotFound.text = OALocalizedString(@"location_not_found");

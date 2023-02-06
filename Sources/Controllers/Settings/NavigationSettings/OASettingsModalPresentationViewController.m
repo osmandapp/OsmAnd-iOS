@@ -72,6 +72,7 @@
                                                         NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer),
                                                         NSFontAttributeName : [UIFont scaledSystemFontOfSize:15.0],
                                                         NSBackgroundColorAttributeName : UIColor.clearColor}];
+    label.adjustsFontForContentSizeCategory = YES;
     label.numberOfLines = 0;
     label.lineBreakMode = NSLineBreakByWordWrapping;
     label.autoresizingMask = UIViewAutoresizingFlexibleWidth;

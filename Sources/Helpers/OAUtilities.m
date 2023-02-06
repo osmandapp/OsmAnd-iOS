@@ -2055,6 +2055,7 @@ static const double d180PI = 180.0 / M_PI_2;
     }
     label.text = text;
     label.font = font;
+    label.adjustsFontForContentSizeCategory = YES;
     label.textColor = textColor;
     label.numberOfLines = 0;
     label.lineBreakMode = NSLineBreakByWordWrapping;
@@ -2117,6 +2118,7 @@ static const double d180PI = 180.0 / M_PI_2;
     CGFloat iconOffset = hasIcon ? 12 + iconFrameSize + 20 : 0;
     CGFloat textWidth = DeviceScreenWidth - (20 + OAUtilities.getLeftMargin * 2) - iconOffset;
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(20 + OAUtilities.getLeftMargin, 0.0, textWidth, CGFLOAT_MAX)];
+    label.adjustsFontForContentSizeCategory = YES;
     label.attributedText = text;
     label.numberOfLines = 0;
     label.lineBreakMode = NSLineBreakByWordWrapping;

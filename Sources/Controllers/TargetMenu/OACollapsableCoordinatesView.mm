@@ -65,6 +65,7 @@
     _viewLabel.numberOfLines = 0;
     _viewLabel.lineBreakMode = NSLineBreakByWordWrapping;
     _viewLabel.font = [UIFont scaledSystemFontOfSize:13.0];
+    _viewLabel.adjustsFontForContentSizeCategory = YES;
     _viewLabel.textColor = UIColorFromRGB(color_text_footer);
     _viewLabel.backgroundColor = [UIColor clearColor];
     _viewLabel.text = OALocalizedString(@"coordinates_copy_descr");

@@ -54,6 +54,7 @@
     _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(15.0, 10.0, 240.0, 20.0)];
     _titleLabel.textColor = [UIColor blackColor];
     _titleLabel.font = [UIFont scaledSystemFontOfSize:14.0];;
+    _titleLabel.adjustsFontForContentSizeCategory = YES;
     _titleLabel.numberOfLines = 1;
     _titleLabel.text = OALocalizedString(@"device_memory");
     [self addSubview:_titleLabel];
@@ -61,6 +62,7 @@
     _freeMemLabel = [[UILabel alloc] initWithFrame:CGRectMake(15.0, 10.0, 240.0, 20.0)];
     _freeMemLabel.textColor = [UIColor blackColor];
     _freeMemLabel.font = [UIFont scaledSystemFontOfSize:14.0];;
+    _freeMemLabel.adjustsFontForContentSizeCategory = YES;
     _freeMemLabel.numberOfLines = 1;
     [self addSubview:_freeMemLabel];
     

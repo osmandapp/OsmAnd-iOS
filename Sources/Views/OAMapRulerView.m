@@ -47,6 +47,7 @@
         
         self.textLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, self.frame.size.height - 20, self.frame.size.width - 10, 15)];
         [self.textLabel setFont:[UIFont scaledSystemFontOfSize:12]];
+        self.textLabel.adjustsFontForContentSizeCategory = YES;
         [self addSubview:self.textLabel];
         CGRect frame = self.frame;
         frame.size.width = 0;

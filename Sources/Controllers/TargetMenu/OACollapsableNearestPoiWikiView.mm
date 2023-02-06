@@ -115,6 +115,7 @@
             UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 20)];
             label.numberOfLines = 0;
             label.font = [UIFont scaledSystemFontOfSize:13.0];
+            label.adjustsFontForContentSizeCategory = YES;
             label.textColor = [UIColor whiteColor];
             label.backgroundColor = UIColorFromRGB(0x7bca62);
             

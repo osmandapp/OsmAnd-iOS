@@ -103,7 +103,7 @@
 #define mapInfoControlsKey @"mapInfoControls"
 #define transparentMapThemeKey @"transparentMapTheme"
 #define showStreetNameKey @"showStreetName"
-#define centerPositionOnMapKey @"centerPositionOnMap"
+#define positionPlacementOnMapKey @"positionPlacementOnMap"
 #define rotateMapKey @"rotateMap"
 #define compassModeKey @"compassMode"
 #define firstMapIsDownloadedKey @"firstMapIsDownloaded"
@@ -3726,8 +3726,8 @@
 
         [_profilePreferences setObject:_showCoordinatesWidget forKey:@"show_coordinates_widget"];
 
-        _centerPositionOnMap = [OACommonBoolean withKey:centerPositionOnMapKey defValue:NO];
-        [_profilePreferences setObject:_centerPositionOnMap forKey:@"center_position_on_map"];
+        _positionPlacementOnMap = [OACommonInteger withKey:positionPlacementOnMapKey defValue:EOAPositionPlacementAuto];
+        [_profilePreferences setObject:_positionPlacementOnMap forKey:@"position_placement_on_map"];
 
         _rotateMap = [OACommonInteger withKey:rotateMapKey defValue:ROTATE_MAP_NONE];
         [_rotateMap setModeDefaultValue:@(ROTATE_MAP_BEARING) mode:[OAApplicationMode CAR]];

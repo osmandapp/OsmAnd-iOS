@@ -29,6 +29,13 @@
 
 @class OAAvoidRoadInfo, OAMapSource, OAMapLayersConfiguration, OASubscriptionState;
 
+typedef NS_ENUM(NSInteger, EOAPositionPlacement)
+{
+    EOAPositionPlacementAuto = 0,
+    EOAPositionPlacementCenter,
+    EOAPositionPlacementBottom
+};
+
 typedef NS_ENUM(NSInteger, EOACompassMode)
 {
     EOACompassVisible = 0,
@@ -873,7 +880,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 
 @property (nonatomic) OACommonBoolean *transparentMapTheme;
 @property (nonatomic) OACommonBoolean *showStreetName;
-@property (nonatomic) OACommonBoolean *centerPositionOnMap;
+@property (nonatomic) OACommonInteger *positionPlacementOnMap;
 @property (nonatomic) OACommonBoolean *showDistanceRuler;
 
 @property (assign, nonatomic) BOOL simulateNavigation;

@@ -1730,7 +1730,7 @@
 "after_tapping_done" = "После нажатия кнопки \"Готово\" удаленные профили будут полностью потеряны.";
 "osmand_routing" = "Навигация OsmAnd";
 "desert" = "Пустыня";
-"settings_item_read_error" = "Невозможно прочитать из «%1$s».";
+"settings_item_read_error" = "Невозможно прочитать из «%@».";
 "public_transport_hide" = "Скрыть общественный транспорт";
 "public_transport_show" = "Показать общественный транспорт";
 "toggle_public_transport" = "Показать/скрыть общественный транспорт";

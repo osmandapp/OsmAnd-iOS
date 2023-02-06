@@ -1739,7 +1739,7 @@
 "map_during_navigation" = "Karte während Navigation";
 "voice_anounces" = "Sprachansagen";
 "osmand_routing" = "OsmAnd-Routing";
-"settings_item_read_error" = "Konnte nicht von '%1$s' lesen.";
+"settings_item_read_error" = "Konnte nicht von '%@' lesen.";
 "quick_action_transport_descr" = "Schaltfläche zum Ein- oder Ausblenden der öffentlichen Verkehrsmittel auf der Karte.";
 "after_tapping_done" = "Nachdem Sie auf Fertig tippen, gehen gelöschte Profile vollständig verloren.";
 "all_application_profiles" = "Alle Anwendungsprofile";

@@ -36,7 +36,6 @@
     
     OARoutingHelper *_routingHelper;
     std::shared_ptr<OsmAnd::VectorLinesCollection> _actionLinesCollection;
-    OAAutoObserverProxy* _mapZoomObserver;
     
     NSDictionary<NSString *, NSNumber *> *_routeAttributes;
 
@@ -67,11 +66,6 @@
     return kRouteAppearanceLayerId;
 }
 
-- (void)dealloc
-{
-    [_mapZoomObserver detach];
-}
-
 - (void) initLayer
 {
     [super initLayer];
@@ -92,10 +86,6 @@
     _routeColoringType = OAColoringType.DEFAULT;
     _colorizationScheme = COLORIZATION_NONE;
     _cachedRouteLineWidth = [NSMutableDictionary dictionary];
-
-    _mapZoomObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                 withHandler:@selector(onMapZoomChanged:withKey:andValue:)
-                                                  andObserve:self.mapViewController.zoomObservable];
 }
 
 - (void) resetLayer
@@ -237,7 +227,7 @@
                     line->setColorizationMapping(colors);
             }
         }
-        [self buildActionArrows];
+        [self buildActionArrows:points];
     }];
 }
 
@@ -398,220 +388,94 @@
     return resultValue * kWidthCorrectionValue;
 }
 
-- (OsmAnd::AreaI) calculateBounds:(NSArray<CLLocation *> *)pts
+- (OsmAnd::AreaI) calculateBounds:(const QVector<OsmAnd::PointI> &)pts
 {
-    double left = DBL_MAX, top = DBL_MIN, right = DBL_MIN, bottom = DBL_MAX;
-    for (NSInteger i = 0; i < pts.count; i++)
+    int left = INT_MAX, top = INT_MAX, right = INT_MIN, bottom = INT_MIN;
+    for (const auto& pt : pts)
     {
-        CLLocation *pt = pts[i];
-        right = MAX(right, pt.coordinate.longitude);
-        left = MIN(left, pt.coordinate.longitude);
-        top = MAX(top, pt.coordinate.latitude);
-        bottom = MIN(bottom, pt.coordinate.latitude);
+        right = MAX(right, pt.x);
+        left = MIN(left, pt.x);
+        top = MIN(top, pt.y);
+        bottom = MAX(bottom, pt.y);
     }
-    OsmAnd::PointI topLeft = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(top, left));
-    OsmAnd::PointI bottomRight = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(bottom, right));
+    OsmAnd::PointI topLeft(left, top);
+    OsmAnd::PointI bottomRight(right, bottom);
     return OsmAnd::AreaI(topLeft, bottomRight);
 }
 
-- (void) onMapZoomChanged:(id)observable withKey:(id)key andValue:(id)value
+- (QVector<OsmAnd::PointI>) getTurnPoints:(const OsmAnd::AreaI &)area leftUp:(BOOL)leftUp
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self buildActionArrows];
-    });
+    QVector<OsmAnd::PointI> res;
+    if (leftUp)
+    {
+        const auto bottomLeft = area.bottomLeft();
+        const auto center = OsmAnd::PointI(area.center().x, area.bottom());
+        const auto centerTop = OsmAnd::PointI(area.center().x, area.top());
+        int32_t leftDist = center.x - bottomLeft.x;
+        int32_t upDist = centerTop.y - center.y;
+        double ratio = (double) abs(leftDist) / (double) abs(upDist);
+        double upCoef = ratio > 1. ? 0.2 : 0.2 * ratio;
+        double leftCoef = ratio > 1. ? 0.2 * (1 - ratio) : 0.2;
+        res << OsmAnd::PointI(center.x - leftDist * leftCoef, center.y);
+        res << center;
+        res << OsmAnd::PointI(center.x, center.y + upDist * upCoef);
+    }
+    else
+    {
+        const auto bottom = OsmAnd::PointI(area.center().x, area.bottom());
+        const auto center = OsmAnd::PointI(area.center().x, area.top());
+        const auto topRight = area.topRight();
+        int32_t bottomDist = center.y - bottom.y;
+        int32_t rightDist = topRight.x - center.x;
+        double ratio = (double) abs(rightDist) / (double) abs(bottomDist);
+        double bottomCoef = ratio > 1. ? 0.2 : 0.2 * ratio;
+        double rightCoef = ratio > 1. ? 0.2 * (1 - ratio) : 0.2;
+        res << OsmAnd::PointI(center.x, center.y - bottomDist * bottomCoef);
+        res << center;
+        res << OsmAnd::PointI(center.x + rightDist * rightCoef, center.y);
+    }
+    return res;
 }
 
-- (void) buildActionArrows
+- (void) buildActionArrows:(const QVector<OsmAnd::PointI> &)points
 {
     if ([self shouldShowTurnArrows])
     {
         [self.mapViewController runWithRenderSync:^{
-            const auto zoom = self.mapView.zoomLevel;
-
-            if (_collection->getLines().isEmpty() || zoom <= OsmAnd::ZoomLevel14) {
+            if (_collection->getLines().isEmpty() || points.count() < 4) {
                 [self.mapView removeKeyedSymbolsProvider:_actionLinesCollection];
                 _actionLinesCollection->removeAllLines();
                 return;
             }
             else
             {
+                [self.mapView removeKeyedSymbolsProvider:_actionLinesCollection];
+                _actionLinesCollection->removeAllLines();
                 int baseOrder = self.baseOrder - 1000;
-                NSArray<NSArray<CLLocation *> *> *actionPoints = [self calculateActionPoints];
-                if (actionPoints.count > 0)
-                {
-                    int lineIdx = 0;
-                    int initialLinesCount = _actionLinesCollection->getLines().count();
-                    for (NSArray<CLLocation *> *line in actionPoints)
-                    {
-                        QVector<OsmAnd::PointI> points;
-                        for (CLLocation *point in line)
-                        {
-                            points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(point.coordinate.latitude, point.coordinate.longitude)));
-                        }
-                        if (lineIdx < initialLinesCount)
-                        {
-                            auto line = _actionLinesCollection->getLines()[lineIdx];
-                            line->setPoints(points);
-                            line->setIsHidden(false);
-                            lineIdx++;
-                        }
-                        else
-                        {
-                            OsmAnd::VectorLineBuilder builder;
-                            builder.setBaseOrder(baseOrder--)
-                                    .setIsHidden(false)
-                                    .setLineId(_actionLinesCollection->getLines().size())
-                                    .setLineWidth(_lineWidth * 0.4)
-                                    .setPoints(points)
-                                    .setEndCapStyle(OsmAnd::VectorLine::EndCapStyle::ARROW)
-                                    .setFillColor(OsmAnd::ColorARGB(_customTurnArrowsColor));
-                            builder.buildAndAddToCollection(_actionLinesCollection);
-                        }
-                    }
-                    QList<std::shared_ptr<OsmAnd::VectorLine> > toDelete;
-                    while (lineIdx < initialLinesCount)
-                    {
-                        _actionLinesCollection->getLines()[lineIdx]->setIsHidden(true);
-                        lineIdx++;
-                    }
-                }
+                const auto area = [self calculateBounds:points];
+                QVector<OsmAnd::PointI> turn1 = [self getTurnPoints:area leftUp:YES];
+                QVector<OsmAnd::PointI> turn2 = [self getTurnPoints:area leftUp:NO];
+                OsmAnd::VectorLineBuilder builder1;
+                builder1.setBaseOrder(baseOrder--)
+                    .setIsHidden(false)
+                    .setLineId(_actionLinesCollection->getLines().size())
+                    .setLineWidth(_lineWidth * 0.4)
+                    .setPoints(turn1)
+                    .setEndCapStyle(OsmAnd::VectorLine::EndCapStyle::ARROW)
+                    .setFillColor(OsmAnd::ColorARGB((uint32_t)_customTurnArrowsColor));
+                builder1.buildAndAddToCollection(_actionLinesCollection);
+                OsmAnd::VectorLineBuilder builder2;
+                builder2.setBaseOrder(baseOrder--)
+                    .setIsHidden(false)
+                    .setLineId(_actionLinesCollection->getLines().size())
+                    .setLineWidth(_lineWidth * 0.4)
+                    .setPoints(turn2)
+                    .setEndCapStyle(OsmAnd::VectorLine::EndCapStyle::ARROW)
+                    .setFillColor(OsmAnd::ColorARGB((uint32_t)_customTurnArrowsColor));
+                builder2.buildAndAddToCollection(_actionLinesCollection);
             }
             [self.mapView addKeyedSymbolsProvider:_actionLinesCollection];
         }];
-    }
-}
-
-- (NSArray<NSArray<CLLocation *> *> *) calculateActionPoints
-{
-    NSArray<OARouteDirectionInfo *> *directions = _routingHelper.getRouteDirections;
-    NSInteger dirIdx = 0;
-    NSArray<CLLocation *> *routeNodes = _routingHelper.getRoute.getRouteLocations;
-    CLLocation *lastProjection = _routingHelper.getLastProjection;
-    int cd = _routingHelper.getRoute.currentRoute;
-    OsmAnd::ZoomLevel zoom = self.mapView.zoomLevel;
-    
-    OARouteDirectionInfo *nf = nil;
-    double DISTANCE_ACTION = 35;
-    if(zoom >= OsmAnd::ZoomLevel17)
-        DISTANCE_ACTION = 15;
-    else if (zoom == OsmAnd::ZoomLevel15)
-        DISTANCE_ACTION = 70;
-    else if (zoom < OsmAnd::ZoomLevel15)
-        DISTANCE_ACTION = 110;
-    
-    double actionDist = 0;
-    CLLocation *previousAction = nil;
-    NSMutableArray<NSArray<CLLocation *> *> *res = [NSMutableArray array];
-    NSMutableArray<CLLocation *> *actionPoints = [NSMutableArray array];
-    int prevFinishPoint = -1;
-    for (int routePoint = 0; routePoint < routeNodes.count; routePoint++)
-    {
-        CLLocation *loc = routeNodes[routePoint];
-        if(nf != nil)
-        {
-            int pnt = nf.routeEndPointOffset == 0 ? nf.routePointOffset : nf.routeEndPointOffset;
-            if (pnt < routePoint + cd)
-                nf = nil;
-        }
-        while (nf == nil && dirIdx < directions.count)
-        {
-            nf = directions[dirIdx++];
-            int pnt = nf.routeEndPointOffset == 0 ? nf.routePointOffset : nf.routeEndPointOffset;
-            if (pnt < routePoint + cd)
-                nf = nil;
-        }
-        BOOL action = nf != nil && (nf.routePointOffset == routePoint + cd ||
-                                        (nf.routePointOffset <= routePoint + cd && routePoint + cd  <= nf.routeEndPointOffset));
-        if(!action && previousAction == nil)
-        {
-            // no need to check
-            continue;
-        }
-        if (!action)
-        {
-            // previousAction != null
-            double dist = [loc distanceFromLocation:previousAction];
-            actionDist += dist;
-            if (actionDist >= DISTANCE_ACTION)
-            {
-                [actionPoints addObject:[self calculateProjection:1 - (actionDist - DISTANCE_ACTION) / dist lp:previousAction l:loc]];
-                [res addObject:actionPoints];
-                actionPoints = [NSMutableArray array];
-                prevFinishPoint = routePoint;
-                previousAction = nil;
-                actionDist = 0;
-            }
-            else
-            {
-                [actionPoints addObject:loc];
-                previousAction = loc;
-            }
-        }
-        else
-        {
-            // action point
-            if (previousAction == nil)
-            {
-                [self addPreviousToActionPoints:actionPoints
-                                 lastProjection:lastProjection
-                                     routeNodes:routeNodes
-                                DISTANCE_ACTION:DISTANCE_ACTION
-                                prevFinishPoint:prevFinishPoint
-                                     routePoint:routePoint
-                                            loc:loc];
-            }
-            [actionPoints addObject:loc];
-            previousAction = loc;
-            prevFinishPoint = -1;
-            actionDist = 0;
-        }
-    }
-    if(previousAction != nil)
-    {
-        [res addObject:actionPoints];
-    }
-    return res;
-}
-
-- (void) addPreviousToActionPoints:(NSMutableArray<CLLocation *> *)actionPoints
-                    lastProjection:(CLLocation *)lastProjection
-                        routeNodes:(NSArray<CLLocation *> *)routeNodes
-                   DISTANCE_ACTION:(double)DISTANCE_ACTION
-                   prevFinishPoint:(int)prevFinishPoint
-                        routePoint:(int)routePoint
-                               loc:(CLLocation *)loc
-{
-    // put some points in front
-    NSInteger ind = actionPoints.count;
-    CLLocation *lprevious = loc;
-    double dist = 0;
-    for (NSInteger k = routePoint - 1; k >= -1; k--)
-    {
-        CLLocation *l = k == -1 ? lastProjection : routeNodes[k];
-        double locDist = [lprevious distanceFromLocation:l];
-        dist += locDist;
-        if (dist >= DISTANCE_ACTION)
-        {
-            if (locDist > 1)
-            {
-                [actionPoints insertObject:[self calculateProjection:(1 - (dist - DISTANCE_ACTION) / locDist) lp:lprevious l:l] atIndex:ind];
-            }
-            break;
-        }
-        else
-        {
-            [actionPoints insertObject:l atIndex:ind];
-            lprevious = l;
-        }
-        if (prevFinishPoint == k)
-        {
-            if (ind >= 2)
-            {
-                [actionPoints removeObjectAtIndex:ind - 2];
-                [actionPoints removeObjectAtIndex:ind - 2];
-            }
-            break;
-        }
     }
 }
 

@@ -554,6 +554,7 @@
 "shared_string_show_all" = "Show all";
 "shared_string_min_height" = "Min. height";
 "shared_string_max_height" = "Max. height";
+"shared_string_height" = "Height";
 "shared_string_gpx_track" = "Track";
 "shared_string_open_street_map" = "OpenStreetMap";
 "any_poi" = "Any";
@@ -2080,6 +2081,7 @@
 "download_wikipedia_data" = "Download Wikipedia data";
 "explore_wikipedia_offline" = "Explore Wikipedia offline.";
 "online_webpage_warning" = "Page only available online. Open in web browser?";
+"open_in_browser_wiki" = "Open article online";
 
 "custom_search" = "Custom search";
 "add_custom_category" = "Add custom category";

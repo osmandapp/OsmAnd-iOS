@@ -104,7 +104,7 @@
     }
     else
     {
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"wiki_sheet_title")
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"how_to_open_wiki_title")
                                                                        message:OALocalizedString(url)
                                                                 preferredStyle:UIAlertControllerStyleActionSheet];
         
@@ -126,7 +126,7 @@
                 [[OARootViewController instance].navigationController pushViewController:resourcesViewController animated:YES];
             }
         }];
-        UIAlertAction *openOnlineAction = [UIAlertAction actionWithTitle:OALocalizedString(@"open_wiki_online")
+        UIAlertAction *openOnlineAction = [UIAlertAction actionWithTitle:OALocalizedString(@"open_in_browser_wiki")
                                                                    style:UIAlertActionStyleDefault
                                                                  handler:^(UIAlertAction * _Nonnull action) {
             [OAUtilities callUrl:url];

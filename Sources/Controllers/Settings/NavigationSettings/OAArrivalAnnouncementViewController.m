@@ -148,7 +148,7 @@
     label.attributedText = [[NSAttributedString alloc] initWithString:text
                                                            attributes:@{ NSParagraphStyleAttributeName : style,
                                                                          NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer),
-                                                                         NSFontAttributeName : [UIFont systemFontOfSize:[self fontSizeForLabel]],
+                                                                         NSFontAttributeName : [UIFont scaledSystemFontOfSize:[self fontSizeForLabel]],
                                                                          NSBackgroundColorAttributeName : UIColor.clearColor }];
     label.numberOfLines = 0;
     label.autoresizingMask = UIViewAutoresizingFlexibleWidth;

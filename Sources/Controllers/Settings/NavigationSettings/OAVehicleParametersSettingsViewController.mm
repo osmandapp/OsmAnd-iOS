@@ -240,6 +240,7 @@
     {
         NSNumberFormatter *formatter = [[NSNumberFormatter alloc]init];
         [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
+        formatter.decimalSeparator = @".";
         formatter.minimumIntegerDigits = 1;
         formatter.minimumFractionDigits = 0;
         formatter.maximumFractionDigits = 3;

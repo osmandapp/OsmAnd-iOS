@@ -29,6 +29,13 @@
     return self;
 }
 
+- (OATableSectionData *) createNewSection
+{
+    OATableSectionData *sectionData = [OATableSectionData sectionData];
+    [self addSection:sectionData];
+    return sectionData;
+}
+
 - (void)addSection:(OATableSectionData *)sectionData
 {
     [_sectionData addObject:sectionData];

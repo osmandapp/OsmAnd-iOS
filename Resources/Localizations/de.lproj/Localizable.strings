@@ -270,7 +270,7 @@
 "plugin_nautical_name" = "Seekarte";
 "product_desc_nautical" = "Vektorkarten für die Navigation von Segelrouten";
 "product_desc_skimap" = "Aktuelle Karte von Skigebieten mit Liften und Pisten";
-"product_title_allworld" = "Alle Weltkarten";
+"worldwide_maps" = "Alle Weltkarten";
 "product_desc_allworld" = "Karten der ganzen Welt";
 "get_unlimited_access" = "Erhalten Sie unbegrenzten Zugang";
 "navigate_point_latitude" = "Breitengrad";

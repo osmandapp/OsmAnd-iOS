@@ -219,7 +219,7 @@
 "loc_access_denied_desc" = "L'accès au service de localisation a été refusé";
 "record_plugin_name" = "Enregistrement d\'itinéraire";
 "product_title_trip_planning" = "Planification de voyage";
-"product_title_allworld" = "Toutes les cartes du monde";
+"worldwide_maps" = "Toutes les cartes du monde";
 "product_desc_wiki" = "Articles Wikipédia sur la carte en fonction de la position";
 "my_location" = "Ma position";
 "get_unlimited_access" = "Obtenir un accès illimité";

@@ -270,7 +270,7 @@
 "product_desc_northamerica" = "Korlátlan térképletöltés: Észak-Amerika";
 "product_desc_russia" = "Korlátlan térképletöltés: Oroszország";
 "product_desc_southamerica" = "Korlátlan térképletöltés: Dél-Amerika";
-"product_title_allworld" = "Az összes világtérkép";
+"worldwide_maps" = "Az összes világtérkép";
 "product_desc_allworld" = "Az egész világ térképei";
 "product_desc_asia" = "Korlátlan térképletöltés: Ázsia";
 "my_location" = "Saját helyzetem";

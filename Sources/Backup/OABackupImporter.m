@@ -246,42 +246,49 @@
     OASettingsItemReader *reader = item.getReader;
     NSString *fileName = remoteFile.getTypeNamePath;
     NSString *tempFilePath = [_tmpFilesDir stringByAppendingPathComponent:fileName];
-    if (reader)
-    {
-        NSString *errorStr = [_backupHelper downloadFile:tempFilePath remoteFile:remoteFile listener:self];
-        BOOL error = errorStr.length > 0;
-        if (!error)
+    @try {
+        if (reader)
         {
-            [reader readFromFile:tempFilePath error:nil];
-            if (forceReadData)
+            NSString *errorStr = [_backupHelper downloadFile:tempFilePath remoteFile:remoteFile listener:self];
+            BOOL error = errorStr.length > 0;
+            if (!error)
             {
-                if ([item isKindOfClass:OACollectionSettingsItem.class])
-                    [((OACollectionSettingsItem *) item) processDuplicateItems];
-                
-                [item apply];
-            }
-
-            [_backupHelper updateFileUploadTime:remoteFile.type fileName:remoteFile.name uploadTime:remoteFile.updatetimems];
-            
-            if ([item isKindOfClass:OAFileSettingsItem.class])
-            {
-                NSString *itemFileName = [OABackupHelper getItemFileName:item];
-                if (itemFileName.pathExtension.length == 0)
+                [reader readFromFile:tempFilePath error:nil];
+                if (forceReadData)
                 {
-                    [_backupHelper updateFileUploadTime:[OASettingsItemType typeName:item.type] fileName:itemFileName
-                                            uploadTime:remoteFile.updatetimems];
+                    if ([item isKindOfClass:OACollectionSettingsItem.class])
+                        [((OACollectionSettingsItem *) item) processDuplicateItems];
+                    
+                    [item apply];
+                }
+
+                [_backupHelper updateFileUploadTime:remoteFile.type fileName:remoteFile.name uploadTime:remoteFile.updatetimems];
+                
+                if ([item isKindOfClass:OAFileSettingsItem.class])
+                {
+                    NSString *itemFileName = [OABackupHelper getItemFileName:item];
+                    if (itemFileName.pathExtension.length == 0)
+                    {
+                        [_backupHelper updateFileUploadTime:[OASettingsItemType typeName:item.type] fileName:itemFileName
+                                                uploadTime:remoteFile.updatetimems];
+                    }
                 }
             }
+            if ([NSFileManager.defaultManager fileExistsAtPath:tempFilePath])
+                [NSFileManager.defaultManager removeItemAtPath:tempFilePath error:nil];
+            if (error)
+            {
+                @throw [NSException exceptionWithName:@"IOException" reason:[NSString stringWithFormat:@"Error reading temp item file %@: %@", fileName, errorStr] userInfo:nil];
+            }
+            
         }
-        if ([NSFileManager.defaultManager fileExistsAtPath:tempFilePath])
-            [NSFileManager.defaultManager removeItemAtPath:tempFilePath error:nil];
-        if (error)
-        {
-            @throw [NSException exceptionWithName:@"IOException" reason:[NSString stringWithFormat:@"Error reading temp item file %@: %@", fileName, errorStr] userInfo:nil];
-        }
-        
+        [item applyAdditionalParams:tempFilePath];
     }
-    [item applyAdditionalParams:tempFilePath];
+    @catch (NSException *exception)
+    {
+        [item.warnings addObject:[NSString stringWithFormat:OALocalizedString(@"settings_item_read_error"), item.name]];
+        NSLog(@"Error reading item data: %@ %@", item.name, exception.reason);
+    }
 }
 
 - (NSArray<OASettingsItem *> *) getRemoteItems:(NSArray<OARemoteFile *> *)remoteFiles readItems:(BOOL)readItems

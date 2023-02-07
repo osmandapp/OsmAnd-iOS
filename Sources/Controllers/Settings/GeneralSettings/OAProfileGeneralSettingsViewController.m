@@ -59,6 +59,36 @@
     } completion:nil];
 }
 
+- (NSString *)getLocationPositionValue
+{
+    switch ([_settings.positionPlacementOnMap get:self.appMode]) {
+        case EOAPositionPlacementAuto:
+            return OALocalizedString(@"shared_string_automatic");
+        case EOAPositionPlacementCenter:
+            return OALocalizedString(@"position_on_map_center");
+        case EOAPositionPlacementBottom:
+            return OALocalizedString(@"position_on_map_bottom");
+            
+        default:
+            return @"";
+    }
+}
+
+- (NSString *)getLocationPositionIcon
+{
+    switch ([_settings.positionPlacementOnMap get:self.appMode]) {
+        case EOAPositionPlacementAuto:
+            return @"ic_custom_display_position_automatic";
+        case EOAPositionPlacementCenter:
+            return @"ic_custom_display_position_center";
+        case EOAPositionPlacementBottom:
+            return @"ic_custom_display_position_bottom";
+            
+        default:
+            return @"";
+    }
+}
+
 - (void) setupView
 {
     NSString *rotateMapValue;
@@ -79,18 +109,8 @@
         rotateMapIcon = @"ic_custom_direction_north";
     }
     
-    NSString *positionMapValue;
-    NSString *positionMapIcon;
-    if ([_settings.centerPositionOnMap get:self.appMode] == YES)
-    {
-        positionMapValue = OALocalizedString(@"position_on_map_center");
-        positionMapIcon = @"ic_custom_display_position_center.png";
-    }
-    else
-    {
-        positionMapValue = OALocalizedString(@"position_on_map_bottom");
-        positionMapIcon = @"ic_custom_display_position_bottom.png";
-    }
+    NSString *positionMapValue = [self getLocationPositionValue];
+    NSString *positionMapIcon = [self getLocationPositionIcon];
     
     NSNumber *allow3DValue = @([_settings.settingAllow3DView get:self.appMode]);
     

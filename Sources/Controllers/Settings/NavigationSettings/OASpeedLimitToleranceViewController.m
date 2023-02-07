@@ -144,6 +144,8 @@
 - (void) selectSpeedLimitExceed:(NSDictionary *)item
 {
     [_settings.speedLimitExceedKmh set:((NSNumber *)item[@"name"]).doubleValue mode:self.appMode];
+    if (self.delegate)
+        [self.delegate onSettingsChanged];
     [self dismissViewController];
 }
 

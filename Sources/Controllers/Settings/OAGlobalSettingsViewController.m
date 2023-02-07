@@ -129,7 +129,7 @@
             [_data addSection:anonymousDataSection];
 
             OATableSectionData *dialogsSection = [OATableSectionData sectionData];
-            [dialogsSection setHeaderText:OALocalizedString(@"help_other_header")];
+            [dialogsSection setHeaderText:OALocalizedString(@"other_location")];
             [dialogsSection setFooterText:OALocalizedString(@"dialogs_and_notifications_descr")];
             [dialogsSection addRowFromDictionary:@{
                 kCellKeyKey : @"dialogs_and_notif",

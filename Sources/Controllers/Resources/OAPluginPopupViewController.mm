@@ -341,7 +341,7 @@ static NSMutableArray *activePopups;
     {
         needShow = YES;
 
-        title = OALocalizedString(@"product_title_nautical");
+        title = OALocalizedString(@"plugin_nautical_name");
         descText = OALocalizedString(@"plugin_popup_nautical_ask");
         okButtonName = OALocalizedString(@"plugins_menu_group");
         cancelButtonName = OALocalizedString(@"shared_string_cancel");

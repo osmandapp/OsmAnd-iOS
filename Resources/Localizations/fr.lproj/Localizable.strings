@@ -219,7 +219,7 @@
 "loc_access_denied_desc" = "L'accès au service de localisation a été refusé";
 "record_plugin_name" = "Enregistrement d\'itinéraire";
 "product_title_trip_planning" = "Planification de voyage";
-"product_title_allworld" = "Toutes les cartes du monde";
+"worldwide_maps" = "Toutes les cartes du monde";
 "product_desc_wiki" = "Articles Wikipédia sur la carte en fonction de la position";
 "my_location" = "Ma position";
 "get_unlimited_access" = "Obtenir un accès illimité";
@@ -2785,7 +2785,7 @@
 "routing_attr_length_description" = "Indiquez la longueur du véhicule autorisée sur les routes.";
 "routing_attr_avoid_4wd_only_name" = "Éviter les routes pour 4 x 4";
 "routing_attr_freeride_policy_prefer_offpiste_name" = "Privilégier le hors-piste";
-"rendering_attr_weatherWindSpeedContours_name" = "Contour des rafales de vent";
+"rendering_attr_weatherWindSpeedContours_name" = "Isolignes de vitesse de vent";
 "rendering_attr_showMtbScaleIMBATrails_description" = "Afficher les chemins tracés pour les VTT.";
 "routing_attr_avoid_fords_name" = "Éviter les gués";
 "routing_attr_avoid_highway_name" = "Éviter les autoroutes";
@@ -2812,3 +2812,19 @@
 "kg" = "kg";
 "km" = "km";
 "m" = "m";
+"speed_camera_pois" = "PI radars";
+"lang_sat" = "Santali";
+"speed_cameras_legal_descr" = "Dans certains pays ou régions, l\'utilisation d\'avertisseurs de radars est interdit par la loi.
+\n
+\nVous devez faire un choix en fonction de la loi de votre pays.
+\n
+\nSélectionnez %@ pour recevoir des alertes et des avertissements sur les radars.
+\n
+\nSélectionnez %@. Toutes les données relatives aux radars (alertes, notifications, PI) seront supprimées pour cette installation de l’application.";
+"lang_zh-Hant" = "Chinois (traditionnel)";
+"shared_string_legal" = "Légal";
+"uninstall_speed_cameras" = "Désinstaller les radars";
+"shared_string_height" = "Hauteur";
+"privacy_and_security" = "Vie privée et Sécurité";
+"speed_cameras_alert" = "Les alertes radars sont interdites par la loi dans certains pays.";
+"shared_string_keep_active" = "Garder actif";

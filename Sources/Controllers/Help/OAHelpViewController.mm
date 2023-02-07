@@ -252,7 +252,7 @@ static const NSInteger groupCount = 5;
     [dataArr addObject:
      @{
        @"name" : @"plugin_nautical_name",
-       @"title" : OALocalizedString(@"product_title_nautical"),
+       @"title" : OALocalizedString(@"plugin_nautical_name"),
        @"type" : kLinkInternalType,
        @"html" : @"nautical-charts"
        }];

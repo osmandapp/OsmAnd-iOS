@@ -947,7 +947,7 @@
             [cell descriptionVisibility:hasDescription];
             cell.descriptionLabel.attributedText = item[@"description"];
             NSString *regionId = [OAWeatherHelper checkAndGetRegionId:region];
-            if (regionId && ([OAWeatherHelper getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateInProgress
+            if (!isSelectCell && regionId && ([OAWeatherHelper getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateInProgress
                     || ![_weatherHelper isOfflineForecastSizesInfoCalculated:regionId]))
             {
                 FFCircularProgressView *progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 25.0f, 25.0f)];

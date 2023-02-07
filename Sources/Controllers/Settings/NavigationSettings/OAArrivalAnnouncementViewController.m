@@ -81,19 +81,17 @@
     double selectedValue = [_settings.arrivalDistanceFactor get:self.appMode];
     NSArray<NSNumber *> *arrivalValues = @[ @1.5f, @1.f, @0.5f, @0.25f ];
     NSArray<NSString *> *arrivalNames =  @[
-        @"arrival_distance_factor_early",
-        @"arrival_distance_factor_normally",
-        @"arrival_distance_factor_late",
-        @"arrival_distance_factor_at_last"];
+        OALocalizedString(@"arrival_distance_factor_early"),
+        OALocalizedString(@"arrival_distance_factor_normally"),
+        OALocalizedString(@"arrival_distance_factor_late"),
+        OALocalizedString(@"arrival_distance_factor_at_last")];
 
     for (int i = 0; i < arrivalNames.count; i++)
     {
-        NSString *key = arrivalNames[i];
         NSNumber *value = arrivalValues[i];
         [arrivalSection addRowFromDictionary:@{
-            kCellKeyKey : key,
             kCellTypeKey : [OARightIconTableViewCell getCellIdentifier],
-            kCellTitleKey : OALocalizedString(key),
+            kCellTitleKey : arrivalNames[i],
             @"value" : value
         }];
         if (value.doubleValue == selectedValue)
@@ -109,6 +107,7 @@
         kCellTitleKey : OALocalizedString(@"announcement_time_intervals")
     }];
     [infoSection addRow:infoCollapsableRow];
+    _collapsedCellIndexPath = [NSIndexPath indexPathForRow:[infoSection rowCount] - 1 inSection:[_data sectionCount] - 1];
 
     [infoCollapsableRow addDependentRow:[[OATableRowData alloc] initWithData:@{
         kCellTypeKey : [OATextMultilineTableViewCell getCellIdentifier]
@@ -179,7 +178,7 @@
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [[_data sectionDataForIndex:section] rowCount];
+    return [_data rowCount:section];
 }
 
 - (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
@@ -201,9 +200,8 @@
             if (item.rowType == EOATableRowTypeCollapsable)
                 cell.rightIconView.image = [UIImage templateImageNamed:((OATableCollapsableRowData *) item).collapsed ? @"ic_custom_arrow_right" : @"ic_custom_arrow_down"];
             else
-                cell.rightIconView.image = _selectedIndexPath == indexPath ? [UIImage imageNamed:@"ic_checkmark_default"] : nil;
+                cell.rightIconView.image = _selectedIndexPath == indexPath ? [UIImage templateImageNamed:@"ic_checkmark_default"] : nil;
 
-            [cell rightIconVisibility:cell.rightIconView.image];
             cell.titleLabel.text = item.title;
         }
         return cell;
@@ -239,9 +237,7 @@
         _selectedIndexPath = indexPath;
         [self updateArrivalDistanceFactorValue];
         [_announceTimeDistances setArrivalDistances:[_settings.arrivalDistanceFactor get:self.appMode]];
-        NSMutableArray<NSIndexPath *> *indexPaths = [NSMutableArray array];
-        [indexPaths addObject:_selectedIndexPath];
-        [indexPaths addObject:oldSelectedIndexPath];
+        NSMutableArray<NSIndexPath *> *indexPaths = [NSMutableArray arrayWithObjects:_selectedIndexPath, oldSelectedIndexPath, nil];
         if (_collapsedCellIndexPath)
         {
             OATableCollapsableRowData *collapsableRow = (OATableCollapsableRowData *) [_data itemForIndexPath:_collapsedCellIndexPath];
@@ -263,23 +259,26 @@
 
 - (void)onCollapseButtonPressed:(NSIndexPath *)indexPath
 {
-    _collapsedCellIndexPath = indexPath;
-    [_announceTimeDistances setArrivalDistances:[_settings.arrivalDistanceFactor get:self.appMode]];
-    OATableCollapsableRowData *collapsableRow = (OATableCollapsableRowData *) [_data itemForIndexPath:indexPath];
-    collapsableRow.collapsed = !collapsableRow.collapsed;
-    NSMutableArray<NSIndexPath *> *rowIndexes = [NSMutableArray array];
-    for (NSInteger i = 1; i <= collapsableRow.dependentRowsCount; i++)
+    OATableRowData *item = [_data itemForIndexPath:indexPath];
+    if (item.rowType == EOATableRowTypeCollapsable)
     {
-        [rowIndexes addObject:[NSIndexPath indexPathForRow:(indexPath.row + i) inSection:indexPath.section]];
+        [_announceTimeDistances setArrivalDistances:[_settings.arrivalDistanceFactor get:self.appMode]];
+        OATableCollapsableRowData *collapsableRow = (OATableCollapsableRowData *) [_data itemForIndexPath:indexPath];
+        collapsableRow.collapsed = !collapsableRow.collapsed;
+        NSMutableArray<NSIndexPath *> *rowIndexes = [NSMutableArray array];
+        for (NSInteger i = 1; i <= collapsableRow.dependentRowsCount; i++)
+        {
+            [rowIndexes addObject:[NSIndexPath indexPathForRow:(indexPath.row + i) inSection:indexPath.section]];
+        }
+        
+        [self.tableView performBatchUpdates:^{
+            [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+            if (collapsableRow.collapsed)
+                [self.tableView deleteRowsAtIndexPaths:rowIndexes withRowAnimation:UITableViewRowAnimationAutomatic];
+            else
+                [self.tableView insertRowsAtIndexPaths:rowIndexes withRowAnimation:UITableViewRowAnimationAutomatic];
+        } completion:nil];
     }
-
-    [self.tableView performBatchUpdates:^{
-        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-        if (collapsableRow.collapsed)
-            [self.tableView deleteRowsAtIndexPaths:rowIndexes withRowAnimation:UITableViewRowAnimationAutomatic];
-        else
-            [self.tableView insertRowsAtIndexPaths:rowIndexes withRowAnimation:UITableViewRowAnimationAutomatic];
-    } completion:nil];
 }
 
 @end

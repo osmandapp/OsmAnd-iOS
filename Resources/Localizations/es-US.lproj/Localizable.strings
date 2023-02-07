@@ -2838,3 +2838,4 @@
 \nPulsa en «%@», para borrar todos los datos relacionados con los radares de velocidad (alertas, notificaciones y PDI) hasta reinstalar OsmAnd completamente.";
 "speed_camera_pois" = "PDI de los radares de velocidad";
 "privacy_and_security" = "Privacidad y seguridad";
+"shared_string_does_not_exist" = "No existe";

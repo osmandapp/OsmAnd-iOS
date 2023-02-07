@@ -2811,6 +2811,7 @@
 "rendering_attr_weatherPrecipitationContours_name" = "Isolinhas de precipitação";
 "shared_string_does_not_exist" = "Não existe";
 "download_wikipedia_data" = "Descarregar dados da Wikipédia";
+
 "km" = "km";
 "m" = "m";
 "kg" = "kg";

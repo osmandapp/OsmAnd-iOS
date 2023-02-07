@@ -2266,3 +2266,41 @@
 "not_enough_contributions_descr" = "Een minimum van %@ wijzigingen over een periode van de laatste twee maanden %@ is nodig om toegang te krijgen tot onbeperkte kaartupdates elk uur.";
 "uninstall_speed_cameras" = "Verwijder snelheidscamera’s";
 "speed_cameras_alert" = "Het waarschuwen voor snelheidscamera’s is in sommige landen in strijd met de wet.";
+
+
+
+
+
+
+
+
+
+
+
+"carplay_active_message" = "Kaart wordt weergegeven via CarPlay";
+"road_speeds_descr" = "Deze parameters kunnen de routeberekening beïnvloeden.";
+"tts" = "TTS (Tekst-naar-spraak)";
+"recorded_voice" = "Opgenomen";
+"allow_3d" = "Laat 2.5D-aanzicht toe";
+"carplay_available_in_sub_plans" = "Koop OsmAnd Pro of Maps+ om CarPlay-functionaliteit te kunnen gebruiken.";
+"animate_my_location_descr" = "Soepele overgang van locatie op de kaart tijdens de navigatie";
+
+"trip_rec_actions_descr" = "Je kan alle opgenomen GPX-tracks vinden in %@";
+"send_anonymous_data_desc" = "Stuur statistieken over kaartdownloads naar OsmAnd, we verzamelen geen locatie-informatie of persoonlijke gegevens.";
+"default_profile_descr" = "Kies een profiel dat gebruikt zal worden bij het starten van de applicatie.";
+"position_on_map" = "Toon positie";
+"map_markers_empty" = "Je hebt geen actieve kaartmarkeringen";
+
+
+"direction_lines" = "Richtingslijnen";
+
+
+"tracks_empty" = "Je lijst met opnames is leeg";
+"road_min_speed_descr" = "Stelt de minimale reissnelheid in voor alle wegen in de route. Verhoogt de prioriteit voor wegen met een aanbevolen snelheid lager dan het minimum.";
+"carplay_profile_descr" = "Profiel dat gebruikt wordt wanneer je verbonden bent via CarPlay.";
+"allow_3d_descr" = "Kies deze optie om de kaart in 2.5D-aanzicht te kunnen bekijken";
+"coords_format_descr_quick_search" = "Je kan het formaat van de coördinaten voor dit profiel aanpassen in de Algemene instellingen";
+"simulation_real_mode_desc" = "• Op stukken rechte wegen, schat men de snelheid gelijk aan de maximumsnelheid.\n• Op kruispunten zal de simulatie vertragen.\n• Extra tijdsverlies zal worden toegepast bij verkeerslichten, stopborden, etc.";
+"road_max_speed_descr" = "Stelt de maximale reissnelheid in voor alle wegen in de route. Verlaagt de prioriteit voor wegen met een mogelijke snelheid die hoger ligt dan het maximum.";
+"favorites_empty" = "Je hebt nog geen favoriete punten opgeslagen";
+"carplay_profile" = "CarPlay-profiel";

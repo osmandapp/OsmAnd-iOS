@@ -302,7 +302,7 @@
 "product_desc_northamerica" = "Ótakmörkuð niðurhöl korta af Norður-Ameríku";
 "product_desc_russia" = "Ótakmörkuð niðurhöl korta af Rússlandi";
 "product_desc_southamerica" = "Ótakmörkuð niðurhöl korta af Suður-Ameríku";
-"product_title_allworld" = "Öll heimskort";
+"worldwide_maps" = "Öll heimskort";
 "product_desc_allworld" = "Heimskort";
 "product_desc_asia" = "Ótakmörkuð niðurhöl korta af Asíu";
 "download_wikipedia_maps" = "Wikipedia";
@@ -2811,3 +2811,19 @@
 "kg" = "kg";
 "m" = "m";
 "km" = "km";
+"lang_zh-Hant" = "Kínverska (hefðbundin)";
+"speed_camera_pois" = "Merktar hraðamyndavélar";
+"uninstall_speed_cameras" = "Fjarlægja hraðamyndavélar";
+"speed_cameras_alert" = "Aðvaranir vegna hraðamyndavéla eru bannaðar með lögum í sumum löndum.";
+"shared_string_legal" = "Löglegt";
+"shared_string_height" = "Hæð";
+"privacy_and_security" = "Gagnaleynd ogöryggi";
+"speed_cameras_legal_descr" = "Aðvaranir vegna hraðamyndavéla eru bannaðar með lögum í sumum löndum.
+\n
+\nÞú þarft að velja hvernig lagaleg staða er í landinu þínu.
+\n
+\nVeldu %@ og þú munt fá aðvaranir og ábendingar um hraðamyndavélar.
+\n
+\nVeldu %@: öllum gögnum sem tengjast hraðamyndavélum; t.d. aðvaranir, tilkynningar, staðsetningar o.fl. verður eytt þar til OsmAnd er sett inn aftur frá grunni.";
+"lang_sat" = "Santalí";
+"shared_string_keep_active" = "Halda virku";

@@ -548,6 +548,7 @@
 
 - (void) commonInit
 {
+    [self setPurchased];
     if (self.free && ![self isAlreadyPurchased])
     {
         [self setPurchased];
@@ -2149,6 +2150,11 @@
     return [[NSDecimalNumber alloc] initWithDouble:kInApp_Region_All_World_Default_Price];
 }
 
+- (NSString *) localizedTitle
+{
+    return OALocalizedString(@"worldwide_maps");
+}
+
 @end
 
 @implementation OARussiaProduct
@@ -2167,6 +2173,11 @@
 - (NSDecimalNumber *) getDefaultPrice
 {
     return [[NSDecimalNumber alloc] initWithDouble:kInApp_Region_Russia_Default_Price];
+}
+
+- (NSString *) localizedTitle
+{
+    return OALocalizedString(@"index_name_russia");
 }
 
 @end
@@ -2189,6 +2200,11 @@
     return [[NSDecimalNumber alloc] initWithDouble:kInApp_Region_Antarctica_Default_Price];
 }
 
+- (NSString *) localizedTitle
+{
+    return OALocalizedString(@"index_name_antarctica");
+}
+
 @end
 
 @implementation OAAfricaProduct
@@ -2207,6 +2223,11 @@
 - (NSDecimalNumber *) getDefaultPrice
 {
     return [[NSDecimalNumber alloc] initWithDouble:kInApp_Region_Africa_Default_Price];
+}
+
+- (NSString *) localizedTitle
+{
+    return OALocalizedString(@"index_name_africa");
 }
 
 @end
@@ -2229,6 +2250,11 @@
     return [[NSDecimalNumber alloc] initWithDouble:kInApp_Region_Asia_Default_Price];
 }
 
+- (NSString *) localizedTitle
+{
+    return OALocalizedString(@"index_name_asia");
+}
+
 @end
 
 @implementation OAAustraliaProduct
@@ -2247,6 +2273,11 @@
 - (NSDecimalNumber *) getDefaultPrice
 {
     return [[NSDecimalNumber alloc] initWithDouble:kInApp_Region_Australia_Default_Price];
+}
+
+- (NSString *) localizedTitle
+{
+    return OALocalizedString(@"index_name_oceania");
 }
 
 @end
@@ -2269,6 +2300,11 @@
     return [[NSDecimalNumber alloc] initWithDouble:kInApp_Region_Europe_Default_Price];
 }
 
+- (NSString *) localizedTitle
+{
+    return OALocalizedString(@"index_name_europe");
+}
+
 @end
 
 @implementation OACentralAmericaProduct
@@ -2287,6 +2323,11 @@
 - (NSDecimalNumber *) getDefaultPrice
 {
     return [[NSDecimalNumber alloc] initWithDouble:kInApp_Region_Central_America_Default_Price];
+}
+
+- (NSString *) localizedTitle
+{
+    return OALocalizedString(@"index_name_central_america");
 }
 
 @end
@@ -2309,6 +2350,11 @@
     return [[NSDecimalNumber alloc] initWithDouble:kInApp_Region_North_America_Default_Price];
 }
 
+- (NSString *) localizedTitle
+{
+    return OALocalizedString(@"index_name_north_america");
+}
+
 @end
 
 @implementation OASouthAmericaProduct
@@ -2327,6 +2373,11 @@
 - (NSDecimalNumber *) getDefaultPrice
 {
     return [[NSDecimalNumber alloc] initWithDouble:kInApp_Region_South_America_Default_Price];
+}
+
+- (NSString *) localizedTitle
+{
+    return OALocalizedString(@"index_name_south_america");
 }
 
 @end

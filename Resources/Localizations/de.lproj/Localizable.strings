@@ -270,7 +270,7 @@
 "plugin_nautical_name" = "Seekarte";
 "product_desc_nautical" = "Vektorkarten für die Navigation von Segelrouten";
 "product_desc_skimap" = "Aktuelle Karte von Skigebieten mit Liften und Pisten";
-"product_title_allworld" = "Alle Weltkarten";
+"worldwide_maps" = "Alle Weltkarten";
 "product_desc_allworld" = "Karten der ganzen Welt";
 "get_unlimited_access" = "Erhalten Sie unbegrenzten Zugang";
 "navigate_point_latitude" = "Breitengrad";
@@ -2827,3 +2827,19 @@
 "m" = "m";
 "km" = "km";
 "kg" = "kg";
+"shared_string_keep_active" = "Aktiviert lassen";
+"privacy_and_security" = "Datenschutz und Sicherheit";
+"speed_cameras_alert" = "Blitzer-Warnungen sind in einigen Ländern gesetzlich verboten.";
+"shared_string_legal" = "Rechtliches";
+"uninstall_speed_cameras" = "Blitzer deinstallieren";
+"speed_cameras_legal_descr" = "In einigen Ländern oder Regionen ist die Verwendung von Blitzer-Warneinrichtungen gesetzlich verboten.
+\n
+\nSie müssen anhand der Gesetzeslage des Landes entscheiden, ob Sie
+\n
+\n%@ wählen und Warnungen und Hinweise zu Blitzern erhalten werden,
+\n
+\n%@ wählen, worauf alle Daten zu Blitzern (Warnungen, Hinweise und POIs) bis zu einer vollständigen Neuinstallation von OsmAnd gelöscht werden.";
+"shared_string_height" = "Höhe";
+"lang_zh-Hant" = "Chinesisch (traditionell)";
+"lang_sat" = "Santali";
+"speed_camera_pois" = "Blitzer-POIs";

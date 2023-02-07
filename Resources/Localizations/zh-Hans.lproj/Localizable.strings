@@ -316,7 +316,7 @@
 "product_desc_northamerica" = "";
 "product_desc_russia" = "";
 "product_desc_southamerica" = "";
-"product_title_allworld" = "";
+"worldwide_maps" = "";
 "product_desc_allworld" = "";
 "product_desc_asia" = "";
 "download_wikipedia_maps" = "维基百科";
@@ -2151,3 +2151,19 @@
 \n在我们的网站上查找有关如何做出贡献的说明 https://osmand.net/docs/user/plugins/openplacereviews。";
 "kg" = "千克";
 "m" = "米";
+"speed_camera_pois" = "测速摄像兴趣点";
+"uninstall_speed_cameras" = "卸载测速摄像头";
+"shared_string_legal" = "合法";
+"shared_string_keep_active" = "保持活跃";
+"privacy_and_security" = "隐私和安全";
+"speed_cameras_alert" = "在某些国家法律禁止使用测速摄像警报。";
+"lang_sat" = "桑塔利语（Satār）";
+"shared_string_height" = "高度";
+"lang_zh-Hant" = "繁体中文";
+"speed_cameras_legal_descr" = "在某些国家或地区，使用测速摄像头提示应用是非法的。
+\n
+\n你需要根据你所在的国家的法律作出选择。
+\n
+\n选择 %@ 你会收到测速摄像头的提示和警告。
+\n
+\n选择 %@，以下关于测速摄像头的数据会被删除直到彻底重新安装OsmAnd:警告、消息、提示、兴趣点。";

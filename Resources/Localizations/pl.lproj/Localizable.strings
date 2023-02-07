@@ -164,7 +164,7 @@
 "product_desc_northamerica" = "Nieograniczone pobieranie map dla Ameryki Północnej";
 "product_desc_russia" = "Nieograniczone pobieranie map dla Rosji";
 "product_desc_southamerica" = "Nieograniczone pobieranie map dla Ameryki Południowej";
-"product_title_allworld" = "Wszystkie mapy świata";
+"worldwide_maps" = "Wszystkie mapy świata";
 "product_desc_allworld" = "Mapy całego świata";
 "product_desc_asia" = "Nieograniczone pobieranie map dla Azji";
 "wiki_around" = "Artykuły Wikipedii w pobliżu";
@@ -2650,3 +2650,19 @@
 \nDane pogodowe są dostarczane przez Globalny System Prognoz (GFS, https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast ).";
 "km" = "km";
 "kg" = "kg";
+"lang_zh-Hant" = "Chiński (tradycyjny)";
+"shared_string_legal" = "Prawny";
+"uninstall_speed_cameras" = "Odinstaluj fotoradary";
+"speed_camera_pois" = "Punkty fotoradarów";
+"speed_cameras_alert" = "Ostrzeżenia o fotoradarach są prawnie zabronione w niektórych krajach.";
+"lang_sat" = "Santalski";
+"shared_string_height" = "Wysokość";
+"speed_cameras_legal_descr" = "W niektórych krajach i regionach używanie aplikacji ostrzegających o fotoradarach jest zabronione przez prawo.
+\n
+\nMusisz dokonać wyboru w zależności od prawa danego kraju.
+\n
+\nWybierz %@ i będziesz otrzymywać powiadomienia i ostrzeżenia o fotoradarach.
+\n
+\nWybierz %@. Wszystkie dane o fotoradarach: ostrzeżenia, powiadomienia, miejsca użyteczne zostaną usunięte, aż OsmAnd zostanie zainstalowany ponownie.";
+"shared_string_keep_active" = "Nie wyłączaj";
+"privacy_and_security" = "Prywatność i bezpieczeństwo";

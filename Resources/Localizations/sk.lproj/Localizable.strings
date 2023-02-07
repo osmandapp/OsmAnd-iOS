@@ -306,7 +306,7 @@
 "product_desc_northamerica" = "Neobmedzené sťahovania máp Severnej Ameriky";
 "product_desc_russia" = "Neobmedzené sťahovania máp Ruska";
 "product_desc_southamerica" = "Neobmedzené sťahovania máp Južnej Ameriky";
-"product_title_allworld" = "Všetky mapy sveta";
+"worldwide_maps" = "Všetky mapy sveta";
 "product_desc_allworld" = "Mapy celého sveta";
 "product_desc_asia" = "Neobmedzené sťahovania máp Ázie";
 "download_wikipedia_maps" = "Wikipédia";
@@ -2355,3 +2355,19 @@
 \n
 \nInštrukcie ako prispievať nájdete na našej webstránke https://osmand.net/docs/user/plugins/openplacereviews .";
 "kg" = "kg";
+"shared_string_height" = "Výška";
+"lang_zh-Hant" = "Čínsky (Tradičná)";
+"uninstall_speed_cameras" = "Odinštalovať rýchlostné radary";
+"speed_cameras_alert" = "V niektorých krajinách je varovanie pred rýchlostnými radarmi zakázané zákonom.";
+"speed_camera_pois" = "Body rýchlostných radarov";
+"lang_sat" = "Santali";
+"shared_string_legal" = "Právne";
+"speed_cameras_legal_descr" = "V niektorých krajinách alebo regiónoch je zákonom zakázané použivať aplikácie varujúce pred rýchlostnými radarmi.
+\n
+\nMusíte sa rozhodnúť podľa zákonov vašej krajiny.
+\n
+\nZvoľte %@ a budete dostávať varovania pred rýchlostnými radarmi.
+\n
+\nZvoľte %@ a všetky údaje o rýchlostných radaroch budú odstránené, až kým nebude OsmAnd znovu preinštalovaný.";
+"shared_string_keep_active" = "Ponechať aktívne";
+"privacy_and_security" = "Súkromie a bezpečnosť";

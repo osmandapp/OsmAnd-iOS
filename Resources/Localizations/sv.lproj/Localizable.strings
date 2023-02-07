@@ -1588,7 +1588,7 @@
 "product_desc_russia_short" = "Maps of Russia regions";
 "product_desc_southamerica" = "Unlimited map downloads for South America";
 "product_desc_southamerica_short" = "South America region maps";
-"product_title_allworld" = "All World Maps";
+"worldwide_maps" = "All World Maps";
 "product_desc_allworld" = "Maps of All World";
 "product_desc_asia" = "Unlimited map downloads for Asia";
 "product_desc_asia_short" = "Asia region maps";
@@ -2594,3 +2594,10 @@
 "km" = "km";
 "m" = "m";
 "kg" = "kg";
+"speed_cameras_alert" = "Varning för hastighetskameror är i vissa länder förbjudet i lag.";
+"uninstall_speed_cameras" = "Avinstallera hastighetskameror";
+"shared_string_legal" = "Juridik";
+"lang_sat" = "Santali";
+"privacy_and_security" = "Sekretess och säkerhet";
+"shared_string_height" = "Höjd";
+"lang_zh-Hant" = "Kinesiska (traditionell)";

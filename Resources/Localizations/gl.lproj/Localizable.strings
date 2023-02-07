@@ -621,7 +621,7 @@
 "product_desc_northamerica" = "Map of North America";
 "product_desc_russia" = "Map of Russia";
 "product_desc_southamerica" = "Map of South America";
-"product_title_allworld" = "All World Maps";
+"worldwide_maps" = "All World Maps";
 "product_desc_allworld" = "Map of All World";
 "product_desc_asia" = "Map of Asia";
 "download_wikipedia_maps" = "Wikipedia";
@@ -1903,3 +1903,18 @@ Lon %@";
 \n- as isolíneas da temperatura/presión
 \n
 \nA predición meteorolóxica e proporcionada polo Global Forecast System (GFS, https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast ).";
+"shared_string_legal" = "Legal";
+"privacy_and_security" = "Privacidade e seguranza";
+"uninstall_speed_cameras" = "Desinstalar radares de velocidade";
+"speed_camera_pois" = "PDI de radares de velocidade";
+"speed_cameras_alert" = "As alertas de radares de velocidade nalgúns países están prohibidas por lei.";
+"shared_string_keep_active" = "Manter activo";
+"speed_cameras_legal_descr" = "Nalgúns países ou rexións, o emprego de aplicacións de aviso de radares está prohibido por lei.
+\n
+\nTes que facer unha escolla, dependendo da lei do teu país.
+\n
+\nEscolle %@ e recibirás alertas e avisos sobre radares de velocidade.
+\n
+\nEscolle %@. Todos os datos relacionados de radares develocidade: alertas, notificacións e PDI serán eliminados até que o OsmAnd sexa reinstalado de xeito completo.";
+"shared_string_height" = "Altura";
+"lang_zh-Hant" = "Chinés tradicional";

@@ -1590,7 +1590,7 @@
 "product_desc_russia_short" = "Maps of Russia regions";
 "product_desc_southamerica" = "Unlimited map downloads for South America";
 "product_desc_southamerica_short" = "South America region maps";
-"product_title_allworld" = "All World Maps";
+"worldwide_maps" = "All World Maps";
 "product_desc_allworld" = "Maps of All World";
 "product_desc_asia" = "Unlimited map downloads for Asia";
 "product_desc_asia_short" = "Asia region maps";
@@ -2565,3 +2565,18 @@
 \n
 \nEguraldiaren datuak Global Forecast System-ek (GFS, https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast) ematen ditu.";
 "km" = "km";
+"shared_string_height" = "Altuera";
+"lang_zh-Hant" = "Txinera (tradizionala)";
+"uninstall_speed_cameras" = "Desinstalatu abiadura-kamerak";
+"shared_string_legal" = "Legezkoa";
+"shared_string_keep_active" = "Mantendu aktibo";
+"privacy_and_security" = "Pribatutasuna eta segurtasuna";
+"speed_camera_pois" = "Abiadura-kameren interesguneak";
+"speed_cameras_legal_descr" = "Herrialde edo eskualde batzuetan, abiadura-kamerak abisatzeko aplikazioak erabiltzea legez debekatuta dago.
+\n
+\nAukeraketa bat egin behar duzu zure herrialdeko legediaren arabera.
+\n
+\nAukeratu %@ eta abiadura-kamerei buruzko alertak eta abisuak jasoko dituzu.
+\n
+\nAukeratu %@ eta abiadura-kameraen inguruko datu guztiak, alertak, jakinarazpenak, interesguneak ezabatuko dira OsmAnd erabat berriro instalatu arte.";
+"speed_cameras_alert" = "Abiadura-kameren alertak herrialde batzuetan legeak debekatuta daude.";

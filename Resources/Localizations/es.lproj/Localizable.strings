@@ -266,7 +266,7 @@
 "product_desc_northamerica" = "Descargas ilimitadas de mapas para Norteamérica";
 "product_desc_russia" = "Descargas ilimitadas de mapas para Rusia";
 "product_desc_southamerica" = "Descargas ilimitadas de mapas para Sudamérica";
-"product_title_allworld" = "Mapas de todo el mundo";
+"worldwide_maps" = "Mapas de todo el mundo";
 "product_desc_allworld" = "Mapas de todo el mundo";
 "product_desc_skimap" = "Mapa actualizado de las pistas de esquí con remontes y pendientes";
 "product_desc_asia" = "Descargas ilimitadas de mapas para Asia";
@@ -2811,3 +2811,19 @@
 "m" = "m";
 "kg" = "kg";
 "km" = "km";
+"lang_sat" = "Santalí";
+"speed_camera_pois" = "PDI de los radares de velocidad";
+"lang_zh-Hant" = "Chino (tradicional)";
+"shared_string_height" = "Altura";
+"uninstall_speed_cameras" = "Desinstalar radares de velocidad";
+"speed_cameras_alert" = "Las alertas de los radares de velocidad se encuentran prohibidas por ley en algunos países.";
+"shared_string_legal" = "Legal";
+"speed_cameras_legal_descr" = "En algunos países o regiones, las alertas de los radares de velocidad se encuentran prohibidas por ley.
+\n
+\nDebes elegir dependiendo de las leyes del país.
+\n
+\nPulsa en «%@», para recibir alertas y advertencias sobre los radares de velocidad.
+\n
+\nPulsa en «%@», para borrar todos los datos relacionados con los radares de velocidad (alertas, notificaciones y PDI) hasta reinstalar OsmAnd completamente.";
+"shared_string_keep_active" = "Mantener";
+"privacy_and_security" = "Privacidad y seguridad";

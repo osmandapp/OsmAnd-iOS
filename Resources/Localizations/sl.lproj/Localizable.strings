@@ -326,7 +326,7 @@
 "product_desc_northamerica" = "Neomejeno prenašanje zemljevidov severne Amerike";
 "product_desc_russia" = "Neomejeno prenašanje zemljevidov Rusije";
 "product_desc_southamerica" = "Neomejeno prenašanje zemljevidov južne Amerike";
-"product_title_allworld" = "Zemljevidi sveta";
+"worldwide_maps" = "Zemljevidi sveta";
 "product_desc_allworld" = "Zemljevidi celega sveta";
 "product_desc_asia" = "Neomejeno prenašanje zemljevidov Azije";
 "download_wikipedia_maps" = "Wikipedija";
@@ -2076,8 +2076,8 @@
 \nNadaljnje branje na http://osmand.net/docs/user/plugins/contour-lines .";
 "kg" = "kg";
 "weather_plugin_description" = "Zagotavlja:
-\n- 24-urno in 7-dnevno vremensko napoved s petimi plastmi
-\n- gradniki, ki temeljijo na lokaciji
+\n- 24-urno in 7-dnevno vremensko napoved s petimi plastmi;
+\n- gradniki, ki temeljijo na lokaciji;
 \n- izoterme in izobare (izočrte temperature in zračnega tlaka).
 \n
 \nVremenske podatke zagotavlja globalni sistem napovedi (Global Forecast System - GFS, https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast ).";
@@ -2093,3 +2093,19 @@
 \n
 \nNadaljnje branje na https://osmand.net/docs/user/plugins/trip-recording .";
 "osmand_parking_plugin_description" = "Označi, kje je tvoj avto parkiran, in obvesti koledar, kdaj se izteče parkirni števec. Če želiš dodati oznako, izberi mesto na zemljevidu, pojdi na »Dejanja« in tapni »Dodaj parkirišče«.";
+"speed_cameras_legal_descr" = "V nekaterih državah ali regijah je uporaba aplikacij za opozarjanje na radarje za merjenje hitrosti zakonsko prepovedana.
+\n
+\nOdločiti se moraš glede na zakonodajo tvoje države.
+\n
+\nIzberi %@ in prejemal/a boš opozorila o radarjih za merjenje hitrosti.
+\n
+\nIzberi %@. Vsi podatki, povezani z radarji zamerjenje hitrosti: opozorila, obvestila, točke zanimanja bodo izbrisani, dokler ne boš v celoti ponovno namestil aplikacije OsmAnd.";
+"speed_cameras_alert" = "V nekaterih državah je opozarjanje na radarje za merjenje hitrosti zakonsko prepovedano.";
+"speed_camera_pois" = "Hitrostne kamere";
+"privacy_and_security" = "Zasebnost in varnost";
+"shared_string_legal" = "Zakonito";
+"uninstall_speed_cameras" = "Odstrani hitrostne kamere";
+"shared_string_height" = "Višina";
+"lang_zh-Hant" = "Kitajščina (tradicionalna)";
+"lang_sat" = "Santalščina";
+"shared_string_keep_active" = "Obdrži aktivno";

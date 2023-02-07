@@ -1594,7 +1594,7 @@
 "product_desc_russia_short" = "Maps of Russia regions";
 "product_desc_southamerica" = "Unlimited map downloads for South America";
 "product_desc_southamerica_short" = "South America region maps";
-"product_title_allworld" = "All World Maps";
+"worldwide_maps" = "All World Maps";
 "product_desc_allworld" = "Maps of All World";
 "product_desc_asia" = "Unlimited map downloads for Asia";
 "product_desc_asia_short" = "Asia region maps";
@@ -2599,3 +2599,19 @@
 "m" = "m";
 "km" = "km";
 "kg" = "kg";
+"shared_string_legal" = "Pravno";
+"lang_sat" = "Santalski";
+"speed_cameras_alert" = "Upozorenja za radare su zakonom zabranjene u nekim državama.";
+"uninstall_speed_cameras" = "Izbriši radare";
+"lang_zh-Hant" = "Kineski (tradicionalni)";
+"speed_cameras_legal_descr" = "U nekim državama ili oblastima, korišćenje aplikacija za obaveštavanje o radarima na putu je zabranjeno zakonom.
+\n
+\nMorate napraviti izbor ovde, u zavisnosti od zakona Vaše države.
+\n
+\nOdaberite %@ i primažete obaveštenja i upozorenja o radarima i kamerama za brzinu.
+\n
+\nOdaberite %@. Svi podaci vezani za radere: upozorenja, obaveštenja, tačke od interesa će biti obrisane dok se OsmAnd ponovo ne instalira.";
+"speed_camera_pois" = "Radarske tačke od interesa";
+"privacy_and_security" = "Privatnost i bezbednost";
+"shared_string_height" = "Visina";
+"shared_string_keep_active" = "Drži aktivnim";

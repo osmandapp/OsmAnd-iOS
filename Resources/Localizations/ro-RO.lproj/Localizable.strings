@@ -1651,7 +1651,7 @@
 "product_desc_asia_short" = "Hărți ale regiunii Asia";
 "product_desc_asia" = "Descărcări nelimitate de hărți pentru Asia";
 "product_desc_allworld" = "Hărți ale întregii lumi";
-"product_title_allworld" = "Toate hărțile lumii";
+"worldwide_maps" = "Toate hărțile lumii";
 "product_desc_southamerica_short" = "Hărți ale regiunii America de Sud";
 "product_desc_southamerica" = "Descărcări nelimitate de hărți pentru America de Sud";
 "product_desc_russia_short" = "Hărți ale regiunilor din Rusia";
@@ -2790,3 +2790,19 @@
 "download_wikipedia_data" = "Descărcați datele Wikipedia";
 "m" = "m";
 "km" = "km";
+"uninstall_speed_cameras" = "Dezinstalare camere radar";
+"lang_sat" = "Santali";
+"lang_zh-Hant" = "Chineză (tradițională)";
+"privacy_and_security" = "Confidențialitate și Securitate";
+"shared_string_keep_active" = "Mențineți activ";
+"speed_camera_pois" = "POI-uri Camere viteză";
+"shared_string_height" = "Înălțime";
+"speed_cameras_alert" = "Alertele camerelor de viteză în unele țări sunt interzise de lege.";
+"speed_cameras_legal_descr" = "În unele țări sau regiuni, utilizarea app-urilor de avertizare a camerelor de viteză este interzisă de lege.
+\n
+\nTrebuie să faceți o alegere în funcție de legea țării dumneavoastră.
+\n
+\nSelectați %@ și veți primi alerte și avertismente cu privire la camerele de viteză.
+\n
+\nSelectați %@. Toate datele legate de camerele de viteză: alerte, notificări, POI-uri vor fi șterse până când OsmAnd este reinstalat din nou.";
+"shared_string_legal" = "Legal";

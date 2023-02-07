@@ -545,7 +545,7 @@
 "product_desc_northamerica" = "Map of North America";
 "product_desc_russia" = "Map of Russia";
 "product_desc_southamerica" = "Map of South America";
-"product_title_allworld" = "All World Maps";
+"worldwide_maps" = "All World Maps";
 "product_desc_allworld" = "Map of All World";
 "product_desc_asia" = "Map of Asia";
 "download_wikipedia_maps" = "ویکی‌پدیا";
@@ -2116,3 +2116,19 @@
 \n
 \nاینجا بیشتر بخوانید: http://openplacereviews.org";
 "km" = "km";
+"shared_string_height" = "ارتفاع";
+"speed_cameras_alert" = "قانونِ برخی از کشورها استفاده از هشداردهندهٔ دوربین سرعت را ممنوع کرده است.";
+"privacy_and_security" = "حریم خصوصی و امنیت";
+"speed_camera_pois" = "نقاط توجه دوربین سرعت";
+"speed_cameras_legal_descr" = "قانونِ برخی کشورها استفاده از نرم‌افزارهای هشداردهندهٔ دوربین سرعت را ممنوع کرده است.
+\n
+\nشما باید بر اساس قانون کشور خود تصمیم بگیرید.
+\n
+\nبا انتخاب %@ هشدارها و اخطارهای دوربین سرعت را دریافت می‌کنید.
+\n
+\nبا انتخاب %@ تا زمانی که OsmAnd را دوباره نصب کنید، تمام دادهٔ مربوط به دوربین‌های سرعت (هشدارها، اعلان‌ها، نقاط توجه) حذف می‌شود.";
+"lang_sat" = "سانتالی";
+"shared_string_legal" = "قانونی";
+"uninstall_speed_cameras" = "حذف نصب دوربین‌های سرعت";
+"lang_zh-Hant" = "چینی (سنتی)";
+"shared_string_keep_active" = "فعال بماند";

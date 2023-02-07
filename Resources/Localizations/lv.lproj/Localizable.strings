@@ -1583,7 +1583,7 @@
 "product_desc_russia_short" = "Maps of Russia regions";
 "product_desc_southamerica" = "Unlimited map downloads for South America";
 "product_desc_southamerica_short" = "South America region maps";
-"product_title_allworld" = "All World Maps";
+"worldwide_maps" = "All World Maps";
 "product_desc_allworld" = "Maps of All World";
 "product_desc_asia" = "Unlimited map downloads for Asia";
 "product_desc_asia_short" = "Asia region maps";
@@ -2328,3 +2328,7 @@ kas tiks pievienots jūsu Kategorijas sadaļai.";
 "download_wikipedia_data" = "Lejupielādēt Vikipēdijas datus";
 "km" = "km";
 "m" = "m";
+"privacy_and_security" = "Privātums un drošība";
+"uninstall_speed_cameras" = "Atinstalēt ātruma kameras";
+"lang_zh-Hant" = "Ķīniešu (tradicionālā)";
+"shared_string_height" = "Augstums";

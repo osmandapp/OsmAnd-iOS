@@ -47,8 +47,8 @@
 
 - (void) commonInit
 {
-    _searchingItem = [[CPListItem alloc] initWithText:OALocalizedString(@"search_preogress") detailText:nil];
-    _emptyItem = [[CPListItem alloc] initWithText:OALocalizedString(@"nothing_found_empty") detailText:nil];
+    _searchingItem = [[CPListItem alloc] initWithText:OALocalizedString(@"searching") detailText:nil];
+    _emptyItem = [[CPListItem alloc] initWithText:OALocalizedString(@"nothing_found") detailText:nil];
     _searchItems = @[];
     _cpItems = @[];
 

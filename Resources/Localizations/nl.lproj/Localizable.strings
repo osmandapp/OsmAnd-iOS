@@ -578,7 +578,7 @@
 "product_desc_northamerica" = "Map of North America";
 "product_desc_russia" = "Map of Russia";
 "product_desc_southamerica" = "Map of South America";
-"worldwide_maps" = "All World Maps";
+"worldwide_maps" = "Wereldwijde kaarten";
 "product_desc_allworld" = "Map of All World";
 "product_desc_asia" = "Map of Asia";
 "download_wikipedia_maps" = "Wikipedia";
@@ -2051,7 +2051,6 @@
 "quick_action_contour_lines_descr" = "Knop om hoogtelijnen al dan niet te tonen op de kaart.";
 "new_file" = "Nieuw bestand";
 "routing_attr_motor_type_gas_name" = "CNG";
-"worldwide_maps" = "Wereldwijde kaarten";
 "you_can_get_feature_as_part_of_pattern" = "Verkrijg \"%@\" als onderdeel van het %@ abonnement. Vergelijking:";
 "rendering_attr_depthContourWidth_name" = "Dikte van lijnen";
 "select_wikipedia_article_langs" = "Selecteer de talen voor Wikipedia-artikelen op de kaart. Tijdens het lezen van het artikel kan omgeschakeld worden naar een andere beschikbare taal.";
@@ -2300,7 +2299,24 @@
 "carplay_profile_descr" = "Profiel dat gebruikt wordt wanneer je verbonden bent via CarPlay.";
 "allow_3d_descr" = "Kies deze optie om de kaart in 2.5D-aanzicht te kunnen bekijken";
 "coords_format_descr_quick_search" = "Je kan het formaat van de coördinaten voor dit profiel aanpassen in de Algemene instellingen";
-"simulation_real_mode_desc" = "• Op stukken rechte wegen, schat men de snelheid gelijk aan de maximumsnelheid.\n• Op kruispunten zal de simulatie vertragen.\n• Extra tijdsverlies zal worden toegepast bij verkeerslichten, stopborden, etc.";
 "road_max_speed_descr" = "Stelt de maximale reissnelheid in voor alle wegen in de route. Verlaagt de prioriteit voor wegen met een mogelijke snelheid die hoger ligt dan het maximum.";
 "favorites_empty" = "Je hebt nog geen favoriete punten opgeslagen";
 "carplay_profile" = "CarPlay-profiel";
+"speed_camera_pois" = "Snelheidscamera’s als POI’s";
+"shared_string_keep_active" = "Actief houden";
+"uninstall_speed_cameras" = "Verwijder snelheidscamera’s";
+"lang_zh-Hant" = "Chinees (traditioneel)";
+"shared_string_legal" = "Legaal";
+"speed_cameras_legal_descr" = "In sommige landen of regio’s is het gebruik van toepassingen om te waarschuwen voor snelheidscamera’s in strijd met de wet.
+\n
+\nMaak een keuze op basis van de geldende wet.
+\n
+\nKies %@ om meldingen en waarschuwingen te ontvangen over snelheidscamera’s.
+\n
+\nKies %@ om alle gegevens over snelheidscamera’s te verwijderen: waarschuwingen, meldingen en POI’s worden verwijderd tot OsmAnd volledig opnieuw geïnstalleerd wordt.";
+"privacy_and_security" = "Privacy en veiligheid";
+"shared_string_height" = "Hoogte";
+"lang_sat" = "Santali";
+"speed_cameras_alert" = "Het waarschuwen voor snelheidscamera’s is in sommige landen in strijd met de wet.";
+"not_enough_contributions_descr" = "Een minimum van %@ wijzigingen over een periode van de laatste twee maanden %@ is nodig om toegang te krijgen tot onbeperkte kaartupdates elk uur.";
+"weather_online_cache" = "Online cache";

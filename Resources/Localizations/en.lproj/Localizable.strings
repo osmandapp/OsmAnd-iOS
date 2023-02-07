@@ -1817,7 +1817,7 @@
 "product_desc_russia_short" = "Maps of Russia regions";
 "product_desc_southamerica" = "Unlimited map downloads for South America";
 "product_desc_southamerica_short" = "South America region maps";
-"worldwide_maps" = "All World Maps";
+"worldwide_maps" = "Worldwide maps";
 "product_desc_allworld" = "Maps of All World";
 "product_desc_asia" = "Unlimited map downloads for Asia";
 "product_desc_asia_short" = "Asia region maps";
@@ -1844,7 +1844,6 @@
 
 "nautical_depth_points" ="Nautical depth points";
 "depth_contours" = "Depth contours";
-"worldwide_maps" = "Worldwide maps";
 
 "my_location" = "My position";
 "all_categories" = "All categories";

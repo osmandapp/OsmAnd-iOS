@@ -65,6 +65,11 @@
     return row;
 }
 
+- (void)removeRowAtIndex:(NSInteger)index
+{
+    [_rowData removeObjectAtIndex:index];
+}
+
 - (NSUInteger)rowCount
 {
     NSUInteger res = 0;

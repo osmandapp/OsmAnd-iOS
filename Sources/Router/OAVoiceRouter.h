@@ -10,22 +10,11 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 
-@class OARoutingHelper, OALocationPointWrapper, OAAlarmInfo, OAApplicationMode;
+@class OARoutingHelper, OALocationPointWrapper, OAAlarmInfo, OAApplicationMode, OAAnnounceTimeDistances, OARouteDirectionInfo;
 
 @protocol OACommandPlayer;
 
 @interface OAVoiceRouter : NSObject
-
-@property (nonatomic, readonly) double DEFAULT_SPEED;
-@property (nonatomic, readonly) double TURN_NOW_SPEED;
-
-@property (nonatomic, readonly) int PREPARE_LONG_DISTANCE;
-@property (nonatomic, readonly) int PREPARE_LONG_DISTANCE_END;
-@property (nonatomic, readonly) int PREPARE_DISTANCE;
-@property (nonatomic, readonly) int PREPARE_DISTANCE_END;
-@property (nonatomic, readonly) int TURN_IN_DISTANCE;
-@property (nonatomic, readonly) int TURN_IN_DISTANCE_END;
-@property (nonatomic, readonly) int TURN_NOW_DISTANCE;
 
 - (instancetype)initWithHelper:(OARoutingHelper *)router;
 
@@ -61,5 +50,8 @@
 - (void) announcePoi:(NSArray<OALocationPointWrapper *> *)points;
 
 - (void) notifyOnVoiceMessage;
+
+- (OAAnnounceTimeDistances *)getAnnounceTimeDistances;
+- (OARouteDirectionInfo *)getNextRouteDirection;
 
 @end

@@ -13,6 +13,7 @@
 #import "OARoutingHelper.h"
 #import "OARouteDirectionInfo.h"
 #import "OAVoiceRouter.h"
+#import "OAAnnounceTimeDistances.h"
 
 #include "routeSegmentResult.h"
 
@@ -39,14 +40,14 @@
     OAVoiceRouter *voiceRouter = routingHelper.getVoiceRouter;
     OACurrentStreetName *streetName = [[OACurrentStreetName alloc] init];
     CLLocation *l = routingHelper.getLastFixedLocation;
-//    AnnounceTimeDistances adt = routingHelper.getVoiceRouter().getAnnounceTimeDistances();
+    OAAnnounceTimeDistances *adt = [[routingHelper getVoiceRouter] getAnnounceTimeDistances];
     BOOL isSet = false;
     float speed = 0;
     if (l && l.speed >=0)
         speed = l.speed;
     // 1. turn is imminent
     if (n.distanceTo > 0  && n.directionInfo && !n.directionInfo.turnType->isSkipToSpeak() &&
-        [voiceRouter isDistanceLess:speed dist:n.distanceTo etalon:voiceRouter.PREPARE_DISTANCE * 0.75f])
+        [adt isTurnStateActive:[adt getSpeed:l] dist:n.distanceTo * 1.3 turnType:kStatePrepareTurn])
     {
         NSString *nm = n.directionInfo.streetName;
         NSString *rf = n.directionInfo.ref;

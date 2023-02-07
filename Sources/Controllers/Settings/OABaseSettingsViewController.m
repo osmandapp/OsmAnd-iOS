@@ -109,9 +109,14 @@
 
 - (CGFloat) heightForLabel:(NSString *)text
 {
-    UIFont *labelFont = [UIFont systemFontOfSize:15.0];
+    UIFont *labelFont = [UIFont systemFontOfSize:[self fontSizeForLabel]];
     CGFloat textWidth = DeviceScreenWidth - (kSidePadding + OAUtilities.getLeftMargin) * 2;
     return [OAUtilities heightForHeaderViewText:text width:textWidth font:labelFont lineSpacing:6.0];
+}
+
+- (CGFloat)fontSizeForLabel
+{
+    return 15.;
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section

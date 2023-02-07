@@ -1086,6 +1086,7 @@
 "ltr_or_rtl_combine_via_dash" = "%@— %@";
 "ltr_or_rtl_combine_via_or" = "%@ or %@";
 "ltr_or_rtl_combine_via_slash" = "%@/%@";
+"ltr_or_rtl_combine_via_comma" = "%@, %@";
 
 "listed_exist" = "Listed %@, already exist in OsmAnd.";
 
@@ -3026,3 +3027,19 @@
 "routing_attr_avoid_4wd_only_description" = "Avoid roads only suitable for 4WD vehicles";
 "rendering_attr_OSMMapperAssistantIconsLowZooms_description" = "Schematic display of icons at low zooms";
 "routing_attr_difficulty_preference_beginner_name" = "Beginner";
+
+"exit_number" = "Exit number";
+"announce_when_exceeded" = "Announce when exceeded";
+"speak_gps_signal_status" = "Announce GPS signal loss and recovery";
+"speak_route_recalculation" = "Announce route recalculation";
+"announcement_time_title" = "Announcement time";
+"user_points" = "User points";
+"speak_descr" = "Configure to announce street names, traffic warnings (forced stops, speed bumps), speed camera warnings, speed limits";
+"announcement_time_descr" = "The anouncement timing of different voice prompts depends on prompt type, current navigation speed, and default navigation speed.";
+"announcement_time_intervals" = "Time and distance intervals";
+"announcement_time_arrive" = "Arrive at destination";
+"announcement_time_off_route" = "Off route";
+"announcement_time_prepare" = "Prepare";
+"announcement_time_prepare_long" = "Long prepare";
+"announcement_time_approach" = "Approach";
+"announcement_time_passing" = "Passing";

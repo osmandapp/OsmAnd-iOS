@@ -177,6 +177,9 @@
 #define speakPedestrianKey @"speakPedestrian"
 #define speakSpeedLimitKey @"speakSpeedLimit"
 #define speakCamerasKey @"speakCameras"
+#define speakExitNumberNamesKey @"speakExitNumberNames"
+#define speakGpsSignalStatusKey @"speakGpsSignalStatus"
+#define speakRouteRecalculationKey @"speakRouteRecalculation"
 #define announceWptKey @"announceWpt"
 #define announceNearbyFavoritesKey @"announceNearbyFavorites"
 #define announceNearbyPoiKey @"announceNearbyPoi"
@@ -3896,6 +3899,9 @@
         _speakSpeedLimit = [OACommonBoolean withKey:speakSpeedLimitKey defValue:YES];
         _speakTunnels = [OACommonBoolean withKey:speakTunnels defValue:NO];
         _speakCameras = [OACommonBoolean withKey:speakCamerasKey defValue:NO];
+        _speakExitNumberNames = [OACommonBoolean withKey:speakExitNumberNamesKey defValue:YES];
+        _speakGpsSignalStatus = [OACommonBoolean withKey:speakGpsSignalStatusKey defValue:YES];
+        _speakRouteRecalculation = [OACommonBoolean withKey:speakRouteRecalculationKey defValue:YES];
         _announceNearbyFavorites = [OACommonBoolean withKey:announceNearbyFavoritesKey defValue:NO];
         _announceNearbyPoi = [OACommonBoolean withKey:announceNearbyPoiKey defValue:NO];
 
@@ -3905,6 +3911,9 @@
         [_profilePreferences setObject:_speakSpeedLimit forKey:@"speak_speed_limit"];
         [_profilePreferences setObject:_speakCameras forKey:@"speak_cameras"];
         [_profilePreferences setObject:_speakTunnels forKey:@"show_tunnels"];
+        [_profilePreferences setObject:_speakExitNumberNames forKey:@"exit_number_names"];
+        [_profilePreferences setObject:_speakGpsSignalStatus forKey:@"speak_gps_signal_status"];
+        [_profilePreferences setObject:_speakRouteRecalculation forKey:@"speak_route_recalculation"];
         [_profilePreferences setObject:_announceNearbyFavorites forKey:@"announce_nearby_favorites"];
         [_profilePreferences setObject:_announceNearbyPoi forKey:@"announce_nearby_poi"];
 

@@ -47,6 +47,33 @@
         [_sectionData insertObject:sectionData atIndex:index];
 }
 
+- (void)removeSection:(NSUInteger)section
+{
+    [_sectionData removeObjectAtIndex:section];
+}
+
+- (void)removeItemsAtIndexPaths:(NSArray<NSIndexPath *> *)indexPaths
+{
+    for (NSIndexPath *indexPath in indexPaths)
+    {
+        [_sectionData[indexPath.section] removeRowAtIndex:indexPath.row];
+    }
+
+    NSMutableArray<NSNumber *> *emptySections = [NSMutableArray array];
+    for (NSIndexPath *indexPath in indexPaths)
+    {
+        NSNumber *section = @(indexPath.section);
+        if (![emptySections containsObject:section] && [_sectionData[indexPath.section] rowCount] == 0)
+            [emptySections addObject:section];
+    }
+    if (emptySections.count > 0)
+    {
+        for (NSNumber *section in [emptySections sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:nil ascending:NO]]])
+        {
+            [self removeSection:section.intValue];
+        }
+    }
+}
 
 - (OATableSectionData *)sectionDataForIndex:(NSUInteger)index
 {

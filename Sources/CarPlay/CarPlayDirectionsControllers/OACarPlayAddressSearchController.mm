@@ -60,8 +60,7 @@
     _searchUICore = [_searchHelper getCore];
     _currentSearchPhrase = @"";
 
-    OASearchSettings *settings = [[[[[[_searchUICore getSearchSettings] resetSearchTypes] setEmptyQueryAllowed:NO] setSortByName:NO] setAddressSearch:NO] setRadiusLevel:1];
-    [_searchUICore updateSettings:settings];
+    OASearchSettings *settings = [_searchUICore getSearchSettings];
     [_searchHelper setResultCollection:nil];
     [_searchUICore resetPhrase];
 
@@ -237,7 +236,7 @@
 
                 regionResultApi = nil;
                 regionResultCollection = nil;
-                [results removeAllObjects];
+                results = [NSMutableArray array];
                 if (!_cancelPrev)
                 {
                     BOOL append = [_searchHelper getResultCollection] != nil;

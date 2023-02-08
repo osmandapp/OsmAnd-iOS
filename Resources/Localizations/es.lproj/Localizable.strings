@@ -2798,3 +2798,9 @@
 "speak_route_recalculation" = "Anunciar un nuevo cálculo de la ruta";
 "announcement_time_intervals" = "Intervalos de tiempo y distancia";
 "announcement_time_descr" = "El tiempo de anuncio de las diferentes indicaciones de voz depende del tipo de indicación, la velocidad de la navegación actual y la velocidad de la navegación predeterminada.";
+"announcement_time_arrive" = "Llegada al destino";
+"announcement_time_off_route" = "Fuera de la ruta";
+"announcement_time_prepare_long" = "Preparación larga";
+"announcement_time_approach" = "Acercarse";
+"announcement_time_passing" = "Pasando por";
+"announcement_time_prepare" = "Preparar";

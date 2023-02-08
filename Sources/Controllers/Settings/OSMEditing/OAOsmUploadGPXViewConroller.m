@@ -26,10 +26,20 @@
 #import "OAValueTableViewCell.h"
 #import "OATitleIconProgressbarCell.h"
 #import "OABackupListeners.h"
+#import "OATextMultilineTableViewCell.h"
+#import <AFNetworking/AFNetworkReachabilityManager.h>
 
 #define kDefaultTag @"osmand"
 #define kDescriptionTextFieldTag 0
 #define kTagsTextFieldsTag 1
+
+typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
+    EOAOsmUploadGPXViewConrollerModeInitial = 0,
+    EOAOsmUploadGPXViewConrollerModeUploading,
+    EOAOsmUploadGPXViewConrollerModeSuccess,
+    EOAOsmUploadGPXViewConrollerModeFailed,
+    EOAOsmUploadGPXViewConrollerModeNoInternet
+};
 
 @interface OAOsmUploadGPXViewConroller () <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, OAOsmUploadGPXVisibilityDelegate, OAAccountSettingDelegate, OAOnUploadFileListener>
 
@@ -53,11 +63,12 @@
     NSString *_tagsText;
     EOAOsmUploadGPXVisibility _selectedVisibility;
     BOOL _isLogged;
-    BOOL _isUploading;
     OAProgressBarCell *_progressBarCell;
     OAValueTableViewCell *_progressValueCell;
     OAUploadGPXFilesTask *_uploadTask;
     NSMutableDictionary<NSString *, NSNumber *> *_filesUploadingProgress;
+    NSMutableArray<NSString *> *_failedFileNames;
+    EOAOsmUploadGPXViewConrollerMode _mode;
 }
 
 - (instancetype)initWithGPXItems:(NSArray<OAGPX *> *)uploadingGpxItems
@@ -66,8 +77,8 @@
     if (self)
     {
         _uploadingGpxItems = uploadingGpxItems;
-        _isUploading = NO;
         _settings = [OAAppSettings sharedManager];
+        _mode = EOAOsmUploadGPXViewConrollerModeInitial;
     }
     return self;
 }
@@ -77,7 +88,6 @@
     [super applyLocalization];
     self.headerTitleLabel.text = OALocalizedString(@"upload_to_openstreetmap");
     [self.backButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
-    [self.bottomButton setTitle:OALocalizedString(@"shared_string_upload") forState:UIControlStateNormal];
 }
 
 - (void)viewDidLoad
@@ -92,13 +102,12 @@
     self.backButton.hidden = NO;
     self.separatorView.hidden = NO;
     
-    [self.bottomButton setBackgroundColor:UIColorFromRGB(color_primary_purple)];
-    [self.bottomButton setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
-    
     _selectedVisibility = EOAOsmUploadGPXVisibilityPublic;
     _descriptionText = @"";
     _tagsText = kDefaultTag;
     _isLogged = [_settings.osmUserName get].length > 0 && [_settings.osmUserPassword get].length > 0;
+    
+    [self updateScreenMode:EOAOsmUploadGPXViewConrollerModeInitial];
     [self setupView];
     
     if (!_isLogged)
@@ -109,23 +118,43 @@
     }
 }
 
+- (void) updateScreenMode:(EOAOsmUploadGPXViewConrollerMode)mode
+{
+    _mode = mode;
+    if (_mode == EOAOsmUploadGPXViewConrollerModeInitial)
+    {
+        [self.bottomButton setBackgroundColor:UIColorFromRGB(color_primary_purple)];
+        [self.bottomButton setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
+        [self.bottomButton setTitle:OALocalizedString(@"shared_string_upload") forState:UIControlStateNormal];
+        self.bottomButton.enabled = YES;
+    }
+    else if (_mode == EOAOsmUploadGPXViewConrollerModeUploading)
+    {
+        [self.bottomButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
+        [self.bottomButton setBackgroundColor:UIColorFromRGB(color_route_button_inactive)];
+        [self.bottomButton setTitleColor:UIColorFromRGB(color_text_footer ) forState:UIControlStateNormal];
+        self.bottomButton.enabled = NO;
+    }
+    else if (_mode == EOAOsmUploadGPXViewConrollerModeSuccess)
+    {
+        [self.bottomButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
+        [self.bottomButton setBackgroundColor:UIColorFromRGB(color_route_button_inactive)];
+        [self.bottomButton setTitleColor:UIColorFromRGB(color_primary_purple ) forState:UIControlStateNormal];
+        self.bottomButton.enabled = YES;
+    }
+    else if (_mode == EOAOsmUploadGPXViewConrollerModeFailed || _mode == EOAOsmUploadGPXViewConrollerModeNoInternet)
+    {
+        [self.bottomButton setTitle:OALocalizedString(@"retry") forState:UIControlStateNormal];
+        [self.bottomButton setBackgroundColor:UIColorFromRGB(color_primary_purple)];
+        [self.bottomButton setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
+        self.bottomButton.enabled = YES;
+    }
+}
+
 - (void)setupView
 {
     _data = [[OATableDataModel alloc] init];
-    
-    if (_isUploading)
-    {
-        _progressBarCell = [self getProgressBarCell];
-        _progressValueCell = [self getProgressValueCell];
-        
-        OATableSectionData *uploadingSection = [_data createNewSection];
-        uploadingSection.headerText = @" ";
-        OATableRowData *progressValueCell = [uploadingSection createNewRow];
-        [progressValueCell setCellType:[OAValueTableViewCell getCellIdentifier]];
-        OATableRowData *progressBarCell = [uploadingSection createNewRow];
-        [progressBarCell setCellType:[OAProgressBarCell getCellIdentifier]];
-    }
-    else
+    if (_mode == EOAOsmUploadGPXViewConrollerModeInitial)
     {
         OATableSectionData *descriptionSection = [_data createNewSection];
         descriptionSection.headerText = OALocalizedString(@"shared_string_description");
@@ -161,6 +190,78 @@
         [accountCell setObj:(_isLogged ? @(UITableViewCellAccessoryDisclosureIndicator) : @(UITableViewCellAccessoryNone)) forKey:@"accessory_type"];
         [accountCell setObj: (^void(){ [self onAccountButtonClicked]; }) forKey:@"actionBlock"];
     }
+    else if (_mode == EOAOsmUploadGPXViewConrollerModeUploading)
+    {
+        _progressBarCell = [self getProgressBarCell];
+        _progressValueCell = [self getProgressValueCell];
+        
+        OATableSectionData *uploadingSection = [_data createNewSection];
+        uploadingSection.headerText = @" ";
+        OATableRowData *progressValueCell = [uploadingSection createNewRow];
+        [progressValueCell setCellType:[OAValueTableViewCell getCellIdentifier]];
+        OATableRowData *progressBarCell = [uploadingSection createNewRow];
+        [progressBarCell setCellType:[OAProgressBarCell getCellIdentifier]];
+    }
+    else if (_mode == EOAOsmUploadGPXViewConrollerModeFailed)
+    {
+        OATableSectionData *section = [_data createNewSection];
+        section.headerText = @" ";
+        OATableRowData *titleRow = [section createNewRow];
+        [titleRow setCellType:[OATextMultilineTableViewCell getCellIdentifier]];
+        [titleRow setTitle: OALocalizedString(@"osm_upload_failed_title")];
+        [titleRow setObj:[UIFont scaledSystemFontOfSize:17]
+             forKey:@"font"];
+        
+        OATableRowData *descrRow = [section createNewRow];
+        [descrRow setCellType:[OATextMultilineTableViewCell getCellIdentifier]];
+        [descrRow setTitle: OALocalizedString(@"osm_upload_failed_descr")];
+        [descrRow setObj:[UIFont scaledSystemFontOfSize:15]
+             forKey:@"font"];
+    }
+    else if (_mode == EOAOsmUploadGPXViewConrollerModeNoInternet)
+    {
+        OATableSectionData *section = [_data createNewSection];
+        section.headerText = @" ";
+        OATableRowData *titleRow = [section createNewRow];
+        [titleRow setCellType:[OATextMultilineTableViewCell getCellIdentifier]];
+        [titleRow setTitle: OALocalizedString(@"no_internet_avail")];
+        [titleRow setObj:[UIFont scaledSystemFontOfSize:17]
+             forKey:@"font"];
+        
+        OATableRowData *descrRow = [section createNewRow];
+        [descrRow setCellType:[OATextMultilineTableViewCell getCellIdentifier]];
+        [descrRow setTitle: OALocalizedString(@"osm_upload_no_internet")];
+        [descrRow setObj:[UIFont scaledSystemFontOfSize:15]
+             forKey:@"font"];
+    }
+}
+
+- (void) setProgress:(float)progress fileName:(NSString *)fileName
+{
+    _filesUploadingProgress[fileName] = [NSNumber numberWithFloat:progress];
+    
+    float progressSum = 0;
+    for (NSNumber *value in _filesUploadingProgress.allValues)
+        progressSum += value.floatValue;
+    
+    progressSum = progressSum / _uploadingGpxItems.count;
+    
+    _progressValueCell.valueLabel.text = [NSString stringWithFormat:@"%d%%", (int)progressSum];
+    [_progressBarCell.progressBar setProgress:progressSum / 100 animated:YES];
+    
+    if (progressSum == 100)
+    {
+        if (_failedFileNames.count == 0)
+        {
+            [self updateScreenMode:EOAOsmUploadGPXViewConrollerModeSuccess];
+        }
+        else
+        {
+            [self updateScreenMode:EOAOsmUploadGPXViewConrollerModeFailed];
+            [self setupView];
+            [self.tableView reloadData];
+        }
+    }
 }
 
 - (OAValueTableViewCell *) getProgressValueCell
@@ -183,42 +284,8 @@
     OAProgressBarCell *resultCell = (OAProgressBarCell *)[nib objectAtIndex:0];
     [resultCell.progressBar setProgress:0.0 animated:NO];
     [resultCell.progressBar setProgressTintColor:UIColorFromRGB(color_primary_purple)];
-    //    resultCell.backgroundColor = [UIColor clearColor];
     resultCell.selectionStyle = UITableViewCellSelectionStyleNone;
     return resultCell;
-}
-
-- (void) setProgress:(float)progress fileName:(NSString *)fileName
-{
-    _filesUploadingProgress[fileName] = [NSNumber numberWithFloat:progress];
-    
-    float progressSum = 0;
-    for (NSNumber *value in _filesUploadingProgress.allValues)
-        progressSum += value.floatValue;
-    
-    progressSum = progressSum / _uploadingGpxItems.count;
-    
-    _progressValueCell.valueLabel.text = [NSString stringWithFormat:@"%d%%", (int)progressSum];
-    [_progressBarCell.progressBar setProgress:progressSum / 100 animated:YES];
-    
-    if (progressSum == 100)
-        [self setToUploadingMode:YES];
-}
-
-- (void) setToUploadingMode:(BOOL)finished
-{
-    [self.bottomButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
-    [self.bottomButton setBackgroundColor:UIColorFromRGB(color_route_button_inactive)];
-    if (finished)
-    {
-        [self.bottomButton setTitleColor:UIColorFromRGB(color_primary_purple ) forState:UIControlStateNormal];
-        self.bottomButton.enabled = YES;
-    }
-    else
-    {
-        [self.bottomButton setTitleColor:UIColorFromRGB(color_text_footer ) forState:UIControlStateNormal];
-        self.bottomButton.enabled = NO;
-    }
 }
 
 - (void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -239,13 +306,7 @@
 
 - (IBAction)backButtonClicked:(id)sender
 {
-    if (_isUploading)
-    {
-        if (_uploadTask)
-            [_uploadTask setInterrupted:YES];
-        [super backButtonClicked:sender];
-    }
-    else
+    if (_mode == EOAOsmUploadGPXViewConrollerModeInitial)
     {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"exit_without_saving") message:OALocalizedString(@"unsaved_changes_will_be_lost") preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil]];
@@ -254,6 +315,16 @@
         }]];
         
         [self presentViewController:alert animated:YES completion:nil];
+    }
+    else if (_mode == EOAOsmUploadGPXViewConrollerModeUploading)
+    {
+        if (_uploadTask)
+            [_uploadTask setInterrupted:YES];
+        [super backButtonClicked:sender];
+    }
+    else
+    {
+        [super backButtonClicked:sender];
     }
 }
 
@@ -282,16 +353,19 @@
 
 - (IBAction)onUploadButtonPressed:(id)sender
 {
-    if (_isUploading)
+    if (_mode == EOAOsmUploadGPXViewConrollerModeInitial)
     {
-        [super backButtonClicked:sender];
-    }
-    else
-    {
+        if (!AFNetworkReachabilityManager.sharedManager.isReachable)
+        {
+            [self updateScreenMode:EOAOsmUploadGPXViewConrollerModeNoInternet];
+            [self setupView];
+            [self.tableView reloadData];
+            return;
+        }
+        
         if (_isLogged)
         {
-            _isUploading = YES;
-            [self setToUploadingMode:NO];
+            [self updateScreenMode:EOAOsmUploadGPXViewConrollerModeUploading];
             [self setupView];
             [self.tableView reloadData];
             
@@ -300,11 +374,35 @@
                 visibility = [OAOsmUploadGPXVisibilityViewConroller toUrlParam:EOAOsmUploadGPXVisibilityPrivate];
             
             _filesUploadingProgress = [NSMutableDictionary dictionary];
+            _failedFileNames = [NSMutableArray array];
             
             OAOsmEditingPlugin *plugin = (OAOsmEditingPlugin *)[OAPlugin getPlugin:OAOsmEditingPlugin.class];
             _uploadTask = [[OAUploadGPXFilesTask alloc] initWithPlugin:plugin uploadingGpxItems:_uploadingGpxItems tags:_tagsText visibility:visibility description:_descriptionText listener:self];
             [_uploadTask uploadTracks];
         }
+    }
+    else if (_mode == EOAOsmUploadGPXViewConrollerModeUploading)
+    {
+        //button is blocked
+    }
+    else if (_mode == EOAOsmUploadGPXViewConrollerModeSuccess)
+    {
+        [super backButtonClicked:sender];
+    }
+    else if (_mode == EOAOsmUploadGPXViewConrollerModeFailed)
+    {
+        _uploadingGpxItems = [self getFailedFiles];
+        [self updateScreenMode:EOAOsmUploadGPXViewConrollerModeInitial];
+        [self setupView];
+        [self.tableView reloadData];
+        [self onUploadButtonPressed:sender];
+    }
+    else if (_mode == EOAOsmUploadGPXViewConrollerModeNoInternet)
+    {
+        [self updateScreenMode:EOAOsmUploadGPXViewConrollerModeInitial];
+        [self setupView];
+        [self.tableView reloadData];
+        [self onUploadButtonPressed:sender];
     }
 }
 
@@ -340,6 +438,23 @@
 {
     UITableViewHeaderFooterView *footer = (UITableViewHeaderFooterView *)view;
     [footer.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    if (_mode == EOAOsmUploadGPXViewConrollerModeInitial)
+        return UITableViewAutomaticDimension;
+    else
+        return 35;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    OATableRowData *item = [_data itemForIndexPath:indexPath];
+    NSString *cellType = item.cellType;
+    if ([cellType isEqualToString:[OAProgressBarCell getCellIdentifier]])
+        return 22;
+    return UITableViewAutomaticDimension;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -414,6 +529,23 @@
         }
         return cell;
     }
+    else if ([cellType isEqualToString:[OATextMultilineTableViewCell getCellIdentifier]])
+    {
+        OATextMultilineTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OATextMultilineTableViewCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextMultilineTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OATextMultilineTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell clearButtonVisibility:NO];
+        }
+        if (cell)
+        {
+            cell.textView.text = item.title;
+            cell.textView.font = [item objForKey:@"font"];
+        }
+        return cell;
+    }
     else if ([cellType isEqualToString:[OAProgressBarCell getCellIdentifier]])
     {
         return _progressBarCell;
@@ -424,21 +556,6 @@
     }
     return nil;
 }
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    OATableRowData *item = [_data itemForIndexPath:indexPath];
-    NSString *cellType = item.cellType;
-    if ([cellType isEqualToString:[OAProgressBarCell getCellIdentifier]])
-        return 22;
-    return UITableViewAutomaticDimension;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return _isUploading ? 35 : UITableViewAutomaticDimension;
-}
-
 
 #pragma mark - UITableViewDelegate
 
@@ -531,23 +648,32 @@
 #pragma mark - OAOnUploadFileListener
 
 - (void)onFileUploadProgress:(NSString *)type fileName:(NSString *)fileName progress:(NSInteger)progress deltaWork:(NSInteger)deltaWork {
-   
-    NSLog(@"!onFileUploadProgress progress: %ld  deltaWork: %ld", (long)progress, (long)deltaWork);
-    
     dispatch_async(dispatch_get_main_queue(), ^{
         [self setProgress: progress fileName:fileName];
     });
 }
 
 - (void)onFileUploadDone:(NSString *)type fileName:(NSString *)fileName uploadTime:(long)uploadTime error:(NSString *)error {
-    
-    NSLog(@"!onFileUploadDone");
-    
-    //TODO: Add error handling
+    if (error || error.length > 0)
+        [_failedFileNames addObject:fileName];
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [self setProgress: 100 fileName:fileName];
     });
+}
+
+- (NSArray<OAGPX *> *) getFailedFiles
+{
+    NSMutableArray<OAGPX *> *failledFiles = [NSMutableArray array];
+    for (NSString *fileName in _failedFileNames)
+    {
+        for (OAGPX *gpx in _uploadingGpxItems)
+        {
+            if ([gpx.gpxFileName isEqualToString:fileName])
+                [failledFiles addObject:gpx];
+        }
+    }
+    return failledFiles;
 }
 
 @end

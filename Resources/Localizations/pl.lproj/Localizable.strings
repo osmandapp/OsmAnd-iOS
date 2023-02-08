@@ -2626,3 +2626,4 @@
 "speed_cameras_legal_descr" = "W niektórych krajach i regionach używanie aplikacji ostrzegających o fotoradarach jest zabronione przez prawo.\n\nMusisz dokonać wyboru w zależności od prawa danego kraju.\n\nWybierz %@ i będziesz otrzymywać powiadomienia i ostrzeżenia o fotoradarach.\n\nWybierz %@. Wszystkie dane o fotoradarach: ostrzeżenia, powiadomienia, miejsca użyteczne zostaną usunięte, aż OsmAnd zostanie zainstalowany ponownie.";
 "shared_string_keep_active" = "Nie wyłączaj";
 "privacy_and_security" = "Prywatność i bezpieczeństwo";
+"connect_rp" = "Połącz punkty trasy";

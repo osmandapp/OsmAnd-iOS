@@ -2791,3 +2791,5 @@
 "lang_zh-Hans" = "Chino (simplificado)";
 "ltr_or_rtl_combine_via_comma" = "%@, %@";
 "exit_number" = "Número de la salida";
+"announce_when_exceeded" = "Anunciar cuando se supere";
+"speak_gps_signal_status" = "Anunciar la pérdida y recuperación de la señal GPS";

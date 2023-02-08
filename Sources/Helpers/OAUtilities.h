@@ -114,6 +114,17 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 
 @end
 
+@interface UIFont (util)
+
+- (UIFont *)scaled;
++ (UIFont *)scaledSystemFontOfSize:(CGFloat)fontSize;
++ (UIFont *)scaledSystemFontOfSize:(CGFloat)fontSize weight:(UIFontWeight)weight;
++ (UIFont *)scaledBoldSystemFontOfSize:(CGFloat)fontSize;
++ (UIFont *)scaledMonospacedDigitSystemFontOfSize:(CGFloat)fontSize weight:(UIFontWeight)weight;
++ (UIFont *)scaledMonospacedSystemFontOfSize:(CGFloat)fontSize weight:(UIFontWeight)weight API_AVAILABLE(ios(13.0));
+
+@end
+
 @interface NSMutableAttributedString (util)
 
 - (void) addString:(NSString *)string fontWeight:(UIFontWeight)fontWeight size:(CGFloat)size;

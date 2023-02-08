@@ -132,7 +132,7 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleRightIconCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleRightIconCell *)[nib objectAtIndex:0];
             cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
-            cell.titleView.font = [UIFont systemFontOfSize:17.];
+            cell.titleView.font = [UIFont scaledSystemFontOfSize:17.];
         }
         cell.titleView.text = item[@"title"];
         [cell.iconView setImage:[UIImage templateImageNamed:item[@"image"]]];

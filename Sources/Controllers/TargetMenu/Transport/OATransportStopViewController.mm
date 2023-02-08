@@ -115,7 +115,7 @@
         paragraphStyle.alignment = NSTextAlignmentCenter;
         attributes[NSParagraphStyleAttributeName] = paragraphStyle;
         attributes[NSForegroundColorAttributeName] = UIColor.whiteColor;
-        UIFont *font = [UIFont systemFontOfSize:10.0 weight:UIFontWeightMedium];
+        UIFont *font = [UIFont scaledSystemFontOfSize:10.0 weight:UIFontWeightMedium];
         attributes[NSFontAttributeName] = font;
         
         CGSize textSize = [text sizeWithAttributes:attributes];

@@ -102,6 +102,9 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
     self.tableView.tableHeaderView = [self getHeaderForTableView:self.tableView withFirstSectionText:self.descriptionText boldFragment:self.descriptionBoldText];
     
     [self setupView];
+
+    self.disableButton.titleLabel.font =  [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
+    self.enableButton.titleLabel.font =  [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
 }
 
 - (NSString *)descriptionText
@@ -330,7 +333,7 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
         }
         if (cell)
         {
-            cell.textView.attributedText = [OAUtilities attributedStringFromHtmlString:item[@"text"] fontSize:17];
+            cell.textView.attributedText = [OAUtilities attributedStringFromHtmlString:item[@"text"] fontSize:[UIFont scaledSystemFontOfSize:17.].pointSize];
             cell.textView.linkTextAttributes = @{NSForegroundColorAttributeName: UIColorFromRGB(color_primary_purple)};
             [cell.textView sizeToFit];
         }
@@ -360,8 +363,8 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                               reuseIdentifier:cellTypeId];
 
-                cell.textLabel.font = [UIFont systemFontOfSize:17.0];
-                cell.detailTextLabel.font = [UIFont systemFontOfSize:12.0];
+                cell.textLabel.font = [UIFont scaledSystemFontOfSize:17.0];
+                cell.detailTextLabel.font = [UIFont scaledSystemFontOfSize:12.0];
                 cell.detailTextLabel.textColor = UIColorFromRGB(0x929292);
 
                 UIImage* iconImage = [UIImage imageNamed:@"ic_custom_download"];
@@ -376,8 +379,8 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                               reuseIdentifier:cellTypeId];
 
-                cell.textLabel.font = [UIFont systemFontOfSize:17.0];
-                cell.detailTextLabel.font = [UIFont systemFontOfSize:12.0];
+                cell.textLabel.font = [UIFont scaledSystemFontOfSize:17.0];
+                cell.detailTextLabel.font = [UIFont scaledSystemFontOfSize:12.0];
                 cell.detailTextLabel.textColor = UIColorFromRGB(0x929292);
 
                 FFCircularProgressView* progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 25.0f, 25.0f)];

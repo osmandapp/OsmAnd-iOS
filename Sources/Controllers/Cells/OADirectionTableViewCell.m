@@ -18,6 +18,12 @@
 }
 */
 
+- (void) awakeFromNib
+{
+    [super awakeFromNib];
+    self.descLabel.font = [UIFont scaledSystemFontOfSize:11. weight:UIFontWeightMedium];
+}
+
 - (void) setTitle:(NSString *)title andDescription:(NSString *)description
 {
     [_titleLabel setText:title];

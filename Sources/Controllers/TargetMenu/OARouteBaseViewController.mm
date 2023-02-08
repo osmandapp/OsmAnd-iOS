@@ -508,7 +508,7 @@
 
 + (NSAttributedString *) getFormattedElevationString:(OAGPXTrackAnalysis *)analysis
 {
-    UIFont *textFont = [UIFont systemFontOfSize:15.];
+    UIFont *textFont = [UIFont scaledSystemFontOfSize:15.];
     NSDictionary *textAttrs = @{ NSFontAttributeName: textFont, NSForegroundColorAttributeName: UIColorFromRGB(color_text_footer) };
     if (analysis)
     {
@@ -548,8 +548,8 @@
 {
     OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
 
-    NSDictionary *numericAttributes = @{NSFontAttributeName: [UIFont systemFontOfSize:20 weight:UIFontWeightSemibold], NSForegroundColorAttributeName : UIColor.blackColor};
-    NSDictionary *alphabeticAttributes = @{NSFontAttributeName: [UIFont systemFontOfSize:20], NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer)};
+    NSDictionary *numericAttributes = @{NSFontAttributeName: [UIFont scaledSystemFontOfSize:20 weight:UIFontWeightSemibold], NSForegroundColorAttributeName : UIColor.blackColor};
+    NSDictionary *alphabeticAttributes = @{NSFontAttributeName: [UIFont scaledSystemFontOfSize:20], NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer)};
     NSString *dist = [OAOsmAndFormatter getFormattedDistance:[routingHelper getLeftDistance]];
     NSAttributedString *distance = [self formatDistance:dist numericAttributes:numericAttributes alphabeticAttributes:alphabeticAttributes];
     NSAttributedString *time = [self getFormattedTimeInterval:[routingHelper getLeftTime] numericAttributes:numericAttributes alphabeticAttributes:alphabeticAttributes];

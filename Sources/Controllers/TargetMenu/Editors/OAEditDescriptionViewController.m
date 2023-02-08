@@ -277,7 +277,7 @@
             [cell clearButtonVisibility:NO];
             cell.textView.userInteractionEnabled = YES;
             cell.textView.editable = YES;
-            cell.textView.font = [UIFont systemFontOfSize:16.];
+            cell.textView.font = [UIFont scaledSystemFontOfSize:16.];
         }
         if (cell)
         {

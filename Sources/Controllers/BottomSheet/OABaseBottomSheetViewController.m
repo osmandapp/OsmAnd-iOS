@@ -100,6 +100,12 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
     self.leftButton.layer.cornerRadius = 9.;
     self.rightButton.layer.cornerRadius = 9.;
     
+    self.leftButton.titleLabel.adjustsFontForContentSizeCategory = YES;
+    self.leftButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
+
+    self.rightButton.titleLabel.adjustsFontForContentSizeCategory = YES;
+    self.rightButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
+
     [self.closeButton setImage:[UIImage templateImageNamed:@"ic_custom_close"] forState:UIControlStateNormal];
     self.closeButton.tintColor = UIColorFromRGB(color_primary_purple);
     
@@ -296,7 +302,7 @@ typedef NS_ENUM(NSInteger, EOAScrollableMenuState)
 
 - (CGFloat) heightForLabel:(NSString *)text
 {
-    UIFont *labelFont = [UIFont systemFontOfSize: 15.0];
+    UIFont *labelFont = [UIFont scaledSystemFontOfSize: 15.0];
     CGFloat textWidth = _bottomSheetView.bounds.size.width - 32;
     return [OAUtilities heightForHeaderViewText:text width:textWidth font:labelFont lineSpacing:6.0];
 }

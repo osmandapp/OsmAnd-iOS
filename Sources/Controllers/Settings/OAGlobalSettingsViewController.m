@@ -450,7 +450,7 @@
     NSString *header = [_data sectionDataForIndex:section].headerText;
     if (header)
     {
-        UIFont *font = [UIFont systemFontOfSize:13.];
+        UIFont *font = [UIFont scaledSystemFontOfSize:13.];
         CGFloat headerHeight = [OAUtilities calculateTextBounds:header
                                                           width:tableView.frame.size.width - (kPaddingOnSideOfContent + [OAUtilities getLeftMargin]) * 2
                                                            font:font].height + kPaddingOnSideOfHeaderWithText;

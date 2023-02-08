@@ -160,7 +160,7 @@
     NSString *url = OALocalizedString(@"coords_format");
     OATableViewCustomFooterView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
 
-    UIFont *textFont = [UIFont systemFontOfSize:13];
+    UIFont *textFont = [UIFont scaledSystemFontOfSize:13];
     NSMutableAttributedString * str = [[NSMutableAttributedString alloc] initWithString:url attributes:@{NSFontAttributeName : textFont}];
     [str addAttribute:NSLinkAttributeName value:url range: NSMakeRange(0, str.length)];
     text = [text stringByAppendingString:@" > "];
@@ -184,7 +184,7 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMultiIconTextDescCell getCellIdentifier] owner:self options:nil];
             cell = (OAMultiIconTextDescCell *)[nib objectAtIndex:0];
-            cell.descView.font = [UIFont systemFontOfSize:13];
+            cell.descView.font = [UIFont scaledSystemFontOfSize:13];
         }
         if (cell)
         {

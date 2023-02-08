@@ -61,7 +61,7 @@
         username = [NSString stringWithFormat:@"@%@", username];
         [_usernameLabel setHidden:NO];
         [_usernameLabelShadow setHidden:NO];
-        UIFont *font = [UIFont systemFontOfSize:13.0];
+        UIFont *font = [UIFont scaledSystemFontOfSize:13.0];
         CGSize stringBox = [username sizeWithAttributes:@{NSFontAttributeName: font}];
         CGRect usernameFrame = _usernameLabel.frame;
         stringBox.width += kTextMargin * 2;

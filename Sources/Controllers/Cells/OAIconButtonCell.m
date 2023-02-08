@@ -13,6 +13,7 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
+    self.textView.font = [UIFont scaledSystemFontOfSize:14. weight:UIFontWeightSemibold];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

@@ -237,6 +237,8 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     [_tabs setTitle:OALocalizedString(@"search_categories") forSegmentAtIndex:1];
     [_tabs setTitle:OALocalizedString(@"shared_string_address") forSegmentAtIndex:2];
     [_tabs setSelectedSegmentIndex:0];
+    [_tabs setTitleTextAttributes:@{ NSFontAttributeName : [UIFont scaledSystemFontOfSize:14.] } forState:UIControlStateNormal];
+    [_tabs setTitleTextAttributes:@{ NSFontAttributeName : [UIFont scaledSystemFontOfSize:14.] } forState:UIControlStateSelected];
 
     _tblMove = [[UIPanGestureRecognizer alloc] initWithTarget:self
                                                        action:@selector(moveGestureDetected:)];

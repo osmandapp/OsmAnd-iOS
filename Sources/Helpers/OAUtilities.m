@@ -202,13 +202,48 @@
 
 @end
 
+@implementation UIFont (util)
+
+- (UIFont *)scaled
+{
+    return [[UIFontMetrics defaultMetrics] scaledFontForFont:self
+                                            maximumPointSize:[[UIFontMetrics defaultMetrics] scaledValueForValue:self.pointSize]];
+}
+
++ (UIFont *)scaledSystemFontOfSize:(CGFloat)fontSize
+{
+    return [[UIFont systemFontOfSize:fontSize] scaled];
+}
+
++ (UIFont *)scaledSystemFontOfSize:(CGFloat)fontSize weight:(UIFontWeight)weight
+{
+    return [[UIFont systemFontOfSize:fontSize weight:weight] scaled];
+}
+
++ (UIFont *)scaledBoldSystemFontOfSize:(CGFloat)fontSize
+{
+    return [[UIFont boldSystemFontOfSize:fontSize] scaled];
+}
+
++ (UIFont *)scaledMonospacedDigitSystemFontOfSize:(CGFloat)fontSize weight:(UIFontWeight)weight
+{
+    return [[UIFont monospacedDigitSystemFontOfSize:fontSize weight:weight] scaled];
+}
+
++ (UIFont *)scaledMonospacedSystemFontOfSize:(CGFloat)fontSize weight:(UIFontWeight)weight
+{
+    return [[UIFont monospacedSystemFontOfSize:fontSize weight:weight] scaled];
+}
+
+@end
+
 @implementation NSMutableAttributedString (util)
 
 - (void) addString:(NSString *)string fontWeight:(UIFontWeight)fontWeight size:(CGFloat)size
 {
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:string];
     NSRange fullRange = NSMakeRange(0, string.length);
-    UIFont *font = [UIFont systemFontOfSize:size weight:fontWeight];
+    UIFont *font = [UIFont scaledSystemFontOfSize:size weight:fontWeight];
     [attributedString addAttribute:NSFontAttributeName value:font range:fullRange];
     [self appendAttributedString:attributedString];
 }
@@ -216,14 +251,14 @@
 - (void) setFontSize:(CGFloat)size forString:(NSString *)string
 {
     NSRange range = [self.string rangeOfString:string];
-    UIFont *font = [UIFont systemFontOfSize:size];
+    UIFont *font = [UIFont scaledSystemFontOfSize:size];
     [self addAttribute:NSFontAttributeName value:font range:range];
 }
 
 - (void) setFontWeight:(UIFontWeight)fontWeight andSize:(CGFloat)size forString:(NSString *)string
 {
     NSRange range = [self.string rangeOfString:string];
-    UIFont *font = [UIFont systemFontOfSize:size weight:fontWeight];
+    UIFont *font = [UIFont scaledSystemFontOfSize:size weight:fontWeight];
     [self addAttribute:NSFontAttributeName value:font range:range];
 }
 
@@ -2020,6 +2055,7 @@ static const double d180PI = 180.0 / M_PI_2;
     }
     label.text = text;
     label.font = font;
+    label.adjustsFontForContentSizeCategory = YES;
     label.textColor = textColor;
     label.numberOfLines = 0;
     label.lineBreakMode = NSLineBreakByWordWrapping;
@@ -2082,6 +2118,7 @@ static const double d180PI = 180.0 / M_PI_2;
     CGFloat iconOffset = hasIcon ? 12 + iconFrameSize + 20 : 0;
     CGFloat textWidth = DeviceScreenWidth - (20 + OAUtilities.getLeftMargin * 2) - iconOffset;
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(20 + OAUtilities.getLeftMargin, 0.0, textWidth, CGFLOAT_MAX)];
+    label.adjustsFontForContentSizeCategory = YES;
     label.attributedText = text;
     label.numberOfLines = 0;
     label.lineBreakMode = NSLineBreakByWordWrapping;
@@ -2193,8 +2230,8 @@ static const double d180PI = 180.0 / M_PI_2;
     NSString *mainString = ms;
     NSRange boldRange = [wholeString rangeOfString:boldString];
     NSRange mainRange = [wholeString rangeOfString:mainString];
-    [descriptionAttributedString addAttribute: NSFontAttributeName value:[UIFont systemFontOfSize:fontSize > 0 ? fontSize : 15] range:mainRange];
-    [descriptionAttributedString addAttribute: NSFontAttributeName value:[UIFont boldSystemFontOfSize:boldFontSize > 0 ? boldFontSize : 15] range:boldRange];
+    [descriptionAttributedString addAttribute: NSFontAttributeName value:[UIFont scaledSystemFontOfSize:fontSize > 0 ? fontSize : 15] range:mainRange];
+    [descriptionAttributedString addAttribute: NSFontAttributeName value:[UIFont scaledBoldSystemFontOfSize:boldFontSize > 0 ? boldFontSize : 15] range:boldRange];
     if (boldColor)
         [descriptionAttributedString addAttribute: NSForegroundColorAttributeName value:boldColor range:boldRange];
     if (mainColor)
@@ -2214,8 +2251,8 @@ static const double d180PI = 180.0 / M_PI_2;
     NSString *mainString = wholeString;
     NSRange highlightedRange = [wholeString rangeOfString:highlightedString];
     NSRange mainRange = [wholeString rangeOfString:mainString];
-    [attributedString addAttribute: NSFontAttributeName value:[UIFont systemFontOfSize:fontSize > 0 ? fontSize : 15] range:mainRange];
-    [attributedString addAttribute: NSFontAttributeName value:[UIFont systemFontOfSize:fontSize > 0 ? fontSize : 15] range:highlightedRange];
+    [attributedString addAttribute: NSFontAttributeName value:[UIFont scaledSystemFontOfSize:fontSize > 0 ? fontSize : 15] range:mainRange];
+    [attributedString addAttribute: NSFontAttributeName value:[UIFont scaledSystemFontOfSize:fontSize > 0 ? fontSize : 15] range:highlightedRange];
     if (highlightColor)
         [attributedString addAttribute: NSForegroundColorAttributeName value:highlightColor range:highlightedRange];
     if (centered)
@@ -2451,10 +2488,10 @@ static const double d180PI = 180.0 / M_PI_2;
         hud.userInteractionEnabled = NO;
 
         hud.labelText = title ? title : details;
-        hud.labelFont = [UIFont systemFontOfSize:14];
+        hud.labelFont = [UIFont scaledSystemFontOfSize:14];
 
         hud.detailsLabelText = title ? details : nil;
-        hud.detailsLabelFont = [UIFont systemFontOfSize:14];
+        hud.detailsLabelFont = [UIFont scaledSystemFontOfSize:14];
 
         [hud hide:YES afterDelay:duration];
     });

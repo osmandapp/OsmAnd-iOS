@@ -92,7 +92,7 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
     btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     btn.contentEdgeInsets = UIEdgeInsetsMake(0, 12.0, 0, 12.0);
     btn.titleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
-    btn.titleLabel.font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightRegular];
+    btn.titleLabel.font = [UIFont scaledSystemFontOfSize:15.0 weight:UIFontWeightRegular];
     btn.layer.cornerRadius = 4.0;
     btn.layer.masksToBounds = YES;
     btn.layer.borderWidth = 0.8;

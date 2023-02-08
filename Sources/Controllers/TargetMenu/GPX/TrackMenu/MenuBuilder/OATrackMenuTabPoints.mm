@@ -166,7 +166,7 @@
             kTableKey: @"delete_waypoints",
             kCellType: [OAIconTitleValueCell getCellIdentifier],
             kCellTitle: OALocalizedString(@"delete_waypoints"),
-            kTableValues: @{ @"font_value": [UIFont systemFontOfSize:17. weight:UIFontWeightMedium] },
+            kTableValues: @{ @"font_value": [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium] },
             kCellRightIconName: @"ic_custom_remove_outlined",
             kCellToggle: @(hasWaypoints),
             kCellTintColor: hasWaypoints ? @color_primary_purple : @unselected_tab_icon,
@@ -176,7 +176,7 @@
     OAGPXTableCellData *addWaypointCellData = [OAGPXTableCellData withData:@{
             kTableKey: @"add_waypoint",
             kCellType: [OAIconTitleValueCell getCellIdentifier],
-            kTableValues: @{ @"font_value": [UIFont systemFontOfSize:17. weight:UIFontWeightMedium] },
+            kTableValues: @{ @"font_value": [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium] },
             kCellTitle: OALocalizedString(@"add_waypoint"),
             kCellRightIconName: @"ic_custom_add_gpx_waypoint",
             kCellToggle: @YES,

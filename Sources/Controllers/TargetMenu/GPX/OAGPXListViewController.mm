@@ -1193,7 +1193,7 @@ static UIViewController *parentController;
                 NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCellNoIcon getCellIdentifier] owner:self options:nil];
                 cell = (OAMenuSimpleCellNoIcon *)[nib objectAtIndex:0];
                 cell.descriptionView.hidden = YES;
-                cell.textView.font = [UIFont systemFontOfSize:14.0];
+                cell.textView.font = [UIFont scaledSystemFontOfSize:14.0];
                 cell.textView.textColor = [UIColor darkGrayColor];
             }
             if (cell)

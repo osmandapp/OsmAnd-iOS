@@ -385,8 +385,8 @@
     BOOL isPlural = originalNumberOfUnits > 1 || self.numberOfPeriods > 1;
     NSString *mainPart = [NSString stringWithFormat:OALocalizedString(isPlural ? @"get_discount_first_few_parts" : @"get_discount_first_part"), periodPriceStr, [self getDisountPeriodString:unitStr totalPeriods:totalPeriods]];
     NSString *thenPart = [NSString stringWithFormat:OALocalizedString(@"get_discount_second_part"), originalPricePeriod];
-    NSAttributedString *mainStrAttributed = [[NSAttributedString alloc] initWithString:mainPart attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:17.0 weight:UIFontWeightSemibold]}];
-    NSAttributedString *secondStrAttributed = [[NSAttributedString alloc] initWithString:thenPart attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:17.0]}];
+    NSAttributedString *mainStrAttributed = [[NSAttributedString alloc] initWithString:mainPart attributes:@{NSFontAttributeName : [UIFont scaledSystemFontOfSize:17.0 weight:UIFontWeightSemibold]}];
+    NSAttributedString *secondStrAttributed = [[NSAttributedString alloc] initWithString:thenPart attributes:@{NSFontAttributeName : [UIFont scaledSystemFontOfSize:17.0]}];
     NSMutableAttributedString *res = [[NSMutableAttributedString alloc] initWithAttributedString:mainStrAttributed];
     [res appendAttributedString:[[NSAttributedString alloc] initWithString:self.paymentMode == OAProductDiscountPaymentModeFreeTrial ? @", " : @"\n"]];
     [res appendAttributedString:secondStrAttributed];
@@ -933,7 +933,7 @@
     NSAttributedString *resStr = [[NSAttributedString alloc] initWithString:@""];
     if (showDiscount && discountStr.length > 0)
     {
-        resStr = [[NSAttributedString alloc] initWithString:discountStr attributes:@{ NSFontAttributeName : [UIFont systemFontOfSize:fontSize weight:UIFontWeightSemibold]}];
+        resStr = [[NSAttributedString alloc] initWithString:discountStr attributes:@{ NSFontAttributeName : [UIFont scaledSystemFontOfSize:fontSize weight:UIFontWeightSemibold]}];
     }
     return resStr;
 }
@@ -1001,9 +1001,9 @@
         NSString *price = [super formattedPrice];
         NSMutableAttributedString *priceAttributed =
                 [[NSMutableAttributedString alloc] initWithString:formattedPrice
-                                                       attributes:@{ NSFontAttributeName : [UIFont systemFontOfSize:15] }];
+                                                       attributes:@{ NSFontAttributeName : [UIFont scaledSystemFontOfSize:15] }];
         [priceAttributed addAttribute:NSFontAttributeName
-                                value:[UIFont systemFontOfSize:15 weight:UIFontWeightSemibold]
+                                value:[UIFont scaledSystemFontOfSize:15 weight:UIFontWeightSemibold]
                                 range:NSMakeRange(0, price.length)];
         return priceAttributed;
     }
@@ -1193,9 +1193,9 @@
 - (NSAttributedString *) getDescription:(CGFloat)fontSize
 {
     NSMutableAttributedString *text = [[NSMutableAttributedString alloc] init];
-    [text addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:fontSize] range:NSMakeRange(0, text.length)];
+    [text addAttribute:NSFontAttributeName value:[UIFont scaledSystemFontOfSize:fontSize] range:NSMakeRange(0, text.length)];
     NSMutableAttributedString *boldStr = [[NSMutableAttributedString alloc] initWithString:OALocalizedString(@"osm_live_payment_contribute_descr")];
-    UIFont *boldFont = [UIFont systemFontOfSize:fontSize];
+    UIFont *boldFont = [UIFont scaledSystemFontOfSize:fontSize];
     [boldStr addAttribute:NSFontAttributeName value:boldFont range:NSMakeRange(0, boldStr.length)];
     [text appendAttributedString:boldStr];
     return text;

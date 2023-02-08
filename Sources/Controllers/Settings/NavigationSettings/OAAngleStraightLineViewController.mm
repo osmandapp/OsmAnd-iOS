@@ -131,7 +131,7 @@
             cell.topLeftLabel.text = item.title;
             cell.topRightLabel.text = [item stringForKey:@"value"];
             cell.topRightLabel.textColor = UIColorFromRGB(color_primary_purple);
-            cell.topRightLabel.font = [UIFont systemFontOfSize:17 weight:UIFontWeightMedium];
+            cell.topRightLabel.font = [UIFont scaledSystemFontOfSize:17 weight:UIFontWeightMedium];
             cell.bottomLeftLabel.text = [item stringForKey:@"minValue"];
             cell.bottomRightLabel.text = [item stringForKey:@"maxValue"];
 

@@ -99,6 +99,9 @@
     [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
 
     [self updateDownloadButtonView];
+
+    self.cancelButton.titleLabel.font =  [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
+    self.downloadButton.titleLabel.font =  [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
 }
 
 - (void)applyLocalization
@@ -361,7 +364,7 @@
             else
                 cell.segmentedControl.tintColor = UIColorFromRGB(color_primary_purple);
 
-            UIFont *font = [UIFont systemFontOfSize:15. weight:UIFontWeightSemibold];
+            UIFont *font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
             [cell.segmentedControl setTitleTextAttributes:@{NSForegroundColorAttributeName : UIColor.whiteColor, NSFontAttributeName : font} forState:UIControlStateSelected];
             [cell.segmentedControl setTitleTextAttributes:@{NSForegroundColorAttributeName : UIColorFromRGB(color_primary_purple), NSFontAttributeName : font} forState:UIControlStateNormal];
         }
@@ -413,7 +416,7 @@
             cell = nib[0];
             cell.tintColor = UIColorFromRGB(color_primary_purple);
             cell.descriptionView.hidden = NO;
-            cell.descriptionView.font = [UIFont systemFontOfSize:13.0];
+            cell.descriptionView.font = [UIFont scaledSystemFontOfSize:13.0];
             if (!_isSingleSRTM)
             {
                 UIView *bgColorView = [[UIView alloc] init];
@@ -508,14 +511,14 @@
     if (section == 0 && _isSRTM)
     {
         customHeader.label.text = [self getTitleForSection:section];
-        customHeader.label.font = [UIFont systemFontOfSize:15];
+        customHeader.label.font = [UIFont scaledSystemFontOfSize:15];
         [customHeader setYOffset:12];
         return customHeader;
     }
     else if ((section == 0 && !_isSRTM) || (section == 1 && !_isSingleSRTM))
     {
         customHeader.label.text = [self getTitleForSection:section];
-        customHeader.label.font = [UIFont systemFontOfSize:13];
+        customHeader.label.font = [UIFont scaledSystemFontOfSize:13];
         [customHeader setYOffset:_isSRTM ? 12 : 32];
         return customHeader;
     }
@@ -525,9 +528,9 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     if (section == 0 && _isSRTM)
-        return [OATableViewCustomHeaderView getHeight:[self getTitleForSection:section] width:tableView.bounds.size.width yOffset:12 font:[UIFont systemFontOfSize:15]] + 9;
+        return [OATableViewCustomHeaderView getHeight:[self getTitleForSection:section] width:tableView.bounds.size.width yOffset:12 font:[UIFont scaledSystemFontOfSize:15]] + 9;
     else if ((section == 0 && !_isSRTM) || (section == 1 && !_isSingleSRTM))
-        return [OATableViewCustomHeaderView getHeight:[self getTitleForSection:section] width:tableView.bounds.size.width yOffset:_isSRTM ? 12 : 32 font:[UIFont systemFontOfSize:13]];
+        return [OATableViewCustomHeaderView getHeight:[self getTitleForSection:section] width:tableView.bounds.size.width yOffset:_isSRTM ? 12 : 32 font:[UIFont scaledSystemFontOfSize:13]];
 
     return 0.001;
 }

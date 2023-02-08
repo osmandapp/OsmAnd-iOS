@@ -30,6 +30,8 @@
     [self.contentView.layer addSublayer:_divider];
     
     [_optionsButton setTitle:OALocalizedString(@"shared_string_settings") forState:UIControlStateNormal];
+    _optionsButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
+    _soundButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
     
     [self setupButton:_optionsButton];
     [self setupButton:_soundButton];

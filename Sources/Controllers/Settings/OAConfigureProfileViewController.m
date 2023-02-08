@@ -275,7 +275,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 
 - (UIView *) setupTableHeaderView
 {
-    return self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:self.getTableHeaderTitle font:[UIFont systemFontOfSize:34.0 weight:UIFontWeightBold] tintColor:UIColorFromRGB(_appMode.getIconColor) icon:_appMode.getIconName];
+    return self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:self.getTableHeaderTitle font:[UIFont scaledSystemFontOfSize:34.0 weight:UIFontWeightBold] tintColor:UIColorFromRGB(_appMode.getIconColor) icon:_appMode.getIconName];
 }
 
 - (void)viewDidLoad
@@ -465,7 +465,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     if (section == 0 && _appMode != OAApplicationMode.DEFAULT)
     {
         [vw setYOffset:6.];
-        UIFont *labelFont = [UIFont systemFontOfSize:15.0];
+        UIFont *labelFont = [UIFont scaledSystemFontOfSize:15.0];
         NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
         [style setLineSpacing:6];
         vw.label.attributedText = [[NSAttributedString alloc] initWithString:title attributes:@{NSParagraphStyleAttributeName : style, NSFontAttributeName : labelFont, NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer)}];
@@ -499,14 +499,14 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 {
     CGFloat textWidth = self.tableView.bounds.size.width - (kSidePadding + OAUtilities.getLeftMargin) * 2;
     if (section == 0 && _appMode != OAApplicationMode.DEFAULT)
-        return [OATableViewCustomHeaderView getHeight:_sectionHeaderTitles[section] width:textWidth yOffset:6. font:[UIFont systemFontOfSize:15.0]] + 10.;
+        return [OATableViewCustomHeaderView getHeight:_sectionHeaderTitles[section] width:textWidth yOffset:6. font:[UIFont scaledSystemFontOfSize:15.0]] + 10.;
     
     return [OATableViewCustomHeaderView getHeight:_sectionHeaderTitles[section] width:textWidth];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    return section == 0 && _appMode != OAApplicationMode.DEFAULT ? 0.01 : [OAUtilities calculateTextBounds:_sectionFooterTitles[section] width:DeviceScreenWidth - (16 + OAUtilities.getLeftMargin) * 2 font:[UIFont systemFontOfSize:13.]].height + 16.;
+    return section == 0 && _appMode != OAApplicationMode.DEFAULT ? 0.01 : [OAUtilities calculateTextBounds:_sectionFooterTitles[section] width:DeviceScreenWidth - (16 + OAUtilities.getLeftMargin) * 2 font:[UIFont scaledSystemFontOfSize:13.]].height + 16.;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
@@ -549,7 +549,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
             cell.textView.numberOfLines = 0;
             cell.arrowIconView.image = [cell.arrowIconView.image imageFlippedForRightToLeftLayoutDirection];
             [cell.iconView setTintColor:UIColorFromRGB(color_icon_inactive)];
-            cell.descView.font = [UIFont systemFontOfSize:15.];
+            cell.descView.font = [UIFont scaledSystemFontOfSize:15.];
             cell.separatorInset = UIEdgeInsetsMake(0., 64., 0., 0.);
         }
         if (cell)
@@ -574,7 +574,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
             cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0);
             cell.titleView.textColor = UIColorFromRGB(color_primary_purple);
             cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
-            cell.titleView.font = [UIFont systemFontOfSize:17. weight:UIFontWeightSemibold];
+            cell.titleView.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightSemibold];
         }
         cell.titleView.text = item[@"title"];
         [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]]];

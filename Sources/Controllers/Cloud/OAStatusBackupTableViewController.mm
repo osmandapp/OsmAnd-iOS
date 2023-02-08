@@ -345,10 +345,10 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
                                     remoteFile:remoteFile];
     NSString *conflictStr = [OALocalizedString(@"cloud_conflict") stringByAppendingString:@". "];
     NSMutableAttributedString *attributedDescr = [[NSMutableAttributedString alloc] initWithString:[conflictStr stringByAppendingString:rowData.descr]];
-    [attributedDescr addAttributes:@{ NSFontAttributeName : [UIFont systemFontOfSize:13 weight:UIFontWeightMedium],
+    [attributedDescr addAttributes:@{ NSFontAttributeName : [UIFont scaledSystemFontOfSize:13 weight:UIFontWeightMedium],
                                       NSForegroundColorAttributeName : UIColorFromRGB(color_primary_red) }
                              range:[attributedDescr.string rangeOfString:conflictStr]];
-    [attributedDescr addAttributes:@{ NSFontAttributeName : [UIFont systemFontOfSize:13],
+    [attributedDescr addAttributes:@{ NSFontAttributeName : [UIFont scaledSystemFontOfSize:13],
                                       NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer) }
                              range:[attributedDescr.string rangeOfString:rowData.descr]];
     [rowData setObj:attributedDescr forKey:@"descrAttr"];
@@ -654,7 +654,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
             cell = (OALargeImageTitleDescrTableViewCell *) nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             [cell showButton:NO];
-            cell.titleLabel.font = [UIFont systemFontOfSize:17. weight:UIFontWeightRegular];
+            cell.titleLabel.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightRegular];
         }
         if (cell)
         {
@@ -666,7 +666,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
             paragraphStyle.alignment = NSTextAlignmentCenter;
             [str addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:range];
             [str addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(color_text_footer) range:range];
-            [str addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15.] range:range];
+            [str addAttribute:NSFontAttributeName value:[UIFont scaledSystemFontOfSize:15.] range:range];
             cell.descriptionLabel.attributedText = str;
             [cell.cellImageView setImage:[UIImage imageNamed:item.iconName]];
 
@@ -707,7 +707,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     if (header && section == _itemsSection && _tableType == EOARecentChangesConflicts)
     {
         customHeader.label.text = header;
-        customHeader.label.font = [UIFont systemFontOfSize:13.];
+        customHeader.label.font = [UIFont scaledSystemFontOfSize:13.];
         [customHeader setYOffset:2.];
         return customHeader;
     }
@@ -725,7 +725,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
                                                     width:tableView.bounds.size.width
                                                   xOffset:kPaddingOnSideOfContent
                                                   yOffset:2.
-                                                     font:[UIFont systemFontOfSize:13.]] + 15.;
+                                                     font:[UIFont scaledSystemFontOfSize:13.]] + 15.;
         }
         return kHeaderHeightDefault;
     }

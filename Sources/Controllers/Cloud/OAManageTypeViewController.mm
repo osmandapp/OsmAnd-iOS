@@ -123,7 +123,7 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASimpleTableViewCell *) nib[0];
             cell.titleLabel.textColor = UIColorFromRGB(color_support_red);
-            cell.titleLabel.font = [UIFont systemFontOfSize:17. weight:UIFontWeightMedium];
+            cell.titleLabel.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium];
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
         }

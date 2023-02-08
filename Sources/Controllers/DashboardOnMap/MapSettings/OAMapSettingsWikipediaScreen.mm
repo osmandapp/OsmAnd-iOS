@@ -296,8 +296,8 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
             {
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellTypeId];
 
-                cell.textLabel.font = [UIFont systemFontOfSize:17.0];
-                cell.detailTextLabel.font = [UIFont systemFontOfSize:12.0];
+                cell.textLabel.font = [UIFont scaledSystemFontOfSize:17.0];
+                cell.detailTextLabel.font = [UIFont scaledSystemFontOfSize:12.0];
                 cell.detailTextLabel.textColor = UIColorFromRGB(0x929292);
 
                 UIImage* iconImage = [UIImage templateImageNamed:@"ic_custom_download"];
@@ -313,8 +313,8 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
             {
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellTypeId];
 
-                cell.textLabel.font = [UIFont systemFontOfSize:17.0];
-                cell.detailTextLabel.font = [UIFont systemFontOfSize:12.0];
+                cell.textLabel.font = [UIFont scaledSystemFontOfSize:17.0];
+                cell.detailTextLabel.font = [UIFont scaledSystemFontOfSize:12.0];
                 cell.detailTextLabel.textColor = UIColorFromRGB(0x929292);
 
                 FFCircularProgressView* progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 25.0f, 25.0f)];

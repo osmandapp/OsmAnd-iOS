@@ -204,8 +204,8 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
                 nil;
     _textColor =  textColorAttr ? UIColorFromARGB(textColorAttr.intValue) : [UIColor blackColor];
                 
-    _font = [UIFont systemFontOfSize:14.0 weight:UIFontWeightRegular];
-    _boldFont = [UIFont systemFontOfSize:14.0 weight:UIFontWeightSemibold];
+    _font = [UIFont scaledSystemFontOfSize:14.0 weight:UIFontWeightRegular];
+    _boldFont = [UIFont scaledSystemFontOfSize:14.0 weight:UIFontWeightSemibold];
     
     _cardinalLinesColor = UIColor.redColor;
     _northArrowColor = UIColor.redColor;

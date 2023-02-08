@@ -106,11 +106,11 @@
                     @"type" : [OARightIconTableViewCell getCellIdentifier],
                     @"attributed_title" : [[NSAttributedString alloc] initWithString:availableTitle
                                                                          attributes:@{
-                                                                                 NSFontAttributeName : [UIFont systemFontOfSize:17.],
+                                                                                 NSFontAttributeName : [UIFont scaledSystemFontOfSize:17.],
                                                                                  NSForegroundColorAttributeName : UIColor.blackColor
                                                                          }],
                     @"description" : availableDescription,
-                    @"description_font" : [UIFont systemFontOfSize:15.],
+                    @"description_font" : [UIFont scaledSystemFontOfSize:15.],
                     @"right_icon" : rightIcon,
                     @"tint_color" : UIColorFromRGB(color_primary_purple),
                     @"top_right_content" : @(YES)
@@ -120,7 +120,7 @@
                     @"type": [OARightIconTableViewCell getCellIdentifier],
                     @"attributed_title": [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_refresh")
                                                                          attributes:@{
-                                                                                 NSFontAttributeName : [UIFont systemFontOfSize:17. weight:UIFontWeightMedium],
+                                                                                 NSFontAttributeName : [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium],
                                                                                  NSForegroundColorAttributeName : UIColorFromRGB(color_primary_purple)
                                                                                      }],
                     @"right_icon": @"ic_custom_reset",
@@ -150,7 +150,7 @@
             NSMutableAttributedString *dateAttributed =
                     [[NSMutableAttributedString alloc] initWithString:[formatterTo stringFromDate:date].capitalizedString];
             [dateAttributed addAttribute:NSFontAttributeName
-                                   value:[UIFont systemFontOfSize:17.]
+                                   value:[UIFont scaledSystemFontOfSize:17.]
                                    range:NSMakeRange(0, dateAttributed.length)];
             [dateAttributed addAttribute:NSForegroundColorAttributeName
                                    value:UIColor.blackColor
@@ -178,7 +178,7 @@
             @"type": [OAValueTableViewCell getCellIdentifier],
             @"attributed_title": [[NSAttributedString alloc] initWithString:OALocalizedString(@"last_two_month_total")
                                                                  attributes:@{
-                                                                         NSFontAttributeName : [UIFont systemFontOfSize:17.],
+                                                                         NSFontAttributeName : [UIFont scaledSystemFontOfSize:17.],
                                                                          NSForegroundColorAttributeName : UIColor.blackColor
                                                                  }],
             @"value": [NSString stringWithFormat:@"%li", [self getChangesSize]],
@@ -195,7 +195,7 @@
             @"type" : [OARightIconTableViewCell getCellIdentifier],
             @"attributed_title" : [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_profile")
                                                                  attributes:@{
-                                                                         NSFontAttributeName : [UIFont systemFontOfSize:17. weight:UIFontWeightMedium],
+                                                                         NSFontAttributeName : [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium],
                                                                          NSForegroundColorAttributeName : UIColorFromRGB(color_primary_purple)
                                                                              }],
             @"right_icon" : @"ic_action_openstreetmap_logo",
@@ -339,7 +339,7 @@
             cell.titleLabel.attributedText = item[@"attributed_title"];
             [cell descriptionVisibility:[item.allKeys containsObject:@"description"]];
             cell.descriptionLabel.text = item[@"description"];
-            cell.descriptionLabel.font = [item.allKeys containsObject:@"description_font"] ? item[@"description_font"] : [UIFont systemFontOfSize:13.];
+            cell.descriptionLabel.font = [item.allKeys containsObject:@"description_font"] ? item[@"description_font"] : [UIFont scaledSystemFontOfSize:13.];
 
             BOOL hasRightIcon = [item.allKeys containsObject:@"right_icon"];
             cell.rightIconView.image = hasRightIcon ? [UIImage templateImageNamed:item[@"right_icon"]] : nil;
@@ -370,7 +370,7 @@
 
             [cell descriptionVisibility:[item.allKeys containsObject:@"description"]];
             cell.descriptionLabel.text = item[@"description"];
-            cell.descriptionLabel.font = [item.allKeys containsObject:@"description_font"] ? item[@"description_font"] : [UIFont systemFontOfSize:13.];
+            cell.descriptionLabel.font = [item.allKeys containsObject:@"description_font"] ? item[@"description_font"] : [UIFont scaledSystemFontOfSize:13.];
         }
         return cell;
     }
@@ -395,7 +395,7 @@
     NSString *header = _headers[@(section)];
     if (header)
     {
-        UIFont *font = [UIFont systemFontOfSize:13.];
+        UIFont *font = [UIFont scaledSystemFontOfSize:13.];
         CGFloat headerHeight = [OAUtilities calculateTextBounds:header
                                                           width:tableView.frame.size.width - (kPaddingOnSideOfContent + [OAUtilities getLeftMargin]) * 2
                                                            font:font].height + kPaddingOnSideOfHeaderWithText;

@@ -238,7 +238,7 @@
     return [[NSAttributedString alloc] initWithString:text
                                            attributes:@{
         NSParagraphStyleAttributeName: paragraphStyle,
-        NSFontAttributeName: [UIFont systemFontOfSize:17. weight:isUpdates ? UIFontWeightRegular : UIFontWeightSemibold],
+        NSFontAttributeName: [UIFont scaledSystemFontOfSize:17. weight:isUpdates ? UIFontWeightRegular : UIFontWeightSemibold],
         NSForegroundColorAttributeName: UIColor.whiteColor }];
 }
 
@@ -250,7 +250,7 @@
     return [[NSAttributedString alloc] initWithString:text
                                            attributes:@{
         NSParagraphStyleAttributeName: paragraphStyle,
-        NSFontAttributeName: [UIFont systemFontOfSize:15.],
+        NSFontAttributeName: [UIFont scaledSystemFontOfSize:15.],
         NSForegroundColorAttributeName: [UIColor colorWithWhite:1. alpha:.5] }];
 }
 
@@ -263,7 +263,7 @@
     return [[NSAttributedString alloc] initWithString:text
                                            attributes:@{
         NSParagraphStyleAttributeName: paragraphStyle,
-        NSFontAttributeName: [UIFont systemFontOfSize:isFree ? 17. : 15. weight:UIFontWeightSemibold],
+        NSFontAttributeName: [UIFont scaledSystemFontOfSize:isFree ? 17. : 15. weight:UIFontWeightSemibold],
         NSForegroundColorAttributeName: isFree ? UIColorFromRGB(color_banner_button) : UIColorFromRGB(color_primary_purple) }];
 }
 

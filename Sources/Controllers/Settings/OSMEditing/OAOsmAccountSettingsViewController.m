@@ -78,7 +78,7 @@
     {
         self.tableView.tableHeaderView =
                 [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"use_login_and_password_description")
-                                                     font:[UIFont systemFontOfSize:13.]
+                                                     font:[UIFont scaledSystemFontOfSize:13.]
                                                 textColor:UIColorFromRGB(color_text_footer)
                                               lineSpacing:0
                                                   isTitle:NO];
@@ -438,7 +438,7 @@
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.titleLabel.font = [UIFont systemFontOfSize:15.];
+            cell.titleLabel.font = [UIFont scaledSystemFontOfSize:15.];
             cell.backgroundColor = UIColor.clearColor;
         }
         if (cell)

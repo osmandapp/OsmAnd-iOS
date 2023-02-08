@@ -447,7 +447,7 @@
     if (!self.distanceLabel)
     {
         self.distanceLabel = [[UILabel alloc] initWithFrame:CGRectMake(60.0, 7.0, 211.0, 21.0)];
-        _distanceLabel.font = [UIFont systemFontOfSize:18.0 weight:UIFontWeightBold];
+        _distanceLabel.font = [UIFont scaledSystemFontOfSize:18.0 weight:UIFontWeightBold];
         _distanceLabel.textAlignment = NSTextAlignmentLeft;
         _distanceLabel.textColor = UIColorFromRGB(0xffffff);
         _distanceLabel.minimumScaleFactor = 0.7;
@@ -457,7 +457,7 @@
     if (!self.infoLabel)
     {
         self.infoLabel = [[UILabel alloc] initWithFrame:CGRectMake(60.0 + _distanceLabel.frame.size.width, 7.0, self.infoLabelWidth, 21.0)];
-        _infoLabel.font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold];
+        _infoLabel.font = [UIFont scaledSystemFontOfSize:15.0 weight:UIFontWeightSemibold];
         _infoLabel.textAlignment = NSTextAlignmentRight;
         _infoLabel.textColor = UIColorFromRGB(0x8ea2b9);
         _infoLabel.minimumScaleFactor = 0.7;
@@ -467,7 +467,7 @@
     if (!self.descLabel)
     {
         self.descLabel = [[UILabel alloc] initWithFrame:CGRectMake(60.0, 24.0, 211.0, 21.0)];
-        _descLabel.font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold];
+        _descLabel.font = [UIFont scaledSystemFontOfSize:15.0 weight:UIFontWeightSemibold];
         _descLabel.textAlignment = NSTextAlignmentLeft;
         _descLabel.textColor = UIColorFromRGB(0x8ea2b9);
         [_directionsView addSubview:_descLabel];
@@ -522,7 +522,7 @@
         if (!self.distanceLabel2)
         {
             self.distanceLabel2 = [[UILabel alloc] initWithFrame:CGRectMake(60.0, 7.0, 211.0, 21.0)];
-            _distanceLabel2.font = [UIFont systemFontOfSize:18.0 weight:UIFontWeightBold];
+            _distanceLabel2.font = [UIFont scaledSystemFontOfSize:18.0 weight:UIFontWeightBold];
             _distanceLabel2.textAlignment = NSTextAlignmentLeft;
             _distanceLabel2.textColor = UIColorFromRGB(0xffffff);
             _distanceLabel2.minimumScaleFactor = 0.7;
@@ -532,7 +532,7 @@
         if (!self.infoLabel2)
         {
             self.infoLabel2 = [[UILabel alloc] initWithFrame:CGRectMake(60.0 + _distanceLabel2.frame.size.width, 7.0, self.infoLabelWidth, 21.0)];
-            _infoLabel2.font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold];
+            _infoLabel2.font = [UIFont scaledSystemFontOfSize:15.0 weight:UIFontWeightSemibold];
             _infoLabel2.textAlignment = NSTextAlignmentRight;
             _infoLabel2.textColor = UIColorFromRGB(0x8ea2b9);
             _infoLabel2.minimumScaleFactor = 0.7;
@@ -542,7 +542,7 @@
         if (!self.descLabel2)
         {
             self.descLabel2 = [[UILabel alloc] initWithFrame:CGRectMake(60.0, 24.0, 211.0, 21.0)];
-            _descLabel2.font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold];
+            _descLabel2.font = [UIFont scaledSystemFontOfSize:15.0 weight:UIFontWeightSemibold];
             _descLabel2.textAlignment = NSTextAlignmentLeft;
             _descLabel2.textColor = UIColorFromRGB(0x8ea2b9);
             [_directionsView addSubview:_descLabel2];
@@ -587,7 +587,7 @@
         if (!self.distanceLabel3)
         {
             self.distanceLabel3 = [[UILabel alloc] initWithFrame:CGRectMake(60.0, 7.0, 211.0, 21.0)];
-            _distanceLabel3.font = [UIFont systemFontOfSize:18.0 weight:UIFontWeightBold];
+            _distanceLabel3.font = [UIFont scaledSystemFontOfSize:18.0 weight:UIFontWeightBold];
             _distanceLabel3.textAlignment = NSTextAlignmentLeft;
             _distanceLabel3.textColor = UIColorFromRGB(0xffffff);
             _distanceLabel3.minimumScaleFactor = 0.7;
@@ -597,7 +597,7 @@
         if (!self.infoLabel3)
         {
             self.infoLabel3 = [[UILabel alloc] initWithFrame:CGRectMake(60.0 + _distanceLabel3.frame.size.width, 7.0, self.infoLabelWidth, 21.0)];
-            _infoLabel3.font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold];
+            _infoLabel3.font = [UIFont scaledSystemFontOfSize:15.0 weight:UIFontWeightSemibold];
             _infoLabel3.textAlignment = NSTextAlignmentRight;
             _infoLabel3.textColor = UIColorFromRGB(0x8ea2b9);
             _infoLabel3.minimumScaleFactor = 0.7;
@@ -607,7 +607,7 @@
         if (!self.descLabel3)
         {
             self.descLabel3 = [[UILabel alloc] initWithFrame:CGRectMake(60.0, 24.0, 211.0, 21.0)];
-            _descLabel3.font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold];
+            _descLabel3.font = [UIFont scaledSystemFontOfSize:15.0 weight:UIFontWeightSemibold];
             _descLabel3.textAlignment = NSTextAlignmentLeft;
             _descLabel3.textColor = UIColorFromRGB(0x8ea2b9);
             [_directionsView addSubview:_descLabel3];

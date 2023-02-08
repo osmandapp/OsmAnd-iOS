@@ -255,6 +255,7 @@ static BOOL _repositoryUpdated = NO;
     {
         self.backButton.hidden = YES;
         self.doneButton.hidden = NO;
+        self.doneButton.titleLabel.font = [UIFont scaledSystemFontOfSize:14.];
     }
     
     if (self.region != _app.worldRegion)
@@ -2525,8 +2526,8 @@ static BOOL _repositoryUpdated = NO;
         {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                           reuseIdentifier:cellTypeId];
-            cell.textLabel.font = [UIFont systemFontOfSize:17.0];
-            cell.detailTextLabel.font = [UIFont systemFontOfSize:12.0];
+            cell.textLabel.font = [UIFont scaledSystemFontOfSize:17.0];
+            cell.detailTextLabel.font = [UIFont scaledSystemFontOfSize:12.0];
             cell.detailTextLabel.textColor = UIColorFromRGB(0x929292);
 
             UIImage *iconImage = [UIImage templateImageNamed:@"ic_custom_download"];
@@ -2553,8 +2554,8 @@ static BOOL _repositoryUpdated = NO;
         {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                           reuseIdentifier:cellTypeId];
-            cell.textLabel.font = [UIFont systemFontOfSize:17.0];
-            cell.detailTextLabel.font = [UIFont systemFontOfSize:12.0];
+            cell.textLabel.font = [UIFont scaledSystemFontOfSize:17.0];
+            cell.detailTextLabel.font = [UIFont scaledSystemFontOfSize:12.0];
             cell.detailTextLabel.textColor = UIColorFromRGB(0x929292);
             NSString *imageNamed = [item_ isKindOfClass:OAMultipleResourceItem.class] && ![self.region.resourceTypes containsObject:[OAResourceType toValue:((OAResourceItem *) item_).resourceType]] ? @"ic_custom_multi_download" : @"ic_custom_download";
             UIImage *iconImage = [UIImage templateImageNamed:imageNamed];
@@ -2570,8 +2571,8 @@ static BOOL _repositoryUpdated = NO;
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                           reuseIdentifier:cellTypeId];
 
-            cell.textLabel.font = [UIFont systemFontOfSize:17.0];
-            cell.detailTextLabel.font = [UIFont systemFontOfSize:12.0];
+            cell.textLabel.font = [UIFont scaledSystemFontOfSize:17.0];
+            cell.detailTextLabel.font = [UIFont scaledSystemFontOfSize:12.0];
             cell.detailTextLabel.textColor = UIColorFromRGB(0x929292);
 
             FFCircularProgressView *progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 25.0f, 25.0f)];
@@ -2609,7 +2610,7 @@ static BOOL _repositoryUpdated = NO;
             if (self.region && [self.region isInPurchasedArea])
             {
                 UILabel *labelGet = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, 300.0, 100.0)];
-                labelGet.font = [UIFont systemFontOfSize:13 weight:UIFontWeightSemibold];
+                labelGet.font = [UIFont scaledSystemFontOfSize:13 weight:UIFontWeightSemibold];
                 labelGet.textAlignment = NSTextAlignmentCenter;
                 labelGet.textColor = [UIColor colorWithRed:0.992f green:0.561f blue:0.149f alpha:1.00f];
                 labelGet.text = [OALocalizedString(@"shared_string_get") uppercaseStringWithLocale:[NSLocale currentLocale]];
@@ -2779,7 +2780,7 @@ static BOOL _repositoryUpdated = NO;
         OADownloadActionButton *button = _downloadDescriptionInfo.getActionButtons[indexPath.row - 1];
         buttonCell.textView.text = button.name;
         buttonCell.descView.text = button.url;
-        buttonCell.textView.font = [UIFont systemFontOfSize:17. weight:UIFontWeightMedium];
+        buttonCell.textView.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium];
         buttonCell.textView.textColor = UIColorFromRGB(color_primary_purple);
         [buttonCell.overflowButton setImage:[UIImage templateImageNamed:@"ic_custom_safari"] forState:UIControlStateNormal];
         buttonCell.overflowButton.tag = indexPath.row - 1;

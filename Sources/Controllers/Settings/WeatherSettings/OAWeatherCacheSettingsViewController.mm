@@ -340,7 +340,7 @@
             cell = (OASimpleTableViewCell *) nib[0];
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
-            cell.titleLabel.font = [UIFont systemFontOfSize:17. weight:UIFontWeightMedium];
+            cell.titleLabel.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium];
             cell.titleLabel.textColor = UIColorFromRGB(color_primary_red);
         }
         if (cell)

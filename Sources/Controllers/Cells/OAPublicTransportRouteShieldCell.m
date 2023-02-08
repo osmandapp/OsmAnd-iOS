@@ -30,6 +30,8 @@
     
     [_routeShieldContainerView addGestureRecognizer:_tapRecognizer];
     [_routeShieldContainerView addGestureRecognizer:_longTapRecognizer];
+
+    self.textView.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated

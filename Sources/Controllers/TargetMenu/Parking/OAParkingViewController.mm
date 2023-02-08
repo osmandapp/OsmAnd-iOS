@@ -119,6 +119,8 @@
     self.titleGradient.frame = self.navBar.frame;
     self.tableView.estimatedRowHeight = kEstimatedRowHeight;
     [super viewDidLoad];
+    self.buttonOK.titleLabel.font = [UIFont scaledSystemFontOfSize:14.];
+    self.buttonCancel.titleLabel.font = [UIFont scaledSystemFontOfSize:14.];
 }
 
 -(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator

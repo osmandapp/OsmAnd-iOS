@@ -198,7 +198,7 @@
 
 - (CGFloat) calculateCellWidth:(NSString *)lablel iconName:(NSString *)iconName
 {
-    CGSize labelSize = [OAUtilities calculateTextBounds:lablel width:DeviceScreenWidth font:[UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold]];
+    CGSize labelSize = [OAUtilities calculateTextBounds:lablel width:DeviceScreenWidth font:[UIFont scaledSystemFontOfSize:15.0 weight:UIFontWeightSemibold]];
     CGFloat labelWidth = labelSize.width;
     if (iconName && iconName.length > 0)
         labelWidth += kImageWidth;

@@ -87,7 +87,7 @@
     self.tableView.tableHeaderView =
         [OAUtilities setupTableHeaderViewWithAttributedText:[[NSAttributedString alloc]
                                                                 initWithString:label
-                                                                    attributes:@{ NSFontAttributeName : [UIFont systemFontOfSize:30. weight:UIFontWeightBold]} ]
+                                                                    attributes:@{ NSFontAttributeName : [UIFont scaledSystemFontOfSize:30. weight:UIFontWeightBold]} ]
                                           topCenterIconName:@"img_speed_camera_warning"
                                                    iconSize:92.];
 }
@@ -107,12 +107,12 @@
     NSString *text = [NSString stringWithFormat:OALocalizedString(@"speed_cameras_legal_descr"), uninstallStr, keepActiveStr];
     NSMutableAttributedString *attrText = [[NSMutableAttributedString alloc] initWithString:text
                                                                                  attributes:@{
-                                                                       NSFontAttributeName : [UIFont systemFontOfSize:15.] }];
+                                                                       NSFontAttributeName : [UIFont scaledSystemFontOfSize:15.] }];
     [attrText addAttribute:NSFontAttributeName
-                     value:[UIFont systemFontOfSize:15. weight:UIFontWeightMedium]
+                     value:[UIFont scaledSystemFontOfSize:15. weight:UIFontWeightMedium]
                      range:[text rangeOfString:uninstallStr]];
     [attrText addAttribute:NSFontAttributeName
-                     value:[UIFont systemFontOfSize:15. weight:UIFontWeightMedium]
+                     value:[UIFont scaledSystemFontOfSize:15. weight:UIFontWeightMedium]
                      range:[text rangeOfString:keepActiveStr]];
     NSMutableParagraphStyle *attrTextParagraphStyle = [[NSMutableParagraphStyle alloc] init];
     attrTextParagraphStyle.minimumLineHeight = 21.;

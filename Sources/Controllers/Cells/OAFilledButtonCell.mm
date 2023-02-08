@@ -15,6 +15,7 @@
     [super awakeFromNib];
     // Initialization code
     _button.layer.cornerRadius = 6.;
+    _button.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
 }
 
 - (void) setSelected:(BOOL)selected animated:(BOOL)animated

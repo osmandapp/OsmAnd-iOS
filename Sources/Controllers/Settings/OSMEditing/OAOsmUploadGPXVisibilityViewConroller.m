@@ -54,7 +54,7 @@
 {
     _data = [[OATableDataModel alloc] init];
     
-    OATableSectionData *section = [OATableSectionData sectionData];
+    OATableSectionData *section = [_data createNewSection];
     if (_selectedVisibility == EOAOsmUploadGPXVisibilityPublic)
         section.footerText = OALocalizedString(@"gpx_upload_public_visibility_descr");
     else if (_selectedVisibility == EOAOsmUploadGPXVisibilityIdentifiable)
@@ -66,35 +66,29 @@
     
     [self.class localizedNameForVisibilityType:EOAOsmUploadGPXVisibilityPublic];
     
-    OATableRowData *publicCell = [OATableRowData rowData];
+    OATableRowData *publicCell = [section createNewRow];
     [publicCell setCellType:[OASettingsTitleTableViewCell getCellIdentifier]];
     [publicCell setTitle:[self.class localizedNameForVisibilityType:EOAOsmUploadGPXVisibilityPublic]];
     [publicCell setObj:@(_selectedVisibility == EOAOsmUploadGPXVisibilityPublic) forKey:@"selected"];
     [publicCell setObj: (^void(){ [self onVisibilityChanged:EOAOsmUploadGPXVisibilityPublic]; }) forKey:@"actionBlock"];
-    [section addRow:publicCell];
     
-    OATableRowData *identifiableCell = [OATableRowData rowData];
+    OATableRowData *identifiableCell = [section createNewRow];
     [identifiableCell setCellType:[OASettingsTitleTableViewCell getCellIdentifier]];
     [identifiableCell setTitle:[self.class localizedNameForVisibilityType:EOAOsmUploadGPXVisibilityIdentifiable]];
     [identifiableCell setObj:@(_selectedVisibility == EOAOsmUploadGPXVisibilityIdentifiable) forKey:@"selected"];
     [identifiableCell setObj: (^void(){ [self onVisibilityChanged:EOAOsmUploadGPXVisibilityIdentifiable]; }) forKey:@"actionBlock"];
-    [section addRow:identifiableCell];
     
-    OATableRowData *trackableCell = [OATableRowData rowData];
+    OATableRowData *trackableCell = [section createNewRow];
     [trackableCell setCellType:[OASettingsTitleTableViewCell getCellIdentifier]];
     [trackableCell setTitle:[self.class localizedNameForVisibilityType:EOAOsmUploadGPXVisibilityTrackable]];
     [trackableCell setObj:@(_selectedVisibility == EOAOsmUploadGPXVisibilityTrackable) forKey:@"selected"];
     [trackableCell setObj: (^void(){ [self onVisibilityChanged:EOAOsmUploadGPXVisibilityTrackable]; }) forKey:@"actionBlock"];
-    [section addRow:trackableCell];
     
-    OATableRowData *privateCell = [OATableRowData rowData];
+    OATableRowData *privateCell = [section createNewRow];
     [privateCell setCellType:[OASettingsTitleTableViewCell getCellIdentifier]];
     [privateCell setTitle:[self.class localizedNameForVisibilityType:EOAOsmUploadGPXVisibilityPrivate]];
     [privateCell setObj:@(_selectedVisibility == EOAOsmUploadGPXVisibilityPrivate) forKey:@"selected"];
     [privateCell setObj: (^void(){ [self onVisibilityChanged:EOAOsmUploadGPXVisibilityPrivate]; }) forKey:@"actionBlock"];
-    [section addRow:privateCell];
-    
-    [_data addSection:section];
 }
 
 + (NSString *) localizedNameForVisibilityType:(EOAOsmUploadGPXVisibility)visibility

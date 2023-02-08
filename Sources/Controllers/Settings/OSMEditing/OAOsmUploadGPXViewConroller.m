@@ -118,50 +118,41 @@
         _progressBarCell = [self getProgressBarCell];
         _progressValueCell = [self getProgressValueCell];
         
-        OATableSectionData *uploadingSection = [OATableSectionData sectionData];
+        OATableSectionData *uploadingSection = [_data createNewSection];
         uploadingSection.headerText = @" ";
-        OATableRowData *progressValueCell = [OATableRowData rowData];
+        OATableRowData *progressValueCell = [uploadingSection createNewRow];
         [progressValueCell setCellType:[OAValueTableViewCell getCellIdentifier]];
-        [uploadingSection addRow:progressValueCell];
-        OATableRowData *progressBarCell = [OATableRowData rowData];
+        OATableRowData *progressBarCell = [uploadingSection createNewRow];
         [progressBarCell setCellType:[OAProgressBarCell getCellIdentifier]];
-        [uploadingSection addRow:progressBarCell];
-        [_data addSection:uploadingSection];
     }
     else
     {
-        OATableSectionData *descriptionSection = [OATableSectionData sectionData];
+        OATableSectionData *descriptionSection = [_data createNewSection];
         descriptionSection.headerText = OALocalizedString(@"shared_string_description");
         descriptionSection.footerText = OALocalizedString(@"osm_upload_gpx_description_footer");
-        OATableRowData *descriptionTextInputCell = [OATableRowData rowData];
+        OATableRowData *descriptionTextInputCell = [descriptionSection createNewRow];
         [descriptionTextInputCell setCellType:[OAInputTableViewCell getCellIdentifier]];
         [descriptionTextInputCell setTitle:_descriptionText];
         [descriptionTextInputCell setObj:@(kDescriptionTextFieldTag) forKey:@"tag"];
-        [descriptionSection addRow:descriptionTextInputCell];
-        [_data addSection:descriptionSection];
         
-        OATableSectionData *tagsSection = [OATableSectionData sectionData];
+        OATableSectionData *tagsSection = [_data createNewSection];
         tagsSection.headerText = OALocalizedString(@"gpx_tags_txt");
         tagsSection.footerText = OALocalizedString(@"osm_upload_gpx_tags_footer");
-        OATableRowData *tagsTextInputCell = [OATableRowData rowData];
+        OATableRowData *tagsTextInputCell = [tagsSection createNewRow];
         [tagsTextInputCell setCellType:[OAInputTableViewCell getCellIdentifier]];
         [tagsTextInputCell setTitle:_tagsText];
         [tagsTextInputCell setObj:@(kTagsTextFieldsTag) forKey:@"tag"];
-        [tagsSection addRow:tagsTextInputCell];
-        [_data addSection:tagsSection];
         
-        OATableSectionData *visibilitySection = [OATableSectionData sectionData];
-        OATableRowData *visibilityCell = [OATableRowData rowData];
+        OATableSectionData *visibilitySection = [_data createNewSection];
+        OATableRowData *visibilityCell = [visibilitySection createNewRow];
         [visibilityCell setCellType:[OASettingsTableViewCell getCellIdentifier]];
         [visibilityCell setTitle:OALocalizedString(@"visibility")];
         [visibilityCell setDescr:[OAOsmUploadGPXVisibilityViewConroller localizedNameForVisibilityType:_selectedVisibility]];
         [visibilityCell setObj: (^void(){ [self onVisibilityButtonClicked]; }) forKey:@"actionBlock"];
-        [visibilitySection addRow:visibilityCell];
-        [_data addSection:visibilitySection];
         
-        OATableSectionData *accountSection = [OATableSectionData sectionData];
+        OATableSectionData *accountSection = [_data createNewSection];
         accountSection.headerText = OALocalizedString(@"login_account");
-        OATableRowData *accountCell = [OATableRowData rowData];
+        OATableRowData *accountCell = [accountSection createNewRow];
         [accountCell setCellType:[OASimpleTableViewCell getCellIdentifier]];
         [accountCell setTitle: _isLogged ? [_settings.osmUserName get] : OALocalizedString(@"login_open_street_map_org")];
         [accountCell setIconName:@"ic_custom_user_profile"];
@@ -169,8 +160,6 @@
         [accountCell setObj:([UIFont systemFontOfSize:17. weight:_isLogged ? UIFontWeightRegular : UIFontWeightMedium]) forKey:@"title_font"];
         [accountCell setObj:(_isLogged ? @(UITableViewCellAccessoryDisclosureIndicator) : @(UITableViewCellAccessoryNone)) forKey:@"accessory_type"];
         [accountCell setObj: (^void(){ [self onAccountButtonClicked]; }) forKey:@"actionBlock"];
-        [accountSection addRow:accountCell];
-        [_data addSection:accountSection];
     }
 }
 

@@ -510,7 +510,7 @@
 "map_widget_next_turn" = "Następny zakręt";
 "map_widget_next_turn_small" = "Następny zakręt (mały)";
 "map_widget_next_next_turn" = "Drugi zakręt";
-"always_center_position_on_map" = "Zawsze wyśrodkowane położenie";
+"always_center_position_on_map" = "Pozycjonowanie zawsze na środku";
 "map_widget_appearance_rem" = "Pozostałe elementy";
 "map_widget_compass" = "Kompas";
 "map_widget_intermediate_distance" = "Cel pośredni trasy";

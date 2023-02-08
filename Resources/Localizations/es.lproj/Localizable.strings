@@ -2789,3 +2789,5 @@
 "shared_string_keep_active" = "Mantener";
 "privacy_and_security" = "Privacidad y seguridad";
 "lang_zh-Hans" = "Chino (simplificado)";
+"ltr_or_rtl_combine_via_comma" = "%@, %@";
+"exit_number" = "Número de la salida";

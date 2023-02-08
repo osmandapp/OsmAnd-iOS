@@ -624,7 +624,7 @@
 "show_warnings_title" = "Warnungen anzeigen…";
 "show_warnings_descr" = "Verkehrswarnungen (Tempolimits, Stoppzeichen, Rüttelschwellen, Tunnel), Blitzerwarner und Fahrspuranzeige konfigurieren.";
 "speak_title" = "Ansagen…";
-"speak_descr" = "Ansagen zu Straßennamen, Verkehrswarnungen (Stoppzeichen, Rüttelschwellen), Blitzerwarnern und Tempolimits konfigurieren.";
+"speak_descr" = "Ansagen zu Straßennamen, Verkehrswarnungen (Stoppzeichen, Rüttelschwellen), Blitzerwarnern und Tempolimits konfigurieren";
 "keep_informing" = "Navigationsanweisungen wiederholen";
 "keep_informing_descr" = "Navigationsanweisungen in regelmäßigen Abständen wiederholen.";
 "arrival_distance" = "Zielankündigung";
@@ -2805,3 +2805,17 @@
 "speed_camera_pois" = "Blitzer-POIs";
 "osmand_default_routing" = "OsmAnd-Routenführung";
 "lang_zh-Hans" = "Chinesisch (vereinfacht)";
+"announce_when_exceeded" = "Meldung bei Überschreitung";
+"user_points" = "Anwenderpunkte";
+"exit_number" = "Ausfahrtnummer";
+"speak_gps_signal_status" = "GPS-Signalverlust und Wiederherstellung ankündigen";
+"speak_route_recalculation" = "Neuberechnung der Route ankündigen";
+"announcement_time_title" = "Ansagezeitpunkt";
+"announcement_time_descr" = "Der Zeitpunkt der verschiedenen Sprachansagen hängt von Ansagetyp, aktueller Navigationsgeschwindigkeit und Standard-Navigationsgeschwindigkeit ab.";
+"announcement_time_intervals" = "Zeit- und Entfernungsintervalle";
+"announcement_time_arrive" = "Ankunft am Ziel";
+"announcement_time_off_route" = "Abweichung von der Route";
+"announcement_time_prepare" = "Zweite Ankündigung (mittlere Distanz)";
+"announcement_time_prepare_long" = "Erste Ankündigung (größere Distanz)";
+"announcement_time_approach" = "Annäherung ans Ziel";
+"announcement_time_passing" = "Beim Passieren";

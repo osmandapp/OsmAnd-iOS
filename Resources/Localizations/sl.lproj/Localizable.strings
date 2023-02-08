@@ -2052,11 +2052,13 @@
 "osm_edit_reopened_note" = "Ponovno odprte opombe OSM";
 "srtm_plugin_description" = "Informacije o terenu, kot so izohipse, senčenje terena in naklon, ti pomagajo vizualno oceniti lego zemlje in relief, navigacijo in drugo. Topografske informacije na zemljevidu so lahko predstavljene s senčenjem naklonov, izohipsami in/ali barvanjem strmine.\n\nOsnovni podatki izvirajo iz SRTM in ASTER.\n\nNadaljnje branje na http://osmand.net/docs/user/plugins/contour-lines .";
 "kg" = "kg";
-"weather_plugin_description" = "Zagotavlja:\n- 24-urno in 7-dnevno vremensko napoved s petimi plastmi";
-"\n- gradniki, ki temeljijo na lokaciji;"  "";
-"\n- izoterme in izobare (izočrte temperature in zračnega tlaka)."  "";
-"\n"  "";
-"\nVremenske podatke zagotavlja globalni sistem napovedi (Global Forecast System - GFS, https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast ).\";"  "";
+
+"weather_plugin_description" = "Zagotavlja:\n- 24-urno in 7-dnevno vremensko napoved s petimi plastmi
+\n- gradniki, ki temeljijo na lokaciji
+\n- izoterme in izobare (izočrte temperature in zračnega tlaka).
+\n
+\nVremenske podatke zagotavlja globalni sistem napovedi (Global Forecast System - GFS, https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast ).";
+
 "plugin_nautical_descr" = "Obogati zemljevid z informacijami o plovnih poteh, navigacijskih lučeh, navtičnih nevarnih območjih, območjih z omejitvami jadranja ali privezovanja itd. Za uporabo prenesi ustrezne navtične karte in omogočite slog »Navtična karta« pod »Konfiguriraj zemljevid«.\n\nNadaljnje branje na https://osmand.net/docs/user/plugins/nautical-charts .";
 "open_place_reviews_plugin_description" = "Prispevaj k projektu OpenPlaceReviews, kot npr. fotografije, ocene, povezave o javnih mestih, kot so restavracije, hoteli, ali muzeji.\n\nNavodila za prispevanje najdeš na naši spletni strani https://osmand.net/docs/user/plugins/openplacereviews .";
 "m" = "m";

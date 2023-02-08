@@ -2796,3 +2796,5 @@
 "announcement_time_title" = "Momento del anuncio";
 "user_points" = "Puntos del usuario";
 "speak_route_recalculation" = "Anunciar un nuevo cálculo de la ruta";
+"announcement_time_intervals" = "Intervalos de tiempo y distancia";
+"announcement_time_descr" = "El tiempo de anuncio de las diferentes indicaciones de voz depende del tipo de indicación, la velocidad de la navegación actual y la velocidad de la navegación predeterminada.";

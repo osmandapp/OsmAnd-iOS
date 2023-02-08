@@ -16,113 +16,18 @@
 #import "OAPointDescCell.h"
 #import "OAUtilities.h"
 #import "OADistanceDirection.h"
+#import "OARootViewController.h"
+#import "OAColors.h"
+#import "OATableDataModel.h"
+#import "OATableSectionData.h"
+#import "OATableRowData.h"
+#import "OALargeImageTitleDescrTableViewCell.h"
+#import "OAFilledButtonCell.h"
+#import "OASearchHistoryTableItem.h"
+#import "OASearchHistoryTableGroup.h"
+#import "OAHistorySettingsViewController.h"
 
 #include <OsmAndCore/Utilities.h>
-
-
-@interface SearchHistoryTableItem : NSObject
-
-@property (nonatomic) OAHistoryItem *item;
-
-- (OADistanceDirection *) getEvaluatedDistanceDirection:(BOOL)decelerating;
-- (void) setMapCenterCoordinate:(CLLocationCoordinate2D)mapCenterCoordinate;
-- (void) resetMapCenterSearch;
-
-@end
-
-@implementation SearchHistoryTableItem
-{
-    OADistanceDirection *_distanceDirection;
-}
-
-- (instancetype)initWithItem:(OAHistoryItem *)item
-{
-    self = [super init];
-    if (self)
-    {
-        _item = item;
-        _distanceDirection = [[OADistanceDirection alloc] initWithLatitude:item.latitude longitude:item.longitude];
-    }
-    return self;
-}
-
-- (instancetype)initWithItem:(OAHistoryItem *)item mapCenterCoordinate:(CLLocationCoordinate2D)mapCenterCoordinate
-{
-    self = [super init];
-    if (self)
-    {
-        _item = item;
-        _distanceDirection = [[OADistanceDirection alloc] initWithLatitude:item.latitude longitude:item.longitude mapCenterCoordinate:mapCenterCoordinate];
-    }
-    return self;
-}
-
--(void)setItem:(OAHistoryItem *)item
-{
-    _item = item;
-    _distanceDirection = [[OADistanceDirection alloc] initWithLatitude:item.latitude longitude:item.longitude];
-}
-
-- (OADistanceDirection *) getEvaluatedDistanceDirection:(BOOL)decelerating
-{
-    if (_distanceDirection)
-        [_distanceDirection evaluateDistanceDirection:decelerating];
-    
-    return _distanceDirection;
-}
-
-- (void) setMapCenterCoordinate:(CLLocationCoordinate2D)mapCenterCoordinate
-{
-    if (_distanceDirection)
-        [_distanceDirection setMapCenterCoordinate:mapCenterCoordinate];
-}
-
-- (void) resetMapCenterSearch
-{
-    if (_distanceDirection)
-        [_distanceDirection resetMapCenterSearch];
-}
-
-
-@end
-
-
-@interface SearchHistoryTableGroup : NSObject
-
-@property NSString *groupName;
-@property NSMutableArray *groupItems;
-
-@end
-
-@implementation SearchHistoryTableGroup
-
-- (id)init
-{
-    self = [super init];
-    if (self)
-    {
-        self.groupItems = [NSMutableArray array];
-    }
-    return self;
-}
-
--(BOOL)isEqual:(id)object
-{
-    if (self == object)
-        return YES;
-    
-    SearchHistoryTableGroup *item = object;
-    
-    return [self.groupName isEqualToString:item.groupName];
-}
-
--(NSUInteger)hash
-{
-    return [self.groupName hash];
-}
-
-@end
-
 
 @interface OAHistoryTableViewController () <OAMultiselectableHeaderDelegate, UIAlertViewDelegate, UIGestureRecognizerDelegate>
 
@@ -132,9 +37,12 @@
 
 @implementation OAHistoryTableViewController
 {
+    OAAppSettings *_settings;
+    OATableDataModel *_data;
     BOOL _decelerating;
     NSArray *_headerViews;
     BOOL _wasAnyDeleted;
+    BOOL _isSearchLoggingDisabled;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame
@@ -165,6 +73,8 @@
     [super viewWillAppear:animated];
 
     _decelerating = NO;
+    _settings = [OAAppSettings sharedManager];
+    _isSearchLoggingDisabled = ![_settings.defaultSearchHistoryLoggingApplicationMode get];
     [self reloadData];
 }
 
@@ -209,10 +119,18 @@
 
 -(void)reloadData
 {
-    [self generateData];
-    if (self.groupsAndItems.count > 0)
-        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
-    [self updateDistanceAndDirection];
+    if (_isSearchLoggingDisabled)
+    {
+        [self generateData];
+        [self.tableView reloadData];
+    }
+    else
+    {
+        [self generateData];
+        if (self.groupsAndItems.count > 0)
+            [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+        [self updateDistanceAndDirection];
+    }
 }
 
 - (NSTimeInterval)beginningOfToday
@@ -235,91 +153,113 @@
 
 -(void)generateData:(BOOL)doReload
 {
-    self.groupsAndItems = [NSMutableArray array];
-    NSMutableArray *headerViews = [NSMutableArray array];
+    _data = [[OATableDataModel alloc] init];
     
-    OAHistoryHelper *helper = [OAHistoryHelper sharedInstance];
-    NSArray *allItems = [helper getPointsHavingTypes:helper.searchTypes limit:0];
-    
-    NSTimeInterval todayBeginTime = [self beginningOfToday];
-    NSTimeInterval yesterdayBeginTime = todayBeginTime - 60 * 60 * 24;
-    
-    NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
-    [fmt setDateFormat:@"LLLL - yyyy"];
-    
-    OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(_myLocation);
-    CLLocationCoordinate2D myLocation = CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
-
-    for (OAHistoryItem *item in allItems)
+    if (_isSearchLoggingDisabled)
     {
-        NSString *groupName;
-        NSTimeInterval time = [item.date timeIntervalSince1970];
-        if (time < yesterdayBeginTime)
-        {
-            groupName = [fmt stringFromDate:item.date];
-        }
-        else if (time < todayBeginTime)
-        {
-            groupName = @"1";
-        }
-        else
-        {
-            groupName = @"0";
-        }
+        OATableSectionData *existingBackupSection = [OATableSectionData sectionData];
+        [existingBackupSection addRowFromDictionary:@{
+            kCellTypeKey: OALargeImageTitleDescrTableViewCell.getCellIdentifier,
+            kCellKeyKey: @"existingOnlineBackup",
+            kCellTitleKey: OALocalizedString(@"search_history_disabled"),
+            kCellDescrKey: OALocalizedString(@"enable_search_history"),
+            kCellIconNameKey: @"ic_custom_history_disabled_48"
+        }];
+        [existingBackupSection addRowFromDictionary:@{
+            kCellTypeKey: OAFilledButtonCell.getCellIdentifier,
+            kCellKeyKey: @"onHistorySettingsButtonPressed",
+            kCellTitleKey: OALocalizedString(@"sett_settings")
+        }];
+        [_data addSection:existingBackupSection];
+    }
+    else
+    {
+        self.groupsAndItems = [NSMutableArray array];
+        NSMutableArray *headerViews = [NSMutableArray array];
         
-        SearchHistoryTableGroup *grp;
-        for (SearchHistoryTableGroup *g in self.groupsAndItems)
-            if ([g.groupName isEqualToString:groupName])
+        OAHistoryHelper *helper = [OAHistoryHelper sharedInstance];
+        NSArray *allItems = [helper getPointsHavingTypes:helper.searchTypes limit:0];
+        
+        NSTimeInterval todayBeginTime = [self beginningOfToday];
+        NSTimeInterval yesterdayBeginTime = todayBeginTime - 60 * 60 * 24;
+        
+        NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
+        [fmt setDateFormat:@"LLLL - yyyy"];
+        
+        OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(_myLocation);
+        CLLocationCoordinate2D myLocation = CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
+        
+        for (OAHistoryItem *item in allItems)
+        {
+            NSString *groupName;
+            NSTimeInterval time = [item.date timeIntervalSince1970];
+            if (time < yesterdayBeginTime)
             {
-                grp = g;
-                break;
+                groupName = [fmt stringFromDate:item.date];
             }
-        
-        if (!grp)
-        {
-            grp = [[SearchHistoryTableGroup alloc] init];
-            grp.groupName = groupName;
-            [self.groupsAndItems addObject:grp];
+            else if (time < todayBeginTime)
+            {
+                groupName = @"1";
+            }
+            else
+            {
+                groupName = @"0";
+            }
+            
+            OASearchHistoryTableGroup *grp;
+            for (OASearchHistoryTableGroup *g in self.groupsAndItems)
+                if ([g.groupName isEqualToString:groupName])
+                {
+                    grp = g;
+                    break;
+                }
+            
+            if (!grp)
+            {
+                grp = [[OASearchHistoryTableGroup alloc] init];
+                grp.groupName = groupName;
+                [self.groupsAndItems addObject:grp];
+            }
+            
+            OASearchHistoryTableItem *tableItem;
+            if (_searchNearMapCenter)
+                tableItem = [[OASearchHistoryTableItem alloc] initWithItem:item mapCenterCoordinate:myLocation];
+            else
+                tableItem = [[OASearchHistoryTableItem alloc] initWithItem:item];
+            
+            [grp.groupItems addObject:tableItem];
         }
         
-        SearchHistoryTableItem *tableItem;
-        if (_searchNearMapCenter)
-            tableItem = [[SearchHistoryTableItem alloc] initWithItem:item mapCenterCoordinate:myLocation];
-        else
-            tableItem = [[SearchHistoryTableItem alloc] initWithItem:item];
+        // Sort items
+        /*
+         NSArray *sortedArrayGroups = [self.groupsAndItems sortedArrayUsingComparator:^NSComparisonResult(SearchHistoryTableGroup* obj1, SearchHistoryTableGroup* obj2) {
+         return [obj1.groupName localizedCaseInsensitiveCompare:obj2.groupName];
+         }];
+         [self.groupsAndItems setArray:sortedArrayGroups];
+         */
         
-        [grp.groupItems addObject:tableItem];
-    }
-    
-    // Sort items
-    /*
-    NSArray *sortedArrayGroups = [self.groupsAndItems sortedArrayUsingComparator:^NSComparisonResult(SearchHistoryTableGroup* obj1, SearchHistoryTableGroup* obj2) {
-        return [obj1.groupName localizedCaseInsensitiveCompare:obj2.groupName];
-    }];
-    [self.groupsAndItems setArray:sortedArrayGroups];
-     */
-    
-    int i = 0;
-    for (SearchHistoryTableGroup *group in self.groupsAndItems)
-    {
-        // add header
-        OAMultiselectableHeaderView *headerView = [[OAMultiselectableHeaderView alloc] initWithFrame:CGRectMake(0.0, 1.0, 100.0, 44.0)];
-        if ([group.groupName isEqualToString:@"0"])
-            [headerView setTitleText:OALocalizedString(@"today")];
-        else if ([group.groupName isEqualToString:@"1"])
-            [headerView setTitleText:OALocalizedString(@"yesterday")];
-        else
-            [headerView setTitleText:group.groupName];
+        int i = 0;
+        for (OASearchHistoryTableGroup *group in self.groupsAndItems)
+        {
+            // add header
+            OAMultiselectableHeaderView *headerView = [[OAMultiselectableHeaderView alloc] initWithFrame:CGRectMake(0.0, 1.0, 100.0, 44.0)];
+            if ([group.groupName isEqualToString:@"0"])
+                [headerView setTitleText:OALocalizedString(@"today")];
+            else if ([group.groupName isEqualToString:@"1"])
+                [headerView setTitleText:OALocalizedString(@"yesterday")];
+            else
+                [headerView setTitleText:group.groupName];
+            
+            headerView.section = i++;
+            headerView.delegate = self;
+            [headerViews addObject:headerView];
+        }
         
-        headerView.section = i++;
-        headerView.delegate = self;
-        [headerViews addObject:headerView];
+        if (doReload)
+            [self.tableView reloadData];
+        
+        _headerViews = [NSArray arrayWithArray:headerViews];
     }
-    
-    if (doReload)
-        [self.tableView reloadData];
-    
-    _headerViews = [NSArray arrayWithArray:headerViews];
 }
 
 -(void)setSearchNearMapCenter:(BOOL)searchNearMapCenter
@@ -328,8 +268,8 @@
     
     OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(_myLocation);
     CLLocationCoordinate2D myLocation = CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
-    for (SearchHistoryTableGroup *group in self.groupsAndItems)
-        for (SearchHistoryTableItem *dataItem in group.groupItems)
+    for (OASearchHistoryTableGroup *group in self.groupsAndItems)
+        for (OASearchHistoryTableItem *dataItem in group.groupItems)
         {
             if (searchNearMapCenter)
                 [dataItem setMapCenterCoordinate:myLocation];
@@ -358,8 +298,8 @@
         for (NSIndexPath *i in visibleIndexPaths)
         {
             OAPointDescCell *cell = (OAPointDescCell *)[self.tableView cellForRowAtIndexPath:i];
-            SearchHistoryTableGroup *groupData = [self.groupsAndItems objectAtIndex:i.section];
-            SearchHistoryTableItem *dataItem = [groupData.groupItems objectAtIndex:i.row];
+            OASearchHistoryTableGroup *groupData = [self.groupsAndItems objectAtIndex:i.section];
+            OASearchHistoryTableItem *dataItem = [groupData.groupItems objectAtIndex:i.row];
             [self updateCell:cell dataItem:dataItem];
         }
         [self.tableView endUpdates];
@@ -384,11 +324,18 @@
     NSMutableArray* itemList = [[NSMutableArray alloc] init];
     
     [indexPath enumerateObjectsUsingBlock:^(NSIndexPath* path, NSUInteger idx, BOOL *stop) {
-        SearchHistoryTableGroup* groupData = [self.groupsAndItems objectAtIndex:path.section];
+        OASearchHistoryTableGroup* groupData = [self.groupsAndItems objectAtIndex:path.section];
         [itemList addObject:[groupData.groupItems objectAtIndex:path.row]];
     }];
     
     return itemList;
+}
+
+-(void)onHistorySettingsButtonPressed
+{
+    OAHistorySettingsViewController* historyViewController = [[OAHistorySettingsViewController alloc] initWithSettingsType:EOASearchHistoryProfile];
+    [self dismissViewControllerAnimated:YES completion:nil];
+    [OARootViewController.instance.navigationController pushViewController:historyViewController animated:YES];
 }
 
 #pragma mark - UIAlertViewDelegate
@@ -401,7 +348,7 @@
         NSArray* selectedItems = [self getItemsForRows:selectedRows];
         
         NSMutableArray *arr = [NSMutableArray array];
-        for (SearchHistoryTableItem* dataItem in selectedItems)
+        for (OASearchHistoryTableItem* dataItem in selectedItems)
             [arr addObject:dataItem.item];
         
         [[OAHistoryHelper sharedInstance] removePoints:arr];
@@ -441,27 +388,32 @@
         [self.delegate historyItemsSelected:(int)([self.tableView indexPathsForSelectedRows].count)];
 }
 
-- (void)updateCell:(OAPointDescCell *)cell dataItem:(SearchHistoryTableItem *)dataItem
+- (void)updateCell:(OAPointDescCell *)cell dataItem:(OASearchHistoryTableItem *)dataItem
 {
-    [cell.titleView setText:dataItem.item.name];
-    cell.titleIcon.image = [dataItem.item icon];
-    [cell.descView setText:dataItem.item.typeName.length > 0 ? dataItem.item.typeName : OALocalizedString(@"history")];
-    cell.openingHoursView.hidden = YES;
-    cell.timeIcon.hidden = YES;
-    
-    OADistanceDirection *distDir = [dataItem getEvaluatedDistanceDirection:_decelerating];
-    
-    [cell.distanceView setText:distDir.distance];
-    if (_searchNearMapCenter)
-    {
-        cell.directionImageView.hidden = YES;
-        cell.distanceViewLeadingOutlet.constant = 16;
-    }
+    if (_isSearchLoggingDisabled)
+        return;
     else
     {
-        cell.directionImageView.hidden = NO;
-        cell.distanceViewLeadingOutlet.constant = 34;
-        cell.directionImageView.transform = CGAffineTransformMakeRotation(distDir.direction);
+        [cell.titleView setText:dataItem.item.name];
+        cell.titleIcon.image = [dataItem.item icon];
+        [cell.descView setText:dataItem.item.typeName.length > 0 ? dataItem.item.typeName : OALocalizedString(@"history")];
+        cell.openingHoursView.hidden = YES;
+        cell.timeIcon.hidden = YES;
+        
+        OADistanceDirection *distDir = [dataItem getEvaluatedDistanceDirection:_decelerating];
+        
+        [cell.distanceView setText:distDir.distance];
+        if (_searchNearMapCenter)
+        {
+            cell.directionImageView.hidden = YES;
+            cell.distanceViewLeadingOutlet.constant = 16;
+        }
+        else
+        {
+            cell.directionImageView.hidden = NO;
+            cell.distanceViewLeadingOutlet.constant = 34;
+            cell.directionImageView.transform = CGAffineTransformMakeRotation(distDir.direction);
+        }
     }
 }
 
@@ -469,7 +421,10 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return [self.groupsAndItems count];
+    if (_isSearchLoggingDisabled)
+        return _data.sectionCount;
+    else
+        return [self.groupsAndItems count];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -487,33 +442,89 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    return _headerViews[section];
+    if (_isSearchLoggingDisabled)
+        return  nil;
+    else
+        return _headerViews[section];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [((SearchHistoryTableGroup*)[self.groupsAndItems objectAtIndex:section]).groupItems count];
+    if (_isSearchLoggingDisabled)
+        return [_data rowCount:section];
+    else
+        return [((OASearchHistoryTableGroup*)[self.groupsAndItems objectAtIndex:section]).groupItems count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    SearchHistoryTableGroup* groupData = [self.groupsAndItems objectAtIndex:indexPath.section];
-    
-    OAPointDescCell* cell;
-    cell = (OAPointDescCell *)[self.tableView dequeueReusableCellWithIdentifier:[OAPointDescCell getCellIdentifier]];
-    if (cell == nil)
+    if (_isSearchLoggingDisabled)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPointDescCell getCellIdentifier] owner:self options:nil];
-        cell = (OAPointDescCell *)[nib objectAtIndex:0];
+        OATableRowData *item = [_data itemForIndexPath:indexPath];
+        NSString *cellId = item.cellType;
+        if ([cellId isEqualToString:OALargeImageTitleDescrTableViewCell.getCellIdentifier])
+        {
+            OALargeImageTitleDescrTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:OALargeImageTitleDescrTableViewCell.getCellIdentifier];
+            if (cell == nil)
+            {
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OALargeImageTitleDescrTableViewCell getCellIdentifier] owner:self options:nil];
+                cell = (OALargeImageTitleDescrTableViewCell *)[nib objectAtIndex:0];
+                cell.separatorInset = UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.);
+                [cell showButton:NO];
+            }
+            cell.titleLabel.text = item.title;
+            cell.descriptionLabel.text = item.descr;
+            [cell.cellImageView setImage:[UIImage templateImageNamed:item.iconName]];
+            cell.cellImageView.tintColor = UIColorFromRGB(color_tint_gray);
+            
+            if (cell.needsUpdateConstraints)
+                [cell updateConstraints];
+            
+            return cell;
+        }
+        else if ([cellId isEqualToString:OAFilledButtonCell.getCellIdentifier])
+        {
+            OAFilledButtonCell* cell = [tableView dequeueReusableCellWithIdentifier:OAFilledButtonCell.getCellIdentifier];
+            if (cell == nil)
+            {
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAFilledButtonCell getCellIdentifier] owner:self options:nil];
+                cell = (OAFilledButtonCell *)[nib objectAtIndex:0];
+                cell.button.backgroundColor = [UIColorFromRGB(color_primary_purple) colorWithAlphaComponent:0.1];
+                [cell.button setTitleColor:[UIColorFromRGB(color_primary_purple) colorWithAlphaComponent:1.0] forState:UIControlStateHighlighted];
+                cell.button.titleLabel.font = [UIFont systemFontOfSize:15. weight:UIFontWeightSemibold];
+                cell.button.layer.cornerRadius = 9.;
+                cell.topMarginConstraint.constant = 9.;
+                cell.bottomMarginConstraint.constant = 20.;
+                cell.heightConstraint.constant = 42.;
+                cell.leadingConstraint.constant = 100.;
+                cell.trailingConstraint.constant = 100.;
+                cell.separatorInset = UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.);
+            }
+            [cell.button setTitle:item.title forState:UIControlStateNormal];
+            [cell.button addTarget:self action:NSSelectorFromString(item.key) forControlEvents:UIControlEventTouchUpInside];
+            return cell;
+        }
     }
-    
-    if (cell)
+    else
     {
-        SearchHistoryTableItem* dataItem = [groupData.groupItems objectAtIndex:indexPath.row];
-        [self updateCell:cell dataItem:dataItem];
+        OASearchHistoryTableGroup* groupData = [self.groupsAndItems objectAtIndex:indexPath.section];
+        
+        OAPointDescCell* cell;
+        cell = (OAPointDescCell *)[self.tableView dequeueReusableCellWithIdentifier:[OAPointDescCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPointDescCell getCellIdentifier] owner:self options:nil];
+            cell = (OAPointDescCell *)[nib objectAtIndex:0];
+        }
+        
+        if (cell)
+        {
+            OASearchHistoryTableItem* dataItem = [groupData.groupItems objectAtIndex:indexPath.row];
+            [self updateCell:cell dataItem:dataItem];
+        }
+        return cell;
     }
-    
-    return cell;
+    return nil;
 }
 
 -(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
@@ -533,8 +544,8 @@
         }
         else
         {
-            SearchHistoryTableGroup* groupData = [self.groupsAndItems objectAtIndex:indexPath.section];
-            SearchHistoryTableItem* dataItem = [groupData.groupItems objectAtIndex:indexPath.row];
+            OASearchHistoryTableGroup* groupData = [self.groupsAndItems objectAtIndex:indexPath.section];
+            OASearchHistoryTableItem* dataItem = [groupData.groupItems objectAtIndex:indexPath.row];
             [self.delegate didSelectHistoryItem:dataItem.item];
         }
     }

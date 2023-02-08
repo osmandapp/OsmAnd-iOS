@@ -1422,7 +1422,11 @@
 		BBA3AFDF197FC4BB0039D991 /* regions.ocbf in Resources */ = {isa = PBXBuildFile; fileRef = BBE1D2B5190D1C9600D90F0A /* regions.ocbf */; };
 		C53920C2291E4E770076D5BB /* ic_custom_van@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C53920C0291E4E770076D5BB /* ic_custom_van@2x.png */; };
 		C53920C3291E4E770076D5BB /* ic_custom_van@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C53920C1291E4E770076D5BB /* ic_custom_van@3x.png */; };
-		C5D4D7312987C56000D3BC04 /* OAHistorySettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C5D4D72F2987C56000D3BC04 /* OAHistorySettingsViewController.m */; };
+		C588D1EC298BF2D3001FEDBD /* OASearchHistoryTableItem.m in Sources */ = {isa = PBXBuildFile; fileRef = C588D1EB298BF2D3001FEDBD /* OASearchHistoryTableItem.m */; };
+		C588D1EF298D1ECE001FEDBD /* OASearchHistoryTableGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = C588D1EE298D1ECE001FEDBD /* OASearchHistoryTableGroup.m */; };
+		C588D1F22992A448001FEDBD /* ic_custom_history_disabled_48@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C588D1F02992A447001FEDBD /* ic_custom_history_disabled_48@2x.png */; };
+		C588D1F32992A448001FEDBD /* ic_custom_history_disabled_48@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C588D1F12992A447001FEDBD /* ic_custom_history_disabled_48@3x.png */; };
+		C5D4D7312987C56000D3BC04 /* OAHistorySettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = C5D4D72F2987C56000D3BC04 /* OAHistorySettingsViewController.mm */; };
 		C5D4D7322987C56000D3BC04 /* OAHistorySettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C5D4D7302987C56000D3BC04 /* OAHistorySettingsViewController.xib */; };
 		C5D8F809292F5B2900C01065 /* ic_custom_download_map@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5D8F808292F5B2900C01065 /* ic_custom_download_map@2x.png */; };
 		C5D8F80B292F5B3A00C01065 /* ic_custom_download_map@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5D8F80A292F5B3A00C01065 /* ic_custom_download_map@3x.png */; };
@@ -4863,8 +4867,14 @@
 		BBE1D2B5190D1C9600D90F0A /* regions.ocbf */ = {isa = PBXFileReference; lastKnownFileType = file; name = regions.ocbf; path = "../resources/countries-info/regions.ocbf"; sourceTree = "<group>"; };
 		C53920C0291E4E770076D5BB /* ic_custom_van@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_van@2x.png"; path = "Resources/Icons/ic_custom_van@2x.png"; sourceTree = "<group>"; };
 		C53920C1291E4E770076D5BB /* ic_custom_van@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_van@3x.png"; path = "Resources/Icons/ic_custom_van@3x.png"; sourceTree = "<group>"; };
+		C588D1EA298BF2D3001FEDBD /* OASearchHistoryTableItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OASearchHistoryTableItem.h; sourceTree = "<group>"; };
+		C588D1EB298BF2D3001FEDBD /* OASearchHistoryTableItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OASearchHistoryTableItem.m; sourceTree = "<group>"; };
+		C588D1ED298D1ECE001FEDBD /* OASearchHistoryTableGroup.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OASearchHistoryTableGroup.h; sourceTree = "<group>"; };
+		C588D1EE298D1ECE001FEDBD /* OASearchHistoryTableGroup.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OASearchHistoryTableGroup.m; sourceTree = "<group>"; };
+		C588D1F02992A447001FEDBD /* ic_custom_history_disabled_48@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_history_disabled_48@2x.png"; path = "Resources/Icons/ic_custom_history_disabled_48@2x.png"; sourceTree = "<group>"; };
+		C588D1F12992A447001FEDBD /* ic_custom_history_disabled_48@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_history_disabled_48@3x.png"; path = "Resources/Icons/ic_custom_history_disabled_48@3x.png"; sourceTree = "<group>"; };
 		C5D4D72E2987C56000D3BC04 /* OAHistorySettingsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAHistorySettingsViewController.h; sourceTree = "<group>"; };
-		C5D4D72F2987C56000D3BC04 /* OAHistorySettingsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAHistorySettingsViewController.m; sourceTree = "<group>"; };
+		C5D4D72F2987C56000D3BC04 /* OAHistorySettingsViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAHistorySettingsViewController.mm; sourceTree = "<group>"; };
 		C5D4D7302987C56000D3BC04 /* OAHistorySettingsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAHistorySettingsViewController.xib; sourceTree = "<group>"; };
 		C5D8F808292F5B2900C01065 /* ic_custom_download_map@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_download_map@2x.png"; path = "Resources/Icons/ic_custom_download_map@2x.png"; sourceTree = "<group>"; };
 		C5D8F80A292F5B3A00C01065 /* ic_custom_download_map@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_download_map@3x.png"; path = "Resources/Icons/ic_custom_download_map@3x.png"; sourceTree = "<group>"; };
@@ -7818,6 +7828,8 @@
 			children = (
 				C5D8F80A292F5B3A00C01065 /* ic_custom_download_map@3x.png */,
 				C5D8F808292F5B2900C01065 /* ic_custom_download_map@2x.png */,
+				C588D1F02992A447001FEDBD /* ic_custom_history_disabled_48@2x.png */,
+				C588D1F12992A447001FEDBD /* ic_custom_history_disabled_48@3x.png */,
 				DA8AD079291D3A830092385B /* ic_custom_cloud_download_outline@2x.png */,
 				DA8AD078291D3A830092385B /* ic_custom_cloud_download_outline@3x.png */,
 				DA8AD07B291D3A840092385B /* ic_custom_cloud_upload_outline@2x.png */,
@@ -11077,7 +11089,7 @@
 				DA5A7B6726C563A100F274C7 /* OAGlobalSettingsViewController.m */,
 				DA5A7B6E26C563A100F274C7 /* OAGlobalSettingsViewController.xib */,
 				C5D4D72E2987C56000D3BC04 /* OAHistorySettingsViewController.h */,
-				C5D4D72F2987C56000D3BC04 /* OAHistorySettingsViewController.m */,
+				C5D4D72F2987C56000D3BC04 /* OAHistorySettingsViewController.mm */,
 				C5D4D7302987C56000D3BC04 /* OAHistorySettingsViewController.xib */,
 				DA5A7B1126C563A100F274C7 /* OAMainSettingsViewController.h */,
 				DA5A7B7126C563A100F274C7 /* OAMainSettingsViewController.m */,
@@ -11998,6 +12010,10 @@
 				DA5A7E2D26C563A400F274C7 /* OAHistoryTableViewController.h */,
 				DA5A7E4726C563A400F274C7 /* OAHistoryTableViewController.mm */,
 				DA5A7E3F26C563A400F274C7 /* OAHistoryTableViewController.xib */,
+				C588D1EA298BF2D3001FEDBD /* OASearchHistoryTableItem.h */,
+				C588D1EB298BF2D3001FEDBD /* OASearchHistoryTableItem.m */,
+				C588D1ED298D1ECE001FEDBD /* OASearchHistoryTableGroup.h */,
+				C588D1EE298D1ECE001FEDBD /* OASearchHistoryTableGroup.m */,
 				DA5A7E3026C563A400F274C7 /* OAPOIFilterViewController.h */,
 				DA5A7E4426C563A400F274C7 /* OAPOIFilterViewController.mm */,
 				DA5A7E4326C563A400F274C7 /* OAPOIFilterViewController.xib */,
@@ -13949,6 +13965,7 @@
 				8420C1CE1B42F2AC004EDAE6 /* ic_dialog_rename@2x.png in Resources */,
 				0CF58566244072EC0081238D /* widget_marker_triangle_pin_4@3x.png in Resources */,
 				DA83602D23449C6B003374B5 /* ic_custom_options@3x.png in Resources */,
+				C588D1F32992A448001FEDBD /* ic_custom_history_disabled_48@3x.png in Resources */,
 				DA5A857326C567B400F274C7 /* OAPluginPopupViewController.xib in Resources */,
 				0A31AFCD26FBAC39000EE842 /* ic_small_speed@2x.png in Resources */,
 				DA5A851126C563A900F274C7 /* OADownloadProgressView.xib in Resources */,
@@ -13971,6 +13988,7 @@
 				1571CE3624ADEE4F00083F92 /* ic_custom_direction_north@3x.png in Resources */,
 				DA134144243DC5A80039D214 /* ic_action_pickup_truck@2x.png in Resources */,
 				1571CE3D24ADEF1900083F92 /* ic_custom_angular_unit@2x.png in Resources */,
+				C588D1F22992A448001FEDBD /* ic_custom_history_disabled_48@2x.png in Resources */,
 				3AFEEE511A0E34FD00900A47 /* menu_icon_back@2x.png in Resources */,
 				841503081DEED6AE007FAC50 /* ic_location_off@3x.png in Resources */,
 				DA5A852126C563A900F274C7 /* OADistanceToMapMarkerControl.xib in Resources */,
@@ -16018,6 +16036,7 @@
 				DA5A82F826C563A800F274C7 /* OASettingsTableViewCell.m in Sources */,
 				DA5A833A26C563A800F274C7 /* OAHomeWorkCell.mm in Sources */,
 				DA5A813226C563A700F274C7 /* OACoreResourcesTransportRouteIconProvider.mm in Sources */,
+				C588D1EF298D1ECE001FEDBD /* OASearchHistoryTableGroup.m in Sources */,
 				DA5A824D26C563A700F274C7 /* OAScreenAlertsViewController.m in Sources */,
 				DA4ABF172876DA6800B996EF /* OAGlobalSettingsItem.mm in Sources */,
 				DA5A81AA26C563A700F274C7 /* OASearchSettings.mm in Sources */,
@@ -16394,6 +16413,7 @@
 				DA5A83DB26C563A800F274C7 /* OASelectFavoriteGroupViewController.mm in Sources */,
 				DA5A854726C563A900F274C7 /* OANetworkUtilities.m in Sources */,
 				B247453827E35E9B00C18C3F /* OACloudIntroductionHeaderView.m in Sources */,
+				C588D1EC298BF2D3001FEDBD /* OASearchHistoryTableItem.m in Sources */,
 				DA5A813A26C563A700F274C7 /* OAEntityInfo.m in Sources */,
 				DA5A846A26C563A900F274C7 /* OADestination.mm in Sources */,
 				DA5A816326C563A700F274C7 /* OADaytimeAppearance.m in Sources */,
@@ -16490,7 +16510,7 @@
 				DA5A84F326C563A900F274C7 /* OAMapViewState.m in Sources */,
 				DA5A814326C563A700F274C7 /* OAOsmBugsLocalUtil.mm in Sources */,
 				DA5A816726C563A700F274C7 /* OAUrlImageCard.m in Sources */,
-				C5D4D7312987C56000D3BC04 /* OAHistorySettingsViewController.m in Sources */,
+				C5D4D7312987C56000D3BC04 /* OAHistorySettingsViewController.mm in Sources */,
 				DA5A848C26C563A900F274C7 /* OASelectTrackFolderViewController.m in Sources */,
 				DA5A856E26C563A900F274C7 /* OAVoiceRouter.mm in Sources */,
 				DA5A835926C563A800F274C7 /* OAIconTextCollapseCell.m in Sources */,

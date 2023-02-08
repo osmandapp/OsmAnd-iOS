@@ -491,8 +491,11 @@
 "map_markers_history" = "Map markers history";
 "clear_history" = "Clear all history";
 "history_clear_alert_title" = "Delete all history";
-"history_clear_alert_message" = "Are you sure you want delete all history items?";
+"history_clear_alert_message" = "Are you sure you want delete all history itemshistory items?";
+"search_history_disabled" = "Search history is disabled";
+"enable_search_history" = "You can enable search history in Settings";
 "history_clear" = "Clear";
+"last_seven_days" = "Last 7 days";
 
 "track_coloring_solid" = "Solid";
 "attribute" = "Attribute";
@@ -1597,6 +1600,7 @@
 "quick_action_name_alert" = "Quick action name was changed to %@ to avoid duplication.";
 "quick_action_screen_header" = "Screen %ld";
 "confirm_bulk_delete" = "Do you want to delete %ld items?";
+"confirm_history_item_delete" = "Are you sure you want to delete (%ld) history items?";
 "quick_action_add_actions_descr" = "Add actions to access them quickly from the map.";
 "quick_actions_show_dialog" = "Show an interim dialog";
 "quick_action_dialog_descr" = "Turn on to show dialog before applying the action";
@@ -2128,6 +2132,7 @@
 "yesterday" = "Yesterday";
 "tomorrow" = "Tomorrow";
 "hist_select_remove" = "Please select history items to remove";
+"delete_history_items" = "Delete history items?";
 "hist_remove_q" = "Do you want to remove history items?";
 "gpx_edit_mode" = "Edit mode";
 "go_to_map" = "Go to Map";

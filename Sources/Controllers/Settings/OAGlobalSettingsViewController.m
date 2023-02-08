@@ -17,6 +17,8 @@
 #import "Localization.h"
 #import "OAColors.h"
 #import "OAHistorySettingsViewController.h"
+#import "OAExportItemsViewController.h"
+#import "OAHistoryHelper.h"
 
 #define kCarplayHeaderTopMargin 40
 #define kDefaultProfileHeaderTopMargin 40
@@ -132,7 +134,7 @@
                                @{
                                    @"name" : @"history_settings",
                                    @"title" : OALocalizedString(@"history_settings"),
-                                   @"value" : [self getDialogsAndNotificationsValue],
+                                   @"value" : ![_settings.defaultSearchHistoryLoggingApplicationMode get] && ![_settings.defaultNavigationHistoryLoggingApplicationMode get] && ![_settings.defaultMarkersHistoryLoggingApplicationMode get] ? OALocalizedString(@"shared_string_off") : @"",
                                    @"img" : @"menu_cell_pointer.png",
                                    @"type" : [OASettingsTableViewCell getCellIdentifier] }]},
                 @{
@@ -202,25 +204,27 @@
         }
         case EOAHistory:
         {
+            OAHistoryHelper *helper = [OAHistoryHelper sharedInstance];
+            NSArray *historyItems = [helper getPointsHavingTypes:helper.searchTypes limit:0];
             _data = @[
                 @{
                     @"header" : @"",
                     @"footer" : OALocalizedString(@"history_footer_text"),
                     @"rows": @[@{  @"name" : @"search_history",
                                    @"title" : OALocalizedString(@"search_history"),
-                                   @"value" : [self getDialogsAndNotificationsValue],
+                                   @"value" : [_settings.defaultSearchHistoryLoggingApplicationMode get] ? [NSString stringWithFormat:@"%ld", historyItems.count] : OALocalizedString(@"shared_string_off"),
                                    @"icon" : @"ic_custom_search",
                                    @"type" : [OAValueTableViewCell getCellIdentifier] },
                                @{
                                    @"name" : @"navigation_history",
                                    @"title" : OALocalizedString(@"navigation_history"),
-                                   @"value" : [self getDialogsAndNotificationsValue],
+                                   @"value" : [_settings.defaultNavigationHistoryLoggingApplicationMode get] ? [NSString stringWithFormat:@"%ld", historyItems.count] : OALocalizedString(@"shared_string_off"),
                                    @"icon" : @"ic_custom_navigation",
                                    @"type" : [OAValueTableViewCell getCellIdentifier] },
                                @{
                                    @"name" : @"map_markers_history",
                                    @"title" : OALocalizedString(@"map_markers_history"),
-                                   @"value" : [self getDialogsAndNotificationsValue],
+                                   @"value" : [_settings.defaultMarkersHistoryLoggingApplicationMode get] ? [NSString stringWithFormat:@"%ld", historyItems.count] : OALocalizedString(@"shared_string_off"),
                                    @"icon" : @"ic_custom_marker",
                                    @"type" : [OAValueTableViewCell getCellIdentifier] }]},
                 @{
@@ -376,6 +380,7 @@
             NSString *iconName = item[@"icon"];
             cell.leftIconView.image = [UIImage templateImageNamed:iconName];
             cell.leftIconView.tintColor = UIColorFromRGB(color_primary_purple);
+            cell.valueLabel.text = item[@"value"];
         }
         return cell;
     }
@@ -472,7 +477,8 @@
                 }
                 else if ([name isEqualToString:@"export_history"])
                 {
-                    
+                    OAExportItemsViewController *exportController = [[OAExportItemsViewController alloc] init];
+                    [self.navigationController pushViewController:exportController animated:YES];
                 }
                 else if ([name isEqualToString:@"clear_history"])
                 {
@@ -487,6 +493,12 @@
                     UIAlertAction *clearAction = [UIAlertAction actionWithTitle:OALocalizedString(@"history_clear")
                                                                           style:UIAlertActionStyleDestructive
                                                                         handler:^(UIAlertAction * _Nonnull action) {
+                        NSArray *historyItems;
+                        OAHistoryHelper *helper = [OAHistoryHelper sharedInstance];
+                        historyItems = [helper getPointsHavingTypes:helper.searchTypes limit:0];
+                        [helper removePoints:historyItems];
+                        [self setupView];
+                        [self.tableView reloadData];
                     }];
                     
                     [alert addAction:cancelAction];
@@ -609,7 +621,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (_settingsType == EOAGlobalSettingsMain)
-        return 44.0;
+        return 46.0;
     return UITableViewAutomaticDimension;
 }
 

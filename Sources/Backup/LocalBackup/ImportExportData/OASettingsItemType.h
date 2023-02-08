@@ -30,6 +30,7 @@ typedef NS_ENUM(NSInteger, EOASettingsItemType) {
     EOASettingsItemTypeHistoryMarkers,
     EOASettingsItemTypeGpx,
     EOASettingsItemTypeSearchHistory,
+    EOASettingsItemTypeNavigationHistory,
     EOASettingsItemTypeDownloads
 };
 

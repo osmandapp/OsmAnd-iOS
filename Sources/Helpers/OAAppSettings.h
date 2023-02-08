@@ -1005,6 +1005,9 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonInteger *numberOfStartsFirstXmasShown;
 @property (nonatomic) OACommonString *lastFavCategoryEntered;
 @property (nonatomic) OACommonBoolean *useLastApplicationModeByDefault;
+@property (nonatomic) OACommonBoolean *defaultSearchHistoryLoggingApplicationMode;
+@property (nonatomic) OACommonBoolean *defaultNavigationHistoryLoggingApplicationMode;
+@property (nonatomic) OACommonBoolean *defaultMarkersHistoryLoggingApplicationMode;
 @property (nonatomic) OACommonString *lastUsedApplicationMode;
 @property (nonatomic) OACommonAppMode * lastRouteApplicationMode;
 

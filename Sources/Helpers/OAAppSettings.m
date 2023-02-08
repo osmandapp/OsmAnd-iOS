@@ -271,6 +271,9 @@
 #define useLastApplicationModeByDefaultKey @"useLastApplicationModeByDefault"
 #define lastUsedApplicationModeKey @"lastUsedApplicationMode"
 #define lastRouteApplicationModeBackupStringKey @"lastRouteApplicationModeBackupString"
+#define defaultSearchHistoryLoggingApplicationModeKey @"defaultSearchHistoryLoggingApplicationMode"
+#define defaultNavigationHistoryLoggingApplicationModeKey @"defaultNavigationHistoryLoggingApplicationMode"
+#define defaultMarkersHistoryLoggingApplicationModeKey @"defaultMarkersHistoryLoggingApplicationMode"
 
 #define onlineRoutingEnginesKey @"onlineRoutingEngines"
 
@@ -4075,12 +4078,18 @@
         _useLastApplicationModeByDefault = [[[OACommonBoolean withKey:useLastApplicationModeByDefaultKey defValue:NO] makeGlobal] makeShared];
         _lastUsedApplicationMode = [[[OACommonString withKey:lastUsedApplicationModeKey defValue:OAApplicationMode.DEFAULT.stringKey] makeGlobal] makeShared];
         _lastRouteApplicationMode = [[OACommonAppMode withKey:lastRouteApplicationModeBackupStringKey defValue:OAApplicationMode.DEFAULT] makeGlobal];
+        _defaultSearchHistoryLoggingApplicationMode = [[[OACommonBoolean withKey:defaultSearchHistoryLoggingApplicationModeKey defValue:NO] makeGlobal] makeShared];
+        _defaultNavigationHistoryLoggingApplicationMode = [[[OACommonBoolean withKey:defaultNavigationHistoryLoggingApplicationModeKey defValue:NO] makeGlobal] makeShared];
+        _defaultMarkersHistoryLoggingApplicationMode = [[[OACommonBoolean withKey:defaultMarkersHistoryLoggingApplicationModeKey defValue:NO] makeGlobal] makeShared];
 
         [_globalPreferences setObject:_numberOfStartsFirstXmasShown forKey:@"number_of_starts_first_xmas_shown"];
         [_globalPreferences setObject:_lastFavCategoryEntered forKey:@"last_fav_category"];
         [_globalPreferences setObject:_useLastApplicationModeByDefault forKey:@"use_last_application_mode_by_default"];
         [_globalPreferences setObject:_lastUsedApplicationMode forKey:@"last_used_application_mode"];
         [_globalPreferences setObject:_lastRouteApplicationMode forKey:@"last_route_application_mode_backup_string"];
+        [_globalPreferences setObject:_defaultSearchHistoryLoggingApplicationMode forKey:@"default_search_history_logging_applicatio_mode"];
+        [_globalPreferences setObject:_defaultNavigationHistoryLoggingApplicationMode forKey:@"default_navigation_history_logging_applicatio_mode"];
+        [_globalPreferences setObject:_defaultMarkersHistoryLoggingApplicationMode forKey:@"default_markers_history_logging_applicatio_mode"];
         
         // TODO: not sure we need to override this setting with import/export
         _userIosId = [[[OACommonString withKey:userIosIdKey defValue:@""] makeGlobal] makeShared];

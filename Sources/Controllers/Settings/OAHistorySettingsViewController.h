@@ -27,8 +27,8 @@ typedef enum
 @property (weak, nonatomic) IBOutlet UIView *editToolbarView;
 @property (weak, nonatomic) IBOutlet UIButton *exportButton;
 @property (weak, nonatomic) IBOutlet UIButton *deleteButton;
-@property (nonatomic, readonly) EOAGlobalSettingsHistoryScreen settingsType;
+@property (nonatomic, readonly) EOAGlobalSettingsHistoryScreen historyType;
 
-- (instancetype) initWithSettingsType:(EOAGlobalSettingsHistoryScreen)settingsType;
+- (instancetype) initWithSettingsType:(EOAGlobalSettingsHistoryScreen)historyType;
 
 @end

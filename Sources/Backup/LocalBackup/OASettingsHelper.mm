@@ -328,6 +328,10 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     if (historyEntries.count > 0)
         myPlacesItems[OAExportSettingsType.SEARCH_HISTORY] = historyEntries;
     
+    NSArray<OAHistoryItem *> *navigationEntries = [historyHelper getPointsHavingTypes:historyHelper.searchTypes limit:0];
+    if (navigationEntries.count > 0)
+        myPlacesItems[OAExportSettingsType.NAVIGATION_HISTORY] = navigationEntries;
+    
     return myPlacesItems;
 }
 
@@ -680,6 +684,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     NSMutableArray<OADestination *> *markers = [NSMutableArray array];
     NSMutableArray<OAHistoryItem *> *historyMarkers = [NSMutableArray array];
     NSMutableArray<OAHistoryItem *> *historyEntries = [NSMutableArray array];
+    NSMutableArray<OAHistoryItem *> *navigationEntries = [NSMutableArray array];
     NSMutableArray<OAGlobalSettingsItem *> *globalSettingsItems = [NSMutableArray array];
     for (OASettingsItem *item in settingsItems)
     {
@@ -790,6 +795,12 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
                 [historyEntries addObjectsFromArray:searchHistorySettingsItem.items];
                 break;
             }
+            case EOASettingsItemTypeNavigationHistory:
+            {
+                OASearchHistorySettingsItem *searchHistorySettingsItem = (OASearchHistorySettingsItem *) item;
+                [historyEntries addObjectsFromArray:searchHistorySettingsItem.items];
+                break;
+            }
             case EOASettingsItemTypeGlobal:
             {
                 OAGlobalSettingsItem *globalItem = (OAGlobalSettingsItem *) item;
@@ -830,6 +841,8 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         settingsToOperate[OAExportSettingsType.HISTORY_MARKERS] = historyMarkers;
     if (historyEntries.count > 0 || addEmptyItems)
         settingsToOperate[OAExportSettingsType.SEARCH_HISTORY] = historyEntries;
+    if (navigationEntries.count > 0 || addEmptyItems)
+        settingsToOperate[OAExportSettingsType.NAVIGATION_HISTORY] = navigationEntries;
     if (globalSettingsItems.count > 0 || addEmptyItems)
         settingsToOperate[OAExportSettingsType.GLOBAL] = globalSettingsItems;
     return settingsToOperate;

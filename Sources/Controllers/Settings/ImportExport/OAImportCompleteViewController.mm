@@ -61,6 +61,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     EOAImportDataTypeActiveMarkers,
     EOAImportDataTypeHistoryMarkers,
     EOAImportDataTypeSearchHistory,
+    EOAImportDataTypeNavigationHistory,
     EOAImportDataTypeGlobal
 };
 
@@ -124,6 +125,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     __block NSInteger markersCount = 0;
     __block NSInteger historyMarkersCount = 0;
     __block NSInteger searchHistoryCount = 0;
+    __block NSInteger navigationHistoryCount = 0;
     __block NSInteger globalCount = 0;
 
     [_itemsMap enumerateKeysAndObjectsUsingBlock:^(OAExportSettingsType * _Nonnull type, NSArray * _Nonnull settings, BOOL * _Nonnull stop) {
@@ -157,6 +159,8 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
             historyMarkersCount += settings.count;
         else if (type == OAExportSettingsType.SEARCH_HISTORY)
             searchHistoryCount += settings.count;
+        else if (type == OAExportSettingsType.NAVIGATION_HISTORY)
+            navigationHistoryCount += settings.count;
         else if (type == OAExportSettingsType.GLOBAL)
             globalCount += settings.count;
     }];
@@ -308,6 +312,16 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
             @"iconName": @"ic_custom_history",
             @"count": [NSString stringWithFormat:@"%ld", searchHistoryCount],
             @"category" : @(EOAImportDataTypeSearchHistory)
+            }
+         ];
+    }
+    if (navigationHistoryCount > 0)
+    {
+        [_data addObject: @{
+            @"label": OALocalizedString(@"navigation_history"),
+            @"iconName": @"ic_custom_navigation",
+            @"count": [NSString stringWithFormat:@"%ld", navigationHistoryCount],
+            @"category" : @(EOAImportDataTypeNavigationHistory)
             }
          ];
     }
@@ -486,6 +500,10 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
         [rootController.navigationController pushViewController:history animated:YES];
     }
     else if (dataType == EOAImportDataTypeSearchHistory)
+    {
+        [rootController.mapPanel openSearch];
+    }
+    else if (dataType == EOAImportDataTypeNavigationHistory)
     {
         [rootController.mapPanel openSearch];
     }

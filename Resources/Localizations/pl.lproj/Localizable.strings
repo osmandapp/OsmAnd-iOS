@@ -2463,7 +2463,7 @@
 "shared_string_expires" = "Wygasa";
 "contact_support_description" = "W razie jakichkolwiek pytań prosimy o kontakt pod adresem %@.";
 "nautical_depth_points" = "Nautyczne punkty głębokości";
-"turn_arrows_descr" = "Wybierz, czy strzałki skrętu mają być wskazywane na linii trasy.";
+"turn_arrows_descr" = "Kontroluj widoczność strzałek skrętów na trasie.";
 "si_nm_mt" = "Mile morskie/metry";
 "shared_string_status" = "Status";
 "download_all" = "Pobierz wszystkie";

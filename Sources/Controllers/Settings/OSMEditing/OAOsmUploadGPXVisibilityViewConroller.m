@@ -110,6 +110,19 @@
     return nil;
 }
 
++ (NSString *) toUrlParam:(EOAOsmUploadGPXVisibility)visibility
+{
+    if (visibility == EOAOsmUploadGPXVisibilityPublic)
+        return @"public";
+    else if (visibility == EOAOsmUploadGPXVisibilityIdentifiable)
+        return @"identifiable";
+    else if (visibility == EOAOsmUploadGPXVisibilityTrackable)
+        return @"trackable";
+    else if (visibility == EOAOsmUploadGPXVisibilityPrivate)
+        return @"private";
+    return nil;
+}
+
 #pragma mark - Actions
 
 - (void) onVisibilityChanged:(EOAOsmUploadGPXVisibility)visibility

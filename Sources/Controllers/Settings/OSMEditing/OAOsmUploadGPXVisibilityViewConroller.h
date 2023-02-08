@@ -32,5 +32,6 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXVisibility) {
 - (instancetype) initWithVisibility:(EOAOsmUploadGPXVisibility)visibility;
 
 + (NSString *) localizedNameForVisibilityType:(EOAOsmUploadGPXVisibility)visibility;
++ (NSString *) toUrlParam:(EOAOsmUploadGPXVisibility)visibility;
 
 @end

@@ -85,7 +85,7 @@
         dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
 }
 
-+ (void) uploadFile:(NSString *)url fileName:(NSString *)fileName params:(NSDictionary<NSString *, NSString *> *)params headers:(NSDictionary<NSString *, NSString *> *)headers data:(NSData *)data gzip:(BOOL)gzip progress:(OAURLSessionProgress *)progress onComplete:(void (^)(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error))onComplete
++ (void) uploadFile:(NSString *)url fileName:(NSString *)fileName params:(NSDictionary<NSString *, NSString *> *)params headers:(NSDictionary<NSString *, NSString *> *)headers data:(NSData *)data gzip:(BOOL)gzip userNamePassword:(NSString *)userNamePassword progress:(OAURLSessionProgress *)progress onComplete:(void (^)(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error))onComplete
 {
     dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
     NSURL *urlObj;
@@ -122,6 +122,14 @@
             [request addValue:obj forHTTPHeaderField:key];
         }];
     }
+    
+    if (userNamePassword)
+    {
+        NSData *authData = [userNamePassword dataUsingEncoding:NSUTF8StringEncoding];
+        NSString *authValue = [NSString stringWithFormat: @"Basic %@", [authData base64EncodedStringWithOptions:0]];
+        [request setValue:authValue forHTTPHeaderField:@"Authorization"];
+    }
+    
     NSMutableData *postData = [NSMutableData data];
     [postData appendData:[[NSString stringWithFormat:@"--%@\r\n", BOUNDARY] dataUsingEncoding:NSUTF8StringEncoding]];
     if (gzip)

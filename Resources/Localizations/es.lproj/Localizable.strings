@@ -2789,3 +2789,12 @@
 "shared_string_keep_active" = "Mantener";
 "privacy_and_security" = "Privacidad y seguridad";
 "lang_zh-Hans" = "Chino (simplificado)";
+"ltr_or_rtl_combine_via_comma" = "%@, %@";
+"exit_number" = "Número de la salida";
+"announce_when_exceeded" = "Anunciar cuando se supere";
+"speak_gps_signal_status" = "Anunciar la pérdida y recuperación de la señal GPS";
+"announcement_time_title" = "Momento del anuncio";
+"user_points" = "Puntos del usuario";
+"speak_route_recalculation" = "Anunciar un nuevo cálculo de la ruta";
+"announcement_time_intervals" = "Intervalos de tiempo y distancia";
+"announcement_time_descr" = "El tiempo de anuncio de las diferentes indicaciones de voz depende del tipo de indicación, la velocidad de la navegación actual y la velocidad de la navegación predeterminada.";

@@ -295,7 +295,6 @@
 "show_warnings_title" = "Show alerts…";
 "show_warnings_descr" = "Set up traffic warnings (speed limits, forced stops, speed bumps, tunnels), speed camera warnings, and lane info.";
 "speak_title" = "Announce…";
-"speak_descr" = "Set up announcement of street names, traffic warnings (forced stops, speed bumps), speed camera warnings, and speed limits.";
 "keep_informing" = "Repeat navigation instructions";
 "repeat_after" = "Repeat after";
 "keep_informing_descr" = "Re-announce navigation instructions at regular intervals.";

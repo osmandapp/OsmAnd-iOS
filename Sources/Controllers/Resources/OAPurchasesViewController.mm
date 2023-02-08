@@ -96,7 +96,7 @@ static BOOL _purchasesUpdated;
 - (UIView *)getHeaderView
 {
     CGFloat headerTopPadding = 40.;
-    UIFont *labelFont = [UIFont systemFontOfSize:17.];
+    UIFont *labelFont = [UIFont scaledSystemFontOfSize:17.];
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0., 0., self.tableView.frame.size.width, headerTopPadding + labelFont.lineHeight)];
     headerView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     headerView.backgroundColor = UIColor.clearColor;
@@ -110,6 +110,7 @@ static BOOL _purchasesUpdated;
     loadingLabel.text = OALocalizedString(@"loading_purchase_information");
     loadingLabel.textColor = UIColorFromRGB(color_text_footer);
     loadingLabel.font = labelFont;
+    loadingLabel.adjustsFontForContentSizeCategory = YES;
     [loadingContainerView addSubview:loadingLabel];
 
     UIActivityIndicatorView *loadingIndicator = [[UIActivityIndicatorView alloc] init];
@@ -423,7 +424,7 @@ static BOOL _purchasesUpdated;
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTitleValueCell *) nib[0];
             [cell showLeftIcon:NO];
-            cell.textView.font = [UIFont systemFontOfSize:17. weight:UIFontWeightMedium];
+            cell.textView.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium];
             cell.descriptionView.text = @"";
         }
         if (cell)
@@ -469,14 +470,14 @@ static BOOL _purchasesUpdated;
 
             cell.titleView.text = item[@"title"];
             cell.titleView.font = [item[@"key"] isEqualToString:@"get_osmand_pro"]
-                    ? [UIFont systemFontOfSize:17. weight:UIFontWeightMedium] : [UIFont systemFontOfSize:17.];
+                    ? [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium] : [UIFont scaledSystemFontOfSize:17.];
 
             NSMutableAttributedString *buttonTitle = [[NSMutableAttributedString alloc] initWithString:item[@"button_title"]];
             [buttonTitle addAttribute:NSForegroundColorAttributeName
                                 value:UIColorFromRGB(color_primary_purple)
                                 range:NSMakeRange(0, buttonTitle.string.length)];
             [buttonTitle addAttribute:NSFontAttributeName
-                                value:[UIFont systemFontOfSize:15. weight:UIFontWeightSemibold]
+                                value:[UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold]
                                 range:NSMakeRange(0, buttonTitle.string.length)];
             [cell.buttonView setAttributedTitle:buttonTitle forState:UIControlStateNormal];
 
@@ -535,7 +536,7 @@ static BOOL _purchasesUpdated;
                 paragraphStyle.minimumLineHeight = 17.;
                 paragraphStyle.lineSpacing = 2.;
                 [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, attributedString.length)];
-                [attributedString addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:13.] range:NSMakeRange(0, attributedString.length)];
+                [attributedString addAttribute:NSFontAttributeName value:[UIFont scaledSystemFontOfSize:13.] range:NSMakeRange(0, attributedString.length)];
                 [attributedString addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(color_text_footer) range:NSMakeRange(0, attributedString.length)];
                 cell.descriptionView.attributedText = attributedString;
             }
@@ -545,7 +546,7 @@ static BOOL _purchasesUpdated;
                 cell.imgView.image = [UIImage imageNamed:item[@"icon"]];
                 cell.descriptionView.text = item[@"descr"];
                 cell.descriptionView.textColor = UIColorFromRGB(color_text_footer);
-                cell.descriptionView.font = [UIFont systemFontOfSize:13.];
+                cell.descriptionView.font = [UIFont scaledSystemFontOfSize:13.];
             }
             UIImageView *rightImageView = [[UIImageView alloc] initWithImage:[UIImage templateImageNamed:@"ic_custom_arrow_right"]];
             rightImageView.tintColor = UIColorFromRGB(color_tint_gray);
@@ -577,7 +578,7 @@ static BOOL _purchasesUpdated;
     NSString *header = _headers[@(section)];
     if (header)
     {
-        UIFont *font = [UIFont systemFontOfSize:13.];
+        UIFont *font = [UIFont scaledSystemFontOfSize:13.];
         CGFloat headerHeight = [OAUtilities calculateTextBounds:header
                                                           width:tableView.frame.size.width - (kPaddingOnSideOfContent + [OAUtilities getLeftMargin]) * 2
                                                            font:font].height + kPaddingOnSideOfHeaderWithText;

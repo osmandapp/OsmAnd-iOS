@@ -125,7 +125,7 @@
     
     [str addAttribute:NSForegroundColorAttributeName value:_osmPoint.getAction == DELETE ? colorClosed : colorOpen range:NSMakeRange(0, str.length)];
     
-    UIFont *font = [UIFont systemFontOfSize:13.0 weight:UIFontWeightMedium];
+    UIFont *font = [UIFont scaledSystemFontOfSize:13.0 weight:UIFontWeightMedium];
     [str addAttribute:NSFontAttributeName value:font range:NSMakeRange(0, str.length)];
     
     return str;

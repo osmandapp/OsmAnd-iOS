@@ -15,7 +15,7 @@
 
 #define kSidePadding 16
 #define kAllApplicationProfilesSection 0
-#define kHeaderViewFont [UIFont systemFontOfSize:15.0]
+#define kHeaderViewFont [UIFont scaledSystemFontOfSize:15.0]
 
 @interface OAEditProfileItem : NSObject
 

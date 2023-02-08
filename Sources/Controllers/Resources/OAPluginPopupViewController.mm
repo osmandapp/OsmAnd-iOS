@@ -59,6 +59,9 @@ static NSMutableArray *activePopups;
     self.cancelButton.layer.masksToBounds = YES;
     self.cancelButton.layer.borderWidth = 0.8;
     self.cancelButton.layer.borderColor = UIColorFromRGB(0x4caf50).CGColor;
+    self.cancelButton.titleLabel.font = [UIFont scaledSystemFontOfSize:12. weight:UIFontWeightSemibold];
+
+    self.descTextView.font = [UIFont scaledSystemFontOfSize:15.];
 }
 
 - (void)didReceiveMemoryWarning
@@ -338,7 +341,7 @@ static NSMutableArray *activePopups;
     {
         needShow = YES;
 
-        title = OALocalizedString(@"product_title_nautical");
+        title = OALocalizedString(@"plugin_nautical_name");
         descText = OALocalizedString(@"plugin_popup_nautical_ask");
         okButtonName = OALocalizedString(@"plugins_menu_group");
         cancelButtonName = OALocalizedString(@"shared_string_cancel");
@@ -519,7 +522,8 @@ static NSMutableArray *activePopups;
 
 + (NSString *) styledHTMLwithHTML:(NSString *)HTML
 {
-    NSString *style = @"<meta charset=\"UTF-8\"><style> body { font-family: -apple-system; font-size: 12px; color:#727272} b {font-family: -apple-system; font-weight: bolder; font-size: 12px; color:#727272 }</style>";
+    CGFloat fontSize = [UIFont scaledSystemFontOfSize:15.].pointSize;
+    NSString *style = [NSString stringWithFormat:@"<meta charset=\"UTF-8\"><style> body { font-family: -apple-system; font-size: %fpx; color:#727272} b {font-family: -apple-system; font-weight: bolder; font-size: %fpx; color:#727272 }</style>", fontSize, fontSize];
     
     return [NSString stringWithFormat:@"%@%@", style, HTML];
 }

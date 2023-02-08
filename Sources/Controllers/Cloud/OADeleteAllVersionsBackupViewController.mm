@@ -160,6 +160,11 @@
     self.bottomButton.hidden = isConfirm || isProgress;
     self.buttonsContainerView.hidden = isConfirm || isProgress;
 
+    self.topButton.titleLabel.adjustsFontForContentSizeCategory = YES;
+    self.topButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
+    self.bottomButton.titleLabel.adjustsFontForContentSizeCategory = YES;
+    self.bottomButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
+
     self.bottomButtonWithTopButtonConstraint.active = hasTwoButtons;
     self.bottomButtonNoTopButtonConstraint.active = !hasTwoButtons;
     self.buttonsContainerWithOneButtonConstraint.active = !hasTwoButtons;

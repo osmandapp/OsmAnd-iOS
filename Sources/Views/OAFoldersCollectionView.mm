@@ -159,7 +159,7 @@
         NSDictionary *item = _data[index];
         CGSize labelSize = [OAUtilities calculateTextBounds:item[@"title"]
                                                       width:self.frame.size.width - [OAUtilities getLeftMargin]
-                                                       font:[UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold]];
+                                                       font:[UIFont scaledSystemFontOfSize:15.0 weight:UIFontWeightSemibold]];
         cellWidth = labelSize.width;
 
         NSString *iconName = item[@"img"];
@@ -219,7 +219,7 @@
 
         destCell.titleLabel.text = item[@"title"];
         destCell.titleLabel.font = enabled
-                ? [UIFont systemFontOfSize:15. weight:UIFontWeightSemibold]
+                ? [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold]
                 : [UIFont fontWithDescriptor:[destCell.titleLabel.font.fontDescriptor
                                 fontDescriptorWithSymbolicTraits:UIFontDescriptorTraitItalic | UIFontDescriptorTraitBold]
                                         size:15.];

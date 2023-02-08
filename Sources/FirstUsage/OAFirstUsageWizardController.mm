@@ -138,7 +138,9 @@ typedef enum
     // Init wizard
     _lbTitle.text = OALocalizedString(@"shared_string_download_map");
     _lbDescription.text = OALocalizedString(@"first_usage_wizard_desc");
+    _lbDescription.font = [UIFont scaledSystemFontOfSize:14.];
     [_btnSkip setTitle:OALocalizedString(@"shared_string_skip") forState:UIControlStateNormal];
+    _btnSkip.titleLabel.font = [UIFont scaledSystemFontOfSize:14.];
     
     // Init no location view
     _lbLocationNotFound.text = OALocalizedString(@"location_not_found");
@@ -179,7 +181,7 @@ typedef enum
                                                                    options:@{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType,
                                                                              NSCharacterEncodingDocumentAttribute: @(NSUTF8StringEncoding)}
                                                         documentAttributes:nil error:nil];
-    [titleStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15.0] range:NSMakeRange(0, titleStr.length)];
+    [titleStr addAttribute:NSFontAttributeName value:[UIFont scaledSystemFontOfSize:15.0] range:NSMakeRange(0, titleStr.length)];
     [titleStr addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(color_text_footer) range:NSMakeRange(0, titleStr.length)];
     [titleStr enumerateAttributesInRange:NSMakeRange(0, titleStr.length) options:0 usingBlock:^(NSDictionary<NSAttributedStringKey,id> * _Nonnull attrs, NSRange range, BOOL * _Nonnull stop) {
         if (attrs[@"NSLink"])
@@ -191,7 +193,7 @@ typedef enum
         }
     }];
     NSDictionary *linkAttributes = @{NSForegroundColorAttributeName: UIColorFromRGB(color_primary_purple),
-                                     NSFontAttributeName: [UIFont systemFontOfSize:15.],
+                                     NSFontAttributeName: [UIFont scaledSystemFontOfSize:15.],
                                      NSUnderlineStyleAttributeName: @(NSUnderlineStyleNone)
     };
     _bottomTextView.linkTextAttributes = linkAttributes;

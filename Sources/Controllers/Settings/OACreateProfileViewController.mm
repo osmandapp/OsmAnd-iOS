@@ -83,8 +83,9 @@
     UIView *vw = [[UIView alloc] initWithFrame:CGRectMake(0, 0.0, tableView.bounds.size.width - OAUtilities.getLeftMargin * 2, _heightForHeader)];
     CGFloat textWidth = self.tableView.bounds.size.width - (kSidePadding + OAUtilities.getLeftMargin) * 2;
     UILabel *description = [[UILabel alloc] initWithFrame:CGRectMake(kSidePadding + OAUtilities.getLeftMargin, 6.0, textWidth, _heightForHeader)];
-    UIFont *labelFont = [UIFont systemFontOfSize:15.0];
+    UIFont *labelFont = [UIFont scaledSystemFontOfSize:15.0];
     description.font = labelFont;
+    description.adjustsFontForContentSizeCategory = YES;
     [description setTextColor: UIColorFromRGB(color_text_footer)];
     NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
     [style setLineSpacing:6];

@@ -14,6 +14,8 @@
 - (void) awakeFromNib
 {
     [super awakeFromNib];
+
+    self.titleView.font = [UIFont scaledSystemFontOfSize:20. weight:UIFontWeightSemibold];
 }
 
 - (void) updateConstraints

@@ -103,7 +103,7 @@
 #define mapInfoControlsKey @"mapInfoControls"
 #define transparentMapThemeKey @"transparentMapTheme"
 #define showStreetNameKey @"showStreetName"
-#define centerPositionOnMapKey @"centerPositionOnMap"
+#define positionPlacementOnMapKey @"positionPlacementOnMap"
 #define rotateMapKey @"rotateMap"
 #define compassModeKey @"compassMode"
 #define firstMapIsDownloadedKey @"firstMapIsDownloaded"
@@ -177,6 +177,9 @@
 #define speakPedestrianKey @"speakPedestrian"
 #define speakSpeedLimitKey @"speakSpeedLimit"
 #define speakCamerasKey @"speakCameras"
+#define speakExitNumberNamesKey @"speakExitNumberNames"
+#define speakGpsSignalStatusKey @"speakGpsSignalStatus"
+#define speakRouteRecalculationKey @"speakRouteRecalculation"
 #define announceWptKey @"announceWpt"
 #define announceNearbyFavoritesKey @"announceNearbyFavorites"
 #define announceNearbyPoiKey @"announceNearbyPoi"
@@ -319,7 +322,7 @@
 #define userAndroidIdKey @"userAndroidId"
 
 #define speedCamerasUninstalledKey @"speedCamerasUninstalled"
-#define speedCamerasAlertShowedKey @"speedCamerasAlertShowed"
+#define speedCamerasAlertShownKey @"speedCamerasAlertShown"
 
 #define lastUpdatesCardRefreshKey @"lastUpdatesCardRefresh"
 
@@ -910,7 +913,7 @@
         case EOAGradientScaleTypeSpeed:
             return OALocalizedString(@"shared_string_speed");
         case EOAGradientScaleTypeAltitude:
-            return OALocalizedString(@"map_widget_altitude");
+            return OALocalizedString(@"altitude");
         case EOAGradientScaleTypeSlope:
             return OALocalizedString(@"shared_string_slope");
         default:
@@ -3403,6 +3406,7 @@
     OADayNightHelper *_dayNightHelper;
     
     NSObject *_settingsLock;
+    NSSet<NSString *> *_disabledTypes;
 }
 
 @synthesize settingShowMapRulet=_settingShowMapRulet, settingMapLanguageShowLocal=_settingMapLanguageShowLocal;
@@ -3436,7 +3440,8 @@
 
         _trackIntervalArray = @[@0, @1, @2, @3, @5, @10, @15, @30, @60, @90, @120, @180, @300];
         
-        _mapLanguages = @[@"af", @"als", @"ar", @"az", @"be", @"ber", @"bg", @"bn", @"bpy", @"br", @"bs", @"ca", @"ceb", @"ckb", @"cs", @"cy", @"da", @"de", @"el", @"eo", @"es", @"et", @"eu", @"fa", @"fi", @"fr", @"fy", @"ga", @"gl", @"he", @"hi", @"hsb", @"hr", @"ht", @"hu", @"hy", @"id", @"is", @"it", @"ja", @"ka", @"kab", @"kn", @"ko", @"ku", @"la", @"lb", @"lo", @"lt", @"lv", @"mk", @"ml", @"mr", @"ms", @"nds", @"new", @"nl", @"nn", @"no", @"nv", @"oc", @"os", @"pl", @"pms", @"pt", @"ro", @"ru", @"sc", @"sh", @"sk", @"sl", @"sq", @"sr", @"sv", @"sw", @"ta", @"te", @"th", @"tl", @"tr", @"uk", @"vi", @"vo", @"zh", @"zh_cn"];
+        _mapLanguages = @[
+            @"af", @"als", @"ar", @"az", @"be", @"ber", @"bg", @"bn", @"bpy", @"br", @"bs", @"ca", @"ceb", @"ckb", @"cs", @"cy", @"da", @"de", @"el", @"eo", @"es", @"et", @"eu", @"fa", @"fi", @"fr", @"fy", @"ga", @"gl", @"he", @"hi", @"hsb", @"hr", @"ht", @"hu", @"hy", @"id", @"is", @"it", @"ja", @"ka", @"kab", @"kk", @"kn", @"ko", @"ku", @"la", @"lb", @"lo", @"lt", @"lv", @"mk", @"ml", @"mr", @"ms", @"nds", @"new", @"nl", @"nn", @"no", @"nv", @"oc", @"os", @"pl", @"pms", @"pt", @"ro", @"ru", @"sat", @"sc", @"sh", @"sk", @"sl", @"sq", @"sr", @"sv", @"sw", @"ta", @"te", @"th", @"tl", @"tr", @"uk", @"vi", @"vo", @"zh", @"zh-Hans", @"zh-Hant"];
 
         _rtlLanguages = @[@"ar",@"dv",@"he",@"iw",@"fa",@"nqo",@"ps",@"sd",@"ug",@"ur",@"yi"];
 
@@ -3724,8 +3729,8 @@
 
         [_profilePreferences setObject:_showCoordinatesWidget forKey:@"show_coordinates_widget"];
 
-        _centerPositionOnMap = [OACommonBoolean withKey:centerPositionOnMapKey defValue:NO];
-        [_profilePreferences setObject:_centerPositionOnMap forKey:@"center_position_on_map"];
+        _positionPlacementOnMap = [OACommonInteger withKey:positionPlacementOnMapKey defValue:EOAPositionPlacementAuto];
+        [_profilePreferences setObject:_positionPlacementOnMap forKey:@"position_placement_on_map"];
 
         _rotateMap = [OACommonInteger withKey:rotateMapKey defValue:ROTATE_MAP_NONE];
         [_rotateMap setModeDefaultValue:@(ROTATE_MAP_BEARING) mode:[OAApplicationMode CAR]];
@@ -3894,6 +3899,9 @@
         _speakSpeedLimit = [OACommonBoolean withKey:speakSpeedLimitKey defValue:YES];
         _speakTunnels = [OACommonBoolean withKey:speakTunnels defValue:NO];
         _speakCameras = [OACommonBoolean withKey:speakCamerasKey defValue:NO];
+        _speakExitNumberNames = [OACommonBoolean withKey:speakExitNumberNamesKey defValue:YES];
+        _speakGpsSignalStatus = [OACommonBoolean withKey:speakGpsSignalStatusKey defValue:YES];
+        _speakRouteRecalculation = [OACommonBoolean withKey:speakRouteRecalculationKey defValue:YES];
         _announceNearbyFavorites = [OACommonBoolean withKey:announceNearbyFavoritesKey defValue:NO];
         _announceNearbyPoi = [OACommonBoolean withKey:announceNearbyPoiKey defValue:NO];
 
@@ -3903,6 +3911,9 @@
         [_profilePreferences setObject:_speakSpeedLimit forKey:@"speak_speed_limit"];
         [_profilePreferences setObject:_speakCameras forKey:@"speak_cameras"];
         [_profilePreferences setObject:_speakTunnels forKey:@"show_tunnels"];
+        [_profilePreferences setObject:_speakExitNumberNames forKey:@"exit_number_names"];
+        [_profilePreferences setObject:_speakGpsSignalStatus forKey:@"speak_gps_signal_status"];
+        [_profilePreferences setObject:_speakRouteRecalculation forKey:@"speak_route_recalculation"];
         [_profilePreferences setObject:_announceNearbyFavorites forKey:@"announce_nearby_favorites"];
         [_profilePreferences setObject:_announceNearbyPoi forKey:@"announce_nearby_poi"];
 
@@ -4165,10 +4176,10 @@
 //        [_globalPreferences setObject:_userAndroidId forKey:@"user_android_id"];
 
         _speedCamerasUninstalled = [[[OACommonBoolean withKey:speedCamerasUninstalledKey defValue:NO] makeGlobal] makeShared];
-        _speedCamerasAlertShowed = [[[OACommonBoolean withKey:speedCamerasAlertShowedKey defValue:NO] makeGlobal] makeShared];
+        _speedCamerasAlertShown = [[[OACommonBoolean withKey:speedCamerasAlertShownKey defValue:NO] makeGlobal] makeShared];
 
         [_globalPreferences setObject:_speedCamerasUninstalled forKey:@"speed_cameras_uninstalled"];
-        [_globalPreferences setObject:_speedCamerasAlertShowed forKey:@"speed_cameras_alert_showed"];
+        [_globalPreferences setObject:_speedCamerasAlertShown forKey:@"speed_cameras_alert_showed"];
 
         _lastUpdatesCardRefresh = [[OACommonLong withKey:lastUpdatesCardRefreshKey defValue:0] makeGlobal];
         [_globalPreferences setObject:_lastUpdatesCardRefresh forKey:@"last_updates_card_refresh"];
@@ -4976,6 +4987,21 @@
 - (void) setLastProfileModifiedTime:(long)timestamp mode:(OAApplicationMode *)mode
 {
     [[NSUserDefaults standardUserDefaults] setObject:@(timestamp) forKey:[NSString stringWithFormat:@"%@_%@", lastProfileSettingsModifiedTimeKey, mode.stringKey]];
+}
+
+- (void)setDisabledTypes:(NSSet<NSString *> *)disabledTypes
+{
+    _disabledTypes = disabledTypes;
+}
+
+- (NSSet<NSString *> *)getDisabledTypes
+{
+    return _disabledTypes;
+}
+
+- (BOOL)isTypeDisabled:(NSString *)typeName
+{
+    return [_disabledTypes containsObject:typeName];
 }
 
 @end

@@ -96,6 +96,10 @@
     [self applyLocalization];
     [self updateInfo];
     [self updateColors];
+
+    self.descrView.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightBold];
+    self.closeButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
+    self.downloadButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
 }
 
 - (void) applyLocalization
@@ -188,9 +192,9 @@
     if (_resourceItem)
     {
         NSString *titleText = [NSString stringWithFormat:OALocalizedString(@"download_suggestion"), _resourceItem.title];
-        NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:titleText attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:17]}];
+        NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:titleText attributes:@{NSFontAttributeName : [UIFont scaledSystemFontOfSize:17]}];
         NSRange range = [titleText rangeOfString:_resourceItem.title];
-        [attrString addAttributes:@{NSForegroundColorAttributeName : UIColorFromRGB(_nightMode ? color_chart_orange : color_primary_purple), NSFontAttributeName : [UIFont systemFontOfSize:17.0 weight:UIFontWeightMedium]} range:range];
+        [attrString addAttributes:@{NSForegroundColorAttributeName : UIColorFromRGB(_nightMode ? color_chart_orange : color_primary_purple), NSFontAttributeName : [UIFont scaledSystemFontOfSize:17.0 weight:UIFontWeightMedium]} range:range];
         
         _titleView.attributedText = attrString;
         _descrView.text = [NSByteCountFormatter stringFromByteCount:_resourceItem.sizePkg countStyle:NSByteCountFormatterCountStyleFile];

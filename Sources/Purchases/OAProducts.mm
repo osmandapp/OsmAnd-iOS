@@ -385,8 +385,8 @@
     BOOL isPlural = originalNumberOfUnits > 1 || self.numberOfPeriods > 1;
     NSString *mainPart = [NSString stringWithFormat:OALocalizedString(isPlural ? @"get_discount_first_few_parts" : @"get_discount_first_part"), periodPriceStr, [self getDisountPeriodString:unitStr totalPeriods:totalPeriods]];
     NSString *thenPart = [NSString stringWithFormat:OALocalizedString(@"get_discount_second_part"), originalPricePeriod];
-    NSAttributedString *mainStrAttributed = [[NSAttributedString alloc] initWithString:mainPart attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:17.0 weight:UIFontWeightSemibold]}];
-    NSAttributedString *secondStrAttributed = [[NSAttributedString alloc] initWithString:thenPart attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:17.0]}];
+    NSAttributedString *mainStrAttributed = [[NSAttributedString alloc] initWithString:mainPart attributes:@{NSFontAttributeName : [UIFont scaledSystemFontOfSize:17.0 weight:UIFontWeightSemibold]}];
+    NSAttributedString *secondStrAttributed = [[NSAttributedString alloc] initWithString:thenPart attributes:@{NSFontAttributeName : [UIFont scaledSystemFontOfSize:17.0]}];
     NSMutableAttributedString *res = [[NSMutableAttributedString alloc] initWithAttributedString:mainStrAttributed];
     [res appendAttributedString:[[NSAttributedString alloc] initWithString:self.paymentMode == OAProductDiscountPaymentModeFreeTrial ? @", " : @"\n"]];
     [res appendAttributedString:secondStrAttributed];
@@ -548,6 +548,7 @@
 
 - (void) commonInit
 {
+    [self setPurchased];
     if (self.free && ![self isAlreadyPurchased])
     {
         [self setPurchased];
@@ -932,7 +933,7 @@
     NSAttributedString *resStr = [[NSAttributedString alloc] initWithString:@""];
     if (showDiscount && discountStr.length > 0)
     {
-        resStr = [[NSAttributedString alloc] initWithString:discountStr attributes:@{ NSFontAttributeName : [UIFont systemFontOfSize:fontSize weight:UIFontWeightSemibold]}];
+        resStr = [[NSAttributedString alloc] initWithString:discountStr attributes:@{ NSFontAttributeName : [UIFont scaledSystemFontOfSize:fontSize weight:UIFontWeightSemibold]}];
     }
     return resStr;
 }
@@ -1000,9 +1001,9 @@
         NSString *price = [super formattedPrice];
         NSMutableAttributedString *priceAttributed =
                 [[NSMutableAttributedString alloc] initWithString:formattedPrice
-                                                       attributes:@{ NSFontAttributeName : [UIFont systemFontOfSize:15] }];
+                                                       attributes:@{ NSFontAttributeName : [UIFont scaledSystemFontOfSize:15] }];
         [priceAttributed addAttribute:NSFontAttributeName
-                                value:[UIFont systemFontOfSize:15 weight:UIFontWeightSemibold]
+                                value:[UIFont scaledSystemFontOfSize:15 weight:UIFontWeightSemibold]
                                 range:NSMakeRange(0, price.length)];
         return priceAttributed;
     }
@@ -1192,9 +1193,9 @@
 - (NSAttributedString *) getDescription:(CGFloat)fontSize
 {
     NSMutableAttributedString *text = [[NSMutableAttributedString alloc] init];
-    [text addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:fontSize] range:NSMakeRange(0, text.length)];
+    [text addAttribute:NSFontAttributeName value:[UIFont scaledSystemFontOfSize:fontSize] range:NSMakeRange(0, text.length)];
     NSMutableAttributedString *boldStr = [[NSMutableAttributedString alloc] initWithString:OALocalizedString(@"osm_live_payment_contribute_descr")];
-    UIFont *boldFont = [UIFont systemFontOfSize:fontSize];
+    UIFont *boldFont = [UIFont scaledSystemFontOfSize:fontSize];
     [boldStr addAttribute:NSFontAttributeName value:boldFont range:NSMakeRange(0, boldStr.length)];
     [text appendAttributedString:boldStr];
     return text;
@@ -2149,6 +2150,11 @@
     return [[NSDecimalNumber alloc] initWithDouble:kInApp_Region_All_World_Default_Price];
 }
 
+- (NSString *) localizedTitle
+{
+    return OALocalizedString(@"worldwide_maps");
+}
+
 @end
 
 @implementation OARussiaProduct
@@ -2167,6 +2173,11 @@
 - (NSDecimalNumber *) getDefaultPrice
 {
     return [[NSDecimalNumber alloc] initWithDouble:kInApp_Region_Russia_Default_Price];
+}
+
+- (NSString *) localizedTitle
+{
+    return OALocalizedString(@"index_name_russia");
 }
 
 @end
@@ -2189,6 +2200,11 @@
     return [[NSDecimalNumber alloc] initWithDouble:kInApp_Region_Antarctica_Default_Price];
 }
 
+- (NSString *) localizedTitle
+{
+    return OALocalizedString(@"index_name_antarctica");
+}
+
 @end
 
 @implementation OAAfricaProduct
@@ -2207,6 +2223,11 @@
 - (NSDecimalNumber *) getDefaultPrice
 {
     return [[NSDecimalNumber alloc] initWithDouble:kInApp_Region_Africa_Default_Price];
+}
+
+- (NSString *) localizedTitle
+{
+    return OALocalizedString(@"index_name_africa");
 }
 
 @end
@@ -2229,6 +2250,11 @@
     return [[NSDecimalNumber alloc] initWithDouble:kInApp_Region_Asia_Default_Price];
 }
 
+- (NSString *) localizedTitle
+{
+    return OALocalizedString(@"index_name_asia");
+}
+
 @end
 
 @implementation OAAustraliaProduct
@@ -2247,6 +2273,11 @@
 - (NSDecimalNumber *) getDefaultPrice
 {
     return [[NSDecimalNumber alloc] initWithDouble:kInApp_Region_Australia_Default_Price];
+}
+
+- (NSString *) localizedTitle
+{
+    return OALocalizedString(@"index_name_oceania");
 }
 
 @end
@@ -2269,6 +2300,11 @@
     return [[NSDecimalNumber alloc] initWithDouble:kInApp_Region_Europe_Default_Price];
 }
 
+- (NSString *) localizedTitle
+{
+    return OALocalizedString(@"index_name_europe");
+}
+
 @end
 
 @implementation OACentralAmericaProduct
@@ -2287,6 +2323,11 @@
 - (NSDecimalNumber *) getDefaultPrice
 {
     return [[NSDecimalNumber alloc] initWithDouble:kInApp_Region_Central_America_Default_Price];
+}
+
+- (NSString *) localizedTitle
+{
+    return OALocalizedString(@"index_name_central_america");
 }
 
 @end
@@ -2309,6 +2350,11 @@
     return [[NSDecimalNumber alloc] initWithDouble:kInApp_Region_North_America_Default_Price];
 }
 
+- (NSString *) localizedTitle
+{
+    return OALocalizedString(@"index_name_north_america");
+}
+
 @end
 
 @implementation OASouthAmericaProduct
@@ -2327,6 +2373,11 @@
 - (NSDecimalNumber *) getDefaultPrice
 {
     return [[NSDecimalNumber alloc] initWithDouble:kInApp_Region_South_America_Default_Price];
+}
+
+- (NSString *) localizedTitle
+{
+    return OALocalizedString(@"index_name_south_america");
 }
 
 @end

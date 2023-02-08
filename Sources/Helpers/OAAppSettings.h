@@ -29,6 +29,13 @@
 
 @class OAAvoidRoadInfo, OAMapSource, OAMapLayersConfiguration, OASubscriptionState;
 
+typedef NS_ENUM(NSInteger, EOAPositionPlacement)
+{
+    EOAPositionPlacementAuto = 0,
+    EOAPositionPlacementCenter,
+    EOAPositionPlacementBottom
+};
+
 typedef NS_ENUM(NSInteger, EOACompassMode)
 {
     EOACompassVisible = 0,
@@ -863,6 +870,9 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonBoolean *speakSpeedLimit;
 @property (nonatomic) OACommonBoolean *speakCameras;
 @property (nonatomic) OACommonBoolean *speakTunnels;
+@property (nonatomic) OACommonBoolean *speakExitNumberNames;
+@property (nonatomic) OACommonBoolean *speakRouteRecalculation;
+@property (nonatomic) OACommonBoolean *speakGpsSignalStatus;
 @property (nonatomic) OACommonBoolean *announceNearbyFavorites;
 @property (nonatomic) OACommonBoolean *announceNearbyPoi;
 
@@ -873,7 +883,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 
 @property (nonatomic) OACommonBoolean *transparentMapTheme;
 @property (nonatomic) OACommonBoolean *showStreetName;
-@property (nonatomic) OACommonBoolean *centerPositionOnMap;
+@property (nonatomic) OACommonInteger *positionPlacementOnMap;
 @property (nonatomic) OACommonBoolean *showDistanceRuler;
 
 @property (assign, nonatomic) BOOL simulateNavigation;
@@ -1059,7 +1069,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 //@property (nonatomic) OACommonString *userAndroidId; //need ?
 
 @property (nonatomic) OACommonBoolean *speedCamerasUninstalled;
-@property (nonatomic) OACommonBoolean *speedCamerasAlertShowed;
+@property (nonatomic) OACommonBoolean *speedCamerasAlertShown;
 
 @property (nonatomic) OACommonLong *lastUpdatesCardRefresh;
 
@@ -1134,5 +1144,9 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 - (void) setLastGlobalModifiedTime:(long)timestamp;
 - (long) getLastProfileSettingsModifiedTime:(OAApplicationMode *)mode;
 - (void) setLastProfileModifiedTime:(long)timestamp mode:(OAApplicationMode *)mode;
+
+- (void)setDisabledTypes:(NSSet<NSString *> *)disabledTypes;
+- (NSSet<NSString *> *)getDisabledTypes;
+- (BOOL)isTypeDisabled:(NSString *)typeName;
 
 @end

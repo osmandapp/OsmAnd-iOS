@@ -129,7 +129,7 @@
 
 - (void) applyLocalization
 {
-    self.titleView.font = [UIFont systemFontOfSize:17 weight:UIFontWeightMedium];
+    self.titleView.font = [UIFont scaledSystemFontOfSize:17 weight:UIFontWeightMedium];
     self.titleView.text = OALocalizedString(@"follow_track");
     [self.leftButton setTitle:OALocalizedString(@"shared_string_close") forState:UIControlStateNormal];
 }
@@ -316,7 +316,7 @@
                 cell.segmentControl.selectedSegmentTintColor = UIColorFromRGB(color_primary_purple);
             else
                 cell.segmentControl.tintColor = UIColorFromRGB(color_primary_purple);
-            UIFont *font = [UIFont systemFontOfSize:15. weight:UIFontWeightSemibold];
+            UIFont *font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
             [cell.segmentControl setTitleTextAttributes:@{NSForegroundColorAttributeName : UIColor.whiteColor, NSFontAttributeName : font} forState:UIControlStateSelected];
             [cell.segmentControl setTitleTextAttributes:@{NSForegroundColorAttributeName : UIColorFromRGB(color_primary_purple), NSFontAttributeName : font} forState:UIControlStateNormal];
         }
@@ -456,7 +456,7 @@
         return 0.001;
     else
     {
-        return [OAUtilities calculateTextBounds:OALocalizedString(@"routing_settings") width:tableView.bounds.size.width font:[UIFont systemFontOfSize:13]].height + 38;
+        return [OAUtilities calculateTextBounds:OALocalizedString(@"routing_settings") width:tableView.bounds.size.width font:[UIFont scaledSystemFontOfSize:13]].height + 38;
     }
 }
 

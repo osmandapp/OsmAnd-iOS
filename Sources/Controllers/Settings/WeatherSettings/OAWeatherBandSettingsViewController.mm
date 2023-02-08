@@ -100,11 +100,11 @@
 - (NSAttributedString *)getAttributedNameUnit:(NSString *)name unit:(NSString *)unit
 {
     NSDictionary *nameAttributes = @{
-            NSFontAttributeName : [UIFont systemFontOfSize:17.0],
+            NSFontAttributeName : [UIFont scaledSystemFontOfSize:17.0],
             NSForegroundColorAttributeName : UIColor.blackColor
     };
     NSDictionary *unitAttributes = @{
-            NSFontAttributeName : [UIFont systemFontOfSize:17.0],
+            NSFontAttributeName : [UIFont scaledSystemFontOfSize:17.0],
             NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer)
     };
 
@@ -195,7 +195,7 @@
 
     OATableViewCustomFooterView *vw =
             [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
-    UIFont *textFont = [UIFont systemFontOfSize:13];
+    UIFont *textFont = [UIFont scaledSystemFontOfSize:13];
     NSMutableAttributedString *textStr =
             [[NSMutableAttributedString alloc] initWithString:OALocalizedString(@"weather_cloud_data_description")
                                                    attributes:@{

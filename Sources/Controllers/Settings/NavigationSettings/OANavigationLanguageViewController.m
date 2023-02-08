@@ -124,6 +124,8 @@
 {
     [_settings.voiceProvider set:item[@"name"] mode:self.appMode];
     [[OsmAndApp instance] initVoiceCommandPlayer:self.appMode warningNoneProvider:NO showDialog:YES force:NO];
+    if (self.delegate)
+        [self.delegate onSettingsChanged];
     [self dismissViewController];
 }
 

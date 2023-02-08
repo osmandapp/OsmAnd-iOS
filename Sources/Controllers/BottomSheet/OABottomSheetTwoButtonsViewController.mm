@@ -46,11 +46,11 @@
     [self layoutButtons];
     _doneButton.backgroundColor = UIColorFromRGB(color_primary_purple);
     _doneButton.layer.cornerRadius = 9;
-    _doneButton.titleLabel.font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold];
+    _doneButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15.0 weight:UIFontWeightSemibold];
     
     self.cancelButton.backgroundColor = UIColorFromRGB(color_bottom_sheet_secondary);
     self.cancelButton.layer.cornerRadius = 9;
-    self.cancelButton.titleLabel.font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold];
+    self.cancelButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15.0 weight:UIFontWeightSemibold];
     [self.cancelButton setTitleColor:UIColorFromRGB(color_primary_purple) forState:UIControlStateNormal];
 }
 

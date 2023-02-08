@@ -114,13 +114,14 @@
             
             UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 20)];
             label.numberOfLines = 0;
-            label.font = [UIFont systemFontOfSize:13.0];
+            label.font = [UIFont scaledSystemFontOfSize:13.0];
+            label.adjustsFontForContentSizeCategory = YES;
             label.textColor = [UIColor whiteColor];
             label.backgroundColor = UIColorFromRGB(0x7bca62);
             
             UIButton *actionButton = [UIButton buttonWithType:UIButtonTypeSystem];
             actionButton.frame = CGRectMake(0, 0, 100, 20);
-            actionButton.titleLabel.font = [UIFont systemFontOfSize:13.0];
+            actionButton.titleLabel.font = [UIFont scaledSystemFontOfSize:13.0];
             actionButton.titleLabel.textColor = [UIColor whiteColor];
             actionButton.layer.cornerRadius = 4.0;
             actionButton.layer.masksToBounds = YES;
@@ -203,7 +204,7 @@
     btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     btn.contentEdgeInsets = UIEdgeInsetsMake(0, 12.0, 0, 12.0);
     btn.titleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
-    btn.titleLabel.font = [UIFont systemFontOfSize:13.0 weight:UIFontWeightRegular];
+    btn.titleLabel.font = [UIFont scaledSystemFontOfSize:13.0 weight:UIFontWeightRegular];
     btn.layer.cornerRadius = 4.0;
     btn.layer.masksToBounds = YES;
     btn.layer.borderWidth = 0.8;

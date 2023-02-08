@@ -207,7 +207,7 @@
 {
     UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
     [header.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
-    header.textLabel.font = [UIFont systemFontOfSize:13.];
+    header.textLabel.font = [UIFont scaledSystemFontOfSize:13.];
 }
 
 - (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

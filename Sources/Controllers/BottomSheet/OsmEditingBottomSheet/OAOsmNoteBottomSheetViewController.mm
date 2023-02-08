@@ -514,7 +514,8 @@
     textField.placeholder = hint;
     [textField.textView setText:text];
     textField.userInteractionEnabled = NO;
-    textField.font = [UIFont systemFontOfSize:17.0];
+    textField.font = [UIFont scaledSystemFontOfSize:17.0];
+    textField.adjustsFontForContentSizeCategory = YES;
     textField.clearButton.imageView.tintColor = UIColorFromRGB(color_icon_color);
     [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field"] forState:UIControlStateNormal];
     [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field"] forState:UIControlStateHighlighted];
@@ -522,7 +523,7 @@
     MDCTextInputControllerFilled *fieldController = [[MDCTextInputControllerFilled alloc] initWithTextInput:textField];
     fieldController.borderFillColor = UIColorFromRGB(color_osm_editing_text_field);
     fieldController.roundedCorners = corners;
-    fieldController.inlinePlaceholderFont = [UIFont systemFontOfSize:16.0];
+    fieldController.inlinePlaceholderFont = [UIFont scaledSystemFontOfSize:16.0];
     fieldController.textInput.textInsetsMode = MDCTextInputTextInsetsModeIfContent;
     [floatingControllers addObject:fieldController];
     
@@ -556,7 +557,8 @@
     [textField setText:text];
     [textField setSecureTextEntry:YES];
     textField.userInteractionEnabled = NO;
-    textField.font = [UIFont systemFontOfSize:17.0];
+    textField.font = [UIFont scaledSystemFontOfSize:17.0];
+    textField.adjustsFontForContentSizeCategory = YES;
     textField.clearButtonMode = UITextFieldViewModeNever;
     textField.placeholderLabel.backgroundColor = [UIColor clearColor];
     [resultCell setupPasswordButton];
@@ -565,7 +567,7 @@
     fieldController.borderFillColor = UIColorFromRGB(color_osm_editing_text_field);
     fieldController.roundedCorners = corners;
     fieldController.disabledColor = [UIColor blackColor];
-    fieldController.inlinePlaceholderFont = [UIFont systemFontOfSize:16.0];
+    fieldController.inlinePlaceholderFont = [UIFont scaledSystemFontOfSize:16.0];
     fieldController.textInput.textInsetsMode = MDCTextInputTextInsetsModeIfContent;
     [floatingControllers addObject:fieldController];
     

@@ -97,7 +97,7 @@
             BOOL isLogoutCell = [item[@"key"] isEqualToString:@"logout_cell"];
             cell.selectionStyle = isLogoutCell ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
             [cell showLeftIcon:!isLogoutCell];
-            cell.textView.font = [UIFont systemFontOfSize:17. weight:isLogoutCell ? UIFontWeightMedium : UIFontWeightRegular];
+            cell.textView.font = [UIFont scaledSystemFontOfSize:17. weight:isLogoutCell ? UIFontWeightMedium : UIFontWeightRegular];
             cell.textView.text = item[@"title"];
             cell.textView.textColor = isLogoutCell ? UIColorFromRGB(color_support_red) : UIColor.blackColor;
             cell.textView.textAlignment = isLogoutCell ? NSTextAlignmentCenter : NSTextAlignmentNatural;

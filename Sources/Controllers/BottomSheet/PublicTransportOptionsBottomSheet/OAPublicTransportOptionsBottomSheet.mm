@@ -203,7 +203,7 @@
         return [OATableViewCustomHeaderView getHeight:OALocalizedString(@"transport_Routes")
                                                 width:tableView.bounds.size.width
                                               yOffset:32
-                                                 font:[UIFont systemFontOfSize:13]];
+                                                 font:[UIFont scaledSystemFontOfSize:13]];
     }
     else
     {
@@ -217,7 +217,7 @@
     {
         OATableViewCustomHeaderView *customHeader = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
         customHeader.label.text = [OALocalizedString(@"transport_Routes") upperCase];
-        customHeader.label.font = [UIFont systemFontOfSize:13];
+        customHeader.label.font = [UIFont scaledSystemFontOfSize:13];
         [customHeader setYOffset:32];
         return customHeader;
     }

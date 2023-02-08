@@ -946,7 +946,7 @@
 "product_desc_russia_short" = "Mapas de Russia";
 "product_desc_southamerica" = "Teledescargaments illimitats dei mapas d'America dau Sud";
 "product_desc_southamerica_short" = "Mapas d'America dau Sud";
-"product_title_allworld" = "Mapa mondiala";
+"worldwide_maps" = "Mapa mondiala";
 "product_desc_allworld" = "Mapas mondialas";
 "product_desc_asia" = "Teledescargaments illimitats dei mapas d'Asia";
 "product_desc_asia_short" = "Mapas d'Asia";
@@ -2515,3 +2515,6 @@
 "rendering_attr_OSMMapperAssistantNote_description" = "Mostrar lei nòtas de balisa";
 "offline_edition_descr" = "Sensa connexion, la modificacion es activada, mai lei cambis se devon sauvagardar localament en premier, se telecargaràn au besonh; autrament s\'actualizan immediatament.";
 "m" = "m";
+"speed_cameras_alert" = "Leis avís sus la preséncia de radars son interdits dins de país que i a.";
+"shared_string_height" = "Auçada";
+"privacy_and_security" = "Vida privada e seguretat";

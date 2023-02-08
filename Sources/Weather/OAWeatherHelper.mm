@@ -696,7 +696,7 @@
     if (outdated)
     {
         NSDictionary *outdatedStrAttributes = @{
-                NSFontAttributeName: [UIFont systemFontOfSize:13.],
+                NSFontAttributeName: [UIFont scaledSystemFontOfSize:13.],
                 NSForegroundColorAttributeName: UIColorFromRGB(color_primary_red)
         };
         [attributedDescription appendAttributedString:[[NSAttributedString alloc] initWithString:[statusStr stringByAppendingString:@" "] attributes:outdatedStrAttributes]];
@@ -735,7 +735,7 @@
     }
 
     NSDictionary *updatedStrAttributes = @{
-            NSFontAttributeName: [UIFont systemFontOfSize:13.],
+            NSFontAttributeName: [UIFont scaledSystemFontOfSize:13.],
             NSForegroundColorAttributeName: UIColorFromRGB(color_text_footer)
     };
     [attributedDescription appendAttributedString:[[NSAttributedString alloc] initWithString:statusStr attributes:updatedStrAttributes]];

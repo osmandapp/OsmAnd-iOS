@@ -161,7 +161,7 @@
                     kCellTitle: [_tableData.values[@"visible_groups_count"] integerValue] == 0
                             ? OALocalizedString(@"shared_string_show_all")
                             : OALocalizedString(@"shared_string_hide_all"),
-                    kTableValues: @{ @"font_value": [UIFont systemFontOfSize:17. weight:UIFontWeightMedium] },
+                    kTableValues: @{ @"font_value": [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium] },
                     kCellRightIconName: [_tableData.values[@"visible_groups_count"] integerValue] == 0
                             ? @"ic_custom_show" : @"ic_custom_hide",
                     kCellTintColor: @color_primary_purple

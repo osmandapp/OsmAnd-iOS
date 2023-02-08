@@ -287,7 +287,7 @@
 "product_desc_northamerica" = "Kuzey Amerika için sınırsız harita indirme";
 "product_desc_russia" = "Rusya için sınırsız harita indirme";
 "product_desc_southamerica" = "Güney Amerika için sınırsız harita indirme";
-"product_title_allworld" = "Tüm Dünya Haritaları";
+"worldwide_maps" = "Tüm Dünya Haritaları";
 "product_desc_allworld" = "Tüm Dünya Haritaları";
 "product_desc_asia" = "Asya için sınırsız harita indirme";
 "download_wikipedia_maps" = "Wikipedia";
@@ -2709,3 +2709,19 @@
 "m" = "m";
 "kg" = "kg";
 "km" = "km";
+"speed_cameras_legal_descr" = "Bazı ülke veya bölgelerde hız kamerası uyarı uygulamalarının kullanımı yasalarca yasaklanmıştır.
+\n
+\nÜlkenizin yasalarına bağlı olarak bir seçim yapmanız gerekmektedir.
+\n
+\n%@ seçeneğini seçtiğinizde hız kameraları hakkında ikaz ve uyarıları alırsınız.
+\n
+\n%@ seçeneğini seçtiğinizde hız kameraları ile ilgili tüm veriler: uyarılar, bildirimler, POI\'ler OsmAnd tamamen yeniden kurulana kadar silinecektir.";
+"shared_string_legal" = "Yasal";
+"speed_cameras_alert" = "Hız kamerası uyarıları bazı ülkelerde yasalarca yasaklanmıştır.";
+"uninstall_speed_cameras" = "Hız kameralarını kaldır";
+"privacy_and_security" = "Gizlilik ve güvenlik";
+"shared_string_keep_active" = "Etkin tut";
+"speed_camera_pois" = "Hız kamerası POI\'leri";
+"shared_string_height" = "Yükseklik";
+"lang_zh-Hant" = "GelenekselÇince";
+"lang_sat" = "Santali";

@@ -534,7 +534,7 @@
 "product_desc_northamerica" = "Map of North America";
 "product_desc_russia" = "Map of Russia";
 "product_desc_southamerica" = "Map of South America";
-"product_title_allworld" = "All World Maps";
+"worldwide_maps" = "All World Maps";
 "product_desc_allworld" = "Map of All World";
 "product_desc_asia" = "Map of Asia";
 "download_wikipedia_maps" = "Wikipedia";
@@ -884,3 +884,4 @@
 "osm_live_payment_contribute_descr" = "၀င်ငွေ၏တစိတ်တပိုင်းသည် OpenStreetMap ထောက်ပံ့သူများထံသို့သွားသည်။";
 "route_add_start_point" = "အစနေရာထည့်ပါ";
 "will_open_at" = "ဖွင့်ချိန်";
+"shared_string_height" = "အမြင့်";

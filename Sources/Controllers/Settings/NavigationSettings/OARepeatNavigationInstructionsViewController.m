@@ -239,6 +239,8 @@
         else
             [self.tableView insertSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
         [self.tableView endUpdates];
+        if (self.delegate)
+            [self.delegate onSettingsChanged];
     }
 }
 
@@ -278,6 +280,8 @@
     [_settings.keepInforming set:_keepInformingValues[_selectedValue].intValue mode:self.appMode];
     [self setupView];
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_pickerIndexPath.row - 1 inSection:_pickerIndexPath.section]] withRowAnimation:UITableViewRowAnimationFade];
+    if (self.delegate)
+        [self.delegate onSettingsChanged];
 }
 
 @end

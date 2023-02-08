@@ -121,7 +121,7 @@
     [self.deleteButton setUserInteractionEnabled:hasSelection];
 
     NSString *textShow = OALocalizedString(@"shared_string_delete");
-    UIFont *fontShow = [UIFont systemFontOfSize:15 weight:UIFontWeightSemibold];
+    UIFont *fontShow = [UIFont scaledSystemFontOfSize:15 weight:UIFontWeightSemibold];
     UIColor *colorShow = hasSelection ? UIColor.whiteColor : UIColorFromRGB(color_text_footer);
     NSMutableAttributedString *attrShow = [[NSMutableAttributedString alloc] initWithString:textShow attributes:@{NSFontAttributeName: fontShow, NSForegroundColorAttributeName: colorShow}];
 
@@ -139,7 +139,7 @@
                                                       OALocalizedString(@"shared_string_waypoints").lowerCase,
                                                       selectedWaypointsCount];
 
-    UIFont *fontCategories = [UIFont systemFontOfSize:13];
+    UIFont *fontCategories = [UIFont scaledSystemFontOfSize:13];
     UIColor *colorCategories = hasSelection != 0 ? UIColor.whiteColor : UIColorFromRGB(color_text_footer);
     NSMutableAttributedString *attrCategories = [[NSMutableAttributedString alloc] initWithString:textGroups attributes:@{NSFontAttributeName: fontCategories, NSForegroundColorAttributeName: colorCategories}];
 

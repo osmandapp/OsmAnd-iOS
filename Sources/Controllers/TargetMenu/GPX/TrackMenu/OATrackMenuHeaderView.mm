@@ -579,11 +579,11 @@
     CGSize sizeByTitle = [OAUtilities calculateTextBounds:title
                                                     width:10000.0
                                                    height:kBlockStatisticsLineHeight
-                                                     font:[UIFont systemFontOfSize:13. weight:UIFontWeightRegular]];
+                                                     font:[UIFont scaledSystemFontOfSize:13. weight:UIFontWeightRegular]];
     CGSize sizeByValue = [OAUtilities calculateTextBounds:value
                                                     width:10000.0
                                                    height:kBlockStatisticsLineHeight
-                                                     font:[UIFont systemFontOfSize:13. weight:UIFontWeightMedium]];
+                                                     font:[UIFont scaledSystemFontOfSize:13. weight:UIFontWeightMedium]];
     CGFloat widthByTitle = sizeByTitle.width < kBlockStatisticsWidthMin ? kBlockStatisticsWidthMin : sizeByTitle.width;
     CGFloat widthByValue = (sizeByValue.width < kBlockStatisticsWidthMinByValue ? kBlockStatisticsWidthMinByValue : sizeByValue.width) + kBlockStatisticsIconWithSpace;
     if (!isLast)

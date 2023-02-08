@@ -25,17 +25,14 @@
 #import "OAPOIFilter.h"
 #import "OAPOIFiltersHelper.h"
 #import "OAPOIUIFilter.h"
+#import "OAAnnounceTimeDistances.h"
+#import "OARouteDirectionInfo.h"
 
 #include <binaryRead.h>
 
 #define NOT_ANNOUNCED 0
 #define ANNOUNCED_ONCE 1
 #define ANNOUNCED_DONE 2
-
-#define LONG_ANNOUNCE_RADIUS 700
-#define SHORT_ANNOUNCE_RADIUS 150
-#define ALARMS_ANNOUNCE_RADIUS 150
-#define ALARMS_SHORT_ANNOUNCE_RADIUS 100
 
 // don't annoy users by lots of announcements
 #define APPROACH_POI_LIMIT 1
@@ -257,6 +254,7 @@
         [list removeAllObjects];
     
     OALocationPointWrapper *found = nil;
+    OAAnnounceTimeDistances *atd = [[[OARoutingHelper sharedInstance] getVoiceRouter] getAnnounceTimeDistances];
     for (int type = 0; type < _locationPoints.count; type++)
     {
         if (type == LPW_ALARMS || type == LPW_TARGETS)
@@ -273,7 +271,7 @@
             }
             else
             {
-                if ([_route getDistanceToPoint:lwp.routeIndex] <= LONG_ANNOUNCE_RADIUS)
+                if ([atd isTurnStateActive:0 dist:[_route getDistanceToPoint:lwp.routeIndex] turnType:kStateLongPntApproach])
                 {
                     if (!found || found.routeIndex < lwp.routeIndex)
                     {
@@ -337,7 +335,10 @@
                     }
                     
                     OAVoiceRouter *voiceRouter = [self getVoiceRouter];
+                    OAAnnounceTimeDistances *atd = [[[OARoutingHelper sharedInstance] getVoiceRouter] getAnnounceTimeDistances];
+                    OARouteDirectionInfo *nextRoute = [voiceRouter getNextRouteDirection];
                     _pointsProgress[type] = @(kIterator);
+                    float atdSpeed = [atd getSpeed:lastKnownLocation];
                     while (kIterator < lp.count)
                     {
                         OALocationPointWrapper *lwp = lp[kIterator];
@@ -348,23 +349,25 @@
                         }
                         if (lwp.announce)
                         {
-                            if ([_route getDistanceToPoint:lwp.routeIndex] > LONG_ANNOUNCE_RADIUS * 2)
+                            if (![atd isTurnStateActive:atdSpeed
+                                                   dist:[_route getDistanceToPoint:(lwp.routeIndex) / 2]
+                                               turnType:kStateLongPntApproach])
                                 break;
                             
                             id<OALocationPoint> point = lwp.point;
                             double d1 = MAX(0.0, [lastKnownLocation distanceFromLocation:[[CLLocation alloc] initWithLatitude:[point getLatitude] longitude:[point getLongitude]]] - lwp.deviationDistance);
                             NSNumber *state = [_locationPointsStates objectForKey:point];
-                            if (state && state.intValue == ANNOUNCED_ONCE && [voiceRouter isDistanceLess:lastKnownLocation.speed dist:d1 etalon:SHORT_ANNOUNCE_RADIUS])
+                            if (state && state.intValue == ANNOUNCED_ONCE && [atd isTurnStateActive:atdSpeed dist:d1 turnType:kStateShortPntApproach])
                             {
                                 [_locationPointsStates setObject:@(ANNOUNCED_DONE) forKey:point];
                                 [announcePoints addObject:lwp];
                             }
-                            else if (type != LPW_ALARMS && (!state || state.intValue == NOT_ANNOUNCED) && [voiceRouter isDistanceLess:lastKnownLocation.speed dist:d1 etalon:LONG_ANNOUNCE_RADIUS])
+                            else if (type != LPW_ALARMS && (!state || state.intValue == NOT_ANNOUNCED) && [atd isTurnStateActive:atdSpeed dist: d1 turnType:kStateLongPntApproach])
                             {
                                 [_locationPointsStates setObject:@(ANNOUNCED_ONCE) forKey:point];
                                 [approachPoints addObject:lwp];
                             }
-                            else if (type == LPW_ALARMS && (!state || state.intValue == NOT_ANNOUNCED) && [voiceRouter isDistanceLess:lastKnownLocation.speed dist:d1 etalon:ALARMS_ANNOUNCE_RADIUS])
+                            else if (type == LPW_ALARMS && (!state || state.intValue == NOT_ANNOUNCED))
                             {
                                 OAAlarmInfo *alarm = (OAAlarmInfo *) point;
                                 EOAAlarmInfoType t = alarm.type;
@@ -373,22 +376,29 @@
                                 switch (t)
                                 {
                                     case AIT_TRAFFIC_CALMING:
-                                        announceRadius = ALARMS_SHORT_ANNOUNCE_RADIUS;
+                                        announceRadius = kStateShortAlarmAnnounce;
                                         filter = YES;
                                         break;
+                                    case AIT_PEDESTRIAN:
+                                        announceRadius = (nextRoute != nil
+                                                          && nextRoute.turnType->isRoundAbout()
+                                                          && kIterator != 0)
+                                                          ? kStateShortAlarmAnnounce
+                                                          : kStateLongAlarmAnnounce;
+                                        break;
                                     default:
-                                        announceRadius = ALARMS_ANNOUNCE_RADIUS;
+                                        announceRadius = kStateLongAlarmAnnounce;
                                         break;
                                 }
 
-                                BOOL proceed = [voiceRouter isDistanceLess:lastKnownLocation.speed dist:d1 etalon:announceRadius];
+                                BOOL proceed = [atd isTurnStateActive:atdSpeed dist:d1 turnType:announceRadius];
                                 if (proceed && filter)
                                 {
                                     OAAlarmInfo *lastAlarm = [_lastAnnouncedAlarms objectForKey:@(t)];
                                     if (lastAlarm)
                                     {
                                         double dist = [[[CLLocation alloc] initWithLatitude:lastAlarm.coordinate.latitude longitude:lastAlarm.coordinate.longitude] distanceFromLocation:[[CLLocation alloc] initWithLatitude:alarm.coordinate.latitude longitude:alarm.coordinate.longitude]];
-                                        if (dist < ALARMS_SHORT_ANNOUNCE_RADIUS)
+                                        if ([atd isTurnStateActive:atdSpeed dist:dist turnType:kStateShortAlarmAnnounce])
                                         {
                                             [_locationPointsStates setObject:@(ANNOUNCED_DONE) forKey:point];
                                             proceed = NO;
@@ -470,6 +480,7 @@
     if (LPW_ALARMS < _pointsProgress.count)
     {
         float speed = lastProjection && lastProjection.speed >= 0 ? lastProjection.speed : 0;
+        OAAnnounceTimeDistances *atd = [[[OARoutingHelper sharedInstance] getVoiceRouter] getAnnounceTimeDistances];
         int kIterator = _pointsProgress[LPW_ALARMS].intValue;
         NSMutableArray<OALocationPointWrapper *> *lp = _locationPoints[LPW_ALARMS];
         while (kIterator < lp.count)
@@ -495,7 +506,7 @@
                 if (inf.locationIndex == currentRoute && d > 10)
                     return nil;
 
-                if (d > LONG_ANNOUNCE_RADIUS)
+                if (![atd isTurnStateActive:0 dist:d turnType:kStateLongPntApproach])
                     break;
 
                 float time = speed > 0 ? d / speed : INT_MAX;
@@ -600,20 +611,20 @@
 
 - (void) calculateAlarms:(OARouteCalculationResult *)route array:(NSMutableArray<OALocationPointWrapper *> *)array mode:(OAApplicationMode *)mode
 {
-    OAAlarmInfo *prevSpeedCam = nil;
     OAAppSettings *settings = [OAAppSettings sharedManager];
+    if (![settings.showRoutingAlarms get:mode])
+        return;
+
+    OAAlarmInfo *prevSpeedCam = nil;
     for (OAAlarmInfo *i in route.alarmInfo)
     {
         if (i.type == AIT_SPEED_CAMERA)
         {
-            if (([settings.showRoutingAlarms get:mode] && [settings.showCameras get:mode]) || [settings.speakCameras get:mode])
+            if ([settings.showCameras get:mode] || [settings.speakCameras get:mode])
             {
                 OALocationPointWrapper *lw = [[OALocationPointWrapper alloc] initWithRouteCalculationResult:route type:LPW_ALARMS point:i deviationDistance:0 routeIndex:i.locationIndex];
-                if (prevSpeedCam && [[[CLLocation alloc] initWithLatitude:prevSpeedCam.coordinate.latitude longitude:prevSpeedCam.coordinate.longitude] distanceFromLocation:[[CLLocation alloc] initWithLatitude:i.coordinate.latitude longitude:i.coordinate.longitude]] < [self.class DISTANCE_IGNORE_DOUBLE_SPEEDCAMS])
-                {
-                    // ignore double speed cams
-                }
-                else
+                // ignore double speed cams
+                if (!prevSpeedCam || [[[CLLocation alloc] initWithLatitude:prevSpeedCam.coordinate.latitude longitude:prevSpeedCam.coordinate.longitude] distanceFromLocation:[[CLLocation alloc] initWithLatitude:i.coordinate.latitude longitude:i.coordinate.longitude]] >= [self.class DISTANCE_IGNORE_DOUBLE_SPEEDCAMS])
                 {
                     [lw setAnnounce:[settings.speakCameras get:mode]];
                     [array addObject:lw];
@@ -623,7 +634,7 @@
         }
         else
         {
-            if (([settings.showRoutingAlarms get:mode] && [settings.showTrafficWarnings get:mode]) || [settings.speakTrafficWarnings get:mode])
+            if ([settings.showTrafficWarnings get:mode] || [settings.speakTrafficWarnings get:mode])
             {
                 OALocationPointWrapper *lw = [[OALocationPointWrapper alloc] initWithRouteCalculationResult:route type:LPW_ALARMS point:i deviationDistance:0 routeIndex:i.locationIndex];
                 [lw setAnnounce:[settings.speakTrafficWarnings get:mode]];

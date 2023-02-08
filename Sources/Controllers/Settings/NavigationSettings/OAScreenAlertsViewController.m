@@ -83,12 +83,17 @@
         @"icon" : @"list_warnings_pedestrian",
         @"value" : _settings.showPedestrian,
     }];
-    [parametersArr addObject:@{
-        @"type" : [OASwitchTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"show_cameras"),
-        @"icon" : @"list_warnings_speed_camera",
-        @"value" : _settings.showCameras,
-    }];
+
+    if (![_settings.speedCamerasUninstalled get])
+    {
+        [parametersArr addObject:@{
+            @"type" : [OASwitchTableViewCell getCellIdentifier],
+            @"title" : OALocalizedString(@"show_cameras"),
+            @"icon" : @"list_warnings_speed_camera",
+            @"value" : _settings.showCameras,
+        }];
+    }
+
     [parametersArr addObject:@{
         @"type" : [OASwitchTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"show_tunnels"),

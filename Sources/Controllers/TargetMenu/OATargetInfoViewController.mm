@@ -719,7 +719,7 @@
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
             cell.titleLabel.textColor = UIColorFromRGB(color_dialog_buttons_light);
-            cell.titleLabel.font = [UIFont systemFontOfSize:13 weight:UIFontWeightSemibold];
+            cell.titleLabel.font = [UIFont scaledSystemFontOfSize:13 weight:UIFontWeightSemibold];
             [cell textIndentsStyle:EOATableViewCellTextIncreasedTopCenterIndentStyle];
             [cell anchorContent:EOATableViewCellContentTopStyle];
         }
@@ -743,17 +743,17 @@
         NSString *label = info.text;
         if (label.length == 0)
         {
-            cell.textView.font = [UIFont systemFontOfSize:16.0];
+            cell.textView.font = [UIFont scaledSystemFontOfSize:16.0];
             cell.textView.text = info.textPrefix;
             cell.textView.textColor = [UIColor lightGrayColor];
         }
         else
         {
-            cell.textView.font = [UIFont systemFontOfSize:14.0];
+            cell.textView.font = [UIFont scaledSystemFontOfSize:14.0];
             cell.textView.textColor = [UIColor blackColor];
             cell.textView.text = label;
             
-            CGSize s = [OAUtilities calculateTextBounds:info.text width:self.tableView.bounds.size.width - 38.0 font:[UIFont systemFontOfSize:14.0]];
+            CGSize s = [OAUtilities calculateTextBounds:info.text width:self.tableView.bounds.size.width - 38.0 font:[UIFont scaledSystemFontOfSize:14.0]];
             CGFloat h = MIN(188.0, s.height + 10.0);
             h = MAX(48.0, h);
             info.height = h;

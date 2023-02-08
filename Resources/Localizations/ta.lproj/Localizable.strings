@@ -1647,7 +1647,7 @@
 "product_desc_russia_short" = "Maps of Russia regions";
 "product_desc_southamerica" = "Unlimited map downloads for South America";
 "product_desc_southamerica_short" = "South America region maps";
-"product_title_allworld" = "All World Maps";
+"worldwide_maps" = "All World Maps";
 "product_desc_allworld" = "Maps of All World";
 "product_desc_asia" = "Unlimited map downloads for Asia";
 "product_desc_asia_short" = "Asia region maps";
@@ -2161,40 +2161,40 @@
 "rendering_attr_highway_class_track_name" = "Track";
 "rendering_attr_tracktype_grade4_name" = "Mostly soft";
 "rendering_value_disabled_name" = "முடக்கியது";
-"routing_attr_short_way_name" = "எரிபொருள்-திறனுள்ள வழி";
+
 "rendering_attr_alpineHiking_name" = "Alpine hiking scale (SAC)";
 "rendering_attr_showLez_name" = "Show Low Emission Zones";
 "rendering_value_green_name" = "Green";
 "routing_attr_piste_type_nordic_description" = "Trails for nordic or cross-country skiing.";
 "rendering_attr_surface_unpaved_name" = "Unpaved";
-"rendering_value_bicycle_name" = "மிதிவண்டி";
+
 "rendering_value_translucent_lightgreen_name" = "Translucent light green";
 "rendering_attr_contourLines_name" = "Show contour lines";
-"rendering_attr_showAccess_name" = "அணுகல் கட்டுப்பாடுகள் மற்றும் எண்ணிக்கை என்பதைக் காட்டு";
+
 "rendering_attr_surface_dirt_name" = "Dirt";
 "routing_attr_piste_type_skitour_name" = "Ski touring";
 "routing_attr_driving_style_prefer_unpaved_name" = "Prefer unpaved roads";
 "rendering_attr_surface_sand_name" = "Sand";
 "routing_attr_no_new_routing_description" = "Do not use routing rules introduced in v1.9.";
-"routing_attr_prefer_motorway_name" = "மோட்டார் வாகனங்களை விரும்புங்கள்";
+
 "rendering_attr_surface_cobblestone_name" = "Cobblestone";
 "rendering_attr_highway_class_state_road_name" = "State road";
 "routing_attr_avoid_sett_name" = "No cobblestone or sett";
 "rendering_value_translucent_lightblue_name" = "Translucent light blue";
 "rendering_attr_smoothness_good_name" = "Good";
-"routing_attr_weight_name" = "எடை வரம்பு";
-"rendering_value_bold_name" = "போல்ட்";
+
+
 "rendering_attr_surface_stone_name" = "Stone";
 "rendering_attr_pisteGrooming_name" = "Piste grooming";
-"rendering_attr_noAdminboundaries_name" = "எல்லைகள்";
+
 "rendering_attr_tracktype_grade3_name" = "Mostly solid";
-"rendering_attr_showSurfaces_name" = "சாலை மேற்பரப்பு காட்டு";
+
 "routing_attr_allow_advanced_description" = "Difficult routes, with dangerous obstacles and steep sections.";
 "osm_notes" = "OSMகுறிப்புகள்";
-"rendering_attr_hidePOILabels_name" = "POIமுகப்புவரிச்சீட்டு";
+
 "rendering_attr_piste_difficulty_novice_name" = "Novice";
-"rendering_attr_hideUnderground_name" = "நிலத்தடி பொருட்கள்";
-"rendering_value_dark_brown_name" = "இருண்ட பழுப்பு";
+
+
 "routeInfo_piste_type_name" = "Piste type";
 "routing_attr_driving_style_safety_name" = "Prefer byways";
 "rendering_attr_surface_paving_stones_name" = "Paving stones";
@@ -2213,24 +2213,24 @@
 "routing_attr_avoid_ice_roads_fords_description" = "Avoids ice roads and fords.";
 "routing_attr_allow_advanced_name" = "Allow advanced routes";
 "rendering_attr_surface_grass_paver_name" = "Grass paver";
-"rendering_attr_hideAccess_name" = "அணுகல் கட்டுப்பாடுகள்";
+
 "rendering_value__name" = "Default";
 "rendering_attr_smoothness_very_horrible_name" = "Very horrible";
 "routing_attr_allow_intermediate_name" = "Allow intermediate routes";
-"rendering_attr_trolleybusRoutes_name" = "ட்ரோலிபஸ் பாதை";
+
 "rendering_attr_hideWaterPolygons_description" = "Water";
 "rendering_attr_piste_difficulty_extreme_name" = "Extreme";
 "rendering_value_low_name" = "Low";
 "rendering_value_lightgreen_name" = "Light green";
-"rendering_attr_busRoutes_name" = "பேருந்து வழித்தடங்கள்";
+
 "rendering_value_defaultTranslucentCyan_name" = "Default (translucent cyan)";
-"rendering_attr_hideHouseNumbers_name" = "வீட்டு எண்";
+
 "rendering_value_translucent_red_name" = "Translucent red";
 "rendering_attr_highway_class_track_grade1_name" = "Grade 1";
 "rendering_attr_transportStops_name" = "Transport stops";
 "rendering_value_walkingRoutesOSMCNodes_name" = "Node networks";
 "rendering_attr_piste_difficulty_expert_name" = "Expert";
-"rendering_attr_buildings15zoom_name" = "ஜூம் 15 இல் கட்டிடங்கள்";
+
 "rendering_attr_tracktype_grade1_name" = "Solid (paved)";
 "routing_attr_avoid_train_description" = "Avoids trains";
 "routing_attr_avoid_shuttle_train_name" = "No shuttle train";
@@ -2238,11 +2238,11 @@
 "rendering_value_boldOutline_name" = "Bold outline";
 "rendering_attr_noPolygons_name" = "Polygons";
 "rendering_attr_piste_difficulty_easy_name" = "Easy";
-"routing_attr_weight_description" = "அனுமதிக்கப்பட்ட வாகனம் எடை வரம்பை வழிகளில் குறிக்கவும்.";
+
 "rendering_attr_surface_salt_name" = "Salt";
 "rendering_value_yellow_name" = "Yellow";
 "routing_attr_allow_private_description" = "Allow access to private areas.";
-"rendering_attr_alpineHiking_description" = "SACஅளவின் படி பாதைகள் வழங்கவும்.";
+
 "rendering_attr_highway_class_bridleway_name" = "Bridleway";
 "routing_attr_avoid_share_taxi_name" = "No share taxi";
 "rendering_attr_pisteRoutes_name" = "Ski slopes";
@@ -2256,27 +2256,27 @@
 "routing_attr_avoid_bus_name" = "No buses";
 "rendering_value_highContrastRoads_name" = "High contrast roads";
 "rendering_attr_highway_class_service_name" = "Service";
-"rendering_attr_showCycleRoutes_name" = "சுழற்சி வழிகளைக் காண்பி";
+
 "rendering_attr_surface_metal_name" = "Metal";
 "rendering_value_translucent_purple_name" = "Translucent purple";
 "rendering_attr_hmRendered_description" = "Increase amount of map detail shown.";
-"rendering_attr_tramRoutes_name" = "டிராம் வழித்தடங்கள்";
+
 "rendering_attr_tracktype_grade2_name" = "Solid (unpaved)";
 "rendering_attr_piste_type_hike_name" = "Hike";
-"rendering_value_medium_name" = "நடுத்தர";
+
 "rendering_attr_piste_type_snow_park_name" = "Terrain park";
 "rendering_attr_highway_class_footway_name" = "Footway";
 "routing_attr_avoid_tram_description" = "Avoids trams";
 "rendering_value_default13_name" = "Default (13)";
-"rendering_value_thin_name" = "மெல்லிய";
-"rendering_attr_whiteWaterSports_name" = "வெண்ணீர் விளையாட்டுகள்";
+
+
 "routeInfo_roadClass_name" = "Road type";
 "routing_attr_allow_skating_only_description" = "Routes groomed for freestyle or skating only without classic tracks.";
 "rendering_attr_piste_type_nordic_name" = "Nordic";
-"rendering_attr_trainLightrailRoutes_name" = "ரயில் பாதைகள்";
-"rendering_value_pedestrian_name" = "பாதசாரிகள்";
+
+
 "rendering_attr_highway_class_track_grade5_name" = "Grade 5";
-"routing_attr_height_name" = "உயரம் வரம்பு";
+
 "rendering_attr_piste_type_connection_name" = "Connection";
 "routing_attr_relief_smoothness_factor_name" = "Select elevation fluctuation";
 "routing_attr_piste_type_downhill_name" = "Alpine/downhill ski";
@@ -2287,9 +2287,9 @@
 "rendering_attr_subwayMode_name" = "Subway routes";
 "rendering_attr_highway_class_motorway_name" = "Motorway";
 "rendering_value_brown_name" = "Brown";
-"rendering_attr_hideIcons_name" = "POIசின்னங்கள்";
+
 "rendering_attr_roadColors_description" = "Select a road color scheme:";
-"rendering_value_browse_map_name" = "வரைபடத்தை உலாவுக";
+
 "rendering_attr_surface_asphalt_name" = "Asphalt";
 "rendering_value_translucent_orange_name" = "Translucent orange";
 "rendering_attr_depthContours_description" = "Show depth contours and points.";
@@ -2414,63 +2414,44 @@
 "download_wikipedia_data" = "விக்கிபீடியா கட்டுரையை பதிவிறக்கவும்";
 "auth_failed" = "அங்கீகாரம் தோல்வியடைந்தது";
 
-"routing_attr_avoid_toll_description" = "கட்டண சாலைகள் தவிர்க்கவும்
-\n";
-"rendering_attr_contourColorScheme_name" = "விளிம்பு கோடுகள் வண்ணங்கள்
-\n";
-"rendering_attr_noAdminboundaries_description" = "பிராந்திய எல்லைகளை காட்சிப்படுத்த (நிர்வாகம் அளவு 5-9).
+
 \n";
 
-"routing_attr_avoid_toll_description" = "கட்டண சாலைகள் தவிர்க்கவும்
 \n";
-"rendering_attr_contourColorScheme_name" = "விளிம்பு கோடுகள் வண்ணங்கள்
+
 \n";
-"rendering_attr_noAdminboundaries_description" = "பிராந்திய எல்லைகளை காட்சிப்படுத்த (நிர்வாகம் அளவு 5-9).
+
+
+\n";
+
+\n";
+
 \n";;
 "rendering_attr_hideAccess_name" = "அணுகல் கட்டுப்பாடுகள்";
-"amenity_type_education" = "கல்வி";
 "rendering_value_medium_name" = "நடுத்தர";
 "rendering_attr_trainLightrailRoutes_name" = "ரயில் பாதைகள்";
-"recording_delete_confirm" = "இந்த உருப்படியை நீக்கவா\?";
 "routing_attr_short_way_name" = "எரிபொருள்-திறனுள்ள வழி";
-"shared_string_delete_all" = "அனைத்தையும் நீக்கு";
-"shared_string_added" = "சேர்க்கப்பட்டது";
 "rendering_attr_showAccess_name" = "அணுகல் கட்டுப்பாடுகள் மற்றும் எண்ணிக்கை என்பதைக் காட்டு";
 "rendering_attr_showCycleRoutes_name" = "சுழற்சி வழிகளைக் காண்பி";
 "routing_attr_prefer_motorway_name" = "மோட்டார் வாகனங்களை விரும்புங்கள்";
 "rendering_value_pedestrian_name" = "பாதசாரிகள்";
 "rendering_attr_showSurfaces_name" = "சாலை மேற்பரப்பு காட்டு";
 "rendering_value_bicycle_name" = "மிதிவண்டி";
-"osm_live_banner_desc" = "வரம்பற்ற வரைபட பதிவிறக்கங்களைப் பெறுக, மேலும் ஒரு மாதத்திற்கு ஒருமுறை விட மேம்படுத்துங்கள்: வாராந்திர, தினசரிஅல்லது மணிநேரம்.";
-"download_wikipedia_data" = "விக்கிபீடியா கட்டுரையை பதிவிறக்கவும்";
-"offline_edition_descr" = "எப்போதும் ஆஃப்லைன் பதிப்பித்தலை பயன்படுத்தவும்.";
-"amenity_type_emergency" = "அவசர";
 "rendering_attr_hideUnderground_name" = "நிலத்தடி பொருட்கள்";
 "routing_attr_weight_description" = "அனுமதிக்கப்பட்ட வாகனம் எடை வரம்பை வழிகளில் குறிக்கவும்.";
-"shared_string_selected" = "தேர்ந்தெடுக்கப்பட்ட";
 "rendering_attr_contourColorScheme_name" = "விளிம்பு கோடுகள் வண்ணங்கள்
 \n";
 "rendering_attr_alpineHiking_description" = "SACஅளவின் படி பாதைகள் வழங்கவும்.";
 "rendering_attr_busRoutes_name" = "பேருந்து வழித்தடங்கள்";
 "rendering_value_bold_name" = "போல்ட்";
-"download_all" = "அனைத்தையும் பதிவிறக்கு";
-"toast_empty_name_error" = "பெயரிடப்படாத இடம்";
-"shared_string_refresh" = "புதுப்பி";
 "rendering_attr_noAdminboundaries_name" = "எல்லைகள்";
 "rendering_value_dark_brown_name" = "இருண்ட பழுப்பு";
 "rendering_attr_hideHouseNumbers_name" = "வீட்டு எண்";
 "rendering_attr_hideIcons_name" = "POIசின்னங்கள்";
 "rendering_value_thin_name" = "மெல்லிய";
 "routing_attr_weight_name" = "எடை வரம்பு";
-"altitude" = "உயரம்";
-"osm_notes" = "OSMகுறிப்புகள்";
 "m" = "மீ";
-"shared_string_recorded" = "பதிவு";
 "rendering_value_browse_map_name" = "வரைபடத்தை உலாவுக";
-"shared_string_status" = "நிலைமை";
-"app_mode_default" = "வரைபடத்தை உலாவுக";
-"osm_live_subscriptions" = "சந்தாக்கள்
-\n";
 "rendering_attr_trolleybusRoutes_name" = "ட்ரோலிபஸ் பாதை";
 "rendering_attr_noAdminboundaries_description" = "பிராந்திய எல்லைகளை காட்சிப்படுத்த (நிர்வாகம் அளவு 5-9).
 \n";
@@ -2481,5 +2462,48 @@
 "rendering_attr_hidePOILabels_name" = "POIமுகப்புவரிச்சீட்டு";
 "routing_attr_avoid_toll_description" = "கட்டண சாலைகள் தவிர்க்கவும்
 \n";
-"auth_failed" = "அங்கீகாரம் தோல்வியடைந்தது";
 "km" = "கி.மீ.";
+
+"routing_attr_avoid_toll_description" = "கட்டண சாலைகள் தவிர்க்கவும்
+\n";
+"rendering_attr_noAdminboundaries_description" = "பிராந்திய எல்லைகளை காட்சிப்படுத்த (நிர்வாகம் அளவு 5-9).
+\n";
+"rendering_attr_contourColorScheme_name" = "விளிம்பு கோடுகள் வண்ணங்கள்
+\n";;
+"rendering_attr_hidePOILabels_name" = "POIமுகப்புவரிச்சீட்டு";
+"routing_attr_short_way_name" = "எரிபொருள்-திறனுள்ள வழி";
+"rendering_attr_noAdminboundaries_name" = "எல்லைகள்";
+"rendering_attr_hideIcons_name" = "POIசின்னங்கள்";
+"km" = "கி.மீ.";
+"routing_attr_weight_description" = "அனுமதிக்கப்பட்ட வாகனம் எடை வரம்பை வழிகளில் குறிக்கவும்.";
+"rendering_value_pedestrian_name" = "பாதசாரிகள்";
+"rendering_value_bold_name" = "போல்ட்";
+"rendering_attr_busRoutes_name" = "பேருந்து வழித்தடங்கள்";
+"rendering_value_dark_brown_name" = "இருண்ட பழுப்பு";
+"rendering_attr_tramRoutes_name" = "டிராம் வழித்தடங்கள்";
+"routing_attr_height_name" = "உயரம் வரம்பு";
+"rendering_attr_whiteWaterSports_name" = "வெண்ணீர் விளையாட்டுகள்";
+"rendering_attr_showAccess_name" = "அணுகல் கட்டுப்பாடுகள் மற்றும் எண்ணிக்கை என்பதைக் காட்டு";
+"rendering_attr_trainLightrailRoutes_name" = "ரயில் பாதைகள்";
+"rendering_attr_alpineHiking_description" = "SACஅளவின் படி பாதைகள் வழங்கவும்.";
+"rendering_attr_buildings15zoom_name" = "ஜூம் 15 இல் கட்டிடங்கள்";
+"lang_zh-Hant" = "சீன (பாரம்பரியம்)";
+"rendering_value_browse_map_name" = "வரைபடத்தை உலாவுக";
+"rendering_attr_hideAccess_name" = "அணுகல் கட்டுப்பாடுகள்";
+"rendering_value_medium_name" = "நடுத்தர";
+"rendering_attr_hideHouseNumbers_name" = "வீட்டு எண்";
+"routing_attr_avoid_toll_description" = "கட்டண சாலைகள் தவிர்க்கவும்
+\n";
+"rendering_value_thin_name" = "மெல்லிய";
+"rendering_attr_showSurfaces_name" = "சாலை மேற்பரப்பு காட்டு";
+"rendering_attr_noAdminboundaries_description" = "பிராந்திய எல்லைகளை காட்சிப்படுத்த (நிர்வாகம் அளவு 5-9).
+\n";
+"rendering_attr_contourColorScheme_name" = "விளிம்பு கோடுகள் வண்ணங்கள்
+\n";
+"rendering_attr_showCycleRoutes_name" = "சுழற்சி வழிகளைக் காண்பி";
+"routing_attr_prefer_motorway_name" = "மோட்டார் வாகனங்களை விரும்புங்கள்";
+"rendering_attr_trolleybusRoutes_name" = "ட்ரோலிபஸ் பாதை";
+"rendering_attr_hideUnderground_name" = "நிலத்தடி பொருட்கள்";
+"m" = "மீ";
+"rendering_value_bicycle_name" = "மிதிவண்டி";
+"routing_attr_weight_name" = "எடை வரம்பு";

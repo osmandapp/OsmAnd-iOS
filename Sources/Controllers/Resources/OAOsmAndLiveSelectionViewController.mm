@@ -102,11 +102,14 @@ static const NSInteger groupCount = 1;
     self.tableView.delegate = self;
     self.tableView.estimatedRowHeight = kEstimatedRowHeight;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
-    
+
+    self.cancelButton.titleLabel.font = [UIFont scaledSystemFontOfSize:14.];
+    self.applyButton.titleLabel.font = [UIFont scaledSystemFontOfSize:14.];
+
     if (_settingsScreen == ELiveSettingsScreenMain)
     {
         _footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 55.0)];
-        NSDictionary *attrs = @{ NSFontAttributeName : [UIFont systemFontOfSize:16.0],
+        NSDictionary *attrs = @{ NSFontAttributeName : [UIFont scaledSystemFontOfSize:16.0],
                                  NSForegroundColorAttributeName : [UIColor whiteColor] };
         NSAttributedString *text = [[NSAttributedString alloc] initWithString:OALocalizedString(@"update_now") attributes:attrs];
         UIButton *updateNow = [UIButton buttonWithType:UIButtonTypeSystem];

@@ -325,6 +325,9 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.separatorInset = UIEdgeInsetsMake(0, CGFLOAT_MAX, 0, 0);
             [cell.segmentControl insertSegmentWithTitle:item[@"title2"] atIndex:2 animated:NO];
+            UIFont *font = [UIFont scaledSystemFontOfSize:14.];
+            [cell.segmentControl setTitleTextAttributes:@{ NSFontAttributeName : font } forState:UIControlStateNormal];
+            [cell.segmentControl setTitleTextAttributes:@{ NSFontAttributeName : font } forState:UIControlStateSelected];
         }
         if (cell)
         {

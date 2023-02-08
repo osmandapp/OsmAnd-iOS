@@ -252,7 +252,7 @@ static const NSInteger groupCount = 5;
     [dataArr addObject:
      @{
        @"name" : @"plugin_nautical_name",
-       @"title" : OALocalizedString(@"product_title_nautical"),
+       @"title" : OALocalizedString(@"plugin_nautical_name"),
        @"type" : kLinkInternalType,
        @"html" : @"nautical-charts"
        }];
@@ -431,8 +431,8 @@ static const NSInteger groupCount = 5;
         [cell.textView setTextColor:[UIColor blackColor]];
         [cell.textView setText:item[@"title"]];
         [cell.descriptionView setText:item[@"description"]];
-        [cell.textView setFont:[UIFont systemFontOfSize:16]];
-        [cell.descriptionView setFont:[UIFont systemFontOfSize:12]];
+        [cell.textView setFont:[UIFont scaledSystemFontOfSize:16]];
+        [cell.descriptionView setFont:[UIFont scaledSystemFontOfSize:12]];
         if ([cell needsUpdateConstraints])
             [cell updateConstraints];
     }

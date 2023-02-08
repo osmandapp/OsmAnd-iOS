@@ -240,6 +240,7 @@
     {
         NSNumberFormatter *formatter = [[NSNumberFormatter alloc]init];
         [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
+        formatter.decimalSeparator = @".";
         formatter.minimumIntegerDigits = 1;
         formatter.minimumFractionDigits = 0;
         formatter.maximumFractionDigits = 3;
@@ -372,8 +373,9 @@
             _isMotorType ? kTopPaddingMotorType : 0.,
             textWidth,
             heightForHeader)];
-        UIFont *labelFont = [UIFont systemFontOfSize:_isMotorType ? 13. : 15.];
+        UIFont *labelFont = [UIFont scaledSystemFontOfSize:_isMotorType ? 13. : 15.];
         description.font = labelFont;
+        description.adjustsFontForContentSizeCategory = YES;
         [description setTextColor: UIColorFromRGB(color_text_footer)];
         NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
         [style setLineSpacing:6];

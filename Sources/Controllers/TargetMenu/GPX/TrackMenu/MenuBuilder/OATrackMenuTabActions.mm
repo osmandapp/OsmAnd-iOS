@@ -147,7 +147,7 @@
     OAGPXTableCellData *deleteCellData = [OAGPXTableCellData withData:@{
             kTableKey: @"delete",
             kCellType: [OATitleIconRoundCell getCellIdentifier],
-            kTableValues: @{ @"font_value": [UIFont boldSystemFontOfSize:17] },
+            kTableValues: @{ @"font_value": [UIFont scaledBoldSystemFontOfSize:17] },
             kCellRightIconName: @"ic_custom_remove_outlined",
             kCellTitle: OALocalizedString(@"shared_string_delete"),
             kCellTintColor: @color_primary_red

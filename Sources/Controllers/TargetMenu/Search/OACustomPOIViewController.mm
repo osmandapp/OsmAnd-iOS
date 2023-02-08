@@ -167,12 +167,12 @@
         }
 
         NSString *textShow = OALocalizedString(@"recording_context_menu_show");
-        UIFont *fontShow = [UIFont systemFontOfSize:15 weight:UIFontWeightSemibold];
+        UIFont *fontShow = [UIFont scaledSystemFontOfSize:15 weight:UIFontWeightSemibold];
         UIColor *colorShow = _countShowCategories != 0 ? UIColor.whiteColor : UIColorFromRGB(color_text_footer);
         NSMutableAttributedString *attrShow = [[NSMutableAttributedString alloc] initWithString:textShow attributes:@{NSFontAttributeName: fontShow, NSForegroundColorAttributeName: colorShow}];
 
         NSString *textCategories = [NSString stringWithFormat:@"\n%@: %li", OALocalizedString(@"search_categories"), _countShowCategories];
-        UIFont *fontCategories = [UIFont systemFontOfSize:13];
+        UIFont *fontCategories = [UIFont scaledSystemFontOfSize:13];
         UIColor *colorCategories = _countShowCategories != 0 ? [[UIColor alloc] initWithWhite:1 alpha:0.5] : UIColorFromRGB(color_text_footer);
         NSMutableAttributedString *attrCategories = [[NSMutableAttributedString alloc] initWithString:textCategories attributes:@{NSFontAttributeName: fontCategories, NSForegroundColorAttributeName: colorCategories}];
 
@@ -194,7 +194,7 @@
     else
     {
         NSString *textShow = OALocalizedString(@"shared_string_add");
-        UIFont *fontShow = [UIFont systemFontOfSize:15 weight:UIFontWeightSemibold];
+        UIFont *fontShow = [UIFont scaledSystemFontOfSize:15 weight:UIFontWeightSemibold];
         UIColor *colorShow = UIColor.whiteColor;
         NSMutableAttributedString *attrAdd = [[NSMutableAttributedString alloc] initWithString:textShow attributes:@{NSFontAttributeName: fontShow, NSForegroundColorAttributeName: colorShow}];
 
@@ -552,7 +552,7 @@
     {
         OATableViewCustomHeaderView *customHeader = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
         customHeader.label.text = OALocalizedString(@"search_poi_types_descr");
-        customHeader.label.font = [UIFont systemFontOfSize:15];
+        customHeader.label.font = [UIFont scaledSystemFontOfSize:15];
         [customHeader setYOffset:12];
         return customHeader;
     }
@@ -561,7 +561,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return section == 0 && !_searchMode ? [OATableViewCustomHeaderView getHeight:OALocalizedString(@"search_poi_types_descr") width:tableView.bounds.size.width yOffset:12 font:[UIFont systemFontOfSize:15]] + 9 : 0.01;
+    return section == 0 && !_searchMode ? [OATableViewCustomHeaderView getHeight:OALocalizedString(@"search_poi_types_descr") width:tableView.bounds.size.width yOffset:12 font:[UIFont scaledSystemFontOfSize:15]] + 9 : 0.01;
 }
 
 #pragma mark - Keyboard Notifications

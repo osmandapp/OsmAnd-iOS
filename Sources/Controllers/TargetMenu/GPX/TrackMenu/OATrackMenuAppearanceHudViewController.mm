@@ -265,7 +265,7 @@
     [self.doneButton addBlurEffect:YES cornerRadius:12. padding:0.];
     [self.doneButton setAttributedTitle:
                     [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_done")
-                                                    attributes:@{ NSFontAttributeName:[UIFont boldSystemFontOfSize:17.] }]
+                                                    attributes:@{ NSFontAttributeName:[UIFont scaledBoldSystemFontOfSize:17.] }]
                                forState:UIControlStateNormal];
 }
 
@@ -778,11 +778,11 @@
             cell.iconView.image = [cell isDirectionRTL] ? image.imageFlippedForRightToLeftLayoutDirection : image;
 
             cell.descView.text = cellData.desc;
-            cell.descView.font = [UIFont systemFontOfSize:[cellData.values[@"desc_font_size"] intValue]];
+            cell.descView.font = [UIFont scaledSystemFontOfSize:[cellData.values[@"desc_font_size"] intValue]];
             cell.descView.textColor = UIColorFromRGB(color_text_footer);
 
             cell.extraDescView.text = extraDesc;
-            cell.extraDescView.font = [UIFont systemFontOfSize:[cellData.values[@"desc_font_size"] intValue]];
+            cell.extraDescView.font = [UIFont scaledSystemFontOfSize:[cellData.values[@"desc_font_size"] intValue]];
             cell.extraDescView.textColor = UIColorFromRGB(color_text_footer);
         }
 
@@ -853,7 +853,7 @@
         {
             [cell makeSmallMargins:indexPath.row != [self tableView:tableView numberOfRowsInSection:indexPath.section] - 1];
             cell.textView.text = cellData.title;
-            cell.textView.font = [UIFont systemFontOfSize:15];
+            cell.textView.font = [UIFont scaledSystemFontOfSize:15];
             cell.textView.textColor = UIColorFromRGB(color_text_footer);
         }
         outCell = cell;
@@ -876,7 +876,7 @@
             [cell.segmentedControl setTitleTextAttributes:@{NSForegroundColorAttributeName : UIColor.whiteColor}
                                                  forState:UIControlStateSelected];
             [cell.segmentedControl setTitleTextAttributes:@{NSForegroundColorAttributeName : UIColorFromRGB(color_primary_purple),
-                                                                       NSFontAttributeName : [UIFont boldSystemFontOfSize:15.0f]}
+                                                                       NSFontAttributeName : [UIFont scaledBoldSystemFontOfSize:15.0f]}
                                                  forState:UIControlStateNormal];
 
             if (@available(iOS 13.0, *))
@@ -960,7 +960,7 @@
             cell.topLeftLabel.text = cellData.title;
             cell.topRightLabel.text = cellData.values[@"custom_string_value"];
             cell.topRightLabel.textColor = UIColorFromRGB(color_primary_purple);
-            cell.topRightLabel.font = [UIFont systemFontOfSize:17 weight:UIFontWeightMedium];
+            cell.topRightLabel.font = [UIFont scaledSystemFontOfSize:17 weight:UIFontWeightMedium];
             cell.bottomLeftLabel.text = arrayValue.firstObject;
             cell.bottomRightLabel.text = arrayValue.lastObject;
             [cell.sliderView setNumberOfMarks:arrayValue.count additionalMarksBetween:0];
@@ -1001,7 +1001,7 @@
     return sectionData.headerHeight > 0
     ? [OAUtilities calculateTextBounds:sectionData.header
                                  width:self.scrollableView.frame.size.width - 40. - [OAUtilities getLeftMargin]
-                                  font:[UIFont systemFontOfSize:13]].height + sectionData.headerHeight
+                                  font:[UIFont scaledSystemFontOfSize:13]].height + sectionData.headerHeight
     : 0.001;
 }
 
@@ -1025,7 +1025,7 @@
 
     OATableViewCustomFooterView *vw =
             [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
-    UIFont *textFont = [UIFont systemFontOfSize:13];
+    UIFont *textFont = [UIFont scaledSystemFontOfSize:13];
     NSMutableAttributedString *textStr = [[NSMutableAttributedString alloc] initWithString:footer attributes:@{
             NSFontAttributeName: textFont,
             NSForegroundColorAttributeName: UIColorFromRGB(color_text_footer)

@@ -92,7 +92,7 @@
 {
     NSMutableArray *dataArr = [NSMutableArray array];
     NSInteger rotateMap = [_settings.rotateMap get:self.appMode];
-    BOOL positionMap = [_settings.centerPositionOnMap get:self.appMode];
+    EOAPositionPlacement positionMap = [_settings.positionPlacementOnMap get:self.appMode];
     BOOL automatic = [_settings.drivingRegionAutomatic get:self.appMode];
     NSInteger drivingRegion = [_settings.drivingRegion get:self.appMode];
     NSInteger metricSystem = [_settings.metricSystem get:self.appMode];
@@ -129,17 +129,24 @@
             
         case EOAProfileGeneralSettingsDisplayPosition:
             [dataArr addObject:@{
+                @"name" : @"auto",
+                @"title" : OALocalizedString(@"shared_string_automatic"),
+                @"selected" : @(positionMap == EOAPositionPlacementAuto),
+                @"icon" : @"ic_custom_display_position_automatic",
+                @"type" : [OAIconTextTableViewCell getCellIdentifier],
+            }];
+            [dataArr addObject:@{
                 @"name" : @"center",
                 @"title" : OALocalizedString(@"position_on_map_center"),
-                @"selected" : @(positionMap == YES),
-                @"icon" : @"ic_custom_display_position_center.png",
+                @"selected" : @(positionMap == EOAPositionPlacementCenter),
+                @"icon" : @"ic_custom_display_position_center",
                 @"type" : [OAIconTextTableViewCell getCellIdentifier],
             }];
             [dataArr addObject:@{
                 @"name" : @"bottom",
                 @"title" : OALocalizedString(@"position_on_map_bottom"),
-                @"selected" : @(positionMap == NO),
-                @"icon" : @"ic_custom_display_position_bottom.png",
+                @"selected" : @(positionMap == EOAPositionPlacementBottom),
+                @"icon" : @"ic_custom_display_position_bottom",
                 @"type" : [OAIconTextTableViewCell getCellIdentifier],
             }];
             break;
@@ -412,7 +419,7 @@
             [self selectMapOrientation:name];
             break;
         case EOAProfileGeneralSettingsDisplayPosition:
-            [self selectDisplayPosition:name];
+            [self selectDisplayPosition:(int)indexPath.row];
             break;
         case EOAProfileGeneralSettingsDrivingRegion:
             [self selectDrivingRegion:name];
@@ -452,9 +459,9 @@
     [OARootViewController.instance.mapPanel.mapViewController refreshMap];
 }
 
-- (void) selectDisplayPosition:(NSString *)name
+- (void) selectDisplayPosition:(int)idx
 {
-    [_settings.centerPositionOnMap set:[name isEqualToString:@"center"] mode:self.appMode];
+    [_settings.positionPlacementOnMap set:idx mode:self.appMode];
 }
 
 - (void) selectDrivingRegion:(NSString *)name

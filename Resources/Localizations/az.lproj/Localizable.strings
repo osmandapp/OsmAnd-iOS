@@ -1582,7 +1582,7 @@
 "product_desc_russia_short" = "Maps of Russia regions";
 "product_desc_southamerica" = "Unlimited map downloads for South America";
 "product_desc_southamerica_short" = "South America region maps";
-"product_title_allworld" = "All World Maps";
+"worldwide_maps" = "All World Maps";
 "product_desc_allworld" = "Maps of All World";
 "product_desc_asia" = "Unlimited map downloads for Asia";
 "product_desc_asia_short" = "Asia region maps";
@@ -2424,3 +2424,18 @@
 "m" = "m";
 "kg" = "kq";
 "km" = "km";
+"speed_camera_pois" = "Sürət kamerası POI-ləri";
+"lang_zh-Hant" = "Çincə (Ənənəvi)";
+"privacy_and_security" = "Gizlilik və təhlükəsizlik";
+"speed_cameras_alert" = "Bəzi ölkələrdə sürət kameralarının xəbərdarlığı qanunla qadağandır.";
+"shared_string_keep_active" = "Aktiv saxla";
+"shared_string_height" = "Hündürlük";
+"uninstall_speed_cameras" = "Sürət kameralarını sil";
+"speed_cameras_legal_descr" = "Bəzi ölkələrdə və ya bölgələrdə sürət kamerası ilə bağlı xəbərdarlıq proqramlarından istifadə qanunla qadağandır.
+\n
+\nÖlkənizin qanunlarından asılı olaraq seçim etməlisiniz.
+\n
+\n%@-nı seçsəniz, sürət kameraları haqqında siqnallar və xəbərdarlıqlar alacaqsınız.
+\n
+\n%@-i seçsəniz, sürət kameraları ilə bağlı bütün məlumatlar: xəbərdarlıqlar, bildirişlər, POI-lər OsmAnd tamamilə yenidən quraşdırılana qədər silinəcək.";
+"shared_string_legal" = "Qanuni";

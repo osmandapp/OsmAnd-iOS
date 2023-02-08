@@ -98,7 +98,6 @@ let languageDict = [
     "sq" : "sq",
     "sr" : "sr",
     "sr-Latn" : "b+sr+Latn",
-    "sr-RS" : "b+sr+Cyrl",
     "sv" : "sv",
     "ta" : "ta",
     "te" : "te",

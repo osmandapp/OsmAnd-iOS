@@ -1654,7 +1654,7 @@
 "product_desc_russia_short" = "Maps of Russia regions";
 "product_desc_southamerica" = "Unlimited map downloads for South America";
 "product_desc_southamerica_short" = "South America region maps";
-"product_title_allworld" = "All World Maps";
+"worldwide_maps" = "All World Maps";
 "product_desc_allworld" = "Maps of All World";
 "product_desc_asia" = "Unlimited map downloads for Asia";
 "product_desc_asia_short" = "Asia region maps";
@@ -2440,3 +2440,16 @@
 "auth_failed" = "Մուտք գործելը ձախողվեց";
 "km" = "կմ";
 "m" = "մ";
+"speed_camera_pois" = "Արագաչափ տեսախցիկների POI-ներ";
+"speed_cameras_legal_descr" = "Որոշ երկրներում և շրջաններում արագության խցիկի ազդանշանների օգտագործումը օրենքով արգելված է:
+\n
+\nԴուք պետք է ընտրություն կատարեք ՝ համաձայն ձեր երկրի օրենսդրությունից:
+\n
+\nԸնտրեք %@ արագության տեսախցիկների վերաբերյալ ահազանգեր ստանալու համար:
+\n
+\nԸնտրեք %@։ Արագության խցիկների (ծանուցումների, ազդանշանների և POI- ների) հետ կապված բոլոր տվյալները ջնջելու համար, մինչև OsmAnd- ը ամբողջովին կվերատեղակայվի:";
+"lang_zh-Hant" = "Չինարեն (Ավանդաան)";
+"shared_string_keep_active" = "Պահել ակտիվ";
+"speed_cameras_alert" = "Որոշ երկրներում արագության վերահսկողության տեսախցիկների ծանուցումը արգելված է օրենքով ։";
+"uninstall_speed_cameras" = "Հեռացրեք արագության տեսախցիկները";
+"shared_string_legal" = "Օրենսդրություն";

@@ -54,7 +54,7 @@
             if (statsModeCell)
             {
                 [statsModeCell.modeButton setTitle:[NSString stringWithFormat:@"%@/%@",
-                                        OALocalizedString(@"map_widget_altitude"),
+                                        OALocalizedString(@"altitude"),
                                         OALocalizedString(@"shared_string_slope")]
                                           forState:UIControlStateNormal];
             }
@@ -73,7 +73,7 @@
                 if (statsModeCell)
                 {
                     [statsModeCell.modeButton setTitle:[NSString stringWithFormat:@"%@/%@",
-                                            OALocalizedString(@"map_widget_altitude"),
+                                            OALocalizedString(@"altitude"),
                                             OALocalizedString(@"shared_string_speed")]
                                               forState:UIControlStateNormal];
                 }
@@ -96,7 +96,7 @@
         case EOARouteStatisticsModeAltitude:
         {
             if (statsModeCell)
-                [statsModeCell.modeButton setTitle:OALocalizedString(@"map_widget_altitude") forState:UIControlStateNormal];
+                [statsModeCell.modeButton setTitle:OALocalizedString(@"altitude") forState:UIControlStateNormal];
             [GpxUIHelper refreshLineChartWithChartView:chart
                                               analysis:analysis
                                    useGesturesAndScale:YES
@@ -508,7 +508,7 @@
 
 + (NSAttributedString *) getFormattedElevationString:(OAGPXTrackAnalysis *)analysis
 {
-    UIFont *textFont = [UIFont systemFontOfSize:15.];
+    UIFont *textFont = [UIFont scaledSystemFontOfSize:15.];
     NSDictionary *textAttrs = @{ NSFontAttributeName: textFont, NSForegroundColorAttributeName: UIColorFromRGB(color_text_footer) };
     if (analysis)
     {
@@ -530,13 +530,13 @@
 
         [res appendAttributedString:uphillIcon];
         [res appendAttributedString:[[NSAttributedString alloc] initWithString:
-                                     [NSString stringWithFormat:@" %@", [OAOsmAndFormatter getFormattedAlt:analysis.maxElevation]]
+                                     [NSString stringWithFormat:@" %@", [OAOsmAndFormatter getFormattedAlt:analysis.diffElevationUp]]
                                                                     attributes:textAttrs]];
         [res appendAttributedString:[[NSAttributedString alloc] initWithString:@"    "]];
 
         [res appendAttributedString:downhilIcon];
         [res appendAttributedString:[[NSAttributedString alloc] initWithString:
-                                     [NSString stringWithFormat:@" %@", [OAOsmAndFormatter getFormattedAlt:analysis.minElevation]]
+                                     [NSString stringWithFormat:@" %@", [OAOsmAndFormatter getFormattedAlt:analysis.diffElevationDown]]
                                                                     attributes:textAttrs]];
 
         return res;
@@ -548,8 +548,8 @@
 {
     OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
 
-    NSDictionary *numericAttributes = @{NSFontAttributeName: [UIFont systemFontOfSize:20 weight:UIFontWeightSemibold], NSForegroundColorAttributeName : UIColor.blackColor};
-    NSDictionary *alphabeticAttributes = @{NSFontAttributeName: [UIFont systemFontOfSize:20], NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer)};
+    NSDictionary *numericAttributes = @{NSFontAttributeName: [UIFont scaledSystemFontOfSize:20 weight:UIFontWeightSemibold], NSForegroundColorAttributeName : UIColor.blackColor};
+    NSDictionary *alphabeticAttributes = @{NSFontAttributeName: [UIFont scaledSystemFontOfSize:20], NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer)};
     NSString *dist = [OAOsmAndFormatter getFormattedDistance:[routingHelper getLeftDistance]];
     NSAttributedString *distance = [self formatDistance:dist numericAttributes:numericAttributes alphabeticAttributes:alphabeticAttributes];
     NSAttributedString *time = [self getFormattedTimeInterval:[routingHelper getLeftTime] numericAttributes:numericAttributes alphabeticAttributes:alphabeticAttributes];
@@ -605,7 +605,7 @@
         if (time.length > 0)
             [time appendAttributedString:space];
         NSAttributedString *val = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d", minutes] attributes:numericAttributes];
-        NSAttributedString *units = [[NSAttributedString alloc] initWithString:OALocalizedString(@"units_min_short") attributes:alphabeticAttributes];
+        NSAttributedString *units = [[NSAttributedString alloc] initWithString:OALocalizedString(@"m") attributes:alphabeticAttributes];
         [time appendAttributedString:val];
         [time appendAttributedString:space];
         [time appendAttributedString:units];

@@ -8,6 +8,10 @@
 
 #import "OAHistoryDB.h"
 #import "OABackupHelper.h"
+#import "OAPointDescription.h"
+#import "OAAppSettings.h"
+#import "OAPOIHelper.h"
+#import "OAQuickSearchTableController.h"
 #import <sqlite3.h>
 #import "OALog.h"
 #import "NSData+CRC32.h"
@@ -214,7 +218,7 @@
                     double lat = sqlite3_column_double(statement, 3);
                     double lon = sqlite3_column_double(statement, 4);
                     
-                    OAHistoryType type = sqlite3_column_int(statement, 5);
+                    OAHistoryType type = (OAHistoryType) sqlite3_column_int(statement, 5);
 
                     NSString *iconName;
                     if (sqlite3_column_text(statement, 6) != nil)
@@ -270,6 +274,10 @@
             const char *query_stmt = [querySQL UTF8String];
             if (sqlite3_prepare_v2(historyDB, query_stmt, -1, &statement, NULL) == SQLITE_OK)
             {
+                OAAppSettings *settings = [OAAppSettings sharedManager];
+                OAPOIHelper *poiHelper = [OAPOIHelper sharedInstance];
+                NSString *lang = [settings.settingPrefMapLanguage get];
+                BOOL transliterate = [settings.settingMapLanguageTranslit get];
                 while (sqlite3_step(statement) == SQLITE_ROW)
                 {
                     OAHistoryItem *item = [[OAHistoryItem alloc] init];
@@ -284,30 +292,49 @@
                     NSString *name;
                     if (sqlite3_column_text(statement, 5) != nil)
                         name = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 5)];
-                    
-                    OAHistoryType type = sqlite3_column_int(statement, 6);
 
-                    NSString *iconName;
-                    if (sqlite3_column_text(statement, 7) != nil)
-                        iconName = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 7)];
+                    OAHistoryType type = (OAHistoryType) sqlite3_column_int(statement, 6);
 
                     NSString *typeName;
                     if (sqlite3_column_text(statement, 8) != nil)
                         typeName = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 8)];
 
-                    NSDate *date = [NSDate dateWithTimeIntervalSince1970:time];
-                    
-                    item.hId = hId;
-                    item.hHash = hHash;
-                    item.date = date;
-                    item.latitude = lat;
-                    item.longitude = lon;
-                    item.name = name;
-                    item.hType = type;
-                    item.iconName = iconName;
-                    item.typeName = typeName;
-                    
-                    [arr addObject:item];
+                    BOOL skipDisabledResult = NO;
+                    NSSet<NSString *> *disabledPoiTypes = [settings getDisabledTypes];
+                    for (NSString *disabledPoiType in disabledPoiTypes)
+                    {
+                        if ([[poiHelper getPhraseByName:disabledPoiType] isEqualToString:typeName])
+                            skipDisabledResult = YES;
+                    }
+                    if (!skipDisabledResult)
+                    {
+                        skipDisabledResult = type == OAHistoryTypePOI && ![OAQuickSearchTableController findAmenity:name
+                                                                                                                lat:lat
+                                                                                                                lon:lon
+                                                                                                               lang:lang ? lang : @""
+                                                                                                      transliterate:transliterate];
+                    }
+
+                    if (!skipDisabledResult)
+                    {
+                        NSString *iconName;
+                        if (sqlite3_column_text(statement, 7) != nil)
+                            iconName = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 7)];
+
+                        NSDate *date = [NSDate dateWithTimeIntervalSince1970:time];
+
+                        item.hId = hId;
+                        item.hHash = hHash;
+                        item.date = date;
+                        item.latitude = lat;
+                        item.longitude = lon;
+                        item.name = name;
+                        item.hType = type;
+                        item.iconName = iconName;
+                        item.typeName = typeName;
+
+                        [arr addObject:item];
+                    }
                 }
                 sqlite3_finalize(statement);
             }

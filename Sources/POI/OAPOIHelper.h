@@ -14,6 +14,7 @@
 #include <OsmAndCore/Data/Amenity.h>
 
 #define OSM_WIKI_CATEGORY @"osmwiki"
+#define SPEED_CAMERA @"speed_camera"
 #define WIKI_LANG @"wiki_lang"
 #define WIKI_PLACE @"wiki_place"
 

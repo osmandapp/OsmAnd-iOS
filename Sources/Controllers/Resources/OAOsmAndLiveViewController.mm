@@ -465,7 +465,7 @@ static const NSInteger sectionCount = 2;
         cell = (OAIconTextDescCell *)[nib objectAtIndex:0];
         
         cell.textView.numberOfLines = 0;
-        cell.descView.font = [UIFont systemFontOfSize:12.];
+        cell.descView.font = [UIFont scaledSystemFontOfSize:12.];
         cell.iconView.hidden = YES;
         [cell.arrowIconView setTintColor:UIColorFromRGB(color_icon_inactive)];
     }
@@ -545,7 +545,8 @@ static const NSInteger sectionCount = 2;
                 UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(kLeftMarginTextLabel + leftMargin, 50 - 18, tableView.frame.size.width, 18)];
                 label.tag = kEnabledLabelTag;
                 label.textColor = [[UIColor blackColor] colorWithAlphaComponent:0.5];
-                [label setFont:[UIFont systemFontOfSize:13]];
+                [label setFont:[UIFont scaledSystemFontOfSize:13]];
+                label.adjustsFontForContentSizeCategory = YES;
                 [label setText:[OALocalizedString(@"live_updates") upperCase]];
                 [button setOn:_settings.settingOsmAndLiveEnabled.get && [OAIAPHelper isSubscribedToLiveUpdates]];
                 [button addTarget:self action:@selector(sectionHeaderButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
@@ -563,7 +564,8 @@ static const NSInteger sectionCount = 2;
                 UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(kLeftMarginTextLabel + leftMargin, 50 - 18, tableView.frame.size.width, 18)];
                 label.tag = kAvailableLabelTag;
                 label.textColor = [[UIColor blackColor] colorWithAlphaComponent:0.5];
-                [label setFont:[UIFont systemFontOfSize:13]];
+                [label setFont:[UIFont scaledSystemFontOfSize:13]];
+                label.adjustsFontForContentSizeCategory = YES;
                 [label setText:[OALocalizedString(@"available_maps") upperCase]];
                 [headerView addSubview:label];
                 _availableHeaderView = headerView;

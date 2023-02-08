@@ -15,6 +15,7 @@
 {
     [super awakeFromNib];
     // Initialization code
+    self.messageView.font = [UIFont scaledSystemFontOfSize:14.];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

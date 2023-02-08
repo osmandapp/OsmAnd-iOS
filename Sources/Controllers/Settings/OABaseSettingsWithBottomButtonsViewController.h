@@ -16,6 +16,7 @@
 @property (weak, nonatomic) IBOutlet UIView *bottomBarView;
 @property (weak, nonatomic) IBOutlet UIButton *primaryBottomButton;
 @property (weak, nonatomic) IBOutlet UIButton *secondaryBottomButton;
+@property (weak, nonatomic) IBOutlet UIView *buttonSeparator;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *cancelButtonLeftMarginWithIcon;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *cancelButtonLeftMarginNoIcon;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *primaryButtonTopMarginNoSecondary;

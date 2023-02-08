@@ -180,6 +180,8 @@ typedef NS_ENUM(NSInteger, EditingTab)
     [_buttonApply setTitle:[self isOnlineEditing] ? OALocalizedString(@"shared_string_upload") : OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
     [_segmentControl setTitle:OALocalizedString(@"tab_title_basic") forSegmentAtIndex:0];
     [_segmentControl setTitle:OALocalizedString(@"tab_title_advanced") forSegmentAtIndex:1];
+    [_segmentControl setTitleTextAttributes:@{ NSFontAttributeName : [UIFont scaledSystemFontOfSize:14.] } forState:UIControlStateNormal];
+    [_segmentControl setTitleTextAttributes:@{ NSFontAttributeName : [UIFont scaledSystemFontOfSize:14.] } forState:UIControlStateSelected];
 }
 
 - (void)setupPageController

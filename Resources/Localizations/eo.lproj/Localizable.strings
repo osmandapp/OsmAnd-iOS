@@ -1589,7 +1589,7 @@
 "product_desc_russia_short" = "Maps of Russia regions";
 "product_desc_southamerica" = "Unlimited map downloads for South America";
 "product_desc_southamerica_short" = "South America region maps";
-"product_title_allworld" = "All World Maps";
+"worldwide_maps" = "All World Maps";
 "product_desc_allworld" = "Maps of All World";
 "product_desc_asia" = "Unlimited map downloads for Asia";
 "product_desc_asia_short" = "Asia region maps";
@@ -2637,3 +2637,19 @@
 \n
 \nDatumoj estas liverataj de «Global Forecast System» (GFS, https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast ).";
 "km" = "km";
+"lang_sat" = "Santala";
+"uninstall_speed_cameras" = "Malinstali informojn pri rapidkontroliloj";
+"shared_string_legal" = "Leĝaj";
+"privacy_and_security" = "Privateco kaj sekureco";
+"shared_string_keep_active" = "Plue uzi";
+"speed_camera_pois" = "Pozicioj de rapidkontroliloj";
+"speed_cameras_alert" = "Avertoj pri rapidkontroliloj estas kontraŭleĝaj en iuj landoj.";
+"shared_string_height" = "Alto";
+"lang_zh-Hant" = "Ĉina (tradicia)";
+"speed_cameras_legal_descr" = "En iuj landoj kaj regionoj uzado de aplikaĵoj avertantaj pri rapidkontroliloj estas kontraŭleĝa.
+\n
+\nVi devas elekti laŭleĝe de via lando.
+\n
+\nElektu “%@” por pluigi ricevi avertojn pri rapidkontroliloj.
+\n
+\nElektu “%@” por forigi (ĝis la reinstalo de OsmAnd) ĉiujn datumojn pri rapidkontrolilojn: avertojn, sciigojn, poziciojn.";

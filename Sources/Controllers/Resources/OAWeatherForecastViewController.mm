@@ -256,7 +256,7 @@
             selectData[@"type"] = [OASimpleTableViewCell getCellIdentifier];
             selectData[@"title"] = OALocalizedString(@"shared_string_select");
             selectData[@"title_color"] = UIColorFromRGB(color_primary_purple);
-            selectData[@"title_font"] = [UIFont systemFontOfSize:17. weight:UIFontWeightMedium];
+            selectData[@"title_font"] = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium];
             [emptyCells addObject:selectData];
 
             [data addObject:emptySection];
@@ -295,7 +295,7 @@
                     offlineForecastData[@"description"] = [OAWeatherHelper getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateInProgress
                             ? [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_download_update")
                                                               attributes:@{
-                                                                      NSFontAttributeName: [UIFont systemFontOfSize:13.],
+                                                                      NSFontAttributeName: [UIFont scaledSystemFontOfSize:13.],
                                                                       NSForegroundColorAttributeName: UIColorFromRGB(color_text_footer)
                                                               }]
                             : [OAWeatherHelper getStatusInfoDescription:regionId];
@@ -942,12 +942,12 @@
             cell.textStackView.alignment = isSelectCell ? UIStackViewAlignmentCenter : UIStackViewAlignmentLeading;
             cell.titleLabel.text = [item.allKeys containsObject:@"region"] ? [OAWeatherHelper checkAndGetRegionName:region] : item[@"title"];
             cell.titleLabel.textColor = [item.allKeys containsObject:@"title_color"] ? item[@"title_color"] : UIColor.blackColor;
-            cell.titleLabel.font = [item.allKeys containsObject:@"title_font"] ? item[@"title_font"] : [UIFont systemFontOfSize:17.];
+            cell.titleLabel.font = [item.allKeys containsObject:@"title_font"] ? item[@"title_font"] : [UIFont scaledSystemFontOfSize:17.];
             BOOL hasDescription = [item.allKeys containsObject:@"description"];
             [cell descriptionVisibility:hasDescription];
             cell.descriptionLabel.attributedText = item[@"description"];
             NSString *regionId = [OAWeatherHelper checkAndGetRegionId:region];
-            if (regionId && ([OAWeatherHelper getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateInProgress
+            if (!isSelectCell && regionId && ([OAWeatherHelper getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateInProgress
                     || ![_weatherHelper isOfflineForecastSizesInfoCalculated:regionId]))
             {
                 FFCircularProgressView *progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 25.0f, 25.0f)];
@@ -977,7 +977,7 @@
             cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + 20., 0., 0.);
             cell.titleLabel.text = item[@"title"];
             cell.titleLabel.textColor = UIColorFromRGB(color_primary_purple);
-            cell.titleLabel.font = [UIFont systemFontOfSize:17. weight:UIFontWeightMedium];
+            cell.titleLabel.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium];
             cell.rightIconView.image = [UIImage templateImageNamed:item[@"right_icon"]];
             cell.rightIconView.tintColor = UIColorFromRGB(color_primary_purple);
         }

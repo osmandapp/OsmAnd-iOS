@@ -37,6 +37,8 @@
 
     _routingHelper = [OARoutingHelper sharedInstance];
     _directionInfo = -1;
+    self.distanceLabel.font = [UIFont scaledSystemFontOfSize:16. weight:UIFontWeightMedium];
+    self.timeLabel.font = [UIFont scaledSystemFontOfSize:16. weight:UIFontWeightMedium];
 }
 
 - (void) layoutSubviews

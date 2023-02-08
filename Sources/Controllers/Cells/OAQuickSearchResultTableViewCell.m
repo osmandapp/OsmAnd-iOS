@@ -10,6 +10,14 @@
 
 @implementation OAQuickSearchResultTableViewCell
 
+- (void) awakeFromNib
+{
+    [super awakeFromNib];
+
+    self.distanceLabel.font = [UIFont scaledSystemFontOfSize:13.];
+    self.coordinateLabel.font = [UIFont scaledSystemFontOfSize:13.];
+}
+
 - (void) setDesriptionLablesVisible:(BOOL)isVisible;
 {
     if (isVisible)

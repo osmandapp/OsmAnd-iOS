@@ -11,7 +11,7 @@
 #import "OASizes.h"
 #import "OAColors.h"
 
-#define kHeaderViewFont [UIFont systemFontOfSize:34.0 weight:UIFontWeightBold]
+#define kHeaderViewFont [UIFont scaledSystemFontOfSize:34.0 weight:UIFontWeightBold]
 #define kSidePadding 16
 
 @interface OABaseBigTitleSettingsViewController () <UIScrollViewDelegate>
@@ -87,7 +87,7 @@
 
 - (CGFloat) heightForLabel:(NSString *)text
 {
-    UIFont *labelFont = [UIFont systemFontOfSize:15.0];
+    UIFont *labelFont = [UIFont scaledSystemFontOfSize:15.0];
     CGFloat textWidth = self.tableView.bounds.size.width - (kSidePadding + OAUtilities.getLeftMargin) * 2;
     return [OAUtilities heightForHeaderViewText:text width:textWidth font:labelFont lineSpacing:6.0];
 }

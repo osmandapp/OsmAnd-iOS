@@ -1827,7 +1827,7 @@
 "product_desc_russia_short" = "Maps of Russia regions";
 "product_desc_southamerica" = "Unlimited map downloads for South America";
 "product_desc_southamerica_short" = "South America region maps";
-"product_title_allworld" = "All World Maps";
+"worldwide_maps" = "All World Maps";
 "product_desc_allworld" = "Maps of All World";
 "product_desc_asia" = "Unlimited map downloads for Asia";
 "product_desc_asia_short" = "Asia region maps";
@@ -3035,3 +3035,19 @@
 "m" = "m";
 "kg" = "kgr";
 "km" = "km";
+"privacy_and_security" = "Privatnost i bezbednost";
+"speed_cameras_alert" = "Predupreduvanjata na kamerite za brzina vo nekoi zemji se zabraneti so zakon.";
+"lang_sat" = "Sntalski";
+"shared_string_height" = "Visina";
+"speed_cameras_legal_descr" = "Vo nekoi zemji ili regioni, upotrebata na aplikacii za predupreduvanje za kameri za brzina e zabraneta so zakon.
+\n
+\nTreba da napravite izbor vo zavisnost od zakonot na vašata zemja.
+\n
+\nIzberete %@ i ḱe dobivate predupreduvanja i predupreduvanja za kamerite za brzina.
+\n
+\nIzberete %@. Site podatoci povrzani so kamerite za brzina: predupreduvanja, izvestuvanja, POI ḱe se izbrišat dodeka OsmAnd celosno ne se instalira.";
+"shared_string_keep_active" = "Bidi aktiven";
+"lang_zh-Hant" = "Kineski (Tradicionalen)";
+"speed_camera_pois" = "Brzinska kamera POI’s";
+"shared_string_legal" = "Legalno";
+"uninstall_speed_cameras" = "Deinstaliraj ja brzinskata kamera";

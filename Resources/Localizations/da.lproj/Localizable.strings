@@ -618,7 +618,7 @@
 "show_warnings_title" = "Vis advarsler…";
 "show_warnings_descr" = "Konfigurer trafikadvarsler (hastighedsgrænser, tvungne stop, vejbump, tunneler), fartkameraadvarsler og vognbane oplysninger.";
 "speak_title" = "Meddel…";
-"speak_descr" = "Konfigurer meddelse af gadenavne, trafikadvarsler (tvungne stop, vejbump), fartkameraadvarsler og hastighedsgrænser.";
+"speak_descr" = "Konfigurer for at annoncere gadenavne, trafikadvarsler (tvungne stop, vejbump), fartkameraadvarsler og hastighedsgrænser";
 "keep_informing" = "Gentag navigationsinstruktioner";
 "keep_informing_descr" = "Gentag navigationsinstruktioner med jævne mellemrum.";
 "arrival_distance" = "Meddel ankomst";

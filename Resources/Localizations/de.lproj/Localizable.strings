@@ -2819,3 +2819,4 @@
 "announcement_time_prepare_long" = "Erste Ankündigung (größere Distanz)";
 "announcement_time_approach" = "Annäherung ans Ziel";
 "announcement_time_passing" = "Beim Passieren";
+"ltr_or_rtl_combine_via_comma" = "%@, %@";

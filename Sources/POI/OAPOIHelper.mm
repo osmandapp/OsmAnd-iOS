@@ -126,6 +126,14 @@
     _otherPoiCategory = pc;
 }
 
+
+- (OAPOIType *) getDefaultOtherCategoryType
+{
+    if (_otherPoiCategory && _otherPoiCategory.poiTypes.count > 0)
+        return _otherPoiCategory.poiTypes[0];
+    return nil;
+}
+
 - (NSArray<OAPOICategory *> *) getCategories:(BOOL)includeMapCategory
 {
     NSMutableArray<OAPOICategory *> *lst = [NSMutableArray arrayWithArray:_poiCategories];

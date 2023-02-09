@@ -340,7 +340,7 @@
                 {
                     type = [OAPOIHelper.sharedInstance getPoiTypeByName:map[key]];
                     if (!type)
-                        type = [OAPOIHelper.sharedInstance getPoiTypeByName:@"user_defined_other"];
+                        type = [OAPOIHelper.sharedInstance getDefaultOtherCategoryType];
                 }
                 else if ([shortKey isEqualToString:SUBTYPE])
                 {
@@ -355,6 +355,10 @@
             {
                 NSString *shortKey = [key stringByReplacingOccurrencesOfString:osmPrefix withString:@""];
                 additionalInfo[shortKey] = map[key];
+            }
+            else if ([key isEqualToString:@"phone"] ||[key isEqualToString:@"website"])
+            {
+                additionalInfo[key] = map[key];
             }
         }
         

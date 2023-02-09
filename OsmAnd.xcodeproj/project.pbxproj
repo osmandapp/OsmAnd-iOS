@@ -15866,7 +15866,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "MYFILE=${TEMP_DIR}/regions.ocbf\ncurl -o $MYFILE https://builder.osmand.net/basemap/regions.ocbf\ncp -f $MYFILE ${SRCROOT}/Resources/Shipped/regions.ocbf\n";
+			shellScript = "# Download the new version each build (does not fail the buld if there's no Internet)\ncurl -o ${SRCROOT}/Resources/Shipped/regions.ocbf https://builder.osmand.net/basemap/regions.ocbf ||:\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

@@ -57,7 +57,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
 @implementation OAOsmUploadGPXViewConroller
 {
     OAAppSettings *_settings;
-    NSArray<OAGPX *> *_uploadingGpxItems;
+    NSArray<OAGPX *> *_gpxItemsToUpload;
     OATableDataModel *_data;
     NSString *_descriptionText;
     NSString *_tagsText;
@@ -71,12 +71,12 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
     EOAOsmUploadGPXViewConrollerMode _mode;
 }
 
-- (instancetype)initWithGPXItems:(NSArray<OAGPX *> *)uploadingGpxItems
+- (instancetype)initWithGPXItems:(NSArray<OAGPX *> *)gpxItemsToUpload
 {
     self = [super initWithNibName:@"OAOsmUploadGPXViewConroller" bundle:nil];
     if (self)
     {
-        _uploadingGpxItems = uploadingGpxItems;
+        _gpxItemsToUpload = gpxItemsToUpload;
         _settings = [OAAppSettings sharedManager];
         _mode = EOAOsmUploadGPXViewConrollerModeInitial;
     }
@@ -160,6 +160,8 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
 - (void)setupView
 {
     _data = [[OATableDataModel alloc] init];
+    __weak OAOsmUploadGPXViewConroller *weakSelf = self;
+    
     if (_mode == EOAOsmUploadGPXViewConrollerModeInitial)
     {
         OATableSectionData *descriptionSection = [_data createNewSection];
@@ -183,7 +185,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
         [visibilityCell setCellType:[OASettingsTableViewCell getCellIdentifier]];
         [visibilityCell setTitle:OALocalizedString(@"visibility")];
         [visibilityCell setDescr:[OAOsmUploadGPXVisibilityViewConroller localizedNameForVisibilityType:_selectedVisibility]];
-        [visibilityCell setObj: (^void(){ [self onVisibilityButtonClicked]; }) forKey:@"actionBlock"];
+        [visibilityCell setObj: (^void(){ [weakSelf onVisibilityButtonClicked]; }) forKey:@"actionBlock"];
         
         OATableSectionData *accountSection = [_data createNewSection];
         accountSection.headerText = OALocalizedString(@"login_account");
@@ -194,7 +196,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
         [accountCell setObj:(_isLogged ? UIColor.blackColor : UIColorFromRGB(color_primary_purple)) forKey:@"title_color"];
         [accountCell setObj:([UIFont systemFontOfSize:17. weight:_isLogged ? UIFontWeightRegular : UIFontWeightMedium]) forKey:@"title_font"];
         [accountCell setObj:(_isLogged ? @(UITableViewCellAccessoryDisclosureIndicator) : @(UITableViewCellAccessoryNone)) forKey:@"accessory_type"];
-        [accountCell setObj: (^void(){ [self onAccountButtonClicked]; }) forKey:@"actionBlock"];
+        [accountCell setObj: (^void(){ [weakSelf onAccountButtonPressed]; }) forKey:@"actionBlock"];
     }
     else if (_mode == EOAOsmUploadGPXViewConrollerModeUploading)
     {
@@ -250,7 +252,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
     for (NSNumber *value in _filesUploadingProgress.allValues)
         progressSum += value.floatValue;
     
-    progressSum = progressSum / _uploadingGpxItems.count;
+    progressSum = progressSum / _gpxItemsToUpload.count;
     
     _progressValueCell.valueLabel.text = [NSString stringWithFormat:@"%d%%", (int)progressSum];
     [_progressBarCell.progressBar setProgress:progressSum / 100 animated:YES];
@@ -341,7 +343,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
     [self presentViewController:vc animated:YES completion:nil];
 }
 
-- (void) onAccountButtonClicked
+- (void) onAccountButtonPressed
 {
     if (_isLogged)
     {
@@ -383,7 +385,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
             _failedFileNames = [NSMutableArray array];
             
             OAOsmEditingPlugin *plugin = (OAOsmEditingPlugin *)[OAPlugin getPlugin:OAOsmEditingPlugin.class];
-            _uploadTask = [[OAUploadGPXFilesTask alloc] initWithPlugin:plugin uploadingGpxItems:_uploadingGpxItems tags:_tagsText visibility:visibility description:_descriptionText listener:self];
+            _uploadTask = [[OAUploadGPXFilesTask alloc] initWithPlugin:plugin gpxItemsToUpload:_gpxItemsToUpload tags:_tagsText visibility:visibility description:_descriptionText listener:self];
             [_uploadTask uploadTracks];
         }
     }
@@ -397,7 +399,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
     }
     else if (_mode == EOAOsmUploadGPXViewConrollerModeFailed)
     {
-        _uploadingGpxItems = [self getFailedFiles];
+        _gpxItemsToUpload = [self getFailedFiles];
         [self updateScreenMode:EOAOsmUploadGPXViewConrollerModeInitial];
         [self setupView];
         [self.tableView reloadData];
@@ -444,14 +446,6 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
 {
     UITableViewHeaderFooterView *footer = (UITableViewHeaderFooterView *)view;
     [footer.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    if (_mode == EOAOsmUploadGPXViewConrollerModeInitial)
-        return UITableViewAutomaticDimension;
-    else
-        return 35;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -655,7 +649,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
 
 - (void)onFileUploadProgress:(NSString *)type fileName:(NSString *)fileName progress:(NSInteger)progress deltaWork:(NSInteger)deltaWork {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self setProgress: progress fileName:fileName];
+        [self setProgress:progress fileName:fileName];
     });
 }
 
@@ -673,7 +667,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
     NSMutableArray<OAGPX *> *failledFiles = [NSMutableArray array];
     for (NSString *fileName in _failedFileNames)
     {
-        for (OAGPX *gpx in _uploadingGpxItems)
+        for (OAGPX *gpx in _gpxItemsToUpload)
         {
             if ([gpx.gpxFileName isEqualToString:fileName])
                 [failledFiles addObject:gpx];

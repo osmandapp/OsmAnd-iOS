@@ -12,6 +12,6 @@
 
 @interface OAOsmUploadGPXViewConroller : OABaseBigTitleSettingsViewController
 
-- (instancetype)initWithGPXItems:(NSArray<OAGPX *> *)uploadingGpxItems;
+- (instancetype)initWithGPXItems:(NSArray<OAGPX *> *)gpxItemsToUpload;
 
 @end

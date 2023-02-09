@@ -53,42 +53,34 @@
 - (void) setupView
 {
     _data = [[OATableDataModel alloc] init];
+    __weak OAOsmUploadGPXVisibilityViewConroller *weakSelf = self;
     
     OATableSectionData *section = [_data createNewSection];
-    if (_selectedVisibility == EOAOsmUploadGPXVisibilityPublic)
-        section.footerText = OALocalizedString(@"gpx_upload_public_visibility_descr");
-    else if (_selectedVisibility == EOAOsmUploadGPXVisibilityIdentifiable)
-        section.footerText = OALocalizedString(@"gpx_upload_identifiable_visibility_descr");
-    else if (_selectedVisibility == EOAOsmUploadGPXVisibilityTrackable)
-        section.footerText = OALocalizedString(@"gpx_upload_trackable_visibility_descr");
-    else if (_selectedVisibility == EOAOsmUploadGPXVisibilityPrivate)
-        section.footerText = OALocalizedString(@"gpx_upload_private_visibility_descr");
-    
-    [self.class localizedNameForVisibilityType:EOAOsmUploadGPXVisibilityPublic];
+    section.footerText = [self.class localizedDescriptionForVisibilityType:_selectedVisibility];
     
     OATableRowData *publicCell = [section createNewRow];
     [publicCell setCellType:[OASettingsTitleTableViewCell getCellIdentifier]];
     [publicCell setTitle:[self.class localizedNameForVisibilityType:EOAOsmUploadGPXVisibilityPublic]];
     [publicCell setObj:@(_selectedVisibility == EOAOsmUploadGPXVisibilityPublic) forKey:@"selected"];
-    [publicCell setObj: (^void(){ [self onVisibilityChanged:EOAOsmUploadGPXVisibilityPublic]; }) forKey:@"actionBlock"];
+    [publicCell setObj: (^void(){ [weakSelf onVisibilityChanged:EOAOsmUploadGPXVisibilityPublic]; }) forKey:@"actionBlock"];
     
     OATableRowData *identifiableCell = [section createNewRow];
     [identifiableCell setCellType:[OASettingsTitleTableViewCell getCellIdentifier]];
     [identifiableCell setTitle:[self.class localizedNameForVisibilityType:EOAOsmUploadGPXVisibilityIdentifiable]];
     [identifiableCell setObj:@(_selectedVisibility == EOAOsmUploadGPXVisibilityIdentifiable) forKey:@"selected"];
-    [identifiableCell setObj: (^void(){ [self onVisibilityChanged:EOAOsmUploadGPXVisibilityIdentifiable]; }) forKey:@"actionBlock"];
+    [identifiableCell setObj: (^void(){ [weakSelf onVisibilityChanged:EOAOsmUploadGPXVisibilityIdentifiable]; }) forKey:@"actionBlock"];
     
     OATableRowData *trackableCell = [section createNewRow];
     [trackableCell setCellType:[OASettingsTitleTableViewCell getCellIdentifier]];
     [trackableCell setTitle:[self.class localizedNameForVisibilityType:EOAOsmUploadGPXVisibilityTrackable]];
     [trackableCell setObj:@(_selectedVisibility == EOAOsmUploadGPXVisibilityTrackable) forKey:@"selected"];
-    [trackableCell setObj: (^void(){ [self onVisibilityChanged:EOAOsmUploadGPXVisibilityTrackable]; }) forKey:@"actionBlock"];
+    [trackableCell setObj: (^void(){ [weakSelf onVisibilityChanged:EOAOsmUploadGPXVisibilityTrackable]; }) forKey:@"actionBlock"];
     
     OATableRowData *privateCell = [section createNewRow];
     [privateCell setCellType:[OASettingsTitleTableViewCell getCellIdentifier]];
     [privateCell setTitle:[self.class localizedNameForVisibilityType:EOAOsmUploadGPXVisibilityPrivate]];
     [privateCell setObj:@(_selectedVisibility == EOAOsmUploadGPXVisibilityPrivate) forKey:@"selected"];
-    [privateCell setObj: (^void(){ [self onVisibilityChanged:EOAOsmUploadGPXVisibilityPrivate]; }) forKey:@"actionBlock"];
+    [privateCell setObj: (^void(){ [weakSelf onVisibilityChanged:EOAOsmUploadGPXVisibilityPrivate]; }) forKey:@"actionBlock"];
 }
 
 + (NSString *) localizedNameForVisibilityType:(EOAOsmUploadGPXVisibility)visibility
@@ -114,6 +106,19 @@
         return @"trackable";
     else if (visibility == EOAOsmUploadGPXVisibilityPrivate)
         return @"private";
+    return nil;
+}
+
++ (NSString *) localizedDescriptionForVisibilityType:(EOAOsmUploadGPXVisibility)visibility
+{
+    if (visibility == EOAOsmUploadGPXVisibilityPublic)
+        return OALocalizedString(@"gpx_upload_public_visibility_descr");
+    else if (visibility == EOAOsmUploadGPXVisibilityIdentifiable)
+        return OALocalizedString(@"gpx_upload_identifiable_visibility_descr");
+    else if (visibility == EOAOsmUploadGPXVisibilityTrackable)
+        return OALocalizedString(@"gpx_upload_trackable_visibility_descr");
+    else if (visibility == EOAOsmUploadGPXVisibilityPrivate)
+        return OALocalizedString(@"gpx_upload_private_visibility_descr");
     return nil;
 }
 

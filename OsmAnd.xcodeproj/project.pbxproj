@@ -1428,7 +1428,6 @@
 		BBA3AF87197FC4BB0039D991 /* Shipped in Resources */ = {isa = PBXBuildFile; fileRef = BB451D8A18D70B4B005FBE09 /* Shipped */; };
 		BBA3AF97197FC4BB0039D991 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = BB451DF318D8F7D7005FBE09 /* Localizable.strings */; };
 		BBA3AFC4197FC4BB0039D991 /* Resources.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BB451F1018EB34A5005FBE09 /* Resources.storyboard */; };
-		BBA3AFDF197FC4BB0039D991 /* regions.ocbf in Resources */ = {isa = PBXBuildFile; fileRef = BBE1D2B5190D1C9600D90F0A /* regions.ocbf */; };
 		C53920C2291E4E770076D5BB /* ic_custom_van@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C53920C0291E4E770076D5BB /* ic_custom_van@2x.png */; };
 		C53920C3291E4E770076D5BB /* ic_custom_van@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C53920C1291E4E770076D5BB /* ic_custom_van@3x.png */; };
 		C588D1E0298BAB81001FEDBD /* ca_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = C588D1DF298BAB80001FEDBD /* ca_tts.js */; };
@@ -3000,6 +2999,7 @@
 		DA8660852268A2870041F57D /* ic_custom_show_on_map@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA86607A2268A2860041F57D /* ic_custom_show_on_map@2x.png */; };
 		DA86AF7526454AC600627B66 /* left_menu_icon_plugins@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA86AF7326454AC500627B66 /* left_menu_icon_plugins@3x.png */; };
 		DA86AF7626454AC600627B66 /* left_menu_icon_plugins@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA86AF7426454AC600627B66 /* left_menu_icon_plugins@2x.png */; };
+		DA8713212994F64A0087BC7F /* regions.ocbf in Resources */ = {isa = PBXBuildFile; fileRef = DA8713202994F6490087BC7F /* regions.ocbf */; };
 		DA879FD8227C23C5007E7817 /* hu-formal_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA879FD7227C23C5007E7817 /* hu-formal_tts.js */; };
 		DA8A927F25DE8B4A00F5320A /* ic_carplay_favorites@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA8A927525DE8B4700F5320A /* ic_carplay_favorites@3x.png */; };
 		DA8A928025DE8B4A00F5320A /* ic_carplay_search@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA8A927625DE8B4800F5320A /* ic_carplay_search@2x.png */; };
@@ -4901,7 +4901,6 @@
 		BBB34EE6179BF2A7004C5567 /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
 		BBB3F6AA18A4DEF0001C3175 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		BBBDADB818BCF53500E4A359 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
-		BBE1D2B5190D1C9600D90F0A /* regions.ocbf */ = {isa = PBXFileReference; lastKnownFileType = file; name = regions.ocbf; path = "../resources/countries-info/regions.ocbf"; sourceTree = "<group>"; };
 		C53920C0291E4E770076D5BB /* ic_custom_van@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_van@2x.png"; path = "Resources/Icons/ic_custom_van@2x.png"; sourceTree = "<group>"; };
 		C53920C1291E4E770076D5BB /* ic_custom_van@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_van@3x.png"; path = "Resources/Icons/ic_custom_van@3x.png"; sourceTree = "<group>"; };
 		C588D1DF298BAB80001FEDBD /* ca_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = ca_tts.js; path = ../resources/voice/ca/ca_tts.js; sourceTree = "<group>"; };
@@ -7358,6 +7357,7 @@
 		DA86607A2268A2860041F57D /* ic_custom_show_on_map@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_show_on_map@2x.png"; path = "Resources/Icons/ic_custom_show_on_map@2x.png"; sourceTree = "<group>"; };
 		DA86AF7326454AC500627B66 /* left_menu_icon_plugins@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "left_menu_icon_plugins@3x.png"; path = "Resources/Icons/left_menu_icon_plugins@3x.png"; sourceTree = "<group>"; };
 		DA86AF7426454AC600627B66 /* left_menu_icon_plugins@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "left_menu_icon_plugins@2x.png"; path = "Resources/Icons/left_menu_icon_plugins@2x.png"; sourceTree = "<group>"; };
+		DA8713202994F6490087BC7F /* regions.ocbf */ = {isa = PBXFileReference; lastKnownFileType = file; name = regions.ocbf; path = Resources/Shipped/regions.ocbf; sourceTree = "<group>"; };
 		DA879FD7227C23C5007E7817 /* hu-formal_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = "hu-formal_tts.js"; path = "../resources/voice/hu-formal/hu-formal_tts.js"; sourceTree = "<group>"; };
 		DA8A927525DE8B4700F5320A /* ic_carplay_favorites@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_carplay_favorites@3x.png"; sourceTree = "<group>"; };
 		DA8A927625DE8B4800F5320A /* ic_carplay_search@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_carplay_search@2x.png"; sourceTree = "<group>"; };
@@ -9858,8 +9858,8 @@
 				DA5CA677211ECCB500E2B79B /* style */,
 				DA5A857E26C5692100F274C7 /* article_style.css */,
 				DAC58858210898FB008B7763 /* voice */,
+				DA8713202994F6490087BC7F /* regions.ocbf */,
 				84C41E531AB95F970089EABB /* search */,
-				BBE1D2B5190D1C9600D90F0A /* regions.ocbf */,
 				BB2726DF19CB37F0007C5613 /* map */,
 				BB2726F619CB3869007C5613 /* routing */,
 				BB27270819CB38E5007C5613 /* misc */,
@@ -13348,6 +13348,7 @@
 				3CF6A0D6E82F1156F659B9F4 /* [CP] Check Pods Manifest.lock */,
 				BBA3AF34197FC4BB0039D991 /* Sources */,
 				BBA3AF66197FC4BB0039D991 /* Frameworks */,
+				DA8713222994F6760087BC7F /* Download regions.ocbf */,
 				BBA3AF82197FC4BB0039D991 /* Resources */,
 				6DDCD3D150843E9C9D19714F /* [CP] Copy Pods Resources */,
 				8401FCFC1EE4723B00238915 /* ShellScript */,
@@ -14313,6 +14314,7 @@
 				DA5A82E226C563A800F274C7 /* OADescrTitleCell.xib in Resources */,
 				84F3A8CE1B4DA93100D16EBC /* ic_map_pin_small@3x.png in Resources */,
 				DAF345BB22F4482C009E2EB6 /* ic_custom_quick_action@3x.png in Resources */,
+				DA8713212994F64A0087BC7F /* regions.ocbf in Resources */,
 				DA5A839126C563A800F274C7 /* OAOnlineTilesEditingViewController.xib in Resources */,
 				8476E26A1F6C1EEC00EC274F /* map_bicycle_location_view_angle@3x.png in Resources */,
 				DA32846126CBF76B0036BA73 /* img_plugin_parking.jpg in Resources */,
@@ -15522,7 +15524,6 @@
 				84669650207CD7E000BA971B /* ic_action_clear_all@3x.png in Resources */,
 				84EE2DDF1AFD149F007C9A94 /* map_banner@2x.png in Resources */,
 				DA5A826926C563A700F274C7 /* OAImageTextViewCell.xib in Resources */,
-				BBA3AFDF197FC4BB0039D991 /* regions.ocbf in Resources */,
 				46453B0C28352407001F9A3A /* ic_custom_monthly_map_updates_colored_day_big@2x.png in Resources */,
 				8476E2821F6C1EEC00EC274F /* map_car_location_lost@3x.png in Resources */,
 				461F451E283E36EB00796360 /* ic_navbar_help@2x.png in Resources */,
@@ -15848,6 +15849,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "#cd ${SRCROOT}/../resources/poi\n#\"./copy_phrases.sh\"\n\n#cd ${SRCROOT}/../core/externals/xsb\n#\"./copy_resources.sh\"\n";
+		};
+		DA8713222994F6760087BC7F /* Download regions.ocbf */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 12;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Download regions.ocbf";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "MYFILE=${TEMP_DIR}/regions.ocbf\ncurl -o $MYFILE https://builder.osmand.net/basemap/regions.ocbf\ncp -f $MYFILE ${SRCROOT}/Resources/Shipped/regions.ocbf\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

@@ -32,6 +32,7 @@
 {
     [super viewDidLoad];
     [self setupNavBarHeight];
+    [self addAccessibilityLabels];
     _tableView.rowHeight = UITableViewAutomaticDimension;
     _tableView.estimatedRowHeight = 60.;
     _tableView.contentInset = UIEdgeInsetsMake(self.navBarHeightConstraint.constant, 0, 0, 0);
@@ -52,6 +53,12 @@
 - (void) applyLocalization
 {
     [_backButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
+}
+
+-(void) addAccessibilityLabels
+{
+    self.backButton.accessibilityLabel = OALocalizedString(@"shared_string_back");
+    self.backImageButton.accessibilityLabel = OALocalizedString(@"shared_string_back");
 }
 
 - (void)setupNavBarHeight

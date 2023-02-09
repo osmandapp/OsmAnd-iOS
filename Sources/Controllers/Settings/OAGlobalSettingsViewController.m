@@ -68,6 +68,11 @@
         self.titleLabel.text = OALocalizedString(@"carplay_profile");
 }
 
+-(void) addAccessibilityLabels
+{
+    self.backButton.accessibilityLabel = OALocalizedString(@"shared_string_back");
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -76,6 +81,7 @@
     self.tableView.dataSource = self;
 
     [self generateData];
+    [self addAccessibilityLabels];
 }
 
 - (void) viewWillAppear:(BOOL)animated

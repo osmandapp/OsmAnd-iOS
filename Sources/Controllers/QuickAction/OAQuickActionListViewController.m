@@ -62,6 +62,7 @@
     [self.btnAdd setTintColor:UIColor.whiteColor];
     [self.btnEdit setImage:[UIImage templateImageNamed:@"ic_custom_edit"] forState:UIControlStateNormal];
     [self.btnEdit setTintColor:UIColor.whiteColor];
+    [self addAccessibilityLabels];
     self.tableView.tableHeaderView = _tableHeaderView;
     _bottomViewHeight.constant = 0;
 }
@@ -99,6 +100,13 @@
     [_selectAllAction setTitle:OALocalizedString(@"shared_string_select_all") forState:UIControlStateNormal];
     [_btnCancel setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
     [_btnDone setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
+}
+
+-(void) addAccessibilityLabels
+{
+    self.backBtn.accessibilityLabel = OALocalizedString(@"shared_string_back");
+    self.btnEdit.accessibilityLabel = OALocalizedString(@"shared_string_edit");
+    self.btnAdd.accessibilityLabel = OALocalizedString(@"shared_string_add");
 }
 
 - (void)applySafeAreaMargins

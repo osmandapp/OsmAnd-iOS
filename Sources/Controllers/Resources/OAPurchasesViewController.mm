@@ -60,6 +60,7 @@ static BOOL _purchasesUpdated;
 
     [self generateData];
     [self updateLoadingView:!_purchasesUpdated];
+    [self addAccessibilityLabels];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -136,6 +137,12 @@ static BOOL _purchasesUpdated;
     ]];
 
     return headerView;
+}
+
+-(void) addAccessibilityLabels
+{
+    self.backButton.accessibilityLabel = OALocalizedString(@"shared_string_back");
+    self.restoreButton.accessibilityLabel = OALocalizedString(@"shared_string_restore");
 }
 
 - (void) generateData

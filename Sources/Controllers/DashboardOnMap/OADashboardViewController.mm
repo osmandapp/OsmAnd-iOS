@@ -438,6 +438,11 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
     [_okButton setTitle:OALocalizedString(@"shared_string_ok") forState:UIControlStateNormal];
 }
 
+-(void) addAccessibilityLabels
+{
+    self.backButton.accessibilityLabel = OALocalizedString(@"shared_string_back");
+}
+
 - (void) updateNavbarBackground:(UIInterfaceOrientation)interfaceOrientation
 {
     UIView *navbarGradientBackgroundView = [self getNavbarGradientBackgroundView];
@@ -512,6 +517,7 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
     [self.navbarBackgroundView.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
 
     [self updateLayout:interfaceOrientation adjustOffset:YES];
+    [self addAccessibilityLabels];
 
     self.okButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
 }

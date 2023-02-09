@@ -10,6 +10,7 @@
 #import "OAColors.h"
 #import "OASizes.h"
 #import "OAApplicationMode.h"
+#import "Localization.h"
 
 #define kSidePadding 20
 
@@ -35,6 +36,7 @@
 {
     [super viewDidLoad];
     [self setupNavBarHeight];
+    [self addAccessibilityLabels];
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -82,6 +84,11 @@
     _tableHeaderView.backgroundColor = UIColor.clearColor;
     [_tableHeaderView addSubview:label];
     self.tableView.tableHeaderView = _tableHeaderView;
+}
+
+-(void) addAccessibilityLabels
+{
+    self.backButton.accessibilityLabel = OALocalizedString(@"shared_string_back");
 }
 
 - (IBAction) backButtonPressed:(id)sender

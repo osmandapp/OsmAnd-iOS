@@ -58,7 +58,7 @@
 - (void) viewDidLoad
 {
     [super viewDidLoad];
-    
+    [self addAccessibilityLabels];
     _iapHelper = [OAIAPHelper sharedInstance];
 }
 
@@ -150,6 +150,11 @@
         [_subscriptionBannerView updateView];
 
     self.tableView.tableHeaderView = _subscriptionBannerView ? _subscriptionBannerView : [[UIView alloc] initWithFrame:CGRectMake(0, 0, 1, 1)];
+}
+
+-(void) addAccessibilityLabels
+{
+    self.backButton.accessibilityLabel = OALocalizedString(@"shared_string_back");
 }
 
 #pragma mark - UITableViewDataSource

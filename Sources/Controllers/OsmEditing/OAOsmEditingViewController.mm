@@ -137,6 +137,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
     [super viewWillAppear:animated];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+    [self addAccessibilityLabels];
     [self setupView];
 }
 
@@ -182,6 +183,11 @@ typedef NS_ENUM(NSInteger, EditingTab)
     [_segmentControl setTitle:OALocalizedString(@"tab_title_advanced") forSegmentAtIndex:1];
     [_segmentControl setTitleTextAttributes:@{ NSFontAttributeName : [UIFont scaledSystemFontOfSize:14.] } forState:UIControlStateNormal];
     [_segmentControl setTitleTextAttributes:@{ NSFontAttributeName : [UIFont scaledSystemFontOfSize:14.] } forState:UIControlStateSelected];
+}
+
+-(void) addAccessibilityLabels
+{
+    self.backButton.accessibilityLabel = OALocalizedString(@"shared_string_back");
 }
 
 - (void)setupPageController

@@ -119,6 +119,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     [super viewDidLoad];
     [self setupNotificationListeners];
     [OAIAPHelper.sharedInstance checkBackupPurchase];
+    [self addAccessibilityLabels];
     _settingsHelper = OANetworkSettingsHelper.sharedInstance;
     _backupHelper = OABackupHelper.sharedInstance;
     self.tblView.refreshControl = [[UIRefreshControl alloc] init];
@@ -142,6 +143,12 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
 - (void)applyLocalization
 {
     self.navBarTitle.text = OALocalizedString(@"osmand_cloud");
+}
+
+-(void) addAccessibilityLabels
+{
+    self.backImgButton.accessibilityLabel = OALocalizedString(@"shared_string_back");
+    self.settingsButton.accessibilityLabel = OALocalizedString(@"shared_string_settings");
 }
 
 - (void) onRefresh

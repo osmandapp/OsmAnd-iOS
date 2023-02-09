@@ -125,6 +125,7 @@ static UIViewController *parentController;
     _horizontalLine.backgroundColor = [UIColorFromRGB(kBottomToolbarTopLineColor) CGColor];
     self.editToolbarView.backgroundColor = UIColorFromRGB(kBottomToolbarBackgroundColor);
     [self.editToolbarView.layer addSublayer:_horizontalLine];
+    [self addAccessibilityLabels];
 
     _selectedItems = [[NSMutableArray alloc] init];
 }
@@ -315,6 +316,14 @@ static UIViewController *parentController;
         self.locationServicesUpdateObserver = nil;
     }
 
+}
+
+-(void) addAccessibilityLabels
+{
+    self.backButton.accessibilityLabel = OALocalizedString(@"shared_string_back");
+    self.editButton.accessibilityLabel = OALocalizedString(@"shared_string_edit");
+    self.exportButton.accessibilityLabel = OALocalizedString(@"shared_string_export");
+    self.deleteButton.accessibilityLabel = OALocalizedString(@"shared_string_delete");
 }
 
 -(void)generateData

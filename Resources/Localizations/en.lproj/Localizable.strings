@@ -79,6 +79,7 @@
 "search_radius_proximity" = "Within";
 "poi" = "POI";
 "search_more" = "Search more…";
+"my_locations" = "My locations";
 
 "day_off_label" = "off";
 "open_from" = "Open from";

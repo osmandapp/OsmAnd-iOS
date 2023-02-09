@@ -42,6 +42,11 @@
     _titleView.text = OALocalizedString(@"osm_editing_plugin_name");
 }
 
+-(void) addAccessibilityLabels
+{
+    self.backButton.accessibilityLabel = OALocalizedString(@"shared_string_back");
+}
+
 - (void) viewDidLoad
 {
     [super viewDidLoad];
@@ -51,6 +56,7 @@
     _headers = [NSMutableDictionary dictionary];
     _footers = [NSMutableDictionary dictionary];
     [self generateData];
+    [self addAccessibilityLabels];
 
     self.tableView.dataSource = self;
     self.tableView.delegate = self;

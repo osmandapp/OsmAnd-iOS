@@ -1,5 +1,5 @@
 //
-//  OATripRecordingSettingsViewController.m
+//  OAHelpViewController.mm
 //  OsmAnd
 //
 //  Created by Paul on 8/29/18.
@@ -12,6 +12,7 @@
 #import "OAWebViewController.h"
 #import "OALinks.h"
 #import "OAAppVersionDependentConstants.h"
+#import "OAColors.h"
 
 #define kLinkInternalType @"internal_link"
 #define kLinkExternalType @"ext_link"
@@ -39,18 +40,16 @@ static const NSInteger otherIndex = 3;
 static const NSInteger followIndex = 4;
 static const NSInteger groupCount = 5;
 
-
--(void) applyLocalization
-{
-    _titleView.text = OALocalizedString(@"shared_string_help");
-}
-
 - (void) viewDidLoad
 {
     [super viewDidLoad];
     
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
+
+    self.titleLabel.textColor = UIColor.whiteColor;
+
+    [self generateData];
 }
 
 - (void) didReceiveMemoryWarning
@@ -59,24 +58,23 @@ static const NSInteger groupCount = 5;
     // Dispose of any resources that can be recreated.
 }
 
-- (void) viewWillAppear:(BOOL)animated
+- (NSString *)getTitle
 {
-    [self setupView];
+    return OALocalizedString(@"shared_string_help");
 }
 
--(UIView *) getTopView
+- (UIColor *)getNavbarColor
 {
-    return _navBarView;
+    return UIColorFromRGB(color_navbar_orange);
 }
 
--(UIView *) getMiddleView
+- (UIColor *)getNavbarButtonsTintColor
 {
-    return _tableView;
+    return UIColor.whiteColor;
 }
 
-- (void) setupView
+- (void) generateData
 {
-    [self applySafeAreaMargins];
     NSMutableArray *dataArr = [NSMutableArray array];
     
     [dataArr addObject:
@@ -364,12 +362,8 @@ static const NSInteger groupCount = 5;
        @"description" : kCommunityVk,
        @"type" : kLinkExternalType
        }];
-    
-    _followData = [NSArray arrayWithArray:dataArr];
-    [dataArr removeAllObjects];
-    
-    [self.tableView reloadData];
-    
+
+    _followData = dataArr;
 }
 
 - (NSDictionary *) getItem:(NSIndexPath *)indexPath

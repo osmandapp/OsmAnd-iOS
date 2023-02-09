@@ -275,6 +275,18 @@
     _menuButtonWeather.titleLabel.font = [UIFont scaledSystemFontOfSize:17.];
     _menuButtonPlugins.titleLabel.font = [UIFont scaledSystemFontOfSize:17.];
 
+    _menuButtonMaps.titleLabel.adjustsFontForContentSizeCategory = YES;
+    _menuButtonMyData.titleLabel.adjustsFontForContentSizeCategory = YES;
+    _menuButtonMyWaypoints.titleLabel.adjustsFontForContentSizeCategory = YES;
+    _menuButtonMapsAndResources.titleLabel.adjustsFontForContentSizeCategory = YES;
+    _menuButtonConfigureScreen.titleLabel.adjustsFontForContentSizeCategory = YES;
+    _menuButtonSettings.titleLabel.adjustsFontForContentSizeCategory = YES;
+    _menuButtonHelp.titleLabel.adjustsFontForContentSizeCategory = YES;
+    _menuButtonNavigation.titleLabel.adjustsFontForContentSizeCategory = YES;
+    _menuButtonPlanRoute.titleLabel.adjustsFontForContentSizeCategory = YES;
+    _menuButtonWeather.titleLabel.adjustsFontForContentSizeCategory = YES;
+    _menuButtonPlugins.titleLabel.adjustsFontForContentSizeCategory = YES;
+
     [_menuButtonMaps.layer addSublayer:_menuButtonMapsDiv];
     [_menuButtonMyData.layer addSublayer:_menuButtonMyDataDiv];
     [_menuButtonMyWaypoints.layer addSublayer:_menuButtonMyWaypointsDiv];

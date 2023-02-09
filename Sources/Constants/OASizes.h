@@ -9,6 +9,7 @@
 #ifndef OASizes_h
 #define OASizes_h
 
+#define separatorNavBarHeight 1.
 #define defaultNavBarHeight 44
 #define modalNavBarHeight 56.
 #define inCallStatusBarHeight 40.0

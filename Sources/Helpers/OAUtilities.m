@@ -206,8 +206,12 @@
 
 - (UIFont *)scaled
 {
-    return [[UIFontMetrics defaultMetrics] scaledFontForFont:self
-                                            maximumPointSize:[[UIFontMetrics defaultMetrics] scaledValueForValue:self.pointSize]];
+    return [self scaled:[[UIFontMetrics defaultMetrics] scaledValueForValue:self.pointSize]];
+}
+
+- (UIFont *)scaled:(CGFloat)maximumSize
+{
+    return [[UIFontMetrics defaultMetrics] scaledFontForFont:self maximumPointSize:maximumSize];
 }
 
 + (UIFont *)scaledSystemFontOfSize:(CGFloat)fontSize
@@ -215,9 +219,19 @@
     return [[UIFont systemFontOfSize:fontSize] scaled];
 }
 
++ (UIFont *)scaledSystemFontOfSize:(CGFloat)fontSize maximumSize:(CGFloat)maximumSize
+{
+    return [[UIFont systemFontOfSize:fontSize] scaled:maximumSize];
+}
+
 + (UIFont *)scaledSystemFontOfSize:(CGFloat)fontSize weight:(UIFontWeight)weight
 {
     return [[UIFont systemFontOfSize:fontSize weight:weight] scaled];
+}
+
++ (UIFont *)scaledSystemFontOfSize:(CGFloat)fontSize weight:(UIFontWeight)weight maximumSize:(CGFloat)maximumSize
+{
+    return [[UIFont systemFontOfSize:fontSize weight:weight] scaled:maximumSize];
 }
 
 + (UIFont *)scaledBoldSystemFontOfSize:(CGFloat)fontSize

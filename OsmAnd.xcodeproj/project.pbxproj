@@ -606,6 +606,8 @@
 		4655EB3328E30AD200FA2E25 /* OAStatusBackupConflictDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4655EB3228E30AD200FA2E25 /* OAStatusBackupConflictDetailsViewController.m */; };
 		4655EB3528E374A500FA2E25 /* OAStatusBackupConflictDetailsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4655EB3428E374A500FA2E25 /* OAStatusBackupConflictDetailsViewController.xib */; };
 		465D7E21295494000099B206 /* OATextMultilineTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 465D7E20295494000099B206 /* OATextMultilineTableViewCell.xib */; };
+		46624E722993B28C00F425AE /* OABaseNavbarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46624E712993B28C00F425AE /* OABaseNavbarViewController.m */; };
+		46624E742993B4B100F425AE /* OABaseNavbarViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46624E732993B4B100F425AE /* OABaseNavbarViewController.xib */; };
 		4663AB402951C95A00D9781E /* OAInputTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4663AB3F2951C95A00D9781E /* OAInputTableViewCell.xib */; };
 		4663AB412951CB6200D9781E /* OAInputTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4663AB3E2951C94700D9781E /* OAInputTableViewCell.m */; };
 		46693AB0284919DA00ADA1A1 /* ic_custom_hazmat_limit@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46693AAC284919D800ADA1A1 /* ic_custom_hazmat_limit@2x.png */; };
@@ -2722,7 +2724,6 @@
 		DA5A84ED26C563A900F274C7 /* OAConfigureMenuMainScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A802826C563A500F274C7 /* OAConfigureMenuMainScreen.mm */; };
 		DA5A84EE26C563A900F274C7 /* OASuperViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A802926C563A500F274C7 /* OASuperViewController.m */; };
 		DA5A84EF26C563A900F274C7 /* OAHelpViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A802C26C563A500F274C7 /* OAHelpViewController.mm */; };
-		DA5A84F026C563A900F274C7 /* OAHelpViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A802D26C563A500F274C7 /* OAHelpViewController.xib */; };
 		DA5A84F126C563A900F274C7 /* OAMapSource.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A803026C563A500F274C7 /* OAMapSource.m */; };
 		DA5A84F226C563A900F274C7 /* OALocationConvert.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A803326C563A500F274C7 /* OALocationConvert.mm */; };
 		DA5A84F326C563A900F274C7 /* OAMapViewState.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A803526C563A500F274C7 /* OAMapViewState.m */; };
@@ -3990,6 +3991,9 @@
 		465D7E1E295493DF0099B206 /* OATextMultilineTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATextMultilineTableViewCell.h; sourceTree = "<group>"; };
 		465D7E1F295493F00099B206 /* OATextMultilineTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OATextMultilineTableViewCell.m; sourceTree = "<group>"; };
 		465D7E20295494000099B206 /* OATextMultilineTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OATextMultilineTableViewCell.xib; sourceTree = "<group>"; };
+		46624E702993B25D00F425AE /* OABaseNavbarViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OABaseNavbarViewController.h; sourceTree = "<group>"; };
+		46624E712993B28C00F425AE /* OABaseNavbarViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OABaseNavbarViewController.m; sourceTree = "<group>"; };
+		46624E732993B4B100F425AE /* OABaseNavbarViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OABaseNavbarViewController.xib; sourceTree = "<group>"; };
 		4663AB3D2951C92C00D9781E /* OAInputTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAInputTableViewCell.h; sourceTree = "<group>"; };
 		4663AB3E2951C94700D9781E /* OAInputTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAInputTableViewCell.m; sourceTree = "<group>"; };
 		4663AB3F2951C95A00D9781E /* OAInputTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAInputTableViewCell.xib; sourceTree = "<group>"; };
@@ -6967,7 +6971,6 @@
 		DA5A802926C563A500F274C7 /* OASuperViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OASuperViewController.m; sourceTree = "<group>"; };
 		DA5A802A26C563A500F274C7 /* OAMenuOriginViewControllerProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMenuOriginViewControllerProtocol.h; sourceTree = "<group>"; };
 		DA5A802C26C563A500F274C7 /* OAHelpViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAHelpViewController.mm; sourceTree = "<group>"; };
-		DA5A802D26C563A500F274C7 /* OAHelpViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAHelpViewController.xib; sourceTree = "<group>"; };
 		DA5A802E26C563A500F274C7 /* OAHelpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAHelpViewController.h; sourceTree = "<group>"; };
 		DA5A803026C563A500F274C7 /* OAMapSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAMapSource.m; sourceTree = "<group>"; };
 		DA5A803126C563A500F274C7 /* OAMapLayersConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMapLayersConfiguration.h; sourceTree = "<group>"; };
@@ -9220,6 +9223,21 @@
 			name = Icons;
 			sourceTree = "<group>";
 		};
+		46624E6F2993B20100F425AE /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				46624E702993B25D00F425AE /* OABaseNavbarViewController.h */,
+				46624E712993B28C00F425AE /* OABaseNavbarViewController.m */,
+				DA5A7DC926C563A300F274C7 /* OABaseScrollableHudViewController.h */,
+				DA5A7EC326C563A400F274C7 /* OABaseScrollableHudViewController.mm */,
+				DA5A7DA426C563A300F274C7 /* OABaseScrollableHudViewController.xib */,
+				DA5A7FE526C563A500F274C7 /* OACompoundViewController.h */,
+				DA5A7D3826C563A300F274C7 /* OACompoundViewController.m */,
+				46624E732993B4B100F425AE /* OABaseNavbarViewController.xib */,
+			);
+			path = Base;
+			sourceTree = "<group>";
+		};
 		46843FD4286F5D2500B1F08C /* WeatherSettings */ = {
 			isa = PBXGroup;
 			children = (
@@ -11015,6 +11033,7 @@
 		DA5A7ADE26C563A100F274C7 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				46624E6F2993B20100F425AE /* Base */,
 				B247453027E35B1D00C18C3F /* Cloud */,
 				DA5A7F9526C563A500F274C7 /* BottomSheet */,
 				DA5A7BAA26C563A100F274C7 /* Cells */,
@@ -11027,11 +11046,6 @@
 				DA5A7ADF26C563A100F274C7 /* LaunchScreen */,
 				DA5A7EC426C563A400F274C7 /* Map */,
 				DA5A7DC226C563A300F274C7 /* MyPlaces */,
-				DA5A7DC926C563A300F274C7 /* OABaseScrollableHudViewController.h */,
-				DA5A7EC326C563A400F274C7 /* OABaseScrollableHudViewController.mm */,
-				DA5A7DA426C563A300F274C7 /* OABaseScrollableHudViewController.xib */,
-				DA5A7FE526C563A500F274C7 /* OACompoundViewController.h */,
-				DA5A7D3826C563A300F274C7 /* OACompoundViewController.m */,
 				DA5A802A26C563A500F274C7 /* OAMenuOriginViewControllerProtocol.h */,
 				DA5A7F4A26C563A400F274C7 /* OAMenuViewControllerProtocol.h */,
 				DA5A7D6426C563A300F274C7 /* OANavigationController.h */,
@@ -12797,7 +12811,6 @@
 			isa = PBXGroup;
 			children = (
 				DA5A802C26C563A500F274C7 /* OAHelpViewController.mm */,
-				DA5A802D26C563A500F274C7 /* OAHelpViewController.xib */,
 				DA5A802E26C563A500F274C7 /* OAHelpViewController.h */,
 			);
 			path = Help;
@@ -14111,7 +14124,6 @@
 				847777561FAA260E00CA8C1F /* widget_max_speed_night@3x.png in Resources */,
 				84BEEE581E028E0D00750848 /* ic_cuisine@2x.png in Resources */,
 				8AE0196424505C8B00DA5C33 /* ic_action_bus@2x.png in Resources */,
-				DA5A84F026C563A900F274C7 /* OAHelpViewController.xib in Resources */,
 				847AF5761F8A3D4900FC7F90 /* ic_action_hide@2x.png in Resources */,
 				843E5D8F1AB341E000BE14BE /* menu_icon_back@3x.png in Resources */,
 				15B4E48D24AB3F8600119365 /* ic_custom_minimal_distance@2x.png in Resources */,
@@ -14632,6 +14644,7 @@
 				32A001A126131FEA00ABE0D2 /* ic_custom_clipboard@3x.png in Resources */,
 				32B50AD926BBE3C7002E6C92 /* ic_custom_map_location_free@2x.png in Resources */,
 				8A4D03E327A6DF2300B8A778 /* wind_color.txt in Resources */,
+				46624E742993B4B100F425AE /* OABaseNavbarViewController.xib in Resources */,
 				8476E2761F6C1EEC00EC274F /* map_car_bearing_night@3x.png in Resources */,
 				1509D52325E90F5600905CBC /* ic_action_ruler_line@3x.png in Resources */,
 				32A001722610B43700ABE0D2 /* widget_coordinates_latitude_north_day@2x.png in Resources */,
@@ -16653,6 +16666,7 @@
 				DA5A824826C563A700F274C7 /* OARoadSpeedsViewController.mm in Sources */,
 				DA5A832526C563A800F274C7 /* OACollectionViewCellState.m in Sources */,
 				DA5A81BE26C563A700F274C7 /* OACustomSearchPoiFilter.m in Sources */,
+				46624E722993B28C00F425AE /* OABaseNavbarViewController.m in Sources */,
 				DA5A833C26C563A800F274C7 /* OACustomSelectionButtonCell.m in Sources */,
 				DA5A836A26C563A800F274C7 /* OARouteStatisticsHelper.mm in Sources */,
 				DA5A815026C563A700F274C7 /* OACarPlayAddressSearchController.mm in Sources */,

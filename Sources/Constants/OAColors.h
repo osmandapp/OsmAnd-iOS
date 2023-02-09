@@ -230,4 +230,6 @@
 
 #define color_tableview_background 0xE5E5E5
 
+#define color_navbar_orange 0xFC7B08
+
 #endif /* OAColors_h */

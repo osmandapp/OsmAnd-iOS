@@ -56,7 +56,7 @@
     __weak OAOsmUploadGPXVisibilityViewConroller *weakSelf = self;
     
     OATableSectionData *section = [_data createNewSection];
-    section.footerText = [self.class localizedDescriptionForVisibilityType:_selectedVisibility];
+    section.footerText = [self localizedDescriptionForVisibilityType:_selectedVisibility];
     
     OATableRowData *publicCell = [section createNewRow];
     [publicCell setCellType:[OASettingsTitleTableViewCell getCellIdentifier]];
@@ -109,7 +109,7 @@
     return nil;
 }
 
-+ (NSString *) localizedDescriptionForVisibilityType:(EOAOsmUploadGPXVisibility)visibility
+- (NSString *) localizedDescriptionForVisibilityType:(EOAOsmUploadGPXVisibility)visibility
 {
     if (visibility == EOAOsmUploadGPXVisibilityPublic)
         return OALocalizedString(@"gpx_upload_public_visibility_descr");

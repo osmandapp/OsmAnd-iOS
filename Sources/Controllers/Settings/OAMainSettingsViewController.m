@@ -65,10 +65,14 @@
     _titleView.text = OALocalizedString(@"shared_string_settings");
 }
 
+-(void) addAccessibilityLabels
+{
+    self.backButton.accessibilityLabel = OALocalizedString(@"shared_string_back");
+}
+
 - (void) viewDidLoad
 {
     [super viewDidLoad];
-    [self addAccessibilityLabels];
     self.settingsTableView.rowHeight = UITableViewAutomaticDimension;
     self.settingsTableView.estimatedRowHeight = kEstimatedRowHeight;
     
@@ -106,11 +110,6 @@
 {
     [_appModesAvailabilityChangeObserver detach];
     [_appModeChangedObservable detach];
-}
-
--(void) addAccessibilityLabels
-{
-    self.backButton.accessibilityLabel = OALocalizedString(@"shared_string_back");
 }
 
 - (void) setupView

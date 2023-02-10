@@ -53,7 +53,6 @@
     [self.backBtn setTintColor:UIColor.whiteColor];
     [self.searchBtn setImage:[UIImage templateImageNamed:@"ic_navbar_search"] forState:UIControlStateNormal];
     [self.searchBtn setTintColor:UIColor.whiteColor];
-    [self addAccessibilityLabels];
     
     _searchFieldContainer = [[UIView alloc] initWithFrame:CGRectMake(0., defaultNavBarHeight + OAUtilities.getStatusBarHeight, DeviceScreenWidth, 0.1)];
     _searchFieldContainer.backgroundColor = _navBarView.backgroundColor;

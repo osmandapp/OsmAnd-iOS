@@ -517,7 +517,6 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
     [self.navbarBackgroundView.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
 
     [self updateLayout:interfaceOrientation adjustOffset:YES];
-    [self addAccessibilityLabels];
 
     self.okButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
 }

@@ -32,7 +32,6 @@
 {
     [super viewDidLoad];
     [self setupNavBarHeight];
-    [self addAccessibilityLabels];
     _tableView.rowHeight = UITableViewAutomaticDimension;
     _tableView.estimatedRowHeight = 60.;
     _tableView.contentInset = UIEdgeInsetsMake(self.navBarHeightConstraint.constant, 0, 0, 0);

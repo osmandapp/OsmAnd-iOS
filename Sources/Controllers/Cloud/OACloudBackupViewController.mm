@@ -119,7 +119,6 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     [super viewDidLoad];
     [self setupNotificationListeners];
     [OAIAPHelper.sharedInstance checkBackupPurchase];
-    [self addAccessibilityLabels];
     _settingsHelper = OANetworkSettingsHelper.sharedInstance;
     _backupHelper = OABackupHelper.sharedInstance;
     self.tblView.refreshControl = [[UIRefreshControl alloc] init];

@@ -244,6 +244,13 @@ static BOOL _repositoryUpdated = NO;
     [_doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
 }
 
+-(void) addAccessibilityLabels
+{
+    self.backButton.accessibilityLabel = OALocalizedString(@"shared_string_back");
+    self.updateButton.accessibilityLabel = OALocalizedString(@"shared_string_update");
+    self.searchButton.accessibilityLabel = OALocalizedString(@"shared_string_search");
+}
+
 - (void) viewDidLoad
 {
     [super viewDidLoad];
@@ -281,7 +288,6 @@ static BOOL _repositoryUpdated = NO;
 
     [self obtainDataAndItems];
     [self prepareContent];
-    [self addAccessibilityLabels];
 
     _freeMemoryView = [[OAFreeMemoryView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, 64.0) localResourcesSize:_totalInstalledSize + _liveUpdatesInstalledSize];
     _subscribeEmailView = [[OASubscribeEmailView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, 100.0)];
@@ -641,13 +647,6 @@ static BOOL _repositoryUpdated = NO;
 + (BOOL) lackOfResources
 {
     return _lackOfResources;
-}
-
--(void) addAccessibilityLabels
-{
-    self.backButton.accessibilityLabel = OALocalizedString(@"shared_string_back");
-    self.updateButton.accessibilityLabel = OALocalizedString(@"shared_string_update");
-    self.searchButton.accessibilityLabel = OALocalizedString(@"shared_string_search");
 }
 
 + (void) prepareData

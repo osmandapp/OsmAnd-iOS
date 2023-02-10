@@ -105,6 +105,13 @@
     _titleView.text = OALocalizedString(@"shared_string_history");
 }
 
+-(void) addAccessibilityLabels
+{
+    self.backButton.accessibilityLabel = OALocalizedString(@"shared_string_back");
+    self.editButton.accessibilityLabel = OALocalizedString(@"shared_string_edit");
+    self.deleteButton.accessibilityLabel = OALocalizedString(@"shared_string_delete");
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -112,7 +119,6 @@
     isDecelerating = NO;
     self.view.backgroundColor = [UIColor whiteColor];
     self.deleteButton.hidden = YES;
-    [self addAccessibilityLabels];
 }
 
 - (void)updateDistanceAndDirection
@@ -258,13 +264,6 @@
     NSDate *today = [cal dateFromComponents:components];
     
     return [today timeIntervalSince1970];
-}
-
--(void) addAccessibilityLabels
-{
-    self.backButton.accessibilityLabel = OALocalizedString(@"shared_string_back");
-    self.editButton.accessibilityLabel = OALocalizedString(@"shared_string_edit");
-    self.deleteButton.accessibilityLabel = OALocalizedString(@"shared_string_delete");
 }
 
 -(void)generateData

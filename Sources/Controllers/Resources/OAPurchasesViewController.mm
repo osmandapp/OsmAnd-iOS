@@ -60,7 +60,6 @@ static BOOL _purchasesUpdated;
 
     [self generateData];
     [self updateLoadingView:!_purchasesUpdated];
-    [self addAccessibilityLabels];
 }
 
 - (void)viewWillAppear:(BOOL)animated

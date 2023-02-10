@@ -62,7 +62,6 @@
     [self.btnAdd setTintColor:UIColor.whiteColor];
     [self.btnEdit setImage:[UIImage templateImageNamed:@"ic_custom_edit"] forState:UIControlStateNormal];
     [self.btnEdit setTintColor:UIColor.whiteColor];
-    [self addAccessibilityLabels];
     self.tableView.tableHeaderView = _tableHeaderView;
     _bottomViewHeight.constant = 0;
 }

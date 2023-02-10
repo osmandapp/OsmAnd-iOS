@@ -56,7 +56,6 @@
     _headers = [NSMutableDictionary dictionary];
     _footers = [NSMutableDictionary dictionary];
     [self generateData];
-    [self addAccessibilityLabels];
 
     self.tableView.dataSource = self;
     self.tableView.delegate = self;

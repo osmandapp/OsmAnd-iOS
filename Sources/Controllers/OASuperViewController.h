@@ -13,6 +13,7 @@
 - (IBAction) backButtonClicked:(id)sender;
 
 - (void) applyLocalization;
+- (void) addAccessibilityLabels;
 - (BOOL) isModal;
 - (void) dismissViewController;
 - (void) showViewController:(UIViewController *)viewController;

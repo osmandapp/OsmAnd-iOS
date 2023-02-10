@@ -58,7 +58,6 @@
 - (void) viewDidLoad
 {
     [super viewDidLoad];
-    [self addAccessibilityLabels];
     _iapHelper = [OAIAPHelper sharedInstance];
 }
 

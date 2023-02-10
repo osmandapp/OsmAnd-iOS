@@ -36,7 +36,6 @@
 {
     [super viewDidLoad];
     [self setupNavBarHeight];
-    [self addAccessibilityLabels];
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator

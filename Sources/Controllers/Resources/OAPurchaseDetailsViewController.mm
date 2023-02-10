@@ -85,7 +85,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self addAccessibilityLabels];
     self.tableView.separatorInset = UIEdgeInsetsZero;
     self.tableView.dataSource = self;
     self.tableView.delegate = self;

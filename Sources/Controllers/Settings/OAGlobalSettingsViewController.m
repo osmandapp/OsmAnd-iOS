@@ -81,7 +81,6 @@
     self.tableView.dataSource = self;
 
     [self generateData];
-    [self addAccessibilityLabels];
 }
 
 - (void) viewWillAppear:(BOOL)animated

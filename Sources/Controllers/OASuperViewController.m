@@ -18,6 +18,7 @@
 {
     [super viewDidLoad];
     [self applyLocalization];
+    [self addAccessibilityLabels];
 }
 
 - (void) didReceiveMemoryWarning
@@ -27,6 +28,11 @@
 }
 
 - (void) applyLocalization
+{
+    // override point
+}
+
+- (void) addAccessibilityLabels
 {
     // override point
 }

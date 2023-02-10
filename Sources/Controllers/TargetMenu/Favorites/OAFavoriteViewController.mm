@@ -121,7 +121,7 @@
 {
     _originObject = [OAPOIHelper findPOIByOriginName:_favorite.getAmenityOriginName lat:_favorite.getLatitude lon:_favorite.getLongitude];
     if (!_originObject)
-        [_favorite getAmenity];
+        _originObject = [_favorite getAmenity];
 }
 
 - (void) buildTopRows:(NSMutableArray<OARowInfo *> *)rows

@@ -360,20 +360,12 @@
 "plugin_popup_nautical_title" = "Hent søkort";
 "plugin_popup_nautical_desc" = "Hent først søkort.\nGå til <b>Indstillinger for kort</b> > <b>kort type</b> og aktiver <b>Søkort</b> format";
 "go_to_downloads" = "Hent";
-"plugin_nautical_descr" = "Beriger dit kort med oplysninger om sejlruter, navigationslys, nautiske farezoner, zoner med sejlads- eller anløbsrestriktioner osv. For at bruge den skal du downloade de respektive nautiske kort og aktivere stilen \"Søkort\" under \"Konfigurer kort\".
-\n
-\nYderligere læsning på https://osmand.net/docs/user/plugins/nautical-charts .";
+"plugin_nautical_descr" = "Beriger dit kort med oplysninger om sejlruter, navigationslys, nautiske farezoner, zoner med sejlads- eller anløbsrestriktioner osv. For at bruge den skal du downloade de respektive nautiske kort og aktivere stilen \"Søkort\" under \"Konfigurer kort\".\n\nYderligere læsning på https://osmand.net/docs/user/plugins/nautical-charts .";
 "osmand_parking_plugin_description" = "Markér, hvor din bil er parkeret, og giv din kalender besked om, hvornår parkometeret udløber. Du placerer markeringen ved at vælge et sted på kortet, gå til \"Handlinger\", og tryk på \"Tilføj parkering\".";
 "plugin_ski_descr" = "Designet til at navigere i vintersportsområder: Se skipister, skilifter og langrendsspor med farvede linjer, der angiver sværhedsgraden. Hvis du vil gøre brug af dette, skal du aktivere denne udvidelse og også gå til \"Konfigurer kort\" og vælge kortstilen \"Vinter og ski\".";
-"record_plugin_description" = "Registrer dine ture eller træninger, og analysér dataene med hensyn til hastighed, akkumulerede stigninger og nedstigninger, højdeprofil osv. Optagede spor kan arkiveres, deles med venner, redigeres og efterbehandles.
-\n
-\nYderligere information på https://osmand.net/docs/user/plugins/trip-recording .";
+"record_plugin_description" = "Registrer dine ture eller træninger, og analysér dataene med hensyn til hastighed, akkumulerede stigninger og nedstigninger, højdeprofil osv. Optagede spor kan arkiveres, deles med venner, redigeres og efterbehandles.\n\nYderligere information på https://osmand.net/docs/user/plugins/trip-recording .";
 "purchases_feature_desc_wikipedia" = "Giver dig alle stedrelaterede Wikipedia-artikler offline, så du kan lære mere om de steder, du besøger på din rejse, ved blot at trykke på kortet. Glem ikke at downloade Wikipedia-kortfilerne for de respektive regioner.";
-"srtm_plugin_description" = "Terrænoplysninger som f.eks. konturlinjer, terrænskygger og skråninger hjælper dig med at vurdere terrænets beskaffenhed og relief, navigationsmuligheder og meget mere. De topografiske oplysninger kan på kortet repræsenteres ved hjælp af skravering af hældninger, konturlinjer og/eller farvelægning af stejlhed.
-\n
-\nDe underliggende data stammer fra SRTM og ASTER.
-\n
-\nYderligere oplysninger findes på http://osmand.net/docs/user/plugins/contour-lines .";
+"srtm_plugin_description" = "Terrænoplysninger som f.eks. konturlinjer, terrænskygger og skråninger hjælper dig med at vurdere terrænets beskaffenhed og relief, navigationsmuligheder og meget mere. De topografiske oplysninger kan på kortet repræsenteres ved hjælp af skravering af hældninger, konturlinjer og/eller farvelægning af stejlhed.\n\nDe underliggende data stammer fra SRTM og ASTER.\n\nYderligere oplysninger findes på http://osmand.net/docs/user/plugins/contour-lines .";
 "plugin_popup_wiki_ask" = "For at hente Wikipedia data, aktiver udvidelsen: <b>Wikipedia</b>";
 "plugin_popup_srtm_ask" = "For at hente højdekurver skal du aktivere udvidelsen: <b>Højdekurver</b>";
 "turn_on_plugin" = "Aktiver udvidelse";
@@ -412,7 +404,7 @@
 // Shared Strings
 "shared_string_select" = "Vælg";
 "shared_string_of" = "af";
-"first_usage_greeting" = "Få rutevejledning og opdag nye steder uden internetforbindelse";
+"first_usage_greeting" = "Få rutevejledning og opdag nye steder uden en internetforbindelse";
 "get_started" = "Kom i gang";
 "first_usage_wizard_desc" = "Lad OsmAnd bestemme placeringen og foreslå at hente kort for området.";
 "location_not_found" = "Placering ikke fundet";
@@ -552,7 +544,7 @@
 "sort_by_name" = "Sorter efter navn";
 "map_markers_other" = "Andre markører";
 "shared_string_turn" = "Sving";
-"stop_routing_confirm" = "Stop navigationen\?";
+"stop_routing_confirm" = "Stop navigationen?";
 "cancel_route" = "Annuller rute\?";
 "route_is_too_long_v2" = "Ved lange afstande: tilføj mellemliggende destinationer, hvis ingen rute er beregnet efter 10 minutter.";
 "navigation_over_track" = "Start navigation langs sporet?";
@@ -594,7 +586,7 @@
 "guidance_preferences_descr" = "Indstillinger for navigation";
 "routing_preferences_descr" = "Præferencer ved ruteberegning";
 "routing_settings" = "Navigation";
-"confirm_usage_speed_cameras" = "I mange lande (Tyskland, Frankrig, Italien og andre) er anvendelse af fartkamera advarsler ikke tilladt ved lov. OsmAnd påtager sig ikke ansvaret, hvis loven overtrædes. Tryk kun på Ja, hvis det er berettiget at bruge denne funktion.";
+"confirm_usage_speed_cameras" = "I mange lande (Tyskland, Frankrig, Italien og andre) er anvendelse af fartkamera-advarsler ikke lovligt. OsmAnd påtager sig ikke ansvaret, hvis loven overtrædes. Tryk kun på 'Ja', hvis det er berettiget at bruge denne funktion.";
 "show_traffic_warnings" = "Trafikadvarsler";
 "show_pedestrian_warnings" = "Fodgængerovergange";
 "show_cameras" = "Fartkameraer";
@@ -626,7 +618,7 @@
 "show_warnings_title" = "Vis advarsler…";
 "show_warnings_descr" = "Konfigurer trafikadvarsler (hastighedsgrænser, tvungne stop, vejbump, tunneler), fartkameraadvarsler og vognbane oplysninger.";
 "speak_title" = "Meddel…";
-"speak_descr" = "Konfigurer meddelse af gadenavne, trafikadvarsler (tvungne stop, vejbump), fartkameraadvarsler og hastighedsgrænser.";
+"speak_descr" = "Konfigurer for at annoncere gadenavne, trafikadvarsler (tvungne stop, vejbump), fartkameraadvarsler og hastighedsgrænser";
 "keep_informing" = "Gentag navigationsinstruktioner";
 "keep_informing_descr" = "Gentag navigationsinstruktioner med jævne mellemrum.";
 "arrival_distance" = "Meddel ankomst";
@@ -634,7 +626,7 @@
 "default_speed_system" = "Hastighed";
 "default_speed_system_descr" = "Vælg enhed for hastighed.";
 "speed_limit_exceed" = "Tolerance for hastighedsgrænse";
-"speed_limit_exceed_message" = "Vælg hvor meget hastighedsgrænsen skal overskrides, for at få en taleadvarsel.";
+"speed_limit_exceed_message" = "Vælg hvor meget hastighedsgrænsen skal overskrides før du får en stemmeadvarsel.";
 "wake_on_voice" = "Tænd for skærmen";
 "wake_on_voice_descr" = "Tænd for skærmen (hvis slukket) ved navigationsinstruktioner.";
 "voice_pref_title" = "Tale";
@@ -683,14 +675,13 @@
 "rotate_map_compass_opt" = "Kompasretning";
 "rotate_map_bearing_opt" = "Bevægelsesretning";
 "rotate_map_none_opt" = "Ingen rotation (nord er op)";
-"driving_region_descr" = "Vælg region: USA, Europa, Storbritannien, Asien og andre.";
+"driving_region_descr" = "Vælg kørselsregion: USA, Europa, Storbritannien, Asien og andre.";
 "shared_string_automatic" = "Automatisk";
 "auto_follow_location_enabled" = "Automatisk centrering af kortvisning aktiv.";
 "unknown_location" = "Position endnu ikke kendt.";
 "route_simulation" = "Rutesimulering";
 "animate_routing_route_not_calculated" = "Beregn ruten først";
-"day_night_info_description" = "Solopgang: %@
-\nSolnedgang: %@";
+"day_night_info_description" = "Solopgang: %@\nSolnedgang: %@";
 "day_night_info" = "Dag/nat information";
 "daynight_mode_auto" = "Solopgang/-nedgang";
 "simulate_your_location" = "Simuler position";
@@ -698,16 +689,16 @@
 "info_button" = "Information";
 "shared_string_go" = "Udfør";
 "error_avoid_specific_road" = "Ingen omfartsvej fundet";
-"road_blocked" = "Spærret vej";
+"road_blocked" = "Vej spærret";
 "starting_point" = "Udgangspunkt";
 "shared_string_select_avoid_road_on_map" = "Vælg en vej, der skal undgås under ruteberegning";
 "shared_string_road" = "Vej";
-"avoid_roads_msg" = "Generere en alternativ rute ved at vælge veje der skal undgås";
+"avoid_roads_msg" = "Udløs en alternativ rute ved at vælge veje der skal undgås";
 "day_off_label" = "lukket";
 "open_from" = "Åben fra";
 "open_till" = "Åben til";
 "will_open_at" = "Åbner kl.";
-"will_open_on" = "Åbner kl.";
+"will_open_on" = "Åbner";
 "will_open_tomorrow_at" = "Åbner i morgen kl.";
 "shared_string_target_points" = "Destinationer";
 "search_radius_proximity" = "Indenfor";
@@ -729,7 +720,7 @@
 "last_intermediate_dest_description" = "Tilføjer et mellemliggende stop";
 "shared_string_options" = "Indstillinger";
 "intermediate_items_sort_by_distance" = "Sorter fra dør til dør";
-"switch_start_finish" = "Byt om på startpunkt og destination";
+"switch_start_finish" = "Byt om på startpunkt&destination";
 "clear_all_intermediates" = "Ryd alle mellemliggende punkter";
 "cancel_navigation" = "Stop navigation";
 "transport_Routes" = "Ruter";
@@ -917,9 +908,7 @@
 "modify_poi" = "Ændre IP oplysninger";
 "osm_editing_plugin_name" = "OpenStreetMap redigering";
 "product_desc_osm_editing" = "Forvandl din mobiltelefon til et kortlægningsværktøj";
-"osm_editing_plugin_description" = "Lav bidrag til OpenStreetMap, et globalt fællesskab, der vedligeholder et omfattende kort over verden og stiller ajourførte open source-data til rådighed for alle brugere.
-\n
-\nDu kan finde en vejledning i, hvordan du redigerer kortet, på vores websted https://osmand.net/docs/user/plugins/osm-editing.";
+"osm_editing_plugin_description" = "Lav bidrag til OpenStreetMap, et globalt fællesskab, der vedligeholder et omfattende kort over verden og stiller ajourførte open source-data til rådighed for alle brugere.\n\nDu kan finde en vejledning i, hvordan du redigerer kortet, på vores websted https://osmand.net/docs/user/plugins/osm-editing.";
 "user_password" = "Adgangskode";
 "rendering_value_category_name" = "Kategori";
 "poi_category_and_type" = "Kategori og IP-type";
@@ -1040,8 +1029,7 @@
 "local_openstreetmap_uploading" = "Overfører…";
 "key_hint_zoom_out" = "Zoom ud";
 "shared_string_read_more" = "Læs mere";
-"short_location_on_map" = "Breddegrad %@
-\nLængdegrad %@";
+"short_location_on_map" = "Breddegrad %@\nLængdegrad %@";
 "navigate_point_format_D" = "DDD.DDDDD";
 "navigate_point_format_DM" = "DDD MM.MMM";
 "navigate_point_format_DMS" = "DDD MM SS.S";
@@ -1770,11 +1758,11 @@
 "plan_route" = "Planlæg en rute";
 "checking_for_duplicates" = "Søger efter dubletter...";
 "after_tapping_done" = "Tryk på Udført og slettede profiler går helt tabt.";
-"profile_alert_delete_msg" = "Slet profilen \"%@\"\?";
+"profile_alert_delete_msg" = "Slet profilen \"%@\"";
 "added_items" = "Tilføjede elementer: %@";
 "shared_string_finish" = "Afslut";
 "shared_string_import_complete" = "Importen er fuldført";
-"listed_exist" = "Det angivne %@ findes allerede.";
+"listed_exist" = "Angivet %@ findes allerede i OsmAnd.";
 "ltr_or_rtl_combine_via_colon" = "%@: %@";
 "ltr_or_rtl_combine_via_space" = "%@ %@";
 "search_activity" = "Søg";
@@ -1793,9 +1781,7 @@
 "replace_all" = "Erstat alle";
 "keep_both_desc" = "Importerede poster tilføjes med præfiks";
 "keep_both" = "Behold begge";
-"import_duplicates_description" = "OsmAnd har allerede elementer med de samme navne som de importerede.
-\n
-\nVælg en handling.";
+"import_duplicates_description" = "OsmAnd har allerede elementer med de samme navne som de importerede.\n\nVælg en handling.";
 "import_duplicates_title" = "Nogle elementer findes allerede";
 "shared_string_nothing_selected" = "Intet valgt";
 "nav_type_hint" = "Navigationstype";
@@ -1907,15 +1893,13 @@
 "routes_color_by_type" = "Farv ruter efter…";
 "rendering_value_walkingRoutesScopeOSMC_description" = "Farvelægning efter netværkstilhørsforhold.";
 "dialogs_and_notifications_title" = "Dialoger og meddelelser";
-"walking_route_osmc_description" = "Farvelæg ruter efter deres individuelle, lokale farve (hvis de findes på OpenStreetMap) og type (international, regional, lokal).";
+"walking_route_osmc_description" = "Farvelæg ruter efter deres individuelle, lokale farve (hvis den findes på OpenStreetMap) og type (international, regional, lokal).";
 "some_articles_may_not_available_in_lang" = "Nogle Wikipedia-artikler er muligvis ikke tilgængelige på dit sprog.";
 "route_between_points_warning_desc" = "Fastgør derefter dit spor til den nærmeste tilladte vej med en af dine navigationsprofiler for at bruge denne mulighed.";
 "rendering_value_walkingRoutesOSMCNodes_description" = "Farvelæg ruter efter deres knudepunktsnetværkstype (international, regional, lokal).";
 "travel_routes" = "Rejseruter";
 "quick_action_remove_next_destination_descr" = "Sletter den næste destination på din rute. Hvis det er den endelige destination, stopper navigationen.";
-"gpx_parse_error" = "Problemer fundet med en GPX-fil.
-\n
-\nDu kan kontakte OsmAnd support for at undersøge det.";
+"gpx_parse_error" = "Problemer fundet med en GPX-fil.\n\nDu kan kontakte OsmAnd support for at undersøge det.";
 "carplay_profile_descr" = "Profil, der skal bruges, når der er forbindelse til CarPlay.";
 "carplay_profile" = "CarPlay-profil";
 "carplay_active_message" = "Kort vises via CarPlay";
@@ -1945,7 +1929,7 @@
 "suggested_maps_descr" = "Disse kort er nødvendige for udvidelsen.";
 "welmode_download_maps" = "Administrer kort";
 "shared_string_navigation" = "Navigation";
-"app_restart_required" = "App-genstart kræves for at anvende nogle indstillinger.";
+"app_restart_required" = "Det er nødvendigt at genstarte appen for at anvende nogle indstillinger.";
 "navigate_point_easting" = "Østlig";
 "added_profiles_descr" = "Profiler tilføjet af udvidelse";
 "open_place_reviews" = "OpenPlaceReviews";
@@ -2038,9 +2022,7 @@
 "unsupported_action_title" = "Handlingen understøttes ikke (%@)";
 "unsupported_action" = "Handling ikke understøttet";
 "product_desc_mapillary" = "Billeder på gadeniveau til at tjekke omgivelserne";
-"open_place_reviews_plugin_description" = "Lav bidrag til OpenPlaceReviews-projektet som f.eks. fotos, anmeldelser, links for offentlige steder som restauranter, hoteller eller museer.
-\n
-\nFind vejledninger om, hvordan du bidrager, på vores websted https://osmand.net/docs/user/plugins/openplacereviews.";
+"open_place_reviews_plugin_description" = "Lav bidrag til OpenPlaceReviews-projektet som f.eks. fotos, anmeldelser, links for offentlige steder som restauranter, hoteller eller museer.\n\nFind vejledninger om, hvordan du bidrager, på vores websted https://osmand.net/docs/user/plugins/openplacereviews.";
 "plugin_popup_osm_editing_ask" = "Aktiver udvidelse til redigering af OpenStreetMap for at tilføje og administrere kortredigeringer og noter";
 "key_hint_recenter_map" = "Centrer kortet igen";
 "select_application_profile" = "Vælg applikationsprofil";
@@ -2053,9 +2035,7 @@
 "fav_point_emoticons_message" = "Favorit omdøbt til \'%@\' for at kunne gemme strengen med humørikoner til en fil.";
 "default_color_descr" = "Denne farve vil blive brugt til alle nye favoritter, der tilføjes gruppen.";
 "export_profile_select_descr" = "Vælg data der skal eksporteres.";
-"checking_for_duplicate_description" = "OsmAnd kontrol af %@ for dubletter med eksisterende elementer i appen.
-\n
-\nDet kan tage lidt tid.";
+"checking_for_duplicate_description" = "OsmAnd kontrol af %@ for dubletter med eksisterende elementer i appen.\n\nDet kan tage lidt tid.";
 "route_calc_progress" = "Beregner: %d%%";
 "poi_categories" = "IP-kategorier";
 "attribute" = "Egenskab";
@@ -2333,8 +2313,7 @@
 "cloud_email_not_registered" = "Denne e-mailadresse er ikke registreret med OsmAnd Cloud";
 "login_help_email_title" = "OsmAnd iOS Cloud";
 "register_opr_create_new_account" = "Opret ny konto";
-"osmand_cloud_create_account_descr" = "Indtast din e-mailadresse, en bekræftelseskode vil blive sendt dertil,
-\nog alle dine data vil blive knyttet til den.";
+"osmand_cloud_create_account_descr" = "Indtast din e-mailadresse, en bekræftelseskode vil blive sendt dertil,\nog alle dine data vil blive knyttet til den.";
 "verification" = "Verifikation";
 "verify_email_address_descr" = "Verifikationskode sendt til %@. Indtast den venligst i feltet nedenfor.";
 "verification_code_placeholder" = "Kode";
@@ -2363,12 +2342,7 @@
 "osmand_cloud_login_descr" = "Indtast den e-mailadresse, du har registreret dig med. Der vil blive sendt en engangskode til det næste trin til den.";
 "plugin_popup_weather_ask" = "Aktiver venligst vejr-udvidelse";
 "product_desc_weather" = "24-timers prognose 7 dage frem på kortet";
-"weather_plugin_description" = "Giver
-\n- 24-timers og 7-dages vejrprognose med 5 lag
-\n- lokationsbaserede moduler
-\n- temperatur/tryk-konturlinjer
-\n
-\nVejrdataene leveres af Global Forecast System(GFS, https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast).";
+"weather_plugin_description" = "Giver\n- 24-timers og 7-dages vejrprognose med 5 lag\n- lokationsbaserede moduler\n- temperatur/tryk-konturlinjer\n\nVejrdataene leveres af Global Forecast System(GFS, https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast).";
 "weather_wind_knots" = "Knob";
 "weather_wind_kilimeters_per_hour" = "Kilometer i timen";
 "weather_precip_milimeters" = "Millimeter";
@@ -2419,9 +2393,7 @@
 "ios_release_4_2" = "• Udseende af rutelinje: tilføjet mulighed for at indstille bredde og farve\n• Spor: tilføjet mulighed for at slette flere spor på én gang\n• Kontekstmenu for spor: tilføjet rullebjælke med grupper af rutepunkter\n• Kortudseende: opdelt yderligere ruter efter type med mulighed for at aktivere en fra hver kategori separat\n• Ridning: tilføjede ny navigationstype og app-profil\n• OsmAnd-filer er nu synlige i Filer-appen\n• UX af indstillingerne \"Brug højdedata\" og \"Vælg højdesvingninger\" blev forbedret, de blev kombineret og omdøbt til \"Foretrukket terræn\", der i øjeblikket er tilgængelig for \"Cykel\" og \"Fodgænger\"-profiler.\n• Ny indstilling \"Medtag overskrift\" til sporregistrering\n• Modul med vejnavne: viser nu vejskilt og afkørselsnummer under navigation\n• Nye fitness- og løberuter på kortet\n• CarPlay-fejlrettelser, tilføjede bevægelser til touchscreens\n• Rettet import af GPX-filer fra OSF-pakken\n• Rettet import af brugerdefinerede udvidelser med inkluderede filer\n• Rettet forskellige nedbrud i ruteplanlægningstilstanden\n• Rettet nedbrud under Navigation\n";
 "routeInfo_horse_scale_description" = "Gengiv stier i henhold til sværhedsgraden af ridestier";
 "routeInfo_horse_scale_name" = "Ridestiers sværhedsgrad";
-"simulation_real_mode_desc" = "På lige vejstrækninger vil hastigheden være omtrent den maksimalt tilladte hastighed.
-\nVed kryds sænkes hastigheden i simuleringen.
-\nDer vil blive anvendt ekstra sanktioner ved trafiksignaler, stopskilte osv.";
+"simulation_real_mode_desc" = "På lige vejstrækninger vil hastigheden være omtrent den maksimalt tilladte hastighed.\nVed kryds sænkes hastigheden i simuleringen.\nDer vil blive anvendt ekstra sanktioner ved trafiksignaler, stopskilte osv.";
 "simulation_real_mode_title" = "Realistisk simulering";
 "simulation_constant_mode_desc" = "Simuleringen vil blive udført med en konstant, valgt hastighed.";
 "simulation_constant_mode_title" = "Fast hastighed";
@@ -2458,7 +2430,7 @@
 "simulate_location_movement_speed_x2_desc" = "Bevægelseshastigheden af placeringen under simuleringen vil være det dobbelte af hastigheden i den valgte fil.";
 "simulate_location_movement_speed" = "Bevægelseshastighed";
 "simulate_location_movement_speed_x4" = "x4";
-"routing_attr_hazmat_category_name" = "Transport af farligt gods";
+"routing_attr_hazmat_category_name" = "Kategori af farligt gods";
 "routing_attr_hazmat_category_no_restrictions_name" = "A (Ingen restriktioner)";
 "transport_hazmat_yes_desc" = "Vælg den rette kategori.";
 "transport_hazmat_no_desc" = "Veje og tunneller kan have begrænsninger på transport af farlige materialer.";
@@ -2484,7 +2456,7 @@
 "subscription_cancel_description" = "Opsig når som helst i AppStore.";
 "osm_live_payment_subscription_management_aid" = "Betalingen vil blive trukket på din Apple ID-konto ved bekræftelsen af købet.\n\nAbonnementet fornyes automatisk, medmindre det opsiges mindst 24 timer før udløbet af den aktuelle periode. Din konto vil blive debiteret for fornyelse senest 24 timer før udløbet af den aktuelle periode.\n\nDu kan administrere og opsige dine abonnementer ved at gå til dine kontoindstillinger i App Store efter købet";
 "no_purchases" = "Du har ingen køb";
-"empty_purchases_description" = "Hvis dine køb ikke vises her, kan du trykke på \"%@\" eller kontakte vores supportteam.";
+"empty_purchases_description" = "Hvis dine køb ikke vises her, kan du trykke på“%@” eller kontakte vores supportteam.";
 "explore_osmnad_plans_to_find_suitable" = "Udforsk OsmAnd-abonnementer for at finde et, der passer til dig.";
 "osm_live_banner_desc" = "Få ubegrænset downloads af kort, tilføjelse af opdateringer ugentligt, dagligt eller hver time.";
 "redeem_promo_code" = "Indløs kampagnekode";
@@ -2601,8 +2573,7 @@
 "backup_danger_zone" = "Farezone";
 "backup_delete_all_data_or_versions_descr" = "Slet alle data på OsmAnd Cloud eller kun versionshistorik. Lokale data forbliver uberørte.";
 "backup_delete_old_data" = "Fjern gamle versioner";
-"logout_from_osmand_cloud_decsr" = "Log ud\?
-\nDu skal logge ind igen for at sikkerhedskopiere eller gendanne data.";
+"logout_from_osmand_cloud_decsr" = "Log ud\?\nDu skal logge ind igen for at sikkerhedskopiere eller gendanne data.";
 "backup_deleting_all_data" = "Sletter alle data…";
 "backup_delete_all_data_in_progress" = "Vent venligst, indtil OsmAnd sletter alle dine data fra skyen. Alle data på enheden forbliver uberørt.";
 "backup_delete_all_data_finished" = "Alle dine data blev slettet fra OsmAnd Cloud.";
@@ -2614,17 +2585,13 @@
 "backup_empty_data_from_category" = "OsmAnd Cloud indeholder ingen data fra denne kategori.";
 "cloud_storage_used" = "%@ af %@ anvendt";
 "recording_delete_confirm" = "Slet dette element\?";
-"backup_delete_all_data_warning" = "Du er ved at slette alle data, der tidligere er uploadet til OsmAnd Cloud, herunder versionshistorik.
-\n
-\nDu vil ikke kunne gendanne slettede data.";
-"backup_delete_old_data_warning" = "Du er ved at sletteændringshistorikken for de tidligere indlæste data.
-\n
-\nDen aktuelle version af dataene vil blive gemt på serveren, men du vil ikke kunne vende tilbage til de tidligere foretagne ændringer.";
+"backup_delete_all_data_warning" = "Du er ved at slette alle data, der tidligere er uploadet til OsmAnd Cloud, herunder versionshistorik.\n\nDu vil ikke kunne gendanne slettede data.";
+"backup_delete_old_data_warning" = "Du er ved at sletteændringshistorikken for de tidligere indlæste data.\n\nDen aktuelle version af dataene vil blive gemt på serveren, men du vil ikke kunne vende tilbage til de tidligere foretagne ændringer.";
 "backup_delete_all_data" = "Slet alle mine data";
 "login_open_street_map_org" = "Log ind på OpenStreetMap.org";
 "map_updates_for_mappers" = "Kortopdateringer til kortlæggerne";
 "offline_edition_descr" = "Hvis offline redigering er aktiveret, vilændringer først blive gemt lokalt og uploadet på forespørgsel. Ellers vil ændringer blive uploadet øjeblikkeligt.";
-"enough_contributions_descr" = "Tillykke, du har bidraget nok til OpenStreetMap og kan nu nyde godt af ubegrænsede OsmAnd-kortopdateringer!";
+"enough_contributions_descr" = "Tillykke, du har lavet nok OpenStreetMap-bidrag og kan nu nyde godt af ubegrænsede OsmAnd-kortopdateringer!";
 "benefits_for_contributors_primary_descr" = "Aktive bidragydere til OpenStreetMap.org kan være berettiget til ubegrænsede kortopdateringer hver time.";
 "shared_string_unavailable" = "Ikke tilgængelig";
 "shared_string_contributions" = "Bidrag";
@@ -2723,7 +2690,7 @@
 "nautical_depth_points" = "Nautiske dybdepunkter";
 "amazon_appstore" = "Amazon Appstore";
 "huawei_appgallery" = "Huawei AppGallery";
-"position_on_map" = "Vis position";
+"position_on_map" = "Placeringsposition på skærmen";
 "co2_mission" = "CO2-udledning";
 "routing_attr_motor_type_gas_name" = "Komprimeret naturgas";
 "routing_attr_motor_type_electric_name" = "Elektrisk";
@@ -2737,7 +2704,6 @@
 "routing_attr_motor_type_lpg_name" = "Flaskegas";
 "si_nm_ft" = "Sømil/fod";
 "si_nm_mt" = "Sømil/meter";
-
 "rendering_attr_showBusRoutes_name" = "Busruter";
 "rendering_attr_showShareTaxiRoutes_name" = "Shuttle-ruter";
 "routing_attr_carriage_restrictions_name" = "Vognbegrænsninger";
@@ -2824,10 +2790,20 @@
 "shared_string_legal" = "Juridisk";
 "lang_zh-Hant" = "Kinesisk (traditionelt)";
 "privacy_and_security" = "Privatliv og sikkerhed";
-"speed_cameras_legal_descr" = "I nogle lande eller regioner er det forbudt at anvende apps, som advarer om fartkameraer.
-\n
-\nDu må foretage et valg afhængig af landets lovgivning.
-\n
-\nVælg %@ og du vil modtage advarsler om fartkameraer.
-\n
-\nVælg %@. Alle date relateret til fartkameraer: advarsler, notifikationer, POI\'er vil blev slettet indtil OsmAnd er fuldstændig geninstalleret.";
+"speed_cameras_legal_descr" = "I nogle lande eller regioner er det forbudt at anvende apps, som advarer om fartkameraer.\n\nDu må foretage et valg afhængig af landets lovgivning.\n\nVælg %@ og du vil modtage advarsler om fartkameraer.\n\nVælg %@. Alle date relateret til fartkameraer: advarsler, notifikationer, POI\'er vil blev slettet indtil OsmAnd er fuldstændig geninstalleret.";
+"lang_zh-Hans" = "Kinesisk (forenklet)";
+"announce_when_exceeded" = "Meddel, når overskredet";
+"speak_route_recalculation" = "Meddel genberegning af rute";
+"announcement_time_title" = "Meddelelsestidspunkt";
+"user_points" = "Brugerpunkter";
+"announcement_time_intervals" = "Tids- og distanceintervaller";
+"announcement_time_arrive" = "Ankomst til destinationen";
+"announcement_time_off_route" = "Uden for ruten";
+"announcement_time_prepare" = "Forbered";
+"announcement_time_prepare_long" = "Lang forberedelse";
+"announcement_time_approach" = "Nærme sig";
+"announcement_time_passing" = "Passerer";
+"announcement_time_descr" = "Tidspunktet for de forskellige stemmeprompter afhænger af prompttypen, den aktuelle navigationshastighed og standardhastigheden for navigation.";
+"ltr_or_rtl_combine_via_comma" = "%@, %@";
+"exit_number" = "Afkørselsnummer";
+"speak_gps_signal_status" = "Meddel tab og genoprettelse af GPS-signal";

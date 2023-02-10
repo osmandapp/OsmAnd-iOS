@@ -24,8 +24,13 @@
 #import "OAPOILocationType.h"
 #import "OARootViewController.h"
 #import "OAAppVersionDependentConstants.h"
+#import "OANetworkUtilities.h"
+#import "OAURLSessionProgress.h"
+#import "OAGPXDatabase.h"
+#import "OsmAndApp.h"
 
 #include <OsmAndCore/Utilities.h>
+#include <OsmAndCore/ArchiveWriter.h>
 
 #define WAY_MODULO_REMAINDER 1;
 static const int AMENITY_ID_RIGHT_SHIFT = 1;
@@ -43,6 +48,8 @@ static const NSString* URL_TO_UPLOAD_GPX = @"https://api.openstreetmap.org/api/0
     long _changeSetId;
     NSTimeInterval _changeSetTimeStamp;
     OAAppSettings *_settings;
+    NSString *_tmpDir;
+    OsmAndAppInstance _app;
 }
 
 -(id)init
@@ -52,20 +59,60 @@ static const NSString* URL_TO_UPLOAD_GPX = @"https://api.openstreetmap.org/api/0
         _changeSetId = NO_CHANGESET_ID;
         _changeSetTimeStamp = NO_CHANGESET_ID;
         _settings = [OAAppSettings sharedManager];
+        _app = [OsmAndApp instance];
+        _tmpDir = [NSTemporaryDirectory() stringByAppendingPathComponent:@"gpx_upload"];
     }
     return self;
 }
 
--(NSString *)uploadGPXFile:(NSString *)tagstring description:(NSString *)description visibility:(NSString *)visibility gpxDoc:(OAGPXDocument *)document
+- (void) uploadGPXFile:(NSString *)tagstring description:(NSString *)description visibility:(NSString *)visibility gpxDoc:(OAGPX *)gpx listener:(id<OAOnUploadFileListener>)listener
 {
-//    String url = URL_TO_UPLOAD_GPX;
-//    Map<String, String> additionalData = new LinkedHashMap<String, String>();
-//    additionalData.put("description", description);
-//    additionalData.put("tags", tagstring);
-//    additionalData.put("visibility", visibility);
-//    return NetworkUtils.uploadFile(url, f, settings.USER_NAME.get() + ":" + settings.USER_PASSWORD.get(), "file",
-//                                   true, additionalData);
-    return @"";
+    NSString *url = [BASE_URL stringByAppendingString:@"api/0.6/gpx/create"];
+    NSString *authStr = [NSString stringWithFormat:@"%@:%@", _settings.osmUserName.get, _settings.osmUserPassword.get];
+    NSDictionary<NSString *, NSString *> *additionalData = @{
+        @"description": description,
+        @"tags": tagstring,
+        @"visibility": visibility,
+    };
+    
+    NSString *fileName = gpx.gpxFileName;
+    NSString *origFilePath = gpx.gpxFilePath;
+    origFilePath = [_app.gpxPath stringByAppendingPathComponent:origFilePath];
+    QString archiveFilePath = QString::fromNSString([[_tmpDir stringByAppendingPathComponent:fileName] stringByAppendingPathExtension:@"gz"]);
+    
+    NSFileManager *fileManager = NSFileManager.defaultManager;
+    if (![fileManager fileExistsAtPath:_tmpDir])
+        [fileManager createDirectoryAtPath:_tmpDir withIntermediateDirectories:YES attributes:nil error:nil];
+    
+    NSData *data = [[NSData alloc] init];
+    BOOL ok = YES;
+    OsmAnd::ArchiveWriter archiveWriter;
+    archiveWriter.createArchive(&ok, archiveFilePath, {QString::fromNSString(origFilePath)}, QString::fromNSString(_tmpDir), true);
+    if (ok)
+    {
+        data = [NSData dataWithContentsOfFile:archiveFilePath.toNSString() options:NSDataReadingMappedAlways error:NULL];
+        
+        OAURLSessionProgress *progress = [[OAURLSessionProgress alloc] init];
+        [progress setOnProgress:^(int progress, int64_t deltaWork) {
+            if (listener)
+                [listener onFileUploadProgress:nil fileName:fileName progress:progress deltaWork:deltaWork];
+        }];
+        
+        [OANetworkUtilities uploadFile:url fileName:fileName params:additionalData headers:@{} data:data gzip:YES userNamePassword:authStr progress:progress onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+            if (listener)
+            {
+                NSString *err = nil;
+                if (((NSHTTPURLResponse *)response).statusCode != 200)
+                    err = data ? [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] : nil;
+                
+                [listener onFileUploadDone:nil fileName:fileName uploadTime:0 error:err];
+            }
+        }];
+    }
+    else
+    {
+        [listener onFileUploadDone:nil fileName:fileName uploadTime:0 error:@"Error: archive creating failed"];
+    }
 }
 
 -(NSString *)sendRequest:(NSString *)url requestMethod:(NSString *)requestMethod requestBody:(NSString *)requestBody userOperation:(NSString *)userOperation

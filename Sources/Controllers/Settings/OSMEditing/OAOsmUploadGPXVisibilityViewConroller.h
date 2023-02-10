@@ -6,7 +6,7 @@
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
-#import "OABaseSettingsViewController.h"
+#import "OABaseNavbarViewController.h"
 
 typedef NS_ENUM(NSInteger, EOAOsmUploadGPXVisibility) {
     EOAOsmUploadGPXVisibilityPublic = 0,
@@ -25,7 +25,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXVisibility) {
 @end
 
 
-@interface OAOsmUploadGPXVisibilityViewConroller : OABaseSettingsViewController
+@interface OAOsmUploadGPXVisibilityViewConroller : OABaseNavbarViewController
 
 @property (nonatomic, weak) id<OAOsmUploadGPXVisibilityDelegate> visibilityDelegate;
 

@@ -232,5 +232,6 @@
 
 #define color_carplay_background_night 0x121926
 #define color_carplay_background_day 0xebe7e4
+#define color_navbar_orange 0xFC7B08
 
 #endif /* OAColors_h */

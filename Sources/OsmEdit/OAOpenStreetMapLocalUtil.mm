@@ -95,8 +95,17 @@ static const int NON_AMENITY_ID_RIGHT_SHIFT = 7;
         if (poiType.getOsmTag2)
             [entity putTagNoLC:poiType.getOsmTag2 value:poiType.getOsmValue2];
     }
-    if ([poi.name length] > 0 && ![poi.name isEqualToString:poiType.getOsmValue])
-        [entity putTagNoLC:[OAOSMSettings getOSMKey:NAME] value:poi.name];
+    
+    NSString *name = poi.name;
+    if (name && [name length] > 0)
+    {
+        NSString *ref = poi.values[@"ref"];
+        NSString *subtype = [poiType getOsmValue];
+        if (![name isEqualToString:ref] && ![subtype hasSuffix:@"_ref"])
+        {
+            [entity putTagNoLC:[OAOSMSettings getOSMKey:NAME] value:poi.name];
+        }
+    }
     
     if ([poi.openingHours length] > 0)
         [entity putTagNoLC:[OAOSMSettings getOSMKey:OSM_TAG_OPENING_HOURS] value:poi.openingHours];

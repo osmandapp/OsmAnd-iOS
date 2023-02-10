@@ -2807,3 +2807,6 @@
 "announcement_time_prepare_long" = "Preparação longa";
 "announcement_time_approach" = "Aproximação";
 "announcement_time_passing" = "Ao passar";
+"osm_upload_gpx_description_footer" = "Será utilizado o nome do trilho em vez de uma descrição vazia. A descrição introduzida será aplicada em cada trilho.";
+"osm_upload_gpx_tags_footer" = "Introduza as etiquetas separadas por vírgulas.";
+"visibility" = "Visibilidade";

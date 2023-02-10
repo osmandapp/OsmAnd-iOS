@@ -549,25 +549,16 @@
 //inapps
 "plugin_nautical_name" = "Nautische kaartweergave";
 "product_desc_nautical" = "Nautical map of all world";
-"plugin_nautical_descr" = "Toon nautische gegevens op de kaart voor varen, zeilen, en andere vormen van watersport. Download ook het kaartbestand \'Zeebakens (wereld)\' om deze plugin te gebruiken.
-\n
-\nDeze plug-in biedt alle nautische navigatietekens en kaartsymbolen voor de binnenvaart en voor navigatie bij de kust. In de beschrijving van elke navigatieteken staat de informatie die nodig is om hem te identificeren en over de betekenis (categorie, vorm, kleur, volgorde, referentie, enz.) ervan.
-\n
-\nOm weer de gewone kaart te zien kun je de plug-in uitschakelen of de \'Kaart stijl\' onder \'Kaart instellen\' veranderen.";
+"plugin_nautical_descr" = "Toon nautische gegevens op de kaart voor varen, zeilen, en andere vormen van watersport. Download ook het kaartbestand \'Zeebakens (wereld)\' om deze plugin te gebruiken.\n\nDeze plug-in biedt alle nautische navigatietekens en kaartsymbolen voor de binnenvaart en voor navigatie bij de kust. In de beschrijving van elke navigatieteken staat de informatie die nodig is om hem te identificeren en over de betekenis (categorie, vorm, kleur, volgorde, referentie, enz.) ervan.\n\nOm weer de gewone kaart te zien kun je de plug-in uitschakelen of de \'Kaart stijl\' onder \'Kaart instellen\' veranderen.";
 "osmand_parking_plugin_name" = "Parkeerlocatie";
 "product_desc_parking" = "Let you easily memorize when the car was parked and how much time left if the parking is limited by time";
-"osmand_parking_plugin_description" = "Bewaart de locatie waar je auto geparkeerd staat en de resterende parkeertijd. 
-\nDe parkeerlocatie en resterende parkeertijd staan op het Osmand dashboard en in een widget op de kaart. Er kan een alarmsignaal in de Android kalender geplaatst worden ter herinnering.";
+"osmand_parking_plugin_description" = "Bewaart de locatie waar je auto geparkeerd staat en de resterende parkeertijd. \nDe parkeerlocatie en resterende parkeertijd staan op het Osmand dashboard en in een widget op de kaart. Er kan een alarmsignaal in de Android kalender geplaatst worden ter herinnering.";
 "plugin_ski_name" = "Ski kaartweergave";
 "product_desc_skimap" = "Ski slopes for all ski resorts in the world";
-"plugin_ski_descr" = "Toon gedetailleerde informatie over slalompistes, langlaufroutes, alpine ski routes, kabelbanen en skiliften wereldwijd. Routes en pistes worden getoond in een kleurcode naar moeilijkheidsgraad, en afgebeeld in een speciale \'Winter en ski\' kaartstijl die lijkt op een besneeuwd winterlandschap. 
-\n 
-\nHet activeren van deze weergave verandert de kaartstijl in \'Winter en ski\', met alle kenmerken van het landschap onder winterse omstandigheden. Deze weergave kan worden teruggezet door het deactiveren van de plug-in, of door het veranderen van de \'Kaart stijl\' onder \'Kaart Instellen\'.";
+"plugin_ski_descr" = "Toon gedetailleerde informatie over slalompistes, langlaufroutes, alpine ski routes, kabelbanen en skiliften wereldwijd. Routes en pistes worden getoond in een kleurcode naar moeilijkheidsgraad, en afgebeeld in een speciale \'Winter en ski\' kaartstijl die lijkt op een besneeuwd winterlandschap. \n \nHet activeren van deze weergave verandert de kaartstijl in \'Winter en ski\', met alle kenmerken van het landschap onder winterse omstandigheden. Deze weergave kan worden teruggezet door het deactiveren van de plug-in, of door het veranderen van de \'Kaart stijl\' onder \'Kaart Instellen\'.";
 "record_plugin_name" = "Track opnemen";
 "product_desc_track_recording" = "Activates the functionality to record and save your tracks";
-"record_plugin_description" = "Registreer je afgelegde weg als track in een GPX-bestand. Gebruik de opnameknop op het kaartscherm, of laat alle reizen automatisch opslaan.
-\n
-\nOpgenomen tracks kunnen worden gedeeld met vrienden of worden gebruikt als OSM-bijdragen. Atleten kunnen opgenomen tracks gebruiken om hun trainingen te volgen. OsmAnd kan tracks analyseren (ronde tijden, gemiddelde snelheid enz.) en tracks kunnen natuurlijk ook met andere programma\'s worden geanalyseerd.";
+"record_plugin_description" = "Registreer je afgelegde weg als track in een GPX-bestand. Gebruik de opnameknop op het kaartscherm, of laat alle reizen automatisch opslaan.\n\nOpgenomen tracks kunnen worden gedeeld met vrienden of worden gebruikt als OSM-bijdragen. Atleten kunnen opgenomen tracks gebruiken om hun trainingen te volgen. OsmAnd kan tracks analyseren (ronde tijden, gemiddelde snelheid enz.) en tracks kunnen natuurlijk ook met andere programma\'s worden geanalyseerd.";
 "product_title_trip_planning" = "Trip planning";
 "product_desc_trip_planning" = "Plan your trip, add waypoints, measure the distance to your destination using this plugin";
 "product_desc_ext_trip_planning" = "Trip planning plugin allows you to create your trip on the map, save it, measure the distance between points connected with straight lines, etc. Created for preliminary trip planning rather than thorough route building.";
@@ -586,9 +577,7 @@
 "purchases_feature_desc_wikipedia" = "Verken Wikipedia offline. Artikels zijn verdeeld over de landen en regio\'s en beschikbaar in alle talen.";
 "srtm_plugin_name" = "Hoogtelijnen";
 "product_desc_srtm" = "Display of contour lines";
-"srtm_plugin_description" = "Deze plug-in toont hoogtelijnen en een reliëfschaduwlaag bovenop de normale OsmAnd-kaart. Uitermate praktisch voor sporters, wandelaars, trekkers, en iedereen die geïnteresseerd is in de hoogteverschillen van een landschap. 
-\n 
-\nDe wereldwijde gegevens (van 70° noorderbreedte tot 70° zuiderbreedte) zijn gebaseerd op metingen door SRTM(Shuttle Radar Topography Mission) en ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), een beeldvormend instrument aan boord van de Terra-satelliet, het vlaggenschip van NASA\'s Earth Observing System. ASTER is een samenwerkingsverband tussen NASA, het Japanse Ministerie van Economie, Handel en Industrie (METI), en Japan Space Systems (J-spacesystems).";
+"srtm_plugin_description" = "Deze plug-in toont hoogtelijnen en een reliëfschaduwlaag bovenop de normale OsmAnd-kaart. Uitermate praktisch voor sporters, wandelaars, trekkers, en iedereen die geïnteresseerd is in de hoogteverschillen van een landschap. \n \nDe wereldwijde gegevens (van 70° noorderbreedte tot 70° zuiderbreedte) zijn gebaseerd op metingen door SRTM(Shuttle Radar Topography Mission) en ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), een beeldvormend instrument aan boord van de Terra-satelliet, het vlaggenschip van NASA\'s Earth Observing System. ASTER is een samenwerkingsverband tussen NASA, het Japanse Ministerie van Economie, Handel en Industrie (METI), en Japan Space Systems (J-spacesystems).";
 "my_location" = "Mijn positie";
 "all_categories" = "All categories";
 "get_unlimited_access" = "Krijg onbeperkte toegang";
@@ -1354,9 +1343,7 @@
 "shared_string_finish" = "Einde";
 "shared_string_routing" = "Routering";
 "import_duplicates_title" = "Sommige elementen bestaan reeds";
-"import_duplicates_description" = "OsmAnd heeft reeds elementen met dezelfde naam als de geïmporteerde.
-\n
-\nKies een actie.";
+"import_duplicates_description" = "OsmAnd heeft reeds elementen met dezelfde naam als de geïmporteerde.\n\nKies een actie.";
 "keep_both_desc" = "Geïmporteerde elementen zullen toegevoegd worden met een voorvoegsel";
 "keep_both" = "Beide houden";
 "replace_all" = "Vervang alles";
@@ -1973,17 +1960,12 @@
 "weather_temperature_celsius" = "Celsius";
 "rendering_attr_showFunicularRoutes_name" = "Kabelspoorwegen";
 "simulation_real_mode_title" = "Realistische simulatie";
-"checking_for_duplicate_description" = "OsmAnd controleert %@ op duplicaten met bestaande items in de app.
-\n
-\nDit kan even duren.";
+"checking_for_duplicate_description" = "OsmAnd controleert %@ op duplicaten met bestaande items in de app.\n\nDit kan even duren.";
 "backup_danger_zone" = "Gevarenzone";
 "create_custom_categories_list_promo" = "Wijzig de sorteervolgorde van de lijst, verberg categorieën. Alle wijzigingen kunnen met profielen geïmporteerd of geëxporteerd worden.";
 "vessel_height_limit_description" = "Stel de hoogte van het vaartuig in om lage bruggen te vermijden. Let op, als de brug beweegbaar is, gebruiken we de hoogte in geopende toestand.";
-"simulation_real_mode_desc" = "Op rechte wegen, snelheid zal maximale snelheid benaderen.
-\nBij kruisingen zal de simulatie vertragen.
-\nEr zijn extra vertraging bij verkeersborden, stopborden, enz.";
-"logout_from_osmand_cloud_decsr" = "Uitloggen\?
-\nJe zal opnieuw moeten aanmelden om je gegevens te herstellen of back-uppen.";
+"simulation_real_mode_desc" = "Op rechte wegen, snelheid zal maximale snelheid benaderen.\nBij kruisingen zal de simulatie vertragen.\nEr zijn extra vertraging bij verkeersborden, stopborden, enz.";
+"logout_from_osmand_cloud_decsr" = "Uitloggen\?\nJe zal opnieuw moeten aanmelden om je gegevens te herstellen of back-uppen.";
 "routing_attr_allow_private_for_truck_name" = "Privé toegang toestaan (vrachtwagen)";
 "zoom_levels_difference_description" = "Het grote verschil tussen zoemniveau\'s kan de grootte van de bestanden doen toenemen.";
 "mapillary_descr" = "Online foto\'s op straatniveau voor iedereen. Ontdek plaatsen, werk samen, leg de wereld vast.";
@@ -2131,18 +2113,16 @@
 "reset_to_default_category_button_promo" = "\'Terugzetten naar standaardwaarden\' zal de sorteervolgorde terugzetten zoals die was bij installatie.";
 "profile_settings" = "Instellingen voor profiel";
 "routing_attr_motor_type_hybrid_name" = "Hybride";
-"mtb_imba_full" = "International Mountain Bicycling Association";
+"mtb_imba_full" = "Internationale Mountain Bicycling Association";
 "backup_version_history" = "Versiegeschiedenis";
 "ltr_or_rtl_combine_via_dash" = "%@— %@";
 "contributions_may_calculate_with_delay" = "Het berekenen van bijdragen kan enkele uren duren.";
 "simulation_preview_mode_desc" = "De snelheid van de simulatie is het maximum op rechte wegen, en vertraagt alleen bij kruisingen.";
 "route_between_points_add_track_desc" = "Selecteer een track waaraan je een nieuw segment wil toevoegen.";
 "rendering_attr_showFitnessTrails_description" = "Toon sport paden";
-"short_location_on_map" = "Breedtegraad:\t%@
-\nLengtegraad: %@";
+"short_location_on_map" = "Breedtegraad:\t%@\nLengtegraad: %@";
 "sett_generic_ext_input" = "Toetsenbord";
 "navigate_point_format_DM" = "GGG MM.MMM";
-
 "routing_attr_freeride_policy_only_if_necessary_name" = "Alleen indien noodzakelijk";
 "rendering_attr_depthContourColorScheme_description" = "Kleurschema van dieptelijnen";
 "rendering_attr_horseScale_name" = "Begaanbaarheid van ruiterpaden";
@@ -2232,28 +2212,12 @@
 "quick_action_map_style_action" = "Kaartstijl toevoegen";
 "mgrs_format_descr" = "OsmAnd gebruikt MGRS, die sterk lijkt op het UTM-NATO-formaat.";
 "km" = "km";
-"weather_plugin_description" = "Toont
-\n- 24-uurs en 7-daagse weersvoorspelling met 5 lagen
-\n- widgets afgesteld op locatie
-\n- hoogtelijnen van temperatuur / luchtdruk
-\n
-\nDe weersgegevens worden geleverd door de Global Forecast System (GFS, https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast ).";
+"weather_plugin_description" = "Toont\n- 24-uurs en 7-daagse weersvoorspelling met 5 lagen\n- widgets afgesteld op locatie\n- hoogtelijnen van temperatuur / luchtdruk\n\nDe weersgegevens worden geleverd door de Global Forecast System (GFS, https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast ).";
 "kg" = "kg";
 "m" = "m";
-"open_place_reviews_plugin_description" = "OpenPlaceReviews is een gemeenschaps gestuurd project over openbare plaatsen zoals restaurants, hotels, musea, way-points. Het verzamelt alle openbare informatie over hen, zoals foto\'s, recensies, links naar andere systemen die OpenStreetMap, Wikipedia linken.
-\n
-\nAlle OpenPlaceReview-gegevens zijn open en voor iedereen beschikbaar: http://openplacereviews.org/data.
-\n
-\nU kunt meer lezen op: http://openplacereviews.org";
-
-"routeInfo_tracktype_description" = "Kleur de route of tracklijn op basis van de samenstelling van het oppervlak. Typisch aangezet wanneer het wegennet grotendeels onverhard is.";;
-"speed_cameras_legal_descr" = "In sommige landen of regio’s is het gebruik van toepassingen om te waarschuwen voor snelheidscamera’s in strijd met de wet.
-\n
-\nMaak een keuze op basis van de geldende wet.
-\n
-\nKies %@ om meldingen en waarschuwingen te ontvangen over snelheidscamera’s.
-\n
-\nKies %@ om alle gegevens over snelheidscamera’s te verwijderen: waarschuwingen, meldingen en POI’s worden verwijderd tot OsmAnd volledig opnieuw geïnstalleerd wordt.";
+"open_place_reviews_plugin_description" = "OpenPlaceReviews is een gemeenschaps gestuurd project over openbare plaatsen zoals restaurants, hotels, musea, way-points. Het verzamelt alle openbare informatie over hen, zoals foto\'s, recensies, links naar andere systemen die OpenStreetMap, Wikipedia linken.\n\nAlle OpenPlaceReview-gegevens zijn open en voor iedereen beschikbaar: http://openplacereviews.org/data.\n\nU kunt meer lezen op: http://openplacereviews.org";
+"routeInfo_tracktype_description" = "Kleur de route of tracklijn op basis van de samenstelling van het oppervlak. Typisch aangezet wanneer het wegennet grotendeels onverhard is.";
+"speed_cameras_legal_descr" = "In sommige landen of regio’s is het gebruik van toepassingen om te waarschuwen voor snelheidscamera’s in strijd met de wet.\n\nMaak een keuze op basis van de geldende wet.\n\nKies %@ om meldingen en waarschuwingen te ontvangen over snelheidscamera’s.\n\nKies %@ om alle gegevens over snelheidscamera’s te verwijderen: waarschuwingen, meldingen en POI’s worden verwijderd tot OsmAnd volledig opnieuw geïnstalleerd wordt.";
 "lang_zh-Hant" = "Chinees (traditioneel)";
 "lang_sat" = "Santali";
 "weather_online_cache" = "Online cache";
@@ -2283,7 +2247,6 @@
 "allow_3d" = "Laat 2.5D-aanzicht toe";
 "carplay_available_in_sub_plans" = "Koop OsmAnd Pro of Maps+ om CarPlay-functionaliteit te kunnen gebruiken.";
 "animate_my_location_descr" = "Soepele overgang van locatie op de kaart tijdens de navigatie";
-
 "trip_rec_actions_descr" = "Je kan alle opgenomen GPX-tracks vinden in %@";
 "send_anonymous_data_desc" = "Stuur statistieken over kaartdownloads naar OsmAnd, we verzamelen geen locatie-informatie of persoonlijke gegevens.";
 "default_profile_descr" = "Kies een profiel dat gebruikt zal worden bij het starten van de applicatie.";
@@ -2307,13 +2270,7 @@
 "uninstall_speed_cameras" = "Verwijder snelheidscamera’s";
 "lang_zh-Hant" = "Chinees (traditioneel)";
 "shared_string_legal" = "Legaal";
-"speed_cameras_legal_descr" = "In sommige landen of regio’s is het gebruik van toepassingen om te waarschuwen voor snelheidscamera’s in strijd met de wet.
-\n
-\nMaak een keuze op basis van de geldende wet.
-\n
-\nKies %@ om meldingen en waarschuwingen te ontvangen over snelheidscamera’s.
-\n
-\nKies %@ om alle gegevens over snelheidscamera’s te verwijderen: waarschuwingen, meldingen en POI’s worden verwijderd tot OsmAnd volledig opnieuw geïnstalleerd wordt.";
+"speed_cameras_legal_descr" = "In sommige landen of regio’s is het gebruik van toepassingen om te waarschuwen voor snelheidscamera’s in strijd met de wet.\n\nMaak een keuze op basis van de geldende wet.\n\nKies %@ om meldingen en waarschuwingen te ontvangen over snelheidscamera’s.\n\nKies %@ om alle gegevens over snelheidscamera’s te verwijderen: waarschuwingen, meldingen en POI’s worden verwijderd tot OsmAnd volledig opnieuw geïnstalleerd wordt.";
 "privacy_and_security" = "Privacy en veiligheid";
 "shared_string_height" = "Hoogte";
 "lang_sat" = "Santali";

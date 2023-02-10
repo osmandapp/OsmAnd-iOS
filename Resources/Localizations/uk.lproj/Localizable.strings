@@ -2815,3 +2815,6 @@
 "announcement_time_prepare_long" = "Завчасне приготування";
 "announcement_time_approach" = "Наближення";
 "announcement_time_passing" = "Проходження";
+"osm_upload_gpx_description_footer" = "Замість порожнього опису буде використано назву треку. Введений опис буде застосовано до кожного треку.";
+"osm_upload_gpx_tags_footer" = "Введіть теґи через кому.";
+"visibility" = "Видимість";

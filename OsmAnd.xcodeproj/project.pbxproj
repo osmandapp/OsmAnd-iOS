@@ -1487,6 +1487,7 @@
 		DA04D779284F86060097CAED /* ic_custom_five_downloads_big@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA04D773284F86050097CAED /* ic_custom_five_downloads_big@3x.png */; };
 		DA04D77A284F86060097CAED /* ic_custom_five_downloads_big@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA04D774284F86060097CAED /* ic_custom_five_downloads_big@2x.png */; };
 		DA05A6A3285B3DCE00D0AFAB /* OABackupExporter.m in Sources */ = {isa = PBXBuildFile; fileRef = DA05A6A2285B3DCE00D0AFAB /* OABackupExporter.m */; };
+		DA06BB5529967A4C003B9212 /* depthcontourlines.addon.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = DA06BB5429967A4C003B9212 /* depthcontourlines.addon.render.xml */; };
 		DA08A0D2227096DA000A53BA /* offroad.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = DA08A0D1227096DA000A53BA /* offroad.render.xml */; };
 		DA0BAC732851F25000AFA550 /* OACheckBackupSubscriptionTask.m in Sources */ = {isa = PBXBuildFile; fileRef = DA0BAC722851F25000AFA550 /* OACheckBackupSubscriptionTask.m */; };
 		DA0C2BDD27EF4B3800B7CC4F /* OAPrepareBackupTask.m in Sources */ = {isa = PBXBuildFile; fileRef = DA0C2BDC27EF4B3800B7CC4F /* OAPrepareBackupTask.m */; };
@@ -5006,6 +5007,7 @@
 		DA04D774284F86060097CAED /* ic_custom_five_downloads_big@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_five_downloads_big@2x.png"; path = "Resources/Icons/ic_custom_five_downloads_big@2x.png"; sourceTree = "<group>"; };
 		DA05A6A1285B3DCE00D0AFAB /* OABackupExporter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OABackupExporter.h; sourceTree = "<group>"; };
 		DA05A6A2285B3DCE00D0AFAB /* OABackupExporter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OABackupExporter.m; sourceTree = "<group>"; };
+		DA06BB5429967A4C003B9212 /* depthcontourlines.addon.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = depthcontourlines.addon.render.xml; path = ../resources/rendering_styles/depthcontourlines.addon.render.xml; sourceTree = "<group>"; };
 		DA08A0D1227096DA000A53BA /* offroad.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = offroad.render.xml; path = ../resources/rendering_styles/offroad.render.xml; sourceTree = "<group>"; };
 		DA0BAC712851F25000AFA550 /* OACheckBackupSubscriptionTask.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACheckBackupSubscriptionTask.h; sourceTree = "<group>"; };
 		DA0BAC722851F25000AFA550 /* OACheckBackupSubscriptionTask.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OACheckBackupSubscriptionTask.m; sourceTree = "<group>"; };
@@ -9299,6 +9301,7 @@
 		84630FC81A8E1947005B39F2 /* styles */ = {
 			isa = PBXGroup;
 			children = (
+				DA06BB5429967A4C003B9212 /* depthcontourlines.addon.render.xml */,
 				05541D94299267900014AEF8 /* contourlines.addon.render.xml */,
 				0575058D292D254500FEECD4 /* weather.addon.render.xml */,
 				DA5A5DE2276B445800ABC19D /* snowmobile.render.xml */,
@@ -13869,6 +13872,7 @@
 				B247459F27F4A6B700C18C3F /* ic_custom_alert_circle@3x.png in Resources */,
 				DA6D077C255173C5004FE017 /* ic_custom_trim_before@3x.png in Resources */,
 				DAF7A4E021786B5700FB94FD /* ic_action_ruler_circle@2x.png in Resources */,
+				DA06BB5529967A4C003B9212 /* depthcontourlines.addon.render.xml in Resources */,
 				8A755A6F21CBF92400E42699 /* ic_live_monthly_updates@2x.png in Resources */,
 				DA822E7A28D2094F001A4D88 /* ic_custom_cloud_upload_colored_day_big@3x.png in Resources */,
 				32309A4026989114005751F5 /* ic_custom_map_zoom_out@3x.png in Resources */,

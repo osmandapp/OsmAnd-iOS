@@ -18,6 +18,8 @@
     UIView *_tableHeaderView;
 }
 
+#pragma mark - Initialization
+
 - (instancetype) initWithAppMode:(OAApplicationMode *)appMode
 {
     self = [super init];
@@ -29,18 +31,14 @@
     return self;
 }
 
-- (void) viewDidLoad
-{
-    [super viewDidLoad];
-
-//    self.tableView.sectionHeaderHeight = 18.;
-//    self.tableView.sectionFooterHeight = 18.;
-}
+#pragma mark - Base UI
 
 - (NSString *)getSubtitle
 {
     return [_appMode toHumanString];
 }
+
+#pragma mark - Additions
 
 - (void) setupTableHeaderViewWithText:(NSString *)text
 {

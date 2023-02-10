@@ -29,19 +29,25 @@
     NSString *_title;
 }
 
+#pragma mark - Initialization
+
 - (instancetype) initWithType:(EOAProfileGeneralSettingsParameter)settingsType applicationMode:(OAApplicationMode *)applicationMode
 {
     self = [super initWithAppMode:applicationMode];
     if (self)
     {
-        _settings = [OAAppSettings sharedManager];
         _settingsType = settingsType;
-        [self generateTitle];
+        [self postInit];
     }
     return self;
 }
 
-- (void)generateTitle
+- (void)commonInit
+{
+    _settings = [OAAppSettings sharedManager];
+}
+
+- (void)postInit
 {
     switch (_settingsType)
     {
@@ -71,10 +77,14 @@
     }
 }
 
+#pragma mark - Base UI
+
 - (NSString *)getTitle
 {
     return _title;
 }
+
+#pragma mark - Table data
 
 - (void)generateData
 {
@@ -321,19 +331,18 @@
     _data = [NSArray arrayWithObject:dataArr];
 }
 
-- (CGFloat)getCustomHeightForHeader:(NSInteger)section
+- (NSInteger)rowsCount:(NSInteger)section
 {
-    return 17.;
+    return _data[section].count;
 }
 
-#pragma mark - TableView
-
-- (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
+{
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
     if ([cellType isEqualToString:[OAIconTextTableViewCell getCellIdentifier]])
     {
-        OAIconTextTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
+        OAIconTextTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
@@ -353,7 +362,7 @@
     }
     if ([cellType isEqualToString:[OATitleDescriptionCollapsableCell getCellIdentifier]])
     {
-        OATitleDescriptionCollapsableCell* cell = [tableView dequeueReusableCellWithIdentifier:[OATitleDescriptionCollapsableCell getCellIdentifier]];
+        OATitleDescriptionCollapsableCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OATitleDescriptionCollapsableCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleDescriptionCollapsableCell getCellIdentifier] owner:self options:nil];
@@ -371,7 +380,7 @@
     }
     if ([cellType isEqualToString:[OASettingsTitleTableViewCell getCellIdentifier]])
     {
-        OASettingsTitleTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTitleTableViewCell getCellIdentifier]];
+        OASettingsTitleTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OASettingsTitleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTitleTableViewCell getCellIdentifier] owner:self options:nil];
@@ -389,16 +398,17 @@
     return nil;
 }
 
-- (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return _data[section].count;
-}
-
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
+- (NSInteger)sectionsCount
 {
     return _data.count;
 }
 
-- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (CGFloat)getCustomHeightForHeader:(NSInteger)section
+{
+    return 17.;
+}
+
+- (void)onRowPressed:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *name = item[@"name"];
@@ -429,10 +439,11 @@
     }
     [self generateData];
     [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationFade];
-    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     [self.delegate onSettingsChanged];
     [self backButtonClicked:self];
 }
+
+#pragma mark - Selectors
 
 - (void) selectMapOrientation:(NSString *)name
 {

@@ -44,6 +44,8 @@ NSString *const kTrackSelectKey = @"kTrackSelectKey";
 NSString *const kMovementSpeedKey = @"kMovementSpeedKey";
 NSString *const kStartStopButtonKey = @"kStartStopButtonKey";
 
+#pragma mark - Initialization
+
 - (void)commonInit
 {
     _app = [OsmAndApp instance];
@@ -54,6 +56,8 @@ NSString *const kStartStopButtonKey = @"kStartStopButtonKey";
 
     _headerDescription = OALocalizedString(@"simulate_your_location_gpx_descr");
 }
+
+#pragma mark - UIViewController
 
 - (void) viewDidLoad
 {
@@ -77,6 +81,8 @@ NSString *const kStartStopButtonKey = @"kStartStopButtonKey";
     if (_simulateLocationDelegate)
         [_simulateLocationDelegate onSimulateLocationInformationUpdated];
 }
+
+#pragma mark - Base UI
 
 - (NSString *)getTitle
 {
@@ -102,6 +108,8 @@ NSString *const kStartStopButtonKey = @"kStartStopButtonKey";
 {
     return NO;
 }
+
+#pragma mark - Table data
 
 - (void) generateData
 {
@@ -190,13 +198,79 @@ NSString *const kStartStopButtonKey = @"kStartStopButtonKey";
     return item[@"footerTitle"];
 }
 
+- (NSInteger)rowsCount:(NSInteger)section
+{
+    return _data[section].count;
+}
+
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
+{
+    NSDictionary *item = [self getItem:indexPath];
+    
+    NSString *cellType = item[@"type"];
+    if ([cellType isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
+    {
+        OAIconTitleValueCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
+            cell = (OAIconTitleValueCell *)[nib objectAtIndex:0];
+            cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
+            cell.rightIconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
+            cell.rightIconView.tintColor = UIColorFromRGB(color_tint_gray);
+        }
+        if (cell)
+        {
+            cell.textView.text = item[@"titleText"];
+            cell.textView.textColor = item[@"titleColor"];
+            cell.descriptionView.text = item[@"descText"];
+            cell.descriptionView.textColor = item[@"descColor"];
+            cell.leftIconView.tintColor = item[@"iconColor"];
+            cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
+        }
+        return cell;
+    }
+    else if ([cellType isEqualToString:[OATitleRightIconCell getCellIdentifier]])
+    {
+        OATitleRightIconCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OATitleRightIconCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleRightIconCell getCellIdentifier] owner:self options:nil];
+            cell = (OATitleRightIconCell *)[nib objectAtIndex:0];
+            cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0);
+            cell.titleView.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightSemibold];
+        }
+        cell.titleView.text = item[@"titleText"];
+        cell.titleView.textColor = item[@"color"];
+        cell.iconView.tintColor = item[@"color"];
+        [cell.iconView setImage:[UIImage templateImageNamed:item[@"icon"]]];
+        return cell;
+    }
+    return nil;
+}
+
+- (NSInteger)sectionsCount
+{
+    return _data.count;
+}
+
+- (void)onRowPressed:(NSIndexPath *)indexPath
+{
+    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+    NSDictionary *item = [self getItem:indexPath];
+    BOOL isActionEnabled = [item[@"isActionEnabled"] boolValue];
+    void (^actionBlock)() = item[@"actionBlock"];
+    if (actionBlock && isActionEnabled)
+        actionBlock();
+}
+
+#pragma mark - Selectors
+
 - (void)onRotation
 {
     self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:_headerDescription font:[UIFont scaledSystemFontOfSize:15] textColor:UIColorFromRGB(color_text_footer) lineSpacing:0.0 isTitle:NO];
     self.tableView.separatorInset = UIEdgeInsetsMake(0., 16.0 + OAUtilities.getLeftMargin, 0., 0.);
 }
-
-#pragma mark - Actions
 
 - (void) openGpxTrackSelector
 {
@@ -235,74 +309,6 @@ NSString *const kStartStopButtonKey = @"kStartStopButtonKey";
         [self reloadData];
     });
 }
-
-
-#pragma mark - UITableViewDataSource
-
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return _data.count;
-}
-
-- (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return _data[section].count;
-}
-
-- (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
-    NSDictionary *item = [self getItem:indexPath];
-    
-    NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
-    {
-        OAIconTitleValueCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
-            cell = (OAIconTitleValueCell *)[nib objectAtIndex:0];
-            cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
-            cell.rightIconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
-            cell.rightIconView.tintColor = UIColorFromRGB(color_tint_gray);
-        }
-        if (cell)
-        {
-            cell.textView.text = item[@"titleText"];
-            cell.textView.textColor = item[@"titleColor"];
-            cell.descriptionView.text = item[@"descText"];
-            cell.descriptionView.textColor = item[@"descColor"];
-            cell.leftIconView.tintColor = item[@"iconColor"];
-            cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
-        }
-        return cell;
-    }
-    else if ([cellType isEqualToString:[OATitleRightIconCell getCellIdentifier]])
-    {
-        OATitleRightIconCell* cell = [tableView dequeueReusableCellWithIdentifier:[OATitleRightIconCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleRightIconCell getCellIdentifier] owner:self options:nil];
-            cell = (OATitleRightIconCell *)[nib objectAtIndex:0];
-            cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0);
-            cell.titleView.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightSemibold];
-        }
-        cell.titleView.text = item[@"titleText"];
-        cell.titleView.textColor = item[@"color"];
-        cell.iconView.tintColor = item[@"color"];
-        [cell.iconView setImage:[UIImage templateImageNamed:item[@"icon"]]];
-        return cell;
-    }
-    return nil;
-}
-
-- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
-    NSDictionary *item = [self getItem:indexPath];
-    BOOL isActionEnabled = [item[@"isActionEnabled"] boolValue];
-    void (^actionBlock)() = item[@"actionBlock"];
-    if (actionBlock && isActionEnabled)
-        actionBlock();
-}
-
 
 #pragma mark - OAOpenAddTrackDelegate
 

@@ -18,6 +18,7 @@
 - (void)resetNavbarEstimatedHeight;
 - (void)applyLocalization;
 - (BOOL)isModal;
+- (BOOL)isScreenLoaded;
 
 - (void)onContentSizeChanged:(NSNotification *)notification;
 - (IBAction)backButtonClicked:(id)sender;

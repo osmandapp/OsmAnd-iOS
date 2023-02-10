@@ -45,15 +45,21 @@
     NSDictionary<NSString *, OARoutingProfileDataObject *> *_routingProfileDataObjects;
 }
 
+#pragma mark - Initialization
+
 - (void)commonInit
 {
     _settings = [OAAppSettings sharedManager];
 }
 
+#pragma mark - Base UI
+
 - (NSString *)getTitle
 {
     return OALocalizedString(@"routing_settings_2");
 }
+
+#pragma mark - Table data
 
 - (void)generateData
 {
@@ -156,14 +162,18 @@
     }
 }
 
-#pragma mark - TableView
+- (NSInteger)rowsCount:(NSInteger)section
+{
+    return _data[section].count;
+}
 
-- (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
+{
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
     if ([cellType isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
     {
-        OAIconTitleValueCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
+        OAIconTitleValueCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
@@ -184,7 +194,7 @@
     }
     else if ([cellType isEqualToString:[OAIconTextTableViewCell getCellIdentifier]])
     {
-        OAIconTextTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
+        OAIconTextTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
@@ -203,7 +213,7 @@
     }
     else if ([cellType isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
+        OASwitchTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
@@ -224,7 +234,7 @@
     }
     else if ([cellType isEqualToString:[OASettingsTitleTableViewCell getCellIdentifier]])
     {
-        OASettingsTitleTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTitleTableViewCell getCellIdentifier]];
+        OASettingsTitleTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OASettingsTitleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTitleTableViewCell getCellIdentifier] owner:self options:nil];
@@ -242,7 +252,12 @@
     return nil;
 }
 
-- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (NSInteger)sectionsCount
+{
+    return _data.count;
+}
+
+- (void)onRowPressed:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *itemKey = item[@"key"];
@@ -285,16 +300,13 @@
             [self showViewController:settingsViewController];
         }
     }
-    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
-- (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return _data[section].count;
-}
+#pragma mark - Selectors
 
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
+- (void)applyParameter:(UISwitch *)sender
 {
-    return _data.count;
+    [_settings.animateMyLocation set:sender.isOn mode:self.appMode];
 }
 
 #pragma mark - OASettingsDataDelegate
@@ -322,11 +334,6 @@
                                                                                                targetScreenKey:kNavigationSettings];
         [OARootViewController.instance.navigationController pushViewController:settingsVC animated:NO];
     }
-}
-
-- (void)applyParameter:(UISwitch *)sender
-{
-    [_settings.animateMyLocation set:sender.isOn mode:self.appMode];
 }
 
 @end

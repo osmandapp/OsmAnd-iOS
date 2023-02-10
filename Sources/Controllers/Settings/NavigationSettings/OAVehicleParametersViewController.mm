@@ -37,10 +37,23 @@
     NSInteger _otherSection;
 }
 
+#pragma mark - Initialization
+
 - (void)commonInit
 {
     _settings = [OAAppSettings sharedManager];
 }
+
+#pragma mark - UIViewController
+
+- (void) viewDidLoad
+{
+    [super viewDidLoad];
+
+    self.tableView.separatorInset = UIEdgeInsetsMake(0., 16., 0., 0.);
+}
+
+#pragma mark - Base UI
 
 - (NSString *)getTitle
 {
@@ -52,12 +65,7 @@
     return OALocalizedString(@"routing_settings");
 }
 
-- (void) viewDidLoad
-{
-    [super viewDidLoad];
-
-    self.tableView.separatorInset = UIEdgeInsetsMake(0., 16., 0., 0.);
-}
+#pragma mark - Table data
 
 - (void)generateData
 {
@@ -186,15 +194,18 @@
     return nil;
 }
 
-#pragma mark - TableView
+- (NSInteger)rowsCount:(NSInteger)section
+{
+    return _data[section].count;
+}
 
-- (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
     if ([cellType isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
     {
-        OAIconTitleValueCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
+        OAIconTitleValueCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
@@ -214,7 +225,7 @@
     }
     else if ([cellType isEqualToString:[OAIconTextTableViewCell getCellIdentifier]])
     {
-        OAIconTextTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
+        OAIconTextTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
@@ -234,7 +245,12 @@
     return nil;
 }
 
-- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (NSInteger)sectionsCount
+{
+    return _data.count;
+}
+
+- (void)onRowPressed:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *itemName = item[@"name"];
@@ -246,17 +262,6 @@
     
     settingsViewController.delegate = self;
     [self presentViewController:settingsViewController animated:YES completion:nil];
-    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
-}
-
-- (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return _data[section].count;
-}
-
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return _data.count;
 }
 
 #pragma mark - OAVehicleParametersSettingDelegate

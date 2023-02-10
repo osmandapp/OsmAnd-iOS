@@ -41,6 +41,8 @@
     NSAttributedString *_footerAttrString;
 }
 
+#pragma mark - Initialization
+
 - (void)commonInit
 {
     _settings = [OAAppSettings sharedManager];
@@ -87,12 +89,16 @@
     _baseMaxSpeed = round(MAX(_maxValue, router->getMaxSpeed() * _ratio * 1.5));
 }
 
+#pragma mark - UIViewController
+
 - (void) viewDidLoad
 {
     [super viewDidLoad];
 
     [self setupTableHeaderViewWithText:OALocalizedString(@"road_speeds_descr")];
 }
+
+#pragma mark - Base UI
 
 - (NSString *)getTitle
 {
@@ -109,27 +115,12 @@
     return OALocalizedString(@"shared_string_done");
 }
 
-- (NSAttributedString *) getFooterDescription
-{
-    NSString *minimumSpeedDescriptionString = [NSString stringWithFormat:@"%@:\n%@\n", OALocalizedString(@"monitoring_min_speed"), OALocalizedString(@"road_min_speed_descr")];
-    NSString *maximumSpeedDescriptionString = [NSString stringWithFormat:@"%@:\n%@", OALocalizedString(@"max_speed"), OALocalizedString(@"road_max_speed_descr")];
-
-    NSMutableAttributedString *minSpeedAttrString = [OAUtilities getStringWithBoldPart:minimumSpeedDescriptionString mainString:OALocalizedString(@"road_min_speed_descr") boldString:OALocalizedString(@"monitoring_min_speed") lineSpacing:1. fontSize:13.];
-    NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
-    [style setParagraphSpacing:12.];
-    CGFloat breakLinePosition = [minimumSpeedDescriptionString indexOf:@"\n"] + 1;
-    [minSpeedAttrString addAttribute:NSParagraphStyleAttributeName value: style range:NSMakeRange(breakLinePosition, minimumSpeedDescriptionString.length - breakLinePosition)];
-    NSAttributedString *maxSpeedAttrString = [OAUtilities getStringWithBoldPart:maximumSpeedDescriptionString mainString:OALocalizedString(@"road_max_speed_descr") boldString:OALocalizedString(@"max_speed") lineSpacing:1. fontSize:13.];
-    
-    NSMutableAttributedString *finalString = [[NSMutableAttributedString alloc] initWithAttributedString:minSpeedAttrString];
-    [finalString appendAttributedString:maxSpeedAttrString];
-    return finalString;
-}
-
 - (BOOL)isChevronIconVisible
 {
     return NO;
 }
+
+#pragma mark - Table data
 
 - (void)generateData
 {
@@ -152,41 +143,19 @@
     _data = [NSArray arrayWithArray:tableData];
 }
 
-- (CGFloat)getCustomHeightForHeader:(NSInteger)section
+- (NSInteger)rowsCount:(NSInteger)section
 {
-    return 17.;
-}
-- (CGFloat)getCustomHeightForFooter:(NSInteger)section
-{
-    CGFloat textWidth = DeviceScreenWidth - (kSidePadding + [OAUtilities getLeftMargin]) * 2;
-    return [OAUtilities calculateTextBounds:_footerAttrString width:textWidth].height + kTopPadding;
+    return _data.count;
 }
 
-- (void)onRotation
-{
-    [self setupTableHeaderViewWithText:OALocalizedString(@"road_speeds_descr")];
-}
-
-- (IBAction)onRightNavbarButtonPressed:(UIButton *)sender
-{
-    OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
-    [self.appMode setMinSpeed:(_minValue / _ratio)];
-    [self.appMode setMaxSpeed:(_maxValue / _ratio)];
-    if (self.appMode == [routingHelper getAppMode] && ([routingHelper isRouteCalculated] || [routingHelper isRouteBeingCalculated]))
-        [routingHelper recalculateRouteDueToSettingsChange];
-    [self dismissViewController];
-}
-
-#pragma mark - TableView
-
-- (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.row];
     NSString *cellType = item[@"type"];
     if ([cellType isEqualToString:[OATimeTableViewCell getCellIdentifier]])
     {
         OATimeTableViewCell* cell;
-        cell = (OATimeTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OATimeTableViewCell getCellIdentifier]];
+        cell = (OATimeTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:[OATimeTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATimeTableViewCell getCellIdentifier] owner:self options:nil];
@@ -201,7 +170,7 @@
     else if ([cellType isEqualToString:[OASliderWithValuesCell getCellIdentifier]])
     {
         OARangeSliderCell* cell = nil;
-        cell = (OARangeSliderCell *)[tableView dequeueReusableCellWithIdentifier:[OARangeSliderCell getCellIdentifier]];
+        cell = (OARangeSliderCell *)[self.tableView dequeueReusableCellWithIdentifier:[OARangeSliderCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARangeSliderCell getCellIdentifier] owner:self options:nil];
@@ -225,17 +194,23 @@
     return nil;
 }
 
-- (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return _data.count;
-}
-
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
+- (NSInteger)sectionsCount
 {
     return 1;
 }
 
-- (UIView *) tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+- (CGFloat)getCustomHeightForHeader:(NSInteger)section
+{
+    return 17.;
+}
+
+- (CGFloat)getCustomHeightForFooter:(NSInteger)section
+{
+    CGFloat textWidth = DeviceScreenWidth - (kSidePadding + [OAUtilities getLeftMargin]) * 2;
+    return [OAUtilities calculateTextBounds:_footerAttrString width:textWidth].height + kTopPadding;
+}
+
+- (UIView *)getCustomViewForFooter:(NSInteger)section
 {
     CGFloat textWidth = DeviceScreenWidth - (kSidePadding + OAUtilities.getLeftMargin) * 2;
     CGFloat textHeight = [OAUtilities calculateTextBounds:_footerAttrString width:textWidth].height + kTopPadding;
@@ -248,6 +223,42 @@
     footerDescription.textColor = UIColorFromRGB(color_text_footer);
     [vw addSubview:footerDescription];
     return vw;
+}
+
+#pragma mark - Selectors
+
+- (void)onRotation
+{
+    [self setupTableHeaderViewWithText:OALocalizedString(@"road_speeds_descr")];
+}
+
+- (IBAction)onRightNavbarButtonPressed:(UIButton *)sender
+{
+    OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
+    [self.appMode setMinSpeed:(_minValue / _ratio)];
+    [self.appMode setMaxSpeed:(_maxValue / _ratio)];
+    if (self.appMode == [routingHelper getAppMode] && ([routingHelper isRouteCalculated] || [routingHelper isRouteBeingCalculated]))
+        [routingHelper recalculateRouteDueToSettingsChange];
+    [self dismissViewController];
+}
+
+#pragma mark - Additions
+
+- (NSAttributedString *)getFooterDescription
+{
+    NSString *minimumSpeedDescriptionString = [NSString stringWithFormat:@"%@:\n%@\n", OALocalizedString(@"monitoring_min_speed"), OALocalizedString(@"road_min_speed_descr")];
+    NSString *maximumSpeedDescriptionString = [NSString stringWithFormat:@"%@:\n%@", OALocalizedString(@"max_speed"), OALocalizedString(@"road_max_speed_descr")];
+
+    NSMutableAttributedString *minSpeedAttrString = [OAUtilities getStringWithBoldPart:minimumSpeedDescriptionString mainString:OALocalizedString(@"road_min_speed_descr") boldString:OALocalizedString(@"monitoring_min_speed") lineSpacing:1. fontSize:13.];
+    NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+    [style setParagraphSpacing:12.];
+    CGFloat breakLinePosition = [minimumSpeedDescriptionString indexOf:@"\n"] + 1;
+    [minSpeedAttrString addAttribute:NSParagraphStyleAttributeName value: style range:NSMakeRange(breakLinePosition, minimumSpeedDescriptionString.length - breakLinePosition)];
+    NSAttributedString *maxSpeedAttrString = [OAUtilities getStringWithBoldPart:maximumSpeedDescriptionString mainString:OALocalizedString(@"road_max_speed_descr") boldString:OALocalizedString(@"max_speed") lineSpacing:1. fontSize:13.];
+    
+    NSMutableAttributedString *finalString = [[NSMutableAttributedString alloc] initWithAttributedString:minSpeedAttrString];
+    [finalString appendAttributedString:maxSpeedAttrString];
+    return finalString;
 }
 
 #pragma mark TTRangeSliderViewDelegate

@@ -29,6 +29,8 @@
     NSInteger _selectedValue;
 }
 
+#pragma mark - Initialization
+
 - (void)commonInit
 {
     _settings = [OAAppSettings sharedManager];
@@ -38,6 +40,8 @@
 {
     _selectedValue = (NSInteger) [self.appMode getStrAngle];
 }
+
+#pragma mark - Base UI
 
 - (NSString *)getTitle
 {
@@ -64,6 +68,8 @@
     return NO;
 }
 
+#pragma mark - Table data
+
 - (void)generateData
 {
     _data = [[OATableDataModel alloc] init];
@@ -86,36 +92,18 @@
     return [_data sectionDataForIndex:section].footerText;
 }
 
-- (IBAction)onRightNavbarButtonPressed:(UIButton *)sender
-{
-    OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
-    [self.appMode setStrAngle:_selectedValue];
-    if (self.delegate)
-        [self.delegate onSettingsChanged];
-    if (self.appMode == [routingHelper getAppMode] && ([routingHelper isRouteCalculated] || [routingHelper isRouteBeingCalculated]))
-        [routingHelper recalculateRouteDueToSettingsChange];
-    [self dismissViewController];
-}
-
-#pragma mark - UITableViewDataSource
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return [_data sectionCount];
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)rowsCount:(NSInteger)section
 {
     return [_data rowCount:section];
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
     OATableRowData *item = [_data itemForIndexPath:indexPath];
     if ([item.cellType isEqualToString:[OASegmentSliderTableViewCell getCellIdentifier]])
     {
         OASegmentSliderTableViewCell *cell =
-                [tableView dequeueReusableCellWithIdentifier:[OASegmentSliderTableViewCell getCellIdentifier]];
+                [self.tableView dequeueReusableCellWithIdentifier:[OASegmentSliderTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASegmentSliderTableViewCell getCellIdentifier]
@@ -145,7 +133,23 @@
     return nil;
 }
 
+- (NSInteger)sectionsCount
+{
+    return [_data sectionCount];
+}
+
 #pragma mark - Selectors
+
+- (IBAction)onRightNavbarButtonPressed:(UIButton *)sender
+{
+    OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
+    [self.appMode setStrAngle:_selectedValue];
+    if (self.delegate)
+        [self.delegate onSettingsChanged];
+    if (self.appMode == [routingHelper getAppMode] && ([routingHelper isRouteCalculated] || [routingHelper isRouteBeingCalculated]))
+        [routingHelper recalculateRouteDueToSettingsChange];
+    [self dismissViewController];
+}
 
 - (void)sliderChanged:(UISlider *)sender
 {

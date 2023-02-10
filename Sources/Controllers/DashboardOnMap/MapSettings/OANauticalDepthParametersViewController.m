@@ -17,6 +17,8 @@
     OAMapStyleParameter *_parameter;
 }
 
+#pragma mark - Initialization
+
 - (instancetype)initWithParameter:(OAMapStyleParameter *)parameter
 {
     self = [super init];
@@ -28,26 +30,23 @@
     return self;
 }
 
+#pragma mark - Base UI
+
 - (NSString *)getTitle
 {
     return _parameter.title;
 }
 
-#pragma mark - UITableViewDataSource
+#pragma mark - Table data
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return 1;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)rowsCount:(NSInteger)section
 {
     return _parameter.possibleValues.count;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
-    OARightIconTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
+    OARightIconTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
     if (!cell)
     {
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
@@ -65,9 +64,12 @@
     return cell;
 }
 
-#pragma mark - UITableViewDelegate
+- (NSInteger)sectionsCount
+{
+    return 1;
+}
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)onRowPressed:(NSIndexPath *)indexPath
 {
     _parameter.value = _parameter.possibleValues[indexPath.row].name;
     [_styleSettings save:_parameter];

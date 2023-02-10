@@ -41,6 +41,8 @@
 - (NSInteger)sectionsCount;
 - (CGFloat)getCustomHeightForHeader:(NSInteger)section;
 - (CGFloat)getCustomHeightForFooter:(NSInteger)section;
+- (UIView *)getCustomViewForHeader:(NSInteger)section;
+- (UIView *)getCustomViewForFooter:(NSInteger)section;
 - (void)onRowPressed:(NSIndexPath *)indexPath;
 
 - (void)onScrollViewDidScroll:(UIScrollView *)scrollView;

@@ -24,8 +24,6 @@
 
 @interface OABaseBackupTypesViewController : OABaseNavbarViewController <OAManageTypeDelegate, OAOnDeleteFilesListener, OAOnPrepareBackupListener, OABackupTypesDelegate>
 
-- (void)commonInit;
-
 - (NSMutableDictionary<OAExportSettingsType *, NSArray *> *)getSelectedItems;
 - (NSDictionary<OAExportSettingsCategory *, OASettingsCategoryItems *> *)getDataItems;
 

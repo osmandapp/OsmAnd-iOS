@@ -11,12 +11,16 @@
 
 @implementation OASuperViewController
 {
-    NSMutableArray<NSNotificationName> *_notificationNames;
-    BOOL _screenLoaded;
+    BOOL _isScreenLoaded;
     UIContentSizeCategory _contentSizeCategory;
 }
 
-#pragma mark - Initialization methods
+#pragma mark - Initialization
+
+- (void)dealloc
+{
+    [NSNotificationCenter.defaultCenter removeObserver:self];
+}
 
 // use addNotification:selector: method here
 // notifications will be automatically added in viewWillAppear: and removed in viewWillDisappear:
@@ -24,11 +28,9 @@
 {
 }
 
-// do not override
 - (void)addNotification:(NSNotificationName)name selector:(SEL)selector
 {
     [NSNotificationCenter.defaultCenter addObserver:self selector:selector name:name object:nil];
-    [_notificationNames addObject:name];
 }
 
 #pragma mark - UIViewController
@@ -43,8 +45,9 @@
 {
     [super viewWillAppear:animated];
 
-    _notificationNames = [NSMutableArray array];
+    // for content size category
     [self addNotification:UIContentSizeCategoryDidChangeNotification selector:@selector(onContentSizeChanged:)];
+    // for other
     [self registerNotifications];
 
     if (_contentSizeCategory)
@@ -60,24 +63,14 @@
     }
 }
 
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-
-    for (NSNotificationName name in _notificationNames)
-    {
-        [[NSNotificationCenter defaultCenter] removeObserver:self name:name object:nil];
-    }
-}
-
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
 
-    if (!_screenLoaded || [self getNavbarEstimatedHeight] == 0)
+    if (!_isScreenLoaded || [self getNavbarEstimatedHeight] == 0)
     {
         [self updateNavbarEstimatedHeight];
-        _screenLoaded = YES;
+        _isScreenLoaded = YES;
         _contentSizeCategory = [UIApplication sharedApplication].preferredContentSizeCategory;
     }
 }
@@ -98,7 +91,7 @@
     return NO;
 }
 
-#pragma mark - UI base setup methods
+#pragma mark - Base setup UI
 
 - (CGFloat)getNavbarEstimatedHeight
 {
@@ -128,6 +121,11 @@
         return YES;
 
    return NO;
+}
+
+- (BOOL)isScreenLoaded
+{
+    return _isScreenLoaded;
 }
 
 #pragma mark - Selectors

@@ -17,10 +17,14 @@
     NSArray<NSArray<NSDictionary *> *> *_data;
 }
 
+#pragma mark - Base UI
+
 - (NSString *)getTitle
 {
     return OALocalizedString(@"login_account");
 }
+
+#pragma mark - Table data
 
 - (void)generateData
 {
@@ -44,26 +48,19 @@
     return _data[indexPath.section][indexPath.row];
 }
 
-#pragma mark - UITableViewDataSource
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return _data.count;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)rowsCount:(NSInteger)section
 {
     return _data[section].count;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
     UITableViewCell *outCell = nil;
 
     if ([item[@"type"] isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
     {
-        OAIconTitleValueCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
+        OAIconTitleValueCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
         if (!cell)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
@@ -90,10 +87,12 @@
     return outCell;
 }
 
+- (NSInteger)sectionsCount
+{
+    return _data.count;
+}
 
-#pragma mark - UITableViewDelegate
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)onRowPressed:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
     if ([item[@"key"] isEqualToString:@"logout_cell"])
@@ -128,8 +127,6 @@
 
         [self presentViewController:alert animated:YES completion:nil];
     }
-
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 @end

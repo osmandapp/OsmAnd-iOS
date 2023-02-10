@@ -25,6 +25,8 @@
     NSArray<NSArray *> *_data;
 }
 
+#pragma mark - UIViewController
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -32,6 +34,8 @@
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.allowsSelection = NO;
 }
+
+#pragma mark - Base UI
 
 - (UIColor *)getNavbarColor
 {
@@ -42,6 +46,8 @@
 {
     return NO;
 }
+
+#pragma mark - Table data
 
 - (void)generateData
 {
@@ -138,82 +144,12 @@
     return _data[indexPath.section][indexPath.row];
 }
 
-- (CGFloat)getCustomHeightForHeader:(NSInteger)section
-{
-    return 0.001;
-}
-
-- (CGFloat)getCustomHeightForFooter:(NSInteger)section
-{
-    return 0.001;
-}
-
-- (CGFloat)heightForRow:(NSIndexPath *)indexPath estimated:(BOOL)estimated
-{
-    NSDictionary *item = [self getItem:indexPath];
-    NSString *type = item[@"type"];
-    if ([type isEqualToString:[OADividerCell getCellIdentifier]])
-    {
-        return 1. / [UIScreen mainScreen].scale;
-    }
-    else if (estimated)
-    {
-        if ([type isEqualToString:[OATitleDescriptionBigIconCell getCellIdentifier]])
-            return 66.;
-        else if ([type isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
-            return 48.;
-        else if ([type isEqualToString:[OAFilledButtonCell getCellIdentifier]])
-            return 42.;
-    }
-
-    return UITableViewAutomaticDimension;
-}
-
-#pragma mark - OAAccountSettingDelegate
-
-- (void)onAccountInformationUpdated
-{
-    [self dismissViewControllerAnimated:YES completion:^{
-        if (self.accountDelegate)
-            [self.accountDelegate onAccountInformationUpdatedFromBenefits];
-    }];
-}
-
-#pragma mark - Selectors
-
-- (void)onButtonPressed:(id)sender
-{
-    UIButton *button = (UIButton *) sender;
-    if (button)
-    {
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:button.tag & 0x3FF inSection:button.tag >> 10];
-        NSDictionary *item = _data[indexPath.section][indexPath.row];
-        NSString *key = item[@"key"];
-        if ([key isEqualToString:@"oauth_login_button"])
-        {
-        }
-        else if ([key isEqualToString:@"email_login_button"])
-        {
-            OAOsmAccountSettingsViewController *accountSettings = [[OAOsmAccountSettingsViewController alloc] init];
-            accountSettings.accountDelegate = self;
-            [self presentViewController:accountSettings animated:YES completion:nil];
-        }
-    }
-}
-
-#pragma mark - UITableViewDataSource
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return _data.count;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)rowsCount:(NSInteger)section
 {
     return _data[section].count;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
     UITableViewCell *outCell = nil;
@@ -221,7 +157,7 @@
     NSString *type = item[@"type"];
     if ([type isEqualToString:[OATitleDescriptionBigIconCell getCellIdentifier]])
     {
-        OATitleDescriptionBigIconCell *cell = [tableView dequeueReusableCellWithIdentifier:[OATitleDescriptionBigIconCell getCellIdentifier]];
+        OATitleDescriptionBigIconCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OATitleDescriptionBigIconCell getCellIdentifier]];
         if (!cell)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleDescriptionBigIconCell getCellIdentifier] owner:self options:nil];
@@ -244,7 +180,7 @@
     }
     else if ([type isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
     {
-        OAIconTitleValueCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
+        OAIconTitleValueCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
         if (!cell)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
@@ -263,7 +199,7 @@
     }
     else if ([type isEqualToString:[OADividerCell getCellIdentifier]])
     {
-        OADividerCell *cell = [tableView dequeueReusableCellWithIdentifier:[OADividerCell getCellIdentifier]];
+        OADividerCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OADividerCell getCellIdentifier]];
         if (!cell)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
@@ -315,6 +251,64 @@
     return outCell;
 }
 
+- (NSInteger)sectionsCount
+{
+    return _data.count;
+}
+
+- (CGFloat)getCustomHeightForHeader:(NSInteger)section
+{
+    return 0.001;
+}
+
+- (CGFloat)getCustomHeightForFooter:(NSInteger)section
+{
+    return 0.001;
+}
+
+- (CGFloat)heightForRow:(NSIndexPath *)indexPath estimated:(BOOL)estimated
+{
+    NSDictionary *item = [self getItem:indexPath];
+    NSString *type = item[@"type"];
+    if ([type isEqualToString:[OADividerCell getCellIdentifier]])
+    {
+        return 1. / [UIScreen mainScreen].scale;
+    }
+    else if (estimated)
+    {
+        if ([type isEqualToString:[OATitleDescriptionBigIconCell getCellIdentifier]])
+            return 66.;
+        else if ([type isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
+            return 48.;
+        else if ([type isEqualToString:[OAFilledButtonCell getCellIdentifier]])
+            return 42.;
+    }
+
+    return UITableViewAutomaticDimension;
+}
+
+#pragma mark - Selectors
+
+- (void)onButtonPressed:(id)sender
+{
+    UIButton *button = (UIButton *) sender;
+    if (button)
+    {
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:button.tag & 0x3FF inSection:button.tag >> 10];
+        NSDictionary *item = _data[indexPath.section][indexPath.row];
+        NSString *key = item[@"key"];
+        if ([key isEqualToString:@"oauth_login_button"])
+        {
+        }
+        else if ([key isEqualToString:@"email_login_button"])
+        {
+            OAOsmAccountSettingsViewController *accountSettings = [[OAOsmAccountSettingsViewController alloc] init];
+            accountSettings.accountDelegate = self;
+            [self presentViewController:accountSettings animated:YES completion:nil];
+        }
+    }
+}
+
 #pragma mark - UITableViewDelegate
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -325,6 +319,16 @@
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return [self heightForRow:indexPath estimated:YES];
+}
+
+#pragma mark - OAAccountSettingDelegate
+
+- (void)onAccountInformationUpdated
+{
+    [self dismissViewControllerAnimated:YES completion:^{
+        if (self.accountDelegate)
+            [self.accountDelegate onAccountInformationUpdatedFromBenefits];
+    }];
 }
 
 @end

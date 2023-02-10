@@ -23,10 +23,14 @@
     NSArray<NSDictionary *> *_data;
 }
 
+#pragma mark - Initialization
+
 - (void)commonInit
 {
     _settings = [OAAppSettings sharedManager];
 }
+
+#pragma mark - UIViewController
 
 - (void) viewWillAppear:(BOOL)animated
 {
@@ -35,10 +39,14 @@
     [self.tableView reloadData];
 }
 
+#pragma mark - Base UI
+
 - (NSString *)getTitle
 {
     return OALocalizedString(@"map_during_navigation");
 }
+
+#pragma mark - Table data
 
 - (void)generateData
 {
@@ -91,19 +99,18 @@
         return @"";
 }
 
-- (CGFloat)getCustomHeightForHeader:(NSInteger)section
+- (NSInteger)rowsCount:(NSInteger)section
 {
-    return section == 0 ? 18.0 : 9.0;
+    return 1;
 }
 
-#pragma mark - TableView
-
-- (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
+{
     NSDictionary *item = _data[indexPath.section];
     NSString *cellType = item[@"type"];
     if ([cellType isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
     {
-        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];
+        OASettingsTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
@@ -121,7 +128,7 @@
     }
     else if ([cellType isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
+        OASwitchTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
@@ -151,16 +158,17 @@
     return nil;
 }
 
-- (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 1;
-}
-
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
+- (NSInteger)sectionsCount
 {
     return _data.count;
 }
 
-- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (CGFloat)getCustomHeightForHeader:(NSInteger)section
+{
+    return section == 0 ? 18.0 : 9.0;
+}
+
+- (void)onRowPressed:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section];
     NSString *itemKey = item[@"key"];
@@ -170,10 +178,9 @@
     else if ([itemKey isEqualToString:@"autoZoom"])
         settingsViewController = [[OAAutoZoomMapViewController alloc] initWithAppMode:self.appMode];
     [self showViewController:settingsViewController];
-    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
-# pragma mark - Switch
+#pragma mark - Selectors
 
 - (void) applyParameter:(id)sender
 {

@@ -34,6 +34,8 @@
     EOAWeatherCacheType _type;
 }
 
+#pragma mark - Initialization
+
 - (instancetype)initWithCacheType:(EOAWeatherCacheType)type
 {
     self = [super init];
@@ -58,6 +60,8 @@
 {
     _weatherHelper = [OAWeatherHelper sharedInstance];
 }
+
+#pragma mark - UIViewController
 
 - (void)viewDidLoad
 {
@@ -102,6 +106,8 @@
     }
 }
 
+#pragma mark - Base UI
+
 - (NSString *)getTitle
 {
     if (_region)
@@ -113,6 +119,8 @@
 
     return @"";
 }
+
+#pragma mark - Table data
 
 - (void)generateData
 {
@@ -212,6 +220,141 @@
 {
     return  _data[section][@"header"];
 }
+
+- (NSInteger)rowsCount:(NSInteger)section
+{
+    return ((NSArray *) _data[section][@"cells"]).count;
+}
+
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
+{
+    NSDictionary *item = [self getItem:indexPath];
+    if ([item[@"type"] isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
+    {
+        OASimpleTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
+        if (!cell)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASimpleTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
+            cell.titleLabel.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium];
+            cell.titleLabel.textColor = UIColorFromRGB(color_primary_red);
+        }
+        if (cell)
+        {
+            BOOL isClear = [item[@"key"] isEqualToString:@"clear"];
+            cell.selectionStyle = isClear && _clearButtonActive ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
+            cell.titleLabel.text = item[@"title"];
+            cell.titleLabel.textColor = isClear ? _clearButtonActive ? UIColorFromRGB(color_primary_red) : UIColorFromRGB(color_text_footer) : UIColor.blackColor;
+            cell.textStackView.alignment = isClear && _type == EOAWeatherOnlineData ? UIStackViewAlignmentCenter : UIStackViewAlignmentLeading;
+        }
+        return cell;
+    }
+    else if ([item[@"type"] isEqualToString:[OARightIconTableViewCell getCellIdentifier]])
+    {
+        OARightIconTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
+        if (!cell)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OARightIconTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            cell.rightIconView.tintColor = UIColorFromRGB(color_primary_red);
+            cell.rightIconView.image = [UIImage templateImageNamed:@"ic_custom_remove_outlined"];
+        }
+        if (cell)
+        {
+            cell.selectionStyle = [item.allKeys containsObject:@"key"] ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
+            cell.titleLabel.text = [OAWeatherHelper checkAndGetRegionName:(OAWorldRegion *) item[@"region"]];
+            cell.descriptionLabel.text = item[@"description"];
+        }
+        return cell;
+    }
+    else if ([item[@"type"] isEqualToString:[OAValueTableViewCell getCellIdentifier]])
+    {
+        OAValueTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
+        if (!cell)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAValueTableViewCell *) nib[0];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
+        }
+        if (cell)
+        {
+            cell.titleLabel.text = item[@"title"];
+            cell.valueLabel.text = item[@"value"];
+        }
+        return cell;
+    }
+    return nil;
+}
+
+- (NSInteger)sectionsCount
+{
+    return _data.count;
+}
+
+- (void)onRowPressed:(NSIndexPath *)indexPath
+{
+    NSDictionary *item = [self getItem:indexPath];
+    BOOL selectedRegionList = [item[@"key"] hasPrefix:@"region_cell_"];
+    if (selectedRegionList)
+        _selectedRegionIndexPath = indexPath;
+
+    if (([item[@"key"] isEqualToString:@"clear"] && _clearButtonActive) || [item[@"key"] hasPrefix:@"region_cell_"])
+    {
+        NSString *title = @"";
+        NSString *message = @"";
+        if (_region || selectedRegionList)
+        {
+            title = OALocalizedString(@"shared_string_clear_offline_cache");
+            message = [NSString stringWithFormat:OALocalizedString(@"weather_clear_offline_cache_for"),
+                    [OAWeatherHelper checkAndGetRegionName:(selectedRegionList ? ((OAWorldRegion *) item[@"region"]) : _region)]];
+        }
+        else if (_type == EOAWeatherOnlineData)
+        {
+            title = OALocalizedString(@"shared_string_clear_online_cache");
+            message = OALocalizedString(@"weather_clear_online_cache");
+        }
+        else if (_type == EOAWeatherOfflineData)
+        {
+            title = OALocalizedString(@"shared_string_clear_offline_cache");
+            message = OALocalizedString(@"weather_clear_offline_cache");
+        }
+
+        UIAlertController *alert =
+                [UIAlertController alertControllerWithTitle:title
+                                                    message:message
+                                             preferredStyle:UIAlertControllerStyleAlert];
+
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel")
+                                                               style:UIAlertActionStyleDefault
+                                                             handler:^(UIAlertAction * _Nonnull action)
+                                                             {
+                                                                 _selectedRegionIndexPath = nil;
+                                                             }
+       ];
+
+        UIAlertAction *clearCacheAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_clear")
+                                                                   style:UIAlertActionStyleDefault
+                                                                 handler:^(UIAlertAction * _Nonnull action)
+                                                                 {
+                                                                     [self clearCache];
+                                                                 }
+        ];
+
+        [alert addAction:cancelAction];
+        [alert addAction:clearCacheAction];
+
+        alert.preferredAction = clearCacheAction;
+
+        [self presentViewController:alert animated:YES completion:nil];
+    }
+}
+
+#pragma mark - Additions
 
 - (void)updateCacheSize
 {
@@ -316,145 +459,6 @@
         if (self.cacheDelegate)
             [self.cacheDelegate onCacheClear];
     }];
-}
-
-#pragma mark - UITableViewDataSource
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return _data.count;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return ((NSArray *) _data[section][@"cells"]).count;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
-    {
-        OASimpleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
-        if (!cell)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASimpleTableViewCell *) nib[0];
-            [cell leftIconVisibility:NO];
-            [cell descriptionVisibility:NO];
-            cell.titleLabel.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium];
-            cell.titleLabel.textColor = UIColorFromRGB(color_primary_red);
-        }
-        if (cell)
-        {
-            BOOL isClear = [item[@"key"] isEqualToString:@"clear"];
-            cell.selectionStyle = isClear && _clearButtonActive ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
-            cell.titleLabel.text = item[@"title"];
-            cell.titleLabel.textColor = isClear ? _clearButtonActive ? UIColorFromRGB(color_primary_red) : UIColorFromRGB(color_text_footer) : UIColor.blackColor;
-            cell.textStackView.alignment = isClear && _type == EOAWeatherOnlineData ? UIStackViewAlignmentCenter : UIStackViewAlignmentLeading;
-        }
-        return cell;
-    }
-    else if ([item[@"type"] isEqualToString:[OARightIconTableViewCell getCellIdentifier]])
-    {
-        OARightIconTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
-        if (!cell)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OARightIconTableViewCell *) nib[0];
-            [cell leftIconVisibility:NO];
-            cell.rightIconView.tintColor = UIColorFromRGB(color_primary_red);
-            cell.rightIconView.image = [UIImage templateImageNamed:@"ic_custom_remove_outlined"];
-        }
-        if (cell)
-        {
-            cell.selectionStyle = [item.allKeys containsObject:@"key"] ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
-            cell.titleLabel.text = [OAWeatherHelper checkAndGetRegionName:(OAWorldRegion *) item[@"region"]];
-            cell.descriptionLabel.text = item[@"description"];
-        }
-        return cell;
-    }
-    else if ([item[@"type"] isEqualToString:[OAValueTableViewCell getCellIdentifier]])
-    {
-        OAValueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
-        if (!cell)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OAValueTableViewCell *) nib[0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            [cell leftIconVisibility:NO];
-            [cell descriptionVisibility:NO];
-        }
-        if (cell)
-        {
-            cell.titleLabel.text = item[@"title"];
-            cell.valueLabel.text = item[@"value"];
-        }
-        return cell;
-    }
-    return nil;
-}
-
-#pragma mark - UITableViewDelegate
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSDictionary *item = [self getItem:indexPath];
-    BOOL selectedRegionList = [item[@"key"] hasPrefix:@"region_cell_"];
-    if (selectedRegionList)
-        _selectedRegionIndexPath = indexPath;
-
-    if (([item[@"key"] isEqualToString:@"clear"] && _clearButtonActive) || [item[@"key"] hasPrefix:@"region_cell_"])
-    {
-        NSString *title = @"";
-        NSString *message = @"";
-        if (_region || selectedRegionList)
-        {
-            title = OALocalizedString(@"shared_string_clear_offline_cache");
-            message = [NSString stringWithFormat:OALocalizedString(@"weather_clear_offline_cache_for"),
-                    [OAWeatherHelper checkAndGetRegionName:(selectedRegionList ? ((OAWorldRegion *) item[@"region"]) : _region)]];
-        }
-        else if (_type == EOAWeatherOnlineData)
-        {
-            title = OALocalizedString(@"shared_string_clear_online_cache");
-            message = OALocalizedString(@"weather_clear_online_cache");
-        }
-        else if (_type == EOAWeatherOfflineData)
-        {
-            title = OALocalizedString(@"shared_string_clear_offline_cache");
-            message = OALocalizedString(@"weather_clear_offline_cache");
-        }
-
-        UIAlertController *alert =
-                [UIAlertController alertControllerWithTitle:title
-                                                    message:message
-                                             preferredStyle:UIAlertControllerStyleAlert];
-
-        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel")
-                                                               style:UIAlertActionStyleDefault
-                                                             handler:^(UIAlertAction * _Nonnull action)
-                                                             {
-                                                                 _selectedRegionIndexPath = nil;
-                                                             }
-       ];
-
-        UIAlertAction *clearCacheAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_clear")
-                                                                   style:UIAlertActionStyleDefault
-                                                                 handler:^(UIAlertAction * _Nonnull action)
-                                                                 {
-                                                                     [self clearCache];
-                                                                 }
-        ];
-
-        [alert addAction:cancelAction];
-        [alert addAction:clearCacheAction];
-
-        alert.preferredAction = clearCacheAction;
-
-        [self presentViewController:alert animated:YES completion:nil];
-    }
-
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 @end

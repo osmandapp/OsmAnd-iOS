@@ -16,6 +16,7 @@
 @property (weak, nonatomic) IBOutlet UIView *navbarBackgroundView;
 @property (weak, nonatomic) IBOutlet UIStackView *navbarStackView;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *navbarEstimatedHeightConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *navbarStackViewEstimatedHeightConstraint;
 @property (weak, nonatomic) IBOutlet UIView *leftNavbarMarginView;
 @property (weak, nonatomic) IBOutlet UIView *rightNavbarMarginView;
 
@@ -32,7 +33,7 @@
     BOOL _isHeaderBlurred;
 }
 
-#pragma mark - Initialization methods
+#pragma mark - Initialization
 
 - (instancetype)init
 {
@@ -62,8 +63,12 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
 
+    self.tableView.sectionHeaderHeight = kHeaderHeightDefault;
+    self.tableView.sectionFooterHeight = kFooterHeightDefault;
+
     [self setupNavbarButtons];
     [self setupNavbarFonts];
+    [self updateNavbarStackViewEstimatedHeight];
 
     NSString *title = [self getTitle];
     self.titleLabel.hidden = !title || title.length == 0;
@@ -79,6 +84,7 @@
 {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+        [self updateNavbarStackViewEstimatedHeight];
         [self updateNavbarEstimatedHeight];
         [self onRotation];
         [self.tableView reloadData];
@@ -93,7 +99,7 @@
     return UIStatusBarStyleDefault;
 }
 
-#pragma mark - UI base setup methods
+#pragma mark - Base setup UI
 
 - (void)applyLocalization
 {
@@ -153,12 +159,19 @@
     self.tableView.contentInset = UIEdgeInsetsMake(self.navbarEstimatedHeightConstraint.constant, 0, 0, 0);
 }
 
+- (void)updateNavbarStackViewEstimatedHeight
+{
+    CGFloat height = [self isNavbarSeparatorVisible] ? separatorNavBarHeight : 0.;
+    height += [self isModal] && ![OAUtilities isLandscape] ? modalNavBarHeight : defaultNavBarHeight;
+    self.navbarStackViewEstimatedHeightConstraint.constant = height;
+}
+
 - (void)resetNavbarEstimatedHeight
 {
     self.navbarEstimatedHeightConstraint.constant = 0;
 }
 
-#pragma mark - UI override methods
+#pragma mark - Base UI
 
 - (NSString *)getTitle
 {
@@ -205,7 +218,7 @@
     return YES;
 }
 
-#pragma mark - Table data methods
+#pragma mark - Table data
 
 - (void)generateData
 {
@@ -251,6 +264,16 @@
     return UITableViewAutomaticDimension;
 }
 
+- (UIView *)getCustomViewForHeader:(NSInteger)section
+{
+    return nil;
+}
+
+- (UIView *)getCustomViewForFooter:(NSInteger)section
+{
+    return nil;
+}
+
 - (void)onRowPressed:(NSIndexPath *)indexPath
 {
 }
@@ -279,35 +302,38 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    if ([self isNavbarBlurring])
+    if ([self isScreenLoaded])
     {
-        CGFloat extraMargin = [self isModal] ? 0. : [OAUtilities getTopMargin];
-        CGFloat y = scrollView.contentOffset.y - (scrollView.contentOffset.y < 0 ? -extraMargin : extraMargin);
-        CGFloat navbarHeight = [self getNavbarHeight];
-        if (!_isHeaderBlurred && y > -(navbarHeight))
+        if ([self isNavbarBlurring])
         {
-            [UIView animateWithDuration:.2 animations:^{
-                [self.navbarBackgroundView addBlurEffect:YES cornerRadius:0. padding:0.];
-                _isHeaderBlurred = YES;
-            }];
+            CGFloat extraMargin = [self isModal] ? 0. : [OAUtilities getTopMargin];
+            CGFloat y = scrollView.contentOffset.y - (scrollView.contentOffset.y < 0 ? -extraMargin : extraMargin);
+            CGFloat navbarHeight = [self getNavbarHeight];
+            if (!_isHeaderBlurred && y > -(navbarHeight))
+            {
+                [UIView animateWithDuration:.2 animations:^{
+                    [self.navbarBackgroundView addBlurEffect:YES cornerRadius:0. padding:0.];
+                    _isHeaderBlurred = YES;
+                }];
+            }
+            else if (_isHeaderBlurred && y <= -(navbarHeight))
+            {
+                [UIView animateWithDuration:.2 animations:^{
+                    [self.navbarBackgroundView removeBlurEffect:[self getNavbarColor]];
+                    _isHeaderBlurred = NO;
+                }];
+            }
         }
-        else if (_isHeaderBlurred && y <= -(navbarHeight))
-        {
-            [UIView animateWithDuration:.2 animations:^{
-                [self.navbarBackgroundView removeBlurEffect:[self getNavbarColor]];
-                _isHeaderBlurred = NO;
-            }];
-        }
-    }
 
-    [self onScrollViewDidScroll:scrollView];
+        [self onScrollViewDidScroll:scrollView];
+    }
 }
 
 #pragma mark - UITableViewDelegate
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    if ([self hideFirstHeader])
+    if (section == 0 && [self hideFirstHeader])
         return 0.001;
 
     return [self getCustomHeightForHeader:section];
@@ -318,9 +344,23 @@
     return [self getCustomHeightForFooter:section];
 }
 
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    return [self getCustomViewForHeader:section];
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    return [self getCustomViewForFooter:section];
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [self onRowPressed:indexPath];
+
+    UITableViewCell *row = [self getRow:indexPath];
+    if (row && row.selectionStyle != UITableViewCellSelectionStyleNone)
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 #pragma mark - UITableViewDataSource
@@ -351,3 +391,13 @@
 }
 
 @end
+
+// !!!
+// remove from project:
+//
+//tableView.separatorInset =
+//- (CGFloat)heightForRow:(NSIndexPath *)indexPath
+//- (CGFloat)heightForRow:(NSIndexPath *)indexPath estimated:(BOOL)estimated
+//- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+//- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
+//- (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath

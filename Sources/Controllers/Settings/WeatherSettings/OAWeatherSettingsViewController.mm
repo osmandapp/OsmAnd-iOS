@@ -31,10 +31,14 @@
     NSIndexPath *_useOfflineDataIndexPath;
 }
 
+#pragma mark - Initialization
+
 - (void)commonInit
 {
     _weatherHelper = [OAWeatherHelper sharedInstance];
 }
+
+#pragma mark - UIViewController
 
 - (void)viewDidAppear:(BOOL)animated
 {
@@ -44,6 +48,8 @@
     }];
 }
 
+#pragma mark - Base UI
+
 - (NSString *)getTitle
 {
     return OALocalizedString(@"weather_plugin");
@@ -52,32 +58,6 @@
 - (NSString *)getSubtitle
 {
     return OALocalizedString(@"shared_string_settings");
-}
-
-- (void)updateCacheSize:(BOOL)localData onComplete:(void (^)())onComplete
-{
-    if ((localData && _useOfflineDataIndexPath) || (!localData && _onlineDataIndexPath))
-    {
-        [_weatherHelper calculateFullCacheSize:localData onComplete:^(unsigned long long dbsSize)
-        {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                NSMutableArray<NSDictionary *> *cells = _data[localData ? _useOfflineDataIndexPath.section : _onlineDataIndexPath.section][@"cells"];
-                NSString *sizeString = [NSByteCountFormatter stringFromByteCount:dbsSize countStyle:NSByteCountFormatterCountStyleFile];
-                cells[localData ? _useOfflineDataIndexPath.row : _onlineDataIndexPath.row] = @{
-                        @"key": localData ? @"offline_forecast" : @"online_cache",
-                        @"title": OALocalizedString(localData ? @"weather_offline_forecast" : @"weather_online_cache"),
-                        @"value": sizeString,
-                        @"type": [OAValueTableViewCell getCellIdentifier]
-                };
-
-                [self.tableView reloadRowsAtIndexPaths:@[localData ? _useOfflineDataIndexPath : _onlineDataIndexPath]
-                                      withRowAnimation:UITableViewRowAnimationNone];
-
-                if (onComplete)
-                    onComplete();
-            });
-        }];
-    }
 }
 
 - (void)generateData
@@ -159,24 +139,17 @@
     return _data[section][@"footer"];
 }
 
-#pragma mark - UITableViewDataSource
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return _data.count;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)rowsCount:(NSInteger)section
 {
     return ((NSArray *) _data[section][@"cells"]).count;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
     if ([item[@"type"] isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
-        OAValueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
+        OAValueTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         if (!cell)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
@@ -225,7 +198,7 @@
     }
     else if ([item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
+        OASwitchTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (!cell)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
@@ -249,9 +222,12 @@
     return nil;
 }
 
-#pragma mark - UITableViewDelegate
+- (NSInteger)sectionsCount
+{
+    return _data.count;
+}
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)onRowPressed:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
     _selectedIndexPath = indexPath;
@@ -274,8 +250,6 @@
         controller.cacheDelegate = self;
         [self presentViewController:controller animated:YES completion:nil];
     }
-
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 #pragma mark - Selectors
@@ -289,6 +263,34 @@
         NSDictionary *item = [self getItem:indexPath];
         if ([item[@"key"] isEqualToString:@"offline_forecast_only"])
             [[OsmAndApp instance].data setWeatherUseOfflineData:switchView.isOn];
+    }
+}
+
+#pragma mark - Additions
+
+- (void)updateCacheSize:(BOOL)localData onComplete:(void (^)())onComplete
+{
+    if ((localData && _useOfflineDataIndexPath) || (!localData && _onlineDataIndexPath))
+    {
+        [_weatherHelper calculateFullCacheSize:localData onComplete:^(unsigned long long dbsSize)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                NSMutableArray<NSDictionary *> *cells = _data[localData ? _useOfflineDataIndexPath.section : _onlineDataIndexPath.section][@"cells"];
+                NSString *sizeString = [NSByteCountFormatter stringFromByteCount:dbsSize countStyle:NSByteCountFormatterCountStyleFile];
+                cells[localData ? _useOfflineDataIndexPath.row : _onlineDataIndexPath.row] = @{
+                        @"key": localData ? @"offline_forecast" : @"online_cache",
+                        @"title": OALocalizedString(localData ? @"weather_offline_forecast" : @"weather_online_cache"),
+                        @"value": sizeString,
+                        @"type": [OAValueTableViewCell getCellIdentifier]
+                };
+
+                [self.tableView reloadRowsAtIndexPaths:@[localData ? _useOfflineDataIndexPath : _onlineDataIndexPath]
+                                      withRowAnimation:UITableViewRowAnimationNone];
+
+                if (onComplete)
+                    onComplete();
+            });
+        }];
     }
 }
 

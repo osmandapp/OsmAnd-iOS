@@ -21,15 +21,21 @@
     NSArray<NSNumber *> *_zoomValues;
 }
 
+#pragma mark - Initialization
+
 - (void)commonInit
 {
     _settings = [OAAppSettings sharedManager];
 }
 
+#pragma mark - Base UI
+
 - (NSString *)getTitle
 {
     return OALocalizedString(@"auto_zoom_map");
 }
+
+#pragma mark - Table data
 
 - (void) generateData
 {
@@ -56,19 +62,18 @@
     _data = [NSArray arrayWithObject:dataArr];
 }
 
-- (CGFloat)getCustomHeightForHeader:(NSInteger)section
+- (NSInteger)rowsCount:(NSInteger)section
 {
-    return 17.;
+    return _data[section].count;
 }
 
-#pragma mark - TableView
-
-- (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
+{
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
     if ([cellType isEqualToString:[OASettingsTitleTableViewCell getCellIdentifier]])
     {
-        OASettingsTitleTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTitleTableViewCell getCellIdentifier]];
+        OASettingsTitleTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OASettingsTitleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTitleTableViewCell getCellIdentifier] owner:self options:nil];
@@ -86,20 +91,22 @@
     return nil;
 }
 
-- (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return _data[section].count;
-}
-
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
+- (NSInteger)sectionsCount
 {
     return _data.count;
 }
 
-- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (CGFloat)getCustomHeightForHeader:(NSInteger)section
+{
+    return 17.;
+}
+
+- (void)onRowPressed:(NSIndexPath *)indexPath
 {
     [self selectAutoZoomMap:_data[indexPath.section][indexPath.row]];
-    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
+
+#pragma mark - Selectors
 
 - (void) selectAutoZoomMap:(NSDictionary *)item
 {

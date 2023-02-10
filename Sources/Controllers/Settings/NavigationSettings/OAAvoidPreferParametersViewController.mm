@@ -80,41 +80,18 @@
     _data = [NSArray arrayWithArray:dataArr];
 }
 
-+ (BOOL) hasPreferParameters:(OAApplicationMode *)appMode
+- (NSInteger)rowsCount:(NSInteger)section
 {
-    auto router = [OsmAndApp.instance getRouter:appMode];
-    if (router)
-    {
-        auto parameters = router->getParameters(string(appMode.getDerivedProfile.UTF8String));
-        for (auto it = parameters.begin(); it != parameters.end(); ++it)
-        {
-            auto& p = it->second;
-            NSString *param = [NSString stringWithUTF8String:p.id.c_str()];
-            if ([param hasPrefix:@"prefer_"])
-                return YES;
-        }
-    }
-    return NO;
+    return _data.count;
 }
 
-- (CGFloat)getCustomHeightForHeader:(NSInteger)section
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
-    return 17.;
-}
-
-- (void)onRotation
-{
-    [self setupTableHeaderViewWithText:OALocalizedString(@"avoid_in_routing_descr_")];
-}
-
-#pragma mark - TableView
-
-- (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     NSDictionary *item = _data[indexPath.row];
     NSString *cellType = item[@"type"];
     if ([cellType isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
+        OASwitchTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
@@ -142,16 +119,22 @@
     return nil;
 }
 
-- (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return _data.count;
-}
-
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
+- (NSInteger)sectionsCount
 {
     return 1;
 }
 
-#pragma mark - Switch
+- (CGFloat)getCustomHeightForHeader:(NSInteger)section
+{
+    return 17.;
+}
+
+#pragma mark - Selectors
+
+- (void)onRotation
+{
+    [self setupTableHeaderViewWithText:OALocalizedString(@"avoid_in_routing_descr_")];
+}
 
 - (void) applyParameter:(id)sender
 {
@@ -170,6 +153,25 @@
         if (self.delegate)
             [self.delegate onSettingsChanged];
     }
+}
+
+#pragma mark - Additions
+
++ (BOOL) hasPreferParameters:(OAApplicationMode *)appMode
+{
+    auto router = [OsmAndApp.instance getRouter:appMode];
+    if (router)
+    {
+        auto parameters = router->getParameters(string(appMode.getDerivedProfile.UTF8String));
+        for (auto it = parameters.begin(); it != parameters.end(); ++it)
+        {
+            auto& p = it->second;
+            NSString *param = [NSString stringWithUTF8String:p.id.c_str()];
+            if ([param hasPrefix:@"prefer_"])
+                return YES;
+        }
+    }
+    return NO;
 }
 
 @end

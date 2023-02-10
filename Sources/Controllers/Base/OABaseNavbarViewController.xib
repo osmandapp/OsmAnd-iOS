@@ -17,6 +17,7 @@
                 <outlet property="navbarBackgroundView" destination="ldq-EA-ADj" id="u7f-Ij-TzN"/>
                 <outlet property="navbarEstimatedHeightConstraint" destination="bFh-vf-Mqq" id="WZ0-Ca-FVF"/>
                 <outlet property="navbarStackView" destination="p4E-OZ-ZZt" id="u3Y-QV-Ju3"/>
+                <outlet property="navbarStackViewEstimatedHeightConstraint" destination="9Oc-hf-mQ1" id="Yxy-lb-S09"/>
                 <outlet property="rightNavbarButton" destination="ztY-lI-A7Q" id="Oxt-Oa-NVf"/>
                 <outlet property="rightNavbarButtonMarginView" destination="rvg-dk-88B" id="nxa-G7-syn"/>
                 <outlet property="rightNavbarButtonStackView" destination="fuX-ua-ltU" id="Xh9-PG-KdN"/>
@@ -187,6 +188,9 @@
                         </view>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="45" id="9Oc-hf-mQ1"/>
+                    </constraints>
                 </stackView>
             </subviews>
             <viewLayoutGuide key="safeArea" id="Rn4-Fc-LbU"/>

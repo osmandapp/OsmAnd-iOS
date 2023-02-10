@@ -17,7 +17,7 @@
 
 @end
 
-@interface OABaseSettingsViewController : OABaseNavbarViewController <OASettingsDataDelegate>
+@interface OABaseSettingsViewController : OABaseNavbarViewController<OASettingsDataDelegate>
 
 @property (weak, nonatomic) id<OASettingsDataDelegate> delegate;
 @property (nonatomic) OAApplicationMode *appMode;

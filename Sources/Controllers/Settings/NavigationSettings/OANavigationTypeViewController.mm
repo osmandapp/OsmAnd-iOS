@@ -26,6 +26,8 @@
     NSArray<NSArray *> *_data;
 }
 
+#pragma mark - UIViewController
+
 - (void) viewDidLoad
 {
     [super viewDidLoad];
@@ -33,10 +35,14 @@
     [self setupTableHeaderViewWithText:OALocalizedString(@"select_nav_profile_dialog_message")];
 }
 
+#pragma mark - Base UI
+
 - (NSString *)getTitle
 {
     return OALocalizedString(@"nav_type_hint");
 }
+
+#pragma mark - Table data
 
 - (void)generateData
 {
@@ -92,29 +98,19 @@
         return @"";
 }
 
-- (void)onRotation
+- (NSInteger)rowsCount:(NSInteger)section
 {
-    [self setupTableHeaderViewWithText:OALocalizedString(@"select_nav_profile_dialog_message")];
-}
-
-#pragma mark - TableView
-
-- (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return _data[section].count;
 }
 
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
-    return _data.count;
-}
-
-- (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
     OARoutingProfileDataObject *profile = _sortedRoutingProfiles[[item[@"profile_ind"] integerValue]];
     if ([cellType isEqualToString:[OAIconTextTableViewCell getCellIdentifier]])
     {
-        OAIconTextTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
+        OAIconTextTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
@@ -138,7 +134,12 @@
     return nil;
 }
 
-- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (NSInteger)sectionsCount
+{
+    return _data.count;
+}
+
+- (void)onRowPressed:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     OARoutingProfileDataObject *profileData = _sortedRoutingProfiles[[item[@"profile_ind"] integerValue]];
@@ -162,7 +163,13 @@
             [self.delegate onSettingsChanged];
         [self dismissViewController];
     }
-    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+#pragma mark - Selectors
+
+- (void)onRotation
+{
+    [self setupTableHeaderViewWithText:OALocalizedString(@"select_nav_profile_dialog_message")];
 }
 
 @end

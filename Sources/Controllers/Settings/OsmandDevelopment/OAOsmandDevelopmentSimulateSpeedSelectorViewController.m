@@ -85,10 +85,14 @@
 
 NSString *const kUICellKey = @"kUICellKey";
 
+#pragma mark - Initialization
+
 - (void)commonInit
 {
     _selectedSpeedMode = [OASimulateNavigationSpeed fromKey:OAAppSettings.sharedManager.simulateNavigationGpxTrackSpeedMode];
 }
+
+#pragma mark - UIViewController
 
 - (void) viewDidLoad
 {
@@ -102,10 +106,14 @@ NSString *const kUICellKey = @"kUICellKey";
     [self reloadData];
 }
 
+#pragma mark - Base UI
+
 - (NSString *)getTitle
 {
     return OALocalizedString(@"simulate_location_movement_speed");
 }
+
+#pragma mark - Table data
 
 - (void) generateData
 {
@@ -156,34 +164,24 @@ NSString *const kUICellKey = @"kUICellKey";
     [self.tableView reloadData];
 }
 
-
-#pragma mark - Actions
-
-- (void) onSelectMode:(EOASimulateNavigationSpeed)mode
+- (NSString *)getTitleForFooter:(NSInteger)section
 {
-    if (_speedSelectorDelegate)
-        [_speedSelectorDelegate onSpeedSelectorInformationUpdated:mode];
-    [self dismissViewControllerAnimated:YES completion:nil];
+    NSDictionary *item = [self getItem:[NSIndexPath indexPathForRow:0 inSection:section]];
+    return item[@"footerTitle"];
 }
 
-
-#pragma mark - UITableViewDataSource
-
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
+- (NSInteger)rowsCount:(NSInteger)section
 {
-    return _data.count;
-}
-
-- (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return _data[section].count;
 }
 
-- (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
+{
     NSDictionary *item = [self getItem:indexPath];
     NSString *cellType = item[@"type"];
     if ([cellType isEqualToString:kUICellKey])
     {
-        UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:kUICellKey];
+        UITableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:kUICellKey];
         if (cell == nil)
         {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kUICellKey];
@@ -197,31 +195,26 @@ NSString *const kUICellKey = @"kUICellKey";
     return nil;
 }
 
-- (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
+- (NSInteger)sectionsCount
 {
-    NSDictionary *item = [self getItem:[NSIndexPath indexPathForRow:0 inSection:section]];
-    return item[@"footerTitle"];
+    return _data.count;
 }
 
-- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
+- (void)onRowPressed:(NSIndexPath *)indexPath
 {
-    UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
-    [header.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
-}
-
-- (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section
-{
-    UITableViewHeaderFooterView *footer = (UITableViewHeaderFooterView *)view;
-    [footer.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
-}
-
-- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     NSDictionary *item = [self getItem:indexPath];
     void (^actionBlock)() = item[@"actionBlock"];
     if (actionBlock)
         actionBlock();
+}
+
+#pragma mark - Selectors
+
+- (void) onSelectMode:(EOASimulateNavigationSpeed)mode
+{
+    if (_speedSelectorDelegate)
+        [_speedSelectorDelegate onSpeedSelectorInformationUpdated:mode];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end

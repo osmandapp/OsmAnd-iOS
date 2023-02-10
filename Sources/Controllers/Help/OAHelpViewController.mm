@@ -36,6 +36,8 @@ static const NSInteger otherIndex = 3;
 static const NSInteger followIndex = 4;
 static const NSInteger groupCount = 5;
 
+#pragma mark - UIViewController
+
 - (void) viewDidLoad
 {
     [super viewDidLoad];
@@ -53,6 +55,8 @@ static const NSInteger groupCount = 5;
 {
     return UIStatusBarStyleLightContent;
 }
+
+#pragma mark - Base UI
 
 - (NSString *)getTitle
 {
@@ -78,6 +82,8 @@ static const NSInteger groupCount = 5;
 {
     return NO;
 }
+
+#pragma mark - Table data
 
 - (void) generateData
 {
@@ -407,14 +413,7 @@ static const NSInteger groupCount = 5;
     }
 }
 
-#pragma mark - UITableViewDataSource
-
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return groupCount;
-}
-
-- (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)rowsCount:(NSInteger)section
 {
     if (section == firstStepsIndex)
         return _firstStepsData.count;
@@ -429,11 +428,11 @@ static const NSInteger groupCount = 5;
     return 0;
 }
 
-- (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
     
-    OAMenuSimpleCellNoIcon *cell = (OAMenuSimpleCellNoIcon *)[tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCellNoIcon getCellIdentifier]];
+    OAMenuSimpleCellNoIcon *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCellNoIcon getCellIdentifier]];
     if (cell == nil)
     {
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCellNoIcon getCellIdentifier] owner:self options:nil];
@@ -455,9 +454,12 @@ static const NSInteger groupCount = 5;
     return cell;
 }
 
-#pragma mark - UITableViewDelegate
+- (NSInteger)sectionsCount
+{
+    return groupCount;
+}
 
-- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)onRowPressed:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
     NSString *type = item[@"type"];
@@ -470,7 +472,6 @@ static const NSInteger groupCount = 5;
     } else if ([kContactAction isEqualToString:type]) {
         [[UIApplication sharedApplication] openURL: [NSURL URLWithString:contactEmailUrl]];
     }
-    [tableView deselectRowAtIndexPath:indexPath animated:true];
 }
 
 @end

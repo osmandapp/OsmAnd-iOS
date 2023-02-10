@@ -34,7 +34,8 @@
 
 #define kPaddingOnSideOfContent 20
 #define kPaddingToLeftOfContentWithIcon 66
-#define kHeaderHeightDefault 36
+#define kHeaderHeightDefault 38
+#define kFooterHeightDefault 16
 #define kPaddingOnSideOfHeaderWithText 38
 #define kPaddingOnSideOfFooterWithText 16
 

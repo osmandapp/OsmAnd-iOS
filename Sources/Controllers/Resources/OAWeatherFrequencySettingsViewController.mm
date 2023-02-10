@@ -28,6 +28,8 @@
     NSInteger _indexSelected;
 }
 
+#pragma mark - Initialization
+
 - (instancetype)initWithRegion:(OAWorldRegion *)region
 {
     self = [super init];
@@ -46,18 +48,12 @@
                     : kFrequencyWeeklyIndex;
 }
 
-- (NSString *)getTitle
-{
-    return OALocalizedString(@"shared_string_updates_frequency");
-}
+#pragma mark - UIViewController
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 
-    self.tableView.estimatedRowHeight = kEstimatedRowHeight;
-    self.tableView.sectionHeaderHeight = 34.;
-    self.tableView.sectionFooterHeight = 0.001;
     self.tableView.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
     self.tableView.tableHeaderView =
             [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"weather_generates_new_forecast_description")
@@ -67,6 +63,15 @@
                                               isTitle:NO
                                                     y:24.];
 }
+
+#pragma mark - Base UI
+
+- (NSString *)getTitle
+{
+    return OALocalizedString(@"shared_string_updates_frequency");
+}
+
+#pragma mark - Table data
 
 - (void)generateData
 {
@@ -118,26 +123,19 @@
     return _data[section][@"footer"];
 }
 
-#pragma mark - UITableViewDataSource
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return _data.count;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)rowsCount:(NSInteger)section
 {
     return ((NSArray *) _data[section][@"cells"]).count;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
     UITableViewCell *outCell = nil;
 
     if ([item[@"type"] isEqualToString:[OASettingsTitleTableViewCell getCellIdentifier]])
     {
-        OASettingsTitleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTitleTableViewCell getCellIdentifier]];
+        OASettingsTitleTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASettingsTitleTableViewCell getCellIdentifier]];
         if (!cell)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTitleTableViewCell getCellIdentifier]
@@ -161,12 +159,13 @@
     return outCell;
 }
 
-#pragma mark - UITableViewDelegate
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (NSInteger)sectionsCount
 {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    return _data.count;
+}
 
+- (void)onRowPressed:(NSIndexPath *)indexPath
+{
     _indexSelected = indexPath.row;
     [OAWeatherHelper setPreferenceFrequency:[OAWeatherHelper checkAndGetRegionId:_region]
                                       value:_indexSelected == kFrequencySemiDailyIndex ? EOAWeatherForecastUpdatesSemiDaily

@@ -28,6 +28,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *cancelButton;
 @property (weak, nonatomic) IBOutlet UIButton *doneButton;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *navBarHeightConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *cancelButtonLeftConstraint;
 
 @property (weak, nonatomic) id<OASettingsDataDelegate> delegate;
 @property (nonatomic) OAApplicationMode *appMode;
@@ -37,5 +38,6 @@
 - (CGFloat) heightForLabel:(NSString *)text;
 - (CGFloat) fontSizeForLabel;
 - (void) setupTableHeaderViewWithText:(NSString *)text;
+- (void) showCancelButtonWithBackButton;
 
 @end

@@ -1444,6 +1444,9 @@
 "save_poi_too_many_uppercase" = "The name contains too many capital letters. Continue?";
 "osm_editing_loading_poi" = "Loading POI information";
 "osm_editing_access_descr" = "You can view all your local edits and notes in %@. Already uploaded points are not listed in OsmAnd.";
+"osm_upload_gpx_description_footer" = "Track name will be used instead of an empty description. Entered description will be applied for each track.";
+"osm_upload_gpx_tags_footer" = "Enter tags separated by comma.";
+"visibility" = "Visibility";
 
 // Mapillary
 "mapil_no_inet_descr" = "You need Internet connection to view Mapillary photos.";

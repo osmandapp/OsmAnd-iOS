@@ -102,7 +102,7 @@
 {
     _originObject = [OAPOIHelper findPOIByOriginName:_wpt.getAmenityOriginName lat:_wpt.point.getLatitude lon:_wpt.point.getLongitude];
     if (!_originObject)
-        [_wpt getAmenity];
+        _originObject = [_wpt getAmenity];
 }
 
 - (void) buildTopRows:(NSMutableArray<OARowInfo *> *)rows

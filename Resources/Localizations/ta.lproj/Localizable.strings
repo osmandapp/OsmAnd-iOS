@@ -2413,20 +2413,6 @@
 "recording_delete_confirm" = "இந்த உருப்படியை நீக்கவா\?";
 "download_wikipedia_data" = "விக்கிபீடியா கட்டுரையை பதிவிறக்கவும்";
 "auth_failed" = "அங்கீகாரம் தோல்வியடைந்தது";
-
-
-\n";
-
-\n";
-
-\n";
-
-
-\n";
-
-\n";
-
-\n";;
 "rendering_attr_hideAccess_name" = "அணுகல் கட்டுப்பாடுகள்";
 "rendering_value_medium_name" = "நடுத்தர";
 "rendering_attr_trainLightrailRoutes_name" = "ரயில் பாதைகள்";

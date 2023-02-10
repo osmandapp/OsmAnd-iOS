@@ -19,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) NSString *headerText;
 @property (nonatomic) NSString *footerText;
 
+- (OATableRowData *) createNewRow;
 - (OATableRowData *) getRow:(NSUInteger)index;
 
 - (void)addRow:(OATableRowData *)rowData;

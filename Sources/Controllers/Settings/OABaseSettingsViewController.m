@@ -91,6 +91,13 @@
     self.backButton.accessibilityLabel = OALocalizedString(@"shared_string_back");
 }
 
+- (void) showCancelButtonWithBackButton
+{
+    self.backButton.hidden = NO;
+    self.cancelButton.hidden = NO;
+    self.cancelButtonLeftConstraint.constant = 8 + self.backButton.frame.size.width;
+}
+
 - (IBAction) backButtonPressed:(id)sender
 {
     [self dismissViewController];

@@ -29,6 +29,13 @@
     return self;
 }
 
+- (OATableRowData *) createNewRow
+{
+    OATableRowData *rowData = [OATableRowData rowData];
+    [self addRow:rowData];
+    return rowData;
+}
+
 - (OATableRowData *) getRow:(NSUInteger)index
 {
     NSInteger realIdx = -1;

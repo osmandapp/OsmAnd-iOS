@@ -602,7 +602,7 @@
 "select_route_start_on_map" = "Sélectionnez le point de départ du trajet";
 "select_route_finish_on_map" = "Sélectionnez le point d'arrivée du trajet";
 "directions_other" = "Autres directions";
-"purchases_feature_desc_wikipedia" = "Donne accès aux articles Wikipedia associés aux points d\'intérêts de la carte, permettant d\'en savoir plus sur un lieu en quelques clics. Pensez à télécharger les articles Wikipédia des régions de votre choix pour les consulter hors-ligne.";
+"purchases_feature_desc_wikipedia" = "Donne accès à tous les articles Wikipédia associés aux points d'intérêts de la carte, permettant d'en savoir plus sur un lieu en quelques clics. Pensez à télécharger les articles Wikipédia des régions de votre choix pour les consulter hors-ligne.";
 "make_call" = "Passer un appel";
 "select_wpt_on_map" = "Sélectionnez un point sur la carte à ajouter à la trace";
 "sorting" = "Tri";
@@ -769,7 +769,7 @@
 "start_editing_card_image_text" = "Le guide de voyage mondial et gratuit que chacun peut améliorer.";
 "search_nearby" = "Rechercherà proximité";
 "unlimited_downloads" = "Téléchargements illimités";
-"wikipedia_offline" = "Wikipedia hors-ligne";
+"wikipedia_offline" = "Wikipédia hors-ligne";
 "monthly_map_updates" = "Miseà jour des cartes : Tous les mois";
 "daily_map_updates" = "Miseà jour des cartes : Toutes les heures";
 "donation_to_osm" = "Donà la communauté OpenStreetMap";
@@ -933,7 +933,7 @@
 "srtm_plugin_description" = "Fournit des informations sur le terrain (ombrage du relief, courbes de niveau, pente) pour vous aiderà mieux interpréter le relief et l’accessibilité. Ces informations topographiques peuvent être représentées sur la carte par des ombres, des lignes d\'altitude et des couleurs variant selon la pente.\n\nLes données proviennent de SRTM et ASTER.\n\nPlus d\'informations sur http://osmand.net/docs/user/plugins/contour-lines.";
 "wikivoyage_travel_guide_descr" = "Guides des lieux les plus intéressants au monde depuis OsmAnd et sans connexion Internet.";
 "product_desc_sea_depth_contours" = "Bathymétrie et balisage maritime";
-"prch_wiki_info" = "L'addon Wikipedia permet d'activer les informations wikipedia pour les cartes que vous avez le droit, achetées ou téléchargées dans les limites de la limite de la gratuité.";
+"prch_wiki_info" = "L'extension Wikipédia permet d'activer les informations wikipédia pour les cartes que vous avez le droit, achetées ou téléchargées dans les limites de la limite de la gratuité.";
 "prch_srtm_info" = "L'extension courbes de niveau permet d'activer l'affichage des courbes de niveau pour les cartes auxquelles vous avez droit, achetées ou téléchargées dans les limites de l'offre gratuite.";
 "poi_category_and_type" = "Catégorie et type de POI";
 "poi_select_type" = "Sélectionner le type";
@@ -1406,7 +1406,7 @@
 "month_short" = "Mois";
 "import_raster_map_success" = "La carte raster a été importée. Ouvrez les paramètres de carte et activez la comme sur-couche/sous-couche";
 "import_raster_map_failed" = "Échec de l'import de la carte raster";
-"how_to_open_wiki_title" = "Comment ouvrir les articles Wikipedia ?";
+"how_to_open_wiki_title" = "Comment ouvrir les articles Wikipédia ?";
 "download_wiki_data" = "Télécharger les données Wikipédia pour %@";
 "open_in_browser_wiki" = "Ouvrir l\'article en ligne";
 "key_hint_zoom_in" = "Zoom avant";
@@ -2775,7 +2775,7 @@
 "routing_attr_carriage_restrictions_name" = "Restrictions de chariot";
 "routing_attr_avoid_footways_description" = "Éviter les trottoirs";
 "shared_string_does_not_exist" = "N'existe pas";
-"download_wikipedia_data" = "Télécharger les données Wikipedia";
+"download_wikipedia_data" = "Télécharger les données Wikipédia";
 "kg" = "kg";
 "km" = "km";
 "m" = "m";

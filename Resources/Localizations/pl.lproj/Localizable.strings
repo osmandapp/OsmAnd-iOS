@@ -561,7 +561,7 @@
 "show_warnings_title" = "Wyświetlanie ostrzeżeń…";
 "show_warnings_descr" = "Skonfiguruj ostrzeżenia o ruchu (ograniczenia prędkości, wymuszone zatrzymania, progi zwalniające, tunele), ostrzeżenia o fotoradarach i informacje o pasach.";
 "speak_title" = "Zapowiadanie…";
-"speak_descr" = "Konfiguruje zapowiadanie nazw ulic, ostrzeżeń o ruchu (przymusowe przystanki, progi zwalniające), fotoradarów i ograniczeń prędkości.";
+"speak_descr" = "Skonfiguruj, aby zapowiadać nazwy ulic, ostrzeżenia o ruchu drogowym (przymusowe zatrzymania, progi zwalniające), ostrzeżenia o fotoradarach, ograniczenia prędkości";
 "keep_informing" = "Powtarzanie instrukcji";
 "keep_informing_descr" = "Odtwarza komunikaty nawigacyjne w regularnych odstępach czasu.";
 "arrival_distance" = "Powiadomienia osiągnięcia celu";
@@ -2628,3 +2628,32 @@
 "privacy_and_security" = "Prywatność i bezpieczeństwo";
 "connect_rp" = "Połącz punkty trasy";
 "route_preferred_terrain_less_hilly" = "Krótsze, mniej pagórkowate trasy.";
+"weather_contours_enable_descr" = "Włącz, aby wyświetlić warstwę izolinii na mapie.";
+"shared_string_updates_size" = "Rozmiar aktualizacji";
+"shared_string_leave" = "Wyjdź";
+"shared_string_clear_offline_cache" = "Wyczyść pamięć podręczną offline";
+"shared_string_available_until" = "Dostępne do";
+"carplay_available_in_sub_plans" = "Kup OsmAnd Pro lub Maps+, aby używać OsmAnd z CarPlay.";
+"position_on_map" = "Pozycja lokalizacji na ekranie";
+"shared_string_next_update" = "Następna aktualizacja";
+"map_settings_clear_geo_cache" = "Wyczyść kafelki geo";
+"navigate_point_format_UTM" = "UTM";
+"map_settings_clear_raster_cache" = "Wyczyść kafelki rastrowe";
+"shared_string_countries" = "Kraje";
+"shared_string_updated" = "Zaktualizowano";
+"shared_string_updates_frequency" = "Częstotliwość aktualizacji";
+"shared_string_delete_data" = "Usuń dane";
+"shared_string_unavailable" = "Niedostępne";
+"gpx_import_already_exists_short" = "Określony plik ścieżki już istnieje na liście.";
+"screen_settings_weather_toolbar" = "Pasek narzędzi pogody";
+"shared_string_download_update" = "Pobierz aktualizację";
+"shared_string_does_not_exist" = "Nie istnieje";
+"shared_string_clear_online_cache" = "Wyczyść pamięć podręczną online";
+"shared_string_total_size" = "Całkowity rozmiar";
+"route_preferred_terrain_flat" = "Trasy o profilu płaskiej rzeźby terenu. Długość może wzrosnąć.";
+"route_preferred_terrain_hilly" = "Trasy o profilu pagórkowatej rzeźby terenu.";
+"shared_string_changed" = "Zmienione";
+"shared_string_profile" = "Profil";
+
+// Shared Strings
+"shared_string_cancelled" = "Anulowano";

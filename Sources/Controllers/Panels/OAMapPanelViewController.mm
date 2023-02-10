@@ -3920,17 +3920,17 @@ typedef enum
     _carPlayActiveController = [[OACarPlayActiveViewController alloc] init];
     _carPlayActiveController.messageText = OALocalizedString(@"carplay_active_message");
     
-    _carPlayActiveController.modalPresentationStyle = UIModalPresentationFullScreen;
-    [self presentViewController:_carPlayActiveController animated:YES completion:nil];
+    [self addChildViewController:_carPlayActiveController];
+    [self.view insertSubview:_carPlayActiveController.view atIndex:0];
 }
 
 - (void) onCarPlayDisconnected:(void (^ __nullable)(void))onComplete
 {
-    [_carPlayActiveController dismissViewControllerAnimated:YES completion:^{
-        _carPlayActiveController = nil;
-        if (onComplete)
-            onComplete();
-    }];
+    [_carPlayActiveController.view removeFromSuperview];
+    [_carPlayActiveController removeFromParentViewController];
+    _carPlayActiveController = nil;
+    if (onComplete)
+        onComplete();
     if (_routingHelper.isFollowingMode)
         [self startNavigation];
 }

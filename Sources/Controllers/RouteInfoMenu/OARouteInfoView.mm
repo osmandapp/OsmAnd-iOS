@@ -955,14 +955,21 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 
 - (IBAction) goPressed:(id)sender
 {
-    BOOL isPublicTransport = [_routingHelper isPublicTransportMode];
-    if ([_pointsHelper getPointToNavigate] || isPublicTransport)
+    if (_app.carPlayActive)
     {
-        [[OARootViewController instance].mapPanel closeRouteInfo:YES
-                                                      onComplete:^{
-            if (!isPublicTransport)
-                [[OARootViewController instance].mapPanel startNavigation];
-        }];
+        [NSNotificationCenter.defaultCenter postNotificationName:kCarPlayTripStartedNotification object:nil];
+    }
+    else
+    {
+        BOOL isPublicTransport = [_routingHelper isPublicTransportMode];
+        if ([_pointsHelper getPointToNavigate] || isPublicTransport)
+        {
+            [[OARootViewController instance].mapPanel closeRouteInfo:YES
+                                                          onComplete:^{
+                if (!isPublicTransport)
+                    [[OARootViewController instance].mapPanel startNavigation];
+            }];
+        }
     }
 }
 

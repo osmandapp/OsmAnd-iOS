@@ -52,6 +52,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 {
     CPMapTemplate *_mapTemplate;
     CPNavigationSession *_navigationSession;
+    CPTrip *_currentTrip;
     
     OARoutingHelper *_routingHelper;
     
@@ -77,11 +78,13 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     _locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                 withHandler:@selector(onLocationServicesUpdate)
                                                                  andObserve:[OsmAndApp instance].locationServices.updateObserver];
+    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(onTripStartTriggered) name:kCarPlayTripStartedNotification object:nil];
 }
 
 - (void)dealloc
 {
     [_locationServicesUpdateObserver detach];
+    [NSNotificationCenter.defaultCenter removeObserver:self];
 }
 
 - (void) stopNavigation
@@ -103,6 +106,12 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     [self enterBrowsingState];
     
     [self.interfaceController setRootTemplate:_mapTemplate animated:YES];
+}
+
+- (void) onTripStartTriggered
+{
+    CPRouteChoice *routeChoice = [[CPRouteChoice alloc] initWithSummaryVariants:@[] additionalInformationVariants:@[] selectionSummaryVariants:@[]];
+    [self mapTemplate:_mapTemplate startedTrip:_currentTrip usingRouteChoice:routeChoice];
 }
 
 - (void) enterBrowsingState
@@ -139,11 +148,11 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     startItem.name = OALocalizedString(@"shared_string_my_location");
     finishItem.name = finish.pointDescription.name;
     
-    CPTrip *trip = [[CPTrip alloc] initWithOrigin:startItem destination:finishItem routeChoices:@[routeChoice]];
+    _currentTrip = [[CPTrip alloc] initWithOrigin:startItem destination:finishItem routeChoices:@[routeChoice]];
     
     CPTripPreviewTextConfiguration *config = [[CPTripPreviewTextConfiguration alloc] initWithStartButtonTitle:OALocalizedString(@"shared_string_control_start") additionalRoutesButtonTitle:nil overviewButtonTitle:nil];
     
-    [_mapTemplate showTripPreviews:@[trip] textConfiguration:config];
+    [_mapTemplate showTripPreviews:@[_currentTrip] textConfiguration:config];
     _mapTemplate.leadingNavigationBarButtons = @[[self createBarButton:EOACarPlayButtonTypeCancelRoute]];
     
     _isInRoutePreview = YES;
@@ -155,11 +164,13 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 
 - (void)exitNavigationMode
 {
-    if (!_navigationSession)
-        return;
     _currentDirectionInfo = nil;
+    _currentTrip = nil;
     [_navigationSession finishTrip];
     _navigationSession = nil;
+    [_mapTemplate hideTripPreviews];
+    if (_delegate)
+        [_delegate exitNavigationMode];
     [self enterBrowsingState];
 }
 

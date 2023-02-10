@@ -1006,7 +1006,7 @@
 "wake_on_voice_descr" = "Porniți ecranul dispozitivului (dacă este dezactivat) atunci când vă apropiați de o curbă.";
 "speed_limit_exceed_message" = "Alegeți marja de toleranță a limitei de viteză, peste care veți primi un avertisment vocal.";
 "repeat_after" = "Se repetă după";
-"speak_descr" = "Setați anunțarea numelor străzilor, a avertismentelor de trafic (opriri forțate, limitatoare de viteză), a avertismentelor privind radarele și a limitelor de viteză.";
+"speak_descr" = "Configurați pentru a anunța numele străzilor, avertismente de trafic (opriri forțate, limitatoare de viteză), avertismente de radare, limite de viteză";
 "show_warnings_descr" = "Configurați avertismente de trafic (limite de viteză, opriri forțate, limitatoare de viteză, tuneluri), avertismente privind radarele și informații despre benzi.";
 "auto_zoom_map_descr" = "Nivelul de zoomîn funcție de viteza dumneavoastră (în timp ce harta este sincronizată cu poziția curentă).";
 "choose_auto_center_map_view_descr" = "Timpul până când vizualizarea hărții se sincronizează cu poziția curentă după mutare";
@@ -2771,3 +2771,18 @@
 "shared_string_does_not_exist" = "Nu există";
 "lang_zh-Hans" = "Chineză (simplificată)";
 "reset_profile_action_descr" = "Resetați toate setările de profil la valorile implicite de instalare. Dacă atingeți Resetare, veți anula toate modificările, această acțiune nu poate fi anulată.";
+"announcement_time_descr" = "Timpul de anunțare a diferitelor mesaje vocale depinde de tipul de mesaj, de viteza de navigare curentă și de viteza de navigare implicită.";
+"ltr_or_rtl_combine_via_comma" = "%@, %@";
+"exit_number" = "Număr de ieșire";
+"announce_when_exceeded" = "Anunță când este depășită";
+"speak_gps_signal_status" = "Anunțați pierderea și recuperarea semnalului GPS";
+"speak_route_recalculation" = "Anunță recalcularea rutei";
+"announcement_time_title" = "Ora anunțului";
+"user_points" = "Puncte de utilizator";
+"announcement_time_intervals" = "Intervale de timp și distanță";
+"announcement_time_arrive" = "Sosirea la destinație";
+"announcement_time_off_route" = "În afara traseului";
+"announcement_time_prepare" = "Pregătiți";
+"announcement_time_prepare_long" = "Pregătire lungă";
+"announcement_time_approach" = "Abordare";
+"announcement_time_passing" = "Trecere";

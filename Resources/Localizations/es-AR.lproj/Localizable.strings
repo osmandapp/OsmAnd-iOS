@@ -251,7 +251,7 @@
 "show_warnings_title" = "Mostrar alertas…";
 "show_warnings_descr" = "Configura advertencias de tráfico (límites de velocidad, paradas forzosas, lomadas, túneles), radares de velocidad, e información de carriles.";
 "speak_title" = "Anunciar…";
-"speak_descr" = "Configura los anuncios para nombres de calles, advertencias de tráfico (paradas, lomadas), radares y límites de velocidad.";
+"speak_descr" = "Configura los anuncios para nombres de calles, advertencias de tráfico (paradas, lomadas), radares y límites de velocidad";
 "keep_informing" = "Repetir instrucciones de navegación";
 "repeat_after" = "Repetir después";
 "keep_informing_descr" = "Repite instrucciones de navegación a intervalos regulares.";
@@ -2799,3 +2799,18 @@
 "uninstall_speed_cameras" = "Desinstalar radares de velocidad";
 "shared_string_keep_active" = "Mantener";
 "lang_zh-Hans" = "Chino (Simplificado)";
+"announcement_time_descr" = "El tiempo de anuncio de las diferentes indicaciones por voz depende del tipo de mensaje, la velocidad de navegación actual y la velocidad de navegación predefinida.";
+"exit_number" = "Número de salida";
+"announce_when_exceeded" = "Anunciar al excederse";
+"speak_route_recalculation" = "Anunciar el recálculo de la ruta";
+"announcement_time_intervals" = "Intervalos de tiempo y distancia";
+"speak_gps_signal_status" = "Anunciar la pérdida o recuperación de la señal GPS";
+"announcement_time_title" = "Tiempo de anuncio";
+"announcement_time_arrive" = "Has llegado al destino";
+"ltr_or_rtl_combine_via_comma" = "%@, %@";
+"user_points" = "Puntos de usuario";
+"announcement_time_off_route" = "Fuera de la ruta";
+"announcement_time_prepare" = "Prepararse";
+"announcement_time_prepare_long" = "Preparación larga";
+"announcement_time_approach" = "Acercarse";
+"announcement_time_passing" = "Pasando";

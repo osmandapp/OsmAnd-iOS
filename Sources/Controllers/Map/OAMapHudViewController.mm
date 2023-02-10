@@ -339,7 +339,7 @@
     self.searchButton.accessibilityLabel = OALocalizedString(@"shared_string_search");
     self.optionsMenuButton.accessibilityLabel = OALocalizedString(@"shared_string_menu");
     self.driveModeButton.accessibilityLabel = OALocalizedString(@"shared_string_navigation");
-    self.mapModeButton.accessibilityLabel = OALocalizedString(@"my_locations");
+    self.mapModeButton.accessibilityLabel = OALocalizedString(@"shared_string_my_location");
     self.zoomInButton.accessibilityLabel = OALocalizedString(@"key_hint_zoom_in");
     self.zoomOutButton.accessibilityLabel = OALocalizedString(@"key_hint_zoom_out");
     self.weatherButton.accessibilityLabel = OALocalizedString(@"shared_string_cancel");

@@ -16,7 +16,7 @@
 #import "Localization.h"
 #import "OAColors.h"
 
-@interface OAWeatherCacheSettingsViewController () <UIViewControllerTransitioningDelegate, UITableViewDelegate, UITableViewDataSource>
+@interface OAWeatherCacheSettingsViewController () <UIViewControllerTransitioningDelegate>
 
 @end
 
@@ -36,52 +36,37 @@
 
 - (instancetype)initWithCacheType:(EOAWeatherCacheType)type
 {
-    self = [super initWithNibName:@"OABaseSettingsViewController" bundle:nil];
+    self = [super init];
     if (self)
     {
         _type = type;
-        _weatherHelper = [OAWeatherHelper sharedInstance];
     }
     return self;
 }
 
 - (instancetype)initWithRegion:(OAWorldRegion *)region
 {
-    self = [super initWithNibName:@"OABaseSettingsViewController" bundle:nil];
+    self = [super init];
     if (self)
     {
         _region = region;
-        _weatherHelper = [OAWeatherHelper sharedInstance];
     }
     return self;
 }
 
-- (void)applyLocalization
+- (void)commonInit
 {
-    [super applyLocalization];
-    if (_region)
-        self.titleLabel.text = OALocalizedString(@"shared_string_updates_size");
-    else if (_type == EOAWeatherOnlineData)
-        self.titleLabel.text = OALocalizedString(@"weather_online_cache");
-    else if (_type == EOAWeatherOfflineData)
-        self.titleLabel.text = OALocalizedString(@"weather_offline_forecast");
+    _weatherHelper = [OAWeatherHelper sharedInstance];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 
-    self.tableView.dataSource = self;
-    self.tableView.delegate = self;
-    self.tableView.estimatedRowHeight = kEstimatedRowHeight;
-    self.tableView.sectionHeaderHeight = 34.;
-    self.tableView.sectionFooterHeight = 0.001;
     self.tableView.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
-    [self setupView];
 
     _progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
     [self.view addSubview:_progressHUD];
-    self.subtitleLabel.hidden = YES;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -117,7 +102,19 @@
     }
 }
 
-- (void)setupView
+- (NSString *)getTitle
+{
+    if (_region)
+        return OALocalizedString(@"shared_string_updates_size");
+    else if (_type == EOAWeatherOnlineData)
+        return OALocalizedString(@"weather_online_cache");
+    else if (_type == EOAWeatherOfflineData)
+        return OALocalizedString(@"weather_offline_forecast");
+
+    return @"";
+}
+
+- (void)generateData
 {
     NSMutableArray<NSDictionary *> *data = [NSMutableArray array];
 
@@ -209,6 +206,11 @@
 - (NSDictionary *)getItem:(NSIndexPath *)indexPath
 {
     return _data[indexPath.section][@"cells"][indexPath.row];
+}
+
+- (NSString *)getTitleForHeader:(NSInteger)section
+{
+    return  _data[section][@"header"];
 }
 
 - (void)updateCacheSize
@@ -391,12 +393,6 @@
         return cell;
     }
     return nil;
-}
-
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    NSDictionary *sectionData = _data[section];
-    return sectionData[@"header"];
 }
 
 #pragma mark - UITableViewDelegate

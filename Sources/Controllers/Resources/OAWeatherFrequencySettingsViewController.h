@@ -6,7 +6,7 @@
 //  Copyright (c) 2022 OsmAnd. All rights reserved.
 //
 
-#import "OABaseSettingsViewController.h"
+#import "OABaseNavbarViewController.h"
 
 @class OAWorldRegion;
 
@@ -18,7 +18,7 @@
 
 @end
 
-@interface OAWeatherFrequencySettingsViewController : OABaseSettingsViewController
+@interface OAWeatherFrequencySettingsViewController : OABaseNavbarViewController
 
 - (instancetype)initWithRegion:(OAWorldRegion *)region;
 

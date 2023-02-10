@@ -21,10 +21,6 @@
 #import "Localization.h"
 #import "OAColors.h"
 
-@interface OAProfileGeneralSettingsParametersViewController () <UITableViewDelegate, UITableViewDataSource>
-
-@end
-
 @implementation OAProfileGeneralSettingsParametersViewController
 {
     NSArray<NSArray *> *_data;
@@ -40,14 +36,15 @@
     {
         _settings = [OAAppSettings sharedManager];
         _settingsType = settingsType;
-        [self generateData];
+        [self generateTitle];
     }
     return self;
 }
 
-- (void) generateData
+- (void)generateTitle
 {
-    switch (_settingsType) {
+    switch (_settingsType)
+    {
         case EOAProfileGeneralSettingsMapOrientation:
             _title = OALocalizedString(@"rotate_map_to");
             break;
@@ -74,21 +71,12 @@
     }
 }
 
-- (void) applyLocalization
+- (NSString *)getTitle
 {
-    [super applyLocalization];
-    self.titleLabel.text = _title;
+    return _title;
 }
 
-- (void) viewDidLoad
-{
-    [super viewDidLoad];
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    [self setupView];
-}
-
-- (void) setupView
+- (void)generateData
 {
     NSMutableArray *dataArr = [NSMutableArray array];
     NSInteger rotateMap = [_settings.rotateMap get:self.appMode];
@@ -333,6 +321,11 @@
     _data = [NSArray arrayWithObject:dataArr];
 }
 
+- (CGFloat)getCustomHeightForHeader:(NSInteger)section
+{
+    return 17.;
+}
+
 #pragma mark - TableView
 
 - (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
@@ -396,11 +389,6 @@
     return nil;
 }
 
-- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return 17.0;
-}
-
 - (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return _data[section].count;
 }
@@ -439,7 +427,7 @@
         default:
             break;
     }
-    [self setupView];
+    [self generateData];
     [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationFade];
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     [self.delegate onSettingsChanged];

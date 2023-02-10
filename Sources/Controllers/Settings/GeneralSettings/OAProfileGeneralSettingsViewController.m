@@ -18,45 +18,33 @@
 #import "Localization.h"
 #import "OAColors.h"
 
-@interface OAProfileGeneralSettingsViewController () <UITableViewDelegate, UITableViewDataSource>
-
-@end
-
 @implementation OAProfileGeneralSettingsViewController
 {
     NSArray<NSArray *> *_data;
     OAAppSettings *_settings;
 }
 
-- (void) applyLocalization
+- (void)commonInit
 {
-    [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"general_settings_2");
+    _settings = [OAAppSettings sharedManager];
 }
 
 - (void) viewDidLoad
 {
     [super viewDidLoad];
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    _settings = [OAAppSettings sharedManager];
     self.tableView.separatorInset = UIEdgeInsetsMake(0., 16.0 + OAUtilities.getLeftMargin, 0., 0.);
-    [self setupView];
 }
 
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self setupView];
+    [self generateData];
     [self.tableView reloadData];
 }
 
-- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+- (NSString *)getTitle
 {
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        self.tableView.separatorInset = UIEdgeInsetsMake(0., 16.0 + OAUtilities.getLeftMargin, 0., 0.);
-        [self.tableView reloadData];
-    } completion:nil];
+    return OALocalizedString(@"general_settings_2");
 }
 
 - (NSString *)getLocationPositionValue
@@ -89,7 +77,7 @@
     }
 }
 
-- (void) setupView
+- (void)generateData
 {
     NSString *rotateMapValue;
     NSString *rotateMapIcon;
@@ -303,12 +291,21 @@
     [tableData addObject:unitsAndFormatsArr];
     [tableData addObject:otherArr];
     _data = [NSArray arrayWithArray:tableData];
-    [self updateNavBar];
 }
 
-- (void) updateNavBar
+- (NSString *)getTitleForHeader:(NSInteger)section
 {
-    self.subtitleLabel.text = self.appMode.toHumanString;
+    if (section == 0)
+        return OALocalizedString(@"shared_string_appearance");
+    else if (section == 1)
+        return OALocalizedString(@"units_and_formats");
+    else
+        return OALocalizedString(@"other_location");
+}
+
+- (void)onRotation
+{
+    self.tableView.separatorInset = UIEdgeInsetsMake(0., 16.0 + OAUtilities.getLeftMargin, 0., 0.);
 }
 
 #pragma mark - TableView
@@ -383,12 +380,6 @@
     return nil;
 }
 
-- (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    return cell.selectionStyle == UITableViewCellSelectionStyleNone ? nil : indexPath;
-}
-
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
@@ -407,7 +398,7 @@
     else if ([itemKey isEqualToString:@"speedUnits"])
         settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsUnitsOfSpeed applicationMode:self.appMode];
     else if ([itemKey isEqualToString:@"coordsFormat"])
-        settingsViewController = [[OACoordinatesFormatViewController alloc] initWithMode:self.appMode];
+        settingsViewController = [[OACoordinatesFormatViewController alloc] initWithAppMode:self.appMode];
     else if ([itemKey isEqualToString:@"angulerMeasurmentUnits"])
         settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsAngularMeasurmentUnits applicationMode:self.appMode];
     else if ([itemKey isEqualToString:@"externalImputDevice"])
@@ -424,16 +415,6 @@
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
 {
     return _data.count;
-}
-
-- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    if (section == 0)
-        return OALocalizedString(@"shared_string_appearance");
-    else if (section == 1)
-        return OALocalizedString(@"units_and_formats");
-    else
-        return OALocalizedString(@"other_location");
 }
 
 #pragma mark - Switch
@@ -461,7 +442,7 @@
                         [app.mapModeObservable notifyEvent];
                 }
             }
-            [self setupView];
+            [self generateData];
             [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:indexPath.row inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationFade];
         }
     }
@@ -471,7 +452,7 @@
 
 - (void) onSettingsChanged;
 {
-    [self setupView];
+    [self generateData];
     [self.tableView reloadData];
 }
 

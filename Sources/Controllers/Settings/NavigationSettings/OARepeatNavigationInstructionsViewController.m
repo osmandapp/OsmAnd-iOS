@@ -18,7 +18,7 @@
 #define kSidePadding 16
 #define kDistanceSection 1
 
-@interface OARepeatNavigationInstructionsViewController () <UITableViewDelegate, UITableViewDataSource, OACustomPickerTableViewCellDelegate>
+@interface OARepeatNavigationInstructionsViewController () <OACustomPickerTableViewCellDelegate>
 
 @end
 
@@ -33,19 +33,10 @@
     OAAppSettings *_settings;
 }
 
-- (instancetype) initWithAppMode:(OAApplicationMode *)appMode
+- (void)commonInit
 {
-    self = [super initWithAppMode:appMode];
-    if (self)
-    {
-        _settings = OAAppSettings.sharedManager;
-        [self generateData];
-    }
-    return self;
-}
+    _settings = [OAAppSettings sharedManager];
 
-- (void) generateData
-{
     _keepInformingValues = @[@1, @2, @3, @5, @7, @10, @15, @20, @25, @30];
     NSMutableArray *array = [NSMutableArray array];
     for (NSNumber *val in _keepInformingValues)
@@ -58,21 +49,12 @@
     _selectedValue = _selectedValue == NSNotFound ? 0 : _selectedValue;
 }
 
--(void) applyLocalization
+- (NSString *)getTitle
 {
-    self.titleLabel.text = OALocalizedString(@"keep_informing");
-    [super applyLocalization];
+    return OALocalizedString(@"keep_informing");
 }
 
-- (void) viewDidLoad
-{
-    [super viewDidLoad];
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    [self setupView];
-}
-
-- (void) setupView
+- (void)generateData
 {
     NSMutableArray *tableData = [NSMutableArray array];
     NSMutableArray *statusArr = [NSMutableArray array];
@@ -97,6 +79,16 @@
     }
     
     _data = [NSArray arrayWithArray:tableData];
+}
+
+- (NSString *)getTitleForFooter:(NSInteger)section
+{
+    return section == 0 ? OALocalizedString(@"instructions_repeat") : @"";
+}
+
+- (CGFloat)getCustomHeightForHeader:(NSInteger)section
+{
+    return 17.;
 }
 
 #pragma mark - TableView
@@ -161,11 +153,6 @@
     return nil;
 }
 
-- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return 17.0;
-}
-
 - (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section == kDistanceSection)
     {
@@ -212,17 +199,6 @@
     return cell.selectionStyle == UITableViewCellSelectionStyleNone && indexPath != [NSIndexPath indexPathForRow:0 inSection:1] ? nil : indexPath;
 }
 
-- (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
-{
-    return section == 0 ? OALocalizedString(@"instructions_repeat") : @"";
-}
-
--(void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section
-{
-    UITableViewHeaderFooterView *vw = (UITableViewHeaderFooterView *) view;
-    [vw.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
-}
-
 # pragma mark - Switch
 
 - (void)applyParameter:(id)sender
@@ -233,7 +209,7 @@
         [_settings.keepInforming set:(control.isOn ? 0 : _keepInformingValues[_selectedValue].intValue) mode:self.appMode];
         [self hidePicker];
         [self.tableView beginUpdates];
-        [self setupView];
+        [self generateData];
         if (control.isOn)
             [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
         else
@@ -278,7 +254,7 @@
     _selectedValue = [_keepInformingEntries indexOfObject:value];
     _selectedValue = _selectedValue == NSNotFound ? 0 : _selectedValue;
     [_settings.keepInforming set:_keepInformingValues[_selectedValue].intValue mode:self.appMode];
-    [self setupView];
+    [self generateData];
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_pickerIndexPath.row - 1 inSection:_pickerIndexPath.section]] withRowAnimation:UITableViewRowAnimationFade];
     if (self.delegate)
         [self.delegate onSettingsChanged];

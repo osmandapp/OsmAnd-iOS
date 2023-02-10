@@ -17,7 +17,7 @@
 
 #include <OsmAndCore/Map/WeatherTileResourcesManager.h>
 
-@interface OAWeatherBandSettingsViewController () <UIViewControllerTransitioningDelegate, UITableViewDelegate, UITableViewDataSource>
+@interface OAWeatherBandSettingsViewController () <UIViewControllerTransitioningDelegate>
 
 @end
 
@@ -30,7 +30,7 @@
 
 - (instancetype)initWithWeatherBand:(OAWeatherBand *)band
 {
-    self = [super initWithNibName:@"OABaseSettingsViewController" bundle:nil];
+    self = [super init];
     if (self)
     {
         _band = band;
@@ -39,29 +39,21 @@
     return self;
 }
 
-- (void)applyLocalization
-{
-    [super applyLocalization];
-    self.titleLabel.text = [_band getMeasurementName];
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 
-    self.tableView.dataSource = self;
-    self.tableView.delegate = self;
-    self.tableView.estimatedRowHeight = kEstimatedRowHeight;
-    self.tableView.sectionHeaderHeight = 34.;
     self.tableView.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
     [self.tableView registerClass:OATableViewCustomFooterView.class
         forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
-
-    self.subtitleLabel.hidden = YES;
-    [self setupView];
 }
 
-- (void)setupView
+- (NSString *)getTitle
+{
+    return [_band getMeasurementName];
+}
+
+- (void)generateData
 {
     NSMutableArray<NSDictionary *> *data = [NSMutableArray array];
 
@@ -114,6 +106,14 @@
         [attributedString appendAttributedString:[[NSAttributedString alloc] initWithString:unit attributes:unitAttributes]];
 
     return attributedString;
+}
+
+- (CGFloat)getCustomHeightForFooter:(NSInteger)section
+{
+    return _band.bandIndex == WEATHER_BAND_CLOUD
+        ? [OATableViewCustomFooterView getHeight:OALocalizedString(@"weather_cloud_data_description")
+                                           width:self.tableView.bounds.size.width]
+        : 0.001;
 }
 
 #pragma mark - UITableViewDataSource
@@ -178,14 +178,6 @@
     [tableView reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section]
              withRowAnimation:UITableViewRowAnimationNone];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-{
-    return _band.bandIndex == WEATHER_BAND_CLOUD
-            ? [OATableViewCustomFooterView getHeight:OALocalizedString(@"weather_cloud_data_description")
-                                               width:self.tableView.bounds.size.width]
-            : 0.001;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section

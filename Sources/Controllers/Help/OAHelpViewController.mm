@@ -20,10 +20,6 @@
 
 #define contactEmailUrl @"mailto:support@osmand.net"
 
-@interface OAHelpViewController ()
-
-@end
-
 @implementation OAHelpViewController
 {
     NSArray *_firstStepsData;
@@ -43,19 +39,19 @@ static const NSInteger groupCount = 5;
 - (void) viewDidLoad
 {
     [super viewDidLoad];
-    
-    self.tableView.dataSource = self;
-    self.tableView.delegate = self;
 
     self.titleLabel.textColor = UIColor.whiteColor;
-
-    [self generateData];
 }
 
 - (void) didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
 }
 
 - (NSString *)getTitle
@@ -71,6 +67,16 @@ static const NSInteger groupCount = 5;
 - (UIColor *)getNavbarButtonsTintColor
 {
     return UIColor.whiteColor;
+}
+
+- (BOOL)isNavbarSeparatorVisible
+{
+    return NO;
+}
+
+- (BOOL)isNavbarBlurring
+{
+    return NO;
 }
 
 - (void) generateData
@@ -366,6 +372,22 @@ static const NSInteger groupCount = 5;
     _followData = dataArr;
 }
 
+- (NSString *)getTitleForHeader:(NSInteger)section
+{
+    if (section == firstStepsIndex)
+        return OALocalizedString(@"help_first_steps");
+    else if (section == featuresIndex)
+        return OALocalizedString(@"features_menu_group");
+    else if (section == pluginsIndex)
+        return OALocalizedString(@"plugins_menu_group");
+    else if (section == otherIndex)
+        return OALocalizedString(@"other_location");
+    else if (section == followIndex)
+        return OALocalizedString(@"follow_us");
+
+    return @"";
+}
+
 - (NSDictionary *) getItem:(NSIndexPath *)indexPath
 {
     long section = indexPath.section;
@@ -431,22 +453,6 @@ static const NSInteger groupCount = 5;
             [cell updateConstraints];
     }
     return cell;
-}
-
-- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    if (section == firstStepsIndex)
-        return OALocalizedString(@"help_first_steps");
-    else if (section == featuresIndex)
-        return OALocalizedString(@"features_menu_group");
-    else if (section == pluginsIndex)
-        return OALocalizedString(@"plugins_menu_group");
-    else if (section == otherIndex)
-        return OALocalizedString(@"other_location");
-    else if (section == followIndex)
-        return OALocalizedString(@"follow_us");
-    
-    return 0;
 }
 
 #pragma mark - UITableViewDelegate

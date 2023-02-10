@@ -25,13 +25,16 @@
 - (void)commonInit
 {
     _backupHelper = [OABackupHelper sharedInstance];
-    [super commonInit];
 }
 
-- (void)applyLocalization
+- (NSString *)getTitle
 {
-    self.titleLabel.text = OALocalizedString(@"manage_storage");
-    [self.backButton setTitle:OALocalizedString(@"backup_data") forState:UIControlStateNormal];
+    return OALocalizedString(@"manage_storage");
+}
+
+- (NSString *)getLeftNavbarButtonTitle
+{
+    return OALocalizedString(@"backup_data");
 }
 
 - (EOARemoteFilesType)getRemoteFilesType

@@ -16,7 +16,7 @@
 #import "OAColors.h"
 #import "Localization.h"
 
-@interface OABenefitsOsmContributorsViewController () <UITableViewDelegate, UITableViewDataSource, OAAccountSettingDelegate>
+@interface OABenefitsOsmContributorsViewController () <OAAccountSettingDelegate>
 
 @end
 
@@ -25,39 +25,22 @@
     NSArray<NSArray *> *_data;
 }
 
-- (instancetype) init
-{
-    self = [super initWithNibName:@"OABaseSettingsViewController" bundle:nil];
-    if (self)
-    {
-        [self commonInit];
-    }
-    return self;
-}
-
-- (void)commonInit
-{
-    [self generateData];
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.allowsSelection = NO;
+}
 
-    self.navbarView.backgroundColor = UIColor.whiteColor;
+- (UIColor *)getNavbarColor
+{
+    return UIColor.whiteColor;
+}
 
-    self.titleLabel.text = @"";
-    self.titleLabel.hidden = YES;
-
-    self.subtitleLabel.text = @"";
-    self.subtitleLabel.hidden = YES;
-
-    self.separatorNavbarView.hidden = YES;
+- (BOOL)isNavbarSeparatorVisible
+{
+    return NO;
 }
 
 - (void)generateData
@@ -153,6 +136,16 @@
 - (NSDictionary *)getItem:(NSIndexPath *)indexPath
 {
     return _data[indexPath.section][indexPath.row];
+}
+
+- (CGFloat)getCustomHeightForHeader:(NSInteger)section
+{
+    return 0.001;
+}
+
+- (CGFloat)getCustomHeightForFooter:(NSInteger)section
+{
+    return 0.001;
 }
 
 - (CGFloat)heightForRow:(NSIndexPath *)indexPath estimated:(BOOL)estimated
@@ -332,16 +325,6 @@
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return [self heightForRow:indexPath estimated:YES];
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return 0.001;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-{
-    return 0.001;
 }
 
 @end

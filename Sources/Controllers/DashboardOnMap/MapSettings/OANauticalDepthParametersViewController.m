@@ -11,10 +11,6 @@
 #import "OAMapStyleSettings.h"
 #import "OAColors.h"
 
-@interface OANauticalDepthParametersViewController () <UITableViewDelegate, UITableViewDataSource>
-
-@end
-
 @implementation OANauticalDepthParametersViewController
 {
     OAMapStyleSettings *_styleSettings;
@@ -23,7 +19,7 @@
 
 - (instancetype)initWithParameter:(OAMapStyleParameter *)parameter
 {
-    self = [super initWithNibName:@"OABaseSettingsViewController" bundle:nil];
+    self = [super init];
     if (self)
     {
         _parameter = parameter;
@@ -32,19 +28,9 @@
     return self;
 }
 
-- (void)applyLocalization
+- (NSString *)getTitle
 {
-    [super applyLocalization];
-    self.titleLabel.text = _parameter.title;
-}
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-
-    self.subtitleLabel.hidden = YES;
-    self.tableView.dataSource = self;
-    self.tableView.delegate = self;
+    return _parameter.title;
 }
 
 #pragma mark - UITableViewDataSource

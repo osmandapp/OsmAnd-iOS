@@ -19,10 +19,6 @@
 
 #define kSidePadding 16
 
-@interface OANavigationTypeViewController () <UITableViewDelegate, UITableViewDataSource>
-
-@end
-
 @implementation OANavigationTypeViewController
 {
     NSArray<OARoutingProfileDataObject *> *_sortedRoutingProfiles;
@@ -30,22 +26,19 @@
     NSArray<NSArray *> *_data;
 }
 
--(void) applyLocalization
-{
-    [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"nav_type_hint");
-}
-
 - (void) viewDidLoad
 {
     [super viewDidLoad];
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
+
     [self setupTableHeaderViewWithText:OALocalizedString(@"select_nav_profile_dialog_message")];
-    [self setupView];
 }
 
-- (void) setupView
+- (NSString *)getTitle
+{
+    return OALocalizedString(@"nav_type_hint");
+}
+
+- (void)generateData
 {
     _sortedRoutingProfiles = [OAProfileDataUtils getSortedRoutingProfiles];
     NSMutableArray *tableData = [NSMutableArray new];
@@ -83,13 +76,25 @@
     _data = [NSArray arrayWithArray:tableData];
 }
 
-- (void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+- (NSString *)getTitleForHeader:(NSInteger)section
 {
-    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        [self setupTableHeaderViewWithText:OALocalizedString(@"select_nav_profile_dialog_message")];
-        [self.tableView reloadData];
-    } completion:nil];
+    if (section == 0)
+        return OALocalizedString(@"osmand_default_routing");
+    else
+        return _fileNames[section - 1].lastPathComponent;
+}
+
+- (NSString *)getTitleForFooter:(NSInteger)section
+{
+    if (section == [self.tableView numberOfSections] - 1)
+        return OALocalizedString(@"import_routing_file_descr");
+    else
+        return @"";
+}
+
+- (void)onRotation
+{
+    [self setupTableHeaderViewWithText:OALocalizedString(@"select_nav_profile_dialog_message")];
 }
 
 #pragma mark - TableView
@@ -158,34 +163,6 @@
         [self dismissViewController];
     }
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
-}
-
-- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    if (section == 0)
-        return OALocalizedString(@"osmand_default_routing");
-    else
-        return _fileNames[section - 1].lastPathComponent;
-}
-
-- (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
-{
-    if (section == tableView.numberOfSections - 1)
-        return OALocalizedString(@"import_routing_file_descr");
-    else
-        return @"";
-}
-
--(void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
-{
-    UITableViewHeaderFooterView *vw = (UITableViewHeaderFooterView *) view;
-    [vw.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
-}
-
--(void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section
-{
-    UITableViewHeaderFooterView *vw = (UITableViewHeaderFooterView *) view;
-    [vw.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
 }
 
 @end

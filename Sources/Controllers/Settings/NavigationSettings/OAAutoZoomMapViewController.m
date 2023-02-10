@@ -14,10 +14,6 @@
 #import "Localization.h"
 #import "OAColors.h"
 
-@interface OAAutoZoomMapViewController () <UITableViewDelegate, UITableViewDataSource>
-
-@end
-
 @implementation OAAutoZoomMapViewController
 {
     OAAppSettings *_settings;
@@ -25,15 +21,14 @@
     NSArray<NSNumber *> *_zoomValues;
 }
 
-- (instancetype) initWithAppMode:(OAApplicationMode *)appMode
+- (void)commonInit
 {
-    self = [super initWithAppMode:appMode];
-    if (self)
-    {
-        _settings = [OAAppSettings sharedManager];
-        [self generateData];
-    }
-    return self;
+    _settings = [OAAppSettings sharedManager];
+}
+
+- (NSString *)getTitle
+{
+    return OALocalizedString(@"auto_zoom_map");
 }
 
 - (void) generateData
@@ -61,17 +56,9 @@
     _data = [NSArray arrayWithObject:dataArr];
 }
 
-- (void) applyLocalization
+- (CGFloat)getCustomHeightForHeader:(NSInteger)section
 {
-    [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"auto_zoom_map");
-}
-
-- (void) viewDidLoad
-{
-    [super viewDidLoad];
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
+    return 17.;
 }
 
 #pragma mark - TableView
@@ -97,11 +84,6 @@
         return cell;
     }
     return nil;
-}
-
-- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return 17.0;
 }
 
 - (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {

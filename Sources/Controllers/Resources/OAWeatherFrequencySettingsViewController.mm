@@ -17,7 +17,7 @@
 #define kFrequencyDailyIndex 1
 #define kFrequencyWeeklyIndex 2
 
-@interface OAWeatherFrequencySettingsViewController () <UIViewControllerTransitioningDelegate, UITableViewDelegate, UITableViewDataSource>
+@interface OAWeatherFrequencySettingsViewController () <UIViewControllerTransitioningDelegate>
 
 @end
 
@@ -30,19 +30,12 @@
 
 - (instancetype)initWithRegion:(OAWorldRegion *)region
 {
-    self = [super initWithNibName:@"OABaseSettingsViewController" bundle:nil];
+    self = [super init];
     if (self)
     {
         _region = region;
-        [self commonInit];
     }
     return self;
-}
-
-- (void)applyLocalization
-{
-    [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"shared_string_updates_frequency");
 }
 
 - (void)commonInit
@@ -53,12 +46,15 @@
                     : kFrequencyWeeklyIndex;
 }
 
+- (NSString *)getTitle
+{
+    return OALocalizedString(@"shared_string_updates_frequency");
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 
-    self.tableView.dataSource = self;
-    self.tableView.delegate = self;
     self.tableView.estimatedRowHeight = kEstimatedRowHeight;
     self.tableView.sectionHeaderHeight = 34.;
     self.tableView.sectionFooterHeight = 0.001;
@@ -70,11 +66,9 @@
                                           lineSpacing:0.0
                                               isTitle:NO
                                                     y:24.];
-    self.subtitleLabel.hidden = YES;
-    [self setupView];
 }
 
-- (void)setupView
+- (void)generateData
 {
     NSMutableArray<NSMutableDictionary<NSString *, id> *> *data = [NSMutableArray array];
 
@@ -112,6 +106,16 @@
 - (NSDictionary *)getItem:(NSIndexPath *)indexPath
 {
     return _data[indexPath.section][@"cells"][indexPath.row];
+}
+
+- (NSString *)getTitleForHeader:(NSInteger)section
+{
+    return _data[section][@"header"];
+}
+
+- (NSString *)getTitleForFooter:(NSInteger)section
+{
+    return _data[section][@"footer"];
 }
 
 #pragma mark - UITableViewDataSource
@@ -155,16 +159,6 @@
         [outCell updateConstraints];
 
     return outCell;
-}
-
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    return _data[section][@"header"];
-}
-
-- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
-{
-    return _data[section][@"footer"];
 }
 
 #pragma mark - UITableViewDelegate

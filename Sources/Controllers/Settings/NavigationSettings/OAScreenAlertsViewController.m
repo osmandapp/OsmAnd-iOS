@@ -17,10 +17,6 @@
 #import "Localization.h"
 #import "OAColors.h"
 
-@interface OAScreenAlertsViewController () <UITableViewDelegate, UITableViewDataSource>
-
-@end
-
 @implementation OAScreenAlertsViewController
 {
     OAAppSettings *_settings;
@@ -28,32 +24,22 @@
     BOOL _showAlerts;
 }
 
-- (instancetype) initWithAppMode:(OAApplicationMode *)appMode
+- (void)commonInit
 {
-    self = [super initWithAppMode:appMode];
-    if (self)
-    {
-        _settings = [OAAppSettings sharedManager];
-        _showAlerts = [_settings.showScreenAlerts get:self.appMode];
-    }
-    return self;
+    _settings = [OAAppSettings sharedManager];
 }
 
--(void) applyLocalization
+- (void)postInit
 {
-    [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"screen_alerts");
+    _showAlerts = [_settings.showScreenAlerts get:self.appMode];
 }
 
-- (void) viewDidLoad
+- (NSString *)getTitle
 {
-    [super viewDidLoad];
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    [self setupView];
+    return OALocalizedString(@"screen_alerts");
 }
 
-- (void) setupView
+- (void)generateData
 {
     NSMutableArray *tableData = [NSMutableArray array];
     NSMutableArray *parametersArr = [NSMutableArray array];
@@ -103,6 +89,11 @@
     [tableData addObject:otherArr];
     [tableData addObject:parametersArr];
     _data = [NSArray arrayWithArray:tableData];
+}
+
+- (BOOL)hideFirstHeader
+{
+    return YES;
 }
 
 #pragma mark - TableView
@@ -174,16 +165,6 @@
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
 {
     return _showAlerts ? _data.count : 1;
-}
-
-- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return section == 0 ? 0.01 : 19.0;
-}
-
-- (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return nil;
 }
 
 #pragma mark - Switch

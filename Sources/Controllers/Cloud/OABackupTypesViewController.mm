@@ -31,15 +31,14 @@
     [super commonInit];
 }
 
-- (void)viewDidLoad
+- (NSString *)getTitle
 {
-    [super viewDidLoad];
+    return OALocalizedString(@"backup_data");
 }
 
-- (void)applyLocalization
+- (NSString *)getLeftNavbarButtonTitle
 {
-    self.titleLabel.text = OALocalizedString(@"backup_data");
-    [self.backButton setTitle:OALocalizedString(@"shared_string_settings") forState:UIControlStateNormal];
+    return OALocalizedString(@"shared_string_settings");
 }
 
 - (EOARemoteFilesType)getRemoteFilesType

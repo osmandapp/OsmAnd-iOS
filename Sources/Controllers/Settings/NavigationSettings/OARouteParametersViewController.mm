@@ -26,7 +26,7 @@
 #import "Localization.h"
 #import "OAColors.h"
 
-@interface OARouteParametersViewController () <UITableViewDelegate, UITableViewDataSource, OARoutePreferencesParametersDelegate>
+@interface OARouteParametersViewController () <OARoutePreferencesParametersDelegate>
 
 @end
 
@@ -43,29 +43,19 @@
     RoutingParameter _fastRouteParameter;
 }
 
-- (instancetype) initWithAppMode:(OAApplicationMode *)appMode
+- (void)commonInit
 {
-    self = [super initWithAppMode:appMode];
-    if (self)
-    {
-        _settings = [OAAppSettings sharedManager];
-    }
-    return self;
+    _settings = [OAAppSettings sharedManager];
 }
 
--(void) applyLocalization
+- (void)postInit
 {
-    [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"route_parameters");
+    _iconColor = [self.appMode getIconColor];
 }
 
-- (void) viewDidLoad
+- (NSString *)getTitle
 {
-    [super viewDidLoad];
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    _iconColor = self.appMode.getIconColor;
-    [self setupView];
+    return OALocalizedString(@"route_parameters");
 }
 
 - (void)populateGroup:(OALocalRoutingParameterGroup *)group params:(vector<RoutingParameter>&)params
@@ -91,7 +81,7 @@
     }
 }
 
-- (void) setupView
+- (void)generateData
 {
     NSMutableArray *tableData = [NSMutableArray array];
     NSMutableArray *otherArr = [NSMutableArray array];
@@ -330,6 +320,11 @@
     _data = [NSArray arrayWithArray:tableData];
 }
 
+- (BOOL)hideFirstHeader
+{
+    return YES;
+}
+
 - (OALocalRoutingParameterGroup *) getLocalRoutingParameterGroup:(NSMutableArray<OALocalRoutingParameter *> *)list groupName:(NSString *)groupName
 {
     for (OALocalRoutingParameter *p in list)
@@ -494,17 +489,6 @@
     return _data.count;
 }
 
-- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return section == 0 ? 0.01 : 19.0;
-}
-
-- (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    return cell.selectionStyle == UITableViewCellSelectionStyleNone ? nil : indexPath;
-}
-
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
@@ -529,12 +513,15 @@
     else if ([itemKey isEqualToString:@"preferRoads"])
         settingsViewController = [[OAAvoidPreferParametersViewController alloc] initWithAppMode:self.appMode isAvoid:NO];
     else if ([itemKey isEqualToString:@"roadSpeeds"])
-        settingsViewController = [[OARoadSpeedsViewController alloc] initWithApplicationMode:self.appMode speedParameters:item];
+        settingsViewController = [[OARoadSpeedsViewController alloc] initWithAppMode:self.appMode];
     else if ([itemKey isEqualToString:@"angleStraight"])
         settingsViewController = [[OAAngleStraightLineViewController alloc] initWithAppMode:self.appMode];
 
-    settingsViewController.delegate = self;
-    [self presentViewController:settingsViewController animated:YES completion:nil];
+    if (settingsViewController)
+    {
+        settingsViewController.delegate = self;
+        [self presentViewController:settingsViewController animated:YES completion:nil];
+    }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
@@ -580,7 +567,7 @@
     if (self.delegate)
         [self.delegate onSettingsChanged];
     
-    [self setupView];
+    [self generateData];
     [self.tableView reloadData];
 }
 

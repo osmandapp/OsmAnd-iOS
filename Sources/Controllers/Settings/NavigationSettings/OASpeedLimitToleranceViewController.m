@@ -16,10 +16,6 @@
 
 #define kSidePadding 16
 
-@interface OASpeedLimitToleranceViewController () <UITableViewDelegate, UITableViewDataSource>
-
-@end
-
 @implementation OASpeedLimitToleranceViewController
 {
     OAAppSettings *_settings;
@@ -27,23 +23,21 @@
     UIView *_tableHeaderView;
 }
 
-- (instancetype) initWithAppMode:(OAApplicationMode *)appMode
+- (void)commonInit
 {
-    self = [super initWithAppMode:appMode];
-    if (self)
-    {
-        _settings = [OAAppSettings sharedManager];
-        [self generateData];
-    }
-    return self;
+    _settings = [OAAppSettings sharedManager];
 }
 
 - (void) viewDidLoad
 {
     [super viewDidLoad];
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
+
     [self setupTableHeaderViewWithText:OALocalizedString(@"speed_limit_tolerance_descr")];
+}
+
+- (NSString *)getTitle
+{
+    return OALocalizedString(@"speed_limit_exceed");
 }
 
 - (void) generateData
@@ -81,19 +75,14 @@
     _data = [NSArray arrayWithObject:dataArr];
 }
 
--(void) applyLocalization
+- (CGFloat)getCustomHeightForHeader:(NSInteger)section
 {
-    [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"speed_limit_exceed");
+    return 17.;
 }
 
-- (void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+- (void)onRotation
 {
-    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        [self setupTableHeaderViewWithText:OALocalizedString(@"speed_limit_tolerance_descr")];
-        [self.tableView reloadData];
-    } completion:nil];
+    [self setupTableHeaderViewWithText:OALocalizedString(@"speed_limit_tolerance_descr")];
 }
 
 #pragma mark - TableView
@@ -119,11 +108,6 @@
         return cell;
     }
     return nil;
-}
-
-- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return 17.0;
 }
 
 - (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {

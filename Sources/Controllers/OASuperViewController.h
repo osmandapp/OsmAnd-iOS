@@ -10,11 +10,19 @@
 
 @interface OASuperViewController : UIViewController
 
-- (IBAction) backButtonClicked:(id)sender;
+- (void)registerNotifications;
+- (void)addNotification:(NSNotificationName)name selector:(SEL)selector;
 
-- (void) applyLocalization;
-- (BOOL) isModal;
-- (void) dismissViewController;
-- (void) showViewController:(UIViewController *)viewController;
+- (CGFloat)getNavbarEstimatedHeight;
+- (void)updateNavbarEstimatedHeight;
+- (void)resetNavbarEstimatedHeight;
+- (void)applyLocalization;
+- (BOOL)isModal;
+
+- (void)onContentSizeChanged:(NSNotification *)notification;
+- (IBAction)backButtonClicked:(id)sender;
+
+- (void)dismissViewController;
+- (void)showViewController:(UIViewController *)viewController;
 
 @end

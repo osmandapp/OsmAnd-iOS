@@ -21,10 +21,6 @@
 
 #define kSidePadding 20.
 
-@interface OAArrivalAnnouncementViewController () <UITableViewDelegate, UITableViewDataSource>
-
-@end
-
 @implementation OAArrivalAnnouncementViewController
 {
     OAAppSettings *_settings;
@@ -34,41 +30,26 @@
     NSIndexPath *_collapsedCellIndexPath;
 }
 
-- (instancetype) initWithAppMode:(OAApplicationMode *)appMode
+- (void)commonInit
 {
-    self = [super initWithAppMode:appMode];
-    if (self)
-    {
-        _settings = [OAAppSettings sharedManager];
-        _announceTimeDistances = [[OAAnnounceTimeDistances alloc] initWithAppMode:appMode];
-    }
-    return self;
+    _settings = [OAAppSettings sharedManager];
 }
 
-- (void) applyLocalization
+- (void)postInit
 {
-    [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"arrival_distance");
+    _announceTimeDistances = [[OAAnnounceTimeDistances alloc] initWithAppMode:self.appMode];
 }
 
 - (void) viewDidLoad
 {
     [super viewDidLoad];
 
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-
-    [self generateData];
     [self setupTableHeaderViewWithText:OALocalizedString(@"announcement_time_descr")];
 }
 
-- (void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+- (NSString *)getTitle
 {
-    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        [self setupTableHeaderViewWithText:OALocalizedString(@"announcement_time_descr")];
-        [self.tableView reloadData];
-    } completion:nil];
+    return OALocalizedString(@"arrival_distance");
 }
 
 - (void) generateData
@@ -112,6 +93,11 @@
     [infoCollapsableRow addDependentRow:[[OATableRowData alloc] initWithData:@{
         kCellTypeKey : [OATextMultilineTableViewCell getCellIdentifier]
     }]];
+}
+
+- (void)onRotation
+{
+    [self setupTableHeaderViewWithText:OALocalizedString(@"announcement_time_descr")];
 }
 
 - (void)updateArrivalDistanceFactorValue

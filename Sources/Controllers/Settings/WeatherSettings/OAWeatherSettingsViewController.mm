@@ -18,7 +18,7 @@
 #import "OAWeatherBand.h"
 #import "OAWeatherHelper.h"
 
-@interface OAWeatherSettingsViewController () <OAWeatherBandSettingsDelegate, OAWeatherCacheSettingsDelegate, UITableViewDelegate, UITableViewDataSource>
+@interface OAWeatherSettingsViewController () <OAWeatherBandSettingsDelegate, OAWeatherCacheSettingsDelegate>
 
 @end
 
@@ -31,29 +31,9 @@
     NSIndexPath *_useOfflineDataIndexPath;
 }
 
-- (instancetype)init
+- (void)commonInit
 {
-    self = [super initWithNibName:@"OABaseSettingsViewController" bundle:nil];
-    return self;
-}
-
-- (void)applyLocalization
-{
-    [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"weather_plugin");
-    self.subtitleLabel.text = OALocalizedString(@"shared_string_settings");
-}
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
     _weatherHelper = [OAWeatherHelper sharedInstance];
-
-    self.tableView.dataSource = self;
-    self.tableView.delegate = self;
-    self.tableView.estimatedRowHeight = kEstimatedRowHeight;
-
-    [self setupView];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -62,6 +42,16 @@
     [self updateCacheSize:NO onComplete:^{
         [self updateCacheSize:YES onComplete:nil];
     }];
+}
+
+- (NSString *)getTitle
+{
+    return OALocalizedString(@"weather_plugin");
+}
+
+- (NSString *)getSubtitle
+{
+    return OALocalizedString(@"shared_string_settings");
 }
 
 - (void)updateCacheSize:(BOOL)localData onComplete:(void (^)())onComplete
@@ -90,7 +80,7 @@
     }
 }
 
-- (void)setupView
+- (void)generateData
 {
     NSMutableArray<NSDictionary *> *data = [NSMutableArray array];
 
@@ -159,6 +149,16 @@
     return _data[indexPath.section][@"cells"][indexPath.row];
 }
 
+- (NSString *)getTitleForHeader:(NSInteger)section
+{
+    return _data[section][@"header"];
+}
+
+- (NSString *)getTitleForFooter:(NSInteger)section
+{
+    return _data[section][@"footer"];
+}
+
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -169,18 +169,6 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return ((NSArray *) _data[section][@"cells"]).count;
-}
-
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    NSDictionary *sectionData = _data[section];
-    return sectionData[@"header"];
-}
-
-- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
-{
-    NSDictionary *sectionData = _data[section];
-    return sectionData[@"footer"];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

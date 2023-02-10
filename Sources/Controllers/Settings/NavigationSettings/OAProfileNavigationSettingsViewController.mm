@@ -32,7 +32,7 @@
 
 #define kOsmAndNavigation @"osmand_navigation"
 
-@interface OAProfileNavigationSettingsViewController () <UITableViewDelegate, UITableViewDataSource, OARouteLineAppearanceViewControllerDelegate>
+@interface OAProfileNavigationSettingsViewController () <OARouteLineAppearanceViewControllerDelegate>
 
 @end
 
@@ -41,29 +41,21 @@
     NSArray<NSArray *> *_data;
     
     OAAppSettings *_settings;
-    OsmAndAppInstance _app;
     
     NSDictionary<NSString *, OARoutingProfileDataObject *> *_routingProfileDataObjects;
 }
 
-- (instancetype) initWithAppMode:(OAApplicationMode *)appMode
+- (void)commonInit
 {
-    self = [super initWithAppMode:appMode];
-    if (self)
-    {
-        _settings = OAAppSettings.sharedManager;
-        _app = [OsmAndApp instance];
-        [self generateData];
-    }
-    return self;
+    _settings = [OAAppSettings sharedManager];
 }
 
-- (void) updateNavBar
+- (NSString *)getTitle
 {
-    self.subtitleLabel.text = self.appMode.toHumanString;
+    return OALocalizedString(@"routing_settings_2");
 }
 
-- (void) generateData
+- (void)generateData
 {
     NSString *selectedProfileName = self.appMode.getRoutingProfile;
     _routingProfileDataObjects = [OAProfileDataUtils getRoutingProfiles];
@@ -136,22 +128,32 @@
     }]];
     
     _data = [NSArray arrayWithArray:tableData];
-    [self updateNavBar];
-    [self.tableView reloadData];
 }
 
-- (void) applyLocalization
+- (NSString *)getTitleForHeader:(NSInteger)section
 {
-    [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"routing_settings_2");
+    switch (section)
+    {
+        case 0:
+            return OALocalizedString(@"routing_settings");
+        case 1:
+            return OALocalizedString(@"other_location");
+        default:
+            return @"";
+    }
 }
 
-- (void) viewDidLoad
+- (NSString *)getTitleForFooter:(NSInteger)section
 {
-    [super viewDidLoad];
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    self.tableView.separatorColor = UIColorFromRGB(color_tint_gray);
+    switch (section)
+    {
+        case 1:
+            return OALocalizedString(@"change_map_behavior");
+        case 2:
+            return OALocalizedString(@"animate_my_location_descr");
+        default:
+            return @"";
+    }
 }
 
 #pragma mark - TableView
@@ -293,44 +295,6 @@
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
 {
     return _data.count;
-}
-
-- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    switch (section)
-    {
-        case 0:
-            return OALocalizedString(@"routing_settings");
-        case 1:
-            return OALocalizedString(@"other_location");
-        default:
-            return @"";
-    }
-}
-
-- (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
-{
-    switch (section)
-    {
-        case 1:
-            return OALocalizedString(@"change_map_behavior");
-        case 2:
-            return OALocalizedString(@"animate_my_location_descr");
-        default:
-            return @"";
-    }
-}
-
--(void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
-{
-    UITableViewHeaderFooterView *vw = (UITableViewHeaderFooterView *) view;
-    [vw.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
-}
-
--(void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section
-{
-    UITableViewHeaderFooterView *vw = (UITableViewHeaderFooterView *) view;
-    [vw.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
 }
 
 #pragma mark - OASettingsDataDelegate

@@ -22,10 +22,6 @@
 #define kAngleMaxValue 90.
 #define kAngleStepValue 5
 
-@interface OAAngleStraightLineViewController() <UITableViewDelegate, UITableViewDataSource>
-
-@end
-
 @implementation OAAngleStraightLineViewController
 {
     OATableDataModel *_data;
@@ -33,43 +29,39 @@
     NSInteger _selectedValue;
 }
 
-- (instancetype)initWithAppMode:(OAApplicationMode *)appMode
-{
-    self = [super initWithAppMode:appMode];
-    if (self)
-    {
-        [self commonInit];
-    }
-    return self;
-}
-
 - (void)commonInit
 {
     _settings = [OAAppSettings sharedManager];
+}
+
+- (void)postInit
+{
     _selectedValue = (NSInteger) [self.appMode getStrAngle];
 }
 
-- (void)applyLocalization
+- (NSString *)getTitle
 {
-    [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"recalc_angle_dialog_title");
-    [self.cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
-    [self.doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
+    return OALocalizedString(@"recalc_angle_dialog_title");
 }
 
-- (void)viewDidLoad
+- (NSString *)getSubtitle
 {
-    [super viewDidLoad];
+    return @"";
+}
 
-    self.tableView.dataSource = self;
-    self.tableView.delegate = self;
+- (NSString *)getLeftNavbarButtonTitle
+{
+    return OALocalizedString(@"shared_string_cancel");
+}
 
-    self.backButton.hidden = YES;
-    self.cancelButton.hidden = NO;
-    self.doneButton.hidden = NO;
-    self.subtitleLabel.hidden = YES;
+- (NSString *)getRightNavbarButtonTitle
+{
+    return OALocalizedString(@"shared_string_done");
+}
 
-    [self generateData];
+- (BOOL)isChevronIconVisible
+{
+    return NO;
 }
 
 - (void)generateData
@@ -89,7 +81,12 @@
     [_data addSection:sliderSection];
 }
 
-- (IBAction)doneButtonPressed:(id)sender
+- (NSString *)getTitleForFooter:(NSInteger)section
+{
+    return [_data sectionDataForIndex:section].footerText;
+}
+
+- (IBAction)onRightNavbarButtonPressed:(UIButton *)sender
 {
     OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
     [self.appMode setStrAngle:_selectedValue];
@@ -146,11 +143,6 @@
         return cell;
     }
     return nil;
-}
-
-- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
-{
-    return [_data sectionDataForIndex:section].footerText;
 }
 
 #pragma mark - Selectors

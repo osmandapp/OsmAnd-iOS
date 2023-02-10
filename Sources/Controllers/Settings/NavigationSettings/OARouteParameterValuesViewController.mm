@@ -15,19 +15,14 @@
 #import "OATableViewCustomFooterView.h"
 #import "OAColors.h"
 #import "Localization.h"
+#import "OASizes.h"
 
 #include <generalRouter.h>
-
-#define kGoodsRestrictionsHeaderTopMargin 20
 
 typedef NS_ENUM(NSInteger, EOARouteParamType) {
     EOARouteParamTypeGroup = 0,
     EOARouteParamTypeNumeric
 };
-
-@interface OARouteParameterValuesViewController () <UITableViewDelegate, UITableViewDataSource>
-
-@end
 
 @implementation OARouteParameterValuesViewController
 {
@@ -50,10 +45,11 @@ typedef NS_ENUM(NSInteger, EOARouteParamType) {
 - (instancetype) initWithRoutingParameterGroup:(OALocalRoutingParameterGroup *)group appMode:(OAApplicationMode *)mode
 {
     self = [super initWithAppMode:mode];
-    if (self) {
-        [self commonInit];
+    if (self)
+    {
         _group = group;
         _type = EOARouteParamTypeGroup;
+        [self postInit];
     }
     return self;
 }
@@ -65,7 +61,7 @@ typedef NS_ENUM(NSInteger, EOARouteParamType) {
     {
         _parameter = parameter;
         _type = EOARouteParamTypeNumeric;
-        [self commonInit];
+        [self postInit];
     }
     return self;
 }
@@ -75,19 +71,22 @@ typedef NS_ENUM(NSInteger, EOARouteParamType) {
     self = [super initWithAppMode:mode];
     if (self)
     {
-        [self commonInit];
         _param = parameter;
         _setting = [_settings getCustomRoutingProperty:[NSString stringWithUTF8String:_param.id.c_str()]
                                           defaultValue:_param.type == RoutingParameterType::NUMERIC ? kDefaultNumericValue : kDefaultSymbolicValue];
         _type = EOARouteParamTypeNumeric;
+        [self postInit];
     }
     return self;
 }
 
-- (void) commonInit
+- (void)commonInit
 {
     _settings = [OAAppSettings sharedManager];
+}
 
+- (void)postInit
+{
     if (_parameter)
     {
         _isHazmatCategory = [_parameter isKindOfClass:OAHazmatRoutingParameter.class];
@@ -99,30 +98,57 @@ typedef NS_ENUM(NSInteger, EOARouteParamType) {
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
+
     [self.tableView registerClass:OATableViewCustomFooterView.class
         forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
     if (_isGoodsRestrictionsCategory)
         [self setupTableHeaderViewWithText:OALocalizedString(@"routing_attr_goods_restrictions_header_name")];
 }
 
-- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+- (NSString *)getTitle
 {
-    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        if (_isGoodsRestrictionsCategory)
-            [self setupTableHeaderViewWithText:OALocalizedString(@"routing_attr_goods_restrictions_header_name")];
-        [self.tableView reloadData];
-    } completion:nil];
+    return _type == EOARouteParamTypeNumeric
+        ? _parameter != nil ? [_parameter getText] : [NSString stringWithUTF8String:_param.name.c_str()]
+        : [_group getText];
 }
 
-- (void)applyLocalization
+- (NSString *)getTitleForHeader:(NSInteger)section
 {
-    [super applyLocalization];
-    self.titleLabel.text = _type == EOARouteParamTypeNumeric
-            ? _parameter != nil ? [_parameter getText] : [NSString stringWithUTF8String:_param.name.c_str()]
-            : [_group getText];
+    if (_isHazmatCategory && section == 1)
+        return OALocalizedString(@"rendering_value_category_name");
+
+    return nil;
+}
+
+- (CGFloat)getCustomHeightForHeader:(NSInteger)section
+{
+    NSString *title = [self getTitleForHeader:section];
+    return [OATableViewCustomHeaderView getHeight:title width:self.tableView.bounds.size.width] + kPaddingOnSideOfContent;
+}
+
+- (CGFloat)getCustomHeightForFooter:(NSInteger)section
+{
+    if (!(_type == EOARouteParamTypeGroup || ((_isHazmatCategory || _isGoodsRestrictionsCategory) && section == 0)))
+        return 0.001;
+
+    NSString *footer = @"";
+    if (_type == EOARouteParamTypeGroup)
+    {
+        OALocalRoutingParameter *param = _group.getRoutingParameters[_indexSelected];
+        footer = [param getDescription];
+    }
+    else if (_isHazmatCategory || _isGoodsRestrictionsCategory)
+    {
+        footer = [_parameter getDescription];
+    }
+
+    return [OATableViewCustomFooterView getHeight:footer width:self.tableView.bounds.size.width];
+}
+
+- (void)onRotation
+{
+    if (_isGoodsRestrictionsCategory)
+        [self setupTableHeaderViewWithText:OALocalizedString(@"routing_attr_goods_restrictions_header_name")];
 }
 
 #pragma mark - UITableViewDataSource
@@ -215,14 +241,6 @@ typedef NS_ENUM(NSInteger, EOARouteParamType) {
     return cell;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    if (_isHazmatCategory && section == 1)
-        return OALocalizedString(@"rendering_value_category_name");
-
-    return nil;
-}
-
 #pragma mark - UITableViewDelegate
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -274,31 +292,6 @@ typedef NS_ENUM(NSInteger, EOARouteParamType) {
         [self.tableView reloadData];
     else
         [self dismissViewController];
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    NSString *title = [self tableView:tableView titleForHeaderInSection:section];
-    return [OATableViewCustomHeaderView getHeight:title width:tableView.bounds.size.width] + kGoodsRestrictionsHeaderTopMargin;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-{
-    if (!(_type == EOARouteParamTypeGroup || ((_isHazmatCategory || _isGoodsRestrictionsCategory) && section == 0)))
-        return 0.001;
-
-    NSString *footer = @"";
-    if (_type == EOARouteParamTypeGroup)
-    {
-        OALocalRoutingParameter *param = _group.getRoutingParameters[_indexSelected];
-        footer = [param getDescription];
-    }
-    else if (_isHazmatCategory || _isGoodsRestrictionsCategory)
-    {
-        footer = [_parameter getDescription];
-    }
-
-    return [OATableViewCustomFooterView getHeight:footer width:self.tableView.bounds.size.width];
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section

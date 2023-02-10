@@ -18,10 +18,6 @@
 
 #define kSidePadding 16
 
-@interface OAAvoidPreferParametersViewController () <UITableViewDelegate, UITableViewDataSource>
-
-@end
-
 @implementation OAAvoidPreferParametersViewController
 {
     NSArray<NSDictionary *> *_data;
@@ -33,31 +29,26 @@
 - (instancetype) initWithAppMode:(OAApplicationMode *)appMode isAvoid:(BOOL)isAvoid
 {
     self = [super initWithAppMode:appMode];
-    if (self) {
+    if (self)
+    {
         _isAvoid = isAvoid;
     }
     return self;
 }
 
-- (void) applyLocalization
-{
-    [super applyLocalization];
-    if (_isAvoid)
-        self.titleLabel.text = OALocalizedString(@"impassable_road");
-    else
-        self.titleLabel.text = OALocalizedString(@"prefer_in_routing_title");
-}
-
 - (void) viewDidLoad
 {
     [super viewDidLoad];
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
+
     [self setupTableHeaderViewWithText:OALocalizedString(@"avoid_in_routing_descr_")];
-    [self setupView];
 }
 
-- (void) setupView
+- (NSString *)getTitle
+{
+    return _isAvoid ? OALocalizedString(@"impassable_road") : OALocalizedString(@"prefer_in_routing_title");
+}
+
+- (void)generateData
 {
     NSMutableArray *dataArr = [NSMutableArray array];
     OAAppSettings* settings = [OAAppSettings sharedManager];
@@ -106,18 +97,14 @@
     return NO;
 }
 
-- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+- (CGFloat)getCustomHeightForHeader:(NSInteger)section
 {
-    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        [self setupTableHeaderViewWithText:OALocalizedString(@"avoid_in_routing_descr_")];
-        [self.tableView reloadData];
-    } completion:nil];
+    return 17.;
 }
 
-- (IBAction) backButtonPressed:(id)sender
+- (void)onRotation
 {
-    [self dismissViewController];
+    [self setupTableHeaderViewWithText:OALocalizedString(@"avoid_in_routing_descr_")];
 }
 
 #pragma mark - TableView
@@ -155,11 +142,6 @@
     return nil;
 }
 
-- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return 17.0;
-}
-
 - (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return _data.count;
 }
@@ -167,17 +149,6 @@
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 1;
-}
-
-- (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    return cell.selectionStyle == UITableViewCellSelectionStyleNone ? nil : indexPath;
-}
-
-- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 #pragma mark - Switch

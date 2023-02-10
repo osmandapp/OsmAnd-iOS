@@ -22,7 +22,7 @@
 #import "OAColors.h"
 #import "OASizes.h"
 
-@interface OABaseBackupTypesViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface OABaseBackupTypesViewController ()
 
 @property (weak, nonatomic) IBOutlet UIProgressView *progressView;
 
@@ -41,15 +41,6 @@
     BOOL _isHeaderBlurred;
 }
 
-- (instancetype)init
-{
-    self = [super initWithNibName:@"OABaseSettingsViewController" bundle:nil];
-    {
-        [self commonInit];
-    }
-    return self;
-}
-
 - (void)commonInit
 {
     _backupHelper = [OABackupHelper sharedInstance];
@@ -57,18 +48,6 @@
     _selectedItems = [self generateSelectedItems];
     _progressFilesCompleteCount = 0;
     _progressFilesTotalCount = 1;
-    [self generateData];
-}
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-
-    self.subtitleLabel.hidden = YES;
-    self.separatorNavbarView.hidden = YES;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -85,12 +64,9 @@
     [_backupHelper removePrepareBackupListener:self];
 }
 
-- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+- (BOOL)isNavbarSeparatorVisible
 {
-    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        [self.tableView reloadData];
-    } completion:nil];
+    return NO;
 }
 
 - (EOARemoteFilesType)getRemoteFilesType
@@ -168,14 +144,6 @@
     return @[];
 }
 
-- (UIStatusBarStyle)preferredStatusBarStyle
-{
-    if (@available(iOS 13.0, *))
-        return UIStatusBarStyleDarkContent;
-
-    return UIStatusBarStyleDefault;
-}
-
 + (NSInteger)calculateItemsSize:(NSArray *)items
 {
     NSInteger itemsSize = 0;
@@ -209,6 +177,11 @@
 - (NSMutableDictionary *)getItem:(NSIndexPath *)indexPath
 {
     return ((NSArray *) _data[indexPath.section][@"cells"])[indexPath.row];
+}
+
+- (NSString *)getTitleForHeader:(NSInteger)section
+{
+    return _data[section][@"header"];
 }
 
 #pragma mark - OAManageTypeDelegate
@@ -444,11 +417,6 @@
         [outCell setNeedsUpdateConstraints];
 
     return outCell;
-}
-
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    return _data[section][@"header"];
 }
 
 #pragma mark - UITableViewDelegate

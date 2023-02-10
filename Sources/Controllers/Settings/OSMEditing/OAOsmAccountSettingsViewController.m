@@ -21,7 +21,7 @@
 #import "OAColors.h"
 #import "Localization.h"
 
-@interface OAOsmAccountSettingsViewController () <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, UIGestureRecognizerDelegate>
+@interface OAOsmAccountSettingsViewController () <UITextFieldDelegate, UIGestureRecognizerDelegate>
 
 @end
 
@@ -41,38 +41,25 @@
     NSString *_newPassword;
 }
 
-- (instancetype) init
-{
-    self = [super initWithNibName:@"OABaseSettingsViewController" bundle:nil];
-    if (self)
-    {
-        [self commonInit];
-    }
-    return self;
-}
-
 - (void)commonInit
 {
     _settings = [OAAppSettings sharedManager];
     _newUserName = [_settings.osmUserName get];
     _newPassword = [_settings.osmUserPassword get];
     _isLogged = _newUserName.length > 0 && _newPassword.length > 0;
+}
 
-    [self generateData];
+- (void)registerNotifications
+{
+    [self addNotification:UIKeyboardWillShowNotification selector:@selector(keyboardWillShow:)];
+    [self addNotification:UIKeyboardWillHideNotification selector:@selector(keyboardWillHide:)];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-
-    self.subtitleLabel.text = @"";
-    self.subtitleLabel.hidden = YES;
-
-    self.separatorNavbarView.hidden = YES;
 
     if (!_isLogged)
     {
@@ -83,17 +70,6 @@
                                               lineSpacing:0
                                                   isTitle:NO];
     }
-
-    self.backButton.hidden = NO;
-    self.cancelButton.hidden = YES;
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -103,24 +79,19 @@
         [self showKeyboardForCellForIndexPath:_userNameIndexPath];
 }
 
-- (void)viewWillDisappear:(BOOL)animated
+- (NSString *)getTitle
 {
-    [super viewWillDisappear:animated];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+    return _isLogged ? OALocalizedString(@"login_account") : OALocalizedString(@"shared_string_account_add");
 }
 
-- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+- (NSString *)getLeftNavbarButtonTitle
 {
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        [self.tableView reloadData];
-    } completion:nil];
+    return OALocalizedString(@"shared_string_back");
 }
 
-- (void)applyLocalization
+- (BOOL)isNavbarSeparatorVisible
 {
-    self.titleLabel.text = _isLogged ? OALocalizedString(@"login_account") : OALocalizedString(@"shared_string_account_add");
-    [self.backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
+    return NO;
 }
 
 - (void)generateData
@@ -188,6 +159,11 @@
 - (NSDictionary *)getItem:(NSIndexPath *)indexPath
 {
     return _data[indexPath.section][indexPath.row];
+}
+
+- (CGFloat)getCustomHeightForHeader:(NSInteger)section
+{
+    return section == _userNameIndexPath.section ? 14. : UITableViewAutomaticDimension;
 }
 
 - (CGFloat)heightForRow:(NSIndexPath *)indexPath estimated:(BOOL)estimated
@@ -465,16 +441,6 @@
 - (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return [self heightForRow:indexPath estimated:YES];
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return section == _userNameIndexPath.section ? 14. : UITableViewAutomaticDimension;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-{
-    return UITableViewAutomaticDimension;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

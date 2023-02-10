@@ -18,28 +18,18 @@
 #import "Localization.h"
 #import "OAColors.h"
 
-@interface OANavigationLanguageViewController () <UITableViewDelegate, UITableViewDataSource>
-
-@end
-
 @implementation OANavigationLanguageViewController
 {
     OAAppSettings *_settings;
     NSArray<NSArray *> *_data;
 }
 
-- (instancetype) initWithAppMode:(OAApplicationMode *)appMode
+- (void)commonInit
 {
-    self = [super initWithAppMode:appMode];
-    if (self)
-    {
-        _settings = [OAAppSettings sharedManager];
-        [self generateData];
-    }
-    return self;
+    _settings = [OAAppSettings sharedManager];
 }
 
-- (void) generateData
+- (void)generateData
 {
     NSDictionary *_screenVoiceProviders = [OAUtilities getSortedVoiceProviders];
     NSMutableArray *dataArr = [NSMutableArray array];
@@ -56,23 +46,14 @@
     _data = [NSArray arrayWithObject:dataArr];
 }
 
-
-- (void) applyLocalization
+- (NSString *)getTitle
 {
-    [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"shared_string_language");
+    return OALocalizedString(@"shared_string_language");
 }
 
-- (void) viewDidLoad
+- (CGFloat)getCustomHeightForHeader:(NSInteger)section
 {
-    [super viewDidLoad];
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    [self setupView];
-}
-
-- (void) setupView
-{
+    return 17.;
 }
 
 #pragma mark - TableView
@@ -98,11 +79,6 @@
         return cell;
     }
     return nil;
-}
-
-- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return 17.0;
 }
 
 - (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {

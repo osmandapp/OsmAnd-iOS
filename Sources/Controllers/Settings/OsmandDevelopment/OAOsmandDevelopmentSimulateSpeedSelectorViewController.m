@@ -76,10 +76,6 @@
 @end
 
 
-@interface OAOsmandDevelopmentSimulateSpeedSelectorViewController () <UITableViewDelegate, UITableViewDataSource>
-
-@end
-
 @implementation OAOsmandDevelopmentSimulateSpeedSelectorViewController
 {
     NSArray<NSArray *> *_data;
@@ -89,21 +85,14 @@
 
 NSString *const kUICellKey = @"kUICellKey";
 
-- (instancetype) init
+- (void)commonInit
 {
-    self = [super initWithNibName:@"OABaseSettingsViewController" bundle:nil];
-    if (self)
-    {
-        _selectedSpeedMode = [OASimulateNavigationSpeed fromKey:OAAppSettings.sharedManager.simulateNavigationGpxTrackSpeedMode];
-    }
-    return self;
+    _selectedSpeedMode = [OASimulateNavigationSpeed fromKey:OAAppSettings.sharedManager.simulateNavigationGpxTrackSpeedMode];
 }
 
 - (void) viewDidLoad
 {
     [super viewDidLoad];
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
     self.tableView.separatorInset = UIEdgeInsetsMake(0., 16.0 + OAUtilities.getLeftMargin, 0., 0.);
 }
 
@@ -113,13 +102,9 @@ NSString *const kUICellKey = @"kUICellKey";
     [self reloadData];
 }
 
-
-#pragma mark - Setup data
-
-- (void) applyLocalization
+- (NSString *)getTitle
 {
-    [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"simulate_location_movement_speed");
+    return OALocalizedString(@"simulate_location_movement_speed");
 }
 
 - (void) generateData

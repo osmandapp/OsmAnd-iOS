@@ -10,6 +10,6 @@
 
 @class OAApplicationMode;
 
-@interface OAHelpViewController : OABaseNavbarViewController<UITableViewDelegate, UITableViewDataSource>
+@interface OAHelpViewController : OABaseNavbarViewController
 
 @end

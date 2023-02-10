@@ -12,39 +12,17 @@
 #import "OAColors.h"
 #import "Localization.h"
 
-@interface OACloudAccountLogoutViewController () <UITableViewDelegate, UITableViewDataSource>
-
-@end
-
 @implementation OACloudAccountLogoutViewController
 {
     NSArray<NSArray<NSDictionary *> *> *_data;
 }
 
-- (instancetype)init
+- (NSString *)getTitle
 {
-    self = [super initWithNibName:@"OABaseSettingsViewController" bundle:nil];
-    return self;
+    return OALocalizedString(@"login_account");
 }
 
-- (void)applyLocalization
-{
-    [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"login_account");
-}
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-
-    self.tableView.dataSource = self;
-    self.tableView.delegate = self;
-
-    self.subtitleLabel.hidden = YES;
-    [self setupView];
-}
-
-- (void)setupView
+- (void)generateData
 {
     _data = @[
             @[@{

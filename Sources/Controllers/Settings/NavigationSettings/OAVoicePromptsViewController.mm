@@ -29,7 +29,7 @@
 
 #include <OsmAndCore/Utilities.h>
 
-@interface OAVoicePromptsViewController () <UITableViewDelegate, UITableViewDataSource, OAUninstallSpeedCamerasDelegate, OASettingsDataDelegate>
+@interface OAVoicePromptsViewController () <OAUninstallSpeedCamerasDelegate, OASettingsDataDelegate>
 
 @end
 
@@ -42,30 +42,14 @@
     NSIndexPath *_selectedIndexPath;
 }
 
-- (instancetype) initWithAppMode:(OAApplicationMode *)appMode
+- (void)commonInit
 {
-    self = [super initWithAppMode:appMode];
-    if (self)
-    {
-        _settings = [OAAppSettings sharedManager];
-    }
-    return self;
+    _settings = [OAAppSettings sharedManager];
 }
 
--(void) applyLocalization
+- (NSString *)getTitle
 {
-    [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"voice_announces");
-}
-
-- (void) viewDidLoad
-{
-    [super viewDidLoad];
-
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-
-    [self generateData];
+    return OALocalizedString(@"voice_announces");
 }
 
 - (void)generateData
@@ -284,6 +268,16 @@
     [item setObj:value forKey:@"value"];
 }
 
+- (NSString *)getTitleForHeader:(NSInteger)section
+{
+    return [_data sectionDataForIndex:section].headerText;
+}
+
+- (NSString *)getTitleForFooter:(NSInteger)section
+{
+    return [_data sectionDataForIndex:section].footerText;
+}
+
 #pragma mark - TableView
 
 - (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
@@ -399,16 +393,6 @@
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
 {
     return [_data sectionCount];
-}
-
-- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    return [_data sectionDataForIndex:section].headerText;
-}
-
-- (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
-{
-    return [_data sectionDataForIndex:section].footerText;
 }
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

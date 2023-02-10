@@ -14,41 +14,23 @@
 #import "Localization.h"
 #import "OAColors.h"
 
-@interface OAAutoCenterMapViewController () <UITableViewDelegate, UITableViewDataSource>
-
-@end
-
 @implementation OAAutoCenterMapViewController
 {
     OAAppSettings *_settings;
     NSArray<NSArray *> *_data;
 }
 
-- (instancetype) initWithAppMode:(OAApplicationMode *)appMode
+- (void)commonInit
 {
-    self = [super initWithAppMode:appMode];
-    if (self)
-    {
-        _settings = [OAAppSettings sharedManager];
-    }
-    return self;
+    _settings = [OAAppSettings sharedManager];
 }
 
-- (void) applyLocalization
+- (NSString *)getTitle
 {
-    [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"choose_auto_follow_route");
+    return OALocalizedString(@"choose_auto_follow_route");
 }
 
-- (void) viewDidLoad
-{
-    [super viewDidLoad];
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    [self setupView];
-}
-
-- (void) setupView
+- (void)generateData
 {
     NSMutableArray *dataArr = [NSMutableArray array];
     NSArray<NSNumber *> *autoFollowRouteValues = @[ @0, @5, @10, @15, @20, @25, @30, @45, @60, @90 ];
@@ -76,6 +58,11 @@
     _data = [NSArray arrayWithObject:dataArr];
 }
 
+- (CGFloat)getCustomHeightForHeader:(NSInteger)section
+{
+    return 17.;
+}
+
 #pragma mark - TableView
 
 - (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
@@ -99,11 +86,6 @@
         return cell;
     }
     return nil;
-}
-
-- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return 17.0;
 }
 
 - (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {

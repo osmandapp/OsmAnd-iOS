@@ -21,7 +21,7 @@
 #define CHANGES_FOR_MAPPER_PROMO 30
 #define VISIBLE_MONTHS_COUNT 6
 
-@interface OAMappersViewController () <UITableViewDelegate, UITableViewDataSource, SFSafariViewControllerDelegate>
+@interface OAMappersViewController () <SFSafariViewControllerDelegate>
 
 @end
 
@@ -35,42 +35,22 @@
     NSDictionary<NSString *, NSNumber *> *_objectChanges;
 }
 
-- (instancetype) init
-{
-    self = [super initWithNibName:@"OABaseSettingsViewController" bundle:nil];
-    if (self)
-    {
-        [self commonInit];
-    }
-    return self;
-}
-
 - (void)commonInit
 {
     _settings = [OAAppSettings sharedManager];
     _headers = [NSMutableDictionary dictionary];
     _footers = [NSMutableDictionary dictionary];
-
-    [self generateData];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     [self downloadChangesInfo];
-
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    self.tableView.sectionFooterHeight = 0.001;
-    self.tableView.sectionHeaderHeight = kHeaderHeightDefault;
-
-    self.subtitleLabel.text = @"";
-    self.subtitleLabel.hidden = YES;
 }
 
-- (void)applyLocalization
+- (NSString *)getTitle
 {
-    self.titleLabel.text = OALocalizedString(@"map_updates_for_mappers");
+    return OALocalizedString(@"map_updates_for_mappers");
 }
 
 - (void)generateData
@@ -212,6 +192,16 @@
 - (NSDictionary *)getItem:(NSIndexPath *)indexPath
 {
     return _data[indexPath.section][indexPath.row];
+}
+
+- (NSString *)getTitleForHeader:(NSInteger)section
+{
+    return _headers[@(section)];
+}
+
+- (NSString *)getTitleForFooter:(NSInteger)section
+{
+    return _footers[@(section)];
 }
 
 - (long)getChangesSize
@@ -379,31 +369,6 @@
 }
 
 #pragma mark - UITableViewDelegate
-
-- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    return _headers[@(section)];
-}
-
-- (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
-{
-    return _footers[@(section)];
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    NSString *header = _headers[@(section)];
-    if (header)
-    {
-        UIFont *font = [UIFont scaledSystemFontOfSize:13.];
-        CGFloat headerHeight = [OAUtilities calculateTextBounds:header
-                                                          width:tableView.frame.size.width - (kPaddingOnSideOfContent + [OAUtilities getLeftMargin]) * 2
-                                                           font:font].height + kPaddingOnSideOfHeaderWithText;
-        return headerHeight;
-    }
-
-    return kHeaderHeightDefault;
-}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {

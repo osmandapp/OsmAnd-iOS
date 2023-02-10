@@ -25,7 +25,7 @@
 #import "OAColors.h"
 #import "OASizes.h"
 
-@interface OAVehicleParametersViewController () <UITableViewDelegate, UITableViewDataSource, OAVehicleParametersSettingDelegate>
+@interface OAVehicleParametersViewController () <OAVehicleParametersSettingDelegate>
 
 @end
 
@@ -37,33 +37,29 @@
     NSInteger _otherSection;
 }
 
-- (instancetype) initWithAppMode:(OAApplicationMode *)appMode
+- (void)commonInit
 {
-    self = [super initWithAppMode:appMode];
-    if (self)
-    {
-        _settings = [OAAppSettings sharedManager];
-    }
-    return self;
+    _settings = [OAAppSettings sharedManager];
 }
 
--(void) applyLocalization
+- (NSString *)getTitle
 {
-    [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"vehicle_parameters");
-    [self.backButton setTitle:OALocalizedString(@"routing_settings") forState:UIControlStateNormal];
+    return OALocalizedString(@"vehicle_parameters");
+}
+
+- (NSString *)getLeftNavbarButtonTitle
+{
+    return OALocalizedString(@"routing_settings");
 }
 
 - (void) viewDidLoad
 {
     [super viewDidLoad];
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
+
     self.tableView.separatorInset = UIEdgeInsetsMake(0., 16., 0., 0.);
-    [self setupView];
 }
 
-- (void) setupView
+- (void)generateData
 {
     NSMutableArray *tableData = [NSMutableArray array];
     NSMutableArray *parametersArr = [NSMutableArray array];
@@ -263,56 +259,11 @@
     return _data.count;
 }
 
-- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    return [self getTitleForHeader:section];
-}
-
-- (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
-{
-    return [self getTitleForFooter:section];
-}
-
-- (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section
-{
-    UITableViewHeaderFooterView *vw = (UITableViewHeaderFooterView *) view;
-    [vw.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    NSString *header = [self getTitleForHeader:section];
-    if (header)
-    {
-        UIFont *font = [UIFont scaledSystemFontOfSize:13.];
-        CGFloat headerHeight = [OAUtilities calculateTextBounds:header
-                                                          width:tableView.frame.size.width - (kPaddingOnSideOfContent + [OAUtilities getLeftMargin]) * 2
-                                                           font:font].height + kPaddingOnSideOfHeaderWithText;
-        return headerHeight;
-    }
-
-    return kHeaderHeightDefault;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-{
-    NSString *footer = [self getTitleForFooter:section];
-    if (footer)
-    {
-        UIFont *font = [UIFont scaledSystemFontOfSize:13.];
-        CGFloat footerHeight = [OAUtilities calculateTextBounds:footer
-                                                          width:tableView.frame.size.width - (kPaddingOnSideOfContent + [OAUtilities getLeftMargin]) * 2
-                                                           font:font].height + kPaddingOnSideOfFooterWithText;
-        return footerHeight;
-    }
-
-    return 0.001;
-}
 #pragma mark - OAVehicleParametersSettingDelegate
 
 - (void) onSettingsChanged
 {
-    [self setupView];
+    [self generateData];
     [self.tableView reloadData];
     if (self.delegate)
         [self.delegate onSettingsChanged];

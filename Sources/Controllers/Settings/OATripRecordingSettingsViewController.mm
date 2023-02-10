@@ -81,37 +81,26 @@ static NSArray<NSString *> *minTrackSpeedNames;
     return self;
 }
 
-- (void) applyLocalization
+- (NSString *)getTitle
 {
-    [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"record_plugin_name");
+    switch (self.settingsType)
+    {
+        case kTripRecordingSettingsScreenRecInterval:
+        case kTripRecordingSettingsScreenNavRecInterval:
+            return OALocalizedString(@"save_track_interval_globally");
+        case kTripRecordingSettingsScreenAccuracy:
+            return OALocalizedString(@"monitoring_min_accuracy");
+        case kTripRecordingSettingsScreenMinSpeed:
+            return OALocalizedString(@"monitoring_min_speed");
+        case kTripRecordingSettingsScreenMinDistance:
+            return OALocalizedString(@"monitoring_min_distance");
+        default:
+            return OALocalizedString(@"record_plugin_name");
+    }
 }
 
-- (void) viewDidLoad
+- (void)generateData
 {
-    [super viewDidLoad];
-    
-    self.tableView.dataSource = self;
-    self.tableView.delegate = self;
-    self.tableView.estimatedRowHeight = kEstimatedRowHeight;
-    self.tableView.separatorColor =  UIColorFromRGB(color_tint_gray);
-}
-
-- (void) didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-- (void) viewWillAppear:(BOOL)animated
-{
-    [self setupView];
-}
-
-- (void) setupView
-{
-    [self.backButton setImage:self.backButton.imageView.image.imageFlippedForRightToLeftLayoutDirection forState:UIControlStateNormal];
-    [self applySafeAreaMargins];
     OAAppSettings* settings = [OAAppSettings sharedManager];
     NSMutableArray *dataArr = [NSMutableArray array];
     switch (self.settingsType)
@@ -237,7 +226,6 @@ static NSArray<NSString *> *minTrackSpeedNames;
         }
         case kTripRecordingSettingsScreenRecInterval:
         {
-            self.titleLabel.text = OALocalizedString(@"save_track_interval_globally");
             BOOL alwaysAsk = ![settings.mapSettingSaveTrackIntervalApproved get:self.appMode];
             [dataArr addObject:@{
                 @"title" : OALocalizedString(@"confirm_every_run"),
@@ -258,7 +246,6 @@ static NSArray<NSString *> *minTrackSpeedNames;
         }
         case kTripRecordingSettingsScreenNavRecInterval:
         {
-            self.titleLabel.text = OALocalizedString(@"save_track_interval_globally");
             for (NSNumber *num in settings.trackIntervalArray)
             {
                 [dataArr addObject: @{
@@ -270,7 +257,6 @@ static NSArray<NSString *> *minTrackSpeedNames;
             break;
         }
         case kTripRecordingSettingsScreenAccuracy:
-            self.titleLabel.text = OALocalizedString(@"monitoring_min_accuracy");
             for (int i = 0; i < trackPrecisionValues.count; i++)
             {
                 [dataArr addObject: @{
@@ -281,7 +267,6 @@ static NSArray<NSString *> *minTrackSpeedNames;
             }
             break;
         case kTripRecordingSettingsScreenMinSpeed:
-            self.titleLabel.text = OALocalizedString(@"monitoring_min_speed");
             for (int i = 0; i < minTrackSpeedValues.count; i++)
             {
                 [dataArr addObject: @{
@@ -292,7 +277,6 @@ static NSArray<NSString *> *minTrackSpeedNames;
             }
             break;
         case kTripRecordingSettingsScreenMinDistance:
-            self.titleLabel.text = OALocalizedString(@"monitoring_min_distance");
             for (int i = 0; i < minTrackDistanceValues.count; i++)
             {
                 [dataArr addObject: @{
@@ -307,8 +291,6 @@ static NSArray<NSString *> *minTrackSpeedNames;
     }
     
     _data = [NSArray arrayWithArray:dataArr];
-    
-    [self.tableView reloadData];
 }
 
 - (NSDictionary *) getItem:(NSIndexPath *)indexPath
@@ -317,6 +299,29 @@ static NSArray<NSString *> *minTrackSpeedNames;
         return _data[indexPath.section][indexPath.row];
     else
         return _data[indexPath.row];
+}
+
+- (NSString *)getTitleForHeader:(NSInteger)section
+{
+    if (_settingsType == kTripRecordingSettingsScreenGeneral)
+    {
+        NSDictionary *item = ((NSArray *)_data[section]).firstObject;
+        return item[@"header"];
+    }
+    return nil;
+}
+
+- (NSString *)getTitleForFooter:(NSInteger)section
+{
+    if (_settingsType == kTripRecordingSettingsScreenGeneral)
+    {
+        NSDictionary *item = ((NSArray *)_data[section]).firstObject;
+        return item[@"description"];
+    }
+    else
+    {
+        return nil;
+    }
 }
 
 - (void) applyParameter:(id)sender
@@ -553,41 +558,6 @@ static NSArray<NSString *> *minTrackSpeedNames;
         return cell;
     }
     return nil;
-}
-
-- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    if (_settingsType == kTripRecordingSettingsScreenGeneral)
-    {
-        NSDictionary *item = ((NSArray *)_data[section]).firstObject;
-        return item[@"header"];
-    }
-    return nil;
-}
-
-- (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
-{
-    if (_settingsType == kTripRecordingSettingsScreenGeneral)
-    {
-        NSDictionary *item = ((NSArray *)_data[section]).firstObject;
-        return item[@"description"];
-    }
-    else
-    {
-        return nil;
-    }
-}
-
-- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
-{
-    UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
-    [header.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
-}
-
-- (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section
-{
-    UITableViewHeaderFooterView *footer = (UITableViewHeaderFooterView *)view;
-    [footer.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
 }
 
 #pragma mark - UITableViewDelegate

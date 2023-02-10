@@ -25,7 +25,7 @@
 #import "OATitleRightIconCell.h"
 #import "OAAutoObserverProxy.h"
 
-@interface OAOsmandDevelopmentSimulateLocationViewController () <UITableViewDelegate, UITableViewDataSource, OAOpenAddTrackDelegate, OAOsmandDevelopmentSimulateSpeedSelectorDelegate>
+@interface OAOsmandDevelopmentSimulateLocationViewController () <OAOpenAddTrackDelegate, OAOsmandDevelopmentSimulateSpeedSelectorDelegate>
 
 @end
 
@@ -43,30 +43,26 @@
 NSString *const kTrackSelectKey = @"kTrackSelectKey";
 NSString *const kMovementSpeedKey = @"kMovementSpeedKey";
 NSString *const kStartStopButtonKey = @"kStartStopButtonKey";
-CGFloat const kDefaultHeight = 48.0;
-CGFloat const kDefaultHeaderHeight = 40.0;
 
-- (instancetype) init
+- (void)commonInit
 {
-    self = [super initWithNibName:@"OABaseSettingsViewController" bundle:nil];
-    if (self)
-    {
-        _app = [OsmAndApp instance];
-        _settings = OAAppSettings.sharedManager;
-        _selectedTrackName = _settings.simulateNavigationGpxTrack;
-        _selectedSpeedMode = [OASimulateNavigationSpeed fromKey:_settings.simulateNavigationGpxTrackSpeedMode];
-        _simulateRoutingObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onTrackAnimationFinished) andObserve:_app.simulateRoutingObservable];
-    }
-    return self;
+    _app = [OsmAndApp instance];
+    _settings = [OAAppSettings sharedManager];
+    _selectedTrackName = _settings.simulateNavigationGpxTrack;
+    _selectedSpeedMode = [OASimulateNavigationSpeed fromKey:_settings.simulateNavigationGpxTrackSpeedMode];
+    _simulateRoutingObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onTrackAnimationFinished) andObserve:_app.simulateRoutingObservable];
+
+    _headerDescription = OALocalizedString(@"simulate_your_location_gpx_descr");
 }
 
 - (void) viewDidLoad
 {
     [super viewDidLoad];
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
+
     self.tableView.separatorInset = UIEdgeInsetsMake(0., 16.0 + OAUtilities.getLeftMargin, 0., 0.);
     self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:_headerDescription font:[UIFont scaledSystemFontOfSize:15] textColor:UIColorFromRGB(color_text_footer) lineSpacing:0.0 isTitle:NO];
+
+    self.titleLabel.textColor = UIColor.whiteColor;
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -82,23 +78,29 @@ CGFloat const kDefaultHeaderHeight = 40.0;
         [_simulateLocationDelegate onSimulateLocationInformationUpdated];
 }
 
-- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+- (NSString *)getTitle
 {
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:_headerDescription font:[UIFont scaledSystemFontOfSize:15] textColor:UIColorFromRGB(color_text_footer) lineSpacing:0.0 isTitle:NO];
-        self.tableView.separatorInset = UIEdgeInsetsMake(0., 16.0 + OAUtilities.getLeftMargin, 0., 0.);
-        [self.tableView reloadData];
-    } completion:nil];
+    return OALocalizedString(@"simulate_your_location");
 }
 
-
-#pragma mark - Setup data
-
-- (void) applyLocalization
+- (UIColor *)getNavbarColor
 {
-    [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"simulate_your_location");
-    _headerDescription = OALocalizedString(@"simulate_your_location_gpx_descr");
+    return UIColorFromRGB(color_navbar_orange);
+}
+
+- (UIColor *)getNavbarButtonsTintColor
+{
+    return UIColor.whiteColor;
+}
+
+- (BOOL)isNavbarSeparatorVisible
+{
+    return NO;
+}
+
+- (BOOL)isNavbarBlurring
+{
+    return NO;
 }
 
 - (void) generateData
@@ -174,6 +176,24 @@ CGFloat const kDefaultHeaderHeight = 40.0;
 {
     [self generateData];
     [self.tableView reloadData];
+}
+
+- (NSString *)getTitleForHeader:(NSInteger)section
+{
+    NSDictionary *item = [self getItem:[NSIndexPath indexPathForRow:0 inSection:section]];
+    return item[@"headerTitle"];
+}
+
+- (NSString *)getTitleForFooter:(NSInteger)section
+{
+    NSDictionary *item = [self getItem:[NSIndexPath indexPathForRow:0 inSection:section]];
+    return item[@"footerTitle"];
+}
+
+- (void)onRotation
+{
+    self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:_headerDescription font:[UIFont scaledSystemFontOfSize:15] textColor:UIColorFromRGB(color_text_footer) lineSpacing:0.0 isTitle:NO];
+    self.tableView.separatorInset = UIEdgeInsetsMake(0., 16.0 + OAUtilities.getLeftMargin, 0., 0.);
 }
 
 #pragma mark - Actions
@@ -271,44 +291,6 @@ CGFloat const kDefaultHeaderHeight = 40.0;
         return cell;
     }
     return nil;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSDictionary *item = [self getItem:indexPath];
-    NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:[OATitleRightIconCell getCellIdentifier]])
-        return kDefaultHeight;
-    return UITableViewAutomaticDimension;
-}
-
-- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return kDefaultHeaderHeight;
-}
-
-- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    NSDictionary *item = [self getItem:[NSIndexPath indexPathForRow:0 inSection:section]];
-    return item[@"headerTitle"];
-}
-
-- (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
-{
-    NSDictionary *item = [self getItem:[NSIndexPath indexPathForRow:0 inSection:section]];
-    return item[@"footerTitle"];
-}
-
-- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
-{
-    UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
-    [header.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
-}
-
-- (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section
-{
-    UITableViewHeaderFooterView *footer = (UITableViewHeaderFooterView *)view;
-    [footer.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
 }
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

@@ -23,7 +23,7 @@
 #define kDistanceSection 1
 #define kDisableMode -1
 
-@interface OARecalculateRouteViewController () <UITableViewDelegate, UITableViewDataSource, OACustomPickerTableViewCellDelegate>
+@interface OARecalculateRouteViewController () <OACustomPickerTableViewCellDelegate>
 
 @end
 
@@ -41,20 +41,11 @@
     OsmAndAppInstance _app;
 }
 
-- (instancetype) initWithAppMode:(OAApplicationMode *)appMode
+- (void)commonInit
 {
-    self = [super initWithAppMode:appMode];
-    if (self)
-    {
-        _settings = [OAAppSettings sharedManager];
-        _app = OsmAndApp.instance;
-        [self generateData];
-    }
-    return self;
-}
+    _settings = [OAAppSettings sharedManager];
+    _app = [OsmAndApp instance];
 
-- (void) generateData
-{
     if ([_settings.metricSystem get:self.appMode] == KILOMETERS_AND_METERS)
         _possibleDistanceValues = @[@(10.), @(20.0), @(30.0), @(50.0), @(100.0), @(200.0), @(500.0), @(1000.0), @(1500.0)];
     else
@@ -79,21 +70,12 @@
     return [OAOsmAndFormatter getFormattedDistance:defValue forceTrailingZeroes:NO];
 }
 
--(void) applyLocalization
+- (NSString *)getTitle
 {
-    [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"recalculate_route");
+    return OALocalizedString(@"recalculate_route");
 }
 
-- (void) viewDidLoad
-{
-    [super viewDidLoad];
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    [self setupView];
-}
-
-- (void) setupView
+- (void)generateData
 {
     NSMutableArray *tableData = [NSMutableArray array];
     NSMutableArray *statusArr = [NSMutableArray array];
@@ -119,6 +101,16 @@
         [tableData addObject:distanceArr];
     }
     _data = [NSArray arrayWithArray:tableData];
+}
+
+- (NSString *)getTitleForFooter:(NSInteger)section
+{
+    return section == 0 ? OALocalizedString(@"recalculate_route_distance_promo") : OALocalizedString(@"select_distance_route_will_recalc");
+}
+
+- (CGFloat)getCustomHeightForHeader:(NSInteger)section
+{
+    return 17.;
 }
 
 #pragma mark - TableView
@@ -182,11 +174,6 @@
     return nil;
 }
 
-- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return 17.0;
-}
-
 - (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section == kDistanceSection)
@@ -234,23 +221,6 @@
     return cell.selectionStyle == UITableViewCellSelectionStyleNone && indexPath != [NSIndexPath indexPathForRow:0 inSection:1] ? nil : indexPath;
 }
 
-- (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
-{
-    return section == 0 ? OALocalizedString(@"recalculate_route_distance_promo") : OALocalizedString(@"select_distance_route_will_recalc");
-}
-
--(void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
-{
-    UITableViewHeaderFooterView *vw = (UITableViewHeaderFooterView *) view;
-    [vw.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
-}
-
--(void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section
-{
-    UITableViewHeaderFooterView *vw = (UITableViewHeaderFooterView *) view;
-    [vw.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
-}
-
 #pragma mark - Switch
 
 - (void) applyParameter:(id)sender
@@ -262,7 +232,7 @@
         [_settings.disableOffrouteRecalc set:!control.isOn mode:self.appMode];
         [self hidePicker];
         [self.tableView beginUpdates];
-        [self setupView];
+        [self generateData];
         if (!control.isOn)
             [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
         else
@@ -316,7 +286,7 @@
     _defaultValue = nil;
     [_settings.routeRecalculationDistance set:_possibleDistanceValues[_selectedValue].doubleValue mode:self.appMode];
     [_settings.disableOffrouteRecalc set:[_settings.routeRecalculationDistance get:self.appMode] != kDisableMode];
-    [self setupView];
+    [self generateData];
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_pickerIndexPath.row - 1 inSection:_pickerIndexPath.section]] withRowAnimation:UITableViewRowAnimationAutomatic];
     
     if (self.delegate)

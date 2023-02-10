@@ -6,7 +6,7 @@
 //  Copyright (c) 2022 OsmAnd. All rights reserved.
 //
 
-#import "OABaseSettingsViewController.h"
+#import "OABaseNavbarViewController.h"
 #import "OABackupListeners.h"
 #import "OAPrepareBackupTask.h"
 #import "OAManageTypeViewController.h"
@@ -22,7 +22,7 @@
 
 @end
 
-@interface OABaseBackupTypesViewController : OABaseSettingsViewController <OAManageTypeDelegate, OAOnDeleteFilesListener, OAOnPrepareBackupListener, OABackupTypesDelegate>
+@interface OABaseBackupTypesViewController : OABaseNavbarViewController <OAManageTypeDelegate, OAOnDeleteFilesListener, OAOnPrepareBackupListener, OABackupTypesDelegate>
 
 - (void)commonInit;
 

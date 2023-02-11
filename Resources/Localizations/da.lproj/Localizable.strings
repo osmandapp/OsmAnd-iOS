@@ -130,7 +130,7 @@
 "poi_max_radius_reached" = "Maksimal søgeradius er nået";
 "poi_search_near_center" = "Søgningen udføres nær midten af kortet";
 "gpx_points" = "Punkter";
-"shared_string_export" = "Eksporter";
+"shared_string_export" = "Eksportér";
 "import_export" = "Import/eksport";
 "import_tracks" = "Importer spor";
 "gpx_import_already_exists" = "Den angivne rute findes allerede på listen. Vælg en handling.";
@@ -1672,7 +1672,7 @@
 "profile_type_base_string" = "Basisprofil";
 "units_and_formats" = "Enheder&formater";
 "configure_profile" = "Konfigurere profil";
-"export_profile" = "Eksporter profil";
+"export_profile" = "Eksportér profil";
 "selected_profile" = "Valgt profil";
 "profile_appearance" = "Profil udseende";
 "vessel_width_limit_description" = "Indstil fartøjets bredde for at undgå smalle broer";

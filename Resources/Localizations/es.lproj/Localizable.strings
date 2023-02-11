@@ -619,7 +619,7 @@
 "show_warnings_title" = "Mostrar alertas…";
 "show_warnings_descr" = "Configura advertencias de tráfico (límites de velocidad, paradas forzosas, badenes, túneles), radares de velocidad, e información de carriles.";
 "speak_title" = "Anunciar…";
-"speak_descr" = "Configura los anuncios para nombres de calles, advertencias de tráfico (paradas, badenes), radares y límites de velocidad.";
+"speak_descr" = "Configure para anunciar nombres de calles, advertencias de tráfico (paradas forzadas, topes de velocidad), advertencias de cámaras de velocidad, límites de velocidad";
 "keep_informing" = "Repetir instrucciones de navegación";
 "keep_informing_descr" = "Repite instrucciones de navegación a intervalos regulares.";
 "arrival_distance" = "Anuncio de llegada";
@@ -2804,3 +2804,6 @@
 "announcement_time_approach" = "Acercarse";
 "announcement_time_passing" = "Pasando por";
 "announcement_time_prepare" = "Preparar";
+"osm_upload_gpx_description_footer" = "Se utilizará el nombre de la pista en lugar de una descripción vacía. La descripción introducida se aplicará a cada pista.";
+"visibility" = "Visibilidad";
+"osm_upload_gpx_tags_footer" = "Introduzca las etiquetas separadas por comas.";

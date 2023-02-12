@@ -370,7 +370,7 @@
             cell.separatorInset = UIEdgeInsetsMake(0., kPaddingToLeftOfContentWithIcon + [OAUtilities getLeftMargin], 0., 0.);
             cell.switchView.on = [_selectedItems.allKeys containsObject:settingsType];
             cell.titleLabel.text = settingsType.title;
-            cell.leftIconView.image = settingsType.icon;
+            cell.leftIconView.image = settingsType.icon.imageFlippedForRightToLeftLayoutDirection;
             cell.leftIconView.tintColor = cell.switchView.on ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_tint_gray);
 
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
@@ -408,7 +408,7 @@
             }
             else
             {
-                cell.leftIconView.image = settingsType ? settingsType.icon : [UIImage templateImageNamed:item[@"icon"]];
+                cell.leftIconView.image = settingsType ? settingsType.icon.imageFlippedForRightToLeftLayoutDirection : [UIImage templateImageNamed:item[@"icon"]].imageFlippedForRightToLeftLayoutDirection;
                 cell.leftIconView.backgroundColor = nil;
                 cell.leftIconView.layer.cornerRadius = 0.;
                 cell.leftIconView.clipsToBounds = NO;

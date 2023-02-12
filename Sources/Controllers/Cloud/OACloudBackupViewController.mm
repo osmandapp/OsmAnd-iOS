@@ -117,6 +117,8 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    UIImage *backImage = [UIImage templateImageNamed:@"ic_navbar_chevron"];
+    [self.backImgButton setImage:[self.backImgButton isDirectionRTL] ? backImage.imageFlippedForRightToLeftLayoutDirection : backImage forState:UIControlStateNormal];
     [self setupNotificationListeners];
     [OAIAPHelper.sharedInstance checkBackupPurchase];
     _settingsHelper = OANetworkSettingsHelper.sharedInstance;
@@ -581,12 +583,12 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
             cell.overflowButton.tintColor = UIColorFromRGB(color_primary_purple);
         }
         BOOL collapsed = item.rowType == EOATableRowTypeCollapsable && ((OATableCollapsableRowData *) item).collapsed;
-        [cell.overflowButton setImage:[UIImage templateImageNamed:collapsed ? @"ic_custom_arrow_right" : @"ic_custom_arrow_down"] forState:UIControlStateNormal];
+        [cell.overflowButton setImage:[UIImage templateImageNamed:collapsed ? @"ic_custom_arrow_right" : @"ic_custom_arrow_down"].imageFlippedForRightToLeftLayoutDirection forState:UIControlStateNormal];
         [cell.overflowButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
         [cell.overflowButton addTarget:self action:@selector(onCollapseButtonPressed) forControlEvents:UIControlEventTouchUpInside];
         cell.textView.text = item.title;
         cell.descView.text = item.descr;
-        [cell.iconView setImage:[UIImage templateImageNamed:item.iconName]];
+        [cell.iconView setImage:[UIImage templateImageNamed:item.iconName].imageFlippedForRightToLeftLayoutDirection];
         cell.iconView.tintColor = item.iconTint != -1 ? UIColorFromRGB(item.iconTint) : UIColorFromRGB(color_primary_purple);
         return cell;
     }
@@ -604,7 +606,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
         if (cell)
         {
             BOOL actionButtonDisabled = [self isActionButtonDisabled:item];
-            cell.rightIconView.image = [UIImage templateImageNamed:item.iconName];
+            cell.rightIconView.image = [UIImage templateImageNamed:item.iconName].imageFlippedForRightToLeftLayoutDirection;
             cell.rightIconView.tintColor = actionButtonDisabled ? UIColorFromRGB(color_tint_gray) : UIColorFromRGB(color_primary_purple);
             cell.titleLabel.text = item.title;
             cell.titleLabel.textColor = actionButtonDisabled ? UIColorFromRGB(color_text_footer) : UIColorFromRGB(color_primary_purple);

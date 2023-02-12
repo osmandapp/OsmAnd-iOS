@@ -594,7 +594,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
             cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingToLeftOfContentWithIcon, 0., 0.);
             cell.titleLabel.text = item.title;
             cell.descriptionLabel.text = item.descr;
-            cell.leftIconView.image = [UIImage templateImageNamed:item.iconName];
+            cell.leftIconView.image = [UIImage templateImageNamed:item.iconName].imageFlippedForRightToLeftLayoutDirection;
             cell.leftIconView.tintColor = UIColorFromRGB(item.iconTint);
         }
         return cell;
@@ -630,11 +630,12 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
             cell.titleLabel.text = item.title;
             cell.leftIconView.image = [item objForKey:@"icon"];
             cell.leftIconView.tintColor = UIColorFromRGB(item.iconTint);
+            cell.leftIconView.image = cell.leftIconView.image.imageFlippedForRightToLeftLayoutDirection;
 
             NSString *secondaryIconName = hasConflict ? [item stringForKey:@"secondaryIconConflict"] : item.secondaryIconName;
             if (secondaryIconName.length > 0)
             {
-                cell.rightIconView.image = [UIImage templateImageNamed:secondaryIconName];
+                cell.rightIconView.image = [UIImage templateImageNamed:secondaryIconName].imageFlippedForRightToLeftLayoutDirection;
                 cell.rightIconView.tintColor = UIColorFromRGB([item integerForKey:@"secondaryIconColor"]);
                 [cell rightIconVisibility:YES];
             }
@@ -668,7 +669,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
             [str addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(color_text_footer) range:range];
             [str addAttribute:NSFontAttributeName value:[UIFont scaledSystemFontOfSize:15.] range:range];
             cell.descriptionLabel.attributedText = str;
-            [cell.cellImageView setImage:[UIImage imageNamed:item.iconName]];
+            [cell.cellImageView setImage:[UIImage imageNamed:item.iconName].imageFlippedForRightToLeftLayoutDirection];
 
             if (cell.needsUpdateConstraints)
                 [cell updateConstraints];
@@ -688,7 +689,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
         if (cell)
         {
             cell.textView.text = item.title;
-            cell.imageView.image = [UIImage templateImageNamed:item.iconName];
+            cell.imageView.image = [UIImage templateImageNamed:item.iconName].imageFlippedForRightToLeftLayoutDirection;
             cell.imageView.tintColor = UIColorFromRGB(item.iconTint);
 
             [cell.progressBar setProgress:[[item objForKey:@"progress"] floatValue] animated:NO];

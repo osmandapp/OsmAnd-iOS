@@ -69,6 +69,8 @@
 {
     [super viewDidLoad];
 
+    UIImage *backImage = [UIImage templateImageNamed:@"ic_navbar_chevron"];
+    [self.backButton setImage:[self.backButton isDirectionRTL] ? backImage.imageFlippedForRightToLeftLayoutDirection : backImage forState:UIControlStateNormal];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.sectionFooterHeight = 0.001;
@@ -323,7 +325,7 @@
             cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + (leftIconVisible ? kPaddingToLeftOfContentWithIcon : kPaddingOnSideOfContent), 0., 0.);
 
             [cell leftIconVisibility:leftIconVisible];
-            cell.leftIconView.image = leftIconVisible ? [UIImage imageNamed:item[@"left_icon"]] : nil;
+            cell.leftIconView.image = leftIconVisible ? [UIImage imageNamed:item[@"left_icon"]].imageFlippedForRightToLeftLayoutDirection : nil;
 
             [cell descriptionVisibility:[item.allKeys containsObject:@"description"]];
             cell.descriptionLabel.text = item[@"description"];

@@ -34,6 +34,8 @@
 - (void) viewDidLoad
 {
     [super viewDidLoad];
+    UIImage *backImage = [UIImage templateImageNamed:@"ic_navbar_chevron"];
+    [self.backButton setImage:[self.backButton isDirectionRTL] ? backImage.imageFlippedForRightToLeftLayoutDirection : backImage forState:UIControlStateNormal];
     [self setupNavBarHeight];
 }
 

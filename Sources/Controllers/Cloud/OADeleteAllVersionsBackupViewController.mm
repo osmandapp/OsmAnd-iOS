@@ -153,8 +153,7 @@
 
     self.backButton.hidden = !(isConfirm || isRemoveOld);
     self.backImageButton.hidden = isConfirm || isRemoveOld;
-    [self.backImageButton setImage:[UIImage templateImageNamed:isProgress ? @"ic_navbar_close" : @"ic_navbar_chevron"]
-                          forState:UIControlStateNormal];
+    [self.backImageButton setImage:[UIImage templateImageNamed:isProgress ? @"ic_navbar_close" : @"ic_navbar_chevron"].imageFlippedForRightToLeftLayoutDirection forState:UIControlStateNormal];
 
     self.topButton.hidden = isConfirm || isRemoveOld || isProgress;
     self.bottomButton.hidden = isConfirm || isProgress;

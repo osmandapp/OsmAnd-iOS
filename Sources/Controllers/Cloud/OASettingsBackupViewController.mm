@@ -69,8 +69,7 @@
 {
     [super viewDidLoad];
 
-    UIImage *backImage = [UIImage templateImageNamed:@"ic_navbar_chevron"];
-    [self.backButton setImage:[self.backButton isDirectionRTL] ? backImage.imageFlippedForRightToLeftLayoutDirection : backImage forState:UIControlStateNormal];
+    [self.backButton setImage:[UIImage imageNamed:@"ic_navbar_chevron"].imageFlippedForRightToLeftLayoutDirection forState:UIControlStateNormal];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.sectionFooterHeight = 0.001;

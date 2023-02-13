@@ -229,7 +229,6 @@
 
 #define color_carplay_background_night 0x121926
 #define color_carplay_background_day 0xebe7e4
-#define color_navbar_orange 0xFC7B08
 
 #define color_primary_table_background 0xF2F2F3
 #define color_primary_gray_navbar_background 0xF9F9F9

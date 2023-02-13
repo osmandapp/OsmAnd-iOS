@@ -65,6 +65,11 @@
     _titleView.text = OALocalizedString(@"shared_string_settings");
 }
 
+-(void) addAccessibilityLabels
+{
+    self.backButton.accessibilityLabel = OALocalizedString(@"shared_string_back");
+}
+
 - (void) viewDidLoad
 {
     [super viewDidLoad];

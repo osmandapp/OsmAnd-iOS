@@ -145,6 +145,12 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     self.navBarTitle.text = OALocalizedString(@"osmand_cloud");
 }
 
+-(void) addAccessibilityLabels
+{
+    self.backImgButton.accessibilityLabel = OALocalizedString(@"shared_string_back");
+    self.settingsButton.accessibilityLabel = OALocalizedString(@"shared_string_settings");
+}
+
 - (void) onRefresh
 {
     if (!_settingsHelper.isBackupSyncing && !_backupHelper.isBackupPreparing)

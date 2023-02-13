@@ -230,4 +230,7 @@
 
 #define color_tableview_background 0xE5E5E5
 
+#define color_carplay_background_night 0x121926
+#define color_carplay_background_day 0xebe7e4
+
 #endif /* OAColors_h */

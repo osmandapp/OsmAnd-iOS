@@ -317,6 +317,14 @@ static UIViewController *parentController;
 
 }
 
+-(void) addAccessibilityLabels
+{
+    self.backButton.accessibilityLabel = OALocalizedString(@"shared_string_back");
+    self.editButton.accessibilityLabel = OALocalizedString(@"shared_string_edit");
+    self.exportButton.accessibilityLabel = OALocalizedString(@"shared_string_export");
+    self.deleteButton.accessibilityLabel = OALocalizedString(@"shared_string_delete");
+}
+
 -(void)generateData
 {
     NSMutableArray *allGroups = [[NSMutableArray alloc] init];

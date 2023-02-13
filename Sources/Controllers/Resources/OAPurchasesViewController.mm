@@ -138,6 +138,12 @@ static BOOL _purchasesUpdated;
     return headerView;
 }
 
+-(void) addAccessibilityLabels
+{
+    self.backButton.accessibilityLabel = OALocalizedString(@"shared_string_back");
+    self.restoreButton.accessibilityLabel = OALocalizedString(@"shared_string_restore");
+}
+
 - (void) generateData
 {
     [_headers removeAllObjects];

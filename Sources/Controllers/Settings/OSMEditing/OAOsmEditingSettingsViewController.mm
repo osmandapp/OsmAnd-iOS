@@ -42,6 +42,11 @@
     _titleView.text = OALocalizedString(@"osm_editing_plugin_name");
 }
 
+-(void) addAccessibilityLabels
+{
+    self.backButton.accessibilityLabel = OALocalizedString(@"shared_string_back");
+}
+
 - (void) viewDidLoad
 {
     [super viewDidLoad];

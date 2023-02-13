@@ -10,6 +10,7 @@
 #import "OAColors.h"
 #import "OASizes.h"
 #import "OAApplicationMode.h"
+#import "Localization.h"
 
 #define kSidePadding 20
 
@@ -83,6 +84,11 @@
     _tableHeaderView.backgroundColor = UIColor.clearColor;
     [_tableHeaderView addSubview:label];
     self.tableView.tableHeaderView = _tableHeaderView;
+}
+
+-(void) addAccessibilityLabels
+{
+    self.backButton.accessibilityLabel = OALocalizedString(@"shared_string_back");
 }
 
 - (void) showCancelButtonWithBackButton

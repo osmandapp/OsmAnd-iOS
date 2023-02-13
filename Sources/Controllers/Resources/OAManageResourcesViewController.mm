@@ -244,6 +244,13 @@ static BOOL _repositoryUpdated = NO;
     [_doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
 }
 
+-(void) addAccessibilityLabels
+{
+    self.backButton.accessibilityLabel = OALocalizedString(@"shared_string_back");
+    self.updateButton.accessibilityLabel = OALocalizedString(@"shared_string_update");
+    self.searchButton.accessibilityLabel = OALocalizedString(@"shared_string_search");
+}
+
 - (void) viewDidLoad
 {
     [super viewDidLoad];

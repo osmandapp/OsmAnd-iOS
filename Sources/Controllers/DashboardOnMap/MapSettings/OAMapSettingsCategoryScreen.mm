@@ -228,9 +228,9 @@ typedef void(^OAMapSettingsCategoryCellDataOnSelect)();
             {
                 UIImage *icon;
                 if ([iconName hasPrefix:@"mx_"])
-                    icon = [[OAUtilities getMxIcon:iconName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                    icon = [[OAUtilities getMxIcon:iconName].imageFlippedForRightToLeftLayoutDirection imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
                 else
-                    icon = [UIImage templateImageNamed:item[@"icon"]];
+                    icon = [UIImage templateImageNamed:item[@"icon"]].imageFlippedForRightToLeftLayoutDirection;
                 cell.leftIconView.image = icon;
                 cell.leftIconView.tintColor = isOn ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
             }

@@ -420,7 +420,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
             NSString *iconName = item[@"img"];
             [cell leftIconVisibility:iconName && iconName.length > 0];
             cell.leftIconView.tintColor = cell.switchView.isOn ? UIColorFromRGB(self.appMode.getIconColor) : UIColorFromRGB(color_icon_inactive);
-            cell.leftIconView.image = [UIImage templateImageNamed:iconName];
+            cell.leftIconView.image = [UIImage templateImageNamed:iconName].imageFlippedForRightToLeftLayoutDirection;
             cell.separatorInset = UIEdgeInsetsMake(0., iconName && iconName.length > 0 ? kPaddingToLeftOfContentWithIcon : kPaddingOnSideOfContent, 0., 0.);
 
             id v = item[@"value"];
@@ -472,7 +472,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
             
             NSString *img = item[@"img"];
             if (img)
-                cell.leftIconView.image = [UIImage templateImageNamed:img];
+                cell.leftIconView.image = [UIImage templateImageNamed:img].imageFlippedForRightToLeftLayoutDirection;
 
             [cell showLeftIcon:img != nil];
             [cell updateConstraints];
@@ -511,7 +511,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
             cell.titleView.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightSemibold];
         }
         cell.titleView.text = item[@"title"];
-        [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]]];
+        [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]].imageFlippedForRightToLeftLayoutDirection];
         return cell;
     }
     else if ([type isEqualToString:[OASettingsTableViewCell getCellIdentifier]] || [type isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
@@ -529,7 +529,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
             [cell.textView setText: item[@"title"]];
             [cell.descriptionView setText: item[@"value"]];
             UIImage *image = [UIImage imageNamed:item[@"img"]];
-            [cell.iconView setImage:image];
+            [cell.iconView setImage:image.imageFlippedForRightToLeftLayoutDirection];
         }
         return cell;
     }

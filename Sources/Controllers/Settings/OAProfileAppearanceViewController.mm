@@ -192,6 +192,7 @@
 - (void) viewDidLoad
 {
     [super viewDidLoad];
+    [self.cancelButton setImage:[UIImage imageNamed:@"ic_navbar_chevron"].imageFlippedForRightToLeftLayoutDirection forState:UIControlStateNormal];
     _tableView.delegate = self;
     _tableView.dataSource = self;
     _tableView.separatorInset = UIEdgeInsetsMake(0., 16., 0., 0.);
@@ -224,7 +225,7 @@
 
 - (void) setupNavBar
 {
-    _profileIconImageView.image = [UIImage templateImageNamed:_changedProfile.iconName];
+    _profileIconImageView.image = [UIImage templateImageNamed:_changedProfile.iconName].imageFlippedForRightToLeftLayoutDirection;
     _profileIconImageView.tintColor = UIColorFromRGB(_changedProfile.color);
     _profileIconView.layer.cornerRadius = _profileIconView.frame.size.height/2;
 }

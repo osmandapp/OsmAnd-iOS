@@ -204,7 +204,7 @@ typedef enum
         
         cell.textView.text = caption;
         cell.descriptionView.hidden = YES;
-        cell.imgView.image = img;
+        cell.imgView.image = img.imageFlippedForRightToLeftLayoutDirection;
         cell.separatorInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
     }
     return cell;

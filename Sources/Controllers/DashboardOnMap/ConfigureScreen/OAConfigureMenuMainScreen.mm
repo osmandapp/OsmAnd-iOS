@@ -370,7 +370,7 @@
         {
             cell.textView.text = data[@"title"];
             cell.descriptionView.text = data[@"description"];
-            cell.leftIconView.image = [UIImage templateImageNamed:data[@"img"]];
+            cell.leftIconView.image = [UIImage templateImageNamed:data[@"img"]].imageFlippedForRightToLeftLayoutDirection;
             cell.leftIconView.tintColor = [data[@"selected"] boolValue] ? UIColorFromRGB(_settings.applicationMode.get.getIconColor) : UIColorFromRGB(color_icon_inactive);
         }
         if ([cell needsUpdateConstraints])
@@ -386,7 +386,7 @@
     NSString *imgName = data[@"img"];
     if (imgName)
     {
-        cell.leftIconView.image = [UIImage templateImageNamed:imgName];
+        cell.leftIconView.image = [UIImage templateImageNamed:imgName].imageFlippedForRightToLeftLayoutDirection;
         cell.leftIconView.tintColor = (((NSNumber *)data[@"selected"]).boolValue) ? UIColorFromRGB(_settings.applicationMode.get.getIconColor) : UIColorFromRGB(color_icon_inactive);
     }
     else

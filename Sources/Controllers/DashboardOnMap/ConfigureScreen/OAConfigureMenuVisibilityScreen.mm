@@ -202,9 +202,9 @@
                 color = item[@"color"];
 
             if (color)
-                cell.iconView.image = [UIImage templateImageNamed:imageName];
+                cell.iconView.image = [UIImage templateImageNamed:imageName].imageFlippedForRightToLeftLayoutDirection;
             else
-                cell.iconView.image = [UIImage imageNamed:imageName];
+                cell.iconView.image = [UIImage imageNamed:imageName].imageFlippedForRightToLeftLayoutDirection;
 
             cell.iconView.tintColor = color;
         }

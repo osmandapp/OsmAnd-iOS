@@ -417,7 +417,7 @@
             }
             if (cell)
             {
-                cell.imgView.image = [item[@"icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                cell.imgView.image = [item[@"icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
                 cell.textView.text = item[@"title"];
                 OASettingsCategoryItems *items = self.itemsMap[_itemTypes[indexPath.section]];
                 OAExportSettingsType *settingType = items.getTypes[indexPath.row - 1];
@@ -452,7 +452,7 @@
             if (cell)
             {
                 cell.textView.text = item[@"title"];
-                cell.iconView.image = [UIImage templateImageNamed:item[@"icon"]];
+                cell.iconView.image = [UIImage templateImageNamed:item[@"icon"]].imageFlippedForRightToLeftLayoutDirection;
                 cell.iconView.tintColor = item[@"color"] ? item[@"color"] : UIColorFromRGB(color_tint_gray);
             }
             return cell;

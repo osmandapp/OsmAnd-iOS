@@ -62,6 +62,7 @@
     [self.btnAdd setTintColor:UIColor.whiteColor];
     [self.btnEdit setImage:[UIImage templateImageNamed:@"ic_custom_edit"] forState:UIControlStateNormal];
     [self.btnEdit setTintColor:UIColor.whiteColor];
+    [self.backBtn setImage:[UIImage imageNamed:@"ic_navbar_chevron"].imageFlippedForRightToLeftLayoutDirection forState:UIControlStateNormal];
     self.tableView.tableHeaderView = _tableHeaderView;
     _bottomViewHeight.constant = 0;
 }

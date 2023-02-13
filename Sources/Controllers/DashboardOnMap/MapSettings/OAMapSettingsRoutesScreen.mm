@@ -241,7 +241,7 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
             BOOL enabled = _routesEnabled;
             cell.titleLabel.text = enabled ? OALocalizedString(@"shared_string_enabled") : OALocalizedString(@"rendering_value_disabled_name");
             NSString *imgName = isMountain ? @"ic_action_bicycle_dark" : enabled ? @"ic_custom_show" : @"ic_custom_hide";
-            cell.leftIconView.image = [UIImage templateImageNamed:imgName];
+            cell.leftIconView.image = [UIImage templateImageNamed:imgName].imageFlippedForRightToLeftLayoutDirection;
             cell.leftIconView.tintColor = enabled ? isMountain ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_dialog_buttons_dark) : UIColorFromRGB(color_tint_gray);
 
             [cell.switchView setOn:enabled];

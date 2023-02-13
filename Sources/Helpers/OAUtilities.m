@@ -2153,7 +2153,7 @@ static const double d180PI = 180.0 / M_PI_2;
 
 + (UIView *) setupTableHeaderViewWithText:(NSString *)text font:(UIFont *)font tintColor:(UIColor *)tintColor icon:(NSString *)iconName
 {
-    return [self setupTableHeaderViewWithText:text font:font tintColor:tintColor icon:[UIImage imageNamed:iconName] iconFrameSize:34.];
+    return [self setupTableHeaderViewWithText:text font:font tintColor:tintColor icon:[UIImage imageNamed:iconName].imageFlippedForRightToLeftLayoutDirection iconFrameSize:34.];
 }
 
 + (UIView *) setupTableHeaderViewWithAttributedText:(NSAttributedString *)attributedText topCenterIconName:(NSString *)iconName iconSize:(CGFloat)iconSize

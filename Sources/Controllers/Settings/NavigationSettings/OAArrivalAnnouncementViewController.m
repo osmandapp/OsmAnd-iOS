@@ -198,7 +198,7 @@
         if (cell)
         {
             if (item.rowType == EOATableRowTypeCollapsable)
-                cell.rightIconView.image = [UIImage templateImageNamed:((OATableCollapsableRowData *) item).collapsed ? @"ic_custom_arrow_right" : @"ic_custom_arrow_down"];
+                cell.rightIconView.image = [UIImage templateImageNamed:((OATableCollapsableRowData *) item).collapsed ? @"ic_custom_arrow_right" : @"ic_custom_arrow_down"].imageFlippedForRightToLeftLayoutDirection;
             else
                 cell.rightIconView.image = _selectedIndexPath == indexPath ? [UIImage templateImageNamed:@"ic_checkmark_default"] : nil;
 

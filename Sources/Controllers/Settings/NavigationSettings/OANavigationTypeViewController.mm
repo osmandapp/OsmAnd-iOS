@@ -121,7 +121,7 @@
             cell.textView.text = item[@"title"];
             cell.arrowIconView.image = [UIImage templateImageNamed:@"ic_checkmark_default"];
             cell.arrowIconView.tintColor = UIColorFromRGB(self.appMode.getIconColor);
-            cell.iconView.image = [UIImage templateImageNamed:item[@"icon"]];
+            cell.iconView.image = [UIImage templateImageNamed:item[@"icon"]].imageFlippedForRightToLeftLayoutDirection;
             NSString *derivedProfile = self.appMode.getDerivedProfile;
             BOOL checkForDerived = ![derivedProfile isEqualToString:@"default"];
             BOOL isSelected = [profile.stringKey isEqual:self.appMode.getRoutingProfile] && ((!checkForDerived && !profile.derivedProfile) || (checkForDerived && [profile.derivedProfile isEqualToString:derivedProfile]));

@@ -393,8 +393,8 @@
         }
         if (cell)
         {
-            cell.backgroundImageView.image = [UIImage imageNamed:item[@"backgroundImage"]];
-            cell.foregroundImageView.image = [UIImage imageNamed:item[@"foregroundImage"]];
+            cell.backgroundImageView.image = [UIImage imageNamed:item[@"backgroundImage"]].imageFlippedForRightToLeftLayoutDirection;
+            cell.foregroundImageView.image = [UIImage imageNamed:item[@"foregroundImage"]].imageFlippedForRightToLeftLayoutDirection;
         }
         return cell;
     }
@@ -411,7 +411,7 @@
         }
         if (cell)
         {
-            cell.leftIconView.image = param && ![item.allKeys containsObject:@"icon"] ? [param getIcon] : item[@"icon"];
+            cell.leftIconView.image = param && ![item.allKeys containsObject:@"icon"] ? [param getIcon].imageFlippedForRightToLeftLayoutDirection : [item[@"icon"] imageFlippedForRightToLeftLayoutDirection];
             if (param && ![param isSelected] && ![item.allKeys containsObject:@"icon"])
                 cell.leftIconView.tintColor = UIColorFromRGB(color_icon_inactive);
             else
@@ -443,7 +443,7 @@
         if (cell)
         {
             cell.textView.text = item[@"title"];
-            cell.iconView.image = [UIImage templateImageNamed:item[@"icon"]];
+            cell.iconView.image = [UIImage templateImageNamed:item[@"icon"]].imageFlippedForRightToLeftLayoutDirection;
             cell.iconView.tintColor = [item[@"value"] boolValue] ? UIColorFromRGB(_iconColor) : UIColorFromRGB(color_icon_inactive);
         }
         return cell;
@@ -461,7 +461,7 @@
         if (cell)
         {
             cell.titleLabel.text = item[@"title"];
-            cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
+            cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]].imageFlippedForRightToLeftLayoutDirection;
             id v = item[@"value"];
 
             [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];

@@ -511,7 +511,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             cell.titleLabel.text = [self isContourLinesOn] ? OALocalizedString(@"shared_string_enabled") : OALocalizedString(@"rendering_value_disabled_name");
 
             NSString *imgName = [self isContourLinesOn] ? @"ic_custom_show.png" : @"ic_custom_hide.png";
-            cell.leftIconView.image = [UIImage templateImageNamed:imgName];
+            cell.leftIconView.image = [UIImage templateImageNamed:imgName].imageFlippedForRightToLeftLayoutDirection;
             cell.leftIconView.tintColor = [self isContourLinesOn] ? UIColorFromRGB(color_dialog_buttons_dark) : UIColorFromRGB(color_tint_gray);
 
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
@@ -645,7 +645,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                 cell.detailTextLabel.font = [UIFont scaledSystemFontOfSize:12.0];
                 cell.detailTextLabel.textColor = UIColorFromRGB(0x929292);
 
-                UIImage* iconImage = [UIImage imageNamed:@"ic_custom_download"];
+                UIImage* iconImage = [UIImage imageNamed:@"ic_custom_download"].imageFlippedForRightToLeftLayoutDirection;
                 UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
                 [btnAcc addTarget:self action: @selector(accessoryButtonPressed:withEvent:) forControlEvents: UIControlEventTouchUpInside];
                 [btnAcc setImage:iconImage forState:UIControlStateNormal];
@@ -673,7 +673,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             if (!mapItem.disabled)
             {
                 cell.textLabel.textColor = [UIColor blackColor];
-                UIImage* iconImage = [UIImage imageNamed:@"ic_custom_download"];
+                UIImage* iconImage = [UIImage imageNamed:@"ic_custom_download"].imageFlippedForRightToLeftLayoutDirection;
                 UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
                 [btnAcc addTarget:self action: @selector(accessoryButtonPressed:withEvent:) forControlEvents: UIControlEventTouchUpInside];
                 [btnAcc setImage:iconImage forState:UIControlStateNormal];
@@ -687,7 +687,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             }
         }
         
-        cell.imageView.image = [OAResourceType getIcon:mapItem.resourceType templated:YES];
+        cell.imageView.image = [OAResourceType getIcon:mapItem.resourceType templated:YES].imageFlippedForRightToLeftLayoutDirection;
         cell.imageView.tintColor = UIColorFromRGB(color_tint_gray);
         cell.textLabel.text = title;
         if (cell.detailTextLabel != nil)
@@ -706,7 +706,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAImageDescTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAImageDescTableViewCell *)[nib objectAtIndex:0];
             cell.descView.text = item[@"desc"];
-            cell.iconView.image = [UIImage imageNamed:item[@"img"]];
+            cell.iconView.image = [UIImage imageNamed:item[@"img"]].imageFlippedForRightToLeftLayoutDirection;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         return cell;
@@ -718,7 +718,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleRightIconCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleRightIconCell *)[nib objectAtIndex:0];
-            cell.iconView.image = [UIImage templateImageNamed:item[@"img"]];
+            cell.iconView.image = [UIImage templateImageNamed:item[@"img"]].imageFlippedForRightToLeftLayoutDirection;
             cell.titleView.text = item[@"title"];
             cell.titleView.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightSemibold];
             cell.titleView.textColor = UIColorFromRGB(color_primary_purple);

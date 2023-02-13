@@ -25,7 +25,7 @@
 - (void) setImage:(UIImage *)image tint:(BOOL)tint
 {
     if (image && tint)
-        image = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        image = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
 
     self.imageView.image = image;
 }

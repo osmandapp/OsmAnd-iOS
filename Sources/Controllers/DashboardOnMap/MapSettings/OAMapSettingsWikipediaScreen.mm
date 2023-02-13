@@ -250,7 +250,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
             cell.titleLabel.text = _wikipediaEnabled ? OALocalizedString(@"shared_string_enabled") : OALocalizedString(@"rendering_value_disabled_name");
 
             NSString *imgName = _wikipediaEnabled ? @"ic_custom_show.png" : @"ic_custom_hide.png";
-            cell.leftIconView.image = [UIImage templateImageNamed:imgName];
+            cell.leftIconView.image = [UIImage templateImageNamed:imgName].imageFlippedForRightToLeftLayoutDirection;
             cell.leftIconView.tintColor = _wikipediaEnabled ? UIColorFromRGB(color_dialog_buttons_dark) : UIColorFromRGB(color_tint_gray);
 
             [cell.switchView setOn:_wikipediaEnabled];
@@ -271,7 +271,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
         if (cell)
         {
             cell.textView.text = item[@"title"];
-            cell.leftIconView.image = [UIImage templateImageNamed:item[@"img"]];
+            cell.leftIconView.image = [UIImage templateImageNamed:item[@"img"]].imageFlippedForRightToLeftLayoutDirection;
             cell.leftIconView.tintColor = UIColorFromRGB(color_dialog_buttons_dark);
             cell.descriptionView.text = [_wikiPlugin getLanguagesSummary];
         }
@@ -300,7 +300,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
                 cell.detailTextLabel.font = [UIFont scaledSystemFontOfSize:12.0];
                 cell.detailTextLabel.textColor = UIColorFromRGB(0x929292);
 
-                UIImage* iconImage = [UIImage templateImageNamed:@"ic_custom_download"];
+                UIImage* iconImage = [UIImage templateImageNamed:@"ic_custom_download"].imageFlippedForRightToLeftLayoutDirection;
                 UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
                 [btnAcc removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
                 [btnAcc addTarget:self action: @selector(accessoryButtonTapped:withEvent:) forControlEvents: UIControlEventTouchUpInside];
@@ -328,7 +328,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
             if (!mapItem.disabled)
             {
                 cell.textLabel.textColor = [UIColor blackColor];
-                UIImage *iconImage = [UIImage templateImageNamed:@"ic_custom_download"];
+                UIImage *iconImage = [UIImage templateImageNamed:@"ic_custom_download"].imageFlippedForRightToLeftLayoutDirection;
                 UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
                 [btnAcc removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
                 [btnAcc addTarget:self action: @selector(accessoryButtonTapped:withEvent:) forControlEvents: UIControlEventTouchUpInside];
@@ -344,7 +344,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
             }
         }
 
-        cell.imageView.image = [UIImage templateImageNamed:@"ic_custom_wikipedia"];
+        cell.imageView.image = [UIImage templateImageNamed:@"ic_custom_wikipedia"].imageFlippedForRightToLeftLayoutDirection;
         cell.imageView.tintColor = UIColorFromRGB(color_tint_gray);
         cell.textLabel.text = mapItem.title;;
         if (cell.detailTextLabel != nil)

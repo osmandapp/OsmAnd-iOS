@@ -75,6 +75,7 @@
     [super viewDidLoad];
     self.settingsTableView.rowHeight = UITableViewAutomaticDimension;
     self.settingsTableView.estimatedRowHeight = kEstimatedRowHeight;
+    [self.backButton setImage:[UIImage imageNamed:@"ic_navbar_chevron"].imageFlippedForRightToLeftLayoutDirection forState:UIControlStateNormal];
     
     _settings = OAAppSettings.sharedManager;
     
@@ -277,7 +278,7 @@
         {
             cell.textView.text = item[@"title"];
             cell.descriptionView.text = item[@"value"];
-            cell.leftIconView.image = [item[@"name"] isEqualToString:@"backup_restore"] ? [UIImage imageNamed:item[@"img"]] : [UIImage templateImageNamed:item[@"img"]];
+            cell.leftIconView.image = [item[@"name"] isEqualToString:@"backup_restore"] ? [UIImage imageNamed:item[@"img"]].imageFlippedForRightToLeftLayoutDirection : [UIImage templateImageNamed:item[@"img"]].imageFlippedForRightToLeftLayoutDirection;
         }
         return cell;
     }
@@ -295,7 +296,7 @@
         }
         OAApplicationMode *am = item[@"app_mode"];
         UIImage *img = am.getIcon;
-        cell.iconView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        cell.iconView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
         cell.iconView.tintColor = UIColorFromRGB(am.getIconColor);
         cell.textView.text = am.toHumanString;
         cell.descView.text = [self getProfileDescription:am];
@@ -319,7 +320,7 @@
         BOOL isEnabled = [OAApplicationMode.values containsObject:am];
         cell.separatorInset = UIEdgeInsetsMake(0.0, indexPath.row < OAApplicationMode.allPossibleValues.count - 1 ? kPaddingToLeftOfContentWithIcon : 0.0, 0.0, 0.0);
         UIImage *img = am.getIcon;
-        cell.leftIconView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        cell.leftIconView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
         cell.leftIconView.tintColor = isEnabled ? UIColorFromRGB(am.getIconColor) : UIColorFromRGB(color_tint_gray);
         cell.titleLabel.text = am.toHumanString;
         cell.descriptionLabel.text = [self getProfileDescription:am];
@@ -358,7 +359,7 @@
             cell.titleView.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightSemibold];
         }
         cell.titleView.text = item[@"title"];
-        [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]]];
+        [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]].imageFlippedForRightToLeftLayoutDirection];
         return cell;
     }
     return nil;

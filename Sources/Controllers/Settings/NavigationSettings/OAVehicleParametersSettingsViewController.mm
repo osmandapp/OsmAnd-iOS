@@ -109,6 +109,7 @@
 {
     [super viewDidLoad];
 
+    [self.cancelButton setImage:[UIImage imageNamed:@"ic_navbar_chevron"].imageFlippedForRightToLeftLayoutDirection forState:UIControlStateNormal];
     self.doneButton.hidden = _isMotorType;
     self.subtitleLabel.hidden = _isMotorType;
     [self setupNavBarHeight];
@@ -285,7 +286,7 @@
         }
         if (cell)
         {
-            cell.imageView.image = [UIImage imageNamed:item[@"icon"]];
+            cell.imageView.image = [UIImage imageNamed:item[@"icon"]].imageFlippedForRightToLeftLayoutDirection;
         }
         return cell;
     }

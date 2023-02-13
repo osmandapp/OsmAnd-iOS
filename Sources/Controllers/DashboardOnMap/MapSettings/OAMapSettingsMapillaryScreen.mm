@@ -346,13 +346,13 @@ static const NSInteger panoImageFilterSection = 2;
             {
                 cell.titleLabel.text = _mapillaryEnabled ? OALocalizedString(@"shared_string_enabled") : OALocalizedString(@"rendering_value_disabled_name");
                 NSString *imgName = _mapillaryEnabled ? @"ic_custom_show.png" : @"ic_custom_hide.png";
-                cell.leftIconView.image = [UIImage templateImageNamed:imgName];
+                cell.leftIconView.image = [UIImage templateImageNamed:imgName].imageFlippedForRightToLeftLayoutDirection;
                 cell.leftIconView.tintColor = _mapillaryEnabled ? UIColorFromRGB(color_dialog_buttons_dark) : UIColorFromRGB(color_tint_gray);
                 [cell.switchView setOn:_mapillaryEnabled];
             }
             else if ([key isEqualToString:@"pano_only"])
             {
-                cell.leftIconView.image = [UIImage templateImageNamed:item[@"img"]];
+                cell.leftIconView.image = [UIImage templateImageNamed:item[@"img"]].imageFlippedForRightToLeftLayoutDirection;
                 cell.leftIconView.tintColor = _panoOnly ? UIColorFromRGB(color_dialog_buttons_dark) : UIColorFromRGB(color_tint_gray);
                 [cell.switchView setOn:_panoOnly];
             }
@@ -374,7 +374,7 @@ static const NSInteger panoImageFilterSection = 2;
         if (cell)
         {
             cell.titleLabel.text = item[@"title"];
-            cell.leftIconView.image = [UIImage templateImageNamed:item[@"img"]];
+            cell.leftIconView.image = [UIImage templateImageNamed:item[@"img"]].imageFlippedForRightToLeftLayoutDirection;
             cell.leftIconView.tintColor = UIColorFromRGB(color_tint_gray);
             [cell.button setTitle:item[@"btnTitle"] forState:UIControlStateNormal];
             [cell.button removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
@@ -393,7 +393,7 @@ static const NSInteger panoImageFilterSection = 2;
         if (cell)
         {
             cell.textView.text = item[@"title"];
-            cell.leftIconView.image = [UIImage templateImageNamed:item[@"img"]];
+            cell.leftIconView.image = [UIImage templateImageNamed:item[@"img"]].imageFlippedForRightToLeftLayoutDirection;
             cell.leftIconView.tintColor = UIColorFromRGB(color_tint_gray);
             if ([item[@"key"] isEqualToString:@"users_filter"])
             {
@@ -435,7 +435,7 @@ static const NSInteger panoImageFilterSection = 2;
             if (img)
             {
                 [cell showLeftImageView:YES];
-                cell.leftImageView.image = img;
+                cell.leftImageView.image = img.imageFlippedForRightToLeftLayoutDirection;
                 cell.leftImageView.tintColor = isNotSet ? UIColorFromRGB(color_tint_gray) : UIColorFromRGB(color_dialog_buttons_dark);
             }
             

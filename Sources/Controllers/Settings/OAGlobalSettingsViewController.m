@@ -77,6 +77,7 @@
 {
     [super viewDidLoad];
 
+    [self.backButton setImage:[UIImage imageNamed:@"ic_navbar_chevron"].imageFlippedForRightToLeftLayoutDirection forState:UIControlStateNormal];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
 
@@ -333,7 +334,7 @@
             cell.titleLabel.text = [appMode toHumanString];
             cell.descriptionLabel.text = [appMode getProfileDescription];
 
-            cell.leftIconView.image = [[appMode getIcon] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.leftIconView.image = [[appMode getIcon] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
             cell.leftIconView.tintColor = UIColorFromRGB([appMode getIconColor]);
 
             [cell rightIconVisibility:[item boolForKey:@"isSelected"]];

@@ -193,7 +193,7 @@
         [cell.descriptionView setText: [data[indexPath.row] objectForKey:@"value"]];
         NSString *imgName = [data[indexPath.row] objectForKey:@"img"];
         if (imgName.length > 0)
-            [cell.iconView setImage:[UIImage imageNamed:imgName]];
+            [cell.iconView setImage:[UIImage imageNamed:imgName].imageFlippedForRightToLeftLayoutDirection];
         else
             [cell.iconView setImage:nil];
     }

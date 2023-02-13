@@ -250,7 +250,7 @@ CGFloat const kDefaultHeaderHeight = 40.0;
             cell.descriptionView.text = item[@"descText"];
             cell.descriptionView.textColor = item[@"descColor"];
             cell.leftIconView.tintColor = item[@"iconColor"];
-            cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
+            cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]].imageFlippedForRightToLeftLayoutDirection;
         }
         return cell;
     }
@@ -267,7 +267,7 @@ CGFloat const kDefaultHeaderHeight = 40.0;
         cell.titleView.text = item[@"titleText"];
         cell.titleView.textColor = item[@"color"];
         cell.iconView.tintColor = item[@"color"];
-        [cell.iconView setImage:[UIImage templateImageNamed:item[@"icon"]]];
+        [cell.iconView setImage:[UIImage templateImageNamed:item[@"icon"]].imageFlippedForRightToLeftLayoutDirection];
         return cell;
     }
     return nil;

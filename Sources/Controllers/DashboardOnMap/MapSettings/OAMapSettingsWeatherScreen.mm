@@ -228,7 +228,7 @@
             cell.titleLabel.text = enabled ? OALocalizedString(@"shared_string_enabled") : OALocalizedString(@"rendering_value_disabled_name");
 
             NSString *imgName = enabled ? @"ic_custom_umbrella.png" : @"ic_custom_hide.png";
-            cell.leftIconView.image = [UIImage templateImageNamed:imgName];
+            cell.leftIconView.image = [UIImage templateImageNamed:imgName].imageFlippedForRightToLeftLayoutDirection;
             cell.leftIconView.tintColor = enabled ? UIColorFromRGB(color_dialog_buttons_dark) : UIColorFromRGB(color_tint_gray);
 
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
@@ -263,7 +263,7 @@
                 iconEnabled = isOn;
             }
             cell.descriptionView.text = valueText;
-            cell.leftIconView.image = [UIImage templateImageNamed:item[@"image"]];
+            cell.leftIconView.image = [UIImage templateImageNamed:item[@"image"]].imageFlippedForRightToLeftLayoutDirection;
             cell.leftIconView.tintColor = iconEnabled ? UIColorFromRGB(nav_bar_day) : UIColorFromRGB(color_tint_gray);
         }
         return cell;

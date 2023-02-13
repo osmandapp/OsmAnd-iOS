@@ -547,7 +547,7 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
         [screenObj deinitView];
 }
 
-- (IBAction) backButtonClicked:(id)sender
+- (IBAction) onLeftNavbarButtonPressed:(id)sender
 {
     if ([screenObj respondsToSelector:@selector(backButtonPressed)] && ![screenObj backButtonPressed])
         return;
@@ -563,7 +563,7 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
     if ([screenObj respondsToSelector:@selector(okButtonPressed)] && ![screenObj okButtonPressed])
         return;
 
-    [self backButtonClicked:sender];
+    [self onLeftNavbarButtonPressed:sender];
 }
 
 - (void) didReceiveMemoryWarning

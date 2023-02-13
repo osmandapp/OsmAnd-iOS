@@ -7,12 +7,14 @@
 //
 
 #import "OASuperViewController.h"
+#import "OAAutoObserverProxy.h"
 #import "OASizes.h"
 
 @implementation OASuperViewController
 {
     BOOL _isScreenLoaded;
     UIContentSizeCategory _contentSizeCategory;
+    NSMutableArray<OAAutoObserverProxy *> *_observers;
 }
 
 #pragma mark - Initialization
@@ -20,17 +22,36 @@
 - (void)dealloc
 {
     [NSNotificationCenter.defaultCenter removeObserver:self];
+
+    for (OAAutoObserverProxy *observer in _observers)
+    {
+        [observer detach];
+    }
 }
 
 // use addNotification:selector: method here
-// notifications will be automatically added in viewWillAppear: and removed in viewWillDisappear:
+// notifications will be automatically added in viewWillAppear: and removed in dealloc
 - (void)registerNotifications
 {
 }
 
+// do not override
 - (void)addNotification:(NSNotificationName)name selector:(SEL)selector
 {
     [NSNotificationCenter.defaultCenter addObserver:self selector:selector name:name object:nil];
+}
+
+// use addObserver: method here
+// observers will be automatically added in viewWillAppear: and removed in dealloc
+- (void)registerObservers
+{
+}
+
+// do not override
+- (OAAutoObserverProxy *)addObserver:(OAAutoObserverProxy *)observer
+{
+    [_observers addObject:observer];
+    return observer;
 }
 
 #pragma mark - UIViewController
@@ -39,6 +60,8 @@
 {
     [super viewDidLoad];
     [self applyLocalization];
+
+    _observers = [NSMutableArray array];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -49,6 +72,7 @@
     [self addNotification:UIContentSizeCategoryDidChangeNotification selector:@selector(onContentSizeChanged:)];
     // for other
     [self registerNotifications];
+    [self registerObservers];
 
     if (_contentSizeCategory)
     {
@@ -72,6 +96,7 @@
         [self updateNavbarEstimatedHeight];
         _isScreenLoaded = YES;
         _contentSizeCategory = [UIApplication sharedApplication].preferredContentSizeCategory;
+        [self adjustScrollStartPosition];
     }
 }
 
@@ -103,6 +128,10 @@
 }
 
 - (void)resetNavbarEstimatedHeight
+{
+}
+
+- (void)adjustScrollStartPosition
 {
 }
 
@@ -138,7 +167,7 @@
     [self resetNavbarEstimatedHeight];
 }
 
-- (IBAction)backButtonClicked:(id)sender
+- (IBAction)onLeftNavbarButtonPressed:(UIButton *)sender
 {
     [self dismissViewController];
 }

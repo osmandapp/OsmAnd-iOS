@@ -477,7 +477,7 @@
     [self presentViewController:safariViewController animated:YES completion:nil];
 }
 
-- (IBAction) backButtonClicked:(id)sender
+- (IBAction) onLeftNavbarButtonPressed:(id)sender
 {
     [self dismissViewControllerAnimated:YES completion:nil];
 }

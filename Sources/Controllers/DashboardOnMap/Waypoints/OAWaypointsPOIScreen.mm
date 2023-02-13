@@ -263,7 +263,7 @@
             
         }
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
-        [vwController backButtonClicked:nil];
+        [vwController onLeftNavbarButtonPressed:nil];
     }
 }
 

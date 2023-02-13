@@ -90,7 +90,7 @@
 
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
-    if ([self getNavbarButtonsTintColor] == EOABaseNavbarColorSchemeOrange)
+    if ([self getNavbarColorScheme] == EOABaseNavbarColorSchemeOrange)
         return UIStatusBarStyleLightContent;
 
     if (@available(iOS 13.0, *))
@@ -170,6 +170,11 @@
 - (void)resetNavbarEstimatedHeight
 {
     self.navbarStackViewEstimatedHeightConstraint.constant = 0;
+}
+
+- (void)adjustScrollStartPosition
+{
+    self.tableView.contentOffset = CGPointMake(0., -[self getNavbarHeight]);
 }
 
 - (UIColor *)getNavbarColor

@@ -50,7 +50,7 @@
                     <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <state key="normal" image="ic_navbar_chevron.png"/>
                     <connections>
-                        <action selector="backButtonClicked:" destination="-1" eventType="touchUpInside" id="QYp-HQ-04X"/>
+                        <action selector="onLeftNavbarButtonPressed:" destination="-1" eventType="touchUpInside" id="QYp-HQ-04X"/>
                     </connections>
                 </button>
             </subviews>

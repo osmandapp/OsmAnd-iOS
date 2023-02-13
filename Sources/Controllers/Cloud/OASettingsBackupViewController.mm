@@ -177,7 +177,7 @@
     }
 }
 
-- (IBAction)backButtonClicked:(id)sender
+- (IBAction)onLeftNavbarButtonPressed:(id)sender
 {
     [self dismissViewController];
 }

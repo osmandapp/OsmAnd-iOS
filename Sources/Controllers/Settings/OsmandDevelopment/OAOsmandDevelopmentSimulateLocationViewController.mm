@@ -33,7 +33,6 @@
 {
     OsmAndAppInstance _app;
     OAAppSettings *_settings;
-    OAAutoObserverProxy* _simulateRoutingObserver;
     NSArray<NSArray *> *_data;
     NSString *_headerDescription;
     NSString *_selectedTrackName;
@@ -52,9 +51,14 @@ NSString *const kStartStopButtonKey = @"kStartStopButtonKey";
     _settings = [OAAppSettings sharedManager];
     _selectedTrackName = _settings.simulateNavigationGpxTrack;
     _selectedSpeedMode = [OASimulateNavigationSpeed fromKey:_settings.simulateNavigationGpxTrackSpeedMode];
-    _simulateRoutingObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onTrackAnimationFinished) andObserve:_app.simulateRoutingObservable];
-
     _headerDescription = OALocalizedString(@"simulate_your_location_gpx_descr");
+}
+
+- (void)registerObservers
+{
+    [self addObserver:[[OAAutoObserverProxy alloc] initWith:self
+                                                withHandler:@selector(onTrackAnimationFinished)
+                                                 andObserve:_app.simulateRoutingObservable]];
 }
 
 #pragma mark - UIViewController

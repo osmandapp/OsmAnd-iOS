@@ -8,20 +8,25 @@
 
 #import <UIKit/UIKit.h>
 
+@class OAAutoObserverProxy;
+
 @interface OASuperViewController : UIViewController
 
 - (void)registerNotifications;
 - (void)addNotification:(NSNotificationName)name selector:(SEL)selector;
+- (void)registerObservers;
+- (OAAutoObserverProxy *)addObserver:(OAAutoObserverProxy *)observer;
 
 - (CGFloat)getNavbarEstimatedHeight;
 - (void)updateNavbarEstimatedHeight;
 - (void)resetNavbarEstimatedHeight;
+- (void)adjustScrollStartPosition;
 - (void)applyLocalization;
 - (BOOL)isModal;
 - (BOOL)isScreenLoaded;
 
 - (void)onContentSizeChanged:(NSNotification *)notification;
-- (IBAction)backButtonClicked:(id)sender;
+- (IBAction)onLeftNavbarButtonPressed:(UIButton *)sender;
 
 - (void)dismissViewController;
 - (void)showViewController:(UIViewController *)viewController;

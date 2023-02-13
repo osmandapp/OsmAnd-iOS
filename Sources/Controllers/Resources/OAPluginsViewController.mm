@@ -354,7 +354,7 @@
     });
 }
 
-- (void) backButtonClicked:(id)sender
+- (void) onLeftNavbarButtonPressed:(id)sender
 {
     [self.navigationController popViewControllerAnimated:YES];
 }

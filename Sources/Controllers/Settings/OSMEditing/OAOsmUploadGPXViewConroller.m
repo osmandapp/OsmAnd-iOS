@@ -312,14 +312,14 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
 
 #pragma mark - Actions
 
-- (IBAction)backButtonClicked:(id)sender
+- (IBAction)onLeftNavbarButtonPressed:(id)sender
 {
     if (_mode == EOAOsmUploadGPXViewConrollerModeInitial)
     {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"exit_without_saving") message:OALocalizedString(@"unsaved_changes_will_be_lost") preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil]];
         [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_exit") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            [super backButtonClicked:sender];
+            [super onLeftNavbarButtonPressed:sender];
         }]];
         
         [self presentViewController:alert animated:YES completion:nil];
@@ -328,11 +328,11 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
     {
         if (_uploadTask)
             [_uploadTask setInterrupted:YES];
-        [super backButtonClicked:sender];
+        [super onLeftNavbarButtonPressed:sender];
     }
     else
     {
-        [super backButtonClicked:sender];
+        [super onLeftNavbarButtonPressed:sender];
     }
 }
 
@@ -395,7 +395,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
     }
     else if (_mode == EOAOsmUploadGPXViewConrollerModeSuccess)
     {
-        [super backButtonClicked:sender];
+        [super onLeftNavbarButtonPressed:sender];
     }
     else if (_mode == EOAOsmUploadGPXViewConrollerModeFailed)
     {

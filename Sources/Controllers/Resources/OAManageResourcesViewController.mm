@@ -1783,7 +1783,7 @@ static BOOL _repositoryUpdated = NO;
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
-- (void)backButtonClicked:(id)sender
+- (void)onLeftNavbarButtonPressed:(id)sender
 {
     if (self.region.regionId == nil && _currentScope == kAllResourcesScope)
         [self.navigationController popToRootViewControllerAnimated:YES];

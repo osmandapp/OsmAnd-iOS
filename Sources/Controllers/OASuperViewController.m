@@ -106,6 +106,7 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
     return UIStatusBarStyleLightContent;
@@ -146,11 +147,11 @@
 }
 
 - (BOOL)isModal
+{
     if ([self presentingViewController])
         return YES;
     if ([[[self navigationController] presentingViewController] presentedViewController] == [self navigationController])
         return YES;
-    if ([[[self tabBarController] presentingViewController] isKindOfClass:[UITabBarController class]])
     if ([[[self tabBarController] presentingViewController] isKindOfClass:[UITabBarController class]])
         return YES;
 
@@ -176,6 +177,7 @@
 {
     [self dismissViewController];
 }
+
 #pragma mark - Actions
 
 - (void)dismissViewController

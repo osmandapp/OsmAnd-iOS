@@ -120,7 +120,7 @@
                title:(NSString *)title
 {
     self.backgroundColor = _selectedTab != EOATrackMenuHudActionsTab
-            ? UIColor.whiteColor : UIColorFromRGB(color_bottom_sheet_background);
+            ? UIColor.whiteColor : UIColorFromRGB(color_primary_table_background);
 
     self.bottomDividerView.hidden = _selectedTab == EOATrackMenuHudSegmentsTab || _selectedTab == EOATrackMenuHudPointsTab;
 

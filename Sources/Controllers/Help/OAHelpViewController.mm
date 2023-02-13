@@ -38,22 +38,10 @@ static const NSInteger groupCount = 5;
 
 #pragma mark - UIViewController
 
-- (void) viewDidLoad
-{
-    [super viewDidLoad];
-
-    self.titleLabel.textColor = UIColor.whiteColor;
-}
-
 - (void) didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-- (UIStatusBarStyle)preferredStatusBarStyle
-{
-    return UIStatusBarStyleLightContent;
 }
 
 #pragma mark - Base UI
@@ -63,24 +51,9 @@ static const NSInteger groupCount = 5;
     return OALocalizedString(@"shared_string_help");
 }
 
-- (UIColor *)getNavbarColor
+- (EOABaseNavbarColorScheme)getNavbarColorScheme
 {
-    return UIColorFromRGB(color_navbar_orange);
-}
-
-- (UIColor *)getNavbarButtonsTintColor
-{
-    return UIColor.whiteColor;
-}
-
-- (BOOL)isNavbarSeparatorVisible
-{
-    return NO;
-}
-
-- (BOOL)isNavbarBlurring
-{
-    return NO;
+    return EOABaseNavbarColorSchemeOrange;
 }
 
 #pragma mark - Table data

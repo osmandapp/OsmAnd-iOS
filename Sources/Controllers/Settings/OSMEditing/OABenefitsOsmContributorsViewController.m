@@ -37,9 +37,9 @@
 
 #pragma mark - Base UI
 
-- (UIColor *)getNavbarColor
+- (EOABaseNavbarColorScheme)getNavbarColorScheme
 {
-    return UIColor.whiteColor;
+    return EOABaseNavbarColorSchemeWhite;
 }
 
 - (BOOL)isNavbarSeparatorVisible

@@ -185,8 +185,8 @@
 - (void) additionalSetup
 {
     [super additionalSetup];
-    self.tableBackgroundView.backgroundColor = UIColorFromRGB(color_bottom_sheet_background);
-    self.buttonsView.backgroundColor = UIColorFromRGB(color_bottom_sheet_background);
+    self.tableBackgroundView.backgroundColor = UIColorFromRGB(color_primary_table_background);
+    self.buttonsView.backgroundColor = UIColorFromRGB(color_primary_table_background);
     for (UIView *v in self.buttonsView.subviews)
     {
         if (v.tag != kButtonsTag)

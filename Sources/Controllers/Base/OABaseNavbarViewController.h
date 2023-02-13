@@ -7,9 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "OACompoundViewController.h"
+#import "OASuperViewController.h"
 
-@interface OABaseNavbarViewController : OACompoundViewController<UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource>
+typedef NS_ENUM(NSInteger, EOABaseNavbarColorScheme)
+{
+    EOABaseNavbarColorSchemeOrange = 0,
+    EOABaseNavbarColorSchemeGray,
+    EOABaseNavbarColorSchemeWhite
+};
+
+@interface OABaseNavbarViewController : OASuperViewController<UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource>
 
 @property (weak, nonatomic) IBOutlet UIButton *leftNavbarButton;
 @property (weak, nonatomic) IBOutlet UIButton *rightNavbarButton;
@@ -26,8 +33,7 @@
 - (NSString *)getSubtitle;
 - (NSString *)getLeftNavbarButtonTitle;
 - (NSString *)getRightNavbarButtonTitle;
-- (UIColor *)getNavbarColor;
-- (UIColor *)getNavbarButtonsTintColor;
+- (EOABaseNavbarColorScheme)getNavbarColorScheme;
 - (BOOL)isNavbarSeparatorVisible;
 - (BOOL)isChevronIconVisible;
 - (BOOL)isNavbarBlurring;

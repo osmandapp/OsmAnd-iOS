@@ -199,7 +199,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     {
         UIView *res = [[UIView alloc] init];
         res.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        res.backgroundColor = UIColorFromRGB(color_bottom_sheet_background);
+        res.backgroundColor = UIColorFromRGB(color_primary_table_background);
         res.alpha = 0;
         return res;
     }
@@ -1093,7 +1093,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     else
     {
         [UIView animateWithDuration:.2 animations:^{
-            self.navbarView.backgroundColor = UIColorFromRGB(color_bottom_sheet_background);
+            self.navbarView.backgroundColor = UIColorFromRGB(color_primary_table_background);
             _navBarBackgroundView.alpha = 0;
         }];
     }
@@ -1237,7 +1237,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
         {
             UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
             btn.frame = CGRectMake(xPosition + margin, 6, 0, 0);
-            btn.backgroundColor = UIColorFromRGB(color_bottom_sheet_background);
+            btn.backgroundColor = UIColorFromRGB(color_primary_table_background);
             btn.layer.masksToBounds = YES;
             btn.layer.cornerRadius = 6.0;
             btn.titleLabel.numberOfLines = 1;

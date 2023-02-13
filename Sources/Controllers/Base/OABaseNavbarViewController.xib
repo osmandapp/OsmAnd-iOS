@@ -35,11 +35,11 @@
             <subviews>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="lEe-QA-baY">
                     <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                    <color key="backgroundColor" red="0.89803921568627454" green="0.89803921568627454" blue="0.89803921568627454" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="calibratedRGB"/>
                 </tableView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ldq-EA-ADj" userLabel="Navbar Background View">
                     <rect key="frame" x="0.0" y="0.0" width="414" height="93"/>
-                    <color key="backgroundColor" red="0.89803921568627454" green="0.89803921568627454" blue="0.89803921568627454" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" red="0.97647058823529409" green="0.97647058823529409" blue="0.97647058823529409" alpha="1" colorSpace="calibratedRGB"/>
                 </view>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="p4E-OZ-ZZt" userLabel="Navbar Stack View">
                     <rect key="frame" x="0.0" y="48" width="414" height="45"/>
@@ -99,7 +99,7 @@
                                         </button>
                                     </subviews>
                                 </stackView>
-                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="hYh-B0-BvK">
+                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="hYh-B0-BvK" userLabel="Text Stack View">
                                     <rect key="frame" x="143" y="0.0" width="128" height="40"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Title" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ejc-zb-cco" userLabel="Title Label">
@@ -174,8 +174,8 @@
                             </subviews>
                             <constraints>
                                 <constraint firstItem="Aut-zP-CbX" firstAttribute="width" secondItem="fuX-ua-ltU" secondAttribute="width" id="M0b-71-JWE"/>
-                                <constraint firstItem="hYh-B0-BvK" firstAttribute="width" relation="lessThanOrEqual" secondItem="Aut-zP-CbX" secondAttribute="width" multiplier="2:1" id="h0N-SY-wmJ"/>
-                                <constraint firstItem="hYh-B0-BvK" firstAttribute="width" relation="lessThanOrEqual" secondItem="fuX-ua-ltU" secondAttribute="width" multiplier="2:1" id="iUB-Yg-eey"/>
+                                <constraint firstItem="hYh-B0-BvK" firstAttribute="width" relation="greaterThanOrEqual" secondItem="Aut-zP-CbX" secondAttribute="width" id="h0N-SY-wmJ"/>
+                                <constraint firstItem="hYh-B0-BvK" firstAttribute="width" relation="greaterThanOrEqual" secondItem="fuX-ua-ltU" secondAttribute="width" id="iUB-Yg-eey"/>
                             </constraints>
                         </stackView>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="o25-jK-K46" userLabel="Separator Navbar View">

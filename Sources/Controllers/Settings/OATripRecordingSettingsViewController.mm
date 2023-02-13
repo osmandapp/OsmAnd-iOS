@@ -524,7 +524,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
         case kTripRecordingSettingsScreenRecInterval:
             if ([item[@"value"] isEqualToString:@"always_ask"]) {
                 [_settings.mapSettingSaveTrackIntervalApproved set:NO mode:self.appMode];
-                [self backButtonClicked:nil];
+                [self dismissViewController];
             } else {
                 [self selectRecInterval:indexPath.row - 1];
             }
@@ -602,31 +602,31 @@ static NSArray<NSString *> *minTrackSpeedNames;
 {
     [_settings.mapSettingSaveTrackIntervalApproved set:YES mode:self.appMode];
     [_settings.mapSettingSaveTrackIntervalGlobal set:[_settings.trackIntervalArray[index] intValue] mode:self.appMode];
-    [self backButtonClicked:nil];
+    [self dismissViewController];
 }
 
 - (void) selectNavRecInterval:(NSInteger)index
 {
     [_settings.mapSettingSaveTrackInterval set:[_settings.trackIntervalArray[index] intValue] mode:self.appMode];
-    [self backButtonClicked:nil];
+    [self dismissViewController];
 }
 
 - (void) selectMinDistance:(NSInteger)index
 {
     [_settings.saveTrackMinDistance set:minTrackDistanceValues[index].doubleValue mode:self.appMode];
-    [self backButtonClicked:nil];
+    [self dismissViewController];
 }
 
 - (void) selectMinSpeed:(NSInteger)index
 {
     [_settings.saveTrackMinSpeed set:minTrackSpeedValues[index].doubleValue / MPS_TO_KMH_MULTIPLIER mode:self.appMode];
-    [self backButtonClicked:nil];
+    [self dismissViewController];
 }
 
 - (void) selectAccuracy:(NSInteger)index
 {
     [_settings.saveTrackPrecision set:trackPrecisionValues[index].doubleValue mode:self.appMode];
-    [self backButtonClicked:nil];
+    [self dismissViewController];
 }
 
 - (void) selectGeneral:(NSDictionary *)item

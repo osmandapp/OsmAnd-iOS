@@ -190,7 +190,7 @@
     [self selectSettingGeoCode:item[@"name"]];
     [self generateData];
     [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationFade];
-    [self backButtonClicked:self];
+    [self dismissViewController];
 }
 
 #pragma mark - Selectors

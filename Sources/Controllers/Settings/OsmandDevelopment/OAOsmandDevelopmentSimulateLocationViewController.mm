@@ -65,8 +65,6 @@ NSString *const kStartStopButtonKey = @"kStartStopButtonKey";
 
     self.tableView.separatorInset = UIEdgeInsetsMake(0., 16.0 + OAUtilities.getLeftMargin, 0., 0.);
     self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:_headerDescription font:[UIFont scaledSystemFontOfSize:15] textColor:UIColorFromRGB(color_text_footer) lineSpacing:0.0 isTitle:NO];
-
-    self.titleLabel.textColor = UIColor.whiteColor;
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -89,24 +87,9 @@ NSString *const kStartStopButtonKey = @"kStartStopButtonKey";
     return OALocalizedString(@"simulate_your_location");
 }
 
-- (UIColor *)getNavbarColor
+- (EOABaseNavbarColorScheme)getNavbarColorScheme
 {
-    return UIColorFromRGB(color_navbar_orange);
-}
-
-- (UIColor *)getNavbarButtonsTintColor
-{
-    return UIColor.whiteColor;
-}
-
-- (BOOL)isNavbarSeparatorVisible
-{
-    return NO;
-}
-
-- (BOOL)isNavbarBlurring
-{
-    return NO;
+    return EOABaseNavbarColorSchemeOrange;
 }
 
 #pragma mark - Table data

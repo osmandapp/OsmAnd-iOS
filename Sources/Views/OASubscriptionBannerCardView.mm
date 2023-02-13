@@ -60,7 +60,7 @@
     self.backgroundColor = UIColorFromRGB(color_banner_background);
 
     self.separatorView.backgroundColor = [UIColor colorWithWhite:1. alpha:0.1];
-    self.iconView.tintColor = UIColorFromRGB(color_bottom_sheet_background);
+    self.iconView.tintColor = UIColorFromRGB(color_primary_table_background);
 }
 
 - (void)updateView

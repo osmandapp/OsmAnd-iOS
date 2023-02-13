@@ -440,7 +440,7 @@
     [self generateData];
     [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationFade];
     [self.delegate onSettingsChanged];
-    [self backButtonClicked:self];
+    [self dismissViewController];
 }
 
 #pragma mark - Selectors

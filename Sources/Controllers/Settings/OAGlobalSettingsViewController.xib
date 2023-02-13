@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -23,11 +24,11 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0fl-3a-Grk">
-                    <rect key="frame" x="0.0" y="0.0" width="414" height="88"/>
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="92"/>
                     <color key="backgroundColor" red="1" green="0.53333333333333333" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </view>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Global settings" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5HS-5V-ak0">
-                    <rect key="frame" x="147" y="44" width="120" height="44"/>
+                    <rect key="frame" x="147" y="48" width="120" height="44"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="44" id="w3J-nN-xYh"/>
                     </constraints>
@@ -36,11 +37,11 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" allowsMultipleSelection="YES" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="0L5-Nu-H0J">
-                    <rect key="frame" x="0.0" y="88" width="414" height="808"/>
+                    <rect key="frame" x="0.0" y="92" width="414" height="804"/>
                     <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                 </tableView>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jP0-iE-Lsr">
-                    <rect key="frame" x="16" y="44" width="28" height="44"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jP0-iE-Lsr">
+                    <rect key="frame" x="16" y="48" width="28" height="44"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="44" id="nhC-6y-CPW"/>
                     </constraints>
@@ -51,7 +52,8 @@
                     </connections>
                 </button>
             </subviews>
-            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+            <viewLayoutGuide key="safeArea" id="Haq-ow-Vm5"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
                 <constraint firstItem="5HS-5V-ak0" firstAttribute="bottom" secondItem="0fl-3a-Grk" secondAttribute="bottom" id="6QS-nx-6RH"/>
                 <constraint firstItem="0fl-3a-Grk" firstAttribute="trailing" secondItem="21h-SV-1Tc" secondAttribute="trailing" id="7jB-AG-BMb"/>
@@ -66,11 +68,13 @@
                 <constraint firstItem="jP0-iE-Lsr" firstAttribute="leading" secondItem="Haq-ow-Vm5" secondAttribute="leading" constant="16" id="n4K-Uc-QHD"/>
                 <constraint firstItem="0fl-3a-Grk" firstAttribute="centerX" secondItem="5HS-5V-ak0" secondAttribute="centerX" id="wUH-XJ-Kab"/>
             </constraints>
-            <viewLayoutGuide key="safeArea" id="Haq-ow-Vm5"/>
             <point key="canvasLocation" x="57" y="775"/>
         </view>
     </objects>
     <resources>
         <image name="ic_navbar_chevron.png" width="28" height="28"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
     </resources>
 </document>

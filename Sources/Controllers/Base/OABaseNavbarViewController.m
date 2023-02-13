@@ -62,12 +62,10 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
 
-    self.tableView.sectionHeaderHeight = kHeaderHeightDefault;
-    self.tableView.sectionFooterHeight = kFooterHeightDefault;
-
     [self setupNavbarButtons];
     [self setupNavbarFonts];
     [self updateNavbarStackViewEstimatedHeight];
+    self.titleLabel.textColor = [self getTitleColor];
 
     NSString *title = [self getTitle];
     self.titleLabel.hidden = !title || title.length == 0;
@@ -92,6 +90,9 @@
 
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
+    if ([self getNavbarButtonsTintColor] == EOABaseNavbarColorSchemeOrange)
+        return UIStatusBarStyleLightContent;
+
     if (@available(iOS 13.0, *))
         return UIStatusBarStyleDarkContent;
 
@@ -110,10 +111,11 @@
 
 - (void)setupNavbarButtons
 {
-    [self.leftNavbarButton setTitleColor:[self getNavbarButtonsTintColor] forState:UIControlStateNormal];
-    self.leftNavbarButton.tintColor = [self getNavbarButtonsTintColor];
-    [self.rightNavbarButton setTitleColor:[self getNavbarButtonsTintColor] forState:UIControlStateNormal];
-    self.rightNavbarButton.tintColor = [self getNavbarButtonsTintColor];
+    UIColor *buttonsTintColor = [self getNavbarButtonsTintColor];
+    [self.leftNavbarButton setTitleColor:buttonsTintColor forState:UIControlStateNormal];
+    self.leftNavbarButton.tintColor = buttonsTintColor;
+    [self.rightNavbarButton setTitleColor:buttonsTintColor forState:UIControlStateNormal];
+    self.rightNavbarButton.tintColor = buttonsTintColor;
 
     BOOL isChevronIconVisible = [self isChevronIconVisible];
     [self.leftNavbarButton setImage:isChevronIconVisible ? [UIImage templateImageNamed:@"ic_navbar_chevron"] : nil
@@ -170,6 +172,39 @@
     self.navbarStackViewEstimatedHeightConstraint.constant = 0;
 }
 
+- (UIColor *)getNavbarColor
+{
+    EOABaseNavbarColorScheme colorScheme = [self getNavbarColorScheme];
+    switch (colorScheme)
+    {
+        case EOABaseNavbarColorSchemeOrange:
+        {
+            return UIColorFromRGB(color_primary_orange_navbar_background);
+            break;
+        }
+        case EOABaseNavbarColorSchemeWhite:
+        {
+            return UIColor.whiteColor;
+            break;
+        }
+        default:
+        {
+            return UIColorFromRGB(color_primary_gray_navbar_background);
+            break;
+        }
+    }
+}
+
+- (UIColor *)getNavbarButtonsTintColor
+{
+    return [self getNavbarColorScheme] == EOABaseNavbarColorSchemeOrange ? UIColor.whiteColor : UIColorFromRGB(color_primary_purple);
+}
+
+- (UIColor *)getTitleColor
+{
+    return [self getNavbarColorScheme] == EOABaseNavbarColorSchemeOrange ? UIColor.whiteColor : UIColor.blackColor;
+}
+
 #pragma mark - Base UI
 
 - (NSString *)getTitle
@@ -192,19 +227,14 @@
     return @"";
 }
 
-- (UIColor *)getNavbarColor
+- (EOABaseNavbarColorScheme)getNavbarColorScheme
 {
-    return UIColorFromRGB(color_bottom_sheet_background);
-}
-
-- (UIColor *)getNavbarButtonsTintColor
-{
-    return UIColorFromRGB(color_primary_purple);
+    return EOABaseNavbarColorSchemeGray;
 }
 
 - (BOOL)isNavbarSeparatorVisible
 {
-    return YES;
+    return [self getNavbarColorScheme] != EOABaseNavbarColorSchemeOrange;
 }
 
 - (BOOL)isChevronIconVisible
@@ -214,7 +244,7 @@
 
 - (BOOL)isNavbarBlurring
 {
-    return YES;
+    return [self getNavbarColorScheme] != EOABaseNavbarColorSchemeOrange;
 }
 
 #pragma mark - Table data
@@ -279,14 +309,6 @@
 
 #pragma mark - Selectors
 
-- (void)onScrollViewDidScroll:(UIScrollView *)scrollView
-{
-}
-
-- (void)onRotation
-{
-}
-
 - (IBAction)onLeftNavbarButtonPressed:(UIButton *)sender
 {
     [self dismissViewController];
@@ -295,6 +317,14 @@
 - (IBAction)onRightNavbarButtonPressed:(UIButton *)sender
 {
     [self dismissViewController];
+}
+
+- (void)onScrollViewDidScroll:(UIScrollView *)scrollView
+{
+}
+
+- (void)onRotation
+{
 }
 
 #pragma mark - UIScrollViewDelegate

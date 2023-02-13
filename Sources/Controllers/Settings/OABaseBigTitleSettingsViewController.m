@@ -104,7 +104,7 @@
 
 - (UIColor *)navBarBackgroundColor
 {
-    return UIColorFromRGB(color_bottom_sheet_background);
+    return UIColorFromRGB(color_primary_table_background);
 }
 
 - (void)onScrollViewDidScroll:(UIScrollView *)scrollView

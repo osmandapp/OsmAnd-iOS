@@ -287,8 +287,8 @@
 - (void)additionalSetup
 {
     [super additionalSetup];
-    self.tableBackgroundView.backgroundColor = UIColorFromRGB(color_bottom_sheet_background);
-    self.buttonsView.subviews.firstObject.backgroundColor = UIColorFromRGB(color_bottom_sheet_background);;
+    self.tableBackgroundView.backgroundColor = UIColorFromRGB(color_primary_table_background);
+    self.buttonsView.subviews.firstObject.backgroundColor = UIColorFromRGB(color_primary_table_background);;
     [self hideDoneButton];
 }
 

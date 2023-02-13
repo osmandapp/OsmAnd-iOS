@@ -356,9 +356,15 @@
                 NSString *shortKey = [key stringByReplacingOccurrencesOfString:osmPrefix withString:@""];
                 additionalInfo[shortKey] = map[key];
             }
-            else if ([key isEqualToString:@"phone"] ||[key isEqualToString:@"website"])
+            else
             {
-                additionalInfo[key] = map[key];
+                NSString *shortKey = [key componentsSeparatedByString:@":"].lastObject;
+                if (![shortKey isEqualToString:@"icon"] &&
+                    ![key isEqualToString:@"color"] &&
+                    ![key isEqualToString:@"background"])
+                {
+                    additionalInfo[key] = map[key];
+                }
             }
         }
         

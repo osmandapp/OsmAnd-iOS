@@ -31,6 +31,8 @@
 
 - (void)viewDidLoad
 {
+    self.primaryButtonTopMarginYesSecondary.constant = 30;
+
     [super viewDidLoad];
 
     self.tableView.delegate = self;
@@ -67,9 +69,7 @@
     self.secondaryBottomButton.backgroundColor = UIColorFromRGB(color_primary_red);
 
     self.bottomBarView.backgroundColor = self.tableView.backgroundColor;
-    self.primaryButtonTopMarginYesSecondary.constant = 30.;
     self.buttonSeparator.hidden = YES;
-    self.bottomViewHeigh.constant = self.primaryBottomButton.frame.origin.y + self.primaryBottomButton.frame.size.height + [OAUtilities getBottomMargin] + 22.;
 
     self.additionalNavBarButton.hidden = YES;
     self.backImageButton.hidden = YES;
@@ -104,18 +104,18 @@
 
     NSString *uninstallStr = OALocalizedString(@"shared_string_uninstall");
     NSString *keepActiveStr = OALocalizedString(@"shared_string_keep_active");
-    NSString *text = [NSString stringWithFormat:OALocalizedString(@"speed_cameras_legal_descr"), uninstallStr, keepActiveStr];
+    NSString *text = [NSString stringWithFormat:OALocalizedString(@"speed_cameras_legal_descr"), keepActiveStr, uninstallStr];
     NSMutableAttributedString *attrText = [[NSMutableAttributedString alloc] initWithString:text
                                                                                  attributes:@{
-                                                                       NSFontAttributeName : [UIFont scaledSystemFontOfSize:15.] }];
+                                                                       NSFontAttributeName : [UIFont scaledSystemFontOfSize:17.] }];
     [attrText addAttribute:NSFontAttributeName
-                     value:[UIFont scaledSystemFontOfSize:15. weight:UIFontWeightMedium]
+                     value:[UIFont scaledSystemFontOfSize:17. weight:UIFontWeightSemibold]
                      range:[text rangeOfString:uninstallStr]];
     [attrText addAttribute:NSFontAttributeName
-                     value:[UIFont scaledSystemFontOfSize:15. weight:UIFontWeightMedium]
+                     value:[UIFont scaledSystemFontOfSize:17. weight:UIFontWeightSemibold]
                      range:[text rangeOfString:keepActiveStr]];
     NSMutableParagraphStyle *attrTextParagraphStyle = [[NSMutableParagraphStyle alloc] init];
-    attrTextParagraphStyle.minimumLineHeight = 21.;
+    attrTextParagraphStyle.minimumLineHeight = 22.;
     [attrText addAttribute:NSParagraphStyleAttributeName
                      value:attrTextParagraphStyle
                      range:NSMakeRange(0, attrText.length)];
@@ -146,7 +146,17 @@
     if (self.delegate)
         [self.delegate onUninstallSpeedCameras];
 
-    [self dismissViewController];
+    UIAlertController *alert =
+            [UIAlertController alertControllerWithTitle:OALocalizedString(@"restart_is_required_title")
+                                                message:OALocalizedString(@"restart_is_required")
+                                         preferredStyle:UIAlertControllerStyleAlert];
+
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok")
+                                              style:UIAlertActionStyleCancel
+                                            handler:^(UIAlertAction * _Nonnull action) {
+                                                    [self dismissViewController];
+    }]];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 - (IBAction)primaryButtonPressed:(id)sender

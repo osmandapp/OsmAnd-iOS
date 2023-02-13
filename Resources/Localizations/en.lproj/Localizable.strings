@@ -3045,3 +3045,6 @@
 "announcement_time_prepare_long" = "Long prepare";
 "announcement_time_approach" = "Approach";
 "announcement_time_passing" = "Passing";
+
+"restart_is_required_title" = "Restart is required";
+"restart_is_required" = "A restart is required to apply the change.";

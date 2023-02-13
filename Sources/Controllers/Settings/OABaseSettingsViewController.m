@@ -10,6 +10,7 @@
 #import "OAColors.h"
 #import "OASizes.h"
 #import "OAApplicationMode.h"
+#import "Localization.h"
 
 #define kSidePadding 20
 
@@ -36,6 +37,11 @@
 - (NSString *)getSubtitle
 {
     return [_appMode toHumanString];
+}
+
+- (void)addAccessibilityLabels
+{
+    self.leftNavbarButton.accessibilityLabel = OALocalizedString(@"shared_string_back");
 }
 
 #pragma mark - Additions

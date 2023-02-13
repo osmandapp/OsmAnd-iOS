@@ -92,6 +92,7 @@
     [super viewDidLoad];
     
     self.titleLabel.text = OALocalizedString(@"map_markers");
+    [self addAccessibilityLabels];
     
     if ([OADestinationsHelper instance].sortedDestinations.count > 0)
     {
@@ -318,6 +319,11 @@
         [self updateDestinationsUsingMapCenter];
     else
         [self doLocationUpdate];
+}
+
+-(void) addAccessibilityLabels
+{
+    self.backButton.accessibilityLabel = OALocalizedString(@"shared_string_back");
 }
 
 -(UIStatusBarStyle)getPreferredStatusBarStyle

@@ -90,6 +90,11 @@
     self.tableView.delegate = self;
 }
 
+-(void) addAccessibilityLabels
+{
+    self.backButton.accessibilityLabel = OALocalizedString(@"shared_string_back");
+}
+
 - (void)generateData
 {
     NSMutableArray<NSDictionary *> *data = [NSMutableArray array];

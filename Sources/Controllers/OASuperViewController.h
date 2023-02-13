@@ -22,6 +22,7 @@
 - (void)resetNavbarEstimatedHeight;
 - (void)adjustScrollStartPosition;
 - (void)applyLocalization;
+- (void)addAccessibilityLabels;
 - (BOOL)isModal;
 - (BOOL)isScreenLoaded;
 

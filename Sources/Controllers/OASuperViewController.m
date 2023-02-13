@@ -60,6 +60,7 @@
 {
     [super viewDidLoad];
     [self applyLocalization];
+    [self addAccessibilityLabels];
 
     _observers = [NSMutableArray array];
 }
@@ -105,7 +106,6 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
     return UIStatusBarStyleLightContent;
@@ -140,12 +140,17 @@
     // override point
 }
 
-- (BOOL)isModal
+- (void)addAccessibilityLabels
 {
+    // override point
+}
+
+- (BOOL)isModal
     if ([self presentingViewController])
         return YES;
     if ([[[self navigationController] presentingViewController] presentedViewController] == [self navigationController])
         return YES;
+    if ([[[self tabBarController] presentingViewController] isKindOfClass:[UITabBarController class]])
     if ([[[self tabBarController] presentingViewController] isKindOfClass:[UITabBarController class]])
         return YES;
 
@@ -171,7 +176,6 @@
 {
     [self dismissViewController];
 }
-
 #pragma mark - Actions
 
 - (void)dismissViewController

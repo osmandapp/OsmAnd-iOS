@@ -90,6 +90,11 @@
     return EOABaseNavbarColorSchemeOrange;
 }
 
+- (void)addAccessibilityLabels
+{
+    self.leftNavbarButton.accessibilityLabel = OALocalizedString(@"shared_string_back");
+}
+
 #pragma mark - Table data
 
 - (void)generateData

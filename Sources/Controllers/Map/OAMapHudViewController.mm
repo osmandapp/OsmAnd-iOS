@@ -28,6 +28,7 @@
 #import "OAMapWidgetRegistry.h"
 #import "OAWeatherPlugin.h"
 #import "OAWeatherToolbar.h"
+#import "Localization.h"
 
 #define kButtonWidth 50.0
 #define kButtonOffset 16.0
@@ -205,6 +206,7 @@
     self.rulerLabel.userInteractionEnabled = NO;
     
     [self updateColors];
+    [self addAccessibilityLabels];
 
     _mapInfoController.delegate = self;
 }
@@ -329,6 +331,18 @@
     } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
         [self updateMapRulerData];
     }];
+}
+
+-(void) addAccessibilityLabels
+{
+    self.mapSettingsButton.accessibilityLabel = OALocalizedString(@"configure_map");
+    self.searchButton.accessibilityLabel = OALocalizedString(@"shared_string_search");
+    self.optionsMenuButton.accessibilityLabel = OALocalizedString(@"shared_string_menu");
+    self.driveModeButton.accessibilityLabel = OALocalizedString(@"shared_string_navigation");
+    self.mapModeButton.accessibilityLabel = OALocalizedString(@"shared_string_my_location");
+    self.zoomInButton.accessibilityLabel = OALocalizedString(@"key_hint_zoom_in");
+    self.zoomOutButton.accessibilityLabel = OALocalizedString(@"key_hint_zoom_out");
+    self.weatherButton.accessibilityLabel = OALocalizedString(@"shared_string_cancel");
 }
 
 - (void) updateRulerPosition:(CGFloat)bottom left:(CGFloat)left

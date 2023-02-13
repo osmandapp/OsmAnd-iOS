@@ -2814,3 +2814,6 @@
 "announcement_time_prepare_long" = "Preparación larga";
 "announcement_time_approach" = "Acercarse";
 "announcement_time_passing" = "Pasando";
+"osm_upload_gpx_description_footer" = "Será usado el nombre de la traza en lugar de una descripción vacía. La descripción ingresada será aplicada a cada traza.";
+"osm_upload_gpx_tags_footer" = "Ingresa etiquetas separadas por comas.";
+"visibility" = "Visibilidad";

@@ -101,6 +101,13 @@
     [_btnDone setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
 }
 
+-(void) addAccessibilityLabels
+{
+    self.backBtn.accessibilityLabel = OALocalizedString(@"shared_string_back");
+    self.btnEdit.accessibilityLabel = OALocalizedString(@"shared_string_edit");
+    self.btnAdd.accessibilityLabel = OALocalizedString(@"shared_string_add");
+}
+
 - (void)applySafeAreaMargins
 {
     [super applySafeAreaMargins];

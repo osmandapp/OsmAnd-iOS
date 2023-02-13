@@ -133,6 +133,12 @@
     _titleView.text = OALocalizedString(@"quick_action_new_action");
 }
 
+-(void) addAccessibilityLabels
+{
+    self.backBtn.accessibilityLabel = OALocalizedString(@"shared_string_back");
+    self.searchBtn.accessibilityLabel = OALocalizedString(@"shared_string_search");
+}
+
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];

@@ -1429,10 +1429,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
                 NSFontAttributeName : font }
                                                  forState:UIControlStateNormal];
 
-            if (@available(iOS 13.0, *))
-                cell.segmentedControl.selectedSegmentTintColor = UIColorFromRGB(color_primary_purple);
-            else
-                cell.segmentedControl.tintColor = UIColorFromRGB(color_primary_purple);
+            cell.segmentedControl.selectedSegmentTintColor = UIColorFromRGB(color_primary_purple);
         }
         if (cell)
         {

@@ -311,11 +311,7 @@
             cell.separatorInset = UIEdgeInsetsMake(0, 20., 0, 0);
             
             cell.segmentControl.backgroundColor = [UIColorFromRGB(color_primary_purple) colorWithAlphaComponent:.1];
-            
-            if (@available(iOS 13.0, *))
-                cell.segmentControl.selectedSegmentTintColor = UIColorFromRGB(color_primary_purple);
-            else
-                cell.segmentControl.tintColor = UIColorFromRGB(color_primary_purple);
+            cell.segmentControl.selectedSegmentTintColor = UIColorFromRGB(color_primary_purple);
             UIFont *font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
             [cell.segmentControl setTitleTextAttributes:@{NSForegroundColorAttributeName : UIColor.whiteColor, NSFontAttributeName : font} forState:UIControlStateSelected];
             [cell.segmentControl setTitleTextAttributes:@{NSForegroundColorAttributeName : UIColorFromRGB(color_primary_purple), NSFontAttributeName : font} forState:UIControlStateNormal];

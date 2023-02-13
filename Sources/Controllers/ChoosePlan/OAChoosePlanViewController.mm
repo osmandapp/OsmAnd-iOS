@@ -263,10 +263,7 @@
 
 - (UIStatusBarStyle) preferredStatusBarStyle
 {
-    if (@available(iOS 13.0, *))
-        return _type == EOAChoosePlan ? UIStatusBarStyleDefault : UIStatusBarStyleDarkContent;
-
-    return UIStatusBarStyleDefault;
+    return _type == EOAChoosePlan ? UIStatusBarStyleDefault : UIStatusBarStyleDarkContent;
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -282,15 +279,9 @@
 {
     CGFloat navigationBarHeight;
     CGFloat extraNavigationBarHeight = 0.;
-    if (@available(iOS 13.0, *))
-    {
-        if (_type == EOAChooseSubscription)
-            extraNavigationBarHeight = [OAUtilities getTopMargin];
-    }
-    else
-    {
-        extraNavigationBarHeight = [OAUtilities getStatusBarHeight];
-    }
+    if (_type == EOAChooseSubscription)
+        extraNavigationBarHeight = [OAUtilities getTopMargin];
+
     navigationBarHeight = kNavigationBarHeight + extraNavigationBarHeight;
 
     self.viewNavigationBar.frame = CGRectMake(0., 0., self.view.frame.size.width, navigationBarHeight);

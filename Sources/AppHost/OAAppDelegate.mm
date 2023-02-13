@@ -161,15 +161,13 @@
             _checkUpdatesTimer = [NSTimer scheduledTimerWithTimeInterval:kCheckUpdatesIntervalHour target:self selector:@selector(performUpdatesCheck) userInfo:nil repeats:YES];
 
             // show map in carPlay if it is a cold start
-            if (@available(iOS 12.0, *)) {
-                if (_windowToAttach && _carPlayInterfaceController)
-                {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [self presentInCarPlay:_carPlayInterfaceController window:_windowToAttach];
-                        _carPlayInterfaceController = nil;
-                        _windowToAttach = nil;
-                    });
-                }
+            if (_windowToAttach && _carPlayInterfaceController)
+            {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self presentInCarPlay:_carPlayInterfaceController window:_windowToAttach];
+                    _carPlayInterfaceController = nil;
+                    _windowToAttach = nil;
+                });
             }
         });
     });

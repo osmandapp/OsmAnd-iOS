@@ -566,8 +566,7 @@ static BOOL _purchasesUpdated;
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     if ([item[@"type"] isEqualToString:[OACardButtonCell getCellIdentifier]])
     {
-        if (@available(iOS 15.0, *))
-            [((OACardButtonCell *) cell) setNeedsUpdateConfiguration];
+        [((OACardButtonCell *) cell) setNeedsUpdateConfiguration];
     }
 }
 

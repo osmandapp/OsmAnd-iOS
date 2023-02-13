@@ -15,7 +15,6 @@
 
 @property (weak, nonatomic) IBOutlet UIView *navbarBackgroundView;
 @property (weak, nonatomic) IBOutlet UIStackView *navbarStackView;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *navbarEstimatedHeightConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *navbarStackViewEstimatedHeightConstraint;
 @property (weak, nonatomic) IBOutlet UIView *leftNavbarMarginView;
 @property (weak, nonatomic) IBOutlet UIView *rightNavbarMarginView;
@@ -145,18 +144,18 @@
 
 - (CGFloat)getNavbarHeight
 {
-    return self.navbarStackView.frame.size.height;
+    return self.navbarBackgroundView.frame.size.height;
 }
 
 - (CGFloat)getNavbarEstimatedHeight
 {
-    return self.navbarEstimatedHeightConstraint.constant;
+    return self.navbarStackViewEstimatedHeightConstraint.constant;
 }
 
 - (void)updateNavbarEstimatedHeight
 {
-    self.navbarEstimatedHeightConstraint.constant = [self getNavbarHeight];
-    self.tableView.contentInset = UIEdgeInsetsMake(self.navbarEstimatedHeightConstraint.constant, 0, 0, 0);
+    self.navbarStackViewEstimatedHeightConstraint.constant = [self getNavbarHeight] - ([self isModal] ? 0. : [OAUtilities getTopMargin]);
+    self.tableView.contentInset = UIEdgeInsetsMake(self.navbarStackViewEstimatedHeightConstraint.constant, 0, 0, 0);
 }
 
 - (void)updateNavbarStackViewEstimatedHeight
@@ -168,7 +167,7 @@
 
 - (void)resetNavbarEstimatedHeight
 {
-    self.navbarEstimatedHeightConstraint.constant = 0;
+    self.navbarStackViewEstimatedHeightConstraint.constant = 0;
 }
 
 #pragma mark - Base UI
@@ -306,17 +305,15 @@
     {
         if ([self isNavbarBlurring])
         {
-            CGFloat extraMargin = [self isModal] ? 0. : [OAUtilities getTopMargin];
-            CGFloat y = scrollView.contentOffset.y - (scrollView.contentOffset.y < 0 ? -extraMargin : extraMargin);
-            CGFloat navbarHeight = [self getNavbarHeight];
-            if (!_isHeaderBlurred && y > -(navbarHeight))
+            CGFloat y = scrollView.contentOffset.y + [self getNavbarHeight];
+            if (!_isHeaderBlurred && y > 0)
             {
                 [UIView animateWithDuration:.2 animations:^{
                     [self.navbarBackgroundView addBlurEffect:YES cornerRadius:0. padding:0.];
                     _isHeaderBlurred = YES;
                 }];
             }
-            else if (_isHeaderBlurred && y <= -(navbarHeight))
+            else if (_isHeaderBlurred && y <= 0)
             {
                 [UIView animateWithDuration:.2 animations:^{
                     [self.navbarBackgroundView removeBlurEffect:[self getNavbarColor]];

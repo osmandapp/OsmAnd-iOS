@@ -15,7 +15,6 @@
                 <outlet property="leftNavbarButtonStackView" destination="Aut-zP-CbX" id="Qb9-TR-B9F"/>
                 <outlet property="leftNavbarMarginView" destination="LqA-aR-Q72" id="l8l-eP-srw"/>
                 <outlet property="navbarBackgroundView" destination="ldq-EA-ADj" id="u7f-Ij-TzN"/>
-                <outlet property="navbarEstimatedHeightConstraint" destination="bFh-vf-Mqq" id="WZ0-Ca-FVF"/>
                 <outlet property="navbarStackView" destination="p4E-OZ-ZZt" id="u3Y-QV-Ju3"/>
                 <outlet property="navbarStackViewEstimatedHeightConstraint" destination="9Oc-hf-mQ1" id="Yxy-lb-S09"/>
                 <outlet property="rightNavbarButton" destination="ztY-lI-A7Q" id="Oxt-Oa-NVf"/>
@@ -36,11 +35,11 @@
             <subviews>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="lEe-QA-baY">
                     <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                    <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" red="0.89803921568627454" green="0.89803921568627454" blue="0.89803921568627454" alpha="1" colorSpace="calibratedRGB"/>
                 </tableView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ldq-EA-ADj" userLabel="Navbar Background View">
                     <rect key="frame" x="0.0" y="0.0" width="414" height="93"/>
-                    <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" red="0.89803921568627454" green="0.89803921568627454" blue="0.89803921568627454" alpha="1" colorSpace="calibratedRGB"/>
                 </view>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="p4E-OZ-ZZt" userLabel="Navbar Stack View">
                     <rect key="frame" x="0.0" y="48" width="414" height="45"/>
@@ -205,7 +204,6 @@
                 <constraint firstItem="ldq-EA-ADj" firstAttribute="top" secondItem="L5C-Gb-Fk0" secondAttribute="top" id="SUb-k7-90Z"/>
                 <constraint firstItem="p4E-OZ-ZZt" firstAttribute="leading" secondItem="L5C-Gb-Fk0" secondAttribute="leading" id="Wet-Dr-sZc"/>
                 <constraint firstItem="lEe-QA-baY" firstAttribute="leading" secondItem="L5C-Gb-Fk0" secondAttribute="leading" id="YpI-nF-0rQ"/>
-                <constraint firstItem="ldq-EA-ADj" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="Rn4-Fc-LbU" secondAttribute="top" constant="45" id="bFh-vf-Mqq"/>
                 <constraint firstAttribute="trailing" secondItem="ldq-EA-ADj" secondAttribute="trailing" id="rdI-ob-1vn"/>
                 <constraint firstItem="ldq-EA-ADj" firstAttribute="leading" secondItem="L5C-Gb-Fk0" secondAttribute="leading" id="xGl-BA-Gtn"/>
             </constraints>

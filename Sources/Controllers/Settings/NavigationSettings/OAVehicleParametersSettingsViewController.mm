@@ -247,7 +247,8 @@
         formatter.minimumIntegerDigits = 1;
         formatter.minimumFractionDigits = 0;
         formatter.maximumFractionDigits = 3;
-        _measurementValue = [[formatter numberFromString:_measurementValue] stringValue];
+        NSNumber *number = [formatter numberFromString:_measurementValue];
+        _measurementValue = [formatter stringFromNumber:number];
     }
     if (_selectedParameter.intValue != -1)
         _measurementValue = [NSString stringWithFormat:@"%.2f", _measurementRangeValuesArr[_selectedParameter.intValue].doubleValue];

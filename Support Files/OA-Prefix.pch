@@ -56,6 +56,4 @@
 #define kReachabilityChangedNotification @"reachabilityStatusChanged"
 #define kCarPlayTripStartedNotification @"carPlayTripStarted"
 
-#define kDot @"."
-
 #endif

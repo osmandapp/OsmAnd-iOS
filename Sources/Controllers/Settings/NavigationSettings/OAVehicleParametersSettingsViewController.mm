@@ -25,6 +25,7 @@
 #define kTopPaddingMotorType 20.
 #define kBottomPaddingMotorType 35.
 #define kDescriptionStringSection 1
+#define kDot @"."
 
 @interface OAVehicleParametersSettingsViewController() <OAHorizontalCollectionViewCellDelegate, UITextFieldDelegate>
 

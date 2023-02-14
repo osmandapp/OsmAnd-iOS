@@ -68,13 +68,14 @@
         cell = (OARightIconTableViewCell *) nib[0];
         [cell descriptionVisibility:NO];
         [cell leftIconVisibility:NO];
+        [cell rightIconVisibility:NO];
     }
     if (cell)
     {
         OAMapStyleParameterValue *value = _parameter.possibleValues[indexPath.row];
         cell.titleLabel.text = value.title;
-        cell.rightIconView.image = [_parameter.value isEqualToString:value.name] ? [UIImage templateImageNamed:@"ic_checkmark_default"] : nil;
-        cell.rightIconView.tintColor = UIColorFromRGB(color_primary_purple);
+        if ([_parameter.value isEqualToString:value.name])
+            cell.accessoryType = UITableViewCellAccessoryCheckmark;
     }
     return cell;
 }

@@ -408,7 +408,7 @@
             }
             else
             {
-                cell.leftIconView.image = settingsType ? settingsType.icon.imageFlippedForRightToLeftLayoutDirection : [UIImage templateImageNamed:item[@"icon"]].imageFlippedForRightToLeftLayoutDirection;
+                cell.leftIconView.image = settingsType ? settingsType.icon.imageFlippedForRightToLeftLayoutDirection : [UIImage templateImageNamed:item[@"icon"]];
                 cell.leftIconView.backgroundColor = nil;
                 cell.leftIconView.layer.cornerRadius = 0.;
                 cell.leftIconView.clipsToBounds = NO;

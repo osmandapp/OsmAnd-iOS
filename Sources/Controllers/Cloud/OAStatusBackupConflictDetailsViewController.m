@@ -342,9 +342,8 @@
             [cell titleVisibility:title != nil];
             cell.titleLabel.text = title;
             cell.descriptionLabel.text = item.descr;
-            cell.leftIconView.image = [item objForKey:@"icon"];
+            cell.leftIconView.image = [[item objForKey:@"icon"] imageFlippedForRightToLeftLayoutDirection];
             cell.leftIconView.tintColor = UIColorFromRGB(item.iconTint);
-            cell.leftIconView.image = cell.leftIconView.image.imageFlippedForRightToLeftLayoutDirection;
         }
         return cell;
     }
@@ -366,7 +365,7 @@
             cell.titleLabel.textColor = enabled ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer);
             cell.titleLabel.text = item.title;
             cell.descriptionLabel.text = item.descr;
-            cell.rightIconView.image = [UIImage templateImageNamed:item.secondaryIconName].imageFlippedForRightToLeftLayoutDirection;
+            cell.rightIconView.image = [UIImage templateImageNamed:item.secondaryIconName];
             cell.rightIconView.tintColor = enabled ? UIColorFromRGB(item.iconTint) : UIColorFromRGB(color_footer_icon_gray);
         }
         return cell;

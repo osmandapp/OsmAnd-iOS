@@ -115,17 +115,17 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
+            [cell.arrowIconView setHidden:YES];
         }
         if (cell)
         {
             cell.textView.text = item[@"title"];
-            cell.arrowIconView.image = [UIImage templateImageNamed:@"ic_checkmark_default"];
-            cell.arrowIconView.tintColor = UIColorFromRGB(self.appMode.getIconColor);
-            cell.iconView.image = [UIImage templateImageNamed:item[@"icon"]].imageFlippedForRightToLeftLayoutDirection;
+            cell.iconView.image = [UIImage templateImageNamed:item[@"icon"]];
             NSString *derivedProfile = self.appMode.getDerivedProfile;
             BOOL checkForDerived = ![derivedProfile isEqualToString:@"default"];
             BOOL isSelected = [profile.stringKey isEqual:self.appMode.getRoutingProfile] && ((!checkForDerived && !profile.derivedProfile) || (checkForDerived && [profile.derivedProfile isEqualToString:derivedProfile]));
-            cell.arrowIconView.hidden = !isSelected;
+            if (isSelected)
+                cell.accessoryType = UITableViewCellAccessoryCheckmark;
             cell.iconView.tintColor = isSelected ? UIColorFromRGB(self.appMode.getIconColor) : UIColorFromRGB(color_icon_inactive);
         }
         return cell;

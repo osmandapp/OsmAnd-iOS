@@ -346,13 +346,13 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
-            cell.arrowIconView.image = [UIImage templateImageNamed:@"ic_checkmark_default"];
-            cell.arrowIconView.tintColor = UIColorFromRGB(color_primary_purple);
+            [cell.arrowIconView setHidden:YES];
         }
         if (cell)
         {
             cell.textView.text = item[@"title"];
-            cell.arrowIconView.hidden = ![item[@"selected"] boolValue];
+            if ([item[@"selected"] boolValue])
+                cell.accessoryType = UITableViewCellAccessoryCheckmark;
             cell.iconView.image = [UIImage templateImageNamed:item[@"icon"]];
             cell.iconView.tintColor = [item[@"selected"] boolValue] ? UIColorFromRGB(self.appMode.getIconColor) : UIColorFromRGB(color_icon_inactive);
         }
@@ -365,14 +365,14 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleDescriptionCollapsableCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleDescriptionCollapsableCell *)[nib objectAtIndex:0];
-            cell.iconView.image = [UIImage templateImageNamed:@"ic_checkmark_default"];
-            cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
+            [cell.iconView setHidden:YES];
         }
         if (cell)
         {
             cell.textView.text = item[@"title"];
             cell.descriptionView.text = item[@"description"];
-            cell.iconView.hidden = ![item[@"selected"] boolValue];
+            if ([item[@"selected"] boolValue])
+                cell.accessoryType = UITableViewCellAccessoryCheckmark;
         }
         return cell;
     }
@@ -383,13 +383,13 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTitleTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingsTitleTableViewCell *)[nib objectAtIndex:0];
-            cell.iconView.image = [UIImage templateImageNamed:@"ic_checkmark_default"];
-            cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
+            [cell.iconView setHidden:YES];
         }
         if (cell)
         {
             cell.textView.text = item[@"title"];
-            cell.iconView.hidden = ![item[@"selected"] boolValue];
+            if ([item[@"selected"] boolValue])
+                cell.accessoryType = UITableViewCellAccessoryCheckmark;
         }
         return cell;
     }

@@ -109,7 +109,7 @@
 {
     [super viewDidLoad];
 
-    [self.cancelButton setImage:[UIImage imageNamed:@"ic_navbar_chevron"].imageFlippedForRightToLeftLayoutDirection forState:UIControlStateNormal];
+    [self.cancelButton setImage:[UIImage rtlImageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
     self.doneButton.hidden = _isMotorType;
     self.subtitleLabel.hidden = _isMotorType;
     [self setupNavBarHeight];
@@ -286,7 +286,7 @@
         }
         if (cell)
         {
-            cell.imageView.image = [UIImage imageNamed:item[@"icon"]].imageFlippedForRightToLeftLayoutDirection;
+            cell.imageView.image = [UIImage rtlImageNamed:item[@"icon"]];
         }
         return cell;
     }
@@ -341,15 +341,14 @@
             cell = (OARightIconTableViewCell *) nib[0];
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
-            cell.rightIconView.tintColor = UIColorFromRGB(color_primary_purple);
+            [cell.rightIconView setHidden:YES];
         }
         if (cell)
         {
             cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + 20., 0., 0.);
             cell.titleLabel.text = _measurementRangeStringArr[indexPath.row];
-            cell.rightIconView.image = [_selectedParameter isEqualToNumber:_measurementRangeValuesArr[indexPath.row]]
-                ? [UIImage templateImageNamed:@"ic_checkmark_default"]
-                : nil;
+            if ([_selectedParameter isEqualToNumber:_measurementRangeValuesArr[indexPath.row]])
+                cell.accessoryType = UITableViewCellAccessoryCheckmark;
         }
         return cell;
     }

@@ -124,7 +124,7 @@
             cell.titleLabel.text = item.title;
 
             BOOL isOn = [_depthContours.value isEqualToString:@"true"];
-            cell.leftIconView.image = [UIImage templateImageNamed:item.iconName].imageFlippedForRightToLeftLayoutDirection;
+            cell.leftIconView.image = [UIImage templateImageNamed:item.iconName];
             cell.leftIconView.tintColor = isOn ? UIColorFromRGB(item.iconTint) : UIColorFromRGB([item integerForKey:@"iconTintDisabled"]);
 
             cell.switchView.on = isOn;

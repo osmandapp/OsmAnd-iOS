@@ -97,6 +97,7 @@
     {
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAGPXTableViewCell getCellIdentifier] owner:self options:nil];
         cell = (OAGPXTableViewCell *)[nib objectAtIndex:0];
+        [cell.iconView setHidden: YES];
     }
 
     if (hasCurrentTrack && indexPath.row == 0)
@@ -108,9 +109,9 @@
             [cell.descriptionPointsView setText:[NSString stringWithFormat:@"%d %@", helper.points, [OALocalizedString(@"gpx_points") lowercaseStringWithLocale:[NSLocale currentLocale]]]];
             
             if (_settings.mapSettingShowRecordingTrack.get)
-                [cell.iconView setImage:[UIImage imageNamed:@"menu_cell_selected.png"]];
+                cell.accessoryType = UITableViewCellAccessoryCheckmark;
             else
-                [cell.iconView setImage:nil];
+                cell.accessoryType = UITableViewCellAccessoryNone;
         }
     }
     else
@@ -125,9 +126,9 @@
             NSArray *visible = _settings.mapSettingVisibleGpx.get;
             
             if ([visible containsObject:item.gpxFilePath])
-                [cell.iconView setImage:[UIImage imageNamed:@"menu_cell_selected.png"]];
+                cell.accessoryType = UITableViewCellAccessoryCheckmark;
             else
-                [cell.iconView setImage:nil];
+                cell.accessoryType = UITableViewCellAccessoryNone;
         }
     }
     

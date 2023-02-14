@@ -101,7 +101,7 @@
             cell.textView.text = item[@"title"];
             cell.textView.textColor = isLogoutCell ? UIColorFromRGB(color_support_red) : UIColor.blackColor;
             cell.textView.textAlignment = isLogoutCell ? NSTextAlignmentCenter : NSTextAlignmentNatural;
-            cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]].imageFlippedForRightToLeftLayoutDirection;
+            cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
             cell.leftIconView.tintColor = UIColorFromRGB(color_icon_color);
             cell.descriptionView.text = @"";
         }

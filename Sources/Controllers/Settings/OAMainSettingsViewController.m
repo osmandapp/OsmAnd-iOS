@@ -75,7 +75,7 @@
     [super viewDidLoad];
     self.settingsTableView.rowHeight = UITableViewAutomaticDimension;
     self.settingsTableView.estimatedRowHeight = kEstimatedRowHeight;
-    [self.backButton setImage:[UIImage imageNamed:@"ic_navbar_chevron"].imageFlippedForRightToLeftLayoutDirection forState:UIControlStateNormal];
+    [self.backButton setImage:[UIImage rtlImageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
     
     _settings = OAAppSettings.sharedManager;
     
@@ -278,7 +278,7 @@
         {
             cell.textView.text = item[@"title"];
             cell.descriptionView.text = item[@"value"];
-            cell.leftIconView.image = [item[@"name"] isEqualToString:@"backup_restore"] ? [UIImage imageNamed:item[@"img"]].imageFlippedForRightToLeftLayoutDirection : [UIImage templateImageNamed:item[@"img"]].imageFlippedForRightToLeftLayoutDirection;
+            cell.leftIconView.image = [item[@"name"] isEqualToString:@"backup_restore"] ? [UIImage rtlImageNamed:item[@"img"]] : [UIImage templateImageNamed:item[@"img"]];
         }
         return cell;
     }
@@ -359,7 +359,7 @@
             cell.titleView.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightSemibold];
         }
         cell.titleView.text = item[@"title"];
-        [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]].imageFlippedForRightToLeftLayoutDirection];
+        [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]]];
         return cell;
     }
     return nil;

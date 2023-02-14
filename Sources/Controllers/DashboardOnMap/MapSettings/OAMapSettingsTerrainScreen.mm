@@ -519,7 +519,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             cell.titleLabel.text = isOn ? OALocalizedString(@"shared_string_enabled") : OALocalizedString(@"rendering_value_disabled_name");
 
             NSString *imgName = isOn ? @"ic_custom_show.png" : @"ic_custom_hide.png";
-            cell.leftIconView.image = [UIImage templateImageNamed:imgName].imageFlippedForRightToLeftLayoutDirection;
+            cell.leftIconView.image = [UIImage templateImageNamed:imgName];
             cell.leftIconView.tintColor = isOn ? UIColorFromRGB(color_dialog_buttons_dark) : UIColorFromRGB(color_tint_gray);
             
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
@@ -555,7 +555,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleRightIconCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleRightIconCell *)[nib objectAtIndex:0];
-            cell.iconView.image = [UIImage templateImageNamed:item[@"img"]].imageFlippedForRightToLeftLayoutDirection;
+            cell.iconView.image = [UIImage templateImageNamed:item[@"img"]];
             cell.titleView.text = item[@"title"];
             cell.titleView.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightSemibold];
             cell.titleView.textColor = UIColorFromRGB(color_primary_purple);
@@ -634,7 +634,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         if (cell)
         {
             cell.descView.text = item[@"desc"];
-            cell.iconView.image = [UIImage imageNamed:item[@"img"]].imageFlippedForRightToLeftLayoutDirection;
+            cell.iconView.image = [UIImage rtlImageNamed:item[@"img"]];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             
             if ([cell needsUpdateConstraints])
@@ -655,7 +655,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         }
         if (cell)
         {
-            cell.iconView.image = [UIImage imageNamed:item[@"img"]].imageFlippedForRightToLeftLayoutDirection;
+            cell.iconView.image = [UIImage rtlImageNamed:item[@"img"]];
 
             NSString *descr = item[@"descr"];
             if (descr && descr.length > 0)
@@ -707,7 +707,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                 cell.detailTextLabel.font = [UIFont scaledSystemFontOfSize:12.0];
                 cell.detailTextLabel.textColor = UIColorFromRGB(0x929292);
 
-                UIImage* iconImage = [UIImage imageNamed:@"ic_custom_download"].imageFlippedForRightToLeftLayoutDirection;
+                UIImage* iconImage = [UIImage rtlImageNamed:@"ic_custom_download"];
                 UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
                 [btnAcc addTarget:self action: @selector(accessoryButtonPressed:withEvent:) forControlEvents: UIControlEventTouchUpInside];
                 [btnAcc setImage:iconImage forState:UIControlStateNormal];
@@ -735,7 +735,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             if (!mapItem.disabled)
             {
                 cell.textLabel.textColor = [UIColor blackColor];
-                UIImage* iconImage = [[UIImage imageNamed:@"ic_custom_download"] imageFlippedForRightToLeftLayoutDirection];
+                UIImage* iconImage = [UIImage rtlImageNamed:@"ic_custom_download"];
                 UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
                 [btnAcc addTarget:self action: @selector(accessoryButtonPressed:withEvent:) forControlEvents: UIControlEventTouchUpInside];
                 [btnAcc setImage:iconImage forState:UIControlStateNormal];
@@ -749,7 +749,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             }
         }
         
-        cell.imageView.image = [[UIImage templateImageNamed:(_app.data.terrainType == EOATerrainTypeHillshade ? @"ic_custom_hillshade" : @"ic_action_slope")] imageFlippedForRightToLeftLayoutDirection];
+        cell.imageView.image = [UIImage templateImageNamed:(_app.data.terrainType == EOATerrainTypeHillshade ? @"ic_custom_hillshade" : @"ic_action_slope")];
         cell.imageView.tintColor = UIColorFromRGB(color_tint_gray);
         cell.textLabel.text = title;
         if (cell.detailTextLabel != nil)

@@ -182,11 +182,10 @@ typedef NS_ENUM(NSInteger, EOAPoiRowType) {
 {
     cell.arrowIconView.hidden = YES;
     if ([[[OAPOIFiltersHelper sharedInstance] getSelectedPoiFilters] containsObject:filter]) {
-        UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"menu_cell_selected.png"]];
-        cell.accessoryView = imageView;
+        cell.accessoryType = UITableViewCellAccessoryCheckmark;
     }
     else {
-        cell.accessoryView = nil;
+        cell.accessoryType = UITableViewCellAccessoryNone;
     }
 }
 

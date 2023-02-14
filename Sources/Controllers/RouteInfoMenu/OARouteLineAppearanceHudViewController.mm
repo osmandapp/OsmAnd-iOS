@@ -1528,7 +1528,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         if (cell)
         {
             cell.textView.text = cellData.title;
-            cell.rightIconView.image = [UIImage templateImageNamed:cellData.rightIconName].imageFlippedForRightToLeftLayoutDirection;
+            cell.rightIconView.image = [UIImage templateImageNamed:cellData.rightIconName];
         }
         outCell = cell;
     }

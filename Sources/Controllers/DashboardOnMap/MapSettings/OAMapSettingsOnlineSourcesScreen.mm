@@ -200,11 +200,11 @@ typedef enum
     if (cell)
     {
         UIImage *img = nil;
-        img = [UIImage imageNamed:@"ic_custom_map_style"];
+        img = [UIImage rtlImageNamed:@"ic_custom_map_style"];
         
         cell.textView.text = caption;
         cell.descriptionView.hidden = YES;
-        cell.imgView.image = img.imageFlippedForRightToLeftLayoutDirection;
+        cell.imgView.image = img;
         cell.separatorInset = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
     }
     return cell;

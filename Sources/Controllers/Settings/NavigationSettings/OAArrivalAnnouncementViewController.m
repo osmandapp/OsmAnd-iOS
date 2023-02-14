@@ -193,14 +193,15 @@
             cell = (OARightIconTableViewCell *) nib[0];
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
-            cell.rightIconView.tintColor = UIColorFromRGB(color_primary_purple);
+            [cell.rightIconView setHidden:YES];
         }
         if (cell)
         {
             if (item.rowType == EOATableRowTypeCollapsable)
-                cell.rightIconView.image = [UIImage templateImageNamed:((OATableCollapsableRowData *) item).collapsed ? @"ic_custom_arrow_right" : @"ic_custom_arrow_down"].imageFlippedForRightToLeftLayoutDirection;
+                cell.rightIconView.image = [UIImage templateImageNamed:((OATableCollapsableRowData *) item).collapsed ? @"ic_custom_arrow_right" : @"ic_custom_arrow_down"];
             else
-                cell.rightIconView.image = _selectedIndexPath == indexPath ? [UIImage templateImageNamed:@"ic_checkmark_default"] : nil;
+                if (_selectedIndexPath == indexPath)
+                    cell.accessoryType = UITableViewCellAccessoryCheckmark;
 
             cell.titleLabel.text = item.title;
         }

@@ -230,7 +230,7 @@
             cell.valueLabel.text = value;
             
             BOOL hasLeftIcon = iconName && iconName.length > 0;
-            cell.leftIconView.image = hasLeftIcon ? [UIImage templateImageNamed:iconName].imageFlippedForRightToLeftLayoutDirection : nil;
+            cell.leftIconView.image = hasLeftIcon ? [UIImage templateImageNamed:iconName] : nil;
             [cell leftIconVisibility:hasLeftIcon];
         }
         return cell;

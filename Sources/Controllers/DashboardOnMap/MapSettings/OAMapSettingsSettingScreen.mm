@@ -185,6 +185,7 @@
     {
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
         cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
+        [cell.iconView setHidden:YES];
     }
     
     if (cell)
@@ -193,9 +194,9 @@
         [cell.descriptionView setText: [data[indexPath.row] objectForKey:@"value"]];
         NSString *imgName = [data[indexPath.row] objectForKey:@"img"];
         if (imgName.length > 0)
-            [cell.iconView setImage:[UIImage imageNamed:imgName].imageFlippedForRightToLeftLayoutDirection];
+            cell.accessoryType = UITableViewCellAccessoryCheckmark;
         else
-            [cell.iconView setImage:nil];
+            cell.accessoryType = UITableViewCellAccessoryNone;
     }
     
     return cell;

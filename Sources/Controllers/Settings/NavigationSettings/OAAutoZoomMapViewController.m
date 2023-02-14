@@ -86,13 +86,13 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTitleTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingsTitleTableViewCell *)[nib objectAtIndex:0];
+            [cell.iconView setHidden:YES];
         }
         if (cell)
         {
             cell.textView.text = item[@"title"];
-            cell.iconView.image = [UIImage templateImageNamed:@"ic_checkmark_default"];
-            cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
-            cell.iconView.hidden = ![item[@"isSelected"] boolValue];
+            if ([item[@"isSelected"] boolValue])
+                cell.accessoryType = UITableViewCellAccessoryCheckmark;
         }
         return cell;
     }

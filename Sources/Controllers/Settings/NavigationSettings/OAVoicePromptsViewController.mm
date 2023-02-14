@@ -310,7 +310,7 @@
             [cell leftIconVisibility:isVoicePrompts];
             if (isVoicePrompts)
             {
-                cell.leftIconView.image = [UIImage templateImageNamed:_voiceOn ? @"ic_custom_sound" : @"ic_custom_sound_off"].imageFlippedForRightToLeftLayoutDirection;
+                cell.leftIconView.image = [UIImage templateImageNamed:_voiceOn ? @"ic_custom_sound" : @"ic_custom_sound_off"];
                 cell.leftIconView.tintColor = _voiceOn ? UIColorFromRGB(self.appMode.getIconColor) : UIColorFromRGB(color_icon_inactive);
             }
             else
@@ -355,7 +355,7 @@
             [cell leftIconVisibility:hasIcon];
             if (hasIcon)
             {
-                cell.leftIconView.image = [UIImage templateImageNamed:item.iconName].imageFlippedForRightToLeftLayoutDirection;
+                cell.leftIconView.image = [UIImage templateImageNamed:item.iconName];
                 cell.leftIconView.tintColor = UIColorFromRGB([self.appMode getIconColor]);
             }
             else
@@ -379,7 +379,7 @@
             cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingOnSideOfContent, 0., 0.);
 
             cell.titleLabel.text = item.title;
-            cell.leftIconView.image = [UIImage imageNamed:item.iconName].imageFlippedForRightToLeftLayoutDirection;
+            cell.leftIconView.image = [UIImage rtlImageNamed:item.iconName];
 
             [cell.button setTitle:[item stringForKey:@"buttonTitle"] forState:UIControlStateNormal];
             cell.button.tag = indexPath.section << 10 | indexPath.row;

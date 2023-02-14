@@ -872,7 +872,7 @@
             cell.titleLabel.text = item[@"name"];
 
             BOOL hasLeftIcon = [item.allKeys containsObject:@"image"];
-            cell.leftIconView.image = hasLeftIcon ? [UIImage templateImageNamed:item[@"image"]].imageFlippedForRightToLeftLayoutDirection : nil;
+            cell.leftIconView.image = hasLeftIcon ? [UIImage templateImageNamed:item[@"image"]] : nil;
             cell.leftIconView.tintColor = isOn ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
         }
         return cell;
@@ -895,7 +895,7 @@
             
             NSString *iconName = item[@"image"];
             BOOL hasLeftIcon = iconName && iconName.length > 0;
-            cell.leftIconView.image = hasLeftIcon ? [UIImage templateImageNamed:iconName].imageFlippedForRightToLeftLayoutDirection : nil;
+            cell.leftIconView.image = hasLeftIcon ? [UIImage templateImageNamed:iconName] : nil;
             cell.leftIconView.tintColor = isOn ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
         }
         return cell;
@@ -933,7 +933,7 @@
                     icon = [[OAUtilities getMxIcon:iconName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
                 else
                     icon = iconName && iconName.length > 0 ? [UIImage templateImageNamed:iconName] : nil;
-                cell.leftIconView.image = icon.imageFlippedForRightToLeftLayoutDirection;
+                cell.leftIconView.image = icon;
                 cell.leftIconView.tintColor = isOn ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
             }
 
@@ -963,7 +963,7 @@
             cell.descriptionLabel.text = item[@"desc"];
 
             BOOL hasLeftIcon = [item.allKeys containsObject:@"image"];
-            cell.leftIconView.image = hasLeftIcon ? [UIImage imageNamed:item[@"image"]].imageFlippedForRightToLeftLayoutDirection : nil;
+            cell.leftIconView.image = hasLeftIcon ? [UIImage rtlImageNamed:item[@"image"]] : nil;
 
             [cell.button setTitle:OALocalizedString(@"shared_string_get") forState:UIControlStateNormal];
             [cell.button setTitleColor:[UIColorFromRGB(color_primary_purple) colorWithAlphaComponent:0.1] forState:UIControlStateHighlighted];

@@ -239,7 +239,7 @@
 
             BOOL hasLeftIcon = [item.allKeys containsObject:@"left_icon"];
             [cell leftIconVisibility:hasLeftIcon];
-            cell.leftIconView.image = hasLeftIcon ? [UIImage templateImageNamed:item[@"left_icon"]].imageFlippedForRightToLeftLayoutDirection : nil;
+            cell.leftIconView.image = hasLeftIcon ? [UIImage templateImageNamed:item[@"left_icon"]] : nil;
             cell.leftIconView.tintColor = UIColorFromRGB(color_primary_purple);
 
             NSString *description = item[@"description"];

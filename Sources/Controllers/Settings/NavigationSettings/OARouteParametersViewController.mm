@@ -443,7 +443,7 @@
         if (cell)
         {
             cell.textView.text = item[@"title"];
-            cell.iconView.image = [UIImage templateImageNamed:item[@"icon"]].imageFlippedForRightToLeftLayoutDirection;
+            cell.iconView.image = [UIImage templateImageNamed:item[@"icon"]];
             cell.iconView.tintColor = [item[@"value"] boolValue] ? UIColorFromRGB(_iconColor) : UIColorFromRGB(color_icon_inactive);
         }
         return cell;
@@ -461,7 +461,7 @@
         if (cell)
         {
             cell.titleLabel.text = item[@"title"];
-            cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]].imageFlippedForRightToLeftLayoutDirection;
+            cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
             id v = item[@"value"];
 
             [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];

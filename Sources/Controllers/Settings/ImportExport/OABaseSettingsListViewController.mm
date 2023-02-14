@@ -452,7 +452,7 @@
             if (cell)
             {
                 cell.textView.text = item[@"title"];
-                cell.iconView.image = [UIImage templateImageNamed:item[@"icon"]].imageFlippedForRightToLeftLayoutDirection;
+                cell.iconView.image = [UIImage templateImageNamed:item[@"icon"]];
                 cell.iconView.tintColor = item[@"color"] ? item[@"color"] : UIColorFromRGB(color_tint_gray);
             }
             return cell;

@@ -141,12 +141,12 @@
             cell.titleLabel.text = item[@"title"];
             if ([item[@"key"] isEqualToString:@"screenAlerts"])
             {
-                cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]].imageFlippedForRightToLeftLayoutDirection;
+                cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
                 cell.leftIconView.tintColor = _showAlerts ? UIColorFromRGB(self.appMode.getIconColor) : UIColorFromRGB(color_icon_inactive);
             }
             else
             {
-                cell.leftIconView.image = [UIImage imageNamed:item[@"icon"]].imageFlippedForRightToLeftLayoutDirection;
+                cell.leftIconView.image = [UIImage rtlImageNamed:item[@"icon"]];
             }
             id v = item[@"value"];
             [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];

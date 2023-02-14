@@ -77,7 +77,7 @@
 {
     [super viewDidLoad];
 
-    [self.backButton setImage:[UIImage imageNamed:@"ic_navbar_chevron"].imageFlippedForRightToLeftLayoutDirection forState:UIControlStateNormal];
+    [self.backButton setImage:[UIImage rtlImageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
 
@@ -323,8 +323,7 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OARightIconTableViewCell *) nib[0];
-            cell.rightIconView.image = [UIImage templateImageNamed:@"ic_checkmark_default"];
-            cell.rightIconView.tintColor = UIColorFromRGB(color_primary_purple);
+            [cell.rightIconView setHidden:YES];
         }
         if (cell)
         {
@@ -337,7 +336,8 @@
             cell.leftIconView.image = [[appMode getIcon] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
             cell.leftIconView.tintColor = UIColorFromRGB([appMode getIconColor]);
 
-            [cell rightIconVisibility:[item boolForKey:@"isSelected"]];
+            if ([item boolForKey:@"isSelected"])
+                cell.accessoryType = UITableViewCellAccessoryCheckmark;
         }
         return cell;
     }

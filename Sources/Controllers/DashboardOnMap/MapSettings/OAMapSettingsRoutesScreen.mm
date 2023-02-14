@@ -241,7 +241,7 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
             BOOL enabled = _routesEnabled;
             cell.titleLabel.text = enabled ? OALocalizedString(@"shared_string_enabled") : OALocalizedString(@"rendering_value_disabled_name");
             NSString *imgName = isMountain ? @"ic_action_bicycle_dark" : enabled ? @"ic_custom_show" : @"ic_custom_hide";
-            cell.leftIconView.image = [UIImage templateImageNamed:imgName].imageFlippedForRightToLeftLayoutDirection;
+            cell.leftIconView.image = [UIImage templateImageNamed:imgName];
             cell.leftIconView.tintColor = enabled ? isMountain ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_dialog_buttons_dark) : UIColorFromRGB(color_tint_gray);
 
             [cell.switchView setOn:enabled];
@@ -260,7 +260,8 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
             cell = (OARightIconTableViewCell *) nib[0];
             [cell descriptionVisibility:NO];
             [cell leftIconVisibility:NO];
-            cell.rightIconView.tintColor = UIColorFromRGB(color_primary_purple);
+            [cell rightIconVisibility:NO];
+            
         }
         if (cell)
         {
@@ -280,7 +281,10 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
             }
 
             cell.titleLabel.text = item[@"title"];
-            cell.rightIconView.image = selected ? [UIImage imageNamed:@"ic_checkmark_default"] : nil;
+            if (selected)
+                cell.accessoryType = UITableViewCellAccessoryCheckmark;
+            else
+                cell.accessoryType = UITableViewCellAccessoryNone;
         }
 
         return cell;

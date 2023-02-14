@@ -1331,7 +1331,7 @@
 "width_limit_description" = "Geef de voertuigbreedte op, er zijn mogelijk routebeperkingen voor te brede voertuigen.";
 "height_limit_description" = "Geef de voertuighoogte op, er zijn mogelijk routebeperkingen voor te hoge voertuigen.";
 "weight_limit_description" = "Geef het voertuiggewicht op, er zijn mogelijk routebeperkingen voor zwaar verkeer.";
-"gpx_parse_error" = "OsmAnd GPX is corrupt, neem contact op met het support team voor verder onderzoek.";
+"gpx_parse_error" = "Er zijn problemen gevonden met een GPX bestand.\n\nJe kunt contact opnemen met OsmAnd support voor onderzoek.";
 "routing_attr_length_name" = "Maximale lengte";
 "quick_action_map_source_title" = "Kaartbronnen";
 "configure_screen_quick_action" = "Sneltoets";
@@ -2283,3 +2283,4 @@
 "rendering_value_walkingRoutesOSMCNodes_description" = "Kleur routes op basis van het type knooppuntennetwerk (internationaal, regionaal, lokaal).";
 "walking_route_osmc_description" = "Kleur routes op basis van hun eigen lokale kleur (indien aanwezig op OpenStreetMap) en type (internationaal, regionaal, lokaal).";
 "rendering_value_walkingRoutesOSMC_description" = "Kleur routes op basis van hun eigen lokale kleur (indien aanwezig op OpenStreetMap) en wandelsymbool.";
+"lang_ckb" = "Centraal Koerdisch";

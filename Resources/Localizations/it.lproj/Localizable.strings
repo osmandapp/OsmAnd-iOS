@@ -1265,7 +1265,7 @@
 "do_not_send_anonymous_data" = "Non inviare dati anonimi";
 "download_wiki_region_placeholder" = "questa regione";
 "show_warnings_descr" = "Configura gli avvisi sul traffico (limiti velocità, fermate forzate, dossi rallentatori, tunnel), avvisi autovelox e indicazioni di corsia.";
-"speak_descr" = "Configura l\'annuncio dei nomi delle strade, gli avvertimenti di traffico (fermate forzate, dossi), gli avvisi autovelox e i limiti di velocità.";
+"speak_descr" = "Configura annuncio dei nomi delle strade, gli avvertimenti di traffico (fermate forzate, dossi), gli avvisi autovelox e i limiti di velocità.";
 "choose_audio_stream_descr" = "Seleziona l\'altoparlante per la guida vocale.";
 "poi_overlay" = "Sovrapposizione PDI";
 "save_current_track_descr" = "Salva adesso la traccia come file GPX.";
@@ -2631,7 +2631,7 @@
 "download_all" = "Scarica tutto";
 "backup_delete_all_data_in_progress" = "Attendi fino a quando OsmAnd cancellerà tutti i tuoi dati dal cloud. Tutti i dati sul dispositivo rimangono intatti.";
 "cloud_recent_changes" = "Modifiche";
-"purchases_feature_desc_cross_buy" = "Utilizza le funzionalità del tuo abbonamento su diverse piattaforme (Android/iOS/Web) senza costi aggiuntivi.";
+"purchases_feature_desc_cross_buy" = "Utilizza le funzionalità del tuo abbonamento su piattaforme diverse (Android/iOS/Web) senza costi aggiuntivi.";
 "option_available_only_by_subscription" = "Disponibile nei piani di abbonamento";
 "backup_danger_zone" = "Zona pericolosa";
 "backup_version_history" = "Cronologia della versione";
@@ -2656,7 +2656,7 @@
 "ios_release_3_80" = "• Introdotto \"Profili Applicazione\" con impostazioni indipendenti\n• Nuova disposizione delle impostazioni per profili e tipi: navigazione, generale, mappa e schermo\n• Possibilità di importare o esportare le impostazioni del profilo\n• Aggiunte origini dati per le foto online\n• Aggiunta la possibilità di scaricare mappe online nella cache\n• Algoritmi di \"ricerca\" migliorati\n";
 "ios_release_3_90" = "• Introdotta una funzione \"Pianifica un percorso\" per pianificare viaggi futuri con la possibilità di creare segmenti di traccia utilizzando diversi tipi di navigazione\n• Aggiunta un'opzione per abilitare una bussola sullo strumento \"Righello raggio\".\n• Aggiunta l'opzione \"Sovrapposizioni etichette POI\" che consente di mostrare i nomi dei preferiti, tracciare i waypoint e gli indicatori sulla mappa\n• Aggiunte nuove Azioni rapide per la visibilità delle curve di livello e del terreno sulla mappa, modifica di un profilo dell'applicazione, eliminazione di un punto intermedio più vicino\n• Risolti i problemi con la categoria di ricerca Wikipedia mancante\n• Importazione impostazioni: bug risolti, supporto aggiunto per tutti i tipi di dati disponibili in OsmAnd\n• Modifica di OpenStreetMap: risolto il time picker e l'impossibilità di modificare il commento del set di modifiche\n";
 "ios_release_4_2" = "• Aspetto della linea del percorso: aggiunta la possibilità di impostare la larghezza e il colore\n• Tracce: aggiunta opzione per eliminare più tracce contemporaneamente\n• Menu contestuale Traccia: aggiunta barra di scorrimento con gruppi waypoint\n• Aspetto della mappa: percorsi aggiuntivi divisi per tipo con la possibilità di abilitarne uno per ciascuna categoria separatamente\n• Equitazione: aggiungi un nuovo tipo di navigazione e un profilo dell'applicazione\n• I file OsmAnd sono ora visibili nell'applicazione \"File\".\n• L'esperienza utente delle opzioni \"Usa dati elevazione\" e \"Seleziona fluttuazione elevazione\" è stata migliorata, sono state combinate e rinominate in \"Terreno preferito\", attualmente disponibile per i profili \"Bicicletta\" e \"Pedone\".\n• Nuova opzione \"Includi intestazione\" per la registrazione della traccia\n• Widget del nome della strada: ora mostra il cartello stradale e il numero dell'uscita durante la navigazione\n• Nuovi percorsi Fitness e corsa sulla mappa\n• Correzioni di bug CarPlay, gesti aggiunti per touchscreen\n• Corretta l'importazione di file GPX dal pacchetto OSF\n• Corretta l'importazione di plugin personalizzati con file inclusi\n• Risolti vari arresti anomali nella modalità di pianificazione del percorso\n• Risolti arresti anomali durante la navigazione\n";
-"board_at" = "Board at";
+"board_at" = "Sali a";
 "compass_visible_in_rotated_mode_descr" = "Nascosto quando il nord è in alto";
 "ios_release_4_3" = "• Animazione fluida per i cambi di posizione durante il movimento\n• CarPlay: aggiunte corsie, visualizzazione 2.5D, risolti problemi audio durante la connessione tramite Bluetooth\n• Introdotti nuovi piani di acquisto: abbonamenti \"OsmAnd Pro\" con accesso a tutte le funzionalità e acquisto \"Maps+\" con download di mappe illimitati e accesso a plugin a pagamento\n• Aggiunto il backup su Cloud e le previsioni del tempo offline per gli utenti di OsmAnd Pro\n• Nuova comoda schermata \"Acquisti\" con l'elenco di tutti gli acquisti\n• Vantaggi per i contributori attivi di OpenStreetMap.org\n• Le tracce ora possono essere colorate in base all'altitudine, alla velocità o alla pendenza\n• Le mappe offline sono ora accessibili tramite l'applicazione File\n• Preferiti: aggiunta la generazione di backup locali dopo ogni modifica, backup accessibili dall'applicazione File\n• I POI salvati nei preferiti memorizzeranno e mostreranno tutti i dati dei POI anche senza una mappa offline\n• GPX ha aggiunto il supporto per tag link, cmt, desc e per eventuali estensioni personalizzate\n• Aggiunta modalità per il pulsante Bussola\n• Risolto un problema con il formato delle coordinate UTM\n• Risolto un problema con i punti intermedi nella navigazione\n";
 "inapp_not_found" = "%@ non è stato trovato in OsmAnd. Probabilmente è stato cancellato.";
@@ -2782,3 +2782,10 @@
 "user_points" = "Punti utente";
 "exit_number" = "Numero uscita";
 "announce_when_exceeded" = "Annuncia quando superato";
+"osm_upload_gpx_tags_footer" = "Inserisci i tag separati da una virgola.";
+"announcement_time_intervals" = "Intervalli di tempo e distanza";
+"announcement_time_arrive" = "Arrivo a destinazione";
+"announcement_time_off_route" = "Fuori percorso";
+"announcement_time_title" = "Tempo annuncio";
+"osm_upload_gpx_description_footer" = "Il nome della traccia verrà usato al posto della descrizione vuota. La descrizione impostata verrà applicata ad ogni traccia.";
+"visibility" = "Visibilità";

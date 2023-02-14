@@ -65,10 +65,7 @@
 
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
-    if (@available(iOS 13.0, *)) {
-        return UIStatusBarStyleLightContent;
-    }
-    return UIStatusBarStyleDefault;
+    return UIStatusBarStyleLightContent;
 }
 
 - (void) viewDidLoad

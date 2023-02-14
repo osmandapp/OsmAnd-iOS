@@ -2895,6 +2895,8 @@
 		DA6676D92450661700EF476D /* ic_action_bus@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA6676D72450661600EF476D /* ic_action_bus@2x.png */; };
 		DA66796B27EDCABA00509932 /* OARegisterDeviceCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = DA66796A27EDCABA00509932 /* OARegisterDeviceCommand.m */; };
 		DA66ACC026D91C5800D43299 /* OABaseVectorLinesLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA66ACBF26D91C5800D43299 /* OABaseVectorLinesLayer.mm */; };
+		DA67994F299A761100CC1509 /* BackgroundTasks.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA67994E299A761100CC1509 /* BackgroundTasks.framework */; };
+		DA679950299A7A4A00CC1509 /* OAFetchBackgroundDataOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = DA223EDF299A722A009412AA /* OAFetchBackgroundDataOperation.m */; };
 		DA68B3A2233B81DB00F5ACCC /* ic_custom_intermediate@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA68B393233B81D600F5ACCC /* ic_custom_intermediate@2x.png */; };
 		DA68B3A4233B81DB00F5ACCC /* ic_custom_work@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA68B394233B81D600F5ACCC /* ic_custom_work@3x.png */; };
 		DA68B3A6233B81DB00F5ACCC /* ic_custom_swap@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA68B395233B81D600F5ACCC /* ic_custom_swap@3x.png */; };
@@ -3251,6 +3253,7 @@
 		DAF345C522F4482C009E2EB6 /* ic_custom_moon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAF3454022F4482A009E2EB6 /* ic_custom_moon@2x.png */; };
 		DAF345C922F4482C009E2EB6 /* ic_action_osm_note@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAF3454222F4482B009E2EB6 /* ic_action_osm_note@2x.png */; };
 		DAF345CD22F4482C009E2EB6 /* ic_action_create_poi@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAF3454422F4482B009E2EB6 /* ic_action_create_poi@2x.png */; };
+		DAF50C6C299BB269006AAF2E /* routes.addon.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = DAF50C6B299BB269006AAF2E /* routes.addon.render.xml */; };
 		DAF7A4E021786B5700FB94FD /* ic_action_ruler_circle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAF7A4DD21786B5700FB94FD /* ic_action_ruler_circle@2x.png */; };
 		DAF7A4E221786B5700FB94FD /* ic_action_ruler_circle@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAF7A4DE21786B5700FB94FD /* ic_action_ruler_circle@3x.png */; };
 		DAF7A4F221786BED00FB94FD /* widget_ruler_circle_hide_night@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAF7A4E621786BEB00FB94FD /* widget_ruler_circle_hide_night@3x.png */; };
@@ -5249,6 +5252,8 @@
 		DA1BC113233F9B00004DAF78 /* ic_custom_trip@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_trip@2x.png"; path = "Resources/Icons/ic_custom_trip@2x.png"; sourceTree = "<group>"; };
 		DA1CAF30211EC7DA00B0662E /* ja_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = ja_tts.js; path = ../resources/voice/ja/ja_tts.js; sourceTree = "<group>"; };
 		DA1F1E4F251CCCC4003CAA55 /* navigation-profiles.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = "navigation-profiles.html"; path = "../help/website/feature_articles/navigation-profiles.html"; sourceTree = "<group>"; };
+		DA223EDE299A7229009412AA /* OAFetchBackgroundDataOperation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAFetchBackgroundDataOperation.h; sourceTree = "<group>"; };
+		DA223EDF299A722A009412AA /* OAFetchBackgroundDataOperation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAFetchBackgroundDataOperation.m; sourceTree = "<group>"; };
 		DA22D6CB28D8688C0074FA65 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		DA22DC4525C05F100070FFCA /* ic_custom_split_after@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_split_after@2x.png"; path = "Resources/Icons/ic_custom_split_after@2x.png"; sourceTree = "<group>"; };
 		DA22DC4625C05F100070FFCA /* ic_custom_split_before@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_split_before@3x.png"; path = "Resources/Icons/ic_custom_split_before@3x.png"; sourceTree = "<group>"; };
@@ -7255,6 +7260,7 @@
 		DA66796A27EDCABA00509932 /* OARegisterDeviceCommand.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OARegisterDeviceCommand.m; sourceTree = "<group>"; };
 		DA66ACBE26D91C5700D43299 /* OABaseVectorLinesLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OABaseVectorLinesLayer.h; sourceTree = "<group>"; };
 		DA66ACBF26D91C5800D43299 /* OABaseVectorLinesLayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OABaseVectorLinesLayer.mm; sourceTree = "<group>"; };
+		DA67994E299A761100CC1509 /* BackgroundTasks.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BackgroundTasks.framework; path = System/Library/Frameworks/BackgroundTasks.framework; sourceTree = SDKROOT; };
 		DA68B393233B81D600F5ACCC /* ic_custom_intermediate@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_intermediate@2x.png"; path = "Resources/Icons/ic_custom_intermediate@2x.png"; sourceTree = "<group>"; };
 		DA68B394233B81D600F5ACCC /* ic_custom_work@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_work@3x.png"; path = "Resources/Icons/ic_custom_work@3x.png"; sourceTree = "<group>"; };
 		DA68B395233B81D600F5ACCC /* ic_custom_swap@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_swap@3x.png"; path = "Resources/Icons/ic_custom_swap@3x.png"; sourceTree = "<group>"; };
@@ -7640,6 +7646,7 @@
 		DAF3454022F4482A009E2EB6 /* ic_custom_moon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_moon@2x.png"; path = "Resources/Icons/ic_custom_moon@2x.png"; sourceTree = "<group>"; };
 		DAF3454222F4482B009E2EB6 /* ic_action_osm_note@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_osm_note@2x.png"; path = "Resources/Icons/ic_action_osm_note@2x.png"; sourceTree = "<group>"; };
 		DAF3454422F4482B009E2EB6 /* ic_action_create_poi@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_create_poi@2x.png"; path = "Resources/Icons/ic_action_create_poi@2x.png"; sourceTree = "<group>"; };
+		DAF50C6B299BB269006AAF2E /* routes.addon.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = routes.addon.render.xml; path = ../resources/rendering_styles/routes.addon.render.xml; sourceTree = "<group>"; };
 		DAF7A4DD21786B5700FB94FD /* ic_action_ruler_circle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_action_ruler_circle@2x.png"; sourceTree = "<group>"; };
 		DAF7A4DE21786B5700FB94FD /* ic_action_ruler_circle@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_action_ruler_circle@3x.png"; sourceTree = "<group>"; };
 		DAF7A4E621786BEB00FB94FD /* widget_ruler_circle_hide_night@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "widget_ruler_circle_hide_night@3x.png"; sourceTree = "<group>"; };
@@ -7703,6 +7710,7 @@
 				BBA3AF7A197FC4BB0039D991 /* CoreLocation.framework in Frameworks */,
 				BBA3AF7B197FC4BB0039D991 /* SystemConfiguration.framework in Frameworks */,
 				BBA3AF7C197FC4BB0039D991 /* libQt5Core.a in Frameworks */,
+				DA67994F299A761100CC1509 /* BackgroundTasks.framework in Frameworks */,
 				BBA3AF7D197FC4BB0039D991 /* libQt5Network.a in Frameworks */,
 				BBA3AF7F197FC4BB0039D991 /* libz.dylib in Frameworks */,
 				DA22D6CC28D8688C0074FA65 /* IOKit.framework in Frameworks */,
@@ -9341,6 +9349,7 @@
 		84630FC81A8E1947005B39F2 /* styles */ = {
 			isa = PBXGroup;
 			children = (
+				DAF50C6B299BB269006AAF2E /* routes.addon.render.xml */,
 				DA06BB5429967A4C003B9212 /* depthcontourlines.addon.render.xml */,
 				05541D94299267900014AEF8 /* contourlines.addon.render.xml */,
 				0575058D292D254500FEECD4 /* weather.addon.render.xml */,
@@ -9788,6 +9797,7 @@
 		BB098CF31793F7FD00423944 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DA67994E299A761100CC1509 /* BackgroundTasks.framework */,
 				DA22D6CB28D8688C0074FA65 /* IOKit.framework */,
 				8AAFE752278DE23700F6504E /* libsqlite_static.a */,
 				8AF348762779D88100A64824 /* libproj_static.a */,
@@ -10639,6 +10649,8 @@
 				DA5A79BA26C563A000F274C7 /* OsmAndAppImpl.mm */,
 				DA5A79B826C563A000F274C7 /* OsmAndAppPrivateProtocol.h */,
 				DA5A79BC26C563A000F274C7 /* OsmAndAppProtocol.h */,
+				DA223EDE299A7229009412AA /* OAFetchBackgroundDataOperation.h */,
+				DA223EDF299A722A009412AA /* OAFetchBackgroundDataOperation.m */,
 			);
 			path = AppHost;
 			sourceTree = "<group>";
@@ -14202,6 +14214,7 @@
 				DAF2F808254825BA00967935 /* map_plan_route_point_normal@3x.png in Resources */,
 				8476E2941F6C1EEC00EC274F /* map_car_location_view_angle@3x.png in Resources */,
 				DA5A83D726C563A800F274C7 /* OAFavoriteImportViewController.xib in Resources */,
+				DAF50C6C299BB269006AAF2E /* routes.addon.render.xml in Resources */,
 				DA71B7E8214B9F4A00FE8B7E /* online-maps-plugin.html in Resources */,
 				DA86607D2268A2870041F57D /* ic_custom_remove@3x.png in Resources */,
 				DA2F091D2217FF75006C7F05 /* ic_action_add_osm_note@2x.png in Resources */,
@@ -16477,6 +16490,7 @@
 				DA5A84CB26C563A900F274C7 /* OACopyProfileBottomSheetViewControler.mm in Sources */,
 				DA5A831326C563A800F274C7 /* OATimeTableViewCell.m in Sources */,
 				DA5A836526C563A800F274C7 /* OAAppModeView.mm in Sources */,
+				DA679950299A7A4A00CC1509 /* OAFetchBackgroundDataOperation.m in Sources */,
 				32D253B427F336C200324717 /* OACloudIntroductionViewController.m in Sources */,
 				DA5A84D926C563A900F274C7 /* OAMapSettingsViewController.mm in Sources */,
 				DA3FBFED27D60DB000D25E86 /* OAPreviewRouteLineLayer.mm in Sources */,
@@ -17176,7 +17190,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Support Files/OA-Prefix.pch";
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "OSMAND_BUNDLE_ID=net.osmand.maps";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -17234,7 +17248,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Support Files/OA-Prefix.pch";
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "OSMAND_BUNDLE_ID=net.osmand.maps";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -17309,7 +17323,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = "OsmAnd MapsTests/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.7;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -17371,7 +17385,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				INFOPLIST_FILE = "OsmAnd MapsTests/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.7;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

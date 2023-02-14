@@ -1241,11 +1241,8 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
             btn.layer.masksToBounds = YES;
             btn.layer.cornerRadius = 6.0;
             btn.titleLabel.numberOfLines = 1;
-            if (@available(iOS 13.0, *)) {
-                btn.titleLabel.font = [UIFont scaledMonospacedSystemFontOfSize:17 weight:UIFontWeightSemibold];
-            } else {
-                btn.titleLabel.font = [UIFont scaledMonospacedDigitSystemFontOfSize:17 weight:UIFontWeightSemibold];
-            }
+            btn.titleLabel.font = [UIFont scaledMonospacedSystemFontOfSize:17 weight:UIFontWeightSemibold];
+
             [btn setTitle:hint forState:UIControlStateNormal];
             [btn setTitleColor:UIColorFromRGB(color_primary_purple) forState:UIControlStateNormal];
             [btn sizeToFit];

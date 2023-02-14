@@ -306,6 +306,11 @@
     return @[];
 }
 
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleDarkContent;
+}
+
 + (NSInteger)calculateItemsSize:(NSArray *)items
 {
     NSInteger itemsSize = 0;

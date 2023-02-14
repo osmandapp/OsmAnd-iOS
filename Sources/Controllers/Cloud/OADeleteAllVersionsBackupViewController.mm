@@ -74,10 +74,7 @@
 
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
-    if (@available(iOS 13.0, *))
-        return UIStatusBarStyleDarkContent;
-
-    return UIStatusBarStyleDefault;
+    return UIStatusBarStyleDarkContent;
 }
 
 - (void)applyLocalization

@@ -138,9 +138,7 @@
     if (data.count > 0)
     {
         // Since the number of items is limited by the system, no need to do extra computations
-        NSInteger maximumItemsCount = MIN(500, data.count);
-        if (@available(iOS 14.0, *))
-            maximumItemsCount = MIN(CPListTemplate.maximumItemCount, data.count);
+        NSInteger maximumItemsCount = MIN(CPListTemplate.maximumItemCount, data.count);
         
         for (NSInteger i = 0; i < maximumItemsCount; i++)
         {

@@ -9,6 +9,7 @@
 #import "OAAppDelegate.h"
 
 #import <UIKit/UIKit.h>
+#import <BackgroundTasks/BackgroundTasks.h>
 
 #import "OsmAndApp.h"
 #import "OsmAndAppPrivateProtocol.h"
@@ -36,6 +37,7 @@
 #import "OADiscountHelper.h"
 #import "OALinks.h"
 #import "OABackupHelper.h"
+#import "OAFetchBackgroundDataOperation.h"
 #import "OACloudAccountVerificationViewController.h"
 
 #include "CoreResourcesFromBundleProvider.h"
@@ -54,6 +56,8 @@
 
 #define kCheckUpdatesIntervalHour 3600
 
+#define kFetchDataUpdatesId @"net.osmand.fetchDataUpdates"
+
 @implementation OAAppDelegate
 {
     id<OsmAndAppProtocol, OsmAndAppCppProtocol, OsmAndAppPrivateProtocol> _app;
@@ -70,6 +74,8 @@
     OACarPlayDashboardInterfaceController *_carPlayDashboardController API_AVAILABLE(ios(12.0));
     CPWindow *_windowToAttach API_AVAILABLE(ios(12.0));
     CPInterfaceController *_carPlayInterfaceController API_AVAILABLE(ios(12.0));
+    
+    NSOperationQueue *_dataFetchQueue;
 }
 
 @synthesize window = _window;
@@ -93,6 +99,12 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.rootViewController = [[OALaunchScreenViewController alloc] init];
     [self.window makeKeyAndVisible];
+    
+    // Set the background fetch
+    _dataFetchQueue = [[NSOperationQueue alloc] init];
+    [BGTaskScheduler.sharedScheduler registerForTaskWithIdentifier:kFetchDataUpdatesId usingQueue:nil launchHandler:^(__kindof BGTask * _Nonnull task) {
+        [self handleAppRefresh:(BGAppRefreshTask *)task];
+    }];
     
     _appInitTask = [[UIApplication sharedApplication] beginBackgroundTaskWithName:@"appInitTask" expirationHandler:^{
         
@@ -155,21 +167,17 @@
             [[UIApplication sharedApplication] endBackgroundTask:_appInitTask];
             _appInitTask = UIBackgroundTaskInvalid;
 
-            // Set the background fetch
-            [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:kCheckUpdatesIntervalHour];
             // Check for updates every hour when the app is in the foreground
             _checkUpdatesTimer = [NSTimer scheduledTimerWithTimeInterval:kCheckUpdatesIntervalHour target:self selector:@selector(performUpdatesCheck) userInfo:nil repeats:YES];
 
             // show map in carPlay if it is a cold start
-            if (@available(iOS 12.0, *)) {
-                if (_windowToAttach && _carPlayInterfaceController)
-                {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [self presentInCarPlay:_carPlayInterfaceController window:_windowToAttach];
-                        _carPlayInterfaceController = nil;
-                        _windowToAttach = nil;
-                    });
-                }
+            if (_windowToAttach && _carPlayInterfaceController)
+            {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self presentInCarPlay:_carPlayInterfaceController window:_windowToAttach];
+                    _carPlayInterfaceController = nil;
+                    _windowToAttach = nil;
+                });
             }
         });
     });
@@ -470,19 +478,32 @@
     return [self initialize];
 }
 
--(void)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
+- (void) handleAppRefresh:(BGAppRefreshTask *)task
 {
-    NSDate *methodStart = [NSDate date];
-    if (_app.resourcesManager == nullptr)
-    {
-        completionHandler(UIBackgroundFetchResultFailed);
-        return;
-    }
-    [_app checkAndDownloadOsmAndLiveUpdates];
-    [_app checkAndDownloadWeatherForecastsUpdates];
-    completionHandler(UIBackgroundFetchResultNewData);
-    NSDate *methodEnd = [NSDate date];
-    NSLog(@"Background fetch took %f sec.", [methodEnd timeIntervalSinceDate:methodStart]);
+    [self scheduleAppRefresh];
+    
+    OAFetchBackgroundDataOperation *operation = [[OAFetchBackgroundDataOperation alloc] init];
+    [task setExpirationHandler:^{
+        [operation cancel];
+    }];
+    
+    [operation setCompletionBlock:^{
+        [task setTaskCompletedWithSuccess:!operation.isCancelled];
+    }];
+    
+    [_dataFetchQueue addOperation:operation];
+}
+
+- (void) scheduleAppRefresh
+{
+    BGProcessingTaskRequest *request = [[BGProcessingTaskRequest alloc] initWithIdentifier:kFetchDataUpdatesId];
+    request.requiresNetworkConnectivity = YES;
+    // Check for updates every hour
+    request.earliestBeginDate = [NSDate dateWithTimeIntervalSinceNow:kCheckUpdatesIntervalHour];
+    NSError *error = nil;
+    [BGTaskScheduler.sharedScheduler submitTaskRequest:request error:&error];
+    if (error)
+        NSLog(@"Could not schedule app refresh: %@", error.description);
 }
 
 - (void)application:(UIApplication *)application handleEventsForBackgroundURLSession:(NSString *)identifier completionHandler:(void (^)(void))completionHandler
@@ -515,6 +536,9 @@
     }
     if (_appInitDone)
         [_app onApplicationDidEnterBackground];
+    
+    [BGTaskScheduler.sharedScheduler cancelAllTaskRequests];
+    [self scheduleAppRefresh];
 }
 
 - (void) applicationWillEnterForeground:(UIApplication *)application

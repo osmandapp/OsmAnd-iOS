@@ -35,7 +35,7 @@
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <state key="normal" image="ic_navbar_chevron.png"/>
                             <connections>
-                                <action selector="backButtonClicked:" destination="-1" eventType="touchUpInside" id="UE6-Ix-mXG"/>
+                                <action selector="onLeftNavbarButtonPressed:" destination="-1" eventType="touchUpInside" id="UE6-Ix-mXG"/>
                             </connections>
                         </button>
                         <button opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eV8-xZ-NVC" userLabel="Restore Button">

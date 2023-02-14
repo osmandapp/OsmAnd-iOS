@@ -25,96 +25,27 @@
     OABackupHelper *_backupHelper;
 }
 
+#pragma mark - Initialization
+
 - (void)commonInit
 {
     _backupHelper = [OABackupHelper sharedInstance];
     [super commonInit];
 }
 
-- (void)viewDidLoad
+#pragma mark - Base UI
+
+- (NSString *)getTitle
 {
-    [super viewDidLoad];
+    return OALocalizedString(@"backup_data");
 }
 
-- (void)applyLocalization
+- (NSString *)getLeftNavbarButtonTitle
 {
-    self.titleLabel.text = OALocalizedString(@"backup_data");
-    [self.backButton setTitle:OALocalizedString(@"shared_string_settings") forState:UIControlStateNormal];
+    return OALocalizedString(@"shared_string_settings");
 }
 
-- (EOARemoteFilesType)getRemoteFilesType
-{
-    return EOARemoteFilesTypeUnique;
-}
-
-- (NSMutableDictionary<OAExportSettingsType *, NSArray *> *)generateSelectedItems
-{
-    NSMutableDictionary<OAExportSettingsType *, NSArray *> *selectedItemsMap = [NSMutableDictionary dictionary];
-    for (OAExportSettingsType *type in [OAExportSettingsType getAllValues])
-    {
-        if ([[_backupHelper getBackupTypePref:type] get])
-            selectedItemsMap[type] = [self getItemsForType:type];
-    }
-    return selectedItemsMap;
-}
-
-- (void)onCellSelected
-{
-    NSDictionary *item = [self getItem:[self getSelectedIndexPath]];
-    NSString *key = item[@"key"];
-    if ([key isEqualToString:@"manage_storage_cell"])
-    {
-        OAManageStorageViewController *manageStorageViewController = [[OAManageStorageViewController alloc] init];
-        manageStorageViewController.backupTypesDelegate = self;
-        [self.navigationController pushViewController:manageStorageViewController animated:YES];
-    }
-}
-
-- (void)onTypeSelected:(OAExportSettingsType *)type selected:(BOOL)selected view:(UIView *)view
-{
-    [super onTypeSelected:type selected:selected view:view];
-    [[_backupHelper getBackupTypePref:type] set:selected];
-    [_backupHelper.backup.backupInfo createItemCollections];
-}
-
-- (void)showClearTypeScreen:(OAExportSettingsType *)type view:(UIView *)view
-{
-    UIAlertController *alert =
-            [UIAlertController alertControllerWithTitle:OALocalizedString(@"backup_delete_types_descr")
-                                                message:nil
-                                         preferredStyle:UIAlertControllerStyleActionSheet];
-    UIPopoverPresentationController *popPresenter = [alert popoverPresentationController];
-    popPresenter.sourceView = self.view;
-    popPresenter.sourceRect = view.frame;
-    popPresenter.permittedArrowDirections = UIPopoverArrowDirectionUp;
-
-    UIAlertAction *deleteAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_delete")
-                                                           style:UIAlertActionStyleDestructive
-                                                         handler:^(UIAlertAction * _Nonnull action)
-                                                         {
-                                                             [_backupHelper deleteAllFiles:@[type] listener:self];
-                                                         }
-    ];
-
-    UIAlertAction *leaveAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_leave")
-                                                          style:UIAlertActionStyleDefault
-                                                        handler:nil
-    ];
-
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel")
-                                                           style:UIAlertActionStyleCancel
-                                                         handler:^(UIAlertAction *action)
-                                                         {
-                                                             [self onTypeSelected:type selected:YES view:nil];
-                                                         }
-    ];
-
-    [alert addAction:deleteAction];
-    [alert addAction:leaveAction];
-    [alert addAction:cancelAction];
-
-    [self presentViewController:alert animated:YES completion:nil];
-}
+#pragma mark - Table data
 
 - (void)generateData
 {
@@ -201,6 +132,84 @@
     manageStorageProgressData[@"third_progress"] = @(settingsSize);
 
     [self setData:data];
+}
+
+#pragma mark - Selectors
+
+- (void)onCellSelected
+{
+    NSDictionary *item = [self getItem:[self getSelectedIndexPath]];
+    NSString *key = item[@"key"];
+    if ([key isEqualToString:@"manage_storage_cell"])
+    {
+        OAManageStorageViewController *manageStorageViewController = [[OAManageStorageViewController alloc] init];
+        manageStorageViewController.backupTypesDelegate = self;
+        [self.navigationController pushViewController:manageStorageViewController animated:YES];
+    }
+}
+
+- (void)onTypeSelected:(OAExportSettingsType *)type selected:(BOOL)selected view:(UIView *)view
+{
+    [super onTypeSelected:type selected:selected view:view];
+    [[_backupHelper getBackupTypePref:type] set:selected];
+    [_backupHelper.backup.backupInfo createItemCollections];
+}
+
+- (void)showClearTypeScreen:(OAExportSettingsType *)type view:(UIView *)view
+{
+    UIAlertController *alert =
+            [UIAlertController alertControllerWithTitle:OALocalizedString(@"backup_delete_types_descr")
+                                                message:nil
+                                         preferredStyle:UIAlertControllerStyleActionSheet];
+    UIPopoverPresentationController *popPresenter = [alert popoverPresentationController];
+    popPresenter.sourceView = self.view;
+    popPresenter.sourceRect = view.frame;
+    popPresenter.permittedArrowDirections = UIPopoverArrowDirectionUp;
+
+    UIAlertAction *deleteAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_delete")
+                                                           style:UIAlertActionStyleDestructive
+                                                         handler:^(UIAlertAction * _Nonnull action)
+                                                         {
+                                                             [_backupHelper deleteAllFiles:@[type] listener:self];
+                                                         }
+    ];
+
+    UIAlertAction *leaveAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_leave")
+                                                          style:UIAlertActionStyleDefault
+                                                        handler:nil
+    ];
+
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel")
+                                                           style:UIAlertActionStyleCancel
+                                                         handler:^(UIAlertAction *action)
+                                                         {
+                                                             [self onTypeSelected:type selected:YES view:nil];
+                                                         }
+    ];
+
+    [alert addAction:deleteAction];
+    [alert addAction:leaveAction];
+    [alert addAction:cancelAction];
+
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
+#pragma mark - Additions
+
+- (EOARemoteFilesType)getRemoteFilesType
+{
+    return EOARemoteFilesTypeUnique;
+}
+
+- (NSMutableDictionary<OAExportSettingsType *, NSArray *> *)generateSelectedItems
+{
+    NSMutableDictionary<OAExportSettingsType *, NSArray *> *selectedItemsMap = [NSMutableDictionary dictionary];
+    for (OAExportSettingsType *type in [OAExportSettingsType getAllValues])
+    {
+        if ([[_backupHelper getBackupTypePref:type] get])
+            selectedItemsMap[type] = [self getItemsForType:type];
+    }
+    return selectedItemsMap;
 }
 
 @end

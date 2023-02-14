@@ -27,7 +27,7 @@
                                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <state key="normal" image="ic_navbar_chevron.png"/>
                                         <connections>
-                                            <action selector="backButtonClicked:" destination="Lhe-yk-sVD" eventType="touchUpInside" id="SMW-OV-oo6"/>
+                                            <action selector="onLeftNavbarButtonPressed:" destination="Lhe-yk-sVD" eventType="touchUpInside" id="SMW-OV-oo6"/>
                                         </connections>
                                     </button>
                                     <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="B0H-ih-pIM">
@@ -229,7 +229,7 @@
                                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <state key="normal" image="ic_navbar_chevron.png"/>
                                         <connections>
-                                            <action selector="backButtonClicked:" destination="w8S-Nb-zGN" eventType="touchUpInside" id="yWT-NG-sVU"/>
+                                            <action selector="onLeftNavbarButtonPressed:" destination="w8S-Nb-zGN" eventType="touchUpInside" id="yWT-NG-sVU"/>
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Updates" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumScaleFactor="0.80000000000000027" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kUw-kt-nW2">
@@ -331,7 +331,7 @@
                                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <state key="normal" image="ic_navbar_chevron.png"/>
                                         <connections>
-                                            <action selector="backButtonClicked:" destination="huq-qE-lWI" eventType="touchUpInside" id="i1U-MM-VhO"/>
+                                            <action selector="onLeftNavbarButtonPressed:" destination="huq-qE-lWI" eventType="touchUpInside" id="i1U-MM-VhO"/>
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Details" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumScaleFactor="0.80000000000000027" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wnu-D6-guC">
@@ -449,7 +449,7 @@
                                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <state key="normal" image="ic_navbar_chevron.png"/>
                                         <connections>
-                                            <action selector="backButtonClicked:" destination="ywk-bf-9Aq" eventType="touchUpInside" id="bR7-1M-R45"/>
+                                            <action selector="onLeftNavbarButtonPressed:" destination="ywk-bf-9Aq" eventType="touchUpInside" id="bR7-1M-R45"/>
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Live Updates" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumScaleFactor="0.80000001192092896" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UUC-wv-Odm">

@@ -844,7 +844,7 @@ static const NSInteger _buttonsCount = 4;
     
     if (_targetPoint.type == OATargetImpassableRoadSelection)
     {
-        self.topView.backgroundColor = UIColorFromRGB(color_bottom_sheet_background);
+        self.topView.backgroundColor = UIColorFromRGB(color_primary_table_background);
     }
     else
     {

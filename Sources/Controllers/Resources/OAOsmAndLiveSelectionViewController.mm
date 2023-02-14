@@ -387,7 +387,7 @@ static const NSInteger groupCount = 1;
     [tableView deselectRowAtIndexPath:indexPath animated:true];
 }
 
-- (IBAction)backButtonClicked:(id)sender
+- (IBAction)onLeftNavbarButtonPressed:(id)sender
 {
     [self onDissmissViewContoller];
 }

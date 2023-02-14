@@ -6,7 +6,7 @@
 //  Copyright (c) 2022 OsmAnd. All rights reserved.
 //
 
-#import "OABaseSettingsViewController.h"
+#import "OABaseNavbarViewController.h"
 
 @protocol OACloudAccountLogoutDelegate <NSObject>
 
@@ -16,7 +16,7 @@
 
 @end
 
-@interface OACloudAccountLogoutViewController : OABaseSettingsViewController
+@interface OACloudAccountLogoutViewController : OABaseNavbarViewController
 
 @property (nonatomic, weak) id<OACloudAccountLogoutDelegate> logoutDelegate;
 

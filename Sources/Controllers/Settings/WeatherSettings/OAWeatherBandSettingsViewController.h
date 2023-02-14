@@ -6,7 +6,7 @@
 //  Copyright (c) 2022 OsmAnd. All rights reserved.
 //
 
-#import "OABaseSettingsViewController.h"
+#import "OABaseNavbarViewController.h"
 
 @class OAWeatherBand;
 
@@ -18,7 +18,7 @@
 
 @end
 
-@interface OAWeatherBandSettingsViewController : OABaseSettingsViewController
+@interface OAWeatherBandSettingsViewController : OABaseNavbarViewController
 
 - (instancetype)initWithWeatherBand:(OAWeatherBand *)band;
 

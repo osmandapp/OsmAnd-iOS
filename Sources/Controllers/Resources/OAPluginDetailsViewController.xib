@@ -56,7 +56,7 @@
                                 <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </state>
                             <connections>
-                                <action selector="backButtonClicked:" destination="-1" eventType="touchUpInside" id="aeZ-Vv-wtP"/>
+                                <action selector="onLeftNavbarButtonPressed:" destination="-1" eventType="touchUpInside" id="aeZ-Vv-wtP"/>
                             </connections>
                         </button>
                     </subviews>

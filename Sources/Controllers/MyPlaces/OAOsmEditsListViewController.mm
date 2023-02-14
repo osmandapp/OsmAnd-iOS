@@ -290,7 +290,7 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
 
 - (IBAction)backButtonPressed:(id)sender {
    if (_popToParent)
-        [super backButtonClicked:sender];
+        [super onLeftNavbarButtonPressed:sender];
     else
         [self.navigationController popToRootViewControllerAnimated:YES];
 }

@@ -11,6 +11,4 @@
 
 @interface OACoordinatesFormatViewController : OABaseSettingsViewController
 
-- (instancetype) initWithMode:(OAApplicationMode *)applicationMode;
-
 @end

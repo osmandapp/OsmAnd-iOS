@@ -103,14 +103,14 @@
     [self dismissViewController];
 }
 
-- (IBAction) backButtonClicked:(id)sender
+- (IBAction) onLeftNavbarButtonPressed:(id)sender
 {
     [self dismissViewController];
 }
 
 - (UIColor *)navBarBackgroundColor
 {
-    return UIColorFromRGB(color_bottom_sheet_background);
+    return UIColorFromRGB(color_primary_table_background);
 }
 
 - (void)onScrollViewDidScroll:(UIScrollView *)scrollView

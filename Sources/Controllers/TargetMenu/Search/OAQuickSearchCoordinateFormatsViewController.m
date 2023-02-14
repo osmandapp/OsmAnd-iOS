@@ -135,7 +135,7 @@
     {
         UIView *res = [[UIView alloc] init];
         res.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        res.backgroundColor = UIColorFromRGB(color_bottom_sheet_background);
+        res.backgroundColor = UIColorFromRGB(color_primary_table_background);
         res.alpha = 0;
         return res;
     }
@@ -224,7 +224,7 @@
     else
     {
         [UIView animateWithDuration:.2 animations:^{
-            self.navbarView.backgroundColor = UIColorFromRGB(color_bottom_sheet_background);
+            self.navbarView.backgroundColor = UIColorFromRGB(color_primary_table_background);
             _navBarBackgroundView.alpha = 0;
         }];
     }

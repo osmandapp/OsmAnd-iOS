@@ -42,7 +42,7 @@
                                 <color key="titleColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
                             </state>
                             <connections>
-                                <action selector="backButtonClicked:" destination="-1" eventType="touchUpInside" id="0aC-e3-c4N"/>
+                                <action selector="onLeftNavbarButtonPressed:" destination="-1" eventType="touchUpInside" id="0aC-e3-c4N"/>
                             </connections>
                         </button>
                         <button opaque="NO" clearsContextBeforeDrawing="NO" contentMode="center" fixedFrame="YES" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="system" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8ia-Vi-jGV">

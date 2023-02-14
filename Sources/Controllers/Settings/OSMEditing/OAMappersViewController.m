@@ -21,7 +21,7 @@
 #define CHANGES_FOR_MAPPER_PROMO 30
 #define VISIBLE_MONTHS_COUNT 6
 
-@interface OAMappersViewController () <UITableViewDelegate, UITableViewDataSource, SFSafariViewControllerDelegate>
+@interface OAMappersViewController () <SFSafariViewControllerDelegate>
 
 @end
 
@@ -35,43 +35,31 @@
     NSDictionary<NSString *, NSNumber *> *_objectChanges;
 }
 
-- (instancetype) init
-{
-    self = [super initWithNibName:@"OABaseSettingsViewController" bundle:nil];
-    if (self)
-    {
-        [self commonInit];
-    }
-    return self;
-}
+#pragma mark - Initialization
 
 - (void)commonInit
 {
     _settings = [OAAppSettings sharedManager];
     _headers = [NSMutableDictionary dictionary];
     _footers = [NSMutableDictionary dictionary];
-
-    [self generateData];
 }
+
+#pragma mark - UIViewController
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     [self downloadChangesInfo];
-
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    self.tableView.sectionFooterHeight = 0.001;
-    self.tableView.sectionHeaderHeight = kHeaderHeightDefault;
-
-    self.subtitleLabel.text = @"";
-    self.subtitleLabel.hidden = YES;
 }
 
-- (void)applyLocalization
+#pragma mark - Base UI
+
+- (NSString *)getTitle
 {
-    self.titleLabel.text = OALocalizedString(@"map_updates_for_mappers");
+    return OALocalizedString(@"map_updates_for_mappers");
 }
+
+#pragma mark - Table data
 
 - (void)generateData
 {
@@ -214,6 +202,105 @@
     return _data[indexPath.section][indexPath.row];
 }
 
+- (NSString *)getTitleForHeader:(NSInteger)section
+{
+    return _headers[@(section)];
+}
+
+- (NSString *)getTitleForFooter:(NSInteger)section
+{
+    return _footers[@(section)];
+}
+
+- (NSInteger)rowsCount:(NSInteger)section
+{
+    return _data[section].count;
+}
+
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
+{
+    NSDictionary *item = [self getItem:indexPath];
+    if ([item[@"type"] isEqualToString:[OARightIconTableViewCell getCellIdentifier]])
+    {
+        OARightIconTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
+        if (!cell)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OARightIconTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+        }
+        if (cell)
+        {
+            cell.selectionStyle = [item.allKeys containsObject:@"key"] ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
+
+            BOOL fullSeparator = [[_headers objectForKey:@(indexPath.section)] isEqualToString:OALocalizedString(@"shared_string_contributions")] && indexPath.row == [self.tableView numberOfRowsInSection:indexPath.section] - 2;
+            CGFloat leftInset = fullSeparator ? 0. : 20. + [OAUtilities getLeftMargin];
+            cell.separatorInset = UIEdgeInsetsMake(0., leftInset, 0., 0.);
+
+            cell.titleLabel.attributedText = item[@"attributed_title"];
+            [cell descriptionVisibility:[item.allKeys containsObject:@"description"]];
+            cell.descriptionLabel.text = item[@"description"];
+            cell.descriptionLabel.font = [item.allKeys containsObject:@"description_font"] ? item[@"description_font"] : [UIFont scaledSystemFontOfSize:13.];
+
+            BOOL hasRightIcon = [item.allKeys containsObject:@"right_icon"];
+            cell.rightIconView.image = hasRightIcon ? [UIImage templateImageNamed:item[@"right_icon"]] : nil;
+            cell.rightIconView.tintColor = item[@"tint_color"];
+
+            BOOL topRightContent = item[@"top_right_content"];
+            [cell anchorContent:topRightContent ? EOATableViewCellContentTopStyle : EOATableViewCellContentCenterStyle];
+            [cell textIndentsStyle:topRightContent ? EOATableViewCellTextIncreasedTopCenterIndentStyle : EOATableViewCellTextNormalIndentsStyle];
+        }
+        return cell;
+    }
+    else if ([item[@"type"] isEqualToString:[OAValueTableViewCell getCellIdentifier]])
+    {
+        OAValueTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
+        if (!cell)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAValueTableViewCell *) nib[0];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.valueLabel.textColor = UIColor.blackColor;
+            [cell leftIconVisibility:NO];
+        }
+        if (cell)
+        {
+            cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + 20., 0., 0.);
+            cell.titleLabel.attributedText = item[@"attributed_title"];
+            cell.valueLabel.text = item[@"value"];
+
+            [cell descriptionVisibility:[item.allKeys containsObject:@"description"]];
+            cell.descriptionLabel.text = item[@"description"];
+            cell.descriptionLabel.font = [item.allKeys containsObject:@"description_font"] ? item[@"description_font"] : [UIFont scaledSystemFontOfSize:13.];
+        }
+        return cell;
+    }
+
+    return nil;
+}
+
+- (NSInteger)sectionsCount
+{
+    return _data.count;
+}
+
+- (void)onRowPressed:(NSIndexPath *)indexPath
+{
+    NSDictionary *item = [self getItem:indexPath];
+    NSString *key = item[@"key"];
+    if ([key isEqualToString:@"profile_cell"])
+    {
+        SFSafariViewController *safariViewController = [[SFSafariViewController alloc] initWithURL:item[@"url"]];
+        [self presentViewController:safariViewController animated:YES completion:nil];
+    }
+    if ([key isEqualToString:@"refresh_cell"])
+    {
+        [self downloadChangesInfo];
+    }
+}
+
+#pragma mark - Additions
+
 - (long)getChangesSize
 {
     long changesSize = 0;
@@ -302,124 +389,6 @@
 - (void)safariViewControllerDidFinish:(SFSafariViewController *)controller
 {
     [controller dismissViewControllerAnimated:YES completion:nil];
-}
-
-#pragma mark - UITableViewDataSource
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return _data.count;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return _data[section].count;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:[OARightIconTableViewCell getCellIdentifier]])
-    {
-        OARightIconTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
-        if (!cell)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OARightIconTableViewCell *) nib[0];
-            [cell leftIconVisibility:NO];
-        }
-        if (cell)
-        {
-            cell.selectionStyle = [item.allKeys containsObject:@"key"] ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
-
-            BOOL fullSeparator = [[_headers objectForKey:@(indexPath.section)] isEqualToString:OALocalizedString(@"shared_string_contributions")] && indexPath.row == [tableView numberOfRowsInSection:indexPath.section] - 2;
-            CGFloat leftInset = fullSeparator ? 0. : 20. + [OAUtilities getLeftMargin];
-            cell.separatorInset = UIEdgeInsetsMake(0., leftInset, 0., 0.);
-
-            cell.titleLabel.attributedText = item[@"attributed_title"];
-            [cell descriptionVisibility:[item.allKeys containsObject:@"description"]];
-            cell.descriptionLabel.text = item[@"description"];
-            cell.descriptionLabel.font = [item.allKeys containsObject:@"description_font"] ? item[@"description_font"] : [UIFont scaledSystemFontOfSize:13.];
-
-            BOOL hasRightIcon = [item.allKeys containsObject:@"right_icon"];
-            cell.rightIconView.image = hasRightIcon ? [UIImage templateImageNamed:item[@"right_icon"]] : nil;
-            cell.rightIconView.tintColor = item[@"tint_color"];
-
-            BOOL topRightContent = item[@"top_right_content"];
-            [cell anchorContent:topRightContent ? EOATableViewCellContentTopStyle : EOATableViewCellContentCenterStyle];
-            [cell textIndentsStyle:topRightContent ? EOATableViewCellTextIncreasedTopCenterIndentStyle : EOATableViewCellTextNormalIndentsStyle];
-        }
-        return cell;
-    }
-    else if ([item[@"type"] isEqualToString:[OAValueTableViewCell getCellIdentifier]])
-    {
-        OAValueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
-        if (!cell)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OAValueTableViewCell *) nib[0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.valueLabel.textColor = UIColor.blackColor;
-            [cell leftIconVisibility:NO];
-        }
-        if (cell)
-        {
-            cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + 20., 0., 0.);
-            cell.titleLabel.attributedText = item[@"attributed_title"];
-            cell.valueLabel.text = item[@"value"];
-
-            [cell descriptionVisibility:[item.allKeys containsObject:@"description"]];
-            cell.descriptionLabel.text = item[@"description"];
-            cell.descriptionLabel.font = [item.allKeys containsObject:@"description_font"] ? item[@"description_font"] : [UIFont scaledSystemFontOfSize:13.];
-        }
-        return cell;
-    }
-
-    return nil;
-}
-
-#pragma mark - UITableViewDelegate
-
-- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    return _headers[@(section)];
-}
-
-- (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
-{
-    return _footers[@(section)];
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    NSString *header = _headers[@(section)];
-    if (header)
-    {
-        UIFont *font = [UIFont scaledSystemFontOfSize:13.];
-        CGFloat headerHeight = [OAUtilities calculateTextBounds:header
-                                                          width:tableView.frame.size.width - (kPaddingOnSideOfContent + [OAUtilities getLeftMargin]) * 2
-                                                           font:font].height + kPaddingOnSideOfHeaderWithText;
-        return headerHeight;
-    }
-
-    return kHeaderHeightDefault;
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSDictionary *item = [self getItem:indexPath];
-    NSString *key = item[@"key"];
-    if ([key isEqualToString:@"profile_cell"])
-    {
-        SFSafariViewController *safariViewController = [[SFSafariViewController alloc] initWithURL:item[@"url"]];
-        [self presentViewController:safariViewController animated:YES completion:nil];
-    }
-    if ([key isEqualToString:@"refresh_cell"])
-    {
-        [self downloadChangesInfo];
-    }
-
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 @end

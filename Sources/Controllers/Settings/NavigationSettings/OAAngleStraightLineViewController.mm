@@ -22,10 +22,6 @@
 #define kAngleMaxValue 90.
 #define kAngleStepValue 5
 
-@interface OAAngleStraightLineViewController() <UITableViewDelegate, UITableViewDataSource>
-
-@end
-
 @implementation OAAngleStraightLineViewController
 {
     OATableDataModel *_data;
@@ -33,44 +29,46 @@
     NSInteger _selectedValue;
 }
 
-- (instancetype)initWithAppMode:(OAApplicationMode *)appMode
-{
-    self = [super initWithAppMode:appMode];
-    if (self)
-    {
-        [self commonInit];
-    }
-    return self;
-}
+#pragma mark - Initialization
 
 - (void)commonInit
 {
     _settings = [OAAppSettings sharedManager];
+}
+
+- (void)postInit
+{
     _selectedValue = (NSInteger) [self.appMode getStrAngle];
 }
 
-- (void)applyLocalization
+#pragma mark - Base UI
+
+- (NSString *)getTitle
 {
-    [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"recalc_angle_dialog_title");
-    [self.cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
-    [self.doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
+    return OALocalizedString(@"recalc_angle_dialog_title");
 }
 
-- (void)viewDidLoad
+- (NSString *)getSubtitle
 {
-    [super viewDidLoad];
-
-    self.tableView.dataSource = self;
-    self.tableView.delegate = self;
-
-    self.backButton.hidden = YES;
-    self.cancelButton.hidden = NO;
-    self.doneButton.hidden = NO;
-    self.subtitleLabel.hidden = YES;
-
-    [self generateData];
+    return @"";
 }
+
+- (NSString *)getLeftNavbarButtonTitle
+{
+    return OALocalizedString(@"shared_string_cancel");
+}
+
+- (NSString *)getRightNavbarButtonTitle
+{
+    return OALocalizedString(@"shared_string_done");
+}
+
+- (BOOL)isChevronIconVisible
+{
+    return NO;
+}
+
+#pragma mark - Table data
 
 - (void)generateData
 {
@@ -89,36 +87,23 @@
     [_data addSection:sliderSection];
 }
 
-- (IBAction)doneButtonPressed:(id)sender
+- (NSString *)getTitleForFooter:(NSInteger)section
 {
-    OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
-    [self.appMode setStrAngle:_selectedValue];
-    if (self.delegate)
-        [self.delegate onSettingsChanged];
-    if (self.appMode == [routingHelper getAppMode] && ([routingHelper isRouteCalculated] || [routingHelper isRouteBeingCalculated]))
-        [routingHelper recalculateRouteDueToSettingsChange];
-    [self dismissViewController];
+    return [_data sectionDataForIndex:section].footerText;
 }
 
-#pragma mark - UITableViewDataSource
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return [_data sectionCount];
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)rowsCount:(NSInteger)section
 {
     return [_data rowCount:section];
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
     OATableRowData *item = [_data itemForIndexPath:indexPath];
     if ([item.cellType isEqualToString:[OASegmentSliderTableViewCell getCellIdentifier]])
     {
         OASegmentSliderTableViewCell *cell =
-                [tableView dequeueReusableCellWithIdentifier:[OASegmentSliderTableViewCell getCellIdentifier]];
+                [self.tableView dequeueReusableCellWithIdentifier:[OASegmentSliderTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASegmentSliderTableViewCell getCellIdentifier]
@@ -148,12 +133,23 @@
     return nil;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
+- (NSInteger)sectionsCount
 {
-    return [_data sectionDataForIndex:section].footerText;
+    return [_data sectionCount];
 }
 
 #pragma mark - Selectors
+
+- (IBAction)onRightNavbarButtonPressed:(UIButton *)sender
+{
+    OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
+    [self.appMode setStrAngle:_selectedValue];
+    if (self.delegate)
+        [self.delegate onSettingsChanged];
+    if (self.appMode == [routingHelper getAppMode] && ([routingHelper isRouteCalculated] || [routingHelper isRouteBeingCalculated]))
+        [routingHelper recalculateRouteDueToSettingsChange];
+    [self dismissViewController];
+}
 
 - (void)sliderChanged:(UISlider *)sender
 {

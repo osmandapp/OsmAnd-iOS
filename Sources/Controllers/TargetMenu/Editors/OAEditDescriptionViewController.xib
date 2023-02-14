@@ -47,7 +47,7 @@
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <state key="normal" title="Back" image="ic_navbar_chevron.png"/>
                             <connections>
-                                <action selector="backButtonClicked:" destination="-1" eventType="touchUpInside" id="yEB-RM-UsA"/>
+                                <action selector="onLeftNavbarButtonPressed:" destination="-1" eventType="touchUpInside" id="yEB-RM-UsA"/>
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Wp-EJ-fmY">

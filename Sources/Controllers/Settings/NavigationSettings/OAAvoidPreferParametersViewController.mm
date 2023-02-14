@@ -18,10 +18,6 @@
 
 #define kSidePadding 16
 
-@interface OAAvoidPreferParametersViewController () <UITableViewDelegate, UITableViewDataSource>
-
-@end
-
 @implementation OAAvoidPreferParametersViewController
 {
     NSArray<NSDictionary *> *_data;
@@ -33,31 +29,26 @@
 - (instancetype) initWithAppMode:(OAApplicationMode *)appMode isAvoid:(BOOL)isAvoid
 {
     self = [super initWithAppMode:appMode];
-    if (self) {
+    if (self)
+    {
         _isAvoid = isAvoid;
     }
     return self;
 }
 
-- (void) applyLocalization
-{
-    [super applyLocalization];
-    if (_isAvoid)
-        self.titleLabel.text = OALocalizedString(@"impassable_road");
-    else
-        self.titleLabel.text = OALocalizedString(@"prefer_in_routing_title");
-}
-
 - (void) viewDidLoad
 {
     [super viewDidLoad];
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
+
     [self setupTableHeaderViewWithText:OALocalizedString(@"avoid_in_routing_descr_")];
-    [self setupView];
 }
 
-- (void) setupView
+- (NSString *)getTitle
+{
+    return _isAvoid ? OALocalizedString(@"impassable_road") : OALocalizedString(@"prefer_in_routing_title");
+}
+
+- (void)generateData
 {
     NSMutableArray *dataArr = [NSMutableArray array];
     OAAppSettings* settings = [OAAppSettings sharedManager];
@@ -89,45 +80,18 @@
     _data = [NSArray arrayWithArray:dataArr];
 }
 
-+ (BOOL) hasPreferParameters:(OAApplicationMode *)appMode
+- (NSInteger)rowsCount:(NSInteger)section
 {
-    auto router = [OsmAndApp.instance getRouter:appMode];
-    if (router)
-    {
-        auto parameters = router->getParameters(string(appMode.getDerivedProfile.UTF8String));
-        for (auto it = parameters.begin(); it != parameters.end(); ++it)
-        {
-            auto& p = it->second;
-            NSString *param = [NSString stringWithUTF8String:p.id.c_str()];
-            if ([param hasPrefix:@"prefer_"])
-                return YES;
-        }
-    }
-    return NO;
+    return _data.count;
 }
 
-- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
-    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        [self setupTableHeaderViewWithText:OALocalizedString(@"avoid_in_routing_descr_")];
-        [self.tableView reloadData];
-    } completion:nil];
-}
-
-- (IBAction) backButtonPressed:(id)sender
-{
-    [self dismissViewController];
-}
-
-#pragma mark - TableView
-
-- (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     NSDictionary *item = _data[indexPath.row];
     NSString *cellType = item[@"type"];
     if ([cellType isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
+        OASwitchTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
@@ -155,32 +119,22 @@
     return nil;
 }
 
-- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return 17.0;
-}
-
-- (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return _data.count;
-}
-
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
+- (NSInteger)sectionsCount
 {
     return 1;
 }
 
-- (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (CGFloat)getCustomHeightForHeader:(NSInteger)section
 {
-    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    return cell.selectionStyle == UITableViewCellSelectionStyleNone ? nil : indexPath;
+    return 17.;
 }
 
-- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
-}
+#pragma mark - Selectors
 
-#pragma mark - Switch
+- (void)onRotation
+{
+    [self setupTableHeaderViewWithText:OALocalizedString(@"avoid_in_routing_descr_")];
+}
 
 - (void) applyParameter:(id)sender
 {
@@ -199,6 +153,25 @@
         if (self.delegate)
             [self.delegate onSettingsChanged];
     }
+}
+
+#pragma mark - Additions
+
++ (BOOL) hasPreferParameters:(OAApplicationMode *)appMode
+{
+    auto router = [OsmAndApp.instance getRouter:appMode];
+    if (router)
+    {
+        auto parameters = router->getParameters(string(appMode.getDerivedProfile.UTF8String));
+        for (auto it = parameters.begin(); it != parameters.end(); ++it)
+        {
+            auto& p = it->second;
+            NSString *param = [NSString stringWithUTF8String:p.id.c_str()];
+            if ([param hasPrefix:@"prefer_"])
+                return YES;
+        }
+    }
+    return NO;
 }
 
 @end

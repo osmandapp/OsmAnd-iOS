@@ -133,7 +133,7 @@
 
 - (UIColor *)navBarBackgroundColor
 {
-    return UIColorFromRGB(color_bottom_sheet_background);
+    return UIColorFromRGB(color_primary_table_background);
 }
 
 - (void)setupButtons
@@ -285,7 +285,7 @@
         [self onCloseDeleteAllBackupData];
 }
 
-- (IBAction)backButtonClicked:(id)sender
+- (IBAction)onLeftNavbarButtonPressed:(id)sender
 {
     [self onCloseDeleteAllBackupData];
 }

@@ -86,7 +86,7 @@
     return defaultToolBarHeight;
 }
 
--(IBAction)backButtonClicked:(id)sender;
+-(IBAction)onLeftNavbarButtonPressed:(id)sender;
 {
     [self.navigationController popViewControllerAnimated:YES];
 }

@@ -38,7 +38,7 @@
 "starting_point" = "نقطة الانطلاق";
 "shared_string_select_avoid_road_on_map" = "حدد طريقًا يجب تجنبه أثناء التوجيه";
 "shared_string_road" = "طريق";
-"avoid_roads_msg" = "يمكنك تشغيل مسار بديل بتحديد طرق متجنبة";
+"avoid_roads_msg" = "شغل مسار بديل بتحديد طرق متجنبة";
 "shared_string_go" = "اذهب";
 "info_button" = "معلومات";
 "simulate_your_location" = "محاكاة تخيلية";
@@ -54,7 +54,7 @@
 "settings_preset_descr" = "اختيار وضع افتراضي لعرض الخريطة: استعراض، سيارة، مشي .";
 "unit_of_length" = "وحدات الطول";
 "unit_of_length_descr" = "تغيير وحدات قياس المسافة.";
-"coords_format" = "نمط الإحداثيات";
+"coords_format" = "نمط الإحداثية";
 "coords_format_descr" = "نمط الإحداثيات الجغرافية.";
 "do_not_show_discount_desc" = "يمنع عرض خصومات التطبيق ورسائل الأحداث المحلية الخاصة.";
 "do_not_send_anonymous_data_desc" = "نحن لا نجمع بيانات الموقع. فقط لإحصائية استخدام التطبيق وتنزيلات الخريطة.";
@@ -62,7 +62,7 @@
 "save_global_track_interval_descr" = "حدد الفاصل الزمني للإدخال الخاص بالتسجيل العام للمسار (مفعل من خلال ودجت \"تسجيل الرحلة\" على الخريطة).";
 "rotate_map_to" = "اتجاه الخريطة";
 "rotate_map_to_bearing_descr" = "محاذاة الخريطة.";
-"rotate_map_compass_opt" = "حسب البوصلة";
+"rotate_map_compass_opt" = "اتجاه البوصلة";
 "rotate_map_bearing_opt" = "اتجاه الحركة";
 "rotate_map_none_opt" = "لا تقم بتدوير الشاشة (الشمال دائما للأعلى)";
 "driving_region_descr" = "حدد منطقة القيادة: الولايات المتحدة، أوروبا، المملكة المتحدة، آسيا، وأخرى.";
@@ -2693,7 +2693,7 @@
 "worldwide_maps" = "خرائط عالمية";
 "amazon_appstore" = "متجر تطبيقات أمازون";
 "huawei_appgallery" = "متجر تطبيق هواوي";
-"position_on_map" = "موضع العرض";
+"position_on_map" = "موضع الموقع على الشاشة";
 "position_on_map_center" = "المركز";
 "position_on_map_bottom" = "الأسفل";
 "routing_attr_motor_type_lpg_name" = "غاز البترول المسال";

@@ -93,10 +93,7 @@
     if ([self getNavbarColorScheme] == EOABaseNavbarColorSchemeOrange)
         return UIStatusBarStyleLightContent;
 
-    if (@available(iOS 13.0, *))
-        return UIStatusBarStyleDarkContent;
-
-    return UIStatusBarStyleDefault;
+    return UIStatusBarStyleDarkContent;
 }
 
 #pragma mark - Base setup UI

@@ -55,4 +55,6 @@
 
 #define kReachabilityChangedNotification @"reachabilityStatusChanged"
 
+#define kDot @"."
+
 #endif

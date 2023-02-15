@@ -1550,7 +1550,7 @@
 "plugin_ski_descr" = "Projektita por navigi en vintraj sportejoj. Vidigas descendejojn, skiliftojn kaj skikuradajn kursojn kiel kolorajn liniojn, kiuj indikas malfacilecon. Por uzi la kromprogramon, aktivigu la map-aspekton“Vintro kaj skiado” en la menuo “Agordi mapon”.";
 "record_plugin_name" = "Spur-registrilo";
 "product_desc_track_recording" = "Activates the functionality to record and save your tracks";
-"record_plugin_description" = "Ebligas registri viajn vojaĝojn aŭ trejnadojn kaj analizi ilin konsiderante rapidon, tutajn suprenirojn kaj malsuprenirojn, profilon de altitudo kaj pli. Registritajn spurojn oni povas arĥivigi, kunhavigi, redakti kaj pritrakti.\n\nPliaj informoj: https://osmand.net/docs/user/plugins/trip-recording.";
+"record_plugin_description" = "Ebligas registri viajn vojaĝojn aŭ trejnadojn kaj analizi ilin konsiderante rapidon, tutajn suprenirojn kaj malsuprenirojn, profilon de altitudo kaj pli. Registritajn spurojn oni povas arĥivigi, kunhavigi, redakti kaj pritrakti.\n\nPliaj informoj: https://osmand.net/docs/user/plugins/trip-recording";
 "osm_editing_plugin_name" = "OSM-redaktilo";
 "product_desc_osm_editing" = "Make changes to OpenStreetMap directly from OsmAnd";
 "osm_editing_plugin_description" = "Ebligas kontribui al OpenStreetMap– tutmonda komunumo, kies celo estas prizorgi detalan mapon de la mondo kaj liveri aktualajn malfermajn datumojn por ĉiu uzanto.\n\nPliaj informoj pri kiel redakti la mapon OSM: https://osmand.net/docs/user/plugins/osm-editing.";
@@ -1589,7 +1589,7 @@
 "preferred_languages" = "Preferred languages";
 "srtm_plugin_name" = "Nivelkurboj";
 "product_desc_srtm" = "Display of contour lines";
-"srtm_plugin_description" = "Informoj pri tereno– kiel nivelkurboj, nivelombrumo kaj dekliveco – helpas al vi perokule taksi formon de la tereno, ĝian navigeblecon kaj pli. Topografiaj informoj povas esti reprezentataj sur la mapo per vidigi nivelkurbojn (nivelliniojn), ombrumi malebenaĵojn (reliefo) aŭ per vidigi angulon de dekliveco uzante kolorojn.\n\nDatumoj devenas de la projektoj SRTM ASTER.\n\nPliaj informoj: http://osmand.net/docs/user/plugins/contour-lines.";
+"srtm_plugin_description" = "Informoj pri tereno – kiel nivelkurboj, nivelombrumo kaj dekliveco – helpas al vi perokule taksi formon de la tereno, ĝian navigeblecon kaj pli. Topografiaj informoj povas esti reprezentataj sur la mapo per vidigi nivelkurbojn (nivelliniojn), ombrumi malebenaĵojn (reliefo) aŭ per vidigi angulon de dekliveco uzante kolorojn.\n\nDatumoj devenas de la projektoj SRTM kaj ASTER.\n\nPliaj informoj: http://osmand.net/docs/user/plugins/contour-lines";
 "wikivoyage_travel_guide" = "Vojaĝaj gvidiloj";
 "start_editing_card_image_text" = "Senpaga/libera vojaĝ-gvidilo redaktebla de ĉiu.";
 "wikivoyage_travel_guide_descr" = "Gvidlibroj de Vikivojaĝo pri la plej interesaj lokoj de la mondo, legeblaj en OsmAnd seninterrete.";
@@ -2603,7 +2603,7 @@
 "offline_edition_descr" = "Se malkonekta redaktado estasŝaltita, ŝanĝoj estos unua konservitaj loke kaj alŝutitaj al OSM je peto; alie ŝanĝoj estos alŝutitaj tuj.";
 "kg" = "kg";
 "m" = "m";
-"weather_plugin_description" = "Liveras:\n• 24-horan 7-tagan veterprognozojn kun 5 tavoloj\n • fenestraĵojn agordiĝantajn laŭ loko\n • egal-temperatur-liniojn kaj egal-aerprem-liniojn.\n\nDatumoj estas liverataj de «Global Forecast System» (GFS, https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast ).";
+"weather_plugin_description" = "Liveras:\n • 24-horan 7-tagan veterprognozojn kun 5 tavoloj\n • fenestraĵojn agordiĝantajn laŭ loko\n • egal-temperatur-liniojn kaj egal-aerprem-liniojn.\n\nDatumoj estas liverataj de «Global Forecast System» (GFS, https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast‌).";
 "km" = "km";
 "lang_sat" = "Santala";
 "uninstall_speed_cameras" = "Malinstali informojn pri rapidkontroliloj";

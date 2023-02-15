@@ -178,6 +178,12 @@
 {
 }
 
+- (void)onContentSizeChanged:(NSNotification *)notification
+{
+    [super onContentSizeChanged:notification];
+    [self setupBottomButtons];
+}
+
 #pragma mark - UITableViewDelegate
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section

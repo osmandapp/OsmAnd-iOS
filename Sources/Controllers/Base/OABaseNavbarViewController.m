@@ -17,20 +17,13 @@
 @property (weak, nonatomic) IBOutlet UIView *navbarBackgroundView;
 @property (weak, nonatomic) IBOutlet UIStackView *navbarStackView;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *navbarStackViewEstimatedHeightConstraint;
-@property (weak, nonatomic) IBOutlet UIView *leftNavbarMarginView;
-@property (weak, nonatomic) IBOutlet UIView *rightNavbarMarginView;
-
-@property (weak, nonatomic) IBOutlet UIStackView *leftNavbarButtonStackView;
-@property (weak, nonatomic) IBOutlet UIView *leftNavbarButtonMarginView;
-
-@property (weak, nonatomic) IBOutlet UIStackView *rightNavbarButtonStackView;
-@property (weak, nonatomic) IBOutlet UIView *rightNavbarButtonMarginView;
 
 @end
 
 @implementation OABaseNavbarViewController
 {
     BOOL _isHeaderBlurred;
+    BOOL _isRotating;
 }
 
 #pragma mark - Initialization
@@ -89,14 +82,16 @@
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
+    _isRotating = YES;
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         [self updateNavbarStackViewEstimatedHeight];
-        [self updateNavbarEstimatedHeight];
         [self setupTableHeaderView];
         [self onRotation];
         [self.tableView reloadData];
-    } completion:nil];
+    } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        _isRotating = NO;
+    }];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle
@@ -131,17 +126,11 @@
     self.leftNavbarButton.titleEdgeInsets = UIEdgeInsetsMake(0., isChevronIconVisible ? -10. : 0., 0., 0.);
 
     NSString *leftNavbarButtonTitle = [self getLeftNavbarButtonTitle];
-    BOOL hasLeftButton = (leftNavbarButtonTitle && leftNavbarButtonTitle.length > 0) || isChevronIconVisible;
-    self.leftNavbarButton.hidden = !hasLeftButton;
-    self.leftNavbarButtonMarginView.hidden = !hasLeftButton || isChevronIconVisible;
-
     NSString *rightNavbarButtonTitle = [self getRightNavbarButtonTitle];
+    BOOL hasLeftButton = (leftNavbarButtonTitle && leftNavbarButtonTitle.length > 0) || isChevronIconVisible;
     BOOL hasRightButton = rightNavbarButtonTitle && rightNavbarButtonTitle.length > 0;
-    self.rightNavbarButton.hidden = !hasRightButton;
-    self.rightNavbarButtonMarginView.hidden = !hasRightButton;
-
-    self.leftNavbarButtonStackView.hidden = !hasLeftButton && !hasRightButton;
-    self.rightNavbarButtonStackView.hidden = !hasLeftButton && !hasRightButton;
+    self.leftNavbarButton.hidden = !hasLeftButton && !hasRightButton;
+    self.rightNavbarButton.hidden = !hasLeftButton && !hasRightButton;
 }
 
 - (void)setupNavbarFonts
@@ -367,6 +356,12 @@
     [self dismissViewController];
 }
 
+- (void)onContentSizeChanged:(NSNotification *)notification
+{
+    [super onContentSizeChanged:notification];
+    [self setupTableHeaderView];
+}
+
 - (void)onScrollViewDidScroll:(UIScrollView *)scrollView
 {
 }
@@ -379,7 +374,7 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    if ([self isScreenLoaded])
+    if (!_isRotating && [self isScreenLoaded])
     {
         if ([self isNavbarBlurring])
         {

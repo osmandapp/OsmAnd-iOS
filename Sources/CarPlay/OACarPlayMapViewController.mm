@@ -91,11 +91,11 @@
 - (void)setupAlarmPosition
 {
     UIEdgeInsets insets = _window.safeAreaInsets;
-    CGRect alarmRect = CGRectMake(0., 0., 40., 40.);
+    CGRect alarmRect = CGRectMake(0., 0., 60., 60.);
     if ([self isLeftSideDriving])
         alarmRect.origin = CGPointMake(8.0, insets.top + 8.);
     else
-        alarmRect.origin = CGPointMake(CGRectGetMaxX(_window.frame) - 48., insets.top + 8.);
+        alarmRect.origin = CGPointMake(CGRectGetMaxX(_window.frame) - 68., insets.top + 8.);
     
     _alarmWidget.frame = alarmRect;
 }

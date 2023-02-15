@@ -73,19 +73,19 @@
     }
     if (self)
     {
-        self.frame = CGRectMake(0, 0, 40., 40.);
+        self.frame = CGRectMake(0, 0, 60., 60.);
         self.imageView.frame = self.frame;
         self.textView.frame = self.frame;
         self.textView.textColor = UIColor.blackColor;
-        self.bottomTextView.frame = CGRectMake(0, 24.4, 40., 9.);
+        self.bottomTextView.frame = CGRectMake(0, 36.6, 60., 13.5);
         _carPlayMode = YES;
+        
+        self.textView.font = [UIFont systemFontOfSize:18. weight:UIFontWeightBold];
+        self.bottomTextView.font = [UIFont systemFontOfSize:10.5];
+        self.imageView.contentMode = UIViewContentModeScaleAspectFit;
+        
+        [self commonInit];
     }
-    
-    self.textView.font = [UIFont systemFontOfSize:12.];
-    self.bottomTextView.font = [UIFont systemFontOfSize:7.];
-    self.imageView.contentMode = UIViewContentModeScaleAspectFit;
-    
-    [self commonInit];
     
     return self;
 }

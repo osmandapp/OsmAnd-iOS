@@ -63,6 +63,7 @@
     [super viewDidLoad];
     _settings = [OAAppSettings sharedManager];
     self.view.backgroundColor = [UIColor groupTableViewBackgroundColor];
+    [self.backButton setImage:[UIImage rtlImageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
@@ -250,28 +251,28 @@
         if ([key isEqualToString:kOneActiveMarker])
         {
             selected = activeMarkers == ONE_ACTIVE_MARKER;
-            cell.iconImageView.image = selected ? item[@"img"] : item[@"img_inactive"];
+            cell.iconImageView.image = selected ? [item[@"img"] imageFlippedForRightToLeftLayoutDirection] : [item[@"img_inactive"] imageFlippedForRightToLeftLayoutDirection];
         }
         else if ([key isEqualToString:kTwoActiveMarkers])
         {
             selected = activeMarkers == TWO_ACTIVE_MARKERS;
-            cell.iconImageView.image = selected ? item[@"img"] : item[@"img_inactive"];
+            cell.iconImageView.image = selected ? [item[@"img"] imageFlippedForRightToLeftLayoutDirection] : [item[@"img_inactive"] imageFlippedForRightToLeftLayoutDirection];
         }
         else if ([key isEqualToString:kTopBarDisplay])
         {
             selected = distanceIndication == TOP_BAR_DISPLAY;
             if (activeMarkers == ONE_ACTIVE_MARKER)
-                cell.iconImageView.image = selected ? item[@"img_one"] : item[@"img_one_inactive"];
+                cell.iconImageView.image = selected ? [item[@"img_one"] imageFlippedForRightToLeftLayoutDirection] : [item[@"img_one_inactive"] imageFlippedForRightToLeftLayoutDirection];
             else
-                cell.iconImageView.image = selected ? item[@"img_two"] : item[@"img_two_inactive"];
+                cell.iconImageView.image = selected ? [item[@"img_two"] imageFlippedForRightToLeftLayoutDirection] : [item[@"img_two_inactive"] imageFlippedForRightToLeftLayoutDirection];
         }
         else if ([key isEqualToString:kWidgetDisplay])
         {
             selected = distanceIndication == WIDGET_DISPLAY;
             if (activeMarkers == ONE_ACTIVE_MARKER)
-                cell.iconImageView.image = selected ? item[@"img_one"] : item[@"img_one_inactive"];
+                cell.iconImageView.image = selected ? [item[@"img_one"] imageFlippedForRightToLeftLayoutDirection] : [item[@"img_one_inactive"] imageFlippedForRightToLeftLayoutDirection];
             else
-                cell.iconImageView.image = selected ? item[@"img_two"] : item[@"img_two_inactive"];
+                cell.iconImageView.image = selected ? [item[@"img_two"] imageFlippedForRightToLeftLayoutDirection] : [item[@"img_two_inactive"] imageFlippedForRightToLeftLayoutDirection];
         }
         cell.titleLabel.text = item[@"title"];
         cell.checkmarkImageView.hidden = !selected;

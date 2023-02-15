@@ -398,8 +398,8 @@
         }
         if (cell)
         {
-            cell.backgroundImageView.image = [UIImage imageNamed:item[@"backgroundImage"]];
-            cell.foregroundImageView.image = [UIImage imageNamed:item[@"foregroundImage"]];
+            cell.backgroundImageView.image = [UIImage imageNamed:item[@"backgroundImage"]].imageFlippedForRightToLeftLayoutDirection;
+            cell.foregroundImageView.image = [UIImage imageNamed:item[@"foregroundImage"]].imageFlippedForRightToLeftLayoutDirection;
         }
         return cell;
     }
@@ -416,7 +416,7 @@
         }
         if (cell)
         {
-            cell.leftIconView.image = param && ![item.allKeys containsObject:@"icon"] ? [param getIcon] : item[@"icon"];
+            cell.leftIconView.image = param && ![item.allKeys containsObject:@"icon"] ? [param getIcon].imageFlippedForRightToLeftLayoutDirection : [item[@"icon"] imageFlippedForRightToLeftLayoutDirection];
             if (param && ![param isSelected] && ![item.allKeys containsObject:@"icon"])
                 cell.leftIconView.tintColor = UIColorFromRGB(color_icon_inactive);
             else

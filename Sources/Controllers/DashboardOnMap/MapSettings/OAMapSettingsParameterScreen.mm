@@ -100,9 +100,9 @@
         OAMapStyleParameterValue *value = parameter.possibleValues[indexPath.row];
         [cell.textView setText:value.title];
         if ([parameter.value isEqualToString:value.name])
-            [cell.iconView setImage:[UIImage imageNamed:@"menu_cell_selected.png"]];
+            cell.accessoryType = UITableViewCellAccessoryCheckmark;
         else
-            [cell.iconView setImage:nil];
+            cell.accessoryType = UITableViewCellAccessoryNone;
     }
     
     return cell;

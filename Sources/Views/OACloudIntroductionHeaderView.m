@@ -163,7 +163,7 @@
 {
     self.titleLabel.text = title;
     self.descriptionLabel.text = description;
-    self.bannerMainImageView.image = image;
+    self.bannerMainImageView.image = image.imageFlippedForRightToLeftLayoutDirection;
     [self.topButton setTitle:topButtonTitle forState:UIControlStateNormal];
     [self.bottomButton setTitle:bottomButtonTitle forState:UIControlStateNormal];
     

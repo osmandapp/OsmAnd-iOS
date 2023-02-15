@@ -145,7 +145,9 @@
     {
         OAPOIViewController *builder = [[OAPOIViewController alloc] initWithPOI: _originObject];
         builder.location = CLLocationCoordinate2DMake(_wpt.point.position.latitude, _wpt.point.position.longitude);
-        [builder buildRowsInternal:rows];
+        NSMutableArray<OARowInfo *> *internalRows = [NSMutableArray array];
+        [builder buildRowsInternal:internalRows];
+        [rows addObjectsFromArray:internalRows];
     }
     else
     {

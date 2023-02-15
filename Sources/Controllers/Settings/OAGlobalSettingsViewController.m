@@ -90,11 +90,6 @@
     return EOABaseNavbarColorSchemeOrange;
 }
 
-- (void)addAccessibilityLabels
-{
-    self.leftNavbarButton.accessibilityLabel = OALocalizedString(@"shared_string_back");
-}
-
 #pragma mark - Table data
 
 - (void)generateData
@@ -306,8 +301,7 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OARightIconTableViewCell *) nib[0];
-            cell.rightIconView.image = [UIImage templateImageNamed:@"ic_checkmark_default"];
-            cell.rightIconView.tintColor = UIColorFromRGB(color_primary_purple);
+            [cell.rightIconView setHidden:YES];
         }
         if (cell)
         {
@@ -317,10 +311,13 @@
             cell.titleLabel.text = [appMode toHumanString];
             cell.descriptionLabel.text = [appMode getProfileDescription];
 
-            cell.leftIconView.image = [[appMode getIcon] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.leftIconView.image = [[appMode getIcon] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
             cell.leftIconView.tintColor = UIColorFromRGB([appMode getIconColor]);
 
-            [cell rightIconVisibility:[item boolForKey:@"isSelected"]];
+            if ([item boolForKey:@"isSelected"])
+                cell.accessoryType = UITableViewCellAccessoryCheckmark;
+            else
+                cell.accessoryType = UITableViewCellAccessoryNone;
         }
         return cell;
     }

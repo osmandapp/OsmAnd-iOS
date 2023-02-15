@@ -68,6 +68,7 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 @interface UIImage (util)
 
 + (UIImage *) templateImageNamed:(NSString *)imageName;
++ (UIImage *) rtlImageNamed:(NSString *)imageName;
 
 @end
 

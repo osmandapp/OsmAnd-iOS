@@ -75,7 +75,7 @@
     {
         OAApplicationMode *am = _profileList[indexPath.row];
         UIImage *img = am.getIcon;
-        cell.imgView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        cell.imgView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
         cell.imgView.tintColor = UIColorFromRGB(am.getIconColor);
         cell.textView.text = _profileList[indexPath.row].toHumanString;
         cell.descriptionView.text = _profileList[indexPath.row].getProfileDescription;

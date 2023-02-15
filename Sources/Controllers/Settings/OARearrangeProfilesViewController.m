@@ -213,7 +213,7 @@
         else
             imageName = @"ic_custom_undo_button";
         
-        cell.iconImageView.image = [mode.getIcon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        cell.iconImageView.image = [mode.getIcon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
         cell.iconImageView.tintColor = UIColorFromRGB(mode.getIconColor);
         [cell.deleteButton setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
         [cell.deleteButton setUserInteractionEnabled:mode.isCustomProfile];

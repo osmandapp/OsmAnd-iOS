@@ -628,7 +628,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
             }
 
             cell.titleLabel.text = item.title;
-            cell.leftIconView.image = [item objForKey:@"icon"];
+            cell.leftIconView.image = [[item objForKey:@"icon"] imageFlippedForRightToLeftLayoutDirection];
             cell.leftIconView.tintColor = UIColorFromRGB(item.iconTint);
 
             NSString *secondaryIconName = hasConflict ? [item stringForKey:@"secondaryIconConflict"] : item.secondaryIconName;
@@ -668,7 +668,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
             [str addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(color_text_footer) range:range];
             [str addAttribute:NSFontAttributeName value:[UIFont scaledSystemFontOfSize:15.] range:range];
             cell.descriptionLabel.attributedText = str;
-            [cell.cellImageView setImage:[UIImage imageNamed:item.iconName]];
+            [cell.cellImageView setImage:[UIImage rtlImageNamed:item.iconName]];
 
             if (cell.needsUpdateConstraints)
                 [cell updateConstraints];

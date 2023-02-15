@@ -116,13 +116,15 @@
                                                          owner:self
                                                        options:nil];
             cell = (OASettingsTitleTableViewCell *) nib[0];
-            cell.iconView.image = [UIImage templateImageNamed:@"ic_checkmark_default"];
-            cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
+            [cell.iconView setHidden:YES];
         }
         if (cell)
         {
             cell.textView.attributedText = item[@"attributed_title"];
-            cell.iconView.hidden = indexPath.row != _indexSelected;
+            if (indexPath.row == _indexSelected)
+                cell.accessoryType = UITableViewCellAccessoryCheckmark;
+            else
+                cell.accessoryType = UITableViewCellAccessoryNone;
         }
         outCell = cell;
     }

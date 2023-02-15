@@ -382,7 +382,7 @@
             cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingOnSideOfContent, 0., 0.);
 
             cell.titleLabel.text = item.title;
-            cell.leftIconView.image = [UIImage imageNamed:item.iconName];
+            cell.leftIconView.image = [UIImage rtlImageNamed:item.iconName];
 
             [cell.button setTitle:[item stringForKey:@"buttonTitle"] forState:UIControlStateNormal];
             cell.button.tag = indexPath.section << 10 | indexPath.row;

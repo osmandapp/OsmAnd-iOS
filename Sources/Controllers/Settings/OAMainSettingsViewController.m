@@ -259,7 +259,7 @@
         {
             cell.textView.text = item[@"title"];
             cell.descriptionView.text = item[@"value"];
-            cell.leftIconView.image = [item[@"name"] isEqualToString:@"backup_restore"] ? [UIImage imageNamed:item[@"img"]] : [UIImage templateImageNamed:item[@"img"]];
+            cell.leftIconView.image = [item[@"name"] isEqualToString:@"backup_restore"] ? [UIImage rtlImageNamed:item[@"img"]] : [UIImage templateImageNamed:item[@"img"]];
         }
         return cell;
     }
@@ -277,7 +277,7 @@
         }
         OAApplicationMode *am = item[@"app_mode"];
         UIImage *img = am.getIcon;
-        cell.iconView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        cell.iconView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
         cell.iconView.tintColor = UIColorFromRGB(am.getIconColor);
         cell.textView.text = am.toHumanString;
         cell.descView.text = [self getProfileDescription:am];
@@ -301,7 +301,7 @@
         BOOL isEnabled = [OAApplicationMode.values containsObject:am];
         cell.separatorInset = UIEdgeInsetsMake(0.0, indexPath.row < OAApplicationMode.allPossibleValues.count - 1 ? kPaddingToLeftOfContentWithIcon : 0.0, 0.0, 0.0);
         UIImage *img = am.getIcon;
-        cell.leftIconView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        cell.leftIconView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
         cell.leftIconView.tintColor = isEnabled ? UIColorFromRGB(am.getIconColor) : UIColorFromRGB(color_tint_gray);
         cell.titleLabel.text = am.toHumanString;
         cell.descriptionLabel.text = [self getProfileDescription:am];

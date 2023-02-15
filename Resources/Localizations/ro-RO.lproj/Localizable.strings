@@ -2786,3 +2786,6 @@
 "announcement_time_prepare_long" = "Pregătire lungă";
 "announcement_time_approach" = "Abordare";
 "announcement_time_passing" = "Trecere";
+"osm_upload_gpx_description_footer" = "Se va folosi numele piesei în locul unei descrieri goale. Descrierea introdusă va fi aplicată pentru fiecare piesă.";
+"osm_upload_gpx_tags_footer" = "Introduceți etichete separate prin virgulă.";
+"visibility" = "Vizibilitate";

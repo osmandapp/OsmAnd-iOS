@@ -501,6 +501,7 @@
             cell.descView.hidden = NO;
         }
         [cell.iconView setImage:icon];
+        cell.iconView.image = [cell.iconView.image imageFlippedForRightToLeftLayoutDirection];
         cell.arrowIconView.image = [cell.arrowIconView.image imageFlippedForRightToLeftLayoutDirection];
     }
     if ([cell needsUpdateConstraints])

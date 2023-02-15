@@ -175,7 +175,12 @@
 
 + (UIImage *) templateImageNamed:(NSString *)imageName
 {
-    return [[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    return [[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
+}
+
++ (UIImage *) rtlImageNamed:(NSString *)imageName
+{
+    return [UIImage imageNamed:imageName].imageFlippedForRightToLeftLayoutDirection;
 }
 
 @end
@@ -1283,7 +1288,7 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
         CGContextRelease(bitmapContext);
         CGColorSpaceRelease(colorSpace);
 
-        UIImage *res = [UIImage imageWithCGImage:mainViewContentBitmapContext scale:source.scale orientation:UIImageOrientationUp];
+        UIImage *res = [UIImage imageWithCGImage:mainViewContentBitmapContext scale:source.scale orientation:UIImageOrientationUp].imageFlippedForRightToLeftLayoutDirection;
         CGImageRelease(mainViewContentBitmapContext);
         return res;
     }
@@ -2155,7 +2160,7 @@ static const double d180PI = 180.0 / M_PI_2;
 
 + (UIView *) setupTableHeaderViewWithText:(NSString *)text font:(UIFont *)font tintColor:(UIColor *)tintColor icon:(NSString *)iconName
 {
-    return [self setupTableHeaderViewWithText:text font:font tintColor:tintColor icon:[UIImage imageNamed:iconName] iconFrameSize:34.];
+    return [self setupTableHeaderViewWithText:text font:font tintColor:tintColor icon:[UIImage rtlImageNamed:iconName] iconFrameSize:34.];
 }
 
 + (UIView *) setupTableHeaderViewWithAttributedText:(NSAttributedString *)attributedText topCenterIconName:(NSString *)iconName iconSize:(CGFloat)iconSize

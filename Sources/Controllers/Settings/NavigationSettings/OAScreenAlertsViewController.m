@@ -122,8 +122,8 @@
         }
         if (cell)
         {
-            cell.backgroundImageView.image = [UIImage imageNamed:item[@"backgroundImage"]];
-            cell.foregroundImageView.image = [UIImage imageNamed:item[@"foregroundImage"]];
+            cell.backgroundImageView.image = [UIImage imageNamed:item[@"backgroundImage"]].imageFlippedForRightToLeftLayoutDirection;
+            cell.foregroundImageView.image = [UIImage imageNamed:item[@"foregroundImage"]].imageFlippedForRightToLeftLayoutDirection;
         }
         return cell;
     }
@@ -147,7 +147,7 @@
             }
             else
             {
-                cell.leftIconView.image = [UIImage imageNamed:item[@"icon"]];
+                cell.leftIconView.image = [UIImage rtlImageNamed:item[@"icon"]];
             }
             id v = item[@"value"];
             [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];

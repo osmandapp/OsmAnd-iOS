@@ -42,7 +42,7 @@ NSString *const kSimulateLocationKey = @"kSimulateLocationKey";
     self.tableView.estimatedRowHeight = kEstimatedRowHeight;
     self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:_headerDescription font:[UIFont scaledSystemFontOfSize:15] textColor:UIColorFromRGB(color_text_footer) lineSpacing:0.0 isTitle:NO];
     
-    self.backButton.imageView.image = [self.backButton.imageView.image imageFlippedForRightToLeftLayoutDirection];
+    [self.backButton setImage:[UIImage rtlImageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
 }
 
 - (void) viewWillAppear:(BOOL)animated

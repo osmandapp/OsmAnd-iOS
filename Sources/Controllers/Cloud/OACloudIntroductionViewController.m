@@ -32,6 +32,7 @@
 {
     [super viewDidLoad];
         
+    [self.backImageButton setImage:[UIImage rtlImageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
     self.backImageButton.tintColor = UIColorFromRGB(color_primary_purple);
     
     [self setUpTableHeaderView];

@@ -963,7 +963,7 @@
             cell.descriptionLabel.text = item[@"desc"];
 
             BOOL hasLeftIcon = [item.allKeys containsObject:@"image"];
-            cell.leftIconView.image = hasLeftIcon ? [UIImage imageNamed:item[@"image"]] : nil;
+            cell.leftIconView.image = hasLeftIcon ? [UIImage rtlImageNamed:item[@"image"]] : nil;
 
             [cell.button setTitle:OALocalizedString(@"shared_string_get") forState:UIControlStateNormal];
             [cell.button setTitleColor:[UIColorFromRGB(color_primary_purple) colorWithAlphaComponent:0.1] forState:UIControlStateHighlighted];

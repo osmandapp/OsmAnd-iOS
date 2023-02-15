@@ -3254,6 +3254,7 @@
 		DAF345C922F4482C009E2EB6 /* ic_action_osm_note@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAF3454222F4482B009E2EB6 /* ic_action_osm_note@2x.png */; };
 		DAF345CD22F4482C009E2EB6 /* ic_action_create_poi@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAF3454422F4482B009E2EB6 /* ic_action_create_poi@2x.png */; };
 		DAF50C6C299BB269006AAF2E /* routes.addon.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = DAF50C6B299BB269006AAF2E /* routes.addon.render.xml */; };
+		DAF50C70299D111B006AAF2E /* osmassistant.addon.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = DAF50C6F299D111B006AAF2E /* osmassistant.addon.render.xml */; };
 		DAF7A4E021786B5700FB94FD /* ic_action_ruler_circle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAF7A4DD21786B5700FB94FD /* ic_action_ruler_circle@2x.png */; };
 		DAF7A4E221786B5700FB94FD /* ic_action_ruler_circle@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAF7A4DE21786B5700FB94FD /* ic_action_ruler_circle@3x.png */; };
 		DAF7A4F221786BED00FB94FD /* widget_ruler_circle_hide_night@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAF7A4E621786BEB00FB94FD /* widget_ruler_circle_hide_night@3x.png */; };
@@ -7647,6 +7648,7 @@
 		DAF3454222F4482B009E2EB6 /* ic_action_osm_note@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_osm_note@2x.png"; path = "Resources/Icons/ic_action_osm_note@2x.png"; sourceTree = "<group>"; };
 		DAF3454422F4482B009E2EB6 /* ic_action_create_poi@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_create_poi@2x.png"; path = "Resources/Icons/ic_action_create_poi@2x.png"; sourceTree = "<group>"; };
 		DAF50C6B299BB269006AAF2E /* routes.addon.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = routes.addon.render.xml; path = ../resources/rendering_styles/routes.addon.render.xml; sourceTree = "<group>"; };
+		DAF50C6F299D111B006AAF2E /* osmassistant.addon.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = osmassistant.addon.render.xml; path = ../resources/rendering_styles/osmassistant.addon.render.xml; sourceTree = "<group>"; };
 		DAF7A4DD21786B5700FB94FD /* ic_action_ruler_circle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_action_ruler_circle@2x.png"; sourceTree = "<group>"; };
 		DAF7A4DE21786B5700FB94FD /* ic_action_ruler_circle@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_action_ruler_circle@3x.png"; sourceTree = "<group>"; };
 		DAF7A4E621786BEB00FB94FD /* widget_ruler_circle_hide_night@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "widget_ruler_circle_hide_night@3x.png"; sourceTree = "<group>"; };
@@ -9349,6 +9351,7 @@
 		84630FC81A8E1947005B39F2 /* styles */ = {
 			isa = PBXGroup;
 			children = (
+				DAF50C6F299D111B006AAF2E /* osmassistant.addon.render.xml */,
 				DAF50C6B299BB269006AAF2E /* routes.addon.render.xml */,
 				DA06BB5429967A4C003B9212 /* depthcontourlines.addon.render.xml */,
 				05541D94299267900014AEF8 /* contourlines.addon.render.xml */,
@@ -14768,6 +14771,7 @@
 				DA5A828626C563A700F274C7 /* OARouteInfoAltitudeCell.xib in Resources */,
 				DA5A827926C563A700F274C7 /* OARadiusCellEx.xib in Resources */,
 				DA52CE0924AE087F00CC309D /* ic_custom_direction_north@2x.png in Resources */,
+				DAF50C70299D111B006AAF2E /* osmassistant.addon.render.xml in Resources */,
 				DA134198243DC5A80039D214 /* map_action_utv@3x.png in Resources */,
 				84EC52B41F8BF26600AFC252 /* ic_action_time_to_distance@2x.png in Resources */,
 				849E81AE1AFA5D6700549953 /* btn_map_type_icon_walk@3x.png in Resources */,

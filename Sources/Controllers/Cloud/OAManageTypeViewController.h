@@ -6,7 +6,7 @@
 //  Copyright (c) 2022 OsmAnd. All rights reserved.
 //
 
-#import "OABaseBigTitleSettingsViewController.h"
+#import "OABaseNavbarViewController.h"
 
 @class OAExportSettingsType, OASettingsCategoryItems;
 
@@ -18,7 +18,7 @@
 
 @end
 
-@interface OAManageTypeViewController : OABaseBigTitleSettingsViewController
+@interface OAManageTypeViewController : OABaseNavbarViewController
 
 - (instancetype)initWithSettingsType:(OAExportSettingsType *)settingsType size:(NSString *)size;
 

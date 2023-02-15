@@ -145,7 +145,7 @@
 
 - (void)updateShowButton:(BOOL)hasSelection
 {
-    self.showButton.backgroundColor = hasSelection ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_route_button_inactive);
+    self.showButton.backgroundColor = hasSelection ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_button_gray_background);
     [self.showButton setTintColor:hasSelection ? UIColor.whiteColor : UIColorFromRGB(color_text_footer)];
     [self.showButton setTitleColor:hasSelection ? UIColor.whiteColor : UIColorFromRGB(color_text_footer) forState:UIControlStateNormal];
     [self.showButton setUserInteractionEnabled:hasSelection];

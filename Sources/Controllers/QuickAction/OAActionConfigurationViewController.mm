@@ -43,7 +43,6 @@
 #import <AudioToolbox/AudioServices.h>
 
 #define KEY_MESSAGE @"message"
-#define kHeaderViewFont [UIFont scaledSystemFontOfSize:15.0]
 
 @interface OAActionConfigurationViewController () <UITableViewDelegate, UITableViewDataSource, OAEditColorViewControllerDelegate, OAEditGroupViewControllerDelegate, OAAddCategoryDelegate, MGSwipeTableCellDelegate, OAAddMapStyleDelegate, OAAddMapSourceDelegate, OAAddProfileDelegate, MDCMultilineTextInputLayoutDelegate, UITextViewDelegate, OAPoiTypeSelectionDelegate, UIGestureRecognizerDelegate>
 
@@ -109,7 +108,7 @@
     [self.backBtn setTintColor:UIColor.whiteColor];
     
     if (_action.getActionText)
-        _tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:_action.getActionText font:kHeaderViewFont textColor:UIColor.blackColor lineSpacing:0.0 isTitle:NO];
+        _tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:_action.getActionText font:kHeaderDescriptionFont textColor:UIColor.blackColor isBigTitle:NO];
 }
 
 - (void)viewWillAppear:(BOOL)animated

@@ -69,10 +69,9 @@
     {
         self.tableView.tableHeaderView =
                 [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"use_login_and_password_description")
-                                                     font:[UIFont scaledSystemFontOfSize:13.]
+                                                     font:kHeaderDescriptionFont
                                                 textColor:UIColorFromRGB(color_text_footer)
-                                              lineSpacing:0
-                                                  isTitle:NO];
+                                               isBigTitle:NO];
     }
 }
 
@@ -228,7 +227,7 @@
         if (cell)
         {
             cell.button.backgroundColor = _isLogged || _newUserName.length == 0 || _newPassword.length == 0 || _errorMessage != nil
-                    ? UIColorFromRGB(color_route_button_inactive)
+                    ? UIColorFromRGB(color_button_gray_background)
                     : UIColorFromRGB(color_primary_purple);
             [cell.button setTitleColor:_isLogged
                             ? UIColorFromRGB(color_primary_purple)

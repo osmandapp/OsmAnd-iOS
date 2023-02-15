@@ -11,7 +11,6 @@
 #import "OASizes.h"
 #import "OAColors.h"
 
-#define kHeaderViewFont [UIFont scaledSystemFontOfSize:34.0 weight:UIFontWeightBold]
 #define kSidePadding 16
 
 @interface OABaseBigTitleSettingsViewController () <UIScrollViewDelegate>
@@ -44,9 +43,9 @@
 - (void) setTableHeaderView:(NSString *)label
 {
     _tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:label
-                                                                      font:kHeaderViewFont
+                                                                      font:kHeaderBigTitleFont
                                                                  textColor:UIColor.blackColor
-                                                               lineSpacing:0.0 isTitle:YES];
+                                                                isBigTitle:YES];
 }
 
 - (void) applyLocalization

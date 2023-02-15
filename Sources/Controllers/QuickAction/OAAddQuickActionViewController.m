@@ -16,8 +16,6 @@
 #import "OASizes.h"
 #import "OAQuickActionType.h"
 
-#define kHeaderViewFont [UIFont scaledSystemFontOfSize:15.0]
-
 @interface OAAddQuickActionViewController () <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet UIView *navBarView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -103,7 +101,7 @@
 
     _actions = [OrderedDictionary dictionaryWithDictionary:mapping];
     
-    _tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"quick_action_add_actions_descr") font:kHeaderViewFont textColor:UIColor.blackColor lineSpacing:0.0 isTitle:NO];
+    _tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"quick_action_add_actions_descr") font:kHeaderDescriptionFont textColor:UIColor.blackColor isBigTitle:NO];
 }
 
 -(void) setupSearchView

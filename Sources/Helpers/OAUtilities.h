@@ -27,6 +27,9 @@ green:((float)((rgbValue & 0xFF00) >> 8 ))/255.0 \
 blue:((float)(rgbValue & 0xFF))/255.0 \
 alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 
+#define kHeaderBigTitleFont [UIFont scaledSystemFontOfSize:34. weight:UIFontWeightBold]
+#define kHeaderDescriptionFont [UIFont scaledSystemFontOfSize:15.]
+
 @interface UIBezierPath (util)
 
 - (void) cubicToX:(float)x1 y1:(float)y1 x2:(float)x2 y2:(float)y2 x3:(float)x3 y3:(float)y3;
@@ -131,6 +134,7 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 @interface NSMutableAttributedString (util)
 
 - (void) addString:(NSString *)string fontWeight:(UIFontWeight)fontWeight size:(CGFloat)size;
+- (void) setFont:(UIFont *)font forString:(NSString *)string;
 - (void) setFontSize:(CGFloat)size forString:(NSString *)string;
 - (void) setFontWeight:(UIFontWeight)fontWeight andSize:(CGFloat)size forString:(NSString *)string;
 - (void) setColor:(UIColor *)color forString:(NSString *)string;
@@ -289,10 +293,9 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 
 + (BOOL) isColorBright:(UIColor *)color;
 + (NSAttributedString *) createAttributedString:(NSString *)text font:(UIFont *)font color:(UIColor *)color strokeColor:(UIColor *)strokeColor strokeWidth:(float)strokeWidth alignment:(NSTextAlignment)alignment;
-+ (UIView *) setupTableHeaderViewWithText:(NSString *)text font:(UIFont *)font textColor:(UIColor *)textColor lineSpacing:(CGFloat)lineSpacing isTitle:(BOOL)isTitle;
-+ (UIView *) setupTableHeaderViewWithText:(NSString *)text font:(UIFont *)font textColor:(UIColor *)textColor lineSpacing:(CGFloat)lineSpacing isTitle:(BOOL)isTitle y:(CGFloat)y;
-+ (UIView *) setupTableHeaderViewWithText:(NSString *)text font:(UIFont *)font tintColor:(UIColor *)tintColor icon:(NSString *)iconName;
-+ (UIView *) setupTableHeaderViewWithText:(NSString *)text font:(UIFont *)font tintColor:(UIColor *)tintColor icon:(UIImage *)icon iconFrameSize:(CGFloat)iconFrameSize;
++ (UIView *) setupTableHeaderViewWithText:(NSString *)text font:(UIFont *)font textColor:(UIColor *)textColor isBigTitle:(BOOL)isBigTitle;
++ (UIView *) setupTableHeaderViewWithText:(NSString *)text font:(UIFont *)font textColor:(UIColor *)textColor isBigTitle:(BOOL)isBigTitle rightIconName:(NSString *)iconName tintColor:(UIColor *)tintColor;
++ (UIView *) setupTableHeaderViewWithText:(NSString *)text font:(UIFont *)font textColor:(UIColor *)textColor isBigTitle:(BOOL)isBigTitle topOffset:(CGFloat)topOffset bottomOffset:(CGFloat)bottomOffset rightIconName:(NSString *)iconName tintColor:(UIColor *)tintColor;
 + (UIView *) setupTableHeaderViewWithText:(NSAttributedString *)text tintColor:(UIColor *)tintColor icon:(UIImage *)icon iconFrameSize:(CGFloat)iconFrameSize iconBackgroundColor:(UIColor *)iconBackgroundColor iconContentMode:(UIViewContentMode)contentMode;
 + (UIView *) setupTableHeaderViewWithText:(NSAttributedString *)text tintColor:(UIColor *)tintColor icon:(UIImage *)icon iconFrameSize:(CGFloat)iconFrameSize iconBackgroundColor:(UIColor *)iconBackgroundColor iconContentMode:(UIViewContentMode)contentMode iconYOffset:(CGFloat)iconYOffset;
 + (UIView *) setupTableHeaderViewWithAttributedText:(NSAttributedString *)attributedText topCenterIconName:(NSString *)iconName iconSize:(CGFloat)iconSize;

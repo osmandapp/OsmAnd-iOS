@@ -6,8 +6,8 @@
 //  Copyright © 2019 OsmAnd. All rights reserved.
 //
 
-#import "OABaseBigTitleSettingsViewController.h"
+#import "OABaseNavbarViewController.h"
 
-@interface OACreateProfileViewController : OABaseBigTitleSettingsViewController
+@interface OACreateProfileViewController : OABaseNavbarViewController
 
 @end

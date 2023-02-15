@@ -44,14 +44,14 @@
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="p4E-OZ-ZZt" userLabel="Navbar Stack View">
                     <rect key="frame" x="0.0" y="48" width="414" height="45"/>
                     <subviews>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sYq-00-5PA">
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sYq-00-5PA" userLabel="Navbar Top Margin View">
                             <rect key="frame" x="0.0" y="0.0" width="414" height="0.0"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
                                 <constraint firstAttribute="height" id="aw4-GM-oic"/>
                             </constraints>
                         </view>
-                        <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="u3I-z5-IQP">
+                        <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="u3I-z5-IQP" userLabel="Navbar Content Stack View">
                             <rect key="frame" x="0.0" y="2" width="414" height="40"/>
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LqA-aR-Q72" userLabel="Left Navbar Margin View">

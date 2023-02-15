@@ -7,6 +7,7 @@
 //
 
 #import "OAOsmUploadGPXViewConroller.h"
+#import "OAOsmUploadGPXVisibilityViewConroller.h"
 #import "OAAppSettings.h"
 #import "Localization.h"
 #import "OAColors.h"
@@ -41,16 +42,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
     EOAOsmUploadGPXViewConrollerModeNoInternet
 };
 
-@interface OAOsmUploadGPXViewConroller () <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, OAOsmUploadGPXVisibilityDelegate, OAAccountSettingDelegate, OAOnUploadFileListener>
-
-@property (weak, nonatomic) IBOutlet UIView *buttonsContainerView;
-@property (weak, nonatomic) IBOutlet UIButton *bottomButton;
-@property (weak, nonatomic) IBOutlet UILabel *headerTitleLabel;
-
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomButtonNoTopButtonConstraint;
-
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *buttonsContainerWithOneButtonConstraint;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *buttonsContainerWithTwoButtonsConstraint;
+@interface OAOsmUploadGPXViewConroller () <UITextFieldDelegate, OAOsmUploadGPXVisibilityDelegate, OAAccountSettingDelegate, OAOnUploadFileListener>
 
 @end
 
@@ -71,45 +63,29 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
     EOAOsmUploadGPXViewConrollerMode _mode;
 }
 
+#pragma mark - Initialization
+
 - (instancetype)initWithGPXItems:(NSArray<OAGPX *> *)gpxItemsToUpload
 {
-    self = [super initWithNibName:@"OAOsmUploadGPXViewConroller" bundle:nil];
+    self = [super init];
     if (self)
     {
         _gpxItemsToUpload = gpxItemsToUpload;
-        _settings = [OAAppSettings sharedManager];
-        _mode = EOAOsmUploadGPXViewConrollerModeInitial;
     }
     return self;
 }
 
-- (void)applyLocalization
+- (void)commonInit
 {
-    [super applyLocalization];
-    self.headerTitleLabel.text = OALocalizedString(@"upload_to_openstreetmap");
-    [self.backButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
-}
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    self.tableView.dataSource = self;
-    self.tableView.delegate = self;
-    self.tableView.estimatedRowHeight = kEstimatedRowHeight;
-    self.tableView.allowsSelection = YES;
-    
-    self.backImageButton.hidden = YES;
-    self.backButton.hidden = NO;
-    self.separatorView.hidden = NO;
-    
+    _settings = [OAAppSettings sharedManager];
+    _mode = EOAOsmUploadGPXViewConrollerModeInitial;
     _selectedVisibility = EOAOsmUploadGPXVisibilityPublic;
     _descriptionText = @"";
     _tagsText = kDefaultTag;
-    
     _isLogged = [_settings.osmUserName get].length > 0 && [_settings.osmUserPassword get].length > 0;
-    [self updateScreenMode:EOAOsmUploadGPXViewConrollerModeInitial];
-    [self setupView];
 }
+
+#pragma mark - UIViewController
 
 - (void)viewDidAppear:(BOOL)animated
 {
@@ -124,40 +100,64 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
     }
 }
 
-- (void) updateScreenMode:(EOAOsmUploadGPXViewConrollerMode)mode
+#pragma mark - Base UI
+
+- (NSString *)getTitle
 {
-    _mode = mode;
-    if (_mode == EOAOsmUploadGPXViewConrollerModeInitial)
+    return OALocalizedString(@"upload_to_openstreetmap");
+}
+
+- (NSString *)getLeftNavbarButtonTitle
+{
+    return OALocalizedString(@"shared_string_cancel");
+}
+
+- (BOOL)isChevronIconVisible
+{
+    return NO;
+}
+
+- (NSString *)getBottomButtonTitle
+{
+    switch (_mode)
     {
-        [self.bottomButton setBackgroundColor:UIColorFromRGB(color_primary_purple)];
-        [self.bottomButton setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
-        [self.bottomButton setTitle:OALocalizedString(@"shared_string_upload") forState:UIControlStateNormal];
-        self.bottomButton.enabled = YES;
-    }
-    else if (_mode == EOAOsmUploadGPXViewConrollerModeUploading)
-    {
-        [self.bottomButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
-        [self.bottomButton setBackgroundColor:UIColorFromRGB(color_route_button_inactive)];
-        [self.bottomButton setTitleColor:UIColorFromRGB(color_text_footer ) forState:UIControlStateNormal];
-        self.bottomButton.enabled = NO;
-    }
-    else if (_mode == EOAOsmUploadGPXViewConrollerModeSuccess)
-    {
-        [self.bottomButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
-        [self.bottomButton setBackgroundColor:UIColorFromRGB(color_route_button_inactive)];
-        [self.bottomButton setTitleColor:UIColorFromRGB(color_primary_purple ) forState:UIControlStateNormal];
-        self.bottomButton.enabled = YES;
-    }
-    else if (_mode == EOAOsmUploadGPXViewConrollerModeFailed || _mode == EOAOsmUploadGPXViewConrollerModeNoInternet)
-    {
-        [self.bottomButton setTitle:OALocalizedString(@"retry") forState:UIControlStateNormal];
-        [self.bottomButton setBackgroundColor:UIColorFromRGB(color_primary_purple)];
-        [self.bottomButton setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
-        self.bottomButton.enabled = YES;
+        case EOAOsmUploadGPXViewConrollerModeInitial:
+            return OALocalizedString(@"shared_string_upload");
+        case EOAOsmUploadGPXViewConrollerModeUploading:
+        case EOAOsmUploadGPXViewConrollerModeSuccess:
+            return OALocalizedString(@"shared_string_done");
+        case EOAOsmUploadGPXViewConrollerModeFailed:
+        case EOAOsmUploadGPXViewConrollerModeNoInternet:
+            return OALocalizedString(@"retry");
+        default:
+            return @"";
     }
 }
 
-- (void)setupView
+- (EOABaseButtonColorScheme)getBottomButtonColorScheme
+{
+    switch (_mode)
+    {
+        case EOAOsmUploadGPXViewConrollerModeUploading:
+            return EOABaseButtonColorSchemeInactive;
+        case EOAOsmUploadGPXViewConrollerModeInitial:
+        case EOAOsmUploadGPXViewConrollerModeFailed:
+        case EOAOsmUploadGPXViewConrollerModeNoInternet:
+            return EOABaseButtonColorSchemePurple;
+        default:
+            return EOABaseButtonColorSchemeGraySimple;
+    }
+}
+
+- (void)updateScreenMode:(EOAOsmUploadGPXViewConrollerMode)mode
+{
+    _mode = mode;
+    [self setupBottomButtons];
+}
+
+#pragma mark - Table data
+
+- (void)generateData
 {
     _data = [[OATableDataModel alloc] init];
     __weak OAOsmUploadGPXViewConroller *weakSelf = self;
@@ -266,7 +266,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
         else
         {
             [self updateScreenMode:EOAOsmUploadGPXViewConrollerModeFailed];
-            [self setupView];
+            [self generateData];
             [self.tableView reloadData];
         }
     }
@@ -276,12 +276,10 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
 {
     NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
     OAValueTableViewCell *resultCell = (OAValueTableViewCell *)[nib objectAtIndex:0];
-    
+    [resultCell descriptionVisibility:NO];
+    [resultCell leftIconVisibility:NO];
     resultCell.titleLabel.text = OALocalizedString(@"local_openstreetmap_uploading");
-    resultCell.descriptionLabel.hidden = YES;
     resultCell.valueLabel.text = @"0%";
-    resultCell.leftIconView.hidden = YES;
-    
     return resultCell;
 }
 
@@ -296,21 +294,144 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
     return resultCell;
 }
 
-- (void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+- (NSString *)getTitleForHeader:(NSInteger)section;
 {
-    [self setupView];
-    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    return [_data sectionDataForIndex:section].headerText;
 }
 
-- (UIStatusBarStyle)preferredStatusBarStyle
+- (NSString *)getTitleForFooter:(NSInteger)section;
 {
-    if (@available(iOS 13.0, *))
-        return UIStatusBarStyleDarkContent;
-    return UIStatusBarStyleDefault;
+    return [_data sectionDataForIndex:section].footerText;
 }
 
+- (NSInteger)rowsCount:(NSInteger)section
+{
+    return [_data rowCount:section];
+}
 
-#pragma mark - Actions
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
+{
+    OATableRowData *item = [_data itemForIndexPath:indexPath];
+    NSString *cellType = item.cellType;
+    
+    if ([cellType isEqualToString:[OAInputTableViewCell getCellIdentifier]])
+    {
+        OAInputTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAInputTableViewCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAInputTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAInputTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell titleVisibility:NO];
+            [cell clearButtonVisibility:NO];
+            [cell.inputField removeTarget:self action:NULL forControlEvents:UIControlEventEditingChanged];
+            [cell.inputField addTarget:self action:@selector(textViewDidChange:) forControlEvents:UIControlEventEditingChanged];
+            cell.inputField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+            cell.inputField.autocorrectionType = UITextAutocorrectionTypeNo;
+            cell.inputField.spellCheckingType = UITextSpellCheckingTypeNo;
+            cell.inputField.textAlignment = NSTextAlignmentNatural;
+        }
+        if (cell)
+        {
+            cell.inputField.text = item.title;
+            cell.inputField.delegate = self;
+            cell.inputField.tag = [item integerForKey:@"tag"];
+        }
+        return cell;
+    }
+    else if ([cellType isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
+    {
+        OASettingsTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
+            cell.descriptionView.font = [UIFont systemFontOfSize:17.0];
+            cell.descriptionView.numberOfLines = 1;
+            cell.iconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
+            cell.iconView.tintColor = UIColorFromRGB(color_tint_gray);
+        }
+        if (cell)
+        {
+            cell.textView.text = item.title;
+            cell.descriptionView.text = item.descr;
+        }
+        return cell;
+    }
+    else if ([cellType isEqualToString:OASimpleTableViewCell.getCellIdentifier])
+    {
+        OASimpleTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
+        if (!cell)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASimpleTableViewCell *) nib[0];
+        }
+        if (cell)
+        {
+            NSString *title = item.title;
+            [cell titleVisibility:title != nil];
+            cell.titleLabel.text = title;
+            cell.titleLabel.textColor = [item objForKey:@"title_color"];
+            cell.titleLabel.font = [item objForKey:@"title_font"];
+            cell.leftIconView.image = [UIImage templateImageNamed:item.iconName];
+            cell.leftIconView.tintColor = UIColorFromRGB(color_primary_purple);
+            [cell leftIconVisibility:YES];
+            [cell descriptionVisibility:NO];
+            cell.accessoryType = (UITableViewCellAccessoryType) [item integerForKey:@"accessory_type"];
+        }
+        return cell;
+    }
+    else if ([cellType isEqualToString:[OATextMultilineTableViewCell getCellIdentifier]])
+    {
+        OATextMultilineTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OATextMultilineTableViewCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextMultilineTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OATextMultilineTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell clearButtonVisibility:NO];
+        }
+        if (cell)
+        {
+            cell.textView.text = item.title;
+            cell.textView.font = [item objForKey:@"font"];
+        }
+        return cell;
+    }
+    else if ([cellType isEqualToString:[OAProgressBarCell getCellIdentifier]])
+    {
+        return _progressBarCell;
+    }
+    else if ([cellType isEqualToString:[OAValueTableViewCell getCellIdentifier]])
+    {
+        return _progressValueCell;
+    }
+    return nil;
+}
+
+- (NSInteger)sectionsCount
+{
+    return _data.sectionCount;
+}
+
+- (void)onRowPressed:(NSIndexPath *)indexPath
+{
+    OATableRowData *item = [_data itemForIndexPath:indexPath];
+    void (^actionBlock)() = [item objForKey:@"actionBlock"];
+    if (actionBlock)
+        actionBlock();
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    OATableRowData *item = [_data itemForIndexPath:indexPath];
+    NSString *cellType = item.cellType;
+    if ([cellType isEqualToString:[OAProgressBarCell getCellIdentifier]])
+        return 22;
+    return UITableViewAutomaticDimension;
+}
+
+#pragma mark - Selectors
 
 - (IBAction)onLeftNavbarButtonPressed:(id)sender
 {
@@ -336,37 +457,14 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
     }
 }
 
-- (void) onVisibilityButtonClicked
-{
-    OAOsmUploadGPXVisibilityViewConroller *vc = [[OAOsmUploadGPXVisibilityViewConroller alloc] initWithVisibility:_selectedVisibility];
-    vc.visibilityDelegate = self;
-    [self presentViewController:vc animated:YES completion:nil];
-}
-
-- (void) onAccountButtonPressed
-{
-    if (_isLogged)
-    {
-        OAOsmAccountSettingsViewController *accountSettings = [[OAOsmAccountSettingsViewController alloc] init];
-        accountSettings.accountDelegate = self;
-        [self presentViewController:accountSettings animated:YES completion:nil];
-    }
-    else
-    {
-        OAOsmLoginMainViewController *loginMainViewController = [[OAOsmLoginMainViewController alloc] init];
-        loginMainViewController.delegate = self;
-        [self presentViewController:loginMainViewController animated:YES completion:nil];
-    }
-}
-
-- (IBAction)onUploadButtonPressed:(id)sender
+- (IBAction)onBottomButtonPressed:(id)sender
 {
     if (_mode == EOAOsmUploadGPXViewConrollerModeInitial)
     {
         if (!AFNetworkReachabilityManager.sharedManager.isReachable)
         {
             [self updateScreenMode:EOAOsmUploadGPXViewConrollerModeNoInternet];
-            [self setupView];
+            [self generateData];
             [self.tableView reloadData];
             return;
         }
@@ -374,7 +472,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
         if (_isLogged)
         {
             [self updateScreenMode:EOAOsmUploadGPXViewConrollerModeUploading];
-            [self setupView];
+            [self generateData];
             [self.tableView reloadData];
             
             NSString *visibility = [OAOsmUploadGPXVisibilityViewConroller toUrlParam:_selectedVisibility];
@@ -401,171 +499,45 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
     {
         _gpxItemsToUpload = [self getFailedFiles];
         [self updateScreenMode:EOAOsmUploadGPXViewConrollerModeInitial];
-        [self setupView];
+        [self generateData];
         [self.tableView reloadData];
-        [self onUploadButtonPressed:sender];
+        [self onBottomButtonPressed:sender];
     }
     else if (_mode == EOAOsmUploadGPXViewConrollerModeNoInternet)
     {
         [self updateScreenMode:EOAOsmUploadGPXViewConrollerModeInitial];
-        [self setupView];
+        [self generateData];
         [self.tableView reloadData];
-        [self onUploadButtonPressed:sender];
+        [self onBottomButtonPressed:sender];
     }
 }
 
-#pragma mark - UITableViewDataSource
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+- (void)onRotation
 {
-    return _data.sectionCount;
+    [self generateData];
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (void)onVisibilityButtonClicked
 {
-    return [_data rowCount:section];
+    OAOsmUploadGPXVisibilityViewConroller *vc = [[OAOsmUploadGPXVisibilityViewConroller alloc] initWithVisibility:_selectedVisibility];
+    vc.visibilityDelegate = self;
+    [self presentViewController:vc animated:YES completion:nil];
 }
 
-- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+- (void)onAccountButtonPressed
 {
-    return [_data sectionDataForIndex:section].headerText;
-}
-
-- (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
-{
-    return [_data sectionDataForIndex:section].footerText;
-}
-
-- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
-{
-    UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
-    [header.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
-}
-
-- (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section
-{
-    UITableViewHeaderFooterView *footer = (UITableViewHeaderFooterView *)view;
-    [footer.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    OATableRowData *item = [_data itemForIndexPath:indexPath];
-    NSString *cellType = item.cellType;
-    if ([cellType isEqualToString:[OAProgressBarCell getCellIdentifier]])
-        return 22;
-    return UITableViewAutomaticDimension;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    OATableRowData *item = [_data itemForIndexPath:indexPath];
-    NSString *cellType = item.cellType;
-    
-    if ([cellType isEqualToString:[OAInputTableViewCell getCellIdentifier]])
+    if (_isLogged)
     {
-        OAInputTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAInputTableViewCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAInputTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OAInputTableViewCell *) nib[0];
-            [cell leftIconVisibility:NO];
-            [cell titleVisibility:NO];
-            [cell clearButtonVisibility:NO];
-            [cell.inputField removeTarget:self action:NULL forControlEvents:UIControlEventEditingChanged];
-            [cell.inputField addTarget:self action:@selector(textViewDidChange:) forControlEvents:UIControlEventEditingChanged];
-            cell.inputField.autocapitalizationType = UITextAutocapitalizationTypeNone;
-            cell.inputField.autocorrectionType = UITextAutocorrectionTypeNo;
-            cell.inputField.spellCheckingType = UITextSpellCheckingTypeNo;
-            cell.inputField.textAlignment = NSTextAlignmentNatural;
-        }
-        if (cell)
-        {
-            cell.inputField.text = item.title;
-            cell.inputField.delegate = self;
-            cell.inputField.tag = [item integerForKey:@"tag"];
-        }
-        return cell;
+        OAOsmAccountSettingsViewController *accountSettings = [[OAOsmAccountSettingsViewController alloc] init];
+        accountSettings.accountDelegate = self;
+        [self presentViewController:accountSettings animated:YES completion:nil];
     }
-    else if ([cellType isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
+    else
     {
-        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
-            cell.descriptionView.font = [UIFont systemFontOfSize:17.0];
-            cell.descriptionView.numberOfLines = 1;
-            cell.iconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
-            cell.iconView.tintColor = UIColorFromRGB(color_tint_gray);
-        }
-        if (cell)
-        {
-            cell.textView.text = item.title;
-            cell.descriptionView.text = item.descr;
-        }
-        return cell;
+        OAOsmLoginMainViewController *loginMainViewController = [[OAOsmLoginMainViewController alloc] init];
+        loginMainViewController.delegate = self;
+        [self presentViewController:loginMainViewController animated:YES completion:nil];
     }
-    else if ([cellType isEqualToString:OASimpleTableViewCell.getCellIdentifier])
-    {
-        OASimpleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
-        if (!cell)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASimpleTableViewCell *) nib[0];
-        }
-        if (cell)
-        {
-            NSString *title = item.title;
-            [cell titleVisibility:title != nil];
-            cell.titleLabel.text = title;
-            cell.titleLabel.textColor = [item objForKey:@"title_color"];
-            cell.titleLabel.font = [item objForKey:@"title_font"];
-            cell.leftIconView.image = [UIImage templateImageNamed:item.iconName];
-            cell.leftIconView.tintColor = UIColorFromRGB(color_primary_purple);
-            [cell leftIconVisibility:YES];
-            [cell descriptionVisibility:NO];
-            cell.accessoryType = (UITableViewCellAccessoryType) [item integerForKey:@"accessory_type"];
-        }
-        return cell;
-    }
-    else if ([cellType isEqualToString:[OATextMultilineTableViewCell getCellIdentifier]])
-    {
-        OATextMultilineTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OATextMultilineTableViewCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextMultilineTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OATextMultilineTableViewCell *) nib[0];
-            [cell leftIconVisibility:NO];
-            [cell clearButtonVisibility:NO];
-        }
-        if (cell)
-        {
-            cell.textView.text = item.title;
-            cell.textView.font = [item objForKey:@"font"];
-        }
-        return cell;
-    }
-    else if ([cellType isEqualToString:[OAProgressBarCell getCellIdentifier]])
-    {
-        return _progressBarCell;
-    }
-    else if ([cellType isEqualToString:[OAValueTableViewCell getCellIdentifier]])
-    {
-        return _progressValueCell;
-    }
-    return nil;
-}
-
-#pragma mark - UITableViewDelegate
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    OATableRowData *item = [_data itemForIndexPath:indexPath];
-    void (^actionBlock)() = [item objForKey:@"actionBlock"];
-    if (actionBlock)
-        actionBlock();
 }
 
 #pragma mark - UITextFieldDelegate
@@ -622,7 +594,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
 - (void) onVisibilityChanged:(EOAOsmUploadGPXVisibility)visibility
 {
     _selectedVisibility = visibility;
-    [self setupView];
+    [self generateData];
     [self.tableView reloadData];
 }
 
@@ -631,7 +603,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
 - (void)onAccountInformationUpdated
 {
     _isLogged = [_settings.osmUserName get].length > 0 && [_settings.osmUserPassword get].length > 0;
-    [self setupView];
+    [self generateData];
     [self.tableView reloadData];
 }
 

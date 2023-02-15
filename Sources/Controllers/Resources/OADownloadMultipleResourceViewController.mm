@@ -113,7 +113,7 @@
 - (void)updateDownloadButtonView
 {
     BOOL hasSelection = _selectedItems.count != 0;
-    self.downloadButton.backgroundColor = hasSelection ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_route_button_inactive);
+    self.downloadButton.backgroundColor = hasSelection ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_button_gray_background);
     [self.downloadButton setTintColor:hasSelection ? UIColor.whiteColor : UIColorFromRGB(color_text_footer)];
     [self.downloadButton setTitleColor:hasSelection ? UIColor.whiteColor : UIColorFromRGB(color_text_footer) forState:UIControlStateNormal];
     [self.downloadButton setUserInteractionEnabled:hasSelection];

@@ -32,6 +32,7 @@
 #define kInfoViewLandscapeWidthPad 414
 #define kInfoViewPortraitWidthPad 375
 
+#define kSmallPaddingOnSideOfContent 16
 #define kPaddingOnSideOfContent 20
 #define kPaddingToLeftOfContentWithIcon 66
 #define kHeaderHeightDefault 38

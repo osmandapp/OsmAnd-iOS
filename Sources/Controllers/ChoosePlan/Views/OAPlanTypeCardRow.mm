@@ -193,7 +193,7 @@
                 icon = [UIImage imageNamed:iconName];
             self.imageViewLeftIcon.image = icon;
             self.imageViewRightIcon.image = nil;
-            self.backgroundColor = available && !isPurchased ? UIColorFromARGB(color_primary_purple_10) : UIColorFromRGB(color_route_button_inactive);
+            self.backgroundColor = available && !isPurchased ? UIColorFromARGB(color_primary_purple_10) : UIColorFromRGB(color_button_gray_background);
             self.labelTitle.textColor = available && !isPurchased ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer);
             self.labelDescription.textColor = available && !isPurchased ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_icon_inactive);
             self.userInteractionEnabled = available && !isPurchased;

@@ -265,7 +265,7 @@
         self.backgroundColor = UIColor.whiteColor;
         self.titleView.textColor = UIColor.blackColor;
         self.descrView.textColor = UIColorFromRGB(color_text_footer);
-        self.closeButton.backgroundColor = UIColorFromRGB(color_route_button_inactive);
+        self.closeButton.backgroundColor = UIColorFromRGB(color_button_gray_background);
         [self.closeButton setTitleColor:UIColorFromRGB(color_primary_purple) forState:UIControlStateNormal];
         self.downloadButton.backgroundColor = UIColorFromRGB(color_primary_purple);
     }

@@ -29,7 +29,7 @@
 
 #include <OsmAndCore/Utilities.h>
 
-@interface OAVoicePromptsViewController () <UITableViewDelegate, UITableViewDataSource, OAUninstallSpeedCamerasDelegate, OASettingsDataDelegate>
+@interface OAVoicePromptsViewController () <OAUninstallSpeedCamerasDelegate, OASettingsDataDelegate>
 
 @end
 
@@ -42,31 +42,21 @@
     NSIndexPath *_selectedIndexPath;
 }
 
-- (instancetype) initWithAppMode:(OAApplicationMode *)appMode
+#pragma mark - Initialization
+
+- (void)commonInit
 {
-    self = [super initWithAppMode:appMode];
-    if (self)
-    {
-        _settings = [OAAppSettings sharedManager];
-    }
-    return self;
+    _settings = [OAAppSettings sharedManager];
 }
 
--(void) applyLocalization
+#pragma mark - Base UI
+
+- (NSString *)getTitle
 {
-    [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"voice_announces");
+    return OALocalizedString(@"voice_announces");
 }
 
-- (void) viewDidLoad
-{
-    [super viewDidLoad];
-
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-
-    [self generateData];
-}
+#pragma mark - Table data
 
 - (void)generateData
 {
@@ -284,14 +274,27 @@
     [item setObj:value forKey:@"value"];
 }
 
-#pragma mark - TableView
+- (NSString *)getTitleForHeader:(NSInteger)section
+{
+    return [_data sectionDataForIndex:section].headerText;
+}
 
-- (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
+- (NSString *)getTitleForFooter:(NSInteger)section
+{
+    return [_data sectionDataForIndex:section].footerText;
+}
+
+- (NSInteger)rowsCount:(NSInteger)section
+{
+    return [[_data sectionDataForIndex:section] rowCount];
+}
+
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
     OATableRowData *item = [_data itemForIndexPath:indexPath];
     if ([item.cellType isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
+        OASwitchTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
@@ -336,7 +339,7 @@
     }
     else if ([item.cellType isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
-        OAValueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
+        OAValueTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
@@ -367,7 +370,7 @@
     }
     else if ([item.cellType isEqualToString:[OACardTableViewCell getCellIdentifier]])
     {
-        OACardTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OACardTableViewCell getCellIdentifier]];
+        OACardTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OACardTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OACardTableViewCell getCellIdentifier] owner:self options:nil];
@@ -391,27 +394,12 @@
     return nil;
 }
 
-- (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return [[_data sectionDataForIndex:section] rowCount];
-}
-
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
+- (NSInteger)sectionsCount
 {
     return [_data sectionCount];
 }
 
-- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    return [_data sectionDataForIndex:section].headerText;
-}
-
-- (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
-{
-    return [_data sectionDataForIndex:section].footerText;
-}
-
-- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)onRowPressed:(NSIndexPath *)indexPath
 {
     OATableRowData *item = [_data itemForIndexPath:indexPath];
     if ([item.cellType isEqualToString:[OAValueTableViewCell getCellIdentifier]])
@@ -427,7 +415,6 @@
         settingsViewController = [[OAArrivalAnnouncementViewController alloc] initWithAppMode:self.appMode];
     settingsViewController.delegate = self;
     [self showViewController:settingsViewController];
-    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 #pragma mark - Selectors

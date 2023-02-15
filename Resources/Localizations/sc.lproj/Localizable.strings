@@ -2835,3 +2835,6 @@
 "announcement_time_prepare_long" = "Ammanniamentu longu";
 "announcement_time_approach" = "Acùrtzia·ti";
 "announcement_time_passing" = "Colende";
+"osm_upload_gpx_description_footer" = "S'at a impreare su nùmene de sa rasta in càmbiu de una descritzione bòida. Sa descritzione insertada s'at a aplicare pro cada rasta.";
+"visibility" = "Visibilidade";
+"osm_upload_gpx_tags_footer" = "Inserta etichetas separadas dae vìrgulas.";

@@ -12,39 +12,21 @@
 #import "OAColors.h"
 #import "Localization.h"
 
-@interface OACloudAccountLogoutViewController () <UITableViewDelegate, UITableViewDataSource>
-
-@end
-
 @implementation OACloudAccountLogoutViewController
 {
     NSArray<NSArray<NSDictionary *> *> *_data;
 }
 
-- (instancetype)init
+#pragma mark - Base UI
+
+- (NSString *)getTitle
 {
-    self = [super initWithNibName:@"OABaseSettingsViewController" bundle:nil];
-    return self;
+    return OALocalizedString(@"login_account");
 }
 
-- (void)applyLocalization
-{
-    [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"login_account");
-}
+#pragma mark - Table data
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-
-    self.tableView.dataSource = self;
-    self.tableView.delegate = self;
-
-    self.subtitleLabel.hidden = YES;
-    [self setupView];
-}
-
-- (void)setupView
+- (void)generateData
 {
     _data = @[
             @[@{
@@ -66,26 +48,19 @@
     return _data[indexPath.section][indexPath.row];
 }
 
-#pragma mark - UITableViewDataSource
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return _data.count;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)rowsCount:(NSInteger)section
 {
     return _data[section].count;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
     UITableViewCell *outCell = nil;
 
     if ([item[@"type"] isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
     {
-        OAIconTitleValueCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
+        OAIconTitleValueCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
         if (!cell)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
@@ -112,10 +87,12 @@
     return outCell;
 }
 
+- (NSInteger)sectionsCount
+{
+    return _data.count;
+}
 
-#pragma mark - UITableViewDelegate
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)onRowPressed:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
     if ([item[@"key"] isEqualToString:@"logout_cell"])
@@ -150,8 +127,6 @@
 
         [self presentViewController:alert animated:YES completion:nil];
     }
-
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 @end

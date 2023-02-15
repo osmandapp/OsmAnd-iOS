@@ -285,7 +285,7 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
 - (IBAction)deleteButtonClicked:(id)sender
 {
     [OAPlugin removeCustomPlugin:(OACustomPlugin *)_plugin];
-    [self backButtonClicked:nil];
+    [self dismissViewController];
 }
 
 - (IBAction) priceButtonClicked:(id)sender

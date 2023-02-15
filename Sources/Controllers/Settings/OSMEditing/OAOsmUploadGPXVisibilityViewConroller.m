@@ -14,43 +14,39 @@
 #import "Localization.h"
 #import "OAColors.h"
 
-@interface OAOsmUploadGPXVisibilityViewConroller () <UITableViewDelegate, UITableViewDataSource>
-
-@end
-
 @implementation OAOsmUploadGPXVisibilityViewConroller
 {
     EOAOsmUploadGPXVisibility _selectedVisibility;
     OATableDataModel *_data;
 }
 
+#pragma mark - Initialization
+
 - (instancetype) initWithVisibility:(EOAOsmUploadGPXVisibility)visibility
 {
-    self = [super initWithNibName:@"OABaseSettingsViewController" bundle:nil];
-    if (self) {
+    self = [super init];
+    if (self)
+    {
         _selectedVisibility = visibility;
     }
     return self;
 }
 
-- (void) applyLocalization
+#pragma mark - Base UI
+
+- (NSString *)getTitle
 {
-    [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"visibility");
-    [self.cancelButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
+    return OALocalizedString(@"visibility");
 }
 
-- (void) viewDidLoad
+- (NSString *)getLeftNavbarButtonTitle
 {
-    [super viewDidLoad];
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    self.subtitleLabel.hidden = YES;
-    [self showCancelButtonWithBackButton];
-    [self setupView];
+    return OALocalizedString(@"shared_string_back");
 }
 
-- (void) setupView
+#pragma mark - Table data
+
+- (void)generateData
 {
     _data = [[OATableDataModel alloc] init];
     __weak OAOsmUploadGPXVisibilityViewConroller *weakSelf = self;
@@ -122,59 +118,28 @@
     return nil;
 }
 
-#pragma mark - Actions
-
-- (void) onVisibilityChanged:(EOAOsmUploadGPXVisibility)visibility
-{
-    NSLog(@"onVisibilityChanged");
-    _selectedVisibility = visibility;
-    [self setupView];
-    [self.tableView reloadData];
-    
-    if (self.visibilityDelegate)
-        [self.visibilityDelegate onVisibilityChanged:visibility];
-}
-
-#pragma mark - TableView
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return _data.sectionCount;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return [_data rowCount:section];
-}
-
-- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+- (NSString *)getTitleForHeader:(NSInteger)section
 {
     return [_data sectionDataForIndex:section].headerText;
 }
 
-- (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
+- (NSString *)getTitleForFooter:(NSInteger)section
 {
     return [_data sectionDataForIndex:section].footerText;
 }
 
-- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
+- (NSInteger)rowsCount:(NSInteger)section
 {
-    UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
-    [header.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
+    return [_data rowCount:section];
 }
 
-- (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
-    UITableViewHeaderFooterView *footer = (UITableViewHeaderFooterView *)view;
-    [footer.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
-}
-
-- (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     OATableRowData *item = [_data itemForIndexPath:indexPath];
     NSString *cellType = item.cellType;
     if ([cellType isEqualToString:[OASettingsTitleTableViewCell getCellIdentifier]])
     {
-        OASettingsTitleTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTitleTableViewCell getCellIdentifier]];
+        OASettingsTitleTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OASettingsTitleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTitleTableViewCell getCellIdentifier] owner:self options:nil];
@@ -192,15 +157,30 @@
     return nil;
 }
 
-#pragma mark - UITableViewDelegate
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (NSInteger)sectionsCount
 {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    return _data.sectionCount;
+}
+
+- (void)onRowPressed:(NSIndexPath *)indexPath
+{
     OATableRowData *item = [_data itemForIndexPath:indexPath];
     void (^actionBlock)() = [item objForKey:@"actionBlock"];
     if (actionBlock)
         actionBlock();
+}
+
+#pragma mark - Selectors
+
+- (void) onVisibilityChanged:(EOAOsmUploadGPXVisibility)visibility
+{
+    NSLog(@"onVisibilityChanged");
+    _selectedVisibility = visibility;
+    [self generateData];
+    [self.tableView reloadData];
+    
+    if (self.visibilityDelegate)
+        [self.visibilityDelegate onVisibilityChanged:visibility];
 }
 
 @end

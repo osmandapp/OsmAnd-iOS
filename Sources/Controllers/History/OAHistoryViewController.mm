@@ -402,7 +402,7 @@
         [self updateDistanceAndDirection:YES];
         
         if (self.groupsAndItems.count == 0)
-            [self backButtonClicked:nil];
+            [self dismissViewController];
     });
 }
 
@@ -435,7 +435,7 @@
         _isAnimating = NO;
         
         if (self.groupsAndItems.count == 0)
-            [self backButtonClicked:nil];
+            [self dismissViewController];
     }];
     
     [self.tableView beginUpdates];
@@ -622,7 +622,7 @@
     HistoryTableItem* dataItem = [groupData.groupItems objectAtIndex:indexPath.row];
     
     [[OARootViewController instance].mapPanel hideDestinationCardsViewAnimated:NO];
-    [self backButtonClicked:nil];
+    [self dismissViewController];
     [[OARootViewController instance].mapPanel openTargetViewWithHistoryItem:dataItem.item pushed:NO];
 }
 

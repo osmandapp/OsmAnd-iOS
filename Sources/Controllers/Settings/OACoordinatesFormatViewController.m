@@ -18,42 +18,38 @@
 #import "Localization.h"
 #import "OAColors.h"
 
-@interface OACoordinatesFormatViewController () <UITableViewDelegate, UITableViewDataSource>
-
-@end
-
 @implementation OACoordinatesFormatViewController
 {
     NSArray<NSDictionary *> *_data;
     OAAppSettings *_settings;
 }
 
-- (instancetype) initWithMode:(OAApplicationMode *)applicationMode
+#pragma mark - Initialization
+
+- (void)commonInit
 {
-    self = [super initWithAppMode:applicationMode];
-    if (self)
-    {
-        _settings = [OAAppSettings sharedManager];
-    }
-    return self;
+    _settings = [OAAppSettings sharedManager];
 }
 
-- (void) applyLocalization
-{
-    [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"coords_format");
-}
+#pragma mark - UIViewController
 
 - (void) viewDidLoad
 {
     [super viewDidLoad];
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
+
     [self.tableView registerClass:OATableViewCustomFooterView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
-    [self setupView];
 }
 
-- (void) setupView
+#pragma mark - Base UI
+
+- (NSString *)getTitle
+{
+    return OALocalizedString(@"coords_format");
+}
+
+#pragma mark - Table data
+
+- (void)generateData
 {
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
     CLLocation *location = [OsmAndApp instance].locationServices.lastKnownLocation;
@@ -115,14 +111,18 @@
     return _data[section];
 }
 
-#pragma mark - TableView
+- (NSInteger)rowsCount:(NSInteger)section
+{
+    return 1;
+}
 
-- (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
+{
     NSDictionary *item = [self getItem:indexPath.section];
     NSString *cellType = item[@"type"];
     if ([cellType isEqualToString:[OASettingsTitleTableViewCell getCellIdentifier]])
     {
-        OASettingsTitleTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTitleTableViewCell getCellIdentifier]];
+        OASettingsTitleTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OASettingsTitleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTitleTableViewCell getCellIdentifier] owner:self options:nil];
@@ -140,26 +140,30 @@
     return nil;
 }
 
-- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return 17.0;
-}
-
-- (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 1;
-}
-
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
+- (NSInteger)sectionsCount
 {
     return _data.count;
 }
 
-- (UIView *) tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+- (CGFloat)getCustomHeightForHeader:(NSInteger)section
+{
+    return 17.;
+}
+
+- (CGFloat)getCustomHeightForFooter:(NSInteger)section
 {
     NSDictionary *item = [self getItem:section];
     NSString *text = item[@"description"];
     NSString *url = item[@"url"];
-    OATableViewCustomFooterView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
+    return [OATableViewCustomFooterView getHeight:url ? [NSString stringWithFormat:@"%@ %@", text, url] : text width:self.tableView.bounds.size.width];
+}
+
+- (UIView *)getCustomViewForFooter:(NSInteger)section
+{
+    NSDictionary *item = [self getItem:section];
+    NSString *text = item[@"description"];
+    NSString *url = item[@"url"];
+    OATableViewCustomFooterView *vw = [self.tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
     if (url)
     {
         NSURL *URL = [NSURL URLWithString:url];
@@ -180,23 +184,16 @@
     return vw;
 }
 
-- (CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-{
-    NSDictionary *item = [self getItem:section];
-    NSString *text = item[@"description"];
-    NSString *url = item[@"url"];
-    return [OATableViewCustomFooterView getHeight:url ? [NSString stringWithFormat:@"%@ %@", text, url] : text width:tableView.bounds.size.width];
-}
-
-- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)onRowPressed:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath.section];
     [self selectSettingGeoCode:item[@"name"]];
-    [self setupView];
+    [self generateData];
     [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationFade];
-    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
-    [self backButtonClicked:self];
+    [self dismissViewController];
 }
+
+#pragma mark - Selectors
 
 - (void) selectSettingGeoCode:(NSString *)name
 {

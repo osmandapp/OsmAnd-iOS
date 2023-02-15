@@ -807,31 +807,23 @@ static OASubscriptionState *EXPIRED;
 - (void) launchPurchase:(OASubscription *)subscription
 {
     NSLog(@"Launching purchase flow for live updates subscription");
-    if (@available(iOS 12.2, *))
+    OAPaymentDiscount *paymentDiscount = nil;
+    if (_settings.eligibleForSubscriptionOffer && subscription.discounts.count > 0)
     {
-        OAPaymentDiscount *paymentDiscount = nil;
-        if (_settings.eligibleForSubscriptionOffer && subscription.discounts.count > 0)
-        {
-            for (OAProductDiscount *discount in subscription.discounts)
-                if (discount.paymentDiscount)
-                {
-                    paymentDiscount = discount.paymentDiscount;
-                    break;
-                }
-        }
-        if (paymentDiscount)
-        {
-            SKMutablePayment *payment = [SKMutablePayment paymentWithProduct:subscription.skProduct];
-            payment.applicationUsername = paymentDiscount.username;
-            SKPaymentDiscount *discountOffer = [[SKPaymentDiscount alloc] initWithIdentifier:paymentDiscount.identifier keyIdentifier:paymentDiscount.keyIdentifier nonce:paymentDiscount.nonce signature:paymentDiscount.signature timestamp:paymentDiscount.timestamp];
-            payment.paymentDiscount = discountOffer;
-            [[SKPaymentQueue defaultQueue] addPayment:payment];
-        }
-        else
-        {
-            SKPayment *payment = [SKPayment paymentWithProduct:subscription.skProduct];
-            [[SKPaymentQueue defaultQueue] addPayment:payment];
-        }
+        for (OAProductDiscount *discount in subscription.discounts)
+            if (discount.paymentDiscount)
+            {
+                paymentDiscount = discount.paymentDiscount;
+                break;
+            }
+    }
+    if (paymentDiscount)
+    {
+        SKMutablePayment *payment = [SKMutablePayment paymentWithProduct:subscription.skProduct];
+        payment.applicationUsername = paymentDiscount.username;
+        SKPaymentDiscount *discountOffer = [[SKPaymentDiscount alloc] initWithIdentifier:paymentDiscount.identifier keyIdentifier:paymentDiscount.keyIdentifier nonce:paymentDiscount.nonce signature:paymentDiscount.signature timestamp:paymentDiscount.timestamp];
+        payment.paymentDiscount = discountOffer;
+        [[SKPaymentQueue defaultQueue] addPayment:payment];
     }
     else
     {
@@ -1602,32 +1594,19 @@ static OASubscriptionState *EXPIRED;
                      products = nil;
                  }
              }
-             if (@available(iOS 12.2, *))
-             {
-                 [self fetchSubscriptionOfferSignatures:^{
-                     if (onComplete)
-                         onComplete(products, expirationDates, success);
-                 }];
-             }
-             else if (onComplete)
-             {
-                 onComplete(products, expirationDates, success);
-             }
+             
+            [self fetchSubscriptionOfferSignatures:^{
+                if (onComplete)
+                    onComplete(products, expirationDates, success);
+            }];
          }];
     }
     else
     {
-        if (@available(iOS 12.2, *))
-        {
-            [self fetchSubscriptionOfferSignatures:^{
-                if (onComplete)
-                    onComplete(nil, nil, YES);
-            }];
-        }
-        else if (onComplete)
-        {
-            onComplete(nil, nil, YES);
-        }
+        [self fetchSubscriptionOfferSignatures:^{
+            if (onComplete)
+                onComplete(nil, nil, YES);
+        }];
     }
 }
 

@@ -1,5 +1,5 @@
 //
-//  OATripRecordingSettingsViewController.m
+//  OAHelpViewController.mm
 //  OsmAnd
 //
 //  Created by Paul on 8/29/18.
@@ -12,16 +12,13 @@
 #import "OAWebViewController.h"
 #import "OALinks.h"
 #import "OAAppVersionDependentConstants.h"
+#import "OAColors.h"
 
 #define kLinkInternalType @"internal_link"
 #define kLinkExternalType @"ext_link"
 #define kContactAction @"send_email"
 
 #define contactEmailUrl @"mailto:support@osmand.net"
-
-@interface OAHelpViewController ()
-
-@end
 
 @implementation OAHelpViewController
 {
@@ -39,19 +36,7 @@ static const NSInteger otherIndex = 3;
 static const NSInteger followIndex = 4;
 static const NSInteger groupCount = 5;
 
-
--(void) applyLocalization
-{
-    _titleView.text = OALocalizedString(@"shared_string_help");
-}
-
-- (void) viewDidLoad
-{
-    [super viewDidLoad];
-    
-    self.tableView.dataSource = self;
-    self.tableView.delegate = self;
-}
+#pragma mark - UIViewController
 
 - (void) didReceiveMemoryWarning
 {
@@ -59,24 +44,22 @@ static const NSInteger groupCount = 5;
     // Dispose of any resources that can be recreated.
 }
 
-- (void) viewWillAppear:(BOOL)animated
+#pragma mark - Base UI
+
+- (NSString *)getTitle
 {
-    [self setupView];
+    return OALocalizedString(@"shared_string_help");
 }
 
--(UIView *) getTopView
+- (EOABaseNavbarColorScheme)getNavbarColorScheme
 {
-    return _navBarView;
+    return EOABaseNavbarColorSchemeOrange;
 }
 
--(UIView *) getMiddleView
-{
-    return _tableView;
-}
+#pragma mark - Table data
 
-- (void) setupView
+- (void) generateData
 {
-    [self applySafeAreaMargins];
     NSMutableArray *dataArr = [NSMutableArray array];
     
     [dataArr addObject:
@@ -364,12 +347,24 @@ static const NSInteger groupCount = 5;
        @"description" : kCommunityVk,
        @"type" : kLinkExternalType
        }];
-    
-    _followData = [NSArray arrayWithArray:dataArr];
-    [dataArr removeAllObjects];
-    
-    [self.tableView reloadData];
-    
+
+    _followData = dataArr;
+}
+
+- (NSString *)getTitleForHeader:(NSInteger)section
+{
+    if (section == firstStepsIndex)
+        return OALocalizedString(@"help_first_steps");
+    else if (section == featuresIndex)
+        return OALocalizedString(@"features_menu_group");
+    else if (section == pluginsIndex)
+        return OALocalizedString(@"plugins_menu_group");
+    else if (section == otherIndex)
+        return OALocalizedString(@"other_location");
+    else if (section == followIndex)
+        return OALocalizedString(@"follow_us");
+
+    return @"";
 }
 
 - (NSDictionary *) getItem:(NSIndexPath *)indexPath
@@ -391,14 +386,7 @@ static const NSInteger groupCount = 5;
     }
 }
 
-#pragma mark - UITableViewDataSource
-
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return groupCount;
-}
-
-- (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)rowsCount:(NSInteger)section
 {
     if (section == firstStepsIndex)
         return _firstStepsData.count;
@@ -413,11 +401,11 @@ static const NSInteger groupCount = 5;
     return 0;
 }
 
-- (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
     
-    OAMenuSimpleCellNoIcon *cell = (OAMenuSimpleCellNoIcon *)[tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCellNoIcon getCellIdentifier]];
+    OAMenuSimpleCellNoIcon *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCellNoIcon getCellIdentifier]];
     if (cell == nil)
     {
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCellNoIcon getCellIdentifier] owner:self options:nil];
@@ -439,25 +427,12 @@ static const NSInteger groupCount = 5;
     return cell;
 }
 
-- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+- (NSInteger)sectionsCount
 {
-    if (section == firstStepsIndex)
-        return OALocalizedString(@"help_first_steps");
-    else if (section == featuresIndex)
-        return OALocalizedString(@"features_menu_group");
-    else if (section == pluginsIndex)
-        return OALocalizedString(@"plugins_menu_group");
-    else if (section == otherIndex)
-        return OALocalizedString(@"other_location");
-    else if (section == followIndex)
-        return OALocalizedString(@"follow_us");
-    
-    return 0;
+    return groupCount;
 }
 
-#pragma mark - UITableViewDelegate
-
-- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)onRowPressed:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
     NSString *type = item[@"type"];
@@ -470,7 +445,6 @@ static const NSInteger groupCount = 5;
     } else if ([kContactAction isEqualToString:type]) {
         [[UIApplication sharedApplication] openURL: [NSURL URLWithString:contactEmailUrl]];
     }
-    [tableView deselectRowAtIndexPath:indexPath animated:true];
 }
 
 @end

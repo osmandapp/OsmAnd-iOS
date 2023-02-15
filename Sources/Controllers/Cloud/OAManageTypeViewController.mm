@@ -54,10 +54,7 @@
 
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
-    if (@available(iOS 13.0, *))
-        return UIStatusBarStyleDarkContent;
-
-    return UIStatusBarStyleDefault;
+    return UIStatusBarStyleDarkContent;
 }
 
 - (void)applyLocalization
@@ -95,7 +92,7 @@
     return _data[indexPath.section][indexPath.row];
 }
 
-- (IBAction)backButtonClicked:(id)sender
+- (IBAction)onLeftNavbarButtonPressed:(id)sender
 {
     [self dismissViewController];
 }

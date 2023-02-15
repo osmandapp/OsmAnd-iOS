@@ -211,8 +211,12 @@
 
 - (UIFont *)scaled
 {
-    return [[UIFontMetrics defaultMetrics] scaledFontForFont:self
-                                            maximumPointSize:[[UIFontMetrics defaultMetrics] scaledValueForValue:self.pointSize]];
+    return [self scaled:[[UIFontMetrics defaultMetrics] scaledValueForValue:self.pointSize]];
+}
+
+- (UIFont *)scaled:(CGFloat)maximumSize
+{
+    return [[UIFontMetrics defaultMetrics] scaledFontForFont:self maximumPointSize:maximumSize];
 }
 
 + (UIFont *)scaledSystemFontOfSize:(CGFloat)fontSize
@@ -220,9 +224,19 @@
     return [[UIFont systemFontOfSize:fontSize] scaled];
 }
 
++ (UIFont *)scaledSystemFontOfSize:(CGFloat)fontSize maximumSize:(CGFloat)maximumSize
+{
+    return [[UIFont systemFontOfSize:fontSize] scaled:maximumSize];
+}
+
 + (UIFont *)scaledSystemFontOfSize:(CGFloat)fontSize weight:(UIFontWeight)weight
 {
     return [[UIFont systemFontOfSize:fontSize weight:weight] scaled];
+}
+
++ (UIFont *)scaledSystemFontOfSize:(CGFloat)fontSize weight:(UIFontWeight)weight maximumSize:(CGFloat)maximumSize
+{
+    return [[UIFont systemFontOfSize:fontSize weight:weight] scaled:maximumSize];
 }
 
 + (UIFont *)scaledBoldSystemFontOfSize:(CGFloat)fontSize
@@ -442,12 +456,8 @@
     self.backgroundColor = [UIColor clearColor];
     UIBlurEffect *blurEffect;
 
-    if (@available(iOS 13.0, *))
-        blurEffect = [UIBlurEffect effectWithStyle:light
+    blurEffect = [UIBlurEffect effectWithStyle:light
                 ? UIBlurEffectStyleSystemUltraThinMaterialLight : UIBlurEffectStyleSystemUltraThinMaterialDark];
-    else
-        blurEffect = [UIBlurEffect effectWithStyle:light
-                ? UIBlurEffectStyleLight : UIBlurEffectStyleDark];
 
     UIView *blurView;
     if (!UIAccessibilityIsReduceTransparencyEnabled())
@@ -503,9 +513,7 @@
             return;
     }
 
-    UIActivityIndicatorViewStyle spinnerStyle = UIActivityIndicatorViewStyleGray;
-    if (@available(iOS 13.0, *))
-        spinnerStyle = UIActivityIndicatorViewStyleLarge;
+    UIActivityIndicatorViewStyle spinnerStyle = UIActivityIndicatorViewStyleLarge;
 
     UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:spinnerStyle];
     spinner.center = CGPointMake([UIScreen mainScreen].bounds.size.width / 2, [UIScreen mainScreen].bounds.size.height / 2);
@@ -1721,16 +1729,10 @@ static const double d180PI = 180.0 / M_PI_2;
 
 + (BOOL) isWindowed
 {
-    BOOL isiOSAppOnMac = NO;
-    if (@available(iOS 14.0, *))
-        isiOSAppOnMac = [NSProcessInfo processInfo].isiOSAppOnMac;
+    BOOL isiOSAppOnMac = [NSProcessInfo processInfo].isiOSAppOnMac;
 
-    if (@available(iOS 13.0, *))
-    {
-        return !isiOSAppOnMac && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad && (DeviceScreenWidth != [[UIScreen mainScreen] bounds].size.width ||
+    return !isiOSAppOnMac && [UIDevice.currentDevice userInterfaceIdiom] == UIUserInterfaceIdiomPad && (DeviceScreenWidth != [[UIScreen mainScreen] bounds].size.width ||
             UIApplication.sharedApplication.delegate.window.bounds.size.height != [[UIScreen mainScreen] bounds].size.height);
-    }
-    return NO;
 }
 
 + (void) adjustViewsToNotch:(CGSize)size topView:(UIView *)topView middleView:(UIView *)middleView bottomView:(UIView *)bottomView
@@ -2446,17 +2448,9 @@ static const double d180PI = 180.0 / M_PI_2;
     {
         [parentView becomeFirstResponder];
         UIMenuController *menuController = UIMenuController.sharedMenuController;
-        if (@available(iOS 13.0, *))
-        {
-            [menuController hideMenu];
-            [menuController showMenuFromView:targetView rect:targetView.bounds];
-        }
-        else
-        {
-            [menuController setMenuVisible:NO animated:YES];
-            [menuController setTargetRect:targetView.bounds inView:targetView];
-            [menuController setMenuVisible:YES animated:YES];
-        }
+        
+        [menuController hideMenu];
+        [menuController showMenuFromView:targetView rect:targetView.bounds];
     }
 }
 

@@ -69,7 +69,7 @@
     [self.tableView reloadData];
 }
 
-- (void)backButtonClicked:(id)sender
+- (void)onLeftNavbarButtonPressed:(id)sender
 {
     [self dismissViewControllerAnimated:YES completion:nil];
 }

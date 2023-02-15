@@ -6,7 +6,7 @@
 //  Copyright © 2022 OsmAnd. All rights reserved.
 //
 
-#import "OABaseSettingsViewController.h"
+#import "OABaseNavbarViewController.h"
 
 typedef NS_ENUM(NSInteger, EOASimulateNavigationSpeed) {
     EOASimulateNavigationSpeedOriginal = 0,
@@ -32,7 +32,7 @@ typedef NS_ENUM(NSInteger, EOASimulateNavigationSpeed) {
 @end
 
 
-@interface OAOsmandDevelopmentSimulateSpeedSelectorViewController : OABaseSettingsViewController
+@interface OAOsmandDevelopmentSimulateSpeedSelectorViewController : OABaseNavbarViewController
 
 @property (nonatomic, weak) id<OAOsmandDevelopmentSimulateSpeedSelectorDelegate> speedSelectorDelegate;
 

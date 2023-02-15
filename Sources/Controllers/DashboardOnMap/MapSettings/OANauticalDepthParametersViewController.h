@@ -6,7 +6,7 @@
 //  Copyright (c) 2022 OsmAnd. All rights reserved.
 //
 
-#import "OABaseSettingsViewController.h"
+#import "OABaseNavbarViewController.h"
 
 @class OAMapStyleParameter;
 
@@ -18,7 +18,7 @@
 
 @end
 
-@interface OANauticalDepthParametersViewController : OABaseSettingsViewController
+@interface OANauticalDepthParametersViewController : OABaseNavbarViewController
 
 - (instancetype)initWithParameter:(OAMapStyleParameter *)parameter;
 

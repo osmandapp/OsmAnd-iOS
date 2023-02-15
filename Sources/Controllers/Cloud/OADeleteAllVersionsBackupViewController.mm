@@ -74,10 +74,7 @@
 
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
-    if (@available(iOS 13.0, *))
-        return UIStatusBarStyleDarkContent;
-
-    return UIStatusBarStyleDefault;
+    return UIStatusBarStyleDarkContent;
 }
 
 - (void)applyLocalization
@@ -136,7 +133,7 @@
 
 - (UIColor *)navBarBackgroundColor
 {
-    return UIColorFromRGB(color_bottom_sheet_background);
+    return UIColorFromRGB(color_primary_table_background);
 }
 
 - (void)setupButtons
@@ -287,7 +284,7 @@
         [self onCloseDeleteAllBackupData];
 }
 
-- (IBAction)backButtonClicked:(id)sender
+- (IBAction)onLeftNavbarButtonPressed:(id)sender
 {
     [self onCloseDeleteAllBackupData];
 }

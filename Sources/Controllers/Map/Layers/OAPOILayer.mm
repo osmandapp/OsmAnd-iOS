@@ -27,6 +27,8 @@
 #include <OsmAndCore/Map/AmenitySymbolsProvider.h>
 #include <OsmAndCore/Map/MapObjectsSymbolsProvider.h>
 #include <OsmAndCore/ObfDataInterface.h>
+#include <OsmAndCore/NetworkRouteSelector.h>
+#include <OsmAndCore/Logging.h>
 
 #define kPoiSearchRadius 50
 
@@ -373,6 +375,71 @@
     return nil;
 }
 
+- (void) processNetworkRoute:(QHash<QString, QString>)tags touchPoint:(CGPoint)touchPoint
+{
+    auto networkRouteSelector = new OsmAnd::NetworkRouteSelector(self.app.resourcesManager->obfsCollection);
+    auto networkRouteKeys = networkRouteSelector->rCtx->getRouteKeys(tags);
+    if (networkRouteKeys.size() != 0)
+    {
+        //Part #1 get list of network routes in UI thread
+        CGFloat delta = 40.0;
+        CGPoint topLeft;
+        topLeft.x = touchPoint.x - delta;
+        topLeft.y = touchPoint.y - delta;
+        CGPoint bottomRight;
+        bottomRight.x = touchPoint.x + delta;
+        bottomRight.y = touchPoint.y + delta;
+        OsmAnd::PointI topLeft31;
+        OsmAnd::PointI bottomRight31;
+        [self.mapView convert:topLeft toLocation:&topLeft31];
+        [self.mapView convert:bottomRight toLocation:&bottomRight31];
+        
+        auto topLeftCoord = OsmAnd::Utilities::convert31ToLatLon(topLeft31);
+        auto bottomRightCoord = OsmAnd::Utilities::convert31ToLatLon(bottomRight31);
+        
+        OsmAnd::LogPrintf(OsmAnd::LogSeverityLevel::Info, "topLeft [%f %f], bottomRight [%f %f]",
+                          topLeftCoord.latitude, topLeftCoord.longitude, bottomRightCoord.latitude, bottomRightCoord.longitude);
+        
+        OsmAnd::AreaI area31(topLeft31, bottomRight31);
+        //auto routeKey = networkRouteKeys[0];
+        //auto routes = networkRouteSelector->getRoutes(area31/*, &networkRouteKeys[0]*/);
+        auto routes = networkRouteSelector->getRoutes(area31, false, nullptr);
+        delete networkRouteSelector;
+        OsmAnd::LogPrintf(OsmAnd::LogSeverityLevel::Info, "routes size %d", routes.size());
+        
+        //Part #2 get glued network route by NetworkRouteKey
+        if (routes.size() > 0)
+        {
+            OsmAnd::NetworkRouteKey key;
+            for (auto i = routes.begin(); i != routes.end(); ++i)
+            {
+                key = i.key();
+                if (key.type == OsmAnd::RouteType::HIKING && key.tags.contains("route_hiking__ref__0201"))
+                    break;
+            }
+            OsmAnd::NetworkRouteSelector networkRouteSelector2(self.app.resourcesManager->obfsCollection);
+            networkRouteSelector2.setNetworkRouteKeyFilter(key);
+            auto comnbined = networkRouteSelector2.getRoutes(area31, true, &key);
+            auto it = comnbined.find(key);
+            if (it != comnbined.end())
+            {
+                auto & gpx = it.value();
+                for (int i = 0; i < gpx->tracks.size(); i++)
+                {
+                    const auto & ref = gpx->tracks.at(i);
+                    for (auto s = ref->segments.begin(); s != ref->segments.end(); ++s)
+                    {
+                        for (auto wptpt : (*s)->points)
+                        {
+                            OsmAnd::LogPrintf(OsmAnd::LogSeverityLevel::Info, "%f, %f [%f]", wptpt->position.latitude, wptpt->position.longitude, wptpt->elevation);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 - (void) collectObjectsFromPoint:(CLLocationCoordinate2D)point touchPoint:(CGPoint)touchPoint symbolInfo:(const OsmAnd::IMapRenderer::MapSymbolInformation *)symbolInfo found:(NSMutableArray<OATargetPoint *> *)found unknownLocation:(BOOL)unknownLocation
 {
     OsmAnd::MapObjectsSymbolsProvider::MapObjectSymbolsGroup* objSymbolGroup = dynamic_cast<OsmAnd::MapObjectsSymbolsProvider::MapObjectSymbolsGroup*>(symbolInfo->mapSymbol->groupPtr);
@@ -415,6 +482,9 @@
             }
             if (!poi.type)
             {
+                QHash<QString, QString> tags = obfMapObject->getResolvedAttributes();
+                [self processNetworkRoute:tags touchPoint:touchPoint];
+                
                 for (const auto& ruleId : mapObject->attributeIds)
                 {
                     const auto& rule = *mapObject->attributeMapping->decodeMap.getRef(ruleId);

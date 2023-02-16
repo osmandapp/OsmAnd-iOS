@@ -168,13 +168,25 @@
     return YES;
 }
 
-#pragma mark - Selectors
+#pragma mark - IBAction
 
 - (IBAction)onTopButtonPressed:(UIButton *)sender
 {
+    [self onTopButtonPressed];
 }
 
 - (IBAction)onBottomButtonPressed:(UIButton *)sender
+{
+    [self onBottomButtonPressed];
+}
+
+#pragma mark - Selectors
+
+- (void)onTopButtonPressed
+{
+}
+
+- (void)onBottomButtonPressed
 {
 }
 

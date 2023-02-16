@@ -151,11 +151,6 @@
     return _tableView;
 }
 
--(IBAction)onLeftNavbarButtonPressed:(id)sender;
-{
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
 - (UITableView *)getTableView
 {
     return self.tableView;

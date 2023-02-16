@@ -336,17 +336,17 @@
 
 #pragma mark - Selectors
 
-- (IBAction)onLeftNavbarButtonPressed:(id)sender
+- (void)onLeftNavbarButtonPressed
 {
     [self onCloseDeleteAllBackupData];
 }
 
-- (IBAction)onTopButtonPressed:(id)sender
+- (void)onTopButtonPressed
 {
     [self onDeleteButtonPressed];
 }
 
-- (IBAction)onBottomButtonPressed:(id)sender
+- (void)onBottomButtonPressed
 {
     if (_screenType == EOARemoveOldVersionsBackupScreenType)
         [self onDeleteButtonPressed];

@@ -344,14 +344,16 @@
 {
 }
 
-#pragma mark - Selectors
-
-- (IBAction)onLeftNavbarButtonPressed:(UIButton *)sender
-{
-    [self dismissViewController];
-}
+#pragma mark - IBAction
 
 - (IBAction)onRightNavbarButtonPressed:(UIButton *)sender
+{
+    [self onRightNavbarButtonPressed];
+}
+
+#pragma mark - Selectors
+
+- (void)onRightNavbarButtonPressed
 {
     [self dismissViewController];
 }

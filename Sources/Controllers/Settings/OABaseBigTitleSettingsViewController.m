@@ -103,11 +103,6 @@
     [self dismissViewController];
 }
 
-- (IBAction) onLeftNavbarButtonPressed:(id)sender
-{
-    [self dismissViewController];
-}
-
 - (UIColor *)navBarBackgroundColor
 {
     return UIColorFromRGB(color_primary_table_background);

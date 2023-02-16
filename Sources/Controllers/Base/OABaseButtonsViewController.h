@@ -42,7 +42,7 @@ typedef NS_ENUM(NSInteger, EOABaseButtonColorScheme)
 - (EOABaseButtonColorScheme)getBottomButtonColorScheme;
 - (BOOL)isBottomSeparatorVisible;
 
-- (IBAction)onTopButtonPressed:(UIButton *)sender;
-- (IBAction)onBottomButtonPressed:(UIButton *)sender;
+- (void)onTopButtonPressed;
+- (void)onBottomButtonPressed;
 
 @end

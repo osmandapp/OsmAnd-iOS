@@ -174,7 +174,7 @@
 
 #pragma mark - Selectors
 
-- (IBAction)onTopButtonPressed:(UIButton *)sender
+- (void)onTopButtonPressed
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
     [settings setDisabledTypes:[NSSet setWithObject:SPEED_CAMERA]];
@@ -192,7 +192,7 @@
     [self dismissViewController];
 }
 
-- (IBAction)onBottomButtonPressed:(UIButton *)sender
+- (void)onBottomButtonPressed
 {
     [self setDialogShown];
     [self dismissViewController];

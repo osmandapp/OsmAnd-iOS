@@ -178,11 +178,6 @@
     }
 }
 
-- (IBAction)onLeftNavbarButtonPressed:(id)sender
-{
-    [self dismissViewController];
-}
-
 #pragma mark - OACloudAccountLogoutDelegate
 
 - (void)onLogout

@@ -86,11 +86,6 @@
     return defaultToolBarHeight;
 }
 
--(IBAction)onLeftNavbarButtonPressed:(id)sender;
-{
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
 - (void) deleteClicked
 {
     if (!_localItem)

@@ -63,9 +63,8 @@ typedef NS_ENUM(NSInteger, EOABaseTableHeaderMode)
 - (UIView *)getCustomViewForFooter:(NSInteger)section;
 - (void)onRowPressed:(NSIndexPath *)indexPath;
 
+- (void)onRightNavbarButtonPressed;
 - (void)onScrollViewDidScroll:(UIScrollView *)scrollView;
 - (void)onRotation;
-- (IBAction)onLeftNavbarButtonPressed:(UIButton *)sender;
-- (IBAction)onRightNavbarButtonPressed:(UIButton *)sender;
 
 @end

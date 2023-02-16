@@ -163,7 +163,19 @@
     return _isScreenLoaded;
 }
 
+#pragma mark - IBAction
+
+- (IBAction)onLeftNavbarButtonPressed:(UIButton *)sender
+{
+    [self onLeftNavbarButtonPressed];
+}
+
 #pragma mark - Selectors
+
+- (void)onLeftNavbarButtonPressed
+{
+    [self dismissViewController];
+}
 
 // after resizing dynamic type for navbar and UI components with adjustsFontForContentSizeCategory = NO
 // override with super to work correctly
@@ -171,11 +183,6 @@
 {
     // needs to update navbar height
     [self resetNavbarEstimatedHeight];
-}
-
-- (IBAction)onLeftNavbarButtonPressed:(UIButton *)sender
-{
-    [self dismissViewController];
 }
 
 #pragma mark - Actions

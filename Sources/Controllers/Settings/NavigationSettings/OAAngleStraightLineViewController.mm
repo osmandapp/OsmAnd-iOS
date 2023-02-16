@@ -140,7 +140,7 @@
 
 #pragma mark - Selectors
 
-- (IBAction)onRightNavbarButtonPressed:(UIButton *)sender
+- (void)onRightNavbarButtonPressed
 {
     OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
     [self.appMode setStrAngle:_selectedValue];

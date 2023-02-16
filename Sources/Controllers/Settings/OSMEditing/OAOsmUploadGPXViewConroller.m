@@ -433,14 +433,14 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
 
 #pragma mark - Selectors
 
-- (IBAction)onLeftNavbarButtonPressed:(id)sender
+- (void)onLeftNavbarButtonPressed
 {
     if (_mode == EOAOsmUploadGPXViewConrollerModeInitial)
     {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"exit_without_saving") message:OALocalizedString(@"unsaved_changes_will_be_lost") preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil]];
         [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_exit") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            [super onLeftNavbarButtonPressed:sender];
+            [super onLeftNavbarButtonPressed];
         }]];
         
         [self presentViewController:alert animated:YES completion:nil];
@@ -449,15 +449,15 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
     {
         if (_uploadTask)
             [_uploadTask setInterrupted:YES];
-        [super onLeftNavbarButtonPressed:sender];
+        [super onLeftNavbarButtonPressed];
     }
     else
     {
-        [super onLeftNavbarButtonPressed:sender];
+        [super onLeftNavbarButtonPressed];
     }
 }
 
-- (IBAction)onBottomButtonPressed:(id)sender
+- (void)onBottomButtonPressed
 {
     if (_mode == EOAOsmUploadGPXViewConrollerModeInitial)
     {
@@ -493,7 +493,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
     }
     else if (_mode == EOAOsmUploadGPXViewConrollerModeSuccess)
     {
-        [super onLeftNavbarButtonPressed:sender];
+        [super onLeftNavbarButtonPressed];
     }
     else if (_mode == EOAOsmUploadGPXViewConrollerModeFailed)
     {
@@ -501,14 +501,14 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
         [self updateScreenMode:EOAOsmUploadGPXViewConrollerModeInitial];
         [self generateData];
         [self.tableView reloadData];
-        [self onBottomButtonPressed:sender];
+        [self onBottomButtonPressed];
     }
     else if (_mode == EOAOsmUploadGPXViewConrollerModeNoInternet)
     {
         [self updateScreenMode:EOAOsmUploadGPXViewConrollerModeInitial];
         [self generateData];
         [self.tableView reloadData];
-        [self onBottomButtonPressed:sender];
+        [self onBottomButtonPressed];
     }
 }
 

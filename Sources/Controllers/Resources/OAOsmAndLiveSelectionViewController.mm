@@ -387,16 +387,6 @@ static const NSInteger groupCount = 1;
     [tableView deselectRowAtIndexPath:indexPath animated:true];
 }
 
-- (IBAction)onLeftNavbarButtonPressed:(id)sender
-{
-    [self onDissmissViewContoller];
-}
-
-- (void)onDissmissViewContoller
-{
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
 - (IBAction)applyButtonClicked:(id)sender
 {
     [OAOsmAndLiveHelper setPreferenceEnabledForLocalIndex:_regionNameNSString value:_isLiveUpdatesEnabled];

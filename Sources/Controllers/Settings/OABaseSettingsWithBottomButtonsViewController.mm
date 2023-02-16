@@ -60,7 +60,7 @@
     self.primaryButtonTopMarginYesSecondary.active = hasPrimaryButton && hasSecondaryButton;
     self.primaryButtonTopMarginNoSecondary.active = !hasSecondaryButton;
     
-    self.bottomViewHeigh.constant = (hasPrimaryButton ? self.primaryButtonHeight.constant : 0.) + (hasSecondaryButton ? self.secondaryButtonHeight.constant : 0.) + kTopBottomPadding * (hasPrimaryButton && hasSecondaryButton ? 3 : 2) + [OAUtilities getBottomMargin];
+    self.bottomViewHeigh.constant = (hasPrimaryButton ? self.primaryButtonHeight.constant : 0.) + (hasSecondaryButton ? self.secondaryButtonHeight.constant : 0.) + kTopBottomPadding * 2 + (hasPrimaryButton && hasSecondaryButton ? self.primaryButtonTopMarginYesSecondary.constant : 0) + [OAUtilities getBottomMargin];
     
     self.tableViewBottomMarginYesView.active = hasBottomView;
     self.tableViewBottomMarginNoView.active = !hasBottomView;

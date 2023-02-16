@@ -67,6 +67,7 @@
     [super applyLocalization];
     _descriptionText = OALocalizedString(@"export_profile_select_descr");
     _descriptionBoldText = _appMode ? OALocalizedString(@"export_profile") : OALocalizedString(@"shared_string_export");
+    [self setTableHeaderView:_descriptionBoldText];
 }
 
 - (void)viewDidLoad {
@@ -84,8 +85,6 @@
 
 - (void)setupView
 {
-    [self setTableHeaderView:_descriptionBoldText];
-
     if (_exportStarted)
     {
         OATableCollapsableGroup *group = [[OATableCollapsableGroup alloc] init];

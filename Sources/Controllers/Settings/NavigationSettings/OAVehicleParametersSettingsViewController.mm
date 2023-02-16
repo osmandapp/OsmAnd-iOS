@@ -26,6 +26,7 @@
 #define kBottomPaddingMotorType 35.
 #define kDescriptionStringSection 1
 #define kDot @"."
+#define kComma @","
 
 @interface OAVehicleParametersSettingsViewController() <OAHorizontalCollectionViewCellDelegate, UITextFieldDelegate>
 
@@ -239,6 +240,7 @@
 {
     NSString *systemDecimalSeparator = NSLocale.autoupdatingCurrentLocale.decimalSeparator;
     _measurementValue = [_measurementValue stringByReplacingOccurrencesOfString:systemDecimalSeparator withString:kDot];
+    _measurementValue = [_measurementValue stringByReplacingOccurrencesOfString:kComma withString:kDot];
     if ([_measurementValue hasPrefix:kDot] || [_measurementValue hasSuffix:kDot] || (![_measurementValue hasPrefix:@"0."]))
     {
         NSNumberFormatter *formatter = [[NSNumberFormatter alloc]init];

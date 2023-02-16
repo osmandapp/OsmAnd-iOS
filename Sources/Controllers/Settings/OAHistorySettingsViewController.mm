@@ -308,7 +308,6 @@
     [_editToolbarView setHidden:NO];
     [UIView animateWithDuration:.3 animations:^{
         _editToolbarView.frame = CGRectMake(0.0, DeviceScreenHeight - _editToolbarView.bounds.size.height, DeviceScreenWidth, _editToolbarView.bounds.size.height);
-        [self applySafeAreaMargins];
     }];
     
     [self.editButton setHidden:YES];
@@ -324,7 +323,6 @@
         _editToolbarView.frame = CGRectMake(0.0, DeviceScreenHeight + 1.0, DeviceScreenWidth, _editToolbarView.bounds.size.height);
     } completion:^(BOOL finished) {
         _editToolbarView.hidden = YES;
-        [self applySafeAreaMargins];
     }];
     
     [self.cancelButton setHidden:YES];

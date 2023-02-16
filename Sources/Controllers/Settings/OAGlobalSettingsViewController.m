@@ -8,7 +8,10 @@
 
 #import "OAGlobalSettingsViewController.h"
 #import "OAUninstallSpeedCamerasViewController.h"
+#import "OAHistorySettingsViewController.h"
+#import "OAExportItemsViewController.h"
 #import "OAAppSettings.h"
+#import "OAHistoryHelper.h"
 #import "OASimpleTableViewCell.h"
 #import "OARightIconTableViewCell.h"
 #import "OAValueTableViewCell.h"
@@ -500,7 +503,7 @@
         }
         case EOAHistory:
         {
-            if ([name isEqualToString:@"clear_history"])
+            if ([item.key isEqualToString:@"clear_history"])
             {
                 UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"history_clear_alert_title")
                                                                                 message:OALocalizedString(@"history_clear_alert_message")
@@ -517,7 +520,7 @@
                     OAHistoryHelper *helper = [OAHistoryHelper sharedInstance];
                     historyItems = [helper getPointsHavingTypes:helper.searchTypes limit:0];
                     [helper removePoints:historyItems];
-                    [self setupView];
+                    [self generateData];
                     [self.tableView reloadData];
                 }];
 

@@ -6,7 +6,7 @@
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
-#import "OABaseSettingsViewController.h"
+#import "OACompoundViewController.h"
 
 typedef enum
 {

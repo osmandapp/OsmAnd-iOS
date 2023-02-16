@@ -246,7 +246,7 @@
             if (available && !enabled)
                 backgroundColor = UIColor.clearColor;
             else if (!available && enabled)
-                backgroundColor = UIColorFromRGB(color_route_button_inactive);
+                backgroundColor = UIColorFromRGB(color_button_gray_background);
 
             destCell.titleLabel.textColor = available
                     ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer);

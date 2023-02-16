@@ -468,11 +468,6 @@
     [self presentViewController:safariViewController animated:YES completion:nil];
 }
 
-- (IBAction) onLeftNavbarButtonPressed:(id)sender
-{
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
-
 - (IBAction) helpButtonClicked:(id)sender
 {
     if (_type == EOAChoosePlan)

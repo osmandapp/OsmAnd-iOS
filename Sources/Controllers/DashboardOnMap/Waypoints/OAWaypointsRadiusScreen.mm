@@ -120,7 +120,7 @@
     [tableView reloadData];
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    [vwController onLeftNavbarButtonPressed:nil];
+    [vwController onLeftNavbarButtonPressed];
 }
 
 @end

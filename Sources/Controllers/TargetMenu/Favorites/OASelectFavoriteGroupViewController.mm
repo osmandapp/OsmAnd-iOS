@@ -63,7 +63,7 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.separatorColor = UIColorFromRGB(color_tint_gray);
-    self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"select_group_descr") font:[UIFont scaledSystemFontOfSize:15.] textColor:UIColor.blackColor lineSpacing:0. isTitle:NO];
+    self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"select_group_descr") font:kHeaderDescriptionFont textColor:UIColor.blackColor isBigTitle:NO];
 }
 
 - (void) applyLocalization

@@ -322,11 +322,6 @@
     [self.backButton setImage:[UIImage imageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
 }
 
-- (void)onLeftNavbarButtonPressed:(id)sender
-{
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
-
 - (IBAction)doneButtonPressed:(id)sender
 {
     [self doneButtonPressed];

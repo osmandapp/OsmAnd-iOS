@@ -267,18 +267,20 @@
     [self appendAttributedString:attributedString];
 }
 
-- (void) setFontSize:(CGFloat)size forString:(NSString *)string
+- (void) setFont:(UIFont *)font forString:(NSString *)string
 {
     NSRange range = [self.string rangeOfString:string];
-    UIFont *font = [UIFont scaledSystemFontOfSize:size];
     [self addAttribute:NSFontAttributeName value:font range:range];
+}
+
+- (void) setFontSize:(CGFloat)size forString:(NSString *)string
+{
+    [self setFont:[UIFont scaledSystemFontOfSize:size] forString:string];
 }
 
 - (void) setFontWeight:(UIFontWeight)fontWeight andSize:(CGFloat)size forString:(NSString *)string
 {
-    NSRange range = [self.string rangeOfString:string];
-    UIFont *font = [UIFont scaledSystemFontOfSize:size weight:fontWeight];
-    [self addAttribute:NSFontAttributeName value:font range:range];
+    [self setFont:[UIFont scaledSystemFontOfSize:size weight:fontWeight] forString:string];
 }
 
 - (void) setColor:(UIColor *)color forString:(NSString *)string
@@ -2044,73 +2046,83 @@ static const double d180PI = 180.0 / M_PI_2;
     return res;
 }
 
-+ (UIView *) setupTableHeaderViewWithText:(NSString *)text font:(UIFont *)font textColor:(UIColor *)textColor lineSpacing:(CGFloat)lineSpacing isTitle:(BOOL)isTitle
++ (UIView *) setupTableHeaderViewWithText:(NSString *)text
+                                     font:(UIFont *)font
+                                textColor:(UIColor *)textColor
+                               isBigTitle:(BOOL)isBigTitle
 {
-    return [self setupTableHeaderViewWithText:text font:font textColor:textColor lineSpacing:lineSpacing isTitle:isTitle y:12.];
+    return [self setupTableHeaderViewWithText:text font:font textColor:textColor isBigTitle:isBigTitle rightIconName:nil tintColor:nil];
 }
 
-+ (UIView *) setupTableHeaderViewWithText:(NSString *)text font:(UIFont *)font textColor:(UIColor *)textColor lineSpacing:(CGFloat)lineSpacing isTitle:(BOOL)isTitle y:(CGFloat)y
++ (UIView *) setupTableHeaderViewWithText:(NSString *)text
+                                     font:(UIFont *)font
+                                textColor:(UIColor *)textColor
+                               isBigTitle:(BOOL)isBigTitle
+                            rightIconName:(NSString *)iconName
+                                tintColor:(UIColor *)tintColor
 {
-    CGFloat textWidth = DeviceScreenWidth - (16 + OAUtilities.getLeftMargin) * 2;
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(16 + OAUtilities.getLeftMargin, 0.0, textWidth, CGFLOAT_MAX)];
-    if (!isTitle)
-    {
-        NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
-        [style setLineSpacing:lineSpacing];
-        label.attributedText = [[NSAttributedString alloc] initWithString:text
-                                attributes:@{NSParagraphStyleAttributeName : style}];
-    }
-    label.text = text;
-    label.font = font;
+    CGFloat topOffset = isBigTitle ? 5. : kPaddingOnSideOfContent;
+    CGFloat bottomOffset = isBigTitle ? 7. : kPaddingOnSideOfContent;
+    return [self setupTableHeaderViewWithText:text font:font textColor:textColor isBigTitle:isBigTitle topOffset:topOffset bottomOffset:bottomOffset rightIconName:iconName tintColor:tintColor];
+}
+
++ (UIView *) setupTableHeaderViewWithText:(NSString *)text
+                                     font:(UIFont *)font
+                                textColor:(UIColor *)textColor
+                               isBigTitle:(BOOL)isBigTitle
+                                topOffset:(CGFloat)topOffset
+                             bottomOffset:(CGFloat)bottomOffset
+                            rightIconName:(NSString *)iconName
+                                tintColor:(UIColor *)tintColor
+{
+    CGFloat sideOffset = [OAUtilities getLeftMargin] + (isBigTitle ? kSmallPaddingOnSideOfContent : kPaddingOnSideOfContent);
+    CGFloat textWidth = DeviceScreenWidth - sideOffset * 2;
+    CGFloat textHeight = [self heightForHeaderViewText:text width:textWidth font:font lineSpacing:0.];
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(sideOffset, topOffset, textWidth, textHeight)];
+
+    NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc] initWithString:text];
+    [attributedText setFont:font forString:text];
+    [attributedText setColor:textColor forString:text];
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    paragraphStyle.minimumLineHeight = isBigTitle ? 41. : 18.;
+    [attributedText addAttribute:NSParagraphStyleAttributeName
+                           value:paragraphStyle
+                           range:NSMakeRange(0, text.length)];
+
+    label.attributedText = attributedText;
     label.adjustsFontForContentSizeCategory = YES;
-    label.textColor = textColor;
     label.numberOfLines = 0;
     label.lineBreakMode = NSLineBreakByWordWrapping;
     label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    [label sizeToFit];
-    CGRect frame = label.frame;
-    frame.size.width = textWidth;
-    frame.origin.y = isTitle ? 5. : y;
-    label.frame = frame;
-    UIView *tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, label.frame.size.height + label.frame.origin.y + (isTitle ? 7. : 12.))];
-    [tableHeaderView addSubview:label];
-    return tableHeaderView;
-}
 
-+ (UIView *) setupTableHeaderViewWithText:(NSString *)text font:(UIFont *)font tintColor:(UIColor *)tintColor icon:(UIImage *)icon iconFrameSize:(CGFloat)iconFrameSize
-{
-    CGFloat textWidth = DeviceScreenWidth - (16 + OAUtilities.getLeftMargin * 2) - 12 - iconFrameSize - 16;
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(16 + OAUtilities.getLeftMargin, 0.0, textWidth, CGFLOAT_MAX)];
-    label.text = text;
-    label.font = font;
-    label.textColor = UIColor.blackColor;
-    label.numberOfLines = 2;
-    label.lineBreakMode = NSLineBreakByTruncatingTail;
-    label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    [label sizeToFit];
-    CGRect frame = label.frame;
-    frame.size.height = label.frame.size.height;
-    frame.origin.y = 8.0;
-    label.frame = frame;
-    UIView *tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, label.frame.size.height + 8)];
+    UIView *tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0., 0., DeviceScreenWidth, topOffset + textHeight + bottomOffset)];
     [tableHeaderView addSubview:label];
-    UIView *imageContainer = [[UIView alloc] initWithFrame:CGRectMake(DeviceScreenWidth - 12 - OAUtilities.getLeftMargin - iconFrameSize, tableHeaderView.frame.size.height / 2 - iconFrameSize / 2, iconFrameSize, iconFrameSize)];
-    imageContainer.backgroundColor = UIColor.whiteColor;
-    
-    if (icon)
+    tableHeaderView.backgroundColor = UIColorFromRGB(color_primary_table_background);
+
+    if (iconName && iconName.length > 0)
     {
-        UIImageView *imageView = [[UIImageView alloc] init];
-        imageView.frame = CGRectMake(2, 2, 30, 30);
-        imageView.contentMode = UIViewContentModeCenter;
-        [imageView setTintColor:tintColor];
-        [imageView setImage:[icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
-        
-        [imageContainer insertSubview:imageView atIndex:0];
-        imageContainer.layer.cornerRadius = iconFrameSize / 2;
-        
-        [tableHeaderView addSubview:imageContainer];
+        CGFloat iconFrameSize = 30.;
+        CGFloat iconFrameOffsetSize = 4.;
+        UIView *iconContainer = [[UIView alloc] initWithFrame:CGRectMake(DeviceScreenWidth - 12. - [OAUtilities getLeftMargin] - iconFrameSize - iconFrameOffsetSize, tableHeaderView.frame.size.height / 2 - iconFrameSize / 2, iconFrameSize + iconFrameOffsetSize, iconFrameSize + iconFrameOffsetSize)];
+        iconContainer.backgroundColor = UIColor.whiteColor;
+        UIImageView *iconView = [[UIImageView alloc] init];
+        iconView.frame = CGRectMake(iconFrameOffsetSize / 2, iconFrameOffsetSize / 2, iconFrameSize, iconFrameSize);
+        iconView.contentMode = UIViewContentModeCenter;
+        if (tintColor)
+        {
+            iconView.tintColor = tintColor;
+            iconView.image = [UIImage templateImageNamed:iconName];
+        }
+        else
+        {
+            iconView.image = [UIImage imageNamed:iconName];
+        }
+
+        [iconContainer insertSubview:iconView atIndex:0];
+        iconContainer.layer.cornerRadius = iconFrameSize / 2;
+        [tableHeaderView addSubview:iconContainer];
     }
-    
+
     return tableHeaderView;
 }
 
@@ -2156,11 +2168,6 @@ static const double d180PI = 180.0 / M_PI_2;
     }
     
     return tableHeaderView;
-}
-
-+ (UIView *) setupTableHeaderViewWithText:(NSString *)text font:(UIFont *)font tintColor:(UIColor *)tintColor icon:(NSString *)iconName
-{
-    return [self setupTableHeaderViewWithText:text font:font tintColor:tintColor icon:[UIImage rtlImageNamed:iconName] iconFrameSize:34.];
 }
 
 + (UIView *) setupTableHeaderViewWithAttributedText:(NSAttributedString *)attributedText topCenterIconName:(NSString *)iconName iconSize:(CGFloat)iconSize

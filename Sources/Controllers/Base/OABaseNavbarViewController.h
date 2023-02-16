@@ -16,6 +16,14 @@ typedef NS_ENUM(NSInteger, EOABaseNavbarColorScheme)
     EOABaseNavbarColorSchemeWhite
 };
 
+typedef NS_ENUM(NSInteger, EOABaseTableHeaderMode)
+{
+    EOABaseTableHeaderModeNone = 0,
+    EOABaseTableHeaderModeDescription,
+    EOABaseTableHeaderModeBigTitle,
+    EOABaseTableHeaderModeBigTitleWithRightIcon
+};
+
 @interface OABaseNavbarViewController : OASuperViewController<UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource>
 
 @property (weak, nonatomic) IBOutlet UIButton *leftNavbarButton;
@@ -29,6 +37,7 @@ typedef NS_ENUM(NSInteger, EOABaseNavbarColorScheme)
 - (void)commonInit;
 - (void)postInit;
 
+- (void)setupTableHeaderView;
 - (NSString *)getTitle;
 - (NSString *)getSubtitle;
 - (NSString *)getLeftNavbarButtonTitle;
@@ -37,6 +46,9 @@ typedef NS_ENUM(NSInteger, EOABaseNavbarColorScheme)
 - (BOOL)isNavbarSeparatorVisible;
 - (BOOL)isChevronIconVisible;
 - (BOOL)isNavbarBlurring;
+- (EOABaseTableHeaderMode)getTableHeaderMode;
+- (NSString *)getTableHeaderDescription;
+- (BOOL)isTableHeaderHasHiddenSeparator;
 
 - (void)generateData;
 - (BOOL)hideFirstHeader;
@@ -51,9 +63,8 @@ typedef NS_ENUM(NSInteger, EOABaseNavbarColorScheme)
 - (UIView *)getCustomViewForFooter:(NSInteger)section;
 - (void)onRowPressed:(NSIndexPath *)indexPath;
 
+- (void)onRightNavbarButtonPressed;
 - (void)onScrollViewDidScroll:(UIScrollView *)scrollView;
 - (void)onRotation;
-- (IBAction)onLeftNavbarButtonPressed:(UIButton *)sender;
-- (IBAction)onRightNavbarButtonPressed:(UIButton *)sender;
 
 @end

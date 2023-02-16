@@ -358,11 +358,6 @@
     });
 }
 
-- (void) onLeftNavbarButtonPressed:(id)sender
-{
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
 #pragma mark - OASubscriptionBannerCardViewDelegate
 
 - (void) onButtonPressed

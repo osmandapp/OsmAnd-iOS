@@ -192,10 +192,10 @@
         if (v.tag != kButtonsTag)
             v.backgroundColor = UIColor.clearColor;
     }
-    [self.cancelButton setBackgroundColor:UIColorFromRGB(color_route_button_inactive)];
+    [self.cancelButton setBackgroundColor:UIColorFromRGB(color_button_gray_background)];
     self.doneButton.layer.borderWidth = 2.0;
-    self.doneButton.layer.borderColor = UIColorFromRGB(color_route_button_inactive).CGColor;
-    [self.doneButton setBackgroundColor:UIColorFromRGB(color_route_button_inactive)];
+    self.doneButton.layer.borderColor = UIColorFromRGB(color_button_gray_background).CGColor;
+    [self.doneButton setBackgroundColor:UIColorFromRGB(color_button_gray_background)];
     [self.doneButton setTitleColor:UIColorFromRGB(color_support_red) forState:UIControlStateNormal];
 }
 

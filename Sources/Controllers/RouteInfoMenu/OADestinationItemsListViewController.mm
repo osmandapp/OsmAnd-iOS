@@ -416,11 +416,6 @@ typedef NS_ENUM(NSInteger, EOASortType)
     [_tableView reloadData];
 }
 
-- (void)onLeftNavbarButtonPressed:(id)sender
-{
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
-
 - (IBAction)sortButtonPressed:(id)sender
 {
     if (_sortingType == EOASortTypeByGroup)

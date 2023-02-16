@@ -15,9 +15,6 @@
 #define kSidePadding 20
 
 @implementation OABaseSettingsViewController
-{
-    UIView *_tableHeaderView;
-}
 
 #pragma mark - Initialization
 
@@ -50,7 +47,7 @@
 {
     CGFloat textWidth = DeviceScreenWidth - (kSidePadding + OAUtilities.getLeftMargin) * 2;
     CGFloat textHeight = [self heightForLabel:text];
-    _tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, textHeight + kSidePadding)];
+    UIView *tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, textHeight + kSidePadding)];
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(kSidePadding + OAUtilities.getLeftMargin, kSidePadding, textWidth, textHeight)];
     NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
     [style setLineSpacing:6];
@@ -63,9 +60,9 @@
     label.numberOfLines = 0;
     label.lineBreakMode = NSLineBreakByWordWrapping;
     label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    _tableHeaderView.backgroundColor = UIColor.clearColor;
-    [_tableHeaderView addSubview:label];
-    self.tableView.tableHeaderView = _tableHeaderView;
+    tableHeaderView.backgroundColor = UIColor.clearColor;
+    [tableHeaderView addSubview:label];
+    self.tableView.tableHeaderView = tableHeaderView;
 }
 
 - (CGFloat) heightForLabel:(NSString *)text

@@ -6,7 +6,7 @@
 //  Copyright (c) 2022 OsmAnd. All rights reserved.
 //
 
-#import "OABaseBigTitleSettingsViewController.h"
+#import "OABaseNavbarViewController.h"
 
 @class OAWorldRegion;
 
@@ -20,7 +20,7 @@
 
 @end
 
-@interface OAWeatherForecastDetailsViewController : OABaseBigTitleSettingsViewController
+@interface OAWeatherForecastDetailsViewController : OABaseNavbarViewController
 
 - (instancetype)initWithRegion:(OAWorldRegion *)region;
 

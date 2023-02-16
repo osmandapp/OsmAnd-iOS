@@ -424,11 +424,6 @@
 
 #pragma mark - Selectors
 
-- (IBAction)onLeftNavbarButtonPressed:(UIButton *)sender
-{
-    [self dismissViewController];
-}
-
 - (void)updateTableView
 {
     BOOL isDefault = _settingsType == EOADefaultProfile;

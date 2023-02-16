@@ -128,7 +128,7 @@
                     @"key" : @"email_login_button",
                     @"type" : [OAFilledButtonCell getCellIdentifier],
                     @"title" : OALocalizedString(@"use_login_and_password"),
-                    @"background_color": UIColorFromRGB(color_route_button_inactive),
+                    @"background_color": UIColorFromRGB(color_button_gray_background),
                     @"tint_color": UIColorFromRGB(color_primary_purple),
                     @"top_margin": @(16.),
                     @"bottom_margin": @(20.)

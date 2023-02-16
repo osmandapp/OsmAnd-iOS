@@ -50,7 +50,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     EOADashboardScreenTypeScreen
 };
 
-@interface OAConfigureProfileViewController () <UITableViewDelegate, UITableViewDataSource, OACopyProfileBottomSheetDelegate, OADeleteProfileBottomSheetDelegate, OASettingsImportExportDelegate>
+@interface OAConfigureProfileViewController () <OACopyProfileBottomSheetDelegate, OADeleteProfileBottomSheetDelegate, OASettingsImportExportDelegate>
 
 @end
 
@@ -71,18 +71,79 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     NSString *_targetScreenKey;
 }
 
+#pragma mark - Initialization
+
 - (instancetype) initWithAppMode:(OAApplicationMode *)mode targetScreenKey:(NSString *)targetScreenKey
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
         _appMode = mode;
         _targetScreenKey = targetScreenKey;
-//        [self generateData];
     }
     return self;
 }
 
-- (void) generateData
+- (void)registerObservers
+{
+    [self addObserver:[[OAAutoObserverProxy alloc] initWith:self
+                                                withHandler:@selector(onAvailableAppModesChanged)
+                                                 andObserve:[OsmAndApp instance].availableAppModesChangedObservable]];
+}
+
+#pragma mark - UIViewController
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+
+    [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+
+    if (_targetScreenKey)
+    {
+        [self openTargetSettingsScreen:_targetScreenKey];
+        _targetScreenKey = nil;
+    }
+}
+
+#pragma mark - Base setup UI
+
+- (void)setupTableHeaderView
+{
+    UIView *tableHeaderView = [OAUtilities setupTableHeaderViewWithText:[self getTitle]
+                                                                   font:kHeaderBigTitleFont
+                                                              textColor:UIColor.blackColor
+                                                             isBigTitle:YES
+                                                          rightIconName:[_appMode getIconName]
+                                                              tintColor:UIColorFromRGB([_appMode getIconColor])];
+    self.tableView.tableHeaderView = tableHeaderView;
+}
+
+#pragma mark - Base UI
+
+- (NSString *)getTitle
+{
+    return [_appMode toHumanString];
+}
+
+- (BOOL)isNavbarSeparatorVisible
+{
+    return NO;
+}
+
+- (EOABaseTableHeaderMode)getTableHeaderMode
+{
+    return EOABaseTableHeaderModeBigTitle;
+}
+
+#pragma mark - Table data
+
+- (void)generateData
 {
     NSMutableArray<NSString *> *sectionHeaderTitles = [NSMutableArray array];
     NSMutableArray<NSString *> *sectionFooterTitles = [NSMutableArray array];
@@ -247,52 +308,124 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     _sectionFooterTitles = sectionFooterTitles;
 }
 
-- (void)viewWillAppear:(BOOL)animated
+- (NSString *)getTitleForHeader:(NSInteger)section
 {
-    [super viewWillAppear:animated];
-    [self setNeedsStatusBarAppearanceUpdate];
-    [self setupTableHeaderView];
-    [self generateData];
-    [self applyLocalization];
-    [self.tableView reloadData];
-    
-    if (_targetScreenKey)
+    NSString *title = _sectionHeaderTitles[section];
+    return title.length > 0 ? title : nil;
+}
+
+- (NSString *)getTitleForFooter:(NSInteger)section
+{
+    NSString *title = _sectionFooterTitles[section];
+    return title.length > 0 ? title : nil;
+}
+
+- (NSInteger)rowsCount:(NSInteger)section
+{
+    return _data[section].count;
+}
+
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
+{
+    NSDictionary *item = _data[indexPath.section][indexPath.row];
+    if ([item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        [self openTargetSettingsScreen:_targetScreenKey];
-        _targetScreenKey = nil;
+        OASwitchTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASwitchTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
+        }
+        if (cell)
+        {
+            [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+            cell.switchView.on = [OAApplicationMode.values containsObject:_appMode];
+            [cell.switchView addTarget:self action:@selector(onModeSwitchPressed:) forControlEvents:UIControlEventValueChanged];
+
+            cell.titleLabel.text = [OAApplicationMode.values containsObject:_appMode] ? OALocalizedString(@"shared_string_enabled") : OALocalizedString(@"rendering_value_disabled_name");
+        }
+        return cell;
     }
+    else if ([item[@"type"] isEqualToString:[OAIconTextDescCell getCellIdentifier]])
+    {
+        OAIconTextDescCell* cell;
+        cell = (OAIconTextDescCell *)[self.tableView dequeueReusableCellWithIdentifier:[OAIconTextDescCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextDescCell getCellIdentifier] owner:self options:nil];
+            cell = (OAIconTextDescCell *)[nib objectAtIndex:0];
+            cell.textView.numberOfLines = 0;
+            cell.arrowIconView.image = [cell.arrowIconView.image imageFlippedForRightToLeftLayoutDirection];
+            [cell.iconView setTintColor:UIColorFromRGB(color_icon_inactive)];
+            cell.descView.font = [UIFont scaledSystemFontOfSize:15.];
+            cell.separatorInset = UIEdgeInsetsMake(0., 64., 0., 0.);
+        }
+        if (cell)
+        {
+            [cell.textView setText:item[@"title"]];
+            cell.descView.hidden = YES;
+                
+            [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]]];
+            
+            if ([cell needsUpdateConstraints])
+                [cell setNeedsUpdateConstraints];
+        }
+        return cell;
+    }
+    else if ([item[@"type"] isEqualToString:[OATitleRightIconCell getCellIdentifier]])
+    {
+        OATitleRightIconCell *cell = (OATitleRightIconCell *)[self.tableView dequeueReusableCellWithIdentifier:[OATitleRightIconCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleRightIconCell getCellIdentifier] owner:self options:nil];
+            cell = (OATitleRightIconCell *)[nib objectAtIndex:0];
+            cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0);
+            cell.titleView.textColor = UIColorFromRGB(color_primary_purple);
+            cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
+            cell.titleView.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightSemibold];
+        }
+        cell.titleView.text = item[@"title"];
+        [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]]];
+        return cell;
+    }
+    return nil;
 }
 
-- (UIStatusBarStyle)preferredStatusBarStyle
+- (NSInteger)sectionsCount
 {
-    return UIStatusBarStyleDefault;
+    return _data.count;
 }
 
-- (void) applyLocalization
+- (UIView *)getCustomViewForHeader:(NSInteger)section
 {
-    self.titleLabel.text = _appMode.toHumanString;
+    if (section == 0 && _appMode != OAApplicationMode.DEFAULT)
+    {
+        OATableViewCustomHeaderView *vw = [self.tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
+        vw.label.text = nil;
+        vw.label.attributedText = nil;
+
+        NSString *title = _sectionHeaderTitles[section];
+        [vw setYOffset:6.];
+        UIFont *labelFont = [UIFont scaledSystemFontOfSize:15.0];
+        NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+        [style setLineSpacing:6];
+        vw.label.attributedText = [[NSAttributedString alloc] initWithString:title attributes:@{NSParagraphStyleAttributeName : style, NSFontAttributeName : labelFont, NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer)}];
+        [vw sizeToFit];
+        return vw;
+    }
+    return nil;
 }
 
-- (UIView *) setupTableHeaderView
+- (void)onRowPressed:(NSIndexPath *)indexPath
 {
-    return self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:self.getTableHeaderTitle font:[UIFont scaledSystemFontOfSize:34.0 weight:UIFontWeightBold] tintColor:UIColorFromRGB(_appMode.getIconColor) icon:_appMode.getIconName];
+    NSDictionary *item = _data[indexPath.section][indexPath.row];
+    NSString *key = item[@"key"];
+    [self openTargetSettingsScreen:key];
 }
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    
-    _appModeChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                       withHandler:@selector(onAvailableAppModesChanged)
-                                                        andObserve:[OsmAndApp instance].availableAppModesChangedObservable];
-        
-    self.backButton.hidden = YES;
-    self.backImageButton.hidden = NO;
-    
-    self.tableView.dataSource = self;
-    self.tableView.delegate = self;
-    [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
-}
+#pragma mark - Selectors
 
 - (void)openDashboardScreen:(EOADashboardScreenType)type
 {
@@ -308,16 +441,6 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         [self openDashboardScreen:_screenToOpen];
         _screenToOpen = EOADashboardScreenTypeNone;
     });
-}
-
-- (void) dealloc
-{
-    [_appModeChangeObserver detach];
-}
-
-- (NSString *)getTableHeaderTitle
-{
-    return _appMode.toHumanString;
 }
 
 - (void) onModeSwitchPressed:(UISwitch *)sender
@@ -357,14 +480,6 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 - (void) onUnderlayTapped
 {
     
-}
-
-- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
-{
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        [self setupTableHeaderView];
-        [self.tableView reloadData];
-    } completion:nil];
 }
 
 - (void)openTargetSettingsScreen:(NSString *)targetScreenKey
@@ -442,164 +557,11 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     }
 }
 
-#pragma mark - UITableViewDataSource
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return _data.count;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return _data[section].count;
-}
-
-- (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{
-    OATableViewCustomHeaderView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
-    vw.label.text = nil;
-    vw.label.attributedText = nil;
-    
-    NSString *title = _sectionHeaderTitles[section];
-    
-    if (section == 0 && _appMode != OAApplicationMode.DEFAULT)
-    {
-        [vw setYOffset:6.];
-        UIFont *labelFont = [UIFont scaledSystemFontOfSize:15.0];
-        NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
-        [style setLineSpacing:6];
-        vw.label.attributedText = [[NSAttributedString alloc] initWithString:title attributes:@{NSParagraphStyleAttributeName : style, NSFontAttributeName : labelFont, NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer)}];
-    }
-    else
-    {
-        [vw setYOffset:17.];
-        vw.label.text = [title upperCase];
-        vw.label.textColor = UIColorFromRGB(color_text_footer);
-    }
-    [vw sizeToFit];
-    return vw;
-}
-
-- (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section
-{
-    UITableViewHeaderFooterView *footer = (UITableViewHeaderFooterView *)view;
-    [footer.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSDictionary *item = _data[indexPath.section][indexPath.row];
-    if ([item[@"type"] isEqualToString:[OATitleRightIconCell getCellIdentifier]])
-        return 45.;
-    else
-        return UITableViewAutomaticDimension;
-}
-
-- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    CGFloat textWidth = self.tableView.bounds.size.width - (kSidePadding + OAUtilities.getLeftMargin) * 2;
-    if (section == 0 && _appMode != OAApplicationMode.DEFAULT)
-        return [OATableViewCustomHeaderView getHeight:_sectionHeaderTitles[section] width:textWidth yOffset:6. font:[UIFont scaledSystemFontOfSize:15.0]] + 10.;
-    
-    return [OATableViewCustomHeaderView getHeight:_sectionHeaderTitles[section] width:textWidth];
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-{
-    return section == 0 && _appMode != OAApplicationMode.DEFAULT ? 0.01 : [OAUtilities calculateTextBounds:_sectionFooterTitles[section] width:DeviceScreenWidth - (16 + OAUtilities.getLeftMargin) * 2 font:[UIFont scaledSystemFontOfSize:13.]].height + 16.;
-}
-
-- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
-{
-    NSString *title = _sectionFooterTitles[section];
-    return title.length > 0 ? title : nil;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSDictionary *item = _data[indexPath.section][indexPath.row];
-    if ([item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
-    {
-        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASwitchTableViewCell *) nib[0];
-            [cell leftIconVisibility:NO];
-            [cell descriptionVisibility:NO];
-        }
-        if (cell)
-        {
-            [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-            cell.switchView.on = [OAApplicationMode.values containsObject:_appMode];
-            [cell.switchView addTarget:self action:@selector(onModeSwitchPressed:) forControlEvents:UIControlEventValueChanged];
-
-            cell.titleLabel.text = [OAApplicationMode.values containsObject:_appMode] ? OALocalizedString(@"shared_string_enabled") : OALocalizedString(@"rendering_value_disabled_name");
-        }
-        return cell;
-    }
-    else if ([item[@"type"] isEqualToString:[OAIconTextDescCell getCellIdentifier]])
-    {
-        OAIconTextDescCell* cell;
-        cell = (OAIconTextDescCell *)[tableView dequeueReusableCellWithIdentifier:[OAIconTextDescCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextDescCell getCellIdentifier] owner:self options:nil];
-            cell = (OAIconTextDescCell *)[nib objectAtIndex:0];
-            cell.textView.numberOfLines = 0;
-            cell.arrowIconView.image = [cell.arrowIconView.image imageFlippedForRightToLeftLayoutDirection];
-            [cell.iconView setTintColor:UIColorFromRGB(color_icon_inactive)];
-            cell.descView.font = [UIFont scaledSystemFontOfSize:15.];
-            cell.separatorInset = UIEdgeInsetsMake(0., 64., 0., 0.);
-        }
-        if (cell)
-        {
-            [cell.textView setText:item[@"title"]];
-            cell.descView.hidden = YES;
-                
-            [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]]];
-            
-            if ([cell needsUpdateConstraints])
-                [cell setNeedsUpdateConstraints];
-        }
-        return cell;
-    }
-    else if ([item[@"type"] isEqualToString:[OATitleRightIconCell getCellIdentifier]])
-    {
-        OATitleRightIconCell *cell = (OATitleRightIconCell *)[tableView dequeueReusableCellWithIdentifier:[OATitleRightIconCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleRightIconCell getCellIdentifier] owner:self options:nil];
-            cell = (OATitleRightIconCell *)[nib objectAtIndex:0];
-            cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0);
-            cell.titleView.textColor = UIColorFromRGB(color_primary_purple);
-            cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
-            cell.titleView.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightSemibold];
-        }
-        cell.titleView.text = item[@"title"];
-        [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]]];
-        return cell;
-    }
-    return nil;
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSDictionary *item = _data[indexPath.section][indexPath.row];
-    NSString *key = item[@"key"];
-    [self openTargetSettingsScreen:key];
-
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-}
-
 #pragma mark - OACopyProfileBottomSheetDelegate
 
 - (void) onCopyProfileCompleted
 {
-    [self setupTableHeaderView];
-    [self generateData];
-    [self applyLocalization];
-    [self.tableView reloadData];
+    [self updateView];
 }
 
 - (void) onCopyProfileDismissed
@@ -673,7 +635,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 
 - (void) updateView
 {
-    self.titleLabel.text = _appMode.toHumanString;
+    [self applyLocalization];
     [self setupTableHeaderView];
     [self generateData];
     [self.tableView reloadData];

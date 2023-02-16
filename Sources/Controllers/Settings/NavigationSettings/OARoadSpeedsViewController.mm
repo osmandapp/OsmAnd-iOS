@@ -232,7 +232,7 @@
     [self setupTableHeaderViewWithText:OALocalizedString(@"road_speeds_descr")];
 }
 
-- (IBAction)onRightNavbarButtonPressed:(UIButton *)sender
+- (void)onRightNavbarButtonPressed
 {
     OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
     [self.appMode setMinSpeed:(_minValue / _ratio)];

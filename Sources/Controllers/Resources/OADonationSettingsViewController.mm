@@ -368,11 +368,6 @@
     return name;
 }
 
-- (IBAction) onLeftNavbarButtonPressed:(id)sender
-{
-    [super onLeftNavbarButtonPressed:sender];
-}
-
 - (NSDictionary *) getItem:(NSIndexPath *)indexPath
 {
     return _data[indexPath.section][indexPath.row];

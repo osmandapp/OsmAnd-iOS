@@ -99,7 +99,7 @@
     self.labelDescription.textColor = UIColorFromRGB(color_text_footer);
     [self.labelPurchaseDescription setText:OALocalizedString(@"subscription_cancel_description")];
     self.viewChooseSubscriptionButtonsBorder.layer.borderWidth = 1.;
-    self.viewChooseSubscriptionButtonsBorder.layer.borderColor = UIColorFromRGB(color_route_button_inactive).CGColor;
+    self.viewChooseSubscriptionButtonsBorder.layer.borderColor = UIColorFromRGB(color_button_gray_background).CGColor;
     self.viewChooseSubscriptionButtonsBorder.layer.cornerRadius = 9.;
 }
 

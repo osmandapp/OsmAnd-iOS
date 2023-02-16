@@ -6,11 +6,11 @@
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
-#import "OABaseBigTitleSettingsViewController.h"
-#import "OAOsmUploadGPXVisibilityViewConroller.h"
-#import "OAGPXDatabase.h"
+#import "OABaseButtonsViewController.h"
 
-@interface OAOsmUploadGPXViewConroller : OABaseBigTitleSettingsViewController
+@class OAGPX;
+
+@interface OAOsmUploadGPXViewConroller : OABaseButtonsViewController
 
 - (instancetype)initWithGPXItems:(NSArray<OAGPX *> *)gpxItemsToUpload;
 

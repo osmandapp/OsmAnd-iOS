@@ -26,8 +26,8 @@
 - (BOOL)isModal;
 - (BOOL)isScreenLoaded;
 
+- (void)onLeftNavbarButtonPressed;
 - (void)onContentSizeChanged:(NSNotification *)notification;
-- (IBAction)onLeftNavbarButtonPressed:(UIButton *)sender;
 
 - (void)dismissViewController;
 - (void)showViewController:(UIViewController *)viewController;

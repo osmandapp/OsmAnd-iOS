@@ -133,7 +133,7 @@
 #define color_support_red 0xff470d
 #define color_support_green 0x14cc9e
 
-#define color_route_button_inactive 0xE0DDE3
+#define color_button_gray_background 0xE0DDE3
 
 #define color_icon_inactive 0xA49DAF
 

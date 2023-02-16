@@ -25,6 +25,7 @@
 #define kTopPaddingMotorType 20.
 #define kBottomPaddingMotorType 35.
 #define kDescriptionStringSection 1
+#define kDot @"."
 
 @interface OAVehicleParametersSettingsViewController() <OAHorizontalCollectionViewCellDelegate, UITextFieldDelegate>
 
@@ -76,7 +77,7 @@
         formatter.minimumIntegerDigits = 1;
         formatter.minimumFractionDigits = 0;
         formatter.maximumFractionDigits = 1;
-        formatter.decimalSeparator = @".";
+        formatter.decimalSeparator = kDot;
         _measurementValue = [formatter stringFromNumber:@(vl)];
     }
     else
@@ -237,15 +238,18 @@
 
 - (IBAction) doneButtonPressed:(id)sender
 {
-    if ([_measurementValue hasPrefix:@"."] || [_measurementValue hasSuffix:@"."] || (![_measurementValue hasPrefix:@"0."]))
+    NSString *systemDecimalSeparator = NSLocale.autoupdatingCurrentLocale.decimalSeparator;
+    _measurementValue = [_measurementValue stringByReplacingOccurrencesOfString:systemDecimalSeparator withString:kDot];
+    if ([_measurementValue hasPrefix:kDot] || [_measurementValue hasSuffix:kDot] || (![_measurementValue hasPrefix:@"0."]))
     {
         NSNumberFormatter *formatter = [[NSNumberFormatter alloc]init];
         [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
-        formatter.decimalSeparator = @".";
+        formatter.decimalSeparator = kDot;
         formatter.minimumIntegerDigits = 1;
         formatter.minimumFractionDigits = 0;
         formatter.maximumFractionDigits = 3;
-        _measurementValue = [[formatter numberFromString:_measurementValue] stringValue];
+        NSNumber *number = [formatter numberFromString:_measurementValue];
+        _measurementValue = [formatter stringFromNumber:number];
     }
     if (_selectedParameter.intValue != -1)
         _measurementValue = [NSString stringWithFormat:@"%.2f", _measurementRangeValuesArr[_selectedParameter.intValue].doubleValue];
@@ -409,7 +413,7 @@
     formatter.minimumIntegerDigits = 1;
     formatter.minimumFractionDigits = 0;
     formatter.maximumFractionDigits = 1;
-    formatter.decimalSeparator = @".";
+    formatter.decimalSeparator = kDot;
     return [formatter stringFromNumber:@(vl)];
 }
 
@@ -469,7 +473,7 @@
             break;
         }
     }
-    if (_measurementValue.length == 0 || [_measurementValue isEqualToString:@"."])
+    if (_measurementValue.length == 0 || [_measurementValue isEqualToString:kDot])
     {
         _selectedParameter = [NSNumber numberWithInteger:0];
         _measurementValue = @"0";
@@ -495,9 +499,9 @@
 {
     if (textField.text.length > 4 && ![string isEqualToString:@""])
         return NO;
-    if ([string isEqualToString:@"."])
+    if ([string isEqualToString:kDot])
     {
-        if ([[textField.text componentsSeparatedByString:@"."] count] > 1)
+        if ([[textField.text componentsSeparatedByString:kDot] count] > 1)
             return NO;
         return YES;
     }

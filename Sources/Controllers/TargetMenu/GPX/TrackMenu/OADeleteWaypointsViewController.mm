@@ -116,7 +116,7 @@
 {
     BOOL hasSelection = _selectedWaypointGroups.allKeys.count != 0;
     self.deleteButton.backgroundColor =
-            hasSelection ? UIColorFromRGB(color_primary_red) : UIColorFromRGB(color_route_button_inactive);
+            hasSelection ? UIColorFromRGB(color_primary_red) : UIColorFromRGB(color_button_gray_background);
     [self.deleteButton setTintColor:hasSelection ? UIColor.whiteColor : UIColorFromRGB(color_text_footer)];
     [self.deleteButton setUserInteractionEnabled:hasSelection];
 

@@ -428,11 +428,6 @@ static const NSInteger sectionCount = 2;
     }
 }
 
-- (IBAction) onLeftNavbarButtonPressed:(id)sender;
-{
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
 - (IBAction) donationSettingsClicked:(id)sender
 {
     OADonationSettingsViewController *donationController = [[OADonationSettingsViewController alloc] init];

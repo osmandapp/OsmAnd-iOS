@@ -57,11 +57,13 @@
     self.tableView.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
     self.tableView.tableHeaderView =
             [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"weather_generates_new_forecast_description")
-                                                 font:[UIFont scaledSystemFontOfSize:13.]
+                                                 font:kHeaderDescriptionFont
                                             textColor:UIColorFromRGB(color_text_footer)
-                                          lineSpacing:0.0
-                                              isTitle:NO
-                                                    y:24.];
+                                           isBigTitle:NO
+                                            topOffset:24.
+                                         bottomOffset:12.
+                                        rightIconName:nil
+                                            tintColor:nil];
 }
 
 #pragma mark - Base UI

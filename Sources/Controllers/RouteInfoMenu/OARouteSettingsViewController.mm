@@ -69,11 +69,6 @@
     [self.tableView reloadData];
 }
 
-- (void)onLeftNavbarButtonPressed:(id)sender
-{
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
-
 - (void)doneButtonPressed
 {
     [self dismissViewControllerAnimated:YES completion:nil];

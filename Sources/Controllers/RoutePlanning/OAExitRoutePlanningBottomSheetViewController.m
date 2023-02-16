@@ -106,7 +106,7 @@
     [_data addObject: @{
         @"type" : [OAFilledButtonCell getCellIdentifier],
         @"title" : OALocalizedString(@"shared_string_exit"),
-        @"buttonColor" : UIColorFromRGB(color_route_button_inactive),
+        @"buttonColor" : UIColorFromRGB(color_button_gray_background),
         @"textColor" : UIColorFromRGB(color_primary_purple),
         @"action": @"exitButtonPressed"
     }];

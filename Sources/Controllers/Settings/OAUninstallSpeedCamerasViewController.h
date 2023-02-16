@@ -6,15 +6,14 @@
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
-#import "OABaseSettingsWithBottomButtonsViewController.h"
-#import "OAGlobalSettingsViewController.h"
-
+#import "OABaseButtonsViewController.h"
+\
 @protocol OAUninstallSpeedCamerasDelegate <NSObject>
 
 - (void)onUninstallSpeedCameras;
 
 @end
-@interface OAUninstallSpeedCamerasViewController : OABaseSettingsWithBottomButtonsViewController
+@interface OAUninstallSpeedCamerasViewController : OABaseButtonsViewController
 
 @property (nonatomic, weak) id<OAUninstallSpeedCamerasDelegate> delegate;
 

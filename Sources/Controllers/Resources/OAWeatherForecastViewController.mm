@@ -644,7 +644,7 @@
     [_regionsOtherCountries sortUsingComparator:_regionsComparator];
 }
 
-- (IBAction)onLeftNavbarButtonPressed:(id)sender
+- (void)onLeftNavbarButtonPressed
 {
     if (_editMode)
     {

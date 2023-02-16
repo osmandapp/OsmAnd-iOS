@@ -10,26 +10,20 @@
 #import "OAUtilities.h"
 #import "OASizes.h"
 #import "OAColors.h"
+#import "Localization.h"
 
 @interface OABaseNavbarViewController ()
 
 @property (weak, nonatomic) IBOutlet UIView *navbarBackgroundView;
 @property (weak, nonatomic) IBOutlet UIStackView *navbarStackView;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *navbarStackViewEstimatedHeightConstraint;
-@property (weak, nonatomic) IBOutlet UIView *leftNavbarMarginView;
-@property (weak, nonatomic) IBOutlet UIView *rightNavbarMarginView;
-
-@property (weak, nonatomic) IBOutlet UIStackView *leftNavbarButtonStackView;
-@property (weak, nonatomic) IBOutlet UIView *leftNavbarButtonMarginView;
-
-@property (weak, nonatomic) IBOutlet UIStackView *rightNavbarButtonStackView;
-@property (weak, nonatomic) IBOutlet UIView *rightNavbarButtonMarginView;
 
 @end
 
 @implementation OABaseNavbarViewController
 {
     BOOL _isHeaderBlurred;
+    BOOL _isRotating;
 }
 
 #pragma mark - Initialization
@@ -61,31 +55,43 @@
 
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    self.tableView.backgroundColor = UIColorFromRGB(color_primary_table_background);
 
     [self setupNavbarButtons];
     [self setupNavbarFonts];
     [self updateNavbarStackViewEstimatedHeight];
+    [self setupTableHeaderView];
     self.titleLabel.textColor = [self getTitleColor];
 
     NSString *title = [self getTitle];
     self.titleLabel.hidden = !title || title.length == 0;
     NSString *subtitle = [self getSubtitle];
     self.subtitleLabel.hidden = !subtitle || subtitle.length == 0;
-    self.separatorNavbarView.hidden = ![self isNavbarSeparatorVisible];
-    self.navbarBackgroundView.backgroundColor = [self getNavbarColor];
+    self.separatorNavbarView.hidden = ![self isNavbarSeparatorVisible] && ![self isTableHeaderHasHiddenSeparator];
+    self.navbarBackgroundView.backgroundColor = [self getNavbarBackgroundColor];
+
+    if ([self getTableHeaderMode] == EOABaseTableHeaderModeBigTitle)
+    {
+        self.titleLabel.alpha = 0.;
+        self.subtitleLabel.alpha = 0.;
+        self.separatorNavbarView.alpha = 0.;
+    }
 
     [self generateData];
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
+    _isRotating = YES;
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
         [self updateNavbarStackViewEstimatedHeight];
-        [self updateNavbarEstimatedHeight];
+        [self setupTableHeaderView];
         [self onRotation];
         [self.tableView reloadData];
-    } completion:nil];
+    } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        _isRotating = NO;
+    }];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle
@@ -120,17 +126,11 @@
     self.leftNavbarButton.titleEdgeInsets = UIEdgeInsetsMake(0., isChevronIconVisible ? -10. : 0., 0., 0.);
 
     NSString *leftNavbarButtonTitle = [self getLeftNavbarButtonTitle];
-    BOOL hasLeftButton = (leftNavbarButtonTitle && leftNavbarButtonTitle.length > 0) || isChevronIconVisible;
-    self.leftNavbarButton.hidden = !hasLeftButton;
-    self.leftNavbarButtonMarginView.hidden = !hasLeftButton || isChevronIconVisible;
-
     NSString *rightNavbarButtonTitle = [self getRightNavbarButtonTitle];
+    BOOL hasLeftButton = (leftNavbarButtonTitle && leftNavbarButtonTitle.length > 0) || isChevronIconVisible;
     BOOL hasRightButton = rightNavbarButtonTitle && rightNavbarButtonTitle.length > 0;
-    self.rightNavbarButton.hidden = !hasRightButton;
-    self.rightNavbarButtonMarginView.hidden = !hasRightButton;
-
-    self.leftNavbarButtonStackView.hidden = !hasLeftButton && !hasRightButton;
-    self.rightNavbarButtonStackView.hidden = !hasLeftButton && !hasRightButton;
+    self.leftNavbarButton.hidden = !hasLeftButton && !hasRightButton;
+    self.rightNavbarButton.hidden = !hasLeftButton && !hasRightButton;
 }
 
 - (void)setupNavbarFonts
@@ -139,6 +139,27 @@
     self.rightNavbarButton.titleLabel.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightSemibold maximumSize:22.];
     self.titleLabel.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightSemibold maximumSize:22.];
     self.subtitleLabel.font = [UIFont scaledSystemFontOfSize:13. weight:UIFontWeightSemibold maximumSize:18.];
+}
+
+- (void)setupTableHeaderView
+{
+    EOABaseTableHeaderMode mode = [self getTableHeaderMode];
+    UIView *tableHeaderView;
+    if (mode != EOABaseTableHeaderModeNone)
+    {
+        BOOL isBigTitle = mode == EOABaseTableHeaderModeBigTitle;
+        tableHeaderView = [OAUtilities setupTableHeaderViewWithText:isBigTitle ? [self getTitle] : [self getTableHeaderDescription]
+                                                               font:isBigTitle ? kHeaderBigTitleFont : kHeaderDescriptionFont
+                                                          textColor:isBigTitle ? UIColor.blackColor : UIColorFromRGB(color_text_footer)
+                                                        isBigTitle:isBigTitle];
+        if ([self isTableHeaderHasHiddenSeparator])
+        {
+            UIView *separator = [[UIView alloc] initWithFrame:CGRectMake(0., tableHeaderView.layer.frame.size.height - 1., DeviceScreenWidth, 1.)];
+            separator.backgroundColor = UIColorFromRGB(color_tint_gray);
+            [tableHeaderView addSubview:separator];
+        }
+    }
+    self.tableView.tableHeaderView = tableHeaderView;
 }
 
 - (CGFloat)getNavbarHeight
@@ -174,26 +195,25 @@
     self.tableView.contentOffset = CGPointMake(0., -[self getNavbarHeight]);
 }
 
-- (UIColor *)getNavbarColor
+- (void)addAccessibilityLabels
 {
+    self.leftNavbarButton.accessibilityLabel = OALocalizedString(@"shared_string_back");
+}
+
+- (UIColor *)getNavbarBackgroundColor
+{
+    if ([self getTableHeaderMode] == EOABaseTableHeaderModeBigTitle)
+        return UIColorFromRGB(color_primary_table_background);
+
     EOABaseNavbarColorScheme colorScheme = [self getNavbarColorScheme];
     switch (colorScheme)
     {
         case EOABaseNavbarColorSchemeOrange:
-        {
             return UIColorFromRGB(color_primary_orange_navbar_background);
-            break;
-        }
         case EOABaseNavbarColorSchemeWhite:
-        {
             return UIColor.whiteColor;
-            break;
-        }
         default:
-        {
             return UIColorFromRGB(color_primary_gray_navbar_background);
-            break;
-        }
     }
 }
 
@@ -247,6 +267,21 @@
 - (BOOL)isNavbarBlurring
 {
     return [self getNavbarColorScheme] != EOABaseNavbarColorSchemeOrange;
+}
+
+- (EOABaseTableHeaderMode)getTableHeaderMode
+{
+    return EOABaseTableHeaderModeNone;
+}
+
+- (NSString *)getTableHeaderDescription
+{
+    return @"";
+}
+
+- (BOOL)isTableHeaderHasHiddenSeparator
+{
+    return NO;
 }
 
 #pragma mark - Table data
@@ -309,16 +344,24 @@
 {
 }
 
+#pragma mark - IBAction
+
+- (IBAction)onRightNavbarButtonPressed:(UIButton *)sender
+{
+    [self onRightNavbarButtonPressed];
+}
+
 #pragma mark - Selectors
 
-- (IBAction)onLeftNavbarButtonPressed:(UIButton *)sender
+- (void)onRightNavbarButtonPressed
 {
     [self dismissViewController];
 }
 
-- (IBAction)onRightNavbarButtonPressed:(UIButton *)sender
+- (void)onContentSizeChanged:(NSNotification *)notification
 {
-    [self dismissViewController];
+    [super onContentSizeChanged:notification];
+    [self setupTableHeaderView];
 }
 
 - (void)onScrollViewDidScroll:(UIScrollView *)scrollView
@@ -333,24 +376,74 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    if ([self isScreenLoaded])
+    if (!_isRotating && [self isScreenLoaded])
     {
         if ([self isNavbarBlurring])
         {
             CGFloat y = scrollView.contentOffset.y + [self getNavbarHeight];
-            if (!_isHeaderBlurred && y > 0)
+            CGFloat tableHeaderHeight = self.tableView.tableHeaderView.frame.size.height;
+            BOOL isBigTitle = [self getTableHeaderMode] == EOABaseTableHeaderModeBigTitle;
+            if (y > 0)
             {
-                [UIView animateWithDuration:.2 animations:^{
-                    [self.navbarBackgroundView addBlurEffect:YES cornerRadius:0. padding:0.];
-                    _isHeaderBlurred = YES;
-                }];
+                if (!_isHeaderBlurred)
+                {
+                    [UIView animateWithDuration:.2 animations:^{
+                        [self.navbarBackgroundView addBlurEffect:YES cornerRadius:0. padding:0.];
+                        _isHeaderBlurred = YES;
+                    }];
+                }
+                else if (isBigTitle)
+                {
+                    if (y > tableHeaderHeight * .75)
+                    {
+                        if (self.titleLabel.alpha == 0.)
+                        {
+                            [UIView animateWithDuration:.2 animations:^{
+                                self.titleLabel.alpha = 1.;
+                                if (!self.subtitleLabel.hidden)
+                                    self.subtitleLabel.alpha = 1.;
+                            }];
+                        }
+                        BOOL needToHideSeparator = y <= tableHeaderHeight && self.separatorNavbarView.alpha == 1.;
+                        BOOL needToShowSeparator = y >= tableHeaderHeight && self.separatorNavbarView.alpha == 0.;
+                        if ([self isTableHeaderHasHiddenSeparator] && (needToHideSeparator || needToShowSeparator))
+                            self.separatorNavbarView.alpha = needToHideSeparator ? 0. : 1.;
+                    }
+                    else if (y < tableHeaderHeight * .75 && self.titleLabel.alpha == 1.)
+                    {
+                        [UIView animateWithDuration:.2 animations:^{
+                            self.titleLabel.alpha = 0.;
+                            if (!self.subtitleLabel.hidden)
+                                self.subtitleLabel.alpha = 0.;
+                        }];
+                    }
+                }
             }
-            else if (_isHeaderBlurred && y <= 0)
+            else if (y <= 0)
             {
-                [UIView animateWithDuration:.2 animations:^{
-                    [self.navbarBackgroundView removeBlurEffect:[self getNavbarColor]];
-                    _isHeaderBlurred = NO;
-                }];
+                if (isBigTitle)
+                {
+                    BOOL isTitleLabelHidden = self.titleLabel.alpha == 0.;
+                    BOOL isSeparatorHidden = self.separatorNavbarView.hidden;
+                    if (!isTitleLabelHidden)
+                    {
+                        [UIView animateWithDuration:.2 animations:^{
+                            self.titleLabel.alpha = 0.;
+                            if (!self.subtitleLabel.hidden)
+                                self.subtitleLabel.alpha = 0.;
+                        }];
+                    }
+                    if (!isSeparatorHidden)
+                        self.separatorNavbarView.alpha = 0.;
+                }
+
+                if (_isHeaderBlurred)
+                {
+                    [UIView animateWithDuration:.2 animations:^{
+                        [self.navbarBackgroundView removeBlurEffect:[self getNavbarBackgroundColor]];
+                        _isHeaderBlurred = NO;
+                    }];
+                }
             }
         }
 

@@ -69,7 +69,7 @@
 {
     self.titleLabel.text = OALocalizedString(@"cloud_recent_changes");
     [self.segmentControl setTitle:OALocalizedString(@"download_tab_local") forSegmentAtIndex:EOARecentChangesLocal];
-    [self.segmentControl setTitle:OALocalizedString(@"shared_string_file_cloud") forSegmentAtIndex:EOARecentChangesRemote];
+    [self.segmentControl setTitle:OALocalizedString(@"shared_string_cloud") forSegmentAtIndex:EOARecentChangesRemote];
     [self.segmentControl setTitle:OALocalizedString(@"cloud_conflicts") forSegmentAtIndex:EOARecentChangesConflicts];
 }
 
@@ -80,8 +80,10 @@
     UIImage *backImage = [UIImage templateImageNamed:@"ic_navbar_chevron"];
     [self.backButton setImage:[self.backButton isDirectionRTL] ? backImage.imageFlippedForRightToLeftLayoutDirection : backImage
                      forState:UIControlStateNormal];
-    [_segmentControl setTitleTextAttributes:@{NSForegroundColorAttributeName : UIColor.whiteColor} forState:UIControlStateNormal];
-    [_segmentControl setTitleTextAttributes:@{NSForegroundColorAttributeName : UIColor.blackColor} forState:UIControlStateSelected];
+    [_segmentControl setTitleTextAttributes:@{ NSForegroundColorAttributeName : UIColor.whiteColor,
+                                               NSFontAttributeName : [UIFont scaledSystemFontOfSize:14.] } forState:UIControlStateNormal];
+    [_segmentControl setTitleTextAttributes:@{ NSForegroundColorAttributeName : UIColor.blackColor,
+                                               NSFontAttributeName : [UIFont scaledSystemFontOfSize:14.] } forState:UIControlStateSelected];
 }
 
 - (void)setupNotificationListeners

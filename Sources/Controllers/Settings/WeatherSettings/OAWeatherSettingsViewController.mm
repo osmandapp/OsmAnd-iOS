@@ -18,7 +18,7 @@
 #import "OAWeatherBand.h"
 #import "OAWeatherHelper.h"
 
-@interface OAWeatherSettingsViewController () <OAWeatherBandSettingsDelegate, OAWeatherCacheSettingsDelegate, UITableViewDelegate, UITableViewDataSource>
+@interface OAWeatherSettingsViewController () <OAWeatherBandSettingsDelegate, OAWeatherCacheSettingsDelegate>
 
 @end
 
@@ -31,30 +31,14 @@
     NSIndexPath *_useOfflineDataIndexPath;
 }
 
-- (instancetype)init
-{
-    self = [super initWithNibName:@"OABaseSettingsViewController" bundle:nil];
-    return self;
-}
+#pragma mark - Initialization
 
-- (void)applyLocalization
+- (void)commonInit
 {
-    [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"weather_plugin");
-    self.subtitleLabel.text = OALocalizedString(@"shared_string_settings");
-}
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
     _weatherHelper = [OAWeatherHelper sharedInstance];
-
-    self.tableView.dataSource = self;
-    self.tableView.delegate = self;
-    self.tableView.estimatedRowHeight = kEstimatedRowHeight;
-
-    [self setupView];
 }
+
+#pragma mark - UIViewController
 
 - (void)viewDidAppear:(BOOL)animated
 {
@@ -64,33 +48,19 @@
     }];
 }
 
-- (void)updateCacheSize:(BOOL)localData onComplete:(void (^)())onComplete
+#pragma mark - Base UI
+
+- (NSString *)getTitle
 {
-    if ((localData && _useOfflineDataIndexPath) || (!localData && _onlineDataIndexPath))
-    {
-        [_weatherHelper calculateFullCacheSize:localData onComplete:^(unsigned long long dbsSize)
-        {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                NSMutableArray<NSDictionary *> *cells = _data[localData ? _useOfflineDataIndexPath.section : _onlineDataIndexPath.section][@"cells"];
-                NSString *sizeString = [NSByteCountFormatter stringFromByteCount:dbsSize countStyle:NSByteCountFormatterCountStyleFile];
-                cells[localData ? _useOfflineDataIndexPath.row : _onlineDataIndexPath.row] = @{
-                        @"key": localData ? @"offline_forecast" : @"online_cache",
-                        @"title": OALocalizedString(localData ? @"weather_offline_forecast" : @"shared_string_online_cache"),
-                        @"value": sizeString,
-                        @"type": [OAValueTableViewCell getCellIdentifier]
-                };
-
-                [self.tableView reloadRowsAtIndexPaths:@[localData ? _useOfflineDataIndexPath : _onlineDataIndexPath]
-                                      withRowAnimation:UITableViewRowAnimationNone];
-
-                if (onComplete)
-                    onComplete();
-            });
-        }];
-    }
+    return OALocalizedString(@"weather_plugin");
 }
 
-- (void)setupView
+- (NSString *)getSubtitle
+{
+    return OALocalizedString(@"shared_string_settings");
+}
+
+- (void)generateData
 {
     NSMutableArray<NSDictionary *> *data = [NSMutableArray array];
 
@@ -122,7 +92,7 @@
 
     NSMutableArray<NSDictionary *> *cacheData = [NSMutableArray array];
     [data addObject:@{
-            @"header": OALocalizedString(@"shared_string_data"),
+            @"header": OALocalizedString(@"data_settings"),
             @"cells": cacheData,
             @"footer": OALocalizedString(@"weather_data_provider")
     }];
@@ -133,7 +103,7 @@
             : OALocalizedString(@"calculating_progress");
     [cacheData addObject:@{
             @"key": @"online_cache",
-            @"title": OALocalizedString(@"shared_string_online_cache"),
+            @"title": OALocalizedString(@"weather_online_cache"),
             @"value": onlineCacheSizeString,
             @"type": [OAValueTableViewCell getCellIdentifier]
     }];
@@ -159,36 +129,27 @@
     return _data[indexPath.section][@"cells"][indexPath.row];
 }
 
-#pragma mark - UITableViewDataSource
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+- (NSString *)getTitleForHeader:(NSInteger)section
 {
-    return _data.count;
+    return _data[section][@"header"];
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSString *)getTitleForFooter:(NSInteger)section
+{
+    return _data[section][@"footer"];
+}
+
+- (NSInteger)rowsCount:(NSInteger)section
 {
     return ((NSArray *) _data[section][@"cells"]).count;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    NSDictionary *sectionData = _data[section];
-    return sectionData[@"header"];
-}
-
-- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
-{
-    NSDictionary *sectionData = _data[section];
-    return sectionData[@"footer"];
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
     if ([item[@"type"] isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
-        OAValueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
+        OAValueTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         if (!cell)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
@@ -237,7 +198,7 @@
     }
     else if ([item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
+        OASwitchTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (!cell)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
@@ -261,9 +222,12 @@
     return nil;
 }
 
-#pragma mark - UITableViewDelegate
+- (NSInteger)sectionsCount
+{
+    return _data.count;
+}
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)onRowPressed:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
     _selectedIndexPath = indexPath;
@@ -286,8 +250,6 @@
         controller.cacheDelegate = self;
         [self presentViewController:controller animated:YES completion:nil];
     }
-
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 #pragma mark - Selectors
@@ -301,6 +263,34 @@
         NSDictionary *item = [self getItem:indexPath];
         if ([item[@"key"] isEqualToString:@"offline_forecast_only"])
             [[OsmAndApp instance].data setWeatherUseOfflineData:switchView.isOn];
+    }
+}
+
+#pragma mark - Additions
+
+- (void)updateCacheSize:(BOOL)localData onComplete:(void (^)())onComplete
+{
+    if ((localData && _useOfflineDataIndexPath) || (!localData && _onlineDataIndexPath))
+    {
+        [_weatherHelper calculateFullCacheSize:localData onComplete:^(unsigned long long dbsSize)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                NSMutableArray<NSDictionary *> *cells = _data[localData ? _useOfflineDataIndexPath.section : _onlineDataIndexPath.section][@"cells"];
+                NSString *sizeString = [NSByteCountFormatter stringFromByteCount:dbsSize countStyle:NSByteCountFormatterCountStyleFile];
+                cells[localData ? _useOfflineDataIndexPath.row : _onlineDataIndexPath.row] = @{
+                        @"key": localData ? @"offline_forecast" : @"online_cache",
+                        @"title": OALocalizedString(localData ? @"weather_offline_forecast" : @"weather_online_cache"),
+                        @"value": sizeString,
+                        @"type": [OAValueTableViewCell getCellIdentifier]
+                };
+
+                [self.tableView reloadRowsAtIndexPaths:@[localData ? _useOfflineDataIndexPath : _onlineDataIndexPath]
+                                      withRowAnimation:UITableViewRowAnimationNone];
+
+                if (onComplete)
+                    onComplete();
+            });
+        }];
     }
 }
 

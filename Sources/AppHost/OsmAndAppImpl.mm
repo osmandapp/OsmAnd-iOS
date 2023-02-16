@@ -256,7 +256,7 @@
     OpeningHoursParser::setLocalizedMonths([OAExternalTimeFormatter getLocalizedMonths]);
     
     OpeningHoursParser::setAdditionalString("off", [OALocalizedString(@"day_off_label") UTF8String]);
-    OpeningHoursParser::setAdditionalString("is_open", [OALocalizedString(@"time_open") UTF8String]);
+    OpeningHoursParser::setAdditionalString("is_open", [OALocalizedString(@"shared_string_open") UTF8String]);
     OpeningHoursParser::setAdditionalString("is_open_24_7", [OALocalizedString(@"shared_string_is_open_24_7") UTF8String]);
     OpeningHoursParser::setAdditionalString("will_open_at", [OALocalizedString(@"will_open_at") UTF8String]);
     OpeningHoursParser::setAdditionalString("open_from", [OALocalizedString(@"open_from") UTF8String]);
@@ -315,6 +315,7 @@
     BOOL resetSettings = [defaults boolForKey:@"reset_settings"];
     BOOL resetRouting = [defaults boolForKey:@"reset_routing"];
     OAAppSettings *settings = [OAAppSettings sharedManager];
+    [settings setDisabledTypes:[settings.speedCamerasUninstalled get] ? [NSSet setWithObject:SPEED_CAMERA] : [NSSet set]];
     if (hideAllGPX)
     {
         [settings.mapSettingVisibleGpx set:@[]];

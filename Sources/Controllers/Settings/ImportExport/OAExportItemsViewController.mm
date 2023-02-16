@@ -181,7 +181,7 @@
 - (void)updateFileSize
 {
     _itemsSize = [self calculateItemsSize:self.getSelectedItems];
-    _fileSize = [NSString stringWithFormat:OALocalizedString(@"approximate_file_size"), [NSByteCountFormatter stringFromByteCount:_itemsSize countStyle:NSByteCountFormatterCountStyleFile]];
+    _fileSize = [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"approximate_file_size"), [NSByteCountFormatter stringFromByteCount:_itemsSize countStyle:NSByteCountFormatterCountStyleFile]];
 }
 
 - (IBAction)primaryButtonPressed:(id)sender
@@ -202,7 +202,7 @@
         NSMutableAttributedString *headerFileSizeText = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"\n%@", _fileSize] attributes:@{NSForegroundColorAttributeName: colorFileSize}];
         [newHeaderText appendAttributedString:headerFileSizeText];
         headerLabel.attributedText = newHeaderText;
-        headerLabel.font = [UIFont systemFontOfSize:15];
+        headerLabel.font = [UIFont scaledSystemFontOfSize:15];
         return customHeader;
     }
     return nil;

@@ -179,7 +179,7 @@ typedef NS_ENUM(NSInteger, EOASortType)
     if (!ungroupedFavorites.isEmpty())
     {
         FavTableGroup* itemData = [[FavTableGroup alloc] init];
-        itemData.groupName = OALocalizedString(@"favorites");
+        itemData.groupName = OALocalizedString(@"favorites_item");
         
         for (const auto& favorite : ungroupedFavorites)
         {
@@ -349,7 +349,7 @@ typedef NS_ENUM(NSInteger, EOASortType)
                 {
                     OAPointTableViewCell *c = (OAPointTableViewCell *)cell;
                     
-                    NSString *title = item.destination.desc ? item.destination.desc : OALocalizedString(@"ctx_mnu_direction");
+                    NSString *title = item.destination.desc ? item.destination.desc : OALocalizedString(@"map_marker");
                     NSString *imageName = [item.destination.markerResourceName ? item.destination.markerResourceName : @"ic_destination_pin_1" stringByAppendingString:@"_small"];
                     
                     [c.titleView setText:title];
@@ -414,11 +414,6 @@ typedef NS_ENUM(NSInteger, EOASortType)
     _tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     
     [_tableView reloadData];
-}
-
-- (void)backButtonClicked:(id)sender
-{
-    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (IBAction)sortButtonPressed:(id)sender
@@ -524,7 +519,7 @@ typedef NS_ENUM(NSInteger, EOASortType)
         OADestinationItem* item = _destinationItems[indexPath.row];
         if (item)
         {
-            NSString *title = item.destination.desc ? item.destination.desc : OALocalizedString(@"ctx_mnu_direction");
+            NSString *title = item.destination.desc ? item.destination.desc : OALocalizedString(@"map_marker");
             NSString *imageName = [item.destination.markerResourceName ? item.destination.markerResourceName : @"ic_destination_pin_1" stringByAppendingString:@"_small"];
             
             [cell.titleView setText:title];

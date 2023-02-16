@@ -88,7 +88,7 @@
 - (void) applyLocalization
 {
     [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"save_new_track");
+    self.titleLabel.text = OALocalizedString(@"save_as_new_track");
     [self.cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
     [self.saveButton setTitle:OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
 }
@@ -97,7 +97,7 @@
 {
     NSString *folderName = [filePath stringByDeletingLastPathComponent];
     if (folderName.length == 0)
-        return OALocalizedString(@"tracks");
+        return OALocalizedString(@"shared_string_gpx_tracks");
     else
         return folderName;
 }
@@ -157,7 +157,7 @@
         @{
             @"type" : [OATextMultilineTableViewCell getCellIdentifier],
             @"fileName" : _fileName,
-            @"header" : OALocalizedString(@"fav_name"),
+            @"header" : OALocalizedString(@"shared_string_name"),
             @"key" : @"input_name",
         }
     ]];
@@ -192,7 +192,7 @@
     [data addObject:@[
         @{
             @"type" : [OASwitchTableViewCell getCellIdentifier],
-            @"title" : OALocalizedString(@"map_settings_show"),
+            @"title" : OALocalizedString(@"shared_string_show_on_map"),
             @"key" : @"map_settings_show"
         }
     ]];
@@ -256,7 +256,7 @@
     {        
         [self dismissViewControllerAnimated:NO completion:nil];
         NSString *savingPath;
-        if ([_selectedFolderName isEqualToString:OALocalizedString(@"tracks")])
+        if ([_selectedFolderName isEqualToString:OALocalizedString(@"shared_string_gpx_tracks")])
             savingPath = _fileName;
         else
             savingPath = [_selectedFolderName stringByAppendingPathComponent:_fileName];
@@ -331,7 +331,7 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
-            cell.descriptionView.font = [UIFont systemFontOfSize:17.0];
+            cell.descriptionView.font = [UIFont scaledSystemFontOfSize:17.0];
             cell.descriptionView.numberOfLines = 1;
             cell.iconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
             cell.iconView.tintColor = UIColorFromRGB(color_tint_gray);
@@ -531,7 +531,7 @@
 - (BOOL) isFileExist:(NSString *)name
 {
     NSString *folderPath = OsmAndApp.instance.gpxPath;
-    if (_selectedFolderName.length > 0 && ![_selectedFolderName isEqualToString:OALocalizedString(@"tracks")])
+    if (_selectedFolderName.length > 0 && ![_selectedFolderName isEqualToString:OALocalizedString(@"shared_string_gpx_tracks")])
         folderPath = [folderPath stringByAppendingPathComponent:_selectedFolderName];
         
     NSString *filePath = [[folderPath stringByAppendingPathComponent:name] stringByAppendingPathExtension:@"gpx"];
@@ -552,11 +552,9 @@
 
 - (CGFloat)getModalPresentationOffset:(BOOL)keyboardShown
 {
-    CGFloat modalOffset = 0;
-    if (@available(iOS 13.0, *)) {
-        // accounts for additional top offset in modal presentation 
-        modalOffset = keyboardShown ? 6. : 10.;
-    }
+    // accounts for additional top offset in modal presentation
+    CGFloat modalOffset = modalOffset = keyboardShown ? 6. : 10.;;
+
     return modalOffset;
 }
 

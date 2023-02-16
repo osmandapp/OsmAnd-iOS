@@ -7,130 +7,270 @@
 //
 
 #import "OAArrivalAnnouncementViewController.h"
-#import "OASettingsTitleTableViewCell.h"
+#import "OARightIconTableViewCell.h"
+#import "OATextMultilineTableViewCell.h"
+#import "OATableDataModel.h"
+#import "OATableSectionData.h"
+#import "OATableRowData.h"
+#import "OATableCollapsableRowData.h"
+#import "OAAnnounceTimeDistances.h"
 #import "OAAppSettings.h"
 #import "OAApplicationMode.h"
-
 #import "Localization.h"
 #import "OAColors.h"
 
-#define kSidePadding 16
-
-@interface OAArrivalAnnouncementViewController () <UITableViewDelegate, UITableViewDataSource>
-
-@end
+#define kSidePadding 20.
 
 @implementation OAArrivalAnnouncementViewController
 {
     OAAppSettings *_settings;
-    NSArray<NSArray *> *_data;
+    OAAnnounceTimeDistances *_announceTimeDistances;
+    OATableDataModel *_data;
+    NSIndexPath *_selectedIndexPath;
+    NSIndexPath *_collapsedCellIndexPath;
 }
 
-- (instancetype) initWithAppMode:(OAApplicationMode *)appMode
+#pragma mark - Initialization
+
+- (void)commonInit
 {
-    self = [super initWithAppMode:appMode];
-    if (self)
-    {
-        _settings = [OAAppSettings sharedManager];
-        [self generateData];
-    }
-    return self;
+    _settings = [OAAppSettings sharedManager];
 }
 
-- (void) generateData
+- (void)postInit
 {
-    NSMutableArray *dataArr = [NSMutableArray array];
-    NSArray<NSNumber *> *arrivalNames =  @[ OALocalizedString(@"arrival_distance_factor_early"),
-        OALocalizedString(@"arrival_distance_factor_normally"),
-        OALocalizedString(@"arrival_distance_factor_late"),
-        OALocalizedString(@"arrival_distance_factor_at_last") ];
-    NSArray<NSNumber *> *arrivalValues = @[ @1.5f, @1.f, @0.5f, @0.25f ];
-    double selectedValue = [_settings.arrivalDistanceFactor get:self.appMode];
-    for (int i = 0; i < arrivalNames.count; i++)
-    {
-        [dataArr addObject:
-         @{
-           @"name" : arrivalValues[i],
-           @"title" : arrivalNames[i],
-           @"isSelected" : @(arrivalValues[i].doubleValue == selectedValue),
-           @"type" : [OASettingsTitleTableViewCell getCellIdentifier]
-         }];
-    }
-    _data = [NSArray arrayWithObject:dataArr];
+    _announceTimeDistances = [[OAAnnounceTimeDistances alloc] initWithAppMode:self.appMode];
 }
 
--(void) applyLocalization
-{
-    [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"arrival_distance");
-}
+#pragma mark - UIViewController
 
 - (void) viewDidLoad
 {
     [super viewDidLoad];
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    [self setupTableHeaderViewWithText:OALocalizedString(@"arrival_announcement_frequency")];
+
+    [self setupTableHeaderViewWithText:OALocalizedString(@"announcement_time_descr")];
 }
 
-- (void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+#pragma mark - Base UI
+
+- (NSString *)getTitle
 {
-    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        [self setupTableHeaderViewWithText:OALocalizedString(@"arrival_announcement_frequency")];
-        [self.tableView reloadData];
-    } completion:nil];
+    return OALocalizedString(@"arrival_distance");
 }
 
-#pragma mark - TableView
+#pragma mark - Table data
 
-- (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
-    NSDictionary *item = _data[indexPath.section][indexPath.row];
-    NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:[OASettingsTitleTableViewCell getCellIdentifier]])
+- (void) generateData
+{
+    _data = [OATableDataModel model];
+
+    OATableSectionData *arrivalSection = [OATableSectionData sectionData];
+    [_data addSection:arrivalSection];
+
+    double selectedValue = [_settings.arrivalDistanceFactor get:self.appMode];
+    NSArray<NSNumber *> *arrivalValues = @[ @1.5f, @1.f, @0.5f, @0.25f ];
+    NSArray<NSString *> *arrivalNames =  @[
+        OALocalizedString(@"arrival_distance_factor_early"),
+        OALocalizedString(@"arrival_distance_factor_normally"),
+        OALocalizedString(@"arrival_distance_factor_late"),
+        OALocalizedString(@"arrival_distance_factor_at_last")];
+
+    for (int i = 0; i < arrivalNames.count; i++)
     {
-        OASettingsTitleTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTitleTableViewCell getCellIdentifier]];
+        NSNumber *value = arrivalValues[i];
+        [arrivalSection addRowFromDictionary:@{
+            kCellTypeKey : [OARightIconTableViewCell getCellIdentifier],
+            kCellTitleKey : arrivalNames[i],
+            @"value" : value
+        }];
+        if (value.doubleValue == selectedValue)
+            _selectedIndexPath = [NSIndexPath indexPathForRow:i inSection:[_data sectionCount] - 1];
+    }
+
+    OATableSectionData *infoSection = [OATableSectionData sectionData];
+    [_data addSection:infoSection];
+
+    OATableCollapsableRowData *infoCollapsableRow = [[OATableCollapsableRowData alloc] initWithData:@{
+        kCellKeyKey : @"infoCollapsableCell",
+        kCellTypeKey : [OARightIconTableViewCell getCellIdentifier],
+        kCellTitleKey : OALocalizedString(@"announcement_time_intervals")
+    }];
+    [infoSection addRow:infoCollapsableRow];
+    _collapsedCellIndexPath = [NSIndexPath indexPathForRow:[infoSection rowCount] - 1 inSection:[_data sectionCount] - 1];
+
+    [infoCollapsableRow addDependentRow:[[OATableRowData alloc] initWithData:@{
+        kCellTypeKey : [OATextMultilineTableViewCell getCellIdentifier]
+    }]];
+}
+
+- (NSInteger)rowsCount:(NSInteger)section
+{
+    return [_data rowCount:section];
+}
+
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
+{
+    OATableRowData *item = [_data itemForIndexPath:indexPath];
+    if ([item.cellType isEqualToString:[OARightIconTableViewCell getCellIdentifier]])
+    {
+        OARightIconTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTitleTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASettingsTitleTableViewCell *)[nib objectAtIndex:0];
-            cell.iconView.image = [UIImage templateImageNamed:@"ic_checkmark_default"];
-            cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OARightIconTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
+            cell.rightIconView.tintColor = UIColorFromRGB(color_primary_purple);
         }
         if (cell)
         {
-            cell.textView.text = item[@"title"];
-            cell.iconView.hidden = ![item[@"isSelected"] boolValue];
+            if (item.rowType == EOATableRowTypeCollapsable)
+                cell.rightIconView.image = [UIImage templateImageNamed:((OATableCollapsableRowData *) item).collapsed ? @"ic_custom_arrow_right" : @"ic_custom_arrow_down"];
+            else
+                cell.rightIconView.image = _selectedIndexPath == indexPath ? [UIImage templateImageNamed:@"ic_checkmark_default"] : nil;
+
+            cell.titleLabel.text = item.title;
+        }
+        return cell;
+    }
+    else if ([item.cellType isEqualToString:[OATextMultilineTableViewCell getCellIdentifier]])
+    {
+        OATextMultilineTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OATextMultilineTableViewCell getCellIdentifier]];
+        if (!cell)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextMultilineTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OATextMultilineTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell clearButtonVisibility:NO];
+        }
+        if (cell)
+        {
+            cell.textView.attributedText = [_announceTimeDistances getIntervalsDescription];
         }
         return cell;
     }
     return nil;
 }
 
-- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+- (NSInteger)sectionsCount
 {
-    return 17.0;
+    return [_data sectionCount];
 }
 
-- (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return _data[section].count;
+- (void)onRowPressed:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == _selectedIndexPath.section)
+    {
+        NSIndexPath *oldSelectedIndexPath = _selectedIndexPath;
+        _selectedIndexPath = indexPath;
+        [self updateArrivalDistanceFactorValue];
+        [_announceTimeDistances setArrivalDistances:[_settings.arrivalDistanceFactor get:self.appMode]];
+        NSMutableArray<NSIndexPath *> *indexPaths = [NSMutableArray arrayWithObjects:_selectedIndexPath, oldSelectedIndexPath, nil];
+        if (_collapsedCellIndexPath)
+        {
+            OATableCollapsableRowData *collapsableRow = (OATableCollapsableRowData *) [_data itemForIndexPath:_collapsedCellIndexPath];
+            if (!collapsableRow.collapsed)
+            {
+                for (NSInteger i = 1; i <= collapsableRow.dependentRowsCount; i++)
+                {
+                    [indexPaths addObject:[NSIndexPath indexPathForRow:(_collapsedCellIndexPath.row + i) inSection:_collapsedCellIndexPath.section]];
+                }
+            }
+        }
+        [self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
+    }
+    else if ([[_data itemForIndexPath:indexPath].key isEqualToString:@"infoCollapsableCell"])
+    {
+        [self onCollapseButtonPressed:indexPath];
+    }
 }
 
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
+#pragma mark - Selectors
+
+- (void)onRotation
 {
-    return _data.count;
+    [self setupTableHeaderViewWithText:OALocalizedString(@"announcement_time_descr")];
 }
 
-- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)updateArrivalDistanceFactorValue
 {
-    [self selectArrivalDistanceFactor:_data[indexPath.section][indexPath.row]];
-    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+    [_settings.arrivalDistanceFactor set:((NSNumber *) [[_data itemForIndexPath:_selectedIndexPath] objForKey:@"value"]).doubleValue
+                                    mode:self.appMode];
+    if (self.delegate)
+        [self.delegate onSettingsChanged];
 }
 
-- (void) selectArrivalDistanceFactor:(NSDictionary *)item
+- (void)onCollapseButtonPressed:(NSIndexPath *)indexPath
 {
-    [_settings.arrivalDistanceFactor set:((NSNumber *)item[@"name"]).doubleValue mode:self.appMode];
-    [self dismissViewController];
+    OATableRowData *item = [_data itemForIndexPath:indexPath];
+    if (item.rowType == EOATableRowTypeCollapsable)
+    {
+        [_announceTimeDistances setArrivalDistances:[_settings.arrivalDistanceFactor get:self.appMode]];
+        OATableCollapsableRowData *collapsableRow = (OATableCollapsableRowData *) [_data itemForIndexPath:indexPath];
+        collapsableRow.collapsed = !collapsableRow.collapsed;
+        NSMutableArray<NSIndexPath *> *rowIndexes = [NSMutableArray array];
+        for (NSInteger i = 1; i <= collapsableRow.dependentRowsCount; i++)
+        {
+            [rowIndexes addObject:[NSIndexPath indexPathForRow:(indexPath.row + i) inSection:indexPath.section]];
+        }
+        
+        [self.tableView performBatchUpdates:^{
+            [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+            if (collapsableRow.collapsed)
+                [self.tableView deleteRowsAtIndexPaths:rowIndexes withRowAnimation:UITableViewRowAnimationAutomatic];
+            else
+                [self.tableView insertRowsAtIndexPaths:rowIndexes withRowAnimation:UITableViewRowAnimationAutomatic];
+        } completion:nil];
+    }
+}
+
+#pragma mark - Additions
+
+- (void)setupTableHeaderViewWithText:(NSString *)text
+{
+    CGFloat textWidth = DeviceScreenWidth - (kSidePadding + [OAUtilities getLeftMargin]) * 2;
+    CGFloat textHeight = [self heightForLabel:text];
+
+    UIView *topImageDivider = [[UIView alloc] initWithFrame:CGRectMake(0., 0., DeviceScreenWidth, .5)];
+    topImageDivider.backgroundColor = UIColorFromRGB(color_tint_gray);
+
+    UIImage *image = [UIImage imageNamed:@"img_help_announcement_time_day"];
+    CGFloat aspectRatio = MIN(DeviceScreenWidth, DeviceScreenHeight) / image.size.width;
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0., 0., DeviceScreenWidth, image.size.height * aspectRatio)];
+    imageView.image = image;
+    imageView.contentMode = UIViewContentModeScaleAspectFit;
+
+    UIView *imageBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0., 0.5, DeviceScreenWidth, imageView.frame.size.height)];
+    imageBackgroundView.backgroundColor = UIColor.whiteColor;
+
+    UIView *bottomImageDivider = [[UIView alloc] initWithFrame:CGRectMake(0., imageView.frame.origin.y + imageView.frame.size.height, DeviceScreenWidth, .5)];
+    bottomImageDivider.backgroundColor = UIColorFromRGB(color_tint_gray);
+
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(kSidePadding + [OAUtilities getLeftMargin], imageView.frame.size.height + 13., textWidth, textHeight)];
+    NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+    style.minimumLineHeight = 17.;
+    label.attributedText = [[NSAttributedString alloc] initWithString:text
+                                                           attributes:@{ NSParagraphStyleAttributeName : style,
+                                                                         NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer),
+                                                                         NSFontAttributeName : [UIFont scaledSystemFontOfSize:[self fontSizeForLabel]],
+                                                                         NSBackgroundColorAttributeName : UIColor.clearColor }];
+    label.numberOfLines = 0;
+    label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+
+    CGFloat headerHeight = label.frame.origin.y + label.frame.size.height + 26.;
+    UIView *tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0., 0., DeviceScreenWidth, headerHeight)];
+    [tableHeaderView addSubview:imageBackgroundView];
+    [tableHeaderView addSubview:imageView];
+    [tableHeaderView addSubview:topImageDivider];
+    [tableHeaderView addSubview:bottomImageDivider];
+    [tableHeaderView addSubview:label];
+    tableHeaderView.backgroundColor = UIColor.clearColor;
+    self.tableView.tableHeaderView = tableHeaderView;
+}
+
+- (CGFloat)fontSizeForLabel
+{
+    return 13.;
 }
 
 @end

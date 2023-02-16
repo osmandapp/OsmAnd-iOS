@@ -333,7 +333,7 @@
     [_settings.distanceIndicationVisibility resetToDefault];
     [_settings.transparentMapTheme resetToDefault];
     [_settings.showStreetName resetToDefault];
-    [_settings.centerPositionOnMap resetToDefault];
+    [_settings.positionPlacementOnMap resetToDefault];
 }
 
 - (void) updateVisibleWidgets

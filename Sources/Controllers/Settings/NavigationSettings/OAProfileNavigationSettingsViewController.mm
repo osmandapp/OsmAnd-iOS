@@ -32,7 +32,7 @@
 
 #define kOsmAndNavigation @"osmand_navigation"
 
-@interface OAProfileNavigationSettingsViewController () <UITableViewDelegate, UITableViewDataSource, OARouteLineAppearanceViewControllerDelegate>
+@interface OAProfileNavigationSettingsViewController () <OARouteLineAppearanceViewControllerDelegate>
 
 @end
 
@@ -41,29 +41,27 @@
     NSArray<NSArray *> *_data;
     
     OAAppSettings *_settings;
-    OsmAndAppInstance _app;
     
     NSDictionary<NSString *, OARoutingProfileDataObject *> *_routingProfileDataObjects;
 }
 
-- (instancetype) initWithAppMode:(OAApplicationMode *)appMode
+#pragma mark - Initialization
+
+- (void)commonInit
 {
-    self = [super initWithAppMode:appMode];
-    if (self)
-    {
-        _settings = OAAppSettings.sharedManager;
-        _app = [OsmAndApp instance];
-        [self generateData];
-    }
-    return self;
+    _settings = [OAAppSettings sharedManager];
 }
 
-- (void) updateNavBar
+#pragma mark - Base UI
+
+- (NSString *)getTitle
 {
-    self.subtitleLabel.text = self.appMode.toHumanString;
+    return OALocalizedString(@"routing_settings_2");
 }
 
-- (void) generateData
+#pragma mark - Table data
+
+- (void)generateData
 {
     NSString *selectedProfileName = self.appMode.getRoutingProfile;
     _routingProfileDataObjects = [OAProfileDataUtils getRoutingProfiles];
@@ -88,7 +86,7 @@
     NSMutableArray *otherArr = [NSMutableArray array];
     [navigationArr addObject:@{
         @"type" : [OAIconTitleValueCell getCellIdentifier],
-        @"title" : OALocalizedString(@"nav_type_title"),
+        @"title" : OALocalizedString(@"nav_type_hint"),
         @"value" : routingData ? routingData.name : @"",
         @"icon" : routingData ? routingData.iconName : @"ic_custom_navigation",
         @"key" : @"navigationType",
@@ -136,32 +134,46 @@
     }]];
     
     _data = [NSArray arrayWithArray:tableData];
-    [self updateNavBar];
-    [self.tableView reloadData];
 }
 
-- (void) applyLocalization
+- (NSString *)getTitleForHeader:(NSInteger)section
 {
-    [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"routing_settings_2");
+    switch (section)
+    {
+        case 0:
+            return OALocalizedString(@"routing_settings");
+        case 1:
+            return OALocalizedString(@"other_location");
+        default:
+            return @"";
+    }
 }
 
-- (void) viewDidLoad
+- (NSString *)getTitleForFooter:(NSInteger)section
 {
-    [super viewDidLoad];
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    self.tableView.separatorColor = UIColorFromRGB(color_tint_gray);
+    switch (section)
+    {
+        case 1:
+            return OALocalizedString(@"change_map_behavior");
+        case 2:
+            return OALocalizedString(@"animate_my_location_descr");
+        default:
+            return @"";
+    }
 }
 
-#pragma mark - TableView
+- (NSInteger)rowsCount:(NSInteger)section
+{
+    return _data[section].count;
+}
 
-- (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
+{
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
     if ([cellType isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
     {
-        OAIconTitleValueCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
+        OAIconTitleValueCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
@@ -182,7 +194,7 @@
     }
     else if ([cellType isEqualToString:[OAIconTextTableViewCell getCellIdentifier]])
     {
-        OAIconTextTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
+        OAIconTextTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
@@ -201,7 +213,7 @@
     }
     else if ([cellType isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
+        OASwitchTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
@@ -222,7 +234,7 @@
     }
     else if ([cellType isEqualToString:[OASettingsTitleTableViewCell getCellIdentifier]])
     {
-        OASettingsTitleTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTitleTableViewCell getCellIdentifier]];
+        OASettingsTitleTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OASettingsTitleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTitleTableViewCell getCellIdentifier] owner:self options:nil];
@@ -240,7 +252,12 @@
     return nil;
 }
 
-- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (NSInteger)sectionsCount
+{
+    return _data.count;
+}
+
+- (void)onRowPressed:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *itemKey = item[@"key"];
@@ -283,54 +300,13 @@
             [self showViewController:settingsViewController];
         }
     }
-    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
-- (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return _data[section].count;
-}
+#pragma mark - Selectors
 
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
+- (void)applyParameter:(UISwitch *)sender
 {
-    return _data.count;
-}
-
-- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    switch (section)
-    {
-        case 0:
-            return OALocalizedString(@"routing_settings");
-        case 1:
-            return OALocalizedString(@"help_other_header");
-        default:
-            return @"";
-    }
-}
-
-- (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
-{
-    switch (section)
-    {
-        case 1:
-            return OALocalizedString(@"change_map_behavior");
-        case 2:
-            return OALocalizedString(@"animate_my_location_descr");
-        default:
-            return @"";
-    }
-}
-
--(void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
-{
-    UITableViewHeaderFooterView *vw = (UITableViewHeaderFooterView *) view;
-    [vw.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
-}
-
--(void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section
-{
-    UITableViewHeaderFooterView *vw = (UITableViewHeaderFooterView *) view;
-    [vw.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
+    [_settings.animateMyLocation set:sender.isOn mode:self.appMode];
 }
 
 #pragma mark - OASettingsDataDelegate
@@ -358,11 +334,6 @@
                                                                                                targetScreenKey:kNavigationSettings];
         [OARootViewController.instance.navigationController pushViewController:settingsVC animated:NO];
     }
-}
-
-- (void)applyParameter:(UISwitch *)sender
-{
-    [_settings.animateMyLocation set:sender.isOn mode:self.appMode];
 }
 
 @end

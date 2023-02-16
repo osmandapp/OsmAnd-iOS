@@ -26,7 +26,7 @@
 
 - (NSString *)getTabTitle
 {
-    return OALocalizedString(@"actions");
+    return OALocalizedString(@"shared_string_actions");
 }
 
 - (UIImage *)getTabIcon
@@ -49,7 +49,7 @@
     OAGPXTableCellData *showOnMapCellData = [OAGPXTableCellData withData:@{
             kTableKey: @"control_show_on_map",
             kCellType: [OATitleSwitchRoundCell getCellIdentifier],
-            kCellTitle: OALocalizedString(@"map_settings_show")
+            kCellTitle: OALocalizedString(@"shared_string_show_on_map")
     }];
     [controlSectionData.subjects addObject:showOnMapCellData];
 
@@ -57,7 +57,7 @@
             kTableKey: @"control_appearance",
             kCellType: [OATitleIconRoundCell getCellIdentifier],
             kCellRightIconName: @"ic_custom_appearance",
-            kCellTitle: OALocalizedString(@"map_settings_appearance")
+            kCellTitle: OALocalizedString(@"shared_string_appearance")
     }];
     [controlSectionData.subjects addObject:appearanceCellData];
 
@@ -87,9 +87,17 @@
             kTableKey: @"share",
             kCellType: [OATitleIconRoundCell getCellIdentifier],
             kCellRightIconName: @"ic_custom_export",
-            kCellTitle: OALocalizedString(@"ctx_mnu_share")
+            kCellTitle: OALocalizedString(@"shared_string_share")
     }];
     [shareSectionData.subjects addObject:shareCellData];
+    
+    OAGPXTableCellData *uploadToOSMCellData = [OAGPXTableCellData withData:@{
+            kTableKey: @"upload_to_openstreetmap",
+            kCellType: [OATitleIconRoundCell getCellIdentifier],
+            kCellRightIconName: @"ic_custom_upload_to_openstreetmap_outlined",
+            kCellTitle: OALocalizedString(@"upload_to_openstreetmap")
+    }];
+    [shareSectionData.subjects addObject:uploadToOSMCellData];
 
     OAGPXTableSectionData *editSectionData = [OAGPXTableSectionData withData:@{ kSectionHeaderHeight: @19. }];
     [self.tableData.subjects addObject:editSectionData];
@@ -120,7 +128,7 @@
             kTableKey: @"change_rename",
             kCellType: [OATitleIconRoundCell getCellIdentifier],
             kCellRightIconName: @"ic_custom_edit",
-            kCellTitle: OALocalizedString(@"gpx_rename_q")
+            kCellTitle: OALocalizedString(@"rename_track")
     }];
     [changeSectionData.subjects addObject:renameCellData];
 
@@ -129,7 +137,7 @@
             kCellType: [OATitleDescriptionIconRoundCell getCellIdentifier],
             kCellDesc: [self generateDirName],
             kCellRightIconName: @"ic_custom_folder_move",
-            kCellTitle: OALocalizedString(@"plan_route_change_folder")
+            kCellTitle: OALocalizedString(@"change_folder")
     }];
     [changeSectionData.subjects addObject:moveCellData];
 
@@ -139,7 +147,7 @@
     OAGPXTableCellData *deleteCellData = [OAGPXTableCellData withData:@{
             kTableKey: @"delete",
             kCellType: [OATitleIconRoundCell getCellIdentifier],
-            kTableValues: @{ @"font_value": [UIFont boldSystemFontOfSize:17] },
+            kTableValues: @{ @"font_value": [UIFont scaledBoldSystemFontOfSize:17] },
             kCellRightIconName: @"ic_custom_remove_outlined",
             kCellTitle: OALocalizedString(@"shared_string_delete"),
             kCellTintColor: @color_primary_red
@@ -218,6 +226,8 @@
         [self.trackMenuDelegate openMoveTrack];
     else if ([tableData.key isEqualToString:@"delete"] && self.trackMenuDelegate)
         [self.trackMenuDelegate showAlertDeleteTrack];
+    else if ([tableData.key isEqualToString:@"upload_to_openstreetmap"] && self.trackMenuDelegate)
+        [self.trackMenuDelegate openUploadGpxToOSM];
 }
 
 @end

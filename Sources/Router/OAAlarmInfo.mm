@@ -194,7 +194,7 @@
         case AIT_HAZARD:
             return OALocalizedString(@"traffic_warning_hazard");
         case AIT_TUNNEL:
-            return OALocalizedString(@"traffic_warning_tunnel");
+            return OALocalizedString(@"tunnel_warning");
         case AIT_MAXIMUM:
             return OALocalizedString(@"traffic_warning");
             

@@ -14,6 +14,7 @@
 #include <OsmAndCore/Data/Amenity.h>
 
 #define OSM_WIKI_CATEGORY @"osmwiki"
+#define SPEED_CAMERA @"speed_camera"
 #define WIKI_LANG @"wiki_lang"
 #define WIKI_PLACE @"wiki_place"
 
@@ -88,6 +89,7 @@ const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100};
 - (void) findPOIsByKeyword:(NSString *)keyword;
 - (void) findPOIsByKeyword:(NSString *)keyword categoryName:(NSString *)category poiTypeName:(NSString *)type radiusIndex:(int *)radiusIndex;
 - (void) findPOIsByFilter:(OAPOIUIFilter *)filter radiusIndex:(int *)radiusIndex;
+- (OAPOIType *) getDefaultOtherCategoryType;
 
 -(NSDictionary<NSString *, OAPOIType *> *)getAllTranslatedNames:(BOOL)skipNonEditable;
 

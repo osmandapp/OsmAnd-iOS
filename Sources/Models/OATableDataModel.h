@@ -17,8 +17,11 @@
 @property (nonatomic) NSString *tableHeaderText;
 @property (nonatomic) NSString *tableFooterText;
 
+- (OATableSectionData *) createNewSection;
 - (void) addSection:(OATableSectionData *)sectionData;
 - (void) addSection:(OATableSectionData *)sectionData atIndex:(NSInteger)index;
+- (void) removeSection:(NSUInteger)section;
+- (void) removeItemsAtIndexPaths:(NSArray<NSIndexPath *> *)indexPaths;
 
 - (OATableSectionData *)sectionDataForIndex:(NSUInteger)index;
 - (OATableRowData *) itemForIndexPath:(NSIndexPath *)indexPath;

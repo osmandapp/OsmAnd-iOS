@@ -690,37 +690,37 @@ static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsap
             valueAsDouble *= FEET_IN_ONE_METER;
             formattedValue = [NSString stringWithFormat:@"%@ %@",
                     [numberFormatter stringFromNumber:@(valueAsDouble)],
-                    OALocalizedString(@"units_ft")];
+                    OALocalizedString(@"foot")];
         }
         else if (metricSystem == MILES_AND_YARDS)
         {
             valueAsDouble *= YARDS_IN_ONE_METER;
             formattedValue = [NSString stringWithFormat:@"%@ %@",
                     [numberFormatter stringFromNumber:@(valueAsDouble)],
-                    OALocalizedString(@"units_yd")];
+                    OALocalizedString(@"yard")];
         }
         else
         {
-            formattedValue = [NSString stringWithFormat:@"%@ %@", value, OALocalizedString(@"units_m")];
+            formattedValue = [NSString stringWithFormat:@"%@ %@", value, OALocalizedString(@"m")];
         }
     }
     else if ([key isEqualToString:@"distance"] && [self isNumericValue:value])
     {
         float valueAsFloatInMeters = [value floatValue] * 1000;
         if (metricSystem == KILOMETERS_AND_METERS)
-            formattedValue = [NSString stringWithFormat:@"%@ %@", value, OALocalizedString(@"units_km")];
+            formattedValue = [NSString stringWithFormat:@"%@ %@", value, OALocalizedString(@"km")];
         else
             formattedValue = [OAOsmAndFormatter getFormattedDistance:valueAsFloatInMeters];
 
-        formattedPrefix = [self formatPrefix:prefix units:OALocalizedString(@"shared_string_distance")];
+        formattedPrefix = [self formatPrefix:prefix units:OALocalizedString(@"map_widget_trip_recording_distance")];
     }
     else if ([key isEqualToString:@"capacity"] && [self isNumericValue:value] && ([amenity.subType isEqualToString:@"water_tower"] || [amenity.subType isEqualToString:@"storage_tank"]))
     {
-        formattedValue = [NSString stringWithFormat:@"%@ %@", value, OALocalizedString(@"units_cubic_m")];
+        formattedValue = [NSString stringWithFormat:@"%@ %@", value, OALocalizedString(@"cubic_m")];
     }
     else if ([key isEqualToString:@"maxweight"] && [self isNumericValue:value])
     {
-        formattedValue = [NSString stringWithFormat:@"%@ %@", value, OALocalizedString(@"units_t")];
+        formattedValue = [NSString stringWithFormat:@"%@ %@", value, OALocalizedString(@"metric_ton")];
     }
     else if (([key isEqualToString:@"students"] || [key isEqualToString:@"spots"] || [key isEqualToString:@"seats"]) && [self isNumericValue:value])
     {
@@ -728,7 +728,7 @@ static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsap
     }
     else if ([key isEqualToString:@"wikipedia"])
     {
-        formattedPrefix = OALocalizedString(@"product_title_wiki");
+        formattedPrefix = OALocalizedString(@"download_wikipedia_maps");
     }
     return @[formattedPrefix, formattedValue];
 }

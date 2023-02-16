@@ -14,10 +14,6 @@
 #import "Localization.h"
 #import "OAColors.h"
 
-@interface OAAutoZoomMapViewController () <UITableViewDelegate, UITableViewDataSource>
-
-@end
-
 @implementation OAAutoZoomMapViewController
 {
     OAAppSettings *_settings;
@@ -25,16 +21,21 @@
     NSArray<NSNumber *> *_zoomValues;
 }
 
-- (instancetype) initWithAppMode:(OAApplicationMode *)appMode
+#pragma mark - Initialization
+
+- (void)commonInit
 {
-    self = [super initWithAppMode:appMode];
-    if (self)
-    {
-        _settings = [OAAppSettings sharedManager];
-        [self generateData];
-    }
-    return self;
+    _settings = [OAAppSettings sharedManager];
 }
+
+#pragma mark - Base UI
+
+- (NSString *)getTitle
+{
+    return OALocalizedString(@"auto_zoom_map");
+}
+
+#pragma mark - Table data
 
 - (void) generateData
 {
@@ -61,63 +62,51 @@
     _data = [NSArray arrayWithObject:dataArr];
 }
 
-- (void) applyLocalization
+- (NSInteger)rowsCount:(NSInteger)section
 {
-    [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"auto_zoom_map");
+    return _data[section].count;
 }
 
-- (void) viewDidLoad
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
-    [super viewDidLoad];
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-}
-
-#pragma mark - TableView
-
-- (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
     if ([cellType isEqualToString:[OASettingsTitleTableViewCell getCellIdentifier]])
     {
-        OASettingsTitleTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTitleTableViewCell getCellIdentifier]];
+        OASettingsTitleTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OASettingsTitleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTitleTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingsTitleTableViewCell *)[nib objectAtIndex:0];
+            [cell.iconView setHidden:YES];
         }
         if (cell)
         {
             cell.textView.text = item[@"title"];
-            cell.iconView.image = [UIImage templateImageNamed:@"ic_checkmark_default"];
-            cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
-            cell.iconView.hidden = ![item[@"isSelected"] boolValue];
+            if ([item[@"isSelected"] boolValue])
+                cell.accessoryType = UITableViewCellAccessoryCheckmark;
         }
         return cell;
     }
     return nil;
 }
 
-- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return 17.0;
-}
-
-- (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return _data[section].count;
-}
-
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
+- (NSInteger)sectionsCount
 {
     return _data.count;
 }
 
-- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (CGFloat)getCustomHeightForHeader:(NSInteger)section
+{
+    return 17.;
+}
+
+- (void)onRowPressed:(NSIndexPath *)indexPath
 {
     [self selectAutoZoomMap:_data[indexPath.section][indexPath.row]];
-    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
+
+#pragma mark - Selectors
 
 - (void) selectAutoZoomMap:(NSDictionary *)item
 {
@@ -130,7 +119,7 @@
         [_settings.autoZoomMap set:YES mode:self.appMode];
         [_settings.autoZoomMapScale set:(EOAAutoZoomMap)((NSNumber *)item[@"name"]).intValue mode:self.appMode];
     }
-    [self backButtonClicked:nil];
+    [self dismissViewController];
 }
 
 @end

@@ -159,7 +159,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                                                                withHandler:@selector(onLocalResourcesChanged:withKey:)
                                                                 andObserve:_app.localResourcesChangedObservable];
     _styleSettings = [OAMapStyleSettings sharedInstance];
-    title = OALocalizedString(@"product_title_srtm");
+    title = OALocalizedString(@"srtm_plugin_name");
     tblView.separatorInset = UIEdgeInsetsMake(0, [OAUtilities getLeftMargin] + 16, 0, 0);
     tblView.estimatedRowHeight = kEstimatedRowHeight;
     
@@ -258,7 +258,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         {
             [zoomArr addObject:@{
                 @"type" : kCellTypeValue,
-                @"title" : OALocalizedString(@"display_starting_at_zoom_level"),
+                @"title" : OALocalizedString(@"show_from_zoom_level"),
                 @"parameter" : param
             }];
         }
@@ -281,7 +281,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         {
             [linesArr addObject:@{
                 @"type" : kCellTypeCollection,
-                @"title" : OALocalizedString(@"map_settings_color_scheme"),
+                @"title" : OALocalizedString(@"srtm_color_scheme"),
                 @"parameter" : param
             }];
         }
@@ -291,7 +291,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             [linesArr addObject:@{
                 @"type" : kCellTypeSlider,
                 @"parameter" : param,
-                @"name" : OALocalizedString(@"map_settings_line_width")
+                @"name" : OALocalizedString(@"rendering_attr_depthContourWidth_name")
             }];
         }
         param = [_styleSettings getParameter:CONTOUR_DENSITY_ATTR];
@@ -350,13 +350,13 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                             @"footer" : OALocalizedString(@"map_settings_contour_zoom_level_descr")
                             }];
         [sectionArr addObject:@{
-                            @"header" : OALocalizedString(@"map_settings_appearance"),
+                            @"header" : OALocalizedString(@"shared_string_appearance"),
                             @"footer" : OALocalizedString(@"map_settings_line_density_slowdown_warning")
                             }];
         if (_mapMultipleItems.count > 0)
         {
             [sectionArr addObject:@{
-                            @"header" : OALocalizedString(@"osmand_live_available_maps"),
+                            @"header" : OALocalizedString(@"available_maps"),
                             @"footer" : OALocalizedString(@"map_settings_available_srtm_maps_descr")
                             }];
         }
@@ -641,11 +641,11 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                               reuseIdentifier:cellTypeId];
 
-                cell.textLabel.font = [UIFont systemFontOfSize:17.0];
-                cell.detailTextLabel.font = [UIFont systemFontOfSize:12.0];
+                cell.textLabel.font = [UIFont scaledSystemFontOfSize:17.0];
+                cell.detailTextLabel.font = [UIFont scaledSystemFontOfSize:12.0];
                 cell.detailTextLabel.textColor = UIColorFromRGB(0x929292);
 
-                UIImage* iconImage = [UIImage imageNamed:@"ic_custom_download"];
+                UIImage* iconImage = [UIImage rtlImageNamed:@"ic_custom_download"];
                 UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
                 [btnAcc addTarget:self action: @selector(accessoryButtonPressed:withEvent:) forControlEvents: UIControlEventTouchUpInside];
                 [btnAcc setImage:iconImage forState:UIControlStateNormal];
@@ -657,8 +657,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                               reuseIdentifier:cellTypeId];
 
-                cell.textLabel.font = [UIFont systemFontOfSize:17.0];
-                cell.detailTextLabel.font = [UIFont systemFontOfSize:12.0];
+                cell.textLabel.font = [UIFont scaledSystemFontOfSize:17.0];
+                cell.detailTextLabel.font = [UIFont scaledSystemFontOfSize:12.0];
                 cell.detailTextLabel.textColor = UIColorFromRGB(0x929292);
 
                 FFCircularProgressView* progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 25.0f, 25.0f)];
@@ -673,7 +673,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             if (!mapItem.disabled)
             {
                 cell.textLabel.textColor = [UIColor blackColor];
-                UIImage* iconImage = [UIImage imageNamed:@"ic_custom_download"];
+                UIImage* iconImage = [UIImage rtlImageNamed:@"ic_custom_download"];
                 UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
                 [btnAcc addTarget:self action: @selector(accessoryButtonPressed:withEvent:) forControlEvents: UIControlEventTouchUpInside];
                 [btnAcc setImage:iconImage forState:UIControlStateNormal];
@@ -687,7 +687,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             }
         }
         
-        cell.imageView.image = [OAResourceType getIcon:mapItem.resourceType templated:YES];
+        cell.imageView.image = [OAResourceType getIcon:mapItem.resourceType templated:YES].imageFlippedForRightToLeftLayoutDirection;
         cell.imageView.tintColor = UIColorFromRGB(color_tint_gray);
         cell.textLabel.text = title;
         if (cell.detailTextLabel != nil)
@@ -706,7 +706,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAImageDescTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAImageDescTableViewCell *)[nib objectAtIndex:0];
             cell.descView.text = item[@"desc"];
-            cell.iconView.image = [UIImage imageNamed:item[@"img"]];
+            cell.iconView.image = [UIImage rtlImageNamed:item[@"img"]];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         return cell;
@@ -720,7 +720,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             cell = (OATitleRightIconCell *)[nib objectAtIndex:0];
             cell.iconView.image = [UIImage templateImageNamed:item[@"img"]];
             cell.titleView.text = item[@"title"];
-            cell.titleView.font = [UIFont systemFontOfSize:17. weight:UIFontWeightSemibold];
+            cell.titleView.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightSemibold];
             cell.titleView.textColor = UIColorFromRGB(color_primary_purple);
             cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
         }

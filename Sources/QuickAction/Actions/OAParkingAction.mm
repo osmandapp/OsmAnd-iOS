@@ -55,7 +55,7 @@ static OAQuickActionType *TYPE;
 + (OAQuickActionType *) TYPE
 {
     if (!TYPE)
-        TYPE = [[OAQuickActionType alloc] initWithIdentifier:7 stringId:@"parking.add" class:self.class name:OALocalizedString(@"add_parking_place") category:CREATE_CATEGORY iconName:@"ic_custom_parking" secondaryIconName:@"ic_custom_compound_action_add" editable:NO];
+        TYPE = [[OAQuickActionType alloc] initWithIdentifier:7 stringId:@"parking.add" class:self.class name:OALocalizedString(@"quick_action_add_parking") category:CREATE_CATEGORY iconName:@"ic_custom_parking" secondaryIconName:@"ic_custom_compound_action_add" editable:NO];
        
     return TYPE;
 }

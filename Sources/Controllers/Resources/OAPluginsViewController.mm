@@ -51,14 +51,13 @@
 
 - (void) applyLocalization
 {
-    _titleView.text = OALocalizedString(@"plugins");
+    _titleView.text = OALocalizedString(@"plugins_menu_group");
     [_doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
 }
 
 - (void) viewDidLoad
 {
     [super viewDidLoad];
-    
     _iapHelper = [OAIAPHelper sharedInstance];
 }
 
@@ -152,6 +151,11 @@
     self.tableView.tableHeaderView = _subscriptionBannerView ? _subscriptionBannerView : [[UIView alloc] initWithFrame:CGRectMake(0, 0, 1, 1)];
 }
 
+-(void) addAccessibilityLabels
+{
+    self.backButton.accessibilityLabel = OALocalizedString(@"shared_string_back");
+}
+
 #pragma mark - UITableViewDataSource
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
@@ -214,7 +218,7 @@
                 title = product.localizedTitle;
                 desc = product.localizedDescription;
                 if (!product.free)
-                    price = [OALocalizedString(@"shared_string_buy") uppercaseStringWithLocale:[NSLocale currentLocale]];
+                    price = [OALocalizedString(@"buy") uppercaseStringWithLocale:[NSLocale currentLocale]];
             }
             else if (indexPath.section == kCustomPluginsSection)
             {
@@ -352,11 +356,6 @@
         [self setupSubscriptionBanner];
         [self.tableView reloadData];
     });
-}
-
-- (void) backButtonClicked:(id)sender
-{
-    [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark - OASubscriptionBannerCardViewDelegate

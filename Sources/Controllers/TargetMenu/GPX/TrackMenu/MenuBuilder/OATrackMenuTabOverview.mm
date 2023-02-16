@@ -48,7 +48,7 @@
 
     OAGPXTableSectionData *descriptionSectionData = [OAGPXTableSectionData withData:@{
             kTableKey: @"section_description",
-            kSectionHeader: OALocalizedString(@"description"),
+            kSectionHeader: OALocalizedString(@"shared_string_description"),
             kSectionHeaderHeight: @56.
     }];
     [self.tableData.subjects addObject:descriptionSectionData];
@@ -72,7 +72,7 @@
 
     OAGPXTableSectionData *infoSectionData = [OAGPXTableSectionData withData:@{
             kTableKey: @"section_info",
-            kSectionHeader: OALocalizedString(@"shared_string_info"),
+            kSectionHeader: OALocalizedString(@"info_button"),
             kSectionHeaderHeight: @56.
     }];
     [self.tableData.subjects addObject:infoSectionData];
@@ -80,7 +80,7 @@
     OAGPXTableCellData *sizeCellData = [OAGPXTableCellData withData:@{
             kTableKey: @"size",
             kCellType: [OAIconTitleValueCell getCellIdentifier],
-            kCellTitle: OALocalizedString(@"res_size"),
+            kCellTitle: OALocalizedString(@"shared_string_size"),
             kCellDesc: self.trackMenuDelegate ? [self.trackMenuDelegate getGpxFileSize] : @""
     }];
     [infoSectionData.subjects addObject:sizeCellData];
@@ -120,7 +120,7 @@
 {
     return [OAUtilities createAttributedString:
                     [[OAWikiArticleHelper getFirstParagraph:_description] componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]][0]
-                                          font:[UIFont systemFontOfSize:17]
+                                          font:[UIFont scaledSystemFontOfSize:17]
                                          color:UIColor.blackColor
                                    strokeColor:nil
                                    strokeWidth:0
@@ -154,7 +154,7 @@
     return [OAGPXTableCellData withData:@{
             kTableKey: @"created_on",
             kCellType: [OAIconTitleValueCell getCellIdentifier],
-            kCellTitle: OALocalizedString(@"res_created_on"),
+            kCellTitle: OALocalizedString(@"created_on"),
             kCellDesc: [self generateCreatedOnString]
     }];
 }
@@ -164,7 +164,7 @@
     return [OAGPXTableCellData withData:@{
             kTableKey: @"location",
             kCellType: [OAIconTitleValueCell getCellIdentifier],
-            kCellTitle: OALocalizedString(@"sett_arr_loc"),
+            kCellTitle: OALocalizedString(@"shared_string_location"),
             kCellDesc: [self generateDirName]
     }];
 }
@@ -182,7 +182,7 @@
     return [OAGPXTableCellData withData:@{
             kTableKey: @"add_description",
             kCellType: [OAIconTitleValueCell getCellIdentifier],
-            kTableValues: @{ @"font_value": [UIFont systemFontOfSize:17. weight:UIFontWeightMedium] },
+            kTableValues: @{ @"font_value": [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium] },
             kCellTitle: OALocalizedString(@"add_description"),
             kCellToggle: @YES,
             kCellTintColor: @color_primary_purple
@@ -203,7 +203,7 @@
     return [OAGPXTableCellData withData:@{
             kTableKey: @"edit_description",
             kCellType: [OAIconTitleValueCell getCellIdentifier],
-            kTableValues: @{ @"font_value": [UIFont systemFontOfSize:17. weight:UIFontWeightMedium] },
+            kTableValues: @{ @"font_value": [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium] },
             kCellTitle: OALocalizedString(@"context_menu_edit_descr"),
             kCellToggle: @YES,
             kCellTintColor: @color_primary_purple
@@ -215,7 +215,7 @@
     return [OAGPXTableCellData withData:@{
             kTableKey: @"read_full_description",
             kCellType: [OAIconTitleValueCell getCellIdentifier],
-            kTableValues: @{ @"font_value": [UIFont systemFontOfSize:17. weight:UIFontWeightMedium] },
+            kTableValues: @{ @"font_value": [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium] },
             kCellTitle: OALocalizedString(@"read_full_description"),
             kCellToggle: @YES,
             kCellTintColor: @color_primary_purple

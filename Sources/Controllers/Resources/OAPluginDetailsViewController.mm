@@ -67,7 +67,7 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
 
 - (void) applyLocalization
 {
-    self.descLabel.text = OALocalizedStringUp(@"description");
+    self.descLabel.text = OALocalizedStringUp(@"shared_string_description");
 }
 
 - (void) viewDidLoad
@@ -87,6 +87,7 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
     self.buttonDeleteCustomPlugin.userInteractionEnabled = !self.buttonDeleteCustomPlugin.hidden;
 
     self.descTextView.delegate = self;
+    self.descLabel.font = [UIFont scaledSystemFontOfSize:13. weight:UIFontWeightSemibold];
 
     UIImage *screenshotImage;
     if (_screenType == EOAPluginScreenTypeProduct)
@@ -212,7 +213,7 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
         title = _product.localizedTitle;
         desc = _product.localizedDescriptionExt;
         if (!_product.free)
-            price = [OALocalizedString(@"shared_string_buy") uppercaseStringWithLocale:[NSLocale currentLocale]];
+            price = [OALocalizedString(@"buy") uppercaseStringWithLocale:[NSLocale currentLocale]];
     }
     else if (_screenType == EOAPluginScreenTypeCustomPlugin)
     {
@@ -284,7 +285,7 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
 - (IBAction)deleteButtonClicked:(id)sender
 {
     [OAPlugin removeCustomPlugin:(OACustomPlugin *)_plugin];
-    [self backButtonClicked:nil];
+    [self dismissViewController];
 }
 
 - (IBAction) priceButtonClicked:(id)sender

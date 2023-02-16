@@ -11,7 +11,6 @@
 #import "OASizes.h"
 #import "OAColors.h"
 
-#define kHeaderViewFont [UIFont systemFontOfSize:34.0 weight:UIFontWeightBold]
 #define kSidePadding 16
 
 @interface OABaseBigTitleSettingsViewController () <UIScrollViewDelegate>
@@ -32,6 +31,7 @@
 {
     [super viewDidLoad];
     [self setupNavBarHeight];
+    [self.backImageButton setImage:[UIImage rtlImageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
     _tableView.rowHeight = UITableViewAutomaticDimension;
     _tableView.estimatedRowHeight = 60.;
     _tableView.contentInset = UIEdgeInsetsMake(self.navBarHeightConstraint.constant, 0, 0, 0);
@@ -44,14 +44,20 @@
 - (void) setTableHeaderView:(NSString *)label
 {
     _tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:label
-                                                                      font:kHeaderViewFont
+                                                                      font:kHeaderBigTitleFont
                                                                  textColor:UIColor.blackColor
-                                                               lineSpacing:0.0 isTitle:YES];
+                                                                isBigTitle:YES];
 }
 
 - (void) applyLocalization
 {
     [_backButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
+}
+
+-(void) addAccessibilityLabels
+{
+    self.backButton.accessibilityLabel = OALocalizedString(@"shared_string_back");
+    self.backImageButton.accessibilityLabel = OALocalizedString(@"shared_string_back");
 }
 
 - (void)setupNavBarHeight
@@ -87,7 +93,7 @@
 
 - (CGFloat) heightForLabel:(NSString *)text
 {
-    UIFont *labelFont = [UIFont systemFontOfSize:15.0];
+    UIFont *labelFont = [UIFont scaledSystemFontOfSize:15.0];
     CGFloat textWidth = self.tableView.bounds.size.width - (kSidePadding + OAUtilities.getLeftMargin) * 2;
     return [OAUtilities heightForHeaderViewText:text width:textWidth font:labelFont lineSpacing:6.0];
 }
@@ -97,14 +103,9 @@
     [self dismissViewController];
 }
 
-- (IBAction) backButtonClicked:(id)sender
-{
-    [self dismissViewController];
-}
-
 - (UIColor *)navBarBackgroundColor
 {
-    return UIColorFromRGB(color_bottom_sheet_background);
+    return UIColorFromRGB(color_primary_table_background);
 }
 
 - (void)onScrollViewDidScroll:(UIScrollView *)scrollView

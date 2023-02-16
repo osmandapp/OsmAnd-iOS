@@ -105,7 +105,7 @@ typedef NS_ENUM(NSInteger, EOAPoiRowType) {
 - (void) initData
 {
     rows = [NSMutableArray array];
-    [rows addObject:[[OAPOIFilterTableRow alloc] initWithRowType:EOAPoiRowTypeButton icon:[UIImage imageNamed:@"icon_remove.png"] title:OALocalizedString(@"poi_clear")]];
+    [rows addObject:[[OAPOIFilterTableRow alloc] initWithRowType:EOAPoiRowTypeButton icon:[UIImage imageNamed:@"icon_remove.png"] title:OALocalizedString(@"shared_string_clear")]];
     NSArray<OAPOIUIFilter *> *filters = [OAPOIFiltersHelper.sharedInstance getSortedPoiFilters:YES];
     for (OAPOIUIFilter *filter in filters)
     {
@@ -182,11 +182,10 @@ typedef NS_ENUM(NSInteger, EOAPoiRowType) {
 {
     cell.arrowIconView.hidden = YES;
     if ([[[OAPOIFiltersHelper sharedInstance] getSelectedPoiFilters] containsObject:filter]) {
-        UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"menu_cell_selected.png"]];
-        cell.accessoryView = imageView;
+        cell.accessoryType = UITableViewCellAccessoryCheckmark;
     }
     else {
-        cell.accessoryView = nil;
+        cell.accessoryType = UITableViewCellAccessoryNone;
     }
 }
 

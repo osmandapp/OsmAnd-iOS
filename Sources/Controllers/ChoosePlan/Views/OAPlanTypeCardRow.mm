@@ -98,8 +98,8 @@
             self.backgroundColor = UIColorFromARGB(color_primary_purple_10);
             self.imageViewLeftIcon.hidden = NO;
             self.imageViewRightIcon.hidden = YES;
-            self.labelTitle.font = [UIFont systemFontOfSize:15. weight:UIFontWeightSemibold];
-            self.labelDescription.font = [UIFont systemFontOfSize:15.];
+            self.labelTitle.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
+            self.labelDescription.font = [UIFont scaledSystemFontOfSize:15.];
             self.labelTitle.textColor = UIColorFromRGB(color_primary_purple);
             self.labelDescription.textColor = UIColorFromRGB(color_primary_purple);
             self.labelTitle.textAlignment = NSTextAlignmentLeft;
@@ -111,8 +111,8 @@
             self.backgroundColor = UIColor.whiteColor;
             self.imageViewLeftIcon.hidden = YES;
             self.imageViewRightIcon.hidden = NO;
-            self.labelTitle.font = [UIFont systemFontOfSize:17. weight:UIFontWeightSemibold];
-            self.labelDescription.font = [UIFont systemFontOfSize:15.];
+            self.labelTitle.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightSemibold];
+            self.labelDescription.font = [UIFont scaledSystemFontOfSize:15.];
             self.labelTitle.textColor = UIColorFromRGB(color_primary_purple);
             self.labelDescription.textColor = UIColor.blackColor;
             self.labelTitle.textAlignment = NSTextAlignmentLeft;
@@ -124,8 +124,8 @@
             self.backgroundColor = UIColorFromRGB(color_primary_purple);
             self.imageViewLeftIcon.hidden = YES;
             self.imageViewRightIcon.hidden = YES;
-            self.labelTitle.font = [UIFont systemFontOfSize:17. weight:UIFontWeightMedium];
-            self.labelDescription.font = [UIFont systemFontOfSize:15.];
+            self.labelTitle.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium];
+            self.labelDescription.font = [UIFont scaledSystemFontOfSize:15.];
             self.labelTitle.textColor = UIColor.whiteColor;
             self.labelDescription.textColor = UIColor.whiteColor;
             self.labelTitle.textAlignment = NSTextAlignmentCenter;
@@ -193,7 +193,7 @@
                 icon = [UIImage imageNamed:iconName];
             self.imageViewLeftIcon.image = icon;
             self.imageViewRightIcon.image = nil;
-            self.backgroundColor = available && !isPurchased ? UIColorFromARGB(color_primary_purple_10) : UIColorFromRGB(color_route_button_inactive);
+            self.backgroundColor = available && !isPurchased ? UIColorFromARGB(color_primary_purple_10) : UIColorFromRGB(color_button_gray_background);
             self.labelTitle.textColor = available && !isPurchased ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer);
             self.labelDescription.textColor = available && !isPurchased ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_icon_inactive);
             self.userInteractionEnabled = available && !isPurchased;
@@ -212,7 +212,7 @@
             {
                 [descr appendAttributedString:[[NSAttributedString alloc]
                                                                  initWithString:discountOffer.getDescriptionTitle
-                                                                 attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:15 weight:UIFontWeightSemibold]}]];
+                                                                 attributes:@{NSFontAttributeName:[UIFont scaledSystemFontOfSize:15 weight:UIFontWeightSemibold]}]];
             }
             else if (purchaseDescr)
             {
@@ -223,6 +223,7 @@
             {
                 _badgeViewContainer.hidden = NO;
                 _badgeViewContainer.backgroundColor = hasSpecialOffer ? UIColorFromRGB(color_disount_offer) : UIColorFromRGB(color_discount_save);
+                _badgeLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
                 _badgeLabel.attributedText = descr;
             }
             

@@ -96,7 +96,7 @@
 
 - (NSString *)getGroupTitle
 {
-    return _gpxWpt.point.type && _gpxWpt.point.type.length > 0 ? _gpxWpt.point.type : OALocalizedString(@"gpx_waypoints");
+    return _gpxWpt.point.type && _gpxWpt.point.type.length > 0 ? _gpxWpt.point.type : OALocalizedString(@"shared_string_waypoints");
 }
 - (OAGPXDocument *)getGpxDocument
 {
@@ -125,7 +125,7 @@
         if ([group[@"title"] isEqualToString:@""])
         {
             NSMutableDictionary *newGroup = [group mutableCopy];
-            newGroup[@"title"] = OALocalizedString(@"gpx_waypoints");
+            newGroup[@"title"] = OALocalizedString(@"shared_string_waypoints");
             NSMutableArray *newGroups = [groups mutableCopy];
             [newGroups removeObject:group];
             [newGroups insertObject:newGroup atIndex:0];
@@ -137,7 +137,7 @@
     if (!hasDefaultGroup)
     {
         NSMutableDictionary<NSString *, NSString *> *defaultGroup = [NSMutableDictionary new];
-        defaultGroup[@"title"] = OALocalizedString(@"gpx_waypoints");
+        defaultGroup[@"title"] = OALocalizedString(@"shared_string_waypoints");
         defaultGroup[@"color"] = [OADefaultFavorite getDefaultColor].toHexString;
         defaultGroup[@"count"] = @"0";
         NSMutableArray *newGroups = [groups mutableCopy];

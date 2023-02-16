@@ -361,7 +361,7 @@
 - (void) drawDistance:(CGContextRef)ctx distance:(NSString *)distance angle:(double)angle start:(CGPoint)start end:(CGPoint)end
 {
     CGPoint middlePoint = CGPointMake((start.x + end.x) / 2, (start.y + end.y) / 2);
-    UIFont *font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightMedium];
+    UIFont *font = [UIFont scaledSystemFontOfSize:15.0 weight:UIFontWeightMedium];
     
     BOOL useDefaults = !_rulerLineFontAttrs || [_rulerLineFontAttrs count] == 0;
     NSNumber *strokeColorAttr = useDefaults ? nil : [_rulerLineFontAttrs objectForKey:@"color_2"];

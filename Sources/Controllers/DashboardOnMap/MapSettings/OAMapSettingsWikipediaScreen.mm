@@ -112,7 +112,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
         [dataArr addObject:@[@{
                         @"type": [OAIconTitleValueCell getCellIdentifier],
                         @"img": @"ic_custom_map_languge",
-                        @"title": OALocalizedString(@"language")
+                        @"title": OALocalizedString(@"shared_string_language")
                 }]];
     }
 
@@ -137,7 +137,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
 
 - (void)setupView
 {
-    title = OALocalizedString(@"product_title_wiki");
+    title = OALocalizedString(@"download_wikipedia_maps");
 
     self.tblView.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + 16., 0., 0.);
     [self.tblView.tableFooterView removeFromSuperview];
@@ -296,8 +296,8 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
             {
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellTypeId];
 
-                cell.textLabel.font = [UIFont systemFontOfSize:17.0];
-                cell.detailTextLabel.font = [UIFont systemFontOfSize:12.0];
+                cell.textLabel.font = [UIFont scaledSystemFontOfSize:17.0];
+                cell.detailTextLabel.font = [UIFont scaledSystemFontOfSize:12.0];
                 cell.detailTextLabel.textColor = UIColorFromRGB(0x929292);
 
                 UIImage* iconImage = [UIImage templateImageNamed:@"ic_custom_download"];
@@ -313,8 +313,8 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
             {
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellTypeId];
 
-                cell.textLabel.font = [UIFont systemFontOfSize:17.0];
-                cell.detailTextLabel.font = [UIFont systemFontOfSize:12.0];
+                cell.textLabel.font = [UIFont scaledSystemFontOfSize:17.0];
+                cell.detailTextLabel.font = [UIFont scaledSystemFontOfSize:12.0];
                 cell.detailTextLabel.textColor = UIColorFromRGB(0x929292);
 
                 FFCircularProgressView* progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 25.0f, 25.0f)];
@@ -412,7 +412,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
     switch (section)
     {
         case EOAMapSettingsWikipediaSectionAvailable:
-            return _mapItems.count > 0 ? OALocalizedString(@"osmand_live_available_maps") : @"";
+            return _mapItems.count > 0 ? OALocalizedString(@"available_maps") : @"";
         default:
             return @"";
     }

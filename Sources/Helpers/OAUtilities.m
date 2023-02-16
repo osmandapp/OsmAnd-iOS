@@ -175,7 +175,12 @@
 
 + (UIImage *) templateImageNamed:(NSString *)imageName
 {
-    return [[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    return [[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
+}
+
++ (UIImage *) rtlImageNamed:(NSString *)imageName
+{
+    return [UIImage imageNamed:imageName].imageFlippedForRightToLeftLayoutDirection;
 }
 
 @end
@@ -202,29 +207,80 @@
 
 @end
 
+@implementation UIFont (util)
+
+- (UIFont *)scaled
+{
+    return [self scaled:[[UIFontMetrics defaultMetrics] scaledValueForValue:self.pointSize]];
+}
+
+- (UIFont *)scaled:(CGFloat)maximumSize
+{
+    return [[UIFontMetrics defaultMetrics] scaledFontForFont:self maximumPointSize:maximumSize];
+}
+
++ (UIFont *)scaledSystemFontOfSize:(CGFloat)fontSize
+{
+    return [[UIFont systemFontOfSize:fontSize] scaled];
+}
+
++ (UIFont *)scaledSystemFontOfSize:(CGFloat)fontSize maximumSize:(CGFloat)maximumSize
+{
+    return [[UIFont systemFontOfSize:fontSize] scaled:maximumSize];
+}
+
++ (UIFont *)scaledSystemFontOfSize:(CGFloat)fontSize weight:(UIFontWeight)weight
+{
+    return [[UIFont systemFontOfSize:fontSize weight:weight] scaled];
+}
+
++ (UIFont *)scaledSystemFontOfSize:(CGFloat)fontSize weight:(UIFontWeight)weight maximumSize:(CGFloat)maximumSize
+{
+    return [[UIFont systemFontOfSize:fontSize weight:weight] scaled:maximumSize];
+}
+
++ (UIFont *)scaledBoldSystemFontOfSize:(CGFloat)fontSize
+{
+    return [[UIFont boldSystemFontOfSize:fontSize] scaled];
+}
+
++ (UIFont *)scaledMonospacedDigitSystemFontOfSize:(CGFloat)fontSize weight:(UIFontWeight)weight
+{
+    return [[UIFont monospacedDigitSystemFontOfSize:fontSize weight:weight] scaled];
+}
+
++ (UIFont *)scaledMonospacedSystemFontOfSize:(CGFloat)fontSize weight:(UIFontWeight)weight
+{
+    return [[UIFont monospacedSystemFontOfSize:fontSize weight:weight] scaled];
+}
+
+@end
+
 @implementation NSMutableAttributedString (util)
 
 - (void) addString:(NSString *)string fontWeight:(UIFontWeight)fontWeight size:(CGFloat)size
 {
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:string];
     NSRange fullRange = NSMakeRange(0, string.length);
-    UIFont *font = [UIFont systemFontOfSize:size weight:fontWeight];
+    UIFont *font = [UIFont scaledSystemFontOfSize:size weight:fontWeight];
     [attributedString addAttribute:NSFontAttributeName value:font range:fullRange];
     [self appendAttributedString:attributedString];
 }
 
-- (void) setFontSize:(CGFloat)size forString:(NSString *)string
+- (void) setFont:(UIFont *)font forString:(NSString *)string
 {
     NSRange range = [self.string rangeOfString:string];
-    UIFont *font = [UIFont systemFontOfSize:size];
     [self addAttribute:NSFontAttributeName value:font range:range];
+}
+
+- (void) setFontSize:(CGFloat)size forString:(NSString *)string
+{
+    [self setFont:[UIFont scaledSystemFontOfSize:size] forString:string];
 }
 
 - (void) setFontWeight:(UIFontWeight)fontWeight andSize:(CGFloat)size forString:(NSString *)string
 {
-    NSRange range = [self.string rangeOfString:string];
-    UIFont *font = [UIFont systemFontOfSize:size weight:fontWeight];
-    [self addAttribute:NSFontAttributeName value:font range:range];
+    [self setFont:[UIFont scaledSystemFontOfSize:size weight:fontWeight] forString:string];
 }
 
 - (void) setColor:(UIColor *)color forString:(NSString *)string
@@ -402,12 +458,8 @@
     self.backgroundColor = [UIColor clearColor];
     UIBlurEffect *blurEffect;
 
-    if (@available(iOS 13.0, *))
-        blurEffect = [UIBlurEffect effectWithStyle:light
+    blurEffect = [UIBlurEffect effectWithStyle:light
                 ? UIBlurEffectStyleSystemUltraThinMaterialLight : UIBlurEffectStyleSystemUltraThinMaterialDark];
-    else
-        blurEffect = [UIBlurEffect effectWithStyle:light
-                ? UIBlurEffectStyleLight : UIBlurEffectStyleDark];
 
     UIView *blurView;
     if (!UIAccessibilityIsReduceTransparencyEnabled())
@@ -463,9 +515,7 @@
             return;
     }
 
-    UIActivityIndicatorViewStyle spinnerStyle = UIActivityIndicatorViewStyleGray;
-    if (@available(iOS 13.0, *))
-        spinnerStyle = UIActivityIndicatorViewStyleLarge;
+    UIActivityIndicatorViewStyle spinnerStyle = UIActivityIndicatorViewStyleLarge;
 
     UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:spinnerStyle];
     spinner.center = CGPointMake([UIScreen mainScreen].bounds.size.width / 2, [UIScreen mainScreen].bounds.size.height / 2);
@@ -655,9 +705,9 @@
 - (NSString *)name
 {
     if ([self.symbol isEqualToString:NSUnitTemperature.celsius.symbol])
-        return OALocalizedString(@"weather_temp_unit_c");
+        return OALocalizedString(@"weather_temperature_celsius");
     else if ([self.symbol isEqualToString:NSUnitTemperature.fahrenheit.symbol])
-        return OALocalizedString(@"weather_temp_unit_f");
+        return OALocalizedString(@"weather_temperature_fahrenheit");
     return nil;
 }
 
@@ -689,11 +739,11 @@
     if ([self.symbol isEqualToString:NSUnitSpeed.metersPerSecond.symbol])
         return OALocalizedString(@"weather_wind_unit_m_s");
     else if ([self.symbol isEqualToString:NSUnitSpeed.kilometersPerHour.symbol])
-        return OALocalizedString(@"weather_wind_unit_km_per_hour");
+        return OALocalizedString(@"weather_wind_kilimeters_per_hour");
     else if ([self.symbol isEqualToString:NSUnitSpeed.milesPerHour.symbol])
-        return OALocalizedString(@"weather_wind_unit_mi_per_hour");
+        return OALocalizedString(@"si_mph");
     else if ([self.symbol isEqualToString:NSUnitSpeed.knots.symbol])
-        return OALocalizedString(@"weather_wind_unit_knots");
+        return OALocalizedString(@"weather_wind_knots");
     return nil;
 }
 
@@ -714,11 +764,11 @@
 - (NSString *)name
 {
     if ([self.symbol isEqualToString:NSUnitPressure.hectopascals.symbol])
-        return OALocalizedString(@"weather_pressure_unit_hpa");
+        return OALocalizedString(@"weather_pressure_hectopascals");
     else if ([self.symbol isEqualToString:NSUnitPressure.millimetersOfMercury.symbol])
-        return OALocalizedString(@"weather_pressure_unit_mmhg");
+        return OALocalizedString(@"weather_pressure_millimeters_of_mercury");
     else if ([self.symbol isEqualToString:NSUnitPressure.inchesOfMercury.symbol])
-        return OALocalizedString(@"weather_pressure_unit_inhg");
+        return OALocalizedString(@"weather_pressure_inches_of_mercury");
     return nil;
 }
 
@@ -739,9 +789,9 @@
 - (NSString *)name
 {
     if ([self.symbol isEqualToString:NSUnitLength.millimeters.symbol])
-        return OALocalizedString(@"weather_precip_unit_mm");
+        return OALocalizedString(@"weather_precip_milimeters");
     else if ([self.symbol isEqualToString:NSUnitLength.inches.symbol])
-        return OALocalizedString(@"weather_precip_unit_in");
+        return OALocalizedString(@"weather_precip_inches");
     return nil;
 }
 
@@ -1240,7 +1290,7 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
         CGContextRelease(bitmapContext);
         CGColorSpaceRelease(colorSpace);
 
-        UIImage *res = [UIImage imageWithCGImage:mainViewContentBitmapContext scale:source.scale orientation:UIImageOrientationUp];
+        UIImage *res = [UIImage imageWithCGImage:mainViewContentBitmapContext scale:source.scale orientation:UIImageOrientationUp].imageFlippedForRightToLeftLayoutDirection;
         CGImageRelease(mainViewContentBitmapContext);
         return res;
     }
@@ -1327,15 +1377,15 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
 + (NSString *) appendMeters:(float)value
 {
     NSString *formattedValue = [OAOsmAndFormatter getFormattedDistance:value];
-    return value == 0.f ? OALocalizedString(@"not_selected") : formattedValue;
+    return value == 0.f ? OALocalizedString(@"shared_string_not_selected") : formattedValue;
 }
 
 + (NSString *) appendSpeed:(float)value
 {
     BOOL kilometers = [[OAAppSettings sharedManager].metricSystem get] == KILOMETERS_AND_METERS;
     value = kilometers ? value : round(value / 0.3048f);
-    NSString *distUnitsFormat = [@"%g " stringByAppendingString:kilometers ? OALocalizedString(@"units_km_h") : OALocalizedString(@"units_mph")];
-    return value == 0.f ? OALocalizedString(@"not_selected") : value == 0.000001f ? @">0" : [NSString stringWithFormat:distUnitsFormat, value];
+    NSString *distUnitsFormat = [@"%g " stringByAppendingString:kilometers ? OALocalizedString(@"km_h") : OALocalizedString(@"mile_per_hour")];
+    return value == 0.f ? OALocalizedString(@"shared_string_not_selected") : value == 0.000001f ? @">0" : [NSString stringWithFormat:distUnitsFormat, value];
 }
 
 + (NSArray<NSString *> *) arrayOfMeterValues:(NSArray<NSNumber *> *) values
@@ -1681,16 +1731,10 @@ static const double d180PI = 180.0 / M_PI_2;
 
 + (BOOL) isWindowed
 {
-    BOOL isiOSAppOnMac = NO;
-    if (@available(iOS 14.0, *))
-        isiOSAppOnMac = [NSProcessInfo processInfo].isiOSAppOnMac;
+    BOOL isiOSAppOnMac = [NSProcessInfo processInfo].isiOSAppOnMac;
 
-    if (@available(iOS 13.0, *))
-    {
-        return !isiOSAppOnMac && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad && (DeviceScreenWidth != [[UIScreen mainScreen] bounds].size.width ||
+    return !isiOSAppOnMac && [UIDevice.currentDevice userInterfaceIdiom] == UIUserInterfaceIdiomPad && (DeviceScreenWidth != [[UIScreen mainScreen] bounds].size.width ||
             UIApplication.sharedApplication.delegate.window.bounds.size.height != [[UIScreen mainScreen] bounds].size.height);
-    }
-    return NO;
 }
 
 + (void) adjustViewsToNotch:(CGSize)size topView:(UIView *)topView middleView:(UIView *)middleView bottomView:(UIView *)bottomView
@@ -2002,72 +2046,83 @@ static const double d180PI = 180.0 / M_PI_2;
     return res;
 }
 
-+ (UIView *) setupTableHeaderViewWithText:(NSString *)text font:(UIFont *)font textColor:(UIColor *)textColor lineSpacing:(CGFloat)lineSpacing isTitle:(BOOL)isTitle
++ (UIView *) setupTableHeaderViewWithText:(NSString *)text
+                                     font:(UIFont *)font
+                                textColor:(UIColor *)textColor
+                               isBigTitle:(BOOL)isBigTitle
 {
-    return [self setupTableHeaderViewWithText:text font:font textColor:textColor lineSpacing:lineSpacing isTitle:isTitle y:12.];
+    return [self setupTableHeaderViewWithText:text font:font textColor:textColor isBigTitle:isBigTitle rightIconName:nil tintColor:nil];
 }
 
-+ (UIView *) setupTableHeaderViewWithText:(NSString *)text font:(UIFont *)font textColor:(UIColor *)textColor lineSpacing:(CGFloat)lineSpacing isTitle:(BOOL)isTitle y:(CGFloat)y
++ (UIView *) setupTableHeaderViewWithText:(NSString *)text
+                                     font:(UIFont *)font
+                                textColor:(UIColor *)textColor
+                               isBigTitle:(BOOL)isBigTitle
+                            rightIconName:(NSString *)iconName
+                                tintColor:(UIColor *)tintColor
 {
-    CGFloat textWidth = DeviceScreenWidth - (16 + OAUtilities.getLeftMargin) * 2;
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(16 + OAUtilities.getLeftMargin, 0.0, textWidth, CGFLOAT_MAX)];
-    if (!isTitle)
-    {
-        NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
-        [style setLineSpacing:lineSpacing];
-        label.attributedText = [[NSAttributedString alloc] initWithString:text
-                                attributes:@{NSParagraphStyleAttributeName : style}];
-    }
-    label.text = text;
-    label.font = font;
-    label.textColor = textColor;
+    CGFloat topOffset = isBigTitle ? 5. : kPaddingOnSideOfContent;
+    CGFloat bottomOffset = isBigTitle ? 7. : kPaddingOnSideOfContent;
+    return [self setupTableHeaderViewWithText:text font:font textColor:textColor isBigTitle:isBigTitle topOffset:topOffset bottomOffset:bottomOffset rightIconName:iconName tintColor:tintColor];
+}
+
++ (UIView *) setupTableHeaderViewWithText:(NSString *)text
+                                     font:(UIFont *)font
+                                textColor:(UIColor *)textColor
+                               isBigTitle:(BOOL)isBigTitle
+                                topOffset:(CGFloat)topOffset
+                             bottomOffset:(CGFloat)bottomOffset
+                            rightIconName:(NSString *)iconName
+                                tintColor:(UIColor *)tintColor
+{
+    CGFloat sideOffset = [OAUtilities getLeftMargin] + (isBigTitle ? kSmallPaddingOnSideOfContent : kPaddingOnSideOfContent);
+    CGFloat textWidth = DeviceScreenWidth - sideOffset * 2;
+    CGFloat textHeight = [self heightForHeaderViewText:text width:textWidth font:font lineSpacing:0.];
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(sideOffset, topOffset, textWidth, textHeight)];
+
+    NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc] initWithString:text];
+    [attributedText setFont:font forString:text];
+    [attributedText setColor:textColor forString:text];
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    paragraphStyle.minimumLineHeight = isBigTitle ? 41. : 18.;
+    [attributedText addAttribute:NSParagraphStyleAttributeName
+                           value:paragraphStyle
+                           range:NSMakeRange(0, text.length)];
+
+    label.attributedText = attributedText;
+    label.adjustsFontForContentSizeCategory = YES;
     label.numberOfLines = 0;
     label.lineBreakMode = NSLineBreakByWordWrapping;
     label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    [label sizeToFit];
-    CGRect frame = label.frame;
-    frame.size.width = textWidth;
-    frame.origin.y = isTitle ? 5. : y;
-    label.frame = frame;
-    UIView *tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, label.frame.size.height + label.frame.origin.y + (isTitle ? 7. : 12.))];
-    [tableHeaderView addSubview:label];
-    return tableHeaderView;
-}
 
-+ (UIView *) setupTableHeaderViewWithText:(NSString *)text font:(UIFont *)font tintColor:(UIColor *)tintColor icon:(UIImage *)icon iconFrameSize:(CGFloat)iconFrameSize
-{
-    CGFloat textWidth = DeviceScreenWidth - (16 + OAUtilities.getLeftMargin * 2) - 12 - iconFrameSize - 16;
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(16 + OAUtilities.getLeftMargin, 0.0, textWidth, CGFLOAT_MAX)];
-    label.text = text;
-    label.font = font;
-    label.textColor = UIColor.blackColor;
-    label.numberOfLines = 2;
-    label.lineBreakMode = NSLineBreakByTruncatingTail;
-    label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    [label sizeToFit];
-    CGRect frame = label.frame;
-    frame.size.height = label.frame.size.height;
-    frame.origin.y = 8.0;
-    label.frame = frame;
-    UIView *tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, label.frame.size.height + 8)];
+    UIView *tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0., 0., DeviceScreenWidth, topOffset + textHeight + bottomOffset)];
     [tableHeaderView addSubview:label];
-    UIView *imageContainer = [[UIView alloc] initWithFrame:CGRectMake(DeviceScreenWidth - 12 - OAUtilities.getLeftMargin - iconFrameSize, tableHeaderView.frame.size.height / 2 - iconFrameSize / 2, iconFrameSize, iconFrameSize)];
-    imageContainer.backgroundColor = UIColor.whiteColor;
-    
-    if (icon)
+    tableHeaderView.backgroundColor = UIColorFromRGB(color_primary_table_background);
+
+    if (iconName && iconName.length > 0)
     {
-        UIImageView *imageView = [[UIImageView alloc] init];
-        imageView.frame = CGRectMake(2, 2, 30, 30);
-        imageView.contentMode = UIViewContentModeCenter;
-        [imageView setTintColor:tintColor];
-        [imageView setImage:[icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
-        
-        [imageContainer insertSubview:imageView atIndex:0];
-        imageContainer.layer.cornerRadius = iconFrameSize / 2;
-        
-        [tableHeaderView addSubview:imageContainer];
+        CGFloat iconFrameSize = 30.;
+        CGFloat iconFrameOffsetSize = 4.;
+        UIView *iconContainer = [[UIView alloc] initWithFrame:CGRectMake(DeviceScreenWidth - 12. - [OAUtilities getLeftMargin] - iconFrameSize - iconFrameOffsetSize, tableHeaderView.frame.size.height / 2 - iconFrameSize / 2, iconFrameSize + iconFrameOffsetSize, iconFrameSize + iconFrameOffsetSize)];
+        iconContainer.backgroundColor = UIColor.whiteColor;
+        UIImageView *iconView = [[UIImageView alloc] init];
+        iconView.frame = CGRectMake(iconFrameOffsetSize / 2, iconFrameOffsetSize / 2, iconFrameSize, iconFrameSize);
+        iconView.contentMode = UIViewContentModeCenter;
+        if (tintColor)
+        {
+            iconView.tintColor = tintColor;
+            iconView.image = [UIImage templateImageNamed:iconName];
+        }
+        else
+        {
+            iconView.image = [UIImage imageNamed:iconName];
+        }
+
+        [iconContainer insertSubview:iconView atIndex:0];
+        iconContainer.layer.cornerRadius = iconFrameSize / 2;
+        [tableHeaderView addSubview:iconContainer];
     }
-    
+
     return tableHeaderView;
 }
 
@@ -2082,6 +2137,7 @@ static const double d180PI = 180.0 / M_PI_2;
     CGFloat iconOffset = hasIcon ? 12 + iconFrameSize + 20 : 0;
     CGFloat textWidth = DeviceScreenWidth - (20 + OAUtilities.getLeftMargin * 2) - iconOffset;
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(20 + OAUtilities.getLeftMargin, 0.0, textWidth, CGFLOAT_MAX)];
+    label.adjustsFontForContentSizeCategory = YES;
     label.attributedText = text;
     label.numberOfLines = 0;
     label.lineBreakMode = NSLineBreakByWordWrapping;
@@ -2114,9 +2170,43 @@ static const double d180PI = 180.0 / M_PI_2;
     return tableHeaderView;
 }
 
-+ (UIView *) setupTableHeaderViewWithText:(NSString *)text font:(UIFont *)font tintColor:(UIColor *)tintColor icon:(NSString *)iconName
++ (UIView *) setupTableHeaderViewWithAttributedText:(NSAttributedString *)attributedText topCenterIconName:(NSString *)iconName iconSize:(CGFloat)iconSize
 {
-    return [self setupTableHeaderViewWithText:text font:font tintColor:tintColor icon:[UIImage imageNamed:iconName] iconFrameSize:34.];
+    BOOL hasIcon = iconName != nil && iconName.length > 0 && iconSize > 0;
+    BOOL hasText = attributedText != nil && attributedText.length > 0;
+
+    UIImageView *imageView;
+    if (hasIcon)
+    {
+        imageView = [[UIImageView alloc] initWithFrame:CGRectMake(DeviceScreenWidth / 2 - iconSize / 2, 8., iconSize, iconSize)];
+        imageView.image = [UIImage imageNamed:iconName];
+    }
+
+    UILabel *label;
+    if (hasText)
+    {
+        CGSize textSize = [self calculateTextBounds:attributedText width:DeviceScreenWidth - ([OAUtilities getLeftMargin] + 20) * 2];
+        label = [[UILabel alloc] initWithFrame:CGRectMake(
+            DeviceScreenWidth / 2 - textSize.width / 2,
+            (imageView ? imageView.frame.origin.y + imageView.frame.size.height + 34. : 4.),
+            textSize.width,
+            textSize.height)];
+        label.attributedText = attributedText;
+    }
+
+    CGFloat headerHeight = 0.;
+    if (imageView && !label)
+        headerHeight = imageView.frame.origin.y + imageView.frame.size.height + 8.;
+    else
+        headerHeight = label.frame.origin.y + label.frame.size.height + 4.;
+    
+    UIView *tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0., 0., DeviceScreenWidth, headerHeight)];
+    if (imageView)
+        [tableHeaderView addSubview:imageView];
+    if (label)
+        [tableHeaderView addSubview:label];
+
+    return tableHeaderView;
 }
 
 + (CGFloat) heightForHeaderViewText:(NSString *)text width:(CGFloat)width font:(UIFont *)font lineSpacing:(CGFloat)lineSpacing
@@ -2154,8 +2244,8 @@ static const double d180PI = 180.0 / M_PI_2;
     NSString *mainString = ms;
     NSRange boldRange = [wholeString rangeOfString:boldString];
     NSRange mainRange = [wholeString rangeOfString:mainString];
-    [descriptionAttributedString addAttribute: NSFontAttributeName value:[UIFont systemFontOfSize:fontSize > 0 ? fontSize : 15] range:mainRange];
-    [descriptionAttributedString addAttribute: NSFontAttributeName value:[UIFont boldSystemFontOfSize:boldFontSize > 0 ? boldFontSize : 15] range:boldRange];
+    [descriptionAttributedString addAttribute: NSFontAttributeName value:[UIFont scaledSystemFontOfSize:fontSize > 0 ? fontSize : 15] range:mainRange];
+    [descriptionAttributedString addAttribute: NSFontAttributeName value:[UIFont scaledBoldSystemFontOfSize:boldFontSize > 0 ? boldFontSize : 15] range:boldRange];
     if (boldColor)
         [descriptionAttributedString addAttribute: NSForegroundColorAttributeName value:boldColor range:boldRange];
     if (mainColor)
@@ -2175,8 +2265,8 @@ static const double d180PI = 180.0 / M_PI_2;
     NSString *mainString = wholeString;
     NSRange highlightedRange = [wholeString rangeOfString:highlightedString];
     NSRange mainRange = [wholeString rangeOfString:mainString];
-    [attributedString addAttribute: NSFontAttributeName value:[UIFont systemFontOfSize:fontSize > 0 ? fontSize : 15] range:mainRange];
-    [attributedString addAttribute: NSFontAttributeName value:[UIFont systemFontOfSize:fontSize > 0 ? fontSize : 15] range:highlightedRange];
+    [attributedString addAttribute: NSFontAttributeName value:[UIFont scaledSystemFontOfSize:fontSize > 0 ? fontSize : 15] range:mainRange];
+    [attributedString addAttribute: NSFontAttributeName value:[UIFont scaledSystemFontOfSize:fontSize > 0 ? fontSize : 15] range:highlightedRange];
     if (highlightColor)
         [attributedString addAttribute: NSForegroundColorAttributeName value:highlightColor range:highlightedRange];
     if (centered)
@@ -2216,7 +2306,7 @@ static const double d180PI = 180.0 / M_PI_2;
             [allFoldersNames addObject:name];
     }
     if (shouldAddTracksFolder)
-        [allFoldersNames addObject:OALocalizedString(@"tracks")];
+        [allFoldersNames addObject:OALocalizedString(@"shared_string_gpx_tracks")];
     
     if (shouldSort)
     {
@@ -2365,17 +2455,9 @@ static const double d180PI = 180.0 / M_PI_2;
     {
         [parentView becomeFirstResponder];
         UIMenuController *menuController = UIMenuController.sharedMenuController;
-        if (@available(iOS 13.0, *))
-        {
-            [menuController hideMenu];
-            [menuController showMenuFromView:targetView rect:targetView.bounds];
-        }
-        else
-        {
-            [menuController setMenuVisible:NO animated:YES];
-            [menuController setTargetRect:targetView.bounds inView:targetView];
-            [menuController setMenuVisible:YES animated:YES];
-        }
+        
+        [menuController hideMenu];
+        [menuController showMenuFromView:targetView rect:targetView.bounds];
     }
 }
 
@@ -2412,10 +2494,10 @@ static const double d180PI = 180.0 / M_PI_2;
         hud.userInteractionEnabled = NO;
 
         hud.labelText = title ? title : details;
-        hud.labelFont = [UIFont systemFontOfSize:14];
+        hud.labelFont = [UIFont scaledSystemFontOfSize:14];
 
         hud.detailsLabelText = title ? details : nil;
-        hud.detailsLabelFont = [UIFont systemFontOfSize:14];
+        hud.detailsLabelFont = [UIFont scaledSystemFontOfSize:14];
 
         [hud hide:YES afterDelay:duration];
     });

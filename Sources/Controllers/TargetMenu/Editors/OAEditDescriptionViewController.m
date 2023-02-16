@@ -72,7 +72,7 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.tableFooterView = [[UIView alloc] init];
-    self.tableView.backgroundColor = UIColorFromRGB(color_bottom_sheet_background);
+    self.tableView.backgroundColor = UIColorFromRGB(color_primary_table_background);
     
     [self setupView];
 }
@@ -127,7 +127,7 @@
         _titleView.text = OALocalizedString(@"context_menu_edit_descr");
         _saveButton.hidden = NO;
         _editButton.hidden = YES;
-        _toolbarView.backgroundColor = UIColorFromRGB(color_bottom_sheet_background);
+        _toolbarView.backgroundColor = UIColorFromRGB(color_primary_table_background);
         _titleView.textColor = UIColor.blackColor;
         _saveButton.tintColor = UIColorFromRGB(color_primary_purple);
         _backButton.tintColor = UIColorFromRGB(color_primary_purple);
@@ -137,7 +137,7 @@
     }
     else
     {
-        _titleView.text = _isComment ? OALocalizedString(@"osm_note_comment") : OALocalizedString(@"description");
+        _titleView.text = _isComment ? OALocalizedString(@"poi_dialog_comment") : OALocalizedString(@"shared_string_description");
         _editButton.hidden = _readOnly;
         _saveButton.hidden = YES;
         _toolbarView.backgroundColor = UIColorFromRGB(color_chart_orange);
@@ -239,8 +239,8 @@
 {
     if (self.delegate && [self.delegate respondsToSelector:@selector(descriptionChanged:)])
         [self.delegate descriptionChanged:self.desc];
-    
-    [self backButtonClicked:self];
+
+    [self dismissViewController];
 }
 
 - (IBAction)editClicked:(id)sender
@@ -277,7 +277,7 @@
             [cell clearButtonVisibility:NO];
             cell.textView.userInteractionEnabled = YES;
             cell.textView.editable = YES;
-            cell.textView.font = [UIFont systemFontOfSize:16.];
+            cell.textView.font = [UIFont scaledSystemFontOfSize:16.];
         }
         if (cell)
         {

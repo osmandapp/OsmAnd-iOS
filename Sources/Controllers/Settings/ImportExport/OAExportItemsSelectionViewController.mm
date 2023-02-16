@@ -86,6 +86,9 @@
 
     self.cancelButton.layer.cornerRadius = 9.0;
     self.saveButton.layer.cornerRadius = 9.0;
+    
+    self.cancelButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
+    self.saveButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
 
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = titleWithDescrCellHeight;
@@ -155,7 +158,7 @@
             routingProfile = routingProfile.length > 0 ? [routingProfile capitalizedString] : routingProfileValue.capitalizedString;
         }
         if (routingProfile.length > 0)
-            item[@"descr"] = [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"nav_type_title"), routingProfile];
+            item[@"descr"] = [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"nav_type_hint"), routingProfile];
         else
             item[@"descr"] = OALocalizedString(@"profile_type_osmand_string");
         
@@ -325,7 +328,7 @@
     NSArray<NSString *> *pathComponents = filePath.pathComponents;
     NSString *parent = pathComponents.count > 1 ? pathComponents[pathComponents.count - 2] : @"";
     if ([[filePath stringByDeletingLastPathComponent] isEqualToString:OsmAndApp.instance.gpxPath])
-        parent = OALocalizedString(@"tracks");
+        parent = OALocalizedString(@"shared_string_gpx_tracks");
     if (parent.length > 0)
         folder = [OAUtilities capitalizeFirstLetter:parent];
     
@@ -363,13 +366,13 @@
     if (isDir /*|| file.getName().endsWith(IndexConstants.BINARY_WIKIVOYAGE_MAP_INDEX_EXT)*/)
         return OALocalizedString(@"online_map");
     if ([filePath hasSuffix:BINARY_ROAD_MAP_INDEX_EXT])
-        return OALocalizedString(@"res_roads");
+        return OALocalizedString(@"roads");
     else if ([filePath hasSuffix:BINARY_WIKI_MAP_INDEX_EXT])
-        return OALocalizedString(@"res_wiki");
+        return OALocalizedString(@"download_wikipedia_maps");
     else if ([filePath hasSuffix:BINARY_SRTM_MAP_INDEX_EXT])
-        return OALocalizedString(@"res_srtm");
+        return OALocalizedString(@"srtm_plugin_name");
     else if ([filePath hasSuffix:BINARY_MAP_INDEX_EXT])
-        return OALocalizedString(@"res_standard");
+        return OALocalizedString(@"download_regular_maps");
     return @"";
 }
 
@@ -478,7 +481,7 @@
         }
         if (cell)
         {
-            NSString *selectionText = _selectedItems.count > 0 ? OALocalizedString(@"shared_string_deselect_all") : OALocalizedString(@"select_all");
+            NSString *selectionText = _selectedItems.count > 0 ? OALocalizedString(@"shared_string_deselect_all") : OALocalizedString(@"shared_string_select_all");
             [cell.selectDeselectButton setTitle:selectionText forState:UIControlStateNormal];
             [cell.selectDeselectButton removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
             [cell.selectDeselectButton addTarget:self action:@selector(selectDeselectGroup:) forControlEvents:UIControlEventTouchUpInside];

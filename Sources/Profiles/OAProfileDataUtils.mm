@@ -44,11 +44,11 @@
 {
     NSMutableDictionary<NSString *, OARoutingProfileDataObject *> *profilesObjects = [NSMutableDictionary new];
     OARoutingProfileDataObject *straightLine = [[OARoutingProfileDataObject alloc] initWithResource:EOARoutingProfilesResourceStraightLine];
-    straightLine.descr = OALocalizedString(@"special_routing");
+    straightLine.descr = OALocalizedString(@"special_routing_type");
     [profilesObjects setObject:straightLine forKey:[OARoutingProfileDataObject getProfileKey:EOARoutingProfilesResourceStraightLine]];
     
     OARoutingProfileDataObject *directTo = [[OARoutingProfileDataObject alloc] initWithResource:EOARoutingProfilesResourceDirectTo];
-    directTo.descr = OALocalizedString(@"special_routing");
+    directTo.descr = OALocalizedString(@"special_routing_type");
     [profilesObjects setObject:directTo forKey:[OARoutingProfileDataObject getProfileKey:EOARoutingProfilesResourceDirectTo]];
     
 //    if (context.getBRouterService() != null) {
@@ -77,7 +77,7 @@
         {
             NSString *iconName = @"ic_custom_navigation";
             NSString *name = [NSString stringWithCString:router->profileName.c_str() encoding:NSUTF8StringEncoding];
-            NSString *descr = OALocalizedString(@"osmand_routing");
+            NSString *descr = OALocalizedString(@"osmand_default_routing");
             NSString *fileName = [NSString stringWithCString:router->fileName.c_str() encoding:NSUTF8StringEncoding];
             fileName = [fileName containsString:@"OsmAnd Maps.app"] ? @"" : fileName;
             OARoutingProfileDataObject *data;

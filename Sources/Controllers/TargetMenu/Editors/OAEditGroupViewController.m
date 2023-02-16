@@ -32,7 +32,7 @@
 
 - (void)applyLocalization
 {
-    _titleView.text = OALocalizedString(@"groups");
+    _titleView.text = OALocalizedString(@"shared_string_groups");
     [_saveButton setTitle:OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
 }
 
@@ -43,6 +43,7 @@
     _saveChanges = NO;
     
     [self setupView];
+    self.saveButton.titleLabel.font = [UIFont scaledSystemFontOfSize:14.];
 }
 
 - (void)didReceiveMemoryWarning
@@ -77,7 +78,7 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return [@[OALocalizedString(@"groups"), OALocalizedString(@"fav_create_group")] objectAtIndex:section];
+    return [@[OALocalizedString(@"shared_string_groups"), OALocalizedString(@"fav_create_group")] objectAtIndex:section];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -114,7 +115,7 @@
             else
             {
                 [cell showImage:NO];
-                [cell.textView setText:OALocalizedString(@"favorites")];
+                [cell.textView setText:OALocalizedString(@"favorites_item")];
                 [cell.arrowIconView setImage:nil];
                 if (self.groupName.length == 0)
                     [cell.arrowIconView setImage:[UIImage imageNamed:@"menu_cell_selected"]];
@@ -184,11 +185,11 @@
 - (IBAction)saveClicked:(id)sender
 {
     _saveChanges = YES;
-    
+
     if (self.delegate && [self.delegate respondsToSelector:@selector(groupChanged)])
         [self.delegate groupChanged];
-    
-    [self backButtonClicked:self];
+
+    [self dismissViewController];
 }
 
 @end

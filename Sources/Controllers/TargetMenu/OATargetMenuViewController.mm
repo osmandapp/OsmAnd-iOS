@@ -94,21 +94,28 @@
         case OATargetFavorite:
         {
             OAFavoriteItem *item;
-            for (const auto& favLoc : [OsmAndApp instance].favoritesCollection->getFavoriteLocations())
+            if (targetPoint.targetObj && [targetPoint.targetObj isKindOfClass:OAFavoriteItem.class])
             {
-                double favLon = OsmAnd::Utilities::get31LongitudeX(favLoc->getPosition31().x);
-                double favLat = OsmAnd::Utilities::get31LatitudeY(favLoc->getPosition31().y);
-                
-                if ([OAUtilities isCoordEqual:lat srcLon:lon destLat:favLat destLon:favLon])
+                item = targetPoint.targetObj;
+            }
+            else
+            {
+                for (const auto& favLoc : [OsmAndApp instance].favoritesCollection->getFavoriteLocations())
                 {
-                    item = [[OAFavoriteItem alloc] initWithFavorite:favLoc];
-                    break;
+                    double favLon = OsmAnd::Utilities::get31LongitudeX(favLoc->getPosition31().x);
+                    double favLat = OsmAnd::Utilities::get31LatitudeY(favLoc->getPosition31().y);
+                    
+                    if ([OAUtilities isCoordEqual:lat srcLon:lon destLat:favLat destLon:favLon])
+                    {
+                        item = [[OAFavoriteItem alloc] initWithFavorite:favLoc];
+                        break;
+                    }
                 }
             }
-            
+
             if (item.favorite)
                 controller = [[OAFavoriteViewController alloc] initWithItem:item headerOnly:headerOnly];
-            
+
             break;
         }
             
@@ -435,7 +442,7 @@
 
 - (NSString *) getCommonTypeStr
 {
-    return OALocalizedString(@"sett_arr_loc");
+    return OALocalizedString(@"shared_string_location");
 }
 
 - (NSAttributedString *) getAttributedTypeStr
@@ -458,7 +465,7 @@
     UIColor *iconColor = color ? color : UIColorFromRGB(0x808080);
     
     NSMutableAttributedString *string = [[NSMutableAttributedString alloc] init];
-    UIFont *font = [UIFont systemFontOfSize:15.0];
+    UIFont *font = [UIFont scaledSystemFontOfSize:15.0];
     
     NSMutableAttributedString *stringGroup = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"  %@", group]];
     NSTextAttachment *groupAttachment = [[NSTextAttachment alloc] init];
@@ -640,7 +647,7 @@
         if ([self showRegionNameOnDownloadButton])
             self.downloadControlButton.title = _localMapIndexItem.title;
         else
-            self.downloadControlButton.title = OALocalizedString(@"download");
+            self.downloadControlButton.title = OALocalizedString(@"shared_string_download");
         [self.delegate contentChanged];
     }
     else if (self.delegate && [self.delegate respondsToSelector:@selector(hideProgressBar)])

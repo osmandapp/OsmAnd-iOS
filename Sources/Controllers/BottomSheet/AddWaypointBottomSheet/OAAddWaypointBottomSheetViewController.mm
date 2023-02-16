@@ -108,7 +108,7 @@
     [builder appendString:@": "];
     if (point)
     {
-        NSString *pointName = [point getOnlyName].length > 0 ? [point getOnlyName] : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"map_settings_map"), [NSString stringWithFormat:@"%@ %.3f %@ %.3f", OALocalizedString(@"Lat"), [point getLatitude], OALocalizedString(@"Lon"), [point getLongitude]]];
+        NSString *pointName = [point getOnlyName].length > 0 ? [point getOnlyName] : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"shared_string_map"), [NSString stringWithFormat:@"%@ %.3f %@ %.3f", OALocalizedString(@"Lat"), [point getLatitude], OALocalizedString(@"Lon"), [point getLongitude]]];
 
         [builder appendString:pointName];
     }

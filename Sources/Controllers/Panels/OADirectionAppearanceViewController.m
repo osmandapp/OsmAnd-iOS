@@ -50,7 +50,12 @@
 
 - (void) applyLocalization
 {
-    _titleView.text = OALocalizedString(@"map_settings_appearance");
+    _titleView.text = OALocalizedString(@"shared_string_appearance");
+}
+
+-(void) addAccessibilityLabels
+{
+    self.backButton.accessibilityLabel = OALocalizedString(@"shared_string_back");
 }
 
 - (void) viewDidLoad
@@ -58,6 +63,7 @@
     [super viewDidLoad];
     _settings = [OAAppSettings sharedManager];
     self.view.backgroundColor = [UIColor groupTableViewBackgroundColor];
+    [self.backButton setImage:[UIImage rtlImageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
@@ -119,7 +125,7 @@
                         @"type" : [OASettingsCheckmarkCell getCellIdentifier],
                         @"section" : kActiveMarkers,
                         @"key" : kOneActiveMarker,
-                        @"title" : OALocalizedString(@"one"),
+                        @"title" : OALocalizedString(@"shared_string_one"),
                         @"img" : [self drawDeviceImage:@"ic_custom_direction_topbar_one" bgColor:UIColorFromRGB(color_chart_orange)],
                         @"img_inactive" : [self drawDeviceImage:@"ic_custom_direction_topbar_one" bgColor:UIColorFromRGB(color_tint_gray)]
                         }];
@@ -128,7 +134,7 @@
                         @"type" : [OASettingsCheckmarkCell getCellIdentifier],
                         @"section" : kActiveMarkers,
                         @"key" : kTwoActiveMarkers,
-                        @"title" : OALocalizedString(@"two"),
+                        @"title" : OALocalizedString(@"shared_string_two"),
                         @"img" : [self drawDeviceImage:@"ic_custom_direction_topbar_two" bgColor:UIColorFromRGB(color_chart_orange)],
                         @"img_inactive" : [self drawDeviceImage:@"ic_custom_direction_topbar_two"  bgColor:UIColorFromRGB(color_tint_gray)]
                         }];
@@ -137,7 +143,7 @@
                         @"type" : [OASwitchTableViewCell getCellIdentifier],
                         @"key" : kDistanceIndication,
                         @"value" : @([_settings.distanceIndicationVisibility get]),
-                        @"title" : OALocalizedString(@"distance_indication"),
+                        @"title" : OALocalizedString(@"show_direction"),
                         }];
     
     [distanceIndicationArr addObject:@{
@@ -245,28 +251,28 @@
         if ([key isEqualToString:kOneActiveMarker])
         {
             selected = activeMarkers == ONE_ACTIVE_MARKER;
-            cell.iconImageView.image = selected ? item[@"img"] : item[@"img_inactive"];
+            cell.iconImageView.image = selected ? [item[@"img"] imageFlippedForRightToLeftLayoutDirection] : [item[@"img_inactive"] imageFlippedForRightToLeftLayoutDirection];
         }
         else if ([key isEqualToString:kTwoActiveMarkers])
         {
             selected = activeMarkers == TWO_ACTIVE_MARKERS;
-            cell.iconImageView.image = selected ? item[@"img"] : item[@"img_inactive"];
+            cell.iconImageView.image = selected ? [item[@"img"] imageFlippedForRightToLeftLayoutDirection] : [item[@"img_inactive"] imageFlippedForRightToLeftLayoutDirection];
         }
         else if ([key isEqualToString:kTopBarDisplay])
         {
             selected = distanceIndication == TOP_BAR_DISPLAY;
             if (activeMarkers == ONE_ACTIVE_MARKER)
-                cell.iconImageView.image = selected ? item[@"img_one"] : item[@"img_one_inactive"];
+                cell.iconImageView.image = selected ? [item[@"img_one"] imageFlippedForRightToLeftLayoutDirection] : [item[@"img_one_inactive"] imageFlippedForRightToLeftLayoutDirection];
             else
-                cell.iconImageView.image = selected ? item[@"img_two"] : item[@"img_two_inactive"];
+                cell.iconImageView.image = selected ? [item[@"img_two"] imageFlippedForRightToLeftLayoutDirection] : [item[@"img_two_inactive"] imageFlippedForRightToLeftLayoutDirection];
         }
         else if ([key isEqualToString:kWidgetDisplay])
         {
             selected = distanceIndication == WIDGET_DISPLAY;
             if (activeMarkers == ONE_ACTIVE_MARKER)
-                cell.iconImageView.image = selected ? item[@"img_one"] : item[@"img_one_inactive"];
+                cell.iconImageView.image = selected ? [item[@"img_one"] imageFlippedForRightToLeftLayoutDirection] : [item[@"img_one_inactive"] imageFlippedForRightToLeftLayoutDirection];
             else
-                cell.iconImageView.image = selected ? item[@"img_two"] : item[@"img_two_inactive"];
+                cell.iconImageView.image = selected ? [item[@"img_two"] imageFlippedForRightToLeftLayoutDirection] : [item[@"img_two_inactive"] imageFlippedForRightToLeftLayoutDirection];
         }
         cell.titleLabel.text = item[@"title"];
         cell.checkmarkImageView.hidden = !selected;
@@ -328,9 +334,9 @@
         case 0:
             return OALocalizedString(@"active_markers");
         case 1:
-            return OALocalizedString(@"distance_indication");
+            return OALocalizedString(@"show_direction");
         case 2:
-            return OALocalizedString(@"appearance_on_map");
+            return OALocalizedString(@"appearance_on_the_map");
         default:
             return @"";
     }

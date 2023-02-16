@@ -13,6 +13,7 @@
 - (void) awakeFromNib
 {
     [super awakeFromNib];
+    self.titleView.font = [UIFont scaledSystemFontOfSize:18. weight:UIFontWeightMedium];
 }
 
 - (void) setSelected:(BOOL)selected animated:(BOOL)animated

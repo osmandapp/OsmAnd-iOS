@@ -21,10 +21,6 @@
 #import "Localization.h"
 #import "OAColors.h"
 
-@interface OAProfileGeneralSettingsParametersViewController () <UITableViewDelegate, UITableViewDataSource>
-
-@end
-
 @implementation OAProfileGeneralSettingsParametersViewController
 {
     NSArray<NSArray *> *_data;
@@ -33,23 +29,30 @@
     NSString *_title;
 }
 
+#pragma mark - Initialization
+
 - (instancetype) initWithType:(EOAProfileGeneralSettingsParameter)settingsType applicationMode:(OAApplicationMode *)applicationMode
 {
     self = [super initWithAppMode:applicationMode];
     if (self)
     {
-        _settings = [OAAppSettings sharedManager];
         _settingsType = settingsType;
-        [self generateData];
+        [self postInit];
     }
     return self;
 }
 
-- (void) generateData
+- (void)commonInit
 {
-    switch (_settingsType) {
+    _settings = [OAAppSettings sharedManager];
+}
+
+- (void)postInit
+{
+    switch (_settingsType)
+    {
         case EOAProfileGeneralSettingsMapOrientation:
-            _title = OALocalizedString(@"rotate_map_to_bearing");
+            _title = OALocalizedString(@"rotate_map_to");
             break;
         case EOAProfileGeneralSettingsDisplayPosition:
             _title = OALocalizedString(@"position_on_map");
@@ -67,32 +70,27 @@
             _title = OALocalizedString(@"angular_measurment_units");
             break;
         case EOAProfileGeneralSettingsExternalInputDevices:
-            _title = OALocalizedString(@"sett_ext_input");
+            _title = OALocalizedString(@"external_input_device");
             break;
         default:
             break;
     }
 }
 
-- (void) applyLocalization
+#pragma mark - Base UI
+
+- (NSString *)getTitle
 {
-    [super applyLocalization];
-    self.titleLabel.text = _title;
+    return _title;
 }
 
-- (void) viewDidLoad
-{
-    [super viewDidLoad];
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    [self setupView];
-}
+#pragma mark - Table data
 
-- (void) setupView
+- (void)generateData
 {
     NSMutableArray *dataArr = [NSMutableArray array];
     NSInteger rotateMap = [_settings.rotateMap get:self.appMode];
-    BOOL positionMap = [_settings.centerPositionOnMap get:self.appMode];
+    EOAPositionPlacement positionMap = [_settings.positionPlacementOnMap get:self.appMode];
     BOOL automatic = [_settings.drivingRegionAutomatic get:self.appMode];
     NSInteger drivingRegion = [_settings.drivingRegion get:self.appMode];
     NSInteger metricSystem = [_settings.metricSystem get:self.appMode];
@@ -129,17 +127,24 @@
             
         case EOAProfileGeneralSettingsDisplayPosition:
             [dataArr addObject:@{
+                @"name" : @"auto",
+                @"title" : OALocalizedString(@"shared_string_automatic"),
+                @"selected" : @(positionMap == EOAPositionPlacementAuto),
+                @"icon" : @"ic_custom_display_position_automatic",
+                @"type" : [OAIconTextTableViewCell getCellIdentifier],
+            }];
+            [dataArr addObject:@{
                 @"name" : @"center",
                 @"title" : OALocalizedString(@"position_on_map_center"),
-                @"selected" : @(positionMap == YES),
-                @"icon" : @"ic_custom_display_position_center.png",
+                @"selected" : @(positionMap == EOAPositionPlacementCenter),
+                @"icon" : @"ic_custom_display_position_center",
                 @"type" : [OAIconTextTableViewCell getCellIdentifier],
             }];
             [dataArr addObject:@{
                 @"name" : @"bottom",
                 @"title" : OALocalizedString(@"position_on_map_bottom"),
-                @"selected" : @(positionMap == NO),
-                @"icon" : @"ic_custom_display_position_bottom.png",
+                @"selected" : @(positionMap == EOAPositionPlacementBottom),
+                @"icon" : @"ic_custom_display_position_bottom",
                 @"type" : [OAIconTextTableViewCell getCellIdentifier],
             }];
             break;
@@ -148,7 +153,7 @@
             self.tableView.rowHeight = 60.;
             [dataArr addObject:@{
                 @"name" : @"AUTOMATIC",
-                @"title" : OALocalizedString(@"driving_region_automatic"),
+                @"title" : OALocalizedString(@"shared_string_automatic"),
                 @"description" : OALocalizedString(@"device_settings"),
                 @"value" : @"",
                 @"selected" : @(automatic),
@@ -326,26 +331,30 @@
     _data = [NSArray arrayWithObject:dataArr];
 }
 
-#pragma mark - TableView
+- (NSInteger)rowsCount:(NSInteger)section
+{
+    return _data[section].count;
+}
 
-- (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
+{
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
     if ([cellType isEqualToString:[OAIconTextTableViewCell getCellIdentifier]])
     {
-        OAIconTextTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
+        OAIconTextTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
-            cell.arrowIconView.image = [UIImage templateImageNamed:@"ic_checkmark_default"];
-            cell.arrowIconView.tintColor = UIColorFromRGB(color_primary_purple);
+            [cell.arrowIconView setHidden:YES];
         }
         if (cell)
         {
             cell.textView.text = item[@"title"];
-            cell.arrowIconView.hidden = ![item[@"selected"] boolValue];
+            if ([item[@"selected"] boolValue])
+                cell.accessoryType = UITableViewCellAccessoryCheckmark;
             cell.iconView.image = [UIImage templateImageNamed:item[@"icon"]];
             cell.iconView.tintColor = [item[@"selected"] boolValue] ? UIColorFromRGB(self.appMode.getIconColor) : UIColorFromRGB(color_icon_inactive);
         }
@@ -353,57 +362,53 @@
     }
     if ([cellType isEqualToString:[OATitleDescriptionCollapsableCell getCellIdentifier]])
     {
-        OATitleDescriptionCollapsableCell* cell = [tableView dequeueReusableCellWithIdentifier:[OATitleDescriptionCollapsableCell getCellIdentifier]];
+        OATitleDescriptionCollapsableCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OATitleDescriptionCollapsableCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleDescriptionCollapsableCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleDescriptionCollapsableCell *)[nib objectAtIndex:0];
-            cell.iconView.image = [UIImage templateImageNamed:@"ic_checkmark_default"];
-            cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
+            [cell.iconView setHidden:YES];
         }
         if (cell)
         {
             cell.textView.text = item[@"title"];
             cell.descriptionView.text = item[@"description"];
-            cell.iconView.hidden = ![item[@"selected"] boolValue];
+            if ([item[@"selected"] boolValue])
+                cell.accessoryType = UITableViewCellAccessoryCheckmark;
         }
         return cell;
     }
     if ([cellType isEqualToString:[OASettingsTitleTableViewCell getCellIdentifier]])
     {
-        OASettingsTitleTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTitleTableViewCell getCellIdentifier]];
+        OASettingsTitleTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OASettingsTitleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTitleTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingsTitleTableViewCell *)[nib objectAtIndex:0];
-            cell.iconView.image = [UIImage templateImageNamed:@"ic_checkmark_default"];
-            cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
+            [cell.iconView setHidden:YES];
         }
         if (cell)
         {
             cell.textView.text = item[@"title"];
-            cell.iconView.hidden = ![item[@"selected"] boolValue];
+            if ([item[@"selected"] boolValue])
+                cell.accessoryType = UITableViewCellAccessoryCheckmark;
         }
         return cell;
     }
     return nil;
 }
 
-- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return 17.0;
-}
-
-- (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return _data[section].count;
-}
-
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
+- (NSInteger)sectionsCount
 {
     return _data.count;
 }
 
-- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (CGFloat)getCustomHeightForHeader:(NSInteger)section
+{
+    return 17.;
+}
+
+- (void)onRowPressed:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *name = item[@"name"];
@@ -412,7 +417,7 @@
             [self selectMapOrientation:name];
             break;
         case EOAProfileGeneralSettingsDisplayPosition:
-            [self selectDisplayPosition:name];
+            [self selectDisplayPosition:(int)indexPath.row];
             break;
         case EOAProfileGeneralSettingsDrivingRegion:
             [self selectDrivingRegion:name];
@@ -432,12 +437,13 @@
         default:
             break;
     }
-    [self setupView];
+    [self generateData];
     [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationFade];
-    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     [self.delegate onSettingsChanged];
-    [self backButtonClicked:self];
+    [self dismissViewController];
 }
+
+#pragma mark - Selectors
 
 - (void) selectMapOrientation:(NSString *)name
 {
@@ -452,9 +458,9 @@
     [OARootViewController.instance.mapPanel.mapViewController refreshMap];
 }
 
-- (void) selectDisplayPosition:(NSString *)name
+- (void) selectDisplayPosition:(int)idx
 {
-    [_settings.centerPositionOnMap set:[name isEqualToString:@"center"] mode:self.appMode];
+    [_settings.positionPlacementOnMap set:idx mode:self.appMode];
 }
 
 - (void) selectDrivingRegion:(NSString *)name

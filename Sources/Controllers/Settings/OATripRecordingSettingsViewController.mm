@@ -51,6 +51,7 @@ static NSArray<NSString *> *trackPrecisionNames;
 static NSArray<NSNumber *> *minTrackSpeedValues;
 static NSArray<NSString *> *minTrackSpeedNames;
 
+#pragma mark - Initialization
 
 + (void) initialize
 {
@@ -81,37 +82,30 @@ static NSArray<NSString *> *minTrackSpeedNames;
     return self;
 }
 
-- (void) applyLocalization
+#pragma mark - Base UI
+
+- (NSString *)getTitle
 {
-    [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"product_title_track_recording");
+    switch (self.settingsType)
+    {
+        case kTripRecordingSettingsScreenRecInterval:
+        case kTripRecordingSettingsScreenNavRecInterval:
+            return OALocalizedString(@"save_track_interval_globally");
+        case kTripRecordingSettingsScreenAccuracy:
+            return OALocalizedString(@"monitoring_min_accuracy");
+        case kTripRecordingSettingsScreenMinSpeed:
+            return OALocalizedString(@"monitoring_min_speed");
+        case kTripRecordingSettingsScreenMinDistance:
+            return OALocalizedString(@"monitoring_min_distance");
+        default:
+            return OALocalizedString(@"record_plugin_name");
+    }
 }
 
-- (void) viewDidLoad
-{
-    [super viewDidLoad];
-    
-    self.tableView.dataSource = self;
-    self.tableView.delegate = self;
-    self.tableView.estimatedRowHeight = kEstimatedRowHeight;
-    self.tableView.separatorColor =  UIColorFromRGB(color_tint_gray);
-}
+#pragma mark - Table data
 
-- (void) didReceiveMemoryWarning
+- (void)generateData
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-- (void) viewWillAppear:(BOOL)animated
-{
-    [self setupView];
-}
-
-- (void) setupView
-{
-    [self.backButton setImage:self.backButton.imageView.image.imageFlippedForRightToLeftLayoutDirection forState:UIControlStateNormal];
-    [self applySafeAreaMargins];
     OAAppSettings* settings = [OAAppSettings sharedManager];
     NSMutableArray *dataArr = [NSMutableArray array];
     switch (self.settingsType)
@@ -127,18 +121,18 @@ static NSArray<NSString *> *minTrackSpeedNames;
             
             [dataArr addObject:
              @[@{
-                   @"header" : OALocalizedString(@"logging_accuracy"),
+                   @"header" : OALocalizedString(@"save_track_logging_accuracy"),
                    @"name" : @"rec_interval",
                    @"title" : OALocalizedString(@"save_global_track_interval"),
                    @"description" : OALocalizedString(@"save_global_track_interval_descr"),
-                   @"value" : ![settings.mapSettingSaveTrackIntervalApproved get:self.appMode] ? OALocalizedString(@"shared_setting_always_ask") : recIntervalValue,
+                   @"value" : ![settings.mapSettingSaveTrackIntervalApproved get:self.appMode] ? OALocalizedString(@"confirm_every_run") : recIntervalValue,
                    @"type" : [OAIconTitleValueCell getCellIdentifier] }
              ]];
             
             [dataArr addObject:
              @[@{
                    @"name" : @"logging_min_distance",
-                   @"title" : OALocalizedString(@"logging_min_distance"),
+                   @"title" : OALocalizedString(@"monitoring_min_distance"),
                    @"description" : OALocalizedString(@"logging_min_distance_descr"),
                    @"value" : minDistValue,
                    @"type" : [OAIconTitleValueCell getCellIdentifier] }
@@ -147,7 +141,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
             [dataArr addObject:
              @[@{
                    @"name" : @"logging_min_accuracy",
-                   @"title" : OALocalizedString(@"logging_min_accuracy"),
+                   @"title" : OALocalizedString(@"monitoring_min_accuracy"),
                    @"description" : OALocalizedString(@"logging_min_accuracy_descr"),
                    @"value" : minPrecision,
                    @"type" : [OAIconTitleValueCell getCellIdentifier] }
@@ -156,7 +150,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
             [dataArr addObject:
              @[@{
                    @"name" : @"logging_min_speed",
-                   @"title" : OALocalizedString(@"logging_min_speed"),
+                   @"title" : OALocalizedString(@"monitoring_min_speed"),
                    @"description" : OALocalizedString(@"logging_min_speed_descr"),
                    @"value" : minSpeed,
                    @"type" : [OAIconTitleValueCell getCellIdentifier] }
@@ -177,14 +171,14 @@ static NSArray<NSString *> *minTrackSpeedNames;
              @[@{
                    @"header" : OALocalizedString(@"routing_settings"),
                    @"name" : @"track_during_nav",
-                   @"title" : OALocalizedString(@"track_during_nav"),
-                   @"description" : [NSString stringWithFormat:@"%@ %@", OALocalizedString(@"track_during_nav_descr"), OALocalizedString(@"logging_interval_navigation_descr")],
+                   @"title" : OALocalizedString(@"save_track_to_gpx"),
+                   @"description" : [NSString stringWithFormat:@"%@ %@", OALocalizedString(@"save_track_to_gpx_descrp"), OALocalizedString(@"logging_interval_navigation_descr")],
                    @"value" : _settings.saveTrackToGPX,
                    @"img" : @"ic_custom_navigation",
                    @"type" : [OASwitchTableViewCell getCellIdentifier] },
                @{
                    @"name" : @"logging_interval_navigation",
-                   @"title" : OALocalizedString(@"logging_interval_navigation"),
+                   @"title" : OALocalizedString(@"save_track_interval"),
                    @"value" : navIntervalValue,
                    @"img" : @"ic_custom_timer",
                    @"type" : [OAIconTitleValueCell getCellIdentifier],
@@ -194,40 +188,40 @@ static NSArray<NSString *> *minTrackSpeedNames;
             
             [dataArr addObject:
              @[@{
-                 @"header" : OALocalizedString(@"help_other_header"),
+                 @"header" : OALocalizedString(@"other_location"),
                  @"name" : @"auto_split_gap",
-                 @"title" : OALocalizedString(@"auto_split_gap"),
+                 @"title" : OALocalizedString(@"auto_split_recording_title"),
                  @"description" : OALocalizedString(@"auto_split_gap_descr"),
                  @"value" : @([_settings.autoSplitRecording get:self.appMode]),
                  @"type" : [OASwitchTableViewCell getCellIdentifier] }]];
             
-            NSString *menuPath = [NSString stringWithFormat:@"%@ — %@ — %@", OALocalizedString(@"menu"), OALocalizedString(@"menu_my_places"), OALocalizedString(@"menu_my_trips")];
+            NSString *menuPath = [NSString stringWithFormat:@"%@ — %@ — %@", OALocalizedString(@"shared_string_menu"), OALocalizedString(@"shared_string_my_places"), OALocalizedString(@"menu_my_trips")];
             NSString *actionsDescr = [NSString stringWithFormat:OALocalizedString(@"trip_rec_actions_descr"), menuPath];
-            NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithString:actionsDescr attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:15], NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer)}];
-            [str addAttributes:@{NSFontAttributeName : [UIFont systemFontOfSize:15 weight:UIFontWeightSemibold]} range:[actionsDescr rangeOfString:menuPath]];
+            NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithString:actionsDescr attributes:@{NSFontAttributeName : [UIFont scaledSystemFontOfSize:15], NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer)}];
+            [str addAttributes:@{NSFontAttributeName : [UIFont scaledSystemFontOfSize:15 weight:UIFontWeightSemibold]} range:[actionsDescr rangeOfString:menuPath]];
             
             [dataArr addObject:@[
                 @{
                     @"type" : [OAIconTextTableViewCell getCellIdentifier],
                     @"title" : str,
-                    @"header" : OALocalizedString(@"actions")
+                    @"header" : OALocalizedString(@"shared_string_actions")
                 },
                 @{
                     @"type" : [OATitleRightIconCell getCellIdentifier],
-                    @"title" : OALocalizedString(@"tracks"),
+                    @"title" : OALocalizedString(@"shared_string_gpx_tracks"),
                     @"img" : @"ic_custom_folder",
                     @"name" : @"open_trips"
                 },
                 @{
                     @"type" : [OATitleRightIconCell getCellIdentifier],
-                    @"title" : OALocalizedString(@"plugin_settings_reset"),
+                    @"title" : OALocalizedString(@"reset_plugin_to_default"),
                     @"img" : @"ic_custom_reset",
                     @"name" : @"reset_plugin"
                 },
                 // TODO: add copy from profile
 //                @{
 //                    @"type" : [OATitleRightIconCell getCellIdentifier],
-//                    @"title" : OALocalizedString(@"tracks"),
+//                    @"title" : OALocalizedString(@"shared_string_gpx_tracks"),
 //                    @"img" : @"ic_custom_folder",
 //                    @"key" : @"open_trips"
 //                }
@@ -237,10 +231,9 @@ static NSArray<NSString *> *minTrackSpeedNames;
         }
         case kTripRecordingSettingsScreenRecInterval:
         {
-            self.titleLabel.text = OALocalizedString(@"rec_interval");
             BOOL alwaysAsk = ![settings.mapSettingSaveTrackIntervalApproved get:self.appMode];
             [dataArr addObject:@{
-                @"title" : OALocalizedString(@"shared_setting_always_ask"),
+                @"title" : OALocalizedString(@"confirm_every_run"),
                 @"value" : @"always_ask",
                 @"img" : alwaysAsk ? @"menu_cell_selected.png" : @"",
                 @"type" : kCellTypeCheck
@@ -258,7 +251,6 @@ static NSArray<NSString *> *minTrackSpeedNames;
         }
         case kTripRecordingSettingsScreenNavRecInterval:
         {
-            self.titleLabel.text = OALocalizedString(@"rec_interval");
             for (NSNumber *num in settings.trackIntervalArray)
             {
                 [dataArr addObject: @{
@@ -270,7 +262,6 @@ static NSArray<NSString *> *minTrackSpeedNames;
             break;
         }
         case kTripRecordingSettingsScreenAccuracy:
-            self.titleLabel.text = OALocalizedString(@"logging_min_accuracy");
             for (int i = 0; i < trackPrecisionValues.count; i++)
             {
                 [dataArr addObject: @{
@@ -281,7 +272,6 @@ static NSArray<NSString *> *minTrackSpeedNames;
             }
             break;
         case kTripRecordingSettingsScreenMinSpeed:
-            self.titleLabel.text = OALocalizedString(@"logging_min_speed");
             for (int i = 0; i < minTrackSpeedValues.count; i++)
             {
                 [dataArr addObject: @{
@@ -292,7 +282,6 @@ static NSArray<NSString *> *minTrackSpeedNames;
             }
             break;
         case kTripRecordingSettingsScreenMinDistance:
-            self.titleLabel.text = OALocalizedString(@"logging_min_distance");
             for (int i = 0; i < minTrackDistanceValues.count; i++)
             {
                 [dataArr addObject: @{
@@ -307,8 +296,6 @@ static NSArray<NSString *> *minTrackSpeedNames;
     }
     
     _data = [NSArray arrayWithArray:dataArr];
-    
-    [self.tableView reloadData];
 }
 
 - (NSDictionary *) getItem:(NSIndexPath *)indexPath
@@ -318,6 +305,248 @@ static NSArray<NSString *> *minTrackSpeedNames;
     else
         return _data[indexPath.row];
 }
+
+- (NSString *)getTitleForHeader:(NSInteger)section
+{
+    if (_settingsType == kTripRecordingSettingsScreenGeneral)
+    {
+        NSDictionary *item = ((NSArray *)_data[section]).firstObject;
+        return item[@"header"];
+    }
+    return nil;
+}
+
+- (NSString *)getTitleForFooter:(NSInteger)section
+{
+    if (_settingsType == kTripRecordingSettingsScreenGeneral)
+    {
+        NSDictionary *item = ((NSArray *)_data[section]).firstObject;
+        return item[@"description"];
+    }
+    else
+    {
+        return nil;
+    }
+}
+
+- (NSInteger)rowsCount:(NSInteger)section
+{
+    if (section == _navigationSection)
+    {
+        OACommonBoolean *value = [self getItem:[NSIndexPath indexPathForRow:0 inSection:_navigationSection]][@"value"];
+        BOOL isAutoRecordOn = [value get:self.appMode];
+        return isAutoRecordOn ? 2 : 1;
+    }
+    
+    if (_settingsType == kTripRecordingSettingsScreenGeneral)
+    {
+        NSArray *sectionData = _data[section];
+        return sectionData.count;
+    }
+    else
+    {
+        return _data.count;
+    }
+}
+
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
+{
+    NSDictionary *item = [self getItem:indexPath];
+    NSString *type = item[@"type"];
+    
+    if ([type isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
+    {
+        OASwitchTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASwitchTableViewCell *) nib[0];
+            [cell descriptionVisibility:NO];
+        }
+        if (cell)
+        {
+            cell.titleLabel.text = item[@"title"];
+
+            NSString *iconName = item[@"img"];
+            [cell leftIconVisibility:iconName && iconName.length > 0];
+            cell.leftIconView.tintColor = cell.switchView.isOn ? UIColorFromRGB(self.appMode.getIconColor) : UIColorFromRGB(color_icon_inactive);
+            cell.leftIconView.image = [UIImage templateImageNamed:iconName];
+            cell.separatorInset = UIEdgeInsetsMake(0., iconName && iconName.length > 0 ? kPaddingToLeftOfContentWithIcon : kPaddingOnSideOfContent, 0., 0.);
+
+            id v = item[@"value"];
+            if ([v isKindOfClass:[OACommonBoolean class]])
+            {
+                OACommonBoolean *value = v;
+                [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+                cell.switchView.on = [value get:self.appMode];
+            }
+            else
+            {
+                cell.switchView.on = [v boolValue];
+            }
+            cell.switchView.tag = indexPath.section << 10 | indexPath.row;
+            [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
+        }
+        return cell;
+    }
+    else if ([type isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
+    {
+        OAIconTitleValueCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
+            cell = (OAIconTitleValueCell *)[nib objectAtIndex:0];
+            cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
+            cell.rightIconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
+            cell.rightIconView.tintColor = UIColorFromRGB(color_tint_gray);
+        }
+        if (cell)
+        {
+            cell.textView.text = item[@"title"];
+            cell.descriptionView.text = item[@"value"];
+            
+            if ([item[@"key"] isEqualToString:@"nav_interval"] && ![_settings.saveTrackToGPX get:self.appMode])
+            {
+                for (UIView *vw in cell.subviews)
+                    vw.alpha = 0.4;
+                cell.userInteractionEnabled = NO;
+                cell.leftIconView.tintColor = UIColorFromRGB(color_icon_inactive);
+            }
+            else
+            {
+                for (UIView *vw in cell.subviews)
+                    vw.alpha = 1;
+                cell.userInteractionEnabled = YES;
+                cell.leftIconView.tintColor = UIColorFromRGB(self.appMode.getIconColor);
+            }
+            
+            NSString *img = item[@"img"];
+            if (img)
+                cell.leftIconView.image = [UIImage templateImageNamed:img];
+
+            [cell showLeftIcon:img != nil];
+            [cell updateConstraints];
+        }
+        return cell;
+    }
+    else if ([type isEqualToString:[OAIconTextTableViewCell getCellIdentifier]])
+    {
+        OAIconTextTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
+            cell.arrowIconView.hidden = YES;
+            cell.iconView.hidden = YES;
+            cell.separatorInset = UIEdgeInsetsMake(0., DBL_MAX, 0., 0.);
+            cell.textView.numberOfLines = 0;
+            cell.textView.lineBreakMode = NSLineBreakByWordWrapping;
+        }
+        if (cell)
+        {
+            cell.textView.attributedText = item[@"title"];
+        }
+        return cell;
+    }
+    else if ([type isEqualToString:[OATitleRightIconCell getCellIdentifier]])
+    {
+        OATitleRightIconCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OATitleRightIconCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleRightIconCell getCellIdentifier] owner:self options:nil];
+            cell = (OATitleRightIconCell *)[nib objectAtIndex:0];
+            cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0);
+            cell.titleView.textColor = UIColorFromRGB(color_primary_purple);
+            cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
+            cell.titleView.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightSemibold];
+        }
+        cell.titleView.text = item[@"title"];
+        [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]]];
+        return cell;
+    }
+    else if ([type isEqualToString:[OASettingsTableViewCell getCellIdentifier]] || [type isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
+    {
+        OASettingsTableViewCell* cell = nil;
+        cell = [self.tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
+        }
+        
+        if (cell)
+        {
+            [cell.textView setText: item[@"title"]];
+            [cell.descriptionView setText: item[@"value"]];
+            UIImage *image = [UIImage imageNamed:item[@"img"]];
+            [cell.iconView setImage:image];
+        }
+        return cell;
+    }
+    else if ([type isEqualToString:kCellTypeCheck])
+    {
+        OASettingsTitleTableViewCell* cell = nil;
+        
+        cell = [self.tableView dequeueReusableCellWithIdentifier:[OASettingsTitleTableViewCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTitleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASettingsTitleTableViewCell *)[nib objectAtIndex:0];
+        }
+        
+        if (cell)
+        {
+            [cell.textView setText: item[@"title"]];
+            UIImage *image = [UIImage imageNamed:item[@"img"]];
+            [cell.iconView setImage:image];
+        }
+        return cell;
+    }
+    return nil;
+}
+
+- (NSInteger)sectionsCount
+{
+    if (_settingsType == kTripRecordingSettingsScreenGeneral)
+        return _data.count;
+    else
+        return 1;
+}
+
+- (void)onRowPressed:(NSIndexPath *)indexPath
+{
+    NSDictionary *item = [self getItem:indexPath];
+    switch (_settingsType)
+    {
+        case kTripRecordingSettingsScreenGeneral:
+            [self selectGeneral:item];
+            break;
+        case kTripRecordingSettingsScreenRecInterval:
+            if ([item[@"value"] isEqualToString:@"always_ask"]) {
+                [_settings.mapSettingSaveTrackIntervalApproved set:NO mode:self.appMode];
+                [self dismissViewController];
+            } else {
+                [self selectRecInterval:indexPath.row - 1];
+            }
+            break;
+        case kTripRecordingSettingsScreenNavRecInterval:
+            [self selectNavRecInterval:indexPath.row];
+            break;
+        case kTripRecordingSettingsScreenMinDistance:
+            [self selectMinDistance:indexPath.row];
+            break;
+        case kTripRecordingSettingsScreenMinSpeed:
+            [self selectMinSpeed:indexPath.row];
+            break;
+        case kTripRecordingSettingsScreenAccuracy:
+            [self selectAccuracy:indexPath.row];
+            break;
+        default:
+            break;
+    }
+}
+
+#pragma mark - Selectors
 
 - (void) applyParameter:(id)sender
 {
@@ -369,292 +598,35 @@ static NSArray<NSString *> *minTrackSpeedNames;
     }
 }
 
-#pragma mark - UITableViewDataSource
-
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
-{
-    if (_settingsType == kTripRecordingSettingsScreenGeneral)
-        return _data.count;
-    else
-        return 1;
-}
-
-- (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    if (section == _navigationSection)
-    {
-        OACommonBoolean *value = [self getItem:[NSIndexPath indexPathForRow:0 inSection:_navigationSection]][@"value"];
-        BOOL isAutoRecordOn = [value get:self.appMode];
-        return isAutoRecordOn ? 2 : 1;
-    }
-    
-    if (_settingsType == kTripRecordingSettingsScreenGeneral)
-    {
-        NSArray *sectionData = _data[section];
-        return sectionData.count;
-    }
-    else
-    {
-        return _data.count;
-    }
-}
-
-- (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSDictionary *item = [self getItem:indexPath];
-    NSString *type = item[@"type"];
-    
-    if ([type isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
-    {
-        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASwitchTableViewCell *) nib[0];
-            [cell descriptionVisibility:NO];
-        }
-        if (cell)
-        {
-            cell.titleLabel.text = item[@"title"];
-
-            NSString *iconName = item[@"img"];
-            [cell leftIconVisibility:iconName && iconName.length > 0];
-            cell.leftIconView.tintColor = cell.switchView.isOn ? UIColorFromRGB(self.appMode.getIconColor) : UIColorFromRGB(color_icon_inactive);
-            cell.leftIconView.image = [UIImage templateImageNamed:iconName];
-            cell.separatorInset = UIEdgeInsetsMake(0., iconName && iconName.length > 0 ? kPaddingToLeftOfContentWithIcon : kPaddingOnSideOfContent, 0., 0.);
-
-            id v = item[@"value"];
-            if ([v isKindOfClass:[OACommonBoolean class]])
-            {
-                OACommonBoolean *value = v;
-                [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-                cell.switchView.on = [value get:self.appMode];
-            }
-            else
-            {
-                cell.switchView.on = [v boolValue];
-            }
-            cell.switchView.tag = indexPath.section << 10 | indexPath.row;
-            [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
-        }
-        return cell;
-    }
-    else if ([type isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
-    {
-        OAIconTitleValueCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
-            cell = (OAIconTitleValueCell *)[nib objectAtIndex:0];
-            cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
-            cell.rightIconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
-            cell.rightIconView.tintColor = UIColorFromRGB(color_tint_gray);
-        }
-        if (cell)
-        {
-            cell.textView.text = item[@"title"];
-            cell.descriptionView.text = item[@"value"];
-            
-            if ([item[@"key"] isEqualToString:@"nav_interval"] && ![_settings.saveTrackToGPX get:self.appMode])
-            {
-                for (UIView *vw in cell.subviews)
-                    vw.alpha = 0.4;
-                cell.userInteractionEnabled = NO;
-                cell.leftIconView.tintColor = UIColorFromRGB(color_icon_inactive);
-            }
-            else
-            {
-                for (UIView *vw in cell.subviews)
-                    vw.alpha = 1;
-                cell.userInteractionEnabled = YES;
-                cell.leftIconView.tintColor = UIColorFromRGB(self.appMode.getIconColor);
-            }
-            
-            NSString *img = item[@"img"];
-            if (img)
-                cell.leftIconView.image = [UIImage templateImageNamed:img];
-
-            [cell showLeftIcon:img != nil];
-            [cell updateConstraints];
-        }
-        return cell;
-    }
-    else if ([type isEqualToString:[OAIconTextTableViewCell getCellIdentifier]])
-    {
-        OAIconTextTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
-            cell.arrowIconView.hidden = YES;
-            cell.iconView.hidden = YES;
-            cell.separatorInset = UIEdgeInsetsMake(0., DBL_MAX, 0., 0.);
-            cell.textView.numberOfLines = 0;
-            cell.textView.lineBreakMode = NSLineBreakByWordWrapping;
-        }
-        if (cell)
-        {
-            cell.textView.attributedText = item[@"title"];
-        }
-        return cell;
-    }
-    else if ([type isEqualToString:[OATitleRightIconCell getCellIdentifier]])
-    {
-        OATitleRightIconCell* cell = [tableView dequeueReusableCellWithIdentifier:[OATitleRightIconCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleRightIconCell getCellIdentifier] owner:self options:nil];
-            cell = (OATitleRightIconCell *)[nib objectAtIndex:0];
-            cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0);
-            cell.titleView.textColor = UIColorFromRGB(color_primary_purple);
-            cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
-            cell.titleView.font = [UIFont systemFontOfSize:17. weight:UIFontWeightSemibold];
-        }
-        cell.titleView.text = item[@"title"];
-        [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]]];
-        return cell;
-    }
-    else if ([type isEqualToString:[OASettingsTableViewCell getCellIdentifier]] || [type isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
-    {
-        OASettingsTableViewCell* cell = nil;
-        cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
-        }
-        
-        if (cell)
-        {
-            [cell.textView setText: item[@"title"]];
-            [cell.descriptionView setText: item[@"value"]];
-            UIImage *image = [UIImage imageNamed:item[@"img"]];
-            [cell.iconView setImage:image];
-        }
-        return cell;
-    }
-    else if ([type isEqualToString:kCellTypeCheck])
-    {
-        OASettingsTitleTableViewCell* cell = nil;
-        
-        cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTitleTableViewCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTitleTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASettingsTitleTableViewCell *)[nib objectAtIndex:0];
-        }
-        
-        if (cell)
-        {
-            [cell.textView setText: item[@"title"]];
-            UIImage *image = [UIImage imageNamed:item[@"img"]];
-            [cell.iconView setImage:image];
-        }
-        return cell;
-    }
-    return nil;
-}
-
-- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    if (_settingsType == kTripRecordingSettingsScreenGeneral)
-    {
-        NSDictionary *item = ((NSArray *)_data[section]).firstObject;
-        return item[@"header"];
-    }
-    return nil;
-}
-
-- (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
-{
-    if (_settingsType == kTripRecordingSettingsScreenGeneral)
-    {
-        NSDictionary *item = ((NSArray *)_data[section]).firstObject;
-        return item[@"description"];
-    }
-    else
-    {
-        return nil;
-    }
-}
-
-- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
-{
-    UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
-    [header.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
-}
-
-- (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section
-{
-    UITableViewHeaderFooterView *footer = (UITableViewHeaderFooterView *)view;
-    [footer.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
-}
-
-#pragma mark - UITableViewDelegate
-
-- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSDictionary *item = [self getItem:indexPath];
-    switch (_settingsType)
-    {
-        case kTripRecordingSettingsScreenGeneral:
-            [self selectGeneral:item];
-            break;
-        case kTripRecordingSettingsScreenRecInterval:
-            if ([item[@"value"] isEqualToString:@"always_ask"]) {
-                [_settings.mapSettingSaveTrackIntervalApproved set:NO mode:self.appMode];
-                [self backButtonClicked:nil];
-            } else {
-                [self selectRecInterval:indexPath.row - 1];
-            }
-            break;
-        case kTripRecordingSettingsScreenNavRecInterval:
-            [self selectNavRecInterval:indexPath.row];
-            break;
-        case kTripRecordingSettingsScreenMinDistance:
-            [self selectMinDistance:indexPath.row];
-            break;
-        case kTripRecordingSettingsScreenMinSpeed:
-            [self selectMinSpeed:indexPath.row];
-            break;
-        case kTripRecordingSettingsScreenAccuracy:
-            [self selectAccuracy:indexPath.row];
-            break;
-        default:
-            break;
-    }
-    [tableView deselectRowAtIndexPath:indexPath animated:true];
-}
-
 - (void) selectRecInterval:(NSInteger)index
 {
     [_settings.mapSettingSaveTrackIntervalApproved set:YES mode:self.appMode];
     [_settings.mapSettingSaveTrackIntervalGlobal set:[_settings.trackIntervalArray[index] intValue] mode:self.appMode];
-    [self backButtonClicked:nil];
+    [self dismissViewController];
 }
 
 - (void) selectNavRecInterval:(NSInteger)index
 {
     [_settings.mapSettingSaveTrackInterval set:[_settings.trackIntervalArray[index] intValue] mode:self.appMode];
-    [self backButtonClicked:nil];
+    [self dismissViewController];
 }
 
 - (void) selectMinDistance:(NSInteger)index
 {
     [_settings.saveTrackMinDistance set:minTrackDistanceValues[index].doubleValue mode:self.appMode];
-    [self backButtonClicked:nil];
+    [self dismissViewController];
 }
 
 - (void) selectMinSpeed:(NSInteger)index
 {
     [_settings.saveTrackMinSpeed set:minTrackSpeedValues[index].doubleValue / MPS_TO_KMH_MULTIPLIER mode:self.appMode];
-    [self backButtonClicked:nil];
+    [self dismissViewController];
 }
 
 - (void) selectAccuracy:(NSInteger)index
 {
     [_settings.saveTrackPrecision set:trackPrecisionValues[index].doubleValue mode:self.appMode];
-    [self backButtonClicked:nil];
+    [self dismissViewController];
 }
 
 - (void) selectGeneral:(NSDictionary *)item

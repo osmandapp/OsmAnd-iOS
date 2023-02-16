@@ -22,20 +22,17 @@
         [self setViewControllers:newTabs];
     }
     [self applyLocalization];
-    if (@available(iOS 15.0, *))
-    {
-        UITabBarAppearance *appearance = [[UITabBarAppearance alloc] init];
-        [appearance configureWithDefaultBackground];
-        self.tabBar.standardAppearance = appearance;
-        self.tabBar.scrollEdgeAppearance = appearance;
-    }
+    UITabBarAppearance *appearance = [[UITabBarAppearance alloc] init];
+    [appearance configureWithDefaultBackground];
+    self.tabBar.standardAppearance = appearance;
+    self.tabBar.scrollEdgeAppearance = appearance;
     [super viewDidLoad];
 }
 
 -(void)applyLocalization
 {
-    [[self.viewControllers objectAtIndex:0] setTitle:OALocalizedString(@"favorites")];
-    [[self.viewControllers objectAtIndex:1] setTitle: OALocalizedString(@"tracks")];
+    [[self.viewControllers objectAtIndex:0] setTitle:OALocalizedString(@"favorites_item")];
+    [[self.viewControllers objectAtIndex:1] setTitle: OALocalizedString(@"shared_string_gpx_tracks")];
     if (self.viewControllers.count > 2)
         [[self.viewControllers objectAtIndex:2] setTitle: OALocalizedString(@"osm_edits_title")];
     

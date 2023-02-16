@@ -7,386 +7,376 @@
 //
 
 #import "OAGlobalSettingsViewController.h"
+#import "OAUninstallSpeedCamerasViewController.h"
 #import "OAAppSettings.h"
-#import "OASettingsTableViewCell.h"
-#import "OASwitchTableViewCell.h"
-#import "OAValueTableViewCell.h"
+#import "OASimpleTableViewCell.h"
 #import "OARightIconTableViewCell.h"
-#import "OAMultiIconTextDescCell.h"
-#import "OATableViewCustomHeaderView.h"
+#import "OAValueTableViewCell.h"
+#import "OASwitchTableViewCell.h"
+#import "OATableDataModel.h"
+#import "OATableSectionData.h"
+#import "OATableRowData.h"
 #import "Localization.h"
 #import "OAColors.h"
-#import "OAHistorySettingsViewController.h"
-#import "OAExportItemsViewController.h"
-#import "OAHistoryHelper.h"
+#import "OASizes.h"
 
-#define kCarplayHeaderTopMargin 40
-#define kDefaultProfileHeaderTopMargin 40
-
-@interface OAGlobalSettingsViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface OAGlobalSettingsViewController () <OAUninstallSpeedCamerasDelegate>
 
 @end
 
 @implementation OAGlobalSettingsViewController
 {
     OAAppSettings *_settings;
-    NSArray<NSDictionary *> *_data;
+    EOAGlobalSettingsScreen _settingsType;
+    OATableDataModel *_data;
     NSArray<OAApplicationMode *> * _profileList;
-    BOOL _isDefaultProfile;
+    BOOL _isCarPlayDefaultProfile;
     BOOL _isUsingLastAppMode;
+    OAApplicationMode *_selectedProfile;
+    OAApplicationMode *_selectedCarPlayProfile;
 }
 
-- (instancetype) initWithSettingsType:(EOAGlobalSettingsScreen)settingsType
+#pragma mark - Initialization
+
+- (instancetype)initWithSettingsType:(EOAGlobalSettingsScreen)settingsType
 {
     self = [super init];
-    if (self) {
-        [self commonInit];
-        _settings = [OAAppSettings sharedManager];
+    if (self)
+    {
         _settingsType = settingsType;
+        [self postInit];
     }
     return self;
 }
 
-- (void) commonInit
+- (void)commonInit
 {
-    [self generateData];
+    _settings = [OAAppSettings sharedManager];
 }
 
-- (void) generateData
+- (void)postInit
 {
-    _profileList = [NSArray arrayWithArray:OAApplicationMode.values];
+    NSMutableArray<OAApplicationMode *> *profileList = [NSMutableArray arrayWithArray:[OAApplicationMode values]];
+    if (_settingsType == EOACarplayProfile)
+        [profileList removeObject:OAApplicationMode.DEFAULT];
+    _profileList = profileList;
 }
 
-- (UIView *) getTopView
-{
-    return _navbarView;
-}
-
-- (void) applyLocalization
-{
-    if (_settingsType == EOAGlobalSettingsMain)
-        self.titleLabel.text = OALocalizedString(@"osmand_settings");
-    else if (_settingsType == EOADefaultProfile)
-        self.titleLabel.text = OALocalizedString(@"settings_preset");
-    else if (_settingsType == EOADialogsAndNotifications)
-        self.titleLabel.text = OALocalizedString(@"dialogs_and_notifications");
-    else if (_settingsType == EOAHistory)
-        self.titleLabel.text = OALocalizedString(@"history_settings");
-    else
-        self.titleLabel.text = OALocalizedString(@"carplay_profile");
-}
-
-- (void) viewDidLoad
-{
-    [super viewDidLoad];
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    self.tableView.separatorInset = UIEdgeInsetsMake(0., 16.0 + OAUtilities.getLeftMargin, 0., 0.);
-    [self setupView];
-    [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
-}
+#pragma mark - UIViewController
 
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self setupView];
+    [self generateData];
     [self.tableView reloadData];
 }
 
-- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+#pragma mark - Base UI
+
+- (NSString *)getTitle
 {
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        self.tableView.separatorInset = UIEdgeInsetsMake(0., 16.0 + OAUtilities.getLeftMargin, 0., 0.);
-        [self.tableView reloadData];
-    } completion:nil];
+    if (_settingsType == EOAGlobalSettingsMain)
+        return OALocalizedString(@"osmand_settings");
+    else if (_settingsType == EOADefaultProfile)
+        return OALocalizedString(@"settings_preset");
+    else if (_settingsType == EOADialogsAndNotifications)
+        return OALocalizedString(@"dialogs_and_notifications_title");
+    else if (_settingsType == EOAHistory)
+        return OALocalizedString(@"history_settings");
+    else
+        return OALocalizedString(@"carplay_profile");
 }
 
-- (void) setupView
+- (EOABaseNavbarColorScheme)getNavbarColorScheme
 {
+    return EOABaseNavbarColorSchemeOrange;
+}
+
+#pragma mark - Table data
+
+- (void)generateData
+{
+    _data = [OATableDataModel model];
     switch (_settingsType)
     {
         case EOAGlobalSettingsMain:
         {
-            _data = @[
-                @{
-                    @"header" : @"",
-                    @"footer" : OALocalizedString(@"default_profile_descr"),
-                    @"rows": @[@{@"name" : @"settings_preset",
-                                 @"title" : OALocalizedString(@"settings_preset"),
-                                 @"value" : _settings.useLastApplicationModeByDefault.get ? OALocalizedString(@"last_used") : _settings.defaultApplicationMode.get.toHumanString,
-                                 @"img" : @"menu_cell_pointer.png",
-                                 @"type" : [OASettingsTableViewCell getCellIdentifier] }]},
-                @{
-                    @"header" : @"",
-                    @"footer" : OALocalizedString(@"carplay_profile_descr"),
-                    @"rows": @[@{ @"name" : @"carplay_profile",
-                                  @"title" : OALocalizedString(@"carplay_profile"),
-                                  @"value" : _settings.isCarPlayModeDefault.get ? OALocalizedString(@"settings_preset") : _settings.carPlayMode.get.toHumanString,
-                                  @"img" : @"menu_cell_pointer.png",
-                                  @"type" : [OASettingsTableViewCell getCellIdentifier] }]},
-                @{
-                    @"header" : [OALocalizedString(@"privacy_and_security_header") upperCase],
-                    @"footer" : OALocalizedString(@"send_anonymous_data_desc"),
-                    @"rows": @[@{  @"name" : @"do_not_send_anonymous_data",
-                                   @"title" : OALocalizedString(@"send_anonymous_data"),
-                                   @"value" : @(_settings.sendAnonymousAppUsageData.get),
-                                   @"type" : [OASwitchTableViewCell getCellIdentifier], },
-                               @{
-                                   @"name" : @"history_settings",
-                                   @"title" : OALocalizedString(@"history_settings"),
-                                   @"value" : ![_settings.defaultSearchHistoryLoggingApplicationMode get] && ![_settings.defaultNavigationHistoryLoggingApplicationMode get] && ![_settings.defaultMarkersHistoryLoggingApplicationMode get] ? OALocalizedString(@"shared_string_off") : @"",
-                                   @"img" : @"menu_cell_pointer.png",
-                                   @"type" : [OASettingsTableViewCell getCellIdentifier] }]},
-                @{
-                    @"header" : @"",
-                    @"footer" : OALocalizedString(@"dialogs_and_notifications_descr"),
-                    @"rows": @[@{@"name" : @"dialogs_and_notif",
-                                 @"title" : OALocalizedString(@"dialogs_and_notifications"),
-                                 @"description" : OALocalizedString(@"dialogs_and_notifications_descr"),
-                                 @"value" : [self getDialogsAndNotificationsValue],
-                                 @"img" : @"menu_cell_pointer.png",
-                                 @"type" : [OASettingsTableViewCell getCellIdentifier]}]
+            _selectedProfile = [_settings.defaultApplicationMode get];
+            _selectedCarPlayProfile = [_settings.carPlayMode get];
+            _isUsingLastAppMode = [_settings.useLastApplicationModeByDefault get];
+            _isCarPlayDefaultProfile = [_settings.isCarPlayModeDefault get];
+
+            OATableSectionData *defaultProfileSection = [OATableSectionData sectionData];
+            [defaultProfileSection setFooterText:OALocalizedString(@"default_profile_descr")];
+            [defaultProfileSection addRowFromDictionary:@{
+                kCellKeyKey : @"settings_preset",
+                kCellTitleKey : OALocalizedString(@"settings_preset"),
+                kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
+                @"value" : _isUsingLastAppMode ? OALocalizedString(@"shared_string_last_used") : [[_settings.defaultApplicationMode get] toHumanString]
+            }];
+            [_data addSection:defaultProfileSection];
+
+            OATableSectionData *carPlayProfileSection = [OATableSectionData sectionData];
+            [carPlayProfileSection setFooterText:OALocalizedString(@"carplay_profile_descr")];
+            [carPlayProfileSection addRowFromDictionary:@{
+                kCellKeyKey : @"carplay_profile",
+                kCellTitleKey : OALocalizedString(@"carplay_profile"),
+                kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
+                @"value" : _isCarPlayDefaultProfile ? OALocalizedString(@"settings_preset") : [[_settings.carPlayMode get] toHumanString]
+            }];
+            [_data addSection:carPlayProfileSection];
+
+            OATableSectionData *privacyDataSection = [OATableSectionData sectionData];
+            [privacyDataSection setHeaderText:OALocalizedString(@"privacy_and_security")];
+            [privacyDataSection setFooterText:OALocalizedString(@"send_anonymous_data_desc")];
+            [privacyDataSection addRowFromDictionary:@{
+                kCellKeyKey : @"do_not_send_anonymous_data",
+                kCellTitleKey : OALocalizedString(@"send_anonymous_data"),
+                kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
+                @"value" : @([_settings.sendAnonymousAppUsageData get])
+            }];
+            [privacyDataSection addRowFromDictionary:@{
+                kCellKeyKey : @"history_settings",
+                kCellTitleKey : OALocalizedString(@"history_settings"),
+                kCellTypeKey : [OASimpleTableViewCell getCellIdentifier],
+                @"value" : ![_settings.defaultSearchHistoryLoggingApplicationMode get] && ![_settings.defaultNavigationHistoryLoggingApplicationMode get] && ![_settings.defaultMarkersHistoryLoggingApplicationMode get] ? OALocalizedString(@"shared_string_off") : @""
+            }];
+            [_data addSection:privacyDataSection];
+
+            OATableSectionData *dialogsSection = [OATableSectionData sectionData];
+            [dialogsSection setHeaderText:OALocalizedString(@"other_location")];
+            [dialogsSection setFooterText:OALocalizedString(@"dialogs_and_notifications_descr")];
+            [dialogsSection addRowFromDictionary:@{
+                kCellKeyKey : @"dialogs_and_notif",
+                kCellTitleKey : OALocalizedString(@"dialogs_and_notifications_title"),
+                kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
+                @"value" : [self getDialogsAndNotificationsValue]
+            }];
+            [_data addSection:dialogsSection];
+
+            if (![_settings.speedCamerasUninstalled get])
+            {
+                OATableSectionData *speedCameraSection = [OATableSectionData sectionData];
+                [speedCameraSection setHeaderText:OALocalizedString(@"shared_string_legal")];
+                [speedCameraSection addRowFromDictionary:@{
+                    kCellKeyKey : @"uninstall_speed_cameras",
+                    kCellTitleKey : OALocalizedString(@"uninstall_speed_cameras"),
+                    kCellTypeKey : [OASimpleTableViewCell getCellIdentifier],
                 }];
+                [_data addSection:speedCameraSection];
+            }
+
             break;
         }
         case EOADefaultProfile:
         {
-            _isUsingLastAppMode = _settings.useLastApplicationModeByDefault.get;
-            NSMutableArray *arr = [NSMutableArray array];
-            [arr addObject: @{
-                @"name" : @"last_used",
-                @"title" : OALocalizedString(@"last_used"),
+            _isUsingLastAppMode = [_settings.useLastApplicationModeByDefault get];
+
+            OATableSectionData *lastUsedSection = [OATableSectionData sectionData];
+            [lastUsedSection addRowFromDictionary:@{
+                kCellKeyKey : @"last_used",
+                kCellTitleKey : OALocalizedString(@"shared_string_last_used"),
+                kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
                 @"value" : @(_isUsingLastAppMode),
-                @"type" : [OASwitchTableViewCell getCellIdentifier] }];
-            
+            }];
+            [_data addSection:lastUsedSection];
+
             if (!_isUsingLastAppMode)
             {
                 for (OAApplicationMode *mode in _profileList)
                 {
-                    [arr addObject: @{
-                        @"name" : mode.toHumanString,
-                        @"descr" : mode.stringKey,
+                    [lastUsedSection addRowFromDictionary:@{
+                        kCellTypeKey : [OASimpleTableViewCell getCellIdentifier],
                         @"mode" : mode,
-                        @"isSelected" : @(_settings.defaultApplicationMode.get == mode),
-                        @"type" : [OAMultiIconTextDescCell getCellIdentifier] }];
+                        @"isSelected" : @([_settings.defaultApplicationMode get] == mode)
+                    }];
                 }
             }
-            _data = [NSArray arrayWithArray:arr];
             break;
         }
         case EOACarplayProfile:
         {
-            _isDefaultProfile = _settings.isCarPlayModeDefault.get;
-            NSMutableArray *arr = [NSMutableArray array];
-            [arr addObject: @{
-                @"name" : @"carplay_mode_is_default_string",
-                @"title" : OALocalizedString(@"settings_preset"),
-                @"value" : @(_isDefaultProfile),
-                @"type" : [OASwitchTableViewCell getCellIdentifier] }];
-            
-            if (!_isDefaultProfile)
+            _isCarPlayDefaultProfile = [_settings.isCarPlayModeDefault get];
+
+            OATableSectionData *defaultSection = [OATableSectionData sectionData];
+            [defaultSection addRowFromDictionary:@{
+                kCellKeyKey : @"carplay_mode_is_default_string",
+                kCellTitleKey : OALocalizedString(@"settings_preset"),
+                kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
+                @"value" : @(_isCarPlayDefaultProfile),
+            }];
+            [_data addSection:defaultSection];
+
+            if (!_isCarPlayDefaultProfile)
             {
                 for (OAApplicationMode *mode in _profileList)
                 {
-                    if (mode != OAApplicationMode.DEFAULT)
-                    {
-                        [arr addObject: @{
-                            @"name" : mode.toHumanString,
-                            @"descr" : mode.stringKey,
-                            @"mode" : mode,
-                            @"isSelected" : @(_settings.carPlayMode.get == mode),
-                            @"type" : [OAMultiIconTextDescCell getCellIdentifier] }];
-                    }
+                    [defaultSection addRowFromDictionary:@{
+                        kCellTypeKey : [OASimpleTableViewCell getCellIdentifier],
+                        @"mode" : mode,
+                        @"isSelected" : @([_settings.carPlayMode get] == mode)
+                    }];
                 }
             }
-            _data = [NSArray arrayWithArray:arr];
             break;
         }
         case EOAHistory:
         {
             OAHistoryHelper *helper = [OAHistoryHelper sharedInstance];
             NSArray *historyItems = [helper getPointsHavingTypes:helper.searchTypes limit:0];
-            _data = @[
-                @{
-                    @"header" : @"",
-                    @"footer" : OALocalizedString(@"history_footer_text"),
-                    @"rows": @[@{  @"name" : @"search_history",
-                                   @"title" : OALocalizedString(@"search_history"),
-                                   @"value" : [_settings.defaultSearchHistoryLoggingApplicationMode get] ? [NSString stringWithFormat:@"%ld", historyItems.count] : OALocalizedString(@"shared_string_off"),
-                                   @"icon" : @"ic_custom_search",
-                                   @"type" : [OAValueTableViewCell getCellIdentifier] },
-                               @{
-                                   @"name" : @"navigation_history",
-                                   @"title" : OALocalizedString(@"navigation_history"),
-                                   @"value" : [_settings.defaultNavigationHistoryLoggingApplicationMode get] ? [NSString stringWithFormat:@"%ld", historyItems.count] : OALocalizedString(@"shared_string_off"),
-                                   @"icon" : @"ic_custom_navigation",
-                                   @"type" : [OAValueTableViewCell getCellIdentifier] },
-                               @{
-                                   @"name" : @"map_markers_history",
-                                   @"title" : OALocalizedString(@"map_markers_history"),
-                                   @"value" : [_settings.defaultMarkersHistoryLoggingApplicationMode get] ? [NSString stringWithFormat:@"%ld", historyItems.count] : OALocalizedString(@"shared_string_off"),
-                                   @"icon" : @"ic_custom_marker",
-                                   @"type" : [OAValueTableViewCell getCellIdentifier] }]},
-                @{
-                    @"header" : [OALocalizedString(@"actions") upperCase],
-                    @"footer" : OALocalizedString(@"history_actions_footer_text"),
-                    @"rows": @[@{  @"name" : @"export_history",
-                                   @"title" : OALocalizedString(@"shared_string_export"),
-                                   @"value" : @(_settings.sendAnonymousAppUsageData.get),
-                                   @"icon" : @"ic_custom_export",
-                                   @"type" : [OARightIconTableViewCell getCellIdentifier] },
-                               @{
-                                   @"name" : @"clear_history",
-                                   @"title" : OALocalizedString(@"clear_history"),
-                                   @"value" : [self getDialogsAndNotificationsValue],
-                                   @"icon" : @"ic_custom_remove_outlined",
-                                   @"type" : [OARightIconTableViewCell getCellIdentifier] }],
-                }];
+
+            OATableSectionData *historySection = [OATableSectionData sectionData];
+            [historySection setFooterText:OALocalizedString(@"history_footer_text")];
+            [_data addSection:historySection];
+
+            [historySection addRowFromDictionary:@{
+                kCellKeyKey : @"search_history",
+                kCellTitleKey : OALocalizedString(@"search_history"),
+                kCellIconNameKey : @"ic_custom_search",
+                kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
+                @"value" : [_settings.defaultSearchHistoryLoggingApplicationMode get] ? [NSString stringWithFormat:@"%ld", historyItems.count] : OALocalizedString(@"shared_string_off"),
+            }];
+            [historySection addRowFromDictionary:@{
+                kCellKeyKey : @"navigation_history",
+                kCellTitleKey : OALocalizedString(@"navigation_history"),
+                kCellIconNameKey : @"ic_custom_navigation",
+                kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
+                @"value" : [_settings.defaultNavigationHistoryLoggingApplicationMode get] ? [NSString stringWithFormat:@"%ld", historyItems.count] : OALocalizedString(@"shared_string_off"),
+            }];
+            [historySection addRowFromDictionary:@{
+                kCellKeyKey : @"map_markers_history",
+                kCellTitleKey : OALocalizedString(@"map_markers_history"),
+                kCellIconNameKey : @"ic_custom_marker",
+                kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
+                @"value" : [_settings.defaultMarkersHistoryLoggingApplicationMode get] ? [NSString stringWithFormat:@"%ld", historyItems.count] : OALocalizedString(@"shared_string_off"),
+            }];
+            
+            OATableSectionData *actionsSection = [OATableSectionData sectionData];
+            [actionsSection setHeaderText:OALocalizedString(@"actions")];
+            [actionsSection setFooterText:OALocalizedString(@"history_actions_footer_text")];
+            [_data addSection:actionsSection];
+
+            [actionsSection addRowFromDictionary:@{
+                kCellKeyKey : @"export_history",
+                kCellTitleKey : OALocalizedString(@"shared_string_export"),
+                kCellIconNameKey : @"ic_custom_export",
+                kCellTypeKey : [OARightIconTableViewCell getCellIdentifier],
+                @"value" : @(_settings.sendAnonymousAppUsageData.get),
+            }];
+            [actionsSection addRowFromDictionary:@{
+                kCellKeyKey : @"clear_history",
+                kCellTitleKey : OALocalizedString(@"clear_history"),
+                kCellIconNameKey : @"ic_custom_remove_outlined",
+                kCellTypeKey : [OARightIconTableViewCell getCellIdentifier],
+                @"value" : [self getDialogsAndNotificationsValue],
+            }];
             break;
         }
         case EOADialogsAndNotifications:
         {
-            _data = @[
-                @{
-                    @"name" : @"do_not_show_discount",
-                    @"title" : OALocalizedString(@"do_not_show_discount"),
-                    @"description" : OALocalizedString(@"do_not_show_discount_desc"),
-                    @"value" : @(_settings.settingDoNotShowPromotions.get),
-                    @"type" : [OASwitchTableViewCell getCellIdentifier]
-                },
-                @{
-                    @"name" : @"download_map_dialog",
-                    @"title" : OALocalizedString(@"download_map_dialog"),
-                    @"value" : @(_settings.showDownloadMapDialog.get),
-                    @"type" : [OASwitchTableViewCell getCellIdentifier]
-                }
-            ];
+            OATableSectionData *promotionsSection = [OATableSectionData sectionData];
+            [promotionsSection setFooterText:OALocalizedString(@"do_not_show_discount_desc")];
+            [promotionsSection addRowFromDictionary:@{
+                kCellKeyKey : @"do_not_show_discount",
+                kCellTitleKey : OALocalizedString(@"do_not_show_discount"),
+                kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
+                @"value" : @([_settings.settingDoNotShowPromotions get])
+            }];
+            [_data addSection:promotionsSection];
+
+            OATableSectionData *downloadMapSection = [OATableSectionData sectionData];
+            [downloadMapSection addRowFromDictionary:@{
+                kCellKeyKey : @"download_map_dialog",
+                kCellTitleKey : OALocalizedString(@"download_map_dialog"),
+                kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
+                @"value" : @([_settings.showDownloadMapDialog get])
+            }];
+            [_data addSection:downloadMapSection];
         }
         default:
             break;
     }
 }
 
-- (NSString *) getDialogsAndNotificationsValue
+- (NSString *)getDialogsAndNotificationsValue
 {
-    BOOL showPromotions = _settings.settingDoNotShowPromotions.get;
-    BOOL showDownloadMap = _settings.showDownloadMapDialog.get;
-    if (showPromotions && showDownloadMap)
+    NSInteger valuesEnabled = 0;
+    NSInteger allValues = 0;
+
+    if ([_settings.settingDoNotShowPromotions get])
+        valuesEnabled++;
+    allValues++;
+
+    if ([_settings.showDownloadMapDialog get])
+        valuesEnabled++;
+    allValues++;
+
+    if (allValues == valuesEnabled)
         return OALocalizedString(@"shared_string_all");
-    else if (!showPromotions && !showDownloadMap)
+    else if (valuesEnabled == 0)
         return OALocalizedString(@"shared_string_none");
-    return @"1/2";
+
+    return [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_slash"), @(valuesEnabled).stringValue, @(allValues).stringValue];
 }
 
-- (IBAction) backButtonPressed:(id)sender
+- (NSString *)getTitleForHeader:(NSInteger)section
 {
-    [self dismissViewController];
+    return [_data sectionDataForIndex:section].headerText;
 }
 
-- (NSDictionary *) getItem:(NSIndexPath *)indexPath
+- (NSString *)getTitleForFooter:(NSInteger)section
 {
-    if (_settingsType == EOAGlobalSettingsMain || _settingsType == EOAHistory)
-    {
-        NSDictionary *section = _data[indexPath.section];
-        NSArray *row = section[@"rows"];
-        return row[indexPath.row];
-    }
-    else if (_settingsType == EOADialogsAndNotifications)
-        return _data[indexPath.section];
-    else
-        return _data[indexPath.row];
+    return [_data sectionDataForIndex:section].footerText;
 }
 
-#pragma mark - TableView
+- (NSInteger)rowsCount:(NSInteger)section
+{
+    return [_data rowCount:section];
+}
 
-- (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
-    NSDictionary *item = [self getItem:indexPath];
-    NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
+{
+    OATableRowData *item = [_data itemForIndexPath:indexPath];
+    if ([item.cellType isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
     {
-        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];
+        OASimpleTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
-            cell.descriptionView.font = [UIFont systemFontOfSize:17.0];
-            cell.descriptionView.numberOfLines = 1;
-            cell.iconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
-            cell.iconView.tintColor = UIColorFromRGB(color_tint_gray);
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASimpleTableViewCell *) nib[0];
         }
         if (cell)
         {
-            cell.textView.text = item[@"title"];
-            cell.descriptionView.text = item[@"value"];
-        }
-        return cell;
-    }
-    else if ([cellType isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
-    {
-        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASwitchTableViewCell *) nib[0];
-            [cell leftIconVisibility:NO];
-            [cell descriptionVisibility:NO];
-        }
-        if (cell)
-        {
-            cell.titleLabel.text = item[@"title"];
+            cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingOnSideOfContent, 0., 0.);
 
-            [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-            cell.switchView.on = [item[@"value"] boolValue];
-            cell.switchView.tag = indexPath.section << 10 | indexPath.row;
-            [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
+            OAApplicationMode *appMode = [item objForKey:@"mode"];
+            if (appMode)
+            {
+                cell.titleLabel.text = [appMode toHumanString];
+                cell.descriptionLabel.text = [appMode getProfileDescription];
+                [cell descriptionVisibility:YES];
+
+                cell.leftIconView.image = [[appMode getIcon] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
+                cell.leftIconView.tintColor = UIColorFromRGB([appMode getIconColor]);
+                [cell leftIconVisibility:YES];
+
+                if ([item boolForKey:@"isSelected"])
+                    cell.accessoryType = UITableViewCellAccessoryCheckmark;
+                else
+                    cell.accessoryType = UITableViewCellAccessoryNone;
+            }
+            else
+            {
+                [cell leftIconVisibility:NO];
+                [cell descriptionVisibility:NO];
+                cell.titleLabel.text = item.title;
+            }
         }
         return cell;
     }
-    else if ([cellType isEqualToString:[OAMultiIconTextDescCell getCellIdentifier]])
+    else if ([item.cellType isEqualToString:[OARightIconTableViewCell getCellIdentifier]])
     {
-        OAMultiIconTextDescCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAMultiIconTextDescCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMultiIconTextDescCell getCellIdentifier] owner:self options:nil];
-            cell = (OAMultiIconTextDescCell *)[nib objectAtIndex:0];
-            cell.separatorInset = UIEdgeInsetsMake(0.0, 62.0, 0.0, 0.0);
-            [cell.overflowButton setImage:[UIImage templateImageNamed:@"ic_checkmark_default"] forState:UIControlStateNormal];
-            cell.overflowButton.tintColor = UIColorFromRGB(color_primary_purple);
-            cell.textView.numberOfLines = 3;
-            cell.textView.lineBreakMode = NSLineBreakByTruncatingTail;
-        }
-        OAApplicationMode *am = item[@"mode"];
-        UIImage *img = am.getIcon;
-        cell.iconView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        cell.iconView.tintColor = UIColorFromRGB(am.getIconColor);
-        cell.textView.text = am.toHumanString;
-        cell.descView.text = am.getProfileDescription;
-        [cell setOverflowVisibility:![item[@"isSelected"] boolValue]];
-        return cell;
-    }
-    else if ([cellType isEqualToString:[OAValueTableViewCell getCellIdentifier]])
-    {
-        OAValueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OAValueTableViewCell *) nib[0];
-            [cell descriptionVisibility:NO];
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        }
-        if (cell)
-        {
-            cell.titleLabel.text = item[@"title"];
-            NSString *iconName = item[@"icon"];
-            cell.leftIconView.image = [UIImage templateImageNamed:iconName];
-            cell.leftIconView.tintColor = UIColorFromRGB(color_primary_purple);
-            cell.valueLabel.text = item[@"value"];
-        }
-        return cell;
-    }
-    else if ([cellType isEqualToString:[OARightIconTableViewCell getCellIdentifier]])
-    {
-        OARightIconTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
+        OARightIconTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
@@ -396,306 +386,233 @@
         }
         if (cell)
         {
-            cell.titleLabel.text = item[@"title"];
-            if ([item[@"title"] isEqualToString:@"Clear all history"])
-                cell.titleLabel.textColor = UIColorFromRGB(color_primary_red);
-            else
-                cell.titleLabel.textColor = UIColorFromRGB(color_primary_purple);
-            
-            cell.rightIconView.image = [UIImage templateImageNamed:item[@"icon"]];
-            if ([item[@"icon"] isEqualToString:@"ic_custom_remove_outlined"])
-                cell.rightIconView.tintColor = UIColorFromRGB(color_primary_red);
-            else
-                cell.rightIconView.tintColor = UIColorFromRGB(color_primary_purple);
-            
+            cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingToLeftOfContentWithIcon, 0., 0.);
+
+            BOOL isClearHistory = [item.key isEqualToString:@"clear_history"];
+            cell.titleLabel.text = item.title;
+            cell.titleLabel.textColor = isClearHistory ? UIColorFromRGB(color_primary_red) : UIColorFromRGB(color_primary_purple);
+            cell.rightIconView.image = [UIImage templateImageNamed:item.iconName];
+            cell.rightIconView.tintColor = isClearHistory ? UIColorFromRGB(color_primary_red) : UIColorFromRGB(color_primary_purple);
+        }
+        return cell;
+    }
+    else if ([item.cellType isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
+    {
+        OASwitchTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASwitchTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
+        }
+        if (cell)
+        {
+            cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingOnSideOfContent, 0., 0.);
+            cell.titleLabel.text = item.title;
+
+            [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+            cell.switchView.on = [item boolForKey:@"value"];
+            cell.switchView.tag = indexPath.section << 10 | indexPath.row;
+            [cell.switchView addTarget:self action:@selector(onSwitchPressed:) forControlEvents:UIControlEventValueChanged];
+        }
+        return cell;
+    }
+    else if ([item.cellType isEqualToString:[OAValueTableViewCell getCellIdentifier]])
+    {
+        OAValueTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAValueTableViewCell *) nib[0];
+            [cell descriptionVisibility:NO];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            cell.leftIconView.tintColor = UIColorFromRGB(color_primary_purple);
+        }
+        if (cell)
+        {
+            cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingOnSideOfContent, 0., 0.);
+            cell.titleLabel.text = item.title;
+            cell.valueLabel.text = [item stringForKey:@"value"];
+
+            BOOL hasLeftIcon = item.iconName && item.iconName.length > 0;
+            [cell leftIconVisibility:hasLeftIcon];
+            cell.leftIconView.image = hasLeftIcon ? [UIImage templateImageNamed:item.iconName] : nil;
         }
         return cell;
     }
     return nil;
 }
 
-- (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (NSInteger)sectionsCount
 {
-    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    return cell.selectionStyle == UITableViewCellSelectionStyleNone ? nil : indexPath;
+    return [_data sectionCount];
 }
 
-- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)onRowPressed:(NSIndexPath *)indexPath
 {
-    NSDictionary *item = [self getItem:indexPath];
-    NSString *name = item[@"name"];
-    if (name)
+    OATableRowData *item = [_data itemForIndexPath:indexPath];
+    switch (_settingsType)
     {
-        switch (self.settingsType)
+        case EOAGlobalSettingsMain:
         {
-            case EOAGlobalSettingsMain:
+            UIViewController *settingsViewController = nil;
+            if ([item.key isEqualToString:@"settings_preset"])
+                settingsViewController = [[OAGlobalSettingsViewController alloc] initWithSettingsType:EOADefaultProfile];
+            else if ([item.key isEqualToString:@"carplay_profile"])
+                settingsViewController = [[OAGlobalSettingsViewController alloc] initWithSettingsType:EOACarplayProfile];
+            else if ([item.key isEqualToString:@"history_settings"])
+                settingsViewController = [[OAGlobalSettingsViewController alloc] initWithSettingsType:EOAHistory];
+            else if ([item.key isEqualToString:@"dialogs_and_notif"])
+                settingsViewController = [[OAGlobalSettingsViewController alloc] initWithSettingsType:EOADialogsAndNotifications];
+
+            if (settingsViewController)
             {
-                OAGlobalSettingsViewController* settingsViewController = nil;
-                if ([name isEqualToString:@"settings_preset"])
-                    settingsViewController = [[OAGlobalSettingsViewController alloc] initWithSettingsType:EOADefaultProfile];
-                else if ([name isEqualToString:@"carplay_profile"])
-                    settingsViewController = [[OAGlobalSettingsViewController alloc] initWithSettingsType:EOACarplayProfile];
-                else if ([name isEqualToString:@"history_settings"])
-                    settingsViewController = [[OAGlobalSettingsViewController alloc] initWithSettingsType:EOAHistory];
-                else if ([name isEqualToString:@"dialogs_and_notif"])
-                    settingsViewController = [[OAGlobalSettingsViewController alloc] initWithSettingsType:EOADialogsAndNotifications];
                 [self.navigationController pushViewController:settingsViewController animated:YES];
-                [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
-                break;
             }
-            case EOADefaultProfile:
+            else
             {
-                NSDictionary *item = [self getItem:indexPath];
-                OAApplicationMode *am = item[@"mode"];
-                [_settings.defaultApplicationMode set:am];
-                [_settings setApplicationModePref:am];
-                [self backButtonClicked:nil];
-                break;
+                if ([item.key isEqualToString:@"uninstall_speed_cameras"])
+                {
+                    settingsViewController = [[OAUninstallSpeedCamerasViewController alloc] init];
+                    ((OAUninstallSpeedCamerasViewController *) settingsViewController).delegate = self;
+                }
+
+                if (settingsViewController)
+                    [self presentViewController:settingsViewController animated:YES completion:nil];
             }
-            case EOACarplayProfile:
+            break;
+        }
+        case EOADefaultProfile:
+        {
+            OAApplicationMode *appMode = [item objForKey:@"mode"];
+            [_settings.defaultApplicationMode set:appMode];
+            [_settings setApplicationModePref:appMode];
+            [self dismissViewController];
+            break;
+        }
+        case EOACarplayProfile:
+        {
+            OAApplicationMode *appMode = [item objForKey:@"mode"];
+            [_settings.carPlayMode set:appMode];
+            [self dismissViewController];
+            break;
+        }
+        case EOAHistory:
+        {
+            if ([name isEqualToString:@"clear_history"])
             {
-                NSDictionary *item = [self getItem:indexPath];
-                OAApplicationMode *am = item[@"mode"];
-                [_settings.carPlayMode set:am];
-                [self backButtonClicked:nil];
-                break;
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"history_clear_alert_title")
+                                                                                message:OALocalizedString(@"history_clear_alert_message")
+                                                                        preferredStyle:UIAlertControllerStyleAlert];
+
+                UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel")
+                                                                        style:UIAlertActionStyleDefault
+                                                                        handler:nil
+                            ];
+                UIAlertAction *clearAction = [UIAlertAction actionWithTitle:OALocalizedString(@"history_clear")
+                                                                        style:UIAlertActionStyleDestructive
+                                                                    handler:^(UIAlertAction * _Nonnull action) {
+                    NSArray *historyItems;
+                    OAHistoryHelper *helper = [OAHistoryHelper sharedInstance];
+                    historyItems = [helper getPointsHavingTypes:helper.searchTypes limit:0];
+                    [helper removePoints:historyItems];
+                    [self setupView];
+                    [self.tableView reloadData];
+                }];
+
+                [alert addAction:cancelAction];
+                [alert addAction:clearAction];
+                alert.preferredAction = clearAction;
+                [self presentViewController:alert animated:YES completion:nil];
             }
-            case EOAHistory:
+            else
             {
-                OAHistorySettingsViewController* historyViewController = nil;
-                if ([name isEqualToString:@"search_history"])
-                {
-                    historyViewController = [[OAHistorySettingsViewController alloc] initWithSettingsType:EOASearchHistoryProfile];
-                }
-                else if ([name isEqualToString:@"navigation_history"])
-                {
-                    historyViewController = [[OAHistorySettingsViewController alloc] initWithSettingsType:EOANavigationHistoryProfile];
-                }
-                else if ([name isEqualToString:@"map_markers_history"])
-                {
-                    historyViewController = [[OAHistorySettingsViewController alloc] initWithSettingsType:EOAMarkersHistoryProfile];
-                }
-                else if ([name isEqualToString:@"export_history"])
-                {
-                    OAExportItemsViewController *exportController = [[OAExportItemsViewController alloc] init];
-                    [self.navigationController pushViewController:exportController animated:YES];
-                }
-                else if ([name isEqualToString:@"clear_history"])
-                {
-                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"history_clear_alert_title")
-                                                                                   message:OALocalizedString(@"history_clear_alert_message")
-                                                                            preferredStyle:UIAlertControllerStyleAlert];
-                    
-                    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel")
-                                                                           style:UIAlertActionStyleDefault
-                                                                         handler:nil
-                    ];
-                    UIAlertAction *clearAction = [UIAlertAction actionWithTitle:OALocalizedString(@"history_clear")
-                                                                          style:UIAlertActionStyleDestructive
-                                                                        handler:^(UIAlertAction * _Nonnull action) {
-                        NSArray *historyItems;
-                        OAHistoryHelper *helper = [OAHistoryHelper sharedInstance];
-                        historyItems = [helper getPointsHavingTypes:helper.searchTypes limit:0];
-                        [helper removePoints:historyItems];
-                        [self setupView];
-                        [self.tableView reloadData];
-                    }];
-                    
-                    [alert addAction:cancelAction];
-                    [alert addAction:clearAction];
-                    alert.preferredAction = clearAction;
-                    [self presentViewController:alert animated:YES completion:nil];
-                }
-                [self.navigationController pushViewController:historyViewController animated:YES];
-                [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
-                break;
+                UIViewController *viewController;
+                if ([item.key isEqualToString:@"search_history"])
+                    viewController = [[OAHistorySettingsViewController alloc] initWithSettingsType:EOASearchHistoryProfile];
+                else if ([item.key isEqualToString:@"navigation_history"])
+                    viewController = [[OAHistorySettingsViewController alloc] initWithSettingsType:EOANavigationHistoryProfile];
+                else if ([item.key isEqualToString:@"map_markers_history"])
+                    viewController = [[OAHistorySettingsViewController alloc] initWithSettingsType:EOAMarkersHistoryProfile];
+                else if ([item.key isEqualToString:@"export_history"])
+                    viewController = [[OAExportItemsViewController alloc] init];
+
+                if (viewController)
+                    [self.navigationController pushViewController:viewController animated:YES];
             }
-            default:
-                break;
+            break;
         }
+        default:
+            break;
     }
 }
 
-- (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    if (_settingsType == EOAGlobalSettingsMain || _settingsType == EOAHistory)
-    {
-        NSDictionary *sections = _data[section];
-        NSArray *row = sections[@"rows"];
-        return row.count;
-    }
-    else if (_settingsType == EOADialogsAndNotifications)
-        return 1;
-    else if (_settingsType == EOADefaultProfile)
-        return _isUsingLastAppMode ? 1 : _data.count;
-    else if (_settingsType == EOACarplayProfile)
-        return _isDefaultProfile ? 1 : _data.count;
-    else
-        return _data.count;
-}
+#pragma mark - Selectors
 
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
+- (void)updateTableView
 {
-    if (_settingsType == EOAGlobalSettingsMain || _settingsType == EOADialogsAndNotifications || _settingsType == EOAHistory)
-        return _data.count;
-    else
-        return 1;
-}
-
-- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    if (_settingsType == EOAGlobalSettingsMain || _settingsType == EOAHistory)
+    BOOL isDefault = _settingsType == EOADefaultProfile;
+    BOOL isCarPlay = _settingsType == EOACarplayProfile;
+    if (isDefault || isCarPlay)
     {
-        NSDictionary *sections = _data[section];
-        return sections[@"header"];
-    }
-    else if (_settingsType == EOACarplayProfile)
-        return OALocalizedString(@"carplay_profile_descr");
-    else if (_settingsType == EOADefaultProfile)
-        return OALocalizedString(@"default_profile_descr");
-    else
-        return @"";
-}
-
-- (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
-{
-    if (_settingsType == EOAGlobalSettingsMain || _settingsType == EOAHistory)
-    {
-        NSDictionary *sections = _data[section];
-        return sections[@"footer"];
-    }
-    else if (_settingsType == EOADialogsAndNotifications)
-    {
-        NSDictionary *item = _data[section];
-        return item[@"description"];
-    }
-    else
-    {
-        return @"";
-    }
-}
-
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{
-    NSString *title = [self tableView:tableView titleForHeaderInSection:section];
-    OATableViewCustomHeaderView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
-    vw.label.text = title;
-    vw.label.textColor = UIColorFromRGB(color_text_footer);
-    return vw;
-}
-
-- (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section
-{
-    if([view isKindOfClass:[UITableViewHeaderFooterView class]]){
-        UITableViewHeaderFooterView * headerView = (UITableViewHeaderFooterView *) view;
-        headerView.textLabel.textColor = UIColorFromRGB(color_text_footer);
-    }
-}
-
-- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    if (_settingsType == EOAGlobalSettingsMain && section == 2)
-    {
-        NSString *title = [self tableView:tableView titleForHeaderInSection:section];
-        return [OATableViewCustomHeaderView getHeight:title width:tableView.bounds.size.width];
-    }
-    else if (_settingsType == EOACarplayProfile)
-    {
-        NSString *title = [self tableView:tableView titleForHeaderInSection:section];
-        return [OATableViewCustomHeaderView getHeight:title width:tableView.bounds.size.width] + kCarplayHeaderTopMargin;
-    }
-    else if (_settingsType == EOADefaultProfile)
-    {
-        NSString *title = [self tableView:tableView titleForHeaderInSection:section];
-        return [OATableViewCustomHeaderView getHeight:title width:tableView.bounds.size.width] + kDefaultProfileHeaderTopMargin;
-    }
-    else if (_settingsType == EOAHistory && section == 1)
-    {
-        NSString *title = [self tableView:tableView titleForHeaderInSection:section];
-        return [OATableViewCustomHeaderView getHeight:title width:tableView.bounds.size.width];
-    }
-    else
-        return section == 0 ? 18.0 : 16.0;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (_settingsType == EOAGlobalSettingsMain)
-        return 46.0;
-    return UITableViewAutomaticDimension;
-}
-
-#pragma mark - Switch
-
-- (void) updateTableView
-{
-    if (_settingsType == EOADefaultProfile)
-    {
-        if (!_isUsingLastAppMode)
+        NSMutableArray<NSIndexPath *> *rows = [NSMutableArray array];
+        for (NSInteger i = 1; i <= _profileList.count; i++)
         {
-            [self.tableView beginUpdates];
-            for (NSInteger i = 1; i <= _profileList.count; i++)
-                [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
-            [self.tableView endUpdates];
+            [rows addObject:[NSIndexPath indexPathForRow:i inSection:0]];
         }
-        else
-        {
-            [self.tableView beginUpdates];
-            for (NSInteger i = 1; i <= _profileList.count; i++)
-                [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
-            [self.tableView endUpdates];
-        }
-    }
-    else if (_settingsType == EOACarplayProfile)
-    {
-        if (!_isDefaultProfile)
-        {
-            [self.tableView beginUpdates];
-            for (NSInteger i = 1; i < _profileList.count; i++)
-                [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
-            [self.tableView endUpdates];
-        }
-        else
-        {
-            [self.tableView beginUpdates];
-            for (NSInteger i = 1; i < _profileList.count; i++)
-                [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:i inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
-            [self.tableView endUpdates];
-        }
+
+        [self.tableView beginUpdates];
+        if ((isDefault && !_isUsingLastAppMode) || (isCarPlay && !_isCarPlayDefaultProfile))
+            [self.tableView insertRowsAtIndexPaths:rows withRowAnimation:UITableViewRowAnimationFade];
+        else if ((isDefault && _isUsingLastAppMode) || (isCarPlay && _isCarPlayDefaultProfile))
+            [self.tableView deleteRowsAtIndexPaths:rows withRowAnimation:UITableViewRowAnimationFade];
+        [self.tableView endUpdates];
     }
 }
 
-- (void) applyParameter:(id)sender
+- (void)onSwitchPressed:(id)sender
 {
     if ([sender isKindOfClass:[UISwitch class]])
     {
         UISwitch *sw = (UISwitch *) sender;
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sw.tag & 0x3FF inSection:sw.tag >> 10];
-        NSDictionary *item = [self getItem:indexPath];
+        OATableRowData *item = [_data itemForIndexPath:indexPath];
         BOOL isChecked = ((UISwitch *) sender).on;
-        NSString *name = item[@"name"];
-        if (name)
+
+        if ([item.key isEqualToString:@"do_not_show_discount"])
         {
-            if ([name isEqualToString:@"do_not_show_discount"])
-                [_settings.settingDoNotShowPromotions set:isChecked];
-            else if ([name isEqualToString:@"do_not_send_anonymous_data"])
-                [_settings.sendAnonymousAppUsageData set:isChecked];
-            else if ([name isEqualToString:@"download_map_dialog"])
-                [_settings.showDownloadMapDialog set:isChecked];
-            else if ([name isEqualToString:@"last_used"])
-            {
-                [_settings.useLastApplicationModeByDefault set:isChecked];
-                [self setupView];
-                [self updateTableView];
-            }
-            else if ([name isEqualToString:@"carplay_mode_is_default_string"])
-            {
-                [_settings.isCarPlayModeDefault set:isChecked];
-                [self setupView];
-                [self updateTableView];
-            }
+            [_settings.settingDoNotShowPromotions set:isChecked];
+        }
+        else if ([item.key isEqualToString:@"do_not_send_anonymous_data"])
+        {
+            [_settings.sendAnonymousAppUsageData set:isChecked];
+        }
+        else if ([item.key isEqualToString:@"download_map_dialog"])
+        {
+            [_settings.showDownloadMapDialog set:isChecked];
+        }
+        else if ([item.key isEqualToString:@"last_used"])
+        {
+            [_settings.useLastApplicationModeByDefault set:isChecked];
+            [self generateData];
+            [self updateTableView];
+        }
+        else if ([item.key isEqualToString:@"carplay_mode_is_default_string"])
+        {
+            [_settings.isCarPlayModeDefault set:isChecked];
+            [self generateData];
+            [self updateTableView];
         }
     }
+}
+
+#pragma mark - OAUninstallSpeedCamerasDelegate
+
+- (void)onUninstallSpeedCameras
+{
+    [self generateData];
+    [self.tableView reloadData];
 }
 
 @end

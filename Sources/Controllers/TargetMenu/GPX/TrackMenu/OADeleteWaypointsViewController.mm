@@ -84,7 +84,7 @@
 {
     self.titleLabel.text = OALocalizedString(@"delete_waypoints");
     [self.cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
-    [self.selectAllButton setTitle:OALocalizedString(@"select_all") forState:UIControlStateNormal];
+    [self.selectAllButton setTitle:OALocalizedString(@"shared_string_select_all") forState:UIControlStateNormal];
 }
 
 - (void)updateDistanceAndDirection
@@ -116,12 +116,12 @@
 {
     BOOL hasSelection = _selectedWaypointGroups.allKeys.count != 0;
     self.deleteButton.backgroundColor =
-            hasSelection ? UIColorFromRGB(color_primary_red) : UIColorFromRGB(color_route_button_inactive);
+            hasSelection ? UIColorFromRGB(color_primary_red) : UIColorFromRGB(color_button_gray_background);
     [self.deleteButton setTintColor:hasSelection ? UIColor.whiteColor : UIColorFromRGB(color_text_footer)];
     [self.deleteButton setUserInteractionEnabled:hasSelection];
 
     NSString *textShow = OALocalizedString(@"shared_string_delete");
-    UIFont *fontShow = [UIFont systemFontOfSize:15 weight:UIFontWeightSemibold];
+    UIFont *fontShow = [UIFont scaledSystemFontOfSize:15 weight:UIFontWeightSemibold];
     UIColor *colorShow = hasSelection ? UIColor.whiteColor : UIColorFromRGB(color_text_footer);
     NSMutableAttributedString *attrShow = [[NSMutableAttributedString alloc] initWithString:textShow attributes:@{NSFontAttributeName: fontShow, NSForegroundColorAttributeName: colorShow}];
 
@@ -134,12 +134,12 @@
             selectedGroupsCount += 1;
     }
     NSString *textGroups = [NSString stringWithFormat:@"\n%@ %li, %@ %li",
-                    OALocalizedString(@"groups"),
+                    OALocalizedString(@"shared_string_groups"),
                                                       selectedGroupsCount,
-                                                      OALocalizedString(@"gpx_waypoints").lowerCase,
+                                                      OALocalizedString(@"shared_string_waypoints").lowerCase,
                                                       selectedWaypointsCount];
 
-    UIFont *fontCategories = [UIFont systemFontOfSize:13];
+    UIFont *fontCategories = [UIFont scaledSystemFontOfSize:13];
     UIColor *colorCategories = hasSelection != 0 ? UIColor.whiteColor : UIColorFromRGB(color_text_footer);
     NSMutableAttributedString *attrCategories = [[NSMutableAttributedString alloc] initWithString:textGroups attributes:@{NSFontAttributeName: fontCategories, NSForegroundColorAttributeName: colorCategories}];
 

@@ -64,7 +64,7 @@
     _measurementRangeValuesArr = [NSArray arrayWithArray:_vehicleParameter[@"possibleValues"]];
     NSMutableArray *arr = [NSMutableArray arrayWithArray:_vehicleParameter[@"possibleValuesDescr"]];
     if ([arr[0] isEqualToString:@"-"])
-        [arr replaceObjectAtIndex:0 withObject:OALocalizedString(_isMotorType ? @"not_selected" : @"shared_string_none")];
+        [arr replaceObjectAtIndex:0 withObject:OALocalizedString(_isMotorType ? @"shared_string_not_selected" : @"shared_string_none")];
     _measurementRangeStringArr = [NSArray arrayWithArray:arr];
     _selectedParameter = _vehicleParameter[@"selectedItem"];
     NSString *valueString = _vehicleParameter[@"value"];
@@ -109,6 +109,7 @@
 {
     [super viewDidLoad];
 
+    [self.cancelButton setImage:[UIImage rtlImageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
     self.doneButton.hidden = _isMotorType;
     self.subtitleLabel.hidden = _isMotorType;
     [self setupNavBarHeight];
@@ -213,7 +214,7 @@
 - (NSString *) getMeasurementUnit:(NSString *)parameter
 {
     if ([parameter isEqualToString:@"weight"])
-        return OALocalizedString(@"tones");
+        return OALocalizedString(@"shared_string_tones");
     else if ([parameter isEqualToString:@"height"] || [parameter isEqualToString:@"width"] || [parameter isEqualToString:@"length"])
         return OALocalizedString(@"shared_string_meters");
     return @"";
@@ -240,6 +241,7 @@
     {
         NSNumberFormatter *formatter = [[NSNumberFormatter alloc]init];
         [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
+        formatter.decimalSeparator = @".";
         formatter.minimumIntegerDigits = 1;
         formatter.minimumFractionDigits = 0;
         formatter.maximumFractionDigits = 3;
@@ -284,7 +286,7 @@
         }
         if (cell)
         {
-            cell.imageView.image = [UIImage imageNamed:item[@"icon"]];
+            cell.imageView.image = [UIImage rtlImageNamed:item[@"icon"]];
         }
         return cell;
     }
@@ -339,15 +341,14 @@
             cell = (OARightIconTableViewCell *) nib[0];
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
-            cell.rightIconView.tintColor = UIColorFromRGB(color_primary_purple);
+            [cell.rightIconView setHidden:YES];
         }
         if (cell)
         {
             cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + 20., 0., 0.);
             cell.titleLabel.text = _measurementRangeStringArr[indexPath.row];
-            cell.rightIconView.image = [_selectedParameter isEqualToNumber:_measurementRangeValuesArr[indexPath.row]]
-                ? [UIImage templateImageNamed:@"ic_checkmark_default"]
-                : nil;
+            if ([_selectedParameter isEqualToNumber:_measurementRangeValuesArr[indexPath.row]])
+                cell.accessoryType = UITableViewCellAccessoryCheckmark;
         }
         return cell;
     }
@@ -372,8 +373,9 @@
             _isMotorType ? kTopPaddingMotorType : 0.,
             textWidth,
             heightForHeader)];
-        UIFont *labelFont = [UIFont systemFontOfSize:_isMotorType ? 13. : 15.];
+        UIFont *labelFont = [UIFont scaledSystemFontOfSize:_isMotorType ? 13. : 15.];
         description.font = labelFont;
+        description.adjustsFontForContentSizeCategory = YES;
         [description setTextColor: UIColorFromRGB(color_text_footer)];
         NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
         [style setLineSpacing:6];

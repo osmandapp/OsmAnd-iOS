@@ -228,7 +228,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     if (gpxFilesCount > 0)
     {
         [_data addObject: @{
-            @"label": OALocalizedString(@"tracks"),
+            @"label": OALocalizedString(@"shared_string_gpx_tracks"),
             @"iconName": @"ic_custom_trip",
             @"count": [NSString stringWithFormat:@"%ld", gpxFilesCount],
             @"category" : @(EOAImportDataTypeGpxTrips)
@@ -248,7 +248,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     if (mapsCount > 0)
     {
         [_data addObject: @{
-            @"label": OALocalizedString(@"maps"),
+            @"label": OALocalizedString(@"shared_string_maps"),
             @"iconName": @"ic_custom_map",
             @"count": [NSString stringWithFormat:@"%ld", mapsCount],
             @"category" : @(EOAImportDataTypeMaps)
@@ -258,7 +258,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     if (favoritesCount > 0)
     {
         [_data addObject: @{
-            @"label": OALocalizedString(@"favorites"),
+            @"label": OALocalizedString(@"favorites_item"),
             @"iconName": @"ic_custom_favorites",
             @"count": [NSString stringWithFormat:@"%ld", favoritesCount],
             @"category" : @(EOAImportDataTypeFavorites)
@@ -308,7 +308,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     if (searchHistoryCount > 0)
     {
         [_data addObject: @{
-            @"label": OALocalizedString(@"search_history"),
+            @"label": OALocalizedString(@"shared_string_search_history"),
             @"iconName": @"ic_custom_history",
             @"count": [NSString stringWithFormat:@"%ld", searchHistoryCount],
             @"category" : @(EOAImportDataTypeSearchHistory)

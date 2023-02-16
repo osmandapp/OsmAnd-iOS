@@ -25,6 +25,7 @@
 @property (weak, nonatomic) IBOutlet UIView *editToolbarView;
 @property (weak, nonatomic) IBOutlet UIButton *exportButton;
 @property (weak, nonatomic) IBOutlet UIButton *showOnMapButton;
+@property (weak, nonatomic) IBOutlet UIButton *uploadToOSMButton;
 @property (weak, nonatomic) IBOutlet UIButton *deleteButton;
 
 - (instancetype)initWithActiveTrips;

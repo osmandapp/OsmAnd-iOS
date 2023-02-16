@@ -19,8 +19,6 @@
 #import "OAPOIHelper.h"
 #import "OAColors.h"
 
-#define kHeaderViewFont [UIFont systemFontOfSize:15.0]
-
 @interface OAActionAddCategoryViewController () <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet UIView *navBarView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -95,7 +93,7 @@
     }
     _data = [NSArray arrayWithArray:rows];
     
-    _tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"quick_action_add_category_descr") font:kHeaderViewFont textColor:UIColor.blackColor lineSpacing:0.0 isTitle:NO];
+    _tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"quick_action_add_category_descr") font:kHeaderDescriptionFont textColor:UIColor.blackColor isBigTitle:NO];
 }
 
 -(void) setupSearchView
@@ -119,7 +117,7 @@
 
 - (void)applyLocalization
 {
-    _titleView.text = OALocalizedString(@"add_action");
+    _titleView.text = OALocalizedString(@"quick_action_new_action");
     _searchField.placeholder = OALocalizedString(@"shared_string_search");
     [_doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
 }
@@ -168,7 +166,7 @@
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
         CGFloat textWidth = DeviceScreenWidth - 32.0 - OAUtilities.getLeftMargin * 2;
-        UIFont *labelFont = [UIFont systemFontOfSize:15.0];
+        UIFont *labelFont = [UIFont scaledSystemFontOfSize:15.0];
         CGSize labelSize = [OAUtilities calculateTextBounds:OALocalizedString(@"quick_action_add_actions_descr") width:textWidth font:labelFont];
         _tableHeaderView.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, labelSize.height + 30.0);
         _tableHeaderView.subviews.firstObject.frame = CGRectMake(16.0 + OAUtilities.getLeftMargin, 20.0, textWidth, labelSize.height);

@@ -122,14 +122,14 @@ static OAQuickActionType *TYPE;
 - (NSString *) getTranslatedItemName:(NSString *)item
 {
     if ([item isEqualToString:KEY_NO_UNDERLAY])
-        return OALocalizedString(@"quick_action_no_underlay");
+        return OALocalizedString(@"no_underlay");
     else
         return item;
 }
 
 -(NSString *) getAddBtnText
 {
-    return OALocalizedString(@"quick_action_add_underlay");
+    return OALocalizedString(@"quick_action_map_underlay_action");
 }
 
 - (NSString *) getDescrHint
@@ -139,7 +139,7 @@ static OAQuickActionType *TYPE;
 
 - (NSString *) getDescrTitle
 {
-    return OALocalizedString(@"map_underlays");
+    return OALocalizedString(@"quick_action_map_underlay_title");
 }
 
 - (NSString *) getListKey
@@ -153,7 +153,7 @@ static OAQuickActionType *TYPE;
     [data setObject:@[@{
                           @"type" : [OASwitchTableViewCell getCellIdentifier],
                           @"key" : KEY_DIALOG,
-                          @"title" : OALocalizedString(@"quick_actions_show_dialog"),
+                          @"title" : OALocalizedString(@"quick_action_interim_dialog"),
                           @"value" : @([self.getParams[KEY_DIALOG] boolValue]),
                           },
                       @{
@@ -172,11 +172,11 @@ static OAQuickActionType *TYPE;
                          }];
     }
     [arr addObject:@{
-                     @"title" : OALocalizedString(@"quick_action_add_underlay"),
+                     @"title" : OALocalizedString(@"quick_action_map_underlay_action"),
                      @"type" : [OAButtonTableViewCell getCellIdentifier],
                      @"target" : @"addMapUnderlay"
                      }];
-    [data setObject:[NSArray arrayWithArray:arr] forKey:OALocalizedString(@"map_underlays")];
+    [data setObject:[NSArray arrayWithArray:arr] forKey:OALocalizedString(@"quick_action_map_underlay_title")];
     return data;
 }
 
@@ -202,7 +202,7 @@ static OAQuickActionType *TYPE;
 + (OAQuickActionType *) TYPE
 {
     if (!TYPE)
-        TYPE = [[OAQuickActionType alloc] initWithIdentifier:16 stringId:@"mapunderlay.change" class:self.class name:OALocalizedString(@"change_map_underlay") category:CONFIGURE_MAP iconName:@"ic_custom_underlay_map" secondaryIconName:nil];
+        TYPE = [[OAQuickActionType alloc] initWithIdentifier:16 stringId:@"mapunderlay.change" class:self.class name:OALocalizedString(@"quick_action_map_underlay") category:CONFIGURE_MAP iconName:@"ic_custom_underlay_map" secondaryIconName:nil];
        
     return TYPE;
 }

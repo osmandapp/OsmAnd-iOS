@@ -228,7 +228,7 @@ typedef void(^OAMapSettingsCategoryCellDataOnSelect)();
             {
                 UIImage *icon;
                 if ([iconName hasPrefix:@"mx_"])
-                    icon = [[OAUtilities getMxIcon:iconName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                    icon = [[OAUtilities getMxIcon:iconName].imageFlippedForRightToLeftLayoutDirection imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
                 else
                     icon = [UIImage templateImageNamed:item[@"icon"]];
                 cell.leftIconView.image = icon;
@@ -272,10 +272,10 @@ typedef void(^OAMapSettingsCategoryCellDataOnSelect)();
     }
     else if (_isTransport && section == _transportRoutesSection)
     {
-        return [OATableViewCustomHeaderView getHeight:OALocalizedString(@"transport_routes")
+        return [OATableViewCustomHeaderView getHeight:OALocalizedString(@"transport_Routes")
                                                 width:tableView.bounds.size.width
                                               yOffset:32
-                                                 font:[UIFont systemFontOfSize:13]];
+                                                 font:[UIFont scaledSystemFontOfSize:13]];
     }
     else
     {
@@ -288,8 +288,8 @@ typedef void(^OAMapSettingsCategoryCellDataOnSelect)();
     if (_isTransport && section == _transportRoutesSection)
     {
         OATableViewCustomHeaderView *customHeader = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
-        customHeader.label.text = [OALocalizedString(@"transport_routes") upperCase];
-        customHeader.label.font = [UIFont systemFontOfSize:13];
+        customHeader.label.text = [OALocalizedString(@"transport_Routes") upperCase];
+        customHeader.label.font = [UIFont scaledSystemFontOfSize:13];
         [customHeader setYOffset:32];
         return customHeader;
     }

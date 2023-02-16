@@ -44,6 +44,10 @@
 {
     [super viewDidLoad];
     [self setupNavBarHeight];
+    self.titleLabel.font = [UIFont scaledSystemFontOfSize:30. weight:UIFontWeightSemibold];
+    self.topButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
+    self.bottomButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
+
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator

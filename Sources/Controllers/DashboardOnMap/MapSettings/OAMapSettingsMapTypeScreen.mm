@@ -191,7 +191,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         case kOfflineSourcesSection:
             return OALocalizedString(@"map_settings_offline");
         case kOnlineSourcesSection:
-            return OALocalizedString(@"map_settings_online");
+            return OALocalizedString(@"shared_string_online_maps");
             
         default:
             return nil;
@@ -255,9 +255,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         itm = (OAMapSourceResourceItem *) someItem;
 
     if (itm && [_app.data.lastMapSource isEqual:itm.mapSource])
-        cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"menu_cell_selected.png"]];
+        cell.accessoryType = UITableViewCellAccessoryCheckmark;
     else
-        cell.accessoryView = nil;
+        cell.accessoryType = UITableViewCellAccessoryNone;
     
     return cell;
 }

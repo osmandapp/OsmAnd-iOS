@@ -253,7 +253,7 @@
     if (_currentPoiType)
         return _currentPoiType.nameLocalized;
     else if (!s || s.length == 0)
-        return OALocalizedString(@"osm_edit_without_name");
+        return OALocalizedString(@"shared_string_without_name");
     else
         return [s capitalizedString];
 }

@@ -16,7 +16,7 @@
 #import "OAColors.h"
 #import "Localization.h"
 
-@interface OABenefitsOsmContributorsViewController () <UITableViewDelegate, UITableViewDataSource, OAAccountSettingDelegate>
+@interface OABenefitsOsmContributorsViewController () <OAAccountSettingDelegate>
 
 @end
 
@@ -25,40 +25,29 @@
     NSArray<NSArray *> *_data;
 }
 
-- (instancetype) init
-{
-    self = [super initWithNibName:@"OABaseSettingsViewController" bundle:nil];
-    if (self)
-    {
-        [self commonInit];
-    }
-    return self;
-}
-
-- (void)commonInit
-{
-    [self generateData];
-}
+#pragma mark - UIViewController
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.allowsSelection = NO;
-
-    self.navbarView.backgroundColor = UIColor.whiteColor;
-
-    self.titleLabel.text = @"";
-    self.titleLabel.hidden = YES;
-
-    self.subtitleLabel.text = @"";
-    self.subtitleLabel.hidden = YES;
-
-    self.separatorNavbarView.hidden = YES;
 }
+
+#pragma mark - Base UI
+
+- (EOABaseNavbarColorScheme)getNavbarColorScheme
+{
+    return EOABaseNavbarColorSchemeWhite;
+}
+
+- (BOOL)isNavbarSeparatorVisible
+{
+    return NO;
+}
+
+#pragma mark - Table data
 
 - (void)generateData
 {
@@ -71,7 +60,7 @@
                                              value:descriptionParagraphStyle
                                              range:NSMakeRange(0, descriptionAttributed.length)];
     [descriptionAttributed addAttribute:NSFontAttributeName
-                                             value:[UIFont systemFontOfSize:17.]
+                                             value:[UIFont scaledSystemFontOfSize:17.]
                                              range:NSMakeRange(0, descriptionAttributed.length)];
 
     NSMutableAttributedString *signInAttributed = [[NSMutableAttributedString alloc] initWithString:
@@ -82,7 +71,7 @@
                                   value:signInParagraphStyle
                                   range:NSMakeRange(0, signInAttributed.length)];
     [signInAttributed addAttribute:NSFontAttributeName
-                                  value:[UIFont systemFontOfSize:15.]
+                                  value:[UIFont scaledSystemFontOfSize:15.]
                                   range:NSMakeRange(0, signInAttributed.length)];
     [signInAttributed addAttribute:NSForegroundColorAttributeName
                                   value:UIColorFromRGB(color_text_footer)
@@ -139,7 +128,7 @@
                     @"key" : @"email_login_button",
                     @"type" : [OAFilledButtonCell getCellIdentifier],
                     @"title" : OALocalizedString(@"use_login_and_password"),
-                    @"background_color": UIColorFromRGB(color_route_button_inactive),
+                    @"background_color": UIColorFromRGB(color_button_gray_background),
                     @"tint_color": UIColorFromRGB(color_primary_purple),
                     @"top_margin": @(16.),
                     @"bottom_margin": @(20.)
@@ -155,72 +144,12 @@
     return _data[indexPath.section][indexPath.row];
 }
 
-- (CGFloat)heightForRow:(NSIndexPath *)indexPath estimated:(BOOL)estimated
-{
-    NSDictionary *item = [self getItem:indexPath];
-    NSString *type = item[@"type"];
-    if ([type isEqualToString:[OADividerCell getCellIdentifier]])
-    {
-        return 1. / [UIScreen mainScreen].scale;
-    }
-    else if (estimated)
-    {
-        if ([type isEqualToString:[OATitleDescriptionBigIconCell getCellIdentifier]])
-            return 66.;
-        else if ([type isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
-            return 48.;
-        else if ([type isEqualToString:[OAFilledButtonCell getCellIdentifier]])
-            return 42.;
-    }
-
-    return UITableViewAutomaticDimension;
-}
-
-#pragma mark - OAAccountSettingDelegate
-
-- (void)onAccountInformationUpdated
-{
-    [self dismissViewControllerAnimated:YES completion:^{
-        if (self.accountDelegate)
-            [self.accountDelegate onAccountInformationUpdatedFromBenefits];
-    }];
-}
-
-#pragma mark - Selectors
-
-- (void)onButtonPressed:(id)sender
-{
-    UIButton *button = (UIButton *) sender;
-    if (button)
-    {
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:button.tag & 0x3FF inSection:button.tag >> 10];
-        NSDictionary *item = _data[indexPath.section][indexPath.row];
-        NSString *key = item[@"key"];
-        if ([key isEqualToString:@"oauth_login_button"])
-        {
-        }
-        else if ([key isEqualToString:@"email_login_button"])
-        {
-            OAOsmAccountSettingsViewController *accountSettings = [[OAOsmAccountSettingsViewController alloc] init];
-            accountSettings.accountDelegate = self;
-            [self presentViewController:accountSettings animated:YES completion:nil];
-        }
-    }
-}
-
-#pragma mark - UITableViewDataSource
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return _data.count;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)rowsCount:(NSInteger)section
 {
     return _data[section].count;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
     UITableViewCell *outCell = nil;
@@ -228,7 +157,7 @@
     NSString *type = item[@"type"];
     if ([type isEqualToString:[OATitleDescriptionBigIconCell getCellIdentifier]])
     {
-        OATitleDescriptionBigIconCell *cell = [tableView dequeueReusableCellWithIdentifier:[OATitleDescriptionBigIconCell getCellIdentifier]];
+        OATitleDescriptionBigIconCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OATitleDescriptionBigIconCell getCellIdentifier]];
         if (!cell)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleDescriptionBigIconCell getCellIdentifier] owner:self options:nil];
@@ -251,7 +180,7 @@
     }
     else if ([type isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
     {
-        OAIconTitleValueCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
+        OAIconTitleValueCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
         if (!cell)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
@@ -270,7 +199,7 @@
     }
     else if ([type isEqualToString:[OADividerCell getCellIdentifier]])
     {
-        OADividerCell *cell = [tableView dequeueReusableCellWithIdentifier:[OADividerCell getCellIdentifier]];
+        OADividerCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OADividerCell getCellIdentifier]];
         if (!cell)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
@@ -322,6 +251,64 @@
     return outCell;
 }
 
+- (NSInteger)sectionsCount
+{
+    return _data.count;
+}
+
+- (CGFloat)getCustomHeightForHeader:(NSInteger)section
+{
+    return 0.001;
+}
+
+- (CGFloat)getCustomHeightForFooter:(NSInteger)section
+{
+    return 0.001;
+}
+
+- (CGFloat)heightForRow:(NSIndexPath *)indexPath estimated:(BOOL)estimated
+{
+    NSDictionary *item = [self getItem:indexPath];
+    NSString *type = item[@"type"];
+    if ([type isEqualToString:[OADividerCell getCellIdentifier]])
+    {
+        return 1. / [UIScreen mainScreen].scale;
+    }
+    else if (estimated)
+    {
+        if ([type isEqualToString:[OATitleDescriptionBigIconCell getCellIdentifier]])
+            return 66.;
+        else if ([type isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
+            return 48.;
+        else if ([type isEqualToString:[OAFilledButtonCell getCellIdentifier]])
+            return 42.;
+    }
+
+    return UITableViewAutomaticDimension;
+}
+
+#pragma mark - Selectors
+
+- (void)onButtonPressed:(id)sender
+{
+    UIButton *button = (UIButton *) sender;
+    if (button)
+    {
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:button.tag & 0x3FF inSection:button.tag >> 10];
+        NSDictionary *item = _data[indexPath.section][indexPath.row];
+        NSString *key = item[@"key"];
+        if ([key isEqualToString:@"oauth_login_button"])
+        {
+        }
+        else if ([key isEqualToString:@"email_login_button"])
+        {
+            OAOsmAccountSettingsViewController *accountSettings = [[OAOsmAccountSettingsViewController alloc] init];
+            accountSettings.accountDelegate = self;
+            [self presentViewController:accountSettings animated:YES completion:nil];
+        }
+    }
+}
+
 #pragma mark - UITableViewDelegate
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -334,14 +321,14 @@
     return [self heightForRow:indexPath estimated:YES];
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return 0.001;
-}
+#pragma mark - OAAccountSettingDelegate
 
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+- (void)onAccountInformationUpdated
 {
-    return 0.001;
+    [self dismissViewControllerAnimated:YES completion:^{
+        if (self.accountDelegate)
+            [self.accountDelegate onAccountInformationUpdatedFromBenefits];
+    }];
 }
 
 @end

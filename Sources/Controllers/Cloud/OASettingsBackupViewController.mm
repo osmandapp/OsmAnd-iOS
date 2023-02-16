@@ -69,6 +69,7 @@
 {
     [super viewDidLoad];
 
+    [self.backButton setImage:[UIImage rtlImageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.sectionFooterHeight = 0.001;
@@ -124,7 +125,7 @@
 
     NSMutableArray<NSMutableDictionary *> *accountCells = [NSMutableArray array];
     [data addObject:accountCells];
-    _headers[@(data.count - 1)] = OALocalizedString(@"shared_string_account");
+    _headers[@(data.count - 1)] = OALocalizedString(@"login_account");
 
     NSMutableDictionary *accountData = [NSMutableDictionary dictionary];
     accountData[@"key"] = @"account_cell";
@@ -175,11 +176,6 @@
         if (self.backupTypesDelegate)
             [self.backupTypesDelegate onCompleteTasks];
     }
-}
-
-- (IBAction)backButtonClicked:(id)sender
-{
-    [self dismissViewController];
 }
 
 #pragma mark - OACloudAccountLogoutDelegate
@@ -323,7 +319,7 @@
             cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + (leftIconVisible ? kPaddingToLeftOfContentWithIcon : kPaddingOnSideOfContent), 0., 0.);
 
             [cell leftIconVisibility:leftIconVisible];
-            cell.leftIconView.image = leftIconVisible ? [UIImage imageNamed:item[@"left_icon"]] : nil;
+            cell.leftIconView.image = leftIconVisible ? [UIImage rtlImageNamed:item[@"left_icon"]] : nil;
 
             [cell descriptionVisibility:[item.allKeys containsObject:@"description"]];
             cell.descriptionLabel.text = item[@"description"];
@@ -354,7 +350,7 @@
     NSString *header = _headers[@(section)];
     if (header)
     {
-        UIFont *font = [UIFont systemFontOfSize:13.];
+        UIFont *font = [UIFont scaledSystemFontOfSize:13.];
         CGFloat headerHeight = [OAUtilities calculateTextBounds:header
                                                           width:tableView.frame.size.width - (kPaddingOnSideOfContent + [OAUtilities getLeftMargin]) * 2
                                                            font:font].height + kPaddingOnSideOfHeaderWithText;
@@ -369,7 +365,7 @@
     NSString *footer = _footers[@(section)];
     if (footer)
     {
-        UIFont *font = [UIFont systemFontOfSize:13.];
+        UIFont *font = [UIFont scaledSystemFontOfSize:13.];
         CGFloat footerHeight = [OAUtilities calculateTextBounds:footer
                                                           width:tableView.frame.size.width - (kPaddingOnSideOfContent + [OAUtilities getLeftMargin]) * 2
                                                            font:font].height + kPaddingOnSideOfFooterWithText;

@@ -43,7 +43,6 @@
 #import <AudioToolbox/AudioServices.h>
 
 #define KEY_MESSAGE @"message"
-#define kHeaderViewFont [UIFont systemFontOfSize:15.0]
 
 @interface OAActionConfigurationViewController () <UITableViewDelegate, UITableViewDataSource, OAEditColorViewControllerDelegate, OAEditGroupViewControllerDelegate, OAAddCategoryDelegate, MGSwipeTableCellDelegate, OAAddMapStyleDelegate, OAAddMapSourceDelegate, OAAddProfileDelegate, MDCMultilineTextInputLayoutDelegate, UITextViewDelegate, OAPoiTypeSelectionDelegate, UIGestureRecognizerDelegate>
 
@@ -109,7 +108,7 @@
     [self.backBtn setTintColor:UIColor.whiteColor];
     
     if (_action.getActionText)
-        _tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:_action.getActionText font:kHeaderViewFont textColor:UIColor.blackColor lineSpacing:0.0 isTitle:NO];
+        _tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:_action.getActionText font:kHeaderDescriptionFont textColor:UIColor.blackColor isBigTitle:NO];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -160,7 +159,7 @@
     [dataModel setObject:@[@{
             @"type" : [OAInputTableViewCell getCellIdentifier],
             @"title" : _action.getName
-    }] forKey:OALocalizedString(@"quick_action_name_str")];
+    }] forKey:OALocalizedString(@"shared_string_action_name")];
 
     OrderedDictionary *actionSpecific = _action.getUIModel;
     [dataModel addEntriesFromDictionary:actionSpecific];
@@ -176,7 +175,7 @@
 
 - (void)showExitDialog
 {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"osm_editing_lost_changes_title") preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"exit_without_saving") preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_exit") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [_action setName:_originalName];
         [self.navigationController popViewControllerAnimated:YES];
@@ -193,7 +192,7 @@
         if (_tableHeaderView)
         {
             CGFloat textWidth = DeviceScreenWidth - 32.0 - OAUtilities.getLeftMargin * 2;
-            UIFont *labelFont = [UIFont systemFontOfSize:15.0];
+            UIFont *labelFont = [UIFont scaledSystemFontOfSize:15.0];
             CGSize labelSize = [OAUtilities calculateTextBounds:OALocalizedString(@"quick_action_add_actions_descr") width:textWidth font:labelFont];
             _tableHeaderView.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, labelSize.height + 30.0);
             _tableHeaderView.subviews.firstObject.frame = CGRectMake(16.0 + OAUtilities.getLeftMargin, 20.0, textWidth, labelSize.height);
@@ -208,7 +207,7 @@
 
 -(void)onNameChanged:(UITextView *)textView
 {
-    NSString *nameKey = OALocalizedString(@"quick_action_name_str");
+    NSString *nameKey = OALocalizedString(@"shared_string_action_name");
     NSMutableDictionary *actionName = [NSMutableDictionary dictionaryWithDictionary:_data[nameKey].firstObject];
     NSString *newTitle = textView.text;
     [actionName setObject:newTitle forKey:@"title"];
@@ -257,7 +256,7 @@
     textField.layoutDelegate = self;
     [textField.clearButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
     [textField.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-    textField.font = [UIFont systemFontOfSize:17.0];
+    textField.font = [UIFont scaledSystemFontOfSize:17.0];
     textField.clearButton.imageView.tintColor = UIColorFromRGB(color_icon_color);
     [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field"] forState:UIControlStateNormal];
     [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field"] forState:UIControlStateHighlighted];
@@ -725,7 +724,7 @@
             textField.layoutDelegate = self;
             [textField.clearButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
             [textField.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-            textField.font = [UIFont systemFontOfSize:17.0];
+            textField.font = [UIFont scaledSystemFontOfSize:17.0];
             textField.clearButton.imageView.tintColor = UIColorFromRGB(color_icon_color);
             [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field"] forState:UIControlStateNormal];
             [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field"] forState:UIControlStateHighlighted];
@@ -761,7 +760,7 @@
     if (url)
     {
         NSURL *URL = [NSURL URLWithString:url];
-        UIFont *textFont = [UIFont systemFontOfSize:13];
+        UIFont *textFont = [UIFont scaledSystemFontOfSize:13];
         NSMutableAttributedString * str = [[NSMutableAttributedString alloc] initWithString:url attributes:@{NSFontAttributeName : textFont}];
         [str addAttribute:NSLinkAttributeName value:URL range: NSMakeRange(0, str.length)];
         text = [text stringByAppendingString:@"\n"];
@@ -879,8 +878,8 @@
     [items setObject:dest atIndexedSubscript:sourceIndexPath.row];
     NSArray *titles = [self getTitles:items];
     
-    NSMutableDictionary *actionName = [NSMutableDictionary dictionaryWithDictionary:_data[OALocalizedString(@"quick_action_name_str")].firstObject];
-    NSString *nameKey = OALocalizedString(@"quick_action_name_str");
+    NSMutableDictionary *actionName = [NSMutableDictionary dictionaryWithDictionary:_data[OALocalizedString(@"shared_string_action_name")].firstObject];
+    NSString *nameKey = OALocalizedString(@"shared_string_action_name");
     NSString *oldTitle = [_action getTitle:oldTitles];
     NSString *defaultName = [_action getDefaultName];
     if ([actionName[@"title"] isEqualToString:defaultName] || [actionName[@"title"] isEqualToString:oldTitle])
@@ -1010,7 +1009,7 @@
 
 - (void)renameAction:(NSMutableArray *)titles oldTitle:(NSString *)oldTitle
 {
-    NSString *nameKey = OALocalizedString(@"quick_action_name_str");
+    NSString *nameKey = OALocalizedString(@"shared_string_action_name");
     NSMutableDictionary *actionName = [NSMutableDictionary dictionaryWithDictionary:_data[nameKey].firstObject];
     NSString *defaultName = [_action getDefaultName];
     
@@ -1083,8 +1082,8 @@
     }
     [newItems addObject:button];
     [_data setObject:[NSArray arrayWithArray:newItems] forKey:key];
-    NSMutableDictionary *actionName = [NSMutableDictionary dictionaryWithDictionary:_data[OALocalizedString(@"quick_action_name_str")].firstObject];
-    NSString *nameKey = OALocalizedString(@"quick_action_name_str");
+    NSMutableDictionary *actionName = [NSMutableDictionary dictionaryWithDictionary:_data[OALocalizedString(@"shared_string_action_name")].firstObject];
+    NSString *nameKey = OALocalizedString(@"shared_string_action_name");
     NSString *oldTitle = [_action getTitle:_action.getParams[_action.getListKey]];
     NSString *defaultName = [_action getDefaultName];
     
@@ -1212,7 +1211,7 @@
 
 - (void)onPoiTypeSelected:(NSString *)name
 {
-    NSString *key = OALocalizedString(@"poi_type");
+    NSString *key = OALocalizedString(@"poi_dialog_poi_type");
     NSMutableArray *arr = [NSMutableArray arrayWithArray:_data[key]];
     NSMutableDictionary *item = [NSMutableDictionary dictionaryWithDictionary:arr.firstObject];
     [item setObject:name forKey:@"value"];

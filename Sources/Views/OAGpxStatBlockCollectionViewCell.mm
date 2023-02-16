@@ -13,6 +13,7 @@
 - (void)awakeFromNib
 {
     [super awakeFromNib];
+    self.valueView.font = [UIFont scaledSystemFontOfSize:13. weight:UIFontWeightMedium];
 }
 
 - (void)updateConstraints

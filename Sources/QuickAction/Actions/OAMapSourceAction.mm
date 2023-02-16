@@ -108,7 +108,7 @@ static OAQuickActionType *TYPE;
 - (NSString *)getTranslatedItemName:(NSString *)item
 {
     if ([item isEqualToString:LAYER_OSM_VECTOR])
-        return OALocalizedString(@"offline_vector_maps");
+        return OALocalizedString(@"vector_data");
     else
         return item;
     return nil;
@@ -116,7 +116,7 @@ static OAQuickActionType *TYPE;
 
 -(NSString *) getAddBtnText
 {
-    return OALocalizedString(@"add_map_source");
+    return OALocalizedString(@"quick_action_map_source_action");
 }
 
 - (NSString *)getDescrHint
@@ -126,7 +126,7 @@ static OAQuickActionType *TYPE;
 
 - (NSString *)getDescrTitle
 {
-    return OALocalizedString(@"map_sources");
+    return OALocalizedString(@"quick_action_map_source_title");
 }
 
 - (NSString *)getListKey
@@ -140,7 +140,7 @@ static OAQuickActionType *TYPE;
     [data setObject:@[@{
                           @"type" : [OASwitchTableViewCell getCellIdentifier],
                           @"key" : KEY_DIALOG,
-                          @"title" : OALocalizedString(@"quick_actions_show_dialog"),
+                          @"title" : OALocalizedString(@"quick_action_interim_dialog"),
                           @"value" : @([self.getParams[KEY_DIALOG] boolValue]),
                           },
                       @{
@@ -159,11 +159,11 @@ static OAQuickActionType *TYPE;
                          }];
     }
     [arr addObject:@{
-                     @"title" : OALocalizedString(@"add_map_source"),
+                     @"title" : OALocalizedString(@"quick_action_map_source_action"),
                      @"type" : [OAButtonTableViewCell getCellIdentifier],
                      @"target" : @"addMapSource"
                      }];
-    [data setObject:[NSArray arrayWithArray:arr] forKey:OALocalizedString(@"map_sources")];
+    [data setObject:[NSArray arrayWithArray:arr] forKey:OALocalizedString(@"quick_action_map_source_title")];
     return data;
 }
 
@@ -189,7 +189,7 @@ static OAQuickActionType *TYPE;
 + (OAQuickActionType *) TYPE
 {
     if (!TYPE)
-        TYPE = [[OAQuickActionType alloc] initWithIdentifier:17 stringId:@"mapsource.change" class:self.class name:OALocalizedString(@"change_map_source") category:CONFIGURE_MAP iconName:@"ic_custom_show_on_map" secondaryIconName:nil];
+        TYPE = [[OAQuickActionType alloc] initWithIdentifier:17 stringId:@"mapsource.change" class:self.class name:OALocalizedString(@"quick_action_map_source") category:CONFIGURE_MAP iconName:@"ic_custom_show_on_map" secondaryIconName:nil];
        
     return TYPE;
 }

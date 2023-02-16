@@ -109,7 +109,7 @@
     [super applyLocalization];
     
     [self.backButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
-    [self.additionalNavBarButton setTitle:OALocalizedString(@"select_all") forState:UIControlStateNormal];
+    [self.additionalNavBarButton setTitle:OALocalizedString(@"shared_string_select_all") forState:UIControlStateNormal];
     [self.primaryBottomButton setTitle:OALocalizedString(@"shared_string_continue") forState:UIControlStateNormal];
 }
 
@@ -126,13 +126,13 @@
 - (void) updateNavigationBarItem
 {
     BOOL selected = [self hasSelection];
-    [self.additionalNavBarButton setTitle:selected ? OALocalizedString(@"shared_string_deselect_all") : OALocalizedString(@"select_all") forState:UIControlStateNormal];
+    [self.additionalNavBarButton setTitle:selected ? OALocalizedString(@"shared_string_deselect_all") : OALocalizedString(@"shared_string_select_all") forState:UIControlStateNormal];
 }
 
 - (void) setupButtonView
 {
     BOOL hasSelection = [self hasSelection];
-    self.primaryBottomButton.backgroundColor = hasSelection ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_route_button_inactive);
+    self.primaryBottomButton.backgroundColor = hasSelection ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_button_gray_background);
     [self.primaryBottomButton setTintColor:hasSelection ? UIColor.whiteColor : UIColorFromRGB(color_text_footer)];
     [self.primaryBottomButton setTitleColor:hasSelection ? UIColor.whiteColor : UIColorFromRGB(color_text_footer) forState:UIControlStateNormal];
     [self.primaryBottomButton setUserInteractionEnabled:hasSelection];
@@ -358,7 +358,7 @@
                     partiallySelected = partiallySelected || allItemsCount != selectedItemsCount;
                 }
                 cell.textView.text = groupData.groupName;
-                cell.descriptionView.text = [NSString stringWithFormat:OALocalizedString(@"selected_profiles"), itemSelectionCount, itemCount];
+                cell.descriptionView.text = [NSString stringWithFormat:OALocalizedString(@"of"), itemSelectionCount, itemCount];
                 if (size > 0)
                 {
                     cell.descriptionView.text = [cell.descriptionView.text stringByAppendingFormat:@" • %@", [NSByteCountFormatter stringFromByteCount:size countStyle:NSByteCountFormatterCountStyleFile]];
@@ -417,13 +417,13 @@
             }
             if (cell)
             {
-                cell.imgView.image = [item[@"icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                cell.imgView.image = [item[@"icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
                 cell.textView.text = item[@"title"];
                 OASettingsCategoryItems *items = self.itemsMap[_itemTypes[indexPath.section]];
                 OAExportSettingsType *settingType = items.getTypes[indexPath.row - 1];
                 NSInteger selectedAmount = [self getSelectedItemsAmount:settingType];
                 NSInteger itemsTotal = [items getItemsForType:settingType].count;
-                NSString *selectedStr = selectedAmount == 0 ? OALocalizedString(@"shared_string_none") : (selectedAmount == itemsTotal ? OALocalizedString(@"shared_string_all") : [NSString stringWithFormat:OALocalizedString(@"some_of"), selectedAmount, itemsTotal]);
+                NSString *selectedStr = selectedAmount == 0 ? OALocalizedString(@"shared_string_none") : (selectedAmount == itemsTotal ? OALocalizedString(@"shared_string_all") : [NSString stringWithFormat:OALocalizedString(@"of"), selectedAmount, itemsTotal]);
                 
                 long size = [self calculateItemsSize:self.selectedItemsMap[settingType]];
                 if (size > 0)

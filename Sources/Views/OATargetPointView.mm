@@ -32,6 +32,7 @@
 #import "OAOsmAndFormatter.h"
 #import "OAMapDownloadController.h"
 #import "OAShareMenuActivity.h"
+#import "OAPOI.h"
 
 #define kButtonsViewHeight 44.0
 #define kDefaultMapRulerMarginBottom 0
@@ -177,9 +178,9 @@ static const NSInteger _buttonsCount = 4;
     [self doUpdateUI];
 
     [_buttonFavorite setTitle:OALocalizedString(@"ctx_mnu_add_fav") forState:UIControlStateNormal];
-    [_buttonShare setTitle:OALocalizedString(@"ctx_mnu_share") forState:UIControlStateNormal];
-    [_buttonDirection setTitle:OALocalizedString(@"ctx_mnu_direction") forState:UIControlStateNormal];
-    [_buttonShowInfo setTitle:[OALocalizedString(@"shared_string_info") upperCase] forState:UIControlStateNormal];
+    [_buttonShare setTitle:OALocalizedString(@"shared_string_share") forState:UIControlStateNormal];
+    [_buttonDirection setTitle:OALocalizedString(@"map_marker") forState:UIControlStateNormal];
+    [_buttonShowInfo setTitle:[OALocalizedString(@"info_button") upperCase] forState:UIControlStateNormal];
     [_buttonRoute setTitle:[OALocalizedString(@"shared_string_navigation") upperCase] forState:UIControlStateNormal];
 
     _backView4.hidden = YES;
@@ -205,6 +206,10 @@ static const NSInteger _buttonsCount = 4;
     [_backViewRoute.layer addSublayer:_horizontalRouteLine];
 
     _nearbyLabel.textColor = UIColorFromARGB(color_secondary_text_light_argb);
+    _descriptionLabel.font = [UIFont scaledSystemFontOfSize:13. weight:UIFontWeightMedium];
+    _buttonShadow.titleLabel.font = [UIFont scaledSystemFontOfSize:18.];
+    _buttonRoute.titleLabel.font = [UIFont scaledSystemFontOfSize:13. weight:UIFontWeightSemibold];
+    _buttonShowInfo.titleLabel.font = [UIFont scaledSystemFontOfSize:13. weight:UIFontWeightSemibold];
     
     [OsmAndApp instance].favoritesCollection->collectionChangeObservable.attach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self),
                                                                 [self]
@@ -276,7 +281,7 @@ static const NSInteger _buttonsCount = 4;
     //btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     btn.contentEdgeInsets = UIEdgeInsetsMake(0, 8.0, 0, 8.0);
     btn.titleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
-    //btn.titleLabel.font = [UIFont systemFontOfSize:13.0 weight:UIFontWeightRegular];
+    //btn.titleLabel.font = [UIFont scaledSystemFontOfSize:13.0 weight:UIFontWeightRegular];
     btn.layer.cornerRadius = 4.0;
     btn.layer.masksToBounds = YES;
     btn.layer.borderWidth = 0.8;
@@ -651,7 +656,7 @@ static const NSInteger _buttonsCount = 4;
         [self insertSubview:self.customController.contentView atIndex:0];
     
     [self.buttonMore setImage:[UIImage imageNamed:@"three_dots.png"] forState:UIControlStateNormal];
-    [self.buttonMore setTitle:OALocalizedString(@"actions") forState:UIControlStateNormal];
+    [self.buttonMore setTitle:OALocalizedString(@"shared_string_actions") forState:UIControlStateNormal];
         
     if (self.customController.hasDismissButton)
     {
@@ -663,7 +668,7 @@ static const NSInteger _buttonsCount = 4;
     }
     else
     {
-        [_buttonDirection setTitle:OALocalizedString(@"ctx_mnu_direction") forState:UIControlStateNormal];
+        [_buttonDirection setTitle:OALocalizedString(@"map_marker") forState:UIControlStateNormal];
         [_buttonDirection setTitleColor:UIColorFromRGB(0x666666) forState:UIControlStateNormal];
         [_buttonDirection setImage:[UIImage imageNamed:@"menu_direction_icon_2"] forState:UIControlStateNormal];
         [_buttonDirection setTintColor:UIColorFromRGB(0x666666)];
@@ -839,7 +844,7 @@ static const NSInteger _buttonsCount = 4;
     
     if (_targetPoint.type == OATargetImpassableRoadSelection)
     {
-        self.topView.backgroundColor = UIColorFromRGB(color_bottom_sheet_background);
+        self.topView.backgroundColor = UIColorFromRGB(color_primary_table_background);
     }
     else
     {
@@ -1601,7 +1606,14 @@ static const NSInteger _buttonsCount = 4;
         else
         {
             UIImage *icon = [self.customController getIcon];
-            _imageView.image = icon ? icon : _targetPoint.icon;
+            if (!icon)
+            {
+                if ([_targetPoint.targetObj isKindOfClass:OAPOI.class])
+                    icon = [((OAPOI *)_targetPoint.targetObj) icon];
+                else
+                    icon = _targetPoint.icon;
+            }
+            _imageView.image = icon;
             _imageView.hidden = NO;
         }
     }
@@ -1633,9 +1645,9 @@ static const NSInteger _buttonsCount = 4;
                 if (typeStr.length > 0)
                 {
                     NSMutableAttributedString *typeAttrStr = [[NSMutableAttributedString alloc] initWithString:[typeStr stringByAppendingString:@": "]];
-                    [typeAttrStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold] range:NSMakeRange(0, typeAttrStr.length)];
+                    [typeAttrStr addAttribute:NSFontAttributeName value:[UIFont scaledSystemFontOfSize:15.0 weight:UIFontWeightSemibold] range:NSMakeRange(0, typeAttrStr.length)];
                     NSMutableAttributedString *addressAttrStr = [[NSMutableAttributedString alloc] initWithString:_targetPoint.titleAddress];
-                    [addressAttrStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15.0] range:NSMakeRange(0, addressAttrStr.length)];
+                    [addressAttrStr addAttribute:NSFontAttributeName value:[UIFont scaledSystemFontOfSize:15.0] range:NSMakeRange(0, addressAttrStr.length)];
                     [attributedStr appendAttributedString:typeAttrStr];
                     [attributedStr appendAttributedString:addressAttrStr];
                     typeStr = [NSString stringWithFormat:@"%@: %@", typeStr, _targetPoint.titleAddress];
@@ -1643,13 +1655,13 @@ static const NSInteger _buttonsCount = 4;
                 else
                 {
                     [attributedStr appendAttributedString:[[NSAttributedString alloc] initWithString:_targetPoint.titleAddress]];
-                    [attributedStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold] range:NSMakeRange(0, attributedStr.length)];
+                    [attributedStr addAttribute:NSFontAttributeName value:[UIFont scaledSystemFontOfSize:15.0 weight:UIFontWeightSemibold] range:NSMakeRange(0, attributedStr.length)];
                 }
             }
             else if (typeStr)
             {
                 [attributedStr appendAttributedString:[[NSAttributedString alloc] initWithString:typeStr]];
-                [attributedStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold] range:NSMakeRange(0, attributedStr.length)];
+                [attributedStr addAttribute:NSFontAttributeName value:[UIFont scaledSystemFontOfSize:15.0 weight:UIFontWeightSemibold] range:NSMakeRange(0, attributedStr.length)];
             }
             self.addressStr = [attributedStr string];
             [_coordinateLabel setAttributedText:attributedStr];
@@ -2052,7 +2064,7 @@ static const NSInteger _buttonsCount = 4;
     if (_showFull || _showFullScreen)
         [_buttonShowInfo setTitle:[OALocalizedString(@"shared_string_collapse") upperCase] forState:UIControlStateNormal];
     else
-        [_buttonShowInfo setTitle:[OALocalizedString(@"res_details") upperCase] forState:UIControlStateNormal];
+        [_buttonShowInfo setTitle:[OALocalizedString(@"shared_string_details") upperCase] forState:UIControlStateNormal];
 }
 
 - (void) applyMapInteraction:(CGFloat)height animated:(BOOL)animated
@@ -2594,7 +2606,7 @@ static const NSInteger _buttonsCount = 4;
                 [sms appendString:@"\n"];
             }
 
-            [sms appendString:OALocalizedString(@"sett_arr_loc")];
+            [sms appendString:OALocalizedString(@"shared_string_location")];
             [sms appendString:@": "];
 
             if ([self isDirectionRTL])

@@ -133,7 +133,7 @@
     
     [_data addObject:@{
         @"type" : [OATitleSliderTableViewCell getCellIdentifier],
-        @"name" : OALocalizedString(@"rec_interval"),
+        @"name" : OALocalizedString(@"save_track_interval_globally"),
         @"value" : @(_sliderValue),
         @"desc" : _sliderIntervalName
     }];
@@ -147,7 +147,7 @@
     
     [_data addObject:@{
         @"type" : [OASwitchTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"map_settings_show"),
+        @"title" : OALocalizedString(@"shared_string_show_on_map"),
         @"value" : @(_isShowOnMap),
         @"tag" : @(kShowOnMapTag)
     }];

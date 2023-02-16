@@ -33,7 +33,7 @@
     self.bottomLeftLabel.hidden = !bottomLeft;
     self.bottomRightLabel.hidden = !bottomRight;
 
-    UIFont *bottomLabelsFont = [UIFont systemFontOfSize:topLeft || topRight ? 15. : 17.];
+    UIFont *bottomLabelsFont = [UIFont scaledSystemFontOfSize:topLeft || topRight ? 15. : 17.];
     self.bottomLeftLabel.font = bottomLabelsFont;
     self.bottomRightLabel.font = bottomLabelsFont;
 }

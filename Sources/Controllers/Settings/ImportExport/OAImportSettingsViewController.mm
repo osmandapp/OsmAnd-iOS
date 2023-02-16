@@ -45,7 +45,7 @@
 
 - (void) viewDidLoad
 {
-    _descriptionText = OALocalizedString(@"import_profile_select_descr");
+    _descriptionText = OALocalizedString(@"select_data_to_import");
     _descriptionBoldText = nil;
     [super viewDidLoad];
 }

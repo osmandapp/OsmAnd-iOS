@@ -32,6 +32,7 @@
 #import "OAExportItemsViewController.h"
 #import "OAIndexConstants.h"
 #import "OsmAndApp.h"
+#import "OAOsmUploadGPXViewConroller.h"
 
 #include <OsmAndCore/ArchiveReader.h>
 #include <OsmAndCore/IFavoriteLocation.h>
@@ -323,7 +324,7 @@ static UIViewController *parentController;
             NSString *gpxFilePath = [_importUrl.path stringByReplacingOccurrencesOfString:[_app.gpxPath stringByAppendingString:@"/"] withString:@""];
             if ([[OAGPXDatabase sharedDb] containsGPXItem:gpxFilePath])
             {
-                [self showImportGpxAlert:OALocalizedString(@"gpx_import_title")
+                [self showImportGpxAlert:OALocalizedString(@"import_tracks")
                                  message:OALocalizedString(@"gpx_import_already_exists_short")
                        cancelButtonTitle:OALocalizedString(@"shared_string_ok")
                        otherButtonTitles:@[]
@@ -331,7 +332,7 @@ static UIViewController *parentController;
             }
             else if (showAlerts)
             {
-                [self showImportGpxAlert:OALocalizedString(@"gpx_import_title")
+                [self showImportGpxAlert:OALocalizedString(@"import_tracks")
                                  message:OALocalizedString(@"gpx_import_already_exists")
                        cancelButtonTitle:OALocalizedString(@"shared_string_cancel")
                        otherButtonTitles:@[OALocalizedString(@"gpx_add_new"), OALocalizedString(@"gpx_overwrite")]
@@ -356,7 +357,7 @@ static UIViewController *parentController;
         
         if (showAlerts)
         {
-            [self showImportGpxAlert:OALocalizedString(@"gpx_import_title")
+            [self showImportGpxAlert:OALocalizedString(@"import_tracks")
                              message:OALocalizedString(@"gpx_cannot_import")
                    cancelButtonTitle:OALocalizedString(@"shared_string_ok")
                    otherButtonTitles:nil
@@ -500,7 +501,7 @@ static UIViewController *parentController;
 
 - (void) updateHeaderLabels
 {
-    [_selectAllButton setTitle:OALocalizedString(@"select_all") forState:UIControlStateNormal];
+    [_selectAllButton setTitle:OALocalizedString(@"shared_string_select_all") forState:UIControlStateNormal];
     [_doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
     
     if (_editActive)
@@ -550,9 +551,11 @@ static UIViewController *parentController;
     
     _exportButton.tintColor = UIColorFromRGB(color_primary_purple);
     _showOnMapButton.tintColor = UIColorFromRGB(color_primary_purple);
+    _uploadToOSMButton.tintColor = UIColorFromRGB(color_primary_purple);
     _deleteButton.tintColor = UIColorFromRGB(color_primary_purple);
     [_exportButton setImage:[UIImage templateImageNamed:@"ic_custom_export.png"] forState:UIControlStateNormal];
-    [_showOnMapButton setImage:[UIImage templateImageNamed:@"ic_custom_map_pin.png"] forState:UIControlStateNormal];
+    [_showOnMapButton setImage:[UIImage templateImageNamed:@"ic_custom_map_pin_outlined.png"] forState:UIControlStateNormal];
+    [_uploadToOSMButton setImage:[UIImage templateImageNamed:@"ic_custom_upload_to_openstreetmap_outlined.png"] forState:UIControlStateNormal];
     [_deleteButton setImage:[UIImage templateImageNamed:@"ic_custom_remove.png"] forState:UIControlStateNormal];
     
     [self updateButtons];
@@ -661,7 +664,7 @@ static UIViewController *parentController;
     
     if ([_iapHelper.trackRecording isActive])
         [trackRecordingGroup.groupItems addObject:@{
-            @"title" : OALocalizedString(@"track_recording_name"),
+            @"title" : OALocalizedString(@"shared_string_currently_recording_track"),
             @"icon" : @"ic_custom_reverse_direction.png",
             @"type" : [OAGPXRecTableViewCell getCellIdentifier],
             @"key" : @"track_recording"}
@@ -766,12 +769,12 @@ static UIViewController *parentController;
     OAGpxTableGroup* actionsGroup = [[OAGpxTableGroup alloc] init];
     actionsGroup.isMenu = YES;
     actionsGroup.type = [OAIconTextTableViewCell getCellIdentifier];
-    actionsGroup.header = OALocalizedString(@"actions");
+    actionsGroup.header = OALocalizedString(@"shared_string_actions");
     self.menuItems = @[@{@"type" : [OAIconTextTableViewCell getCellIdentifier],
                          @"key" : @"import_track",
-                         @"title": OALocalizedString(@"gpx_import_title"),
+                         @"title": OALocalizedString(@"import_tracks"),
                          @"icon": @"ic_custom_import",
-                         @"header" : OALocalizedString(@"actions")},
+                         @"header" : OALocalizedString(@"shared_string_actions")},
                        @{@"type" : [OAIconTextTableViewCell getCellIdentifier],
                          @"key" : @"create_new_trip",
                          @"title": OALocalizedString(@"create_new_trip"),
@@ -799,17 +802,11 @@ static UIViewController *parentController;
 
 #pragma mark - Actions
 
-
-- (IBAction) backButtonClicked:(id)sender
-{
-    [super backButtonClicked:sender];
-}
-
 - (IBAction) goRootScreen:(id)sender
 {
     if (_popToParent)
     {
-        [super backButtonClicked:sender];
+        [super onLeftNavbarButtonPressed];
     }
     else
     {
@@ -1113,6 +1110,15 @@ static UIViewController *parentController;
     }
 }
 
+- (IBAction) uploadToOSMButtonClicked:(id)sender
+{
+    if (_selectedItems.count > 0)
+    {
+        OAOsmUploadGPXViewConroller *vc = [[OAOsmUploadGPXViewConroller alloc] initWithGPXItems:_selectedItems];
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+}
+
 #pragma mark - UITableViewDataSource
 
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
@@ -1170,9 +1176,9 @@ static UIViewController *parentController;
             }
             if (_recCell)
             {
-                [_recCell.textView setText:OALocalizedString(@"track_recording_name")];
+                [_recCell.textView setText:OALocalizedString(@"shared_string_currently_recording_track")];
                 
-                _recCell.descriptionPointsView.text = [NSString stringWithFormat:@"%d %@", _savingHelper.points, [OALocalizedString(@"gpx_waypoints") lowercaseStringWithLocale:[NSLocale currentLocale]]];
+                _recCell.descriptionPointsView.text = [NSString stringWithFormat:@"%d %@", _savingHelper.points, [OALocalizedString(@"shared_string_waypoints") lowercaseStringWithLocale:[NSLocale currentLocale]]];
                 _recCell.descriptionDistanceView.text = [OAOsmAndFormatter getFormattedDistance:_savingHelper.distance];
                 
                 [_recCell.btnStartStopRec removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
@@ -1193,7 +1199,7 @@ static UIViewController *parentController;
                 NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCellNoIcon getCellIdentifier] owner:self options:nil];
                 cell = (OAMenuSimpleCellNoIcon *)[nib objectAtIndex:0];
                 cell.descriptionView.hidden = YES;
-                cell.textView.font = [UIFont systemFontOfSize:14.0];
+                cell.textView.font = [UIFont scaledSystemFontOfSize:14.0];
                 cell.textView.textColor = [UIColor darkGrayColor];
             }
             if (cell)

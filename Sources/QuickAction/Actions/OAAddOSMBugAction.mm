@@ -51,7 +51,7 @@ static OAQuickActionType *TYPE;
     [data setObject:@[@{
                           @"type" : [OASwitchTableViewCell getCellIdentifier],
                           @"key" : KEY_DIALOG,
-                          @"title" : OALocalizedString(@"quick_actions_show_dialog"),
+                          @"title" : OALocalizedString(@"quick_action_interim_dialog"),
                           @"value" : @([self.getParams[KEY_DIALOG] boolValue]),
                           },
                       @{
@@ -64,8 +64,8 @@ static OAQuickActionType *TYPE;
                           @"key" : KEY_MESSAGE
                           },
                       @{
-                          @"footer" : OALocalizedString(@"osm_note_action_field_descr")
-                          }] forKey:OALocalizedString(@"osm_alert_message")];
+                          @"footer" : OALocalizedString(@"quick_action_bug_descr")
+                          }] forKey:OALocalizedString(@"osb_comment_dialog_message")];
     
     return data;
 }
@@ -91,7 +91,7 @@ static OAQuickActionType *TYPE;
 + (OAQuickActionType *) TYPE
 {
     if (!TYPE)
-        TYPE = [[OAQuickActionType alloc] initWithIdentifier:12 stringId:@"osmbug.add" class:self.class name:OALocalizedString(@"add_osm_note") category:CREATE_CATEGORY iconName:@"ic_action_osm_note" secondaryIconName:@"ic_custom_compound_action_add"];
+        TYPE = [[OAQuickActionType alloc] initWithIdentifier:12 stringId:@"osmbug.add" class:self.class name:OALocalizedString(@"quick_action_add_osm_bug") category:CREATE_CATEGORY iconName:@"ic_action_osm_note" secondaryIconName:@"ic_custom_compound_action_add"];
        
     return TYPE;
 }

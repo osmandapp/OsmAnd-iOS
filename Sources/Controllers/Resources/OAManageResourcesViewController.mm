@@ -244,6 +244,13 @@ static BOOL _repositoryUpdated = NO;
     [_doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
 }
 
+-(void) addAccessibilityLabels
+{
+    self.backButton.accessibilityLabel = OALocalizedString(@"shared_string_back");
+    self.updateButton.accessibilityLabel = OALocalizedString(@"shared_string_update");
+    self.searchButton.accessibilityLabel = OALocalizedString(@"shared_string_search");
+}
+
 - (void) viewDidLoad
 {
     [super viewDidLoad];
@@ -255,6 +262,7 @@ static BOOL _repositoryUpdated = NO;
     {
         self.backButton.hidden = YES;
         self.doneButton.hidden = NO;
+        self.doneButton.titleLabel.font = [UIFont scaledSystemFontOfSize:14.];
     }
     
     if (self.region != _app.worldRegion)
@@ -1070,7 +1078,7 @@ static BOOL _repositoryUpdated = NO;
 
             if (repositoryResource->type == OsmAndResourceType::SrtmMapRegion)
             {
-                item.title = OALocalizedString(@"srtm_disabled");
+                item.title = OALocalizedString(@"srtm_plugin_disabled");
                 item.size = 0;
                 item.sizePkg = 0;
             }
@@ -1782,7 +1790,7 @@ static BOOL _repositoryUpdated = NO;
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
-- (void)backButtonClicked:(id)sender
+- (void)onLeftNavbarButtonPressed
 {
     if (self.region.regionId == nil && _currentScope == kAllResourcesScope)
         [self.navigationController popToRootViewControllerAnimated:YES];
@@ -1992,29 +2000,29 @@ static BOOL _repositoryUpdated = NO;
         }
 
         if (section == _extraMapsSection)
-            return OALocalizedString(@"extra_maps");
+            return OALocalizedString(@"extra_maps_menu_group");
         if (section == _resourcesSection)
-            return OALocalizedString([self isNauticalScope] ? @"region_nautical" : @"res_worldwide");
+            return OALocalizedString([self isNauticalScope] ? @"nautical_maps" : @"res_worldwide");
         if (section == _regionMapSection)
             return OALocalizedString(@"res_world_map");
         if (section == _otherMapsSection)
-            return OALocalizedString(@"region_others");
+            return OALocalizedString(@"download_select_map_types");
         if (section == _nauticalMapsSection)
-            return OALocalizedString(@"region_nautical");
+            return OALocalizedString(@"nautical_maps");
 
         return nil;
     }
 
     if (section == _extraMapsSection)
-        return OALocalizedString(@"extra_maps");
+        return OALocalizedString(@"extra_maps_menu_group");
     if (section == _resourcesSection)
-        return OALocalizedString([self isNauticalScope] ? @"region_nautical" : @"res_mapsres");
+        return OALocalizedString([self isNauticalScope] ? @"nautical_maps" : @"res_mapsres");
     if (section == _regionMapSection)
         return OALocalizedString(@"res_region_map");
     if (section == _otherMapsSection)
-        return OALocalizedString(@"region_others");
+        return OALocalizedString(@"download_select_map_types");
     if (section == _nauticalMapsSection)
-        return OALocalizedString(@"region_nautical");
+        return OALocalizedString(@"nautical_maps");
 
     return nil;
 }
@@ -2187,7 +2195,7 @@ static BOOL _repositoryUpdated = NO;
         {
             BOOL isLocalCell = indexPath.row == 0 && [self hasLocalResources];
             cellTypeId = isLocalCell ? installedResourcesSubmenuCell : outdatedResourcesSubmenuCell;
-            title = OALocalizedString(isLocalCell ? @"download_tab_local" : @"res_updates");
+            title = OALocalizedString(isLocalCell ? @"download_tab_local" : @"download_tab_updates");
 
             if (isLocalCell)
             {
@@ -2228,12 +2236,12 @@ static BOOL _repositoryUpdated = NO;
         else if (indexPath.section == _otherMapsSection)
         {
             cellTypeId = subregionCell;
-            title = OALocalizedString(@"region_others");
+            title = OALocalizedString(@"download_select_map_types");
         }
         else if (indexPath.section == _nauticalMapsSection)
         {
             cellTypeId = subregionCell;
-            title = OALocalizedString(@"region_nautical");
+            title = OALocalizedString(@"nautical_maps");
         }
         else if (indexPath.section == _resourcesSection && _resourcesSection >= 0)
         {
@@ -2525,8 +2533,8 @@ static BOOL _repositoryUpdated = NO;
         {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                           reuseIdentifier:cellTypeId];
-            cell.textLabel.font = [UIFont systemFontOfSize:17.0];
-            cell.detailTextLabel.font = [UIFont systemFontOfSize:12.0];
+            cell.textLabel.font = [UIFont scaledSystemFontOfSize:17.0];
+            cell.detailTextLabel.font = [UIFont scaledSystemFontOfSize:12.0];
             cell.detailTextLabel.textColor = UIColorFromRGB(0x929292);
 
             UIImage *iconImage = [UIImage templateImageNamed:@"ic_custom_download"];
@@ -2553,8 +2561,8 @@ static BOOL _repositoryUpdated = NO;
         {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                           reuseIdentifier:cellTypeId];
-            cell.textLabel.font = [UIFont systemFontOfSize:17.0];
-            cell.detailTextLabel.font = [UIFont systemFontOfSize:12.0];
+            cell.textLabel.font = [UIFont scaledSystemFontOfSize:17.0];
+            cell.detailTextLabel.font = [UIFont scaledSystemFontOfSize:12.0];
             cell.detailTextLabel.textColor = UIColorFromRGB(0x929292);
             NSString *imageNamed = [item_ isKindOfClass:OAMultipleResourceItem.class] && ![self.region.resourceTypes containsObject:[OAResourceType toValue:((OAResourceItem *) item_).resourceType]] ? @"ic_custom_multi_download" : @"ic_custom_download";
             UIImage *iconImage = [UIImage templateImageNamed:imageNamed];
@@ -2570,8 +2578,8 @@ static BOOL _repositoryUpdated = NO;
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                           reuseIdentifier:cellTypeId];
 
-            cell.textLabel.font = [UIFont systemFontOfSize:17.0];
-            cell.detailTextLabel.font = [UIFont systemFontOfSize:12.0];
+            cell.textLabel.font = [UIFont scaledSystemFontOfSize:17.0];
+            cell.detailTextLabel.font = [UIFont scaledSystemFontOfSize:12.0];
             cell.detailTextLabel.textColor = UIColorFromRGB(0x929292);
 
             FFCircularProgressView *progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 25.0f, 25.0f)];
@@ -2609,10 +2617,10 @@ static BOOL _repositoryUpdated = NO;
             if (self.region && [self.region isInPurchasedArea])
             {
                 UILabel *labelGet = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, 300.0, 100.0)];
-                labelGet.font = [UIFont systemFontOfSize:13 weight:UIFontWeightSemibold];
+                labelGet.font = [UIFont scaledSystemFontOfSize:13 weight:UIFontWeightSemibold];
                 labelGet.textAlignment = NSTextAlignmentCenter;
                 labelGet.textColor = [UIColor colorWithRed:0.992f green:0.561f blue:0.149f alpha:1.00f];
-                labelGet.text = [OALocalizedString(@"purchase_get") uppercaseStringWithLocale:[NSLocale currentLocale]];
+                labelGet.text = [OALocalizedString(@"shared_string_get") uppercaseStringWithLocale:[NSLocale currentLocale]];
                 
                 [labelGet sizeToFit];
                 CGSize priceSize = CGSizeMake(MAX(kPriceMinTextWidth, labelGet.bounds.size.width), MAX(kPriceMinTextHeight, labelGet.bounds.size.height));
@@ -2779,7 +2787,7 @@ static BOOL _repositoryUpdated = NO;
         OADownloadActionButton *button = _downloadDescriptionInfo.getActionButtons[indexPath.row - 1];
         buttonCell.textView.text = button.name;
         buttonCell.descView.text = button.url;
-        buttonCell.textView.font = [UIFont systemFontOfSize:17. weight:UIFontWeightMedium];
+        buttonCell.textView.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium];
         buttonCell.textView.textColor = UIColorFromRGB(color_primary_purple);
         [buttonCell.overflowButton setImage:[UIImage templateImageNamed:@"ic_custom_safari"] forState:UIControlStateNormal];
         buttonCell.overflowButton.tag = indexPath.row - 1;

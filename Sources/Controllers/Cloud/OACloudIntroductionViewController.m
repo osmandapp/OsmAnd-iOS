@@ -32,6 +32,7 @@
 {
     [super viewDidLoad];
         
+    [self.backImageButton setImage:[UIImage rtlImageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
     self.backImageButton.tintColor = UIColorFromRGB(color_primary_purple);
     
     [self setUpTableHeaderView];
@@ -77,8 +78,8 @@
 - (void)setUpTableHeaderView
 {
     _headerView = [[OACloudIntroductionHeaderView alloc] init];
-    NSString *topButtonTitle = [OAIAPHelper isSubscribedToOsmAndPro] ? OALocalizedString(@"cloud_create_account") : OALocalizedString(@"purchase_get");
-    [_headerView setUpViewWithTitle:OALocalizedString(@"osmand_cloud") description:OALocalizedString(@"cloud_description") image:[UIImage imageNamed:@"ic_custom_cloud_upload_colored_day_big"] topButtonTitle:topButtonTitle bottomButtonTitle:OALocalizedString(@"cloud_existing_account")];
+    NSString *topButtonTitle = [OAIAPHelper isSubscribedToOsmAndPro] ? OALocalizedString(@"cloud_create_account") : OALocalizedString(@"shared_string_get");
+    [_headerView setUpViewWithTitle:OALocalizedString(@"osmand_cloud") description:OALocalizedString(@"osmand_cloud_authorize_descr") image:[UIImage imageNamed:@"ic_custom_cloud_upload_colored_day_big"] topButtonTitle:topButtonTitle bottomButtonTitle:OALocalizedString(@"register_opr_have_account")];
     CGRect frame = _headerView.frame;
     frame.size.height = [_headerView calculateViewHeight];
     _headerView.frame = frame;
@@ -132,7 +133,7 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleRightIconCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleRightIconCell *)[nib objectAtIndex:0];
             cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
-            cell.titleView.font = [UIFont systemFontOfSize:17.];
+            cell.titleView.font = [UIFont scaledSystemFontOfSize:17.];
         }
         cell.titleView.text = item[@"title"];
         [cell.iconView setImage:[UIImage templateImageNamed:item[@"image"]]];

@@ -64,27 +64,24 @@
     self = [super init];
     if (self)
     {
-        if (@available(iOS 11.2, *))
+        self.numberOfUnits = skSubscriptionPeriod.numberOfUnits;
+        switch (skSubscriptionPeriod.unit)
         {
-            self.numberOfUnits = skSubscriptionPeriod.numberOfUnits;
-            switch (skSubscriptionPeriod.unit)
-            {
-                case SKProductPeriodUnitDay:
-                    self.unit = OAProductPeriodUnitDay;
-                    break;
-                case SKProductPeriodUnitWeek:
-                    self.unit = OAProductPeriodUnitWeek;
-                    break;
-                case SKProductPeriodUnitMonth:
-                    self.unit = OAProductPeriodUnitMonth;
-                    break;
-                case SKProductPeriodUnitYear:
-                    self.unit = OAProductPeriodUnitYear;
-                    break;
-
-                default:
-                    break;
-            }
+            case SKProductPeriodUnitDay:
+                self.unit = OAProductPeriodUnitDay;
+                break;
+            case SKProductPeriodUnitWeek:
+                self.unit = OAProductPeriodUnitWeek;
+                break;
+            case SKProductPeriodUnitMonth:
+                self.unit = OAProductPeriodUnitMonth;
+                break;
+            case SKProductPeriodUnitYear:
+                self.unit = OAProductPeriodUnitYear;
+                break;
+                
+            default:
+                break;
         }
     }
     return self;
@@ -131,49 +128,44 @@
     self = [super init];
     if (self)
     {
-        if (@available(iOS 11.2, *))
+        self.price = skDiscount.price;
+        self.priceLocale = skDiscount.priceLocale;
+        self.subscriptionPeriod = [[OAProductSubscriptionPeriod alloc] initWithSkSubscriptionPeriod:skDiscount.subscriptionPeriod];
+        self.numberOfPeriods = skDiscount.numberOfPeriods;
+        switch (skDiscount.paymentMode)
         {
-            self.price = skDiscount.price;
-            self.priceLocale = skDiscount.priceLocale;
-            self.subscriptionPeriod = [[OAProductSubscriptionPeriod alloc] initWithSkSubscriptionPeriod:skDiscount.subscriptionPeriod];
-            self.numberOfPeriods = skDiscount.numberOfPeriods;
-            switch (skDiscount.paymentMode)
-            {
-                case SKProductDiscountPaymentModePayAsYouGo:
-                    self.paymentMode = OAProductDiscountPaymentModePayAsYouGo;
-                    break;
-                case SKProductDiscountPaymentModePayUpFront:
-                    self.paymentMode = OAProductDiscountPaymentModePayUpFront;
-                    break;
-                case SKProductDiscountPaymentModeFreeTrial:
-                    self.paymentMode = OAProductDiscountPaymentModeFreeTrial;
-                    break;
-                    
-                default:
-                    self.paymentMode = OAProductDiscountPaymentModeUnknown;
-                    break;
-            }
-            self.originalPrice = skProduct.price;
-            self.originalPriceLocale = skProduct.priceLocale;
-            if (skProduct.subscriptionPeriod)
-                self.originalSubscriptionPeriod = [[OAProductSubscriptionPeriod alloc] initWithSkSubscriptionPeriod:skProduct.subscriptionPeriod];
+            case SKProductDiscountPaymentModePayAsYouGo:
+                self.paymentMode = OAProductDiscountPaymentModePayAsYouGo;
+                break;
+            case SKProductDiscountPaymentModePayUpFront:
+                self.paymentMode = OAProductDiscountPaymentModePayUpFront;
+                break;
+            case SKProductDiscountPaymentModeFreeTrial:
+                self.paymentMode = OAProductDiscountPaymentModeFreeTrial;
+                break;
+                
+            default:
+                self.paymentMode = OAProductDiscountPaymentModeUnknown;
+                break;
         }
-        if (@available(iOS 12.2, *))
+        self.originalPrice = skProduct.price;
+        self.originalPriceLocale = skProduct.priceLocale;
+        if (skProduct.subscriptionPeriod)
+            self.originalSubscriptionPeriod = [[OAProductSubscriptionPeriod alloc] initWithSkSubscriptionPeriod:skProduct.subscriptionPeriod];
+        
+        self.identifier = skDiscount.identifier;
+        switch (skDiscount.type)
         {
-            self.identifier = skDiscount.identifier;
-            switch (skDiscount.type)
-            {
-                case SKProductDiscountTypeIntroductory:
-                    self.type = OAProductDiscountTypeIntroductory;
-                    break;
-                case SKProductDiscountTypeSubscription:
-                    self.type = OAProductDiscountTypeSubscription;
-                    break;
-                    
-                default:
-                    self.type = OAProductDiscountTypeUnknown;
-                    break;
-            }
+            case SKProductDiscountTypeIntroductory:
+                self.type = OAProductDiscountTypeIntroductory;
+                break;
+            case SKProductDiscountTypeSubscription:
+                self.type = OAProductDiscountTypeSubscription;
+                break;
+                
+            default:
+                self.type = OAProductDiscountTypeUnknown;
+                break;
         }
     }
     return self;
@@ -385,8 +377,8 @@
     BOOL isPlural = originalNumberOfUnits > 1 || self.numberOfPeriods > 1;
     NSString *mainPart = [NSString stringWithFormat:OALocalizedString(isPlural ? @"get_discount_first_few_parts" : @"get_discount_first_part"), periodPriceStr, [self getDisountPeriodString:unitStr totalPeriods:totalPeriods]];
     NSString *thenPart = [NSString stringWithFormat:OALocalizedString(@"get_discount_second_part"), originalPricePeriod];
-    NSAttributedString *mainStrAttributed = [[NSAttributedString alloc] initWithString:mainPart attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:17.0 weight:UIFontWeightSemibold]}];
-    NSAttributedString *secondStrAttributed = [[NSAttributedString alloc] initWithString:thenPart attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:17.0]}];
+    NSAttributedString *mainStrAttributed = [[NSAttributedString alloc] initWithString:mainPart attributes:@{NSFontAttributeName : [UIFont scaledSystemFontOfSize:17.0 weight:UIFontWeightSemibold]}];
+    NSAttributedString *secondStrAttributed = [[NSAttributedString alloc] initWithString:thenPart attributes:@{NSFontAttributeName : [UIFont scaledSystemFontOfSize:17.0]}];
     NSMutableAttributedString *res = [[NSMutableAttributedString alloc] initWithAttributedString:mainStrAttributed];
     [res appendAttributedString:[[NSAttributedString alloc] initWithString:self.paymentMode == OAProductDiscountPaymentModeFreeTrial ? @", " : @"\n"]];
     [res appendAttributedString:secondStrAttributed];
@@ -548,6 +540,7 @@
 
 - (void) commonInit
 {
+    [self setPurchased];
     if (self.free && ![self isAlreadyPurchased])
     {
         [self setPurchased];
@@ -566,24 +559,15 @@
     self.price = skProduct.price;
     self.priceLocale = skProduct.priceLocale;
     
-    if (@available(iOS 11.2, *))
-    {
-        if (skProduct.subscriptionPeriod)
-            self.subscriptionPeriod = [[OAProductSubscriptionPeriod alloc] initWithSkSubscriptionPeriod:skProduct.subscriptionPeriod];
-        if (skProduct.introductoryPrice)
-            self.introductoryPrice = [[OAProductDiscount alloc] initWithSkDiscount:skProduct.introductoryPrice skProduct:skProduct];
-    }
-    if (@available(iOS 12.0, *))
-    {
-        if (skProduct.subscriptionGroupIdentifier)
-            self.subscriptionGroupIdentifier = skProduct.subscriptionGroupIdentifier;
-    }
+    if (skProduct.subscriptionPeriod)
+        self.subscriptionPeriod = [[OAProductSubscriptionPeriod alloc] initWithSkSubscriptionPeriod:skProduct.subscriptionPeriod];
+    if (skProduct.introductoryPrice)
+        self.introductoryPrice = [[OAProductDiscount alloc] initWithSkDiscount:skProduct.introductoryPrice skProduct:skProduct];
+    if (skProduct.subscriptionGroupIdentifier)
+        self.subscriptionGroupIdentifier = skProduct.subscriptionGroupIdentifier;
     NSMutableArray<OAProductDiscount *> *discounts = [NSMutableArray array];
-    if (@available(iOS 12.2, *))
-    {
-        for (SKProductDiscount *skDiscount in skProduct.discounts)
-            [discounts addObject:[[OAProductDiscount alloc] initWithSkDiscount:skDiscount skProduct:skProduct]];
-    }
+    for (SKProductDiscount *skDiscount in skProduct.discounts)
+        [discounts addObject:[[OAProductDiscount alloc] initWithSkDiscount:skDiscount skProduct:skProduct]];
     self.discounts = [NSArray arrayWithArray:discounts];
 
     NSString *locDescriptionExtId = [@"product_desc_ext_" stringByAppendingString:postfix];
@@ -932,7 +916,7 @@
     NSAttributedString *resStr = [[NSAttributedString alloc] initWithString:@""];
     if (showDiscount && discountStr.length > 0)
     {
-        resStr = [[NSAttributedString alloc] initWithString:discountStr attributes:@{ NSFontAttributeName : [UIFont systemFontOfSize:fontSize weight:UIFontWeightSemibold]}];
+        resStr = [[NSAttributedString alloc] initWithString:discountStr attributes:@{ NSFontAttributeName : [UIFont scaledSystemFontOfSize:fontSize weight:UIFontWeightSemibold]}];
     }
     return resStr;
 }
@@ -1000,9 +984,9 @@
         NSString *price = [super formattedPrice];
         NSMutableAttributedString *priceAttributed =
                 [[NSMutableAttributedString alloc] initWithString:formattedPrice
-                                                       attributes:@{ NSFontAttributeName : [UIFont systemFontOfSize:15] }];
+                                                       attributes:@{ NSFontAttributeName : [UIFont scaledSystemFontOfSize:15] }];
         [priceAttributed addAttribute:NSFontAttributeName
-                                value:[UIFont systemFontOfSize:15 weight:UIFontWeightSemibold]
+                                value:[UIFont scaledSystemFontOfSize:15 weight:UIFontWeightSemibold]
                                 range:NSMakeRange(0, price.length)];
         return priceAttributed;
     }
@@ -1155,7 +1139,7 @@
 
 - (NSString *) localizedTitle
 {
-    return OALocalizedString(@"osmand_live_title");
+    return OALocalizedString(@"osmand_live");
 }
 
 - (void) setPrice:(NSDecimalNumber *)price
@@ -1192,9 +1176,9 @@
 - (NSAttributedString *) getDescription:(CGFloat)fontSize
 {
     NSMutableAttributedString *text = [[NSMutableAttributedString alloc] init];
-    [text addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:fontSize] range:NSMakeRange(0, text.length)];
+    [text addAttribute:NSFontAttributeName value:[UIFont scaledSystemFontOfSize:fontSize] range:NSMakeRange(0, text.length)];
     NSMutableAttributedString *boldStr = [[NSMutableAttributedString alloc] initWithString:OALocalizedString(@"osm_live_payment_contribute_descr")];
-    UIFont *boldFont = [UIFont systemFontOfSize:fontSize];
+    UIFont *boldFont = [UIFont scaledSystemFontOfSize:fontSize];
     [boldStr addAttribute:NSFontAttributeName value:boldFont range:NSMakeRange(0, boldStr.length)];
     [text appendAttributedString:boldStr];
     return text;
@@ -1232,7 +1216,7 @@
 
 - (NSString *) localizedTitle
 {
-    return OALocalizedString(@"osmand_live_title");
+    return OALocalizedString(@"osmand_live");
 }
 
 - (void) setPrice:(NSDecimalNumber *)price
@@ -1298,7 +1282,7 @@
 
 - (NSString *) localizedTitle
 {
-    return OALocalizedString(@"osmand_live_title");
+    return OALocalizedString(@"osmand_live");
 }
 
 - (void) setPrice:(NSDecimalNumber *)price
@@ -1389,7 +1373,7 @@
 
 - (NSString *)localizedDescription
 {
-    return OALocalizedString(@"product_desc_pro");
+    return OALocalizedString(@"osmand_pro_tagline");
 }
 
 - (void) setPrice:(NSDecimalNumber *)price
@@ -1460,7 +1444,7 @@
 
 - (NSString *)localizedDescription
 {
-    return OALocalizedString(@"product_desc_pro");
+    return OALocalizedString(@"osmand_pro_tagline");
 }
 
 - (void) setPrice:(NSDecimalNumber *)price
@@ -1531,7 +1515,7 @@
 
 - (NSString *)localizedDescription
 {
-    return OALocalizedString(@"product_desc_plus");
+    return OALocalizedString(@"osmand_maps_plus_tagline");
 }
 
 - (NSDecimalNumber *) getDefaultPrice
@@ -1596,7 +1580,7 @@
 
 - (NSString *)localizedDescription
 {
-    return OALocalizedString(@"product_desc_plus");
+    return OALocalizedString(@"osmand_maps_plus_tagline");
 }
 
 - (NSString *) formattedPrice
@@ -1644,6 +1628,21 @@
     return @"img_plugin_skimap.jpg";
 }
 
+- (NSString *) localizedTitle
+{
+    return OALocalizedString(@"plugin_ski_name");
+}
+
+- (NSString *) localizedDescription
+{
+    return OALocalizedString(@"product_desc_skimap");
+}
+
+- (NSString *) localizedDescriptionExt
+{
+    return OALocalizedString(@"plugin_ski_descr");
+}
+
 @end
 
 @implementation OANauticalProduct
@@ -1679,6 +1678,21 @@
     return @"img_plugin_nautical.jpg";
 }
 
+- (NSString *) localizedTitle
+{
+    return OALocalizedString(@"plugin_nautical_name");
+}
+
+- (NSString *) localizedDescription
+{
+    return OALocalizedString(@"product_desc_nautical");
+}
+
+- (NSString *) localizedDescriptionExt
+{
+    return OALocalizedString(@"plugin_nautical_descr");
+}
+
 @end
 
 @implementation OATrackRecordingProduct
@@ -1707,6 +1721,21 @@
 - (NSString *) productScreenshotName
 {
     return @"img_plugin_trip_recording.jpg";
+}
+
+- (NSString *) localizedTitle
+{
+    return OALocalizedString(@"record_plugin_name");
+}
+
+- (NSString *) localizedDescription
+{
+    return OALocalizedString(@"product_desc_track_recording");
+}
+
+- (NSString *) localizedDescriptionExt
+{
+    return OALocalizedString(@"record_plugin_description");
 }
 
 @end
@@ -1739,6 +1768,21 @@
     return @"img_plugin_parking.jpg";
 }
 
+- (NSString *) localizedTitle
+{
+    return OALocalizedString(@"osmand_parking_plugin_name");
+}
+
+- (NSString *) localizedDescription
+{
+    return OALocalizedString(@"product_desc_parking");
+}
+
+- (NSString *) localizedDescriptionExt
+{
+    return OALocalizedString(@"osmand_parking_plugin_description");
+}
+
 @end
 
 @implementation OAWikiProduct
@@ -1767,6 +1811,21 @@
 - (NSString *) productScreenshotName
 {
     return @"img_plugin_wikipedia.jpg";
+}
+
+- (NSString *) localizedTitle
+{
+    return OALocalizedString(@"download_wikipedia_maps");
+}
+
+- (NSString *) localizedDescription
+{
+    return OALocalizedString(@"product_desc_wiki");
+}
+
+- (NSString *) localizedDescriptionExt
+{
+    return OALocalizedString(@"purchases_feature_desc_wikipedia");
 }
 
 @end
@@ -1799,6 +1858,21 @@
     return @"img_plugin_contourlines.jpg";
 }
 
+- (NSString *) localizedTitle
+{
+    return OALocalizedString(@"srtm_plugin_name");
+}
+
+- (NSString *) localizedDescription
+{
+    return OALocalizedString(@"product_desc_srtm");
+}
+
+- (NSString *) localizedDescriptionExt
+{
+    return OALocalizedString(@"srtm_plugin_description");
+}
+
 @end
 
 @implementation OAOsmEditingProduct
@@ -1827,6 +1901,21 @@
 - (NSString *) productScreenshotName
 {
     return @"img_plugin_osm_edits.jpg";
+}
+
+- (NSString *) localizedTitle
+{
+    return OALocalizedString(@"osm_editing_plugin_name");
+}
+
+- (NSString *) localizedDescription
+{
+    return OALocalizedString(@"product_desc_osm_editing");
+}
+
+- (NSString *) localizedDescriptionExt
+{
+    return OALocalizedString(@"osm_editing_plugin_description");
 }
 
 @end
@@ -1859,6 +1948,21 @@
     return @"img_plugin_mapillary.jpg";
 }
 
+- (NSString *) localizedTitle
+{
+    return OALocalizedString(@"mapillary");
+}
+
+- (NSString *) localizedDescription
+{
+    return OALocalizedString(@"product_desc_mapillary");
+}
+
+- (NSString *) localizedDescriptionExt
+{
+    return OALocalizedString(@"plugin_mapillary_descr");
+}
+
 @end
 
 @implementation OAOpenPlaceReviewsProduct
@@ -1889,6 +1993,21 @@
     return @"img_plugin_openplacereviews.jpg";
 }
 
+- (NSString *) localizedTitle
+{
+    return OALocalizedString(@"open_place_reviews");
+}
+
+- (NSString *) localizedDescription
+{
+    return OALocalizedString(@"product_desc_openplacereviews");
+}
+
+- (NSString *) localizedDescriptionExt
+{
+    return OALocalizedString(@"open_place_reviews_plugin_description");
+}
+
 @end
 
 @implementation OAWeatherProduct
@@ -1912,6 +2031,21 @@
 - (NSString *) productScreenshotName
 {
     return @"img_plugin_weather.jpg";
+}
+
+- (NSString *) localizedTitle
+{
+    return OALocalizedString(@"shared_string_weather");
+}
+
+- (NSString *) localizedDescription
+{
+    return OALocalizedString(@"product_desc_weather");
+}
+
+- (NSString *) localizedDescriptionExt
+{
+    return OALocalizedString(@"weather_plugin_description");
 }
 
 @end
@@ -1964,6 +2098,21 @@
     return @"ic_custom_laptop";
 }
 
+- (NSString *) localizedTitle
+{
+    return OALocalizedString(@"debugging_and_development");
+}
+
+- (NSString *) localizedDescription
+{
+    return OALocalizedString(@"product_desc_development");
+}
+
+- (NSString *) localizedDescriptionExt
+{
+    return OALocalizedString(@"osmand_development_plugin_description");
+}
+
 @end
 
 @implementation OAAllWorldProduct
@@ -1982,6 +2131,11 @@
 - (NSDecimalNumber *) getDefaultPrice
 {
     return [[NSDecimalNumber alloc] initWithDouble:kInApp_Region_All_World_Default_Price];
+}
+
+- (NSString *) localizedTitle
+{
+    return OALocalizedString(@"worldwide_maps");
 }
 
 @end
@@ -2004,6 +2158,11 @@
     return [[NSDecimalNumber alloc] initWithDouble:kInApp_Region_Russia_Default_Price];
 }
 
+- (NSString *) localizedTitle
+{
+    return OALocalizedString(@"index_name_russia");
+}
+
 @end
 
 @implementation OAAntarcticaProduct
@@ -2022,6 +2181,11 @@
 - (NSDecimalNumber *) getDefaultPrice
 {
     return [[NSDecimalNumber alloc] initWithDouble:kInApp_Region_Antarctica_Default_Price];
+}
+
+- (NSString *) localizedTitle
+{
+    return OALocalizedString(@"index_name_antarctica");
 }
 
 @end
@@ -2044,6 +2208,11 @@
     return [[NSDecimalNumber alloc] initWithDouble:kInApp_Region_Africa_Default_Price];
 }
 
+- (NSString *) localizedTitle
+{
+    return OALocalizedString(@"index_name_africa");
+}
+
 @end
 
 @implementation OAAsiaProduct
@@ -2062,6 +2231,11 @@
 - (NSDecimalNumber *) getDefaultPrice
 {
     return [[NSDecimalNumber alloc] initWithDouble:kInApp_Region_Asia_Default_Price];
+}
+
+- (NSString *) localizedTitle
+{
+    return OALocalizedString(@"index_name_asia");
 }
 
 @end
@@ -2084,6 +2258,11 @@
     return [[NSDecimalNumber alloc] initWithDouble:kInApp_Region_Australia_Default_Price];
 }
 
+- (NSString *) localizedTitle
+{
+    return OALocalizedString(@"index_name_oceania");
+}
+
 @end
 
 @implementation OAEuropeProduct
@@ -2102,6 +2281,11 @@
 - (NSDecimalNumber *) getDefaultPrice
 {
     return [[NSDecimalNumber alloc] initWithDouble:kInApp_Region_Europe_Default_Price];
+}
+
+- (NSString *) localizedTitle
+{
+    return OALocalizedString(@"index_name_europe");
 }
 
 @end
@@ -2124,6 +2308,11 @@
     return [[NSDecimalNumber alloc] initWithDouble:kInApp_Region_Central_America_Default_Price];
 }
 
+- (NSString *) localizedTitle
+{
+    return OALocalizedString(@"index_name_central_america");
+}
+
 @end
 
 @implementation OANorthAmericaProduct
@@ -2144,6 +2333,11 @@
     return [[NSDecimalNumber alloc] initWithDouble:kInApp_Region_North_America_Default_Price];
 }
 
+- (NSString *) localizedTitle
+{
+    return OALocalizedString(@"index_name_north_america");
+}
+
 @end
 
 @implementation OASouthAmericaProduct
@@ -2162,6 +2356,11 @@
 - (NSDecimalNumber *) getDefaultPrice
 {
     return [[NSDecimalNumber alloc] initWithDouble:kInApp_Region_South_America_Default_Price];
+}
+
+- (NSString *) localizedTitle
+{
+    return OALocalizedString(@"index_name_south_america");
 }
 
 @end
@@ -2466,28 +2665,28 @@
     
     if ([self.osmEditing isPurchased])
     {
-        OAFunctionalAddon *addon = [[OAFunctionalAddon alloc] initWithAddonId:kId_Addon_OsmEditing_Edit_POI titleShort:OALocalizedString(@"modify_poi_short") titleWide:OALocalizedString(@"modify_poi") imageName:@"ic_plugin_osm_edit"];
+        OAFunctionalAddon *addon = [[OAFunctionalAddon alloc] initWithAddonId:kId_Addon_OsmEditing_Edit_POI titleShort:OALocalizedString(@"poi_context_menu_modify") titleWide:OALocalizedString(@"modify_poi") imageName:@"ic_plugin_osm_edit"];
         addon.sortIndex = 2;
         [arr addObject:addon];
     }
     
     if ([self.mapillary isPurchased])
     {
-        OAFunctionalAddon *addon = [[OAFunctionalAddon alloc] initWithAddonId:kInAppId_Addon_Mapillary titleShort:OALocalizedString(@"product_title_mapillary") titleWide:OALocalizedString(@"product_title_mapillary") imageName:@"ic_custom_mapillary_symbol"];
+        OAFunctionalAddon *addon = [[OAFunctionalAddon alloc] initWithAddonId:kInAppId_Addon_Mapillary titleShort:OALocalizedString(@"mapillary") titleWide:OALocalizedString(@"mapillary") imageName:@"ic_custom_mapillary_symbol"];
         addon.sortIndex = 3;
         [arr addObject:addon];
     }
     
     if ([self.openPlaceReviews isPurchased])
     {
-        OAFunctionalAddon *addon = [[OAFunctionalAddon alloc] initWithAddonId:kInAppId_Addon_OpenPlaceReview titleShort:OALocalizedString(@"product_title_openplacereviews") titleWide:OALocalizedString(@"product_title_openplacereviews") imageName:@"ic_custom_mapillary_symbol"];
+        OAFunctionalAddon *addon = [[OAFunctionalAddon alloc] initWithAddonId:kInAppId_Addon_OpenPlaceReview titleShort:OALocalizedString(@"open_place_reviews") titleWide:OALocalizedString(@"open_place_reviews") imageName:@"ic_custom_mapillary_symbol"];
         addon.sortIndex = 3;
         [arr addObject:addon];
     }
 
     if ([self.osmandDevelopment isPurchased])
     {
-        OAFunctionalAddon *addon = [[OAFunctionalAddon alloc] initWithAddonId:kInAppId_Addon_OsmandDevelopment titleShort:OALocalizedString(@"product_title_development") titleWide:OALocalizedString(@"product_title_development") imageName:@"ic_custom_laptop"];
+        OAFunctionalAddon *addon = [[OAFunctionalAddon alloc] initWithAddonId:kInAppId_Addon_OsmandDevelopment titleShort:OALocalizedString(@"debugging_and_development") titleWide:OALocalizedString(@"debugging_and_development") imageName:@"ic_custom_laptop"];
         addon.sortIndex = 3;
         [arr addObject:addon];
     }

@@ -86,7 +86,7 @@ static const NSInteger _contactInfoSectionCount = 5;
     textField.clearButton.tag = tag;
     [textField.clearButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
     [textField.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-    textField.font = [UIFont systemFontOfSize:17.0];
+    textField.font = [UIFont scaledSystemFontOfSize:17.0];
     textField.clearButton.imageView.tintColor = UIColorFromRGB(color_icon_color);
     [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field.png"] forState:UIControlStateNormal];
     [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field.png"] forState:UIControlStateHighlighted];
@@ -95,7 +95,7 @@ static const NSInteger _contactInfoSectionCount = 5;
     if (isFloating)
     {
         MDCTextInputControllerUnderline *fieldController = [[MDCTextInputControllerUnderline alloc] initWithTextInput:textField];
-        fieldController.inlinePlaceholderFont = [UIFont systemFontOfSize:16.0];
+        fieldController.inlinePlaceholderFont = [UIFont scaledSystemFontOfSize:16.0];
         fieldController.floatingPlaceholderActiveColor = fieldController.floatingPlaceholderNormalColor;
         fieldController.textInput.textInsetsMode = MDCTextInputTextInsetsModeIfContent;
         [_floatingTextFieldControllers addObject:fieldController];
@@ -138,14 +138,14 @@ static const NSInteger _contactInfoSectionCount = 5;
     NSMutableArray *dataArr = [NSMutableArray new];
     [dataArr addObject:@{
                          @"name" : @"poi_category",
-                         @"title" : OALocalizedString(@"shared_string_category"),
+                         @"title" : OALocalizedString(@"rendering_value_category_name"),
                          @"value" : _poiData.getPoiCategory != [OAPOIHelper sharedInstance].otherPoiCategory ? _poiData.getPoiCategory.nameLocalized :
                              OALocalizedString(@"shared_string_select"),
                          @"type" : [OASettingsTableViewCell getCellIdentifier],
                          }];
     [dataArr addObject:@{
                          @"name" : @"poi_type",
-                         @"title" : OALocalizedString(@"poi_type"),
+                         @"title" : OALocalizedString(@"poi_dialog_poi_type"),
                          @"value" : _poiData.getCurrentPoiType ? _poiData.getLocalizedTypeString :
                              OALocalizedString(@"shared_string_select"),
                          @"type" : [OASettingsTableViewCell getCellIdentifier],
@@ -156,7 +156,7 @@ static const NSInteger _contactInfoSectionCount = 5;
 - (void) setupView
 {
     _poiData = _dataProvider.getData;
-    _poiNameCell = [self getInputCellWithHint:OALocalizedString(@"fav_name")
+    _poiNameCell = [self getInputCellWithHint:OALocalizedString(@"shared_string_name")
                                          text:[_poiData getTag:[OAOSMSettings getOSMKey:NAME]] isFloating:NO tag:-1];
     [self populatePoiSection];
     [self populateOpeningHours];
@@ -168,8 +168,8 @@ static const NSInteger _contactInfoSectionCount = 5;
 {
     _floatingTextFieldControllers = [[NSMutableArray alloc] initWithCapacity:_contactInfoSectionCount];
     NSMutableArray *dataArr = [NSMutableArray new];
-    NSArray *hints = @[OALocalizedString(@"osm_str_name"), OALocalizedString(@"osm_building_num"),
-                       OALocalizedString(@"osm_phone"), OALocalizedString(@"osm_website"), OALocalizedString(@"description")];
+    NSArray *hints = @[OALocalizedString(@"map_widget_top_text"), OALocalizedString(@"osm_building_num"),
+                       OALocalizedString(@"phone"), OALocalizedString(@"website"), OALocalizedString(@"shared_string_description")];
     for (NSInteger i = 0; i < _contactInfoSectionCount; i++)
     {
         OATextInputFloatingCell *cell = [self getInputCellWithHint:hints[i] text:[self getDataForField:i] isFloating:YES tag:i];
@@ -328,13 +328,13 @@ static const NSInteger _contactInfoSectionCount = 5;
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     if (section == _nameSectionIndex)
-        return OALocalizedString(@"fav_name");
+        return OALocalizedString(@"shared_string_name");
     else if (section == _poiSectionIndex)
         return OALocalizedString(@"poi_category_and_type");
     else if (section == _hoursSectionIndex)
-        return OALocalizedString(@"poi_opening_hours");
+        return OALocalizedString(@"opening_hours");
     else if (section == _contactInfoSectionIndex)
-        return OALocalizedString(@"osm_editing_contact_info");
+        return OALocalizedString(@"contact_info");
     else
         return @"";
 }

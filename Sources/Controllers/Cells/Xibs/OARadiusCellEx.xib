@@ -21,7 +21,7 @@
                         <constraints>
                             <constraint firstAttribute="height" constant="48" id="AG8-iw-TGa"/>
                         </constraints>
-                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                        <fontDescription key="fontDescription" style="UICTFontTextStyleCallout"/>
                         <state key="normal" title="Within">
                             <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         </state>

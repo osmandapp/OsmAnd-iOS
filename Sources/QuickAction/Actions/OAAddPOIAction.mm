@@ -107,7 +107,7 @@ static OAQuickActionType *ACTION_TYPE;
     [data setObject:@[@{
                           @"type" : [OASwitchTableViewCell getCellIdentifier],
                           @"key" : KEY_DIALOG,
-                          @"title" : OALocalizedString(@"quick_actions_show_dialog"),
+                          @"title" : OALocalizedString(@"quick_action_interim_dialog"),
                           @"value" : @([self.getParams[KEY_DIALOG] boolValue]),
                           },
                       @{
@@ -116,15 +116,15 @@ static OAQuickActionType *ACTION_TYPE;
     
     [data setObject:@[@{
                           @"type" : [OAIconTitleValueCell getCellIdentifier],
-                          @"title" : OALocalizedString(@"poi_type"),
+                          @"title" : OALocalizedString(@"poi_dialog_poi_type"),
                           @"key" : KEY_CATEGORY,
-                          @"value" : self.getTagsFromParams[POI_TYPE_TAG] ? self.getTagsFromParams[POI_TYPE_TAG] : OALocalizedString(@"key_hint_select"),
+                          @"value" : self.getTagsFromParams[POI_TYPE_TAG] ? self.getTagsFromParams[POI_TYPE_TAG] : OALocalizedString(@"shared_string_select"),
                           },
                       @{
                           @"footer" : OALocalizedString(@"quick_action_get_info"),
                           @"url" : kUrlOsm_wikiMapFeatures
                           }
-                      ] forKey:OALocalizedString(@"poi_type")];
+                      ] forKey:OALocalizedString(@"poi_dialog_poi_type")];
     NSMutableArray *arr = [NSMutableArray new];
     [self.getTagsFromParams enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull value, BOOL * _Nonnull stop) {
         if (![key isEqualToString:POI_TYPE_TAG]
@@ -148,7 +148,7 @@ static OAQuickActionType *ACTION_TYPE;
                      @"type" : [OAButtonTableViewCell getCellIdentifier],
                      @"target" : @"addTagValue:"
                      }];
-    [data setObject:arr forKey:OALocalizedString(@"quick_action_tags")];
+    [data setObject:arr forKey:OALocalizedString(@"gpx_tags_txt")];
    
     return data;
 }
@@ -194,7 +194,7 @@ static OAQuickActionType *ACTION_TYPE;
 + (OAQuickActionType *) TYPE
 {
     if (!ACTION_TYPE)
-        ACTION_TYPE = [[OAQuickActionType alloc] initWithIdentifier:13 stringId:@"osmpoi.add" class:self.class name:OALocalizedString(@"add_poi") category:CREATE_CATEGORY iconName:@"ic_action_create_poi" secondaryIconName:nil];
+        ACTION_TYPE = [[OAQuickActionType alloc] initWithIdentifier:13 stringId:@"osmpoi.add" class:self.class name:OALocalizedString(@"quick_action_add_poi") category:CREATE_CATEGORY iconName:@"ic_action_create_poi" secondaryIconName:nil];
        
     return ACTION_TYPE;
 }

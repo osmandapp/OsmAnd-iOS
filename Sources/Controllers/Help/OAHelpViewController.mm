@@ -1,5 +1,5 @@
 //
-//  OATripRecordingSettingsViewController.m
+//  OAHelpViewController.mm
 //  OsmAnd
 //
 //  Created by Paul on 8/29/18.
@@ -12,16 +12,13 @@
 #import "OAWebViewController.h"
 #import "OALinks.h"
 #import "OAAppVersionDependentConstants.h"
+#import "OAColors.h"
 
 #define kLinkInternalType @"internal_link"
 #define kLinkExternalType @"ext_link"
 #define kContactAction @"send_email"
 
 #define contactEmailUrl @"mailto:support@osmand.net"
-
-@interface OAHelpViewController ()
-
-@end
 
 @implementation OAHelpViewController
 {
@@ -39,19 +36,7 @@ static const NSInteger otherIndex = 3;
 static const NSInteger followIndex = 4;
 static const NSInteger groupCount = 5;
 
-
--(void) applyLocalization
-{
-    _titleView.text = OALocalizedString(@"menu_help");
-}
-
-- (void) viewDidLoad
-{
-    [super viewDidLoad];
-    
-    self.tableView.dataSource = self;
-    self.tableView.delegate = self;
-}
+#pragma mark - UIViewController
 
 - (void) didReceiveMemoryWarning
 {
@@ -59,30 +44,28 @@ static const NSInteger groupCount = 5;
     // Dispose of any resources that can be recreated.
 }
 
-- (void) viewWillAppear:(BOOL)animated
+#pragma mark - Base UI
+
+- (NSString *)getTitle
 {
-    [self setupView];
+    return OALocalizedString(@"shared_string_help");
 }
 
--(UIView *) getTopView
+- (EOABaseNavbarColorScheme)getNavbarColorScheme
 {
-    return _navBarView;
+    return EOABaseNavbarColorSchemeOrange;
 }
 
--(UIView *) getMiddleView
-{
-    return _tableView;
-}
+#pragma mark - Table data
 
-- (void) setupView
+- (void) generateData
 {
-    [self applySafeAreaMargins];
     NSMutableArray *dataArr = [NSMutableArray array];
     
     [dataArr addObject:
      @{
        @"name" : @"help_first_use",
-       @"title" : OALocalizedString(@"help_first_use"),
+       @"title" : OALocalizedString(@"first_usage_item"),
        @"description" : OALocalizedString(@"help_first_use_descr"),
        @"type" : kLinkInternalType,
        @"html" : @"start"
@@ -100,7 +83,7 @@ static const NSInteger groupCount = 5;
     [dataArr addObject:
      @{
        @"name" : @"help_faq",
-       @"title" : OALocalizedString(@"help_faq"),
+       @"title" : OALocalizedString(@"faq_item"),
        @"description" : OALocalizedString(@"help_faq_descr"),
        @"type" : kLinkInternalType,
        @"html" : @"faq"
@@ -109,7 +92,7 @@ static const NSInteger groupCount = 5;
     [dataArr addObject:
     @{
       @"name" : @"help_legend",
-      @"title" : OALocalizedString(@"help_legend"),
+      @"title" : OALocalizedString(@"map_legend"),
       @"description" : OALocalizedString(@"help_legend_descr"),
       @"type" : kLinkInternalType,
       @"html" : @"map-legend"
@@ -122,7 +105,7 @@ static const NSInteger groupCount = 5;
     [dataArr addObject:
      @{
        @"name" : @"help_map_viewing",
-       @"title" : OALocalizedString(@"help_map_viewing"),
+       @"title" : OALocalizedString(@"map_viewing_item"),
        @"type" : kLinkInternalType,
        @"html" : @"map-viewing"
        }];
@@ -138,7 +121,7 @@ static const NSInteger groupCount = 5;
     [dataArr addObject:
      @{
        @"name" : @"help_trip_planning",
-       @"title" : OALocalizedString(@"help_trip_planning"),
+       @"title" : OALocalizedString(@"planning_trip_item"),
        @"type" : kLinkInternalType,
        @"html" : @"trip-planning"
        }];
@@ -146,7 +129,7 @@ static const NSInteger groupCount = 5;
     [dataArr addObject:
      @{
        @"name" : @"help_navigation_profiles",
-       @"title" : OALocalizedString(@"help_nav_profiles"),
+       @"title" : OALocalizedString(@"navigation_profiles_item"),
        @"type" : kLinkInternalType,
        @"html" : @"navigation-profiles"
        }];
@@ -154,7 +137,7 @@ static const NSInteger groupCount = 5;
     [dataArr addObject:
     @{
       @"name" : @"help_purchases",
-      @"title" : OALocalizedString(@"help_purchases"),
+      @"title" : OALocalizedString(@"osmand_purchases_item"),
       @"type" : kLinkInternalType,
       @"html" : @"osmand_purchases"
       }];
@@ -162,7 +145,7 @@ static const NSInteger groupCount = 5;
     [dataArr addObject:
     @{
       @"name" : @"help_osmand_live",
-      @"title" : OALocalizedString(@"help_osmand_live"),
+      @"title" : OALocalizedString(@"subscription_osmandlive_item"),
       @"type" : kLinkInternalType,
       @"html" : @"subscription"
       }];
@@ -170,7 +153,7 @@ static const NSInteger groupCount = 5;
     [dataArr addObject:
     @{
       @"name" : @"help_favorites",
-      @"title" : OALocalizedString(@"favorites"),
+      @"title" : OALocalizedString(@"favorites_item"),
       @"type" : kLinkInternalType,
       @"html" : @"favourites"
       }];
@@ -202,7 +185,7 @@ static const NSInteger groupCount = 5;
     [dataArr addObject:
     @{
       @"name" : @"help_quick_action",
-      @"title" : OALocalizedString(@"quick_action_name"),
+      @"title" : OALocalizedString(@"configure_screen_quick_action"),
       @"type" : kLinkInternalType,
       @"html" : @"quick-action"
       }];
@@ -210,7 +193,7 @@ static const NSInteger groupCount = 5;
     [dataArr addObject:
     @{
       @"name" : @"help_mapillary",
-      @"title" : OALocalizedString(@"help_mapillary"),
+      @"title" : OALocalizedString(@"mapillary_item"),
       @"type" : kLinkInternalType,
       @"html" : @"mapillary"
       }];
@@ -222,21 +205,21 @@ static const NSInteger groupCount = 5;
     [dataArr addObject:
      @{
        @"name" : @"online_maps",
-       @"title" : OALocalizedString(@"map_settings_online"),
+       @"title" : OALocalizedString(@"shared_string_online_maps"),
        @"type" : kLinkInternalType,
        @"html" : @"online-maps-plugin"
        }];
     [dataArr addObject:
      @{
        @"name" : @"trip_recording",
-       @"title" : OALocalizedString(@"product_title_track_recording"),
+       @"title" : OALocalizedString(@"record_plugin_name"),
        @"type" : kLinkInternalType,
        @"html" : @"trip-recording-plugin"
        }];
     [dataArr addObject:
      @{
        @"name" : @"contour_lines",
-       @"title" : OALocalizedString(@"product_title_srtm"),
+       @"title" : OALocalizedString(@"srtm_plugin_name"),
        @"type" : kLinkInternalType,
        @"html" : @"contour-lines-plugin"
        }];
@@ -244,15 +227,15 @@ static const NSInteger groupCount = 5;
     [dataArr addObject:
      @{
        @"name" : @"parking_position",
-       @"title" : OALocalizedString(@"product_title_parking"),
+       @"title" : OALocalizedString(@"osmand_parking_plugin_name"),
        @"type" : kLinkInternalType,
        @"html" : @"parking-plugin"
        }];
     
     [dataArr addObject:
      @{
-       @"name" : @"nautical_maps",
-       @"title" : OALocalizedString(@"product_title_nautical"),
+       @"name" : @"plugin_nautical_name",
+       @"title" : OALocalizedString(@"plugin_nautical_name"),
        @"type" : kLinkInternalType,
        @"html" : @"nautical-charts"
        }];
@@ -260,7 +243,7 @@ static const NSInteger groupCount = 5;
     [dataArr addObject:
     @{
       @"name" : @"osm_editing",
-      @"title" : OALocalizedString(@"product_title_osm_editing"),
+      @"title" : OALocalizedString(@"osm_editing_plugin_name"),
       @"type" : kLinkInternalType,
       @"html" : @"osm-editing-plugin"
       }];
@@ -268,7 +251,7 @@ static const NSInteger groupCount = 5;
     [dataArr addObject:
      @{
        @"name" : @"ski_map",
-       @"title" : OALocalizedString(@"product_title_skimap"),
+       @"title" : OALocalizedString(@"product_desc_skimap"),
        @"type" : kLinkInternalType,
        @"html" : @"ski-plugin"
        }];
@@ -288,7 +271,7 @@ static const NSInteger groupCount = 5;
     [dataArr addObject:
      @{
        @"name" : @"install_and_troublesoot",
-       @"title" : OALocalizedString(@"help_install_and_troubleshoot"),
+       @"title" : OALocalizedString(@"instalation_troubleshooting_item"),
        @"type" : kLinkInternalType,
        @"html" : @"installation-and-troubleshooting"
        }];
@@ -298,7 +281,7 @@ static const NSInteger groupCount = 5;
     [dataArr addObject:
      @{
        @"name" : @"versions",
-       @"title" : OALocalizedString(@"help_versions"),
+       @"title" : OALocalizedString(@"versions_item"),
        @"type" : kLinkInternalType,
        @"html" : @"changes"
        }];
@@ -314,7 +297,7 @@ static const NSInteger groupCount = 5;
     [dataArr addObject:
      @{
        @"name" : @"feedback",
-       @"title" : OALocalizedString(@"menu_feedback"),
+       @"title" : OALocalizedString(@"feedback"),
        @"description" : kOsmAndPoll,
        @"type" : kLinkExternalType
        }];
@@ -323,7 +306,7 @@ static const NSInteger groupCount = 5;
     [dataArr addObject:
      @{
        @"name" : @"about",
-       @"title" : OALocalizedString(@"help_about"),
+       @"title" : OALocalizedString(@"shared_string_about"),
        @"description" : [NSString stringWithFormat:@"%@ %@", @"OsmAnd", OAAppVersionDependentConstants.getVersion],
        @"type" : kLinkInternalType,
        @"html" : @"about"
@@ -364,12 +347,24 @@ static const NSInteger groupCount = 5;
        @"description" : kCommunityVk,
        @"type" : kLinkExternalType
        }];
-    
-    _followData = [NSArray arrayWithArray:dataArr];
-    [dataArr removeAllObjects];
-    
-    [self.tableView reloadData];
-    
+
+    _followData = dataArr;
+}
+
+- (NSString *)getTitleForHeader:(NSInteger)section
+{
+    if (section == firstStepsIndex)
+        return OALocalizedString(@"help_first_steps");
+    else if (section == featuresIndex)
+        return OALocalizedString(@"features_menu_group");
+    else if (section == pluginsIndex)
+        return OALocalizedString(@"plugins_menu_group");
+    else if (section == otherIndex)
+        return OALocalizedString(@"other_location");
+    else if (section == followIndex)
+        return OALocalizedString(@"follow_us");
+
+    return @"";
 }
 
 - (NSDictionary *) getItem:(NSIndexPath *)indexPath
@@ -391,14 +386,7 @@ static const NSInteger groupCount = 5;
     }
 }
 
-#pragma mark - UITableViewDataSource
-
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return groupCount;
-}
-
-- (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)rowsCount:(NSInteger)section
 {
     if (section == firstStepsIndex)
         return _firstStepsData.count;
@@ -413,11 +401,11 @@ static const NSInteger groupCount = 5;
     return 0;
 }
 
-- (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
     
-    OAMenuSimpleCellNoIcon *cell = (OAMenuSimpleCellNoIcon *)[tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCellNoIcon getCellIdentifier]];
+    OAMenuSimpleCellNoIcon *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCellNoIcon getCellIdentifier]];
     if (cell == nil)
     {
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCellNoIcon getCellIdentifier] owner:self options:nil];
@@ -431,33 +419,20 @@ static const NSInteger groupCount = 5;
         [cell.textView setTextColor:[UIColor blackColor]];
         [cell.textView setText:item[@"title"]];
         [cell.descriptionView setText:item[@"description"]];
-        [cell.textView setFont:[UIFont systemFontOfSize:16]];
-        [cell.descriptionView setFont:[UIFont systemFontOfSize:12]];
+        [cell.textView setFont:[UIFont scaledSystemFontOfSize:16]];
+        [cell.descriptionView setFont:[UIFont scaledSystemFontOfSize:12]];
         if ([cell needsUpdateConstraints])
             [cell updateConstraints];
     }
     return cell;
 }
 
-- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+- (NSInteger)sectionsCount
 {
-    if (section == firstStepsIndex)
-        return OALocalizedString(@"help_first_steps");
-    else if (section == featuresIndex)
-        return OALocalizedString(@"help_features");
-    else if (section == pluginsIndex)
-        return OALocalizedString(@"plugins");
-    else if (section == otherIndex)
-        return OALocalizedString(@"help_other_header");
-    else if (section == followIndex)
-        return OALocalizedString(@"help_follow_us");
-    
-    return 0;
+    return groupCount;
 }
 
-#pragma mark - UITableViewDelegate
-
-- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)onRowPressed:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
     NSString *type = item[@"type"];
@@ -470,7 +445,6 @@ static const NSInteger groupCount = 5;
     } else if ([kContactAction isEqualToString:type]) {
         [[UIApplication sharedApplication] openURL: [NSURL URLWithString:contactEmailUrl]];
     }
-    [tableView deselectRowAtIndexPath:indexPath animated:true];
 }
 
 @end

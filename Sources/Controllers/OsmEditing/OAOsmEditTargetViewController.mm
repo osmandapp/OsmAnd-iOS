@@ -116,16 +116,16 @@
     UIColor *colorClosed = UIColorFromRGB(color_ctx_menu_amenity_closed_text);
     if (_osmPoint.getGroup == BUG)
     {
-        [str appendAttributedString:[[NSAttributedString alloc] initWithString:OALocalizedString(@"osm_note_created")]];
+        [str appendAttributedString:[[NSAttributedString alloc] initWithString:OALocalizedString(@"osm_edit_created_note")]];
     }
     else if (_osmPoint.getGroup == POI)
     {
-        [str appendAttributedString:[[NSAttributedString alloc] initWithString:_osmPoint.getAction == MODIFY ? OALocalizedString(@"osm_target_modified") : _osmPoint.getAction == DELETE ? OALocalizedString(@"osm_target_deleted") : OALocalizedString(@"osm_target_created")]];
+        [str appendAttributedString:[[NSAttributedString alloc] initWithString:_osmPoint.getAction == MODIFY ? OALocalizedString(@"osm_edit_modified_poi") : _osmPoint.getAction == DELETE ? OALocalizedString(@"osm_edit_deleted_poi") : OALocalizedString(@"osm_edit_created_poi")]];
     }
     
     [str addAttribute:NSForegroundColorAttributeName value:_osmPoint.getAction == DELETE ? colorClosed : colorOpen range:NSMakeRange(0, str.length)];
     
-    UIFont *font = [UIFont systemFontOfSize:13.0 weight:UIFontWeightMedium];
+    UIFont *font = [UIFont scaledSystemFontOfSize:13.0 weight:UIFontWeightMedium];
     [str addAttribute:NSFontAttributeName value:font range:NSMakeRange(0, str.length)];
     
     return str;

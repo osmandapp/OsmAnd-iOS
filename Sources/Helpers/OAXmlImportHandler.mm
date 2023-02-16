@@ -106,7 +106,7 @@ typedef NS_ENUM(NSInteger, EOAXmlFileType) {
                         [OAUtilities denyAccessToFile:destPath removeFromInbox:YES];
                     }]];
                     
-                    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"fav_replace") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"update_existing") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                         [self doImport:path destPath:destPath];
                     }]];
                     

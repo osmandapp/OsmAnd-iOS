@@ -104,7 +104,7 @@
     if (_otherResources.count > 0)
     {
         self.rightControlButton = [[OATargetMenuControlButton alloc] init];
-        self.rightControlButton.title = OALocalizedString(@"region_others");
+        self.rightControlButton.title = OALocalizedString(@"download_select_map_types");
     }
 }
 

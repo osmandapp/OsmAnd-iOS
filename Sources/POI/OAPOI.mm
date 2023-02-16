@@ -31,7 +31,9 @@
 
 - (UIImage *)icon
 {
-    if (_type)
+    if (_mapIconName && _mapIconName.length > 0)
+        return [UIImage imageNamed:[OAUtilities drawablePath:[NSString stringWithFormat:@"mx_%@", _mapIconName]]];
+    else if (_type)
         return [_type icon];
     else
         return nil;
@@ -39,7 +41,9 @@
 
 - (NSString *)iconName
 {
-    if (_type)
+    if (_mapIconName && _mapIconName.length > 0)
+        return [OAUtilities drawablePath:[NSString stringWithFormat:@"mx_%@", _mapIconName]];
+    else if (_type)
         return [_type iconName];
     else
         return nil;
@@ -336,7 +340,7 @@
                 {
                     type = [OAPOIHelper.sharedInstance getPoiTypeByName:map[key]];
                     if (!type)
-                        type = [OAPOIHelper.sharedInstance getPoiTypeByName:@"user_defined_other"];
+                        type = [OAPOIHelper.sharedInstance getDefaultOtherCategoryType];
                 }
                 else if ([shortKey isEqualToString:SUBTYPE])
                 {
@@ -351,6 +355,16 @@
             {
                 NSString *shortKey = [key stringByReplacingOccurrencesOfString:osmPrefix withString:@""];
                 additionalInfo[shortKey] = map[key];
+            }
+            else
+            {
+                NSString *shortKey = [key componentsSeparatedByString:@":"].lastObject;
+                if (![shortKey isEqualToString:@"icon"] &&
+                    ![key isEqualToString:@"color"] &&
+                    ![key isEqualToString:@"background"])
+                {
+                    additionalInfo[key] = map[key];
+                }
             }
         }
         

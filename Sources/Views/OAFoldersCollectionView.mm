@@ -159,7 +159,7 @@
         NSDictionary *item = _data[index];
         CGSize labelSize = [OAUtilities calculateTextBounds:item[@"title"]
                                                       width:self.frame.size.width - [OAUtilities getLeftMargin]
-                                                       font:[UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold]];
+                                                       font:[UIFont scaledSystemFontOfSize:15.0 weight:UIFontWeightSemibold]];
         cellWidth = labelSize.width;
 
         NSString *iconName = item[@"img"];
@@ -219,7 +219,7 @@
 
         destCell.titleLabel.text = item[@"title"];
         destCell.titleLabel.font = enabled
-                ? [UIFont systemFontOfSize:15. weight:UIFontWeightSemibold]
+                ? [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold]
                 : [UIFont fontWithDescriptor:[destCell.titleLabel.font.fontDescriptor
                                 fontDescriptorWithSymbolicTraits:UIFontDescriptorTraitItalic | UIFontDescriptorTraitBold]
                                         size:15.];
@@ -246,7 +246,7 @@
             if (available && !enabled)
                 backgroundColor = UIColor.clearColor;
             else if (!available && enabled)
-                backgroundColor = UIColorFromRGB(color_route_button_inactive);
+                backgroundColor = UIColorFromRGB(color_button_gray_background);
 
             destCell.titleLabel.textColor = available
                     ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer);

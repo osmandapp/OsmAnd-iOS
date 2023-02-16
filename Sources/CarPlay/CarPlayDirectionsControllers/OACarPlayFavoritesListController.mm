@@ -22,7 +22,7 @@
 
 - (NSString *)screenTitle
 {
-    return OALocalizedString(@"favorites");
+    return OALocalizedString(@"favorites_item");
 }
 
 - (NSArray<CPListSection *> *) generateSections
@@ -42,7 +42,7 @@
                 listItem.userInfo = item;
                 [items addObject:listItem];
             }];
-            NSString *groupName = group.name.length == 0 ? OALocalizedString(@"favorites") : group.name;
+            NSString *groupName = group.name.length == 0 ? OALocalizedString(@"favorites_item") : group.name;
             CPListSection *section = [[CPListSection alloc] initWithItems:items header:groupName sectionIndexTitle:[groupName substringToIndex:1]];
             [sections addObject:section];
         }];

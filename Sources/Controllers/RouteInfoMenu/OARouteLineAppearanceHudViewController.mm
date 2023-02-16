@@ -38,8 +38,8 @@
 #import "OAProducts.h"
 #import "OASizes.h"
 
-#define kColorDayMode OALocalizedString(@"map_settings_day")
-#define kColorNightMode OALocalizedString(@"map_settings_night")
+#define kColorDayMode OALocalizedString(@"day")
+#define kColorNightMode OALocalizedString(@"daynight_mode_night")
 
 #define kAppearanceLineMargin 20.
 
@@ -443,7 +443,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 {
     NSString *headerTitle = @"";
     if (sectionIndex == 0)
-        headerTitle = OALocalizedString(@"fav_color");
+        headerTitle = OALocalizedString(@"shared_string_color");
 
     OAGPXTableSectionData *sectionData = _tableData.subjects[sectionIndex];
     if (sectionData.header)
@@ -473,7 +473,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     self.backNavBarButton.imageView.tintColor = UIColorFromRGB(color_primary_purple);
     [self.backNavBarButton setAttributedTitle:
                     [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_back")
-                                                    attributes:@{ NSFontAttributeName:[UIFont systemFontOfSize:17.] }]
+                                                    attributes:@{ NSFontAttributeName:[UIFont scaledSystemFontOfSize:17.] }]
                                      forState:UIControlStateNormal];
     self.backNavBarButton.titleLabel.translatesAutoresizingMaskIntoConstraints = NO;
     [NSLayoutConstraint activateConstraints:@[
@@ -486,11 +486,11 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     [self.applyButton addBlurEffect:YES cornerRadius:12. padding:0.];
     [self.applyButton setAttributedTitle:
                     [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_apply")
-                                                    attributes:@{ NSFontAttributeName:[UIFont boldSystemFontOfSize:17.] }]
+                                                    attributes:@{ NSFontAttributeName:[UIFont scaledBoldSystemFontOfSize:17.] }]
                                 forState:UIControlStateNormal];
     [self.applyNavBarButton setAttributedTitle:
                     [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_apply")
-                                                    attributes:@{ NSFontAttributeName:[UIFont boldSystemFontOfSize:17.] }]
+                                                    attributes:@{ NSFontAttributeName:[UIFont scaledBoldSystemFontOfSize:17.] }]
                                       forState:UIControlStateNormal];
 
     self.applyNavBarButton.titleLabel.translatesAutoresizingMaskIntoConstraints = NO;
@@ -544,7 +544,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         OAGPXTableCellData *colorMapStyleCellData = [OAGPXTableCellData withData:@{
                 kTableKey:@"cell_color_map_style",
                 kCellType:[OASwitchTableViewCell getCellIdentifier],
-                kCellTitle:OALocalizedString(@"map_settings_style")
+                kCellTitle:OALocalizedString(@"map_widget_renderer")
         }];
         [colorsSectionData.subjects addObject:colorMapStyleCellData];
 
@@ -570,7 +570,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         OAGPXTableCellData *widthMapStyleCellData = [OAGPXTableCellData withData:@{
                 kTableKey:@"width_map_style",
                 kCellType:[OASwitchTableViewCell getCellIdentifier],
-                kCellTitle:OALocalizedString(@"map_settings_style")
+                kCellTitle:OALocalizedString(@"map_widget_renderer")
         }];
         [widthSectionData.subjects addObject:widthMapStyleCellData];
 
@@ -599,7 +599,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         // actions section
         OAGPXTableSectionData *resetSectionData = [OAGPXTableSectionData withData:@{
                 kTableKey: @"section_reset",
-                kSectionHeader:OALocalizedString(@"actions"),
+                kSectionHeader:OALocalizedString(@"shared_string_actions"),
                 kSectionFooterHeight: @60.
         }];
         [_tableData.subjects addObject:resetSectionData];
@@ -1372,12 +1372,12 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
             NSString *desc = cellData.desc;
             [cell showDesc:desc && desc.length > 0];
             cell.descView.text = desc;
-            cell.descView.font = [UIFont systemFontOfSize:[cellData.values[@"desc_font_size"] intValue]];
+            cell.descView.font = [UIFont scaledSystemFontOfSize:[cellData.values[@"desc_font_size"] intValue]];
 
             NSString *extraDesc = cellData.values[@"extra_desc"];
             [cell showExtraDesc:extraDesc && extraDesc.length > 0];
             cell.extraDescView.text = extraDesc;
-            cell.extraDescView.font = [UIFont systemFontOfSize:[cellData.values[@"desc_font_size"] intValue]];
+            cell.extraDescView.font = [UIFont scaledSystemFontOfSize:[cellData.values[@"desc_font_size"] intValue]];
         }
 
         if ([cell needsUpdateConstraints])
@@ -1401,7 +1401,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         {
             [cell makeSmallMargins:indexPath.row != [self tableView:tableView numberOfRowsInSection:indexPath.section] - 1];
             cell.textView.text = cellData.title;
-            cell.textView.font = [UIFont systemFontOfSize:15];
+            cell.textView.font = [UIFont scaledSystemFontOfSize:15];
         }
         outCell = cell;
     }
@@ -1419,18 +1419,17 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
             cell.backgroundColor = UIColor.whiteColor;
             cell.segmentedControl.backgroundColor = [UIColorFromRGB(color_primary_purple) colorWithAlphaComponent:.1];
             [cell changeHeight:YES];
-
-            [cell.segmentedControl setTitleTextAttributes:@{NSForegroundColorAttributeName : UIColor.whiteColor}
+            UIFont *font = [UIFont scaledSystemFontOfSize:15.];
+            [cell.segmentedControl setTitleTextAttributes:@{
+                NSForegroundColorAttributeName : UIColor.whiteColor,
+                NSFontAttributeName : font }
                                                  forState:UIControlStateSelected];
             [cell.segmentedControl setTitleTextAttributes:@{
-                    NSForegroundColorAttributeName : UIColorFromRGB(color_primary_purple),
-                    NSFontAttributeName : [UIFont boldSystemFontOfSize:15.0f]}
+                NSForegroundColorAttributeName : UIColorFromRGB(color_primary_purple),
+                NSFontAttributeName : font }
                                                  forState:UIControlStateNormal];
 
-            if (@available(iOS 13.0, *))
-                cell.segmentedControl.selectedSegmentTintColor = UIColorFromRGB(color_primary_purple);
-            else
-                cell.segmentedControl.tintColor = UIColorFromRGB(color_primary_purple);
+            cell.segmentedControl.selectedSegmentTintColor = UIColorFromRGB(color_primary_purple);
         }
         if (cell)
         {
@@ -1489,7 +1488,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
             cell = (OASegmentSliderTableViewCell *) nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.topRightLabel.textColor = UIColorFromRGB(color_primary_purple);
-            cell.topRightLabel.font = [UIFont systemFontOfSize:17. weight:UIFontWeightMedium];
+            cell.topRightLabel.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium];
         }
         if (cell)
         {
@@ -1555,7 +1554,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
             ? 0.001
             : [OAUtilities calculateTextBounds:sectionData.header
                                          width:self.scrollableView.frame.size.width - 40. - [OAUtilities getLeftMargin]
-                                          font:[UIFont systemFontOfSize:13]].height;
+                                          font:[UIFont scaledSystemFontOfSize:13]].height;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
@@ -1578,7 +1577,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 
     OATableViewCustomFooterView *vw =
             [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
-    UIFont *textFont = [UIFont systemFontOfSize:13];
+    UIFont *textFont = [UIFont scaledSystemFontOfSize:13];
     NSMutableAttributedString *textStr = [[NSMutableAttributedString alloc] initWithString:footer attributes:@{
             NSFontAttributeName: textFont,
             NSForegroundColorAttributeName: UIColorFromRGB(color_text_footer)

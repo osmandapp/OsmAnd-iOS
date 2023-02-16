@@ -715,7 +715,7 @@
         else if ([_settings.rotateMap get] == ROTATE_MAP_COMPASS)
             rotMode = OALocalizedString(@"rotate_map_compass_opt");
     }
-    rotMode = [NSString stringWithFormat:@"%@:\n%@", OALocalizedString(@"rotate_map_to_bearing"), rotMode];
+    rotMode = [NSString stringWithFormat:@"%@:\n%@", OALocalizedString(@"rotate_map_to"), rotMode];
     [_app showShortToastMessage:rotMode];
     [self updateSettings];
     if (_mapViewController)
@@ -728,8 +728,15 @@
     {
         if ([_settings.rotateMap get] == ROTATE_MAP_NONE || _routePlanningMode)
             [self animatedAlignAzimuthToNorth];
-        
-        _mapViewController.mapPosition = ([_settings.centerPositionOnMap get] || _routePlanningMode ? CENTER_CONSTANT : BOTTOM_CONSTANT);
+        EOAPositionPlacement placement = (EOAPositionPlacement) [_settings.positionPlacementOnMap get];
+        if (placement == EOAPositionPlacementAuto)
+        {
+            _mapViewController.mapPosition = ([_settings.rotateMap get] == ROTATE_MAP_BEARING && !_routePlanningMode ? BOTTOM_CONSTANT : CENTER_CONSTANT);
+        }
+        else
+        {
+            _mapViewController.mapPosition = (placement == EOAPositionPlacementCenter || _routePlanningMode ? CENTER_CONSTANT : BOTTOM_CONSTANT);
+        }
     }
 }
 
@@ -761,7 +768,7 @@
 - (void) onProfileSettingSet:(NSNotification *)notification
 {
     OACommonPreference *obj = notification.object;
-    OACommonBoolean *centerPositionOnMap = [OAAppSettings sharedManager].centerPositionOnMap;
+    OACommonInteger *centerPositionOnMap = [OAAppSettings sharedManager].positionPlacementOnMap;
     if (obj)
     {
         if (obj == centerPositionOnMap)

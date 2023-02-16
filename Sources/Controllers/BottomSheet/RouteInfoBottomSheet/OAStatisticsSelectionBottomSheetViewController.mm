@@ -78,7 +78,7 @@
 
     [arr addObject:@{
         @"type" : [OATitleIconRoundCell getCellIdentifier],
-        @"title" : OALocalizedString(@"map_widget_altitude"),
+        @"title" : OALocalizedString(@"altitude"),
         @"img" : @"ic_custom_altitude",
         @"mode" : @(EOARouteStatisticsModeAltitude),
         @"round_bottom" : @(NO),
@@ -87,7 +87,7 @@
 
     [arr addObject:@{
         @"type" : [OATitleIconRoundCell getCellIdentifier],
-        @"title" : OALocalizedString(@"gpx_slope"),
+        @"title" : OALocalizedString(@"shared_string_slope"),
         @"img" : @"ic_custom_ascent",
         @"mode" : @(EOARouteStatisticsModeSlope),
         @"round_bottom" : @(NO),
@@ -96,7 +96,7 @@
 
     [arr addObject:@{
             @"type" : [OATitleIconRoundCell getCellIdentifier],
-            @"title" : OALocalizedString(@"gpx_speed"),
+            @"title" : OALocalizedString(@"shared_string_speed"),
             @"img" : @"ic_action_speed",
             @"mode" : @(EOARouteStatisticsModeSpeed),
             @"round_bottom" : @(NO),
@@ -105,7 +105,7 @@
 
     [arr addObject:@{
             @"type" : [OATitleIconRoundCell getCellIdentifier],
-            @"title" : [NSString stringWithFormat:@"%@/%@", OALocalizedString(@"map_widget_altitude"), OALocalizedString(@"gpx_slope")],
+            @"title" : [NSString stringWithFormat:@"%@/%@", OALocalizedString(@"altitude"), OALocalizedString(@"shared_string_slope")],
             @"img" : @"ic_custom_altitude_and_slope",
             @"mode" : @(EOARouteStatisticsModeAltitudeSlope),
             @"round_bottom" : @(NO),
@@ -114,7 +114,7 @@
 
     [arr addObject:@{
             @"type" : [OATitleIconRoundCell getCellIdentifier],
-            @"title" : [NSString stringWithFormat:@"%@/%@", OALocalizedString(@"map_widget_altitude"), OALocalizedString(@"gpx_speed")],
+            @"title" : [NSString stringWithFormat:@"%@/%@", OALocalizedString(@"altitude"), OALocalizedString(@"shared_string_speed")],
             @"img" : @"ic_custom_altitude_and_slope",
             @"mode" : @(EOARouteStatisticsModeAltitudeSpeed),
             @"round_bottom" : @(YES),
@@ -287,8 +287,8 @@
 - (void)additionalSetup
 {
     [super additionalSetup];
-    self.tableBackgroundView.backgroundColor = UIColorFromRGB(color_bottom_sheet_background);
-    self.buttonsView.subviews.firstObject.backgroundColor = UIColorFromRGB(color_bottom_sheet_background);;
+    self.tableBackgroundView.backgroundColor = UIColorFromRGB(color_primary_table_background);
+    self.buttonsView.subviews.firstObject.backgroundColor = UIColorFromRGB(color_primary_table_background);;
     [self hideDoneButton];
 }
 

@@ -28,7 +28,7 @@
 
 - (NSString *) getCommonTypeStr
 {
-    return OALocalizedString(@"history");
+    return OALocalizedString(@"shared_string_history");
 }
 
 - (void) viewDidLoad

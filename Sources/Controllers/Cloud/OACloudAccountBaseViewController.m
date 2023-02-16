@@ -76,6 +76,7 @@
     self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
     self.backButton.hidden = YES;
     self.backImageButton.hidden = NO;
+    [self.backImageButton setImage:[UIImage rtlImageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -95,7 +96,7 @@
 
 - (void) setupTableHeaderView
 {
-    self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:[self getTableHeaderTitle] font:[UIFont systemFontOfSize:34.0 weight:UIFontWeightBold] textColor:UIColor.blackColor lineSpacing:0 isTitle:YES];
+    self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:[self getTableHeaderTitle] font:kHeaderBigTitleFont textColor:UIColor.blackColor isBigTitle:YES];
 }
 
 - (void) setupTableFooterView
@@ -105,7 +106,7 @@
     NSRange fullRange = NSMakeRange(0, fullText.length);
     NSRange coloredRange = [fullText rangeOfString:coloredPart];
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:fullText];
-    UIFont *font = [UIFont systemFontOfSize:15];
+    UIFont *font = [UIFont scaledSystemFontOfSize:15];
     [attributedString addAttribute:NSFontAttributeName value:font range:fullRange];
     [attributedString addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(color_text_footer) range:fullRange];
     [attributedString addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(color_primary_purple) range:coloredRange];
@@ -228,14 +229,14 @@
             [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:range];
             
             int fontSize = item[@"fontSize"] ? [item[@"fontSize"] intValue] : 15;
-            [attributedString addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:fontSize] range:range];
+            [attributedString addAttribute:NSFontAttributeName value:[UIFont scaledSystemFontOfSize:fontSize] range:range];
             [attributedString addAttribute:NSForegroundColorAttributeName value:item[@"color"] range:range];
             
             NSString *boldPart = item[@"boldPart"];
             if (boldPart && boldPart.length > 0)
             {
                 NSRange boldRange = [text rangeOfString:boldPart];
-                [attributedString addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:fontSize weight:UIFontWeightSemibold] range:boldRange];
+                [attributedString addAttribute:NSFontAttributeName value:[UIFont scaledSystemFontOfSize:fontSize weight:UIFontWeightSemibold] range:boldRange];
                 [attributedString addAttribute:NSForegroundColorAttributeName value:UIColor.blackColor range:boldRange];
             }
             
@@ -428,7 +429,7 @@
     BOOL isInvalidEmail = ![_inputText isValidEmail] && _inputText.length > 0;
     if (isInvalidEmail)
     {
-        self.errorMessage = OALocalizedString(@"login_error_email_invalid");
+        self.errorMessage = OALocalizedString(@"osm_live_enter_email");
         [self generateData];
         [self.tableView performBatchUpdates:^{
             [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:1]] withRowAnimation:UITableViewRowAnimationAutomatic];

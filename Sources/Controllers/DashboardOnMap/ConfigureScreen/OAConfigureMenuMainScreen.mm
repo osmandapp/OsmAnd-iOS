@@ -84,7 +84,7 @@
     // Quick action
     NSArray *controls = @[@{
                               @"groupName" : @"",
-                              @"cells" : @[@{ @"title" : OALocalizedString(@"quick_action_name"),
+                              @"cells" : @[@{ @"title" : OALocalizedString(@"configure_screen_quick_action"),
                                             @"description" : @"",
                                             @"key" : @"quick_action",
                                             @"img" : @"ic_custom_quick_action",
@@ -124,7 +124,7 @@
     
     if (_settings.applicationMode.get != OAApplicationMode.DEFAULT)
     {
-        [controlsList addObject:@{ @"title" : OALocalizedString(@"osm_str_name"),
+        [controlsList addObject:@{ @"title" : OALocalizedString(@"map_widget_top_text"),
                                    @"key" : @"street_name",
                                    @"selected" : @([_settings.showStreetName get]),
                                    @"type" : [OASwitchTableViewCell getCellIdentifier]} ];
@@ -345,7 +345,7 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
-            cell.descriptionView.font = [UIFont systemFontOfSize:17.0];
+            cell.descriptionView.font = [UIFont scaledSystemFontOfSize:17.0];
             cell.iconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
             cell.iconView.tintColor = UIColorFromRGB(color_tint_gray);
             cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);

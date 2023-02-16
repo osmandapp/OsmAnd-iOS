@@ -49,7 +49,7 @@ static NSArray<OAColoringType *> * TRACK_COLORING_TYPES = @[OAColoringType.TRACK
 {
     if (!DEFAULT)
     {
-        DEFAULT = [[OAColoringType alloc] initWithName:@"default" title:OALocalizedString(@"map_settings_style") iconName:@"ic_custom_map_style"];
+        DEFAULT = [[OAColoringType alloc] initWithName:@"default" title:OALocalizedString(@"map_widget_renderer") iconName:@"ic_custom_map_style"];
     }
     return DEFAULT;
 }
@@ -77,7 +77,7 @@ static NSArray<OAColoringType *> * TRACK_COLORING_TYPES = @[OAColoringType.TRACK
 {
     if (!SPEED)
     {
-        SPEED = [[OAColoringType alloc] initWithName:@"speed" title:OALocalizedString(@"gpx_speed") iconName:@"ic_action_max_speed"];
+        SPEED = [[OAColoringType alloc] initWithName:@"speed" title:OALocalizedString(@"shared_string_speed") iconName:@"ic_action_max_speed"];
     }
     return SPEED;
 }
@@ -86,7 +86,7 @@ static NSArray<OAColoringType *> * TRACK_COLORING_TYPES = @[OAColoringType.TRACK
 {
     if (!ALTITUDE)
     {
-        ALTITUDE = [[OAColoringType alloc] initWithName:@"altitude" title:OALocalizedString(@"map_widget_altitude") iconName:@"ic_action_altitude"];
+        ALTITUDE = [[OAColoringType alloc] initWithName:@"altitude" title:OALocalizedString(@"altitude") iconName:@"ic_action_altitude"];
     }
     return ALTITUDE;
 }
@@ -95,7 +95,7 @@ static NSArray<OAColoringType *> * TRACK_COLORING_TYPES = @[OAColoringType.TRACK
 {
    if (!SLOPE)
    {
-       SLOPE = [[OAColoringType alloc] initWithName:@"slope" title:OALocalizedString(@"gpx_slope") iconName:@"ic_custom_altitude_and_slope"];
+       SLOPE = [[OAColoringType alloc] initWithName:@"slope" title:OALocalizedString(@"shared_string_slope") iconName:@"ic_custom_altitude_and_slope"];
    }
     return SLOPE;
 }

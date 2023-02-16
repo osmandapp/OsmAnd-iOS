@@ -128,7 +128,7 @@
 
     NSMutableArray *showSectionData = [NSMutableArray array];
     [showSectionData addObject:@{
-            @"name": OALocalizedString(@"favorites"),
+            @"name": OALocalizedString(@"favorites_item"),
             @"image": @"ic_custom_favorites",
             @"type": [OASwitchTableViewCell getCellIdentifier],
             @"key": @"favorites"
@@ -152,7 +152,7 @@
     if (!hasWiki || !_iapHelper.wiki.disabled)
     {
         [showSectionData addObject:@{
-                @"name": OALocalizedString(@"product_title_wiki"),
+                @"name": OALocalizedString(@"download_wikipedia_maps"),
                 @"image": hasWiki ? @"ic_custom_wikipedia" : @"ic_custom_wikipedia_download_colored",
                 hasWiki ? @"has_options" : @"desc": hasWiki ? @YES : OALocalizedString(@"explore_wikipedia_offline"),
                 @"type": hasWiki ? [OASwitchTableViewCell getCellIdentifier] : [OAButtonTableViewCell getCellIdentifier],
@@ -174,7 +174,7 @@
     if ([[[OAGPXDatabase sharedDb] gpxList] count] > 0 || [[OASavingTrackHelper sharedInstance] hasData])
     {
         [showSectionData addObject:@{
-                @"name": OALocalizedString(@"tracks"),
+                @"name": OALocalizedString(@"shared_string_gpx_tracks"),
                 @"image": @"ic_custom_trip",
                 @"type": [OASimpleTableViewCell getCellIdentifier],
                 @"key": @"tracks"
@@ -205,7 +205,7 @@
     }
 
     [data addObject:@{
-            @"group_name": OALocalizedString(@"map_settings_show"),
+            @"group_name": OALocalizedString(@"shared_string_show_on_map"),
             @"cells": showSectionData
     }];
 
@@ -301,7 +301,7 @@
                 }
             }
             NSDictionary *routeData = @{
-                    @"name": isMountainBike ? OALocalizedString(@"mountain_bike") : routeParameter.title,
+                    @"name": isMountainBike ? OALocalizedString(@"activity_type_mountainbike_name") : routeParameter.title,
                     @"image": [self getImageForParameterOrCategory:routeParameter.name],
                     @"key": [NSString stringWithFormat:@"routes_%@", routeParameter.name],
                     @"type": [hasParameters containsObject:routeParameter.name]
@@ -349,9 +349,9 @@
     {
         NSString *modeStr;
         if ([_settings.appearanceMode get] == APPEARANCE_MODE_DAY)
-            modeStr = OALocalizedString(@"map_settings_day");
+            modeStr = OALocalizedString(@"day");
         else if ([_settings.appearanceMode get] == APPEARANCE_MODE_NIGHT)
-            modeStr = OALocalizedString(@"map_settings_night");
+            modeStr = OALocalizedString(@"daynight_mode_night");
         else if ([_settings.appearanceMode get] == APPEARANCE_MODE_AUTO)
             modeStr = OALocalizedString(@"daynight_mode_auto");
         else
@@ -366,14 +366,14 @@
                 @"key": @"map_mode"
         }];
         [mapStyleSectionData addObject:@{
-                @"name": OALocalizedString(@"map_settings_map_magnifier"),
+                @"name": OALocalizedString(@"map_magnifier"),
                 @"value": [self getPercentString:[_settings.mapDensity get]],
                 @"image": @"ic_custom_magnifier",
                 @"type": [OAValueTableViewCell getCellIdentifier],
                 @"key": @"map_magnifier"
         }];
         [mapStyleSectionData addObject:@{
-                @"name": OALocalizedString(@"map_settings_text_size"),
+                @"name": OALocalizedString(@"text_size"),
                 @"value": [self getPercentString:[_settings.textSize get:_settings.applicationMode.get]],
                 @"image": @"ic_custom_text_size",
                 @"type": [OAValueTableViewCell getCellIdentifier],
@@ -412,7 +412,7 @@
         if (hasSRTM && !_iapHelper.srtm.disabled)
         {
             [mapStyleSectionData addObject:@{
-                    @"name": OALocalizedString(@"product_title_srtm"),
+                    @"name": OALocalizedString(@"srtm_plugin_name"),
                     @"image": @"ic_custom_contour_lines",
                     @"has_options": @YES,
                     @"type": [OASwitchTableViewCell getCellIdentifier],
@@ -421,7 +421,7 @@
         }
 
         [data addObject:@{
-                @"group_name": OALocalizedString(@"map_settings_style"),
+                @"group_name": OALocalizedString(@"map_widget_renderer"),
                 @"cells": mapStyleSectionData
         }];
     }
@@ -455,9 +455,9 @@
     if (!hasWeather || !_iapHelper.weather.disabled)
     {
         [overlayUnderlaySectionData addObject:@{
-                @"name": OALocalizedString(@"product_title_weather"),
+                @"name": OALocalizedString(@"shared_string_weather"),
                 @"image": @"ic_custom_umbrella",
-                hasWeather ? @"has_options" : @"desc": hasWeather ? @YES : OALocalizedString(@"product_title_weather"),
+                hasWeather ? @"has_options" : @"desc": hasWeather ? @YES : OALocalizedString(@"shared_string_weather"),
                 @"type": hasWeather ? [OASwitchTableViewCell getCellIdentifier] : [OAButtonTableViewCell getCellIdentifier],
                 @"key": @"weather_layer"
         }];
@@ -469,9 +469,9 @@
     }];
 
     [data addObject:@{
-            @"group_name": OALocalizedString(@"language"),
+            @"group_name": OALocalizedString(@"shared_string_language"),
             @"cells": @[@{
-                    @"name": OALocalizedString(@"sett_lang"),
+                    @"name": OALocalizedString(@"map_locale"),
                     @"value": [self getMapLangValueStr],
                     @"image": @"ic_custom_map_languge",
                     @"type": [OAValueTableViewCell getCellIdentifier],
@@ -548,17 +548,17 @@
 - (NSString *)getMapLangValueStr
 {
     NSString *prefLangId = _settings.settingPrefMapLanguage.get;
-    NSString *prefLang = prefLangId.length > 0 ? [[[NSLocale currentLocale] displayNameForKey:NSLocaleIdentifier value:prefLangId] capitalizedStringWithLocale:[NSLocale currentLocale]] : OALocalizedString(@"local_names");
+    NSString *prefLang = prefLangId.length > 0 ? [[[NSLocale currentLocale] displayNameForKey:NSLocaleIdentifier value:prefLangId] capitalizedStringWithLocale:[NSLocale currentLocale]] : OALocalizedString(@"local_map_names");
     switch (_settings.settingMapLanguage.get)
     {
         case 0: // NativeOnly
-            return OALocalizedString(@"sett_lang_local");
+            return OALocalizedString(@"download_tab_local");
         case 4: // LocalizedAndNative
-            return [NSString stringWithFormat:@"%@ %@ %@", prefLang, OALocalizedString(@"shared_string_and"), [OALocalizedString(@"sett_lang_local") lowercaseStringWithLocale:[NSLocale currentLocale]]];
+            return [NSString stringWithFormat:@"%@ %@ %@", prefLang, OALocalizedString(@"shared_string_and"), [OALocalizedString(@"download_tab_local") lowercaseStringWithLocale:[NSLocale currentLocale]]];
         case 1: // LocalizedOrNative
-            return [NSString stringWithFormat:@"%@ %@ %@", prefLang, OALocalizedString(@"shared_string_or"), [OALocalizedString(@"sett_lang_local") lowercaseStringWithLocale:[NSLocale currentLocale]]];
+            return [NSString stringWithFormat:@"%@ %@ %@", prefLang, OALocalizedString(@"shared_string_or"), [OALocalizedString(@"download_tab_local") lowercaseStringWithLocale:[NSLocale currentLocale]]];
         case 5: // LocalizedOrTransliteratedAndNative
-            return [NSString stringWithFormat:@"%@ (%@) %@ %@", prefLang, [OALocalizedString(@"sett_lang_trans") lowercaseStringWithLocale:[NSLocale currentLocale]], OALocalizedString(@"shared_string_and"), [OALocalizedString(@"sett_lang_local") lowercaseStringWithLocale:[NSLocale currentLocale]]];
+            return [NSString stringWithFormat:@"%@ (%@) %@ %@", prefLang, [OALocalizedString(@"sett_lang_trans") lowercaseStringWithLocale:[NSLocale currentLocale]], OALocalizedString(@"shared_string_and"), [OALocalizedString(@"download_tab_local") lowercaseStringWithLocale:[NSLocale currentLocale]]];
         case 6: // LocalizedOrTransliterated
             return [NSString stringWithFormat:@"%@ (%@)", prefLang, [OALocalizedString(@"sett_lang_trans") lowercaseStringWithLocale:[NSLocale currentLocale]]];
         default:
@@ -963,9 +963,9 @@
             cell.descriptionLabel.text = item[@"desc"];
 
             BOOL hasLeftIcon = [item.allKeys containsObject:@"image"];
-            cell.leftIconView.image = hasLeftIcon ? [UIImage imageNamed:item[@"image"]] : nil;
+            cell.leftIconView.image = hasLeftIcon ? [UIImage rtlImageNamed:item[@"image"]] : nil;
 
-            [cell.button setTitle:OALocalizedString(@"purchase_get") forState:UIControlStateNormal];
+            [cell.button setTitle:OALocalizedString(@"shared_string_get") forState:UIControlStateNormal];
             [cell.button setTitleColor:[UIColorFromRGB(color_primary_purple) colorWithAlphaComponent:0.1] forState:UIControlStateHighlighted];
             cell.button.tag = indexPath.section << 10 | indexPath.row;
             [cell.button removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];

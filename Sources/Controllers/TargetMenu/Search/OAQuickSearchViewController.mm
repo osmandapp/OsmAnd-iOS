@@ -177,7 +177,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 -(void)applyLocalization
 {
-    [_btnCancel setTitle:OALocalizedString(@"poi_hide") forState:UIControlStateNormal];
+    [_btnCancel setTitle:OALocalizedString(@"shared_string_hide") forState:UIControlStateNormal];
     [_bottomTextBtn setTitle:OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
 }
 
@@ -233,10 +233,12 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
     [_pageController setViewControllers:@[_historyViewController] direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:nil];
 
-    [_tabs setTitle:OALocalizedString(@"history") forSegmentAtIndex:0];
-    [_tabs setTitle:OALocalizedString(@"categories") forSegmentAtIndex:1];
+    [_tabs setTitle:OALocalizedString(@"shared_string_history") forSegmentAtIndex:0];
+    [_tabs setTitle:OALocalizedString(@"search_categories") forSegmentAtIndex:1];
     [_tabs setTitle:OALocalizedString(@"shared_string_address") forSegmentAtIndex:2];
     [_tabs setSelectedSegmentIndex:0];
+    [_tabs setTitleTextAttributes:@{ NSFontAttributeName : [UIFont scaledSystemFontOfSize:14.] } forState:UIControlStateNormal];
+    [_tabs setTitleTextAttributes:@{ NSFontAttributeName : [UIFont scaledSystemFontOfSize:14.] } forState:UIControlStateSelected];
 
     _tblMove = [[UIPanGestureRecognizer alloc] initWithTarget:self
                                                        action:@selector(moveGestureDetected:)];
@@ -408,11 +410,11 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                     if (word && word.result)
                         [_barActionTextButton setTitle:[NSString stringWithFormat:OALocalizedString(@"show_something_on_map"), word.result.localeName] forState:UIControlStateNormal];
                     else
-                        [_barActionTextButton setTitle:OALocalizedString(@"map_settings_show") forState:UIControlStateNormal];
+                        [_barActionTextButton setTitle:OALocalizedString(@"shared_string_show_on_map") forState:UIControlStateNormal];
                 }
                 else
                 {
-                    [_barActionTextButton setTitle:OALocalizedString(@"map_settings_show") forState:UIControlStateNormal];
+                    [_barActionTextButton setTitle:OALocalizedString(@"shared_string_show_on_map") forState:UIControlStateNormal];
                 }
 
                 [_barActionTextButton layoutIfNeeded];
@@ -1765,7 +1767,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     if ([self.searchUICore isSearchMoreAvailable:self.searchUICore.getPhrase] && minimalSearchRadius != INT_MAX)
     {
         double rd = [OAOsmAndFormatter calculateRoundedDist:minimalSearchRadius];
-        item.title = [NSString stringWithFormat:OALocalizedString(@"nothing_found"),
+        item.title = [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"nothing_found"),
                 [OAOsmAndFormatter getFormattedDistance:rd forceTrailingZeroes:NO]];
     }
 
@@ -2010,7 +2012,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 - (UIAlertController *)createSaveFilterDialog:(OAPOIUIFilter *)filter customSaveAction:(BOOL)customSaveAction
 {
-    UIAlertController *saveDialog = [UIAlertController alertControllerWithTitle:OALocalizedString(@"enter_name") message:OALocalizedString(@"new_filter_desc") preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *saveDialog = [UIAlertController alertControllerWithTitle:OALocalizedString(@"access_hint_enter_name") message:OALocalizedString(@"new_filter_desc") preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction* actionCancel = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil];
     [saveDialog addAction:actionCancel];
 

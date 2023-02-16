@@ -33,7 +33,7 @@
 -(void) applyLocalization
 {
     [super applyLocalization];
-    self.titleView.text = OALocalizedString(@"sett_settings");
+    self.titleView.text = OALocalizedString(@"shared_string_settings");
 }
 
 - (void) viewDidLoad
@@ -69,11 +69,6 @@
     [self.tableView reloadData];
 }
 
-- (void)backButtonClicked:(id)sender
-{
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
-
 - (void)doneButtonPressed
 {
     [self dismissViewControllerAnimated:YES completion:nil];
@@ -98,7 +93,7 @@
     else if (section == 1)
         return OALocalizedString(@"route_parameters");
     else if (section == 2)
-        return OALocalizedString(@"osm_edits_advanced");
+        return OALocalizedString(@"tab_title_advanced");
     
     return nil;
 }
@@ -117,7 +112,7 @@
     }
     else
     {
-        CGFloat height = [OAUtilities calculateTextBounds:headerText width:tableView.bounds.size.width font:[UIFont systemFontOfSize:13.]].height;
+        CGFloat height = [OAUtilities calculateTextBounds:headerText width:tableView.bounds.size.width font:[UIFont scaledSystemFontOfSize:13.]].height;
         return MAX(38.0, height + 10.0);
     }
 }

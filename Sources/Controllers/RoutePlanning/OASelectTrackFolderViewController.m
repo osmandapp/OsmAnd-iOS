@@ -38,7 +38,7 @@
     {
         _selectedFolderName = gpx.gpxFolderName;
         if ([_selectedFolderName isEqualToString:@""])
-            _selectedFolderName = OALocalizedString(@"tracks");
+            _selectedFolderName = OALocalizedString(@"shared_string_gpx_tracks");
         [self reloadData];
     }
     return self;
@@ -67,7 +67,7 @@
 - (void) applyLocalization
 {
     [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"plan_route_select_folder");
+    self.titleLabel.text = OALocalizedString(@"select_folder");
 }
 
 - (void) generateData:(NSMutableArray<NSString *> *)allFolderNames foldersData:(NSMutableDictionary *)foldersData
@@ -127,7 +127,7 @@
             cell = (OATitleRightIconCell *)[nib objectAtIndex:0];
             cell.titleView.textColor = UIColorFromRGB(color_primary_purple);
             cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
-            cell.titleView.font = [UIFont systemFontOfSize:17. weight:UIFontWeightSemibold];
+            cell.titleView.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightSemibold];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         cell.titleView.text = item[@"title"];

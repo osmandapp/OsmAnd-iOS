@@ -22,7 +22,7 @@
 #import "OAColors.h"
 #import "OASizes.h"
 
-@interface OABaseBackupTypesViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface OABaseBackupTypesViewController ()
 
 @property (weak, nonatomic) IBOutlet UIProgressView *progressView;
 
@@ -41,14 +41,7 @@
     BOOL _isHeaderBlurred;
 }
 
-- (instancetype)init
-{
-    self = [super initWithNibName:@"OABaseSettingsViewController" bundle:nil];
-    {
-        [self commonInit];
-    }
-    return self;
-}
+#pragma mark - Initialization
 
 - (void)commonInit
 {
@@ -57,19 +50,9 @@
     _selectedItems = [self generateSelectedItems];
     _progressFilesCompleteCount = 0;
     _progressFilesTotalCount = 1;
-    [self generateData];
 }
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-
-    self.subtitleLabel.hidden = YES;
-    self.separatorNavbarView.hidden = YES;
-}
+#pragma mark - UIViewController
 
 - (void)viewDidAppear:(BOOL)animated
 {
@@ -85,27 +68,172 @@
     [_backupHelper removePrepareBackupListener:self];
 }
 
-- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+#pragma mark - Base setup UI
+
+- (UIColor *)getNavbarColor
 {
-    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        [self.tableView reloadData];
-    } completion:nil];
+    return UIColorFromRGB(color_primary_table_background);
 }
 
-- (EOARemoteFilesType)getRemoteFilesType
+#pragma mark - Base UI
+
+- (BOOL)isNavbarSeparatorVisible
 {
-    return EOARemoteFilesTypeAll;
+    return NO;
 }
 
-- (NSMutableDictionary<OAExportSettingsType *, NSArray *> *)getSelectedItems
+#pragma mark - Table data
+
+- (void)generateData
 {
-    return _selectedItems;
+    _data = [NSMutableArray array]; // override;
 }
 
-- (NSMutableDictionary<OAExportSettingsType *, NSArray *> *)generateSelectedItems
+- (NSMutableDictionary *)getItem:(NSIndexPath *)indexPath
 {
-    return [NSMutableDictionary dictionary]; // override
+    return ((NSArray *) _data[indexPath.section][@"cells"])[indexPath.row];
+}
+
+- (NSString *)getTitleForHeader:(NSInteger)section
+{
+    return _data[section][@"header"];
+}
+
+- (NSInteger)rowsCount:(NSInteger)section
+{
+    return ((NSArray *) _data[section][@"cells"]).count;
+}
+
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
+{
+    UITableViewCell *outCell = nil;
+
+    NSDictionary *item = [self getItem:indexPath];
+    NSString *cellType = item[@"type"];
+    OAExportSettingsType *settingsType = item[@"setting"];
+    BOOL emptyCell = [item[@"key"] hasPrefix:@"empty_cell_"];
+    BOOL hasEmptyIcon = [item[@"has_empty_icon"] boolValue];
+
+    if ([cellType isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
+    {
+        OASwitchTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
+        if (!cell)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASwitchTableViewCell *) nib[0];
+            [cell descriptionVisibility:NO];
+        }
+        if (cell)
+        {
+            cell.separatorInset = UIEdgeInsetsMake(0., kPaddingToLeftOfContentWithIcon + [OAUtilities getLeftMargin], 0., 0.);
+            cell.switchView.on = [_selectedItems.allKeys containsObject:settingsType];
+            cell.titleLabel.text = settingsType.title;
+            cell.leftIconView.image = settingsType.icon;
+            cell.leftIconView.tintColor = cell.switchView.on ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_tint_gray);
+
+            cell.switchView.tag = indexPath.section << 10 | indexPath.row;
+            [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
+            [cell.switchView addTarget:self action:@selector(onSwitchPressed:) forControlEvents:UIControlEventValueChanged];
+        }
+        outCell = cell;
+    }
+    else if ([cellType isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
+    {
+        OAIconTitleValueCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
+        if (!cell)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
+            cell = (OAIconTitleValueCell *) nib[0];
+        }
+        if (cell)
+        {
+            cell.separatorInset = UIEdgeInsetsMake(0., 66. + [OAUtilities getLeftMargin], 0., 0.);
+            cell.selectionStyle = emptyCell || hasEmptyIcon ? UITableViewCellSelectionStyleNone : UITableViewCellSelectionStyleDefault;
+
+            cell.textView.text = settingsType ? settingsType.title : item[@"title"];
+            cell.descriptionView.text = [item.allKeys containsObject:@"description"] ? item[@"description"] : @"";
+
+            [cell showRightIcon:!(emptyCell || hasEmptyIcon)];
+            [cell showLeftIcon:!emptyCell];
+            cell.leftIconView.tintColor = UIColorFromRGB(color_primary_purple);
+
+            if (hasEmptyIcon)
+            {
+                cell.leftIconView.image = nil;
+                cell.leftIconView.backgroundColor = item[@"icon_color"];
+                cell.leftIconView.layer.cornerRadius = cell.rightIconView.layer.frame.size.width / 2;
+                cell.leftIconView.clipsToBounds = YES;
+            }
+            else
+            {
+                cell.leftIconView.image = settingsType ? settingsType.icon : [UIImage templateImageNamed:item[@"icon"]];
+                cell.leftIconView.backgroundColor = nil;
+                cell.leftIconView.layer.cornerRadius = 0.;
+                cell.leftIconView.clipsToBounds = NO;
+            }
+        }
+        outCell = cell;
+    }
+    else if ([cellType isEqualToString:[OAStorageStateValuesCell getCellIdentifier]])
+    {
+        OAStorageStateValuesCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAStorageStateValuesCell getCellIdentifier]];
+        if (!cell)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAStorageStateValuesCell getCellIdentifier] owner:self options:nil];
+            cell = (OAStorageStateValuesCell *) nib[0];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        }
+        if (cell)
+        {
+            BOOL showDescription = [item[@"show_description"] boolValue];
+            cell.separatorInset = UIEdgeInsetsMake(0., showDescription ? 0. : CGFLOAT_MAX, 0., 0.);
+
+            cell.titleLabel.text = item[@"title"];
+            [cell showDescription:showDescription];
+            [cell setTotalAvailableValue:[item[@"total_progress"] integerValue]];
+            [cell setFirstValue:[item[@"first_progress"] integerValue]];
+            [cell setSecondValue:[item[@"second_progress"] integerValue]];
+            [cell setThirdValue:[item[@"third_progress"] integerValue]];
+        }
+        outCell = cell;
+    }
+
+    if ([outCell needsUpdateConstraints])
+        [outCell setNeedsUpdateConstraints];
+
+    return outCell;
+}
+
+- (NSInteger)sectionsCount
+{
+    return _data.count;
+}
+
+- (void)onRowPressed:(NSIndexPath *)indexPath
+{
+    NSDictionary *item = [self getItem:indexPath];
+    BOOL emptyCell = [item[@"key"] hasPrefix:@"empty_cell_"];
+    BOOL hasEmptyIcon = [item[@"has_empty_icon"] boolValue];
+    if (!(emptyCell || hasEmptyIcon))
+    {
+        _selectedIndexPath = indexPath;
+        [self onCellSelected];
+    }
+}
+
+#pragma mark - Selectors
+
+- (void)onSwitchPressed:(id)sender
+{
+    UISwitch *switchView = (UISwitch *) sender;
+    if (switchView)
+    {
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:switchView.tag & 0x3FF inSection:switchView.tag >> 10];
+        _selectedIndexPath = indexPath;
+        NSMutableDictionary *item = [self getItem:indexPath];
+
+        [self onTypeSelected:item[@"setting"] selected:switchView.isOn view:switchView];
+    }
 }
 
 - (void)onCellSelected
@@ -131,6 +259,23 @@
 - (void)showClearTypeScreen:(OAExportSettingsType *)type view:(UIView *)view
 {
     // override
+}
+
+#pragma mark - Additions
+
+- (EOARemoteFilesType)getRemoteFilesType
+{
+    return EOARemoteFilesTypeAll;
+}
+
+- (NSMutableDictionary<OAExportSettingsType *, NSArray *> *)getSelectedItems
+{
+    return _selectedItems;
+}
+
+- (NSMutableDictionary<OAExportSettingsType *, NSArray *> *)generateSelectedItems
+{
+    return [NSMutableDictionary dictionary]; // override
 }
 
 - (NSDictionary<OAExportSettingsCategory *, OASettingsCategoryItems *> *)getDataItems
@@ -168,14 +313,6 @@
     return @[];
 }
 
-- (UIStatusBarStyle)preferredStatusBarStyle
-{
-    if (@available(iOS 13.0, *))
-        return UIStatusBarStyleDarkContent;
-
-    return UIStatusBarStyleDefault;
-}
-
 + (NSInteger)calculateItemsSize:(NSArray *)items
 {
     NSInteger itemsSize = 0;
@@ -199,16 +336,6 @@
 - (void)setData:(NSMutableArray<NSMutableDictionary *> *)data
 {
     _data = data;
-}
-
-- (void)generateData
-{
-    _data = [NSMutableArray array]; // override;
-}
-
-- (NSMutableDictionary *)getItem:(NSIndexPath *)indexPath
-{
-    return ((NSArray *) _data[indexPath.section][@"cells"])[indexPath.row];
 }
 
 #pragma mark - OAManageTypeDelegate
@@ -317,153 +444,6 @@
             [self.progressView setProgress:0.0 animated:NO];
         }];
     });
-}
-
-#pragma mark - Selectors
-
-- (void)onSwitchPressed:(id)sender
-{
-    UISwitch *switchView = (UISwitch *) sender;
-    if (switchView)
-    {
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:switchView.tag & 0x3FF inSection:switchView.tag >> 10];
-        _selectedIndexPath = indexPath;
-        NSMutableDictionary *item = [self getItem:indexPath];
-
-        [self onTypeSelected:item[@"setting"] selected:switchView.isOn view:switchView];
-    }
-}
-
-#pragma mark - UITableViewDataSource
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return _data.count;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return ((NSArray *) _data[section][@"cells"]).count;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    UITableViewCell *outCell = nil;
-
-    NSDictionary *item = [self getItem:indexPath];
-    NSString *cellType = item[@"type"];
-    OAExportSettingsType *settingsType = item[@"setting"];
-    BOOL emptyCell = [item[@"key"] hasPrefix:@"empty_cell_"];
-    BOOL hasEmptyIcon = [item[@"has_empty_icon"] boolValue];
-
-    if ([cellType isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
-    {
-        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
-        if (!cell)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASwitchTableViewCell *) nib[0];
-            [cell descriptionVisibility:NO];
-        }
-        if (cell)
-        {
-            cell.separatorInset = UIEdgeInsetsMake(0., kPaddingToLeftOfContentWithIcon + [OAUtilities getLeftMargin], 0., 0.);
-            cell.switchView.on = [_selectedItems.allKeys containsObject:settingsType];
-            cell.titleLabel.text = settingsType.title;
-            cell.leftIconView.image = settingsType.icon;
-            cell.leftIconView.tintColor = cell.switchView.on ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_tint_gray);
-
-            cell.switchView.tag = indexPath.section << 10 | indexPath.row;
-            [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
-            [cell.switchView addTarget:self action:@selector(onSwitchPressed:) forControlEvents:UIControlEventValueChanged];
-        }
-        outCell = cell;
-    }
-    else if ([cellType isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
-    {
-        OAIconTitleValueCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
-        if (!cell)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
-            cell = (OAIconTitleValueCell *) nib[0];
-        }
-        if (cell)
-        {
-            cell.separatorInset = UIEdgeInsetsMake(0., 66. + [OAUtilities getLeftMargin], 0., 0.);
-            cell.selectionStyle = emptyCell || hasEmptyIcon ? UITableViewCellSelectionStyleNone : UITableViewCellSelectionStyleDefault;
-
-            cell.textView.text = settingsType ? settingsType.title : item[@"title"];
-            cell.descriptionView.text = [item.allKeys containsObject:@"description"] ? item[@"description"] : @"";
-
-            [cell showRightIcon:!(emptyCell || hasEmptyIcon)];
-            [cell showLeftIcon:!emptyCell];
-            cell.leftIconView.tintColor = UIColorFromRGB(color_primary_purple);
-
-            if (hasEmptyIcon)
-            {
-                cell.leftIconView.image = nil;
-                cell.leftIconView.backgroundColor = item[@"icon_color"];
-                cell.leftIconView.layer.cornerRadius = cell.rightIconView.layer.frame.size.width / 2;
-                cell.leftIconView.clipsToBounds = YES;
-            }
-            else
-            {
-                cell.leftIconView.image = settingsType ? settingsType.icon : [UIImage templateImageNamed:item[@"icon"]];
-                cell.leftIconView.backgroundColor = nil;
-                cell.leftIconView.layer.cornerRadius = 0.;
-                cell.leftIconView.clipsToBounds = NO;
-            }
-        }
-        outCell = cell;
-    }
-    else if ([cellType isEqualToString:[OAStorageStateValuesCell getCellIdentifier]])
-    {
-        OAStorageStateValuesCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAStorageStateValuesCell getCellIdentifier]];
-        if (!cell)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAStorageStateValuesCell getCellIdentifier] owner:self options:nil];
-            cell = (OAStorageStateValuesCell *) nib[0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        }
-        if (cell)
-        {
-            BOOL showDescription = [item[@"show_description"] boolValue];
-            cell.separatorInset = UIEdgeInsetsMake(0., showDescription ? 0. : CGFLOAT_MAX, 0., 0.);
-
-            cell.titleLabel.text = item[@"title"];
-            [cell showDescription:showDescription];
-            [cell setTotalAvailableValue:[item[@"total_progress"] integerValue]];
-            [cell setFirstValue:[item[@"first_progress"] integerValue]];
-            [cell setSecondValue:[item[@"second_progress"] integerValue]];
-            [cell setThirdValue:[item[@"third_progress"] integerValue]];
-        }
-        outCell = cell;
-    }
-
-    if ([outCell needsUpdateConstraints])
-        [outCell setNeedsUpdateConstraints];
-
-    return outCell;
-}
-
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    return _data[section][@"header"];
-}
-
-#pragma mark - UITableViewDelegate
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSDictionary *item = [self getItem:indexPath];
-    BOOL emptyCell = [item[@"key"] hasPrefix:@"empty_cell_"];
-    BOOL hasEmptyIcon = [item[@"has_empty_icon"] boolValue];
-    if (!(emptyCell || hasEmptyIcon))
-    {
-        _selectedIndexPath = indexPath;
-        [self onCellSelected];
-        [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    }
 }
 
 @end

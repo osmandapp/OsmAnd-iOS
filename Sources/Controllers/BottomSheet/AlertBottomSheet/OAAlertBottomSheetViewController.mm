@@ -126,7 +126,13 @@
     
     self.headerDividerView.hidden = YES;
     self.buttonsSectionDividerView.hidden = YES;
-    
+
+    self.leftButton.titleLabel.adjustsFontForContentSizeCategory = YES;
+    self.leftButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
+
+    self.rightButton.titleLabel.adjustsFontForContentSizeCategory = YES;
+    self.rightButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
+
     [self.leftIconView setImage:[UIImage imageNamed:_titleIcon]];
     if (!_titleIcon)
     {
@@ -168,7 +174,7 @@
     CGFloat contentHeight = 0;
     
     if (_message)
-        contentHeight += [OAUtilities calculateTextBounds:_message width:width font:[UIFont systemFontOfSize:15.]].height + kLabelVerticalMargin * 3;
+        contentHeight += [OAUtilities calculateTextBounds:_message width:width font:[UIFont scaledSystemFontOfSize:15.]].height + kLabelVerticalMargin * 3;
     
     if (_selectableItemsTitles && _selectableItemsTitles.count > 0)
         contentHeight += _selectableItemsTitles.count * kApproximateCellHeight + 2 * kVerticalMargin;

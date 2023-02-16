@@ -99,7 +99,7 @@
         x += 12.;
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
         btn.frame = CGRectMake(x, 0, w, h);
-        [btn setImage:mode.getIcon forState:UIControlStateNormal];
+        [btn setImage:mode.getIcon.imageFlippedForRightToLeftLayoutDirection forState:UIControlStateNormal];
         btn.contentMode = UIViewContentModeCenter;
         btn.tintColor = UIColorFromRGB(mode.getIconColor);
         btn.backgroundColor = _selectedMode == mode ? [btn.tintColor colorWithAlphaComponent:0.2] : UIColor.clearColor;

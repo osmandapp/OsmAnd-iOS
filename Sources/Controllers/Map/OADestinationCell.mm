@@ -59,16 +59,16 @@
     
     if (_firstRow)
     {
-        _primaryFont = [UIFont systemFontOfSize:18.0 weight:UIFontWeightBold];
-        _unitsFont = [UIFont systemFontOfSize:15.0 weight:UIFontWeightMedium];
-        _descFont = [UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold];
+        _primaryFont = [UIFont scaledSystemFontOfSize:18.0 weight:UIFontWeightBold];
+        _unitsFont = [UIFont scaledSystemFontOfSize:15.0 weight:UIFontWeightMedium];
+        _descFont = [UIFont scaledSystemFontOfSize:15.0 weight:UIFontWeightSemibold];
         _descColor = UIColorFromRGB(0x8ea2b9);
     }
     else
     {
-        _primaryFont = [UIFont systemFontOfSize:15.0 weight:UIFontWeightBold];
-        _unitsFont = [UIFont systemFontOfSize:13.0 weight:UIFontWeightMedium];
-        _descFont = [UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold];
+        _primaryFont = [UIFont scaledSystemFontOfSize:15.0 weight:UIFontWeightBold];
+        _unitsFont = [UIFont scaledSystemFontOfSize:13.0 weight:UIFontWeightMedium];
+        _descFont = [UIFont scaledSystemFontOfSize:15.0 weight:UIFontWeightSemibold];
         
         _descColor = UIColorFromRGB(0x6C95B1);
     }
@@ -247,7 +247,7 @@
     if (!self.infoLabel)
     {
         self.infoLabel = [[UILabel alloc] initWithFrame:CGRectMake(60.0 + _distanceLabel.frame.size.width, 7.0, self.infoLabelWidth, 21.0)];
-        _infoLabel.font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold];
+        _infoLabel.font = [UIFont scaledSystemFontOfSize:15.0 weight:UIFontWeightSemibold];
         _infoLabel.textAlignment = NSTextAlignmentRight;
         _infoLabel.textColor = UIColorFromRGB(0x8ea2b9);
         _infoLabel.minimumScaleFactor = 0.7;
@@ -310,31 +310,31 @@
     
     NSMutableString *time = [NSMutableString string];
     if (hours > 0)
-        [time appendFormat:@"%d %@", hours, OALocalizedString(@"units_hour")];
+        [time appendFormat:@"%d %@", hours, OALocalizedString(@"int_hour")];
     if (minutes > 0)
     {
         if (time.length > 0)
             [time appendString:@" "];
-        [time appendFormat:@"%d %@", minutes, OALocalizedString(@"units_min")];
+        [time appendFormat:@"%d %@", minutes, OALocalizedString(@"int_min")];
     }
     if (minutes == 0 && hours == 0)
     {
         if (time.length > 0)
             [time appendString:@" "];
-        [time appendFormat:@"%d %@", seconds, OALocalizedString(@"units_sec")];
+        [time appendFormat:@"%d %@", seconds, OALocalizedString(@"shared_string_sec")];
     }
     
     if (timeInterval > 0.0)
     {
         if (!shortText)
-            return [NSString stringWithFormat:@"%@ %@", time, OALocalizedString(@"time_left")];
+            return [NSString stringWithFormat:@"%@ %@", time, OALocalizedString(@"osmand_parking_time_left")];
         else
             return [NSString stringWithFormat:@"%@", time];
     }
     else
     {
         if (!shortText)
-            return [NSString stringWithFormat:@"%@ %@", time, OALocalizedString(@"time_overdue")];
+            return [NSString stringWithFormat:@"%@ %@", time, OALocalizedString(@"osmand_parking_overdue")];
         else
             return [NSString stringWithFormat:@"%@", time];
     }
@@ -368,7 +368,7 @@
     NSRange coloredRange = NSMakeRange(0, remainingTimeText.length);
     
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:fullText];
-    UIFont *font = [UIFont systemFontOfSize:15];
+    UIFont *font = [UIFont scaledSystemFontOfSize:15];
     [attributedString addAttribute:NSFontAttributeName value:font range:fullRange];
     [attributedString addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithRed:0.678f green:0.678f blue:0.678f alpha:1.00f] range:fullRange];
     if (pickupDate && timeInterval <= 0.0)

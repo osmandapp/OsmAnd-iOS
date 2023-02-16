@@ -121,7 +121,7 @@
 {
     _originObject = [OAPOIHelper findPOIByOriginName:_favorite.getAmenityOriginName lat:_favorite.getLatitude lon:_favorite.getLongitude];
     if (!_originObject)
-        [_favorite getAmenity];
+        _originObject = [_favorite getAmenity];
 }
 
 - (void) buildTopRows:(NSMutableArray<OARowInfo *> *)rows
@@ -142,7 +142,9 @@
     {
         OAPOIViewController *builder = [[OAPOIViewController alloc] initWithPOI: _originObject];
         builder.location = CLLocationCoordinate2DMake([_favorite getLatitude], [_favorite getLongitude]);
-        [builder buildRowsInternal:rows];
+        NSMutableArray<OARowInfo *> *internalRows = [NSMutableArray array];
+        [builder buildRowsInternal:internalRows];
+        [rows addObjectsFromArray:internalRows];
     }
     else
     {
@@ -172,7 +174,7 @@
         color = favoriteGroup.isVisible ? color : disabledColor;
         UIImage *icon = [UIImage templateImageNamed:@"ic_custom_folder"];
         NSString *name = [self.favorite getCategoryDisplayName];
-        NSString *description = OALocalizedString(@"all_group_points");
+        NSString *description = OALocalizedString(@"context_menu_points_of_group");
 
         OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:nil icon:icon textPrefix:description text:name textColor:color isText:NO needLinks:NO order:1 typeName:kGroupRowType isPhoneNumber:NO isUrl:NO];
         rowInfo.collapsed = YES;
@@ -213,7 +215,7 @@
 
 - (NSString *) getCommonTypeStr
 {
-    return OALocalizedString(@"favorites");
+    return OALocalizedString(@"favorites_item");
 }
 
 - (NSAttributedString *) getAttributedTypeStr
@@ -228,7 +230,7 @@
     NSMutableAttributedString *mutAttributedTypeStr = [[NSMutableAttributedString alloc] init];
     [mutAttributedTypeStr appendAttributedString:attributedTypeStr];
     [mutAttributedTypeStr appendAttributedString:[[NSAttributedString alloc] initWithString:address]];
-    [mutAttributedTypeStr addAttributes:@{ NSFontAttributeName : [UIFont systemFontOfSize:15],
+    [mutAttributedTypeStr addAttributes:@{ NSFontAttributeName : [UIFont scaledSystemFontOfSize:15],
                                            NSForegroundColorAttributeName : UIColorFromRGB(color_dialog_text_description_color_night) }
                                   range:NSMakeRange(0, mutAttributedTypeStr.length)];
     return mutAttributedTypeStr;

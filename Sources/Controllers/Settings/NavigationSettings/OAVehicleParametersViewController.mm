@@ -25,7 +25,7 @@
 #import "OAColors.h"
 #import "OASizes.h"
 
-@interface OAVehicleParametersViewController () <UITableViewDelegate, UITableViewDataSource, OAVehicleParametersSettingDelegate>
+@interface OAVehicleParametersViewController () <OAVehicleParametersSettingDelegate>
 
 @end
 
@@ -37,33 +37,37 @@
     NSInteger _otherSection;
 }
 
-- (instancetype) initWithAppMode:(OAApplicationMode *)appMode
+#pragma mark - Initialization
+
+- (void)commonInit
 {
-    self = [super initWithAppMode:appMode];
-    if (self)
-    {
-        _settings = [OAAppSettings sharedManager];
-    }
-    return self;
+    _settings = [OAAppSettings sharedManager];
 }
 
--(void) applyLocalization
-{
-    [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"vehicle_parameters");
-    [self.backButton setTitle:OALocalizedString(@"routing_settings") forState:UIControlStateNormal];
-}
+#pragma mark - UIViewController
 
 - (void) viewDidLoad
 {
     [super viewDidLoad];
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
+
     self.tableView.separatorInset = UIEdgeInsetsMake(0., 16., 0., 0.);
-    [self setupView];
 }
 
-- (void) setupView
+#pragma mark - Base UI
+
+- (NSString *)getTitle
+{
+    return OALocalizedString(@"vehicle_parameters");
+}
+
+- (NSString *)getLeftNavbarButtonTitle
+{
+    return OALocalizedString(@"routing_settings");
+}
+
+#pragma mark - Table data
+
+- (void)generateData
 {
     NSMutableArray *tableData = [NSMutableArray array];
     NSMutableArray *parametersArr = [NSMutableArray array];
@@ -119,11 +123,11 @@
                 }
 
                 if (index == 0)
-                    value = OALocalizedString([paramId isEqualToString:@"motor_type"] ? @"not_selected" : @"shared_string_none");
+                    value = OALocalizedString([paramId isEqualToString:@"motor_type"] ? @"shared_string_not_selected" : @"shared_string_none");
                 else if (index != -1)
                     value = [NSString stringWithUTF8String:p.possibleValueDescriptions[index].c_str()];
                 else
-                    value = [NSString stringWithFormat:@"%@ %@", value, [paramId isEqualToString:@"weight"] ? OALocalizedString(@"units_t") : OALocalizedString(@"units_m")];
+                    value = [NSString stringWithFormat:@"%@ %@", value, [paramId isEqualToString:@"weight"] ? OALocalizedString(@"metric_ton") : OALocalizedString(@"m")];
                 [isMotorType ? exraParametersArr : parametersArr addObject:
                  @{
                      @"name" : paramId,
@@ -141,7 +145,7 @@
     }
     [defaultSpeedArr addObject:@{
         @"type" : [OAIconTextTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"default_speed"),
+        @"title" : OALocalizedString(@"default_speed_setting_title"),
         @"icon" : @"ic_action_speed",
         @"name" : @"defaultSpeed",
     }];
@@ -175,7 +179,7 @@
 - (NSString *)getTitleForHeader:(NSInteger)section
 {
     if (section == _otherSection)
-        return OALocalizedString(@"help_other_header");
+        return OALocalizedString(@"other_location");
 
     return nil;
 }
@@ -190,15 +194,18 @@
     return nil;
 }
 
-#pragma mark - TableView
+- (NSInteger)rowsCount:(NSInteger)section
+{
+    return _data[section].count;
+}
 
-- (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
     if ([cellType isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
     {
-        OAIconTitleValueCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
+        OAIconTitleValueCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
@@ -218,7 +225,7 @@
     }
     else if ([cellType isEqualToString:[OAIconTextTableViewCell getCellIdentifier]])
     {
-        OAIconTextTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
+        OAIconTextTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
@@ -238,7 +245,12 @@
     return nil;
 }
 
-- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (NSInteger)sectionsCount
+{
+    return _data.count;
+}
+
+- (void)onRowPressed:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *itemName = item[@"name"];
@@ -250,69 +262,13 @@
     
     settingsViewController.delegate = self;
     [self presentViewController:settingsViewController animated:YES completion:nil];
-    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
-- (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return _data[section].count;
-}
-
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return _data.count;
-}
-
-- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    return [self getTitleForHeader:section];
-}
-
-- (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
-{
-    return [self getTitleForFooter:section];
-}
-
-- (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section
-{
-    UITableViewHeaderFooterView *vw = (UITableViewHeaderFooterView *) view;
-    [vw.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    NSString *header = [self getTitleForHeader:section];
-    if (header)
-    {
-        UIFont *font = [UIFont systemFontOfSize:13.];
-        CGFloat headerHeight = [OAUtilities calculateTextBounds:header
-                                                          width:tableView.frame.size.width - (kPaddingOnSideOfContent + [OAUtilities getLeftMargin]) * 2
-                                                           font:font].height + kPaddingOnSideOfHeaderWithText;
-        return headerHeight;
-    }
-
-    return kHeaderHeightDefault;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-{
-    NSString *footer = [self getTitleForFooter:section];
-    if (footer)
-    {
-        UIFont *font = [UIFont systemFontOfSize:13.];
-        CGFloat footerHeight = [OAUtilities calculateTextBounds:footer
-                                                          width:tableView.frame.size.width - (kPaddingOnSideOfContent + [OAUtilities getLeftMargin]) * 2
-                                                           font:font].height + kPaddingOnSideOfFooterWithText;
-        return footerHeight;
-    }
-
-    return 0.001;
-}
 #pragma mark - OAVehicleParametersSettingDelegate
 
 - (void) onSettingsChanged
 {
-    [self setupView];
+    [self generateData];
     [self.tableView reloadData];
     if (self.delegate)
         [self.delegate onSettingsChanged];

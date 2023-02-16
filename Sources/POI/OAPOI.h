@@ -72,6 +72,7 @@
 @property (nonatomic) NSDictionary *localizedContent;
 
 @property (nonatomic) OAPOIRoutePoint *routePoint;
+@property (nonatomic) NSString *mapIconName;
 
 - (UIImage *)icon;
 - (NSString *)iconName;

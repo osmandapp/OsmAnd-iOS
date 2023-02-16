@@ -19,6 +19,9 @@
     self.contentContainer.layer.cornerRadius = 9.;
     self.contentContainer.layer.borderWidth = 1.;
     self.contentContainer.layer.borderColor = UIColorFromRGB(color_tint_gray).CGColor;
+
+    self.modeButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
+    self.rightLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
 }
 
 - (void) setSelected:(BOOL)selected animated:(BOOL)animated

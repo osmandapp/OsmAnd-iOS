@@ -38,6 +38,9 @@
     BOOL _isInNavigationMode;
     
     OAAlarmWidget *_alarmWidget;
+    
+    BOOL _leftSideDriving;
+    BOOL _drivingSideChecked;
 }
 
 - (instancetype) initWithCarPlayWindow:(CPWindow *)window mapViewController:(OAMapViewController *)mapVC
@@ -74,7 +77,7 @@
     
     if (widthOffset != _cachedWidthOffset && heightOffset != _cachedHeightOffset && widthOffset != 0 && heightOffset != 0 && !_isInNavigationMode)
     {
-        _mapVc.mapView.viewportXScale = leftSide ? widthOffset : 1.0 + widthOffset;
+        _mapVc.mapView.viewportXScale = leftSide ? 1.0 - widthOffset : 1.0 + widthOffset;
         _mapVc.mapView.viewportYScale = 1.0 + heightOffset;
         _cachedWidthOffset = widthOffset;
         _cachedHeightOffset = heightOffset;
@@ -88,11 +91,11 @@
 - (void)setupAlarmPosition
 {
     UIEdgeInsets insets = _window.safeAreaInsets;
-    CGRect alarmRect = CGRectMake(0., 0., 40., 40.);
+    CGRect alarmRect = CGRectMake(0., 0., 60., 60.);
     if ([self isLeftSideDriving])
         alarmRect.origin = CGPointMake(8.0, insets.top + 8.);
     else
-        alarmRect.origin = CGPointMake(CGRectGetMaxX(_window.frame) - 48., insets.top + 8.);
+        alarmRect.origin = CGPointMake(CGRectGetMaxX(_window.frame) - 68., insets.top + 8.);
     
     _alarmWidget.frame = alarmRect;
 }
@@ -235,7 +238,20 @@
 
 - (BOOL)isLeftSideDriving
 {
-    return _window.safeAreaInsets.right > _window.safeAreaInsets.left && _window.safeAreaInsets.bottom == 0;
+    if (_drivingSideChecked)
+        return _leftSideDriving;
+    CGFloat r = _window.safeAreaInsets.right;
+    CGFloat l = _window.safeAreaInsets.left;
+    if (r == 0 && l == 0)
+        return _leftSideDriving;
+    if (l > 0 && r == 0)
+        _leftSideDriving = YES;
+    else if (r > 0 && l == 0)
+        _leftSideDriving = NO;
+    else
+        _leftSideDriving = r > l;
+    _drivingSideChecked = YES;
+    return _leftSideDriving;
 }
 
 - (void) enterNavigationMode

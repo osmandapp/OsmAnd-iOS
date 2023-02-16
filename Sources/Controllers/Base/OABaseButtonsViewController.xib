@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OABaseButtonsViewController">
+            <connections>
+                <outlet property="bottomBackgroundView" destination="jbw-zT-lJ9" id="ZOu-Jq-e20"/>
+                <outlet property="bottomButton" destination="7kA-H9-2N0" id="2kV-Lg-9JW"/>
+                <outlet property="leftNavbarButton" destination="7Io-LG-e7V" id="CGJ-mS-wNy"/>
+                <outlet property="middleBottomMarginStackView" destination="lUZ-R9-z1j" id="7UM-BG-VAg"/>
+                <outlet property="navbarBackgroundView" destination="Se2-eb-4ae" id="ewv-fc-Wbq"/>
+                <outlet property="navbarStackView" destination="h42-DX-qKy" id="YSS-rb-EIs"/>
+                <outlet property="navbarStackViewEstimatedHeightConstraint" destination="kCn-u0-Vfv" id="n8P-My-POS"/>
+                <outlet property="rightNavbarButton" destination="ZGI-zU-jL6" id="J60-Gh-7R1"/>
+                <outlet property="separatorBottomView" destination="uPB-MS-llO" id="JLB-td-hiy"/>
+                <outlet property="separatorNavbarView" destination="JdT-fS-U75" id="jNb-zE-G2a"/>
+                <outlet property="subtitleLabel" destination="1EB-d0-siu" id="az2-im-Wzc"/>
+                <outlet property="tableView" destination="MiH-Ug-q1h" id="KgI-0I-qoG"/>
+                <outlet property="titleLabel" destination="rQc-Za-adq" id="mF0-tH-GAN"/>
+                <outlet property="topButton" destination="Xcf-lk-fFu" id="95F-AF-LQK"/>
+                <outlet property="view" destination="hLM-mY-zOx" id="Rc5-ux-fsC"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="hLM-mY-zOx">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="MiH-Ug-q1h">
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                    <color key="backgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.95294117649999999" alpha="1" colorSpace="calibratedRGB"/>
+                </tableView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Se2-eb-4ae" userLabel="Navbar Background View">
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="92"/>
+                    <color key="backgroundColor" red="0.97647058819999999" green="0.97647058819999999" blue="0.97647058819999999" alpha="1" colorSpace="calibratedRGB"/>
+                </view>
+                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="h42-DX-qKy" userLabel="Navbar Stack View">
+                    <rect key="frame" x="16" y="48" width="382" height="44"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cYy-bc-Khd" userLabel="Navbar Top Margin View">
+                            <rect key="frame" x="0.0" y="0.0" width="382" height="0.0"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstAttribute="height" id="D0J-9d-UWt"/>
+                            </constraints>
+                        </view>
+                        <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="8t2-nR-3aB" userLabel="Navbar Content Stack View">
+                            <rect key="frame" x="0.0" y="2" width="382" height="42"/>
+                            <subviews>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7Io-LG-e7V" userLabel="Left Navbar Button">
+                                    <rect key="frame" x="0.0" y="6" width="117" height="30"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" relation="lessThanOrEqual" constant="300" id="LVM-qW-Ybb"/>
+                                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="30" id="Wu2-gl-qop"/>
+                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="30" id="z61-dN-ZO6"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                                    <color key="tintColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                    <inset key="titleEdgeInsets" minX="-10" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                    <state key="normal" title="Left Button" image="ic_navbar_chevron.png">
+                                        <color key="titleColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                    </state>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="number" keyPath="titleLabel.numberOfLines">
+                                            <integer key="value" value="1"/>
+                                        </userDefinedRuntimeAttribute>
+                                        <userDefinedRuntimeAttribute type="boolean" keyPath="titleLabel.adjustsFontForContentSizeCategory" value="YES"/>
+                                    </userDefinedRuntimeAttributes>
+                                    <connections>
+                                        <action selector="onLeftNavbarButtonPressed:" destination="-1" eventType="touchUpInside" id="g76-3z-VVp"/>
+                                    </connections>
+                                </button>
+                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="66a-Uw-usW" userLabel="Text Stack View">
+                                    <rect key="frame" x="127" y="1" width="128" height="40"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Title" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rQc-Za-adq" userLabel="Title Label">
+                                            <rect key="frame" x="14" y="0.0" width="100" height="23"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="22" id="6WS-5r-7MV"/>
+                                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="100" id="waQ-ej-upd"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Subtitle" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1EB-d0-siu" userLabel="Subtitle Label">
+                                            <rect key="frame" x="40.5" y="23" width="47" height="17"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="17" id="CjF-hM-xdf"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
+                                            <color key="textColor" red="0.59215686270000001" green="0.56078431370000004" blue="0.63921568630000003" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="40" id="Jrd-IZ-hNR"/>
+                                        <constraint firstItem="1EB-d0-siu" firstAttribute="width" relation="lessThanOrEqual" secondItem="rQc-Za-adq" secondAttribute="width" id="sLG-av-QIF"/>
+                                    </constraints>
+                                </stackView>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZGI-zU-jL6" userLabel="Right Navbar Button">
+                                    <rect key="frame" x="265" y="4.5" width="117" height="33"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" relation="lessThanOrEqual" constant="300" id="2Z4-1f-78X"/>
+                                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="30" id="Mzf-LE-shQ"/>
+                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="30" id="ZQ4-y5-gcN"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                                    <color key="tintColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                    <state key="normal" title="Right Button">
+                                        <color key="titleColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                    </state>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="number" keyPath="titleLabel.numberOfLines">
+                                            <integer key="value" value="1"/>
+                                        </userDefinedRuntimeAttribute>
+                                        <userDefinedRuntimeAttribute type="boolean" keyPath="titleLabel.adjustsFontForContentSizeCategory" value="YES"/>
+                                    </userDefinedRuntimeAttributes>
+                                    <connections>
+                                        <action selector="onRightNavbarButtonPressed:" destination="-1" eventType="touchUpInside" id="WPX-aE-T8V"/>
+                                    </connections>
+                                </button>
+                            </subviews>
+                            <constraints>
+                                <constraint firstItem="66a-Uw-usW" firstAttribute="width" relation="greaterThanOrEqual" secondItem="ZGI-zU-jL6" secondAttribute="width" id="G9f-RM-7QG"/>
+                                <constraint firstItem="66a-Uw-usW" firstAttribute="width" relation="greaterThanOrEqual" secondItem="7Io-LG-e7V" secondAttribute="width" id="ZES-Ve-U3d"/>
+                                <constraint firstItem="7Io-LG-e7V" firstAttribute="width" secondItem="ZGI-zU-jL6" secondAttribute="width" id="ZRU-Zi-3DR"/>
+                            </constraints>
+                        </stackView>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="44" id="kCn-u0-Vfv"/>
+                    </constraints>
+                </stackView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JdT-fS-U75" userLabel="Separator Navbar View">
+                    <rect key="frame" x="0.0" y="91" width="414" height="1"/>
+                    <color key="backgroundColor" red="0.79607843140000001" green="0.78039215689999997" blue="0.81960784310000001" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="1" id="L1b-Qh-9Xm"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jbw-zT-lJ9" userLabel="Bottom Background View">
+                    <rect key="frame" x="0.0" y="745" width="414" height="151"/>
+                    <color key="backgroundColor" red="0.97647058823529409" green="0.97647058823529409" blue="0.97647058823529409" alpha="1" colorSpace="calibratedRGB"/>
+                </view>
+                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="OpN-uh-HHm" userLabel="Bottom Stack View">
+                    <rect key="frame" x="20" y="745" width="374" height="117"/>
+                    <subviews>
+                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="K1D-T0-kzO" userLabel="Bottom Separator Stack View">
+                            <rect key="frame" x="0.0" y="0.0" width="374" height="1"/>
+                            <subviews>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uPB-MS-llO" userLabel="Separator Bottom View">
+                                    <rect key="frame" x="0.0" y="0.0" width="374" height="1"/>
+                                    <color key="backgroundColor" red="0.79607843140000001" green="0.78039215689999997" blue="0.81960784310000001" alpha="1" colorSpace="calibratedRGB"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="1" id="7Tr-g1-3oq"/>
+                                    </constraints>
+                                </view>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dJJ-2p-8Wt">
+                                    <rect key="frame" x="0.0" y="1" width="374" height="0.0"/>
+                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" id="OpE-mY-dt3"/>
+                                    </constraints>
+                                </view>
+                            </subviews>
+                        </stackView>
+                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="Le7-0b-Az6" userLabel="Bottom Stack View">
+                            <rect key="frame" x="0.0" y="9" width="374" height="108"/>
+                            <subviews>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xcf-lk-fFu" userLabel="Top Button">
+                                    <rect key="frame" x="0.0" y="0.0" width="374" height="42"/>
+                                    <color key="backgroundColor" red="1" green="0.2784313725" blue="0.050980392159999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="42" id="e7U-6e-btZ"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                                    <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                    <state key="normal" title="Delete">
+                                        <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </state>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                            <integer key="value" value="9"/>
+                                        </userDefinedRuntimeAttribute>
+                                        <userDefinedRuntimeAttribute type="number" keyPath="titleLabel.numberOfLines">
+                                            <integer key="value" value="1"/>
+                                        </userDefinedRuntimeAttribute>
+                                        <userDefinedRuntimeAttribute type="boolean" keyPath="titleLabel.adjustsFontForContentSizeCategory" value="YES"/>
+                                    </userDefinedRuntimeAttributes>
+                                    <connections>
+                                        <action selector="onTopButtonPressed:" destination="-1" eventType="touchUpInside" id="iR6-c4-Dhf"/>
+                                    </connections>
+                                </button>
+                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="lUZ-R9-z1j" userLabel="Middle Bottom Margin Stack View">
+                                    <rect key="frame" x="0.0" y="50" width="374" height="0.0"/>
+                                    <subviews>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OZc-YD-s3o">
+                                            <rect key="frame" x="0.0" y="0.0" width="374" height="0.0"/>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" id="k9l-kc-PSW"/>
+                                            </constraints>
+                                        </view>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Dx8-3N-vTA">
+                                            <rect key="frame" x="0.0" y="0.0" width="374" height="0.0"/>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" id="vTW-kV-c2u"/>
+                                            </constraints>
+                                        </view>
+                                    </subviews>
+                                </stackView>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7kA-H9-2N0" userLabel="Bottom Button">
+                                    <rect key="frame" x="0.0" y="58" width="374" height="42"/>
+                                    <color key="backgroundColor" red="0.87843137250000003" green="0.86666666670000003" blue="0.89019607840000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="42" id="wOT-RF-pfW"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                                    <color key="tintColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                    <state key="normal" title="Cancel">
+                                        <color key="titleColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </state>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                            <integer key="value" value="9"/>
+                                        </userDefinedRuntimeAttribute>
+                                        <userDefinedRuntimeAttribute type="number" keyPath="titleLabel.numberOfLines">
+                                            <integer key="value" value="1"/>
+                                        </userDefinedRuntimeAttribute>
+                                        <userDefinedRuntimeAttribute type="boolean" keyPath="titleLabel.adjustsFontForContentSizeCategory" value="YES"/>
+                                    </userDefinedRuntimeAttributes>
+                                    <connections>
+                                        <action selector="onBottomButtonPressed:" destination="-1" eventType="touchUpInside" id="tJe-pf-H7b"/>
+                                    </connections>
+                                </button>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Dvz-tc-ONa" userLabel="Under Bottom Margin View">
+                                    <rect key="frame" x="0.0" y="108" width="374" height="0.0"/>
+                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" id="9Uv-yS-szc"/>
+                                    </constraints>
+                                </view>
+                            </subviews>
+                        </stackView>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                </stackView>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="MEk-kg-hIM"/>
+            <color key="backgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.95294117649999999" alpha="1" colorSpace="calibratedRGB"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="MiH-Ug-q1h" secondAttribute="trailing" id="2qN-yb-V0d"/>
+                <constraint firstItem="OpN-uh-HHm" firstAttribute="top" secondItem="jbw-zT-lJ9" secondAttribute="top" id="5Lh-Oc-ZfP"/>
+                <constraint firstItem="JdT-fS-U75" firstAttribute="leading" secondItem="hLM-mY-zOx" secondAttribute="leading" id="95j-Xr-vya"/>
+                <constraint firstAttribute="bottom" secondItem="jbw-zT-lJ9" secondAttribute="bottom" id="BA5-Et-6Xa"/>
+                <constraint firstItem="h42-DX-qKy" firstAttribute="top" secondItem="MEk-kg-hIM" secondAttribute="top" id="KW1-Lp-UvB"/>
+                <constraint firstAttribute="trailing" secondItem="JdT-fS-U75" secondAttribute="trailing" id="P6V-8X-fRs"/>
+                <constraint firstItem="MiH-Ug-q1h" firstAttribute="leading" secondItem="hLM-mY-zOx" secondAttribute="leading" id="Y1Y-l7-vek"/>
+                <constraint firstItem="jbw-zT-lJ9" firstAttribute="leading" secondItem="hLM-mY-zOx" secondAttribute="leading" id="Y3R-kM-Tdc"/>
+                <constraint firstItem="MEk-kg-hIM" firstAttribute="trailing" secondItem="OpN-uh-HHm" secondAttribute="trailing" constant="20" id="gPY-HR-v7z"/>
+                <constraint firstItem="h42-DX-qKy" firstAttribute="bottom" secondItem="Se2-eb-4ae" secondAttribute="bottom" id="jDh-Rp-uel"/>
+                <constraint firstItem="MEk-kg-hIM" firstAttribute="bottom" secondItem="OpN-uh-HHm" secondAttribute="bottom" id="jZn-79-Tg3"/>
+                <constraint firstAttribute="trailing" secondItem="jbw-zT-lJ9" secondAttribute="trailing" id="l1y-cr-vcS"/>
+                <constraint firstItem="h42-DX-qKy" firstAttribute="leading" secondItem="MEk-kg-hIM" secondAttribute="leading" constant="16" id="nDE-LV-Ib6"/>
+                <constraint firstItem="OpN-uh-HHm" firstAttribute="leading" secondItem="MEk-kg-hIM" secondAttribute="leading" constant="20" id="pVe-7Z-G3P"/>
+                <constraint firstItem="MiH-Ug-q1h" firstAttribute="bottom" secondItem="hLM-mY-zOx" secondAttribute="bottom" id="r1V-bz-VQD"/>
+                <constraint firstAttribute="trailing" secondItem="Se2-eb-4ae" secondAttribute="trailing" id="rAP-9K-9sO"/>
+                <constraint firstItem="JdT-fS-U75" firstAttribute="bottom" secondItem="Se2-eb-4ae" secondAttribute="bottom" id="tkr-CZ-YB8"/>
+                <constraint firstItem="Se2-eb-4ae" firstAttribute="top" secondItem="hLM-mY-zOx" secondAttribute="top" id="v7T-Rc-lrS"/>
+                <constraint firstItem="MEk-kg-hIM" firstAttribute="trailing" secondItem="h42-DX-qKy" secondAttribute="trailing" constant="16" id="vss-Oc-qKK"/>
+                <constraint firstItem="Se2-eb-4ae" firstAttribute="leading" secondItem="hLM-mY-zOx" secondAttribute="leading" id="wXM-zv-g8W"/>
+                <constraint firstItem="MiH-Ug-q1h" firstAttribute="top" secondItem="hLM-mY-zOx" secondAttribute="top" id="yzz-qO-2AU"/>
+            </constraints>
+            <point key="canvasLocation" x="57.971014492753625" y="770.75892857142856"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="ic_navbar_chevron.png" width="28" height="28"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

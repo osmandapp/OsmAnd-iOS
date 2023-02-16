@@ -438,6 +438,11 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
     [_okButton setTitle:OALocalizedString(@"shared_string_ok") forState:UIControlStateNormal];
 }
 
+-(void) addAccessibilityLabels
+{
+    self.backButton.accessibilityLabel = OALocalizedString(@"shared_string_back");
+}
+
 - (void) updateNavbarBackground:(UIInterfaceOrientation)interfaceOrientation
 {
     UIView *navbarGradientBackgroundView = [self getNavbarGradientBackgroundView];
@@ -512,6 +517,8 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
     [self.navbarBackgroundView.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
 
     [self updateLayout:interfaceOrientation adjustOffset:YES];
+
+    self.okButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -545,7 +552,7 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
         [screenObj deinitView];
 }
 
-- (IBAction) backButtonClicked:(id)sender
+- (void)onLeftNavbarButtonPressed
 {
     if ([screenObj respondsToSelector:@selector(backButtonPressed)] && ![screenObj backButtonPressed])
         return;
@@ -561,7 +568,7 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
     if ([screenObj respondsToSelector:@selector(okButtonPressed)] && ![screenObj okButtonPressed])
         return;
 
-    [self backButtonClicked:sender];
+    [self onLeftNavbarButtonPressed];
 }
 
 - (void) didReceiveMemoryWarning

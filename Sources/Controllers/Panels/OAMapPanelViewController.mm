@@ -2646,13 +2646,13 @@ typedef enum
                 state:(OATrackMenuViewControllerState *)state
          trackHudMode:(EOATrackHudMode)trackHudMode
 {
-    BOOL showCurrentTrack = item == nil || !item.gpxFileName || item.gpxFileName.length == 0 || [item.gpxTitle isEqualToString:OALocalizedString(@"track_recording_name")];
+    BOOL showCurrentTrack = item == nil || !item.gpxFileName || item.gpxFileName.length == 0 || [item.gpxTitle isEqualToString:OALocalizedString(@"shared_string_currently_recording_track")];
     if (showCurrentTrack)
     {
         if (item == nil)
             item = [[OASavingTrackHelper sharedInstance] getCurrentGPX];
         if (!item.gpxTitle || item.gpxTitle.length == 0)
-            item.gpxTitle = OALocalizedString(@"track_recording_name");
+            item.gpxTitle = OALocalizedString(@"shared_string_currently_recording_track");
     }
 
     [self hideMultiMenuIfNeeded];
@@ -3920,17 +3920,17 @@ typedef enum
     _carPlayActiveController = [[OACarPlayActiveViewController alloc] init];
     _carPlayActiveController.messageText = OALocalizedString(@"carplay_active_message");
     
-    _carPlayActiveController.modalPresentationStyle = UIModalPresentationFullScreen;
-    [self presentViewController:_carPlayActiveController animated:YES completion:nil];
+    [self addChildViewController:_carPlayActiveController];
+    [self.view insertSubview:_carPlayActiveController.view atIndex:0];
 }
 
 - (void) onCarPlayDisconnected:(void (^ __nullable)(void))onComplete
 {
-    [_carPlayActiveController dismissViewControllerAnimated:YES completion:^{
-        _carPlayActiveController = nil;
-        if (onComplete)
-            onComplete();
-    }];
+    [_carPlayActiveController.view removeFromSuperview];
+    [_carPlayActiveController removeFromParentViewController];
+    _carPlayActiveController = nil;
+    if (onComplete)
+        onComplete();
     if (_routingHelper.isFollowingMode)
         [self startNavigation];
 }

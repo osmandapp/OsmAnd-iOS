@@ -218,8 +218,10 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     _currentState = EOARouteInfoMenuStateInitial;
     
     [_cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
-    
-    
+
+    _cancelButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
+    _goButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
+
     _cancelButton.layer.cornerRadius = 9.;
     _goButton.layer.cornerRadius = 9.;
 
@@ -237,7 +239,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 - (void) setupGoButton
 {
     BOOL isActive = _app.data.pointToNavigate != nil;
-    _goButton.backgroundColor = isActive ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_route_button_inactive);
+    _goButton.backgroundColor = isActive ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_button_gray_background);
     [_goButton setTintColor:isActive ? UIColor.whiteColor : UIColorFromRGB(color_text_footer)];
     [_goButton setTitleColor:isActive ? UIColor.whiteColor : UIColorFromRGB(color_text_footer) forState:UIControlStateNormal];
     [_goButton.imageView setTintColor:_goButton.tintColor];
@@ -246,12 +248,12 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     
     if (!_routingHelper.isPublicTransportMode)
     {
-        [_goButton setTitle:OALocalizedString(@"gpx_start") forState:UIControlStateNormal];
+        [_goButton setTitle:OALocalizedString(@"shared_string_control_start") forState:UIControlStateNormal];
         [_goButton setImage:[UIImage templateImageNamed:@"ic_custom_navigation_arrow"] forState:UIControlStateNormal];
     }
     else
     {
-        [_goButton setTitle:OALocalizedString(@"map_settings_show") forState:UIControlStateNormal];
+        [_goButton setTitle:OALocalizedString(@"shared_string_show_on_map") forState:UIControlStateNormal];
         [_goButton setImage:[UIImage templateImageNamed:@"ic_custom_map"] forState:UIControlStateNormal];
     }
     [self layoutSubviews];
@@ -449,7 +451,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         {
             [section addObject:@{
                 @"cell" : [OAButtonTableViewCell getCellIdentifier],
-                @"title" : OALocalizedString(@"shared_string_show_more")
+                @"title" : OALocalizedString(@"show_more")
             }];
         }
         else
@@ -516,10 +518,10 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         
         NSString *time = [OAOsmAndFormatter getFormattedTimeInterval:approxPedestrianTime shortFormat:NO];
         NSString *formattedStr = [NSString stringWithFormat:OALocalizedString(@"public_transport_ped_route_title"), time];
-        NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithString:formattedStr attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:17]}];
+        NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithString:formattedStr attributes:@{NSFontAttributeName: [UIFont scaledSystemFontOfSize:17]}];
         
         NSRange range = [formattedStr rangeOfString:time];
-        [str setAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:17 weight:UIFontWeightSemibold]} range:range];
+        [str setAttributes:@{NSFontAttributeName:[UIFont scaledSystemFontOfSize:17 weight:UIFontWeightSemibold]} range:range];
         
         [section addObject:@{
             @"cell" : [OADescrTitleIconCell getCellIdentifier],
@@ -626,7 +628,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             }];
             [section addObject:@{
                 @"cell" : [OAFilledButtonCell getCellIdentifier],
-                @"title" : OALocalizedString(@"res_details"),
+                @"title" : OALocalizedString(@"shared_string_details"),
                 @"key" : @"route_details"
             }];
             [section addObject:@{
@@ -716,8 +718,8 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     vector<SHARED_PTR<TransportRouteResultSegment>> segments = res->segments;
     NSString *name = [NSString stringWithUTF8String:segments[0]->getStart().name.c_str()];
     
-    NSDictionary *secondaryAttributes = @{NSFontAttributeName : [UIFont systemFontOfSize:15.0], NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer)};
-    NSDictionary *mainAttributes = @{NSFontAttributeName : [UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold], NSForegroundColorAttributeName : UIColor.blackColor};
+    NSDictionary *secondaryAttributes = @{NSFontAttributeName : [UIFont scaledSystemFontOfSize:15.0], NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer)};
+    NSDictionary *mainAttributes = @{NSFontAttributeName : [UIFont scaledSystemFontOfSize:15.0 weight:UIFontWeightSemibold], NSForegroundColorAttributeName : UIColor.blackColor};
     
     [attributedStr appendAttributedString:[[NSAttributedString alloc] initWithString:[OALocalizedString(@"route_from") stringByAppendingString:@" "] attributes:secondaryAttributes]];
     
@@ -734,8 +736,8 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 - (NSAttributedString *) getSecondLineDescrAttributed:(SHARED_PTR<TransportRouteResult>)res
 {
     NSMutableAttributedString *attributedStr = [NSMutableAttributedString new];
-    NSDictionary *secondaryAttributes = @{NSFontAttributeName : [UIFont systemFontOfSize:15.0], NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer)};
-    NSDictionary *mainAttributes = @{NSFontAttributeName : [UIFont systemFontOfSize:15.0 weight:UIFontWeightSemibold], NSForegroundColorAttributeName : UIColor.blackColor};
+    NSDictionary *secondaryAttributes = @{NSFontAttributeName : [UIFont scaledSystemFontOfSize:15.0], NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer)};
+    NSDictionary *mainAttributes = @{NSFontAttributeName : [UIFont scaledSystemFontOfSize:15.0 weight:UIFontWeightSemibold], NSForegroundColorAttributeName : UIColor.blackColor};
     auto& segments = res->segments;
     NSInteger walkTimeReal = [_transportHelper getWalkingTime:segments];
     NSInteger walkTimePT = (NSInteger) res->getWalkTime();
@@ -750,11 +752,11 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     NSInteger travelDist = (NSInteger) res->getTravelDist() + walkDistance;
     NSString *travelDistStr = [OAOsmAndFormatter getFormattedDistance:travelDist];
 
-    [attributedStr appendAttributedString:[[NSAttributedString alloc] initWithString:[OALocalizedString(@"total") stringByAppendingString:@" "] attributes:secondaryAttributes]];
+    [attributedStr appendAttributedString:[[NSAttributedString alloc] initWithString:[OALocalizedString(@"shared_string_total") stringByAppendingString:@" "] attributes:secondaryAttributes]];
     
     [attributedStr appendAttributedString:[[NSAttributedString alloc] initWithString:travelTimeStr attributes:mainAttributes]];
     
-    [attributedStr appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@", %@  •  %@ ", travelDistStr, OALocalizedString(@"walk")] attributes:secondaryAttributes]];
+    [attributedStr appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@", %@  •  %@ ", travelDistStr, OALocalizedString(@"shared_string_walk")] attributes:secondaryAttributes]];
     
     [attributedStr appendAttributedString:[[NSAttributedString alloc] initWithString:walkTimeStr attributes:mainAttributes]];
     
@@ -953,14 +955,21 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 
 - (IBAction) goPressed:(id)sender
 {
-    BOOL isPublicTransport = [_routingHelper isPublicTransportMode];
-    if ([_pointsHelper getPointToNavigate] || isPublicTransport)
+    if (_app.carPlayActive)
     {
-        [[OARootViewController instance].mapPanel closeRouteInfo:YES
-                                                      onComplete:^{
-            if (!isPublicTransport)
-                [[OARootViewController instance].mapPanel startNavigation];
-        }];
+        [NSNotificationCenter.defaultCenter postNotificationName:kCarPlayTripStartedNotification object:nil];
+    }
+    else
+    {
+        BOOL isPublicTransport = [_routingHelper isPublicTransportMode];
+        if ([_pointsHelper getPointToNavigate] || isPublicTransport)
+        {
+            [[OARootViewController instance].mapPanel closeRouteInfo:YES
+                                                          onComplete:^{
+                if (!isPublicTransport)
+                    [[OARootViewController instance].mapPanel startNavigation];
+            }];
+        }
     }
 }
 
@@ -1282,7 +1291,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
                 if (point)
                 {
                     [cell.imgView setImage:[UIImage imageNamed:@"ic_custom_start_point"]];
-                    NSString *oname = [point getOnlyName].length > 0 ? [point getOnlyName] : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"map_settings_map"), [self getRoutePointDescription:[point getLatitude] lon:[point getLongitude]]];
+                    NSString *oname = [point getOnlyName].length > 0 ? [point getOnlyName] : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"shared_string_map"), [self getRoutePointDescription:[point getLatitude] lon:[point getLongitude]]];
                     cell.addressLabel.text = oname;
                 }
                 else
@@ -1366,7 +1375,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
                 
                 if (gpx.getNonEmptySegmentsCount > 1 && gpxParams != nil && gpxParams.selectedSegment != -1)
                 {
-                    fileName = [NSString stringWithFormat:@"%@, %@", [NSString stringWithFormat:OALocalizedString(@"some_of"), gpxParams.selectedSegment + 1, gpx.getNonEmptySegmentsCount], fileName];
+                    fileName = [NSString stringWithFormat:@"%@, %@", [NSString stringWithFormat:OALocalizedString(@"of"), gpxParams.selectedSegment + 1, gpx.getNonEmptySegmentsCount], fileName];
                 }
                 
                 cell.finishPoint = NO;
@@ -1608,11 +1617,11 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             cell.topInfoLabel.attributedText = [self getFirstLineDescrAttributed:_transportHelper.getRoutes[routeIndex]];
             cell.bottomInfoLabel.attributedText = [self getSecondLineDescrAttributed:_transportHelper.getRoutes[routeIndex]];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            [cell.detailsButton setTitle:OALocalizedString(@"res_details") forState:UIControlStateNormal];
+            [cell.detailsButton setTitle:OALocalizedString(@"shared_string_details") forState:UIControlStateNormal];
             cell.detailsButton.tag = routeIndex;
             [cell.detailsButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.detailsButton addTarget:self action:@selector(onTransportDetailsPressed:) forControlEvents:UIControlEventTouchUpInside];
-            [cell.showOnMapButton setTitle:OALocalizedString(@"sett_show") forState:UIControlStateNormal];
+            [cell.showOnMapButton setTitle:OALocalizedString(@"recording_context_menu_show") forState:UIControlStateNormal];
             cell.showOnMapButton.tag = routeIndex;
             [cell.showOnMapButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.showOnMapButton addTarget:self action:@selector(onTransportShowOnMapPressed:) forControlEvents:UIControlEventTouchUpInside];
@@ -1838,9 +1847,9 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 - (NSAttributedString *) getAttributedEmptyRouteWarning
 {
     NSString *mainText = OALocalizedString(@"public_transport_empty_warning_title");
-    NSString *additionalText = OALocalizedString(@"public_transport_empty_warning_descr");
+    NSString *additionalText = OALocalizedString(@"public_transport_try_change_settings");
     NSString *settingName = OALocalizedString(@"avoid_transport_type");
-    NSDictionary *attributes = @{NSFontAttributeName: [UIFont systemFontOfSize:15], NSForegroundColorAttributeName: UIColorFromRGB(color_text_footer)};
+    NSDictionary *attributes = @{NSFontAttributeName: [UIFont scaledSystemFontOfSize:15], NSForegroundColorAttributeName: UIColorFromRGB(color_text_footer)};
     
     NSMutableAttributedString *res = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@\n\n%@\n%@", mainText, additionalText, settingName] attributes:attributes];
     
@@ -1849,7 +1858,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     {
         [res addAttributes:@{NSLinkAttributeName: @"osmand://open_transport_settings",
                              NSForegroundColorAttributeName: UIColorFromRGB(color_primary_purple),
-                             NSFontAttributeName: [UIFont systemFontOfSize:15 weight:UIFontWeightSemibold]
+                             NSFontAttributeName: [UIFont scaledSystemFontOfSize:15 weight:UIFontWeightSemibold]
         } range:settingRange];
     }
     return [[NSAttributedString alloc] initWithAttributedString:res];
@@ -1859,13 +1868,13 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 {
     NSString *mainText = OALocalizedString(@"public_transport_warning_title");
     NSString *additionalText = OALocalizedString(@"public_transport_warning_descr_blog");
-    NSDictionary *attributes = @{NSFontAttributeName: [UIFont systemFontOfSize:15], NSForegroundColorAttributeName: UIColorFromRGB(color_text_footer)};
+    NSDictionary *attributes = @{NSFontAttributeName: [UIFont scaledSystemFontOfSize:15], NSForegroundColorAttributeName: UIColorFromRGB(color_text_footer)};
     
     NSMutableAttributedString *res = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@\n\n%@", mainText, additionalText] attributes:attributes];
     
     [res addAttributes:@{NSLinkAttributeName: kBlogGuideline,
                          NSForegroundColorAttributeName: UIColorFromRGB(color_primary_purple),
-                         NSFontAttributeName: [UIFont systemFontOfSize:15 weight:UIFontWeightSemibold]
+                         NSFontAttributeName: [UIFont scaledSystemFontOfSize:15 weight:UIFontWeightSemibold]
     } range:NSMakeRange(mainText.length + 2, additionalText.length)];
     return [[NSAttributedString alloc] initWithAttributedString:res];
 }
@@ -1893,13 +1902,13 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         return nil;
     
     if (section == _prevRouteSection)
-        return OALocalizedString(@"prev_route");
+        return OALocalizedString(@"previous_route");
     else if (section == _gpxTripSection)
-        return OALocalizedString(@"displayed_trips");
+        return OALocalizedString(@"tracks_on_map");
     else if (section == _mapMarkerSection)
         return OALocalizedString(@"map_markers");
     else if (section == _historySection)
-        return OALocalizedString(@"history");
+        return OALocalizedString(@"shared_string_history");
         
     return nil;
 }

@@ -6,7 +6,7 @@
 //  Copyright (c) 2022 OsmAnd. All rights reserved.
 //
 
-#import "OABaseBigTitleSettingsViewController.h"
+#import "OABaseButtonsViewController.h"
 
 typedef NS_ENUM(NSInteger, EOADeleteBackupScreenType)
 {
@@ -26,7 +26,7 @@ typedef NS_ENUM(NSInteger, EOADeleteBackupScreenType)
 
 @end
 
-@interface OADeleteAllVersionsBackupViewController : OABaseBigTitleSettingsViewController
+@interface OADeleteAllVersionsBackupViewController : OABaseButtonsViewController
 
 - (instancetype)initWithScreenType:(EOADeleteBackupScreenType)screenType;
 

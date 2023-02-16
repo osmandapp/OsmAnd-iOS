@@ -135,7 +135,7 @@ static const NSInteger panoImageFilterSection = 2;
                              },
                          @{
                              @"type" : [OAButtonTableViewCell getCellIdentifier],
-                             @"title" : OALocalizedString(@"tile_cache"),
+                             @"title" : OALocalizedString(@"mapillary_menu_title_tile_cache"),
                              @"btnTitle" : OALocalizedString(@"shared_string_reload"),
                              @"description" : @"",
                              @"img" : @"ic_custom_overlay_map.png"
@@ -166,7 +166,7 @@ static const NSInteger panoImageFilterSection = 2;
                          @{ @"type" : [OADividerCell getCellIdentifier]},
                          @{
                              @"type" : [OASwitchTableViewCell getCellIdentifier],
-                             @"title" : OALocalizedString(@"mapil_pano_only"),
+                             @"title" : OALocalizedString(@"mapillary_menu_title_pano"),
                              @"description" : @"",
                              @"img" : @"ic_custom_coordinates.png",
                              @"key" : @"pano_only"
@@ -187,9 +187,9 @@ static const NSInteger panoImageFilterSection = 2;
     CGFloat buttonHeight = 44.0;
     _footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, width, height)];
     
-    NSDictionary *applyAttrs = @{ NSFontAttributeName : [UIFont systemFontOfSize:15.0],
+    NSDictionary *applyAttrs = @{ NSFontAttributeName : [UIFont scaledSystemFontOfSize:15.0],
                              NSForegroundColorAttributeName : [UIColor whiteColor] };
-    NSDictionary *resetAttrs = @{ NSFontAttributeName : [UIFont systemFontOfSize:15.0],
+    NSDictionary *resetAttrs = @{ NSFontAttributeName : [UIFont scaledSystemFontOfSize:15.0],
                                   NSForegroundColorAttributeName : UIColorFromRGB(color_menu_button) };
     NSAttributedString *resetText = [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_reset") attributes:resetAttrs];
     NSAttributedString *applyText = [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_apply") attributes:applyAttrs];
@@ -589,7 +589,7 @@ static const NSInteger panoImageFilterSection = 2;
 {
     switch (section) {
         case dateFilterSection:
-            return OALocalizedString(@"shared_string_filter");
+            return OALocalizedString(@"filter_current_poiButton");
         default:
             return nil;
     }

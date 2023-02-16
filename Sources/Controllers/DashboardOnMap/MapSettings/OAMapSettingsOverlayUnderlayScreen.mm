@@ -145,8 +145,7 @@ static NSInteger kButtonsSection;
     NSMutableArray *sliderArr = [NSMutableArray new];
     [sliderArr addObject:@{
                         @"type" : kCellTypeTitleSlider,
-                        @"title" : _mapSettingType == EMapSettingOverlay ? OALocalizedString(@"map_settings_transp")
-                                                                        : OALocalizedString(@"map_settings_base_transp"),
+                        @"title" : _mapSettingType == EMapSettingOverlay ? OALocalizedString(@"shared_string_transparency") : OALocalizedString(@"map_transparency"),
                          }];
     [sliderArr addObject:@{
                         @"type" : kCellTypeSwitch,
@@ -170,7 +169,7 @@ static NSInteger kButtonsSection;
     NSMutableArray *buttonsArray = [NSMutableArray new];
     [buttonsArray addObject:@{
                         @"type" : kCellTypeButton,
-                        @"title" : OALocalizedString(@"map_settings_add_online_source"),
+                        @"title" : OALocalizedString(@"add_online_source"),
                          }];
     [buttonsArray addObject:@{
                         @"type" : kCellTypeButton,
@@ -187,7 +186,7 @@ static NSInteger kButtonsSection;
     NSMutableArray *styleArray = [NSMutableArray new];
     [styleArray addObject:@{
         @"type" : kCellTypeSwitch,
-        @"title": OALocalizedString(@"map_settings_show_map_symbols"),
+        @"title": OALocalizedString(@"show_map_symbols"),
         @"tag" : kShowLabels
     }];
     if (_mapSettingType == EMapSettingUnderlay)

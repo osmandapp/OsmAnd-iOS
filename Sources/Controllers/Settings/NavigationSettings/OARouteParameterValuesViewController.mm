@@ -15,19 +15,14 @@
 #import "OATableViewCustomFooterView.h"
 #import "OAColors.h"
 #import "Localization.h"
+#import "OASizes.h"
 
 #include <generalRouter.h>
-
-#define kGoodsRestrictionsHeaderTopMargin 20
 
 typedef NS_ENUM(NSInteger, EOARouteParamType) {
     EOARouteParamTypeGroup = 0,
     EOARouteParamTypeNumeric
 };
-
-@interface OARouteParameterValuesViewController () <UITableViewDelegate, UITableViewDataSource>
-
-@end
 
 @implementation OARouteParameterValuesViewController
 {
@@ -47,13 +42,16 @@ typedef NS_ENUM(NSInteger, EOARouteParamType) {
     UIView *_tableHeaderView;
 }
 
+#pragma mark - Initialization
+
 - (instancetype) initWithRoutingParameterGroup:(OALocalRoutingParameterGroup *)group appMode:(OAApplicationMode *)mode
 {
     self = [super initWithAppMode:mode];
-    if (self) {
-        [self commonInit];
+    if (self)
+    {
         _group = group;
         _type = EOARouteParamTypeGroup;
+        [self postInit];
     }
     return self;
 }
@@ -65,7 +63,7 @@ typedef NS_ENUM(NSInteger, EOARouteParamType) {
     {
         _parameter = parameter;
         _type = EOARouteParamTypeNumeric;
-        [self commonInit];
+        [self postInit];
     }
     return self;
 }
@@ -75,19 +73,22 @@ typedef NS_ENUM(NSInteger, EOARouteParamType) {
     self = [super initWithAppMode:mode];
     if (self)
     {
-        [self commonInit];
         _param = parameter;
         _setting = [_settings getCustomRoutingProperty:[NSString stringWithUTF8String:_param.id.c_str()]
                                           defaultValue:_param.type == RoutingParameterType::NUMERIC ? kDefaultNumericValue : kDefaultSymbolicValue];
         _type = EOARouteParamTypeNumeric;
+        [self postInit];
     }
     return self;
 }
 
-- (void) commonInit
+- (void)commonInit
 {
     _settings = [OAAppSettings sharedManager];
+}
 
+- (void)postInit
+{
     if (_parameter)
     {
         _isHazmatCategory = [_parameter isKindOfClass:OAHazmatRoutingParameter.class];
@@ -96,43 +97,38 @@ typedef NS_ENUM(NSInteger, EOARouteParamType) {
     }
 }
 
+#pragma mark - UIViewController
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
+
     [self.tableView registerClass:OATableViewCustomFooterView.class
         forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
     if (_isGoodsRestrictionsCategory)
         [self setupTableHeaderViewWithText:OALocalizedString(@"routing_attr_goods_restrictions_header_name")];
 }
 
-- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+#pragma mark - Base UI
+
+- (NSString *)getTitle
 {
-    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        if (_isGoodsRestrictionsCategory)
-            [self setupTableHeaderViewWithText:OALocalizedString(@"routing_attr_goods_restrictions_header_name")];
-        [self.tableView reloadData];
-    } completion:nil];
+    return _type == EOARouteParamTypeNumeric
+        ? _parameter != nil ? [_parameter getText] : [NSString stringWithUTF8String:_param.name.c_str()]
+        : [_group getText];
 }
 
-- (void)applyLocalization
+#pragma mark - Table data
+
+- (NSString *)getTitleForHeader:(NSInteger)section
 {
-    [super applyLocalization];
-    self.titleLabel.text = _type == EOARouteParamTypeNumeric
-            ? _parameter != nil ? [_parameter getText] : [NSString stringWithUTF8String:_param.name.c_str()]
-            : [_group getText];
+    if (_isHazmatCategory && section == 1)
+        return OALocalizedString(@"rendering_value_category_name");
+
+    return nil;
 }
 
-#pragma mark - UITableViewDataSource
-
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return _isAnyCategorySelected ? 2 : 1;
-}
-
-- (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)rowsCount:(NSInteger)section
 {
     if (_type == EOARouteParamTypeGroup)
         return [_group getRoutingParameters].count;
@@ -142,11 +138,9 @@ typedef NS_ENUM(NSInteger, EOARouteParamType) {
     return _parameter ? _parameter.routingParameter.possibleValues.size() : _param.possibleValues.size();
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
     NSString *text;
-    UIImage *icon;
-    UIColor *color;
     BOOL isSelected = NO;
 
     if (_type == EOARouteParamTypeNumeric)
@@ -179,7 +173,7 @@ typedef NS_ENUM(NSInteger, EOARouteParamType) {
         isSelected = _group.getSelected == _group.getRoutingParameters[indexPath.row];
     }
 
-    OARightIconTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
+    OARightIconTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
@@ -215,19 +209,67 @@ typedef NS_ENUM(NSInteger, EOARouteParamType) {
     return cell;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+- (NSInteger)sectionsCount
 {
-    if (_isHazmatCategory && section == 1)
-        return OALocalizedString(@"rendering_value_category_name");
-
-    return nil;
+    return _isAnyCategorySelected ? 2 : 1;
 }
 
-#pragma mark - UITableViewDelegate
-
-- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (CGFloat)getCustomHeightForHeader:(NSInteger)section
 {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    NSString *title = [self getTitleForHeader:section];
+    return [OATableViewCustomHeaderView getHeight:title width:self.tableView.bounds.size.width] + kPaddingOnSideOfContent;
+}
+
+- (CGFloat)getCustomHeightForFooter:(NSInteger)section
+{
+    if (!(_type == EOARouteParamTypeGroup || ((_isHazmatCategory || _isGoodsRestrictionsCategory) && section == 0)))
+        return 0.001;
+
+    NSString *footer = @"";
+    if (_type == EOARouteParamTypeGroup)
+    {
+        OALocalRoutingParameter *param = _group.getRoutingParameters[_indexSelected];
+        footer = [param getDescription];
+    }
+    else if (_isHazmatCategory || _isGoodsRestrictionsCategory)
+    {
+        footer = [_parameter getDescription];
+    }
+
+    return [OATableViewCustomFooterView getHeight:footer width:self.tableView.bounds.size.width];
+}
+
+- (UIView *)getCustomViewForFooter:(NSInteger)section
+{
+    if (!(_type == EOARouteParamTypeGroup || ((_isHazmatCategory || _isGoodsRestrictionsCategory) && section == 0)))
+        return nil;
+
+    NSString *footer = @"";
+    if (_type == EOARouteParamTypeGroup)
+    {
+        OALocalRoutingParameter *param = _group.getRoutingParameters[_indexSelected];
+        footer = [param getDescription];
+        if (!footer || footer.length == 0)
+            return nil;
+    }
+    else if (_isHazmatCategory || _isGoodsRestrictionsCategory)
+    {
+        footer = [_parameter getDescription];
+    }
+
+    OATableViewCustomFooterView *vw =
+            [self.tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
+    UIFont *textFont = [UIFont scaledSystemFontOfSize:13];
+    NSMutableAttributedString *textStr = [[NSMutableAttributedString alloc] initWithString:footer attributes:@{
+            NSFontAttributeName: textFont,
+            NSForegroundColorAttributeName: UIColorFromRGB(color_text_footer)
+    }];
+    vw.label.attributedText = textStr;
+    return vw;
+}
+
+- (void)onRowPressed:(NSIndexPath *)indexPath
+{
     if (_type == EOARouteParamTypeNumeric)
     {
         if ((_isHazmatCategory || _isGoodsRestrictionsCategory) && indexPath.section == 0)
@@ -276,58 +318,12 @@ typedef NS_ENUM(NSInteger, EOARouteParamType) {
         [self dismissViewController];
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+#pragma mark - Selectors
+
+- (void)onRotation
 {
-    NSString *title = [self tableView:tableView titleForHeaderInSection:section];
-    return [OATableViewCustomHeaderView getHeight:title width:tableView.bounds.size.width] + kGoodsRestrictionsHeaderTopMargin;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-{
-    if (!(_type == EOARouteParamTypeGroup || ((_isHazmatCategory || _isGoodsRestrictionsCategory) && section == 0)))
-        return 0.001;
-
-    NSString *footer = @"";
-    if (_type == EOARouteParamTypeGroup)
-    {
-        OALocalRoutingParameter *param = _group.getRoutingParameters[_indexSelected];
-        footer = [param getDescription];
-    }
-    else if (_isHazmatCategory || _isGoodsRestrictionsCategory)
-    {
-        footer = [_parameter getDescription];
-    }
-
-    return [OATableViewCustomFooterView getHeight:footer width:self.tableView.bounds.size.width];
-}
-
-- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
-{
-    if (!(_type == EOARouteParamTypeGroup || ((_isHazmatCategory || _isGoodsRestrictionsCategory) && section == 0)))
-        return nil;
-
-    NSString *footer = @"";
-    if (_type == EOARouteParamTypeGroup)
-    {
-        OALocalRoutingParameter *param = _group.getRoutingParameters[_indexSelected];
-        footer = [param getDescription];
-        if (!footer || footer.length == 0)
-            return nil;
-    }
-    else if (_isHazmatCategory || _isGoodsRestrictionsCategory)
-    {
-        footer = [_parameter getDescription];
-    }
-
-    OATableViewCustomFooterView *vw =
-            [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
-    UIFont *textFont = [UIFont scaledSystemFontOfSize:13];
-    NSMutableAttributedString *textStr = [[NSMutableAttributedString alloc] initWithString:footer attributes:@{
-            NSFontAttributeName: textFont,
-            NSForegroundColorAttributeName: UIColorFromRGB(color_text_footer)
-    }];
-    vw.label.attributedText = textStr;
-    return vw;
+    if (_isGoodsRestrictionsCategory)
+        [self setupTableHeaderViewWithText:OALocalizedString(@"routing_attr_goods_restrictions_header_name")];
 }
 
 @end

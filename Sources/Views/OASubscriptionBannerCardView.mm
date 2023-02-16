@@ -60,7 +60,7 @@
     self.backgroundColor = UIColorFromRGB(color_banner_background);
 
     self.separatorView.backgroundColor = [UIColor colorWithWhite:1. alpha:0.1];
-    self.iconView.tintColor = UIColorFromRGB(color_bottom_sheet_background);
+    self.iconView.tintColor = UIColorFromRGB(color_primary_table_background);
 }
 
 - (void)updateView
@@ -199,32 +199,19 @@
 
     CGFloat contentHorizontalInset = isFree ? 0. : 12.;
     CGFloat iconWidth = isFree ? 0. : kButtonIconSideSize;
-    if (@available(iOS 15.0, *))
-    {
-        CGFloat buttonTitleWidth = [OAUtilities calculateTextBounds:self.buttonView.titleLabel.attributedText
-                                                              width:DeviceScreenWidth - (kPaddingOnSideOfContent + [OAUtilities getLeftMargin] + contentHorizontalInset) * 2 - iconWidth].width;
-        CGFloat imagePadding = DeviceScreenWidth - ((kPaddingOnSideOfContent + [OAUtilities getLeftMargin] + contentHorizontalInset) * 2 + buttonTitleWidth + iconWidth);
-
-        UIButtonConfiguration *configuration = UIButtonConfiguration.plainButtonConfiguration;
-        configuration.titleAlignment = UIButtonConfigurationTitleAlignmentLeading;
-        configuration.imagePlacement = NSDirectionalRectEdgeTrailing;
-        configuration.contentInsets = NSDirectionalEdgeInsetsMake(0., contentHorizontalInset, 0., contentHorizontalInset);
-        configuration.imagePadding = imagePadding;
-
-        self.buttonView.configuration = configuration;
-        [self.buttonView setNeedsUpdateConfiguration];
-    }
-    else
-    {
-        UIEdgeInsets contentInsets = UIEdgeInsetsMake(0., contentHorizontalInset, 0., contentHorizontalInset);
-        UIEdgeInsets titleInsets = UIEdgeInsetsMake(0., -iconWidth, 0., iconWidth + (isFree ? 0. : 16.));
-        UIEdgeInsets imageInsets = UIEdgeInsetsMake(0., self.buttonView.frame.size.width - kButtonIconSideSize - contentHorizontalInset * 2, 0., 0.);
-
-        self.buttonView.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-        self.buttonView.contentEdgeInsets = contentInsets;
-        self.buttonView.titleEdgeInsets = titleInsets;
-        self.buttonView.imageEdgeInsets = imageInsets;
-    }
+    
+    CGFloat buttonTitleWidth = [OAUtilities calculateTextBounds:self.buttonView.titleLabel.attributedText
+                                                          width:DeviceScreenWidth - (kPaddingOnSideOfContent + [OAUtilities getLeftMargin] + contentHorizontalInset) * 2 - iconWidth].width;
+    CGFloat imagePadding = DeviceScreenWidth - ((kPaddingOnSideOfContent + [OAUtilities getLeftMargin] + contentHorizontalInset) * 2 + buttonTitleWidth + iconWidth);
+    
+    UIButtonConfiguration *configuration = UIButtonConfiguration.plainButtonConfiguration;
+    configuration.titleAlignment = UIButtonConfigurationTitleAlignmentLeading;
+    configuration.imagePlacement = NSDirectionalRectEdgeTrailing;
+    configuration.contentInsets = NSDirectionalEdgeInsetsMake(0., contentHorizontalInset, 0., contentHorizontalInset);
+    configuration.imagePadding = imagePadding;
+    
+    self.buttonView.configuration = configuration;
+    [self.buttonView setNeedsUpdateConfiguration];
 }
 
 - (NSAttributedString *)getAttributedTitleText:(EOASubscriptionBannerType)type freeMapsCount:(NSInteger)freeMapsCount

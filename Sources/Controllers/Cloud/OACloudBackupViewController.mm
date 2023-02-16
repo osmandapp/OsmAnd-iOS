@@ -117,6 +117,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self.backImgButton setImage:[UIImage rtlImageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
     [self setupNotificationListeners];
     [OAIAPHelper.sharedInstance checkBackupPurchase];
     _settingsHelper = OANetworkSettingsHelper.sharedInstance;

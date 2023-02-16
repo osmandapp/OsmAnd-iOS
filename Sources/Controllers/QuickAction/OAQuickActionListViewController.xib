@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19455" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -31,10 +31,10 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VFd-dL-Uso">
-                    <rect key="frame" x="0.0" y="0.0" width="414" height="88"/>
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="92"/>
                     <subviews>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add action" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" minimumScaleFactor="0.80000001192092896" translatesAutoresizingMaskIntoConstraints="NO" id="Te4-7D-UvL">
-                            <rect key="frame" x="82" y="44" width="250" height="43"/>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add action" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumScaleFactor="0.80000001192092896" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Te4-7D-UvL">
+                            <rect key="frame" x="82" y="48" width="250" height="43"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="43" id="rm6-l3-Amt"/>
                             </constraints>
@@ -43,7 +43,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <button opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TOj-Zt-z4Z">
-                            <rect key="frame" x="362" y="44" width="44" height="44"/>
+                            <rect key="frame" x="362" y="48" width="44" height="44"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="44" id="MW6-Jq-X2k"/>
                                 <constraint firstAttribute="width" constant="44" id="Ron-j6-UMG"/>
@@ -58,7 +58,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wIR-hG-J8L">
-                            <rect key="frame" x="8" y="44" width="44" height="44"/>
+                            <rect key="frame" x="8" y="48" width="44" height="44"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="44" id="d1v-GL-3oP"/>
                                 <constraint firstAttribute="height" constant="44" id="opB-G6-0dQ"/>
@@ -66,11 +66,11 @@
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <state key="normal" image="ic_navbar_chevron.png"/>
                             <connections>
-                                <action selector="backButtonClicked:" destination="-1" eventType="touchUpInside" id="Xzq-4X-TUi"/>
+                                <action selector="onLeftNavbarButtonPressed:" destination="-1" eventType="touchUpInside" id="NLf-3l-qaO"/>
                             </connections>
                         </button>
                         <button opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UOa-Cg-QCt">
-                            <rect key="frame" x="310" y="44" width="44" height="44"/>
+                            <rect key="frame" x="310" y="48" width="44" height="44"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="44" id="g73-bV-UOY"/>
                                 <constraint firstAttribute="height" constant="44" id="j3W-IO-GiW"/>
@@ -85,7 +85,7 @@
                             </connections>
                         </button>
                         <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9yT-fO-CgK">
-                            <rect key="frame" x="16" y="44" width="58" height="43"/>
+                            <rect key="frame" x="16" y="48" width="58" height="43"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="58" id="SNX-Sk-XIx"/>
                                 <constraint firstAttribute="height" constant="43" id="iIQ-0P-9vG"/>
@@ -99,7 +99,7 @@
                             </connections>
                         </button>
                         <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J2Z-Aw-IRf">
-                            <rect key="frame" x="340" y="44" width="58" height="43"/>
+                            <rect key="frame" x="340" y="48" width="58" height="43"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="58" id="MjO-s6-dBJ"/>
                                 <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="43" id="hkZ-fG-4FL"/>
@@ -134,7 +134,7 @@
                     </constraints>
                 </view>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" allowsSelectionDuringEditing="YES" allowsMultipleSelectionDuringEditing="YES" rowHeight="-1" estimatedRowHeight="48" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="NJU-Et-9QF">
-                    <rect key="frame" x="0.0" y="88" width="414" height="744"/>
+                    <rect key="frame" x="0.0" y="92" width="414" height="740"/>
                     <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </tableView>
                 <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2aL-ba-RxX">

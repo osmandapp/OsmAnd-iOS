@@ -64,27 +64,24 @@
     self = [super init];
     if (self)
     {
-        if (@available(iOS 11.2, *))
+        self.numberOfUnits = skSubscriptionPeriod.numberOfUnits;
+        switch (skSubscriptionPeriod.unit)
         {
-            self.numberOfUnits = skSubscriptionPeriod.numberOfUnits;
-            switch (skSubscriptionPeriod.unit)
-            {
-                case SKProductPeriodUnitDay:
-                    self.unit = OAProductPeriodUnitDay;
-                    break;
-                case SKProductPeriodUnitWeek:
-                    self.unit = OAProductPeriodUnitWeek;
-                    break;
-                case SKProductPeriodUnitMonth:
-                    self.unit = OAProductPeriodUnitMonth;
-                    break;
-                case SKProductPeriodUnitYear:
-                    self.unit = OAProductPeriodUnitYear;
-                    break;
-
-                default:
-                    break;
-            }
+            case SKProductPeriodUnitDay:
+                self.unit = OAProductPeriodUnitDay;
+                break;
+            case SKProductPeriodUnitWeek:
+                self.unit = OAProductPeriodUnitWeek;
+                break;
+            case SKProductPeriodUnitMonth:
+                self.unit = OAProductPeriodUnitMonth;
+                break;
+            case SKProductPeriodUnitYear:
+                self.unit = OAProductPeriodUnitYear;
+                break;
+                
+            default:
+                break;
         }
     }
     return self;
@@ -131,49 +128,44 @@
     self = [super init];
     if (self)
     {
-        if (@available(iOS 11.2, *))
+        self.price = skDiscount.price;
+        self.priceLocale = skDiscount.priceLocale;
+        self.subscriptionPeriod = [[OAProductSubscriptionPeriod alloc] initWithSkSubscriptionPeriod:skDiscount.subscriptionPeriod];
+        self.numberOfPeriods = skDiscount.numberOfPeriods;
+        switch (skDiscount.paymentMode)
         {
-            self.price = skDiscount.price;
-            self.priceLocale = skDiscount.priceLocale;
-            self.subscriptionPeriod = [[OAProductSubscriptionPeriod alloc] initWithSkSubscriptionPeriod:skDiscount.subscriptionPeriod];
-            self.numberOfPeriods = skDiscount.numberOfPeriods;
-            switch (skDiscount.paymentMode)
-            {
-                case SKProductDiscountPaymentModePayAsYouGo:
-                    self.paymentMode = OAProductDiscountPaymentModePayAsYouGo;
-                    break;
-                case SKProductDiscountPaymentModePayUpFront:
-                    self.paymentMode = OAProductDiscountPaymentModePayUpFront;
-                    break;
-                case SKProductDiscountPaymentModeFreeTrial:
-                    self.paymentMode = OAProductDiscountPaymentModeFreeTrial;
-                    break;
-                    
-                default:
-                    self.paymentMode = OAProductDiscountPaymentModeUnknown;
-                    break;
-            }
-            self.originalPrice = skProduct.price;
-            self.originalPriceLocale = skProduct.priceLocale;
-            if (skProduct.subscriptionPeriod)
-                self.originalSubscriptionPeriod = [[OAProductSubscriptionPeriod alloc] initWithSkSubscriptionPeriod:skProduct.subscriptionPeriod];
+            case SKProductDiscountPaymentModePayAsYouGo:
+                self.paymentMode = OAProductDiscountPaymentModePayAsYouGo;
+                break;
+            case SKProductDiscountPaymentModePayUpFront:
+                self.paymentMode = OAProductDiscountPaymentModePayUpFront;
+                break;
+            case SKProductDiscountPaymentModeFreeTrial:
+                self.paymentMode = OAProductDiscountPaymentModeFreeTrial;
+                break;
+                
+            default:
+                self.paymentMode = OAProductDiscountPaymentModeUnknown;
+                break;
         }
-        if (@available(iOS 12.2, *))
+        self.originalPrice = skProduct.price;
+        self.originalPriceLocale = skProduct.priceLocale;
+        if (skProduct.subscriptionPeriod)
+            self.originalSubscriptionPeriod = [[OAProductSubscriptionPeriod alloc] initWithSkSubscriptionPeriod:skProduct.subscriptionPeriod];
+        
+        self.identifier = skDiscount.identifier;
+        switch (skDiscount.type)
         {
-            self.identifier = skDiscount.identifier;
-            switch (skDiscount.type)
-            {
-                case SKProductDiscountTypeIntroductory:
-                    self.type = OAProductDiscountTypeIntroductory;
-                    break;
-                case SKProductDiscountTypeSubscription:
-                    self.type = OAProductDiscountTypeSubscription;
-                    break;
-                    
-                default:
-                    self.type = OAProductDiscountTypeUnknown;
-                    break;
-            }
+            case SKProductDiscountTypeIntroductory:
+                self.type = OAProductDiscountTypeIntroductory;
+                break;
+            case SKProductDiscountTypeSubscription:
+                self.type = OAProductDiscountTypeSubscription;
+                break;
+                
+            default:
+                self.type = OAProductDiscountTypeUnknown;
+                break;
         }
     }
     return self;
@@ -567,24 +559,15 @@
     self.price = skProduct.price;
     self.priceLocale = skProduct.priceLocale;
     
-    if (@available(iOS 11.2, *))
-    {
-        if (skProduct.subscriptionPeriod)
-            self.subscriptionPeriod = [[OAProductSubscriptionPeriod alloc] initWithSkSubscriptionPeriod:skProduct.subscriptionPeriod];
-        if (skProduct.introductoryPrice)
-            self.introductoryPrice = [[OAProductDiscount alloc] initWithSkDiscount:skProduct.introductoryPrice skProduct:skProduct];
-    }
-    if (@available(iOS 12.0, *))
-    {
-        if (skProduct.subscriptionGroupIdentifier)
-            self.subscriptionGroupIdentifier = skProduct.subscriptionGroupIdentifier;
-    }
+    if (skProduct.subscriptionPeriod)
+        self.subscriptionPeriod = [[OAProductSubscriptionPeriod alloc] initWithSkSubscriptionPeriod:skProduct.subscriptionPeriod];
+    if (skProduct.introductoryPrice)
+        self.introductoryPrice = [[OAProductDiscount alloc] initWithSkDiscount:skProduct.introductoryPrice skProduct:skProduct];
+    if (skProduct.subscriptionGroupIdentifier)
+        self.subscriptionGroupIdentifier = skProduct.subscriptionGroupIdentifier;
     NSMutableArray<OAProductDiscount *> *discounts = [NSMutableArray array];
-    if (@available(iOS 12.2, *))
-    {
-        for (SKProductDiscount *skDiscount in skProduct.discounts)
-            [discounts addObject:[[OAProductDiscount alloc] initWithSkDiscount:skDiscount skProduct:skProduct]];
-    }
+    for (SKProductDiscount *skDiscount in skProduct.discounts)
+        [discounts addObject:[[OAProductDiscount alloc] initWithSkDiscount:skDiscount skProduct:skProduct]];
     self.discounts = [NSArray arrayWithArray:discounts];
 
     NSString *locDescriptionExtId = [@"product_desc_ext_" stringByAppendingString:postfix];

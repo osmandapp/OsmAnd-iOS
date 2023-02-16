@@ -69,6 +69,7 @@
 {
     [super viewDidLoad];
 
+    [self.backButton setImage:[UIImage rtlImageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.sectionFooterHeight = 0.001;
@@ -175,11 +176,6 @@
         if (self.backupTypesDelegate)
             [self.backupTypesDelegate onCompleteTasks];
     }
-}
-
-- (IBAction)backButtonClicked:(id)sender
-{
-    [self dismissViewController];
 }
 
 #pragma mark - OACloudAccountLogoutDelegate
@@ -323,7 +319,7 @@
             cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + (leftIconVisible ? kPaddingToLeftOfContentWithIcon : kPaddingOnSideOfContent), 0., 0.);
 
             [cell leftIconVisibility:leftIconVisible];
-            cell.leftIconView.image = leftIconVisible ? [UIImage imageNamed:item[@"left_icon"]] : nil;
+            cell.leftIconView.image = leftIconVisible ? [UIImage rtlImageNamed:item[@"left_icon"]] : nil;
 
             [cell descriptionVisibility:[item.allKeys containsObject:@"description"]];
             cell.descriptionLabel.text = item[@"description"];

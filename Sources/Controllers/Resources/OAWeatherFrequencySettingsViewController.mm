@@ -17,7 +17,7 @@
 #define kFrequencyDailyIndex 1
 #define kFrequencyWeeklyIndex 2
 
-@interface OAWeatherFrequencySettingsViewController () <UIViewControllerTransitioningDelegate, UITableViewDelegate, UITableViewDataSource>
+@interface OAWeatherFrequencySettingsViewController () <UIViewControllerTransitioningDelegate>
 
 @end
 
@@ -28,21 +28,16 @@
     NSInteger _indexSelected;
 }
 
+#pragma mark - Initialization
+
 - (instancetype)initWithRegion:(OAWorldRegion *)region
 {
-    self = [super initWithNibName:@"OABaseSettingsViewController" bundle:nil];
+    self = [super init];
     if (self)
     {
         _region = region;
-        [self commonInit];
     }
     return self;
-}
-
-- (void)applyLocalization
-{
-    [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"shared_string_updates_frequency");
 }
 
 - (void)commonInit
@@ -53,28 +48,34 @@
                     : kFrequencyWeeklyIndex;
 }
 
+#pragma mark - UIViewController
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 
-    self.tableView.dataSource = self;
-    self.tableView.delegate = self;
-    self.tableView.estimatedRowHeight = kEstimatedRowHeight;
-    self.tableView.sectionHeaderHeight = 34.;
-    self.tableView.sectionFooterHeight = 0.001;
     self.tableView.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
     self.tableView.tableHeaderView =
             [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"weather_generates_new_forecast_description")
-                                                 font:[UIFont scaledSystemFontOfSize:13.]
+                                                 font:kHeaderDescriptionFont
                                             textColor:UIColorFromRGB(color_text_footer)
-                                          lineSpacing:0.0
-                                              isTitle:NO
-                                                    y:24.];
-    self.subtitleLabel.hidden = YES;
-    [self setupView];
+                                           isBigTitle:NO
+                                            topOffset:24.
+                                         bottomOffset:12.
+                                        rightIconName:nil
+                                            tintColor:nil];
 }
 
-- (void)setupView
+#pragma mark - Base UI
+
+- (NSString *)getTitle
+{
+    return OALocalizedString(@"shared_string_updates_frequency");
+}
+
+#pragma mark - Table data
+
+- (void)generateData
 {
     NSMutableArray<NSMutableDictionary<NSString *, id> *> *data = [NSMutableArray array];
 
@@ -114,26 +115,29 @@
     return _data[indexPath.section][@"cells"][indexPath.row];
 }
 
-#pragma mark - UITableViewDataSource
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+- (NSString *)getTitleForHeader:(NSInteger)section
 {
-    return _data.count;
+    return _data[section][@"header"];
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSString *)getTitleForFooter:(NSInteger)section
+{
+    return _data[section][@"footer"];
+}
+
+- (NSInteger)rowsCount:(NSInteger)section
 {
     return ((NSArray *) _data[section][@"cells"]).count;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
     UITableViewCell *outCell = nil;
 
     if ([item[@"type"] isEqualToString:[OASettingsTitleTableViewCell getCellIdentifier]])
     {
-        OASettingsTitleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTitleTableViewCell getCellIdentifier]];
+        OASettingsTitleTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASettingsTitleTableViewCell getCellIdentifier]];
         if (!cell)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTitleTableViewCell getCellIdentifier]
@@ -157,22 +161,13 @@
     return outCell;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+- (NSInteger)sectionsCount
 {
-    return _data[section][@"header"];
+    return _data.count;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
+- (void)onRowPressed:(NSIndexPath *)indexPath
 {
-    return _data[section][@"footer"];
-}
-
-#pragma mark - UITableViewDelegate
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-
     _indexSelected = indexPath.row;
     [OAWeatherHelper setPreferenceFrequency:[OAWeatherHelper checkAndGetRegionId:_region]
                                       value:_indexSelected == kFrequencySemiDailyIndex ? EOAWeatherForecastUpdatesSemiDaily

@@ -185,6 +185,7 @@
         cell.textView.numberOfLines = 0;
         cell.descView.font = [UIFont scaledSystemFontOfSize:15.];
         cell.separatorInset = UIEdgeInsetsMake(0., 66., 0., 0.);
+        [cell.arrowIconView setHidden:YES];
     }
     if (cell)
     {
@@ -204,15 +205,16 @@
             if (color)
                 cell.iconView.image = [UIImage templateImageNamed:imageName];
             else
-                cell.iconView.image = [UIImage imageNamed:imageName];
+                cell.iconView.image = [UIImage rtlImageNamed:imageName];
 
             cell.iconView.tintColor = color;
         }
         cell.textView.text = item[@"title"];
 
-        BOOL selected = [item[@"selected"] boolValue];
-        cell.arrowIconView.tintColor = UIColorFromRGB(color_primary_purple);
-        cell.arrowIconView.image = selected ? [UIImage templateImageNamed:@"menu_cell_selected"] : nil;
+        if ([item[@"selected"] boolValue])
+            cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        else
+            cell.accessoryType = UITableViewCellAccessoryNone;
 
         if ([cell needsUpdateConstraints])
             [cell updateConstraints];

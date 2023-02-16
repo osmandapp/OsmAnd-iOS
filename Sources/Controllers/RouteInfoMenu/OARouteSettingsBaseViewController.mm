@@ -65,10 +65,7 @@
 
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
-    if (@available(iOS 13.0, *)) {
-        return UIStatusBarStyleLightContent;
-    }
-    return UIStatusBarStyleDefault;
+    return UIStatusBarStyleLightContent;
 }
 
 - (void) viewDidLoad
@@ -323,11 +320,6 @@
 {
     [self.backButton setTitle:nil forState:UIControlStateNormal];
     [self.backButton setImage:[UIImage imageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
-}
-
-- (void)backButtonClicked:(id)sender
-{
-    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (IBAction)doneButtonPressed:(id)sender

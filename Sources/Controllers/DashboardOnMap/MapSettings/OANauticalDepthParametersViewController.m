@@ -11,19 +11,17 @@
 #import "OAMapStyleSettings.h"
 #import "OAColors.h"
 
-@interface OANauticalDepthParametersViewController () <UITableViewDelegate, UITableViewDataSource>
-
-@end
-
 @implementation OANauticalDepthParametersViewController
 {
     OAMapStyleSettings *_styleSettings;
     OAMapStyleParameter *_parameter;
 }
 
+#pragma mark - Initialization
+
 - (instancetype)initWithParameter:(OAMapStyleParameter *)parameter
 {
-    self = [super initWithNibName:@"OABaseSettingsViewController" bundle:nil];
+    self = [super init];
     if (self)
     {
         _parameter = parameter;
@@ -32,56 +30,47 @@
     return self;
 }
 
-- (void)applyLocalization
+#pragma mark - Base UI
+
+- (NSString *)getTitle
 {
-    [super applyLocalization];
-    self.titleLabel.text = _parameter.title;
+    return _parameter.title;
 }
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
+#pragma mark - Table data
 
-    self.subtitleLabel.hidden = YES;
-    self.tableView.dataSource = self;
-    self.tableView.delegate = self;
-}
-
-#pragma mark - UITableViewDataSource
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return 1;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)rowsCount:(NSInteger)section
 {
     return _parameter.possibleValues.count;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
-    OARightIconTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
+    OARightIconTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
     if (!cell)
     {
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
         cell = (OARightIconTableViewCell *) nib[0];
         [cell descriptionVisibility:NO];
         [cell leftIconVisibility:NO];
+        [cell rightIconVisibility:NO];
     }
     if (cell)
     {
         OAMapStyleParameterValue *value = _parameter.possibleValues[indexPath.row];
         cell.titleLabel.text = value.title;
-        cell.rightIconView.image = [_parameter.value isEqualToString:value.name] ? [UIImage templateImageNamed:@"ic_checkmark_default"] : nil;
-        cell.rightIconView.tintColor = UIColorFromRGB(color_primary_purple);
+        if ([_parameter.value isEqualToString:value.name])
+            cell.accessoryType = UITableViewCellAccessoryCheckmark;
     }
     return cell;
 }
 
-#pragma mark - UITableViewDelegate
+- (NSInteger)sectionsCount
+{
+    return 1;
+}
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)onRowPressed:(NSIndexPath *)indexPath
 {
     _parameter.value = _parameter.possibleValues[indexPath.row].name;
     [_styleSettings save:_parameter];

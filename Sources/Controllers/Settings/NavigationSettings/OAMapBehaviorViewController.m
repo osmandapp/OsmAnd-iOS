@@ -17,48 +17,38 @@
 #import "Localization.h"
 #import "OAColors.h"
 
-@interface OAMapBehaviorViewController () <UITableViewDelegate, UITableViewDataSource>
-
-@end
-
 @implementation OAMapBehaviorViewController
 {
     OAAppSettings *_settings;
     NSArray<NSDictionary *> *_data;
 }
 
-- (instancetype) initWithAppMode:(OAApplicationMode *)appMode
+#pragma mark - Initialization
+
+- (void)commonInit
 {
-    self = [super initWithAppMode:appMode];
-    if (self)
-    {
-        _settings = [OAAppSettings sharedManager];
-    }
-    return self;
+    _settings = [OAAppSettings sharedManager];
 }
 
--(void) applyLocalization
-{
-    [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"map_during_navigation");
-}
-
-- (void) viewDidLoad
-{
-    [super viewDidLoad];
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    [self setupView];
-}
+#pragma mark - UIViewController
 
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self setupView];
+    [self generateData];
     [self.tableView reloadData];
 }
 
-- (void) setupView
+#pragma mark - Base UI
+
+- (NSString *)getTitle
+{
+    return OALocalizedString(@"map_during_navigation");
+}
+
+#pragma mark - Table data
+
+- (void)generateData
 {
     NSString *autoCenterValue = nil;
     NSUInteger autoCenter = [_settings.autoFollowRoute get:self.appMode];
@@ -97,14 +87,30 @@
     _data = [NSArray arrayWithArray:dataArr];
 }
 
-#pragma mark - TableView
+- (NSString *)getTitleForFooter:(NSInteger)section
+{
+    if (section == 0)
+        return OALocalizedString(@"choose_auto_center_map_view_descr");
+    else if (section == 1)
+        return OALocalizedString(@"auto_zoom_map_descr");
+    else if (section == 2)
+        return OALocalizedString(@"snap_to_road_descr");
+    else
+        return @"";
+}
 
-- (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
+- (NSInteger)rowsCount:(NSInteger)section
+{
+    return 1;
+}
+
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
+{
     NSDictionary *item = _data[indexPath.section];
     NSString *cellType = item[@"type"];
     if ([cellType isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
     {
-        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];
+        OASettingsTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
@@ -122,7 +128,7 @@
     }
     else if ([cellType isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
+        OASwitchTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
@@ -152,51 +158,17 @@
     return nil;
 }
 
-- (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 1;
-}
-
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
+- (NSInteger)sectionsCount
 {
     return _data.count;
 }
 
-- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+- (CGFloat)getCustomHeightForHeader:(NSInteger)section
 {
     return section == 0 ? 18.0 : 9.0;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
-{
-    if (section == 0)
-        return OALocalizedString(@"choose_auto_center_map_view_descr");
-    else if (section == 1)
-        return OALocalizedString(@"auto_zoom_map_descr");
-    else if (section == 2)
-        return OALocalizedString(@"snap_to_road_descr");
-    else
-        return @"";
-}
-
--(void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
-{
-    UITableViewHeaderFooterView *vw = (UITableViewHeaderFooterView *) view;
-    [vw.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
-}
-
--(void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section
-{
-    UITableViewHeaderFooterView *vw = (UITableViewHeaderFooterView *) view;
-    [vw.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
-}
-
-- (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    return cell.selectionStyle == UITableViewCellSelectionStyleNone ? nil : indexPath;
-}
-
-- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)onRowPressed:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section];
     NSString *itemKey = item[@"key"];
@@ -206,10 +178,9 @@
     else if ([itemKey isEqualToString:@"autoZoom"])
         settingsViewController = [[OAAutoZoomMapViewController alloc] initWithAppMode:self.appMode];
     [self showViewController:settingsViewController];
-    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
-# pragma mark - Switch
+#pragma mark - Selectors
 
 - (void) applyParameter:(id)sender
 {

@@ -634,7 +634,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         if (cell)
         {
             cell.descView.text = item[@"desc"];
-            cell.iconView.image = [UIImage imageNamed:item[@"img"]];
+            cell.iconView.image = [UIImage rtlImageNamed:item[@"img"]];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             
             if ([cell needsUpdateConstraints])
@@ -655,7 +655,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         }
         if (cell)
         {
-            cell.iconView.image = [UIImage imageNamed:item[@"img"]];
+            cell.iconView.image = [UIImage rtlImageNamed:item[@"img"]];
 
             NSString *descr = item[@"descr"];
             if (descr && descr.length > 0)
@@ -707,7 +707,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                 cell.detailTextLabel.font = [UIFont scaledSystemFontOfSize:12.0];
                 cell.detailTextLabel.textColor = UIColorFromRGB(0x929292);
 
-                UIImage* iconImage = [UIImage imageNamed:@"ic_custom_download"];
+                UIImage* iconImage = [UIImage rtlImageNamed:@"ic_custom_download"];
                 UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
                 [btnAcc addTarget:self action: @selector(accessoryButtonPressed:withEvent:) forControlEvents: UIControlEventTouchUpInside];
                 [btnAcc setImage:iconImage forState:UIControlStateNormal];
@@ -735,7 +735,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             if (!mapItem.disabled)
             {
                 cell.textLabel.textColor = [UIColor blackColor];
-                UIImage* iconImage = [UIImage imageNamed:@"ic_custom_download"];
+                UIImage* iconImage = [UIImage rtlImageNamed:@"ic_custom_download"];
                 UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
                 [btnAcc addTarget:self action: @selector(accessoryButtonPressed:withEvent:) forControlEvents: UIControlEventTouchUpInside];
                 [btnAcc setImage:iconImage forState:UIControlStateNormal];

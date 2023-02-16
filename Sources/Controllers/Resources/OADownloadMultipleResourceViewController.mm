@@ -113,7 +113,7 @@
 - (void)updateDownloadButtonView
 {
     BOOL hasSelection = _selectedItems.count != 0;
-    self.downloadButton.backgroundColor = hasSelection ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_route_button_inactive);
+    self.downloadButton.backgroundColor = hasSelection ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_button_gray_background);
     [self.downloadButton setTintColor:hasSelection ? UIColor.whiteColor : UIColorFromRGB(color_text_footer)];
     [self.downloadButton setTitleColor:hasSelection ? UIColor.whiteColor : UIColorFromRGB(color_text_footer) forState:UIControlStateNormal];
     [self.downloadButton setUserInteractionEnabled:hasSelection];
@@ -358,11 +358,7 @@
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.backgroundColor = UIColor.clearColor;
             cell.segmentedControl.backgroundColor = [UIColorFromRGB(color_primary_purple) colorWithAlphaComponent:.1];
-
-            if (@available(iOS 13.0, *))
-                cell.segmentedControl.selectedSegmentTintColor = UIColorFromRGB(color_primary_purple);
-            else
-                cell.segmentedControl.tintColor = UIColorFromRGB(color_primary_purple);
+            cell.segmentedControl.selectedSegmentTintColor = UIColorFromRGB(color_primary_purple);
 
             UIFont *font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
             [cell.segmentedControl setTitleTextAttributes:@{NSForegroundColorAttributeName : UIColor.whiteColor, NSFontAttributeName : font} forState:UIControlStateSelected];

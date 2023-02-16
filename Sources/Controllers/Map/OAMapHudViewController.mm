@@ -1097,7 +1097,7 @@
     if (self.contextMenuMode && !_toolbarViewController)
         statusBarColor = isNight ? UIColor.clearColor : [UIColor colorWithWhite:1.0 alpha:0.5];
     else if (_downloadMapWidget.isVisible)
-        statusBarColor = isNight ? UIColorFromRGB(nav_bar_night) : UIColorFromRGB(color_bottom_sheet_background);
+        statusBarColor = isNight ? UIColorFromRGB(nav_bar_night) : UIColorFromRGB(color_primary_table_background);
     else if ([_topCoordinatesWidget isVisible])
         return UIColorFromRGB(nav_bar_night);
     else if (_toolbarViewController)

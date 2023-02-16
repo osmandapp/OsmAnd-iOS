@@ -151,11 +151,6 @@
     return _tableView;
 }
 
--(IBAction)backButtonClicked:(id)sender;
-{
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
 - (UITableView *)getTableView
 {
     return self.tableView;

@@ -86,7 +86,7 @@
     _data = [NSArray arrayWithObject:dataArr];
     
     self.rightButton.userInteractionEnabled = _sourceAppMode;
-    self.rightButton.backgroundColor = _sourceAppMode ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_route_button_inactive);
+    self.rightButton.backgroundColor = _sourceAppMode ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_button_gray_background);
     [self.rightButton setTintColor:_sourceAppMode ? UIColor.whiteColor : UIColorFromRGB(color_text_footer)];
     [self.rightButton setTitleColor:_sourceAppMode ? UIColor.whiteColor : UIColorFromRGB(color_text_footer) forState:UIControlStateNormal];
 }

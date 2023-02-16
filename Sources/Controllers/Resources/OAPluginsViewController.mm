@@ -358,11 +358,6 @@
     });
 }
 
-- (void) backButtonClicked:(id)sender
-{
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
 #pragma mark - OASubscriptionBannerCardViewDelegate
 
 - (void) onButtonPressed

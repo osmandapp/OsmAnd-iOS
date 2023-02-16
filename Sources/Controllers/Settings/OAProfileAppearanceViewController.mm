@@ -192,6 +192,7 @@
 - (void) viewDidLoad
 {
     [super viewDidLoad];
+    [self.cancelButton setImage:[UIImage rtlImageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
     _tableView.delegate = self;
     _tableView.dataSource = self;
     _tableView.separatorInset = UIEdgeInsetsMake(0., 16., 0., 0.);

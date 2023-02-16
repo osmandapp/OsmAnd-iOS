@@ -77,11 +77,9 @@
 - (void)updateTableHeaderView
 {
     self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"osm_editing_settings_descr")
-                                                                          font:[UIFont scaledSystemFontOfSize:15.]
+                                                                          font:kHeaderDescriptionFont
                                                                      textColor:UIColorFromRGB(color_text_footer)
-                                                                   lineSpacing:0.0
-                                                                       isTitle:NO
-                                                                             y:20.];
+                                                                   isBigTitle:NO];
 }
 
 - (void)generateData

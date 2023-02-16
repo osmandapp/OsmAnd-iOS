@@ -19,7 +19,6 @@
 
 #import <AudioToolbox/AudioServices.h>
 
-#define kHeaderViewFont [UIFont scaledSystemFontOfSize:15.0]
 #define toolbarHeight 64
 
 @interface OAQuickActionListViewController () <UITableViewDelegate, UITableViewDataSource, MGSwipeTableCellDelegate, OAMultiselectableHeaderDelegate, OAQuickActionListDelegate>
@@ -62,6 +61,7 @@
     [self.btnAdd setTintColor:UIColor.whiteColor];
     [self.btnEdit setImage:[UIImage templateImageNamed:@"ic_custom_edit"] forState:UIControlStateNormal];
     [self.btnEdit setTintColor:UIColor.whiteColor];
+    [self.backBtn setImage:[UIImage rtlImageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
     self.tableView.tableHeaderView = _tableHeaderView;
     _bottomViewHeight.constant = 0;
 }
@@ -77,7 +77,7 @@
     _registry = [OAQuickActionRegistry sharedInstance];
     _data = [NSMutableArray arrayWithArray:_registry.getQuickActions];
     
-    _tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"quick_action_add_actions_descr") font:kHeaderViewFont textColor:UIColor.blackColor lineSpacing:0.0 isTitle:NO];
+    _tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"quick_action_add_actions_descr") font:kHeaderDescriptionFont textColor:UIColor.blackColor isBigTitle:NO];
     if (!UIAccessibilityIsReduceTransparencyEnabled())
     {
         UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleExtraLight]];

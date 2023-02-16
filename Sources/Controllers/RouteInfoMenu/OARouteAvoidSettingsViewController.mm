@@ -37,8 +37,6 @@
 #include <OsmAndCore/Utilities.h>
 #include <binaryRead.h>
 
-#define kHeaderViewFont [UIFont scaledSystemFontOfSize:15.0]
-
 @interface OARouteAvoidSettingsViewController ()
 
 @end
@@ -136,7 +134,7 @@
 - (void) setupView
 {
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-    self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"select_avoid_descr") font:kHeaderViewFont textColor:UIColor.blackColor lineSpacing:0.0 isTitle:NO];
+    self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"select_avoid_descr") font:kHeaderDescriptionFont textColor:UIColor.blackColor isBigTitle:NO];
     [self.tableView reloadData];
 }
 
@@ -154,11 +152,6 @@
             _tableHeaderView.subviews.firstObject.frame = CGRectMake(16.0 + OAUtilities.getLeftMargin, 20.0, textWidth, labelSize.height);
         }
     } completion:nil];
-}
-
-- (void)backButtonClicked:(id)sender
-{
-    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)doneButtonPressed

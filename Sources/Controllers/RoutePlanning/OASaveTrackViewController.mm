@@ -552,11 +552,9 @@
 
 - (CGFloat)getModalPresentationOffset:(BOOL)keyboardShown
 {
-    CGFloat modalOffset = 0;
-    if (@available(iOS 13.0, *)) {
-        // accounts for additional top offset in modal presentation 
-        modalOffset = keyboardShown ? 6. : 10.;
-    }
+    // accounts for additional top offset in modal presentation
+    CGFloat modalOffset = modalOffset = keyboardShown ? 6. : 10.;;
+
     return modalOffset;
 }
 

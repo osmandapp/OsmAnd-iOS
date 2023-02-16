@@ -76,6 +76,7 @@
     self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
     self.backButton.hidden = YES;
     self.backImageButton.hidden = NO;
+    [self.backImageButton setImage:[UIImage rtlImageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -95,7 +96,7 @@
 
 - (void) setupTableHeaderView
 {
-    self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:[self getTableHeaderTitle] font:[UIFont scaledSystemFontOfSize:34.0 weight:UIFontWeightBold] textColor:UIColor.blackColor lineSpacing:0 isTitle:YES];
+    self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:[self getTableHeaderTitle] font:kHeaderBigTitleFont textColor:UIColor.blackColor isBigTitle:YES];
 }
 
 - (void) setupTableFooterView

@@ -56,7 +56,7 @@
     self.tableView.sectionHeaderHeight = 16.;
     self.tableView.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
     
-    _tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"route_betw_points_descr") font:[UIFont scaledSystemFontOfSize:15.] textColor:UIColor.blackColor lineSpacing:0. isTitle:NO];
+    _tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"route_betw_points_descr") font:kHeaderDescriptionFont textColor:UIColor.blackColor isBigTitle:NO];
     self.tableView.tableHeaderView = _tableHeaderView;
     
     [self.rightButton removeFromSuperview];
@@ -259,11 +259,8 @@
             cell = (OASegmentedControlCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.segmentedControl.backgroundColor = [UIColorFromRGB(color_primary_purple) colorWithAlphaComponent:.1];
-            
-            if (@available(iOS 13.0, *))
-                cell.segmentedControl.selectedSegmentTintColor = UIColorFromRGB(color_primary_purple);
-            else
-                cell.segmentedControl.tintColor = UIColorFromRGB(color_primary_purple);
+            cell.segmentedControl.selectedSegmentTintColor = UIColorFromRGB(color_primary_purple);
+
             UIFont *font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
             [cell.segmentedControl setTitleTextAttributes:@{NSForegroundColorAttributeName : UIColor.whiteColor, NSFontAttributeName : font} forState:UIControlStateSelected];
             [cell.segmentedControl setTitleTextAttributes:@{NSForegroundColorAttributeName : UIColorFromRGB(color_primary_purple), NSFontAttributeName : font} forState:UIControlStateNormal];

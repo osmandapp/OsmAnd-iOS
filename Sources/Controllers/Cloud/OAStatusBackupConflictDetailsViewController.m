@@ -342,7 +342,7 @@
             [cell titleVisibility:title != nil];
             cell.titleLabel.text = title;
             cell.descriptionLabel.text = item.descr;
-            cell.leftIconView.image = [item objForKey:@"icon"];
+            cell.leftIconView.image = [[item objForKey:@"icon"] imageFlippedForRightToLeftLayoutDirection];
             cell.leftIconView.tintColor = UIColorFromRGB(item.iconTint);
         }
         return cell;

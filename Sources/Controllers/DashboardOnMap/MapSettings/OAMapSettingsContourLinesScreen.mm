@@ -645,7 +645,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                 cell.detailTextLabel.font = [UIFont scaledSystemFontOfSize:12.0];
                 cell.detailTextLabel.textColor = UIColorFromRGB(0x929292);
 
-                UIImage* iconImage = [UIImage imageNamed:@"ic_custom_download"];
+                UIImage* iconImage = [UIImage rtlImageNamed:@"ic_custom_download"];
                 UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
                 [btnAcc addTarget:self action: @selector(accessoryButtonPressed:withEvent:) forControlEvents: UIControlEventTouchUpInside];
                 [btnAcc setImage:iconImage forState:UIControlStateNormal];
@@ -673,7 +673,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             if (!mapItem.disabled)
             {
                 cell.textLabel.textColor = [UIColor blackColor];
-                UIImage* iconImage = [UIImage imageNamed:@"ic_custom_download"];
+                UIImage* iconImage = [UIImage rtlImageNamed:@"ic_custom_download"];
                 UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
                 [btnAcc addTarget:self action: @selector(accessoryButtonPressed:withEvent:) forControlEvents: UIControlEventTouchUpInside];
                 [btnAcc setImage:iconImage forState:UIControlStateNormal];
@@ -687,7 +687,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             }
         }
         
-        cell.imageView.image = [OAResourceType getIcon:mapItem.resourceType templated:YES];
+        cell.imageView.image = [OAResourceType getIcon:mapItem.resourceType templated:YES].imageFlippedForRightToLeftLayoutDirection;
         cell.imageView.tintColor = UIColorFromRGB(color_tint_gray);
         cell.textLabel.text = title;
         if (cell.detailTextLabel != nil)
@@ -706,7 +706,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAImageDescTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAImageDescTableViewCell *)[nib objectAtIndex:0];
             cell.descView.text = item[@"desc"];
-            cell.iconView.image = [UIImage imageNamed:item[@"img"]];
+            cell.iconView.image = [UIImage rtlImageNamed:item[@"img"]];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         return cell;

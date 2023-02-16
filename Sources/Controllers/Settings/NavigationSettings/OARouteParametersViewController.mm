@@ -26,7 +26,7 @@
 #import "Localization.h"
 #import "OAColors.h"
 
-@interface OARouteParametersViewController () <UITableViewDelegate, UITableViewDataSource, OARoutePreferencesParametersDelegate>
+@interface OARouteParametersViewController () <OARoutePreferencesParametersDelegate>
 
 @end
 
@@ -43,30 +43,26 @@
     RoutingParameter _fastRouteParameter;
 }
 
-- (instancetype) initWithAppMode:(OAApplicationMode *)appMode
+#pragma mark - Initialization
+
+- (void)commonInit
 {
-    self = [super initWithAppMode:appMode];
-    if (self)
-    {
-        _settings = [OAAppSettings sharedManager];
-    }
-    return self;
+    _settings = [OAAppSettings sharedManager];
 }
 
--(void) applyLocalization
+- (void)postInit
 {
-    [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"route_parameters");
+    _iconColor = [self.appMode getIconColor];
 }
 
-- (void) viewDidLoad
+#pragma mark - Base UI
+
+- (NSString *)getTitle
 {
-    [super viewDidLoad];
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    _iconColor = self.appMode.getIconColor;
-    [self setupView];
+    return OALocalizedString(@"route_parameters");
 }
+
+#pragma mark - Table data
 
 - (void)populateGroup:(OALocalRoutingParameterGroup *)group params:(vector<RoutingParameter>&)params
 {
@@ -91,7 +87,53 @@
     }
 }
 
-- (void) setupView
+- (OALocalRoutingParameterGroup *) getLocalRoutingParameterGroup:(NSMutableArray<OALocalRoutingParameter *> *)list groupName:(NSString *)groupName
+{
+    for (OALocalRoutingParameter *p in list)
+    {
+        if ([p isKindOfClass:[OALocalRoutingParameterGroup class]] && [groupName isEqualToString:[((OALocalRoutingParameterGroup *) p) getGroupName]])
+        {
+            return (OALocalRoutingParameterGroup *) p;
+        }
+    }
+    return nil;
+}
+
+- (BOOL) checkIfAnyParameterIsSelected:(vector <RoutingParameter>)routingParameters
+{
+    for (const auto& p : routingParameters)
+    {
+        OALocalRoutingParameter *rp = [[OALocalRoutingParameter alloc] initWithAppMode:self.appMode];
+        rp.routingParameter = p;
+        if (rp.isSelected)
+            return YES;
+    }
+    return NO;
+}
+
+- (NSString *) getParameterIcon:(NSString *)parameterName isSelected:(BOOL)isSelected
+{
+    if ([parameterName isEqualToString:kRouteParamIdShortWay])
+        return @"ic_custom_fuel";
+    else if ([parameterName isEqualToString:kRouteParamIdAllowPrivate] || [parameterName isEqualToString:kRouteParamIdAllowPrivateTruck])
+        return isSelected ? @"ic_custom_allow_private_access" : @"ic_custom_forbid_private_access";
+    else if ([parameterName isEqualToString:kRouteParamIdAllowMotorway])
+        return isSelected ? @"ic_custom_motorways" : @"ic_custom_avoid_motorways";
+    else if ([parameterName isEqualToString:kRouteParamIdHeightObstacles])
+        return @"ic_custom_ascent";
+    return @"ic_custom_alert";
+}
+
+- (void) clearParameters
+{
+    _otherParameters.clear();
+    _avoidParameters.clear();
+    _preferParameters.clear();
+    _reliefFactorParameters.clear();
+    _drivingStyleParameters.clear();
+}
+
+- (void)generateData
 {
     NSMutableArray *tableData = [NSMutableArray array];
     NSMutableArray *otherArr = [NSMutableArray array];
@@ -330,61 +372,24 @@
     _data = [NSArray arrayWithArray:tableData];
 }
 
-- (OALocalRoutingParameterGroup *) getLocalRoutingParameterGroup:(NSMutableArray<OALocalRoutingParameter *> *)list groupName:(NSString *)groupName
+- (BOOL)hideFirstHeader
 {
-    for (OALocalRoutingParameter *p in list)
-    {
-        if ([p isKindOfClass:[OALocalRoutingParameterGroup class]] && [groupName isEqualToString:[((OALocalRoutingParameterGroup *) p) getGroupName]])
-        {
-            return (OALocalRoutingParameterGroup *) p;
-        }
-    }
-    return nil;
+    return YES;
 }
 
-- (BOOL) checkIfAnyParameterIsSelected:(vector <RoutingParameter>)routingParameters
+- (NSInteger)rowsCount:(NSInteger)section
 {
-    for (const auto& p : routingParameters)
-    {
-        OALocalRoutingParameter *rp = [[OALocalRoutingParameter alloc] initWithAppMode:self.appMode];
-        rp.routingParameter = p;
-        if (rp.isSelected)
-            return YES;
-    }
-    return NO;
+    return _data[section].count;
 }
 
-- (NSString *) getParameterIcon:(NSString *)parameterName isSelected:(BOOL)isSelected
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
-    if ([parameterName isEqualToString:kRouteParamIdShortWay])
-        return @"ic_custom_fuel";
-    else if ([parameterName isEqualToString:kRouteParamIdAllowPrivate] || [parameterName isEqualToString:kRouteParamIdAllowPrivateTruck])
-        return isSelected ? @"ic_custom_allow_private_access" : @"ic_custom_forbid_private_access";
-    else if ([parameterName isEqualToString:kRouteParamIdAllowMotorway])
-        return isSelected ? @"ic_custom_motorways" : @"ic_custom_avoid_motorways";
-    else if ([parameterName isEqualToString:kRouteParamIdHeightObstacles])
-        return @"ic_custom_ascent";
-    return @"ic_custom_alert";
-}
-
-- (void) clearParameters
-{
-    _otherParameters.clear();
-    _avoidParameters.clear();
-    _preferParameters.clear();
-    _reliefFactorParameters.clear();
-    _drivingStyleParameters.clear();
-}
-
-#pragma mark - TableView
-
-- (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     OALocalRoutingParameter *param = item[@"param"];
     NSString *cellType = param ? [param getCellType] : item[@"type"];
     if ([cellType isEqualToString:[OADeviceScreenTableViewCell getCellIdentifier]])
     {
-        OADeviceScreenTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OADeviceScreenTableViewCell getCellIdentifier]];
+        OADeviceScreenTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OADeviceScreenTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADeviceScreenTableViewCell getCellIdentifier] owner:self options:nil];
@@ -393,14 +398,14 @@
         }
         if (cell)
         {
-            cell.backgroundImageView.image = [UIImage imageNamed:item[@"backgroundImage"]];
-            cell.foregroundImageView.image = [UIImage imageNamed:item[@"foregroundImage"]];
+            cell.backgroundImageView.image = [UIImage imageNamed:item[@"backgroundImage"]].imageFlippedForRightToLeftLayoutDirection;
+            cell.foregroundImageView.image = [UIImage imageNamed:item[@"foregroundImage"]].imageFlippedForRightToLeftLayoutDirection;
         }
         return cell;
     }
     else if ([cellType isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
     {
-        OAIconTitleValueCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
+        OAIconTitleValueCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
@@ -411,7 +416,7 @@
         }
         if (cell)
         {
-            cell.leftIconView.image = param && ![item.allKeys containsObject:@"icon"] ? [param getIcon] : item[@"icon"];
+            cell.leftIconView.image = param && ![item.allKeys containsObject:@"icon"] ? [param getIcon].imageFlippedForRightToLeftLayoutDirection : [item[@"icon"] imageFlippedForRightToLeftLayoutDirection];
             if (param && ![param isSelected] && ![item.allKeys containsObject:@"icon"])
                 cell.leftIconView.tintColor = UIColorFromRGB(color_icon_inactive);
             else
@@ -431,7 +436,7 @@
     }
     else if ([cellType isEqualToString:[OAIconTextTableViewCell getCellIdentifier]])
     {
-        OAIconTextTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
+        OAIconTextTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
@@ -450,7 +455,7 @@
     }
     else if ([cellType isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
+        OASwitchTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
@@ -485,27 +490,12 @@
     return nil;
 }
 
-- (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return _data[section].count;
-}
-
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
+- (NSInteger)sectionsCount
 {
     return _data.count;
 }
 
-- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return section == 0 ? 0.01 : 19.0;
-}
-
-- (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    return cell.selectionStyle == UITableViewCellSelectionStyleNone ? nil : indexPath;
-}
-
-- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)onRowPressed:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     OALocalRoutingParameter *parameter = item[@"param"];
@@ -513,7 +503,7 @@
     if ([itemKey isEqualToString:@"paramGroup"])
     {
         [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
-        [parameter rowSelectAction:tableView indexPath:indexPath];
+        [parameter rowSelectAction:self.tableView indexPath:indexPath];
         return;
     }
 
@@ -529,16 +519,18 @@
     else if ([itemKey isEqualToString:@"preferRoads"])
         settingsViewController = [[OAAvoidPreferParametersViewController alloc] initWithAppMode:self.appMode isAvoid:NO];
     else if ([itemKey isEqualToString:@"roadSpeeds"])
-        settingsViewController = [[OARoadSpeedsViewController alloc] initWithApplicationMode:self.appMode speedParameters:item];
+        settingsViewController = [[OARoadSpeedsViewController alloc] initWithAppMode:self.appMode];
     else if ([itemKey isEqualToString:@"angleStraight"])
         settingsViewController = [[OAAngleStraightLineViewController alloc] initWithAppMode:self.appMode];
 
-    settingsViewController.delegate = self;
-    [self presentViewController:settingsViewController animated:YES completion:nil];
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if (settingsViewController)
+    {
+        settingsViewController.delegate = self;
+        [self presentViewController:settingsViewController animated:YES completion:nil];
+    }
 }
 
-#pragma mark - Switch
+#pragma mark - Selectors
 
 - (void) applyParameter:(id)sender
 {
@@ -580,7 +572,7 @@
     if (self.delegate)
         [self.delegate onSettingsChanged];
     
-    [self setupView];
+    [self generateData];
     [self.tableView reloadData];
 }
 

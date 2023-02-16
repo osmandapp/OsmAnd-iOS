@@ -29,7 +29,7 @@
     [self.leftIconView setImage:[UIImage templateImageNamed:@"ic_custom_attach_track"]];
     self.leftIconView.tintColor = UIColorFromRGB(color_primary_purple);
     
-    self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"route_between_points_warning_desc") font:[UIFont scaledSystemFontOfSize:15.] textColor:UIColor.blackColor lineSpacing:0. isTitle:NO];
+    self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"route_between_points_warning_desc") font:kHeaderDescriptionFont textColor:UIColor.blackColor isBigTitle:NO];
 }
 
 - (void)applyLocalization

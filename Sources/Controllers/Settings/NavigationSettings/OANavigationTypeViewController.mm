@@ -19,10 +19,6 @@
 
 #define kSidePadding 16
 
-@interface OANavigationTypeViewController () <UITableViewDelegate, UITableViewDataSource>
-
-@end
-
 @implementation OANavigationTypeViewController
 {
     NSArray<OARoutingProfileDataObject *> *_sortedRoutingProfiles;
@@ -30,22 +26,25 @@
     NSArray<NSArray *> *_data;
 }
 
--(void) applyLocalization
-{
-    [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"nav_type_hint");
-}
+#pragma mark - UIViewController
 
 - (void) viewDidLoad
 {
     [super viewDidLoad];
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
+
     [self setupTableHeaderViewWithText:OALocalizedString(@"select_nav_profile_dialog_message")];
-    [self setupView];
 }
 
-- (void) setupView
+#pragma mark - Base UI
+
+- (NSString *)getTitle
+{
+    return OALocalizedString(@"nav_type_hint");
+}
+
+#pragma mark - Table data
+
+- (void)generateData
 {
     _sortedRoutingProfiles = [OAProfileDataUtils getSortedRoutingProfiles];
     NSMutableArray *tableData = [NSMutableArray new];
@@ -83,49 +82,51 @@
     _data = [NSArray arrayWithArray:tableData];
 }
 
-- (void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+- (NSString *)getTitleForHeader:(NSInteger)section
 {
-    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        [self setupTableHeaderViewWithText:OALocalizedString(@"select_nav_profile_dialog_message")];
-        [self.tableView reloadData];
-    } completion:nil];
+    if (section == 0)
+        return OALocalizedString(@"osmand_default_routing");
+    else
+        return _fileNames[section - 1].lastPathComponent;
 }
 
-#pragma mark - TableView
+- (NSString *)getTitleForFooter:(NSInteger)section
+{
+    if (section == [self.tableView numberOfSections] - 1)
+        return OALocalizedString(@"import_routing_file_descr");
+    else
+        return @"";
+}
 
-- (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+- (NSInteger)rowsCount:(NSInteger)section
+{
     return _data[section].count;
 }
 
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
-    return _data.count;
-}
-
-- (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
     OARoutingProfileDataObject *profile = _sortedRoutingProfiles[[item[@"profile_ind"] integerValue]];
     if ([cellType isEqualToString:[OAIconTextTableViewCell getCellIdentifier]])
     {
-        OAIconTextTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
+        OAIconTextTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
             cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
+            [cell.arrowIconView setHidden:YES];
         }
         if (cell)
         {
             cell.textView.text = item[@"title"];
-            cell.arrowIconView.image = [UIImage templateImageNamed:@"ic_checkmark_default"];
-            cell.arrowIconView.tintColor = UIColorFromRGB(self.appMode.getIconColor);
             cell.iconView.image = [UIImage templateImageNamed:item[@"icon"]];
             NSString *derivedProfile = self.appMode.getDerivedProfile;
             BOOL checkForDerived = ![derivedProfile isEqualToString:@"default"];
             BOOL isSelected = [profile.stringKey isEqual:self.appMode.getRoutingProfile] && ((!checkForDerived && !profile.derivedProfile) || (checkForDerived && [profile.derivedProfile isEqualToString:derivedProfile]));
-            cell.arrowIconView.hidden = !isSelected;
+            if (isSelected)
+                cell.accessoryType = UITableViewCellAccessoryCheckmark;
             cell.iconView.tintColor = isSelected ? UIColorFromRGB(self.appMode.getIconColor) : UIColorFromRGB(color_icon_inactive);
         }
         return cell;
@@ -133,7 +134,12 @@
     return nil;
 }
 
-- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (NSInteger)sectionsCount
+{
+    return _data.count;
+}
+
+- (void)onRowPressed:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     OARoutingProfileDataObject *profileData = _sortedRoutingProfiles[[item[@"profile_ind"] integerValue]];
@@ -157,35 +163,13 @@
             [self.delegate onSettingsChanged];
         [self dismissViewController];
     }
-    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
-- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    if (section == 0)
-        return OALocalizedString(@"osmand_default_routing");
-    else
-        return _fileNames[section - 1].lastPathComponent;
-}
+#pragma mark - Selectors
 
-- (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
+- (void)onRotation
 {
-    if (section == tableView.numberOfSections - 1)
-        return OALocalizedString(@"import_routing_file_descr");
-    else
-        return @"";
-}
-
--(void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
-{
-    UITableViewHeaderFooterView *vw = (UITableViewHeaderFooterView *) view;
-    [vw.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
-}
-
--(void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section
-{
-    UITableViewHeaderFooterView *vw = (UITableViewHeaderFooterView *) view;
-    [vw.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
+    [self setupTableHeaderViewWithText:OALocalizedString(@"select_nav_profile_dialog_message")];
 }
 
 @end

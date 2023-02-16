@@ -15,7 +15,6 @@
 
 #define kSidePadding 16
 #define kAllApplicationProfilesSection 0
-#define kHeaderViewFont [UIFont scaledSystemFontOfSize:15.0]
 
 @interface OAEditProfileItem : NSObject
 
@@ -113,14 +112,14 @@
 - (void) viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
-    _tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"rearrange_profile_descr") font:kHeaderViewFont textColor:UIColorFromRGB(color_text_footer) lineSpacing:6.0 isTitle:NO];
+    _tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"rearrange_profile_descr") font:kHeaderDescriptionFont textColor:UIColorFromRGB(color_text_footer) isBigTitle:NO];
 }
 
 - (void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        _tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"rearrange_profile_descr") font:kHeaderViewFont textColor:UIColorFromRGB(color_text_footer) lineSpacing:6.0 isTitle:NO];
+        _tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"rearrange_profile_descr") font:kHeaderDescriptionFont textColor:UIColorFromRGB(color_text_footer) isBigTitle:NO];
         [_tableView reloadData];
     } completion:nil];
 }
@@ -214,7 +213,7 @@
         else
             imageName = @"ic_custom_undo_button";
         
-        cell.iconImageView.image = [mode.getIcon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        cell.iconImageView.image = [mode.getIcon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
         cell.iconImageView.tintColor = UIColorFromRGB(mode.getIconColor);
         [cell.deleteButton setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
         [cell.deleteButton setUserInteractionEnabled:mode.isCustomProfile];

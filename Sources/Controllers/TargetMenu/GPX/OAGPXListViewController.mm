@@ -802,17 +802,11 @@ static UIViewController *parentController;
 
 #pragma mark - Actions
 
-
-- (IBAction) backButtonClicked:(id)sender
-{
-    [super backButtonClicked:sender];
-}
-
 - (IBAction) goRootScreen:(id)sender
 {
     if (_popToParent)
     {
-        [super backButtonClicked:sender];
+        [super onLeftNavbarButtonPressed];
     }
     else
     {

@@ -20,82 +20,88 @@
 #import "OAColors.h"
 #import "Localization.h"
 
-@interface OAUninstallSpeedCamerasViewController () <UITableViewDelegate, UITableViewDataSource>
-
-@end
-
 @implementation OAUninstallSpeedCamerasViewController
 {
     OATableDataModel *_data;
 }
 
+#pragma mark - UIViewController
+
 - (void)viewDidLoad
 {
-    self.primaryButtonTopMarginYesSecondary.constant = 30;
-
     [super viewDidLoad];
 
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-
-    [self setupNavBarHeight];
-    [self setupButtons];
-    [self generateData];
 }
 
-- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+#pragma mark - Base UI
+
+- (NSString *)getTitle
 {
-    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-    [self setupNavBarHeight];
+    return OALocalizedString(@"speed_camera_pois");
 }
 
-- (void)applyLocalization
+- (NSString *)getLeftNavbarButtonTitle
 {
-    [super applyLocalization];
-
-    self.titleLabel.text = OALocalizedString(@"speed_camera_pois");
+    return OALocalizedString(@"shared_string_cancel");
 }
 
-- (void)setupButtons
+- (BOOL)isNavbarSeparatorVisible
 {
-    [self.secondaryBottomButton setTitle:OALocalizedString(@"shared_string_uninstall") forState:UIControlStateNormal];
-    [self.primaryBottomButton setTitle:OALocalizedString(@"shared_string_keep_active") forState:UIControlStateNormal];
-    self.secondaryBottomButton.tintColor = UIColor.whiteColor;
-    self.primaryBottomButton.tintColor = UIColorFromRGB(color_primary_purple);
-    [self.secondaryBottomButton setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
-    [self.primaryBottomButton setTitleColor:UIColorFromRGB(color_primary_purple) forState:UIControlStateNormal];
-    self.primaryBottomButton.backgroundColor = UIColorFromRGB(color_route_button_inactive);
-    self.secondaryBottomButton.backgroundColor = UIColorFromRGB(color_primary_red);
-
-    self.bottomBarView.backgroundColor = self.tableView.backgroundColor;
-    self.buttonSeparator.hidden = YES;
-
-    self.additionalNavBarButton.hidden = YES;
-    self.backImageButton.hidden = YES;
-    self.backButton.hidden = NO;
-    [self.backButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
+    return NO;
 }
 
-- (void)setupNavBarHeight
+- (BOOL)isChevronIconVisible
 {
-    self.navBarHeightConstraint.constant = [self isModal] ? [OAUtilities isLandscape] ? defaultNavBarHeight : modalNavBarHeight : defaultNavBarHeight;
+    return NO;
 }
 
-- (void)setTableHeaderView:(NSString *)label
+- (EOABaseTableHeaderMode)getTableHeaderMode
+{
+    return EOABaseTableHeaderModeBigTitle;
+}
+
+- (NSString *)getTopButtonTitle
+{
+    return OALocalizedString(@"shared_string_uninstall");
+}
+
+- (NSString *)getBottomButtonTitle
+{
+    return OALocalizedString(@"shared_string_keep_active");
+}
+
+- (EOABaseButtonColorScheme)getTopButtonColorScheme
+{
+    return EOABaseButtonColorSchemeRed;
+}
+
+- (EOABaseButtonColorScheme)getBottomButtonColorScheme
+{
+    return EOABaseButtonColorSchemeGraySimple;
+}
+
+- (CGFloat)getSpaceBetweenButtons
+{
+    return 14.;
+}
+
+- (BOOL)isBottomSeparatorVisible
+{
+    return NO;
+}
+
+- (void)setupTableHeaderView
 {
     self.tableView.tableHeaderView =
         [OAUtilities setupTableHeaderViewWithAttributedText:[[NSAttributedString alloc]
-                                                                initWithString:label
+                                                                initWithString:[self getTitle]
                                                                     attributes:@{ NSFontAttributeName : [UIFont scaledSystemFontOfSize:30. weight:UIFontWeightBold]} ]
                                           topCenterIconName:@"img_speed_camera_warning"
                                                    iconSize:92.];
 }
 
-- (NSString *)getTableHeaderTitle
-{
-    return OALocalizedString(@"speed_camera_pois");
-}
+#pragma mark - Table data
 
 - (void)generateData
 {
@@ -126,63 +132,24 @@
     [_data addSection:descriptionSection];
 }
 
-- (void)setDialogShown
+- (BOOL)hideFirstHeader
 {
-    [[OAAppSettings sharedManager].speedCamerasAlertShown set:YES];
-}
-
-- (IBAction)secondaryButtonPressed:(id)sender
-{
-    OAAppSettings *settings = [OAAppSettings sharedManager];
-    [settings setDisabledTypes:[NSSet setWithObject:SPEED_CAMERA]];
-    [settings.speedCamerasUninstalled set:YES];
-    [settings.speakCameras set:NO];
-    [settings.showCameras set:NO];
-    [self setDialogShown];
-
-    [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
-    [[OARootViewController instance].mapPanel refreshMap];
-
-    if (self.delegate)
-        [self.delegate onUninstallSpeedCameras];
-
-    UIAlertController *alert =
-            [UIAlertController alertControllerWithTitle:OALocalizedString(@"restart_is_required_title")
-                                                message:OALocalizedString(@"restart_is_required")
-                                         preferredStyle:UIAlertControllerStyleAlert];
-
-    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok")
-                                              style:UIAlertActionStyleCancel
-                                            handler:^(UIAlertAction * _Nonnull action) {
-                                                    [self dismissViewController];
-    }]];
-    [self presentViewController:alert animated:YES completion:nil];
-}
-
-- (IBAction)primaryButtonPressed:(id)sender
-{
-    [self setDialogShown];
-    [self dismissViewController];
+    return YES;
 }
 
 #pragma mark - UITableViewDataSource
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return _data.sectionCount;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)rowsCount:(NSInteger)section
 {
     return [_data sectionDataForIndex:section].rowCount;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
     OATableRowData *item = [_data itemForIndexPath:indexPath];
     if ([item.cellType isEqualToString:[OATextMultilineTableViewCell getCellIdentifier]])
     {
-        OATextMultilineTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OATextMultilineTableViewCell getCellIdentifier]];
+        OATextMultilineTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OATextMultilineTableViewCell getCellIdentifier]];
         if (!cell)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextMultilineTableViewCell getCellIdentifier] owner:self options:nil];
@@ -198,6 +165,52 @@
         return cell;
     }
     return nil;
+}
+
+- (NSInteger)sectionsCount
+{
+    return _data.sectionCount;
+}
+
+#pragma mark - Selectors
+
+- (void)onTopButtonPressed
+{
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    [settings setDisabledTypes:[NSSet setWithObject:SPEED_CAMERA]];
+    [settings.speedCamerasUninstalled set:YES];
+    [settings.speakCameras set:NO];
+    [settings.showCameras set:NO];
+    [self setDialogShown];
+
+    [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
+    [[OARootViewController instance].mapPanel refreshMap];
+
+    if (self.delegate)
+        [self.delegate onUninstallSpeedCameras];
+
+    UIAlertController *alert =
+                [UIAlertController alertControllerWithTitle:OALocalizedString(@"restart_is_required_title")
+                                                    message:OALocalizedString(@"restart_is_required")
+                                             preferredStyle:UIAlertControllerStyleAlert];
+
+        [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok")
+                                                  style:UIAlertActionStyleCancel
+                                                handler:^(UIAlertAction * _Nonnull action) {
+                                                        [self dismissViewController];
+        }]];
+        [self presentViewController:alert animated:YES completion:nil];
+}
+
+- (void)onBottomButtonPressed
+{
+    [self setDialogShown];
+    [self dismissViewController];
+}
+
+- (void)setDialogShown
+{
+    [[OAAppSettings sharedManager].speedCamerasAlertShown set:YES];
 }
 
 @end

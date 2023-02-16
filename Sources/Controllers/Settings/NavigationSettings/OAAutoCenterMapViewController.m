@@ -14,41 +14,29 @@
 #import "Localization.h"
 #import "OAColors.h"
 
-@interface OAAutoCenterMapViewController () <UITableViewDelegate, UITableViewDataSource>
-
-@end
-
 @implementation OAAutoCenterMapViewController
 {
     OAAppSettings *_settings;
     NSArray<NSArray *> *_data;
 }
 
-- (instancetype) initWithAppMode:(OAApplicationMode *)appMode
+#pragma mark - Initialization
+
+- (void)commonInit
 {
-    self = [super initWithAppMode:appMode];
-    if (self)
-    {
-        _settings = [OAAppSettings sharedManager];
-    }
-    return self;
+    _settings = [OAAppSettings sharedManager];
 }
 
-- (void) applyLocalization
+#pragma mark - Base UI
+
+- (NSString *)getTitle
 {
-    [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"choose_auto_follow_route");
+    return OALocalizedString(@"choose_auto_follow_route");
 }
 
-- (void) viewDidLoad
-{
-    [super viewDidLoad];
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    [self setupView];
-}
+#pragma mark - Table data
 
-- (void) setupView
+- (void)generateData
 {
     NSMutableArray *dataArr = [NSMutableArray array];
     NSArray<NSNumber *> *autoFollowRouteValues = @[ @0, @5, @10, @15, @20, @25, @30, @45, @60, @90 ];
@@ -76,50 +64,51 @@
     _data = [NSArray arrayWithObject:dataArr];
 }
 
-#pragma mark - TableView
+- (NSInteger)rowsCount:(NSInteger)section
+{
+    return _data[section].count;
+}
 
-- (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
+{
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
     if ([cellType isEqualToString:[OASettingsTitleTableViewCell getCellIdentifier]])
     {
-        OASettingsTitleTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTitleTableViewCell getCellIdentifier]];
+        OASettingsTitleTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OASettingsTitleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTitleTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingsTitleTableViewCell *)[nib objectAtIndex:0];
-            cell.iconView.image = [UIImage templateImageNamed:@"ic_checkmark_default"];
-            cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
+            [cell.iconView setHidden:YES];
         }
         if (cell)
         {
             cell.textView.text = item[@"title"];
-            cell.iconView.hidden = ![item[@"isSelected"] boolValue];
+            if ([item[@"isSelected"] boolValue])
+                cell.accessoryType = UITableViewCellAccessoryCheckmark;
         }
         return cell;
     }
     return nil;
 }
 
-- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return 17.0;
-}
-
-- (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return _data[section].count;
-}
-
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
+- (NSInteger)sectionsCount
 {
     return _data.count;
 }
 
-- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (CGFloat)getCustomHeightForHeader:(NSInteger)section
+{
+    return 17.;
+}
+
+- (void)onRowPressed:(NSIndexPath *)indexPath
 {
     [self selectAutoFollowRoute:_data[indexPath.section][indexPath.row]];
-    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
+
+#pragma mark - Selectors
 
 - (void) selectAutoFollowRoute:(NSDictionary *)item
 {

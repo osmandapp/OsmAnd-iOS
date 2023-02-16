@@ -132,7 +132,7 @@
 - (void) setupButtonView
 {
     BOOL hasSelection = [self hasSelection];
-    self.primaryBottomButton.backgroundColor = hasSelection ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_route_button_inactive);
+    self.primaryBottomButton.backgroundColor = hasSelection ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_button_gray_background);
     [self.primaryBottomButton setTintColor:hasSelection ? UIColor.whiteColor : UIColorFromRGB(color_text_footer)];
     [self.primaryBottomButton setTitleColor:hasSelection ? UIColor.whiteColor : UIColorFromRGB(color_text_footer) forState:UIControlStateNormal];
     [self.primaryBottomButton setUserInteractionEnabled:hasSelection];
@@ -417,7 +417,7 @@
             }
             if (cell)
             {
-                cell.imgView.image = [item[@"icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                cell.imgView.image = [item[@"icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
                 cell.textView.text = item[@"title"];
                 OASettingsCategoryItems *items = self.itemsMap[_itemTypes[indexPath.section]];
                 OAExportSettingsType *settingType = items.getTypes[indexPath.row - 1];

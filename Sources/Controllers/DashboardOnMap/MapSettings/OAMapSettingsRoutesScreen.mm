@@ -260,7 +260,8 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
             cell = (OARightIconTableViewCell *) nib[0];
             [cell descriptionVisibility:NO];
             [cell leftIconVisibility:NO];
-            cell.rightIconView.tintColor = UIColorFromRGB(color_primary_purple);
+            [cell rightIconVisibility:NO];
+            
         }
         if (cell)
         {
@@ -280,7 +281,10 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
             }
 
             cell.titleLabel.text = item[@"title"];
-            cell.rightIconView.image = selected ? [UIImage imageNamed:@"ic_checkmark_default"] : nil;
+            if (selected)
+                cell.accessoryType = UITableViewCellAccessoryCheckmark;
+            else
+                cell.accessoryType = UITableViewCellAccessoryNone;
         }
 
         return cell;

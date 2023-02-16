@@ -185,11 +185,11 @@
 - (IBAction)saveClicked:(id)sender
 {
     _saveChanges = YES;
-    
+
     if (self.delegate && [self.delegate respondsToSelector:@selector(groupChanged)])
         [self.delegate groupChanged];
-    
-    [self backButtonClicked:self];
+
+    [self dismissViewController];
 }
 
 @end

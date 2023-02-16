@@ -60,7 +60,7 @@
     }
     else
     {
-        cell.backView.backgroundColor = UIColorFromRGB(color_route_button_inactive);
+        cell.backView.backgroundColor = UIColorFromRGB(color_button_gray_background);
         cell.titleLabel.textColor = UIColorFromRGB(color_primary_purple);
         cell.titleLabel.font = [UIFont scaledSystemFontOfSize:15.0 weight:UIFontWeightRegular];
     }

@@ -6,7 +6,7 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import "OABaseBigTitleSettingsViewController.h"
+#import "OABaseNavbarViewController.h"
 
 #define kGeneralSettings @"general_settings"
 #define kNavigationSettings @"nav_settings"
@@ -19,7 +19,7 @@
 
 @class OAApplicationMode;
 
-@interface OAConfigureProfileViewController : OABaseBigTitleSettingsViewController
+@interface OAConfigureProfileViewController : OABaseNavbarViewController
 
 - (instancetype) initWithAppMode:(OAApplicationMode *)mode targetScreenKey:(NSString *)targetScreenKey;
 

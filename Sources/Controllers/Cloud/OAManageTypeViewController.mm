@@ -15,10 +15,6 @@
 #import "OAColors.h"
 #import "Localization.h"
 
-@interface OAManageTypeViewController () <UITableViewDelegate, UITableViewDataSource>
-
-@end
-
 @implementation OAManageTypeViewController
 {
     OAExportSettingsType *_settingsType;
@@ -26,6 +22,8 @@
     NSArray<NSArray<NSDictionary *> *> *_data;
     NSMutableDictionary<NSNumber *, NSString *> *_footers;
 }
+
+#pragma mark - Initialization
 
 - (instancetype)initWithSettingsType:(OAExportSettingsType *)settingsType size:(NSString *)size
 {
@@ -39,40 +37,31 @@
     return self;
 }
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
+#pragma mark - Base UI
 
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-
-    self.backButton.hidden = YES;
-    self.backImageButton.hidden = NO;
-
-    [self setupView];
-}
-
-- (UIStatusBarStyle)preferredStatusBarStyle
-{
-    if (@available(iOS 13.0, *))
-        return UIStatusBarStyleDarkContent;
-
-    return UIStatusBarStyleDefault;
-}
-
-- (void)applyLocalization
-{
-    [super applyLocalization];
-    self.titleLabel.text = _settingsType.title;
-    [self.backImageButton setTitle:OALocalizedString(@"manage_storage") forState:UIControlStateNormal];
-}
-
-- (NSString *)getTableHeaderTitle
+- (NSString *)getTitle
 {
     return _settingsType.title;
 }
 
-- (void)setupView
+- (NSString *)getLeftNavbarButtonTitle
+{
+    return OALocalizedString(@"manage_storage");
+}
+
+- (BOOL)isNavbarSeparatorVisible
+{
+    return NO;
+}
+
+- (EOABaseTableHeaderMode)getTableHeaderMode
+{
+    return EOABaseTableHeaderModeBigTitle;
+}
+
+#pragma mark - Table data
+
+- (void)generateData
 {
     _data = @[
             @[@{
@@ -95,29 +84,22 @@
     return _data[indexPath.section][indexPath.row];
 }
 
-- (IBAction)backButtonClicked:(id)sender
+- (NSString *)getTitleForFooter:(NSInteger)section
 {
-    [self dismissViewController];
+    return _footers[@(section)];
 }
 
-#pragma mark - UITableViewDataSource
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return _data.count;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)rowsCount:(NSInteger)section
 {
     return _data[section].count;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
     if ([item[@"type"] isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
     {
-        OASimpleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
+        OASimpleTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
         if (!cell)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
@@ -135,7 +117,7 @@
     }
     else if ([item[@"type"] isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
-        OAValueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
+        OAValueTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         if (!cell)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
@@ -156,22 +138,22 @@
     return nil;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
+- (NSInteger)sectionsCount
 {
-    return _footers[@(section)];
+    return _data.count;
 }
 
 #pragma mark - UITableViewDelegate
 
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+- (CGFloat)getCustomHeightForHeader:(NSInteger)section
 {
     if (section == 0)
         return 14.;
 
-    return UITableViewAutomaticDimension;
+    return [super getCustomHeightForHeader:section];
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)onRowPressed:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
     if ([item[@"key"] isEqualToString:@"delete_cell"])
@@ -203,8 +185,6 @@
 
                      [self presentViewController:alert animated:YES completion:nil];
     }
-
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 @end

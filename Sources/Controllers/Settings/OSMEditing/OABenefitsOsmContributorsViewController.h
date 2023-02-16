@@ -6,11 +6,11 @@
 //  Copyright (c) 2022 OsmAnd. All rights reserved.
 //
 
-#import "OABaseSettingsViewController.h"
+#import "OABaseNavbarViewController.h"
 
 @protocol OAAccountSettingDelegate;
 
-@interface OABenefitsOsmContributorsViewController : OABaseSettingsViewController
+@interface OABenefitsOsmContributorsViewController : OABaseNavbarViewController
 
 @property (nonatomic, weak) id<OAAccountSettingDelegate> accountDelegate;
 

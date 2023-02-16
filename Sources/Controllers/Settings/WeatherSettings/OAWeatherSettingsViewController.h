@@ -6,8 +6,8 @@
 //  Copyright (c) 2022 OsmAnd. All rights reserved.
 //
 
-#import "OABaseSettingsViewController.h"
+#import "OABaseNavbarViewController.h"
 
-@interface OAWeatherSettingsViewController : OABaseSettingsViewController
+@interface OAWeatherSettingsViewController : OABaseNavbarViewController
 
 @end

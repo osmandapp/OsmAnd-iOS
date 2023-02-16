@@ -368,11 +368,6 @@
     return name;
 }
 
-- (IBAction) backButtonClicked:(id)sender
-{
-    [super backButtonClicked:sender];
-}
-
 - (NSDictionary *) getItem:(NSIndexPath *)indexPath
 {
     return _data[indexPath.section][indexPath.row];

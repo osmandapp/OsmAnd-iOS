@@ -228,7 +228,7 @@ typedef void(^OAMapSettingsCategoryCellDataOnSelect)();
             {
                 UIImage *icon;
                 if ([iconName hasPrefix:@"mx_"])
-                    icon = [[OAUtilities getMxIcon:iconName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                    icon = [[OAUtilities getMxIcon:iconName].imageFlippedForRightToLeftLayoutDirection imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
                 else
                     icon = [UIImage templateImageNamed:item[@"icon"]];
                 cell.leftIconView.image = icon;

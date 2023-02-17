@@ -79,7 +79,7 @@
         self.textView.textColor = UIColor.blackColor;
         self.bottomTextView.frame = CGRectMake(0, 36.6, 60., 13.5);
         _carPlayMode = YES;
-        
+       
         self.textView.font = [UIFont scaledSystemFontOfSize:18. weight:UIFontWeightBold];
         self.bottomTextView.font = [UIFont scaledSystemFontOfSize:10.5];
         self.imageView.contentMode = UIViewContentModeScaleAspectFit;

@@ -178,6 +178,9 @@
 
 - (CGFloat)updateLayout:(CGFloat)y width:(CGFloat)width
 {
+    if ([self isDirectionRTL])
+        [self rtlApplication];
+    
     BOOL isRowInclude = _type == EOAFeatureCardRowInclude;
     CGFloat iconMargin = _type == EOAFeatureCardRowSimple || isRowInclude
             ? 0.
@@ -273,6 +276,14 @@
     }
 
     return self.frame.size.height;
+}
+
+- (void)rtlApplication
+{
+    self.labelTitle.transform = CGAffineTransformMakeScale(-1.0, 1.0);
+    self.labelTitle.textAlignment = NSTextAlignmentRight;
+    self.labelDescription.transform = CGAffineTransformMakeScale(-1.0, 1.0);
+    self.labelDescription.textAlignment = NSTextAlignmentRight;
 }
 
 - (void)onTapped:(UIGestureRecognizer *)recognizer

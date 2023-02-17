@@ -277,6 +277,14 @@
 
 - (void) viewWillLayoutSubviews
 {
+    if ([self.scrollView isDirectionRTL])
+    {
+        self.scrollView.transform = CGAffineTransformMakeScale(-1.0, 1.0);
+        self.viewNavigationBar.transform = CGAffineTransformMakeScale(-1.0, 1.0);
+        self.buttonNavigationBack.transform = CGAffineTransformMakeScale(-1.0, 1.0);
+        self.labelNavigationTitle.transform = CGAffineTransformMakeScale(-1.0, 1.0);
+    }
+    
     CGFloat navigationBarHeight;
     CGFloat extraNavigationBarHeight = 0.;
     if (_type == EOAChooseSubscription)
@@ -334,6 +342,16 @@
 
 - (void)updateScrollViewContainerSize
 {
+    if ([self.scrollView isDirectionRTL])
+    {
+        _labelIncludes.transform = CGAffineTransformMakeScale(-1.0, 1.0);
+        _labelIncludes.textAlignment = NSTextAlignmentRight;
+        _labelNotIncluded.transform = CGAffineTransformMakeScale(-1.0, 1.0);
+        _labelNotIncluded.textAlignment = NSTextAlignmentRight;
+        _subscriptionManagement.transform = CGAffineTransformMakeScale(-1.0, 1.0);
+        _subscriptionManagement.textAlignment = NSTextAlignmentRight;
+    }
+    
     CGFloat y = 0;
     for (UIView *view in self.scrollViewContainerView.subviews)
     {
@@ -442,6 +460,12 @@
 
 - (void)setupButton:(UIButton *)button
 {
+    if ([self.scrollView isDirectionRTL])
+    {
+        self.buttonLater.transform = CGAffineTransformMakeScale(-1.0, 1.0);
+        self.buttonRestore.transform = CGAffineTransformMakeScale(-1.0, 1.0);
+    }
+    
     [button setTitleColor:UIColorFromRGB(color_primary_purple) forState:UIControlStateNormal];
     button.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
 }

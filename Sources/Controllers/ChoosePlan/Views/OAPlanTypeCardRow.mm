@@ -282,6 +282,9 @@
 
 - (CGFloat)updateLayout:(CGFloat)y width:(CGFloat)width
 {
+    if ([self isDirectionRTL])
+        [self rtlApplication];
+    
     CGFloat newWidth = width - kPrimarySpaceMargin * 2 - [OAUtilities getLeftMargin] * 2;
     CGFloat textVerticalOffset = kSecondarySpaceMargin;
     CGFloat leftSideOffset = _type == EOAPlanTypeChoosePlan ? kSecondarySpaceMargin : kPrimarySpaceMargin;
@@ -370,6 +373,18 @@
     CGRect frame = self.imageViewRightIcon.frame;
     frame.origin.x = x;
     self.imageViewRightIcon.frame = frame;
+}
+
+- (void)rtlApplication
+{
+    self.labelTitle.transform = CGAffineTransformMakeScale(-1.0, 1.0);
+    self.labelTitle.textAlignment = NSTextAlignmentRight;
+    self.labelDescription.transform = CGAffineTransformMakeScale(-1.0, 1.0);
+    self.labelDescription.textAlignment = NSTextAlignmentRight;
+    self.badgeLabel.transform = CGAffineTransformMakeScale(-1.0, 1.0);
+    self.badgeLabel.textAlignment = NSTextAlignmentRight;
+    self.tertiaryDescrLabel.transform = CGAffineTransformMakeScale(-1.0, 1.0);
+    self.tertiaryDescrLabel.textAlignment = NSTextAlignmentRight;
 }
 
 - (void)onTapped:(UIGestureRecognizer *)recognizer

@@ -161,6 +161,9 @@
 
 - (CGFloat)updateLayout:(CGFloat)y width:(CGFloat)width
 {
+    if ([self isDirectionRTL])
+        [self rtlApplication];
+    
     CGFloat leftMargin = 20. + [OAUtilities getLeftMargin];
     CGFloat titleRightMargin = leftMargin + kIconBigTitleSize + 16.;
     CGSize titleSize = [OAUtilities calculateTextBounds:self.labelTitle.text
@@ -253,6 +256,16 @@
 
     self.frame = CGRectMake(0., y, width, self.viewBottomSeparator.frame.origin.y + kSeparatorHeight);
     return self.frame.size.height;
+}
+
+- (void)rtlApplication
+{
+    self.labelTitle.transform = CGAffineTransformMakeScale(-1.0, 1.0);
+    self.labelTitle.textAlignment = NSTextAlignmentRight;
+    self.labelDescription.transform = CGAffineTransformMakeScale(-1.0, 1.0);
+    self.labelDescription.textAlignment = NSTextAlignmentRight;
+    self.labelPurchaseDescription.transform = CGAffineTransformMakeScale(-1.0, 1.0);
+    self.labelPurchaseDescription.textAlignment = NSTextAlignmentRight;
 }
 
 - (OAFeatureCardRow *)addFeatureRow:(OAFeature *)feature showDivider:(BOOL)showDivider selected:(BOOL)selected

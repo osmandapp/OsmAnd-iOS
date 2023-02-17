@@ -178,7 +178,7 @@
 
         if (!currentTrack)
         {
-            [self.exportButton setTitle:OALocalizedString(@"shared_string_export") forState:UIControlStateNormal];
+            [self.exportButton setTitle:OALocalizedString(@"shared_string_share") forState:UIControlStateNormal];
             [self.exportButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [self.exportButton addTarget:self action:@selector(onExportPressed:)
                                forControlEvents:UIControlEventTouchUpInside];

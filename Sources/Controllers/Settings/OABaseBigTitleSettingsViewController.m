@@ -43,10 +43,13 @@
 
 - (void) setTableHeaderView:(NSString *)label
 {
-    _tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:label
-                                                                      font:kHeaderBigTitleFont
-                                                                 textColor:UIColor.blackColor
-                                                                isBigTitle:YES];
+    if (label)
+    {
+        _tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:label
+                                                                          font:kHeaderBigTitleFont
+                                                                     textColor:UIColor.blackColor
+                                                                    isBigTitle:YES];
+    }
 }
 
 - (void) applyLocalization

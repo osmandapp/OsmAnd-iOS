@@ -87,6 +87,7 @@
     [self setTableHeaderView:_descriptionBoldText];
 
     if (_exportStarted)
+    if (_exportStarted)
     {
         OATableCollapsableGroup *group = [[OATableCollapsableGroup alloc] init];
         group.type = [OAProgressTitleCell getCellIdentifier];

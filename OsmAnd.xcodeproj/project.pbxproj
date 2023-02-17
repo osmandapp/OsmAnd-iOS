@@ -1439,6 +1439,10 @@
 		BBA3AFC4197FC4BB0039D991 /* Resources.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BB451F1018EB34A5005FBE09 /* Resources.storyboard */; };
 		C53920C2291E4E770076D5BB /* ic_custom_van@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C53920C0291E4E770076D5BB /* ic_custom_van@2x.png */; };
 		C53920C3291E4E770076D5BB /* ic_custom_van@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C53920C1291E4E770076D5BB /* ic_custom_van@3x.png */; };
+		C5879A49299FB96300F53249 /* uk_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = C5879A48299FB96300F53249 /* uk_tts.js */; };
+		C5879A4B299FBF7A00F53249 /* bg_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = C5879A4A299FBF7900F53249 /* bg_tts.js */; };
+		C5879A4D299FC24700F53249 /* id_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = C5879A4C299FC24700F53249 /* id_tts.js */; };
+		C5879A4F299FC8AC00F53249 /* sl_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = C5879A4E299FC8AC00F53249 /* sl_tts.js */; };
 		C588D1E0298BAB81001FEDBD /* ca_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = C588D1DF298BAB80001FEDBD /* ca_tts.js */; };
 		C5D8F809292F5B2900C01065 /* ic_custom_download_map@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5D8F808292F5B2900C01065 /* ic_custom_download_map@2x.png */; };
 		C5D8F80B292F5B3A00C01065 /* ic_custom_download_map@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5D8F80A292F5B3A00C01065 /* ic_custom_download_map@3x.png */; };
@@ -4927,6 +4931,10 @@
 		BBBDADB818BCF53500E4A359 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		C53920C0291E4E770076D5BB /* ic_custom_van@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_van@2x.png"; path = "Resources/Icons/ic_custom_van@2x.png"; sourceTree = "<group>"; };
 		C53920C1291E4E770076D5BB /* ic_custom_van@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_van@3x.png"; path = "Resources/Icons/ic_custom_van@3x.png"; sourceTree = "<group>"; };
+		C5879A48299FB96300F53249 /* uk_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = uk_tts.js; path = ../resources/voice/uk/uk_tts.js; sourceTree = "<group>"; };
+		C5879A4A299FBF7900F53249 /* bg_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = bg_tts.js; path = ../resources/voice/bg/bg_tts.js; sourceTree = "<group>"; };
+		C5879A4C299FC24700F53249 /* id_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = id_tts.js; path = ../resources/voice/id/id_tts.js; sourceTree = "<group>"; };
+		C5879A4E299FC8AC00F53249 /* sl_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = sl_tts.js; path = ../resources/voice/sl/sl_tts.js; sourceTree = "<group>"; };
 		C588D1DF298BAB80001FEDBD /* ca_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = ca_tts.js; path = ../resources/voice/ca/ca_tts.js; sourceTree = "<group>"; };
 		C5D8F808292F5B2900C01065 /* ic_custom_download_map@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_download_map@2x.png"; path = "Resources/Icons/ic_custom_download_map@2x.png"; sourceTree = "<group>"; };
 		C5D8F80A292F5B3A00C01065 /* ic_custom_download_map@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_download_map@3x.png"; path = "Resources/Icons/ic_custom_download_map@3x.png"; sourceTree = "<group>"; };
@@ -13304,6 +13312,7 @@
 			isa = PBXGroup;
 			children = (
 				DAB985A72124231C0081F8F8 /* ar_tts.js */,
+				C5879A4A299FBF7900F53249 /* bg_tts.js */,
 				C588D1DF298BAB80001FEDBD /* ca_tts.js */,
 				DA0C641A21245B6600B2A350 /* fa_tts.js */,
 				DA86371621A5A0AD0064A85F /* nb_tts.js */,
@@ -13320,6 +13329,7 @@
 				DAB985AA212423410081F8F8 /* cs_tts.js */,
 				DAB985AD2124235E0081F8F8 /* da_tts.js */,
 				DA0C642021245BA600B2A350 /* hr_tts.js */,
+				C5879A4C299FC24700F53249 /* id_tts.js */,
 				DAB985B0212423710081F8F8 /* en-gb_tts.js */,
 				DAC588652108996B008B7763 /* nl_tts.js */,
 				DA1CAF30211EC7DA00B0662E /* ja_tts.js */,
@@ -13332,10 +13342,12 @@
 				DAC5885F21089948008B7763 /* es_tts.js */,
 				DA98A02E2109EBBF00BB32D0 /* pl_tts.js */,
 				DAC588682108997F008B7763 /* ru_tts.js */,
+				C5879A4E299FC8AC00F53249 /* sl_tts.js */,
 				DAC588622108995B008B7763 /* fr_tts.js */,
 				DAC5885921089929008B7763 /* de_tts.js */,
 				DAC5885C21089938008B7763 /* en_tts.js */,
 				DA7FA55D2695DCFB0044F05A /* fi_tts.js */,
+				C5879A48299FB96300F53249 /* uk_tts.js */,
 			);
 			name = voice;
 			sourceTree = "<group>";
@@ -14094,6 +14106,7 @@
 				8476E2D61F6C1EEC00EC274F /* map_pedestrian_location_view_angle_night@3x.png in Resources */,
 				DA8EE7F8246D446400069A6D /* ic_custom_no_route@3x.png in Resources */,
 				DA8A927F25DE8B4A00F5320A /* ic_carplay_favorites@3x.png in Resources */,
+				C5879A49299FB96300F53249 /* uk_tts.js in Resources */,
 				323BD9092628850400D255ED /* ic_bg_point_circle_bottom@2x.png in Resources */,
 				323BD90D2628850400D255ED /* ic_bg_point_square_top@3x.png in Resources */,
 				1571CE3624ADEE4F00083F92 /* ic_custom_direction_north@3x.png in Resources */,
@@ -14945,6 +14958,7 @@
 				845E06081B5956E800DFC2A7 /* ic_arrow_open@3x.png in Resources */,
 				842432601AEFDD1900925821 /* widget_monitoring_rec_small_day@2x.png in Resources */,
 				155B8049249217F7003ADA42 /* img_placeholder_online_source@3x.png in Resources */,
+				C5879A4B299FBF7A00F53249 /* bg_tts.js in Resources */,
 				844499931AAA1FFA00ACA20D /* bt_bought_addon@2x.png in Resources */,
 				157F3CD724A1F43C000A66F0 /* ic_custom_straight_line@2x.png in Resources */,
 				0CF5855E244072EC0081238D /* widget_marker_triangle_pin_3@2x.png in Resources */,
@@ -15048,6 +15062,7 @@
 				3205EC4026E807E80090B491 /* OAQuickSearchCoordinatesViewController.xib in Resources */,
 				845E06A91B5FF17400DFC2A7 /* ic_plugin_parking@3x.png in Resources */,
 				8415030D1DEED6AE007FAC50 /* ic_wifi_off@2x.png in Resources */,
+				C5879A4F299FC8AC00F53249 /* sl_tts.js in Resources */,
 				DAF7A4E221786B5700FB94FD /* ic_action_ruler_circle@3x.png in Resources */,
 				3219705F25FA0DCE00C3FED6 /* bg_point_circle@3x.png in Resources */,
 				DA540D92229E63270069201E /* ic_custom_photo@3x.png in Resources */,
@@ -15399,6 +15414,7 @@
 				DA5A826426C563A700F274C7 /* OABottomSheetHeaderButtonCell.xib in Resources */,
 				DA1340F2243DC5A80039D214 /* map_action_ski_touring@2x.png in Resources */,
 				4649427D286DB36800A44103 /* ic_custom_compass_rotated@3x.png in Resources */,
+				C5879A4D299FC24700F53249 /* id_tts.js in Resources */,
 				B247459B27F4A5FB00C18C3F /* ic_custom_cloud_upload@2x.png in Resources */,
 				B247453E27E3A8D000C18C3F /* OACloudIntroductionHeaderView.xib in Resources */,
 				3296B4A527F8790800108AF7 /* widget_weather_wind_night@3x.png in Resources */,

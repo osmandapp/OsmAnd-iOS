@@ -167,7 +167,7 @@
                                   value:descriptionParagraphStyle
                                   range:NSMakeRange(0, attributedDescription.length)];
     [attributedDescription addAttribute:NSFontAttributeName
-                                  value:[UIFont systemFontOfSize:15.]
+                                  value:[UIFont scaledSystemFontOfSize:15.]
                                   range:NSMakeRange(0, attributedDescription.length)];
     [attributedDescription addAttribute:NSForegroundColorAttributeName
                                   value:UIColorFromRGB(color_text_footer)

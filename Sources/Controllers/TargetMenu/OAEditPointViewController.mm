@@ -225,8 +225,8 @@
     _scrollCellsState = [[OACollectionViewCellState alloc] init];
     
     _floatingTextFieldControllers = [NSMutableArray array];
-    _nameTextField = [self getInputCellWithHint:OALocalizedString(@"fav_name") text:(self.name ? self.name : @"") tag:0 isEditable:![_pointHandler isSpecialPoint]];
-    _descTextField = [self getInputCellWithHint:OALocalizedString(@"description") text:(self.desc ? self.desc : @"") tag:1 isEditable:YES];
+    _nameTextField = [self getInputCellWithHint:OALocalizedString(@"shared_string_name") text:(self.name ? self.name : @"") tag:0 isEditable:![_pointHandler isSpecialPoint]];
+    _descTextField = [self getInputCellWithHint:OALocalizedString(@"shared_string_description") text:(self.desc ? self.desc : @"") tag:1 isEditable:YES];
     _addressTextField = [self getInputCellWithHint:OALocalizedString(@"shared_string_address") text:(self.address ? self.address : @"") tag:2 isEditable:YES];
 
     [self initLastUsedIcons];
@@ -266,7 +266,7 @@
         NSArray<OAFavoriteGroup *> *allGroups = [OAFavoritesHelper getFavoriteGroups];
 
         if (![[OAFavoritesHelper getGroups].allKeys containsObject:@""]) {
-            [names addObject:OALocalizedString(@"favorites")];
+            [names addObject:OALocalizedString(@"favorites_item")];
             [sizes addObject:@0];
             [colors addObject:[OADefaultFavorite getDefaultColor]];
         }
@@ -553,7 +553,7 @@
         @"values" : _groupNames,
         @"sizes" : _groupSizes,
         @"colors" : _groupColors,
-        @"addButtonTitle" : OALocalizedString(@"fav_add_group")
+        @"addButtonTitle" : OALocalizedString(@"add_group")
     }];
     _selectCategoryCardsRowIndex = section.count - 1;
     [data addObject:[NSArray arrayWithArray:section]];
@@ -561,7 +561,7 @@
 
     section = [NSMutableArray new];
     [section addObject:@{
-        @"header" : OALocalizedString(@"map_settings_appearance"),
+        @"header" : OALocalizedString(@"shared_string_appearance"),
         @"type" : [OAPoiTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"icon"),
         @"value" : @"",
@@ -575,7 +575,7 @@
 
     [section addObject:@{
         @"type" : [OAColorsTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"fav_color"),
+        @"title" : OALocalizedString(@"shared_string_color"),
         @"value" : _selectedColor.name,
         @"index" : @(_selectedColorIndex),
     }];
@@ -583,7 +583,7 @@
 
     [section addObject:@{
         @"type" : [OAShapesTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"shape"),
+        @"title" : OALocalizedString(@"shared_string_shape"),
         @"value" : OALocalizedString(_backgroundIconNames[_selectedBackgroundIndex]),
         @"index" : @(_selectedBackgroundIndex),
         @"icons" : _backgroundIcons,
@@ -597,9 +597,9 @@
 
     section = [NSMutableArray new];
     [section addObject:@{
-        @"header" : OALocalizedString(@"actions").upperCase,
+        @"header" : OALocalizedString(@"shared_string_actions").upperCase,
         @"type" : [OATitleRightIconCell getCellIdentifier],
-        @"title" : OALocalizedString(@"fav_replace"),
+        @"title" : OALocalizedString(@"update_existing"),
         @"img" : @"ic_custom_replace",
         @"color" : UIColorFromRGB(color_primary_purple),
         @"key" : kReplaceKey
@@ -634,7 +634,8 @@
     textField.clearButton.tag = tag;
     [textField.clearButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
     [textField.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-    textField.font = [UIFont systemFontOfSize:17.0];
+    textField.font = [UIFont scaledSystemFontOfSize:17.0];
+    textField.adjustsFontForContentSizeCategory = YES;
     textField.clearButton.imageView.tintColor = UIColorFromRGB(color_icon_color);
     [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field.png"] forState:UIControlStateNormal];
     [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field.png"] forState:UIControlStateHighlighted];
@@ -642,7 +643,7 @@
     if (!_floatingTextFieldControllers)
         _floatingTextFieldControllers = [NSMutableArray new];
     MDCTextInputControllerUnderline *fieldController = [[MDCTextInputControllerUnderline alloc] initWithTextInput:textField];
-    fieldController.inlinePlaceholderFont = [UIFont systemFontOfSize:16.0];
+    fieldController.inlinePlaceholderFont = [UIFont scaledSystemFontOfSize:16.0];
     fieldController.floatingPlaceholderActiveColor = fieldController.floatingPlaceholderNormalColor;
     fieldController.textInput.textInsetsMode = MDCTextInputTextInsetsModeIfContent;
     [_floatingTextFieldControllers addObject:fieldController];
@@ -680,7 +681,9 @@
 
 - (NSString *)getGroupTitle
 {
-    return [_pointHandler getGroupTitle];
+    return _isNewItemAdding && _editPointType == EOAEditPointTypeFavorite
+        ? [OAFavoriteGroup getDisplayName:[[OAAppSettings sharedManager].lastFavCategoryEntered get]]
+        : [_pointHandler getGroupTitle];
 }
 
 - (void)viewDidLayoutSubviews
@@ -711,7 +714,7 @@
             _navBarHeightConstraint.constant = kCompressedHeaderHeight;
         }
 
-        self.titleLabel.font = [UIFont systemFontOfSize:17 * multiplier weight:UIFontWeightSemibold];
+        self.titleLabel.font = [UIFont scaledSystemFontOfSize:17 * multiplier weight:UIFontWeightSemibold];
         self.titleLabel.alpha = multiplier;
         self.titleLabel.hidden = NO;
     }
@@ -727,7 +730,7 @@
 {
     if (_isUnsaved)
     {
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"shared_string_dismiss") message:OALocalizedString(@"osm_editing_lost_changes_title") preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"shared_string_dismiss") message:OALocalizedString(@"exit_without_saving") preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleDefault handler:nil]];
         [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_exit") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             if (_isNewItemAdding)
@@ -789,7 +792,7 @@
         {
             if (!_pointHandler.gpxWptDelegate)
                 _pointHandler.gpxWptDelegate = self.gpxWptDelegate;
-            if ([savingGroup isEqualToString:OALocalizedString(@"gpx_waypoints")])
+            if ([savingGroup isEqualToString:OALocalizedString(@"shared_string_waypoints")])
                 savingGroup = @"";
         }
 
@@ -822,6 +825,9 @@
         }
 
         [[OARootViewController instance].mapPanel reopenContextMenu];
+        
+        if (_editPointType == EOAEditPointTypeFavorite)
+            [OAAppSettings.sharedManager.lastFavCategoryEntered set:savingGroup];
     }
 }
 
@@ -933,7 +939,7 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
             cell = nib[0];
-            cell.descriptionView.font = [UIFont systemFontOfSize:17.0];
+            cell.descriptionView.font = [UIFont scaledSystemFontOfSize:17.0];
             cell.descriptionView.numberOfLines = 1;
             cell.iconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
             cell.iconView.tintColor = UIColorFromRGB(color_tint_gray);
@@ -1033,7 +1039,7 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleRightIconCell getCellIdentifier] owner:self options:nil];
             cell = nib[0];
-            cell.titleView.font = [UIFont systemFontOfSize:17. weight:UIFontWeightSemibold];
+            cell.titleView.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightSemibold];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         cell.titleView.text = item[@"title"];
@@ -1310,7 +1316,7 @@
     [self updateHeaderIcon];
     
     if ([self.groupTitle isEqualToString:@""])
-        self.groupTitle = OALocalizedString(@"favorites");
+        self.groupTitle = OALocalizedString(@"favorites_item");
     [self generateData];
     
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_selectCategoryLabelRowIndex inSection:_selectCategorySectionIndex], [NSIndexPath indexPathForRow:_poiIconRowIndex inSection:_appearenceSectionIndex], [NSIndexPath indexPathForRow:_colorRowIndex inSection:_appearenceSectionIndex], [NSIndexPath indexPathForRow:_shapeRowIndex inSection:_appearenceSectionIndex]] withRowAnimation:UITableViewRowAnimationNone];
@@ -1399,7 +1405,7 @@
 - (void)onFavoriteReplaced:(OAFavoriteItem *)favoriteItem;
 {
     NSString *message = [NSString stringWithFormat:OALocalizedString(@"replace_favorite_confirmation"), [favoriteItem getDisplayName]];
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"fav_replace") message:message preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"update_existing") message:message preferredStyle:UIAlertControllerStyleAlert];
     
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_no") style:UIAlertActionStyleDefault handler:nil]];
     
@@ -1427,7 +1433,7 @@
 - (void) onWaypointReplaced:(OAGpxWptItem *)waypointItem
 {
     NSString *message = [NSString stringWithFormat:OALocalizedString(@"replace_waypoint_confirmation"), waypointItem.point.name];
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"fav_replace") message:message preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"update_existing") message:message preferredStyle:UIAlertControllerStyleAlert];
 
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_no") style:UIAlertActionStyleDefault handler:nil]];
 

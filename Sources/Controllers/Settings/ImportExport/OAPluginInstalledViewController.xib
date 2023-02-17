@@ -90,12 +90,12 @@
                     <constraints>
                         <constraint firstAttribute="height" constant="56" id="b6d-sH-jMu"/>
                     </constraints>
-                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                     <state key="normal" title="Cancel">
                         <color key="titleColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
                     </state>
                     <connections>
-                        <action selector="backButtonClicked:" destination="-1" eventType="touchUpInside" id="MP8-Hg-eJr"/>
+                        <action selector="onLeftNavbarButtonPressed:" destination="-1" eventType="touchUpInside" id="MP8-Hg-eJr"/>
                     </connections>
                 </button>
             </subviews>

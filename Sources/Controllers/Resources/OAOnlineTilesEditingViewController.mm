@@ -9,12 +9,12 @@
 #import "OAOnlineTilesEditingViewController.h"
 #import "Localization.h"
 #import "OASQLiteTileSource.h"
-#import "OATextViewResizingCell.h"
 #import "OAColors.h"
 #import "OATimeTableViewCell.h"
 #import "OASettingsTableViewCell.h"
 #import "OACustomPickerTableViewCell.h"
-#import "OATextInputCell.h"
+#import "OAInputTableViewCell.h"
+#import "OATextMultilineTableViewCell.h"
 #import "OAOnlineTilesSettingsViewController.h"
 #import "OAResourcesBaseViewController.h"
 #import "OAManageResourcesViewController.h"
@@ -72,7 +72,7 @@
 }
 -(void)applyLocalization
 {
-    _titleView.text = _isNewItem ? OALocalizedString(@"map_settings_add_online_source") : OALocalizedString(@"res_edit_map_source");
+    _titleView.text = _isNewItem ? OALocalizedString(@"add_online_source") : OALocalizedString(@"res_edit_map_source");
     [_saveButton setTitle:OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
 }
 
@@ -253,16 +253,12 @@
     _zoomArray = [NSArray arrayWithArray: zoomArr];
     
     NSMutableArray *tableData = [NSMutableArray new];
-    [tableData addObject:@{
-        @"type" : [OATextViewResizingCell getCellIdentifier],
-    }];
-    [tableData addObject:@{
-        @"type" : [OATextViewResizingCell getCellIdentifier],
-    }];
+    [tableData addObject:@{ @"type" : [OATextMultilineTableViewCell getCellIdentifier] }];
+    [tableData addObject:@{ @"type" : [OATextMultilineTableViewCell getCellIdentifier] }];
     [tableData addObject: zoomArr];
     [tableData addObject:@{
         @"placeholder" : OALocalizedString(@"shared_string_not_set"),
-        @"type" : [OATextInputCell getCellIdentifier],
+        @"type" : [OAInputTableViewCell getCellIdentifier]
     }];
     
     [tableData addObject:@{
@@ -280,15 +276,15 @@
 
     NSMutableArray *sectionArr = [NSMutableArray new];
     [sectionArr addObject:@{
-                        @"header" : OALocalizedString(@"fav_name"),
+                        @"header" : OALocalizedString(@"shared_string_name"),
                         @"footer" : OALocalizedString(@"res_online_name_descr")
                         }];
     [sectionArr addObject:@{
-                        @"header" : OALocalizedString(@"res_url"),
+                        @"header" : OALocalizedString(@"edit_tilesource_url_to_load"),
                         @"footer" : OALocalizedString(@"res_online_url_descr")
                         }];
     [sectionArr addObject:@{
-                        @"header" : OALocalizedString(@"res_zoom_levels"),
+                        @"header" : OALocalizedString(@"shared_string_zoom_levels"),
                         @"footer" : OALocalizedString(@"res_zoom_levels_desc")
                         }];
     [sectionArr addObject:@{
@@ -485,7 +481,7 @@
     {
         if ([self needsClearCache] && [self isOnlineSource])
         {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"shared_string_warning") message:OALocalizedString(@"res_online_source_cache_alert") preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"osmand_parking_warning") message:OALocalizedString(@"clear_tiles_warning") preferredStyle:UIAlertControllerStyleAlert];
             [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleDefault handler:nil]];
             [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 [self clearAndUpdateSource];
@@ -676,7 +672,7 @@
 
 - (void)showExitWithoutChangesDialog
 {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"osm_editing_lost_changes_title") message:OALocalizedString(@"osm_editing_lost_changes_descr") preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"exit_without_saving") message:OALocalizedString(@"unsaved_changes_will_be_lost") preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleDefault handler:nil]];
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self.navigationController popViewControllerAnimated:YES];
@@ -762,76 +758,76 @@
 - (NSString *) getFormatString:(EOASourceFormat)sourceFormat
 {
     if (sourceFormat == EOASourceFormatOnline)
-        return OALocalizedString(@"res_source_one_per_tile");
+        return OALocalizedString(@"one_image_per_tile");
     else if (sourceFormat == EOASourceFormatSQLite)
-        return OALocalizedString(@"res_source_sqlite");
+        return OALocalizedString(@"sqlite_db_file");
     
     return @"";
 }
 
-- (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
+- (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
+{
     NSDictionary *item =  [self getItem:indexPath];
-    
-    if ([item[@"type"] isEqualToString:[OATextViewResizingCell getCellIdentifier]])
+    if ([item[@"type"] isEqualToString:[OATextMultilineTableViewCell getCellIdentifier]])
     {
-        OATextViewResizingCell* cell = [tableView dequeueReusableCellWithIdentifier:[OATextViewResizingCell getCellIdentifier]];
+        OATextMultilineTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OATextMultilineTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextViewResizingCell getCellIdentifier] owner:self options:nil];
-            cell = (OATextViewResizingCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextMultilineTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OATextMultilineTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            cell.textView.userInteractionEnabled = YES;
+            cell.textView.editable = YES;
+            cell.textView.delegate = self;
+            cell.textView.textContainer.lineBreakMode = NSLineBreakByCharWrapping;
         }
-        
         if (cell)
         {
             BOOL isURL = indexPath.section == kURLSection;
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.inputField.delegate = self;
-            cell.inputField.textContainer.lineBreakMode = NSLineBreakByCharWrapping;
-            cell.inputField.tag = isURL ? kURLCellTag : kNameCellTag;
-            cell.clearButton.tag = cell.inputField.tag;
+            cell.textView.tag = isURL ? kURLCellTag : kNameCellTag;
+            cell.clearButton.tag = cell.textView.tag;
             [cell.clearButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
             [cell.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
             if ([self isOfflineSQLiteDB] && isURL)
             {
                 cell.userInteractionEnabled = NO;
-                cell.inputField.text = OALocalizedString(@"res_offlineSQL_URL_warning");
-                cell.inputField.textColor = [UIColor lightGrayColor];
-                cell.clearButton.hidden = YES;
+                cell.textView.text = OALocalizedString(@"res_offlineSQL_URL_warning");
+                cell.textView.textColor = [UIColor lightGrayColor];
+                [cell clearButtonVisibility:NO];
             }
             else
             {
                 cell.userInteractionEnabled = YES;
-                cell.inputField.text = isURL ? _itemURL : _itemName;
-                cell.inputField.textColor = [UIColor blackColor];
-                cell.clearButton.hidden = NO;
+                cell.textView.text = isURL ? _itemURL : _itemName;
+                cell.textView.textColor = [UIColor blackColor];
+                [cell clearButtonVisibility:YES];
             }
         }
-        
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:[OATextInputCell getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:[OAInputTableViewCell getCellIdentifier]])
     {
-        OATextInputCell* cell = [tableView dequeueReusableCellWithIdentifier:[OATextInputCell getCellIdentifier]];
+        OAInputTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAInputTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextInputCell getCellIdentifier] owner:self options:nil];
-            cell = (OATextInputCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAInputTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAInputTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell titleVisibility:NO];
+            [cell clearButtonVisibility:NO];
+            [cell.inputField removeTarget:self action:NULL forControlEvents:UIControlEventEditingChanged];
+            [cell.inputField addTarget:self action:@selector(textChanged:) forControlEvents:UIControlEventEditingChanged];
+            cell.inputField.keyboardType = UIKeyboardTypeNumberPad;
+            cell.inputField.textAlignment = NSTextAlignmentNatural;
         }
-        cell.inputField.text = _expireTimeMinutes;
-        cell.inputField.delegate = self;
-        cell.userInteractionEnabled = YES;
-        [cell.inputField removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-        [cell.inputField addTarget:self action:@selector(textChanged:) forControlEvents:UIControlEventEditingChanged];
-        cell.inputField.keyboardType = UIKeyboardTypeNumberPad;
-        if ([self isOfflineSQLiteDB])
+        if (cell)
         {
-            cell.userInteractionEnabled = NO;
-            cell.inputField.placeholder = OALocalizedString(@"res_offlineSQL_URL_warning");
-        }
-        else
-        {
-            cell.userInteractionEnabled = YES;
-            cell.inputField.placeholder = item[@"placeholder"];
+            cell.inputField.text = _expireTimeMinutes;
+            cell.inputField.delegate = self;
+
+            BOOL isOfflineSQLiteDB = [self isOfflineSQLiteDB];
+            cell.userInteractionEnabled = !isOfflineSQLiteDB;
+            cell.inputField.placeholder = isOfflineSQLiteDB ? OALocalizedString(@"res_offlineSQL_URL_warning") : item[@"placeholder"];
         }
         return cell;
     }
@@ -849,7 +845,7 @@
             NSString *key = item[@"key"];
             if ([key isEqualToString:@"mercator_sett"])
             {
-                cell.descriptionView.text = _isEllipticYTile ? OALocalizedString(@"res_elliptic_mercator") : OALocalizedString(@"res_pseudo_mercator");
+                cell.descriptionView.text = _isEllipticYTile ? OALocalizedString(@"edit_tilesource_elliptic_tile") : OALocalizedString(@"pseudo_mercator_projection");
             }
             else if ([key isEqualToString:@"format_sett"])
             {
@@ -948,6 +944,16 @@
         [self hidePicker];
         [self.navigationController pushViewController:settingsViewController animated:YES];
     }
+    else if ([item[@"type"] isEqualToString:[OAInputTableViewCell getCellIdentifier]])
+    {
+        OAInputTableViewCell *cell = (OAInputTableViewCell *) [tableView cellForRowAtIndexPath:indexPath];
+        [cell.inputField becomeFirstResponder];
+    }
+    else if ([item[@"type"] isEqualToString:[OATextMultilineTableViewCell getCellIdentifier]])
+    {
+        OATextMultilineTableViewCell *cell = (OATextMultilineTableViewCell *) [tableView cellForRowAtIndexPath:indexPath];
+        [cell.textView becomeFirstResponder];
+    }
 }
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -975,35 +981,17 @@
     return _data.count;
 }
 
-#pragma mark - UITextViewDelegate
-
--(void)textViewDidChange:(UITextView *)textView
-{
-    if (textView.tag == kNameCellTag)
-        _itemName = textView.text;
-    else if (textView.tag == kURLCellTag)
-        _itemURL = textView.text;
-    
-    [textView sizeToFit];
-    [self.tableView beginUpdates];
-    [self.tableView endUpdates];
-}
-
-- (void)textViewDidBeginEditing:(UITextView *)textView
-{
-    [self hidePicker];
-}
-
-- (void)textChanged:(UITextView *)textView
-{
-    _expireTimeMinutes = textView.text;
-}
-
 #pragma mark - UITextFieldDelegate
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
     [self hidePicker];
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [textField resignFirstResponder];
+    return YES;
 }
 
 #pragma mark - OACustomPickerTableViewCellDelegate
@@ -1060,18 +1048,43 @@
     } completion:nil];
 }
 
--(void) clearButtonPressed:(UIButton *)sender
+#pragma mark - UITextViewDelegate
+
+- (void)textViewDidBeginEditing:(UITextView *)textView
+{
+    [self hidePicker];
+}
+
+- (void)textViewDidChange:(UITextView *)textView
+{
+    if (textView.tag == kNameCellTag)
+        _itemName = textView.text;
+    else if (textView.tag == kURLCellTag)
+        _itemURL = textView.text;
+    
+    [textView sizeToFit];
+    [self.tableView beginUpdates];
+    [self.tableView endUpdates];
+}
+
+#pragma mark - Selectors
+
+- (void)textChanged:(UITextView *)textView
+{
+    _expireTimeMinutes = textView.text;
+}
+
+- (void) clearButtonPressed:(UIButton *)sender
 {
     if (sender.tag == kNameCellTag)
         _itemName = @"";
     else if (sender.tag == kURLCellTag)
         _itemURL = @"";
-    
+
     [_tableView beginUpdates];
     UITableViewCell *cell = [_tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:sender.tag == kNameCellTag ? kNameSection : kURLSection]];
-    if ([cell isKindOfClass:OATextViewResizingCell.class])
-        ((OATextViewResizingCell *) cell).inputField.text = @"";
-    
+    if ([cell isKindOfClass:OATextMultilineTableViewCell.class])
+        ((OATextMultilineTableViewCell *) cell).textView.text = @"";
     [_tableView endUpdates];
 }
 

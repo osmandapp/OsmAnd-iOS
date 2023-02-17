@@ -106,7 +106,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
 - (void) applyLocalization
 {
     [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"fav_replace");
+    self.titleLabel.text = OALocalizedString(@"update_existing");
 }
 
 - (void) generateData
@@ -325,6 +325,9 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.separatorInset = UIEdgeInsetsMake(0, CGFLOAT_MAX, 0, 0);
             [cell.segmentControl insertSegmentWithTitle:item[@"title2"] atIndex:2 animated:NO];
+            UIFont *font = [UIFont scaledSystemFontOfSize:14.];
+            [cell.segmentControl setTitleTextAttributes:@{ NSFontAttributeName : font } forState:UIControlStateNormal];
+            [cell.segmentControl setTitleTextAttributes:@{ NSFontAttributeName : font } forState:UIControlStateSelected];
         }
         if (cell)
         {

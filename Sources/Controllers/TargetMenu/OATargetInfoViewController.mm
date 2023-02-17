@@ -42,7 +42,7 @@
 #import "OASimpleTableViewCell.h"
 #import "OAMapillaryOsmTagHelper.h"
 #import "OACollapsableWaypointsView.h"
-#import "OATextMultiViewCell.h"
+#import "OATextMultilineTableViewCell.h"
 #import "OAEditDescriptionViewController.h"
 
 #include <OsmAndCore/Utilities.h>
@@ -129,7 +129,7 @@
     NSArray<OATransportStopRoute *> *nearbyTransportRoutes = [self getNearbyTransportStopRoutes];
     if (localTransportRoutes.count > 0)
     {
-        OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:nil icon:nil textPrefix:nil text:OALocalizedString(@"transport_routes") textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
+        OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:nil icon:nil textPrefix:nil text:OALocalizedString(@"transport_Routes") textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
         rowInfo.collapsable = YES;
         rowInfo.collapsed = NO;
         rowInfo.collapsableView = [[OACollapsableTransportStopRoutesView alloc] initWithFrame:CGRectMake([OAUtilities getLeftMargin], 0, 320, 100)];
@@ -719,58 +719,45 @@
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
             cell.titleLabel.textColor = UIColorFromRGB(color_dialog_buttons_light);
-            cell.titleLabel.font = [UIFont systemFontOfSize:13 weight:UIFontWeightSemibold];
+            cell.titleLabel.font = [UIFont scaledSystemFontOfSize:13 weight:UIFontWeightSemibold];
             [cell textIndentsStyle:EOATableViewCellTextIncreasedTopCenterIndentStyle];
             [cell anchorContent:EOATableViewCellContentTopStyle];
         }
         if (self.delegate.isInFullMode)
             cell.titleLabel.text = OALocalizedString(@"shared_string_collapse").upperCase;
         else
-            cell.titleLabel.text = OALocalizedString(@"res_details").upperCase;
-
+            cell.titleLabel.text = OALocalizedString(@"shared_string_details").upperCase;
         return cell;
     }
     else if ([info.typeName isEqualToString:kDescriptionRowType])
     {
-        OATextMultiViewCell* cell;
-        cell = (OATextMultiViewCell *)[tableView dequeueReusableCellWithIdentifier:[OATextMultiViewCell getCellIdentifier]];
+        OATextMultilineTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OATextMultilineTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextMultiViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OATextMultiViewCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextMultilineTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OATextMultilineTableViewCell *) nib[0];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            [cell leftIconVisibility:NO];
+            [cell clearButtonVisibility:NO];
         }
-        
         NSString *label = info.text;
         if (label.length == 0)
         {
-            cell.textView.font = [UIFont systemFontOfSize:16.0];
-            cell.textView.textContainerInset = UIEdgeInsetsMake(11,11,0,0);
+            cell.textView.font = [UIFont scaledSystemFontOfSize:16.0];
             cell.textView.text = info.textPrefix;
             cell.textView.textColor = [UIColor lightGrayColor];
-            cell.iconView.hidden = NO;
         }
         else
         {
-            cell.textView.font = [UIFont systemFontOfSize:14.0];
+            cell.textView.font = [UIFont scaledSystemFontOfSize:14.0];
             cell.textView.textColor = [UIColor blackColor];
             cell.textView.text = label;
-            cell.iconView.hidden = NO;
             
-            CGSize s = [OAUtilities calculateTextBounds:info.text width:self.tableView.bounds.size.width - 38.0 font:[UIFont systemFontOfSize:14.0]];
+            CGSize s = [OAUtilities calculateTextBounds:info.text width:self.tableView.bounds.size.width - 38.0 font:[UIFont scaledSystemFontOfSize:14.0]];
             CGFloat h = MIN(188.0, s.height + 10.0);
-            h = MAX(44.0, h);
+            h = MAX(48.0, h);
             info.height = h;
-            
-            BOOL descSingleLine = (s.height < 24.0);
-            if (descSingleLine)
-                cell.textView.textContainerInset = UIEdgeInsetsMake(12,11,0,35);
-            else if (info.height > 44.0)
-                cell.textView.textContainerInset = UIEdgeInsetsMake(5,11,0,35);
-            else
-                cell.textView.textContainerInset = UIEdgeInsetsMake(3,11,0,35);
         }
-        cell.textView.backgroundColor = UIColorFromRGB(0xffffff);
-        cell.backgroundColor = UIColorFromRGB(0xffffff);
         return cell;
     }
     

@@ -24,6 +24,8 @@
 
     _lbDescription.text = OALocalizedString(@"first_usage_greeting");
     [_btnStart setTitle:OALocalizedString(@"get_started") forState:UIControlStateNormal];
+    self.lbDescription.font = [UIFont scaledSystemFontOfSize:16. weight:UIFontWeightSemibold];
+    self.btnStart.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
 }
 
 - (void)didReceiveMemoryWarning {

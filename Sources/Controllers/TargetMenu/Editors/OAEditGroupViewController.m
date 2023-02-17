@@ -8,7 +8,7 @@
 
 #import "OAEditGroupViewController.h"
 #import "OAIconTextTableViewCell.h"
-#import "OATextViewTableViewCell.h"
+#import "OAInputTableViewCell.h"
 #import "OAUtilities.h"
 #import "OsmAndApp.h"
 #include "Localization.h"
@@ -32,7 +32,7 @@
 
 - (void)applyLocalization
 {
-    _titleView.text = OALocalizedString(@"groups");
+    _titleView.text = OALocalizedString(@"shared_string_groups");
     [_saveButton setTitle:OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
 }
 
@@ -43,6 +43,7 @@
     _saveChanges = NO;
     
     [self setupView];
+    self.saveButton.titleLabel.font = [UIFont scaledSystemFontOfSize:14.];
 }
 
 - (void)didReceiveMemoryWarning
@@ -77,7 +78,7 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return [@[OALocalizedString(@"groups"), OALocalizedString(@"fav_create_group")] objectAtIndex:section];
+    return [@[OALocalizedString(@"shared_string_groups"), OALocalizedString(@"fav_create_group")] objectAtIndex:section];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -114,7 +115,7 @@
             else
             {
                 [cell showImage:NO];
-                [cell.textView setText:OALocalizedString(@"favorites")];
+                [cell.textView setText:OALocalizedString(@"favorites_item")];
                 [cell.arrowIconView setImage:nil];
                 if (self.groupName.length == 0)
                     [cell.arrowIconView setImage:[UIImage imageNamed:@"menu_cell_selected"]];
@@ -126,24 +127,24 @@
     }
     else
     {
-        OATextViewTableViewCell* cell;
-        cell = (OATextViewTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OATextViewTableViewCell getCellIdentifier]];
+        OAInputTableViewCell *cell = (OAInputTableViewCell *) [tableView dequeueReusableCellWithIdentifier:[OAInputTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextViewTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OATextViewTableViewCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAInputTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAInputTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell titleVisibility:NO];
+            [cell clearButtonVisibility:NO];
+            cell.inputField.textAlignment = NSTextAlignmentNatural;
+            cell.inputField.placeholder = OALocalizedString(@"fav_enter_group_name");
         }
-        
         if (cell)
         {
-            [cell.textView setPlaceholder:OALocalizedString(@"fav_enter_group_name")];
-            [cell.textView removeTarget:self action:NULL forControlEvents:UIControlEventEditingChanged];
-            [cell.textView addTarget:self action:@selector(editGroupName:) forControlEvents:UIControlEventEditingChanged];
-            [cell.textView setDelegate:self];
-            
-            return cell;
+            cell.inputField.delegate = self;
+            [cell.inputField removeTarget:self action:NULL forControlEvents:UIControlEventEditingChanged];
+            [cell.inputField addTarget:self action:@selector(editGroupName:) forControlEvents:UIControlEventEditingChanged];
         }
-        
+        return cell;
     }
     return nil;
 }
@@ -184,11 +185,11 @@
 - (IBAction)saveClicked:(id)sender
 {
     _saveChanges = YES;
-    
+
     if (self.delegate && [self.delegate respondsToSelector:@selector(groupChanged)])
         [self.delegate groupChanged];
-    
-    [self backButtonClicked:self];
+
+    [self dismissViewController];
 }
 
 @end

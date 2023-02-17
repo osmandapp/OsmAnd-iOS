@@ -340,7 +340,7 @@
                 {
                     type = [OAPOIHelper.sharedInstance getPoiTypeByName:map[key]];
                     if (!type)
-                        type = [OAPOIHelper.sharedInstance getPoiTypeByName:@"user_defined_other"];
+                        type = [OAPOIHelper.sharedInstance getDefaultOtherCategoryType];
                 }
                 else if ([shortKey isEqualToString:SUBTYPE])
                 {
@@ -355,6 +355,16 @@
             {
                 NSString *shortKey = [key stringByReplacingOccurrencesOfString:osmPrefix withString:@""];
                 additionalInfo[shortKey] = map[key];
+            }
+            else
+            {
+                NSString *shortKey = [key componentsSeparatedByString:@":"].lastObject;
+                if (![shortKey isEqualToString:@"icon"] &&
+                    ![key isEqualToString:@"color"] &&
+                    ![key isEqualToString:@"background"])
+                {
+                    additionalInfo[key] = map[key];
+                }
             }
         }
         

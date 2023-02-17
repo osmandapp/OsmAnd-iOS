@@ -110,10 +110,13 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     self.tableView.dataSource = self;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.contentInset = UIEdgeInsetsMake(-16, 0, 0, 0);
+    NSString *header;
     if (_screenType == EOAAddToATrack || _screenType == EOASelectTrack)
-        self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"route_between_points_add_track_desc") font:[UIFont systemFontOfSize:15.] textColor:UIColor.blackColor lineSpacing:0. isTitle:NO];
+        header = OALocalizedString(@"route_between_points_add_track_desc");
     else if (_screenType == EOAFollowTrack)
-        self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"select_track_to_follow") font:[UIFont systemFontOfSize:15.] textColor:UIColor.blackColor lineSpacing:0. isTitle:NO];
+        header = OALocalizedString(@"select_track_to_follow");
+    if (header)
+        self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:header font:kHeaderDescriptionFont textColor:UIColor.blackColor isBigTitle:NO];
 }
 
 - (void) applyLocalization
@@ -124,7 +127,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
             self.titleLabel.text = OALocalizedString(@"plan_route_open_existing_track");
             break;
         case EOAAddToATrack:
-            self.titleLabel.text = OALocalizedString(@"add_to_track");
+            self.titleLabel.text = OALocalizedString(@"add_to_a_track");
             break;
         case EOAFollowTrack:
             self.titleLabel.text = OALocalizedString(@"follow_track");
@@ -144,7 +147,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     if (_screenType != EOAOpenExistingTrack)
     {
         [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-            self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:headerDescription font:[UIFont systemFontOfSize:15.] textColor:UIColor.blackColor lineSpacing:0. isTitle:NO];
+            self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:headerDescription font:kHeaderDescriptionFont textColor:UIColor.blackColor isBigTitle:NO];
             [self.tableView reloadData];
         } completion:nil];
     }
@@ -168,7 +171,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     
     [existingTracksSection addObject:@{
         @"type" : [OASegmentTableViewCell getCellIdentifier],
-        @"title0" : OALocalizedString(@"osm_modified"),
+        @"title0" : OALocalizedString(@"shared_string_modified"),
         @"title1" : OALocalizedString(@"shared_a_z"),
         @"title2" : OALocalizedString(@"shared_z_a"),
         @"key" : @"segment_control"
@@ -180,7 +183,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     {
         [existingTracksSection addObject:@{
                 @"type" : [OAGPXTrackCell getCellIdentifier],
-                @"title" : OALocalizedString(@"track_recording_name"),
+                @"title" : OALocalizedString(@"shared_string_currently_recording_track"),
                 @"distance" : [OAOsmAndFormatter getFormattedDistance:gpxRecHelper.distance],
                 @"time" : [OAOsmAndFormatter getFormattedTimeInterval:0 shortFormat:YES],
                 @"wpt" : [NSString stringWithFormat:@"%d", gpxRecHelper.points],
@@ -234,7 +237,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     else
     {
         NSString *selectedFolderName = _allFolders[_selectedFolderIndex - 1];
-        if ([selectedFolderName isEqualToString:OALocalizedString(@"tracks")])
+        if ([selectedFolderName isEqualToString:OALocalizedString(@"shared_string_gpx_tracks")])
             selectedFolderName = @"";
         
         return [data filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(OAGPX *object, NSDictionary *bindings) {
@@ -318,6 +321,9 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
             [cell.segmentControl addTarget:self action:@selector(segmentChanged:) forControlEvents:UIControlEventValueChanged];
             [cell.segmentControl setTitle:item[@"title0"] forSegmentAtIndex:0];
             [cell.segmentControl setTitle:item[@"title1"] forSegmentAtIndex:1];
+            UIFont *font = [UIFont scaledSystemFontOfSize:14.];
+            [cell.segmentControl setTitleTextAttributes:@{ NSFontAttributeName : font } forState:UIControlStateNormal];
+            [cell.segmentControl setTitleTextAttributes:@{ NSFontAttributeName : font } forState:UIControlStateSelected];
         }
         return cell;
     }

@@ -78,7 +78,7 @@ struct RoutingParameter;
 - (NSString *) getDescription;
 - (UIImage *) getIcon;
 - (NSString *) getCellType;
-- (UIImage *) getSecondaryIcon;
+- (BOOL) hasOptions;
 - (UIColor *) getTintColor;
 
 - (void) setControlAction:(UIControl *)control;

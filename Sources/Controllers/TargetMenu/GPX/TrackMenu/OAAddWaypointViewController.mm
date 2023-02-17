@@ -67,7 +67,7 @@
 - (void)commonInit
 {
     OAWptPt *movedPoint = [[OAWptPt alloc] init];
-    movedPoint.name = OALocalizedString(@"gpx_waypoint");
+    movedPoint.name = OALocalizedString(@"shared_string_waypoint");
     movedPoint.position = _gpx.bounds.center;
     _movedPoint = [OAGpxWptItem withGpxWpt:movedPoint];
 }
@@ -90,6 +90,10 @@
     _contextLayer.changePositionDelegate = self;
 
     [self onMapMoved];
+
+    self.coordinatesView.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
+    self.cancelButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
+    self.addButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
 }
 
 - (void)applyLocalization
@@ -201,7 +205,7 @@
     [_mapPanelViewController targetPointAddWaypoint:_isCurrentTrack
                     ? nil : [_app.gpxPath stringByAppendingPathComponent:_gpx.gpxFilePath]
                                            location:CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude)
-                                              title:OALocalizedString(@"gpx_waypoint")];
+                                              title:OALocalizedString(@"shared_string_waypoint")];
 }
 
 - (IBAction)cancelPressed:(id)sender

@@ -91,7 +91,6 @@
 
 #define color_options_panel_icon 0xa6a6a6
 #define bottom_sheet_background_color 0xFFFFFF
-#define color_bottom_sheet_background 0xF2F2F3
 
 #define color_mapillary 0xff3db878
 #define color_tint_gray 0xCBC7D1
@@ -134,7 +133,7 @@
 #define color_support_red 0xff470d
 #define color_support_green 0x14cc9e
 
-#define color_route_button_inactive 0xE0DDE3
+#define color_button_gray_background 0xE0DDE3
 
 #define color_icon_inactive 0xA49DAF
 
@@ -222,12 +221,17 @@
 
 #define color_slider_minimum 0x58555E
 
-#define color_view_background 0xf9f9f9
-
 #define backup_restore_icons_blue 0x6C19FF
 #define backup_restore_icons_yellow 0xFFC30D
 #define backup_restore_icons_green 0x12B38B
 
 #define color_tableview_background 0xE5E5E5
+
+#define color_carplay_background_night 0x121926
+#define color_carplay_background_day 0xebe7e4
+
+#define color_primary_table_background 0xF2F2F3
+#define color_primary_gray_navbar_background 0xF9F9F9
+#define color_primary_orange_navbar_background 0xFF8800
 
 #endif /* OAColors_h */

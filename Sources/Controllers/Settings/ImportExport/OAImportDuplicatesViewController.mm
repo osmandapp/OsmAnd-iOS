@@ -255,21 +255,21 @@
     if (gpxFilesList.count > 0)
     {
         NSMutableArray *gpxSection = [NSMutableArray new];
-        [gpxSection addObject:[[OAHeaderType alloc] initWithTitle:OALocalizedString(@"tracks")]];
+        [gpxSection addObject:[[OAHeaderType alloc] initWithTitle:OALocalizedString(@"shared_string_gpx_tracks")]];
         [gpxSection addObjectsFromArray:gpxFilesList];
         [duplicates addObject:gpxSection];
     }
     if (mapFiles.count > 0)
     {
         NSMutableArray *mapsSection = [NSMutableArray new];
-        [mapsSection addObject:[[OAHeaderType alloc] initWithTitle:OALocalizedString(@"maps")]];
+        [mapsSection addObject:[[OAHeaderType alloc] initWithTitle:OALocalizedString(@"shared_string_maps")]];
         [mapsSection addObjectsFromArray:mapFiles];
         [duplicates addObject:mapsSection];
     }
     if (favoriteItems.count > 0)
     {
         NSMutableArray *favoritesSection = [NSMutableArray new];
-        [favoritesSection addObject:[[OAHeaderType alloc] initWithTitle:OALocalizedString(@"favorites")]];
+        [favoritesSection addObject:[[OAHeaderType alloc] initWithTitle:OALocalizedString(@"favorites_item")]];
         [favoritesSection addObjectsFromArray:favoriteItems];
         [duplicates addObject:favoritesSection];
     }
@@ -331,7 +331,7 @@
                 if (routingProfile.length == 0)
                     item[@"description"] = @"";
                 else
-                    item[@"description"] = [NSString stringWithFormat:OALocalizedString(@"nav_type_hint"), routingProfile];
+                    item[@"description"] = [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"nav_type_hint"), routingProfile];
                 
                 item[@"icon"] = [UIImage imageNamed:modeBean.iconName];
                 item[@"iconColor"] = UIColorFromRGB(modeBean.iconColor);

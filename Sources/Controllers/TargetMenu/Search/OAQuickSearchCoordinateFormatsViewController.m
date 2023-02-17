@@ -61,42 +61,42 @@
     [_data addObject:@{
         @"type" : [OAMultiIconTextDescCell getCellIdentifier],
         @"title" : [OAPointDescription formatToHumanString:MAP_GEO_FORMAT_DEGREES],
-        @"description" : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"coordinates_example"), [OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_DEGREES]],
+        @"description" : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"shared_string_example"), [OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_DEGREES]],
         @"isSelected" : [NSNumber numberWithBool:_currentFormat == MAP_GEO_FORMAT_DEGREES]
     }];
     
     [_data addObject:@{
         @"type" : [OAMultiIconTextDescCell getCellIdentifier],
         @"title" : [OAPointDescription formatToHumanString:MAP_GEO_FORMAT_MINUTES],
-        @"description" : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"coordinates_example"), [OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_MINUTES]],
+        @"description" : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"shared_string_example"), [OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_MINUTES]],
         @"isSelected" : [NSNumber numberWithBool:_currentFormat == MAP_GEO_FORMAT_MINUTES]
     }];
     
     [_data addObject:@{
         @"type" : [OAMultiIconTextDescCell getCellIdentifier],
         @"title" : [OAPointDescription formatToHumanString:MAP_GEO_FORMAT_SECONDS],
-        @"description" : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"coordinates_example"), [OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_SECONDS]],
+        @"description" : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"shared_string_example"), [OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_SECONDS]],
         @"isSelected" : [NSNumber numberWithBool:_currentFormat == MAP_GEO_FORMAT_SECONDS]
     }];
     
     [_data addObject:@{
         @"type" : [OAMultiIconTextDescCell getCellIdentifier],
         @"title" : [OAPointDescription formatToHumanString:MAP_GEO_UTM_FORMAT],
-        @"description" : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"coordinates_example"), [OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_UTM]],
+        @"description" : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"shared_string_example"), [OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_UTM]],
         @"isSelected" : [NSNumber numberWithBool:_currentFormat == MAP_GEO_UTM_FORMAT]
     }];
     
     [_data addObject:@{
         @"type" : [OAMultiIconTextDescCell getCellIdentifier],
         @"title" : [OAPointDescription formatToHumanString:MAP_GEO_OLC_FORMAT],
-        @"description" : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"coordinates_example"), [OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_OLC]],
+        @"description" : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"shared_string_example"), [OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_OLC]],
         @"isSelected" : [NSNumber numberWithBool:_currentFormat == MAP_GEO_OLC_FORMAT]
     }];
     
     [_data addObject:@{
         @"type" : [OAMultiIconTextDescCell getCellIdentifier],
         @"title" : [OAPointDescription formatToHumanString:MAP_GEO_MGRS_FORMAT],
-        @"description" : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"coordinates_example"), [OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_MGRS]],
+        @"description" : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"shared_string_example"), [OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:FORMAT_MGRS]],
         @"isSelected" : [NSNumber numberWithBool:_currentFormat == MAP_GEO_MGRS_FORMAT]
     }];
 
@@ -135,7 +135,7 @@
     {
         UIView *res = [[UIView alloc] init];
         res.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        res.backgroundColor = UIColorFromRGB(color_bottom_sheet_background);
+        res.backgroundColor = UIColorFromRGB(color_primary_table_background);
         res.alpha = 0;
         return res;
     }
@@ -160,7 +160,7 @@
     NSString *url = OALocalizedString(@"coords_format");
     OATableViewCustomFooterView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
 
-    UIFont *textFont = [UIFont systemFontOfSize:13];
+    UIFont *textFont = [UIFont scaledSystemFontOfSize:13];
     NSMutableAttributedString * str = [[NSMutableAttributedString alloc] initWithString:url attributes:@{NSFontAttributeName : textFont}];
     [str addAttribute:NSLinkAttributeName value:url range: NSMakeRange(0, str.length)];
     text = [text stringByAppendingString:@" > "];
@@ -184,7 +184,7 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMultiIconTextDescCell getCellIdentifier] owner:self options:nil];
             cell = (OAMultiIconTextDescCell *)[nib objectAtIndex:0];
-            cell.descView.font = [UIFont systemFontOfSize:13];
+            cell.descView.font = [UIFont scaledSystemFontOfSize:13];
         }
         if (cell)
         {
@@ -224,7 +224,7 @@
     else
     {
         [UIView animateWithDuration:.2 animations:^{
-            self.navbarView.backgroundColor = UIColorFromRGB(color_bottom_sheet_background);
+            self.navbarView.backgroundColor = UIColorFromRGB(color_primary_table_background);
             _navBarBackgroundView.alpha = 0;
         }];
     }

@@ -46,7 +46,7 @@
 
 - (void) applyLocalization
 {
-    [self setTitle:OALocalizedString(@"download_map")];
+    [self setTitle:OALocalizedString(@"shared_string_download_map")];
     [self.cancelButton setTitle: OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
 }
 

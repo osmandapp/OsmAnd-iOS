@@ -95,7 +95,7 @@
         
         _calculatingRoute = NO;
         
-        title = OALocalizedString(@"gpx_waypoints");
+        title = OALocalizedString(@"shared_string_waypoints");
         waypointsScreen = EWaypointsScreenMain;
         
         vwController = viewController;
@@ -257,7 +257,7 @@
                 }
                 else
                 {
-                    NSString *oname = [start getOnlyName].length > 0 ? [start getOnlyName] : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"map_settings_map"), [NSString stringWithFormat:@"%@ %.3f %@ %.3f", OALocalizedString(@"Lat"), [start getLatitude], OALocalizedString(@"Lon"), [start getLongitude]]];
+                    NSString *oname = [start getOnlyName].length > 0 ? [start getOnlyName] : [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"shared_string_map"), [NSString stringWithFormat:@"%@ %.3f %@ %.3f", OALocalizedString(@"Lat"), [start getLatitude], OALocalizedString(@"Lon"), [start getLongitude]]];
                     
                     start = [OARTargetPoint createStartPoint:[[CLLocation alloc] initWithLatitude:[start getLatitude] longitude:[start getLongitude]] name:[[OAPointDescription alloc] initWithType:POINT_TYPE_LOCATION name:oname]];
                 }
@@ -628,13 +628,13 @@
     switch (type)
     {
         case LPW_TARGETS:
-            return OALocalizedString(@"targets");
+            return OALocalizedString(@"shared_string_target_points");
         case LPW_ALARMS:
             return OALocalizedString(@"show_traffic_warnings");
         case LPW_FAVORITES:
             return OALocalizedString(@"my_favorites");
         case LPW_WAYPOINTS:
-            return OALocalizedString(@"gpx_waypoints");
+            return OALocalizedString(@"shared_string_waypoints");
         case LPW_POI:
             return OALocalizedString(@"poi");
             
@@ -722,7 +722,7 @@
             distAttrStr = [[NSMutableAttributedString alloc] initWithString:distStr];
             UIColor *color = UIColorFromRGB(color_myloc_distance);
             [distAttrStr addAttribute:NSForegroundColorAttributeName value:color range:NSMakeRange(0, distStr.length)];
-            [distAttrStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:12.0] range:NSMakeRange(0, distAttrStr.length)];
+            [distAttrStr addAttribute:NSFontAttributeName value:[UIFont scaledSystemFontOfSize:12.0] range:NSMakeRange(0, distAttrStr.length)];
         }
         NSMutableAttributedString *deviationAttrStr = nil;
         if (deviationStr)
@@ -754,7 +754,7 @@
             case LPW_FAVORITES:
             {
                 OAFavoriteItem *favPoint = (OAFavoriteItem *)p.point;
-                pointDescription = favPoint.favorite->getGroup().isEmpty() ? OALocalizedString(@"favorites") : favPoint.favorite->getGroup().toNSString();
+                pointDescription = favPoint.favorite->getGroup().isEmpty() ? OALocalizedString(@"favorites_item") : favPoint.favorite->getGroup().toNSString();
                 break;
             }
         }
@@ -784,7 +784,7 @@
         {
             UIColor *color = UIColorFromARGB(color_secondary_text_light_argb);
             [descAttrStr addAttribute:NSForegroundColorAttributeName value:color range:NSMakeRange(0, descAttrStr.length)];
-            [descAttrStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:12.0] range:NSMakeRange(0, descAttrStr.length)];
+            [descAttrStr addAttribute:NSFontAttributeName value:[UIFont scaledSystemFontOfSize:12.0] range:NSMakeRange(0, descAttrStr.length)];
         }
         if (distAttrStr)
         {
@@ -847,7 +847,7 @@
         
         OAPOIFiltersHelper *helper = [OAPOIFiltersHelper sharedInstance];
         NSString *descEx = [helper isShowingAnyPoi] ? OALocalizedString(@"poi") : [helper getSelectedPoiFiltersName];
-        [cell setButtonRightTitle:[OALocalizedString(@"res_type") stringByAppendingString:@":"] description:descEx];
+        [cell setButtonRightTitle:[OALocalizedString(@"shared_string_type") stringByAppendingString:@":"] description:descEx];
         
         [cell.buttonLeft removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
         cell.buttonLeft.tag = [self encodePos:indexPath];

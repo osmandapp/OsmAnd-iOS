@@ -10,7 +10,7 @@
 #import "Localization.h"
 #import "OAColors.h"
 #import "OASettingsTableViewCell.h"
-#import "OACoodinateSearchCell.h"
+#import "OAInputTableViewCell.h"
 #import "OAQuickSearchCoordinateFormatsViewController.h"
 #import "OAAppSettings.h"
 #import "OsmAndApp.h"
@@ -114,7 +114,6 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     UITextField *_currentEditingTextField;
     BOOL _shouldHideHintBar;
     UIView *_navBarBackgroundView;
-    NSTimeInterval _lastTableViewTapTime;
     
     NSMutableArray<OAPOI *> *_olcCities;
     NSString *_olcSearchingCity;
@@ -164,12 +163,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     self.tableView.dataSource = self;
     self.tableView.separatorColor = UIColorFromRGB(color_tint_gray);
     self.tableView.contentInset = UIEdgeInsetsMake(defaultNavBarHeight, 0, 0, 0);
-    
-    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
-    tapGesture.cancelsTouchesInView = NO;
-    tapGesture.delegate = self;
-    [self.tableView addGestureRecognizer:tapGesture];
-    
+
     self.titleLabel.text = OALocalizedString(@"coords_search");
     [self.cancelButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
     self.doneButton.hidden = YES;
@@ -205,7 +199,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     {
         UIView *res = [[UIView alloc] init];
         res.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        res.backgroundColor = UIColorFromRGB(color_bottom_sheet_background);
+        res.backgroundColor = UIColorFromRGB(color_primary_table_background);
         res.alpha = 0;
         return res;
     }
@@ -230,7 +224,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     if (_currentFormat == MAP_GEO_OLC_FORMAT)
     {
         [result addObject:@{
-            @"type" : [OACoodinateSearchCell getCellIdentifier],
+            @"type" : [OAInputTableViewCell getCellIdentifier],
             @"title" : OALocalizedString(@"navigate_point_olc_short"),
             @"value" : _olcStr,
             @"tag" : @(EOAQuickSearchCoordinatesTextFieldOlc),
@@ -239,21 +233,21 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     else if (_currentFormat == MAP_GEO_UTM_FORMAT)
     {
         [result addObject:@{
-            @"type" : [OACoodinateSearchCell getCellIdentifier],
+            @"type" : [OAInputTableViewCell getCellIdentifier],
             @"title" : OALocalizedString(@"navigate_point_northing"),
             @"value" : _northingStr,
             @"tag" : @(EOAQuickSearchCoordinatesTextFieldNorthing),
         }];
         
         [result addObject:@{
-            @"type" : [OACoodinateSearchCell getCellIdentifier],
+            @"type" : [OAInputTableViewCell getCellIdentifier],
             @"title" : OALocalizedString(@"navigate_point_easting"),
             @"value" : _eastingStr,
             @"tag" : @(EOAQuickSearchCoordinatesTextFieldEasting),
         }];
         
         [result addObject:@{
-            @"type" : [OACoodinateSearchCell getCellIdentifier],
+            @"type" : [OAInputTableViewCell getCellIdentifier],
             @"title" : OALocalizedString(@"navigate_point_zone"),
             @"value" : _zoneStr,
             @"tag" : @(EOAQuickSearchCoordinatesTextFieldZone),
@@ -262,8 +256,8 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     else if (_currentFormat == MAP_GEO_MGRS_FORMAT)
     {
         [result addObject:@{
-            @"type" : [OACoodinateSearchCell getCellIdentifier],
-            @"title" : OALocalizedString(@"navigate_point_format_MGRS"),
+            @"type" : [OAInputTableViewCell getCellIdentifier],
+            @"title" : OALocalizedString(@"navigate_point_mgrs"),
             @"value" : _mgrsStr,
             @"tag" : @(EOAQuickSearchCoordinatesTextFieldMgrs),
         }];
@@ -271,15 +265,15 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     else
     {
         [result addObject:@{
-            @"type" : [OACoodinateSearchCell getCellIdentifier],
-            @"title" : OALocalizedString(@"latitude"),
+            @"type" : [OAInputTableViewCell getCellIdentifier],
+            @"title" : OALocalizedString(@"navigate_point_latitude"),
             @"value" : _latStr,
             @"tag" : @(EOAQuickSearchCoordinatesTextFieldLat),
         }];
         
         [result addObject:@{
-            @"type" : [OACoodinateSearchCell getCellIdentifier],
-            @"title" : OALocalizedString(@"longitude"),
+            @"type" : [OAInputTableViewCell getCellIdentifier],
+            @"title" : OALocalizedString(@"navigate_point_longitude"),
             @"value" : _lonStr,
             @"tag" : @(EOAQuickSearchCoordinatesTextFieldLon),
         }];
@@ -320,7 +314,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
 {
     NSString *title = [OAPointDescription getLocationNamePlain:location.coordinate.latitude lon:location.coordinate.longitude];
     NSString *countryName = [_app.worldRegion getCountryNameAtLat:location.coordinate.latitude lon:location.coordinate.longitude];
-    NSString *subTitle = countryName ? countryName : OALocalizedString(@"sett_arr_loc");
+    NSString *subTitle = countryName ? countryName : OALocalizedString(@"shared_string_location");
     
     return @{
         @"type" : [OAQuickSearchResultTableViewCell getCellIdentifier],
@@ -941,7 +935,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
-            cell.descriptionView.font = [UIFont systemFontOfSize:17.0];
+            cell.descriptionView.font = [UIFont scaledSystemFontOfSize:17.0];
             cell.iconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
             cell.iconView.tintColor = UIColorFromRGB(color_tint_gray);
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -953,54 +947,51 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
         }
         return cell;
     }
-    else if ([cellType isEqualToString:[OACoodinateSearchCell getCellIdentifier]])
+    else if ([cellType isEqualToString:[OAInputTableViewCell getCellIdentifier]])
     {
-        OACoodinateSearchCell* cell = [tableView dequeueReusableCellWithIdentifier:[OACoodinateSearchCell getCellIdentifier]];
+        OAInputTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAInputTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OACoodinateSearchCell getCellIdentifier] owner:self options:nil];
-            cell = (OACoodinateSearchCell *)[nib objectAtIndex:0];
-            cell.textField.font = [UIFont systemFontOfSize:17.0];
-            [cell.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field"] forState:UIControlStateNormal];
-            cell.clearButton.tintColor = UIColorFromRGB(color_tint_gray);
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAInputTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAInputTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
         }
         if (cell)
         {
             NSInteger tag = [item[@"tag"] integerValue];
             if (tag == EOAQuickSearchCoordinatesTextFieldOlc || tag == EOAQuickSearchCoordinatesTextFieldMgrs)
-                cell.textField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
+                cell.inputField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
             else
-                cell.textField.keyboardType = UIKeyboardTypeASCIICapableNumberPad;
-            
-            cell.textField.tag = tag;
-            cell.textField.text = item[@"value"];
-            cell.textField.delegate = self;
-            cell.textField.autocorrectionType = UITextAutocorrectionTypeNo;
-            cell.textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+                cell.inputField.keyboardType = UIKeyboardTypeASCIICapableNumberPad;
 
-            cell.textField.returnKeyType = UIReturnKeyDone;
-            cell.textField.enablesReturnKeyAutomatically = YES;
-            [cell.textField removeTarget:self action:NULL forControlEvents:UIControlEventEditingChanged];
-            [cell.textField addTarget:self action:@selector(textViewDidChange:) forControlEvents:UIControlEventEditingChanged];
-            cell.label.text = item[@"title"];
-            
+            cell.inputField.tag = tag;
+            cell.inputField.text = item[@"value"];
+            cell.inputField.delegate = self;
+            cell.inputField.autocorrectionType = UITextAutocorrectionTypeNo;
+            cell.inputField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+            cell.inputField.returnKeyType = UIReturnKeyDone;
+            cell.inputField.enablesReturnKeyAutomatically = YES;
+            [cell.inputField removeTarget:self action:NULL forControlEvents:UIControlEventEditingChanged];
+            [cell.inputField addTarget:self action:@selector(textViewDidChange:) forControlEvents:UIControlEventEditingChanged];
+
+            cell.titleLabel.text = item[@"title"];
+
             cell.clearButton.tag = tag;
             [cell.clearButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
             [cell.clearButton addTarget:self action:@selector(onClearButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-            cell.clearBackgroundButton.tag = tag;
-            [cell.clearBackgroundButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
-            [cell.clearBackgroundButton addTarget:self action:@selector(onClearButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-            
-            
-            UITextInputAssistantItem* inputAssistantItem = cell.textField.inputAssistantItem;
+            cell.clearButtonArea.tag = tag;
+            [cell.clearButtonArea removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
+            [cell.clearButtonArea addTarget:self action:@selector(onClearButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+
+            UITextInputAssistantItem *inputAssistantItem = cell.inputField.inputAssistantItem;
             inputAssistantItem.leadingBarButtonGroups = @[];
             inputAssistantItem.trailingBarButtonGroups = @[];
             if (tag == EOAQuickSearchCoordinatesTextFieldEasting || tag == EOAQuickSearchCoordinatesTextFieldNorthing)
-                cell.textField.inputAccessoryView = nil;
+                cell.inputField.inputAccessoryView = nil;
             else
-                cell.textField.inputAccessoryView = self.toolbarView;
-            [cell.textField reloadInputViews];
+                cell.inputField.inputAccessoryView = self.toolbarView;
+
+            [cell.inputField reloadInputViews];
         }
         return cell;
     }
@@ -1046,15 +1037,23 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ([self canSelectCell])
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    NSDictionary *item = indexPath.section == 0 ? _controlsSectionData[indexPath.row] : _searchResultSectionData[indexPath.row];
+    NSString *cellType = item[@"type"];
+
+    if ([cellType isEqualToString:[OAInputTableViewCell getCellIdentifier]])
     {
-        NSDictionary *item = indexPath.section == 0 ? _controlsSectionData[indexPath.row] : _searchResultSectionData[indexPath.row];
-        NSString *cellType = item[@"type"];
-        
+        OAInputTableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+        if (cell)
+            [cell.inputField becomeFirstResponder];
+    }
+    else
+    {
+        if (_currentEditingTextField)
+            [_currentEditingTextField resignFirstResponder];
+
         if ([cellType isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
         {
-            [self.view endEditing:YES];
-            
             OAQuickSearchCoordinateFormatsViewController *vc = [[OAQuickSearchCoordinateFormatsViewController alloc] initWithCurrentFormat:_currentFormat location:[self getDisplayingCoordinate]];
             vc.delegate = self;
             [self presentViewController:vc animated:YES completion:nil];
@@ -1069,17 +1068,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
                 [self showMapMenuForLocationPoint:location];
             }
         }
-        else if ([cellType isEqualToString:[OACoodinateSearchCell getCellIdentifier]])
-        {
-            OACoodinateSearchCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
-            if (cell)
-            {
-                [cell.textField becomeFirstResponder];
-            }
-        }
     }
-    
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 #pragma mark - UIGestureRecognizerDelegate
@@ -1089,15 +1078,6 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     if([touch.view isKindOfClass:[UITableViewCell class]] || [touch.view.superview isKindOfClass:[UITableViewCell class]] || [touch.view.superview.superview isKindOfClass:[UITableViewCell class]])
         return NO;
     return YES;
-}
-
-- (BOOL) canSelectCell
-{
-    //Sometimes a TapGestureRecognizer that has been added to the tableView to hide the keyboard immediately calls the didSelectRow method  with random IndexPath value.
-    // This method filters that extra calls.
-    double filteringTimeIntervalInSeconds = 0.1;
-    NSTimeInterval timeNow = [[NSDate date] timeIntervalSince1970];
-    return timeNow - _lastTableViewTapTime > filteringTimeIntervalInSeconds;
 }
 
 - (void) scrollViewDidScroll:(UIScrollView *)scrollView
@@ -1113,13 +1093,13 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     else
     {
         [UIView animateWithDuration:.2 animations:^{
-            self.navbarView.backgroundColor = UIColorFromRGB(color_bottom_sheet_background);
+            self.navbarView.backgroundColor = UIColorFromRGB(color_primary_table_background);
             _navBarBackgroundView.alpha = 0;
         }];
     }
 }
 
-#pragma mark - UITextViewDelegate
+#pragma mark - UITextFieldDelegate
 
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
 {
@@ -1166,20 +1146,20 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     
     [self.tableView beginUpdates];
     UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row inSection:indexPath.section]];
-    if ([cell isKindOfClass:OACoodinateSearchCell.class])
-        ((OACoodinateSearchCell *) cell).textField.text = @"";
+    if ([cell isKindOfClass:OAInputTableViewCell.class])
+        ((OAInputTableViewCell *) cell).inputField.text = @"";
     [self.tableView endUpdates];
     
     [self setText:@"" forTextFieldByTag:sender.tag];
     [self parseLocation];
 }
 
-- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
     [textField resignFirstResponder];
+    _currentEditingTextField = nil;
     return YES;
 }
-
-#pragma mark - UIGestureRecognizerDelegate
 
 #pragma mark - Keyboard notifications
 
@@ -1210,13 +1190,8 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
         UIEdgeInsets insets = [[self tableView] contentInset];
         [[self tableView] setContentInset:UIEdgeInsetsMake(insets.top, insets.left, 0, insets.right)];
+        _currentEditingTextField = nil;
     } completion:nil];
-}
-
-- (void) dismissKeyboard
-{
-    _lastTableViewTapTime = [[NSDate date] timeIntervalSince1970];
-    [self.view endEditing:YES];
 }
 
 #pragma mark - Hintbar
@@ -1262,15 +1237,12 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
         {
             UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
             btn.frame = CGRectMake(xPosition + margin, 6, 0, 0);
-            btn.backgroundColor = UIColorFromRGB(color_bottom_sheet_background);
+            btn.backgroundColor = UIColorFromRGB(color_primary_table_background);
             btn.layer.masksToBounds = YES;
             btn.layer.cornerRadius = 6.0;
             btn.titleLabel.numberOfLines = 1;
-            if (@available(iOS 13.0, *)) {
-                btn.titleLabel.font = [UIFont monospacedSystemFontOfSize:17 weight:UIFontWeightSemibold];
-            } else {
-                btn.titleLabel.font = [UIFont monospacedDigitSystemFontOfSize:17 weight:UIFontWeightSemibold];
-            }
+            btn.titleLabel.font = [UIFont scaledMonospacedSystemFontOfSize:17 weight:UIFontWeightSemibold];
+
             [btn setTitle:hint forState:UIControlStateNormal];
             [btn setTitleColor:UIColorFromRGB(color_primary_purple) forState:UIControlStateNormal];
             [btn sizeToFit];

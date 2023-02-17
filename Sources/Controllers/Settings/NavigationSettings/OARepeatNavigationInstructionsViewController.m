@@ -18,7 +18,7 @@
 #define kSidePadding 16
 #define kDistanceSection 1
 
-@interface OARepeatNavigationInstructionsViewController () <UITableViewDelegate, UITableViewDataSource, OACustomPickerTableViewCellDelegate>
+@interface OARepeatNavigationInstructionsViewController () <OACustomPickerTableViewCellDelegate>
 
 @end
 
@@ -33,24 +33,17 @@
     OAAppSettings *_settings;
 }
 
-- (instancetype) initWithAppMode:(OAApplicationMode *)appMode
-{
-    self = [super initWithAppMode:appMode];
-    if (self)
-    {
-        _settings = OAAppSettings.sharedManager;
-        [self generateData];
-    }
-    return self;
-}
+#pragma mark - Initialization
 
-- (void) generateData
+- (void)commonInit
 {
+    _settings = [OAAppSettings sharedManager];
+
     _keepInformingValues = @[@1, @2, @3, @5, @7, @10, @15, @20, @25, @30];
     NSMutableArray *array = [NSMutableArray array];
     for (NSNumber *val in _keepInformingValues)
     {
-        [array addObject:[NSString stringWithFormat:@"%d %@", val.intValue, OALocalizedString(@"units_min")]];
+        [array addObject:[NSString stringWithFormat:@"%d %@", val.intValue, OALocalizedString(@"int_min")]];
     }
     _keepInformingEntries = [NSArray arrayWithArray:array];
     
@@ -58,21 +51,16 @@
     _selectedValue = _selectedValue == NSNotFound ? 0 : _selectedValue;
 }
 
--(void) applyLocalization
+#pragma mark - Base UI
+
+- (NSString *)getTitle
 {
-    self.titleLabel.text = OALocalizedString(@"keep_informing");
-    [super applyLocalization];
+    return OALocalizedString(@"keep_informing");
 }
 
-- (void) viewDidLoad
-{
-    [super viewDidLoad];
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    [self setupView];
-}
+#pragma mark - Table data
 
-- (void) setupView
+- (void)generateData
 {
     NSMutableArray *tableData = [NSMutableArray array];
     NSMutableArray *statusArr = [NSMutableArray array];
@@ -99,24 +87,41 @@
     _data = [NSArray arrayWithArray:tableData];
 }
 
-#pragma mark - TableView
+- (NSString *)getTitleForFooter:(NSInteger)section
+{
+    return section == 0 ? OALocalizedString(@"instructions_repeat") : @"";
+}
 
-- (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
+- (NSInteger)rowsCount:(NSInteger)section
+{
+    if (section == kDistanceSection)
+    {
+        if ([self pickerIsShown])
+            return 2;
+        return 1;
+    }
+    return 1;
+}
+
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
+{
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
     if ([cellType isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
 
-        OASwitchTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
+        OASwitchTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell = (OASwitchTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
         }
         if (cell)
         {
-            cell.textView.text = item[@"title"];
+            cell.titleLabel.text = item[@"title"];
+
             cell.switchView.on = [item[@"isOn"] boolValue];
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
@@ -127,7 +132,7 @@
     else if ([cellType isEqualToString:[OATimeTableViewCell getCellIdentifier]])
     {
         OATimeTableViewCell* cell;
-        cell = (OATimeTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OATimeTableViewCell getCellIdentifier]];
+        cell = (OATimeTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:[OATimeTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATimeTableViewCell getCellIdentifier] owner:self options:nil];
@@ -143,7 +148,7 @@
     else if ([cellType isEqualToString:[OACustomPickerTableViewCell getCellIdentifier]])
     {
         OACustomPickerTableViewCell* cell;
-        cell = (OACustomPickerTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OACustomPickerTableViewCell getCellIdentifier]];
+        cell = (OACustomPickerTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:[OACustomPickerTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OACustomPickerTableViewCell getCellIdentifier] owner:self options:nil];
@@ -159,27 +164,17 @@
     return nil;
 }
 
-- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return 17.0;
-}
-
-- (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (section == kDistanceSection)
-    {
-        if ([self pickerIsShown])
-            return 2;
-        return 1;
-    }
-    return 1;
-}
-
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
+- (NSInteger)sectionsCount
 {
     return _data.count;
 }
 
-- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (CGFloat)getCustomHeightForHeader:(NSInteger)section
+{
+    return 17.;
+}
+
+- (void)onRowPressed:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     if ([item[@"type"] isEqualToString:[OATimeTableViewCell getCellIdentifier]])
@@ -198,30 +193,12 @@
             _pickerIndexPath = [NSIndexPath indexPathForRow:newPickerIndexPath.row + 1 inSection:indexPath.section];
         }
 
-        [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
         [self.tableView endUpdates];
         [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
     }
 }
 
-- (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    return cell.selectionStyle == UITableViewCellSelectionStyleNone && indexPath != [NSIndexPath indexPathForRow:0 inSection:1] ? nil : indexPath;
-}
-
-- (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
-{
-    return section == 0 ? OALocalizedString(@"instructions_repeat") : @"";
-}
-
--(void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section
-{
-    UITableViewHeaderFooterView *vw = (UITableViewHeaderFooterView *) view;
-    [vw.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
-}
-
-# pragma mark - Switch
+#pragma mark - Selectors
 
 - (void)applyParameter:(id)sender
 {
@@ -231,16 +208,26 @@
         [_settings.keepInforming set:(control.isOn ? 0 : _keepInformingValues[_selectedValue].intValue) mode:self.appMode];
         [self hidePicker];
         [self.tableView beginUpdates];
-        [self setupView];
+        [self generateData];
         if (control.isOn)
             [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
         else
             [self.tableView insertSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
         [self.tableView endUpdates];
+        if (self.delegate)
+            [self.delegate onSettingsChanged];
     }
 }
 
-# pragma mark - Picker
+#pragma mark - UITableViewDelegate
+
+- (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    return cell.selectionStyle == UITableViewCellSelectionStyleNone && indexPath != [NSIndexPath indexPathForRow:0 inSection:1] ? nil : indexPath;
+}
+
+#pragma mark - Picker
 
 - (BOOL) pickerIsShown
 {
@@ -274,8 +261,10 @@
     _selectedValue = [_keepInformingEntries indexOfObject:value];
     _selectedValue = _selectedValue == NSNotFound ? 0 : _selectedValue;
     [_settings.keepInforming set:_keepInformingValues[_selectedValue].intValue mode:self.appMode];
-    [self setupView];
+    [self generateData];
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_pickerIndexPath.row - 1 inSection:_pickerIndexPath.section]] withRowAnimation:UITableViewRowAnimationFade];
+    if (self.delegate)
+        [self.delegate onSettingsChanged];
 }
 
 @end

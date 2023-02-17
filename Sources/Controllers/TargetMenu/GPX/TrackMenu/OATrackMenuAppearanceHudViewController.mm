@@ -10,7 +10,7 @@
 #import "OATableViewCustomFooterView.h"
 #import "OAFoldersCollectionView.h"
 #import "OASlider.h"
-#import "OAIconTextDividerSwitchCell.h"
+#import "OASwitchTableViewCell.h"
 #import "OAIconTitleValueCell.h"
 #import "OAColorsTableViewCell.h"
 #import "OATextLineViewCell.h"
@@ -32,6 +32,7 @@
 #import "OAPluginPopupViewController.h"
 #import "OASegmentedSlider.h"
 #import "OARouteStatisticsHelper.h"
+#import "OASizes.h"
 
 #define kColorsSection 1
 
@@ -244,7 +245,7 @@
 
 - (void)applyLocalization
 {
-    [self.titleView setText:OALocalizedString(@"map_settings_appearance")];
+    [self.titleView setText:OALocalizedString(@"shared_string_appearance")];
 }
 
 - (OAGPXTableCellData *) generateDescriptionCellData:(NSString *)key description:(NSString *)description
@@ -264,7 +265,7 @@
     [self.doneButton addBlurEffect:YES cornerRadius:12. padding:0.];
     [self.doneButton setAttributedTitle:
                     [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_done")
-                                                    attributes:@{ NSFontAttributeName:[UIFont boldSystemFontOfSize:17.] }]
+                                                    attributes:@{ NSFontAttributeName:[UIFont scaledBoldSystemFontOfSize:17.] }]
                                forState:UIControlStateNormal];
 }
 
@@ -298,13 +299,13 @@
     NSMutableArray<OAGPXTableSectionData *> *appearanceSections = [NSMutableArray array];
     OAGPXTableCellData *directionCellData = [OAGPXTableCellData withData:@{
             kTableKey:@"direction_arrows",
-            kCellType:[OAIconTextDividerSwitchCell getCellIdentifier],
-            kCellTitle:OALocalizedString(@"gpx_dir_arrows")
+            kCellType:[OASwitchTableViewCell getCellIdentifier],
+            kCellTitle:OALocalizedString(@"gpx_direction_arrows")
     }];
 
     OAGPXTableCellData *startFinishCellData = [OAGPXTableCellData withData:@{
             kTableKey:@"start_finish_icons",
-            kCellType:[OAIconTextDividerSwitchCell getCellIdentifier],
+            kCellType:[OASwitchTableViewCell getCellIdentifier],
             kCellTitle:OALocalizedString(@"track_show_start_finish_icons")
     }];
 
@@ -316,7 +317,7 @@
             kTableKey: @"color_title",
             kCellType: [OAIconTitleValueCell getCellIdentifier],
             kTableValues: @{ @"string_value": _selectedItem.title },
-            kCellTitle: OALocalizedString(@"fav_color")
+            kCellTitle: OALocalizedString(@"shared_string_color")
     }];
 
     [colorsCells addObject:colorTitleCellData];
@@ -337,7 +338,7 @@
                 @"array_value": trackColoringTypes,
                 @"selected_integer_value": @([_availableColoringTypes indexOfObject:_selectedItem])
             },
-            kCellTitle: OALocalizedString(@"fav_color")
+            kCellTitle: OALocalizedString(@"shared_string_color")
     }];
     [colorsCells addObject:colorValuesCellData];
 
@@ -433,7 +434,7 @@
 
     OAGPXTableCellData *joinGapsCellData = [OAGPXTableCellData withData:@{
             kTableKey:@"join_gaps",
-            kCellType:[OAIconTextDividerSwitchCell getCellIdentifier],
+            kCellType:[OASwitchTableViewCell getCellIdentifier],
             kCellTitle:OALocalizedString(@"gpx_join_gaps")
     }];
 
@@ -454,7 +455,7 @@
     [appearanceSections addObject:[OAGPXTableSectionData withData:@{
             kTableSubjects: @[resetCellData],
             kSectionHeaderHeight: @42.,
-            kSectionHeader:OALocalizedString(@"actions"),
+            kSectionHeader:OALocalizedString(@"shared_string_actions"),
             kSectionFooterHeight: @60.
     }]];
 
@@ -733,24 +734,23 @@
         }
         outCell = cell;
     }
-    else if ([cellData.type isEqualToString:[OAIconTextDividerSwitchCell getCellIdentifier]])
+    else if ([cellData.type isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OAIconTextDividerSwitchCell *cell =
-                [tableView dequeueReusableCellWithIdentifier:[OAIconTextDividerSwitchCell getCellIdentifier]];
+        OASwitchTableViewCell *cell =
+                [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextDividerSwitchCell getCellIdentifier]
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier]
                                                          owner:self options:nil];
-            cell = (OAIconTextDividerSwitchCell *) nib[0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
-            cell.dividerView.hidden = YES;
-            [cell showIcon:NO];
+            cell = (OASwitchTableViewCell *) nib[0];
+            cell.separatorInset = UIEdgeInsetsMake(0., kPaddingOnSideOfContent, 0., 0.);
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
         }
         if (cell)
         {
             cell.switchView.on = [self isOn:cellData];
-            cell.textView.text = cellData.title;
+            cell.titleLabel.text = cellData.title;
 
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
@@ -778,11 +778,11 @@
             cell.iconView.image = [cell isDirectionRTL] ? image.imageFlippedForRightToLeftLayoutDirection : image;
 
             cell.descView.text = cellData.desc;
-            cell.descView.font = [UIFont systemFontOfSize:[cellData.values[@"desc_font_size"] intValue]];
+            cell.descView.font = [UIFont scaledSystemFontOfSize:[cellData.values[@"desc_font_size"] intValue]];
             cell.descView.textColor = UIColorFromRGB(color_text_footer);
 
             cell.extraDescView.text = extraDesc;
-            cell.extraDescView.font = [UIFont systemFontOfSize:[cellData.values[@"desc_font_size"] intValue]];
+            cell.extraDescView.font = [UIFont scaledSystemFontOfSize:[cellData.values[@"desc_font_size"] intValue]];
             cell.extraDescView.textColor = UIColorFromRGB(color_text_footer);
         }
 
@@ -853,7 +853,7 @@
         {
             [cell makeSmallMargins:indexPath.row != [self tableView:tableView numberOfRowsInSection:indexPath.section] - 1];
             cell.textView.text = cellData.title;
-            cell.textView.font = [UIFont systemFontOfSize:15];
+            cell.textView.font = [UIFont scaledSystemFontOfSize:15];
             cell.textView.textColor = UIColorFromRGB(color_text_footer);
         }
         outCell = cell;
@@ -876,13 +876,10 @@
             [cell.segmentedControl setTitleTextAttributes:@{NSForegroundColorAttributeName : UIColor.whiteColor}
                                                  forState:UIControlStateSelected];
             [cell.segmentedControl setTitleTextAttributes:@{NSForegroundColorAttributeName : UIColorFromRGB(color_primary_purple),
-                                                                       NSFontAttributeName : [UIFont boldSystemFontOfSize:15.0f]}
+                                                                       NSFontAttributeName : [UIFont scaledBoldSystemFontOfSize:15.0f]}
                                                  forState:UIControlStateNormal];
 
-            if (@available(iOS 13.0, *))
-                cell.segmentedControl.selectedSegmentTintColor = UIColorFromRGB(color_primary_purple);
-            else
-                cell.segmentedControl.tintColor = UIColorFromRGB(color_primary_purple);
+            cell.segmentedControl.selectedSegmentTintColor = UIColorFromRGB(color_primary_purple);
         }
         if (cell)
         {
@@ -960,7 +957,7 @@
             cell.topLeftLabel.text = cellData.title;
             cell.topRightLabel.text = cellData.values[@"custom_string_value"];
             cell.topRightLabel.textColor = UIColorFromRGB(color_primary_purple);
-            cell.topRightLabel.font = [UIFont systemFontOfSize:17 weight:UIFontWeightMedium];
+            cell.topRightLabel.font = [UIFont scaledSystemFontOfSize:17 weight:UIFontWeightMedium];
             cell.bottomLeftLabel.text = arrayValue.firstObject;
             cell.bottomRightLabel.text = arrayValue.lastObject;
             [cell.sliderView setNumberOfMarks:arrayValue.count additionalMarksBetween:0];
@@ -1001,7 +998,7 @@
     return sectionData.headerHeight > 0
     ? [OAUtilities calculateTextBounds:sectionData.header
                                  width:self.scrollableView.frame.size.width - 40. - [OAUtilities getLeftMargin]
-                                  font:[UIFont systemFontOfSize:13]].height + sectionData.headerHeight
+                                  font:[UIFont scaledSystemFontOfSize:13]].height + sectionData.headerHeight
     : 0.001;
 }
 
@@ -1025,7 +1022,7 @@
 
     OATableViewCustomFooterView *vw =
             [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
-    UIFont *textFont = [UIFont systemFontOfSize:13];
+    UIFont *textFont = [UIFont scaledSystemFontOfSize:13];
     NSMutableAttributedString *textStr = [[NSMutableAttributedString alloc] initWithString:footer attributes:@{
             NSFontAttributeName: textFont,
             NSForegroundColorAttributeName: UIColorFromRGB(color_text_footer)

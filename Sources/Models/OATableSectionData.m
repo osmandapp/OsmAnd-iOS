@@ -29,6 +29,13 @@
     return self;
 }
 
+- (OATableRowData *) createNewRow
+{
+    OATableRowData *rowData = [OATableRowData rowData];
+    [self addRow:rowData];
+    return rowData;
+}
+
 - (OATableRowData *) getRow:(NSUInteger)index
 {
     NSInteger realIdx = -1;
@@ -63,6 +70,11 @@
     OATableRowData *row = [[OATableRowData alloc] initWithData:dictionary];
     [_rowData addObject:row];
     return row;
+}
+
+- (void)removeRowAtIndex:(NSInteger)index
+{
+    [_rowData removeObjectAtIndex:index];
 }
 
 - (NSUInteger)rowCount

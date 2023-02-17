@@ -107,19 +107,19 @@ static OAApplicationMode *_HORSE;
     _DEFAULT.descr = OALocalizedString(@"profile_type_base_string");
     [_DEFAULT reg];
     
-    _CAR = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_car") stringKey:@"car"];
+    _CAR = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"routing_engine_vehicle_type_driving") stringKey:@"car"];
     _CAR.descr = OALocalizedString(@"base_profile_descr_car");
     [_CAR reg];
     
-    _BICYCLE = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_bicycle") stringKey:@"bicycle"];
+    _BICYCLE = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_bicycle") stringKey:@"bicycle"];
     _BICYCLE.descr = OALocalizedString(@"base_profile_descr_bicycle");
     [_BICYCLE reg];
     
-    _PEDESTRIAN = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_walk") stringKey:@"pedestrian"];
+    _PEDESTRIAN = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_pedestrian") stringKey:@"pedestrian"];
     _PEDESTRIAN.descr = OALocalizedString(@"base_profile_descr_pedestrian");
     [_PEDESTRIAN reg];
     
-    _PUBLIC_TRANSPORT = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"m_style_pulic_transport") stringKey:@"public_transport"];
+    _PUBLIC_TRANSPORT = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"poi_filter_public_transport") stringKey:@"public_transport"];
     _PUBLIC_TRANSPORT.descr = OALocalizedString(@"base_profile_descr_public_transport");
     [_PUBLIC_TRANSPORT reg];
     

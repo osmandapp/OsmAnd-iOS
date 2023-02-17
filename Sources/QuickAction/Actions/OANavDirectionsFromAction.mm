@@ -40,7 +40,7 @@ static OAQuickActionType *TYPE;
 + (OAQuickActionType *) TYPE
 {
     if (!TYPE)
-        TYPE = [[OAQuickActionType alloc] initWithIdentifier:32 stringId:@"nav.directions" class:self.class name:OALocalizedString(@"directions_more_options") category:NAVIGATION iconName:@"ic_action_directions_from" secondaryIconName:nil editable:NO];
+        TYPE = [[OAQuickActionType alloc] initWithIdentifier:32 stringId:@"nav.directions" class:self.class name:OALocalizedString(@"context_menu_item_directions_from") category:NAVIGATION iconName:@"ic_action_directions_from" secondaryIconName:nil editable:NO];
        
     return TYPE;
 }

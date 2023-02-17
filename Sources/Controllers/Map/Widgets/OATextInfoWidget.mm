@@ -102,12 +102,12 @@
     self.layer.shadowRadius = 2.0;
     self.layer.shadowOffset = CGSizeMake(0.0, 0.0);
     
-    _largeFont = [UIFont systemFontOfSize:21 weight:UIFontWeightSemibold];
-    _largeBoldFont = [UIFont systemFontOfSize:21 weight:UIFontWeightBold];
+    _largeFont = [UIFont scaledSystemFontOfSize:21 weight:UIFontWeightSemibold];
+    _largeBoldFont = [UIFont scaledSystemFontOfSize:21 weight:UIFontWeightBold];
     _primaryFont = _largeFont;
     _primaryColor = [UIColor blackColor];
-    _smallFont = [UIFont systemFontOfSize:14 weight:UIFontWeightSemibold];
-    _smallBoldFont = [UIFont systemFontOfSize:14 weight:UIFontWeightBold];
+    _smallFont = [UIFont scaledSystemFontOfSize:14 weight:UIFontWeightSemibold];
+    _smallBoldFont = [UIFont scaledSystemFontOfSize:14 weight:UIFontWeightBold];
     _unitsFont = _smallFont;
     _unitsColor = [UIColor grayColor];
     _primaryShadowColor = nil;

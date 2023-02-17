@@ -106,12 +106,12 @@
                                                                tag:[tab getTabMode]];
     [tabBarItem setTitleTextAttributes:@{
             NSForegroundColorAttributeName: UIColorFromRGB(color_text_footer),
-            NSFontAttributeName: [UIFont systemFontOfSize:12]
+            NSFontAttributeName: [UIFont scaledSystemFontOfSize:12]
     } forState:UIControlStateNormal];
 
     [tabBarItem setTitleTextAttributes:@{
             NSForegroundColorAttributeName: UIColorFromRGB(color_primary_purple),
-            NSFontAttributeName: [UIFont systemFontOfSize:12]
+            NSFontAttributeName: [UIFont scaledSystemFontOfSize:12]
     } forState:UIControlStateSelected];
 
     return tabBarItem;

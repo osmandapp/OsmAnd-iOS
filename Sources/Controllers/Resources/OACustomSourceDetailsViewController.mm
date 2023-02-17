@@ -10,7 +10,7 @@
 #import "OADownloadDescriptionInfo.h"
 #import "OACustomRegion.h"
 #import "OAResourcesUIHelper.h"
-#import "OATextViewSimpleCell.h"
+#import "OATextMultilineTableViewCell.h"
 #import "OAMenuSimpleCellNoIcon.h"
 #import "OAFilledButtonCell.h"
 #import "OAResourcesUIHelper.h"
@@ -114,7 +114,7 @@
     {
         NSAttributedString *attrString = [OAUtilities attributedStringFromHtmlString:_item.descriptionInfo.getLocalizedDescription fontSize:17];
         [data addObject:@{
-                @"type" : [OATextViewSimpleCell getCellIdentifier],
+                @"type" : [OATextMultilineTableViewCell getCellIdentifier],
                 @"attrText" : attrString
         }];
     }
@@ -140,7 +140,7 @@
     NSMutableArray<OADownloadActionButton *> *actionButtons = [NSMutableArray arrayWithArray:_item.descriptionInfo.getActionButtons];
     BOOL isDownloading = [[OsmAndApp instance].downloadsManager.keysOfDownloadTasks containsObject:[NSString stringWithFormat:@"resource:%@", _item.resourceId.toNSString()]];
     if (actionButtons.count == 0 && _item && !_item.isInstalled && !isDownloading)
-        downloadButton = [[OADownloadActionButton alloc] initWithActionType:DOWNLOAD_BUTTON_ACTION name:OALocalizedString(@"download") url:nil];
+        downloadButton = [[OADownloadActionButton alloc] initWithActionType:DOWNLOAD_BUTTON_ACTION name:OALocalizedString(@"shared_string_download") url:nil];
     
     NSMutableArray<NSDictionary *> *additionalButtons = [NSMutableArray array];
     for (OADownloadActionButton *actionButton in actionButtons)
@@ -169,8 +169,8 @@
 {
     _downloadButton = downloadButton;
     BOOL active = downloadButton != nil;
-    [self.actionButton setTitle:active ? downloadButton.name : OALocalizedString(@"show_region_on_map_title") forState:UIControlStateNormal];
-    self.actionButton.backgroundColor = active ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_route_button_inactive);
+    [self.actionButton setTitle:active ? downloadButton.name : OALocalizedString(@"map_downloaded") forState:UIControlStateNormal];
+    self.actionButton.backgroundColor = active ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_button_gray_background);
     [self.actionButton setTitleColor:active ? UIColor.whiteColor : UIColorFromRGB(color_text_footer) forState:UIControlStateNormal];
     [self.actionButton setUserInteractionEnabled:active];
 }
@@ -229,15 +229,15 @@
         }
         return cell;
     }
-    else if ([type isEqualToString:[OATextViewSimpleCell getCellIdentifier]])
+    else if ([type isEqualToString:[OATextMultilineTableViewCell getCellIdentifier]])
     {
-        OATextViewSimpleCell *cell = [tableView dequeueReusableCellWithIdentifier:[OATextViewSimpleCell getCellIdentifier]];
+        OATextMultilineTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OATextMultilineTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextViewSimpleCell getCellIdentifier] owner:self options:nil];
-            cell = (OATextViewSimpleCell *)[nib objectAtIndex:0];
-            cell.separatorInset = UIEdgeInsetsZero;
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextMultilineTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OATextMultilineTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell clearButtonVisibility:NO];
         }
         if (cell)
         {

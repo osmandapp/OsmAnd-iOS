@@ -102,6 +102,8 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     [_segmentControl setTitle:OALocalizedString(@"shared_string_all") forSegmentAtIndex:0];
     [_segmentControl setTitle:OALocalizedString(@"osm_edits_edits_label") forSegmentAtIndex:1];
     [_segmentControl setTitle:OALocalizedString(@"osm_edits_notes") forSegmentAtIndex:2];
+    [_segmentControl setTitleTextAttributes:@{ NSFontAttributeName : [UIFont scaledSystemFontOfSize:14.] } forState:UIControlStateNormal];
+    [_segmentControl setTitleTextAttributes:@{ NSFontAttributeName : [UIFont scaledSystemFontOfSize:14.] } forState:UIControlStateSelected];
 }
 
 -(void)setupView
@@ -288,7 +290,7 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
 
 - (IBAction)backButtonPressed:(id)sender {
    if (_popToParent)
-        [super backButtonClicked:sender];
+        [super onLeftNavbarButtonPressed];
     else
         [self.navigationController popToRootViewControllerAnimated:YES];
 }

@@ -7,7 +7,7 @@
 //
 
 #import "OAPluginInstalledViewController.h"
-#import "OATextViewSimpleCell.h"
+#import "OATextMultilineTableViewCell.h"
 #import "OAPlugin.h"
 #import "OAColors.h"
 #import "OAProducts.h"
@@ -15,10 +15,11 @@
 #import "OAResourcesUIHelper.h"
 #import "OAIAPHelper.h"
 #import "OAAutoObserverProxy.h"
-#import "OAIconTextDescSwitchCell.h"
+#import "OASwitchTableViewCell.h"
 #import "OADownloadMultipleResourceViewController.h"
 #import "OAPluginPopupViewController.h"
 #import "OARootViewController.h"
+#import "OASizes.h"
 
 #define kSidePadding 20.0
 #define kTopPadding 6
@@ -101,6 +102,9 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
     self.tableView.tableHeaderView = [self getHeaderForTableView:self.tableView withFirstSectionText:self.descriptionText boldFragment:self.descriptionBoldText];
     
     [self setupView];
+
+    self.disableButton.titleLabel.font =  [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
+    self.enableButton.titleLabel.font =  [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
 }
 
 - (NSString *)descriptionText
@@ -136,7 +140,7 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
     NSMutableArray *descriptionSection = [NSMutableArray new];
     [descriptionSection addObject: @{
         @"sectionType" : [NSNumber numberWithInt:EOAPluginSectionTypeDescription],
-        @"type" : [OATextViewSimpleCell getCellIdentifier],
+        @"type" : [OATextMultilineTableViewCell getCellIdentifier],
         @"text" : _plugin.getDescription
     }];
     [data addObject:descriptionSection];
@@ -168,7 +172,7 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
         [OAApplicationMode changeProfileAvailability:mode isSelected:YES];
         [addedAppModesSection addObject: @{
             @"sectionType" : [NSNumber numberWithInt:EOAPluginSectionTypeSuggestedProfiles],
-            @"type" : [OAIconTextDescSwitchCell getCellIdentifier],
+            @"type" : [OASwitchTableViewCell getCellIdentifier],
             @"mode" : mode
         }];
     }
@@ -316,18 +320,20 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
-    if ([item[@"type"] isEqualToString:[OATextViewSimpleCell getCellIdentifier]])
+    if ([item[@"type"] isEqualToString:[OATextMultilineTableViewCell getCellIdentifier]])
     {
-        OATextViewSimpleCell *cell = [tableView dequeueReusableCellWithIdentifier:[OATextViewSimpleCell getCellIdentifier]];
+        OATextMultilineTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OATextMultilineTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextViewSimpleCell getCellIdentifier] owner:self options:nil];
-            cell = (OATextViewSimpleCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextMultilineTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OATextMultilineTableViewCell *) nib[0];
             cell.separatorInset = UIEdgeInsetsZero;
+            [cell leftIconVisibility:NO];
+            [cell clearButtonVisibility:NO];
         }
         if (cell)
         {
-            cell.textView.attributedText = [OAUtilities attributedStringFromHtmlString:item[@"text"] fontSize:17];
+            cell.textView.attributedText = [OAUtilities attributedStringFromHtmlString:item[@"text"] fontSize:[UIFont scaledSystemFontOfSize:17.].pointSize];
             cell.textView.linkTextAttributes = @{NSForegroundColorAttributeName: UIColorFromRGB(color_primary_purple)};
             [cell.textView sizeToFit];
         }
@@ -357,8 +363,8 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                               reuseIdentifier:cellTypeId];
 
-                cell.textLabel.font = [UIFont systemFontOfSize:17.0];
-                cell.detailTextLabel.font = [UIFont systemFontOfSize:12.0];
+                cell.textLabel.font = [UIFont scaledSystemFontOfSize:17.0];
+                cell.detailTextLabel.font = [UIFont scaledSystemFontOfSize:12.0];
                 cell.detailTextLabel.textColor = UIColorFromRGB(0x929292);
 
                 UIImage* iconImage = [UIImage imageNamed:@"ic_custom_download"];
@@ -373,8 +379,8 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                               reuseIdentifier:cellTypeId];
 
-                cell.textLabel.font = [UIFont systemFontOfSize:17.0];
-                cell.detailTextLabel.font = [UIFont systemFontOfSize:12.0];
+                cell.textLabel.font = [UIFont scaledSystemFontOfSize:17.0];
+                cell.detailTextLabel.font = [UIFont scaledSystemFontOfSize:12.0];
                 cell.detailTextLabel.textColor = UIColorFromRGB(0x929292);
 
                 FFCircularProgressView* progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 25.0f, 25.0f)];
@@ -415,23 +421,22 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
         return cell;
     }
     
-    else if ([item[@"type"] isEqualToString:[OAIconTextDescSwitchCell getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OAIconTextDescSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTextDescSwitchCell getCellIdentifier]];
+        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextDescSwitchCell getCellIdentifier] owner:self options:nil];
-            cell = (OAIconTextDescSwitchCell *)[nib objectAtIndex:0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASwitchTableViewCell *) nib[0];
         }
         OAApplicationMode *am = item[@"mode"];
         BOOL isEnabled = [OAApplicationMode.values containsObject:am];
-        cell.separatorInset = UIEdgeInsetsMake(0.0, indexPath.row < OAApplicationMode.allPossibleValues.count - 1 ? 62.0 : 0.0, 0.0, 0.0);
+        cell.separatorInset = UIEdgeInsetsMake(0.0, indexPath.row < OAApplicationMode.allPossibleValues.count - 1 ? kPaddingToLeftOfContentWithIcon : 0.0, 0.0, 0.0);
         UIImage *img = am.getIcon;
         cell.leftIconView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.leftIconView.tintColor = isEnabled ? UIColorFromRGB(am.getIconColor) : UIColorFromRGB(color_tint_gray);
         cell.titleLabel.text = am.toHumanString;
-        cell.descLabel.text = [self getProfileDescription:am];
+        cell.descriptionLabel.text = [self getProfileDescription:am];
         cell.switchView.tag = indexPath.row;
         BOOL isDefault = am == OAApplicationMode.DEFAULT;
         [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
@@ -440,8 +445,8 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
             [cell.switchView setOn:isEnabled];
             [cell.switchView addTarget:self action:@selector(onAppModeSwitchChanged:) forControlEvents:UIControlEventValueChanged];
         }
-        cell.switchView.hidden = isDefault;
-        cell.dividerView.hidden = isDefault;
+        [cell switchVisibility:!isDefault];
+        [cell dividerVisibility:!isDefault];
         return cell;
     }
      

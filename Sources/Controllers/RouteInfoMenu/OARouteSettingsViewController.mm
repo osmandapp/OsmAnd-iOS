@@ -17,8 +17,9 @@
 #import "OARoutingHelper.h"
 #import "OASettingsTableViewCell.h"
 #import "OAUtilities.h"
-#import "OASettingSwitchCell.h"
+#import "OASwitchTableViewCell.h"
 #import "OAIconTitleValueCell.h"
+#import "OASizes.h"
 
 @interface OARouteSettingsViewController ()
 
@@ -32,7 +33,7 @@
 -(void) applyLocalization
 {
     [super applyLocalization];
-    self.titleView.text = OALocalizedString(@"sett_settings");
+    self.titleView.text = OALocalizedString(@"shared_string_settings");
 }
 
 - (void) viewDidLoad
@@ -68,11 +69,6 @@
     [self.tableView reloadData];
 }
 
-- (void)backButtonClicked:(id)sender
-{
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
-
 - (void)doneButtonPressed
 {
     [self dismissViewControllerAnimated:YES completion:nil];
@@ -97,7 +93,7 @@
     else if (section == 1)
         return OALocalizedString(@"route_parameters");
     else if (section == 2)
-        return OALocalizedString(@"osm_edits_advanced");
+        return OALocalizedString(@"tab_title_advanced");
     
     return nil;
 }
@@ -116,7 +112,7 @@
     }
     else
     {
-        CGFloat height = [OAUtilities calculateTextBounds:headerText width:tableView.bounds.size.width font:[UIFont systemFontOfSize:13.]].height;
+        CGFloat height = [OAUtilities calculateTextBounds:headerText width:tableView.bounds.size.width font:[UIFont scaledSystemFontOfSize:13.]].height;
         return MAX(38.0, height + 10.0);
     }
 }
@@ -149,30 +145,29 @@
         cell.backgroundColor = UIColor.redColor;
         return cell;
     }
-    else if ([type isEqualToString:[OASettingSwitchCell getCellIdentifier]])
+    else if ([type isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
+        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
-            cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASwitchTableViewCell *) nib[0];
+            cell.separatorInset = UIEdgeInsetsMake(0., kPaddingToLeftOfContentWithIcon, 0., 0.);
+            [cell descriptionVisibility:NO];
         }
-        
         if (cell)
         {
             [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.switchView setOn:[param isChecked]];
-            cell.textView.text = text;
-            cell.descriptionView.text = nil;
-            cell.descriptionView.hidden = YES;
-            [cell setSecondaryImage:param.getSecondaryIcon];
-            cell.imgView.image = [param.getIcon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            cell.imgView.tintColor = [param isChecked] ? UIColorFromRGB([appMode getIconColor]) : UIColorFromRGB(color_icon_inactive);
             [param setControlAction:cell.switchView];
-            cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            if ([cell needsUpdateConstraints])
-                [cell setNeedsUpdateConstraints];
+
+            cell.titleLabel.text = text;
+            cell.leftIconView.image = [param.getIcon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.leftIconView.tintColor = [param isChecked] ? UIColorFromRGB([appMode getIconColor]) : UIColorFromRGB(color_icon_inactive);
+
+            BOOL showDivider = [param hasOptions];
+            [cell dividerVisibility:showDivider];
+            cell.selectionStyle = showDivider ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
         }
         return cell;
     }

@@ -14,7 +14,7 @@
 #import "OAQuickActionSelectionBottomSheetViewController.h"
 #import "OAQuickActionType.h"
 #import "OAResourcesUIHelper.h"
-#import "OAButtonCell.h"
+#import "OAButtonTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OATitleDescrDraggableCell.h"
 
@@ -104,14 +104,14 @@ static OAQuickActionType *TYPE;
 - (NSString *)getTranslatedItemName:(NSString *)item
 {
     if ([item isEqualToString:KEY_NO_OVERLAY])
-        return OALocalizedString(@"quick_action_no_overlay");
+        return OALocalizedString(@"no_overlay");
     else
         return item;
 }
 
 -(NSString *) getAddBtnText
 {
-    return OALocalizedString(@"quick_action_add_overlay");
+    return OALocalizedString(@"quick_action_map_overlay_action");
 }
 
 - (NSString *)getDescrHint
@@ -121,7 +121,7 @@ static OAQuickActionType *TYPE;
 
 - (NSString *)getDescrTitle
 {
-    return OALocalizedString(@"map_overlays");
+    return OALocalizedString(@"quick_action_map_overlay_title");
 }
 
 - (NSString *)getListKey
@@ -135,7 +135,7 @@ static OAQuickActionType *TYPE;
     [data setObject:@[@{
                           @"type" : [OASwitchTableViewCell getCellIdentifier],
                           @"key" : KEY_DIALOG,
-                          @"title" : OALocalizedString(@"quick_actions_show_dialog"),
+                          @"title" : OALocalizedString(@"quick_action_interim_dialog"),
                           @"value" : @([self.getParams[KEY_DIALOG] boolValue]),
                           },
                       @{
@@ -154,11 +154,11 @@ static OAQuickActionType *TYPE;
                          }];
     }
     [arr addObject:@{
-                     @"title" : OALocalizedString(@"quick_action_add_overlay"),
-                     @"type" : [OAButtonCell getCellIdentifier],
+                     @"title" : OALocalizedString(@"quick_action_map_overlay_action"),
+                     @"type" : [OAButtonTableViewCell getCellIdentifier],
                      @"target" : @"addMapOverlay"
                      }];
-    [data setObject:[NSArray arrayWithArray:arr] forKey:OALocalizedString(@"map_overlays")];
+    [data setObject:[NSArray arrayWithArray:arr] forKey:OALocalizedString(@"quick_action_map_overlay_title")];
     return data;
 }
 
@@ -184,7 +184,7 @@ static OAQuickActionType *TYPE;
 + (OAQuickActionType *) TYPE
 {
     if (!TYPE)
-        TYPE = [[OAQuickActionType alloc] initWithIdentifier:15 stringId:@"mapoverlay.change" class:self.class name:OALocalizedString(@"change_map_overlay") category:CONFIGURE_MAP iconName:@"ic_custom_overlay_map" secondaryIconName:nil];
+        TYPE = [[OAQuickActionType alloc] initWithIdentifier:15 stringId:@"mapoverlay.change" class:self.class name:OALocalizedString(@"quick_action_map_overlay") category:CONFIGURE_MAP iconName:@"ic_custom_overlay_map" secondaryIconName:nil];
        
     return TYPE;
 }

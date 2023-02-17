@@ -103,7 +103,7 @@
 - (void) applyLocalization
 {
     if (_type == EOAChoosePlan)
-        [self.buttonLater setTitle:OALocalizedString(@"shared_string_later") forState:UIControlStateNormal];
+        [self.buttonLater setTitle:OALocalizedString(@"first_time_continue") forState:UIControlStateNormal];
     [self.buttonRestore setTitle:OALocalizedString(@"restore_purchase") forState:UIControlStateNormal];
 }
 
@@ -137,7 +137,8 @@
         [self.scrollViewContainerView addSubview:subscriptionCardView];
 
         _subscriptionManagement = [[UILabel alloc] init];
-        _subscriptionManagement.font = [UIFont systemFontOfSize:15.];
+        _subscriptionManagement.font = [UIFont scaledSystemFontOfSize:15.];
+        _subscriptionManagement.adjustsFontForContentSizeCategory = YES;
         _subscriptionManagement.textColor = UIColor.blackColor;
         _subscriptionManagement.numberOfLines = 0;
 
@@ -149,7 +150,7 @@
                                                  value:subscriptionManagementParagraphStyle
                                                  range:NSMakeRange(0, attributedSubscriptionManagement.length)];
         [attributedSubscriptionManagement addAttribute:NSFontAttributeName
-                                                 value:[UIFont systemFontOfSize:15.]
+                                                 value:[UIFont scaledSystemFontOfSize:15.]
                                                  range:NSMakeRange(0, attributedSubscriptionManagement.length)];
         _subscriptionManagement.attributedText = attributedSubscriptionManagement;
 
@@ -169,7 +170,8 @@
         [self.scrollView insertSubview:_viewIncludesSeparator belowSubview:self.buttonRestore];
 
         _labelIncludes = [[UILabel alloc] init];
-        _labelIncludes.font = [UIFont systemFontOfSize:17.];
+        _labelIncludes.font = [UIFont scaledSystemFontOfSize:17.];
+        _labelIncludes.adjustsFontForContentSizeCategory = YES;
         _labelIncludes.textColor = UIColor.blackColor;
         _labelIncludes.numberOfLines = 0;
         _labelIncludes.text = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_colon"),
@@ -195,7 +197,8 @@
         if (isMaps)
         {
             _labelNotIncluded = [[UILabel alloc] init];
-            _labelNotIncluded.font = [UIFont systemFontOfSize:17.];
+            _labelNotIncluded.font = [UIFont scaledSystemFontOfSize:17.];
+            _labelNotIncluded.adjustsFontForContentSizeCategory = YES;
             _labelNotIncluded.textColor = UIColor.blackColor;
             _labelNotIncluded.numberOfLines = 0;
             _labelNotIncluded.text = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_colon"),
@@ -226,10 +229,10 @@
 
     NSInteger index1 = [self.scrollView.subviews indexOfObject:_buttonTermsOfUse];
     _buttonTermsOfUse.tag = index1;
-    _buttonTermsOfUse.labelTitle.font = [UIFont systemFontOfSize:15. weight:UIFontWeightSemibold];
+    _buttonTermsOfUse.labelTitle.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
     NSInteger index2 = [self.scrollView.subviews indexOfObject:_buttonPrivacyPolicy];
     _buttonPrivacyPolicy.tag = index2;
-    _buttonPrivacyPolicy.labelTitle.font = [UIFont systemFontOfSize:15. weight:UIFontWeightSemibold];
+    _buttonPrivacyPolicy.labelTitle.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
 
     [self.buttonNavigationBack setTintColor:UIColorFromRGB(color_primary_purple)];
     [self.buttonNavigationBack setImage:[UIImage templateImageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
@@ -260,10 +263,7 @@
 
 - (UIStatusBarStyle) preferredStatusBarStyle
 {
-    if (@available(iOS 13.0, *))
-        return _type == EOAChoosePlan ? UIStatusBarStyleDefault : UIStatusBarStyleDarkContent;
-
-    return UIStatusBarStyleDefault;
+    return _type == EOAChoosePlan ? UIStatusBarStyleDefault : UIStatusBarStyleDarkContent;
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -279,15 +279,9 @@
 {
     CGFloat navigationBarHeight;
     CGFloat extraNavigationBarHeight = 0.;
-    if (@available(iOS 13.0, *))
-    {
-        if (_type == EOAChooseSubscription)
-            extraNavigationBarHeight = [OAUtilities getTopMargin];
-    }
-    else
-    {
-        extraNavigationBarHeight = [OAUtilities getStatusBarHeight];
-    }
+    if (_type == EOAChooseSubscription)
+        extraNavigationBarHeight = [OAUtilities getTopMargin];
+
     navigationBarHeight = kNavigationBarHeight + extraNavigationBarHeight;
 
     self.viewNavigationBar.frame = CGRectMake(0., 0., self.view.frame.size.width, navigationBarHeight);
@@ -449,7 +443,7 @@
 - (void)setupButton:(UIButton *)button
 {
     [button setTitleColor:UIColorFromRGB(color_primary_purple) forState:UIControlStateNormal];
-    button.titleLabel.font = [UIFont systemFontOfSize:15. weight:UIFontWeightSemibold];
+    button.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
 }
 
 - (OAFeatureCardRow *)addSimpleRow:(NSString *)title
@@ -472,11 +466,6 @@
 {
     SFSafariViewController *safariViewController = [[SFSafariViewController alloc] initWithURL:[NSURL URLWithString:url]];
     [self presentViewController:safariViewController animated:YES completion:nil];
-}
-
-- (IBAction) backButtonClicked:(id)sender
-{
-    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (IBAction) helpButtonClicked:(id)sender

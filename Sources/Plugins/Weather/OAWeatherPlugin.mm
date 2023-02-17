@@ -215,4 +215,14 @@
         [_weatherPrecipControl updateInfo];
 }
 
+- (NSString *) getName
+{
+    return OALocalizedString(@"shared_string_weather");
+}
+
+- (NSString *) getDescription
+{
+    return OALocalizedString(@"weather_plugin_description");
+}
+
 @end

@@ -9,7 +9,7 @@
 #import "OAVehicleParametersSettingsViewController.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
-#import "OAInputCellWithTitle.h"
+#import "OAInputTableViewCell.h"
 #import "OAOnlyImageViewCell.h"
 #import "OAHorizontalCollectionViewCell.h"
 #import "OARightIconTableViewCell.h"
@@ -66,7 +66,7 @@
     _measurementRangeValuesArr = [NSArray arrayWithArray:_vehicleParameter[@"possibleValues"]];
     NSMutableArray *arr = [NSMutableArray arrayWithArray:_vehicleParameter[@"possibleValuesDescr"]];
     if ([arr[0] isEqualToString:@"-"])
-        [arr replaceObjectAtIndex:0 withObject:OALocalizedString(_isMotorType ? @"not_selected" : @"shared_string_none")];
+        [arr replaceObjectAtIndex:0 withObject:OALocalizedString(_isMotorType ? @"shared_string_not_selected" : @"shared_string_none")];
     _measurementRangeStringArr = [NSArray arrayWithArray:arr];
     _selectedParameter = _vehicleParameter[@"selectedItem"];
     NSString *valueString = _vehicleParameter[@"value"];
@@ -111,6 +111,7 @@
 {
     [super viewDidLoad];
 
+    [self.cancelButton setImage:[UIImage rtlImageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
     self.doneButton.hidden = _isMotorType;
     self.subtitleLabel.hidden = _isMotorType;
     [self setupNavBarHeight];
@@ -176,7 +177,7 @@
             @"icon" : [self getParameterImage:parameter],
         }];
         [parametersArr addObject:@{
-            @"type" : [OAInputCellWithTitle getCellIdentifier],
+            @"type" : [OAInputTableViewCell getCellIdentifier],
             @"title" : [self getMeasurementUnit:parameter],
             @"value" : [_measurementValue isEqualToString:OALocalizedString(@"shared_string_none")] ? @"0" : _measurementValue,
         }];
@@ -215,7 +216,7 @@
 - (NSString *) getMeasurementUnit:(NSString *)parameter
 {
     if ([parameter isEqualToString:@"weight"])
-        return OALocalizedString(@"tones");
+        return OALocalizedString(@"shared_string_tones");
     else if ([parameter isEqualToString:@"height"] || [parameter isEqualToString:@"width"] || [parameter isEqualToString:@"length"])
         return OALocalizedString(@"shared_string_meters");
     return @"";
@@ -291,17 +292,19 @@
         }
         if (cell)
         {
-            cell.imageView.image = [UIImage imageNamed:item[@"icon"]];
+            cell.imageView.image = [UIImage rtlImageNamed:item[@"icon"]];
         }
         return cell;
     }
-    else if ([cellType isEqualToString:[OAInputCellWithTitle getCellIdentifier]])
+    else if ([cellType isEqualToString:[OAInputTableViewCell getCellIdentifier]])
     {
-        OAInputCellWithTitle* cell = [tableView dequeueReusableCellWithIdentifier:[OAInputCellWithTitle getCellIdentifier]];
+        OAInputTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAInputTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAInputCellWithTitle getCellIdentifier] owner:self options:nil];
-            cell = (OAInputCellWithTitle *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAInputTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAInputTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell clearButtonVisibility:NO];
             [cell.inputField removeTarget:self action:NULL forControlEvents:UIControlEventEditingChanged];
             [cell.inputField addTarget:self action:@selector(textViewDidChange:) forControlEvents:UIControlEventEditingChanged];
             cell.inputField.keyboardType = UIKeyboardTypeDecimalPad;
@@ -344,15 +347,14 @@
             cell = (OARightIconTableViewCell *) nib[0];
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
-            cell.rightIconView.tintColor = UIColorFromRGB(color_primary_purple);
+            [cell.rightIconView setHidden:YES];
         }
         if (cell)
         {
             cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + 20., 0., 0.);
             cell.titleLabel.text = _measurementRangeStringArr[indexPath.row];
-            cell.rightIconView.image = [_selectedParameter isEqualToNumber:_measurementRangeValuesArr[indexPath.row]]
-                ? [UIImage templateImageNamed:@"ic_checkmark_default"]
-                : nil;
+            if ([_selectedParameter isEqualToNumber:_measurementRangeValuesArr[indexPath.row]])
+                cell.accessoryType = UITableViewCellAccessoryCheckmark;
         }
         return cell;
     }
@@ -377,8 +379,9 @@
             _isMotorType ? kTopPaddingMotorType : 0.,
             textWidth,
             heightForHeader)];
-        UIFont *labelFont = [UIFont systemFontOfSize:_isMotorType ? 13. : 15.];
+        UIFont *labelFont = [UIFont scaledSystemFontOfSize:_isMotorType ? 13. : 15.];
         description.font = labelFont;
+        description.adjustsFontForContentSizeCategory = YES;
         [description setTextColor: UIColorFromRGB(color_text_footer)];
         NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
         [style setLineSpacing:6];
@@ -429,9 +432,9 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     NSDictionary *item = _data[indexPath.section][indexPath.row];
-    if ([item[@"type"] isEqualToString:[OAInputCellWithTitle getCellIdentifier]])
+    if ([item[@"type"] isEqualToString:[OAInputTableViewCell getCellIdentifier]])
     {
-        OAInputCellWithTitle *cell = (OAInputCellWithTitle *) [tableView cellForRowAtIndexPath:indexPath];
+        OAInputTableViewCell *cell = (OAInputTableViewCell *) [tableView cellForRowAtIndexPath:indexPath];
         if (cell.inputField.isFirstResponder)
         {
             [cell.inputField resignFirstResponder];

@@ -122,7 +122,7 @@
         [modeCell.modeButton setTitle:[NSString stringWithFormat:@"%@/%@", OALocalizedString(@"altitude"), OALocalizedString(@"shared_string_slope")] forState:UIControlStateNormal];
         [modeCell.modeButton addTarget:self action:@selector(onStatsModeButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         [modeCell.iconButton addTarget:self action:@selector(onStatsModeButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-        modeCell.rightLabel.text = OALocalizedString(@"shared_string_distance");
+        modeCell.rightLabel.text = OALocalizedString(@"map_widget_trip_recording_distance");
         modeCell.separatorInset = UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.);
         
         [dataArr setObject:@[modeCell, routeStatsCell, analyzeBtnCell] forKey:@(section++)];
@@ -136,8 +136,8 @@
 - (void)populateElevationSection:(NSMutableDictionary *)dataArr section:(NSInteger &)section {
     NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARouteInfoAltitudeCell getCellIdentifier] owner:self options:nil];
     OARouteInfoAltitudeCell *altCell = (OARouteInfoAltitudeCell *)[nib objectAtIndex:0];
-    altCell.avgAltitudeTitle.text = OALocalizedString(@"gpx_avg_altitude");
-    altCell.altRangeTitle.text = OALocalizedString(@"gpx_alt_range");
+    altCell.avgAltitudeTitle.text = OALocalizedString(@"average_altitude");
+    altCell.altRangeTitle.text = OALocalizedString(@"altitude_range");
     altCell.ascentTitle.text = OALocalizedString(@"gpx_ascent");
     altCell.descentTitle.text = OALocalizedString(@"gpx_descent");
     
@@ -448,10 +448,10 @@
 
 - (void) applyLocalization
 {
-    self.titleView.text = OALocalizedString(@"gpx_route");
+    self.titleView.text = OALocalizedString(@"layer_route");
     [self.doneButton setTitle:OALocalizedString(@"shared_string_export") forState:UIControlStateNormal];
     [self.cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
-    [self.startButton setTitle:OALocalizedString(@"gpx_start") forState:UIControlStateNormal];
+    [self.startButton setTitle:OALocalizedString(@"shared_string_control_start") forState:UIControlStateNormal];
 }
 
 - (CGFloat)contentHeight

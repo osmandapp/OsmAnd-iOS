@@ -9,9 +9,8 @@
 #import "OAEditDescriptionViewController.h"
 #import "Localization.h"
 #import "OAColors.h"
-#import "OATextViewSimpleCell.h"
+#import "OATextMultilineTableViewCell.h"
 #import "OAWebViewCell.h"
-#import "OAIconTitleValueCell.h"
 
 @interface OAEditDescriptionViewController () <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate>
 
@@ -73,7 +72,7 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.tableFooterView = [[UIView alloc] init];
-    self.tableView.backgroundColor = UIColorFromRGB(color_bottom_sheet_background);
+    self.tableView.backgroundColor = UIColorFromRGB(color_primary_table_background);
     
     [self setupView];
 }
@@ -128,7 +127,7 @@
         _titleView.text = OALocalizedString(@"context_menu_edit_descr");
         _saveButton.hidden = NO;
         _editButton.hidden = YES;
-        _toolbarView.backgroundColor = UIColorFromRGB(color_bottom_sheet_background);
+        _toolbarView.backgroundColor = UIColorFromRGB(color_primary_table_background);
         _titleView.textColor = UIColor.blackColor;
         _saveButton.tintColor = UIColorFromRGB(color_primary_purple);
         _backButton.tintColor = UIColorFromRGB(color_primary_purple);
@@ -138,7 +137,7 @@
     }
     else
     {
-        _titleView.text = _isComment ? OALocalizedString(@"osm_note_comment") : OALocalizedString(@"description");
+        _titleView.text = _isComment ? OALocalizedString(@"poi_dialog_comment") : OALocalizedString(@"shared_string_description");
         _editButton.hidden = _readOnly;
         _saveButton.hidden = YES;
         _toolbarView.backgroundColor = UIColorFromRGB(color_chart_orange);
@@ -160,7 +159,7 @@
     {
         _cellsData = @[
             @{
-                @"type" : [OATextViewSimpleCell getCellIdentifier],
+                @"type" : [OATextMultilineTableViewCell getCellIdentifier],
                 @"title" : self.desc,
                 @"separatorInset" : @0
             }
@@ -240,8 +239,8 @@
 {
     if (self.delegate && [self.delegate respondsToSelector:@selector(descriptionChanged:)])
         [self.delegate descriptionChanged:self.desc];
-    
-    [self backButtonClicked:self];
+
+    [self dismissViewController];
 }
 
 - (IBAction)editClicked:(id)sender
@@ -267,14 +266,18 @@
 {
     NSDictionary *item = _cellsData[indexPath.row];
     
-    if ([item[@"type"] isEqualToString:[OATextViewSimpleCell getCellIdentifier]])
+    if ([item[@"type"] isEqualToString:[OATextMultilineTableViewCell getCellIdentifier]])
     {
-        OATextViewSimpleCell *cell = [tableView dequeueReusableCellWithIdentifier:[OATextViewSimpleCell getCellIdentifier]];
+        OATextMultilineTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OATextMultilineTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextViewSimpleCell getCellIdentifier] owner:self options:nil];
-            cell = (OATextViewSimpleCell *)[nib objectAtIndex:0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextMultilineTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OATextMultilineTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell clearButtonVisibility:NO];
+            cell.textView.userInteractionEnabled = YES;
+            cell.textView.editable = YES;
+            cell.textView.font = [UIFont scaledSystemFontOfSize:16.];
         }
         if (cell)
         {
@@ -282,50 +285,17 @@
             cell.separatorInset = UIEdgeInsetsMake(0, inset.floatValue, 0, 0);
             cell.textView.delegate = self;
             cell.textView.text = item[@"title"];
-            cell.textView.font = [UIFont systemFontOfSize:16];
             [cell.textView sizeToFit];
-            cell.textView.editable = YES;
             [cell.textView becomeFirstResponder];
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
-    {
-        OAIconTitleValueCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
-            cell = (OAIconTitleValueCell *) nib[0];
-            [cell showLeftIcon:NO];
-            [cell showRightIcon:NO];
-        }
-        if (cell)
-        {
-            NSNumber *inset = item[@"separatorInset"];
-            cell.separatorInset = UIEdgeInsetsMake(0, inset.floatValue, 0, 0);
-            cell.selectionStyle = UITableViewCellSelectionStyleDefault;
-            cell.textView.font = [UIFont systemFontOfSize:17. weight:UIFontWeightMedium];
-            cell.textView.textColor = UIColorFromRGB(color_primary_purple);
-            cell.textView.text = item[@"title"];
-            cell.descriptionView.hidden = YES;
-        }
-        return cell;
-    }
-
     return nil;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return UITableViewAutomaticDimension;
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSDictionary *item = _cellsData[indexPath.row];
-    if ([item[@"type"] isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
-        [self editClicked:nil];
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 #pragma mark - UITextViewDelegate

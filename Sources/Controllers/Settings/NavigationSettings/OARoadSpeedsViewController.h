@@ -10,6 +10,4 @@
 
 @interface OARoadSpeedsViewController : OABaseSettingsViewController
 
-- (instancetype) initWithApplicationMode:(OAApplicationMode *)am speedParameters:(NSDictionary *)speedParameters;
-
 @end

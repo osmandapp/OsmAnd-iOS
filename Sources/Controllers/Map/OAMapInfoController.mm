@@ -704,7 +704,7 @@
     OATextInfoWidget *intermediateTime = [ric createTimeControl:YES];
     [self registerSideWidget:intermediateTime widgetState:[[OAIntermediateTimeControlWidgetState alloc] init] key:@"intermediate_time" left:NO priorityOrder:14];
     OATextInfoWidget *dist = [ric createDistanceControl];
-    [self registerSideWidget:dist imageId:@"ic_action_target" message:OALocalizedString(@"map_widget_distance") key:@"distance" left:NO priorityOrder:15];
+    [self registerSideWidget:dist imageId:@"ic_action_target" message:OALocalizedString(@"route_descr_destination") key:@"distance" left:NO priorityOrder:15];
     OATextInfoWidget *time = [ric createTimeControl:NO];
     [self registerSideWidget:time widgetState:[[OATimeWidgetState alloc] init] key:@"time" left:NO priorityOrder:16];
     OATextInfoWidget *bearing = [ric createBearingControl];
@@ -716,7 +716,7 @@
     [self registerSideWidget:marker2nd imageId:@"widget_marker_day" message:OALocalizedString(@"widget_marker2") key:@"map_marker_2nd" left:NO priorityOrder:19];
     
     OATextInfoWidget *speed = [ric createSpeedControl];
-    [self registerSideWidget:speed imageId:@"ic_action_speed" message:OALocalizedString(@"gpx_speed") key:@"speed" left:false priorityOrder:20];
+    [self registerSideWidget:speed imageId:@"ic_action_speed" message:OALocalizedString(@"shared_string_speed") key:@"speed" left:false priorityOrder:20];
     OATextInfoWidget *maxspeed = [ric createMaxSpeedControl];
     [self registerSideWidget:maxspeed imageId:@"ic_action_speed_limit" message:OALocalizedString(@"map_widget_max_speed") key:@"max_speed" left:false priorityOrder:21];
     OATextInfoWidget *alt = [mic createAltitudeControl];

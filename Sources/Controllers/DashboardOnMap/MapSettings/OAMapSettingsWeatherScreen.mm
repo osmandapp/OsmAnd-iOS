@@ -11,7 +11,7 @@
 #import "Localization.h"
 #import "OARootViewController.h"
 #import "OAMapStyleSettings.h"
-#import "OASettingSwitchCell.h"
+#import "OASwitchTableViewCell.h"
 #import "OAIconTitleValueCell.h"
 #import "OAWeatherLayerSettingsViewController.h"
 #import "OAColors.h"
@@ -49,7 +49,7 @@
         _settings = [OAAppSettings sharedManager];
         _styleSettings = [OAMapStyleSettings sharedInstance];
         
-        title = OALocalizedString(@"product_title_weather");
+        title = OALocalizedString(@"shared_string_weather");
         settingsScreen = EMapSettingsScreenWeather;
         
         vwController = viewController;
@@ -79,7 +79,7 @@
 {
     BOOL enabled = _app.data.weather;
     NSArray* mainSwitch = @[@{
-        @"type" : [OASettingSwitchCell getCellIdentifier],
+        @"type" : [OASwitchTableViewCell getCellIdentifier],
         @"name"  : kWeather,
         @"value" : @(enabled)
     }];
@@ -142,7 +142,7 @@
         @{
             @"type"  : [OAIconTitleValueCell getCellIdentifier],
             @"name"  : kWeatherContourLines,
-            @"title" : OALocalizedString(@"map_settings_weather_contours"),
+            @"title" : OALocalizedString(@"shared_string_contours"),
             @"value" : selectedContourLinesName,
             @"image" : @"ic_custom_contour_lines"
         }];
@@ -186,7 +186,7 @@
 - (NSString*) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     if (section == kLayersSection)
-        return OALocalizedString(@"map_settings_weather_layers");
+        return OALocalizedString(@"shared_string_layers");
     return @"";
 }
 
@@ -207,30 +207,30 @@
 {
     UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
     [header.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
-    header.textLabel.font = [UIFont systemFontOfSize:13.];
+    header.textLabel.font = [UIFont scaledSystemFontOfSize:13.];
 }
 
 - (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:[OASettingSwitchCell getCellIdentifier]])
+    if ([item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
+        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (!cell)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
-            cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.descriptionView.hidden = YES;
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASwitchTableViewCell *) nib[0];
+            [cell descriptionVisibility:NO];
         }
         if (cell)
         {
             BOOL enabled = [item[@"value"] boolValue];
-            cell.textView.text = enabled ? OALocalizedString(@"shared_string_enabled") : OALocalizedString(@"rendering_value_disabled_name");
+            cell.titleLabel.text = enabled ? OALocalizedString(@"shared_string_enabled") : OALocalizedString(@"rendering_value_disabled_name");
+
             NSString *imgName = enabled ? @"ic_custom_umbrella.png" : @"ic_custom_hide.png";
-            cell.imgView.image = [UIImage templateImageNamed:imgName];
-            cell.imgView.tintColor = enabled ? UIColorFromRGB(color_dialog_buttons_dark) : UIColorFromRGB(color_tint_gray);
-            
+            cell.leftIconView.image = [UIImage templateImageNamed:imgName];
+            cell.leftIconView.tintColor = enabled ? UIColorFromRGB(color_dialog_buttons_dark) : UIColorFromRGB(color_tint_gray);
+
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.switchView setOn:enabled];
             [cell.switchView addTarget:self action:@selector(turnWeatherOnOff:) forControlEvents:UIControlEventValueChanged];

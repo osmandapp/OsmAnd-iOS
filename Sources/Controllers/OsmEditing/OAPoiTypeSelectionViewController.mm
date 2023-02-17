@@ -12,7 +12,7 @@
 #import "OAPOICategory.h"
 #import "OAPOIType.h"
 #import "OAPOIBaseType.h"
-#import "OASettingsTitleTableViewCell.h"
+#import "OARightIconTableViewCell.h"
 #import "OASizes.h"
 #import "OAColors.h"
 #import "Localization.h"
@@ -167,22 +167,29 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    OASettingsTitleTableViewCell* cell = nil;
-    cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTitleTableViewCell getCellIdentifier]];
+    OARightIconTableViewCell* cell = nil;
+    cell = [tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTitleTableViewCell getCellIdentifier] owner:self options:nil];
-        cell = (OASettingsTitleTableViewCell *)[nib objectAtIndex:0];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
+        cell = (OARightIconTableViewCell *)[nib objectAtIndex:0];
+        [cell descriptionVisibility:NO];
     }
     
     if (cell)
     {
         OAPOIBaseType *item = _isFiltered ? (OAPOIBaseType *)_filteredData[indexPath.row] : (OAPOIBaseType *)_data[indexPath.row];
-        [cell.textView setText:item.nameLocalized];
+        cell.titleLabel.text = item.nameLocalized;
         if ((_screenType == CATEGORY_SCREEN && [item isEqual:_poiData.getPoiCategory]) || [item isEqual:_poiData.getCurrentPoiType])
-            [cell.iconView setImage:[UIImage imageNamed:@"menu_cell_selected.png"]];
+        {
+            [cell.leftIconView setImage:[UIImage imageNamed:@"menu_cell_selected.png"]];
+        }
         else
-            [cell.iconView setImage:nil];
+        {
+            UIImage *icon = [item.icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            [cell.leftIconView setImage:icon];
+            [cell.leftIconView setTintColor:UIColorFromRGB(color_poi_orange)];
+        }
     }
     return cell;
 }

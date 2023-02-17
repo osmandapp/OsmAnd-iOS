@@ -13,6 +13,7 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
+    self.textView.font = [UIFont scaledSystemFontOfSize:14. weight:UIFontWeightSemibold];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -24,7 +25,7 @@
 - (void) setImage:(UIImage *)image tint:(BOOL)tint
 {
     if (image && tint)
-        image = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        image = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
 
     self.imageView.image = image;
 }

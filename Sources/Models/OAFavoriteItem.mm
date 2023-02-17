@@ -31,8 +31,8 @@
     UIColor *_iconColor;
 }
 
-static OASpecialPointType* _home = [[OASpecialPointType alloc] initWithTypeName:@"home" resId:@"home_pt" iconName:@"special_house"];
-static OASpecialPointType* _work = [[OASpecialPointType alloc] initWithTypeName:@"work" resId:@"work_pt" iconName:@"special_building"];
+static OASpecialPointType* _home = [[OASpecialPointType alloc] initWithTypeName:@"home" resId:@"favorite_home_category" iconName:@"special_house"];
+static OASpecialPointType* _work = [[OASpecialPointType alloc] initWithTypeName:@"work" resId:@"work_button" iconName:@"special_building"];
 static OASpecialPointType* _parking = [[OASpecialPointType alloc] initWithTypeName:@"parking" resId:@"map_widget_parking" iconName:@"parking"];
 static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 
@@ -190,7 +190,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 
 - (void) initPersonalType
 {
-    if ([[self getCategory] isEqualToString:kPersonalCategory])
+    if ([OAFavoriteGroup isPersonal:[self getCategory]])
     {
         for (OASpecialPointType *pointType in [OASpecialPointType VALUES])
         {

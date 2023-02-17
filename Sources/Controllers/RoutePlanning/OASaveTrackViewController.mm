@@ -10,7 +10,7 @@
 #import "OARootViewController.h"
 #import "Localization.h"
 #import "OAColors.h"
-#import "OATextViewResizingCell.h"
+#import "OATextMultilineTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OASaveTrackBottomSheetViewController.h"
 #import "OAMapLayers.h"
@@ -88,7 +88,7 @@
 - (void) applyLocalization
 {
     [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"save_new_track");
+    self.titleLabel.text = OALocalizedString(@"save_as_new_track");
     [self.cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
     [self.saveButton setTitle:OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
 }
@@ -97,7 +97,7 @@
 {
     NSString *folderName = [filePath stringByDeletingLastPathComponent];
     if (folderName.length == 0)
-        return OALocalizedString(@"tracks");
+        return OALocalizedString(@"shared_string_gpx_tracks");
     else
         return folderName;
 }
@@ -155,9 +155,9 @@
     
     [data addObject:@[
         @{
-            @"type" : [OATextViewResizingCell getCellIdentifier],
+            @"type" : [OATextMultilineTableViewCell getCellIdentifier],
             @"fileName" : _fileName,
-            @"header" : OALocalizedString(@"fav_name"),
+            @"header" : OALocalizedString(@"shared_string_name"),
             @"key" : @"input_name",
         }
     ]];
@@ -192,7 +192,7 @@
     [data addObject:@[
         @{
             @"type" : [OASwitchTableViewCell getCellIdentifier],
-            @"title" : OALocalizedString(@"map_settings_show"),
+            @"title" : OALocalizedString(@"shared_string_show_on_map"),
             @"key" : @"map_settings_show"
         }
     ]];
@@ -256,7 +256,7 @@
     {        
         [self dismissViewControllerAnimated:NO completion:nil];
         NSString *savingPath;
-        if ([_selectedFolderName isEqualToString:OALocalizedString(@"tracks")])
+        if ([_selectedFolderName isEqualToString:OALocalizedString(@"shared_string_gpx_tracks")])
             savingPath = _fileName;
         else
             savingPath = [_selectedFolderName stringByAppendingPathComponent:_fileName];
@@ -277,43 +277,44 @@
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:[OATextViewResizingCell getCellIdentifier]])
+    if ([cellType isEqualToString:[OATextMultilineTableViewCell getCellIdentifier]])
     {
-        OATextViewResizingCell* cell = [tableView dequeueReusableCellWithIdentifier:[OATextViewResizingCell getCellIdentifier]];
+        OATextMultilineTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OATextMultilineTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextViewResizingCell getCellIdentifier] owner:self options:nil];
-            cell = (OATextViewResizingCell *)[nib objectAtIndex:0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextMultilineTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OATextMultilineTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            cell.textView.userInteractionEnabled = YES;
+            cell.textView.editable = YES;
+            cell.textView.delegate = self;
+            cell.textView.returnKeyType = UIReturnKeyDone;
+            cell.textView.enablesReturnKeyAutomatically = YES;
         }
-        
         if (cell)
         {
-            cell.inputField.text = item[@"fileName"];
-            cell.inputField.delegate = self;
-            cell.inputField.textContainer.lineBreakMode = NSLineBreakByCharWrapping;
-            cell.inputField.returnKeyType = UIReturnKeyDone;
-            cell.inputField.enablesReturnKeyAutomatically = YES;
-            cell.clearButton.tag = cell.inputField.tag;
+            cell.textView.text = item[@"fileName"];
+            cell.textView.tag = indexPath.section << 10 | indexPath.row;
+            cell.clearButton.tag = cell.textView.tag;
             [cell.clearButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
             [cell.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         }
-        
         return cell;
     }
     else if ([cellType isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OASwitchTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
+        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell = (OASwitchTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
         }
-        
         if (cell)
         {
-            [cell.textView setText: item[@"title"]];
+            cell.titleLabel.text = item[@"title"];
+
             NSString *itemKey = item[@"key"];
             BOOL value = [self cellValueByKey:itemKey];
             cell.switchView.on = value;
@@ -330,7 +331,7 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
-            cell.descriptionView.font = [UIFont systemFontOfSize:17.0];
+            cell.descriptionView.font = [UIFont scaledSystemFontOfSize:17.0];
             cell.descriptionView.numberOfLines = 1;
             cell.iconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
             cell.iconView.tintColor = UIColorFromRGB(color_tint_gray);
@@ -430,7 +431,35 @@
     }
 }
 
--(void) clearButtonPressed:(UIButton *)sender
+#pragma mark - UITextFieldDelegate
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [textField resignFirstResponder];
+    return YES;
+}
+
+#pragma mark - UITextViewDelegate
+
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    if([text isEqualToString:@"\n"])
+    {
+        [textView resignFirstResponder];
+        return NO;
+    }
+    return YES;
+}
+
+- (void) textViewDidChange:(UITextView *)textView
+{
+    [self updateErrorMessage:textView.text];
+    [textView sizeToFit];
+}
+
+#pragma mark - Selectors
+
+- (void) clearButtonPressed:(UIButton *)sender
 {
     _fileName = @"";
     
@@ -439,8 +468,8 @@
     
     [_tableView beginUpdates];
     UITableViewCell *cell = [_tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row inSection:indexPath.section]];
-    if ([cell isKindOfClass:OATextViewResizingCell.class])
-        ((OATextViewResizingCell *) cell).inputField.text = @"";
+    if ([cell isKindOfClass:OATextMultilineTableViewCell.class])
+        ((OATextMultilineTableViewCell *) cell).textView.text = @"";
     [_tableView endUpdates];
 }
 
@@ -462,14 +491,6 @@
     }
 }
 
-#pragma mark - UITextViewDelegate
-
-- (void) textViewDidChange:(UITextView *)textView
-{
-    [self updateErrorMessage:textView.text];
-    [textView sizeToFit];
-}
-
 - (void) updateErrorMessage:(NSString *)text
 {
     [self updateFileNameFromEditText:text];
@@ -480,16 +501,6 @@
     footer.textLabel.text = _inputFieldError;
     [footer sizeToFit];
     [self.tableView endUpdates];
-}
-
-- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
-{
-    if([text isEqualToString:@"\n"])
-    {
-        [textView resignFirstResponder];
-        return NO;
-    }
-    return YES;
 }
 
 - (void) updateFileNameFromEditText:(NSString *)name
@@ -520,7 +531,7 @@
 - (BOOL) isFileExist:(NSString *)name
 {
     NSString *folderPath = OsmAndApp.instance.gpxPath;
-    if (_selectedFolderName.length > 0 && ![_selectedFolderName isEqualToString:OALocalizedString(@"tracks")])
+    if (_selectedFolderName.length > 0 && ![_selectedFolderName isEqualToString:OALocalizedString(@"shared_string_gpx_tracks")])
         folderPath = [folderPath stringByAppendingPathComponent:_selectedFolderName];
         
     NSString *filePath = [[folderPath stringByAppendingPathComponent:name] stringByAppendingPathExtension:@"gpx"];
@@ -541,11 +552,9 @@
 
 - (CGFloat)getModalPresentationOffset:(BOOL)keyboardShown
 {
-    CGFloat modalOffset = 0;
-    if (@available(iOS 13.0, *)) {
-        // accounts for additional top offset in modal presentation 
-        modalOffset = keyboardShown ? 6. : 10.;
-    }
+    // accounts for additional top offset in modal presentation
+    CGFloat modalOffset = modalOffset = keyboardShown ? 6. : 10.;;
+
     return modalOffset;
 }
 

@@ -17,7 +17,7 @@
 #import "OAAppSettings.h"
 #import "OsmAndApp.h"
 
-#import "OATextInputCell.h"
+#import "OAInputTableViewCell.h"
 #import "OAColorsTableViewCell.h"
 #import "OAIconsTableViewCell.h"
 #import "OALocationIconsTableViewCell.h"
@@ -192,6 +192,7 @@
 - (void) viewDidLoad
 {
     [super viewDidLoad];
+    [self.cancelButton setImage:[UIImage rtlImageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
     _tableView.delegate = self;
     _tableView.dataSource = self;
     _tableView.separatorInset = UIEdgeInsetsMake(0., 16., 0., 0.);
@@ -266,7 +267,7 @@
     NSMutableArray *profileMapAppearanceArr = [NSMutableArray array];
     NSString* profileColor = OALocalizedString(_colorNames[@(_changedProfile.color)]);
     [profileNameArr addObject:@{
-        @"type" : [OATextInputCell getCellIdentifier],
+        @"type" : [OAInputTableViewCell getCellIdentifier],
         @"title" : _changedProfile.name,
     }];
     [profileAppearanceArr addObject:@{
@@ -276,17 +277,17 @@
     }];
     [profileAppearanceArr addObject:@{
         @"type" : [OAIconsTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"select_icon"),
+        @"title" : OALocalizedString(@"select_icon_profile_dialog_title"),
         @"value" : @"",
     }];
     [profileMapAppearanceArr addObject:@{
         @"type" : [OALocationIconsTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"position_icon_at_rest"),
+        @"title" : OALocalizedString(@"select_map_icon"),
         @"description" : @"",
     }];
     [profileMapAppearanceArr addObject:@{
         @"type" : [OALocationIconsTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"position_icon_while_moving"),
+        @"title" : OALocalizedString(@"select_navigation_icon"),
         @"description" : OALocalizedString(@"will_be_show_while_moving"),
     }];
     [tableData addObject:profileNameArr];
@@ -307,7 +308,7 @@
         @(profile_icon_color_magenta_light),
     ];
     
-    _colorNames = @{@(profile_icon_color_blue_light_default): @"lightblue", @(profile_icon_color_purple_light) : @"purple", @(profile_icon_color_green_light) : @"green", @(profile_icon_color_blue_light) : @"blue",  @(profile_icon_color_red_light) : @"red", @(profile_icon_color_yellow_light) : @"yellow", @(profile_icon_color_magenta_light) : @"col_magenta"};
+    _colorNames = @{@(profile_icon_color_blue_light_default): @"rendering_value_lightblue_name", @(profile_icon_color_purple_light) : @"rendering_value_purple_name", @(profile_icon_color_green_light) : @"rendering_value_green_name", @(profile_icon_color_blue_light) : @"rendering_value_blue_name",  @(profile_icon_color_red_light) : @"rendering_value_red_name", @(profile_icon_color_yellow_light) : @"rendering_value_yellow_name", @(profile_icon_color_magenta_light) : @"shared_string_color_magenta"};
     
     _icons = @[@"ic_world_globe_dark",
                @"ic_action_car_dark",
@@ -368,7 +369,7 @@
 }
 
 - (void)showExitWithoutSavingAlert {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"osm_editing_lost_changes_title") preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"exit_without_saving") preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil]];
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_exit") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self.navigationController popViewControllerAnimated:YES];
@@ -491,9 +492,9 @@
     if (section == 0)
         return @"";
     else if (section == 1)
-        return OALocalizedString(@"map_settings_appearance");
+        return OALocalizedString(@"shared_string_appearance");
     else if (section == 2)
-        return OALocalizedString(@"appearance_on_map");
+        return OALocalizedString(@"appearance_on_the_map");
     return @"";
 }
 
@@ -505,15 +506,20 @@
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath { 
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = [[NSString alloc] initWithString:item[@"type"]];
-    if ([cellType isEqualToString:[OATextInputCell getCellIdentifier]])
+    if ([cellType isEqualToString:[OAInputTableViewCell getCellIdentifier]])
     {
-        OATextInputCell* cell = [tableView dequeueReusableCellWithIdentifier:[OATextInputCell getCellIdentifier]];
+        OAInputTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAInputTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextInputCell getCellIdentifier] owner:self options:nil];
-            cell = (OATextInputCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAInputTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAInputTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell titleVisibility:NO];
+            [cell clearButtonVisibility:NO];
+            [cell.inputField removeTarget:self action:NULL forControlEvents:UIControlEventEditingChanged];
             [cell.inputField addTarget:self action:@selector(textViewDidChange:) forControlEvents:UIControlEventEditingChanged];
             cell.inputField.autocapitalizationType = UITextAutocapitalizationTypeSentences;
+            cell.inputField.textAlignment = NSTextAlignmentNatural;
         }
         cell.inputField.text = item[@"title"];
         cell.inputField.delegate = self;
@@ -555,6 +561,7 @@
             cell.delegate = self;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.separatorInset = UIEdgeInsetsZero;
+            cell.valueLabel.hidden = YES;
         }
         if (cell)
         {

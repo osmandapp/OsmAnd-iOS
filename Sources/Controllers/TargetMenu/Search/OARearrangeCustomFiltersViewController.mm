@@ -21,7 +21,6 @@
 #define kAllFiltersSection 0
 #define kHiddenFiltersSection 1
 #define kActionsSection 2
-#define kHeaderViewFont [UIFont systemFontOfSize:15.0]
 
 @interface OAEditFilterItem : NSObject
 
@@ -130,7 +129,7 @@
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
-    _tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"create_custom_categories_list_promo") font:kHeaderViewFont textColor:UIColorFromRGB(color_text_footer) lineSpacing:6.0 isTitle:NO];
+    _tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"create_custom_categories_list_promo") font:kHeaderDescriptionFont textColor:UIColorFromRGB(color_text_footer) isBigTitle:NO];
 }
 
 - (void)applyLocalization
@@ -300,7 +299,7 @@
 
 - (void)showChangesAlert
 {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"osm_editing_lost_changes_title") preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:OALocalizedString(@"exit_without_saving") preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_exit") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self.navigationController popViewControllerAnimated:YES];
     }]];
@@ -363,7 +362,7 @@
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
             cell.titleLabel.textColor = UIColorFromRGB(color_primary_purple);
-            cell.titleLabel.font = [UIFont systemFontOfSize:17. weight:UIFontWeightMedium];
+            cell.titleLabel.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium];
             cell.rightIconView.tintColor = UIColorFromRGB(color_primary_purple);
         }
         if (cell)
@@ -425,7 +424,7 @@
     else if (section == kHiddenFiltersSection)
         title = OALocalizedString(@"hidden_categories");
     else
-        title = OALocalizedString(@"actions");
+        title = OALocalizedString(@"shared_string_actions");
     return title;
 }
 

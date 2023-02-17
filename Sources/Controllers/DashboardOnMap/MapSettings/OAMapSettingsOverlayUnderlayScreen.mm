@@ -15,10 +15,10 @@
 #import "OAMapPanelViewController.h"
 #import "OAMapCreatorHelper.h"
 #import "OAMapStyleSettings.h"
-#import "OASettingSwitchCell.h"
+#import "OASwitchTableViewCell.h"
 #import "OATitleSliderTableViewCell.h"
 #import "OAIconTextDescButtonCell.h"
-#import "OAButtonCell.h"
+#import "OAButtonTableViewCell.h"
 #import "OAColors.h"
 #import "OALocalResourceInformationViewController.h"
 #import "OAOnlineTilesEditingViewController.h"
@@ -145,8 +145,7 @@ static NSInteger kButtonsSection;
     NSMutableArray *sliderArr = [NSMutableArray new];
     [sliderArr addObject:@{
                         @"type" : kCellTypeTitleSlider,
-                        @"title" : _mapSettingType == EMapSettingOverlay ? OALocalizedString(@"map_settings_transp")
-                                                                        : OALocalizedString(@"map_settings_base_transp"),
+                        @"title" : _mapSettingType == EMapSettingOverlay ? OALocalizedString(@"shared_string_transparency") : OALocalizedString(@"map_transparency"),
                          }];
     [sliderArr addObject:@{
                         @"type" : kCellTypeSwitch,
@@ -170,7 +169,7 @@ static NSInteger kButtonsSection;
     NSMutableArray *buttonsArray = [NSMutableArray new];
     [buttonsArray addObject:@{
                         @"type" : kCellTypeButton,
-                        @"title" : OALocalizedString(@"map_settings_add_online_source"),
+                        @"title" : OALocalizedString(@"add_online_source"),
                          }];
     [buttonsArray addObject:@{
                         @"type" : kCellTypeButton,
@@ -187,7 +186,7 @@ static NSInteger kButtonsSection;
     NSMutableArray *styleArray = [NSMutableArray new];
     [styleArray addObject:@{
         @"type" : kCellTypeSwitch,
-        @"title": OALocalizedString(@"map_settings_show_map_symbols"),
+        @"title": OALocalizedString(@"show_map_symbols"),
         @"tag" : kShowLabels
     }];
     if (_mapSettingType == EMapSettingUnderlay)
@@ -304,21 +303,21 @@ static NSInteger kButtonsSection;
 
     if ([item[@"type"] isEqualToString:kCellTypeIconSwitch])
     {
-        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
+        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
-            cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.descriptionView.hidden = YES;
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASwitchTableViewCell *) nib[0];
+            [cell descriptionVisibility:NO];
         }
         if (cell)
         {
-            cell.textView.text = _isEnabled ? OALocalizedString(@"shared_string_enabled") : OALocalizedString(@"rendering_value_disabled_name");
+            cell.titleLabel.text = _isEnabled ? OALocalizedString(@"shared_string_enabled") : OALocalizedString(@"rendering_value_disabled_name");
+
             NSString *imgName = _isEnabled ? @"ic_custom_show.png" : @"ic_custom_hide.png";
-            cell.imgView.image = [UIImage templateImageNamed:imgName];
-            cell.imgView.tintColor = _isEnabled ? UIColorFromRGB(color_dialog_buttons_dark) : UIColorFromRGB(color_tint_gray);
-            
+            cell.leftIconView.image = [UIImage templateImageNamed:imgName];
+            cell.leftIconView.tintColor = _isEnabled ? UIColorFromRGB(color_dialog_buttons_dark) : UIColorFromRGB(color_tint_gray);
+
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.switchView setOn:_isEnabled];
             [cell.switchView addTarget:self action:@selector(turnLayerOnOff:) forControlEvents:UIControlEventValueChanged];
@@ -390,26 +389,27 @@ static NSInteger kButtonsSection;
     
     else if ([item[@"type"] isEqualToString:kCellTypeSwitch])
     {
-        OASwitchTableViewCell* cell = nil;
-        cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
+        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
+            cell = (OASwitchTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
         }
         if (cell)
         {
-            [cell.textView setText:item[@"title"]];
+            cell.titleLabel.text = item[@"title"];
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
-            
+
             if ([item[@"tag"] isEqualToString:kShowSlider])
             {
-                [cell.switchView setOn: [self isOpacitySliderVisible]];
+                [cell.switchView setOn:[self isOpacitySliderVisible]];
                 [cell.switchView addTarget:self action:@selector(onShowSwitchChanged:) forControlEvents:UIControlEventValueChanged];
             }
             else if ([item[@"tag"] isEqualToString:kShowLabels])
             {
-                [cell.switchView setOn: _settings.keepMapLabelsVisible.get];
+                [cell.switchView setOn:_settings.keepMapLabelsVisible.get];
                 [cell.switchView addTarget:self action:@selector(onShowLabelsChanged:) forControlEvents:UIControlEventValueChanged];
             }
             else if ([item[@"tag"] isEqualToString:kHidePoligons])
@@ -446,20 +446,24 @@ static NSInteger kButtonsSection;
     }
     else if ([item[@"type"] isEqualToString:kCellTypeButton])
     {
-        OAButtonCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAButtonCell getCellIdentifier]];
+        OAButtonTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAButtonTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonCell getCellIdentifier] owner:self options:nil];
-            cell = (OAButtonCell *)[nib objectAtIndex:0];
-            [cell showImage:NO];
-            [cell.button setTitleColor:[UIColor colorWithRed:87.0/255.0 green:20.0/255.0 blue:204.0/255.0 alpha:1] forState:UIControlStateNormal];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAButtonTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell titleVisibility:NO];
+            [cell descriptionVisibility:NO];
+            cell.button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
         }
         if (cell)
         {
             [cell.button setTitle:item[@"title"] forState:UIControlStateNormal];
             [cell.button removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
             if (indexPath.section == kAvailableLayersSection)
+            {
                 [cell.button addTarget:self action:@selector(installMorePressed) forControlEvents:UIControlEventTouchUpInside];
+            }
             else
             {
                 if (indexPath.row == 0)

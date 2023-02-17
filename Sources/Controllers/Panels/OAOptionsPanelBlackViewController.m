@@ -252,17 +252,41 @@
     self.navigationController.delegate = self;
     
     [_menuButtonMaps setTitle:OALocalizedString(@"configure_map") forState:UIControlStateNormal];
-    [_menuButtonMyData setTitle:OALocalizedString(@"my_places") forState:UIControlStateNormal];
+    [_menuButtonMyData setTitle:OALocalizedString(@"shared_string_my_places") forState:UIControlStateNormal];
     [_menuButtonMyWaypoints setTitle:OALocalizedString(@"map_markers") forState:UIControlStateNormal];
     [_menuButtonMapsAndResources setTitle:OALocalizedString(@"res_mapsres") forState:UIControlStateNormal];
     [_menuButtonConfigureScreen setTitle:OALocalizedString(@"layer_map_appearance") forState:UIControlStateNormal];
-    [_menuButtonSettings setTitle:OALocalizedString(@"sett_settings") forState:UIControlStateNormal];
-    [_menuButtonHelp setTitle:OALocalizedString(@"menu_help") forState:UIControlStateNormal];
+    [_menuButtonSettings setTitle:OALocalizedString(@"shared_string_settings") forState:UIControlStateNormal];
+    [_menuButtonHelp setTitle:OALocalizedString(@"shared_string_help") forState:UIControlStateNormal];
     [_menuButtonNavigation setTitle:OALocalizedString(@"shared_string_navigation") forState:UIControlStateNormal];
     [_menuButtonPlanRoute setTitle:OALocalizedString(@"plan_route") forState:UIControlStateNormal];
-    [_menuButtonWeather setTitle:OALocalizedString(@"product_title_weather") forState:UIControlStateNormal];
-    [_menuButtonPlugins setTitle:OALocalizedString(@"plugins") forState:UIControlStateNormal];
-    
+    [_menuButtonWeather setTitle:OALocalizedString(@"shared_string_weather") forState:UIControlStateNormal];
+    [_menuButtonPlugins setTitle:OALocalizedString(@"plugins_menu_group") forState:UIControlStateNormal];
+
+    _menuButtonMaps.titleLabel.font = [UIFont scaledSystemFontOfSize:17.];
+    _menuButtonMyData.titleLabel.font = [UIFont scaledSystemFontOfSize:17.];
+    _menuButtonMyWaypoints.titleLabel.font = [UIFont scaledSystemFontOfSize:17.];
+    _menuButtonMapsAndResources.titleLabel.font = [UIFont scaledSystemFontOfSize:17.];
+    _menuButtonConfigureScreen.titleLabel.font = [UIFont scaledSystemFontOfSize:17.];
+    _menuButtonSettings.titleLabel.font = [UIFont scaledSystemFontOfSize:17.];
+    _menuButtonHelp.titleLabel.font = [UIFont scaledSystemFontOfSize:17.];
+    _menuButtonNavigation.titleLabel.font = [UIFont scaledSystemFontOfSize:17.];
+    _menuButtonPlanRoute.titleLabel.font = [UIFont scaledSystemFontOfSize:17.];
+    _menuButtonWeather.titleLabel.font = [UIFont scaledSystemFontOfSize:17.];
+    _menuButtonPlugins.titleLabel.font = [UIFont scaledSystemFontOfSize:17.];
+
+    _menuButtonMaps.titleLabel.adjustsFontForContentSizeCategory = YES;
+    _menuButtonMyData.titleLabel.adjustsFontForContentSizeCategory = YES;
+    _menuButtonMyWaypoints.titleLabel.adjustsFontForContentSizeCategory = YES;
+    _menuButtonMapsAndResources.titleLabel.adjustsFontForContentSizeCategory = YES;
+    _menuButtonConfigureScreen.titleLabel.adjustsFontForContentSizeCategory = YES;
+    _menuButtonSettings.titleLabel.adjustsFontForContentSizeCategory = YES;
+    _menuButtonHelp.titleLabel.adjustsFontForContentSizeCategory = YES;
+    _menuButtonNavigation.titleLabel.adjustsFontForContentSizeCategory = YES;
+    _menuButtonPlanRoute.titleLabel.adjustsFontForContentSizeCategory = YES;
+    _menuButtonWeather.titleLabel.adjustsFontForContentSizeCategory = YES;
+    _menuButtonPlugins.titleLabel.adjustsFontForContentSizeCategory = YES;
+
     [_menuButtonMaps.layer addSublayer:_menuButtonMapsDiv];
     [_menuButtonMyData.layer addSublayer:_menuButtonMyDataDiv];
     [_menuButtonMyWaypoints.layer addSublayer:_menuButtonMyWaypointsDiv];

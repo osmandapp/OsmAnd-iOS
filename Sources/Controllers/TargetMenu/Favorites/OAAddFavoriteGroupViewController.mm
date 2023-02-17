@@ -12,7 +12,7 @@
 #import "Localization.h"
 #import "OAUtilities.h"
 #import "OAFavoritesHelper.h"
-#import "OATextInputCell.h"
+#import "OAInputTableViewCell.h"
 #import "OAColorsTableViewCell.h"
 #import "OsmAndApp.h"
 
@@ -72,18 +72,18 @@
     NSMutableArray *data = [NSMutableArray new];
     [data addObject:@[
         @{
-            @"header" : OALocalizedString(@"group_name"),
+            @"header" : OALocalizedString(@"favorite_group_name"),
             @"footer" : @"",
-            @"type" : [OATextInputCell getCellIdentifier],
+            @"type" : [OAInputTableViewCell getCellIdentifier],
             @"title" : @""
         }
     ]];
     [data addObject:@[
         @{
-            @"header" : OALocalizedString(@"default_color"),
+            @"header" : OALocalizedString(@"access_default_color"),
             @"footer" : OALocalizedString(@"default_color_descr"),
             @"type" : [OAColorsTableViewCell getCellIdentifier],
-            @"title" : OALocalizedString(@"fav_color"),
+            @"title" : OALocalizedString(@"shared_string_color"),
             @"value" : _selectedColor.name,
             @"index" : [NSNumber numberWithInt:_selectedColorIndex],
         }
@@ -109,19 +109,27 @@
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
     
-    if ([cellType isEqualToString:[OATextInputCell getCellIdentifier]])
+    if ([cellType isEqualToString:[OAInputTableViewCell getCellIdentifier]])
     {
-        OATextInputCell* cell = [tableView dequeueReusableCellWithIdentifier:[OATextInputCell getCellIdentifier]];
+        OAInputTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAInputTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextInputCell getCellIdentifier] owner:self options:nil];
-            cell = (OATextInputCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAInputTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAInputTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell titleVisibility:NO];
+            [cell clearButtonVisibility:NO];
+            [cell.inputField removeTarget:self action:NULL forControlEvents:UIControlEventEditingChanged];
             [cell.inputField addTarget:self action:@selector(textViewDidChange:) forControlEvents:UIControlEventEditingChanged];
             cell.inputField.autocapitalizationType = UITextAutocapitalizationTypeNone;
             cell.inputField.placeholder = OALocalizedString(@"fav_enter_group_name");
+            cell.inputField.textAlignment = NSTextAlignmentNatural;
         }
-        cell.inputField.text = item[@"title"];
-        cell.inputField.delegate = self;
+        if (cell)
+        {
+            cell.inputField.text = item[@"title"];
+            cell.inputField.delegate = self;
+        }
         return cell;
     }
     else if ([cellType isEqualToString:[OAColorsTableViewCell getCellIdentifier]])
@@ -145,7 +153,7 @@
             int selectedIndex = [item[@"index"] intValue];
             cell.currentColor = selectedIndex;
             [cell.collectionView reloadData];
-            [cell layoutIfNeeded];
+            [cell layoutSubviews];
         }
         return cell;
     }
@@ -185,7 +193,7 @@
 {
     if (textView.text.length == 0 ||
         [self isIncorrectFileName: textView.text] ||
-        [textView.text isEqualToString:OALocalizedString(@"favorites")] ||
+        [textView.text isEqualToString:OALocalizedString(@"favorites_item")] ||
         [textView.text isEqualToString:OALocalizedString(@"personal_category_name")] ||
         [textView.text isEqualToString:kPersonalCategory] ||
         [OAFavoritesHelper getGroupByName:textView.text])

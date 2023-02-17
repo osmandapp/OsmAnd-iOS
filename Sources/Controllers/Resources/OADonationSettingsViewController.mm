@@ -10,7 +10,7 @@
 #import "OASettingsTableViewCell.h"
 #import "OASettingsTitleTableViewCell.h"
 #import "OASwitchTableViewCell.h"
-#import "OATextInputCell.h"
+#import "OAInputTableViewCell.h"
 #import "OAAppSettings.h"
 #import "Localization.h"
 #import "OAUtilities.h"
@@ -55,8 +55,8 @@
     
     OASwitchTableViewCell *_donationSwitch;
     OASwitchTableViewCell *_hideNameSwitch;
-    OATextInputCell *_emailCell;
-    OATextInputCell *_userNameCell;
+    OAInputTableViewCell *_emailCell;
+    OAInputTableViewCell *_userNameCell;
     UIView *_footerView;
     
     MBProgressHUD *_progressHUD;
@@ -92,7 +92,7 @@
 
 -(void) applyLocalization
 {
-    _titleView.text = OALocalizedString(@"osmand_live_donations");
+    _titleView.text = OALocalizedString(@"donations");
 }
 
 - (void) viewDidLoad
@@ -119,33 +119,45 @@
     if (_settingsType == EDonationSettingsScreenMain)
     {
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
-        _donationSwitch = (OASwitchTableViewCell *)[nib objectAtIndex:0];
-        _donationSwitch.textView.numberOfLines = 0;
-        _donationSwitch.textView.text = OALocalizedString(@"osmand_live_donation_switch_title");
+        _donationSwitch = (OASwitchTableViewCell *) nib[0];
+        [_donationSwitch leftIconVisibility:NO];
+        [_donationSwitch descriptionVisibility:NO];
+        _donationSwitch.titleLabel.numberOfLines = 0;
+        _donationSwitch.titleLabel.text = OALocalizedString(@"osmand_live_donation_switch_title");
         _donationSwitch.switchView.on = _donation;
         [_donationSwitch.switchView addTarget:self action:@selector(donationSwitchChanged:) forControlEvents:UIControlEventValueChanged];
 
         nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
-        _hideNameSwitch = (OASwitchTableViewCell *)[nib objectAtIndex:0];
-        _hideNameSwitch.textView.numberOfLines = 0;
-        _hideNameSwitch.textView.text = OALocalizedString(@"osm_live_hide_user_name");
+        _hideNameSwitch = (OASwitchTableViewCell *) nib[0];
+        [_hideNameSwitch leftIconVisibility:NO];
+        [_hideNameSwitch descriptionVisibility:NO];
+        _hideNameSwitch.titleLabel.numberOfLines = 0;
+        _hideNameSwitch.titleLabel.text = OALocalizedString(@"osm_live_hide_user_name");
         _hideNameSwitch.switchView.on = _settings.billingHideUserName.get;
         
-        nib = [[NSBundle mainBundle] loadNibNamed:[OATextInputCell getCellIdentifier] owner:self options:nil];
-        _emailCell = (OATextInputCell *)[nib objectAtIndex:0];
+        nib = [[NSBundle mainBundle] loadNibNamed:[OAInputTableViewCell getCellIdentifier] owner:self options:nil];
+        _emailCell = (OAInputTableViewCell *) nib[0];
+        [_emailCell leftIconVisibility:NO];
+        [_emailCell titleVisibility:NO];
+        [_emailCell clearButtonVisibility:NO];
+        _emailCell.inputField.textAlignment = NSTextAlignmentNatural;
         _emailCell.inputField.text = _settings.billingUserEmail.get;
         _emailCell.inputField.placeholder = OALocalizedString(@"osmand_live_donations_enter_email");
         _emailCell.inputField.keyboardType = UIKeyboardTypeEmailAddress;
         _emailCell.inputField.delegate = self;
 
-        nib = [[NSBundle mainBundle] loadNibNamed:[OATextInputCell getCellIdentifier] owner:self options:nil];
-        _userNameCell = (OATextInputCell *)[nib objectAtIndex:0];
+        nib = [[NSBundle mainBundle] loadNibNamed:[OAInputTableViewCell getCellIdentifier] owner:self options:nil];
+        _userNameCell = (OAInputTableViewCell *) nib[0];
+        [_emailCell leftIconVisibility:NO];
+        [_emailCell titleVisibility:NO];
+        [_emailCell clearButtonVisibility:NO];
+        _emailCell.inputField.textAlignment = NSTextAlignmentNatural;
         _userNameCell.inputField.text = _settings.billingUserName.get;
         _userNameCell.inputField.placeholder = OALocalizedString(@"osmand_live_public_name");
         _userNameCell.inputField.delegate = self;
 
         _footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 55.0)];
-        NSDictionary *attrs = @{ NSFontAttributeName : [UIFont systemFontOfSize:16.0],
+        NSDictionary *attrs = @{ NSFontAttributeName : [UIFont scaledSystemFontOfSize:16.0],
                                  NSForegroundColorAttributeName : [UIColor whiteColor] };
         NSAttributedString *text = [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_save") attributes:attrs];
         UIButton *saveButton = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -226,7 +238,7 @@
             [dataArr addObject:
              @[@{
                    @"name" : @"support_region",
-                   @"title" : OALocalizedString(@"osmand_live_support_reg_title"),
+                   @"title" : OALocalizedString(@"osm_live_support_region"),
                    @"value" : countryName,
                    @"img" : @"menu_cell_pointer",
                    @"type" : kCellTypeSingleSelectionList }]
@@ -331,7 +343,7 @@
     OAWorldRegion *worldRegion = [OsmAndApp instance].worldRegion;
     NSString *name = @"";
     if (region == worldRegion)
-        name = OALocalizedString(@"res_world_region");
+        name = OALocalizedString(@"shared_string_world");
     else if ([region getLevel] > 2 || ([region getLevel] == 2
                                       && [region.superregion.regionId isEqualToString:OsmAnd::WorldRegions::RussiaRegionId.toNSString()]))
     {
@@ -354,11 +366,6 @@
         name = @"";
     
     return name;
-}
-
-- (IBAction) backButtonClicked:(id)sender
-{
-    [super backButtonClicked:sender];
 }
 
 - (NSDictionary *) getItem:(NSIndexPath *)indexPath

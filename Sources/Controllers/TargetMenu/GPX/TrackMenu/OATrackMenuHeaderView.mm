@@ -120,13 +120,13 @@
                title:(NSString *)title
 {
     self.backgroundColor = _selectedTab != EOATrackMenuHudActionsTab
-            ? UIColor.whiteColor : UIColorFromRGB(color_bottom_sheet_background);
+            ? UIColor.whiteColor : UIColorFromRGB(color_primary_table_background);
 
     self.bottomDividerView.hidden = _selectedTab == EOATrackMenuHudSegmentsTab || _selectedTab == EOATrackMenuHudPointsTab;
 
     if (_selectedTab != EOATrackMenuHudActionsTab)
     {
-        [self.titleView setText:currentTrack ? OALocalizedString(@"track_recording_name") : title];
+        [self.titleView setText:currentTrack ? OALocalizedString(@"shared_string_currently_recording_track") : title];
         self.titleIconView.image = [UIImage templateImageNamed:@"ic_custom_trip"];
         self.titleIconView.tintColor = UIColorFromRGB(color_icon_inactive);
     }
@@ -169,7 +169,7 @@
                                 action:@selector(onShowHidePressed:)
                       forControlEvents:UIControlEventTouchUpInside];
 
-        [self.appearanceButton setTitle:OALocalizedString(@"map_settings_appearance")
+        [self.appearanceButton setTitle:OALocalizedString(@"shared_string_appearance")
                                forState:UIControlStateNormal];
         [self.appearanceButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
         [self.appearanceButton addTarget:self
@@ -196,7 +196,7 @@
     }
     else if (_selectedTab == EOATrackMenuHudActionsTab)
     {
-        [self.titleView setText:OALocalizedString(@"actions")];
+        [self.titleView setText:OALocalizedString(@"shared_string_actions")];
         self.titleIconView.image = nil;
         [self makeOnlyHeader:NO];
     }
@@ -227,7 +227,7 @@
                             @"string_value": [OAOsmAndFormatter getFormattedDistance:totalDistance],
                             @"int_value": @(EOARouteStatisticsModeAltitude)
                     },
-                    kCellTitle: OALocalizedString(@"shared_string_distance"),
+                    kCellTitle: OALocalizedString(@"map_widget_trip_recording_distance"),
                     kCellRightIconName: @"ic_small_distance"
             }]];
         }
@@ -257,7 +257,7 @@
                                                                         [OAOsmAndFormatter getFormattedAlt:analysis.maxElevation]],
                             @"int_value": @(EOARouteStatisticsModeAltitude)
                     },
-                    kCellTitle: OALocalizedString(@"gpx_alt_range"),
+                    kCellTitle: OALocalizedString(@"altitude_range"),
                     kCellRightIconName: @"ic_small_altitude_range"
             }]];
         }
@@ -269,7 +269,7 @@
                             @"string_value": [OAOsmAndFormatter getFormattedSpeed:analysis.avgSpeed],
                             @"int_value": @(EOARouteStatisticsModeSpeed)
                     },
-                    kCellTitle: OALocalizedString(@"gpx_average_speed"),
+                    kCellTitle: OALocalizedString(@"map_widget_average_speed"),
                     kCellRightIconName: @"ic_small_speed"
             }]];
             [statisticCells addObject:[OAGPXTableCellData withData:@{
@@ -318,7 +318,7 @@
                        options:UIViewAnimationOptionTransitionCrossDissolve | UIViewAnimationOptionAllowUserInteraction
                     animations:^(void) {
                         [self.showHideButton setTitle:shownTrack
-                                        ? OALocalizedString(@"poi_hide") : OALocalizedString(@"sett_show")
+                                        ? OALocalizedString(@"shared_string_hide") : OALocalizedString(@"recording_context_menu_show")
                                              forState:UIControlStateNormal];
                         [self.showHideButton setImage:[UIImage templateImageNamed:shownTrack
                                         ? @"ic_custom_hide" : @"ic_custom_show"]
@@ -579,11 +579,11 @@
     CGSize sizeByTitle = [OAUtilities calculateTextBounds:title
                                                     width:10000.0
                                                    height:kBlockStatisticsLineHeight
-                                                     font:[UIFont systemFontOfSize:13. weight:UIFontWeightRegular]];
+                                                     font:[UIFont scaledSystemFontOfSize:13. weight:UIFontWeightRegular]];
     CGSize sizeByValue = [OAUtilities calculateTextBounds:value
                                                     width:10000.0
                                                    height:kBlockStatisticsLineHeight
-                                                     font:[UIFont systemFontOfSize:13. weight:UIFontWeightMedium]];
+                                                     font:[UIFont scaledSystemFontOfSize:13. weight:UIFontWeightMedium]];
     CGFloat widthByTitle = sizeByTitle.width < kBlockStatisticsWidthMin ? kBlockStatisticsWidthMin : sizeByTitle.width;
     CGFloat widthByValue = (sizeByValue.width < kBlockStatisticsWidthMinByValue ? kBlockStatisticsWidthMinByValue : sizeByValue.width) + kBlockStatisticsIconWithSpace;
     if (!isLast)

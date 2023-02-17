@@ -31,13 +31,11 @@
 #import "OAUtilities.h"
 #import "OAAvoidSpecificRoads.h"
 #import "OAMenuSimpleCell.h"
-#import "OAButtonCell.h"
+#import "OAButtonTableViewCell.h"
 #import "OAOsmAndFormatter.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <binaryRead.h>
-
-#define kHeaderViewFont [UIFont systemFontOfSize:15.0]
 
 @interface OARouteAvoidSettingsViewController ()
 
@@ -106,7 +104,7 @@
     
     [sectionData addObject:@{
         @"title" : OALocalizedString(@"shared_string_select_on_map"),
-        @"type" : [OAButtonCell getCellIdentifier],
+        @"type" : [OAButtonTableViewCell getCellIdentifier],
         @"key" : @"select_on_map"
     }];
     
@@ -136,7 +134,7 @@
 - (void) setupView
 {
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-    self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"select_avoid_descr") font:kHeaderViewFont textColor:UIColor.blackColor lineSpacing:0.0 isTitle:NO];
+    self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"select_avoid_descr") font:kHeaderDescriptionFont textColor:UIColor.blackColor isBigTitle:NO];
     [self.tableView reloadData];
 }
 
@@ -148,17 +146,12 @@
         if (_tableHeaderView)
         {
             CGFloat textWidth = DeviceScreenWidth - 32.0 - OAUtilities.getLeftMargin * 2;
-            UIFont *labelFont = [UIFont systemFontOfSize:15.0];
+            UIFont *labelFont = [UIFont scaledSystemFontOfSize:15.0];
             CGSize labelSize = [OAUtilities calculateTextBounds:OALocalizedString(@"select_avoid_descr") width:textWidth font:labelFont];
             _tableHeaderView.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, labelSize.height + 30.0);
             _tableHeaderView.subviews.firstObject.frame = CGRectMake(16.0 + OAUtilities.getLeftMargin, 20.0, textWidth, labelSize.height);
         }
     } completion:nil];
-}
-
-- (void)backButtonClicked:(id)sender
-{
-    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)doneButtonPressed
@@ -206,7 +199,7 @@
     }
     else
     {
-        CGFloat height = [OAUtilities calculateTextBounds:headerText width:tableView.bounds.size.width font:[UIFont systemFontOfSize:13.]].height;
+        CGFloat height = [OAUtilities calculateTextBounds:headerText width:tableView.bounds.size.width font:[UIFont scaledSystemFontOfSize:13.]].height;
         return MAX(38.0, height + 10.0);
     }
 }
@@ -217,16 +210,17 @@
     NSString *type = [param getCellType];
     if ([type isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OASwitchTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
+        OASwitchTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
+            cell = (OASwitchTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
         }
-        
         if (cell)
         {
-            [cell.textView setText:text];
+            cell.titleLabel.text = text;
             [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.switchView setOn:[param isChecked]];
             [param setControlAction:cell.switchView];
@@ -269,22 +263,23 @@
             }
             return cell;
         }
-        else if ([item[@"type"] isEqualToString:[OAButtonCell getCellIdentifier]])
+        else if ([item[@"type"] isEqualToString:[OAButtonTableViewCell getCellIdentifier]])
         {
-            OAButtonCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAButtonCell getCellIdentifier]];
+            OAButtonTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAButtonTableViewCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonCell getCellIdentifier] owner:self options:nil];
-                cell = (OAButtonCell *)[nib objectAtIndex:0];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonTableViewCell getCellIdentifier] owner:self options:nil];
+                cell = (OAButtonTableViewCell *) nib[0];
+                [cell leftIconVisibility:NO];
+                [cell titleVisibility:NO];
+                [cell descriptionVisibility:NO];
+                cell.button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
             }
             if (cell)
             {
-                cell.userInteractionEnabled = YES;
                 [cell.button setTitle:item[@"title"] forState:UIControlStateNormal];
                 [cell.button removeTarget:self action:NULL forControlEvents:UIControlEventTouchDown];
                 [cell.button addTarget:self action:@selector(addRoadPressed:) forControlEvents:UIControlEventTouchDown];
-                [cell.button setTintColor:UIColorFromRGB(color_primary_purple)];
-                [cell showImage:NO];
             }
             return cell;
         }

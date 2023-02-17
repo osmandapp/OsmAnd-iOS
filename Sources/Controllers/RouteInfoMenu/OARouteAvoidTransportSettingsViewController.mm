@@ -89,11 +89,6 @@
     [self.tableView reloadData];
 }
 
-- (void)backButtonClicked:(id)sender
-{
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
-
 - (void)doneButtonPressed
 {
     [self dismissViewControllerAnimated:YES completion:nil];
@@ -153,7 +148,7 @@
     }
     else
     {
-        CGFloat height = [OAUtilities calculateTextBounds:headerText width:tableView.bounds.size.width font:[UIFont systemFontOfSize:13.]].height;
+        CGFloat height = [OAUtilities calculateTextBounds:headerText width:tableView.bounds.size.width font:[UIFont scaledSystemFontOfSize:13.]].height;
         return MAX(38.0, height + 10.0);
     }
 }
@@ -169,16 +164,19 @@
     NSString *type = [param getCellType];
     if ([type isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OASwitchTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
+        OASwitchTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
+            cell = (OASwitchTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
         }
         
         if (cell)
         {
-            [cell.textView setText:text];
+            cell.titleLabel.text = text;
+
             [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.switchView setOn:[param isChecked]];
             [param setControlAction:cell.switchView];

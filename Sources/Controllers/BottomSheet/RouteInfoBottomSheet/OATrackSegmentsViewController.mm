@@ -63,13 +63,13 @@
     self.tableView.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
     self.cancelButton.hidden = YES;
     
-    _tableHeaderView = [OAUtilities setupTableHeaderViewWithText:self.getLocalizedDescription font:[UIFont systemFontOfSize:15] textColor:UIColor.blackColor lineSpacing:0. isTitle:NO];
+    _tableHeaderView = [OAUtilities setupTableHeaderViewWithText:self.getLocalizedDescription font:kHeaderDescriptionFont textColor:UIColor.blackColor isBigTitle:NO];
     self.tableView.tableHeaderView = _tableHeaderView;
 }
 
 - (void) applyLocalization
 {
-    self.titleLabel.font = [UIFont systemFontOfSize:17 weight:UIFontWeightMedium];
+    self.titleLabel.font = [UIFont scaledSystemFontOfSize:17 weight:UIFontWeightMedium];
     self.titleLabel.text = OALocalizedString(@"select_segment");
 }
 
@@ -113,7 +113,7 @@
 
         NSString *segmentTitle = [self getTrackSegmentTitle:seg];
         if (!segmentTitle)
-            segmentTitle = [NSString stringWithFormat:OALocalizedString(@"segnet_num"), idx];
+            segmentTitle = [NSString stringWithFormat:OALocalizedString(@"segments_count"), idx];
 
         NSMutableDictionary *item = [NSMutableDictionary new];
         item[@"title"] = segmentTitle;

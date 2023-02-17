@@ -20,7 +20,7 @@
     self = [super initWithFrame:frame];
     if (self)
     {
-        UIFont *font = [UIFont systemFontOfSize:15.0];
+        UIFont *font = [UIFont scaledSystemFontOfSize:15.0];
         CGFloat viewWidth = frame.size.width;
         _label = [[OALabel alloc] initWithFrame:CGRectMake(kMarginLeft, 12.0, viewWidth - kMarginLeft - kMarginRight, 21.0)];
         _label.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;

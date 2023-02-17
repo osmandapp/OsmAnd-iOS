@@ -29,7 +29,9 @@
     _divider.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
     [self.contentView.layer addSublayer:_divider];
     
-    [_optionsButton setTitle:OALocalizedString(@"sett_settings") forState:UIControlStateNormal];
+    [_optionsButton setTitle:OALocalizedString(@"shared_string_settings") forState:UIControlStateNormal];
+    _optionsButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
+    _soundButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
     
     [self setupButton:_optionsButton];
     [self setupButton:_soundButton];

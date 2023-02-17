@@ -133,7 +133,7 @@
     
     [_data addObject:@{
         @"type" : [OATitleSliderTableViewCell getCellIdentifier],
-        @"name" : OALocalizedString(@"rec_interval"),
+        @"name" : OALocalizedString(@"save_track_interval_globally"),
         @"value" : @(_sliderValue),
         @"desc" : _sliderIntervalName
     }];
@@ -147,7 +147,7 @@
     
     [_data addObject:@{
         @"type" : [OASwitchTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"map_settings_show"),
+        @"title" : OALocalizedString(@"shared_string_show_on_map"),
         @"value" : @(_isShowOnMap),
         @"tag" : @(kShowOnMapTag)
     }];
@@ -248,24 +248,25 @@
     }
     else if ([type isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OASwitchTableViewCell* cell = nil;
-        cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
+        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
-            cell.textView.numberOfLines = 0;
+            cell = (OASwitchTableViewCell *) nib[0];
+            cell.backgroundColor = [UIColor clearColor];
+            cell.switchView.tintColor = UIColorFromRGB(color_bottom_sheet_secondary);
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
         }
         
         if (cell)
         {
-            cell.backgroundColor = [UIColor clearColor];
-            [cell.textView setText: item[@"title"]];
+            cell.titleLabel.text = item[@"title"];
+
             cell.switchView.on = [item[@"value"] boolValue];
             cell.switchView.tag = [item[@"tag"] intValue];
             [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
-            cell.switchView.tintColor = UIColorFromRGB(color_bottom_sheet_secondary);
         }
         return cell;
     }

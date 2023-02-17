@@ -715,7 +715,7 @@
         else if ([_settings.rotateMap get] == ROTATE_MAP_COMPASS)
             rotMode = OALocalizedString(@"rotate_map_compass_opt");
     }
-    rotMode = [NSString stringWithFormat:@"%@:\n%@", OALocalizedString(@"rotate_map_to_bearing"), rotMode];
+    rotMode = [NSString stringWithFormat:@"%@:\n%@", OALocalizedString(@"rotate_map_to"), rotMode];
     [_app showShortToastMessage:rotMode];
     [self updateSettings];
     if (_mapViewController)

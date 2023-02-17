@@ -10,7 +10,7 @@
 #import "OAOsmEditingViewController.h"
 #import "OADescrTitleCell.h"
 #import "OATextInputFloatingCellWithIcon.h"
-#import "OAButtonCell.h"
+#import "OAButtonTableViewCell.h"
 #import "OAEditPOIData.h"
 #import "Localization.h"
 #import "OAColors.h"
@@ -39,6 +39,7 @@
     NSMutableArray *_fieldPairs;
     
     BOOL _isKeyboardShown;
+    BOOL _isHintsAvailable;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame
@@ -106,7 +107,7 @@
     textField.layoutDelegate = self;
     [textField.clearButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
     [textField.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-    textField.font = [UIFont systemFontOfSize:17.0];
+    textField.font = [UIFont scaledSystemFontOfSize:17.0];
     textField.clearButton.imageView.tintColor = UIColorFromRGB(color_icon_color);
     [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field"] forState:UIControlStateNormal];
     [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field"] forState:UIControlStateHighlighted];
@@ -114,21 +115,23 @@
     return resultCell;
 }
 
-- (OAButtonCell *) getAddTagButtonCell
+- (OAButtonTableViewCell *) getAddTagButtonCell
 {
-    OAButtonCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAButtonCell getCellIdentifier]];
+    OAButtonTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAButtonTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonCell getCellIdentifier] owner:self options:nil];
-        cell = (OAButtonCell *)[nib objectAtIndex:0];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonTableViewCell getCellIdentifier] owner:self options:nil];
+        cell = (OAButtonTableViewCell *) nib[0];
     }
     if (cell)
     {
         [cell.button setTitle:OALocalizedString(@"shared_string_add") forState:UIControlStateNormal];
         [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventTouchDown];
         [cell.button addTarget:self action:@selector(addTag:) forControlEvents:UIControlEventTouchDown];
-        [cell showImage:YES];
-        cell.iconView.image = [UIImage imageNamed:@"ic_custom_plus"];
+        [cell titleVisibility:NO];
+        [cell descriptionVisibility:NO];
+        cell.button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+        cell.leftIconView.image = [UIImage imageNamed:@"ic_custom_plus"];
     }
     return cell;
 }
@@ -161,7 +164,7 @@
     _poiData = _dataProvider.getData;
     _fieldPairs = [NSMutableArray new];
     OAPOIType *pt = _poiData.getCurrentPoiType;
-    NSString *hint = OALocalizedString(@"amenity");
+    NSString *hint = OALocalizedString(@"icon_group_amenity");
     NSString *value = @"";
     if (pt && !pt.nonEditableOsm)
     {
@@ -179,7 +182,7 @@
     NSString *poiName = [_poiData getTag:[OAOSMSettings getOSMKey:NAME]];
     
     NSArray *nameTypePair = @[
-                              [self getDictionary:[OADescrTitleCell getCellIdentifier] hint:OALocalizedString(@"fav_name") value:poiName image:nil],
+                              [self getDictionary:[OADescrTitleCell getCellIdentifier] hint:OALocalizedString(@"shared_string_name") value:poiName image:nil],
                               [self getDictionary:[OADescrTitleCell getCellIdentifier] hint:hint value:value image:nil]
                               ];
     [_fieldPairs addObject:nameTypePair];
@@ -209,11 +212,7 @@
                                      ]];
         }
     }];
-    [_fieldPairs addObject:@[
-                             @{
-                                 @"type" : [OAButtonCell getCellIdentifier]
-                                 }
-                             ]];
+    [_fieldPairs addObject:@[ @{ @"type" : [OAButtonTableViewCell getCellIdentifier] } ]];
     [self.tableView reloadData];
 }
 
@@ -248,7 +247,7 @@
 {
     NSDictionary *item = [self getItem:indexPath];
     [tableView deselectRowAtIndexPath:indexPath animated:true];
-    if ([item[@"type"] isEqualToString:[OAButtonCell getCellIdentifier]])
+    if ([item[@"type"] isEqualToString:[OAButtonTableViewCell getCellIdentifier]])
         [self addTag:nil];
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     if ([cell canBecomeFirstResponder])
@@ -262,7 +261,7 @@
         return [self getTextCellWithDescr:indexPath];
     else if ([item[@"type"] isEqualToString:[OATextInputFloatingCellWithIcon getCellIdentifier]])
         return [self getInputCellWithHint:indexPath];
-    else if ([item[@"type"] isEqualToString:[OAButtonCell getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:[OAButtonTableViewCell getCellIdentifier]])
         return [self getAddTagButtonCell];
     return nil;
 }
@@ -465,11 +464,12 @@
     item.trailingBarButtonGroups = @[];
     self.tagTextView.inputAccessoryView = self.toolbarView;
     [self.tagTextView reloadInputViews];
+    _isHintsAvailable = YES;
 }
 
 - (void) toggleTagToolbar
 {
-    if (self.tagTextView.inputAccessoryView == nil)
+    if ((self.tagTextView.inputAccessoryView == nil) && (_isHintsAvailable || self.tagTextView.text.length == 0))
         [self createTagToolbarFor];
     else if ([self.tagTextView.text isEqualToString:@""])
         [self hideTagToolbar];
@@ -479,6 +479,8 @@
 {
     self.tagTextView.inputAccessoryView = nil;
     [self.tagTextView reloadInputViews];
+    if (self.tagTextView.text.length > 0)
+        _isHintsAvailable = NO;
 }
 
 - (void) updateTagHintsSet:(NSString *)tag
@@ -515,7 +517,8 @@
     
     if ([hints count] == 0)
     {
-        [self hideTagToolbar];
+        if (_isHintsAvailable)
+            [self hideTagToolbar];
     }
     else
     {
@@ -542,9 +545,9 @@
             
             [self.scrollView addSubview:btn];
         }
+        _isHintsAvailable = YES;
     }
     self.scrollView.contentSize = CGSizeMake(xPosition, self.toolbarView.frame.size.height);
-    [self.tagTextView reloadInputViews];
 }
 
 - (void) removeFromSuperview:(UITapGestureRecognizer *)sender

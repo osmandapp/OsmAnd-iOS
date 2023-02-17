@@ -96,7 +96,7 @@ static BOOL _purchasesUpdated;
 - (UIView *)getHeaderView
 {
     CGFloat headerTopPadding = 40.;
-    UIFont *labelFont = [UIFont systemFontOfSize:17.];
+    UIFont *labelFont = [UIFont scaledSystemFontOfSize:17.];
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0., 0., self.tableView.frame.size.width, headerTopPadding + labelFont.lineHeight)];
     headerView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     headerView.backgroundColor = UIColor.clearColor;
@@ -110,6 +110,7 @@ static BOOL _purchasesUpdated;
     loadingLabel.text = OALocalizedString(@"loading_purchase_information");
     loadingLabel.textColor = UIColorFromRGB(color_text_footer);
     loadingLabel.font = labelFont;
+    loadingLabel.adjustsFontForContentSizeCategory = YES;
     [loadingContainerView addSubview:loadingLabel];
 
     UIActivityIndicatorView *loadingIndicator = [[UIActivityIndicatorView alloc] init];
@@ -135,6 +136,12 @@ static BOOL _purchasesUpdated;
     ]];
 
     return headerView;
+}
+
+-(void) addAccessibilityLabels
+{
+    self.backButton.accessibilityLabel = OALocalizedString(@"shared_string_back");
+    self.restoreButton.accessibilityLabel = OALocalizedString(@"shared_string_restore");
 }
 
 - (void) generateData
@@ -184,7 +191,7 @@ static BOOL _purchasesUpdated;
                             @"icon": [UIImage imageNamed:@"ic_custom_osmand_pro_logo_colored"],
                             @"title": OALocalizedString(@"product_title_pro"),
                             @"description": OALocalizedString(@"osm_live_banner_desc"),
-                            @"button_title": OALocalizedString(@"purchase_get"),
+                            @"button_title": OALocalizedString(@"shared_string_get"),
                             @"button_icon": [UIImage templateImageNamed:@"ic_custom_arrow_forward"],
                             @"button_icon_color": UIColorFromRGB(color_primary_purple)
                     }
@@ -204,7 +211,7 @@ static BOOL _purchasesUpdated;
                     OASubscriptionState *state = [settings.backupPurchaseState get];
                     BOOL isPromo = ((EOASubscriptionOrigin) [settings.proSubscriptionOrigin get]) == EOASubscriptionOriginPromo;
                     if (state != OASubscriptionState.EXPIRED)
-                        datePattern = OALocalizedString(@"expires");
+                        datePattern = OALocalizedString(@"shared_string_expires");
                     else
                         datePattern = OALocalizedString(@"expired");
                     long expiretime = [settings.backupPurchaseExpireTime get];
@@ -232,7 +239,7 @@ static BOOL _purchasesUpdated;
                     }];
                 }
                 [data addObject:active];
-                _headers[@(data.count - 1)] = OALocalizedString(@"menu_active_trips");
+                _headers[@(data.count - 1)] = OALocalizedString(@"osm_live_active");
             }
             if (expiredProducts.count > 0)
             {
@@ -287,7 +294,7 @@ static BOOL _purchasesUpdated;
         @{
             @"key": @"contact_support_description",
             @"type": [OAIconTitleValueCell getCellIdentifier],
-            @"title": OALocalizedString(@"contact_support_description"),
+            @"title": [NSString stringWithFormat: OALocalizedString(@"contact_support_description"), kSupportEmail],
             @"tint_color": UIColorFromRGB(color_text_footer)
         },
         @{
@@ -297,7 +304,7 @@ static BOOL _purchasesUpdated;
             @"tint_color": UIColorFromRGB(color_primary_purple)
         }
     ]];
-    _headers[@(data.count - 1)] = OALocalizedString(@"menu_help");
+    _headers[@(data.count - 1)] = OALocalizedString(@"shared_string_help");
 
     _data = data;
 }
@@ -320,7 +327,7 @@ static BOOL _purchasesUpdated;
     if (product.purchaseState == PSTATE_NOT_PURCHASED)
         datePattern = OALocalizedString(@"expired");
     else if ([product isKindOfClass:OASubscription.class])
-        datePattern = OALocalizedString(@"expires");
+        datePattern = OALocalizedString(@"shared_string_expires");
     else if ([product isKindOfClass:OAProduct.class])
         datePattern = OALocalizedString(@"shared_string_purchased");
 
@@ -423,7 +430,7 @@ static BOOL _purchasesUpdated;
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
             cell = (OAIconTitleValueCell *) nib[0];
             [cell showLeftIcon:NO];
-            cell.textView.font = [UIFont systemFontOfSize:17. weight:UIFontWeightMedium];
+            cell.textView.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium];
             cell.descriptionView.text = @"";
         }
         if (cell)
@@ -469,14 +476,14 @@ static BOOL _purchasesUpdated;
 
             cell.titleView.text = item[@"title"];
             cell.titleView.font = [item[@"key"] isEqualToString:@"get_osmand_pro"]
-                    ? [UIFont systemFontOfSize:17. weight:UIFontWeightMedium] : [UIFont systemFontOfSize:17.];
+                    ? [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium] : [UIFont scaledSystemFontOfSize:17.];
 
             NSMutableAttributedString *buttonTitle = [[NSMutableAttributedString alloc] initWithString:item[@"button_title"]];
             [buttonTitle addAttribute:NSForegroundColorAttributeName
                                 value:UIColorFromRGB(color_primary_purple)
                                 range:NSMakeRange(0, buttonTitle.string.length)];
             [buttonTitle addAttribute:NSFontAttributeName
-                                value:[UIFont systemFontOfSize:15. weight:UIFontWeightSemibold]
+                                value:[UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold]
                                 range:NSMakeRange(0, buttonTitle.string.length)];
             [cell.buttonView setAttributedTitle:buttonTitle forState:UIControlStateNormal];
 
@@ -524,7 +531,7 @@ static BOOL _purchasesUpdated;
             if (product)
             {
                 cell.textView.text = [product.productIdentifier isEqualToString:kInAppId_Addon_Nautical]
-                        ? OALocalizedString(@"product_title_sea_depth_contours")
+                        ? OALocalizedString(@"rendering_attr_depthContours_name")
                         : product.localizedTitle;
                 cell.imgView.image = [product isKindOfClass:OASubscription.class] || [OAIAPHelper isFullVersion:product]
                         ? [UIImage imageNamed:product.productIconName]
@@ -535,7 +542,7 @@ static BOOL _purchasesUpdated;
                 paragraphStyle.minimumLineHeight = 17.;
                 paragraphStyle.lineSpacing = 2.;
                 [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, attributedString.length)];
-                [attributedString addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:13.] range:NSMakeRange(0, attributedString.length)];
+                [attributedString addAttribute:NSFontAttributeName value:[UIFont scaledSystemFontOfSize:13.] range:NSMakeRange(0, attributedString.length)];
                 [attributedString addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(color_text_footer) range:NSMakeRange(0, attributedString.length)];
                 cell.descriptionView.attributedText = attributedString;
             }
@@ -545,7 +552,7 @@ static BOOL _purchasesUpdated;
                 cell.imgView.image = [UIImage imageNamed:item[@"icon"]];
                 cell.descriptionView.text = item[@"descr"];
                 cell.descriptionView.textColor = UIColorFromRGB(color_text_footer);
-                cell.descriptionView.font = [UIFont systemFontOfSize:13.];
+                cell.descriptionView.font = [UIFont scaledSystemFontOfSize:13.];
             }
             UIImageView *rightImageView = [[UIImageView alloc] initWithImage:[UIImage templateImageNamed:@"ic_custom_arrow_right"]];
             rightImageView.tintColor = UIColorFromRGB(color_tint_gray);
@@ -565,8 +572,7 @@ static BOOL _purchasesUpdated;
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     if ([item[@"type"] isEqualToString:[OACardButtonCell getCellIdentifier]])
     {
-        if (@available(iOS 15.0, *))
-            [((OACardButtonCell *) cell) setNeedsUpdateConfiguration];
+        [((OACardButtonCell *) cell) setNeedsUpdateConfiguration];
     }
 }
 
@@ -577,7 +583,7 @@ static BOOL _purchasesUpdated;
     NSString *header = _headers[@(section)];
     if (header)
     {
-        UIFont *font = [UIFont systemFontOfSize:13.];
+        UIFont *font = [UIFont scaledSystemFontOfSize:13.];
         CGFloat headerHeight = [OAUtilities calculateTextBounds:header
                                                           width:tableView.frame.size.width - (kPaddingOnSideOfContent + [OAUtilities getLeftMargin]) * 2
                                                            font:font].height + kPaddingOnSideOfHeaderWithText;
@@ -632,7 +638,7 @@ static BOOL _purchasesUpdated;
     {
         MFMailComposeViewController *mailCont = [[MFMailComposeViewController alloc] init];
         mailCont.mailComposeDelegate = self;
-        [mailCont setSubject:OALocalizedString(@"help_purchases")];
+        [mailCont setSubject:OALocalizedString(@"osmand_purchases_item")];
         [mailCont setToRecipients:@[OALocalizedString(@"login_footer_email_part")]];
         [mailCont setMessageBody:@"" isHTML:NO];
         [self presentViewController:mailCont animated:YES completion:nil];

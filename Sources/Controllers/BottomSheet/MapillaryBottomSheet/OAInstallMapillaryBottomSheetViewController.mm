@@ -18,7 +18,6 @@
 #import "OAAppSettings.h"
 #import "OADescrTitleCell.h"
 #import "OAMapillaryPlugin.h"
-#import "OASwitchTableViewCell.h"
 
 #define kButtonsDividerTag 150
 
@@ -64,7 +63,7 @@
     NSMutableArray *arr = [NSMutableArray array];
     [arr addObject:@{
                      @"type" : [OABottomSheetHeaderIconCell getCellIdentifier],
-                     @"title" : OALocalizedString(@"mapillary_get_title"),
+                     @"title" : OALocalizedString(@"improve_coverage_mapillary"),
                      @"description" : @"",
                      @"img" : @"ic_custom_mapillary_color_logo.png"
                      }];
@@ -172,15 +171,6 @@
     view.hidden = YES;
 }
 
-- (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSDictionary *item = _data[indexPath.row];
-    if (![item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
-        return indexPath;
-    else
-        return nil;
-}
-
 @synthesize vwController;
 
 @end
@@ -201,7 +191,7 @@
 - (void)applyLocalization
 {
     [self.cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
-    [self.doneButton setTitle:OALocalizedString(@"purchase_get") forState:UIControlStateNormal];
+    [self.doneButton setTitle:OALocalizedString(@"shared_string_get") forState:UIControlStateNormal];
 }
 
 @end

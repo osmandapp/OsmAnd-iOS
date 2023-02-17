@@ -35,6 +35,9 @@
     [super viewDidLoad];
     [self setupNavbar];
     [self setupBottomView];
+
+    self.primaryBottomButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
+    self.secondaryBottomButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
 }
 
 - (void) setupNavbar
@@ -57,7 +60,7 @@
     self.primaryButtonTopMarginYesSecondary.active = hasPrimaryButton && hasSecondaryButton;
     self.primaryButtonTopMarginNoSecondary.active = !hasSecondaryButton;
     
-    self.bottomViewHeigh.constant = (hasPrimaryButton ? self.primaryButtonHeight.constant : 0.) + (hasSecondaryButton ? self.secondaryButtonHeight.constant : 0.) + kTopBottomPadding * (hasPrimaryButton && hasSecondaryButton ? 3 : 2) + [OAUtilities getBottomMargin];
+    self.bottomViewHeigh.constant = (hasPrimaryButton ? self.primaryButtonHeight.constant : 0.) + (hasSecondaryButton ? self.secondaryButtonHeight.constant : 0.) + kTopBottomPadding * 2 + (hasPrimaryButton && hasSecondaryButton ? self.primaryButtonTopMarginYesSecondary.constant : 0) + [OAUtilities getBottomMargin];
     
     self.tableViewBottomMarginYesView.active = hasBottomView;
     self.tableViewBottomMarginNoView.active = !hasBottomView;
@@ -71,8 +74,8 @@
     paragraphStyles.alignment = NSTextAlignmentCenter;
     paragraphStyles.lineSpacing = 3;
     
-    UIFont *firstLabelFont = params[@"firstLabelFont"] ? params[@"firstLabelFont"] :[UIFont systemFontOfSize:15 weight:UIFontWeightSemibold]; [UIFont systemFontOfSize:15 weight:UIFontWeightSemibold];
-    UIFont *secondLabelFont = params[@"secondLabelFont"] ? params[@"secondLabelFont"] : [UIFont systemFontOfSize:13];
+    UIFont *firstLabelFont = params[@"firstLabelFont"] ? params[@"firstLabelFont"] :[UIFont scaledSystemFontOfSize:15 weight:UIFontWeightSemibold]; [UIFont scaledSystemFontOfSize:15 weight:UIFontWeightSemibold];
+    UIFont *secondLabelFont = params[@"secondLabelFont"] ? params[@"secondLabelFont"] : [UIFont scaledSystemFontOfSize:13];
     NSDictionary *firstLabelAttributes = @{NSForegroundColorAttributeName: params[@"firstLabelColor"], NSFontAttributeName: firstLabelFont, NSParagraphStyleAttributeName:paragraphStyles};
     NSDictionary *secondLabelAttributes = @{NSForegroundColorAttributeName: params[@"secondLabelColor"], NSFontAttributeName: secondLabelFont, NSParagraphStyleAttributeName:paragraphStyles};
     
@@ -101,11 +104,12 @@
             descriptionText = text;
             
         CGFloat textWidth = tableView.bounds.size.width - 32 - OAUtilities.getLeftMargin * 2;
-        CGFloat heightForHeader = [OAUtilities heightForHeaderViewText:descriptionText width:textWidth font:[UIFont systemFontOfSize:15] lineSpacing:6.] + 16;
+        CGFloat heightForHeader = [OAUtilities heightForHeaderViewText:descriptionText width:textWidth font:[UIFont scaledSystemFontOfSize:15] lineSpacing:6.] + 16;
         UIView *vw = [[UIView alloc] initWithFrame:CGRectMake(0., 0., tableView.bounds.size.width, heightForHeader)];
         UILabel *description = [[UILabel alloc] initWithFrame:CGRectMake(16. + OAUtilities.getLeftMargin, 8., textWidth, heightForHeader)];
-        UIFont *labelFont = [UIFont systemFontOfSize:15.0];
+        UIFont *labelFont = [UIFont scaledSystemFontOfSize:15.0];
         description.font = labelFont;
+        description.adjustsFontForContentSizeCategory = YES;
         [description setTextColor: UIColorFromRGB(color_text_footer)];
         
         if (boldFragment && boldFragment.length > 0)
@@ -155,12 +159,12 @@
 
 - (IBAction)backImageButtonPressed:(id)sender
 {
-    [self.navigationController popViewControllerAnimated:YES];
+    [self dismissViewController];
 }
 
 - (IBAction)backButtonPressed:(id)sender
 {
-    [self.navigationController popViewControllerAnimated:YES];
+    [self dismissViewController];
 }
 
 - (IBAction)additionalNavBarButtonPressed:(id)sender

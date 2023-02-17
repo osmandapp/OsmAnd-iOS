@@ -6,7 +6,7 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import "OABaseSettingsViewController.h"
+#import "OABaseNavbarViewController.h"
 
 typedef NS_ENUM(NSUInteger, EOAOSMAccountSettingsScreenType)
 {
@@ -24,7 +24,7 @@ typedef NS_ENUM(NSUInteger, EOAOSMAccountSettingsScreenType)
 
 @end
 
-@interface OAOsmAccountSettingsViewController : OABaseSettingsViewController
+@interface OAOsmAccountSettingsViewController : OABaseNavbarViewController
 
 @property (nonatomic, weak) id<OAAccountSettingDelegate> accountDelegate;
 

@@ -8,7 +8,7 @@
 
 #import "OAScreenAlertsViewController.h"
 #import "OADeviceScreenTableViewCell.h"
-#import "OASettingSwitchCell.h"
+#import "OASwitchTableViewCell.h"
 #import "OAAvoidPreferParametersViewController.h"
 #import "OARecalculateRouteViewController.h"
 #import "OAAppSettings.h"
@@ -17,10 +17,6 @@
 #import "Localization.h"
 #import "OAColors.h"
 
-@interface OAScreenAlertsViewController () <UITableViewDelegate, UITableViewDataSource>
-
-@end
-
 @implementation OAScreenAlertsViewController
 {
     OAAppSettings *_settings;
@@ -28,32 +24,28 @@
     BOOL _showAlerts;
 }
 
-- (instancetype) initWithAppMode:(OAApplicationMode *)appMode
+#pragma mark - Initialization
+
+- (void)commonInit
 {
-    self = [super initWithAppMode:appMode];
-    if (self)
-    {
-        _settings = [OAAppSettings sharedManager];
-        _showAlerts = [_settings.showScreenAlerts get:self.appMode];
-    }
-    return self;
+    _settings = [OAAppSettings sharedManager];
 }
 
--(void) applyLocalization
+- (void)postInit
 {
-    [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"screen_alerts");
+    _showAlerts = [_settings.showScreenAlerts get:self.appMode];
 }
 
-- (void) viewDidLoad
+#pragma mark - Base UI
+
+- (NSString *)getTitle
 {
-    [super viewDidLoad];
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    [self setupView];
+    return OALocalizedString(@"screen_alerts");
 }
 
-- (void) setupView
+#pragma mark - Table data
+
+- (void)generateData
 {
     NSMutableArray *tableData = [NSMutableArray array];
     NSMutableArray *parametersArr = [NSMutableArray array];
@@ -65,32 +57,37 @@
         @"backgroundImage" : @"img_settings_device_bottom_light@3x.png",
     }];
     [otherArr addObject:@{
-        @"type" : [OASettingSwitchCell getCellIdentifier],
+        @"type" : [OASwitchTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"screen_alerts"),
         @"icon" : @"ic_custom_alert",
         @"value" : _settings.showScreenAlerts,
         @"key" : @"screenAlerts",
     }];
     [parametersArr addObject:@{
-        @"type" : [OASettingSwitchCell getCellIdentifier],
+        @"type" : [OASwitchTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"show_traffic_warnings"),
         @"icon" : @"list_warnings_traffic_calming",
         @"value" : _settings.showTrafficWarnings,
     }];
     [parametersArr addObject:@{
-        @"type" : [OASettingSwitchCell getCellIdentifier],
+        @"type" : [OASwitchTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"show_pedestrian_warnings"),
         @"icon" : @"list_warnings_pedestrian",
         @"value" : _settings.showPedestrian,
     }];
+
+    if (![_settings.speedCamerasUninstalled get])
+    {
+        [parametersArr addObject:@{
+            @"type" : [OASwitchTableViewCell getCellIdentifier],
+            @"title" : OALocalizedString(@"show_cameras"),
+            @"icon" : @"list_warnings_speed_camera",
+            @"value" : _settings.showCameras,
+        }];
+    }
+
     [parametersArr addObject:@{
-        @"type" : [OASettingSwitchCell getCellIdentifier],
-        @"title" : OALocalizedString(@"show_cameras"),
-        @"icon" : @"list_warnings_speed_camera",
-        @"value" : _settings.showCameras,
-    }];
-    [parametersArr addObject:@{
-        @"type" : [OASettingSwitchCell getCellIdentifier],
+        @"type" : [OASwitchTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"show_tunnels"),
         @"icon" : @"list_warnings_tunnel",
         @"value" : _settings.showTunnels,
@@ -100,14 +97,23 @@
     _data = [NSArray arrayWithArray:tableData];
 }
 
-#pragma mark - TableView
+- (BOOL)hideFirstHeader
+{
+    return YES;
+}
 
-- (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
+- (NSInteger)rowsCount:(NSInteger)section
+{
+    return _data[section].count;
+}
+
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
+{
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
     if ([cellType isEqualToString:[OADeviceScreenTableViewCell getCellIdentifier]])
     {
-        OADeviceScreenTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OADeviceScreenTableViewCell getCellIdentifier]];
+        OADeviceScreenTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OADeviceScreenTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADeviceScreenTableViewCell getCellIdentifier] owner:self options:nil];
@@ -116,33 +122,32 @@
         }
         if (cell)
         {
-            cell.backgroundImageView.image = [UIImage imageNamed:item[@"backgroundImage"]];
-            cell.foregroundImageView.image = [UIImage imageNamed:item[@"foregroundImage"]];
+            cell.backgroundImageView.image = [UIImage imageNamed:item[@"backgroundImage"]].imageFlippedForRightToLeftLayoutDirection;
+            cell.foregroundImageView.image = [UIImage imageNamed:item[@"foregroundImage"]].imageFlippedForRightToLeftLayoutDirection;
         }
         return cell;
     }
-    else if ([cellType isEqualToString:[OASettingSwitchCell getCellIdentifier]])
+    else if ([cellType isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
+        OASwitchTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
-            cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
-            cell.descriptionView.hidden = YES;
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASwitchTableViewCell *) nib[0];
+            [cell descriptionVisibility:NO];
             cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         if (cell)
         {
-            cell.textView.text = item[@"title"];
+            cell.titleLabel.text = item[@"title"];
             if ([item[@"key"] isEqualToString:@"screenAlerts"])
             {
-                cell.imgView.image = [UIImage templateImageNamed:item[@"icon"]];
-                cell.imgView.tintColor = _showAlerts ? UIColorFromRGB(self.appMode.getIconColor) : UIColorFromRGB(color_icon_inactive);
+                cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
+                cell.leftIconView.tintColor = _showAlerts ? UIColorFromRGB(self.appMode.getIconColor) : UIColorFromRGB(color_icon_inactive);
             }
             else
             {
-                cell.imgView.image = [UIImage imageNamed:item[@"icon"]];
+                cell.leftIconView.image = [UIImage rtlImageNamed:item[@"icon"]];
             }
             id v = item[@"value"];
             [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
@@ -163,26 +168,12 @@
     return nil;
 }
 
-- (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return _data[section].count;
-}
-
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
+- (NSInteger)sectionsCount
 {
     return _showAlerts ? _data.count : 1;
 }
 
-- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return section == 0 ? 0.01 : 19.0;
-}
-
-- (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return nil;
-}
-
-#pragma mark - Switch
+#pragma mark - Selectors
 
 - (void) updateTableView
 {

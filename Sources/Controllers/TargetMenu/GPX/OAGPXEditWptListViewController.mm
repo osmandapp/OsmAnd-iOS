@@ -243,7 +243,7 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return OALocalizedString(@"gpx_waypoints");
+    return OALocalizedString(@"shared_string_waypoints");
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section

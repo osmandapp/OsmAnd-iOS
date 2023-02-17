@@ -126,6 +126,14 @@
     _otherPoiCategory = pc;
 }
 
+
+- (OAPOIType *) getDefaultOtherCategoryType
+{
+    if (_otherPoiCategory && _otherPoiCategory.poiTypes.count > 0)
+        return _otherPoiCategory.poiTypes[0];
+    return nil;
+}
+
 - (NSArray<OAPOICategory *> *) getCategories:(BOOL)includeMapCategory
 {
     NSMutableArray<OAPOICategory *> *lst = [NSMutableArray arrayWithArray:_poiCategories];
@@ -420,10 +428,13 @@
 
 - (OAPOIType *) getPoiTypeByCategory:(NSString *)category name:(NSString *)name
 {
-    for (OAPOIType *t in _poiTypes)
-        if ([t.category.name isEqualToString:category] && [t.name isEqualToString:name])
-            return t;
-    
+    for (OAPOICategory *c in _poiCategories)
+    {
+        if ([c.name isEqualToString:category])
+        {
+            return [c getPoiTypeByKeyName:name];
+        }
+    }
     return nil;
 }
 
@@ -1144,12 +1155,11 @@
     return [self.class parsePOIByAmenity:amenity type:type];
 }
 
-+ (OAPOIType *) parsePOITypeByAmenity:(std::shared_ptr<const OsmAnd::Amenity>)amenity
++ (OAPOIType *) parsePOITypeByAmenity:(const std::shared_ptr<const OsmAnd::Amenity> &)amenity
 {
     OAPOIHelper *helper = [OAPOIHelper sharedInstance];
-
     OAPOIType *type = nil;
-    if (!amenity->categories.isEmpty())
+    if (!amenity->categories.isEmpty() && ![[OAAppSettings sharedManager] isTypeDisabled:amenity->subType.toNSString()])
     {
         const auto& catList = amenity->getDecodedCategories();
         if (!catList.isEmpty())
@@ -1178,7 +1188,7 @@
 
 + (OAPOI *) parsePOIByAmenity:(std::shared_ptr<const OsmAnd::Amenity>)amenity type:(OAPOIType *)type
 {
-    if (!type || type.mapOnly)
+    if (!type || type.mapOnly || [[OAAppSettings sharedManager] isTypeDisabled:amenity->subType.toNSString()])
         return nil;
     
     OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(amenity->position31);

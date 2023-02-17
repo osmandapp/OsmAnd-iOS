@@ -123,7 +123,7 @@
         [arr addObject:@{
                          @"type" : [OATextInputFloatingCell getCellIdentifier],
                          @"name" : @"osm_message",
-                         @"cell" : [OAOsmNoteBottomSheetViewController getInputCellWithHint:OALocalizedString(@"osm_alert_message") text:((OAOsmNotePoint *)_bugPoints.firstObject).getText roundedCorners:UIRectCornerAllCorners hideUnderline:YES floatingTextFieldControllers:_floatingTextFieldControllers]
+                         @"cell" : [OAOsmNoteBottomSheetViewController getInputCellWithHint:OALocalizedString(@"osb_comment_dialog_message") text:((OAOsmNotePoint *)_bugPoints.firstObject).getText roundedCorners:UIRectCornerAllCorners hideUnderline:YES floatingTextFieldControllers:_floatingTextFieldControllers]
                          }];
         
         if (_screenType == TYPE_CREATE)
@@ -144,7 +144,7 @@
         [arr addObject:@{
                          @"type" : [OASwitchTableViewCell getCellIdentifier],
                          @"name" : @"upload_anonymously",
-                         @"title" : OALocalizedString(@"osm_note_upload_anonymously"),
+                         @"title" : OALocalizedString(@"upload_anonymously"),
                          @"value" : @(_uploadAnonymously)
                          }];
         
@@ -170,11 +170,11 @@
 {
     NSString *title = OALocalizedString(@"osm_note_create");
     if (_screenType == TYPE_CLOSE)
-        title = OALocalizedString(@"osm_note_close");
+        title = OALocalizedString(@"osm_edit_close_note");
     else if (_screenType == TYPE_REOPEN)
         title = OALocalizedString(@"osm_note_reopen_title");
     else if (_screenType == TYPE_MODIFY)
-        title = OALocalizedString(@"osm_note_comment_title");
+        title = OALocalizedString(@"osm_edit_comment_note");
     
     return title;
 }
@@ -312,24 +312,24 @@
     }
     else if ([item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OASwitchTableViewCell* cell = nil;
-        cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
+        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
-            cell.textView.numberOfLines = 0;
+            cell = (OASwitchTableViewCell *) nib[0];
+            cell.backgroundColor = [UIColor clearColor];
+            cell.switchView.tintColor = UIColorFromRGB(color_bottom_sheet_secondary);
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
         }
-        
         if (cell)
         {
-            cell.backgroundColor = [UIColor clearColor];
-            [cell.textView setText: item[@"title"]];
+            cell.titleLabel.text = item[@"title"];
+
             cell.switchView.on = [item[@"value"] boolValue];
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
-            cell.switchView.tintColor = UIColorFromRGB(color_bottom_sheet_secondary);
         }
         return cell;
     }
@@ -438,15 +438,6 @@
     view.hidden = YES;
 }
 
-- (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSDictionary *item = _data[indexPath.row];
-    if (![item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
-        return indexPath;
-    else
-        return nil;
-}
-
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.row];
@@ -523,7 +514,8 @@
     textField.placeholder = hint;
     [textField.textView setText:text];
     textField.userInteractionEnabled = NO;
-    textField.font = [UIFont systemFontOfSize:17.0];
+    textField.font = [UIFont scaledSystemFontOfSize:17.0];
+    textField.adjustsFontForContentSizeCategory = YES;
     textField.clearButton.imageView.tintColor = UIColorFromRGB(color_icon_color);
     [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field"] forState:UIControlStateNormal];
     [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field"] forState:UIControlStateHighlighted];
@@ -531,7 +523,7 @@
     MDCTextInputControllerFilled *fieldController = [[MDCTextInputControllerFilled alloc] initWithTextInput:textField];
     fieldController.borderFillColor = UIColorFromRGB(color_osm_editing_text_field);
     fieldController.roundedCorners = corners;
-    fieldController.inlinePlaceholderFont = [UIFont systemFontOfSize:16.0];
+    fieldController.inlinePlaceholderFont = [UIFont scaledSystemFontOfSize:16.0];
     fieldController.textInput.textInsetsMode = MDCTextInputTextInsetsModeIfContent;
     [floatingControllers addObject:fieldController];
     
@@ -565,7 +557,8 @@
     [textField setText:text];
     [textField setSecureTextEntry:YES];
     textField.userInteractionEnabled = NO;
-    textField.font = [UIFont systemFontOfSize:17.0];
+    textField.font = [UIFont scaledSystemFontOfSize:17.0];
+    textField.adjustsFontForContentSizeCategory = YES;
     textField.clearButtonMode = UITextFieldViewModeNever;
     textField.placeholderLabel.backgroundColor = [UIColor clearColor];
     [resultCell setupPasswordButton];
@@ -574,7 +567,7 @@
     fieldController.borderFillColor = UIColorFromRGB(color_osm_editing_text_field);
     fieldController.roundedCorners = corners;
     fieldController.disabledColor = [UIColor blackColor];
-    fieldController.inlinePlaceholderFont = [UIFont systemFontOfSize:16.0];
+    fieldController.inlinePlaceholderFont = [UIFont scaledSystemFontOfSize:16.0];
     fieldController.textInput.textInsetsMode = MDCTextInputTextInsetsModeIfContent;
     [floatingControllers addObject:fieldController];
     

@@ -65,7 +65,7 @@
 {
     [super applyLocalization];
     
-    _titleView.text = OALocalizedString(@"res_updates");
+    _titleView.text = OALocalizedString(@"download_tab_updates");
     [_updateAllButton setTitle:OALocalizedString(@"res_update_all") forState:UIControlStateNormal];
 }
 
@@ -149,11 +149,6 @@
 -(UIView *) getMiddleView
 {
     return _tableView;
-}
-
--(IBAction)backButtonClicked:(id)sender;
-{
-    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (UITableView *)getTableView
@@ -410,7 +405,7 @@
         if (indexPath.row == _liveUpdatesRow)
         {
             cellTypeId = liveUpdatesCell;
-            title = OALocalizedString(@"osmand_live_updates");
+            title = OALocalizedString(@"live_updates");
         }
         else if (indexPath.row == _weatherForecastsRow)
         {
@@ -457,8 +452,8 @@
         }
         else if (indexPath.section == _availableMapsSection)
         {
-            cell.textLabel.font = [UIFont systemFontOfSize:17.];
-            cell.detailTextLabel.font = [UIFont systemFontOfSize:13.];
+            cell.textLabel.font = [UIFont scaledSystemFontOfSize:17.];
+            cell.detailTextLabel.font = [UIFont scaledSystemFontOfSize:13.];
 
             if ([cellTypeId isEqualToString:outdatedResourceCell])
             {

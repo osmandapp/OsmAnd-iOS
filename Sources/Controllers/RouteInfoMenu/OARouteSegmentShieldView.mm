@@ -73,6 +73,8 @@ static UIFont *_shieldFont;
         _shieldImage.image = [[OATargetInfoViewController getIcon:_iconName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         _shieldImage.tintColor = tintColor;
     }
+
+    self.shieldLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
 }
 
 - (CGSize)intrinsicContentSize
@@ -144,7 +146,7 @@ static UIFont *_shieldFont;
 + (CGFloat) getViewWidth:(NSString *)text
 {
     if (!_shieldFont)
-        _shieldFont = [UIFont systemFontOfSize:15.];
+        _shieldFont = [UIFont scaledSystemFontOfSize:15.];
     return 6.0 + 20. + 6.0 + MIN(86.0, [OAUtilities calculateTextBounds:text width:86.0 font:_shieldFont].width) + 12.0;
 }
 

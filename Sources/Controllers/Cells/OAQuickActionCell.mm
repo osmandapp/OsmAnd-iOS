@@ -16,6 +16,7 @@
     [super awakeFromNib];
     // Initialization code
     self.layer.cornerRadius = 9.0;
+    self.actionTitleView.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
 }
 
 @end

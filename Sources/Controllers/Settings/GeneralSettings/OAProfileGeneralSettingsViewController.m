@@ -11,16 +11,12 @@
 #import "OsmAndApp.h"
 #import "OAIconTitleValueCell.h"
 #import "OASettingsTableViewCell.h"
-#import "OASettingSwitchCell.h"
+#import "OASwitchTableViewCell.h"
 #import "OAProfileGeneralSettingsParametersViewController.h"
 #import "OACoordinatesFormatViewController.h"
-
+#import "OASizes.h"
 #import "Localization.h"
 #import "OAColors.h"
-
-@interface OAProfileGeneralSettingsViewController () <UITableViewDelegate, UITableViewDataSource>
-
-@end
 
 @implementation OAProfileGeneralSettingsViewController
 {
@@ -28,36 +24,36 @@
     OAAppSettings *_settings;
 }
 
-- (void) applyLocalization
+#pragma mark - Initialization
+
+- (void)commonInit
 {
-    [super applyLocalization];
-    self.titleLabel.text = OALocalizedString(@"general_settings_2");
+    _settings = [OAAppSettings sharedManager];
 }
+
+#pragma mark - UIViewController
 
 - (void) viewDidLoad
 {
     [super viewDidLoad];
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    _settings = [OAAppSettings sharedManager];
     self.tableView.separatorInset = UIEdgeInsetsMake(0., 16.0 + OAUtilities.getLeftMargin, 0., 0.);
-    [self setupView];
 }
 
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self setupView];
+    [self generateData];
     [self.tableView reloadData];
 }
 
-- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+#pragma mark - Base UI
+
+- (NSString *)getTitle
 {
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        self.tableView.separatorInset = UIEdgeInsetsMake(0., 16.0 + OAUtilities.getLeftMargin, 0., 0.);
-        [self.tableView reloadData];
-    } completion:nil];
+    return OALocalizedString(@"general_settings_2");
 }
+
+#pragma mark - Table data
 
 - (NSString *)getLocationPositionValue
 {
@@ -89,7 +85,7 @@
     }
 }
 
-- (void) setupView
+- (void)generateData
 {
     NSString *rotateMapValue;
     NSString *rotateMapIcon;
@@ -232,20 +228,20 @@
 //    [appearanceArr addObject:@{
 //        @"type" : [OAIconTitleValueCell getCellIdentifier],
 //        @"title" : OALocalizedString(@"settings_app_theme"),
-//        @"value" : OALocalizedString(@"app_theme_light"),
+//        @"value" : OALocalizedString(@"light_theme"),
 //        @"icon" : @"ic_custom_contrast",
 //        @"key" : @"app_theme",
 //    }];
     [appearanceArr addObject:@{
         @"type" : [OAIconTitleValueCell getCellIdentifier],
-        @"title" : OALocalizedString(@"rotate_map_to_bearing"),
+        @"title" : OALocalizedString(@"rotate_map_to"),
         @"value" : rotateMapValue,
         @"icon" : rotateMapIcon,
         @"key" : @"map_orientation",
     }];
     [appearanceArr addObject:@{
         @"name" : @"allow_3d",
-        @"type" : [OASettingSwitchCell getCellIdentifier],
+        @"type" : [OASwitchTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"allow_3D_view"),
         @"isOn" : allow3DValue,
         @"icon" : @"ic_custom_2_5d_view",
@@ -295,7 +291,7 @@
     }];
     [otherArr addObject:@{
         @"type" : [OASettingsTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"sett_ext_input"),
+        @"title" : OALocalizedString(@"external_input_device"),
         @"value" : externalInputDeviceValue,
         @"key" : @"externalImputDevice",
     }];
@@ -303,22 +299,29 @@
     [tableData addObject:unitsAndFormatsArr];
     [tableData addObject:otherArr];
     _data = [NSArray arrayWithArray:tableData];
-    [self updateNavBar];
 }
 
-- (void) updateNavBar
+- (NSString *)getTitleForHeader:(NSInteger)section
 {
-    self.subtitleLabel.text = self.appMode.toHumanString;
+    if (section == 0)
+        return OALocalizedString(@"shared_string_appearance");
+    else if (section == 1)
+        return OALocalizedString(@"units_and_formats");
+    else
+        return OALocalizedString(@"other_location");
 }
 
-#pragma mark - TableView
-
-- (nonnull UITableViewCell *) tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
+- (NSInteger)rowsCount:(NSInteger)section
+{
+    return _data[section].count;
+}
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
+{
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *cellType = item[@"type"];
     if ([cellType isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
     {
-        OAIconTitleValueCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
+        OAIconTitleValueCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
@@ -336,24 +339,25 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:[OASettingSwitchCell getCellIdentifier]])
+    else if ([cellType isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
+        OASwitchTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
-            cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
-            cell.descriptionView.hidden = YES;
-            cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.imgView.tintColor = UIColorFromRGB(color_icon_inactive);
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASwitchTableViewCell *) nib[0];
+            [cell descriptionVisibility:NO];
+            cell.separatorInset = UIEdgeInsetsMake(0., kPaddingToLeftOfContentWithIcon, 0., 0.);
+            cell.leftIconView.tintColor = UIColorFromRGB(color_icon_inactive);
         }
         if (cell)
         {
-            cell.textView.text = item[@"title"];
+            cell.titleLabel.text = item[@"title"];
+
+            cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
+            cell.leftIconView.tintColor = [item[@"isOn"] boolValue] ? UIColorFromRGB(self.appMode.getIconColor) : UIColorFromRGB(color_icon_inactive);
+
             cell.switchView.on = [item[@"isOn"] boolValue];
-            cell.imgView.image = [UIImage templateImageNamed:item[@"icon"]];
-            cell.imgView.tintColor = [item[@"isOn"] boolValue] ? UIColorFromRGB(self.appMode.getIconColor) : UIColorFromRGB(color_icon_inactive);
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
@@ -362,12 +366,12 @@
     }
     else if ([cellType isEqualToString:[OASettingsTableViewCell getCellIdentifier]])
     {
-        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];
+        OASettingsTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
-            cell.descriptionView.font = [UIFont systemFontOfSize:17.0];
+            cell.descriptionView.font = [UIFont scaledSystemFontOfSize:17.0];
             cell.iconView.image = [UIImage templateImageNamed:@"ic_custom_arrow_right"].imageFlippedForRightToLeftLayoutDirection;
             cell.iconView.tintColor = UIColorFromRGB(color_tint_gray);
             cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
@@ -382,13 +386,12 @@
     return nil;
 }
 
-- (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (NSInteger)sectionsCount
 {
-    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    return cell.selectionStyle == UITableViewCellSelectionStyleNone ? nil : indexPath;
+    return _data.count;
 }
 
-- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)onRowPressed:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *itemKey = item[@"key"];
@@ -406,36 +409,21 @@
     else if ([itemKey isEqualToString:@"speedUnits"])
         settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsUnitsOfSpeed applicationMode:self.appMode];
     else if ([itemKey isEqualToString:@"coordsFormat"])
-        settingsViewController = [[OACoordinatesFormatViewController alloc] initWithMode:self.appMode];
+        settingsViewController = [[OACoordinatesFormatViewController alloc] initWithAppMode:self.appMode];
     else if ([itemKey isEqualToString:@"angulerMeasurmentUnits"])
         settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsAngularMeasurmentUnits applicationMode:self.appMode];
     else if ([itemKey isEqualToString:@"externalImputDevice"])
         settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsExternalInputDevices applicationMode:self.appMode];
     settingsViewController.delegate = self;
     [self presentViewController:settingsViewController animated:YES completion:nil];
-    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
-- (NSInteger) tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return _data[section].count;
-}
+#pragma mark - Selectors
 
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
+- (void)onRotation
 {
-    return _data.count;
+    self.tableView.separatorInset = UIEdgeInsetsMake(0., 16.0 + OAUtilities.getLeftMargin, 0., 0.);
 }
-
-- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    if (section == 0)
-        return OALocalizedString(@"map_settings_appearance");
-    else if (section == 1)
-        return OALocalizedString(@"units_and_formats");
-    else
-        return OALocalizedString(@"help_other_header");
-}
-
-#pragma mark - Switch
 
 - (void) applyParameter:(id)sender
 {
@@ -460,7 +448,7 @@
                         [app.mapModeObservable notifyEvent];
                 }
             }
-            [self setupView];
+            [self generateData];
             [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:indexPath.row inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationFade];
         }
     }
@@ -470,7 +458,7 @@
 
 - (void) onSettingsChanged;
 {
-    [self setupView];
+    [self generateData];
     [self.tableView reloadData];
 }
 

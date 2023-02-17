@@ -14,6 +14,7 @@
 #import "OACloudAccountVerificationViewController.h"
 #import "OACloudAccountCreateViewController.h"
 #import "OAChoosePlanHelper.h"
+#import "OAInputTableViewCell.h"
 
 @interface OACloudAccountLoginViewController () <OAOnRegisterUserListener, OAOnRegisterDeviceListener>
 
@@ -84,7 +85,7 @@
     },
     @{ @"type" : [OADividerCell getCellIdentifier] },
     @{
-        @"type" : [OAInputCellWithTitle getCellIdentifier],
+        @"type" : [OAInputTableViewCell getCellIdentifier],
         @"title" : [self getTextFieldValue],
         @"placeholder" : OALocalizedString(@"shared_string_email")
     },
@@ -130,7 +131,7 @@
         {
             [otherCells addObject: @{
                 @"type" : [OAFilledButtonCell getCellIdentifier],
-                @"title" : OALocalizedString(@"purchase_get"),
+                @"title" : OALocalizedString(@"shared_string_get"),
                 @"buttonColor" : UIColorFromRGB(color_primary_purple),
                 @"textColor" : UIColor.whiteColor,
                 @"action" : @"getButtonPressed",

@@ -19,8 +19,8 @@
 #import "OAPOIFiltersHelper.h"
 #import "OAMapViewController.h"
 #import "OARootViewController.h"
-#import "OAIconTitleButtonCell.h"
-#import "OASettingSwitchCell.h"
+#import "OAButtonTableViewCell.h"
+#import "OASwitchTableViewCell.h"
 #import "OAIconTitleValueCell.h"
 #import "OATimeTableViewCell.h"
 #import "OADateTimePickerTableViewCell.h"
@@ -127,15 +127,15 @@ static const NSInteger panoImageFilterSection = 2;
     [dataArr addObject:@[
                          @{ @"type" : [OADividerCell getCellIdentifier]},
                          @{
-                             @"type" : [OASettingSwitchCell getCellIdentifier],
+                             @"type" : [OASwitchTableViewCell getCellIdentifier],
                              @"title" : @"",
                              @"description" : @"",
                              @"img" : @"",
                              @"key" : @"mapillary_enabled"
                              },
                          @{
-                             @"type" : [OAIconTitleButtonCell getCellIdentifier],
-                             @"title" : OALocalizedString(@"tile_cache"),
+                             @"type" : [OAButtonTableViewCell getCellIdentifier],
+                             @"title" : OALocalizedString(@"mapillary_menu_title_tile_cache"),
                              @"btnTitle" : OALocalizedString(@"shared_string_reload"),
                              @"description" : @"",
                              @"img" : @"ic_custom_overlay_map.png"
@@ -165,8 +165,8 @@ static const NSInteger panoImageFilterSection = 2;
     [dataArr addObject:@[
                          @{ @"type" : [OADividerCell getCellIdentifier]},
                          @{
-                             @"type" : [OASettingSwitchCell getCellIdentifier],
-                             @"title" : OALocalizedString(@"mapil_pano_only"),
+                             @"type" : [OASwitchTableViewCell getCellIdentifier],
+                             @"title" : OALocalizedString(@"mapillary_menu_title_pano"),
                              @"description" : @"",
                              @"img" : @"ic_custom_coordinates.png",
                              @"key" : @"pano_only"
@@ -187,9 +187,9 @@ static const NSInteger panoImageFilterSection = 2;
     CGFloat buttonHeight = 44.0;
     _footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, width, height)];
     
-    NSDictionary *applyAttrs = @{ NSFontAttributeName : [UIFont systemFontOfSize:15.0],
+    NSDictionary *applyAttrs = @{ NSFontAttributeName : [UIFont scaledSystemFontOfSize:15.0],
                              NSForegroundColorAttributeName : [UIColor whiteColor] };
-    NSDictionary *resetAttrs = @{ NSFontAttributeName : [UIFont systemFontOfSize:15.0],
+    NSDictionary *resetAttrs = @{ NSFontAttributeName : [UIFont scaledSystemFontOfSize:15.0],
                                   NSForegroundColorAttributeName : UIColorFromRGB(color_menu_button) };
     NSAttributedString *resetText = [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_reset") attributes:resetAttrs];
     NSAttributedString *applyText = [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_apply") attributes:applyAttrs];
@@ -326,65 +326,61 @@ static const NSInteger panoImageFilterSection = 2;
 {
     UITableViewCell *outCell;
     NSDictionary *item = [self getItem:indexPath];
-    
-    if ([item[@"type"] isEqualToString:[OASettingSwitchCell getCellIdentifier]])
+    if ([item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
+        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
-            cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASwitchTableViewCell *) nib[0];
         }
-        
         if (cell)
         {
-            cell.textView.text = item[@"title"];
+            cell.titleLabel.text = item[@"title"];
             NSString *desc = item[@"description"];
-            cell.descriptionView.text = desc;
-            cell.descriptionView.hidden = desc.length == 0;
+            cell.descriptionLabel.text = desc;
+            [cell descriptionVisibility:desc && desc.length == 0];
+
             NSString *key = item[@"key"];
-            
             if ([key isEqualToString:@"mapillary_enabled"])
             {
-                cell.textView.text = _mapillaryEnabled ? OALocalizedString(@"shared_string_enabled") : OALocalizedString(@"rendering_value_disabled_name");
+                cell.titleLabel.text = _mapillaryEnabled ? OALocalizedString(@"shared_string_enabled") : OALocalizedString(@"rendering_value_disabled_name");
                 NSString *imgName = _mapillaryEnabled ? @"ic_custom_show.png" : @"ic_custom_hide.png";
-                cell.imgView.image = [UIImage templateImageNamed:imgName];
-                cell.imgView.tintColor = _mapillaryEnabled ? UIColorFromRGB(color_dialog_buttons_dark) : UIColorFromRGB(color_tint_gray);
+                cell.leftIconView.image = [UIImage templateImageNamed:imgName];
+                cell.leftIconView.tintColor = _mapillaryEnabled ? UIColorFromRGB(color_dialog_buttons_dark) : UIColorFromRGB(color_tint_gray);
                 [cell.switchView setOn:_mapillaryEnabled];
             }
             else if ([key isEqualToString:@"pano_only"])
             {
-                cell.imgView.image = [UIImage templateImageNamed:item[@"img"]];
-                cell.imgView.tintColor = _panoOnly ? UIColorFromRGB(color_dialog_buttons_dark) : UIColorFromRGB(color_tint_gray);
+                cell.leftIconView.image = [UIImage templateImageNamed:item[@"img"]];
+                cell.leftIconView.tintColor = _panoOnly ? UIColorFromRGB(color_dialog_buttons_dark) : UIColorFromRGB(color_tint_gray);
                 [cell.switchView setOn:_panoOnly];
             }
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
         }
         outCell = cell;
     }
-    else if ([item[@"type"] isEqualToString:[OAIconTitleButtonCell getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:[OAButtonTableViewCell getCellIdentifier]])
     {
-        OAIconTitleButtonCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleButtonCell getCellIdentifier]];
+        OAButtonTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAButtonTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleButtonCell getCellIdentifier] owner:self options:nil];
-            cell = (OAIconTitleButtonCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAButtonTableViewCell *) nib[0];
+            [cell descriptionVisibility:NO];
         }
-        
         if (cell)
         {
-            cell.titleView.text = item[@"title"];
-            cell.iconView.image = [UIImage templateImageNamed:item[@"img"]];
-            cell.iconView.tintColor = UIColorFromRGB(color_tint_gray);
-            [cell setButtonText:item[@"btnTitle"]];
-            [cell.buttonView removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
-            [cell.buttonView addTarget:self action:@selector(reloadCache) forControlEvents:UIControlEventTouchUpInside];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.titleLabel.text = item[@"title"];
+            cell.leftIconView.image = [UIImage templateImageNamed:item[@"img"]];
+            cell.leftIconView.tintColor = UIColorFromRGB(color_tint_gray);
+            [cell.button setTitle:item[@"btnTitle"] forState:UIControlStateNormal];
+            [cell.button removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
+            [cell.button addTarget:self action:@selector(reloadCache) forControlEvents:UIControlEventTouchUpInside];
         }
-        outCell = cell;
+        return cell;
     }
     else if ([item[@"type"] isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
     {
@@ -593,7 +589,7 @@ static const NSInteger panoImageFilterSection = 2;
 {
     switch (section) {
         case dateFilterSection:
-            return OALocalizedString(@"shared_string_filter");
+            return OALocalizedString(@"filter_current_poiButton");
         default:
             return nil;
     }
@@ -602,7 +598,7 @@ static const NSInteger panoImageFilterSection = 2;
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:[OASettingSwitchCell getCellIdentifier]] || [item[@"type"] isEqualToString:[OAIconTitleButtonCell getCellIdentifier]] || [item[@"type"] isEqualToString:[OAIconTitleValueCell getCellIdentifier]] || [indexPath isEqual:_datePickerIndexPath])
+    if ([item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]] || [item[@"type"] isEqualToString:[OAButtonTableViewCell getCellIdentifier]] || [item[@"type"] isEqualToString:[OAIconTitleValueCell getCellIdentifier]] || [indexPath isEqual:_datePickerIndexPath])
     {
         return UITableViewAutomaticDimension;
     }
@@ -611,15 +607,6 @@ static const NSInteger panoImageFilterSection = 2;
         return [OADividerCell cellHeight:0.5 dividerInsets:UIEdgeInsetsZero];
     }
     return 44.0;
-}
-
-- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSDictionary *item = [self getItem:indexPath];
-    NSString *type = item[@"type"];
-    if ([type isEqualToString:[OAIconTitleButtonCell getCellIdentifier]] || [type isEqualToString:[OASettingSwitchCell getCellIdentifier]])
-        return nil;
-    return indexPath;
 }
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

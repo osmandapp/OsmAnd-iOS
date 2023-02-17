@@ -40,9 +40,9 @@ NSString *const kSimulateLocationKey = @"kSimulateLocationKey";
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     self.tableView.estimatedRowHeight = kEstimatedRowHeight;
-    self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:_headerDescription font:[UIFont systemFontOfSize:15] textColor:UIColorFromRGB(color_text_footer) lineSpacing:0.0 isTitle:NO];
+    self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:_headerDescription font:kHeaderDescriptionFont textColor:UIColorFromRGB(color_text_footer) isBigTitle:NO];
     
-    self.backButton.imageView.image = [self.backButton.imageView.image imageFlippedForRightToLeftLayoutDirection];
+    [self.backButton setImage:[UIImage rtlImageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -55,7 +55,7 @@ NSString *const kSimulateLocationKey = @"kSimulateLocationKey";
 {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:_headerDescription font:[UIFont systemFontOfSize:15] textColor:UIColorFromRGB(color_text_footer) lineSpacing:0.0 isTitle:NO];
+        self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:_headerDescription font:kHeaderDescriptionFont textColor:UIColorFromRGB(color_text_footer) isBigTitle:NO];
     } completion:nil];
 }
 
@@ -69,7 +69,7 @@ NSString *const kSimulateLocationKey = @"kSimulateLocationKey";
 
 - (void) applyLocalization
 {
-    _titleView.text = OALocalizedString(@"product_title_development");
+    _titleView.text = OALocalizedString(@"debugging_and_development");
     _headerDescription = OALocalizedString(@"osm_editing_settings_descr");
 }
 
@@ -82,7 +82,7 @@ NSString *const kSimulateLocationKey = @"kSimulateLocationKey";
     [simulationSection addRowFromDictionary:@{
         kCellTypeKey : [OAIconTitleValueCell getCellIdentifier],
         kCellKeyKey : kSimulateLocationKey,
-        kCellTitleKey : OALocalizedString(@"simulate_routing"),
+        kCellTitleKey : OALocalizedString(@"simulate_your_location"),
         kCellDescrKey : isRouteAnimating ? OALocalizedString(@"simulate_in_progress") : @"",
         @"actionBlock" : (^void(){ [weakSelf openSimulateLocationSettings]; })
     }];
@@ -159,19 +159,20 @@ NSString *const kSimulateLocationKey = @"kSimulateLocationKey";
     }
     else if ([type isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OASwitchTableViewCell* cell = nil;
-        cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
+        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
-            cell.textView.numberOfLines = 0;
+            cell = (OASwitchTableViewCell *) nib[0];
             cell.switchView.tintColor = UIColorFromRGB(color_bottom_sheet_secondary);
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
         }
         
         if (cell)
         {
-            [cell.textView setText:item.title];
+            cell.titleLabel.text = item.title;
+
             cell.switchView.on = [OAAppSettings.sharedManager.showHeightmaps get];
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];

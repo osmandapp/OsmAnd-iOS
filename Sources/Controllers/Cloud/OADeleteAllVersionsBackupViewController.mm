@@ -15,17 +15,7 @@
 #import "Localization.h"
 #import "OABackupHelper.h"
 
-@interface OADeleteAllVersionsBackupViewController () <UITableViewDelegate, UITableViewDataSource, OADeleteAllVersionsBackupDelegate, OAOnDeleteFilesListener>
-
-@property (weak, nonatomic) IBOutlet UIView *buttonsContainerView;
-@property (weak, nonatomic) IBOutlet UIButton *topButton;
-@property (weak, nonatomic) IBOutlet UIButton *bottomButton;
-
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomButtonWithTopButtonConstraint;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomButtonNoTopButtonConstraint;
-
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *buttonsContainerWithOneButtonConstraint;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *buttonsContainerWithTwoButtonsConstraint;
+@interface OADeleteAllVersionsBackupViewController () <OADeleteAllVersionsBackupDelegate, OAOnDeleteFilesListener>
 
 @end
 
@@ -42,28 +32,37 @@
     BOOL _isDeleted;
 }
 
+#pragma mark - Initialization
+
 - (instancetype)initWithScreenType:(EOADeleteBackupScreenType)screenType
 {
-    self = [super initWithNibName:@"OADeleteAllVersionsBackupViewController" bundle:nil];
+    self = [super init];
     if (self)
     {
         _screenType = screenType;
+        _progressFilesCompleteCount = 0;
+        _progressFilesTotalCount = 1;
     }
     return self;
 }
+
+#pragma mark - UIViewController
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 
-    _progressFilesCompleteCount = 0;
-    _progressFilesTotalCount = 1;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableView.allowsSelection = NO;
 
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-
-    [self setupButtons];
-    [self setupView];
+    BOOL isProgress = _screenType == EOADeleteAllDataProgressBackupScreenType
+            || _screenType == EOARemoveOldVersionsProgressBackupScreenType;
+    if ([self isChevronIconVisible])
+    {
+        [self.leftNavbarButton setImage:[UIImage templateImageNamed:isProgress ? @"ic_navbar_close" : @"ic_navbar_chevron"]
+                               forState:UIControlStateNormal];
+        self.bottomButton.hidden = YES;
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -72,104 +71,120 @@
     [self deleteBackupFiles];
 }
 
-- (UIStatusBarStyle)preferredStatusBarStyle
-{
-    if (@available(iOS 13.0, *))
-        return UIStatusBarStyleDarkContent;
-
-    return UIStatusBarStyleDefault;
-}
+#pragma mark - Base UI
 
 - (void)applyLocalization
 {
     [super applyLocalization];
+
     _sectionDescription = @"";
-    NSString *title = @"";
-    NSString *titleBottomButton = @"";
     switch (_screenType)
     {
         case EOADeleteAllDataBackupScreenType:
-        {
-            title = OALocalizedString(@"backup_delete_all_data");
-            titleBottomButton = OALocalizedString(@"shared_string_cancel");
-            _description = OALocalizedString(@"backup_delete_all_data_warning");
-            [self.topButton setTitle:OALocalizedString(@"backup_delete_all_data") forState:UIControlStateNormal];
-            break;
-        }
         case EOADeleteAllDataConfirmBackupScreenType:
         {
-            title = OALocalizedString(@"are_you_sure");
             _description = OALocalizedString(@"backup_delete_all_data_warning");
             break;
         }
         case EOADeleteAllDataProgressBackupScreenType:
         {
-            title = OALocalizedString(@"backup_deleting_all_data");
-            titleBottomButton = OALocalizedString(@"shared_string_close");
             _description = OALocalizedString(@"shared_string_progress");
             _sectionDescription = OALocalizedString(@"backup_delete_all_data_in_progress");
             break;
         }
         case EOARemoveOldVersionsBackupScreenType:
         {
-            title = OALocalizedString(@"backup_delete_old_data");
-            titleBottomButton = OALocalizedString(@"shared_string_remove");
             _description = OALocalizedString(@"backup_delete_old_data_warning");
             break;
         }
         case EOARemoveOldVersionsProgressBackupScreenType:
         {
-            title = OALocalizedString(@"backup_delete_old_data");
-            titleBottomButton = OALocalizedString(@"shared_string_close");
             _description = OALocalizedString(@"shared_string_progress");
             break;
         }
     }
-    self.titleLabel.text = title;
-    [self.bottomButton setTitle:titleBottomButton forState:UIControlStateNormal];
 }
 
-- (NSString *)getTableHeaderTitle
+- (NSString *)getTitle
 {
-    return self.titleLabel.text;
+    switch (_screenType)
+    {
+        case EOADeleteAllDataBackupScreenType:
+            return OALocalizedString(@"backup_delete_all_data");
+        case EOADeleteAllDataConfirmBackupScreenType:
+            return OALocalizedString(@"are_you_sure");
+        case EOADeleteAllDataProgressBackupScreenType:
+            return OALocalizedString(@"backup_deleting_all_data");
+        case EOARemoveOldVersionsBackupScreenType:
+            return OALocalizedString(@"backup_delete_old_data");
+        case EOARemoveOldVersionsProgressBackupScreenType:
+            return OALocalizedString(@"backup_delete_old_data");
+    }
+    return @"";
 }
 
-- (UIColor *)navBarBackgroundColor
+- (NSString *)getLeftNavbarButtonTitle
 {
-    return UIColorFromRGB(color_bottom_sheet_background);
+    return _screenType == EOARemoveOldVersionsBackupScreenType || _screenType == EOADeleteAllDataConfirmBackupScreenType ? OALocalizedString(@"shared_string_cancel") : @"";
 }
 
-- (void)setupButtons
+- (BOOL)isNavbarSeparatorVisible
 {
-    BOOL isRemoveOld = _screenType == EOARemoveOldVersionsBackupScreenType;
-    BOOL isConfirm = _screenType == EOADeleteAllDataConfirmBackupScreenType;
-    BOOL isProgress = _screenType == EOADeleteAllDataProgressBackupScreenType
-            || _screenType == EOARemoveOldVersionsProgressBackupScreenType;
-    BOOL hasTwoButtons = _screenType == EOADeleteAllDataBackupScreenType;
-
-    self.bottomButton.tintColor = isRemoveOld ? UIColorFromRGB(color_support_red) : UIColorFromRGB(color_primary_purple);
-    [self.bottomButton setTitleColor:isRemoveOld ? UIColorFromRGB(color_support_red) : UIColorFromRGB(color_primary_purple)
-                            forState:UIControlStateNormal];
-
-    self.backButton.hidden = !(isConfirm || isRemoveOld);
-    self.backImageButton.hidden = isConfirm || isRemoveOld;
-    [self.backImageButton setImage:[UIImage templateImageNamed:isProgress ? @"ic_navbar_close" : @"ic_navbar_chevron"]
-                          forState:UIControlStateNormal];
-
-    self.topButton.hidden = isConfirm || isRemoveOld || isProgress;
-    self.bottomButton.hidden = isConfirm || isProgress;
-    self.buttonsContainerView.hidden = isConfirm || isProgress;
-
-    self.bottomButtonWithTopButtonConstraint.active = hasTwoButtons;
-    self.bottomButtonNoTopButtonConstraint.active = !hasTwoButtons;
-    self.buttonsContainerWithOneButtonConstraint.active = !hasTwoButtons;
-    self.buttonsContainerWithTwoButtonsConstraint.active = hasTwoButtons;
-
-    [self.view setNeedsUpdateConstraints];
-    [self.view updateConstraintsIfNeeded];
+    return NO;
 }
 
-- (void)setupView
+- (BOOL)isChevronIconVisible
+{
+    return _screenType == EOADeleteAllDataBackupScreenType || _screenType == EOADeleteAllDataProgressBackupScreenType || _screenType == EOARemoveOldVersionsProgressBackupScreenType;
+}
+
+- (EOABaseTableHeaderMode)getTableHeaderMode
+{
+    return EOABaseTableHeaderModeBigTitle;
+}
+
+- (NSString *)getTopButtonTitle
+{
+    if (_screenType == EOADeleteAllDataBackupScreenType)
+        return OALocalizedString(@"backup_delete_all_data");
+
+    return @"";
+}
+
+- (NSString *)getBottomButtonTitle
+{
+    switch (_screenType)
+    {
+        case EOADeleteAllDataBackupScreenType:
+            return OALocalizedString(@"shared_string_cancel");
+        case EOARemoveOldVersionsBackupScreenType:
+            return OALocalizedString(@"shared_string_remove");
+        case EOADeleteAllDataProgressBackupScreenType:
+        case EOARemoveOldVersionsProgressBackupScreenType:
+            return OALocalizedString(@"shared_string_close");
+        default:
+            return @"";
+    }
+}
+
+- (EOABaseButtonColorScheme)getTopButtonColorScheme
+{
+    return _screenType == EOADeleteAllDataBackupScreenType ? EOABaseButtonColorSchemeRed : EOABaseButtonColorSchemeInactive;
+}
+
+- (EOABaseButtonColorScheme)getBottomButtonColorScheme
+{
+    return _screenType == EOARemoveOldVersionsBackupScreenType ? EOABaseButtonColorSchemeGrayAttn : EOABaseButtonColorSchemeGraySimple;
+}
+
+- (BOOL)isBottomSeparatorVisible
+{
+    return NO;
+}
+
+#pragma mark - Table data
+
+- (void)generateData
 {
     NSMutableArray *data = [NSMutableArray array];
     BOOL isProgress = _screenType == EOADeleteAllDataProgressBackupScreenType
@@ -179,7 +194,6 @@
         NSMutableArray<NSMutableDictionary *> *progressCells = [NSMutableArray array];
         NSMutableDictionary *progressSection = [NSMutableDictionary dictionary];
         progressSection[@"cells"] = progressCells;
-        progressSection[@"footer"] = _sectionDescription;
         [data addObject:progressSection];
 
         NSMutableDictionary *progressData = [NSMutableDictionary dictionary];
@@ -227,6 +241,119 @@
     return _data[indexPath.section][@"cells"][indexPath.row];
 }
 
+- (BOOL)hideFirstHeader
+{
+    return YES;
+}
+
+- (NSString *)getTitleForFooter:(NSInteger)section
+{
+    if (_progressIndexPath && _progressIndexPath.section == section)
+        return _sectionDescription;
+
+    return [super getTitleForFooter:section];
+}
+
+- (NSInteger)rowsCount:(NSInteger)section;
+{
+    return ((NSArray *) _data[section][@"cells"]).count;
+}
+
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath;
+{
+    NSDictionary *item = [self getItem:indexPath];
+    NSString *cellType = item[@"type"];
+    UITableViewCell *outCell = nil;
+
+    if ([cellType isEqualToString:[OATextLineViewCell getCellIdentifier]])
+    {
+        OATextLineViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OATextLineViewCell getCellIdentifier]];
+        if (!cell)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextLineViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OATextLineViewCell *) nib[0];
+            cell.backgroundColor = UIColor.clearColor;
+        }
+        if (cell)
+        {
+            cell.textView.text = item[@"title"];
+        }
+        outCell = cell;
+    }
+    else if ([cellType isEqualToString:[OADownloadProgressBarCell getCellIdentifier]])
+    {
+        OADownloadProgressBarCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OADownloadProgressBarCell getCellIdentifier]];
+        if (!cell)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADownloadProgressBarCell getCellIdentifier] owner:self options:nil];
+            cell = (OADownloadProgressBarCell *) nib[0];
+            cell.backgroundColor = UIColor.clearColor;
+        }
+        if (cell)
+        {
+            cell.progressStatusLabel.text = item[@"title"];
+
+            float progress = (float) _progressFilesCompleteCount / _progressFilesTotalCount;
+            cell.progressValueLabel.text = [NSString stringWithFormat:@"%i%%", (int) (progress * 100)];
+            [cell.progressBarView setProgress:progress];
+        }
+
+        outCell = cell;
+    }
+    else if ([cellType isEqualToString:[OAFilledButtonCell getCellIdentifier]])
+    {
+        OAFilledButtonCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAFilledButtonCell getCellIdentifier]];
+        if (!cell)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAFilledButtonCell getCellIdentifier] owner:self options:nil];
+            cell = (OAFilledButtonCell *) nib[0];
+        }
+        if (cell)
+        {
+            cell.backgroundColor = UIColor.clearColor;
+            cell.button.backgroundColor = UIColorFromRGB(color_support_red);
+            [cell.button setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
+            [cell.button setTitle:item[@"title"] forState:UIControlStateNormal];
+            cell.button.layer.cornerRadius = 9;
+            cell.topMarginConstraint.constant = 9.;
+            cell.heightConstraint.constant = 42.;
+            [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+            [cell.button addTarget:self
+                            action:NSSelectorFromString(item[@"action"])
+                  forControlEvents:UIControlEventTouchUpInside];
+        }
+        outCell = cell;
+    }
+
+    [outCell updateConstraintsIfNeeded];
+    return outCell;
+}
+
+- (NSInteger)sectionsCount;
+{
+    return _data.count;
+}
+
+#pragma mark - Selectors
+
+- (void)onLeftNavbarButtonPressed
+{
+    [self onCloseDeleteAllBackupData];
+}
+
+- (void)onTopButtonPressed
+{
+    [self onDeleteButtonPressed];
+}
+
+- (void)onBottomButtonPressed
+{
+    if (_screenType == EOARemoveOldVersionsBackupScreenType)
+        [self onDeleteButtonPressed];
+    else
+        [self onCloseDeleteAllBackupData];
+}
+
 - (void)deleteBackupFiles
 {
     BOOL isProgressOfDeleteAll = _screenType == EOADeleteAllDataProgressBackupScreenType;
@@ -244,12 +371,9 @@
     else if (_screenType == EOARemoveOldVersionsProgressBackupScreenType)
         _sectionDescription = OALocalizedString(@"backup_remove_old_versions_finished");
 
-    if (_progressIndexPath)
-        _data[_progressIndexPath.section][@"footer"] = _sectionDescription;
-
+    [self generateData];
     [self.tableView reloadData];
     self.bottomButton.hidden = NO;
-    self.buttonsContainerView.hidden = NO;
 
     [self onCompleteTasks];
     _isDeleted = YES;
@@ -268,29 +392,6 @@
     OADeleteAllVersionsBackupViewController *deleteAllDataViewController = [[OADeleteAllVersionsBackupViewController alloc] initWithScreenType:nextScreen];
     deleteAllDataViewController.deleteDelegate = self;
     [self.navigationController pushViewController:deleteAllDataViewController animated:YES];
-}
-
-- (IBAction)onDeleteButtonPressed:(id)sender
-{
-    [self onDeleteButtonPressed];
-}
-
-- (IBAction)onCancelButtonPressed:(id)sender
-{
-    if (_screenType == EOARemoveOldVersionsBackupScreenType)
-        [self onDeleteButtonPressed];
-    else
-        [self onCloseDeleteAllBackupData];
-}
-
-- (IBAction)backButtonClicked:(id)sender
-{
-    [self onCloseDeleteAllBackupData];
-}
-
-- (IBAction)backImageButtonPressed:(id)sender
-{
-    [self onCloseDeleteAllBackupData];
 }
 
 #pragma mark - OAOnDeleteFilesListener
@@ -355,88 +456,6 @@
 {
     if (!_isDeleted && self.deleteDelegate)
         [self.deleteDelegate onCompleteTasks];
-}
-
-#pragma mark - UITableViewDataSource
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return _data.count;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return ((NSArray *) _data[section][@"cells"]).count;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSDictionary *item = [self getItem:indexPath];
-    NSString *cellType = item[@"type"];
-    UITableViewCell *outCell = nil;
-
-    if ([cellType isEqualToString:[OATextLineViewCell getCellIdentifier]])
-    {
-        OATextLineViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OATextLineViewCell getCellIdentifier]];
-        if (!cell)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextLineViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OATextLineViewCell *) nib[0];
-            cell.backgroundColor = UIColor.clearColor;
-        }
-        if (cell)
-        {
-            cell.textView.text = item[@"title"];
-        }
-        outCell = cell;
-    }
-    else if ([cellType isEqualToString:[OADownloadProgressBarCell getCellIdentifier]])
-    {
-        OADownloadProgressBarCell *cell = [tableView dequeueReusableCellWithIdentifier:[OADownloadProgressBarCell getCellIdentifier]];
-        if (!cell)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADownloadProgressBarCell getCellIdentifier] owner:self options:nil];
-            cell = (OADownloadProgressBarCell *) nib[0];
-            cell.backgroundColor = UIColor.clearColor;
-        }
-        if (cell)
-        {
-            cell.progressStatusLabel.text = item[@"title"];
-
-            float progress = (float) _progressFilesCompleteCount / _progressFilesTotalCount;
-            cell.progressValueLabel.text = [NSString stringWithFormat:@"%i%%", (int) (progress * 100)];
-            [cell.progressBarView setProgress:progress];
-        }
-
-        outCell = cell;
-    }
-    else if ([cellType isEqualToString:[OAFilledButtonCell getCellIdentifier]])
-    {
-        OAFilledButtonCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAFilledButtonCell getCellIdentifier]];
-        if (!cell)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAFilledButtonCell getCellIdentifier] owner:self options:nil];
-            cell = (OAFilledButtonCell *) nib[0];
-        }
-        if (cell)
-        {
-            cell.backgroundColor = UIColor.clearColor;
-            cell.button.backgroundColor = UIColorFromRGB(color_support_red);
-            [cell.button setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
-            [cell.button setTitle:item[@"title"] forState:UIControlStateNormal];
-            cell.button.layer.cornerRadius = 9;
-            cell.topMarginConstraint.constant = 9.;
-            cell.heightConstraint.constant = 42.;
-            [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-            [cell.button addTarget:self
-                            action:NSSelectorFromString(item[@"action"])
-                  forControlEvents:UIControlEventTouchUpInside];
-        }
-        outCell = cell;
-    }
-
-    [outCell updateConstraintsIfNeeded];
-    return outCell;
 }
 
 @end

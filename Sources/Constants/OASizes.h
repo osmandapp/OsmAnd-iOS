@@ -9,6 +9,7 @@
 #ifndef OASizes_h
 #define OASizes_h
 
+#define separatorNavBarHeight 1.
 #define defaultNavBarHeight 44
 #define modalNavBarHeight 56.
 #define inCallStatusBarHeight 40.0
@@ -31,9 +32,11 @@
 #define kInfoViewLandscapeWidthPad 414
 #define kInfoViewPortraitWidthPad 375
 
+#define kSmallPaddingOnSideOfContent 16
 #define kPaddingOnSideOfContent 20
 #define kPaddingToLeftOfContentWithIcon 66
-#define kHeaderHeightDefault 36
+#define kHeaderHeightDefault 38
+#define kFooterHeightDefault 16
 #define kPaddingOnSideOfHeaderWithText 38
 #define kPaddingOnSideOfFooterWithText 16
 

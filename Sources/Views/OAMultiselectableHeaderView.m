@@ -41,14 +41,14 @@ static UIFont *_btnFont;
 
 - (void)commonInit
 {
-    _btnFont = [UIFont systemFontOfSize:13.0];
+    _btnFont = [UIFont scaledSystemFontOfSize:13.0];
     
     _selectAllBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     CGFloat width = self.frame.size.width;
-    CGSize textSize = [OAUtilities calculateTextBounds:[OALocalizedString(@"key_hint_deselect") uppercaseStringWithLocale:[NSLocale currentLocale]] width:width font:_btnFont];
+    CGSize textSize = [OAUtilities calculateTextBounds:[OALocalizedString(@"shared_string_deselect") uppercaseStringWithLocale:[NSLocale currentLocale]] width:width font:_btnFont];
     _selectAllBtn.frame = CGRectMake(width - textSize.width - OAUtilities.getLeftMargin - kMargin, 12.0, textSize.width, 30.0);
-    [_selectAllBtn setTitle:[OALocalizedString(@"key_hint_select") uppercaseStringWithLocale:[NSLocale currentLocale]] forState:UIControlStateNormal];
-    [_selectAllBtn setTitle:[OALocalizedString(@"key_hint_deselect") uppercaseStringWithLocale:[NSLocale currentLocale]] forState:UIControlStateSelected];
+    [_selectAllBtn setTitle:[OALocalizedString(@"shared_string_select") uppercaseStringWithLocale:[NSLocale currentLocale]] forState:UIControlStateNormal];
+    [_selectAllBtn setTitle:[OALocalizedString(@"shared_string_deselect") uppercaseStringWithLocale:[NSLocale currentLocale]] forState:UIControlStateSelected];
     [_selectAllBtn setTitleColor:UIColorFromRGB(color_primary_purple) forState:UIControlStateNormal];
     [_selectAllBtn.titleLabel setFont:_btnFont];
     [_selectAllBtn addTarget:self action:@selector(checkPress:) forControlEvents:UIControlEventTouchUpInside];
@@ -56,6 +56,7 @@ static UIFont *_btnFont;
     _title = [[UILabel alloc] initWithFrame:CGRectMake(kMargin + OAUtilities.getLeftMargin, 12.0, self.frame.size.width - textSize.width - kMargin * 2 - OAUtilities.getLeftMargin * 2, self.frame.size.height - 10.0)];
     _title.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     _title.font = _btnFont;
+    _title.adjustsFontForContentSizeCategory = YES;
     _title.textColor = [UIColor colorWithRed:0.427f green:0.427f blue:0.447f alpha:1.00f]; //6D6D72
     [self addSubview:self.title];
     

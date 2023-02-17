@@ -12,11 +12,9 @@
 #import "OAQuickActionRegistry.h"
 #import "OAQuickAction.h"
 #import "OrderedDictionary.h"
-#import "OAIconTitleButtonCell.h"
+#import "OAButtonTableViewCell.h"
 #import "OASizes.h"
 #import "OAQuickActionType.h"
-
-#define kHeaderViewFont [UIFont systemFontOfSize:15.0]
 
 @interface OAAddQuickActionViewController () <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet UIView *navBarView;
@@ -103,7 +101,7 @@
 
     _actions = [OrderedDictionary dictionaryWithDictionary:mapping];
     
-    _tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"quick_action_add_actions_descr") font:kHeaderViewFont textColor:UIColor.blackColor lineSpacing:0.0 isTitle:NO];
+    _tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"quick_action_add_actions_descr") font:kHeaderDescriptionFont textColor:UIColor.blackColor isBigTitle:NO];
 }
 
 -(void) setupSearchView
@@ -130,7 +128,13 @@
 
 - (void)applyLocalization
 {
-    _titleView.text = OALocalizedString(@"add_action");
+    _titleView.text = OALocalizedString(@"quick_action_new_action");
+}
+
+-(void) addAccessibilityLabels
+{
+    self.backBtn.accessibilityLabel = OALocalizedString(@"shared_string_back");
+    self.searchBtn.accessibilityLabel = OALocalizedString(@"shared_string_search");
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -142,7 +146,7 @@
         _searchFieldContainer.frame = searchBarFrame;
         
         CGFloat textWidth = DeviceScreenWidth - 32.0 - OAUtilities.getLeftMargin * 2;
-        UIFont *labelFont = [UIFont systemFontOfSize:15.0];
+        UIFont *labelFont = [UIFont scaledSystemFontOfSize:15.0];
         CGSize labelSize = [OAUtilities calculateTextBounds:OALocalizedString(@"quick_action_add_actions_descr") width:textWidth font:labelFont];
         _tableHeaderView.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, labelSize.height + 30.0);
         _tableHeaderView.subviews.firstObject.frame = CGRectMake(16.0 + OAUtilities.getLeftMargin, 20.0, textWidth, labelSize.height);
@@ -228,40 +232,40 @@
     OAQuickActionType *action = [self getItem:indexPath];
     if (action)
     {
-        OAIconTitleButtonCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleButtonCell getCellIdentifier]];
+        OAButtonTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAButtonTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleButtonCell getCellIdentifier] owner:self options:nil];
-            cell = (OAIconTitleButtonCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAButtonTableViewCell *) nib[0];
+            [cell descriptionVisibility:NO];
+            [cell.button setTitle:nil forState:UIControlStateNormal];
         }
-        
         if (cell)
         {
-            cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
-            cell.titleView.text = action.name;
-            cell.iconView.image = [UIImage imageNamed:action.iconName];
-            if (cell.iconView.subviews.count > 0)
-                [[cell.iconView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
+            cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingToLeftOfContentWithIcon, 0., 0.);
+            cell.titleLabel.text = action.name;
+            cell.leftIconView.image = [UIImage imageNamed:action.iconName];
+            if (cell.leftIconView.subviews.count > 0)
+                [[cell.leftIconView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
             
             if (action.hasSecondaryIcon)
             {
                 OAQuickAction *act = [action createNew];
-                CGRect frame = CGRectMake(0., 0., cell.iconView.frame.size.width, cell.iconView.frame.size.height);
+                CGRect frame = CGRectMake(0., 0., cell.leftIconView.frame.size.width, cell.leftIconView.frame.size.height);
                 UIImage *imgBackground = [UIImage templateImageNamed:@"ic_custom_compound_action_background"];
                 UIImageView *background = [[UIImageView alloc] initWithImage:imgBackground];
                 [background setTintColor:UIColor.whiteColor];
-                [cell.iconView addSubview:background];
+                [cell.leftIconView addSubview:background];
                 UIImage *img = [UIImage imageNamed:act.getSecondaryIconName];
                 UIImageView *view = [[UIImageView alloc] initWithImage:img];
                 view.frame = frame;
-                [cell.iconView addSubview:view];
+                [cell.leftIconView addSubview:view];
             }
-            [cell setButtonText:nil];
-            cell.buttonView.tag = indexPath.section << 10 | indexPath.row;
-            [cell.buttonView setImage:[[UIImage imageNamed:@"ic_custom_plus"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] forState:UIControlStateNormal];
-            [cell.buttonView removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
-            [cell.buttonView addTarget:self action:@selector(addAction:) forControlEvents:UIControlEventTouchUpInside];
-            cell.buttonView.imageEdgeInsets = UIEdgeInsetsMake(0., cell.buttonView.frame.size.width - 30, 0, 0);
+            cell.button.tag = indexPath.section << 10 | indexPath.row;
+            [cell.button setImage:[[UIImage imageNamed:@"ic_custom_plus"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]
+                         forState:UIControlStateNormal];
+            [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
+            [cell.button addTarget:self action:@selector(addAction:) forControlEvents:UIControlEventTouchUpInside];
         }
         return cell;
     }

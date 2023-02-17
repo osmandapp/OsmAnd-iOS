@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21225" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21207"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -15,8 +15,7 @@
                 <outlet property="backImageButton" destination="VY7-at-aSe" id="7Bs-V0-T43"/>
                 <outlet property="bottomBarView" destination="L3y-hy-OUi" id="sT9-8n-dVL"/>
                 <outlet property="bottomViewHeigh" destination="EeE-6d-k0f" id="8Xa-dF-YLC"/>
-                <outlet property="cancelButtonLeftMarginNoIcon" destination="WDL-fk-eK7" id="tZd-sT-1QL"/>
-                <outlet property="cancelButtonLeftMarginWithIcon" destination="1vg-Pu-W0u" id="VAS-be-C5b"/>
+                <outlet property="buttonSeparator" destination="UVn-Dp-Y28" id="qvi-K9-HPg"/>
                 <outlet property="navBarHeightConstraint" destination="BeD-vI-G7t" id="xMg-eK-ELs"/>
                 <outlet property="navBarView" destination="z1H-Xh-Vqx" id="Aoj-R8-MfJ"/>
                 <outlet property="primaryBottomButton" destination="BaW-Xn-8jB" id="UMw-gs-His"/>
@@ -42,57 +41,80 @@
                     <rect key="frame" x="0.0" y="48" width="414" height="706"/>
                     <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                 </tableView>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="z1H-Xh-Vqx" userLabel="navBarView">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="z1H-Xh-Vqx" userLabel="Navigation Bar View">
                     <rect key="frame" x="0.0" y="0.0" width="414" height="92"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="S7C-be-DKq" userLabel="Navigation Bar Container">
+                            <rect key="frame" x="0.0" y="48" width="414" height="44"/>
+                            <subviews>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VY7-at-aSe" userLabel="Back Button">
+                                    <rect key="frame" x="10" y="7" width="30" height="30"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="30" id="HOu-up-JIv"/>
+                                        <constraint firstAttribute="height" constant="30" id="ZpB-Dr-yKO"/>
+                                    </constraints>
+                                    <color key="tintColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                    <state key="normal" image="ic_navbar_chevron.png"/>
+                                    <connections>
+                                        <action selector="backImageButtonPressed:" destination="-1" eventType="touchUpInside" id="BQt-UI-rbS"/>
+                                    </connections>
+                                </button>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kXa-gs-sfl" userLabel="Cancel Button">
+                                    <rect key="frame" x="16" y="0.0" width="55" height="44"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="44" id="b6d-sH-jMu"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                                    <state key="normal" title="Cancel">
+                                        <color key="titleColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                    </state>
+                                    <connections>
+                                        <action selector="backButtonPressed:" destination="-1" eventType="touchUpInside" id="kSm-Xn-0QG"/>
+                                    </connections>
+                                </button>
+                                <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j9D-Qp-mxe" userLabel="Title Label">
+                                    <rect key="frame" x="207" y="0.0" width="0.0" height="44"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="44" id="oV9-hp-idC"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                                    <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Emr-yd-xz4" userLabel="Additional Button">
+                                    <rect key="frame" x="325" y="0.0" width="73" height="44"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="44" id="omu-HG-x8E"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                                    <state key="normal" title="Select all">
+                                        <color key="titleColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                    </state>
+                                    <connections>
+                                        <action selector="additionalNavBarButtonPressed:" destination="-1" eventType="touchUpInside" id="p0H-rf-yu1"/>
+                                    </connections>
+                                </button>
+                            </subviews>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstItem="kXa-gs-sfl" firstAttribute="centerY" secondItem="S7C-be-DKq" secondAttribute="centerY" id="6Dc-Ca-G1H"/>
+                                <constraint firstItem="j9D-Qp-mxe" firstAttribute="centerY" secondItem="S7C-be-DKq" secondAttribute="centerY" id="YZe-Ho-Koz"/>
+                                <constraint firstItem="VY7-at-aSe" firstAttribute="centerY" secondItem="S7C-be-DKq" secondAttribute="centerY" id="ZEW-2K-t9R"/>
+                                <constraint firstItem="Emr-yd-xz4" firstAttribute="centerY" secondItem="S7C-be-DKq" secondAttribute="centerY" id="whH-sv-w3Z"/>
+                            </constraints>
+                        </view>
+                    </subviews>
                     <color key="backgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.95294117649999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstItem="VY7-at-aSe" firstAttribute="leading" secondItem="z1H-Xh-Vqx" secondAttribute="leadingMargin" constant="2" id="3cw-13-QZs"/>
+                        <constraint firstAttribute="bottom" secondItem="S7C-be-DKq" secondAttribute="bottom" id="5Uu-0Q-bGg"/>
+                        <constraint firstItem="S7C-be-DKq" firstAttribute="leading" secondItem="z1H-Xh-Vqx" secondAttribute="leading" id="KM4-Zb-E3T"/>
+                        <constraint firstItem="j9D-Qp-mxe" firstAttribute="centerX" secondItem="z1H-Xh-Vqx" secondAttribute="centerX" id="NUf-5c-P8e"/>
+                        <constraint firstAttribute="trailingMargin" secondItem="Emr-yd-xz4" secondAttribute="trailing" constant="8" id="TEH-Xu-1GE"/>
+                        <constraint firstItem="kXa-gs-sfl" firstAttribute="leading" secondItem="z1H-Xh-Vqx" secondAttribute="leadingMargin" constant="8" id="oUa-mN-PA4"/>
+                        <constraint firstAttribute="trailing" secondItem="S7C-be-DKq" secondAttribute="trailing" id="xK8-m2-1ZL"/>
+                    </constraints>
                 </view>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kXa-gs-sfl">
-                    <rect key="frame" x="30" y="48" width="55" height="44"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="44" id="b6d-sH-jMu"/>
-                    </constraints>
-                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
-                    <state key="normal" title="Cancel">
-                        <color key="titleColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
-                    </state>
-                    <connections>
-                        <action selector="backButtonPressed:" destination="-1" eventType="touchUpInside" id="hHf-xD-cwb"/>
-                    </connections>
-                </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VY7-at-aSe">
-                    <rect key="frame" x="10" y="54" width="30" height="30"/>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="30" id="HOu-up-JIv"/>
-                        <constraint firstAttribute="height" constant="30" id="ZpB-Dr-yKO"/>
-                    </constraints>
-                    <color key="tintColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
-                    <state key="normal" image="ic_navbar_chevron.png"/>
-                    <connections>
-                        <action selector="backImageButtonPressed:" destination="-1" eventType="touchUpInside" id="BQt-UI-rbS"/>
-                    </connections>
-                </button>
-                <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j9D-Qp-mxe" userLabel="navbar title label">
-                    <rect key="frame" x="207" y="48" width="0.0" height="44"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="44" id="oV9-hp-idC"/>
-                    </constraints>
-                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
-                    <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    <nil key="highlightedColor"/>
-                </label>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Emr-yd-xz4">
-                    <rect key="frame" x="325" y="48" width="73" height="44"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="44" id="omu-HG-x8E"/>
-                    </constraints>
-                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
-                    <state key="normal" title="Select all">
-                        <color key="titleColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
-                    </state>
-                    <connections>
-                        <action selector="additionalNavBarButtonPressed:" destination="-1" eventType="touchUpInside" id="p0H-rf-yu1"/>
-                    </connections>
-                </button>
                 <view contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" translatesAutoresizingMaskIntoConstraints="NO" id="L3y-hy-OUi">
                     <rect key="frame" x="0.0" y="754" width="414" height="142"/>
                     <subviews>
@@ -151,27 +173,19 @@
             <viewLayoutGuide key="safeArea" id="3w3-gS-5vz"/>
             <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="kXa-gs-sfl" firstAttribute="leading" secondItem="3w3-gS-5vz" secondAttribute="leading" constant="30" id="1vg-Pu-W0u"/>
                 <constraint firstItem="L3y-hy-OUi" firstAttribute="trailing" secondItem="mrf-Nc-zcj" secondAttribute="trailing" id="327-JA-Eo7"/>
                 <constraint firstItem="z1H-Xh-Vqx" firstAttribute="leading" secondItem="mrf-Nc-zcj" secondAttribute="leading" id="3jf-Lw-BUF"/>
                 <constraint firstItem="L3y-hy-OUi" firstAttribute="top" secondItem="047-sX-bmi" secondAttribute="bottom" id="3zT-Ng-etm"/>
-                <constraint firstItem="3w3-gS-5vz" firstAttribute="trailing" secondItem="Emr-yd-xz4" secondAttribute="trailing" constant="16" id="6QD-D0-fKn"/>
                 <constraint firstItem="3w3-gS-5vz" firstAttribute="bottom" secondItem="L3y-hy-OUi" secondAttribute="top" priority="999" constant="108" id="A6v-DD-5g0"/>
-                <constraint firstItem="z1H-Xh-Vqx" firstAttribute="bottom" secondItem="3w3-gS-5vz" secondAttribute="top" priority="750" constant="44" id="BeD-vI-G7t"/>
-                <constraint firstItem="kXa-gs-sfl" firstAttribute="top" secondItem="3w3-gS-5vz" secondAttribute="top" id="MGh-G1-cob"/>
+                <constraint firstItem="z1H-Xh-Vqx" firstAttribute="bottom" secondItem="3w3-gS-5vz" secondAttribute="top" constant="44" id="BeD-vI-G7t"/>
                 <constraint firstItem="z1H-Xh-Vqx" firstAttribute="top" secondItem="mrf-Nc-zcj" secondAttribute="top" id="MyA-mE-gyB"/>
-                <constraint firstItem="Emr-yd-xz4" firstAttribute="top" secondItem="3w3-gS-5vz" secondAttribute="top" id="QGK-dX-Ucy"/>
-                <constraint firstItem="j9D-Qp-mxe" firstAttribute="bottom" secondItem="z1H-Xh-Vqx" secondAttribute="bottom" id="Ts8-PM-dju"/>
                 <constraint firstItem="z1H-Xh-Vqx" firstAttribute="trailing" secondItem="mrf-Nc-zcj" secondAttribute="trailing" id="VCk-ht-Nj5"/>
-                <constraint firstItem="kXa-gs-sfl" firstAttribute="leading" secondItem="3w3-gS-5vz" secondAttribute="leading" priority="999" constant="16" id="WDL-fk-eK7"/>
-                <constraint firstItem="j9D-Qp-mxe" firstAttribute="centerX" secondItem="z1H-Xh-Vqx" secondAttribute="centerX" id="bAB-Fr-jmb"/>
-                <constraint firstItem="VY7-at-aSe" firstAttribute="top" secondItem="3w3-gS-5vz" secondAttribute="top" constant="6" id="dgD-TD-aFT"/>
                 <constraint firstAttribute="bottom" secondItem="L3y-hy-OUi" secondAttribute="bottom" id="gjD-G8-rb0"/>
                 <constraint firstItem="047-sX-bmi" firstAttribute="leading" secondItem="mrf-Nc-zcj" secondAttribute="leading" id="iu1-97-N7o"/>
                 <constraint firstAttribute="bottom" secondItem="047-sX-bmi" secondAttribute="bottom" priority="999" id="lBv-pO-4t0"/>
                 <constraint firstItem="047-sX-bmi" firstAttribute="trailing" secondItem="mrf-Nc-zcj" secondAttribute="trailing" id="sSo-KD-uVY"/>
                 <constraint firstItem="L3y-hy-OUi" firstAttribute="leading" secondItem="mrf-Nc-zcj" secondAttribute="leading" id="tcQ-Au-p8U"/>
-                <constraint firstItem="VY7-at-aSe" firstAttribute="leading" secondItem="3w3-gS-5vz" secondAttribute="leading" constant="10" id="tj2-G3-XnQ"/>
+                <constraint firstItem="3w3-gS-5vz" firstAttribute="top" secondItem="S7C-be-DKq" secondAttribute="top" id="ul2-8h-ur0"/>
                 <constraint firstItem="047-sX-bmi" firstAttribute="top" secondItem="3w3-gS-5vz" secondAttribute="top" id="wVW-pC-sp1"/>
             </constraints>
             <point key="canvasLocation" x="213.04347826086959" y="6.6964285714285712"/>

@@ -65,7 +65,7 @@
 
 - (void) applyLocalization
 {
-    self.titleView.text = OALocalizedString(@"osm_editing_lost_changes_title");
+    self.titleView.text = OALocalizedString(@"exit_without_saving");
     [self.exitButton setTitle:OALocalizedString(@"shared_string_exit") forState:UIControlStateNormal];
     [self.saveButton setTitle:OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
     [self.cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
@@ -83,7 +83,7 @@
     
     width -= 2 * kHorizontalMargin;
     CGFloat headerHeight = self.headerView.frame.size.height;
-    CGFloat textHeight = [OAUtilities calculateTextBounds:OALocalizedString(@"plan_route_exit_message") width:width font:[UIFont systemFontOfSize:15.]].height + kLabelVerticalMargin * 2;
+    CGFloat textHeight = [OAUtilities calculateTextBounds:OALocalizedString(@"plan_route_exit_message") width:width font:[UIFont scaledSystemFontOfSize:15.]].height + kLabelVerticalMargin * 2;
     CGFloat contentHeight = textHeight + 2 * kButtonHeight + 2 * kButtonsVerticalMargin;
     CGFloat buttonsHeight = [self buttonsViewHeight];
     return headerHeight + contentHeight + buttonsHeight;
@@ -106,7 +106,7 @@
     [_data addObject: @{
         @"type" : [OAFilledButtonCell getCellIdentifier],
         @"title" : OALocalizedString(@"shared_string_exit"),
-        @"buttonColor" : UIColorFromRGB(color_route_button_inactive),
+        @"buttonColor" : UIColorFromRGB(color_button_gray_background),
         @"textColor" : UIColorFromRGB(color_primary_purple),
         @"action": @"exitButtonPressed"
     }];

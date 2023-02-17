@@ -9,7 +9,7 @@
 #import "OAMainSettingsViewController.h"
 #import "OAIconTitleValueCell.h"
 #import "OAMultiIconTextDescCell.h"
-#import "OAIconTextDescSwitchCell.h"
+#import "OASwitchTableViewCell.h"
 #import "OATitleRightIconCell.h"
 #import "OAAppSettings.h"
 #import "Localization.h"
@@ -20,7 +20,7 @@
 #import "OAAutoObserverProxy.h"
 #import "OAPurchasesViewController.h"
 #import "OABackupHelper.h"
-
+#import "OASizes.h"
 #import "OACreateProfileViewController.h"
 #import "OARearrangeProfilesViewController.h"
 #import "OAProfileNavigationSettingsViewController.h"
@@ -41,13 +41,12 @@
 {
     NSArray<NSArray *> *_data;
     OAAppSettings *_settings;
-    
-    OAAutoObserverProxy* _appModesAvailabilityChangeObserver;
-    OAAutoObserverProxy* _appModeChangedObservable;
-    
+
     OAApplicationMode *_targetAppMode;
     NSString *_targetScreenKey;
 }
+
+#pragma mark - Initialization
 
 - (instancetype) initWithTargetAppMode:(OAApplicationMode *)mode targetScreenKey:(NSString *)targetScreenKey
 {
@@ -60,36 +59,43 @@
     return self;
 }
 
-- (void) applyLocalization
+- (void)commonInit
 {
-    _titleView.text = OALocalizedString(@"sett_settings");
+    _settings = [OAAppSettings sharedManager];
 }
 
-- (void) viewDidLoad
+- (void)registerObservers
 {
-    [super viewDidLoad];
-    self.settingsTableView.rowHeight = UITableViewAutomaticDimension;
-    self.settingsTableView.estimatedRowHeight = kEstimatedRowHeight;
-    
-    _settings = OAAppSettings.sharedManager;
-    
-    _appModesAvailabilityChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                       withHandler:@selector(onAvailableAppModesChanged)
-                                                        andObserve:[OsmAndApp instance].availableAppModesChangedObservable];
-    
-    _appModeChangedObservable = [[OAAutoObserverProxy alloc] initWith:self
-                                                          withHandler:@selector(onAvailableAppModesChanged)
-                                                           andObserve:OsmAndApp.instance.data.applicationModeChangedObservable];
+    [self addObserver:[[OAAutoObserverProxy alloc] initWith:self
+                                                withHandler:@selector(onAvailableAppModesChanged)
+                                                 andObserve:[OsmAndApp instance].availableAppModesChangedObservable]];
+    [self addObserver:[[OAAutoObserverProxy alloc] initWith:self
+                                                withHandler:@selector(onAvailableAppModesChanged)
+                                                 andObserve:OsmAndApp.instance.data.applicationModeChangedObservable]];
 }
+
+#pragma mark - Base UI
+
+- (NSString *)getTitle
+{
+    return OALocalizedString(@"shared_string_settings");
+}
+
+- (EOABaseNavbarColorScheme)getNavbarColorScheme
+{
+    return EOABaseNavbarColorSchemeOrange;
+}
+
+- (void)addAccessibilityLabels
+{
+    self.leftNavbarButton.accessibilityLabel = OALocalizedString(@"shared_string_back");
+}
+
+#pragma mark - UIViewController
 
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self.settingsTableView setDataSource: self];
-    [self.settingsTableView setDelegate:self];
-    self.settingsTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-    [self.settingsTableView setSeparatorInset:UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0)];
-    [self setupView];
 
     if (_targetAppMode)
     {
@@ -101,16 +107,11 @@
     }
 }
 
-- (void)dealloc
-{
-    [_appModesAvailabilityChangeObserver detach];
-    [_appModeChangedObservable detach];
-}
+#pragma mark - Table data
 
-- (void) setupView
+- (void)generateData
 {
-    OAAppSettings* settings = [OAAppSettings sharedManager];
-    OAApplicationMode *appMode = settings.applicationMode.get;
+    OAApplicationMode *appMode = _settings.applicationMode.get;
     NSMutableArray *data = [NSMutableArray new];
     
     [data addObject:@[
@@ -153,7 +154,7 @@
         [profilesSection addObject:@{
             @"name" : @"profile_val",
             @"app_mode" : OAApplicationMode.allPossibleValues[i],
-            @"type" : i == 0 ? [OAMultiIconTextDescCell getCellIdentifier] : [OAIconTextDescSwitchCell getCellIdentifier],
+            @"type" : i == 0 ? [OAMultiIconTextDescCell getCellIdentifier] : [OASwitchTableViewCell getCellIdentifier],
             @"isColored" : @NO
         }];
     }
@@ -166,7 +167,7 @@
     }];
 
     [profilesSection addObject:@{
-        @"title" : OALocalizedString(@"edit_profile_list"),
+        @"title" : OALocalizedString(@"reorder_profiles"),
         @"img" : @"ic_custom_edit",
         @"type" : [OATitleRightIconCell getCellIdentifier],
         @"name" : @"edit_profiles"
@@ -209,56 +210,42 @@
     return _data[indexPath.section][indexPath.row];
 }
 
-- (void) onAppModeSwitchChanged:(UISwitch *)sender
+- (NSString *)getTitleForHeader:(NSInteger)section
 {
-    if (sender.tag < OAApplicationMode.allPossibleValues.count)
-    {
-        OAApplicationMode *am = OAApplicationMode.allPossibleValues[sender.tag];
-        [OAApplicationMode changeProfileAvailability:am isSelected:sender.isOn];
-    }
+    if (section == 1)
+        return OALocalizedString(@"selected_profile");
+    else if (section == 2)
+        return OALocalizedString(@"application_profiles");
+    else if (section == 3)
+        return OALocalizedString(@"local_backup");
+
+    return nil;
 }
 
-- (void)onAvailableAppModesChanged
+- (NSString *)getTitleForFooter:(NSInteger)section
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self setupView];
-        [self.settingsTableView reloadData];
-    });
+    if (section == 0)
+        return OALocalizedString(@"global_settings_descr");
+    else if (section == 2)
+        return OALocalizedString(@"import_profile_descr");
+    else if (section == 3)
+        return OALocalizedString(@"local_backup_descr");
+
+    return nil;
 }
 
-- (void)onBackupIntoFilePressed
-{
-    OAExportItemsViewController *exportController = [[OAExportItemsViewController alloc] init];
-    [self.navigationController pushViewController:exportController animated:YES];
-}
-
-- (void)onRestoreFromFilePressed
-{
-    UIDocumentPickerViewController *documentPickerVC = [[UIDocumentPickerViewController alloc] initWithDocumentTypes:@[@"net.osmand.osf"] inMode:UIDocumentPickerModeImport];
-    documentPickerVC.allowsMultipleSelection = NO;
-    documentPickerVC.delegate = self;
-    [self presentViewController:documentPickerVC animated:YES completion:nil];
-}
-
-#pragma mark - UITableViewDataSource
-
-- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return _data.count;
-}
-
-- (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)rowsCount:(NSInteger)section
 {
     return _data[section].count;
 }
 
-- (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
     NSString *type = item[@"type"];
     if ([type isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
     {
-        OAIconTitleValueCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
+        OAIconTitleValueCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAIconTitleValueCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTitleValueCell getCellIdentifier] owner:self options:nil];
@@ -272,13 +259,13 @@
         {
             cell.textView.text = item[@"title"];
             cell.descriptionView.text = item[@"value"];
-            cell.leftIconView.image = [item[@"name"] isEqualToString:@"backup_restore"] ? [UIImage imageNamed:item[@"img"]] : [UIImage templateImageNamed:item[@"img"]];
+            cell.leftIconView.image = [item[@"name"] isEqualToString:@"backup_restore"] ? [UIImage rtlImageNamed:item[@"img"]] : [UIImage templateImageNamed:item[@"img"]];
         }
         return cell;
     }
     else if ([type isEqualToString:[OAMultiIconTextDescCell getCellIdentifier]])
     {
-        OAMultiIconTextDescCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAMultiIconTextDescCell getCellIdentifier]];
+        OAMultiIconTextDescCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAMultiIconTextDescCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMultiIconTextDescCell getCellIdentifier] owner:self options:nil];
@@ -290,7 +277,7 @@
         }
         OAApplicationMode *am = item[@"app_mode"];
         UIImage *img = am.getIcon;
-        cell.iconView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        cell.iconView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
         cell.iconView.tintColor = UIColorFromRGB(am.getIconColor);
         cell.textView.text = am.toHumanString;
         cell.descView.text = [self getProfileDescription:am];
@@ -301,22 +288,23 @@
             cell.backgroundColor = UIColor.whiteColor;
         return cell;
     }
-    else if ([type isEqualToString:[OAIconTextDescSwitchCell getCellIdentifier]])
+    else if ([type isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OAIconTextDescSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAIconTextDescSwitchCell getCellIdentifier]];
+        OASwitchTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextDescSwitchCell getCellIdentifier] owner:self options:nil];
-            cell = (OAIconTextDescSwitchCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASwitchTableViewCell *) nib[0];
+            cell.selectionStyle = UITableViewCellSelectionStyleDefault;
         }
         OAApplicationMode *am = item[@"app_mode"];
         BOOL isEnabled = [OAApplicationMode.values containsObject:am];
-        cell.separatorInset = UIEdgeInsetsMake(0.0, indexPath.row < OAApplicationMode.allPossibleValues.count - 1 ? 62.0 : 0.0, 0.0, 0.0);
+        cell.separatorInset = UIEdgeInsetsMake(0.0, indexPath.row < OAApplicationMode.allPossibleValues.count - 1 ? kPaddingToLeftOfContentWithIcon : 0.0, 0.0, 0.0);
         UIImage *img = am.getIcon;
-        cell.leftIconView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        cell.leftIconView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
         cell.leftIconView.tintColor = isEnabled ? UIColorFromRGB(am.getIconColor) : UIColorFromRGB(color_tint_gray);
         cell.titleLabel.text = am.toHumanString;
-        cell.descLabel.text = [self getProfileDescription:am];
+        cell.descriptionLabel.text = [self getProfileDescription:am];
         cell.switchView.tag = indexPath.row;
         BOOL isDefault = am == OAApplicationMode.DEFAULT;
         [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
@@ -325,13 +313,13 @@
             [cell.switchView setOn:isEnabled];
             [cell.switchView addTarget:self action:@selector(onAppModeSwitchChanged:) forControlEvents:UIControlEventValueChanged];
         }
-        cell.switchView.hidden = isDefault;
-        cell.dividerView.hidden = isDefault;
+        [cell switchVisibility:!isDefault];
+        [cell dividerVisibility:!isDefault];
         return cell;
     }
     else if ([type isEqualToString:[OATitleRightIconCell getCellIdentifier]])
     {
-        OATitleRightIconCell* cell = [tableView dequeueReusableCellWithIdentifier:[OATitleRightIconCell getCellIdentifier]];
+        OATitleRightIconCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OATitleRightIconCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleRightIconCell getCellIdentifier] owner:self options:nil];
@@ -339,17 +327,17 @@
             cell.separatorInset = UIEdgeInsetsMake(0.0, 16.0, 0.0, 0.0);
             cell.titleView.textColor = UIColorFromRGB(color_primary_purple);
             cell.iconView.tintColor = UIColorFromRGB(color_primary_purple);
-            cell.titleView.font = [UIFont systemFontOfSize:17. weight:UIFontWeightSemibold];
+            cell.titleView.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightSemibold];
         }
         if ([item[@"regular_text"] boolValue])
         {
             cell.titleView.textColor = UIColor.blackColor;
-            cell.titleView.font = [UIFont systemFontOfSize:17.];
+            cell.titleView.font = [UIFont scaledSystemFontOfSize:17.];
         }
         else
         {
             cell.titleView.textColor = UIColorFromRGB(color_primary_purple);
-            cell.titleView.font = [UIFont systemFontOfSize:17. weight:UIFontWeightSemibold];
+            cell.titleView.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightSemibold];
         }
         cell.titleView.text = item[@"title"];
         [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]]];
@@ -358,47 +346,31 @@
     return nil;
 }
 
-- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+- (NSInteger)sectionsCount
 {
-    if (section == 1)
-        return OALocalizedString(@"selected_profile");
-    else if (section == 2)
-        return OALocalizedString(@"app_profiles");
-    else if (section == 3)
-        return OALocalizedString(@"local_backup");
-    return nil;
+    return _data.count;
 }
 
-- (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
-{
-    if (section == 0)
-        return OALocalizedString(@"global_settings_descr");
-    else if (section == 2)
-        return OALocalizedString(@"import_profile_descr");
-    else if (section == 3)
-        return OALocalizedString(@"local_backup_descr");
-    return nil;
-}
-
-- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
-{
-    UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
-    [header.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
-}
-
-- (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section
-{
-    UITableViewHeaderFooterView *footer = (UITableViewHeaderFooterView *)view;
-    [footer.textLabel setTextColor:UIColorFromRGB(color_text_footer)];
-}
-
-#pragma mark - UITableViewDelegate
-
-- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)onRowPressed:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
     [self selectSettingMain:item];
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+#pragma mark - Selectors
+
+- (void)onBackupIntoFilePressed
+{
+    OAExportItemsViewController *exportController = [[OAExportItemsViewController alloc] init];
+    [self.navigationController pushViewController:exportController animated:YES];
+}
+
+- (void)onRestoreFromFilePressed
+{
+    UIDocumentPickerViewController *documentPickerVC = [[UIDocumentPickerViewController alloc] initWithDocumentTypes:@[@"net.osmand.osf"] inMode:UIDocumentPickerModeImport];
+    documentPickerVC.allowsMultipleSelection = NO;
+    documentPickerVC.delegate = self;
+    [self presentViewController:documentPickerVC animated:YES completion:nil];
 }
 
 - (void) selectSettingMain:(NSDictionary *)item
@@ -450,7 +422,24 @@
     }
 }
 
-// MARK: UIDocumentPickerDelegate
+- (void) onAppModeSwitchChanged:(UISwitch *)sender
+{
+    if (sender.tag < OAApplicationMode.allPossibleValues.count)
+    {
+        OAApplicationMode *am = OAApplicationMode.allPossibleValues[sender.tag];
+        [OAApplicationMode changeProfileAvailability:am isSelected:sender.isOn];
+    }
+}
+
+- (void)onAvailableAppModesChanged
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self generateData];
+        [self.tableView reloadData];
+    });
+}
+
+#pragma mark - UIDocumentPickerDelegate
 
 - (void)documentPicker:(UIDocumentPickerViewController *)controller didPickDocumentsAtURLs:(NSArray<NSURL *> *)urls
 {

@@ -17,7 +17,7 @@
 #import "OAGPXDatabase.h"
 #import "OASegmentTableViewCell.h"
 #import "OAIconTextDescCell.h"
-#import "OASettingSwitchCell.h"
+#import "OASwitchTableViewCell.h"
 #import "OATitleRightIconCell.h"
 #import "OsmAndApp.h"
 #import "OARoutingHelper.h"
@@ -129,7 +129,7 @@
 
 - (void) applyLocalization
 {
-    self.titleView.font = [UIFont systemFontOfSize:17 weight:UIFontWeightMedium];
+    self.titleView.font = [UIFont scaledSystemFontOfSize:17 weight:UIFontWeightMedium];
     self.titleView.text = OALocalizedString(@"follow_track");
     [self.leftButton setTitle:OALocalizedString(@"shared_string_close") forState:UIControlStateNormal];
 }
@@ -156,7 +156,7 @@
     BOOL isSegment = _gpx.getNonEmptySegmentsCount > 1 && params != nil && params.selectedSegment != -1;
     if (isSegment)
     {
-        title = [NSString stringWithFormat:@"%@, %@", [NSString stringWithFormat:OALocalizedString(@"some_of"), params.selectedSegment + 1, _gpx.getNonEmptySegmentsCount], title];
+        title = [NSString stringWithFormat:@"%@, %@", [NSString stringWithFormat:OALocalizedString(@"of"), params.selectedSegment + 1, _gpx.getNonEmptySegmentsCount], title];
     }
     
     NSString *distance = gpxData ? [OAOsmAndFormatter getFormattedDistance:gpxData.totalDistance] : @"";
@@ -190,8 +190,8 @@
 	}];
 	
 	[items addObject:@{
-		@"type" : [OASettingSwitchCell getCellIdentifier],
-		@"title" : OALocalizedString(@"reverse_track_dir"),
+		@"type" : [OASwitchTableViewCell getCellIdentifier],
+		@"title" : OALocalizedString(@"gpx_option_reverse_route"),
 		@"img" : @"ic_custom_swap",
 		@"key" : @"reverse_track"
 	}];
@@ -208,7 +208,7 @@
 	
 	[data addObject:items];
     
-    NSString *navTypeTitle1 = OALocalizedString(@"nav_type_straight_line");
+    NSString *navTypeTitle1 = OALocalizedString(@"routing_profile_straightline");
     NSString *navTypeTitle2 = OARoutingHelper.sharedInstance.getAppMode.toHumanString;
     BOOL useRtePt = params.useIntermediatePointsRTE;
     [data addObject:@[
@@ -218,13 +218,13 @@
         },
         @{
             @"type" : [OASegmentTableViewCell getCellIdentifier],
-            @"title0" : OALocalizedString(@"start_of_track"),
+            @"title0" : OALocalizedString(@"start_of_the_track"),
             @"title1" : OALocalizedString(@"nearest_point"),
             @"key" : @"point_to_start"
         },
         @{
             @"type" : [OATitleRightIconCell getCellIdentifier],
-            @"title" : useRtePt ? OALocalizedString(@"connect_rp") : OALocalizedString(@"nav_type_title")
+            @"title" : useRtePt ? OALocalizedString(@"connect_rp") : OALocalizedString(@"nav_type_hint")
         },
         @{
             @"type" : [OASegmentTableViewCell getCellIdentifier],
@@ -311,12 +311,8 @@
             cell.separatorInset = UIEdgeInsetsMake(0, 20., 0, 0);
             
             cell.segmentControl.backgroundColor = [UIColorFromRGB(color_primary_purple) colorWithAlphaComponent:.1];
-            
-            if (@available(iOS 13.0, *))
-                cell.segmentControl.selectedSegmentTintColor = UIColorFromRGB(color_primary_purple);
-            else
-                cell.segmentControl.tintColor = UIColorFromRGB(color_primary_purple);
-            UIFont *font = [UIFont systemFontOfSize:15. weight:UIFontWeightSemibold];
+            cell.segmentControl.selectedSegmentTintColor = UIColorFromRGB(color_primary_purple);
+            UIFont *font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
             [cell.segmentControl setTitleTextAttributes:@{NSForegroundColorAttributeName : UIColor.whiteColor, NSFontAttributeName : font} forState:UIControlStateSelected];
             [cell.segmentControl setTitleTextAttributes:@{NSForegroundColorAttributeName : UIColorFromRGB(color_primary_purple), NSFontAttributeName : font} forState:UIControlStateNormal];
         }
@@ -397,31 +393,25 @@
         }
         return cell;
     }
-    else if ([type isEqualToString:[OASettingSwitchCell getCellIdentifier]])
+    else if ([type isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OASettingSwitchCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
+        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
-            cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
-            cell.descriptionView.hidden = YES;
-            
-            [cell setSecondaryImage:nil];
-            
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASwitchTableViewCell *) nib[0];
+            [cell descriptionVisibility:NO];
             cell.separatorInset = UIEdgeInsetsMake(0., 66., 0., 0.);
+            cell.leftIconView.tintColor = UIColorFromRGB(color_primary_purple);
         }
-        
         if (cell)
         {
-            cell.textView.text = item[@"title"];
-            cell.imgView.image = [UIImage templateImageNamed:item[@"img"]];
-            cell.imgView.tintColor = UIColorFromRGB(color_primary_purple);
+            cell.titleLabel.text = item[@"title"];
+            cell.leftIconView.image = [UIImage templateImageNamed:item[@"img"]];
+
             [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             cell.switchView.on = _reverseParam.isSelected;
             [_reverseParam setControlAction:cell.switchView];
-            
-            if ([cell needsUpdateConstraints])
-                [cell setNeedsUpdateConstraints];
         }
         return cell;
     }
@@ -462,7 +452,7 @@
         return 0.001;
     else
     {
-        return [OAUtilities calculateTextBounds:OALocalizedString(@"routing_settings") width:tableView.bounds.size.width font:[UIFont systemFontOfSize:13]].height + 38;
+        return [OAUtilities calculateTextBounds:OALocalizedString(@"routing_settings") width:tableView.bounds.size.width font:[UIFont scaledSystemFontOfSize:13]].height + 38;
     }
 }
 

@@ -114,7 +114,7 @@
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NCn-9w-B8g" userLabel="Done Button">
                             <rect key="frame" x="0.0" y="0.0" width="74" height="50"/>
                             <color key="backgroundColor" white="1" alpha="0.80377358489999995" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
+                            <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                             <color key="tintColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <state key="normal" title="Done">
                                 <color key="titleColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>

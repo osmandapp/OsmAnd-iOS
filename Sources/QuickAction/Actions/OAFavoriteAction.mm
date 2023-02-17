@@ -23,7 +23,7 @@
 #import "OAQuickActionType.h"
 #import "OAIconTitleValueCell.h"
 #import "OASwitchTableViewCell.h"
-#import "OATextInputIconCell.h"
+#import "OAInputTableViewCell.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/IFavoriteLocation.h>
@@ -149,21 +149,21 @@ static OAQuickActionType *TYPE;
     [data setObject:@[@{
                           @"type" : [OASwitchTableViewCell getCellIdentifier],
                           @"key" : KEY_DIALOG,
-                          @"title" : OALocalizedString(@"quick_actions_show_dialog"),
+                          @"title" : OALocalizedString(@"quick_action_interim_dialog"),
                           @"value" : @([self.getParams[KEY_DIALOG] boolValue]),
                           },
                       @{
                           @"footer" : OALocalizedString(@"quick_action_dialog_descr")
                           }] forKey:OALocalizedString(@"shared_string_options")];
     [data setObject:@[@{
-                          @"type" : [OATextInputIconCell getCellIdentifier],
+                          @"type" : [OAInputTableViewCell getCellIdentifier],
                           @"key" : KEY_NAME,
                           @"title" : self.getParams[KEY_NAME] ? self.getParams[KEY_NAME] : @"",
                           @"hint" : OALocalizedString(@"quick_action_template_name"),
                           @"img" : @"ic_custom_text_field_name"
                           },
                       @{
-                          @"footer" : OALocalizedString(@"quick_action_name_footer")
+                          @"footer" : OALocalizedString(@"quick_action_fav_name_descr")
                           }
                       ] forKey:kSectionNoName];
     
@@ -174,14 +174,14 @@ static OAQuickActionType *TYPE;
                           @"type" : [OAIconTitleValueCell getCellIdentifier],
                           @"key" : KEY_CATEGORY_NAME,
                           @"title" : OALocalizedString(@"fav_group"),
-                          @"value" : self.getParams[KEY_CATEGORY_NAME] ? self.getParams[KEY_CATEGORY_NAME] : OALocalizedString(@"favorites"),
+                          @"value" : self.getParams[KEY_CATEGORY_NAME] ? self.getParams[KEY_CATEGORY_NAME] : OALocalizedString(@"favorites_item"),
                           @"color" : @(defaultColor),
                           @"img" : @"ic_custom_folder"
                           },
                       @{
                           @"type" : [OAIconTitleValueCell getCellIdentifier],
                           @"key" : KEY_CATEGORY_COLOR,
-                          @"title" : OALocalizedString(@"fav_color"),
+                          @"title" : OALocalizedString(@"shared_string_color"),
                           @"value" : color ? color.name : @"",
                           @"color" : @(defaultColor)
                           },

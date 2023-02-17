@@ -90,11 +90,11 @@ typedef NS_ENUM(NSInteger, EOAOnlineSourceSetting)
         {
             
             [data addObject:@{
-                                @"text": OALocalizedString(@"res_elliptic_mercator"),
+                                @"text": OALocalizedString(@"edit_tilesource_elliptic_tile"),
                                 @"img": _isEllipticYTile ? @"menu_cell_selected.png" : @""
             }];
             [data addObject:@{
-                                @"text": OALocalizedString(@"res_pseudo_mercator"),
+                                @"text": OALocalizedString(@"pseudo_mercator_projection"),
                                 @"img": !_isEllipticYTile ? @"menu_cell_selected.png" : @""
             }];
             break;
@@ -102,11 +102,11 @@ typedef NS_ENUM(NSInteger, EOAOnlineSourceSetting)
         case EOAOnlineSourceSettingSourceFormat:
         {
             [data addObject:@{
-                                @"text": OALocalizedString(@"res_source_sqlite"),
+                                @"text": OALocalizedString(@"sqlite_db_file"),
                                 @"img": _sourceFormat == EOASourceFormatSQLite ? @"menu_cell_selected.png" : @""
             }];
             [data addObject:@{
-                                @"text": OALocalizedString(@"res_source_one_per_tile"),
+                                @"text": OALocalizedString(@"one_image_per_tile"),
                                 @"img": _sourceFormat == EOASourceFormatOnline ? @"menu_cell_selected.png" : @""
             }];
             break;

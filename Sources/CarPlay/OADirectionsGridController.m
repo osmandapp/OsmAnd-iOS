@@ -41,7 +41,7 @@
 
 - (NSArray<CPGridButton *> *) generateGridButtons
 {
-    CPGridButton *btnFav = [[CPGridButton alloc] initWithTitleVariants:@[OALocalizedString(@"favorites")] image:[UIImage imageNamed:@"ic_carplay_favorites"] handler:^(CPGridButton * _Nonnull barButton) {
+    CPGridButton *btnFav = [[CPGridButton alloc] initWithTitleVariants:@[OALocalizedString(@"favorites_item")] image:[UIImage imageNamed:@"ic_carplay_favorites"] handler:^(CPGridButton * _Nonnull barButton) {
         _favoritesListController = [[OACarPlayFavoritesListController alloc] initWithInterfaceController:self.interfaceController];
         [_favoritesListController present];
     }];
@@ -51,7 +51,7 @@
         [_categoriesListController present];
     }];
     
-    CPGridButton *btnSearch = [[CPGridButton alloc] initWithTitleVariants:@[OALocalizedString(@"shared_string_search")] image:[UIImage imageNamed:@"ic_carplay_search"] handler:^(CPGridButton * _Nonnull barButton) {
+    CPGridButton *btnSearch = [[CPGridButton alloc] initWithTitleVariants:@[OALocalizedString(@"address_search_desc")] image:[UIImage imageNamed:@"ic_carplay_search"] handler:^(CPGridButton * _Nonnull barButton) {
         _searchController = [[OACarPlayAddressSearchController alloc] initWithInterfaceController:self.interfaceController];
         [_searchController present];
     }];
@@ -61,7 +61,7 @@
         [_markersListController present];
     }];
     
-    CPGridButton *btnTracks = [[CPGridButton alloc] initWithTitleVariants:@[OALocalizedString(@"tracks")] image:[UIImage imageNamed:@"ic_carplay_tracks"] handler:^(CPGridButton * _Nonnull barButton) {
+    CPGridButton *btnTracks = [[CPGridButton alloc] initWithTitleVariants:@[OALocalizedString(@"shared_string_gpx_tracks")] image:[UIImage imageNamed:@"ic_carplay_tracks"] handler:^(CPGridButton * _Nonnull barButton) {
         _tracksListController = [[OACarPlayTracksListController alloc] initWithInterfaceController:self.interfaceController];
         [_tracksListController present];
     }];

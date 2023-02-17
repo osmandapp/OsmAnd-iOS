@@ -108,7 +108,7 @@
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
         btn.frame = CGRectMake(x, 4.0, w, h - 8.0);
         btn.autoresizingMask = UIViewAutoresizingFlexibleHeight;
-        [btn setImage:mode.getIcon forState:UIControlStateNormal];
+        [btn setImage:mode.getIcon.imageFlippedForRightToLeftLayoutDirection forState:UIControlStateNormal];
         btn.tintColor = UIColorFromRGB(mode.getIconColor);
         btn.backgroundColor = _selectedMode == mode ? [btn.tintColor colorWithAlphaComponent:0.2] : UIColor.clearColor;
         btn.layer.cornerRadius = 4.;

@@ -21,7 +21,7 @@
 #import "OAPOIViewController.h"
 #import "OAColors.h"
 #import "OACollapsableCoordinatesView.h"
-#import "OATextMultiViewCell.h"
+#import "OATextMultilineTableViewCell.h"
 #import "OAPOIHelper.h"
 #import "OANativeUtilities.h"
 
@@ -102,7 +102,7 @@
 {
     _originObject = [OAPOIHelper findPOIByOriginName:_wpt.getAmenityOriginName lat:_wpt.point.getLatitude lon:_wpt.point.getLongitude];
     if (!_originObject)
-        [_wpt getAmenity];
+        _originObject = [_wpt getAmenity];
 }
 
 - (void) buildTopRows:(NSMutableArray<OARowInfo *> *)rows
@@ -145,7 +145,9 @@
     {
         OAPOIViewController *builder = [[OAPOIViewController alloc] initWithPOI: _originObject];
         builder.location = CLLocationCoordinate2DMake(_wpt.point.position.latitude, _wpt.point.position.longitude);
-        [builder buildRowsInternal:rows];
+        NSMutableArray<OARowInfo *> *internalRows = [NSMutableArray array];
+        [builder buildRowsInternal:internalRows];
+        [rows addObjectsFromArray:internalRows];
     }
     else
     {
@@ -157,8 +159,8 @@
 
 - (void) buildWaypointsView:(NSMutableArray<OARowInfo *> *)rows
 {
-    NSString *name = OALocalizedString(@"all_group_points");
-    NSString *gpxName = self.wpt.docPath == nil ? OALocalizedString(@"track_recording_name") : [self.wpt.docPath.lastPathComponent stringByDeletingPathExtension];
+    NSString *name = OALocalizedString(@"context_menu_points_of_group");
+    NSString *gpxName = self.wpt.docPath == nil ? OALocalizedString(@"shared_string_currently_recording_track") : [self.wpt.docPath.lastPathComponent stringByDeletingPathExtension];
     UIColor *color = [self getItemColor];
     UIImage *icon = [UIImage templateImageNamed:@"ic_custom_folder"];
     
@@ -205,7 +207,7 @@
 
 - (NSString *) getCommonTypeStr
 {
-    return OALocalizedString(@"gpx_waypoint");
+    return OALocalizedString(@"shared_string_waypoint");
 }
 
 - (NSAttributedString *) getAttributedTypeStr
@@ -220,7 +222,7 @@
     NSMutableAttributedString *mutAttributedTypeStr = [[NSMutableAttributedString alloc] init];
     [mutAttributedTypeStr appendAttributedString:attributedTypeStr];
     [mutAttributedTypeStr appendAttributedString:[[NSAttributedString alloc] initWithString:address]];
-    [mutAttributedTypeStr addAttributes:@{ NSFontAttributeName : [UIFont systemFontOfSize:15],
+    [mutAttributedTypeStr addAttributes:@{ NSFontAttributeName : [UIFont scaledSystemFontOfSize:15],
                                            NSForegroundColorAttributeName : UIColorFromRGB(color_dialog_text_description_color_night) }
                                   range:NSMakeRange(0, mutAttributedTypeStr.length)];
     return mutAttributedTypeStr;

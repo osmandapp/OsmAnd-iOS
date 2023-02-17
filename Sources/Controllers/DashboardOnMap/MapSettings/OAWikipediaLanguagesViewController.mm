@@ -13,7 +13,7 @@
 #import "Localization.h"
 #import "OAColors.h"
 #import "OATableViewCustomHeaderView.h"
-#import "OASettingSwitchCell.h"
+#import "OASwitchTableViewCell.h"
 #import "OAMenuSimpleCellNoIcon.h"
 
 typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaLangSection)
@@ -112,7 +112,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaLangSection)
 
 - (void)applyLocalization
 {
-    self.titleLabel.text = OALocalizedString(@"language");
+    self.titleLabel.text = OALocalizedString(@"shared_string_language");
     [self.cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
     [self.doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
 }
@@ -123,7 +123,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaLangSection)
 
     NSMutableArray *dataArr = [NSMutableArray new];
     [dataArr addObject:@[@{
-                    @"type": [OASettingSwitchCell getCellIdentifier],
+                    @"type": [OASwitchTableViewCell getCellIdentifier],
                     @"title": OALocalizedString(@"shared_string_all_languages")
             }]];
 
@@ -243,7 +243,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaLangSection)
 
 - (CGFloat)getHeaderHeightForSection:(NSInteger)section
 {
-    return [OATableViewCustomHeaderView getHeight:[self getTextForHeader:section] width:self.tableView.frame.size.width yOffset:17. font:[UIFont systemFontOfSize:section == EOAMapSettingsWikipediaLangSectionAll ? 15.0 : 13.0]];
+    return [OATableViewCustomHeaderView getHeight:[self getTextForHeader:section] width:self.tableView.frame.size.width yOffset:17. font:[UIFont scaledSystemFontOfSize:section == EOAMapSettingsWikipediaLangSectionAll ? 15.0 : 13.0]];
 }
 
 - (void)selectDeselectItem:(NSIndexPath *)indexPath
@@ -291,21 +291,21 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaLangSection)
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:[OASettingSwitchCell getCellIdentifier]])
+    if ([item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OASettingSwitchCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
+        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
-            cell = (OASettingSwitchCell *) nib[0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASwitchTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
         }
         if (cell)
         {
-            cell.textView.text = item[@"title"];
-            cell.descriptionView.hidden = YES;
-            cell.imgView.hidden = YES;
+            cell.titleLabel.text = item[@"title"];
+
             [cell.switchView setOn:_isGlobalWikiPoiEnabled];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
@@ -396,7 +396,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaLangSection)
     OATableViewCustomHeaderView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
     NSString *text = [self getTextForHeader:section];
     vw.label.text = text;
-    vw.label.font = [UIFont systemFontOfSize:section == EOAMapSettingsWikipediaLangSectionAll ? 15.0 : 13.0];
+    vw.label.font = [UIFont scaledSystemFontOfSize:section == EOAMapSettingsWikipediaLangSectionAll ? 15.0 : 13.0];
     return vw;
 }
 

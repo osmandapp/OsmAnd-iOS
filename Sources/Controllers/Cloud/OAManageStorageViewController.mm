@@ -22,42 +22,26 @@
     OABackupHelper *_backupHelper;
 }
 
+#pragma mark - Initialization
+
 - (void)commonInit
 {
     _backupHelper = [OABackupHelper sharedInstance];
-    [super commonInit];
 }
 
-- (void)applyLocalization
+#pragma mark - Base UI
+
+- (NSString *)getTitle
 {
-    self.titleLabel.text = OALocalizedString(@"manage_storage");
-    [self.backButton setTitle:OALocalizedString(@"backup_data") forState:UIControlStateNormal];
+    return OALocalizedString(@"manage_storage");
 }
 
-- (EOARemoteFilesType)getRemoteFilesType
+- (NSString *)getLeftNavbarButtonTitle
 {
-    return EOARemoteFilesTypeUnique;
+    return OALocalizedString(@"backup_data");
 }
 
-- (void)onCellSelected
-{
-    NSDictionary *item = [self getItem:[self getSelectedIndexPath]];
-    if (![item[@"key"] isEqualToString:@"manage_storage_progress_cell"])
-        [self showClearTypeScreen:item[@"setting"]];
-}
-
-- (void)onTypeSelected:(OAExportSettingsType *)type selected:(BOOL)selected
-{
-}
-
-- (void)showClearTypeScreen:(OAExportSettingsType *)type
-{
-    OAManageTypeViewController *manageTypeViewController =
-            [[OAManageTypeViewController alloc] initWithSettingsType:type
-                                                                size:[self getItem:[self getSelectedIndexPath]][@"description"]];
-    manageTypeViewController.manageTypeDelegate = self;
-    [self.navigationController presentViewController:manageTypeViewController animated:YES completion:nil];
-}
+#pragma mark - Table data
 
 - (void)generateData
 {
@@ -85,7 +69,7 @@
     NSMutableDictionary *myPlacesData = [NSMutableDictionary dictionary];
     myPlacesData[@"key"] = @"my_places_storage_cell";
     myPlacesData[@"type"] = [OAIconTitleValueCell getCellIdentifier];
-    myPlacesData[@"title"] = OALocalizedString(@"my_places");
+    myPlacesData[@"title"] = OALocalizedString(@"shared_string_my_places");
     myPlacesData[@"has_empty_icon"] = @(YES);
     myPlacesData[@"icon_color"] = UIColorFromRGB(backup_restore_icons_yellow);
     [manageStorageCells addObject:myPlacesData];
@@ -100,7 +84,7 @@
 
     NSMutableArray<NSMutableDictionary *> *myPlacesCells = [NSMutableArray array];
     NSMutableDictionary *myPlacesSection = [NSMutableDictionary dictionary];
-    myPlacesSection[@"header"] = OALocalizedString(@"my_places");
+    myPlacesSection[@"header"] = OALocalizedString(@"shared_string_my_places");
     myPlacesSection[@"cells"] = myPlacesCells;
     [data addObject:myPlacesSection];
 
@@ -197,6 +181,35 @@
     }
 
     [self setData:data];
+}
+
+#pragma mark - Selectors
+
+- (void)onCellSelected
+{
+    NSDictionary *item = [self getItem:[self getSelectedIndexPath]];
+    if (![item[@"key"] isEqualToString:@"manage_storage_progress_cell"])
+        [self showClearTypeScreen:item[@"setting"]];
+}
+
+- (void)onTypeSelected:(OAExportSettingsType *)type selected:(BOOL)selected
+{
+}
+
+- (void)showClearTypeScreen:(OAExportSettingsType *)type
+{
+    OAManageTypeViewController *manageTypeViewController =
+            [[OAManageTypeViewController alloc] initWithSettingsType:type
+                                                                size:[self getItem:[self getSelectedIndexPath]][@"description"]];
+    manageTypeViewController.manageTypeDelegate = self;
+    [self.navigationController presentViewController:manageTypeViewController animated:YES completion:nil];
+}
+
+#pragma mark - Additions
+
+- (EOARemoteFilesType)getRemoteFilesType
+{
+    return EOARemoteFilesTypeUnique;
 }
 
 @end

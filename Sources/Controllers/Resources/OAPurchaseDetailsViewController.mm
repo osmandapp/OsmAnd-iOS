@@ -76,7 +76,7 @@
     else
     {
         BOOL isDepthContours = [_product.productIdentifier isEqualToString:kInAppId_Addon_Nautical];
-        self.titleView.text = isDepthContours ? OALocalizedString(@"product_title_sea_depth_contours") : _product.localizedTitle;
+        self.titleView.text = isDepthContours ? OALocalizedString(@"rendering_attr_depthContours_name") : _product.localizedTitle;
     }
     [self.backButton setTitle:@"" forState:UIControlStateNormal];
     [self.backButton setImage:[UIImage templateImageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
@@ -90,6 +90,11 @@
     self.tableView.delegate = self;
 }
 
+-(void) addAccessibilityLabels
+{
+    self.backButton.accessibilityLabel = OALocalizedString(@"shared_string_back");
+}
+
 - (void)generateData
 {
     NSMutableArray<NSDictionary *> *data = [NSMutableArray array];
@@ -98,7 +103,7 @@
 
     NSMutableDictionary *productDict = [NSMutableDictionary dictionary];
     productDict[@"type"] = [OATitleDescriptionBigIconCell getCellIdentifier];
-    productDict[@"title"] = isDepthContours ? OALocalizedString(@"product_title_sea_depth_contours") : _product.localizedTitle;
+    productDict[@"title"] = isDepthContours ? OALocalizedString(@"rendering_attr_depthContours_name") : _product.localizedTitle;
     UIImage *icon = [self getIcon];
     if (icon)
         productDict[@"icon"] = icon;
@@ -109,7 +114,7 @@
 
     [data addObject:@{
             @"type": [OAIconTitleValueCell getCellIdentifier],
-            @"title": OALocalizedString(@"res_type"),
+            @"title": OALocalizedString(@"shared_string_type"),
             @"description": isSubscription || [OAIAPHelper isFullVersion:_product]
                     ? [_product getTitle:17.].string
                     : OALocalizedString(@"in_app_purchase_desc")
@@ -121,7 +126,7 @@
         if (_product.purchaseState == PSTATE_NOT_PURCHASED)
             purchasedType = OALocalizedString(@"expired");
         else if (isSubscription)
-            purchasedType = OALocalizedString(@"expires");
+            purchasedType = OALocalizedString(@"shared_string_expires");
     }
 
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
@@ -181,7 +186,7 @@
 
     [data addObject:@{
             @"type": [OAIconTitleValueCell getCellIdentifier],
-            @"title": OALocalizedString(@"res_type"),
+            @"title": OALocalizedString(@"shared_string_type"),
             @"description": OALocalizedString(@"subscription")
     }];
 
@@ -190,7 +195,7 @@
     if (!state.isActive)
         purchasedType = OALocalizedString(@"expired");
     else
-        purchasedType = OALocalizedString(@"expires");
+        purchasedType = OALocalizedString(@"shared_string_expires");
 
     NSDate *expirationDate = [_settings.backupPurchaseExpireTime get] > 0 ? [NSDate dateWithTimeIntervalSince1970:_settings.backupPurchaseExpireTime.get] : nil;
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
@@ -334,7 +339,7 @@
 
             UIColor *tintColor = isManageSubscription ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_text_footer);
             cell.textView.text = item[@"title"];
-            cell.textView.font = [UIFont systemFontOfSize:17. weight:isManageSubscription ? UIFontWeightMedium : UIFontWeightRegular];
+            cell.textView.font = [UIFont scaledSystemFontOfSize:17. weight:isManageSubscription ? UIFontWeightMedium : UIFontWeightRegular];
             cell.textView.textColor = tintColor;
             cell.descriptionView.text = isManageSubscription ? @"" : item[@"description"];
             cell.rightIconView.image = item[@"icon"];

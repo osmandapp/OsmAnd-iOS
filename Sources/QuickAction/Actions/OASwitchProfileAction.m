@@ -13,7 +13,7 @@
 #import "OAAppSettings.h"
 #import "OAQuickActionRegistry.h"
 #import "OAProfileSelectionBottomSheetViewController.h"
-#import "OAButtonCell.h"
+#import "OAButtonTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OATitleDescrDraggableCell.h"
 
@@ -112,7 +112,7 @@ static OAQuickActionType *TYPE;
     [data setObject:@[@{
                           @"type" : [OASwitchTableViewCell getCellIdentifier],
                           @"key" : KEY_DIALOG,
-                          @"title" : OALocalizedString(@"quick_actions_show_dialog"),
+                          @"title" : OALocalizedString(@"quick_action_interim_dialog"),
                           @"value" : @([self.getParams[KEY_DIALOG] boolValue]),
                           },
                       @{
@@ -137,10 +137,10 @@ static OAQuickActionType *TYPE;
     }
     [arr addObject:@{
                      @"title" : OALocalizedString(@"shared_string_add_profile"),
-                     @"type" : [OAButtonCell getCellIdentifier],
+                     @"type" : [OAButtonTableViewCell getCellIdentifier],
                      @"target" : @"addProfile"
                      }];
-    [data setObject:[NSArray arrayWithArray:arr] forKey:OALocalizedString(@"app_profiles")];
+    [data setObject:[NSArray arrayWithArray:arr] forKey:OALocalizedString(@"application_profiles")];
     return data;
 }
 

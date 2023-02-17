@@ -223,7 +223,7 @@ static OAMotorType * HYBRID;
         NSString *name = [NSString stringWithUTF8String:descriptions[j].c_str()];
         if ([name containsString:@"-"])
         {
-            [names addObject:OALocalizedString(@"not_selected")];
+            [names addObject:OALocalizedString(@"shared_string_not_selected")];
         }
         else
         {
@@ -274,7 +274,7 @@ static OAMotorType * HYBRID;
     CGFloat emissionsGramsByKm = motorType.fuelConsumption * fuelEmissionFactor * 10;
     double totalEmissionsKg = meters / 1000 * emissionsGramsByKm / 1000;
     NSString *emission = [NSString stringWithFormat:!fmod(round(totalEmissionsKg * 10) / 10, 1.0) ? @"%.0f" : @"%.1f", totalEmissionsKg];
-    NSString *text = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_space"), emission, OALocalizedString(@"units_kg")];
+    NSString *text = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_space"), emission, OALocalizedString(@"kg")];
     text = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_space"), @"~", text];
     return [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_space"), text, OALocalizedString(@"co2_mission")];
 }

@@ -92,7 +92,7 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
     btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     btn.contentEdgeInsets = UIEdgeInsetsMake(0, 12.0, 0, 12.0);
     btn.titleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
-    btn.titleLabel.font = [UIFont systemFontOfSize:15.0 weight:UIFontWeightRegular];
+    btn.titleLabel.font = [UIFont scaledSystemFontOfSize:15.0 weight:UIFontWeightRegular];
     btn.layer.cornerRadius = 4.0;
     btn.layer.masksToBounds = YES;
     btn.layer.borderWidth = 0.8;
@@ -129,7 +129,7 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
     
     if (_data.count > kMaxItemsCount - 1)
     {
-        OAButton *showMore = [self createButton:OALocalizedString(@"shared_string_show_more") tag:kMaxItemsCount];
+        OAButton *showMore = [self createButton:OALocalizedString(@"show_more") tag:kMaxItemsCount];
         [self addSubview:showMore];
         [buttons addObject:showMore];
         [showMore addTarget:self action:@selector(onShowMorePressed:) forControlEvents:UIControlEventTouchDown];

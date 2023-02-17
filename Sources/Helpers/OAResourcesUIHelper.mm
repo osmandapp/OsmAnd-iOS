@@ -61,25 +61,25 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     {
         case OsmAndResourceType::MapRegion:
         case OsmAndResourceType::DepthContourRegion:
-            return OALocalizedString(@"map_settings_map");
+            return OALocalizedString(@"shared_string_map");
         case OsmAndResourceType::DepthMapRegion:
             return OALocalizedString(@"nautical_depth");
         case OsmAndResourceType::SrtmMapRegion:
-            return OALocalizedString(@"res_srtm");
+            return OALocalizedString(@"srtm_plugin_name");
         case OsmAndResourceType::WikiMapRegion:
-            return OALocalizedString(@"res_wiki");
+            return OALocalizedString(@"download_wikipedia_maps");
         case OsmAndResourceType::RoadMapRegion:
-            return OALocalizedString(@"res_roads");
+            return OALocalizedString(@"roads");
         case OsmAndResourceType::HillshadeRegion:
-            return OALocalizedString(@"res_hillshade");
+            return OALocalizedString(@"shared_string_hillshade");
         case OsmAndResourceType::SlopeRegion:
-            return OALocalizedString(@"res_slope");
+            return OALocalizedString(@"shared_string_slope");
         case OsmAndResourceType::SqliteFile:
             return OALocalizedString(@"online_map");
         case OsmAndResourceType::WeatherForecast:
             return OALocalizedString(@"weather_forecast");
         case OsmAndResourceType::HeightmapRegion:
-            return OALocalizedString(@"res_heightmap");
+            return OALocalizedString(@"download_heightmap_maps");
         default:
             return OALocalizedString(@"res_unknown");
     }
@@ -305,7 +305,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 
 + (NSString *)getSRTMFormatShort:(BOOL)isSRTMF
 {
-    return isSRTMF ? OALocalizedString(@"units_ft") : OALocalizedString(@"units_m");
+    return isSRTMF ? OALocalizedString(@"foot") : OALocalizedString(@"m");
 }
 
 + (NSString *)getSRTMFormatLong:(BOOL)isSRTMF
@@ -1804,7 +1804,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     message = [NSString stringWithFormat:OALocalizedString(@"res_confirmation_clear_cache"), title];
 
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *okAction = [UIAlertAction actionWithTitle:OALocalizedString(@"poi_clear") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_clear") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self.class clearCacheOf:item executeAfterSuccess:block];
     }];
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleDefault handler:nil];

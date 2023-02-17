@@ -445,7 +445,7 @@
 {
     [cell.titleView setText:dataItem.item.name];
     cell.titleIcon.image = [dataItem.item icon];
-    [cell.descView setText:dataItem.item.typeName.length > 0 ? dataItem.item.typeName : OALocalizedString(@"history")];
+    [cell.descView setText:dataItem.item.typeName.length > 0 ? dataItem.item.typeName : OALocalizedString(@"shared_string_history")];
     cell.openingHoursView.hidden = YES;
     cell.timeIcon.hidden = YES;
     

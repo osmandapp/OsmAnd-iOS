@@ -73,18 +73,18 @@
                      @"value" : @"",
                      @"img" : mode == APPEARANCE_MODE_AUTO ? @"menu_cell_selected.png" : @"" },
                  @{
-                     @"name" : OALocalizedString(@"map_settings_day"),
+                     @"name" : OALocalizedString(@"day"),
                      @"value" : @"",
                      @"img" : mode == APPEARANCE_MODE_DAY ? @"menu_cell_selected.png" : @"" },
                  @{
-                     @"name" : OALocalizedString(@"map_settings_night"),
+                     @"name" : OALocalizedString(@"daynight_mode_night"),
                      @"value" : @"",
                      @"img" : mode == APPEARANCE_MODE_NIGHT ? @"menu_cell_selected.png" : @"" }
                  ];
     }
     else if ([settingKeyName isEqualToString:mapDensityKey])
     {
-        title = OALocalizedString(@"map_settings_map_magnifier");
+        title = OALocalizedString(@"map_magnifier");
         double value = [_settings.mapDensity get];
         
         data = @[
@@ -132,7 +132,7 @@
     }
     else if ([settingKeyName isEqualToString:textSizeKey])
     {
-        title = OALocalizedString(@"map_settings_text_size");
+        title = OALocalizedString(@"text_size");
         double value = [_settings.textSize get:_settings.applicationMode.get];
         
         data = @[
@@ -185,6 +185,7 @@
     {
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTableViewCell getCellIdentifier] owner:self options:nil];
         cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
+        [cell.iconView setHidden:YES];
     }
     
     if (cell)
@@ -193,9 +194,9 @@
         [cell.descriptionView setText: [data[indexPath.row] objectForKey:@"value"]];
         NSString *imgName = [data[indexPath.row] objectForKey:@"img"];
         if (imgName.length > 0)
-            [cell.iconView setImage:[UIImage imageNamed:imgName]];
+            cell.accessoryType = UITableViewCellAccessoryCheckmark;
         else
-            [cell.iconView setImage:nil];
+            cell.accessoryType = UITableViewCellAccessoryNone;
     }
     
     return cell;

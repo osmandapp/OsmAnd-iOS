@@ -102,7 +102,7 @@
     CGFloat textHeight =
             [OAUtilities calculateTextBounds:[NSString stringWithFormat:OALocalizedString(@"delete_group_confirm"), _groupName]
                                        width:self.tableView.frame.size.width - kHorizontalMargin * 2
-                                        font:[UIFont systemFontOfSize:17.]].height;
+                                        font:[UIFont scaledSystemFontOfSize:17.]].height;
     CGFloat contentHeight = textHeight + kButtonHeight + 60.;
     return self.headerView.frame.size.height + contentHeight + self.buttonsView.frame.size.height;
 }

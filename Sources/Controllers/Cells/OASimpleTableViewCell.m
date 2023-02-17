@@ -10,6 +10,7 @@
 
 @interface OASimpleTableViewCell ()
 
+@property (weak, nonatomic) IBOutlet UIStackView *contentOutsideStackViewVertical;
 @property (weak, nonatomic) IBOutlet UIStackView *textCustomMarginTopStackView;
 @property (weak, nonatomic) IBOutlet UIStackView *contentInsideStackView;
 @property (weak, nonatomic) IBOutlet UIStackView *textCustomMarginBottomStackView;
@@ -27,19 +28,27 @@
 - (void)titleVisibility:(BOOL)show
 {
     self.titleLabel.hidden = !show;
+    if (!show && self.descriptionLabel.hidden)
+        self.textStackView.hidden = YES;
+
     [self updateMargins];
 }
 
 - (void)descriptionVisibility:(BOOL)show
 {
     self.descriptionLabel.hidden = !show;
+    if (!show && self.titleLabel.hidden)
+        self.textStackView.hidden = YES;
+
     [self updateMargins];
 }
 
 - (void)updateMargins
 {
-    self.topContentSpaceView.hidden = (self.descriptionLabel.hidden || self.titleLabel.hidden) && [self checkSubviewsToUpdateMargins];
-    self.bottomContentSpaceView.hidden = (self.descriptionLabel.hidden || self.titleLabel.hidden) && [self checkSubviewsToUpdateMargins];
+    BOOL hidden = (self.descriptionLabel.hidden || self.titleLabel.hidden) && [self checkSubviewsToUpdateMargins];
+    self.topContentSpaceView.hidden = hidden;
+    self.bottomContentSpaceView.hidden = hidden;
+    self.contentOutsideStackViewVertical.spacing = hidden ? 3 : 4;
 }
 
 - (BOOL)checkSubviewsToUpdateMargins

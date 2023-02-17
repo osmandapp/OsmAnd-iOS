@@ -11,7 +11,7 @@
 #import "OAColors.h"
 #import "OATableViewCustomHeaderView.h"
 #import "OADescrTitleCell.h"
-#import "OAInputCellWithTitle.h"
+#import "OAInputTableViewCell.h"
 #import "OAFilledButtonCell.h"
 #import "OADividerCell.h"
 #import "OAUtilities.h"
@@ -76,6 +76,7 @@
     self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
     self.backButton.hidden = YES;
     self.backImageButton.hidden = NO;
+    [self.backImageButton setImage:[UIImage rtlImageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -95,7 +96,7 @@
 
 - (void) setupTableHeaderView
 {
-    self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:[self getTableHeaderTitle] font:[UIFont systemFontOfSize:34.0 weight:UIFontWeightBold] textColor:UIColor.blackColor lineSpacing:0 isTitle:YES];
+    self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:[self getTableHeaderTitle] font:kHeaderBigTitleFont textColor:UIColor.blackColor isBigTitle:YES];
 }
 
 - (void) setupTableFooterView
@@ -105,7 +106,7 @@
     NSRange fullRange = NSMakeRange(0, fullText.length);
     NSRange coloredRange = [fullText rangeOfString:coloredPart];
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:fullText];
-    UIFont *font = [UIFont systemFontOfSize:15];
+    UIFont *font = [UIFont scaledSystemFontOfSize:15];
     [attributedString addAttribute:NSFontAttributeName value:font range:fullRange];
     [attributedString addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(color_text_footer) range:fullRange];
     [attributedString addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(color_primary_purple) range:coloredRange];
@@ -228,14 +229,14 @@
             [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:range];
             
             int fontSize = item[@"fontSize"] ? [item[@"fontSize"] intValue] : 15;
-            [attributedString addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:fontSize] range:range];
+            [attributedString addAttribute:NSFontAttributeName value:[UIFont scaledSystemFontOfSize:fontSize] range:range];
             [attributedString addAttribute:NSForegroundColorAttributeName value:item[@"color"] range:range];
             
             NSString *boldPart = item[@"boldPart"];
             if (boldPart && boldPart.length > 0)
             {
                 NSRange boldRange = [text rangeOfString:boldPart];
-                [attributedString addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:fontSize weight:UIFontWeightSemibold] range:boldRange];
+                [attributedString addAttribute:NSFontAttributeName value:[UIFont scaledSystemFontOfSize:fontSize weight:UIFontWeightSemibold] range:boldRange];
                 [attributedString addAttribute:NSForegroundColorAttributeName value:UIColor.blackColor range:boldRange];
             }
             
@@ -245,14 +246,16 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:[OAInputCellWithTitle getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:[OAInputTableViewCell getCellIdentifier]])
     {
-        OAInputCellWithTitle* cell = [tableView dequeueReusableCellWithIdentifier:[OAInputCellWithTitle getCellIdentifier]];
+        OAInputTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAInputTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAInputCellWithTitle getCellIdentifier] owner:self options:nil];
-            cell = (OAInputCellWithTitle *)[nib objectAtIndex:0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAInputTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAInputTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell clearButtonVisibility:NO];
+            [cell.inputField removeTarget:self action:NULL forControlEvents:UIControlEventEditingChanged];
             [cell.inputField addTarget:self action:@selector(textViewDidChange:) forControlEvents:UIControlEventEditingChanged];
             cell.inputField.delegate = self;
         }
@@ -313,14 +316,18 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:[OAButtonCell getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:[OAButtonTableViewCell getCellIdentifier]])
     {
-        OAButtonCell* cell = [tableView dequeueReusableCellWithIdentifier:[OAButtonCell getCellIdentifier]];
+        OAButtonTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAButtonTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonCell getCellIdentifier] owner:self options:nil];
-            cell = (OAButtonCell *)[nib objectAtIndex:0];
-            [cell showImage:NO];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAButtonTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell titleVisibility:NO];
+            [cell descriptionVisibility:NO];
+            cell.button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+            cell.backgroundColor = UIColor.clearColor;
         }
         if (cell)
         {
@@ -328,7 +335,6 @@
             [cell.button setTitleColor:item[@"color"] forState:UIControlStateNormal];
             [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.button addTarget:self action:NSSelectorFromString(item[@"action"]) forControlEvents:UIControlEventTouchUpInside];
-            cell.backgroundColor = UIColor.clearColor;
         }
         return cell;
     }
@@ -359,9 +365,9 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:[OAInputCellWithTitle getCellIdentifier]])
+    if ([item[@"type"] isEqualToString:[OAInputTableViewCell getCellIdentifier]])
     {
-        OAInputCellWithTitle *cell = (OAInputCellWithTitle *) [tableView cellForRowAtIndexPath:indexPath];
+        OAInputTableViewCell *cell = (OAInputTableViewCell *) [tableView cellForRowAtIndexPath:indexPath];
         [cell.inputField becomeFirstResponder];
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -423,7 +429,7 @@
     BOOL isInvalidEmail = ![_inputText isValidEmail] && _inputText.length > 0;
     if (isInvalidEmail)
     {
-        self.errorMessage = OALocalizedString(@"login_error_email_invalid");
+        self.errorMessage = OALocalizedString(@"osm_live_enter_email");
         [self generateData];
         [self.tableView performBatchUpdates:^{
             [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:1]] withRowAnimation:UITableViewRowAnimationAutomatic];

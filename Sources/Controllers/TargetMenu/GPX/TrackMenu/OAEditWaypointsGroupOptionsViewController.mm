@@ -8,14 +8,15 @@
 
 #import "OAEditWaypointsGroupOptionsViewController.h"
 #import "OABaseTrackMenuHudViewController.h"
-#import "OATextInputCell.h"
+#import "OAInputTableViewCell.h"
 #import "OAColorsTableViewCell.h"
-#import "OAIconTextDividerSwitchCell.h"
+#import "OASwitchTableViewCell.h"
 #import "OAIconTitleValueCell.h"
 #import "Localization.h"
 #import "OAColors.h"
 #import "OADefaultFavorite.h"
 #import "OAFavoritesHelper.h"
+#import "OASizes.h"
 
 @interface OAEditWaypointsGroupOptionsViewController() <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate, OAColorsTableViewCellDelegate>
 
@@ -86,7 +87,7 @@
     [super applyLocalization];
     if (_screenType == EOAEditWaypointsGroupRenameScreen)
     {
-        self.titleLabel.text = OALocalizedString(@"fav_rename");
+        self.titleLabel.text = OALocalizedString(@"shared_string_rename");
     }
     else if (_screenType == EOAEditWaypointsGroupColorScreen)
     {
@@ -94,7 +95,7 @@
     }
     else if (_screenType == EOAEditWaypointsGroupVisibleScreen)
     {
-        self.titleLabel.text = OALocalizedString(@"map_settings_show");
+        self.titleLabel.text = OALocalizedString(@"shared_string_show_on_map");
     }
     else if (_screenType == EOAEditWaypointsGroupCopyToFavoritesScreen)
     {
@@ -110,11 +111,11 @@
                 kTableKey: @"section",
                 kTableSubjects: @[[OAGPXTableCellData withData:@{
                         kTableKey: @"new_name",
-                        kCellType: [OATextInputCell getCellIdentifier],
+                        kCellType: [OAInputTableViewCell getCellIdentifier],
                         kCellTitle: _groupName,
                         kCellDesc: OALocalizedString(@"fav_enter_group_name")
                 }]],
-                kSectionHeader: _screenType == EOAEditWaypointsGroupRenameScreen ? OALocalizedString(@"fav_name") : OALocalizedString(@"group_name")
+                kSectionHeader: _screenType == EOAEditWaypointsGroupRenameScreen ? OALocalizedString(@"shared_string_name") : OALocalizedString(@"favorite_group_name")
         }];
     }
     else if (_screenType == EOAEditWaypointsGroupColorScreen)
@@ -128,10 +129,10 @@
                                 @"int_value": @([OAUtilities colorToNumber:_selectedColor.color]),
                                 @"array_value": _colors
                         },
-                        kCellTitle: OALocalizedString(@"fav_color"),
+                        kCellTitle: OALocalizedString(@"shared_string_color"),
                         kCellDesc: _selectedColor.name
                 }]],
-                kSectionHeader: OALocalizedString(@"default_color"),
+                kSectionHeader: OALocalizedString(@"access_default_color"),
                 kSectionFooter: OALocalizedString(@"default_color_descr")
         }];
     }
@@ -143,7 +144,7 @@
 
         _tableData = [OAGPXTableSectionData withData:@{
                 kTableKey: @"section",
-                kSectionHeader: OALocalizedString(@"groups"),
+                kSectionHeader: OALocalizedString(@"shared_string_groups"),
                 kTableValues: @{
                         @"groups_count": @([groups containsObject:OALocalizedString(@"route_points")]
                                 ? groups.count - 1
@@ -160,7 +161,7 @@
                     kCellTitle: [_tableData.values[@"visible_groups_count"] integerValue] == 0
                             ? OALocalizedString(@"shared_string_show_all")
                             : OALocalizedString(@"shared_string_hide_all"),
-                    kTableValues: @{ @"font_value": [UIFont systemFontOfSize:17. weight:UIFontWeightMedium] },
+                    kTableValues: @{ @"font_value": [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium] },
                     kCellRightIconName: [_tableData.values[@"visible_groups_count"] integerValue] == 0
                             ? @"ic_custom_show" : @"ic_custom_hide",
                     kCellTintColor: @color_primary_purple
@@ -188,7 +189,7 @@
 
                 OAGPXTableCellData *groupCellData = [OAGPXTableCellData withData:@{
                         kTableKey: [@"cell_waypoints_group_" stringByAppendingString:groupName],
-                        kCellType: [OAIconTextDividerSwitchCell getCellIdentifier],
+                        kCellType: [OASwitchTableViewCell getCellIdentifier],
                         kCellTitle: groupName,
                         kCellLeftIcon: [UIImage templateImageNamed:visible ? @"ic_custom_folder" : @"ic_custom_folder_hidden"],
                         kCellTintColor: @(visible ? color : color_footer_icon_gray),
@@ -358,16 +359,21 @@
 {
     OAGPXTableCellData *cellData = [self getCellData:indexPath];
     UITableViewCell *outCell = nil;
-    if ([cellData.type isEqualToString:[OATextInputCell getCellIdentifier]])
+    if ([cellData.type isEqualToString:[OAInputTableViewCell getCellIdentifier]])
     {
-        OATextInputCell *cell = [tableView dequeueReusableCellWithIdentifier:[OATextInputCell getCellIdentifier]];
+        OAInputTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAInputTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextInputCell getCellIdentifier] owner:self options:nil];
-            cell = (OATextInputCell *) nib[0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAInputTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAInputTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell titleVisibility:NO];
+            [cell clearButtonVisibility:NO];
+            [cell.inputField removeTarget:self action:NULL forControlEvents:UIControlEventEditingChanged];
             [cell.inputField addTarget:self action:@selector(textViewDidChange:) forControlEvents:UIControlEventEditingChanged];
             cell.inputField.autocapitalizationType = UITextAutocapitalizationTypeNone;
             cell.inputField.placeholder = cellData.desc;
+            cell.inputField.textAlignment = NSTextAlignmentNatural;
         }
         if (cell)
         {
@@ -404,28 +410,27 @@
         }
         outCell = cell;
     }
-    else if ([cellData.type isEqualToString:[OAIconTextDividerSwitchCell getCellIdentifier]])
+    else if ([cellData.type isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OAIconTextDividerSwitchCell *cell =
-                [tableView dequeueReusableCellWithIdentifier:[OAIconTextDividerSwitchCell getCellIdentifier]];
+        OASwitchTableViewCell *cell =
+                [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextDividerSwitchCell getCellIdentifier]
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier]
                                                          owner:self options:nil];
-            cell = (OAIconTextDividerSwitchCell *) nib[0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
-            cell.dividerView.hidden = YES;
+            cell = (OASwitchTableViewCell *) nib[0];
+            cell.separatorInset = UIEdgeInsetsMake(0., kPaddingOnSideOfContent, 0., 0.);
+            [cell descriptionVisibility:NO];
         }
         if (cell)
         {
             BOOL isOn = [self isOn:cellData];
             cell.switchView.on = isOn;
-            cell.textView.text = cellData.title;
+            cell.titleLabel.text = cellData.title;
 
-            [cell showIcon:cellData.leftIcon != nil];
-            cell.iconView.image = cellData.leftIcon;
-            cell.iconView.tintColor = UIColorFromRGB(cellData.tintColor);
+            [cell leftIconVisibility:cellData.leftIcon != nil];
+            cell.leftIconView.image = cellData.leftIcon;
+            cell.leftIconView.tintColor = UIColorFromRGB(cellData.tintColor);
 
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
@@ -469,8 +474,8 @@
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if ((_screenType == EOAEditWaypointsGroupRenameScreen || _screenType == EOAEditWaypointsGroupCopyToFavoritesScreen) &&
-            [[self getCellData:indexPath].type isEqualToString:[OATextInputCell getCellIdentifier]])
-        [((OATextInputCell *) cell).inputField becomeFirstResponder];
+            [[self getCellData:indexPath].type isEqualToString:[OAInputTableViewCell getCellIdentifier]])
+        [((OAInputTableViewCell *) cell).inputField becomeFirstResponder];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -507,7 +512,7 @@
     if (newGroupName.length == 0 ||
             [self isIncorrectFileName:textView.text] ||
             [OAFavoritesHelper getGroupByName:newGroupName] ||
-            [newGroupName isEqualToString:OALocalizedString(@"favorites")] ||
+            [newGroupName isEqualToString:OALocalizedString(@"favorites_item")] ||
             [newGroupName isEqualToString:OALocalizedString(@"personal_category_name")] ||
             [newGroupName isEqualToString:kPersonalCategory] ||
             (_screenType != EOAEditWaypointsGroupCopyToFavoritesScreen && [newGroupName isEqualToString:_groupName]))

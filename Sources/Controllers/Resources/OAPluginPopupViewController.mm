@@ -59,6 +59,9 @@ static NSMutableArray *activePopups;
     self.cancelButton.layer.masksToBounds = YES;
     self.cancelButton.layer.borderWidth = 0.8;
     self.cancelButton.layer.borderColor = UIColorFromRGB(0x4caf50).CGColor;
+    self.cancelButton.titleLabel.font = [UIFont scaledSystemFontOfSize:12. weight:UIFontWeightSemibold];
+
+    self.descTextView.font = [UIFont scaledSystemFontOfSize:15.];
 }
 
 - (void)didReceiveMemoryWarning
@@ -199,9 +202,9 @@ static NSMutableArray *activePopups;
     NSString *okButtonName;
     NSString *cancelButtonName;
     
-    title = OALocalizedString(@"show_region_on_map_title");
+    title = OALocalizedString(@"map_downloaded");
     descText = [NSString stringWithFormat:OALocalizedString(@"show_region_on_map_desc"), region.name];
-    cancelButtonName = OALocalizedString(@"shared_string_later");
+    cancelButtonName = OALocalizedString(@"first_time_continue");
     okButtonName = OALocalizedString(@"show_region_on_map_go");
     
     [popup.okButton addTarget:popup action:@selector(showOnMap) forControlEvents:UIControlEventTouchUpInside];
@@ -293,7 +296,7 @@ static NSMutableArray *activePopups;
         
         title = OALocalizedString(@"turn_on_plugin");
         descText = OALocalizedString(@"plugin_popup_wiki_ask");
-        okButtonName = OALocalizedString(@"plugins");
+        okButtonName = OALocalizedString(@"plugins_menu_group");
         cancelButtonName = OALocalizedString(@"shared_string_cancel");
         
         [popup.okButton addTarget:popup action:@selector(goToPlugins) forControlEvents:UIControlEventTouchUpInside];
@@ -305,7 +308,7 @@ static NSMutableArray *activePopups;
         
         title = OALocalizedString(@"turn_on_plugin");
         descText = OALocalizedString(@"plugin_popup_srtm_ask");
-        okButtonName = OALocalizedString(@"plugins");
+        okButtonName = OALocalizedString(@"plugins_menu_group");
         cancelButtonName = OALocalizedString(@"shared_string_cancel");
         
         [popup.okButton addTarget:popup action:@selector(goToPlugins) forControlEvents:UIControlEventTouchUpInside];
@@ -317,7 +320,7 @@ static NSMutableArray *activePopups;
         
         title = OALocalizedString(@"plugin_popup_osm_editing_title");
         descText = OALocalizedString(@"plugin_popup_osm_editing_ask");
-        okButtonName = OALocalizedString(@"plugins");
+        okButtonName = OALocalizedString(@"plugins_menu_group");
         cancelButtonName = OALocalizedString(@"shared_string_cancel");
         
         [popup.okButton addTarget:popup action:@selector(goToPlugins) forControlEvents:UIControlEventTouchUpInside];
@@ -329,7 +332,7 @@ static NSMutableArray *activePopups;
 
         title = OALocalizedString(@"plugin_popup_weather_title");
         descText = OALocalizedString(@"plugin_popup_weather_ask");
-        okButtonName = OALocalizedString(@"plugins");
+        okButtonName = OALocalizedString(@"plugins_menu_group");
         cancelButtonName = OALocalizedString(@"shared_string_cancel");
 
         [popup.okButton addTarget:popup action:@selector(goToPlugins) forControlEvents:UIControlEventTouchUpInside];
@@ -338,9 +341,9 @@ static NSMutableArray *activePopups;
     {
         needShow = YES;
 
-        title = OALocalizedString(@"product_title_nautical");
+        title = OALocalizedString(@"plugin_nautical_name");
         descText = OALocalizedString(@"plugin_popup_nautical_ask");
-        okButtonName = OALocalizedString(@"plugins");
+        okButtonName = OALocalizedString(@"plugins_menu_group");
         cancelButtonName = OALocalizedString(@"shared_string_cancel");
         iconName = @"ic_custom_nautical_depth_colored_day";
 
@@ -350,9 +353,9 @@ static NSMutableArray *activePopups;
     {
         needShow = YES;
 
-        title = OALocalizedString(@"product_title_sea_depth_contours");
+        title = OALocalizedString(@"rendering_attr_depthContours_name");
         descText = OALocalizedString(@"option_available_only_by_subscription");
-        okButtonName = OALocalizedString(@"subscriptions");
+        okButtonName = OALocalizedString(@"osm_live_subscriptions");
         cancelButtonName = OALocalizedString(@"shared_string_cancel");
         iconName = @"ic_custom_nautical_depth_colored_day";
         popup.okButton.tag = EOAFeatureNautical;
@@ -365,7 +368,7 @@ static NSMutableArray *activePopups;
 
         title = OALocalizedString(@"carplay");
         descText = OALocalizedString(@"option_available_only_by_subscription");
-        okButtonName = OALocalizedString(@"subscriptions");
+        okButtonName = OALocalizedString(@"osm_live_subscriptions");
         cancelButtonName = OALocalizedString(@"shared_string_cancel");
         iconName = @"ic_custom_carplay_colored";
         popup.okButton.tag = EOAFeatureCarPlay;
@@ -378,7 +381,7 @@ static NSMutableArray *activePopups;
 
         title = OALocalizedString(@"pro_features");
         descText = OALocalizedString(@"purchases_feature_desc_pro_widgets");
-        okButtonName = OALocalizedString(@"subscriptions");
+        okButtonName = OALocalizedString(@"osm_live_subscriptions");
         cancelButtonName = OALocalizedString(@"shared_string_cancel");
         iconName = @"ic_custom_advanced_widgets_colored_day";
         popup.okButton.tag = EOAFeatureAdvancedWidgets;
@@ -442,7 +445,7 @@ static NSMutableArray *activePopups;
             title = OALocalizedString(@"plugin_popup_wiki_title");
             descText = OALocalizedString(@"plugin_popup_wiki_desc");
             okButtonName = OALocalizedString(@"go_to_downloads");
-            cancelButtonName = OALocalizedString(@"shared_string_later");
+            cancelButtonName = OALocalizedString(@"first_time_continue");
             
             [popup.okButton addTarget:popup action:@selector(goToDownloads) forControlEvents:UIControlEventTouchUpInside];
         }
@@ -456,7 +459,7 @@ static NSMutableArray *activePopups;
             title = OALocalizedString(@"plugin_popup_srtm_title");
             descText = OALocalizedString(@"plugin_popup_srtm_desc");
             okButtonName = OALocalizedString(@"go_to_downloads");
-            cancelButtonName = OALocalizedString(@"shared_string_later");
+            cancelButtonName = OALocalizedString(@"first_time_continue");
             
             [popup.okButton addTarget:popup action:@selector(goToDownloads) forControlEvents:UIControlEventTouchUpInside];
         }
@@ -472,7 +475,7 @@ static NSMutableArray *activePopups;
                 
                 title = OALocalizedString(@"plugin_popup_nautical_title");
                 descText = OALocalizedString(@"plugin_popup_nautical_desc");
-                cancelButtonName = OALocalizedString(@"shared_string_later");
+                cancelButtonName = OALocalizedString(@"first_time_continue");
                 
                 [popup.okButton addTarget:popup action:@selector(downloadNautical) forControlEvents:UIControlEventTouchUpInside];
                 
@@ -484,7 +487,7 @@ static NSMutableArray *activePopups;
                 {
                     NSString* stringifiedSize = [NSByteCountFormatter stringFromByteCount:repositoryMap->packageSize
                                                                                countStyle:NSByteCountFormatterCountStyleFile];
-                    okButtonName = [NSString stringWithFormat:@"%@ (%@)", OALocalizedString(@"download"), stringifiedSize];
+                    okButtonName = [NSString stringWithFormat:@"%@ (%@)", OALocalizedString(@"shared_string_download"), stringifiedSize];
                 }
                 else
                 {
@@ -519,7 +522,8 @@ static NSMutableArray *activePopups;
 
 + (NSString *) styledHTMLwithHTML:(NSString *)HTML
 {
-    NSString *style = @"<meta charset=\"UTF-8\"><style> body { font-family: -apple-system; font-size: 12px; color:#727272} b {font-family: -apple-system; font-weight: bolder; font-size: 12px; color:#727272 }</style>";
+    CGFloat fontSize = [UIFont scaledSystemFontOfSize:15.].pointSize;
+    NSString *style = [NSString stringWithFormat:@"<meta charset=\"UTF-8\"><style> body { font-family: -apple-system; font-size: %fpx; color:#727272} b {font-family: -apple-system; font-weight: bolder; font-size: %fpx; color:#727272 }</style>", fontSize, fontSize];
     
     return [NSString stringWithFormat:@"%@%@", style, HTML];
 }

@@ -18,12 +18,11 @@
 #import "OAAppSettings.h"
 #import "OADescrTitleCell.h"
 #import "OADividerCell.h"
-#import "OASettingSwitchCell.h"
+#import "OASwitchTableViewCell.h"
 #import "OARootViewController.h"
 #import "OAMapWidgetRegistry.h"
 #import "OAProducts.h"
 #import "OAMapWidgetRegInfo.h"
-#import "OASwitchTableViewCell.h"
 
 #define kButtonsDividerTag 150
 
@@ -85,7 +84,7 @@
     [arr addObject:@{ @"type" : [OADividerCell getCellIdentifier] } ];
     
     [arr addObject:@{
-                     @"type" : [OASettingSwitchCell getCellIdentifier],
+                     @"type" : [OASwitchTableViewCell getCellIdentifier],
                      @"name" : @"enable_mapil_widget",
                      @"title" : OALocalizedString(@"mapillary_turn_on_widget"),
                      @"description" : OALocalizedString(@"mapillary_turn_on_widget_descr"),
@@ -103,7 +102,7 @@
 - (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
 {
     NSDictionary *item = _data[indexPath.row];
-    if ([item[@"type"] isEqualToString:[OABottomSheetHeaderIconCell getCellIdentifier]] || [item[@"type"] isEqualToString:[OADescrTitleCell getCellIdentifier]] || [item[@"type"] isEqualToString:[OASettingSwitchCell getCellIdentifier]])
+    if ([item[@"type"] isEqualToString:[OABottomSheetHeaderIconCell getCellIdentifier]] || [item[@"type"] isEqualToString:[OADescrTitleCell getCellIdentifier]] || [item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
         return UITableViewAutomaticDimension;
     }
@@ -153,8 +152,6 @@
 - (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.row];
-    
-    
     if ([item[@"type"] isEqualToString:[OABottomSheetHeaderIconCell getCellIdentifier]])
     {
         OABottomSheetHeaderIconCell* cell = [tableView dequeueReusableCellWithIdentifier:[OABottomSheetHeaderIconCell getCellIdentifier]];
@@ -206,56 +203,30 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:[OASettingSwitchCell getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
-        OASettingSwitchCell* cell = nil;
-        cell = [tableView dequeueReusableCellWithIdentifier:[OASettingSwitchCell getCellIdentifier]];
+        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingSwitchCell getCellIdentifier] owner:self options:nil];
-            cell = (OASettingSwitchCell *)[nib objectAtIndex:0];
-            cell.textView.numberOfLines = 0;
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASwitchTableViewCell *) nib[0];
+            cell.backgroundColor = [UIColor clearColor];
+            [cell leftIconVisibility:NO];
+            cell.switchView.tintColor = UIColorFromRGB(color_bottom_sheet_secondary);
         }
-        
         if (cell)
         {
-            [self updateSettingSwitchCell:cell data:item];
-            
-            cell.backgroundColor = [UIColor clearColor];
-            [cell.textView setText: item[@"title"]];
-            [cell.descriptionView setText:item[@"description"]];
+            cell.titleLabel.text = item[@"title"];
+            cell.descriptionLabel.text = item[@"description"];
+
             cell.switchView.on = [item[@"value"] boolValue];
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
-            cell.switchView.tintColor = UIColorFromRGB(color_bottom_sheet_secondary);
         }
         return cell;
     }
-    else
-    {
-        return nil;
-    }
-}
-
-- (void) updateSettingSwitchCell:(OASettingSwitchCell *)cell data:(NSDictionary *)data
-{
-    UIImage *img = nil;
-    NSString *imgName = data[@"img"];
-    NSString *secondaryImgName = data[@"secondaryImg"];
-    if (imgName)
-        img = [UIImage templateImageNamed:imgName];
-    
-    cell.textView.text = data[@"title"];
-    NSString *desc = data[@"description"];
-    cell.descriptionView.text = desc;
-    cell.descriptionView.hidden = desc.length == 0;
-    cell.imgView.image = img;
-    cell.imgView.tintColor = UIColorFromRGB(color_primary_purple);
-    
-    [cell setSecondaryImage:secondaryImgName.length > 0 ? [UIImage imageNamed:data[@"secondaryImg"]] : nil];
-    if ([cell needsUpdateConstraints])
-        [cell setNeedsUpdateConstraints];
+    return nil;
 }
 
 - (NSDictionary *) getItem:(NSIndexPath *)indexPath
@@ -283,15 +254,6 @@
 - (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section
 {
     view.hidden = YES;
-}
-
-- (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSDictionary *item = _data[indexPath.row];
-    if (![item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
-        return indexPath;
-    else
-        return nil;
 }
 
 @synthesize vwController;

@@ -69,11 +69,6 @@
     [self.tableView reloadData];
 }
 
-- (void)backButtonClicked:(id)sender
-{
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
-
 - (void)doneButtonPressed
 {
     OALocalRoutingParameter *useElevation;
@@ -186,7 +181,7 @@
 
     OATableViewCustomFooterView *vw =
             [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
-    UIFont *textFont = [UIFont systemFontOfSize:13];
+    UIFont *textFont = [UIFont scaledSystemFontOfSize:13];
     NSMutableAttributedString *textStr = [[NSMutableAttributedString alloc] initWithString:footer attributes:@{
             NSFontAttributeName: textFont,
             NSForegroundColorAttributeName: UIColorFromRGB(color_text_footer)

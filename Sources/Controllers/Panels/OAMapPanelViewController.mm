@@ -1716,6 +1716,15 @@ typedef enum
          [_hudViewController.quickActionController hideActionsSheetAnimated];
  }
 
+- (void) updateTargetPointPosition:(CGFloat)height animated:(BOOL)animated
+{
+    if ((![self.targetMenuView isLandscape] && self.targetMenuView.showFullScreen) || (self.targetMenuView.targetPoint.type == OATargetImpassableRoadSelection && !_routingHelper.isRouteCalculated))
+        return;
+    
+    Point31 targetPoint31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_targetLatitude, _targetLongitude))];
+    [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:([self.targetMenuView isLandscape] ? self.targetMenuView.frame.size.width + 20.0 : 0.0) bottomInset:([self.targetMenuView isLandscape] ? 0.0 : height) centerBBox:(_targetMode == EOATargetBBOX) animated:animated];
+}
+
 #pragma mark - OATargetPointViewDelegate
 
 - (void) targetResetCustomStatusBarStyle
@@ -2026,13 +2035,14 @@ typedef enum
         [self displayGpxOnMap:[[OASavingTrackHelper sharedInstance] getCurrentGPX]];
 }
 
+- (void) targetViewOnAppear:(CGFloat)height animated:(BOOL)animated
+{
+    [self updateTargetPointPosition:height animated:animated];
+}
+
 - (void) targetViewHeightChanged:(CGFloat)height animated:(BOOL)animated
 {
-    if ((![self.targetMenuView isLandscape] && self.targetMenuView.showFullScreen) || (self.targetMenuView.targetPoint.type == OATargetImpassableRoadSelection && !_routingHelper.isRouteCalculated))
-        return;
-    
-    Point31 targetPoint31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_targetLatitude, _targetLongitude))];
-    [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:([self.targetMenuView isLandscape] ? kInfoViewLanscapeWidth : 0.0) bottomInset:([self.targetMenuView isLandscape] ? 0.0 : height) centerBBox:(_targetMode == EOATargetBBOX) animated:animated];
+    [self updateTargetPointPosition:height animated:animated];
 }
 
 - (void) showTargetPointMenu:(BOOL)saveMapState showFullMenu:(BOOL)showFullMenu
@@ -2195,13 +2205,6 @@ typedef enum
     }
     
     [self.view addSubview:self.targetMenuView];
-    OAMapRendererView *renderView = (OAMapRendererView*)_mapViewController.view;
-    Point31 targetPoint31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_targetLatitude, _targetLongitude))];
-    BOOL landscape = ([self.targetMenuView isLandscape] || OAUtilities.isIPad) && !OAUtilities.isWindowed;
-    if (_targetMenuView.targetPoint.type != OATargetRouteDetailsGraph && _targetMenuView.targetPoint.type != OATargetRouteDetails && _targetMenuView.targetPoint.type != OATargetImpassableRoadSelection)
-    {
-        [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mapStateSaved ? _mainMapTarget31 : renderView.target31] leftInset:landscape ? self.targetMenuView.frame.size.width + 20.0 : 0 bottomInset:landscape ? 0.0 : [self.targetMenuView getHeaderViewHeight] centerBBox:(_targetMode == EOATargetBBOX) animated:YES];
-    }
     
     if (onComplete)
         onComplete();
@@ -2643,13 +2646,13 @@ typedef enum
                 state:(OATrackMenuViewControllerState *)state
          trackHudMode:(EOATrackHudMode)trackHudMode
 {
-    BOOL showCurrentTrack = item == nil || !item.gpxFileName || item.gpxFileName.length == 0 || [item.gpxTitle isEqualToString:OALocalizedString(@"track_recording_name")];
+    BOOL showCurrentTrack = item == nil || !item.gpxFileName || item.gpxFileName.length == 0 || [item.gpxTitle isEqualToString:OALocalizedString(@"shared_string_currently_recording_track")];
     if (showCurrentTrack)
     {
         if (item == nil)
             item = [[OASavingTrackHelper sharedInstance] getCurrentGPX];
         if (!item.gpxTitle || item.gpxTitle.length == 0)
-            item.gpxTitle = OALocalizedString(@"track_recording_name");
+            item.gpxTitle = OALocalizedString(@"shared_string_currently_recording_track");
     }
 
     [self hideMultiMenuIfNeeded];
@@ -3917,17 +3920,17 @@ typedef enum
     _carPlayActiveController = [[OACarPlayActiveViewController alloc] init];
     _carPlayActiveController.messageText = OALocalizedString(@"carplay_active_message");
     
-    _carPlayActiveController.modalPresentationStyle = UIModalPresentationFullScreen;
-    [self presentViewController:_carPlayActiveController animated:YES completion:nil];
+    [self addChildViewController:_carPlayActiveController];
+    [self.view insertSubview:_carPlayActiveController.view atIndex:0];
 }
 
 - (void) onCarPlayDisconnected:(void (^ __nullable)(void))onComplete
 {
-    [_carPlayActiveController dismissViewControllerAnimated:YES completion:^{
-        _carPlayActiveController = nil;
-        if (onComplete)
-            onComplete();
-    }];
+    [_carPlayActiveController.view removeFromSuperview];
+    [_carPlayActiveController removeFromParentViewController];
+    _carPlayActiveController = nil;
+    if (onComplete)
+        onComplete();
     if (_routingHelper.isFollowingMode)
         [self startNavigation];
 }

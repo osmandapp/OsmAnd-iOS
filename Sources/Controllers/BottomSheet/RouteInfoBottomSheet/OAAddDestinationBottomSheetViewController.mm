@@ -76,7 +76,7 @@
 {
     NSMutableArray *arr = [NSMutableArray new];
     [arr addObject:@{
-        @"title" : OALocalizedString(@"favorites"),
+        @"title" : OALocalizedString(@"favorites_item"),
         @"key" : @"favorites",
         @"color" : UIColorFromRGB(color_primary_purple),
         @"img" : @"ic_custom_favorites"
@@ -85,7 +85,7 @@
     {
         OARTargetPoint *home = [_pointsHelper getHomePoint];
         [arr addObject:@{
-            @"title" : OALocalizedString(@"home_pt"),
+            @"title" : OALocalizedString(@"favorite_home_category"),
             @"descr" : home.pointDescription.name,
             @"color" : UIColorFromRGB(color_primary_purple),
             @"img" : @"ic_custom_home",
@@ -97,7 +97,7 @@
     {
         OARTargetPoint *work = [_pointsHelper getWorkPoint];
         [arr addObject:@{
-            @"title" : OALocalizedString(@"work_pt"),
+            @"title" : OALocalizedString(@"work_button"),
             @"descr" : work.pointDescription.name,
             @"color" : UIColorFromRGB(color_primary_purple),
             @"img" : @"ic_custom_work",
@@ -112,7 +112,7 @@
         NSString *groupName = item.favorite->getGroup().toNSString();
         [arr addObject:@{
             @"title" : item.favorite->getTitle().toNSString(),
-            @"descr" : groupName == nil || groupName.length == 0 ? OALocalizedString(@"favorites") : groupName,
+            @"descr" : groupName == nil || groupName.length == 0 ? OALocalizedString(@"favorites_item") : groupName,
             @"color" : item.getColor,
             @"img" : @"ic_custom_favorites",
             @"point" : item
@@ -168,7 +168,7 @@
         case EOADestinationTypeWork:
             return OALocalizedString(@"add_work");
         case EOADestinationTypeStart:
-            return OALocalizedString(@"add_start");
+            return OALocalizedString(@"route_add_start_point");
         case EOADestinationTypeFinish:
             return OALocalizedString(@"add_destination");
         case EOADestinationTypeIntermediate:
@@ -438,7 +438,7 @@
         else if (_type == EOADestinationTypeWork)
             [mapPanel openSearch:OAQuickSearchType::WORK];
     }
-    else if ([item[@"key"] isEqualToString:@"address_search"])
+    else if ([item[@"key"] isEqualToString:@"address_search_desc"])
     {
         if (_type == EOADestinationTypeIntermediate)
             [mapPanel openSearch:OAQuickSearchType::INTERMEDIATE location:nil tabIndex:2];
@@ -625,8 +625,8 @@
 - (void)additionalSetup
 {
     [super additionalSetup];
-    self.tableBackgroundView.backgroundColor = UIColorFromRGB(color_bottom_sheet_background);
-    self.buttonsView.subviews.firstObject.backgroundColor = UIColorFromRGB(color_bottom_sheet_background);;
+    self.tableBackgroundView.backgroundColor = UIColorFromRGB(color_primary_table_background);
+    self.buttonsView.subviews.firstObject.backgroundColor = UIColorFromRGB(color_primary_table_background);;
     [self hideDoneButton];
 }
 

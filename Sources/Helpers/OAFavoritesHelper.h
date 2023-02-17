@@ -81,6 +81,7 @@
 - (void) addPoint:(OAFavoriteItem *)point;
 
 - (BOOL) isPersonal;
++ (BOOL) isPersonal:(NSString *)name;
 
 + (BOOL) isPersonalCategoryDisplayName:(NSString *)name;
 + (NSString *) getDisplayName:(NSString *)name;

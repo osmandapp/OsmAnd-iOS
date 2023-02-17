@@ -13,11 +13,11 @@
 #import "OASearchUICore.h"
 #import "OAQuickSearchHelper.h"
 #import "OAQuickSearchListItem.h"
-#import "OATextLineViewCell.h"
+#import "OASimpleTableViewCell.h"
 #import "OAPOIUIFilter.h"
 #import "OAPOIBaseType.h"
-
-#define kHeaderViewFont [UIFont systemFontOfSize:15.0]
+#import "OAPOIHelper.h"
+#import "OAColors.h"
 
 @interface OAActionAddCategoryViewController () <UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet UIView *navBarView;
@@ -93,7 +93,7 @@
     }
     _data = [NSArray arrayWithArray:rows];
     
-    _tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"quick_action_add_category_descr") font:kHeaderViewFont textColor:UIColor.blackColor lineSpacing:0.0 isTitle:NO];
+    _tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"quick_action_add_category_descr") font:kHeaderDescriptionFont textColor:UIColor.blackColor isBigTitle:NO];
 }
 
 -(void) setupSearchView
@@ -117,7 +117,7 @@
 
 - (void)applyLocalization
 {
-    _titleView.text = OALocalizedString(@"add_action");
+    _titleView.text = OALocalizedString(@"quick_action_new_action");
     _searchField.placeholder = OALocalizedString(@"shared_string_search");
     [_doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
 }
@@ -166,7 +166,7 @@
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
         CGFloat textWidth = DeviceScreenWidth - 32.0 - OAUtilities.getLeftMargin * 2;
-        UIFont *labelFont = [UIFont systemFontOfSize:15.0];
+        UIFont *labelFont = [UIFont scaledSystemFontOfSize:15.0];
         CGSize labelSize = [OAUtilities calculateTextBounds:OALocalizedString(@"quick_action_add_actions_descr") width:textWidth font:labelFont];
         _tableHeaderView.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, labelSize.height + 30.0);
         _tableHeaderView.subviews.firstObject.frame = CGRectMake(16.0 + OAUtilities.getLeftMargin, 20.0, textWidth, labelSize.height);
@@ -178,20 +178,26 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     id category = [self getItem:indexPath];
-    OATextLineViewCell* cell;
-    cell = (OATextLineViewCell *)[tableView dequeueReusableCellWithIdentifier:[OATextLineViewCell getCellIdentifier]];
+    OASimpleTableViewCell* cell;
+    cell = (OASimpleTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATextLineViewCell getCellIdentifier] owner:self options:nil];
-        cell = (OATextLineViewCell *)[nib objectAtIndex:0];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+        cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
+        [cell descriptionVisibility:NO];
     }
     
     if (cell)
     {
         cell.contentView.backgroundColor = [UIColor whiteColor];
-        [cell.textView setTextColor:[UIColor blackColor]];
         NSString *name = [self getNameFromCategory:category];
-        [cell.textView setText:name];
+        cell.titleLabel.text = name;
+        [cell.titleLabel setTextColor:[UIColor blackColor]];
+        if ([category isKindOfClass:OAPOIBaseType.class])
+            cell.leftIconView.image = ((OAPOIBaseType *)category).icon;
+        else if ([category isKindOfClass:OAPOIUIFilter.class])
+            cell.leftIconView.image = [OAPOIHelper getCustomFilterIcon:(OAPOIUIFilter *)category];
+        cell.leftIconView.tintColor = UIColorFromRGB(color_osmand_orange);
         if ([_initialValues containsObject:name])
         {
             [_tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];

@@ -6,7 +6,7 @@
 //  Copyright (c) 2022 OsmAnd. All rights reserved.
 //
 
-#import "OABaseSettingsViewController.h"
+#import "OABaseNavbarViewController.h"
 
 typedef NS_ENUM(NSInteger, EOAWeatherCacheType)
 {
@@ -24,7 +24,7 @@ typedef NS_ENUM(NSInteger, EOAWeatherCacheType)
 
 @end
 
-@interface OAWeatherCacheSettingsViewController : OABaseSettingsViewController
+@interface OAWeatherCacheSettingsViewController : OABaseNavbarViewController
 
 - (instancetype)initWithCacheType:(EOAWeatherCacheType)type;
 - (instancetype)initWithRegion:(OAWorldRegion *)region;

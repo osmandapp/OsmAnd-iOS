@@ -892,6 +892,21 @@
     return [OAUtilities applyScaleFactorToImage:img];
 }
 
++ (NSString *) getPoiTypeIconName:(OAPOIBaseType *)abstractPoiType
+{
+    if (abstractPoiType != nil && abstractPoiType.iconName) {
+        return abstractPoiType.iconName;
+    } else if ([abstractPoiType isKindOfClass:OAPOIType.class]) {
+        OAPOIType *poiType = (OAPOIType *) abstractPoiType;
+        NSString *iconId = [NSString stringWithFormat:@"%@_%@", poiType.getOsmTag, poiType.getOsmValue];
+        if (poiType.iconName.length > 0)
+            return poiType.iconName;
+        else if (poiType.parent != nil)
+            return [self getPoiTypeIconName:poiType.parent.type];
+    }
+    return nil;
+}
+
 - (BOOL) isEqual:(id)object
 {
     if (object == self) {

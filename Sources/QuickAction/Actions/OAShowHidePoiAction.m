@@ -15,7 +15,7 @@
 #import "OAMapViewController.h"
 #import "OsmAndApp.h"
 #import "OAQuickActionType.h"
-#import "OAButtonCell.h"
+#import "OAButtonTableViewCell.h"
 #import "OAMenuSimpleCell.h"
 
 #define KEY_FILTERS @"filters"
@@ -52,6 +52,33 @@ static OAQuickActionType *TYPE;
     [mapVC updatePoiLayer];
     
     [[OsmAndApp instance].mapSettingsChangeObservable notifyEvent];
+}
+
+- (NSString *) getIconResName
+{
+    OAPOIFiltersHelper *helper = [OAPOIFiltersHelper sharedInstance];
+    NSArray<NSString *> *filtersIds = [NSArray new];
+    
+    NSString *filtersIdsJson = self.getParams[KEY_FILTERS];
+    if (filtersIdsJson && [filtersIdsJson trim].length != 0)
+        filtersIds = [NSArray arrayWithArray:[filtersIdsJson componentsSeparatedByString:@","]];
+    
+    if ([filtersIds count] == 0)
+        return [super getIconResName];
+    
+    OAPOIUIFilter *filter = [helper getFilterById:filtersIds[0]];
+    if (!filter)
+        return [super getIconResName];
+    
+    id iconRes = [filter getIconResource];
+    if ([iconRes isKindOfClass:NSString.class])
+    {
+        return [OAUtilities drawablePath:[NSString stringWithFormat:@"mx_%@", (NSString *)iconRes]];
+    }
+    else
+    {
+        return [super getIconResName];
+    }
 }
 
 - (BOOL)isActionWithSlash
@@ -110,25 +137,25 @@ static OAQuickActionType *TYPE;
                            }];
     }
     [items addObject:@{
-                       @"title" : OALocalizedString(@"quick_action_add_poi_category"),
-                       @"type" : [OAButtonCell getCellIdentifier],
+                       @"title" : OALocalizedString(@"quick_action_add_category"),
+                       @"type" : [OAButtonTableViewCell getCellIdentifier],
                        @"target" : @"addCategory"
                        }];
     
     MutableOrderedDictionary *data = [[MutableOrderedDictionary alloc] init];
-    [data setObject:[NSArray arrayWithArray:items] forKey:OALocalizedString(@"poi_list")];
+    [data setObject:[NSArray arrayWithArray:items] forKey:OALocalizedString(@"quick_action_poi_list")];
     return [OrderedDictionary dictionaryWithDictionary:data];
 }
 
 - (BOOL)fillParams:(NSDictionary *)model
 {
     NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:self.getParams];
-    NSArray *items = model[OALocalizedString(@"poi_list")];
+    NSArray *items = model[OALocalizedString(@"quick_action_poi_list")];
     NSMutableString *filters = [NSMutableString new];
     for (NSInteger i = 0; i < items.count; i ++)
     {
         NSDictionary *item = items[i];
-        if ([item[@"type"] isEqualToString:[OAButtonCell getCellIdentifier]])
+        if ([item[@"type"] isEqualToString:[OAButtonTableViewCell getCellIdentifier]])
             continue;
         
         [filters appendString:item[@"value"]];
@@ -148,7 +175,7 @@ static OAQuickActionType *TYPE;
 
 - (NSString *)getActionStateName
 {
-    return [NSString stringWithFormat:@"%@ %@", ![self isCurrentFilters] ? OALocalizedString(@"sett_show") : OALocalizedString(@"rendering_category_hide"), self.getName];
+    return [NSString stringWithFormat:@"%@ %@", ![self isCurrentFilters] ? OALocalizedString(@"recording_context_menu_show") : OALocalizedString(@"rendering_category_hide"), self.getName];
 }
 
 - (NSString *)getTitle:(NSArray *)filters

@@ -119,6 +119,8 @@
     self.titleGradient.frame = self.navBar.frame;
     self.tableView.estimatedRowHeight = kEstimatedRowHeight;
     [super viewDidLoad];
+    self.buttonOK.titleLabel.font = [UIFont scaledSystemFontOfSize:14.];
+    self.buttonCancel.titleLabel.font = [UIFont scaledSystemFontOfSize:14.];
 }
 
 -(void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -259,19 +261,22 @@
     {
         case 0:
         {
-            OASwitchTableViewCell* cell;
-            cell = (OASwitchTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
+            OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
             if (cell == nil)
             {
                 NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
-                cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
+                cell = (OASwitchTableViewCell *) nib[0];
+                [cell leftIconVisibility:NO];
+                [cell descriptionVisibility:NO];
             }
-            [cell.switchView setOn:_timeLimitActive];
-            [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
-            [cell.switchView addTarget:self action:@selector(timeLimitSwitched:) forControlEvents:UIControlEventValueChanged];
-            
-            cell.textView.text = OALocalizedString(@"time_limited");
-            
+            if (cell)
+            {
+                [cell.switchView setOn:_timeLimitActive];
+                [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
+                [cell.switchView addTarget:self action:@selector(timeLimitSwitched:) forControlEvents:UIControlEventValueChanged];
+
+                cell.titleLabel.text = OALocalizedString(@"time_limited");
+            }
             return cell;
         }
         case 1:
@@ -307,20 +312,22 @@
         }
         case 3:
         {
-            OASwitchTableViewCell* cell;
-            cell = (OASwitchTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
+            OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
             if (cell == nil)
             {
                 NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
-                cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
+                cell = (OASwitchTableViewCell *) nib[0];
+                [cell leftIconVisibility:NO];
+                [cell descriptionVisibility:NO];
             }
-            
-            [cell.switchView setOn:_addToCalActive];
-            [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
-            [cell.switchView addTarget:self action:@selector(addNotificationSwitched:) forControlEvents:UIControlEventValueChanged];
-            
-            cell.textView.text = OALocalizedString(@"add_notification_calendar");
-            
+            if (cell)
+            {
+                [cell.switchView setOn:_addToCalActive];
+                [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
+                [cell.switchView addTarget:self action:@selector(addNotificationSwitched:) forControlEvents:UIControlEventValueChanged];
+
+                cell.titleLabel.text = OALocalizedString(@"add_notification_calendar");
+            }
             return cell;
         }
             

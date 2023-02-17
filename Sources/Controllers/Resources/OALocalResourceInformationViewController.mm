@@ -9,7 +9,7 @@
 #import "OALocalResourceInformationViewController.h"
 #import "OsmAndApp.h"
 #import "OALocalResourceInfoCell.h"
-#import "OAButtonCell.h"
+#import "OAButtonTableViewCell.h"
 #import "OAPurchasesViewController.h"
 #import "OAPluginsViewController.h"
 #import "OAUtilities.h"
@@ -42,7 +42,7 @@
 
 -(void)applyLocalization
 {
-    _titleView.text = OALocalizedString(@"res_details");
+    _titleView.text = OALocalizedString(@"shared_string_details");
 }
 
 -(void)viewDidLoad
@@ -84,11 +84,6 @@
 -(CGFloat) getToolBarHeight
 {
     return defaultToolBarHeight;
-}
-
--(IBAction)backButtonClicked:(id)sender;
-{
-    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void) deleteClicked
@@ -139,11 +134,11 @@
     NSMutableArray *tButtons = [NSMutableArray array];
     
     // Type
-    [tKeys addObject:OALocalizedString(@"res_type")];
+    [tKeys addObject:OALocalizedString(@"shared_string_type")];
     [tValues addObject:isOnlineSql ? OALocalizedString(@"online_raster_map") : OALocalizedString(@"offline_raster_map")];
     
     // Size
-    [tKeys addObject:OALocalizedString(@"res_size")];
+    [tKeys addObject:OALocalizedString(@"shared_string_size")];
     [tValues addObject:[NSByteCountFormatter stringFromByteCount:item.size countStyle:NSByteCountFormatterCountStyleFile]];
     
     // Timestamp
@@ -153,7 +148,7 @@
     [fileUrl getResourceValue:&d forKey:NSURLCreationDateKey error:&error];
     if (!error)
     {
-        [tKeys addObject:OALocalizedString(@"res_created_on")];
+        [tKeys addObject:OALocalizedString(@"created_on")];
         
         if (!formatter)
         {
@@ -183,10 +178,10 @@
     NSMutableArray *tKeys = [NSMutableArray array];
     NSMutableArray *tValues = [NSMutableArray array];
     
-    [tKeys addObject:OALocalizedString(@"res_type")];
+    [tKeys addObject:OALocalizedString(@"shared_string_type")];
     [tValues addObject:[OASQLiteTileSource isOnlineTileSource:item.path] ? OALocalizedString(@"online_raster_map") : OALocalizedString(@"offline_raster_map")];
     
-    [tKeys addObject:OALocalizedString(@"res_size")];
+    [tKeys addObject:OALocalizedString(@"shared_string_size")];
     [tValues addObject:[NSByteCountFormatter stringFromByteCount:item.size countStyle:NSByteCountFormatterCountStyleFile]];
     
     NSError *error;
@@ -195,7 +190,7 @@
     [fileUrl getResourceValue:&d forKey:NSURLCreationDateKey error:&error];
     if (!error)
     {
-        [tKeys addObject:OALocalizedString(@"res_created_on")];
+        [tKeys addObject:OALocalizedString(@"created_on")];
         
         if (!formatter)
         {
@@ -222,11 +217,11 @@
     NSMutableArray *tButtons = [NSMutableArray array];
     
     // Type
-    [tKeys addObject:OALocalizedString(@"res_type")];
+    [tKeys addObject:OALocalizedString(@"shared_string_type")];
     [tValues addObject:OALocalizedString(@"online_map")];
     
     // Size
-    [tKeys addObject:OALocalizedString(@"res_size")];
+    [tKeys addObject:OALocalizedString(@"shared_string_size")];
     [tValues addObject:OALocalizedString(@"calculating_progress")];
     
     [tButtons addObject:@"clear_cache"];
@@ -249,11 +244,11 @@
             NSMutableArray *tValues = [NSMutableArray array];
             
             // Type
-            [tKeys addObject:OALocalizedString(@"res_type")];
+            [tKeys addObject:OALocalizedString(@"shared_string_type")];
             [tValues addObject:OALocalizedString(@"online_map")];
             
             // Size
-            [tKeys addObject:OALocalizedString(@"res_size")];
+            [tKeys addObject:OALocalizedString(@"shared_string_size")];
             [tValues addObject:size];
             
             tableKeys = tKeys;
@@ -293,14 +288,14 @@
     const auto installedResource = std::dynamic_pointer_cast<const OsmAnd::ResourcesManager::InstalledResource>(localResource);
 
     // Type
-    [tKeys addObject:OALocalizedString(@"res_type")];
+    [tKeys addObject:OALocalizedString(@"shared_string_type")];
     NSString *typeLocalized = [OAResourceType resourceTypeLocalized:localResource->type];
     if ([OAResourceType isSRTMResourceType:resource])
         typeLocalized = [NSString stringWithFormat:@"%@ (%@)", typeLocalized, [OAResourceType getSRTMFormatResource:resource longFormat:NO]];
     [tValues addObject:typeLocalized];
 
     // Size
-    [tKeys addObject:OALocalizedString(@"res_size")];
+    [tKeys addObject:OALocalizedString(@"shared_string_size")];
     [tValues addObject:[NSByteCountFormatter stringFromByteCount:localResource->size countStyle:NSByteCountFormatterCountStyleFile]];
 
     if (installedResource)
@@ -318,7 +313,7 @@
         NSString *dateStr = [formatter stringFromDate:d];
         if (dateStr.length > 0)
         {
-            [tKeys addObject:OALocalizedString(@"res_created_on")];
+            [tKeys addObject:OALocalizedString(@"created_on")];
             [tValues addObject:[NSString stringWithFormat:@"%@", dateStr]];
         }
         [tButtons addObject:@"delete"];
@@ -329,15 +324,17 @@
     tableButtons = tButtons;
 }
 
-- (OAButtonCell *) getButtonCell:(NSString *)type
+- (OAButtonTableViewCell *) getButtonCell:(NSString *)type
 {
-    OAButtonCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAButtonCell getCellIdentifier]];
+    OAButtonTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAButtonTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonCell getCellIdentifier] owner:self options:nil];
-        cell = (OAButtonCell *)[nib objectAtIndex:0];
-        [cell showImage:NO];
-        [cell.button setTitleColor:UIColorFromRGB(color_primary_purple) forState:UIControlStateNormal];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonTableViewCell getCellIdentifier] owner:self options:nil];
+        cell = (OAButtonTableViewCell *) nib[0];
+        [cell leftIconVisibility:NO];
+        [cell titleVisibility:NO];
+        [cell descriptionVisibility:NO];
+        cell.button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     }
     if (cell)
     {
@@ -379,9 +376,9 @@
 - (NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     if (section == 0)
-        return OALocalizedStringUp(@"res_details");
+        return OALocalizedStringUp(@"shared_string_details");
     else
-        return OALocalizedStringUp(@"actions");
+        return OALocalizedStringUp(@"shared_string_actions");
 }
 
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

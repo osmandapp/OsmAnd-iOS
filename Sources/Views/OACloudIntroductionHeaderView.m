@@ -83,6 +83,9 @@
     self.contentView.frame = self.bounds;
     
     _animatedViews = [NSMutableArray array];
+    self.titleLabel.font = [UIFont scaledSystemFontOfSize:34. weight:UIFontWeightBold];
+    self.topButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
+    self.bottomButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
 }
 
 - (CGFloat)getCompoundImageWidth:(NSInteger)count
@@ -160,7 +163,7 @@
 {
     self.titleLabel.text = title;
     self.descriptionLabel.text = description;
-    self.bannerMainImageView.image = image;
+    self.bannerMainImageView.image = image.imageFlippedForRightToLeftLayoutDirection;
     [self.topButton setTitle:topButtonTitle forState:UIControlStateNormal];
     [self.bottomButton setTitle:bottomButtonTitle forState:UIControlStateNormal];
     
@@ -172,8 +175,8 @@
 - (CGFloat)calculateViewHeight
 {
     CGFloat labelWidth = DeviceScreenWidth - kLabelOffset - (OAUtilities.getLeftMargin * 2);
-    CGFloat titleHeight = [OAUtilities calculateTextBounds:self.titleLabel.text width:labelWidth font:[UIFont systemFontOfSize:34. weight:UIFontWeightBold]].height;
-    CGFloat descriptionHeight = [OAUtilities calculateTextBounds:self.descriptionLabel.text width:labelWidth font:[UIFont systemFontOfSize:15.]].height;
+    CGFloat titleHeight = [OAUtilities calculateTextBounds:self.titleLabel.text width:labelWidth font:[UIFont scaledSystemFontOfSize:34. weight:UIFontWeightBold]].height;
+    CGFloat descriptionHeight = [OAUtilities calculateTextBounds:self.descriptionLabel.text width:labelWidth font:[UIFont scaledSystemFontOfSize:15.]].height;
     return titleHeight + descriptionHeight + kFixedHeight;
 }
 

@@ -8,7 +8,7 @@
 
 #import "OABackupTypesViewController.h"
 #import "OAManageStorageViewController.h"
-#import "OAIconTextDividerSwitchCell.h"
+#import "OASwitchTableViewCell.h"
 #import "OAIconTitleValueCell.h"
 #import "OAStorageStateValuesCell.h"
 #import "OAExportSettingsCategory.h"
@@ -25,38 +25,116 @@
     OABackupHelper *_backupHelper;
 }
 
+#pragma mark - Initialization
+
 - (void)commonInit
 {
     _backupHelper = [OABackupHelper sharedInstance];
     [super commonInit];
 }
 
-- (void)viewDidLoad
+#pragma mark - Base UI
+
+- (NSString *)getTitle
 {
-    [super viewDidLoad];
+    return OALocalizedString(@"backup_data");
 }
 
-- (void)applyLocalization
+- (NSString *)getLeftNavbarButtonTitle
 {
-    self.titleLabel.text = OALocalizedString(@"backup_data");
-    [self.backButton setTitle:OALocalizedString(@"shared_string_settings") forState:UIControlStateNormal];
+    return OALocalizedString(@"shared_string_settings");
 }
 
-- (EOARemoteFilesType)getRemoteFilesType
-{
-    return EOARemoteFilesTypeUnique;
-}
+#pragma mark - Table data
 
-- (NSMutableDictionary<OAExportSettingsType *, NSArray *> *)generateSelectedItems
+- (void)generateData
 {
-    NSMutableDictionary<OAExportSettingsType *, NSArray *> *selectedItemsMap = [NSMutableDictionary dictionary];
-    for (OAExportSettingsType *type in [OAExportSettingsType getAllValues])
+    NSMutableArray *data = [NSMutableArray array];
+
+    NSMutableArray<NSMutableDictionary *> *manageStorageCells = [NSMutableArray array];
+    NSMutableDictionary *manageStorageSection = [NSMutableDictionary dictionary];
+    manageStorageSection[@"cells"] = manageStorageCells;
+    [data addObject:manageStorageSection];
+
+    NSMutableDictionary *manageStorageProgressData = [NSMutableDictionary dictionary];
+    manageStorageProgressData[@"key"] = @"manage_storage_progress_cell";
+    manageStorageProgressData[@"type"] = [OAStorageStateValuesCell getCellIdentifier];
+    manageStorageProgressData[@"show_description"] = @(YES);
+    [manageStorageCells addObject:manageStorageProgressData];
+
+    NSMutableDictionary *manageStorageData = [NSMutableDictionary dictionary];
+    manageStorageData[@"key"] = @"manage_storage_cell";
+    manageStorageData[@"type"] = [OAIconTitleValueCell getCellIdentifier];
+    manageStorageData[@"title"] = OALocalizedString(@"manage_storage");
+    manageStorageData[@"icon"] = @"ic_custom_storage";
+    [manageStorageCells addObject:manageStorageData];
+
+    NSMutableArray<NSMutableDictionary *> *myPlacesCells = [NSMutableArray array];
+    NSMutableDictionary *myPlacesSection = [NSMutableDictionary dictionary];
+    myPlacesSection[@"header"] = OALocalizedString(@"shared_string_my_places");
+    myPlacesSection[@"cells"] = myPlacesCells;
+    [data addObject:myPlacesSection];
+
+    NSMutableArray<NSMutableDictionary *> *resourcesCells = [NSMutableArray array];
+    NSMutableDictionary *resourcesSection = [NSMutableDictionary dictionary];
+    resourcesSection[@"header"] = OALocalizedString(@"shared_string_resources");
+    resourcesSection[@"cells"] = resourcesCells;
+    [data addObject:resourcesSection];
+
+    NSMutableArray<NSMutableDictionary *> *settingsCells = [NSMutableArray array];
+    NSMutableDictionary *settingsSection = [NSMutableDictionary dictionary];
+    settingsSection[@"header"] = OALocalizedString(@"shared_string_settings");
+    settingsSection[@"cells"] = settingsCells;
+    [data addObject:settingsSection];
+
+    NSInteger resourcesSize = 0;
+    NSInteger myPlacesSize = 0;
+    NSInteger settingsSize = 0;
+    for (OAExportSettingsCategory *category in [self getDataItems].allKeys)
     {
-        if ([[_backupHelper getBackupTypePref:type] get])
-            selectedItemsMap[type] = [self getItemsForType:type];
+        OASettingsCategoryItems *categoryItems = [self getDataItems][category];
+        for (OAExportSettingsType *type in [categoryItems getTypes])
+        {
+            NSMutableDictionary *itemData = [NSMutableDictionary dictionary];
+            itemData[@"key"] = [type.name stringByAppendingString:@"_cell"];
+            itemData[@"type"] = [OASwitchTableViewCell getCellIdentifier];
+            itemData[@"setting"] = type;
+            itemData[@"category"] = categoryItems;
+
+            NSInteger size = [self.class calculateItemsSize:[categoryItems getItemsForType:type]];
+            if (type.isMyPlacesCategory)
+            {
+                [myPlacesCells addObject:itemData];
+                myPlacesSize += size;
+            }
+            else if (type.isResourcesCategory)
+            {
+                [resourcesCells addObject:itemData];
+                resourcesSize += size;
+            }
+            else if (type.isSettingsCategory)
+            {
+                [settingsCells addObject:itemData];
+                settingsSize += size;
+            }
+        }
     }
-    return selectedItemsMap;
+
+    NSInteger totalSize = [_backupHelper getMaximumAccountSize];
+    NSString *totalSizeStr = [NSByteCountFormatter stringFromByteCount:[_backupHelper getMaximumAccountSize]
+                                                            countStyle:NSByteCountFormatterCountStyleFile];
+    NSString *usedSizeStr = [NSByteCountFormatter stringFromByteCount:resourcesSize + myPlacesSize + settingsSize
+                                                           countStyle:NSByteCountFormatterCountStyleFile];
+    manageStorageProgressData[@"title"] = [NSString stringWithFormat:OALocalizedString(@"cloud_storage_used"), usedSizeStr, totalSizeStr];
+    manageStorageProgressData[@"total_progress"] = @(totalSize);
+    manageStorageProgressData[@"first_progress"] = @(resourcesSize);
+    manageStorageProgressData[@"second_progress"] = @(myPlacesSize);
+    manageStorageProgressData[@"third_progress"] = @(settingsSize);
+
+    [self setData:data];
 }
+
+#pragma mark - Selectors
 
 - (void)onCellSelected
 {
@@ -116,91 +194,22 @@
     [self presentViewController:alert animated:YES completion:nil];
 }
 
-- (void)generateData
+#pragma mark - Additions
+
+- (EOARemoteFilesType)getRemoteFilesType
 {
-    NSMutableArray *data = [NSMutableArray array];
+    return EOARemoteFilesTypeUnique;
+}
 
-    NSMutableArray<NSMutableDictionary *> *manageStorageCells = [NSMutableArray array];
-    NSMutableDictionary *manageStorageSection = [NSMutableDictionary dictionary];
-    manageStorageSection[@"cells"] = manageStorageCells;
-    [data addObject:manageStorageSection];
-
-    NSMutableDictionary *manageStorageProgressData = [NSMutableDictionary dictionary];
-    manageStorageProgressData[@"key"] = @"manage_storage_progress_cell";
-    manageStorageProgressData[@"type"] = [OAStorageStateValuesCell getCellIdentifier];
-    manageStorageProgressData[@"show_description"] = @(YES);
-    [manageStorageCells addObject:manageStorageProgressData];
-
-    NSMutableDictionary *manageStorageData = [NSMutableDictionary dictionary];
-    manageStorageData[@"key"] = @"manage_storage_cell";
-    manageStorageData[@"type"] = [OAIconTitleValueCell getCellIdentifier];
-    manageStorageData[@"title"] = OALocalizedString(@"manage_storage");
-    manageStorageData[@"icon"] = @"ic_custom_storage";
-    [manageStorageCells addObject:manageStorageData];
-
-    NSMutableArray<NSMutableDictionary *> *myPlacesCells = [NSMutableArray array];
-    NSMutableDictionary *myPlacesSection = [NSMutableDictionary dictionary];
-    myPlacesSection[@"header"] = OALocalizedString(@"my_places");
-    myPlacesSection[@"cells"] = myPlacesCells;
-    [data addObject:myPlacesSection];
-
-    NSMutableArray<NSMutableDictionary *> *resourcesCells = [NSMutableArray array];
-    NSMutableDictionary *resourcesSection = [NSMutableDictionary dictionary];
-    resourcesSection[@"header"] = OALocalizedString(@"shared_string_resources");
-    resourcesSection[@"cells"] = resourcesCells;
-    [data addObject:resourcesSection];
-
-    NSMutableArray<NSMutableDictionary *> *settingsCells = [NSMutableArray array];
-    NSMutableDictionary *settingsSection = [NSMutableDictionary dictionary];
-    settingsSection[@"header"] = OALocalizedString(@"shared_string_settings");
-    settingsSection[@"cells"] = settingsCells;
-    [data addObject:settingsSection];
-
-    NSInteger resourcesSize = 0;
-    NSInteger myPlacesSize = 0;
-    NSInteger settingsSize = 0;
-    for (OAExportSettingsCategory *category in [self getDataItems].allKeys)
+- (NSMutableDictionary<OAExportSettingsType *, NSArray *> *)generateSelectedItems
+{
+    NSMutableDictionary<OAExportSettingsType *, NSArray *> *selectedItemsMap = [NSMutableDictionary dictionary];
+    for (OAExportSettingsType *type in [OAExportSettingsType getAllValues])
     {
-        OASettingsCategoryItems *categoryItems = [self getDataItems][category];
-        for (OAExportSettingsType *type in [categoryItems getTypes])
-        {
-            NSMutableDictionary *itemData = [NSMutableDictionary dictionary];
-            itemData[@"key"] = [type.name stringByAppendingString:@"_cell"];
-            itemData[@"type"] = [OAIconTextDividerSwitchCell getCellIdentifier];
-            itemData[@"setting"] = type;
-            itemData[@"category"] = categoryItems;
-
-            NSInteger size = [self.class calculateItemsSize:[categoryItems getItemsForType:type]];
-            if (type.isMyPlacesCategory)
-            {
-                [myPlacesCells addObject:itemData];
-                myPlacesSize += size;
-            }
-            else if (type.isResourcesCategory)
-            {
-                [resourcesCells addObject:itemData];
-                resourcesSize += size;
-            }
-            else if (type.isSettingsCategory)
-            {
-                [settingsCells addObject:itemData];
-                settingsSize += size;
-            }
-        }
+        if ([[_backupHelper getBackupTypePref:type] get])
+            selectedItemsMap[type] = [self getItemsForType:type];
     }
-
-    NSInteger totalSize = [_backupHelper getMaximumAccountSize];
-    NSString *totalSizeStr = [NSByteCountFormatter stringFromByteCount:[_backupHelper getMaximumAccountSize]
-                                                            countStyle:NSByteCountFormatterCountStyleFile];
-    NSString *usedSizeStr = [NSByteCountFormatter stringFromByteCount:resourcesSize + myPlacesSize + settingsSize
-                                                           countStyle:NSByteCountFormatterCountStyleFile];
-    manageStorageProgressData[@"title"] = [NSString stringWithFormat:OALocalizedString(@"cloud_storage_used"), usedSizeStr, totalSizeStr];
-    manageStorageProgressData[@"total_progress"] = @(totalSize);
-    manageStorageProgressData[@"first_progress"] = @(resourcesSize);
-    manageStorageProgressData[@"second_progress"] = @(myPlacesSize);
-    manageStorageProgressData[@"third_progress"] = @(settingsSize);
-
-    [self setData:data];
+    return selectedItemsMap;
 }
 
 @end

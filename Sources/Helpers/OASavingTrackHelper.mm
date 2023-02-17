@@ -77,6 +77,18 @@
     return _sharedInstance;
 }
 
+- (void)setupCurrentTrack
+{
+    currentTrack = [[OAGPXMutableDocument alloc] init];
+    
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    [currentTrack setWidth:[settings.currentTrackWidth get]];
+    [currentTrack setShowArrows:[settings.currentTrackShowArrows get]];
+    [currentTrack setShowStartFinish:[settings.currentTrackShowStartFinish get]];
+    [currentTrack setColor:[settings.currentTrackColor get]];
+    [currentTrack setColoringType:[settings.currentTrackColoringType get].name];
+}
+
 - (instancetype)init
 {
     self = [super init];
@@ -87,14 +99,7 @@
 
         [self createDb];
         
-        currentTrack = [[OAGPXMutableDocument alloc] init];
-
-        OAAppSettings *settings = [OAAppSettings sharedManager];
-        [currentTrack setWidth:[settings.currentTrackWidth get]];
-        [currentTrack setShowArrows:[settings.currentTrackShowArrows get]];
-        [currentTrack setShowStartFinish:[settings.currentTrackShowStartFinish get]];
-        [currentTrack setColor:[settings.currentTrackColor get]];
-        [currentTrack setColoringType:[settings.currentTrackColoringType get].name];
+        [self setupCurrentTrack];
 
         if (![self saveIfNeeded])
             [self loadGpxFromDatabase];
@@ -329,11 +334,7 @@
     lastTimeUpdated = 0;
     lastPoint = kCLLocationCoordinate2DInvalid;
     
-    [currentTrack getDocument]->points.clear();
-    [currentTrack getDocument]->tracks.clear();
-    
-    [currentTrack.points removeAllObjects];
-    [currentTrack.tracks removeAllObjects];
+    [self setupCurrentTrack];
     [currentTrack initBounds];
     currentTrack.modifiedTime = (long)[[NSDate date] timeIntervalSince1970];
     

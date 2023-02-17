@@ -10,7 +10,6 @@
 #import "OAWorldRegion.h"
 #import "OsmAndApp.h"
 #import "OAManageResourcesViewController.h"
-#import "OAWikiLinkBottomSheetViewController.h"
 #import "OAPOIHelper.h"
 #import "OAPOI.h"
 #import "OAWikiWebViewController.h"
@@ -105,8 +104,43 @@
     }
     else
     {
-        OAWikiLinkBottomSheetViewController *bottomSheet = [[OAWikiLinkBottomSheetViewController alloc] initWithUrl:url localItem:item];
-        [bottomSheet show];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"how_to_open_wiki_title")
+                                                                       message:OALocalizedString(url)
+                                                                preferredStyle:UIAlertControllerStyleActionSheet];
+        
+        UIAlertAction *downloadAction = [UIAlertAction actionWithTitle:OALocalizedString(@"download_wikipedia_data")
+                                                                 style:UIAlertActionStyleDefault
+                                                               handler:^(UIAlertAction * _Nonnull action) {
+            OsmAndAppInstance app = [OsmAndApp instance];
+            if ([app.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:item.resourceId.toNSString()]].count == 0)
+            {
+                NSString *resourceName = [OAResourcesUIHelper titleOfResource:item.resource
+                                                                     inRegion:item.worldRegion
+                                                               withRegionName:YES
+                                                             withResourceType:YES];
+                [OAResourcesUIHelper startBackgroundDownloadOf:item.resource resourceName:resourceName];
+            }
+            else
+            {
+                OASuperViewController* resourcesViewController = [[UIStoryboard storyboardWithName:@"Resources" bundle:nil] instantiateInitialViewController];
+                [[OARootViewController instance].navigationController pushViewController:resourcesViewController animated:YES];
+            }
+        }];
+        UIAlertAction *openOnlineAction = [UIAlertAction actionWithTitle:OALocalizedString(@"open_in_browser_wiki")
+                                                                   style:UIAlertActionStyleDefault
+                                                                 handler:^(UIAlertAction * _Nonnull action) {
+            [OAUtilities callUrl:url];
+        }];
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel")
+                                                               style:UIAlertActionStyleCancel
+                                                             handler:nil
+        ];
+        
+        [alert addAction:downloadAction];
+        [alert addAction:openOnlineAction];
+        [alert addAction:cancelAction];
+        alert.preferredAction = cancelAction;
+        [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
     }
 }
 

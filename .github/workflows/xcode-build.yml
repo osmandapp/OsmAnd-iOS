@@ -1,9 +1,9 @@
 name: Build OsmAndMaps
 # on:
 #  push:
-#    branches: [ r4.3 ]
+#    branches: [ master ]
 #  pull_request:
-#    branches: [ r4.3 ]
+#    branches: [ master ]
 on: 
   workflow_dispatch:
     inputs:
@@ -40,44 +40,44 @@ jobs:
     #   run: brew install gnupg
     ### Checks-out repository under $GITHUB_WORKSPACE, so job can access it
     - name: Checkout ios
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
-        ref: refs/heads/r4.3
+        ref: refs/heads/master
         path: ios
     - name: Checkout android
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
-        ref: refs/heads/r4.3
+        ref: refs/heads/master
         repository: osmandapp/OsmAnd
         path: android
     - name: Checkout build
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
-        ref: refs/heads/r4.3
+        ref: refs/heads/master
         repository: osmandapp/OsmAnd-build
         path: build
     - name: Checkout core legacy
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
-        ref: refs/heads/r4.3
+        ref: refs/heads/master
         repository: osmandapp/OsmAnd-core-legacy
         path: core-legacy
     - name: Checkout core
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
-        ref: refs/heads/r4.3
+        ref: refs/heads/master
         repository: osmandapp/OsmAnd-core
         path: core
     - name: Checkout help
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
-        ref: refs/heads/r4.3
+        ref: refs/heads/master
         repository: osmandapp/osmandapp.github.io
         path: help
     - name: Checkout resources
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
-        ref: refs/heads/r4.3
+        ref: refs/heads/master
         repository: osmandapp/OsmAnd-resources
         path: resources
     # - name: Select XCode 11.3

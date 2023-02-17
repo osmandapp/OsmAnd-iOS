@@ -32,7 +32,7 @@
         _app = [OsmAndApp instance];
         _settings = [OAAppSettings sharedManager];
         
-        title = OALocalizedString(@"sett_lang");
+        title = OALocalizedString(@"map_locale");
         settingsScreen = EMapSettingsScreenLanguage;
         
         vwController = viewController;
@@ -63,7 +63,7 @@
     if (_prefLangId)
         _prefLang = [[[NSLocale currentLocale] displayNameForKey:NSLocaleIdentifier value:_prefLangId] capitalizedStringWithLocale:[NSLocale currentLocale]];
     else
-        _prefLang = OALocalizedString(@"local_names");
+        _prefLang = OALocalizedString(@"local_map_names");
     
     [tblView reloadData];
 }
@@ -154,8 +154,6 @@
 
 - (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell* outCell = nil;
-    
     if (indexPath.row == 0)
     {
         OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASettingsTableViewCell getCellIdentifier]];
@@ -170,23 +168,23 @@
             [cell.textView setText: OALocalizedString(@"sett_pref_lang")];
             [cell.descriptionView setText: _prefLang];
         }
-        outCell = cell;
-        
+        return cell;
     }
     else
     {
-        OASwitchTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
+        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
+            cell = (OASwitchTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
         }
-        
         if (cell)
         {
             if (indexPath.row == 1)
             {
-                [cell.textView setText: OALocalizedString(@"sett_lang_show_local")];
+                cell.titleLabel.text = OALocalizedString(@"sett_lang_show_local");
 
                 [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
                 [cell.switchView setOn:_settings.settingMapLanguageShowLocal];
@@ -194,32 +192,30 @@
                 
                 if (!_prefLangId && !_settings.settingMapLanguageTranslit.get)
                 {
-                    cell.textView.textColor = [UIColor lightGrayColor];
+                    cell.titleLabel.textColor = [UIColor lightGrayColor];
                     cell.switchView.enabled = NO;
                 }
                 else
                 {
-                    cell.textView.textColor = [UIColor blackColor];
+                    cell.titleLabel.textColor = [UIColor blackColor];
                     cell.switchView.enabled = YES;
                 }
             }
             else
             {
-                [cell.textView setText: OALocalizedString(@"sett_lang_show_trans")];
-                
+                cell.titleLabel.text = OALocalizedString(@"translit_names");
+                cell.titleLabel.textColor = [UIColor blackColor];
+
+                cell.switchView.enabled = YES;
                 [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
                 [cell.switchView setOn:_settings.settingMapLanguageTranslit.get];
                 [cell.switchView addTarget:self action:@selector(showTranslitChanged:) forControlEvents:UIControlEventValueChanged];
-
-                cell.textView.textColor = [UIColor blackColor];
-                cell.switchView.enabled = YES;
             }
             
         }
-        outCell = cell;
+        return cell;
     }
-    
-    return outCell;
+    return nil;
 }
 
 - (void) showLocalChanged:(id)sender

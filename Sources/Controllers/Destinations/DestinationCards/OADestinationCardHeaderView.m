@@ -29,13 +29,14 @@
 
         _title = [[UILabel alloc] initWithFrame:CGRectMake(DESTINATION_CARD_BORDER, 0.0, w, _containerView.frame.size.height)];
         _title.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;
-        _title.font = [UIFont systemFontOfSize:13.0 weight:UIFontWeightSemibold];
+        _title.font = [UIFont scaledSystemFontOfSize:13.0 weight:UIFontWeightSemibold];
+        _title.adjustsFontForContentSizeCategory = YES;
         _title.textColor = UIColorFromRGB(0x000000);
         [_containerView addSubview:self.title];
 
         _rightButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _rightButton.frame = CGRectMake(_containerView.frame.size.width - 10.0, 0.0, 10.0, _containerView.frame.size.height);
-        _rightButton.titleLabel.font = [UIFont systemFontOfSize:13];
+        _rightButton.titleLabel.font = [UIFont scaledSystemFontOfSize:13];
         [_rightButton setTitleColor:UIColorFromRGB(0x587BF8) forState:UIControlStateNormal];
         _rightButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
         _rightButton.hidden = YES;

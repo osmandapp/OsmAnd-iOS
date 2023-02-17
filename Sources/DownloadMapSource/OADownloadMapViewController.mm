@@ -160,9 +160,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void) applyLocalization
 {
-    [self setTitle:OALocalizedString(@"download_map")];
+    [self setTitle:OALocalizedString(@"shared_string_download_map")];
     [self.cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
-    [self.downloadButton setTitle:OALocalizedString(@"download") forState:UIControlStateNormal];
+    [self.downloadButton setTitle:OALocalizedString(@"shared_string_download") forState:UIControlStateNormal];
 }
 
 - (NSAttributedString *) getAttributedTypeStr
@@ -578,7 +578,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (NSString*) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return section == kZoomSection ? OALocalizedString(@"res_zoom_levels") : @"";
+    return section == kZoomSection ? OALocalizedString(@"shared_string_zoom_levels") : @"";
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
@@ -588,7 +588,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
-    return section == kZoomSection ? OALocalizedString(@"size_of_downloaded_data") : @"";
+    return section == kZoomSection ? OALocalizedString(@"zoom_levels_difference_description") : @"";
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath

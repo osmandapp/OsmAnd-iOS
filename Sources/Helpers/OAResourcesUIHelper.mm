@@ -456,6 +456,21 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     return nil;
 }
 
+- (BOOL)isInstalled
+{
+    if (_resourceType != OsmAnd::ResourcesManager::ResourceType::SrtmMapRegion)
+    {
+        return [OsmAndApp instance].resourcesManager->isResourceInstalled(_resourceId);
+    }
+    else
+    {
+        QString srtmQPath = _resourceId;
+        NSString *srtmfPath = [srtmQPath.toNSString() stringByReplacingOccurrencesOfString:@"srtm" withString:@"srtmf"];
+        QString srtmfQPath = QString(srtmfPath.UTF8String);
+        return [OsmAndApp instance].resourcesManager->isResourceInstalled(srtmQPath) || [OsmAndApp instance].resourcesManager->isResourceInstalled(srtmfQPath);
+    }
+}
+
 @end
 
 @implementation OARepositoryResourceItem
@@ -502,6 +517,17 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         self.items = [NSArray arrayWithArray:resourceItems];
     }
     return self;
+}
+
+- (BOOL) allDownloaded
+{
+    NSInteger downloadedCount = 0;
+    for (OAResourceItem *item in _items)
+    {
+        if ([OsmAndApp instance].resourcesManager->isResourceInstalled(item.resourceId))
+            downloadedCount++;
+    }
+    return downloadedCount == _items.count;
 }
 
 @end

@@ -10,7 +10,7 @@
 #import "Localization.h"
 #import "OAColors.h"
 #import "OACustomSelectionButtonCell.h"
-#import "OAMenuSimpleCell.h"
+#import "OASimpleTableViewCell.h"
 #import "OASegmentedControlCell.h"
 #import "OADividerCell.h"
 #import "OATableViewCustomHeaderView.h"
@@ -65,26 +65,11 @@
         _selectedItems = [NSMutableArray new];
         for (OAResourceItem *item in _items)
         {
-            if (![self isResourceInstalled:item])
+            if (!item.isInstalled)
                 [_selectedItems addObject:item];
         }
     }
     return self;
-}
-
-- (BOOL) isResourceInstalled:(OAResourceItem *)resourceItem
-{
-    if (resourceItem.resourceType != OsmAnd::ResourcesManager::ResourceType::SrtmMapRegion)
-    {
-        return [OsmAndApp instance].resourcesManager->isResourceInstalled(resourceItem.resourceId);
-    }
-    else
-    {
-        QString srtmQPath = resourceItem.resourceId;
-        NSString *srtmfPath = [srtmQPath.toNSString() stringByReplacingOccurrencesOfString:@"srtm" withString:@"srtmf"];
-        QString srtmfQPath = QString(srtmfPath.UTF8String);
-        return [OsmAndApp instance].resourcesManager->isResourceInstalled(srtmQPath) || [OsmAndApp instance].resourcesManager->isResourceInstalled(srtmfQPath);
-    }
 }
 
 - (void)viewDidLoad
@@ -320,6 +305,12 @@
     return _isSingleSRTM ? NO : ![self isDividerCell:indexPath] && indexPath.row > 2;
 }
 
+- (OAResourceItem *)getItem:(NSIndexPath * _Nonnull)indexPath
+{
+    OAResourceItem *item = _items[!_isSingleSRTM ? (indexPath.row - 1) / 2 - 1 : 0];
+    return item;
+}
+
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
 {
     if ([self isDividerCell:indexPath])
@@ -346,7 +337,7 @@
     NSString *cellType = _isSRTM && indexPath.section == 0 ? [OASegmentedControlCell getCellIdentifier] :
             indexPath.row == 1 && !_isSingleSRTM
                     ? [OACustomSelectionButtonCell getCellIdentifier]
-                    : [OAMenuSimpleCell getCellIdentifier];
+                    : [OASimpleTableViewCell getCellIdentifier];
 
     if ([cellType isEqualToString:[OASegmentedControlCell getCellIdentifier]])
     {
@@ -403,16 +394,14 @@
             return cell;
         }
     }
-    else if ([cellType isEqualToString:[OAMenuSimpleCell getCellIdentifier]])
+    else if ([cellType isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
     {
-        OAMenuSimpleCell *cell = [tableView dequeueReusableCellWithIdentifier:cellType];
+        OASimpleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellType];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:cellType owner:self options:nil];
             cell = nib[0];
             cell.tintColor = UIColorFromRGB(color_primary_purple);
-            cell.descriptionView.hidden = NO;
-            cell.descriptionView.font = [UIFont scaledSystemFontOfSize:13.0];
             if (!_isSingleSRTM)
             {
                 UIView *bgColorView = [[UIView alloc] init];
@@ -422,14 +411,15 @@
         }
         if (cell)
         {
-            OAResourceItem *item = _items[!_isSingleSRTM ? (indexPath.row - 1) / 2 - 1 : 0];
+            OAResourceItem * item = [self getItem:indexPath];
             BOOL selected = !_isSingleSRTM && [_selectedItems containsObject:item];
+            BOOL installed = item.isInstalled;
+            cell.leftIconView.image = [OAResourceType getIcon:_type.type templated:YES];
+            cell.leftIconView.tintColor = selected ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB((installed ? resource_installed_icon_color : color_tint_gray));
+            cell.leftIconView.contentMode = UIViewContentModeCenter;
+            cell.editingAccessoryType = installed ? UITableViewCellAccessoryDetailButton : UITableViewCellAccessoryNone;
 
-            cell.imgView.image = [OAResourceType getIcon:_type.type templated:YES];
-            cell.imgView.tintColor = selected ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_tint_gray);
-            cell.imgView.contentMode = UIViewContentModeCenter;
-
-            cell.textView.text = item.title;
+            cell.titleLabel.text = item.title;
 
             NSString *size;
             if ([item isKindOfClass:OARepositoryResourceItem.class])
@@ -440,11 +430,7 @@
             if ([OAResourceType isSRTMResourceItem:item])
                 size = [NSString stringWithFormat:@"%@ (%@)", size, [OAResourceType getSRTMFormatItem:item longFormat:NO]];
 
-            cell.descriptionView.text = [NSString stringWithFormat:@"%@ • %@", size, [item getDate]];
-
-            [cell changeHeight:YES];
-            if ([cell needsUpdateConstraints])
-                [cell updateConstraints];
+            cell.descriptionLabel.text = [NSString stringWithFormat:@"%@ • %@", size, [item getDate]];
             return cell;
         }
     }
@@ -529,6 +515,15 @@
         return [OATableViewCustomHeaderView getHeight:[self getTitleForSection:section] width:tableView.bounds.size.width yOffset:_isSRTM ? 12 : 32 font:[UIFont scaledSystemFontOfSize:13]];
 
     return 0.001;
+}
+
+- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
+{
+    [self dismissViewControllerAnimated:YES completion:^{
+        OAResourceItem *item = [self getItem:indexPath];
+        if ([item isKindOfClass:OALocalResourceItem.class])
+            [self.delegate onDetailsSelected:(OALocalResourceItem *)item];
+    }];
 }
 
 @end

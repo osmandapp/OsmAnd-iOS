@@ -34,11 +34,16 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 - (void)updateSize;
 - (NSString *)getDate;
 
+- (BOOL) isInstalled;
+
 @end
 
 @interface OAMultipleResourceItem : OAResourceItem
 @property (nonatomic, readonly) NSArray<OAResourceItem *> *items;
 - (instancetype)initWithType:(OsmAndResourceType)resourceType items:(NSArray<OAResourceItem *> *)items;
+
+- (BOOL) allDownloaded;
+
 @end
 
 @interface OAResourceType : NSObject

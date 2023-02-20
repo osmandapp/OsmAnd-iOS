@@ -2561,17 +2561,28 @@ static BOOL _repositoryUpdated = NO;
         {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                           reuseIdentifier:cellTypeId];
+            cell.tintColor = UIColorFromRGB(color_primary_purple);
             cell.textLabel.font = [UIFont scaledSystemFontOfSize:17.0];
             cell.detailTextLabel.font = [UIFont scaledSystemFontOfSize:12.0];
             cell.detailTextLabel.textColor = UIColorFromRGB(0x929292);
-            NSString *imageNamed = [item_ isKindOfClass:OAMultipleResourceItem.class] && ![self.region.resourceTypes containsObject:[OAResourceType toValue:((OAResourceItem *) item_).resourceType]] ? @"ic_custom_multi_download" : @"ic_custom_download";
-            UIImage *iconImage = [UIImage templateImageNamed:imageNamed];
-            UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
-            [btnAcc addTarget:self action: @selector(accessoryButtonPressed:withEvent:) forControlEvents: UIControlEventTouchUpInside];
-            [btnAcc setImage:iconImage forState:UIControlStateNormal];
-            btnAcc.tintColor = UIColorFromRGB(color_primary_purple);
-            btnAcc.frame = CGRectMake(0.0, 0.0, 30.0, 50.0);
-            [cell setAccessoryView:btnAcc];
+            BOOL isMultipleItem = [item_ isKindOfClass:OAMultipleResourceItem.class];
+            BOOL addInfoAccessory = isMultipleItem && [((OAMultipleResourceItem *) item_) allDownloaded];
+            if (addInfoAccessory)
+            {
+                cell.accessoryView = nil;
+                cell.accessoryType = UITableViewCellAccessoryDetailButton;
+            }
+            else
+            {
+                NSString *imageNamed = [item_ isKindOfClass:OAMultipleResourceItem.class] && ![self.region.resourceTypes containsObject:[OAResourceType toValue:((OAResourceItem *) item_).resourceType]] ? @"ic_custom_multi_download" : @"ic_custom_download";
+                UIImage *iconImage = [UIImage templateImageNamed:imageNamed];
+                UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
+                [btnAcc addTarget:self action: @selector(accessoryButtonPressed:withEvent:) forControlEvents: UIControlEventTouchUpInside];
+                [btnAcc setImage:iconImage forState:UIControlStateNormal];
+                btnAcc.tintColor = UIColorFromRGB(color_primary_purple);
+                btnAcc.frame = CGRectMake(0.0, 0.0, 30.0, 50.0);
+                [cell setAccessoryView:btnAcc];
+            }
         }
         else if ([cellTypeId isEqualToString:downloadingResourceCell])
         {
@@ -2601,14 +2612,24 @@ static BOOL _repositoryUpdated = NO;
         if (!disabled)
         {
             cell.textLabel.textColor = [UIColor blackColor];
-            NSString *imageNamed = [item_ isKindOfClass:OAMultipleResourceItem.class] && ![self.region.resourceTypes containsObject:[OAResourceType toValue:((OAResourceItem *) item_).resourceType]] ? @"ic_custom_multi_download" : @"ic_custom_download";
-            UIImage *iconImage = [UIImage templateImageNamed:imageNamed];
-            UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
-            [btnAcc addTarget:self action: @selector(accessoryButtonPressed:withEvent:) forControlEvents: UIControlEventTouchUpInside];
-            [btnAcc setImage:iconImage forState:UIControlStateNormal];
-            btnAcc.tintColor = UIColorFromRGB(color_primary_purple);
-            btnAcc.frame = CGRectMake(0.0, 0.0, 30.0, 50.0);
-            [cell setAccessoryView:btnAcc];
+            BOOL isMultipleItem = [item_ isKindOfClass:OAMultipleResourceItem.class];
+            BOOL addInfoAccessory = isMultipleItem && [((OAMultipleResourceItem *) item_) allDownloaded];
+            if (addInfoAccessory)
+            {
+                cell.accessoryView = nil;
+                cell.accessoryType = UITableViewCellAccessoryDetailButton;
+            }
+            else
+            {
+                NSString *imageNamed = isMultipleItem && ![self.region.resourceTypes containsObject:[OAResourceType toValue:((OAResourceItem *) item_).resourceType]] ? @"ic_custom_multi_download" : @"ic_custom_download";
+                UIImage *iconImage = [UIImage templateImageNamed:imageNamed];
+                UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
+                [btnAcc addTarget:self action: @selector(accessoryButtonPressed:withEvent:) forControlEvents: UIControlEventTouchUpInside];
+                [btnAcc setImage:iconImage forState:UIControlStateNormal];
+                btnAcc.tintColor = UIColorFromRGB(color_primary_purple);
+                btnAcc.frame = CGRectMake(0.0, 0.0, 30.0, 50.0);
+                [cell setAccessoryView:btnAcc];
+            }
         }
         else
         {
@@ -2950,99 +2971,6 @@ static BOOL _repositoryUpdated = NO;
         [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
 }
-
-#pragma mark - UISearchDisplayDelegate
-
-//- (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchScope:(NSInteger)searchOption
-//{
-//    _lastSearchScope = searchOption;
-//    [self performSearchForSearchString:_lastSearchString
-//                        andSearchScope:_lastSearchScope];
-//
-//    return YES;
-//}
-//
-//- (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
-//{
-//    _lastSearchString = searchString;
-//    [self performSearchForSearchString:_lastSearchString
-//                        andSearchScope:_lastSearchScope];
-//
-//    return YES;
-//}
-//
-//- (BOOL)prefersStatusBarHidden
-//{
-//    return _isSearching;
-//}
-//
-//- (void)searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller
-//{
-//    _isSearching = YES;
-//
-//    [self setNeedsStatusBarAppearanceUpdate];
-//
-//    [UIView animateWithDuration:0.3
-//                          delay:0.0
-//                        options:UIViewAnimationOptionCurveLinear
-//                     animations:^{
-//
-//                         CGRect newBounds = self.tableView.bounds;
-//                         newBounds.origin.y = 0.0;
-//                         self.tableView.bounds = newBounds;
-//
-//                         self.titlePanelView.frame = CGRectMake(0.0, -self.titlePanelView.frame.size.height, self.titlePanelView.frame.size.width, self.titlePanelView.frame.size.height);
-//                         self.toolbarView.frame = CGRectMake(0.0, self.view.frame.size.height, self.toolbarView.frame.size.width, self.toolbarView.frame.size.height);
-//                         self.tableView.frame = CGRectMake(0.0, 0.0, self.view.bounds.size.width, self.view.bounds.size.height);
-//
-//                     } completion:^(BOOL finished) {
-//                         self.titlePanelView.userInteractionEnabled = NO;
-//                     }];
-//}
-//
-//- (void)searchDisplayControllerDidEndSearch:(UISearchDisplayController *)controller
-//{
-//    _isSearching = NO;
-//
-//    [self setNeedsStatusBarAppearanceUpdate];
-//
-//    CGFloat h = self.view.bounds.size.height - 50.0 - 61.0;
-//    if (self.downloadView && self.downloadView.superview)
-//        h -= self.downloadView.bounds.size.height;
-//
-//    [UIView animateWithDuration:0.1
-//                          delay:0.0
-//                        options:UIViewAnimationOptionCurveLinear
-//                     animations:^{
-//
-//                         self.titlePanelView.frame = CGRectMake(0.0, 0.0, self.titlePanelView.frame.size.width, self.titlePanelView.frame.size.height);
-//                         self.toolbarView.frame = CGRectMake(0.0, self.view.frame.size.height - self.toolbarView.frame.size.height, self.toolbarView.frame.size.width, self.toolbarView.frame.size.height);
-//                         self.tableView.frame = CGRectMake(0.0, 64.0, self.view.bounds.size.width, h);
-//                         [self applySafeAreaMargins];
-//
-//                     } completion:^(BOOL finished) {
-//                         self.titlePanelView.userInteractionEnabled = YES;
-//                         if (_displayBanner)
-//                             [self.tableView reloadData];
-//                     }];
-//
-//    if (self.openFromSplash && _app.resourcesManager->isRepositoryAvailable())
-//    {
-//        int showMapIterator = (int)[[NSUserDefaults standardUserDefaults] integerForKey:kShowMapIterator];
-//        if (showMapIterator == 0)
-//        {
-//            [[NSUserDefaults standardUserDefaults] setInteger:++showMapIterator forKey:kShowMapIterator];
-//            [[NSUserDefaults standardUserDefaults] synchronize];
-//
-//            NSString *key = [@"resource:" stringByAppendingString:_app.resourcesManager->getResourceInRepository(kWorldBasemapKey)->id.toNSString()];
-//            BOOL _isWorldMapDownloading = [_app.downloadsManager.keysOfDownloadTasks containsObject:key];
-//
-//            const auto worldMap = _app.resourcesManager->getLocalResource(kWorldBasemapKey);
-//            if (!worldMap && !_isWorldMapDownloading)
-//                [OAPluginPopupViewController askForWorldMap];
-//        }
-//    }
-//}
 
 - (BOOL) isFiltering
 {
@@ -3389,6 +3317,11 @@ static BOOL _repositoryUpdated = NO;
 - (void)clearMultipleResources
 {
     _multipleItems = nil;
+}
+
+- (void)onDetailsSelected:(OALocalResourceItem *)item
+{
+    [self showDetailsOf:item];
 }
 
 #pragma mark - OAWeatherForecastDetails

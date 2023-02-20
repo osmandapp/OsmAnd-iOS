@@ -2,33 +2,34 @@
 //  OAHistorySettingsViewController.h
 //  OsmAnd Maps
 //
-//  Created by ДМИТРИЙ СВЕТЛИЧНЫЙ on 30.01.2023.
+//  Created by Dmytro Svetlichnyi on 30.01.2023.
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
-#import "OACompoundViewController.h"
+#import "OABaseButtonsViewController.h"
 
 typedef enum
 {
-    EOASearchHistoryProfile,
-    EOANavigationHistoryProfile,
-    EOAMarkersHistoryProfile
-} EOAGlobalSettingsHistoryScreen;
+    EOAHistorySettingsTypeSearch,
+    EOAHistorySettingsTypeNavigation,
+    EOAHistorySettingsTypeMapMarkers
+} EOAHistorySettingsType;
 
-@interface OAHistorySettingsViewController : OACompoundViewController
+@class OASearchResult, OAHistoryItem;
 
-@property (weak, nonatomic) IBOutlet UIView *navBarView;
-@property (weak, nonatomic) IBOutlet UILabel *titleView;
-@property (weak, nonatomic) IBOutlet UIButton *backButton;
-@property (weak, nonatomic) IBOutlet UIButton *cancelButton;
-@property (weak, nonatomic) IBOutlet UIButton *editButton;
-@property (weak, nonatomic) IBOutlet UIButton *selectAllButton;
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet UIView *editToolbarView;
-@property (weak, nonatomic) IBOutlet UIButton *exportButton;
-@property (weak, nonatomic) IBOutlet UIButton *deleteButton;
-@property (nonatomic, readonly) EOAGlobalSettingsHistoryScreen historyType;
+@protocol OAHistorySettingsDelegate
 
-- (instancetype) initWithSettingsType:(EOAGlobalSettingsHistoryScreen)historyType;
+- (NSArray<OASearchResult *> *)getNavigationHistoryResults;
+- (NSMutableArray<OASearchResult *> *)getSearchHistoryResults;
+- (OAHistoryItem *)getHistoryEntry:(OASearchResult *) searchResult;
+
+@end
+
+@interface OAHistorySettingsViewController : OABaseButtonsViewController
+
+- (instancetype)initWithSettingsType:(EOAHistorySettingsType)historyType;
+
+@property (nonatomic, readonly) EOAHistorySettingsType historyType;
+@property (nonatomic, weak) id<OAHistorySettingsDelegate> delegate;
 
 @end

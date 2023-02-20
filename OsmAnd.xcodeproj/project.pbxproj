@@ -1445,7 +1445,6 @@
 		C588D1F22992A448001FEDBD /* ic_custom_history_disabled_48@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C588D1F02992A447001FEDBD /* ic_custom_history_disabled_48@2x.png */; };
 		C588D1F32992A448001FEDBD /* ic_custom_history_disabled_48@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C588D1F12992A447001FEDBD /* ic_custom_history_disabled_48@3x.png */; };
 		C5D4D7312987C56000D3BC04 /* OAHistorySettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = C5D4D72F2987C56000D3BC04 /* OAHistorySettingsViewController.mm */; };
-		C5D4D7322987C56000D3BC04 /* OAHistorySettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C5D4D7302987C56000D3BC04 /* OAHistorySettingsViewController.xib */; };
 		C5D8F809292F5B2900C01065 /* ic_custom_download_map@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5D8F808292F5B2900C01065 /* ic_custom_download_map@2x.png */; };
 		C5D8F80B292F5B3A00C01065 /* ic_custom_download_map@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5D8F80A292F5B3A00C01065 /* ic_custom_download_map@3x.png */; };
 		CA4ED03A64D6784BA1452142 /* OADeleteAllFilesCommand.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4EDB13C1566E5C9A2B0D3E /* OADeleteAllFilesCommand.mm */; };
@@ -2096,7 +2095,7 @@
 		DA5A823526C563A700F274C7 /* OAPluginInstalledViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7B6426C563A100F274C7 /* OAPluginInstalledViewController.xib */; };
 		DA5A823626C563A700F274C7 /* OAExportItemsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7B6526C563A100F274C7 /* OAExportItemsViewController.mm */; };
 		DA5A823726C563A700F274C7 /* OAExportItemsSelectionViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7B6626C563A100F274C7 /* OAExportItemsSelectionViewController.mm */; };
-		DA5A823826C563A700F274C7 /* OAGlobalSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7B6726C563A100F274C7 /* OAGlobalSettingsViewController.m */; };
+		DA5A823826C563A700F274C7 /* OAGlobalSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7B6726C563A100F274C7 /* OAGlobalSettingsViewController.mm */; };
 		DA5A823926C563A700F274C7 /* OAOsmAccountSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7B6826C563A100F274C7 /* OAOsmAccountSettingsViewController.m */; };
 		DA5A823A26C563A700F274C7 /* OABaseBigTitleSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7B6926C563A100F274C7 /* OABaseBigTitleSettingsViewController.m */; };
 		DA5A823B26C563A700F274C7 /* OAOsmEditingSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7B6A26C563A100F274C7 /* OAOsmEditingSettingsViewController.xib */; };
@@ -4942,7 +4941,6 @@
 		C588D1F12992A447001FEDBD /* ic_custom_history_disabled_48@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_history_disabled_48@3x.png"; path = "Resources/Icons/ic_custom_history_disabled_48@3x.png"; sourceTree = "<group>"; };
 		C5D4D72E2987C56000D3BC04 /* OAHistorySettingsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAHistorySettingsViewController.h; sourceTree = "<group>"; };
 		C5D4D72F2987C56000D3BC04 /* OAHistorySettingsViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAHistorySettingsViewController.mm; sourceTree = "<group>"; };
-		C5D4D7302987C56000D3BC04 /* OAHistorySettingsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAHistorySettingsViewController.xib; sourceTree = "<group>"; };
 		C5D8F808292F5B2900C01065 /* ic_custom_download_map@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_download_map@2x.png"; path = "Resources/Icons/ic_custom_download_map@2x.png"; sourceTree = "<group>"; };
 		C5D8F80A292F5B3A00C01065 /* ic_custom_download_map@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_download_map@3x.png"; path = "Resources/Icons/ic_custom_download_map@3x.png"; sourceTree = "<group>"; };
 		CA4ED01DD17D02CD759BBC7C /* OAShowHidePressureAction.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAShowHidePressureAction.mm; sourceTree = "<group>"; };
@@ -5934,7 +5932,7 @@
 		DA5A7B6426C563A100F274C7 /* OAPluginInstalledViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAPluginInstalledViewController.xib; sourceTree = "<group>"; };
 		DA5A7B6526C563A100F274C7 /* OAExportItemsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAExportItemsViewController.mm; sourceTree = "<group>"; };
 		DA5A7B6626C563A100F274C7 /* OAExportItemsSelectionViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAExportItemsSelectionViewController.mm; sourceTree = "<group>"; };
-		DA5A7B6726C563A100F274C7 /* OAGlobalSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAGlobalSettingsViewController.m; sourceTree = "<group>"; };
+		DA5A7B6726C563A100F274C7 /* OAGlobalSettingsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGlobalSettingsViewController.mm; sourceTree = "<group>"; };
 		DA5A7B6826C563A100F274C7 /* OAOsmAccountSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAOsmAccountSettingsViewController.m; sourceTree = "<group>"; };
 		DA5A7B6926C563A100F274C7 /* OABaseBigTitleSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OABaseBigTitleSettingsViewController.m; sourceTree = "<group>"; };
 		DA5A7B6A26C563A100F274C7 /* OAOsmEditingSettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAOsmEditingSettingsViewController.xib; sourceTree = "<group>"; };
@@ -11191,11 +11189,9 @@
 				DA5A7BA026C563A100F274C7 /* OACreateProfileViewController.h */,
 				DA5A7B9E26C563A100F274C7 /* OACreateProfileViewController.mm */,
 				DA5A7BA726C563A100F274C7 /* OAGlobalSettingsViewController.h */,
-				DA5A7B6726C563A100F274C7 /* OAGlobalSettingsViewController.m */,
-				DA5A7B6E26C563A100F274C7 /* OAGlobalSettingsViewController.xib */,
+				DA5A7B6726C563A100F274C7 /* OAGlobalSettingsViewController.mm */,
 				C5D4D72E2987C56000D3BC04 /* OAHistorySettingsViewController.h */,
 				C5D4D72F2987C56000D3BC04 /* OAHistorySettingsViewController.mm */,
-				C5D4D7302987C56000D3BC04 /* OAHistorySettingsViewController.xib */,
 				DA5A7B1126C563A100F274C7 /* OAMainSettingsViewController.h */,
 				DA5A7B7126C563A100F274C7 /* OAMainSettingsViewController.m */,
 				DA5A7BA426C563A100F274C7 /* OAProfileAppearanceViewController.h */,
@@ -14116,7 +14112,6 @@
 				46453B0A28352407001F9A3A /* ic_custom_monthly_map_updates_colored_day@2x.png in Resources */,
 				32119B4728477CC8005E1E0C /* img_plugin_mapillary.jpg in Resources */,
 				3296B49827F8790800108AF7 /* widget_weather_clouds_night@2x.png in Resources */,
-				C5D4D7322987C56000D3BC04 /* OAHistorySettingsViewController.xib in Resources */,
 				84E442101AF8A07500F87542 /* track_new_segement@2x.png in Resources */,
 				8476E2D61F6C1EEC00EC274F /* map_pedestrian_location_view_angle_night@3x.png in Resources */,
 				DA8EE7F8246D446400069A6D /* ic_custom_no_route@3x.png in Resources */,
@@ -16207,7 +16202,7 @@
 				DA5A81AA26C563A700F274C7 /* OASearchSettings.mm in Sources */,
 				46B0CC5A299CEB99003D9F40 /* OABaseButtonsViewController.m in Sources */,
 				DA5A839826C563A800F274C7 /* OAResourcesBaseViewController.mm in Sources */,
-				DA5A823826C563A700F274C7 /* OAGlobalSettingsViewController.m in Sources */,
+				DA5A823826C563A700F274C7 /* OAGlobalSettingsViewController.mm in Sources */,
 				DA5A835326C563A800F274C7 /* OANoImagesCell.mm in Sources */,
 				DA5A81B726C563A700F274C7 /* OAPhrasesParser.m in Sources */,
 				DA5A814526C563A700F274C7 /* OAOsmEditsDBHelper.m in Sources */,

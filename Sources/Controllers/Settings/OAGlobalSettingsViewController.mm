@@ -10,8 +10,6 @@
 #import "OAUninstallSpeedCamerasViewController.h"
 #import "OAHistorySettingsViewController.h"
 #import "OAExportItemsViewController.h"
-#import "OAAppSettings.h"
-#import "OAHistoryHelper.h"
 #import "OASimpleTableViewCell.h"
 #import "OARightIconTableViewCell.h"
 #import "OAValueTableViewCell.h"
@@ -19,11 +17,19 @@
 #import "OATableDataModel.h"
 #import "OATableSectionData.h"
 #import "OATableRowData.h"
-#import "Localization.h"
+#import "OAAppSettings.h"
+#import "OASearchUICore.h"
+#import "OATargetPointsHelper.h"
+#import "OAQuickSearchHelper.h"
+#import "OAHistoryHelper.h"
+#import "OADestinationsHelper.h"
+#import "OASearchResult.h"
+#import "OAPointDescription.h"
 #import "OAColors.h"
 #import "OASizes.h"
+#import "Localization.h"
 
-@interface OAGlobalSettingsViewController () <OAUninstallSpeedCamerasDelegate>
+@interface OAGlobalSettingsViewController () <OAUninstallSpeedCamerasDelegate, OAHistorySettingsDelegate>
 
 @end
 
@@ -142,7 +148,7 @@
                 kCellKeyKey : @"history_settings",
                 kCellTitleKey : OALocalizedString(@"history_settings"),
                 kCellTypeKey : [OASimpleTableViewCell getCellIdentifier],
-                @"value" : ![_settings.defaultSearchHistoryLoggingApplicationMode get] && ![_settings.defaultNavigationHistoryLoggingApplicationMode get] && ![_settings.defaultMarkersHistoryLoggingApplicationMode get] ? OALocalizedString(@"shared_string_off") : @""
+                @"value" : ![_settings.searchHistory get] && ![_settings.navigationHistory get] && ![_settings.mapMarkersHistory get] ? OALocalizedString(@"shared_string_off") : @""
             }];
             [_data addSection:privacyDataSection];
 
@@ -225,35 +231,39 @@
         }
         case EOAHistory:
         {
-            OAHistoryHelper *helper = [OAHistoryHelper sharedInstance];
-            NSArray *historyItems = [helper getPointsHavingTypes:helper.searchTypes limit:0];
-
+            OAHistoryHelper *historyHelper = [OAHistoryHelper sharedInstance];
             OATableSectionData *historySection = [OATableSectionData sectionData];
             [historySection setFooterText:OALocalizedString(@"history_footer_text")];
             [_data addSection:historySection];
 
             [historySection addRowFromDictionary:@{
                 kCellKeyKey : @"search_history",
-                kCellTitleKey : OALocalizedString(@"search_history"),
+                kCellTitleKey : OALocalizedString(@"shared_string_search_history"),
                 kCellIconNameKey : @"ic_custom_search",
                 kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
-                @"value" : [_settings.defaultSearchHistoryLoggingApplicationMode get] ? [NSString stringWithFormat:@"%ld", historyItems.count] : OALocalizedString(@"shared_string_off"),
+                @"value" : [_settings.searchHistory get]
+                    ? [NSString stringWithFormat:@"%lu", [self getSearchHistoryResults].count]
+                    : OALocalizedString(@"shared_string_off"),
             }];
             [historySection addRowFromDictionary:@{
                 kCellKeyKey : @"navigation_history",
                 kCellTitleKey : OALocalizedString(@"navigation_history"),
                 kCellIconNameKey : @"ic_custom_navigation",
                 kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
-                @"value" : [_settings.defaultNavigationHistoryLoggingApplicationMode get] ? [NSString stringWithFormat:@"%ld", historyItems.count] : OALocalizedString(@"shared_string_off"),
+                @"value" : [_settings.navigationHistory get]
+                    ? [NSString stringWithFormat:@"%ld", [self calculateNavigationItemsCount]]
+                    : OALocalizedString(@"shared_string_off"),
             }];
             [historySection addRowFromDictionary:@{
                 kCellKeyKey : @"map_markers_history",
                 kCellTitleKey : OALocalizedString(@"map_markers_history"),
                 kCellIconNameKey : @"ic_custom_marker",
                 kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
-                @"value" : [_settings.defaultMarkersHistoryLoggingApplicationMode get] ? [NSString stringWithFormat:@"%ld", historyItems.count] : OALocalizedString(@"shared_string_off"),
+                @"value" : [_settings.mapMarkersHistory get]
+                    ? [NSString stringWithFormat:@"%lu", [historyHelper getPointsHavingTypes:historyHelper.destinationTypes limit:0].count]
+                    : OALocalizedString(@"shared_string_off"),
             }];
-            
+
             OATableSectionData *actionsSection = [OATableSectionData sectionData];
             [actionsSection setHeaderText:OALocalizedString(@"actions")];
             [actionsSection setFooterText:OALocalizedString(@"history_actions_footer_text")];
@@ -268,7 +278,7 @@
             }];
             [actionsSection addRowFromDictionary:@{
                 kCellKeyKey : @"clear_history",
-                kCellTitleKey : OALocalizedString(@"clear_history"),
+                kCellTitleKey : OALocalizedString(@"history_clear_alert_title"),
                 kCellIconNameKey : @"ic_custom_remove_outlined",
                 kCellTypeKey : [OARightIconTableViewCell getCellIdentifier],
                 @"value" : [self getDialogsAndNotificationsValue],
@@ -350,8 +360,6 @@
         }
         if (cell)
         {
-            cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingOnSideOfContent, 0., 0.);
-
             OAApplicationMode *appMode = [item objForKey:@"mode"];
             if (appMode)
             {
@@ -389,8 +397,6 @@
         }
         if (cell)
         {
-            cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingToLeftOfContentWithIcon, 0., 0.);
-
             BOOL isClearHistory = [item.key isEqualToString:@"clear_history"];
             cell.titleLabel.text = item.title;
             cell.titleLabel.textColor = isClearHistory ? UIColorFromRGB(color_primary_red) : UIColorFromRGB(color_primary_purple);
@@ -411,7 +417,6 @@
         }
         if (cell)
         {
-            cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingOnSideOfContent, 0., 0.);
             cell.titleLabel.text = item.title;
 
             [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
@@ -434,7 +439,6 @@
         }
         if (cell)
         {
-            cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingOnSideOfContent, 0., 0.);
             cell.titleLabel.text = item.title;
             cell.valueLabel.text = [item stringForKey:@"value"];
 
@@ -452,7 +456,7 @@
     return [_data sectionCount];
 }
 
-- (void)onRowPressed:(NSIndexPath *)indexPath
+- (void)onRowSelected:(NSIndexPath *)indexPath
 {
     OATableRowData *item = [_data itemForIndexPath:indexPath];
     switch (_settingsType)
@@ -531,18 +535,25 @@
             }
             else
             {
-                UIViewController *viewController;
-                if ([item.key isEqualToString:@"search_history"])
-                    viewController = [[OAHistorySettingsViewController alloc] initWithSettingsType:EOASearchHistoryProfile];
-                else if ([item.key isEqualToString:@"navigation_history"])
-                    viewController = [[OAHistorySettingsViewController alloc] initWithSettingsType:EOANavigationHistoryProfile];
-                else if ([item.key isEqualToString:@"map_markers_history"])
-                    viewController = [[OAHistorySettingsViewController alloc] initWithSettingsType:EOAMarkersHistoryProfile];
-                else if ([item.key isEqualToString:@"export_history"])
-                    viewController = [[OAExportItemsViewController alloc] init];
-
-                if (viewController)
-                    [self.navigationController pushViewController:viewController animated:YES];
+                if ([item.key isEqualToString:@"export_history"])
+                {
+                    [self.navigationController pushViewController:[[OAExportItemsViewController alloc] init] animated:YES];
+                }
+                else
+                {
+                    OAHistorySettingsViewController *historyViewController;
+                    if ([item.key isEqualToString:@"search_history"])
+                        historyViewController = [[OAHistorySettingsViewController alloc] initWithSettingsType:EOAHistorySettingsTypeSearch];
+                    else if ([item.key isEqualToString:@"navigation_history"])
+                        historyViewController = [[OAHistorySettingsViewController alloc] initWithSettingsType:EOAHistorySettingsTypeNavigation];
+                    else if ([item.key isEqualToString:@"map_markers_history"])
+                        historyViewController = [[OAHistorySettingsViewController alloc] initWithSettingsType:EOAHistorySettingsTypeMapMarkers];
+                    if (historyViewController)
+                    {
+                        historyViewController.delegate = self;
+                        [self.navigationController pushViewController:historyViewController animated:YES];
+                    }
+                }
             }
             break;
         }
@@ -608,6 +619,57 @@
             [self updateTableView];
         }
     }
+}
+
+#pragma mark - Additions
+
+- (NSArray<OASearchResult *> *)getNavigationHistoryResults
+{
+    NSMutableArray<OASearchResult *> *searchResults = [self getSearchHistoryResults];
+    [searchResults enumerateObjectsUsingBlock:^(OASearchResult *searchResult, NSUInteger idx, BOOL *stop) {
+        OAHistoryItem *historyEntry = [self getHistoryEntry:searchResult];
+        if (historyEntry)
+        {
+            OAPointDescription *pointDescription = [[OAPointDescription alloc] initWithType:[historyEntry getPointDescriptionType]
+                                                                                   typeName:historyEntry.typeName
+                                                                                       name:historyEntry.name];
+            if ([pointDescription isPoiType] || [pointDescription isCustomPoiFilter])
+                [searchResults removeObject:searchResult];
+        }
+
+    }];
+    return searchResults;
+}
+
+- (NSMutableArray<OASearchResult *> *)getSearchHistoryResults
+{
+    NSMutableArray<OASearchResult *> *searchResults = [NSMutableArray array];
+    OASearchUICore *searchUICore = [[OAQuickSearchHelper instance] getCore];
+    OASearchResultCollection *res = [searchUICore shallowSearch:OASearchHistoryAPI.class text:@"" matcher:nil resortAll:NO removeDuplicates:NO];
+    if (res)
+        [searchResults addObjectsFromArray:[res getCurrentSearchResults]];
+    return searchResults;
+}
+
+- (NSInteger)calculateNavigationItemsCount
+{
+    NSInteger count = [self getNavigationHistoryResults].count;
+    if ([[OATargetPointsHelper sharedInstance] isBackupPointsAvailable])
+    {
+        // Take "Previous Route" item into account during calculations
+        count++;
+    }
+    return count;
+}
+
+- (OAHistoryItem *)getHistoryEntry:(OASearchResult *) searchResult
+{
+    if ([searchResult.object isKindOfClass:OAHistoryItem.class])
+        return (OAHistoryItem *) searchResult.object;
+    else if ([searchResult.relatedObject isKindOfClass:OAHistoryItem.class])
+        return (OAHistoryItem *) searchResult.relatedObject;
+
+    return nil;
 }
 
 #pragma mark - OAUninstallSpeedCamerasDelegate

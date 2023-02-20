@@ -19,6 +19,10 @@
 
 - (OARTargetPoint *) getPointToNavigate;
 - (OARTargetPoint *) getPointToStart;
+- (OARTargetPoint *) getPointToNavigateBackup;
+- (OARTargetPoint *) getPointToStartBackup;
+- (OARTargetPoint *) getMyLocationToStart;
+- (BOOL) isBackupPointsAvailable;
 - (OAPointDescription *) getStartPointDescription;
 - (NSArray<OARTargetPoint *> *) getIntermediatePoints;
 - (NSArray<OARTargetPoint *> *) getIntermediatePointsNavigation;

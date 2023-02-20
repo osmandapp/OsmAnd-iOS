@@ -106,7 +106,7 @@
                                              font:[UIFont scaledSystemFontOfSize:15.]];
 }
 
-- (void)onRowPressed:(NSIndexPath *)indexPath
+- (void)onRowSelected:(NSIndexPath *)indexPath
 {
     OAProfileAppearanceViewController* profileAppearanceViewController = [[OAProfileAppearanceViewController alloc] initWithParentProfile:_profileList[indexPath.row]];
     [self.navigationController pushViewController:profileAppearanceViewController animated:YES];

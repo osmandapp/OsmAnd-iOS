@@ -70,7 +70,7 @@
     return 1;
 }
 
-- (void)onRowPressed:(NSIndexPath *)indexPath
+- (void)onRowSelected:(NSIndexPath *)indexPath
 {
     _parameter.value = _parameter.possibleValues[indexPath.row].name;
     [_styleSettings save:_parameter];

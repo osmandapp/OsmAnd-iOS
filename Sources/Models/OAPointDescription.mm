@@ -142,6 +142,11 @@
     return [POINT_TYPE_MY_LOCATION isEqualToString:_type];
 }
 
+- (BOOL) isPoiType
+{
+    return [POINT_TYPE_POI_TYPE isEqualToString:_type];
+}
+
 - (BOOL) isCustomPoiFilter
 {
     return [POINT_TYPE_CUSTOM_POI_FILTER isEqualToString:_type];

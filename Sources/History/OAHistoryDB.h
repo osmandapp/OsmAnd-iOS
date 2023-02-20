@@ -17,9 +17,9 @@
 - (void)deletePoint:(int64_t)id;
 
 - (OAHistoryItem *)getPointByName:(NSString *)name;
-- (NSArray *)getPoints:(NSString *)selectPostfix limit:(int)limit;
+- (NSArray<OAHistoryItem *> *)getPoints:(NSString *)selectPostfix limit:(int)limit;
 - (NSArray *)getSearchHistoryPoints:(int)count;
-- (NSArray *)getPointsHavingTypes:(NSArray<NSNumber *> *)types limit:(int)limit;
+- (NSArray<OAHistoryItem *> *)getPointsHavingTypes:(NSArray<NSNumber *> *)types limit:(int)limit;
 
 - (long) getMarkersHistoryLastModifiedTime;
 - (void) setMarkersHistoryLastModifiedTime:(long)lastModified;

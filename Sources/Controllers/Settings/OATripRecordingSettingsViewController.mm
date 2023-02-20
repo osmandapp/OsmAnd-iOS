@@ -513,7 +513,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
         return 1;
 }
 
-- (void)onRowPressed:(NSIndexPath *)indexPath
+- (void)onRowSelected:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
     switch (_settingsType)

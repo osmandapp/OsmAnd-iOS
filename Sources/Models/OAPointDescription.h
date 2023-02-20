@@ -87,6 +87,7 @@
 - (BOOL) isMapMarker;
 - (BOOL) isParking;
 - (BOOL) isMyLocation;
+- (BOOL) isPoiType;
 - (BOOL) isCustomPoiFilter;
 - (BOOL) isGpxPoint;
 

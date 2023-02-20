@@ -107,6 +107,30 @@
     return _pointToStart;
 }
 
+- (OARTargetPoint *)getPointToNavigateBackup
+{
+    return _pointToNavigateBackup;
+}
+
+- (OARTargetPoint *)getPointToStartBackup
+{
+    return _pointToStartBackup;
+}
+
+- (OARTargetPoint *)getMyLocationToStart
+{
+    return _myLocationToStart;
+}
+
+- (BOOL)isBackupPointsAvailable
+{
+    OARTargetPoint *startPoint = [self getPointToStartBackup];
+    OARTargetPoint *endPoint = [self getPointToNavigateBackup];
+    if (!startPoint)
+        startPoint = [self getMyLocationToStart];
+    return startPoint && endPoint;
+}
+
 - (OAPointDescription *) getStartPointDescription
 {
     return _app.data.pointToStart ? _app.data.pointToStart.pointDescription : nil;

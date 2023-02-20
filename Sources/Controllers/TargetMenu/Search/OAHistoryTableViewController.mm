@@ -74,7 +74,7 @@
 
     _decelerating = NO;
     _settings = [OAAppSettings sharedManager];
-    _isSearchLoggingDisabled = ![_settings.defaultSearchHistoryLoggingApplicationMode get];
+    _isSearchLoggingDisabled = ![_settings.searchHistory get];
     [self reloadData];
 }
 
@@ -168,7 +168,7 @@
         [existingBackupSection addRowFromDictionary:@{
             kCellTypeKey: OAFilledButtonCell.getCellIdentifier,
             kCellKeyKey: @"onHistorySettingsButtonPressed",
-            kCellTitleKey: OALocalizedString(@"sett_settings")
+            kCellTitleKey: OALocalizedString(@"shared_string_settings")
         }];
         [_data addSection:existingBackupSection];
     }
@@ -333,7 +333,7 @@
 
 -(void)onHistorySettingsButtonPressed
 {
-    OAHistorySettingsViewController* historyViewController = [[OAHistorySettingsViewController alloc] initWithSettingsType:EOASearchHistoryProfile];
+    OAHistorySettingsViewController* historyViewController = [[OAHistorySettingsViewController alloc] initWithSettingsType:EOAHistorySettingsTypeSearch];
     [self dismissViewControllerAnimated:YES completion:nil];
     [OARootViewController.instance.navigationController pushViewController:historyViewController animated:YES];
 }
@@ -472,21 +472,24 @@
                 NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OALargeImageTitleDescrTableViewCell getCellIdentifier] owner:self options:nil];
                 cell = (OALargeImageTitleDescrTableViewCell *)[nib objectAtIndex:0];
                 cell.separatorInset = UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.);
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
                 [cell showButton:NO];
+                cell.cellImageView.tintColor = UIColorFromRGB(color_tint_gray);
             }
-            cell.titleLabel.text = item.title;
-            cell.descriptionLabel.text = item.descr;
-            [cell.cellImageView setImage:[UIImage templateImageNamed:item.iconName]];
-            cell.cellImageView.tintColor = UIColorFromRGB(color_tint_gray);
-            
-            if (cell.needsUpdateConstraints)
-                [cell updateConstraints];
-            
+            if (cell)
+            {
+                cell.titleLabel.text = item.title;
+                cell.descriptionLabel.text = item.descr;
+                [cell.cellImageView setImage:[UIImage templateImageNamed:item.iconName]];
+
+                if (cell.needsUpdateConstraints)
+                    [cell updateConstraints];
+            }
             return cell;
         }
         else if ([cellId isEqualToString:OAFilledButtonCell.getCellIdentifier])
         {
-            OAFilledButtonCell* cell = [tableView dequeueReusableCellWithIdentifier:OAFilledButtonCell.getCellIdentifier];
+            OAFilledButtonCell *cell = [tableView dequeueReusableCellWithIdentifier:OAFilledButtonCell.getCellIdentifier];
             if (cell == nil)
             {
                 NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAFilledButtonCell getCellIdentifier] owner:self options:nil];
@@ -501,9 +504,13 @@
                 cell.leadingConstraint.constant = 100.;
                 cell.trailingConstraint.constant = 100.;
                 cell.separatorInset = UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.);
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
             }
-            [cell.button setTitle:item.title forState:UIControlStateNormal];
-            [cell.button addTarget:self action:NSSelectorFromString(item.key) forControlEvents:UIControlEventTouchUpInside];
+            if (cell)
+            {
+                [cell.button setTitle:item.title forState:UIControlStateNormal];
+                [cell.button addTarget:self action:NSSelectorFromString(item.key) forControlEvents:UIControlEventTouchUpInside];
+            }
             return cell;
         }
     }

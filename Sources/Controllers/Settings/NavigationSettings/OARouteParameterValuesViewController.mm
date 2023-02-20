@@ -268,7 +268,7 @@ typedef NS_ENUM(NSInteger, EOARouteParamType) {
     return vw;
 }
 
-- (void)onRowPressed:(NSIndexPath *)indexPath
+- (void)onRowSelected:(NSIndexPath *)indexPath
 {
     if (_type == EOARouteParamTypeNumeric)
     {

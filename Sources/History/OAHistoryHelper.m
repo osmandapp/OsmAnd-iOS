@@ -80,7 +80,7 @@
     return [_db getSearchHistoryPoints:limit];
 }
 
-- (NSArray *)getPointsHavingTypes:(NSArray<NSNumber *> *)types limit:(int)limit
+- (NSArray<OAHistoryItem *> *)getPointsHavingTypes:(NSArray<NSNumber *> *)types limit:(int)limit
 {
     return [_db getPointsHavingTypes:types limit:limit];
 }

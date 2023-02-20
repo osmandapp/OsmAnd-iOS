@@ -2,7 +2,7 @@
 //  OASearchHistoryTableItem.h
 //  OsmAnd Maps
 //
-//  Created by ДМИТРИЙ СВЕТЛИЧНЫЙ on 02.02.2023.
+//  Created by Dmytro Svetlichnyi on 02.02.2023.
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 

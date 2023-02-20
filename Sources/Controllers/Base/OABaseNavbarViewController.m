@@ -7,6 +7,7 @@
 //
 
 #import "OABaseNavbarViewController.h"
+#import "OASimpleTableViewCell.h"
 #import "OAUtilities.h"
 #import "OASizes.h"
 #import "OAColors.h"
@@ -53,29 +54,15 @@
 {
     [super viewDidLoad];
 
+    self.navigationController.interactivePopGestureRecognizer.delegate = self;
+    self.navigationController.interactivePopGestureRecognizer.enabled = YES;
+
+    [self updateNavbar];
+
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.backgroundColor = UIColorFromRGB(color_primary_table_background);
-
-    [self setupNavbarButtons];
-    [self setupNavbarFonts];
-    [self updateNavbarStackViewEstimatedHeight];
-    [self setupTableHeaderView];
-    self.titleLabel.textColor = [self getTitleColor];
-
-    NSString *title = [self getTitle];
-    self.titleLabel.hidden = !title || title.length == 0;
-    NSString *subtitle = [self getSubtitle];
-    self.subtitleLabel.hidden = !subtitle || subtitle.length == 0;
-    self.separatorNavbarView.hidden = ![self isNavbarSeparatorVisible] && ![self isTableHeaderHasHiddenSeparator];
-    self.navbarBackgroundView.backgroundColor = [self getNavbarBackgroundColor];
-
-    if ([self getTableHeaderMode] == EOABaseTableHeaderModeBigTitle)
-    {
-        self.titleLabel.alpha = 0.;
-        self.subtitleLabel.alpha = 0.;
-        self.separatorNavbarView.alpha = 0.;
-    }
+    self.tableView.tintColor = UIColorFromRGB(color_primary_purple);
 
     [self generateData];
 }
@@ -112,6 +99,49 @@
     [self.rightNavbarButton setTitle:[self getRightNavbarButtonTitle] forState:UIControlStateNormal];
 }
 
+- (void)updateNavbar
+{
+    [self setupNavbarButtons];
+    [self setupNavbarFonts];
+    [self updateNavbarStackViewEstimatedHeight];
+    [self setupTableHeaderView];
+
+    self.titleLabel.textColor = [self getTitleColor];
+    NSString *title = [self getTitle];
+    self.titleLabel.hidden = !title || title.length == 0;
+    NSString *subtitle = [self getSubtitle];
+    self.subtitleLabel.hidden = !subtitle || subtitle.length == 0;
+    self.separatorNavbarView.hidden = ![self isNavbarSeparatorVisible] && ![self isTableHeaderHasHiddenSeparator];
+    self.navbarBackgroundView.backgroundColor = [self getNavbarBackgroundColor];
+
+    if ([self getTableHeaderMode] == EOABaseTableHeaderModeBigTitle)
+    {
+        self.titleLabel.alpha = 0.;
+        self.subtitleLabel.alpha = 0.;
+        self.separatorNavbarView.alpha = 0.;
+    }
+}
+
+- (void)updateUI
+{
+    [self applyLocalization];
+    [self updateNavbar];
+    [self generateData];
+    [self.tableView reloadData];
+}
+
+- (void)updateUIAnimated
+{
+    [UIView transitionWithView:self.view
+                      duration:.2
+                       options:UIViewAnimationOptionTransitionCrossDissolve
+                    animations:^(void)
+                    {
+                        [self updateUI];
+                    }
+                    completion:nil];
+}
+
 - (void)setupNavbarButtons
 {
     UIColor *buttonsTintColor = [self getNavbarButtonsTintColor];
@@ -131,6 +161,8 @@
     BOOL hasRightButton = rightNavbarButtonTitle && rightNavbarButtonTitle.length > 0;
     self.leftNavbarButton.hidden = !hasLeftButton && !hasRightButton;
     self.rightNavbarButton.hidden = !hasLeftButton && !hasRightButton;
+    self.leftNavbarButton.enabled = hasLeftButton;
+    self.rightNavbarButton.enabled = hasRightButton;
 }
 
 - (void)setupNavbarFonts
@@ -340,7 +372,10 @@
     return nil;
 }
 
-- (void)onRowPressed:(NSIndexPath *)indexPath
+- (void)onRowSelected:(NSIndexPath *)indexPath
+{
+}
+- (void)onRowDeselected:(NSIndexPath *)indexPath
 {
 }
 
@@ -370,6 +405,13 @@
 
 - (void)onRotation
 {
+}
+
+#pragma mark - UIGestureRecognizerDelegate
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+{
+    return YES;
 }
 
 #pragma mark - UIScrollViewDelegate
@@ -478,11 +520,19 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [self onRowPressed:indexPath];
+    [self onRowSelected:indexPath];
 
-    UITableViewCell *row = [self getRow:indexPath];
-    if (row && row.selectionStyle != UITableViewCellSelectionStyleNone)
-        [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if (!self.tableView.allowsMultipleSelectionDuringEditing)
+    {
+        UITableViewCell *row = [self getRow:indexPath];
+        if (row && row.selectionStyle != UITableViewCellSelectionStyleNone)
+            [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    }
+}
+
+- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [self onRowDeselected:indexPath];
 }
 
 #pragma mark - UITableViewDataSource

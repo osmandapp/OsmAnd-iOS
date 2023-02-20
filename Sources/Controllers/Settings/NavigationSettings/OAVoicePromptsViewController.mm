@@ -399,7 +399,7 @@
     return [_data sectionCount];
 }
 
-- (void)onRowPressed:(NSIndexPath *)indexPath
+- (void)onRowSelected:(NSIndexPath *)indexPath
 {
     OATableRowData *item = [_data itemForIndexPath:indexPath];
     if ([item.cellType isEqualToString:[OAValueTableViewCell getCellIdentifier]])

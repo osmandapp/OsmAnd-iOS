@@ -24,7 +24,7 @@ typedef NS_ENUM(NSInteger, EOABaseTableHeaderMode)
     EOABaseTableHeaderModeBigTitleWithRightIcon
 };
 
-@interface OABaseNavbarViewController : OASuperViewController<UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource>
+@interface OABaseNavbarViewController : OASuperViewController<UIGestureRecognizerDelegate, UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource>
 
 @property (weak, nonatomic) IBOutlet UIButton *leftNavbarButton;
 @property (weak, nonatomic) IBOutlet UIButton *rightNavbarButton;
@@ -36,6 +36,10 @@ typedef NS_ENUM(NSInteger, EOABaseTableHeaderMode)
 
 - (void)commonInit;
 - (void)postInit;
+
+- (void)updateNavbar;
+- (void)updateUI;
+- (void)updateUIAnimated;
 
 - (void)setupTableHeaderView;
 - (NSString *)getTitle;
@@ -61,7 +65,8 @@ typedef NS_ENUM(NSInteger, EOABaseTableHeaderMode)
 - (CGFloat)getCustomHeightForFooter:(NSInteger)section;
 - (UIView *)getCustomViewForHeader:(NSInteger)section;
 - (UIView *)getCustomViewForFooter:(NSInteger)section;
-- (void)onRowPressed:(NSIndexPath *)indexPath;
+- (void)onRowSelected:(NSIndexPath *)indexPath;
+- (void)onRowDeselected:(NSIndexPath *)indexPath;
 
 - (void)onRightNavbarButtonPressed;
 - (void)onScrollViewDidScroll:(UIScrollView *)scrollView;

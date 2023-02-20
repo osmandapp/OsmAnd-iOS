@@ -28,6 +28,8 @@ typedef NS_ENUM(NSInteger, EOATableViewCellContentStyle) {
 @property (weak, nonatomic) IBOutlet UILabel *descriptionLabel;
 @property (weak, nonatomic) IBOutlet UIView *bottomContentSpaceView;
 
+- (void)updateSeparatorInset;
+
 - (void)leftIconVisibility:(BOOL)show;
 - (void)titleVisibility:(BOOL)show;
 - (void)descriptionVisibility:(BOOL)show;

@@ -471,9 +471,20 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     }
 }
 
+- (BOOL)isFree
+{
+    return NO;
+}
+
 @end
 
 @implementation OARepositoryResourceItem
+
+- (BOOL)isFree
+{
+    return _resource && _resource->free;
+}
+
 @end
 
 @interface OAMultipleResourceItem ()
@@ -819,8 +830,10 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 + (BOOL) checkIfDownloadAvailable:(OAWorldRegion *)region
 {
     NSInteger tasksCount = [OsmAndApp instance].downloadsManager.keysOfDownloadTasks.count;
+    const auto res = OsmAndApp.instance.resourcesManager->getResourceInRepository(QString::fromNSString(region.regionId));
+    bool free = res && res->free;
 
-    if (region.regionId == nil || [region isInPurchasedArea] || ([OAIAPHelper freeMapsAvailable] > 0 && tasksCount < [OAIAPHelper freeMapsAvailable]))
+    if (region.regionId == nil || [region isInPurchasedArea] || free || ([OAIAPHelper freeMapsAvailable] > 0 && tasksCount < [OAIAPHelper freeMapsAvailable]))
         return YES;
 
     return NO;

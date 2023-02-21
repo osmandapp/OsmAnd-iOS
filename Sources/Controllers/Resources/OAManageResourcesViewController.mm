@@ -102,6 +102,7 @@ struct RegionResources
     NSMutableArray *_regionMapItems;
     NSMutableArray *_localRegionMapItems;
     
+    NSInteger _freeMapsBannerSection;
     NSInteger _downloadDescriptionSection;
     NSInteger _extraMapsSection;
     NSInteger _regionMapSection;
@@ -444,12 +445,45 @@ static BOOL _repositoryUpdated = NO;
 
 - (BOOL) shouldHideEmailSubscription
 {
-    return _currentScope == kLocalResourcesScope || [_iapHelper.allWorld isPurchased] || [OAIAPHelper isPaidVersion] || [OAAppSettings sharedManager].emailSubscribed.get || [self.region isKindOfClass:OACustomRegion.class];
+    return _currentScope == kLocalResourcesScope || [_iapHelper.allWorld isPurchased] || [OAIAPHelper isPaidVersion] || [OAAppSettings sharedManager].emailSubscribed.get || [self.region isKindOfClass:OACustomRegion.class] || [self shouldDisplayFreeMapsMessage];
 }
 
 - (BOOL) shouldDisplayWeatherForecast:(OAWorldRegion *)region
 {
     return [OAWeatherHelper shouldHaveWeatherForecast:region] && region == self.region;
+}
+
+- (BOOL) shouldDisplayFreeMapsMessage
+{
+    return self.region != OsmAndApp.instance.worldRegion && self.region.superregion != OsmAndApp.instance.worldRegion && [self hasFreeMaps];
+}
+
+- (BOOL) hasFreeMaps
+{
+    BOOL free = NO;
+    for (OAResourceItem *item in _regionMapItems)
+    {
+        const auto repoRes = _app.resourcesManager->getResourceInRepository(item.resourceId);
+        if (repoRes)
+            free |= repoRes->free;
+        if (free)
+            return free;
+    }
+    return free;
+}
+
+- (NSString *) getFreeMapsMessage
+{
+    NSString *message = @"";
+    for (OAResourceItem *item in _regionMapItems)
+    {
+        const auto repoRes = _app.resourcesManager->getResourceInRepository(item.resourceId);
+        if (repoRes)
+            message = repoRes->message.toNSString();
+        if (message.length > 0)
+            return message;
+    }
+    return message;
 }
 
 - (void)onWeatherSizeCalculated:(id)sender withKey:(id)key andValue:(id)value
@@ -1278,6 +1312,7 @@ static BOOL _repositoryUpdated = NO;
     @synchronized(_dataLock)
     {
         _lastUnusedSectionIndex = 0;
+        _freeMapsBannerSection = -1;
         _downloadDescriptionSection = -1;
         _extraMapsSection = -1;
         _otherMapsSection = -1;
@@ -1310,6 +1345,9 @@ static BOOL _repositoryUpdated = NO;
         
         if (![self.region isKindOfClass:OACustomRegion.class])
             _freeMemorySection = _lastUnusedSectionIndex++;
+        
+        if ([self shouldDisplayFreeMapsMessage])
+            _freeMapsBannerSection = _lastUnusedSectionIndex++;
         
         if (_displaySubscribeEmailView)
             _subscribeEmailSection = _lastUnusedSectionIndex++;
@@ -1897,7 +1935,7 @@ static BOOL _repositoryUpdated = NO;
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    if ([self isFiltering] || (_downloadDescriptionInfo && section == _downloadDescriptionSection))
+    if ([self isFiltering] || (_downloadDescriptionInfo && section == _downloadDescriptionSection) || section == _freeMapsBannerSection)
         return 0.0;
 
     if (section == _subscriptionBannerSection)
@@ -1931,6 +1969,8 @@ static BOOL _repositoryUpdated = NO;
         sectionsCount++;
     if (_freeMemorySection >= 0)
         sectionsCount++;
+    if (_freeMapsBannerSection)
+        sectionsCount++;
     if (_extraMapsSection >= 0)
         sectionsCount++;
     if (_downloadDescriptionSection >= 0)
@@ -1958,6 +1998,8 @@ static BOOL _repositoryUpdated = NO;
         return 0;
     if (section == _freeMemorySection)
         return 0;
+    if (section == _freeMapsBannerSection)
+        return 1;
     if (section == _extraMapsSection)
         return _customRegions.count;
     if (section == _downloadDescriptionSection)
@@ -2287,27 +2329,30 @@ static BOOL _repositoryUpdated = NO;
                     }
                 }
                 
-                if ((item.resourceType == OsmAndResourceType::SrtmMapRegion || item.resourceType == OsmAndResourceType::HillshadeRegion || item.resourceType == OsmAndResourceType::SlopeRegion)
-                    && ![_iapHelper.srtm isActive] && ![self.region isInPurchasedArea])
+                if (!item.isFree)
                 {
-                    disabled = YES;
-                    item.disabled = disabled;
-                }
-                if (item.resourceType == OsmAndResourceType::WikiMapRegion
-                    && ![_iapHelper.wiki isActive] && ![self.region isInPurchasedArea])
-                {
-                    disabled = YES;
-                    item.disabled = disabled;
-                }
-                if (item.resourceType == OsmAndResourceType::MapRegion && [self isNauticalScope] && ![OAPlugin isEnabled:OANauticalMapsPlugin.class])
-                {
-                    disabled = YES;
-                    item.disabled = disabled;
-                }
-                if ((item.resourceType == OsmAndResourceType::DepthContourRegion || item.resourceType == OsmAndResourceType::DepthMapRegion) && (![OAIAPHelper isDepthContoursPurchased] || ![OAPlugin isEnabled:OANauticalMapsPlugin.class]))
-                {
-                    disabled = YES;
-                    item.disabled = disabled;
+                    if ((item.resourceType == OsmAndResourceType::SrtmMapRegion || item.resourceType == OsmAndResourceType::HillshadeRegion || item.resourceType == OsmAndResourceType::SlopeRegion)
+                        && ![_iapHelper.srtm isActive] && ![self.region isInPurchasedArea])
+                    {
+                        disabled = YES;
+                        item.disabled = disabled;
+                    }
+                    if (item.resourceType == OsmAndResourceType::WikiMapRegion
+                        && ![_iapHelper.wiki isActive] && ![self.region isInPurchasedArea])
+                    {
+                        disabled = YES;
+                        item.disabled = disabled;
+                    }
+                    if (item.resourceType == OsmAndResourceType::MapRegion && [self isNauticalScope] && ![OAPlugin isEnabled:OANauticalMapsPlugin.class])
+                    {
+                        disabled = YES;
+                        item.disabled = disabled;
+                    }
+                    if ((item.resourceType == OsmAndResourceType::DepthContourRegion || item.resourceType == OsmAndResourceType::DepthMapRegion) && (![OAIAPHelper isDepthContoursPurchased] || ![OAPlugin isEnabled:OANauticalMapsPlugin.class]))
+                    {
+                        disabled = YES;
+                        item.disabled = disabled;
+                    }
                 }
 
                 if (_currentScope == kLocalResourcesScope && item.worldRegion && item.worldRegion.superregion)
@@ -2402,23 +2447,26 @@ static BOOL _repositoryUpdated = NO;
                 }
             }
 
-            if ((item.resourceType == OsmAndResourceType::SrtmMapRegion || item.resourceType == OsmAndResourceType::HillshadeRegion || item.resourceType == OsmAndResourceType::SlopeRegion)
-                && ![_iapHelper.srtm isActive] && ![self.region isInPurchasedArea])
+            if (![item isFree])
             {
-                disabled = YES;
-                item.disabled = disabled;
-            }
-            if (item.resourceType == OsmAndResourceType::WikiMapRegion
-                && ![_iapHelper.wiki isActive] && ![self.region isInPurchasedArea])
-            {
-                disabled = YES;
-                item.disabled = disabled;
-            }
-            if (item.resourceType == OsmAndResourceType::WeatherForecast
-                && ![_iapHelper.weather isActive] && ![self.region isInPurchasedArea])
-            {
-                disabled = YES;
-                item.disabled = disabled;
+                if ((item.resourceType == OsmAndResourceType::SrtmMapRegion || item.resourceType == OsmAndResourceType::HillshadeRegion || item.resourceType == OsmAndResourceType::SlopeRegion)
+                    && ![_iapHelper.srtm isActive] && ![self.region isInPurchasedArea])
+                {
+                    disabled = YES;
+                    item.disabled = disabled;
+                }
+                if (item.resourceType == OsmAndResourceType::WikiMapRegion
+                    && ![_iapHelper.wiki isActive] && ![self.region isInPurchasedArea])
+                {
+                    disabled = YES;
+                    item.disabled = disabled;
+                }
+                if (item.resourceType == OsmAndResourceType::WeatherForecast
+                    && ![_iapHelper.weather isActive] && ![self.region isInPurchasedArea])
+                {
+                    disabled = YES;
+                    item.disabled = disabled;
+                }
             }
 
             subtitle = @"";
@@ -2522,6 +2570,24 @@ static BOOL _repositoryUpdated = NO;
                 subtitle = [NSString stringWithFormat:@"%@ • %@", OALocalizedString(@"online_map"), [NSByteCountFormatter stringFromByteCount:item.size countStyle:NSByteCountFormatterCountStyleFile]];
             else
                 subtitle = OALocalizedString(@"online_map");
+        }
+        else if (indexPath.section == _freeMapsBannerSection)
+        {
+            OASimpleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
+            if (cell == nil)
+            {
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+                cell = (OASimpleTableViewCell *) nib[0];
+                [cell anchorContent:EOATableViewCellContentTopStyle];
+            }
+            if (cell)
+            {
+                cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + 66., 0., 0.);
+                cell.titleLabel.text = OALocalizedString(@"free_downloads");
+                cell.descriptionLabel.text = [self getFreeMapsMessage];
+                cell.leftIconView.image = [UIImage rtlImageNamed:@"ic_custom_map_updates_colored_day"];
+            }
+            return cell;
         }
     }
 

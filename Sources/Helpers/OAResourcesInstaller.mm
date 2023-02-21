@@ -202,8 +202,8 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
     {
         NSString* localPath = task.targetPath;
         NSString* nsResourceId = [task.key substringFromIndex:[@"resource:" length]];
-        const auto& resourceId = QString::fromNSString(nsResourceId);
-        const auto& filePath = QString::fromNSString(localPath);
+        const auto resourceId = QString::fromNSString(nsResourceId);
+        const auto filePath = QString::fromNSString(localPath);
         bool success = false;
         bool showProgressHud = !resourceId.endsWith(QStringLiteral(".live.obf"));
         
@@ -238,8 +238,13 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
                     if (nsResourceId && [[nsResourceId lowercaseString] hasSuffix:@".obf"] && ![[nsResourceId lowercaseString] hasSuffix:@"live.obf"])
                     {
                         OAWorldRegion* match = [OAResourcesUIHelper findRegionOrAnySubregionOf:_app.worldRegion thatContainsResource:QString([nsResourceId UTF8String])];
-                        if (!match || ![match isInPurchasedArea])
-                            [OAIAPHelper decreaseFreeMapsCount];
+                        const auto resource = _app.resourcesManager->getResourceInRepository(resourceId);
+                        bool free = resource && resource->free;
+                        if (!free)
+                        {
+                            if (!match || ![match isInPurchasedArea])
+                                [OAIAPHelper decreaseFreeMapsCount];
+                        }
                     }
                     
                     [[NSNotificationCenter defaultCenter] postNotificationName:OAResourceInstalledNotification object:nsResourceId userInfo:nil];

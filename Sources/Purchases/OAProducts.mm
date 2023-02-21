@@ -540,7 +540,6 @@
 
 - (void) commonInit
 {
-    [self setPurchased];
     if (self.free && ![self isAlreadyPurchased])
     {
         [self setPurchased];

@@ -345,7 +345,7 @@
     return [NSArray arrayWithArray:arr];
 }
 
-- (NSArray *)getSearchHistoryPoints:(int)count
+- (NSArray<OAHistoryItem *> *)getSearchHistoryPoints:(int)count
 {
     return [self getPoints:[NSString stringWithFormat:@"WHERE %@ > %d GROUP BY %@ HAVING MAX(%@)", POINT_COL_TYPE, (int)OAHistoryTypeUnknown, POINT_COL_HASH, POINT_COL_TIME] limit:count];
 }

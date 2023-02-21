@@ -12,6 +12,7 @@
 #import "OAMapPanelViewController.h"
 #import "OAMapViewController.h"
 #import "OARouteBaseViewController.h"
+#import "OAExportItemsViewController.h"
 #import "OAAppSettings.h"
 #import "OASwitchTableViewCell.h"
 #import "Localization.h"
@@ -32,6 +33,8 @@
 #import "OADestinationItem.h"
 #import "OAMapRendererView.h"
 #import "OAOsmAndFormatter.h"
+#import "OAExportSettingsType.h"
+#import "OAAutoObserverProxy.h"
 #import "OASizes.h"
 #import <CoreLocation/CoreLocation.h>
 
@@ -85,6 +88,13 @@
     }
 }
 
+- (void)registerObservers
+{
+    [self addObserver:[[OAAutoObserverProxy alloc] initWith:self
+                                                withHandler:@selector(onHistoryItemsDeleted:withKey:)
+                                                 andObserve:_historyHelper.historyPointsRemoveObservable]];
+}
+
 #pragma mark - Base setup UI
 
 - (void)setupBottomFonts
@@ -125,7 +135,7 @@
     {
         if (self.tableView.editing)
             return [self isAllSelected] ? OALocalizedString(@"shared_string_deselect_all") : OALocalizedString(@"shared_string_select_all");
-        else
+        else if ([self sectionsCount] > 1)
             return OALocalizedString(@"shared_string_edit");
     }
     return @"";
@@ -216,12 +226,12 @@
 
     if (_isLogHistoryOn)
     {
-        CLLocation *latLon = _app.locationServices.lastKnownLocation;
-        NSMutableArray<OAHistoryItem *> *historyItems = [NSMutableArray array];
+        NSMutableDictionary<NSNumber *, NSDictionary<NSString *, NSString *> *> *historyDetails = [NSMutableDictionary dictionary];
+        NSMutableArray<OAHistoryItem *> *sortedHistoryItems = [NSMutableArray array];
 
         if (_historyType == EOAHistorySettingsTypeMapMarkers)
         {
-            historyItems = [NSMutableArray arrayWithArray:[_historyHelper getPointsHavingTypes:_historyHelper.destinationTypes limit:0]];
+            sortedHistoryItems = [NSMutableArray arrayWithArray:[_historyHelper getPointsHavingTypes:_historyHelper.destinationTypes limit:0]];
         }
         else
         {
@@ -237,12 +247,21 @@
             {
                 OAHistoryItem *historyItem = [self.delegate getHistoryEntry:searchResult];
                 if (historyItem)
-                    [historyItems addObject:historyItem];
+                {
+                    [sortedHistoryItems addObject:historyItem];
+                    NSString *iconName = [OAQuickSearchListItem getIconName:searchResult];
+                    historyDetails[@(historyItem.hId)] = @{
+                        @"name" : [OAQuickSearchListItem getName:searchResult],
+                        @"iconName" : iconName ? iconName : @"ic_custom_marker"
+                    };
+                }
             }
         }
 
-        if (historyItems.count > 0)
+        if (sortedHistoryItems.count > 0)
         {
+            [self sortSearchResults:sortedHistoryItems];
+
             NSCalendar *calendar = NSCalendar.autoupdatingCurrentCalendar;
             NSDate *today = [calendar startOfDayForDate:[NSDate date]];
             NSDate *sevenDaysAgo = [calendar dateByAddingUnit:NSCalendarUnitDay value:-7 toDate:today options:0];
@@ -251,17 +270,20 @@
             OATableSectionData *lastSection = [_data createNewSection];
             lastSection.headerText = OALocalizedString(@"last_seven_days");
 
-            [self sortSearchResults:historyItems];
-            for (OAHistoryItem *historyItem in historyItems)
+            for (OAHistoryItem *historyItem in sortedHistoryItems)
             {
                 [self updateDistanceAndDirection:historyItem];
                 NSDate *historyItemDate = [calendar startOfDayForDate:historyItem.date];
                 if ([historyItemDate isEqualToDate:today] || [historyItemDate laterDate:sevenDaysAgo])
                 {
-                    [lastSection addRowFromDictionary:@{
-                        kCellTypeKey : [OASimpleTableViewCell getCellIdentifier],
-                        @"historyItem" : historyItem
-                    }];
+                    OATableRowData *rowData = [lastSection createNewRow];
+                    rowData.cellType = [OASimpleTableViewCell getCellIdentifier];
+                    [rowData setObj:historyItem forKey:@"historyItem"];
+                    if (historyDetails.count > 0)
+                    {
+                        rowData.title = historyDetails[@(historyItem.hId)][@"name"];
+                        rowData.iconName = historyDetails[@(historyItem.hId)][@"iconName"];
+                    }
                 }
                 else
                 {
@@ -340,10 +362,15 @@
             cell.selectionStyle = self.tableView.editing ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
 
             OAHistoryItem *historyItem = [item objForKey:@"historyItem"];
-            cell.titleLabel.text = historyItem.name.length > 0 ? historyItem.name : historyItem.typeName;
+            cell.titleLabel.text = item.title && item.title.length > 0 ? item.title : historyItem.name.length > 0 ? historyItem.name : historyItem.typeName;
             cell.descriptionLabel.text = historyItem.distance;
 
-            UIImage *icon = [historyItem icon];
+            NSString *iconName = item.iconName;
+            UIImage *icon;
+            if (iconName)
+                icon = [UIImage imageNamed:iconName];
+            if (!icon)
+                icon = [historyItem icon];
             if (!icon)
             {
                 if (_historyType == EOAHistorySettingsTypeSearch)
@@ -460,16 +487,35 @@
 
 - (void)onTopButtonPressed
 {
-    
+    NSArray<NSIndexPath *> *selectedIndexPaths = self.tableView.indexPathsForSelectedRows;
+    NSMutableArray<OAHistoryItem *> *selectedItems = [NSMutableArray array];
+    for (NSIndexPath *indexPath in selectedIndexPaths)
+    {
+        OAHistoryItem *selectedItem = [[_data itemForIndexPath:indexPath] objForKey:@"historyItem"];
+        if (selectedItem)
+            [selectedItems addObject:selectedItem];
+    }
+
+    OAExportSettingsType *exportSettingsType;
+    if (_historyType == EOAHistorySettingsTypeNavigation)
+        exportSettingsType = OAExportSettingsType.NAVIGATION_HISTORY;
+    else if (_historyType == EOAHistorySettingsTypeMapMarkers)
+        exportSettingsType = OAExportSettingsType.HISTORY_MARKERS;
+    else
+        exportSettingsType = OAExportSettingsType.SEARCH_HISTORY;
+
+    OAExportItemsViewController *exportItemsViewController =
+        [[OAExportItemsViewController alloc] initWithType:exportSettingsType selectedItems:selectedItems];
+    [self.navigationController pushViewController:exportItemsViewController animated:YES];
 }
 
 - (void)onBottomButtonPressed
 {
-    NSArray *indexes = [self.tableView indexPathsForSelectedRows];
-    if (indexes.count > 0)
+    NSArray *selectedIndexPaths = [self.tableView indexPathsForSelectedRows];
+    if (selectedIndexPaths.count > 0)
     {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"delete_history_items")
-                                                                       message:[NSString stringWithFormat:OALocalizedString(@"confirm_history_item_delete"), indexes.count]
+                                                                       message:[NSString stringWithFormat:OALocalizedString(@"confirm_history_item_delete"), selectedIndexPaths.count]
                                                                 preferredStyle:UIAlertControllerStyleAlert];
         
         UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel")
@@ -480,14 +526,13 @@
                                                               style:UIAlertActionStyleDefault
                                                             handler:^(UIAlertAction * _Nonnull action) {
             NSMutableArray<OAHistoryItem *> *selectedItems = [NSMutableArray array];
-            for (NSIndexPath *path in indexes)
+            for (NSIndexPath *indexPath in selectedIndexPaths)
             {
-                OAHistoryItem *selectedItem = [[_data itemForIndexPath:path] objForKey:@"historyItem"];
-                [selectedItems addObject:selectedItem];
+                OAHistoryItem *selectedItem = [[_data itemForIndexPath:indexPath] objForKey:@"historyItem"];
+                if (selectedItem)
+                    [selectedItems addObject:selectedItem];
             }
             [_historyHelper removePoints:selectedItems];
-
-            [self updateUIAnimated];
         }];
         
         [alert addAction:cancelAction];
@@ -521,12 +566,21 @@
                        options:UIViewAnimationOptionTransitionCrossDissolve
                     animations:^(void)
                     {
-                        [self.rightNavbarButton setTitle:[self getRightNavbarButtonTitle] forState:UIControlStateNormal];
-                        [self updateNavbar];
                         [self generateData];
                         [self.tableView reloadData];
+                        [self.rightNavbarButton setTitle:[self getRightNavbarButtonTitle] forState:UIControlStateNormal];
+                        [self updateNavbar];
                     }
     completion:nil];
+}
+
+- (void)onHistoryItemsDeleted:(id)observable withKey:(id)key
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateUIAnimated];
+        if ([self sectionsCount] == 0)
+            [self onLeftNavbarButtonPressed];
+    });
 }
 
 @end

@@ -892,6 +892,25 @@
     return [OAUtilities applyScaleFactorToImage:img];
 }
 
++ (NSString *)getCustomFilterIconName:(OAPOIUIFilter *)filter
+{
+    if (filter)
+    {
+        NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *acceptedTypes = [filter getAcceptedTypes];
+        NSArray<OAPOICategory *> *categories = acceptedTypes.keyEnumerator.allObjects;
+        if (categories.count == 1)
+        {
+            OAPOICategory *category = categories[0];
+            NSMutableSet<NSString *> *filters = [acceptedTypes objectForKey:category];
+            if (!filters || filters.count > 1)
+                return [category iconName];
+            else
+                return [self getPoiTypeIconName:[category getPoiTypeByKeyName:filters.allObjects.firstObject]];
+        }
+    }
+    return nil;
+}
+
 + (NSString *) getPoiTypeIconName:(OAPOIBaseType *)abstractPoiType
 {
     if (abstractPoiType != nil && abstractPoiType.iconName) {

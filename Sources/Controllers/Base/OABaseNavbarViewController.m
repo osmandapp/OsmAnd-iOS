@@ -52,6 +52,8 @@
 
 - (void)viewDidLoad
 {
+    [self generateData];
+
     [super viewDidLoad];
 
     self.navigationController.interactivePopGestureRecognizer.delegate = self;
@@ -63,8 +65,6 @@
     self.tableView.dataSource = self;
     self.tableView.backgroundColor = UIColorFromRGB(color_primary_table_background);
     self.tableView.tintColor = UIColorFromRGB(color_primary_purple);
-
-    [self generateData];
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -75,9 +75,14 @@
         [self updateNavbarStackViewEstimatedHeight];
         [self setupTableHeaderView];
         [self onRotation];
-        [self.tableView reloadData];
     } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
         _isRotating = NO;
+        if (![OAUtilities isLandscape])
+        {
+            CGFloat y = self.tableView.contentOffset.y + [self getNavbarHeight];
+            if (y == 0)
+                [self scrollViewDidScroll:self.tableView];
+        }
     }];
 }
 
@@ -124,10 +129,10 @@
 
 - (void)updateUI
 {
-    [self applyLocalization];
-    [self updateNavbar];
     [self generateData];
     [self.tableView reloadData];
+    [self applyLocalization];
+    [self updateNavbar];
 }
 
 - (void)updateUIAnimated

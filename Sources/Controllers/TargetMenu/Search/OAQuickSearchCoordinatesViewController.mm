@@ -829,7 +829,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
 
 - (void) addHistoryItem:(OASearchResult *)searchResult
 {
-    if (searchResult.location)
+    if (searchResult.location && [[OAAppSettings sharedManager].searchHistory get])
     {
         OAHistoryItem *h = [[OAHistoryItem alloc] init];
         h.name = [OAQuickSearchListItem getName:searchResult];

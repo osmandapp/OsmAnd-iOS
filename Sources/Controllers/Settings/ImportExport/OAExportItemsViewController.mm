@@ -55,6 +55,17 @@
     return self;
 }
 
+- (instancetype)initWithType:(OAExportSettingsType *)type selectedItems:(NSArray *)selectedItems
+{
+    self = [super init];
+    if (self)
+    {
+        self.selectedItemsMap[type] = selectedItems;
+        _shouldOpenMyPlacesOnInit = YES;
+    }
+    return self;
+}
+
 - (void)commonInit
 {
     _settingsHelper = OASettingsHelper.sharedInstance;

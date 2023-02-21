@@ -90,6 +90,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     OARoutingHelper *_routingHelper;
     OATransportRoutingHelper *_transportHelper;
     OsmAndAppInstance _app;
+    OAAppSettings *_settings;
     
     NSDictionary<NSNumber *, NSArray *> *_data;
     
@@ -268,6 +269,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 - (void) commonInit
 {
     _app = [OsmAndApp instance];
+    _settings = [OAAppSettings sharedManager];
     _pointsHelper = [OATargetPointsHelper sharedInstance];
     _routingHelper = [OARoutingHelper sharedInstance];
     _transportHelper = [OATransportRoutingHelper sharedInstance];
@@ -666,14 +668,17 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         [dictionary setObject:[NSArray arrayWithArray:section] forKey:@(sectionIndex++)];
         
         [section removeAllObjects];
-        
-        [self generatePrevRouteSection:dictionary section:section sectionIndex:sectionIndex];
-        
+
+        BOOL isHistoryOn = [_settings.navigationHistory get];
+        if (isHistoryOn)
+            [self generatePrevRouteSection:dictionary section:section sectionIndex:sectionIndex];
+
         [self generateGpxSection:dictionary section:section sectionIndex:sectionIndex];
-        
+
         [self generateMrkersSection:dictionary section:section sectionIndex:sectionIndex];
-        
-        [self generateHistorySection:dictionary section:section sectionIndex:sectionIndex];
+
+        if (isHistoryOn)
+            [self generateHistorySection:dictionary section:section sectionIndex:sectionIndex];
     }
     _data = [NSDictionary dictionaryWithDictionary:dictionary];
     
@@ -1062,7 +1067,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     [self adjustFrame];
     [self.tableView reloadData];
     
-    BOOL isNight = [OAAppSettings sharedManager].nightMode;
+    BOOL isNight = _settings.nightMode;
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
     [mapPanel setTopControlsVisible:NO
            onlyMapSettingsAndSearch:NO
@@ -1116,7 +1121,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     }
     OAApplicationMode *am = [_routingHelper getAppMode];
     _appModeView.selectedMode = am;
-	if ([[OAAppSettings sharedManager].applicationMode get] != am)
+	if ([_settings.applicationMode get] != am)
         [self appModeChanged:am];
 }
 
@@ -1223,7 +1228,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 {
     _hasEmptyTransportRoute = NO;
     [_routingHelper setAppMode:next];
-    [[OAAppSettings sharedManager] setApplicationModePref:next markAsLastUsed:NO];
+    [_settings setApplicationModePref:next markAsLastUsed:NO];
     [_app initVoiceCommandPlayer:next warningNoneProvider:YES showDialog:NO force:NO];
     if ([_routingHelper isRouteBeingCalculated] || (_routingHelper.isPublicTransportMode && [_transportHelper isRouteBeingCalculated]))
         [_tableView reloadData];

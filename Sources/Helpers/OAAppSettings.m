@@ -4098,9 +4098,9 @@
         [_globalPreferences setObject:_useLastApplicationModeByDefault forKey:@"use_last_application_mode_by_default"];
         [_globalPreferences setObject:_lastUsedApplicationMode forKey:@"last_used_application_mode"];
         [_globalPreferences setObject:_lastRouteApplicationMode forKey:@"last_route_application_mode_backup_string"];
-        [_globalPreferences setObject:_searchHistory forKey:@"default_search_history_logging_applicatio_mode"];
-        [_globalPreferences setObject:_navigationHistory forKey:@"default_navigation_history_logging_applicatio_mode"];
-        [_globalPreferences setObject:_mapMarkersHistory forKey:@"default_markers_history_logging_applicatio_mode"];
+        [_globalPreferences setObject:_searchHistory forKey:@"search_history"];
+        [_globalPreferences setObject:_navigationHistory forKey:@"navigation_history"];
+        [_globalPreferences setObject:_mapMarkersHistory forKey:@"map_markers_history"];
         
         // TODO: not sure we need to override this setting with import/export
         _userIosId = [[[OACommonString withKey:userIosIdKey defValue:@""] makeGlobal] makeShared];

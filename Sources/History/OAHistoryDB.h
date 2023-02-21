@@ -18,7 +18,7 @@
 
 - (OAHistoryItem *)getPointByName:(NSString *)name;
 - (NSArray<OAHistoryItem *> *)getPoints:(NSString *)selectPostfix limit:(int)limit;
-- (NSArray *)getSearchHistoryPoints:(int)count;
+- (NSArray<OAHistoryItem *> *)getSearchHistoryPoints:(int)count;
 - (NSArray<OAHistoryItem *> *)getPointsHavingTypes:(NSArray<NSNumber *> *)types limit:(int)limit;
 
 - (long) getMarkersHistoryLastModifiedTime;

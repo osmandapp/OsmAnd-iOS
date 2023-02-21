@@ -623,6 +623,19 @@
 
 #pragma mark - Additions
 
+- (NSInteger)calculateNavigationItemsCount
+{
+    NSInteger count = [self getNavigationHistoryResults].count;
+    if ([[OATargetPointsHelper sharedInstance] isBackupPointsAvailable])
+    {
+        // Take "Previous Route" item into account during calculations
+        count++;
+    }
+    return count;
+}
+
+#pragma mark - OAHistorySettingsDelegate
+
 - (NSArray<OASearchResult *> *)getNavigationHistoryResults
 {
     NSMutableArray<OASearchResult *> *searchResults = [self getSearchHistoryResults];
@@ -649,17 +662,6 @@
     if (res)
         [searchResults addObjectsFromArray:[res getCurrentSearchResults]];
     return searchResults;
-}
-
-- (NSInteger)calculateNavigationItemsCount
-{
-    NSInteger count = [self getNavigationHistoryResults].count;
-    if ([[OATargetPointsHelper sharedInstance] isBackupPointsAvailable])
-    {
-        // Take "Previous Route" item into account during calculations
-        count++;
-    }
-    return count;
 }
 
 - (OAHistoryItem *)getHistoryEntry:(OASearchResult *) searchResult

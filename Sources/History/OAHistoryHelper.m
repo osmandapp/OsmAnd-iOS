@@ -70,12 +70,12 @@
     [_historyPointsRemoveObservable notifyEventWithKey:items];
 }
 
-- (NSArray *)getAllPoints
+- (NSArray<OAHistoryItem *> *)getAllPoints
 {
     return [_db getPoints:nil limit:0];
 }
 
-- (NSArray *)getSearchHistoryPoints:(int)limit
+- (NSArray<OAHistoryItem *> *)getSearchHistoryPoints:(int)limit
 {
     return [_db getSearchHistoryPoints:limit];
 }

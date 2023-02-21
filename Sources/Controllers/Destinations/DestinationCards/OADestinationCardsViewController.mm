@@ -308,24 +308,28 @@
         [sections addObject:directionsCardController];
     }
 
-    OAHistoryHelper *helper = [OAHistoryHelper sharedInstance];
-    if ([helper getPointsHavingTypes:helper.destinationTypes limit:1].count > 0)
+    BOOL isHistoryOn = [[OAAppSettings sharedManager].mapMarkersHistory get];
+    if (isHistoryOn)
     {
-        OAHistoryCardController *historyCardController;
-        for (OADestinationCardBaseController *card in _sections)
-            if ([card isKindOfClass:[OAHistoryCardController class]])
-            {
-                historyCardController = (OAHistoryCardController *)card;
-                break;
-            }
-        
-        if (!historyCardController)
-            historyCardController = [[OAHistoryCardController alloc] initWithSection:index++ tableView:self.tableView];
-        else
-            [historyCardController updateSectionNumber:index++];
-        
-        historyCardController.delegate = self;
-        [sections addObject:historyCardController];
+        OAHistoryHelper *helper = [OAHistoryHelper sharedInstance];
+        if ([helper getPointsHavingTypes:helper.destinationTypes limit:1].count > 0)
+        {
+            OAHistoryCardController *historyCardController;
+            for (OADestinationCardBaseController *card in _sections)
+                if ([card isKindOfClass:[OAHistoryCardController class]])
+                {
+                    historyCardController = (OAHistoryCardController *)card;
+                    break;
+                }
+            
+            if (!historyCardController)
+                historyCardController = [[OAHistoryCardController alloc] initWithSection:index++ tableView:self.tableView];
+            else
+                [historyCardController updateSectionNumber:index++];
+            
+            historyCardController.delegate = self;
+            [sections addObject:historyCardController];
+        }
     }
     
     _sections = [NSArray arrayWithArray:sections];

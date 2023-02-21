@@ -157,6 +157,11 @@
     return [POINT_TYPE_GPX isEqualToString:_type];
 }
 
+- (BOOL) isGpxFile
+{
+    return [POINT_TYPE_GPX_FILE isEqualToString:_type];
+}
+
 + (NSString *) getLocationName:(double)lat lon:(double)lon sh:(BOOL)sh
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];

@@ -1513,9 +1513,12 @@
 {
     @synchronized (_lock)
     {
-        _pointToNavigateBackup = _pointToNavigate;
-        _pointToStartBackup = _pointToStart;
-        _intermediatePointsBackup = [NSMutableArray arrayWithArray:_intermediates];
+        if ([[OAAppSettings sharedManager].navigationHistory get])
+        {
+            _pointToNavigateBackup = _pointToNavigate;
+            _pointToStartBackup = _pointToStart;
+            _intermediatePointsBackup = [NSMutableArray arrayWithArray:_intermediates];
+        }
     }
 }
 
@@ -1540,7 +1543,7 @@
 - (void) setPointToNavigate:(OARTargetPoint *)pointToNavigate
 {
     _pointToNavigate = pointToNavigate;
-    if (pointToNavigate && pointToNavigate.pointDescription)
+    if (pointToNavigate && pointToNavigate.pointDescription && [[OAAppSettings sharedManager].navigationHistory get])
     {
         OAHistoryItem *h = [[OAHistoryItem alloc] init];
         h.name = pointToNavigate.pointDescription.name;

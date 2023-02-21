@@ -1869,6 +1869,7 @@
 "roads" = "Roads";
 "shared_string_hillshade" = "Hillshade";
 "download_regular_maps" = "Standard map";
+"free_downloads" = "Free downloads";
 
 "select_language" = "Select language";
 "language_short" = "Lang";

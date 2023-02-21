@@ -35,6 +35,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 - (NSString *)getDate;
 
 - (BOOL) isInstalled;
+- (BOOL) isFree;
 
 @end
 

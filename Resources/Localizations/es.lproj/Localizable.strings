@@ -2504,7 +2504,7 @@
 "plugin_popup_nautical_ask" = "Activa el complemento náutico";
 "benefits_for_contributors_secondary_descr" = "Accede a OpenStreetMap para comprobar si tienes derecho a actualizaciones mensuales y horarias ilimitadas de los mapas.";
 "not_enough_contributions_descr" = "Necesitas un mínimo de %@ cambios en el último bimestre %@ para obtener acceso a actualizaciones ilimitadas de mapas por hora.";
-"enough_contributions_descr" = "Enhorabuena, has aportado suficientes contribuciones a OpenStreetMap y ya puedes disfrutar de actualizaciones ilimitadas de los mapas de OsmAnd.";
+"enough_contributions_descr" = "¡Felicitaciones, ha proporcionado suficientes contribuciones a OpenStreetMap y ahora puede disfrutar de actualizaciones ilimitadas de mapas de OsmAnd!";
 "auth_failed" = "Fallo de autorización";
 "backup_delete_all_data_or_versions_descr" = "Borra todos los datos en OsmAnd Cloud o sólo el historial de versiones. Los datos locales permanecerán intactos.";
 "backup_delete_old_data" = "Quitar versiones antiguas";

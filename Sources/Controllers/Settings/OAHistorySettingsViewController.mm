@@ -258,6 +258,29 @@
             }
         }
 
+        if (_historyType == EOAHistorySettingsTypeNavigation)
+        {
+            OARTargetPoint *pointToStartBackup = _app.data.pointToStartBackup;
+            OARTargetPoint *pointToNavigateBackup = _app.data.pointToNavigateBackup;
+            OATableSectionData *prevRouteSection = [OATableSectionData sectionData];
+            [prevRouteSection setHeaderText:OALocalizedString(@"previous_route")];
+            if (pointToNavigateBackup)
+            {
+                OAHistoryItem *historyitem = [[OAHistoryItem alloc] initWithPointDescription:pointToNavigateBackup.pointDescription];
+                historyitem.name = pointToNavigateBackup.pointDescription.name;
+                historyitem.latitude = pointToNavigateBackup.point.coordinate.latitude;
+                historyitem.longitude = pointToNavigateBackup.point.coordinate.longitude;
+                [prevRouteSection addRowFromDictionary:@{
+                    kCellTypeKey : [OASimpleTableViewCell getCellIdentifier],
+                    kCellTitleKey : pointToStartBackup ? pointToStartBackup.pointDescription.name : OALocalizedString(@"shared_string_my_location"),
+                    kCellDescrKey : pointToNavigateBackup.pointDescription.name,
+                    kCellIconNameKey : @"ic_custom_point_to_point",
+                    @"historyItem" : historyitem
+                }];
+                [_data addSection:prevRouteSection];
+            }
+        }
+
         if (sortedHistoryItems.count > 0)
         {
             [self sortSearchResults:sortedHistoryItems];
@@ -305,10 +328,14 @@
                 NSMutableArray<OAHistoryItem *> *groupHistoryItems = monthGroups[monthName];
                 for (OAHistoryItem *historyItem in groupHistoryItems)
                 {
-                    [monthSection addRowFromDictionary:@{
-                        kCellTypeKey : [OASimpleTableViewCell getCellIdentifier],
-                        @"historyItem" : historyItem
-                    }];
+                    OATableRowData *rowData = [monthSection createNewRow];
+                    rowData.cellType = [OASimpleTableViewCell getCellIdentifier];
+                    [rowData setObj:historyItem forKey:@"historyItem"];
+                    if (historyDetails.count > 0)
+                    {
+                        rowData.title = historyDetails[@(historyItem.hId)][@"name"];
+                        rowData.iconName = historyDetails[@(historyItem.hId)][@"iconName"];
+                    }
                 }
             }
         }
@@ -362,14 +389,17 @@
             cell.selectionStyle = self.tableView.editing ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
 
             OAHistoryItem *historyItem = [item objForKey:@"historyItem"];
-            cell.titleLabel.text = item.title && item.title.length > 0 ? item.title : historyItem.name.length > 0 ? historyItem.name : historyItem.typeName;
-            cell.descriptionLabel.text = historyItem.distance;
+            NSString *title = item.title;
+            if ((!item.title || item.title.length == 0) && historyItem)
+                title = historyItem.name.length > 0 ? historyItem.name : historyItem.typeName;
+            cell.titleLabel.text = title;
+            cell.descriptionLabel.text = historyItem && historyItem.distance ? historyItem.distance : item.descr;
 
             NSString *iconName = item.iconName;
             UIImage *icon;
             if (iconName)
                 icon = [UIImage imageNamed:iconName];
-            if (!icon)
+            if (!icon && historyItem)
                 icon = [historyItem icon];
             if (!icon)
             {

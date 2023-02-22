@@ -31,6 +31,12 @@ typedef BOOL(^OAAmenityNameFilterAccept)(OAPOI * poi);
 
 @end
 
+
+@interface OAAmenityExtendedNameFilter : NSObject
+
+@end
+
+
 @interface OAPOIUIFilter : OACustomSearchPoiFilter
 
 @property (nonatomic, readonly) NSString *filterId;
@@ -76,6 +82,7 @@ typedef BOOL(^OAAmenityNameFilterAccept)(OAPOI * poi);
 - (NSArray<OAPOI *> *) initializeNewSearch:(double)lat lon:(double)lon firstTimeLimit:(int)firstTimeLimit  matcher:(OAResultMatcher<OAPOI *> *)matcher;
 - (NSArray<OAPOI *> *) searchAmenities:(double)top left:(double)left bottom:(double)bottom right:(double)right zoom:(int)zoom matcher:(OAResultMatcher<OAPOI *> *)matcher;
 - (OAAmenityNameFilter *) getNameFilter:(NSString *)filter;
+- (OAAmenityExtendedNameFilter *) getNameAmenityFilter:(NSString *)filter;
 - (NSString *) getNameToken24H;
 - (NSString *) getNameTokenOpen;
 - (NSObject *) getIconResource;

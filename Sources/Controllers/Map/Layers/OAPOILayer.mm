@@ -13,6 +13,7 @@
 #import "OAPOILocationType.h"
 #import "OAPOIMyLocationType.h"
 #import "OAPOIUIFilter.h"
+#import "OAPOIUIFilter+cpp.h"
 #import "OAPOIHelper.h"
 #import "OATargetPoint.h"
 #import "OAReverseGeocoder.h"
@@ -37,8 +38,8 @@
 
     OAPOIUIFilter *_poiUiFilter;
     OAPOIUIFilter *_wikiUiFilter;
-    OAAmenityNameFilter *_poiUiNameFilter;
-    OAAmenityNameFilter *_wikiUiNameFilter;
+    OAAmenityExtendedNameFilter *_poiUiNameFilter;
+    OAAmenityExtendedNameFilter *_wikiUiNameFilter;
     NSString *_poiCategoryName;
     NSString *_poiFilterName;
     NSString *_poiTypeName;
@@ -169,34 +170,29 @@
             }
 
             if (isWiki)
-                _wikiUiNameFilter = [f getNameFilter:f.filterByName];
+                _wikiUiNameFilter = [f getNameAmenityFilter:f.filterByName];
             else
-                _poiUiNameFilter = [f getNameFilter:f.filterByName];
+                _poiUiNameFilter = [f getNameAmenityFilter:f.filterByName];
 
             QSet<QString> *searchedPois = new QSet<QString>();
             OsmAnd::ObfPoiSectionReader::VisitorFunction amenityFilter =
                     [=](const std::shared_ptr<const OsmAnd::Amenity> &amenity)
                     {
-                        OAPOI *poi = [[OAPOI alloc] init];
-                        poi.name = amenity->nativeName.toNSString();
-                        NSMutableDictionary *names = [NSMutableDictionary dictionary];
-                        for (const auto& entry : OsmAnd::rangeOf(amenity->localizedNames))
-                        {
-                            names[entry.key().toNSString()] = entry.value().toNSString();
-                        }
-                        NSString *prefLang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
-                        const QString lang = (prefLang ? QString::fromNSString(prefLang) : QString());
-                        poi.nameLocalized = amenity->getName(lang, false).toNSString();
-                        poi.localizedNames = names;
                         OAPOIType *type = [OAPOIHelper parsePOITypeByAmenity:amenity];
-                        poi.type = type;
+                        QHash<QString, QString> decodedValues = amenity->getDecodedValuesHash();
                         
                         BOOL check = !_wikiUiNameFilter && !_wikiUiFilter && _poiUiNameFilter
                                 && _poiUiFilter && _poiUiFilter.filterByName && _poiUiFilter.filterByName.length > 0;
-                        if (!isWiki && [poi.type.tag isEqualToString:OSM_WIKI_CATEGORY])
-                            return check ? [_poiUiNameFilter accept:poi] : false;
-                        if ((check && [_poiUiNameFilter accept:poi]) || [isWiki ? _wikiUiNameFilter : _poiUiNameFilter accept:poi])
-                            return ![poi isClosed];
+                        BOOL accepted = [_poiUiNameFilter acceptAmenity:amenity values:decodedValues type:type];
+                        
+                        if (!isWiki && [type.tag isEqualToString:OSM_WIKI_CATEGORY])
+                            return check ? accepted : false;
+                        
+                        if ((check && accepted) || (isWiki ? [_wikiUiNameFilter acceptAmenity:amenity values:decodedValues type:type] : accepted))
+                        {
+                            BOOL isClosed = decodedValues[QString::fromNSString(OSM_DELETE_TAG)] == QString::fromNSString(OSM_DELETE_VALUE);
+                            return !isClosed;
+                        }
 
                         return false;
                     };

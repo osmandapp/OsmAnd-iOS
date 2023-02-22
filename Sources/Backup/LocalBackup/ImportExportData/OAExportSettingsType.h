@@ -27,7 +27,6 @@ NS_ASSUME_NONNULL_BEGIN
 + (OAExportSettingsType *) ACTIVE_MARKERS;
 + (OAExportSettingsType *) HISTORY_MARKERS;
 + (OAExportSettingsType *) SEARCH_HISTORY;
-+ (OAExportSettingsType *) NAVIGATION_HISTORY;
 + (OAExportSettingsType *) CUSTOM_RENDER_STYLE;
 + (OAExportSettingsType *) CUSTOM_ROUTING;
 + (OAExportSettingsType *) MAP_SOURCES;

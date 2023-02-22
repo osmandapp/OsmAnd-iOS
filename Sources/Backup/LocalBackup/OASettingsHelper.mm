@@ -328,10 +328,6 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     if (historyEntries.count > 0)
         myPlacesItems[OAExportSettingsType.SEARCH_HISTORY] = historyEntries;
     
-    NSArray<OAHistoryItem *> *navigationEntries = [historyHelper getPointsHavingTypes:historyHelper.searchTypes limit:0];
-    if (navigationEntries.count > 0)
-        myPlacesItems[OAExportSettingsType.NAVIGATION_HISTORY] = navigationEntries;
-    
     return myPlacesItems;
 }
 
@@ -841,8 +837,6 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         settingsToOperate[OAExportSettingsType.HISTORY_MARKERS] = historyMarkers;
     if (historyEntries.count > 0 || addEmptyItems)
         settingsToOperate[OAExportSettingsType.SEARCH_HISTORY] = historyEntries;
-    if (navigationEntries.count > 0 || addEmptyItems)
-        settingsToOperate[OAExportSettingsType.NAVIGATION_HISTORY] = navigationEntries;
     if (globalSettingsItems.count > 0 || addEmptyItems)
         settingsToOperate[OAExportSettingsType.GLOBAL] = globalSettingsItems;
     return settingsToOperate;

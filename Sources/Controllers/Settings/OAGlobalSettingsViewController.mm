@@ -22,7 +22,6 @@
 #import "OATargetPointsHelper.h"
 #import "OAQuickSearchHelper.h"
 #import "OAHistoryHelper.h"
-#import "OADestinationsHelper.h"
 #import "OASearchResult.h"
 #import "OAPointDescription.h"
 #import "OAColors.h"

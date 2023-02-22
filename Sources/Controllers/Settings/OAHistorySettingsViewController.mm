@@ -8,18 +8,12 @@
 
 #import "OAHistorySettingsViewController.h"
 #import "OAGlobalSettingsViewController.h"
-#import "OARootViewController.h"
-#import "OAMapPanelViewController.h"
-#import "OAMapViewController.h"
-#import "OARouteBaseViewController.h"
 #import "OAExportItemsViewController.h"
 #import "OAAppSettings.h"
 #import "OASwitchTableViewCell.h"
 #import "Localization.h"
 #import "OAColors.h"
 #import "OARTargetPoint.h"
-#import "OASearchHistoryTableItem.h"
-#import "OASearchHistoryTableGroup.h"
 #import "OAQuickSearchListItem.h"
 #import "OASearchResult.h"
 #import "OAHistoryItem.h"
@@ -28,14 +22,11 @@
 #import "OATableSectionData.h"
 #import "OATableRowData.h"
 #import "OAPointDescription.h"
-#import "OADestinationsHelper.h"
-#import "OADestination.h"
-#import "OADestinationItem.h"
-#import "OAMapRendererView.h"
 #import "OAOsmAndFormatter.h"
 #import "OAExportSettingsType.h"
 #import "OAAutoObserverProxy.h"
 #import "OASizes.h"
+#import "OsmAndApp.h"
 #import <CoreLocation/CoreLocation.h>
 
 #include <OsmAndCore/Utilities.h>
@@ -297,7 +288,7 @@
             {
                 [self updateDistanceAndDirection:historyItem];
                 NSDate *historyItemDate = [calendar startOfDayForDate:historyItem.date];
-                if ([historyItemDate isEqualToDate:today] || [historyItemDate laterDate:sevenDaysAgo])
+                if ([historyItemDate isEqualToDate:today] || [[historyItemDate laterDate:sevenDaysAgo] isEqualToDate:historyItemDate])
                 {
                     OATableRowData *rowData = [lastSection createNewRow];
                     rowData.cellType = [OASimpleTableViewCell getCellIdentifier];
@@ -526,14 +517,8 @@
             [selectedItems addObject:selectedItem];
     }
 
-    OAExportSettingsType *exportSettingsType;
-    if (_historyType == EOAHistorySettingsTypeNavigation)
-        exportSettingsType = OAExportSettingsType.NAVIGATION_HISTORY;
-    else if (_historyType == EOAHistorySettingsTypeMapMarkers)
-        exportSettingsType = OAExportSettingsType.HISTORY_MARKERS;
-    else
-        exportSettingsType = OAExportSettingsType.SEARCH_HISTORY;
-
+    OAExportSettingsType *exportSettingsType =
+        _historyType == EOAHistorySettingsTypeMapMarkers ? OAExportSettingsType.HISTORY_MARKERS : OAExportSettingsType.SEARCH_HISTORY;
     OAExportItemsViewController *exportItemsViewController =
         [[OAExportItemsViewController alloc] initWithType:exportSettingsType selectedItems:selectedItems];
     [self.navigationController pushViewController:exportItemsViewController animated:YES];

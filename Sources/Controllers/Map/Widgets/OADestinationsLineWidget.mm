@@ -225,7 +225,7 @@
 - (void) drawDistance:(CGContextRef)ctx distance:(NSString *)distance angle:(double)angle start:(CGPoint)start end:(CGPoint)end
 {
     CGPoint middlePoint = CGPointMake((end.x + start.x) / 2, (end.y + start.y) / 2);
-    UIFont *font = [UIFont scaledSystemFontOfSize:11.0 weight:UIFontWeightBold];
+    UIFont *font = [UIFont systemFontOfSize:11.0 weight:UIFontWeightBold];
     UIColor *color = [UIColor blackColor];
     UIColor *shadowColor = [UIColor whiteColor];
 

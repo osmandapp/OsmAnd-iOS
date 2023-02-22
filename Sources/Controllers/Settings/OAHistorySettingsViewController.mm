@@ -250,6 +250,8 @@
             }
         }
 
+        OAHistoryItem *prevRouteHistoryitem;
+        OATableRowData *prevRouteItem;
         if (_historyType == EOAHistorySettingsTypeNavigation)
         {
             OARTargetPoint *pointToStartBackup = _app.data.pointToStartBackup;
@@ -259,18 +261,16 @@
                 OATableSectionData *prevRouteSection = [_data createNewSection];
                 [prevRouteSection setHeaderText:OALocalizedString(@"previous_route")];
 
-                OAHistoryItem *historyitem = [[OAHistoryItem alloc] initWithPointDescription:pointToNavigateBackup.pointDescription];
-                historyitem.name = pointToNavigateBackup.pointDescription.name;
-                historyitem.latitude = pointToNavigateBackup.point.coordinate.latitude;
-                historyitem.longitude = pointToNavigateBackup.point.coordinate.longitude;
-                [prevRouteSection addRowFromDictionary:@{
-                    kCellKeyKey : @"prevRoute",
-                    kCellTypeKey : [OASimpleTableViewCell getCellIdentifier],
-                    kCellTitleKey : pointToStartBackup ? pointToStartBackup.pointDescription.name : OALocalizedString(@"shared_string_my_location"),
-                    kCellDescrKey : pointToNavigateBackup.pointDescription.name,
-                    kCellIconNameKey : @"ic_custom_point_to_point",
-                    @"historyItem" : historyitem
-                }];
+                prevRouteHistoryitem = [[OAHistoryItem alloc] initWithPointDescription:pointToNavigateBackup.pointDescription];
+                prevRouteHistoryitem.name = pointToNavigateBackup.pointDescription.name;
+                prevRouteHistoryitem.latitude = pointToNavigateBackup.point.coordinate.latitude;
+                prevRouteHistoryitem.longitude = pointToNavigateBackup.point.coordinate.longitude;
+                prevRouteItem = [prevRouteSection createNewRow];
+                prevRouteItem.key = @"prevRoute";
+                prevRouteItem.cellType = [OASimpleTableViewCell getCellIdentifier];
+                prevRouteItem.title = pointToStartBackup ? pointToStartBackup.pointDescription.name : OALocalizedString(@"shared_string_my_location");
+                prevRouteItem.descr = pointToNavigateBackup.pointDescription.name;
+                prevRouteItem.iconName = @"ic_custom_point_to_point";
             }
         }
 
@@ -288,6 +288,12 @@
 
             for (OAHistoryItem *historyItem in sortedHistoryItems)
             {
+                if (prevRouteItem && prevRouteHistoryitem && prevRouteHistoryitem.latitude == historyItem.latitude && prevRouteHistoryitem.longitude == historyItem.longitude && [prevRouteHistoryitem.name isEqualToString:historyItem.name])
+                {
+                    prevRouteHistoryitem.date = historyItem.date;
+                    [prevRouteItem setObj:prevRouteHistoryitem forKey:@"historyItem"];
+                }
+
                 [self updateDistanceAndDirection:historyItem];
                 NSDate *historyItemDate = [calendar startOfDayForDate:historyItem.date];
                 if ([historyItemDate isEqualToDate:today] || [[historyItemDate laterDate:sevenDaysAgo] isEqualToDate:historyItemDate])

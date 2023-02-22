@@ -514,7 +514,11 @@
     {
         OAHistoryItem *selectedItem = [[_data itemForIndexPath:indexPath] objForKey:@"historyItem"];
         if (selectedItem)
+        {
+            if (!selectedItem.date)
+                selectedItem.date = [NSDate date];
             [selectedItems addObject:selectedItem];
+        }
     }
 
     OAExportSettingsType *exportSettingsType =

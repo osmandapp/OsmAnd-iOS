@@ -72,6 +72,8 @@
     _pointToNavigate = _app.data.pointToNavigate;
     _pointToStart = _app.data.pointToStart;
     _intermediatePoints = [NSMutableArray arrayWithArray:_app.data.intermediatePoints];
+    _pointToNavigateBackup = _app.data.pointToNavigateBackup;
+    _pointToStartBackup = _app.data.pointToStartBackup;
     
     if (_pointToStart)
     {
@@ -290,6 +292,14 @@
     [_intermediatePoints removeAllObjects];
     [self readFromSettings];
     [self updateRouteAndRefresh:updateRoute];
+}
+
+- (void)clearBackupPoints
+{
+    [_app.data clearPointToStartBackup];
+    [_app.data clearIntermediatePointsBackup];
+    [_app.data clearPointToNavigateBackup];
+    [self readFromSettings];
 }
 
 - (void) reorderAllTargetPoints:(NSArray<OARTargetPoint *> *)point updateRoute:(BOOL)updateRoute

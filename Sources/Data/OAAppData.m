@@ -1602,6 +1602,21 @@
     [_intermediates removeAllObjects];
 }
 
+- (void) clearPointToStartBackup
+{
+    _pointToStartBackup = nil;
+}
+
+- (void) clearPointToNavigateBackup
+{
+    _pointToNavigateBackup = nil;
+}
+
+- (void) clearIntermediatePointsBackup
+{
+    [_intermediatePointsBackup removeAllObjects];
+}
+
 #pragma mark - defaults
 
 + (OAAppData*) defaults

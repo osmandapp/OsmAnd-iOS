@@ -18,6 +18,7 @@
 #import "OASearchResult.h"
 #import "OAHistoryItem.h"
 #import "OAHistoryHelper.h"
+#import "OATargetPointsHelper.h"
 #import "OATableDataModel.h"
 #import "OATableSectionData.h"
 #import "OATableRowData.h"
@@ -253,22 +254,23 @@
         {
             OARTargetPoint *pointToStartBackup = _app.data.pointToStartBackup;
             OARTargetPoint *pointToNavigateBackup = _app.data.pointToNavigateBackup;
-            OATableSectionData *prevRouteSection = [OATableSectionData sectionData];
-            [prevRouteSection setHeaderText:OALocalizedString(@"previous_route")];
             if (pointToNavigateBackup)
             {
+                OATableSectionData *prevRouteSection = [_data createNewSection];
+                [prevRouteSection setHeaderText:OALocalizedString(@"previous_route")];
+
                 OAHistoryItem *historyitem = [[OAHistoryItem alloc] initWithPointDescription:pointToNavigateBackup.pointDescription];
                 historyitem.name = pointToNavigateBackup.pointDescription.name;
                 historyitem.latitude = pointToNavigateBackup.point.coordinate.latitude;
                 historyitem.longitude = pointToNavigateBackup.point.coordinate.longitude;
                 [prevRouteSection addRowFromDictionary:@{
+                    kCellKeyKey : @"prevRoute",
                     kCellTypeKey : [OASimpleTableViewCell getCellIdentifier],
                     kCellTitleKey : pointToStartBackup ? pointToStartBackup.pointDescription.name : OALocalizedString(@"shared_string_my_location"),
                     kCellDescrKey : pointToNavigateBackup.pointDescription.name,
                     kCellIconNameKey : @"ic_custom_point_to_point",
                     @"historyItem" : historyitem
                 }];
-                [_data addSection:prevRouteSection];
             }
         }
 
@@ -547,9 +549,17 @@
             NSMutableArray<OAHistoryItem *> *selectedItems = [NSMutableArray array];
             for (NSIndexPath *indexPath in selectedIndexPaths)
             {
-                OAHistoryItem *selectedItem = [[_data itemForIndexPath:indexPath] objForKey:@"historyItem"];
-                if (selectedItem)
-                    [selectedItems addObject:selectedItem];
+                OATableRowData *item = [_data itemForIndexPath:indexPath];
+                if ([item.key isEqualToString:@"prevRoute"])
+                {
+                    [[OATargetPointsHelper sharedInstance] clearBackupPoints];
+                }
+                else
+                {
+                    OAHistoryItem *selectedItem = [item objForKey:@"historyItem"];
+                    if (selectedItem)
+                        [selectedItems addObject:selectedItem];
+                }
             }
             [_historyHelper removePoints:selectedItems];
         }];

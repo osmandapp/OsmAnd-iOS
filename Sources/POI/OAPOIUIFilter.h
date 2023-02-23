@@ -18,7 +18,7 @@ static NSString* const USER_PREFIX = @"user_";
 static NSString* const CUSTOM_FILTER_ID = @"user_custom_id";
 static NSString* const BY_NAME_FILTER_ID = @"user_by_name";
 
-@class OAPOI, OAPOIBaseType, OAPOIType, OAPOICategory;
+@class OAPOI, OAPOIBaseType, OAPOIType, OAPOICategory, OAAmenityExtendedNameFilter;
 
 @interface OAAmenityNameFilter : NSObject
 
@@ -28,11 +28,6 @@ typedef BOOL(^OAAmenityNameFilterAccept)(OAPOI * poi);
 - (BOOL) accept:(OAPOI *)a;
 
 - (instancetype)initWithAcceptFunc:(OAAmenityNameFilterAccept)aFunction;
-
-@end
-
-
-@interface OAAmenityExtendedNameFilter : NSObject
 
 @end
 

@@ -13,7 +13,7 @@
 #import "OAPOILocationType.h"
 #import "OAPOIMyLocationType.h"
 #import "OAPOIUIFilter.h"
-#import "OAPOIUIFilter+cpp.h"
+#import "OAAmenityExtendedNameFilter.h"
 #import "OAPOIHelper.h"
 #import "OATargetPoint.h"
 #import "OAReverseGeocoder.h"

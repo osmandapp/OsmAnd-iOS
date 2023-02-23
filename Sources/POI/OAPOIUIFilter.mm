@@ -7,7 +7,7 @@
 //
 
 #import "OAPOIUIFilter.h"
-#import "OAPOIUIFilter+cpp.h"
+#import "OAAmenityExtendedNameFilter.h"
 #import "OAPOI.h"
 #import "OAPOICategory.h"
 #import "OAPOIType.h"

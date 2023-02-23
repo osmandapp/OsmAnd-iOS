@@ -2794,3 +2794,6 @@
 "announcement_time_approach" = "Avvicinamento";
 "announcement_time_passing" = "Passaggio";
 "announcement_time_prepare_long" = "Preparazione lunga";
+"restart_is_required" = "Riavvio richiesto per applicare il cambiamento.";
+"free_downloads" = "Download gratuiti";
+"restart_is_required_title" = "Riavvio richiesto";

@@ -544,6 +544,12 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 @end
 
 @implementation OALocalResourceItem
+
+- (BOOL)isInstalled
+{
+    return YES;
+}
+
 @end
 
 @implementation OAOutdatedResourceItem
@@ -1466,11 +1472,12 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
                    onTaskCreated:(OADownloadTaskCallback)onTaskCreated
                    onTaskResumed:(OADownloadTaskCallback)onTaskResumed
 {
-    if (![self.class checkIfUpdateEnabled:item.worldRegion])
-        return;
-
     OsmAndAppInstance app = [OsmAndApp instance];
     const auto resourceInRepository = app.resourcesManager->getResourceInRepository(item.resourceId);
+    BOOL isFree = resourceInRepository && resourceInRepository->free;
+    if (!isFree && ![self.class checkIfUpdateEnabled:item.worldRegion])
+        return;
+
     NSString* resourceName = [self.class titleOfResource:item.resource inRegion:item.worldRegion withRegionName:YES withResourceType:YES];
 
     uint64_t spaceNeeded = resourceInRepository->packageSize + resourceInRepository->size;

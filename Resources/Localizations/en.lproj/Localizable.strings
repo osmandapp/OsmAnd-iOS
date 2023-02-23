@@ -123,8 +123,7 @@
 "default_profile_descr" = "Select a profile that will be used the application launch.";
 "dialogs_and_notifications_title" = "Dialogs and notifications";
 "dialogs_and_notifications_descr" = "Control popups, dialogs and notifications.";
-"history_settings" = "History";
-"history_footer_text" = "You can disable history logging individually for each history type.";
+"history_preferences_descr" = "You can disable history logging individually for each history type.";
 "history_actions_footer_text" = "You can export history into a file. You can delete all history entries recorded until now.";
 "settings_preset_descr" = "Map view and navigation settings are remembered per use profile. Set your default profile here.";
 "unit_of_length" = "Units of length";
@@ -134,8 +133,8 @@
 "coordinates" = "Coordinates";
 "coords_format_descr" = "Format for geographical coordinates.";
 "do_not_show_discount_desc" = "Suppresses displaying app discounts & special local event messages.";
-"privacy_and_security_header" = "Privacy and security";
 "send_anonymous_data_desc" = "Send to OsmAnd map download statistics, we are not collecting location data, or any personal info.";
+"rotate_map_to" = "Map orientation";
 "rotate_map_to_bearing_descr" = "Select the map screen alignment.";
 "rotate_map_compass_opt" = "Compass direction";
 "rotate_map_bearing_opt" = "Movement direction";
@@ -479,10 +478,9 @@
 "navigation_history" = "Navigation history";
 "map_markers_history" = "Map markers history";
 "history_clear_alert_title" = "Delete all history";
-"history_clear_alert_message" = "Are you sure you want delete all history itemshistory items?";
+"history_clear_alert_message" = "Are you sure you want delete all history items?";
 "search_history_disabled" = "Search history is disabled";
 "enable_search_history" = "You can enable search history in Settings";
-"history_clear" = "Clear";
 "last_seven_days" = "Last 7 days";
 
 "track_coloring_solid" = "Solid";
@@ -606,6 +604,7 @@
 "shared_string_does_not_exist" = "Does not exist";
 "shared_string_legal" = "Legal";
 "shared_string_keep_active" = "Keep active";
+"shared_string_history" = "History";
 
 "restart" = "Restart";
 
@@ -1097,7 +1096,7 @@
 "ltr_or_rtl_combine_via_or" = "%@ or %@";
 "ltr_or_rtl_combine_via_slash" = "%@/%@";
 "ltr_or_rtl_combine_via_comma" = "%@, %@";
-"of" = "%ld of %ld";
+"ltr_or_rtl_combine_via_of" = "%ld of %ld";
 
 "listed_exist" = "Listed %@, already exist in OsmAnd.";
 

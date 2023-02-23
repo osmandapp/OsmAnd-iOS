@@ -157,10 +157,9 @@
     
     if (_isSearchLoggingDisabled)
     {
-        OATableSectionData *existingBackupSection = [OATableSectionData sectionData];
+        OATableSectionData *existingBackupSection = [_data createNewSection];
         [existingBackupSection addRowFromDictionary:@{
             kCellTypeKey: OALargeImageTitleDescrTableViewCell.getCellIdentifier,
-            kCellKeyKey: @"existingOnlineBackup",
             kCellTitleKey: OALocalizedString(@"search_history_disabled"),
             kCellDescrKey: OALocalizedString(@"enable_search_history"),
             kCellIconNameKey: @"ic_custom_history_disabled_48"
@@ -170,7 +169,6 @@
             kCellKeyKey: @"onHistorySettingsButtonPressed",
             kCellTitleKey: OALocalizedString(@"shared_string_settings")
         }];
-        [_data addSection:existingBackupSection];
     }
     else
     {

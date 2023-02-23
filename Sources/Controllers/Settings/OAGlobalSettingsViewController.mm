@@ -90,7 +90,7 @@
     else if (_settingsType == EOADialogsAndNotifications)
         return OALocalizedString(@"dialogs_and_notifications_title");
     else if (_settingsType == EOAHistory)
-        return OALocalizedString(@"history_settings");
+        return OALocalizedString(@"shared_string_history");
     else
         return OALocalizedString(@"carplay_profile");
 }
@@ -114,7 +114,7 @@
             _isUsingLastAppMode = [_settings.useLastApplicationModeByDefault get];
             _isCarPlayDefaultProfile = [_settings.isCarPlayModeDefault get];
 
-            OATableSectionData *defaultProfileSection = [OATableSectionData sectionData];
+            OATableSectionData *defaultProfileSection = [_data createNewSection];
             [defaultProfileSection setFooterText:OALocalizedString(@"default_profile_descr")];
             [defaultProfileSection addRowFromDictionary:@{
                 kCellKeyKey : @"settings_preset",
@@ -122,9 +122,8 @@
                 kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
                 @"value" : _isUsingLastAppMode ? OALocalizedString(@"shared_string_last_used") : [[_settings.defaultApplicationMode get] toHumanString]
             }];
-            [_data addSection:defaultProfileSection];
 
-            OATableSectionData *carPlayProfileSection = [OATableSectionData sectionData];
+            OATableSectionData *carPlayProfileSection = [_data createNewSection];
             [carPlayProfileSection setFooterText:OALocalizedString(@"carplay_profile_descr")];
             [carPlayProfileSection addRowFromDictionary:@{
                 kCellKeyKey : @"carplay_profile",
@@ -132,9 +131,8 @@
                 kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
                 @"value" : _isCarPlayDefaultProfile ? OALocalizedString(@"settings_preset") : [[_settings.carPlayMode get] toHumanString]
             }];
-            [_data addSection:carPlayProfileSection];
 
-            OATableSectionData *privacyDataSection = [OATableSectionData sectionData];
+            OATableSectionData *privacyDataSection = [_data createNewSection];
             [privacyDataSection setHeaderText:OALocalizedString(@"privacy_and_security")];
             [privacyDataSection setFooterText:OALocalizedString(@"send_anonymous_data_desc")];
             [privacyDataSection addRowFromDictionary:@{
@@ -145,13 +143,12 @@
             }];
             [privacyDataSection addRowFromDictionary:@{
                 kCellKeyKey : @"history_settings",
-                kCellTitleKey : OALocalizedString(@"history_settings"),
+                kCellTitleKey : OALocalizedString(@"shared_string_history"),
                 kCellTypeKey : [OASimpleTableViewCell getCellIdentifier],
                 @"value" : ![_settings.searchHistory get] && ![_settings.navigationHistory get] && ![_settings.mapMarkersHistory get] ? OALocalizedString(@"shared_string_off") : @""
             }];
-            [_data addSection:privacyDataSection];
 
-            OATableSectionData *dialogsSection = [OATableSectionData sectionData];
+            OATableSectionData *dialogsSection = [_data createNewSection];
             [dialogsSection setHeaderText:OALocalizedString(@"other_location")];
             [dialogsSection setFooterText:OALocalizedString(@"dialogs_and_notifications_descr")];
             [dialogsSection addRowFromDictionary:@{
@@ -160,18 +157,16 @@
                 kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
                 @"value" : [self getDialogsAndNotificationsValue]
             }];
-            [_data addSection:dialogsSection];
 
             if (![_settings.speedCamerasUninstalled get])
             {
-                OATableSectionData *speedCameraSection = [OATableSectionData sectionData];
+                OATableSectionData *speedCameraSection = [_data createNewSection];
                 [speedCameraSection setHeaderText:OALocalizedString(@"shared_string_legal")];
                 [speedCameraSection addRowFromDictionary:@{
                     kCellKeyKey : @"uninstall_speed_cameras",
                     kCellTitleKey : OALocalizedString(@"uninstall_speed_cameras"),
                     kCellTypeKey : [OASimpleTableViewCell getCellIdentifier],
                 }];
-                [_data addSection:speedCameraSection];
             }
 
             break;
@@ -180,14 +175,13 @@
         {
             _isUsingLastAppMode = [_settings.useLastApplicationModeByDefault get];
 
-            OATableSectionData *lastUsedSection = [OATableSectionData sectionData];
+            OATableSectionData *lastUsedSection = [_data createNewSection];
             [lastUsedSection addRowFromDictionary:@{
                 kCellKeyKey : @"last_used",
                 kCellTitleKey : OALocalizedString(@"shared_string_last_used"),
                 kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
                 @"value" : @(_isUsingLastAppMode),
             }];
-            [_data addSection:lastUsedSection];
 
             if (!_isUsingLastAppMode)
             {
@@ -206,14 +200,13 @@
         {
             _isCarPlayDefaultProfile = [_settings.isCarPlayModeDefault get];
 
-            OATableSectionData *defaultSection = [OATableSectionData sectionData];
+            OATableSectionData *defaultSection = [_data createNewSection];
             [defaultSection addRowFromDictionary:@{
                 kCellKeyKey : @"carplay_mode_is_default_string",
                 kCellTitleKey : OALocalizedString(@"settings_preset"),
                 kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
                 @"value" : @(_isCarPlayDefaultProfile),
             }];
-            [_data addSection:defaultSection];
 
             if (!_isCarPlayDefaultProfile)
             {
@@ -231,9 +224,8 @@
         case EOAHistory:
         {
             OAHistoryHelper *historyHelper = [OAHistoryHelper sharedInstance];
-            OATableSectionData *historySection = [OATableSectionData sectionData];
-            [historySection setFooterText:OALocalizedString(@"history_footer_text")];
-            [_data addSection:historySection];
+            OATableSectionData *historySection = [_data createNewSection];
+            [historySection setFooterText:OALocalizedString(@"history_preferences_descr")];
 
             [historySection addRowFromDictionary:@{
                 kCellKeyKey : @"search_history",
@@ -263,10 +255,9 @@
                     : OALocalizedString(@"shared_string_off"),
             }];
 
-            OATableSectionData *actionsSection = [OATableSectionData sectionData];
+            OATableSectionData *actionsSection = [_data createNewSection];
             [actionsSection setHeaderText:OALocalizedString(@"actions")];
             [actionsSection setFooterText:OALocalizedString(@"history_actions_footer_text")];
-            [_data addSection:actionsSection];
 
             [actionsSection addRowFromDictionary:@{
                 kCellKeyKey : @"export_history",
@@ -286,7 +277,7 @@
         }
         case EOADialogsAndNotifications:
         {
-            OATableSectionData *promotionsSection = [OATableSectionData sectionData];
+            OATableSectionData *promotionsSection = [_data createNewSection];
             [promotionsSection setFooterText:OALocalizedString(@"do_not_show_discount_desc")];
             [promotionsSection addRowFromDictionary:@{
                 kCellKeyKey : @"do_not_show_discount",
@@ -294,16 +285,14 @@
                 kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
                 @"value" : @([_settings.settingDoNotShowPromotions get])
             }];
-            [_data addSection:promotionsSection];
 
-            OATableSectionData *downloadMapSection = [OATableSectionData sectionData];
+            OATableSectionData *downloadMapSection = [_data createNewSection];
             [downloadMapSection addRowFromDictionary:@{
                 kCellKeyKey : @"download_map_dialog",
                 kCellTitleKey : OALocalizedString(@"download_map_dialog"),
                 kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
                 @"value" : @([_settings.showDownloadMapDialog get])
             }];
-            [_data addSection:downloadMapSection];
         }
         default:
             break;
@@ -516,7 +505,7 @@
                                                                         style:UIAlertActionStyleDefault
                                                                         handler:nil
                             ];
-                UIAlertAction *clearAction = [UIAlertAction actionWithTitle:OALocalizedString(@"history_clear")
+                UIAlertAction *clearAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_clear")
                                                                         style:UIAlertActionStyleDestructive
                                                                     handler:^(UIAlertAction * _Nonnull action) {
                     NSArray *historyItems;

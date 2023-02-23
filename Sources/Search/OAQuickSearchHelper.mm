@@ -321,7 +321,7 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 53;
                 [resultMatcher publish:sr];
         }
     }
-    return true;
+    return YES;
 }
 
 - (int) getSearchPriority:(OASearchPhrase *)p

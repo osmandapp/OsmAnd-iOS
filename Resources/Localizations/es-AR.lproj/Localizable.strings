@@ -2817,3 +2817,6 @@
 "osm_upload_gpx_description_footer" = "Será usado el nombre de la traza en lugar de una descripción vacía. La descripción ingresada será aplicada a cada traza.";
 "osm_upload_gpx_tags_footer" = "Ingresa etiquetas separadas por comas.";
 "visibility" = "Visibilidad";
+"free_downloads" = "Descargas gratuitas";
+"restart_is_required" = "Debes reiniciar para aplicar los cambios.";
+"restart_is_required_title" = "Es necesario reiniciar";

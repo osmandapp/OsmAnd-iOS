@@ -48,29 +48,6 @@
 
 @end
 
-
-@implementation OAAmenityExtendedNameFilter
-
--(BOOL)acceptAmenity:(std::shared_ptr<const OsmAnd::Amenity>)a values:(QHash<QString, QString>)values type:(OAPOIType *)type
-{
-    if (_acceptAmenityFunction)
-        return _acceptAmenityFunction(a, values, type);
-    
-    return NO;
-}
-
-- (instancetype)initWithAcceptAmenityFunc:(OAAmenityNameFilterAmenityAccept)aFunction
-{
-    self = [super init];
-    if (self) {
-        _acceptAmenityFunction = aFunction;
-    }
-    return self;
-}
-
-@end
-
-
 @interface OAPOIUIFilter ()
 
 @property (nonatomic) NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *acceptedTypes;

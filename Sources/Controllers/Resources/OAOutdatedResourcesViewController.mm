@@ -300,7 +300,9 @@
     {
         for (OAOutdatedResourceItem* item in _resourcesItems)
         {
-            BOOL needPurchase = (item.worldRegion.regionId != nil && ![item.worldRegion isInPurchasedArea]);
+            const auto repoRes = _app.resourcesManager->getResourceInRepository(item.resourceId);
+            BOOL isFree = repoRes && repoRes->free;
+            BOOL needPurchase = (item.worldRegion.regionId != nil && ![item.worldRegion isInPurchasedArea] && !isFree);
             if (!needPurchaseAny && needPurchase)
                 needPurchaseAny = YES;
             

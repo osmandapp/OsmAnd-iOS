@@ -12,7 +12,7 @@
 #import "OAPOIType.h"
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
-#include <openingHoursParser.h>"
+#include <openingHoursParser.h>
 #include <OsmAndCore/Data/ObfPoiSectionInfo.h>
 #include <OsmAndCore/Data/ObfMapObject.h>
 

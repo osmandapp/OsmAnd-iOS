@@ -7,6 +7,7 @@
 //
 
 #import "OAPOIUIFilter.h"
+#import "OAAmenityExtendedNameFilter.h"
 #import "OAPOI.h"
 #import "OAPOICategory.h"
 #import "OAPOIType.h"
@@ -23,6 +24,8 @@
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
 #include <openingHoursParser.h>
+#include <OsmAndCore/Data/ObfPoiSectionInfo.h>
+#include <OsmAndCore/Data/ObfMapObject.h>
 
 @implementation OAAmenityNameFilter
 
@@ -44,7 +47,6 @@
 }
 
 @end
-
 
 @interface OAPOIUIFilter ()
 
@@ -423,6 +425,51 @@
     return [self getNameFilterInternal:nmFilter allTime:allTime open:open poiAdditionals:poiAdditionalsFilter];
 }
 
+- (OAAmenityExtendedNameFilter *) getNameAmenityFilter:(NSString *)filter
+{
+    if (!filter || filter.length == 0)
+    {
+        return [[OAAmenityExtendedNameFilter alloc] initWithAcceptAmenityFunc:^BOOL(std::shared_ptr<const OsmAnd::Amenity> amenity, QHash<QString, QString> values, OAPOIType *type) {
+            return YES;
+        }];
+    }
+    NSMutableString *nmFilter = [NSMutableString string];
+    NSArray<NSString *> *items = [filter componentsSeparatedByString:@" "];
+    BOOL allTime = NO;
+    BOOL open = NO;
+    NSMutableArray<OAPOIType *> *poiAdditionalsFilter;
+    for (NSString *str in items)
+    {
+        NSString *s = [str trim];
+        if (s.length > 0)
+        {
+            if ([[self getNameToken24H] caseInsensitiveCompare:s] == 0)
+            {
+                allTime = YES;
+            }
+            else if ([[self getNameTokenOpen] caseInsensitiveCompare:s] == 0)
+            {
+                open = YES;
+            }
+            else if ([poiAdditionals objectForKey:[s lowercaseString]])
+            {
+                if (!poiAdditionalsFilter)
+                    poiAdditionalsFilter = [NSMutableArray array];
+
+                OAPOIType *pt = [poiAdditionals objectForKey:[s lowercaseString]];
+                if (pt)
+                    [poiAdditionalsFilter addObject:pt];
+            }
+            else
+            {
+                [nmFilter appendString:s];
+                [nmFilter appendString:@" "];
+            }
+        }
+    }
+    return [self getNameAmenityFilterInternal:nmFilter allTime:allTime open:open poiAdditionals:poiAdditionalsFilter];
+}
+
 - (OAAmenityNameFilter *) getNameFilterInternal:(NSMutableString *)nmFilter
                                         allTime:(BOOL)allTime
                                            open:(BOOL)open
@@ -467,6 +514,72 @@
     }];
 }
 
+- (OAAmenityExtendedNameFilter *) getNameAmenityFilterInternal:(NSMutableString *)nmFilter
+                                               allTime:(BOOL)allTime
+                                                  open:(BOOL)open
+                                        poiAdditionals:(NSArray<OAPOIType *> *)selectedFilters
+{
+    OANameStringMatcher __block *sm = nmFilter.length > 0 ?
+                [[OANameStringMatcher alloc] initWithNamePart:[nmFilter trim] mode:CHECK_STARTS_FROM_SPACE] : nil;
+    
+    return [[OAAmenityExtendedNameFilter alloc] initWithAcceptAmenityFunc:^BOOL(std::shared_ptr<const OsmAnd::Amenity> amenity, QHash<QString, QString> values, OAPOIType *type) {
+        
+        QString openingHours = nullptr;
+        openingHours = values[QString::fromNSString(OPENING_HOURS)];
+        
+        if (allTime)
+        {
+            if (openingHours == nullptr  || (openingHours != QString("24/7") && openingHours != QString("Mo-Su 00:00-24:00")) )
+            {
+                return NO;
+            }
+        }
+        
+        if (open)
+        {
+            if (openingHours == nullptr)
+            {
+                return NO;
+            }
+            else
+            {
+                auto parser = OpeningHoursParser::parseOpenedHours(openingHours.toStdString());
+                if (!parser || !parser->isOpened())
+                    return NO;
+            }
+        }
+        
+        if (sm)
+        {
+            NSString *name = amenity->nativeName.toNSString();;
+            NSString *typeName = [[OAPOIHelper sharedInstance] getPhrase:type];;
+            NSString *poiStringWithoutType;
+            
+            if (typeName && [name indexOf:typeName] != -1)
+            {
+                poiStringWithoutType = name;
+            }
+            if (name.length == 0)
+                poiStringWithoutType = typeName;
+            poiStringWithoutType = [NSString stringWithFormat:@"%@ %@", typeName, name];
+            
+            NSMutableArray *names = [NSMutableArray array];
+            for (const auto& entry : OsmAnd::rangeOf(amenity->localizedNames))
+            {
+                [names addObject:entry.value().toNSString()];
+            }
+            
+            if (![sm matches:poiStringWithoutType] && ![sm matchesMap:names])
+                return NO;
+        }
+        
+        if (![self acceptedAmeintyAnyFilterOfEachCategory:amenity values:values selectedFilters:selectedFilters])
+            return NO;
+        
+        return YES;
+    }];
+}
+
 - (BOOL)acceptedAnyFilterOfEachCategory:(OAPOI *)amenity
                         selectedFilters:(NSArray<OAPOIType *> *)selectedFilters
 {
@@ -481,6 +594,27 @@
     for (NSMutableArray<OAPOIType *> *category in filterCategories.allValues)
     {
         if (![self acceptedAnyFilterOfCategory:amenity category:category textFilters:textFilters])
+            return NO;
+    }
+
+    return YES;
+}
+
+- (BOOL)acceptedAmeintyAnyFilterOfEachCategory:(std::shared_ptr<const OsmAnd::Amenity>)amenity
+                                        values:(QHash<QString, QString>)values
+                        selectedFilters:(NSArray<OAPOIType *> *)selectedFilters
+{
+    if (!selectedFilters)
+        return YES;
+
+    NSMutableDictionary<NSString *, NSMutableArray<OAPOIType *> *> *filterCategories = [NSMutableDictionary dictionary];
+    NSMapTable <OAPOIType *, OAPOIType *> *textFilters = [NSMapTable strongToStrongObjectsMapTable];
+
+    [self fillFilterCategories:selectedFilters filterCategories:filterCategories textFilters:textFilters];
+
+    for (NSMutableArray<OAPOIType *> *category in filterCategories.allValues)
+    {
+        if (![self acceptedAmenityAnyFilterOfCategory:amenity values:values category:category textFilters:textFilters])
             return NO;
     }
 
@@ -525,6 +659,20 @@
     return NO;
 }
 
+- (BOOL)acceptedAmenityAnyFilterOfCategory:(std::shared_ptr<const OsmAnd::Amenity>)amenity
+                                    values:(QHash<QString, QString>)values
+                           category:(NSMutableArray<OAPOIType *> *)category
+                        textFilters:(NSMapTable <OAPOIType *, OAPOIType *> *)textFilters
+{
+    for (OAPOIType *filter in category)
+    {
+        if ([self acceptedAmenityFilter:amenity values:values filter:filter textFilterCategories:textFilters])
+            return YES;
+    }
+
+    return NO;
+}
+
 - (BOOL)acceptedFilter:(OAPOI *)amenity
                 filter:(OAPOIType *)filter
   textFilterCategories:(NSMapTable <OAPOIType *, OAPOIType *> *)textFilterCategories
@@ -550,6 +698,37 @@
             return YES;
     }
 
+    return NO;
+}
+
+- (BOOL)acceptedAmenityFilter:(std::shared_ptr<const OsmAnd::Amenity>)amenity
+                       values:(QHash<QString, QString>)values
+                filter:(OAPOIType *)filter
+  textFilterCategories:(NSMapTable <OAPOIType *, OAPOIType *> *)textFilterCategories
+{
+    QString filterName = QString::fromNSString(filter.name);
+    QString filterValue = values[filterName];
+    if (filterValue != nullptr)
+        return YES;
+    
+    OAPOIType *textPoiType = [textFilterCategories objectForKey:filter];
+    if (!textPoiType)
+        return NO;
+    
+    filterName = QString::fromNSString(textPoiType.name);
+    filterValue = values[filterName];
+    
+    if (filterValue == nullptr || filterValue.size() == 0)
+        return NO;
+    
+    QStringList items = filterValue.split( ";" );
+    QString val = QString::fromNSString([[filter getOsmValue] trim].lowercaseString);
+    for (int i = 0; i < items.length(); i++)
+    {
+        if (items.value(i).trimmed().toLower() == val)
+            return YES;
+    }
+    
     return NO;
 }
 

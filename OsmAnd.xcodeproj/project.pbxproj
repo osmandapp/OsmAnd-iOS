@@ -3598,6 +3598,8 @@
 		32076B0E29014677001A86AF /* ic_custom_fps@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_fps@3x.png"; path = "Resources/Icons/ic_custom_fps@3x.png"; sourceTree = "<group>"; };
 		32076B0F29014677001A86AF /* widget_fps_night@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "widget_fps_night@2x.png"; path = "Resources/Icons/widget_fps_night@2x.png"; sourceTree = "<group>"; };
 		32076B1029014678001A86AF /* widget_fps_day@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "widget_fps_day@2x.png"; path = "Resources/Icons/widget_fps_day@2x.png"; sourceTree = "<group>"; };
+		320EADAA29A77A96002F9883 /* OAAmenityExtendedNameFilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAAmenityExtendedNameFilter.h; sourceTree = "<group>"; };
+		320EADAB29A77AAB002F9883 /* OAAmenityExtendedNameFilter.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAmenityExtendedNameFilter.mm; sourceTree = "<group>"; };
 		321126FD280070F500ED8D52 /* OAExternalTimeFormatter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAExternalTimeFormatter.h; sourceTree = "<group>"; };
 		321126FE2800710800ED8D52 /* OAExternalTimeFormatter.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAExternalTimeFormatter.mm; sourceTree = "<group>"; };
 		3211355E2753FB500050242B /* ast */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ast; path = ast.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -10929,6 +10931,8 @@
 				DA5A7A6626C563A000F274C7 /* OASearchByNameFilter.mm */,
 				DA5A7A6526C563A000F274C7 /* OASearchPoiTypeFilter.h */,
 				DA5A7A5726C563A000F274C7 /* OASearchPoiTypeFilter.m */,
+				320EADAA29A77A96002F9883 /* OAAmenityExtendedNameFilter.h */,
+				320EADAB29A77AAB002F9883 /* OAAmenityExtendedNameFilter.mm */,
 			);
 			path = POI;
 			sourceTree = "<group>";

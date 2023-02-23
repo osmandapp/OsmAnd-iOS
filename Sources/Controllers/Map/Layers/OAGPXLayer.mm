@@ -371,22 +371,6 @@ colorizationScheme:(int)colorizationScheme
             _cachedTrackWidth[gpx.width] = @(lineWidth);
         }
 
-        // Add outline for colorized lines
-        if (!colors.isEmpty() && colorizationScheme != COLORIZATION_NONE)
-        {
-            OsmAnd::VectorLineBuilder outlineBuilder;
-            outlineBuilder.setBaseOrder(baseOrder--)
-                .setIsHidden(points.size() == 0)
-                .setLineId(lineId + 1000)
-                .setLineWidth(lineWidth + kOutlineWidth)
-                .setOutlineWidth(kOutlineWidth)
-                .setPoints(points)
-                .setFillColor(kOutlineColor)
-                .setApproximationEnabled(false);
-            
-            outlineBuilder.buildAndAddToCollection(_linesCollection);
-        }
-
         OsmAnd::FColorARGB colorARGB;
         if (gpx.color != 0)
         {
@@ -407,6 +391,13 @@ colorizationScheme:(int)colorizationScheme
             .setLineWidth(lineWidth)
             .setPoints(points)
             .setFillColor(colorARGB);
+
+        // Add outline for colorized lines
+        if (!colors.isEmpty() && colorizationScheme != COLORIZATION_NONE)
+        {
+            builder.setOutlineWidth(lineWidth + kOutlineWidth)
+                   .setOutlineColor(kOutlineColor);
+        }
 
         if (!colors.empty() && colorizationScheme != COLORIZATION_NONE)
         {
@@ -448,34 +439,6 @@ colorizationScheme:(int)colorizationScheme
             _cachedTrackWidth[gpx.width] = @(lineWidth);
         }
 
-        // Add outline for colorized lines
-        if (!colors.isEmpty() && colorizationScheme != COLORIZATION_NONE)
-        {
-            auto line = [self getLineById:lineId + 1000];
-            if (!line)
-            {
-                OsmAnd::VectorLineBuilder outlineBuilder;
-                outlineBuilder.setBaseOrder(baseOrder--)
-                    .setIsHidden(points.size() == 0)
-                    .setLineId(lineId + 1000)
-                    .setLineWidth(lineWidth + kOutlineWidth)
-                    .setOutlineWidth(kOutlineWidth)
-                    .setPoints(points)
-                    .setFillColor(kOutlineColor)
-                    .setApproximationEnabled(false);
-                
-                outlineBuilder.buildAndAddToCollection(_linesCollection);
-            }
-            else
-            {
-                line->setIsHidden(points.size() == 0);
-                line->setLineWidth(lineWidth + kOutlineWidth);
-                line->setOutlineWidth(kOutlineWidth);
-                line->setPoints(points);
-                line->setFillColor(kOutlineColor);
-            }
-        }
-
         OsmAnd::FColorARGB colorARGB;
         if (gpx.color != 0)
         {
@@ -503,9 +466,11 @@ colorizationScheme:(int)colorizationScheme
             if (!colors.empty() && colorizationScheme != COLORIZATION_NONE)
             {
                 builder.setColorizationMapping(colors)
-                    .setColorizationScheme(colorizationScheme);
+                    .setColorizationScheme(colorizationScheme)
+                    .setOutlineWidth(lineWidth + kOutlineWidth)
+                    .setOutlineColor(kOutlineColor);
             }
-            
+
             if (gpx.showArrows)
             {
                 // Use black arrows for gradient colorization

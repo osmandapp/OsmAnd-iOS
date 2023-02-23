@@ -413,10 +413,12 @@
         settingsViewController = [[OARepeatNavigationInstructionsViewController alloc] initWithAppMode:self.appMode];
     else if ([item.key isEqualToString:@"arrivalAnnouncement"])
         settingsViewController = [[OAArrivalAnnouncementViewController alloc] initWithAppMode:self.appMode];
-    else
-        return;
-    settingsViewController.delegate = self;
-    [self showViewController:settingsViewController];
+    
+    if (settingsViewController != nil)
+    {
+        settingsViewController.delegate = self;
+        [self showViewController:settingsViewController];
+    }
 }
 
 #pragma mark - Selectors

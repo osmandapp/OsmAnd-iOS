@@ -2521,7 +2521,7 @@
 "backup_delete_all_data_or_versions_descr" = "Smazat všechna data v OsmAnd Cloud nebo pouze historii verzí. Místní data zůstanou nedotčena.";
 "backup_delete_all_data" = "Smazat všechna moje data";
 "show_borders_of_downloaded_maps" = "Zobrazit hranice stažených map";
-"weather_temperature_fahrenheit" = "stupnice Fahrenheit";
+"weather_temperature_fahrenheit" = "Fahrenheit";
 "verification" = "Ověřování";
 "verification_code_placeholder" = "Kód";
 "shared_string_expires" = "Platnost končí";
@@ -2586,7 +2586,7 @@
 "fetching_from_server" = "Získávání dat ze serveru";
 "quarterly_subscription" = "Čtvrtletní předplatné";
 "transport_hazmat_yes_desc" = "Vyberte příslušnou kategorii.";
-"routing_attr_motor_type_diesel_name" = "Diesel";
+"routing_attr_motor_type_diesel_name" = "Nafta";
 "restore_backup_descr" = "Obnovit data v zařízení bez online zálohování";
 "routeInfo_horse_scale_name" = "Obtížnost stezek pro koně";
 "routeInfo_horse_scale_description" = "Vykreslení cest podle obtížnosti koňských stezek";
@@ -2798,3 +2798,6 @@
 "rendering_attr_showTrainRoutes_name" = "Vlakové trasy";
 "routing_attr_freeride_policy_allow_name" = "Povolit";
 "speak_route_recalculation" = "Oznámení o přepočtu trasy";
+"free_downloads" = "Zdarma ke stažení";
+"restart_is_required_title" = "Je nutný restart";
+"restart_is_required" = "K provedení změny je nutný restart.";

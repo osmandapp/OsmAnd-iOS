@@ -174,7 +174,7 @@
     return 17.;
 }
 
-- (void)onRowPressed:(NSIndexPath *)indexPath
+- (void)onRowSelected:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     if ([item[@"type"] isEqualToString:[OATimeTableViewCell getCellIdentifier]])

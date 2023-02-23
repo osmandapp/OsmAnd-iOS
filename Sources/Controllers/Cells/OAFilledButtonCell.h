@@ -14,5 +14,7 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *topMarginConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *bottomMarginConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *heightConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *trailingConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *leadingConstraint;
 
 @end

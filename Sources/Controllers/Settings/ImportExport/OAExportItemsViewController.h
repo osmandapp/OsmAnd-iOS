@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype) initWithAppMode:(OAApplicationMode *)appMode;
 - (instancetype) initWithTracks:(NSArray<NSString *> *)tracks;
+- (instancetype) initWithType:(OAExportSettingsType *)type selectedItems:(NSArray *)selectedItems;
 
 @end
 

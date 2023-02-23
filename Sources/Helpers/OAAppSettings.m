@@ -274,6 +274,9 @@
 #define useLastApplicationModeByDefaultKey @"useLastApplicationModeByDefault"
 #define lastUsedApplicationModeKey @"lastUsedApplicationMode"
 #define lastRouteApplicationModeBackupStringKey @"lastRouteApplicationModeBackupString"
+#define searchHistoryKey @"searchHistoy"
+#define navigationHistoryKey @"navigationHistory"
+#define mapMarkersHistoryKey @"mapMarkersHistory"
 
 #define onlineRoutingEnginesKey @"onlineRoutingEngines"
 
@@ -4086,12 +4089,18 @@
         _useLastApplicationModeByDefault = [[[OACommonBoolean withKey:useLastApplicationModeByDefaultKey defValue:NO] makeGlobal] makeShared];
         _lastUsedApplicationMode = [[[OACommonString withKey:lastUsedApplicationModeKey defValue:OAApplicationMode.DEFAULT.stringKey] makeGlobal] makeShared];
         _lastRouteApplicationMode = [[OACommonAppMode withKey:lastRouteApplicationModeBackupStringKey defValue:OAApplicationMode.DEFAULT] makeGlobal];
+        _searchHistory = [[[OACommonBoolean withKey:searchHistoryKey defValue:YES] makeGlobal] makeShared];
+        _navigationHistory = [[[OACommonBoolean withKey:navigationHistoryKey defValue:YES] makeGlobal] makeShared];
+        _mapMarkersHistory = [[[OACommonBoolean withKey:mapMarkersHistoryKey defValue:YES] makeGlobal] makeShared];
 
         [_globalPreferences setObject:_numberOfStartsFirstXmasShown forKey:@"number_of_starts_first_xmas_shown"];
         [_globalPreferences setObject:_lastFavCategoryEntered forKey:@"last_fav_category"];
         [_globalPreferences setObject:_useLastApplicationModeByDefault forKey:@"use_last_application_mode_by_default"];
         [_globalPreferences setObject:_lastUsedApplicationMode forKey:@"last_used_application_mode"];
         [_globalPreferences setObject:_lastRouteApplicationMode forKey:@"last_route_application_mode_backup_string"];
+        [_globalPreferences setObject:_searchHistory forKey:@"search_history"];
+        [_globalPreferences setObject:_navigationHistory forKey:@"navigation_history"];
+        [_globalPreferences setObject:_mapMarkersHistory forKey:@"map_markers_history"];
         
         // TODO: not sure we need to override this setting with import/export
         _userIosId = [[[OACommonString withKey:userIosIdKey defValue:@""] makeGlobal] makeShared];

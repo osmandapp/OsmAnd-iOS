@@ -10,7 +10,7 @@
 #import "OADistanceDirection.h"
 #import "OACity.h"
 
-@class OASearchResult;
+@class OASearchResult, OAPointDescription;
 
 typedef NS_ENUM(NSInteger, EOAQuickSearchListItemType)
 {
@@ -34,6 +34,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchListItemType)
 - (NSString *) getName;
 + (NSString *) getName:(OASearchResult *)searchResult;
 + (NSString *) getIconName:(OASearchResult *)searchResult;
++ (NSString *) getItemIcon:(OAPointDescription *)pd;
 + (NSString *) getTypeName:(OASearchResult *)searchResult;
 
 - (OADistanceDirection *) getEvaluatedDistanceDirection:(BOOL)decelerating;

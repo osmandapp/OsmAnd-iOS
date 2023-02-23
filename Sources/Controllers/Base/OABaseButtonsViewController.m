@@ -13,7 +13,18 @@
 @interface OABaseButtonsViewController ()
 
 @property (weak, nonatomic) IBOutlet UIView *bottomBackgroundView;
+@property (weak, nonatomic) IBOutlet UIStackView *bottomStackView;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *leftBottomMarginConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *rightBottomMarginConstraint;
+@property (weak, nonatomic) IBOutlet UIView *aboveBottomMarginView;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *aboveBottomMarginVertivalConstraint;
 @property (weak, nonatomic) IBOutlet UIStackView *middleBottomMarginStackView;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *middleFirstMarginViewVerticalConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *middleFirstMarginViewHorizontalConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *middleSecondMarginViewVerticalConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *middleSecondMarginViewHorizontalConstraint;
+@property (weak, nonatomic) IBOutlet UIView *belowBottomMarginView;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *belowBottomMarginVertivalConstraint;
 
 @end
 
@@ -36,13 +47,18 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+
+    [self updateBottomButtons];
+}
+
+#pragma mark - Base setup UI
+
+- (void)updateBottomButtons
+{
+    [self setupBottomAxis];
     [self setupBottomButtons];
     [self setupBottomFonts];
-    
-    self.separatorBottomView.hidden = ![self isBottomSeparatorVisible];
-    self.middleBottomMarginStackView.spacing = [self getSpaceBetweenButtons];
-    
+
     UIColor *bottomBackgroundColor = [self getBottomBackgroundColor];
     if (bottomBackgroundColor)
         self.bottomBackgroundView.backgroundColor = bottomBackgroundColor;
@@ -50,7 +66,30 @@
         [self.bottomBackgroundView addBlurEffect:YES cornerRadius:0. padding:0.];
 }
 
-#pragma mark - Base setup UI
+- (void)updateUI
+{
+    [super updateUI];
+    [self updateBottomButtons];
+}
+
+- (void)setupBottomAxis
+{
+    UILayoutConstraintAxis axisMode = [self getBottomAxisMode];
+    BOOL isVertical = axisMode == UILayoutConstraintAxisVertical;
+    self.bottomStackView.axis = axisMode;
+    self.aboveBottomMarginView.hidden = !isVertical;
+    self.aboveBottomMarginVertivalConstraint.active = isVertical;
+    self.leftBottomMarginConstraint.constant = isVertical ? kPaddingOnSideOfContent : kSmallPaddingOnSideOfContent;
+    self.rightBottomMarginConstraint.constant = isVertical ? kPaddingOnSideOfContent : kSmallPaddingOnSideOfContent;
+    self.middleBottomMarginStackView.axis = axisMode;
+    self.middleBottomMarginStackView.distribution = isVertical ? UIStackViewDistributionFill : UIStackViewDistributionEqualSpacing;
+    self.middleFirstMarginViewVerticalConstraint.active = isVertical;
+    self.middleFirstMarginViewHorizontalConstraint.active = !isVertical;
+    self.middleSecondMarginViewVerticalConstraint.active = isVertical;
+    self.middleSecondMarginViewHorizontalConstraint.active = !isVertical;
+    self.belowBottomMarginView.hidden = !isVertical;
+    self.belowBottomMarginVertivalConstraint.active = isVertical;
+}
 
 - (void)setupBottomButtons
 {
@@ -60,25 +99,31 @@
     self.topButton.tintColor = topButtonTintColor;
     self.topButton.backgroundColor = [self getButtonBackgroundColor:topButtonColorScheme];
     self.topButton.enabled = topButtonColorScheme != EOABaseButtonColorSchemeInactive;
-    
+
     EOABaseButtonColorScheme bottomButtonColorScheme = [self getBottomButtonColorScheme];
     UIColor *bottomButtonTintColor = [self getButtonTintColor:bottomButtonColorScheme];
     [self.bottomButton setTitleColor:bottomButtonTintColor forState:UIControlStateNormal];
     self.bottomButton.tintColor = bottomButtonTintColor;
     self.bottomButton.backgroundColor = [self getButtonBackgroundColor:bottomButtonColorScheme];
     self.bottomButton.enabled = bottomButtonColorScheme != EOABaseButtonColorSchemeInactive;
-    
+
     NSString *topButtonTitle = [self getTopButtonTitle];
     BOOL hasTopButton = topButtonTitle && topButtonTitle.length > 0;
     self.topButton.hidden = !hasTopButton;
     [self.topButton setTitle:topButtonTitle forState:UIControlStateNormal];
-    
+
     NSString *bottomButtonTitle = [self getBottomButtonTitle];
     BOOL hasBottomButton = bottomButtonTitle && bottomButtonTitle.length > 0;
     self.bottomButton.hidden = !hasBottomButton;
     [self.bottomButton setTitle:bottomButtonTitle forState:UIControlStateNormal];
-    
+
+    self.middleBottomMarginStackView.spacing = [self getSpaceBetweenButtons];
     self.middleBottomMarginStackView.hidden = !hasTopButton || !hasBottomButton;
+
+    BOOL hasBottomButtons = hasTopButton || hasBottomButton;
+    self.bottomBackgroundView.hidden = !hasBottomButtons;
+    self.bottomStackView.hidden = !hasBottomButtons;
+    self.separatorBottomView.hidden = !hasBottomButtons || ![self isBottomSeparatorVisible];
 }
 
 - (void)setupBottomFonts
@@ -120,6 +165,9 @@
 
 - (UIColor *)getButtonBackgroundColor:(EOABaseButtonColorScheme)scheme
 {
+    if ([self getBottomAxisMode] == UILayoutConstraintAxisHorizontal)
+        return UIColor.clearColor;
+
     switch (scheme)
     {
         case EOABaseButtonColorSchemePurple:
@@ -132,6 +180,11 @@
 }
 
 #pragma mark - Base UI
+
+- (UILayoutConstraintAxis)getBottomAxisMode
+{
+    return UILayoutConstraintAxisVertical;
+}
 
 - (EOABaseBottomColorScheme)getBottomColorScheme
 {

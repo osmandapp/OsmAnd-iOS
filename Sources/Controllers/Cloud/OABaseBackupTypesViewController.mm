@@ -209,7 +209,7 @@
     return _data.count;
 }
 
-- (void)onRowPressed:(NSIndexPath *)indexPath
+- (void)onRowSelected:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
     BOOL emptyCell = [item[@"key"] hasPrefix:@"empty_cell_"];

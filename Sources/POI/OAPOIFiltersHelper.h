@@ -23,6 +23,7 @@
 - (OAPOIUIFilter *) getTopWikiPoiFilter;
 - (OAPOIUIFilter *) getShowAllPOIFilter;
 - (OAPOIUIFilter *) getFilterById:(NSString *)filterId;
+- (OAPOIUIFilter *) getFilterById:(NSString *)filterId includeDeleted:(BOOL)includeDeleted;
 - (void) reloadAllPoiFilters;
 - (NSArray<OAPOIUIFilter *> *) getUserDefinedPoiFilters:(BOOL)includeDeleted;
 - (NSArray<OAPOIUIFilter *> *) getSearchPoiFilters;

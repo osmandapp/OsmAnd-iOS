@@ -284,7 +284,7 @@
     return _data.count;
 }
 
-- (void)onRowPressed:(NSIndexPath *)indexPath
+- (void)onRowSelected:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
     NSString *key = item[@"key"];

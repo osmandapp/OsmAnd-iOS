@@ -3558,7 +3558,9 @@ typedef enum
         cardsController.bottomView.frame = CGRectMake(0.0, DeviceScreenHeight + 1, DeviceScreenWidth, toolbarHeight);
         [cardsController.cardsView setHidden:YES];
         [cardsController.bottomView setHidden:YES];
-        
+        BOOL isHistoryOn = [_settings.mapMarkersHistory get];
+        cardsController.historyViewButton.enabled = isHistoryOn;
+
         [self.hudViewController addChildViewController:cardsController];
         
         [self createShade];

@@ -168,7 +168,7 @@
     return section == 0 ? 18.0 : 9.0;
 }
 
-- (void)onRowPressed:(NSIndexPath *)indexPath
+- (void)onRowSelected:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section];
     NSString *itemKey = item[@"key"];

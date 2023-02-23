@@ -32,8 +32,10 @@ typedef NS_ENUM(NSInteger, EOABaseButtonColorScheme)
 @property (weak, nonatomic) IBOutlet UIButton *topButton;
 @property (weak, nonatomic) IBOutlet UIButton *bottomButton;
 
+- (void)updateBottomButtons;
 - (void)setupBottomButtons;
 
+- (UILayoutConstraintAxis)getBottomAxisMode;
 - (EOABaseBottomColorScheme)getBottomColorScheme;
 - (CGFloat)getSpaceBetweenButtons;
 - (NSString *)getTopButtonTitle;

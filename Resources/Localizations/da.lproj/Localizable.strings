@@ -2810,3 +2810,6 @@
 "osm_upload_gpx_tags_footer" = "Indtast mærker adskilt af komma.";
 "visibility" = "Synlighed";
 "osm_upload_gpx_description_footer" = "Spornavnet vil blive brugt i stedet for en tom beskrivelse. Den indtastede beskrivelse vil blive anvendt for hvert spor.";
+"free_downloads" = "Gratis downloads";
+"restart_is_required_title" = "Genstart er nødvendig";
+"restart_is_required" = "En genstart er påkrævet for at anvende ændringen.";

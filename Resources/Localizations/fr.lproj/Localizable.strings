@@ -2803,3 +2803,4 @@
 "osm_upload_gpx_description_footer" = "Le nom de la trace sera utilisée au lieu d'une description vide. La description entrée sera appliquée pour chaque trace.";
 "osm_upload_gpx_tags_footer" = "Entrez les balises séparées par une virgule.";
 "visibility" = "Visibilité";
+"free_downloads" = "Téléchargement gratuits";

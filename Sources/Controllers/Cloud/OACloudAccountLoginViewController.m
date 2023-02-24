@@ -28,6 +28,7 @@
     
     BOOL _isEmailRegistered;
     BOOL _hasValidSub;
+    BOOL _continuePressed;
 }
 
 - (instancetype)init
@@ -45,6 +46,7 @@
     self.lastTimeCodeSent = 0;
     
     _backupHelper = [OABackupHelper sharedInstance];
+    _continuePressed = NO;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -72,7 +74,7 @@
 {
     NSMutableArray<NSArray<NSDictionary *> *> *data = [NSMutableArray new];
     
-    BOOL isTextFieldValidData = [self isValidInputValue:[self getTextFieldValue]];
+    BOOL isTextFieldValidData = [self isValidInputValue:[self getTextFieldValue]] && !_continuePressed;
     _isEmailRegistered = ![self.errorMessage isEqualToString:OALocalizedString(@"cloud_email_not_registered")];
     
     [data addObject:@[@{
@@ -187,11 +189,16 @@
 
 - (void) continueButtonPressed
 {
-    NSString *email = self.getTextFieldValue;
-    if ([email isValidEmail])
+    if (!_continuePressed)
     {
-        [OAAppSettings.sharedManager.backupUserEmail set:email];
-        [_backupHelper registerDevice:@""];
+        NSString *email = self.getTextFieldValue;
+        if ([email isValidEmail])
+        {
+            [OAAppSettings.sharedManager.backupUserEmail set:email];
+            [_backupHelper registerDevice:@""];
+            _continuePressed = YES;
+            [self updateScreen];
+        }
     }
 }
 
@@ -237,6 +244,7 @@
         {
             self.errorMessage = error.getLocalizedError;
         }
+        _continuePressed = NO;
         [self updateScreen];
         NSLog(@"Backup error: %@", error.getLocalizedError);
     }
@@ -255,6 +263,7 @@
         else
         {
             self.errorMessage = error != nil ? error.getLocalizedError : message;
+            _continuePressed = NO;
             [self updateScreen];
         }
     });

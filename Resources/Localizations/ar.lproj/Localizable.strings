@@ -2072,7 +2072,7 @@
 "regions" = "المناطق";
 "shared_string_width" = "العرض";
 "shared_string_interval" = "الفاصل الزمني";
-"gpx_selection_segment_title" = "قطعة";
+"gpx_selection_segment_title" = "الجزء";
 "navigate_point_format_UTM" = "UTM";
 "navigate_point_format_unknown" = "تنسيق غير معروف";
 "navigate_point_olc_short" = "OLC";

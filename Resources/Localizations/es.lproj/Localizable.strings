@@ -2807,3 +2807,6 @@
 "osm_upload_gpx_description_footer" = "Se utilizará el nombre de la pista en lugar de una descripción vacía. La descripción introducida se aplicará a cada pista.";
 "visibility" = "Visibilidad";
 "osm_upload_gpx_tags_footer" = "Introduzca las etiquetas separadas por comas.";
+"restart_is_required" = "Es necesario reiniciar el sistema para aplicar el cambio.";
+"free_downloads" = "Descargas gratuitas";
+"restart_is_required_title" = "Se requiere reinicio";

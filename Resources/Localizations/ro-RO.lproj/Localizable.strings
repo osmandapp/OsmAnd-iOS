@@ -2789,3 +2789,6 @@
 "osm_upload_gpx_description_footer" = "Se va folosi numele piesei în locul unei descrieri goale. Descrierea introdusă va fi aplicată pentru fiecare piesă.";
 "osm_upload_gpx_tags_footer" = "Introduceți etichete separate prin virgulă.";
 "visibility" = "Vizibilitate";
+"free_downloads" = "Descărcări gratuite";
+"restart_is_required_title" = "Este necesară repornirea";
+"restart_is_required" = "Este necesară o repornire pentru a aplica modificarea.";

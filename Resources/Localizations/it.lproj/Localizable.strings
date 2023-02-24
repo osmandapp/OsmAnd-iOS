@@ -2797,3 +2797,15 @@
 "restart_is_required" = "Riavvio richiesto per applicare il cambiamento.";
 "free_downloads" = "Download gratuiti";
 "restart_is_required_title" = "Riavvio richiesto";
+"navigation_history" = "Cronologia navigazione";
+"ltr_or_rtl_combine_via_of" = "%ld di %ld";
+"history_actions_footer_text" = "Puoi esportare la cronologia in un file. Puoi eliminare tutti gli elementi della cronologia registrati fino ad ora.";
+"history_clear_alert_message" = "Sei sicuro di voler eliminare tutti gli elementi della cronologia?";
+"history_preferences_descr" = "Puoi disattivare la registrazione della cronologia individualmente per ogni tipo di cronologia.";
+"map_markers_history" = "Cronologia marcatori mappa";
+"history_clear_alert_title" = "Cancella cronologia";
+"search_history_disabled" = "La ricerca nella cronologia è disattivata";
+"enable_search_history" = "Puoi attivare la ricerca nella cronologia nelle Impostazioni";
+"last_seven_days" = "Ultimi 7 giorni";
+"confirm_history_item_delete" = "Sei sicuro di voler eliminare (%ld) elementi della cronologia?";
+"delete_history_items" = "Eliminare gli elementi della cronologia?";

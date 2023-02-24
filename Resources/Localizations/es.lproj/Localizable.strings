@@ -2810,3 +2810,5 @@
 "restart_is_required" = "Es necesario reiniciar el sistema para aplicar el cambio.";
 "free_downloads" = "Descargas gratuitas";
 "restart_is_required_title" = "Se requiere reinicio";
+"delete_history_items" = "¿Borrar elementos históricos?";
+"navigation_history" = "Historial de navegación";

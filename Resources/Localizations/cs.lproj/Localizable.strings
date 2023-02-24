@@ -376,7 +376,7 @@
 "record_trip" = "Zaznamenejte svoji stopu";
 "gpx_distance_points" = "Distance (points)";
 "gpx_max_speed" = "Max. rychlost";
-"shared_string_speed" = "Aktuální rychlost";
+"shared_string_speed" = "Rychlost";
 // Map settings
 "rendering_value_browse_map_name" = "Standardní";
 "routing_engine_vehicle_type_driving" = "Řízení vozidla";
@@ -558,7 +558,7 @@
 "plugin_ski_descr" = "Navrženo pro navigaci v oblastech zimních sportů: Sjezdovky, vleky a běžkařské tratě jsou označeny barevnými čarami, které označují obtížnost. Chcete-li tento doplněk používat, povolte jej a přejděte také na \"Konfigurace mapy\" a vyberte styl mapy \"Zima a lyžování\".";
 "record_plugin_name" = "Záznam cesty";
 "product_desc_track_recording" = "Zaznamenávejte a ukládejte své cesty jako GPX stopy";
-"record_plugin_description" = "Tento modul zapne funkci záznamu a uložení vašich stop stisknutím tlačítka GPX na panelu mapové obrazovky. Taktéž umožňuje nastavit automatické ukládání vašich navigačních tras do GPX souboru.\n\n Zaznamenávané stopy můžete sdílet se svými přáteli nebo mohou být použity jako příspěvek do OSM. Sportovci mohou použít zaznamenané trasy k sledování svých tréninků. Základní analýza může být provedena přímo v OsmAnd, například čas okruhu, průměrná rychlost, apod. Trasy mohou být samozřejmě analyzovány později speciálními programy třetích stran.";
+"record_plugin_description" = "Zaznamenávejte své výlety nebo tréninky a analyzujte data z hlediska rychlosti, počtu stoupání a klesání, výškového profilu atd. Zaznamenané trasy lze archivovat, sdílet s přáteli, upravovat a následně zpracovávat.\n\nDalší informace naleznete na adrese https://osmand.net/docs/user/plugins/trip-recording .";
 "product_title_trip_planning" = "Plánování cesty";
 "product_desc_trip_planning" = "Pomocí tohoto modulu si naplánujete svůj výlet, přidáte trasové body a změříte vzdálenost do cíle";
 "product_desc_ext_trip_planning" = "Modul pro plánování trasy vám umožní vytvořit si cestu na mapě, uložit ji, změřit vzdálenost mezi body spojenými přímkami atd. Vytvořeno pro předběžné plánování cesty, nikoli pro důkladné budování trasy.";
@@ -939,7 +939,7 @@
 "shared_string_on" = "Zapnuto";
 "rendering_value_category_name" = "Kategorie";
 "poi_dialog_reopen" = "Znovuotevřít";
-"show_from_zoom_level" = "Zobrazit odúrovně přiblížení";
+"show_from_zoom_level" = "Zobrazení začíná na úrovni přiblížení";
 "add_work" = "Přidat práci";
 "quick_action_add_parking" = "Přidat parkovací místo";
 "configure_map" = "Nastavení mapy";
@@ -2037,7 +2037,7 @@
 "suggested_maps_descr" = "Tyto mapy jsou potřebné pro modul.";
 "suggested_maps" = "Navrhované mapy";
 "product_desc_openplacereviews" = "Sdílejte své názory na veřejná místa";
-"plugin_mapillary_descr" = "Fotografie z ulic pro každého. Objevte místa, spolupracujte, zachyťte svět.";
+"plugin_mapillary_descr" = "Snímky pohledů na úrovni ulice. Přispět můžete i vy. Chcete-li zobrazit existující data jako mapovou vrstvu, zapněte v nabídce \"Konfigurace mapy\" možnost \"Snímky na úrovni ulic\".";
 "product_desc_mapillary" = "Pohledy do ulice, abyste si mohli prohlédnout okolí";
 "shared_string_feet" = "stopy";
 "srtm_download_list_help_message" = "OsmAnd poskytuje data vrstevnic vmetrech a stopách. Pro změnu formátu budete muset soubor znovu stáhnout.";
@@ -2356,7 +2356,7 @@
 "purchases_feature_desc_terrain" = "Vrstevnice, mapy se stínováním kopců a sklonem svahů s barevným zvýrazněním vrcholů a nížin.";
 "nautical_depth" = "Námořní hloubka";
 "purchases_feature_desc_nautical" = "Získejte přístup k informacím o námořní hloubce";
-"osmand_development_plugin_description" = "Nastavení funkcí pro vývoj a ladění, jako jsou simulace navigace, informace o rychlosti vykreslování nebo hlasová oznámení. Tato nastavení jsou určená pro vývojáře a nejsou potřebná pro běžné použití.";
+"osmand_development_plugin_description" = "Poskytuje funkce pro testování a ladění aplikace OsmAnd: simulaci navigačních tras, sledování vykreslování obrazovky, kontrolu výkonu atd. Tento zásuvný modul není pro běžné používání aplikace vyžadován.";
 "shared_string_learn_more" = "Zjistit více";
 "osm_live_subscriptions" = "Předplatné";
 "copy_address" = "Kopírovat adresu";
@@ -2437,15 +2437,15 @@
 "cloud_hide" = "Skrýt oblačnost";
 "toggle_cloud" = "Zobrazit/skrýt - Vrstva oblačnosti";
 "simulation_real_mode_title" = "Realistická simulace";
-"simulation_constant_mode_desc" = "Simulace bude provedena se zadanou konstantní rychlostí.";
-"simulation_constant_mode_title" = "Konstantní rychlost";
-"simulation_preview_mode_title" = "Režim rychlého přehledu";
-"speed_mode" = "Rychlostní režim";
+"simulation_constant_mode_desc" = "Simulace bude provedena s konstantní zvolenou rychlostí.";
+"simulation_constant_mode_title" = "Stálá rychlost";
+"simulation_preview_mode_title" = "Režim rychlého náhledu";
+"speed_mode" = "Režim rychlosti";
 "shared_string_clear_offline_cache" = "Smazat offline mezipaměť";
 "shared_string_total_size" = "Celková velikost";
 "wind_hide" = "Skrýt vítr";
 "simulation_real_mode_desc" = "Na rovných úsecích cest bude rychlost přizpůsobena maximální povolené rychlosti.\nNa křižovatkách simulace zpomalí.\nNa semaforech, značkách stop, atd. se aplikuje dodatečné zdržení.";
-"simulation_preview_mode_desc" = "Rychlost simulace bude na rovných úsecích maximální a zpomalí jen na křižovatkách.";
+"simulation_preview_mode_desc" = "Rychlost simulace bude maximální na rovných úsecích a zpomalí se pouze na křižovatkách.";
 "carplay_available_in_sub_plans" = "Zakupte si OsmAnd Pro nebo Maps+, abyste mohli používat OsmAnd s CarPlay.";
 "shared_string_updates_frequency" = "Frekvence aktualizací";
 "gpx_import_already_exists_short" = "Vybraný soubor stopy již v seznamu je.";
@@ -2801,3 +2801,15 @@
 "free_downloads" = "Zdarma ke stažení";
 "restart_is_required_title" = "Je nutný restart";
 "restart_is_required" = "K provedení změny je nutný restart.";
+"navigation_history" = "Historie navigace";
+"history_clear_alert_message" = "Jste si jisti, že chcete odstranit všechny položky historie?";
+"last_seven_days" = "Posledních 7 dní";
+"delete_history_items" = "Odstranit položky historie?";
+"history_preferences_descr" = "Protokolování historie můžete zakázat pro každý typ historie zvlášť.";
+"history_actions_footer_text" = "Historii můžete exportovat do souboru. Všechny dosud zaznamenané záznamy historie můžete vymazat.";
+"ltr_or_rtl_combine_via_of" = "%ld z %ld";
+"confirm_history_item_delete" = "Opravdu chcete odstranit (%ld) položek historie?";
+"map_markers_history" = "Historie mapových značek";
+"history_clear_alert_title" = "Odstranit celou historii";
+"search_history_disabled" = "Historie vyhledávání je vypnutá";
+"enable_search_history" = "Historii vyhledávání můžete povolit v Nastavení";

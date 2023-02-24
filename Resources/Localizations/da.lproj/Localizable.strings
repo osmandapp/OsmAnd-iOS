@@ -2813,3 +2813,12 @@
 "free_downloads" = "Gratis downloads";
 "restart_is_required_title" = "Genstart er nødvendig";
 "restart_is_required" = "En genstart er påkrævet for at anvende ændringen.";
+"map_markers_history" = "Kortmarkørhistorik";
+"search_history_disabled" = "Søgehistorik er deaktiveret";
+"enable_search_history" = "Du kan aktivere søgehistorik i Indstillinger";
+"history_clear_alert_title" = "Slet al historik";
+"history_clear_alert_message" = "Er du sikker på, at du vil slette alle historikelementer?";
+"last_seven_days" = "Seneste 7 dage";
+"history_preferences_descr" = "Du kan deaktivere logning af historik individuelt for hver historiktype.";
+"history_actions_footer_text" = "Du kan eksportere historik til en fil. Du kan slette alle historikposter, der er registreret indtil nu.";
+"navigation_history" = "Navigationshistorik";

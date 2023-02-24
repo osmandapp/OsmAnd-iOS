@@ -2820,3 +2820,15 @@
 "free_downloads" = "Descargas gratuitas";
 "restart_is_required" = "Debes reiniciar para aplicar los cambios.";
 "restart_is_required_title" = "Es necesario reiniciar";
+"history_actions_footer_text" = "Puedes exportar el historial a un archivo. Puedes borrar todas las entradas del historial registradas hasta el momento.";
+"history_clear_alert_title" = "Borrar todo el historial";
+"search_history_disabled" = "El historial de búsqueda está desactivado";
+"delete_history_items" = "¿Borrar elementos del historial?";
+"history_clear_alert_message" = "¿Borrar los elementos marcados en el historial?";
+"ltr_or_rtl_combine_via_of" = "%ld de %ld";
+"history_preferences_descr" = "Puedes desactivar el registro del historial individualmente para cada tipo de historial.";
+"navigation_history" = "Historial de navegación";
+"map_markers_history" = "Historial de los marcadores del mapa";
+"enable_search_history" = "Puedes activar el historial de búsqueda en los ajustes";
+"last_seven_days" = "Últimos 7 días";
+"confirm_history_item_delete" = "¿Borrar (%ld) elementos del historial?";

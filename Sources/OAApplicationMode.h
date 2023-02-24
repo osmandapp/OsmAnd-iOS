@@ -72,6 +72,11 @@
 - (BOOL) hasFastSpeed;
 - (BOOL) isDerivedRoutingFrom:(OAApplicationMode *)mode;
 
+/**
+ * @return Distance in meters to use as a filter when the app goes into the background during a track recording
+ */
+- (NSInteger) getBackgroundDistanceFilter;
+
 + (NSSet<OAApplicationMode *> *) regWidgetVisibility:(NSString *)widgetId am:(NSArray<OAApplicationMode *> *)am;
 - (BOOL) isWidgetCollapsible:(NSString *)key;
 - (BOOL) isWidgetVisible:(NSString *)key;

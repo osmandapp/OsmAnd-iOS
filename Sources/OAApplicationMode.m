@@ -13,6 +13,9 @@
 #import "OsmAndApp.h"
 #import "OAColors.h"
 
+#define kBackgroundDistanceSlow 5
+#define kBackgroundDistanceFast 10
+
 @interface OAApplicationMode ()
 
 @property (nonatomic) NSInteger modeId;
@@ -578,6 +581,11 @@ static OAApplicationMode *_HORSE;
 - (NSString *) getProfileDescription
 {
     return _descr && _descr.length > 0 ? _descr : OALocalizedString(@"profile_type_custom_string");
+}
+
+- (NSInteger) getBackgroundDistanceFilter
+{
+    return [self hasFastSpeed] ? kBackgroundDistanceFast : kBackgroundDistanceSlow;
 }
 
 - (OAApplicationModeBean *) toModeBean

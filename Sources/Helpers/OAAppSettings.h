@@ -740,7 +740,6 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonBoolean *autoSplitRecording;
 @property (nonatomic) OACommonBoolean *saveHeadingToGpx;
 
-
 @property (assign, nonatomic) BOOL mapSettingTrackRecording;
 
 @property (nonatomic) OACommonBoolean *mapSettingSaveGlobalTrackToGpx;

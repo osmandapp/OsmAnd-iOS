@@ -2796,7 +2796,7 @@
 "lang_zh-Hans" = "Chinois simplifié";
 "speak_gps_signal_status" = "Annoncer la perte et la récupération du signal GPS";
 "speak_route_recalculation" = "Annoncer un nouveau calcul de l'itinéraire";
-"announcement_time_title" = "Heure d'annonce";
+"announcement_time_title" = "Date de l'annonce";
 "announcement_time_intervals" = "Intervalles de temps et de distance";
 "announcement_time_arrive" = "Arrivée à la destination";
 "announcement_time_off_route" = "En dehors de la route";

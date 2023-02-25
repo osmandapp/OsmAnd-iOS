@@ -74,6 +74,8 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     
     _tableView.estimatedRowHeight = kEstimatedRowHeight;
     _tableView.rowHeight = UITableViewAutomaticDimension;
+    
+    self.navBarView.backgroundColor = UIColorFromRGB(color_primary_orange_navbar_background);
 }
 
 - (void) setShouldPopToParent:(BOOL)shouldPop

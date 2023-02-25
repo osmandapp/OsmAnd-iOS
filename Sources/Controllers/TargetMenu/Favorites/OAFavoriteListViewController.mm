@@ -60,7 +60,7 @@ typedef enum
 
 @end
 
-@interface OAFavoriteListViewController () <OAMultiselectableHeaderDelegate, UIDocumentPickerDelegate>
+@interface OAFavoriteListViewController () <OAMultiselectableHeaderDelegate, UIDocumentPickerDelegate, UISearchControllerDelegate, UISearchResultsUpdating>
 {
 
     BOOL isDecelerating;
@@ -83,6 +83,10 @@ typedef enum
 
     CALayer *_horizontalLine;
     NSMutableArray<NSIndexPath *> *_selectedItems;
+
+    UIBarButtonItem *_directionButton;
+    UIBarButtonItem *_editButton;
+    UISearchController *_searchController;
 }
 
 static UIViewController *parentController;
@@ -95,11 +99,6 @@ static UIViewController *parentController;
     [OAFavoriteListViewController doPop];
 
     return YES;
-}
-
-- (void)applyLocalization
-{
-    _titleView.text = OALocalizedString(@"my_favorites");
 }
 
 - (void)viewDidLoad
@@ -133,11 +132,6 @@ static UIViewController *parentController;
 {
     [super viewWillLayoutSubviews];
     _horizontalLine.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 0.5);
-}
-
--(UIView *) getTopView
-{
-    return _navBarView;
 }
 
 -(UIView *) getMiddleView
@@ -230,7 +224,7 @@ static UIViewController *parentController;
             if ([cell isKindOfClass:[OAPointTableViewCell class]])
             {
                 OAFavoriteItem* item;
-                if (self.directionButton.tag == 1)
+                if (_directionButton.tag == 1)
                 {
                     if (i.section == 0)
                         item = [self.sortedFavoriteItems objectAtIndex:i.row];
@@ -289,6 +283,12 @@ static UIViewController *parentController;
                                                                      andObserve:app.locationServices.updateObserver];
     [self applySafeAreaMargins];
     [super viewWillAppear:animated];
+    
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
+    
+    _editButton = [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:@"icon_edit"] style:UIBarButtonItemStylePlain target:self action:@selector(editButtonClicked:)];
+    _directionButton = [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:@"icon_direction"] style:UIBarButtonItemStylePlain target:self action:@selector(sortByDistance:)];
+    [self.navigationController.navigationBar.topItem setRightBarButtonItems:@[_editButton, _directionButton] animated:YES];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -314,13 +314,12 @@ static UIViewController *parentController;
         [self.locationServicesUpdateObserver detach];
         self.locationServicesUpdateObserver = nil;
     }
-
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 
 -(void) addAccessibilityLabels
 {
-    self.backButton.accessibilityLabel = OALocalizedString(@"shared_string_back");
-    self.editButton.accessibilityLabel = OALocalizedString(@"shared_string_edit");
+    _editButton.accessibilityLabel = OALocalizedString(@"shared_string_edit");
     self.exportButton.accessibilityLabel = OALocalizedString(@"shared_string_export");
     self.deleteButton.accessibilityLabel = OALocalizedString(@"shared_string_delete");
 }
@@ -423,16 +422,16 @@ static UIViewController *parentController;
 {
     if (![self.favoriteTableView isEditing])
     {
-        if (self.directionButton.tag == 0)
+        if (_directionButton.tag == 0)
         {
-            self.directionButton.tag = 1;
-            [self.directionButton setImage:[UIImage imageNamed:@"icon_direction_active"] forState:UIControlStateNormal];
+            _directionButton.tag = 1;
+            _directionButton.image = [UIImage imageNamed:@"icon_direction_active"];
             self.sortingType = 1;
         }
         else
         {
-            self.directionButton.tag = 0;
-            [self.directionButton setImage:[UIImage imageNamed:@"icon_direction"] forState:UIControlStateNormal];
+            _directionButton.tag = 0;
+            _directionButton.image = [UIImage imageNamed:@"icon_direction"];
             self.sortingType = 0;
         }
         [self generateData];
@@ -542,7 +541,7 @@ static UIViewController *parentController;
         for (NSIndexPath *indexPath in _selectedItems)
         {
             OAFavoriteItem* item;
-            if (self.directionButton.tag == 1)
+            if (_directionButton.tag == 1)
             {
                 if (indexPath.section == 0)
                     item = [self.sortedFavoriteItems objectAtIndex:indexPath.row];
@@ -599,7 +598,7 @@ static UIViewController *parentController;
         for (NSIndexPath *indexPath in sortedSelectedItems)
         {
             OAFavoriteItem* item;
-            if (self.directionButton.tag == 1)
+            if (_directionButton.tag == 1)
             {
                 if (indexPath.section == 0)
                     item = [self.sortedFavoriteItems objectAtIndex:indexPath.row];
@@ -634,7 +633,7 @@ static UIViewController *parentController;
 - (NSArray *) getItemsForRows:(NSArray<NSIndexPath *>*)indexPath
 {
     NSMutableArray* itemList = [[NSMutableArray alloc] init];
-    if (self.directionButton.tag == 1)
+    if (_directionButton.tag == 1)
     { // Sorted
         [indexPath enumerateObjectsUsingBlock:^(NSIndexPath* path, NSUInteger idx, BOOL *stop) {
             [itemList addObject:[self.sortedFavoriteItems objectAtIndex:path.row]];
@@ -666,9 +665,9 @@ static UIViewController *parentController;
         [self.tabBarController.tabBar setHidden:YES];
     }];
 
-    [self.editButton setImage:[UIImage imageNamed:@"icon_edit_active"] forState:UIControlStateNormal];
-    [self.backButton setHidden:YES];
-    [self.directionButton setHidden:YES];
+    _editButton.image = [UIImage imageNamed:@"icon_edit_active"];
+    self.tabBarController.navigationItem.hidesBackButton = YES;
+    [self.navigationController.navigationBar.topItem setRightBarButtonItems:@[_editButton] animated:YES];
     [self.favoriteTableView reloadData];
 }
 
@@ -685,15 +684,15 @@ static UIViewController *parentController;
         [self applySafeAreaMargins];
     }];
 
-    [self.editButton setImage:[UIImage imageNamed:@"icon_edit"] forState:UIControlStateNormal];
-    [self.backButton setHidden:NO];
+    _editButton.image = [UIImage imageNamed:@"icon_edit"];
+    self.tabBarController.navigationItem.hidesBackButton = NO;
 
-    if (self.directionButton.tag == 1)
-        [self.directionButton setImage:[UIImage imageNamed:@"icon_direction_active"] forState:UIControlStateNormal];
+    if (_directionButton.tag == 1)
+        _directionButton.image = [UIImage imageNamed:@"icon_direction_active"];
     else
-        [self.directionButton setImage:[UIImage imageNamed:@"icon_direction"] forState:UIControlStateNormal];
+        _directionButton.image = [UIImage imageNamed:@"icon_direction"];
 
-    [self.directionButton setHidden:NO];
+    [self.navigationController.navigationBar.topItem setRightBarButtonItems:@[_editButton, _directionButton] animated:YES];
     [self.favoriteTableView setEditing:NO animated:YES];
     [_selectedItems removeAllObjects];
 }
@@ -799,7 +798,7 @@ static UIViewController *parentController;
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    if (self.directionButton.tag == 1)
+    if (_directionButton.tag == 1)
         return [self getSortedNumberOfSectionsInTableView];
     return [self getUnsortedNumberOfSectionsInTableView];
 }
@@ -820,7 +819,7 @@ static UIViewController *parentController;
         return 44;
     NSDictionary *item = _data[section][0];
     NSString *cellType = item[@"type"];
-    return [cellType isEqualToString:@"actionItem"] || self.directionButton.tag == 1 ? 44 : 16;
+    return [cellType isEqualToString:@"actionItem"] || _directionButton.tag == 1 ? 44 : 16;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
@@ -830,7 +829,7 @@ static UIViewController *parentController;
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    if (self.directionButton.tag == 1)
+    if (_directionButton.tag == 1)
     {
         if (section == 0)
             return _sortedHeaderView;
@@ -852,7 +851,7 @@ static UIViewController *parentController;
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (self.directionButton.tag == 1)
+    if (_directionButton.tag == 1)
         return [self getSortedNumberOfRowsInSection:section];
     return [self getUnsortedNumberOfRowsInSection:section];
 }
@@ -880,7 +879,7 @@ static UIViewController *parentController;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (self.directionButton.tag == 1)
+    if (_directionButton.tag == 1)
         return [self getSortedcellForRowAtIndexPath:indexPath];
     return [self getUnsortedcellForRowAtIndexPath:indexPath];
 }
@@ -1044,7 +1043,7 @@ static UIViewController *parentController;
 {
     if ([self.favoriteTableView isEditing])
     {
-        if (self.directionButton.tag == 0)
+        if (_directionButton.tag == 0)
         {
             NSDictionary *item = _data[indexPath.section][0];
             NSString *cellType = item[@"type"];
@@ -1063,7 +1062,7 @@ static UIViewController *parentController;
 
 - (BOOL) tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (self.directionButton.tag == 1)
+    if (_directionButton.tag == 1)
         return [self canEditSortedRowAtIndexPath:indexPath];
 
     return [self canEditUnsortedRowAtIndexPath:indexPath];
@@ -1085,7 +1084,7 @@ static UIViewController *parentController;
 
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ((indexPath.row != 0 && self.directionButton.tag == 0) || self.directionButton.tag == 1)
+    if ((indexPath.row != 0 && _directionButton.tag == 0) || _directionButton.tag == 1)
         return UITableViewCellEditingStyleDelete;
     else
         return UITableViewCellEditingStyleNone;
@@ -1252,7 +1251,7 @@ static UIViewController *parentController;
 
 - (void) removeFavoriteItems
 {
-    if (self.directionButton.tag == 0)
+    if (_directionButton.tag == 0)
         [self removeItemsFromUnsortedFavoriteItems];
     else
         [self removeItemsFromSortedFavoriteItems];
@@ -1260,7 +1259,7 @@ static UIViewController *parentController;
 
 - (void)removeFavoriteItem:(NSIndexPath *)indexPath
 {
-    if (self.directionButton.tag == 0)
+    if (_directionButton.tag == 0)
         [self removeItemFromUnsortedFavoriteItems:indexPath];
     else
         [self removeItemFromSortedFavoriteItems:indexPath];
@@ -1424,7 +1423,7 @@ static UIViewController *parentController;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (self.directionButton.tag == 1)
+    if (_directionButton.tag == 1)
         [self didSelectRowAtIndexPathSorter:indexPath];
     else
     {
@@ -1446,7 +1445,7 @@ static UIViewController *parentController;
 
 - (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (self.directionButton.tag == 1)
+    if (_directionButton.tag == 1)
         [self didDeselectRowAtIndexPathSorted:indexPath];
     else
     {
@@ -1630,6 +1629,11 @@ static UIViewController *parentController;
     
     NSURL *url = urls.firstObject;
     [OARootViewController.instance handleIncomingURL:url];
+}
+
+- (void)updateSearchResultsForSearchController:(UISearchController *)searchController
+{
+    NSLog(@"%@", searchController.searchBar.text);
 }
 
 @end

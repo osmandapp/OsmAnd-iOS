@@ -117,7 +117,7 @@
                                                        [OANativeUtilities skImageFromPngResource:@"map_pedestrian_location"]);
     _locationMarker = locationMarkerBuilder.buildAndAddToCollection(_currentGraphPosition);
     
-    _routeAttributes = [self.mapViewController getLineRenderingAttributes:@"route"];
+    _routeAttributes = nil;
     _сoloringTypeAvailabilityCache = [[NSCache alloc] init];
     
     _initDone = YES;
@@ -151,7 +151,7 @@
     _transportRouteMarkers = std::make_shared<OsmAnd::MapMarkersCollection>();
     _actionLinesCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
     
-    _routeAttributes = [self.mapViewController getLineRenderingAttributes:@"route"];
+    _routeAttributes = nil;
 
     _locationMarker->setIsHidden(true);
     _route = nil;
@@ -370,7 +370,6 @@
 
 - (NSNumber *)getParamFromAttr:(NSString *)param
 {
-    _routeAttributes = [self.mapViewController getLineRenderingAttributes:@"route"];
     return _routeAttributes[param];
 }
 
@@ -756,6 +755,11 @@
 
 - (void) refreshRouteWithSync:(BOOL)sync
 {
+    if (!_routeAttributes)
+        _routeAttributes = [self.mapViewController getLineRenderingAttributes:@"route"];
+    if (!_routeAttributes)
+        return;
+
     BOOL isNight = [OAAppSettings sharedManager].nightMode;
     OARouteCalculationResult *route = [_routingHelper getRoute];
     if ([_routingHelper isPublicTransportMode])

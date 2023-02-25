@@ -2812,3 +2812,15 @@
 "restart_is_required" = "É necessário reiniciar para aplicar a alteração.";
 "restart_is_required_title" = "É necessário reiniciar";
 "ios_release_4_3" = "• Animação suave nas mudanças de localização durante o movimento\n• CarPlay: adicionadas vias de trânsito, visualização 2.5D, problemas de som corrigidos em conexões por Bluetooth\n• Introdução de novos planos de compra: assinaturas \"OsmAnd Pro\" com acesso a todos os recursos e compra do plano \"Maps+\" com descarregamentos ilimitados de mapas e acesso a complementos (plug-ins) pagos.\n• Adicionada funcionalidade de cópia de segurança na nuvem e previsão do tempo off-line para utilizadores OsmAnd Pro\n• Nova tela \"Compra\" mais prático com a lista de todas as compras\n• Benefícios para colaboradores ativos do OpenStreetMap.org\n• Os trilhos agora podem ser coloridos por altitude, velocidade ou inclinação\n• Os mapas off-line estão agora acessíveis através da aplicação do Android \"Ficheiros\"\n• Favoritos: geração de cópias de segurança locais adicionadas após cada alteração, estas cópias de segurança estão acessíveis a partir da aplicação do Android \"Ficheiros\"\n• POI guardado nos favoritos irá armazenar e mostrar todos os dados do POI mesmo sem um mapa off-line\n• GPX com suporte para link, cmt, desc tags e para quaisquer extensões personalizadas\n• Modo adicionado no botão \"Bússola\"\n• Corrigido problema com o formato de Coordenadas UTM\n• Corrigido problema com pontos intermédios na navegação\n";
+"delete_history_items" = "Excluir itens do histórico?";
+"history_actions_footer_text" = "Você pode exportar o histórico para um arquivo. Você pode excluir todas as entradas do histórico gravadas até agora.";
+"last_seven_days" = "Os últimos 7 dias";
+"history_preferences_descr" = "Você pode desativar o registro do histórico individualmente para cada tipo de histórico.";
+"navigation_history" = "Histórico de navegação";
+"map_markers_history" = "Histórico de marcadores de mapa";
+"history_clear_alert_title" = "Excluir todo o histórico";
+"history_clear_alert_message" = "Tem certeza de que deseja excluir todos os itens do histórico?";
+"ltr_or_rtl_combine_via_of" = "%ld de %ld";
+"search_history_disabled" = "O histórico de pesquisa está desativado";
+"enable_search_history" = "Você pode ativar o histórico de pesquisa em Configurações";
+"confirm_history_item_delete" = "Tem certeza de que deseja excluir (%ld) itens do histórico?";

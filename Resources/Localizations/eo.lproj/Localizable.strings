@@ -2116,7 +2116,7 @@
 "routing_attr_avoid_toll_description" = "Eviti pagendajn vojojn";
 "rendering_attr_noPolygons_name" = "Pluranguloj";
 "rendering_attr_piste_difficulty_easy_name" = "facila";
-"routing_attr_weight_description" = "Difini permesatan pezon de veturilo.";
+"routing_attr_weight_description" = "Difini permesatan mason de veturilo.";
 "rendering_attr_surface_salt_name" = "Salo";
 "rendering_value_yellow_name" = "Flava";
 "routing_attr_allow_private_description" = "Permesi aliron al privataj areoj.";
@@ -2603,7 +2603,7 @@
 "offline_edition_descr" = "Se malkonekta redaktado estasŝaltita, ŝanĝoj estos unua konservitaj loke kaj alŝutitaj al OSM je peto; alie ŝanĝoj estos alŝutitaj tuj.";
 "kg" = "kg";
 "m" = "m";
-"weather_plugin_description" = "Liveras:\n • 24-horan 7-tagan veterprognozojn kun 5 tavoloj\n • fenestraĵojn agordiĝantajn laŭ loko\n • egal-temperatur-liniojn kaj egal-aerprem-liniojn.\n\nDatumoj estas liverataj de «Global Forecast System» (GFS, https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast‌).";
+"weather_plugin_description" = "Liveras:\n • 24-horan 7-tagan veterprognozojn kun 5 tavoloj\n • fenestraĵojn agordiĝantajn laŭ loko\n • egal-temperatur-liniojn kaj egal-aerprem-liniojn.\n\nDatumoj estas liverataj de «Global Forecast System» (GFS, https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast ).";
 "km" = "km";
 "lang_sat" = "Santala";
 "uninstall_speed_cameras" = "Malinstali informojn pri rapidkontroliloj";

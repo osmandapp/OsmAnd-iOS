@@ -241,7 +241,7 @@ NSString *const kStartStopButtonKey = @"kStartStopButtonKey";
     return _data.count;
 }
 
-- (void)onRowPressed:(NSIndexPath *)indexPath
+- (void)onRowSelected:(NSIndexPath *)indexPath
 {
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     NSDictionary *item = [self getItem:indexPath];

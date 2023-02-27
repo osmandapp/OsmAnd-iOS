@@ -165,7 +165,7 @@
     return vw;
 }
 
-- (void)onRowPressed:(NSIndexPath *)indexPath
+- (void)onRowSelected:(NSIndexPath *)indexPath
 {
     _indexSelected = indexPath.row;
     NSUnit *prevUnit = [_band getBandUnit];

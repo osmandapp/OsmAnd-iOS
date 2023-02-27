@@ -161,10 +161,10 @@
     self.layer.shadowRadius = 2.0;
     self.layer.shadowOffset = CGSizeMake(0.0, 0.0);
 
-    _regularFont = [UIFont scaledSystemFontOfSize:23 weight:UIFontWeightSemibold];
-    _boldFont = [UIFont scaledSystemFontOfSize:23 weight:UIFontWeightBold];
-    _regularWaypointFont = [UIFont scaledSystemFontOfSize:17 weight:UIFontWeightMedium];
-    _boldWaypointFont = [UIFont scaledSystemFontOfSize:17 weight:UIFontWeightSemibold];
+    _regularFont = [UIFont systemFontOfSize:23 weight:UIFontWeightSemibold];
+    _boldFont = [UIFont systemFontOfSize:23 weight:UIFontWeightBold];
+    _regularWaypointFont = [UIFont systemFontOfSize:17 weight:UIFontWeightMedium];
+    _boldWaypointFont = [UIFont systemFontOfSize:17 weight:UIFontWeightSemibold];
     _textFont = _regularFont;
     _textWaypointFont = _regularWaypointFont;
     _textColor = [UIColor blackColor];
@@ -219,7 +219,7 @@
     CGRect exitRefFrame = _exitRefTextContainer.frame;
     if (showExit)
     {
-        CGSize size = [OAUtilities calculateTextBounds:_exitRefText.text width:w font:[UIFont scaledSystemFontOfSize:17 weight:UIFontWeightSemibold]];
+        CGSize size = [OAUtilities calculateTextBounds:_exitRefText.text width:w font:[UIFont systemFontOfSize:17 weight:UIFontWeightSemibold]];
         CGRect textFrame = CGRectMake(3., 3., size.width, h - 10);
         _exitRefText.frame = textFrame;
         exitRefFrame.size = CGSizeMake(size.width + 6., h - 4);
@@ -468,7 +468,7 @@
         {
             UIColor *color = UIColorFromRGB(color_osmand_orange);
             [descAttrStr addAttribute:NSForegroundColorAttributeName value:color range:NSMakeRange(0, descAttrStr.length)];
-            UIFont *font = [UIFont scaledSystemFontOfSize:12 weight:UIFontWeightSemibold];
+            UIFont *font = [UIFont systemFontOfSize:12 weight:UIFontWeightSemibold];
             if (font)
                 [descAttrStr addAttribute:NSFontAttributeName value:font range:NSMakeRange(0, descAttrStr.length)];
         }
@@ -582,9 +582,10 @@
             if (idx > 0)
                 streetName.text = [streetName.text substringToIndex:idx];
             
-            if (_roadShieldName && [streetName.text containsString:_roadShieldName])
+            if (_roadShieldName && [streetName.text hasPrefix:_roadShieldName])
             {
-                streetName.text = [streetName.text stringByReplacingOccurrencesOfString:_roadShieldName withString:@""];
+                NSRange roadShieldNameRange = [streetName.text rangeOfString:_roadShieldName];
+                streetName.text = [streetName.text stringByReplacingCharactersInRange:roadShieldNameRange withString:@""];
                 streetName.text = [streetName.text trim];
             }
         }

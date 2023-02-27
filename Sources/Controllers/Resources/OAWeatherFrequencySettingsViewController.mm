@@ -166,7 +166,7 @@
     return _data.count;
 }
 
-- (void)onRowPressed:(NSIndexPath *)indexPath
+- (void)onRowSelected:(NSIndexPath *)indexPath
 {
     _indexSelected = indexPath.row;
     [OAWeatherHelper setPreferenceFrequency:[OAWeatherHelper checkAndGetRegionId:_region]

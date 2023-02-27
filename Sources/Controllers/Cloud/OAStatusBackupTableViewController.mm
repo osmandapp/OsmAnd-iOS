@@ -787,7 +787,10 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
             [row setTitle:[OALocalizedString(@"syncing_progress") stringByAppendingString:[NSString stringWithFormat:@"%i%%", (int) (value * 100)]]];
             OATitleIconProgressbarCell *cell = (OATitleIconProgressbarCell *) [self.tableView cellForRowAtIndexPath:progressIdxPath];
             if (cell)
+            {
                 cell.progressBar.progress = value;
+                cell.textView.text = row.title;
+            }
         }
     });
 }

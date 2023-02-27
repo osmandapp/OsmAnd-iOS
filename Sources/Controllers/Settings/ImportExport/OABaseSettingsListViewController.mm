@@ -358,7 +358,7 @@
                     partiallySelected = partiallySelected || allItemsCount != selectedItemsCount;
                 }
                 cell.textView.text = groupData.groupName;
-                cell.descriptionView.text = [NSString stringWithFormat:OALocalizedString(@"of"), itemSelectionCount, itemCount];
+                cell.descriptionView.text = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_of"), itemSelectionCount, itemCount];
                 if (size > 0)
                 {
                     cell.descriptionView.text = [cell.descriptionView.text stringByAppendingFormat:@" • %@", [NSByteCountFormatter stringFromByteCount:size countStyle:NSByteCountFormatterCountStyleFile]];
@@ -423,7 +423,7 @@
                 OAExportSettingsType *settingType = items.getTypes[indexPath.row - 1];
                 NSInteger selectedAmount = [self getSelectedItemsAmount:settingType];
                 NSInteger itemsTotal = [items getItemsForType:settingType].count;
-                NSString *selectedStr = selectedAmount == 0 ? OALocalizedString(@"shared_string_none") : (selectedAmount == itemsTotal ? OALocalizedString(@"shared_string_all") : [NSString stringWithFormat:OALocalizedString(@"of"), selectedAmount, itemsTotal]);
+                NSString *selectedStr = selectedAmount == 0 ? OALocalizedString(@"shared_string_none") : (selectedAmount == itemsTotal ? OALocalizedString(@"shared_string_all") : [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_of"), selectedAmount, itemsTotal]);
                 
                 long size = [self calculateItemsSize:self.selectedItemsMap[settingType]];
                 if (size > 0)

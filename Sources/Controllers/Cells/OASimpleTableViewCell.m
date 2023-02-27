@@ -7,6 +7,8 @@
 //
 
 #import "OASimpleTableViewCell.h"
+#import "OASizes.h"
+#import "UITableViewCell+getTableView.h"
 
 @interface OASimpleTableViewCell ()
 
@@ -18,6 +20,23 @@
 @end
 
 @implementation OASimpleTableViewCell
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    [self updateSeparatorInset];
+}
+
+- (void)updateSeparatorInset
+{
+    CGRect titleFrame = [self.titleLabel convertRect:self.titleLabel.frame toView:self];
+
+    CGFloat leftInset = titleFrame.origin.x;
+    if (leftInset == 0)
+        leftInset = [OAUtilities getLeftMargin] + (self.leftIconView.hidden ? kPaddingOnSideOfContent : kPaddingToLeftOfContentWithIcon);
+
+    self.separatorInset = UIEdgeInsetsMake(0., leftInset, 0., 0.);
+}
 
 - (void)leftIconVisibility:(BOOL)show
 {

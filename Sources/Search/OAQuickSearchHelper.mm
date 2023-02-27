@@ -23,6 +23,8 @@
 #import "Localization.h"
 #import "OAAutoObserverProxy.h"
 #import "OAGPXDatabase.h"
+#import "OAPointDescription.h"
+#import "OAPOIHelper.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IFavoriteLocation.h>
@@ -246,22 +248,78 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 53;
 
 - (BOOL) search:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
 {
-    OAHistoryHelper *helper = [OAHistoryHelper sharedInstance];
-    NSArray *allItems = [helper getPointsHavingTypes:helper.searchTypes limit:0];
+    OAHistoryHelper *historyhelper = [OAHistoryHelper sharedInstance];
     int p = 0;
-    for (OAHistoryItem *point in allItems)
+    for (OAHistoryItem *point in [historyhelper getPointsHavingTypes:historyhelper.searchTypes limit:0])
     {
+        BOOL publish = NO;
         OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:phrase];
-        sr.localeName = point.name;
-        sr.object = point;
-        sr.priority = SEARCH_HISTORY_OBJECT_PRIORITY + (p++);
-        sr.objectType = RECENT_OBJ;
-        sr.location = [[CLLocation alloc] initWithLatitude:point.latitude longitude:point.longitude];
-        sr.preferredZoom = 17;
-        if ([phrase getFullSearchPhrase].length <= 1 && [phrase isNoSelectedType])
-            [resultMatcher publish:sr];
-        else if ([[phrase getFirstUnknownNameStringMatcher] matches:sr.localeName])
-            [resultMatcher publish:sr];
+        OAPointDescription *pd = [[OAPointDescription alloc] initWithType:[point getPointDescriptionType]
+                                                                 typeName:point.typeName
+                                                                     name:point.name];
+        if ([pd isPoiType])
+        {
+            NSString *name = pd.name;
+            OAPOIHelper *mapPoiTypes = [OAPOIHelper sharedInstance];
+            OAPOIBaseType *pt = [mapPoiTypes getAnyPoiTypeByName:name];
+            if (!pt)
+            {
+                pt = [mapPoiTypes getAnyPoiAdditionalTypeByKey:name];
+            }
+            if (pt)
+            {
+                if ([OSM_WIKI_CATEGORY isEqualToString:pt.name])
+                    sr.localeName = [NSString stringWithFormat:@"%@ (%@)", pt.nameLocalized, [mapPoiTypes getAllLanguagesTranslationSuffix]];
+                else
+                    sr.localeName = pt.nameLocalized;
+                sr.object = pt;
+                sr.relatedObject = point;
+                sr.priorityDistance = 0;
+                sr.objectType = POI_TYPE;
+                publish = YES;
+            }
+        }
+        else if ([pd isCustomPoiFilter])
+        {
+            OAPOIUIFilter *filter = [[OAPOIFiltersHelper sharedInstance] getFilterById:pd.name includeDeleted:YES];
+            if (filter)
+            {
+                sr.localeName = filter.name;
+                sr.object = filter;
+                sr.relatedObject = point;
+                sr.objectType = POI_TYPE;
+                publish = YES;
+            }
+        }
+        else if ([pd isGpxFile])
+        {
+            OAGPX *gpxInfo = [[OAGPXDatabase sharedDb] getGPXItemByFileName:pd.name];
+            if (gpxInfo)
+            {
+                sr.localeName = [gpxInfo gpxFileName];
+                sr.object = point;
+                sr.objectType = GPX_TRACK;
+                sr.relatedObject = gpxInfo;
+                publish = YES;
+            }
+        }
+        else
+        {
+            sr.localeName = pd.name;
+            sr.object = point;
+            sr.objectType = RECENT_OBJ;
+            sr.location = [[CLLocation alloc] initWithLatitude:point.latitude longitude:point.longitude];
+            sr.preferredZoom = 17;
+            publish = YES;
+        }
+        if (publish)
+        {
+            sr.priority = SEARCH_HISTORY_OBJECT_PRIORITY + (p++);
+            if ([phrase getFullSearchPhrase].length <= 1 && [phrase isNoSelectedType])
+                [resultMatcher publish:sr];
+            else if ([[phrase getFirstUnknownNameStringMatcher] matches:sr.localeName])
+                [resultMatcher publish:sr];
+        }
     }
     return YES;
 }

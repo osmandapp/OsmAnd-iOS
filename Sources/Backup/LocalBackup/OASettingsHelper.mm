@@ -680,6 +680,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     NSMutableArray<OADestination *> *markers = [NSMutableArray array];
     NSMutableArray<OAHistoryItem *> *historyMarkers = [NSMutableArray array];
     NSMutableArray<OAHistoryItem *> *historyEntries = [NSMutableArray array];
+    NSMutableArray<OAHistoryItem *> *navigationEntries = [NSMutableArray array];
     NSMutableArray<OAGlobalSettingsItem *> *globalSettingsItems = [NSMutableArray array];
     for (OASettingsItem *item in settingsItems)
     {
@@ -785,6 +786,12 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
                 break;
             }
             case EOASettingsItemTypeSearchHistory:
+            {
+                OASearchHistorySettingsItem *searchHistorySettingsItem = (OASearchHistorySettingsItem *) item;
+                [historyEntries addObjectsFromArray:searchHistorySettingsItem.items];
+                break;
+            }
+            case EOASettingsItemTypeNavigationHistory:
             {
                 OASearchHistorySettingsItem *searchHistorySettingsItem = (OASearchHistorySettingsItem *) item;
                 [historyEntries addObjectsFromArray:searchHistorySettingsItem.items];

@@ -3200,10 +3200,10 @@
             
             [result setObject:value forKey:key];
         }
-        return [[NSDictionary<NSString *, NSNumber *> alloc] initWithDictionary:result];;
+        return [[NSDictionary<NSString *, NSNumber *> alloc] initWithDictionary:result];
     }
     else
-        return [NSDictionary<NSString *, NSNumber *> new];
+        return nil;
 }
 
 - (NSDictionary<NSString *, NSNumber *> *) getRoadRenderingAttributes:(NSString *)renderAttrName additionalSettings:(NSDictionary<NSString *, NSString*> *) additionalSettings

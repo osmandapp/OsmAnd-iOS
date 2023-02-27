@@ -61,6 +61,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     EOAImportDataTypeActiveMarkers,
     EOAImportDataTypeHistoryMarkers,
     EOAImportDataTypeSearchHistory,
+    EOAImportDataTypeNavigationHistory,
     EOAImportDataTypeGlobal
 };
 
@@ -488,6 +489,10 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     else if (dataType == EOAImportDataTypeSearchHistory)
     {
         [rootController.mapPanel openSearch];
+    }
+    else if (dataType == EOAImportDataTypeNavigationHistory)
+    {
+        [rootController.mapPanel showRouteInfo];
     }
     else if (dataType == EOAImportDataTypeGlobal)
     {

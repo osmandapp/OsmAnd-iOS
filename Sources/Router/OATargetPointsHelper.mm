@@ -72,7 +72,10 @@
     _pointToNavigate = _app.data.pointToNavigate;
     _pointToStart = _app.data.pointToStart;
     _intermediatePoints = [NSMutableArray arrayWithArray:_app.data.intermediatePoints];
-    
+    _pointToNavigateBackup = _app.data.pointToNavigateBackup;
+    _pointToStartBackup = _app.data.pointToStartBackup;
+    _myLocationToStart = _app.data.myLocationToStart;
+
     if (_pointToStart)
     {
         _pointToNavigate.start = YES;
@@ -105,6 +108,30 @@
 - (OARTargetPoint *) getPointToStart
 {
     return _pointToStart;
+}
+
+- (OARTargetPoint *)getPointToNavigateBackup
+{
+    return _pointToNavigateBackup;
+}
+
+- (OARTargetPoint *)getPointToStartBackup
+{
+    return _pointToStartBackup;
+}
+
+- (OARTargetPoint *)getMyLocationToStart
+{
+    return _myLocationToStart;
+}
+
+- (BOOL)isBackupPointsAvailable
+{
+    OARTargetPoint *startPoint = [self getPointToStartBackup];
+    OARTargetPoint *endPoint = [self getPointToNavigateBackup];
+    if (!startPoint)
+        startPoint = [self getMyLocationToStart];
+    return startPoint && endPoint;
 }
 
 - (OAPointDescription *) getStartPointDescription
@@ -236,7 +263,7 @@
 
 - (void) clearPointToNavigate:(BOOL)updateRoute
 {
-    _app.data.pointToNavigate = nil;
+    [_app.data clearPointToNavigate];
     [_app.data clearIntermediatePoints];
     [_intermediatePoints removeAllObjects];
     [self readFromSettings];
@@ -245,7 +272,7 @@
 
 - (void) clearStartPoint:(BOOL)updateRoute
 {
-    _app.data.pointToStart = nil;
+    [_app.data clearPointToStart];
     [self readFromSettings];
     [self updateRouteAndRefresh:updateRoute];
 }
@@ -268,15 +295,26 @@
     [self updateRouteAndRefresh:updateRoute];
 }
 
+- (void)clearBackupPoints
+{
+    [_app.data clearPointToStartBackup];
+    [_app.data clearIntermediatePointsBackup];
+    [_app.data clearPointToNavigateBackup];
+    [self readFromSettings];
+}
+
 - (void) reorderAllTargetPoints:(NSArray<OARTargetPoint *> *)point updateRoute:(BOOL)updateRoute
 {
-    _app.data.pointToNavigate = nil;
+    [_app.data clearPointToNavigate];
     if (point.count > 0)
     {
         _app.data.intermediatePoints = [point subarrayWithRange:NSMakeRange(0, point.count - 1)];
+        [_app.data backupTargetPoints];
         OARTargetPoint *p = point[point.count - 1];
-        _app.data.pointToNavigate = [OARTargetPoint create:p.point name:p.pointDescription];
-    } else {
+        [_app.data setPointToNavigate:[OARTargetPoint create:p.point name:p.pointDescription]];
+    }
+    else
+    {
         [_app.data clearIntermediatePoints];
     }
     [self readFromSettings];
@@ -292,7 +330,7 @@
     [_intermediatePoints removeObjectAtIndex:index];
 
     _pointToNavigate = targetPoint;
-    _app.data.pointToNavigate = [[OARTargetPoint alloc] initWithPoint:_pointToNavigate.point name:_pointToNavigate.pointDescription];
+    [_app.data setPointToNavigate:[[OARTargetPoint alloc] initWithPoint:_pointToNavigate.point name:_pointToNavigate.pointDescription]];
     _pointToNavigate.intermediate = false;
     [_app.data deleteIntermediatePoint:index];
     
@@ -304,7 +342,7 @@
 {
     if (index < 0)
     {
-        _app.data.pointToNavigate = nil;
+        [_app.data clearPointToNavigate];
         _pointToNavigate = nil;
         auto sz = _intermediatePoints.count;
         if (sz > 0)
@@ -312,8 +350,8 @@
             [_app.data deleteIntermediatePoint:(int)(sz - 1)];
             _pointToNavigate = _intermediatePoints[sz - 1];
             [_intermediatePoints removeObjectAtIndex:sz - 1];
-            _pointToNavigate.intermediate = false;
-            _app.data.pointToNavigate = [[OARTargetPoint alloc] initWithPoint:_pointToNavigate.point name:_pointToNavigate.pointDescription];
+            _pointToNavigate.intermediate = NO;
+            [_app.data setPointToNavigate:[[OARTargetPoint alloc] initWithPoint:_pointToNavigate.point name:_pointToNavigate.pointDescription]];
             [self lookupAddressForDestinationPoint];
         }
     }
@@ -370,7 +408,7 @@
                         [_app.data addIntermediatePoint:pn];
 
                 }
-                _app.data.pointToNavigate = [OARTargetPoint create:point name:pointDescription];
+                [_app.data setPointToNavigate:[OARTargetPoint create:point name:pointDescription]];
             }
             else
             {
@@ -399,7 +437,7 @@
         if ([pointDescription isLocation] && pointDescription.name.length == 0)
             [pointDescription setName:[OAPointDescription getSearchAddressStr]];
         
-        _app.data.pointToStart = [OARTargetPoint createStartPoint:startPoint name:pointDescription];
+        [_app.data setPointToStart:[OARTargetPoint createStartPoint:startPoint name:pointDescription]];
     }
     else
     {
@@ -512,14 +550,13 @@
 
 - (void) lookupAddressForStartPoint
 {
-    OARTargetPoint *startPoint = _app.data.pointToStart;
-    if (startPoint != nil && [startPoint isSearchingAddress] && !_isSearchingStart)
+    if (_pointToStart != nil && [_pointToStart isSearchingAddress] && !_isSearchingStart)
     {
         _isSearchingStart = YES;
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-            NSString *pointName = [self getLocationName:startPoint.point];
-            [startPoint.pointDescription setName:pointName];
-            _app.data.pointToStart = startPoint;
+            NSString *pointName = [self getLocationName:_pointToStart.point];
+            [_pointToStart.pointDescription setName:pointName];
+            [_app.data setPointToStart:_pointToStart];
             dispatch_async(dispatch_get_main_queue(), ^(void) {
                 [self updateListeners:NO];
                 _isSearchingStart = NO;
@@ -530,14 +567,13 @@
 
 - (void) lookupAddressForDestinationPoint
 {
-    OARTargetPoint *destination = _app.data.pointToNavigate;
-    if (destination != nil && [destination isSearchingAddress] && !_isSearchingDestination)
+    if (_pointToNavigate != nil && [_pointToNavigate isSearchingAddress] && !_isSearchingDestination)
     {
         _isSearchingDestination = YES;
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
-            NSString *pointName = [self getLocationName:destination.point];
-            [destination.pointDescription setName:pointName];
-            _app.data.pointToNavigate = destination;
+            NSString *pointName = [self getLocationName:_pointToNavigate.point];
+            [_pointToNavigate.pointDescription setName:pointName];
+            [_app.data setPointToNavigate:_pointToNavigate];
             dispatch_async(dispatch_get_main_queue(), ^(void) {
                 [self updateListeners:NO];
                 _isSearchingDestination = NO;

@@ -274,6 +274,9 @@
 #define useLastApplicationModeByDefaultKey @"useLastApplicationModeByDefault"
 #define lastUsedApplicationModeKey @"lastUsedApplicationMode"
 #define lastRouteApplicationModeBackupStringKey @"lastRouteApplicationModeBackupString"
+#define searchHistoryKey @"searchHistoy"
+#define navigationHistoryKey @"navigationHistory"
+#define mapMarkersHistoryKey @"mapMarkersHistory"
 
 #define onlineRoutingEnginesKey @"onlineRoutingEngines"
 
@@ -3445,7 +3448,7 @@
 
         _rtlLanguages = @[@"ar",@"dv",@"he",@"iw",@"fa",@"nqo",@"ps",@"sd",@"ug",@"ur",@"yi"];
 
-        _ttsAvailableVoices = @[@"ar", @"cs", @"ca", @"da", @"de", @"el", @"en-gb", @"en", @"es-ar", @"es", @"et", @"fa", @"fi", @"fr", @"hi", @"hr", @"hu-formal", @"hu", @"it", @"ja", @"ko", @"nb", @"nl", @"pl", @"pt-br", @"pt", @"ro", @"ru", @"sk", @"sv", @"tr", @"zh-hk", @"zh"];
+        _ttsAvailableVoices = @[@"ar", @"bg", @"cs", @"ca", @"da", @"de", @"el", @"en-gb", @"en", @"es-ar", @"es", @"et", @"fa", @"fi", @"fr", @"hi", @"hr", @"hu-formal", @"hu", @"id", @"it", @"ja", @"ko", @"nb", @"nl", @"pl", @"pt-br", @"pt", @"ro", @"ru", @"sk", @"sl", @"sv", @"tr", @"uk", @"zh-hk", @"zh"];
 
         // Common Settings
         _settingMapLanguage = [[[OACommonInteger withKey:settingMapLanguageKey defValue:0] makeGlobal] makeShared];
@@ -4086,12 +4089,18 @@
         _useLastApplicationModeByDefault = [[[OACommonBoolean withKey:useLastApplicationModeByDefaultKey defValue:NO] makeGlobal] makeShared];
         _lastUsedApplicationMode = [[[OACommonString withKey:lastUsedApplicationModeKey defValue:OAApplicationMode.DEFAULT.stringKey] makeGlobal] makeShared];
         _lastRouteApplicationMode = [[OACommonAppMode withKey:lastRouteApplicationModeBackupStringKey defValue:OAApplicationMode.DEFAULT] makeGlobal];
+        _searchHistory = [[[OACommonBoolean withKey:searchHistoryKey defValue:YES] makeGlobal] makeShared];
+        _navigationHistory = [[[OACommonBoolean withKey:navigationHistoryKey defValue:YES] makeGlobal] makeShared];
+        _mapMarkersHistory = [[[OACommonBoolean withKey:mapMarkersHistoryKey defValue:YES] makeGlobal] makeShared];
 
         [_globalPreferences setObject:_numberOfStartsFirstXmasShown forKey:@"number_of_starts_first_xmas_shown"];
         [_globalPreferences setObject:_lastFavCategoryEntered forKey:@"last_fav_category"];
         [_globalPreferences setObject:_useLastApplicationModeByDefault forKey:@"use_last_application_mode_by_default"];
         [_globalPreferences setObject:_lastUsedApplicationMode forKey:@"last_used_application_mode"];
         [_globalPreferences setObject:_lastRouteApplicationMode forKey:@"last_route_application_mode_backup_string"];
+        [_globalPreferences setObject:_searchHistory forKey:@"search_history"];
+        [_globalPreferences setObject:_navigationHistory forKey:@"navigation_history"];
+        [_globalPreferences setObject:_mapMarkersHistory forKey:@"map_markers_history"];
         
         // TODO: not sure we need to override this setting with import/export
         _userIosId = [[[OACommonString withKey:userIosIdKey defValue:@""] makeGlobal] makeShared];

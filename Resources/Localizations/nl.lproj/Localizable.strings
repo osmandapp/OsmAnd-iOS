@@ -345,7 +345,7 @@
 "gpx_cannot_import" = "Cannot import specified GPX file";
 "gpx_export_title" = "Export trip";
 "gpx_export_select_track" = "Please select trip for Export";
-"gpx_import_desc" = "You can import your GPX files (common GPS data format)\n\nTo share the GPX file you can open file from Dropbox, Email, or any other source - Use Open In function";
+"gpx_import_desc" = "Om je GPX bestanden (standaard GPS gegevensformaat) te importeren uit Dropbox, Email, of andere programma's, gebruik de \"Kopieer naar OsmAnd Maps\" optie";
 "gpx_no_tracks" = "There are no trips";
 "gpx_remove" = "Remove trip?";
 "shared_string_statistics" = "Statistieken";
@@ -458,7 +458,7 @@
 "res_inst_avail_cell_q" = "Installatie voor %@ heeft %@ nodig voor het downloaden over cellular netwerk.";
 "res_inst_avail_wifi_q" = "Installatie van %@ heeft %@ nodig voor downloaden over een WiFi netwerk.";
 "res_cancel_upd_q" = "Je gaat %@ update annuleren.";
-"data_will_be_lost" = "Alle gedownloade data zal verloren gaan";
+"data_will_be_lost" = "Alle gedownloade data zal verloren gaan.";
 "res_cancel_inst_q" = "Je gaat de %@ installatie annuleren.";
 "res_uninst_managed_q" = "Je gaat %@ deïnstalleren. Je kunt deze later reïnstalleren uit de catalogus.";
 "res_uninst_unmanaged_q" = "Je gaat %@ verwijderen. Deze komt niet uit onze catalogus, dus zorg ervoor dat je een backup hebt gemaakt als dat nodig is.";
@@ -552,10 +552,10 @@
 "plugin_nautical_descr" = "Toon nautische gegevens op de kaart voor varen, zeilen, en andere vormen van watersport. Download ook het kaartbestand \'Zeebakens (wereld)\' om deze plugin te gebruiken.\n\nDeze plug-in biedt alle nautische navigatietekens en kaartsymbolen voor de binnenvaart en voor navigatie bij de kust. In de beschrijving van elke navigatieteken staat de informatie die nodig is om hem te identificeren en over de betekenis (categorie, vorm, kleur, volgorde, referentie, enz.) ervan.\n\nOm weer de gewone kaart te zien kun je de plug-in uitschakelen of de \'Kaart stijl\' onder \'Kaart instellen\' veranderen.";
 "osmand_parking_plugin_name" = "Parkeerlocatie";
 "product_desc_parking" = "Let you easily memorize when the car was parked and how much time left if the parking is limited by time";
-"osmand_parking_plugin_description" = "Bewaart de locatie waar je auto geparkeerd staat en de resterende parkeertijd. \nDe parkeerlocatie en resterende parkeertijd staan op het Osmand dashboard en in een widget op de kaart. Er kan een alarmsignaal in de Android kalender geplaatst worden ter herinnering.";
+"osmand_parking_plugin_description" = "Bewaart de locatie waar je auto geparkeerd staat en de resterende parkeertijd.\nDe parkeerlocatie en resterende parkeertijd staan op het Osmand dashboard en in een widget op de kaart. Er kan een alarmsignaal in de Android kalender geplaatst worden ter herinnering.";
 "plugin_ski_name" = "Ski kaartweergave";
 "product_desc_skimap" = "Ski slopes for all ski resorts in the world";
-"plugin_ski_descr" = "Toon gedetailleerde informatie over slalompistes, langlaufroutes, alpine ski routes, kabelbanen en skiliften wereldwijd. Routes en pistes worden getoond in een kleurcode naar moeilijkheidsgraad, en afgebeeld in een speciale \'Winter en ski\' kaartstijl die lijkt op een besneeuwd winterlandschap. \n \nHet activeren van deze weergave verandert de kaartstijl in \'Winter en ski\', met alle kenmerken van het landschap onder winterse omstandigheden. Deze weergave kan worden teruggezet door het deactiveren van de plug-in, of door het veranderen van de \'Kaart stijl\' onder \'Kaart Instellen\'.";
+"plugin_ski_descr" = "Toon gedetailleerde informatie over slalompistes, langlaufroutes, alpine ski routes, kabelbanen en skiliften wereldwijd. Routes en pistes worden getoond in een kleurcode naar moeilijkheidsgraad, en afgebeeld in een speciale 'Winter en ski' kaartstijl die lijkt op een besneeuwd winterlandschap. \n\nHet activeren van deze weergave verandert de kaartstijl in 'Winter en ski', met alle kenmerken van het landschap onder winterse omstandigheden. Deze weergave kan worden teruggezet door het deactiveren van de plug-in, of door het veranderen van de 'Kaart stijl' onder 'Kaart Instellen'.";
 "record_plugin_name" = "Track opnemen";
 "product_desc_track_recording" = "Activates the functionality to record and save your tracks";
 "record_plugin_description" = "Registreer je afgelegde weg als track in een GPX-bestand. Gebruik de opnameknop op het kaartscherm, of laat alle reizen automatisch opslaan.\n\nOpgenomen tracks kunnen worden gedeeld met vrienden of worden gebruikt als OSM-bijdragen. Atleten kunnen opgenomen tracks gebruiken om hun trainingen te volgen. OsmAnd kan tracks analyseren (ronde tijden, gemiddelde snelheid enz.) en tracks kunnen natuurlijk ook met andere programma\'s worden geanalyseerd.";
@@ -577,7 +577,7 @@
 "purchases_feature_desc_wikipedia" = "Biedt alle plaatsgerelateerde Wikipedia-artikelen offline, zodat u meer te weten komt over de plaatsen die u tijdens uw reis bezoekt door eenvoudig te tikken op de kaart. Vergeet niet de Wikipedia-kaartbestanden voor de specifieke regio's te downloaden.";
 "srtm_plugin_name" = "Hoogtelijnen";
 "product_desc_srtm" = "Display of contour lines";
-"srtm_plugin_description" = "Deze plug-in toont hoogtelijnen en een reliëfschaduwlaag bovenop de normale OsmAnd-kaart. Uitermate praktisch voor sporters, wandelaars, trekkers, en iedereen die geïnteresseerd is in de hoogteverschillen van een landschap. \n \nDe wereldwijde gegevens (van 70° noorderbreedte tot 70° zuiderbreedte) zijn gebaseerd op metingen door SRTM(Shuttle Radar Topography Mission) en ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), een beeldvormend instrument aan boord van de Terra-satelliet, het vlaggenschip van NASA\'s Earth Observing System. ASTER is een samenwerkingsverband tussen NASA, het Japanse Ministerie van Economie, Handel en Industrie (METI), en Japan Space Systems (J-spacesystems).";
+"srtm_plugin_description" = "Deze plug-in toont hoogtelijnen en een reliëfschaduwlaag bovenop de normale OsmAnd-kaart. Uitermate praktisch voor sporters, wandelaars, trekkers, en iedereen die geïnteresseerd is in de hoogteverschillen van een landschap. \n\nDe wereldwijde gegevens (van 70° noorderbreedte tot 70° zuiderbreedte) zijn gebaseerd op metingen door SRTM(Shuttle Radar Topography Mission) en ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), een beeldvormend instrument aan boord van de Terra-satelliet, het vlaggenschip van NASA's Earth Observing System. ASTER is een samenwerkingsverband tussen NASA, het Japanse Ministerie van Economie, Handel en Industrie (METI), en Japan Space Systems (J-spacesystems).";
 "my_location" = "Mijn positie";
 "all_categories" = "All categories";
 "get_unlimited_access" = "Krijg onbeperkte toegang";
@@ -589,7 +589,7 @@
 "enter_description" = "Enter description";
 "shared_string_description" = "Beschrijving";
 "enter_fav_name" = "Enter favorite name";
-"res_installing" = "Installing...";
+"res_installing" = "Installeren…";
 "roads" = "Wegen";
 "shared_string_hillshade" = "Reliëfschaduw";
 "select_language" = "Select language";
@@ -873,7 +873,7 @@
 "weekly" = "Elke week";
 "tab_title_basic" = "Basis";
 "gpx_ascent" = "Stijging";
-"get_discount_second_part" = "daarna %@";
+"get_discount_second_part" = "Daarna %@";
 "shared_string_deselect" = "Deselecteren";
 "quick_action_add_category" = "Categorie toevoegen";
 "shared_string_without_name" = "Zonder naam";
@@ -2284,3 +2284,17 @@
 "walking_route_osmc_description" = "Kleur routes op basis van hun eigen lokale kleur (indien aanwezig op OpenStreetMap) en type (internationaal, regionaal, lokaal).";
 "rendering_value_walkingRoutesOSMC_description" = "Kleur routes op basis van hun eigen lokale kleur (indien aanwezig op OpenStreetMap) en wandelsymbool.";
 "lang_ckb" = "Centraal Koerdisch";
+"recalculate_wrong_dir" = "Route herberekenen in geval van omgekeerde richting";
+"instructions_repeat" = "Tik op de \"Volgende afslag\" widget om de instructies te herhalen";
+"osm_live_routing_descr" = "Gebruik OsmAnd Live updates voor navigatie";
+"choose_auto_center_map_view_descr" = "Tijd totdat de kaartweergave synchroniseert met de huidige positie na verplaatsing";
+"nav_type_descr" = "Selecteer hoe een route voor dit profiel berekend moet worden";
+"change_map_behavior" = "Kaartgedrag wijzigen tijdens navigatie";
+"arrows_direction_to_markers" = "Pijlen geven de richting naar de actieve markering aan als deze zich buiten het scherm bevindt. Richtingslijnen tekenen een lijn naar actieve markeringen.";
+"specify_number_of_dir_indicators" = "Specificeer het aantal richtingaanwijzers, het beïnvloedt alle onderstaande instellingen.";
+"connect_rp" = "Routepunten verbinden";
+"repeat_after" = "Herhaal na";
+"choose_how_display_distance" = "Kies hoe de afstand naar actieve markeringen weergegeven wordt";
+"speed_limit_tolerance_descr" = "Kies hoeveel de maximumsnelheid mag worden overschreden voordat u een gesproken waarschuwing krijgt.";
+"only_manually" = "Alleen handmatig";
+"import_routing_file_descr" = "Je kunt een route bestanden importeren uit elke cloudopslag app door deze te openen in OsmAnd.";

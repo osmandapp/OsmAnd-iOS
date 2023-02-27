@@ -158,6 +158,10 @@
 - (void) deleteIntermediatePoint:(int)index;
 - (void) clearIntermediatePoints;
 
+- (void) clearPointToStartBackup;
+- (void) clearPointToNavigateBackup;
+- (void) clearIntermediatePointsBackup;
+
 - (void) backupTargetPoints;
 - (void) restoreTargetPoints;
 - (BOOL) restorePointToStart;

@@ -19,6 +19,10 @@
 
 - (OARTargetPoint *) getPointToNavigate;
 - (OARTargetPoint *) getPointToStart;
+- (OARTargetPoint *) getPointToNavigateBackup;
+- (OARTargetPoint *) getPointToStartBackup;
+- (OARTargetPoint *) getMyLocationToStart;
+- (BOOL) isBackupPointsAvailable;
 - (OAPointDescription *) getStartPointDescription;
 - (NSArray<OARTargetPoint *> *) getIntermediatePoints;
 - (NSArray<OARTargetPoint *> *) getIntermediatePointsNavigation;
@@ -45,6 +49,7 @@
 - (void) clearStartPoint:(BOOL)updateRoute;
 - (void) clearAllIntermediatePoints:(BOOL)updateRoute;
 - (void) clearAllPoints:(BOOL)updateRoute;
+- (void) clearBackupPoints;
 - (void) reorderAllTargetPoints:(NSArray<OARTargetPoint *> *)point updateRoute:(BOOL)updateRoute;
 - (void) makeWayPointDestination:(BOOL)updateRoute index:(int)index;
 - (void) removeWayPoint:(BOOL)updateRoute index:(int)index;

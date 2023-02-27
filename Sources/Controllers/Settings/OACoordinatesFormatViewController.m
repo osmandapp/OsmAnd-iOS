@@ -184,7 +184,7 @@
     return vw;
 }
 
-- (void)onRowPressed:(NSIndexPath *)indexPath
+- (void)onRowSelected:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath.section];
     [self selectSettingGeoCode:item[@"name"]];

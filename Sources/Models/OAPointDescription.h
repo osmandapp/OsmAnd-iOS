@@ -30,7 +30,7 @@
 #define POINT_TYPE_MAP_MARKER @"map_marker"
 #define POINT_TYPE_OSM_BUG @"bug"
 #define POINT_TYPE_WORLD_REGION @"world_region"
-#define POINT_TYPE_GPX_ITEM @"gpx_item"
+#define POINT_TYPE_GPX_FILE @"gpx_file"
 #define POINT_TYPE_WORLD_REGION_SHOW_ON_MAP @"world_region_show_on_map"
 #define POINT_TYPE_BLOCKED_ROAD @"blocked_road"
 #define POINT_TYPE_TRANSPORT_ROUTE @"transport_route"
@@ -87,7 +87,9 @@
 - (BOOL) isMapMarker;
 - (BOOL) isParking;
 - (BOOL) isMyLocation;
+- (BOOL) isPoiType;
 - (BOOL) isCustomPoiFilter;
 - (BOOL) isGpxPoint;
+- (BOOL) isGpxFile;
 
 @end

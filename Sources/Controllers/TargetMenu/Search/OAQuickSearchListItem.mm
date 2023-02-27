@@ -26,6 +26,10 @@
 #import "OADefaultFavorite.h"
 #import "OAPointDescription.h"
 #import "OAOsmAndFormatter.h"
+#import "OAPOIUIFilter.h"
+#import "OAPOIFiltersHelper.h"
+#import "OAFavoriteItem.h"
+#import "OAFavoritesHelper.h"
 
 #include <OsmAndCore/Data/Address.h>
 #include <OsmAndCore/Data/Street.h>
@@ -134,25 +138,85 @@
     {
         case LOCATION:
         case PARTIAL_LOCATION:
+        {
             return @"ic_action_world_globe";
-            
-        case POI:
-            return [((OAPOI *)searchResult.object) iconName];
-            
+        }
         case CITY:
         case VILLAGE:
         case POSTCODE:
         case STREET:
         case HOUSE:
         case STREET_INTERSECTION:
+        {
             return [((OAAddress *)searchResult.object) iconName];
-            
+        }
+        case POI_TYPE:
+        {
+            if ([searchResult.object isKindOfClass:OAPOIBaseType.class])
+            {
+                NSString *iconName = [OAPOIUIFilter getPoiTypeIconName:(OAPOIBaseType *) searchResult.object];
+                if ((!iconName || iconName.length == 0) && [searchResult.object isKindOfClass:OAPOIType.class])
+                    iconName = ((OAPOIBaseType *) searchResult.object).iconName;
+                if (!iconName || iconName.length == 0)
+                    iconName = [OAUtilities drawablePath:[@"mx_" stringByAppendingString:@"craft_default"]];
+                return iconName;
+            }
+            else if ([searchResult.object isKindOfClass:OACustomSearchPoiFilter.class])
+            {
+                OACustomSearchPoiFilter *searchPoiFilter = (OACustomSearchPoiFilter *) searchResult.object;
+                OAPOIUIFilter *filter = [[OAPOIFiltersHelper sharedInstance] getFilterById:[searchPoiFilter getFilterId]];
+                NSString *iconName;
+                if (filter)
+                    iconName = [OAPOIUIFilter getCustomFilterIconName:filter];
+                return iconName && iconName.length > 0 ? iconName : @"ic_custom_search";
+            }
+        }
+        case POI:
+        {
+            OAPOI *amenity = (OAPOI *) searchResult.object;
+            NSString *iconName = [amenity iconName];
+            if (!iconName)
+                iconName = [OAUtilities drawablePath:[@"mx_" stringByAppendingString:@"craft_default"]];
+            return iconName;
+        }
+        case GPX_TRACK:
+        {
+            return @"ic_custom_trip";
+        }
         case FAVORITE:
         {
-            const auto& favorite = searchResult.favorite;
-            UIColor* color = [UIColor colorWithRed:favorite->getColor().r/255.0 green:favorite->getColor().g/255.0 blue:favorite->getColor().b/255.0 alpha:1.0];
-            OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
-            return favCol.iconName;
+            auto favorite = std::const_pointer_cast<OsmAnd::IFavoriteLocation>(searchResult.favorite);
+            OAFavoriteItem *favItem = [[OAFavoriteItem alloc] initWithFavorite:favorite];
+            return [favItem getIcon];
+        }
+        case FAVORITE_GROUP:
+        {
+            return @"ic_custom_favorites";
+        }
+        case REGION:
+        {
+            return @"ic_world_globe_dark";
+        }
+        case RECENT_OBJ:
+        {
+            OAHistoryItem *entry = (OAHistoryItem *) searchResult.object;
+            if (entry.iconName && entry.iconName.length > 0)
+                return entry.hType == OAHistoryTypeParking ? @"ic_parking_pin_small" : entry.iconName;
+
+            OAPointDescription *name = [[OAPointDescription alloc] initWithType:[entry getPointDescriptionType]
+                                                                       typeName:entry.typeName
+                                                                           name:entry.name];
+            if (name)
+            {
+                if (name.iconName && name.iconName.length > 0)
+                    return name.iconName;
+                else
+                    return [self getItemIcon:name];
+            }
+            else
+            {
+                return @"ic_custom_marker";
+            }
         }
         case WPT:
         {
@@ -163,6 +227,28 @@
         default:
             return nil;
     }
+}
+
++ (NSString *)getItemIcon:(OAPointDescription *)pd
+{
+    if ([pd isFavorite])
+        return @"ic_custom_favorites";
+    else if ([pd isLocation])
+        return @"ic_custom_location_marker";
+    else if ([pd isPoi])
+        return @"ic_custom_info";
+    else if ([pd isGpxFile] || [pd isGpxPoint])
+        return @"ic_custom_trip";
+    else if ([pd isWpt])
+        return @"ic_custom_marker";
+//    else if ([pd isAudioNote])
+//        iconId = R.drawable.ic_type_audio;
+//    else if (pd.isVideoNote())
+//        iconId = R.drawable.ic_type_video;
+//    else if (pd.isPhotoNote())
+//        iconId = R.drawable.ic_type_img;
+    else
+        return @"ic_action_street_name";
 }
 
 + (NSString *) getTypeName:(OASearchResult *)searchResult

@@ -315,15 +315,18 @@
 
 - (void) addHistoryItem:(OADestination *)destination
 {
-    OAHistoryItem *h = [[OAHistoryItem alloc] init];
-    h.name = destination.desc;
-    h.latitude = destination.latitude;
-    h.longitude = destination.longitude;
-    h.date = [NSDate date];
-    
-    h.hType = OAHistoryTypeDirection;
-    
-    [[OAHistoryHelper sharedInstance] addPoint:h];
+    if ([[OAAppSettings sharedManager].mapMarkersHistory get])
+    {
+        OAHistoryItem *h = [[OAHistoryItem alloc] init];
+        h.name = destination.desc;
+        h.latitude = destination.latitude;
+        h.longitude = destination.longitude;
+        h.date = [NSDate date];
+        
+        h.hType = OAHistoryTypeDirection;
+        
+        [[OAHistoryHelper sharedInstance] addPoint:h];
+    }
 }
 
 - (OAGPXDocument *) generateGpx:(NSArray<OADestination *> *)markers completeBackup:(BOOL)completeBackup

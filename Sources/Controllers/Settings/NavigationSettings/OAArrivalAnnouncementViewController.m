@@ -157,7 +157,7 @@
     return [_data sectionCount];
 }
 
-- (void)onRowPressed:(NSIndexPath *)indexPath
+- (void)onRowSelected:(NSIndexPath *)indexPath
 {
     if (indexPath.section == _selectedIndexPath.section)
     {

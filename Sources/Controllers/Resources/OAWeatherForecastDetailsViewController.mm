@@ -356,7 +356,7 @@
     return nil;
 }
 
-- (void)onRowPressed:(NSIndexPath *)indexPath
+- (void)onRowSelected:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
     NSString *regionId = [OAWeatherHelper checkAndGetRegionId:_region];

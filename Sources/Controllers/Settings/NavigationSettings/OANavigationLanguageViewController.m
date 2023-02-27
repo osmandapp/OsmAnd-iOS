@@ -97,7 +97,7 @@
     return 17.;
 }
 
-- (void)onRowPressed:(NSIndexPath *)indexPath
+- (void)onRowSelected:(NSIndexPath *)indexPath
 {
     [self slectVoiceLanguage:_data[indexPath.section][indexPath.row]];
 }

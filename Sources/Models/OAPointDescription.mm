@@ -142,6 +142,11 @@
     return [POINT_TYPE_MY_LOCATION isEqualToString:_type];
 }
 
+- (BOOL) isPoiType
+{
+    return [POINT_TYPE_POI_TYPE isEqualToString:_type];
+}
+
 - (BOOL) isCustomPoiFilter
 {
     return [POINT_TYPE_CUSTOM_POI_FILTER isEqualToString:_type];
@@ -150,6 +155,11 @@
 - (BOOL) isGpxPoint
 {
     return [POINT_TYPE_GPX isEqualToString:_type];
+}
+
+- (BOOL) isGpxFile
+{
+    return [POINT_TYPE_GPX_FILE isEqualToString:_type];
 }
 
 + (NSString *) getLocationName:(double)lat lon:(double)lon sh:(BOOL)sh

@@ -399,7 +399,7 @@
     return [_data sectionCount];
 }
 
-- (void)onRowPressed:(NSIndexPath *)indexPath
+- (void)onRowSelected:(NSIndexPath *)indexPath
 {
     OATableRowData *item = [_data itemForIndexPath:indexPath];
     if ([item.cellType isEqualToString:[OAValueTableViewCell getCellIdentifier]])
@@ -413,8 +413,12 @@
         settingsViewController = [[OARepeatNavigationInstructionsViewController alloc] initWithAppMode:self.appMode];
     else if ([item.key isEqualToString:@"arrivalAnnouncement"])
         settingsViewController = [[OAArrivalAnnouncementViewController alloc] initWithAppMode:self.appMode];
-    settingsViewController.delegate = self;
-    [self showViewController:settingsViewController];
+    
+    if (settingsViewController != nil)
+    {
+        settingsViewController.delegate = self;
+        [self showViewController:settingsViewController];
+    }
 }
 
 #pragma mark - Selectors

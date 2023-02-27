@@ -373,11 +373,19 @@ static const NSArray<NSString *> *kContactPhoneTags = @[PHONE, MOBILE, @"whatsap
             }
             if (pType)
             {
+                NSString *cat = [pType.tag stringByReplacingOccurrencesOfString:@":" withString:@"_"];
+                if (cat && cat.length > 0)
+                {
+                    NSString *catIconId = [NSString stringWithFormat:@"mx_%@", cat];
+                    UIImage *img = [OATargetInfoViewController getIcon:catIconId];
+                    iconId = img ? catIconId : iconId;
+                }
+                
                 poiTypeOrder = pType.order;
                 poiTypeKeyName = pType.name;
                 if (pType.parentType && [pType.parentType isKindOfClass:OAPOIType.class])
                 {
-                    icon = [OATargetInfoViewController getIcon:[NSString stringWithFormat:@"mx_%@_%@_%@", ((OAPOIType *) pType.parentType).tag, [pType.tag stringByReplacingOccurrencesOfString:@":" withString:@"_"], pType.value]];
+                    icon = [OATargetInfoViewController getIcon:[NSString stringWithFormat:@"mx_%@_%@_%@", ((OAPOIType *) pType.parentType).tag, cat, pType.value]];
                 }
                 if (!pType.isText)
                 {

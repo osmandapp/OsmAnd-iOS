@@ -432,7 +432,7 @@ static const NSInteger groupCount = 5;
     return groupCount;
 }
 
-- (void)onRowPressed:(NSIndexPath *)indexPath
+- (void)onRowSelected:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
     NSString *type = item[@"type"];

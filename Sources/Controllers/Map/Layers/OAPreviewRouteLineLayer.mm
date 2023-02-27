@@ -163,28 +163,19 @@
 
             int baseOrder = self.baseOrder;
 
-            // Add outline for colorized lines
-            if (!colors.isEmpty())
-            {
-                OsmAnd::VectorLineBuilder outlineBuilder;
-                outlineBuilder.setBaseOrder(baseOrder--)
-                              .setIsHidden(points.size() < 2)
-                              .setLineId(kOutlineId)
-                              .setLineWidth(_lineWidth + kOutlineWidth)
-                              .setOutlineWidth(kOutlineWidth)
-                              .setPoints(points)
-                              .setFillColor(kOutlineColor)
-                              .setApproximationEnabled(false);
-
-                outlineBuilder.buildAndAddToCollection(_collection);
-            }
-
             OsmAnd::VectorLineBuilder builder;
             builder.setBaseOrder(baseOrder--)
                    .setIsHidden(points.size() < 2)
                    .setLineId(1)
                    .setLineWidth(_lineWidth)
                    .setPoints(points);
+
+            // Add outline for colorized lines
+            if (!colors.isEmpty())
+            {
+                builder.setOutlineWidth(_lineWidth + kOutlineWidth)
+                       .setOutlineColor(kOutlineColor);
+            }
 
             UIColor *color = _routeLineColor == kDefaultRouteLineDayColor || _routeLineColor == kDefaultRouteLineNightColor
                     ? UIColorFromARGB(_routeLineColor)
@@ -223,7 +214,7 @@
             for (auto &line : lines)
             {
                 line->setPoints(points);
-                if (!colors.empty() && line->getOutlineWidth() == 0.)
+                if (!colors.empty())
                     line->setColorizationMapping(colors);
             }
         }

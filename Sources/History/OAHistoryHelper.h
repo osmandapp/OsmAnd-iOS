@@ -27,9 +27,9 @@
 - (void)removePoint:(OAHistoryItem *)item;
 - (void)removePoints:(NSArray *)items;
 
-- (NSArray *)getAllPoints;
-- (NSArray *)getSearchHistoryPoints:(int)limit;
-- (NSArray *)getPointsHavingTypes:(NSArray<NSNumber *> *)types limit:(int)limit;
+- (NSArray<OAHistoryItem *> *)getAllPoints;
+- (NSArray<OAHistoryItem *> *)getSearchHistoryPoints:(int)limit;
+- (NSArray<OAHistoryItem *> *)getPointsHavingTypes:(NSArray<NSNumber *> *)types limit:(int)limit;
 - (OAHistoryItem *)getPointByName:(NSString *)name;
 
 - (long) getMarkersHistoryLastModifiedTime;

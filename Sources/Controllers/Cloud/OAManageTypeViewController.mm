@@ -153,7 +153,7 @@
     return [super getCustomHeightForHeader:section];
 }
 
-- (void)onRowPressed:(NSIndexPath *)indexPath
+- (void)onRowSelected:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
     if ([item[@"key"] isEqualToString:@"delete_cell"])

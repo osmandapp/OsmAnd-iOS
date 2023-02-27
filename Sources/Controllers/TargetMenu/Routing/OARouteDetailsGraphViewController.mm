@@ -304,12 +304,6 @@
     return ETopToolbarTypeFixed;
 }
 
-- (void)onMenuDismissed
-{
-    [super onMenuDismissed];
-    [[OARootViewController instance].mapPanel.mapViewController.mapLayers.routeMapLayer hideCurrentStatisticsLocation];
-}
-
 - (void) applyLocalization
 {
     self.titleView.text = OALocalizedString(@"gpx_analyze");

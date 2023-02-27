@@ -29,14 +29,16 @@
 @implementation OARouteLineChartHelper
 {
     OAGPXDocument *_gpxDoc;
+    OABaseVectorLinesLayer *_layer;
 }
 
-- (instancetype)initWithGpxDoc:(OAGPXDocument *)gpxDoc
+- (instancetype)initWithGpxDoc:(OAGPXDocument *)gpxDoc layer:(OABaseVectorLinesLayer *)layer
 {
     self = [super init];
     if (self)
     {
         _gpxDoc = gpxDoc;
+        _layer = layer;
     }
     return self;
 }
@@ -157,8 +159,7 @@
 
     NSArray<ChartHighlight *> *highlights = lineChartView.highlighted;
     CLLocationCoordinate2D location = kCLLocationCoordinate2DInvalid;
-    OAMapViewController *mapViewController = [OARootViewController instance].mapPanel.mapViewController;
-    [mapViewController.mapLayers.routeMapLayer showCurrentStatisticsLocation:trackChartPoints];
+    [_layer showCurrentStatisticsLocation:trackChartPoints];
 
     double minimumVisibleXValue = lineChartView.lowestVisibleX;
     double maximumVisibleXValue = lineChartView.highestVisibleX;
@@ -201,7 +202,7 @@
     trackChartPoints.axisPointsInvalidated = forceFit;
     trackChartPoints.xAxisPoints = [self getXAxisPoints:trackChartPoints lineChartView:lineChartView segment:segment];
 
-    [mapViewController.mapLayers.routeMapLayer showCurrentStatisticsLocation:trackChartPoints];
+    [_layer showCurrentStatisticsLocation:trackChartPoints];
     [self fitTrackOnMap:location
                forceFit:forceFit
           lineChartView:lineChartView
@@ -444,6 +445,9 @@
 @end
 
 @implementation OARouteBaseViewController
+{
+    OABaseVectorLinesLayer *_layer;
+}
 
 - (instancetype) initWithGpxData:(NSDictionary *)data
 {
@@ -454,6 +458,9 @@
         {
             _gpx = data[@"gpx"];
             _analysis = data[@"analysis"];
+            OAMapLayers *layers = [OARootViewController instance].mapPanel.mapViewController.mapLayers;
+            _layer = [data[@"route"] boolValue] ? layers.routeMapLayer : layers.gpxMapLayer;
+            
         }
     }
     return self;
@@ -465,7 +472,7 @@
 
     _routingHelper = [OARoutingHelper sharedInstance];
     [_routingHelper addListener:self];
-    _routeLineChartHelper = [[OARouteLineChartHelper alloc] initWithGpxDoc:_gpx];
+    _routeLineChartHelper = [[OARouteLineChartHelper alloc] initWithGpxDoc:_gpx layer:_layer];
     _routeLineChartHelper.delegate = self;
     _routeLineChartHelper.isLandscape = [self isLandscapeIPadAware];
     _routeLineChartHelper.screenBBox = [self getScreenBBox];
@@ -474,6 +481,7 @@
 - (void)onMenuDismissed
 {
     [_routingHelper removeListener:self];
+    [_layer hideCurrentStatisticsLocation];
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator

@@ -41,6 +41,38 @@
     QReadWriteLock _lock;
     std::shared_ptr<OsmAnd::VectorLinesCollection> _vectorLinesCollection;
     std::shared_ptr<OsmAnd::VectorLineArrowsProvider> _vectorLinesArrowsProvider;
+    
+    std::shared_ptr<OsmAnd::MapMarkersCollection> _currentGraphXAxisPositions;
+    
+    std::shared_ptr<OsmAnd::MapMarkersCollection> _currentGraphPosition;
+    std::shared_ptr<OsmAnd::MapMarker> _locationMarker;
+    OsmAnd::MapMarker::OnSurfaceIconKey _locationIconKey;
+    
+    sk_sp<SkImage> _xAxisLocationIcon;
+}
+
+- (void)initLayer
+{
+    [super initLayer];
+    
+    _currentGraphPosition = std::make_shared<OsmAnd::MapMarkersCollection>();
+    _currentGraphXAxisPositions = std::make_shared<OsmAnd::MapMarkersCollection>();
+    
+    
+    _xAxisLocationIcon = [OANativeUtilities skImageFromPngResource:@"map_mapillary_location"];
+    
+    OsmAnd::MapMarkerBuilder locationMarkerBuilder;
+    locationMarkerBuilder.setIsAccuracyCircleSupported(false);
+    locationMarkerBuilder.setBaseOrder(self.pointsOrder - 25);
+    locationMarkerBuilder.setIsHidden(true);
+    
+    _locationIconKey = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
+    locationMarkerBuilder.addOnMapSurfaceIcon(_locationIconKey,
+                                                       [OANativeUtilities skImageFromPngResource:@"map_pedestrian_location"]);
+    _locationMarker = locationMarkerBuilder.buildAndAddToCollection(_currentGraphPosition);
+    
+    [self.mapView addKeyedSymbolsProvider:_currentGraphPosition];
+    [self.mapView addKeyedSymbolsProvider:_currentGraphXAxisPositions];
 }
 
 - (NSString *) layerId
@@ -67,6 +99,10 @@
     [self hide];
     _vectorLinesArrowsProvider.reset();
     _vectorLinesCollection.reset();
+    [self.mapView removeKeyedSymbolsProvider:_currentGraphXAxisPositions];
+    
+    _currentGraphXAxisPositions = std::make_shared<OsmAnd::MapMarkersCollection>();
+    _locationMarker->setIsHidden(true);
     [self show];
 }
 
@@ -201,6 +237,45 @@
         locationsIdx++;
     }
     return locationsIdx == locations.count ? 0 : locationsIdx;
+}
+
+- (void) showCurrentStatisticsLocation:(OATrackChartPoints *)trackPoints
+{
+    if (_locationMarker && CLLocationCoordinate2DIsValid(trackPoints.highlightedPoint))
+    {
+        _locationMarker->setPosition(OsmAnd::Utilities::convertLatLonTo31(
+                OsmAnd::LatLon(trackPoints.highlightedPoint.latitude, trackPoints.highlightedPoint.longitude)));
+        _locationMarker->setIsHidden(false);
+    }
+    OsmAnd::MapMarkerBuilder xAxisMarkerBuilder;
+    xAxisMarkerBuilder.setIsAccuracyCircleSupported(false);
+    xAxisMarkerBuilder.setBaseOrder(self.pointsOrder - 15);
+    xAxisMarkerBuilder.setIsHidden(false);
+    if (trackPoints.axisPointsInvalidated)
+    {
+        [self.mapView removeKeyedSymbolsProvider:_currentGraphXAxisPositions];
+        _currentGraphXAxisPositions = std::make_shared<OsmAnd::MapMarkersCollection>();
+        
+        for (CLLocation *location in trackPoints.xAxisPoints)
+        {
+            xAxisMarkerBuilder.addOnMapSurfaceIcon(_locationIconKey,
+                                                   _xAxisLocationIcon);
+            
+            const auto& marker = xAxisMarkerBuilder.buildAndAddToCollection(_currentGraphXAxisPositions);
+            marker->setPosition(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(location.coordinate.latitude, location.coordinate.longitude)));
+        }
+        [self.mapView addKeyedSymbolsProvider:_currentGraphXAxisPositions];
+        trackPoints.axisPointsInvalidated = NO;
+    }
+}
+
+- (void) hideCurrentStatisticsLocation
+{
+    if (_locationMarker)
+        _locationMarker->setIsHidden(true);
+    
+    [self.mapView removeKeyedSymbolsProvider:_currentGraphXAxisPositions];
+    _currentGraphXAxisPositions = std::make_shared<OsmAnd::MapMarkersCollection>();
 }
 
 @end

@@ -22,7 +22,7 @@
 #define kOutlineWidth 10
 #define kWidthCorrectionValue 4
 
-@class OAGPXDocument, OATrkSegment;
+@class OAGPXDocument, OATrkSegment, OATrackChartPoints;
 
 struct RouteSegmentResult;
 
@@ -37,5 +37,8 @@ struct RouteSegmentResult;
                       attrName:(NSString *)attrName
                  segmentResult:(std::vector<std::shared_ptr<RouteSegmentResult>> &)segs
                      locations:(NSArray<CLLocation *> *)locations;
+
+- (void) showCurrentStatisticsLocation:(OATrackChartPoints *)trackPoints;
+- (void) hideCurrentStatisticsLocation;
 
 @end

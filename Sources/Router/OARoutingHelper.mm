@@ -595,10 +595,10 @@ static BOOL _isDeviatedFromRoute = false;
 {
     // measuring without bearing could be really error prone (with last fixed location)
     // this code has an effect on route recalculation which should be detected without mistakes
-    if (currentLocation.course >= 0 && nextRouteLocation && prevRouteLocation)
+    if (currentLocation.course >= 0 && nextRouteLocation)
     {
         float bearingMotion = currentLocation.course;
-        float bearingToRoute = [prevRouteLocation bearingTo:nextRouteLocation];
+        float bearingToRoute = [prevRouteLocation ? prevRouteLocation : currentLocation bearingTo:nextRouteLocation];
         double diff = degreesDiff(bearingMotion, bearingToRoute);
         if (ABS(diff) > 60.0)
         {

@@ -819,7 +819,8 @@ static BOOL _repositoryUpdated = NO;
                     case OsmAndResourceType::SlopeRegion:
                     case OsmAndResourceType::DepthContourRegion:
                     case OsmAndResourceType::DepthMapRegion:
-                    case OsmAndResourceType::HeightmapRegion:
+                    case OsmAndResourceType::HeightmapRegionLegacy:
+                    case OsmAndResourceType::GeoTiffRegion:
                         [typesArray addObject:@((int) resource->type)];
                         break;
                     default:
@@ -918,8 +919,13 @@ static BOOL _repositoryUpdated = NO;
             {
                 [allResourcesArray addObject:item_];
             }
-            else if (![OAAppSettings.sharedManager.showHeightmaps get] && item_.resourceType == OsmAndResourceType::HeightmapRegion)
+            else if (![OAAppSettings.sharedManager.showHeightmaps get] && item_.resourceType == OsmAndResourceType::GeoTiffRegion)
             {
+                continue;
+            }
+            else if (item_.resourceType == OsmAndResourceType::HeightmapRegionLegacy)
+            {
+                // Hide heightmaps of sqlite format
                 continue;
             }
             else if (region == self.region)

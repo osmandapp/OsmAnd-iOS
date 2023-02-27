@@ -100,7 +100,7 @@
 #include <OsmAndCore/Map/MapSymbolsGroup.h>
 #include <OsmAndCore/Map/AmenitySymbolsProvider.h>
 #include <OsmAndCore/IFavoriteLocation.h>
-#include <OsmAndCore/TileSqliteDatabasesCollection.h>
+#include <OsmAndCore/GeoTiffCollection.h>
 #include <OsmAndCore/Map/SqliteHeightmapTileProvider.h>
 #include <OsmAndCore/Map/WeatherTileResourcesManager.h>
 #include <OsmAndCore/Map/MapRendererTypes.h>
@@ -1795,10 +1795,12 @@
         
         if ([OAAppSettings.sharedManager.showHeightmaps get])
         {
-            std::shared_ptr<const OsmAnd::ITileSqliteDatabasesCollection> heightsCollection;
-            const auto manualHeightsCollection = new OsmAnd::TileSqliteDatabasesCollection();
-            manualHeightsCollection->addDirectory(_app.documentsDir.absoluteFilePath(QString::fromNSString(RESOURCES_DIR)));
-            heightsCollection.reset(manualHeightsCollection);
+            std::shared_ptr<const OsmAnd::IGeoTiffCollection> heightsCollection;
+            const auto manualTilesCollection = new OsmAnd::GeoTiffCollection();
+            NSString *cacheDir = [_app.cachePath stringByAppendingPathComponent:GEOTIFF_SQLITE_CACHE_DIR];
+            manualTilesCollection->setLocalCache(QString::fromNSString(cacheDir));
+            manualTilesCollection->addDirectory(_app.documentsDir.absoluteFilePath(QString::fromNSString(RESOURCES_DIR)));
+            heightsCollection.reset(manualTilesCollection);
             [_mapView setElevationDataProvider:
                 std::make_shared<OsmAnd::SqliteHeightmapTileProvider>(heightsCollection, _mapView.elevationDataTileSize)];
         }

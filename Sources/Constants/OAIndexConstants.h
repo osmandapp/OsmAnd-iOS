@@ -97,4 +97,6 @@
 
 #define VOICE_PROVIDER_SUFFIX @"-tts"
 
+#define GEOTIFF_SQLITE_CACHE_DIR @"geotiff_sqlite_cache"
+
 #endif /* OAIndexConstants_h */

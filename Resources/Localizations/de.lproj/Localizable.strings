@@ -2837,3 +2837,4 @@
 "confirm_history_item_delete" = "Sind Sie sicher, dass Sie (%ld) Verlaufseinträge löschen möchten?";
 "restart_is_required" = "Ein Neustart ist erforderlich, um die Änderung anzuwenden.";
 "restart_is_required_title" = "Neustart ist erforderlich";
+"free_downloads" = "Kostenlose Downloads";

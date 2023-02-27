@@ -19,6 +19,7 @@
 @class OAGPXTrackAnalysis;
 @class OARouteStatisticsModeCell;
 @class OATrkSegment;
+@class OABaseVectorLinesLayer;
 
 @protocol OARouteLineChartHelperDelegate
 
@@ -32,7 +33,7 @@
 @property (nonatomic) BOOL isLandscape;
 @property (nonatomic) CGRect screenBBox;
 
-- (instancetype)initWithGpxDoc:(OAGPXDocument *)gpxDoc;
+- (instancetype)initWithGpxDoc:(OAGPXDocument *)gpxDoc layer:(OABaseVectorLinesLayer *)layer;
 
 @property (nonatomic, weak) id<OARouteLineChartHelperDelegate> delegate;
 

@@ -145,6 +145,10 @@
 - (void) openTargetViewWithRouteDetailsGraph:(OAGPXDocument *)gpx
                                     analysis:(OAGPXTrackAnalysis *)analysis
                             menuControlState:(OATargetMenuViewControllerState *)menuControlState;
+- (void) openTargetViewWithRouteDetailsGraph:(OAGPXDocument *)gpx
+                                    analysis:(OAGPXTrackAnalysis *)analysis
+                            menuControlState:(OATargetMenuViewControllerState *)menuControlState
+                                     isRoute:(BOOL)isRoute;
 - (void) openTargetViewWithMovableTarget:(OATargetPoint *)targetPoint;
 - (void) openTargetViewWithNewGpxWptMovableTarget:(OAGPX *)gpx
                                  menuControlState:(OATargetMenuViewControllerState *)menuControlState;

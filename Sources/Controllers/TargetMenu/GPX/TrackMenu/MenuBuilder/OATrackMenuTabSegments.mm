@@ -384,7 +384,7 @@
 
 - (void)chartValueNothingSelected:(ChartViewBase *)chartView
 {
-    [[OARootViewController instance].mapPanel.mapViewController.mapLayers.routeMapLayer hideCurrentStatisticsLocation];
+    [[OARootViewController instance].mapPanel.mapViewController.mapLayers.gpxMapLayer hideCurrentStatisticsLocation];
 }
 
 - (void)chartValueSelected:(ChartViewBase *)chartView

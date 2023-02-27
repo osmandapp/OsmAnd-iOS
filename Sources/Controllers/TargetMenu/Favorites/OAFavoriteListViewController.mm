@@ -60,7 +60,7 @@ typedef enum
 
 @end
 
-@interface OAFavoriteListViewController () <OAMultiselectableHeaderDelegate, UIDocumentPickerDelegate, UISearchControllerDelegate, UISearchResultsUpdating>
+@interface OAFavoriteListViewController () <OAMultiselectableHeaderDelegate, UIDocumentPickerDelegate, UISearchResultsUpdating, UISearchBarDelegate>
 {
 
     BOOL isDecelerating;
@@ -76,6 +76,7 @@ typedef enum
     OAMultiselectableHeaderView *_menuHeaderView;
     NSArray *_unsortedHeaderViews;
     NSMutableArray<NSArray *> *_data;
+    NSMutableArray *_filteredItems;
 
     EFavoriteAction _favAction;
     OAEditColorViewController *_colorController;
@@ -87,6 +88,9 @@ typedef enum
     UIBarButtonItem *_directionButton;
     UIBarButtonItem *_editButton;
     UISearchController *_searchController;
+    
+    BOOL _isSearchActive;
+    BOOL _isFiltered;
 }
 
 static UIViewController *parentController;
@@ -126,6 +130,8 @@ static UIViewController *parentController;
     [self.editToolbarView.layer addSublayer:_horizontalLine];
 
     _selectedItems = [[NSMutableArray alloc] init];
+    
+    self.tabBarController.navigationItem.title = OALocalizedString(@"my_favorites");
 }
 
 -(void)viewWillLayoutSubviews
@@ -262,6 +268,7 @@ static UIViewController *parentController;
 
 -(void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
 
     if (_favAction == kFavoriteActionChangeColor)
         [self setupColor];
@@ -282,13 +289,22 @@ static UIViewController *parentController;
                                                                     withHandler:@selector(updateDistanceAndDirection)
                                                                      andObserve:app.locationServices.updateObserver];
     [self applySafeAreaMargins];
-    [super viewWillAppear:animated];
     
     [self.navigationController setNavigationBarHidden:NO animated:NO];
-    
     _editButton = [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:@"icon_edit"] style:UIBarButtonItemStylePlain target:self action:@selector(editButtonClicked:)];
     _directionButton = [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:@"icon_direction"] style:UIBarButtonItemStylePlain target:self action:@selector(sortByDistance:)];
     [self.navigationController.navigationBar.topItem setRightBarButtonItems:@[_editButton, _directionButton] animated:YES];
+    
+    _searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
+    _searchController.searchResultsUpdater = self;
+    _searchController.searchBar.delegate = self;
+    _searchController.obscuresBackgroundDuringPresentation = NO;
+    self.tabBarController.navigationItem.searchController = _searchController;
+    self.definesPresentationContext = YES;
+    [self setupSearchController:NO filtered:NO];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -314,6 +330,9 @@ static UIViewController *parentController;
         [self.locationServicesUpdateObserver detach];
         self.locationServicesUpdateObserver = nil;
     }
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+    self.tabBarController.navigationItem.searchController = nil;
     [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 
@@ -408,6 +427,31 @@ static UIViewController *parentController;
     [self.favoriteTableView setDelegate:self];
     self.favoriteTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     [self.favoriteTableView reloadData];
+    _isSearchActive = NO;
+    _isFiltered = NO;
+}
+
+- (void) setupSearchController:(BOOL)isSearchActive filtered:(BOOL)isFiltered
+{
+    if (isSearchActive)
+    {
+        _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"search_activity") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1.0 alpha:0.5]}];
+        _searchController.searchBar.searchTextField.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.3];
+        _searchController.searchBar.searchTextField.leftView.tintColor = [UIColor colorWithWhite:1.0 alpha:0.5];
+    }
+    else if (isFiltered)
+    {
+        _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"search_favorites") attributes:@{NSForegroundColorAttributeName:UIColor.grayColor}];
+        _searchController.searchBar.searchTextField.backgroundColor = UIColor.whiteColor;
+        _searchController.searchBar.searchTextField.leftView.tintColor = UIColor.grayColor;
+    }
+    else
+    {
+        _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"search_favorites") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1.0 alpha:0.5]}];
+        _searchController.searchBar.searchTextField.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.3];
+        _searchController.searchBar.searchTextField.leftView.tintColor = [UIColor colorWithWhite:1.0 alpha:0.5];
+        _searchController.searchBar.searchTextField.tintColor = UIColor.grayColor;
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -805,7 +849,7 @@ static UIViewController *parentController;
 
 -(NSInteger)getSortedNumberOfSectionsInTableView
 {
-    return 2;
+    return _isSearchActive ? 1 : 2;
 }
 
 -(NSInteger)getUnsortedNumberOfSectionsInTableView
@@ -815,7 +859,9 @@ static UIViewController *parentController;
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    if (_data.count == 1)
+    if (_isSearchActive)
+        return 0;
+    else if (_data.count == 1)
         return 44;
     NSDictionary *item = _data[section][0];
     NSString *cellType = item[@"type"];
@@ -829,7 +875,11 @@ static UIViewController *parentController;
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    if (_directionButton.tag == 1)
+    if (_isSearchActive)
+    {
+        return nil;
+    }
+    else if (_directionButton.tag == 1)
     {
         if (section == 0)
             return _sortedHeaderView;
@@ -844,7 +894,7 @@ static UIViewController *parentController;
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section != self.favoriteTableView.numberOfSections - 1)
+    if (indexPath.section != self.favoriteTableView.numberOfSections - 1 || _isSearchActive)
         return 60.;
     return  44.;
 }
@@ -858,8 +908,8 @@ static UIViewController *parentController;
 
 -(NSInteger)getSortedNumberOfRowsInSection:(NSInteger)section
 {
-    if (section == 0)
-        return [self.sortedFavoriteItems count];
+    if (section == 0 || _isSearchActive)
+        return _isFiltered ? [_filteredItems count] : [self.sortedFavoriteItems count];
     return _data.lastObject.count;
 }
 
@@ -886,7 +936,7 @@ static UIViewController *parentController;
 
 -(UITableViewCell*)getSortedcellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 0)
+    if (indexPath.section == 0 || _isSearchActive)
     {
         OAPointTableViewCell* cell;
         cell = (OAPointTableViewCell *)[self.favoriteTableView dequeueReusableCellWithIdentifier:[OAPointTableViewCell getCellIdentifier]];
@@ -898,7 +948,7 @@ static UIViewController *parentController;
 
         if (cell)
         {
-            OAFavoriteItem* item = [self.sortedFavoriteItems objectAtIndex:indexPath.row];
+            OAFavoriteItem* item = _isFiltered ? [_filteredItems objectAtIndex:indexPath.row] : [self.sortedFavoriteItems objectAtIndex:indexPath.row];
             [cell.titleView setText:[item getDisplayName]];
             cell = [self setupPoiIconForCell:cell withFavaoriteItem:item];
 
@@ -1092,15 +1142,24 @@ static UIViewController *parentController;
 
 - (void)removeItemFromSortedFavoriteItems:(NSIndexPath *)indexPath
 {
-    OAFavoriteItem *item = self.sortedFavoriteItems[indexPath.row];
+    OAFavoriteItem *item = _isFiltered ? _filteredItems[indexPath.row] : self.sortedFavoriteItems[indexPath.row];
     if (item)
     {
-        NSInteger itemIndex = [self.sortedFavoriteItems indexOfObject:item];
+        NSInteger itemIndex = _isFiltered ? [_filteredItems indexOfObject:item] : [self.sortedFavoriteItems indexOfObject:item];
         if (itemIndex != NSNotFound)
         {
             [self.favoriteTableView beginUpdates];
-            [OAFavoritesHelper deleteFavoriteGroups:nil andFavoritesItems:@[self.sortedFavoriteItems[itemIndex]]];
-            [self.sortedFavoriteItems removeObjectAtIndex:itemIndex];
+            if (!_isFiltered)
+            {
+                [OAFavoritesHelper deleteFavoriteGroups:nil andFavoritesItems:@[self.sortedFavoriteItems[itemIndex]]];
+                [self.sortedFavoriteItems removeObjectAtIndex:itemIndex];
+            }
+            else
+            {
+                [OAFavoritesHelper deleteFavoriteGroups:nil andFavoritesItems:@[_filteredItems[itemIndex]]];
+                [_filteredItems removeObjectAtIndex:itemIndex];
+            }
+            
             [self.favoriteTableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
             [self.favoriteTableView endUpdates];
         }
@@ -1134,9 +1193,9 @@ static UIViewController *parentController;
             }
             [OAFavoritesHelper deleteFavoriteGroups:nil andFavoritesItems:@[group.favoriteGroup.points[itemIndex]]];
 
-            NSInteger sortedItemIndex = [self.sortedFavoriteItems indexOfObject:item];
+            NSInteger sortedItemIndex = _isFiltered ? [_filteredItems indexOfObject:item] : [self.sortedFavoriteItems indexOfObject:item];
             if (sortedItemIndex != NSNotFound)
-                [self.sortedFavoriteItems removeObjectAtIndex:sortedItemIndex];
+                _isFiltered ? [_filteredItems removeObjectAtIndex:sortedItemIndex] : [self.sortedFavoriteItems removeObjectAtIndex:sortedItemIndex];
 
             if (group.favoriteGroup.points.count == 0)
             {
@@ -1163,15 +1222,23 @@ static UIViewController *parentController;
 
     for (NSIndexPath *selectedItem in sortedArray)
     {
-        OAFavoriteItem* item = self.sortedFavoriteItems[selectedItem.row];
+        OAFavoriteItem* item = _isFiltered ? _filteredItems[selectedItem.row] : self.sortedFavoriteItems[selectedItem.row];
         if (item)
         {
-            NSInteger itemIndex = [self.sortedFavoriteItems indexOfObject:item];
+            NSInteger itemIndex = _isFiltered ? [_filteredItems indexOfObject:item] : [self.sortedFavoriteItems indexOfObject:item];
             if (itemIndex != NSNotFound)
             {
                 [self.favoriteTableView beginUpdates];
-                [OAFavoritesHelper deleteFavoriteGroups:nil andFavoritesItems:@[self.sortedFavoriteItems[itemIndex]]];
-                [self.sortedFavoriteItems removeObjectAtIndex:itemIndex];
+                if (!_isFiltered)
+                {
+                    [OAFavoritesHelper deleteFavoriteGroups:nil andFavoritesItems:@[self.sortedFavoriteItems[itemIndex]]];
+                    [self.sortedFavoriteItems removeObjectAtIndex:itemIndex];
+                }
+                else
+                {
+                    [OAFavoritesHelper deleteFavoriteGroups:nil andFavoritesItems:@[_filteredItems[itemIndex]]];
+                    [_filteredItems removeObjectAtIndex:itemIndex];
+                }
                 [self.favoriteTableView deleteRowsAtIndexPaths:@[selectedItem] withRowAnimation:UITableViewRowAnimationLeft];
                 [self.favoriteTableView endUpdates];
             }
@@ -1204,9 +1271,9 @@ static UIViewController *parentController;
                 {
                     [self.favoriteTableView beginUpdates];
                     [OAFavoritesHelper deleteFavoriteGroups:nil andFavoritesItems:@[group.favoriteGroup.points[itemIndex]]];
-                    NSInteger sortedItemIndex = [self.sortedFavoriteItems indexOfObject:item];
+                    NSInteger sortedItemIndex = _isFiltered ? [_filteredItems indexOfObject:item] : [self.sortedFavoriteItems indexOfObject:item];
                     if (sortedItemIndex != NSNotFound)
-                        [self.sortedFavoriteItems removeObjectAtIndex:sortedItemIndex];
+                        _isFiltered ? [_filteredItems removeObjectAtIndex:sortedItemIndex] : [self.sortedFavoriteItems removeObjectAtIndex:sortedItemIndex];
                     [self.favoriteTableView deleteRowsAtIndexPaths:@[selectedItem] withRowAnimation:UITableViewRowAnimationLeft];
                     [self.favoriteTableView endUpdates];
                 }
@@ -1473,7 +1540,7 @@ static UIViewController *parentController;
 
     if (indexPath.section == 0)
     {
-        OAFavoriteItem* item = [self.sortedFavoriteItems objectAtIndex:indexPath.row];
+        OAFavoriteItem* item = _isFiltered ? [_filteredItems objectAtIndex:indexPath.row] : [self.sortedFavoriteItems objectAtIndex:indexPath.row];
         [self doPush];
         [[OARootViewController instance].mapPanel openTargetViewWithFavorite:item pushed:YES];
 
@@ -1631,9 +1698,88 @@ static UIViewController *parentController;
     [OARootViewController.instance handleIncomingURL:url];
 }
 
+#pragma mark - Keyboard Notifications
+
+- (void) keyboardWillShow:(NSNotification *)notification;
+{
+    NSDictionary *userInfo = [notification userInfo];
+    CGRect keyboardBounds;
+    [[userInfo valueForKey:UIKeyboardFrameEndUserInfoKey] getValue: &keyboardBounds];
+    CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
+    NSInteger animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
+        [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
+            UIEdgeInsets insets = [self.favoriteTableView contentInset];
+            [self.favoriteTableView setContentInset:UIEdgeInsetsMake(insets.top, insets.left, keyboardBounds.size.height, insets.right)];
+            [self.favoriteTableView setScrollIndicatorInsets:self.favoriteTableView.contentInset];
+        } completion:nil];
+}
+
+- (void) keyboardWillHide:(NSNotification *)notification;
+{
+    NSDictionary *userInfo = [notification userInfo];
+    CGFloat duration = [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
+    NSInteger animationCurve = [[userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
+        [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
+            UIEdgeInsets insets = [self.favoriteTableView contentInset];
+            [self.favoriteTableView setContentInset:UIEdgeInsetsMake(insets.top, insets.left, 0.0, insets.right)];
+            [self.favoriteTableView setScrollIndicatorInsets:self.favoriteTableView.contentInset];
+        } completion:nil];
+}
+
+#pragma mark - UISearchResultsUpdating
+
 - (void)updateSearchResultsForSearchController:(UISearchController *)searchController
 {
-    NSLog(@"%@", searchController.searchBar.text);
+    if (searchController.isActive && searchController.searchBar.searchTextField.text.length == 0)
+    {
+        _isSearchActive = YES;
+        _isFiltered = NO;
+        [self setupSearchController:YES filtered:NO];
+        [UIView animateWithDuration:.3 animations:^{
+            self.tabBarController.tabBar.frame = CGRectMake(0.0, DeviceScreenHeight + 1.0, DeviceScreenWidth, self.tabBarController.tabBar.frame.size.height);
+            [self applySafeAreaMargins];
+        } completion:^(BOOL finished) {
+            [self.tabBarController.tabBar setHidden:YES];
+        }];
+        _directionButton.tag = 1;
+        [self.favoriteTableView reloadData];
+    }
+    else if (searchController.isActive && searchController.searchBar.searchTextField.text.length > 0)
+    {
+        _isFiltered = YES;
+        [self setupSearchController:NO filtered:YES];
+        _filteredItems = [NSMutableArray new];
+        for (OAFavoriteItem *item in self.sortedFavoriteItems)
+        {
+            NSRange nameTagRange = [[item getDisplayName] rangeOfString:searchController.searchBar.searchTextField.text options:NSCaseInsensitiveSearch];
+            if (nameTagRange.location != NSNotFound)
+                [_filteredItems addObject:item];
+        }
+        [self.favoriteTableView reloadData];
+    }
+    else
+    {
+        _isSearchActive = NO;
+        _isFiltered = NO;
+        _directionButton.tag = 0;
+        [self setupSearchController:NO filtered:NO];
+        [UIView animateWithDuration:.3 animations:^{
+            [self.tabBarController.tabBar setHidden:NO];
+            self.tabBarController.tabBar.frame = CGRectMake(0.0, DeviceScreenHeight - self.tabBarController.tabBar.frame.size.height, DeviceScreenWidth, self.tabBarController.tabBar.frame.size.height);
+        } completion:^(BOOL finished) {
+            [self applySafeAreaMargins];
+        }];
+        [self.favoriteTableView reloadData];
+    }
+}
+
+#pragma mark - UISearchBarDelegate
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
+{
+    searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"search_favorites") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1.0 alpha:0.5]}];
+    searchBar.searchTextField.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.3];
+    searchBar.searchTextField.leftView.tintColor = [UIColor colorWithWhite:1.0 alpha:0.5];
 }
 
 @end

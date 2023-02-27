@@ -27,7 +27,6 @@
     [appearance configureWithDefaultBackground];
     self.tabBar.standardAppearance = appearance;
     self.tabBar.scrollEdgeAppearance = appearance;
-    [self setupSearchController];
     [super viewDidLoad];
 }
 
@@ -58,21 +57,9 @@
     return UIStatusBarStyleLightContent;
 }
 
--(void)setupSearchController
-{
-    OAFavoritesTabBarViewController <UISearchControllerDelegate, UISearchResultsUpdating> *favoriteListVC = (OAFavoritesTabBarViewController <UISearchControllerDelegate, UISearchResultsUpdating>*)[self.viewControllers objectAtIndex:0];
-    UISearchController *searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
-    searchController.delegate = favoriteListVC;
-    searchController.searchResultsUpdater = favoriteListVC;
-    searchController.obscuresBackgroundDuringPresentation = NO;
-    self.navigationItem.searchController = searchController;
-    favoriteListVC.definesPresentationContext = YES;
-}
-
 -(void)applyLocalization
 {
-    if ([self.viewControllers objectAtIndex:0])
-        self.navigationItem.title = OALocalizedString(@"my_favorites");
+    [[self.viewControllers objectAtIndex:0] setTitle:OALocalizedString(@"favorites_item")];
     [[self.viewControllers objectAtIndex:1] setTitle: OALocalizedString(@"shared_string_gpx_tracks")];
     if (self.viewControllers.count > 2)
         [[self.viewControllers objectAtIndex:2] setTitle: OALocalizedString(@"osm_edits_title")];

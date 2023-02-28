@@ -164,7 +164,17 @@
     }
     else
     {
-        bitmap = [OANativeUtilities skImageFromPngResource:@"map_osm_edit"];
+        auto iconId = QStringLiteral("osm_note");
+        const auto bitmapIt = _iconsCache.find(iconId);
+        if (bitmapIt == _iconsCache.end())
+        {
+            [self getOsmNoteBitmap:bitmap];
+            _iconsCache[iconId] = bitmap;
+        }
+        else
+        {
+            bitmap = bitmapIt.value();
+        }
     }
 
     return [OANativeUtilities getScaledSkImage:bitmap scaleFactor:_textSize];
@@ -240,7 +250,9 @@
         }
     }
     
-    return [UIImage imageNamed:@"map_osm_edit"];
+    sk_sp<SkImage> bitmap;
+    [self getOsmNoteBitmap:bitmap];
+    return [OANativeUtilities skImageToUIImage:bitmap];
 }
 
 - (OATargetPoint *) getTargetPoint:(id)obj
@@ -313,9 +325,17 @@
     }
 }
 
-- (UIImage *) getPointIcon:(id)object
+- (void)getOsmNoteBitmap:(sk_sp<SkImage> &)bitmap
 {
-    return [UIImage imageNamed:@"map_osm_edit"];
+    UIImage *img = [UIImage imageNamed:[OAUtilities drawablePath:@"mx_special_information"]];
+    img = [OAUtilities applyScaleFactorToImage:img];
+    bitmap = [OACompoundIconUtils createCompositeIconWithcolor:UIColorFromARGB(color_osm_edit) shapeName:@"circle" iconName:@"special_information" isFullSize:YES icon:img];
+}
+
+- (UIImage *) getPointIcon:(id)point
+{
+    sk_sp<SkImage> bitmap = [self getIcon:point];
+    return [OANativeUtilities skImageToUIImage:bitmap];
 }
 
 - (void)setPointVisibility:(id)object hidden:(BOOL)hidden

@@ -607,35 +607,38 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    CGFloat navbarHeight = self.navigationController.navigationBar.frame.size.height;
-    if (_navbarHeightCurrent != navbarHeight && (navbarHeight >= (_navbarHeightLarge + _navbarHeightSmall && [self getNavbarStyle] != EOABaseNavbarStyleLargeTitle)))
+    if (!_isRotating && [self isScreenLoaded])
     {
-        _navbarHeightCurrent = _navbarHeightLarge + _navbarHeightSmall;
-        [self updateRightIconLargeTitle];
-    }
-
-    [self moveAndResizeImage:self.navigationController.navigationBar.frame.size.height];
-
-    if ([self getNavbarStyle] == EOABaseNavbarStyleCustomLargeTitle)
-    {
-        CGFloat y = scrollView.contentOffset.y + _navbarHeightSmall + _navbarHeightLarge;
-        if (![self isModal])
-            y += [OAUtilities getTopMargin];
-        CGFloat tableHeaderHeight = self.tableView.tableHeaderView.frame.size.height;
-        if (y > 0)
+        CGFloat navbarHeight = self.navigationController.navigationBar.frame.size.height;
+        if (_navbarHeightCurrent != navbarHeight && (navbarHeight >= (_navbarHeightLarge + _navbarHeightSmall) && [self getNavbarStyle] == EOABaseNavbarStyleLargeTitle))
         {
-            if (y > tableHeaderHeight * .75 && [self.navigationItem isTitleInStackViewHided])
+            _navbarHeightCurrent = _navbarHeightLarge + _navbarHeightSmall;
+            [self updateRightIconLargeTitle];
+        }
+        
+        [self moveAndResizeImage:self.navigationController.navigationBar.frame.size.height];
+        
+        if ([self getNavbarStyle] == EOABaseNavbarStyleCustomLargeTitle)
+        {
+            CGFloat y = scrollView.contentOffset.y + _navbarHeightSmall + _navbarHeightLarge;
+            if (![self isModal])
+                y += [OAUtilities getTopMargin];
+            CGFloat tableHeaderHeight = self.tableView.tableHeaderView.frame.size.height;
+            if (y > 0)
+            {
+                if (y > tableHeaderHeight * .75 && [self.navigationItem isTitleInStackViewHided])
+                    [self.navigationItem hideTitleInStackView:NO defaultTitle:[self getTitle] defaultSubtitle:[self getSubtitle]];
+                else if (y < tableHeaderHeight * .75 && ![self.navigationItem isTitleInStackViewHided])
+                    [self.navigationItem hideTitleInStackView:YES defaultTitle:[self getTitle] defaultSubtitle:[self getSubtitle]];
+            }
+            else if (y <= 0 && ![self.navigationItem isTitleInStackViewHided])
+            {
                 [self.navigationItem hideTitleInStackView:NO defaultTitle:[self getTitle] defaultSubtitle:[self getSubtitle]];
-            else if (y < tableHeaderHeight * .75 && ![self.navigationItem isTitleInStackViewHided])
-                [self.navigationItem hideTitleInStackView:YES defaultTitle:[self getTitle] defaultSubtitle:[self getSubtitle]];
+            }
         }
-        else if (y <= 0 && ![self.navigationItem isTitleInStackViewHided])
-        {
-            [self.navigationItem hideTitleInStackView:NO defaultTitle:[self getTitle] defaultSubtitle:[self getSubtitle]];
-        }
+        
+        [self onScrollViewDidScroll:scrollView];
     }
-
-    [self onScrollViewDidScroll:scrollView];
 }
 
 #pragma mark - UITableViewDelegate

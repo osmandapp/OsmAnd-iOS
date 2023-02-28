@@ -250,9 +250,7 @@
         }
     }
     
-    sk_sp<SkImage> bitmap;
-    [self getOsmNoteBitmap:bitmap];
-    return [OANativeUtilities skImageToUIImage:bitmap];
+    return [UIImage imageNamed:[OAUtilities drawablePath:@"mx_special_information"]];
 }
 
 - (OATargetPoint *) getTargetPoint:(id)obj

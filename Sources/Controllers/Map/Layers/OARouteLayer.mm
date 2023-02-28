@@ -43,14 +43,8 @@
 
     std::shared_ptr<OsmAnd::VectorLinesCollection> _collection;
     
-    std::shared_ptr<OsmAnd::MapMarkersCollection> _currentGraphXAxisPositions;
     std::shared_ptr<OsmAnd::MapMarkersCollection> _transportRouteMarkers;
     
-    std::shared_ptr<OsmAnd::MapMarkersCollection> _currentGraphPosition;
-    std::shared_ptr<OsmAnd::MapMarker> _locationMarker;
-    OsmAnd::MapMarker::OnSurfaceIconKey _locationIconKey;
-    
-    sk_sp<SkImage> _xAxisLocationIcon;
     sk_sp<SkImage> _transportTransferIcon;
     sk_sp<SkImage> _transportShieldIcon;
     
@@ -58,6 +52,7 @@
     OAAutoObserverProxy* _mapZoomObserver;
     
     NSDictionary<NSString *, NSNumber *> *_routeAttributes;
+    NSCache<NSString *, NSNumber *> *_сoloringTypeAvailabilityCache;
 
     BOOL _initDone;
 
@@ -74,7 +69,7 @@
     QList<OsmAnd::FColorARGB> _colors;
     OAColoringType *_prevRouteColoringType;
     NSString *_prevRouteInfoAttribute;
-    NSMutableDictionary<NSString *, NSNumber *> *_cachedRouteLineWidth;
+    NSCache<NSString *, NSNumber *> *_cachedRouteLineWidth;
     int _currentAnimatedRoute;
     CLLocation *_lastProj;
 }
@@ -97,38 +92,24 @@
     _transportHelper = [OATransportRoutingHelper sharedInstance];
     
     _collection = std::make_shared<OsmAnd::VectorLinesCollection>();
-    _currentGraphPosition = std::make_shared<OsmAnd::MapMarkersCollection>();
-    _currentGraphXAxisPositions = std::make_shared<OsmAnd::MapMarkersCollection>();
-    _transportRouteMarkers = std::make_shared<OsmAnd::MapMarkersCollection>();
     _actionLinesCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
+    _transportRouteMarkers = std::make_shared<OsmAnd::MapMarkersCollection>();
     
-    _xAxisLocationIcon = [OANativeUtilities skImageFromPngResource:@"map_mapillary_location"];
     _transportTransferIcon = [OANativeUtilities skImageFromPngResource:@"map_public_transport_transfer"];
     _transportShieldIcon = [OANativeUtilities skImageFromPngResource:@"map_public_transport_stop_shield"];
     
-    OsmAnd::MapMarkerBuilder locationMarkerBuilder;
-    locationMarkerBuilder.setIsAccuracyCircleSupported(false);
-    locationMarkerBuilder.setBaseOrder(self.pointsOrder - 25);
-    locationMarkerBuilder.setIsHidden(true);
-    
-    _locationIconKey = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
-    locationMarkerBuilder.addOnMapSurfaceIcon(_locationIconKey,
-                                                       [OANativeUtilities skImageFromPngResource:@"map_pedestrian_location"]);
-    _locationMarker = locationMarkerBuilder.buildAndAddToCollection(_currentGraphPosition);
-    
-    _routeAttributes = [self.mapViewController getLineRenderingAttributes:@"route"];
+    _routeAttributes = nil;
+    _сoloringTypeAvailabilityCache = [[NSCache alloc] init];
     
     _initDone = YES;
     
     [self.mapView addKeyedSymbolsProvider:_collection];
-    [self.mapView addKeyedSymbolsProvider:_currentGraphPosition];
-    [self.mapView addKeyedSymbolsProvider:_currentGraphXAxisPositions];
     [self.mapView addKeyedSymbolsProvider:_transportRouteMarkers];
 
     _lineWidth = kDefaultWidthMultiplier * kWidthCorrectionValue;
     _routeColoringType = OAColoringType.DEFAULT;
     _colorizationScheme = COLORIZATION_NONE;
-    _cachedRouteLineWidth = [NSMutableDictionary dictionary];
+    _cachedRouteLineWidth = [[NSCache alloc] init];
 
     _mapZoomObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                  withHandler:@selector(onMapZoomChanged:withKey:andValue:)
@@ -140,18 +121,14 @@
     [super resetLayer];
     
     [self.mapView removeKeyedSymbolsProvider:_collection];
-    [self.mapView removeKeyedSymbolsProvider:_currentGraphXAxisPositions];
-    [self.mapView removeKeyedSymbolsProvider:_transportRouteMarkers];
     [self.mapView removeKeyedSymbolsProvider:_actionLinesCollection];
+    [self.mapView removeKeyedSymbolsProvider:_transportRouteMarkers];
     
     _collection = std::make_shared<OsmAnd::VectorLinesCollection>();
-    _currentGraphXAxisPositions = std::make_shared<OsmAnd::MapMarkersCollection>();
-    _transportRouteMarkers = std::make_shared<OsmAnd::MapMarkersCollection>();
     _actionLinesCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
+    _transportRouteMarkers = std::make_shared<OsmAnd::MapMarkersCollection>();
     
-    _routeAttributes = [self.mapViewController getLineRenderingAttributes:@"route"];
-
-    _locationMarker->setIsHidden(true);
+    _routeAttributes = nil;
     _route = nil;
 }
 
@@ -301,28 +278,19 @@
 
             int baseOrder = self.baseOrder;
 
-            // Add outline for colorized lines
-            if (!colors.isEmpty())
-            {
-                OsmAnd::VectorLineBuilder outlineBuilder;
-                outlineBuilder.setBaseOrder(baseOrder--)
-                              .setIsHidden(points.size() < 2)
-                              .setLineId(kOutlineId)
-                              .setLineWidth(_lineWidth + kOutlineWidth)
-                              .setOutlineWidth(kOutlineWidth)
-                              .setPoints(points)
-                              .setFillColor(kOutlineColor)
-                              .setApproximationEnabled(false);
-
-                outlineBuilder.buildAndAddToCollection(_collection);
-            }
-
             OsmAnd::VectorLineBuilder builder;
             builder.setBaseOrder(baseOrder--)
                    .setIsHidden(points.size() < 2)
                    .setLineId(1)
                    .setLineWidth(_lineWidth)
                    .setPoints(points);
+
+            // Add outline for colorized lines
+            if (!colors.isEmpty())
+            {
+                builder.setOutlineWidth(_lineWidth + kOutlineWidth)
+                       .setOutlineColor(kOutlineColor);
+            }
 
             UIColor *color = _routeLineColor == kDefaultRouteLineDayColor || _routeLineColor == kDefaultRouteLineNightColor
                     ? UIColorFromARGB(_routeLineColor)
@@ -361,7 +329,7 @@
             for (auto &line : lines)
             {
                 line->setPoints(points);
-                if (!colors.empty() && line->getOutlineWidth() == 0.)
+                if (!colors.empty())
                     line->setColorizationMapping(colors);
             }
         }
@@ -377,7 +345,6 @@
 
 - (NSNumber *)getParamFromAttr:(NSString *)param
 {
-    _routeAttributes = [self.mapViewController getLineRenderingAttributes:@"route"];
     return _routeAttributes[param];
 }
 
@@ -472,14 +439,15 @@
     CGFloat width;
     if (widthKey)
     {
-        if ([_cachedRouteLineWidth.allKeys containsObject:widthKey])
+        NSNumber *widthNumber = [_cachedRouteLineWidth objectForKey:widthKey];
+        if (widthNumber)
         {
-            width = _cachedRouteLineWidth[widthKey].floatValue;
+            width = widthNumber.floatValue;
         }
         else
         {
             width = [self getWidthByKey:widthKey];
-            _cachedRouteLineWidth[widthKey] = @(width);
+            [_cachedRouteLineWidth setObject:@(width) forKey:widthKey];
         }
     }
     else
@@ -762,6 +730,11 @@
 
 - (void) refreshRouteWithSync:(BOOL)sync
 {
+    if (!_routeAttributes)
+        _routeAttributes = [self.mapViewController getLineRenderingAttributes:@"route"];
+    if (!_routeAttributes)
+        return;
+
     BOOL isNight = [OAAppSettings sharedManager].nightMode;
     OARouteCalculationResult *route = [_routingHelper getRoute];
     if ([_routingHelper isPublicTransportMode])
@@ -815,12 +788,7 @@
             currentRoute = 0;
 
         OAColoringType *routeColoringType = _routeColoringType;
-        BOOL isAvailable = [routeColoringType isAvailableInSubscription];
-        if (!isAvailable)
-            routeColoringType = OAColoringType.DEFAULT;
-        else if ([routeColoringType isGradient] && ![routeColoringType isAvailableForDrawingRoute:route attributeName:nil])
-            routeColoringType = OAColoringType.DEFAULT;
-        else if ([routeColoringType isRouteInfoAttribute] && ![routeColoringType isAvailableForDrawingRoute:route attributeName:_routeInfoAttribute])
+        if (![self isColoringAvailable:route routeColoringType:routeColoringType attributeName:_routeInfoAttribute])
             routeColoringType = OAColoringType.DEFAULT;
 
         NSArray<CLLocation *> *locations = [route getImmutableAllLocations];
@@ -941,6 +909,26 @@
     }
 }
 
+- (BOOL) isColoringAvailable:(OARouteCalculationResult *)route routeColoringType:(OAColoringType *)routeColoringType attributeName:(NSString *)attributeName
+{
+        if (_route != route)
+            [_сoloringTypeAvailabilityCache removeAllObjects];
+
+        NSString *key = [routeColoringType getName:attributeName];
+        if (!key)
+            key = @"_nil_";
+
+        NSNumber *available = [_сoloringTypeAvailabilityCache objectForKey:key];
+        if (!available)
+        {
+            BOOL drawing = [routeColoringType isAvailableForDrawingRoute:route attributeName:attributeName];
+            BOOL subscription = [routeColoringType isAvailableInSubscription];
+            available = @(drawing && subscription);
+            [_сoloringTypeAvailabilityCache setObject:available forKey:key];
+        }
+        return available.boolValue;
+    }
+
 - (void) addWalkRoute:(SHARED_PTR<TransportRouteResultSegment>) s1 s2:(SHARED_PTR<TransportRouteResultSegment>)s2 start:(CLLocation *)start end:(CLLocation *)end sync:(BOOL)sync
 {
     OARouteCalculationResult *res = [_transportHelper.walkingRouteSegments objectForKey:@[[[OATransportRouteResultSegment alloc] initWithSegment:s1], [[OATransportRouteResultSegment alloc] initWithSegment:s2]]];
@@ -955,45 +943,6 @@
         }
         [self drawRouteSegment:points addToExisting:YES sync:sync];
     }
-}
-
-- (void) showCurrentStatisticsLocation:(OATrackChartPoints *)trackPoints
-{
-    if (_locationMarker && CLLocationCoordinate2DIsValid(trackPoints.highlightedPoint))
-    {
-        _locationMarker->setPosition(OsmAnd::Utilities::convertLatLonTo31(
-                OsmAnd::LatLon(trackPoints.highlightedPoint.latitude, trackPoints.highlightedPoint.longitude)));
-        _locationMarker->setIsHidden(false);
-    }
-    OsmAnd::MapMarkerBuilder xAxisMarkerBuilder;
-    xAxisMarkerBuilder.setIsAccuracyCircleSupported(false);
-    xAxisMarkerBuilder.setBaseOrder(self.pointsOrder - 15);
-    xAxisMarkerBuilder.setIsHidden(false);
-    if (trackPoints.axisPointsInvalidated)
-    {
-        [self.mapView removeKeyedSymbolsProvider:_currentGraphXAxisPositions];
-        _currentGraphXAxisPositions = std::make_shared<OsmAnd::MapMarkersCollection>();
-        
-        for (CLLocation *location in trackPoints.xAxisPoints)
-        {
-            xAxisMarkerBuilder.addOnMapSurfaceIcon(_locationIconKey,
-                                                   _xAxisLocationIcon);
-            
-            const auto& marker = xAxisMarkerBuilder.buildAndAddToCollection(_currentGraphXAxisPositions);
-            marker->setPosition(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(location.coordinate.latitude, location.coordinate.longitude)));
-        }
-        [self.mapView addKeyedSymbolsProvider:_currentGraphXAxisPositions];
-        trackPoints.axisPointsInvalidated = NO;
-    }
-}
-
-- (void) hideCurrentStatisticsLocation
-{
-    if (_locationMarker)
-        _locationMarker->setIsHidden(true);
-    
-    [self.mapView removeKeyedSymbolsProvider:_currentGraphXAxisPositions];
-    _currentGraphXAxisPositions = std::make_shared<OsmAnd::MapMarkersCollection>();
 }
 
 - (void) onMapFrameAnimatorsUpdated

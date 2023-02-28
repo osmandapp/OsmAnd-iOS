@@ -547,6 +547,7 @@ static UIViewController *parentController;
     _horizontalLine = [CALayer layer];
     _horizontalLine.backgroundColor = [UIColorFromRGB(kBottomToolbarTopLineColor) CGColor];
     self.editToolbarView.backgroundColor = UIColorFromRGB(kBottomToolbarBackgroundColor);
+    self.navBarView.backgroundColor = UIColorFromRGB(color_primary_orange_navbar_background);
     [self.editToolbarView.layer addSublayer:_horizontalLine];
     
     _exportButton.tintColor = UIColorFromRGB(color_primary_purple);

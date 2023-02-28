@@ -78,7 +78,8 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             return OALocalizedString(@"online_map");
         case OsmAndResourceType::WeatherForecast:
             return OALocalizedString(@"weather_forecast");
-        case OsmAndResourceType::HeightmapRegion:
+        case OsmAndResourceType::HeightmapRegionLegacy:
+        case OsmAndResourceType::GeoTiffRegion:
             return OALocalizedString(@"download_heightmap_maps");
         default:
             return OALocalizedString(@"res_unknown");
@@ -170,7 +171,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         case OsmAndResourceType::WeatherForecast:
             return 85;
         default:
-            return 1000; //HeightmapRegion, MapStyle, MapStylesPresets, OnlineTileSources
+            return 1000; //HeightmapRegionLegacy, GeoTiffRegion, MapStyle, MapStylesPresets, OnlineTileSources
     }
 }
 
@@ -209,7 +210,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     else if ([scopeId isEqualToString:@"weather_forecast"])
         return OsmAndResourceType::WeatherForecast;
     else if ([scopeId isEqualToString:@"heightmap"])
-        return OsmAndResourceType::HeightmapRegion;
+        return OsmAndResourceType::GeoTiffRegion;
 
     //TODO: add another types from ResourcesManager.h
     //MapStyle,
@@ -239,7 +240,8 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             [self.class toValue:OsmAndResourceType::LiveUpdateRegion],
             [self.class toValue:OsmAndResourceType::GpxFile],
             [self.class toValue:OsmAndResourceType::SqliteFile],
-            [self.class toValue:OsmAndResourceType::HeightmapRegion],
+            [self.class toValue:OsmAndResourceType::HeightmapRegionLegacy],
+            [self.class toValue:OsmAndResourceType::GeoTiffRegion],
             [self.class toValue:OsmAndResourceType::MapStyle],
             [self.class toValue:OsmAndResourceType::MapStylesPresets],
             [self.class toValue:OsmAndResourceType::OnlineTileSources],
@@ -544,6 +546,12 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 @end
 
 @implementation OALocalResourceItem
+
+- (BOOL)isInstalled
+{
+    return YES;
+}
+
 @end
 
 @implementation OAOutdatedResourceItem
@@ -698,7 +706,8 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         case OsmAndResourceType::HillshadeRegion:
         case OsmAndResourceType::SlopeRegion:
         case OsmAndResourceType::WeatherForecast:
-        case OsmAndResourceType::HeightmapRegion:
+        case OsmAndResourceType::HeightmapRegionLegacy:
+        case OsmAndResourceType::GeoTiffRegion:
             if ([region.subregions count] > 0)
             {
                 if (!includeRegionName || region == nil)
@@ -1466,11 +1475,12 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
                    onTaskCreated:(OADownloadTaskCallback)onTaskCreated
                    onTaskResumed:(OADownloadTaskCallback)onTaskResumed
 {
-    if (![self.class checkIfUpdateEnabled:item.worldRegion])
-        return;
-
     OsmAndAppInstance app = [OsmAndApp instance];
     const auto resourceInRepository = app.resourcesManager->getResourceInRepository(item.resourceId);
+    BOOL isFree = resourceInRepository && resourceInRepository->free;
+    if (!isFree && ![self.class checkIfUpdateEnabled:item.worldRegion])
+        return;
+
     NSString* resourceName = [self.class titleOfResource:item.resource inRegion:item.worldRegion withRegionName:YES withResourceType:YES];
 
     uint64_t spaceNeeded = resourceInRepository->packageSize + resourceInRepository->size;

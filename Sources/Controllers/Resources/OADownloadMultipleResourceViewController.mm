@@ -173,14 +173,21 @@
         BOOL shouldSelect = _selectedItems.count == 0;
         NSInteger section = _isSRTM ? 1 : 0;
         if (!shouldSelect)
+        {
             [_selectedItems removeAllObjects];
+        }
         else
-            [_selectedItems addObjectsFromArray:_items];
+        {
+            [_items enumerateObjectsUsingBlock:^(OAResourceItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                if (![obj isInstalled])
+                    [_selectedItems addObject:obj];
+            }];
+        }
 
         for (NSInteger i = 1; i < _items.count + 1; i++)
         {
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow:(i + 1) * 2 - 1 inSection:section];
-            if (shouldSelect)
+            if (shouldSelect && ![_items[i - 1] isInstalled])
                 [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
             else
                 [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -302,7 +309,13 @@
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return _isSingleSRTM ? NO : ![self isDividerCell:indexPath] && indexPath.row > 2;
+    return _isSingleSRTM ? NO : (![self isDividerCell:indexPath] && indexPath.row > 2 && ![self isItemInstalled:indexPath]);
+}
+
+- (BOOL) isItemInstalled:(NSIndexPath *)indexPath
+{
+    OAResourceItem *item = [self getItem:indexPath];
+    return item && [item isInstalled];
 }
 
 - (OAResourceItem *)getItem:(NSIndexPath * _Nonnull)indexPath
@@ -328,8 +341,10 @@
         {
             if (indexPath.row == 0 || indexPath.row == (_items.count + 1) * 2 || _isSingleSRTM)
                 cell.dividerInsets = UIEdgeInsetsZero;
+            else if (indexPath.row == 2)
+                cell.dividerInsets = UIEdgeInsetsMake(0., 20., 0., 0.);
             else
-                cell.dividerInsets = UIEdgeInsetsMake(0., indexPath.row == 2 ? 20. : 110., 0., 0.);
+                cell.dividerInsets = UIEdgeInsetsMake(0., [self tableView:tableView canEditRowAtIndexPath:indexPath] ? 110. : 70., 0., 0.);
         }
         return cell;
     }
@@ -417,7 +432,7 @@
             cell.leftIconView.image = [OAResourceType getIcon:_type.type templated:YES];
             cell.leftIconView.tintColor = selected ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB((installed ? resource_installed_icon_color : color_tint_gray));
             cell.leftIconView.contentMode = UIViewContentModeCenter;
-            cell.editingAccessoryType = installed ? UITableViewCellAccessoryDetailButton : UITableViewCellAccessoryNone;
+            cell.accessoryType = installed ? UITableViewCellAccessoryDetailButton : UITableViewCellAccessoryNone;
 
             cell.titleLabel.text = item.title;
 

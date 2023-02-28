@@ -18,7 +18,7 @@ static NSString* const USER_PREFIX = @"user_";
 static NSString* const CUSTOM_FILTER_ID = @"user_custom_id";
 static NSString* const BY_NAME_FILTER_ID = @"user_by_name";
 
-@class OAPOI, OAPOIBaseType, OAPOIType, OAPOICategory;
+@class OAPOI, OAPOIBaseType, OAPOIType, OAPOICategory, OAAmenityExtendedNameFilter;
 
 @interface OAAmenityNameFilter : NSObject
 
@@ -30,6 +30,7 @@ typedef BOOL(^OAAmenityNameFilterAccept)(OAPOI * poi);
 - (instancetype)initWithAcceptFunc:(OAAmenityNameFilterAccept)aFunction;
 
 @end
+
 
 @interface OAPOIUIFilter : OACustomSearchPoiFilter
 
@@ -77,6 +78,7 @@ typedef BOOL(^OAAmenityNameFilterAccept)(OAPOI * poi);
 - (NSArray<OAPOI *> *) initializeNewSearch:(double)lat lon:(double)lon firstTimeLimit:(int)firstTimeLimit  matcher:(OAResultMatcher<OAPOI *> *)matcher;
 - (NSArray<OAPOI *> *) searchAmenities:(double)top left:(double)left bottom:(double)bottom right:(double)right zoom:(int)zoom matcher:(OAResultMatcher<OAPOI *> *)matcher;
 - (OAAmenityNameFilter *) getNameFilter:(NSString *)filter;
+- (OAAmenityExtendedNameFilter *) getNameAmenityFilter:(NSString *)filter;
 - (NSString *) getNameToken24H;
 - (NSString *) getNameTokenOpen;
 - (NSObject *) getIconResource;

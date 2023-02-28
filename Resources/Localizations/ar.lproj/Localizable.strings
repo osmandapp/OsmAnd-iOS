@@ -2072,7 +2072,7 @@
 "regions" = "المناطق";
 "shared_string_width" = "العرض";
 "shared_string_interval" = "الفاصل الزمني";
-"gpx_selection_segment_title" = "قطعة";
+"gpx_selection_segment_title" = "الجزء";
 "navigate_point_format_UTM" = "UTM";
 "navigate_point_format_unknown" = "تنسيق غير معروف";
 "navigate_point_olc_short" = "OLC";
@@ -2813,3 +2813,11 @@
 "announcement_time_passing" = "تجاوز";
 "announcement_time_descr" = "يعتمد توقيت إعلان العبارات الصوتية المختلفة على نوع العبارة، سرعة التنقل الحالية وسرعة التنقل الافتراضية.";
 "osm_upload_gpx_description_footer" = "سيتم استخدام اسم المسار بدلاً من وصف فارغ. سيتم تطبيق الوصف الذي تم إدخاله على كل مسار.";
+"navigation_history" = "سجل الملاحة";
+"search_history_disabled" = "تم تعطيل سجل البحث";
+"enable_search_history" = "يمكنك تفعيل سجل البحث في الإعدادات";
+"history_clear_alert_title" = "حذف كل السجل";
+"history_preferences_descr" = "يمكنك تعطيل السجل بشكل فردي لكل نوع سجل.";
+"history_actions_footer_text" = "يمكنك تصدير المحفوظات إلى ملف. يمكنك حذف جميع إدخالات التاريخ المسجلة حتى الآن.";
+"map_markers_history" = "سجل علامات الخريطة";
+"history_clear_alert_message" = "هل أنت متأكد أنك تريد حذف كافة عناصر المحفوظات؟";

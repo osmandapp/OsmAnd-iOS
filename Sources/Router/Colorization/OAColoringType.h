@@ -36,6 +36,7 @@
 
 - (OAGradientScaleType *) toGradientScaleType;
 
+- (NSString *) getName:(NSString *)routeInfoAttribute;
 - (BOOL) isCustomColor;
 - (BOOL) isTrackSolid;
 - (BOOL) isSolidSingleColor;

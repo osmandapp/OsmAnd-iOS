@@ -288,7 +288,7 @@
 {
     NSDictionary<NSString *, NSNumber *> *lineAttrs = [_mapViewController getLineRenderingAttributes:@"rulerLine"];
     _rulerLineFontAttrs = [_mapViewController getLineRenderingAttributes:@"rulerLineFont"];
-    BOOL changed = [_rulerLineAttrs isEqualToDictionary:lineAttrs];
+    BOOL changed = ![_rulerLineAttrs isEqualToDictionary:lineAttrs];
     _rulerLineAttrs = lineAttrs;
     return changed;
 }

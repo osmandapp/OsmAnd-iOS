@@ -8,14 +8,11 @@
 
 #import "OABaseVectorLinesLayer.h"
 
-@class OATrackChartPoints, OAPreviewRouteLineInfo;
+@class OAPreviewRouteLineInfo;
 
 @interface OARouteLayer : OABaseVectorLinesLayer
 
 - (void) refreshRoute;
-
-- (void) showCurrentStatisticsLocation:(OATrackChartPoints *) trackPoints;
-- (void) hideCurrentStatisticsLocation;
 
 - (OAPreviewRouteLineInfo *) getPreviewRouteLineInfo;
 - (void) setPreviewRouteLineInfo:(OAPreviewRouteLineInfo *)previewInfo;

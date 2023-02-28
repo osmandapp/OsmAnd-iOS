@@ -582,9 +582,10 @@
             if (idx > 0)
                 streetName.text = [streetName.text substringToIndex:idx];
             
-            if (_roadShieldName && [streetName.text containsString:_roadShieldName])
+            if (_roadShieldName && [streetName.text hasPrefix:_roadShieldName])
             {
-                streetName.text = [streetName.text stringByReplacingOccurrencesOfString:_roadShieldName withString:@""];
+                NSRange roadShieldNameRange = [streetName.text rangeOfString:_roadShieldName];
+                streetName.text = [streetName.text stringByReplacingCharactersInRange:roadShieldNameRange withString:@""];
                 streetName.text = [streetName.text trim];
             }
         }

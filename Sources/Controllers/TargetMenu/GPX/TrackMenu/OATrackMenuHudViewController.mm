@@ -287,7 +287,7 @@
 {
     [super hide:YES duration:duration onComplete:^{
         [self stopLocationServices];
-        [self.mapViewController.mapLayers.routeMapLayer hideCurrentStatisticsLocation];
+        [self.mapViewController.mapLayers.gpxMapLayer hideCurrentStatisticsLocation];
         if (onComplete)
             onComplete();
         [_headerView removeFromSuperview];
@@ -866,7 +866,8 @@
     [self hide:YES duration:.2 onComplete:^{
         [self.mapPanelViewController openTargetViewWithRouteDetailsGraph:self.doc
                                                                 analysis:analysis
-                                                        menuControlState:[self getCurrentStateForAnalyze:mode]];
+                                                        menuControlState:[self getCurrentStateForAnalyze:mode]
+                                                                 isRoute:NO];
     }];
 }
 
@@ -928,7 +929,7 @@
                         animations: ^(void) {
             [self.tableView reloadData];
         } completion:^(BOOL finished) {
-            [self.mapViewController.mapLayers.routeMapLayer hideCurrentStatisticsLocation];
+            [self.mapViewController.mapLayers.gpxMapLayer hideCurrentStatisticsLocation];
         }];
 
         if (_headerView)
@@ -1255,7 +1256,7 @@
 {
     if (!_routeLineChartHelper)
     {
-        _routeLineChartHelper = [[OARouteLineChartHelper alloc] initWithGpxDoc:self.doc];
+        _routeLineChartHelper = [[OARouteLineChartHelper alloc] initWithGpxDoc:self.doc layer:self.mapViewController.mapLayers.gpxMapLayer];
         _routeLineChartHelper.delegate = self;
         _routeLineChartHelper.isLandscape = [self isLandscape];
         _routeLineChartHelper.screenBBox = CGRectMake(
@@ -1761,7 +1762,7 @@
     {
         _isTabSelecting = YES;
         if (_selectedTab == EOATrackMenuHudSegmentsTab)
-            [self.mapViewController.mapLayers.routeMapLayer hideCurrentStatisticsLocation];
+            [self.mapViewController.mapLayers.gpxMapLayer hideCurrentStatisticsLocation];
 
         if (_selectedTab == EOATrackMenuHudOverviewTab || _selectedTab == EOATrackMenuHudPointsTab)
             [self stopLocationServices];

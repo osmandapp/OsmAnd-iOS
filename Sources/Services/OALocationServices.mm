@@ -514,6 +514,10 @@
 
         [self suspend];
     }
+    else
+    {
+        [self setupDistanceFilter:YES];
+    }
 }
 
 
@@ -527,6 +531,19 @@
 
         [self resume];
     }
+    else
+    {
+        [self setupDistanceFilter:NO];
+    }
+}
+
+- (void) setupDistanceFilter:(BOOL)enable
+{
+    if (enable)
+        _manager.distanceFilter = [_settings.applicationMode.get getBackgroundDistanceFilter];
+    else
+        _manager.distanceFilter = kCLDistanceFilterNone;
+    
 }
 
 + (BOOL) isPointAccurateForRouting:(CLLocation *)loc

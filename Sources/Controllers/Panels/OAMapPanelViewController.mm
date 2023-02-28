@@ -2908,6 +2908,14 @@ typedef enum
                                     analysis:(OAGPXTrackAnalysis *)analysis
                             menuControlState:(OATargetMenuViewControllerState *)menuControlState
 {
+    [self openTargetViewWithRouteDetailsGraph:gpx analysis:analysis menuControlState:menuControlState isRoute:YES];
+}
+
+- (void) openTargetViewWithRouteDetailsGraph:(OAGPXDocument *)gpx
+                                    analysis:(OAGPXTrackAnalysis *)analysis
+                            menuControlState:(OATargetMenuViewControllerState *)menuControlState
+                                     isRoute:(BOOL)isRoute
+{
     [_mapViewController hideContextPinMarker];
     [self closeDashboard];
     [self closeRouteInfo];
@@ -2923,7 +2931,7 @@ typedef enum
     targetPoint.toolbarNeeded = NO;
     
     if (gpx && analysis)
-        targetPoint.targetObj = @{@"gpx" : gpx, @"analysis" : analysis};
+        targetPoint.targetObj = @{@"gpx" : gpx, @"analysis" : analysis, @"route" : @(isRoute)};
     else
         targetPoint.targetObj = nil;
     

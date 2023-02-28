@@ -174,7 +174,7 @@
     if (_buttons.count > _selectedButtonIndex)
     {
         OAButton *button = _buttons[_selectedButtonIndex];
-        [UIView animateWithDuration:0.3 animations:^{
+        [UIView animateWithDuration:0.2 animations:^{
             button.layer.backgroundColor = UIColorFromRGB(color_coordinates_background).CGColor;
             button.layer.borderColor = UIColor.clearColor.CGColor;
             button.tintColor = UIColor.whiteColor;
@@ -183,9 +183,9 @@
                 button.layer.backgroundColor = UIColor.clearColor.CGColor;
                 button.layer.borderColor = UIColorFromRGB(color_tint_gray).CGColor;
                 button.tintColor = UIColorFromRGB(color_primary_purple);
-                [OAUtilities showMenuInView:self fromView:button];
             }];
         }];
+        [OAUtilities showMenuInView:self fromView:button];
     }
 }
 

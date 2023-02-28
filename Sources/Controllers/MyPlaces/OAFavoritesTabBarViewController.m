@@ -48,7 +48,7 @@
 
 - (void)viewWillDisappear:(BOOL)animated
 {
-    [super viewWillDisappear:YES];
+    [super viewWillDisappear:animated];
     self.navigationItem.searchController = nil;
 }
 

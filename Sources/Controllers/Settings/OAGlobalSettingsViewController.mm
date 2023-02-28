@@ -455,8 +455,7 @@
             {
                 OAUninstallSpeedCamerasViewController *uninstallSpeedCamerasViewController = [[OAUninstallSpeedCamerasViewController alloc] init];
                 uninstallSpeedCamerasViewController.delegate = self;
-                UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:uninstallSpeedCamerasViewController];
-                [self.navigationController presentViewController:navigationController animated:YES completion:nil];
+                [self showModalViewController:uninstallSpeedCamerasViewController];
             }
             else
             {

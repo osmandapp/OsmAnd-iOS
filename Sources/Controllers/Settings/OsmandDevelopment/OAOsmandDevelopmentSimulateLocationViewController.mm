@@ -270,8 +270,7 @@ NSString *const kStartStopButtonKey = @"kStartStopButtonKey";
 {
     OAOsmandDevelopmentSimulateSpeedSelectorViewController *vc = [[OAOsmandDevelopmentSimulateSpeedSelectorViewController alloc] init];
     vc.speedSelectorDelegate = self;
-    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:vc];
-    [self.navigationController presentViewController:navigationController animated:YES completion:nil];
+    [self showModalViewController:vc];
 }
 
 - (void) setTrackAnimationEnabled:(BOOL)isEnabled

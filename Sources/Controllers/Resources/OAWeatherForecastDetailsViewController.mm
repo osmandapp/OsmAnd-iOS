@@ -359,8 +359,7 @@
     {
         OAWeatherCacheSettingsViewController *controller = [[OAWeatherCacheSettingsViewController alloc] initWithRegion:_region];
         controller.cacheDelegate = self;
-        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
-        [self.navigationController presentViewController:navigationController animated:YES completion:nil];
+        [self showModalViewController:controller];
     }
     else if ([item[@"key"] isEqualToString:@"update_now_cell"])
     {
@@ -412,8 +411,7 @@
         OAWeatherFrequencySettingsViewController *frequencySettingsViewController =
                 [[OAWeatherFrequencySettingsViewController alloc] initWithRegion:_region];
         frequencySettingsViewController.frequencyDelegate = self;
-        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:frequencySettingsViewController];
-        [self.navigationController presentViewController:navigationController animated:YES completion:nil];
+        [self showModalViewController:frequencySettingsViewController];
     }
 }
 

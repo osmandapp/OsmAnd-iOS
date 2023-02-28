@@ -82,7 +82,7 @@
     if ([self.navigationController isNavigationBarHidden] && [self isNavbarVisible])
         [self.navigationController setNavigationBarHidden:NO animated:YES];
 
-    BOOL isBigTitle = [self getNavbarStyle] == EOABaseNavbarStyleLargeTitle;
+    BOOL isLargeTitle = [self getNavbarStyle] == EOABaseNavbarStyleLargeTitle;
 
     UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
     [appearance configureWithOpaqueBackground];
@@ -105,7 +105,7 @@
     self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
 
     self.navigationController.navigationBar.tintColor = [self getNavbarButtonsTintColor];
-    self.navigationItem.largeTitleDisplayMode = isBigTitle ? UINavigationItemLargeTitleDisplayModeAlways : UINavigationItemLargeTitleDisplayModeNever;
+    self.navigationItem.largeTitleDisplayMode = isLargeTitle ? UINavigationItemLargeTitleDisplayModeAlways : UINavigationItemLargeTitleDisplayModeNever;
 
     if (_navbarHeightSmall == 0)
         _navbarHeightSmall = self.navigationController.navigationBar.frame.size.height;
@@ -167,8 +167,8 @@
 {
     self.title = [self getTitle];
     NSString *sub = [self getSubtitle];
-    BOOL isCustomBigTitle = [self getNavbarStyle] == EOABaseNavbarStyleCustomLargeTitle;
-    if ((sub && sub.length > 0) || isCustomBigTitle)
+    BOOL isCustomLargeTitle = [self getNavbarStyle] == EOABaseNavbarStyleCustomLargeTitle;
+    if ((sub && sub.length > 0) || isCustomLargeTitle)
     {
         [self.navigationItem setStackViewWithTitle:[self getTitle]
                                         titleColor:[self getTitleColor]
@@ -369,14 +369,14 @@
     }
 }
 
-- (BOOL)isBigTitle
+- (BOOL)isAnyLargeTitle
 {
     return [self getNavbarStyle] == EOABaseNavbarStyleLargeTitle || [self getNavbarStyle] == EOABaseNavbarStyleCustomLargeTitle;
 }
 
 - (UIColor *)getNavbarBackgroundColor
 {
-    if ([self isBigTitle])
+    if ([self isAnyLargeTitle])
         return self.tableView.backgroundColor;
 
     EOABaseNavbarColorScheme colorScheme = [self getNavbarColorScheme];

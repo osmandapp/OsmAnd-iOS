@@ -175,4 +175,10 @@
         [self.navigationController pushViewController:viewController animated:YES];
 }
 
+- (void)showModalViewController:(UIViewController *)viewController
+{
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
+    [self.navigationController presentViewController:navigationController animated:YES completion:nil];
+}
+
 @end

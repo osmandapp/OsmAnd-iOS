@@ -416,8 +416,7 @@
         settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsExternalInputDevices applicationMode:self.appMode];
     settingsViewController.delegate = self;
 
-    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:settingsViewController];
-    [self.navigationController presentViewController:navigationController animated:YES completion:nil];
+    [self showModalViewController:settingsViewController];
 }
 
 #pragma mark - Selectors

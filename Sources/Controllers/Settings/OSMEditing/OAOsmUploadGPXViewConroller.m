@@ -96,8 +96,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
     {
         OAOsmAccountSettingsViewController *accountSettings = [[OAOsmAccountSettingsViewController alloc] init];
         accountSettings.accountDelegate = self;
-        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:accountSettings];
-        [self.navigationController presentViewController:navigationController animated:YES completion:nil];
+        [self showModalViewController:accountSettings];
     }
 }
 
@@ -517,8 +516,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
 {
     OAOsmUploadGPXVisibilityViewConroller *vc = [[OAOsmUploadGPXVisibilityViewConroller alloc] initWithVisibility:_selectedVisibility];
     vc.visibilityDelegate = self;
-    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:vc];
-    [self.navigationController presentViewController:navigationController animated:YES completion:nil];
+    [self showModalViewController:vc];
 }
 
 - (void)onAccountButtonPressed
@@ -527,8 +525,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
     {
         OAOsmAccountSettingsViewController *accountSettings = [[OAOsmAccountSettingsViewController alloc] init];
         accountSettings.accountDelegate = self;
-        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:accountSettings];
-        [self.navigationController presentViewController:navigationController animated:YES completion:nil];
+        [self showModalViewController:accountSettings];
     }
     else
     {

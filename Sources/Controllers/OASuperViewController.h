@@ -28,5 +28,6 @@
 
 - (void)dismissViewController;
 - (void)showViewController:(UIViewController *)viewController;
+- (void)showModalViewController:(UIViewController *)viewController;
 
 @end

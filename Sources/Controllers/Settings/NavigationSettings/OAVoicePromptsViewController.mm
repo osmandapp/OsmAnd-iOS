@@ -432,8 +432,7 @@
         {
             OAUninstallSpeedCamerasViewController *speedCamerasViewController = [[OAUninstallSpeedCamerasViewController alloc] init];
             speedCamerasViewController.delegate = self;
-            UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:speedCamerasViewController];
-            [self.navigationController presentViewController:navigationController animated:YES completion:nil];
+            [self showModalViewController:speedCamerasViewController];
         }
     }
 }

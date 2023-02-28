@@ -197,8 +197,7 @@
             [[OAManageTypeViewController alloc] initWithSettingsType:type
                                                                 size:[self getItem:[self getSelectedIndexPath]][@"description"]];
     manageTypeViewController.manageTypeDelegate = self;
-    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:manageTypeViewController];
-    [self.navigationController presentViewController:navigationController animated:YES completion:nil];
+    [self showModalViewController:manageTypeViewController];
 }
 
 #pragma mark - Additions

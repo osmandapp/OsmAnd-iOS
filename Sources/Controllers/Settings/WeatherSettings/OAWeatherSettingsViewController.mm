@@ -60,6 +60,8 @@
     return OALocalizedString(@"shared_string_settings");
 }
 
+#pragma mark - Table data
+
 - (void)generateData
 {
     NSMutableArray<NSDictionary *> *data = [NSMutableArray array];
@@ -236,19 +238,22 @@
         OAWeatherBandSettingsViewController *controller =
                 [[OAWeatherBandSettingsViewController alloc] initWithWeatherBand:item[@"band"]];
         controller.bandDelegate = self;
-        [self presentViewController:controller animated:YES completion:nil];
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
+        [self.navigationController presentViewController:navigationController animated:YES completion:nil];
     }
     else if ([item[@"key"] isEqualToString:@"online_cache"])
     {
         OAWeatherCacheSettingsViewController *controller = [[OAWeatherCacheSettingsViewController alloc] initWithCacheType:EOAWeatherOnlineData];
         controller.cacheDelegate = self;
-        [self presentViewController:controller animated:YES completion:nil];
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
+        [self.navigationController presentViewController:navigationController animated:YES completion:nil];
     }
     else if ([item[@"key"] isEqualToString:@"offline_forecast"])
     {
         OAWeatherCacheSettingsViewController *controller = [[OAWeatherCacheSettingsViewController alloc] initWithCacheType:EOAWeatherOfflineData];
         controller.cacheDelegate = self;
-        [self presentViewController:controller animated:YES completion:nil];
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
+        [self.navigationController presentViewController:navigationController animated:YES completion:nil];
     }
 }
 

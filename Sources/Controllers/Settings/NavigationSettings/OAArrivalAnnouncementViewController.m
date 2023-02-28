@@ -42,20 +42,59 @@
     _announceTimeDistances = [[OAAnnounceTimeDistances alloc] initWithAppMode:self.appMode];
 }
 
-#pragma mark - UIViewController
-
-- (void) viewDidLoad
-{
-    [super viewDidLoad];
-
-    [self setupTableHeaderViewWithText:OALocalizedString(@"announcement_time_descr")];
-}
-
 #pragma mark - Base UI
 
 - (NSString *)getTitle
 {
     return OALocalizedString(@"arrival_distance");
+}
+
+- (EOABaseNavbarStyle)getNavbarStyle
+{
+    return EOABaseNavbarStyleDescription;
+}
+
+- (void)setupCustomLargeTitleView
+{
+    NSString *text = OALocalizedString(@"announcement_time_descr");
+    CGFloat textWidth = DeviceScreenWidth - (kSidePadding + [OAUtilities getLeftMargin]) * 2;
+    CGFloat textHeight = [OAUtilities heightForHeaderViewText:text width:textWidth font:kHeaderDescriptionFontSmall lineSpacing:6.0];
+
+    UIView *topImageDivider = [[UIView alloc] initWithFrame:CGRectMake(0., 0., DeviceScreenWidth, .5)];
+    topImageDivider.backgroundColor = UIColorFromRGB(color_tint_gray);
+
+    UIImage *image = [UIImage imageNamed:@"img_help_announcement_time_day"];
+    CGFloat aspectRatio = MIN(DeviceScreenWidth, DeviceScreenHeight) / image.size.width;
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0., 0., DeviceScreenWidth, image.size.height * aspectRatio)];
+    imageView.image = image;
+    imageView.contentMode = UIViewContentModeScaleAspectFit;
+
+    UIView *imageBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0., 0.5, DeviceScreenWidth, imageView.frame.size.height)];
+    imageBackgroundView.backgroundColor = UIColor.whiteColor;
+
+    UIView *bottomImageDivider = [[UIView alloc] initWithFrame:CGRectMake(0., imageView.frame.origin.y + imageView.frame.size.height, DeviceScreenWidth, .5)];
+    bottomImageDivider.backgroundColor = UIColorFromRGB(color_tint_gray);
+
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(kSidePadding + [OAUtilities getLeftMargin], imageView.frame.size.height + 13., textWidth, textHeight)];
+    NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+    style.minimumLineHeight = 17.;
+    label.attributedText = [[NSAttributedString alloc] initWithString:text
+                                                           attributes:@{ NSParagraphStyleAttributeName : style,
+                                                                         NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer),
+                                                                         NSFontAttributeName : kHeaderDescriptionFontSmall,
+                                                                         NSBackgroundColorAttributeName : UIColor.clearColor }];
+    label.numberOfLines = 0;
+    label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+
+    CGFloat headerHeight = label.frame.origin.y + label.frame.size.height + 26.;
+    UIView *tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0., 0., DeviceScreenWidth, headerHeight)];
+    [tableHeaderView addSubview:imageBackgroundView];
+    [tableHeaderView addSubview:imageView];
+    [tableHeaderView addSubview:topImageDivider];
+    [tableHeaderView addSubview:bottomImageDivider];
+    [tableHeaderView addSubview:label];
+    tableHeaderView.backgroundColor = UIColor.clearColor;
+    self.tableView.tableHeaderView = tableHeaderView;
 }
 
 #pragma mark - Table data
@@ -101,6 +140,11 @@
     [infoCollapsableRow addDependentRow:[[OATableRowData alloc] initWithData:@{
         kCellTypeKey : [OATextMultilineTableViewCell getCellIdentifier]
     }]];
+}
+
+- (BOOL)hideFirstHeader
+{
+    return YES;
 }
 
 - (NSInteger)rowsCount:(NSInteger)section
@@ -187,11 +231,6 @@
 
 #pragma mark - Selectors
 
-- (void)onRotation
-{
-    [self setupTableHeaderViewWithText:OALocalizedString(@"announcement_time_descr")];
-}
-
 - (void)updateArrivalDistanceFactorValue
 {
     [_settings.arrivalDistanceFactor set:((NSNumber *) [[_data itemForIndexPath:_selectedIndexPath] objForKey:@"value"]).doubleValue
@@ -222,55 +261,6 @@
                 [self.tableView insertRowsAtIndexPaths:rowIndexes withRowAnimation:UITableViewRowAnimationAutomatic];
         } completion:nil];
     }
-}
-
-#pragma mark - Additions
-
-- (void)setupTableHeaderViewWithText:(NSString *)text
-{
-    CGFloat textWidth = DeviceScreenWidth - (kSidePadding + [OAUtilities getLeftMargin]) * 2;
-    CGFloat textHeight = [self heightForLabel:text];
-
-    UIView *topImageDivider = [[UIView alloc] initWithFrame:CGRectMake(0., 0., DeviceScreenWidth, .5)];
-    topImageDivider.backgroundColor = UIColorFromRGB(color_tint_gray);
-
-    UIImage *image = [UIImage imageNamed:@"img_help_announcement_time_day"];
-    CGFloat aspectRatio = MIN(DeviceScreenWidth, DeviceScreenHeight) / image.size.width;
-    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0., 0., DeviceScreenWidth, image.size.height * aspectRatio)];
-    imageView.image = image;
-    imageView.contentMode = UIViewContentModeScaleAspectFit;
-
-    UIView *imageBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0., 0.5, DeviceScreenWidth, imageView.frame.size.height)];
-    imageBackgroundView.backgroundColor = UIColor.whiteColor;
-
-    UIView *bottomImageDivider = [[UIView alloc] initWithFrame:CGRectMake(0., imageView.frame.origin.y + imageView.frame.size.height, DeviceScreenWidth, .5)];
-    bottomImageDivider.backgroundColor = UIColorFromRGB(color_tint_gray);
-
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(kSidePadding + [OAUtilities getLeftMargin], imageView.frame.size.height + 13., textWidth, textHeight)];
-    NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
-    style.minimumLineHeight = 17.;
-    label.attributedText = [[NSAttributedString alloc] initWithString:text
-                                                           attributes:@{ NSParagraphStyleAttributeName : style,
-                                                                         NSForegroundColorAttributeName : UIColorFromRGB(color_text_footer),
-                                                                         NSFontAttributeName : [UIFont scaledSystemFontOfSize:[self fontSizeForLabel]],
-                                                                         NSBackgroundColorAttributeName : UIColor.clearColor }];
-    label.numberOfLines = 0;
-    label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-
-    CGFloat headerHeight = label.frame.origin.y + label.frame.size.height + 26.;
-    UIView *tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0., 0., DeviceScreenWidth, headerHeight)];
-    [tableHeaderView addSubview:imageBackgroundView];
-    [tableHeaderView addSubview:imageView];
-    [tableHeaderView addSubview:topImageDivider];
-    [tableHeaderView addSubview:bottomImageDivider];
-    [tableHeaderView addSubview:label];
-    tableHeaderView.backgroundColor = UIColor.clearColor;
-    self.tableView.tableHeaderView = tableHeaderView;
-}
-
-- (CGFloat)fontSizeForLabel
-{
-    return 13.;
 }
 
 @end

@@ -40,11 +40,6 @@
     return OALocalizedString(@"backup_data");
 }
 
-- (NSString *)getLeftNavbarButtonTitle
-{
-    return OALocalizedString(@"shared_string_settings");
-}
-
 #pragma mark - Table data
 
 - (void)generateData

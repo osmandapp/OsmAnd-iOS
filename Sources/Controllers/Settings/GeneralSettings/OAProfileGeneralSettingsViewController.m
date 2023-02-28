@@ -415,7 +415,9 @@
     else if ([itemKey isEqualToString:@"externalImputDevice"])
         settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsExternalInputDevices applicationMode:self.appMode];
     settingsViewController.delegate = self;
-    [self presentViewController:settingsViewController animated:YES completion:nil];
+
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:settingsViewController];
+    [self.navigationController presentViewController:navigationController animated:YES completion:nil];
 }
 
 #pragma mark - Selectors

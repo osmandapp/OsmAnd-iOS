@@ -26,6 +26,8 @@
     BOOL _isAvoid;
 }
 
+#pragma mark - Initialization
+
 - (instancetype) initWithAppMode:(OAApplicationMode *)appMode isAvoid:(BOOL)isAvoid
 {
     self = [super initWithAppMode:appMode];
@@ -36,17 +38,24 @@
     return self;
 }
 
-- (void) viewDidLoad
-{
-    [super viewDidLoad];
-
-    [self setupTableHeaderViewWithText:OALocalizedString(@"avoid_in_routing_descr_")];
-}
+#pragma mark - Base UI
 
 - (NSString *)getTitle
 {
     return _isAvoid ? OALocalizedString(@"impassable_road") : OALocalizedString(@"prefer_in_routing_title");
 }
+
+- (EOABaseNavbarStyle)getNavbarStyle
+{
+    return EOABaseNavbarStyleDescription;
+}
+
+- (NSString *)getCustomTableViewDescription
+{
+    return OALocalizedString(@"avoid_in_routing_descr_");
+}
+
+#pragma mark - Table data
 
 - (void)generateData
 {
@@ -78,6 +87,11 @@
         }
     }
     _data = [NSArray arrayWithArray:dataArr];
+}
+
+- (BOOL)hideFirstHeader
+{
+    return YES;
 }
 
 - (NSInteger)rowsCount:(NSInteger)section
@@ -124,17 +138,7 @@
     return 1;
 }
 
-- (CGFloat)getCustomHeightForHeader:(NSInteger)section
-{
-    return 17.;
-}
-
 #pragma mark - Selectors
-
-- (void)onRotation
-{
-    [self setupTableHeaderViewWithText:OALocalizedString(@"avoid_in_routing_descr_")];
-}
 
 - (void) applyParameter:(id)sender
 {

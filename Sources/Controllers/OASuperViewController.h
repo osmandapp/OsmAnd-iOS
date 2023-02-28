@@ -17,14 +17,11 @@
 - (void)registerObservers;
 - (OAAutoObserverProxy *)addObserver:(OAAutoObserverProxy *)observer;
 
-- (CGFloat)getNavbarEstimatedHeight;
-- (void)updateNavbarEstimatedHeight;
-- (void)resetNavbarEstimatedHeight;
-- (void)adjustScrollStartPosition;
 - (void)applyLocalization;
 - (void)addAccessibilityLabels;
 - (BOOL)isModal;
 - (BOOL)isScreenLoaded;
+- (CGFloat)getNavbarHeight;
 
 - (void)onLeftNavbarButtonPressed;
 - (void)onContentSizeChanged:(NSNotification *)notification;

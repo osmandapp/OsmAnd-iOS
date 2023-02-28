@@ -304,7 +304,8 @@
         {
             OAOsmAccountSettingsViewController *accountSettings = [[OAOsmAccountSettingsViewController alloc] init];
             accountSettings.accountDelegate = self;
-            [self presentViewController:accountSettings animated:YES completion:nil];
+            UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:accountSettings];
+            [self.navigationController presentViewController:navigationController animated:YES completion:nil];
         }
     }
 }

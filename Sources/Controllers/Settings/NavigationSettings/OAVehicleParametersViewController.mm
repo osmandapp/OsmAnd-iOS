@@ -60,11 +60,6 @@
     return OALocalizedString(@"vehicle_parameters");
 }
 
-- (NSString *)getLeftNavbarButtonTitle
-{
-    return OALocalizedString(@"routing_settings");
-}
-
 #pragma mark - Table data
 
 - (void)generateData

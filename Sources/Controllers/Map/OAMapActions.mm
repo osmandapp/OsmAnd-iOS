@@ -113,7 +113,8 @@
     if (![_settings.speedCamerasAlertShown get])
     {
         OAUninstallSpeedCamerasViewController *speedCamerasViewController = [[OAUninstallSpeedCamerasViewController alloc] init];
-        [[OARootViewController instance] presentViewController:speedCamerasViewController animated:YES completion:nil];
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:speedCamerasViewController];
+        [[OARootViewController instance] presentViewController:navigationController animated:YES completion:nil];
     }
 }
 

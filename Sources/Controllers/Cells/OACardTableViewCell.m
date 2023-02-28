@@ -7,6 +7,7 @@
 //
 
 #import "OACardTableViewCell.h"
+#import "OASizes.h"
 
 @interface OACardTableViewCell ()
 
@@ -15,6 +16,11 @@
 @end
 
 @implementation OACardTableViewCell
+
+- (void)updateSeparatorInset
+{
+    self.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingOnSideOfContent, 0., 0.);
+}
 
 - (void)topBackgroundMarginVisibility:(BOOL)show
 {

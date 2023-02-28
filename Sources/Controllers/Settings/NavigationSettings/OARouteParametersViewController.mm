@@ -526,7 +526,8 @@
     if (settingsViewController)
     {
         settingsViewController.delegate = self;
-        [self presentViewController:settingsViewController animated:YES completion:nil];
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:settingsViewController];
+        [self.navigationController presentViewController:navigationController animated:YES completion:nil];
     }
 }
 

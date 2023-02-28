@@ -1154,7 +1154,8 @@
     {
         OAWeatherCacheSettingsViewController *controller = [[OAWeatherCacheSettingsViewController alloc] initWithCacheType:EOAWeatherOfflineData];
         controller.cacheDelegate = self;
-        [self presentViewController:controller animated:YES completion:nil];
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
+        [self.navigationController presentViewController:navigationController animated:YES completion:nil];
     }
     else if ([item[@"key"] isEqualToString:@"select_cell"])
     {

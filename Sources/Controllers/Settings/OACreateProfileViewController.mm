@@ -43,9 +43,9 @@
     return NO;
 }
 
-- (EOABaseTableHeaderMode)getTableHeaderMode
+- (EOABaseNavbarStyle)getNavbarStyle
 {
-    return EOABaseTableHeaderModeBigTitle;
+    return EOABaseNavbarStyleLargeTitle;
 }
 
 #pragma mark - Table data

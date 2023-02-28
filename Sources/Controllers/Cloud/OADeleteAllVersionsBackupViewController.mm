@@ -42,41 +42,13 @@
         _screenType = screenType;
         _progressFilesCompleteCount = 0;
         _progressFilesTotalCount = 1;
+        [self postInit];
     }
     return self;
 }
 
-#pragma mark - UIViewController
-
-- (void)viewDidLoad
+- (void)postInit
 {
-    [super viewDidLoad];
-
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    self.tableView.allowsSelection = NO;
-
-    BOOL isProgress = _screenType == EOADeleteAllDataProgressBackupScreenType
-            || _screenType == EOARemoveOldVersionsProgressBackupScreenType;
-    if ([self isChevronIconVisible])
-    {
-        [self.leftNavbarButton setImage:[UIImage templateImageNamed:isProgress ? @"ic_navbar_close" : @"ic_navbar_chevron"]
-                               forState:UIControlStateNormal];
-        self.bottomButton.hidden = YES;
-    }
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    [self deleteBackupFiles];
-}
-
-#pragma mark - Base UI
-
-- (void)applyLocalization
-{
-    [super applyLocalization];
-
     _sectionDescription = @"";
     switch (_screenType)
     {
@@ -105,6 +77,24 @@
     }
 }
 
+#pragma mark - UIViewController
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableView.allowsSelection = NO;
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [self deleteBackupFiles];
+}
+
+#pragma mark - Base UI
+
 - (NSString *)getTitle
 {
     switch (_screenType)
@@ -128,19 +118,24 @@
     return _screenType == EOARemoveOldVersionsBackupScreenType || _screenType == EOADeleteAllDataConfirmBackupScreenType ? OALocalizedString(@"shared_string_cancel") : @"";
 }
 
+- (UIImage *)getCustomIconForLeftNavbarButton
+{
+    NSString *iconName;
+    if (_screenType == EOADeleteAllDataBackupScreenType)
+        iconName = @"ic_navbar_chevron";
+    else if (_screenType == EOADeleteAllDataProgressBackupScreenType || _screenType == EOARemoveOldVersionsProgressBackupScreenType)
+        iconName = @"ic_navbar_close";
+    return iconName ? [UIImage templateImageNamed:iconName] : nil;
+}
+
 - (BOOL)isNavbarSeparatorVisible
 {
     return NO;
 }
 
-- (BOOL)isChevronIconVisible
+- (EOABaseNavbarStyle)getNavbarStyle
 {
-    return _screenType == EOADeleteAllDataBackupScreenType || _screenType == EOADeleteAllDataProgressBackupScreenType || _screenType == EOARemoveOldVersionsProgressBackupScreenType;
-}
-
-- (EOABaseTableHeaderMode)getTableHeaderMode
-{
-    return EOABaseTableHeaderModeBigTitle;
+    return EOABaseNavbarStyleLargeTitle;
 }
 
 - (NSString *)getTopButtonTitle

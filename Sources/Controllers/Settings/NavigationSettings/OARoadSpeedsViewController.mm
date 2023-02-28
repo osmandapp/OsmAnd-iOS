@@ -89,15 +89,6 @@
     _baseMaxSpeed = round(MAX(_maxValue, router->getMaxSpeed() * _ratio * 1.5));
 }
 
-#pragma mark - UIViewController
-
-- (void) viewDidLoad
-{
-    [super viewDidLoad];
-
-    [self setupTableHeaderViewWithText:OALocalizedString(@"road_speeds_descr")];
-}
-
 #pragma mark - Base UI
 
 - (NSString *)getTitle
@@ -115,9 +106,14 @@
     return OALocalizedString(@"shared_string_done");
 }
 
-- (BOOL)isChevronIconVisible
+- (EOABaseNavbarStyle)getNavbarStyle
 {
-    return NO;
+    return EOABaseNavbarStyleDescription;
+}
+
+- (NSString *)getCustomTableViewDescription
+{
+    return OALocalizedString(@"road_speeds_descr");
 }
 
 #pragma mark - Table data
@@ -141,6 +137,11 @@
         @"maxValue" : [NSString stringWithFormat:@"%ld %@", _baseMaxSpeed, _units],
     }];
     _data = [NSArray arrayWithArray:tableData];
+}
+
+- (BOOL)hideFirstHeader
+{
+    return YES;
 }
 
 - (NSInteger)rowsCount:(NSInteger)section
@@ -199,11 +200,6 @@
     return 1;
 }
 
-- (CGFloat)getCustomHeightForHeader:(NSInteger)section
-{
-    return 17.;
-}
-
 - (CGFloat)getCustomHeightForFooter:(NSInteger)section
 {
     CGFloat textWidth = DeviceScreenWidth - (kSidePadding + [OAUtilities getLeftMargin]) * 2;
@@ -226,11 +222,6 @@
 }
 
 #pragma mark - Selectors
-
-- (void)onRotation
-{
-    [self setupTableHeaderViewWithText:OALocalizedString(@"road_speeds_descr")];
-}
 
 - (void)onRightNavbarButtonPressed
 {

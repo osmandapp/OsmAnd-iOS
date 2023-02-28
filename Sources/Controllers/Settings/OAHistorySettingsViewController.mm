@@ -138,11 +138,6 @@
     return EOABaseNavbarColorSchemeOrange;
 }
 
-- (BOOL)isChevronIconVisible
-{
-    return !self.tableView.editing;
-}
-
 - (UILayoutConstraintAxis)getBottomAxisMode
 {
     return UILayoutConstraintAxisHorizontal;
@@ -603,7 +598,6 @@
                     {
                         [self generateData];
                         [self.tableView reloadData];
-                        [self.rightNavbarButton setTitle:[self getRightNavbarButtonTitle] forState:UIControlStateNormal];
                         [self updateNavbar];
                     }
     completion:nil];

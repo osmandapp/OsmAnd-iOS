@@ -105,8 +105,6 @@ typedef NS_ENUM(NSInteger, EOARouteParamType) {
 
     [self.tableView registerClass:OATableViewCustomFooterView.class
         forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
-    if (_isGoodsRestrictionsCategory)
-        [self setupTableHeaderViewWithText:OALocalizedString(@"routing_attr_goods_restrictions_header_name")];
 }
 
 #pragma mark - Base UI
@@ -118,7 +116,22 @@ typedef NS_ENUM(NSInteger, EOARouteParamType) {
         : [_group getText];
 }
 
+- (EOABaseNavbarStyle)getNavbarStyle
+{
+    return _isGoodsRestrictionsCategory ? EOABaseNavbarStyleDescription : EOABaseNavbarStyleSimple;
+}
+
+- (NSString *)getCustomTableViewDescription
+{
+    return _isGoodsRestrictionsCategory ? OALocalizedString(@"road_speeds_descr") : @"";
+}
+
 #pragma mark - Table data
+
+- (BOOL)hideFirstHeader
+{
+    return _isGoodsRestrictionsCategory;
+}
 
 - (NSString *)getTitleForHeader:(NSInteger)section
 {
@@ -316,14 +329,6 @@ typedef NS_ENUM(NSInteger, EOARouteParamType) {
         [self.tableView reloadData];
     else
         [self dismissViewController];
-}
-
-#pragma mark - Selectors
-
-- (void)onRotation
-{
-    if (_isGoodsRestrictionsCategory)
-        [self setupTableHeaderViewWithText:OALocalizedString(@"routing_attr_goods_restrictions_header_name")];
 }
 
 @end

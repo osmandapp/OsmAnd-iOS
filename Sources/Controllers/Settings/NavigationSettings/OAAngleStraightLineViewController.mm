@@ -63,11 +63,6 @@
     return OALocalizedString(@"shared_string_done");
 }
 
-- (BOOL)isChevronIconVisible
-{
-    return NO;
-}
-
 #pragma mark - Table data
 
 - (void)generateData

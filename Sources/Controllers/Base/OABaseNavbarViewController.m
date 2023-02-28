@@ -13,18 +13,20 @@
 #import "OAColors.h"
 #import "Localization.h"
 
-@interface OABaseNavbarViewController ()
-
-@property (weak, nonatomic) IBOutlet UIView *navbarBackgroundView;
-@property (weak, nonatomic) IBOutlet UIStackView *navbarStackView;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *navbarStackViewEstimatedHeightConstraint;
-
-@end
+#define kRightIconLargeTitleSmall 34.
+#define kRightIconLargeTitleLarge 40.
 
 @implementation OABaseNavbarViewController
 {
     BOOL _isHeaderBlurred;
     BOOL _isRotating;
+    CGFloat _navbarHeightCurrent;
+    CGFloat _navbarHeightSmall;
+    CGFloat _navbarHeightLarge;
+    UIView *_rightIconLargeTitle;
+
+    UIBarButtonItem *_leftNavbarButton;
+    UIBarButtonItem *_rightNavbarButton;
 }
 
 #pragma mark - Initialization
@@ -56,15 +58,85 @@
 
     [super viewDidLoad];
 
+    self.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeNever;
+    
+    if ([self getNavbarStyle] == EOABaseNavbarStyleCustomLargeTitle)
+        [self.navigationItem hideTitleInStackView:YES defaultTitle:[self getTitle] defaultSubtitle:[self getSubtitle]];
+
     self.navigationController.interactivePopGestureRecognizer.delegate = self;
     self.navigationController.interactivePopGestureRecognizer.enabled = YES;
-
-    [self updateNavbar];
 
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.backgroundColor = UIColorFromRGB(color_primary_table_background);
     self.tableView.tintColor = UIColorFromRGB(color_primary_purple);
+
+    [self updateNavbar];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+
+    self.navigationController.navigationBar.prefersLargeTitles = YES;
+    if ([self.navigationController isNavigationBarHidden] && [self isNavbarVisible])
+        [self.navigationController setNavigationBarHidden:NO animated:YES];
+
+    BOOL isBigTitle = [self getNavbarStyle] == EOABaseNavbarStyleLargeTitle;
+
+    UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
+    [appearance configureWithOpaqueBackground];
+    appearance.backgroundColor = [self getNavbarBackgroundColor];
+    appearance.titleTextAttributes = @{
+        NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
+        NSForegroundColorAttributeName : [self getTitleColor]
+    };
+    appearance.largeTitleTextAttributes = @{
+        NSForegroundColorAttributeName : [self getLargeTitleColor]
+    };
+
+    if (![self isNavbarSeparatorVisible])
+    {
+        appearance.shadowImage = nil;
+        appearance.shadowColor = nil;
+    }
+
+    self.navigationController.navigationBar.standardAppearance = [self isNavbarBlurring] ? [[UINavigationBarAppearance alloc] init] : appearance;
+    self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
+
+    self.navigationController.navigationBar.tintColor = [self getNavbarButtonsTintColor];
+    self.navigationItem.largeTitleDisplayMode = isBigTitle ? UINavigationItemLargeTitleDisplayModeAlways : UINavigationItemLargeTitleDisplayModeNever;
+
+    if (_navbarHeightSmall == 0)
+        _navbarHeightSmall = self.navigationController.navigationBar.frame.size.height;
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+
+    CGFloat navbarHeight = self.navigationController.navigationBar.frame.size.height;
+    _navbarHeightCurrent = navbarHeight;
+    [self updateRightIconLargeTitle];
+    [self moveAndResizeImage:_navbarHeightCurrent];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+
+    if (_rightIconLargeTitle)
+    {
+        [_rightIconLargeTitle removeFromSuperview];
+        _rightIconLargeTitle = nil;
+    }
+
+    if (![self isModal] && ![self.navigationController isNavigationBarHidden])
+    {
+        //hide root navbar if open screen without navbar
+        if (![self.navigationController.viewControllers.lastObject isNavbarVisible])
+            [self.navigationController setNavigationBarHidden:YES animated:YES];
+    }
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -72,17 +144,12 @@
     _isRotating = YES;
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {
-        [self updateNavbarStackViewEstimatedHeight];
-        [self setupTableHeaderView];
+        [self updateNavbar];
+        [self updateRightIconLargeTitle];
+        [self moveAndResizeImage:self.navigationController.navigationBar.frame.size.height];
         [self onRotation];
     } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
         _isRotating = NO;
-        if (![OAUtilities isLandscape])
-        {
-            CGFloat y = self.tableView.contentOffset.y + [self getNavbarHeight];
-            if (y == 0)
-                [self scrollViewDidScroll:self.tableView];
-        }
     }];
 }
 
@@ -98,33 +165,39 @@
 
 - (void)applyLocalization
 {
-    self.titleLabel.text = [self getTitle];
-    self.subtitleLabel.text = [self getSubtitle];
-    [self.leftNavbarButton setTitle:[self getLeftNavbarButtonTitle] forState:UIControlStateNormal];
-    [self.rightNavbarButton setTitle:[self getRightNavbarButtonTitle] forState:UIControlStateNormal];
+    self.title = [self getTitle];
+    NSString *sub = [self getSubtitle];
+    BOOL isCustomBigTitle = [self getNavbarStyle] == EOABaseNavbarStyleCustomLargeTitle;
+    if ((sub && sub.length > 0) || isCustomBigTitle)
+    {
+        [self.navigationItem setStackViewWithTitle:[self getTitle]
+                                        titleColor:[self getTitleColor]
+                                         titleFont:[UIFont preferredFontForTextStyle:UIFontTextStyleHeadline]
+                                          subtitle:sub
+                                     subtitleColor:UIColorFromRGB(color_text_footer)
+                                      subtitleFont:[UIFont preferredFontForTextStyle:UIFontTextStyleFootnote]];
+    }
+    [self updateNavbarButtonTitles];
+}
+
+- (void)addAccessibilityLabels
+{
+    NSString *leftButtonTitle = [self getLeftNavbarButtonTitle];
+    _leftNavbarButton.accessibilityLabel = leftButtonTitle ? leftButtonTitle : OALocalizedString(@"shared_string_back");
+    NSString *rightButtonTitle = [self getRightNavbarButtonTitle];
+    if (rightButtonTitle)
+    _rightNavbarButton.accessibilityLabel = rightButtonTitle;
+}
+
+- (BOOL)isNavbarVisible
+{
+    return YES;
 }
 
 - (void)updateNavbar
 {
     [self setupNavbarButtons];
-    [self setupNavbarFonts];
-    [self updateNavbarStackViewEstimatedHeight];
-    [self setupTableHeaderView];
-
-    self.titleLabel.textColor = [self getTitleColor];
-    NSString *title = [self getTitle];
-    self.titleLabel.hidden = !title || title.length == 0;
-    NSString *subtitle = [self getSubtitle];
-    self.subtitleLabel.hidden = !subtitle || subtitle.length == 0;
-    self.separatorNavbarView.hidden = ![self isNavbarSeparatorVisible] && ![self isTableHeaderHasHiddenSeparator];
-    self.navbarBackgroundView.backgroundColor = [self getNavbarBackgroundColor];
-
-    if ([self getTableHeaderMode] == EOABaseTableHeaderModeBigTitle)
-    {
-        self.titleLabel.alpha = 0.;
-        self.subtitleLabel.alpha = 0.;
-        self.separatorNavbarView.alpha = 0.;
-    }
+    [self setupCustomLargeTitleView];
 }
 
 - (void)updateUI
@@ -147,100 +220,164 @@
                     completion:nil];
 }
 
+- (void)updateRightIconLargeTitle
+{
+    if (_rightIconLargeTitle)
+    {
+        [_rightIconLargeTitle removeFromSuperview];
+        _rightIconLargeTitle = nil;
+    }
+
+    UIImage *rightIconLargeTitle = [self getRightIconLargeTitle];
+    if (rightIconLargeTitle && [self getNavbarStyle] == EOABaseNavbarStyleLargeTitle)
+    {
+        CGFloat navbarHeight = _navbarHeightCurrent;
+        if (navbarHeight > _navbarHeightSmall)
+        {
+            navbarHeight -= _navbarHeightSmall;
+            if (_navbarHeightLarge == 0)
+                _navbarHeightLarge = navbarHeight;
+        }
+        CGFloat baseIconSize = navbarHeight == _navbarHeightLarge ? kRightIconLargeTitleLarge : kRightIconLargeTitleSmall;
+        CGFloat iconFrameOffsetSize = 2.;
+        CGFloat iconFrameSize = baseIconSize - iconFrameOffsetSize * 2;
+
+        UIImageView *iconView = [[UIImageView alloc] init];
+        UIView *iconContainer = [[UIView alloc] init];
+        [iconContainer addSubview:iconView];
+
+        iconView.clipsToBounds = YES;
+        iconView.translatesAutoresizingMaskIntoConstraints = NO;
+        [NSLayoutConstraint activateConstraints:@[
+            [iconView.leadingAnchor constraintEqualToAnchor:iconContainer.leadingAnchor constant:iconFrameOffsetSize],
+            [iconView.topAnchor constraintEqualToAnchor:iconContainer.topAnchor constant:iconFrameOffsetSize],
+            [iconView.heightAnchor constraintEqualToConstant:iconFrameSize],
+            [iconView.widthAnchor constraintEqualToAnchor:iconView.heightAnchor]
+        ]];
+
+        iconContainer.backgroundColor = UIColor.whiteColor;
+        iconView.contentMode = UIViewContentModeCenter;
+        iconView.image = rightIconLargeTitle;
+        UIColor *tintColor = [self getRightIconTintColorLargeTitle];
+        if (tintColor)
+            iconView.tintColor = tintColor;
+
+        [self.navigationController.navigationBar addSubview:iconContainer];
+        iconContainer.layer.cornerRadius = baseIconSize / 2;
+        iconContainer.clipsToBounds = YES;
+        iconContainer.translatesAutoresizingMaskIntoConstraints = NO;
+        [NSLayoutConstraint activateConstraints:@[
+            [iconContainer.rightAnchor constraintEqualToAnchor:self.navigationController.navigationBar.rightAnchor constant:-(16. + [OAUtilities getLeftMargin])],
+            [iconContainer.bottomAnchor constraintEqualToAnchor:self.navigationController.navigationBar.bottomAnchor constant:-((navbarHeight - baseIconSize) / 2)],
+            [iconContainer.heightAnchor constraintEqualToConstant:baseIconSize],
+            [iconContainer.widthAnchor constraintEqualToAnchor:iconContainer.heightAnchor]
+        ]];
+        _rightIconLargeTitle = iconContainer;
+    }
+}
+
+- (void)updateNavbarButtonTitles
+{
+    if (_leftNavbarButton)
+    {
+        UIButton *leftButton = _leftNavbarButton.customView;
+        [leftButton setTitle:[self getLeftNavbarButtonTitle] forState:UIControlStateNormal];
+    }
+    if (_rightNavbarButton)
+    {
+        UIButton *rightButton = _rightNavbarButton.customView;
+        [rightButton setTitle:[self getRightNavbarButtonTitle] forState:UIControlStateNormal];
+    }
+}
+
 - (void)setupNavbarButtons
 {
-    UIColor *buttonsTintColor = [self getNavbarButtonsTintColor];
-    [self.leftNavbarButton setTitleColor:buttonsTintColor forState:UIControlStateNormal];
-    self.leftNavbarButton.tintColor = buttonsTintColor;
-    [self.rightNavbarButton setTitleColor:buttonsTintColor forState:UIControlStateNormal];
-    self.rightNavbarButton.tintColor = buttonsTintColor;
+    NSString *rightButtonTitle = [self getRightNavbarButtonTitle];
+    NSString *leftButtonTitle = [self getLeftNavbarButtonTitle];
+    UIImage *leftNavbarButtonCustomIcon = [self getCustomIconForLeftNavbarButton];
+    if ((([self isModal] && !leftButtonTitle) || (![self isModal] && leftButtonTitle && leftButtonTitle.length == 0)) && !leftNavbarButtonCustomIcon)
+        leftNavbarButtonCustomIcon = [UIImage templateImageNamed:@"ic_navbar_chevron"];
 
-    BOOL isChevronIconVisible = [self isChevronIconVisible];
-    [self.leftNavbarButton setImage:isChevronIconVisible ? [UIImage templateImageNamed:@"ic_navbar_chevron"] : nil
-                           forState:UIControlStateNormal];
-    self.leftNavbarButton.titleEdgeInsets = UIEdgeInsetsMake(0., isChevronIconVisible ? -10. : 0., 0., 0.);
+    CGFloat freeSpaceForTitle = DeviceScreenWidth - (kPaddingOnSideOfContent + [OAUtilities getLeftMargin]) * 2;
+    CGFloat freeSpaceForNavbarButton = freeSpaceForTitle;
+    if (leftNavbarButtonCustomIcon)
+        freeSpaceForTitle -= 71.;
 
-    NSString *leftNavbarButtonTitle = [self getLeftNavbarButtonTitle];
-    NSString *rightNavbarButtonTitle = [self getRightNavbarButtonTitle];
-    BOOL hasLeftButton = (leftNavbarButtonTitle && leftNavbarButtonTitle.length > 0) || isChevronIconVisible;
-    BOOL hasRightButton = rightNavbarButtonTitle && rightNavbarButtonTitle.length > 0;
-    self.leftNavbarButton.hidden = !hasLeftButton && !hasRightButton;
-    self.rightNavbarButton.hidden = !hasLeftButton && !hasRightButton;
-    self.leftNavbarButton.enabled = hasLeftButton;
-    self.rightNavbarButton.enabled = hasRightButton;
-}
+    NSMutableParagraphStyle *titleParagraphStyle = [[NSMutableParagraphStyle alloc] init];
+    titleParagraphStyle.lineBreakMode = NSLineBreakByTruncatingTail;
+    NSDictionary<NSAttributedStringKey, id> *titleAttributes = @{
+        NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
+        NSParagraphStyleAttributeName : titleParagraphStyle
+    };
+    CGFloat titleWidth = [OAUtilities calculateTextBounds:[[NSAttributedString alloc] initWithString:self.title
+                                                                                          attributes:titleAttributes]
+                                                    width:freeSpaceForTitle].width;
+    freeSpaceForNavbarButton -= titleWidth;
+    freeSpaceForNavbarButton /= 2;
+    freeSpaceForNavbarButton -= 12.;
+    BOOL isLongTitle = freeSpaceForNavbarButton < 50.;
 
-- (void)setupNavbarFonts
-{
-    self.leftNavbarButton.titleLabel.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightSemibold maximumSize:22.];
-    self.rightNavbarButton.titleLabel.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightSemibold maximumSize:22.];
-    self.titleLabel.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightSemibold maximumSize:22.];
-    self.subtitleLabel.font = [UIFont scaledSystemFontOfSize:13. weight:UIFontWeightSemibold maximumSize:18.];
-}
-
-- (void)setupTableHeaderView
-{
-    EOABaseTableHeaderMode mode = [self getTableHeaderMode];
-    UIView *tableHeaderView;
-    if (mode != EOABaseTableHeaderModeNone)
+    if (leftButtonTitle || leftNavbarButtonCustomIcon)
     {
-        BOOL isBigTitle = mode == EOABaseTableHeaderModeBigTitle;
-        tableHeaderView = [OAUtilities setupTableHeaderViewWithText:isBigTitle ? [self getTitle] : [self getTableHeaderDescription]
-                                                               font:isBigTitle ? kHeaderBigTitleFont : kHeaderDescriptionFont
-                                                          textColor:isBigTitle ? UIColor.blackColor : UIColorFromRGB(color_text_footer)
-                                                        isBigTitle:isBigTitle];
-        if ([self isTableHeaderHasHiddenSeparator])
+        UIButton *leftButton = [[UIButton alloc] initWithFrame:CGRectMake(0., 0., freeSpaceForNavbarButton, 30.)];
+        leftButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeading;
+        leftButton.titleLabel.textAlignment = NSTextAlignmentLeft;
+        leftButton.titleLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
+        leftButton.titleLabel.numberOfLines = 1;
+        leftButton.titleLabel.adjustsFontForContentSizeCategory = YES;
+        leftButton.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+        [leftButton setTintColor:[self getNavbarButtonsTintColor]];
+        [leftButton setTitleColor:[self getNavbarButtonsTintColor] forState:UIControlStateNormal];
+        [leftButton setTitleColor:[[self getNavbarButtonsTintColor] colorWithAlphaComponent:.3] forState:UIControlStateHighlighted];
+        [leftButton setTitle:isLongTitle ? nil : leftButtonTitle forState:UIControlStateNormal];
+        if (isLongTitle && !leftNavbarButtonCustomIcon)
         {
-            UIView *separator = [[UIView alloc] initWithFrame:CGRectMake(0., tableHeaderView.layer.frame.size.height - 1., DeviceScreenWidth, 1.)];
-            separator.backgroundColor = UIColorFromRGB(color_tint_gray);
-            [tableHeaderView addSubview:separator];
+            leftNavbarButtonCustomIcon = [UIImage templateImageNamed:@"ic_navbar_chevron"];
+            freeSpaceForNavbarButton = 30.;
         }
+        [leftButton setImage:leftNavbarButtonCustomIcon forState:UIControlStateNormal];
+        leftButton.imageEdgeInsets = UIEdgeInsetsMake(0., -10., 0., 0.);
+        [leftButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+        [leftButton addTarget:self action:@selector(onLeftNavbarButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+        leftButton.translatesAutoresizingMaskIntoConstraints = NO;
+        [leftButton.widthAnchor constraintLessThanOrEqualToConstant:freeSpaceForNavbarButton].active = YES;
+
+        _leftNavbarButton = [[UIBarButtonItem alloc] initWithCustomView:leftButton];
+        [self.navigationItem setLeftBarButtonItem:_leftNavbarButton animated:YES];
     }
-    self.tableView.tableHeaderView = tableHeaderView;
+
+    if (rightButtonTitle)
+    {
+        UIButton *rightButton = [[UIButton alloc] initWithFrame:CGRectMake(0., 0., freeSpaceForNavbarButton, 30.)];
+        rightButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentTrailing;
+        rightButton.titleLabel.textAlignment = NSTextAlignmentRight;
+        rightButton.titleLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
+        rightButton.titleLabel.numberOfLines = 1;
+        rightButton.titleLabel.adjustsFontForContentSizeCategory = YES;
+        rightButton.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+        [rightButton setTintColor:[self getNavbarButtonsTintColor]];
+        [rightButton setTitleColor:[self getNavbarButtonsTintColor] forState:UIControlStateNormal];
+        [rightButton setTitleColor:[[self getNavbarButtonsTintColor] colorWithAlphaComponent:.3] forState:UIControlStateHighlighted];
+        [rightButton setTitle:rightButtonTitle forState:UIControlStateNormal];
+        [rightButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+        [rightButton addTarget:self action:@selector(onRightNavbarButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+        rightButton.translatesAutoresizingMaskIntoConstraints = NO;
+        [rightButton.widthAnchor constraintLessThanOrEqualToConstant:isLongTitle ? 50. : freeSpaceForNavbarButton].active = YES;
+
+        _rightNavbarButton = [[UIBarButtonItem alloc] initWithCustomView:rightButton];
+        [self.navigationItem setRightBarButtonItem:_rightNavbarButton animated:YES];
+    }
 }
 
-- (CGFloat)getNavbarHeight
+- (BOOL)isBigTitle
 {
-    return self.navbarBackgroundView.frame.size.height;
-}
-
-- (CGFloat)getNavbarEstimatedHeight
-{
-    return self.navbarStackViewEstimatedHeightConstraint.constant;
-}
-
-- (void)updateNavbarEstimatedHeight
-{
-    self.navbarStackViewEstimatedHeightConstraint.constant = [self getNavbarHeight] - ([self isModal] ? 0. : [OAUtilities getTopMargin]);
-    self.tableView.contentInset = UIEdgeInsetsMake(self.navbarStackViewEstimatedHeightConstraint.constant, 0, 0, 0);
-}
-
-- (void)updateNavbarStackViewEstimatedHeight
-{
-    CGFloat height = [self isNavbarSeparatorVisible] ? separatorNavBarHeight : 0.;
-    height += [self isModal] && ![OAUtilities isLandscape] ? modalNavBarHeight : defaultNavBarHeight;
-    self.navbarStackViewEstimatedHeightConstraint.constant = height;
-}
-
-- (void)resetNavbarEstimatedHeight
-{
-    self.navbarStackViewEstimatedHeightConstraint.constant = 0;
-}
-
-- (void)adjustScrollStartPosition
-{
-    self.tableView.contentOffset = CGPointMake(0., -[self getNavbarHeight]);
-}
-
-- (void)addAccessibilityLabels
-{
-    self.leftNavbarButton.accessibilityLabel = OALocalizedString(@"shared_string_back");
+    return [self getNavbarStyle] == EOABaseNavbarStyleLargeTitle || [self getNavbarStyle] == EOABaseNavbarStyleCustomLargeTitle;
 }
 
 - (UIColor *)getNavbarBackgroundColor
 {
-    if ([self getTableHeaderMode] == EOABaseTableHeaderModeBigTitle)
-        return UIColorFromRGB(color_primary_table_background);
+    if ([self isBigTitle])
+        return self.tableView.backgroundColor;
 
     EOABaseNavbarColorScheme colorScheme = [self getNavbarColorScheme];
     switch (colorScheme)
@@ -250,7 +387,7 @@
         case EOABaseNavbarColorSchemeWhite:
             return UIColor.whiteColor;
         default:
-            return UIColorFromRGB(color_primary_gray_navbar_background);
+            return self.tableView.backgroundColor;
     }
 }
 
@@ -262,6 +399,11 @@
 - (UIColor *)getTitleColor
 {
     return [self getNavbarColorScheme] == EOABaseNavbarColorSchemeOrange ? UIColor.whiteColor : UIColor.blackColor;
+}
+
+- (UIColor *)getLargeTitleColor
+{
+    return UIColor.blackColor;
 }
 
 #pragma mark - Base UI
@@ -278,7 +420,12 @@
 
 - (NSString *)getLeftNavbarButtonTitle
 {
-    return @"";
+    return nil;
+}
+
+- (UIImage *)getCustomIconForLeftNavbarButton
+{
+    return nil;
 }
 
 - (NSString *)getRightNavbarButtonTitle
@@ -291,34 +438,49 @@
     return EOABaseNavbarColorSchemeGray;
 }
 
-- (BOOL)isNavbarSeparatorVisible
-{
-    return [self getNavbarColorScheme] != EOABaseNavbarColorSchemeOrange;
-}
-
-- (BOOL)isChevronIconVisible
-{
-    return YES;
-}
-
 - (BOOL)isNavbarBlurring
 {
     return [self getNavbarColorScheme] != EOABaseNavbarColorSchemeOrange;
 }
 
-- (EOABaseTableHeaderMode)getTableHeaderMode
+- (BOOL)isNavbarSeparatorVisible
 {
-    return EOABaseTableHeaderModeNone;
+    return [self getNavbarColorScheme] != EOABaseNavbarColorSchemeOrange;
 }
 
-- (NSString *)getTableHeaderDescription
+- (UIImage *)getRightIconLargeTitle
+{
+    return nil;
+}
+
+- (UIColor *)getRightIconTintColorLargeTitle
+{
+    return nil;
+}
+
+- (EOABaseNavbarStyle)getNavbarStyle
+{
+    return EOABaseNavbarStyleSimple;
+}
+
+- (NSString *)getCustomTableViewDescription
 {
     return @"";
 }
 
-- (BOOL)isTableHeaderHasHiddenSeparator
+- (void)setupCustomLargeTitleView
 {
-    return NO;
+    EOABaseNavbarStyle style = [self getNavbarStyle];
+    UIView *tableHeaderView;
+    BOOL isCustomLargeTitle = style == EOABaseNavbarStyleCustomLargeTitle;
+    if (isCustomLargeTitle || style == EOABaseNavbarStyleDescription)
+    {
+        tableHeaderView = [OAUtilities setupTableHeaderViewWithText:isCustomLargeTitle ? [self getTitle] : [self getCustomTableViewDescription]
+                                                               font:isCustomLargeTitle ? kHeaderBigTitleFont : kHeaderDescriptionFontSmall
+                                                          textColor:isCustomLargeTitle ? UIColor.blackColor : UIColorFromRGB(color_text_footer)
+                                                        isBigTitle:isCustomLargeTitle];
+    }
+    self.tableView.tableHeaderView = tableHeaderView;
 }
 
 #pragma mark - Table data
@@ -398,10 +560,10 @@
     [self dismissViewController];
 }
 
+// override with super to work correctly
 - (void)onContentSizeChanged:(NSNotification *)notification
 {
-    [super onContentSizeChanged:notification];
-    [self setupTableHeaderView];
+    [self setupCustomLargeTitleView];
 }
 
 - (void)onScrollViewDidScroll:(UIScrollView *)scrollView
@@ -421,81 +583,59 @@
 
 #pragma mark - UIScrollViewDelegate
 
+- (void)moveAndResizeImage:(CGFloat)height
+{
+    if (_rightIconLargeTitle && [self getNavbarStyle] == EOABaseNavbarStyleLargeTitle)
+    {
+        CGFloat delta = height - _navbarHeightSmall;
+        CGFloat heightDifferenceBetweenStates = _navbarHeightLarge - _navbarHeightSmall;
+        CGFloat coeff = delta / heightDifferenceBetweenStates;
+        CGFloat factor = kRightIconLargeTitleSmall / kRightIconLargeTitleLarge;
+        CGFloat sizeAddendumFactor = coeff * (1. - factor);
+        CGFloat scale = MIN(1., sizeAddendumFactor + factor);
+
+        CGFloat sizeDiff = kRightIconLargeTitleLarge * (1. - factor);
+        CGFloat iconBottomMarginForLargeState = (_navbarHeightLarge - kRightIconLargeTitleLarge) / 2;
+        CGFloat iconBottomMarginForSmallState = (_navbarHeightSmall - kRightIconLargeTitleSmall) / 2;
+        CGFloat maxYTranslation = iconBottomMarginForLargeState - iconBottomMarginForSmallState + sizeDiff;
+        CGFloat yTranslation = MAX(0, MIN(maxYTranslation, (maxYTranslation - coeff * (iconBottomMarginForSmallState + sizeDiff))));
+        CGFloat xTranslation = MAX(0, sizeDiff - coeff * sizeDiff);
+
+        _rightIconLargeTitle.transform = CGAffineTransformTranslate(CGAffineTransformScale(CGAffineTransformIdentity, scale, scale), xTranslation, yTranslation);
+    }
+}
+
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    if (!_isRotating && [self isScreenLoaded])
+    CGFloat navbarHeight = self.navigationController.navigationBar.frame.size.height;
+    if (_navbarHeightCurrent != navbarHeight && (navbarHeight >= (_navbarHeightLarge + _navbarHeightSmall && [self getNavbarStyle] != EOABaseNavbarStyleLargeTitle)))
     {
-        if ([self isNavbarBlurring])
-        {
-            CGFloat y = scrollView.contentOffset.y + [self getNavbarHeight];
-            CGFloat tableHeaderHeight = self.tableView.tableHeaderView.frame.size.height;
-            BOOL isBigTitle = [self getTableHeaderMode] == EOABaseTableHeaderModeBigTitle;
-            if (y > 0)
-            {
-                if (!_isHeaderBlurred)
-                {
-                    [UIView animateWithDuration:.2 animations:^{
-                        [self.navbarBackgroundView addBlurEffect:YES cornerRadius:0. padding:0.];
-                        _isHeaderBlurred = YES;
-                    }];
-                }
-                else if (isBigTitle)
-                {
-                    if (y > tableHeaderHeight * .75)
-                    {
-                        if (self.titleLabel.alpha == 0.)
-                        {
-                            [UIView animateWithDuration:.2 animations:^{
-                                self.titleLabel.alpha = 1.;
-                                if (!self.subtitleLabel.hidden)
-                                    self.subtitleLabel.alpha = 1.;
-                            }];
-                        }
-                        BOOL needToHideSeparator = y <= tableHeaderHeight && self.separatorNavbarView.alpha == 1.;
-                        BOOL needToShowSeparator = y >= tableHeaderHeight && self.separatorNavbarView.alpha == 0.;
-                        if ([self isTableHeaderHasHiddenSeparator] && (needToHideSeparator || needToShowSeparator))
-                            self.separatorNavbarView.alpha = needToHideSeparator ? 0. : 1.;
-                    }
-                    else if (y < tableHeaderHeight * .75 && self.titleLabel.alpha == 1.)
-                    {
-                        [UIView animateWithDuration:.2 animations:^{
-                            self.titleLabel.alpha = 0.;
-                            if (!self.subtitleLabel.hidden)
-                                self.subtitleLabel.alpha = 0.;
-                        }];
-                    }
-                }
-            }
-            else if (y <= 0)
-            {
-                if (isBigTitle)
-                {
-                    BOOL isTitleLabelHidden = self.titleLabel.alpha == 0.;
-                    BOOL isSeparatorHidden = self.separatorNavbarView.hidden;
-                    if (!isTitleLabelHidden)
-                    {
-                        [UIView animateWithDuration:.2 animations:^{
-                            self.titleLabel.alpha = 0.;
-                            if (!self.subtitleLabel.hidden)
-                                self.subtitleLabel.alpha = 0.;
-                        }];
-                    }
-                    if (!isSeparatorHidden)
-                        self.separatorNavbarView.alpha = 0.;
-                }
-
-                if (_isHeaderBlurred)
-                {
-                    [UIView animateWithDuration:.2 animations:^{
-                        [self.navbarBackgroundView removeBlurEffect:[self getNavbarBackgroundColor]];
-                        _isHeaderBlurred = NO;
-                    }];
-                }
-            }
-        }
-
-        [self onScrollViewDidScroll:scrollView];
+        _navbarHeightCurrent = _navbarHeightLarge + _navbarHeightSmall;
+        [self updateRightIconLargeTitle];
     }
+
+    [self moveAndResizeImage:self.navigationController.navigationBar.frame.size.height];
+
+    if ([self getNavbarStyle] == EOABaseNavbarStyleCustomLargeTitle)
+    {
+        CGFloat y = scrollView.contentOffset.y + _navbarHeightSmall + _navbarHeightLarge;
+        if (![self isModal])
+            y += [OAUtilities getTopMargin];
+        CGFloat tableHeaderHeight = self.tableView.tableHeaderView.frame.size.height;
+        if (y > 0)
+        {
+            if (y > tableHeaderHeight * .75 && [self.navigationItem isTitleInStackViewHided])
+                [self.navigationItem hideTitleInStackView:NO defaultTitle:[self getTitle] defaultSubtitle:[self getSubtitle]];
+            else if (y < tableHeaderHeight * .75 && ![self.navigationItem isTitleInStackViewHided])
+                [self.navigationItem hideTitleInStackView:YES defaultTitle:[self getTitle] defaultSubtitle:[self getSubtitle]];
+        }
+        else if (y <= 0 && ![self.navigationItem isTitleInStackViewHided])
+        {
+            [self.navigationItem hideTitleInStackView:NO defaultTitle:[self getTitle] defaultSubtitle:[self getSubtitle]];
+        }
+    }
+
+    [self onScrollViewDidScroll:scrollView];
 }
 
 #pragma mark - UITableViewDelegate

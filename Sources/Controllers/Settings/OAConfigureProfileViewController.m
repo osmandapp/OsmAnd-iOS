@@ -111,19 +111,6 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     }
 }
 
-#pragma mark - Base setup UI
-
-- (void)setupTableHeaderView
-{
-    UIView *tableHeaderView = [OAUtilities setupTableHeaderViewWithText:[self getTitle]
-                                                                   font:kHeaderBigTitleFont
-                                                              textColor:UIColor.blackColor
-                                                             isBigTitle:YES
-                                                          rightIconName:[_appMode getIconName]
-                                                              tintColor:UIColorFromRGB([_appMode getIconColor])];
-    self.tableView.tableHeaderView = tableHeaderView;
-}
-
 #pragma mark - Base UI
 
 - (NSString *)getTitle
@@ -136,9 +123,19 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     return NO;
 }
 
-- (EOABaseTableHeaderMode)getTableHeaderMode
+- (UIImage *)getRightIconLargeTitle
 {
-    return EOABaseTableHeaderModeBigTitle;
+    return [UIImage templateImageNamed:[_appMode getIconName]];
+}
+
+- (UIColor *)getRightIconTintColorLargeTitle
+{
+    return UIColorFromRGB([_appMode getIconColor]);
+}
+
+- (EOABaseNavbarStyle)getNavbarStyle
+{
+    return EOABaseNavbarStyleLargeTitle;
 }
 
 #pragma mark - Table data
@@ -636,7 +633,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 - (void) updateView
 {
     [self applyLocalization];
-    [self setupTableHeaderView];
+    [self setupCustomLargeTitleView];
     [self generateData];
     [self.tableView reloadData];
 }

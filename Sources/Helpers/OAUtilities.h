@@ -28,7 +28,8 @@ blue:((float)(rgbValue & 0xFF))/255.0 \
 alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 
 #define kHeaderBigTitleFont [UIFont scaledSystemFontOfSize:34. weight:UIFontWeightBold]
-#define kHeaderDescriptionFont [UIFont scaledSystemFontOfSize:15.]
+#define kHeaderDescriptionFont [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]
+#define kHeaderDescriptionFontSmall [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote]
 
 @interface UIBezierPath (util)
 
@@ -69,6 +70,28 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 
 + (UIImage *) templateImageNamed:(NSString *)imageName;
 + (UIImage *) rtlImageNamed:(NSString *)imageName;
+
+@end
+
+@interface UIViewController (util)
+
+- (BOOL)isNavbarVisible;
+
+@end
+
+@interface UINavigationItem (util)
+
+
+- (void)setStackViewWithTitle:(NSString *)title
+                   titleColor:(UIColor *)titleColor
+                    titleFont:(UIFont *)titleFont
+                     subtitle:(NSString *)subtitle
+                subtitleColor:(UIColor *)subtitleColor
+                 subtitleFont:(UIFont *)subtitleFont;
+
+- (void)hideTitleInStackView:(BOOL)hide defaultTitle:(NSString *)defaultTitle defaultSubtitle:(NSString *)defaultSubtitle;
+
+- (BOOL)isTitleInStackViewHided;
 
 @end
 

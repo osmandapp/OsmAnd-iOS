@@ -12,6 +12,4 @@
 
 @interface OAMappersViewController : OABaseNavbarViewController
 
-@property (nonatomic, weak) id<OAAccountSettingDelegate> accountDelegate;
-
 @end

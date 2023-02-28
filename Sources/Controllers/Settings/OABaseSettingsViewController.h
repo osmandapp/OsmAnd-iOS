@@ -24,8 +24,4 @@
 
 - (instancetype) initWithAppMode:(OAApplicationMode *)appMode;
 
-- (CGFloat) heightForLabel:(NSString *)text;
-- (CGFloat) fontSizeForLabel;
-- (void) setupTableHeaderViewWithText:(NSString *)text;
-
 @end

@@ -30,20 +30,21 @@
     _settings = [OAAppSettings sharedManager];
 }
 
-#pragma mark - UIViewController
-
-- (void) viewDidLoad
-{
-    [super viewDidLoad];
-
-    [self setupTableHeaderViewWithText:OALocalizedString(@"speed_limit_tolerance_descr")];
-}
-
 #pragma mark - Base UI
 
 - (NSString *)getTitle
 {
     return OALocalizedString(@"speed_limit_exceed");
+}
+
+- (EOABaseNavbarStyle)getNavbarStyle
+{
+    return EOABaseNavbarStyleDescription;
+}
+
+- (NSString *)getCustomTableViewDescription
+{
+    return OALocalizedString(@"speed_limit_tolerance_descr");
 }
 
 #pragma mark - Table data
@@ -83,6 +84,11 @@
     _data = [NSArray arrayWithObject:dataArr];
 }
 
+- (BOOL)hideFirstHeader
+{
+    return YES;
+}
+
 - (NSInteger)rowsCount:(NSInteger)section
 {
     return _data[section].count;
@@ -117,22 +123,12 @@
     return _data.count;
 }
 
-- (CGFloat)getCustomHeightForHeader:(NSInteger)section
-{
-    return 17.;
-}
-
 - (void)onRowSelected:(NSIndexPath *)indexPath
 {
     [self selectSpeedLimitExceed:_data[indexPath.section][indexPath.row]];
 }
 
 #pragma mark - Selectors
-
-- (void)onRotation
-{
-    [self setupTableHeaderViewWithText:OALocalizedString(@"speed_limit_tolerance_descr")];
-}
 
 - (void) selectSpeedLimitExceed:(NSDictionary *)item
 {

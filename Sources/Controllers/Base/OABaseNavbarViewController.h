@@ -16,21 +16,15 @@ typedef NS_ENUM(NSInteger, EOABaseNavbarColorScheme)
     EOABaseNavbarColorSchemeWhite
 };
 
-typedef NS_ENUM(NSInteger, EOABaseTableHeaderMode)
+typedef NS_ENUM(NSInteger, EOABaseNavbarStyle)
 {
-    EOABaseTableHeaderModeNone = 0,
-    EOABaseTableHeaderModeDescription,
-    EOABaseTableHeaderModeBigTitle,
-    EOABaseTableHeaderModeBigTitleWithRightIcon
+    EOABaseNavbarStyleSimple = 0,
+    EOABaseNavbarStyleDescription,
+    EOABaseNavbarStyleLargeTitle,
+    EOABaseNavbarStyleCustomLargeTitle
 };
 
 @interface OABaseNavbarViewController : OASuperViewController<UIGestureRecognizerDelegate, UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource>
-
-@property (weak, nonatomic) IBOutlet UIButton *leftNavbarButton;
-@property (weak, nonatomic) IBOutlet UIButton *rightNavbarButton;
-@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
-@property (weak, nonatomic) IBOutlet UILabel *subtitleLabel;
-@property (weak, nonatomic) IBOutlet UIView *separatorNavbarView;
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
@@ -41,18 +35,19 @@ typedef NS_ENUM(NSInteger, EOABaseTableHeaderMode)
 - (void)updateUI;
 - (void)updateUIAnimated;
 
-- (void)setupTableHeaderView;
 - (NSString *)getTitle;
 - (NSString *)getSubtitle;
 - (NSString *)getLeftNavbarButtonTitle;
+- (UIImage *)getCustomIconForLeftNavbarButton;
 - (NSString *)getRightNavbarButtonTitle;
 - (EOABaseNavbarColorScheme)getNavbarColorScheme;
-- (BOOL)isNavbarSeparatorVisible;
-- (BOOL)isChevronIconVisible;
 - (BOOL)isNavbarBlurring;
-- (EOABaseTableHeaderMode)getTableHeaderMode;
-- (NSString *)getTableHeaderDescription;
-- (BOOL)isTableHeaderHasHiddenSeparator;
+- (BOOL)isNavbarSeparatorVisible;
+- (UIImage *)getRightIconLargeTitle;
+- (UIColor *)getRightIconTintColorLargeTitle;
+- (EOABaseNavbarStyle)getNavbarStyle;
+- (NSString *)getCustomTableViewDescription;
+- (void)setupCustomLargeTitleView;
 
 - (void)generateData;
 - (BOOL)hideFirstHeader;

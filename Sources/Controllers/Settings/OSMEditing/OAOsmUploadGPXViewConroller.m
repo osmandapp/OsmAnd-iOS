@@ -96,7 +96,8 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
     {
         OAOsmAccountSettingsViewController *accountSettings = [[OAOsmAccountSettingsViewController alloc] init];
         accountSettings.accountDelegate = self;
-        [self presentViewController:accountSettings animated:YES completion:nil];
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:accountSettings];
+        [self.navigationController presentViewController:navigationController animated:YES completion:nil];
     }
 }
 
@@ -110,11 +111,6 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
 - (NSString *)getLeftNavbarButtonTitle
 {
     return OALocalizedString(@"shared_string_cancel");
-}
-
-- (BOOL)isChevronIconVisible
-{
-    return NO;
 }
 
 - (NSString *)getBottomButtonTitle
@@ -521,7 +517,8 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
 {
     OAOsmUploadGPXVisibilityViewConroller *vc = [[OAOsmUploadGPXVisibilityViewConroller alloc] initWithVisibility:_selectedVisibility];
     vc.visibilityDelegate = self;
-    [self presentViewController:vc animated:YES completion:nil];
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:vc];
+    [self.navigationController presentViewController:navigationController animated:YES completion:nil];
 }
 
 - (void)onAccountButtonPressed
@@ -530,7 +527,8 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
     {
         OAOsmAccountSettingsViewController *accountSettings = [[OAOsmAccountSettingsViewController alloc] init];
         accountSettings.accountDelegate = self;
-        [self presentViewController:accountSettings animated:YES completion:nil];
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:accountSettings];
+        [self.navigationController presentViewController:navigationController animated:YES completion:nil];
     }
     else
     {

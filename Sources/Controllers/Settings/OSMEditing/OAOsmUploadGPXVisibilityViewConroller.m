@@ -39,11 +39,6 @@
     return OALocalizedString(@"visibility");
 }
 
-- (NSString *)getLeftNavbarButtonTitle
-{
-    return OALocalizedString(@"shared_string_back");
-}
-
 #pragma mark - Table data
 
 - (void)generateData

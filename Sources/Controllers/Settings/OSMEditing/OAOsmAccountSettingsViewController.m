@@ -89,11 +89,6 @@
     return _isLogged ? OALocalizedString(@"login_account") : OALocalizedString(@"shared_string_account_add");
 }
 
-- (NSString *)getLeftNavbarButtonTitle
-{
-    return OALocalizedString(@"shared_string_back");
-}
-
 - (BOOL)isNavbarSeparatorVisible
 {
     return NO;

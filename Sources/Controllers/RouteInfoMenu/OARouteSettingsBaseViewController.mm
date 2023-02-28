@@ -352,7 +352,8 @@
 - (void) selectVoiceGuidance:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath
 {
     OANavigationLanguageViewController *settingsViewController = [[OANavigationLanguageViewController alloc] initWithAppMode:[[OARoutingHelper sharedInstance] getAppMode]];
-    [self presentViewController:settingsViewController animated:YES completion:nil];
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:settingsViewController];
+    [self.navigationController presentViewController:navigationController animated:YES completion:nil];
 }
 
 - (void) showAvoidRoadsScreen
@@ -367,7 +368,8 @@
     OAProfileNavigationSettingsViewController *settingsViewController = [[OAProfileNavigationSettingsViewController alloc] initWithAppMode:[[OARoutingHelper sharedInstance] getAppMode]];
     settingsViewController.openFromRouteInfo = YES;
     settingsViewController.delegate = self;
-    [self presentViewController:settingsViewController animated:YES completion:nil];
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:settingsViewController];
+    [self.navigationController presentViewController:navigationController animated:YES completion:nil];
 }
 
 - (void) openRouteLineAppearance

@@ -447,7 +447,7 @@
     [historyItems sortUsingComparator:^NSComparisonResult(OAHistoryItem *h1, OAHistoryItem *h2) {
         NSTimeInterval lastTime1 = h1.date.timeIntervalSince1970;
         NSTimeInterval lastTime2 = h2.date.timeIntervalSince1970;
-        return (lastTime1 < lastTime2) ? NSOrderedAscending : ((lastTime1 == lastTime2) ? NSOrderedSame : NSOrderedDescending);
+        return (lastTime1 < lastTime2) ? NSOrderedDescending : ((lastTime1 == lastTime2) ? NSOrderedSame : NSOrderedAscending);
     }];
 }
 

@@ -372,12 +372,13 @@ static UIViewController *parentController;
             [self.sortedFavoriteItems addObject:item];
         [allGroups addObject:itemData];
     }
-
-    NSArray *sortedArray = [self.sortedFavoriteItems sortedArrayUsingComparator:^NSComparisonResult(OAFavoriteItem* obj1, OAFavoriteItem* obj2) {
-        return obj1.distanceMeters > obj2.distanceMeters ? NSOrderedDescending : obj1.distanceMeters < obj2.distanceMeters ? NSOrderedAscending : NSOrderedSame;
-    }];
-    [self.sortedFavoriteItems setArray:sortedArray];
-
+    if (!_isSearchActive)
+    {
+        NSArray *sortedArray = [self.sortedFavoriteItems sortedArrayUsingComparator:^NSComparisonResult(OAFavoriteItem* obj1, OAFavoriteItem* obj2) {
+            return obj1.distanceMeters > obj2.distanceMeters ? NSOrderedDescending : obj1.distanceMeters < obj2.distanceMeters ? NSOrderedAscending : NSOrderedSame;
+        }];
+        [self.sortedFavoriteItems setArray:sortedArray];
+    }
     for (FavoriteTableGroup *group in allGroups)
     {
         NSMutableArray *groupData = [NSMutableArray array];
@@ -1742,6 +1743,7 @@ static UIViewController *parentController;
             [self.tabBarController.tabBar setHidden:YES];
         }];
         _directionButton.tag = 1;
+        [self generateData];
         [self.favoriteTableView reloadData];
     }
     else if (searchController.isActive && searchController.searchBar.searchTextField.text.length > 0)

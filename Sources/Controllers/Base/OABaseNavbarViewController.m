@@ -172,10 +172,10 @@
     {
         [self.navigationItem setStackViewWithTitle:[self getTitle]
                                         titleColor:[self getTitleColor]
-                                         titleFont:[UIFont preferredFontForTextStyle:UIFontTextStyleHeadline]
+                                         titleFont:[UIFont scaledSystemFontOfSize:17. weight:UIFontWeightSemibold maximumSize:22.]
                                           subtitle:sub
                                      subtitleColor:UIColorFromRGB(color_text_footer)
-                                      subtitleFont:[UIFont preferredFontForTextStyle:UIFontTextStyleFootnote]];
+                                      subtitleFont:[UIFont scaledSystemFontOfSize:13. maximumSize:18.]];
     }
     [self updateNavbarButtonTitles];
 }

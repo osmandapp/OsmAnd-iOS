@@ -23,7 +23,7 @@
 
 #include <OsmAndCore/Utilities.h>
 
-@interface OACarPlayAddressSearchController() <CPSearchTemplateDelegate, CPListTemplateDelegate>
+@interface OACarPlayAddressSearchController() <CPSearchTemplateDelegate>
 
 @end
 
@@ -54,7 +54,6 @@
 
     _resultsListTemplate = [[CPListTemplate alloc] initWithTitle:OALocalizedString(@"shared_string_search")
                                                         sections:@[[[CPListSection alloc] initWithItems:_cpItems]]];
-    _resultsListTemplate.delegate = self;
 
     _searchHelper = [OAQuickSearchHelper instance];
     _searchUICore = [_searchHelper getCore];
@@ -107,7 +106,7 @@
 {
     _searchTemplate = [[CPSearchTemplate alloc] init];
     _searchTemplate.delegate = self;
-    [self.interfaceController pushTemplate:_searchTemplate animated:YES];
+    [self.interfaceController pushTemplate:_searchTemplate animated:YES completion:nil];
 }
 
 - (void)onItemSelected:(CPListItem * _Nonnull)item
@@ -120,7 +119,7 @@
     OAQuickSearchListItem *searchItem = _searchItems[index];
     CLLocation *loc = searchItem.getSearchResult.location;
     [self startNavigationGivenLocation:loc];
-    [self.interfaceController popToRootTemplateAnimated:YES];
+    [self.interfaceController popToRootTemplateAnimated:YES completion:nil];
 }
 
 - (void) updateSearchResult:(OASearchResultCollection *)res
@@ -143,6 +142,11 @@
                                                        detailText:[self generateDescription:qsItem]
                                                             image:[UIImage imageNamed:[OAQuickSearchListItem getIconName:sr]]];
             cpItem.userInfo = @(i);
+            cpItem.handler = ^(id <CPSelectableListItem> item, dispatch_block_t completionBlock) {
+                [self onItemSelected:item];
+                if (completionBlock)
+                    completionBlock();
+            };
 
             [searchItems addObject:qsItem];
             [cpItems addObject:cpItem];
@@ -334,16 +338,7 @@
 - (void)searchTemplateSearchButtonPressed:(CPSearchTemplate *)searchTemplate
 {
     [_resultsListTemplate updateSections:@[[[CPListSection alloc] initWithItems:_cpItems]]];
-    [self.interfaceController pushTemplate:_resultsListTemplate animated:YES];
-}
-
-// MARK: CPListTemplateDelegate
-
-- (void)listTemplate:(CPListTemplate *)listTemplate didSelectListItem:(CPListItem *)item completionHandler:(void (^)())completionHandler
-{
-    [self onItemSelected:item];
-    
-    completionHandler();
+    [self.interfaceController pushTemplate:_resultsListTemplate animated:YES completion:nil];
 }
 
 @end

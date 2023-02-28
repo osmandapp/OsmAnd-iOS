@@ -38,8 +38,11 @@
             [group.points enumerateObjectsUsingBlock:^(OAFavoriteItem * _Nonnull item, NSUInteger idx, BOOL * _Nonnull stop) {
                 item.distance = [self calculateDistanceToItem:item];
                 CPListItem *listItem;
-                listItem = [[CPListItem alloc] initWithText:item.favorite->getTitle().toNSString() detailText:item.distance image:[UIImage imageNamed:@"ic_custom_favorites"] showsDisclosureIndicator:YES];
+                listItem = [[CPListItem alloc] initWithText:item.favorite->getTitle().toNSString() detailText:item.distance image:[UIImage imageNamed:@"ic_custom_favorites"] accessoryImage:nil accessoryType:CPListItemAccessoryTypeDisclosureIndicator];
                 listItem.userInfo = item;
+                listItem.handler = ^(id <CPSelectableListItem> item, dispatch_block_t completionBlock) {
+                    [self onItemSelected:item completionHandler:completionBlock];
+                };
                 [items addObject:listItem];
             }];
             NSString *groupName = group.name.length == 0 ? OALocalizedString(@"favorites_item") : group.name;
@@ -74,20 +77,20 @@
     return [OAOsmAndFormatter getFormattedDistance:distance];
 }
 
-// MARK: - CPListTemplateDelegate
-
-- (void)listTemplate:(CPListTemplate *)listTemplate didSelectListItem:(CPListItem *)item completionHandler:(void (^)())completionHandler
+- (void)onItemSelected:(CPListItem * _Nonnull)item completionHandler:(dispatch_block_t)completionBlock
 {
     OAFavoriteItem* favoritePoint = item.userInfo;
     if (!favoritePoint)
     {
-        completionHandler();
+        if (completionBlock)
+            completionBlock();
         return;
     }
     [self startNavigationGivenLocation:[[CLLocation alloc] initWithLatitude:favoritePoint.getLatitude longitude:favoritePoint.getLongitude]];
-    [self.interfaceController popToRootTemplateAnimated:YES];
-    
-    completionHandler();
+    [self.interfaceController popToRootTemplateAnimated:YES completion:nil];
+
+    if (completionBlock)
+        completionBlock();
 }
 
 @end

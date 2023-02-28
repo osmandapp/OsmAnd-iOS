@@ -36,7 +36,7 @@
 - (void) present
 {
     _gridTemplate = [[CPGridTemplate alloc] initWithTitle:OALocalizedString(@"select_route_finish_on_map") gridButtons:[self generateGridButtons]];
-    [self.interfaceController pushTemplate:_gridTemplate animated:YES];
+    [self.interfaceController pushTemplate:_gridTemplate animated:YES completion:nil];
 }
 
 - (NSArray<CPGridButton *> *) generateGridButtons

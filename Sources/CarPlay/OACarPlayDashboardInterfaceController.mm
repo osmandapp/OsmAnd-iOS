@@ -105,7 +105,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     _mapTemplate.mapDelegate = self;
     [self enterBrowsingState];
     
-    [self.interfaceController setRootTemplate:_mapTemplate animated:YES];
+    [self.interfaceController setRootTemplate:_mapTemplate animated:YES completion:nil];
 }
 
 - (void) onTripStartTriggered
@@ -222,24 +222,29 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 
 - (CPBarButton *) createBarButton:(EOACarPlayButtonType)type
 {
-    CPBarButton *barButton = [[CPBarButton alloc] initWithType:[self getButtonType:type] handler:^(CPBarButton * _Nonnull button) {
-        switch(type) {
-            case EOACarPlayButtonTypeDismiss: {
+    CPBarButtonHandler handler = ^(CPBarButton * _Nonnull button) {
+        switch(type)
+        {
+            case EOACarPlayButtonTypeDismiss:
+            {
                 // Dismiss the map panning interface
                 [_mapTemplate dismissPanningInterfaceAnimated:YES];
                 break;
             }
-            case EOACarPlayButtonTypePanMap: {
+            case EOACarPlayButtonTypePanMap:
+            {
                 // Enable the map panning interface and set the dismiss button
                 [_mapTemplate showPanningInterfaceAnimated:YES];
                 break;
             }
-            case EOACarPlayButtonTypeDirections: {
+            case EOACarPlayButtonTypeDirections:
+            {
                 OADirectionsGridController *directionsGrid = [[OADirectionsGridController alloc] initWithInterfaceController:self.interfaceController];
                 [directionsGrid present];
                 break;
             }
-            case EOACarPlayButtonTypeCancelRoute: {
+            case EOACarPlayButtonTypeCancelRoute:
+            {
                 [self stopNavigation];
                 if (_delegate)
                     [_delegate exitNavigationMode];
@@ -247,24 +252,28 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
                 [self enterBrowsingState];
                 break;
             }
-            default: {
+            default:
+            {
                 break;
             }
         }
-    }];
-    
+    };
+
+    NSString *title = @"";
+    UIImage *icon;
+
     if (type == EOACarPlayButtonTypePanMap)
-        barButton.image = [UIImage imageNamed:@"ic_custom_change_object_position"];
+        icon = [UIImage imageNamed:@"ic_custom_change_object_position"];
     else if (type == EOACarPlayButtonTypeDismiss)
-        barButton.title = OALocalizedString(@"shared_string_done");
+        title = OALocalizedString(@"shared_string_done");
     else if (type == EOACarPlayButtonTypeDirections)
-        barButton.title = OALocalizedString(@"shared_string_navigation");
+        title = OALocalizedString(@"shared_string_navigation");
     else if (type == EOACarPlayButtonTypeRouteCalculation)
-        barButton.title = [NSString stringWithFormat:OALocalizedString(@"route_calc_progress"), 0];
+        title = [NSString stringWithFormat:OALocalizedString(@"route_calc_progress"), 0];
     else if (type == EOACarPlayButtonTypeCancelRoute)
-        barButton.title = OALocalizedString(@"shared_string_cancel");
-    
-    return barButton;
+        title = OALocalizedString(@"shared_string_cancel");
+
+    return icon ? [[CPBarButton alloc] initWithImage:icon handler:handler] : [[CPBarButton alloc] initWithTitle:title handler:handler];
 }
 
 - (CPBarButtonType) getButtonType:(EOACarPlayButtonType)type
@@ -465,10 +474,8 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     CPManeuver *maneuver = [[CPManeuver alloc] init];
     NSString *lightImageName = [self imageNameForTurnType:turnType];
     NSString *darkImageName = [lightImageName stringByAppendingString:@"_dark"];
-    UIImage *darkImage = [UIImage imageNamed:darkImageName];
-    UIImage *lightImage = [UIImage imageNamed:lightImageName];
-    maneuver.symbolSet = [[CPImageSet alloc] initWithLightContentImage:lightImage darkContentImage:darkImage];
-    
+    UIUserInterfaceStyle style = self.interfaceController.carTraitCollection.userInterfaceStyle;
+    maneuver.symbolImage = [UIImage imageNamed:style == UIUserInterfaceStyleDark ? lightImageName : darkImageName];
     maneuver.initialTravelEstimates = estimates;
     if (directionInfo.directionInfo.streetName)
         maneuver.instructionVariants = @[directionInfo.directionInfo.streetName];
@@ -525,7 +532,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
                             [_lanesDrawable setNeedsDisplay];
                         }
                         UIImage *img = _lanesDrawable.toUIImage;
-                        secondaryManeuver.symbolSet = [[CPImageSet alloc] initWithLightContentImage:img darkContentImage:img];
+                        secondaryManeuver.symbolImage = img;
                         secondaryManeuver.instructionVariants = @[];
                         _secondaryStyle = CPManeuverDisplayStyleSymbolOnly;
                     });

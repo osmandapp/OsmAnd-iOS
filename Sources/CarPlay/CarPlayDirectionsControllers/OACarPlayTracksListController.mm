@@ -58,9 +58,12 @@
             NSMutableArray<CPListItem *> *items = [NSMutableArray new];
             for (OAGpxInfo *info in obj)
             {
-                CPListItem *item = [[CPListItem alloc] initWithText:info.getName detailText:[self getTrackDescription:info.gpx] image:[UIImage imageNamed:@"ic_custom_trip"]];
-                item.userInfo = info;
-                [items addObject:item];
+                CPListItem *listItem = [[CPListItem alloc] initWithText:info.getName detailText:[self getTrackDescription:info.gpx] image:[UIImage imageNamed:@"ic_custom_trip"]];
+                listItem.userInfo = info;
+                listItem.handler = ^(id <CPSelectableListItem> item, dispatch_block_t completionBlock) {
+                    [self onItemSelected:item completionHandler:completionBlock];
+                };
+                [items addObject:listItem];
             }
             [sections addObject:[[CPListSection alloc] initWithItems:items header:key sectionIndexTitle:[key substringToIndex:1]]];
         }];
@@ -97,14 +100,13 @@
     return res;
 }
 
-// MARK: - CPListTemplateDelegate
-
-- (void)listTemplate:(CPListTemplate *)listTemplate didSelectListItem:(CPListItem *)item completionHandler:(void (^)())completionHandler
+- (void)onItemSelected:(CPListItem * _Nonnull)item completionHandler:(dispatch_block_t)completionBlock
 {
     OAGpxInfo *info = item.userInfo;
     if (!info)
     {
-        completionHandler();
+        if (completionBlock)
+            completionBlock();
         return;
     }
     const auto& activeGpx = OASelectedGPXHelper.instance.activeGpx;
@@ -118,8 +120,9 @@
     [OATargetPointsHelper.sharedInstance navigateToPoint:loc updateRoute:YES intermediate:-1];
     [OARootViewController.instance.mapPanel.mapActions enterRoutePlanningModeGivenGpx:info.gpx from:nil fromName:nil useIntermediatePointsByDefault:NO showDialog:NO];
     
-    [self.interfaceController popToRootTemplateAnimated:YES];
-    completionHandler();
+    [self.interfaceController popToRootTemplateAnimated:YES completion:nil];
+    if (completionBlock)
+        completionBlock();
 }
 
 @end

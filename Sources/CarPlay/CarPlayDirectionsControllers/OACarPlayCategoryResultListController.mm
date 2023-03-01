@@ -163,6 +163,9 @@
                 OAPOI *poi = (OAPOI *)res.object;
                 CPListItem *listItem = [[CPListItem alloc] initWithText:item.getName detailText:[self generatePoiDescription:poi searchItem:item] image:poi.icon];
                 listItem.userInfo = item;
+                listItem.handler = ^(id <CPSelectableListItem> item, dispatch_block_t completionBlock) {
+                    [self onItemSelected:item completionHandler:completionBlock];
+                };
                 return listItem;
             }
             default:
@@ -203,21 +206,21 @@
     return res;
 }
 
-// MARK: - CPListTemplateDelegate
-
-- (void)listTemplate:(CPListTemplate *)listTemplate didSelectListItem:(CPListItem *)item completionHandler:(void (^)())completionHandler
+- (void)onItemSelected:(CPListItem * _Nonnull)item completionHandler:(dispatch_block_t)completionBlock
 {
     OAQuickSearchListItem *searchItem = item.userInfo;
     if (!searchItem)
     {
-        completionHandler();
+        if (completionBlock)
+            completionBlock();
         return;
     }
     CLLocation *loc = searchItem.getSearchResult.location;
     [self startNavigationGivenLocation:loc];
-    [self.interfaceController popToRootTemplateAnimated:YES];
-    
-    completionHandler();
+    [self.interfaceController popToRootTemplateAnimated:YES completion:nil];
+
+    if (completionBlock)
+        completionBlock();
 }
 
 @end

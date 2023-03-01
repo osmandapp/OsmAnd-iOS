@@ -70,7 +70,7 @@
         if (!icon)
             icon = [OAUtilities getMxIcon:@"user_defined"];
         
-        listItem = [[CPListItem alloc] initWithText:name detailText:nil image:icon showsDisclosureIndicator:YES];
+        listItem = [[CPListItem alloc] initWithText:name detailText:nil image:icon accessoryImage:nil accessoryType:CPListItemAccessoryTypeDisclosureIndicator];
     }
     else if ([res.object isKindOfClass:[OAPOIBaseType class]])
     {
@@ -78,33 +78,36 @@
         NSString *typeName = [OAQuickSearchTableController applySynonyms:res];
         UIImage *icon = [((OAPOIBaseType *)res.object) icon];
         
-        listItem = [[CPListItem alloc] initWithText:name detailText:typeName image:icon showsDisclosureIndicator:YES];
+        listItem = [[CPListItem alloc] initWithText:name detailText:typeName image:icon accessoryImage:nil accessoryType:CPListItemAccessoryTypeDisclosureIndicator];
     }
     else if ([res.object isKindOfClass:[OAPOICategory class]])
     {
-        listItem = [[CPListItem alloc] initWithText:item.getName detailText:nil image:((OAPOICategory *)res.object).icon showsDisclosureIndicator:YES];
+        listItem = [[CPListItem alloc] initWithText:item.getName detailText:nil image:((OAPOICategory *)res.object).icon accessoryImage:nil accessoryType:CPListItemAccessoryTypeDisclosureIndicator];
     }
     
     if (listItem)
         listItem.userInfo = item;
-    
+
+    listItem.handler = ^(id <CPSelectableListItem> item, dispatch_block_t completionBlock) {
+        [self onItemSelected:item completionHandler:completionBlock];
+    };
     return listItem;
 }
 
-// MARK: - CPListTemplateDelegate
-
-- (void)listTemplate:(CPListTemplate *)listTemplate didSelectListItem:(CPListItem *)item completionHandler:(void (^)())completionHandler
+- (void)onItemSelected:(CPListItem * _Nonnull)item completionHandler:(dispatch_block_t)completionBlock
 {
     OAQuickSearchListItem *searchItem = item.userInfo;
     if (!searchItem)
     {
-        completionHandler();
+        if (completionBlock)
+            completionBlock();
         return;
     }
     _categoryResultController = [[OACarPlayCategoryResultListController alloc] initWithInterfaceController:self.interfaceController searchResult:searchItem.getSearchResult];
     [_categoryResultController present];
-    
-    completionHandler();
+
+    if (completionBlock)
+        completionBlock();
 }
 
 @end

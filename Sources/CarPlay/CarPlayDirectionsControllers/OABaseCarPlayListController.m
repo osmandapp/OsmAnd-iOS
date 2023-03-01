@@ -10,10 +10,6 @@
 
 #import <CarPlay/CarPlay.h>
 
-@interface OABaseCarPlayListController() <CPListTemplateDelegate>
-
-@end
-
 @implementation OABaseCarPlayListController
 {
     CPListTemplate *_listTemplate;
@@ -28,8 +24,7 @@
 - (void) present
 {
     _listTemplate = [[CPListTemplate alloc] initWithTitle:self.screenTitle sections:[self generateSections]];
-    _listTemplate.delegate = self;
-    [self.interfaceController pushTemplate:_listTemplate animated:YES];
+    [self.interfaceController pushTemplate:_listTemplate animated:YES completion:nil];
 }
 
 - (NSArray<CPListSection *> *) generateSections
@@ -40,13 +35,6 @@
 - (void) updateSections:(NSArray<CPListSection *> *)sections
 {
     [_listTemplate updateSections:sections];
-}
-
-// MARK: - CPListTemplateDelegate
-
-- (void)listTemplate:(CPListTemplate *)listTemplate didSelectListItem:(CPListItem *)item completionHandler:(void (^)())completionHandler
-{
-    // Override
 }
 
 @end

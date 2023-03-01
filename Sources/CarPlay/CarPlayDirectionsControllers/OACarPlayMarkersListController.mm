@@ -35,9 +35,12 @@
     {
         [_destinationsHelper.sortedDestinations enumerateObjectsUsingBlock:^(OADestination * _Nonnull destination, NSUInteger idx, BOOL * _Nonnull stop) {
             NSString *imageName = [destination.markerResourceName stringByAppendingString:@"_small"];
-            CPListItem *item = [[CPListItem alloc] initWithText:destination.desc detailText:nil image:[UIImage imageNamed:imageName]];
-            item.userInfo = destination;
-            [items addObject:item];
+            CPListItem *listItem = [[CPListItem alloc] initWithText:destination.desc detailText:nil image:[UIImage imageNamed:imageName]];
+            listItem.userInfo = destination;
+            listItem.handler = ^(id <CPSelectableListItem> item, dispatch_block_t completionBlock) {
+                [self onItemSelected:item completionHandler:completionBlock];
+            };
+            [items addObject:listItem];
         }];
     }
     else
@@ -48,20 +51,20 @@
     return @[[[CPListSection alloc] initWithItems:items]];
 }
 
-// MARK: CPListTemplateDelegate
-
-- (void)listTemplate:(CPListTemplate *)listTemplate didSelectListItem:(CPListItem *)item completionHandler:(void (^)())completionHandler
+- (void)onItemSelected:(CPListItem * _Nonnull)item completionHandler:(dispatch_block_t)completionBlock
 {
     OADestination *destination = item.userInfo;
     if (!destination)
     {
-        completionHandler();
+        if (completionBlock)
+            completionBlock();
         return;
     }
     [self startNavigationGivenLocation:[[CLLocation alloc] initWithLatitude:destination.latitude longitude:destination.longitude]];
     [self.interfaceController popToRootTemplateAnimated:YES];
-    
-    completionHandler();
+
+    if (completionBlock)
+        completionBlock();
 }
 
 @end

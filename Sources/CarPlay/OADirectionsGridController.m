@@ -12,6 +12,7 @@
 #import "OACarPlayAddressSearchController.h"
 #import "OACarPlayMarkersListController.h"
 #import "OACarPlayTracksListController.h"
+#import "OACarPlayHistoryListController.h"
 #import "Localization.h"
 
 #import <CarPlay/CarPlay.h>
@@ -24,19 +25,19 @@
 @implementation OADirectionsGridController
 {
     CPGridTemplate *_gridTemplate;
-    
+
     OACarPlayAddressSearchController *_searchController;
     OACarPlayFavoritesListController *_favoritesListController;
     OASearchCategoriesListController *_categoriesListController;
     OACarPlayMarkersListController *_markersListController;
     OACarPlayTracksListController *_tracksListController;
-    
+    OACarPlayHistoryListController *_historyListController;
 }
 
 - (void) present
 {
     _gridTemplate = [[CPGridTemplate alloc] initWithTitle:OALocalizedString(@"select_route_finish_on_map") gridButtons:[self generateGridButtons]];
-    [self.interfaceController pushTemplate:_gridTemplate animated:YES];
+    [self.interfaceController pushTemplate:_gridTemplate animated:YES completion:nil];
 }
 
 - (NSArray<CPGridButton *> *) generateGridButtons
@@ -65,8 +66,13 @@
         _tracksListController = [[OACarPlayTracksListController alloc] initWithInterfaceController:self.interfaceController];
         [_tracksListController present];
     }];
-    
-    return @[btnSearch, btnCategories, btnFav, btnMarkers, btnTracks];
+
+    CPGridButton *btnHistory = [[CPGridButton alloc] initWithTitleVariants:@[OALocalizedString(@"shared_string_history")] image:[UIImage imageNamed:@"ic_carplay_history"] handler:^(CPGridButton * _Nonnull barButton) {
+        _historyListController = [[OACarPlayHistoryListController alloc] initWithInterfaceController:self.interfaceController];
+        [_historyListController present];
+    }];
+
+    return @[btnHistory, btnSearch, btnCategories, btnFav, btnMarkers, btnTracks];
 }
 
 @end

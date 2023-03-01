@@ -102,6 +102,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     for(const auto& resource : mapStylesResources)
     {
         const auto& mapStyle = std::static_pointer_cast<const OsmAnd::ResourcesManager::MapStyleMetadata>(resource->metadata)->mapStyle;
+        if (mapStyle->name.endsWith(QStringLiteral(".addon")))
+            continue;
 
         NSString *resourceId = resource->id.toNSString();
         NSDictionary *mapStyleInfo = [OARendererRegistry getMapStyleInfo:mapStyle->title.toNSString()];

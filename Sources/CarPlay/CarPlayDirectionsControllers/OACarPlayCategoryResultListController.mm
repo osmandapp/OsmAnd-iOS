@@ -161,7 +161,11 @@
             case POI:
             {
                 OAPOI *poi = (OAPOI *)res.object;
-                CPListItem *listItem = [[CPListItem alloc] initWithText:item.getName detailText:[self generatePoiDescription:poi searchItem:item] image:poi.icon];
+                CPListItem *listItem = [[CPListItem alloc] initWithText:item.getName
+                                                             detailText:[self generatePoiDescription:poi searchItem:item]
+                                                                  image:poi.icon
+                                                         accessoryImage:nil
+                                                          accessoryType:CPListItemAccessoryTypeDisclosureIndicator];
                 listItem.userInfo = item;
                 listItem.handler = ^(id <CPSelectableListItem> item, dispatch_block_t completionBlock) {
                     [self onItemSelected:item completionHandler:completionBlock];

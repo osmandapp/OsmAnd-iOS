@@ -2825,3 +2825,4 @@
 "ltr_or_rtl_combine_via_of" = "%ld af %ld";
 "delete_history_items" = "Slet historikelementer?";
 "confirm_history_item_delete" = "Er du sikker på, at du vil slette (%ld) historikelementer?";
+"search_favorites" = "Søg i favoritter";

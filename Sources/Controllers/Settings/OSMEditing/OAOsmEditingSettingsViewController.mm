@@ -366,7 +366,7 @@
         {
             OAOsmAccountSettingsViewController *accountSettings = [[OAOsmAccountSettingsViewController alloc] init];
             accountSettings.accountDelegate = self;
-            [self presentViewController:accountSettings animated:YES completion:nil];
+            [self showModalViewController:accountSettings];
         }
         else
         {
@@ -380,13 +380,13 @@
         if (_isLogged)
         {
             OAMappersViewController *benefitsViewController = [[OAMappersViewController alloc] init];
-            [self presentViewController:benefitsViewController animated:YES completion:nil];
+            [self showModalViewController:benefitsViewController];
         }
         else
         {
             OABenefitsOsmContributorsViewController *benefitsViewController = [[OABenefitsOsmContributorsViewController alloc] init];
             benefitsViewController.accountDelegate = self;
-            [self presentViewController:benefitsViewController animated:YES completion:nil];
+            [self showModalViewController:benefitsViewController];
         }
     }
     

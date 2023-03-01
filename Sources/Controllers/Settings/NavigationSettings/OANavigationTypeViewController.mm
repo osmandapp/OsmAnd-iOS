@@ -26,20 +26,21 @@
     NSArray<NSArray *> *_data;
 }
 
-#pragma mark - UIViewController
-
-- (void) viewDidLoad
-{
-    [super viewDidLoad];
-
-    [self setupTableHeaderViewWithText:OALocalizedString(@"select_nav_profile_dialog_message")];
-}
-
 #pragma mark - Base UI
 
 - (NSString *)getTitle
 {
     return OALocalizedString(@"nav_type_hint");
+}
+
+- (EOABaseNavbarStyle)getNavbarStyle
+{
+    return EOABaseNavbarStyleDescription;
+}
+
+- (NSString *)getCustomTableViewDescription
+{
+    return OALocalizedString(@"select_nav_profile_dialog_message");
 }
 
 #pragma mark - Table data
@@ -163,13 +164,6 @@
             [self.delegate onSettingsChanged];
         [self dismissViewController];
     }
-}
-
-#pragma mark - Selectors
-
-- (void)onRotation
-{
-    [self setupTableHeaderViewWithText:OALocalizedString(@"select_nav_profile_dialog_message")];
 }
 
 @end

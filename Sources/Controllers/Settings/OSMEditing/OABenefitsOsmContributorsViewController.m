@@ -304,7 +304,7 @@
         {
             OAOsmAccountSettingsViewController *accountSettings = [[OAOsmAccountSettingsViewController alloc] init];
             accountSettings.accountDelegate = self;
-            [self presentViewController:accountSettings animated:YES completion:nil];
+            [self showModalViewController:accountSettings];
         }
     }
 }

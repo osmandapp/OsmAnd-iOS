@@ -379,8 +379,6 @@
         }
         if (cell)
         {
-            cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingOnSideOfContent, 0., 0.);
-
             cell.titleLabel.text = item.title;
             cell.leftIconView.image = [UIImage rtlImageNamed:item.iconName];
 
@@ -434,7 +432,7 @@
         {
             OAUninstallSpeedCamerasViewController *speedCamerasViewController = [[OAUninstallSpeedCamerasViewController alloc] init];
             speedCamerasViewController.delegate = self;
-            [self presentViewController:speedCamerasViewController animated:YES completion:nil];
+            [self showModalViewController:speedCamerasViewController];
         }
     }
 }

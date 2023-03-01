@@ -96,7 +96,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
     {
         OAOsmAccountSettingsViewController *accountSettings = [[OAOsmAccountSettingsViewController alloc] init];
         accountSettings.accountDelegate = self;
-        [self presentViewController:accountSettings animated:YES completion:nil];
+        [self showModalViewController:accountSettings];
     }
 }
 
@@ -110,11 +110,6 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
 - (NSString *)getLeftNavbarButtonTitle
 {
     return OALocalizedString(@"shared_string_cancel");
-}
-
-- (BOOL)isChevronIconVisible
-{
-    return NO;
 }
 
 - (NSString *)getBottomButtonTitle
@@ -521,7 +516,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
 {
     OAOsmUploadGPXVisibilityViewConroller *vc = [[OAOsmUploadGPXVisibilityViewConroller alloc] initWithVisibility:_selectedVisibility];
     vc.visibilityDelegate = self;
-    [self presentViewController:vc animated:YES completion:nil];
+    [self showModalViewController:vc];
 }
 
 - (void)onAccountButtonPressed
@@ -530,7 +525,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
     {
         OAOsmAccountSettingsViewController *accountSettings = [[OAOsmAccountSettingsViewController alloc] init];
         accountSettings.accountDelegate = self;
-        [self presentViewController:accountSettings animated:YES completion:nil];
+        [self showModalViewController:accountSettings];
     }
     else
     {

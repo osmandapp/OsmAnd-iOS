@@ -68,13 +68,6 @@
     [_backupHelper removePrepareBackupListener:self];
 }
 
-#pragma mark - Base setup UI
-
-- (UIColor *)getNavbarColor
-{
-    return UIColorFromRGB(color_primary_table_background);
-}
-
 #pragma mark - Base UI
 
 - (BOOL)isNavbarSeparatorVisible

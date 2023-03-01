@@ -90,6 +90,7 @@
     [self show:YES state:_currentState onComplete:^{
         [self layoutSubviews];
     }];
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle

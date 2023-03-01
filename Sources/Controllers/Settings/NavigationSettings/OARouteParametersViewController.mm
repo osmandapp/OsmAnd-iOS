@@ -526,7 +526,7 @@
     if (settingsViewController)
     {
         settingsViewController.delegate = self;
-        [self presentViewController:settingsViewController animated:YES completion:nil];
+        [self showModalViewController:settingsViewController];
     }
 }
 

@@ -51,14 +51,9 @@
     return NO;
 }
 
-- (BOOL)isChevronIconVisible
+- (EOABaseNavbarStyle)getNavbarStyle
 {
-    return NO;
-}
-
-- (EOABaseTableHeaderMode)getTableHeaderMode
-{
-    return EOABaseTableHeaderModeBigTitle;
+    return EOABaseNavbarStyleCustomLargeTitle;
 }
 
 - (NSString *)getTopButtonTitle
@@ -91,12 +86,17 @@
     return NO;
 }
 
-- (void)setupTableHeaderView
+- (void)setupCustomLargeTitleView
 {
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    paragraphStyle.alignment = NSTextAlignmentCenter;
+    NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString:[self getTitle]
+                                                                         attributes:@{
+        NSParagraphStyleAttributeName : paragraphStyle,
+        NSFontAttributeName : [UIFont scaledSystemFontOfSize:30. weight:UIFontWeightBold]
+    }];
     self.tableView.tableHeaderView =
-        [OAUtilities setupTableHeaderViewWithAttributedText:[[NSAttributedString alloc]
-                                                                initWithString:[self getTitle]
-                                                                    attributes:@{ NSFontAttributeName : [UIFont scaledSystemFontOfSize:30. weight:UIFontWeightBold]} ]
+        [OAUtilities setupTableHeaderViewWithAttributedText:attributedText
                                           topCenterIconName:@"img_speed_camera_warning"
                                                    iconSize:92.];
 }

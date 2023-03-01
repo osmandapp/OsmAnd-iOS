@@ -36,11 +36,6 @@
     return OALocalizedString(@"manage_storage");
 }
 
-- (NSString *)getLeftNavbarButtonTitle
-{
-    return OALocalizedString(@"backup_data");
-}
-
 #pragma mark - Table data
 
 - (void)generateData
@@ -202,7 +197,7 @@
             [[OAManageTypeViewController alloc] initWithSettingsType:type
                                                                 size:[self getItem:[self getSelectedIndexPath]][@"description"]];
     manageTypeViewController.manageTypeDelegate = self;
-    [self.navigationController presentViewController:manageTypeViewController animated:YES completion:nil];
+    [self showModalViewController:manageTypeViewController];
 }
 
 #pragma mark - Additions

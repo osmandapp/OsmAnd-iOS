@@ -44,19 +44,14 @@
     return _settingsType.title;
 }
 
-- (NSString *)getLeftNavbarButtonTitle
-{
-    return OALocalizedString(@"manage_storage");
-}
-
 - (BOOL)isNavbarSeparatorVisible
 {
     return NO;
 }
 
-- (EOABaseTableHeaderMode)getTableHeaderMode
+- (EOABaseNavbarStyle)getNavbarStyle
 {
-    return EOABaseTableHeaderModeBigTitle;
+    return EOABaseNavbarStyleLargeTitle;
 }
 
 #pragma mark - Table data

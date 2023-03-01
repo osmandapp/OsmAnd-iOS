@@ -1154,7 +1154,7 @@
     {
         OAWeatherCacheSettingsViewController *controller = [[OAWeatherCacheSettingsViewController alloc] initWithCacheType:EOAWeatherOfflineData];
         controller.cacheDelegate = self;
-        [self presentViewController:controller animated:YES completion:nil];
+        [self showModalViewController:controller];
     }
     else if ([item[@"key"] isEqualToString:@"select_cell"])
     {

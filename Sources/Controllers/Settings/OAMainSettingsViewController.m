@@ -86,11 +86,6 @@
     return EOABaseNavbarColorSchemeOrange;
 }
 
-- (void)addAccessibilityLabels
-{
-    self.leftNavbarButton.accessibilityLabel = OALocalizedString(@"shared_string_back");
-}
-
 #pragma mark - UIViewController
 
 - (void) viewWillAppear:(BOOL)animated

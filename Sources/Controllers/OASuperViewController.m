@@ -7,6 +7,7 @@
 //
 
 #import "OASuperViewController.h"
+#import "OABaseNavbarViewController.h"
 #import "OAAutoObserverProxy.h"
 #import "OASizes.h"
 
@@ -74,30 +75,16 @@
     // for other
     [self registerNotifications];
     [self registerObservers];
-
-    if (_contentSizeCategory)
-    {
-        // check if dynamic type size has changed
-        UIContentSizeCategory contentSizeCategory = [UIApplication sharedApplication].preferredContentSizeCategory;
-        if (![contentSizeCategory isEqualToString:_contentSizeCategory])
-        {
-            // needs to update navbar height after returning from next screen
-            [self resetNavbarEstimatedHeight];
-            [self.view setNeedsDisplay];
-        }
-    }
 }
 
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
 
-    if (!_isScreenLoaded || [self getNavbarEstimatedHeight] == 0)
+    if (!_isScreenLoaded)
     {
-        [self updateNavbarEstimatedHeight];
         _isScreenLoaded = YES;
         _contentSizeCategory = [UIApplication sharedApplication].preferredContentSizeCategory;
-        [self adjustScrollStartPosition];
     }
 }
 
@@ -118,23 +105,6 @@
 }
 
 #pragma mark - Base setup UI
-
-- (CGFloat)getNavbarEstimatedHeight
-{
-    return [self isModal] ? [OAUtilities isLandscape] ? defaultNavBarHeight : modalNavBarHeight : defaultNavBarHeight;;
-}
-
-- (void)updateNavbarEstimatedHeight
-{
-}
-
-- (void)resetNavbarEstimatedHeight
-{
-}
-
-- (void)adjustScrollStartPosition
-{
-}
 
 - (void)applyLocalization
 {
@@ -163,6 +133,11 @@
     return _isScreenLoaded;
 }
 
+- (CGFloat)getNavbarHeight
+{
+    return [OAUtilities getTopMargin] + ([self isModal] && ![OAUtilities isLandscape] ? modalNavBarHeight : defaultNavBarHeight);
+}
+
 #pragma mark - IBAction
 
 - (IBAction)onLeftNavbarButtonPressed:(UIButton *)sender
@@ -178,11 +153,8 @@
 }
 
 // after resizing dynamic type for navbar and UI components with adjustsFontForContentSizeCategory = NO
-// override with super to work correctly
 - (void)onContentSizeChanged:(NSNotification *)notification
 {
-    // needs to update navbar height
-    [self resetNavbarEstimatedHeight];
 }
 
 #pragma mark - Actions
@@ -201,6 +173,12 @@
         [self presentViewController:viewController animated:YES completion:nil];
     else
         [self.navigationController pushViewController:viewController animated:YES];
+}
+
+- (void)showModalViewController:(UIViewController *)viewController
+{
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
+    [self.navigationController presentViewController:navigationController animated:YES completion:nil];
 }
 
 @end

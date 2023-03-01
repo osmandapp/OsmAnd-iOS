@@ -390,7 +390,7 @@
     {
         OACloudAccountLogoutViewController *logoutViewController = [[OACloudAccountLogoutViewController alloc] init];
         logoutViewController.logoutDelegate = self;
-        [self presentViewController:logoutViewController animated:YES completion:nil];
+        [self showModalViewController:logoutViewController];
     }
     else if ([key isEqualToString:@"delete_all_cell"])
     {

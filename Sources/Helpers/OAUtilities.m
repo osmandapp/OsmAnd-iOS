@@ -27,6 +27,9 @@
 
 #define kBlurViewTag -999
 #define kSpinnerViewTag -998
+#define kNavItemStackViewWithSubtitleTag -997
+#define kTitleInNavItemStackViewTag -996
+#define kSubtitleInNavItemStackViewTag -995
 
 @implementation UIBezierPath (util)
 
@@ -416,6 +419,91 @@
         [results addObject:lastPhrase];
   
     return [NSArray arrayWithArray:results];
+}
+
+@end
+
+@implementation UIViewController (utils)
+
+- (BOOL)isNavbarVisible
+{
+    return NO;
+}
+
+@end
+
+@implementation UINavigationItem (util)
+
+- (void)setStackViewWithTitle:(NSString *)title
+                   titleColor:(UIColor *)titleColor
+                    titleFont:(UIFont *)titleFont
+                     subtitle:(NSString *)subtitle
+                subtitleColor:(UIColor *)subtitleColor
+                 subtitleFont:(UIFont *)subtitleFont
+{
+    UIStackView *stackView;
+
+    UILabel *titleLabel = [[UILabel alloc] init];
+    titleLabel.tag = kTitleInNavItemStackViewTag;
+    titleLabel.backgroundColor = UIColor.clearColor;
+    titleLabel.text = title;
+    titleLabel.textColor = titleColor;
+    titleLabel.font = titleFont;
+
+    if (subtitle)
+    {
+        UILabel *subtitleLabel = [[UILabel alloc] init];
+        subtitleLabel.tag = kSubtitleInNavItemStackViewTag;
+        subtitleLabel.backgroundColor = UIColor.clearColor;
+        subtitleLabel.text = subtitle;
+        subtitleLabel.textColor = subtitleColor;
+        subtitleLabel.font = subtitleFont;
+        stackView = [[UIStackView alloc] initWithArrangedSubviews:@[titleLabel, subtitleLabel]];
+    }
+    else
+    {
+        stackView = [[UIStackView alloc] initWithArrangedSubviews:@[titleLabel]];
+    }
+
+    stackView.tag = kNavItemStackViewWithSubtitleTag;
+    stackView.backgroundColor = UIColor.clearColor;
+    stackView.distribution = UIStackViewDistributionEqualCentering;
+    stackView.alignment = UIStackViewAlignmentCenter;
+    stackView.axis = UILayoutConstraintAxisVertical;
+    [stackView layoutSubviews];
+
+    self.titleView = stackView;
+}
+
+- (void)hideTitleInStackView:(BOOL)hide defaultTitle:(NSString *)defaultTitle defaultSubtitle:(NSString *)defaultSubtitle
+{
+    if (self.titleView && self.titleView.tag == kNavItemStackViewWithSubtitleTag)
+    {
+        [UIView animateWithDuration:.2 animations:^{
+            if (self.titleView.subviews.firstObject.tag == kTitleInNavItemStackViewTag)
+            {
+                UILabel *titleLabel = self.titleView.subviews.firstObject;
+                titleLabel.text = hide ? @"" : defaultTitle;
+                titleLabel.alpha = hide ? 0. : 1.;
+            }
+            if (self.titleView.subviews.count == 2 && self.titleView.subviews.lastObject.tag == kSubtitleInNavItemStackViewTag)
+            {
+                UILabel *subtitleLabel = self.titleView.subviews.lastObject;
+                subtitleLabel.text = hide ? @"" : defaultSubtitle;
+                subtitleLabel.alpha = hide ? 0. : 1.;
+            }
+        }];
+    }
+}
+
+- (BOOL)isTitleInStackViewHided
+{
+    if (self.titleView && self.titleView.tag == kNavItemStackViewWithSubtitleTag)
+    {
+        if (self.titleView.subviews.firstObject.tag == kTitleInNavItemStackViewTag)
+            return ((UILabel *) self.titleView.subviews.firstObject).text.length == 0;
+    }
+    return NO;
 }
 
 @end
@@ -2185,13 +2273,15 @@ static const double d180PI = 180.0 / M_PI_2;
     UILabel *label;
     if (hasText)
     {
-        CGSize textSize = [self calculateTextBounds:attributedText width:DeviceScreenWidth - ([OAUtilities getLeftMargin] + 20) * 2];
+        CGFloat width = DeviceScreenWidth - ([OAUtilities getLeftMargin] + 20) * 2;
+        CGFloat height = [self calculateTextBounds:attributedText width:width].height;
         label = [[UILabel alloc] initWithFrame:CGRectMake(
-            DeviceScreenWidth / 2 - textSize.width / 2,
+            DeviceScreenWidth / 2 - width / 2,
             (imageView ? imageView.frame.origin.y + imageView.frame.size.height + 34. : 4.),
-            textSize.width,
-            textSize.height)];
+            width,
+            height)];
         label.attributedText = attributedText;
+        label.numberOfLines = 0;
     }
 
     CGFloat headerHeight = 0.;

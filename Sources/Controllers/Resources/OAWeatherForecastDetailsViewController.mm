@@ -102,14 +102,9 @@
     return NO;
 }
 
-- (EOABaseTableHeaderMode)getTableHeaderMode
+- (EOABaseNavbarStyle)getNavbarStyle
 {
-    return EOABaseTableHeaderModeBigTitle;
-}
-
-- (BOOL)isTableHeaderHasHiddenSeparator
-{
-    return YES;
+    return EOABaseNavbarStyleLargeTitle;
 }
 
 #pragma mark - Table data
@@ -364,7 +359,7 @@
     {
         OAWeatherCacheSettingsViewController *controller = [[OAWeatherCacheSettingsViewController alloc] initWithRegion:_region];
         controller.cacheDelegate = self;
-        [self presentViewController:controller animated:YES completion:nil];
+        [self showModalViewController:controller];
     }
     else if ([item[@"key"] isEqualToString:@"update_now_cell"])
     {
@@ -416,7 +411,7 @@
         OAWeatherFrequencySettingsViewController *frequencySettingsViewController =
                 [[OAWeatherFrequencySettingsViewController alloc] initWithRegion:_region];
         frequencySettingsViewController.frequencyDelegate = self;
-        [self presentViewController:frequencySettingsViewController animated:YES completion:nil];
+        [self showModalViewController:frequencySettingsViewController];
     }
 }
 

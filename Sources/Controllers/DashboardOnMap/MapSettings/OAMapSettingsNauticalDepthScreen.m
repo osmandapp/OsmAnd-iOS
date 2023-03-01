@@ -188,7 +188,8 @@
     {
         OANauticalDepthParametersViewController *depthParametersViewController = [[OANauticalDepthParametersViewController alloc] initWithParameter:parameter];
         depthParametersViewController.depthDelegate = self;
-        [vwController presentViewController:depthParametersViewController animated:YES completion:nil];
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:depthParametersViewController];
+        [vwController presentViewController:navigationController animated:YES completion:nil];
     }
 }
 

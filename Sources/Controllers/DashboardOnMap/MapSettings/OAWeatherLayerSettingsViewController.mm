@@ -723,7 +723,8 @@
         OAWeatherBandSettingsViewController *controller =
         [[OAWeatherBandSettingsViewController alloc] initWithWeatherBand:band];
         controller.bandDelegate = self;
-        [self presentViewController:controller animated:YES completion:nil];
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
+        [self.navigationController presentViewController:navigationController animated:YES completion:nil];
         
     }
     else if ([cellType isEqualToString:kContoursTypeCell])

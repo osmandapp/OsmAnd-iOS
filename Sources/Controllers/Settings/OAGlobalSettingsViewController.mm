@@ -451,30 +451,28 @@
     {
         case EOAGlobalSettingsMain:
         {
-            UIViewController *settingsViewController = nil;
-            if ([item.key isEqualToString:@"settings_preset"])
-                settingsViewController = [[OAGlobalSettingsViewController alloc] initWithSettingsType:EOADefaultProfile];
-            else if ([item.key isEqualToString:@"carplay_profile"])
-                settingsViewController = [[OAGlobalSettingsViewController alloc] initWithSettingsType:EOACarplayProfile];
-            else if ([item.key isEqualToString:@"history_settings"])
-                settingsViewController = [[OAGlobalSettingsViewController alloc] initWithSettingsType:EOAHistory];
-            else if ([item.key isEqualToString:@"dialogs_and_notif"])
-                settingsViewController = [[OAGlobalSettingsViewController alloc] initWithSettingsType:EOADialogsAndNotifications];
-
-            if (settingsViewController)
+            if ([item.key isEqualToString:@"uninstall_speed_cameras"])
             {
-                [self.navigationController pushViewController:settingsViewController animated:YES];
+                OAUninstallSpeedCamerasViewController *uninstallSpeedCamerasViewController = [[OAUninstallSpeedCamerasViewController alloc] init];
+                uninstallSpeedCamerasViewController.delegate = self;
+                [self showModalViewController:uninstallSpeedCamerasViewController];
             }
             else
             {
-                if ([item.key isEqualToString:@"uninstall_speed_cameras"])
-                {
-                    settingsViewController = [[OAUninstallSpeedCamerasViewController alloc] init];
-                    ((OAUninstallSpeedCamerasViewController *) settingsViewController).delegate = self;
-                }
-
+                UIViewController *settingsViewController = nil;
+                if ([item.key isEqualToString:@"settings_preset"])
+                    settingsViewController = [[OAGlobalSettingsViewController alloc] initWithSettingsType:EOADefaultProfile];
+                else if ([item.key isEqualToString:@"carplay_profile"])
+                    settingsViewController = [[OAGlobalSettingsViewController alloc] initWithSettingsType:EOACarplayProfile];
+                else if ([item.key isEqualToString:@"history_settings"])
+                    settingsViewController = [[OAGlobalSettingsViewController alloc] initWithSettingsType:EOAHistory];
+                else if ([item.key isEqualToString:@"dialogs_and_notif"])
+                    settingsViewController = [[OAGlobalSettingsViewController alloc] initWithSettingsType:EOADialogsAndNotifications];
+                
                 if (settingsViewController)
-                    [self presentViewController:settingsViewController animated:YES completion:nil];
+                {
+                    [self.navigationController pushViewController:settingsViewController animated:YES];
+                }
             }
             break;
         }

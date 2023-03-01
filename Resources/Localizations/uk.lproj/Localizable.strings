@@ -2821,3 +2821,15 @@
 "restart_is_required_title" = "Потрібен перезапуск";
 "restart_is_required" = "Для застосування змін потрібен перезапуск.";
 "free_downloads" = "Безплатні завантаження";
+"last_seven_days" = "За останні 7 днів";
+"history_preferences_descr" = "Ви можете вимкнути запис історії окремо для кожного типу історії.";
+"history_actions_footer_text" = "Ви можете експортувати історію у файл. Ви можете видалити всі записи історії, записані до цього моменту.";
+"history_clear_alert_message" = "Ви впевнені, що хочете видалити всі елементи історії?";
+"ltr_or_rtl_combine_via_of" = "%ld з %ld";
+"delete_history_items" = "Видалити елементи історії?";
+"navigation_history" = "Історія навігації";
+"map_markers_history" = "Історія позначок мап";
+"history_clear_alert_title" = "Видалити всю історію";
+"search_history_disabled" = "Історію пошуку вимкнено";
+"enable_search_history" = "Ви можете ввімкнути історію пошуку в налаштуваннях";
+"confirm_history_item_delete" = "Ви впевнені, що хочете видалити (%ld) елементи історії?";

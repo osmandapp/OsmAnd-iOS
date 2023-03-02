@@ -617,6 +617,8 @@
 		4655EB3328E30AD200FA2E25 /* OAStatusBackupConflictDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4655EB3228E30AD200FA2E25 /* OAStatusBackupConflictDetailsViewController.m */; };
 		4655EB3528E374A500FA2E25 /* OAStatusBackupConflictDetailsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4655EB3428E374A500FA2E25 /* OAStatusBackupConflictDetailsViewController.xib */; };
 		465D7E21295494000099B206 /* OATextMultilineTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 465D7E20295494000099B206 /* OATextMultilineTableViewCell.xib */; };
+		465DB48629AF5BA3007F5989 /* OACarPlayTrackResultListController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 465DB48529AF5AE7007F5989 /* OACarPlayTrackResultListController.mm */; };
+		465DB48929AF9F6C007F5989 /* OACarPlayFavoriteResultListController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 465DB48829AF9E1A007F5989 /* OACarPlayFavoriteResultListController.mm */; };
 		46624E722993B28C00F425AE /* OABaseNavbarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46624E712993B28C00F425AE /* OABaseNavbarViewController.m */; };
 		46624E742993B4B100F425AE /* OABaseNavbarViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46624E732993B4B100F425AE /* OABaseNavbarViewController.xib */; };
 		4663AB402951C95A00D9781E /* OAInputTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4663AB3F2951C95A00D9781E /* OAInputTableViewCell.xib */; };
@@ -1921,7 +1923,7 @@
 		DA5A814E26C563A700F274C7 /* OACarPlayMarkersListController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A796726C563A000F274C7 /* OACarPlayMarkersListController.mm */; };
 		DA5A814F26C563A700F274C7 /* OACarPlayFavoritesListController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A796826C563A000F274C7 /* OACarPlayFavoritesListController.mm */; };
 		DA5A815026C563A700F274C7 /* OACarPlayAddressSearchController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A796926C563A000F274C7 /* OACarPlayAddressSearchController.mm */; };
-		DA5A815126C563A700F274C7 /* OACarPlayTracksListController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A796B26C563A000F274C7 /* OACarPlayTracksListController.mm */; };
+		DA5A815126C563A700F274C7 /* OACarPlayTracksListController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A796B26C563A000F274C7 /* OACarPlayTracksListController.m */; };
 		DA5A815226C563A700F274C7 /* OABaseCarPlayListController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A796C26C563A000F274C7 /* OABaseCarPlayListController.m */; };
 		DA5A815326C563A700F274C7 /* OACarPlayDashboardInterfaceController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A796E26C563A000F274C7 /* OACarPlayDashboardInterfaceController.mm */; };
 		DA5A815426C563A700F274C7 /* OACarPlayMapViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A797026C563A000F274C7 /* OACarPlayMapViewController.mm */; };
@@ -4027,6 +4029,10 @@
 		465D7E1E295493DF0099B206 /* OATextMultilineTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATextMultilineTableViewCell.h; sourceTree = "<group>"; };
 		465D7E1F295493F00099B206 /* OATextMultilineTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OATextMultilineTableViewCell.m; sourceTree = "<group>"; };
 		465D7E20295494000099B206 /* OATextMultilineTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OATextMultilineTableViewCell.xib; sourceTree = "<group>"; };
+		465DB48429AF5AD1007F5989 /* OACarPlayTrackResultListController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACarPlayTrackResultListController.h; sourceTree = "<group>"; };
+		465DB48529AF5AE7007F5989 /* OACarPlayTrackResultListController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OACarPlayTrackResultListController.mm; sourceTree = "<group>"; };
+		465DB48729AF9D3B007F5989 /* OACarPlayFavoriteResultListController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACarPlayFavoriteResultListController.h; sourceTree = "<group>"; };
+		465DB48829AF9E1A007F5989 /* OACarPlayFavoriteResultListController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OACarPlayFavoriteResultListController.mm; sourceTree = "<group>"; };
 		46624E702993B25D00F425AE /* OABaseNavbarViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OABaseNavbarViewController.h; sourceTree = "<group>"; };
 		46624E712993B28C00F425AE /* OABaseNavbarViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OABaseNavbarViewController.m; sourceTree = "<group>"; };
 		46624E732993B4B100F425AE /* OABaseNavbarViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OABaseNavbarViewController.xib; sourceTree = "<group>"; };
@@ -5573,7 +5579,7 @@
 		DA5A796826C563A000F274C7 /* OACarPlayFavoritesListController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OACarPlayFavoritesListController.mm; sourceTree = "<group>"; };
 		DA5A796926C563A000F274C7 /* OACarPlayAddressSearchController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OACarPlayAddressSearchController.mm; sourceTree = "<group>"; };
 		DA5A796A26C563A000F274C7 /* OACarPlayMarkersListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OACarPlayMarkersListController.h; sourceTree = "<group>"; };
-		DA5A796B26C563A000F274C7 /* OACarPlayTracksListController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OACarPlayTracksListController.mm; sourceTree = "<group>"; };
+		DA5A796B26C563A000F274C7 /* OACarPlayTracksListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OACarPlayTracksListController.m; sourceTree = "<group>"; };
 		DA5A796C26C563A000F274C7 /* OABaseCarPlayListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OABaseCarPlayListController.m; sourceTree = "<group>"; };
 		DA5A796D26C563A000F274C7 /* OACarPlayFavoritesListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OACarPlayFavoritesListController.h; sourceTree = "<group>"; };
 		DA5A796E26C563A000F274C7 /* OACarPlayDashboardInterfaceController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OACarPlayDashboardInterfaceController.mm; sourceTree = "<group>"; };
@@ -10503,14 +10509,18 @@
 				DA5A796926C563A000F274C7 /* OACarPlayAddressSearchController.mm */,
 				DA5A796126C563A000F274C7 /* OACarPlayCategoryResultListController.h */,
 				DA5A796426C563A000F274C7 /* OACarPlayCategoryResultListController.mm */,
+				465DB48729AF9D3B007F5989 /* OACarPlayFavoriteResultListController.h */,
+				465DB48829AF9E1A007F5989 /* OACarPlayFavoriteResultListController.mm */,
 				DA5A796D26C563A000F274C7 /* OACarPlayFavoritesListController.h */,
 				DA5A796826C563A000F274C7 /* OACarPlayFavoritesListController.mm */,
 				4631377729AE6D45000B0258 /* OACarPlayHistoryListController.h */,
 				4631377829AE6D8A000B0258 /* OACarPlayHistoryListController.mm */,
 				DA5A796A26C563A000F274C7 /* OACarPlayMarkersListController.h */,
 				DA5A796726C563A000F274C7 /* OACarPlayMarkersListController.mm */,
+				465DB48429AF5AD1007F5989 /* OACarPlayTrackResultListController.h */,
+				465DB48529AF5AE7007F5989 /* OACarPlayTrackResultListController.mm */,
 				DA5A796026C563A000F274C7 /* OACarPlayTracksListController.h */,
-				DA5A796B26C563A000F274C7 /* OACarPlayTracksListController.mm */,
+				DA5A796B26C563A000F274C7 /* OACarPlayTracksListController.m */,
 				DA5A796326C563A000F274C7 /* OASearchCategoriesListController.h */,
 				DA5A796526C563A000F274C7 /* OASearchCategoriesListController.mm */,
 			);
@@ -16005,9 +16015,11 @@
 				DA5A84DA26C563A900F274C7 /* OAMapSettingsMapTypeScreen.mm in Sources */,
 				DA5A847526C563A900F274C7 /* OAFingerRulerDelegate.mm in Sources */,
 				DA66ACC026D91C5800D43299 /* OABaseVectorLinesLayer.mm in Sources */,
+				465DB48629AF5BA3007F5989 /* OACarPlayTrackResultListController.mm in Sources */,
 				DA5A821326C563A700F274C7 /* OAPluginInstalledViewController.mm in Sources */,
 				461FB12E298801FA00097673 /* OAAnnounceTimeDistances.m in Sources */,
 				DA5A839226C563A800F274C7 /* OAOnlineTilesEditingViewController.mm in Sources */,
+				465DB48929AF9F6C007F5989 /* OACarPlayFavoriteResultListController.mm in Sources */,
 				DA5A825C26C563A700F274C7 /* OAProfileAppearanceViewController.mm in Sources */,
 				DA5A853226C563A900F274C7 /* OAResourcesUIHelper.mm in Sources */,
 				DA5A84EF26C563A900F274C7 /* OAHelpViewController.mm in Sources */,
@@ -16396,7 +16408,7 @@
 				DA5A81B526C563A700F274C7 /* OAPOIHelper.mm in Sources */,
 				DA5A824026C563A700F274C7 /* OATripRecordingSettingsViewController.mm in Sources */,
 				DA5A813926C563A700F274C7 /* OAOnlineOsmNoteWrapper.mm in Sources */,
-				DA5A815126C563A700F274C7 /* OACarPlayTracksListController.mm in Sources */,
+				DA5A815126C563A700F274C7 /* OACarPlayTracksListController.m in Sources */,
 				DA5A823226C563A700F274C7 /* OAGpxAppearanceInfo.mm in Sources */,
 				DA5A813C26C563A700F274C7 /* OAEntity.m in Sources */,
 				DA5A841026C563A800F274C7 /* OATargetAddressViewController.mm in Sources */,

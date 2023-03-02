@@ -1,5 +1,5 @@
 //
-//  OACarPlayFavoritesListController.m
+//  OACarPlayFavoritesListController.mm
 //  OsmAnd Maps
 //
 //  Created by Paul on 12.02.2021.
@@ -7,18 +7,18 @@
 //
 
 #import "OACarPlayFavoritesListController.h"
-#import "Localization.h"
+#import "OACarPlayFavoriteResultListController.h"
 #import "OAFavoritesHelper.h"
 #import "OAFavoriteItem.h"
 #import "OsmAndApp.h"
-#import "OAOsmAndFormatter.h"
-
+#import "OAColors.h"
+#import "Localization.h"
 #import <CarPlay/CarPlay.h>
 
-#include <OsmAndCore/IFavoriteLocation.h>
-#include <OsmAndCore/Utilities.h>
-
 @implementation OACarPlayFavoritesListController
+{
+    OACarPlayFavoriteResultListController *_favoriteResultController;
+}
 
 - (NSString *)screenTitle
 {
@@ -27,67 +27,74 @@
 
 - (NSArray<CPListSection *> *) generateSections
 {
-    NSMutableArray<CPListSection *> *sections = [NSMutableArray new];
-    
-    NSArray<OAFavoriteGroup *> *favoriteGroups = [OAFavoritesHelper getGroupedFavorites:OsmAndApp.instance.favoritesCollection->getFavoriteLocations()];
-    
+    NSArray<OAFavoriteGroup *> *favoriteGroups = [OAFavoritesHelper getGroupedFavorites:[OsmAndApp instance].favoritesCollection->getFavoriteLocations()];
     if (favoriteGroups.count > 0)
     {
+        NSMutableArray<CPListItem *> *listItems = [NSMutableArray new];
+        NSMutableArray<OAFavoriteItem *> *lastModifiedList = [NSMutableArray new];
         [favoriteGroups enumerateObjectsUsingBlock:^(OAFavoriteGroup * _Nonnull group, NSUInteger idx, BOOL * _Nonnull stop) {
-            NSMutableArray<CPListItem *> *items = [NSMutableArray new];
-            [group.points enumerateObjectsUsingBlock:^(OAFavoriteItem * _Nonnull item, NSUInteger idx, BOOL * _Nonnull stop) {
-                item.distance = [self calculateDistanceToItem:item];
-                CPListItem *listItem;
-                listItem = [[CPListItem alloc] initWithText:item.favorite->getTitle().toNSString() detailText:item.distance image:[UIImage imageNamed:@"ic_custom_favorites"] accessoryImage:nil accessoryType:CPListItemAccessoryTypeDisclosureIndicator];
-                listItem.userInfo = item;
-                listItem.handler = ^(id <CPSelectableListItem> item, dispatch_block_t completionBlock) {
-                    [self onItemSelected:item completionHandler:completionBlock];
-                };
-                [items addObject:listItem];
-            }];
-            NSString *groupName = group.name.length == 0 ? OALocalizedString(@"favorites_item") : group.name;
-            CPListSection *section = [[CPListSection alloc] initWithItems:items header:groupName sectionIndexTitle:[groupName substringToIndex:1]];
-            [sections addObject:section];
+            CPListItem *listItem = [[CPListItem alloc] initWithText:group.name.length == 0 ? OALocalizedString(@"favorites_item") : group.name
+                                                         detailText:[NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_space"),
+                                                                                               OALocalizedString(@"points_count"),
+                                                                                               @(group.points.count).stringValue]
+                                                              image:[OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_custom_folder"]
+                                                                                              color:group.color]
+                                                     accessoryImage:nil
+                                                      accessoryType:CPListItemAccessoryTypeDisclosureIndicator];
+            listItem.userInfo = group.points;
+            listItem.handler = ^(id <CPSelectableListItem> item, dispatch_block_t completionBlock) {
+                [self onItemSelected:item completionHandler:completionBlock];
+            };
+            [listItems addObject:listItem];
+            [lastModifiedList addObjectsFromArray:group.points];
         }];
+        [listItems sortUsingComparator:^NSComparisonResult(CPListItem *i1, CPListItem *i2) {
+            return [i1.text compare:i2.text];
+        }];
+
+        [lastModifiedList sortUsingComparator:^NSComparisonResult(OAFavoriteItem *i1, OAFavoriteItem *i2) {
+            NSDate *date1 = [i1 getTimestamp];
+            NSDate *date2 = [i2 getTimestamp];
+            if (!date1 || !date2)
+                return NSOrderedDescending;
+            NSTimeInterval lastTime1 = date1.timeIntervalSince1970;
+            NSTimeInterval lastTime2 = date2.timeIntervalSince1970;
+            return (lastTime1 < lastTime2) ? NSOrderedDescending : ((lastTime1 == lastTime2) ? NSOrderedSame : NSOrderedAscending);
+        }];
+        CPListItem *lastModifiedItem = [[CPListItem alloc] initWithText:OALocalizedString(@"sort_last_modified")
+                                                             detailText:@(lastModifiedList.count).stringValue
+                                                                  image:[OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_custom_history"]
+                                                                                                  color:UIColorFromRGB(color_primary_purple)]
+                                                         accessoryImage:nil
+                                                          accessoryType:CPListItemAccessoryTypeDisclosureIndicator];
+        lastModifiedItem.userInfo = lastModifiedList;
+        lastModifiedItem.handler = ^(id <CPSelectableListItem> item, dispatch_block_t completionBlock) {
+            [self onItemSelected:item completionHandler:completionBlock];
+        };
+        [listItems insertObject:lastModifiedItem atIndex:0];
+
+        return @[[[CPListSection alloc] initWithItems:listItems header:nil sectionIndexTitle:nil]];
     }
     else
     {
         return [self generateSingleItemSectionWithTitle:OALocalizedString(@"favorites_empty")];
     }
-    return sections;
-}
-
-- (NSString *) calculateDistanceToItem:(OAFavoriteItem *)item
-{
-    OsmAndAppInstance app = OsmAndApp.instance;
-    CLLocation* newLocation = app.locationServices.lastKnownLocation;
-    if (!newLocation)
-        return nil;
-    
-    const auto& favoritePosition31 = item.favorite->getPosition31();
-    const auto favoriteLon = OsmAnd::Utilities::get31LongitudeX(favoritePosition31.x);
-    const auto favoriteLat = OsmAnd::Utilities::get31LatitudeY(favoritePosition31.y);
-    
-    const auto distance = OsmAnd::Utilities::distance(newLocation.coordinate.longitude,
-                                                      newLocation.coordinate.latitude,
-                                                      favoriteLon, favoriteLat);
-    
-    
-    
-    return [OAOsmAndFormatter getFormattedDistance:distance];
 }
 
 - (void)onItemSelected:(CPListItem * _Nonnull)item completionHandler:(dispatch_block_t)completionBlock
 {
-    OAFavoriteItem* favoritePoint = item.userInfo;
-    if (!favoritePoint)
+    NSString *folderName = item.text;
+    NSArray<OAFavoriteItem *> *favoriteList = item.userInfo;
+    if (!favoriteList)
     {
         if (completionBlock)
             completionBlock();
         return;
     }
-    [self startNavigationGivenLocation:[[CLLocation alloc] initWithLatitude:favoritePoint.getLatitude longitude:favoritePoint.getLongitude]];
-    [self.interfaceController popToRootTemplateAnimated:YES completion:nil];
+    _favoriteResultController = [[OACarPlayFavoriteResultListController alloc] initWithInterfaceController:self.interfaceController
+                                                                                                folderName:folderName
+                                                                                              favoriteList:favoriteList];
+    [_favoriteResultController present];
 
     if (completionBlock)
         completionBlock();

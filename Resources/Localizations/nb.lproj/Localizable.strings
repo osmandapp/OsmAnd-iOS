@@ -1895,7 +1895,7 @@
 "gpx_upload_private_visibility_descr" = "«Privat» betyr at sporet ikke vises i noen offentlige oppføringer, men sporingspunkter fra dem i ukronologisk rekkefølge er tilgjengelig gjennom det offentlige GPS-API-et uten tidsstempler.";
 "gpx_upload_identifiable_visibility_descr" = "«Identifiserbart» betyr at sporet vises offentlig i dine GPS-spor og i offentlige GPS-sporingsoppføringer. Altså vil andre kunne laste ned rå sporingsdata og tilknytte den til brukernavnet ditt. Sporingspunktsdata med offentlige tidsstempel fra GPS-API-et servert via sporingspunkts-API-et vil vise til din opprinnelige sporingsside.";
 "gpx_upload_public_visibility_descr" = "«Offentlig» betyr at sporet vises offentlig i dine GPS-spor og i offentlige GPS-sporingsoppføringer, og i den offentlige spor-listen med tidsstempler i rå form. Data servert via API-et viser ikke til sporsiden din. Tidsstempler fra sporingspunkter er ikke tilgjengelig gjennom det offentlige GPS-API-et, og sporingspunkter sorteres ikke kronologisk.";
-"app_restart_required" = "Programomstart kreves forå bruke noen innstillinger.";
+"app_restart_required" = "Programomstart kreves for å bruke noen innstillinger.";
 "welmode_download_maps" = "Kartnedlasting";
 "plugin_mapillary_descr" = "Foto på gatenivå for alle. Oppdag plasser, samarbeid, fang inn verden.";
 "open_place_reviews" = "OpenPlaceReviews";
@@ -2043,7 +2043,7 @@
 "lang_sh" = "Serbokroatisk";
 "lang_es" = "Spansk";
 "lang_zh" = "Kinesisk";
-"resend_verification_code" = "Send koden igjen";
+"resend_verification_code" = "Send igjen";
 "lang_ba" = "Basjkirsk";
 "lang_sv" = "Svensk";
 "shared_string_open_street_map" = "OpenStreetMap";
@@ -2244,7 +2244,7 @@
 "map_settings_weather_wind" = "Vind";
 "mtb_segment_classification" = "Segmentklassifisering";
 "deleted_file" = "Slettet fil";
-"cloud_changes_will_be_dismissed" = "Sky-endringer vil bli forkastet";
+"cloud_changes_will_be_dismissed" = "Sky-endringene vil bli forkastet";
 "cloud_all_changes_uploaded_descr" = "Alle endringer på denne enheten synkroniseres med OsmAnd-sky.";
 "shared_string_do_not_exist" = "Finnes ikke";
 "shared_string_uploaded" = "Opplastet";
@@ -2255,14 +2255,14 @@
 "last_sync" = "Siste synkronisering";
 "sync_now" = "Synkroniser nå";
 "upload_change" = "Last opp endring";
-"local_file_will_be_restored" = "Lokal fil vil bli gjenopprettet";
+"local_file_will_be_restored" = "Den lokale filen vil bli gjenopprettet";
 "local_changes_will_be_dismissed" = "Lokale endringer vil bli forkastet";
 "cloud_conflict" = "Konflikt";
 "cloud_recent_changes" = "Endringer";
 "cloud_all_changes_uploaded" = "Alle endringer opplastet";
 "cloud_all_changes_downloaded" = "Alle endringer nedlastet";
 "cloud_no_conflicts" = "Det er ingen konflikter.";
-"cloud_version_will_be_removed" = "Sky-versjon vil bli fjernet";
+"cloud_version_will_be_removed" = "Sky-versjonen vil bli fjernet";
 "upload_all" = "Last opp alle";
 "position_on_map_center" = "Senter";
 "delete_all_confirmation" = "Ja, slett alle";
@@ -2293,7 +2293,7 @@
 "not_enough_contributions_descr" = "Minst %@ endringer de siste to månedene %@ kreves for ubegrenset tilgang til timevise kartoppdateringer.";
 "lenght_limit_description" = "Angi lengden på ditt kjøretøy, noen rutebegrensninger kan gjelde for lange kjøretøy.";
 "routing_attr_avoid_tunnels_name" = "Unngå tunneler";
-"verification_code_missing" = "Jeg mottok ingen bekreftelseskode";
+"verification_code_missing" = "Jeg mottok ikke noen bekreftelseskode";
 "use_login_and_password" = "Bruk brukernavn og passord";
 "duration_ago" = "%@ siden";
 "recording_delete_confirm" = "Slett dette elementet\?";
@@ -2415,7 +2415,7 @@
 "routing_attr_length_description" = "Angi kjøretøylengde som tillates på rutene.";
 "rendering_attr_horse_scale_common_name" = "Vanlig";
 "routing_attr_allow_streams_name" = "Tillat bekker og dreneringsgrøfter";
-"rendering_attr_showMtbScale_description" = "Vis løyper ifølge MTB-skala.";
+"rendering_attr_showMtbScale_description" = "Viser løyper ihht. deres fjellsykkel-skala.";
 "routing_attr_carriage_restrictions_description" = "Overvei adgangstillatelser for hestekjøretøy";
 "rendering_attr_noNatureReserveBoundaries_name" = "Naturgrenser";
 "routing_attr_allow_intermittent_description" = "Tillat periodiske vannveier";
@@ -2504,3 +2504,4 @@
 "rendering_attr_showMtbScaleIMBATrails_description" = "Viser egnede fjellsykkelstier.";
 "rendering_attr_showMtbScaleIMBATrails_name" = "Vis IMBA-fjellsykkelstier";
 "shared_string_cross_buy" = "Krysskjøp";
+"announcement_time_descr" = "Kunngjøringstid for forskjellige talemeldinger avhenger av meldingstype, gjeldende navigasjonshastighet og forvalgt navigasjonshastighet.";

@@ -17,6 +17,7 @@
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OAMapViewController.h"
+#import "OASimpleTableViewCell.h"
 
 #import "Localization.h"
 #import "OAColors.h"
@@ -27,6 +28,8 @@
     OAAppSettings *_settings;
     EOAProfileGeneralSettingsParameter _settingsType;
     NSString *_title;
+    UIView *_tableHeaderView;
+    BOOL _openFromMap;
 }
 
 #pragma mark - Initialization
@@ -37,6 +40,18 @@
     if (self)
     {
         _settingsType = settingsType;
+        [self postInit];
+    }
+    return self;
+}
+
+- (instancetype) initMapOrientationFromMap
+{
+    self = [super initWithAppMode:OAAppSettings.sharedManager.applicationMode.get];
+    if (self)
+    {
+        _settingsType = EOAProfileGeneralSettingsMapOrientation;
+        _openFromMap = YES;
         [self postInit];
     }
     return self;
@@ -84,6 +99,31 @@
     return _title;
 }
 
+- (NSString *)getSubtitle
+{
+    return _settingsType == EOAProfileGeneralSettingsMapOrientation && _openFromMap ? @"" : [self.appMode toHumanString];
+}
+
+- (BOOL)isNavbarSeparatorVisible
+{
+    return !_openFromMap;
+}
+
+- (EOABaseNavbarStyle)getNavbarStyle
+{
+    return _settingsType == EOAProfileGeneralSettingsMapOrientation ? EOABaseNavbarStyleDescription : EOABaseNavbarStyleSimple;
+}
+
+- (NSString *)getCustomTableViewDescription
+{
+    return OALocalizedString(@"compass_click_desc");
+}
+
+- (NSString *)getLeftNavbarButtonTitle
+{
+    return _openFromMap ? OALocalizedString(@"shared_string_close") : nil;
+}
+
 #pragma mark - Table data
 
 - (void)generateData
@@ -104,24 +144,31 @@
         case EOAProfileGeneralSettingsMapOrientation:
             [dataArr addObject:@{
                 @"name" : @"none",
-                @"title" : OALocalizedString(@"rotate_map_none_opt"),
+                @"title" : OALocalizedString(@"rotate_map_none_fixed"),
                 @"selected" : @(rotateMap == ROTATE_MAP_NONE),
                 @"icon" : @"ic_custom_direction_north",
-                @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
+                @"type" : [OASimpleTableViewCell getCellIdentifier],
             }];
             [dataArr addObject:@{
                 @"name" : @"bearing",
                 @"title" : OALocalizedString(@"rotate_map_bearing_opt"),
                 @"selected" : @(rotateMap == ROTATE_MAP_BEARING),
                 @"icon" : @"ic_custom_direction_movement",
-                @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
+                @"type" : [OASimpleTableViewCell getCellIdentifier],
             }];
             [dataArr addObject:@{
                @"name" : @"compass",
                @"title" : OALocalizedString(@"rotate_map_compass_opt"),
                @"selected" : @(rotateMap == ROTATE_MAP_COMPASS),
                @"icon" : @"ic_custom_direction_compass",
-               @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
+               @"type" : [OASimpleTableViewCell getCellIdentifier],
+            }];
+            [dataArr addObject:@{
+               @"name" : @"manually",
+               @"title" : OALocalizedString(@"rotate_map_none_manually"),
+               @"selected" : @(rotateMap == ROTATE_MAP_MANUAL),
+               @"icon" : @"ic_custom_direction_manual",
+               @"type" : [OASimpleTableViewCell getCellIdentifier],
             }];
             break;
             
@@ -331,6 +378,11 @@
     _data = [NSArray arrayWithObject:dataArr];
 }
 
+- (BOOL) hideFirstHeader
+{
+    return _settingsType == EOAProfileGeneralSettingsMapOrientation;
+}
+
 - (NSInteger)rowsCount:(NSInteger)section
 {
     return _data[section].count;
@@ -395,6 +447,25 @@
         }
         return cell;
     }
+    if ([cellType isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
+    {
+        OASimpleTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
+            [cell.descriptionLabel setHidden:YES];
+        }
+        if (cell)
+        {
+            cell.titleLabel.text = item[@"title"];
+            cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
+            cell.leftIconView.tintColor = [item[@"selected"] boolValue] ? UIColorFromRGB(self.appMode.getIconColor) : UIColorFromRGB(color_icon_inactive);
+            if ([item[@"selected"] boolValue])
+                cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        }
+        return cell;
+    }
     return nil;
 }
 
@@ -451,6 +522,8 @@
         [_settings.rotateMap set:ROTATE_MAP_BEARING mode:self.appMode];
     else if ([name isEqualToString:@"compass"])
         [_settings.rotateMap set:ROTATE_MAP_COMPASS mode:self.appMode];
+    else if ([name isEqualToString:@"manually"])
+        [_settings.rotateMap set:ROTATE_MAP_MANUAL mode:self.appMode];
     else
         [_settings.rotateMap set:ROTATE_MAP_NONE mode:self.appMode];
     

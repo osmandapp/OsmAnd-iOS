@@ -13,5 +13,6 @@
 @interface OAProfileGeneralSettingsParametersViewController : OABaseSettingsViewController
 
 - (instancetype) initWithType:(EOAProfileGeneralSettingsParameter)settingsType applicationMode:(OAApplicationMode *)applicationMode;
+- (instancetype) initMapOrientationFromMap;
 
 @end

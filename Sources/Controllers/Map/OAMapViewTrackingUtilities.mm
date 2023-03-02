@@ -699,14 +699,15 @@
 
 - (void) switchRotateMapMode
 {
-    NSString *rotMode = OALocalizedString(@"rotate_map_none_opt");
-    if ([_settings.rotateMap get] == ROTATE_MAP_NONE && _mapViewController.mapView.azimuth != 0)
+    NSString *rotMode = OALocalizedString(@"rotate_map_none_fixed");
+    if ([_settings.rotateMap get] == ROTATE_MAP_NONE)
     {
         // reset manual rotation
+        [_settings.rotateMap set: ROTATE_MAP_MANUAL];
     }
     else
     {
-        int vl = ([_settings.rotateMap get] + 1) % 3;
+        int vl = ([_settings.rotateMap get] + 1) % 4;
         [_settings.rotateMap set:vl];
         _lastPositionTrackStateCaptured = false;
         

@@ -99,9 +99,14 @@
         rotateMapValue = OALocalizedString(@"rotate_map_compass_opt");
         rotateMapIcon = @"ic_custom_direction_compass";
     }
+    else if ([_settings.rotateMap get:self.appMode] == ROTATE_MAP_MANUAL)
+    {
+        rotateMapValue = OALocalizedString(@"rotate_map_none_manually");
+        rotateMapIcon = @"ic_custom_direction_manual";
+    }
     else
     {
-        rotateMapValue = OALocalizedString(@"rotate_map_none_opt");
+        rotateMapValue = OALocalizedString(@"rotate_map_none_fixed");
         rotateMapIcon = @"ic_custom_direction_north";
     }
     

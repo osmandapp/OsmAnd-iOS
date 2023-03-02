@@ -47,7 +47,10 @@
 {
     _settings = [OAAppSettings sharedManager];
     _app = [OsmAndApp instance];
+}
 
+- (void)postInit
+{
     if ([_settings.metricSystem get:self.appMode] == KILOMETERS_AND_METERS)
         _possibleDistanceValues = @[@(10.), @(20.0), @(30.0), @(50.0), @(100.0), @(200.0), @(500.0), @(1000.0), @(1500.0)];
     else
@@ -241,14 +244,6 @@
         if (self.delegate)
             [self.delegate onSettingsChanged];
     }
-}
-
-#pragma mark - UITableViewDelegate
-
-- (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    return cell.selectionStyle == UITableViewCellSelectionStyleNone && indexPath != [NSIndexPath indexPathForRow:0 inSection:1] ? nil : indexPath;
 }
 
 #pragma mark - Picker

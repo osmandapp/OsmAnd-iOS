@@ -49,6 +49,15 @@
     _settings = [OAAppSettings sharedManager];
 }
 
+#pragma mark - UIViewController
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+
+    _selectedIndexPath = nil;
+}
+
 #pragma mark - Base UI
 
 - (NSString *)getTitle
@@ -537,7 +546,6 @@
         [self generateValueForItem:item];
         [self.tableView reloadRowsAtIndexPaths:@[_selectedIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
-    _selectedIndexPath = nil;
 }
 
 - (void)closeSettingsScreenWithRouteInfo

@@ -170,7 +170,7 @@
 - (void)showViewController:(UIViewController *)viewController
 {
     if ([self isModal])
-        [self presentViewController:viewController animated:YES completion:nil];
+        [self showModalViewController:viewController];
     else
         [self.navigationController pushViewController:viewController animated:YES];
 }
@@ -178,7 +178,10 @@
 - (void)showModalViewController:(UIViewController *)viewController
 {
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:viewController];
-    [self.navigationController presentViewController:navigationController animated:YES completion:nil];
+    if (self.navigationController)
+        [self.navigationController presentViewController:navigationController animated:YES completion:nil];
+    else
+        [self presentViewController:navigationController animated:YES completion:nil];
 }
 
 @end

@@ -46,7 +46,10 @@
         [array addObject:[NSString stringWithFormat:@"%d %@", val.intValue, OALocalizedString(@"int_min")]];
     }
     _keepInformingEntries = [NSArray arrayWithArray:array];
-    
+}
+
+- (void)postInit
+{
     _selectedValue = [_keepInformingValues indexOfObject:@([_settings.keepInforming get:self.appMode])];
     _selectedValue = _selectedValue == NSNotFound ? 0 : _selectedValue;
 }
@@ -217,14 +220,6 @@
         if (self.delegate)
             [self.delegate onSettingsChanged];
     }
-}
-
-#pragma mark - UITableViewDelegate
-
-- (NSIndexPath *) tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    return cell.selectionStyle == UITableViewCellSelectionStyleNone && indexPath != [NSIndexPath indexPathForRow:0 inSection:1] ? nil : indexPath;
 }
 
 #pragma mark - Picker

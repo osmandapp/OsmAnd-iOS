@@ -14,7 +14,7 @@
 #import "OAColors.h"
 #import "OATableViewCustomHeaderView.h"
 #import "OASwitchTableViewCell.h"
-#import "OAMenuSimpleCellNoIcon.h"
+#import "OASimpleTableViewCell.h"
 
 typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaLangSection)
 {
@@ -54,15 +54,6 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaLangSection)
 
 @end
 
-@interface OAWikipediaLanguagesViewController () <UITableViewDelegate, UITableViewDataSource>
-
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
-@property (weak, nonatomic) IBOutlet UIButton *cancelButton;
-@property (weak, nonatomic) IBOutlet UIButton *doneButton;
-
-@end
-
 @implementation OAWikipediaLanguagesViewController
 {
     OsmAndAppInstance _app;
@@ -74,83 +65,13 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaLangSection)
     NSArray<NSArray<NSDictionary *> *> *_data;
 }
 
-- (instancetype)init
+#pragma mark - Initialization
+
+- (void)commonInit
 {
-    self = [super init];
-    if (self)
-    {
-        _app = [OsmAndApp instance];
-        _wikiPlugin = (OAWikipediaPlugin *) [OAPlugin getPlugin:OAWikipediaPlugin.class];
-        _isGlobalWikiPoiEnabled = NO;
-        _languages = [NSMutableArray new];
-    }
-    return self;
-}
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    self.tableView.editing = YES;
-    self.tableView.tintColor = UIColorFromRGB(color_primary_purple);
-    self.tableView.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + 52., 0., 0.);
-    [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
-
-    [self initData];
-}
-
-- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
-{
-    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        self.tableView.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + 52., 0., 0.);
-        [self.tableView reloadData];
-    } completion:nil];
-}
-
-- (void)applyLocalization
-{
-    self.titleLabel.text = OALocalizedString(@"shared_string_language");
-    [self.cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
-    [self.doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
-}
-
-- (void)initData
-{
-    [self initLanguagesData];
-
-    NSMutableArray *dataArr = [NSMutableArray new];
-    [dataArr addObject:@[@{
-                    @"type": [OASwitchTableViewCell getCellIdentifier],
-                    @"title": OALocalizedString(@"shared_string_all_languages")
-            }]];
-
-    NSMutableArray *preferredLanguages = [NSMutableArray new];
-    NSMutableArray *availableLanguages = [NSMutableArray new];
-
-    for (OAWikiLanguageItem *language in _languages)
-    {
-        NSDictionary *lang = @{
-                @"type": [OAMenuSimpleCellNoIcon getCellIdentifier],
-                @"item": language
-        };
-
-        if (language.preferred)
-            [preferredLanguages addObject:lang];
-        else
-            [availableLanguages addObject:lang];
-    }
-    [dataArr addObject:preferredLanguages];
-    [dataArr addObject:availableLanguages];
-
-    _data = dataArr;
-}
-
-- (void)initLanguagesData
-{
-    [_languages removeAllObjects];
+    _app = [OsmAndApp instance];
+    _wikiPlugin = (OAWikipediaPlugin *) [OAPlugin getPlugin:OAWikipediaPlugin.class];
+    _languages = [NSMutableArray array];
 
     NSMutableArray<NSString *> *preferredLocales = [NSMutableArray new];
     for (NSString *langCode in [NSLocale preferredLanguages])
@@ -183,6 +104,215 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaLangSection)
     [_languages setArray:[_languages sortedArrayUsingSelector:@selector(compare:)]];
 }
 
+#pragma mark - UIViewController
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+
+    [self.tableView setEditing:YES animated:YES];
+    self.tableView.allowsMultipleSelectionDuringEditing = YES;
+}
+
+#pragma mark - Base UI
+
+- (NSString *)getTitle
+{
+    return OALocalizedString(@"shared_string_language");
+}
+
+- (NSString *)getLeftNavbarButtonTitle
+{
+    return OALocalizedString(@"shared_string_cancel");
+}
+
+- (NSString *)getRightNavbarButtonTitle
+{
+    return OALocalizedString(@"shared_string_done");
+}
+
+- (EOABaseNavbarStyle)getNavbarStyle
+{
+    return EOABaseNavbarStyleDescription;
+}
+
+- (NSString *)getCustomTableViewDescription
+{
+    return [NSString stringWithFormat:@"%@\n\n%@", OALocalizedString(@"some_articles_may_not_available_in_lang"), OALocalizedString(@"select_wikipedia_article_langs")];
+}
+
+#pragma mark - Table data
+
+- (void)generateData
+{
+    NSMutableArray *dataArr = [NSMutableArray new];
+    [dataArr addObject:@[@{
+        @"type": [OASwitchTableViewCell getCellIdentifier],
+        @"title": OALocalizedString(@"shared_string_all_languages")
+    }]];
+
+    if (!_isGlobalWikiPoiEnabled)
+    {
+        NSMutableArray *preferredLanguages = [NSMutableArray new];
+        NSMutableArray *availableLanguages = [NSMutableArray new];
+        
+        for (OAWikiLanguageItem *language in _languages)
+        {
+            NSDictionary *lang = @{
+                @"type": [OASimpleTableViewCell getCellIdentifier],
+                @"item": language
+            };
+            
+            if (language.preferred)
+                [preferredLanguages addObject:lang];
+            else
+                [availableLanguages addObject:lang];
+        }
+        [dataArr addObject:preferredLanguages];
+        [dataArr addObject:availableLanguages];
+    }
+
+    _data = dataArr;
+}
+
+- (NSDictionary *)getItem:(NSIndexPath *)indexPath
+{
+    return _data[indexPath.section][indexPath.row];
+}
+
+- (BOOL)hideFirstHeader
+{
+    return YES;
+}
+
+- (NSString *)getTitleForHeader:(NSInteger)section
+{
+    switch (section)
+    {
+        case EOAMapSettingsWikipediaLangSectionPreffered:
+            return OALocalizedString(@"preferred_languages");
+        case EOAMapSettingsWikipediaLangSectionAvailable:
+            return OALocalizedString(@"available_languages");
+        default:
+            return @"";
+    }
+}
+
+- (NSInteger)rowsCount:(NSInteger)section
+{
+    return _data[section].count;
+}
+
+- (UITableViewCell*)getRow:(NSIndexPath *)indexPath
+{
+    NSDictionary *item = [self getItem:indexPath];
+    if ([item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
+    {
+        OASwitchTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASwitchTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
+        }
+        if (cell)
+        {
+            cell.titleLabel.text = item[@"title"];
+
+            [cell.switchView setOn:_isGlobalWikiPoiEnabled];
+            cell.switchView.tag = indexPath.section << 10 | indexPath.row;
+            [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];
+            [cell.switchView addTarget:self action:@selector(onSwitchPressed:) forControlEvents:UIControlEventValueChanged];
+        }
+        return cell;
+    }
+    else if ([item[@"type"] isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
+    {
+        OASimpleTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASimpleTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
+        }
+        if (cell)
+        {
+            OAWikiLanguageItem *language = item[@"item"];
+            cell.titleLabel.text = language.title.capitalizedString;
+        }
+        return cell;
+    }
+    return nil;
+}
+
+- (NSInteger)sectionsCount
+{
+    return _data.count;
+}
+
+- (void)onRowSelected:(NSIndexPath *)indexPath
+{
+    OAWikiLanguageItem *language = [self getItem:indexPath][@"item"];
+    language.checked = !language.checked;
+}
+
+- (void)onRowDeselected:(NSIndexPath *)indexPath
+{
+    OAWikiLanguageItem *language = [self getItem:indexPath][@"item"];
+    language.checked = !language.checked;
+}
+
+#pragma mark - UITableViewDelegate
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSDictionary *item = [self getItem:indexPath];
+    if ([item[@"type"] isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
+    {
+        OAWikiLanguageItem *language = item[@"item"];
+        [cell setSelected:language.checked animated:YES];
+        if (language.checked)
+            [tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
+        else
+            [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    }
+}
+
+#pragma mark - UITableViewDataSource
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return [[self getItem:indexPath][@"type"] isEqualToString:[OASimpleTableViewCell getCellIdentifier]];
+}
+
+#pragma mark - Selectors
+
+- (void)onRightNavbarButtonPressed
+{
+    [self applyPreference:NO];
+
+    if (self.delegate)
+        [self.delegate updateSelectedLanguage];
+
+    [self dismissViewController];
+}
+
+- (void)onSwitchPressed:(UISwitch *)sw
+{
+    _isGlobalWikiPoiEnabled = sw.on;
+    [UIView transitionWithView:self.view
+                      duration:.2
+                       options:UIViewAnimationOptionTransitionCrossDissolve
+                    animations:^(void)
+                    {
+                        [self generateData];
+                        [self.tableView reloadData];
+                    }
+                    completion:nil];
+}
+
 - (void)applyPreference:(BOOL)applyToAllProfiles
 {
     NSMutableArray<NSString *> *localesForSaving = [NSMutableArray new];
@@ -205,204 +335,6 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaLangSection)
         [_wikiPlugin setShowAllLanguages:localesForSaving.count == 0 ? YES : _isGlobalWikiPoiEnabled];
     }
     [_wikiPlugin updateWikipediaState];
-}
-
-- (void)applyParameter:(id)sender
-{
-    if ([sender isKindOfClass:[UISwitch class]])
-    {
-        [self.tableView beginUpdates];
-        UISwitch *sw = (UISwitch *) sender;
-        _isGlobalWikiPoiEnabled = sw.on;
-        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:sw.tag & 0x3FF inSection:sw.tag >> 10]] withRowAnimation:UITableViewRowAnimationAutomatic];
-        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:EOAMapSettingsWikipediaLangSectionPreffered] withRowAnimation:UITableViewRowAnimationAutomatic];
-        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:EOAMapSettingsWikipediaLangSectionAvailable] withRowAnimation:UITableViewRowAnimationAutomatic];
-        [self.tableView endUpdates];
-    }
-}
-
-- (NSDictionary *)getItem:(NSIndexPath *)indexPath
-{
-    return _data[indexPath.section][indexPath.row];
-}
-
-- (NSString *)getTextForHeader:(NSInteger)section
-{
-    switch (section)
-    {
-        case EOAMapSettingsWikipediaLangSectionAll:
-            return [NSString stringWithFormat:@"%@\n\n%@", OALocalizedString(@"some_articles_may_not_available_in_lang"), OALocalizedString(@"select_wikipedia_article_langs")];
-        case EOAMapSettingsWikipediaLangSectionPreffered:
-            return [OALocalizedString(@"preferred_languages") upperCase];
-        case EOAMapSettingsWikipediaLangSectionAvailable:
-            return [OALocalizedString(@"available_languages") upperCase];
-        default:
-            return @"";
-    }
-}
-
-- (CGFloat)getHeaderHeightForSection:(NSInteger)section
-{
-    return [OATableViewCustomHeaderView getHeight:[self getTextForHeader:section] width:self.tableView.frame.size.width yOffset:17. font:[UIFont scaledSystemFontOfSize:section == EOAMapSettingsWikipediaLangSectionAll ? 15.0 : 13.0]];
-}
-
-- (void)selectDeselectItem:(NSIndexPath *)indexPath
-{
-    if (indexPath.section != EOAMapSettingsWikipediaLangSectionAll)
-    {
-        [self.tableView beginUpdates];
-        OAWikiLanguageItem *language = [self getItem:indexPath][@"item"];
-        language.checked = !language.checked;
-        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-        [self.tableView endUpdates];
-    }
-}
-
-- (IBAction)cancelButtonPressed:(id)sender
-{
-    [self dismissViewController];
-}
-
-- (IBAction)doneButtonPressed:(id)sender
-{
-    [self applyPreference:NO];
-
-    if (self.delegate)
-        [self.delegate updateSelectedLanguage];
-
-    [self dismissViewController];
-}
-
-#pragma mark - UITableViewDataSource
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return _data.count;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    if (section != EOAMapSettingsWikipediaLangSectionAll && _isGlobalWikiPoiEnabled)
-        return 0;
-
-    return _data[section].count;
-}
-
-- (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
-    {
-        OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASwitchTableViewCell *) nib[0];
-            [cell leftIconVisibility:NO];
-            [cell descriptionVisibility:NO];
-        }
-        if (cell)
-        {
-            cell.titleLabel.text = item[@"title"];
-
-            [cell.switchView setOn:_isGlobalWikiPoiEnabled];
-            cell.switchView.tag = indexPath.section << 10 | indexPath.row;
-            [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];
-            [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
-        }
-        return cell;
-    }
-    else if ([item[@"type"] isEqualToString:[OAMenuSimpleCellNoIcon getCellIdentifier]])
-    {
-        OAWikiLanguageItem *language = item[@"item"];
-        OAMenuSimpleCellNoIcon *cell = [tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCellNoIcon getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCellNoIcon getCellIdentifier] owner:self options:nil];
-            cell = (OAMenuSimpleCellNoIcon *) nib[0];
-            cell.tintColor = UIColorFromRGB(color_primary_purple);
-            UIView *bgColorView = [[UIView alloc] init];
-            bgColorView.backgroundColor = [UIColorFromRGB(color_primary_purple) colorWithAlphaComponent:.05];
-            [cell setSelectedBackgroundView:bgColorView];
-            cell.descriptionView.hidden = YES;
-
-            if ([cell needsUpdateConstraints])
-                [cell updateConstraints];
-        }
-        if (cell)
-        {
-            cell.textView.text = language.title.capitalizedString;
-        }
-        return cell;
-    }
-
-    return nil;
-}
-
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return [[self getItem:indexPath][@"type"] isEqualToString:[OAMenuSimpleCellNoIcon getCellIdentifier]];
-}
-
-#pragma mark - UITableViewDelegate
-
-- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:[OAMenuSimpleCellNoIcon getCellIdentifier]])
-    {
-        OAWikiLanguageItem *language = item[@"item"];
-        [cell setSelected:language.checked animated:YES];
-        if (language.checked)
-            [tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
-        else
-            [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    }
-}
-
-- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return [[self getItem:indexPath][@"type"] isEqualToString:[OAMenuSimpleCellNoIcon getCellIdentifier]] ? indexPath : nil;
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if ([[self getItem:indexPath][@"type"] isEqualToString:[OAMenuSimpleCellNoIcon getCellIdentifier]])
-        [self selectDeselectItem:indexPath];
-    else
-        [tableView deselectRowAtIndexPath:indexPath animated:YES];
-}
-
-- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if ([[self getItem:indexPath][@"type"] isEqualToString:[OAMenuSimpleCellNoIcon getCellIdentifier]])
-        [self selectDeselectItem:indexPath];
-}
-
-- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
-{
-    if (section == EOAMapSettingsWikipediaLangSectionAll || !_isGlobalWikiPoiEnabled)
-    {
-        UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *) view;
-        header.textLabel.textColor = UIColorFromRGB(color_text_footer);
-    }
-}
-
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{
-    if (section != EOAMapSettingsWikipediaLangSectionAll && _isGlobalWikiPoiEnabled)
-        return nil;
-
-    OATableViewCustomHeaderView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
-    NSString *text = [self getTextForHeader:section];
-    vw.label.text = text;
-    vw.label.font = [UIFont scaledSystemFontOfSize:section == EOAMapSettingsWikipediaLangSectionAll ? 15.0 : 13.0];
-    return vw;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return [self getHeaderHeightForSection:section];
 }
 
 @end

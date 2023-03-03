@@ -3060,3 +3060,5 @@
 
 "restart_is_required_title" = "Restart is required";
 "restart_is_required" = "A restart is required to apply the change.";
+
+"wikipedia_language_settings_descr" = "Select the languages ​​in which Wikipedia articles will appear on the map. You can switch between any available language ​​while reading the article.";

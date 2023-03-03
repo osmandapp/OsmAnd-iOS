@@ -2163,19 +2163,14 @@ static const double d180PI = 180.0 / M_PI_2;
                             rightIconName:(NSString *)iconName
                                 tintColor:(UIColor *)tintColor
 {
-    CGFloat sideOffset = [OAUtilities getLeftMargin] + (isBigTitle ? kSmallPaddingOnSideOfContent : kPaddingOnSideOfContent);
-    CGFloat textWidth = DeviceScreenWidth - sideOffset * 2;
-    CGFloat textHeight = [self heightForHeaderViewText:text width:textWidth font:font lineSpacing:0.];
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(sideOffset, topOffset, textWidth, textHeight)];
-
     NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc] initWithString:text];
     [attributedText setFont:font forString:text];
     [attributedText setColor:textColor forString:text];
-    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-    paragraphStyle.minimumLineHeight = isBigTitle ? 41. : 18.;
-    [attributedText addAttribute:NSParagraphStyleAttributeName
-                           value:paragraphStyle
-                           range:NSMakeRange(0, text.length)];
+
+    CGFloat sideOffset = [OAUtilities getLeftMargin] + (isBigTitle ? kSmallPaddingOnSideOfContent : kPaddingOnSideOfContent);
+    CGFloat textWidth = DeviceScreenWidth - sideOffset * 2;
+    CGFloat textHeight = [self calculateTextBounds:attributedText width:textWidth].height;
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(sideOffset, topOffset, textWidth, textHeight)];
 
     label.attributedText = attributedText;
     label.adjustsFontForContentSizeCategory = YES;

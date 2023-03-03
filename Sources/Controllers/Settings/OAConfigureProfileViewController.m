@@ -39,6 +39,8 @@
 #import "OAIndexConstants.h"
 #import "OAWeatherPlugin.h"
 #import "OAWeatherSettingsViewController.h"
+#import "OAWikipediaPlugin.h"
+#import "OAWikipediaSettingsViewController.h"
 
 #define kSidePadding 16.
 #define BACKUP_INDEX_DIR @"backup"
@@ -252,6 +254,17 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
             @"title" : weather.getName,
             @"img" : @"ic_custom_umbrella",
             @"key" : kWeatherSettings
+        }];
+    }
+    
+    OAPlugin *wikipedia = [OAPlugin getEnabledPlugin:OAWikipediaPlugin.class];
+    if (wikipedia)
+    {
+        [plugins addObject:@{
+            @"type" : [OAIconTextDescCell getCellIdentifier],
+            @"title" : wikipedia.getName,
+            @"img" : @"ic_custom_wikipedia",
+            @"key" : kWikipediaSettings
         }];
     }
     
@@ -548,6 +561,8 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
             settingsScreen = [[OAWeatherSettingsViewController alloc] init];
         else if ([targetScreenKey isEqualToString:kOsmandDevelopmentSettings])
             settingsScreen = [[OAOsmandDevelopmentViewController alloc] init];
+        else if ([targetScreenKey isEqualToString:kWikipediaSettings])
+            settingsScreen = [[OAWikipediaSettingsViewController alloc] initWithAppMode:_appMode];
 
         if (settingsScreen)
             [self.navigationController pushViewController:settingsScreen animated:YES];

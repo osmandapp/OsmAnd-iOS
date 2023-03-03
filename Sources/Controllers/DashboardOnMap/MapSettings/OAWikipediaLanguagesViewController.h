@@ -6,7 +6,7 @@
 //  Copyright (c) 2021 OsmAnd. All rights reserved.
 //
 
-#import "OACompoundViewController.h"
+#import "OABaseNavbarViewController.h"
 
 @class OAWikiLanguageItem;
 
@@ -30,7 +30,7 @@
 
 @end
 
-@interface OAWikipediaLanguagesViewController : OACompoundViewController
+@interface OAWikipediaLanguagesViewController : OABaseNavbarViewController
 
 @property (nonatomic) id<OAWikipediaScreenDelegate> delegate;
 

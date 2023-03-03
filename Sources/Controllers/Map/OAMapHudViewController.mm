@@ -29,6 +29,7 @@
 #import "OAWeatherPlugin.h"
 #import "OAWeatherToolbar.h"
 #import "Localization.h"
+#import "OAProfileGeneralSettingsParametersViewController.h"
 
 #define kButtonWidth 50.0
 #define kButtonOffset 16.0
@@ -60,6 +61,7 @@
     OAMapViewController* _mapViewController;
 
     UIPanGestureRecognizer* _grMove;
+    UILongPressGestureRecognizer *_longPress;
     
     OAAutoObserverProxy* _dayNightModeObserver;
     OAAutoObserverProxy* _locationServicesStatusObserver;
@@ -209,6 +211,10 @@
     [self addAccessibilityLabels];
 
     _mapInfoController.delegate = self;
+    
+    _longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPressCompass:)];
+    _longPress.delaysTouchesBegan = YES;
+    [self.compassBox addGestureRecognizer:_longPress];
 }
 
 - (CGFloat) getExtraScreenOffset
@@ -698,6 +704,25 @@
     });
 }
 
+- (void) handleLongPressCompass:(UILongPressGestureRecognizer *)gestureRecognizer
+{
+    OAProfileGeneralSettingsParametersViewController *settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initMapOrientationFromMap];
+    
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:settingsViewController];
+    
+    navigationController.modalPresentationStyle = UIModalPresentationPageSheet;
+    UISheetPresentationController *sheet = navigationController.sheetPresentationController;
+    if (sheet)
+    {
+        sheet.detents = @[UISheetPresentationControllerDetent.mediumDetent, UISheetPresentationControllerDetent.largeDetent];
+        sheet.prefersGrabberVisible = YES;
+        sheet.preferredCornerRadius = 20;
+        sheet.prefersEdgeAttachedInCompactHeight = YES;
+    }
+    
+    [self.navigationController presentViewController:navigationController animated:YES completion:nil];
+}
+
 - (void) onLocationServicesFirstTimeUpdate
 {
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -813,6 +838,8 @@
         _compassImage.image = [UIImage imageNamed:isNight ? @"ic_custom_direction_north_night" : @"ic_custom_direction_north_day"];
     else if ([rotateMap get] == ROTATE_MAP_BEARING)
         _compassImage.image = [UIImage imageNamed:isNight ? @"ic_custom_direction_bearing_night" : @"ic_custom_direction_bearing_day"];
+    else if ([rotateMap get] == ROTATE_MAP_MANUAL)
+        _compassImage.image = [UIImage imageNamed:isNight ? @"ic_custom_direction_manual_night" : @"ic_custom_direction_manual_day"];
     else
         _compassImage.image = [UIImage imageNamed:isNight ? @"ic_custom_direction_compass_night" : @"ic_custom_direction_compass_day"];
     [self updateCompassVisibility:showCompass];

@@ -13,7 +13,6 @@
 #import "OAFileNameTranslationHelper.h"
 #import "OAMapViewTrackingUtilities.h"
 #import "OATitleDescriptionCollapsableCell.h"
-#import "OASettingsTitleTableViewCell.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OAMapViewController.h"
@@ -257,37 +256,37 @@
                 @"name" : @"KILOMETERS_AND_METERS",
                 @"title" : OALocalizedString(@"si_km_m"),
                 @"selected" : @(metricSystem == KILOMETERS_AND_METERS),
-                @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
+                @"type" : [OASimpleTableViewCell getCellIdentifier],
             }];
             [dataArr addObject:@{
                 @"name" : @"MILES_AND_FEET",
                 @"title" : OALocalizedString(@"si_mi_feet"),
                 @"selected" : @(metricSystem == MILES_AND_FEET),
-                @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
+                @"type" : [OASimpleTableViewCell getCellIdentifier],
             }];
             [dataArr addObject:@{
                 @"name" : @"MILES_AND_YARDS",
                 @"title" : OALocalizedString(@"si_mi_yard"),
                 @"selected" : @(metricSystem == MILES_AND_YARDS),
-                @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
+                @"type" : [OASimpleTableViewCell getCellIdentifier],
             }];
             [dataArr addObject:@{
                 @"name" : @"MILES_AND_METERS",
                 @"title" : OALocalizedString(@"si_mi_meters"),
                 @"selected" : @(metricSystem == MILES_AND_METERS),
-                @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
+                @"type" : [OASimpleTableViewCell getCellIdentifier],
             }];
             [dataArr addObject:@{
                 @"name" : @"NAUTICAL_MILES_AND_METERS",
                 @"title" : OALocalizedString(@"si_nm_mt"),
                 @"selected" : @(metricSystem == NAUTICAL_MILES_AND_METERS),
-                @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
+                @"type" : [OASimpleTableViewCell getCellIdentifier],
             }];
             [dataArr addObject:@{
                 @"name" : @"NAUTICAL_MILES_AND_FEET",
                 @"title" : OALocalizedString(@"si_nm_ft"),
                 @"selected" : @(metricSystem == NAUTICAL_MILES_AND_FEET),
-                @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
+                @"type" : [OASimpleTableViewCell getCellIdentifier],
             }];
             break;
             
@@ -296,37 +295,37 @@
                 @"name" : @"KILOMETERS_PER_HOUR",
                 @"title" : OALocalizedString(@"si_kmh"),
                 @"selected" : @(speedSystem == KILOMETERS_PER_HOUR),
-                @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
+                @"type" : [OASimpleTableViewCell getCellIdentifier],
             }];
             [dataArr addObject:@{
                 @"name" : @"MILES_PER_HOUR",
                 @"title" : OALocalizedString(@"si_mph"),
                 @"selected" : @(speedSystem == MILES_PER_HOUR),
-                @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
+                @"type" : [OASimpleTableViewCell getCellIdentifier],
             }];
             [dataArr addObject:@{
                 @"name" : @"METERS_PER_SECOND",
                 @"title" : OALocalizedString(@"si_m_s"),
                 @"selected" : @(speedSystem == METERS_PER_SECOND),
-                @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
+                @"type" : [OASimpleTableViewCell getCellIdentifier],
             }];
             [dataArr addObject:@{
                 @"name" : @"MINUTES_PER_MILE",
                 @"title" : OALocalizedString(@"si_min_m"),
                 @"selected" : @(speedSystem == MINUTES_PER_MILE),
-                @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
+                @"type" : [OASimpleTableViewCell getCellIdentifier],
             }];
             [dataArr addObject:@{
                 @"name" : @"MINUTES_PER_KILOMETER",
                 @"title" : OALocalizedString(@"si_min_km"),
                 @"selected" : @(speedSystem == MINUTES_PER_KILOMETER),
-                @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
+                @"type" : [OASimpleTableViewCell getCellIdentifier],
             }];
             [dataArr addObject:@{
                 @"name" : @"NAUTICALMILES_PER_HOUR",
                 @"title" : OALocalizedString(@"si_nm_h"),
                 @"selected" : @(speedSystem == NAUTICALMILES_PER_HOUR),
-                @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
+                @"type" : [OASimpleTableViewCell getCellIdentifier],
             }];
             break;
             
@@ -335,19 +334,19 @@
                 @"name" : @"degrees_180",
                 @"title" : OALocalizedString(@"sett_deg180"),
                 @"selected" : @(angularUnits == DEGREES),
-                @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
+                @"type" : [OASimpleTableViewCell getCellIdentifier],
             }];
             [dataArr addObject:@{
                 @"name" : @"degrees_360",
                 @"title" : OALocalizedString(@"sett_deg360"),
                 @"selected" : @(angularUnits == DEGREES360),
-                @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
+                @"type" : [OASimpleTableViewCell getCellIdentifier],
             }];
             [dataArr addObject:@{
                 @"name" : @"milliradians",
                 @"title" : OALocalizedString(@"shared_string_milliradians"),
                 @"selected" : @(angularUnits == MILLIRADS),
-                @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
+                @"type" : [OASimpleTableViewCell getCellIdentifier],
             }];
             break;
             
@@ -356,19 +355,19 @@
                 @"name" : @"sett_no_ext_input",
                 @"title" : OALocalizedString(@"shared_string_none"),
                 @"selected" : @(externamlInputDevices == NO_EXTERNAL_DEVICE),
-                @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
+                @"type" : [OASimpleTableViewCell getCellIdentifier],
             }];
             [dataArr addObject:@{
                 @"name" : @"sett_generic_ext_input",
                 @"title" : OALocalizedString(@"sett_generic_ext_input"),
                 @"selected" : @(externamlInputDevices == GENERIC_EXTERNAL_DEVICE),
-                @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
+                @"type" : [OASimpleTableViewCell getCellIdentifier],
             }];
             [dataArr addObject:@{
                 @"name" : @"sett_wunderlinq_ext_input",
                 @"title" : OALocalizedString(@"sett_wunderlinq_ext_input"),
                 @"selected" : @(externamlInputDevices == WUNDERLINQ_EXTERNAL_DEVICE),
-                @"type" : [OASettingsTitleTableViewCell getCellIdentifier],
+                @"type" : [OASimpleTableViewCell getCellIdentifier],
             }];
             break;
             
@@ -430,23 +429,6 @@
         }
         return cell;
     }
-    if ([cellType isEqualToString:[OASettingsTitleTableViewCell getCellIdentifier]])
-    {
-        OASettingsTitleTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OASettingsTitleTableViewCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASettingsTitleTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASettingsTitleTableViewCell *)[nib objectAtIndex:0];
-            [cell.iconView setHidden:YES];
-        }
-        if (cell)
-        {
-            cell.textView.text = item[@"title"];
-            if ([item[@"selected"] boolValue])
-                cell.accessoryType = UITableViewCellAccessoryCheckmark;
-        }
-        return cell;
-    }
     if ([cellType isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
     {
         OASimpleTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
@@ -455,6 +437,8 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
             [cell.descriptionLabel setHidden:YES];
+            if (!item[@"icon"])
+                [cell.leftIconView setHidden:YES];
         }
         if (cell)
         {

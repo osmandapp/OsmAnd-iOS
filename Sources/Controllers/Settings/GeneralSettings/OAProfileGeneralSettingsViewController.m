@@ -419,9 +419,11 @@
         settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsAngularMeasurmentUnits applicationMode:self.appMode];
     else if ([itemKey isEqualToString:@"externalImputDevice"])
         settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsExternalInputDevices applicationMode:self.appMode];
-    settingsViewController.delegate = self;
-
-    [self showModalViewController:settingsViewController];
+    if (settingsViewController != nil)
+    {
+        settingsViewController.delegate = self;
+        [self showModalViewController:settingsViewController];
+    }
 }
 
 #pragma mark - Selectors

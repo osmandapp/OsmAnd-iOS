@@ -2838,3 +2838,7 @@
 "restart_is_required" = "Ein Neustart ist erforderlich, um die Änderung anzuwenden.";
 "restart_is_required_title" = "Neustart ist erforderlich";
 "free_downloads" = "Kostenlose Downloads";
+"search_favorites" = "Favoriten suchen";
+"compass_click_desc" = "Tippen Sie auf den Kompass, um den Kartenausrichtungsmodus zu wechseln.";
+"rotate_map_none_fixed" = "Norden ist oben (feststehend)";
+"rotate_map_none_manually" = "Manuell gedreht (feststehend)";

@@ -2832,3 +2832,4 @@
 "enable_search_history" = "Puedes activar el historial de búsqueda en los ajustes";
 "last_seven_days" = "Últimos 7 días";
 "confirm_history_item_delete" = "¿Borrar (%ld) elementos del historial?";
+"search_favorites" = "Buscar en favoritos";

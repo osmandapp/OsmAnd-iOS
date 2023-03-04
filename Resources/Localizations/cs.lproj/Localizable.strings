@@ -2813,3 +2813,4 @@
 "history_clear_alert_title" = "Odstranit celou historii";
 "search_history_disabled" = "Historie vyhledávání je vypnutá";
 "enable_search_history" = "Historii vyhledávání můžete povolit v Nastavení";
+"search_favorites" = "Hledat oblíbené";

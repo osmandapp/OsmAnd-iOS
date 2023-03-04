@@ -2829,3 +2829,6 @@
 "restart_is_required" = "مطلوب إعادة التشغيل لتطبيق التغيير.";
 "delete_history_items" = "هل تريد حذف سجل التاريخ؟";
 "search_favorites" = "بحث في المفضلة";
+"rotate_map_none_manually" = "استدارة يدويا (مثبتة)";
+"compass_click_desc" = "اضغط على البوصلة لتبديل وضع اتجاه الخريطة.";
+"rotate_map_none_fixed" = "الشمال لأعلى (مثبت)";

@@ -113,7 +113,7 @@
             {
                 OAMapInfoController *mapInfoController = [self getMapInfoController];
                 [mapInfoController removeSideWidget:_fpsWidgetControl];
-                _widget = [_mapWidgetRegistry widgetByKey:PLUGIN_ID];
+                _widget = [_mapWidgetRegistry widgetByKey:DEV_FPS];
                 _fpsWidgetControl = nil;
             }
             if (_cameraTiltWidgetControl)

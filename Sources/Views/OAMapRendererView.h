@@ -144,6 +144,8 @@ struct CLLocationCoordinate2D;
 @property (nonatomic) int heixelsPerTileSide;
 @property (nonatomic) int elevationDataTileSize;
 
+- (float)getCameraHeightInMeters;
+- (float)getTargetDistanceInMeters;
 
 
 @end

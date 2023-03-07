@@ -2833,3 +2833,7 @@
 "search_history_disabled" = "Історію пошуку вимкнено";
 "enable_search_history" = "Ви можете ввімкнути історію пошуку в налаштуваннях";
 "confirm_history_item_delete" = "Ви впевнені, що хочете видалити (%ld) елементи історії?";
+"search_favorites" = "Пошук у закладках";
+"rotate_map_none_manually" = "Фіксовано (обертається вручну)";
+"compass_click_desc" = "Торкніться компаса, щоб перемикнути режим орієнтації мапи.";
+"rotate_map_none_fixed" = "Фіксовано (північ угорі)";

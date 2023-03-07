@@ -2826,3 +2826,6 @@
 "delete_history_items" = "Slet historikelementer?";
 "confirm_history_item_delete" = "Er du sikker på, at du vil slette (%ld) historikelementer?";
 "search_favorites" = "Søg i favoritter";
+"rotate_map_none_manually" = "Manuelt roteret (fast)";
+"rotate_map_none_fixed" = "Nord er op (fast)";
+"compass_click_desc" = "Tryk på kompas for at skifte kortorienteringstilstand.";

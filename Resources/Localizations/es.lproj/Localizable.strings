@@ -2822,3 +2822,7 @@
 "history_actions_footer_text" = "Puede exportar el historial a un archivo. Puede borrar todas las entradas del historial registradas hasta el momento.";
 "ltr_or_rtl_combine_via_of" = "%ld de %ld";
 "confirm_history_item_delete" = "¿Estás seguro de que quieres borrar (%ld) elementos del historial?";
+"search_favorites" = "Buscar en favoritos";
+"rotate_map_none_manually" = "Giro manual (fijo)";
+"rotate_map_none_fixed" = "El norte está arriba (fijado)";
+"compass_click_desc" = "Pulse sobre la brújula para cambiar el modo de orientación del mapa.";

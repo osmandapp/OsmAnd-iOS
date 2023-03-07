@@ -284,6 +284,28 @@ typedef NS_ENUM(NSInteger, EOASimulationMode)
 
 @end
 
+typedef NS_ENUM(NSInteger, EOADownloadMode) {
+    EOADownloadModeNone = 0,
+    EOADownloadModeWiFi,
+    EOADownloadModeAny
+};
+
+@interface OADownloadMode : NSObject
+
+- (instancetype)initWithMode:(EOADownloadMode)mode;
++ (NSArray<OADownloadMode *> *)values;
++ (OADownloadMode *)getModeObject:(NSString *)key;
++ (EOADownloadMode)getMode:(NSString *)key;
++ (NSString *)toKey:(EOADownloadMode)mode;
++ (NSString *)toTitle:(EOADownloadMode)mode;
++ (NSString *)toIconName:(EOADownloadMode)mode;
+- (EOADownloadMode)mode;
+- (NSString *)key;
+- (NSString *)title;
+- (NSString *)iconName;
+
+@end
+
 @interface OACommonPreference : NSObject
 
 @property (nonatomic, readonly) NSString *key;
@@ -609,6 +631,17 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 - (EOACoordinateInputFormats) get:(OAApplicationMode *)mode;
 - (void) set:(EOACoordinateInputFormats)coordinateInputFormats;
 - (void) set:(EOACoordinateInputFormats)coordinateInputFormats mode:(OAApplicationMode *)mode;
+
+@end
+
+@interface OACommonDownloadMode : OACommonInteger
+
++ (instancetype) withKey:(NSString *)key defValue:(EOADownloadMode)defValue;
+
+- (EOADownloadMode) get;
+- (EOADownloadMode) get:(OAApplicationMode *)mode;
+- (void) set:(EOADownloadMode)downloadMode;
+- (void) set:(EOADownloadMode)downloadMode mode:(OAApplicationMode *)mode;
 
 @end
 

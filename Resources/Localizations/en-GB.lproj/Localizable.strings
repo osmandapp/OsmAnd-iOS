@@ -375,6 +375,7 @@
 "traffic_warning" = "Traffic warning";
 "traffic_warning_railways" = "Railway crossing";
 "traffic_warning_pedestrian" = "Pedestrian crossing";
+"traffic_warning_pedestrian_crosswalk" = "Pedestrian crosswalk";
 "traffic_warning_hazard" = "Hazard";
 "tunnel_warning" = "Tunnel ahead";
 "accessibility_announce" = "Announce";

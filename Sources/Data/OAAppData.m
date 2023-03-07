@@ -41,6 +41,7 @@
 #define kMapillaryKey @"mapillary"
 #define kWikipediaLanguagesKey @"wikipediaLanguages"
 #define kWikipediaGlobalKey @"wikipediaGlobal"
+#define kWikipediaImagesDownloadModeKey @"wikipediaImagesDownloadMode"
 
 #define kWeatherKey @"weather"
 #define kWeatherUseOfflineDataKey @"weatherUseOfflineData"
@@ -112,6 +113,7 @@
     OACommonBoolean *_mapillaryProfile;
     OACommonBoolean *_wikipediaGlobalProfile;
     OACommonStringList *_wikipediaLanguagesProfile;
+    OACommonDownloadMode *_wikipediaImagesDownloadModeProfile;
 
     BOOL _weatherToolbarActive;
     OAAutoObserverProxy *_weatherSettingsChangeObserver;
@@ -228,6 +230,10 @@
         {
             [_wikipediaLanguagesProfile setValueFromString:value appMode:mode];
         }
+        else if ([key isEqualToString:@"wikipedia_images_download_mode"])
+        {
+            [_wikipediaImagesDownloadModeProfile setValueFromString:value appMode:mode];
+        }
     }
 }
 
@@ -245,6 +251,7 @@
         prefs[@"show_mapillary"] = [_mapillaryProfile toStringValue:mode];
         prefs[@"global_wikipedia_poi_enabled"] = [_wikipediaGlobalProfile toStringValue:mode];
         prefs[@"wikipedia_poi_enabled_languages"] = [_wikipediaLanguagesProfile toStringValue:mode];
+        prefs[@"wikipedia_images_download_mode"] = [_wikipediaImagesDownloadModeProfile toStringValue:mode];
     }
 }
 
@@ -305,6 +312,7 @@
     _mapillaryProfile = [OACommonBoolean withKey:kMapillaryKey defValue:NO];
     _wikipediaGlobalProfile = [OACommonBoolean withKey:kWikipediaGlobalKey defValue:NO];
     _wikipediaLanguagesProfile = [OACommonStringList withKey:kWikipediaLanguagesKey defValue:@[]];
+    _wikipediaImagesDownloadModeProfile = [OACommonDownloadMode withKey:kWikipediaImagesDownloadModeKey defValue:EOADownloadModeAny];
 
     _weatherSettingsChangeObservable = [[OAObservable alloc] init];
     _weatherSettingsChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
@@ -394,6 +402,7 @@
     [_registeredPreferences setObject:_terrainTypeProfile forKey:@"terrain_mode"];
     [_registeredPreferences setObject:_wikipediaGlobalProfile forKey:@"global_wikipedia_poi_enabled"];
     [_registeredPreferences setObject:_wikipediaLanguagesProfile forKey:@"wikipedia_poi_enabled_languages"];
+    [_registeredPreferences setObject:_wikipediaImagesDownloadModeProfile forKey:@"wikipedia_images_download_mode"];
 
     [_registeredPreferences setObject:_weatherProfile forKey:@"show_weather"];
     [_registeredPreferences setObject:_weatherUseOfflineDataProfile forKey:@"show_weather_offline_data"];
@@ -1507,6 +1516,22 @@
     }
 }
 
+- (EOADownloadMode)wikipediaImagesDownloadMode
+{
+    @synchronized (_lock)
+    {
+        return [_wikipediaImagesDownloadModeProfile get];
+    }
+}
+
+- (void)setWikipediaImagesDownloadMode:(EOADownloadMode)mode
+{
+    @synchronized (_lock)
+    {
+        [_wikipediaImagesDownloadModeProfile set:mode];
+    }
+}
+
 @synthesize mapLastViewedState = _mapLastViewedState;
 
 - (void) backupTargetPoints
@@ -1730,6 +1755,7 @@
     [_mapillaryProfile set:[_mapillaryProfile get:sourceMode] mode:targetMode];
     [_wikipediaGlobalProfile set:[_wikipediaGlobalProfile get:sourceMode] mode:targetMode];
     [_wikipediaLanguagesProfile set:[_wikipediaLanguagesProfile get:sourceMode] mode:targetMode];
+    [_wikipediaImagesDownloadModeProfile set:[_wikipediaImagesDownloadModeProfile get:sourceMode] mode:targetMode];
 
     [_weatherProfile set:[_weatherProfile get:sourceMode] mode:targetMode];
     [_weatherUseOfflineDataProfile set:[_weatherUseOfflineDataProfile get:sourceMode] mode:targetMode];

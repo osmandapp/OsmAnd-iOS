@@ -65,6 +65,11 @@
     [_rowData addObject:rowData];
 }
 
+- (void)addRows:(NSArray<OATableRowData *> *)rowsData
+{
+    [_rowData addObjectsFromArray:rowsData];
+}
+
 - (OATableRowData *) addRowFromDictionary:(NSDictionary *)dictionary
 {
     OATableRowData *row = [[OATableRowData alloc] initWithData:dictionary];

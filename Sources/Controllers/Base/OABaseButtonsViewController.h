@@ -40,6 +40,8 @@ typedef NS_ENUM(NSInteger, EOABaseButtonColorScheme)
 - (CGFloat)getSpaceBetweenButtons;
 - (NSString *)getTopButtonTitle;
 - (NSString *)getBottomButtonTitle;
+- (NSString *)getTopButtonIconName;
+- (NSString *)getBottomButtonIconName;
 - (EOABaseButtonColorScheme)getTopButtonColorScheme;
 - (EOABaseButtonColorScheme)getBottomButtonColorScheme;
 - (BOOL)isBottomSeparatorVisible;

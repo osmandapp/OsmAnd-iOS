@@ -124,6 +124,7 @@
 
 @property (nonatomic) BOOL wikipedia;
 @property (readonly) OAObservable* wikipediaChangeObservable;
+@property (nonatomic) EOADownloadMode wikipediaImagesDownloadMode;
 
 @property (readonly) OAObservable* mapLayerChangeObservable;
 

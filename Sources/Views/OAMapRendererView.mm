@@ -371,6 +371,16 @@
     return _renderer->getTileSizeInMeters();
 }
 
+- (float)getCameraHeightInMeters
+{
+    return _renderer->getCameraHeightInMeters();
+}
+
+- (float)getTargetDistanceInMeters
+{
+    return _renderer->getMapTargetDistance(self.target31);
+}
+
 - (float)minZoom
 {
     return OsmAnd::ZoomLevel1;//_renderer->getMinZoomLevel();

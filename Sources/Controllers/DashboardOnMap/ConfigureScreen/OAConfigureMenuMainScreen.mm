@@ -386,8 +386,16 @@
     NSString *imgName = data[@"img"];
     if (imgName)
     {
-        cell.leftIconView.image = [UIImage templateImageNamed:imgName];
-        cell.leftIconView.tintColor = (((NSNumber *)data[@"selected"]).boolValue) ? UIColorFromRGB(_settings.applicationMode.get.getIconColor) : UIColorFromRGB(color_icon_inactive);
+        if ([imgName hasPrefix:@"widget_developer"] || [imgName hasPrefix:@"widget_fps"])
+        {
+            cell.leftIconView.image = [UIImage rtlImageNamed:imgName];
+            cell.leftIconView.contentMode = UIViewContentModeCenter;
+        }
+        else
+        {
+            cell.leftIconView.image = [UIImage templateImageNamed:imgName];
+            cell.leftIconView.tintColor = (((NSNumber *)data[@"selected"]).boolValue) ? UIColorFromRGB(_settings.applicationMode.get.getIconColor) : UIColorFromRGB(color_icon_inactive);
+        }
     }
     else
     {

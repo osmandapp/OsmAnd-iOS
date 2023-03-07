@@ -2542,7 +2542,6 @@
 		DA5A83E326C563A800F274C7 /* OAEditColorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7E1526C563A300F274C7 /* OAEditColorViewController.xib */; };
 		DA5A83E426C563A800F274C7 /* OAEditGroupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7E1826C563A300F274C7 /* OAEditGroupViewController.xib */; };
 		DA5A83E526C563A800F274C7 /* OAEditDescriptionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7E1926C563A300F274C7 /* OAEditDescriptionViewController.m */; };
-		DA5A83E626C563A800F274C7 /* OAWikiWebViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7E1F26C563A400F274C7 /* OAWikiWebViewController.xib */; };
 		DA5A83E726C563A800F274C7 /* OAWikiWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7E2026C563A400F274C7 /* OAWikiWebViewController.m */; };
 		DA5A83E826C563A800F274C7 /* OAWikiMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7E2126C563A400F274C7 /* OAWikiMenuViewController.xib */; };
 		DA5A83E926C563A800F274C7 /* OAWikiMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7E2226C563A400F274C7 /* OAWikiMenuViewController.m */; };
@@ -6672,7 +6671,6 @@
 		DA5A7E1B26C563A300F274C7 /* OACollapsableCardsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OACollapsableCardsView.h; sourceTree = "<group>"; };
 		DA5A7E1C26C563A300F274C7 /* OACollapsableTransportStopRoutesView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OACollapsableTransportStopRoutesView.h; sourceTree = "<group>"; };
 		DA5A7E1E26C563A400F274C7 /* OAWikiMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWikiMenuViewController.h; sourceTree = "<group>"; };
-		DA5A7E1F26C563A400F274C7 /* OAWikiWebViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAWikiWebViewController.xib; sourceTree = "<group>"; };
 		DA5A7E2026C563A400F274C7 /* OAWikiWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAWikiWebViewController.m; sourceTree = "<group>"; };
 		DA5A7E2126C563A400F274C7 /* OAWikiMenuViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAWikiMenuViewController.xib; sourceTree = "<group>"; };
 		DA5A7E2226C563A400F274C7 /* OAWikiMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAWikiMenuViewController.m; sourceTree = "<group>"; };
@@ -12269,7 +12267,6 @@
 				DA5A7E2126C563A400F274C7 /* OAWikiMenuViewController.xib */,
 				DA5A7E2326C563A400F274C7 /* OAWikiWebViewController.h */,
 				DA5A7E2026C563A400F274C7 /* OAWikiWebViewController.m */,
-				DA5A7E1F26C563A400F274C7 /* OAWikiWebViewController.xib */,
 			);
 			path = Wiki;
 			sourceTree = "<group>";
@@ -15683,7 +15680,6 @@
 				32ADB42F25D2EC2900F5C634 /* ic_dialog_move@2x.png in Resources */,
 				DA1340F4243DC5A80039D214 /* ic_action_taxi@3x.png in Resources */,
 				DA23425623477F33003911B8 /* ic_custom_alert_color@2x.png in Resources */,
-				DA5A83E626C563A800F274C7 /* OAWikiWebViewController.xib in Resources */,
 				84C102721FBDC10800D3E5EE /* warnings_railways@2x.png in Resources */,
 				DA8AD07E291D3A850092385B /* ic_custom_cloud_upload_outline@3x.png in Resources */,
 				845E07191B60E72300DFC2A7 /* ic_checkmark_big_enable@3x.png in Resources */,

@@ -277,7 +277,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
             [collapsableRow addDependentRow:conflictsRow];
             [backupRows addRow:collapsableRow];
 
-//            if (_status.warningTitle != nil || _error.length > 0)
+            if (_status.warningTitle != nil || _error.length > 0)
             {
                 BOOL hasWarningStatus = _status.warningTitle != nil;
                 BOOL hasDescr = _error || _status.warningDescription;
@@ -288,9 +288,9 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
                     kCellTypeKey: [OARightIconTableViewCell getCellIdentifier],
                     kCellKeyKey: @"makeBackupWarning",
                     kCellTitleKey: hasWarningStatus ? _status.warningTitle : OALocalizedString(@"osm_failed_uploads"),
-                    kCellDescrKey: @"descr",
+                    kCellDescrKey: descr ? descr : @"",
                     kCellIconTint: @(color),
-                    kCellIconNameKey:@"ic_custom_cancel"
+                    kCellIconNameKey: _status.warningIconName
                 };
                 [backupRows addRowFromDictionary:makeBackupWarningCell];
             }

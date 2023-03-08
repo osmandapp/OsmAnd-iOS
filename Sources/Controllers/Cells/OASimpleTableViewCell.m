@@ -29,12 +29,8 @@
 
 - (void)updateSeparatorInset
 {
-    CGRect titleFrame = [self.titleLabel convertRect:self.titleLabel.frame toView:self];
-
-    CGFloat leftInset = titleFrame.origin.x;
-    if (leftInset == 0)
-        leftInset = [OAUtilities getLeftMargin] + (self.leftIconView.hidden ? kPaddingOnSideOfContent : kPaddingToLeftOfContentWithIcon);
-
+    CGRect titleFrame = [self.titleLabel convertRect:self.titleLabel.bounds toView:self];
+    CGFloat leftInset = [self isDirectionRTL] ? ([self getTableView].frame.size.width - (titleFrame.origin.x + titleFrame.size.width)) : titleFrame.origin.x;
     self.separatorInset = UIEdgeInsetsMake(0., leftInset, 0., 0.);
 }
 

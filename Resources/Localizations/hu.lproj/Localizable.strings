@@ -1490,7 +1490,7 @@
 "road_max_speed_descr" = "Beállítja a legnagyobb utazási sebességet az útvonal összes útján. Csökkenti a prioritását azoknak az utaknak, amelyeken a lehetséges sebesség magasabb, mint a legnagyobb sebesség.";
 "road_min_speed_descr" = "Beállítja a legkisebb utazási sebességet az útvonal összes útján. Megemeli a prioritását azoknak az utaknak, amelyeken az ajánlott sebesség alacsonyabb, mint a legkiseb sebesség.";
 "road_speeds_descr" = "Ezek a paraméterek befolyásolhatják az útvonal kiszámítását.";
-"max_speed" = "Sebességkorlátozás";
+"max_speed" = "Legnagyobb sebesség";
 "driving_region_descr" = "Vezetési régió kijelölése: USA, Európa, Egyesült Királyság, Ázsia és egyebek.";
 "rotate_map_none_opt" = "Ne forogjon (észak felfelé)";
 "rotate_map_bearing_opt" = "A mozgás irányába";

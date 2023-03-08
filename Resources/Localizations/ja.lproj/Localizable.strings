@@ -31,7 +31,7 @@
 "angular_units" = "角度測定ユニット";
 "angular_units_descr" = "方位角の測定単位を変更します。";
 "access_intermediate_arrival_time" = "中間経由地点への到着時間";
-"map_widget_intermediate_time" = "-経由地点時間";
+"map_widget_intermediate_time" = "経由地点の時刻";
 "shared_string_previous" = "前へ";
 "route_stops_before" = "%@前に止まる";
 "transport_Routes" = "ルート";
@@ -419,7 +419,7 @@
 "favorites_item" = "お気に入り";
 "shared_string_gpx_tracks" = "経路";
 // GPX
-"plugin_distance_point" = "地点";
+"plugin_distance_point" = "座標";
 "shared_string_waypoint" = "経由地点";
 "shared_string_waypoints" = "経由地点";
 "gpx_points" = "地点";
@@ -999,7 +999,7 @@
 "you_searching" = "検索中";
 "from_location" = "離れる";
 "show_alt_in_drive" = "ドライブモードで高度を表示";
-"shared_string_get" = "取得";
+"shared_string_get" = "取得する";
 "srtm_plugin_disabled" = "等高線無効";
 "prch_wiki_info" = "Wikipediaアドオンを使用すると、購入あるいは無料ダウンロード枠の制限内でダウンロードできたWikipedia情報を、マップ内で参照することができます。";
 "prch_srtm_info" = "等高線アドオンは、購入あるいは無料の制限内でダウンロードできた等高線情報をマップ内に反映表示することができます。";
@@ -1626,7 +1626,7 @@
 "recalculate_route" = "ルートの再計算";
 "routing_profile_straightline" = "直線";
 "routing_profile_ski" = "スキー";
-"base_profile_descr_public_transport" = "公共交通機関の種類";
+"base_profile_descr_public_transport" = "公共交通機関の類い";
 "routing_profile_direct_to" = "直接指示";
 "osmand_default_routing" = "OsmAndルーティング";
 "select_nav_profile_dialog_message" = "\'ナビゲーションタイプ\'では、利用可能なオフラインおよびオンラインルーティングエンジンの中から、ルートの計算方法を選択します。";
@@ -2269,7 +2269,7 @@
 "monthly_subscription" = "月毎のサブスクリプション";
 "manage_subscription" = "サブスクリプションの管理";
 "osm_live_banner_desc" = "マップダウンロードの制限がなくなり、設定した更新頻度(月、週、日、時間)での自動ダウンロードが可能になります。";
-"purchases_feature_desc_hourly_map_updates" = "より短い頻度でマップ更新が可能になります。時間ごと、日ごと、週ごとの更新。更新は変更されたエリアに対してのみ、段階的にダウンロードされます。";
+"purchases_feature_desc_hourly_map_updates" = "より短い頻度でマップ更新が可能になります。時間ごと、日ごと、週ごとの更新を選択できます。更新は段階的に、変更されたエリアのみがダウンロードされます。";
 "shared_string_purchased" = "購入済";
 "altitude_descent" = "下り坂";
 "purchases_feature_desc_wikivoyage" = "オフラインでもWikivoyage を参考に探索することが可能になります。記事は国や地域ごとに分けられ、言語に寄らず利用できます。";
@@ -2277,7 +2277,7 @@
 "osmand_maps_plus_tagline" = "より拡張された機能を手に入れる";
 "private_access_routing_req" = "目的地が専有エリア(私有地)内にあります。専有道路あるいは私道を通ることを許可しますか？";
 "osm_live_subscriptions" = "サブスクリプション";
-"purchases_feature_desc_nautical" = "水深に関する情報を入手しましょう";
+"purchases_feature_desc_nautical" = "水深に関する情報を入手できるようになります";
 "share_geo" = "geo:";
 "redeem_promo_code" = "プロモーションコードを利用";
 "unlimited_map_downloads" = "マップの無制限ダウンロード";
@@ -2300,7 +2300,7 @@
 "cubic_m" = "立方メートル";
 "toast_empty_name_error" = "名前の付けられていない場所";
 "annual_subscription" = "年毎のサブスクリプション";
-"purchases_feature_desc_pro_widgets" = "OsmAnd Proの機能(ルートの色付けなど)が利用できます。";
+"purchases_feature_desc_pro_widgets" = "OsmAnd Pro専用の機能(ルートの色付けなど)が利用できます。";
 "purchases_feature_desc_monthly_map_updates" = "オフラインマップの定期および月毎更新が可能になります。";
 "shared_string_learn_more" = "詳細を見る";
 "continue_with" = "%@への手続きに進む";
@@ -2434,11 +2434,11 @@
 "promo_subscription" = "プロモーションサブスクリプション";
 "offline_edition_descr" = "オフライン編集が有効になっている場合、変更は最初にローカルに保存され、リクエストに応じてアップロードされます。有効になっていない場合、変更は即アップロードされます。";
 "verification_code_missing" = "確認コードを受け取りませんでした";
-"pro_features" = "Pro版";
+"pro_features" = "Pro版専用機能";
 "shared_string_selected" = "選択済み";
 "srtm_unit_format" = "等高線ユニットバリアント";
 "save_heading_descr" = "記録中の各トラックポイントに見出しも保存します。";
-"no_purchases" = "購入済みの品目はありません";
+"no_purchases" = "購入済みのアイテムはありません";
 "osmand_cloud_create_account_descr" = "メールアドレスを入力してください。ワンタイムパスワードが送信されます。\n手続きを進めるとすべてのデータがリンクされます。";
 "service_is_not_available_please_try_later" = "サービスは利用できません。後ほどもう一度やり直してください。";
 "select_another_colorization" = "別タイプのカラーリングを選択してください。";
@@ -2518,7 +2518,7 @@
 "speed_camera_pois" = "スピードカメラPOI";
 "shared_string_height" = "高さ";
 "uninstall_speed_cameras" = "スピードカメラデータの削除";
-"speed_cameras_alert" = "一部の国では、スピードカメラの事前警告は法律で禁止されています。";
+"speed_cameras_alert" = "一部の国では、スピードカメラ有無の事前警告は法律で禁止されています。";
 "shared_string_keep_active" = "機能を維持";
 "shared_string_legal" = "法的事項";
 "measurement_units" = "測定単位";
@@ -2547,7 +2547,7 @@
 "routing_attr_motor_type_diesel_name" = "ディーゼル";
 "routing_attr_motor_type_gas_name" = "天然ガス";
 "transport_hazmat_no_desc" = "道路やトンネルは、危険物の輸送が制限される場合があります。";
-"shared_string_cross_buy" = "Cross-buy";
+"shared_string_cross_buy" = "クロスバイ";
 "routing_attr_avoid_highway_description" = "高速道路を避ける";
 "rendering_attr_showTrainRoutes_name" = "列車路線";
 "routing_attr_difficulty_preference_no_preference_name" = "指定なし";
@@ -2561,10 +2561,10 @@
 "simulation_preview_mode_desc" = "シミュレーションの速度は直線区間で最大となり、交差点でのみ減速します。";
 "speed_mode" = "スピード重視モード";
 "mtb_segment_classification" = "セグメントの分類";
-"weather_plugin_description" = "サービス\n- 5つのレイヤーを備えた 24時間および 7日間の天気予報\n- 位置に応じたウィジェット\n- 温度/気圧の分布図\n\n気象データは、Global Forecast System (GFS、https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast ) によって提供されています。";
+"weather_plugin_description" = "提供されるサービスは以下の通りです\n- 5つのレイヤーを備えた 24時間および 7日間の天気予報\n- 位置に応じたウィジェット\n- 温度/気圧の分布図\n\n気象データは、Global Forecast System (GFS、https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast ) によって提供されています。";
 "rendering_attr_depthContourColorScheme_name" = "線の色";
 "show_borders_of_downloaded_maps" = "ダウンロードしたマップの境界線を表示";
-"purchases_feature_desc_cross_buy" = "追加料金なしで、さまざまなプラットフォーム(Android/iOS/ウェブ) からサブスクリプション機能を使用できます。";
+"purchases_feature_desc_cross_buy" = "追加料金なしで、さまざまなプラットフォーム(Android/iOS/ウェブ) からサブスクリプション機能を利用できます。";
 "rendering_attr_showMtbScaleIMBATrails_description" = "専用のマウンテンバイク トレイルを表示します。";
 "compass_visible_if_map_rotated" = "マップが回転している場合に表示";
 "rendering_attr_depthContourColorScheme_description" = "等深線の配色";

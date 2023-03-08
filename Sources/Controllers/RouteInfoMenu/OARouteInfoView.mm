@@ -1415,7 +1415,6 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASimpleTableViewCell *) nib[0];
             [cell leftIconVisibility:NO];
-            [cell textIndentsStyle:EOATableViewCellTextIncreasedCenterIndentStyle];
         }
         if (cell)
         {

@@ -10,7 +10,6 @@
 
 typedef NS_ENUM(NSInteger, EOATableViewCellTextIndentsStyle) {
     EOATableViewCellTextNormalIndentsStyle = 0,
-    EOATableViewCellTextIncreasedCenterIndentStyle,
     EOATableViewCellTextIncreasedTopCenterIndentStyle
 };
 

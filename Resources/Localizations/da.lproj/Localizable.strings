@@ -2829,3 +2829,15 @@
 "rotate_map_none_manually" = "Manuelt roteret (fast)";
 "rotate_map_none_fixed" = "Nord er op (fast)";
 "compass_click_desc" = "Tryk på kompas for at skifte kortorienteringstilstand.";
+"map_widget_zoom_level" = "Zoom-niveau";
+"map_widget_target_distance" = "Målafstand";
+"dont_download" = "Download ikke";
+"over_wifi_only" = "Kun via Wi-Fi";
+"wikivoyage_download_pics" = "Download billeder";
+"download_over_cellular_network" = "Vil du downloade billeder via mobilnetværk? Dette kan medføre høje gebyrer.";
+"map_widget_camera_tilt" = "Kamerahældning";
+"map_widget_camera_distance" = "Kameraafstand";
+"change_language" = "Skift sprog";
+"over_any_network" = "Via ethvert netværk";
+"wikipedia_language_settings_descr" = "Vælg de sprog, som Wikipedia-artikler skal vises i på kortet. Du kan skifte mellem alle tilgængelige sprog, mens du læser artiklen.";
+"download_only_now" = "Download kun nu";

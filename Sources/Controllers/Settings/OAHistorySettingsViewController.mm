@@ -121,16 +121,22 @@
     return _isLogHistoryOn && self.tableView.editing ? OALocalizedString(@"shared_string_cancel") : @"";
 }
 
-- (NSString *)getRightNavbarButtonTitle
+
+- (NSArray<UIBarButtonItem *> *)getRightNavbarButtons
 {
     if (_isLogHistoryOn)
     {
+        NSString *title = @"";
         if (self.tableView.editing)
-            return [self isAllSelected] ? OALocalizedString(@"shared_string_deselect_all") : OALocalizedString(@"shared_string_select_all");
+            title = [self isAllSelected] ? OALocalizedString(@"shared_string_deselect_all") : OALocalizedString(@"shared_string_select_all");
         else if ([self sectionsCount] > 1)
-            return OALocalizedString(@"shared_string_edit");
+            title = OALocalizedString(@"shared_string_edit");
+        return @[[self createRightNavbarButton:title
+                                      iconName:nil
+                                        action:@selector(onRightNavbarButtonPressed)
+                                          menu:nil]];
     }
-    return @"";
+    return nil;
 }
 
 - (EOABaseNavbarColorScheme)getNavbarColorScheme
@@ -423,7 +429,10 @@
         [self applyLocalization];
         if ((self.topButton.enabled && self.tableView.indexPathsForSelectedRows.count == 0)
             || (!self.topButton.enabled && self.tableView.indexPathsForSelectedRows.count > 0))
+        {
+            [self updateNavbar];
             [self updateBottomButtons];
+        }
     }
 }
 
@@ -432,7 +441,10 @@
     [self applyLocalization];
     if ((self.topButton.enabled && self.tableView.indexPathsForSelectedRows.count == 0)
         || (!self.topButton.enabled && self.tableView.indexPathsForSelectedRows.count > 0))
+    {
+        [self updateNavbar];
         [self updateBottomButtons];
+    }
 }
 
 #pragma mark - Aditions
@@ -499,6 +511,7 @@
         }
         [self.tableView endUpdates];
         [self applyLocalization];
+        [self updateNavbar];
         [self updateBottomButtons];
    }
     else

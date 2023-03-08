@@ -1892,6 +1892,7 @@
 "free_downloads" = "Free downloads";
 
 "select_language" = "Select language";
+"change_language" = "Change language";
 "language_short" = "Lang";
 "open_url" = "Open page in browser";
 "no_other_translations" = "There are no other translations";
@@ -3067,3 +3068,11 @@
 
 "restart_is_required_title" = "Restart is required";
 "restart_is_required" = "A restart is required to apply the change.";
+
+"wikipedia_language_settings_descr" = "Select the languages ​​in which Wikipedia articles will appear on the map. You can switch between any available language ​​while reading the article.";
+"dont_download" = "Don't download";
+"over_wifi_only" = "Over Wi-Fi only";
+"over_any_network" = "Over any network";
+"download_only_now" = "Download only now";
+"wikivoyage_download_pics" = "Download images";
+"download_over_cellular_network" = "Download images over cellular network? This may incur high charges.";

@@ -3193,6 +3193,94 @@
 
 @end
 
+@implementation OACommonDownloadMode
+{
+    NSArray<OADownloadMode *> *_values;
+}
+
+@dynamic defValue;
+
++ (instancetype) withKey:(NSString *)key defValue:(OADownloadMode *)defValue
+{
+    OACommonDownloadMode *obj = [[OACommonDownloadMode alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+        obj.values = [NSArray array];
+    }
+    return obj;
+}
+
++ (instancetype) withKey:(NSString *)key defValue:(OADownloadMode *)defValue values:(NSArray<OADownloadMode *> *)values
+{
+    OACommonDownloadMode *obj = [[OACommonDownloadMode alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        NSUInteger indexOfValue = [values indexOfObject:defValue];
+        obj.defValue = indexOfValue != NSNotFound ? indexOfValue : 0;
+        obj.values = values;
+    }
+    return obj;
+}
+
+- (OADownloadMode *) get
+{
+    NSInteger indexOfValue = [super get:self.appMode];
+    return self.values.count > indexOfValue ? self.values[indexOfValue] : self.values.firstObject;
+}
+
+- (void) set:(OADownloadMode *)downloadMode
+{
+    NSUInteger indexOfValue = [self.values indexOfObject:downloadMode];
+    [super setValue:@(indexOfValue != NSNotFound ? indexOfValue : 0) mode:self.appMode];
+}
+
+- (OADownloadMode *) get:(OAApplicationMode *)mode
+{
+    NSInteger indexOfValue = [super get:mode];
+    return self.values.count > indexOfValue ? self.values[indexOfValue] : self.values.firstObject;
+}
+
+- (void) set:(OADownloadMode *)downloadMode mode:(OAApplicationMode *)mode
+{
+    NSUInteger indexOfValue = [self.values indexOfObject:downloadMode];
+    [super set:indexOfValue != NSNotFound ? indexOfValue : 0 mode:mode];
+}
+
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    if ([strValue isEqualToString:@"none"])
+        return [self set:OADownloadMode.NONE mode:mode];
+    else if ([strValue isEqualToString:@"wifi"])
+        return [self set:OADownloadMode.WIFI_ONLY mode:mode];
+    else if ([strValue isEqualToString:@"wifi"])
+        return [self set:OADownloadMode.ANY_NETWORK mode:mode];
+    
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    OADownloadMode *downloadMode = [OADownloadMode getDownloadModes][[super get:mode]];
+
+    if ([downloadMode isEqual:OADownloadMode.NONE])
+        return @"none";
+    else if ([downloadMode isEqual:OADownloadMode.WIFI_ONLY])
+        return @"wifi";
+    else if ([downloadMode isEqual:OADownloadMode.ANY_NETWORK])
+        return @"any";
+
+    return @"any";
+}
+
+- (void) resetToDefault
+{
+    [self set:self.values.count > self.defValue ? self.values[self.defValue] : self.values.firstObject];
+}
+
+@end
+
 @implementation OACommonColoringType
 {
     NSArray<OAColoringType *> *_values;

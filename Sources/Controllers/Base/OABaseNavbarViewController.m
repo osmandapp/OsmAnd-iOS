@@ -26,7 +26,6 @@
     UIView *_rightIconLargeTitle;
 
     UIBarButtonItem *_leftNavbarButton;
-    UIBarButtonItem *_rightNavbarButton;
 }
 
 #pragma mark - Initialization
@@ -170,23 +169,26 @@
     BOOL isCustomLargeTitle = [self getNavbarStyle] == EOABaseNavbarStyleCustomLargeTitle;
     if ((sub && sub.length > 0) || isCustomLargeTitle)
     {
-        [self.navigationItem setStackViewWithTitle:[self getTitle]
-                                        titleColor:[self getTitleColor]
-                                         titleFont:[UIFont scaledSystemFontOfSize:17. weight:UIFontWeightSemibold maximumSize:22.]
-                                          subtitle:sub
-                                     subtitleColor:UIColorFromRGB(color_text_footer)
-                                      subtitleFont:[UIFont scaledSystemFontOfSize:13. maximumSize:18.]];
+        BOOL isTitleHidden = [self.navigationItem isTitleInStackViewHidden];
+        if (isTitleHidden)
+        {
+            [self.navigationItem hideTitleInStackView:YES defaultTitle:[self getTitle] defaultSubtitle:[self getSubtitle]];
+        }
+        else
+        {
+            [self.navigationItem setStackViewWithTitle:[self getTitle]
+                                            titleColor:[self getTitleColor]
+                                             titleFont:[UIFont scaledSystemFontOfSize:17. weight:UIFontWeightSemibold maximumSize:22.]
+                                              subtitle:sub
+                                         subtitleColor:UIColorFromRGB(color_text_footer)
+                                          subtitleFont:[UIFont scaledSystemFontOfSize:13. maximumSize:18.]];
+        }
     }
-    [self updateNavbarButtonTitles];
-}
-
-- (void)addAccessibilityLabels
-{
-    NSString *leftButtonTitle = [self getLeftNavbarButtonTitle];
-    _leftNavbarButton.accessibilityLabel = leftButtonTitle ? leftButtonTitle : OALocalizedString(@"shared_string_back");
-    NSString *rightButtonTitle = [self getRightNavbarButtonTitle];
-    if (rightButtonTitle)
-    _rightNavbarButton.accessibilityLabel = rightButtonTitle;
+    if (_leftNavbarButton)
+    {
+        UIButton *leftButton = _leftNavbarButton.customView;
+        [leftButton setTitle:[self getLeftNavbarButtonTitle] forState:UIControlStateNormal];
+    }
 }
 
 - (BOOL)isNavbarVisible
@@ -276,23 +278,8 @@
     }
 }
 
-- (void)updateNavbarButtonTitles
-{
-    if (_leftNavbarButton)
-    {
-        UIButton *leftButton = _leftNavbarButton.customView;
-        [leftButton setTitle:[self getLeftNavbarButtonTitle] forState:UIControlStateNormal];
-    }
-    if (_rightNavbarButton)
-    {
-        UIButton *rightButton = _rightNavbarButton.customView;
-        [rightButton setTitle:[self getRightNavbarButtonTitle] forState:UIControlStateNormal];
-    }
-}
-
 - (void)setupNavbarButtons
 {
-    NSString *rightButtonTitle = [self getRightNavbarButtonTitle];
     NSString *leftButtonTitle = [self getLeftNavbarButtonTitle];
     UIImage *leftNavbarButtonCustomIcon = [self getCustomIconForLeftNavbarButton];
     if ((([self isModal] && !leftButtonTitle) || (![self isModal] && leftButtonTitle && leftButtonTitle.length == 0)) && !leftNavbarButtonCustomIcon)
@@ -343,30 +330,64 @@
         [leftButton.widthAnchor constraintLessThanOrEqualToConstant:freeSpaceForNavbarButton].active = YES;
 
         _leftNavbarButton = [[UIBarButtonItem alloc] initWithCustomView:leftButton];
+        _leftNavbarButton.accessibilityLabel = leftButtonTitle ? leftButtonTitle : OALocalizedString(@"shared_string_back");
         [self.navigationItem setLeftBarButtonItem:_leftNavbarButton animated:YES];
     }
 
-    if (rightButtonTitle)
-    {
-        UIButton *rightButton = [[UIButton alloc] initWithFrame:CGRectMake(0., 0., freeSpaceForNavbarButton, 30.)];
-        rightButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentTrailing;
-        rightButton.titleLabel.textAlignment = NSTextAlignmentRight;
-        rightButton.titleLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
-        rightButton.titleLabel.numberOfLines = 1;
-        rightButton.titleLabel.adjustsFontForContentSizeCategory = YES;
-        rightButton.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-        [rightButton setTintColor:[self getNavbarButtonsTintColor]];
-        [rightButton setTitleColor:[self getNavbarButtonsTintColor] forState:UIControlStateNormal];
-        [rightButton setTitleColor:[[self getNavbarButtonsTintColor] colorWithAlphaComponent:.3] forState:UIControlStateHighlighted];
-        [rightButton setTitle:rightButtonTitle forState:UIControlStateNormal];
-        [rightButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-        [rightButton addTarget:self action:@selector(onRightNavbarButtonPressed) forControlEvents:UIControlEventTouchUpInside];
-        rightButton.translatesAutoresizingMaskIntoConstraints = NO;
-        [rightButton.widthAnchor constraintLessThanOrEqualToConstant:isLongTitle ? 50. : freeSpaceForNavbarButton].active = YES;
+    NSArray<UIBarButtonItem *> *rightNavbarButtons = [self getRightNavbarButtons];
 
-        _rightNavbarButton = [[UIBarButtonItem alloc] initWithCustomView:rightButton];
-        [self.navigationItem setRightBarButtonItem:_rightNavbarButton animated:YES];
+    if (rightNavbarButtons && rightNavbarButtons.count > 0)
+    {
+        NSMutableArray<UIBarButtonItem *> *rightNavbarButtonsWithSpaces = [NSMutableArray array];
+        if (rightNavbarButtons.count > 1)
+        {
+            freeSpaceForNavbarButton -= (rightNavbarButtons.count - 1) * 8.;
+            freeSpaceForNavbarButton /= rightNavbarButtons.count;
+        }
+        for (NSInteger i = 0; i < rightNavbarButtons.count; i++)
+        {
+            UIBarButtonItem *buttonItem = rightNavbarButtons[i];
+            [rightNavbarButtonsWithSpaces addObject:buttonItem];
+            UIButton *button = buttonItem.customView;
+            if (button)
+            {
+                NSString *buttonTitle = [button titleForState:UIControlStateNormal];
+                [button.widthAnchor constraintEqualToConstant:!buttonTitle ? 44. : freeSpaceForNavbarButton].active = YES;
+                button.contentHorizontalAlignment = i == 0 ? UIControlContentHorizontalAlignmentTrailing : UIControlContentHorizontalAlignmentCenter;
+                button.titleLabel.textAlignment = i == 0 ? NSTextAlignmentRight : NSTextAlignmentCenter;
+            }
+        }
+        [self.navigationItem setRightBarButtonItems:rightNavbarButtonsWithSpaces animated:YES];
     }
+}
+
+- (UIBarButtonItem *)createRightNavbarButton:(NSString *)title
+                                    iconName:(NSString *)iconName
+                                      action:(SEL)action
+                                        menu:(UIMenu *)menu
+{
+    UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0., 0., 30., 30.)];
+    button.titleLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
+    button.titleLabel.numberOfLines = 1;
+    button.titleLabel.adjustsFontForContentSizeCategory = YES;
+    button.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+    [button setTintColor:[self getNavbarButtonsTintColor]];
+    [button setTitleColor:[self getNavbarButtonsTintColor] forState:UIControlStateNormal];
+    [button setTitleColor:[[self getNavbarButtonsTintColor] colorWithAlphaComponent:.3] forState:UIControlStateHighlighted];
+    [button setTitle:title forState:UIControlStateNormal];
+    [button setImage:[UIImage templateImageNamed:iconName] forState:UIControlStateNormal];
+    [button removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+    [button addTarget:self action:action forControlEvents:UIControlEventTouchUpInside];
+    button.translatesAutoresizingMaskIntoConstraints = NO;
+    if (menu)
+    {
+        button.showsMenuAsPrimaryAction = YES;
+        button.menu = menu;
+    }
+    UIBarButtonItem *rightNavbarButton = [[UIBarButtonItem alloc] initWithCustomView:button];
+    if (title)
+        rightNavbarButton.accessibilityLabel = title;
+    return rightNavbarButton;
 }
 
 - (BOOL)isAnyLargeTitle
@@ -428,9 +449,9 @@
     return nil;
 }
 
-- (NSString *)getRightNavbarButtonTitle
+- (NSArray<UIBarButtonItem *> *)getRightNavbarButtons
 {
-    return @"";
+    return nil;
 }
 
 - (EOABaseNavbarColorScheme)getNavbarColorScheme
@@ -623,17 +644,17 @@
             CGFloat y = scrollView.contentOffset.y + _navbarHeightSmall + _navbarHeightLarge;
             if (![self isModal])
                 y += [OAUtilities getTopMargin];
-            CGFloat tableHeaderHeight = self.tableView.tableHeaderView.frame.size.height;
+            CGFloat tableHeaderHeight = self.tableView.tableHeaderView ? self.tableView.tableHeaderView.frame.size.height : _navbarHeightCurrent;
             if (y > 0)
             {
-                if (y > tableHeaderHeight * .75 && [self.navigationItem isTitleInStackViewHided])
+                if (y > tableHeaderHeight * .75 && [self.navigationItem isTitleInStackViewHidden])
                     [self.navigationItem hideTitleInStackView:NO defaultTitle:[self getTitle] defaultSubtitle:[self getSubtitle]];
-                else if (y < tableHeaderHeight * .75 && ![self.navigationItem isTitleInStackViewHided])
+                else if (y < tableHeaderHeight * .75 && ![self.navigationItem isTitleInStackViewHidden])
                     [self.navigationItem hideTitleInStackView:YES defaultTitle:[self getTitle] defaultSubtitle:[self getSubtitle]];
             }
-            else if (y <= 0 && ![self.navigationItem isTitleInStackViewHided])
+            else if (y <= 0 && ![self.navigationItem isTitleInStackViewHidden])
             {
-                [self.navigationItem hideTitleInStackView:NO defaultTitle:[self getTitle] defaultSubtitle:[self getSubtitle]];
+                [self.navigationItem hideTitleInStackView:YES defaultTitle:[self getTitle] defaultSubtitle:[self getSubtitle]];
             }
         }
         

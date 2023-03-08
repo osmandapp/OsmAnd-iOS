@@ -11,6 +11,7 @@
 #import "OAApplicationMode.h"
 #import "OAColorizationType.h"
 #import "OAColoringType.h"
+#import "OADownloadMode.h"
 
 #define kNotificationSetProfileSetting @"kNotificationSetProfileSetting"
 #define VOICE_PROVIDER_NOT_USE @"VOICE_PROVIDER_NOT_USE"
@@ -609,6 +610,20 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 - (EOACoordinateInputFormats) get:(OAApplicationMode *)mode;
 - (void) set:(EOACoordinateInputFormats)coordinateInputFormats;
 - (void) set:(EOACoordinateInputFormats)coordinateInputFormats mode:(OAApplicationMode *)mode;
+
+@end
+
+@interface OACommonDownloadMode : OACommonInteger
+
+@property (nonatomic) NSArray<OADownloadMode *> *values;
+
++ (instancetype) withKey:(NSString *)key defValue:(OADownloadMode *)defValue;
++ (instancetype) withKey:(NSString *)key defValue:(OADownloadMode *)defValue values:(NSArray<OADownloadMode *> *)values;
+
+- (OADownloadMode *) get;
+- (OADownloadMode *) get:(OAApplicationMode *)mode;
+- (void) set:(OADownloadMode *)downloadMode;
+- (void) set:(OADownloadMode *)downloadMode mode:(OAApplicationMode *)mode;
 
 @end
 

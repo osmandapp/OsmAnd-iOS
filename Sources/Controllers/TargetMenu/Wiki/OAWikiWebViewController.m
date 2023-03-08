@@ -292,9 +292,9 @@
     BOOL hasLocalizedName = [title isEqualToString:OALocalizedString(@"download_wikipedia_maps")];
     return [NSURL URLWithString:[NSString stringWithFormat:@"https://%@.wikipedia.org/wiki/%@",
                                  (_contentLocale.length == 0 ? @"en" : _contentLocale),
-                                 !hasLocalizedName ? @"" : [[title stringByReplacingOccurrencesOfString:@" "
-                                                                                             withString:@"_"]
-                                                            stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet]]];
+                                 (hasLocalizedName ? @"" : [[title stringByReplacingOccurrencesOfString:@" "
+                                                                                              withString:@"_"]
+                                                             stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet])]];
 }
 
 - (NSString *)getContent

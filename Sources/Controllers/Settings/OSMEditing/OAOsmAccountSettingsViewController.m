@@ -71,7 +71,8 @@
                 [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"use_login_and_password_description")
                                                      font:kHeaderDescriptionFont
                                                 textColor:UIColorFromRGB(color_text_footer)
-                                               isBigTitle:NO];
+                                               isBigTitle:NO
+                                          parentViewWidth:self.view.frame.size.width];
     }
 }
 

@@ -108,7 +108,7 @@
     [self.backBtn setTintColor:UIColor.whiteColor];
     
     if (_action.getActionText)
-        _tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:_action.getActionText font:kHeaderDescriptionFont textColor:UIColor.blackColor isBigTitle:NO];
+        _tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:_action.getActionText font:kHeaderDescriptionFont textColor:UIColor.blackColor isBigTitle:NO parentViewWidth:self.view.frame.size.width];
 }
 
 - (void)viewWillAppear:(BOOL)animated

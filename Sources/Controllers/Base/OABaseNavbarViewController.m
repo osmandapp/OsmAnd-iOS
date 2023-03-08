@@ -77,6 +77,8 @@
 {
     [super viewWillAppear:animated];
 
+    [self setupCustomLargeTitleView];
+
     self.navigationController.navigationBar.prefersLargeTitles = YES;
     if ([self.navigationController isNavigationBarHidden] && [self isNavbarVisible])
         [self.navigationController setNavigationBarHidden:NO animated:YES];
@@ -199,7 +201,8 @@
 - (void)updateNavbar
 {
     [self setupNavbarButtons];
-    [self setupCustomLargeTitleView];
+    if ([self isScreenLoaded])
+        [self setupCustomLargeTitleView];
 }
 
 - (void)updateUI
@@ -496,10 +499,11 @@
     BOOL isCustomLargeTitle = style == EOABaseNavbarStyleCustomLargeTitle;
     if (isCustomLargeTitle || style == EOABaseNavbarStyleDescription)
     {
-        tableHeaderView = [OAUtilities setupTableHeaderViewWithText:isCustomLargeTitle ? [self getTitle] : [self getCustomTableViewDescription]
+        tableHeaderView = [OAUtilities setupTableHeaderViewWithText:isCustomLargeTitle ? [self getTitle] : [[[[self getCustomTableViewDescription] stringByAppendingString:[self getCustomTableViewDescription]] stringByAppendingString:[self getCustomTableViewDescription]] stringByAppendingString:[self getCustomTableViewDescription]]
                                                                font:isCustomLargeTitle ? kHeaderBigTitleFont : kHeaderDescriptionFontSmall
                                                           textColor:isCustomLargeTitle ? UIColor.blackColor : UIColorFromRGB(color_text_footer)
-                                                        isBigTitle:isCustomLargeTitle];
+                                                         isBigTitle:isCustomLargeTitle
+                                                    parentViewWidth:self.view.frame.size.width];
     }
     self.tableView.tableHeaderView = tableHeaderView;
 }

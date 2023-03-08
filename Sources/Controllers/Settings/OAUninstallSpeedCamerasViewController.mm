@@ -98,7 +98,8 @@
     self.tableView.tableHeaderView =
         [OAUtilities setupTableHeaderViewWithAttributedText:attributedText
                                           topCenterIconName:@"img_speed_camera_warning"
-                                                   iconSize:92.];
+                                                   iconSize:92.
+                                            parentViewWidth:self.view.frame.size.width];
 }
 
 #pragma mark - Table data

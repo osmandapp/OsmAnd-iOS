@@ -56,7 +56,7 @@
     self.tableView.sectionHeaderHeight = 16.;
     self.tableView.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
     
-    _tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"route_betw_points_descr") font:kHeaderDescriptionFont textColor:UIColor.blackColor isBigTitle:NO];
+    _tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"route_betw_points_descr") font:kHeaderDescriptionFont textColor:UIColor.blackColor isBigTitle:NO parentViewWidth:self.view.frame.size.width];
     self.tableView.tableHeaderView = _tableHeaderView;
     
     [self.rightButton removeFromSuperview];

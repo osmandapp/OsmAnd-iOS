@@ -48,7 +48,8 @@
         _tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:label
                                                                           font:kHeaderBigTitleFont
                                                                      textColor:UIColor.blackColor
-                                                                    isBigTitle:YES];
+                                                                    isBigTitle:YES
+                                                               parentViewWidth:self.view.frame.size.width];
     }
 }
 

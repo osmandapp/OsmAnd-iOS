@@ -93,7 +93,7 @@
     }
     _data = [NSArray arrayWithArray:rows];
     
-    _tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"quick_action_add_category_descr") font:kHeaderDescriptionFont textColor:UIColor.blackColor isBigTitle:NO];
+    _tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"quick_action_add_category_descr") font:kHeaderDescriptionFont textColor:UIColor.blackColor isBigTitle:NO parentViewWidth:self.view.frame.size.width];
 }
 
 -(void) setupSearchView

@@ -2826,3 +2826,15 @@
 "rotate_map_none_manually" = "Giro manual (fijo)";
 "rotate_map_none_fixed" = "El norte está arriba (fijado)";
 "compass_click_desc" = "Pulse sobre la brújula para cambiar el modo de orientación del mapa.";
+"map_widget_camera_tilt" = "Inclinación de la cámara";
+"map_widget_camera_distance" = "Distancia de la cámara";
+"map_widget_zoom_level" = "Nivel del zoom";
+"dont_download" = "No descargar";
+"over_any_network" = "En cualquier red";
+"wikivoyage_download_pics" = "Descargar las imágenes";
+"over_wifi_only" = "Sólo con Wi-Fi";
+"map_widget_target_distance" = "Distancia al objetivo";
+"change_language" = "Cambiar el idioma";
+"wikipedia_language_settings_descr" = "Selecciona los idiomas en los que aparecerán los artículos de la Wikipedia en el mapa. Puedes cambiar entre cualquier idioma disponible mientras lees el artículo.";
+"download_only_now" = "Descargar sólo ahora";
+"download_over_cellular_network" = "¿Descargar imágenes a través de la red móvil? Esto puede incurrir en altos cargos.";

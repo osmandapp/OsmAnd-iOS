@@ -169,8 +169,8 @@
     BOOL isCustomLargeTitle = [self getNavbarStyle] == EOABaseNavbarStyleCustomLargeTitle;
     if ((sub && sub.length > 0) || isCustomLargeTitle)
     {
-        BOOL isTitleWasHided = [self.navigationItem isTitleInStackViewHided];
-        if (isTitleWasHided)
+        BOOL isTitleHidden = [self.navigationItem isTitleInStackViewHidden];
+        if (isTitleHidden)
         {
             [self.navigationItem hideTitleInStackView:YES defaultTitle:[self getTitle] defaultSubtitle:[self getSubtitle]];
         }
@@ -647,12 +647,12 @@
             CGFloat tableHeaderHeight = self.tableView.tableHeaderView ? self.tableView.tableHeaderView.frame.size.height : _navbarHeightCurrent;
             if (y > 0)
             {
-                if (y > tableHeaderHeight * .75 && [self.navigationItem isTitleInStackViewHided])
+                if (y > tableHeaderHeight * .75 && [self.navigationItem isTitleInStackViewHidden])
                     [self.navigationItem hideTitleInStackView:NO defaultTitle:[self getTitle] defaultSubtitle:[self getSubtitle]];
-                else if (y < tableHeaderHeight * .75 && ![self.navigationItem isTitleInStackViewHided])
+                else if (y < tableHeaderHeight * .75 && ![self.navigationItem isTitleInStackViewHidden])
                     [self.navigationItem hideTitleInStackView:YES defaultTitle:[self getTitle] defaultSubtitle:[self getSubtitle]];
             }
-            else if (y <= 0 && ![self.navigationItem isTitleInStackViewHided])
+            else if (y <= 0 && ![self.navigationItem isTitleInStackViewHidden])
             {
                 [self.navigationItem hideTitleInStackView:YES defaultTitle:[self getTitle] defaultSubtitle:[self getSubtitle]];
             }

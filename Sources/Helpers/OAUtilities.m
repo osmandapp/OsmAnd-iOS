@@ -496,7 +496,7 @@
     }
 }
 
-- (BOOL)isTitleInStackViewHided
+- (BOOL)isTitleInStackViewHidden
 {
     if (self.titleView && self.titleView.tag == kNavItemStackViewWithSubtitleTag)
     {

@@ -91,7 +91,7 @@ alpha:((float)((rgbValue & 0xFF000000) >> 24))/255.0]
 
 - (void)hideTitleInStackView:(BOOL)hide defaultTitle:(NSString *)defaultTitle defaultSubtitle:(NSString *)defaultSubtitle;
 
-- (BOOL)isTitleInStackViewHided;
+- (BOOL)isTitleInStackViewHidden;
 
 @end
 

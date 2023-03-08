@@ -11,6 +11,7 @@
 #import "OAApplicationMode.h"
 #import "OAColorizationType.h"
 #import "OAColoringType.h"
+#import "OADownloadMode.h"
 
 #define kNotificationSetProfileSetting @"kNotificationSetProfileSetting"
 #define VOICE_PROVIDER_NOT_USE @"VOICE_PROVIDER_NOT_USE"
@@ -281,28 +282,6 @@ typedef NS_ENUM(NSInteger, EOASimulationMode)
 - (NSString *)key;
 - (NSString *)title;
 - (NSString *)description;
-
-@end
-
-typedef NS_ENUM(NSInteger, EOADownloadMode) {
-    EOADownloadModeNone = 0,
-    EOADownloadModeWiFi,
-    EOADownloadModeAny
-};
-
-@interface OADownloadMode : NSObject
-
-- (instancetype)initWithMode:(EOADownloadMode)mode;
-+ (NSArray<OADownloadMode *> *)values;
-+ (OADownloadMode *)getModeObject:(NSString *)key;
-+ (EOADownloadMode)getMode:(NSString *)key;
-+ (NSString *)toKey:(EOADownloadMode)mode;
-+ (NSString *)toTitle:(EOADownloadMode)mode;
-+ (NSString *)toIconName:(EOADownloadMode)mode;
-- (EOADownloadMode)mode;
-- (NSString *)key;
-- (NSString *)title;
-- (NSString *)iconName;
 
 @end
 
@@ -636,12 +615,15 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 
 @interface OACommonDownloadMode : OACommonInteger
 
-+ (instancetype) withKey:(NSString *)key defValue:(EOADownloadMode)defValue;
+@property (nonatomic) NSArray<OADownloadMode *> *values;
 
-- (EOADownloadMode) get;
-- (EOADownloadMode) get:(OAApplicationMode *)mode;
-- (void) set:(EOADownloadMode)downloadMode;
-- (void) set:(EOADownloadMode)downloadMode mode:(OAApplicationMode *)mode;
++ (instancetype) withKey:(NSString *)key defValue:(OADownloadMode *)defValue;
++ (instancetype) withKey:(NSString *)key defValue:(OADownloadMode *)defValue values:(NSArray<OADownloadMode *> *)values;
+
+- (OADownloadMode *) get;
+- (OADownloadMode *) get:(OAApplicationMode *)mode;
+- (void) set:(OADownloadMode *)downloadMode;
+- (void) set:(OADownloadMode *)downloadMode mode:(OAApplicationMode *)mode;
 
 @end
 

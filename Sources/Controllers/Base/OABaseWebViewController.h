@@ -22,7 +22,7 @@
 
 - (NSURL *)getUrl;
 - (NSString *)getContent;
-- (EOADownloadMode)getImagesDownloadMode;
+- (OADownloadMode *)getImagesDownloadMode;
 - (BOOL)isDownloadImagesOnlyNow;
 - (void)resetDownloadImagesOnlyNow;
 

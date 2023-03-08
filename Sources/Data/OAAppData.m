@@ -312,7 +312,7 @@
     _mapillaryProfile = [OACommonBoolean withKey:kMapillaryKey defValue:NO];
     _wikipediaGlobalProfile = [OACommonBoolean withKey:kWikipediaGlobalKey defValue:NO];
     _wikipediaLanguagesProfile = [OACommonStringList withKey:kWikipediaLanguagesKey defValue:@[]];
-    _wikipediaImagesDownloadModeProfile = [OACommonDownloadMode withKey:kWikipediaImagesDownloadModeKey defValue:EOADownloadModeAny];
+    _wikipediaImagesDownloadModeProfile = [OACommonDownloadMode withKey:kWikipediaImagesDownloadModeKey defValue:OADownloadMode.ANY_NETWORK values:[OADownloadMode getDownloadModes]];
 
     _weatherSettingsChangeObservable = [[OAObservable alloc] init];
     _weatherSettingsChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
@@ -1516,7 +1516,7 @@
     }
 }
 
-- (EOADownloadMode)wikipediaImagesDownloadMode
+- (OADownloadMode *)wikipediaImagesDownloadMode
 {
     @synchronized (_lock)
     {
@@ -1524,7 +1524,7 @@
     }
 }
 
-- (void)setWikipediaImagesDownloadMode:(EOADownloadMode)mode
+- (void)setWikipediaImagesDownloadMode:(OADownloadMode *)mode
 {
     @synchronized (_lock)
     {

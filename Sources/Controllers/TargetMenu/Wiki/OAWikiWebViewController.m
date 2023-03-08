@@ -13,6 +13,7 @@
 #import "OATableSectionData.h"
 #import "OATableRowData.h"
 #import "OAAppSettings.h"
+#import "OADownloadMode.h"
 #import "OAPlugin.h"
 #import "OAPOI.h"
 #import "OsmAndApp.h"
@@ -185,20 +186,20 @@
 {
     NSMutableArray<UIMenuElement *> *downloadModeOptions = [NSMutableArray array];
     NSString *selectedIconName = @"ic_navbar_image_disabled_outlined";
-    NSArray<OADownloadMode *> *downloadModes = [OADownloadMode values];
+    NSArray<OADownloadMode *> *downloadModes = [OADownloadMode getDownloadModes];
     for (OADownloadMode *downloadMode in downloadModes)
     {
-        UIAction *downloadModeAction = [UIAction actionWithTitle:[downloadMode title]
+        UIAction *downloadModeAction = [UIAction actionWithTitle:downloadMode.title
                                                            image:nil
                                                       identifier:nil
                                                          handler:^(__kindof UIAction * _Nonnull action) {
-            _app.data.wikipediaImagesDownloadMode = [downloadMode mode];
+            _app.data.wikipediaImagesDownloadMode = downloadMode;
             [self updateWikiData];
         }];
-        if ([downloadMode mode] == _app.data.wikipediaImagesDownloadMode)
+        if ([downloadMode isEqual:_app.data.wikipediaImagesDownloadMode])
         {
             downloadModeAction.state = _isDownloadImagesOnlyNow ? UIMenuElementStateMixed : UIMenuElementStateOn;
-            selectedIconName = [downloadMode iconName];
+            selectedIconName = downloadMode.iconName;
         }
         [downloadModeOptions addObject:downloadModeAction];
     }
@@ -207,8 +208,8 @@
                                                               image:[UIImage systemImageNamed:@"app.dashed"]
                                                          identifier:nil
                                                             handler:^(__kindof UIAction * _Nonnull action) {
-                                    EOADownloadMode imagesDownloadMode = [self getImagesDownloadMode];
-                                    if ([[AFNetworkReachabilityManager sharedManager] isReachableViaWWAN] && (imagesDownloadMode == EOADownloadModeNone || imagesDownloadMode == EOADownloadModeWiFi))
+                                    OADownloadMode *imagesDownloadMode = [self getImagesDownloadMode];
+                                    if ([[AFNetworkReachabilityManager sharedManager] isReachableViaWWAN] && ([imagesDownloadMode isDontDownload] || [imagesDownloadMode isDownloadOnlyViaWifi]))
                                     {
                                         UIAlertController *alert =
                                             [UIAlertController alertControllerWithTitle:OALocalizedString(@"wikivoyage_download_pics")
@@ -301,7 +302,7 @@
     return _content;
 }
 
-- (EOADownloadMode)getImagesDownloadMode
+- (OADownloadMode *)getImagesDownloadMode
 {
     return _app.data.wikipediaImagesDownloadMode;
 }

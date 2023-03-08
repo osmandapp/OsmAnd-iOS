@@ -48,9 +48,9 @@
     return @"";
 }
 
-- (EOADownloadMode)getImagesDownloadMode
+- (OADownloadMode *)getImagesDownloadMode
 {
-    return EOADownloadModeAny;
+    return OADownloadMode.ANY_NETWORK;
 }
 
 - (BOOL)isDownloadImagesOnlyNow
@@ -76,10 +76,10 @@
                                                                              completionHandler:^(WKContentRuleList *contentRuleList, NSError *error) {
                         if (!error)
                         {
-                            EOADownloadMode imagesDownloadMode = [self getImagesDownloadMode];
+                            OADownloadMode *imagesDownloadMode = [self getImagesDownloadMode];
                             WKWebViewConfiguration *configuration = self.webView.configuration;
 
-                            if (![self isDownloadImagesOnlyNow] && ((imagesDownloadMode == EOADownloadModeNone) || (imagesDownloadMode == EOADownloadModeWiFi && [[AFNetworkReachabilityManager sharedManager] isReachableViaWWAN])))
+                            if (![self isDownloadImagesOnlyNow] && ([imagesDownloadMode isDontDownload] || ([imagesDownloadMode isDownloadOnlyViaWifi] && [[AFNetworkReachabilityManager sharedManager] isReachableViaWWAN])))
                                 [[configuration userContentController] addContentRuleList:contentRuleList];
                             else
                                 [[configuration userContentController] removeContentRuleList:contentRuleList];

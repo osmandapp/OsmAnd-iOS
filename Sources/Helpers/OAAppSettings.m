@@ -1266,115 +1266,6 @@
 
 @end
 
-@interface OADownloadMode()
-
-@property (nonatomic) EOADownloadMode mode;
-
-@end
-
-@implementation OADownloadMode
-{
-    EOADownloadMode _mode;
-}
-
-- (instancetype)initWithMode:(EOADownloadMode)mode
-{
-    self = [super init];
-    if (self)
-    {
-        _mode = mode;
-    }
-    return self;
-}
-
-+ (instancetype)withMode:(EOADownloadMode)mode
-{
-    return [[OADownloadMode alloc] initWithMode:mode];
-}
-
-+ (NSArray<OADownloadMode *> *)values
-{
-    return @[[OADownloadMode withMode:EOADownloadModeNone],
-             [OADownloadMode withMode:EOADownloadModeWiFi],
-             [OADownloadMode withMode:EOADownloadModeAny]];
-}
-
-+ (OADownloadMode *)getModeObject:(NSString *)key
-{
-    for (OADownloadMode *mode in [OADownloadMode values])
-    {
-        if ([[mode key] isEqualToString:key])
-            return mode;
-    }
-    return nil;
-}
-
-+ (EOADownloadMode)getMode:(NSString *)key
-{
-    return [self getModeObject:key].mode;
-}
-
-+ (NSString *)toKey:(EOADownloadMode)mode
-{
-    switch (mode)
-    {
-        case EOADownloadModeNone:
-            return @"none";
-        case EOADownloadModeWiFi:
-            return @"wifi";
-        case EOADownloadModeAny:
-            return @"any";
-        default:
-            return @"";
-    }
-}
-
-+ (NSString *)toTitle:(EOADownloadMode)mode
-{
-    switch (mode)
-    {
-        case EOADownloadModeNone:
-            return OALocalizedString(@"dont_download");
-        case EOADownloadModeWiFi:
-            return OALocalizedString(@"over_wifi_only");
-        case EOADownloadModeAny:
-            return OALocalizedString(@"over_any_network");
-        default:
-            return @"";
-    }
-}
-
-+ (NSString *)toIconName:(EOADownloadMode)mode
-{
-    switch (mode)
-    {
-        case EOADownloadModeNone:
-            return @"ic_navbar_image_disabled_outlined";
-        case EOADownloadModeWiFi:
-        case EOADownloadModeAny:
-            return @"ic_navbar_image_outlined";
-        default:
-            return @"";
-    }
-}
-
-- (NSString *)title
-{
-    return [OADownloadMode toTitle:_mode];
-}
-
-- (NSString *)key
-{
-    return [OADownloadMode toKey:_mode];
-}
-
-- (NSString *)iconName
-{
-    return [OADownloadMode toIconName:_mode];
-}
-
-@end
-
 @interface OACommonPreference ()
 
 @property (nonatomic, readonly) OAApplicationMode *appMode;
@@ -3303,74 +3194,89 @@
 @end
 
 @implementation OACommonDownloadMode
+{
+    NSArray<OADownloadMode *> *_values;
+}
 
 @dynamic defValue;
 
-+ (instancetype) withKey:(NSString *)key defValue:(EOADownloadMode)defValue
++ (instancetype) withKey:(NSString *)key defValue:(OADownloadMode *)defValue
 {
     OACommonDownloadMode *obj = [[OACommonDownloadMode alloc] init];
     if (obj)
     {
         obj.key = key;
         obj.defValue = defValue;
+        obj.values = [NSArray array];
     }
     return obj;
 }
 
-- (EOADownloadMode) get
++ (instancetype) withKey:(NSString *)key defValue:(OADownloadMode *)defValue values:(NSArray<OADownloadMode *> *)values
 {
-    return [super get];
+    OACommonDownloadMode *obj = [[OACommonDownloadMode alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        NSUInteger indexOfValue = [values indexOfObject:defValue];
+        obj.defValue = indexOfValue != NSNotFound ? indexOfValue : 0;
+        obj.values = values;
+    }
+    return obj;
 }
 
-- (void) set:(EOADownloadMode)downloadMode
+- (OADownloadMode *) get
 {
-    [super set:downloadMode];
+    NSInteger indexOfValue = [super get:self.appMode];
+    return self.values.count > indexOfValue ? self.values[indexOfValue] : self.values.firstObject;
 }
 
-- (EOADownloadMode) get:(OAApplicationMode *)mode
+- (void) set:(OADownloadMode *)downloadMode
 {
-    return [super get:mode];
+    NSUInteger indexOfValue = [self.values indexOfObject:downloadMode];
+    [super setValue:@(indexOfValue != NSNotFound ? indexOfValue : 0) mode:self.appMode];
 }
 
-- (void) set:(EOADownloadMode)downloadMode mode:(OAApplicationMode *)mode
+- (OADownloadMode *) get:(OAApplicationMode *)mode
 {
-    [super set:downloadMode mode:mode];
+    NSInteger indexOfValue = [super get:mode];
+    return self.values.count > indexOfValue ? self.values[indexOfValue] : self.values.firstObject;
+}
+
+- (void) set:(OADownloadMode *)downloadMode mode:(OAApplicationMode *)mode
+{
+    NSUInteger indexOfValue = [self.values indexOfObject:downloadMode];
+    [super set:indexOfValue != NSNotFound ? indexOfValue : 0 mode:mode];
 }
 
 - (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
 {
-    if ([strValue isEqualToString:@"NONE"])
-        return [self set:EOADownloadModeNone mode:mode];
-    else if ([strValue isEqualToString:@"WIFI"])
-        return [self set:EOADownloadModeWiFi mode:mode];
-    else if ([strValue isEqualToString:@"ANY"])
-        return [self set:EOADownloadModeAny mode:mode];
+    if ([strValue isEqualToString:@"none"])
+        return [self set:OADownloadMode.NONE mode:mode];
+    else if ([strValue isEqualToString:@"wifi"])
+        return [self set:OADownloadMode.WIFI_ONLY mode:mode];
+    else if ([strValue isEqualToString:@"wifi"])
+        return [self set:OADownloadMode.ANY_NETWORK mode:mode];
     
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
 {
-    switch ([self get:mode])
-    {
-        case EOADownloadModeNone:
-            return @"NONE";
-        case EOADownloadModeWiFi:
-            return @"WIFI";
-        case EOADownloadModeAny:
-            return @"ANY";
-        default:
-            return @"ANY";
-    }
+    OADownloadMode *downloadMode = [OADownloadMode getDownloadModes][[super get:mode]];
+
+    if ([downloadMode isEqual:OADownloadMode.NONE])
+        return @"none";
+    else if ([downloadMode isEqual:OADownloadMode.WIFI_ONLY])
+        return @"wifi";
+    else if ([downloadMode isEqual:OADownloadMode.ANY_NETWORK])
+        return @"any";
+
+    return @"any";
 }
 
 - (void) resetToDefault
 {
-    EOADownloadMode defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
-    if (pDefault)
-        defaultValue = (EOADownloadMode) ((NSNumber *) pDefault).intValue;
-
-    [self set:defaultValue];
+    [self set:self.values.count > self.defValue ? self.values[self.defValue] : self.values.firstObject];
 }
 
 @end

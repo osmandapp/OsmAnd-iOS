@@ -22,7 +22,7 @@
 #import "Localization.h"
 #import "OAMeasurementCommandManager.h"
 #import "OAAddPointCommand.h"
-#import "OAMenuSimpleCellNoIcon.h"
+#import "OASimpleTableViewCell.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OALocationServices.h"
 #import "OAGpxData.h"
@@ -1270,35 +1270,39 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    OAMenuSimpleCellNoIcon* cell = [tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCellNoIcon getCellIdentifier]];
+    OASimpleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCellNoIcon getCellIdentifier] owner:self options:nil];
-        cell = (OAMenuSimpleCellNoIcon *)[nib objectAtIndex:0];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+        cell = (OASimpleTableViewCell *) nib[0];
+        [cell leftIconVisibility:NO];
     }
-    cell.textView.text = [NSString stringWithFormat:OALocalizedString(@"point_num"), indexPath.row + 1];
-    
-    OAWptPt *point1 = _editingContext.getPoints[indexPath.row];
-    CLLocation *location1 = [[CLLocation alloc] initWithLatitude:point1.getLatitude longitude:point1.getLongitude];
-    if (indexPath.row == 0)
+    if (cell)
     {
-        CLLocation *currentLocation = _app.locationServices.lastKnownLocation;
-        if (currentLocation)
+        cell.titleLabel.text = [NSString stringWithFormat:OALocalizedString(@"point_num"), indexPath.row + 1];
+
+        OAWptPt *point1 = _editingContext.getPoints[indexPath.row];
+        CLLocation *location1 = [[CLLocation alloc] initWithLatitude:point1.getLatitude longitude:point1.getLongitude];
+        if (indexPath.row == 0)
         {
-            double azimuth = [location1 bearingTo:currentLocation];
-            cell.descriptionView.text = [NSString stringWithFormat:@"%@ • %@ • %@", OALocalizedString(@"shared_string_control_start"), [OAOsmAndFormatter getFormattedDistance:[location1 distanceFromLocation:currentLocation]], [OAOsmAndFormatter getFormattedAzimuth:azimuth]];
+            CLLocation *currentLocation = _app.locationServices.lastKnownLocation;
+            if (currentLocation)
+            {
+                double azimuth = [location1 bearingTo:currentLocation];
+                cell.descriptionLabel.text = [NSString stringWithFormat:@"%@ • %@ • %@", OALocalizedString(@"shared_string_control_start"), [OAOsmAndFormatter getFormattedDistance:[location1 distanceFromLocation:currentLocation]], [OAOsmAndFormatter getFormattedAzimuth:azimuth]];
+            }
+            else
+            {
+                cell.descriptionLabel.text = OALocalizedString(@"shared_string_control_start");
+            }
         }
         else
         {
-            cell.descriptionView.text = OALocalizedString(@"shared_string_control_start");
+            OAWptPt *point2 = indexPath.row == 0 && _editingContext.getPointsCount > 1 ? _editingContext.getPoints[indexPath.row + 1] : _editingContext.getPoints[indexPath.row - 1];
+            CLLocation *location2 = [[CLLocation alloc] initWithLatitude:point2.getLatitude longitude:point2.getLongitude];
+            double azimuth = [location1 bearingTo:location2];
+            cell.descriptionLabel.text = [NSString stringWithFormat:@"%@ • %@", [OAOsmAndFormatter getFormattedDistance:[location1 distanceFromLocation:location2]], [OAOsmAndFormatter getFormattedAzimuth:azimuth]];
         }
-    }
-    else
-    {
-        OAWptPt *point2 = indexPath.row == 0 && _editingContext.getPointsCount > 1 ? _editingContext.getPoints[indexPath.row + 1] : _editingContext.getPoints[indexPath.row - 1];
-        CLLocation *location2 = [[CLLocation alloc] initWithLatitude:point2.getLatitude longitude:point2.getLongitude];
-        double azimuth = [location1 bearingTo:location2];
-        cell.descriptionView.text = [NSString stringWithFormat:@"%@ • %@", [OAOsmAndFormatter getFormattedDistance:[location1 distanceFromLocation:location2]], [OAOsmAndFormatter getFormattedAzimuth:azimuth]];
     }
     return cell;
 }

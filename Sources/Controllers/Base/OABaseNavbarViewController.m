@@ -137,6 +137,19 @@
         //hide root navbar if open screen without navbar
         if (![self.navigationController.viewControllers.lastObject isNavbarVisible])
             [self.navigationController setNavigationBarHidden:YES animated:YES];
+
+        //reset navbar to default appearance
+        NSArray<UIViewController *> *viewControllers = self.navigationController.viewControllers;
+        BOOL closeEntireStack = viewControllers.count == 2 && [viewControllers.firstObject isKindOfClass:self.class];
+        if (viewControllers.count <= 1 || closeEntireStack)
+        {
+            self.navigationController.navigationBar.prefersLargeTitles = NO;
+            UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
+            [appearance configureWithDefaultBackground];
+            self.navigationController.navigationBar.standardAppearance = appearance;
+            self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
+            self.navigationController.navigationBar.tintColor = nil;
+        }
     }
 }
 

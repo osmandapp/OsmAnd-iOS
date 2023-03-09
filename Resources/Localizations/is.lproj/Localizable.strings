@@ -1977,15 +1977,15 @@
 "available_groups" = "Tiltækir hópar";
 "select_group_descr" = "Veldu hóp eða bættu við nýjum";
 "fav_add_new_group" = "Bæta við nýjum hópi";
-"quick_action_coordinates_widget_descr" = "Víxlhnappur til að birta eða fela hnitaglugga á kortinu.";
-"hide_coordinates" = "Fela hnit";
-"show_coordinates" = "Birta hnit";
-"toggle_coordinates" = "Birta/fela viðmót hnita";
+"quick_action_current_location_widget_descr" = "Víxlhnappur til að birta eða fela hnitaglugga á kortinu.";
+"hide_current_location" = "Fela hnit";
+"show_current_location" = "Birta hnit";
+"toggle_current_location" = "Birta/fela viðmót hnita";
 "copied_to_clipboard" = "Afritað á klippispjald";
 "searching_gps" = "Leita að GPS";
 
 // Coordinate widget
-"coordinates_widget" = "Viðmótshluti fyrir hnit";
+"coordinates_widget_current_location" = "Viðmótshluti fyrir hnit";
 "coordinates" = "Hnit";
 "markers_history" = "Ferill kortamerkja";
 "shared_string_gpx_points" = "Punktar";

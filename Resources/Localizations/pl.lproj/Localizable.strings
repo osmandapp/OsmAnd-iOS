@@ -1837,9 +1837,9 @@
 "add_custom_category" = "Dodaj niestandardową kategorię";
 "searching" = "Szukanie…";
 "unsupported_action_title" = "Nieobsługiwana czynność (%@)";
-"hide_coordinates" = "Ukryj współrzędne";
-"show_coordinates" = "Pokaż współrzędne";
-"toggle_coordinates" = "Pokaż/ukryj widżet współrzędnych";
+"hide_current_location" = "Ukryj współrzędne";
+"show_current_location" = "Pokaż współrzędne";
+"toggle_current_location" = "Pokaż/ukryj widżet współrzędnych";
 
 // Resources
 "shared_string_resources" = "Zasoby";
@@ -1916,7 +1916,7 @@
 "searching_gps" = "Wyszukiwanie GPS";
 
 // Coordinate widget
-"coordinates_widget" = "Widżet współrzędnych";
+"coordinates_widget_current_location" = "Widżet współrzędnych";
 "shared_string_loading" = "Ładowanie…";
 "segments_count" = "Segment %d";
 "select_segment" = "Wybierz segment";
@@ -2020,7 +2020,7 @@
 "quick_action_showhide_mapillary_descr" = "Przełącznik służący do pokazywania lub ukrywania warstwy Mapillary na mapie.";
 "quick_action_transport_descr" = "Przycisk do pokazywania i chowania transportu publicznego na mapie.";
 "quick_action_dir_from_descr" = "Naciśnij tę czynność, aby nawigować od środkowego punktu bieżącego ekranu.";
-"quick_action_coordinates_widget_descr" = "Przełącznik służący do pokazywania lub ukrywania widżetu Współrzędne na mapie.";
+"quick_action_current_location_widget_descr" = "Przełącznik służący do pokazywania lub ukrywania widżetu Współrzędne na mapie.";
 "osm_editing_access_descr" = "Możesz wyświetlić wszystkie swoje lokalne edycje i uwagi w %@. Punkty już przesłane nie są wyświetlane w OsmAnd.";
 "plan_route_exit_message" = "Czy na pewno chcesz zamknąć planowanie trasy bez zapisywania? Stracisz wszystkie zmiany.";
 "export_profile_descr" = "Możesz wyeksportować wszystkie ustawienia profilu, skopiować wszystkie ustawienia z innego profilu lub zrestartować wszystkie ustawienia profilu do stanu domyślnego.";

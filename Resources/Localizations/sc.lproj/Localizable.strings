@@ -1981,15 +1981,15 @@
 "fav_add_new_group" = "Annanghe unu grupu nou";
 "shared_string_gpx_points" = "Puntos";
 "download_regular_maps" = "Mapas regulares";
-"quick_action_coordinates_widget_descr" = "Unu butone pro ammustrare o cuare su widget de sas coordinadas in sa mapa.";
-"hide_coordinates" = "Cua sas coordinadas";
-"show_coordinates" = "Ammustra sas coordinadas";
-"toggle_coordinates" = "Ammustra/cua su widget de sas coordinadas";
+"quick_action_current_location_widget_descr" = "Unu butone pro ammustrare o cuare su widget de sas coordinadas in sa mapa.";
+"hide_current_location" = "Cua sas coordinadas";
+"show_current_location" = "Ammustra sas coordinadas";
+"toggle_current_location" = "Ammustra/cua su widget de sas coordinadas";
 "copied_to_clipboard" = "Copiadu in punta de billete";
 "searching_gps" = "Chirchende su GPS";
 
 // Coordinate widget
-"coordinates_widget" = "Widget de sas coordinatas";
+"coordinates_widget_current_location" = "Widget de sas coordinatas";
 
 // Resources
 "shared_string_resources" = "Risursas";

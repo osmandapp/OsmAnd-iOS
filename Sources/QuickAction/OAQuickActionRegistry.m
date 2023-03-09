@@ -39,6 +39,7 @@
 #import "OAContourLinesAction.h"
 #import "OATerrainAction.h"
 #import "OAShowHideCoordinatesAction.h"
+#import "OAShowHideMapCenterAction.h"
 #import "OAShowHideTemperatureAction.h"
 #import "OAShowHidePressureAction.h"
 #import "OAShowHideWindAction.h"
@@ -162,6 +163,7 @@ static OAQuickActionType *TYPE_CONFIGURE_SCREEN;
     
     // configure screen
     [quickActionTypes addObject:OAShowHideCoordinatesAction.TYPE];
+    [quickActionTypes addObject:OAShowHideMapCenterAction.TYPE];
     
     [OAPlugin registerQuickActionTypesPlugins:quickActionTypes disabled:NO];
     if ([[OAPlugin getPlugin:OASRTMPlugin.class] isEnabled])

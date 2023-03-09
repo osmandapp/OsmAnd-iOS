@@ -1424,7 +1424,7 @@
 "favorite_places_category" = "地方";
 "shared_string_circle" = "圆形";
 "markers_history" = "标记历史";
-"coordinates_widget" = "坐标小工具";
+"coordinates_widget_current_location" = "坐标小工具";
 "shared_string_square" = "方形";
 "rearrange_categories" = "重新排列类别";
 "select_distance_route_will_recalc" = "选择之后重新计算路径的距离。";
@@ -1907,7 +1907,7 @@
 "route_is_too_long_v2" = "对于长途：如果 10 分钟内未找到路线，请添加中间目的地。";
 "you_can_get_feature_as_part_of_pattern" = "作为 %@ 套餐的一部分获得 “%@”。比较：";
 "no_purchases" = "你没有任何购买";
-"quick_action_coordinates_widget_descr" = "显示或隐藏地图上坐标小部件的开关。";
+"quick_action_current_location_widget_descr" = "显示或隐藏地图上坐标小部件的开关。";
 "wikivoyage_travel_guide_descr" = "引导地球上最有趣的地方的指南，在OsmAnd内部，无需连接到互联网。";
 "auto_zoom_map_descr" = "缩放级别将根据你的速度而定（当地图与当前的位置同步时）。";
 "settings_item_read_error" = "无法从 \'%@\' 中读取。";

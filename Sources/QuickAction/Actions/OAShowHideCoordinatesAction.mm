@@ -25,29 +25,29 @@ static OAQuickActionType *TYPE;
 - (void)execute
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
-    [settings.showCoordinatesWidget set:![settings.showCoordinatesWidget get]];
+    [settings.showCurrentLocationCoordinatesWidget set:![settings.showCurrentLocationCoordinatesWidget get]];
     [[[OsmAndApp instance].data destinationsChangeObservable] notifyEventWithKey:nil];
 }
 
 - (BOOL)isActionWithSlash
 {
-    return [[OAAppSettings sharedManager].showCoordinatesWidget get];
+    return [[OAAppSettings sharedManager].showCurrentLocationCoordinatesWidget get];
 }
 
 - (NSString *)getActionStateName
 {
-    return [self isActionWithSlash] ? OALocalizedString(@"hide_coordinates") : OALocalizedString(@"show_coordinates");
+    return [self isActionWithSlash] ? OALocalizedString(@"hide_current_location") : OALocalizedString(@"show_current_location");
 }
 
 - (NSString *)getActionText
 {
-    return OALocalizedString(@"quick_action_coordinates_widget_descr");
+    return OALocalizedString(@"quick_action_current_location_widget_descr");
 }
 
 + (OAQuickActionType *) TYPE
 {
     if (!TYPE)
-        TYPE = [[OAQuickActionType alloc] initWithIdentifier:35 stringId:@"coordinates.showhide" class:self.class name:OALocalizedString(@"toggle_coordinates") category:CONFIGURE_SCREEN iconName:@"ic_custom_coordinates" secondaryIconName:nil editable:NO];
+        TYPE = [[OAQuickActionType alloc] initWithIdentifier:35 stringId:@"coordinates.current_location.showhide" class:self.class name:OALocalizedString(@"toggle_current_location") category:CONFIGURE_SCREEN iconName:@"ic_custom_coordinates" secondaryIconName:nil editable:NO];
        
     return TYPE;
 }

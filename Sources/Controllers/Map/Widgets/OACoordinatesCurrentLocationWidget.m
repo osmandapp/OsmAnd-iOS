@@ -1,12 +1,12 @@
 //
-//  OATopCoordinatesWidget.m
+//  OACoordinatesCurrentLocationWidget.m
 //  OsmAnd Maps
 //
 //  Created by nnngrach on 28.03.2021.
 //  Copyright © 2021 OsmAnd. All rights reserved.
 //
 
-#import "OATopCoordinatesWidget.h"
+#import "OACoordinatesCurrentLocationWidget.h"
 #import "OsmAndApp.h"
 #import "OAColors.h"
 #import "OALocationConvert.h"
@@ -21,7 +21,7 @@
 #define kHorisontalOffset 8
 #define kIconWidth 30
 
-@interface OATopCoordinatesWidget ()
+@interface OACoordinatesCurrentLocationWidget ()
 
 @property (weak, nonatomic) IBOutlet UIImageView *latImageView;
 @property (weak, nonatomic) IBOutlet UILabel *latTextView;
@@ -32,7 +32,7 @@
 
 @end
 
-@implementation OATopCoordinatesWidget
+@implementation OACoordinatesCurrentLocationWidget
 {
     OsmAndAppInstance _app;
     OAAppSettings *_settings;
@@ -45,8 +45,8 @@
 
 - (instancetype) init
 {
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATopCoordinatesWidget" owner:self options:nil];
-    self = (OATopCoordinatesWidget *)[nib objectAtIndex:0];
+    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OACoordinatesCurrentLocationWidget" owner:self options:nil];
+    self = (OACoordinatesCurrentLocationWidget *)[nib objectAtIndex:0];
     if (self)
         self.frame = CGRectMake(0, 0, 200, 50);
     
@@ -56,8 +56,8 @@
 
 - (instancetype) initWithFrame:(CGRect)frame
 {
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATopCoordinatesWidget" owner:self options:nil];
-    self = (OATopCoordinatesWidget *)[nib objectAtIndex:0];
+    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OACoordinatesCurrentLocationWidget" owner:self options:nil];
+    self = (OACoordinatesCurrentLocationWidget *)[nib objectAtIndex:0];
     if (self)
         self.frame = CGRectMake(0, 0, 200, 50);
     
@@ -86,8 +86,9 @@
     
     BOOL isLandscape = [OAUtilities isLandscapeIpadAware];
     CGFloat middlePoint = self.frame.size.width / 2;
-    _horisontalSeparator.frame = CGRectMake(0, 0, self.frame.size.width, 1);
-    _verticalSeparator.frame = CGRectMake(middlePoint - 1, 14, 1, 24);
+    CGFloat lineWidth = 1.0 / [UIScreen mainScreen].scale;
+    _horisontalSeparator.frame = CGRectMake(0, 0, self.frame.size.width, lineWidth);
+    _verticalSeparator.frame = CGRectMake(middlePoint - lineWidth, 14, lineWidth, 24);
     
     if (![self isDirectionRTL])
     {
@@ -137,7 +138,7 @@
 {
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
     OAToolbarViewController *topToolbar = [mapPanel.hudViewController toolbarViewController];
-    return [_settings.showCoordinatesWidget get]
+    return [_settings.showCurrentLocationCoordinatesWidget get]
             && [topToolbar getAttentionLevel] != EOAToolbarAttentionLevelHigh
             && !mapPanel.hudViewController.downloadMapWidget.isVisible
             && ![mapPanel isTopToolbarSearchVisible];
@@ -152,7 +153,7 @@
     {
         BOOL nightMode = [OAAppSettings sharedManager].nightMode;
         [self updateVisibility:visible];
-        _cachedVisibiliy = [_settings.showCoordinatesWidget get];
+        _cachedVisibiliy = [_settings.showCurrentLocationCoordinatesWidget get];
         
         if (visible)
         {
@@ -233,10 +234,11 @@
                 _latTextView.text = OALocalizedString(@"searching_gps");
             }
             
-            self.backgroundColor = UIColorFromRGB(nav_bar_night);
-            _latTextView.textColor = UIColorFromRGB(text_primary_night);
-            _lonTextView.textColor = UIColorFromRGB(text_primary_night);
+            self.backgroundColor = nightMode ? UIColorFromRGB(nav_bar_night) : UIColor.whiteColor;
+            _latTextView.textColor = nightMode ? UIColorFromRGB(text_primary_night) : UIColor.blackColor;
+            _lonTextView.textColor = nightMode ? UIColorFromRGB(text_primary_night) : UIColor.blackColor;
             _horisontalSeparator.hidden = !isPortrait;
+            _horisontalSeparator.backgroundColor = self.backgroundColor;
             
             _lastUpdatingTime = [[NSDate new] timeIntervalSince1970];
         }
@@ -264,7 +266,7 @@
     }
     else
     {
-        BOOL isVisibilityChanged = _cachedVisibiliy != [_settings.showCoordinatesWidget get];
+        BOOL isVisibilityChanged = _cachedVisibiliy != [_settings.showCurrentLocationCoordinatesWidget get];
         
         CLLocation *currentLocation = _app.locationServices.lastKnownLocation;
         BOOL isLocationChanged = ![OAUtilities isCoordEqual:currentLocation.coordinate.latitude srcLon:currentLocation.coordinate.longitude destLat:_lastKnownLocation.coordinate.latitude destLon:_lastKnownLocation.coordinate.latitude];

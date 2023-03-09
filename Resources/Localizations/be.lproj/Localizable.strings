@@ -1875,7 +1875,7 @@
 "rearrange_categories" = "Перапарадкаваць катэгорыі";
 "favorite_places_category" = "Месцы";
 "shared_string_resources" = "Рэсурсы";
-"coordinates_widget" = "Віджэт каардынат";
+"coordinates_widget_current_location" = "Віджэт каардынат";
 "search_more" = "Знайсці яшчэ…";
 "suggested_maps_descr" = "Гэтыя мапы патрабуюцца для убудовы.";
 "shared_string_last_used" = "Апошні раз выкарыстоўвалася";
@@ -2371,7 +2371,7 @@
 "logout_from_osmand_cloud_decsr" = "Выйсці\?\nКаб выканаць рэзервовае капіяванне або аднаўленне, вам патрэбна будзе зноў увайсці.";
 "shared_string_logout" = "Выйсці";
 "shared_string_progress" = "Ход выканання";
-"quick_action_coordinates_widget_descr" = "Пераключальнік для адлюстравання або скрыцця віджэту каардынатаў на мапе.";
+"quick_action_current_location_widget_descr" = "Пераключальнік для адлюстравання або скрыцця віджэту каардынатаў на мапе.";
 "backup_delete_types_descr" = "Выдаліць усе даныя для адключаных тыпаў з OsmAnd Cloud\?";
 "depth_contour_lines" = "Ізабаты";
 "routing_attr_avoid_low_emission_zone_description" = "Пазбягаць зон з нізкім узроўнем выкідаў";

@@ -1751,7 +1751,7 @@
 "shared_string_square" = "Quadrato";
 "select_folder" = "Seleziona una cartella";
 "attach_to_the_roads" = "Blocca sulle strade";
-"coordinates_widget" = "Widget coordinate";
+"coordinates_widget_current_location" = "Widget coordinate";
 "favorite_places_category" = "Luoghi";
 "icon_group_special" = "Speciale";
 "shared_string_disable" = "Disattiva";
@@ -2199,7 +2199,7 @@
 "tomorrow" = "Domani";
 "hide_terrain" = "Nascondi terreno";
 "poi_categories" = "Categorie PDI";
-"show_coordinates" = "Mostra coordinate";
+"show_current_location" = "Mostra coordinate";
 "custom_plugins" = "Plugin personalizzati";
 "preferred_terrain" = "Terreno preferito";
 "manage_storage" = "Gestisci archiviazione";
@@ -2225,7 +2225,7 @@
 "navigate_point_format_UTM" = "UTM";
 "plan_route_folder" = "Cartella";
 "unsupported_action_title" = "Azione non supportata (%@)";
-"hide_coordinates" = "Nascondi coordinate";
+"hide_current_location" = "Nascondi coordinate";
 "map_markers_empty" = "Non hai alcun marcatore mappa attivo";
 "vk" = "VK";
 
@@ -2257,7 +2257,7 @@
 "hidden_categories" = "Categorie nascoste";
 "ui_customization" = "Personalizzazione dell\'interfaccia grafica";
 "select_profile" = "Seleziona profilo";
-"toggle_coordinates" = "Mostra/nascondi widget delle coordinate";
+"toggle_current_location" = "Mostra/nascondi widget delle coordinate";
 "weather_temperature_fahrenheit" = "Fahrenheit";
 "backup_error_invalid_token" = "Token non valido";
 "verification_code_placeholder" = "Codice";
@@ -2403,7 +2403,7 @@
 "srtm_unit_format" = "Unità di misura delle linee di contorno";
 "quick_action_add_dest_descr" = "Toccando questo pulsante si imposta la destinazione al centro della mappa. Qualsiasi destinazione precedentemente selezionata diventa l'ultima destinazione intermedia.";
 "quick_action_first_intermediate_descr" = "Toccando questo pulsante si aggiunge la prima destinazione intermedia al punto centrale della mappa.";
-"quick_action_coordinates_widget_descr" = "Un interruttore per mostrare o nascondere il widget delle Coordinate sulla mappa.";
+"quick_action_current_location_widget_descr" = "Un interruttore per mostrare o nascondere il widget delle Coordinate sulla mappa.";
 "quick_action_day_night_descr" = "Toccando questo pulsante si passa dalla modalità mappa diurna a quella notturna.";
 "quick_action_poi_add_descr" = "Toccando questo pulsante è possibile aggiungere rapidamente PDI sulla mappa con tipi e tag predefiniti.";
 "export_profile_descr" = "È possibile esportare tutte le impostazioni del profilo, copiare tutte le impostazioni da un altro profilo o ripristinare tutte le impostazioni del profilo allo stato predefinito.";

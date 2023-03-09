@@ -871,7 +871,7 @@
 "download_tab_local" = "Local";
 "favorite_friends_category" = "Prieteni";
 "shared_string_import" = "Importă";
-"coordinates_widget" = "Coordonatele widget";
+"coordinates_widget_current_location" = "Coordonatele widget";
 "map_during_navigation" = "Hartă în timpul navigării";
 "join_segments" = "Alăturați segmente";
 "shared_string_gpx_tracks" = "Track-uri";
@@ -1775,10 +1775,10 @@
 "quick_action_map_source_action" = "Adăugați sursa hărții";
 "quick_action_map_underlay_title" = "Substraturi pentru hărți";
 "quick_action_map_overlay_title" = "Suprapuneri de hărți";
-"quick_action_coordinates_widget_descr" = "Un comutator pentru a afișa sau ascunde widgetul Coordonate pe hartă.";
-"hide_coordinates" = "Ascundeți coordonatele";
-"show_coordinates" = "Afișați coordonatele";
-"toggle_coordinates" = "Afișați / ascundeți coordonatele widget";
+"quick_action_current_location_widget_descr" = "Un comutator pentru a afișa sau ascunde widgetul Coordonate pe hartă.";
+"hide_current_location" = "Ascundeți coordonatele";
+"show_current_location" = "Afișați coordonatele";
+"toggle_current_location" = "Afișați / ascundeți coordonatele widget";
 "quick_action_list_descr" = "Atingând acest buton de acțiune se parcurge lista de mai jos";
 "quick_action_map_underlay_action" = "Adăugați sub strat";
 "no_underlay" = "Fără strat de bază";

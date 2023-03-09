@@ -1967,15 +1967,15 @@
 "select_group_descr" = "Gruppe auswählen oder neue hinzufügen";
 "fav_add_new_group" = "Neue Gruppe hinzufügen";
 "shared_string_square" = "Quadrat";
-"quick_action_coordinates_widget_descr" = "Ein Umschalter zum Ein- und Ausblenden des Koordinaten-Widgets auf der Karte.";
-"hide_coordinates" = "Koordinaten ausblenden";
-"show_coordinates" = "Koordinaten anzeigen";
-"toggle_coordinates" = "Koordinaten-Widget ein-/ausblenden";
+"quick_action_current_location_widget_descr" = "Ein Umschalter zum Ein- und Ausblenden des Koordinaten-Widgets auf der Karte.";
+"hide_current_location" = "Koordinaten ausblenden";
+"show_current_location" = "Koordinaten anzeigen";
+"toggle_current_location" = "Koordinaten-Widget ein-/ausblenden";
 "copied_to_clipboard" = "In die Zwischenablage kopiert";
 "searching_gps" = "Suche GPS";
 
 // Coordinate widget
-"coordinates_widget" = "Koordinaten-Widget";
+"coordinates_widget_current_location" = "Koordinaten-Widget";
 "coordinates" = "Koordinaten";
 "shared_string_gpx_points" = "Punkte";
 "download_regular_maps" = "Standardkarte";

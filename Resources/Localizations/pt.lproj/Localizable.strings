@@ -1746,15 +1746,15 @@
 "show_terrain" = "Mostrar terreno";
 "quick_action_hillshade_descr" = "Um botão para mostrar ou ocultar sombras de relevo.";
 "unsupported_items" = "Itens não suportados";
-"quick_action_coordinates_widget_descr" = "Um alternador para mostrar ou ocultar um widget de coordenadas no mapa.";
-"hide_coordinates" = "Ocultar coordenadas";
-"show_coordinates" = "Mostrar coordenadas";
-"toggle_coordinates" = "Mostrar/ocultar widget de coordenadas";
+"quick_action_current_location_widget_descr" = "Um alternador para mostrar ou ocultar um widget de coordenadas no mapa.";
+"hide_current_location" = "Ocultar coordenadas";
+"show_current_location" = "Mostrar coordenadas";
+"toggle_current_location" = "Mostrar/ocultar widget de coordenadas";
 "copied_to_clipboard" = "Copiado para aárea de transferência";
 "searching_gps" = "A procurar GPS";
 
 // Coordinate widget
-"coordinates_widget" = "Widget de coordenadas";
+"coordinates_widget_current_location" = "Widget de coordenadas";
 "osm_editing_access_descr" = "Pode ver todas as suas edições e notas locais em %@. Os pontos já enviados não são mostrados no OsmAnd.";
 "osm_editing_settings_descr" = "As configurações deste complemento são globais e aplicam-se a todos os perfis.";
 "shared_string_loading" = "A carregar…";

@@ -1469,7 +1469,7 @@
 "mapil_select_user" = "Select user";
 
 // Coordinate widget
-"coordinates_widget" = "Koordinati za vidzet";
+"coordinates_widget_current_location" = "Koordinati za vidzet";
 "searching_gps" = "Prebaruvanje GPS";
 "copied_to_clipboard" = "Kopirano vo tablata so isečoci";
 // Quick action
@@ -1478,10 +1478,10 @@
 "no_underlay" = "Bez podloga";
 "quick_action_map_underlay_action" = "Dodadete podloga";
 "quick_action_list_descr" = "Tapping this action button pages through the list below";
-"toggle_coordinates" = "Show/hide coordinates widget";
-"show_coordinates" = "Show coordinates";
-"hide_coordinates" = "Hide coordinates";
-"quick_action_coordinates_widget_descr" = "Prekinuvač za prikažuvanje ili sokrivanje na vidžetot Koordinati na kartata.";
+"toggle_current_location" = "Show/hide coordinates widget";
+"show_current_location" = "Show coordinates";
+"hide_current_location" = "Hide coordinates";
+"quick_action_current_location_widget_descr" = "Prekinuvač za prikažuvanje ili sokrivanje na vidžetot Koordinati na kartata.";
 "quick_action_map_overlay_title" = "Preklopuvanja na karti";
 "quick_action_map_underlay_title" = "Podlogi na kartata";
 "vector_data" = "Oflajn vektorski karti";

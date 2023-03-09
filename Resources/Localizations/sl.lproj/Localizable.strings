@@ -1313,7 +1313,7 @@
 "hide_compass_ruler" = "Skrij kompas";
 "plan_route_open_existing_track" = "Odpri obstoječo sled";
 "favorite_friends_category" = "Naslovi prijateljev";
-"coordinates_widget" = "Gradnik za določevanje koordinat";
+"coordinates_widget_current_location" = "Gradnik za določevanje koordinat";
 "plan_route_create_new_route" = "Ustvari novo pot";
 "icon_group_sport" = "Šport";
 "searching" = "Iskanje…";
@@ -1814,7 +1814,7 @@
 "local_backup_descr" = "Varnostno kopiranje ali obnovitev podatkov iz lokalne datoteke.";
 "backup_restore_data" = "Obnovi podatke";
 "recalculate_route" = "Preračunaj pot";
-"quick_action_coordinates_widget_descr" = "Stikalo za prikaz ali skrivanje pripomočka Koordinate na zemljevidu.";
+"quick_action_current_location_widget_descr" = "Stikalo za prikaz ali skrivanje pripomočka Koordinate na zemljevidu.";
 "move_point" = "Premakni točko";
 "promo_subscription" = "Promocijska naročnina";
 "nav_type_hint" = "Vrsta navigacije";

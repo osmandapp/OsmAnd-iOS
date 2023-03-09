@@ -1962,14 +1962,14 @@
 "searching_gps" = "بحث عن جي بي اس";
 
 // Coordinate widget
-"coordinates_widget" = "عرض الإحداثيات";
+"coordinates_widget_current_location" = "عرض الإحداثيات";
 "coordinates" = "إحداثيات";
 "shared_string_gpx_points" = "النقاط";
 "download_regular_maps" = "الخرائط العادية";
-"quick_action_coordinates_widget_descr" = "زر لإظهار أو إخفاء أداة الإحداثيات على الخريطة.";
-"hide_coordinates" = "إخفاء الإحداثيات";
-"show_coordinates" = "إظهار الإحداثيات";
-"toggle_coordinates" = "إظهار/إخفاء الإحداثيات";
+"quick_action_current_location_widget_descr" = "زر لإظهار أو إخفاء أداة الإحداثيات على الخريطة.";
+"hide_current_location" = "إخفاء الإحداثيات";
+"show_current_location" = "إظهار الإحداثيات";
+"toggle_current_location" = "إظهار/إخفاء الإحداثيات";
 "copied_to_clipboard" = "تم النسخ في الحافظة";
 
 // Resources

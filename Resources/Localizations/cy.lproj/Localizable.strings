@@ -1269,7 +1269,7 @@
 "mapil_select_user" = "Select user";
 
 // Coordinate widget
-"coordinates_widget" = "Ategyn cyfesurynnau";
+"coordinates_widget_current_location" = "Ategyn cyfesurynnau";
 "searching_gps" = "Chwilio am GPS";
 "copied_to_clipboard" = "Wedi\'i gopïo i\'r clipfwrdd";
 // Quick action
@@ -1278,10 +1278,10 @@
 "no_underlay" = "Dim is-haen";
 "quick_action_map_underlay_action" = "Ychwanegu is-haen";
 "quick_action_list_descr" = "Tapping this action button pages through the list below";
-"toggle_coordinates" = "Show/hide coordinates widget";
-"show_coordinates" = "Show coordinates";
-"hide_coordinates" = "Hide coordinates";
-"quick_action_coordinates_widget_descr" = "Toglo i ddangos neu guddio\'r ategyn cyfesurynnau ar y map.";
+"toggle_current_location" = "Show/hide coordinates widget";
+"show_current_location" = "Show coordinates";
+"hide_current_location" = "Hide coordinates";
+"quick_action_current_location_widget_descr" = "Toglo i ddangos neu guddio\'r ategyn cyfesurynnau ar y map.";
 "quick_action_map_overlay_title" = "Troshaenau mapiau";
 "quick_action_map_underlay_title" = "Is-haenau mapiau";
 "vector_data" = "Offline vector maps";

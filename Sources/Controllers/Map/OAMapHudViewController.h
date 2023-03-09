@@ -14,7 +14,9 @@
 @class OAToolbarViewController;
 @class OAMapRulerView;
 @class OAMapInfoController;
-@class OATopCoordinatesWidget, OADownloadMapWidget;
+@class OACoordinatesCurrentLocationWidget;
+@class OACoordinatesMapCenterWidget;
+@class OADownloadMapWidget;
 @class OAWeatherToolbar;
 
 @interface OAMapHudViewController : UIViewController
@@ -50,7 +52,8 @@
 
 @property (nonatomic) OAToolbarViewController *toolbarViewController;
 @property (nonatomic) OAMapInfoController *mapInfoController;
-@property (nonatomic) OATopCoordinatesWidget *topCoordinatesWidget;
+@property (nonatomic) OACoordinatesCurrentLocationWidget *topCoordinatesWidget;
+@property (nonatomic) OACoordinatesMapCenterWidget *coordinatesMapCenterWidget;
 @property (nonatomic) OADownloadMapWidget *downloadMapWidget;
 @property (nonatomic) OAWeatherToolbar *weatherToolbar;
 
@@ -77,7 +80,8 @@
 - (void) updateToolbarLayout:(BOOL)animated;
 - (void) removeToolbar;
 
-- (void) setCoordinatesWidget:(OATopCoordinatesWidget *)widget;
+- (void) setCoordinatesWidget:(OACoordinatesCurrentLocationWidget *)widget;
+- (void) setCenterCoordinatesWidget:(OACoordinatesMapCenterWidget *)widget;
 - (void) setDownloadMapWidget:(OADownloadMapWidget *)widget;
 - (void) setWeatherToolbarMapWidget:(OAWeatherToolbar *)widget;
 

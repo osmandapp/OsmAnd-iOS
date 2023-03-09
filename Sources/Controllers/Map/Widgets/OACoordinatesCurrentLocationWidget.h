@@ -1,5 +1,5 @@
 //
-//  OATopCoordinatesWidget.h
+//  OACoordinatesCurrentLocationWidget.h
 //  OsmAnd Maps
 //
 //  Created by nnngrach on 26.03.2021.
@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "OABaseWidgetView.h"
 
-@interface OATopCoordinatesWidget :OABaseWidgetView
+@interface OACoordinatesCurrentLocationWidget : OABaseWidgetView
 
 - (BOOL) isVisible;
 

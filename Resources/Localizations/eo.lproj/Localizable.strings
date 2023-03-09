@@ -1262,7 +1262,7 @@
 "mapil_select_user" = "Select user";
 
 // Coordinate widget
-"coordinates_widget" = "Fenestraĵo de koordinatoj";
+"coordinates_widget_current_location" = "Fenestraĵo de koordinatoj";
 "searching_gps" = "Determinado de pozicio…";
 "copied_to_clipboard" = "Enpoŝigita";
 // Quick action
@@ -1271,10 +1271,10 @@
 "no_underlay" = "Neniu subtavolo";
 "quick_action_map_underlay_action" = "Aldoni subtavolon";
 "quick_action_list_descr" = "Tapping this action button pages through the list below";
-"toggle_coordinates" = "Show/hide coordinates widget";
-"show_coordinates" = "Show coordinates";
-"hide_coordinates" = "Hide coordinates";
-"quick_action_coordinates_widget_descr" = "Ŝaltilo por montri aŭ kaŝi la fenestraĵon de koordinatoj sur la mapo.";
+"toggle_current_location" = "Show/hide coordinates widget";
+"show_current_location" = "Show coordinates";
+"hide_current_location" = "Hide coordinates";
+"quick_action_current_location_widget_descr" = "Ŝaltilo por montri aŭ kaŝi la fenestraĵon de koordinatoj sur la mapo.";
 "quick_action_map_overlay_title" = "Mapaj surtavoloj";
 "quick_action_map_underlay_title" = "Mapaj subtavoloj";
 "vector_data" = "Malkonektaj vektoraj mapoj";

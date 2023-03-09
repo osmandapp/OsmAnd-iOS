@@ -1968,7 +1968,7 @@
 "shared_string_gpx_points" = "Точки";
 "shared_string_resources" = "Ресурсы";
 "select_group" = "Категории";
-"coordinates_widget" = "Виджет координат";
+"coordinates_widget_current_location" = "Виджет координат";
 "transport" = "Транспорт";
 "shared_string_circle" = "Круг";
 "plan_route_split_before" = "Разделить перед";
@@ -2018,10 +2018,10 @@
 "replace_waypoint_confirmation" = "Вы уверены, что хотите переместить Путевую точку %@?";
 "quick_action_showhide_mapillary_descr" = "Переключатель для отображения или скрытия слоя Mapillary на карте.";
 "context_menu_item_edit_waypoint" = "Изменить путевую точку GPX";
-"quick_action_coordinates_widget_descr" = "Переключатель для отображения или скрытия виджета координат.";
-"hide_coordinates" = "Скрыть координаты";
-"show_coordinates" = "Показать координаты";
-"toggle_coordinates" = "Показать/скрыть виджет координат";
+"quick_action_current_location_widget_descr" = "Переключатель для отображения или скрытия виджета координат.";
+"hide_current_location" = "Скрыть координаты";
+"show_current_location" = "Показать координаты";
+"toggle_current_location" = "Показать/скрыть виджет координат";
 "shared_string_loading" = "Загрузка…";
 "select_profile" = "Выбрать профиль";
 "track_multiple_segments_select" = "%@ содержит более одного сегмента. Пожалуйста, выберите часть трека, которую вы хотите использовать для навигации.";

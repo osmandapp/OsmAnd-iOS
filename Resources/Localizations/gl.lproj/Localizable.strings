@@ -1471,7 +1471,7 @@
 "sort_last_modified" = "Última modificación";
 "plan_route_split_after" = "Dividir despois";
 "osmand_live" = "OsmAnd Live";
-"coordinates_widget" = "Trebello de coordenadas";
+"coordinates_widget_current_location" = "Trebello de coordenadas";
 "plan_route_open_existing_track" = "Abrir pista existente";
 "favorite_group_name" = "Nome do grupo";
 "replace_favorite_confirmation" = "Tes a certeza de querer substituír o favorito \"%@\"\?";
@@ -1843,7 +1843,7 @@ Lon %@";
 "show_gpx" = "Pistas";
 "units_and_formats" = "Unidades e formatos";
 "add_group" = "Engadir un grupo";
-"quick_action_coordinates_widget_descr" = "Trocar para amosar ou agochar o trebello de coordenadas no mapa.";
+"quick_action_current_location_widget_descr" = "Trocar para amosar ou agochar o trebello de coordenadas no mapa.";
 "plan_route" = "Planificar ruta";
 "quick_action_hillshade_descr" = "Un botón que amosa ou agocha a sombra dos outeiros no mapa.";
 "quick_action_transport_descr" = "Botón que amosa ou agocha o transporte público no mapa.";

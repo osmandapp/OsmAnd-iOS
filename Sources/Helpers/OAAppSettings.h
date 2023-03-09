@@ -861,7 +861,8 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonBoolean *showIntermediateArrivalTime;
 @property (nonatomic) OACommonBoolean *showRelativeBearing;
 @property (nonatomic) OACommonBoolean *showCompassControlRuler;
-@property (nonatomic) OACommonBoolean *showCoordinatesWidget;
+@property (nonatomic) OACommonBoolean *showCurrentLocationCoordinatesWidget;
+@property (nonatomic) OACommonBoolean *showMapCenterCoordinatesWidget;
 @property (nonatomic) NSArray<OAAvoidRoadInfo *> *impassableRoads;
 
 @property (nonatomic) OACommonBoolean *speakStreetNames;

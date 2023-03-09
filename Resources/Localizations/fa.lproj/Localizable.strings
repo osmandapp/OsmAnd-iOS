@@ -1511,7 +1511,7 @@
 "fav_points_not_exist" = "هیچ نقطهٔ موردعلاقه‌ای وجود ندارد";
 "favorite_friends_category" = "دوستان";
 "shared_string_import" = "درون‌برد";
-"coordinates_widget" = "ابزارک مختصات";
+"coordinates_widget_current_location" = "ابزارک مختصات";
 "mapil_usernames" = "نام‌های کاربری";
 "osm_edits_edits_label" = "ویرایش‌ها";
 "osm_value" = "مقدار";
@@ -1950,7 +1950,7 @@
 "subscribe_email_desc" = "مشترک خبرنامهٔ ایمیلی ما شوید و ۳ نقشهٔ دیگر بارگیری کنید!";
 "profile_alert_delete_msg" = "حذف نمایه «%@»";
 "download_all" = "بارگیری همه";
-"quick_action_coordinates_widget_descr" = "دکمه‌ای برای آشکار یا پنهان کردن ابزارک مختصات روی نقشه.";
+"quick_action_current_location_widget_descr" = "دکمه‌ای برای آشکار یا پنهان کردن ابزارک مختصات روی نقشه.";
 "reset_to_default_category_button_promo" = "«بازنشانی به پیشفرض» ترتیب را به حالت اولیهٔ پس از نصب برمی‌گرداند.";
 "benefits_for_contributors_secondary_descr" = "به حساب اوپن‌استریت‌مپ خود وارد شوید تا ببینید آیا شرایط دریافت روزآمدسازی‌های نامحدود ماهانه و ساعتی را دارید.";
 "move_point" = "جابه‌جاکردن نقطه";

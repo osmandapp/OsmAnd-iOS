@@ -2981,6 +2981,21 @@
 • Fixed an issue with UTM Coordinates format\n
 • Fixed an issue with intermediate points in navigation\n";
 
+"ios_release_4_4" = "• Wikipedia: added ability to view images, updated reader UI\n
+• Favorites: added search\n
+• CarPlay: added history, reorganized tracks and favorites list\n
+• Hiking routes: added ability to select routes on the map for viewing additional information or navigation\n
+• OpenStreetMap: added ability to uplaod tracks\n
+• Voice prompts: added support for new languages: Catalan, Ukrainian, Bulgarian, Indonesian, Slovenian\n
+• Added legal warning about using speed camera alerts\n
+• Improved privacy: added options to disable history logging\n
+• Improved visibility of the map ruler\n
+• UI improvements for RTL languages\n
+• Accessibility: added content labelling for map buttons\n
+• Added \"Dynamic type\" support, text size in OsmAnd will change accordingly to text size in iOS\n
+• Map orientation: added manually rotated mode\n
+• Minimum iOS version is increased to 15.0\n";
+
 "rendering_attr_showTrainRoutes_name" = "Train routes";
 "rendering_attr_showWaterwayTunnels_description" = "Don\'t hide waterway tunnels";
 "rendering_attr_natureReserves_description" = "Show nature reserve, protected areas, and national parks.";

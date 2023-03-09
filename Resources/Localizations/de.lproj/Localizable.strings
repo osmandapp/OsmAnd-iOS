@@ -2842,3 +2842,15 @@
 "compass_click_desc" = "Tippen Sie auf den Kompass, um den Kartenausrichtungsmodus zu wechseln.";
 "rotate_map_none_fixed" = "Norden ist oben (feststehend)";
 "rotate_map_none_manually" = "Manuell gedreht (feststehend)";
+"map_widget_camera_tilt" = "Kameraneigung";
+"map_widget_camera_distance" = "Kameraabstand";
+"map_widget_target_distance" = "Zielentfernung";
+"change_language" = "Sprache ändern";
+"dont_download" = "Nicht herunterladen";
+"download_only_now" = "Nur jetzt herunterladen";
+"download_over_cellular_network" = "Bilder über ein Mobilfunknetz herunterladen? Dabei können hohe Gebühren anfallen.";
+"map_widget_zoom_level" = "Zoomstufe";
+"over_any_network" = "Über jedes Netzwerk";
+"wikipedia_language_settings_descr" = "Wählen Sie die Sprachen aus, in denen Wikipedia-Artikel auf der Karte erscheinen sollen. Sie können während des Lesens des Artikels zwischen allen verfügbaren Sprachen wechseln.";
+"over_wifi_only" = "Nur über Wi-Fi";
+"wikivoyage_download_pics" = "Bilder herunterladen";

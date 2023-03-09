@@ -16,6 +16,7 @@
 #define kOsmEditsSettings @"osm_edits"
 #define kOsmandDevelopmentSettings @"osmand_development"
 #define kWeatherSettings @"weather"
+#define kWikipediaSettings @"wikipedia"
 
 @class OAApplicationMode;
 

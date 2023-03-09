@@ -407,10 +407,10 @@
     NSString *imgName = data[@"img"];
     if (imgName)
     {
-        if ([data[@"key"] hasPrefix:@"coordinates_widget"])
+        if ([imgName hasPrefix:@"widget_developer"] || [imgName hasPrefix:@"widget_fps"] || [data[@"key"] hasPrefix:@"coordinates_widget"])
         {
-            cell.leftIconView.image = [UIImage imageNamed:imgName];
-            
+            cell.leftIconView.image = [UIImage rtlImageNamed:imgName];
+            cell.leftIconView.contentMode = UIViewContentModeCenter;
         }
         else
         {

@@ -53,11 +53,6 @@
     return [super isEnabled] && [[OAIAPHelper sharedInstance].wiki isActive];
 }
 
-- (NSString *)getLogoResourceId
-{
-    return @"ic_plugin_wikipedia";
-}
-
 - (NSString *)getName
 {
     return OALocalizedString(@"download_wikipedia_maps");

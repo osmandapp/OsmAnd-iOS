@@ -2834,5 +2834,5 @@
 "confirm_history_item_delete" = "¿Borrar (%ld) elementos del historial?";
 "search_favorites" = "Buscar en favoritos";
 "compass_click_desc" = "Sugerencia: Pulsa el widget de la brújula para cambiar el modo de orientación del mapa.";
-"rotate_map_none_fixed" = "Fijo (norte siempre arriba)";
-"rotate_map_none_manually" = "Fijo (rotación manual)";
+"rotate_map_none_fixed" = "Norte siempre arriba (fijo)";
+"rotate_map_none_manually" = "Rotación manual (fijo)";

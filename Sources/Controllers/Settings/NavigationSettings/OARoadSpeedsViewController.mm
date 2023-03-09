@@ -101,9 +101,12 @@
     return OALocalizedString(@"shared_string_cancel");
 }
 
-- (NSString *)getRightNavbarButtonTitle
+- (NSArray<UIBarButtonItem *> *)getRightNavbarButtons
 {
-    return OALocalizedString(@"shared_string_done");
+    return @[[self createRightNavbarButton:OALocalizedString(@"shared_string_done")
+                                  iconName:nil
+                                    action:@selector(onRightNavbarButtonPressed)
+                                      menu:nil]];
 }
 
 - (EOABaseNavbarStyle)getNavbarStyle

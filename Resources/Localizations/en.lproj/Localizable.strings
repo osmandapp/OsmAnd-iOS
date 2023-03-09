@@ -202,6 +202,10 @@
 "hide_compass_ruler" = "Hide compass ruler";
 "map_widget_distance_by_tap" = "Distance by tap";
 "map_widget_rendering_fps" = "Map rendering FPS";
+"map_widget_camera_tilt" = "Camera Tilt";
+"map_widget_camera_distance" = "Camera Distance";
+"map_widget_zoom_level" = "Zoom level";
+"map_widget_target_distance" = "Target Distance";
 
 "shared_string_collapse" = "Collapse";
 "shared_string_topbar" = "Top bar";
@@ -1894,6 +1898,7 @@
 "free_downloads" = "Free downloads";
 
 "select_language" = "Select language";
+"change_language" = "Change language";
 "language_short" = "Lang";
 "open_url" = "Open page in browser";
 "no_other_translations" = "There are no other translations";
@@ -2982,6 +2987,21 @@
 • Fixed an issue with UTM Coordinates format\n
 • Fixed an issue with intermediate points in navigation\n";
 
+"ios_release_4_4" = "• Wikipedia: added ability to view images, updated reader UI\n
+• Favorites: added search\n
+• CarPlay: added history, reorganized tracks and favorites list\n
+• Hiking routes: added ability to select routes on the map for viewing additional information or navigation\n
+• OpenStreetMap: added ability to uplaod tracks\n
+• Voice prompts: added support for new languages: Catalan, Ukrainian, Bulgarian, Indonesian, Slovenian\n
+• Added legal warning about using speed camera alerts\n
+• Improved privacy: added options to disable history logging\n
+• Improved visibility of the map ruler\n
+• UI improvements for RTL languages\n
+• Accessibility: added content labelling for map buttons\n
+• Added \"Dynamic type\" support, text size in OsmAnd will change accordingly to text size in iOS\n
+• Map orientation: added manually rotated mode\n
+• Minimum iOS version is increased to 15.0\n";
+
 "rendering_attr_showTrainRoutes_name" = "Train routes";
 "rendering_attr_showWaterwayTunnels_description" = "Don\'t hide waterway tunnels";
 "rendering_attr_natureReserves_description" = "Show nature reserve, protected areas, and national parks.";
@@ -3069,3 +3089,11 @@
 
 "restart_is_required_title" = "Restart is required";
 "restart_is_required" = "A restart is required to apply the change.";
+
+"wikipedia_language_settings_descr" = "Select the languages ​​in which Wikipedia articles will appear on the map. You can switch between any available language ​​while reading the article.";
+"dont_download" = "Don't download";
+"over_wifi_only" = "Over Wi-Fi only";
+"over_any_network" = "Over any network";
+"download_only_now" = "Download only now";
+"wikivoyage_download_pics" = "Download images";
+"download_over_cellular_network" = "Download images over cellular network? This may incur high charges.";

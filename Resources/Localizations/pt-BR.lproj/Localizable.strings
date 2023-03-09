@@ -2588,7 +2588,7 @@
 "cloud_storage_used" = "%@ de %@ usado";
 "open_street_map_login_mode_simple" = "Você pericentral para enviar as suas alterações.";
 "contributions_may_calculate_with_delay" = "O cálculo das contribuições pode levar várias horas.";
-"map_updates_are_unavailable_yet" = "As atualizações do mapa ainda não estão disponíveis :-(";
+"map_updates_are_unavailable_yet" = "As atualizações do mapa ainda não estão disponíveis. :-(";
 "auth_failed" = "Falha na autorização";
 "shared_string_cross_buy" = "Compra cruzada";
 "login_open_street_map_org" = "Entrar com OpenStreetMap.org";
@@ -2824,3 +2824,7 @@
 "search_history_disabled" = "O histórico de pesquisa está desativado";
 "enable_search_history" = "Você pode ativar o histórico de pesquisa em Configurações";
 "confirm_history_item_delete" = "Tem certeza de que deseja excluir (%ld) itens do histórico?";
+"search_favorites" = "Pesquisar favoritos";
+"rotate_map_none_manually" = "Rotação manual (fixa)";
+"compass_click_desc" = "Toque na bússola para alternar o modo de orientação do mapa.";
+"rotate_map_none_fixed" = "O norte está para cima (fixo)";

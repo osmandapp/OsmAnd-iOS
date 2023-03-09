@@ -47,7 +47,7 @@ static OAQuickActionType *TYPE;
 + (OAQuickActionType *) TYPE
 {
     if (!TYPE)
-        TYPE = [[OAQuickActionType alloc] initWithIdentifier:36 stringId:@"coordinates.showhide" class:self.class name:OALocalizedString(@"toggle_map_center") category:CONFIGURE_SCREEN iconName:@"ic_custom_coordinates" secondaryIconName:nil editable:NO];
+        TYPE = [[OAQuickActionType alloc] initWithIdentifier:36 stringId:@"coordinates.showhide" class:self.class name:OALocalizedString(@"toggle_map_center") category:CONFIGURE_SCREEN iconName:@"ic_custom_coordinates_map_center" secondaryIconName:nil editable:NO];
        
     return TYPE;
 }

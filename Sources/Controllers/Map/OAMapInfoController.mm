@@ -39,6 +39,8 @@
 #import "OAQuickActionHudViewController.h"
 #import "OAMapLayers.h"
 #import "OAWeatherLayerSettingsViewController.h"
+#import "OASunriseWidget.h"
+#import "OASunsetWidget.h"
 
 @interface OATextState : NSObject
 
@@ -729,6 +731,12 @@
     
     OATextInfoWidget *ruler = [mic createRulerControl];
     [self registerSideWidget:ruler widgetState:[[OACompassRulerWidgetState alloc] init] key:@"radius_ruler" left:NO priorityOrder:43];
+    
+    OASunriseWidget *sunriseWidget = [[OASunriseWidget alloc] init];
+    [self registerSideWidget:sunriseWidget imageId:@"widget_sunrise_day" message:OALocalizedString(@"map_widget_sunrise") key:@"sunrise" left:false priorityOrder:44];
+    
+    OASunsetWidget *sunsetWidget = [[OASunsetWidget alloc] init];
+    [self registerSideWidget:sunsetWidget imageId:@"widget_sunset_day" message:OALocalizedString(@"map_widget_sunset") key:@"sunset" left:false priorityOrder:45];
 }
 
 - (void) updateStreetName:(BOOL)nightMode ts:(OATextState *)ts

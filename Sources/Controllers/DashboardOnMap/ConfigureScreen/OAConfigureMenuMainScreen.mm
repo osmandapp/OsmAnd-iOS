@@ -386,7 +386,7 @@
     NSString *imgName = data[@"img"];
     if (imgName)
     {
-        if ([imgName hasPrefix:@"widget_developer"] || [imgName hasPrefix:@"widget_fps"])
+        if ([imgName hasPrefix:@"widget_developer"] || [imgName hasPrefix:@"widget_fps"] || [imgName hasPrefix:@"widget_sunrise"] || [imgName hasPrefix:@"widget_sunset"])
         {
             cell.leftIconView.image = [UIImage rtlImageNamed:imgName];
             cell.leftIconView.contentMode = UIViewContentModeCenter;

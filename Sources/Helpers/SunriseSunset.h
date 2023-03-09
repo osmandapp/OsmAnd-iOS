@@ -195,7 +195,7 @@
 
 @interface SunriseSunset : NSObject
 
-- (instancetype) initWithLatitude:(double)dfLatIn longitude:(double)dfLonIn dateInputIn:(NSDate *)dateInputIn tzIn:(NSTimeZone *)tzIn;
+- (instancetype) initWithLatitude:(double)dfLatIn longitude:(double)dfLonIn dateInputIn:(NSDate *)dateInputIn tzIn:(NSTimeZone *)tzIn forTomorrow:(BOOL)tomorrow;
 
 - (BOOL) isDaytime;
 - (NSDate *) getSunrise;

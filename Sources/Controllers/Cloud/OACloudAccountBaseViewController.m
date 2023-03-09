@@ -96,7 +96,7 @@
 
 - (void) setupTableHeaderView
 {
-    self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:[self getTableHeaderTitle] font:kHeaderBigTitleFont textColor:UIColor.blackColor isBigTitle:YES];
+    self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:[self getTableHeaderTitle] font:kHeaderBigTitleFont textColor:UIColor.blackColor isBigTitle:YES parentViewWidth:self.view.frame.size.width];
 }
 
 - (void) setupTableFooterView

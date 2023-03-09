@@ -7,7 +7,7 @@
 //
 
 #import "OAHelpViewController.h"
-#import "OAMenuSimpleCellNoIcon.h"
+#import "OASimpleTableViewCell.h"
 #import "Localization.h"
 #import "OAWebViewController.h"
 #import "OALinks.h"
@@ -404,25 +404,19 @@ static const NSInteger groupCount = 5;
 - (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    
-    OAMenuSimpleCellNoIcon *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCellNoIcon getCellIdentifier]];
+    OASimpleTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCellNoIcon getCellIdentifier] owner:self options:nil];
-        cell = (OAMenuSimpleCellNoIcon *)[nib objectAtIndex:0];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+        cell = (OASimpleTableViewCell *) nib[0];
+        [cell leftIconVisibility:NO];
     }
-    
     if (cell)
     {
-        cell.descriptionView.hidden = item[@"description"] == nil || [item[@"description"] length] == 0 ? YES : NO;
-        cell.contentView.backgroundColor = [UIColor whiteColor];
-        [cell.textView setTextColor:[UIColor blackColor]];
-        [cell.textView setText:item[@"title"]];
-        [cell.descriptionView setText:item[@"description"]];
-        [cell.textView setFont:[UIFont scaledSystemFontOfSize:16]];
-        [cell.descriptionView setFont:[UIFont scaledSystemFontOfSize:12]];
-        if ([cell needsUpdateConstraints])
-            [cell updateConstraints];
+        cell.titleLabel.text = item[@"title"];
+        NSString *description = item[@"description"];
+        cell.descriptionLabel.text = description;
+        [cell descriptionVisibility:description && description.length > 0];
     }
     return cell;
 }

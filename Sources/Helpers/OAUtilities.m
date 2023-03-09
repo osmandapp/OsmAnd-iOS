@@ -2138,8 +2138,9 @@ static const double d180PI = 180.0 / M_PI_2;
                                      font:(UIFont *)font
                                 textColor:(UIColor *)textColor
                                isBigTitle:(BOOL)isBigTitle
+                          parentViewWidth:(CGFloat)parentViewWidth
 {
-    return [self setupTableHeaderViewWithText:text font:font textColor:textColor isBigTitle:isBigTitle rightIconName:nil tintColor:nil];
+    return [self setupTableHeaderViewWithText:text font:font textColor:textColor isBigTitle:isBigTitle rightIconName:nil tintColor:nil parentViewWidth:parentViewWidth];
 }
 
 + (UIView *) setupTableHeaderViewWithText:(NSString *)text
@@ -2148,10 +2149,11 @@ static const double d180PI = 180.0 / M_PI_2;
                                isBigTitle:(BOOL)isBigTitle
                             rightIconName:(NSString *)iconName
                                 tintColor:(UIColor *)tintColor
+                          parentViewWidth:(CGFloat)parentViewWidth
 {
     CGFloat topOffset = isBigTitle ? 5. : kPaddingOnSideOfContent;
     CGFloat bottomOffset = isBigTitle ? 7. : kPaddingOnSideOfContent;
-    return [self setupTableHeaderViewWithText:text font:font textColor:textColor isBigTitle:isBigTitle topOffset:topOffset bottomOffset:bottomOffset rightIconName:iconName tintColor:tintColor];
+    return [self setupTableHeaderViewWithText:text font:font textColor:textColor isBigTitle:isBigTitle topOffset:topOffset bottomOffset:bottomOffset rightIconName:iconName tintColor:tintColor parentViewWidth:parentViewWidth];
 }
 
 + (UIView *) setupTableHeaderViewWithText:(NSString *)text
@@ -2162,13 +2164,14 @@ static const double d180PI = 180.0 / M_PI_2;
                              bottomOffset:(CGFloat)bottomOffset
                             rightIconName:(NSString *)iconName
                                 tintColor:(UIColor *)tintColor
+                          parentViewWidth:(CGFloat)parentViewWidth
 {
     NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc] initWithString:text];
     [attributedText setFont:font forString:text];
     [attributedText setColor:textColor forString:text];
 
     CGFloat sideOffset = [OAUtilities getLeftMargin] + (isBigTitle ? kSmallPaddingOnSideOfContent : kPaddingOnSideOfContent);
-    CGFloat textWidth = DeviceScreenWidth - sideOffset * 2;
+    CGFloat textWidth = parentViewWidth - sideOffset * 2;
     CGFloat textHeight = [self calculateTextBounds:attributedText width:textWidth].height;
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(sideOffset, topOffset, textWidth, textHeight)];
 
@@ -2178,7 +2181,7 @@ static const double d180PI = 180.0 / M_PI_2;
     label.lineBreakMode = NSLineBreakByWordWrapping;
     label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 
-    UIView *tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0., 0., DeviceScreenWidth, topOffset + textHeight + bottomOffset)];
+    UIView *tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0., 0., parentViewWidth, topOffset + textHeight + bottomOffset)];
     [tableHeaderView addSubview:label];
     tableHeaderView.backgroundColor = UIColorFromRGB(color_primary_table_background);
 
@@ -2186,7 +2189,7 @@ static const double d180PI = 180.0 / M_PI_2;
     {
         CGFloat iconFrameSize = 30.;
         CGFloat iconFrameOffsetSize = 4.;
-        UIView *iconContainer = [[UIView alloc] initWithFrame:CGRectMake(DeviceScreenWidth - 12. - [OAUtilities getLeftMargin] - iconFrameSize - iconFrameOffsetSize, tableHeaderView.frame.size.height / 2 - iconFrameSize / 2, iconFrameSize + iconFrameOffsetSize, iconFrameSize + iconFrameOffsetSize)];
+        UIView *iconContainer = [[UIView alloc] initWithFrame:CGRectMake(parentViewWidth - 12. - [OAUtilities getLeftMargin] - iconFrameSize - iconFrameOffsetSize, tableHeaderView.frame.size.height / 2 - iconFrameSize / 2, iconFrameSize + iconFrameOffsetSize, iconFrameSize + iconFrameOffsetSize)];
         iconContainer.backgroundColor = UIColor.whiteColor;
         UIImageView *iconView = [[UIImageView alloc] init];
         iconView.frame = CGRectMake(iconFrameOffsetSize / 2, iconFrameOffsetSize / 2, iconFrameSize, iconFrameSize);
@@ -2253,7 +2256,10 @@ static const double d180PI = 180.0 / M_PI_2;
     return tableHeaderView;
 }
 
-+ (UIView *) setupTableHeaderViewWithAttributedText:(NSAttributedString *)attributedText topCenterIconName:(NSString *)iconName iconSize:(CGFloat)iconSize
++ (UIView *) setupTableHeaderViewWithAttributedText:(NSAttributedString *)attributedText
+                                  topCenterIconName:(NSString *)iconName
+                                           iconSize:(CGFloat)iconSize
+                                    parentViewWidth:(CGFloat)parentViewWidth
 {
     BOOL hasIcon = iconName != nil && iconName.length > 0 && iconSize > 0;
     BOOL hasText = attributedText != nil && attributedText.length > 0;
@@ -2261,17 +2267,17 @@ static const double d180PI = 180.0 / M_PI_2;
     UIImageView *imageView;
     if (hasIcon)
     {
-        imageView = [[UIImageView alloc] initWithFrame:CGRectMake(DeviceScreenWidth / 2 - iconSize / 2, 8., iconSize, iconSize)];
+        imageView = [[UIImageView alloc] initWithFrame:CGRectMake(parentViewWidth / 2 - iconSize / 2, 8., iconSize, iconSize)];
         imageView.image = [UIImage imageNamed:iconName];
     }
 
     UILabel *label;
     if (hasText)
     {
-        CGFloat width = DeviceScreenWidth - ([OAUtilities getLeftMargin] + 20) * 2;
+        CGFloat width = parentViewWidth - ([OAUtilities getLeftMargin] + 20) * 2;
         CGFloat height = [self calculateTextBounds:attributedText width:width].height;
         label = [[UILabel alloc] initWithFrame:CGRectMake(
-            DeviceScreenWidth / 2 - width / 2,
+            parentViewWidth / 2 - width / 2,
             (imageView ? imageView.frame.origin.y + imageView.frame.size.height + 34. : 4.),
             width,
             height)];
@@ -2285,7 +2291,7 @@ static const double d180PI = 180.0 / M_PI_2;
     else
         headerHeight = label.frame.origin.y + label.frame.size.height + 4.;
     
-    UIView *tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0., 0., DeviceScreenWidth, headerHeight)];
+    UIView *tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0., 0., parentViewWidth, headerHeight)];
     if (imageView)
         [tableHeaderView addSubview:imageView];
     if (label)

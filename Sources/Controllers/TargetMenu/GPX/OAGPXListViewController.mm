@@ -8,7 +8,7 @@
 
 #import "OAGPXListViewController.h"
 #import "OAIconTextTableViewCell.h"
-#import "OAMenuSimpleCellNoIcon.h"
+#import "OASimpleTableViewCell.h"
 #import "OAGpxInfo.h"
 #import "OALoadGpxTask.h"
 #import "OAGPXRecTableViewCell.h"
@@ -673,7 +673,7 @@ static UIViewController *parentController;
     else
         [trackRecordingGroup.groupItems addObject:@{
             @"title" : OALocalizedString(@"track_rec_addon_q"),
-            @"type" : [OAMenuSimpleCellNoIcon getCellIdentifier],
+            @"type" : [OASimpleTableViewCell getCellIdentifier],
             @"key" : @"track_recording"}
         ];
     [tableData addObject:trackRecordingGroup];
@@ -1192,19 +1192,20 @@ static UIViewController *parentController;
             }
             return _recCell;
         }
-        else if ([menuCellType isEqualToString:[OAMenuSimpleCellNoIcon getCellIdentifier]])
+        else if ([menuCellType isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
         {
-            OAMenuSimpleCellNoIcon *cell = (OAMenuSimpleCellNoIcon *)[tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCellNoIcon getCellIdentifier]];
+            OASimpleTableViewCell *cell = (OASimpleTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCellNoIcon getCellIdentifier] owner:self options:nil];
-                cell = (OAMenuSimpleCellNoIcon *)[nib objectAtIndex:0];
-                cell.descriptionView.hidden = YES;
-                cell.textView.font = [UIFont scaledSystemFontOfSize:14.0];
-                cell.textView.textColor = [UIColor darkGrayColor];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+                cell = (OASimpleTableViewCell *) nib[0];
+                [cell leftIconVisibility:NO];
+                [cell descriptionVisibility:NO];
+                cell.titleLabel.font = [UIFont scaledSystemFontOfSize:14.0];
+                cell.titleLabel.textColor = [UIColor darkGrayColor];
             }
             if (cell)
-                [cell.textView setText:OALocalizedString(@"track_rec_addon_q")];
+                cell.titleLabel.text = OALocalizedString(@"track_rec_addon_q");
             return cell;
         }
         else if ([menuCellType isEqualToString:[OAIconTextTableViewCell getCellIdentifier]])

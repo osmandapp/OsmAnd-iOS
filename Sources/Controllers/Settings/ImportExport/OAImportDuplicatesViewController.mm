@@ -17,7 +17,7 @@
 #import "OAAvoidRoadInfo.h"
 #import "OAProfileDataObject.h"
 #import "OAMenuSimpleCell.h"
-#import "OAMenuSimpleCellNoIcon.h"
+#import "OASimpleTableViewCell.h"
 #import "OAActivityViewWithTitleCell.h"
 #import "OAIndexConstants.h"
 #import "OAFileSettingsItem.h"
@@ -298,7 +298,7 @@
                 OAHeaderType *header = (OAHeaderType *)currentItem;
                 item[@"label"] = header.title;
                 item[@"description"] = [NSString stringWithFormat:OALocalizedString(@"listed_exist"), [header.title lowerCase]];
-                item[@"cellType"] = [OAMenuSimpleCellNoIcon getCellIdentifier];
+                item[@"cellType"] = [OASimpleTableViewCell getCellIdentifier];
             }
             else if ([currentItem isKindOfClass:OAApplicationModeBean.class])
             {
@@ -522,19 +522,20 @@
     NSDictionary *item = _data[indexPath.section][indexPath.row];
     NSString *type = item[@"cellType"];
 
-    if ([type isEqualToString:[OAMenuSimpleCellNoIcon getCellIdentifier]])
+    if ([type isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
     {
-        OAMenuSimpleCellNoIcon* cell;
-        cell = (OAMenuSimpleCellNoIcon *)[tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCellNoIcon getCellIdentifier]];
+        OASimpleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAMenuSimpleCellNoIcon getCellIdentifier] owner:self options:nil];
-            cell = (OAMenuSimpleCellNoIcon *)[nib objectAtIndex:0];
-            cell.separatorInset = UIEdgeInsetsMake(0.0, 20.0, 0.0, 0.0);
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASimpleTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
         }
-        cell.descriptionView.hidden = NO;
-        cell.textView.text = item[@"label"];
-        cell.descriptionView.text = item[@"description"];
+        if (cell)
+        {
+            cell.titleLabel.text = item[@"label"];
+            cell.descriptionLabel.text = item[@"description"];
+        }
         return cell;
     }
     else if ([type isEqualToString:[OAMenuSimpleCell getCellIdentifier]])

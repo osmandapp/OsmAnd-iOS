@@ -20,7 +20,6 @@
 #import "OAIconTitleValueCell.h"
 #import "OATitleIconProgressbarCell.h"
 #import "OAValueTableViewCell.h"
-#import "OATitleDescrRightIconTableViewCell.h"
 #import "OARightIconTableViewCell.h"
 #import "FFCircularProgressView+isSpinning.h"
 #import "OAResourcesUIHelper.h"
@@ -286,7 +285,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
                 NSInteger color = _status == OABackupStatus.CONFLICTS || _status == OABackupStatus.ERROR ? _status.iconColor
                         : _status == OABackupStatus.MAKE_BACKUP ? profile_icon_color_green_light : -1;
                 NSDictionary *makeBackupWarningCell = @{
-                    kCellTypeKey: OATitleDescrRightIconTableViewCell.getCellIdentifier,
+                    kCellTypeKey: [OARightIconTableViewCell getCellIdentifier],
                     kCellKeyKey: @"makeBackupWarning",
                     kCellTitleKey: hasWarningStatus ? _status.warningTitle : OALocalizedString(@"osm_failed_uploads"),
                     kCellDescrKey: descr ? descr : @"",
@@ -605,41 +604,38 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OARightIconTableViewCell *) nib[0];
             [cell leftIconVisibility:NO];
-            [cell descriptionVisibility:NO];
             cell.titleLabel.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium];
         }
         if (cell)
         {
-            BOOL actionButtonDisabled = [self isActionButtonDisabled:item];
-            cell.rightIconView.image = [UIImage templateImageNamed:item.iconName];
-            cell.rightIconView.tintColor = actionButtonDisabled ? UIColorFromRGB(color_tint_gray) : UIColorFromRGB(color_primary_purple);
             cell.titleLabel.text = item.title;
-            cell.titleLabel.textColor = actionButtonDisabled ? UIColorFromRGB(color_text_footer) : UIColorFromRGB(color_primary_purple);
+            cell.descriptionLabel.text = item.descr;
+
+            BOOL isWarningCell = [item.key isEqualToString:@"makeBackupWarning"];
+            [cell descriptionVisibility:isWarningCell];
+            cell.selectionStyle = isWarningCell ? UITableViewCellSelectionStyleNone : UITableViewCellSelectionStyleDefault;
+            if (isWarningCell)
+            {
+                cell.titleLabel.textColor = UIColor.blackColor;
+                NSInteger color = item.iconTint;
+                if (color != -1)
+                {
+                    cell.rightIconView.tintColor = UIColorFromRGB(color);
+                    cell.rightIconView.image = [UIImage templateImageNamed:item.iconName];
+                }
+                else
+                {
+                    cell.rightIconView.image = [UIImage imageNamed:item.iconName];
+                }
+            }
+            else
+            {
+                BOOL actionButtonDisabled = [self isActionButtonDisabled:item];
+                cell.rightIconView.image = [UIImage templateImageNamed:item.iconName];
+                cell.rightIconView.tintColor = actionButtonDisabled ? UIColorFromRGB(color_tint_gray) : UIColorFromRGB(color_primary_purple);
+                cell.titleLabel.textColor = actionButtonDisabled ? UIColorFromRGB(color_text_footer) : UIColorFromRGB(color_primary_purple);
+            }
         }
-        return cell;
-    }
-    else if ([cellId isEqualToString:OATitleDescrRightIconTableViewCell.getCellIdentifier])
-    {
-        OATitleDescrRightIconTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:OATitleDescrRightIconTableViewCell.getCellIdentifier];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleDescrRightIconTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OATitleDescrRightIconTableViewCell *)[nib objectAtIndex:0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        }
-        cell.titleLabel.text = item.title;
-        cell.descriptionLabel.text = item.descr;
-        NSInteger color = item.iconTint;
-        if (color != -1)
-        {
-            cell.iconView.tintColor = UIColorFromRGB(color);
-            [cell.iconView setImage:[UIImage templateImageNamed:item.iconName]];
-        }
-        else
-        {
-            [cell.iconView setImage:[UIImage imageNamed:item.iconName]];
-        }
-        
         return cell;
     }
     else if ([cellId isEqualToString:OAIconTitleValueCell.getCellIdentifier])

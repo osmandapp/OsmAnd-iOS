@@ -499,7 +499,7 @@
     BOOL isCustomLargeTitle = style == EOABaseNavbarStyleCustomLargeTitle;
     if (isCustomLargeTitle || style == EOABaseNavbarStyleDescription)
     {
-        tableHeaderView = [OAUtilities setupTableHeaderViewWithText:isCustomLargeTitle ? [self getTitle] : [[[[self getCustomTableViewDescription] stringByAppendingString:[self getCustomTableViewDescription]] stringByAppendingString:[self getCustomTableViewDescription]] stringByAppendingString:[self getCustomTableViewDescription]]
+        tableHeaderView = [OAUtilities setupTableHeaderViewWithText:isCustomLargeTitle ? [self getTitle] : [self getCustomTableViewDescription]
                                                                font:isCustomLargeTitle ? kHeaderBigTitleFont : kHeaderDescriptionFontSmall
                                                           textColor:isCustomLargeTitle ? UIColor.blackColor : UIColorFromRGB(color_text_footer)
                                                          isBigTitle:isCustomLargeTitle

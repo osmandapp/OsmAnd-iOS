@@ -176,6 +176,8 @@
     
     if (self.visibilityDelegate)
         [self.visibilityDelegate onVisibilityChanged:visibility];
+    
+    [self dismissViewController];
 }
 
 @end

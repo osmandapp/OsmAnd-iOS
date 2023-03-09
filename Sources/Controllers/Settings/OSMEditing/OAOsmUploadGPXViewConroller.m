@@ -104,7 +104,11 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
 
 - (NSString *)getTitle
 {
-    return OALocalizedString(@"upload_to_openstreetmap");
+    if (_gpxItemsToUpload.count > 1)
+        return [NSString stringWithFormat:@"%@ (%d)", OALocalizedString(@"upload_to_openstreetmap"), _gpxItemsToUpload.count];
+    else
+        return OALocalizedString(@"upload_to_openstreetmap");
+        
 }
 
 - (NSString *)getLeftNavbarButtonTitle

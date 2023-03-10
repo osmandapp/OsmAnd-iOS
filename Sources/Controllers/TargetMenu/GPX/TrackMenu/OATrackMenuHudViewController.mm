@@ -20,6 +20,7 @@
 #import "OARouteBaseViewController.h"
 #import "OAGPXListViewController.h"
 #import "OARootViewController.h"
+#import "OARouteKey.h"
 #import "OAMapRendererView.h"
 #import "OATabBar.h"
 #import "OAIconTitleValueCell.h"
@@ -126,6 +127,8 @@
     UIImage *_cachedImage;
     NSString *_cachedImageURL;
     BOOL _isViewVisible;
+    
+    OARouteKey *_routeKey;
 }
 
 @dynamic gpx, analysis, isShown, backButton, statusBarBackgroundView, contentContainer;
@@ -152,7 +155,7 @@
     return self;
 }
 
-- (instancetype)initWithGpx:(OAGPX *)gpx state:(OATargetMenuViewControllerState *)state
+- (instancetype)initWithGpx:(OAGPX *)gpx routeKey:(OARouteKey *)routeKey state:(OATargetMenuViewControllerState *)state
 {
     self = [super initWithGpx:gpx];
     if (self)
@@ -160,6 +163,7 @@
         if ([state isKindOfClass:OATrackMenuViewControllerState.class])
         {
             _reopeningState = state;
+            _routeKey = routeKey;
             _selectedTab = _reopeningState.lastSelectedTab;
             [self commonInit];
         }
@@ -172,13 +176,18 @@
     return @"OATrackMenuHudViewController";
 }
 
+- (void)setupUIBuilder
+{
+    _uiBuilder = [[OATrackMenuUIBuilder alloc] initWithSelectedTab:_selectedTab];
+    _uiBuilder.trackMenuDelegate = self;
+}
+
 - (void)commonInit
 {
     _app = [OsmAndApp instance];
     _routeLineChartHelper = [self getLineChartHelper];
 
-    _uiBuilder = [[OATrackMenuUIBuilder alloc] initWithSelectedTab:_selectedTab];
-    _uiBuilder.trackMenuDelegate = self;
+    [self setupUIBuilder];
 }
 
 - (void)viewDidLoad
@@ -286,6 +295,8 @@
 - (void)hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete
 {
     [super hide:YES duration:duration onComplete:^{
+        if (_routeKey)
+            [self.mapViewController hideTempGpxTrack];
         [self stopLocationServices];
         [self.mapViewController.mapLayers.gpxMapLayer hideCurrentStatisticsLocation];
         if (onComplete)
@@ -385,8 +396,11 @@
         [_headerView setGroupsCollection:[self generateGroupCollectionData] withSelectedIndex:0];
     }
 
+    BOOL isRoute = _routeKey != nil;
     [_headerView updateHeader:self.isCurrentTrack
                    shownTrack:self.isShown
+               isNetworkRoute:isRoute
+            routeIcon:isRoute ? _reopeningState.trackIcon : [UIImage templateImageNamed:@"ic_custom_trip"]
                         title:[self.gpx getNiceTitle]];
 
     [self.scrollableView addSubview:_headerView];
@@ -1303,9 +1317,16 @@
 
 - (NSString *)getCreatedOn
 {
-    if (self.doc.metadata.time <= [[NSDate date] timeIntervalSince1970])
+    long time = self.doc.metadata.time;
+    if (time < 0)
     {
-        return [NSDateFormatter localizedStringFromDate:[NSDate dateWithTimeIntervalSince1970:self.doc.metadata.time]
+        NSFileManager *manager = NSFileManager.defaultManager;
+        NSDictionary *attrs = [manager attributesOfItemAtPath:self.doc.path error:nil];
+        time = attrs.fileModificationDate.timeIntervalSince1970;
+    }
+    if (time > 0)
+    {
+        return [NSDateFormatter localizedStringFromDate:[NSDate dateWithTimeIntervalSince1970:time]
                                               dateStyle:NSDateFormatterMediumStyle
                                               timeStyle:NSDateFormatterNoStyle];
     }
@@ -1472,6 +1493,51 @@
             [self.mapViewController hideContextPinMarker];
         }];
     }
+}
+
+- (void)saveNetworkRoute
+{
+    NSString *folderPath = [_app.gpxPath stringByAppendingPathComponent:@"Travel"];
+    if (![[NSFileManager defaultManager] fileExistsAtPath:folderPath])
+        [[NSFileManager defaultManager] createDirectoryAtPath:folderPath withIntermediateDirectories:NO attributes:nil error:nil];
+    NSString *path = [self createUniqueFileName:self.doc.path.lastPathComponent path:folderPath];
+    [self.doc saveTo:path];
+    self.doc.path = path;
+    OAGPX *gpx = [[OAGPXDatabase sharedDb] addGpxItem:path title:self.doc.metadata.name desc:nil bounds:self.doc.bounds document:self.doc];
+    [[OAGPXDatabase sharedDb] save];
+    self.gpx = gpx;
+    _routeKey = nil;
+    [self.mapViewController hideTempGpxTrack];
+    self.isShown = NO;
+    [self changeTrackVisible];
+    [_headerView updateHeader:self.isCurrentTrack
+                   shownTrack:self.isShown
+               isNetworkRoute:_routeKey != nil
+                    routeIcon:[UIImage templateImageNamed:@"ic_custom_trip"]
+                        title:[self.gpx getNiceTitle]];
+    [self setupUIBuilder];
+    [_uiBuilder setupTabBar:self.tabBarView
+                parentWidth:self.scrollableView.frame.size.width];
+    [self generateData];
+    [self.tableView reloadData];
+}
+
+- (NSString *) createUniqueFileName:(NSString *)fileName path:(NSString *)path
+{
+    NSFileManager *fileMan = [NSFileManager defaultManager];
+    if ([fileMan fileExistsAtPath:[path stringByAppendingPathComponent:fileName]])
+    {
+        NSString *ext = [fileName pathExtension];
+        NSString *newName;
+        for (int i = 1; i < 100000; i++) {
+            newName = [[NSString stringWithFormat:@"%@_(%d)", [fileName stringByDeletingPathExtension], i] stringByAppendingPathExtension:ext];
+            NSString *newPath = [path stringByAppendingPathComponent:newName];
+            if (![fileMan fileExistsAtPath:newPath])
+                break;
+        }
+        return [path stringByAppendingPathComponent:newName];
+    }
+    return [path stringByAppendingPathComponent:fileName];
 }
 
 - (void)openDescription

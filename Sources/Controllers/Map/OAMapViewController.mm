@@ -2321,6 +2321,33 @@
     }
 }
 
+- (void) showTempGpxTrackFromDocument:(OAGPXDocument *)doc
+{
+    if (_recTrackShowing)
+        [self hideRecGpxTrack];
+    NSString *filePath = doc.path;
+
+    @synchronized(_rendererSync)
+    {
+        OAAppSettings *settings = [OAAppSettings sharedManager];
+        if ([settings.mapSettingVisibleGpx.get containsObject:filePath]) {
+            _gpxDocsTemp.clear();
+            _gpxDocFileTemp = nil;
+            return;
+        }
+        
+        _tempTrackShowing = YES;
+
+        if (![_gpxDocFileTemp isEqualToString:filePath] || _gpxDocsTemp.isEmpty()) {
+            _gpxDocsTemp.clear();
+            _gpxDocFileTemp = [filePath copy];
+            _gpxDocsTemp.append(OsmAnd::GpxDocument::loadFrom(QString::fromNSString(filePath)));
+        }
+        
+        [[_app updateGpxTracksOnMapObservable] notifyEvent];
+    }
+}
+
 - (void) hideTempGpxTrack:(BOOL)update
 {
     @synchronized(_rendererSync)
@@ -2329,6 +2356,9 @@
         _tempTrackShowing = NO;
         
         _gpxDocsTemp.clear();
+        NSString *folderParh = [_gpxDocFileTemp stringByDeletingLastPathComponent];
+        if ([folderParh.lastPathComponent isEqualToString:@"Temp"])
+            [NSFileManager.defaultManager removeItemAtPath:folderParh error:nil];
         _gpxDocFileTemp = nil;
         
         if (wasTempTrackShowing && update)

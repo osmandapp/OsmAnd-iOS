@@ -102,9 +102,16 @@
     
     // Set the background fetch
     _dataFetchQueue = [[NSOperationQueue alloc] init];
-    [BGTaskScheduler.sharedScheduler registerForTaskWithIdentifier:kFetchDataUpdatesId usingQueue:nil launchHandler:^(__kindof BGTask * _Nonnull task) {
-        [self handleAppRefresh:(BGAppRefreshTask *)task];
-    }];
+    @try
+    {
+        [BGTaskScheduler.sharedScheduler registerForTaskWithIdentifier:kFetchDataUpdatesId usingQueue:nil launchHandler:^(__kindof BGTask * _Nonnull task) {
+            [self handleAppRefresh:(BGAppRefreshTask *)task];
+        }];
+    }
+    @catch (NSException *e)
+    {
+        NSLog(@"Failed to schedule background fetch. Reason: %@", e.reason);
+    }
     
     _appInitTask = [[UIApplication sharedApplication] beginBackgroundTaskWithName:@"appInitTask" expirationHandler:^{
         

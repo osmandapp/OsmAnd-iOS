@@ -35,6 +35,11 @@
     return self.gpxTitle;
 }
 
+- (BOOL)isTempTrack
+{
+    return [self.gpxFilePath hasPrefix:@"Temp/"];
+}
+
 - (void)removeHiddenGroups:(NSString *)groupName
 {
     if (!self.hiddenGroups)
@@ -352,6 +357,7 @@
     NSMutableArray *res = [NSMutableArray array];
     NSArray *dbContent = [NSArray arrayWithContentsOfFile:self.dbFilePath];
     NSString *gpxFolderPath = [OsmAndApp instance].gpxPath;
+    [NSFileManager.defaultManager removeItemAtPath:[gpxFolderPath stringByAppendingPathComponent:@"Temp"] error:nil];
     NSMutableSet<NSString *> *existingGpxPaths = [NSMutableSet set];
     for (NSDictionary *gpxData in dbContent)
     {

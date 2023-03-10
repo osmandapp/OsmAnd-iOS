@@ -8,9 +8,6 @@
 
 #import "OAAppVersionDependentConstants.h"
 
-#define kVersion4_3 @"4.3."
-#define kVersion4_4 @"4.4."
-
 @implementation OAAppVersionDependentConstants
 
 + (NSString *) getShortAppVersionWithSeparator:(NSString *)separator
@@ -28,12 +25,6 @@
 + (NSString *) getVersion
 {
     NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-    if ([version hasPrefix:kVersion4_4])
-    {
-        NSRange rOriginal = [version rangeOfString:kVersion4_4];
-        if (NSNotFound != rOriginal.location)
-            version = [version stringByReplacingCharactersInRange:rOriginal withString:kVersion4_3];
-    }
     return version;
 }
 

@@ -1724,6 +1724,7 @@
 		DA1BC140233F9B01004DAF78 /* ic_custom_trip@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA1BC113233F9B00004DAF78 /* ic_custom_trip@2x.png */; };
 		DA1CAF31211EC7DA00B0662E /* ja_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA1CAF30211EC7DA00B0662E /* ja_tts.js */; };
 		DA1F1E50251CCCC5003CAA55 /* navigation-profiles.html in Resources */ = {isa = PBXBuildFile; fileRef = DA1F1E4F251CCCC4003CAA55 /* navigation-profiles.html */; };
+		DA21F1BB29BA101E004985BA /* OANetworkRouteDrawable.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA21F1BA29BA101E004985BA /* OANetworkRouteDrawable.mm */; };
 		DA22D6CC28D8688C0074FA65 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA22D6CB28D8688C0074FA65 /* IOKit.framework */; };
 		DA22DC4E25C05F130070FFCA /* ic_custom_split_after@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA22DC4525C05F100070FFCA /* ic_custom_split_after@2x.png */; };
 		DA22DC5025C05F130070FFCA /* ic_custom_split_before@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA22DC4625C05F100070FFCA /* ic_custom_split_before@3x.png */; };
@@ -1782,6 +1783,8 @@
 		DA35226C20F245BD0038CDA7 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DA35226B20F245BC0038CDA7 /* AVFoundation.framework */; };
 		DA357C4D22A636CC00A1F82D /* ic_custom_coordinates@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA357C4A22A636CB00A1F82D /* ic_custom_coordinates@3x.png */; };
 		DA357C5122A636CC00A1F82D /* ic_custom_coordinates@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA357C4C22A636CC00A1F82D /* ic_custom_coordinates@2x.png */; };
+		DA35963229B0A00A009DF4D6 /* OARouteKey.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA35963129B0A00A009DF4D6 /* OARouteKey.mm */; };
+		DA35963529B1EDEA009DF4D6 /* OANetworkRouteSelectionTask.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA35963429B1EDEA009DF4D6 /* OANetworkRouteSelectionTask.mm */; };
 		DA377DE027BBBB19004B4EBD /* OAMapPresentationEnvironment.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA377DDF27BBBB19004B4EBD /* OAMapPresentationEnvironment.mm */; };
 		DA3DBC2E2976E631003803D8 /* OATransportStopsBaseController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA3DBC2D2976E631003803D8 /* OATransportStopsBaseController.mm */; };
 		DA3FBFED27D60DB000D25E86 /* OAPreviewRouteLineLayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA3FBFEB27D60DB000D25E86 /* OAPreviewRouteLineLayer.mm */; };
@@ -5275,6 +5278,8 @@
 		DA1BC113233F9B00004DAF78 /* ic_custom_trip@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_trip@2x.png"; path = "Resources/Icons/ic_custom_trip@2x.png"; sourceTree = "<group>"; };
 		DA1CAF30211EC7DA00B0662E /* ja_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = ja_tts.js; path = ../resources/voice/ja/ja_tts.js; sourceTree = "<group>"; };
 		DA1F1E4F251CCCC4003CAA55 /* navigation-profiles.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = "navigation-profiles.html"; path = "../help/website/feature_articles/navigation-profiles.html"; sourceTree = "<group>"; };
+		DA21F1B929BA101E004985BA /* OANetworkRouteDrawable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OANetworkRouteDrawable.h; sourceTree = "<group>"; };
+		DA21F1BA29BA101E004985BA /* OANetworkRouteDrawable.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OANetworkRouteDrawable.mm; sourceTree = "<group>"; };
 		DA223EDE299A7229009412AA /* OAFetchBackgroundDataOperation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAFetchBackgroundDataOperation.h; sourceTree = "<group>"; };
 		DA223EDF299A722A009412AA /* OAFetchBackgroundDataOperation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAFetchBackgroundDataOperation.m; sourceTree = "<group>"; };
 		DA22D6CB28D8688C0074FA65 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
@@ -5341,6 +5346,10 @@
 		DA35226B20F245BC0038CDA7 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		DA357C4A22A636CB00A1F82D /* ic_custom_coordinates@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_coordinates@3x.png"; path = "Resources/Icons/ic_custom_coordinates@3x.png"; sourceTree = "<group>"; };
 		DA357C4C22A636CC00A1F82D /* ic_custom_coordinates@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_coordinates@2x.png"; path = "Resources/Icons/ic_custom_coordinates@2x.png"; sourceTree = "<group>"; };
+		DA35963029B0A00A009DF4D6 /* OARouteKey.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OARouteKey.h; sourceTree = "<group>"; };
+		DA35963129B0A00A009DF4D6 /* OARouteKey.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OARouteKey.mm; sourceTree = "<group>"; };
+		DA35963329B1EDEA009DF4D6 /* OANetworkRouteSelectionTask.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OANetworkRouteSelectionTask.h; sourceTree = "<group>"; };
+		DA35963429B1EDEA009DF4D6 /* OANetworkRouteSelectionTask.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OANetworkRouteSelectionTask.mm; sourceTree = "<group>"; };
 		DA377DDE27BBBB19004B4EBD /* OAMapPresentationEnvironment.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAMapPresentationEnvironment.h; sourceTree = "<group>"; };
 		DA377DDF27BBBB19004B4EBD /* OAMapPresentationEnvironment.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMapPresentationEnvironment.mm; sourceTree = "<group>"; };
 		DA3DBC2C2976E631003803D8 /* OATransportStopsBaseController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATransportStopsBaseController.h; sourceTree = "<group>"; };
@@ -11043,6 +11052,8 @@
 				DA5A7AC126C563A100F274C7 /* OAGPXTrackAnalysis.mm */,
 				DA5A7ABC26C563A100F274C7 /* OALoadGpxTask.h */,
 				DA5A7AB826C563A100F274C7 /* OALoadGpxTask.m */,
+				DA35963329B1EDEA009DF4D6 /* OANetworkRouteSelectionTask.h */,
+				DA35963429B1EDEA009DF4D6 /* OANetworkRouteSelectionTask.mm */,
 			);
 			path = GPX;
 			sourceTree = "<group>";
@@ -12372,6 +12383,10 @@
 				DA377DDF27BBBB19004B4EBD /* OAMapPresentationEnvironment.mm */,
 				8A31787327E1D8A800CA8AA4 /* OAMapRendererEnvironment.h */,
 				8A31787427E1D8A800CA8AA4 /* OAMapRendererEnvironment.mm */,
+				DA35963029B0A00A009DF4D6 /* OARouteKey.h */,
+				DA35963129B0A00A009DF4D6 /* OARouteKey.mm */,
+				DA21F1B929BA101E004985BA /* OANetworkRouteDrawable.h */,
+				DA21F1BA29BA101E004985BA /* OANetworkRouteDrawable.mm */,
 			);
 			path = Map;
 			sourceTree = "<group>";
@@ -16762,6 +16777,7 @@
 				DA5A847A26C563A900F274C7 /* OADestinationLineDelegate.m in Sources */,
 				DA5A84AC26C563A900F274C7 /* OAOpenAddTrackViewController.mm in Sources */,
 				32119B552848D921005E1E0C /* OAOsmandDevelopmentSimulateSpeedSelectorViewController.m in Sources */,
+				DA35963229B0A00A009DF4D6 /* OARouteKey.mm in Sources */,
 				DA5A847B26C563A900F274C7 /* OATurnDrawable.mm in Sources */,
 				DA5A82E826C563A800F274C7 /* OAIconButtonCell.m in Sources */,
 				DA5A816F26C563A700F274C7 /* OAAppDelegate.mm in Sources */,
@@ -16791,6 +16807,7 @@
 				DABC7F1F27B65C36005C76E2 /* OACurrentStreetName.mm in Sources */,
 				DA775B8D27E618070081B9C1 /* OABackupInfo.mm in Sources */,
 				DA5A83A926C563A800F274C7 /* OABasicEditingViewController.mm in Sources */,
+				DA35963529B1EDEA009DF4D6 /* OANetworkRouteSelectionTask.mm in Sources */,
 				DA5A852F26C563A900F274C7 /* OpenLocationCode.swift in Sources */,
 				DA5A850026C563A900F274C7 /* OARangeSlider.m in Sources */,
 				DA5A84CA26C563A900F274C7 /* OADeleteProfileBottomSheetViewController.m in Sources */,
@@ -16825,6 +16842,7 @@
 				DA5A81A526C563A700F274C7 /* OASearchWord.mm in Sources */,
 				DA5A83EA26C563A800F274C7 /* OACollapsableWaypointsView.mm in Sources */,
 				DA5A837D26C563A800F274C7 /* GpxUIHelper.swift in Sources */,
+				DA21F1BB29BA101E004985BA /* OANetworkRouteDrawable.mm in Sources */,
 				DA4ABF252876DA6800B996EF /* OAFileSettingsItem.mm in Sources */,
 				DA5A820E26C563A700F274C7 /* OARearrangeProfilesViewController.m in Sources */,
 				DA5A823626C563A700F274C7 /* OAExportItemsViewController.mm in Sources */,
@@ -17108,7 +17126,7 @@
 				INFOPLIST_PREFIX_HEADER = "";
 				INFOPLIST_PREPROCESS = YES;
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios.clang/lib",
@@ -17190,7 +17208,7 @@
 				INFOPLIST_PREFIX_HEADER = "";
 				INFOPLIST_PREPROCESS = YES;
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios.clang/lib",

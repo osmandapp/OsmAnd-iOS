@@ -368,7 +368,8 @@ colorizationScheme:(int)colorizationScheme
         else
         {
             lineWidth = [self getLineWidth:gpx.width];
-            _cachedTrackWidth[gpx.width] = @(lineWidth);
+            if (gpx)
+                _cachedTrackWidth[gpx.width] = @(lineWidth);
         }
 
         OsmAnd::FColorARGB colorARGB;
@@ -517,14 +518,13 @@ colorizationScheme:(int)colorizationScheme
     
     QList<OsmAnd::PointI> startFinishPoints;
     QList<OsmAnd::GpxAdditionalIconsProvider::SplitLabel> splitLabels;
-    const auto& activeGpx = OASelectedGPXHelper.instance.activeGpx;
-    for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
+    for (auto it = _gpxDocs.begin(); it != _gpxDocs.end(); ++it)
     {
         NSString *path = it.key().toNSString();
         OAGPXDatabase *gpxDb = OAGPXDatabase.sharedDb;
         path = [[gpxDb getFileDir:path] stringByAppendingPathComponent:path.lastPathComponent];
         OAGPX *gpx = [gpxDb getGPXItem:path];
-        if (gpx.showStartFinish)
+        if (!gpx || gpx.showStartFinish)
         {
             const auto& doc = it.value();
             if (!doc)

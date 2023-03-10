@@ -1364,7 +1364,7 @@
 "app_mode_utv" = "Côte à côte";
 "app_mode_pedestrian" = "À pied";
 "app_mode_bicycle" = "Vélo";
-"app_mode_car" = "En voiture";
+"app_mode_car" = "Voiture";
 "app_mode_default" = "Parcourir la carte";
 "app_mode_skiing" = "Ski";
 "app_mode_horse" = "À cheval";
@@ -1782,7 +1782,7 @@
 "points_count" = "Points :";
 
 // Route planning
-"plan_route" = "Créer une trace";
+"plan_route" = "Ajouter une trace";
 "quick_action_poi_add_descr" = "Appuyer sur ce bouton d’action vous permet d’ajouter rapidement des POI sur la carte avec un type et des étiquettes prédéfinis.";
 "quick_action_contour_lines_descr" = "Bouton affichant ou masquant les courbes de niveau sur la carte.";
 "quick_action_day_night_descr" = "Ce bouton permet de basculer entre les modes Jour et Nuit de la carte.";

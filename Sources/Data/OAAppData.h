@@ -158,6 +158,7 @@
 - (void) insertIntermediatePoint:(OARTargetPoint *)point index:(int)index;
 - (void) deleteIntermediatePoint:(int)index;
 - (void) clearIntermediatePoints;
+- (void) clearMyLocationToStart;
 
 - (void) clearPointToStartBackup;
 - (void) clearPointToNavigateBackup;

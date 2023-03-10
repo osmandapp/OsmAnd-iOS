@@ -51,7 +51,7 @@
                                                     <constraint firstAttribute="height" id="f2r-rY-fzK"/>
                                                 </constraints>
                                             </view>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_custom_alert_color.png" translatesAutoresizingMaskIntoConstraints="NO" id="t55-aY-pBk">
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" semanticContentAttribute="forceLeftToRight" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_custom_alert_color.png" translatesAutoresizingMaskIntoConstraints="NO" id="t55-aY-pBk">
                                                 <rect key="frame" x="0.0" y="8" width="30" height="30"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="30" id="CV7-vp-b7u"/>

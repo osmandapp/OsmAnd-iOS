@@ -307,6 +307,7 @@
     freeSpaceForNavbarButton -= 12.;
     BOOL isLongTitle = freeSpaceForNavbarButton < 50.;
 
+    _leftNavbarButton = nil;
     if (leftButtonTitle || leftNavbarButtonCustomIcon)
     {
         UIButton *leftButton = [[UIButton alloc] initWithFrame:CGRectMake(0., 0., freeSpaceForNavbarButton, 30.)];
@@ -336,9 +337,12 @@
         _leftNavbarButton.accessibilityLabel = leftButtonTitle ? leftButtonTitle : OALocalizedString(@"shared_string_back");
         [self.navigationItem setLeftBarButtonItem:_leftNavbarButton animated:YES];
     }
+    else
+    {
+        [self.navigationItem setLeftBarButtonItem:nil animated:YES];
+    }
 
     NSArray<UIBarButtonItem *> *rightNavbarButtons = [self getRightNavbarButtons];
-
     if (rightNavbarButtons && rightNavbarButtons.count > 0)
     {
         NSMutableArray<UIBarButtonItem *> *rightNavbarButtonsWithSpaces = [NSMutableArray array];
@@ -361,6 +365,10 @@
             }
         }
         [self.navigationItem setRightBarButtonItems:rightNavbarButtonsWithSpaces animated:YES];
+    }
+    else
+    {
+        [self.navigationItem setRightBarButtonItems:nil animated:YES];
     }
 }
 
@@ -689,6 +697,12 @@
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
     return [self getCustomViewForFooter:section];
+}
+
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    return cell.selectionStyle == UITableViewCellSelectionStyleNone ? nil : indexPath;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

@@ -15,21 +15,10 @@ typedef enum
     EOAHistorySettingsTypeMapMarkers
 } EOAHistorySettingsType;
 
-@class OASearchResult, OAHistoryItem;
-
-@protocol OAHistorySettingsDelegate
-
-- (NSArray<OASearchResult *> *)getNavigationHistoryResults;
-- (NSMutableArray<OASearchResult *> *)getSearchHistoryResults;
-- (OAHistoryItem *)getHistoryEntry:(OASearchResult *) searchResult;
-
-@end
-
 @interface OAHistorySettingsViewController : OABaseButtonsViewController
 
 - (instancetype)initWithSettingsType:(EOAHistorySettingsType)historyType;
 
 @property (nonatomic, readonly) EOAHistorySettingsType historyType;
-@property (nonatomic, weak) id<OAHistorySettingsDelegate> delegate;
 
 @end

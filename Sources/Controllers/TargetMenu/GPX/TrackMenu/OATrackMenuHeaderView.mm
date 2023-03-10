@@ -117,6 +117,8 @@
 
 - (void)updateHeader:(BOOL)currentTrack
           shownTrack:(BOOL)shownTrack
+      isNetworkRoute:(BOOL)isNetworkRoute
+           routeIcon:(UIImage *)icon
                title:(NSString *)title
 {
     self.backgroundColor = _selectedTab != EOATrackMenuHudActionsTab
@@ -127,7 +129,7 @@
     if (_selectedTab != EOATrackMenuHudActionsTab)
     {
         [self.titleView setText:currentTrack ? OALocalizedString(@"shared_string_currently_recording_track") : title];
-        self.titleIconView.image = [UIImage templateImageNamed:@"ic_custom_trip"];
+        self.titleIconView.image = icon;
         self.titleIconView.tintColor = UIColorFromRGB(color_icon_inactive);
     }
 
@@ -163,35 +165,59 @@
             [self showLocation:NO];
         }
 
-        [self updateShowHideButton:shownTrack];
-        [self.showHideButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-        [self.showHideButton addTarget:self
-                                action:@selector(onShowHidePressed:)
-                      forControlEvents:UIControlEventTouchUpInside];
-
-        [self.appearanceButton setTitle:OALocalizedString(@"shared_string_appearance")
-                               forState:UIControlStateNormal];
-        [self.appearanceButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-        [self.appearanceButton addTarget:self
-                                  action:@selector(onAppearancePressed:)
-                        forControlEvents:UIControlEventTouchUpInside];
-
-        if (!currentTrack)
+        if (!isNetworkRoute)
         {
-            [self.exportButton setTitle:OALocalizedString(@"shared_string_share") forState:UIControlStateNormal];
-            [self.exportButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-            [self.exportButton addTarget:self action:@selector(onExportPressed:)
-                               forControlEvents:UIControlEventTouchUpInside];
+            self.exportButton.hidden = NO;
+            self.navigationButton.hidden = NO;
+            [self updateShowHideButton:shownTrack];
+            [self.showHideButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+            [self.showHideButton addTarget:self
+                                    action:@selector(onShowHidePressed:)
+                          forControlEvents:UIControlEventTouchUpInside];
 
-            [self.navigationButton setTitle:OALocalizedString(@"routing_settings") forState:UIControlStateNormal];
-            [self.navigationButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-            [self.navigationButton addTarget:self action:@selector(onNavigationPressed:)
+            [self.appearanceButton setTitle:OALocalizedString(@"shared_string_appearance")
+                                   forState:UIControlStateNormal];
+            [self.appearanceButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+            [self.appearanceButton addTarget:self
+                                      action:@selector(onAppearancePressed:)
+                            forControlEvents:UIControlEventTouchUpInside];
+
+            if (!currentTrack)
+            {
+                [self.exportButton setTitle:OALocalizedString(@"shared_string_share") forState:UIControlStateNormal];
+                [self.exportButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+                [self.exportButton addTarget:self action:@selector(onExportPressed:)
                                    forControlEvents:UIControlEventTouchUpInside];
+
+                [self.navigationButton setTitle:OALocalizedString(@"routing_settings") forState:UIControlStateNormal];
+                [self.navigationButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+                [self.navigationButton addTarget:self action:@selector(onNavigationPressed:)
+                                       forControlEvents:UIControlEventTouchUpInside];
+            }
+            else
+            {
+                self.exportButton.hidden = YES;
+                self.navigationButton.hidden = YES;
+            }
         }
         else
         {
             self.exportButton.hidden = YES;
             self.navigationButton.hidden = YES;
+            
+            [self.showHideButton setTitle:OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
+            [self.showHideButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+            [self.showHideButton addTarget:self action:@selector(onSaveNetworkRoutePressed) forControlEvents:UIControlEventTouchUpInside];
+            [self.showHideButton setImage:[UIImage templateImageNamed:@"ic_custom_download"] forState:UIControlStateNormal];
+            
+            [self.appearanceButton setTitle:OALocalizedString(@"routing_settings")
+                                   forState:UIControlStateNormal];
+            [self.appearanceButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+            [self.appearanceButton addTarget:self
+                                      action:@selector(onNavigationPressed:)
+                            forControlEvents:UIControlEventTouchUpInside];
+            [self.appearanceButton setImage:[UIImage templateImageNamed:@"ic_custom_navigation.png"] forState:UIControlStateNormal];
+            
         }
     }
     else if (_selectedTab == EOATrackMenuHudActionsTab)
@@ -517,6 +543,11 @@
 {
     if (self.trackMenuDelegate)
         [self.trackMenuDelegate openNavigation];
+}
+
+- (void)onSaveNetworkRoutePressed
+{
+    [self.trackMenuDelegate saveNetworkRoute];
 }
 
 #pragma mark - UICollectionViewDataSource

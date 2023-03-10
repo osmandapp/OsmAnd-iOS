@@ -20,6 +20,8 @@
 #import "Localization.h"
 #import "OAPOIFiltersHelper.h"
 #import "OAWikipediaPlugin.h"
+#import "OARouteKey.h"
+#import "OANetworkRouteDrawable.h"
 
 #include "OACoreResourcesAmenityIconProvider.h"
 #include <OsmAndCore/Data/Amenity.h>
@@ -28,8 +30,11 @@
 #include <OsmAndCore/Map/AmenitySymbolsProvider.h>
 #include <OsmAndCore/Map/MapObjectsSymbolsProvider.h>
 #include <OsmAndCore/ObfDataInterface.h>
+#include <OsmAndCore/NetworkRouteContext.h>
+#include <OsmAndCore/NetworkRouteSelector.h>
 
 #define kPoiSearchRadius 50
+#define kTrackSearchDelta 40
 
 @implementation OAPOILayer
 {
@@ -314,6 +319,55 @@
     poi.localizedContent = content;
 }
 
+- (void) addRoute:(NSMutableArray<OATargetPoint *> *)points touchPoint:(CGPoint)touchPoint mapObj:(const std::shared_ptr<const OsmAnd::MapObject> &)mapObj
+{
+    CGPoint topLeft;
+    topLeft.x = touchPoint.x - kTrackSearchDelta;
+    topLeft.y = touchPoint.y - kTrackSearchDelta;
+    CGPoint bottomRight;
+    bottomRight.x = touchPoint.x + kTrackSearchDelta;
+    bottomRight.y = touchPoint.y + kTrackSearchDelta;
+    OsmAnd::PointI topLeft31;
+    OsmAnd::PointI bottomRight31;
+    [self.mapView convert:topLeft toLocation:&topLeft31];
+    [self.mapView convert:bottomRight toLocation:&bottomRight31];
+    
+    OsmAnd::AreaI area31(topLeft31, bottomRight31);
+    const auto center31 = area31.center();
+    const auto latLon = OsmAnd::Utilities::convert31ToLatLon(center31);
+    CLLocationCoordinate2D coord = CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
+    auto networkRouteSelector = std::make_shared<OsmAnd::NetworkRouteSelector>(self.app.resourcesManager->obfsCollection);
+    auto routes = networkRouteSelector->getRoutes(area31, false, nullptr);
+    NSMutableSet<OARouteKey *> *routeKeys = [NSMutableSet set];
+    for (auto it = routes.begin(); it != routes.end(); ++it)
+    {
+        OARouteKey *routeKey = [[OARouteKey alloc] initWithKey:it.key()];
+        if (![routeKeys containsObject:routeKey])
+        {
+            [routeKeys addObject:routeKey];
+            [self putRouteToSelected:routeKey location:coord mapObj:mapObj points:points area:area31];
+        }
+    }
+}
+
+- (void) putRouteToSelected:(OARouteKey *)key location:(CLLocationCoordinate2D)location mapObj:(const std::shared_ptr<const OsmAnd::MapObject> &)mapObj points:(NSMutableArray<OATargetPoint *> *)points area:(OsmAnd::AreaI)area
+{
+    OATargetPoint *point = [[OATargetPoint alloc] init];
+    point.location = location;
+    point.type = OATargetNetworkGPX;
+    point.targetObj = key;
+    OANetworkRouteDrawable *drawable = [[OANetworkRouteDrawable alloc] initWithRouteKey:key];
+    point.icon = drawable.getIcon;
+    point.title = key.routeKey.getRouteName().toNSString();
+    NSArray *areaPoints = @[@(area.topLeft.x), @(area.topLeft.y), @(area.bottomRight.x), @(area.bottomRight.y)];
+    point.values = @{ @"area": areaPoints };
+
+    point.sortIndex = (NSInteger)point.type;
+
+    if (![points containsObject:point])
+        [points addObject:point];
+}
+
 #pragma mark - OAContextMenuProvider
 
 - (OATargetPoint *) getTargetPoint:(id)obj
@@ -394,6 +448,13 @@
             auto point31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(point.latitude, point.longitude));
             auto bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(kPoiSearchRadius, point31);
             BOOL amenityFound = obfsDataInterface->findAmenityByObfMapObject(obfMapObject, &amenity, &bbox31);
+            
+            const auto tags = obfMapObject->getResolvedAttributes();
+            
+            bool isRoute = !OsmAnd::NetworkRouteKey::getRouteKeys(tags).isEmpty();
+            if (isRoute)
+                [self addRoute:found touchPoint:touchPoint mapObj:mapObject];
+            
             if (amenityFound)
             {
                 [self processAmenity:amenity poi:poi];
@@ -414,7 +475,7 @@
                 for (const auto& ruleId : mapObject->attributeIds)
                 {
                     const auto& rule = *mapObject->attributeMapping->decodeMap.getRef(ruleId);
-                    if (rule.tag == QString("contour") || (rule.tag == QString("highway") && rule.value != QString("bus_stop")))
+                    if (rule.tag == QString("contour") /*|| (rule.tag == QString("highway") && rule.value != QString("bus_stop"))*/)
                         return;
                     
                     if (rule.tag == QString("place"))

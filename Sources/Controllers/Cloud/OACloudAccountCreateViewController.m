@@ -227,6 +227,7 @@
         else
         {
             self.errorMessage = error != nil ? error.getLocalizedError : message;
+            NSLog(@"%@", message);
             _continuePressed = NO;
             [self updateScreen];
         }

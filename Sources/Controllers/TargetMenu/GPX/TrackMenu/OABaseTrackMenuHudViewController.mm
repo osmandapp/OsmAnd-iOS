@@ -218,7 +218,7 @@
 
 - (void)updateGpxData:(BOOL)replaceGPX updateDocument:(BOOL)updateDocument
 {
-    if (!_isShown)
+    if (!_isShown && !_gpx.isTempTrack)
         [self changeTrackVisible];
 
     if (updateDocument)

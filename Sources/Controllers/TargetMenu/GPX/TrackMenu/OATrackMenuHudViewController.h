@@ -11,7 +11,7 @@
 #import "OAMapPanelViewController.h"
 
 @class LineChartView;
-@class OATrack, OATrkSegment, OARouteLineChartHelper;
+@class OATrack, OATrkSegment, OARouteLineChartHelper, OARouteKey;
 
 typedef NS_ENUM(NSUInteger, EOATrackMenuHudTab)
 {
@@ -84,6 +84,7 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudTab)
 - (void)showAlertDeleteTrack;
 - (void)showAlertRenameTrack;
 - (void)openUploadGpxToOSM;
+- (void)saveNetworkRoute;
 
 - (void)stopLocationServices;
 - (BOOL)openedFromMap;
@@ -99,7 +100,8 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudTab)
 
 @property (nonatomic, assign) EOATrackMenuHudTab lastSelectedTab;
 @property (nonatomic, assign) EOARouteStatisticsMode routeStatistics;
-@property (nonatomic, assign) NSString *gpxFilePath;
+@property (nonatomic) UIImage *trackIcon;
+@property (nonatomic) NSString *gpxFilePath;
 @property (nonatomic, assign) CLLocationCoordinate2D pinLocation;
 @property (nonatomic, assign) EOADraggableMenuState showingState;
 @property (nonatomic, assign) BOOL openedFromMap;
@@ -109,6 +111,6 @@ typedef NS_ENUM(NSUInteger, EOATrackMenuHudTab)
 @interface OATrackMenuHudViewController : OABaseTrackMenuHudViewController
 
 - (instancetype)initWithGpx:(OAGPX *)gpx tab:(EOATrackMenuHudTab)tab;
-- (instancetype)initWithGpx:(OAGPX *)gpx state:(OATargetMenuViewControllerState *)state;
+- (instancetype)initWithGpx:(OAGPX *)gpx routeKey:(OARouteKey *)routeKey state:(OATargetMenuViewControllerState *)state;
 
 @end

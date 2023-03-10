@@ -46,7 +46,7 @@
     if (_isTimeLeft)
         [self timeLeftCalculate];
     else
-        [self nextSunriseCalculate];
+        [self nextSunsetCalculate];
     return YES;
 }
 
@@ -59,7 +59,7 @@
     [self updateInfo];
 }
 
-- (void) nextSunriseCalculate
+- (void) nextSunsetCalculate
 {
     double longitude = _location.coordinate.longitude;
     NSDate *actualTime = [NSDate date];
@@ -80,7 +80,7 @@
     [dateFormatter setDateFormat:@"EE"];
     NSString *nextDay = [dateFormatter stringFromDate:nextSunrise];
     
-    if (actualTime >= sunrise)
+    if ([actualTime compare:sunrise] == NSOrderedDescending)
         [self setText:nextTime subtext:nextDay];
     else
         [self setText:time subtext:day];
@@ -97,17 +97,17 @@
     NSDate *sunrise = [sunriseSunset getSunset];
     NSDate *nextSunrise = [nextSunriseSunset getSunset];
     
-    if (actualTime >= sunrise)
+    if ([actualTime compare:sunrise] == NSOrderedDescending)
     {
         NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
         NSDateComponents *components = [calendar components:NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond fromDate:actualTime toDate:nextSunrise options:0];
-        [self setText:[NSString stringWithFormat:@"%ld:%ld", (long)[components hour], (long)[components minute]] subtext:(long)[components hour] > 0 ? OALocalizedString(@"int_hour") : OALocalizedString(@"int_min")];
+        [self setText:[NSString stringWithFormat:@"%ld:%ld", [components hour], [components minute]] subtext:[components hour] > 0 ? OALocalizedString(@"int_hour") : OALocalizedString(@"int_min")];
     }
     else
     {
         NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
         NSDateComponents *components = [calendar components:NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond fromDate:actualTime toDate:sunrise options:0];
-        [self setText:[NSString stringWithFormat:@"%ld:%ld", (long)[components hour], (long)[components minute]] subtext:(long)[components hour] > 0 ? OALocalizedString(@"int_hour") : OALocalizedString(@"int_min")];
+        [self setText:[NSString stringWithFormat:@"%ld:%ld", [components hour], [components minute]] subtext:[components hour] > 0 ? OALocalizedString(@"int_hour") : OALocalizedString(@"int_min")];
     }
 }
 

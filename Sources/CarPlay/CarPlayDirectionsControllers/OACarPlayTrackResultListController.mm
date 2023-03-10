@@ -52,7 +52,7 @@
         NSMutableArray<CPListItem *> *listItems = [NSMutableArray new];
         for (OAGpxInfo *gpxInfo in _gpxList)
         {
-            CPListItem *listItem = [[CPListItem alloc] initWithText:gpxInfo.getName
+            CPListItem *listItem = [[CPListItem alloc] initWithText:[gpxInfo.gpx getNiceTitle]
                                                          detailText:[self getTrackDescription:gpxInfo.gpx]
                                                               image:[UIImage imageNamed:@"ic_custom_trip"]
                                                      accessoryImage:nil

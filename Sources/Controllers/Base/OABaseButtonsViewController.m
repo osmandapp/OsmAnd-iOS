@@ -108,14 +108,20 @@
     self.bottomButton.enabled = bottomButtonColorScheme != EOABaseButtonColorSchemeInactive;
 
     NSString *topButtonTitle = [self getTopButtonTitle];
-    BOOL hasTopButton = topButtonTitle && topButtonTitle.length > 0;
+    NSString *topButtonIconName = [self getTopButtonIconName];
+    BOOL hasTopButtonIcon = topButtonIconName && topButtonIconName.length > 0;
+    BOOL hasTopButton = (topButtonTitle && topButtonTitle.length > 0) || hasTopButtonIcon;
     self.topButton.hidden = !hasTopButton;
     [self.topButton setTitle:topButtonTitle forState:UIControlStateNormal];
+    [self.topButton setImage:hasTopButtonIcon ? [UIImage templateImageNamed:topButtonIconName] : nil forState:UIControlStateNormal];
 
     NSString *bottomButtonTitle = [self getBottomButtonTitle];
-    BOOL hasBottomButton = bottomButtonTitle && bottomButtonTitle.length > 0;
+    NSString *bottomButtonIconName = [self getBottomButtonIconName];
+    BOOL hasBottomButtonIcon = bottomButtonIconName && bottomButtonIconName.length > 0;
+    BOOL hasBottomButton = (bottomButtonTitle && bottomButtonTitle.length > 0) || hasBottomButtonIcon;
     self.bottomButton.hidden = !hasBottomButton;
     [self.bottomButton setTitle:bottomButtonTitle forState:UIControlStateNormal];
+    [self.bottomButton setImage:hasBottomButtonIcon ? [UIImage templateImageNamed:bottomButtonIconName] : nil forState:UIControlStateNormal];
 
     self.middleBottomMarginStackView.spacing = [self getSpaceBetweenButtons];
     self.middleBottomMarginStackView.hidden = !hasTopButton || !hasBottomButton;
@@ -202,6 +208,16 @@
 }
 
 - (NSString *)getBottomButtonTitle
+{
+    return @"";
+}
+
+- (NSString *)getTopButtonIconName
+{
+    return @"";
+}
+
+- (NSString *)getBottomButtonIconName
 {
     return @"";
 }

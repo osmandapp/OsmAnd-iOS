@@ -116,7 +116,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     else if (_screenType == EOAFollowTrack)
         header = OALocalizedString(@"select_track_to_follow");
     if (header)
-        self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:header font:kHeaderDescriptionFont textColor:UIColor.blackColor isBigTitle:NO];
+        self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:header font:kHeaderDescriptionFont textColor:UIColor.blackColor isBigTitle:NO parentViewWidth:self.view.frame.size.width];
 }
 
 - (void) applyLocalization
@@ -147,7 +147,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     if (_screenType != EOAOpenExistingTrack)
     {
         [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-            self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:headerDescription font:kHeaderDescriptionFont textColor:UIColor.blackColor isBigTitle:NO];
+            self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:headerDescription font:kHeaderDescriptionFont textColor:UIColor.blackColor isBigTitle:NO parentViewWidth:self.view.frame.size.width];
             [self.tableView reloadData];
         } completion:nil];
     }

@@ -79,7 +79,8 @@
     self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"osm_editing_settings_descr")
                                                                           font:kHeaderDescriptionFont
                                                                      textColor:UIColorFromRGB(color_text_footer)
-                                                                   isBigTitle:NO];
+                                                                    isBigTitle:NO
+                                                               parentViewWidth:self.view.frame.size.width];
 }
 
 - (void)generateData

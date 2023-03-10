@@ -112,14 +112,14 @@
 - (void) viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
-    _tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"rearrange_profile_descr") font:kHeaderDescriptionFont textColor:UIColorFromRGB(color_text_footer) isBigTitle:NO];
+    _tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"rearrange_profile_descr") font:kHeaderDescriptionFont textColor:UIColorFromRGB(color_text_footer) isBigTitle:NO parentViewWidth:self.view.frame.size.width];
 }
 
 - (void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        _tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"rearrange_profile_descr") font:kHeaderDescriptionFont textColor:UIColorFromRGB(color_text_footer) isBigTitle:NO];
+        _tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"rearrange_profile_descr") font:kHeaderDescriptionFont textColor:UIColorFromRGB(color_text_footer) isBigTitle:NO parentViewWidth:self.view.frame.size.width];
         [_tableView reloadData];
     } completion:nil];
 }

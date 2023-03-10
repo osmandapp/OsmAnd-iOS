@@ -122,7 +122,7 @@
     }];
     [announceSecondSection addRowFromDictionary:@{
         kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
-        kCellTitleKey : OALocalizedString(@"traffic_warning_pedestrian"),
+        kCellTitleKey : OALocalizedString(@"speak_pedestrian"),
         kCellKeyKey : @"pedestrianCrosswalks",
         @"value" : _settings.speakPedestrian
     }];

@@ -2826,3 +2826,6 @@
 "restart_is_required" = "Reinicie a aplicação manualmente para aplicar todas as alterações.";
 "restart_is_required_title" = "É necessário reiniciar";
 "delete_history_items" = "Eliminar itens do histórico?";
+"rotate_map_none_fixed" = "O norte está para cima (fixo)";
+"rotate_map_none_manually" = "Rotação manual (fixa)";
+"compass_click_desc" = "Toque na bússola para alternar o modo de orientação do mapa.";

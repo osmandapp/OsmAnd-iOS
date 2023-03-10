@@ -11,7 +11,7 @@
 #import "OACustomRegion.h"
 #import "OAResourcesUIHelper.h"
 #import "OATextMultilineTableViewCell.h"
-#import "OAMenuSimpleCellNoIcon.h"
+#import "OASimpleTableViewCell.h"
 #import "OAFilledButtonCell.h"
 #import "OAResourcesUIHelper.h"
 #import "Localization.h"
@@ -105,7 +105,7 @@
     }
     
     [data addObject:@{
-        @"type" : [OAMenuSimpleCellNoIcon getCellIdentifier],
+        @"type" : [OASimpleTableViewCell getCellIdentifier],
         @"title" : _item.getVisibleName ? : @"",
         @"descr" : [NSByteCountFormatter stringFromByteCount:_item.sizePkg countStyle:NSByteCountFormatterCountStyleFile]
     }];
@@ -209,23 +209,22 @@
 {
     NSDictionary *item = _data[indexPath.row];
     NSString *type = item[@"type"];
-    if ([type isEqualToString:[OAMenuSimpleCellNoIcon getCellIdentifier]])
+    if ([type isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
     {
-        OAMenuSimpleCellNoIcon *cell = (OAMenuSimpleCellNoIcon *)[tableView dequeueReusableCellWithIdentifier:[OAMenuSimpleCellNoIcon getCellIdentifier]];
+        OASimpleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:type owner:self options:nil];
-            cell = (OAMenuSimpleCellNoIcon *)[nib objectAtIndex:0];
+            cell = (OASimpleTableViewCell *) nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            [cell leftIconVisibility:NO];
         }
-        
         if (cell)
         {
-            cell.descriptionView.hidden = item[@"descr"] == nil || [item[@"descr"] length] == 0 ? YES : NO;
-            [cell.textView setText:item[@"title"]];
-            [cell.descriptionView setText:item[@"descr"]];
-            if ([cell needsUpdateConstraints])
-                [cell updateConstraints];
+            cell.titleLabel.text = item[@"title"];
+            NSString *descr = item[@"descr"];
+            cell.descriptionLabel.text = descr;
+            [cell descriptionVisibility:descr && descr.length > 0];
         }
         return cell;
     }

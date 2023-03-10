@@ -129,7 +129,7 @@
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
-    _tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"create_custom_categories_list_promo") font:kHeaderDescriptionFont textColor:UIColorFromRGB(color_text_footer) isBigTitle:NO];
+    _tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"create_custom_categories_list_promo") font:kHeaderDescriptionFont textColor:UIColorFromRGB(color_text_footer) isBigTitle:NO parentViewWidth:self.view.frame.size.width];
 }
 
 - (void)applyLocalization

@@ -101,7 +101,7 @@
 
     _actions = [OrderedDictionary dictionaryWithDictionary:mapping];
     
-    _tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"quick_action_add_actions_descr") font:kHeaderDescriptionFont textColor:UIColor.blackColor isBigTitle:NO];
+    _tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"quick_action_add_actions_descr") font:kHeaderDescriptionFont textColor:UIColor.blackColor isBigTitle:NO parentViewWidth:self.view.frame.size.width];
 }
 
 -(void) setupSearchView

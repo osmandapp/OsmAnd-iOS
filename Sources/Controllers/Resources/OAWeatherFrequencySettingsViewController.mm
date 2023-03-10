@@ -10,6 +10,7 @@
 #import "OASettingsTitleTableViewCell.h"
 #import "OAWeatherHelper.h"
 #import "OAWorldRegion.h"
+#import "OASizes.h"
 #import "OAColors.h"
 #import "Localization.h"
 
@@ -48,29 +49,21 @@
                     : kFrequencyWeeklyIndex;
 }
 
-#pragma mark - UIViewController
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-
-    self.tableView.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
-    self.tableView.tableHeaderView =
-            [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"weather_generates_new_forecast_description")
-                                                 font:kHeaderDescriptionFont
-                                            textColor:UIColorFromRGB(color_text_footer)
-                                           isBigTitle:NO
-                                            topOffset:24.
-                                         bottomOffset:12.
-                                        rightIconName:nil
-                                            tintColor:nil];
-}
-
 #pragma mark - Base UI
 
 - (NSString *)getTitle
 {
     return OALocalizedString(@"shared_string_updates_frequency");
+}
+
+- (EOABaseNavbarStyle)getNavbarStyle
+{
+    return EOABaseNavbarStyleDescription;
+}
+
+- (NSString *)getCustomTableViewDescription
+{
+    return OALocalizedString(@"weather_generates_new_forecast_description");
 }
 
 #pragma mark - Table data
@@ -149,6 +142,8 @@
         }
         if (cell)
         {
+            self.tableView.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingOnSideOfContent, 0., 0.);
+
             cell.textView.text = item[@"title"];
             cell.iconView.hidden = indexPath.row != _indexSelected;
         }

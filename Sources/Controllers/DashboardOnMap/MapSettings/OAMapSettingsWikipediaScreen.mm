@@ -443,7 +443,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
     {
         OAWikipediaLanguagesViewController *controller = [[OAWikipediaLanguagesViewController alloc] init];
         controller.delegate = self;
-        [self.vwController presentViewController:controller animated:YES completion:nil];
+        [self.vwController showModalViewController:controller];
     }
     else if (indexPath.section == EOAMapSettingsWikipediaSectionAvailable && [item[@"type"] isEqualToString:kCellTypeMap])
     {

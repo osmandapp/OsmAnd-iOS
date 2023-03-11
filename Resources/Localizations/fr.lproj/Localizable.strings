@@ -551,7 +551,7 @@
 "arrival_distance_factor_late" = "Tard";
 "arrival_distance_factor_at_last" = "Dans les derniers mètres";
 "snap_to_road" = "Déplacer sur la route";
-"snap_to_road_descr" = "L’icône de positionnement s\'accrochera à l\'itinéraire en cours.";
+"snap_to_road_descr" = "L’icône de position sera déplacé sur l’itinéraire";
 "show_warnings_title" = "Alertes visuelles…";
 "show_warnings_descr" = "Paramétrer les avertissements de circulation (limites de vitesse, stops, ralentisseurs, tunnels), les radars et les informations sur les voies de circulation.";
 "speak_title" = "Annoncer…";
@@ -1364,7 +1364,7 @@
 "app_mode_utv" = "Côte à côte";
 "app_mode_pedestrian" = "À pied";
 "app_mode_bicycle" = "Vélo";
-"app_mode_car" = "En voiture";
+"app_mode_car" = "Voiture";
 "app_mode_default" = "Parcourir la carte";
 "app_mode_skiing" = "Ski";
 "app_mode_horse" = "À cheval";
@@ -1542,7 +1542,7 @@
 "arrows_on_map" = "Flèches sur la carte";
 "shared_string_two" = "Deux";
 "max_speed" = "Vitesse maximale";
-"shared_string_min_speed" = "Vitesse Min.";
+"shared_string_min_speed" = "Vitesse minimale";
 "default_speed_setting_title" = "Vitesse par défaut";
 "routing_attr_length_name" = "Limite de longueur";
 "send_anonymous_data_desc" = "Envoyez à OsmAnd des statistiques de téléchargement des cartes. Nous ne collectons aucune donnée de localisation, ni aucune information personnelle.";
@@ -1651,13 +1651,13 @@
 "will_be_show_while_moving" = "Ce sera affiché pendant le déplacement";
 "select_icon_profile_dialog_title" = "Sélectionnez une icône";
 "profile_alert_need_profile_name_title" = "Entrez le nom du profil";
-"reorder_profiles" = "Modifiez la liste des profils";
+"reorder_profiles" = "Modifier la liste des profils";
 "ui_customization" = "Personnalisation de l\'interface utilisateur";
 "profile_appearance_descr" = "Icône, couleur et nom";
 "profile_appearance" = "Apparence du profil";
 "profile_settings" = "Paramètres pour le profil";
 "configure_profile" = "Configurer le profil";
-"profile_alert_delete_msg" = "Supprimer le profil« %@ » \?";
+"profile_alert_delete_msg" = "Supprimer le profil« %@ »";
 "copy_from_other_profile_descr" = "Vous pouvez copier tous les paramètres de n'importe quel profil vers le profil sélectionné : ";
 "shared_string_next" = "Suivant";
 "nav_type_hint" = "Type de navigation";
@@ -1675,7 +1675,7 @@
 "shared_string_finish" = "Terminer";
 "shared_string_routing" = "Calcul d\'itinéraire";
 "import_duplicates_title" = "Certainséléments existent déjà";
-"import_duplicates_description" = "Des éléments portant les mêmes noms existent déjà dans OsmAnd.\n\nQue souhaitez-vous faire ?";
+"import_duplicates_description" = "Des éléments portant les mêmes noms existent déjà dans OsmAnd.\n\nSélectionnez une action.";
 "keep_both_desc" = "Leséléments seront importés avec un préfixe";
 "keep_both" = "Conserver les deux";
 "replace_all" = "Tout remplacer";
@@ -1782,7 +1782,7 @@
 "points_count" = "Points :";
 
 // Route planning
-"plan_route" = "Créer une trace";
+"plan_route" = "Ajouter une trace";
 "quick_action_poi_add_descr" = "Appuyer sur ce bouton d’action vous permet d’ajouter rapidement des POI sur la carte avec un type et des étiquettes prédéfinis.";
 "quick_action_contour_lines_descr" = "Bouton affichant ou masquant les courbes de niveau sur la carte.";
 "quick_action_day_night_descr" = "Ce bouton permet de basculer entre les modes Jour et Nuit de la carte.";
@@ -2383,7 +2383,7 @@
 "plugin_popup_weather_title" = "Activer la météo";
 "plugin_popup_weather_ask" = "Veuillez activer le greffon Météo";
 "product_desc_weather" = "Prévisions horaires 24h/24 et sur 7 jours sur la carte";
-"weather_plugin_description" = "Fournit:\n- Les prévisions météorologiques pour les 24 prochaines heures et les 7 prochains jours, avec 5 sur-couches\n- Des widgets basés sur la position\n- Les cartes d\'isobares et d\'isothermes\n\nLes données météorologiques sont fournies par le modèle GFS (Global Forecast System, https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast).";
+"weather_plugin_description" = "Fournit :\n- Les prévisions météorologiques pour les 24 prochaines heures et les 7 prochains jours, avec 5 sur-couches\n- Des widgets basés sur la position\n- Les cartes d'isobares et d'isothermes\n\nLes données météorologiques sont fournies par le modèle GFS (Global Forecast System, https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast).";
 "measurement_units" = "Unités de mesure";
 "weather_pressure_hectopascals" = "Hectopascals";
 "weather_pressure_millimeters_of_mercury" = "Millimètres de mercure";
@@ -2690,7 +2690,7 @@
 "worldwide_maps" = "Cartes mondiales";
 "amazon_appstore" = "Boutique Amazon";
 "huawei_appgallery" = "Galerie d'applications Huawei";
-"position_on_map_center" = "Centre";
+"position_on_map_center" = "Centré";
 "routing_attr_motor_type_name" = "Moteur du véhicule";
 "routing_attr_motor_type_description" = "Sélectionnez le carburant utilisé par le moteur de votre véhicule pour calculer les émissions de CO₂.";
 "routing_attr_motor_type_diesel_name" = "Gazole";
@@ -2700,7 +2700,7 @@
 "routing_attr_motor_type_hybrid_name" = "Hybride";
 "routing_attr_motor_type_gas_name" = "GNV";
 "co2_mission" = "Émissions de CO₂";
-"position_on_map_bottom" = "Bas";
+"position_on_map_bottom" = "En bas";
 "position_on_map" = "Position sur l'écran";
 "si_nm_ft" = "Milles marins / pieds";
 "si_nm_mt" = "Milles marins / mètres";
@@ -2721,7 +2721,7 @@
 "rendering_attr_horse_scale_critical_name" = "Critique";
 "rendering_attr_showBusRoutes_name" = "Lignes d\'autobus";
 "rendering_value_omit_name" = "Ignorer";
-"routing_attr_driving_style_description" = "Sélectionnez un mode de conduite pour calculer l\'itinéraire le plus court, le plus rapide ou le plus sûr.";
+"routing_attr_driving_style_description" = "Sélectionner un mode de conduite pour calculer l'itinéraire le plus court, le plus rapide ou le plus sûr";
 "rendering_attr_weatherTempContours_name" = "Lignes isothermes";
 "rendering_attr_noNatureReserveBoundaries_name" = "Limites naturelles";
 "rendering_attr_showTrolleybusRoutes_name" = "Lignes de trolleybus";
@@ -2827,3 +2827,15 @@
 "confirm_history_item_delete" = "Êtes-vous sûr de vouloir supprimer (%ld) éléments de l'historique ?";
 "announcement_time_descr" = "Le rythme des annonces vocales dépend du type d'alerte, de la vitesse actuelle et du type de navigation.";
 "restart_is_required_title" = "Redémarrage nécessaire";
+"map_widget_zoom_level" = "Niveau de zoom";
+"map_widget_target_distance" = "Distance de la cible";
+"change_language" = "Changer la langue";
+"wikipedia_language_settings_descr" = "Sélectionnez les langues dans lesquelles les articles de Wikipédia apparaîtront sur la carte. Vous pouvez passer d'une langue à l'autre pendant la lecture de l'article.";
+"dont_download" = "Ne pas télécharger";
+"over_wifi_only" = "Uniquement en Wi-Fi";
+"over_any_network" = "Sur n'importe quel réseau";
+"download_over_cellular_network" = "Télécharger des images via le réseau cellulaire ? Cela peut entraîner des frais élevés.";
+"map_widget_camera_tilt" = "Inclinaison de la caméra";
+"wikivoyage_download_pics" = "Télécharger les images";
+"map_widget_camera_distance" = "Distance de la caméra";
+"download_only_now" = "Télécharger seulement maintenant";

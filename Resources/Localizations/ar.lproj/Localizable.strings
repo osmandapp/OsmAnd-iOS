@@ -2832,3 +2832,15 @@
 "rotate_map_none_manually" = "استدارة يدويا (مثبتة)";
 "compass_click_desc" = "اضغط على البوصلة لتبديل وضع اتجاه الخريطة.";
 "rotate_map_none_fixed" = "الشمال لأعلى (مثبت)";
+"map_widget_camera_tilt" = "إمالة الكاميرا";
+"map_widget_zoom_level" = "مستويات التكبير";
+"map_widget_target_distance" = "بعد الهدف";
+"change_language" = "غيَّر اللغة";
+"dont_download" = "لا تقم بالتنزيل";
+"over_wifi_only" = "عبر الواي الفاي فقط";
+"map_widget_camera_distance" = "مسافة الكاميرا";
+"wikipedia_language_settings_descr" = "حدد اللغات التي ستظهر بها مقالات ويكيبيديا على الخريطة. يمكنك التبديل بين أي لغة متاحة أثناء قراءة المقال.";
+"over_any_network" = "عبر أي شبكة";
+"wikivoyage_download_pics" = "تنزيل الصور";
+"download_over_cellular_network" = "هل تريد تنزيل الصور عبر الشبكة الخلوية؟ قد يؤدي هذا إلى تحمل رسوم باهظة.";
+"download_only_now" = "تنزيل الآن فقط";

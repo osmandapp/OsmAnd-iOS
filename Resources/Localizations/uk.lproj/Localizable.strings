@@ -2837,3 +2837,15 @@
 "rotate_map_none_manually" = "Фіксовано (обертається вручну)";
 "compass_click_desc" = "Торкніться компаса, щоб перемикнути режим орієнтації мапи.";
 "rotate_map_none_fixed" = "Фіксовано (північ угорі)";
+"map_widget_zoom_level" = "Масштаб";
+"map_widget_target_distance" = "Відстань до цілі";
+"wikivoyage_download_pics" = "Завантажити зображення";
+"map_widget_camera_tilt" = "Нахил камери";
+"map_widget_camera_distance" = "Відстань камери";
+"change_language" = "Зміна мови";
+"dont_download" = "Не завантажувати";
+"over_wifi_only" = "Тільки через Wi-Fi";
+"wikipedia_language_settings_descr" = "Виберіть мови, якими статті Вікіпедії будуть відображатися на мапі. Ви можете перемикатися між будь-якими доступними мовами під час читання статті.";
+"download_only_now" = "Завантажити тільки зараз";
+"over_any_network" = "Через будь-яку мережу";
+"download_over_cellular_network" = "Завантажувати зображення через мобільну мережу? За це може стягуватися висока плата.";

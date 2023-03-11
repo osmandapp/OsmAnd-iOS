@@ -2,8 +2,8 @@
 // Shared Strings
 "shared_string_back" = "Zurück";
 "shared_string_cancel" = "Abbrechen";
-"shared_string_no" = "nein";
-"shared_string_yes" = "ja";
+"shared_string_no" = "Nein";
+"shared_string_yes" = "Ja";
 "shared_string_save" = "Speichern";
 "shared_string_done" = "Fertig";
 "shared_string_update" = "Aktualisieren";
@@ -1726,7 +1726,7 @@
 "vessel_width_limit_description" = "Stellen Sie die Schiffsbreite ein, um schmale Brücken zu vermeiden";
 "lenght_limit_description" = "Bitte geben Sie Ihre Fahrzeuglänge an. Für lange Fahrzeuge könnten einige Streckenabschnitte nicht befahrbar sein.";
 "profile_settings" = "Profilspezifische Einstellungen";
-"vessel_height_limit_description" = "Schiffshöhe einstellen, um niedrige Brücken zu vermeiden. Beachten Sie: Für beweglichen Brücken, wird deren Höhe im geöffneten Zustand verwendet.";
+"vessel_height_limit_description" = "Schiffshöhe einstellen, um niedrige Brücken zu vermeiden. Beachten Sie: Für bewegliche Brücken wird deren Höhe im geöffneten Zustand verwendet.";
 "err_profile_import" = "Fehler beim Lesen von Elementdaten: %@";
 "configure_profile" = "Profil konfigurieren";
 "height_limit_description" = "Geben Sie Ihre Fahrzeughöhe an, für hohe Fahrzeuge können einige Routenbeschränkungen gelten.";
@@ -2842,3 +2842,15 @@
 "compass_click_desc" = "Tippen Sie auf den Kompass, um den Kartenausrichtungsmodus zu wechseln.";
 "rotate_map_none_fixed" = "Norden ist oben (feststehend)";
 "rotate_map_none_manually" = "Manuell gedreht (feststehend)";
+"map_widget_camera_tilt" = "Kameraneigung";
+"map_widget_camera_distance" = "Kameraabstand";
+"map_widget_target_distance" = "Zielentfernung";
+"change_language" = "Sprache ändern";
+"dont_download" = "Nicht herunterladen";
+"download_only_now" = "Nur jetzt herunterladen";
+"download_over_cellular_network" = "Bilder über ein Mobilfunknetz herunterladen? Dabei können hohe Gebühren anfallen.";
+"map_widget_zoom_level" = "Zoomstufe";
+"over_any_network" = "Über jedes Netzwerk";
+"wikipedia_language_settings_descr" = "Wählen Sie die Sprachen aus, in denen Wikipedia-Artikel auf der Karte erscheinen sollen. Sie können während des Lesens des Artikels zwischen allen verfügbaren Sprachen wechseln.";
+"over_wifi_only" = "Nur über Wi-Fi";
+"wikivoyage_download_pics" = "Bilder herunterladen";

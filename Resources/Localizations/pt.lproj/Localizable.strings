@@ -2829,3 +2829,16 @@
 "rotate_map_none_fixed" = "O norte está para cima (fixo)";
 "rotate_map_none_manually" = "Rotação manual (fixa)";
 "compass_click_desc" = "Toque na bússola para alternar o modo de orientação do mapa.";
+"map_widget_camera_tilt" = "Inclinação da câmara";
+"map_widget_camera_distance" = "Distância da câmara";
+"map_widget_zoom_level" = "Nível de ampliação";
+"map_widget_target_distance" = "Distância ao alvo";
+"wikipedia_language_settings_descr" = "Selecione os idiomas nos quais os artigos da Wikipédia aparecerão no mapa. Pode alternar entre qualquer idioma disponível durante a leitura do artigo.";
+"dont_download" = "Não descarregar";
+"over_wifi_only" = "Apenas por Wi-Fi";
+"over_any_network" = "Em qualquer rede";
+"download_only_now" = "Descarregar apenas agora";
+"wikivoyage_download_pics" = "Descarregar imagens";
+"download_over_cellular_network" = "Descarregar imagens pela rede móvel? Isto pode ter custos monetários de utilização de dados móveis.";
+"change_language" = "Mudar idioma";
+"ios_release_4_4" = "• Wikipédia: capacidade adicionada para visualizar imagens, interface do leitor atualizada\n• Favoritos: pesquisa adicionada\n• CarPlay: histórico adicionado, trilhos reorganizados e lista de favoritos\n• Rotas de caminhada: capacidade adicional de selecionar rotas no mapa para visualizar informações adicionais ou navegação\n• OpenStreetMap: adicionada capacidade de enviar trilhos\n• Avisos de voz: suporte adicional para novos idiomas: catalão, ucraniano, búlgaro, indonésio, esloveno\n• Adicionado aviso legal sobre utilização de alertas de radares de velocidade\n• Privacidade aprimorada: opções adicionadas para desativar o registo do histórico\n• Visibilidade melhorada da régua do mapa\n• Melhorias na interface em idiomas que se leem da direita para a esquerda\n• Acessibilidade: adicionado rótulo de conteúdo em botões do mapa\n• Adicionado suporte a \"tipo de letra dinâmico\", o tamanho do texto no OsmAnd mudará de acordo com o tamanho do texto no iOS\n• Orientação do mapa: adicionado modo girado manualmente\n• A versão mínima do iOS foi aumentada para 15.0\n";

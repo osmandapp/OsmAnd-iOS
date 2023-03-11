@@ -106,7 +106,7 @@
     
     double longitude = lastKnownLocation.coordinate.longitude;
     NSDate *actualTime = [NSDate date];
-    SunriseSunset *daynightSwitch = [[SunriseSunset alloc] initWithLatitude:lastKnownLocation.coordinate.latitude longitude:longitude < 0 ? 360 + longitude : longitude dateInputIn:actualTime tzIn:[NSTimeZone localTimeZone]forTomorrow:NO];
+    SunriseSunset *daynightSwitch = [[SunriseSunset alloc] initWithLatitude:lastKnownLocation.coordinate.latitude longitude:longitude < 0 ? 360 + longitude : longitude dateInputIn:actualTime tzIn:[NSTimeZone localTimeZone]forNextDay:NO];
     return daynightSwitch;
 }
 

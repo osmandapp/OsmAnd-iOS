@@ -44,7 +44,7 @@
 - (BOOL) updateInfo
 {
     if (_isTimeLeft)
-        [self timeLeftCalculate];
+        [self timeLeftUntilSunriseCalculate];
     else
         [self nextSunriseCalculate];
     return YES;
@@ -61,12 +61,11 @@
 
 - (void) nextSunriseCalculate
 {
-    double longitude = _location.coordinate.longitude;
     NSDate *actualTime = [NSDate date];
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     
-    SunriseSunset *sunriseSunset = [[SunriseSunset alloc] initWithLatitude:_location.coordinate.latitude longitude:longitude < 0 ? 360 + longitude : longitude dateInputIn:actualTime tzIn:[NSTimeZone localTimeZone] forTomorrow:NO];
-    SunriseSunset *nextSunriseSunset = [[SunriseSunset alloc] initWithLatitude:_location.coordinate.latitude longitude:longitude < 0 ? 360 + longitude : longitude dateInputIn:actualTime tzIn:[NSTimeZone localTimeZone] forTomorrow:YES];
+    SunriseSunset *sunriseSunset = [self createSunriseSunset:actualTime forNextDay:NO];
+    SunriseSunset *nextSunriseSunset = [self createSunriseSunset:actualTime forNextDay:YES];
     
     NSDate *sunrise = [sunriseSunset getSunrise];
     [dateFormatter setDateFormat:@"HH:mm"];
@@ -86,13 +85,12 @@
         [self setText:time subtext:day];
 }
 
-- (void) timeLeftCalculate
+- (void) timeLeftUntilSunriseCalculate
 {
-    double longitude = _location.coordinate.longitude;
     NSDate *actualTime = [NSDate date];
     
-    SunriseSunset *sunriseSunset = [[SunriseSunset alloc] initWithLatitude:_location.coordinate.latitude longitude:longitude < 0 ? 360 + longitude : longitude dateInputIn:actualTime tzIn:[NSTimeZone localTimeZone] forTomorrow:NO];
-    SunriseSunset *nextSunriseSunset = [[SunriseSunset alloc] initWithLatitude:_location.coordinate.latitude longitude:longitude < 0 ? 360 + longitude : longitude dateInputIn:actualTime tzIn:[NSTimeZone localTimeZone] forTomorrow:YES];
+    SunriseSunset *sunriseSunset = [self createSunriseSunset:actualTime forNextDay:NO];
+    SunriseSunset *nextSunriseSunset = [self createSunriseSunset:actualTime forNextDay:YES];
     
     NSDate *sunrise = [sunriseSunset getSunrise];
     NSDate *nextSunrise = [nextSunriseSunset getSunrise];
@@ -109,6 +107,13 @@
         NSDateComponents *components = [calendar components:NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond fromDate:actualTime toDate:sunrise options:0];
         [self setText:[NSString stringWithFormat:@"%ld:%ld", [components hour], [components minute]] subtext:[components hour] > 0 ? OALocalizedString(@"int_hour") : OALocalizedString(@"int_min")];
     }
+}
+
+- (SunriseSunset *) createSunriseSunset:(NSDate *)date forNextDay:(BOOL)nextDay
+{
+    double longitude = _location.coordinate.longitude;
+    SunriseSunset *sunriseSunset = [[SunriseSunset alloc] initWithLatitude:_location.coordinate.latitude longitude:longitude < 0 ? 360 + longitude : longitude dateInputIn:date tzIn:[NSTimeZone localTimeZone] forNextDay:nextDay];
+    return sunriseSunset;
 }
 
 @end

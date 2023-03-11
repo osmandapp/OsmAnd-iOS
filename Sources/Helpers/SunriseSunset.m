@@ -23,7 +23,7 @@
     BOOL      bSunUpAllDay;    // flag for sun up all day
     BOOL      bSunDownAllDay;    // flag for sun down all day
     BOOL      bDaytime;    // flag for daytime, given
-    BOOL      isTomorrow;
+    BOOL      isNextDay;
     // hour and min in dateInput
     BOOL      bSunrise;        // sunrise during hour checked
     BOOL      bSunset;        // sunset during hour checked
@@ -59,7 +59,7 @@
     double    dfV0, dfV1, dfV2;        // SUNUP.BAS V0, V1, V2
 }
 
-- (instancetype) initWithLatitude:(double)dfLatIn longitude:(double)dfLonIn dateInputIn:(NSDate *)dateInputIn tzIn:(NSTimeZone *)tzIn forTomorrow:(BOOL)tomorrow
+- (instancetype) initWithLatitude:(double)dfLatIn longitude:(double)dfLonIn dateInputIn:(NSDate *)dateInputIn tzIn:(NSTimeZone *)tzIn forNextDay:(BOOL)nextDay
 {
     self = [super init];
     if (self)
@@ -73,7 +73,7 @@
         bSunrise = false;        // sunrise during hour checked
         bSunset  = false;        // sunset during hour checked
         bGregorian = false;
-        isTomorrow = tomorrow;
+        isNextDay = nextDay;
         
         dfAA1 = 0;
         dfAA2 = 0;
@@ -104,7 +104,7 @@
     NSDateComponents *components = [[NSCalendar currentCalendar] components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear fromDate:[NSDate date]];
     iYear = (int) [components year];
     iMonth = (int) [components month];
-    if (isTomorrow)
+    if (isNextDay)
         iDay = (int) [components day] + 1;
     else
         iDay = (int) [components day];

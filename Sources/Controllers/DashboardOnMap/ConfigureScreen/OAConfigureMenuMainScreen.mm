@@ -22,6 +22,7 @@
 #import "OAColors.h"
 #import "OAMapLayers.h"
 #import "OAIconTitleValueCell.h"
+#import "OAValueTableViewCell.h"
 
 @interface OAConfigureMenuMainScreen () <OAAppModeCellDelegate>
 
@@ -179,6 +180,18 @@
             EOACompassMode compassMode = (EOACompassMode) [r getItemId].intValue;
             description = [OACompassMode getTitle:compassMode];
             type = [OAIconTitleValueCell getCellIdentifier];
+        }
+        else if ([r.key isEqualToString:@"sunrise"])
+        {
+            NSString *collapsedStr = OALocalizedString(@"map_widget_next_sunrise");
+            description = [r visibleCollapsed:mode] ? collapsedStr : @"";
+            type = [OAValueTableViewCell getCellIdentifier];
+        }
+        else if ([r.key isEqualToString:@"sunset"])
+        {
+            NSString *collapsedStr = OALocalizedString(@"map_widget_next_sunset");
+            description = [r visibleCollapsed:mode] ? collapsedStr : @"";
+            type = [OAValueTableViewCell getCellIdentifier];
         }
         else
         {
@@ -377,7 +390,26 @@
             [cell updateConstraints];
         return cell;
     }
-
+    else if ([data[@"type"] isEqualToString:[OAValueTableViewCell getCellIdentifier]])
+    {
+        OAValueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
+        NSString *imgName = data[@"img"];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAValueTableViewCell *) nib[0];
+            [cell descriptionVisibility:NO];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        }
+        if (cell)
+        {
+            cell.titleLabel.text = data[@"title"];
+            cell.valueLabel.text = data[@"description"];
+            cell.leftIconView.image = [UIImage rtlImageNamed:imgName];
+            cell.leftIconView.contentMode = UIViewContentModeCenter;
+        }
+        return cell;
+    }
     return outCell;
 }
 
@@ -386,7 +418,7 @@
     NSString *imgName = data[@"img"];
     if (imgName)
     {
-        if ([imgName hasPrefix:@"widget_developer"] || [imgName hasPrefix:@"widget_fps"] || [imgName hasPrefix:@"widget_sunrise"] || [imgName hasPrefix:@"widget_sunset"])
+        if ([imgName hasPrefix:@"widget_developer"] || [imgName hasPrefix:@"widget_fps"])
         {
             cell.leftIconView.image = [UIImage rtlImageNamed:imgName];
             cell.leftIconView.contentMode = UIViewContentModeCenter;
@@ -435,7 +467,7 @@
         OADirectionAppearanceViewController *vc = [[OADirectionAppearanceViewController alloc] init];
         [self.vwController.navigationController pushViewController:vc animated:YES];
     }
-    else if ([data[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]] || [data[@"type"] isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
+    else if ([data[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]] || [data[@"type"] isEqualToString:[OAIconTitleValueCell getCellIdentifier]] || [data[@"type"] isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
         OAMapWidgetRegInfo *r = [_mapWidgetRegistry widgetByKey:data[@"key"]];
         if (r && (r.widget || [r.key isEqualToString:@"compass"]))

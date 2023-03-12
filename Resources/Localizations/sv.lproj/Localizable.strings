@@ -548,8 +548,8 @@
 "shared_string_icon" = "Ikon";
 "shared_string_shape" = "Figur";
 "fav_point_dublicate" = "Duplicerat namn på favorit angivet";
-"fav_point_dublicate_message" = "Favorit omdöpt till %@ för att undvika dubbletter.";
-"fav_point_emoticons_message" = "Favorit omdöpt till %@ för att spara strängen som innehåller emoticons till en fil.";
+"fav_point_dublicate_message" = "Favoritens namn ändras till %@ för att undvika dubbletter.";
+"fav_point_emoticons_message" = "Favoritens namn ändras till %@ för att spara strängen som innehåller emoticons till en fil.";
 "access_default_color" = "Standardfärg";
 "default_color_descr" = "This color wil be used for all new favorites added to the group.";
 "favorite_friends_category" = "Vänner";

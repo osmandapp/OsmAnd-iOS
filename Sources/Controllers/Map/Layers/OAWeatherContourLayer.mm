@@ -192,11 +192,10 @@
         rasterTileSize);
     
     _mapObjectsSymbolsProvider = std::make_shared<OsmAnd::MapObjectsSymbolsProvider>(
-        _mapPrimitivesProvider,
-        rasterTileSize);
+        _mapPrimitivesProvider, rasterTileSize, nullptr, true);
     self.mapView.renderer->addSymbolsProvider(_mapObjectsSymbolsProvider);
     
-    _rasterMapProvider = std::make_shared<OsmAnd::MapRasterLayerProvider_Software>(_mapPrimitivesProvider, false);
+    _rasterMapProvider = std::make_shared<OsmAnd::MapRasterLayerProvider_Software>(_mapPrimitivesProvider, false, true);
     self.mapView.renderer->setMapLayerProvider(self.layerIndex, _rasterMapProvider);
 }
 

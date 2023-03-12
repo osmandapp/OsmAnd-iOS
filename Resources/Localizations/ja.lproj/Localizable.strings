@@ -1685,7 +1685,7 @@
 "base_profile_descr_aircraft" = "航空機、グライダー";
 "base_profile_descr_boat" = "船舶、漕ぎボート、帆船";
 "base_profile_descr_pedestrian" = "徒歩、ハイキング、ランニング";
-"base_profile_descr_bicycle" = "マウンテンバイク、モペッド、馬";
+"base_profile_descr_bicycle" = "マウンテンバイク、原付、馬";
 "base_profile_descr_car" = "乗用車、トラック、オートバイ";
 "profile_type_custom_string" = "カスタムプロファイル";
 "profile_alert_delete_title" = "プロファイルの削除";

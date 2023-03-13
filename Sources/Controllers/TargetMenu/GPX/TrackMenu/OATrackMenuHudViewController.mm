@@ -1642,7 +1642,7 @@
 {
     OAOsmUploadGPXViewConroller *vc = [[OAOsmUploadGPXViewConroller alloc] initWithGPXItems:@[self.gpx]];
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:vc];
-    [self.navigationController presentViewController:navigationController animated:YES completion:nil];
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)stopLocationServices

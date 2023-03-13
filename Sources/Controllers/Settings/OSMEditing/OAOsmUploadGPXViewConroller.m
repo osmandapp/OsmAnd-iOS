@@ -87,6 +87,13 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
 
 #pragma mark - UIViewController
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+}
+
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
@@ -104,7 +111,11 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
 
 - (NSString *)getTitle
 {
-    return OALocalizedString(@"upload_to_openstreetmap");
+    if (_gpxItemsToUpload.count > 1)
+        return [NSString stringWithFormat:@"%@ (%lu)", OALocalizedString(@"upload_to_openstreetmap"), (unsigned long)_gpxItemsToUpload.count];
+    else
+        return OALocalizedString(@"upload_to_openstreetmap");
+        
 }
 
 - (NSString *)getLeftNavbarButtonTitle
@@ -567,6 +578,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
     NSInteger animationCurve = [userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue];
     UIEdgeInsets insets = [[self tableView] contentInset];
     [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
+        self.buttonsBottomOffsetConstraint.constant = keyboardHeight - [OAUtilities getBottomMargin];
         [[self tableView] setContentInset:UIEdgeInsetsMake(insets.top, insets.left, keyboardHeight, insets.right)];
         [[self view] layoutIfNeeded];
     } completion:nil];
@@ -579,6 +591,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
     NSInteger animationCurve = [userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue];
     UIEdgeInsets insets = [[self tableView] contentInset];
     [UIView animateWithDuration:duration delay:0. options:animationCurve animations:^{
+        self.buttonsBottomOffsetConstraint.constant = 0;
         [[self tableView] setContentInset:UIEdgeInsetsMake(insets.top, insets.left, 0., insets.right)];
         [[self view] layoutIfNeeded];
     } completion:nil];

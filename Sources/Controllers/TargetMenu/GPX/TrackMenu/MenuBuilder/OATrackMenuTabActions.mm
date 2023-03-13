@@ -94,7 +94,7 @@
     OAGPXTableCellData *uploadToOSMCellData = [OAGPXTableCellData withData:@{
             kTableKey: @"upload_to_openstreetmap",
             kCellType: [OATitleIconRoundCell getCellIdentifier],
-            kCellRightIconName: @"ic_custom_upload_to_openstreetmap_outlined",
+            kCellRightIconName: @"ic_custom_upload_to_openstreetmap",
             kCellTitle: OALocalizedString(@"upload_to_openstreetmap")
     }];
     [shareSectionData.subjects addObject:uploadToOSMCellData];

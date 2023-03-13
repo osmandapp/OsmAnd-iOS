@@ -2810,8 +2810,10 @@
 "confirm_history_item_delete" = "Sei sicuro di voler eliminare (%ld) elementi della cronologia?";
 "delete_history_items" = "Eliminare gli elementi della cronologia?";
 "search_favorites" = "Cerca tra i favoriti";
-"map_widget_camera_tilt" = "inclinazione della fotocamera";
+"map_widget_camera_tilt" = "Inclinazione fotocamera";
 "map_widget_zoom_level" = "Livello di zoom";
 "rotate_map_none_fixed" = "Nord in alto (fisso)";
 "rotate_map_none_manually" = "Rotazione manuale (fissa)";
 "compass_click_desc" = "Tocca il compasso per cambiare modalità di orientamento della mappa.";
+"map_widget_camera_distance" = "Distanza fotocamera";
+"change_language" = "Cambia lingua";

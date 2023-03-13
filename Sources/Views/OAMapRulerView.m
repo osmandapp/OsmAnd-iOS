@@ -104,8 +104,8 @@
     blurView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.textLabel.leadingAnchor constraintEqualToAnchor:blurView.leadingAnchor constant:padding].active = YES;
     [self.textLabel.trailingAnchor constraintEqualToAnchor:blurView.trailingAnchor constant:-padding].active = YES;
-    [self.textLabel.topAnchor constraintEqualToAnchor:blurView.topAnchor constant:padding].active = YES;
-    [self.textLabel.bottomAnchor constraintEqualToAnchor:blurView.bottomAnchor constant:-padding].active = YES;
+    [self.textLabel.topAnchor constraintEqualToAnchor:blurView.topAnchor constant:padding / 2].active = YES;
+    [self.textLabel.bottomAnchor constraintEqualToAnchor:blurView.bottomAnchor constant:-padding / 2].active = YES;
 }
 
 - (void) removeBlurBackground

@@ -1134,8 +1134,6 @@ static BOOL _isDeviatedFromRoute = false;
 {
     if (!_app.data.pointToStart && !_app.data.myLocationToStart && currentLocation != nil)
         [[OATargetPointsHelper sharedInstance] setMyLocationPoint:currentLocation updateRoute:NO name:nil];
-//    if ([self isFollowingMode] || (!_app.data.pointToStart && _isRoutePlanningMode) || [_app.locationServices.locationSimulation isRouteAnimating])
-//        [self setCurrentLocation:currentLocation returnUpdatedLocation:NO];
 }
 
 - (CLLocation *) setCurrentLocation:(CLLocation *)currentLocation returnUpdatedLocation:(BOOL)returnUpdatedLocation

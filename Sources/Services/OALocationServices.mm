@@ -633,10 +633,10 @@
     {
         [OASavingTrackHelper.sharedInstance updateLocation:location heading:_lastHeading];
         //OsmandPlugin.updateLocationPlugins(location);
-        [_routingHelper updateLocation:location];
     }
     
     // 2. routing
+    [_routingHelper updateLocation:location];
     CLLocation *updatedLocation = location;
     if ([_routingHelper isFollowingMode])
     {

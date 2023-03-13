@@ -150,7 +150,9 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
 {
     _data = [[OATableDataModel alloc] init];
     OATableSectionData *statusSection = [OATableSectionData sectionData];
-    NSString *backupTime = [OAOsmAndFormatter getFormattedPassedTime:OAAppSettings.sharedManager.backupLastUploadedTime.get def:OALocalizedString(@"shared_string_never")];
+    NSString *backupTime = _backupHelper.isBackupPreparing ?
+        OALocalizedString(@"checking_progress")
+        : [OAOsmAndFormatter getFormattedPassedTime:OAAppSettings.sharedManager.backupLastUploadedTime.get def:OALocalizedString(@"shared_string_never")]; [OAOsmAndFormatter getFormattedPassedTime:OAAppSettings.sharedManager.backupLastUploadedTime.get def:OALocalizedString(@"shared_string_never")];
     if ([_settingsHelper isBackupSyncing])
     {
         OATableRowData *progressCell = [OATableRowData rowData];
@@ -734,16 +736,19 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    OATableRowData *item = [_data itemForIndexPath:indexPath];
-    if ([item objForKey:@"settingsItem"] && [item objForKey:@"operation"] && ![_settingsHelper isBackupSyncing])
+    if (!_backupHelper.isBackupPreparing)
     {
-        OAStatusBackupConflictDetailsViewController *statusDetailsViewController =
-        [[OAStatusBackupConflictDetailsViewController alloc] initWithLocalFile:[item objForKey:@"localFile"]
-                                                                    remoteFile:[item objForKey:@"remoteFile"]
-                                                                     operation:(EOABackupSyncOperationType) [item integerForKey:@"operation"]
-                                                             recentChangesType:_tableType];
-        statusDetailsViewController.delegate = self;
-        [self presentViewController:statusDetailsViewController animated:YES completion:nil];
+        OATableRowData *item = [_data itemForIndexPath:indexPath];
+        if ([item objForKey:@"settingsItem"] && [item objForKey:@"operation"] && ![_settingsHelper isBackupSyncing])
+        {
+            OAStatusBackupConflictDetailsViewController *statusDetailsViewController =
+            [[OAStatusBackupConflictDetailsViewController alloc] initWithLocalFile:[item objForKey:@"localFile"]
+                                                                        remoteFile:[item objForKey:@"remoteFile"]
+                                                                         operation:(EOABackupSyncOperationType) [item integerForKey:@"operation"]
+                                                                 recentChangesType:_tableType];
+            statusDetailsViewController.delegate = self;
+            [self presentViewController:statusDetailsViewController animated:YES completion:nil];
+        }
     }
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -760,6 +765,9 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
 
 - (void)onBackupPreparing
 {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateData];
+    });
 }
 
 // MARK: Sync callbacks

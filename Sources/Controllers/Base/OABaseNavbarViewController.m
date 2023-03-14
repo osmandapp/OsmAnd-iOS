@@ -52,8 +52,6 @@
 
 - (void)viewDidLoad
 {
-    [self generateData];
-
     [super viewDidLoad];
 
     self.navigationController.interactivePopGestureRecognizer.delegate = self;
@@ -65,6 +63,13 @@
     self.tableView.dataSource = self;
     self.tableView.backgroundColor = UIColorFromRGB(color_primary_table_background);
     self.tableView.tintColor = UIColorFromRGB(color_primary_purple);
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self generateData];
+    [self.tableView reloadData];
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator

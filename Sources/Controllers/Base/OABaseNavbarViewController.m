@@ -54,6 +54,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    if (!self.refreshOnAppear)
+        [self generateData];
 
     self.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeNever;
     
@@ -154,8 +157,11 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self generateData];
-    [self.tableView reloadData];
+    if (self.refreshOnAppear)
+    {
+        [self generateData];
+        [self.tableView reloadData];
+    }
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -533,6 +539,11 @@
 }
 
 - (BOOL)hideFirstHeader
+{
+    return NO;
+}
+
+- (BOOL) refreshOnAppear
 {
     return NO;
 }

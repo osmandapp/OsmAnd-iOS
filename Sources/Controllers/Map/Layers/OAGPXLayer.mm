@@ -596,8 +596,8 @@ colorizationScheme:(int)colorizationScheme
                             stringValue = QString::fromNSString([OAOsmAndFormatter getFormattedDistance:metricStartValue]);
                         else if (splitByTime)
                             stringValue = QString::fromNSString([OAOsmAndFormatter getFormattedTimeInterval:metricStartValue shortFormat:YES]);
-
-                        splitLabels.push_back(OsmAnd::GpxAdditionalIconsProvider::SplitLabel(pos31, stringValue, OsmAnd::ColorARGB((uint32_t) gpx.color)));
+                        const auto colorARGB = [UIColorFromARGB(gpx.color == 0 ? kDefaultTrackColor : gpx.color) toFColorARGB];
+                        splitLabels.push_back(OsmAnd::GpxAdditionalIconsProvider::SplitLabel(pos31, stringValue, colorARGB));
                     }
                 }
             }

@@ -1047,7 +1047,7 @@
     CGFloat markersWidgetHeaderHeight = _toolbarViewController.view.frame.size.height;
     BOOL isCurrentLocationCoordinatesVisible = [_topCoordinatesWidget isVisible] && _topCoordinatesWidget.alpha != 0;
     BOOL isMapCenterCoordinatesVisible = [_coordinatesMapCenterWidget isVisible] && _coordinatesMapCenterWidget.alpha != 0;
-    CGFloat coordinateWidgetHeight = _topCoordinatesWidget.frame.size.height; //???
+    CGFloat coordinateWidgetHeight = _topCoordinatesWidget.frame.size.height;
     BOOL isMapDownloadVisible = [_downloadMapWidget isVisible] && _downloadMapWidget.alpha != 0;
     CGFloat downloadWidgetHeight = _downloadMapWidget.frame.size.height + _downloadMapWidget.shadowOffset;
     

@@ -254,7 +254,7 @@
     }
     else
     {
-        BOOL isVisibilityChanged = _cachedVisibiliy != [_settings.showCurrentLocationCoordinatesWidget get];
+        BOOL isVisibilityChanged = _cachedVisibiliy != [self isEnabled];
 
         CLLocation *currentLocation = _app.locationServices.lastKnownLocation;
         BOOL isLocationChanged = ![OAUtilities isCoordEqual:currentLocation.coordinate.latitude srcLon:currentLocation.coordinate.longitude destLat:_lastKnownLocation.coordinate.latitude destLon:_lastKnownLocation.coordinate.latitude];

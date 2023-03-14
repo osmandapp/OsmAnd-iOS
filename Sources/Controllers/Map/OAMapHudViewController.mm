@@ -12,8 +12,7 @@
 #import "OAMapInfoController.h"
 #import "OAMapViewTrackingUtilities.h"
 #import "OAColors.h"
-#import "OACoordinatesCurrentLocationWidget.h"
-#import "OACoordinatesMapCenterWidget.h"
+#import "OACoordinatesWidget.h"
 #import "OADownloadMapWidget.h"
 #import <JASidePanelController.h>
 #import <UIViewController+JASidePanel.h>
@@ -914,7 +913,7 @@
     [self updateToolbarLayout:YES];
 }
 
-- (void) setCoordinatesWidget:(OACoordinatesCurrentLocationWidget *)widget
+- (void) setCoordinatesWidget:(OACoordinatesWidget *)widget
 {
     if (_topCoordinatesWidget.superview)
         [_topCoordinatesWidget removeFromSuperview];
@@ -931,7 +930,7 @@
     }
 }
 
-- (void) setCenterCoordinatesWidget:(OACoordinatesMapCenterWidget *)widget
+- (void) setCenterCoordinatesWidget:(OACoordinatesWidget *)widget
 {
     if (_coordinatesMapCenterWidget.superview)
         [_coordinatesMapCenterWidget removeFromSuperview];

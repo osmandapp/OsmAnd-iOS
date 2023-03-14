@@ -22,8 +22,7 @@
 #import "OARouteInfoWidgetsFactory.h"
 #import "OAMapInfoWidgetsFactory.h"
 #import "OANextTurnWidget.h"
-#import "OACoordinatesCurrentLocationWidget.h"
-#import "OACoordinatesMapCenterWidget.h"
+#import "OACoordinatesWidget.h"
 #import "OALanesControl.h"
 #import "OATopTextView.h"
 #import "OAAlarmWidget.h"
@@ -73,8 +72,8 @@
     OAMapWidgetRegistry *_mapWidgetRegistry;
     BOOL _expanded;
     OATopTextView *_streetNameView;
-    OACoordinatesCurrentLocationWidget *_topCoordinatesView;
-    OACoordinatesMapCenterWidget *_coordinatesMapCenterWidget;
+    OACoordinatesWidget *_topCoordinatesView;
+    OACoordinatesWidget *_coordinatesMapCenterWidget;
     OADownloadMapWidget *_downloadMapWidget;
     OAWeatherToolbar *_weatherToolbar;
     OALanesControl *_lanesControl;
@@ -688,11 +687,11 @@
     _alarmControl.delegate = self;
     [widgetsToUpdate addObject:_alarmControl];
     
-    _topCoordinatesView = [[OACoordinatesCurrentLocationWidget alloc] init];
+    _topCoordinatesView = [[OACoordinatesWidget alloc] initWithType:EOACoordinatesWidgetTypeCurrentLocation];
     _topCoordinatesView.delegate = self;
     [widgetsToUpdate addObject:_topCoordinatesView];
     
-    _coordinatesMapCenterWidget = [[OACoordinatesMapCenterWidget alloc] init];
+    _coordinatesMapCenterWidget = [[OACoordinatesWidget alloc] initWithType:EOACoordinatesWidgetTypeMapCenter];
     _coordinatesMapCenterWidget.delegate = self;
     [widgetsToUpdate addObject:_coordinatesMapCenterWidget];
     

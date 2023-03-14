@@ -456,6 +456,7 @@
 		32A001822610B43700ABE0D2 /* widget_coordinates_utm_day@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32A001642610B43700ABE0D2 /* widget_coordinates_utm_day@2x.png */; };
 		32A001A026131FEA00ABE0D2 /* ic_custom_clipboard@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32A0019E26131FEA00ABE0D2 /* ic_custom_clipboard@2x.png */; };
 		32A001A126131FEA00ABE0D2 /* ic_custom_clipboard@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32A0019F26131FEA00ABE0D2 /* ic_custom_clipboard@3x.png */; };
+		32A585BA29BF66C100ACEE84 /* OACoordinatesWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32A585B929BF66C100ACEE84 /* OACoordinatesWidget.mm */; };
 		32A7EE0F261BBF5D00F7A697 /* bg_point_circle_contour@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32A7EE0D261BBF5C00F7A697 /* bg_point_circle_contour@2x.png */; };
 		32A7EE10261BBF5D00F7A697 /* bg_point_circle_contour@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32A7EE0E261BBF5D00F7A697 /* bg_point_circle_contour@3x.png */; };
 		32A7EE15261BBF6C00F7A697 /* bg_point_octagon_contour@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32A7EE13261BBF6B00F7A697 /* bg_point_octagon_contour@3x.png */; };
@@ -494,7 +495,6 @@
 		32D253B427F336C200324717 /* OACloudIntroductionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32D253AB27F336C100324717 /* OACloudIntroductionViewController.m */; };
 		32D253B527F336C200324717 /* OACloudAccountBaseViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 32D253AC27F336C100324717 /* OACloudAccountBaseViewController.xib */; };
 		32E2A6E027206ACF00F018B5 /* OAQuickSearchCoordinateFormatsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 32E2A6DF2720699200F018B5 /* OAQuickSearchCoordinateFormatsViewController.xib */; };
-		32E2D23F29B657C900A17D0B /* OACoordinatesMapCenterWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32E2D23E29B657C900A17D0B /* OACoordinatesMapCenterWidget.mm */; };
 		32E2D2B229B7376F00A17D0B /* widget_coordinates_latitude_day@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32E2D2B029B7376E00A17D0B /* widget_coordinates_latitude_day@2x.png */; };
 		32E2D2B329B7376F00A17D0B /* widget_coordinates_latitude_day@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32E2D2B129B7376F00A17D0B /* widget_coordinates_latitude_day@3x.png */; };
 		32E2D2B629B7377A00A17D0B /* widget_coordinates_latitude_night@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32E2D2B429B7377900A17D0B /* widget_coordinates_latitude_night@2x.png */; };
@@ -531,7 +531,6 @@
 		32E2D2F529B7381600A17D0B /* widget_coordinates_map_center_utm_day@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32E2D2DD29B7381500A17D0B /* widget_coordinates_map_center_utm_day@2x.png */; };
 		32E2D2F629B7381600A17D0B /* widget_coordinates_map_center_utm_night@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32E2D2DE29B7381500A17D0B /* widget_coordinates_map_center_utm_night@3x.png */; };
 		32E2D2F729B7381600A17D0B /* widget_coordinates_map_center_night@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32E2D2DF29B7381600A17D0B /* widget_coordinates_map_center_night@2x.png */; };
-		32E2D2F929B73FE700A17D0B /* OACoordinatesMapCenterWidget.xib in Resources */ = {isa = PBXBuildFile; fileRef = 32E2D2F829B73F4000A17D0B /* OACoordinatesMapCenterWidget.xib */; };
 		32E2D2FC29B9C7A300A17D0B /* OAShowHideMapCenterAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 32E2D2FB29B9C7A300A17D0B /* OAShowHideMapCenterAction.m */; };
 		32E2D30229B9DB5700A17D0B /* ic_custom_coordinates_location@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32E2D2FE29B9DB5500A17D0B /* ic_custom_coordinates_location@3x.png */; };
 		32E2D30329B9DB5700A17D0B /* ic_custom_coordinates_map_center@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32E2D2FF29B9DB5600A17D0B /* ic_custom_coordinates_map_center@2x.png */; };
@@ -2726,7 +2725,6 @@
 		DA5A847B26C563A900F274C7 /* OATurnDrawable.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F2E26C563A400F274C7 /* OATurnDrawable.mm */; };
 		DA5A847C26C563A900F274C7 /* OATurnPathHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F3326C563A400F274C7 /* OATurnPathHelper.mm */; };
 		DA5A847D26C563A900F274C7 /* OANextTurnWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F3526C563A400F274C7 /* OANextTurnWidget.mm */; };
-		DA5A847E26C563A900F274C7 /* OACoordinatesCurrentLocationWidget.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F3626C563A400F274C7 /* OACoordinatesCurrentLocationWidget.m */; };
 		DA5A847F26C563A900F274C7 /* OAAlarmWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F3726C563A400F274C7 /* OAAlarmWidget.mm */; };
 		DA5A848026C563A900F274C7 /* OATopTextView.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F3B26C563A400F274C7 /* OATopTextView.mm */; };
 		DA5A848126C563A900F274C7 /* OADistanceToMapMarkerControl.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7F3E26C563A400F274C7 /* OADistanceToMapMarkerControl.mm */; };
@@ -2866,7 +2864,7 @@
 		DA5A851226C563A900F274C7 /* OARouteInfoView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A807526C563A500F274C7 /* OARouteInfoView.xib */; };
 		DA5A851326C563A900F274C7 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A807626C563A500F274C7 /* LaunchScreen.xib */; };
 		DA5A851426C563A900F274C7 /* OARulerWidget.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A807726C563A500F274C7 /* OARulerWidget.xib */; };
-		DA5A851526C563A900F274C7 /* OACoordinatesCurrentLocationWidget.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A807826C563A500F274C7 /* OACoordinatesCurrentLocationWidget.xib */; };
+		DA5A851526C563A900F274C7 /* OACoordinatesWidget.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A807826C563A500F274C7 /* OACoordinatesWidget.xib */; };
 		DA5A851626C563A900F274C7 /* OAOverlayUnderlayView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A807926C563A500F274C7 /* OAOverlayUnderlayView.xib */; };
 		DA5A851726C563A900F274C7 /* OARoutingProgressView.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A807A26C563A500F274C7 /* OARoutingProgressView.xib */; };
 		DA5A851826C563A900F274C7 /* OANextTurnWidget.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A807B26C563A500F274C7 /* OANextTurnWidget.xib */; };
@@ -3942,6 +3940,8 @@
 		32A001642610B43700ABE0D2 /* widget_coordinates_utm_day@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "widget_coordinates_utm_day@2x.png"; path = "Resources/Icons/Widgets/widget_coordinates_utm_day@2x.png"; sourceTree = "<group>"; };
 		32A0019E26131FEA00ABE0D2 /* ic_custom_clipboard@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_clipboard@2x.png"; path = "Resources/Icons/ic_custom_clipboard@2x.png"; sourceTree = "<group>"; };
 		32A0019F26131FEA00ABE0D2 /* ic_custom_clipboard@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_clipboard@3x.png"; path = "Resources/Icons/ic_custom_clipboard@3x.png"; sourceTree = "<group>"; };
+		32A585B829BF66AD00ACEE84 /* OACoordinatesWidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACoordinatesWidget.h; sourceTree = "<group>"; };
+		32A585B929BF66C100ACEE84 /* OACoordinatesWidget.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OACoordinatesWidget.mm; sourceTree = "<group>"; };
 		32A7863D27452C4E00FE7881 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		32A7EE0D261BBF5C00F7A697 /* bg_point_circle_contour@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bg_point_circle_contour@2x.png"; path = "Resources/Icons/bg_point_circle_contour@2x.png"; sourceTree = "<group>"; };
 		32A7EE0E261BBF5D00F7A697 /* bg_point_circle_contour@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bg_point_circle_contour@3x.png"; path = "Resources/Icons/bg_point_circle_contour@3x.png"; sourceTree = "<group>"; };
@@ -3990,8 +3990,6 @@
 		32D253AB27F336C100324717 /* OACloudIntroductionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OACloudIntroductionViewController.m; sourceTree = "<group>"; };
 		32D253AC27F336C100324717 /* OACloudAccountBaseViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OACloudAccountBaseViewController.xib; sourceTree = "<group>"; };
 		32E2A6DF2720699200F018B5 /* OAQuickSearchCoordinateFormatsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAQuickSearchCoordinateFormatsViewController.xib; sourceTree = "<group>"; };
-		32E2D23D29B657BE00A17D0B /* OACoordinatesMapCenterWidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACoordinatesMapCenterWidget.h; sourceTree = "<group>"; };
-		32E2D23E29B657C900A17D0B /* OACoordinatesMapCenterWidget.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OACoordinatesMapCenterWidget.mm; sourceTree = "<group>"; };
 		32E2D2B029B7376E00A17D0B /* widget_coordinates_latitude_day@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "widget_coordinates_latitude_day@2x.png"; path = "Resources/Icons/widget_coordinates_latitude_day@2x.png"; sourceTree = "<group>"; };
 		32E2D2B129B7376F00A17D0B /* widget_coordinates_latitude_day@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "widget_coordinates_latitude_day@3x.png"; path = "Resources/Icons/widget_coordinates_latitude_day@3x.png"; sourceTree = "<group>"; };
 		32E2D2B429B7377900A17D0B /* widget_coordinates_latitude_night@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "widget_coordinates_latitude_night@2x.png"; path = "Resources/Icons/widget_coordinates_latitude_night@2x.png"; sourceTree = "<group>"; };
@@ -4028,7 +4026,6 @@
 		32E2D2DD29B7381500A17D0B /* widget_coordinates_map_center_utm_day@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "widget_coordinates_map_center_utm_day@2x.png"; path = "Resources/Icons/widget_coordinates_map_center_utm_day@2x.png"; sourceTree = "<group>"; };
 		32E2D2DE29B7381500A17D0B /* widget_coordinates_map_center_utm_night@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "widget_coordinates_map_center_utm_night@3x.png"; path = "Resources/Icons/widget_coordinates_map_center_utm_night@3x.png"; sourceTree = "<group>"; };
 		32E2D2DF29B7381600A17D0B /* widget_coordinates_map_center_night@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "widget_coordinates_map_center_night@2x.png"; path = "Resources/Icons/widget_coordinates_map_center_night@2x.png"; sourceTree = "<group>"; };
-		32E2D2F829B73F4000A17D0B /* OACoordinatesMapCenterWidget.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OACoordinatesMapCenterWidget.xib; sourceTree = "<group>"; };
 		32E2D2FA29B9C79500A17D0B /* OAShowHideMapCenterAction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAShowHideMapCenterAction.h; sourceTree = "<group>"; };
 		32E2D2FB29B9C7A300A17D0B /* OAShowHideMapCenterAction.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAShowHideMapCenterAction.m; sourceTree = "<group>"; };
 		32E2D2FE29B9DB5500A17D0B /* ic_custom_coordinates_location@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_coordinates_location@3x.png"; path = "Resources/Icons/ic_custom_coordinates_location@3x.png"; sourceTree = "<group>"; };
@@ -6987,7 +6984,6 @@
 		DA5A7F1F26C563A400F274C7 /* OATurnDrawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OATurnDrawable.h; sourceTree = "<group>"; };
 		DA5A7F2026C563A400F274C7 /* OATurnResource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OATurnResource.m; sourceTree = "<group>"; };
 		DA5A7F2126C563A400F274C7 /* OATextInfoWidget.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OATextInfoWidget.mm; sourceTree = "<group>"; };
-		DA5A7F2226C563A400F274C7 /* OACoordinatesCurrentLocationWidget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OACoordinatesCurrentLocationWidget.h; sourceTree = "<group>"; };
 		DA5A7F2326C563A400F274C7 /* OAMapWidgetRegistry.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMapWidgetRegistry.mm; sourceTree = "<group>"; };
 		DA5A7F2426C563A400F274C7 /* OADestinationsLineWidget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OADestinationsLineWidget.h; sourceTree = "<group>"; };
 		DA5A7F2526C563A400F274C7 /* OAFingerRulerDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAFingerRulerDelegate.mm; sourceTree = "<group>"; };
@@ -7007,7 +7003,6 @@
 		DA5A7F3326C563A400F274C7 /* OATurnPathHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OATurnPathHelper.mm; sourceTree = "<group>"; };
 		DA5A7F3426C563A400F274C7 /* OAMapWidgetRegInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMapWidgetRegInfo.h; sourceTree = "<group>"; };
 		DA5A7F3526C563A400F274C7 /* OANextTurnWidget.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OANextTurnWidget.mm; sourceTree = "<group>"; };
-		DA5A7F3626C563A400F274C7 /* OACoordinatesCurrentLocationWidget.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OACoordinatesCurrentLocationWidget.m; sourceTree = "<group>"; };
 		DA5A7F3726C563A400F274C7 /* OAAlarmWidget.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAlarmWidget.mm; sourceTree = "<group>"; };
 		DA5A7F3826C563A400F274C7 /* OAAlarmWidget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAAlarmWidget.h; sourceTree = "<group>"; };
 		DA5A7F3926C563A400F274C7 /* OATurnPathHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OATurnPathHelper.h; sourceTree = "<group>"; };
@@ -7279,7 +7274,7 @@
 		DA5A807526C563A500F274C7 /* OARouteInfoView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OARouteInfoView.xib; sourceTree = "<group>"; };
 		DA5A807626C563A500F274C7 /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
 		DA5A807726C563A500F274C7 /* OARulerWidget.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OARulerWidget.xib; sourceTree = "<group>"; };
-		DA5A807826C563A500F274C7 /* OACoordinatesCurrentLocationWidget.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OACoordinatesCurrentLocationWidget.xib; sourceTree = "<group>"; };
+		DA5A807826C563A500F274C7 /* OACoordinatesWidget.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OACoordinatesWidget.xib; sourceTree = "<group>"; };
 		DA5A807926C563A500F274C7 /* OAOverlayUnderlayView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAOverlayUnderlayView.xib; sourceTree = "<group>"; };
 		DA5A807A26C563A500F274C7 /* OARoutingProgressView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OARoutingProgressView.xib; sourceTree = "<group>"; };
 		DA5A807B26C563A500F274C7 /* OANextTurnWidget.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OANextTurnWidget.xib; sourceTree = "<group>"; };
@@ -12782,10 +12777,8 @@
 				DA5A7F2B26C563A400F274C7 /* OARulerWidget.mm */,
 				DA5A7F2C26C563A400F274C7 /* OATextInfoWidget.h */,
 				DA5A7F2126C563A400F274C7 /* OATextInfoWidget.mm */,
-				DA5A7F2226C563A400F274C7 /* OACoordinatesCurrentLocationWidget.h */,
-				DA5A7F3626C563A400F274C7 /* OACoordinatesCurrentLocationWidget.m */,
-				32E2D23D29B657BE00A17D0B /* OACoordinatesMapCenterWidget.h */,
-				32E2D23E29B657C900A17D0B /* OACoordinatesMapCenterWidget.mm */,
+				32A585B829BF66AD00ACEE84 /* OACoordinatesWidget.h */,
+				32A585B929BF66C100ACEE84 /* OACoordinatesWidget.mm */,
 				DA5A7F4626C563A400F274C7 /* OATopTextView.h */,
 				DA5A7F3B26C563A400F274C7 /* OATopTextView.mm */,
 				DA5A7F1F26C563A400F274C7 /* OATurnDrawable.h */,
@@ -13314,8 +13307,7 @@
 				DA5A807726C563A500F274C7 /* OARulerWidget.xib */,
 				DAC849B526CF97EE00018091 /* OADownloadMapWidget.xib */,
 				DA5A807E26C563A500F274C7 /* OATargetPointView.xib */,
-				DA5A807826C563A500F274C7 /* OACoordinatesCurrentLocationWidget.xib */,
-				32E2D2F829B73F4000A17D0B /* OACoordinatesMapCenterWidget.xib */,
+				DA5A807826C563A500F274C7 /* OACoordinatesWidget.xib */,
 				DA5A807926C563A500F274C7 /* OAOverlayUnderlayView.xib */,
 				DA5A807A26C563A500F274C7 /* OARoutingProgressView.xib */,
 				DA5A807B26C563A500F274C7 /* OANextTurnWidget.xib */,
@@ -15612,7 +15604,7 @@
 				DA1340B0243DC5A70039D214 /* map_action_taxi@3x.png in Resources */,
 				0CEF2C4324B7237800BAAC4B /* ic_action_go_cart@3x.png in Resources */,
 				84F3A95A1B4ECF2700D16EBC /* ic_trip_removepoint@3x.png in Resources */,
-				DA5A851526C563A900F274C7 /* OACoordinatesCurrentLocationWidget.xib in Resources */,
+				DA5A851526C563A900F274C7 /* OACoordinatesWidget.xib in Resources */,
 				46B4A7D82841183D008AE194 /* ic_custom_label_sale@2x.png in Resources */,
 				156E91D1244AF35900B181BA /* ic_custom_direction_widget_two@2x.png in Resources */,
 				DAF3454F22F4482B009E2EB6 /* ic_custom_compound_action_remove@3x.png in Resources */,
@@ -15907,7 +15899,6 @@
 				84E4420A1AF8A07500F87542 /* parking_position@3x.png in Resources */,
 				84C102741FBDC10800D3E5EE /* warnings_toll_bridge@2x.png in Resources */,
 				84E442251AF8A07500F87542 /* track_save@3x.png in Resources */,
-				32E2D2F929B73FE700A17D0B /* OACoordinatesMapCenterWidget.xib in Resources */,
 				849E819C1AFA5D6700549953 /* btn_map_type_icon_view@3x.png in Resources */,
 				DA9A2C2C26FCB50600BEC681 /* map_direction_arrow_small@2x.png in Resources */,
 				3296B4A227F8790800108AF7 /* ic_custom_terrain_flat@2x.png in Resources */,
@@ -16742,7 +16733,6 @@
 				DA5A835D26C563A800F274C7 /* OATextLineViewCell.m in Sources */,
 				DA4ABF1D2876DA6800B996EF /* OAGpxSettingsItem.m in Sources */,
 				DA5A836326C563A800F274C7 /* OAHomeWorkCollectionViewCell.mm in Sources */,
-				32E2D23F29B657C900A17D0B /* OACoordinatesMapCenterWidget.mm in Sources */,
 				DA3DBC2E2976E631003803D8 /* OATransportStopsBaseController.mm in Sources */,
 				DA5A848326C563A900F274C7 /* OAMapInfoWidgetsFactory.mm in Sources */,
 				DA5A83D926C563A800F274C7 /* OAFavoriteImportViewController.mm in Sources */,
@@ -16995,7 +16985,6 @@
 				DABC7F2227B65FD6005C76E2 /* OARoutingHelperUtils.mm in Sources */,
 				DADF31A928D07D1100DC2886 /* OACarPlayPurchaseViewController.m in Sources */,
 				DA5A836926C563A800F274C7 /* OARouteSettingsViewController.mm in Sources */,
-				DA5A847E26C563A900F274C7 /* OACoordinatesCurrentLocationWidget.m in Sources */,
 				DA5A83FD26C563A800F274C7 /* OAHistoryTableViewController.mm in Sources */,
 				DA5A84FD26C563A900F274C7 /* OATableViewCell.m in Sources */,
 				DA5A83DB26C563A800F274C7 /* OASelectFavoriteGroupViewController.mm in Sources */,
@@ -17228,6 +17217,7 @@
 				DA5A852626C563A900F274C7 /* OAFreeMemoryView.m in Sources */,
 				DA5A84C626C563A900F274C7 /* OAUploadFinishedBottomSheetViewController.mm in Sources */,
 				DA5A81D326C563A700F274C7 /* OATTSCommandPlayerImpl.mm in Sources */,
+				32A585BA29BF66C100ACEE84 /* OACoordinatesWidget.mm in Sources */,
 				DA5A819426C563A700F274C7 /* OAParkingAction.mm in Sources */,
 				DA5A84A426C563A900F274C7 /* OAJoinPointsCommand.mm in Sources */,
 				DA5A815726C563A700F274C7 /* OANauticalMapsPlugin.m in Sources */,

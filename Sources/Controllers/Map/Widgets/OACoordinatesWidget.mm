@@ -1,12 +1,12 @@
 //
-//  OACoordinatesCurrentLocationWidget.m
+//  OACoordinatesBaseWidget.m
 //  OsmAnd Maps
 //
-//  Created by nnngrach on 28.03.2021.
-//  Copyright © 2021 OsmAnd. All rights reserved.
+//  Created by nnngrach on 13.03.2023.
+//  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
-#import "OACoordinatesCurrentLocationWidget.h"
+#import "OACoordinatesWidget.h"
 #import "OsmAndApp.h"
 #import "OAColors.h"
 #import "OALocationConvert.h"
@@ -18,10 +18,12 @@
 #import "OAOsmAndFormatter.h"
 #import "OASearchToolbarViewController.h"
 
+#import <OsmAndCore/Utilities.h>
+
 #define kHorisontalOffset 8
 #define kIconWidth 30
 
-@interface OACoordinatesCurrentLocationWidget ()
+@interface OACoordinatesWidget ()
 
 @property (weak, nonatomic) IBOutlet UIImageView *latImageView;
 @property (weak, nonatomic) IBOutlet UILabel *latTextView;
@@ -32,8 +34,9 @@
 
 @end
 
-@implementation OACoordinatesCurrentLocationWidget
+@implementation OACoordinatesWidget
 {
+    EOACoordinatesWidgetType _type;
     OsmAndAppInstance _app;
     OAAppSettings *_settings;
     NSTimeInterval _lastUpdatingTime;
@@ -43,23 +46,16 @@
     UIButton *_shadowButton;
 }
 
-- (instancetype) init
+- (instancetype) initWithType:(EOACoordinatesWidgetType)type;
 {
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OACoordinatesCurrentLocationWidget" owner:self options:nil];
-    self = (OACoordinatesCurrentLocationWidget *)[nib objectAtIndex:0];
-    if (self)
-        self.frame = CGRectMake(0, 0, 200, 50);
-    
-    [self commonInit];
-    return self;
-}
+    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OACoordinatesWidget" owner:self options:nil];
+    self = (OACoordinatesWidget *)[nib objectAtIndex:0];
 
-- (instancetype) initWithFrame:(CGRect)frame
-{
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OACoordinatesCurrentLocationWidget" owner:self options:nil];
-    self = (OACoordinatesCurrentLocationWidget *)[nib objectAtIndex:0];
     if (self)
+    {
+        _type = type;
         self.frame = CGRectMake(0, 0, 200, 50);
+    }
     
     [self commonInit];
     return self;
@@ -69,13 +65,13 @@
 {
     _settings = [OAAppSettings sharedManager];
     _app = [OsmAndApp instance];
-    
+
     self.hidden = YES;
     _shadowButton = [[UIButton alloc] initWithFrame:self.frame];
     _shadowButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [_shadowButton addTarget:self action:@selector(onWidgetClicked:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:_shadowButton];
-    
+
     [self updateInfo];
 }
 
@@ -83,13 +79,13 @@
 {
     if (self.delegate)
         [self.delegate widgetChanged:nil];
-    
+
     BOOL isLandscape = [OAUtilities isLandscapeIpadAware];
     CGFloat middlePoint = self.frame.size.width / 2;
     CGFloat lineWidth = 1.0 / [UIScreen mainScreen].scale;
     _horisontalSeparator.frame = CGRectMake(0, 0, self.frame.size.width, lineWidth);
     _verticalSeparator.frame = CGRectMake(middlePoint - lineWidth, 14, lineWidth, 24);
-    
+
     if (![self isDirectionRTL])
     {
         CGFloat latIconRightPoint = 2 * kHorisontalOffset + kIconWidth;
@@ -121,15 +117,15 @@
             _lonImageView.frame = CGRectMake(self.frame.size.width - kIconWidth - kHorisontalOffset, 10, kIconWidth, kIconWidth);
         }
     }
-    
+
     _horisontalSeparator.hidden = isLandscape;
-    
+
     self.layer.shadowColor = [UIColor.blackColor colorWithAlphaComponent:0.7].CGColor;
     self.layer.shadowOpacity = 1.0;
     self.layer.shadowRadius = 1.0;
     self.layer.shadowOffset = CGSizeMake(0.0, 1.0);
     self.layer.masksToBounds = NO;
-    
+
     self.layer.cornerRadius = [OAUtilities isLandscape] ? 3 : 0;
     self.layer.maskedCorners = kCALayerMinXMaxYCorner | kCALayerMaxXMaxYCorner;
 }
@@ -138,7 +134,7 @@
 {
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
     OAToolbarViewController *topToolbar = [mapPanel.hudViewController toolbarViewController];
-    return [_settings.showCurrentLocationCoordinatesWidget get]
+    return [self isEnabled]
             && [topToolbar getAttentionLevel] != EOAToolbarAttentionLevelHigh
             && !mapPanel.hudViewController.downloadMapWidget.isVisible
             && ![mapPanel isTopToolbarSearchVisible];
@@ -148,23 +144,23 @@
 {
     BOOL visible = [self isVisible];
     self.hidden = !visible;
-    
+
     if ([self shouldUpdate])
     {
         BOOL nightMode = [OAAppSettings sharedManager].nightMode;
         [self updateVisibility:visible];
-        _cachedVisibiliy = [_settings.showCurrentLocationCoordinatesWidget get];
-        
+        _cachedVisibiliy = [self isEnabled];
+
         if (visible)
         {
             BOOL isPortrait = ![OAUtilities isLandscape];
-            _lastKnownLocation = _app.locationServices.lastKnownLocation;
+            _lastKnownLocation = [self getLocation];
             if (_lastKnownLocation)
             {
                 int format = [_settings.settingGeoFormat get];
                 double lat = _lastKnownLocation.coordinate.latitude;
                 double lon = _lastKnownLocation.coordinate.longitude;
-                
+
                 NSString *latText;
                 NSString *lonText;
 
@@ -175,7 +171,7 @@
                     _latImageView.hidden = NO;
                     _lonImageView.hidden = YES;
                     _verticalSeparator.hidden = YES;
-                    [_latImageView setImage:[UIImage imageNamed:nightMode ? @"widget_coordinates_utm_night" : @"widget_coordinates_utm_day"]];
+                    [_latImageView setImage:[UIImage imageNamed:[self getUtmIcon]]];
                     _latTextView.text = [OALocationConvert getUTMCoordinateString:lat lon:lon];
                 }
                 else if (format == MAP_GEO_OLC_FORMAT)
@@ -185,7 +181,7 @@
                     _latImageView.hidden = NO;
                     _lonImageView.hidden = YES;
                     _verticalSeparator.hidden = YES;
-                    [_latImageView setImage:[UIImage imageNamed:nightMode ? @"widget_coordinates_utm_night" : @"widget_coordinates_utm_day"]];
+                    [_latImageView setImage:[UIImage imageNamed:[self getUtmIcon]]];
                     _latTextView.text = [OALocationConvert getLocationOlcName:lat lon:lon];
                 }
                 else if (format == MAP_GEO_MGRS_FORMAT)
@@ -195,7 +191,7 @@
                     _latImageView.hidden = NO;
                     _lonImageView.hidden = YES;
                     _verticalSeparator.hidden = YES;
-                    [_latImageView setImage:[UIImage imageNamed:nightMode ? @"widget_coordinates_utm_night" : @"widget_coordinates_utm_day"]];
+                    [_latImageView setImage:[UIImage imageNamed:[self getUtmIcon]]];
                     _latTextView.text = [OALocationConvert getMgrsCoordinateString:lat lon:lon];
                 }
                 else
@@ -205,21 +201,13 @@
                     _latImageView.hidden = NO;
                     _lonImageView.hidden = NO;
                     _verticalSeparator.hidden = NO;
-                    
+
                     NSString *coordinatesString = [OAOsmAndFormatter getFormattedCoordinatesWithLat:lat lon:lon outputFormat:format];
                     NSArray<NSString *> *coordinates = [coordinatesString componentsSeparatedByString:@","];
                     latText = coordinates[0];
                     lonText = [coordinates[1] trim];
-                    
-                    NSString* latDayImg = lat >= 0 ? @"widget_coordinates_latitude_north_day" : @"widget_coordinates_latitude_south_day";
-                    NSString* latNightImg = lat >= 0 ? @"widget_coordinates_latitude_north_night" : @"widget_coordinates_latitude_south_night";
-                    NSString* lonDayImg = lon >= 0 ? @"widget_coordinates_longitude_east_day" : @"widget_coordinates_longitude_west_day";
-                    NSString* lonNightImg = lon >= 0 ? @"widget_coordinates_longitude_east_night" : @"widget_coordinates_longitude_west_night";
-                    
-                    //not a bug: in android in Night mode in this case shows Day icons too.
-                    [_latImageView setImage:[UIImage imageNamed:nightMode ? latDayImg : latNightImg]];
-                    [_lonImageView setImage:[UIImage imageNamed:nightMode ? lonDayImg: lonNightImg]];
-                    
+                    [_latImageView setImage:[UIImage imageNamed:[self getLatitudeIcon:lat]]];
+                    [_lonImageView setImage:[UIImage imageNamed:[self getLongitudeIcon:lon]]];
                     _latTextView.text = latText;
                     _lonTextView.text = lonText;
                 }
@@ -233,16 +221,16 @@
                 _verticalSeparator.hidden = YES;
                 _latTextView.text = OALocalizedString(@"searching_gps");
             }
-            
+
             self.backgroundColor = nightMode ? UIColorFromRGB(nav_bar_night) : UIColor.whiteColor;
             _latTextView.textColor = nightMode ? UIColorFromRGB(text_primary_night) : UIColor.blackColor;
             _lonTextView.textColor = nightMode ? UIColorFromRGB(text_primary_night) : UIColor.blackColor;
             _horisontalSeparator.hidden = !isPortrait;
             _horisontalSeparator.backgroundColor = self.backgroundColor;
-            
+
             _lastUpdatingTime = [[NSDate new] timeIntervalSince1970];
         }
-        
+
         [self layoutSubviews];
         return NO;
     }
@@ -267,15 +255,14 @@
     else
     {
         BOOL isVisibilityChanged = _cachedVisibiliy != [_settings.showCurrentLocationCoordinatesWidget get];
-        
+
         CLLocation *currentLocation = _app.locationServices.lastKnownLocation;
         BOOL isLocationChanged = ![OAUtilities isCoordEqual:currentLocation.coordinate.latitude srcLon:currentLocation.coordinate.longitude destLat:_lastKnownLocation.coordinate.latitude destLon:_lastKnownLocation.coordinate.latitude];
-        
+
         NSTimeInterval updatingPeriond = 0.5;
         NSTimeInterval currentTimestamp = [[NSDate new] timeIntervalSince1970];
-        NSTimeInterval difference = currentTimestamp - _lastUpdatingTime;
         BOOL hasUpdatingTimeLimitPassed = currentTimestamp - _lastUpdatingTime > updatingPeriond;
-        
+
         return isVisibilityChanged || (!_isAnimated && isLocationChanged && hasUpdatingTimeLimitPassed);
     }
 }
@@ -287,7 +274,7 @@
         self.hidden = !visible;
         if (self.delegate)
             [self.delegate widgetVisibilityChanged:nil visible:visible];
-        
+
         return YES;
     }
     return NO;
@@ -300,7 +287,7 @@
         NSString *coordinates = _latTextView.text;
         if (!_lonTextView.hidden)
             coordinates = [NSString stringWithFormat:@"%@, %@", coordinates, _lonTextView.text];
-        
+
         UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
         pasteboard.string = coordinates;
 
@@ -313,7 +300,7 @@
             _verticalSeparator.hidden = YES;
             [_latImageView setImage:[UIImage imageNamed:@"ic_custom_clipboard"]];
             _latTextView.text = OALocalizedString(@"copied_to_clipboard");
-            
+
             CGFloat latIconRightPoint = 2 * kHorisontalOffset + kIconWidth;
             _latTextView.frame = CGRectMake(latIconRightPoint, 14, self.frame.size.width - latIconRightPoint - 2 * kHorisontalOffset, 22);
         }];
@@ -321,12 +308,79 @@
         NSTimeInterval delayInSeconds = 2.0;
         dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
         dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-            
+
             [UIView animateWithDuration:.3 animations:^{
                 _isAnimated = NO;
                 [self updateInfo];
             }];
         });
+    }
+}
+
+- (BOOL) isEnabled
+{
+    return _type == EOACoordinatesWidgetTypeCurrentLocation ? [_settings.showCurrentLocationCoordinatesWidget get] : [_settings.showMapCenterCoordinatesWidget get];
+}
+
+- (CLLocation *) getLocation
+{
+    if (_type == EOACoordinatesWidgetTypeCurrentLocation)
+    {
+        return _app.locationServices.lastKnownLocation;
+    }
+    else
+    {
+        Point31 mapCenter = _app.data.mapLastViewedState.target31;
+        OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(OsmAnd::PointI(mapCenter.x, mapCenter.y));
+        return [[CLLocation alloc] initWithLatitude:latLon.latitude longitude:latLon.longitude];
+    }
+}
+
+- (NSString *) getUtmIcon
+{
+    BOOL nightMode = [OAAppSettings sharedManager].nightMode;
+    if (_type == EOACoordinatesWidgetTypeCurrentLocation)
+        return nightMode ? @"widget_coordinates_utm_night" : @"widget_coordinates_utm_day";
+    else
+        return nightMode ? @"widget_coordinates_map_center_utm_night" : @"widget_coordinates_map_center_utm_day";
+}
+
+- (NSString *) getLatitudeIcon:(double)lat
+{
+    //not a bug: in android in Night mode in this case shows Day icons too.
+    BOOL nightMode = [OAAppSettings sharedManager].nightMode;
+    if (_type == EOACoordinatesWidgetTypeCurrentLocation)
+    {
+        if (nightMode)
+            return lat >= 0 ? @"widget_coordinates_latitude_north_day" : @"widget_coordinates_latitude_south_day";
+        else
+            return lat >= 0 ? @"widget_coordinates_latitude_north_night" : @"widget_coordinates_latitude_south_night";
+    }
+    else
+    {
+        if (nightMode)
+            return lat >= 0 ? @"widget_coordinates_map_center_latitude_north_day" : @"widget_coordinates_map_center_latitude_south_day";
+        else
+            return lat >= 0 ? @"widget_coordinates_map_center_latitude_north_night" : @"widget_coordinates_map_center_latitude_south_night";
+    }
+}
+
+- (NSString *) getLongitudeIcon:(double)lon
+{
+    BOOL nightMode = [OAAppSettings sharedManager].nightMode;
+    if (_type == EOACoordinatesWidgetTypeCurrentLocation)
+    {
+        if (nightMode)
+            return lon >= 0 ? @"widget_coordinates_longitude_east_day" : @"widget_coordinates_longitude_west_day";
+        else
+            return lon >= 0 ? @"widget_coordinates_longitude_east_night" : @"widget_coordinates_longitude_west_night";
+    }
+    else
+    {
+        if (nightMode)
+            return lon >= 0 ? @"widget_coordinates_map_center_longitude_east_day" : @"widget_coordinates_map_center_longitude_west_day";
+        else
+            return lon >= 0 ? @"widget_coordinates_map_center_longitude_east_night" : @"widget_coordinates_map_center_longitude_west_night";
     }
 }
 

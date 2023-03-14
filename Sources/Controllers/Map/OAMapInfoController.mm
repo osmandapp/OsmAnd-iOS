@@ -399,7 +399,7 @@
     BOOL showTopCoordinatesView = _topCoordinatesView && _topCoordinatesView.superview && !_topCoordinatesView.hidden;
     BOOL showCoordinatesMapCenterWidget = _coordinatesMapCenterWidget && _coordinatesMapCenterWidget.superview && !_coordinatesMapCenterWidget.hidden;
     
-    if (showTopCoordinatesView || showCoordinatesMapCenterWidget)  // ???
+    if (showTopCoordinatesView || showCoordinatesMapCenterWidget)
     {
         if (_lastUpdateTime == 0)
             [[OARootViewController instance].mapPanel updateToolbar];
@@ -409,29 +409,29 @@
         {
             if (showTopCoordinatesView)
             {
-                _topCoordinatesView.frame = CGRectMake(0, _mapHudViewController.statusBarView.frame.size.height, DeviceScreenWidth, 52);  // ???
+                _topCoordinatesView.frame = CGRectMake(0, _mapHudViewController.statusBarView.frame.size.height, DeviceScreenWidth, 52);
                 if (showCoordinatesMapCenterWidget)
                     _coordinatesMapCenterWidget.frame = CGRectMake(0, _mapHudViewController.statusBarView.frame.size.height + 52, DeviceScreenWidth, 52);
             }
             else if (showCoordinatesMapCenterWidget)
             {
-                _coordinatesMapCenterWidget.frame = CGRectMake(0, _mapHudViewController.statusBarView.frame.size.height, DeviceScreenWidth, 52);  // ???
+                _coordinatesMapCenterWidget.frame = CGRectMake(0, _mapHudViewController.statusBarView.frame.size.height, DeviceScreenWidth, 52);
             }
         }
         else
         {
             CGFloat widgetWidth = DeviceScreenWidth / 2 - [OAUtilities getLeftMargin];
-            CGFloat withMarkersLeftOffset = [_topCoordinatesView isDirectionRTL] ? DeviceScreenWidth / 2 : [OAUtilities getLeftMargin];  // ???
+            CGFloat withMarkersLeftOffset = [_topCoordinatesView isDirectionRTL] ? DeviceScreenWidth / 2 : [OAUtilities getLeftMargin];
             CGFloat leftOffset = hasTopWidgetsPanel ? withMarkersLeftOffset : (DeviceScreenWidth - widgetWidth) / 2;
             if (showTopCoordinatesView)
             {
-                _topCoordinatesView.frame = CGRectMake(leftOffset - [OAUtilities getLeftMargin], _mapHudViewController.statusBarView.frame.size.height, widgetWidth, 50);  // ???
+                _topCoordinatesView.frame = CGRectMake(leftOffset - [OAUtilities getLeftMargin], _mapHudViewController.statusBarView.frame.size.height, widgetWidth, 50);
                 if (showCoordinatesMapCenterWidget)
-                    _coordinatesMapCenterWidget.frame = CGRectMake(leftOffset - [OAUtilities getLeftMargin], _mapHudViewController.statusBarView.frame.size.height + 50, widgetWidth, 50);  // ???
+                    _coordinatesMapCenterWidget.frame = CGRectMake(leftOffset - [OAUtilities getLeftMargin], _mapHudViewController.statusBarView.frame.size.height + 50, widgetWidth, 50);
             }
             else if (showCoordinatesMapCenterWidget)
             {
-                _coordinatesMapCenterWidget.frame = CGRectMake(leftOffset - [OAUtilities getLeftMargin], _mapHudViewController.statusBarView.frame.size.height, widgetWidth, 50);  // ???
+                _coordinatesMapCenterWidget.frame = CGRectMake(leftOffset - [OAUtilities getLeftMargin], _mapHudViewController.statusBarView.frame.size.height, widgetWidth, 50);
             }
         }
     }
@@ -548,7 +548,7 @@
 {
     OAApplicationMode *appMode = _settings.applicationMode.get;
     
-    [_mapHudViewController setCoordinatesWidget:_topCoordinatesView];  // ???
+    [_mapHudViewController setCoordinatesWidget:_topCoordinatesView];
     [_mapHudViewController setCenterCoordinatesWidget:_coordinatesMapCenterWidget];
     [_mapHudViewController setDownloadMapWidget:_downloadMapWidget];
     [_mapHudViewController setWeatherToolbarMapWidget:_weatherToolbar];
@@ -688,7 +688,7 @@
     _alarmControl.delegate = self;
     [widgetsToUpdate addObject:_alarmControl];
     
-    _topCoordinatesView = [[OACoordinatesCurrentLocationWidget alloc] init];  // ???
+    _topCoordinatesView = [[OACoordinatesCurrentLocationWidget alloc] init];
     _topCoordinatesView.delegate = self;
     [widgetsToUpdate addObject:_topCoordinatesView];
     

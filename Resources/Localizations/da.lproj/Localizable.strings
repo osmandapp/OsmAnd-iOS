@@ -952,7 +952,7 @@
 "access_intermediate_arrival_time" = "Mellemliggende ankomsttid";
 "map_widget_intermediate_time" = "Mellemliggende tid";
 "shared_string_time" = "Tid";
-"map_widget_trip_recording_distance" = "Afstand";
+"shared_string_distance" = "Afstand";
 "icon_group_amenity" = "Facilitet";
 "shared_string_milliradians" = "Milliradianer";
 "angular_units" = "Enhed for vinkelmåling";

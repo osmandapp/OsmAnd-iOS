@@ -663,7 +663,7 @@
 "osm_live_payment_renews_monthly" = "Aylık yenileme";
 "osm_live_payment_renews_annually" = "Yıllık yenileme";
 "shared_string_time" = "Zaman";
-"map_widget_trip_recording_distance" = "Mesafe";
+"shared_string_distance" = "Mesafe";
 "retry" = "Tekrar dene";
 "shared_string_enabled" = "Etkin";
 "shared_string_start_date" = "Başlangıç tarihi";

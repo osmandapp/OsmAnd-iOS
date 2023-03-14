@@ -727,7 +727,7 @@
 "user_password" = "密码";
 "opening_hours" = "营业时间";
 "shared_string_time" = "时间";
-"map_widget_trip_recording_distance" = "距离";
+"shared_string_distance" = "距离";
 "angular_units_descr" = "改变方位测量单位。";
 "map_magnifier" = "地图缩放";
 "text_size" = "字体大小";

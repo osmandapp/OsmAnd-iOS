@@ -455,7 +455,7 @@
 "shared_string_from" = "från";
 "shared_string_time" = "Tid";
 "time_of_day" = "Tid på dagen";
-"map_widget_trip_recording_distance" = "Sträcka";
+"shared_string_distance" = "Sträcka";
 "shared_string_time_span" = "Tidsspann";
 "shared_string_start_time" = "Starttid";
 "shared_string_end_time" = "Sluttid";

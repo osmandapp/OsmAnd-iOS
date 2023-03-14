@@ -952,7 +952,7 @@
 "access_intermediate_arrival_time" = "Čas príchodu k prechodnému bodu";
 "map_widget_intermediate_time" = "Prechodný čas";
 "shared_string_time" = "Čas";
-"map_widget_trip_recording_distance" = "Vzdialenosť";
+"shared_string_distance" = "Vzdialenosť";
 "shared_string_milliradians" = "Miliradiány";
 "angular_units" = "Merné jednotky pre uhly";
 "angular_units_descr" = "Zmení jednotku na meranie azimutu.";

@@ -484,7 +484,7 @@
 "shared_string_from" = "սկսած";
 "shared_string_time" = "Ժամանակ";
 "time_of_day" = "Time of day";
-"map_widget_trip_recording_distance" = "Հեռավորություն";
+"shared_string_distance" = "Հեռավորություն";
 "shared_string_time_span" = "Ընդհանուր ժամանակը";
 "shared_string_start_time" = "Մեկնելու ժամը";
 "shared_string_end_time" = "Ժամաննամ ժամկետը";

@@ -669,7 +669,7 @@
 "km_h" = "km/h";
 "lang_nl" = "네델란드어";
 "rendering_value_default_name" = "기본";
-"map_widget_trip_recording_distance" = "거리";
+"shared_string_distance" = "거리";
 "routing_engine_vehicle_type_driving" = "운전";
 "daynight_mode_night" = "야간";
 "rendering_attr_pisteRoutes_name" = "스키 슬로프";

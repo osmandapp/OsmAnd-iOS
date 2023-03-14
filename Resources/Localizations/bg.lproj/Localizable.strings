@@ -455,7 +455,7 @@
 "shared_string_from" = "от";
 "shared_string_time" = "Time";
 "time_of_day" = "Time of day";
-"map_widget_trip_recording_distance" = "Растояние";
+"shared_string_distance" = "Растояние";
 "shared_string_time_span" = "Time span";
 "shared_string_start_time" = "Start time";
 "shared_string_end_time" = "End time";

@@ -960,7 +960,7 @@
 "map_widget_intermediate_time" = "Tiempo intermedio";
 "show_tunnels" = "Túneles";
 "shared_string_time" = "Tiempo";
-"map_widget_trip_recording_distance" = "Distancia";
+"shared_string_distance" = "Distancia";
 "map_magnifier" = "Lupa del mapa";
 "text_size" = "Tamaño del texto";
 "osm_confirm_bulk_delete" = "¿Borrar %d ediciones?";

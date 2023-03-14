@@ -454,7 +454,7 @@
 "shared_string_from" = "el";
 "shared_string_time" = "Tempo";
 "time_of_day" = "Tagtempo";
-"map_widget_trip_recording_distance" = "Distanco";
+"shared_string_distance" = "Distanco";
 "shared_string_time_span" = "Tempa variejo";
 "shared_string_start_time" = "Komenca tempo";
 "shared_string_end_time" = "Fina tempo";

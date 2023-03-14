@@ -456,7 +456,7 @@
 "shared_string_from" = "Dari";
 "shared_string_time" = "Waktu";
 "time_of_day" = "Waktu dalam sehari";
-"map_widget_trip_recording_distance" = "Jarak";
+"shared_string_distance" = "Jarak";
 "shared_string_time_span" = "Rentang waktu";
 "shared_string_start_time" = "Waktu mulai";
 "shared_string_end_time" = "Waktu berakhir";

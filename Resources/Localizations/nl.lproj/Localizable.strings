@@ -883,7 +883,7 @@
 "available_maps" = "Beschikbare kaarten";
 "quick_action_add_parking" = "Parkeerlocatie instellen";
 "quick_action_navigation_voice" = "Stembegeleiding aan/uit";
-"map_widget_trip_recording_distance" = "Afstand";
+"shared_string_distance" = "Afstand";
 "context_menu_item_create_poi" = "POI aanmaken";
 "tunnel_warning" = "Tunnel";
 "context_menu_item_directions_from" = "Route vanaf";

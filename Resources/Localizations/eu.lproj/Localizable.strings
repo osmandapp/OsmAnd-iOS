@@ -455,7 +455,7 @@
 "shared_string_from" = "nondik";
 "shared_string_time" = "Denbora";
 "time_of_day" = "Eguneko ordua";
-"map_widget_trip_recording_distance" = "Distantzia";
+"shared_string_distance" = "Distantzia";
 "shared_string_time_span" = "Denbora tartea";
 "shared_string_start_time" = "Hasiera ordua";
 "shared_string_end_time" = "Amaiera ordua";

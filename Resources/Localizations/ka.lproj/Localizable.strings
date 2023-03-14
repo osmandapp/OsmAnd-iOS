@@ -455,7 +455,7 @@
 "shared_string_from" = "-დან";
 "shared_string_time" = "დრო";
 "time_of_day" = "დღის დრო";
-"map_widget_trip_recording_distance" = "მანძილი";
+"shared_string_distance" = "მანძილი";
 "shared_string_time_span" = "დროის შუალედი";
 "shared_string_start_time" = "საწყისი დრო";
 "shared_string_end_time" = "დამთავრების დრო";

@@ -456,7 +456,7 @@
 "shared_string_from" = "iz";
 "shared_string_time" = "Vreme";
 "time_of_day" = "Doba dana";
-"map_widget_trip_recording_distance" = "Rastojanje";
+"shared_string_distance" = "Rastojanje";
 "shared_string_time_span" = "Vremenski raspon";
 "shared_string_start_time" = "Vreme polaska";
 "shared_string_end_time" = "Vreme dolaska";

@@ -455,7 +455,7 @@
 "shared_string_from" = "desde";
 "shared_string_time" = "Tiempo";
 "time_of_day" = "Hora del día";
-"map_widget_trip_recording_distance" = "Distancia";
+"shared_string_distance" = "Distancia";
 "shared_string_time_span" = "Duración total";
 "shared_string_start_time" = "Hora de inicio";
 "shared_string_end_time" = "Hora de fin";

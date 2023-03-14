@@ -101,7 +101,7 @@
     {
         [distanceArr addObject:@{
             @"type" : [OATimeTableViewCell getCellIdentifier],
-            @"title" : OALocalizedString(@"map_widget_trip_recording_distance"),
+            @"title" : OALocalizedString(@"shared_string_distance"),
         }];
         [distanceArr addObject:@{
             @"type" : [OACustomPickerTableViewCell getCellIdentifier],

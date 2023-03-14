@@ -456,7 +456,7 @@
 "shared_string_from" = "o";
 "shared_string_time" = "Amser";
 "time_of_day" = "Amser o\'r dydd";
-"map_widget_trip_recording_distance" = "Pellter";
+"shared_string_distance" = "Pellter";
 "shared_string_time_span" = "Rhychwant amser";
 "shared_string_start_time" = "Amser dechrau";
 "shared_string_end_time" = "Amser gorffen";

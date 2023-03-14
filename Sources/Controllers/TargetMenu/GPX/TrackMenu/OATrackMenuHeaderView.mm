@@ -253,7 +253,7 @@
                             @"string_value": [OAOsmAndFormatter getFormattedDistance:totalDistance],
                             @"int_value": @(EOARouteStatisticsModeAltitude)
                     },
-                    kCellTitle: OALocalizedString(@"map_widget_trip_recording_distance"),
+                    kCellTitle: OALocalizedString(@"shared_string_distance"),
                     kCellRightIconName: @"ic_small_distance"
             }]];
         }

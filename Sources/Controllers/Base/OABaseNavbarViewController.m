@@ -53,8 +53,6 @@
 
 - (void)viewDidLoad
 {
-    [self generateData];
-
     [super viewDidLoad];
 
     self.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeNever;
@@ -151,6 +149,13 @@
             self.navigationController.navigationBar.tintColor = nil;
         }
     }
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self generateData];
+    [self.tableView reloadData];
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator

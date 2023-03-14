@@ -8,7 +8,7 @@
 
 #import "OAAdvancedEditingViewController.h"
 #import "OAOsmEditingViewController.h"
-#import "OADescrTitleCell.h"
+#import "OASimpleTableViewCell.h"
 #import "OATextInputFloatingCellWithIcon.h"
 #import "OAButtonTableViewCell.h"
 #import "OAEditPOIData.h"
@@ -58,21 +58,27 @@
     _dataProvider = provider;
 }
 
-- (OADescrTitleCell *)getTextCellWithDescr:(NSIndexPath *)indexPath
+- (OASimpleTableViewCell *)getTextCellWithDescr:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    OADescrTitleCell *resultCell = nil;
-    resultCell = [self.tableView dequeueReusableCellWithIdentifier:[OADescrTitleCell getCellIdentifier]];
+    OASimpleTableViewCell *resultCell = [self.tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
     if (resultCell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADescrTitleCell getCellIdentifier] owner:self options:nil];
-        resultCell = (OADescrTitleCell *)[nib objectAtIndex:0];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+        resultCell = (OASimpleTableViewCell *) nib[0];
+        [resultCell leftIconVisibility:NO];
+        resultCell.userInteractionEnabled = NO;
+        resultCell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
+        resultCell.titleLabel.textColor = UIColorFromRGB(color_text_footer);
+        resultCell.descriptionLabel.textColor = UIColor.blackColor;
+        resultCell.descriptionLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
     }
-    resultCell.descriptionView.text = item[@"hint"];
-    resultCell.textView.text = item[@"value"];
-    resultCell.textView.hidden = resultCell.textView.text.length == 0;
-    
-    resultCell.userInteractionEnabled = NO;
+    if (resultCell)
+    {
+        resultCell.titleLabel.text = item[@"hint"];
+        resultCell.descriptionLabel.text = item[@"value"];
+        [resultCell descriptionVisibility:resultCell.descriptionLabel.text.length > 0];
+    }
     return resultCell;
 }
 
@@ -182,8 +188,8 @@
     NSString *poiName = [_poiData getTag:[OAOSMSettings getOSMKey:NAME]];
     
     NSArray *nameTypePair = @[
-                              [self getDictionary:[OADescrTitleCell getCellIdentifier] hint:OALocalizedString(@"shared_string_name") value:poiName image:nil],
-                              [self getDictionary:[OADescrTitleCell getCellIdentifier] hint:hint value:value image:nil]
+                              [self getDictionary:[OASimpleTableViewCell getCellIdentifier] hint:OALocalizedString(@"shared_string_name") value:poiName image:nil],
+                              [self getDictionary:[OASimpleTableViewCell getCellIdentifier] hint:hint value:value image:nil]
                               ];
     [_fieldPairs addObject:nameTypePair];
     
@@ -257,7 +263,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:[OADescrTitleCell getCellIdentifier]])
+    if ([item[@"type"] isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
         return [self getTextCellWithDescr:indexPath];
     else if ([item[@"type"] isEqualToString:[OATextInputFloatingCellWithIcon getCellIdentifier]])
         return [self getInputCellWithHint:indexPath];

@@ -955,7 +955,7 @@
 "angular_units_descr" = "Change l'unité de mesure de l'azimut.";
 "show_tunnels" = "Tunnels";
 "shared_string_time" = "Durée";
-"map_widget_trip_recording_distance" = "Distance";
+"shared_string_distance" = "Distance";
 "day" = "Jour";
 "week" = "Semaine";
 "weeks_2_4" = "Semaines";

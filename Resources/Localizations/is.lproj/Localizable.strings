@@ -962,7 +962,7 @@
 "access_intermediate_arrival_time" = "Milli-komutími";
 "map_widget_intermediate_time" = "Millitími";
 "shared_string_time" = "Tími";
-"map_widget_trip_recording_distance" = "Vegalengd";
+"shared_string_distance" = "Vegalengd";
 "shared_string_milliradians" = "Millíradíanar";
 "angular_units" = "Mælieiningar horna";
 "angular_units_descr" = "Breyttu í hvaða einingum áttarhorn (hæð) er mælt.";

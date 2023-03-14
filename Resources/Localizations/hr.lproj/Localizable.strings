@@ -456,7 +456,7 @@
 "shared_string_from" = "from";
 "shared_string_time" = "Vrijeme";
 "time_of_day" = "Time of day";
-"map_widget_trip_recording_distance" = "Udaljenost";
+"shared_string_distance" = "Udaljenost";
 "shared_string_time_span" = "Vremensko razdoblje";
 "shared_string_start_time" = "Vrijeme početka";
 "shared_string_end_time" = "Vrijeme završetka";

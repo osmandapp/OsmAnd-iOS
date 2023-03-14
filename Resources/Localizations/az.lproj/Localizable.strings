@@ -456,7 +456,7 @@
 "shared_string_from" = "buradan:";
 "shared_string_time" = "Vaxt";
 "time_of_day" = "Günün vaxtı";
-"map_widget_trip_recording_distance" = "Məsafə";
+"shared_string_distance" = "Məsafə";
 "shared_string_time_span" = "Ümumi vaxt";
 "shared_string_start_time" = "Başlama vaxtı";
 "shared_string_end_time" = "Bitmə vaxtı";

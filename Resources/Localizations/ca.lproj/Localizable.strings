@@ -966,7 +966,7 @@
 "access_intermediate_arrival_time" = "Temps de pas";
 "map_widget_intermediate_time" = "Temps de pas";
 "shared_string_time" = "Durada";
-"map_widget_trip_recording_distance" = "Distància";
+"shared_string_distance" = "Distància";
 "shared_string_milliradians" = "Mil·liradiants";
 "angular_units" = "Unitats de mesura angular";
 "angular_units_descr" = "Canvia la unitat de mesura de l'azimut.";

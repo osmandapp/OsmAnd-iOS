@@ -455,7 +455,7 @@
 "shared_string_from" = "из";
 "shared_string_time" = "Време";
 "time_of_day" = "Доба дана";
-"map_widget_trip_recording_distance" = "Растојање";
+"shared_string_distance" = "Растојање";
 "shared_string_time_span" = "Временски распон";
 "shared_string_start_time" = "Време поласка";
 "shared_string_end_time" = "Време доласка";

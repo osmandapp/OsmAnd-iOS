@@ -363,7 +363,7 @@
 "shared_string_from" = "de";
 "shared_string_time" = "Durada";
 "time_of_day" = "Ora de la jornada";
-"map_widget_trip_recording_distance" = "Distància";
+"shared_string_distance" = "Distància";
 "retry" = "Tornatz assajar";
 "shared_string_enabled" = "Activat";
 "shared_string_start_date" = "Data de començament";

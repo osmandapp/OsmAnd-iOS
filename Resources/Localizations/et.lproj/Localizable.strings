@@ -366,7 +366,7 @@
 "shared_string_from" = "alates";
 "shared_string_time" = "Aeg";
 "time_of_day" = "Kellaaeg";
-"map_widget_trip_recording_distance" = "Kaugus";
+"shared_string_distance" = "Kaugus";
 "retry" = "Proovi uuesti";
 "shared_string_enabled" = "Lubatud";
 "shared_string_start_date" = "Alguskuupäev";

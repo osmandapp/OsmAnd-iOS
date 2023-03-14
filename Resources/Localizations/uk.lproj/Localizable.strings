@@ -874,7 +874,7 @@
 "access_intermediate_arrival_time" = "Прибуття в проміжний пункт призначення";
 "map_widget_intermediate_time" = "Час до проміжного пункту призначення";
 "shared_string_time" = "Час";
-"map_widget_trip_recording_distance" = "Відстань";
+"shared_string_distance" = "Відстань";
 "angular_units" = "Кутові одиниці виміру";
 "angular_units_descr" = "Змінити одиниці вимірювання азимуту.";
 "show_tunnels" = "Тунелі";

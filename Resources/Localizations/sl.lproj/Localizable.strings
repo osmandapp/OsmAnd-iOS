@@ -808,7 +808,7 @@
 "get_discount_second_part" = "nato %@";
 "sett_generic_ext_input" = "Tipkovnica";
 "sett_wunderlinq_ext_input" = "WunderLINQ";
-"map_widget_trip_recording_distance" = "Razdalja";
+"shared_string_distance" = "Razdalja";
 "configure_map" = "Nastavitve zemljevida";
 "simulate_navigation" = "Izvedi navidezno navigacijo";
 "select_map_marker" = "Izbor označbe na zemljevidu";

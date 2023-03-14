@@ -456,7 +456,7 @@
 "shared_string_from" = "no";
 "shared_string_time" = "Laiks";
 "time_of_day" = "Dienas laiks";
-"map_widget_trip_recording_distance" = "Attālums";
+"shared_string_distance" = "Attālums";
 "shared_string_time_span" = "Laika sprīdis";
 "shared_string_start_time" = "Starta laiks";
 "shared_string_end_time" = "Finiša laiks";

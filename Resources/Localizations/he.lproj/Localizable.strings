@@ -456,7 +456,7 @@
 "shared_string_from" = "מאת";
 "shared_string_time" = "זמן";
 "time_of_day" = "השעה ביום";
-"map_widget_trip_recording_distance" = "מרחק";
+"shared_string_distance" = "מרחק";
 "shared_string_time_span" = "מסגרת זמן";
 "shared_string_start_time" = "יציאה לדרך";
 "shared_string_end_time" = "הגעה";

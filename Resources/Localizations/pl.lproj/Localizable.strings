@@ -951,7 +951,7 @@
 "map_widget_intermediate_time" = "Czas pośredni";
 "show_tunnels" = "Tunele";
 "shared_string_time" = "Czas";
-"map_widget_trip_recording_distance" = "Odległość";
+"shared_string_distance" = "Odległość";
 "icon_group_amenity" = "Udogodnienie";
 "map_magnifier" = "Przybliżenie";
 "text_size" = "Rozmiar tekstu";

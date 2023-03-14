@@ -277,7 +277,7 @@
 "postcode" = "Ταχυδρομικός κώδικας";
 "map_widget_ruler_control" = "Κανόνας ακτίνας";
 "quick_action_interim_dialog" = "Εμφάνιση ενδιάμεσου διαλόγου";
-"map_widget_trip_recording_distance" = "Απόσταση";
+"shared_string_distance" = "Απόσταση";
 "edit_filter" = "Επεξεργασία κατηγοριών";
 "rendering_category_hide" = "Απόκρυψη";
 "poi_filter_by_name" = "Αναζήτηση βάσει ονόματος";

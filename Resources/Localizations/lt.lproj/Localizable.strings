@@ -455,7 +455,7 @@
 "shared_string_from" = "iš";
 "shared_string_time" = "Laikas";
 "time_of_day" = "Dienos metas";
-"map_widget_trip_recording_distance" = "Atstumas";
+"shared_string_distance" = "Atstumas";
 "shared_string_time_span" = "Trukmė";
 "shared_string_start_time" = "Pradžios laikas";
 "shared_string_end_time" = "Pabaigos laikas";

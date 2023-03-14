@@ -523,7 +523,7 @@
 "shared_string_from" = "od";
 "shared_string_time" = "Vreme";
 "time_of_day" = "Vreme od denot";
-"map_widget_trip_recording_distance" = "Rastojanie";
+"shared_string_distance" = "Rastojanie";
 "shared_string_time_span" = "Vremenski raspon";
 "shared_string_start_time" = "Pocetno vreme";
 "shared_string_end_time" = "Kraj na vremeto";

@@ -363,7 +363,7 @@
 "shared_string_from" = "から";
 "shared_string_time" = "時間";
 "time_of_day" = "時刻";
-"map_widget_trip_recording_distance" = "距離";
+"shared_string_distance" = "距離";
 "retry" = "再試行";
 "shared_string_enabled" = "有効";
 "shared_string_start_date" = "開始日";

@@ -364,7 +364,7 @@
 "shared_string_from" = "wot";
 "shared_string_time" = "Čas";
 "time_of_day" = "Time of day";
-"map_widget_trip_recording_distance" = "Distance";
+"shared_string_distance" = "Distance";
 "retry" = "Znowa spytać";
 "shared_string_enabled" = "Enabled";
 "shared_string_start_date" = "Start date";

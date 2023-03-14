@@ -268,7 +268,7 @@
     {
         case EOARouteStatisticsModeAltitudeSpeed:
         {
-            titles[@"top_left_title_string_value"] = OALocalizedString(@"map_widget_trip_recording_distance");
+            titles[@"top_left_title_string_value"] = OALocalizedString(@"shared_string_distance");
             titles[@"top_right_title_string_value"] = OALocalizedString(@"shared_string_time_span");
             titles[@"bottom_left_title_string_value"] = OALocalizedString(@"shared_string_start_time");
             titles[@"bottom_right_title_string_value"] = OALocalizedString(@"shared_string_end_time");

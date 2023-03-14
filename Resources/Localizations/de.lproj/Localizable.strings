@@ -956,7 +956,7 @@
 "access_intermediate_arrival_time" = "Ankunftszeit Zwischenziel";
 "map_widget_intermediate_time" = "Zwischenankunftszeit";
 "shared_string_time" = "Zeit";
-"map_widget_trip_recording_distance" = "Entfernung";
+"shared_string_distance" = "Entfernung";
 "shared_string_milliradians" = "Milliradiant";
 "angular_units" = "Winkel-Maßeinheiten";
 "angular_units_descr" = "Azimut-Messeinheiten ändern.";

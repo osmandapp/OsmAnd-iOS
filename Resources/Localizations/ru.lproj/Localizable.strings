@@ -670,7 +670,7 @@
 "osm_edits_all" = "Все правки";
 "osm_edits_notes" = "Заметки";
 "shared_string_time" = "Время";
-"map_widget_trip_recording_distance" = "Расстояние";
+"shared_string_distance" = "Расстояние";
 "angular_units" = "Угловые единицы измерения";
 "show_tunnels" = "Туннели";
 "text_size" = "Размер текста";

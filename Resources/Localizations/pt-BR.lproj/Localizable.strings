@@ -763,7 +763,7 @@
 "shared_string_modify" = "Alterar";
 "shared_string_of" = "de";
 "shared_string_time" = "Tempo";
-"map_widget_trip_recording_distance" = "Distância";
+"shared_string_distance" = "Distância";
 "offline_maps" = "Mapas offline";
 "icon_group_amenity" = "Amenidade";
 "poi_overlay" = "Camada superior de POI";

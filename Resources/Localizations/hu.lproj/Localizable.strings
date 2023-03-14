@@ -641,7 +641,7 @@
 "in_app_purchase" = "Alkalmazáson belüli vásárlás";
 "in_app_purchase_desc" = "Egyszeri fizetés";
 "user_password" = "Jelszó";
-"map_widget_trip_recording_distance" = "Távolság";
+"shared_string_distance" = "Távolság";
 "shared_string_milliradians" = "Milliradián";
 "sett_generic_ext_input" = "Billentyűzet";
 "sett_wunderlinq_ext_input" = "WunderLINQ";

@@ -838,7 +838,7 @@
 "map_magnifier" = "Achegamento do mapa";
 "add_home" = "Engadir a miña casa";
 "mapillary" = "Mapillary";
-"map_widget_trip_recording_distance" = "Distancia";
+"shared_string_distance" = "Distancia";
 "vector_data" = "Mapas vectoriais sen conexión";
 "osn_add_dialog_title" = "Crear unha nota";
 "poi_context_menu_modify" = "Modificar o PDI";

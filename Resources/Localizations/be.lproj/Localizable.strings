@@ -744,7 +744,7 @@
 "info_button" = "Інфармацыя";
 "shared_string_select_avoid_road_on_map" = "Абярыце дарогі, якія патрэбна пазбягаць падчас разліку маршруту";
 "user_password" = "Пароль";
-"map_widget_trip_recording_distance" = "Адлегласць";
+"shared_string_distance" = "Адлегласць";
 "angular_units" = "Адзінкі вымярэння вуглоў";
 "angular_units_descr" = "Змяніць адзінкі вымярэння азімуту.";
 "day_short" = "Дзень";

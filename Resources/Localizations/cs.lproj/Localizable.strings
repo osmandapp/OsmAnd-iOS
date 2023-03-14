@@ -992,7 +992,7 @@
 "osm_notes_online_layer" = "OSM Poznámky (on-line)";
 "gpx_tags_txt" = "Tagy";
 "quick_action_add_poi" = "Přidat POI";
-"map_widget_trip_recording_distance" = "Vzdálenost";
+"shared_string_distance" = "Vzdálenost";
 "quick_action_navigation_voice" = "Hlas zapnout/vypnout";
 "quick_action_map_style" = "Změnit styl mapy";
 "quick_action_poi_list" = "Seznam POI";

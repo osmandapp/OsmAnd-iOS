@@ -664,7 +664,7 @@
 "twitter" = "Twitter";
 "shared_string_close" = "Chiudi";
 "user_password" = "Password";
-"map_widget_trip_recording_distance" = "Distanza";
+"shared_string_distance" = "Distanza";
 "osm_live_plan_pricing" = "Piani&Tariffe";
 "osm_live_payment_monthly_title" = "Mensilmente";
 "osm_live_payment_month_cost_descr" = "%@ / mese";

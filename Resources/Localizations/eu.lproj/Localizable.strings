@@ -1263,7 +1263,7 @@
 "mapil_select_user" = "Select user";
 
 // Coordinate widget
-"coordinates_widget" = "Koordenatuen trepeta";
+"coordinates_widget_current_location" = "Koordenatuen trepeta";
 "searching_gps" = "GPSa bilatzen";
 "copied_to_clipboard" = "Arbelera kopiatuta";
 // Quick action
@@ -1272,10 +1272,10 @@
 "no_underlay" = "Azpi-azalik ez";
 "quick_action_map_underlay_action" = "Gehitu azpi-azala";
 "quick_action_list_descr" = "Tapping this action button pages through the list below";
-"toggle_coordinates" = "Show/hide coordinates widget";
-"show_coordinates" = "Show coordinates";
-"hide_coordinates" = "Hide coordinates";
-"quick_action_coordinates_widget_descr" = "Maparen koordenatuen widget-a erakusteko edo ezkutatzeko botoia.";
+"toggle_current_location" = "Show/hide coordinates widget";
+"show_current_location" = "Show coordinates";
+"hide_current_location" = "Hide coordinates";
+"quick_action_current_location_widget_descr" = "Maparen koordenatuen widget-a erakusteko edo ezkutatzeko botoia.";
 "quick_action_map_overlay_title" = "Maparen gain-azalak";
 "quick_action_map_underlay_title" = "Maparen azpi-azalak";
 "vector_data" = "Lineaz kanpoko bektore mapak";

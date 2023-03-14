@@ -1970,15 +1970,15 @@
 "hide_terrain" = "地形の非表示";
 "show_terrain" = "地形の表示";
 "unsupported_items" = "サポートされていない要素";
-"quick_action_coordinates_widget_descr" = "マップ上で座標ウィジェットの表示/非表示を切り替えます。";
-"hide_coordinates" = "座標を非表示";
-"show_coordinates" = "座標を表示";
-"toggle_coordinates" = "座標ウィジェットの表示/非表示";
+"quick_action_current_location_widget_descr" = "マップ上で座標ウィジェットの表示/非表示を切り替えます。";
+"hide_current_location" = "座標を非表示";
+"show_current_location" = "座標を表示";
+"toggle_current_location" = "座標ウィジェットの表示/非表示";
 "copied_to_clipboard" = "クリップボードにコピー";
 "searching_gps" = "GPS検索";
 
 // Coordinate widget
-"coordinates_widget" = "座標ウィジェット";
+"coordinates_widget_current_location" = "座標ウィジェット";
 "osm_editing_access_descr" = "すべてのローカル編集とメモを%@で表示できます。すでにアップロードされたアイテムはOsmAndのリストに表示されません。";
 "shared_string_loading" = "読込中…";
 "add_custom_category" = "カスタムカテゴリーを追加";

@@ -1501,7 +1501,7 @@
 "open_saved_track" = "開啟已儲存的軌跡";
 "amenity_type_emergency" = "緊急救助";
 "access_default_color" = "預設顏色";
-"coordinates_widget" = "座標小工具";
+"coordinates_widget_current_location" = "座標小工具";
 "shared_string_resources" = "資源";
 "extra_maps_menu_group" = "額外地圖";
 "show_compass_ruler" = "顯示指南針與尺規";
@@ -2021,7 +2021,7 @@
 "weather_pressure_millimeters_of_mercury" = "毫米汞柱";
 "transfers" = "移動";
 "use_login_and_password" = "使用使用者名稱與密碼";
-"quick_action_coordinates_widget_descr" = "在地圖上顯示或隱藏「座標」小工具的開關。";
+"quick_action_current_location_widget_descr" = "在地圖上顯示或隱藏「座標」小工具的開關。";
 "shared_string_cross_buy" = "跨平台購買";
 "shared_string_recorded" = "已記錄";
 "quick_action_contour_lines_descr" = "在地圖上顯示或隱藏等高線的按鈕。";

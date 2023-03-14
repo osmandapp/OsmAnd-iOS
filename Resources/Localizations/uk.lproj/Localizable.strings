@@ -1963,15 +1963,15 @@
 "select_gropu_descr" = "Виберіть групу або додайте нову";
 "fav_add_new_group" = "Додати нову групу";
 "select_group_descr" = "Виберіть групу або додайте нову";
-"quick_action_coordinates_widget_descr" = "Перемикач для показу або приховування віджета Координати на мапі.";
-"hide_coordinates" = "Сховати координати";
-"show_coordinates" = "Показати координати";
-"toggle_coordinates" = "Показати/сховати віджет координат";
+"quick_action_current_location_widget_descr" = "Перемикач для показу або приховування віджета Координати на мапі.";
+"hide_current_location" = "Сховати координати";
+"show_current_location" = "Показати координати";
+"toggle_current_location" = "Показати/сховати віджет координат";
 "copied_to_clipboard" = "Скопійовано до буфера обміну";
 "searching_gps" = "Пошук GPS";
 
 // Coordinate widget
-"coordinates_widget" = "Віджет координат";
+"coordinates_widget_current_location" = "Віджет координат";
 "coordinates" = "Координати";
 "shared_string_gpx_points" = "Точки";
 "download_regular_maps" = "Стандартна мапа";

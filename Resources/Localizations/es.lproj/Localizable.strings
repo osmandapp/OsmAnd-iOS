@@ -1910,7 +1910,7 @@
 "add_point_after" = "Añadir punto posterior";
 
 // Coordinate widget
-"coordinates_widget" = "Widget de coordenadas";
+"coordinates_widget_current_location" = "Widget de coordenadas";
 "searching_gps" = "Buscando GPS";
 "select_group" = "Elegir grupo";
 "street_level_imagery" = "Imágenes a nivel de calle";
@@ -2229,7 +2229,7 @@
 "route_preferred_terrain_any" = "El perfil del terreno no se tiene en cuenta al elegir una ruta.";
 "route_preferred_terrain_less_hilly" = "Rutas más cortas y menos montañosas.";
 "select_profile" = "Elige un perfil";
-"hide_coordinates" = "Ocultar coordenadas";
+"hide_current_location" = "Ocultar coordenadas";
 "cloud_show" = "Mostrar nubes";
 "product_desc_openplacereviews" = "Comparte tus opiniones sobre lugares públicos";
 "shared_string_weather" = "Meteorología";
@@ -2298,8 +2298,8 @@
 "export_failed" = "No se pudo exportar el perfil";
 "population_num" = "Población";
 "product_desc_mapillary" = "Vistas a nivel de calle para conocer el entorno";
-"toggle_coordinates" = "Mostrar/ocultar control de coordenadas";
-"show_coordinates" = "Mostrar coordenadas";
+"toggle_current_location" = "Mostrar/ocultar control de coordenadas";
+"show_current_location" = "Mostrar coordenadas";
 "gpx_upload_public_visibility_descr" = "«Público» significa que la traza se mostrará públicamente en tus trazas GPS y en las lista públicas de trazas GPS y con marcas de tiempo en crudo. Los datos servidos a través de la API no harán referencia a tu página de trazas. Las marcas de tiempo de los puntos no estarán disponibles a través de la API pública de GPS, y los puntos de la ruta no se ordenarán de manera cronológica.";
 "gpx_upload_identifiable_visibility_descr" = "«Identificable» significa que la traza se mostrará públicamente en tus trazas GPS y en las listas públicas de trazas GPS, es decir que otros usuarios podrán descargar la traza en bruto y asociarla a tu nombre de usuario. Los datos públicos servidos a través de la API con marcas de tiempo GPSharán referencia a la página original de la traza.";
 "map_settings_weather_temp" = "Temperatura";
@@ -2315,7 +2315,7 @@
 "srtm_download_single_help_message" = "Marca la variante. Deberás volver a descargar el archivo para cambiar el formato.";
 "ios_release_4_2" = "• Aspecto de las líneas de ruta: se ha añadido la posibilidad de definir el ancho y el color\n• Trazas: se ha añadido la opción de borrar varias trazas a la vez\n• Menú contextual de trazas: se ha añadido una barra de desplazamiento con grupos de puntos de ruta\n• Aspecto del mapa: se han dividido las rutas adicionales por tipo con la posibilidad de activar por separado una de cada categoría\n• Rutas a caballo: se ha añadido un nuevo tipo de navegación y perfil de la aplicación\n• Los archivos de OsmAnd ahora son visibles en desde el gestor de archivos\n• Se ha mejorado la interfaz de las opciones «Usar datos de elevación» y «Elegir fluctuación de elevación», se han combinado y se han renombrado como «Terreno preferido», actualmente disponibles para los perfiles «Bicicleta» y «Peatón».\n• Se ha añadido la opción «Incluir cabecera» para la grabación de trazas\n• Widget del nombre de la calle: ahora muestra el escudo del camino y el número de salida durante la navegación\n• Nuevas rutas de ejercicios «fitness» y «running» en el mapa\n• Corrección de errores de CarPlay, se han añadido gestos para pantallas táctiles\n• Se ha corregido la importación de archivos GPX desde el paquete OSF\n• Se ha corregido la importación de complementos personalizados con archivos incluidos\n• Se ha corregido varios fallos en el modo de planificación de rutas\n• Se ha corregido fallos durante la navegación\n";
 "white_color_undefined" = "Los tramos sin datos son blancos.";
-"quick_action_coordinates_widget_descr" = "Un botón que muestra u oculta el widget de coordenadas en el mapa.";
+"quick_action_current_location_widget_descr" = "Un botón que muestra u oculta el widget de coordenadas en el mapa.";
 "activity" = "Actividad";
 "product_desc_weather" = "Pronóstico horario de 24 horas con 7 días de anticipación en el mapa";
 "weather_plugin_description" = "Proporciona\n- el pronóstico del tiempo de 24 horas y 7 días con 5 capas\n- widgets basados en la ubicación\n- las isolíneas de temperatura/presión\n\nLos datos meteorológicos son proporcionados por el Sistema de Pronóstico Global (GFS, https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast).";

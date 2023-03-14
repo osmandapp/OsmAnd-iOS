@@ -1309,7 +1309,7 @@
 "searching_gps" = "Recèrca GPS en trin";
 "shared_string_enable" = "Activar";
 "shared_string_icon" = "Icòna";
-"coordinates_widget" = "VInheta de coordonadas";
+"coordinates_widget_current_location" = "VInheta de coordonadas";
 "show_compass_ruler" = "Mostrar la règla de la bossòla";
 "shared_string_wifi_only" = "Per wi-fi solament";
 "dialogs_and_notifications_title" = "Dialògs e notificacions";
@@ -1423,7 +1423,7 @@
 "avoid_road" = "Evitar la rota";
 "profile_appearance_descr" = "Icona, color e nom";
 "profile_appearance" = "Aparéncia dau perfiu";
-"hide_coordinates" = "Amagar lei coordenadas";
+"hide_current_location" = "Amagar lei coordenadas";
 "quick_action_hillshade_descr" = "Boton per mostrar o amagar l\'ombra de relèu de la mapa.";
 "track_show_start_finish_icons" = "Mostrar lei icònas de començament e de fin";
 "routing_attr_avoid_toll_name" = "Pas de rota de peatge";
@@ -1438,7 +1438,7 @@
 "routing_attr_allow_private_description" = "Permet l\'accès a d\'airaus privats.";
 "routing_attr_avoid_toll_description" = "Evitar lei rotas de peatge";
 "rendering_attr_piste_type_snow_park_name" = "Camin de terra (draia, draiòu...)";
-"show_coordinates" = "Monstrar lei coordenadas";
+"show_current_location" = "Monstrar lei coordenadas";
 "hide_terrain" = "Amagar lo relèu";
 "enable_hillshade" = "Activar la representacion dei donadas de terren";
 "rendering_attr_piste_difficulty_advanced_name" = "Avançat -da";
@@ -1829,7 +1829,7 @@
 "lang_scn" = "Sicilian";
 "lang_sk" = "Eslovac";
 "lang_sl" = "Eslovèn";
-"toggle_coordinates" = "Monstrar/ amagar la vinheta de coordonadas";
+"toggle_current_location" = "Monstrar/ amagar la vinheta de coordonadas";
 "lang_af" = "Afrikaans";
 "shared_string_show_all" = "Tot mostrar";
 "import_from_files" = "Importar de fichiers";
@@ -1843,7 +1843,7 @@
 "street_level_imagery" = "Imatges de carrieras";
 "navigate_point_format_UTM" = "TUM (Universal Transverse Mercator)";
 "navigate_point_format_unknown" = "Format inconegut";
-"quick_action_coordinates_widget_descr" = "Una bascula per mostrarò amagar lei vinhetas dei Coordenadas sus la mapa.";
+"quick_action_current_location_widget_descr" = "Una bascula per mostrarò amagar lei vinhetas dei Coordenadas sus la mapa.";
 "distance_moving" = "Distància corregida";
 "stats_select_graph_data" = "Seleccionatz lei donadas graficas";
 "map_widget_parking" = "Aparcament";

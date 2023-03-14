@@ -1132,7 +1132,7 @@
 "icon_group_sport" = "Άθληση";
 "shared_string_gpx_points" = "Σημεία";
 "hide_compass_ruler" = "Απόκρυψη χάρακα πυξίδας";
-"coordinates_widget" = "Γραφικό στοιχείο συντεταγμένων";
+"coordinates_widget_current_location" = "Γραφικό στοιχείο συντεταγμένων";
 "favorite_places_category" = "Μέρη";
 "shared_string_octagon" = "Οκτάγωνο";
 "navigation_over_track" = "Έναρξη πλοήγησης κατά μήκος του ίχνους";

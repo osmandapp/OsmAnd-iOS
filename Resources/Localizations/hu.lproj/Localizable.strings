@@ -1426,7 +1426,7 @@
 "plan_route_split_before" = "Elvágás ez előtt:";
 "shared_string_import" = "Importálás";
 "transport" = "Tömegközlekedés";
-"coordinates_widget" = "Koordináta-widget";
+"coordinates_widget_current_location" = "Koordináta-widget";
 "shared_string_others" = "Egyéb";
 "address_search_desc" = "Címkeresés";
 "shared_string_circle" = "Kör";
@@ -2175,7 +2175,7 @@
 "pro_features" = "Pro funkciók";
 "worldwide_maps" = "Térképek világszerte";
 "contributions_may_calculate_with_delay" = "A szerkesztések kiszámítása több órát is igénybe vehet.";
-"quick_action_coordinates_widget_descr" = "A koordináta-widgetet a térképen megjelenítő vagy elrejtő kapcsoló.";
+"quick_action_current_location_widget_descr" = "A koordináta-widgetet a térképen megjelenítő vagy elrejtő kapcsoló.";
 "quick_action_hillshade_descr" = "Gomb, amely a térképen megjeleníti vagy elrejti a domborzatárnyékolást.";
 "contact_support" = "Kapcsolatfelvétel az ügyfélszolgálattal";
 "backup_delete_types_descr" = "Törli az összes elavult adattípus adatát az OsmAnd Cloudból\?";

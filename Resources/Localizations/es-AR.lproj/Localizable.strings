@@ -1263,7 +1263,7 @@
 "mapil_select_user" = "Elegir usuario";
 
 // Coordinate widget
-"coordinates_widget" = "Widget de coordenadas";
+"coordinates_widget_current_location" = "Widget de coordenadas";
 "searching_gps" = "Buscando GPS";
 "copied_to_clipboard" = "Copiado al portapapeles";
 // Quick action
@@ -1272,10 +1272,10 @@
 "no_underlay" = "Sin subyacencia";
 "quick_action_map_underlay_action" = "Añadir subyacencia";
 "quick_action_list_descr" = "Pulsando las páginas de este botón de acción a través de la siguiente lista";
-"toggle_coordinates" = "Mostrar/ocultar control de coordenadas";
-"show_coordinates" = "Mostrar coordenadas";
-"hide_coordinates" = "Ocultar coordenadas";
-"quick_action_coordinates_widget_descr" = "Un botón que muestra u oculta el widget de coordenadas en el mapa.";
+"toggle_current_location" = "Mostrar/ocultar control de coordenadas";
+"show_current_location" = "Mostrar coordenadas";
+"hide_current_location" = "Ocultar coordenadas";
+"quick_action_current_location_widget_descr" = "Un botón que muestra u oculta el widget de coordenadas en el mapa.";
 "quick_action_map_overlay_title" = "Mapas superpuestos";
 "quick_action_map_underlay_title" = "Mapas subyacentes";
 "vector_data" = "Mapas vectoriales sin conexión";

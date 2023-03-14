@@ -1263,7 +1263,7 @@
 "mapil_select_user" = "Изаберите корисника";
 
 // Coordinate widget
-"coordinates_widget" = "Справица за координате";
+"coordinates_widget_current_location" = "Справица за координате";
 "searching_gps" = "Тражим ГПС";
 "copied_to_clipboard" = "Умножено је у оставу исечака";
 // Quick action
@@ -1272,10 +1272,10 @@
 "no_underlay" = "Без подвлачења";
 "quick_action_map_underlay_action" = "Додај слој испод карте";
 "quick_action_list_descr" = "Додиром на ово дугме листају се странице на листи испод";
-"toggle_coordinates" = "Прикажи/сакриј виџет за координате";
-"show_coordinates" = "Прикажи координате";
-"hide_coordinates" = "Сакриј координате";
-"quick_action_coordinates_widget_descr" = "Прекидач да на карти покаже или сакрије справицу са координатама.";
+"toggle_current_location" = "Прикажи/сакриј виџет за координате";
+"show_current_location" = "Прикажи координате";
+"hide_current_location" = "Сакриј координате";
+"quick_action_current_location_widget_descr" = "Прекидач да на карти покаже или сакрије справицу са координатама.";
 "quick_action_map_overlay_title" = "Слојеви изнад карте";
 "quick_action_map_underlay_title" = "Слојеви испод карте";
 "vector_data" = "Векторске карте ван мреже";

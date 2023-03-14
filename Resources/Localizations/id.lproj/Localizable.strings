@@ -1271,7 +1271,7 @@
 "mapil_select_user" = "Select user";
 
 // Coordinate widget
-"coordinates_widget" = "Widget koordinat";
+"coordinates_widget_current_location" = "Widget koordinat";
 "searching_gps" = "Mencari GPS";
 "copied_to_clipboard" = "Disalin ke papan klip";
 // Quick action
@@ -1280,10 +1280,10 @@
 "no_underlay" = "Tidak ada dasaran";
 "quick_action_map_underlay_action" = "Tambahkan dasaran";
 "quick_action_list_descr" = "Tapping this action button pages through the list below";
-"toggle_coordinates" = "Show/hide coordinates widget";
-"show_coordinates" = "Show coordinates";
-"hide_coordinates" = "Hide coordinates";
-"quick_action_coordinates_widget_descr" = "Alihan untuk menampilkan atau menyembunyikan widget Koordinat pada peta.";
+"toggle_current_location" = "Show/hide coordinates widget";
+"show_current_location" = "Show coordinates";
+"hide_current_location" = "Hide coordinates";
+"quick_action_current_location_widget_descr" = "Alihan untuk menampilkan atau menyembunyikan widget Koordinat pada peta.";
 "quick_action_map_overlay_title" = "Hamparan peta";
 "quick_action_map_underlay_title" = "Dasaran peta";
 "vector_data" = "Peta vektor luring";

@@ -1907,7 +1907,7 @@
 "coordinates" = "Coordenades";
 "sort_last_modified" = "Darrera modificació";
 "custom_osmand_plugin" = "Connector d\'OsmAnd adaptat";
-"coordinates_widget" = "Giny de coordenades";
+"coordinates_widget_current_location" = "Giny de coordenades";
 "searching_gps" = "Buscant GPS";
 "extra_maps_menu_group" = "Mapes addicionals";
 "join_segments" = "Uneix segments";

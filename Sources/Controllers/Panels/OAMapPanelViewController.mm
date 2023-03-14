@@ -46,7 +46,7 @@
 #import "OATransportRoutingHelper.h"
 #import "OAMainSettingsViewController.h"
 #import "OABaseScrollableHudViewController.h"
-#import "OATopCoordinatesWidget.h"
+#import "OACoordinatesWidget.h"
 #import "OAParkingPositionPlugin.h"
 #import "OAFavoritesHelper.h"
 #import "OADownloadMapWidget.h"

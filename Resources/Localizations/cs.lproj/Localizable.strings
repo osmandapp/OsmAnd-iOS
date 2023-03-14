@@ -1929,10 +1929,10 @@
 "visible_categories" = "Viditelné kategorie";
 "delete_custom_categories" = "Smazat vlastní kategorie";
 "download_regular_maps" = "Standardní mapy";
-"quick_action_coordinates_widget_descr" = "Přepínač pro zobrazení nebo skrytí nástroje Souřadnice na mapě.";
-"hide_coordinates" = "Skrýt souřadnice";
-"show_coordinates" = "Zobrazit souřadnice";
-"toggle_coordinates" = "Zobrazit/skrýt nástroj souřadnic";
+"quick_action_current_location_widget_descr" = "Přepínač pro zobrazení nebo skrytí nástroje Souřadnice na mapě.";
+"hide_current_location" = "Skrýt souřadnice";
+"show_current_location" = "Zobrazit souřadnice";
+"toggle_current_location" = "Zobrazit/skrýt nástroj souřadnic";
 "folder_already_exsists" = "Složka s tímto názvem již existuje";
 "incorrect_symbols" = "Zadány neplatné znaky";
 "preparing_file" = "Příprava souboru";
@@ -1977,7 +1977,7 @@
 "copied_to_clipboard" = "Zkopírováno do schránky";
 
 // Coordinate widget
-"coordinates_widget" = "Nástroj souřadnic";
+"coordinates_widget_current_location" = "Nástroj souřadnic";
 "searching_gps" = "Vyhledávání GPS";
 "new_plugin_added" = "Přidán nový modul";
 "add_custom_category" = "Přidat vlastní kategorii";

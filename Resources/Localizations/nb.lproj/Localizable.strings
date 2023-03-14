@@ -1806,7 +1806,7 @@
 "icon_group_symbols" = "Symboler";
 "icon_group_special" = "Spesiell";
 "hide_compass_ruler" = "Skjul kompasslinjal";
-"coordinates_widget" = "Koordinat-miniprogram";
+"coordinates_widget_current_location" = "Koordinat-miniprogram";
 "shared_string_others" = "Andre";
 "coordinates" = "Koordinater";
 "amenity_type_emergency" = "Nødsituasjon";
@@ -1838,8 +1838,8 @@
 "context_menu_item_edit_waypoint" = "Rediger GPX-rutepunkt";
 "map_widget_parking" = "Parkering";
 "unsupported_items" = "Ustøttede elementer";
-"hide_coordinates" = "Skjul koordinater";
-"show_coordinates" = "Vis koordinater";
+"hide_current_location" = "Skjul koordinater";
+"show_current_location" = "Vis koordinater";
 "select_profile" = "Velg profil";
 "threshold_distance" = "Terskeldistanse";
 "select_segment" = "Velg segment";
@@ -1945,7 +1945,7 @@
 "shared_string_custom" = "Egendefinert";
 "navigate_point_format_UTM" = "UTM";
 "navigate_point_format_unknown" = "Ukjent format";
-"toggle_coordinates" = "Vis/skjul koordinat-miniprogram";
+"toggle_current_location" = "Vis/skjul koordinat-miniprogram";
 "approximate_file_size" = "Omtrentlig filstørrelse";
 "help_travel" = "Rise (Wikipedia og Wikivoyage)";
 "shared_string_time_span" = "Tidsrom";
@@ -2373,7 +2373,7 @@
 "public_transport_ped_route_title" = "Ruten til fots er omtrent %@, og kan være raskere enn offentlig transport";
 "contributions_may_calculate_with_delay" = "Utregning av bidrag kan ta flere timer.";
 "are_you_sure" = "Er du sikker\?";
-"quick_action_coordinates_widget_descr" = "Glidebryter forå vise eler skjule koordinat-miniprogram på kartet.";
+"quick_action_current_location_widget_descr" = "Glidebryter forå vise eler skjule koordinat-miniprogram på kartet.";
 "rendering_attr_depthContourWidth_name" = "Linjebredde";
 "checking_for_duplicate_description" = "OsmAnd sjekker %@ for duplikater med eksisterende elementer i programmet.\n\nDet kan ta noe tid.";
 "depth_contour_lines" = "Dybdekoter";

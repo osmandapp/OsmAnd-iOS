@@ -1890,16 +1890,16 @@
 "quick_action_name_alert" = "Le nom de l'action rapide a été changé en %@ pour éviter les doublons.";
 "toggle_day_night" = "Changement de mode Jour/Nuit";
 "unsupported_items" = "Éléments non supportés";
-"quick_action_coordinates_widget_descr" = "Bouton pour afficher ou masquer le widget Coordonnées sur la carte.";
-"hide_coordinates" = "Masquer les coordonnées";
-"show_coordinates" = "Afficher les coordonnées";
-"toggle_coordinates" = "Afficher/Masquer le gadget des coordonnées";
+"quick_action_current_location_widget_descr" = "Bouton pour afficher ou masquer le widget Coordonnées sur la carte.";
+"hide_current_location" = "Masquer les coordonnées";
+"show_current_location" = "Afficher les coordonnées";
+"toggle_current_location" = "Afficher/Masquer le gadget des coordonnées";
 "quick_action_list_descr" = "Appuyez pour faire défiler la liste ci-dessous";
 "copied_to_clipboard" = "Copié dans le presse-papiers";
 "searching_gps" = "Recherche des signaux GPS";
 
 // Coordinate widget
-"coordinates_widget" = "Widget de coordonnées";
+"coordinates_widget_current_location" = "Widget de coordonnées";
 "mapil_select_user" = "Sélectionner l'utilisateur";
 "mapil_usernames" = "Noms d'utilisateur";
 "mapil_filter_date" = "Filtrer les images par date";

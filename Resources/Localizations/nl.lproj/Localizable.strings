@@ -1487,7 +1487,7 @@
 "custom_osmand_plugin" = "Aangepaste OsmAnd plug-in";
 "favorite_places_category" = "Plaatsen";
 "shared_string_enable" = "Activeer";
-"coordinates_widget" = "Coördinaten widget";
+"coordinates_widget_current_location" = "Coördinaten widget";
 "segments_count" = "Segment %d";
 "coordinates" = "Coördinaten";
 "extra_maps_menu_group" = "Extra kaarten";
@@ -2051,7 +2051,7 @@
 "get_osmand_live" = "Neem OsmAnd Live en krijg alle mogelijkheden: Dagelijkse kaartupdates en onbeperkte downloads, alle betaalde en gratis plugins, Wikipedia, Wikivoyage en veel meer.";
 "save_heading_descr" = "Sla koers naar elk trackpunt op tijdens het opnemen.";
 "backup_delete_all_data" = "Verwijder al mijn gegevens";
-"quick_action_coordinates_widget_descr" = "Een schuifschakelaar om de coördinaten widget op de kaart weer te geven of te verbergen.";
+"quick_action_current_location_widget_descr" = "Een schuifschakelaar om de coördinaten widget op de kaart weer te geven of te verbergen.";
 "routing_attr_avoid_tunnels_name" = "Tunnels vermijden";
 "shared_string_uploaded" = "Geüpload";
 "map_updates_for_mappers" = "Kaart updates voor OSM bijdragers";

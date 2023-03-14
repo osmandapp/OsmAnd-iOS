@@ -1088,7 +1088,7 @@
 "mapil_select_user" = "Select user";
 
 // Coordinate widget
-"coordinates_widget" = "Coordinates widget";
+"coordinates_widget_current_location" = "Coordinates widget";
 "searching_gps" = "Searching GPS";
 "copied_to_clipboard" = "Kopioitu leikepöydälle";
 // Quick action
@@ -1097,10 +1097,10 @@
 "no_underlay" = "No underlay";
 "quick_action_map_underlay_action" = "Add underlay";
 "quick_action_list_descr" = "Tapping this action button pages through the list below";
-"toggle_coordinates" = "Show/hide coordinates widget";
-"show_coordinates" = "Show coordinates";
-"hide_coordinates" = "Hide coordinates";
-"quick_action_coordinates_widget_descr" = "Painike Koordinaatit-widgetin näyttämiseen tai piilottamiseen kartalla.";
+"toggle_current_location" = "Show/hide coordinates widget";
+"show_current_location" = "Show coordinates";
+"hide_current_location" = "Hide coordinates";
+"quick_action_current_location_widget_descr" = "Painike Koordinaatit-widgetin näyttämiseen tai piilottamiseen kartalla.";
 "quick_action_map_overlay_title" = "Kartan peitekuvat";
 "quick_action_map_underlay_title" = "Map underlays";
 "vector_data" = "Offline vektorikartat";

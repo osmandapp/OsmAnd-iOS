@@ -77,6 +77,12 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    if (self.refreshOnAppear)
+    {
+        [self generateData];
+        [self.tableView reloadData];
+    }
 
     [self setupCustomLargeTitleView];
 
@@ -151,16 +157,6 @@
             self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
             self.navigationController.navigationBar.tintColor = nil;
         }
-    }
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    if (self.refreshOnAppear)
-    {
-        [self generateData];
-        [self.tableView reloadData];
     }
 }
 

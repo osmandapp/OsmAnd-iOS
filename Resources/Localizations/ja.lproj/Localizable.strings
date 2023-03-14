@@ -2356,7 +2356,7 @@
 "contributions_may_calculate_with_delay" = "貢献度の計算には数時間程度かかる場合があります。";
 "weather_forecast" = "天気予報";
 "tts_title" = "TTS";
-"rendering_attr_showMonorailRoutes_name" = "モノレールでのルート";
+"rendering_attr_showMonorailRoutes_name" = "モノレール路線";
 "product_title_pro" = "OsmAnd Pro";
 "product_title_plus" = "Maps+";
 "map_widget_rendering_fps" = "マップ描画FPS";
@@ -2386,8 +2386,8 @@
 "delete_tracks_bottom_sheet_title" = "経路を削除しますか？";
 "compass_always_visible" = "常に表示";
 "compass_always_hidden" = "常に非表示";
-"rendering_attr_showLightRailRoutes_name" = "軽量軌道交通(LRT)でのルート";
-"rendering_attr_showFunicularRoutes_name" = "ケーブルカーでのルート";
+"rendering_attr_showLightRailRoutes_name" = "軽量軌道交通(LRT)路線";
+"rendering_attr_showFunicularRoutes_name" = "ケーブルカー路線";
 "login_help_email_title" = "OsmAnd iOS Cloud";
 "huawei_appgallery" = "Huawei AppGallery";
 "amazon_appstore" = "Amazon Appstore";
@@ -2496,13 +2496,13 @@
 "rendering_attr_weatherCloudContours_name" = "雲頂高度(等値線)";
 "rendering_attr_showWaterwayTunnels_name" = "水路トンネル";
 "rendering_attr_OSMMapperAssistantNote_description" = "Note(メモ)タグの表示";
-"rendering_attr_showTrolleybusRoutes_name" = "トロリーバスでのルート";
+"rendering_attr_showTrolleybusRoutes_name" = "トロリーバス路線";
 "rendering_attr_noNatureReserveBoundaries_description" = "自然保護区、保護地域、国立公園の境界を非表示にします。";
 "routing_attr_prefer_tactile_paving_name" = "触覚舗装を優先";
 "rendering_attr_seabedDetail_description" = "海底面に関する条件、その表面の種類、雑草または海草などのカテゴリと分類に関する追加のテキスト情報です";
 "routing_attr_goods_restrictions_description" = "小型商用配達車の通行許可の可否";
 "rendering_attr_OSMMapperAssistantFixme_description" = "Fixmeタグの表示";
-"rendering_attr_showBusRoutes_name" = "バスでのルート";
+"rendering_attr_showBusRoutes_name" = "バス路線";
 "rendering_attr_natureReserves_description" = "自然保護区、保護地域、国立公園を表示します。";
 "routing_attr_driving_style_description" = "運転の目的を選択することで、より短くより速くより安全なルートを取得します";
 "routing_attr_avoid_footways_name" = "歩道を避ける";

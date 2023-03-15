@@ -18,6 +18,7 @@
 #import "OARoutingHelper.h"
 #import "OAMonitoringPlugin.h"
 #import "OAPlugin.h"
+#import "Localization.h"
 #include <OsmAndCore/Utilities.h>
 
 #import <sqlite3.h>
@@ -979,7 +980,7 @@
 - (OAGPX *)getCurrentGPX
 {
     [currentTrack applyBounds];
-    return [[OAGPXDatabase sharedDb] buildGpxItem:@"" title:currentTrack.metadata.name desc:currentTrack.metadata.desc bounds:currentTrack.bounds document:currentTrack];
+    return [[OAGPXDatabase sharedDb] buildGpxItem:OALocalizedString(@"shared_string_currently_recording_track") title:currentTrack.metadata.name desc:currentTrack.metadata.desc bounds:currentTrack.bounds document:currentTrack];
 }
 
 @end

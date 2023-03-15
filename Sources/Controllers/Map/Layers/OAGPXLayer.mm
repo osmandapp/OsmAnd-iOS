@@ -524,7 +524,7 @@ colorizationScheme:(int)colorizationScheme
         OAGPXDatabase *gpxDb = OAGPXDatabase.sharedDb;
         path = [[gpxDb getFileDir:path] stringByAppendingPathComponent:path.lastPathComponent];
         OAGPX *gpx = [gpxDb getGPXItem:path];
-        if (!gpx || gpx.showStartFinish)
+        if ((!gpx && ![path isEqualToString:kCurrentTrack]) || gpx.showStartFinish)
         {
             const auto& doc = it.value();
             if (!doc)

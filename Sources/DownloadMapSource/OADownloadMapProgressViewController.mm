@@ -13,7 +13,6 @@
 #import "OASQLiteTileSource.h"
 #import "OAMapTileDownloader.h"
 #import "OARootViewController.h"
-#import "OATimeTableViewCell.h"
 
 #include "Localization.h"
 #include "OASizes.h"

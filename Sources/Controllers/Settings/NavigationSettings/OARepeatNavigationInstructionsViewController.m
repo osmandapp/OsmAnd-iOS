@@ -8,7 +8,7 @@
 
 #import "OARepeatNavigationInstructionsViewController.h"
 #import "OASwitchTableViewCell.h"
-#import "OATimeTableViewCell.h"
+#import "OAValueTableViewCell.h"
 #import "OACustomPickerTableViewCell.h"
 #import "OAAppSettings.h"
 
@@ -78,7 +78,7 @@
     if (!isManualAnnunce)
     {
         [distanceArr addObject:@{
-            @"type" : [OATimeTableViewCell getCellIdentifier],
+            @"type" : [OAValueTableViewCell getCellIdentifier],
             @"title" : OALocalizedString(@"repeat_after"),
         }];
         [distanceArr addObject:@{
@@ -132,20 +132,22 @@
         }
         return cell;
     }
-    else if ([cellType isEqualToString:[OATimeTableViewCell getCellIdentifier]])
+    else if ([cellType isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
-        OATimeTableViewCell* cell;
-        cell = (OATimeTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:[OATimeTableViewCell getCellIdentifier]];
+        OAValueTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATimeTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OATimeTableViewCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAValueTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
-        cell.lbTitle.text = item[@"title"];
-        cell.lbTime.text = _keepInformingEntries[_selectedValue];
-        cell.lbTime.textColor = UIColorFromRGB(color_text_footer);
-
+        if (cell)
+        {
+            cell.titleLabel.text = item[@"title"];
+            cell.valueLabel.text = _keepInformingEntries[_selectedValue];
+        }
         return cell;
     }
     else if ([cellType isEqualToString:[OACustomPickerTableViewCell getCellIdentifier]])
@@ -180,7 +182,7 @@
 - (void)onRowSelected:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
-    if ([item[@"type"] isEqualToString:[OATimeTableViewCell getCellIdentifier]])
+    if ([item[@"type"] isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
         [self.tableView beginUpdates];
 

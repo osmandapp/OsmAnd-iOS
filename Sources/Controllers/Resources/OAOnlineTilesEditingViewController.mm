@@ -10,7 +10,7 @@
 #import "Localization.h"
 #import "OASQLiteTileSource.h"
 #import "OAColors.h"
-#import "OATimeTableViewCell.h"
+#import "OAValueTableViewCell.h"
 #import "OASettingsTableViewCell.h"
 #import "OACustomPickerTableViewCell.h"
 #import "OAInputTableViewCell.h"
@@ -240,12 +240,12 @@
     [zoomArr addObject:@{
                         @"title": OALocalizedString(@"rec_interval_minimum"),
                         @"key" : @"minZoom",
-                        @"type" : [OATimeTableViewCell getCellIdentifier],
+                        @"type" : [OAValueTableViewCell getCellIdentifier],
                          }];
     [zoomArr addObject:@{
                         @"title": OALocalizedString(@"shared_string_maximum"),
                         @"key" : @"maxZoom",
-                        @"type" : [OATimeTableViewCell getCellIdentifier],
+                        @"type" : [OAValueTableViewCell getCellIdentifier],
                          }];
     [zoomArr addObject:@{
                         @"type" : [OACustomPickerTableViewCell getCellIdentifier],
@@ -865,25 +865,28 @@
         return cell;
     }
 
-    else if ([item[@"type"] isEqualToString:[OATimeTableViewCell getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
-        OATimeTableViewCell* cell;
-        cell = (OATimeTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OATimeTableViewCell getCellIdentifier]];
+        OAValueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATimeTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OATimeTableViewCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAValueTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.valueLabel.textColor = UIColor.blackColor;
         }
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.lbTitle.text = item[@"title"];
-        if ([item[@"key"] isEqualToString:@"minZoom"])
-            cell.lbTime.text = [NSString stringWithFormat:@"%d", _minZoom];
-        else if ([item[@"key"] isEqualToString:@"maxZoom"])
-            cell.lbTime.text = [NSString stringWithFormat:@"%d", _maxZoom];
-        else
-            cell.lbTime.text = @"";
-        cell.lbTime.textColor = [UIColor blackColor];
-
+        if (cell)
+        {
+            cell.titleLabel.text = item[@"title"];
+            if ([item[@"key"] isEqualToString:@"minZoom"])
+                cell.valueLabel.text = [NSString stringWithFormat:@"%d", _minZoom];
+            else if ([item[@"key"] isEqualToString:@"maxZoom"])
+                cell.valueLabel.text = [NSString stringWithFormat:@"%d", _maxZoom];
+            else
+                cell.valueLabel.text = @"";
+        }
         return cell;
     }
     else if ([item[@"type"] isEqualToString:[OACustomPickerTableViewCell getCellIdentifier]])
@@ -910,7 +913,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item =  [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:[OATimeTableViewCell getCellIdentifier]])
+    if ([item[@"type"] isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
         [self.tableView beginUpdates];
 

@@ -2211,15 +2211,16 @@
 
 //Icon categories
 "icon_group_amenity" = "Ameniti";
-"amenity_type_emergency" = "Hitna pomoć";
+"icon_group_emergency" = "Hitna pomoć";
 "icon_group_special" = "Special";
 "icon_group_sport" = "Sport";
 "icon_group_symbols" = "Simboli";
-"transport" = "Prevoz";
+"icon_group_transport" = "Prevoz";
 "icon_group_travel" = "Putovanje";
 "icon_group_nautical" = "Pomorska";
 "icon_group_industrial" = "Industrija";
-"amenity_type_education" = "Obrazovanje";
+"icon_group_education" = "Obrazovanje";
+"transport" = "Prevoz";
 "settings_item_read_error" = "Ne mogu dačitam iz „%@”.";
 "app_mode_default" = "Pregled karte";
 "app_mode_car" = "Vožnja";

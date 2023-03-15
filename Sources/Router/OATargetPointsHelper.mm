@@ -40,6 +40,7 @@
     BOOL _isSearchingWork;
     BOOL _isSearchingStart;
     BOOL _isSearchingDestination;
+    BOOL _isSearchingMyLocation;
 }
 
 + (OATargetPointsHelper *) sharedInstance
@@ -98,6 +99,12 @@
     }
     
     [self lookupAllAddresses];
+}
+
+- (void)readMyLocationPointFromSettings
+{
+    _myLocationToStart = _app.data.myLocationToStart;
+    [self lookupAddressForMyLocationPoint];
 }
 
 - (OARTargetPoint *) getPointToNavigate
@@ -244,6 +251,16 @@
     [self updateListeners];
 }
 
+- (void)updateMyLocationToStart
+{
+    if (!_pointToStart)
+    {
+        CLLocation *lastKnownLocation = _app.locationServices.lastKnownLocation;
+//        OARoutingHelperUtils.checkAndUpdateStartLocation(ctx, latLon, false);
+        [self setMyLocationPoint:lastKnownLocation updateRoute:false name:nil];
+    }
+}
+
 - (void) updateRoutingHelper
 {
     OARTargetPoint *start = _app.data.pointToStart;
@@ -383,7 +400,7 @@
     }
     [self lookupAddressForHomePoint];
     [self lookupAddressForWorkPoint];
-//    lookupAddressForMyLocationPoint();
+    [self lookupAddressForMyLocationPoint];
 }
 
 - (void) navigateToPoint:(CLLocation *)point updateRoute:(BOOL)updateRoute intermediate:(int)intermediate historyName:(OAPointDescription *)historyName
@@ -444,6 +461,29 @@
         [_app.data clearPointToStart];
     }
     [self readFromSettings];
+    [self updateRouteAndRefresh:updateRoute];
+}
+
+- (void)setMyLocationPoint:(CLLocation *)startPoint updateRoute:(BOOL)updateRoute name:(OAPointDescription *)name
+{
+    if (startPoint)
+    {
+        OAPointDescription *pointDescription;
+        if (!name)
+            pointDescription = [[OAPointDescription alloc] initWithType:POINT_TYPE_LOCATION name:@""];
+        else
+            pointDescription = name;
+        
+        if ([pointDescription isLocation] && pointDescription.name.length == 0)
+            [pointDescription setName:[OAPointDescription getSearchAddressStr]];
+        
+        [_app.data setMyLocationToStart:[OARTargetPoint createStartPoint:startPoint name:pointDescription]];
+    }
+    else
+    {
+        [_app.data clearMyLocationToStart];
+    }
+    [self readMyLocationPointFromSettings];
     [self updateRouteAndRefresh:updateRoute];
 }
 
@@ -557,9 +597,28 @@
             NSString *pointName = [self getLocationName:_pointToStart.point];
             [_pointToStart.pointDescription setName:pointName];
             [_app.data setPointToStart:_pointToStart];
+            [self updateRouteAndRefresh:NO];
             dispatch_async(dispatch_get_main_queue(), ^(void) {
                 [self updateListeners:NO];
                 _isSearchingStart = NO;
+            });
+        });
+    }
+}
+
+- (void)lookupAddressForMyLocationPoint
+{
+    if (_myLocationToStart != nil && [_myLocationToStart isSearchingAddress] && !_isSearchingMyLocation)
+    {
+        _isSearchingMyLocation = YES;
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
+            NSString *pointName = [self getLocationName:_myLocationToStart.point];
+            [_myLocationToStart.pointDescription setName:pointName];
+            [_app.data setMyLocationToStart:_myLocationToStart];;
+            [self updateRouteAndRefresh:NO];
+            dispatch_async(dispatch_get_main_queue(), ^(void) {
+                [self updateListeners:NO];
+                _isSearchingMyLocation = NO;
             });
         });
     }
@@ -574,6 +633,7 @@
             NSString *pointName = [self getLocationName:_pointToNavigate.point];
             [_pointToNavigate.pointDescription setName:pointName];
             [_app.data setPointToNavigate:_pointToNavigate];
+            [self updateRouteAndRefresh:NO];
             dispatch_async(dispatch_get_main_queue(), ^(void) {
                 [self updateListeners:NO];
                 _isSearchingDestination = NO;
@@ -589,6 +649,7 @@
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
             NSString *pointName = [self getLocationName:point.point];
             [point.pointDescription setName:pointName];
+            [self updateRouteAndRefresh:NO];
             dispatch_async(dispatch_get_main_queue(), ^(void) {
                 [self updateListeners:NO];
             });
@@ -660,7 +721,7 @@
     [_app.data clearPointToStart];
     if (clearBackup)
         [_app.data backupTargetPoints];
-    
+    [self updateMyLocationToStart];
     _pointToNavigate = nil;
     _pointToStart = nil;
     [_intermediatePoints removeAllObjects];

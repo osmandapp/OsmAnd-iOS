@@ -37,6 +37,7 @@
 - (void) navigateToPoint:(CLLocation *)point updateRoute:(BOOL)updateRoute intermediate:(int)intermediate;
 - (void) navigateToPoint:(CLLocation *)point updateRoute:(BOOL)updateRoute intermediate:(int)intermediate historyName:(OAPointDescription *)historyName;
 - (void) setStartPoint:(CLLocation *)startPoint updateRoute:(BOOL)updateRoute name:(OAPointDescription *)name;
+- (void) setMyLocationPoint:(CLLocation *)startPoint updateRoute:(BOOL)updateRoute name:(OAPointDescription *)name;
 - (OARTargetPoint *)getHomePoint;
 - (OARTargetPoint *)getWorkPoint;
 - (void) setHomePoint:(CLLocation *) latLon description:(OAPointDescription *)name;

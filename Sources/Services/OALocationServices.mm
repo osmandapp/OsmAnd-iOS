@@ -636,6 +636,7 @@
     }
     
     // 2. routing
+    [_routingHelper updateLocation:location];
     CLLocation *updatedLocation = location;
     if ([_routingHelper isFollowingMode])
     {

@@ -2310,15 +2310,16 @@
 
 //Icon categories
 "icon_group_amenity" = "Amenity";
-"amenity_type_emergency" = "എമെര്‍ജന്‍സി (അടിയന്തിരം)";
+"icon_group_emergency" = "എമെര്‍ജന്‍സി (അടിയന്തിരം)";
 "icon_group_special" = "Special";
 "icon_group_sport" = "സ്പോര്‍ട്സ്";
 "icon_group_symbols" = "Symbols";
-"transport" = "ഗതാഗത സംവിധാനം";
+"icon_group_transport" = "ഗതാഗത സംവിധാനം";
 "icon_group_travel" = "Travel";
 "icon_group_nautical" = "നോട്ടിക്കല്‍";
 "icon_group_industrial" = "Industrial";
-"amenity_type_education" = "വിദ്യാഭ്യാസം";
+"icon_group_education" = "വിദ്യാഭ്യാസം";
+"transport" = "ഗതാഗത സംവിധാനം";
 
 "settings_item_read_error" = "Could not read %@.";
 "app_mode_default" = "\"ഭൂപടം പരതുക \"";

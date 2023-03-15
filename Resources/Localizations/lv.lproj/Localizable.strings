@@ -2201,15 +2201,16 @@ kas tiks pievienots jūsu Kategorijas sadaļai.";
 
 //Icon categories
 "icon_group_amenity" = "Amenity";
-"amenity_type_emergency" = "Avārijas dienesti";
+"icon_group_emergency" = "Avārijas dienesti";
 "icon_group_special" = "Speciālais";
 "icon_group_sport" = "Sports";
 "icon_group_symbols" = "Simboli";
+"icon_group_transport" = "Transports";
 "transport" = "Transports";
 "icon_group_travel" = "Ceļošana";
 "icon_group_nautical" = "Jūras";
 "icon_group_industrial" = "Industrial";
-"amenity_type_education" = "Izglītība";
+"icon_group_education" = "Izglītība";
 "settings_item_read_error" = "Could not read %@.";
 "app_mode_default" = "Izpētīt karti";
 "app_mode_car" = "Auto";

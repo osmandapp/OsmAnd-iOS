@@ -1948,13 +1948,14 @@
 "select_segment" = "Veldu bút";
 "select_track_to_follow" = "Veldu feril til að fylgja";
 "icon_group_travel" = "Ferðalög";
-"transport" = "Samgöngur";
+"icon_group_transport" = "Samgöngur";
 "icon_group_symbols" = "Tákn";
 "icon_group_sport" = "Íþróttir";
 "icon_group_special" = "Sértákn";
-"amenity_type_emergency" = "Neyðartilfelli";
+"icon_group_emergency" = "Neyðartilfelli";
 "shared_string_square" = "Ferningur";
 "shared_string_octagon" = "Átthyrningur";
+"transport" = "Samgöngur";
 
 // Shapes
 "shared_string_circle" = "Hringur";
@@ -2098,7 +2099,7 @@
 "edit_track" = "Breyta ferli";
 "gpx_split_interval_none_descr" = "Veldu hvernigþú vilt skipta upp: eftir tíma eða vegalengd.";
 "shared_string_custom" = "Sérsniðið";
-"amenity_type_education" = "Menntun";
+"icon_group_education" = "Menntun";
 "distance_moving" = "Leiðrétt fjarlægð";
 "gpx_direction_arrows" = "Stefnuörvar";
 "delete_waypoints" = "Eyða ferilpunktum";

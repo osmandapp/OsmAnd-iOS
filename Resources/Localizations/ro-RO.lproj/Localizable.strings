@@ -881,6 +881,7 @@
 "shared_string_gpx_track" = "Track(pistă)";
 "plan_route_open_existing_track" = "Deschideți o rută existentă";
 "searching_gps" = "Căutare GPS";
+"icon_group_transport" = "Transport";
 "transport" = "Transport";
 "shared_string_others" = "Altele";
 "icon_group_sport" = "Sport";
@@ -898,7 +899,7 @@
 "navigation_over_track" = "Pornesc navigarea de-a lungul traseului\?";
 "add_custom_category" = "Adăugați o categorie personalizată";
 "save_current_track" = "Salvează traseul curent";
-"amenity_type_emergency" = "Urgență";
+"icon_group_emergency" = "Urgență";
 "shared_string_visible" = "Vizibil";
 "map_mode" = "Mod hartă";
 "new_plugin_added" = "A fost adăugat un plugin nou";
@@ -2080,7 +2081,7 @@
 "distance_moving" = "Distanța corectată";
 "parked_at" = "parcat la";
 "icon_group_industrial" = "Industrială";
-"amenity_type_education" = "Educație";
+"icon_group_education" = "Educație";
 "route_points" = "Puncte de traseu";
 "connect_rp" = "Conectarea punctelor de rută";
 "lang_al" = "Albaneză";

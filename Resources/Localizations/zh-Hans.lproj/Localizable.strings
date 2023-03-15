@@ -1375,7 +1375,7 @@
 "shared_string_import_complete" = "导入完成";
 "quick_action_switch_profile_descr" = "操作按钮在选定的配置文件之间切换。";
 "osm_edit_close_note" = "关闭 OSM 注记";
-"amenity_type_emergency" = "紧急救助";
+"icon_group_emergency" = "紧急救助";
 "shared_string_others" = "其它";
 "download_regular_maps" = "定期地图";
 "recalculate_route_distance_promo" = "如果从路线到当前位置的距离超过了所选的值，路线将被重新计算。";
@@ -1396,6 +1396,7 @@
 "show_direction" = "距离指示";
 "searching" = "正在搜索…";
 "osm_edit_comment_note" = "评论 OSM 注记";
+"icon_group_transport" = "交通工具";
 "transport" = "交通工具";
 "osmand_purchases_item" = "OsmAnd购买";
 "shared_string_enable" = "启用";
@@ -1600,7 +1601,7 @@
 "lang_sk" = "斯洛伐克语";
 "lang_br" = "布列塔尼文";
 "lang_ht" = "海地语";
-"amenity_type_education" = "教育";
+"icon_group_education" = "教育";
 "lang_sr_latn" = "塞尔维亚语（拉丁文）";
 "lang_ber" = "柏柏尔文";
 "shared_string_width" = "宽度";

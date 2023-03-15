@@ -1960,7 +1960,7 @@
 "access_default_color" = "Цвет по умолчанию";
 "copied_to_clipboard" = "Скопировано в буфер обмена";
 "shared_string_square" = "Квадрат";
-"amenity_type_emergency" = "Экстренные службы";
+"icon_group_emergency" = "Экстренные службы";
 "icon_group_symbols" = "Символы";
 "fav_point_dublicate" = "Введено повторяющееся название избранной точки";
 "attach_to_the_roads" = "Привязка к дороге";
@@ -1969,6 +1969,7 @@
 "shared_string_resources" = "Ресурсы";
 "select_group" = "Категории";
 "coordinates_widget_current_location" = "Виджет координат";
+"icon_group_transport" = "Транспорт";
 "transport" = "Транспорт";
 "shared_string_circle" = "Круг";
 "plan_route_split_before" = "Разделить перед";
@@ -2088,7 +2089,7 @@
 "population_num" = "Население";
 "shared_string_overview" = "Обзор";
 "map_widget_parking" = "Парковка";
-"amenity_type_education" = "Образование";
+"icon_group_education" = "Образование";
 "regions" = "Регионы";
 "shared_string_interval" = "Интервал";
 "duplicate_track" = "Дублировать трек";

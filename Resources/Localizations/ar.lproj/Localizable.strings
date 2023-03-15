@@ -1930,13 +1930,14 @@
 "segments_count" = "الجزء %d";
 "track_multiple_segments_select" = "%@ يحتوي على أكثر من جزء. الرجاء تحديد جزء من المسار الذي تريد استخدامه للتنقل.";
 "icon_group_travel" = "سفر";
-"transport" = "نقل";
+"icon_group_transport" = "نقل";
 "icon_group_symbols" = "الرموز";
 "icon_group_sport" = "رياضة";
 "icon_group_special" = "خاص";
-"amenity_type_emergency" = "حالة طوارئ";
+"icon_group_emergency" = "حالة طوارئ";
 "shared_string_square" = "مربع";
 "shared_string_octagon" = "مثمن";
+"transport" = "نقل";
 
 // Shapes
 "shared_string_circle" = "دائرة";
@@ -2106,7 +2107,7 @@
 "shared_string_time_span" = "الفترة الزمنية";
 "shared_string_start_time" = "وقت البدء";
 "icon_group_industrial" = "صناعي";
-"amenity_type_education" = "تعليم";
+"icon_group_education" = "تعليم";
 "route_points" = "نقاط الطريق";
 "lang_ar" = "العربية";
 "lang_az" = "الأذربيجانية";

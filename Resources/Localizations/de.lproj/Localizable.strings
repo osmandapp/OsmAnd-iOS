@@ -1938,12 +1938,13 @@
 "select_segment" = "Segment auswählen";
 "select_track_to_follow" = "Track auswählen, welchem gefolgt werden soll";
 "icon_group_travel" = "Reisen";
-"transport" = "ÖPNV";
+"icon_group_transport" = "ÖPNV";
 "icon_group_symbols" = "Symbole";
 "icon_group_sport" = "Sport";
 "icon_group_special" = "Spezial";
-"amenity_type_emergency" = "Notfall";
+"icon_group_emergency" = "Notfall";
 "shared_string_octagon" = "Achteck";
+"transport" = "ÖPNV";
 
 // Shapes
 "shared_string_circle" = "Kreis";
@@ -2114,7 +2115,7 @@
 "distance_moving" = "Korrigierte Distanz";
 "parked_at" = "geparkt um";
 "icon_group_industrial" = "Industriell";
-"amenity_type_education" = "Bildung";
+"icon_group_education" = "Bildung";
 "route_points" = "Routenpunkte";
 "connect_rp" = "Routenpunkte verbinden";
 "lang_al" = "Albanisch";

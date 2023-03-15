@@ -322,7 +322,7 @@
         h.latitude = destination.latitude;
         h.longitude = destination.longitude;
         h.date = [NSDate date];
-        
+        h.iconName = @"ic_custom_marker";
         h.hType = OAHistoryTypeDirection;
         
         [[OAHistoryHelper sharedInstance] addPoint:h];

@@ -24,6 +24,7 @@ typedef NS_ENUM(NSInteger, EOATableRowType) {
 #define kCellIconNameKey @"iconName"
 #define kCellIconTint @"iconTint"
 #define kCellSecondaryIconName @"secondaryIconName"
+#define kCellAccessoryType @"accessoryType"
 
 + (instancetype) rowData;
 
@@ -36,6 +37,7 @@ typedef NS_ENUM(NSInteger, EOATableRowType) {
 @property (nonatomic) NSString *iconName;
 @property (nonatomic) NSInteger iconTint;
 @property (nonatomic) NSString *secondaryIconName;
+@property (nonatomic) UITableViewCellAccessoryType accessoryType;
 
 @property (nonatomic, readonly, assign) EOATableRowType rowType;
 

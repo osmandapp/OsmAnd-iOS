@@ -78,15 +78,21 @@
     [self reloadData];
 }
 
--(void) longTapHandler:(UILongPressGestureRecognizer *)gestureRecognizer
+- (void)longTapHandler:(UILongPressGestureRecognizer *)gestureRecognizer
 {
     if (![self.tableView isEditing])
     {
-        _wasAnyDeleted = NO;
-        
         CGPoint p = [gestureRecognizer locationInView:self.tableView];
         NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:p];
-        
+        if (_isSearchLoggingDisabled)
+        {
+            OATableRowData *item = [_data itemForIndexPath:indexPath];
+            if ([item.cellType isEqualToString:[OALargeImageTitleDescrTableViewCell getCellIdentifier]] || [item.cellType isEqualToString:[OAFilledButtonCell getCellIdentifier]])
+                return;
+        }
+
+        _wasAnyDeleted = NO;
+
         if (self.delegate)
             [self.delegate enterHistoryEditingMode];
         
@@ -536,10 +542,27 @@
 
 -(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (_isSearchLoggingDisabled)
+    {
+        OATableRowData *item = [_data itemForIndexPath:indexPath];
+        return !([item.cellType isEqualToString:[OALargeImageTitleDescrTableViewCell getCellIdentifier]] || [item.cellType isEqualToString:[OAFilledButtonCell getCellIdentifier]]);
+    }
     return YES;
 }
 
 #pragma mark - Table view delegate
+
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (_isSearchLoggingDisabled)
+    {
+        OATableRowData *item = [_data itemForIndexPath:indexPath];
+        if ([item.cellType isEqualToString:[OALargeImageTitleDescrTableViewCell getCellIdentifier]] || [item.cellType isEqualToString:[OAFilledButtonCell getCellIdentifier]])
+            return nil;
+    }
+
+    return indexPath;
+}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {

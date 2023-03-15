@@ -17,9 +17,15 @@ typedef enum
     EOAHistory
 } EOAGlobalSettingsScreen;
 
+@class OASearchResult, OAHistoryItem;
+
 @interface OAGlobalSettingsViewController : OABaseNavbarViewController
 
 - (instancetype) initWithSettingsType:(EOAGlobalSettingsScreen)settingsType;
+
++ (NSArray<OASearchResult *> *)getNavigationHistoryResults;
++ (NSMutableArray<OASearchResult *> *)getSearchHistoryResults;
++ (OAHistoryItem *)getHistoryEntry:(OASearchResult *)searchResult;
 
 @end
 

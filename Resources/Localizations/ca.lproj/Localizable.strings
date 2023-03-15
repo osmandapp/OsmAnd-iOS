@@ -1926,6 +1926,7 @@
 "replace_favorite_confirmation" = "Substituir el preferit %@\?";
 "icon_group_sport" = "Esport";
 "plan_route_open_existing_track" = "Obre una traça existent";
+"icon_group_transport" = "Transport col·lectiu";
 "transport" = "Transport col·lectiu";
 "shared_string_icon" = "Icona";
 "fav_point_dublicate" = "S\'ha indicat un nom de Preferit duplicat";
@@ -1940,7 +1941,7 @@
 "shared_string_disable" = "Desactiva";
 "open_saved_track" = "Obre una traça enregistrada";
 "shared_string_octagon" = "Octàgon";
-"amenity_type_emergency" = "Emergències";
+"icon_group_emergency" = "Emergències";
 "nearest_point" = "El punt més proper";
 "shared_string_visible" = "Visible";
 "access_default_color" = "Color per defecte";
@@ -2118,7 +2119,7 @@
 "lang_hu" = "Hongarès";
 "lang_ur" = "Urdú";
 "lang_fr" = "Francès";
-"amenity_type_education" = "Educació";
+"icon_group_education" = "Educació";
 "lang_be_by" = "Bielorús (alfabet llatí)";
 "lang_es" = "Espanyol";
 "lang_az" = "Àzeri";

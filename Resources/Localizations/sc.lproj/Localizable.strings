@@ -1950,13 +1950,14 @@
 "route_parameters" = "Paràmetros de s\'àndala";
 "map_widget_distance_by_tap" = "Distàntzia pro tocu";
 "icon_group_travel" = "Biàgiu";
-"transport" = "Trasportos pùblicos";
+"icon_group_transport" = "Trasportos pùblicos";
 "icon_group_symbols" = "Sìmbulos";
 "icon_group_sport" = "Isport";
 "icon_group_special" = "Ispetziales";
-"amenity_type_emergency" = "Emergèntzia";
+"icon_group_emergency" = "Emergèntzia";
 "shared_string_square" = "Cuadradu";
 "shared_string_octagon" = "Otàgonu";
+"transport" = "Trasportos pùblicos";
 
 // Shapes
 "shared_string_circle" = "Tzìrculu";
@@ -2130,7 +2131,7 @@
 "shared_string_time_moving" = "Tempus in movimentu";
 "distance_moving" = "Distàntzia curreta";
 "icon_group_industrial" = "Industriale";
-"amenity_type_education" = "Istrutzione";
+"icon_group_education" = "Istrutzione";
 "lang_tl" = "Tagalog";
 "lang_bs" = "Bosniacu";
 "lang_pms" = "Piemontesu";

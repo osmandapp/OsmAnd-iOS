@@ -1826,7 +1826,7 @@
 "hide_compass_ruler" = "Skjul kompas lineal";
 "segments_count" = "Segment %d";
 "shared_string_resources" = "Ressourcer";
-"amenity_type_emergency" = "Nødsituation";
+"icon_group_emergency" = "Nødsituation";
 "plan_route_open_existing_track" = "Åbn eksisterende spor";
 "open_saved_track" = "Åben gemt spor";
 "fav_points_not_exist" = "Der findes ingen favoritpunkter";
@@ -1854,6 +1854,7 @@
 "shared_string_others" = "Andre";
 "start_of_the_track" = "Starten af sporet";
 "extra_maps_menu_group" = "Ekstra kort";
+"icon_group_transport" = "Transport";
 "transport" = "Transport";
 "favorite_group_name" = "Gruppenavn";
 "simplified_track" = "Forenklet spor";
@@ -2102,7 +2103,7 @@
 "delete_group_confirm_short" = "Slet gruppe?";
 "parked_at" = "parkeret på";
 "icon_group_industrial" = "Industriel";
-"amenity_type_education" = "Uddannelse";
+"icon_group_education" = "Uddannelse";
 "route_points" = "Rutepunkter";
 "connect_rp" = "Forbind rutepunkter";
 "lang_al" = "Albansk";

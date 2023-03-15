@@ -2043,8 +2043,8 @@
 "gpx_split_interval_none_descr" = "Chausir lo critèri desirat : segon lo temps ò segon la distància.";
 "gpx_split_interval_descr" = "Chausir l\'intervalle que lei marcas de distància ò de temps i pareisseràn.";
 "osmand_cloud_login_descr" = "Per plaser, indicatz l\'adreiça electronica que vos siatz enregistrat-da amb ela. Un senhau de l\'us unic serà mandat per l\'etapa seguenta.";
-"amenity_type_emergency" = "Urgéncias";
-"amenity_type_education" = "Educacion";
+"icon_group_emergency" = "Urgéncias";
+"icon_group_education" = "Educacion";
 "grey_color_undefined" = "Lei partidas sensa donadas son grisadas.";
 "cloud_email_already_registered" = "Aquesta adreiça electronica es ja enregistrada.";
 "restore_from_file" = "Restaurar dau fichier";
@@ -2433,6 +2433,7 @@
 "rendering_attr_depthContourColorScheme_name" = "Combinason de colors dei linhas";
 "routing_attr_weight_description" = "Precisar lo pes dei veïcules acceptat sus leis itineraris.";
 "routing_attr_height_name" = "Limit d\'auçada";
+"icon_group_transport" = "Transpòrt public";
 "transport" = "Transpòrt public";
 "app_mode_default" = "Mapa de basa";
 "unsupported_action_descr" = "Aquesta escorcha per ara se permet pas. Aiçò se podriá reglar a l'avenir dins lei versions novèlas de l'aplicacion.";

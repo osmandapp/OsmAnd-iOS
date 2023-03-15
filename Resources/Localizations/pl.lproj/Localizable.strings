@@ -1829,7 +1829,7 @@
 "profile_type_osmand_string" = "Profil OsmAnd";
 "quick_action_remove_next_destination" = "Usuń najbliższy punkt docelowy";
 "map_widget_distance_by_tap" = "Odległość po dotknięciu";
-"amenity_type_emergency" = "Służby ratunkowe";
+"icon_group_emergency" = "Służby ratunkowe";
 "touting_specified_vehicle_parameters_descr" = "Określone parametry pojazdu mogą mieć wpływ na wyznaczanie trasy.";
 "key_hint_recenter_map" = "Wyśrodkuj mapę";
 "visible_categories" = "Widoczne kategorie";
@@ -1939,6 +1939,7 @@
 "start_of_the_track" = "Początek trasy";
 "shared_string_square" = "Kwadrat";
 "track" = "Ślad";
+"icon_group_transport" = "Transport publiczny";
 "transport" = "Transport publiczny";
 "replace_favorite_confirmation" = "Zastąpić ulubione miejsce \"%@\"\?";
 "shared_string_gpx_track" = "Trasa";
@@ -2117,7 +2118,7 @@
 "routing_attr_only_permitted_ways_name" = "Celowo dozwolone ulice";
 "weather_wind_kilimeters_per_hour" = "Kilometry na godzinę";
 "backup_error_subscription_was_expired_descr" = "Twoja subskrypcja OsmAnd Pro wygasła - odnów ją, aby korzystać z kopii zapasowej. Nadal możesz przywracać dane z chmury.";
-"amenity_type_education" = "Edukacja";
+"icon_group_education" = "Edukacja";
 "upload_to_openstreetmap" = "Prześlij do OpenStreetMap";
 "lang_sk" = "Słowacki";
 "backup_error_no_valid_subscription" = "Brak ważnej subskrypcji";

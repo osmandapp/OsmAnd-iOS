@@ -2311,15 +2311,16 @@
 
 //Icon categories
 "icon_group_amenity" = "Amenity";
-"amenity_type_emergency" = "அவசர";
+"icon_group_emergency" = "அவசர";
 "icon_group_special" = "Special";
 "icon_group_sport" = "விளையாட்டு";
 "icon_group_symbols" = "Symbols";
-"transport" = "Transport";
+"icon_group_transport" = "Transport";
 "icon_group_travel" = "Travel";
 "icon_group_nautical" = "கடலோடிகளுக்குரிய";
 "icon_group_industrial" = "Industrial";
-"amenity_type_education" = "கல்வி";
+"icon_group_education" = "கல்வி";
+"transport" = "Transport";
 
 "settings_item_read_error" = "Could not read %@.";
 "app_mode_default" = "வரைபடத்தை உலாவுக";

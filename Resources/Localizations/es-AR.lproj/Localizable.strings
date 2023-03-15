@@ -2189,15 +2189,16 @@
 
 //Icon categories
 "icon_group_amenity" = "Comodidad";
-"amenity_type_emergency" = "Emergencia";
+"icon_group_emergency" = "Emergencia";
 "icon_group_special" = "Especial";
 "icon_group_sport" = "Deporte";
 "icon_group_symbols" = "Símbolos";
-"transport" = "Transporte";
+"icon_group_transport" = "Transporte";
 "icon_group_travel" = "Viaje";
 "icon_group_nautical" = "Náutico";
 "icon_group_industrial" = "Industrial";
-"amenity_type_education" = "Educación";
+"icon_group_education" = "Educación";
+"transport" = "Transporte";
 "settings_item_read_error" = "No se pudo leer desde«%@».";
 "app_mode_default" = "Ver mapa";
 "app_mode_car" = "Automóvil";

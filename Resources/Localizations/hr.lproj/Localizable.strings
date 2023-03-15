@@ -2195,15 +2195,16 @@
 
 //Icon categories
 "icon_group_amenity" = "Amenity";
-"amenity_type_emergency" = "Hitna pomoć";
+"icon_group_emergency" = "Hitna pomoć";
 "icon_group_special" = "Special";
 "icon_group_sport" = "Sport";
 "icon_group_symbols" = "Symbols";
-"transport" = "Prijevoz";
+"icon_group_transport" = "Prijevoz";
 "icon_group_travel" = "Travel";
 "icon_group_nautical" = "Nautical";
 "icon_group_industrial" = "Industrial";
-"amenity_type_education" = "Obrazovanje";
+"icon_group_education" = "Obrazovanje";
+"transport" = "Prijevoz";
 "settings_item_read_error" = "Could not read %@.";
 "app_mode_default" = "Karta";
 "app_mode_car" = "Auto";

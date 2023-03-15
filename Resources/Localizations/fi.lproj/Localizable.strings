@@ -1981,12 +1981,13 @@
 
 //Poi catagories
 "icon_group_amenity" = "Mukavuus";
-"amenity_type_emergency" = "Hätäpalvelu";
+"icon_group_emergency" = "Hätäpalvelu";
 "icon_group_special" = "Erityinen";
 "icon_group_sport" = "Urheilu";
 "icon_group_symbols" = "Symbolit";
-"transport" = "Liikenne";
+"icon_group_transport" = "Liikenne";
 "icon_group_travel" = "Matkailu";
+"transport" = "Liikenne";
 "settings_item_read_error" = "Ei voitu lukea \'%@\'.";
 "app_mode_default" = "Selaa karttaa";
 "app_mode_car" = "Auto";
@@ -2093,7 +2094,7 @@
 "lang_bar" = "Baijeri";
 "lang_it" = "Italia";
 "lang_hr" = "Kroaatia";
-"amenity_type_education" = "Koulutus";
+"icon_group_education" = "Koulutus";
 "backup_error_token_is_not_valid" = "Laitteen tunnuksessa tai tunnuksessa on jotain vikaa";
 "lang_ce" = "tšetšeeni";
 "lang_zh_tw" = "Kiina (traditionaalinen)";

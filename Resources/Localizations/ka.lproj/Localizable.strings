@@ -2193,15 +2193,16 @@
 
 //Icon categories
 "icon_group_amenity" = "კომფორტი";
-"amenity_type_emergency" = "სასწრაფო დახმარება";
+"icon_group_emergency" = "სასწრაფო დახმარება";
 "icon_group_special" = "სპეციალური";
 "icon_group_sport" = "სპორტი";
 "icon_group_symbols" = "სიმბოლოები";
-"transport" = "ტრანსპორტი";
+"icon_group_transport" = "ტრანსპორტი";
 "icon_group_travel" = "მოგზაურობა";
 "icon_group_nautical" = "საზღვაო";
 "icon_group_industrial" = "საწარმოო";
-"amenity_type_education" = "სასწავლო";
+"icon_group_education" = "სასწავლო";
+"transport" = "ტრანსპორტი";
 "settings_item_read_error" = "%@-დან წაკითხვა შეუძლებელია.";
 "app_mode_default" = "რუკის დათვალიერება";
 "app_mode_car" = "მანქანით";

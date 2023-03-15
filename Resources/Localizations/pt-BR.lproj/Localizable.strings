@@ -1686,11 +1686,12 @@
 "desert" = "Deserto";
 "settings_item_read_error" = "Não foi possível ler a partir de \'%@\'.";
 "icon_group_travel" = "Viagem";
-"transport" = "Transporte";
+"icon_group_transport" = "Transporte";
 "icon_group_symbols" = "Símbolos";
 "icon_group_sport" = "Esporte";
 "icon_group_special" = "Especial";
-"amenity_type_emergency" = "Emergência";
+"icon_group_emergency" = "Emergência";
+"transport" = "Transporte";
 "vessel_height_limit_description" = "Defina a altura da embarcação para evitar pontes baixas. Lembre-se, se a ponte for móvel, usaremos sua altura no estado aberto.";
 "lenght_limit_description" = "Forneça o comprimento do seu veículo. Algumas restrições de rotas podem ser aplicadas a veículos longos.";
 "touting_specified_vehicle_parameters_descr" = "Os parâmetros definidos do veículo podem afetar a navegação.";
@@ -2101,7 +2102,7 @@
 "shared_string_time_moving" = "Tempo se movendo";
 "distance_moving" = "Distância corrigida";
 "parked_at" = "estacionado em";
-"amenity_type_education" = "Educação";
+"icon_group_education" = "Educação";
 "icon_group_industrial" = "Industrial";
 "route_points" = "Pontos da rota";
 "connect_rp" = "Conectar pontos de rota";

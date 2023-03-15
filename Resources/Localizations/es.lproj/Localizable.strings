@@ -1915,6 +1915,7 @@
 "select_group" = "Elegir grupo";
 "street_level_imagery" = "Imágenes a nivel de calle";
 "map_widget_distance_by_tap" = "Distancia al pulsar";
+"icon_group_transport" = "Transporte";
 "transport" = "Transporte";
 "favorite_group_name" = "Nombre del grupo";
 "custom_osmand_plugin" = "Complemento personalizado de OsmAnd";
@@ -1950,7 +1951,7 @@
 "shared_string_search_history" = "Historial de búsqueda";
 "select_folder" = "Elegir carpeta";
 "coordinates" = "Coordenadas";
-"amenity_type_emergency" = "Emergencia";
+"icon_group_emergency" = "Emergencia";
 "access_default_color" = "Color predefinido";
 "preparing_file" = "Preparando archivo";
 "reading_file" = "Leyendo archivo";
@@ -2217,7 +2218,7 @@
 "backup_error_subscription_was_used" = "Suscripción o promoción usada en otra cuenta %@";
 "lang_bg" = "Búlgaro";
 "lang_la" = "Latín";
-"amenity_type_education" = "Educación";
+"icon_group_education" = "Educación";
 "points_delete_multiple" = "¿Borrar %d punto(s)\?";
 "lang_lmo" = "Lombardo";
 "cloud_conflicts_descr" = "Algunos archivos no se pudieron cargar porque existe una versión más reciente en el servidor.";

@@ -2190,15 +2190,16 @@
 
 //Icon categories
 "icon_group_amenity" = "Prestazioa";
-"amenity_type_emergency" = "Larrialdiak";
+"icon_group_emergency" = "Larrialdiak";
 "icon_group_special" = "Berezia";
 "icon_group_sport" = "Kirola";
 "icon_group_symbols" = "Sinboloak";
-"transport" = "Garraioa";
+"icon_group_transport" = "Garraioa";
 "icon_group_travel" = "Bidaia";
 "icon_group_nautical" = "Itsasokoa";
 "icon_group_industrial" = "Industria";
-"amenity_type_education" = "Hezkuntza";
+"icon_group_education" = "Hezkuntza";
+"transport" = "Garraioa";
 "settings_item_read_error" = "Ezin izan da %@-tik irakurri.";
 "app_mode_default" = "Arakatu mapa";
 "app_mode_car" = "Gidatzea";

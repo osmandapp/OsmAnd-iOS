@@ -531,6 +531,7 @@
 "shared_string_import" = "Ssekcem";
 "shared_string_icon" = "D tignit n wesnas";
 "icon_group_sport" = "Addal";
+"icon_group_transport" = "Amesni";
 "transport" = "Amesni";
 "select_group" = "Fren agraw";
 "favorite_friends_category" = "Imdukal";
@@ -538,7 +539,7 @@
 "shared_string_gpx_track" = "Abrid";
 "map_marker" = "marker";
 "shared_string_square" = "Amkuẓ";
-"amenity_type_emergency" = "Annar n trusi n utrab";
+"icon_group_emergency" = "Annar n trusi n utrab";
 "extra_maps_menu_group" = "Tikarḍiwin-nniḍen";
 "shared_string_disable" = "Désactiver";
 "shared_string_gpx_points" = "Tineqqiḍin";
@@ -574,7 +575,7 @@
 "welmode_download_maps" = "Sider";
 "shared_string_time_span" = "Akud";
 "gpx_split_interval_none_descr" = "Fren iɣewwaṛen n unegzum i tebɣiḍ: s wakud neɣ s umeccaq.";
-"amenity_type_education" = "Asegmi";
+"icon_group_education" = "Asegmi";
 "gpx_direction_arrows" = "Ineccaben n tnila";
 "shared_string_start_time" = "Temps de début";
 "shared_string_width" = "Largeur";

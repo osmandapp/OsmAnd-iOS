@@ -455,7 +455,7 @@
 "shared_string_from" = "från";
 "shared_string_time" = "Tid";
 "time_of_day" = "Tid på dagen";
-"map_widget_trip_recording_distance" = "Sträcka";
+"shared_string_distance" = "Sträcka";
 "shared_string_time_span" = "Tidsspann";
 "shared_string_start_time" = "Starttid";
 "shared_string_end_time" = "Sluttid";
@@ -1263,7 +1263,7 @@
 "mapil_select_user" = "Select user";
 
 // Coordinate widget
-"coordinates_widget" = "Coordinates widget";
+"coordinates_widget_current_location" = "Coordinates widget";
 "searching_gps" = "Searching GPS";
 "copied_to_clipboard" = "Kopierat till Urklipp";
 // Quick action
@@ -1272,10 +1272,10 @@
 "no_underlay" = "Inget underlägg";
 "quick_action_map_underlay_action" = "Lägg till underlägg";
 "quick_action_list_descr" = "Tapping this action button pages through the list below";
-"toggle_coordinates" = "Show/hide coordinates widget";
-"show_coordinates" = "Show coordinates";
-"hide_coordinates" = "Hide coordinates";
-"quick_action_coordinates_widget_descr" = "En toggel för att visa eller dölja koordinatwidgeten på kartan.";
+"toggle_current_location" = "Show/hide coordinates widget";
+"show_current_location" = "Show coordinates";
+"hide_current_location" = "Hide coordinates";
+"quick_action_current_location_widget_descr" = "En toggel för att visa eller dölja koordinatwidgeten på kartan.";
 "quick_action_map_overlay_title" = "Kartöverlägg";
 "quick_action_map_underlay_title" = "Kartunderlägg";
 "vector_data" = "Offline vektorkartor";
@@ -2186,15 +2186,16 @@
 
 //Icon categories
 "icon_group_amenity" = "bekvämligheter";
-"amenity_type_emergency" = "Nödsituationer";
+"icon_group_emergency" = "Nödsituationer";
 "icon_group_special" = "Speciell";
 "icon_group_sport" = "Idrott";
 "icon_group_symbols" = "Symboler";
-"transport" = "Transporter";
+"icon_group_transport" = "Transporter";
 "icon_group_travel" = "Resa";
 "icon_group_nautical" = "Nautiska";
 "icon_group_industrial" = "Industriell";
-"amenity_type_education" = "Utbildning";
+"icon_group_education" = "Utbildning";
+"transport" = "Transporter";
 "settings_item_read_error" = "Kunde inte läsa från %@.";
 "app_mode_default" = "Titta på kartan";
 "app_mode_car" = "Fordonskörning";

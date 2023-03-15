@@ -46,7 +46,7 @@ import Charts.Swift
     public func getName() -> String {
         switch self {
         case .DISTANCE:
-            return OAUtilities.getLocalizedString("map_widget_trip_recording_distance");
+            return OAUtilities.getLocalizedString("shared_string_distance");
         case .TIME:
             return OAUtilities.getLocalizedString("shared_string_time");
         case .TIMEOFDAY:

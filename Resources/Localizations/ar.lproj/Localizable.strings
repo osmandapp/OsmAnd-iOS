@@ -978,7 +978,7 @@
 "osm_confirm_bulk_delete" = "حذف %d التعديلات؟";
 "access_intermediate_arrival_time" = "متوسط وقت الوصول";
 "map_widget_intermediate_time" = "متوسط الوقت";
-"map_widget_trip_recording_distance" = "المسافة";
+"shared_string_distance" = "المسافة";
 "angular_units" = "وحدات قياس الزاوي";
 "angular_units_descr" = "تغيير قياس زاوية الازيموث.";
 "show_tunnels" = "الأنفاق";
@@ -1930,13 +1930,14 @@
 "segments_count" = "الجزء %d";
 "track_multiple_segments_select" = "%@ يحتوي على أكثر من جزء. الرجاء تحديد جزء من المسار الذي تريد استخدامه للتنقل.";
 "icon_group_travel" = "سفر";
-"transport" = "نقل";
+"icon_group_transport" = "نقل";
 "icon_group_symbols" = "الرموز";
 "icon_group_sport" = "رياضة";
 "icon_group_special" = "خاص";
-"amenity_type_emergency" = "حالة طوارئ";
+"icon_group_emergency" = "حالة طوارئ";
 "shared_string_square" = "مربع";
 "shared_string_octagon" = "مثمن";
+"transport" = "نقل";
 
 // Shapes
 "shared_string_circle" = "دائرة";
@@ -1962,14 +1963,14 @@
 "searching_gps" = "بحث عن جي بي اس";
 
 // Coordinate widget
-"coordinates_widget" = "عرض الإحداثيات";
+"coordinates_widget_current_location" = "عرض الإحداثيات";
 "coordinates" = "إحداثيات";
 "shared_string_gpx_points" = "النقاط";
 "download_regular_maps" = "الخرائط العادية";
-"quick_action_coordinates_widget_descr" = "زر لإظهار أو إخفاء أداة الإحداثيات على الخريطة.";
-"hide_coordinates" = "إخفاء الإحداثيات";
-"show_coordinates" = "إظهار الإحداثيات";
-"toggle_coordinates" = "إظهار/إخفاء الإحداثيات";
+"quick_action_current_location_widget_descr" = "زر لإظهار أو إخفاء أداة الإحداثيات على الخريطة.";
+"hide_current_location" = "إخفاء الإحداثيات";
+"show_current_location" = "إظهار الإحداثيات";
+"toggle_current_location" = "إظهار/إخفاء الإحداثيات";
 "copied_to_clipboard" = "تم النسخ في الحافظة";
 
 // Resources
@@ -2106,7 +2107,7 @@
 "shared_string_time_span" = "الفترة الزمنية";
 "shared_string_start_time" = "وقت البدء";
 "icon_group_industrial" = "صناعي";
-"amenity_type_education" = "تعليم";
+"icon_group_education" = "تعليم";
 "route_points" = "نقاط الطريق";
 "lang_ar" = "العربية";
 "lang_az" = "الأذربيجانية";

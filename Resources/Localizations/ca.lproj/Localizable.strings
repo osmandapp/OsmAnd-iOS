@@ -966,7 +966,7 @@
 "access_intermediate_arrival_time" = "Temps de pas";
 "map_widget_intermediate_time" = "Temps de pas";
 "shared_string_time" = "Durada";
-"map_widget_trip_recording_distance" = "Distància";
+"shared_string_distance" = "Distància";
 "shared_string_milliradians" = "Mil·liradiants";
 "angular_units" = "Unitats de mesura angular";
 "angular_units_descr" = "Canvia la unitat de mesura de l'azimut.";
@@ -1907,7 +1907,7 @@
 "coordinates" = "Coordenades";
 "sort_last_modified" = "Darrera modificació";
 "custom_osmand_plugin" = "Connector d\'OsmAnd adaptat";
-"coordinates_widget" = "Giny de coordenades";
+"coordinates_widget_current_location" = "Giny de coordenades";
 "searching_gps" = "Buscant GPS";
 "extra_maps_menu_group" = "Mapes addicionals";
 "join_segments" = "Uneix segments";
@@ -1926,6 +1926,7 @@
 "replace_favorite_confirmation" = "Substituir el preferit %@\?";
 "icon_group_sport" = "Esport";
 "plan_route_open_existing_track" = "Obre una traça existent";
+"icon_group_transport" = "Transport col·lectiu";
 "transport" = "Transport col·lectiu";
 "shared_string_icon" = "Icona";
 "fav_point_dublicate" = "S\'ha indicat un nom de Preferit duplicat";
@@ -1940,7 +1941,7 @@
 "shared_string_disable" = "Desactiva";
 "open_saved_track" = "Obre una traça enregistrada";
 "shared_string_octagon" = "Octàgon";
-"amenity_type_emergency" = "Emergències";
+"icon_group_emergency" = "Emergències";
 "nearest_point" = "El punt més proper";
 "shared_string_visible" = "Visible";
 "access_default_color" = "Color per defecte";
@@ -2118,7 +2119,7 @@
 "lang_hu" = "Hongarès";
 "lang_ur" = "Urdú";
 "lang_fr" = "Francès";
-"amenity_type_education" = "Educació";
+"icon_group_education" = "Educació";
 "lang_be_by" = "Bielorús (alfabet llatí)";
 "lang_es" = "Espanyol";
 "lang_az" = "Àzeri";

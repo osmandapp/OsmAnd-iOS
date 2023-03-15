@@ -484,7 +484,7 @@
 "shared_string_from" = "սկսած";
 "shared_string_time" = "Ժամանակ";
 "time_of_day" = "Time of day";
-"map_widget_trip_recording_distance" = "Հեռավորություն";
+"shared_string_distance" = "Հեռավորություն";
 "shared_string_time_span" = "Ընդհանուր ժամանակը";
 "shared_string_start_time" = "Մեկնելու ժամը";
 "shared_string_end_time" = "Ժամաննամ ժամկետը";
@@ -1325,7 +1325,7 @@
 "mapil_select_user" = "Select user";
 
 // Coordinate widget
-"coordinates_widget" = "Coordinates widget";
+"coordinates_widget_current_location" = "Coordinates widget";
 "searching_gps" = "Searching GPS";
 "copied_to_clipboard" = "Պատճենված է";
 // Quick action
@@ -1334,10 +1334,10 @@
 "no_underlay" = "Նեքեվի շերնը անջատված է";
 "quick_action_map_underlay_action" = "Ավելացնել քարտեզի նեքեվի շերտը";
 "quick_action_list_descr" = "Tapping this action button pages through the list below";
-"toggle_coordinates" = "Show/hide coordinates widget";
-"show_coordinates" = "Show coordinates";
-"hide_coordinates" = "Hide coordinates";
-"quick_action_coordinates_widget_descr" = "Tapping this action button shows or hides the Coordinates widget.";
+"toggle_current_location" = "Show/hide coordinates widget";
+"show_current_location" = "Show coordinates";
+"hide_current_location" = "Hide coordinates";
+"quick_action_current_location_widget_descr" = "Tapping this action button shows or hides the Coordinates widget.";
 "quick_action_map_overlay_title" = "Քարտեզներ";
 "quick_action_map_underlay_title" = "Քարտեզի նեքեվի շերտը";
 "vector_data" = "Տեղական վեկտորային(Offline) քարտեզներ";
@@ -2319,15 +2319,16 @@
 
 //Icon categories
 "icon_group_amenity" = "Amenity";
-"amenity_type_emergency" = "Արտակարգ իրավիճակների ծառայություններ";
+"icon_group_emergency" = "Արտակարգ իրավիճակների ծառայություններ";
 "icon_group_special" = "Special";
 "icon_group_sport" = "Սպորտ";
 "icon_group_symbols" = "Symbols";
-"transport" = "Տրանսպորտ";
+"icon_group_transport" = "Տրանսպորտ";
 "icon_group_travel" = "Travel";
 "icon_group_nautical" = "Ծովային";
 "icon_group_industrial" = "Industrial";
-"amenity_type_education" = "Կրթություն";
+"icon_group_education" = "Կրթություն";
+"transport" = "Տրանսպորտ";
 
 "settings_item_read_error" = "Անհնար է կարդալ «%@»։";
 "app_mode_default" = "Դիտել քարտեզը";

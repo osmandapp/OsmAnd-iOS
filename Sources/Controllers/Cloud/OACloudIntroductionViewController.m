@@ -41,6 +41,17 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.tableHeaderView = _headerView;
+    
+}
+
+- (void)registerNotifications
+{
+    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(onApplicationEnteredForeground) name:UIApplicationWillEnterForegroundNotification object:nil];
+}
+
+- (void)onApplicationEnteredForeground
+{
+    [_headerView addAnimatedViews];
 }
 
 - (void)viewWillAppear:(BOOL)animated

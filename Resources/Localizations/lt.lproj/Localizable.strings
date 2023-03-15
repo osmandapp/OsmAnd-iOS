@@ -455,7 +455,7 @@
 "shared_string_from" = "iš";
 "shared_string_time" = "Laikas";
 "time_of_day" = "Dienos metas";
-"map_widget_trip_recording_distance" = "Atstumas";
+"shared_string_distance" = "Atstumas";
 "shared_string_time_span" = "Trukmė";
 "shared_string_start_time" = "Pradžios laikas";
 "shared_string_end_time" = "Pabaigos laikas";
@@ -1263,7 +1263,7 @@
 "mapil_select_user" = "Select user";
 
 // Coordinate widget
-"coordinates_widget" = "Coordinates widget";
+"coordinates_widget_current_location" = "Coordinates widget";
 "searching_gps" = "Searching GPS";
 "copied_to_clipboard" = "Nukopijuotaį įškarpinę";
 // Quick action
@@ -1272,10 +1272,10 @@
 "no_underlay" = "Jokio apatnio sluoksnio";
 "quick_action_map_underlay_action" = "Add underlay";
 "quick_action_list_descr" = "Tapping this action button pages through the list below";
-"toggle_coordinates" = "Show/hide coordinates widget";
-"show_coordinates" = "Show coordinates";
-"hide_coordinates" = "Hide coordinates";
-"quick_action_coordinates_widget_descr" = "Tapping this action button shows or hides the Coordinates widget.";
+"toggle_current_location" = "Show/hide coordinates widget";
+"show_current_location" = "Show coordinates";
+"hide_current_location" = "Hide coordinates";
+"quick_action_current_location_widget_descr" = "Tapping this action button shows or hides the Coordinates widget.";
 "quick_action_map_overlay_title" = "Map overlays";
 "quick_action_map_underlay_title" = "Map underlays";
 "vector_data" = "Parsiųsti vektoriniai žemėlapiai";
@@ -2190,15 +2190,16 @@
 
 //Icon categories
 "icon_group_amenity" = "Amenity";
-"amenity_type_emergency" = "Spec. tarnybos";
+"icon_group_emergency" = "Spec. tarnybos";
 "icon_group_special" = "Special";
 "icon_group_sport" = "Sportas";
 "icon_group_symbols" = "Symbols";
-"transport" = "Transportas";
+"icon_group_transport" = "Transportas";
 "icon_group_travel" = "Travel";
 "icon_group_nautical" = "Jūrinis";
 "icon_group_industrial" = "Industrial";
-"amenity_type_education" = "Mokslas/Švietimas";
+"icon_group_education" = "Mokslas/Švietimas";
+"transport" = "Transportas";
 "settings_item_read_error" = "Could not read %@.";
 "app_mode_default" = "Numatyta";
 "app_mode_car" = "Automobilis";

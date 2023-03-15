@@ -22,7 +22,7 @@
 #import "OARouteInfoWidgetsFactory.h"
 #import "OAMapInfoWidgetsFactory.h"
 #import "OANextTurnWidget.h"
-#import "OATopCoordinatesWidget.h"
+#import "OACoordinatesWidget.h"
 #import "OALanesControl.h"
 #import "OATopTextView.h"
 #import "OAAlarmWidget.h"
@@ -72,7 +72,8 @@
     OAMapWidgetRegistry *_mapWidgetRegistry;
     BOOL _expanded;
     OATopTextView *_streetNameView;
-    OATopCoordinatesWidget *_topCoordinatesView;
+    OACoordinatesWidget *_topCoordinatesView;
+    OACoordinatesWidget *_coordinatesMapCenterWidget;
     OADownloadMapWidget *_downloadMapWidget;
     OAWeatherToolbar *_weatherToolbar;
     OALanesControl *_lanesControl;
@@ -394,7 +395,10 @@
         _rightWidgetsView.superview.frame = CGRectMake(f.origin.x, f.origin.y, f.size.width, maxContainerHeight);
     }
     
-    if (_topCoordinatesView && _topCoordinatesView.superview && !_topCoordinatesView.hidden)
+    BOOL showTopCoordinatesView = _topCoordinatesView && _topCoordinatesView.superview && !_topCoordinatesView.hidden;
+    BOOL showCoordinatesMapCenterWidget = _coordinatesMapCenterWidget && _coordinatesMapCenterWidget.superview && !_coordinatesMapCenterWidget.hidden;
+    
+    if (showTopCoordinatesView || showCoordinatesMapCenterWidget)
     {
         if (_lastUpdateTime == 0)
             [[OARootViewController instance].mapPanel updateToolbar];
@@ -402,14 +406,32 @@
         BOOL hasTopWidgetsPanel = _mapHudViewController.toolbarViewController.view.alpha != 0;
         if (portrait)
         {
-            _topCoordinatesView.frame = CGRectMake(0, _mapHudViewController.statusBarView.frame.size.height, DeviceScreenWidth, 52);
+            if (showTopCoordinatesView)
+            {
+                _topCoordinatesView.frame = CGRectMake(0, _mapHudViewController.statusBarView.frame.size.height, DeviceScreenWidth, 52);
+                if (showCoordinatesMapCenterWidget)
+                    _coordinatesMapCenterWidget.frame = CGRectMake(0, _mapHudViewController.statusBarView.frame.size.height + 52, DeviceScreenWidth, 52);
+            }
+            else if (showCoordinatesMapCenterWidget)
+            {
+                _coordinatesMapCenterWidget.frame = CGRectMake(0, _mapHudViewController.statusBarView.frame.size.height, DeviceScreenWidth, 52);
+            }
         }
         else
         {
             CGFloat widgetWidth = DeviceScreenWidth / 2 - [OAUtilities getLeftMargin];
             CGFloat withMarkersLeftOffset = [_topCoordinatesView isDirectionRTL] ? DeviceScreenWidth / 2 : [OAUtilities getLeftMargin];
             CGFloat leftOffset = hasTopWidgetsPanel ? withMarkersLeftOffset : (DeviceScreenWidth - widgetWidth) / 2;
-            _topCoordinatesView.frame = CGRectMake(leftOffset - [OAUtilities getLeftMargin], _mapHudViewController.statusBarView.frame.size.height, widgetWidth, 50);
+            if (showTopCoordinatesView)
+            {
+                _topCoordinatesView.frame = CGRectMake(leftOffset - [OAUtilities getLeftMargin], _mapHudViewController.statusBarView.frame.size.height, widgetWidth, 50);
+                if (showCoordinatesMapCenterWidget)
+                    _coordinatesMapCenterWidget.frame = CGRectMake(leftOffset - [OAUtilities getLeftMargin], _mapHudViewController.statusBarView.frame.size.height + 50, widgetWidth, 50);
+            }
+            else if (showCoordinatesMapCenterWidget)
+            {
+                _coordinatesMapCenterWidget.frame = CGRectMake(leftOffset - [OAUtilities getLeftMargin], _mapHudViewController.statusBarView.frame.size.height, widgetWidth, 50);
+            }
         }
     }
     
@@ -526,6 +548,7 @@
     OAApplicationMode *appMode = _settings.applicationMode.get;
     
     [_mapHudViewController setCoordinatesWidget:_topCoordinatesView];
+    [_mapHudViewController setCenterCoordinatesWidget:_coordinatesMapCenterWidget];
     [_mapHudViewController setDownloadMapWidget:_downloadMapWidget];
     [_mapHudViewController setWeatherToolbarMapWidget:_weatherToolbar];
 
@@ -664,9 +687,13 @@
     _alarmControl.delegate = self;
     [widgetsToUpdate addObject:_alarmControl];
     
-    _topCoordinatesView = [[OATopCoordinatesWidget alloc] init];
+    _topCoordinatesView = [[OACoordinatesWidget alloc] initWithType:EOACoordinatesWidgetTypeCurrentLocation];
     _topCoordinatesView.delegate = self;
     [widgetsToUpdate addObject:_topCoordinatesView];
+    
+    _coordinatesMapCenterWidget = [[OACoordinatesWidget alloc] initWithType:EOACoordinatesWidgetTypeMapCenter];
+    _coordinatesMapCenterWidget.delegate = self;
+    [widgetsToUpdate addObject:_coordinatesMapCenterWidget];
     
     _downloadMapWidget = [[OADownloadMapWidget alloc] init];
     _downloadMapWidget.delegate = self;

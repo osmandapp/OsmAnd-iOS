@@ -456,7 +456,7 @@
 "shared_string_from" = "מאת";
 "shared_string_time" = "זמן";
 "time_of_day" = "השעה ביום";
-"map_widget_trip_recording_distance" = "מרחק";
+"shared_string_distance" = "מרחק";
 "shared_string_time_span" = "מסגרת זמן";
 "shared_string_start_time" = "יציאה לדרך";
 "shared_string_end_time" = "הגעה";
@@ -1269,7 +1269,7 @@
 "mapil_select_user" = "Select user";
 
 // Coordinate widget
-"coordinates_widget" = "וידג׳ט נקודות ציון";
+"coordinates_widget_current_location" = "וידג׳ט נקודות ציון";
 "searching_gps" = "בחיפוש אחר GPS";
 "copied_to_clipboard" = "הועתק ללוח הגזירים";
 // Quick action
@@ -1278,10 +1278,10 @@
 "no_underlay" = "אין שכבה תחתונה";
 "quick_action_map_underlay_action" = "הוספת מפה מתחת";
 "quick_action_list_descr" = "Tapping this action button pages through the list below";
-"toggle_coordinates" = "Show/hide coordinates widget";
-"show_coordinates" = "Show coordinates";
-"hide_coordinates" = "Hide coordinates";
-"quick_action_coordinates_widget_descr" = "מפסק להצגה או הסתרה של וידג׳ט נקודות הציון במפה.";
+"toggle_current_location" = "Show/hide coordinates widget";
+"show_current_location" = "Show coordinates";
+"hide_current_location" = "Hide coordinates";
+"quick_action_current_location_widget_descr" = "מפסק להצגה או הסתרה של וידג׳ט נקודות הציון במפה.";
 "quick_action_map_overlay_title" = "שכבות מעל למפה";
 "quick_action_map_underlay_title" = "מפות שמתחת";
 "vector_data" = "מפות וקטוריות בלתי מקוונות";
@@ -2209,15 +2209,16 @@
 
 //Icon categories
 "icon_group_amenity" = "שירות לציבור";
-"amenity_type_emergency" = "חירום";
+"icon_group_emergency" = "חירום";
 "icon_group_special" = "מיוחד";
 "icon_group_sport" = "ספורט";
 "icon_group_symbols" = "סמלים";
-"transport" = "תחבורה";
+"icon_group_transport" = "תחבורה";
 "icon_group_travel" = "טיול";
 "icon_group_nautical" = "ימי";
 "icon_group_industrial" = "תעשייתי";
-"amenity_type_education" = "חינוך";
+"icon_group_education" = "חינוך";
+"transport" = "תחבורה";
 "settings_item_read_error" = "לא ניתן לקרוא מתוך ‚%@’.";
 "app_mode_default" = "עיון במפה";
 "app_mode_car" = "נהיגה";

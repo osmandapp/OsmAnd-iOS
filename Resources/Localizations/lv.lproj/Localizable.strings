@@ -456,7 +456,7 @@
 "shared_string_from" = "no";
 "shared_string_time" = "Laiks";
 "time_of_day" = "Dienas laiks";
-"map_widget_trip_recording_distance" = "Attālums";
+"shared_string_distance" = "Attālums";
 "shared_string_time_span" = "Laika sprīdis";
 "shared_string_start_time" = "Starta laiks";
 "shared_string_end_time" = "Finiša laiks";
@@ -1264,7 +1264,7 @@
 "mapil_select_user" = "Select user";
 
 // Coordinate widget
-"coordinates_widget" = "Koordināšu logrīks";
+"coordinates_widget_current_location" = "Koordināšu logrīks";
 "searching_gps" = "Meklē GPS";
 "copied_to_clipboard" = "Iekopēts starpliktuvē";
 // Quick action
@@ -1273,10 +1273,10 @@
 "no_underlay" = "Nav apakšklāja";
 "quick_action_map_underlay_action" = "Pievienot apakšklāju";
 "quick_action_list_descr" = "Tapping this action button pages through the list below";
-"toggle_coordinates" = "Show/hide coordinates widget";
-"show_coordinates" = "Show coordinates";
-"hide_coordinates" = "Hide coordinates";
-"quick_action_coordinates_widget_descr" = "Tapping this action button shows or hides the Coordinates widget.";
+"toggle_current_location" = "Show/hide coordinates widget";
+"show_current_location" = "Show coordinates";
+"hide_current_location" = "Hide coordinates";
+"quick_action_current_location_widget_descr" = "Tapping this action button shows or hides the Coordinates widget.";
 "quick_action_map_overlay_title" = "Kartes virsklāji";
 "quick_action_map_underlay_title" = "Kartes apakšklāji";
 "vector_data" = "Bezsaistes vektoru kartes";
@@ -2201,15 +2201,16 @@ kas tiks pievienots jūsu Kategorijas sadaļai.";
 
 //Icon categories
 "icon_group_amenity" = "Amenity";
-"amenity_type_emergency" = "Avārijas dienesti";
+"icon_group_emergency" = "Avārijas dienesti";
 "icon_group_special" = "Speciālais";
 "icon_group_sport" = "Sports";
 "icon_group_symbols" = "Simboli";
+"icon_group_transport" = "Transports";
 "transport" = "Transports";
 "icon_group_travel" = "Ceļošana";
 "icon_group_nautical" = "Jūras";
 "icon_group_industrial" = "Industrial";
-"amenity_type_education" = "Izglītība";
+"icon_group_education" = "Izglītība";
 "settings_item_read_error" = "Could not read %@.";
 "app_mode_default" = "Izpētīt karti";
 "app_mode_car" = "Auto";

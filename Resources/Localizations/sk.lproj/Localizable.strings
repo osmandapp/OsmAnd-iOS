@@ -952,7 +952,7 @@
 "access_intermediate_arrival_time" = "Čas príchodu k prechodnému bodu";
 "map_widget_intermediate_time" = "Prechodný čas";
 "shared_string_time" = "Čas";
-"map_widget_trip_recording_distance" = "Vzdialenosť";
+"shared_string_distance" = "Vzdialenosť";
 "shared_string_milliradians" = "Miliradiány";
 "angular_units" = "Merné jednotky pre uhly";
 "angular_units_descr" = "Zmení jednotku na meranie azimutu.";
@@ -1657,7 +1657,7 @@
 "searching" = "Vyhľadávanie…";
 "rearrange_categories" = "Usporiadať kategórie";
 "start_of_the_track" = "Začiatok stopy";
-"coordinates_widget" = "Nástroj súradníc";
+"coordinates_widget_current_location" = "Nástroj súradníc";
 "plan_route_split_after" = "Rozdeliť po";
 "copied_to_clipboard" = "Skopírované do schránky";
 "change_folder" = "Zmeniť priečinok";
@@ -1667,7 +1667,7 @@
 "shared_string_import" = "Import";
 "icon_group_symbols" = "Symboly";
 "add_custom_category" = "Pridať vlastnú kategóriu";
-"amenity_type_emergency" = "Pomoc v núdzi";
+"icon_group_emergency" = "Pomoc v núdzi";
 "icon_group_sport" = "Šport";
 "select_group" = "Zvoľte skupinu";
 "favorite_friends_category" = "Priatelia";
@@ -1678,6 +1678,7 @@
 "shared_string_resources" = "Zdroje";
 "sort_last_modified" = "Naposledy zmenené";
 "fav_point_dublicate" = "Zadaný duplicitný názov obľúbeného bodu";
+"icon_group_transport" = "Hromadná doprava";
 "transport" = "Hromadná doprava";
 "segments_count" = "Úsek %d";
 "icon_group_special" = "Špeciálne";
@@ -1876,7 +1877,7 @@
 "any_poi" = "Akékoľvek";
 "lang_kn" = "Kannada";
 "shared_string_overview" = "Prehľad";
-"amenity_type_education" = "Školstvo";
+"icon_group_education" = "Školstvo";
 "lang_br" = "Bretónsky";
 "backup_error_file_not_available" = "Súbor nie je dostupný";
 "delete_waypoints" = "Odstrániť body trasy";
@@ -2077,7 +2078,7 @@
 "tts_title" = "TTS";
 "mtb_segment_classification" = "Klasifikácia úseku";
 "routing_attr_avoid_tunnels_name" = "Vyhnúť sa tunelom";
-"quick_action_coordinates_widget_descr" = "Prepínať na zobrazenie alebo skrytie nástroja Súradnice na mape.";
+"quick_action_current_location_widget_descr" = "Prepínať na zobrazenie alebo skrytie nástroja Súradnice na mape.";
 "offline_edition_descr" = "Ak je zapnuté offline upravovanie dát, zmeny budú najprv uložené lokálne a odoslané až na váš pokyn, inak budú zmeny odoslané ihneď.";
 "rendering_attr_depthContourWidth_name" = "Hrúbka čiar";
 "are_you_sure" = "Ste si istí?";

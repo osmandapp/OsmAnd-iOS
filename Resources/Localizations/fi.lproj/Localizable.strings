@@ -446,7 +446,7 @@
 "shared_string_from" = "lähtien";
 "shared_string_time" = "Aika";
 "time_of_day" = "Vuorokaudenaika";
-"map_widget_trip_recording_distance" = "Etäisyys";
+"shared_string_distance" = "Etäisyys";
 "retry" = "Yritä uudelleen";
 "shared_string_enabled" = "Käytössä";
 "shared_string_start_date" = "Start date";
@@ -1088,7 +1088,7 @@
 "mapil_select_user" = "Select user";
 
 // Coordinate widget
-"coordinates_widget" = "Coordinates widget";
+"coordinates_widget_current_location" = "Coordinates widget";
 "searching_gps" = "Searching GPS";
 "copied_to_clipboard" = "Kopioitu leikepöydälle";
 // Quick action
@@ -1097,10 +1097,10 @@
 "no_underlay" = "No underlay";
 "quick_action_map_underlay_action" = "Add underlay";
 "quick_action_list_descr" = "Tapping this action button pages through the list below";
-"toggle_coordinates" = "Show/hide coordinates widget";
-"show_coordinates" = "Show coordinates";
-"hide_coordinates" = "Hide coordinates";
-"quick_action_coordinates_widget_descr" = "Painike Koordinaatit-widgetin näyttämiseen tai piilottamiseen kartalla.";
+"toggle_current_location" = "Show/hide coordinates widget";
+"show_current_location" = "Show coordinates";
+"hide_current_location" = "Hide coordinates";
+"quick_action_current_location_widget_descr" = "Painike Koordinaatit-widgetin näyttämiseen tai piilottamiseen kartalla.";
 "quick_action_map_overlay_title" = "Kartan peitekuvat";
 "quick_action_map_underlay_title" = "Map underlays";
 "vector_data" = "Offline vektorikartat";
@@ -1981,12 +1981,13 @@
 
 //Poi catagories
 "icon_group_amenity" = "Mukavuus";
-"amenity_type_emergency" = "Hätäpalvelu";
+"icon_group_emergency" = "Hätäpalvelu";
 "icon_group_special" = "Erityinen";
 "icon_group_sport" = "Urheilu";
 "icon_group_symbols" = "Symbolit";
-"transport" = "Liikenne";
+"icon_group_transport" = "Liikenne";
 "icon_group_travel" = "Matkailu";
+"transport" = "Liikenne";
 "settings_item_read_error" = "Ei voitu lukea \'%@\'.";
 "app_mode_default" = "Selaa karttaa";
 "app_mode_car" = "Auto";
@@ -2093,7 +2094,7 @@
 "lang_bar" = "Baijeri";
 "lang_it" = "Italia";
 "lang_hr" = "Kroaatia";
-"amenity_type_education" = "Koulutus";
+"icon_group_education" = "Koulutus";
 "backup_error_token_is_not_valid" = "Laitteen tunnuksessa tai tunnuksessa on jotain vikaa";
 "lang_ce" = "tšetšeeni";
 "lang_zh_tw" = "Kiina (traditionaalinen)";

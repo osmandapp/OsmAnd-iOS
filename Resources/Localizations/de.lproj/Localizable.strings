@@ -956,7 +956,7 @@
 "access_intermediate_arrival_time" = "Ankunftszeit Zwischenziel";
 "map_widget_intermediate_time" = "Zwischenankunftszeit";
 "shared_string_time" = "Zeit";
-"map_widget_trip_recording_distance" = "Entfernung";
+"shared_string_distance" = "Entfernung";
 "shared_string_milliradians" = "Milliradiant";
 "angular_units" = "Winkel-Maßeinheiten";
 "angular_units_descr" = "Azimut-Messeinheiten ändern.";
@@ -1938,12 +1938,13 @@
 "select_segment" = "Segment auswählen";
 "select_track_to_follow" = "Track auswählen, welchem gefolgt werden soll";
 "icon_group_travel" = "Reisen";
-"transport" = "ÖPNV";
+"icon_group_transport" = "ÖPNV";
 "icon_group_symbols" = "Symbole";
 "icon_group_sport" = "Sport";
 "icon_group_special" = "Spezial";
-"amenity_type_emergency" = "Notfall";
+"icon_group_emergency" = "Notfall";
 "shared_string_octagon" = "Achteck";
+"transport" = "ÖPNV";
 
 // Shapes
 "shared_string_circle" = "Kreis";
@@ -1967,15 +1968,15 @@
 "select_group_descr" = "Gruppe auswählen oder neue hinzufügen";
 "fav_add_new_group" = "Neue Gruppe hinzufügen";
 "shared_string_square" = "Quadrat";
-"quick_action_coordinates_widget_descr" = "Ein Umschalter zum Ein- und Ausblenden des Koordinaten-Widgets auf der Karte.";
-"hide_coordinates" = "Koordinaten ausblenden";
-"show_coordinates" = "Koordinaten anzeigen";
-"toggle_coordinates" = "Koordinaten-Widget ein-/ausblenden";
+"quick_action_current_location_widget_descr" = "Ein Umschalter zum Ein- und Ausblenden des Koordinaten-Widgets auf der Karte.";
+"hide_current_location" = "Koordinaten ausblenden";
+"show_current_location" = "Koordinaten anzeigen";
+"toggle_current_location" = "Koordinaten-Widget ein-/ausblenden";
 "copied_to_clipboard" = "In die Zwischenablage kopiert";
 "searching_gps" = "Suche GPS";
 
 // Coordinate widget
-"coordinates_widget" = "Koordinaten-Widget";
+"coordinates_widget_current_location" = "Koordinaten-Widget";
 "coordinates" = "Koordinaten";
 "shared_string_gpx_points" = "Punkte";
 "download_regular_maps" = "Standardkarte";
@@ -2114,7 +2115,7 @@
 "distance_moving" = "Korrigierte Distanz";
 "parked_at" = "geparkt um";
 "icon_group_industrial" = "Industriell";
-"amenity_type_education" = "Bildung";
+"icon_group_education" = "Bildung";
 "route_points" = "Routenpunkte";
 "connect_rp" = "Routenpunkte verbinden";
 "lang_al" = "Albanisch";

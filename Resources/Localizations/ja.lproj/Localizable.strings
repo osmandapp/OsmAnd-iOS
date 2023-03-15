@@ -363,7 +363,7 @@
 "shared_string_from" = "から";
 "shared_string_time" = "時間";
 "time_of_day" = "時刻";
-"map_widget_trip_recording_distance" = "距離";
+"shared_string_distance" = "距離";
 "retry" = "再試行";
 "shared_string_enabled" = "有効";
 "shared_string_start_date" = "開始日";
@@ -1929,11 +1929,12 @@
 "desert" = "砂漠";
 "settings_item_read_error" = "\'%@\'から読み込めませんでした。";
 "icon_group_travel" = "旅行";
-"transport" = "交通";
+"icon_group_transport" = "交通";
 "icon_group_symbols" = "記号";
 "icon_group_special" = "特別";
 "icon_group_sport" = "スポーツ";
-"amenity_type_emergency" = "救急";
+"icon_group_emergency" = "救急";
+"transport" = "交通";
 "key_hint_recenter_map" = "マップを中央に再配置";
 "shared_z_a" = "降順(Z～A)";
 "shared_a_z" = "昇順(A～Z)";
@@ -1970,15 +1971,15 @@
 "hide_terrain" = "地形の非表示";
 "show_terrain" = "地形の表示";
 "unsupported_items" = "サポートされていない要素";
-"quick_action_coordinates_widget_descr" = "マップ上で座標ウィジェットの表示/非表示を切り替えます。";
-"hide_coordinates" = "座標を非表示";
-"show_coordinates" = "座標を表示";
-"toggle_coordinates" = "座標ウィジェットの表示/非表示";
+"quick_action_current_location_widget_descr" = "マップ上で座標ウィジェットの表示/非表示を切り替えます。";
+"hide_current_location" = "座標を非表示";
+"show_current_location" = "座標を表示";
+"toggle_current_location" = "座標ウィジェットの表示/非表示";
 "copied_to_clipboard" = "クリップボードにコピー";
 "searching_gps" = "GPS検索";
 
 // Coordinate widget
-"coordinates_widget" = "座標ウィジェット";
+"coordinates_widget_current_location" = "座標ウィジェット";
 "osm_editing_access_descr" = "すべてのローカル編集とメモを%@で表示できます。すでにアップロードされたアイテムはOsmAndのリストに表示されません。";
 "shared_string_loading" = "読込中…";
 "add_custom_category" = "カスタムカテゴリーを追加";
@@ -2064,7 +2065,7 @@
 "duplicate_track" = "経路を複製";
 "icon_group_industrial" = "産業・工業";
 "dialogs_and_notifications_descr" = "ポップアップ、ダイアログ、通知の制御";
-"amenity_type_education" = "教育";
+"icon_group_education" = "教育";
 "analyze_on_map" = "分析をマップ上で閲覧";
 "gpx_split_interval" = "区間を分割";
 "shared_string_start_time" = "開始時刻";
@@ -2356,7 +2357,7 @@
 "contributions_may_calculate_with_delay" = "貢献度の計算には数時間程度かかる場合があります。";
 "weather_forecast" = "天気予報";
 "tts_title" = "TTS";
-"rendering_attr_showMonorailRoutes_name" = "モノレールでのルート";
+"rendering_attr_showMonorailRoutes_name" = "モノレール路線";
 "product_title_pro" = "OsmAnd Pro";
 "product_title_plus" = "Maps+";
 "map_widget_rendering_fps" = "マップ描画FPS";
@@ -2386,8 +2387,8 @@
 "delete_tracks_bottom_sheet_title" = "経路を削除しますか？";
 "compass_always_visible" = "常に表示";
 "compass_always_hidden" = "常に非表示";
-"rendering_attr_showLightRailRoutes_name" = "軽量軌道交通(LRT)でのルート";
-"rendering_attr_showFunicularRoutes_name" = "ケーブルカーでのルート";
+"rendering_attr_showLightRailRoutes_name" = "軽量軌道交通(LRT)路線";
+"rendering_attr_showFunicularRoutes_name" = "ケーブルカー路線";
 "login_help_email_title" = "OsmAnd iOS Cloud";
 "huawei_appgallery" = "Huawei AppGallery";
 "amazon_appstore" = "Amazon Appstore";
@@ -2496,13 +2497,13 @@
 "rendering_attr_weatherCloudContours_name" = "雲頂高度(等値線)";
 "rendering_attr_showWaterwayTunnels_name" = "水路トンネル";
 "rendering_attr_OSMMapperAssistantNote_description" = "Note(メモ)タグの表示";
-"rendering_attr_showTrolleybusRoutes_name" = "トロリーバスでのルート";
+"rendering_attr_showTrolleybusRoutes_name" = "トロリーバス路線";
 "rendering_attr_noNatureReserveBoundaries_description" = "自然保護区、保護地域、国立公園の境界を非表示にします。";
 "routing_attr_prefer_tactile_paving_name" = "触覚舗装を優先";
 "rendering_attr_seabedDetail_description" = "海底面に関する条件、その表面の種類、雑草または海草などのカテゴリと分類に関する追加のテキスト情報です";
 "routing_attr_goods_restrictions_description" = "小型商用配達車の通行許可の可否";
 "rendering_attr_OSMMapperAssistantFixme_description" = "Fixmeタグの表示";
-"rendering_attr_showBusRoutes_name" = "バスでのルート";
+"rendering_attr_showBusRoutes_name" = "バス路線";
 "rendering_attr_natureReserves_description" = "自然保護区、保護地域、国立公園を表示します。";
 "routing_attr_driving_style_description" = "運転の目的を選択することで、より短くより速くより安全なルートを取得します";
 "routing_attr_avoid_footways_name" = "歩道を避ける";

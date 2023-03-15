@@ -954,7 +954,7 @@
 "access_intermediate_arrival_time" = "Ora de arrivu a sa tapa";
 "map_widget_intermediate_time" = "Tempus de arrivu a sa tapa";
 "shared_string_time" = "Tempus";
-"map_widget_trip_recording_distance" = "Distàntzia";
+"shared_string_distance" = "Distàntzia";
 "shared_string_milliradians" = "Millèsimos angulares (radiantes)";
 "angular_units" = "Unidades de medida angulare";
 "angular_units_descr" = "Càmbia sas unidades de medida de s'àzimut.";
@@ -1950,13 +1950,14 @@
 "route_parameters" = "Paràmetros de s\'àndala";
 "map_widget_distance_by_tap" = "Distàntzia pro tocu";
 "icon_group_travel" = "Biàgiu";
-"transport" = "Trasportos pùblicos";
+"icon_group_transport" = "Trasportos pùblicos";
 "icon_group_symbols" = "Sìmbulos";
 "icon_group_sport" = "Isport";
 "icon_group_special" = "Ispetziales";
-"amenity_type_emergency" = "Emergèntzia";
+"icon_group_emergency" = "Emergèntzia";
 "shared_string_square" = "Cuadradu";
 "shared_string_octagon" = "Otàgonu";
+"transport" = "Trasportos pùblicos";
 
 // Shapes
 "shared_string_circle" = "Tzìrculu";
@@ -1981,15 +1982,15 @@
 "fav_add_new_group" = "Annanghe unu grupu nou";
 "shared_string_gpx_points" = "Puntos";
 "download_regular_maps" = "Mapas regulares";
-"quick_action_coordinates_widget_descr" = "Unu butone pro ammustrare o cuare su widget de sas coordinadas in sa mapa.";
-"hide_coordinates" = "Cua sas coordinadas";
-"show_coordinates" = "Ammustra sas coordinadas";
-"toggle_coordinates" = "Ammustra/cua su widget de sas coordinadas";
+"quick_action_current_location_widget_descr" = "Unu butone pro ammustrare o cuare su widget de sas coordinadas in sa mapa.";
+"hide_current_location" = "Cua sas coordinadas";
+"show_current_location" = "Ammustra sas coordinadas";
+"toggle_current_location" = "Ammustra/cua su widget de sas coordinadas";
 "copied_to_clipboard" = "Copiadu in punta de billete";
 "searching_gps" = "Chirchende su GPS";
 
 // Coordinate widget
-"coordinates_widget" = "Widget de sas coordinatas";
+"coordinates_widget_current_location" = "Widget de sas coordinatas";
 
 // Resources
 "shared_string_resources" = "Risursas";
@@ -2130,7 +2131,7 @@
 "shared_string_time_moving" = "Tempus in movimentu";
 "distance_moving" = "Distàntzia curreta";
 "icon_group_industrial" = "Industriale";
-"amenity_type_education" = "Istrutzione";
+"icon_group_education" = "Istrutzione";
 "lang_tl" = "Tagalog";
 "lang_bs" = "Bosniacu";
 "lang_pms" = "Piemontesu";

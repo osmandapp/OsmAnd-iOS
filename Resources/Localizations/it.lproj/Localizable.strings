@@ -664,7 +664,7 @@
 "twitter" = "Twitter";
 "shared_string_close" = "Chiudi";
 "user_password" = "Password";
-"map_widget_trip_recording_distance" = "Distanza";
+"shared_string_distance" = "Distanza";
 "osm_live_plan_pricing" = "Piani&Tariffe";
 "osm_live_payment_monthly_title" = "Mensilmente";
 "osm_live_payment_month_cost_descr" = "%@ / mese";
@@ -1735,7 +1735,7 @@
 "access_default_color" = "Colore preimpostato";
 "fav_point_dublicate" = "Duplicato del nome del punto Preferito";
 "shared_string_icon" = "Icona";
-"amenity_type_emergency" = "Emergenza";
+"icon_group_emergency" = "Emergenza";
 "plan_route_split_before" = "Spezza";
 "favorite_friends_category" = "Amici";
 "fav_points_not_exist" = "Non esiste alcun preferito";
@@ -1751,10 +1751,11 @@
 "shared_string_square" = "Quadrato";
 "select_folder" = "Seleziona una cartella";
 "attach_to_the_roads" = "Blocca sulle strade";
-"coordinates_widget" = "Widget coordinate";
+"coordinates_widget_current_location" = "Widget coordinate";
 "favorite_places_category" = "Luoghi";
 "icon_group_special" = "Speciale";
 "shared_string_disable" = "Disattiva";
+"icon_group_transport" = "Trasporti pubblici";
 "transport" = "Trasporti pubblici";
 "replace_favorite_confirmation" = "Sostituire il preferito %@\?";
 "start_of_the_track" = "Inizio della traccia";
@@ -2025,7 +2026,7 @@
 "set_up_backup" = "Impostare il backup";
 "altitude" = "Altitudine";
 "gpx_direction_arrows" = "Frecce della direzione";
-"amenity_type_education" = "Istruzione";
+"icon_group_education" = "Istruzione";
 "lang_ga" = "Irlandese";
 "backup_welcome_back" = "Bentornato!";
 "lang_ms" = "Malese";
@@ -2199,7 +2200,7 @@
 "tomorrow" = "Domani";
 "hide_terrain" = "Nascondi terreno";
 "poi_categories" = "Categorie PDI";
-"show_coordinates" = "Mostra coordinate";
+"show_current_location" = "Mostra coordinate";
 "custom_plugins" = "Plugin personalizzati";
 "preferred_terrain" = "Terreno preferito";
 "manage_storage" = "Gestisci archiviazione";
@@ -2225,7 +2226,7 @@
 "navigate_point_format_UTM" = "UTM";
 "plan_route_folder" = "Cartella";
 "unsupported_action_title" = "Azione non supportata (%@)";
-"hide_coordinates" = "Nascondi coordinate";
+"hide_current_location" = "Nascondi coordinate";
 "map_markers_empty" = "Non hai alcun marcatore mappa attivo";
 "vk" = "VK";
 
@@ -2257,7 +2258,7 @@
 "hidden_categories" = "Categorie nascoste";
 "ui_customization" = "Personalizzazione dell\'interfaccia grafica";
 "select_profile" = "Seleziona profilo";
-"toggle_coordinates" = "Mostra/nascondi widget delle coordinate";
+"toggle_current_location" = "Mostra/nascondi widget delle coordinate";
 "weather_temperature_fahrenheit" = "Fahrenheit";
 "backup_error_invalid_token" = "Token non valido";
 "verification_code_placeholder" = "Codice";
@@ -2403,7 +2404,7 @@
 "srtm_unit_format" = "Unità di misura delle linee di contorno";
 "quick_action_add_dest_descr" = "Toccando questo pulsante si imposta la destinazione al centro della mappa. Qualsiasi destinazione precedentemente selezionata diventa l'ultima destinazione intermedia.";
 "quick_action_first_intermediate_descr" = "Toccando questo pulsante si aggiunge la prima destinazione intermedia al punto centrale della mappa.";
-"quick_action_coordinates_widget_descr" = "Un interruttore per mostrare o nascondere il widget delle Coordinate sulla mappa.";
+"quick_action_current_location_widget_descr" = "Un interruttore per mostrare o nascondere il widget delle Coordinate sulla mappa.";
 "quick_action_day_night_descr" = "Toccando questo pulsante si passa dalla modalità mappa diurna a quella notturna.";
 "quick_action_poi_add_descr" = "Toccando questo pulsante è possibile aggiungere rapidamente PDI sulla mappa con tipi e tag predefiniti.";
 "export_profile_descr" = "È possibile esportare tutte le impostazioni del profilo, copiare tutte le impostazioni da un altro profilo o ripristinare tutte le impostazioni del profilo allo stato predefinito.";
@@ -2810,8 +2811,10 @@
 "confirm_history_item_delete" = "Sei sicuro di voler eliminare (%ld) elementi della cronologia?";
 "delete_history_items" = "Eliminare gli elementi della cronologia?";
 "search_favorites" = "Cerca tra i favoriti";
-"map_widget_camera_tilt" = "inclinazione della fotocamera";
+"map_widget_camera_tilt" = "Inclinazione fotocamera";
 "map_widget_zoom_level" = "Livello di zoom";
 "rotate_map_none_fixed" = "Nord in alto (fisso)";
 "rotate_map_none_manually" = "Rotazione manuale (fissa)";
 "compass_click_desc" = "Tocca il compasso per cambiare modalità di orientamento della mappa.";
+"map_widget_camera_distance" = "Distanza fotocamera";
+"change_language" = "Cambia lingua";

@@ -992,7 +992,7 @@
 "osm_notes_online_layer" = "OSM Poznámky (on-line)";
 "gpx_tags_txt" = "Tagy";
 "quick_action_add_poi" = "Přidat POI";
-"map_widget_trip_recording_distance" = "Vzdálenost";
+"shared_string_distance" = "Vzdálenost";
 "quick_action_navigation_voice" = "Hlas zapnout/vypnout";
 "quick_action_map_style" = "Změnit styl mapy";
 "quick_action_poi_list" = "Seznam POI";
@@ -1921,7 +1921,7 @@
 "icon_group_symbols" = "Symboly";
 "icon_group_sport" = "Sport";
 "icon_group_special" = "Speciální";
-"amenity_type_emergency" = "Pomoc v nouzi";
+"icon_group_emergency" = "Pomoc v nouzi";
 "search_poi_types_descr" = "Zkombinujte body zájmu různých kategorií. Klepnutím na přepínač vyberete všechny, klepnutím na levou stranu vyberete kategorie.";
 "reset_to_default_category_button_promo" = "\"Obnovit do základního nastavení\" nastaví výchozí pořadí.";
 "create_custom_categories_list_promo" = "Změňte pořadí seznamu a skryjte kategorie. Importujte a exportujte všechny změny jako profily.";
@@ -1929,10 +1929,10 @@
 "visible_categories" = "Viditelné kategorie";
 "delete_custom_categories" = "Smazat vlastní kategorie";
 "download_regular_maps" = "Standardní mapy";
-"quick_action_coordinates_widget_descr" = "Přepínač pro zobrazení nebo skrytí nástroje Souřadnice na mapě.";
-"hide_coordinates" = "Skrýt souřadnice";
-"show_coordinates" = "Zobrazit souřadnice";
-"toggle_coordinates" = "Zobrazit/skrýt nástroj souřadnic";
+"quick_action_current_location_widget_descr" = "Přepínač pro zobrazení nebo skrytí nástroje Souřadnice na mapě.";
+"hide_current_location" = "Skrýt souřadnice";
+"show_current_location" = "Zobrazit souřadnice";
+"toggle_current_location" = "Zobrazit/skrýt nástroj souřadnic";
 "folder_already_exsists" = "Složka s tímto názvem již existuje";
 "incorrect_symbols" = "Zadány neplatné znaky";
 "preparing_file" = "Příprava souboru";
@@ -1963,6 +1963,7 @@
 "fav_add_new_group" = "Přidat novou skupinu";
 "shared_string_search_history" = "Historie vyhledávání";
 "fav_points_not_exist" = "Žádná Oblíbená místa nejsou zadána";
+"icon_group_transport" = "Doprava";
 "transport" = "Doprava";
 "shared_string_others" = "Ostatní";
 "favorite_places_category" = "Místa";
@@ -1977,7 +1978,7 @@
 "copied_to_clipboard" = "Zkopírováno do schránky";
 
 // Coordinate widget
-"coordinates_widget" = "Nástroj souřadnic";
+"coordinates_widget_current_location" = "Nástroj souřadnic";
 "searching_gps" = "Vyhledávání GPS";
 "new_plugin_added" = "Přidán nový modul";
 "add_custom_category" = "Přidat vlastní kategorii";
@@ -2094,7 +2095,7 @@
 "shared_string_end_time" = "Čas příjezdu";
 "shared_string_time_moving" = "Doba pohybu";
 "icon_group_industrial" = "Průmysl";
-"amenity_type_education" = "Školství";
+"icon_group_education" = "Školství";
 "route_points" = "Body trasy";
 "connect_rp" = "Spojit body trasy";
 "lang_als" = "Toskičtina";

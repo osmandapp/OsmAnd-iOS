@@ -763,7 +763,7 @@
 "shared_string_modify" = "Alterar";
 "shared_string_of" = "de";
 "shared_string_time" = "Tempo";
-"map_widget_trip_recording_distance" = "Distância";
+"shared_string_distance" = "Distância";
 "offline_maps" = "Mapas offline";
 "icon_group_amenity" = "Amenidade";
 "poi_overlay" = "Camada superior de POI";
@@ -1686,11 +1686,12 @@
 "desert" = "Deserto";
 "settings_item_read_error" = "Não foi possível ler a partir de \'%@\'.";
 "icon_group_travel" = "Viagem";
-"transport" = "Transporte";
+"icon_group_transport" = "Transporte";
 "icon_group_symbols" = "Símbolos";
 "icon_group_sport" = "Esporte";
 "icon_group_special" = "Especial";
-"amenity_type_emergency" = "Emergência";
+"icon_group_emergency" = "Emergência";
+"transport" = "Transporte";
 "vessel_height_limit_description" = "Defina a altura da embarcação para evitar pontes baixas. Lembre-se, se a ponte for móvel, usaremos sua altura no estado aberto.";
 "lenght_limit_description" = "Forneça o comprimento do seu veículo. Algumas restrições de rotas podem ser aplicadas a veículos longos.";
 "touting_specified_vehicle_parameters_descr" = "Os parâmetros definidos do veículo podem afetar a navegação.";
@@ -1747,15 +1748,15 @@
 "show_terrain" = "Mostrar terreno";
 "quick_action_hillshade_descr" = "Um botão para mostrar ou ocultar sombras de relevo.";
 "unsupported_items" = "Itens não suportados";
-"quick_action_coordinates_widget_descr" = "Uma alternância para mostrar ou ocultar o widget de coordenadas no mapa.";
-"hide_coordinates" = "Ocultar coordenadas";
-"show_coordinates" = "Mostrar coordenadas";
-"toggle_coordinates" = "Mostrar/ocultar widget de coordenadas";
+"quick_action_current_location_widget_descr" = "Uma alternância para mostrar ou ocultar o widget de coordenadas no mapa.";
+"hide_current_location" = "Ocultar coordenadas";
+"show_current_location" = "Mostrar coordenadas";
+"toggle_current_location" = "Mostrar/ocultar widget de coordenadas";
 "copied_to_clipboard" = "Copiado para aárea de transferência";
 "searching_gps" = "Pesquisando GPS";
 
 // Coordinate widget
-"coordinates_widget" = "Widget de coordenadas";
+"coordinates_widget_current_location" = "Widget de coordenadas";
 "osm_editing_access_descr" = "Pode ver todas as suas edições e notas locais em %@. Os pontos já enviados não são mostrados no OsmAnd.";
 "osm_editing_settings_descr" = "As configurações deste complemento são globais e aplicam-se a todos os perfis.";
 "shared_string_loading" = "A carregar…";
@@ -2101,7 +2102,7 @@
 "shared_string_time_moving" = "Tempo se movendo";
 "distance_moving" = "Distância corrigida";
 "parked_at" = "estacionado em";
-"amenity_type_education" = "Educação";
+"icon_group_education" = "Educação";
 "icon_group_industrial" = "Industrial";
 "route_points" = "Pontos da rota";
 "connect_rp" = "Conectar pontos de rota";

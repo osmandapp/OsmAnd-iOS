@@ -838,7 +838,7 @@
 "map_magnifier" = "Achegamento do mapa";
 "add_home" = "Engadir a miña casa";
 "mapillary" = "Mapillary";
-"map_widget_trip_recording_distance" = "Distancia";
+"shared_string_distance" = "Distancia";
 "vector_data" = "Mapas vectoriais sen conexión";
 "osn_add_dialog_title" = "Crear unha nota";
 "poi_context_menu_modify" = "Modificar o PDI";
@@ -1463,6 +1463,7 @@
 "favorite_places_category" = "Lugares";
 "add_custom_category" = "Engadir categoría personalizada";
 "simplified_track" = "Pista simplificada";
+"icon_group_transport" = "Transporte";
 "transport" = "Transporte";
 "shared_string_disable" = "Desactivar";
 "extra_maps_menu_group" = "Mapas adicionais";
@@ -1471,7 +1472,7 @@
 "sort_last_modified" = "Última modificación";
 "plan_route_split_after" = "Dividir despois";
 "osmand_live" = "OsmAnd Live";
-"coordinates_widget" = "Trebello de coordenadas";
+"coordinates_widget_current_location" = "Trebello de coordenadas";
 "plan_route_open_existing_track" = "Abrir pista existente";
 "favorite_group_name" = "Nome do grupo";
 "replace_favorite_confirmation" = "Tes a certeza de querer substituír o favorito \"%@\"\?";
@@ -1484,7 +1485,7 @@
 "hide_compass_ruler" = "Agochar a regra de compás";
 "street_level_imagery" = "Imaxes a nivel de rúa";
 "fav_point_dublicate" = "Favorito especificado con nome duplicado";
-"amenity_type_emergency" = "Urxencias";
+"icon_group_emergency" = "Urxencias";
 "custom_osmand_plugin" = "Plugin personalizado do OsmAnd";
 "change_folder" = "Mudar cartafol";
 "shared_string_others" = "Outros";
@@ -1662,7 +1663,7 @@
 "lang_mg" = "Malgaxe";
 "user_login" = "Iniciar sesión";
 "lang_oc" = "Occitano";
-"amenity_type_education" = "Educación";
+"icon_group_education" = "Educación";
 "lang_pms" = "Piamontés";
 "lang_de" = "Alemán";
 "lang_yo" = "Ioruba";
@@ -1843,7 +1844,7 @@ Lon %@";
 "show_gpx" = "Pistas";
 "units_and_formats" = "Unidades e formatos";
 "add_group" = "Engadir un grupo";
-"quick_action_coordinates_widget_descr" = "Trocar para amosar ou agochar o trebello de coordenadas no mapa.";
+"quick_action_current_location_widget_descr" = "Trocar para amosar ou agochar o trebello de coordenadas no mapa.";
 "plan_route" = "Planificar ruta";
 "quick_action_hillshade_descr" = "Un botón que amosa ou agocha a sombra dos outeiros no mapa.";
 "quick_action_transport_descr" = "Botón que amosa ou agocha o transporte público no mapa.";

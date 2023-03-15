@@ -212,6 +212,7 @@
 "shared_string_widgets" = "Widgets";
 "map_widget_right" = "Right panel";
 "map_widget_left" = "Left panel";
+"top_widgets_panel" = "Top panel";
 "layer_map_appearance" = "Configure screen";
 "edit_profile_screen_options_subtitle" = "Select screen options for the profile";
 "map_markers" = "Map markers";
@@ -536,7 +537,7 @@
 "shared_string_from" = "from";
 "shared_string_time" = "Time";
 "time_of_day" = "Time of day";
-"map_widget_trip_recording_distance" = "Distance";
+"shared_string_distance" = "Distance";
 "shared_string_time_span" = "Time span";
 "shared_string_start_time" = "Start time";
 "shared_string_end_time" = "End time";
@@ -1489,7 +1490,8 @@
 "mapil_select_user" = "Select user";
 
 // Coordinate widget
-"coordinates_widget" = "Coordinates widget";
+"coordinates_widget_current_location" = "Coordinates: current location";
+"coordinates_widget_map_center" = "Coordinates: map center";
 "searching_gps" = "Searching GPS";
 "copied_to_clipboard" = "Copied to clipboard";
 // Quick action
@@ -1498,10 +1500,14 @@
 "no_underlay" = "No underlay";
 "quick_action_map_underlay_action" = "Add underlay";
 "quick_action_list_descr" = "Tapping this action button pages through the list below";
-"toggle_coordinates" = "Show/hide coordinates widget";
-"show_coordinates" = "Show coordinates";
-"hide_coordinates" = "Hide coordinates";
-"quick_action_coordinates_widget_descr" = "A toggle to show or hide the Coordinates widget on the map.";
+"toggle_current_location" = "Show/hide Coordinates: current location";
+"show_current_location" = "Show Coordinates: current location";
+"hide_current_location" = "Hide Coordinates: current location";
+"toggle_map_center" = "Show/hide Coordinates: map center";
+"show_map_center" = "Show Coordinates: map center";
+"hide_map_center" = "Hide Coordinates: map center";
+"quick_action_current_location_widget_descr" = "A toggle to show or hide the Coordinates widget on the map.";
+"quick_action_map_center_widget_descr" = "A toggle to show or hide the Coordinates widget on the map.";
 "quick_action_map_overlay_title" = "Map overlays";
 "quick_action_map_underlay_title" = "Map underlays";
 "vector_data" = "Offline vector maps";
@@ -2596,18 +2602,19 @@
 "routing_attr_motor_type_gas_name" = "CNG";
 "routing_attr_motor_type_electric_name" = "Electric";
 "routing_attr_motor_type_hybrid_name" = "Hybrid";
+"transport" = "Transport";
 
 //Icon categories
 "icon_group_amenity" = "Amenity";
-"amenity_type_emergency" = "Emergency";
+"icon_group_emergency" = "Emergency";
 "icon_group_special" = "Special";
 "icon_group_sport" = "Sport";
 "icon_group_symbols" = "Symbols";
-"transport" = "Transport";
+"icon_group_transport" = "Transport";
 "icon_group_travel" = "Travel";
 "icon_group_nautical" = "Nautical";
 "icon_group_industrial" = "Industrial";
-"amenity_type_education" = "Education";
+"icon_group_education" = "Education";
 
 "settings_item_read_error" = "Could not read from \'%@\'.";
 "app_mode_default" = "Browse map";

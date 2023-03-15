@@ -808,7 +808,7 @@
 "get_discount_second_part" = "nato %@";
 "sett_generic_ext_input" = "Tipkovnica";
 "sett_wunderlinq_ext_input" = "WunderLINQ";
-"map_widget_trip_recording_distance" = "Razdalja";
+"shared_string_distance" = "Razdalja";
 "configure_map" = "Nastavitve zemljevida";
 "simulate_navigation" = "Izvedi navidezno navigacijo";
 "select_map_marker" = "Izbor označbe na zemljevidu";
@@ -1313,7 +1313,7 @@
 "hide_compass_ruler" = "Skrij kompas";
 "plan_route_open_existing_track" = "Odpri obstoječo sled";
 "favorite_friends_category" = "Naslovi prijateljev";
-"coordinates_widget" = "Gradnik za določevanje koordinat";
+"coordinates_widget_current_location" = "Gradnik za določevanje koordinat";
 "plan_route_create_new_route" = "Ustvari novo pot";
 "icon_group_sport" = "Šport";
 "searching" = "Iskanje…";
@@ -1324,7 +1324,8 @@
 "shared_string_enable" = "Omogoči";
 "plan_route_split_before" = "Razdeli pred";
 "replace_favorite_confirmation" = "Zamenjati priljubljeno točko »%@«\?";
-"amenity_type_emergency" = "Nujna medicinska pomoč";
+"icon_group_emergency" = "Nujna medicinska pomoč";
+"icon_group_transport" = "Prevoz";
 "transport" = "Prevoz";
 "context_menu_item_edit_waypoint" = "Uredi vmesno točko GPX";
 "no_waypoints_found" = "Ni vmesnih točk";
@@ -1355,7 +1356,7 @@
 "lang_lo" = "Laoščina";
 "lang_el" = "Grščina";
 "lang_als" = "Toskovska albanščina";
-"amenity_type_education" = "Izobraževalna ustanova";
+"icon_group_education" = "Izobraževalna ustanova";
 "lang_pt" = "Portugalščina";
 "lang_ast" = "Asturijski";
 "lang_vi" = "Vietnamščina";
@@ -1814,7 +1815,7 @@
 "local_backup_descr" = "Varnostno kopiranje ali obnovitev podatkov iz lokalne datoteke.";
 "backup_restore_data" = "Obnovi podatke";
 "recalculate_route" = "Preračunaj pot";
-"quick_action_coordinates_widget_descr" = "Stikalo za prikaz ali skrivanje pripomočka Koordinate na zemljevidu.";
+"quick_action_current_location_widget_descr" = "Stikalo za prikaz ali skrivanje pripomočka Koordinate na zemljevidu.";
 "move_point" = "Premakni točko";
 "promo_subscription" = "Promocijska naročnina";
 "nav_type_hint" = "Vrsta navigacije";

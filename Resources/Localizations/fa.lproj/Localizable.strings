@@ -916,7 +916,7 @@
 "poi_context_menu_modify" = "اصلاح POI";
 "mapillary_menu_title_pano" = "فقط نمایش عکس‌های ۳۶۰ درجه";
 "phone" = "تلفن";
-"map_widget_trip_recording_distance" = "فاصله";
+"shared_string_distance" = "فاصله";
 "nautical_maps" = "نقشه‌های دریایی";
 "offline_edition" = "ویرایش آفلاین";
 "use_osm_live_routing" = "مسیریابی با OsmAnd Live";
@@ -1467,6 +1467,7 @@
 "access_default_color" = "رنگ پیش‌فرض";
 "fav_point_dublicate" = "نام علاقه‌مندی تکراری است";
 "coordinates" = "مختصات";
+"icon_group_transport" = "حمل‌ونقل";
 "transport" = "حمل‌ونقل";
 "shared_string_disable" = "غیرفعال";
 "shared_string_search_history" = "تاریخچهٔ جست‌وجو";
@@ -1502,7 +1503,7 @@
 "replace_favorite_confirmation" = "آیا «%@» علاقه‌مندی جانشین شود؟";
 "shared_string_others" = "دیگر";
 "add_custom_category" = "افزودن دستهٔ سفارشی";
-"amenity_type_emergency" = "اورژانس";
+"icon_group_emergency" = "اورژانس";
 "copied_to_clipboard" = "کپی شد";
 "osmand_live" = "OsmAnd Live";
 "searching_gps" = "در حال جست‌وجوی GPS‏";
@@ -1511,7 +1512,7 @@
 "fav_points_not_exist" = "هیچ نقطهٔ موردعلاقه‌ای وجود ندارد";
 "favorite_friends_category" = "دوستان";
 "shared_string_import" = "درون‌برد";
-"coordinates_widget" = "ابزارک مختصات";
+"coordinates_widget_current_location" = "ابزارک مختصات";
 "mapil_usernames" = "نام‌های کاربری";
 "osm_edits_edits_label" = "ویرایش‌ها";
 "osm_value" = "مقدار";
@@ -1808,7 +1809,7 @@
 "lang_al" = "آلبانیایی";
 "cloud_email_not_registered" = "این نشانی ایمیل برای ابر OsmAnd ثبت نشده است";
 "lang_lmo" = "لومبارد";
-"amenity_type_education" = "آموزشی";
+"icon_group_education" = "آموزشی";
 "lang_war" = "وینارایی";
 "lang_af" = "آفریقایی";
 "lang_pms" = "پیدمونتی";
@@ -1950,7 +1951,7 @@
 "subscribe_email_desc" = "مشترک خبرنامهٔ ایمیلی ما شوید و ۳ نقشهٔ دیگر بارگیری کنید!";
 "profile_alert_delete_msg" = "حذف نمایه «%@»";
 "download_all" = "بارگیری همه";
-"quick_action_coordinates_widget_descr" = "دکمه‌ای برای آشکار یا پنهان کردن ابزارک مختصات روی نقشه.";
+"quick_action_current_location_widget_descr" = "دکمه‌ای برای آشکار یا پنهان کردن ابزارک مختصات روی نقشه.";
 "reset_to_default_category_button_promo" = "«بازنشانی به پیشفرض» ترتیب را به حالت اولیهٔ پس از نصب برمی‌گرداند.";
 "benefits_for_contributors_secondary_descr" = "به حساب اوپن‌استریت‌مپ خود وارد شوید تا ببینید آیا شرایط دریافت روزآمدسازی‌های نامحدود ماهانه و ساعتی را دارید.";
 "move_point" = "جابه‌جاکردن نقطه";

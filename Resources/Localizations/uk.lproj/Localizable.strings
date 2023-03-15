@@ -874,7 +874,7 @@
 "access_intermediate_arrival_time" = "Прибуття в проміжний пункт призначення";
 "map_widget_intermediate_time" = "Час до проміжного пункту призначення";
 "shared_string_time" = "Час";
-"map_widget_trip_recording_distance" = "Відстань";
+"shared_string_distance" = "Відстань";
 "angular_units" = "Кутові одиниці виміру";
 "angular_units_descr" = "Змінити одиниці вимірювання азимуту.";
 "show_tunnels" = "Тунелі";
@@ -1932,12 +1932,13 @@
 "track_multiple_segments_select" = "%@ має кілька відрізків. Виберіть частину треку, яку слід використовувати для навігації.";
 "select_segment" = "Вибрати відрізок";
 "select_track_to_follow" = "Виберіть файл треку для слідування";
+"icon_group_transport" = "Транспорт";
 "transport" = "Транспорт";
 "icon_group_travel" = "Подорож";
 "icon_group_symbols" = "Знаки";
 "icon_group_sport" = "Спорт";
 "icon_group_special" = "Спеціальні";
-"amenity_type_emergency" = "Екстрені служби";
+"icon_group_emergency" = "Екстрені служби";
 "shared_string_square" = "Квадрат";
 "shared_string_octagon" = "Восьмикутник";
 
@@ -1963,15 +1964,15 @@
 "select_gropu_descr" = "Виберіть групу або додайте нову";
 "fav_add_new_group" = "Додати нову групу";
 "select_group_descr" = "Виберіть групу або додайте нову";
-"quick_action_coordinates_widget_descr" = "Перемикач для показу або приховування віджета Координати на мапі.";
-"hide_coordinates" = "Сховати координати";
-"show_coordinates" = "Показати координати";
-"toggle_coordinates" = "Показати/сховати віджет координат";
+"quick_action_current_location_widget_descr" = "Перемикач для показу або приховування віджета Координати на мапі.";
+"hide_current_location" = "Сховати координати";
+"show_current_location" = "Показати координати";
+"toggle_current_location" = "Показати/сховати віджет координат";
 "copied_to_clipboard" = "Скопійовано до буфера обміну";
 "searching_gps" = "Пошук GPS";
 
 // Coordinate widget
-"coordinates_widget" = "Віджет координат";
+"coordinates_widget_current_location" = "Віджет координат";
 "coordinates" = "Координати";
 "shared_string_gpx_points" = "Точки";
 "download_regular_maps" = "Стандартна мапа";
@@ -2110,7 +2111,7 @@
 "distance_moving" = "Скоригована відстань";
 "parked_at" = "початок стоянки";
 "icon_group_industrial" = "Промисловість";
-"amenity_type_education" = "Освіта";
+"icon_group_education" = "Освіта";
 "route_points" = "Точки маршруту";
 "connect_rp" = "З’єднати точки маршруту";
 "lang_al" = "Албанська";

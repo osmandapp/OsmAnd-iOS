@@ -215,7 +215,7 @@
 "index_name_africa" = "Africa";
 "traffic_warning" = "Avertizare trafic";
 "osm_live_subscription" = "Abonament OsmAnd Live";
-"map_widget_trip_recording_distance" = "Distanță";
+"shared_string_distance" = "Distanță";
 "mile" = "mi";
 "local_map_names" = "Nume locale";
 "osm_notes_online_layer" = "Bug hartă OSM";
@@ -871,7 +871,7 @@
 "download_tab_local" = "Local";
 "favorite_friends_category" = "Prieteni";
 "shared_string_import" = "Importă";
-"coordinates_widget" = "Coordonatele widget";
+"coordinates_widget_current_location" = "Coordonatele widget";
 "map_during_navigation" = "Hartă în timpul navigării";
 "join_segments" = "Alăturați segmente";
 "shared_string_gpx_tracks" = "Track-uri";
@@ -881,6 +881,7 @@
 "shared_string_gpx_track" = "Track(pistă)";
 "plan_route_open_existing_track" = "Deschideți o rută existentă";
 "searching_gps" = "Căutare GPS";
+"icon_group_transport" = "Transport";
 "transport" = "Transport";
 "shared_string_others" = "Altele";
 "icon_group_sport" = "Sport";
@@ -898,7 +899,7 @@
 "navigation_over_track" = "Pornesc navigarea de-a lungul traseului\?";
 "add_custom_category" = "Adăugați o categorie personalizată";
 "save_current_track" = "Salvează traseul curent";
-"amenity_type_emergency" = "Urgență";
+"icon_group_emergency" = "Urgență";
 "shared_string_visible" = "Vizibil";
 "map_mode" = "Mod hartă";
 "new_plugin_added" = "A fost adăugat un plugin nou";
@@ -1775,10 +1776,10 @@
 "quick_action_map_source_action" = "Adăugați sursa hărții";
 "quick_action_map_underlay_title" = "Substraturi pentru hărți";
 "quick_action_map_overlay_title" = "Suprapuneri de hărți";
-"quick_action_coordinates_widget_descr" = "Un comutator pentru a afișa sau ascunde widgetul Coordonate pe hartă.";
-"hide_coordinates" = "Ascundeți coordonatele";
-"show_coordinates" = "Afișați coordonatele";
-"toggle_coordinates" = "Afișați / ascundeți coordonatele widget";
+"quick_action_current_location_widget_descr" = "Un comutator pentru a afișa sau ascunde widgetul Coordonate pe hartă.";
+"hide_current_location" = "Ascundeți coordonatele";
+"show_current_location" = "Afișați coordonatele";
+"toggle_current_location" = "Afișați / ascundeți coordonatele widget";
 "quick_action_list_descr" = "Atingând acest buton de acțiune se parcurge lista de mai jos";
 "quick_action_map_underlay_action" = "Adăugați sub strat";
 "no_underlay" = "Fără strat de bază";
@@ -2080,7 +2081,7 @@
 "distance_moving" = "Distanța corectată";
 "parked_at" = "parcat la";
 "icon_group_industrial" = "Industrială";
-"amenity_type_education" = "Educație";
+"icon_group_education" = "Educație";
 "route_points" = "Puncte de traseu";
 "connect_rp" = "Conectarea punctelor de rută";
 "lang_al" = "Albaneză";

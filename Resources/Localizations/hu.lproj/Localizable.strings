@@ -641,7 +641,7 @@
 "in_app_purchase" = "Alkalmazáson belüli vásárlás";
 "in_app_purchase_desc" = "Egyszeri fizetés";
 "user_password" = "Jelszó";
-"map_widget_trip_recording_distance" = "Távolság";
+"shared_string_distance" = "Távolság";
 "shared_string_milliradians" = "Milliradián";
 "sett_generic_ext_input" = "Billentyűzet";
 "sett_wunderlinq_ext_input" = "WunderLINQ";
@@ -1419,14 +1419,15 @@
 "save_current_track_descr" = "Jelenlegi nyomvonal mentése GPX fájlba most.";
 "shared_string_icon" = "Ikon";
 "icon_group_special" = "Különleges";
-"amenity_type_emergency" = "Vészhelyzet";
+"icon_group_emergency" = "Vészhelyzet";
 "extra_maps_menu_group" = "Egyéb térképek";
 "add_custom_category" = "Egyéni kategória hozzáadása";
 "shared_string_disable" = "Letiltás";
 "plan_route_split_before" = "Elvágás ez előtt:";
 "shared_string_import" = "Importálás";
+"icon_group_transport" = "Tömegközlekedés";
 "transport" = "Tömegközlekedés";
-"coordinates_widget" = "Koordináta-widget";
+"coordinates_widget_current_location" = "Koordináta-widget";
 "shared_string_others" = "Egyéb";
 "address_search_desc" = "Címkeresés";
 "shared_string_circle" = "Kör";
@@ -1655,7 +1656,7 @@
 "lang_als" = "albán (toszk)";
 "lang_iw" = "héber";
 "cloud_email_not_registered" = "Ez az e-mail-címe nincs regisztrálva az OsmAnd Cloud szolgáltatásban";
-"amenity_type_education" = "Oktatás";
+"icon_group_education" = "Oktatás";
 "register_opr_have_account" = "Már van fiókom";
 "upload_to_openstreetmap" = "Feltöltés az OpenStreetMapre";
 "lang_nn" = "norvég nynorsk";
@@ -2175,7 +2176,7 @@
 "pro_features" = "Pro funkciók";
 "worldwide_maps" = "Térképek világszerte";
 "contributions_may_calculate_with_delay" = "A szerkesztések kiszámítása több órát is igénybe vehet.";
-"quick_action_coordinates_widget_descr" = "A koordináta-widgetet a térképen megjelenítő vagy elrejtő kapcsoló.";
+"quick_action_current_location_widget_descr" = "A koordináta-widgetet a térképen megjelenítő vagy elrejtő kapcsoló.";
 "quick_action_hillshade_descr" = "Gomb, amely a térképen megjeleníti vagy elrejti a domborzatárnyékolást.";
 "contact_support" = "Kapcsolatfelvétel az ügyfélszolgálattal";
 "backup_delete_types_descr" = "Törli az összes elavult adattípus adatát az OsmAnd Cloudból\?";

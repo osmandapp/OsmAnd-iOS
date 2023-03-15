@@ -455,7 +455,7 @@
 "shared_string_from" = "nondik";
 "shared_string_time" = "Denbora";
 "time_of_day" = "Eguneko ordua";
-"map_widget_trip_recording_distance" = "Distantzia";
+"shared_string_distance" = "Distantzia";
 "shared_string_time_span" = "Denbora tartea";
 "shared_string_start_time" = "Hasiera ordua";
 "shared_string_end_time" = "Amaiera ordua";
@@ -1263,7 +1263,7 @@
 "mapil_select_user" = "Select user";
 
 // Coordinate widget
-"coordinates_widget" = "Koordenatuen trepeta";
+"coordinates_widget_current_location" = "Koordenatuen trepeta";
 "searching_gps" = "GPSa bilatzen";
 "copied_to_clipboard" = "Arbelera kopiatuta";
 // Quick action
@@ -1272,10 +1272,10 @@
 "no_underlay" = "Azpi-azalik ez";
 "quick_action_map_underlay_action" = "Gehitu azpi-azala";
 "quick_action_list_descr" = "Tapping this action button pages through the list below";
-"toggle_coordinates" = "Show/hide coordinates widget";
-"show_coordinates" = "Show coordinates";
-"hide_coordinates" = "Hide coordinates";
-"quick_action_coordinates_widget_descr" = "Maparen koordenatuen widget-a erakusteko edo ezkutatzeko botoia.";
+"toggle_current_location" = "Show/hide coordinates widget";
+"show_current_location" = "Show coordinates";
+"hide_current_location" = "Hide coordinates";
+"quick_action_current_location_widget_descr" = "Maparen koordenatuen widget-a erakusteko edo ezkutatzeko botoia.";
 "quick_action_map_overlay_title" = "Maparen gain-azalak";
 "quick_action_map_underlay_title" = "Maparen azpi-azalak";
 "vector_data" = "Lineaz kanpoko bektore mapak";
@@ -2190,15 +2190,16 @@
 
 //Icon categories
 "icon_group_amenity" = "Prestazioa";
-"amenity_type_emergency" = "Larrialdiak";
+"icon_group_emergency" = "Larrialdiak";
 "icon_group_special" = "Berezia";
 "icon_group_sport" = "Kirola";
 "icon_group_symbols" = "Sinboloak";
-"transport" = "Garraioa";
+"icon_group_transport" = "Garraioa";
 "icon_group_travel" = "Bidaia";
 "icon_group_nautical" = "Itsasokoa";
 "icon_group_industrial" = "Industria";
-"amenity_type_education" = "Hezkuntza";
+"icon_group_education" = "Hezkuntza";
+"transport" = "Garraioa";
 "settings_item_read_error" = "Ezin izan da %@-tik irakurri.";
 "app_mode_default" = "Arakatu mapa";
 "app_mode_car" = "Gidatzea";

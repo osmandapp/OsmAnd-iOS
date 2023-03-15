@@ -1465,6 +1465,8 @@
 		C54371FB29B7923D00028C3C /* widget_sunrise_day@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C54371F329B7923D00028C3C /* widget_sunrise_day@3x.png */; };
 		C54371FC29B7923D00028C3C /* widget_sunset_night@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C54371F429B7923D00028C3C /* widget_sunset_night@3x.png */; };
 		C54371FD29B7923D00028C3C /* widget_sunrise_night@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C54371F529B7923D00028C3C /* widget_sunrise_night@2x.png */; };
+		C54D7F8829BF357700E14746 /* OASunriseSunsetWidgetState.m in Sources */ = {isa = PBXBuildFile; fileRef = C54D7F8729BF357700E14746 /* OASunriseSunsetWidgetState.m */; };
+		C54D7F8B29C06F9200E14746 /* OASunriseSunsetWidgetHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = C54D7F8A29C06F9200E14746 /* OASunriseSunsetWidgetHelper.mm */; };
 		C556C85329BA0844006794D5 /* OASunriseWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = C556C85129BA0844006794D5 /* OASunriseWidget.mm */; };
 		C556C85829BA42FA006794D5 /* OASunsetWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = C556C85629BA42FA006794D5 /* OASunsetWidget.mm */; };
 		C558A29B29B1355A00E79DDB /* ic_custom_direction_manual_night@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C558A29529B1355800E79DDB /* ic_custom_direction_manual_night@2x.png */; };
@@ -5029,6 +5031,10 @@
 		C54371F329B7923D00028C3C /* widget_sunrise_day@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "widget_sunrise_day@3x.png"; path = "Resources/Icons/widget_sunrise_day@3x.png"; sourceTree = "<group>"; };
 		C54371F429B7923D00028C3C /* widget_sunset_night@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "widget_sunset_night@3x.png"; path = "Resources/Icons/widget_sunset_night@3x.png"; sourceTree = "<group>"; };
 		C54371F529B7923D00028C3C /* widget_sunrise_night@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "widget_sunrise_night@2x.png"; path = "Resources/Icons/widget_sunrise_night@2x.png"; sourceTree = "<group>"; };
+		C54D7F8629BF357700E14746 /* OASunriseSunsetWidgetState.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OASunriseSunsetWidgetState.h; sourceTree = "<group>"; };
+		C54D7F8729BF357700E14746 /* OASunriseSunsetWidgetState.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OASunriseSunsetWidgetState.m; sourceTree = "<group>"; };
+		C54D7F8929C06F9200E14746 /* OASunriseSunsetWidgetHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OASunriseSunsetWidgetHelper.h; sourceTree = "<group>"; };
+		C54D7F8A29C06F9200E14746 /* OASunriseSunsetWidgetHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASunriseSunsetWidgetHelper.mm; sourceTree = "<group>"; };
 		C556C85029BA0844006794D5 /* OASunriseWidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OASunriseWidget.h; sourceTree = "<group>"; };
 		C556C85129BA0844006794D5 /* OASunriseWidget.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASunriseWidget.mm; sourceTree = "<group>"; };
 		C556C85529BA42FA006794D5 /* OASunsetWidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OASunsetWidget.h; sourceTree = "<group>"; };
@@ -12651,6 +12657,8 @@
 				C556C85129BA0844006794D5 /* OASunriseWidget.mm */,
 				C556C85529BA42FA006794D5 /* OASunsetWidget.h */,
 				C556C85629BA42FA006794D5 /* OASunsetWidget.mm */,
+				C54D7F8929C06F9200E14746 /* OASunriseSunsetWidgetHelper.h */,
+				C54D7F8A29C06F9200E14746 /* OASunriseSunsetWidgetHelper.mm */,
 				DA5A7F3726C563A400F274C7 /* OAAlarmWidget.mm */,
 				DA5A7F3A26C563A400F274C7 /* OADestinationLineDelegate.h */,
 				DA5A7F2D26C563A400F274C7 /* OADestinationLineDelegate.m */,
@@ -12701,6 +12709,8 @@
 				DA5A7F1926C563A400F274C7 /* OABearingWidgetState.m */,
 				DA5A7F1A26C563A400F274C7 /* OACompassRulerWidgetState.m */,
 				DA5A7F1B26C563A400F274C7 /* OATimeWidgetState.m */,
+				C54D7F8629BF357700E14746 /* OASunriseSunsetWidgetState.h */,
+				C54D7F8729BF357700E14746 /* OASunriseSunsetWidgetState.m */,
 				DA5A7F1C26C563A400F274C7 /* OAWidgetState.h */,
 				DA5A7F1D26C563A400F274C7 /* OACompassRulerWidgetState.h */,
 				DA5A7F1E26C563A400F274C7 /* OABearingWidgetState.h */,
@@ -16535,6 +16545,7 @@
 				DA5A855D26C563A900F274C7 /* OARouteDirectionInfo.mm in Sources */,
 				32388EE226E6AF770021F829 /* OAQuickSearchResultTableViewCell.m in Sources */,
 				DA5F77B628742E85000A2BFF /* OABackupStatus.m in Sources */,
+				C54D7F8B29C06F9200E14746 /* OASunriseSunsetWidgetHelper.mm in Sources */,
 				DA5A850C26C563A900F274C7 /* OASubscribeEmailView.m in Sources */,
 				DA5A819226C563A700F274C7 /* OANavRemoveNextDestination.m in Sources */,
 				DAAC0EBD2801807200867D35 /* OAImportBackupTask.m in Sources */,
@@ -17114,6 +17125,7 @@
 				DA5A850326C563A900F274C7 /* OARouteInfoLegendItemView.m in Sources */,
 				DA5A816926C563A700F274C7 /* OAIPFSImageCard.mm in Sources */,
 				DA5A82EB26C563A800F274C7 /* OAPublicTransportRouteCell.mm in Sources */,
+				C54D7F8829BF357700E14746 /* OASunriseSunsetWidgetState.m in Sources */,
 				DA5A855E26C563A900F274C7 /* OATransportRouteCalculationParams.mm in Sources */,
 				DA5A855926C563A900F274C7 /* OAMapillaryImage.mm in Sources */,
 				DA5A837F26C563A800F274C7 /* OADirectionsCardController.mm in Sources */,

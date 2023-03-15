@@ -52,6 +52,20 @@ typedef NS_ENUM(NSInteger, EOACompassMode)
 
 @end
 
+typedef NS_ENUM(NSInteger, EOASunriseSunsetMode)
+{
+    EOASunriseSunsetHide = 0,
+    EOASunriseSunsetTimeLeft,
+    EOASunriseSunsetNext
+};
+
+@interface OASunriseSunsetMode : NSObject
+
++ (NSString *) getTitle:(EOASunriseSunsetMode)ssm isSunrise:(BOOL)isSunrise;
++ (NSString *) getDescription:(EOASunriseSunsetMode)ssm isSunrise:(BOOL)isSunrise;
+
+@end
+
 typedef NS_ENUM(NSInteger, EOARouteService)
 {
     OSMAND = 0,
@@ -798,6 +812,8 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OAApplicationMode *lastRoutingApplicationMode;
 @property (nonatomic) OACommonInteger *rotateMap;
 @property (nonatomic) OACommonInteger *compassMode;
+@property (nonatomic) OACommonInteger *sunriseMode;
+@property (nonatomic) OACommonInteger *sunsetMode;
 
 // Application mode related settings
 @property (nonatomic) OACommonString *profileIconName;

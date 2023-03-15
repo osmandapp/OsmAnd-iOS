@@ -14,6 +14,7 @@
 #import "OAAvoidRoadInfo.h"
 #import "OAGPXDatabase.h"
 #import "OAIAPHelper.h"
+#import "OASunriseSunsetWidgetHelper.h"
 
 #define settingShowMapRuletKey @"settingShowMapRuletKey"
 #define metricSystemKey @"settingMetricSystemKey"
@@ -107,6 +108,8 @@
 #define rotateMapKey @"rotateMap"
 #define compassModeKey @"compassMode"
 #define firstMapIsDownloadedKey @"firstMapIsDownloaded"
+#define sunriseModeKey @"sunriseMode"
+#define sunsetModeKey @"sunsetMode"
 
 // App profiles
 #define appModeBeanPrefsIdsKey @"appModeBeanPrefsIds"
@@ -438,6 +441,46 @@
             return @"ic_custom_compass_hidden";
         default:
             return @"ic_custom_compass_rotated";
+    }
+}
+
+@end
+
+@implementation OASunriseSunsetMode
+
++ (NSString *) getTitle:(EOASunriseSunsetMode)ssm isSunrise:(BOOL)isSunrise
+{
+    switch (ssm)
+    {
+        case EOASunriseSunsetHide:
+            return OALocalizedString(@"shared_string_hide");
+        case EOASunriseSunsetTimeLeft:
+            return OALocalizedString(@"map_widget_sunrise_sunset_time_left");
+        case EOASunriseSunsetNext:
+            return isSunrise ? OALocalizedString(@"map_widget_next_sunrise") : OALocalizedString(@"map_widget_next_sunset");
+        default:
+            return @"";
+    }
+}
+
++ (NSString *) getDescription:(EOASunriseSunsetMode)ssm isSunrise:(BOOL)isSunrise
+{
+    switch (ssm)
+    {
+        case EOASunriseSunsetHide:
+            return OALocalizedString(@"");
+        case EOASunriseSunsetTimeLeft:
+        {
+            NSArray <NSString *> *values = [OASunriseSunsetWidgetHelper getTimeLeftUntilSunriseSunset:isSunrise];
+            return [NSString stringWithFormat:@"%@ %@", values.firstObject, values.lastObject];
+        }
+        case EOASunriseSunsetNext:
+        {
+            NSArray <NSString *> *values = [OASunriseSunsetWidgetHelper getNextSunriseSunset:isSunrise];
+            return [NSString stringWithFormat:@"%@ %@", values.firstObject, values.lastObject];
+        }
+        default:
+            return @"";
     }
 }
 
@@ -3831,6 +3874,12 @@
 
         _compassMode = [OACommonInteger withKey:compassModeKey defValue:EOACompassRotated];
         [_profilePreferences setObject:_compassMode forKey:@"compass_mode"];
+        
+        _sunriseMode = [OACommonInteger withKey:sunriseModeKey defValue:EOASunriseSunsetHide];
+        [_profilePreferences setObject:_sunriseMode forKey:@"show_sunrise_info"];
+        
+        _sunsetMode = [OACommonInteger withKey:sunsetModeKey defValue:EOASunriseSunsetHide];
+        [_profilePreferences setObject:_sunsetMode forKey:@"show_sunset_info"];
 
         _mapDensity = [OACommonDouble withKey:mapDensityKey defValue:MAGNIFIER_DEFAULT_VALUE];
         [_mapDensity setModeDefaultValue:@(MAGNIFIER_DEFAULT_CAR) mode:[OAApplicationMode CAR]];

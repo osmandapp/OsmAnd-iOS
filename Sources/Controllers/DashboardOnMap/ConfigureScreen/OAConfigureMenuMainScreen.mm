@@ -183,14 +183,14 @@
         }
         else if ([r.key isEqualToString:@"sunrise"])
         {
-            NSString *collapsedStr = OALocalizedString(@"map_widget_next_sunrise");
-            description = [r visibleCollapsed:mode] ? collapsedStr : @"";
+            EOASunriseSunsetMode sunriseSunsetMode = (EOASunriseSunsetMode) [r getItemId].intValue;
+            description = [OASunriseSunsetMode getTitle:sunriseSunsetMode isSunrise:YES];
             type = [OAValueTableViewCell getCellIdentifier];
         }
         else if ([r.key isEqualToString:@"sunset"])
         {
-            NSString *collapsedStr = OALocalizedString(@"map_widget_next_sunset");
-            description = [r visibleCollapsed:mode] ? collapsedStr : @"";
+            EOASunriseSunsetMode sunriseSunsetMode = (EOASunriseSunsetMode) [r getItemId].intValue;
+            description = [OASunriseSunsetMode getTitle:sunriseSunsetMode isSunrise:NO];
             type = [OAValueTableViewCell getCellIdentifier];
         }
         else

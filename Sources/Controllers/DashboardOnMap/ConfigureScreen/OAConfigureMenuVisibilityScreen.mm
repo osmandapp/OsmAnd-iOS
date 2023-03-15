@@ -14,6 +14,7 @@
 #import "OAIconTextDescCell.h"
 #import "OARootViewController.h"
 #import "OAColors.h"
+#import "OASimpleTableViewCell.h"
 
 @implementation OAConfigureMenuVisibilityScreen
 {
@@ -89,6 +90,20 @@
     };
 }
 
+- (NSDictionary *)createSunriseSunsetTableItem:(NSString *)itemTitle
+                      description:(NSString *)description
+                              key:(NSString *)key
+                         selected:(BOOL)selected
+{
+    return @{
+            @"title": itemTitle,
+            @"description": description,
+            @"key": key,
+            @"selected": @(selected),
+            @"type": [OASimpleTableViewCell getCellIdentifier]
+    };
+}
+
 - (void) setupView
 {
     if (_r)
@@ -111,11 +126,17 @@
                 if (descriptions)
                     descriptionId = [_r getDescriptions][i];
 
-                [additionalList addObject:[self createTableItem:OALocalizedString(messageId)
-                                                    description:OALocalizedString(descriptionId)
-                                                            key:itemId
-                                                           icon:imageId
-                                                       selected:selected]];
+                if ([_r.key isEqualToString:@"sunrise"] || [_r.key isEqualToString:@"sunset"])
+                    [additionalList addObject:[self createSunriseSunsetTableItem:OALocalizedString(messageId)
+                                                                     description:OALocalizedString(descriptionId)
+                                                                             key:itemId
+                                                                        selected:selected]];
+                else
+                    [additionalList addObject:[self createTableItem:OALocalizedString(messageId)
+                                                        description:OALocalizedString(descriptionId)
+                                                                key:itemId
+                                                               icon:imageId
+                                                           selected:selected]];
             }
         }
 
@@ -147,8 +168,9 @@
                                                  selected:collapsedSelected]];
 
             data[@"standard"] = standardList;
+            if ([_r.key isEqualToString:@"sunrise"] || [_r.key isEqualToString:@"sunset"])
+                data[@"standard"] = nil;
         }
-
         _data = data;
     }
 }
@@ -177,49 +199,73 @@
 - (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[_data.allKeys[indexPath.section]][indexPath.row];
-    OAIconTextDescCell *cell = [tblView dequeueReusableCellWithIdentifier:[OAIconTextDescCell getCellIdentifier]];
-    if (cell == nil)
+    NSString *description = item[@"description"];
+    if ([item[@"type"] isEqualToString:[OAIconTextDescCell getCellIdentifier]])
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextDescCell getCellIdentifier] owner:self options:nil];
-        cell = (OAIconTextDescCell *) nib[0];
-        cell.textView.numberOfLines = 0;
-        cell.descView.font = [UIFont scaledSystemFontOfSize:15.];
-        cell.separatorInset = UIEdgeInsetsMake(0., 66., 0., 0.);
-        [cell.arrowIconView setHidden:YES];
-    }
-    if (cell)
-    {
-        cell.textView.text = item[@"title"];
-
-        NSString *description = item[@"description"];
-        cell.descView.hidden = description.length == 0;
-        cell.descView.text = description;
-
-        NSString *imageName = item[@"img"];
-        if (imageName)
+        OAIconTextDescCell *cell = [tblView dequeueReusableCellWithIdentifier:[OAIconTextDescCell getCellIdentifier]];
+        if (cell == nil)
         {
-            UIColor *color = nil;
-            if (item[@"color"] != [NSNull null])
-                color = item[@"color"];
-
-            if (color)
-                cell.iconView.image = [UIImage templateImageNamed:imageName];
-            else
-                cell.iconView.image = [UIImage rtlImageNamed:imageName];
-
-            cell.iconView.tintColor = color;
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextDescCell getCellIdentifier] owner:self options:nil];
+            cell = (OAIconTextDescCell *) nib[0];
+            cell.textView.numberOfLines = 0;
+            cell.descView.font = [UIFont scaledSystemFontOfSize:15.];
+            cell.separatorInset = UIEdgeInsetsMake(0., 66., 0., 0.);
+            [cell.arrowIconView setHidden:YES];
         }
-        cell.textView.text = item[@"title"];
-
-        if ([item[@"selected"] boolValue])
-            cell.accessoryType = UITableViewCellAccessoryCheckmark;
-        else
-            cell.accessoryType = UITableViewCellAccessoryNone;
-
-        if ([cell needsUpdateConstraints])
-            [cell updateConstraints];
+        if (cell)
+        {
+            cell.textView.text = item[@"title"];
+            cell.descView.hidden = description.length == 0;
+            cell.descView.text = description;
+            
+            NSString *imageName = item[@"img"];
+            if (imageName)
+            {
+                UIColor *color = nil;
+                if (item[@"color"] != [NSNull null])
+                    color = item[@"color"];
+                
+                if (color)
+                    cell.iconView.image = [UIImage templateImageNamed:imageName];
+                else
+                    cell.iconView.image = [UIImage rtlImageNamed:imageName];
+                
+                cell.iconView.tintColor = color;
+            }
+            cell.textView.text = item[@"title"];
+            
+            if ([item[@"selected"] boolValue])
+                cell.accessoryType = UITableViewCellAccessoryCheckmark;
+            else
+                cell.accessoryType = UITableViewCellAccessoryNone;
+            
+            if ([cell needsUpdateConstraints])
+                [cell updateConstraints];
+        }
+        return cell;
     }
-    return cell;
+    else if ([item[@"type"] isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
+    {
+        OASimpleTableViewCell *cell = [tblView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASimpleTableViewCell *) nib[0];
+            [cell.leftIconView setHidden:YES];
+        }
+        if (cell)
+        {
+            cell.titleLabel.text = item[@"title"];
+            cell.descriptionLabel.hidden = description.length == 0;
+            cell.descriptionLabel.text = description;
+            if ([item[@"selected"] boolValue])
+                cell.accessoryType = UITableViewCellAccessoryCheckmark;
+            else
+                cell.accessoryType = UITableViewCellAccessoryNone;
+        }
+        return cell;
+    }
+    return nil;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
@@ -256,6 +302,13 @@
                 {
                     [_r changeState:menuItemId];
                     [[OARootViewController instance].mapPanel recreateControls];
+                }
+                if ([_r.key isEqualToString:@"sunrise"] || [_r.key isEqualToString:@"sunset"])
+                {
+                    if ([key isEqualToString:@"0"])
+                        [self setVisibility:NO collapsed:NO];
+                    else
+                        [self setVisibility:YES collapsed:NO];
                 }
             }
         }

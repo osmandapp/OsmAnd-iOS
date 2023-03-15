@@ -456,7 +456,7 @@
 "shared_string_from" = "from";
 "shared_string_time" = "Vrijeme";
 "time_of_day" = "Time of day";
-"map_widget_trip_recording_distance" = "Udaljenost";
+"shared_string_distance" = "Udaljenost";
 "shared_string_time_span" = "Vremensko razdoblje";
 "shared_string_start_time" = "Vrijeme početka";
 "shared_string_end_time" = "Vrijeme završetka";
@@ -1264,7 +1264,7 @@
 "mapil_select_user" = "Select user";
 
 // Coordinate widget
-"coordinates_widget" = "Coordinates widget";
+"coordinates_widget_current_location" = "Coordinates widget";
 "searching_gps" = "Tražim GPS";
 "copied_to_clipboard" = "Copied to clipboard";
 // Quick action
@@ -1273,10 +1273,10 @@
 "no_underlay" = "No underlay";
 "quick_action_map_underlay_action" = "Add underlay";
 "quick_action_list_descr" = "Tapping this action button pages through the list below";
-"toggle_coordinates" = "Show/hide coordinates widget";
-"show_coordinates" = "Show coordinates";
-"hide_coordinates" = "Hide coordinates";
-"quick_action_coordinates_widget_descr" = "Tapping this action button shows or hides the Coordinates widget.";
+"toggle_current_location" = "Show/hide coordinates widget";
+"show_current_location" = "Show coordinates";
+"hide_current_location" = "Hide coordinates";
+"quick_action_current_location_widget_descr" = "Tapping this action button shows or hides the Coordinates widget.";
 "quick_action_map_overlay_title" = "Map overlays";
 "quick_action_map_underlay_title" = "Map underlays";
 "vector_data" = "Offline vektorske karte";
@@ -2195,15 +2195,16 @@
 
 //Icon categories
 "icon_group_amenity" = "Amenity";
-"amenity_type_emergency" = "Hitna pomoć";
+"icon_group_emergency" = "Hitna pomoć";
 "icon_group_special" = "Special";
 "icon_group_sport" = "Sport";
 "icon_group_symbols" = "Symbols";
-"transport" = "Prijevoz";
+"icon_group_transport" = "Prijevoz";
 "icon_group_travel" = "Travel";
 "icon_group_nautical" = "Nautical";
 "icon_group_industrial" = "Industrial";
-"amenity_type_education" = "Obrazovanje";
+"icon_group_education" = "Obrazovanje";
+"transport" = "Prijevoz";
 "settings_item_read_error" = "Could not read %@.";
 "app_mode_default" = "Karta";
 "app_mode_car" = "Auto";

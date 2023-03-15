@@ -455,7 +455,7 @@
 "shared_string_from" = "-დან";
 "shared_string_time" = "დრო";
 "time_of_day" = "დღის დრო";
-"map_widget_trip_recording_distance" = "მანძილი";
+"shared_string_distance" = "მანძილი";
 "shared_string_time_span" = "დროის შუალედი";
 "shared_string_start_time" = "საწყისი დრო";
 "shared_string_end_time" = "დამთავრების დრო";
@@ -1264,7 +1264,7 @@
 "mapil_select_user" = "Select user";
 
 // Coordinate widget
-"coordinates_widget" = "კორდინატების ღილაკი";
+"coordinates_widget_current_location" = "კორდინატების ღილაკი";
 "searching_gps" = "GPS-ის ძებნა";
 "copied_to_clipboard" = "კოპირებულია გაცვლის ბუფერში";
 // Quick action
@@ -1273,10 +1273,10 @@
 "no_underlay" = "No underlay";
 "quick_action_map_underlay_action" = "Add underlay";
 "quick_action_list_descr" = "Tapping this action button pages through the list below";
-"toggle_coordinates" = "Show/hide coordinates widget";
-"show_coordinates" = "Show coordinates";
-"hide_coordinates" = "Hide coordinates";
-"quick_action_coordinates_widget_descr" = "Tapping this action button shows or hides the Coordinates widget.";
+"toggle_current_location" = "Show/hide coordinates widget";
+"show_current_location" = "Show coordinates";
+"hide_current_location" = "Hide coordinates";
+"quick_action_current_location_widget_descr" = "Tapping this action button shows or hides the Coordinates widget.";
 "quick_action_map_overlay_title" = "რუკის შრეები";
 "quick_action_map_underlay_title" = "Map underlays";
 "vector_data" = "გათიშული ვექტორული რუკები";
@@ -2193,15 +2193,16 @@
 
 //Icon categories
 "icon_group_amenity" = "კომფორტი";
-"amenity_type_emergency" = "სასწრაფო დახმარება";
+"icon_group_emergency" = "სასწრაფო დახმარება";
 "icon_group_special" = "სპეციალური";
 "icon_group_sport" = "სპორტი";
 "icon_group_symbols" = "სიმბოლოები";
-"transport" = "ტრანსპორტი";
+"icon_group_transport" = "ტრანსპორტი";
 "icon_group_travel" = "მოგზაურობა";
 "icon_group_nautical" = "საზღვაო";
 "icon_group_industrial" = "საწარმოო";
-"amenity_type_education" = "სასწავლო";
+"icon_group_education" = "სასწავლო";
+"transport" = "ტრანსპორტი";
 "settings_item_read_error" = "%@-დან წაკითხვა შეუძლებელია.";
 "app_mode_default" = "რუკის დათვალიერება";
 "app_mode_car" = "მანქანით";

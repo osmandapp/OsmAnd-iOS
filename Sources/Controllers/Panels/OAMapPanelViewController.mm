@@ -46,7 +46,7 @@
 #import "OATransportRoutingHelper.h"
 #import "OAMainSettingsViewController.h"
 #import "OABaseScrollableHudViewController.h"
-#import "OATopCoordinatesWidget.h"
+#import "OACoordinatesWidget.h"
 #import "OAParkingPositionPlugin.h"
 #import "OAFavoritesHelper.h"
 #import "OADownloadMapWidget.h"
@@ -103,6 +103,11 @@
 #import "OAWeatherLayerSettingsViewController.h"
 #import "OAMapInfoController.h"
 
+#import "OARouteKey.h"
+#import "OANetworkRouteSelectionTask.h"
+#import <MBProgressHUD.h>
+
+#include <OsmAndCore/NetworkRouteContext.h>
 #include <OsmAndCore/CachingRoadLocator.h>
 #include <OsmAndCore/Data/Road.h>
 
@@ -180,6 +185,9 @@ typedef enum
     OACarPlayActiveViewController *_carPlayActiveController;
 
     BOOL _isNewContextMenuStillEnabled;
+    
+    MBProgressHUD *_gpxProgress;
+    OANetworkRouteSelectionTask *_gpxNetworkTask;
 }
 
 - (instancetype) init
@@ -1346,18 +1354,84 @@ typedef enum
     }];
 }
 
+- (void) setupNetworkGpxProgress
+{
+    _gpxProgress = [[MBProgressHUD alloc] initWithView:self.view];
+    _gpxProgress.minShowTime = .3;
+    _gpxProgress.removeFromSuperViewOnHide = YES;
+    _gpxProgress.labelText = OALocalizedString(@"shared_string_loading");
+    _gpxProgress.labelFont = [UIFont scaledSystemFontOfSize:22. weight:UIFontWeightSemibold];
+    _gpxProgress.detailsLabelText = OALocalizedString(@"shared_string_cancel");
+    _gpxProgress.detailsLabelFont = [UIFont scaledSystemFontOfSize:20.];
+    _gpxProgress.detailsLabelColor = UIColor.blackColor;
+    _gpxProgress.labelColor = UIColor.blackColor;
+    [[UIActivityIndicatorView appearanceWhenContainedInInstancesOfClasses:@[[MBProgressHUD class]]] setColor:UIColor.blackColor];
+    _gpxProgress.color = UIColor.whiteColor;
+    [self.view addSubview:_gpxProgress];
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onCancelNetworkGPX)];
+    [_gpxProgress addGestureRecognizer:tap];
+}
+
+- (void)hideProgress
+{
+    [_gpxProgress hide:YES];
+    _gpxProgress = nil;
+    [[UIActivityIndicatorView appearanceWhenContainedInInstancesOfClasses:@[[MBProgressHUD class]]] setColor:UIColor.whiteColor];
+}
+
+- (void) onCancelNetworkGPX
+{
+    [_gpxNetworkTask setCancelled:YES];
+    _gpxNetworkTask = nil;
+    [self hideProgress];
+}
+
 - (void) showContextMenu:(OATargetPoint *)targetPoint
 {
     if (targetPoint.type == OATargetGPX)
     {
-        return [self openTargetViewWithGPX:targetPoint.targetObj
-                              trackHudMode:EOATrackMenuHudMode
-                                     state:[OATrackMenuViewControllerState withPinLocation:targetPoint.location
-                                                                             openedFromMap:[targetPoint.values[@"opened_from_map"] boolValue]]];
+        [self openTargetViewWithGPX:targetPoint.targetObj
+                           routeKey:nil
+                       trackHudMode:EOATrackMenuHudMode
+                              state:[OATrackMenuViewControllerState withPinLocation:targetPoint.location
+                                                                      openedFromMap:[targetPoint.values[@"opened_from_map"] boolValue]]];
+    }
+    else if (targetPoint.type == OATargetNetworkGPX)
+    {
+        [self setupNetworkGpxProgress];
+        [_gpxProgress show:YES];
+        __weak OAMapPanelViewController *weakSelf = self;
+        _gpxNetworkTask = [[OANetworkRouteSelectionTask alloc] initWithRouteKey:targetPoint.targetObj area:targetPoint.values[@"area"]];
+        [_gpxNetworkTask execute:^(OAGPXDocument *gpxFile) {
+            [self hideProgress];
+            if (!gpxFile)
+                return;
+            OAGPXDatabase *db = [OAGPXDatabase sharedDb];
+            OARouteKey *key = (OARouteKey *)targetPoint.targetObj;
+            NSString *name = key.routeKey.getRouteName().toNSString();
+            name = name.length == 0 ? OALocalizedString(@"layer_route") : name;
+            NSString *folderPath = [_app.gpxPath stringByAppendingPathComponent:@"Temp"];
+            NSFileManager *manager = NSFileManager.defaultManager;
+            if (![manager fileExistsAtPath:folderPath])
+                [manager createDirectoryAtPath:folderPath withIntermediateDirectories:NO attributes:nil error:nil];
+            NSString *path = [[folderPath stringByAppendingPathComponent:name] stringByAppendingPathExtension:@"gpx"];
+            gpxFile.path = path;
+            gpxFile.metadata.name = targetPoint.title;
+            [gpxFile saveTo:path];
+            [weakSelf.mapViewController showTempGpxTrackFromDocument:gpxFile];
+            OAGPX *gpx = [db buildGpxItem:[path stringByReplacingOccurrencesOfString:_app.gpxPath withString:@""] title:name desc:gpxFile.metadata.desc bounds:gpxFile.bounds document:gpxFile];
+            OATrackMenuViewControllerState *state = [OATrackMenuViewControllerState withPinLocation:targetPoint.location
+                                                                                      openedFromMap:YES];
+            state.trackIcon = targetPoint.icon;
+            [weakSelf openTargetViewWithGPX:gpx
+                               routeKey:targetPoint.targetObj
+                           trackHudMode:EOATrackMenuHudMode
+                                  state:state];
+        }];
     }
     else
     {
-        return [self showContextMenu:targetPoint saveState:YES];
+        [self showContextMenu:targetPoint saveState:YES];
     }
 }
 
@@ -2630,19 +2704,28 @@ typedef enum
                  trackHudMode:(EOATrackHudMode)trackHudMode
                         state:(OATrackMenuViewControllerState *)state;
 {
+    [self openTargetViewWithGPX:item routeKey:nil trackHudMode:trackHudMode state:state];
+}
+
+- (void)openTargetViewWithGPX:(OAGPX *)item
+                     routeKey:(OARouteKey *)routeKey
+                 trackHudMode:(EOATrackHudMode)trackHudMode
+                        state:(OATrackMenuViewControllerState *)state;
+{
     if (_scrollableHudViewController)
     {
         [_scrollableHudViewController hide:YES duration:0.2 onComplete:^{
             state.pinLocation = item.bounds.center;
-            [self doShowGpxItem:item state:state trackHudMode:trackHudMode];
+            [self doShowGpxItem:item routeKey:routeKey state:state trackHudMode:trackHudMode];
         }];
         return;
     }
-    [self doShowGpxItem:item state:state trackHudMode:trackHudMode];
+    [self doShowGpxItem:item routeKey:routeKey state:state trackHudMode:trackHudMode];
 }
 
 
 - (void)doShowGpxItem:(OAGPX *)item
+             routeKey:(OARouteKey *)routeKey
                 state:(OATrackMenuViewControllerState *)state
          trackHudMode:(EOATrackHudMode)trackHudMode
 {
@@ -2686,7 +2769,7 @@ typedef enum
 
     targetPoint.type = OATargetGPX;
     targetPoint.title = _formattedTargetName;
-    targetPoint.icon = [UIImage imageNamed:@"icon_info"];
+    targetPoint.icon = state.trackIcon;
     targetPoint.toolbarNeeded = NO;
     if (!showCurrentTrack)
         targetPoint.targetObj = item;
@@ -2713,6 +2796,7 @@ typedef enum
         default:
         {
             trackMenuHudViewController = [[OATrackMenuHudViewController alloc] initWithGpx:item
+                                                                                  routeKey:routeKey
                                                                                      state:state];
             [_mapViewController showContextPinMarker:targetPoint.location.latitude
                                            longitude:targetPoint.location.longitude

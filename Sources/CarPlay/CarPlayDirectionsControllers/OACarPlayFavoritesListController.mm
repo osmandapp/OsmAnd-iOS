@@ -33,15 +33,22 @@
         NSMutableArray<CPListItem *> *listItems = [NSMutableArray new];
         NSMutableArray<OAFavoriteItem *> *lastModifiedList = [NSMutableArray new];
         [favoriteGroups enumerateObjectsUsingBlock:^(OAFavoriteGroup * _Nonnull group, NSUInteger idx, BOOL * _Nonnull stop) {
+            NSMutableArray<OAFavoriteItem *> *points = group.points;
+            [points sortUsingComparator:^NSComparisonResult(OAFavoriteItem *i1, OAFavoriteItem *i2) {
+                return [i1.favorite->getTitle().toNSString() compare:i2.favorite->getTitle().toNSString()];
+            }];
+            if (points.count > CPListTemplate.maximumItemCount)
+                [points removeObjectsInRange:NSMakeRange(CPListTemplate.maximumItemCount, points.count - CPListTemplate.maximumItemCount)];
+
             CPListItem *listItem = [[CPListItem alloc] initWithText:group.name.length == 0 ? OALocalizedString(@"favorites_item") : group.name
                                                          detailText:[NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_space"),
                                                                                                OALocalizedString(@"points_count"),
-                                                                                               @(group.points.count).stringValue]
+                                                                                               @(points.count).stringValue]
                                                               image:[OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_custom_folder"]
                                                                                               color:group.color]
                                                      accessoryImage:nil
                                                       accessoryType:CPListItemAccessoryTypeDisclosureIndicator];
-            listItem.userInfo = group.points;
+            listItem.userInfo = points;
             listItem.handler = ^(id <CPSelectableListItem> item, dispatch_block_t completionBlock) {
                 [self onItemSelected:item completionHandler:completionBlock];
             };
@@ -51,6 +58,9 @@
         [listItems sortUsingComparator:^NSComparisonResult(CPListItem *i1, CPListItem *i2) {
             return [i1.text compare:i2.text];
         }];
+        NSInteger maximumItemCount = CPListTemplate.maximumItemCount;
+        if (listItems.count > maximumItemCount - 1)
+            [listItems removeObjectsInRange:NSMakeRange(maximumItemCount - 1, listItems.count - maximumItemCount - 1)];
 
         [lastModifiedList sortUsingComparator:^NSComparisonResult(OAFavoriteItem *i1, OAFavoriteItem *i2) {
             NSDate *date1 = [i1 getTimestamp];
@@ -61,6 +71,8 @@
             NSTimeInterval lastTime2 = date2.timeIntervalSince1970;
             return (lastTime1 < lastTime2) ? NSOrderedDescending : ((lastTime1 == lastTime2) ? NSOrderedSame : NSOrderedAscending);
         }];
+        if (lastModifiedList.count > maximumItemCount)
+            [lastModifiedList removeObjectsInRange:NSMakeRange(maximumItemCount, lastModifiedList.count - maximumItemCount)];
         CPListItem *lastModifiedItem = [[CPListItem alloc] initWithText:OALocalizedString(@"sort_last_modified")
                                                              detailText:@(lastModifiedList.count).stringValue
                                                                   image:[OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_custom_history"]

@@ -952,7 +952,7 @@
 "access_intermediate_arrival_time" = "Mellemliggende ankomsttid";
 "map_widget_intermediate_time" = "Mellemliggende tid";
 "shared_string_time" = "Tid";
-"map_widget_trip_recording_distance" = "Afstand";
+"shared_string_distance" = "Afstand";
 "icon_group_amenity" = "Facilitet";
 "shared_string_milliradians" = "Milliradianer";
 "angular_units" = "Enhed for vinkelmåling";
@@ -1826,7 +1826,7 @@
 "hide_compass_ruler" = "Skjul kompas lineal";
 "segments_count" = "Segment %d";
 "shared_string_resources" = "Ressourcer";
-"amenity_type_emergency" = "Nødsituation";
+"icon_group_emergency" = "Nødsituation";
 "plan_route_open_existing_track" = "Åbn eksisterende spor";
 "open_saved_track" = "Åben gemt spor";
 "fav_points_not_exist" = "Der findes ingen favoritpunkter";
@@ -1854,6 +1854,7 @@
 "shared_string_others" = "Andre";
 "start_of_the_track" = "Starten af sporet";
 "extra_maps_menu_group" = "Ekstra kort";
+"icon_group_transport" = "Transport";
 "transport" = "Transport";
 "favorite_group_name" = "Gruppenavn";
 "simplified_track" = "Forenklet spor";
@@ -1873,7 +1874,7 @@
 "shared_string_visible" = "Synlig";
 "change_folder" = "Skift mappe";
 "plan_route_split_before" = "Opdel før";
-"coordinates_widget" = "Koordinat-modul";
+"coordinates_widget_current_location" = "Koordinat-modul";
 "attach_to_the_roads" = "Fastgør til veje";
 "plan_route_split_after" = "Opdel efter";
 "icon_group_special" = "Særlig";
@@ -1961,8 +1962,8 @@
 "select_profile" = "Vælg profil";
 "shared_string_loading" = "Indlæser…";
 "srtm_download_single_help_message" = "Vælg venligst varianten. Du skal downloade filen igen for at ændre formatet.";
-"toggle_coordinates" = "Vis/skjul koordinat-modul";
-"show_coordinates" = "Vis koordinater";
+"toggle_current_location" = "Vis/skjul koordinat-modul";
+"show_current_location" = "Vis koordinater";
 "unsupported_items" = "Ikke-understøttede elementer";
 "map_widget_parking" = "Parkering";
 "quick_action_dir_from_descr" = "Tryk på denne genvej for at navigere fra skærmens aktuelle midtpunkt.";
@@ -2009,7 +2010,7 @@
 "read_full_description" = "Læs hele beskrivelsen";
 "track_show_start_finish_icons" = "Vis start- og målikoner";
 "activity" = "Aktivitet";
-"quick_action_coordinates_widget_descr" = "En til/fra-knap for at vise eller skjule koordinat-modulet på kortet.";
+"quick_action_current_location_widget_descr" = "En til/fra-knap for at vise eller skjule koordinat-modulet på kortet.";
 "gpx_saved_successfully" = "GPX-fil gemt til %@";
 "change_map_behavior" = "Ændr kortopførsel under navigation";
 "instructions_repeat" = "Tryk på \"Næste sving\"-modulet for at gentage instruktionerne";
@@ -2018,7 +2019,7 @@
 "prev_segs_dist" = "Alle tidligere segmenter %@";
 "only_selected_segment_recalc" = "Kun det valgte segment genberegnes igen ved hjælp af den valgte profil.";
 "import_routing_file_descr" = "Du kan importere en ruteberegningsfil fra en hvilket som helst sky-app ved at åbne den i OsmAnd.";
-"hide_coordinates" = "Skjul koordinater";
+"hide_current_location" = "Skjul koordinater";
 "unsupported_action_title" = "Handlingen understøttes ikke (%@)";
 "unsupported_action" = "Handling ikke understøttet";
 "product_desc_mapillary" = "Billeder på gadeniveau til at tjekke omgivelserne";
@@ -2102,7 +2103,7 @@
 "delete_group_confirm_short" = "Slet gruppe?";
 "parked_at" = "parkeret på";
 "icon_group_industrial" = "Industriel";
-"amenity_type_education" = "Uddannelse";
+"icon_group_education" = "Uddannelse";
 "route_points" = "Rutepunkter";
 "connect_rp" = "Forbind rutepunkter";
 "lang_al" = "Albansk";
@@ -2829,3 +2830,16 @@
 "rotate_map_none_manually" = "Manuelt roteret (fast)";
 "rotate_map_none_fixed" = "Nord er op (fast)";
 "compass_click_desc" = "Tryk på kompas for at skifte kortorienteringstilstand.";
+"map_widget_zoom_level" = "Zoom-niveau";
+"map_widget_target_distance" = "Målafstand";
+"dont_download" = "Download ikke";
+"over_wifi_only" = "Kun via Wi-Fi";
+"wikivoyage_download_pics" = "Download billeder";
+"download_over_cellular_network" = "Vil du downloade billeder via mobilnetværk? Dette kan medføre høje gebyrer.";
+"map_widget_camera_tilt" = "Kamerahældning";
+"map_widget_camera_distance" = "Kameraafstand";
+"change_language" = "Skift sprog";
+"over_any_network" = "Via ethvert netværk";
+"wikipedia_language_settings_descr" = "Vælg de sprog, som Wikipedia-artikler skal vises i på kortet. Du kan skifte mellem alle tilgængelige sprog, mens du læser artiklen.";
+"download_only_now" = "Download kun nu";
+"ios_release_4_4" = "• Wikipedia: tilføjet mulighed for at se billeder, opdateret læser-brugergrænseflade\n• Favoritter: tilføjet søgning\n• CarPlay: tilføjet historik, omorganiseret spor og favoritliste\n• Vandreruter: tilføjet mulighed for at vælge ruter på kortet for at få vist yderligere oplysninger eller navigation\n• OpenStreetMap: tilføjet mulighed for at uploade spor\n• Stemmevejledninger: tilføjet understøttelse af nye sprog: Catalansk, ukrainsk, bulgarsk, indonesisk, slovensk\n• Tilføjet juridisk advarsel om brug af advarsler om fartkameraer\n• Forbedret beskyttelse af privatlivets fred: tilføjede muligheder for at deaktivere logning af historik\n• Forbedret synlighed af kortlinealen\n• Forbedringer af brugergrænsefladen for RTL-sprog\n• Tilgængelighed: tilføjet indholdsmærkning for kortknapper\n• Tilføjet understøttelse af \"dynamisk skrifttype\", tekststørrelsen i OsmAnd ændres i overensstemmelse med tekststørrelsen i iOS\n• Kortorientering: tilføjet manuelt roteret tilstand\n• Minimum iOS-version er øget til 15.0\n";

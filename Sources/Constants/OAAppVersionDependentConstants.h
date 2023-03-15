@@ -14,7 +14,6 @@
 + (NSString *) getShortAppVersionWithSeparator:(NSString *)separator;
 + (NSString *)getAppVersionWithBundle;
 + (NSString *) getAppVersionForUrl;
-// 4.3 only
 + (NSString *) getVersion;
 
 @end

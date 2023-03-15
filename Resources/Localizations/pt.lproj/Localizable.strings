@@ -762,7 +762,7 @@
 "shared_string_modify" = "Alterar";
 "shared_string_of" = "de";
 "shared_string_time" = "Tempo";
-"map_widget_trip_recording_distance" = "Distância";
+"shared_string_distance" = "Distância";
 "offline_maps" = "Mapas offline";
 "icon_group_amenity" = "Infraestrutura";
 "poi_overlay" = "Camada superior de POI";
@@ -1685,11 +1685,12 @@
 "desert" = "Deserto";
 "settings_item_read_error" = "Não foi possível ler \"%@\".";
 "icon_group_travel" = "Viagem";
-"transport" = "Transporte";
+"icon_group_transport" = "Transporte";
 "icon_group_symbols" = "Símbolos";
 "icon_group_sport" = "Desporto";
 "icon_group_special" = "Especial";
-"amenity_type_emergency" = "Emergência";
+"icon_group_emergency" = "Emergência";
+"transport" = "Transporte";
 "vessel_height_limit_description" = "Defina a altura da embarcação para evitar pontes baixas. Tenha em conta que se a ponte for móvel, o cálculo utiliza a altura da ponte no estado aberto.";
 "lenght_limit_description" = "Configure o comprimento do seu veículo para evitar estradas proibidas a veículos com comprimento superior a esse.";
 "touting_specified_vehicle_parameters_descr" = "Os parâmetros definidos do veículo podem afetar a navegação.";
@@ -1746,15 +1747,15 @@
 "show_terrain" = "Mostrar terreno";
 "quick_action_hillshade_descr" = "Um botão para mostrar ou ocultar sombras de relevo.";
 "unsupported_items" = "Itens não suportados";
-"quick_action_coordinates_widget_descr" = "Um alternador para mostrar ou ocultar um widget de coordenadas no mapa.";
-"hide_coordinates" = "Ocultar coordenadas";
-"show_coordinates" = "Mostrar coordenadas";
-"toggle_coordinates" = "Mostrar/ocultar widget de coordenadas";
+"quick_action_current_location_widget_descr" = "Um alternador para mostrar ou ocultar um widget de coordenadas no mapa.";
+"hide_current_location" = "Ocultar coordenadas";
+"show_current_location" = "Mostrar coordenadas";
+"toggle_current_location" = "Mostrar/ocultar widget de coordenadas";
 "copied_to_clipboard" = "Copiado para aárea de transferência";
 "searching_gps" = "A procurar GPS";
 
 // Coordinate widget
-"coordinates_widget" = "Widget de coordenadas";
+"coordinates_widget_current_location" = "Widget de coordenadas";
 "osm_editing_access_descr" = "Pode ver todas as suas edições e notas locais em %@. Os pontos já enviados não são mostrados no OsmAnd.";
 "osm_editing_settings_descr" = "As configurações deste complemento são globais e aplicam-se a todos os perfis.";
 "shared_string_loading" = "A carregar…";
@@ -2100,7 +2101,7 @@
 "shared_string_time_moving" = "Tempo em movimento";
 "distance_moving" = "Distância corrigida";
 "parked_at" = "estacionado em";
-"amenity_type_education" = "Educação";
+"icon_group_education" = "Educação";
 "icon_group_industrial" = "Industrial";
 "route_points" = "Pontos da rota";
 "connect_rp" = "Conectar pontos da rota";
@@ -2829,3 +2830,16 @@
 "rotate_map_none_fixed" = "O norte está para cima (fixo)";
 "rotate_map_none_manually" = "Rotação manual (fixa)";
 "compass_click_desc" = "Toque na bússola para alternar o modo de orientação do mapa.";
+"map_widget_camera_tilt" = "Inclinação da câmara";
+"map_widget_camera_distance" = "Distância da câmara";
+"map_widget_zoom_level" = "Nível de ampliação";
+"map_widget_target_distance" = "Distância ao alvo";
+"wikipedia_language_settings_descr" = "Selecione os idiomas nos quais os artigos da Wikipédia aparecerão no mapa. Pode alternar entre qualquer idioma disponível durante a leitura do artigo.";
+"dont_download" = "Não descarregar";
+"over_wifi_only" = "Apenas por Wi-Fi";
+"over_any_network" = "Em qualquer rede";
+"download_only_now" = "Descarregar apenas agora";
+"wikivoyage_download_pics" = "Descarregar imagens";
+"download_over_cellular_network" = "Descarregar imagens pela rede móvel? Isto pode ter custos monetários de utilização de dados móveis.";
+"change_language" = "Mudar idioma";
+"ios_release_4_4" = "• Wikipédia: capacidade adicionada para visualizar imagens, interface do leitor atualizada\n• Favoritos: pesquisa adicionada\n• CarPlay: histórico adicionado, trilhos reorganizados e lista de favoritos\n• Rotas de caminhada: capacidade adicional de selecionar rotas no mapa para visualizar informações adicionais ou navegação\n• OpenStreetMap: adicionada capacidade de enviar trilhos\n• Avisos de voz: suporte adicional para novos idiomas: catalão, ucraniano, búlgaro, indonésio, esloveno\n• Adicionado aviso legal sobre utilização de alertas de radares de velocidade\n• Privacidade aprimorada: opções adicionadas para desativar o registo do histórico\n• Visibilidade melhorada da régua do mapa\n• Melhorias na interface em idiomas que se leem da direita para a esquerda\n• Acessibilidade: adicionado rótulo de conteúdo em botões do mapa\n• Adicionado suporte a \"tipo de letra dinâmico\", o tamanho do texto no OsmAnd mudará de acordo com o tamanho do texto no iOS\n• Orientação do mapa: adicionado modo girado manualmente\n• A versão mínima do iOS foi aumentada para 15.0\n";

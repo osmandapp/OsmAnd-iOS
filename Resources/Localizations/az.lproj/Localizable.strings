@@ -456,7 +456,7 @@
 "shared_string_from" = "buradan:";
 "shared_string_time" = "Vaxt";
 "time_of_day" = "Günün vaxtı";
-"map_widget_trip_recording_distance" = "Məsafə";
+"shared_string_distance" = "Məsafə";
 "shared_string_time_span" = "Ümumi vaxt";
 "shared_string_start_time" = "Başlama vaxtı";
 "shared_string_end_time" = "Bitmə vaxtı";
@@ -1268,7 +1268,7 @@
 "mapil_select_user" = "Select user";
 
 // Coordinate widget
-"coordinates_widget" = "Coordinates widget";
+"coordinates_widget_current_location" = "Coordinates widget";
 "searching_gps" = "GPS axtarılır";
 "copied_to_clipboard" = "Buferə köçürüldü";
 // Quick action
@@ -1277,10 +1277,10 @@
 "no_underlay" = "Altlıq yoxdur";
 "quick_action_map_underlay_action" = "Altlıq əlavə et";
 "quick_action_list_descr" = "Tapping this action button pages through the list below";
-"toggle_coordinates" = "Show/hide coordinates widget";
-"show_coordinates" = "Show coordinates";
-"hide_coordinates" = "Hide coordinates";
-"quick_action_coordinates_widget_descr" = "Xəritədə Koordinatlar vidcetini göstərmək və ya gizlətmək üçün düymə.";
+"toggle_current_location" = "Show/hide coordinates widget";
+"show_current_location" = "Show coordinates";
+"hide_current_location" = "Hide coordinates";
+"quick_action_current_location_widget_descr" = "Xəritədə Koordinatlar vidcetini göstərmək və ya gizlətmək üçün düymə.";
 "quick_action_map_overlay_title" = "Xəritə örtükləri";
 "quick_action_map_underlay_title" = "Xəritə altlıqları";
 "vector_data" = "Oflayn vektor xəritələr";
@@ -2199,15 +2199,16 @@
 
 //Icon categories
 "icon_group_amenity" = "Amenity";
-"amenity_type_emergency" = "Təcili";
+"icon_group_emergency" = "Təcili";
 "icon_group_special" = "Xüsusi";
 "icon_group_sport" = "İdman";
 "icon_group_symbols" = "Simvollar";
-"transport" = "Nəqliyyat";
+"icon_group_transport" = "Nəqliyyat";
 "icon_group_travel" = "Səyahət";
 "icon_group_nautical" = "Nautical";
 "icon_group_industrial" = "Industrial";
-"amenity_type_education" = "Təhsil";
+"icon_group_education" = "Təhsil";
+"transport" = "Nəqliyyat";
 "settings_item_read_error" = "Could not read %@.";
 "app_mode_default" = "Xəritəyə baxış";
 "app_mode_car" = "Avtomobil";

@@ -18,6 +18,7 @@
                 <outlet property="bottomBackgroundView" destination="jbw-zT-lJ9" id="ZOu-Jq-e20"/>
                 <outlet property="bottomButton" destination="7kA-H9-2N0" id="2kV-Lg-9JW"/>
                 <outlet property="bottomStackView" destination="OpN-uh-HHm" id="mWu-mK-1Wj"/>
+                <outlet property="buttonsBottomOffsetConstraint" destination="jZn-79-Tg3" id="qqI-KR-Izy"/>
                 <outlet property="leftBottomMarginConstraint" destination="pVe-7Z-G3P" id="Mfa-Yx-heO"/>
                 <outlet property="middleBottomMarginStackView" destination="lUZ-R9-z1j" id="7UM-BG-VAg"/>
                 <outlet property="middleFirstMarginViewHorizontalConstraint" destination="5KX-hz-T1z" id="APv-il-x4W"/>

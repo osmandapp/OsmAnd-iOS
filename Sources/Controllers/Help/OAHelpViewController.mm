@@ -339,14 +339,6 @@ static const NSInteger groupCount = 5;
        @"description" : kCommunityFacebook,
        @"type" : kLinkExternalType
        }];
-    
-    [dataArr addObject:
-     @{
-       @"name" : @"vk",
-       @"title" : OALocalizedString(@"vk"),
-       @"description" : kCommunityVk,
-       @"type" : kLinkExternalType
-       }];
 
     _followData = dataArr;
 }

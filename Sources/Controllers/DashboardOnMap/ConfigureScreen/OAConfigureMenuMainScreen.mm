@@ -117,11 +117,23 @@
     if (controlsList.count > 0)
         [arr addObjectsFromArray:controls];
     
-    // Others
+    // Top
     controlsList = [NSMutableArray array];
-    controls = @[ @{ @"groupName" : OALocalizedString(@"map_widget_appearance_rem"),
+    controls = @[ @{ @"groupName" : OALocalizedString(@"top_widgets_panel"),
                      @"cells" : controlsList,
                      } ];
+    
+    [controlsList addObject:@{ @"title" : OALocalizedString(@"coordinates_widget_current_location"),
+                               @"img" : @"widget_coordinates_location_day",
+                               @"key" : @"coordinates_widget_current_location",
+                               @"selected" : @([_settings.showCurrentLocationCoordinatesWidget get]),
+                               @"type" : [OASwitchTableViewCell getCellIdentifier]} ];
+    
+    [controlsList addObject:@{ @"title" : OALocalizedString(@"coordinates_widget_map_center"),
+                               @"img" : @"widget_coordinates_map_center_day",
+                               @"key" : @"coordinates_widget_map_center",
+                               @"selected" : @([_settings.showMapCenterCoordinatesWidget get]),
+                               @"type" : [OASwitchTableViewCell getCellIdentifier]} ];
     
     if (_settings.applicationMode.get != OAApplicationMode.DEFAULT)
     {
@@ -131,18 +143,6 @@
                                    @"type" : [OASwitchTableViewCell getCellIdentifier]} ];
     }
     
-    [controlsList addObject:@{ @"title" : OALocalizedString(@"coordinates_widget"),
-                               @"img" : @"ic_custom_coordinates",
-                               @"key" : @"coordinates_widget",
-                               @"selected" : @([_settings.showCoordinatesWidget get]),
-                               @"type" : [OASwitchTableViewCell getCellIdentifier]} ];
-    
-    [controlsList addObject:@{ @"title" : OALocalizedString(@"map_widget_distance_by_tap"),
-                               @"img" : @"ic_action_ruler_line",
-                               @"key" : @"map_widget_distance_by_tap",
-                               @"selected" : @([_settings.showDistanceRuler get]),
-                               @"type" : [OASwitchTableViewCell getCellIdentifier]} ];
-    
     EOADistanceIndicationConstant distanceIndication = [_settings.distanceIndication get];
     NSString *markersAppeareance = distanceIndication == WIDGET_DISPLAY ? OALocalizedString(@"shared_string_widgets") : OALocalizedString(@"shared_string_topbar") ;
     [controlsList addObject:@{ @"type" : [OASettingsTableViewCell getCellIdentifier],
@@ -150,15 +150,31 @@
                                @"value" : markersAppeareance,
                                @"key" : @"map_markers"}];
     
+    [controlsList addObject:@{ @"title" : OALocalizedString(@"show_lanes"),
+                               @"key" : @"show_lanes",
+                               @"selected" : @([_settings.showLanes get]),
+                               @"type" : [OASwitchTableViewCell getCellIdentifier]} ];
+    
+    if (controlsList.count > 0)
+        [arr addObjectsFromArray:controls];
+    
+    // Others
+    controlsList = [NSMutableArray array];
+    controls = @[ @{ @"groupName" : OALocalizedString(@"map_widget_appearance_rem"),
+                     @"cells" : controlsList,
+                     } ];
+    
+    [controlsList addObject:@{ @"title" : OALocalizedString(@"map_widget_distance_by_tap"),
+                               @"img" : @"ic_action_ruler_line",
+                               @"key" : @"map_widget_distance_by_tap",
+                               @"selected" : @([_settings.showDistanceRuler get]),
+                               @"type" : [OASwitchTableViewCell getCellIdentifier]} ];
+    
     [controlsList addObject:@{ @"title" : OALocalizedString(@"map_widget_transparent"),
                                @"key" : @"map_widget_transparent",
                                @"selected" : @([_settings.transparentMapTheme get]),
                                @"type" : [OASwitchTableViewCell getCellIdentifier]} ];
     
-    [controlsList addObject:@{ @"title" : OALocalizedString(@"show_lanes"),
-                               @"key" : @"show_lanes",
-                               @"selected" : @([_settings.showLanes get]),
-                               @"type" : [OASwitchTableViewCell getCellIdentifier]} ];
     if (controlsList.count > 0)
         [arr addObjectsFromArray:controls];
     
@@ -251,9 +267,14 @@
             [_mapWidgetRegistry setVisibility:r visible:visible collapsed:collapsed];
             [[OARootViewController instance].mapPanel recreateControls];
         }
-        else if ([key isEqualToString:@"coordinates_widget"])
+        else if ([key isEqualToString:@"coordinates_widget_current_location"])
         {
-            [_settings.showCoordinatesWidget set:visible];
+            [_settings.showCurrentLocationCoordinatesWidget set:visible];
+            [[[OsmAndApp instance].data mapLayerChangeObservable] notifyEvent];
+        }
+        else if ([key isEqualToString:@"coordinates_widget_map_center"])
+        {
+            [_settings.showMapCenterCoordinatesWidget set:visible];
             [[[OsmAndApp instance].data mapLayerChangeObservable] notifyEvent];
         }
         else if ([key isEqualToString:@"street_name"])
@@ -418,7 +439,7 @@
     NSString *imgName = data[@"img"];
     if (imgName)
     {
-        if ([imgName hasPrefix:@"widget_developer"] || [imgName hasPrefix:@"widget_fps"])
+        if ([imgName hasPrefix:@"widget_developer"] || [imgName hasPrefix:@"widget_fps"] || [data[@"key"] hasPrefix:@"coordinates_widget"])
         {
             cell.leftIconView.image = [UIImage rtlImageNamed:imgName];
             cell.leftIconView.contentMode = UIViewContentModeCenter;

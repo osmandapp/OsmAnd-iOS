@@ -380,7 +380,7 @@
         {
             NSString *name = [categories allKeys][i];
             NSArray *icons = categories[name];
-            NSString *translatedName = OALocalizedString(name);
+            NSString *translatedName = OALocalizedString([NSString stringWithFormat:@"icon_group_%@", name]);
             _iconCategories[translatedName] = icons;
         }
     }
@@ -563,7 +563,7 @@
     [section addObject:@{
         @"header" : OALocalizedString(@"shared_string_appearance"),
         @"type" : [OAPoiTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"icon"),
+        @"title" : OALocalizedString(@"shared_string_icon"),
         @"value" : @"",
         @"selectedCategoryName" : _selectedIconCategoryName,
         @"categotyData" : _poiCategories,
@@ -584,7 +584,7 @@
     [section addObject:@{
         @"type" : [OAShapesTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"shared_string_shape"),
-        @"value" : OALocalizedString(_backgroundIconNames[_selectedBackgroundIndex]),
+        @"value" : OALocalizedString([NSString stringWithFormat:@"shared_string_%@", _backgroundIconNames[_selectedBackgroundIndex]]),
         @"index" : @(_selectedBackgroundIndex),
         @"icons" : _backgroundIcons,
         @"contourIcons" : _backgroundContourIconNames,

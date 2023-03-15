@@ -663,7 +663,7 @@
 "osm_live_payment_renews_monthly" = "Aylık yenileme";
 "osm_live_payment_renews_annually" = "Yıllık yenileme";
 "shared_string_time" = "Zaman";
-"map_widget_trip_recording_distance" = "Mesafe";
+"shared_string_distance" = "Mesafe";
 "retry" = "Tekrar dene";
 "shared_string_enabled" = "Etkin";
 "shared_string_start_date" = "Başlangıç tarihi";
@@ -1943,22 +1943,23 @@
 "plan_route_folder" = "Klasör";
 "street_level_imagery" = "Sokak düzeyinde görüntüler";
 "icon_group_travel" = "Seyahat";
+"icon_group_transport" = "Ulaşım";
 "transport" = "Ulaşım";
 "icon_group_symbols" = "Semboller";
 "icon_group_sport" = "Spor";
 "icon_group_special" = "Özel";
-"amenity_type_emergency" = "Acil durum";
+"icon_group_emergency" = "Acil durum";
 "shared_string_gpx_points" = "Noktalar";
 "download_regular_maps" = "Standart harita";
-"quick_action_coordinates_widget_descr" = "Haritaüzerinde koordinatlar widget\'ını göstermek veya gizlemek için bir geçiş.";
-"hide_coordinates" = "Koordinatları gizle";
-"show_coordinates" = "Koordinatları göster";
-"toggle_coordinates" = "Koordinatlar widget'ını göster/gizle";
+"quick_action_current_location_widget_descr" = "Haritaüzerinde koordinatlar widget\'ını göstermek veya gizlemek için bir geçiş.";
+"hide_current_location" = "Koordinatları gizle";
+"show_current_location" = "Koordinatları göster";
+"toggle_current_location" = "Koordinatlar widget'ını göster/gizle";
 "copied_to_clipboard" = "Panoya kopyalandı";
 "searching_gps" = "GPS aranıyor";
 
 // Coordinate widget
-"coordinates_widget" = "Koordinatlar widget\'ı";
+"coordinates_widget_current_location" = "Koordinatlar widget\'ı";
 
 // Resources
 "shared_string_resources" = "Kaynaklar";
@@ -2113,7 +2114,7 @@
 "edit_track" = "Yolu düzenle";
 "icon_group_nautical" = "Deniz";
 "icon_group_industrial" = "Sanayi";
-"amenity_type_education" = "Eğitim";
+"icon_group_education" = "Eğitim";
 "shared_string_time_span" = "Zaman aralığı";
 "shared_string_start_time" = "Başlangıç zamanı";
 "shared_string_end_time" = "Bitiş zamanı";

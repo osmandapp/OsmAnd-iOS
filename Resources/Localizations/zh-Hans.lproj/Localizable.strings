@@ -727,7 +727,7 @@
 "user_password" = "密码";
 "opening_hours" = "营业时间";
 "shared_string_time" = "时间";
-"map_widget_trip_recording_distance" = "距离";
+"shared_string_distance" = "距离";
 "angular_units_descr" = "改变方位测量单位。";
 "map_magnifier" = "地图缩放";
 "text_size" = "字体大小";
@@ -1375,7 +1375,7 @@
 "shared_string_import_complete" = "导入完成";
 "quick_action_switch_profile_descr" = "操作按钮在选定的配置文件之间切换。";
 "osm_edit_close_note" = "关闭 OSM 注记";
-"amenity_type_emergency" = "紧急救助";
+"icon_group_emergency" = "紧急救助";
 "shared_string_others" = "其它";
 "download_regular_maps" = "定期地图";
 "recalculate_route_distance_promo" = "如果从路线到当前位置的距离超过了所选的值，路线将被重新计算。";
@@ -1396,6 +1396,7 @@
 "show_direction" = "距离指示";
 "searching" = "正在搜索…";
 "osm_edit_comment_note" = "评论 OSM 注记";
+"icon_group_transport" = "交通工具";
 "transport" = "交通工具";
 "osmand_purchases_item" = "OsmAnd购买";
 "shared_string_enable" = "启用";
@@ -1424,7 +1425,7 @@
 "favorite_places_category" = "地方";
 "shared_string_circle" = "圆形";
 "markers_history" = "标记历史";
-"coordinates_widget" = "坐标小工具";
+"coordinates_widget_current_location" = "坐标小工具";
 "shared_string_square" = "方形";
 "rearrange_categories" = "重新排列类别";
 "select_distance_route_will_recalc" = "选择之后重新计算路径的距离。";
@@ -1600,7 +1601,7 @@
 "lang_sk" = "斯洛伐克语";
 "lang_br" = "布列塔尼文";
 "lang_ht" = "海地语";
-"amenity_type_education" = "教育";
+"icon_group_education" = "教育";
 "lang_sr_latn" = "塞尔维亚语（拉丁文）";
 "lang_ber" = "柏柏尔文";
 "shared_string_width" = "宽度";
@@ -1907,7 +1908,7 @@
 "route_is_too_long_v2" = "对于长途：如果 10 分钟内未找到路线，请添加中间目的地。";
 "you_can_get_feature_as_part_of_pattern" = "作为 %@ 套餐的一部分获得 “%@”。比较：";
 "no_purchases" = "你没有任何购买";
-"quick_action_coordinates_widget_descr" = "显示或隐藏地图上坐标小部件的开关。";
+"quick_action_current_location_widget_descr" = "显示或隐藏地图上坐标小部件的开关。";
 "wikivoyage_travel_guide_descr" = "引导地球上最有趣的地方的指南，在OsmAnd内部，无需连接到互联网。";
 "auto_zoom_map_descr" = "缩放级别将根据你的速度而定（当地图与当前的位置同步时）。";
 "settings_item_read_error" = "无法从 \'%@\' 中读取。";

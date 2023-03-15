@@ -883,7 +883,7 @@
 "available_maps" = "Beschikbare kaarten";
 "quick_action_add_parking" = "Parkeerlocatie instellen";
 "quick_action_navigation_voice" = "Stembegeleiding aan/uit";
-"map_widget_trip_recording_distance" = "Afstand";
+"shared_string_distance" = "Afstand";
 "context_menu_item_create_poi" = "POI aanmaken";
 "tunnel_warning" = "Tunnel";
 "context_menu_item_directions_from" = "Route vanaf";
@@ -1487,7 +1487,7 @@
 "custom_osmand_plugin" = "Aangepaste OsmAnd plug-in";
 "favorite_places_category" = "Plaatsen";
 "shared_string_enable" = "Activeer";
-"coordinates_widget" = "Coördinaten widget";
+"coordinates_widget_current_location" = "Coördinaten widget";
 "segments_count" = "Segment %d";
 "coordinates" = "Coördinaten";
 "extra_maps_menu_group" = "Extra kaarten";
@@ -1495,13 +1495,14 @@
 "favorite_group_name" = "Groepsnaam";
 "shared_string_square" = "Vierkant";
 "transport" = "Openbaar Vervoer";
+"icon_group_transport" = "Openbaar Vervoer";
 "icon_group_travel" = "Reizen";
 "shared_string_import" = "Importeren";
 "shared_string_icon" = "Icoon";
 "shared_string_disable" = "Schakel uit";
 "change_folder" = "Map wijzigen";
 "plan_route_split_after" = "Hierna splitsen";
-"amenity_type_emergency" = "Noodgevallen";
+"icon_group_emergency" = "Noodgevallen";
 "start_of_the_track" = "Begin van de track";
 "icon_group_special" = "Speciaal";
 "shared_string_search_history" = "Zoekgeschiedenis";
@@ -1671,7 +1672,7 @@
 "lang_cy" = "Welsh";
 "backup_error_gzip_only_supported_upload" = "Het bestand moet verzonden worden in het .gzip formaat";
 "lang_sq" = "Albanees";
-"amenity_type_education" = "Onderwijs";
+"icon_group_education" = "Onderwijs";
 "lang_vi" = "Vietnamees";
 "lang_es_ar" = "Spaans (Argentinië)";
 "lang_ce" = "Tsjetsjeens";
@@ -2051,7 +2052,7 @@
 "get_osmand_live" = "Neem OsmAnd Live en krijg alle mogelijkheden: Dagelijkse kaartupdates en onbeperkte downloads, alle betaalde en gratis plugins, Wikipedia, Wikivoyage en veel meer.";
 "save_heading_descr" = "Sla koers naar elk trackpunt op tijdens het opnemen.";
 "backup_delete_all_data" = "Verwijder al mijn gegevens";
-"quick_action_coordinates_widget_descr" = "Een schuifschakelaar om de coördinaten widget op de kaart weer te geven of te verbergen.";
+"quick_action_current_location_widget_descr" = "Een schuifschakelaar om de coördinaten widget op de kaart weer te geven of te verbergen.";
 "routing_attr_avoid_tunnels_name" = "Tunnels vermijden";
 "shared_string_uploaded" = "Geüpload";
 "map_updates_for_mappers" = "Kaart updates voor OSM bijdragers";

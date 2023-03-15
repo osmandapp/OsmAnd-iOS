@@ -366,7 +366,7 @@
 "shared_string_from" = "alates";
 "shared_string_time" = "Aeg";
 "time_of_day" = "Kellaaeg";
-"map_widget_trip_recording_distance" = "Kaugus";
+"shared_string_distance" = "Kaugus";
 "retry" = "Proovi uuesti";
 "shared_string_enabled" = "Lubatud";
 "shared_string_start_date" = "Alguskuupäev";
@@ -1940,7 +1940,7 @@
 "select_track_to_follow" = "Vali järgimiseks teekond";
 
 // Coordinate widget
-"coordinates_widget" = "Koordinaatide vidin";
+"coordinates_widget_current_location" = "Koordinaatide vidin";
 "searching_gps" = "GPSi otsimine";
 "new_plugin_added" = "Uus laiendus lisatud";
 "add_custom_category" = "Lisa oma kategooria";
@@ -1958,7 +1958,7 @@
 "shared_string_gpx_points" = "Punktid";
 "shared_string_disable" = "Keela";
 "icon_group_special" = "Eriteenused";
-"amenity_type_emergency" = "Esmaabi";
+"icon_group_emergency" = "Esmaabi";
 "shared_string_square" = "Ruut";
 "icon_group_symbols" = "Sümbolid";
 "icon_group_sport" = "Sport";
@@ -1966,6 +1966,7 @@
 "icon_group_travel" = "Reisimine";
 "download_regular_maps" = "Tavaline kaart";
 "access_default_color" = "Vaikevärv";
+"icon_group_transport" = "Transport";
 "transport" = "Transport";
 "custom_osmand_plugin" = "Kohandatud OsmAnd pistik";
 "coordinates" = "Koordinaadid";
@@ -1988,10 +1989,10 @@
 "replace_waypoint_confirmation" = "Oled kindel, et soovid asendada teekonnapunkti %@?";
 "map_widget_parking" = "Parkimine";
 "context_menu_item_edit_waypoint" = "Muuda GPX teekonnapunkti";
-"quick_action_coordinates_widget_descr" = "Lüliti, mis kuvab või peidab kaardil koordinaatide vidina.";
-"hide_coordinates" = "Peida koordinaadid";
-"show_coordinates" = "Kuva koordinaadid";
-"toggle_coordinates" = "Koordinaatide vidina kuvamine/peitmine";
+"quick_action_current_location_widget_descr" = "Lüliti, mis kuvab või peidab kaardil koordinaatide vidina.";
+"hide_current_location" = "Peida koordinaadid";
+"show_current_location" = "Kuva koordinaadid";
+"toggle_current_location" = "Koordinaatide vidina kuvamine/peitmine";
 "select_profile" = "Vali profiil";
 "threshold_distance" = "Läve kaugus";
 "folder_already_exsists" = "Selle nimega kaust on juba olemas";
@@ -2242,7 +2243,7 @@
 "connect_rp" = "Ühenda teekonnapunktid";
 "route_points" = "Teekonnapunktid";
 "icon_group_industrial" = "Tööstuslik";
-"amenity_type_education" = "Haridus";
+"icon_group_education" = "Haridus";
 "map_settings_clear_geo_cache" = "Tühjenda geopaanid";
 "shared_string_weather" = "Ilm";
 "backup_and_restore" = "Varunda ja taasta";

@@ -81,6 +81,8 @@ typedef NS_ENUM(NSInteger, EOAGpxSplitType) {
 - (void)resetAppearanceToOriginal;
 - (void)updateFolderName:(NSString *)newFilePath;
 
+- (BOOL)isTempTrack;
+
 @end
 
 @interface OAGPXDatabase : NSObject

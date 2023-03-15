@@ -12,7 +12,7 @@
 #import "OAMapInfoController.h"
 #import "OAMapViewTrackingUtilities.h"
 #import "OAColors.h"
-#import "OATopCoordinatesWidget.h"
+#import "OACoordinatesWidget.h"
 #import "OADownloadMapWidget.h"
 #import <JASidePanelController.h>
 #import <UIViewController+JASidePanel.h>
@@ -871,8 +871,6 @@
     else
     {
         BOOL isNight = [OAAppSettings sharedManager].nightMode;
-        if (_topCoordinatesWidget.isVisible && !_downloadMapWidget.isVisible)
-            return UIStatusBarStyleLightContent;
         return isNight ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault;
     }
 }
@@ -893,7 +891,9 @@
     {
         [self.view addSubview:_toolbarViewController.view];
         [self.view insertSubview:_topCoordinatesWidget aboveSubview:_toolbarViewController.view];
-        [self.view insertSubview:self.statusBarView aboveSubview:_topCoordinatesWidget];
+        
+        [self.view insertSubview:_coordinatesMapCenterWidget aboveSubview:_topCoordinatesWidget];
+        [self.view insertSubview:self.statusBarView aboveSubview:_coordinatesMapCenterWidget];
         
         if (self.widgetsView && self.widgetsView.superview)
         {
@@ -901,6 +901,7 @@
             [self.view insertSubview:self.widgetsView belowSubview:shadeView && shadeView.superview ? shadeView : _toolbarViewController.view];
         }
     }
+    
 }
 
 - (void) removeToolbar
@@ -912,7 +913,7 @@
     [self updateToolbarLayout:YES];
 }
 
-- (void) setCoordinatesWidget:(OATopCoordinatesWidget *)widget
+- (void) setCoordinatesWidget:(OACoordinatesWidget *)widget
 {
     if (_topCoordinatesWidget.superview)
         [_topCoordinatesWidget removeFromSuperview];
@@ -924,7 +925,25 @@
     {
         [self.view addSubview:_topCoordinatesWidget];
         [self.view insertSubview:_topCoordinatesWidget aboveSubview:_toolbarViewController.view];
-        [self.view insertSubview:self.statusBarView aboveSubview:_topCoordinatesWidget];
+        [self.view insertSubview:_coordinatesMapCenterWidget aboveSubview:_topCoordinatesWidget];
+        [self.view insertSubview:self.statusBarView aboveSubview:_coordinatesMapCenterWidget];
+    }
+}
+
+- (void) setCenterCoordinatesWidget:(OACoordinatesWidget *)widget
+{
+    if (_coordinatesMapCenterWidget.superview)
+        [_coordinatesMapCenterWidget removeFromSuperview];
+
+    _coordinatesMapCenterWidget = widget;
+    [_coordinatesMapCenterWidget updateInfo];
+
+    if (![self.view.subviews containsObject:_coordinatesMapCenterWidget])
+    {
+        [self.view addSubview:_topCoordinatesWidget];
+        [self.view insertSubview:_topCoordinatesWidget aboveSubview:_toolbarViewController.view];
+        [self.view insertSubview:_coordinatesMapCenterWidget aboveSubview:_topCoordinatesWidget];
+        [self.view insertSubview:self.statusBarView aboveSubview:_coordinatesMapCenterWidget];
     }
 }
 
@@ -1026,14 +1045,15 @@
     BOOL isLandscape = [OAUtilities isLandscape];
     BOOL isMarkersWidgetVisible = _toolbarViewController.view.alpha != 0;
     CGFloat markersWidgetHeaderHeight = _toolbarViewController.view.frame.size.height;
-    BOOL isCoordinatesVisible = [_topCoordinatesWidget isVisible] && _topCoordinatesWidget.alpha != 0;
+    BOOL isCurrentLocationCoordinatesVisible = [_topCoordinatesWidget isVisible] && _topCoordinatesWidget.alpha != 0;
+    BOOL isMapCenterCoordinatesVisible = [_coordinatesMapCenterWidget isVisible] && _coordinatesMapCenterWidget.alpha != 0;
     CGFloat coordinateWidgetHeight = _topCoordinatesWidget.frame.size.height;
     BOOL isMapDownloadVisible = [_downloadMapWidget isVisible] && _downloadMapWidget.alpha != 0;
     CGFloat downloadWidgetHeight = _downloadMapWidget.frame.size.height + _downloadMapWidget.shadowOffset;
     
     if (isLandscape)
     {
-        if (isCoordinatesVisible && isMarkersWidgetVisible && !isMapDownloadVisible)
+        if ((isCurrentLocationCoordinatesVisible || isMapCenterCoordinatesVisible) && isMarkersWidgetVisible && !isMapDownloadVisible)
             offset += coordinateWidgetHeight;
     }
     else
@@ -1046,7 +1066,9 @@
         {
             if (isMarkersWidgetVisible)
                 offset += markersWidgetHeaderHeight;
-            if (isCoordinatesVisible)
+            if (isCurrentLocationCoordinatesVisible)
+                offset += coordinateWidgetHeight;
+            if (isMapCenterCoordinatesVisible)
                 offset += coordinateWidgetHeight;
         }
     }
@@ -1125,8 +1147,8 @@
         statusBarColor = isNight ? UIColor.clearColor : [UIColor colorWithWhite:1.0 alpha:0.5];
     else if (_downloadMapWidget.isVisible)
         statusBarColor = isNight ? UIColorFromRGB(nav_bar_night) : UIColorFromRGB(color_primary_table_background);
-    else if ([_topCoordinatesWidget isVisible])
-        return UIColorFromRGB(nav_bar_night);
+    else if ([_topCoordinatesWidget isVisible] || [_coordinatesMapCenterWidget isVisible])
+        statusBarColor = isNight ? UIColorFromRGB(nav_bar_night) : UIColor.whiteColor;
     else if (_toolbarViewController)
         statusBarColor = [_toolbarViewController getStatusBarColor];
     else
@@ -1244,6 +1266,8 @@
         self.toolbarViewController.view.alpha = alphaEx;
     if (self.topCoordinatesWidget)
         self.topCoordinatesWidget.alpha = alphaEx;
+    if (self.coordinatesMapCenterWidget)
+        self.coordinatesMapCenterWidget.alpha = alphaEx;
     if (self.downloadMapWidget)
         self.downloadMapWidget.alpha = alphaEx;
 }
@@ -1267,6 +1291,8 @@
             self.toolbarViewController.view.alpha = alphaEx;
         if (self.topCoordinatesWidget)
             self.topCoordinatesWidget.alpha = alphaEx;
+        if (self.coordinatesMapCenterWidget)
+            self.coordinatesMapCenterWidget.alpha = alphaEx;
         if (self.downloadMapWidget)
             self.downloadMapWidget.alpha = alphaEx;
 
@@ -1285,6 +1311,8 @@
             self.toolbarViewController.view.userInteractionEnabled = self.toolbarViewController.view.alpha > 0.0;
         if (self.topCoordinatesWidget)
             self.topCoordinatesWidget.userInteractionEnabled = self.topCoordinatesWidget.alpha > 0.0;
+        if (self.coordinatesMapCenterWidget)
+            self.coordinatesMapCenterWidget.userInteractionEnabled = self.coordinatesMapCenterWidget.alpha > 0.0;
         if (self.downloadMapWidget)
             self.downloadMapWidget.userInteractionEnabled = self.downloadMapWidget.alpha > 0.0;
     }];
@@ -1304,6 +1332,8 @@
             self.toolbarViewController.view.alpha = 0.0;
         if (self.topCoordinatesWidget)
             self.topCoordinatesWidget.alpha = 0.0;
+        if (self.coordinatesMapCenterWidget)
+            self.coordinatesMapCenterWidget.alpha = 0.0;
         if (self.downloadMapWidget)
             self.downloadMapWidget.alpha = 0.0;
         
@@ -1319,6 +1349,8 @@
             self.toolbarViewController.view.userInteractionEnabled = NO;
         if (self.topCoordinatesWidget)
             self.topCoordinatesWidget.userInteractionEnabled = NO;
+        if (self.coordinatesMapCenterWidget)
+            self.coordinatesMapCenterWidget.userInteractionEnabled = NO;
         if (self.downloadMapWidget)
             self.downloadMapWidget.userInteractionEnabled = NO;
         

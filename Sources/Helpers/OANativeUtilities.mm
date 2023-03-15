@@ -114,7 +114,7 @@
     return skImage;
 }
 
-+ (UIImage *) skImageToUIImage:(const sk_sp<SkImage> &)image
++ (UIImage *) skImageToUIImage:(const sk_sp<const SkImage> &)image
 {
     if (!image)
         return nil;

@@ -53,9 +53,10 @@
 
 - (void)viewDidLoad
 {
-    [self generateData];
-
     [super viewDidLoad];
+    
+    if (!self.refreshOnAppear)
+        [self generateData];
 
     self.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeNever;
     
@@ -76,6 +77,12 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    if (self.refreshOnAppear)
+    {
+        [self generateData];
+        [self.tableView reloadData];
+    }
 
     [self setupCustomLargeTitleView];
 
@@ -528,6 +535,11 @@
 }
 
 - (BOOL)hideFirstHeader
+{
+    return NO;
+}
+
+- (BOOL) refreshOnAppear
 {
     return NO;
 }

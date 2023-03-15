@@ -277,7 +277,7 @@
 "postcode" = "Ταχυδρομικός κώδικας";
 "map_widget_ruler_control" = "Κανόνας ακτίνας";
 "quick_action_interim_dialog" = "Εμφάνιση ενδιάμεσου διαλόγου";
-"map_widget_trip_recording_distance" = "Απόσταση";
+"shared_string_distance" = "Απόσταση";
 "edit_filter" = "Επεξεργασία κατηγοριών";
 "rendering_category_hide" = "Απόκρυψη";
 "poi_filter_by_name" = "Αναζήτηση βάσει ονόματος";
@@ -1106,7 +1106,7 @@
 "fav_points_not_exist" = "Δεν υπάρχουν αγαπημένα σημεία";
 "shared_string_gpx_track" = "Ίχνος";
 "save_current_track_descr" = "Αποθήκευση τρέχοντος ίχνους ως αρχείου GPX τώρα.";
-"amenity_type_emergency" = "Επείγοντα";
+"icon_group_emergency" = "Επείγοντα";
 "select_group" = "Επιλογή ομάδας";
 "shared_string_square" = "Τετράγωνο";
 "coordinates" = "Συντεταγμένες";
@@ -1128,11 +1128,12 @@
 "searching" = "Αναζήτηση…";
 "searching_gps" = "Αναζήτηση GPS";
 "extra_maps_menu_group" = "Πρόσθετοι χάρτες";
+"icon_group_transport" = "Μεταφορές";
 "transport" = "Μεταφορές";
 "icon_group_sport" = "Άθληση";
 "shared_string_gpx_points" = "Σημεία";
 "hide_compass_ruler" = "Απόκρυψη χάρακα πυξίδας";
-"coordinates_widget" = "Γραφικό στοιχείο συντεταγμένων";
+"coordinates_widget_current_location" = "Γραφικό στοιχείο συντεταγμένων";
 "favorite_places_category" = "Μέρη";
 "shared_string_octagon" = "Οκτάγωνο";
 "navigation_over_track" = "Έναρξη πλοήγησης κατά μήκος του ίχνους";
@@ -1251,7 +1252,7 @@
 "lang_es" = "Ισπανικά";
 "gpx_split_interval_none_descr" = "Επιλέξτε την επιθυμητή επιλογή διαίρεσης: κατά χρόνο ή απόσταση.";
 "lang_fy" = "Φρισικά";
-"amenity_type_education" = "Εκπαίδευση";
+"icon_group_education" = "Εκπαίδευση";
 "lang_vi" = "Βιετναμέζικα";
 "lang_sco" = "Σκωτσέζικα";
 "lang_eo" = "Εσπεράντο";

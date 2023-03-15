@@ -30,11 +30,6 @@
     --divider-color-night: #2d3133;
 }
 
-@font-face {
-    font-family: RobotoSlab-Regular;
-    src: url("fonts/RobotoSlab-Regular.ttf")
-}
-
 body {
     max-width: 100% !important;
     margin-top: 0%;
@@ -144,10 +139,9 @@ h1 {
     font-size: 2em;
     color: #212121;
     color: var(--main-text-color-day);
-    font-family: RobotoSlab-Regular, "GillSans-SemiBold", sans-serif;
+    font-family: -apple-system-headline1, sans-serif;
     letter-spacing: 0.02em;
     word-wrap: break-word;
-    
     font-weight: normal;
 }
 
@@ -160,8 +154,8 @@ h2 {
     font-size: 1.5em;
     color: #454545;
     color: var(--headline-text-color-day);
-    font-family: RobotoSlab-Regular, "GillSans-SemiBold", sans-serif;
-    font-weight: 100;
+    font-family: -apple-system, sans-serif;
+    font-weight: 500;
     word-wrap: break-word;
     line-height: 1.6em;
     line-height: var(--main-text-line-height);
@@ -179,7 +173,7 @@ h2 {
     color: var(--headline-text-color-night);
     border-bottom: #2d3133;
     border-bottom: 1px solid var(--divider-color-night);
-    font-weight: 100;
+    font-weight: 500;
 }
 
 h2.active {

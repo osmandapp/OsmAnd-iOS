@@ -59,6 +59,7 @@
 @class OAWorldRegion;
 @class OAMapRendererEnvironment;
 @class OAMapPresentationEnvironment;
+@class OAGPXDocument;
 
 @interface OAMapViewController : UIViewController <UIGestureRecognizerDelegate>
 
@@ -153,6 +154,7 @@
 
 - (void) showTempGpxTrack:(NSString *)filePath update:(BOOL)update;
 - (void) showTempGpxTrack:(NSString *)filePath;
+- (void) showTempGpxTrackFromDocument:(OAGPXDocument *)doc;
 - (void) hideTempGpxTrack:(BOOL)update;
 - (void) hideTempGpxTrack;
 - (void) keepTempGpxTrackVisible;

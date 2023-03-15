@@ -2,8 +2,8 @@
 // Shared Strings
 "shared_string_back" = "Zurück";
 "shared_string_cancel" = "Abbrechen";
-"shared_string_no" = "nein";
-"shared_string_yes" = "ja";
+"shared_string_no" = "Nein";
+"shared_string_yes" = "Ja";
 "shared_string_save" = "Speichern";
 "shared_string_done" = "Fertig";
 "shared_string_update" = "Aktualisieren";
@@ -956,7 +956,7 @@
 "access_intermediate_arrival_time" = "Ankunftszeit Zwischenziel";
 "map_widget_intermediate_time" = "Zwischenankunftszeit";
 "shared_string_time" = "Zeit";
-"map_widget_trip_recording_distance" = "Entfernung";
+"shared_string_distance" = "Entfernung";
 "shared_string_milliradians" = "Milliradiant";
 "angular_units" = "Winkel-Maßeinheiten";
 "angular_units_descr" = "Azimut-Messeinheiten ändern.";
@@ -1474,7 +1474,7 @@
 "rendering_attr_smoothness_very_bad_name" = "Sehr schlecht";
 "rendering_attr_highway_class_bridleway_name" = "Reitweg";
 "rendering_attr_piste_type_nordic_name" = "Nordisch";
-"routing_attr_allow_classic_only_description" = "Für den klassischen Stil präparierte Loipen, keine Skating-Pisten. Einschließlich durch kleinere Schneemobile präparierte Routen mit lockerer Piste und durch Skifahrer selbstgespurte Bahnen.";
+"routing_attr_allow_classic_only_description" = "Für den klassischen Stil präparierte Loipen, keine Skating-Pisten. Einschließlich durch kleinere Schneemobile präparierte Routen mit lockerer Piste und durch Skifahrer selbst gespurte Bahnen.";
 "rendering_value_dark_brown_name" = "Dunkelbraun";
 "rendering_attr_surface_mud_name" = "Schlamm";
 "rendering_attr_piste_type_snow_park_name" = "Winter-Funpark";
@@ -1726,7 +1726,7 @@
 "vessel_width_limit_description" = "Stellen Sie die Schiffsbreite ein, um schmale Brücken zu vermeiden";
 "lenght_limit_description" = "Bitte geben Sie Ihre Fahrzeuglänge an. Für lange Fahrzeuge könnten einige Streckenabschnitte nicht befahrbar sein.";
 "profile_settings" = "Profilspezifische Einstellungen";
-"vessel_height_limit_description" = "Schiffshöhe einstellen, um niedrige Brücken zu vermeiden. Beachten Sie: Für beweglichen Brücken, wird deren Höhe im geöffneten Zustand verwendet.";
+"vessel_height_limit_description" = "Schiffshöhe einstellen, um niedrige Brücken zu vermeiden. Beachten Sie: Für bewegliche Brücken wird deren Höhe im geöffneten Zustand verwendet.";
 "err_profile_import" = "Fehler beim Lesen von Elementdaten: %@";
 "configure_profile" = "Profil konfigurieren";
 "height_limit_description" = "Geben Sie Ihre Fahrzeughöhe an, für hohe Fahrzeuge können einige Routenbeschränkungen gelten.";
@@ -1938,12 +1938,13 @@
 "select_segment" = "Segment auswählen";
 "select_track_to_follow" = "Track auswählen, welchem gefolgt werden soll";
 "icon_group_travel" = "Reisen";
-"transport" = "ÖPNV";
+"icon_group_transport" = "ÖPNV";
 "icon_group_symbols" = "Symbole";
 "icon_group_sport" = "Sport";
 "icon_group_special" = "Spezial";
-"amenity_type_emergency" = "Notfall";
+"icon_group_emergency" = "Notfall";
 "shared_string_octagon" = "Achteck";
+"transport" = "ÖPNV";
 
 // Shapes
 "shared_string_circle" = "Kreis";
@@ -1967,15 +1968,15 @@
 "select_group_descr" = "Gruppe auswählen oder neue hinzufügen";
 "fav_add_new_group" = "Neue Gruppe hinzufügen";
 "shared_string_square" = "Quadrat";
-"quick_action_coordinates_widget_descr" = "Ein Umschalter zum Ein- und Ausblenden des Koordinaten-Widgets auf der Karte.";
-"hide_coordinates" = "Koordinaten ausblenden";
-"show_coordinates" = "Koordinaten anzeigen";
-"toggle_coordinates" = "Koordinaten-Widget ein-/ausblenden";
+"quick_action_current_location_widget_descr" = "Ein Umschalter zum Ein- und Ausblenden des Koordinaten-Widgets auf der Karte.";
+"hide_current_location" = "Koordinaten ausblenden";
+"show_current_location" = "Koordinaten anzeigen";
+"toggle_current_location" = "Koordinaten-Widget ein-/ausblenden";
 "copied_to_clipboard" = "In die Zwischenablage kopiert";
 "searching_gps" = "Suche GPS";
 
 // Coordinate widget
-"coordinates_widget" = "Koordinaten-Widget";
+"coordinates_widget_current_location" = "Koordinaten-Widget";
 "coordinates" = "Koordinaten";
 "shared_string_gpx_points" = "Punkte";
 "download_regular_maps" = "Standardkarte";
@@ -2114,7 +2115,7 @@
 "distance_moving" = "Korrigierte Distanz";
 "parked_at" = "geparkt um";
 "icon_group_industrial" = "Industriell";
-"amenity_type_education" = "Bildung";
+"icon_group_education" = "Bildung";
 "route_points" = "Routenpunkte";
 "connect_rp" = "Routenpunkte verbinden";
 "lang_al" = "Albanisch";
@@ -2842,3 +2843,16 @@
 "compass_click_desc" = "Tippen Sie auf den Kompass, um den Kartenausrichtungsmodus zu wechseln.";
 "rotate_map_none_fixed" = "Norden ist oben (feststehend)";
 "rotate_map_none_manually" = "Manuell gedreht (feststehend)";
+"map_widget_camera_tilt" = "Kameraneigung";
+"map_widget_camera_distance" = "Kameraabstand";
+"map_widget_target_distance" = "Zielentfernung";
+"change_language" = "Sprache ändern";
+"dont_download" = "Nicht herunterladen";
+"download_only_now" = "Nur jetzt herunterladen";
+"download_over_cellular_network" = "Bilder über ein Mobilfunknetz herunterladen? Dabei können hohe Gebühren anfallen.";
+"map_widget_zoom_level" = "Zoomstufe";
+"over_any_network" = "Über jedes Netzwerk";
+"wikipedia_language_settings_descr" = "Wählen Sie die Sprachen aus, in denen Wikipedia-Artikel auf der Karte erscheinen sollen. Sie können während des Lesens des Artikels zwischen allen verfügbaren Sprachen wechseln.";
+"over_wifi_only" = "Nur über Wi-Fi";
+"wikivoyage_download_pics" = "Bilder herunterladen";
+"ios_release_4_4" = "- Wikipedia: Möglichkeit zum Anzeigen von Bildern hinzugefügt, UI des Readers aktualisiert\n- Favoriten: Suche hinzugefügt\n- CarPlay: Historie hinzugefügt, Tracks und Favoritenliste reorganisiert\n- Wanderrouten: Möglichkeit hinzugefügt, Routen auf der Karte auszuwählen, um zusätzliche Informationen anzuzeigen oder zu navigieren\n- OpenStreetMap: Möglichkeit zum Hochladen von Tracks hinzugefügt\n- Sprachansagen: Unterstützung für neue Sprachen hinzugefügt: Katalanisch, Ukrainisch, Bulgarisch, Indonesisch, Slowenisch\n- Rechtliche Warnung über die Verwendung von Blitzerwarnungen hinzugefügt\n- Verbesserter Datenschutz: Optionen zur Deaktivierung der Verlaufsprotokollierung hinzugefügt\n- Die Sichtbarkeit des Kartenlineals wurde verbessert\n- UI-Verbesserungen für RTL-Sprachen\n- Barrierefreiheit: Inhaltsbeschriftung für Kartenschaltflächen hinzugefügt\n- Unterstützung für \"Dynamische Schrift\" zugefügt, die Textgröße in OsmAnd wird entsprechend der Textgröße in iOS angepasst\n- Kartenausrichtung: manuell gedrehter Modus hinzugefügt\n- Die minimale iOS-Version wurde auf 15.0 erhöht\n";

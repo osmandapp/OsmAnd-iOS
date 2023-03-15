@@ -102,6 +102,11 @@ static NSArray<NSString *> *minTrackSpeedNames;
     }
 }
 
+- (BOOL) refreshOnAppear
+{
+    return YES;
+}
+
 #pragma mark - Table data
 
 - (void)generateData

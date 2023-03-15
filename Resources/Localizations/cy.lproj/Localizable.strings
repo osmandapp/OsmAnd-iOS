@@ -456,7 +456,7 @@
 "shared_string_from" = "o";
 "shared_string_time" = "Amser";
 "time_of_day" = "Amser o\'r dydd";
-"map_widget_trip_recording_distance" = "Pellter";
+"shared_string_distance" = "Pellter";
 "shared_string_time_span" = "Rhychwant amser";
 "shared_string_start_time" = "Amser dechrau";
 "shared_string_end_time" = "Amser gorffen";
@@ -1269,7 +1269,7 @@
 "mapil_select_user" = "Select user";
 
 // Coordinate widget
-"coordinates_widget" = "Ategyn cyfesurynnau";
+"coordinates_widget_current_location" = "Ategyn cyfesurynnau";
 "searching_gps" = "Chwilio am GPS";
 "copied_to_clipboard" = "Wedi\'i gopïo i\'r clipfwrdd";
 // Quick action
@@ -1278,10 +1278,10 @@
 "no_underlay" = "Dim is-haen";
 "quick_action_map_underlay_action" = "Ychwanegu is-haen";
 "quick_action_list_descr" = "Tapping this action button pages through the list below";
-"toggle_coordinates" = "Show/hide coordinates widget";
-"show_coordinates" = "Show coordinates";
-"hide_coordinates" = "Hide coordinates";
-"quick_action_coordinates_widget_descr" = "Toglo i ddangos neu guddio\'r ategyn cyfesurynnau ar y map.";
+"toggle_current_location" = "Show/hide coordinates widget";
+"show_current_location" = "Show coordinates";
+"hide_current_location" = "Hide coordinates";
+"quick_action_current_location_widget_descr" = "Toglo i ddangos neu guddio\'r ategyn cyfesurynnau ar y map.";
 "quick_action_map_overlay_title" = "Troshaenau mapiau";
 "quick_action_map_underlay_title" = "Is-haenau mapiau";
 "vector_data" = "Offline vector maps";
@@ -2209,15 +2209,16 @@
 
 //Icon categories
 "icon_group_amenity" = "Amwynder";
-"amenity_type_emergency" = "Argyfwng";
+"icon_group_emergency" = "Argyfwng";
 "icon_group_special" = "Arbennig";
 "icon_group_sport" = "Chwaraeon";
 "icon_group_symbols" = "Symbolau";
-"transport" = "Trafnidiaeth";
+"icon_group_transport" = "Trafnidiaeth";
 "icon_group_travel" = "Teithio";
 "icon_group_nautical" = "Morol";
 "icon_group_industrial" = "Diwydiannol";
-"amenity_type_education" = "Addysg";
+"icon_group_education" = "Addysg";
+"transport" = "Trafnidiaeth";
 "settings_item_read_error" = "Methwyd darllen o \'%@\'.";
 "app_mode_default" = "Pori\'r map";
 "app_mode_car" = "Gyrru";

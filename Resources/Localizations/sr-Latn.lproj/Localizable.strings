@@ -456,7 +456,7 @@
 "shared_string_from" = "iz";
 "shared_string_time" = "Vreme";
 "time_of_day" = "Doba dana";
-"map_widget_trip_recording_distance" = "Rastojanje";
+"shared_string_distance" = "Rastojanje";
 "shared_string_time_span" = "Vremenski raspon";
 "shared_string_start_time" = "Vreme polaska";
 "shared_string_end_time" = "Vreme dolaska";
@@ -1271,7 +1271,7 @@
 "mapil_select_user" = "Select user";
 
 // Coordinate widget
-"coordinates_widget" = "Spravica za koordinate";
+"coordinates_widget_current_location" = "Spravica za koordinate";
 "searching_gps" = "Tražim GPS";
 "copied_to_clipboard" = "Umnoženo je u ostavu isečaka";
 // Quick action
@@ -1280,10 +1280,10 @@
 "no_underlay" = "Bez podvlačenja";
 "quick_action_map_underlay_action" = "Dodaj sloj ispod karte";
 "quick_action_list_descr" = "Tapping this action button pages through the list below";
-"toggle_coordinates" = "Show/hide coordinates widget";
-"show_coordinates" = "Show coordinates";
-"hide_coordinates" = "Hide coordinates";
-"quick_action_coordinates_widget_descr" = "Prekidač da na karti pokaže ili sakrije spravicu sa koordinatama.";
+"toggle_current_location" = "Show/hide coordinates widget";
+"show_current_location" = "Show coordinates";
+"hide_current_location" = "Hide coordinates";
+"quick_action_current_location_widget_descr" = "Prekidač da na karti pokaže ili sakrije spravicu sa koordinatama.";
 "quick_action_map_overlay_title" = "Slojevi iznad karte";
 "quick_action_map_underlay_title" = "Slojevi ispod karte";
 "vector_data" = "Vektorske karte van mreže";
@@ -2211,15 +2211,16 @@
 
 //Icon categories
 "icon_group_amenity" = "Ameniti";
-"amenity_type_emergency" = "Hitna pomoć";
+"icon_group_emergency" = "Hitna pomoć";
 "icon_group_special" = "Special";
 "icon_group_sport" = "Sport";
 "icon_group_symbols" = "Simboli";
-"transport" = "Prevoz";
+"icon_group_transport" = "Prevoz";
 "icon_group_travel" = "Putovanje";
 "icon_group_nautical" = "Pomorska";
 "icon_group_industrial" = "Industrija";
-"amenity_type_education" = "Obrazovanje";
+"icon_group_education" = "Obrazovanje";
+"transport" = "Prevoz";
 "settings_item_read_error" = "Ne mogu dačitam iz „%@”.";
 "app_mode_default" = "Pregled karte";
 "app_mode_car" = "Vožnja";

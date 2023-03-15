@@ -424,7 +424,7 @@
 "shared_string_widgets" = "Gradniki";
 "map_widget_right" = "Desni pult";
 "map_widget_left" = "Levi pult";
-"layer_map_appearance" = "Nastavite zaslona";
+"layer_map_appearance" = "Nastavitve zaslona";
 "map_markers" = "Oznake zemljevida";
 "select_gpx" = "Izbor sledi GPX …";
 "confirm_usage_speed_cameras" = "V mnogih državah (na primer v Nemčiji, Franciji, Italiji in drugih) je uporaba kamer za merjenje hitrosti prepovedana z zakonom. Razvijalci programa ne sprejemamo odgovornosti za tako rabo. Potrdite uporabo le, če ste res prepričani v svoje ravnanje.";
@@ -808,8 +808,8 @@
 "get_discount_second_part" = "nato %@";
 "sett_generic_ext_input" = "Tipkovnica";
 "sett_wunderlinq_ext_input" = "WunderLINQ";
-"map_widget_trip_recording_distance" = "Razdalja";
-"configure_map" = "Nastavi zemljevid";
+"shared_string_distance" = "Razdalja";
+"configure_map" = "Nastavitve zemljevida";
 "simulate_navigation" = "Izvedi navidezno navigacijo";
 "select_map_marker" = "Izbor označbe na zemljevidu";
 "add_intermediate" = "Dodaj vmesno točko";
@@ -1313,7 +1313,7 @@
 "hide_compass_ruler" = "Skrij kompas";
 "plan_route_open_existing_track" = "Odpri obstoječo sled";
 "favorite_friends_category" = "Naslovi prijateljev";
-"coordinates_widget" = "Gradnik za določevanje koordinat";
+"coordinates_widget_current_location" = "Gradnik za določevanje koordinat";
 "plan_route_create_new_route" = "Ustvari novo pot";
 "icon_group_sport" = "Šport";
 "searching" = "Iskanje…";
@@ -1324,7 +1324,8 @@
 "shared_string_enable" = "Omogoči";
 "plan_route_split_before" = "Razdeli pred";
 "replace_favorite_confirmation" = "Zamenjati priljubljeno točko »%@«\?";
-"amenity_type_emergency" = "Nujna medicinska pomoč";
+"icon_group_emergency" = "Nujna medicinska pomoč";
+"icon_group_transport" = "Prevoz";
 "transport" = "Prevoz";
 "context_menu_item_edit_waypoint" = "Uredi vmesno točko GPX";
 "no_waypoints_found" = "Ni vmesnih točk";
@@ -1335,7 +1336,7 @@
 "gpxup_private" = "Zasebno";
 "navigate_point_easting" = "Koordinata v smeri proti vzhodu";
 "dialogs_and_notifications_title" = "Pogovorna okna in opozorila";
-"plugin_mapillary_descr" = "Posnetki pogledov z ravni ulice. Prispevaš lahko tudi sam/a. Če si želiš ogledati obstoječe podatke kot sloj zemljevida, v meniju »Konfiguriraj zemljevid« vklopi »Posnetke na ravni ulice«.";
+"plugin_mapillary_descr" = "Posnetki pogledov z ravni ulice. Prispevaš lahko tudi sam/a. Če si želiš ogledati obstoječe podatke kot sloj zemljevida, v meniju »Nastavitve zemljevida« vklopi »Posnetke na ravni ulice«.";
 "navigate_point_zone" = "Območje";
 "navigate_point_northing" = "Koordinata v smeri proti severu";
 "shared_string_navigation" = "Navigacija";
@@ -1355,7 +1356,7 @@
 "lang_lo" = "Laoščina";
 "lang_el" = "Grščina";
 "lang_als" = "Toskovska albanščina";
-"amenity_type_education" = "Izobraževalna ustanova";
+"icon_group_education" = "Izobraževalna ustanova";
 "lang_pt" = "Portugalščina";
 "lang_ast" = "Asturijski";
 "lang_vi" = "Vietnamščina";
@@ -1814,7 +1815,7 @@
 "local_backup_descr" = "Varnostno kopiranje ali obnovitev podatkov iz lokalne datoteke.";
 "backup_restore_data" = "Obnovi podatke";
 "recalculate_route" = "Preračunaj pot";
-"quick_action_coordinates_widget_descr" = "Stikalo za prikaz ali skrivanje pripomočka Koordinate na zemljevidu.";
+"quick_action_current_location_widget_descr" = "Stikalo za prikaz ali skrivanje pripomočka Koordinate na zemljevidu.";
 "move_point" = "Premakni točko";
 "promo_subscription" = "Promocijska naročnina";
 "nav_type_hint" = "Vrsta navigacije";
@@ -2033,7 +2034,7 @@
 "add_point_after" = "Dodaj točko za";
 "quick_action_map_style_action" = "Dodaj slog zemljevida";
 "download_wikipedia_data" = "Prejmi podatke Wikipedije";
-"plugin_ski_descr" = "Zasnovan za navigacijo po območjih zimskih športov: oglej si smučarske proge in vlečnice ter proge za tek na smučeh z barvnimi črtami, ki označujejo stopnje težavnosti. Za uporabo omogoči ta vtičnik in pojdi na »Konfiguriraj zemljevid« ter izberite slog zemljevida »Zima in smučanje«.";
+"plugin_ski_descr" = "Zasnovan za navigacijo po območjih zimskih športov: oglej si smučarske proge in vlečnice ter proge za tek na smučeh z barvnimi črtami, ki označujejo stopnje težavnosti. Za uporabo omogoči ta vtičnik in pojdi na »Nastavitve zemljevida« ter izberi slog zemljevida »Zima in smučanje«.";
 "save_track_to_gpx_descrp" = "Samodejni zagon snemanja sledi med navigacijo in samodejno shranjevanje po tem.";
 "move_marker_bottom_sheet_title" = "S premikom zemljevida se spremeni položaj označbe";
 "local_openstreetmap_uploading" = "Poteka pošiljanje …";
@@ -2052,13 +2053,7 @@
 "osm_edit_reopened_note" = "Ponovno odprte opombe OSM";
 "srtm_plugin_description" = "Informacije o terenu, kot so izohipse, senčenje terena in naklon, ti pomagajo vizualno oceniti lego zemlje in relief, navigacijo in drugo. Topografske informacije na zemljevidu so lahko predstavljene s senčenjem naklonov, izohipsami in/ali barvanjem strmine.\n\nOsnovni podatki izvirajo iz SRTM in ASTER.\n\nNadaljnje branje na http://osmand.net/docs/user/plugins/contour-lines .";
 "kg" = "kg";
-
-"weather_plugin_description" = "Zagotavlja:\n- 24-urno in 7-dnevno vremensko napoved s petimi plastmi
-\n- gradniki, ki temeljijo na lokaciji
-\n- izoterme in izobare (izočrte temperature in zračnega tlaka).
-\n
-\nVremenske podatke zagotavlja globalni sistem napovedi (Global Forecast System - GFS, https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast ).";
-
+"weather_plugin_description" = "Zagotavlja:\n- 24-urno in 7-dnevno vremensko napoved s petimi plastmi\n- gradniki, ki temeljijo na lokaciji\n- izoterme in izobare (izočrte temperature in zračnega tlaka).\n\nVremenske podatke zagotavlja globalni sistem napovedi (Global Forecast System - GFS, https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast ).";
 "plugin_nautical_descr" = "Obogati zemljevid z informacijami o plovnih poteh, navigacijskih lučeh, navtičnih nevarnih območjih, območjih z omejitvami jadranja ali privezovanja itd. Za uporabo prenesi ustrezne navtične karte in omogočite slog »Navtična karta« pod »Konfiguriraj zemljevid«.\n\nNadaljnje branje na https://osmand.net/docs/user/plugins/nautical-charts .";
 "open_place_reviews_plugin_description" = "Prispevaj k projektu OpenPlaceReviews, kot npr. fotografije, ocene, povezave o javnih mestih, kot so restavracije, hoteli, ali muzeji.\n\nNavodila za prispevanje najdeš na naši spletni strani https://osmand.net/docs/user/plugins/openplacereviews .";
 "m" = "m";

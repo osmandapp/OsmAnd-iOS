@@ -455,7 +455,7 @@
 "shared_string_from" = "desde";
 "shared_string_time" = "Tiempo";
 "time_of_day" = "Hora del día";
-"map_widget_trip_recording_distance" = "Distancia";
+"shared_string_distance" = "Distancia";
 "shared_string_time_span" = "Duración total";
 "shared_string_start_time" = "Hora de inicio";
 "shared_string_end_time" = "Hora de fin";
@@ -1263,7 +1263,7 @@
 "mapil_select_user" = "Elegir usuario";
 
 // Coordinate widget
-"coordinates_widget" = "Widget de coordenadas";
+"coordinates_widget_current_location" = "Widget de coordenadas";
 "searching_gps" = "Buscando GPS";
 "copied_to_clipboard" = "Copiado al portapapeles";
 // Quick action
@@ -1272,10 +1272,10 @@
 "no_underlay" = "Sin subyacencia";
 "quick_action_map_underlay_action" = "Añadir subyacencia";
 "quick_action_list_descr" = "Pulsando las páginas de este botón de acción a través de la siguiente lista";
-"toggle_coordinates" = "Mostrar/ocultar control de coordenadas";
-"show_coordinates" = "Mostrar coordenadas";
-"hide_coordinates" = "Ocultar coordenadas";
-"quick_action_coordinates_widget_descr" = "Un botón que muestra u oculta el widget de coordenadas en el mapa.";
+"toggle_current_location" = "Mostrar/ocultar control de coordenadas";
+"show_current_location" = "Mostrar coordenadas";
+"hide_current_location" = "Ocultar coordenadas";
+"quick_action_current_location_widget_descr" = "Un botón que muestra u oculta el widget de coordenadas en el mapa.";
 "quick_action_map_overlay_title" = "Mapas superpuestos";
 "quick_action_map_underlay_title" = "Mapas subyacentes";
 "vector_data" = "Mapas vectoriales sin conexión";
@@ -2189,15 +2189,16 @@
 
 //Icon categories
 "icon_group_amenity" = "Comodidad";
-"amenity_type_emergency" = "Emergencia";
+"icon_group_emergency" = "Emergencia";
 "icon_group_special" = "Especial";
 "icon_group_sport" = "Deporte";
 "icon_group_symbols" = "Símbolos";
-"transport" = "Transporte";
+"icon_group_transport" = "Transporte";
 "icon_group_travel" = "Viaje";
 "icon_group_nautical" = "Náutico";
 "icon_group_industrial" = "Industrial";
-"amenity_type_education" = "Educación";
+"icon_group_education" = "Educación";
+"transport" = "Transporte";
 "settings_item_read_error" = "No se pudo leer desde«%@».";
 "app_mode_default" = "Ver mapa";
 "app_mode_car" = "Automóvil";
@@ -2836,3 +2837,16 @@
 "compass_click_desc" = "Sugerencia: Pulsa el widget de la brújula para cambiar el modo de orientación del mapa.";
 "rotate_map_none_fixed" = "Norte siempre arriba (fijo)";
 "rotate_map_none_manually" = "Rotación manual (fijo)";
+"map_widget_camera_tilt" = "Inclinación de la cámara";
+"map_widget_camera_distance" = "Distancia de la cámara";
+"map_widget_zoom_level" = "Nivel de zum";
+"map_widget_target_distance" = "Distancia al objetivo";
+"change_language" = "Cambiar idioma";
+"ios_release_4_4" = "• Wikipedia: ahora pueden verse imágenes y se ha actualizado la interfaz de usuario\n• Favoritos: se ha añadido un buscador\n• CarPlay: se ha añadido el historial, se reorganizaron las trazas y la lista de favoritos\n• Rutas de senderismo: ahora pueden marcarse rutas en el mapa para navegar o ver información adicional\n• OpenStreetMap: se ha añadido la posibilidad de cargar trazas\n• Indicaciones por voz: ahora se admiten nuevos idiomas: Catalán, ucraniano, búlgaro, indonesio y esloveno\n• Se ha añadido un aviso legal sobre el uso de alertas con los radares de velocidad\n• Privacidad mejorada: se han añadido opciones para desactivar el registro del historial.\n• Se ha mejorado la visibilidad de la regla del mapa\n• Se ha mejorado la interfaz de usuario para los idiomas RTL (de derecha a izquierda)\n• Accesibilidad: se ha añadido etiquetado en el contenido de los botones del mapa.\n• Se ha añadido soporte para «Tipo dinámico», el tamaño del texto en OsmAnd cambiará según el tamaño del texto en iOS.\n• Orientación del mapa: se ha añadido el modo de rotación manual\n• Desde ahora, la versión mínima de soporte en iOS es v15.0\n";
+"dont_download" = "No descargar";
+"over_wifi_only" = "Sólo por Wi-Fi";
+"over_any_network" = "Sobre cualquier red";
+"download_only_now" = "Descargar sólo esta vez";
+"download_over_cellular_network" = "¿Descargar imágenes a través de la red móvil? Esto puede incurrir en altos cargos.";
+"wikivoyage_download_pics" = "Descargar imágenes";
+"wikipedia_language_settings_descr" = "Marca los idiomas en los que los artículos de Wikipedia aparecerán en el mapa. Puedes cambiar entre todos los idiomas disponibles mientras lees el artículo.";

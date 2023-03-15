@@ -226,10 +226,13 @@
 - (NSAttributedString *) getAttributedTypeStr:(NSString *)group
 {
     NSAttributedString *attributedTypeStr = [self getAttributedTypeStr:group color:[_favoriteGroup color]];
-    NSString *address = [@"\n\n" stringByAppendingString:[self.favorite getAddress]];
     NSMutableAttributedString *mutAttributedTypeStr = [[NSMutableAttributedString alloc] init];
     [mutAttributedTypeStr appendAttributedString:attributedTypeStr];
-    [mutAttributedTypeStr appendAttributedString:[[NSAttributedString alloc] initWithString:address]];
+    if ([self.favorite getAddress] && [self.favorite getAddress].length > 0)
+    {
+        NSString *address = [@"\n\n" stringByAppendingString:[self.favorite getAddress]];
+        [mutAttributedTypeStr appendAttributedString:[[NSAttributedString alloc] initWithString:address]];
+    }
     [mutAttributedTypeStr addAttributes:@{ NSFontAttributeName : [UIFont scaledSystemFontOfSize:15],
                                            NSForegroundColorAttributeName : UIColorFromRGB(color_dialog_text_description_color_night) }
                                   range:NSMakeRange(0, mutAttributedTypeStr.length)];

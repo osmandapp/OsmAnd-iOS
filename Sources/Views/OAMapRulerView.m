@@ -13,6 +13,7 @@
 #import "OAOsmAndFormatter.h"
 #import "OAColors.h"
 
+#define kAnimationDuration .2
 #define kBlurBackgroundTag -999
 
 @interface OAMapRulerView()
@@ -49,6 +50,12 @@
         self.rightBorder = [CALayer layer];
         self.rightBorder.frame = CGRectMake(self.frame.size.width-1, self.frame.size.height - 10, 1.0f, 10);
         [self.layer addSublayer:self.rightBorder];
+        
+        // Add border outline
+        [UIView animateWithDuration:kAnimationDuration animations:^{
+            self.blurView.frame = CGRectMake(-2.5, self.frame.size.height - 12.5, self.frame.size.width + 5., 16.);
+            [self applyBlurMask];
+        }];
         
         self.textLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, self.frame.size.height - 20, self.frame.size.width - 10, 15)];
         [self.textLabel setFont:[UIFont scaledSystemFontOfSize:12]];
@@ -97,8 +104,8 @@
     blurView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.textLabel.leadingAnchor constraintEqualToAnchor:blurView.leadingAnchor constant:padding].active = YES;
     [self.textLabel.trailingAnchor constraintEqualToAnchor:blurView.trailingAnchor constant:-padding].active = YES;
-    [self.textLabel.topAnchor constraintEqualToAnchor:blurView.topAnchor constant:padding].active = YES;
-    [self.textLabel.bottomAnchor constraintEqualToAnchor:blurView.bottomAnchor constant:-padding].active = YES;
+    [self.textLabel.topAnchor constraintEqualToAnchor:blurView.topAnchor constant:padding / 2].active = YES;
+    [self.textLabel.bottomAnchor constraintEqualToAnchor:blurView.bottomAnchor constant:-padding / 2].active = YES;
 }
 
 - (void) removeBlurBackground
@@ -186,9 +193,11 @@
     self.bottomBorder.frame = CGRectMake(0, self.frame.size.height, self.frame.size.width, 1.0f);
     self.leftBorder.frame = CGRectMake(0, self.frame.size.height - 10, 1.0f, 10);
     self.rightBorder.frame = CGRectMake(self.frame.size.width-1, self.frame.size.height - 10, 1.0f, 10);
-    self.blurView.frame = CGRectMake(-2.5, self.frame.size.height - 12.5, self.frame.size.width + 5., 16.);
-    
-    [self applyBlurMask];
+    [self.blurView.layer removeAllAnimations];
+    [UIView animateWithDuration:kAnimationDuration delay:0. options:UIViewAnimationOptionOverrideInheritedDuration animations:^{
+        self.blurView.frame = CGRectMake(-2.5, self.frame.size.height - 12.5, self.frame.size.width + 5., 16.);
+        [self applyBlurMask];
+    } completion:nil];
 }
 
 - (void) setRulerData:(float)metersPerPixel

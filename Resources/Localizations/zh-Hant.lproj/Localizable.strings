@@ -925,7 +925,7 @@
 "navigate_point_format_D" = "DDD.DDDDD";
 "navigate_point_format_DM" = "DDD MM.MMM";
 "navigate_point_format_DMS" = "DDD MM SS.S";
-"map_widget_trip_recording_distance" = "距離";
+"shared_string_distance" = "距離";
 "day" = "天";
 "days_2_4" = "天";
 "days_5" = "天";
@@ -1499,9 +1499,9 @@
 "fav_points_not_exist" = "沒有我的收藏標點存在";
 "shared_string_enable" = "啟用";
 "open_saved_track" = "開啟已儲存的軌跡";
-"amenity_type_emergency" = "緊急救助";
+"icon_group_emergency" = "緊急救助";
 "access_default_color" = "預設顏色";
-"coordinates_widget" = "座標小工具";
+"coordinates_widget_current_location" = "座標小工具";
 "shared_string_resources" = "資源";
 "extra_maps_menu_group" = "額外地圖";
 "show_compass_ruler" = "顯示指南針與尺規";
@@ -1520,6 +1520,7 @@
 "simplified_track" = "簡化軌跡";
 "add_custom_category" = "新增自訂分類";
 "download_regular_maps" = "標準地圖";
+"icon_group_transport" = "交通工具";
 "transport" = "交通工具";
 "plan_route_create_new_route" = "建立新路線";
 "icon_group_sport" = "運動";
@@ -1622,7 +1623,7 @@
 "lang_sr_latn" = "塞爾維亞語（拉丁文）";
 "lang_pt" = "葡萄牙";
 "lang_lo" = "寮語";
-"amenity_type_education" = "教育";
+"icon_group_education" = "教育";
 "lang_an" = "亞拉岡語";
 "gpx_split_interval_none_descr" = "選取所需的分割選項：按時間或按距離。";
 "lang_ber" = "柏柏爾語";
@@ -2021,7 +2022,7 @@
 "weather_pressure_millimeters_of_mercury" = "毫米汞柱";
 "transfers" = "移動";
 "use_login_and_password" = "使用使用者名稱與密碼";
-"quick_action_coordinates_widget_descr" = "在地圖上顯示或隱藏「座標」小工具的開關。";
+"quick_action_current_location_widget_descr" = "在地圖上顯示或隱藏「座標」小工具的開關。";
 "shared_string_cross_buy" = "跨平台購買";
 "shared_string_recorded" = "已記錄";
 "quick_action_contour_lines_descr" = "在地圖上顯示或隱藏等高線的按鈕。";

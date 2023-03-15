@@ -454,7 +454,7 @@
 "shared_string_from" = "el";
 "shared_string_time" = "Tempo";
 "time_of_day" = "Tagtempo";
-"map_widget_trip_recording_distance" = "Distanco";
+"shared_string_distance" = "Distanco";
 "shared_string_time_span" = "Tempa variejo";
 "shared_string_start_time" = "Komenca tempo";
 "shared_string_end_time" = "Fina tempo";
@@ -1023,7 +1023,7 @@
 "plan_route_create_new_route" = "Krei novan kurson";
 "track_is_saved" = "%@\nis saved!";
 "plan_route_open_existing_track" = "Malfermi ekzistan spuron";
-"sort_last_modified" = "Antaŭe modifita";
+"sort_last_modified" = "dato de modifo";
 "route_between_points_add_track_desc" = "Elektu dosieron de spuro al kiu nova segmento estos aldonita.";
 "route_between_points_warning_desc" = "Por uzi tiunĉi agordon, OsmAnd postulas ĝustigi vian kurson al vojoj sur la mapo.\n\n Sekve vi devos elekti profilon de navigo (por trovi permesatajn vojojn) kaj sojlan distancon (por alproksimigi vian kurson al vojoj).";
 "plan_route_exit_message" = "Are you sure you want to close Plan route without saving? You will lose all changes.";
@@ -1262,7 +1262,7 @@
 "mapil_select_user" = "Select user";
 
 // Coordinate widget
-"coordinates_widget" = "Fenestraĵo de koordinatoj";
+"coordinates_widget_current_location" = "Fenestraĵo de koordinatoj";
 "searching_gps" = "Determinado de pozicio…";
 "copied_to_clipboard" = "Enpoŝigita";
 // Quick action
@@ -1271,10 +1271,10 @@
 "no_underlay" = "Neniu subtavolo";
 "quick_action_map_underlay_action" = "Aldoni subtavolon";
 "quick_action_list_descr" = "Tapping this action button pages through the list below";
-"toggle_coordinates" = "Show/hide coordinates widget";
-"show_coordinates" = "Show coordinates";
-"hide_coordinates" = "Hide coordinates";
-"quick_action_coordinates_widget_descr" = "Ŝaltilo por montri aŭ kaŝi la fenestraĵon de koordinatoj sur la mapo.";
+"toggle_current_location" = "Show/hide coordinates widget";
+"show_current_location" = "Show coordinates";
+"hide_current_location" = "Hide coordinates";
+"quick_action_current_location_widget_descr" = "Ŝaltilo por montri aŭ kaŝi la fenestraĵon de koordinatoj sur la mapo.";
 "quick_action_map_overlay_title" = "Mapaj surtavoloj";
 "quick_action_map_underlay_title" = "Mapaj subtavoloj";
 "vector_data" = "Malkonektaj vektoraj mapoj";
@@ -2189,15 +2189,16 @@
 
 //Icon categories
 "icon_group_amenity" = "Oportunaĵo";
-"amenity_type_emergency" = "Vivsavo";
+"icon_group_emergency" = "Vivsavo";
 "icon_group_special" = "Specialaj";
 "icon_group_sport" = "Sporto";
 "icon_group_symbols" = "Simboloj";
-"transport" = "Transporto";
+"icon_group_transport" = "Transporto";
 "icon_group_travel" = "Vojaĝo";
 "icon_group_nautical" = "Mar-navigado";
 "icon_group_industrial" = "Industrio";
-"amenity_type_education" = "Edukado";
+"icon_group_education" = "Edukado";
+"transport" = "Transporto";
 "settings_item_read_error" = "Ne povas legi el“%@”.";
 "app_mode_default" = "Foliumi mapon";
 "app_mode_car" = "Aŭto";

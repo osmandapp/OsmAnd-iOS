@@ -978,7 +978,7 @@
 "osm_confirm_bulk_delete" = "حذف %d التعديلات؟";
 "access_intermediate_arrival_time" = "متوسط وقت الوصول";
 "map_widget_intermediate_time" = "متوسط الوقت";
-"map_widget_trip_recording_distance" = "المسافة";
+"shared_string_distance" = "المسافة";
 "angular_units" = "وحدات قياس الزاوي";
 "angular_units_descr" = "تغيير قياس زاوية الازيموث.";
 "show_tunnels" = "الأنفاق";
@@ -1930,13 +1930,14 @@
 "segments_count" = "الجزء %d";
 "track_multiple_segments_select" = "%@ يحتوي على أكثر من جزء. الرجاء تحديد جزء من المسار الذي تريد استخدامه للتنقل.";
 "icon_group_travel" = "سفر";
-"transport" = "نقل";
+"icon_group_transport" = "نقل";
 "icon_group_symbols" = "الرموز";
 "icon_group_sport" = "رياضة";
 "icon_group_special" = "خاص";
-"amenity_type_emergency" = "حالة طوارئ";
+"icon_group_emergency" = "حالة طوارئ";
 "shared_string_square" = "مربع";
 "shared_string_octagon" = "مثمن";
+"transport" = "نقل";
 
 // Shapes
 "shared_string_circle" = "دائرة";
@@ -1962,14 +1963,14 @@
 "searching_gps" = "بحث عن جي بي اس";
 
 // Coordinate widget
-"coordinates_widget" = "عرض الإحداثيات";
+"coordinates_widget_current_location" = "عرض الإحداثيات";
 "coordinates" = "إحداثيات";
 "shared_string_gpx_points" = "النقاط";
 "download_regular_maps" = "الخرائط العادية";
-"quick_action_coordinates_widget_descr" = "زر لإظهار أو إخفاء أداة الإحداثيات على الخريطة.";
-"hide_coordinates" = "إخفاء الإحداثيات";
-"show_coordinates" = "إظهار الإحداثيات";
-"toggle_coordinates" = "إظهار/إخفاء الإحداثيات";
+"quick_action_current_location_widget_descr" = "زر لإظهار أو إخفاء أداة الإحداثيات على الخريطة.";
+"hide_current_location" = "إخفاء الإحداثيات";
+"show_current_location" = "إظهار الإحداثيات";
+"toggle_current_location" = "إظهار/إخفاء الإحداثيات";
 "copied_to_clipboard" = "تم النسخ في الحافظة";
 
 // Resources
@@ -2106,7 +2107,7 @@
 "shared_string_time_span" = "الفترة الزمنية";
 "shared_string_start_time" = "وقت البدء";
 "icon_group_industrial" = "صناعي";
-"amenity_type_education" = "تعليم";
+"icon_group_education" = "تعليم";
 "route_points" = "نقاط الطريق";
 "lang_ar" = "العربية";
 "lang_az" = "الأذربيجانية";
@@ -2832,3 +2833,16 @@
 "rotate_map_none_manually" = "استدارة يدويا (مثبتة)";
 "compass_click_desc" = "اضغط على البوصلة لتبديل وضع اتجاه الخريطة.";
 "rotate_map_none_fixed" = "الشمال لأعلى (مثبت)";
+"map_widget_camera_tilt" = "إمالة الكاميرا";
+"map_widget_zoom_level" = "مستويات التكبير";
+"map_widget_target_distance" = "بعد الهدف";
+"change_language" = "غيَّر اللغة";
+"dont_download" = "لا تقم بالتنزيل";
+"over_wifi_only" = "عبر الواي الفاي فقط";
+"map_widget_camera_distance" = "مسافة الكاميرا";
+"wikipedia_language_settings_descr" = "حدد اللغات التي ستظهر بها مقالات ويكيبيديا على الخريطة. يمكنك التبديل بين أي لغة متاحة أثناء قراءة المقال.";
+"over_any_network" = "عبر أي شبكة";
+"wikivoyage_download_pics" = "تنزيل الصور";
+"download_over_cellular_network" = "هل تريد تنزيل الصور عبر الشبكة الخلوية؟ قد يؤدي هذا إلى تحمل رسوم باهظة.";
+"download_only_now" = "تنزيل الآن فقط";
+"ios_release_4_4" = "• ويكيبيديا: القدرة على عرض الصور، تحديث واجهة مستخدم القارئ\n• المفضلة: إضافة البحث\n• CarPlay: تمت إضافة التاريخ والمسارات المعاد تنظيمها وقائمة المفضلة\n• طرق المشي لمسافات طويلة: إضافة القدرة على تحديد الطرق على الخريطة لعرض معلومات إضافية أو الملاحة\n• خريطة الشارع المفتوح: إضافة القدرة على تحميل المسارات\n• المطالبات الصوتية: دعم إضافي للغات الجديدة: الكاتالونية والأوكرانية والبلغارية والإندونيسية والسلوفينية\n• تمت إضافة تحذير قانوني حول استخدام تنبيهات كاميرا السرعة\n• خصوصية محسنة: تمت إضافة خيارات لتعطيل تسجيل السجل\n• تحسين رؤية مسطرة الخريطة\n• تحسينات واجهة المستخدم للغات RTL\n• إمكانية الوصول: إضافة تسمية المحتوى لأزرار الخريطة\n• تمت إضافة دعم \"النوع الديناميكي\" ، سيتغير حجم النص في أوسماند وفقا لحجم النص في iOS\n• اتجاه الخريطة: تمت إضافة وضع الدوران يدويا\n• يتم زيادة الحد الأدنى لإصدار iOS إلى 15.0\n";

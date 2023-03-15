@@ -951,7 +951,7 @@
 "map_widget_intermediate_time" = "Czas pośredni";
 "show_tunnels" = "Tunele";
 "shared_string_time" = "Czas";
-"map_widget_trip_recording_distance" = "Odległość";
+"shared_string_distance" = "Odległość";
 "icon_group_amenity" = "Udogodnienie";
 "map_magnifier" = "Przybliżenie";
 "text_size" = "Rozmiar tekstu";
@@ -1829,7 +1829,7 @@
 "profile_type_osmand_string" = "Profil OsmAnd";
 "quick_action_remove_next_destination" = "Usuń najbliższy punkt docelowy";
 "map_widget_distance_by_tap" = "Odległość po dotknięciu";
-"amenity_type_emergency" = "Służby ratunkowe";
+"icon_group_emergency" = "Służby ratunkowe";
 "touting_specified_vehicle_parameters_descr" = "Określone parametry pojazdu mogą mieć wpływ na wyznaczanie trasy.";
 "key_hint_recenter_map" = "Wyśrodkuj mapę";
 "visible_categories" = "Widoczne kategorie";
@@ -1837,9 +1837,9 @@
 "add_custom_category" = "Dodaj niestandardową kategorię";
 "searching" = "Szukanie…";
 "unsupported_action_title" = "Nieobsługiwana czynność (%@)";
-"hide_coordinates" = "Ukryj współrzędne";
-"show_coordinates" = "Pokaż współrzędne";
-"toggle_coordinates" = "Pokaż/ukryj widżet współrzędnych";
+"hide_current_location" = "Ukryj współrzędne";
+"show_current_location" = "Pokaż współrzędne";
+"toggle_current_location" = "Pokaż/ukryj widżet współrzędnych";
 
 // Resources
 "shared_string_resources" = "Zasoby";
@@ -1916,7 +1916,7 @@
 "searching_gps" = "Wyszukiwanie GPS";
 
 // Coordinate widget
-"coordinates_widget" = "Widżet współrzędnych";
+"coordinates_widget_current_location" = "Widżet współrzędnych";
 "shared_string_loading" = "Ładowanie…";
 "segments_count" = "Segment %d";
 "select_segment" = "Wybierz segment";
@@ -1939,6 +1939,7 @@
 "start_of_the_track" = "Początek trasy";
 "shared_string_square" = "Kwadrat";
 "track" = "Ślad";
+"icon_group_transport" = "Transport publiczny";
 "transport" = "Transport publiczny";
 "replace_favorite_confirmation" = "Zastąpić ulubione miejsce \"%@\"\?";
 "shared_string_gpx_track" = "Trasa";
@@ -2020,7 +2021,7 @@
 "quick_action_showhide_mapillary_descr" = "Przełącznik służący do pokazywania lub ukrywania warstwy Mapillary na mapie.";
 "quick_action_transport_descr" = "Przycisk do pokazywania i chowania transportu publicznego na mapie.";
 "quick_action_dir_from_descr" = "Naciśnij tę czynność, aby nawigować od środkowego punktu bieżącego ekranu.";
-"quick_action_coordinates_widget_descr" = "Przełącznik służący do pokazywania lub ukrywania widżetu Współrzędne na mapie.";
+"quick_action_current_location_widget_descr" = "Przełącznik służący do pokazywania lub ukrywania widżetu Współrzędne na mapie.";
 "osm_editing_access_descr" = "Możesz wyświetlić wszystkie swoje lokalne edycje i uwagi w %@. Punkty już przesłane nie są wyświetlane w OsmAnd.";
 "plan_route_exit_message" = "Czy na pewno chcesz zamknąć planowanie trasy bez zapisywania? Stracisz wszystkie zmiany.";
 "export_profile_descr" = "Możesz wyeksportować wszystkie ustawienia profilu, skopiować wszystkie ustawienia z innego profilu lub zrestartować wszystkie ustawienia profilu do stanu domyślnego.";
@@ -2117,7 +2118,7 @@
 "routing_attr_only_permitted_ways_name" = "Celowo dozwolone ulice";
 "weather_wind_kilimeters_per_hour" = "Kilometry na godzinę";
 "backup_error_subscription_was_expired_descr" = "Twoja subskrypcja OsmAnd Pro wygasła - odnów ją, aby korzystać z kopii zapasowej. Nadal możesz przywracać dane z chmury.";
-"amenity_type_education" = "Edukacja";
+"icon_group_education" = "Edukacja";
 "upload_to_openstreetmap" = "Prześlij do OpenStreetMap";
 "lang_sk" = "Słowacki";
 "backup_error_no_valid_subscription" = "Brak ważnej subskrypcji";

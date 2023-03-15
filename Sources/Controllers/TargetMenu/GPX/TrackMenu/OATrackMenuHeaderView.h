@@ -53,6 +53,8 @@
 - (void)updateSelectedTab:(EOATrackMenuHudTab)selectedTab;
 - (void)updateHeader:(BOOL)currentTrack
           shownTrack:(BOOL)shownTrack
+      isNetworkRoute:(BOOL)isNetworkRoute
+           routeIcon:(UIImage *)icon
                title:(NSString *)title;
 
 - (void)generateGpxBlockStatistics:(OAGPXTrackAnalysis *)analysis

@@ -962,7 +962,7 @@
 "access_intermediate_arrival_time" = "Milli-komutími";
 "map_widget_intermediate_time" = "Millitími";
 "shared_string_time" = "Tími";
-"map_widget_trip_recording_distance" = "Vegalengd";
+"shared_string_distance" = "Vegalengd";
 "shared_string_milliradians" = "Millíradíanar";
 "angular_units" = "Mælieiningar horna";
 "angular_units_descr" = "Breyttu í hvaða einingum áttarhorn (hæð) er mælt.";
@@ -1948,13 +1948,14 @@
 "select_segment" = "Veldu bút";
 "select_track_to_follow" = "Veldu feril til að fylgja";
 "icon_group_travel" = "Ferðalög";
-"transport" = "Samgöngur";
+"icon_group_transport" = "Samgöngur";
 "icon_group_symbols" = "Tákn";
 "icon_group_sport" = "Íþróttir";
 "icon_group_special" = "Sértákn";
-"amenity_type_emergency" = "Neyðartilfelli";
+"icon_group_emergency" = "Neyðartilfelli";
 "shared_string_square" = "Ferningur";
 "shared_string_octagon" = "Átthyrningur";
+"transport" = "Samgöngur";
 
 // Shapes
 "shared_string_circle" = "Hringur";
@@ -1977,15 +1978,15 @@
 "available_groups" = "Tiltækir hópar";
 "select_group_descr" = "Veldu hóp eða bættu við nýjum";
 "fav_add_new_group" = "Bæta við nýjum hópi";
-"quick_action_coordinates_widget_descr" = "Víxlhnappur til að birta eða fela hnitaglugga á kortinu.";
-"hide_coordinates" = "Fela hnit";
-"show_coordinates" = "Birta hnit";
-"toggle_coordinates" = "Birta/fela viðmót hnita";
+"quick_action_current_location_widget_descr" = "Víxlhnappur til að birta eða fela hnitaglugga á kortinu.";
+"hide_current_location" = "Fela hnit";
+"show_current_location" = "Birta hnit";
+"toggle_current_location" = "Birta/fela viðmót hnita";
 "copied_to_clipboard" = "Afritað á klippispjald";
 "searching_gps" = "Leita að GPS";
 
 // Coordinate widget
-"coordinates_widget" = "Viðmótshluti fyrir hnit";
+"coordinates_widget_current_location" = "Viðmótshluti fyrir hnit";
 "coordinates" = "Hnit";
 "markers_history" = "Ferill kortamerkja";
 "shared_string_gpx_points" = "Punktar";
@@ -2098,7 +2099,7 @@
 "edit_track" = "Breyta ferli";
 "gpx_split_interval_none_descr" = "Veldu hvernigþú vilt skipta upp: eftir tíma eða vegalengd.";
 "shared_string_custom" = "Sérsniðið";
-"amenity_type_education" = "Menntun";
+"icon_group_education" = "Menntun";
 "distance_moving" = "Leiðrétt fjarlægð";
 "gpx_direction_arrows" = "Stefnuörvar";
 "delete_waypoints" = "Eyða ferilpunktum";

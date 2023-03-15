@@ -163,7 +163,8 @@
 #define routeLineWidthKey @"routeLineWidth"
 #define routeShowTurnArrowsKey @"routeShowTurnArrows"
 #define showCompassControlRulerKey @"showCompassRuler"
-#define showCoordinatesWidgetKey @"showCoordinatesWidget"
+#define showCurrentLocationCoordinatesWidgetKey @"showCoordinatesWidget"
+#define showMapCenterWidgetKey @"showMapCenterWidget"
 
 #define showRoutingAlarmsKey @"showRoutingAlarms"
 #define showTrafficWarningsKey @"showTrafficWarnings"
@@ -3854,14 +3855,16 @@
         _showIntermediateArrivalTime = [OACommonBoolean withKey:showIntermediateArrivalTimeKey defValue:YES];
         _showRelativeBearing = [OACommonBoolean withKey:showRelativeBearingKey defValue:YES];
         _showCompassControlRuler = [[[OACommonBoolean withKey:showCompassControlRulerKey defValue:YES] makeGlobal] makeShared];
-        _showCoordinatesWidget = [OACommonBoolean withKey:showCoordinatesWidgetKey defValue:NO];
+        _showCurrentLocationCoordinatesWidget = [OACommonBoolean withKey:showCurrentLocationCoordinatesWidgetKey defValue:NO];
+        _showMapCenterCoordinatesWidget = [OACommonBoolean withKey:showMapCenterWidgetKey defValue:NO];
 
         [_profilePreferences setObject:_showArrivalTime forKey:@"show_arrival_time"];
         [_profilePreferences setObject:_showIntermediateArrivalTime forKey:@"show_intermediate_arrival_time"];
         [_profilePreferences setObject:_showRelativeBearing forKey:@"show_relative_bearing"];
         [_globalPreferences setObject:_showCompassControlRuler forKey:@"show_compass_ruler"];
 
-        [_profilePreferences setObject:_showCoordinatesWidget forKey:@"show_coordinates_widget"];
+        [_profilePreferences setObject:_showCurrentLocationCoordinatesWidget forKey:@"show_coordinates_widget"];
+        [_profilePreferences setObject:_showMapCenterCoordinatesWidget forKey:@"show_map_center_coordinates_widget"];
 
         _positionPlacementOnMap = [OACommonInteger withKey:positionPlacementOnMapKey defValue:EOAPositionPlacementAuto];
         [_profilePreferences setObject:_positionPlacementOnMap forKey:@"position_placement_on_map"];

@@ -1660,6 +1660,7 @@ static const NSInteger _buttonsCount = 4;
             }
             else if (typeStr)
             {
+                typeStr = [NSString stringWithFormat:@"%@: %@", typeStr, OALocalizedString(@"no_address_found")];
                 [attributedStr appendAttributedString:[[NSAttributedString alloc] initWithString:typeStr]];
                 [attributedStr addAttribute:NSFontAttributeName value:[UIFont scaledSystemFontOfSize:15.0 weight:UIFontWeightSemibold] range:NSMakeRange(0, attributedStr.length)];
             }

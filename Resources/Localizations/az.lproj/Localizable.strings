@@ -2199,15 +2199,16 @@
 
 //Icon categories
 "icon_group_amenity" = "Amenity";
-"amenity_type_emergency" = "Təcili";
+"icon_group_emergency" = "Təcili";
 "icon_group_special" = "Xüsusi";
 "icon_group_sport" = "İdman";
 "icon_group_symbols" = "Simvollar";
-"transport" = "Nəqliyyat";
+"icon_group_transport" = "Nəqliyyat";
 "icon_group_travel" = "Səyahət";
 "icon_group_nautical" = "Nautical";
 "icon_group_industrial" = "Industrial";
-"amenity_type_education" = "Təhsil";
+"icon_group_education" = "Təhsil";
+"transport" = "Nəqliyyat";
 "settings_item_read_error" = "Could not read %@.";
 "app_mode_default" = "Xəritəyə baxış";
 "app_mode_car" = "Avtomobil";

@@ -2209,15 +2209,16 @@
 
 //Icon categories
 "icon_group_amenity" = "שירות לציבור";
-"amenity_type_emergency" = "חירום";
+"icon_group_emergency" = "חירום";
 "icon_group_special" = "מיוחד";
 "icon_group_sport" = "ספורט";
 "icon_group_symbols" = "סמלים";
-"transport" = "תחבורה";
+"icon_group_transport" = "תחבורה";
 "icon_group_travel" = "טיול";
 "icon_group_nautical" = "ימי";
 "icon_group_industrial" = "תעשייתי";
-"amenity_type_education" = "חינוך";
+"icon_group_education" = "חינוך";
+"transport" = "תחבורה";
 "settings_item_read_error" = "לא ניתן לקרוא מתוך ‚%@’.";
 "app_mode_default" = "עיון במפה";
 "app_mode_car" = "נהיגה";

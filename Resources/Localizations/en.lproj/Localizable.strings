@@ -2602,18 +2602,19 @@
 "routing_attr_motor_type_gas_name" = "CNG";
 "routing_attr_motor_type_electric_name" = "Electric";
 "routing_attr_motor_type_hybrid_name" = "Hybrid";
+"transport" = "Transport";
 
 //Icon categories
 "icon_group_amenity" = "Amenity";
-"amenity_type_emergency" = "Emergency";
+"icon_group_emergency" = "Emergency";
 "icon_group_special" = "Special";
 "icon_group_sport" = "Sport";
 "icon_group_symbols" = "Symbols";
-"transport" = "Transport";
+"icon_group_transport" = "Transport";
 "icon_group_travel" = "Travel";
 "icon_group_nautical" = "Nautical";
 "icon_group_industrial" = "Industrial";
-"amenity_type_education" = "Education";
+"icon_group_education" = "Education";
 
 "settings_item_read_error" = "Could not read from \'%@\'.";
 "app_mode_default" = "Browse map";

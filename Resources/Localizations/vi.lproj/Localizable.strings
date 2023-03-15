@@ -2190,15 +2190,16 @@
 
 //Icon categories
 "icon_group_amenity" = "Amenity";
-"amenity_type_emergency" = "Khẩn cấp";
+"icon_group_emergency" = "Khẩn cấp";
 "icon_group_special" = "Special";
 "icon_group_sport" = "Thể thao";
 "icon_group_symbols" = "Symbols";
-"transport" = "Giao thông";
+"icon_group_transport" = "Giao thông";
 "icon_group_travel" = "Travel";
 "icon_group_nautical" = "Nautical";
 "icon_group_industrial" = "Industrial";
-"amenity_type_education" = "Giáo dục";
+"icon_group_education" = "Giáo dục";
+"transport" = "Giao thông";
 "settings_item_read_error" = "Could not read %@.";
 "app_mode_default" = "Mặc định";
 "app_mode_car" = "Ô tô";

@@ -1495,13 +1495,14 @@
 "favorite_group_name" = "Groepsnaam";
 "shared_string_square" = "Vierkant";
 "transport" = "Openbaar Vervoer";
+"icon_group_transport" = "Openbaar Vervoer";
 "icon_group_travel" = "Reizen";
 "shared_string_import" = "Importeren";
 "shared_string_icon" = "Icoon";
 "shared_string_disable" = "Schakel uit";
 "change_folder" = "Map wijzigen";
 "plan_route_split_after" = "Hierna splitsen";
-"amenity_type_emergency" = "Noodgevallen";
+"icon_group_emergency" = "Noodgevallen";
 "start_of_the_track" = "Begin van de track";
 "icon_group_special" = "Speciaal";
 "shared_string_search_history" = "Zoekgeschiedenis";
@@ -1671,7 +1672,7 @@
 "lang_cy" = "Welsh";
 "backup_error_gzip_only_supported_upload" = "Het bestand moet verzonden worden in het .gzip formaat";
 "lang_sq" = "Albanees";
-"amenity_type_education" = "Onderwijs";
+"icon_group_education" = "Onderwijs";
 "lang_vi" = "Vietnamees";
 "lang_es_ar" = "Spaans (Argentinië)";
 "lang_ce" = "Tsjetsjeens";

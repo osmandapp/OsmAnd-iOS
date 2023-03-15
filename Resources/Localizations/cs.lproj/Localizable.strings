@@ -1921,7 +1921,7 @@
 "icon_group_symbols" = "Symboly";
 "icon_group_sport" = "Sport";
 "icon_group_special" = "Speciální";
-"amenity_type_emergency" = "Pomoc v nouzi";
+"icon_group_emergency" = "Pomoc v nouzi";
 "search_poi_types_descr" = "Zkombinujte body zájmu různých kategorií. Klepnutím na přepínač vyberete všechny, klepnutím na levou stranu vyberete kategorie.";
 "reset_to_default_category_button_promo" = "\"Obnovit do základního nastavení\" nastaví výchozí pořadí.";
 "create_custom_categories_list_promo" = "Změňte pořadí seznamu a skryjte kategorie. Importujte a exportujte všechny změny jako profily.";
@@ -1963,6 +1963,7 @@
 "fav_add_new_group" = "Přidat novou skupinu";
 "shared_string_search_history" = "Historie vyhledávání";
 "fav_points_not_exist" = "Žádná Oblíbená místa nejsou zadána";
+"icon_group_transport" = "Doprava";
 "transport" = "Doprava";
 "shared_string_others" = "Ostatní";
 "favorite_places_category" = "Místa";
@@ -2094,7 +2095,7 @@
 "shared_string_end_time" = "Čas příjezdu";
 "shared_string_time_moving" = "Doba pohybu";
 "icon_group_industrial" = "Průmysl";
-"amenity_type_education" = "Školství";
+"icon_group_education" = "Školství";
 "route_points" = "Body trasy";
 "connect_rp" = "Spojit body trasy";
 "lang_als" = "Toskičtina";

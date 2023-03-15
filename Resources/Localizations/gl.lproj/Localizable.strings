@@ -1463,6 +1463,7 @@
 "favorite_places_category" = "Lugares";
 "add_custom_category" = "Engadir categoría personalizada";
 "simplified_track" = "Pista simplificada";
+"icon_group_transport" = "Transporte";
 "transport" = "Transporte";
 "shared_string_disable" = "Desactivar";
 "extra_maps_menu_group" = "Mapas adicionais";
@@ -1484,7 +1485,7 @@
 "hide_compass_ruler" = "Agochar a regra de compás";
 "street_level_imagery" = "Imaxes a nivel de rúa";
 "fav_point_dublicate" = "Favorito especificado con nome duplicado";
-"amenity_type_emergency" = "Urxencias";
+"icon_group_emergency" = "Urxencias";
 "custom_osmand_plugin" = "Plugin personalizado do OsmAnd";
 "change_folder" = "Mudar cartafol";
 "shared_string_others" = "Outros";
@@ -1662,7 +1663,7 @@
 "lang_mg" = "Malgaxe";
 "user_login" = "Iniciar sesión";
 "lang_oc" = "Occitano";
-"amenity_type_education" = "Educación";
+"icon_group_education" = "Educación";
 "lang_pms" = "Piamontés";
 "lang_de" = "Alemán";
 "lang_yo" = "Ioruba";

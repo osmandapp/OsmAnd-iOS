@@ -1929,11 +1929,12 @@
 "desert" = "砂漠";
 "settings_item_read_error" = "\'%@\'から読み込めませんでした。";
 "icon_group_travel" = "旅行";
-"transport" = "交通";
+"icon_group_transport" = "交通";
 "icon_group_symbols" = "記号";
 "icon_group_special" = "特別";
 "icon_group_sport" = "スポーツ";
-"amenity_type_emergency" = "救急";
+"icon_group_emergency" = "救急";
+"transport" = "交通";
 "key_hint_recenter_map" = "マップを中央に再配置";
 "shared_z_a" = "降順(Z～A)";
 "shared_a_z" = "昇順(A～Z)";
@@ -2064,7 +2065,7 @@
 "duplicate_track" = "経路を複製";
 "icon_group_industrial" = "産業・工業";
 "dialogs_and_notifications_descr" = "ポップアップ、ダイアログ、通知の制御";
-"amenity_type_education" = "教育";
+"icon_group_education" = "教育";
 "analyze_on_map" = "分析をマップ上で閲覧";
 "gpx_split_interval" = "区間を分割";
 "shared_string_start_time" = "開始時刻";

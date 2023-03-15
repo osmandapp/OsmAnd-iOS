@@ -2319,15 +2319,16 @@
 
 //Icon categories
 "icon_group_amenity" = "Amenity";
-"amenity_type_emergency" = "Արտակարգ իրավիճակների ծառայություններ";
+"icon_group_emergency" = "Արտակարգ իրավիճակների ծառայություններ";
 "icon_group_special" = "Special";
 "icon_group_sport" = "Սպորտ";
 "icon_group_symbols" = "Symbols";
-"transport" = "Տրանսպորտ";
+"icon_group_transport" = "Տրանսպորտ";
 "icon_group_travel" = "Travel";
 "icon_group_nautical" = "Ծովային";
 "icon_group_industrial" = "Industrial";
-"amenity_type_education" = "Կրթություն";
+"icon_group_education" = "Կրթություն";
+"transport" = "Տրանսպորտ";
 
 "settings_item_read_error" = "Անհնար է կարդալ «%@»։";
 "app_mode_default" = "Դիտել քարտեզը";

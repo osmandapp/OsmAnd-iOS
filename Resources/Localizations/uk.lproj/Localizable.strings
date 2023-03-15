@@ -1932,12 +1932,13 @@
 "track_multiple_segments_select" = "%@ має кілька відрізків. Виберіть частину треку, яку слід використовувати для навігації.";
 "select_segment" = "Вибрати відрізок";
 "select_track_to_follow" = "Виберіть файл треку для слідування";
+"icon_group_transport" = "Транспорт";
 "transport" = "Транспорт";
 "icon_group_travel" = "Подорож";
 "icon_group_symbols" = "Знаки";
 "icon_group_sport" = "Спорт";
 "icon_group_special" = "Спеціальні";
-"amenity_type_emergency" = "Екстрені служби";
+"icon_group_emergency" = "Екстрені служби";
 "shared_string_square" = "Квадрат";
 "shared_string_octagon" = "Восьмикутник";
 
@@ -2110,7 +2111,7 @@
 "distance_moving" = "Скоригована відстань";
 "parked_at" = "початок стоянки";
 "icon_group_industrial" = "Промисловість";
-"amenity_type_education" = "Освіта";
+"icon_group_education" = "Освіта";
 "route_points" = "Точки маршруту";
 "connect_rp" = "З’єднати точки маршруту";
 "lang_al" = "Албанська";

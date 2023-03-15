@@ -2190,15 +2190,16 @@
 
 //Icon categories
 "icon_group_amenity" = "Пријатност";
-"amenity_type_emergency" = "Хитна помоћ";
+"icon_group_emergency" = "Хитна помоћ";
 "icon_group_special" = "Нарочита";
 "icon_group_sport" = "Спорт";
 "icon_group_symbols" = "Знамења";
-"transport" = "Превоз";
+"icon_group_transport" = "Превоз";
 "icon_group_travel" = "Путовање";
 "icon_group_nautical" = "Поморска";
 "icon_group_industrial" = "Индустрија";
-"amenity_type_education" = "Образовање";
+"icon_group_education" = "Образовање";
+"transport" = "Превоз";
 "settings_item_read_error" = "Не могу да читам из „%@”.";
 "app_mode_default" = "Преглед карте";
 "app_mode_car" = "Вожња";

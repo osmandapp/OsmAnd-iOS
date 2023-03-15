@@ -2186,15 +2186,16 @@
 
 //Icon categories
 "icon_group_amenity" = "bekvämligheter";
-"amenity_type_emergency" = "Nödsituationer";
+"icon_group_emergency" = "Nödsituationer";
 "icon_group_special" = "Speciell";
 "icon_group_sport" = "Idrott";
 "icon_group_symbols" = "Symboler";
-"transport" = "Transporter";
+"icon_group_transport" = "Transporter";
 "icon_group_travel" = "Resa";
 "icon_group_nautical" = "Nautiska";
 "icon_group_industrial" = "Industriell";
-"amenity_type_education" = "Utbildning";
+"icon_group_education" = "Utbildning";
+"transport" = "Transporter";
 "settings_item_read_error" = "Kunde inte läsa från %@.";
 "app_mode_default" = "Titta på kartan";
 "app_mode_car" = "Fordonskörning";

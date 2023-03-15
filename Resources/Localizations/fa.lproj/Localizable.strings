@@ -1467,6 +1467,7 @@
 "access_default_color" = "رنگ پیش‌فرض";
 "fav_point_dublicate" = "نام علاقه‌مندی تکراری است";
 "coordinates" = "مختصات";
+"icon_group_transport" = "حمل‌ونقل";
 "transport" = "حمل‌ونقل";
 "shared_string_disable" = "غیرفعال";
 "shared_string_search_history" = "تاریخچهٔ جست‌وجو";
@@ -1502,7 +1503,7 @@
 "replace_favorite_confirmation" = "آیا «%@» علاقه‌مندی جانشین شود؟";
 "shared_string_others" = "دیگر";
 "add_custom_category" = "افزودن دستهٔ سفارشی";
-"amenity_type_emergency" = "اورژانس";
+"icon_group_emergency" = "اورژانس";
 "copied_to_clipboard" = "کپی شد";
 "osmand_live" = "OsmAnd Live";
 "searching_gps" = "در حال جست‌وجوی GPS‏";
@@ -1808,7 +1809,7 @@
 "lang_al" = "آلبانیایی";
 "cloud_email_not_registered" = "این نشانی ایمیل برای ابر OsmAnd ثبت نشده است";
 "lang_lmo" = "لومبارد";
-"amenity_type_education" = "آموزشی";
+"icon_group_education" = "آموزشی";
 "lang_war" = "وینارایی";
 "lang_af" = "آفریقایی";
 "lang_pms" = "پیدمونتی";

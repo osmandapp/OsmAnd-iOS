@@ -1626,7 +1626,7 @@
 "recalculate_route" = "ルートの再計算";
 "routing_profile_straightline" = "直線";
 "routing_profile_ski" = "スキー";
-"base_profile_descr_public_transport" = "公共交通機関の類い";
+"base_profile_descr_public_transport" = "定期運行している鉄道やバスなど";
 "routing_profile_direct_to" = "直接指示";
 "osmand_default_routing" = "OsmAndルーティング";
 "select_nav_profile_dialog_message" = "\'ナビゲーションタイプ\'では、利用可能なオフラインおよびオンラインルーティングエンジンの中から、ルートの計算方法を選択します。";
@@ -2226,7 +2226,7 @@
 "weather_wind_kilimeters_per_hour" = "毎時メートル";
 "backup_error_subscription_was_expired_descr" = "OsmAnd Proのサブスクリプション期限が切れているので、データのバックアップを継続利用するのであれば更新してください。引き続きクラウドからデータを復元できるようになります。";
 "register_opr_have_account" = "私はすでにアカウントを持っています";
-"save_heading" = "見出しを含める";
+"save_heading" = "方向も保存する";
 "last_backup" = "最終バックアップ";
 "backup_error_token_is_not_valid_or_expired" = "無効または期限切れのトークン";
 "routing_attr_prefer_horse_routes_description" = "馬が通れるルートを優先します";
@@ -2438,7 +2438,7 @@
 "pro_features" = "Pro版専用機能";
 "shared_string_selected" = "選択済み";
 "srtm_unit_format" = "等高線ユニットバリアント";
-"save_heading_descr" = "記録中の各トラックポイントに見出しも保存します。";
+"save_heading_descr" = "記録中の各経路地点でのその時の向きも保存します。";
 "no_purchases" = "購入済みのアイテムはありません";
 "osmand_cloud_create_account_descr" = "メールアドレスを入力してください。ワンタイムパスワードが送信されます。\n手続きを進めるとすべてのデータがリンクされます。";
 "service_is_not_available_please_try_later" = "サービスは利用できません。後ほどもう一度やり直してください。";
@@ -2550,7 +2550,7 @@
 "transport_hazmat_no_desc" = "道路やトンネルは、危険物の輸送が制限される場合があります。";
 "shared_string_cross_buy" = "クロスバイ";
 "routing_attr_avoid_highway_description" = "高速道路を避ける";
-"rendering_attr_showTrainRoutes_name" = "列車路線";
+"rendering_attr_showTrainRoutes_name" = "鉄道路線";
 "routing_attr_difficulty_preference_no_preference_name" = "指定なし";
 "rendering_attr_horse_scale_impossible_name" = "Impossible(命の危険あり)";
 "routing_attr_freeride_policy_only_if_necessary_name" = "必要な場合のみ";

@@ -46,18 +46,19 @@ static OAApplicationMode *_PEDESTRIAN;
 static OAApplicationMode *_AIRCRAFT;
 static OAApplicationMode *_TRUCK;
 static OAApplicationMode *_MOTORCYCLE;
+static OAApplicationMode *_MOPED;
 static OAApplicationMode *_BOAT;
 static OAApplicationMode *_SKI;
 static OAApplicationMode *_HORSE;
 
 + (void)initRegVisibility
 {
-    NSArray<OAApplicationMode *> *exceptDefault = @[_CAR, _BICYCLE, _PEDESTRIAN, _PUBLIC_TRANSPORT, _BOAT, _AIRCRAFT, _SKI, _TRUCK, _MOTORCYCLE, _HORSE];
+    NSArray<OAApplicationMode *> *exceptDefault = @[_CAR, _BICYCLE, _PEDESTRIAN, _PUBLIC_TRANSPORT, _BOAT, _AIRCRAFT, _SKI, _TRUCK, _MOTORCYCLE, _MOPED, _HORSE];
     
     NSArray<OAApplicationMode *> *all = nil;
     NSArray<OAApplicationMode *> *none = @[];
     
-    NSArray<OAApplicationMode *> *navigationSet1 = @[_CAR, _BICYCLE, _BOAT, _SKI, _TRUCK, _MOTORCYCLE, _HORSE];
+    NSArray<OAApplicationMode *> *navigationSet1 = @[_CAR, _BICYCLE, _BOAT, _SKI, _TRUCK, _MOTORCYCLE, _MOPED, _HORSE];
     NSArray<OAApplicationMode *> *navigationSet2 = @[_PEDESTRIAN, _PUBLIC_TRANSPORT, _AIRCRAFT];
     
     // left
@@ -73,8 +74,8 @@ static OAApplicationMode *_HORSE;
     [self regWidgetVisibility:@"distance" am:all];
     [self regWidgetVisibility:@"time" am:all];
     [self regWidgetVisibility:@"intermediate_time" am:all];
-    [self regWidgetVisibility:@"speed" am:@[_CAR, _BICYCLE, _BOAT, _SKI, _PUBLIC_TRANSPORT, _AIRCRAFT, _TRUCK, _MOTORCYCLE, _HORSE]];
-    [self regWidgetVisibility:@"max_speed" am:@[_CAR, _TRUCK, _MOTORCYCLE]];
+    [self regWidgetVisibility:@"speed" am:@[_CAR, _BICYCLE, _BOAT, _SKI, _PUBLIC_TRANSPORT, _AIRCRAFT, _TRUCK, _MOTORCYCLE, _MOPED, _HORSE]];
+    [self regWidgetVisibility:@"max_speed" am:@[_CAR, _TRUCK, _MOTORCYCLE, _MOPED]];
     [self regWidgetVisibility:@"altitude" am:@[_PEDESTRIAN, _BICYCLE]];
     [self regWidgetVisibility:@"gps_info" am:none];
     
@@ -138,6 +139,10 @@ static OAApplicationMode *_HORSE;
     _MOTORCYCLE.descr = OALocalizedString(@"app_mode_motorcycle");
     [_MOTORCYCLE reg];
     
+    _MOPED = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_moped") stringKey:@"moped"];
+    _MOPED.descr = OALocalizedString(@"app_mode_bicycle");
+    [_MOPED reg];
+
     _BOAT = [[OAApplicationMode alloc] initWithName:OALocalizedString(@"app_mode_boat") stringKey:@"boat"];
     _BOAT.descr = OALocalizedString(@"base_profile_descr_boat");
     [_BOAT reg];
@@ -190,6 +195,11 @@ static OAApplicationMode *_HORSE;
 + (OAApplicationMode *) MOTORCYCLE;
 {
     return _MOTORCYCLE;
+}
+
++ (OAApplicationMode *) MOPED;
+{
+    return _MOPED;
 }
 
 + (OAApplicationMode *) BOAT;
@@ -608,6 +618,7 @@ static OAApplicationMode *_HORSE;
     // OAAppSetttings.init() -> OAApplicationMode.init() -> OAAppSetttings.init() -> OAApplicationMode...
     [_TRUCK setParent:_CAR];
     [_MOTORCYCLE setParent:_CAR];
+    [_MOPED setParent:_BICYCLE];
 }
 
 + (void) initModesParams
@@ -619,6 +630,8 @@ static OAApplicationMode *_HORSE;
             [_TRUCK setOrder:_PEDESTRIAN.getOrder + 1];
         if (![settings.appModeOrder isSetForMode:_MOTORCYCLE])
             [_MOTORCYCLE setOrder:_PEDESTRIAN.getOrder + 1];
+        if (![settings.appModeOrder isSetForMode:_MOPED])
+            [_MOPED setOrder:_MOTORCYCLE.getOrder + 1];
     }
     if ([settings.appModeOrder isSetForMode:_SKI] && ![settings.appModeOrder isSetForMode:_HORSE])
         [_HORSE setOrder:_SKI.getOrder + 1];

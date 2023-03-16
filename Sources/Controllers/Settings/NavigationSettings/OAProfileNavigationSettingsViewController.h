@@ -9,7 +9,7 @@
 #import "OABaseSettingsViewController.h"
 
 @class OAApplicationMode;
-@class OARoutingProfileDataObject;
+@class OARoutingDataObject;
 
 @interface OAProfileNavigationSettingsViewController : OABaseSettingsViewController
 

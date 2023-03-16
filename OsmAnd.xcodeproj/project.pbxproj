@@ -753,6 +753,11 @@
 		46C49509291E57DA005A9D70 /* OANauticalDepthParametersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46C49508291E57DA005A9D70 /* OANauticalDepthParametersViewController.m */; };
 		46C7647728DC7BAA002DB43E /* OASimpleTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46C7647628DC7BAA002DB43E /* OASimpleTableViewCell.xib */; };
 		46C78C0A28BD16A30019FF69 /* OAStorageStateValuesCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46C78C0928BD16A30019FF69 /* OAStorageStateValuesCell.xib */; };
+		46D38A9429C38E10000AAE0C /* OARoutingProfilesHolder.m in Sources */ = {isa = PBXBuildFile; fileRef = 46D38A9329C38DD0000AAE0C /* OARoutingProfilesHolder.m */; };
+		46D38A9929C39545000AAE0C /* OARoutingDataObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 46D38A9829C39509000AAE0C /* OARoutingDataObject.m */; };
+		46D38A9C29C398E1000AAE0C /* OARoutingDataUtils.mm in Sources */ = {isa = PBXBuildFile; fileRef = 46D38A9B29C3983E000AAE0C /* OARoutingDataUtils.mm */; };
+		46D38A9F29C39B0F000AAE0C /* OAProfilesGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 46D38A9E29C39AE8000AAE0C /* OAProfilesGroup.m */; };
+		46D38AA229C39D7C000AAE0C /* OARoutingFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 46D38AA129C39D42000AAE0C /* OARoutingFile.m */; };
 		46D6CF4A2844F736007A43F9 /* OAPurchaseDetailsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46D6CF492844F736007A43F9 /* OAPurchaseDetailsViewController.xib */; };
 		46D6CF4C28452F5D007A43F9 /* OATitleDescriptionBigIconCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46D6CF4B28452F5D007A43F9 /* OATitleDescriptionBigIconCell.xib */; };
 		46DC808629B8898700C477C3 /* OADownloadMode.mm in Sources */ = {isa = PBXBuildFile; fileRef = 46DC808529B8889200C477C3 /* OADownloadMode.mm */; };
@@ -2180,7 +2185,7 @@
 		DA5A81EC26C563A700F274C7 /* OARendererRegistry.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7ACF26C563A100F274C7 /* OARendererRegistry.mm */; };
 		DA5A81ED26C563A700F274C7 /* OAProfileIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7AD326C563A100F274C7 /* OAProfileIcon.m */; };
 		DA5A81EE26C563A700F274C7 /* OANavigationIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7AD526C563A100F274C7 /* OANavigationIcon.m */; };
-		DA5A81EF26C563A700F274C7 /* OAProfileDataUtils.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7AD626C563A100F274C7 /* OAProfileDataUtils.mm */; };
+		DA5A81EF26C563A700F274C7 /* OAProfileDataUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7AD626C563A100F274C7 /* OAProfileDataUtils.m */; };
 		DA5A81F026C563A700F274C7 /* OALocationIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7AD726C563A100F274C7 /* OALocationIcon.m */; };
 		DA5A81F126C563A700F274C7 /* OAProfileIconColor.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7AD826C563A100F274C7 /* OAProfileIconColor.m */; };
 		DA5A81F226C563A700F274C7 /* OALaunchScreenViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = DA5A7AE126C563A100F274C7 /* OALaunchScreenViewController.xib */; };
@@ -4278,6 +4283,16 @@
 		46C49508291E57DA005A9D70 /* OANauticalDepthParametersViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OANauticalDepthParametersViewController.m; sourceTree = "<group>"; };
 		46C7647628DC7BAA002DB43E /* OASimpleTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OASimpleTableViewCell.xib; sourceTree = "<group>"; };
 		46C78C0928BD16A30019FF69 /* OAStorageStateValuesCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAStorageStateValuesCell.xib; sourceTree = "<group>"; };
+		46D38A9229C38DC0000AAE0C /* OARoutingProfilesHolder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OARoutingProfilesHolder.h; sourceTree = "<group>"; };
+		46D38A9329C38DD0000AAE0C /* OARoutingProfilesHolder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OARoutingProfilesHolder.m; sourceTree = "<group>"; };
+		46D38A9629C394EC000AAE0C /* OARoutingDataObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OARoutingDataObject.h; sourceTree = "<group>"; };
+		46D38A9829C39509000AAE0C /* OARoutingDataObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OARoutingDataObject.m; sourceTree = "<group>"; };
+		46D38A9A29C39832000AAE0C /* OARoutingDataUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OARoutingDataUtils.h; sourceTree = "<group>"; };
+		46D38A9B29C3983E000AAE0C /* OARoutingDataUtils.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OARoutingDataUtils.mm; sourceTree = "<group>"; };
+		46D38A9D29C39AD3000AAE0C /* OAProfilesGroup.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAProfilesGroup.h; sourceTree = "<group>"; };
+		46D38A9E29C39AE8000AAE0C /* OAProfilesGroup.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAProfilesGroup.m; sourceTree = "<group>"; };
+		46D38AA029C39D36000AAE0C /* OARoutingFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OARoutingFile.h; sourceTree = "<group>"; };
+		46D38AA129C39D42000AAE0C /* OARoutingFile.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OARoutingFile.m; sourceTree = "<group>"; };
 		46D6CF492844F736007A43F9 /* OAPurchaseDetailsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAPurchaseDetailsViewController.xib; sourceTree = "<group>"; };
 		46D6CF4B28452F5D007A43F9 /* OATitleDescriptionBigIconCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OATitleDescriptionBigIconCell.xib; sourceTree = "<group>"; };
 		46DC808429B8887600C477C3 /* OADownloadMode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OADownloadMode.h; sourceTree = "<group>"; };
@@ -6113,7 +6128,7 @@
 		DA5A7AD326C563A100F274C7 /* OAProfileIcon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAProfileIcon.m; sourceTree = "<group>"; };
 		DA5A7AD426C563A100F274C7 /* OAProfileIconColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAProfileIconColor.h; sourceTree = "<group>"; };
 		DA5A7AD526C563A100F274C7 /* OANavigationIcon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OANavigationIcon.m; sourceTree = "<group>"; };
-		DA5A7AD626C563A100F274C7 /* OAProfileDataUtils.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAProfileDataUtils.mm; sourceTree = "<group>"; };
+		DA5A7AD626C563A100F274C7 /* OAProfileDataUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAProfileDataUtils.m; sourceTree = "<group>"; };
 		DA5A7AD726C563A100F274C7 /* OALocationIcon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OALocationIcon.m; sourceTree = "<group>"; };
 		DA5A7AD826C563A100F274C7 /* OAProfileIconColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAProfileIconColor.m; sourceTree = "<group>"; };
 		DA5A7AD926C563A100F274C7 /* OAProfileIcon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAProfileIcon.h; sourceTree = "<group>"; };
@@ -9637,6 +9652,27 @@
 			path = Weather;
 			sourceTree = "<group>";
 		};
+		46D38A9529C394C4000AAE0C /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				DA5A7B0E26C563A100F274C7 /* OAProfileDataObject.h */,
+				DA5A7B6D26C563A100F274C7 /* OAProfileDataObject.m */,
+				DA5A7ADA26C563A100F274C7 /* OAProfileDataUtils.h */,
+				DA5A7AD626C563A100F274C7 /* OAProfileDataUtils.m */,
+				46D38A9D29C39AD3000AAE0C /* OAProfilesGroup.h */,
+				46D38A9E29C39AE8000AAE0C /* OAProfilesGroup.m */,
+				46D38A9629C394EC000AAE0C /* OARoutingDataObject.h */,
+				46D38A9829C39509000AAE0C /* OARoutingDataObject.m */,
+				46D38A9A29C39832000AAE0C /* OARoutingDataUtils.h */,
+				46D38A9B29C3983E000AAE0C /* OARoutingDataUtils.mm */,
+				46D38AA029C39D36000AAE0C /* OARoutingFile.h */,
+				46D38AA129C39D42000AAE0C /* OARoutingFile.m */,
+				46D38A9229C38DC0000AAE0C /* OARoutingProfilesHolder.h */,
+				46D38A9329C38DD0000AAE0C /* OARoutingProfilesHolder.m */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
 		46DC808329B8884F00C477C3 /* Enums */ = {
 			isa = PBXGroup;
 			children = (
@@ -11413,12 +11449,11 @@
 		DA5A7AD126C563A100F274C7 /* Profiles */ = {
 			isa = PBXGroup;
 			children = (
+				46D38A9529C394C4000AAE0C /* Data */,
 				DA5A7AD226C563A100F274C7 /* OALocationIcon.h */,
 				DA5A7AD726C563A100F274C7 /* OALocationIcon.m */,
 				DA5A7ADB26C563A100F274C7 /* OANavigationIcon.h */,
 				DA5A7AD526C563A100F274C7 /* OANavigationIcon.m */,
-				DA5A7ADA26C563A100F274C7 /* OAProfileDataUtils.h */,
-				DA5A7AD626C563A100F274C7 /* OAProfileDataUtils.mm */,
 				DA5A7AD926C563A100F274C7 /* OAProfileIcon.h */,
 				DA5A7AD326C563A100F274C7 /* OAProfileIcon.m */,
 				DA5A7AD426C563A100F274C7 /* OAProfileIconColor.h */,
@@ -11537,8 +11572,6 @@
 				DA5A7BA426C563A100F274C7 /* OAProfileAppearanceViewController.h */,
 				DA5A7BA626C563A100F274C7 /* OAProfileAppearanceViewController.mm */,
 				DA5A7B1326C563A100F274C7 /* OAProfileAppearanceViewController.xib */,
-				DA5A7B0E26C563A100F274C7 /* OAProfileDataObject.h */,
-				DA5A7B6D26C563A100F274C7 /* OAProfileDataObject.m */,
 				DA5A7BA126C563A100F274C7 /* OARearrangeProfilesViewController.h */,
 				DA5A7B1426C563A100F274C7 /* OARearrangeProfilesViewController.m */,
 				DA5A7B0F26C563A100F274C7 /* OARearrangeProfilesViewController.xib */,
@@ -16415,6 +16448,7 @@
 				DA5A824926C563A700F274C7 /* OAAutoCenterMapViewController.m in Sources */,
 				DA5A855F26C563A900F274C7 /* OALocationPointWrapper.mm in Sources */,
 				DA5A81AE26C563A700F274C7 /* OASearchResultMatcher.mm in Sources */,
+				46D38A9929C39545000AAE0C /* OARoutingDataObject.m in Sources */,
 				DA5A83E526C563A800F274C7 /* OAEditDescriptionViewController.m in Sources */,
 				DA5A853F26C563A900F274C7 /* OASuggestedDownloadsItem.m in Sources */,
 				DA5A834626C563A800F274C7 /* OADateTimePickerTableViewCell.m in Sources */,
@@ -16704,6 +16738,7 @@
 				DA5A813326C563A700F274C7 /* OATerrainMapLayerProvider.mm in Sources */,
 				DA5A843B26C563A800F274C7 /* OAParkingViewController.mm in Sources */,
 				0AD1F3A626CC02B100EE4DFD /* OADownloadMultipleResourceViewController.mm in Sources */,
+				46D38A9429C38E10000AAE0C /* OARoutingProfilesHolder.m in Sources */,
 				325B69FD26D828EB00D8B67C /* OAQuickSearchCoordinatesViewController.mm in Sources */,
 				DA5A844726C563A900F274C7 /* OAMapHudViewController.mm in Sources */,
 				DA5A816126C563A700F274C7 /* OAMapillaryPlugin.mm in Sources */,
@@ -17057,6 +17092,7 @@
 				DA5A832326C563A800F274C7 /* OATitleSliderTableViewCell.m in Sources */,
 				DA5A83C726C563A800F274C7 /* OATargetMenuViewController.mm in Sources */,
 				DA5A81BF26C563A700F274C7 /* OAPOIType.m in Sources */,
+				46D38AA229C39D7C000AAE0C /* OARoutingFile.m in Sources */,
 				DA5A81CE26C563A700F274C7 /* OATileSource.mm in Sources */,
 				DA5A818026C563A700F274C7 /* OANavAddFirstIntermediateAction.mm in Sources */,
 				32210DB729893C17005D16CB /* OAOsmUploadGPXViewConroller.m in Sources */,
@@ -17191,6 +17227,7 @@
 				DA5A813026C563A700F274C7 /* OAOnlineOsmNote.mm in Sources */,
 				DA5A820B26C563A700F274C7 /* OAProfileGeneralSettingsViewController.m in Sources */,
 				DA5A831A26C563A800F274C7 /* OATextInputFloatingCellWithIcon.mm in Sources */,
+				46D38A9F29C39B0F000AAE0C /* OAProfilesGroup.m in Sources */,
 				DA4ABF1B2876DA6800B996EF /* OAFavoritesSettingsItem.mm in Sources */,
 				DA591EAF28D9EB2C0068CAC7 /* OATableRowData.m in Sources */,
 				DA5A82F126C563A800F274C7 /* OALocationIconsTableViewCell.m in Sources */,
@@ -17198,7 +17235,7 @@
 				DA5A84BC26C563A900F274C7 /* OABaseBottomSheetViewController.m in Sources */,
 				DA5A844C26C563A900F274C7 /* OADestinationCell.mm in Sources */,
 				DA5A856626C563A900F274C7 /* OALocationsHolder.mm in Sources */,
-				DA5A81EF26C563A700F274C7 /* OAProfileDataUtils.mm in Sources */,
+				DA5A81EF26C563A700F274C7 /* OAProfileDataUtils.m in Sources */,
 				DA5A839926C563A800F274C7 /* OAPluginPopupViewController.mm in Sources */,
 				DA5A81E326C563A700F274C7 /* OAGPXDocumentPrimitives.mm in Sources */,
 				DA5A847A26C563A900F274C7 /* OADestinationLineDelegate.m in Sources */,
@@ -17285,6 +17322,7 @@
 				DA5A83E226C563A800F274C7 /* OAEditColorViewController.m in Sources */,
 				DA297C2E2811601F009C248E /* OACompoundIconUtils.mm in Sources */,
 				DA5A81E126C563A700F274C7 /* OAGpxInfo.m in Sources */,
+				46D38A9C29C398E1000AAE0C /* OARoutingDataUtils.mm in Sources */,
 				DA5A836226C563A800F274C7 /* OATitleDescriptionCollapsableCell.m in Sources */,
 				DA5A815826C563A700F274C7 /* OAOsmEditingPlugin.mm in Sources */,
 				DA5A845A26C563A900F274C7 /* OAGPXRecLayer.mm in Sources */,

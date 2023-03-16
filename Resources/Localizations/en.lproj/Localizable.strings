@@ -614,6 +614,7 @@
 "shared_string_legal" = "Legal";
 "shared_string_keep_active" = "Keep active";
 "shared_string_history" = "History";
+"shared_string_external" = "External";
 
 "restart" = "Restart";
 
@@ -2640,6 +2641,7 @@
 "app_mode_utv" = "Side by Side";
 "app_mode_osm" = "OSM";
 "desert" = "Desert";
+"app_mode_moped" = "Moped";
 
 "user_login" = "Login";
 "osmand_cloud_login_descr" = "Please enter the e-mail address you registred with. A one-time password for the next step will be sent to it.";

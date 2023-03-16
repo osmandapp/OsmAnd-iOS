@@ -40,6 +40,9 @@
 
 #import <OsmAndCore/Utilities.h>
 
+#define kAdjustedViewportScale 1.5
+#define kRegularViewportScale 1.0
+
 @interface OAChangePositionViewController () <OAChangePositionModeDelegate>
 
 @end
@@ -52,6 +55,8 @@
     
     OAContextMenuLayer *_contextLayer;
     OAMapRendererView *_mapView;
+    
+    CGFloat _cachedX;
 }
 
 -(instancetype) initWithTargetPoint:(OATargetPoint *)targetPoint
@@ -62,6 +67,9 @@
         _targetPoint = targetPoint;
         _contextLayer = OARootViewController.instance.mapPanel.mapViewController.mapLayers.contextMenuLayer;
         _mapView = OARootViewController.instance.mapPanel.mapViewController.mapView;
+        
+        _cachedX = _mapView.viewportXScale;
+        [self adjustViewport];
     }
     return self;
 }
@@ -89,7 +97,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
     [_contextLayer enterChangePositionMode:_targetPoint.targetObj];
     _contextLayer.changePositionDelegate = self;
     
@@ -158,6 +165,20 @@
     _doneButton.layer.cornerRadius = 9.;
 }
 
+- (void)adjustViewport
+{
+    if (OAUtilities.isLandscapeIpadAware)
+    {
+        if (_mapView.viewportXScale != kAdjustedViewportScale)
+            _mapView.viewportXScale = kAdjustedViewportScale;
+    }
+    else
+    {
+        if (_mapView.viewportXScale != kRegularViewportScale)
+            _mapView.viewportXScale = kRegularViewportScale;
+    }
+}
+
 - (UIView *) getMiddleView
 {
     return self.contentView;
@@ -216,6 +237,7 @@
 - (void)onMenuDismissed
 {
     [_contextLayer exitChangePositionMode:_targetPoint.targetObj applyNewPosition:NO];
+    _mapView.viewportXScale = _cachedX;
 }
 
 - (void) applyLocalization
@@ -249,6 +271,7 @@
             _mainTitleContainerView.layer.mask = nil;
             self.contentView.layer.mask = nil;
         }
+        [self adjustViewport];
     } completion:nil];
 }
 

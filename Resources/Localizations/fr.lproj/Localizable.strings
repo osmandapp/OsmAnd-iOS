@@ -2840,3 +2840,10 @@
 "wikivoyage_download_pics" = "Télécharger les images";
 "map_widget_camera_distance" = "Distance de la caméra";
 "download_only_now" = "Télécharger seulement maintenant";
+"ios_release_4_4" = "• Wikipédia : ajout de la possibilité de voir les images, mise à jour de l'interface utilisateur du lecteur\n• Favoris : ajout de la recherche\n• CarPlay : ajout de l'historique, traces et liste de favoris réorganisées\n• Itinéraires de randonnées : ajout de la possibilité de sélectionner des itinéraires sur la carte pour voir des informations supplémentaires\n• OpenStreetMap : ajout de la possibilité de téléverser des traces\n• Messages vocaux : prise en charge de nouvelles langues : catalan, ukrainien, bulgare, indonésien et slovène\n• Ajout d'un avertissement juridique concernant l'utilisation des alertes radars\n• Amélioration de la protection de la vie privée : ajout d'options permettant de désactiver l'enregistrement de l'historique\n• Amélioration de la visibilité de la règle de la carte\n• Amélioration de l'interface utilisateur pour les langues RTL\n• Accessibilité : ajout d'une étiquette de contenu pour les boutons de carte\n• Ajout du support de l'écriture dynamique, la taille du texte dans OsmAnd changera en fonction de la taille du texte dans iOS.\n• Orientation de la carte : ajout d'un mode de rotation manuelle\n• La version minimale d'iOS passe à 15.0\n";
+"top_widgets_panel" = "Panneau supérieur";
+"coordinates_widget_map_center" = "Coordonnées : centre de la carte";
+"toggle_map_center" = "Afficher/masquer les coordonnées du centre de la carte";
+"show_map_center" = "Afficher les coordonnées du centre de la carte";
+"hide_map_center" = "Masquer les coordonnées du centre de la carte";
+"quick_action_map_center_widget_descr" = "Bouton pour afficher ou masquer le widget Coordonnées sur la carte.";

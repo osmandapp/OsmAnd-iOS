@@ -56,6 +56,8 @@
     id<OAMoveObjectProvider> _selectedObjectContextMenuProvider;
     
     NSArray<OAMapLayer *> *_pointLayers;
+    
+    CGPoint _cachedTargetPoint;
 }
 
 - (NSString *) layerId
@@ -117,6 +119,37 @@
     }
 }
 
+- (void)setupIconCenter
+{
+    CGPoint targetPoint;
+    OsmAnd::PointI targetPositionI = self.mapView.target31;
+    if ([self.mapView convert:&targetPositionI toScreen:&targetPoint])
+    {
+        if (CGPointEqualToPoint(targetPoint, _cachedTargetPoint))
+            return;
+        
+        _cachedTargetPoint = targetPoint;
+        CGFloat iconHalfHeight = _changePositionPin.frame.size.height /2;
+        CGFloat iconHalfWidth = _changePositionPin.frame.size.width / 2;
+        CGFloat shiftX = iconHalfWidth;
+        CGFloat shiftY = iconHalfHeight;
+        EOAPinVerticalAlignment verticalAlignment = [_selectedObjectContextMenuProvider getPointIconVerticalAlignment];
+        EOAPinHorizontalAlignment horizontalAlignment = [_selectedObjectContextMenuProvider getPointIconHorizontalAlignment];
+        
+        if (horizontalAlignment == EOAPinAlignmentRight)
+            shiftX = -iconHalfWidth;
+        else if (horizontalAlignment == EOAPinAlignmentCenterHorizontal)
+            shiftX = 0;
+        
+        if (verticalAlignment == EOAPinAlignmentBottom)
+            shiftY = -iconHalfHeight;
+        else if (verticalAlignment == EOAPinAlignmentCenterVertical)
+            shiftY = 0;
+        
+        _changePositionPin.center = CGPointMake(targetPoint.x - shiftX, targetPoint.y - shiftY);
+    }
+}
+
 - (void) enterChangePositionMode:(id)targetObject
 {
     [self applyMoveProvider:targetObject];
@@ -138,29 +171,7 @@
     }
     [_changePositionPin sizeToFit];
     
-    CGPoint targetPoint;
-    OsmAnd::PointI targetPositionI = self.mapView.target31;
-    if ([self.mapView convert:&targetPositionI toScreen:&targetPoint])
-    {
-        CGFloat iconHalfHeight = _changePositionPin.frame.size.height /2;
-        CGFloat iconHalfWidth = _changePositionPin.frame.size.width / 2;
-        CGFloat shiftX = iconHalfWidth;
-        CGFloat shiftY = iconHalfHeight;
-        EOAPinVerticalAlignment verticalAlignment = [_selectedObjectContextMenuProvider getPointIconVerticalAlignment];
-        EOAPinHorizontalAlignment horizontalAlignment = [_selectedObjectContextMenuProvider getPointIconHorizontalAlignment];
-        
-        if (horizontalAlignment == EOAPinAlignmentRight)
-            shiftX = -iconHalfWidth;
-        else if (horizontalAlignment == EOAPinAlignmentCenterHorizontal)
-            shiftX = 0;
-        
-        if (verticalAlignment == EOAPinAlignmentBottom)
-            shiftY = -iconHalfHeight;
-        else if (verticalAlignment == EOAPinAlignmentCenterVertical)
-            shiftY = 0;
-        
-        _changePositionPin.center = CGPointMake(targetPoint.x - shiftX, targetPoint.y - shiftY);
-    }
+    [self setupIconCenter];
     
     [self.mapView addSubview:_changePositionPin];
     _isInChangePositionMode = YES;
@@ -206,6 +217,9 @@
                 _animatedPin.center = CGPointMake(targetPoint.x, targetPoint.y);
         }
     }
+    
+    if (_isInChangePositionMode)
+        [self setupIconCenter];
     
     if (_isInChangePositionMode && self.changePositionDelegate)
         [self.changePositionDelegate onMapMoved];

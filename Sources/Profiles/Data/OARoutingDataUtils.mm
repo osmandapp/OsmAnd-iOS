@@ -26,7 +26,6 @@
     NSMutableDictionary<NSString *, OARoutingFile *> *routingFiles = [self getOfflineRoutingFilesByNames];
     
     OAProfilesGroup *profilesGroup = [self createProfilesGroup:OALocalizedString(@"osmand_default_routing") file:routingFiles[kOsmAndNavigation]];
-    profilesGroup.descr = OALocalizedString(@"import_routing_file_descr");
     [routingFiles removeObjectForKey:kOsmAndNavigation];
     if (profilesGroup)
         [result addObject:profilesGroup];

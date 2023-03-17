@@ -10,12 +10,12 @@
 
 @interface OAProfileDataObject : NSObject
 
-@property (nonatomic) NSString *name;
-@property (nonatomic) NSString *descr;
-@property (nonatomic) NSString *iconName;
-@property (nonatomic) NSString *stringKey;
+@property (nonatomic, readonly) NSString *name;
+@property (nonatomic, readonly) NSString *descr;
+@property (nonatomic, readonly) NSString *iconName;
+@property (nonatomic, readonly) NSString *stringKey;
 @property (nonatomic) BOOL isSelected;
-@property (nonatomic) BOOL isEnabled;
+@property (nonatomic, readonly) BOOL isEnabled;
 @property (nonatomic) int iconColor;
 
 - (instancetype) initWithStringKey:(NSString *)stringKey name:(NSString *)name descr:(NSString *)descr iconName:(NSString *)iconName isSelected:(BOOL)isSelected;

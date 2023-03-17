@@ -50,6 +50,11 @@
     return OALocalizedString(@"select_nav_profile_dialog_message");
 }
 
+- (NSString *)getTableFooterText
+{
+    return OALocalizedString(@"import_routing_file_descr");
+}
+
 #pragma mark - Table data
 
 - (void)generateData

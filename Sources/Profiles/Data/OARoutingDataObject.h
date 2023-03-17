@@ -28,8 +28,8 @@ typedef NS_ENUM(NSInteger, EOARoutingProfilesResource)
 
 @interface OARoutingDataObject : OAProfileDataObject
 
-@property (nonatomic) NSString *fileName;
-@property (nonatomic) NSString *derivedProfile;
+@property (nonatomic, readonly) NSString *fileName;
+@property (nonatomic, readonly) NSString *derivedProfile;
 
 - (instancetype) initWithStringKey:(NSString *)stringKey
                               name:(NSString *)name

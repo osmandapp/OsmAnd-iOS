@@ -44,7 +44,6 @@
 #import "OATableViewCustomHeaderView.h"
 #import "OAStateChangedListener.h"
 #import "OADividerCell.h"
-#import "OADescrTitleIconCell.h"
 #import "OARouteProvider.h"
 #import "OASelectedGPXHelper.h"
 #import "OAHistoryHelper.h"
@@ -373,7 +372,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         }];
         
         [section addObject:@{
-            @"cell" : [OADescrTitleIconCell getCellIdentifier],
+            @"cell" : [OASimpleTableViewCell getCellIdentifier],
             @"title" : destinationBackup.pointDescription.name,
             @"descr" : startBackup ? startBackup.pointDescription.name : OALocalizedString(@"shared_string_my_location"),
             @"img" : @"ic_custom_point_to_point",
@@ -526,7 +525,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         [str setAttributes:@{NSFontAttributeName:[UIFont scaledSystemFontOfSize:17 weight:UIFontWeightSemibold]} range:range];
         
         [section addObject:@{
-            @"cell" : [OADescrTitleIconCell getCellIdentifier],
+            @"cell" : [OASimpleTableViewCell getCellIdentifier],
             @"title" : str,
             @"img" : @"ic_profile_pedestrian",
             @"key" : @"pedestrian_short"
@@ -1414,13 +1413,40 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASimpleTableViewCell *) nib[0];
-            [cell leftIconVisibility:NO];
         }
         if (cell)
         {
-            if (indexPath == _routingInfoIndexPath)
+            NSString *key = item[@"key"];
+            if ([key isEqualToString:@"prev_route"] || [key isEqualToString:@"pedestrian_short"])
             {
+                [cell leftIconVisibility:YES];
+                if ([key isEqualToString:@"pedestrian_short"])
+                {
+                    cell.leftIconView.image = [UIImage templateImageNamed:item[@"img"]];
+                    cell.leftIconView.tintColor = UIColorFromRGB(color_icon_inactive);
+                    cell.descriptionLabel.text = nil;
+                    cell.descriptionLabel.attributedText = item[@"title"];
+                }
+                else
+                {
+                    cell.leftIconView.image = [UIImage imageNamed:item[@"img"]];
+                    cell.descriptionLabel.attributedText = nil;
+                    cell.descriptionLabel.text = item[@"title"];
+                }
+                cell.descriptionLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+                cell.descriptionLabel.textColor = UIColor.blackColor;
+                cell.titleLabel.attributedText = nil;
+                cell.titleLabel.text = item[@"descr"];
+                cell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
+                cell.titleLabel.textColor = UIColorFromRGB(color_text_footer);
+            }
+            else if (indexPath == _routingInfoIndexPath)
+            {
+                [cell leftIconVisibility:NO];
+                cell.titleLabel.text = nil;
                 cell.titleLabel.attributedText = [OARouteBaseViewController getFormattedDistTimeString];
+                cell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+                cell.titleLabel.textColor = UIColor.blackColor;
                 NSMutableAttributedString *attrDescription =
                 [[NSMutableAttributedString alloc] initWithAttributedString:[OARouteBaseViewController getFormattedElevationString:[self getTrackAnalysis]]];
                 if (_emission)
@@ -1429,7 +1455,10 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
                     [attrDescription addString:emission fontWeight:UIFontWeightRegular size:15.];
                     [attrDescription setColor:UIColorFromRGB(color_text_footer) forString:emission];
                 }
+                cell.descriptionLabel.text = nil;
                 cell.descriptionLabel.attributedText = attrDescription;
+                cell.descriptionLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
+                cell.descriptionLabel.textColor = UIColorFromRGB(color_text_footer);
             }
         }
         return cell;
@@ -1528,46 +1557,6 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             CGFloat rightInset = [cell isDirectionRTL] ? 62.0 : 0.;
             cell.dividerInsets = [item[@"custom_insets"] boolValue] ? UIEdgeInsetsMake(0., leftInset, 0., rightInset) : UIEdgeInsetsZero;
             cell.dividerHight = 0.5;
-        }
-        return cell;
-    }
-    else if ([item[@"cell"] isEqualToString:[OADescrTitleIconCell getCellIdentifier]])
-    {
-        OADescrTitleIconCell* cell;
-        cell = (OADescrTitleIconCell *)[tableView dequeueReusableCellWithIdentifier:[OADescrTitleIconCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADescrTitleIconCell getCellIdentifier] owner:self options:nil];
-            cell = (OADescrTitleIconCell *)[nib objectAtIndex:0];
-        }
-        
-        if (cell)
-        {
-            NSString *key = item[@"key"];
-            if ([key isEqualToString:@"pedestrian_short"])
-            {
-                [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]]];
-                cell.iconView.tintColor = UIColorFromRGB(color_icon_inactive);
-                cell.textView.attributedText = item[@"title"];
-                cell.backgroundColor = UIColor.whiteColor;
-            }
-            else if ([key isEqualToString:@"pt_beta_warning"])
-            {
-                [cell.iconView setImage:[UIImage imageNamed:item[@"img"]]];
-                cell.textView.attributedText = item[@"title"];
-                cell.backgroundColor = UIColor.clearColor;
-                cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            }
-            else
-            {
-                [cell.iconView setImage:[UIImage imageNamed:item[@"img"]]];
-                [cell.textView setText:item[@"title"]];
-                cell.backgroundColor = UIColor.whiteColor;
-            }
-            [cell.descView setText:item[@"descr"]];
-            
-            if ([cell needsUpdateConstraints])
-                [cell setNeedsUpdateConstraints];
         }
         return cell;
     }

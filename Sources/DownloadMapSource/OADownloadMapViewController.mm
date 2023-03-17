@@ -23,7 +23,7 @@
 #include "OASizes.h"
 
 #import "OASettingsTableViewCell.h"
-#import "OATimeTableViewCell.h"
+#import "OAValueTableViewCell.h"
 #import "OAPreviewZoomLevelsCell.h"
 #import "OACustomPickerTableViewCell.h"
 
@@ -306,7 +306,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     [zoomLevelArr addObject:@{
         @"title" : OALocalizedString(@"rec_interval_minimum"),
         @"value" : [NSString stringWithFormat:@"%d", _minZoom],
-        @"type"  : [OATimeTableViewCell getCellIdentifier],
+        @"type"  : [OAValueTableViewCell getCellIdentifier],
         @"clickable" : @(YES)
     }];
     [zoomLevelArr addObject:@{
@@ -316,7 +316,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     [zoomLevelArr addObject:@{
         @"title" : OALocalizedString(@"shared_string_maximum"),
         @"value" : [NSString stringWithFormat:@"%d", _maxZoom],
-        @"type" : [OATimeTableViewCell getCellIdentifier],
+        @"type" : [OAValueTableViewCell getCellIdentifier],
         @"clickable" : @(YES)
     }];
     [zoomLevelArr addObject:@{
@@ -324,13 +324,13 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         @"isVisible" : @(_maxZoomPickerIsShown),
     }];
     [generalInfoArr addObject:@{
-        @"type" : [OATimeTableViewCell getCellIdentifier],
+        @"type" : [OAValueTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"number_of_tiles"),
         @"value" : [NSString stringWithFormat:@"%ld", _numberOfTiles],
         @"clickable" : @(NO)
     }];
     [generalInfoArr addObject:@{
-        @"type" : [OATimeTableViewCell getCellIdentifier],
+        @"type" : [OAValueTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"download_size"),
         @"value" : [NSString stringWithFormat:@"~ %@", [NSByteCountFormatter stringFromByteCount:_downloadSize countStyle:NSByteCountFormatterCountStyleFile]],
         @"clickable" : @(NO)
@@ -528,23 +528,27 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         }
         return cell;
     }
-    else if ([cellType isEqualToString:[OATimeTableViewCell getCellIdentifier]])
+    else if ([cellType isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
-        OATimeTableViewCell* cell;
-        cell = (OATimeTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OATimeTableViewCell getCellIdentifier]];
+        OAValueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATimeTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OATimeTableViewCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAValueTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
-        cell.lbTitle.text = item[@"title"];
-        cell.lbTime.text = item[@"value"];
-        cell.lbTime.textColor = [item[@"clickable"] boolValue] ? [UIColor blackColor] : [UIColor grayColor];
-        if (indexPath.row == kMaxZoomRow && !_maxZoomPickerIsShown)
-            cell.separatorInset = UIEdgeInsetsZero;
-        else
-            cell.separatorInset = UIEdgeInsetsMake(0., 16.0, 0., 0.);
+        if (cell)
+        {
+            cell.titleLabel.text = item[@"title"];
+            cell.valueLabel.text = item[@"value"];
+            cell.valueLabel.textColor = [item[@"clickable"] boolValue] ? UIColor.blackColor : UIColorFromRGB(color_text_footer);
+            if (indexPath.row == kMaxZoomRow && !_maxZoomPickerIsShown)
+                cell.separatorInset = UIEdgeInsetsZero;
+            else
+                cell.separatorInset = UIEdgeInsetsMake(0., 16.0, 0., 0.);
+        }
         return cell;
     }
     else if ([cellType isEqualToString:[OACustomPickerTableViewCell getCellIdentifier]])

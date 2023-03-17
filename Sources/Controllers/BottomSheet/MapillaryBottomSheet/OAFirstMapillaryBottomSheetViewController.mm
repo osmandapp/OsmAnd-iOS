@@ -16,7 +16,7 @@
 #import "OARootViewController.h"
 #import "OASizes.h"
 #import "OAAppSettings.h"
-#import "OADescrTitleCell.h"
+#import "OASimpleTableViewCell.h"
 #import "OADividerCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OARootViewController.h"
@@ -76,7 +76,7 @@
                      }];
     
     [arr addObject:@{
-                     @"type" : [OADescrTitleCell getCellIdentifier],
+                     @"type" : [OASimpleTableViewCell getCellIdentifier],
                      @"title" : OALocalizedString(@"mapillary_descr"),
                      @"description" : @""
                      }];
@@ -102,7 +102,7 @@
 - (CGFloat) heightForRow:(NSIndexPath *)indexPath tableView:(UITableView *)tableView
 {
     NSDictionary *item = _data[indexPath.row];
-    if ([item[@"type"] isEqualToString:[OABottomSheetHeaderIconCell getCellIdentifier]] || [item[@"type"] isEqualToString:[OADescrTitleCell getCellIdentifier]] || [item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
+    if ([item[@"type"] isEqualToString:[OABottomSheetHeaderIconCell getCellIdentifier]] || [item[@"type"] isEqualToString:[OASimpleTableViewCell getCellIdentifier]] || [item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
         return UITableViewAutomaticDimension;
     }
@@ -170,22 +170,21 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:[OADescrTitleCell getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
     {
-        OADescrTitleCell* cell;
-        cell = (OADescrTitleCell *)[self.tblView dequeueReusableCellWithIdentifier:[OADescrTitleCell getCellIdentifier]];
+        OASimpleTableViewCell *cell = [self.tblView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADescrTitleCell getCellIdentifier] owner:self options:nil];
-            cell = (OADescrTitleCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASimpleTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
+            cell.backgroundColor = [UIColor clearColor];
+            cell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
         }
-        
         if (cell)
         {
-            cell.descriptionView.text = item[@"title"];
-            cell.descriptionView.textColor = [UIColor blackColor];
-            cell.backgroundColor = [UIColor clearColor];
-            cell.textView.hidden = YES;
+            cell.titleLabel.text = item[@"title"];
         }
         return cell;
     }

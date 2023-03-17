@@ -12,7 +12,7 @@
 #import "Localization.h"
 #import "OAColors.h"
 #import "OASwitchTableViewCell.h"
-#import "OATimeTableViewCell.h"
+#import "OAValueTableViewCell.h"
 #import "OACustomPickerTableViewCell.h"
 #import "OATitleSliderTableViewCell.h"
 #import "OASegmentTableViewCell.h"
@@ -530,22 +530,26 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
     else if ([item[@"type"] isEqualToString: kCellTypeValue])
     {
-        OATimeTableViewCell* cell;
-        cell = (OATimeTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OATimeTableViewCell getCellIdentifier]];
+        OAValueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATimeTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OATimeTableViewCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAValueTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.valueLabel.textColor = UIColor.blackColor;
         }
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.lbTitle.text = item[@"title"];
-        if ([item[@"key"] isEqualToString:@"minZoom"])
-            cell.lbTime.text = [NSString stringWithFormat:@"%ld", [self getMinZoom]];
-        else if ([item[@"key"] isEqualToString:@"maxZoom"])
-            cell.lbTime.text = [NSString stringWithFormat:@"%ld", [self getMaxZoom]];
-        else
-            cell.lbTime.text = @"";
-        cell.lbTime.textColor = [UIColor blackColor];
+        if (cell)
+        {
+            cell.titleLabel.text = item[@"title"];
+            if ([item[@"key"] isEqualToString:@"minZoom"])
+                cell.valueLabel.text = [NSString stringWithFormat:@"%ld", [self getMinZoom]];
+            else if ([item[@"key"] isEqualToString:@"maxZoom"])
+                cell.valueLabel.text = [NSString stringWithFormat:@"%ld", [self getMaxZoom]];
+            else
+                cell.valueLabel.text = @"";
+        }
         return cell;
     }
     else if ([item[@"type"] isEqualToString:kCellTypeButton])

@@ -10,7 +10,7 @@
 #import "Localization.h"
 #import "OASwitchTableViewCell.h"
 #import "OADateTimePickerTableViewCell.h"
-#import "OATimeTableViewCell.h"
+#import "OAValueTableViewCell.h"
 #import "OAMapViewController.h"
 #import "OARootViewController.h"
 #import "OANativeUtilities.h"
@@ -18,6 +18,7 @@
 #import "OAIconTextTableViewCell.h"
 #import "OAPlugin.h"
 #import "OAParkingPositionPlugin.h"
+#import "OAColors.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -281,17 +282,21 @@
         }
         case 1:
         {
-            OATimeTableViewCell* cell;
-            cell = (OATimeTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OATimeTableViewCell getCellIdentifier]];
+            OAValueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
             if (cell == nil)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATimeTableViewCell getCellIdentifier] owner:self options:nil];
-                cell = (OATimeTableViewCell *)[nib objectAtIndex:0];
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+                cell = (OAValueTableViewCell *) nib[0];
+                [cell leftIconVisibility:NO];
+                [cell descriptionVisibility:NO];
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                cell.valueLabel.textColor = UIColorFromRGB(color_primary_orange_navbar_background);
             }
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.lbTitle.text = OALocalizedString(@"pickup_car_at");
-            cell.lbTime.text = [_timeFmt stringFromDate:_date];
-            
+            if (cell)
+            {
+                cell.titleLabel.text = OALocalizedString(@"pickup_car_at");
+                cell.valueLabel.text = [_timeFmt stringFromDate:_date];
+            }
             return cell;
         }
         case 2:

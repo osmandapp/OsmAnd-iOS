@@ -9,7 +9,6 @@
 #import "OARearrangeCustomFiltersViewController.h"
 #import "OAPOIFiltersHelper.h"
 #import "Localization.h"
-#import "OADeleteButtonTableViewCell.h"
 #import "OAColors.h"
 #import "OAQuickSearchHelper.h"
 #import "OARightIconTableViewCell.h"
@@ -311,22 +310,24 @@
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath
 {
-    NSString *cellType = indexPath.section == kActionsSection ? [OARightIconTableViewCell getCellIdentifier] : [OADeleteButtonTableViewCell getCellIdentifier];
-    if ([cellType isEqualToString:[OADeleteButtonTableViewCell getCellIdentifier]])
+    NSString *cellType = indexPath.section == kActionsSection ? [OARightIconTableViewCell getCellIdentifier] : [OASimpleTableViewCell getCellIdentifier];
+    if ([cellType isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
     {
-        BOOL isAllFilters = indexPath.section == kAllFiltersSection;
-        OAPOIUIFilter *filter = isAllFilters ? _filtersItems[indexPath.row].filter : _hiddenFiltersItems[indexPath.row].filter;
-        OADeleteButtonTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OADeleteButtonTableViewCell getCellIdentifier]];
+        OASimpleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADeleteButtonTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OADeleteButtonTableViewCell *) nib[0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASimpleTableViewCell *) nib[0];
+            [cell leftEditButtonVisibility:YES];
+            [cell descriptionVisibility:NO];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.separatorInset = UIEdgeInsetsMake(0.0, 58.0, 0.0, 0.0);
-            [cell showIcon:YES];
+            cell.leftIconView.tintColor = UIColorFromRGB(color_tint_gray);
+            cell.leftIconView.contentMode = UIViewContentModeCenter;
         }
         if (cell)
         {
+            BOOL isAllFilters = indexPath.section == kAllFiltersSection;
+            OAPOIUIFilter *filter = isAllFilters ? _filtersItems[indexPath.row].filter : _hiddenFiltersItems[indexPath.row].filter;
             cell.titleLabel.text = filter.name;
 
             UIImage *icon;
@@ -338,18 +339,14 @@
             }
             if (!icon)
                 icon = [OAPOIHelper getCustomFilterIcon:filter];
-            [cell.iconImageView setImage:[icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
-            cell.iconImageView.tintColor = UIColorFromRGB(color_tint_gray);
-            cell.iconImageView.contentMode = UIViewContentModeCenter;
+            [cell.leftIconView setImage:[icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
 
             NSString *imageName = isAllFilters ? @"ic_custom_delete" : @"ic_custom_plus";
-            [cell.deleteButton setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
-            cell.deleteButton.tag = indexPath.section << 10 | indexPath.row;
-            [cell.deleteButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-            [cell.deleteButton addTarget:self action:@selector(onRowButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+            [cell.leftEditButton setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
+            cell.leftEditButton.tag = indexPath.section << 10 | indexPath.row;
+            [cell.leftEditButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+            [cell.leftEditButton addTarget:self action:@selector(onRowButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         }
-        if (cell.needsUpdateConstraints)
-            [cell updateConstraints];
         return cell;
     }
     else if ([cellType isEqualToString:[OARightIconTableViewCell getCellIdentifier]])

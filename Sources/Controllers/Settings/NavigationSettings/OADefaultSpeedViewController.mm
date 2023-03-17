@@ -7,7 +7,7 @@
 //
 
 #import "OADefaultSpeedViewController.h"
-#import "OATimeTableViewCell.h"
+#import "OAValueTableViewCell.h"
 #import "OASliderWithValuesCell.h"
 #import "OAAppSettings.h"
 #import "Localization.h"
@@ -118,7 +118,7 @@
     if (_selectedValue == 0)
         _selectedValue = _defaultValue;
     [tableData addObject:@{
-        @"type" : [OATimeTableViewCell getCellIdentifier],
+        @"type" : [OAValueTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"default_speed_setting_title"),
         @"value" : [NSString stringWithFormat:@"%ld %@", _selectedValue, _units],
     }];
@@ -143,19 +143,23 @@
 {
     NSDictionary *item = _data[indexPath.row];
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:[OATimeTableViewCell getCellIdentifier]])
+    if ([cellType isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
-        OATimeTableViewCell* cell;
-        cell = (OATimeTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OATimeTableViewCell getCellIdentifier]];
+        OAValueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATimeTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OATimeTableViewCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAValueTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.lbTime.textColor = UIColor.blackColor;
+            cell.valueLabel.textColor = UIColor.blackColor;
         }
-        cell.lbTitle.text = item[@"title"];
-        cell.lbTime.text = item[@"value"];
+        if (cell)
+        {
+            cell.titleLabel.text = item[@"title"];
+            cell.valueLabel.text = item[@"value"];
+        }
         return cell;
     }
     else if ([cellType isEqualToString:[OASliderWithValuesCell getCellIdentifier]])

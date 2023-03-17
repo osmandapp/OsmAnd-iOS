@@ -10,7 +10,6 @@
 #import "Localization.h"
 #import "OAColors.h"
 #import "OATableViewCustomHeaderView.h"
-#import "OADescrTitleCell.h"
 #import "OAFilledButtonCell.h"
 #import "OADividerCell.h"
 #import "OAButtonTableViewCell.h"

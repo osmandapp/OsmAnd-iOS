@@ -64,12 +64,10 @@
     BOOL isEmailRegistred = [self.errorMessage isEqualToString:OALocalizedString(@"cloud_email_already_registered")];
     
     [data addObject:@[@{
-        @"type" : [OADescrTitleCell getCellIdentifier],
+        @"type" : [OASimpleTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"osmand_cloud_create_account_descr"),
         @"color" : UIColorFromRGB(color_text_footer),
-        @"spacing" : @6,
-        @"topMargin" : @20,
-        @"bottomMargin" : @14
+        @"spacing" : @6
     },
     @{ @"type" : [OADividerCell getCellIdentifier] },
     @{
@@ -85,12 +83,10 @@
         if (self.errorMessage.length > 0)
         {
             [otherCells addObject:@{
-                @"type" : [OADescrTitleCell getCellIdentifier],
+                @"type" : [OASimpleTableViewCell getCellIdentifier],
                 @"title" : self.errorMessage,
                 @"color" : UIColorFromRGB(color_support_red),
-                @"spacing" : @1,
-                @"topMargin" : @14,
-                @"bottomMargin" : @0
+                @"spacing" : @1
             }];
         }
         if (isTextFieldValidData)
@@ -119,12 +115,10 @@
     else
     {
         [otherCells addObject:@{
-            @"type" : [OADescrTitleCell getCellIdentifier],
+            @"type" : [OASimpleTableViewCell getCellIdentifier],
             @"title" : self.errorMessage,
             @"color" : UIColorFromRGB(color_support_red),
-            @"spacing" : @1,
-            @"topMargin" : @14,
-            @"bottomMargin" : @0
+            @"spacing" : @1
         }];
         
         [otherCells addObject: @{
@@ -134,6 +128,7 @@
             @"textColor" : UIColorFromRGB(color_primary_purple),
             @"action": @"loginButtonPressed",
             @"inteactive" : @YES,
+            @"topMargin" : @0
         }];
         
         [otherCells addObject: @{

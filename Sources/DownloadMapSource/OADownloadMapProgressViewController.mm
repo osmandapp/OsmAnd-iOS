@@ -8,12 +8,11 @@
 
 #import "OADownloadMapProgressViewController.h"
 #import "OADownloadProgressBarCell.h"
-#import "OADownloadInfoTableViewCell.h"
+#import "OAValueTableViewCell.h"
 #import "OAResourcesUIHelper.h"
 #import "OASQLiteTileSource.h"
 #import "OAMapTileDownloader.h"
 #import "OARootViewController.h"
-#import "OATimeTableViewCell.h"
 
 #include "Localization.h"
 #include "OASizes.h"
@@ -88,15 +87,15 @@
         @"type" : @"OADownloadProgressBarCell",
     }];
     [tableData addObject:@{
-        @"type" : [OATimeTableViewCell getCellIdentifier],
+        @"type" : [OAValueTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"number_of_tiles"),
-        @"value" : [NSString stringWithFormat:@"/ %@", [NSString stringWithFormat:@"%ld", _numberOfTiles]],
+        @"value" : [NSString stringWithFormat:@" / %@", [NSString stringWithFormat:@"%ld", _numberOfTiles]],
         @"key" : @"num_of_tiles"
     }];
     [tableData addObject:@{
-        @"type" : [OATimeTableViewCell getCellIdentifier],
+        @"type" : [OAValueTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"download_size"),
-        @"value" : [NSString stringWithFormat:@"/ ~ %@", [NSByteCountFormatter stringFromByteCount:_downloadSize countStyle:NSByteCountFormatterCountStyleFile]],
+        @"value" : [NSString stringWithFormat:@" / ~ %@", [NSByteCountFormatter stringFromByteCount:_downloadSize countStyle:NSByteCountFormatterCountStyleFile]],
         @"key" : @"download_size"
     }];
     _data = [NSArray arrayWithArray:tableData];
@@ -174,28 +173,32 @@
         
         return cell;
     }
-    else if ([cellType isEqualToString:[OATimeTableViewCell getCellIdentifier]])
+    else if ([cellType isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
-        OADownloadInfoTableViewCell* cell;
-        cell = (OADownloadInfoTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OATimeTableViewCell getCellIdentifier]];
+        OAValueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADownloadInfoTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OADownloadInfoTableViewCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAValueTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
-        NSString *progressText = @"";
-        if ([item[@"key"] isEqualToString:@"num_of_tiles"])
+        if (cell)
         {
-            progressText = [NSString stringWithFormat:@"%ld", _downloadedNumberOfTiles];
+            cell.titleLabel.text = item[@"title"];
+
+            NSString *total = item[@"value"];
+            NSString *done = @"";
+            if ([item[@"key"] isEqualToString:@"num_of_tiles"])
+                done = [NSString stringWithFormat:@"%ld", _downloadedNumberOfTiles];
+            else if ([item[@"key"] isEqualToString:@"download_size"])
+                done = [NSByteCountFormatter stringFromByteCount:_downloadedNumberOfTiles * 12000 countStyle:NSByteCountFormatterCountStyleFile];
+            NSMutableAttributedString *value = [[NSMutableAttributedString alloc] initWithString:[done stringByAppendingString:total]];
+            [value setColor:UIColorFromRGB(color_text_footer) forString:total];
+            [value setColor:UIColor.blackColor forString:done];
+            cell.valueLabel.attributedText = value;
         }
-        else if ([item[@"key"] isEqualToString:@"download_size"])
-        {
-            progressText = [NSByteCountFormatter stringFromByteCount:_downloadedNumberOfTiles * 12000 countStyle:NSByteCountFormatterCountStyleFile];
-        }
-        cell.titleLabel.text = item[@"title"];
-        cell.doneLabel.text = progressText;
-        cell.totalLabel.text = item[@"value"];
         return cell;
     }
     return nil;

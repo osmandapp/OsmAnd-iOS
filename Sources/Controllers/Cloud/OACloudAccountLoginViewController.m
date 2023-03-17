@@ -78,12 +78,10 @@
     _isEmailRegistered = ![self.errorMessage isEqualToString:OALocalizedString(@"cloud_email_not_registered")];
     
     [data addObject:@[@{
-        @"type" : [OADescrTitleCell getCellIdentifier],
+        @"type" : [OASimpleTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"osmand_cloud_login_descr"),
         @"color" : UIColorFromRGB(color_text_footer),
-        @"spacing" : @6,
-        @"topMargin" : @20,
-        @"bottomMargin" : @14
+        @"spacing" : @6
     },
     @{ @"type" : [OADividerCell getCellIdentifier] },
     @{
@@ -99,12 +97,10 @@
         if (self.errorMessage.length > 0)
         {
             [otherCells addObject:@{
-                @"type" : [OADescrTitleCell getCellIdentifier],
+                @"type" : [OASimpleTableViewCell getCellIdentifier],
                 @"title" : self.errorMessage,
                 @"color" : UIColorFromRGB(color_support_red),
-                @"spacing" : @1,
-                @"topMargin" : @14,
-                @"bottomMargin" : @0
+                @"spacing" : @1
             }];
         }
         if (isTextFieldValidData)
@@ -116,6 +112,7 @@
                 @"textColor" : UIColor.whiteColor,
                 @"action" : @"continueButtonPressed",
                 @"inteactive" : @YES,
+                @"topMargin" : !_hasValidSub ? @0 : @20
             }];
         }
         else
@@ -127,6 +124,7 @@
                 @"textColor" : UIColorFromRGB(color_text_footer),
                 @"action": @"continueButtonPressed",
                 @"inteactive" : @NO,
+                @"topMargin" : !_hasValidSub ? @0 : @20
             }];
         }
         if (!_hasValidSub)
@@ -144,12 +142,10 @@
     else
     {
         [otherCells addObject:@{
-            @"type" : [OADescrTitleCell getCellIdentifier],
+            @"type" : [OASimpleTableViewCell getCellIdentifier],
             @"title" : self.errorMessage,
             @"color" : UIColorFromRGB(color_support_red),
-            @"spacing" : @1,
-            @"topMargin" : @14,
-            @"bottomMargin" : @0
+            @"spacing" : @1
         }];
         
         [otherCells addObject: @{
@@ -159,6 +155,7 @@
             @"textColor" : UIColorFromRGB(color_primary_purple),
             @"action": @"createAccountButtonPressed",
             @"inteactive" : @YES,
+            @"topMargin" : @0
         }];
         
         [otherCells addObject: @{

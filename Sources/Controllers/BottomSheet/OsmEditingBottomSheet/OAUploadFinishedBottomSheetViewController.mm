@@ -16,7 +16,7 @@
 #import "OARootViewController.h"
 #import "OASizes.h"
 #import "OAAppSettings.h"
-#import "OADescrTitleCell.h"
+#import "OASimpleTableViewCell.h"
 #import "OADividerCell.h"
 #import "OARootViewController.h"
 #import "OAMapWidgetRegistry.h"
@@ -121,7 +121,7 @@
         if (names.length > 0)
             value = [NSString stringWithFormat:@"%@ (%@)", value, names];
         [arr addObject:@{
-                         @"type" : [OADescrTitleCell getCellIdentifier],
+                         @"type" : [OASimpleTableViewCell getCellIdentifier],
                          @"title" : value,
                          @"description" : @""
                          }];
@@ -129,7 +129,7 @@
         [arr addObject:@{ @"type" : [OADividerCell getCellIdentifier] } ];
         
         [arr addObject:@{
-                         @"type" : [OADescrTitleCell getCellIdentifier],
+                         @"type" : [OASimpleTableViewCell getCellIdentifier],
                          @"title" : OALocalizedString(@"osm_upload_no_internet"),
                          @"description" : @""
                          }];
@@ -137,7 +137,7 @@
     else
     {
         [arr addObject:@{
-                         @"type" : [OADescrTitleCell getCellIdentifier],
+                         @"type" : [OASimpleTableViewCell getCellIdentifier],
                          @"title" : OALocalizedString(@"osm_upload_failed_descr"),
                          @"description" : @""
                          }];
@@ -257,23 +257,21 @@
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:[OADescrTitleCell getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
     {
-        OADescrTitleCell* cell;
-        cell = (OADescrTitleCell *)[self.tblView dequeueReusableCellWithIdentifier:[OADescrTitleCell getCellIdentifier]];
+        OASimpleTableViewCell *cell = [self.tblView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADescrTitleCell getCellIdentifier] owner:self options:nil];
-            cell = (OADescrTitleCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASimpleTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
+            cell.backgroundColor = [UIColor clearColor];
+            cell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
         }
-        
         if (cell)
         {
-            cell.descriptionView.text = item[@"title"];
-            cell.descriptionView.textColor = [UIColor blackColor];
-            cell.backgroundColor = [UIColor clearColor];
-            cell.textView.hidden = YES;
-            cell.textViewZeroHeightConstraint.priority = 1000;
+            cell.titleLabel.text = item[@"title"];
         }
         return cell;
     }

@@ -12,7 +12,7 @@
 #import "OAEditPOIData.h"
 #import "OASwitchTableViewCell.h"
 #import "OADateTimePickerTableViewCell.h"
-#import "OATimeTableViewCell.h"
+#import "OAValueTableViewCell.h"
 #import "OASizes.h"
 #import "OAOSMSettings.h"
 
@@ -152,12 +152,12 @@ static const NSInteger timeSectionIndex = 1;
     _endDate = [self dateFromMinutes:rule->getEndTime()];
     [dataArr addObject:@{
                          @"title" : OALocalizedString(@"osm_opens_at"),
-                         @"type" : [OATimeTableViewCell getCellIdentifier],
+                         @"type" : [OAValueTableViewCell getCellIdentifier],
                          }];
     
     [dataArr addObject:@{
                          @"title" : OALocalizedString(@"osm_closes_at"),
-                         @"type" : [OATimeTableViewCell getCellIdentifier],
+                         @"type" : [OAValueTableViewCell getCellIdentifier],
                          }];
     _timeData = [NSArray arrayWithArray:dataArr];
 }
@@ -326,20 +326,23 @@ static const NSInteger timeSectionIndex = 1;
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:[OATimeTableViewCell getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
-        OATimeTableViewCell* cell;
-        cell = (OATimeTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OATimeTableViewCell getCellIdentifier]];
+        OAValueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATimeTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OATimeTableViewCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAValueTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.valueLabel.textColor = UIColor.blackColor;
         }
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.lbTitle.text = item[@"title"];
-        cell.lbTime.text = [_dateFormatter stringFromDate:indexPath.row == 1 ? _startDate : _endDate];
-        cell.lbTime.textColor = [UIColor blackColor];
-        
+        if (cell)
+        {
+            cell.titleLabel.text = item[@"title"];
+            cell.valueLabel.text = [_dateFormatter stringFromDate:indexPath.row == 1 ? _startDate : _endDate];
+        }
         return cell;
     }
     else if ([self datePickerIsShown] && [_datePickerIndexPath isEqual:indexPath])
@@ -387,7 +390,7 @@ static const NSInteger timeSectionIndex = 1;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:[OATimeTableViewCell getCellIdentifier]])
+    if ([item[@"type"] isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
         [self.tableView beginUpdates];
         

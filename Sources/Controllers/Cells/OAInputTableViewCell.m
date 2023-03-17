@@ -41,7 +41,7 @@
 
 - (BOOL)checkSubviewsToUpdateMargins
 {
-    return !self.leftIconView.hidden || !self.inputField.hidden;
+    return !self.inputField.hidden;
 }
 
 @end

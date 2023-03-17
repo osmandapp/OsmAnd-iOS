@@ -10,7 +10,7 @@
 #import "OAMapSettingsViewController.h"
 #import "OAMapStyleSettings.h"
 #import "Localization.h"
-#import "OATimeTableViewCell.h"
+#import "OAValueTableViewCell.h"
 #import "OACustomPickerTableViewCell.h"
 #import "OAAppSettings.h"
 #import "OASegmentSliderTableViewCell.h"
@@ -522,18 +522,20 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
     else if ([item[@"type"] isEqualToString:kCellTypeValue])
     {
-        OATimeTableViewCell* cell;
-        cell = (OATimeTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[OATimeTableViewCell getCellIdentifier]];
+        OAValueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATimeTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OATimeTableViewCell *)[nib objectAtIndex:0];
-            cell.lbTime.textColor = UIColorFromRGB(color_text_footer);
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAValueTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
         }
-        OAMapStyleParameter *p = item[@"parameter"];
-        cell.lbTitle.text = item[@"title"];
-        NSString *title = p.value.length == 0 ? kDefaultZoomLevel : p.value;
-        cell.lbTime.text = title;
+        if (cell)
+        {
+            OAMapStyleParameter *p = item[@"parameter"];
+            cell.titleLabel.text = item[@"title"];
+            cell.valueLabel.text = p.value.length == 0 ? kDefaultZoomLevel : p.value;
+        }
         return cell;
     }
     else if ([item[@"type"] isEqualToString:kCellTypePicker])

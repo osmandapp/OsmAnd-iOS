@@ -39,7 +39,7 @@
 #import "OAPOIBaseType.h"
 #import "OAOsmEditingPlugin.h"
 #import "OAOsmNotePoint.h"
-#import "OADescrTitleCell.h"
+#import "OASimpleTableViewCell.h"
 #import "OABottomSheetTwoButtonsViewController.h"
 #import "OAOsmBugsRemoteUtil.h"
 #import "OAOsmBugsDBHelper.h"
@@ -112,7 +112,7 @@
     if (_screenType == TYPE_UPLOAD)
     {
         [arr addObject:@{
-                         @"type" : [OADescrTitleCell getCellIdentifier],
+                         @"type" : [OASimpleTableViewCell getCellIdentifier],
                          @"title" : OALocalizedString(@"osm_note_upload_info"),
                          @"description" : @""
                          }];
@@ -252,7 +252,7 @@
     {
         return MAX(((OATextInputFloatingCell *)_data[indexPath.row][@"cell"]).inputField.intrinsicContentSize.height, 60.0);
     }
-    else if ([item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]] || [item[@"type"] isEqualToString:[OABottomSheetHeaderCell getCellIdentifier]] || [item[@"type"] isEqualToString:[OADescrTitleCell getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]] || [item[@"type"] isEqualToString:[OABottomSheetHeaderCell getCellIdentifier]] || [item[@"type"] isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
     {
         return UITableViewAutomaticDimension;
     }
@@ -337,22 +337,22 @@
     {
         return item[@"cell"];
     }
-    else if ([item[@"type"] isEqualToString:[OADescrTitleCell getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
     {
-        OADescrTitleCell* cell;
-        cell = (OADescrTitleCell *)[self.tblView dequeueReusableCellWithIdentifier:[OADescrTitleCell getCellIdentifier]];
+        OASimpleTableViewCell *cell = [self.tblView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADescrTitleCell getCellIdentifier] owner:self options:nil];
-            cell = (OADescrTitleCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASimpleTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
+            cell.backgroundColor = [UIColor clearColor];
+            cell.titleLabel.textColor = UIColorFromRGB(color_text_footer);
+            cell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
         }
-        
         if (cell)
         {
-            cell.descriptionView.text = item[@"title"];
-            cell.descriptionView.textColor = UIColorFromRGB(color_text_footer);
-            cell.backgroundColor = [UIColor clearColor];
-            cell.textView.hidden = YES;
+            cell.titleLabel.text = item[@"title"];
         }
         return cell;
     }

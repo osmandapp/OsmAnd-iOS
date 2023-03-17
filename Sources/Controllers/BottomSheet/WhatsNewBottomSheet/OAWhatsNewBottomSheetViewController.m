@@ -9,7 +9,7 @@
 
 #import "OAWhatsNewBottomSheetViewController.h"
 #import "OAAppVersionDependentConstants.h"
-#import "OADescrTitleCell.h"
+#import "OASimpleTableViewCell.h"
 #import "Localization.h"
 #import "OALinks.h"
 #import "OARootViewController.h"
@@ -55,7 +55,7 @@
     NSMutableArray *data = [NSMutableArray new];
     [data addObject:@[
         @{
-             @"type" : [OADescrTitleCell getCellIdentifier],
+             @"type" : [OASimpleTableViewCell getCellIdentifier],
              @"attributedText" : [self getAttributedContentText]
         }]];
     _data = data;
@@ -104,24 +104,24 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
-    if ([item[@"type"] isEqualToString:[OADescrTitleCell getCellIdentifier]])
+    if ([item[@"type"] isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
     {
-        OADescrTitleCell* cell;
-        cell = (OADescrTitleCell *)[self.tableView dequeueReusableCellWithIdentifier:[OADescrTitleCell getCellIdentifier]];
+        OASimpleTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADescrTitleCell getCellIdentifier] owner:self options:nil];
-            cell = (OADescrTitleCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASimpleTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
             cell.backgroundColor = UIColor.clearColor;
             cell.contentView.backgroundColor = UIColor.clearColor;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.descriptionView.textColor = [UIColor blackColor];
-            cell.descriptionView.backgroundColor = UIColor.clearColor;
-            cell.textView.hidden = YES;
+            cell.titleLabel.backgroundColor = UIColor.clearColor;
+            cell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
         }
         if (cell)
         {
-            cell.descriptionView.attributedText = item[@"attributedText"];
+            cell.titleLabel.attributedText = item[@"attributedText"];
         }
         return cell;
     }

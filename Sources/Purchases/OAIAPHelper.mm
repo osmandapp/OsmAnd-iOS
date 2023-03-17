@@ -1550,11 +1550,7 @@ static OASubscriptionState *EXPIRED;
                                  }
                                  
                                  NSArray *subscriptions = [map objectForKey:@"subscriptions"];
-                                 NSData *data = [OAAppSettings.sharedManager.purchasedIdentifiers.get dataUsingEncoding:NSUTF8StringEncoding];
-                                 NSError *error = nil;
-                                 NSDictionary *result = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
-                                 NSMutableDictionary *res = (error || OAAppSettings.sharedManager.purchasedIdentifiers.get.length == 0)
-                                    ? [NSMutableDictionary dictionary] : [NSMutableDictionary dictionaryWithDictionary:result];
+                                 NSMutableDictionary *res = [NSMutableDictionary dictionary];
                                  
                                  for (NSDictionary *subscription in subscriptions)
                                  {
@@ -1583,11 +1579,11 @@ static OASubscriptionState *EXPIRED;
                                              res[product.productIdentifier] = transactionId;
                                      }
                                  }
-                                 error = nil;
+                                 NSError *error = nil;
                                  NSString *resStr = [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:res
                                                                                                                    options:0
                                                                                                                      error:&error] encoding:NSUTF8StringEncoding];
-                                 resStr = error ? @"" : resStr;
+                                 resStr = error ? @"{}" : resStr;
                                  [_settings.purchasedIdentifiers set:resStr];
                              }
                              else if (status == kUserNotFoundStatus || status == kNoSubscriptionsFoundStatus)

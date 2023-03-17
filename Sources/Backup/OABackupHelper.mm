@@ -313,6 +313,7 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
     OASubscription *purchasedSubscription = iapHelper.getAnyPurchasedOsmAndProSubscription;
     if (purchasedSubscription)
     {
+        NSLog(@"Found purchased subscription: %@", [purchasedSubscription getOrderId]);
         return [purchasedSubscription getOrderId];
     }
     return nil;

@@ -13,6 +13,7 @@
 #import "OAMenuSimpleCell.h"
 #import "Localization.h"
 #import "OAProfileDataObject.h"
+#import "OARoutingDataObject.h"
 #import "OAQuickAction.h"
 #import "OAPOIUIFilter.h"
 #import "OATileSource.h"
@@ -154,7 +155,7 @@
         NSString *routingProfileValue = modeBean.routingProfile;
         if (routingProfileValue.length > 0)
         {
-            routingProfile = [OARoutingProfileDataObject getLocalizedName:[OARoutingProfileDataObject getValueOf:[routingProfileValue upperCase]]];
+            routingProfile = [OARoutingDataObject getLocalizedName:[OARoutingDataObject getValueOf:[routingProfileValue upperCase]]];
             routingProfile = routingProfile.length > 0 ? [routingProfile capitalizedString] : routingProfileValue.capitalizedString;
         }
         if (routingProfile.length > 0)

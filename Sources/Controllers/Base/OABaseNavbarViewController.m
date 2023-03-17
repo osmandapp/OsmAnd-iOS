@@ -70,6 +70,15 @@
     self.tableView.dataSource = self;
     self.tableView.backgroundColor = UIColorFromRGB(color_primary_table_background);
     self.tableView.tintColor = UIColorFromRGB(color_primary_purple);
+    NSString *tableFooterText = [self getTableFooterText];
+    if (tableFooterText && tableFooterText.length > 0)
+    {
+        self.tableView.tableFooterView = [OAUtilities setupTableHeaderViewWithText:tableFooterText
+                                                                              font:[UIFont preferredFontForTextStyle:UIFontTextStyleFootnote]
+                                                                         textColor:UIColorFromRGB(color_text_footer)
+                                                                        isBigTitle:NO
+                                                                   parentViewWidth:self.view.frame.size.width];
+    }
 
     [self updateNavbar];
 }
@@ -534,6 +543,11 @@
                                                     parentViewWidth:self.view.frame.size.width];
     }
     self.tableView.tableHeaderView = tableHeaderView;
+}
+
+- (NSString *)getTableFooterText
+{
+    return @"";
 }
 
 #pragma mark - Table data

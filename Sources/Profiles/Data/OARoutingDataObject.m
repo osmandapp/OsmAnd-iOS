@@ -1,82 +1,41 @@
 //
-//  OAProfileDataObject.m
+//  OARoutingDataObject.m
 //  OsmAnd
 //
-//  Created by Paul on 02.07.2020.
-//  Copyright © 2020 OsmAnd. All rights reserved.
+//  Created by Skalii on 16.03.2023.
+//  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
-#import "OAProfileDataObject.h"
+#import "OARoutingDataObject.h"
 #import "Localization.h"
 
-static NSDictionary<NSString *, OARoutingProfileDataObject *> *_rpValues;
+static NSArray<NSString *> *_rpValues;
 
-@implementation OAProfileDataObject
-
-- (instancetype)initWithStringKey:(NSString *)stringKey name:(NSString *)name descr:(NSString *)descr iconName:(NSString *)iconName isSelected:(BOOL)isSelected
-{
-    self = [super init];
-    if (self) {
-        _stringKey = stringKey;
-        _name = name;
-        _descr = descr;
-        _iconName = iconName;
-        _isSelected = isSelected;
-    }
-    return self;
-}
-
-- (NSComparisonResult)compare:(OAProfileDataObject *)other
-{
-    return [_name compare:other.name];
-}
-
-@end
-
-@implementation OARoutingProfileDataObject
+@implementation OARoutingDataObject
 
 + (void)initialize
 {
-    NSMutableDictionary<NSString *, OARoutingProfileDataObject *> *rps = [NSMutableDictionary new];
-    for (NSInteger i = EOARoutingProfilesResourceDirectTo; i < EOARoutingProfilesResourceGeocoding; i++)
+    NSMutableArray<NSString *> *rpValues = [NSMutableArray array];
+    for (NSInteger i = EOARoutingProfilesResourceDirectTo; i < EOARoutingProfilesResourceMoped + 1; i++)
     {
-        [rps setObject:[[OARoutingProfileDataObject alloc] initWithResource:i] forKey:[self getProfileKey:i]];
+        [rpValues addObject:[self getProfileKey:i]];
     }
-    _rpValues = [NSDictionary dictionaryWithDictionary:rps];
+    _rpValues = rpValues;
 }
 
-- (instancetype)initWithStringKey:(NSString *)stringKey name:(NSString *)name descr:(NSString *)descr iconName:(NSString *)iconName isSelected:(BOOL)isSelected fileName:(NSString *)fileName
+- (instancetype)initWithStringKey:(NSString *)stringKey
+                             name:(NSString *)name
+                            descr:(NSString *)descr
+                         iconName:(NSString *)iconName
+                       isSelected:(BOOL)isSelected
+                         fileName:(NSString *)fileName
+                   derivedProfile:(NSString *)derivedProfile
 {
     self = [super initWithStringKey:stringKey name:name descr:descr iconName:iconName isSelected:isSelected];
-    if (self) {
+    if (self)
+    {
         _fileName = fileName;
-    }
-    return self;
-}
-
-- (instancetype) initWithResource:(EOARoutingProfilesResource)res
-{
-    self = [super init];
-    if (self) {
-        self.stringKey = [OARoutingProfileDataObject getProfileKey:res];
-        self.name = [OARoutingProfileDataObject getLocalizedName:res];
-        self.iconName = [OARoutingProfileDataObject getIconName:res];
-    }
-    return self;
-}
-
-- (instancetype) initWithProfileDataObject:(OARoutingProfileDataObject *)copy
-{
-    self = [super init];
-    if (self) {
-        self.stringKey = copy.stringKey;
-        self.name = copy.name;
-        self.iconName = copy.iconName;
-        self.fileName = copy.fileName;
-        self.descr = copy.descr;
-        self.isEnabled = copy.isEnabled;
-        self.iconColor = copy.iconColor;
-        self.derivedProfile = copy.derivedProfile;
+        _derivedProfile = derivedProfile;
     }
     return self;
 }
@@ -106,6 +65,8 @@ static NSDictionary<NSString *, OARoutingProfileDataObject *> *_rpValues;
             return @"HORSEBACKRIDING";
         case EOARoutingProfilesResourceGeocoding:
             return @"GEOCODING";
+        case EOARoutingProfilesResourceMoped:
+            return @"MOPED";
         default:
             return @"";
     };
@@ -136,6 +97,8 @@ static NSDictionary<NSString *, OARoutingProfileDataObject *> *_rpValues;
             return @"ic_action_horse";
         case EOARoutingProfilesResourceGeocoding:
             return @"ic_custom_online";
+        case EOARoutingProfilesResourceMoped:
+            return @"ic_action_motor_scooter";
         default:
             return @"";
     };
@@ -166,6 +129,8 @@ static NSDictionary<NSString *, OARoutingProfileDataObject *> *_rpValues;
             return OALocalizedString(@"horseback_riding");
         case EOARoutingProfilesResourceGeocoding:
             return OALocalizedString(@"routing_profile_geocoding");
+        case EOARoutingProfilesResourceMoped:
+            return OALocalizedString(@"app_mode_moped");
         default:
             return @"";
     };
@@ -195,18 +160,16 @@ static NSDictionary<NSString *, OARoutingProfileDataObject *> *_rpValues;
         return EOARoutingProfilesResourceHorsebackriding;
     else if ([key isEqualToString: @"GEOCODING"])
         return EOARoutingProfilesResourceGeocoding;
+    else if ([key isEqualToString: @"MOPED"])
+        return EOARoutingProfilesResourceMoped;
     else
         return EOARoutingProfilesResourceUndefined;
 }
 
-+ (OARoutingProfileDataObject *) getRoutingProfileDataByName:(NSString *)key
-{
-    return _rpValues[key];
-}
-
 + (BOOL)isRpValue:(NSString *)value
 {
-    return [_rpValues objectForKey:value] != nil;
+    return [_rpValues containsObject:value];
 }
 
 @end
+

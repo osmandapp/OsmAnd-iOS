@@ -16,6 +16,7 @@
 #import "OAPOIUIFilter.h"
 #import "OAAvoidRoadInfo.h"
 #import "OAProfileDataObject.h"
+#import "OARoutingDataObject.h"
 #import "OAMenuSimpleCell.h"
 #import "OASimpleTableViewCell.h"
 #import "OAActivityViewWithTitleCell.h"
@@ -319,7 +320,7 @@
                 {
                     try
                     {
-                        routingProfile = [OARoutingProfileDataObject getLocalizedName: [OARoutingProfileDataObject getValueOf: [routingProfileValue upperCase]]];
+                        routingProfile = [OARoutingDataObject getLocalizedName:[OARoutingDataObject getValueOf:routingProfileValue.upperCase]];
                         routingProfile = [routingProfile capitalizedString];
 
                     } catch (NSException *e)

@@ -53,6 +53,7 @@ typedef NS_ENUM(NSInteger, EOABaseNavbarStyle)
 - (EOABaseNavbarStyle)getNavbarStyle;
 - (NSString *)getCustomTableViewDescription;
 - (void)setupCustomLargeTitleView;
+- (NSString *)getTableFooterText;
 
 - (void)generateData;
 - (BOOL)hideFirstHeader;

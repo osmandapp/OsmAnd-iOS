@@ -7,23 +7,30 @@
 //
 
 #import "OANavigationTypeViewController.h"
-#import "OAIconTextTableViewCell.h"
-#import "OAProfileDataObject.h"
-#import "OAProfileNavigationSettingsViewController.h"
+#import "OASimpleTableViewCell.h"
+#import "OAProfilesGroup.h"
 #import "OAApplicationMode.h"
-#import "OAProfileDataUtils.h"
+#import "OARoutingDataUtils.h"
+#import "OARoutingDataObject.h"
 #import "OAAppSettings.h"
-
+#import "OATableDataModel.h"
+#import "OATableSectionData.h"
+#import "OATableRowData.h"
 #import "Localization.h"
 #import "OAColors.h"
 
-#define kSidePadding 16
-
 @implementation OANavigationTypeViewController
 {
-    NSArray<OARoutingProfileDataObject *> *_sortedRoutingProfiles;
+    NSArray<OAProfilesGroup *> *_profileGroups;
     NSArray<NSString *> *_fileNames;
-    NSArray<NSArray *> *_data;
+    OATableDataModel *_data;
+}
+
+#pragma mark - Initialization
+
+- (void)commonInit
+{
+    _profileGroups = [OARoutingDataUtils getOfflineProfiles];
 }
 
 #pragma mark - Base UI
@@ -43,92 +50,74 @@
     return OALocalizedString(@"select_nav_profile_dialog_message");
 }
 
+- (NSString *)getTableFooterText
+{
+    return OALocalizedString(@"import_routing_file_descr");
+}
+
 #pragma mark - Table data
 
 - (void)generateData
 {
-    _sortedRoutingProfiles = [OAProfileDataUtils getSortedRoutingProfiles];
-    NSMutableArray *tableData = [NSMutableArray new];
-    NSString *lastFileName = _sortedRoutingProfiles.firstObject.fileName;
-    NSMutableArray *sectionData = [NSMutableArray new];
-    NSMutableArray *fileNames = [NSMutableArray new];
-    for (NSInteger i = 0; i < _sortedRoutingProfiles.count; i++)
+    _data = [OATableDataModel model];
+    for (OAProfilesGroup *group in _profileGroups)
     {
-        OARoutingProfileDataObject *profile = _sortedRoutingProfiles[i];
-        if ((lastFileName == nil && profile.fileName == nil) || [lastFileName isEqualToString:profile.fileName])
+        NSArray<OARoutingDataObject *> *profiles = group.profiles;
+        if (profiles.count > 0)
         {
-            [sectionData addObject:@{
-                @"type" : [OAIconTextTableViewCell getCellIdentifier],
-                @"title" : profile.name,
-                @"profile_ind" : @(i),
-                @"icon" : profile.iconName,
-            }];
-        }
-        else
-        {
-            [tableData addObject:[NSArray arrayWithArray:sectionData]];
-            [sectionData removeAllObjects];
-            lastFileName = profile.fileName;
-            [fileNames addObject:lastFileName];
-            [sectionData addObject:@{
-                @"type" : [OAIconTextTableViewCell getCellIdentifier],
-                @"title" : profile.name,
-                @"profile_ind" : @(i),
-                @"icon" : profile.iconName,
-            }];
+            OATableSectionData *routingSection = [_data createNewSection];
+            routingSection.headerText = group.title;
+            routingSection.footerText = group.descr;
+            
+            for (OARoutingDataObject *profile in profiles)
+            {
+                [routingSection addRowFromDictionary:@{
+                    kCellTypeKey : [OASimpleTableViewCell getCellIdentifier],
+                    @"profile" : profile
+                }];
+            }
         }
     }
-    [tableData addObject:[NSArray arrayWithArray:sectionData]];
-    _fileNames = [NSArray arrayWithArray:fileNames];
-    _data = [NSArray arrayWithArray:tableData];
 }
 
 - (NSString *)getTitleForHeader:(NSInteger)section
 {
-    if (section == 0)
-        return OALocalizedString(@"osmand_default_routing");
-    else
-        return _fileNames[section - 1].lastPathComponent;
+    return [_data sectionDataForIndex:section].headerText;
 }
 
 - (NSString *)getTitleForFooter:(NSInteger)section
 {
-    if (section == [self.tableView numberOfSections] - 1)
-        return OALocalizedString(@"import_routing_file_descr");
-    else
-        return @"";
+    return [_data sectionDataForIndex:section].footerText;
 }
 
 - (NSInteger)rowsCount:(NSInteger)section
 {
-    return _data[section].count;
+    return [_data rowCount:section];
 }
 
 - (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
-    NSDictionary *item = _data[indexPath.section][indexPath.row];
-    NSString *cellType = item[@"type"];
-    OARoutingProfileDataObject *profile = _sortedRoutingProfiles[[item[@"profile_ind"] integerValue]];
-    if ([cellType isEqualToString:[OAIconTextTableViewCell getCellIdentifier]])
+    OATableRowData *item = [_data itemForIndexPath:indexPath];
+    OARoutingDataObject *profile = [item objForKey:@"profile"];
+    if ([item.cellType isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
     {
-        OAIconTextTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OAIconTextTableViewCell getCellIdentifier]];
+        OASimpleTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAIconTextTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
-            cell.separatorInset = UIEdgeInsetsMake(0., 62., 0., 0.);
-            [cell.arrowIconView setHidden:YES];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASimpleTableViewCell *) nib[0];
+            [cell descriptionVisibility:NO];
         }
         if (cell)
         {
-            cell.textView.text = item[@"title"];
-            cell.iconView.image = [UIImage templateImageNamed:item[@"icon"]];
-            NSString *derivedProfile = self.appMode.getDerivedProfile;
+            cell.titleLabel.text = profile.name;
+            cell.leftIconView.image = [UIImage templateImageNamed:profile.iconName];
+
+            NSString *derivedProfile = [self.appMode getDerivedProfile];
             BOOL checkForDerived = ![derivedProfile isEqualToString:@"default"];
-            BOOL isSelected = [profile.stringKey isEqual:self.appMode.getRoutingProfile] && ((!checkForDerived && !profile.derivedProfile) || (checkForDerived && [profile.derivedProfile isEqualToString:derivedProfile]));
-            if (isSelected)
-                cell.accessoryType = UITableViewCellAccessoryCheckmark;
-            cell.iconView.tintColor = isSelected ? UIColorFromRGB(self.appMode.getIconColor) : UIColorFromRGB(color_icon_inactive);
+            BOOL isSelected = [profile.stringKey isEqual:[self.appMode getRoutingProfile]] && ((!checkForDerived && !profile.derivedProfile) || (checkForDerived && [profile.derivedProfile isEqualToString:derivedProfile]));
+            cell.accessoryType = isSelected ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+            cell.leftIconView.tintColor = isSelected ? UIColorFromRGB([self.appMode getIconColor]) : UIColorFromRGB(color_icon_inactive);
         }
         return cell;
     }
@@ -137,33 +126,30 @@
 
 - (NSInteger)sectionsCount
 {
-    return _data.count;
+    return [_data sectionCount];
 }
 
 - (void)onRowSelected:(NSIndexPath *)indexPath
 {
-    NSDictionary *item = _data[indexPath.section][indexPath.row];
-    OARoutingProfileDataObject *profileData = _sortedRoutingProfiles[[item[@"profile_ind"] integerValue]];
-    if (profileData)
-    {
-        int routeService;
-        if ([profileData.stringKey isEqualToString:@"STRAIGHT_LINE_MODE"])
-            routeService = STRAIGHT;
-        else if ([profileData.stringKey isEqualToString:@"DIRECT_TO_MODE"])
-            routeService = DIRECT_TO;
-//        else if (profileKey.equals(RoutingProfilesResources.BROUTER_MODE.name())) {
-//            routeService = RouteProvider.RouteService.BROUTER;
-        else
-            routeService = OSMAND;
-        
-        NSString *derivedProfile = profileData.derivedProfile ? profileData.derivedProfile : @"default";
-        [self.appMode setRoutingProfile:profileData.stringKey];
-        [self.appMode setDerivedProfile:derivedProfile];
-        [self.appMode setRouterService:routeService];
-        if (self.delegate)
-            [self.delegate onSettingsChanged];
-        [self dismissViewController];
-    }
+    OATableRowData *item = [_data itemForIndexPath:indexPath];
+    OARoutingDataObject *profile = [item objForKey:@"profile"];
+    int routeService;
+    if ([profile.stringKey isEqualToString:@"STRAIGHT_LINE_MODE"])
+        routeService = STRAIGHT;
+    else if ([profile.stringKey isEqualToString:@"DIRECT_TO_MODE"])
+        routeService = DIRECT_TO;
+//    else if (profileKey.equals(RoutingProfilesResources.BROUTER_MODE.name())) {
+//        routeService = RouteProvider.RouteService.BROUTER;
+    else
+        routeService = OSMAND;
+
+    NSString *derivedProfile = profile.derivedProfile ? profile.derivedProfile : @"default";
+    [self.appMode setRoutingProfile:profile.stringKey];
+    [self.appMode setDerivedProfile:derivedProfile];
+    [self.appMode setRouterService:routeService];
+    if (self.delegate)
+        [self.delegate onSettingsChanged];
+    [self dismissViewController];
 }
 
 @end

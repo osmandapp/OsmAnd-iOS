@@ -50,6 +50,7 @@
 + (OAApplicationMode *) AIRCRAFT;
 + (OAApplicationMode *) TRUCK;
 + (OAApplicationMode *) MOTORCYCLE;
++ (OAApplicationMode *) MOPED;
 + (OAApplicationMode *) BOAT;
 + (OAApplicationMode *) PUBLIC_TRANSPORT;
 + (OAApplicationMode *) SKI;

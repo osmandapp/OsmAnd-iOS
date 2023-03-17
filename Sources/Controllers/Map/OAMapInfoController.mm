@@ -39,8 +39,7 @@
 #import "OAQuickActionHudViewController.h"
 #import "OAMapLayers.h"
 #import "OAWeatherLayerSettingsViewController.h"
-#import "OASunriseWidget.h"
-#import "OASunsetWidget.h"
+#import "OASunriseSunsetWidget.h"
 #import "OASunriseSunsetWidgetState.h"
 
 @interface OATextState : NSObject
@@ -760,11 +759,13 @@
     OATextInfoWidget *ruler = [mic createRulerControl];
     [self registerSideWidget:ruler widgetState:[[OACompassRulerWidgetState alloc] init] key:@"radius_ruler" left:NO priorityOrder:43];
     
-    OASunriseWidget *sunriseWidget = [[OASunriseWidget alloc] init];
-    [self registerSideWidget:sunriseWidget widgetState:[[OASunriseSunsetWidgetState alloc] initWithType:YES] key:@"sunrise" left:NO priorityOrder:44];
+    OASunriseSunsetWidgetState *sunriseState = [[OASunriseSunsetWidgetState alloc] initWithType:YES];
+    OASunriseSunsetWidget *sunriseWidget = [[OASunriseSunsetWidget alloc] initWithState:sunriseState];
+    [self registerSideWidget:sunriseWidget widgetState:sunriseState key:@"sunrise" left:NO priorityOrder:44];
     
-    OASunsetWidget *sunsetWidget = [[OASunsetWidget alloc] init];
-    [self registerSideWidget:sunsetWidget widgetState:[[OASunriseSunsetWidgetState alloc] initWithType:NO] key:@"sunset" left:NO priorityOrder:45];
+    OASunriseSunsetWidgetState *sunsetState = [[OASunriseSunsetWidgetState alloc] initWithType:NO];
+    OASunriseSunsetWidget *sunsetWidget = [[OASunriseSunsetWidget alloc] initWithState:sunsetState];
+    [self registerSideWidget:sunsetWidget widgetState:sunsetState key:@"sunset" left:NO priorityOrder:45];
 }
 
 - (void) updateStreetName:(BOOL)nightMode ts:(OATextState *)ts

@@ -14,7 +14,6 @@
 #import "OAAvoidRoadInfo.h"
 #import "OAGPXDatabase.h"
 #import "OAIAPHelper.h"
-#import "OASunriseSunsetWidgetHelper.h"
 
 #define settingShowMapRuletKey @"settingShowMapRuletKey"
 #define metricSystemKey @"settingMetricSystemKey"
@@ -459,27 +458,6 @@
             return OALocalizedString(@"map_widget_sunrise_sunset_time_left");
         case EOASunriseSunsetNext:
             return isSunrise ? OALocalizedString(@"map_widget_next_sunrise") : OALocalizedString(@"map_widget_next_sunset");
-        default:
-            return @"";
-    }
-}
-
-+ (NSString *) getDescription:(EOASunriseSunsetMode)ssm isSunrise:(BOOL)isSunrise
-{
-    switch (ssm)
-    {
-        case EOASunriseSunsetHide:
-            return OALocalizedString(@"");
-        case EOASunriseSunsetTimeLeft:
-        {
-            NSArray <NSString *> *values = [OASunriseSunsetWidgetHelper getTimeLeftUntilSunriseSunset:isSunrise];
-            return [NSString stringWithFormat:@"%@ %@", values.firstObject, values.lastObject];
-        }
-        case EOASunriseSunsetNext:
-        {
-            NSArray <NSString *> *values = [OASunriseSunsetWidgetHelper getNextSunriseSunset:isSunrise];
-            return [NSString stringWithFormat:@"%@ %@", values.firstObject, values.lastObject];
-        }
         default:
             return @"";
     }

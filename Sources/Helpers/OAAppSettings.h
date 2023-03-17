@@ -62,7 +62,6 @@ typedef NS_ENUM(NSInteger, EOASunriseSunsetMode)
 @interface OASunriseSunsetMode : NSObject
 
 + (NSString *) getTitle:(EOASunriseSunsetMode)ssm isSunrise:(BOOL)isSunrise;
-+ (NSString *) getDescription:(EOASunriseSunsetMode)ssm isSunrise:(BOOL)isSunrise;
 
 @end
 

@@ -11,6 +11,7 @@
 #import "OAMapWidgetRegistry.h"
 #import "OARootViewController.h"
 #import "OAAppSettings.h"
+#import "OASunriseSunsetWidget.h"
 
 typedef NS_ENUM(NSInteger, EOASunriseSunsetWidgetType)
 {
@@ -33,6 +34,11 @@ typedef NS_ENUM(NSInteger, EOASunriseSunsetWidgetType)
         _sunriseSunsetMode = sunriseMode ? [OAAppSettings sharedManager].sunriseMode : [OAAppSettings sharedManager].sunsetMode;
     }
     return self;
+}
+
+- (BOOL) isSunriseMode
+{
+    return _type == SUNRISE_TYPE;
 }
 
 - (NSString *) getMenuTitle
@@ -91,15 +97,15 @@ typedef NS_ENUM(NSInteger, EOASunriseSunsetWidgetType)
     {
         case SUNRISE_TYPE:
             return @[
-                [OASunriseSunsetMode getDescription:EOASunriseSunsetHide isSunrise:YES],
-                [OASunriseSunsetMode getDescription:EOASunriseSunsetTimeLeft isSunrise:YES],
-                [OASunriseSunsetMode getDescription:EOASunriseSunsetNext isSunrise:YES]
+                [OASunriseSunsetWidget getDescription:EOASunriseSunsetHide isSunrise:YES],
+                [OASunriseSunsetWidget getDescription:EOASunriseSunsetTimeLeft isSunrise:YES],
+                [OASunriseSunsetWidget getDescription:EOASunriseSunsetNext isSunrise:YES]
             ];
         case SUNSET_TYPE:
             return @[
-                [OASunriseSunsetMode getDescription:EOASunriseSunsetHide isSunrise:NO],
-                [OASunriseSunsetMode getDescription:EOASunriseSunsetTimeLeft isSunrise:NO],
-                [OASunriseSunsetMode getDescription:EOASunriseSunsetNext isSunrise:NO]
+                [OASunriseSunsetWidget getDescription:EOASunriseSunsetHide isSunrise:NO],
+                [OASunriseSunsetWidget getDescription:EOASunriseSunsetTimeLeft isSunrise:NO],
+                [OASunriseSunsetWidget getDescription:EOASunriseSunsetNext isSunrise:NO]
             ];
         default:
             return @[@""];

@@ -1508,9 +1508,7 @@
 		C54371FC29B7923D00028C3C /* widget_sunset_night@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C54371F429B7923D00028C3C /* widget_sunset_night@3x.png */; };
 		C54371FD29B7923D00028C3C /* widget_sunrise_night@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C54371F529B7923D00028C3C /* widget_sunrise_night@2x.png */; };
 		C54D7F8829BF357700E14746 /* OASunriseSunsetWidgetState.m in Sources */ = {isa = PBXBuildFile; fileRef = C54D7F8729BF357700E14746 /* OASunriseSunsetWidgetState.m */; };
-		C54D7F8B29C06F9200E14746 /* OASunriseSunsetWidgetHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = C54D7F8A29C06F9200E14746 /* OASunriseSunsetWidgetHelper.mm */; };
-		C556C85329BA0844006794D5 /* OASunriseWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = C556C85129BA0844006794D5 /* OASunriseWidget.mm */; };
-		C556C85829BA42FA006794D5 /* OASunsetWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = C556C85629BA42FA006794D5 /* OASunsetWidget.mm */; };
+		C556C85329BA0844006794D5 /* OASunriseSunsetWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = C556C85129BA0844006794D5 /* OASunriseSunsetWidget.mm */; };
 		C558A29B29B1355A00E79DDB /* ic_custom_direction_manual_night@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C558A29529B1355800E79DDB /* ic_custom_direction_manual_night@2x.png */; };
 		C558A29C29B1355A00E79DDB /* ic_custom_direction_manual_night@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C558A29629B1355900E79DDB /* ic_custom_direction_manual_night@3x.png */; };
 		C558A29D29B1355A00E79DDB /* ic_custom_direction_manual@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C558A29729B1355900E79DDB /* ic_custom_direction_manual@2x.png */; };
@@ -1546,7 +1544,6 @@
 		C56FAB8229B22D2F0096192F /* widget_developer_day@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C56FAB7E29B22D2E0096192F /* widget_developer_day@2x.png */; };
 		C56FAB8329B22D2F0096192F /* widget_developer_night@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C56FAB7F29B22D2E0096192F /* widget_developer_night@3x.png */; };
 		C56FAB8429B22D2F0096192F /* widget_developer_day@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C56FAB8029B22D2E0096192F /* widget_developer_day@3x.png */; };
-		C578644329BA4F9F0083B3FC /* OASunsetWidget.xib in Resources */ = {isa = PBXBuildFile; fileRef = C578644229BA4F9F0083B3FC /* OASunsetWidget.xib */; };
 		C5879A49299FB96300F53249 /* uk_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = C5879A48299FB96300F53249 /* uk_tts.js */; };
 		C5879A4B299FBF7A00F53249 /* bg_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = C5879A4A299FBF7900F53249 /* bg_tts.js */; };
 		C5879A4D299FC24700F53249 /* id_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = C5879A4C299FC24700F53249 /* id_tts.js */; };
@@ -1556,7 +1553,7 @@
 		C588D1EF298D1ECE001FEDBD /* OASearchHistoryTableGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = C588D1EE298D1ECE001FEDBD /* OASearchHistoryTableGroup.m */; };
 		C588D1F22992A448001FEDBD /* ic_custom_history_disabled_48@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C588D1F02992A447001FEDBD /* ic_custom_history_disabled_48@2x.png */; };
 		C588D1F32992A448001FEDBD /* ic_custom_history_disabled_48@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C588D1F12992A447001FEDBD /* ic_custom_history_disabled_48@3x.png */; };
-		C5CD068629BA4D70009F79CF /* OASunriseWidget.xib in Resources */ = {isa = PBXBuildFile; fileRef = C5CD068529BA4D70009F79CF /* OASunriseWidget.xib */; };
+		C5CD068629BA4D70009F79CF /* OASunriseSunsetWidget.xib in Resources */ = {isa = PBXBuildFile; fileRef = C5CD068529BA4D70009F79CF /* OASunriseSunsetWidget.xib */; };
 		C5D4D7312987C56000D3BC04 /* OAHistorySettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = C5D4D72F2987C56000D3BC04 /* OAHistorySettingsViewController.mm */; };
 		C5D8F809292F5B2900C01065 /* ic_custom_download_map@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5D8F808292F5B2900C01065 /* ic_custom_download_map@2x.png */; };
 		C5D8F80B292F5B3A00C01065 /* ic_custom_download_map@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C5D8F80A292F5B3A00C01065 /* ic_custom_download_map@3x.png */; };
@@ -5121,12 +5118,8 @@
 		C54371F529B7923D00028C3C /* widget_sunrise_night@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "widget_sunrise_night@2x.png"; path = "Resources/Icons/widget_sunrise_night@2x.png"; sourceTree = "<group>"; };
 		C54D7F8629BF357700E14746 /* OASunriseSunsetWidgetState.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OASunriseSunsetWidgetState.h; sourceTree = "<group>"; };
 		C54D7F8729BF357700E14746 /* OASunriseSunsetWidgetState.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OASunriseSunsetWidgetState.m; sourceTree = "<group>"; };
-		C54D7F8929C06F9200E14746 /* OASunriseSunsetWidgetHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OASunriseSunsetWidgetHelper.h; sourceTree = "<group>"; };
-		C54D7F8A29C06F9200E14746 /* OASunriseSunsetWidgetHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASunriseSunsetWidgetHelper.mm; sourceTree = "<group>"; };
-		C556C85029BA0844006794D5 /* OASunriseWidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OASunriseWidget.h; sourceTree = "<group>"; };
-		C556C85129BA0844006794D5 /* OASunriseWidget.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASunriseWidget.mm; sourceTree = "<group>"; };
-		C556C85529BA42FA006794D5 /* OASunsetWidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OASunsetWidget.h; sourceTree = "<group>"; };
-		C556C85629BA42FA006794D5 /* OASunsetWidget.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASunsetWidget.mm; sourceTree = "<group>"; };
+		C556C85029BA0844006794D5 /* OASunriseSunsetWidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OASunriseSunsetWidget.h; sourceTree = "<group>"; };
+		C556C85129BA0844006794D5 /* OASunriseSunsetWidget.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASunriseSunsetWidget.mm; sourceTree = "<group>"; };
 		C558A29529B1355800E79DDB /* ic_custom_direction_manual_night@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_direction_manual_night@2x.png"; path = "Resources/Icons/ic_custom_direction_manual_night@2x.png"; sourceTree = "<group>"; };
 		C558A29629B1355900E79DDB /* ic_custom_direction_manual_night@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_direction_manual_night@3x.png"; path = "Resources/Icons/ic_custom_direction_manual_night@3x.png"; sourceTree = "<group>"; };
 		C558A29729B1355900E79DDB /* ic_custom_direction_manual@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_direction_manual@2x.png"; path = "Resources/Icons/ic_custom_direction_manual@2x.png"; sourceTree = "<group>"; };
@@ -5166,7 +5159,6 @@
 		C56FAB7E29B22D2E0096192F /* widget_developer_day@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "widget_developer_day@2x.png"; path = "Resources/Icons/widget_developer_day@2x.png"; sourceTree = "<group>"; };
 		C56FAB7F29B22D2E0096192F /* widget_developer_night@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "widget_developer_night@3x.png"; path = "Resources/Icons/widget_developer_night@3x.png"; sourceTree = "<group>"; };
 		C56FAB8029B22D2E0096192F /* widget_developer_day@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "widget_developer_day@3x.png"; path = "Resources/Icons/widget_developer_day@3x.png"; sourceTree = "<group>"; };
-		C578644229BA4F9F0083B3FC /* OASunsetWidget.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OASunsetWidget.xib; sourceTree = "<group>"; };
 		C5879A48299FB96300F53249 /* uk_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = uk_tts.js; path = ../resources/voice/uk/uk_tts.js; sourceTree = "<group>"; };
 		C5879A4A299FBF7900F53249 /* bg_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = bg_tts.js; path = ../resources/voice/bg/bg_tts.js; sourceTree = "<group>"; };
 		C5879A4C299FC24700F53249 /* id_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = id_tts.js; path = ../resources/voice/id/id_tts.js; sourceTree = "<group>"; };
@@ -5178,7 +5170,7 @@
 		C588D1EE298D1ECE001FEDBD /* OASearchHistoryTableGroup.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OASearchHistoryTableGroup.m; sourceTree = "<group>"; };
 		C588D1F02992A447001FEDBD /* ic_custom_history_disabled_48@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_history_disabled_48@2x.png"; path = "Resources/Icons/ic_custom_history_disabled_48@2x.png"; sourceTree = "<group>"; };
 		C588D1F12992A447001FEDBD /* ic_custom_history_disabled_48@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_history_disabled_48@3x.png"; path = "Resources/Icons/ic_custom_history_disabled_48@3x.png"; sourceTree = "<group>"; };
-		C5CD068529BA4D70009F79CF /* OASunriseWidget.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OASunriseWidget.xib; sourceTree = "<group>"; };
+		C5CD068529BA4D70009F79CF /* OASunriseSunsetWidget.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OASunriseSunsetWidget.xib; sourceTree = "<group>"; };
 		C5D4D72E2987C56000D3BC04 /* OAHistorySettingsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAHistorySettingsViewController.h; sourceTree = "<group>"; };
 		C5D4D72F2987C56000D3BC04 /* OAHistorySettingsViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAHistorySettingsViewController.mm; sourceTree = "<group>"; };
 		C5D8F808292F5B2900C01065 /* ic_custom_download_map@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_download_map@2x.png"; path = "Resources/Icons/ic_custom_download_map@2x.png"; sourceTree = "<group>"; };
@@ -12793,12 +12785,8 @@
 				C56FAB5429B226F10096192F /* OAZoomLevelWidget.mm */,
 				C56FAB5829B227130096192F /* OATargetDistanceWidget.h */,
 				C56FAB5929B227130096192F /* OATargetDistanceWidget.mm */,
-				C556C85029BA0844006794D5 /* OASunriseWidget.h */,
-				C556C85129BA0844006794D5 /* OASunriseWidget.mm */,
-				C556C85529BA42FA006794D5 /* OASunsetWidget.h */,
-				C556C85629BA42FA006794D5 /* OASunsetWidget.mm */,
-				C54D7F8929C06F9200E14746 /* OASunriseSunsetWidgetHelper.h */,
-				C54D7F8A29C06F9200E14746 /* OASunriseSunsetWidgetHelper.mm */,
+				C556C85029BA0844006794D5 /* OASunriseSunsetWidget.h */,
+				C556C85129BA0844006794D5 /* OASunriseSunsetWidget.mm */,
 				DA5A7F3726C563A400F274C7 /* OAAlarmWidget.mm */,
 				DA5A7F3A26C563A400F274C7 /* OADestinationLineDelegate.h */,
 				DA5A7F2D26C563A400F274C7 /* OADestinationLineDelegate.m */,
@@ -13366,8 +13354,7 @@
 				C55AC35B29B762C800D8F655 /* OATargetDistanceWidget.xib */,
 				C55AC35C29B762C900D8F655 /* OAZoomLevelWidget.xib */,
 				DA5A807F26C563A500F274C7 /* OptionsPanel.xib */,
-				C5CD068529BA4D70009F79CF /* OASunriseWidget.xib */,
-				C578644229BA4F9F0083B3FC /* OASunsetWidget.xib */,
+				C5CD068529BA4D70009F79CF /* OASunriseSunsetWidget.xib */,
 				DA5A808026C563A500F274C7 /* OADistanceControl.xib */,
 				DA5A808226C563A500F274C7 /* OAAlarmWidget.xib */,
 				DA5A808326C563A500F274C7 /* OATargetMultiView.xib */,
@@ -15402,7 +15389,6 @@
 				C5879A4B299FBF7A00F53249 /* bg_tts.js in Resources */,
 				844499931AAA1FFA00ACA20D /* bt_bought_addon@2x.png in Resources */,
 				157F3CD724A1F43C000A66F0 /* ic_custom_straight_line@2x.png in Resources */,
-				C578644329BA4F9F0083B3FC /* OASunsetWidget.xib in Resources */,
 				0CF5855E244072EC0081238D /* widget_marker_triangle_pin_3@2x.png in Resources */,
 				DAFE4D3B22169B4D009731CA /* map_osm_note_unresolved@2x.png in Resources */,
 				DA5A826526C563A700F274C7 /* OAQuickActionCell.xib in Resources */,
@@ -15548,7 +15534,7 @@
 				DA1341AA243DC5A80039D214 /* map_action_offroad@2x.png in Resources */,
 				32E2D2F629B7381600A17D0B /* widget_coordinates_map_center_utm_night@3x.png in Resources */,
 				847777521FAA260E00CA8C1F /* widget_monitoring_rec_big_night@3x.png in Resources */,
-				C5CD068629BA4D70009F79CF /* OASunriseWidget.xib in Resources */,
+				C5CD068629BA4D70009F79CF /* OASunriseSunsetWidget.xib in Resources */,
 				DA32846426CBF76B0036BA73 /* img_plugin_nautical.jpg in Resources */,
 				DA0D1632281BEEF500CEEF58 /* map_turn_slight_right@2x.png in Resources */,
 				DA134134243DC5A80039D214 /* map_action_aircraft@2x.png in Resources */,
@@ -16631,7 +16617,6 @@
 				DA0BAC732851F25000AFA550 /* OACheckBackupSubscriptionTask.m in Sources */,
 				4655EB3328E30AD200FA2E25 /* OAStatusBackupConflictDetailsViewController.m in Sources */,
 				DA5A834526C563A800F274C7 /* OAIconTextDescButtonCell.m in Sources */,
-				C556C85829BA42FA006794D5 /* OASunsetWidget.mm in Sources */,
 				DA5A824126C563A700F274C7 /* OACoordinatesFormatViewController.m in Sources */,
 				DA5A813726C563A700F274C7 /* OAOsmPoint.m in Sources */,
 				DA5A835826C563A800F274C7 /* OABottomSheetHeaderDescrButtonCell.m in Sources */,
@@ -16647,7 +16632,7 @@
 				DA5A83CD26C563A800F274C7 /* OATransportRouteController.mm in Sources */,
 				DA5A81C326C563A700F274C7 /* OAPOILocationType.mm in Sources */,
 				DA5A818D26C563A700F274C7 /* OAShowHideCoordinatesAction.mm in Sources */,
-				C556C85329BA0844006794D5 /* OASunriseWidget.mm in Sources */,
+				C556C85329BA0844006794D5 /* OASunriseSunsetWidget.mm in Sources */,
 				DA5A848926C563A900F274C7 /* OASaveTrackViewController.mm in Sources */,
 				DA84999C287EBF27002B1E11 /* OABaseDeleteFilesCommand.m in Sources */,
 				DA5A838626C563A800F274C7 /* OADestinationItem.m in Sources */,
@@ -16725,7 +16710,6 @@
 				DA5A855D26C563A900F274C7 /* OARouteDirectionInfo.mm in Sources */,
 				32388EE226E6AF770021F829 /* OAQuickSearchResultTableViewCell.m in Sources */,
 				DA5F77B628742E85000A2BFF /* OABackupStatus.m in Sources */,
-				C54D7F8B29C06F9200E14746 /* OASunriseSunsetWidgetHelper.mm in Sources */,
 				DA5A850C26C563A900F274C7 /* OASubscribeEmailView.m in Sources */,
 				DA5A819226C563A700F274C7 /* OANavRemoveNextDestination.m in Sources */,
 				DAAC0EBD2801807200867D35 /* OAImportBackupTask.m in Sources */,

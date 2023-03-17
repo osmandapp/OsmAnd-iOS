@@ -1,18 +1,98 @@
 //
-//  OASunriseSunsetWidgetHelper.m
+//  OASunriseSunsetWidget.m
 //  OsmAnd Maps
 //
-//  Created by Dmitry Svetlichny on 14.03.2023.
+//  Created by Dmitry Svetlichny on 09.03.2023.
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
-#import "OASunriseSunsetWidgetHelper.h"
-#import "OAMapLayers.h"
-#import "OAOsmAndFormatter.h"
+#import "OASunriseSunsetWidget.h"
 #import "Localization.h"
 #import "SunriseSunset.h"
+#import "OAOsmAndFormatter.h"
+#import "Localization.h"
+#import "OsmAndApp.h"
+#import "OsmAndAppImpl.h"
 
-@implementation OASunriseSunsetWidgetHelper
+@implementation OASunriseSunsetWidget
+{
+    OsmAndAppInstance _app;
+    OAAppSettings *_settings;
+    OASunriseSunsetWidgetState *_state;
+    NSArray<NSString *> *_items;
+}
+
+- (instancetype) initWithState:(OASunriseSunsetWidgetState *)state
+{
+    self = [super init];
+    if (self)
+    {
+        _app = [OsmAndApp instance];
+        _settings = [OAAppSettings sharedManager];
+        _state = state;
+        
+        __weak OASunriseSunsetWidget *selfWeak = self;
+        self.updateInfoFunction = ^BOOL{
+            [selfWeak updateInfo];
+            return NO;
+        };
+        self.onClickFunction = ^(id sender) {
+            [selfWeak onWidgetClicked];
+        };
+        
+        [self setText:@"-" subtext:@""];
+        if ([_state isSunriseMode])
+            [self setIcons:@"widget_sunrise_day" widgetNightIcon:@"widget_sunrise_night"];
+        else
+            [self setIcons:@"widget_sunset_day" widgetNightIcon:@"widget_sunset_night"];
+    }
+    return self;
+}
+
+- (BOOL) updateInfo
+{
+    if ([_settings.sunriseMode get] == EOASunriseSunsetTimeLeft)
+        _items = [self.class getTimeLeftUntilSunriseSunset:[_state isSunriseMode]];
+    else
+        _items = [self.class getNextSunriseSunset:[_state isSunriseMode]];
+    [self setText:_items.firstObject subtext:_items.lastObject];
+
+    return YES;
+}
+
+- (void) onWidgetClicked
+{
+    if ([_settings.sunriseMode get] != EOASunriseSunsetTimeLeft)
+        [_settings.sunriseMode set:EOASunriseSunsetTimeLeft];
+    
+    else
+        [_settings.sunriseMode set:EOASunriseSunsetNext];
+    [self updateInfo];
+}
+
+
+
+
++ (NSString *) getDescription:(EOASunriseSunsetMode)ssm isSunrise:(BOOL)isSunrise
+{
+    switch (ssm)
+    {
+        case EOASunriseSunsetHide:
+            return OALocalizedString(@"");
+        case EOASunriseSunsetTimeLeft:
+        {
+            NSArray <NSString *> *values = [self.class getTimeLeftUntilSunriseSunset:isSunrise];
+            return [NSString stringWithFormat:@"%@ %@", values.firstObject, values.lastObject];
+        }
+        case EOASunriseSunsetNext:
+        {
+            NSArray <NSString *> *values = [self.class getNextSunriseSunset:isSunrise];
+            return [NSString stringWithFormat:@"%@ %@", values.firstObject, values.lastObject];
+        }
+        default:
+            return @"";
+    }
+}
 
 + (NSArray<NSString *> *) getNextSunriseSunset:(BOOL)isSunrise
 {

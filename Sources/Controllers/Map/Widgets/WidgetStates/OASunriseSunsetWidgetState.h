@@ -11,5 +11,6 @@
 @interface OASunriseSunsetWidgetState : OAWidgetState
 
 - (instancetype) initWithType:(BOOL)sunriseMode;
+- (BOOL) isSunriseMode;
 
 @end

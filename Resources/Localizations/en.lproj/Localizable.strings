@@ -2062,7 +2062,6 @@
 "online_map" = "Online map";
 "calculating_progress" = "Calculating...";
 "local_map_names" = "Local names";
-"shared_string_history" = "History";
 "today" = "Today";
 "yesterday" = "Yesterday";
 "tomorrow" = "Tomorrow";
@@ -2610,6 +2609,7 @@
 "icon_group_special" = "Special";
 "icon_group_sport" = "Sport";
 "icon_group_symbols" = "Symbols";
+"icon_group_service" = "Service";
 "icon_group_transport" = "Transport";
 "icon_group_travel" = "Travel";
 "icon_group_nautical" = "Nautical";

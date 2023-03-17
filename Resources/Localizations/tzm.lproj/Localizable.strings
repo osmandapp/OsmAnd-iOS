@@ -1835,7 +1835,6 @@
 
 "nautical_depth_points" ="Nautical depth points";
 "depth_contours" = "Depth contours";
-"worldwide_maps" = "Worldwide maps";
 
 "my_location" = "My Location";
 "all_categories" = "All categories";
@@ -2925,3 +2924,4 @@
 • Fixed import of custom plugins with included files\n
 • Fixed various crashes in the Route planning mode\n
 • Fixed crashes during Navigation\n";
+"icon_group_service" = "Tanafut";

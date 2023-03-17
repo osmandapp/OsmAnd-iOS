@@ -2443,7 +2443,6 @@
 "routing_attr_motor_type_diesel_name" = "Diesel";
 "contact_support_description" = "Jika Anda memiliki pertanyaan, silakan hubungi kami di %@.";
 "weather_pressure_inches_of_mercury" = "Inci air raksa";
-"worldwide_maps" = "Peta dunia";
 "backup_data" = "Cadangkan data";
 "co2_mission" = "Emisi CO2";
 "shared_string_cross_buy" = "Pembelian silang";
@@ -2658,3 +2657,4 @@
 "privacy_and_security" = "Privasi dan keamanan";
 "shared_string_legal" = "Legal";
 "speed_cameras_alert" = "Peringatan kamera pengukur kecepatan di beberapa negara dilarang oleh undang-undang.";
+"icon_group_service" = "Layanan";

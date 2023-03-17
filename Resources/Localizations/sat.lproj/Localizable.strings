@@ -1836,7 +1836,6 @@
 
 "nautical_depth_points" ="Nautical depth points";
 "depth_contours" = "Depth contours";
-"worldwide_maps" = "Worldwide maps";
 
 "my_location" = "ᱤᱧᱭᱟᱹᱜ ᱴᱷᱟᱣ";
 "all_categories" = "All categories";
@@ -2966,3 +2965,4 @@
 "shared_string_keep_active" = "ᱩᱥᱨᱟᱹᱣ ᱫᱚᱦᱚᱭ ᱢᱮ";
 "privacy_and_security" = "ᱫᱟᱱᱟᱝ ᱟᱨ ᱡᱟᱹᱯᱛᱤ";
 "lang_zh-Hant" = "ᱪᱟᱭᱱᱤᱡᱽ (ᱴᱨᱮᱰᱤᱥᱱᱟᱞ)";
+"icon_group_service" = "ᱥᱮᱣᱟ";

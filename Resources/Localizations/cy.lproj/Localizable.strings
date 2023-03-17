@@ -2563,3 +2563,4 @@
 "speed_cameras_alert" = "Mewn rhai gwledydd, mae\'n anghyfreithlon rhybuddio am gamerâu cyflymder.";
 "lang_zh-Hant" = "Tsieineeg (Traddodiadol)";
 "shared_string_keep_active" = "Cadw\'n fyw";
+"icon_group_service" = "Gwasanaeth";

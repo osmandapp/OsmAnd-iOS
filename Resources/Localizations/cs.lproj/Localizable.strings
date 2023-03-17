@@ -2597,7 +2597,6 @@
 "use_heightmap_setting" = "Použít 3D reliéfní výškové mapy";
 "nautical_depth_points" = "Plavební hloubkové body";
 "depth_contours" = "Hloubkové vrstevnice";
-"worldwide_maps" = "Celosvětové mapy";
 "tomorrow" = "Zítra";
 "routing_attr_allow_private_for_truck_description" = "Umožnění přístupu nákladních vozidel na soukromé pozemky.";
 "routing_attr_hazmat_category_no_restrictions_name" = "A (bez omezení)";
@@ -2815,3 +2814,4 @@
 "search_history_disabled" = "Historie vyhledávání je vypnutá";
 "enable_search_history" = "Historii vyhledávání můžete povolit v Nastavení";
 "search_favorites" = "Hledat oblíbené";
+"icon_group_service" = "Služby";

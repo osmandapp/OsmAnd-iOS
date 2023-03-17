@@ -2275,7 +2275,6 @@
 "animate_my_location" = "Animer egen posisjon";
 "show_borders_of_downloaded_maps" = "Vis grenser for nedlastede kart";
 "show_map_symbols" = "Vis kartsymboler";
-"worldwide_maps" = "Verdenskart";
 "tts_title" = "Talesyntese";
 "routing_attr_avoid_tunnels_description" = "Unngå tunneler";
 "turn_arrows_descr" = "Velg hvorvidt svingpiler skal vises langs rutelinjen.";
@@ -2581,3 +2580,4 @@
 "shared_string_updated" = "Oppdatert";
 "delete_tracks_bottom_sheet_description_bold_part" = "%d spor?";
 "delete_tracks_bottom_sheet_title" = "Slett spor?";
+"icon_group_service" = "Tjeneste";

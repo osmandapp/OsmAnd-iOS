@@ -2686,7 +2686,6 @@
 "cloud_conflict_descr" = "De lokale og cloud-versioner indeholder ændringer siden den sidste synkronisering.";
 "download_heightmap_maps" = "Højdekort";
 "depth_contours" = "Dybdekonturer";
-"worldwide_maps" = "Globale kort";
 "use_heightmap_setting" = "Brug højdekort med 3D-relief";
 "nautical_depth_points" = "Nautiske dybdepunkter";
 "amazon_appstore" = "Amazon Appstore";
@@ -2849,3 +2848,4 @@
 "toggle_map_center" = "Vis/skjul koordinater: kortets centrum";
 "show_map_center" = "Vis koordinater: kortets centrum";
 "quick_action_map_center_widget_descr" = "En til/fra-knap for at vise eller skjule koordinat-modulet på kortet.";
+"icon_group_service" = "Service";

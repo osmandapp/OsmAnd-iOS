@@ -2174,7 +2174,6 @@
 "parked_at" = "leparkolva ekkor:";
 "activity_type_mountainbike_name" = "Hegyi kerékpározás";
 "pro_features" = "Pro funkciók";
-"worldwide_maps" = "Térképek világszerte";
 "contributions_may_calculate_with_delay" = "A szerkesztések kiszámítása több órát is igénybe vehet.";
 "quick_action_current_location_widget_descr" = "A koordináta-widgetet a térképen megjelenítő vagy elrejtő kapcsoló.";
 "quick_action_hillshade_descr" = "Gomb, amely a térképen megjeleníti vagy elrejti a domborzatárnyékolást.";
@@ -2359,3 +2358,4 @@
 "shared_string_keep_active" = "Maradjanak";
 "speed_camera_pois" = "Traffipax POI-k";
 "uninstall_speed_cameras" = "Traffipaxok eltávolítása";
+"icon_group_service" = "Szolgáltatás";

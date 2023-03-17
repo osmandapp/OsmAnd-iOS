@@ -2428,7 +2428,6 @@
 "cloud_all_changes_downloaded" = "Pobrane wszystkie zmiany";
 "cloud_all_changes_uploaded_descr" = "Wszystkie zmiany dokonane na tym urządzeniu są synchronizowane z Chmurą OsmAnd.";
 "backup_error_failed_to_fetch_remote_items" = "Nie udało się pobrać listy plików z serwera.";
-"worldwide_maps" = "Mapyświata";
 "routing_attr_motor_type_diesel_name" = "Diesel";
 "rendering_attr_depthContourWidth_name" = "Szerokość linii";
 "show_map_symbols" = "Pokaż symbole mapy";
@@ -2658,3 +2657,4 @@
 
 // Shared Strings
 "shared_string_cancelled" = "Anulowano";
+"icon_group_service" = "Usługi";

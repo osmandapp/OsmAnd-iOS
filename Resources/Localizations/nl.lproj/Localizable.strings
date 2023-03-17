@@ -2266,18 +2266,6 @@
 "road_max_speed_descr" = "Stelt de maximale reissnelheid in voor alle wegen in de route. Verlaagt de prioriteit voor wegen met een mogelijke snelheid die hoger ligt dan het maximum.";
 "favorites_empty" = "Je hebt nog geen favoriete punten opgeslagen";
 "carplay_profile" = "CarPlay-profiel";
-"speed_camera_pois" = "Snelheidscamera’s als POI’s";
-"shared_string_keep_active" = "Actief houden";
-"uninstall_speed_cameras" = "Verwijder snelheidscamera’s";
-"lang_zh-Hant" = "Chinees (traditioneel)";
-"shared_string_legal" = "Legaal";
-"speed_cameras_legal_descr" = "In sommige landen of regio’s is het gebruik van toepassingen om te waarschuwen voor snelheidscamera’s in strijd met de wet.\n\nMaak een keuze op basis van de geldende wet.\n\nKies %@ om meldingen en waarschuwingen te ontvangen over snelheidscamera’s.\n\nKies %@ om alle gegevens over snelheidscamera’s te verwijderen: waarschuwingen, meldingen en POI’s worden verwijderd tot OsmAnd volledig opnieuw geïnstalleerd wordt.";
-"privacy_and_security" = "Privacy en veiligheid";
-"shared_string_height" = "Hoogte";
-"lang_sat" = "Santali";
-"speed_cameras_alert" = "Het waarschuwen voor snelheidscamera’s is in sommige landen in strijd met de wet.";
-"not_enough_contributions_descr" = "Een minimum van %@ wijzigingen over een periode van de laatste twee maanden %@ is nodig om toegang te krijgen tot onbeperkte kaartupdates elk uur.";
-"weather_online_cache" = "Online cache";
 "backup_delete_all_data_warning" = "U staat op het punt om alle gegevens die eerder naar OsmAnd Cloud zijn geüpload te verwijderen, inclusief de versiegeschiedenis.\n\nU kunt de verwijderde gegevens niet meer herstellen.";
 "backup_delete_old_data_warning" = "U staat op het punt de wijzigingsgeschiedenis van de eerder geladen gegevens te wissen.\n\nDe huidige versie van de gegevens wordt opgeslagen op de server, maar u kunt de eerder aangebrachte wijzigingen niet terugdraaien.";
 "osmand_cloud_create_account_descr" = "Vul uw e-mailadres in, zodat u de verificatiecode kan ontvangen.\nAan dit e-mailadres worden ook de gegevens gekoppeld.";
@@ -2299,3 +2287,4 @@
 "speed_limit_tolerance_descr" = "Kies hoeveel de maximumsnelheid mag worden overschreden voordat u een gesproken waarschuwing krijgt.";
 "only_manually" = "Alleen handmatig";
 "import_routing_file_descr" = "Je kunt een route bestanden importeren uit elke cloudopslag app door deze te openen in OsmAnd.";
+"icon_group_service" = "Onderhoud";

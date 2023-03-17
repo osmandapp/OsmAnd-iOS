@@ -2477,7 +2477,6 @@
 "cloud_all_changes_uploaded_descr" = "Све измене учињене на овом уређају су усклађене са Облаком Османда.";
 "nautical_depth_points" = "Тачке дубине мора";
 "depth_contours" = "Дубински обриси";
-"worldwide_maps" = "Светске карте";
 "upload_all" = "Отпреми све";
 "cloud_all_changes_downloaded" = "Све измене су преузете";
 "cloud_recent_changes" = "Измене";
@@ -2678,3 +2677,4 @@
 "announcement_time_descr" = "Времена објава различитих гласовних навођења зависе од врсте објаве, као и тренутне и подразумеване брзине навођења.";
 "history_preferences_descr" = "Можете да онемогућите бележење историје појединачно за сваку врсту историје.";
 "shared_string_cross_buy" = "Унакрсна куповина";
+"icon_group_service" = "Услуга";

@@ -1919,3 +1919,4 @@ Lon %@";
 \nEscolle %@. Todos os datos relacionados de radares develocidade: alertas, notificacións e PDI serán eliminados até que o OsmAnd sexa reinstalado de xeito completo.";
 "shared_string_height" = "Altura";
 "lang_zh-Hant" = "Chinés tradicional";
+"icon_group_service" = "Servizo";

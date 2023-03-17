@@ -2284,7 +2284,6 @@
 "recalc_angle_dialog_title" = "Angle mínim entre la meva ubicació i la ruta";
 "create_custom_categories_list_promo" = "Canvia el criteri d\'ordenació de la llista, amaga categories. Podeu importar o exportar tots els canvis amb els perfils.";
 "rendering_attr_showFunicularRoutes_name" = "Línies de funicular";
-"worldwide_maps" = "Mapes mundials";
 "turn_arrows_descr" = "Controla la visibilitat de les fletxes de gir a la línia de ruta.";
 "empty_filename" = "Nom de fitxer buit";
 "depth_contours" = "Isòbates";
@@ -2363,3 +2362,4 @@
 "privacy_and_security" = "Privadesa i seguretat";
 "shared_string_height" = "Alçada";
 "lang_zh-Hant" = "Xinès (tradicional)";
+"icon_group_service" = "Servei";

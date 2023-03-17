@@ -2459,7 +2459,6 @@
 "product_desc_africa_short" = "Mappe della regione africana";
 "select_wikipedia_article_langs" = "Seleziona i linguaggi in cui gli articoli di Wikipedia appariranno sulla mappa. Puoi cambiare fra tutte le lingue disponibili mentre leggi l\'articolo.";
 "depth_contours" = "Isabate";
-"worldwide_maps" = "Mappe internazionali";
 "gpx_join_gaps_descr" = "Gli spazi tra i segmenti saranno collegati.";
 "slope_grey_color_descr" = "Il colore grigio viene utilizzato quando la pendenza non è definita.";
 "white_color_undefined" = "Le parti senza dati sono bianche.";
@@ -2818,3 +2817,4 @@
 "compass_click_desc" = "Tocca il compasso per cambiare modalità di orientamento della mappa.";
 "map_widget_camera_distance" = "Distanza fotocamera";
 "change_language" = "Cambia lingua";
+"icon_group_service" = "Servizi";

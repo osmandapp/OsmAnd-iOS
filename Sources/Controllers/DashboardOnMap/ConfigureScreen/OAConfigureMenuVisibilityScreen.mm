@@ -305,10 +305,7 @@
                 }
                 if ([_r.key isEqualToString:@"sunrise"] || [_r.key isEqualToString:@"sunset"])
                 {
-                    if ([key isEqualToString:@"0"])
-                        [self setVisibility:NO collapsed:NO];
-                    else
-                        [self setVisibility:YES collapsed:NO];
+                    [self setVisibility:![key isEqualToString:@"0"] collapsed:NO];
                 }
             }
         }

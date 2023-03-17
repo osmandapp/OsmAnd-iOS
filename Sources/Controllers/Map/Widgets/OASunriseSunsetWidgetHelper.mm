@@ -29,31 +29,17 @@
     
     if (isSunrise)
     {
-        sunriseSunsetDate = [sunriseSunset getSunrise];
-        [dateFormatter setDateFormat:@"HH:mm"];
-        time = [dateFormatter stringFromDate:sunriseSunsetDate];
-        [dateFormatter setDateFormat:@"EE"];
-        day = [dateFormatter stringFromDate:sunriseSunsetDate];
-        
-        nextSunriseSunsetDate = [nextSunriseSunset getSunrise];
-        [dateFormatter setDateFormat:@"HH:mm"];
-        nextTime = [dateFormatter stringFromDate:nextSunriseSunsetDate];
-        [dateFormatter setDateFormat:@"EE"];
-        nextDay = [dateFormatter stringFromDate:nextSunriseSunsetDate];
+        time = [self getFormattedTime:[sunriseSunset getSunrise]];
+        day = [self getFormattedDay:[sunriseSunset getSunrise]];
+        nextTime = [self getFormattedTime:[nextSunriseSunset getSunrise]];
+        nextDay = [self getFormattedDay:[nextSunriseSunset getSunrise]];
     }
     else
     {
-        sunriseSunsetDate = [sunriseSunset getSunset];
-        [dateFormatter setDateFormat:@"HH:mm"];
-        time = [dateFormatter stringFromDate:sunriseSunsetDate];
-        [dateFormatter setDateFormat:@"EE"];
-        day = [dateFormatter stringFromDate:sunriseSunsetDate];
-        
-        nextSunriseSunsetDate = [nextSunriseSunset getSunset];
-        [dateFormatter setDateFormat:@"HH:mm"];
-        nextTime = [dateFormatter stringFromDate:nextSunriseSunsetDate];
-        [dateFormatter setDateFormat:@"EE"];
-        nextDay = [dateFormatter stringFromDate:nextSunriseSunsetDate];
+        time = [self getFormattedTime:[sunriseSunset getSunset]];
+        day = [self getFormattedDay:[sunriseSunset getSunset]];
+        nextTime = [self getFormattedTime:[nextSunriseSunset getSunset]];
+        nextDay = [self getFormattedDay:[nextSunriseSunset getSunset]];
     }
     if ([actualTime compare:sunriseSunsetDate] == NSOrderedDescending)
         return @[nextTime, nextDay];
@@ -61,37 +47,44 @@
         return @[time, day];
 }
 
++ (NSString *) getFormattedTime:(NSDate *)date
+{
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"HH:mm"];
+    return [dateFormatter stringFromDate:date];
+}
+
++ (NSString *) getFormattedDay:(NSDate *)date
+{
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"EE"];;
+    return [dateFormatter stringFromDate:date];
+}
+
 + (NSArray<NSString *> *) getTimeLeftUntilSunriseSunset:(BOOL)isSunrise
 {
     NSDate *actualTime = [NSDate date];
-    NSDate *sunriseSunsetDate;
-    NSDate *nextSunriseSunsetDate;
+    NSDate *date;
+    NSDate *nextDate;
     NSString *timeLeft;
     NSString *subText;
     SunriseSunset *sunriseSunset = [self createSunriseSunset:actualTime forNextDay:NO];
     SunriseSunset *nextSunriseSunset = [self createSunriseSunset:actualTime forNextDay:YES];
     
-    if (isSunrise)
-    {
-        sunriseSunsetDate = [sunriseSunset getSunrise];
-        nextSunriseSunsetDate = [nextSunriseSunset getSunrise];
-    }
-    else
-    {
-        sunriseSunsetDate = [sunriseSunset getSunset];
-        nextSunriseSunsetDate = [nextSunriseSunset getSunset];
-    }
-    if ([actualTime compare:sunriseSunsetDate] == NSOrderedDescending)
+    date = isSunrise ? [sunriseSunset getSunrise] : [sunriseSunset getSunset];
+    nextDate = isSunrise ? [nextSunriseSunset getSunrise] : [nextSunriseSunset getSunset];
+    
+    if ([actualTime compare:date] == NSOrderedDescending)
     {
         NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
-        NSDateComponents *components = [calendar components:NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond fromDate:actualTime toDate:nextSunriseSunsetDate options:0];
+        NSDateComponents *components = [calendar components:NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond fromDate:actualTime toDate:nextDate options:0];
         timeLeft = [NSString stringWithFormat:@"%ld:%ld", [components hour], [components minute]];
         subText = [components hour] > 0 ? OALocalizedString(@"int_hour") : OALocalizedString(@"int_min");
     }
     else
     {
         NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
-        NSDateComponents *components = [calendar components:NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond fromDate:actualTime toDate:sunriseSunsetDate options:0];
+        NSDateComponents *components = [calendar components:NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond fromDate:actualTime toDate:date options:0];
         timeLeft = [NSString stringWithFormat:@"%ld:%ld", [components hour], [components minute]];
         subText = [components hour] > 0 ? OALocalizedString(@"int_hour") : OALocalizedString(@"int_min");
     }

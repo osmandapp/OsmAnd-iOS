@@ -672,7 +672,7 @@ static OASubscriptionState *EXPIRED;
     if (TEST_LOCAL_PURCHASE)
     {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            [self provideContentForProductIdentifier:product.productIdentifier transaction:nil];
+            [self provideContentForProductIdentifier:product.productIdentifier transactionId:nil];
         });
         return;
     }
@@ -1165,7 +1165,7 @@ static OASubscriptionState *EXPIRED;
             else
             {
                 NSLog(@"completeTransaction - %@", transaction.payment.productIdentifier);
-                [self provideContentForProductIdentifier:transaction.payment.productIdentifier transaction:transaction.originalTransaction ? transaction.originalTransaction : transaction];
+                [self provideContentForProductIdentifier:transaction.payment.productIdentifier transactionId:transaction.originalTransaction ? transaction.originalTransaction.transactionIdentifier : transaction.transactionIdentifier];
             }
         }
         [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
@@ -1300,7 +1300,7 @@ static OASubscriptionState *EXPIRED;
     [_settings.purchasedIdentifiers set:resStr];
 }
 
-- (void) provideContentForProductIdentifier:(NSString * _Nonnull)productIdentifier transaction:(SKPaymentTransaction *)transaction
+- (void) provideContentForProductIdentifier:(NSString * _Nonnull)productIdentifier transactionId:(NSString *)transactionId
 {
     OAProduct *product = [self product:productIdentifier];
     if (product)
@@ -1350,14 +1350,14 @@ static OASubscriptionState *EXPIRED;
         if ([product isKindOfClass:[OASubscription class]])
         {
             NSData *receipt = [self getLocalReceipt];
-            if (!receipt || !transaction)
+            if (!receipt || !transactionId)
             {
                 NSLog(@"Error: No local receipt or transaction");
                 NSMutableString *errorText = [NSMutableString string];
                 if (!receipt)
                     [errorText appendString:@" (no receipt)"];
-                if (!transaction)
-                    [errorText appendString:@" (no transation)"];
+                if (!transactionId)
+                    [errorText appendString:@" (no transaction)"];
 
                 [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchaseFailedNotification object:productIdentifier userInfo:@{@"error" : [NSString stringWithFormat:@"provideContent:%@ -%@", productIdentifier, errorText]}];
             }
@@ -1377,7 +1377,6 @@ static OASubscriptionState *EXPIRED;
                 if (sku)
                     [params setObject:sku forKey:@"sku"];
                 
-                NSString *transactionId = transaction.transactionIdentifier;
                 if (transactionId)
                     [params setObject:transactionId forKey:@"purchaseToken"];
                 [self updateTransactionId:product transactionId:transactionId];
@@ -1441,6 +1440,15 @@ static OASubscriptionState *EXPIRED;
 
     [self requestProductsWithCompletionHandler:^(BOOL success) {
         [self checkBackupPurchase];
+        NSData *data = [_settings.purchasedIdentifiers.get dataUsingEncoding:NSUTF8StringEncoding];
+        NSError *error = nil;
+        NSDictionary *result = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
+        if (!error)
+        {
+            [result enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *obj, BOOL * _Nonnull stop) {
+                [self provideContentForProductIdentifier:key transactionId:obj];
+            }];
+        }
         [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductsRestoredNotification object:[NSNumber numberWithInteger:_transactionErrors] userInfo:nil];
     }];
 }
@@ -1568,6 +1576,9 @@ static OASubscriptionState *EXPIRED;
                                              }
                                          }
                                          NSString *transactionId = subscription[@"original_transaction_id"];
+                                         if (!transactionId)
+                                             transactionId = subscription[@"transaction_id"];
+                                         
                                          if (transactionId && product)
                                              res[product.productIdentifier] = transactionId;
                                      }

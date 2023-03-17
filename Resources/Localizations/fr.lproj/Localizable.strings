@@ -2688,7 +2688,6 @@
 "download_heightmap_maps" = "Carte des altitudes";
 "nautical_depth_points" = "Points de sonde marine";
 "depth_contours" = "Lignes de profondeur";
-"worldwide_maps" = "Cartes mondiales";
 "amazon_appstore" = "Boutique Amazon";
 "huawei_appgallery" = "Galerie d'applications Huawei";
 "position_on_map_center" = "Centré";
@@ -2840,3 +2839,4 @@
 "wikivoyage_download_pics" = "Télécharger les images";
 "map_widget_camera_distance" = "Distance de la caméra";
 "download_only_now" = "Télécharger seulement maintenant";
+"icon_group_service" = "Service";

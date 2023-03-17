@@ -1902,7 +1902,6 @@
 "depth_contours" = "Izobate";
 "turn_arrows_descr" = "Izberi, ali so načrti poti prikazane puščice za obračanje.";
 "backup_into_file" = "Varnostno kopiraj kot datoteko";
-"worldwide_maps" = "Zemljevidi sveta";
 "weather_precip_inches" = "Palcev";
 "copy_poi_name" = "Kopiraj ime točke POI";
 "shared_string_added" = "Dodano";
@@ -2070,3 +2069,4 @@
 "lang_zh-Hant" = "Kitajščina (tradicionalna)";
 "lang_sat" = "Santalščina";
 "shared_string_keep_active" = "Obdrži aktivno";
+"icon_group_service" = "Storitev";

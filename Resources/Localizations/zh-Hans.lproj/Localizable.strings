@@ -1835,7 +1835,6 @@
 "rendering_attr_piste_type_snow_park_name" = "地形公园";
 "routing_attr_hazmat_category_name" = "危险品类别";
 "osm_live_payment_current_subscription" = "当前订阅";
-"worldwide_maps" = "全球地图";
 "checking_for_duplicate_description" = "OsmAand将检查%@是否与应用程序中的现有项目重复。\n\n这可能需要一些时间。";
 "not_enough_contributions_descr" = "至少需要在过去两个月期间进行 %@ 次更改 %@ 才能获得无限制的每小时地图更新。";
 "download_all" = "下载全部";
@@ -2137,3 +2136,4 @@
 "new_file" = "新文件";
 "sync_now" = "立即同步";
 "rendering_attr_depthContourColorScheme_name" = "线条配色方案";
+"icon_group_service" = "服务";

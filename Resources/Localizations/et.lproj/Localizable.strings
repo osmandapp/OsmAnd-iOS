@@ -2533,3 +2533,4 @@
 \n
 \nValides %@ kustutatakse kõik kiiruskaameratega seotud andmed, nagu hoiatused, teated ja huvipunktid seniks, kuni sa OsmAnd\'ile ei tee täiesti uut paigaldust.";
 "speed_cameras_alert" = "Kiiruskaamerate hoiatused on mõnedes riikides seadusega keelatud.";
+"icon_group_service" = "Teenused";

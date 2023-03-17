@@ -2060,7 +2060,6 @@
 "weather_online_cache" = "線上預報";
 "backup_data" = "備份資料";
 "backup_delete_all_data" = "刪除我所有的資料";
-"worldwide_maps" = "世界地圖";
 "recalculate_route" = "重新計算路線";
 "ltr_or_rtl_combine_via_dash" = "%@— %@";
 "renew_subscription" = "續訂";
@@ -2248,3 +2247,4 @@
 "custom_plugins" = "客製化插入程式";
 "search_favorites" = "搜尋我的最愛";
 "search_results" = "搜尋結果";
+"icon_group_service" = "服務";

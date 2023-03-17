@@ -2732,7 +2732,6 @@
 "co2_mission" = "CO2útblástur";
 "nautical_depth_points" = "Sjódýptarpunktar";
 "depth_contours" = "Dýptarlínur";
-"worldwide_maps" = "Heimskort";
 "amazon_appstore" = "Amazon Appstore";
 "huawei_appgallery" = "Huawei AppGallery";
 "si_nm_ft" = "Sjómílur/fet";
@@ -2828,3 +2827,4 @@
 \nVeldu %@: öllum gögnum sem tengjast hraðamyndavélum; t.d. aðvaranir, tilkynningar, staðsetningar o.fl. verður eytt þar til OsmAnd er sett inn aftur frá grunni.";
 "lang_sat" = "Santalí";
 "shared_string_keep_active" = "Halda virku";
+"icon_group_service" = "Þjónusta";

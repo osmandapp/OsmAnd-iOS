@@ -2694,7 +2694,6 @@
 "huawei_appgallery" = "Huawei AppGallery";
 "nautical_depth_points" = "Puntos de profundidad náuticos";
 "use_heightmap_setting" = "Usar mapas de altura del relieve 3D";
-"worldwide_maps" = "Mapas del mundo";
 "download_heightmap_maps" = "Mapa de alturas";
 "amazon_appstore" = "Amazon Appstore";
 "routing_attr_motor_type_name" = "Motor del vehículo";
@@ -2850,3 +2849,4 @@
 "download_over_cellular_network" = "¿Descargar imágenes a través de la red móvil? Esto puede incurrir en altos cargos.";
 "wikivoyage_download_pics" = "Descargar imágenes";
 "wikipedia_language_settings_descr" = "Marca los idiomas en los que los artículos de Wikipedia aparecerán en el mapa. Puedes cambiar entre todos los idiomas disponibles mientras lees el artículo.";
+"icon_group_service" = "Servicio";

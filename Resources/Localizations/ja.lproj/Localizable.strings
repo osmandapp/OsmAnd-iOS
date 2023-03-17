@@ -2613,3 +2613,4 @@
 "routing_attr_difficulty_preference_intermediate_name" = "中級者";
 "rendering_attr_horse_scale_demanding_name" = "Demanding(要注意)";
 "rendering_attr_showShareTaxiRoutes_name" = "乗合タクシー路線";
+"icon_group_service" = "設備・技術";

@@ -2712,7 +2712,6 @@
 "cloud_version_will_be_removed" = "Sa versione de sa nue s'at a iscantzellare";
 "cloud_changes_will_be_dismissed" = "Sas modìficas in sa nue s'ant a iscartare";
 "local_file_will_be_restored" = "Su documentu locale s'at a ripristinare";
-"worldwide_maps" = "Mapas mundiales";
 "routing_attr_motor_type_diesel_name" = "Gasòliu";
 "routing_attr_motor_type_petrol_name" = "Benzina";
 "routing_attr_motor_type_lpg_name" = "GPL";
@@ -2839,3 +2838,4 @@
 "osm_upload_gpx_description_footer" = "S'at a impreare su nùmene de sa rasta in càmbiu de una descritzione bòida. Sa descritzione insertada s'at a aplicare pro cada rasta.";
 "visibility" = "Visibilidade";
 "osm_upload_gpx_tags_footer" = "Inserta etichetas separadas dae vìrgulas.";
+"icon_group_service" = "Servìtziu";

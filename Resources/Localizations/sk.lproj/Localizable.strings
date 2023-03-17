@@ -2149,7 +2149,6 @@
 "shared_string_status" = "Stav";
 "shared_string_progress" = "Postup";
 "benefits_for_contributors" = "Výhody pre aktívnych prispievateľov do OSM";
-"worldwide_maps" = "Celosvetové mapy";
 "login_open_street_map_org" = "Prihlásiť sa do OpenStreetMap.org";
 "routing_attr_motor_type_lpg_name" = "LPG";
 "shared_string_added" = "Pridané";
@@ -2337,3 +2336,4 @@
 "track_multiple_segments_select" = "%@ obsahuje viac ako jeden úsek. Prosím zvoľte časť trasy, ktorú chcete použiť na navigáciu.";
 "select_segment" = "Zvoľte úsek";
 "add_folder" = "Pridať priečinok";
+"icon_group_service" = "Služby";

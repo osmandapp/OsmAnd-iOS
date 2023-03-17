@@ -2682,7 +2682,6 @@
 "use_heightmap_setting" = "Usar mapas de altitude para relevos em 3D";
 "nautical_depth_points" = "Pontos de profundidade náutica";
 "depth_contours" = "Contornos de profundidade";
-"worldwide_maps" = "Mapas mundiais";
 "upload_change" = "Carregar alterações";
 "cloud_version_will_be_removed" = "A versão na nuvem será removida";
 "cloud_changes_will_be_dismissed" = "As alterações na nuvem serão descartadas";
@@ -2842,3 +2841,4 @@
 "download_over_cellular_network" = "Baixar imagens pela rede celular? Isso pode incorrer em altas taxas.";
 "wikivoyage_download_pics" = "Baixar imagens";
 "ios_release_4_4" = "• Wikipédia: capacidade adicionada para visualizar imagens, interface do leitor atualizada\n• Favoritos: pesquisa adicionada\n• CarPlay: histórico adicionado, trilhos reorganizados e lista de favoritos\n• Rotas de caminhada: capacidade adicional de selecionar rotas no mapa para visualizar informações adicionais ou navegação\n• OpenStreetMap: adicionada capacidade de enviar trilhos\n• Avisos de voz: suporte adicional para novos idiomas: catalão, ucraniano, búlgaro, indonésio, esloveno\n• Adicionado aviso legal sobre utilização de alertas de radares de velocidade\n• Privacidade aprimorada: opções adicionadas para desativar o registo do histórico\n• Visibilidade melhorada da régua do mapa\n• Melhorias na interface em idiomas que se leem da direita para a esquerda\n• Acessibilidade: adicionado rótulo de conteúdo em botões do mapa\n• Adicionado suporte a \"tipo de letra dinâmico\", o tamanho do texto no OsmAnd mudará de acordo com o tamanho do texto no iOS\n• Orientação do mapa: adicionado modo girado manualmente\n• A versão mínima do iOS foi aumentada para 15.0\n";
+"icon_group_service" = "Serviço";

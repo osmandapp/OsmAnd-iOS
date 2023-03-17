@@ -2647,7 +2647,6 @@
 "routing_attr_motor_type_hybrid_name" = "Hibridă";
 "routing_attr_motor_type_description" = "Selectați tipul de combustibil al motorului dumneavoastră, acest lucru este necesar pentru a estima emisiile de CO2.";
 "shared_string_added" = "Adăugat";
-"worldwide_maps" = "Hărți lume";
 "modified_file" = "Fișier modificat";
 "recalc_angle_dialog_descr" = "Se va afișa un segment drept între locație și ruta calculată până la recalcularea rutei";
 "mtb_segment_classification" = "Clasificare segment";
@@ -2821,3 +2820,4 @@
 "map_markers_history" = "Istoria marcajelor de pe hartă";
 "history_clear_alert_title" = "Ștergeți tot istoricul";
 "history_clear_alert_message" = "Sunteți sigur că doriți să ștergeți toate elementele din istoric?";
+"icon_group_service" = "Serviciul";

@@ -2511,7 +2511,6 @@
 "show_borders_of_downloaded_maps" = "Erakutsi deskargatutako mapen mugak";
 "depth_contours" = "Sakonera-sestrak";
 "nautical_depth_points" = "Ur sakonerako puntuak";
-"worldwide_maps" = "Mundu osoko mapak";
 "cloud_recent_changes" = "Aldaketak";
 "cloud_all_changes_uploaded" = "Aldaketa guztiak kargatu dira";
 "weather_pressure_inches_of_mercury" = "Hazbete merkurio";
@@ -2546,3 +2545,4 @@
 "speed_camera_pois" = "Abiadura-kameren interesguneak";
 "speed_cameras_legal_descr" = "Herrialde edo eskualde batzuetan, abiadura-kamerak abisatzeko aplikazioak erabiltzea legez debekatuta dago.\n\nAukeraketa bat egin behar duzu zure herrialdeko legediaren arabera.\n\nAukeratu %@ eta abiadura-kamerei buruzko alertak eta abisuak jasoko dituzu.\n\nAukeratu %@ eta abiadura-kameraen inguruko datu guztiak, alertak, jakinarazpenak, interesguneak ezabatuko dira OsmAnd erabat berriro instalatu arte.";
 "speed_cameras_alert" = "Abiadura-kameren alertak herrialde batzuetan legeak debekatuta daude.";
+"icon_group_service" = "Zerbitzua";

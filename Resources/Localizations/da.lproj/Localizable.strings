@@ -2843,3 +2843,9 @@
 "wikipedia_language_settings_descr" = "Vælg de sprog, som Wikipedia-artikler skal vises i på kortet. Du kan skifte mellem alle tilgængelige sprog, mens du læser artiklen.";
 "download_only_now" = "Download kun nu";
 "ios_release_4_4" = "• Wikipedia: tilføjet mulighed for at se billeder, opdateret læser-brugergrænseflade\n• Favoritter: tilføjet søgning\n• CarPlay: tilføjet historik, omorganiseret spor og favoritliste\n• Vandreruter: tilføjet mulighed for at vælge ruter på kortet for at få vist yderligere oplysninger eller navigation\n• OpenStreetMap: tilføjet mulighed for at uploade spor\n• Stemmevejledninger: tilføjet understøttelse af nye sprog: Catalansk, ukrainsk, bulgarsk, indonesisk, slovensk\n• Tilføjet juridisk advarsel om brug af advarsler om fartkameraer\n• Forbedret beskyttelse af privatlivets fred: tilføjede muligheder for at deaktivere logning af historik\n• Forbedret synlighed af kortlinealen\n• Forbedringer af brugergrænsefladen for RTL-sprog\n• Tilgængelighed: tilføjet indholdsmærkning for kortknapper\n• Tilføjet understøttelse af \"dynamisk skrifttype\", tekststørrelsen i OsmAnd ændres i overensstemmelse med tekststørrelsen i iOS\n• Kortorientering: tilføjet manuelt roteret tilstand\n• Minimum iOS-version er øget til 15.0\n";
+"top_widgets_panel" = "Øverste panel";
+"coordinates_widget_map_center" = "Koordinater: kortcentrum";
+"hide_map_center" = "Skjul koordinater: kortets centrum";
+"toggle_map_center" = "Vis/skjul koordinater: kortets centrum";
+"show_map_center" = "Vis koordinater: kortets centrum";
+"quick_action_map_center_widget_descr" = "En til/fra-knap for at vise eller skjule koordinat-modulet på kortet.";

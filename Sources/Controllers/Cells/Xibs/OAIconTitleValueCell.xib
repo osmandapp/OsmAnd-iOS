@@ -34,7 +34,7 @@
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="value" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oCO-hD-EJk">
-                        <rect key="frame" x="151.5" y="13" width="114.5" height="22"/>
+                        <rect key="frame" x="204.5" y="13" width="61.5" height="22"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="22" id="BDm-qb-0IB"/>
                         </constraints>
@@ -42,8 +42,8 @@
                         <color key="textColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sBM-Kj-IT8">
-                        <rect key="frame" x="62" y="13" width="69.5" height="22"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sBM-Kj-IT8">
+                        <rect key="frame" x="62" y="13" width="122.5" height="22"/>
                         <constraints>
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="22" id="a90-OG-SqS"/>
                         </constraints>
@@ -52,7 +52,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Description" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="215-ed-0OE" userLabel="Bottom Description View">
-                        <rect key="frame" x="62" y="37" width="69.5" height="17"/>
+                        <rect key="frame" x="62" y="37" width="122.5" height="17"/>
                         <constraints>
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="17" id="N4C-Lk-4LJ"/>
                         </constraints>
@@ -79,6 +79,7 @@
                     <constraint firstItem="215-ed-0OE" firstAttribute="top" secondItem="sBM-Kj-IT8" secondAttribute="bottom" constant="2" id="f4r-zc-eHn"/>
                     <constraint firstItem="oCO-hD-EJk" firstAttribute="leading" secondItem="215-ed-0OE" secondAttribute="trailing" constant="20" id="h7w-ei-hjQ"/>
                     <constraint firstAttribute="trailingMargin" secondItem="oCO-hD-EJk" secondAttribute="trailing" priority="999" id="iZI-nv-Gls"/>
+                    <constraint firstItem="sBM-Kj-IT8" firstAttribute="width" secondItem="oCO-hD-EJk" secondAttribute="width" multiplier="2" priority="300" id="j4x-lD-xp6"/>
                     <constraint firstItem="9jr-sR-1Hx" firstAttribute="leading" secondItem="oCO-hD-EJk" secondAttribute="trailing" constant="8" id="kCm-bw-Mwg"/>
                     <constraint firstItem="TVY-ES-CU4" firstAttribute="centerY" secondItem="sBM-Kj-IT8" secondAttribute="centerY" id="s1f-ZH-SLK"/>
                     <constraint firstItem="eW5-xD-Mrs" firstAttribute="top" secondItem="NX6-3V-6tN" secondAttribute="top" id="upu-bG-bLG"/>

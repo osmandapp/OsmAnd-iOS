@@ -145,28 +145,28 @@
                 @"name" : @"none",
                 @"title" : OALocalizedString(@"rotate_map_none_fixed"),
                 @"selected" : @(rotateMap == ROTATE_MAP_NONE),
-                @"icon" : @"ic_custom_direction_north",
+                @"icon" : @"ic_custom_direction_north_day",
                 @"type" : [OASimpleTableViewCell getCellIdentifier],
             }];
             [dataArr addObject:@{
                 @"name" : @"bearing",
                 @"title" : OALocalizedString(@"rotate_map_bearing_opt"),
                 @"selected" : @(rotateMap == ROTATE_MAP_BEARING),
-                @"icon" : @"ic_custom_direction_movement",
+                @"icon" : @"ic_custom_direction_bearing_day",
                 @"type" : [OASimpleTableViewCell getCellIdentifier],
             }];
             [dataArr addObject:@{
                @"name" : @"compass",
                @"title" : OALocalizedString(@"rotate_map_compass_opt"),
                @"selected" : @(rotateMap == ROTATE_MAP_COMPASS),
-               @"icon" : @"ic_custom_direction_compass",
+               @"icon" : @"ic_custom_direction_compass_day",
                @"type" : [OASimpleTableViewCell getCellIdentifier],
             }];
             [dataArr addObject:@{
                @"name" : @"manually",
                @"title" : OALocalizedString(@"rotate_map_none_manually"),
                @"selected" : @(rotateMap == ROTATE_MAP_MANUAL),
-               @"icon" : @"ic_custom_direction_manual",
+               @"icon" : @"ic_custom_direction_manual_day",
                @"type" : [OASimpleTableViewCell getCellIdentifier],
             }];
             break;
@@ -443,8 +443,15 @@
         if (cell)
         {
             cell.titleLabel.text = item[@"title"];
-            cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
-            cell.leftIconView.tintColor = [item[@"selected"] boolValue] ? UIColorFromRGB(self.appMode.getIconColor) : UIColorFromRGB(color_icon_inactive);
+            if (_settingsType != EOAProfileGeneralSettingsMapOrientation)
+            {
+                cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
+                cell.leftIconView.tintColor = [item[@"selected"] boolValue] ? UIColorFromRGB(self.appMode.getIconColor) : UIColorFromRGB(color_icon_inactive);
+            }
+            else
+            {
+                cell.leftIconView.image = [UIImage imageNamed:item[@"icon"]];
+            }
             if ([item[@"selected"] boolValue])
                 cell.accessoryType = UITableViewCellAccessoryCheckmark;
         }

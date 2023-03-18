@@ -107,8 +107,6 @@
 #define rotateMapKey @"rotateMap"
 #define compassModeKey @"compassMode"
 #define firstMapIsDownloadedKey @"firstMapIsDownloaded"
-#define sunriseModeKey @"sunriseMode"
-#define sunsetModeKey @"sunsetMode"
 
 // App profiles
 #define appModeBeanPrefsIdsKey @"appModeBeanPrefsIds"
@@ -441,25 +439,6 @@
             return @"ic_custom_compass_hidden";
         default:
             return @"ic_custom_compass_rotated";
-    }
-}
-
-@end
-
-@implementation OASunriseSunsetMode
-
-+ (NSString *) getTitle:(EOASunriseSunsetMode)ssm isSunrise:(BOOL)isSunrise
-{
-    switch (ssm)
-    {
-        case EOASunriseSunsetHide:
-            return OALocalizedString(@"shared_string_hide");
-        case EOASunriseSunsetTimeLeft:
-            return OALocalizedString(@"map_widget_sunrise_sunset_time_left");
-        case EOASunriseSunsetNext:
-            return isSunrise ? OALocalizedString(@"map_widget_next_sunrise") : OALocalizedString(@"map_widget_next_sunset");
-        default:
-            return @"";
     }
 }
 
@@ -3855,12 +3834,6 @@
 
         _compassMode = [OACommonInteger withKey:compassModeKey defValue:EOACompassRotated];
         [_profilePreferences setObject:_compassMode forKey:@"compass_mode"];
-        
-        _sunriseMode = [OACommonInteger withKey:sunriseModeKey defValue:EOASunriseSunsetHide];
-        [_profilePreferences setObject:_sunriseMode forKey:@"show_sunrise_info"];
-        
-        _sunsetMode = [OACommonInteger withKey:sunsetModeKey defValue:EOASunriseSunsetHide];
-        [_profilePreferences setObject:_sunsetMode forKey:@"show_sunset_info"];
 
         _mapDensity = [OACommonDouble withKey:mapDensityKey defValue:MAGNIFIER_DEFAULT_VALUE];
         [_mapDensity setModeDefaultValue:@(MAGNIFIER_DEFAULT_CAR) mode:[OAApplicationMode CAR]];
@@ -4496,6 +4469,66 @@
 - (void)registerPreference:(OACommonPreference *)preference forKey:(NSString *)key
 {
     [_registeredPreferences setObject:preference forKey:key];
+}
+
+- (OACommonBoolean *)registerBooleanPreference:(NSString *)key defValue:(BOOL)defValue
+{
+    if ([_registeredPreferences objectForKey:key])
+        return (OACommonBoolean *)[_registeredPreferences objectForKey:key];
+    
+    OACommonBoolean *p = [OACommonBoolean withKey:key defValue:defValue];
+    [self registerPreference:p forKey:key];
+    return p;
+}
+
+- (OACommonString *)registerStringPreference:(NSString *)key defValue:(NSString *)defValue
+{
+    if ([_registeredPreferences objectForKey:key])
+        return (OACommonString *)[_registeredPreferences objectForKey:key];
+    
+    OACommonString *p = [OACommonString withKey:key defValue:defValue];
+    [self registerPreference:p forKey:key];
+    return p;
+}
+
+- (OACommonStringList *)registerStringListPreference:(NSString *)key defValue:(NSArray<NSString *> *)defValue
+{
+    if ([_registeredPreferences objectForKey:key])
+        return (OACommonStringList *)[_registeredPreferences objectForKey:key];
+    
+    OACommonStringList *p = [OACommonStringList withKey:key defValue:defValue ];
+    [self registerPreference:p forKey:key];
+    return p;
+}
+
+- (OACommonInteger *)registerIntPreference:(NSString *)key defValue:(int)defValue
+{
+    if ([_registeredPreferences objectForKey:key])
+        return (OACommonInteger *)[_registeredPreferences objectForKey:key];
+    
+    OACommonInteger *p = [OACommonInteger withKey:key defValue:defValue];
+    [self registerPreference:p forKey:key];
+    return p;
+}
+
+- (OACommonLong *)registerLongPreference:(NSString *)key defValue:(long)defValue
+{
+    if ([_registeredPreferences objectForKey:key])
+        return (OACommonLong *)[_registeredPreferences objectForKey:key];
+    
+    OACommonLong *p = [OACommonLong withKey:key defValue:defValue];
+    [self registerPreference:p forKey:key];
+    return p;
+}
+
+- (OACommonDouble *)registerFloatPreference:(NSString *)key defValue:(double)defValue
+{
+    if ([_registeredPreferences objectForKey:key])
+        return (OACommonDouble *)[_registeredPreferences objectForKey:key];
+    
+    OACommonDouble *p = [OACommonDouble withKey:key defValue:defValue];
+    [self registerPreference:p forKey:key];
+    return p;
 }
 
 - (void)resetPreferencesForProfile:(OAApplicationMode *)mode

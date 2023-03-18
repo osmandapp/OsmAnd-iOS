@@ -21,17 +21,19 @@ typedef NS_ENUM(NSInteger, EOASunriseSunsetWidgetType)
 
 @implementation OASunriseSunsetWidgetState
 {
-    OACommonInteger *_sunriseSunsetMode;
     EOASunriseSunsetWidgetType _type;
+    OAAppSettings *_settings;
+    OACommonInteger *_preference;
 }
 
-- (instancetype) initWithType:(BOOL)sunriseMode
+- (instancetype) initWithType:(BOOL)sunriseMode customId:(NSString *)customId
 {
     self = [super init];
     if (self)
     {
+        _settings = [OAAppSettings sharedManager];
         _type = sunriseMode ? SUNRISE_TYPE : SUNSET_TYPE;
-        _sunriseSunsetMode = sunriseMode ? [OAAppSettings sharedManager].sunriseMode : [OAAppSettings sharedManager].sunsetMode;
+        _preference = [self registerPreference:customId];
     }
     return self;
 }
@@ -43,7 +45,7 @@ typedef NS_ENUM(NSInteger, EOASunriseSunsetWidgetType)
 
 - (NSString *) getMenuTitle
 {
-    if (_type == SUNRISE_TYPE)
+    if ([self isSunriseMode])
         return OALocalizedString(@"map_widget_sunrise");
     else
         return OALocalizedString(@"map_widget_sunset");
@@ -51,7 +53,7 @@ typedef NS_ENUM(NSInteger, EOASunriseSunsetWidgetType)
 
 - (NSString *)getMenuDescription
 {
-    if (_type == SUNRISE_TYPE)
+    if ([self isSunriseMode])
         return OALocalizedString(@"map_widget_sunrise_desc");
     else
         return OALocalizedString(@"map_widget_sunset_desc");
@@ -59,7 +61,7 @@ typedef NS_ENUM(NSInteger, EOASunriseSunsetWidgetType)
 
 - (NSString *) getMenuIconId
 {
-    if (_type == SUNRISE_TYPE)
+    if ([self isSunriseMode])
         return @"widget_sunrise_day";
     else
         return @"widget_sunset_day";
@@ -67,7 +69,7 @@ typedef NS_ENUM(NSInteger, EOASunriseSunsetWidgetType)
 
 - (NSString *) getMenuItemId
 {
-    return @((EOASunriseSunsetMode) [_sunriseSunsetMode get]).stringValue;
+    return @((EOASunriseSunsetMode) [[self getPreference] get]).stringValue;
 }
 
 - (NSArray<NSString *> *) getMenuTitles
@@ -76,15 +78,15 @@ typedef NS_ENUM(NSInteger, EOASunriseSunsetWidgetType)
     {
         case SUNRISE_TYPE:
             return @[
-                [OASunriseSunsetMode getTitle:EOASunriseSunsetHide isSunrise:YES],
-                [OASunriseSunsetMode getTitle:EOASunriseSunsetTimeLeft isSunrise:YES],
-                [OASunriseSunsetMode getTitle:EOASunriseSunsetNext isSunrise:YES]
+                [OASunriseSunsetWidget getTitle:EOASunriseSunsetHide isSunrise:YES],
+                [OASunriseSunsetWidget getTitle:EOASunriseSunsetTimeLeft isSunrise:YES],
+                [OASunriseSunsetWidget getTitle:EOASunriseSunsetNext isSunrise:YES]
             ];
         case SUNSET_TYPE:
             return @[
-                [OASunriseSunsetMode getTitle:EOASunriseSunsetHide isSunrise:NO],
-                [OASunriseSunsetMode getTitle:EOASunriseSunsetTimeLeft isSunrise:NO],
-                [OASunriseSunsetMode getTitle:EOASunriseSunsetNext isSunrise:NO]
+                [OASunriseSunsetWidget getTitle:EOASunriseSunsetHide isSunrise:NO],
+                [OASunriseSunsetWidget getTitle:EOASunriseSunsetTimeLeft isSunrise:NO],
+                [OASunriseSunsetWidget getTitle:EOASunriseSunsetNext isSunrise:NO]
             ];
         default:
             return @[@""];
@@ -121,9 +123,28 @@ typedef NS_ENUM(NSInteger, EOASunriseSunsetWidgetType)
     ];
 }
 
+- (OACommonInteger *) getPreference
+{
+    return _preference;
+}
+
 - (void) changeState:(NSString *)stateId
 {
-    [_sunriseSunsetMode set:stateId.intValue];
+    [_preference set:stateId.intValue];
+}
+
+- (void) copyPrefs:(OAApplicationMode *)appMode customId:(NSString *)customId
+{
+    [[self registerPreference:customId] set:[_preference get:appMode] mode:appMode];
+}
+
+- (OACommonInteger *) registerPreference:(NSString *)customId
+{
+    NSString *prefId = [self isSunriseMode] ? @"show_sunrise_info" : @"show_sunset_info";
+    if (customId && customId.length >0)
+        prefId = [prefId stringByAppendingString:customId];
+
+    return [_settings registerIntPreference:prefId defValue:EOASunriseSunsetHide];
 }
 
 @end

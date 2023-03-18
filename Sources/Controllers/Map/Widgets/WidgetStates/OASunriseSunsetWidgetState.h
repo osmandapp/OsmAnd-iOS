@@ -8,9 +8,12 @@
 
 #import "OAWidgetState.h"
 
+@class OACommonInteger;
+
 @interface OASunriseSunsetWidgetState : OAWidgetState
 
-- (instancetype) initWithType:(BOOL)sunriseMode;
+- (instancetype) initWithType:(BOOL)sunriseMode customId:(NSString *)customId;
 - (BOOL) isSunriseMode;
+- (OACommonInteger *) getPreference;
 
 @end

@@ -59,12 +59,6 @@ typedef NS_ENUM(NSInteger, EOASunriseSunsetMode)
     EOASunriseSunsetNext
 };
 
-@interface OASunriseSunsetMode : NSObject
-
-+ (NSString *) getTitle:(EOASunriseSunsetMode)ssm isSunrise:(BOOL)isSunrise;
-
-@end
-
 typedef NS_ENUM(NSInteger, EOARouteService)
 {
     OSMAND = 0,
@@ -1015,6 +1009,12 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 - (NSMapTable<NSString *, OACommonPreference *> *)getGlobalPreferences;
 - (OACommonPreference *)getPreferenceByKey:(NSString *)key;
 - (void)registerPreference:(OACommonPreference *)preference forKey:(NSString *)key;
+- (OACommonBoolean *)registerBooleanPreference:(NSString *)key defValue:(BOOL)defValue;
+- (OACommonString *)registerStringPreference:(NSString *)key defValue:(NSString *)defValue;
+- (OACommonStringList *)registerStringListPreference:(NSString *)key defValue:(NSArray<NSString *> *)defValue;
+- (OACommonInteger *)registerIntPreference:(NSString *)key defValue:(int)defValue;
+- (OACommonLong *)registerLongPreference:(NSString *)key defValue:(long)defValue;
+- (OACommonDouble *)registerFloatPreference:(NSString *)key defValue:(double)defValue;
 - (void)resetPreferencesForProfile:(OAApplicationMode *)mode;
 
 // Direction Appearance

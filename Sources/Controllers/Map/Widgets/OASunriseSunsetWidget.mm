@@ -12,7 +12,6 @@
 #import "OAOsmAndFormatter.h"
 #import "Localization.h"
 #import "OsmAndApp.h"
-#import "OsmAndAppImpl.h"
 
 @implementation OASunriseSunsetWidget
 {
@@ -51,7 +50,7 @@
 
 - (BOOL) updateInfo
 {
-    if ([_settings.sunriseMode get] == EOASunriseSunsetTimeLeft)
+    if ([self isShowTimeLeft])
         _items = [self.class getTimeLeftUntilSunriseSunset:[_state isSunriseMode]];
     else
         _items = [self.class getNextSunriseSunset:[_state isSunriseMode]];
@@ -62,16 +61,37 @@
 
 - (void) onWidgetClicked
 {
-    if ([_settings.sunriseMode get] != EOASunriseSunsetTimeLeft)
-        [_settings.sunriseMode set:EOASunriseSunsetTimeLeft];
-    
+    if ([self isShowTimeLeft])
+        [[self getPreference] set:EOASunriseSunsetNext];
     else
-        [_settings.sunriseMode set:EOASunriseSunsetNext];
+        [[self getPreference] set:EOASunriseSunsetTimeLeft];
     [self updateInfo];
 }
 
+- (BOOL) isShowTimeLeft
+{
+    return [[self getPreference] get] == EOASunriseSunsetTimeLeft;
+}
 
+- (OACommonInteger *) getPreference
+{
+    return [_state getPreference];
+}
 
++ (NSString *) getTitle:(EOASunriseSunsetMode)ssm isSunrise:(BOOL)isSunrise
+{
+    switch (ssm)
+    {
+        case EOASunriseSunsetHide:
+            return OALocalizedString(@"shared_string_hide");
+        case EOASunriseSunsetTimeLeft:
+            return OALocalizedString(@"map_widget_sunrise_sunset_time_left");
+        case EOASunriseSunsetNext:
+            return isSunrise ? OALocalizedString(@"map_widget_next_sunrise") : OALocalizedString(@"map_widget_next_sunset");
+        default:
+            return @"";
+    }
+}
 
 + (NSString *) getDescription:(EOASunriseSunsetMode)ssm isSunrise:(BOOL)isSunrise
 {
@@ -97,9 +117,7 @@
 + (NSArray<NSString *> *) getNextSunriseSunset:(BOOL)isSunrise
 {
     NSDate *actualTime = [NSDate date];
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     NSDate *sunriseSunsetDate;
-    NSDate *nextSunriseSunsetDate;
     NSString *time;
     NSString *nextTime;
     NSString *day;

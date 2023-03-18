@@ -23,6 +23,7 @@
 #import "OAMapLayers.h"
 #import "OAIconTitleValueCell.h"
 #import "OAValueTableViewCell.h"
+#import "OASunriseSunsetWidget.h"
 
 @interface OAConfigureMenuMainScreen () <OAAppModeCellDelegate>
 
@@ -200,13 +201,13 @@
         else if ([r.key isEqualToString:@"sunrise"])
         {
             EOASunriseSunsetMode sunriseSunsetMode = (EOASunriseSunsetMode) [r getItemId].intValue;
-            description = [OASunriseSunsetMode getTitle:sunriseSunsetMode isSunrise:YES];
+            description = [OASunriseSunsetWidget getTitle:sunriseSunsetMode isSunrise:YES];
             type = [OAValueTableViewCell getCellIdentifier];
         }
         else if ([r.key isEqualToString:@"sunset"])
         {
             EOASunriseSunsetMode sunriseSunsetMode = (EOASunriseSunsetMode) [r getItemId].intValue;
-            description = [OASunriseSunsetMode getTitle:sunriseSunsetMode isSunrise:NO];
+            description = [OASunriseSunsetWidget getTitle:sunriseSunsetMode isSunrise:NO];
             type = [OAValueTableViewCell getCellIdentifier];
         }
         else

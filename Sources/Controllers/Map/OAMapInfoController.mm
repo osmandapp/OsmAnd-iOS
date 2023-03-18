@@ -759,11 +759,11 @@
     OATextInfoWidget *ruler = [mic createRulerControl];
     [self registerSideWidget:ruler widgetState:[[OACompassRulerWidgetState alloc] init] key:@"radius_ruler" left:NO priorityOrder:43];
     
-    OASunriseSunsetWidgetState *sunriseState = [[OASunriseSunsetWidgetState alloc] initWithType:YES];
+    OASunriseSunsetWidgetState *sunriseState = [[OASunriseSunsetWidgetState alloc] initWithType:YES customId:nil];
     OASunriseSunsetWidget *sunriseWidget = [[OASunriseSunsetWidget alloc] initWithState:sunriseState];
     [self registerSideWidget:sunriseWidget widgetState:sunriseState key:@"sunrise" left:NO priorityOrder:44];
     
-    OASunriseSunsetWidgetState *sunsetState = [[OASunriseSunsetWidgetState alloc] initWithType:NO];
+    OASunriseSunsetWidgetState *sunsetState = [[OASunriseSunsetWidgetState alloc] initWithType:NO customId:nil];
     OASunriseSunsetWidget *sunsetWidget = [[OASunriseSunsetWidget alloc] initWithState:sunsetState];
     [self registerSideWidget:sunsetWidget widgetState:sunsetState key:@"sunset" left:NO priorityOrder:45];
 }

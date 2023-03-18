@@ -2226,7 +2226,7 @@
 "weather_wind_kilimeters_per_hour" = "毎時メートル";
 "backup_error_subscription_was_expired_descr" = "OsmAnd Proのサブスクリプション期限が切れているので、データのバックアップを継続利用するのであれば更新してください。引き続きクラウドからデータを復元できるようになります。";
 "register_opr_have_account" = "私はすでにアカウントを持っています";
-"save_heading" = "方向も保存する";
+"save_heading" = "方向もログに含める";
 "last_backup" = "最終バックアップ";
 "backup_error_token_is_not_valid_or_expired" = "無効または期限切れのトークン";
 "routing_attr_prefer_horse_routes_description" = "馬が通れるルートを優先します";

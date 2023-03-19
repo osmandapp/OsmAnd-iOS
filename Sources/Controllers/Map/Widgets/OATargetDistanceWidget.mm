@@ -11,6 +11,7 @@
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 #import "OAOsmAndFormatter.h"
+#import "Localization.h"
 
 @implementation OATargetDistanceWidget
 {
@@ -46,6 +47,7 @@
         NSString *text = _cachedTargetDistance > 0 ? [self formatDistance:_cachedTargetDistance] : @"-";
         [self setText:text subtext:@""];
         [self setIcons:@"widget_developer_target_distance_day" widgetNightIcon:@"widget_developer_target_distance_night"];
+        [self addAccessibilityLabelsWithValue:text];
     }
     return YES;
 }
@@ -58,6 +60,17 @@
 - (NSString *) formatDistance: (float) distanceInMeters
 {
     return [OAOsmAndFormatter getFormattedDistance:distanceInMeters];
+}
+
+- (void) addAccessibilityLabelsWithValue:(NSString *)value
+{
+    self.accessibilityLabel = OALocalizedString(@"map_widget_target_distance");
+    self.accessibilityValue = value;
+}
+
+- (void) setImage:(UIImage *)image
+{
+    [self.imageView setImage:image.imageFlippedForRightToLeftLayoutDirection];
 }
 
 @end

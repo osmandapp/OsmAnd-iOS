@@ -17,7 +17,6 @@
 
 @interface OATextInfoWidget ()
 
-@property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (weak, nonatomic) IBOutlet UILabel *textView;
 @property (weak, nonatomic) IBOutlet UILabel *textShadowView;
 
@@ -268,6 +267,11 @@
     _textView.attributedText = string;
     if (self.delegate)
         [self.delegate widgetChanged:self];
+}
+
+- (void) addAccessibilityLabelsWithValue:(NSString *)value
+{
+    // override point
 }
 
 - (CGFloat) getWidgetHeight

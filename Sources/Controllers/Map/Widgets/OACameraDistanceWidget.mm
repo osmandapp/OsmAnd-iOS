@@ -12,6 +12,7 @@
 #import "OAMapRendererView.h"
 #import "OAOsmAndFormatter.h"
 #import "OAAppSettings.h"
+#import "Localization.h"
 
 @implementation OACameraDistanceWidget
 {
@@ -49,6 +50,7 @@
         NSString *text = _cachedCameraDistance > 0 ? [self formatDistance:_cachedCameraDistance] : @"-";
         [self setText:text subtext:@""];
         [self setIcons:@"widget_developer_camera_distance_day" widgetNightIcon:@"widget_developer_camera_distance_night"];
+        [self addAccessibilityLabelsWithValue:text];
     }
     return YES;
 }
@@ -61,6 +63,17 @@
 - (NSString *) formatDistance: (float) distanceInMeters
 {
     return [OAOsmAndFormatter getFormattedDistance:distanceInMeters];
+}
+
+- (void) addAccessibilityLabelsWithValue:(NSString *)value
+{
+    self.accessibilityLabel = OALocalizedString(@"map_widget_camera_distance");
+    self.accessibilityValue = value;
+}
+
+- (void) setImage:(UIImage *)image
+{
+    [self.imageView setImage:image.imageFlippedForRightToLeftLayoutDirection];
 }
 
 @end

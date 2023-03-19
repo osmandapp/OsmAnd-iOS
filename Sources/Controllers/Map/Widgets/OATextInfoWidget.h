@@ -15,6 +15,7 @@
 
 @interface OATextInfoWidget : OABaseWidgetView
 
+@property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (nonatomic, readonly) UIFont *primaryFont;
 @property (nonatomic, readonly) UIColor *primaryColor;
 @property (nonatomic, readonly) UIColor *primaryShadowColor;
@@ -38,6 +39,7 @@
 
 - (BOOL) updateVisibility:(BOOL)visible;
 - (BOOL) isVisible;
+- (void) addAccessibilityLabelsWithValue:(NSString *)value;
 
 - (BOOL) isUpdateNeeded;
 - (BOOL) isMetricSystemDepended;

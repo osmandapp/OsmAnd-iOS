@@ -10,6 +10,7 @@
 #import "OARootViewController.h"
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
+#import "Localization.h"
 
 @implementation OACameraTiltWidget
 {
@@ -40,9 +41,22 @@
     int mapTilt = [_rendererView elevationAngle];
     if (self.isUpdateNeeded || mapTilt != _cachedMapTilt)
         _cachedMapTilt = mapTilt;
-    [self setText:[NSString stringWithFormat:@"%d", _cachedMapTilt] subtext:@"°"];
+    NSString *cachedMapTiltText = [NSString stringWithFormat:@"%d", _cachedMapTilt];
+    [self setText:cachedMapTiltText subtext:@"°"];
     [self setIcons:@"widget_developer_camera_tilt_day" widgetNightIcon:@"widget_developer_camera_tilt_night"];
+    [self addAccessibilityLabelsWithValue:cachedMapTiltText];
     return YES;
+}
+
+- (void) addAccessibilityLabelsWithValue:(NSString *)value
+{
+    self.accessibilityLabel = OALocalizedString(@"map_widget_camera_tilt");
+    self.accessibilityValue = [NSString stringWithFormat: @"%@ °", value];
+}
+
+- (void) setImage:(UIImage *)image
+{
+    [self.imageView setImage:image.imageFlippedForRightToLeftLayoutDirection];
 }
 
 @end

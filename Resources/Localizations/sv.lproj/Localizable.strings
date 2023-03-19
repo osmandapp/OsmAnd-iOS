@@ -932,7 +932,7 @@
 "profile_settings" = "Profilspecifika inställningar";
 "profile_appearance" = "Profilutseende";
 "profile_appearance_descr" = "Icon, color, and name";
-"ui_customization" = "UI customization";
+"ui_customization" = "Anpassning av användargränssnittet";
 "ui_customization_short_descr" = "Drawer items, context menu";
 "reorder_profiles" = "Redigera profillista";
 "profile_alert_need_profile_name_title" = "Ange profilnamn";

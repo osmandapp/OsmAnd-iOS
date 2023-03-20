@@ -35,4 +35,6 @@
 - (void) refreshLocation;
 - (void) updateSettings;
 
+- (void) setRotationNoneToManual;
+
 @end

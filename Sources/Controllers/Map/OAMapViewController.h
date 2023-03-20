@@ -119,6 +119,11 @@
 - (BOOL) canZoomOut;
 - (void) animatedZoomOut;
 
+- (void) animatedPanUp;
+- (void) animatedPanDown;
+- (void) animatedPanLeft;
+- (void) animatedPanRight;
+
 - (void) goToPosition:(Point31)position31
             animated:(BOOL)animated;
 - (void) goToPosition:(Point31)position31

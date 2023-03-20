@@ -4474,6 +4474,66 @@
     [_registeredPreferences setObject:preference forKey:key];
 }
 
+- (OACommonBoolean *)registerBooleanPreference:(NSString *)key defValue:(BOOL)defValue
+{
+    if ([_registeredPreferences objectForKey:key])
+        return (OACommonBoolean *)[_registeredPreferences objectForKey:key];
+    
+    OACommonBoolean *p = [OACommonBoolean withKey:key defValue:defValue];
+    [self registerPreference:p forKey:key];
+    return p;
+}
+
+- (OACommonString *)registerStringPreference:(NSString *)key defValue:(NSString *)defValue
+{
+    if ([_registeredPreferences objectForKey:key])
+        return (OACommonString *)[_registeredPreferences objectForKey:key];
+    
+    OACommonString *p = [OACommonString withKey:key defValue:defValue];
+    [self registerPreference:p forKey:key];
+    return p;
+}
+
+- (OACommonStringList *)registerStringListPreference:(NSString *)key defValue:(NSArray<NSString *> *)defValue
+{
+    if ([_registeredPreferences objectForKey:key])
+        return (OACommonStringList *)[_registeredPreferences objectForKey:key];
+    
+    OACommonStringList *p = [OACommonStringList withKey:key defValue:defValue ];
+    [self registerPreference:p forKey:key];
+    return p;
+}
+
+- (OACommonInteger *)registerIntPreference:(NSString *)key defValue:(int)defValue
+{
+    if ([_registeredPreferences objectForKey:key])
+        return (OACommonInteger *)[_registeredPreferences objectForKey:key];
+    
+    OACommonInteger *p = [OACommonInteger withKey:key defValue:defValue];
+    [self registerPreference:p forKey:key];
+    return p;
+}
+
+- (OACommonLong *)registerLongPreference:(NSString *)key defValue:(long)defValue
+{
+    if ([_registeredPreferences objectForKey:key])
+        return (OACommonLong *)[_registeredPreferences objectForKey:key];
+    
+    OACommonLong *p = [OACommonLong withKey:key defValue:defValue];
+    [self registerPreference:p forKey:key];
+    return p;
+}
+
+- (OACommonDouble *)registerFloatPreference:(NSString *)key defValue:(double)defValue
+{
+    if ([_registeredPreferences objectForKey:key])
+        return (OACommonDouble *)[_registeredPreferences objectForKey:key];
+    
+    OACommonDouble *p = [OACommonDouble withKey:key defValue:defValue];
+    [self registerPreference:p forKey:key];
+    return p;
+}
+
 - (void)resetPreferencesForProfile:(OAApplicationMode *)mode
 {
     for (OACommonPreference *value in [_profilePreferences objectEnumerator].allObjects)//todo

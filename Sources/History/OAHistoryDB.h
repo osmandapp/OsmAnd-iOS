@@ -20,6 +20,7 @@
 - (NSArray<OAHistoryItem *> *)getPoints:(NSString *)selectPostfix limit:(int)limit;
 - (NSArray<OAHistoryItem *> *)getSearchHistoryPoints:(int)count;
 - (NSArray<OAHistoryItem *> *)getPointsHavingTypes:(NSArray<NSNumber *> *)types limit:(int)limit;
+- (NSInteger)getPointsCountHavingTypes:(NSArray<NSNumber *> *)types;
 
 - (long) getMarkersHistoryLastModifiedTime;
 - (void) setMarkersHistoryLastModifiedTime:(long)lastModified;

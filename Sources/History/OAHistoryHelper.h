@@ -31,6 +31,7 @@
 - (NSArray<OAHistoryItem *> *)getSearchHistoryPoints:(int)limit;
 - (NSArray<OAHistoryItem *> *)getPointsHavingTypes:(NSArray<NSNumber *> *)types limit:(int)limit;
 - (OAHistoryItem *)getPointByName:(NSString *)name;
+- (NSInteger) getPointsCountHavingTypes:(NSArray<NSNumber *> *)types;
 
 - (long) getMarkersHistoryLastModifiedTime;
 - (void) setMarkersHistoryLastModifiedTime:(long)lastModified;

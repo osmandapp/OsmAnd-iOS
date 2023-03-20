@@ -362,6 +362,43 @@
     return [self getPoints:[NSString stringWithFormat:@"WHERE %@ in (%@)", POINT_COL_TYPE, arrayStr] limit:limit];
 }
 
+- (NSInteger)getPointsCountHavingTypes:(NSArray<NSNumber *> *)types
+{
+    __block NSInteger res;
+    dispatch_sync(dbQueue, ^{
+        
+        NSMutableString *arrayStr = [NSMutableString string];
+        for (NSNumber *t in types)
+        {
+            if (arrayStr.length > 0)
+                [arrayStr appendString:@","];
+            [arrayStr appendFormat:@"%d", [t intValue]];
+        }
+        
+        const char *dbpath = [databasePath UTF8String];
+        sqlite3_stmt *statement;
+        
+        if (sqlite3_open(dbpath, &historyDB) == SQLITE_OK)
+        {
+            NSMutableString *querySQL = [NSMutableString stringWithString:[NSString stringWithFormat:@"SELECT count(*) FROM %@ WHERE %@ in (%@)", TABLE_NAME, POINT_COL_TYPE, arrayStr]];
+            
+            const char *query_stmt = [querySQL UTF8String];
+            if (sqlite3_prepare_v2(historyDB, query_stmt, -1, &statement, NULL) == SQLITE_OK)
+            {
+                
+                while (sqlite3_step(statement) == SQLITE_ROW)
+                {
+                    res = sqlite3_column_int(statement, 0);
+                    break;
+                }
+                sqlite3_finalize(statement);
+            }
+            sqlite3_close(historyDB);
+        }
+    });
+    return res;
+}
+
 - (long)getMarkersHistoryLastModifiedTime
 {
     long lastModifiedTime = [OABackupHelper getLastModifiedTime:MARKERS_HISTORY_LAST_MODIFIED_NAME];

@@ -233,7 +233,7 @@
                 kCellIconNameKey : @"ic_custom_search",
                 kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
                 @"value" : [_settings.searchHistory get]
-                    ? [NSString stringWithFormat:@"%lu", [self getSearchHistoryResults].count]
+                ? [NSString stringWithFormat:@"%lu", [historyHelper getPointsCountHavingTypes:historyHelper.searchTypes]]
                     : OALocalizedString(@"shared_string_off"),
             }];
             [historySection addRowFromDictionary:@{
@@ -251,7 +251,7 @@
                 kCellIconNameKey : @"ic_custom_marker",
                 kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
                 @"value" : [_settings.mapMarkersHistory get]
-                    ? [NSString stringWithFormat:@"%lu", [historyHelper getPointsHavingTypes:historyHelper.destinationTypes limit:0].count]
+                    ? [NSString stringWithFormat:@"%lu", [historyHelper getPointsCountHavingTypes:historyHelper.destinationTypes]]
                     : OALocalizedString(@"shared_string_off"),
             }];
 
@@ -611,7 +611,8 @@
 
 - (NSInteger)calculateNavigationItemsCount
 {
-    NSInteger count = [self getNavigationHistoryResults].count;
+    OAHistoryHelper *historyHelper = OAHistoryHelper.sharedInstance;
+    NSInteger count = [historyHelper getPointsCountHavingTypes:historyHelper.searchTypes];
     if ([[OATargetPointsHelper sharedInstance] isBackupPointsAvailable])
     {
         // Take "Previous Route" item into account during calculations

@@ -351,6 +351,33 @@
     self.weatherButton.accessibilityLabel = OALocalizedString(@"shared_string_cancel");
 }
 
+- (void) addAccessibilityValues
+{
+    self.mapSettingsButton.accessibilityValue = [OAAppSettings sharedManager].applicationMode.get.stringKey;
+    if ([[OAAppSettings sharedManager].applicationMode.get.stringKey isEqualToString:@"default"])
+        self.mapSettingsButton.accessibilityValue = OALocalizedString(@"app_mode_default");
+    else if ([[OAAppSettings sharedManager].applicationMode.get.stringKey isEqualToString:@"car"])
+        self.mapSettingsButton.accessibilityValue = OALocalizedString(@"app_mode_car");
+    else if ([[OAAppSettings sharedManager].applicationMode.get.stringKey isEqualToString:@"bicycle"])
+        self.mapSettingsButton.accessibilityValue = OALocalizedString(@"app_mode_bicycle");
+    else if ([[OAAppSettings sharedManager].applicationMode.get.stringKey isEqualToString:@"pedestrian"])
+        self.mapSettingsButton.accessibilityValue = OALocalizedString(@"app_mode_pedestrian");
+    else if ([[OAAppSettings sharedManager].applicationMode.get.stringKey isEqualToString:@"public_transport"])
+        self.mapSettingsButton.accessibilityValue = OALocalizedString(@"app_mode_shuttle_bus");
+    else if ([[OAAppSettings sharedManager].applicationMode.get.stringKey isEqualToString:@"aircraft"])
+        self.mapSettingsButton.accessibilityValue = OALocalizedString(@"app_mode_aircraft");
+    else if ([[OAAppSettings sharedManager].applicationMode.get.stringKey isEqualToString:@"truck"])
+        self.mapSettingsButton.accessibilityValue = OALocalizedString(@"app_mode_truck");
+    else if ([[OAAppSettings sharedManager].applicationMode.get.stringKey isEqualToString:@"motorcycle"])
+        self.mapSettingsButton.accessibilityValue = OALocalizedString(@"app_mode_motorcycle");
+    else if ([[OAAppSettings sharedManager].applicationMode.get.stringKey isEqualToString:@"moped"])
+        self.mapSettingsButton.accessibilityValue = OALocalizedString(@"app_mode_moped");
+    else if ([[OAAppSettings sharedManager].applicationMode.get.stringKey isEqualToString:@"boat"])
+        self.mapSettingsButton.accessibilityValue = OALocalizedString(@"app_mode_boat");
+    else if ([[OAAppSettings sharedManager].applicationMode.get.stringKey isEqualToString:@"ski"])
+        self.mapSettingsButton.accessibilityValue = OALocalizedString(@"app_mode_skiing");
+}
+
 - (void) updateRulerPosition:(CGFloat)bottom left:(CGFloat)left
 {
     _bottomRulerConstraint.constant = bottom;
@@ -623,6 +650,7 @@
 - (IBAction) onMapSettingsButtonClick:(id)sender
 {
     [_mapPanelViewController mapSettingsButtonClick:sender];
+    [self addAccessibilityValues];
 }
 
 - (IBAction) onSearchButtonClick:(id)sender

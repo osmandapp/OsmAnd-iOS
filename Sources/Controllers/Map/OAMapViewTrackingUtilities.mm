@@ -729,6 +729,9 @@
     {
         if ([_settings.rotateMap get] == ROTATE_MAP_NONE || _routePlanningMode)
             [self animatedAlignAzimuthToNorth];
+        else if ([_settings.rotateMap get] == ROTATE_MAP_MANUAL)
+            [self animatedAlignAzimuth:[[OAAppSettings sharedManager].mapManuallyRotatingAngle get]];
+        
         EOAPositionPlacement placement = (EOAPositionPlacement) [_settings.positionPlacementOnMap get];
         if (placement == EOAPositionPlacementAuto)
         {
@@ -743,7 +746,12 @@
 
 - (void) animatedAlignAzimuthToNorth
 {
-    if (!_mapViewController || ![_mapViewController isViewLoaded] || _mapView.azimuth == 0)
+    [self animatedAlignAzimuth:0];
+}
+
+- (void) animatedAlignAzimuth:(CGFloat)azimuth
+{
+    if (!_mapViewController || ![_mapViewController isViewLoaded] || _mapView.azimuth == azimuth)
         return;
     
     _startChangingMapModeTime = CACurrentMediaTime();
@@ -752,8 +760,8 @@
     _mapView.mapAnimator->pause();
     _mapView.mapAnimator->cancelAllAnimations();
     
-    // Animate azimuth change to north
-    _mapView.mapAnimator->animateAzimuthTo(0.0f,
+    // Animate azimuth change
+    _mapView.mapAnimator->animateAzimuthTo(azimuth,
                                         kFastAnimationTime,
                                         OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
                                         kUserInteractionAnimationKey);

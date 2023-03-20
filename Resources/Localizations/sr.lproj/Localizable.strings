@@ -124,7 +124,7 @@
 
 // Track recording settings
 "save_global_track_interval" = "Међувреме општег бележења";
-"save_global_track_interval_descr" = "Наведите међувреме завођења општег снимања стаза (укључено помоћу справице „снимање путовања“ на карти).";
+"save_global_track_interval_descr" = "Наведите међувреме завођења општег снимања трагова (укључено помоћу справице „снимање путовања“ на карти).";
 "save_track_interval" = "Участалост бележења за време навођења";
 "logging_interval_navigation_descr" = "Наведите интервал логовања снимања путање приликом навођења";
 "monitoring_min_distance" = "Најмањи померај";
@@ -249,7 +249,7 @@
 "snap_to_road" = "Прилепи на пут";
 "snap_to_road_descr" = "Сличица тренутног положаја ће бити прилепљена за тренутно навођени пут";
 "show_warnings_title" = "Приказуј упозорења…";
-"show_warnings_descr" = "Подесите упозорења у саобраћају (ограничења брзине, форсирана заустављања, лежећи полицајци, тунели), радаре и податке о траци.";
+"show_warnings_descr" = "Подесите упозорења у саобраћају (ограничења брзине, присилна заустављања, лежећи полицајци, тунели), радаре и податке о траци.";
 "speak_title" = "Најави…";
 "speak_descr" = "Подесите најаве назива улица, саобраћајних упозорења (лежећи, знаци заустављања), радара и ограничења брзине.";
 "keep_informing" = "Понови упут навођења";
@@ -296,9 +296,9 @@
 "app_mode_aircraft" = "Авион";
 "gpx_option_calculate_first_last_segment" = "Рачунај од првог до последњег одсечка стазе ОсмАнда";
 "gpx_option_from_start_point" = "Постави дуж целе путање";
-"gpx_option_reverse_route" = "Обрни смер стазе";
+"gpx_option_reverse_route" = "Обрни смер трага";
 "use_points_as_intermediates" = "Рачунај пут између тачака";
-"calculate_osmand_route_without_internet" = "Рачунање одсечака стазе Османда ван мреже";
+"calculate_osmand_route_without_internet" = "Рачунање одсечака путање Османда ван мреже";
 "routing_settings_2" = "Поставке навођења";
 "impassable_road" = "Избегавај путеве…";
 "road_speeds" = "Брзине на путу";
@@ -569,7 +569,7 @@
 
 // My Places
 "favorites_item" = "Омиљени";
-"shared_string_gpx_tracks" = "Путање";
+"shared_string_gpx_tracks" = "Трагови";
 "personal_category_name" = "Лични";
 "shared_string_visible" = "Видљиво";
 
@@ -614,7 +614,7 @@
 "gpx_uphills_total" = "Узбрдо укупно";
 "distance_moving" = "Растојање је исправљено";
 "track_recording" = "Снимање путања";
-"shared_string_currently_recording_track" = "Стаза која се тренутно снима";
+"shared_string_currently_recording_track" = "Траг која се тренутно снима";
 "track_stop_rec" = "Заустави снимање";
 "gpx_start_new_segment" = "Покрени нови одсечак";
 "save_current_track" = "Сачувај тренутну путању";
@@ -638,9 +638,9 @@
 "gpxup_trackable" = "Пративо";
 "gpxup_private" = "Приватно";
 "gpx_upload_public_visibility_descr" = "„Јавно“ значи да је траг јавно приказан у Вашим траговима ГПС-а и на јавним траговима ГПС-а, као и на јавном списку трагова са временским ознакама у сировом облику. Подаци који се приказују путем АПИ-ја не упућују на Вашу страницу трагова. Временске ознаке праћења нису доступне путем јавног АПИ-ја ГПС-а и тачке праћења нису временски поређане.";
-"gpx_upload_identifiable_visibility_descr" = "„Препознатљив“ значи да ће се стаза јавно приказати у Вашим стазама ГПС-а и у јавним списковима стаза ГПС-а, тј. други корисници ће моћи да преузму необрађену стазу и повежу га са Вашим корисничким именом. Јавни подаци о временским тачкама стазе из АПИ-ја ГПС-а који се служе путем АПИ-ја за тачке праћења имаће однос на вашу изворну страницу праћења.";
+"gpx_upload_identifiable_visibility_descr" = "„Препознатљив“ значи да ће се траг јавно приказати у Вашим траговима ГПС-а и у јавним списковима трагова ГПС-а, тј. други корисници ће моћи да преузму необрађени траг и повежу га са Вашим корисничким именом. Јавни подаци о временским тачкама стазе из АПИ-ја ГПС-а који се служе путем АПИ-ја за тачке праћења имаће однос на вашу изворну страницу праћења.";
 "gpx_upload_trackable_visibility_descr" = "„Следљиво“ значи да се траг не приказује нигде на јавним списковима, али обрађене тачке праћења са временским ознакама у њима (које не могу бити непосредно повезане са вама) иду кроз преузимања са јавног АПИ-ја ГПС-а.";
-"gpx_upload_private_visibility_descr" = "„Приватно“ значи да се стаза не појављује ни на једном јавном списку, али тачке праћења у њему у нису у времеском редоследу доступне путем јавног АПИ-ја ГПС-а без временских ознака.";
+"gpx_upload_private_visibility_descr" = "„Приватно“ значи да се траг не појављује ни на једном јавном списку, али тачке праћења у њему у нису у временском редоследу доступне путем јавног АПИ-ја ГПС-а без временских ознака.";
 "save_track_to_gpx" = "Сам снимај путању за време навођења";
 "save_track_to_gpx_descrp" = "Самостално покрени снимање путање током навођења и самостално сачувај након тога.";
 "gpx_distance_points" = "Distance (points)";
@@ -1008,7 +1008,7 @@
 "next_seg_descr" = "Следећи сегмент ће бити поново израчунат коришћењем изабраног профила.";
 "whole_track_descr" = "Цела путања ће бити поново израчуната коришћењем изабраног профила.";
 "next_segment" = "Следећи чланак";
-"whole_track" = "Цела стаза";
+"whole_track" = "Цео траг";
 "next_seg_dist" = "Следећи сегмент %@";
 "next_segs_dist" = "Сви наредни сегменти %@";
 "prev_seg_dist" = "Претходни сегмент %@";
@@ -1018,7 +1018,7 @@
 "prev_segs_recalc_descr" = "Сви претходни сегменти ће бити поново израчунати користећи изабрани профил";
 "reverse_route" = "Обрнута путања";
 "join_segments" = "Споји делове";
-"simplified_track" = "Поједностављена стаза";
+"simplified_track" = "Поједностављени траг";
 "simplified_track_description" = "Само линија путање ће бити сачувана, а путне тачке ће бити избрисане.";
 "open_saved_track" = "Отвори сачувану";
 "plan_route_create_new_route" = "Креирај нову стазу";
@@ -1037,9 +1037,9 @@
 "folder_already_exsists" = "Фолдер са овим именом већ постоји";
 "plan_route_split_before" = "Подели пре";
 "plan_route_split_after" = "После подели";
-"follow_track" = "Следи стазу";
+"follow_track" = "Следи траг";
 "shared_string_gpx_track" = "Путања";
-"select_another_track" = "Изаберите другу стазу";
+"select_another_track" = "Изаберите други траг";
 "select_track_to_follow" = "Одаберите путању за праћење";
 "attach_to_the_roads" = "Причврстите на путеве";
 "point_to_navigate" = "Иди на";
@@ -1330,7 +1330,7 @@
 "quick_action_navigation_voice_on" = "Искључи глас";
 "quick_action_navigation_voice_off" = "Укључи глас";
 "show_hide_gpx" = "Прикажи/сакриј путање";
-"show_gpx" = "Путање";
+"show_gpx" = "Трагови";
 "hide_gpx" = "Сакриј путању";
 "show_notes" = "Прикажи OSM белешке";
 "hide_notes" = "Сакриј OSM белешке";
@@ -1618,7 +1618,7 @@
 "no_other_translations" = "Других превода нема";
 "wpt_remove_q" = "Уклонити пролазну тачку?";
 "gpx_select_track" = "Изаберите путању";
-"current_track" = "Тренутна стаза";
+"current_track" = "Тренутни траг";
 "gpx_direction_arrows" = "Стрелице смера";
 "gpx_split_interval" = "Време раздвајања";
 "gpx_split_interval_descr" = "Изаберите међувреме на коме ће се приказивати ознаке са раздаљином или временом на стази.";
@@ -1890,7 +1890,7 @@
 "already_has_inapp" = "Већ сте се претплатили на %@.";
 "inapp_not_found" = "%@ се не налази у ОсмАнду. Вероватно је отказано.";
 "rendering_value_high_name" = "Густа";
-"routing_attr_difficulty_preference_description" = "Тежи стазама ове тежине, али остави могуће навођење преко тежих или лакших стаза ако је краће.";
+"routing_attr_difficulty_preference_description" = "Тежи путањама ове тежине, али остави могућност навођења преко тежих или лакших путања ако су краће.";
 "routing_attr_height_description" = "Одреди висину возила која је дозвољена на путевима.";
 "touting_specified_vehicle_parameters_descr" = "Наведени параметри возила могу утицати на рутирање.";
 "routing_attr_height_obstacles_name" = "Користи податке о висини";
@@ -1898,7 +1898,7 @@
 "rendering_attr_appMode_description" = "Прилагоди карту за";
 "routing_attr_avoid_ice_roads_fords_name" = "Без путева са поледицама или плићацима";
 "rendering_value_germanRoadAtlas_name" = "Немачки атлас путева";
-"rendering_attr_hikingRoutesOSMC_name" = "Путање за пешачење";
+"rendering_attr_hikingRoutesOSMC_name" = "Планинске стазе";
 "rendering_attr_showRoadMaps_name" = "Само путне карте";
 "routing_attr_avoid_ferries_description" = "Избегавање трајеката";
 "rendering_attr_contourWidth_description" = "Дебљина линије изохипсе";
@@ -2127,7 +2127,7 @@
 "rendering_attr_pisteRoutes_name" = "Скијалишта";
 "rendering_attr_piste_type_sled_name" = "Саонице";
 "rendering_attr_noPolygons_description" = "Начини прозирним све околне одлике тла на карти.";
-"routing_attr_allow_classic_only_description" = "Стазе припремљене за обичан начинн без путева за клизање. Ово укључује и стазе припремљене малим возилима за снег и путањама које су скијаши направили.";
+"routing_attr_allow_classic_only_description" = "Стазе припремљене за обичан начин без путева за клизање. Ово укључује и стазе припремљене малим возилима за снег и путањама које су скијаши направили.";
 "routing_attr_allow_skating_only_name" = "Дозволи путеве само за клизање";
 "routing_attr_avoid_shuttle_train_description" = "Избегавање брзих возова";
 "routing_attr_driving_style_balance_name" = "Уравнотежено";

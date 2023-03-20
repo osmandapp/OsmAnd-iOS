@@ -2850,3 +2850,9 @@
 "wikivoyage_download_pics" = "Descargar imágenes";
 "wikipedia_language_settings_descr" = "Marca los idiomas en los que los artículos de Wikipedia aparecerán en el mapa. Puedes cambiar entre todos los idiomas disponibles mientras lees el artículo.";
 "icon_group_service" = "Servicio";
+"top_widgets_panel" = "Panel superior";
+"show_map_center" = "Mostrar «Coordenadas: centro del mapa»";
+"hide_map_center" = "Ocultar «Coordenadas: centro del mapa»";
+"quick_action_map_center_widget_descr" = "Un botón que muestra u oculta en el mapa el widget de coordenadas.";
+"coordinates_widget_map_center" = "Coordenadas: centro del mapa";
+"toggle_map_center" = "Mostrar/ocultar «Coordenadas: centro del mapa»";

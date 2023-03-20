@@ -2815,3 +2815,12 @@
 "enable_search_history" = "Historii vyhledávání můžete povolit v Nastavení";
 "search_favorites" = "Hledat oblíbené";
 "icon_group_service" = "Služby";
+"coordinates_widget_map_center" = "Počet řádků";
+"map_widget_camera_tilt" = "Naklonění kamery";
+"map_widget_camera_distance" = "Vzdálenost kamery";
+"map_widget_zoom_level" = "Zoom level";
+"map_widget_target_distance" = "Vzdálenost cíle";
+"top_widgets_panel" = "Horní panel";
+"rotate_map_none_fixed" = "Sever je nahoře (opraveno)";
+"rotate_map_none_manually" = "Ruční otáčení (opraveno)";
+"compass_click_desc" = "Klepnutím na kompas přepnete režim orientace mapy.";

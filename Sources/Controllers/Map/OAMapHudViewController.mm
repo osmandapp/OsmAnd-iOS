@@ -50,6 +50,7 @@
 @implementation OAMapHudViewController
 {
     OsmAndAppInstance _app;
+    OAAppSettings *_settings;
 
     OAAutoObserverProxy* _mapModeObserver;
     OAAutoObserverProxy* _mapAzimuthObserver;
@@ -103,6 +104,7 @@
     _mapHudType = EOAMapHudBrowse;
     
     _app = [OsmAndApp instance];
+    _settings = [OAAppSettings sharedManager];
 
     _mapPanelViewController = [OARootViewController instance].mapPanel;
     _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
@@ -351,31 +353,38 @@
     self.weatherButton.accessibilityLabel = OALocalizedString(@"shared_string_cancel");
 }
 
-- (void) addAccessibilityValues
+- (void) addAccessibilityValuesForMapSettingsButton
 {
-    self.mapSettingsButton.accessibilityValue = [OAAppSettings sharedManager].applicationMode.get.stringKey;
-    if ([[OAAppSettings sharedManager].applicationMode.get.stringKey isEqualToString:@"default"])
-        self.mapSettingsButton.accessibilityValue = OALocalizedString(@"app_mode_default");
-    else if ([[OAAppSettings sharedManager].applicationMode.get.stringKey isEqualToString:@"car"])
-        self.mapSettingsButton.accessibilityValue = OALocalizedString(@"app_mode_car");
-    else if ([[OAAppSettings sharedManager].applicationMode.get.stringKey isEqualToString:@"bicycle"])
-        self.mapSettingsButton.accessibilityValue = OALocalizedString(@"app_mode_bicycle");
-    else if ([[OAAppSettings sharedManager].applicationMode.get.stringKey isEqualToString:@"pedestrian"])
-        self.mapSettingsButton.accessibilityValue = OALocalizedString(@"app_mode_pedestrian");
-    else if ([[OAAppSettings sharedManager].applicationMode.get.stringKey isEqualToString:@"public_transport"])
-        self.mapSettingsButton.accessibilityValue = OALocalizedString(@"app_mode_shuttle_bus");
-    else if ([[OAAppSettings sharedManager].applicationMode.get.stringKey isEqualToString:@"aircraft"])
-        self.mapSettingsButton.accessibilityValue = OALocalizedString(@"app_mode_aircraft");
-    else if ([[OAAppSettings sharedManager].applicationMode.get.stringKey isEqualToString:@"truck"])
-        self.mapSettingsButton.accessibilityValue = OALocalizedString(@"app_mode_truck");
-    else if ([[OAAppSettings sharedManager].applicationMode.get.stringKey isEqualToString:@"motorcycle"])
-        self.mapSettingsButton.accessibilityValue = OALocalizedString(@"app_mode_motorcycle");
-    else if ([[OAAppSettings sharedManager].applicationMode.get.stringKey isEqualToString:@"moped"])
-        self.mapSettingsButton.accessibilityValue = OALocalizedString(@"app_mode_moped");
-    else if ([[OAAppSettings sharedManager].applicationMode.get.stringKey isEqualToString:@"boat"])
-        self.mapSettingsButton.accessibilityValue = OALocalizedString(@"app_mode_boat");
-    else if ([[OAAppSettings sharedManager].applicationMode.get.stringKey isEqualToString:@"ski"])
-        self.mapSettingsButton.accessibilityValue = OALocalizedString(@"app_mode_skiing");
+    NSString *value;
+    
+    if ([_settings.applicationMode.get.stringKey isEqualToString:@"default"])
+        value = OALocalizedString(@"app_mode_default");
+    else if ([_settings.applicationMode.get.stringKey isEqualToString:@"car"])
+        value = OALocalizedString(@"app_mode_car");
+    else if ([_settings.applicationMode.get.stringKey isEqualToString:@"bicycle"])
+        value = OALocalizedString(@"app_mode_bicycle");
+    else if ([_settings.applicationMode.get.stringKey isEqualToString:@"pedestrian"])
+        value = OALocalizedString(@"app_mode_pedestrian");
+    else if ([_settings.applicationMode.get.stringKey isEqualToString:@"public_transport"])
+        value = OALocalizedString(@"poi_filter_public_transport");
+    else if ([_settings.applicationMode.get.stringKey isEqualToString:@"aircraft"])
+        value = OALocalizedString(@"app_mode_aircraft");
+    else if ([_settings.applicationMode.get.stringKey isEqualToString:@"truck"])
+        value = OALocalizedString(@"app_mode_truck");
+    else if ([_settings.applicationMode.get.stringKey isEqualToString:@"motorcycle"])
+        value = OALocalizedString(@"app_mode_motorcycle");
+    else if ([_settings.applicationMode.get.stringKey isEqualToString:@"moped"])
+        value = OALocalizedString(@"app_mode_moped");
+    else if ([_settings.applicationMode.get.stringKey isEqualToString:@"boat"])
+        value = OALocalizedString(@"app_mode_boat");
+    else if ([_settings.applicationMode.get.stringKey isEqualToString:@"ski"])
+        value = OALocalizedString(@"app_mode_skiing");
+    else if ([_settings.applicationMode.get.stringKey isEqualToString:@"horse"])
+        value = OALocalizedString(@"horseback_riding");
+    else
+        value = OALocalizedString(@"profile_type_user_string");
+    
+    self.mapSettingsButton.accessibilityValue = value;
 }
 
 - (void) updateRulerPosition:(CGFloat)bottom left:(CGFloat)left
@@ -650,7 +659,6 @@
 - (IBAction) onMapSettingsButtonClick:(id)sender
 {
     [_mapPanelViewController mapSettingsButtonClick:sender];
-    [self addAccessibilityValues];
 }
 
 - (IBAction) onSearchButtonClick:(id)sender
@@ -1502,6 +1510,7 @@
     _mapSettingsButton.tintColorDay = UIColorFromRGB(mode.getIconColor);
     _mapSettingsButton.tintColorNight = UIColorFromRGB(mode.getIconColor);
     [_mapSettingsButton updateColorsForPressedState:NO];
+    [self addAccessibilityValuesForMapSettingsButton];
 }
 
 - (void) enterContextMenuMode

@@ -2488,7 +2488,7 @@
 "compass_visible_if_map_rotated" = "Виден, если карта повернута";
 "data_settings" = "Данные";
 "shared_string_undefined" = "Неопределённо";
-"map_widget_rendering_fps" = "FPSотрисовки карты";
+"map_widget_rendering_fps" = "FPS отрисовки карты";
 "weather_offline_forecast" = "Офлайн-прогноз";
 "deleted_file" = "Удалённый файл";
 "cloud_version_will_be_removed" = "Облачная версия будет удалена";

@@ -260,11 +260,11 @@
         else
         {
             [self.navigationController popToViewController:OARootViewController.instance animated:YES];
+            OARouteLineAppearanceHudViewController *routeLineAppearanceHudViewController =
+                    [[OARouteLineAppearanceHudViewController alloc] initWithAppMode:self.appMode];
+            routeLineAppearanceHudViewController.delegate = self;
+            [OARootViewController.instance.mapPanel showScrollableHudViewController:routeLineAppearanceHudViewController];
         }
-        OARouteLineAppearanceHudViewController *routeLineAppearanceHudViewController =
-                [[OARouteLineAppearanceHudViewController alloc] initWithAppMode:self.appMode];
-        routeLineAppearanceHudViewController.delegate = self;
-        [OARootViewController.instance.mapPanel showScrollableHudViewController:routeLineAppearanceHudViewController];
     }
     else
     {

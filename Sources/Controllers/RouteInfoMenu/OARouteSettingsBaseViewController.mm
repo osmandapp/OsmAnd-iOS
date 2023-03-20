@@ -437,9 +437,7 @@
 
 - (void)closeSettingsScreenWithRouteInfo
 {
-    [self dismissViewControllerAnimated:YES completion:^{
-        [[OARootViewController instance].mapPanel closeRouteInfo];
-    }];
+    [self openRouteLineAppearance];
 }
 
 #pragma mark - OARouteLineAppearanceViewControllerDelegate

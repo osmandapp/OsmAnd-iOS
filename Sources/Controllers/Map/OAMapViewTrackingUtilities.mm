@@ -353,7 +353,7 @@
             const OsmAnd::PointI newTarget31(OsmAnd::Utilities::get31TileNumberX(newLocation.coordinate.longitude),
                                              OsmAnd::Utilities::get31TileNumberY(newLocation.coordinate.latitude));
             
-            if (_app.mapMode == OAMapModePositionTrack || _app.mapMode == OAMapModeFollow)
+            if (_app.mapMode == OAMapModePositionTrack || _app.mapMode == OAMapModeFollow || [_settings.rotateMap get] == ROTATE_MAP_COMPASS)
             {
                 _mapView.mapAnimator->pause();
                 
@@ -376,7 +376,9 @@
                 const auto azimuthAnimation = _mapView.mapAnimator->getCurrentAnimation(kLocationServicesAnimationKey, OsmAnd::MapAnimator::AnimatedValue::Azimuth);
                 _mapView.mapAnimator->cancelCurrentAnimation(kUserInteractionAnimationKey, OsmAnd::MapAnimator::AnimatedValue::Azimuth);
                 
-                if (direction >= 0)
+                NSTimeInterval timeSinceLasGestureRotating = [NSDate now].timeIntervalSince1970 - _mapViewController.lastRotatingByGestureTime.timeIntervalSince1970;
+                
+                if (direction >= 0 && timeSinceLasGestureRotating > 1)
                 {
                     if (azimuthAnimation)
                     {
@@ -392,8 +394,10 @@
                     }
                 }
                 
+                BOOL freeMapCenterMode = [_settings.rotateMap get] == ROTATE_MAP_COMPASS && !(_app.mapMode == OAMapModePositionTrack || _app.mapMode == OAMapModeFollow);
+                
                 // Update target
-                if (!sameLocation)
+                if (!sameLocation && !freeMapCenterMode)
                 {
                     if (![self.class isSmallSpeedForAnimation:newLocation] && _settings.animateMyLocation.get)
                     {
@@ -680,7 +684,9 @@
 
 - (void) onMapGestureAction:(NSNotification *)notification
 {
+    
     _app.mapMode = OAMapModeFree;
+//    _app.mapMode = [_settings.rotateMap get] == ROTATE_MAP_COMPASS ? OAMapModePositionTrack : OAMapModeFree;
 }
 
 - (void) setMapViewController:(OAMapViewController *)mapViewController

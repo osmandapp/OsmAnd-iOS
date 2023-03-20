@@ -1166,6 +1166,8 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
         [OAMapViewTrackingUtilities.instance setRotationNoneToManual];
     }
     [recognizer setRotation:0];
+    
+    _lastRotatingByGestureTime = [NSDate now];
 }
 
 - (void) zoomInGestureDetected:(UITapGestureRecognizer *)recognizer

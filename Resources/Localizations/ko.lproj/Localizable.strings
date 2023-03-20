@@ -581,7 +581,7 @@
 "opening_changeset" = "변경사항 여는중…";
 "rendering_value_translucent_green_name" = "반투명 녹색";
 "lang_nb" = "노르웨이 부크몰어";
-"amenity_type_emergency" = "응급기관";
+"icon_group_emergency" = "응급기관";
 "download_wikipedia_maps" = "위키백과";
 "navigate_point_easting" = "동향";
 "app_mode_aircraft" = "비행기";
@@ -600,7 +600,7 @@
 "map_markers_other" = "기타 마커";
 "shared_string_is_open" = "열기";
 "rendering_value_orange_name" = "오렌지";
-"amenity_type_education" = "교육기관";
+"icon_group_education" = "교육기관";
 "rendering_attr_lessDetailed_name" = "덜 상세";
 "poi_remove_title" = "POI삭제";
 "map_widget_altitude" = "현재 위치의 고도";
@@ -697,6 +697,7 @@
 "local_indexes_cat_backup" = "비활성화";
 "vector_data" = "오프라인 벡터 맵";
 "int_hour" = "h";
+"icon_group_transport" = "대중교통";
 "transport" = "대중교통";
 "lang_al" = "알바니아어";
 "layer_amenity_label" = "포인트 이름";
@@ -1453,3 +1454,4 @@
 "shared_string_legal" = "법적고지";
 "shared_string_keep_active" = "활성 상태 유지";
 "privacy_and_security" = "개인 정보 보호 및 보안";
+"icon_group_service" = "서비스";

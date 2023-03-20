@@ -1926,6 +1926,7 @@
 "replace_favorite_confirmation" = "Substituir el preferit %@\?";
 "icon_group_sport" = "Esport";
 "plan_route_open_existing_track" = "Obre una traça existent";
+"icon_group_transport" = "Transport col·lectiu";
 "transport" = "Transport col·lectiu";
 "shared_string_icon" = "Icona";
 "fav_point_dublicate" = "S\'ha indicat un nom de Preferit duplicat";
@@ -1940,7 +1941,7 @@
 "shared_string_disable" = "Desactiva";
 "open_saved_track" = "Obre una traça enregistrada";
 "shared_string_octagon" = "Octàgon";
-"amenity_type_emergency" = "Emergències";
+"icon_group_emergency" = "Emergències";
 "nearest_point" = "El punt més proper";
 "shared_string_visible" = "Visible";
 "access_default_color" = "Color per defecte";
@@ -2118,7 +2119,7 @@
 "lang_hu" = "Hongarès";
 "lang_ur" = "Urdú";
 "lang_fr" = "Francès";
-"amenity_type_education" = "Educació";
+"icon_group_education" = "Educació";
 "lang_be_by" = "Bielorús (alfabet llatí)";
 "lang_es" = "Espanyol";
 "lang_az" = "Àzeri";
@@ -2283,7 +2284,6 @@
 "recalc_angle_dialog_title" = "Angle mínim entre la meva ubicació i la ruta";
 "create_custom_categories_list_promo" = "Canvia el criteri d\'ordenació de la llista, amaga categories. Podeu importar o exportar tots els canvis amb els perfils.";
 "rendering_attr_showFunicularRoutes_name" = "Línies de funicular";
-"worldwide_maps" = "Mapes mundials";
 "turn_arrows_descr" = "Controla la visibilitat de les fletxes de gir a la línia de ruta.";
 "empty_filename" = "Nom de fitxer buit";
 "depth_contours" = "Isòbates";
@@ -2362,3 +2362,4 @@
 "privacy_and_security" = "Privadesa i seguretat";
 "shared_string_height" = "Alçada";
 "lang_zh-Hant" = "Xinès (tradicional)";
+"icon_group_service" = "Servei";

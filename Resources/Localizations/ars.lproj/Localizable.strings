@@ -2579,15 +2579,16 @@
 
 //Icon categories
 "icon_group_amenity" = "Amenity";
-"amenity_type_emergency" = "Emergency";
+"icon_group_emergency" = "Emergency";
 "icon_group_special" = "Special";
 "icon_group_sport" = "Sport";
 "icon_group_symbols" = "Symbols";
-"transport" = "Transport";
+"icon_group_transport" = "Transport";
 "icon_group_travel" = "Travel";
 "icon_group_nautical" = "Nautical";
 "icon_group_industrial" = "Industrial";
-"amenity_type_education" = "Education";
+"icon_group_education" = "Education";
+"transport" = "Transport";
 
 "settings_item_read_error" = "Could not read %@.";
 "app_mode_default" = "Browse map";

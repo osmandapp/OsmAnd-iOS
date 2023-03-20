@@ -22,6 +22,8 @@
 #import "OAColors.h"
 #import "OAMapLayers.h"
 #import "OAIconTitleValueCell.h"
+#import "OAValueTableViewCell.h"
+#import "OASunriseSunsetWidget.h"
 
 @interface OAConfigureMenuMainScreen () <OAAppModeCellDelegate>
 
@@ -195,6 +197,18 @@
             EOACompassMode compassMode = (EOACompassMode) [r getItemId].intValue;
             description = [OACompassMode getTitle:compassMode];
             type = [OAIconTitleValueCell getCellIdentifier];
+        }
+        else if ([r.key isEqualToString:@"sunrise"])
+        {
+            EOASunriseSunsetMode sunriseSunsetMode = (EOASunriseSunsetMode) [r getItemId].intValue;
+            description = [OASunriseSunsetWidget getTitle:sunriseSunsetMode isSunrise:YES];
+            type = [OAValueTableViewCell getCellIdentifier];
+        }
+        else if ([r.key isEqualToString:@"sunset"])
+        {
+            EOASunriseSunsetMode sunriseSunsetMode = (EOASunriseSunsetMode) [r getItemId].intValue;
+            description = [OASunriseSunsetWidget getTitle:sunriseSunsetMode isSunrise:NO];
+            type = [OAValueTableViewCell getCellIdentifier];
         }
         else
         {
@@ -398,7 +412,26 @@
             [cell updateConstraints];
         return cell;
     }
-
+    else if ([data[@"type"] isEqualToString:[OAValueTableViewCell getCellIdentifier]])
+    {
+        OAValueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
+        NSString *imgName = data[@"img"];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAValueTableViewCell *) nib[0];
+            [cell descriptionVisibility:NO];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        }
+        if (cell)
+        {
+            cell.titleLabel.text = data[@"title"];
+            cell.valueLabel.text = data[@"description"];
+            cell.leftIconView.image = [UIImage rtlImageNamed:imgName];
+            cell.leftIconView.contentMode = UIViewContentModeCenter;
+        }
+        return cell;
+    }
     return outCell;
 }
 
@@ -407,9 +440,14 @@
     NSString *imgName = data[@"img"];
     if (imgName)
     {
-        if ([imgName hasPrefix:@"widget_developer"] || [imgName hasPrefix:@"widget_fps"] || [data[@"key"] hasPrefix:@"coordinates_widget"])
+        if ([imgName hasPrefix:@"widget_developer"] || [data[@"key"] hasPrefix:@"coordinates_widget"])
         {
             cell.leftIconView.image = [UIImage rtlImageNamed:imgName];
+            cell.leftIconView.contentMode = UIViewContentModeCenter;
+        }
+        else if ([imgName hasPrefix:@"widget_fps"])
+        {
+            cell.leftIconView.image = [UIImage imageNamed:imgName];
             cell.leftIconView.contentMode = UIViewContentModeCenter;
         }
         else
@@ -456,7 +494,7 @@
         OADirectionAppearanceViewController *vc = [[OADirectionAppearanceViewController alloc] init];
         [self.vwController.navigationController pushViewController:vc animated:YES];
     }
-    else if ([data[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]] || [data[@"type"] isEqualToString:[OAIconTitleValueCell getCellIdentifier]])
+    else if ([data[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]] || [data[@"type"] isEqualToString:[OAIconTitleValueCell getCellIdentifier]] || [data[@"type"] isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
         OAMapWidgetRegInfo *r = [_mapWidgetRegistry widgetByKey:data[@"key"]];
         if (r && (r.widget || [r.key isEqualToString:@"compass"]))

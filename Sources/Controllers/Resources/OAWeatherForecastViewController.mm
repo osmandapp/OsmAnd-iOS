@@ -10,7 +10,6 @@
 #import "OAWeatherCacheSettingsViewController.h"
 #import "OAWeatherForecastDetailsViewController.h"
 #import "MBProgressHUD.h"
-#import "OADeleteButtonTableViewCell.h"
 #import "OASimpleTableViewCell.h"
 #import "OARightIconTableViewCell.h"
 #import "OAValueTableViewCell.h"
@@ -206,7 +205,7 @@
         for (OAWorldRegion *region in regions)
         {
             NSMutableDictionary *forecastData = [NSMutableDictionary dictionary];
-            forecastData[@"type"] = [OADeleteButtonTableViewCell getCellIdentifier];
+            forecastData[@"type"] = [OASimpleTableViewCell getCellIdentifier];
             forecastData[@"region"] = region;
 
             NSString *regionId = [OAWeatherHelper checkAndGetRegionId:region];
@@ -936,28 +935,49 @@
         if (cell)
         {
             OAWorldRegion *region = (OAWorldRegion *) item[@"region"];
-            cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + 20., 0., 0.);
-            BOOL isSelectCell = [item[@"key"] isEqualToString:@"select_cell"];
-            cell.accessoryType = isSelectCell ? UITableViewCellAccessoryNone : UITableViewCellAccessoryDisclosureIndicator;
-            cell.textStackView.alignment = isSelectCell ? UIStackViewAlignmentCenter : UIStackViewAlignmentLeading;
+
+            [cell leftEditButtonVisibility:_editMode];
+            cell.selectionStyle = _editMode ? UITableViewCellSelectionStyleNone : UITableViewCellSelectionStyleDefault;
+
             cell.titleLabel.text = [item.allKeys containsObject:@"region"] ? [OAWeatherHelper checkAndGetRegionName:region] : item[@"title"];
             cell.titleLabel.textColor = [item.allKeys containsObject:@"title_color"] ? item[@"title_color"] : UIColor.blackColor;
-            cell.titleLabel.font = [item.allKeys containsObject:@"title_font"] ? item[@"title_font"] : [UIFont scaledSystemFontOfSize:17.];
+            cell.titleLabel.font = [item.allKeys containsObject:@"title_font"] ? item[@"title_font"] : [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+            
             BOOL hasDescription = [item.allKeys containsObject:@"description"];
             [cell descriptionVisibility:hasDescription];
-            cell.descriptionLabel.attributedText = item[@"description"];
-            NSString *regionId = [OAWeatherHelper checkAndGetRegionId:region];
-            if (!isSelectCell && regionId && ([OAWeatherHelper getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateInProgress
-                    || ![_weatherHelper isOfflineForecastSizesInfoCalculated:regionId]))
+            cell.descriptionLabel.attributedText = hasDescription ? item[@"description"] : nil;
+
+            [cell.leftEditButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+            if (_editMode)
             {
-                FFCircularProgressView *progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 25.0f, 25.0f)];
-                progressView.iconView = [[UIView alloc] init];
-                progressView.tintColor = UIColorFromRGB(color_primary_purple);
-                cell.accessoryView = progressView;
+                cell.accessoryView = nil;
+                cell.accessoryType = UITableViewCellAccessoryNone;
+                cell.textStackView.alignment = UIStackViewAlignmentLeading;
+
+                NSString *imageName = [item[@"key"] hasPrefix:@"selected_"] ? @"ic_custom_delete" : @"ic_custom_plus";
+                [cell.leftEditButton setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
+                cell.leftEditButton.tag = indexPath.section << 10 | indexPath.row;
+                [cell.leftEditButton addTarget:self action:@selector(rearrangeButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
             }
             else
             {
-                cell.accessoryView = nil;
+                [cell.leftEditButton setImage:nil forState:UIControlStateNormal];
+                BOOL isSelectCell = [item[@"key"] isEqualToString:@"select_cell"];
+                cell.accessoryType = isSelectCell ? UITableViewCellAccessoryNone : UITableViewCellAccessoryDisclosureIndicator;
+                cell.textStackView.alignment = isSelectCell ? UIStackViewAlignmentCenter : UIStackViewAlignmentLeading;
+                NSString *regionId = [OAWeatherHelper checkAndGetRegionId:region];
+                if (!isSelectCell && regionId && ([OAWeatherHelper getPreferenceDownloadState:regionId] == EOAWeatherForecastDownloadStateInProgress
+                        || ![_weatherHelper isOfflineForecastSizesInfoCalculated:regionId]))
+                {
+                    FFCircularProgressView *progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 25.0f, 25.0f)];
+                    progressView.iconView = [[UIView alloc] init];
+                    progressView.tintColor = UIColorFromRGB(color_primary_purple);
+                    cell.accessoryView = progressView;
+                }
+                else
+                {
+                    cell.accessoryView = nil;
+                }
             }
         }
         return cell;
@@ -1001,29 +1021,6 @@
             cell.valueLabel.text = item[@"value"];
         }
         return cell;
-    }
-    else if ([item[@"type"] isEqualToString:[OADeleteButtonTableViewCell getCellIdentifier]])
-    {
-        OADeleteButtonTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OADeleteButtonTableViewCell getCellIdentifier]];
-        if (!cell)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADeleteButtonTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OADeleteButtonTableViewCell *) nib[0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.separatorInset = UIEdgeInsetsMake(0., 66., 0., 0.);
-            cell.iconImageView.image = nil;
-            [cell showIcon:NO];
-        }
-        if (cell)
-        {
-            cell.titleLabel.text = [item.allKeys containsObject:@"region"] ? [OAWeatherHelper checkAndGetRegionName:((OAWorldRegion *) item[@"region"])] : item[@"title"];
-            NSString *imageName = [item[@"key"] hasPrefix:@"selected_"] ? @"ic_custom_delete" : @"ic_custom_plus";
-            [cell.deleteButton setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
-            cell.deleteButton.tag = indexPath.section << 10 | indexPath.row;
-            [cell.deleteButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-            [cell.deleteButton addTarget:self action:@selector(rearrangeButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-        }
-        outCell = cell;
     }
     else if ([item[@"type"] isEqualToString:[OALargeImageTitleDescrTableViewCell getCellIdentifier]])
     {

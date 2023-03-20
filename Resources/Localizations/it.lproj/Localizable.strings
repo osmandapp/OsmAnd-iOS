@@ -1735,7 +1735,7 @@
 "access_default_color" = "Colore preimpostato";
 "fav_point_dublicate" = "Duplicato del nome del punto Preferito";
 "shared_string_icon" = "Icona";
-"amenity_type_emergency" = "Emergenza";
+"icon_group_emergency" = "Emergenza";
 "plan_route_split_before" = "Spezza";
 "favorite_friends_category" = "Amici";
 "fav_points_not_exist" = "Non esiste alcun preferito";
@@ -1755,6 +1755,7 @@
 "favorite_places_category" = "Luoghi";
 "icon_group_special" = "Speciale";
 "shared_string_disable" = "Disattiva";
+"icon_group_transport" = "Trasporti pubblici";
 "transport" = "Trasporti pubblici";
 "replace_favorite_confirmation" = "Sostituire il preferito %@\?";
 "start_of_the_track" = "Inizio della traccia";
@@ -2025,7 +2026,7 @@
 "set_up_backup" = "Impostare il backup";
 "altitude" = "Altitudine";
 "gpx_direction_arrows" = "Frecce della direzione";
-"amenity_type_education" = "Istruzione";
+"icon_group_education" = "Istruzione";
 "lang_ga" = "Irlandese";
 "backup_welcome_back" = "Bentornato!";
 "lang_ms" = "Malese";
@@ -2458,7 +2459,6 @@
 "product_desc_africa_short" = "Mappe della regione africana";
 "select_wikipedia_article_langs" = "Seleziona i linguaggi in cui gli articoli di Wikipedia appariranno sulla mappa. Puoi cambiare fra tutte le lingue disponibili mentre leggi l\'articolo.";
 "depth_contours" = "Isabate";
-"worldwide_maps" = "Mappe internazionali";
 "gpx_join_gaps_descr" = "Gli spazi tra i segmenti saranno collegati.";
 "slope_grey_color_descr" = "Il colore grigio viene utilizzato quando la pendenza non è definita.";
 "white_color_undefined" = "Le parti senza dati sono bianche.";
@@ -2817,3 +2817,4 @@
 "compass_click_desc" = "Tocca il compasso per cambiare modalità di orientamento della mappa.";
 "map_widget_camera_distance" = "Distanza fotocamera";
 "change_language" = "Cambia lingua";
+"icon_group_service" = "Servizi";

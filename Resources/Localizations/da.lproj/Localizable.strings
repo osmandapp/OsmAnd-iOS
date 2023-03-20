@@ -365,7 +365,7 @@
 "plugin_ski_descr" = "Designet til at navigere i vintersportsområder: Se skipister, skilifter og langrendsspor med farvede linjer, der angiver sværhedsgraden. Hvis du vil gøre brug af dette, skal du aktivere denne udvidelse og også gå til \"Konfigurer kort\" og vælge kortstilen \"Vinter og ski\".";
 "record_plugin_description" = "Registrer dine ture eller træninger, og analysér dataene med hensyn til hastighed, akkumulerede stigninger og nedstigninger, højdeprofil osv. Optagede spor kan arkiveres, deles med venner, redigeres og efterbehandles.\n\nYderligere information på https://osmand.net/docs/user/plugins/trip-recording .";
 "purchases_feature_desc_wikipedia" = "Giver dig alle stedrelaterede Wikipedia-artikler offline, så du kan lære mere om de steder, du besøger på din rejse, ved blot at trykke på kortet. Glem ikke at downloade Wikipedia-kortfilerne for de respektive regioner.";
-"srtm_plugin_description" = "Terrænoplysninger som f.eks. konturlinjer, terrænskygger og skråninger hjælper dig med at vurdere terrænets beskaffenhed og relief, navigationsmuligheder og meget mere. De topografiske oplysninger kan på kortet repræsenteres ved hjælp af skravering af hældninger, konturlinjer og/eller farvelægning af stejlhed.\n\nDe underliggende data stammer fra SRTM og ASTER.\n\nYderligere oplysninger findes på http://osmand.net/docs/user/plugins/contour-lines .";
+"srtm_plugin_description" = "Terrænoplysninger som f.eks. konturlinjer, terrænskygger og hældninger hjælper dig med at vurdere terrænets beskaffenhed og relief, navigationsmuligheder og meget mere. De topografiske oplysninger kan på kortet repræsenteres ved hjælp af skravering af hældninger, konturlinjer og/eller farvelægning af stejlhed.\n\nDe underliggende data stammer fra SRTM og ASTER.\n\nYderligere oplysninger findes på http://osmand.net/docs/user/plugins/contour-lines .";
 "plugin_popup_wiki_ask" = "For at hente Wikipedia data, aktiver udvidelsen: <b>Wikipedia</b>";
 "plugin_popup_srtm_ask" = "For at hente højdekurver skal du aktivere udvidelsen: <b>Højdekurver</b>";
 "turn_on_plugin" = "Aktiver udvidelse";
@@ -1826,7 +1826,7 @@
 "hide_compass_ruler" = "Skjul kompas lineal";
 "segments_count" = "Segment %d";
 "shared_string_resources" = "Ressourcer";
-"amenity_type_emergency" = "Nødsituation";
+"icon_group_emergency" = "Nødsituation";
 "plan_route_open_existing_track" = "Åbn eksisterende spor";
 "open_saved_track" = "Åben gemt spor";
 "fav_points_not_exist" = "Der findes ingen favoritpunkter";
@@ -1854,6 +1854,7 @@
 "shared_string_others" = "Andre";
 "start_of_the_track" = "Starten af sporet";
 "extra_maps_menu_group" = "Ekstra kort";
+"icon_group_transport" = "Transport";
 "transport" = "Transport";
 "favorite_group_name" = "Gruppenavn";
 "simplified_track" = "Forenklet spor";
@@ -1935,7 +1936,7 @@
 "open_place_reviews" = "OpenPlaceReviews";
 "wiki_menu_download_descr" = "Yderligere kort er nødvendige for at se Wikipedia Interessepunkter på kortet.";
 "navigate_point_olc" = "Open Location Code (OLC)";
-"contour_lines_hillshades_slope" = "Højdekurver, terrænskygger, skråning";
+"contour_lines_hillshades_slope" = "Højdekurver, terrænskygger, hældning";
 "explore_wikipedia_offline" = "Udforsk Wikipedia offline.";
 "shared_string_turn_off" = "Sluk";
 "context_menu_item_edit_waypoint" = "Rediger GPX-rutepunkt";
@@ -2102,7 +2103,7 @@
 "delete_group_confirm_short" = "Slet gruppe?";
 "parked_at" = "parkeret på";
 "icon_group_industrial" = "Industriel";
-"amenity_type_education" = "Uddannelse";
+"icon_group_education" = "Uddannelse";
 "route_points" = "Rutepunkter";
 "connect_rp" = "Forbind rutepunkter";
 "lang_al" = "Albansk";
@@ -2685,7 +2686,6 @@
 "cloud_conflict_descr" = "De lokale og cloud-versioner indeholder ændringer siden den sidste synkronisering.";
 "download_heightmap_maps" = "Højdekort";
 "depth_contours" = "Dybdekonturer";
-"worldwide_maps" = "Globale kort";
 "use_heightmap_setting" = "Brug højdekort med 3D-relief";
 "nautical_depth_points" = "Nautiske dybdepunkter";
 "amazon_appstore" = "Amazon Appstore";
@@ -2842,3 +2842,10 @@
 "wikipedia_language_settings_descr" = "Vælg de sprog, som Wikipedia-artikler skal vises i på kortet. Du kan skifte mellem alle tilgængelige sprog, mens du læser artiklen.";
 "download_only_now" = "Download kun nu";
 "ios_release_4_4" = "• Wikipedia: tilføjet mulighed for at se billeder, opdateret læser-brugergrænseflade\n• Favoritter: tilføjet søgning\n• CarPlay: tilføjet historik, omorganiseret spor og favoritliste\n• Vandreruter: tilføjet mulighed for at vælge ruter på kortet for at få vist yderligere oplysninger eller navigation\n• OpenStreetMap: tilføjet mulighed for at uploade spor\n• Stemmevejledninger: tilføjet understøttelse af nye sprog: Catalansk, ukrainsk, bulgarsk, indonesisk, slovensk\n• Tilføjet juridisk advarsel om brug af advarsler om fartkameraer\n• Forbedret beskyttelse af privatlivets fred: tilføjede muligheder for at deaktivere logning af historik\n• Forbedret synlighed af kortlinealen\n• Forbedringer af brugergrænsefladen for RTL-sprog\n• Tilgængelighed: tilføjet indholdsmærkning for kortknapper\n• Tilføjet understøttelse af \"dynamisk skrifttype\", tekststørrelsen i OsmAnd ændres i overensstemmelse med tekststørrelsen i iOS\n• Kortorientering: tilføjet manuelt roteret tilstand\n• Minimum iOS-version er øget til 15.0\n";
+"top_widgets_panel" = "Øverste panel";
+"coordinates_widget_map_center" = "Koordinater: kortcentrum";
+"hide_map_center" = "Skjul koordinater: kortets centrum";
+"toggle_map_center" = "Vis/skjul koordinater: kortets centrum";
+"show_map_center" = "Vis koordinater: kortets centrum";
+"quick_action_map_center_widget_descr" = "En til/fra-knap for at vise eller skjule koordinat-modulet på kortet.";
+"icon_group_service" = "Service";

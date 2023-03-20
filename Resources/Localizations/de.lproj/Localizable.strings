@@ -1938,12 +1938,13 @@
 "select_segment" = "Segment auswählen";
 "select_track_to_follow" = "Track auswählen, welchem gefolgt werden soll";
 "icon_group_travel" = "Reisen";
-"transport" = "ÖPNV";
+"icon_group_transport" = "ÖPNV";
 "icon_group_symbols" = "Symbole";
 "icon_group_sport" = "Sport";
 "icon_group_special" = "Spezial";
-"amenity_type_emergency" = "Notfall";
+"icon_group_emergency" = "Notfall";
 "shared_string_octagon" = "Achteck";
+"transport" = "ÖPNV";
 
 // Shapes
 "shared_string_circle" = "Kreis";
@@ -2114,7 +2115,7 @@
 "distance_moving" = "Korrigierte Distanz";
 "parked_at" = "geparkt um";
 "icon_group_industrial" = "Industriell";
-"amenity_type_education" = "Bildung";
+"icon_group_education" = "Bildung";
 "route_points" = "Routenpunkte";
 "connect_rp" = "Routenpunkte verbinden";
 "lang_al" = "Albanisch";
@@ -2699,7 +2700,6 @@
 "use_heightmap_setting" = "3D-Reliefhöhenkarten verwenden";
 "nautical_depth_points" = "Nautische Tiefenpunkte";
 "depth_contours" = "Tiefenlinien";
-"worldwide_maps" = "Weltweite Karten";
 "huawei_appgallery" = "Huawei AppGallery";
 "amazon_appstore" = "Amazon Appstore";
 "position_on_map" = "Position auf dem Bildschirm";
@@ -2855,3 +2855,4 @@
 "over_wifi_only" = "Nur über Wi-Fi";
 "wikivoyage_download_pics" = "Bilder herunterladen";
 "ios_release_4_4" = "- Wikipedia: Möglichkeit zum Anzeigen von Bildern hinzugefügt, UI des Readers aktualisiert\n- Favoriten: Suche hinzugefügt\n- CarPlay: Historie hinzugefügt, Tracks und Favoritenliste reorganisiert\n- Wanderrouten: Möglichkeit hinzugefügt, Routen auf der Karte auszuwählen, um zusätzliche Informationen anzuzeigen oder zu navigieren\n- OpenStreetMap: Möglichkeit zum Hochladen von Tracks hinzugefügt\n- Sprachansagen: Unterstützung für neue Sprachen hinzugefügt: Katalanisch, Ukrainisch, Bulgarisch, Indonesisch, Slowenisch\n- Rechtliche Warnung über die Verwendung von Blitzerwarnungen hinzugefügt\n- Verbesserter Datenschutz: Optionen zur Deaktivierung der Verlaufsprotokollierung hinzugefügt\n- Die Sichtbarkeit des Kartenlineals wurde verbessert\n- UI-Verbesserungen für RTL-Sprachen\n- Barrierefreiheit: Inhaltsbeschriftung für Kartenschaltflächen hinzugefügt\n- Unterstützung für \"Dynamische Schrift\" zugefügt, die Textgröße in OsmAnd wird entsprechend der Textgröße in iOS angepasst\n- Kartenausrichtung: manuell gedrehter Modus hinzugefügt\n- Die minimale iOS-Version wurde auf 15.0 erhöht\n";
+"icon_group_service" = "Dienstleistung";

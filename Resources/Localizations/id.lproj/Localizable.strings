@@ -2210,15 +2210,16 @@
 
 //Icon categories
 "icon_group_amenity" = "Fasilitas";
-"amenity_type_emergency" = "Darurat";
+"icon_group_emergency" = "Darurat";
 "icon_group_special" = "Spesial";
 "icon_group_sport" = "Olahraga";
 "icon_group_symbols" = "Simbol";
-"transport" = "Transportasi";
+"icon_group_transport" = "Transportasi";
 "icon_group_travel" = "Perjalanan";
 "icon_group_nautical" = "Bahari";
 "icon_group_industrial" = "Industri";
-"amenity_type_education" = "Edukasi";
+"icon_group_education" = "Edukasi";
+"transport" = "Transportasi";
 "settings_item_read_error" = "Tidak dapat membaca dari \'%@\'.";
 "app_mode_default" = "Jelajahi peta";
 "app_mode_car" = "Mengemudi";
@@ -2442,7 +2443,6 @@
 "routing_attr_motor_type_diesel_name" = "Diesel";
 "contact_support_description" = "Jika Anda memiliki pertanyaan, silakan hubungi kami di %@.";
 "weather_pressure_inches_of_mercury" = "Inci air raksa";
-"worldwide_maps" = "Peta dunia";
 "backup_data" = "Cadangkan data";
 "co2_mission" = "Emisi CO2";
 "shared_string_cross_buy" = "Pembelian silang";
@@ -2657,3 +2657,4 @@
 "privacy_and_security" = "Privasi dan keamanan";
 "shared_string_legal" = "Legal";
 "speed_cameras_alert" = "Peringatan kamera pengukur kecepatan di beberapa negara dilarang oleh undang-undang.";
+"icon_group_service" = "Layanan";

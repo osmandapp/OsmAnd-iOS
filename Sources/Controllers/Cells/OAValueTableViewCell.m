@@ -24,7 +24,7 @@
 
 - (BOOL)checkSubviewsToUpdateMargins
 {
-    return !self.leftIconView.hidden || !self.valueStackView.hidden;
+    return !self.valueStackView.hidden;
 }
 
 @end

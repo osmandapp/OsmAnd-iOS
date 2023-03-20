@@ -106,6 +106,16 @@
     _data[kCellIconTint] = @(iconTint);
 }
 
+- (UITableViewCellAccessoryType)accessoryType
+{
+    return _data[kCellAccessoryType] ? [_data[kCellAccessoryType] integerValue] : UITableViewCellAccessoryNone;
+}
+
+- (void)setAccessoryType:(UITableViewCellAccessoryType)accessoryType
+{
+    _data[kCellAccessoryType] = @(accessoryType);
+}
+
 - (void) setObj:(id)data forKey:(nonnull NSString *)key
 {
     _data[key] = data;

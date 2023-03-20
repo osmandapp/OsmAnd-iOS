@@ -15,8 +15,7 @@
 #import "OARoutingHelper.h"
 #import "OARouteProvider.h"
 #import "OAOsmAndFormatter.h"
-
-#import "OATimeTableViewCell.h"
+#import "OAValueTableViewCell.h"
 #import "OASliderWithValuesCell.h"
 #import "OARangeSliderCell.h"
 
@@ -125,12 +124,12 @@
 {
     NSMutableArray *tableData = [NSMutableArray array];
     [tableData addObject:@{
-        @"type" : [OATimeTableViewCell getCellIdentifier],
+        @"type" : [OAValueTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"monitoring_min_speed"),
         @"value" : [NSString stringWithFormat:@"%ld %@", _minValue, _units],
     }];
     [tableData addObject:@{
-        @"type" : [OATimeTableViewCell getCellIdentifier],
+        @"type" : [OAValueTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"max_speed"),
         @"value" : [NSString stringWithFormat:@"%ld %@", _maxValue, _units],
     }];
@@ -156,19 +155,23 @@
 {
     NSDictionary *item = _data[indexPath.row];
     NSString *cellType = item[@"type"];
-    if ([cellType isEqualToString:[OATimeTableViewCell getCellIdentifier]])
+    if ([cellType isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
-        OATimeTableViewCell* cell;
-        cell = (OATimeTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:[OATimeTableViewCell getCellIdentifier]];
+        OAValueTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATimeTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OATimeTableViewCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAValueTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.lbTime.textColor = UIColor.blackColor;
+            cell.valueLabel.textColor = UIColor.blackColor;
         }
-        cell.lbTitle.text = item[@"title"];
-        cell.lbTime.text = item[@"value"];
+        if (cell)
+        {
+            cell.titleLabel.text = item[@"title"];
+            cell.valueLabel.text = item[@"value"];
+        }
         return cell;
     }
     else if ([cellType isEqualToString:[OASliderWithValuesCell getCellIdentifier]])

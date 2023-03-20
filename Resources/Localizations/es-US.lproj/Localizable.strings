@@ -2189,15 +2189,16 @@
 
 //Icon categories
 "icon_group_amenity" = "Comodidad";
-"amenity_type_emergency" = "Emergencia";
+"icon_group_emergency" = "Emergencia";
 "icon_group_special" = "Especial";
 "icon_group_sport" = "Deporte";
 "icon_group_symbols" = "Símbolos";
-"transport" = "Transporte";
+"icon_group_transport" = "Transporte";
 "icon_group_travel" = "Viaje";
 "icon_group_nautical" = "Náutico";
 "icon_group_industrial" = "Industrial";
-"amenity_type_education" = "Educación";
+"icon_group_education" = "Educación";
+"transport" = "Transporte";
 "settings_item_read_error" = "No se pudo leer desde«%@».";
 "app_mode_default" = "Ver mapa";
 "app_mode_car" = "Automóvil";
@@ -2682,7 +2683,6 @@
 "position_on_map_center" = "Centro";
 "use_heightmap_setting" = "Usar mapas de altura del relieve 3D";
 "depth_contours" = "Curvas de profundidad";
-"worldwide_maps" = "Mapas del mundo";
 "routing_attr_motor_type_name" = "Motor del vehículo";
 "routing_attr_motor_type_diesel_name" = "Diésel";
 "co2_mission" = "Emisión de CO2";
@@ -2838,3 +2838,4 @@
 "announcement_time_prepare" = "Prepararse";
 "rotate_map_none_fixed" = "Norte siempre arriba (fijo)";
 "ios_release_4_4" = "• Wikipedia: ahora pueden verse imágenes y se ha actualizado la interfaz de usuario\n• Favoritos: se ha añadido un buscador\n• CarPlay: se ha añadido el historial, se reorganizaron las trazas y la lista de favoritos\n• Rutas de senderismo: ahora pueden marcarse rutas en el mapa para navegar o ver información adicional\n• OpenStreetMap: se ha añadido la posibilidad de cargar trazas\n• Indicaciones por voz: ahora se admiten nuevos idiomas: Catalán, ucraniano, búlgaro, indonesio y esloveno\n• Se ha añadido un aviso legal sobre el uso de alertas con los radares de velocidad\n• Privacidad mejorada: se han añadido opciones para desactivar el registro del historial.\n• Se ha mejorado la visibilidad de la regla del mapa\n• Se ha mejorado la interfaz de usuario para los idiomas RTL (de derecha a izquierda)\n• Accesibilidad: se ha añadido etiquetado en el contenido de los botones del mapa.\n• Se ha añadido soporte para «Tipo dinámico», el tamaño del texto en OsmAnd cambiará según el tamaño del texto en iOS.\n• Orientación del mapa: se ha añadido el modo de rotación manual\n• Desde ahora, la versión mínima de soporte en iOS es v15.0\n";
+"icon_group_service" = "Servicio";

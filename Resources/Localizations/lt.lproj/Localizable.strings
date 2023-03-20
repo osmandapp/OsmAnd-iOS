@@ -2190,15 +2190,16 @@
 
 //Icon categories
 "icon_group_amenity" = "Amenity";
-"amenity_type_emergency" = "Spec. tarnybos";
+"icon_group_emergency" = "Spec. tarnybos";
 "icon_group_special" = "Special";
 "icon_group_sport" = "Sportas";
 "icon_group_symbols" = "Symbols";
-"transport" = "Transportas";
+"icon_group_transport" = "Transportas";
 "icon_group_travel" = "Travel";
 "icon_group_nautical" = "Jūrinis";
 "icon_group_industrial" = "Industrial";
-"amenity_type_education" = "Mokslas/Švietimas";
+"icon_group_education" = "Mokslas/Švietimas";
+"transport" = "Transportas";
 "settings_item_read_error" = "Could not read %@.";
 "app_mode_default" = "Numatyta";
 "app_mode_car" = "Automobilis";

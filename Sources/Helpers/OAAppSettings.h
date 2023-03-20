@@ -52,6 +52,13 @@ typedef NS_ENUM(NSInteger, EOACompassMode)
 
 @end
 
+typedef NS_ENUM(NSInteger, EOASunriseSunsetMode)
+{
+    EOASunriseSunsetHide = 0,
+    EOASunriseSunsetTimeLeft,
+    EOASunriseSunsetNext
+};
+
 typedef NS_ENUM(NSInteger, EOARouteService)
 {
     OSMAND = 0,
@@ -798,6 +805,8 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OAApplicationMode *lastRoutingApplicationMode;
 @property (nonatomic) OACommonInteger *rotateMap;
 @property (nonatomic) OACommonInteger *compassMode;
+@property (nonatomic) OACommonInteger *sunriseMode;
+@property (nonatomic) OACommonInteger *sunsetMode;
 
 // Application mode related settings
 @property (nonatomic) OACommonString *profileIconName;
@@ -1000,6 +1009,12 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 - (NSMapTable<NSString *, OACommonPreference *> *)getGlobalPreferences;
 - (OACommonPreference *)getPreferenceByKey:(NSString *)key;
 - (void)registerPreference:(OACommonPreference *)preference forKey:(NSString *)key;
+- (OACommonBoolean *)registerBooleanPreference:(NSString *)key defValue:(BOOL)defValue;
+- (OACommonString *)registerStringPreference:(NSString *)key defValue:(NSString *)defValue;
+- (OACommonStringList *)registerStringListPreference:(NSString *)key defValue:(NSArray<NSString *> *)defValue;
+- (OACommonInteger *)registerIntPreference:(NSString *)key defValue:(int)defValue;
+- (OACommonLong *)registerLongPreference:(NSString *)key defValue:(long)defValue;
+- (OACommonDouble *)registerFloatPreference:(NSString *)key defValue:(double)defValue;
 - (void)resetPreferencesForProfile:(OAApplicationMode *)mode;
 
 // Direction Appearance

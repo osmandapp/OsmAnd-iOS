@@ -2206,15 +2206,16 @@
 
 //Icon categories
 "icon_group_amenity" = "Удобства";
-"amenity_type_emergency" = "Спешна помощ";
+"icon_group_emergency" = "Спешна помощ";
 "icon_group_special" = "Специални";
 "icon_group_sport" = "Спорт";
 "icon_group_symbols" = "Символи";
-"transport" = "Обществен транспорт";
+"icon_group_transport" = "Обществен транспорт";
 "icon_group_travel" = "Пътуване";
 "icon_group_nautical" = "Nautical";
 "icon_group_industrial" = "Industrial";
-"amenity_type_education" = "Образование";
+"icon_group_education" = "Образование";
+"transport" = "Обществен транспорт";
 "settings_item_read_error" = "%@не може да прочете.";
 "app_mode_default" = "Карта";
 "app_mode_car" = "Автомобил";
@@ -2421,3 +2422,4 @@
 "kg" = "кг";
 "km" = "км";
 "lang_zh-Hant" = "Китайски (традиционен)";
+"icon_group_service" = "Услуги";

@@ -10,7 +10,7 @@
 #import "Localization.h"
 #import "OAColors.h"
 #import "OATableViewCustomHeaderView.h"
-#import "OADescrTitleCell.h"
+#import "OASimpleTableViewCell.h"
 #import "OAInputTableViewCell.h"
 #import "OAFilledButtonCell.h"
 #import "OADividerCell.h"
@@ -204,20 +204,19 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:[OADescrTitleCell getCellIdentifier]])
+    if ([item[@"type"] isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
     {
-        OADescrTitleCell* cell;
-        cell = (OADescrTitleCell *)[tableView dequeueReusableCellWithIdentifier:[OADescrTitleCell getCellIdentifier]];
+        OASimpleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADescrTitleCell getCellIdentifier] owner:self options:nil];
-            cell = (OADescrTitleCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASimpleTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
             cell.backgroundColor = UIColor.clearColor;
             cell.contentView.backgroundColor = UIColor.clearColor;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.descriptionView.backgroundColor = UIColor.clearColor;
-            cell.textViewZeroHeightConstraint.priority = UILayoutPriorityRequired;
-            cell.textView.hidden = YES;
+            cell.titleLabel.backgroundColor = UIColor.clearColor;
         }
         if (cell)
         {
@@ -240,9 +239,7 @@
                 [attributedString addAttribute:NSForegroundColorAttributeName value:UIColor.blackColor range:boldRange];
             }
             
-            cell.descriptionView.attributedText = attributedString;
-            cell.topConstraint.constant = [item[@"topMargin"] intValue];
-            cell.bottomConstraint.constant = [item[@"bottomMargin"] intValue];
+            cell.titleLabel.attributedText = attributedString;
         }
         return cell;
     }

@@ -1981,12 +1981,13 @@
 
 //Poi catagories
 "icon_group_amenity" = "Mukavuus";
-"amenity_type_emergency" = "Hätäpalvelu";
+"icon_group_emergency" = "Hätäpalvelu";
 "icon_group_special" = "Erityinen";
 "icon_group_sport" = "Urheilu";
 "icon_group_symbols" = "Symbolit";
-"transport" = "Liikenne";
+"icon_group_transport" = "Liikenne";
 "icon_group_travel" = "Matkailu";
+"transport" = "Liikenne";
 "settings_item_read_error" = "Ei voitu lukea \'%@\'.";
 "app_mode_default" = "Selaa karttaa";
 "app_mode_car" = "Auto";
@@ -2093,7 +2094,7 @@
 "lang_bar" = "Baijeri";
 "lang_it" = "Italia";
 "lang_hr" = "Kroaatia";
-"amenity_type_education" = "Koulutus";
+"icon_group_education" = "Koulutus";
 "backup_error_token_is_not_valid" = "Laitteen tunnuksessa tai tunnuksessa on jotain vikaa";
 "lang_ce" = "tšetšeeni";
 "lang_zh_tw" = "Kiina (traditionaalinen)";
@@ -2449,7 +2450,6 @@
 "shared_string_keep_active" = "Pidä aktiivisena";
 "shared_string_height" = "Korkeus";
 "speed_cameras_alert" = "Nopeusvalvontakameroiden hälytykset on joissakin maissa kielletty lailla.";
-"shared_string_tones" = "tonnia";
 "shared_string_legal" = "Lakiasiat";
 "speed_camera_pois" = "Nopeuskameroiden KP:t";
 "speed_cameras_legal_descr" = "Joissain maissa tai alueilla nopeusvalvontakameroiden varoitussovellusten käyttö on lailla kielletty.
@@ -2461,3 +2461,4 @@
 \nValitse %@. Kaikki nopeuskameroihin liittyvät tiedot: hälytykset, ilmoitukset, KP:t poistetaan, kunnes OsmAnd asennetaan kokonaan uudelleen.";
 "lang_zh-Hant" = "Kiina (traditionaalinen)";
 "privacy_and_security" = "Yksityisyys ja turvallisuus";
+"icon_group_service" = "Palvelu";

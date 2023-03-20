@@ -19,9 +19,10 @@
 #import "OAMapBehaviorViewController.h"
 #import "OAApplicationMode.h"
 #import "OAAppSettings.h"
-#import "OAProfileDataObject.h"
+#import "OARoutingDataObject.h"
+#import "OARoutingDataUtils.h"
+#import "OARoutingProfilesHolder.h"
 #import "OsmAndApp.h"
-#import "OAProfileDataUtils.h"
 #import "OARootViewController.h"
 #import "OARouteLineAppearanceHudViewController.h"
 #import "OAMainSettingsViewController.h"
@@ -39,10 +40,9 @@
 @implementation OAProfileNavigationSettingsViewController
 {
     NSArray<NSArray *> *_data;
-    
+
     OAAppSettings *_settings;
-    
-    NSDictionary<NSString *, OARoutingProfileDataObject *> *_routingProfileDataObjects;
+    OARoutingProfilesHolder *_routingDataObjects;
 }
 
 #pragma mark - Initialization
@@ -50,6 +50,7 @@
 - (void)commonInit
 {
     _settings = [OAAppSettings sharedManager];
+    _routingDataObjects = [OARoutingDataUtils getRoutingProfiles];
 }
 
 #pragma mark - Base UI
@@ -64,22 +65,8 @@
 - (void)generateData
 {
     NSString *selectedProfileName = self.appMode.getRoutingProfile;
-    _routingProfileDataObjects = [OAProfileDataUtils getRoutingProfiles];
-    NSArray *profiles = [_routingProfileDataObjects allValues];
-    OARoutingProfileDataObject *routingData;
     NSString *derivedProfile = self.appMode.getDerivedProfile;
-    BOOL checkForDerived = ![derivedProfile isEqualToString:@"default"];
-    for (OARoutingProfileDataObject *profile in profiles)
-    {
-        if([profile.stringKey isEqual:selectedProfileName])
-        {
-            if ((!checkForDerived && !profile.derivedProfile) || (checkForDerived && [profile.derivedProfile isEqualToString:derivedProfile]))
-            {
-                routingData = profile;
-                break;
-            }
-        }
-    }
+    OARoutingDataObject *routingData = [_routingDataObjects get:selectedProfileName derivedProfile:derivedProfile];
     
     NSMutableArray *tableData = [NSMutableArray array];
     NSMutableArray *navigationArr = [NSMutableArray array];

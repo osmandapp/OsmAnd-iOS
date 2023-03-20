@@ -178,7 +178,7 @@
 
 + (UIImage *) templateImageNamed:(NSString *)imageName
 {
-    return [[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
+    return [[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 }
 
 + (UIImage *) rtlImageNamed:(NSString *)imageName

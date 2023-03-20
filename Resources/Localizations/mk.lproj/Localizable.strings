@@ -1856,7 +1856,6 @@
 
 "nautical_depth_points" ="Nautical depth points";
 "depth_contours" = "Depth contours";
-"worldwide_maps" = "Worldwide maps";
 
 "my_location" = "Moja pozicija";
 "all_categories" = "All categories";
@@ -2585,15 +2584,16 @@
 
 //Icon categories
 "icon_group_amenity" = "Udobnost";
-"amenity_type_emergency" = "Iten slučaj";
+"icon_group_emergency" = "Iten slučaj";
 "icon_group_special" = "Poesbno";
 "icon_group_sport" = "Sport";
 "icon_group_symbols" = "Simboli";
-"transport" = "Transport";
+"icon_group_transport" = "Transport";
 "icon_group_travel" = "Patuvaj";
 "icon_group_nautical" = "Nautički";
 "icon_group_industrial" = "Industriski";
-"amenity_type_education" = "Edukacija";
+"icon_group_education" = "Edukacija";
+"transport" = "Transport";
 
 "settings_item_read_error" = "Ne možese da se procita od „%@“.";
 "app_mode_default" = "Prelistajte ja kartata";
@@ -3051,3 +3051,4 @@
 "speed_camera_pois" = "Brzinska kamera POI’s";
 "shared_string_legal" = "Legalno";
 "uninstall_speed_cameras" = "Deinstaliraj ja brzinskata kamera";
+"icon_group_service" = "Servis";

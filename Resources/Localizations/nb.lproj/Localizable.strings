@@ -1788,6 +1788,7 @@
 "shared_string_disable" = "Deaktiver";
 "change_folder" = "Endre mappe";
 "fav_point_dublicate" = "Duplisert av favorittnavn angitt";
+"icon_group_transport" = "Transport";
 "transport" = "Transport";
 "shared_string_enable" = "Aktiver";
 "simplified_track_description" = "Kun rutelinjen vil lagres, rutepunktene vil slettes.";
@@ -1809,7 +1810,7 @@
 "coordinates_widget_current_location" = "Koordinat-miniprogram";
 "shared_string_others" = "Andre";
 "coordinates" = "Koordinater";
-"amenity_type_emergency" = "Nødsituasjon";
+"icon_group_emergency" = "Nødsituasjon";
 "copied_to_clipboard" = "Kopiert til utklippstavle";
 "shared_string_icon" = "Ikon";
 "access_default_color" = "Standardfarge";
@@ -2032,7 +2033,7 @@
 "lang_ko" = "Koreansk";
 "add_description" = "Legg til beskrivelse";
 "backup_view_conflicts" = "Vis konflikter";
-"amenity_type_education" = "Utdanning";
+"icon_group_education" = "Utdanning";
 "user_login" = "Logg inn";
 "lang_min" = "Minangkabau";
 "lang_mk" = "Makedonsk";
@@ -2274,7 +2275,6 @@
 "animate_my_location" = "Animer egen posisjon";
 "show_borders_of_downloaded_maps" = "Vis grenser for nedlastede kart";
 "show_map_symbols" = "Vis kartsymboler";
-"worldwide_maps" = "Verdenskart";
 "tts_title" = "Talesyntese";
 "routing_attr_avoid_tunnels_description" = "Unngå tunneler";
 "turn_arrows_descr" = "Velg hvorvidt svingpiler skal vises langs rutelinjen.";
@@ -2580,3 +2580,4 @@
 "shared_string_updated" = "Oppdatert";
 "delete_tracks_bottom_sheet_description_bold_part" = "%d spor?";
 "delete_tracks_bottom_sheet_title" = "Slett spor?";
+"icon_group_service" = "Tjeneste";

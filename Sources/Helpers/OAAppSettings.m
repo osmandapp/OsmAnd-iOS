@@ -3732,6 +3732,7 @@
         [_routingProfile setModeDefaultValue:@"STRAIGHT_LINE_MODE" mode:OAApplicationMode.AIRCRAFT];
         [_routingProfile setModeDefaultValue:@"ski" mode:OAApplicationMode.SKI];
         [_routingProfile setModeDefaultValue:@"horsebackriding" mode:OAApplicationMode.HORSE];
+        [_routingProfile setModeDefaultValue:@"moped" mode:OAApplicationMode.MOPED];
         [_profilePreferences setObject:_routingProfile forKey:@"routing_profile"];
 
         _profileIconName = [OACommonString withKey:profileIconNameKey defValue:@"ic_world_globe_dark"];
@@ -3745,6 +3746,7 @@
         [_profileIconName setModeDefaultValue:@"ic_action_skiing" mode:OAApplicationMode.SKI];
         [_profileIconName setModeDefaultValue:@"ic_action_truck" mode:OAApplicationMode.TRUCK];
         [_profileIconName setModeDefaultValue:@"ic_action_motorcycle_dark" mode:OAApplicationMode.MOTORCYCLE];
+        [_profileIconName setModeDefaultValue:@"ic_action_motor_scooter" mode:OAApplicationMode.MOPED];
         [_profileIconName setModeDefaultValue:@"ic_action_horse" mode:OAApplicationMode.HORSE];
         
         _profileIconColor = [OACommonInteger withKey:profileIconColorKey defValue:profile_icon_color_blue_dark_default];
@@ -3773,6 +3775,7 @@
         [_profilePreferences setObject:_locationIcon forKey:@"location_icon"];
 
         _appModeOrder = [OACommonInteger withKey:appModeOrderKey defValue:0];
+        [_profilePreferences setObject:_appModeOrder forKey:@"app_mode_order"];
 
         _defaultSpeed = [OACommonDouble withKey:defaultSpeedKey defValue:10.];
         [_defaultSpeed setModeDefaultValue:@1.5 mode:OAApplicationMode.DEFAULT];
@@ -4469,6 +4472,66 @@
 - (void)registerPreference:(OACommonPreference *)preference forKey:(NSString *)key
 {
     [_registeredPreferences setObject:preference forKey:key];
+}
+
+- (OACommonBoolean *)registerBooleanPreference:(NSString *)key defValue:(BOOL)defValue
+{
+    if ([_registeredPreferences objectForKey:key])
+        return (OACommonBoolean *)[_registeredPreferences objectForKey:key];
+    
+    OACommonBoolean *p = [OACommonBoolean withKey:key defValue:defValue];
+    [self registerPreference:p forKey:key];
+    return p;
+}
+
+- (OACommonString *)registerStringPreference:(NSString *)key defValue:(NSString *)defValue
+{
+    if ([_registeredPreferences objectForKey:key])
+        return (OACommonString *)[_registeredPreferences objectForKey:key];
+    
+    OACommonString *p = [OACommonString withKey:key defValue:defValue];
+    [self registerPreference:p forKey:key];
+    return p;
+}
+
+- (OACommonStringList *)registerStringListPreference:(NSString *)key defValue:(NSArray<NSString *> *)defValue
+{
+    if ([_registeredPreferences objectForKey:key])
+        return (OACommonStringList *)[_registeredPreferences objectForKey:key];
+    
+    OACommonStringList *p = [OACommonStringList withKey:key defValue:defValue ];
+    [self registerPreference:p forKey:key];
+    return p;
+}
+
+- (OACommonInteger *)registerIntPreference:(NSString *)key defValue:(int)defValue
+{
+    if ([_registeredPreferences objectForKey:key])
+        return (OACommonInteger *)[_registeredPreferences objectForKey:key];
+    
+    OACommonInteger *p = [OACommonInteger withKey:key defValue:defValue];
+    [self registerPreference:p forKey:key];
+    return p;
+}
+
+- (OACommonLong *)registerLongPreference:(NSString *)key defValue:(long)defValue
+{
+    if ([_registeredPreferences objectForKey:key])
+        return (OACommonLong *)[_registeredPreferences objectForKey:key];
+    
+    OACommonLong *p = [OACommonLong withKey:key defValue:defValue];
+    [self registerPreference:p forKey:key];
+    return p;
+}
+
+- (OACommonDouble *)registerFloatPreference:(NSString *)key defValue:(double)defValue
+{
+    if ([_registeredPreferences objectForKey:key])
+        return (OACommonDouble *)[_registeredPreferences objectForKey:key];
+    
+    OACommonDouble *p = [OACommonDouble withKey:key defValue:defValue];
+    [self registerPreference:p forKey:key];
+    return p;
 }
 
 - (void)resetPreferencesForProfile:(OAApplicationMode *)mode

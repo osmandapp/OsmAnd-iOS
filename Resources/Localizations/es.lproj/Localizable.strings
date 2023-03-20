@@ -1915,6 +1915,7 @@
 "select_group" = "Elegir grupo";
 "street_level_imagery" = "Imágenes a nivel de calle";
 "map_widget_distance_by_tap" = "Distancia al pulsar";
+"icon_group_transport" = "Transporte";
 "transport" = "Transporte";
 "favorite_group_name" = "Nombre del grupo";
 "custom_osmand_plugin" = "Complemento personalizado de OsmAnd";
@@ -1950,7 +1951,7 @@
 "shared_string_search_history" = "Historial de búsqueda";
 "select_folder" = "Elegir carpeta";
 "coordinates" = "Coordenadas";
-"amenity_type_emergency" = "Emergencia";
+"icon_group_emergency" = "Emergencia";
 "access_default_color" = "Color predefinido";
 "preparing_file" = "Preparando archivo";
 "reading_file" = "Leyendo archivo";
@@ -2217,7 +2218,7 @@
 "backup_error_subscription_was_used" = "Suscripción o promoción usada en otra cuenta %@";
 "lang_bg" = "Búlgaro";
 "lang_la" = "Latín";
-"amenity_type_education" = "Educación";
+"icon_group_education" = "Educación";
 "points_delete_multiple" = "¿Borrar %d punto(s)\?";
 "lang_lmo" = "Lombardo";
 "cloud_conflicts_descr" = "Algunos archivos no se pudieron cargar porque existe una versión más reciente en el servidor.";
@@ -2680,7 +2681,6 @@
 "local_changes_will_be_dismissed" = "Se descartarán los cambios locales";
 "use_heightmap_setting" = "Utilizar mapas de altura en relieve 3D";
 "depth_contours" = "Curvas de profundidad";
-"worldwide_maps" = "Mapas del mundo";
 "huawei_appgallery" = "Huawei AppGallery";
 "download_heightmap_maps" = "Mapa de alturas";
 "nautical_depth_points" = "Puntos de profundidad náutica";
@@ -2839,3 +2839,10 @@
 "download_only_now" = "Descargar sólo ahora";
 "download_over_cellular_network" = "¿Descargar imágenes a través de la red móvil? Esto puede incurrir en altos cargos.";
 "ios_release_4_4" = "• Wikipedia: ahora pueden verse imágenes y se ha actualizado la interfaz de usuario\n• Favoritos: se ha añadido un buscador\n• CarPlay: se ha añadido el historial, se reorganizaron las trazas y la lista de favoritos\n• Rutas de senderismo: ahora pueden marcarse rutas en el mapa para navegar o ver información adicional\n• OpenStreetMap: se ha añadido la posibilidad de cargar trazas\n• Indicaciones por voz: ahora se admiten nuevos idiomas: Catalán, ucraniano, búlgaro, indonesio y esloveno\n• Se ha añadido un aviso legal sobre el uso de alertas con los radares de velocidad\n• Privacidad mejorada: se han añadido opciones para desactivar el registro del historial.\n• Se ha mejorado la visibilidad de la regla del mapa\n• Se ha mejorado la interfaz de usuario para los idiomas RTL (de derecha a izquierda)\n• Accesibilidad: se ha añadido etiquetado en el contenido de los botones del mapa.\n• Se ha añadido soporte para «Tipo dinámico», el tamaño del texto en OsmAnd cambiará según el tamaño del texto en iOS.\n• Orientación del mapa: se ha añadido el modo de rotación manual\n• Desde ahora, la versión mínima de soporte en iOS es v15.0\n";
+"icon_group_service" = "Servicio";
+"top_widgets_panel" = "Panel superior";
+"coordinates_widget_map_center" = "Coordenadas: centro del mapa";
+"toggle_map_center" = "Mostrar/ocultar Coordenadas: centro del mapa";
+"show_map_center" = "Mostrar coordenadas: centro del mapa";
+"hide_map_center" = "Ocultar coordenadas: centro del mapa";
+"quick_action_map_center_widget_descr" = "Un conmutador para mostrar u ocultar el widget de Coordenadas en el mapa.";

@@ -2209,15 +2209,16 @@
 
 //Icon categories
 "icon_group_amenity" = "Amwynder";
-"amenity_type_emergency" = "Argyfwng";
+"icon_group_emergency" = "Argyfwng";
 "icon_group_special" = "Arbennig";
 "icon_group_sport" = "Chwaraeon";
 "icon_group_symbols" = "Symbolau";
-"transport" = "Trafnidiaeth";
+"icon_group_transport" = "Trafnidiaeth";
 "icon_group_travel" = "Teithio";
 "icon_group_nautical" = "Morol";
 "icon_group_industrial" = "Diwydiannol";
-"amenity_type_education" = "Addysg";
+"icon_group_education" = "Addysg";
+"transport" = "Trafnidiaeth";
 "settings_item_read_error" = "Methwyd darllen o \'%@\'.";
 "app_mode_default" = "Pori\'r map";
 "app_mode_car" = "Gyrru";
@@ -2562,3 +2563,4 @@
 "speed_cameras_alert" = "Mewn rhai gwledydd, mae\'n anghyfreithlon rhybuddio am gamerâu cyflymder.";
 "lang_zh-Hant" = "Tsieineeg (Traddodiadol)";
 "shared_string_keep_active" = "Cadw\'n fyw";
+"icon_group_service" = "Gwasanaeth";

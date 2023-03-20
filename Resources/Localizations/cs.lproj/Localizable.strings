@@ -1921,7 +1921,7 @@
 "icon_group_symbols" = "Symboly";
 "icon_group_sport" = "Sport";
 "icon_group_special" = "Speciální";
-"amenity_type_emergency" = "Pomoc v nouzi";
+"icon_group_emergency" = "Pomoc v nouzi";
 "search_poi_types_descr" = "Zkombinujte body zájmu různých kategorií. Klepnutím na přepínač vyberete všechny, klepnutím na levou stranu vyberete kategorie.";
 "reset_to_default_category_button_promo" = "\"Obnovit do základního nastavení\" nastaví výchozí pořadí.";
 "create_custom_categories_list_promo" = "Změňte pořadí seznamu a skryjte kategorie. Importujte a exportujte všechny změny jako profily.";
@@ -1963,6 +1963,7 @@
 "fav_add_new_group" = "Přidat novou skupinu";
 "shared_string_search_history" = "Historie vyhledávání";
 "fav_points_not_exist" = "Žádná Oblíbená místa nejsou zadána";
+"icon_group_transport" = "Doprava";
 "transport" = "Doprava";
 "shared_string_others" = "Ostatní";
 "favorite_places_category" = "Místa";
@@ -2094,7 +2095,7 @@
 "shared_string_end_time" = "Čas příjezdu";
 "shared_string_time_moving" = "Doba pohybu";
 "icon_group_industrial" = "Průmysl";
-"amenity_type_education" = "Školství";
+"icon_group_education" = "Školství";
 "route_points" = "Body trasy";
 "connect_rp" = "Spojit body trasy";
 "lang_als" = "Toskičtina";
@@ -2596,7 +2597,6 @@
 "use_heightmap_setting" = "Použít 3D reliéfní výškové mapy";
 "nautical_depth_points" = "Plavební hloubkové body";
 "depth_contours" = "Hloubkové vrstevnice";
-"worldwide_maps" = "Celosvětové mapy";
 "tomorrow" = "Zítra";
 "routing_attr_allow_private_for_truck_description" = "Umožnění přístupu nákladních vozidel na soukromé pozemky.";
 "routing_attr_hazmat_category_no_restrictions_name" = "A (bez omezení)";
@@ -2814,3 +2814,13 @@
 "search_history_disabled" = "Historie vyhledávání je vypnutá";
 "enable_search_history" = "Historii vyhledávání můžete povolit v Nastavení";
 "search_favorites" = "Hledat oblíbené";
+"icon_group_service" = "Služby";
+"coordinates_widget_map_center" = "Počet řádků";
+"map_widget_camera_tilt" = "Naklonění kamery";
+"map_widget_camera_distance" = "Vzdálenost kamery";
+"map_widget_zoom_level" = "Zoom level";
+"map_widget_target_distance" = "Vzdálenost cíle";
+"top_widgets_panel" = "Horní panel";
+"rotate_map_none_fixed" = "Sever je nahoře (opraveno)";
+"rotate_map_none_manually" = "Ruční otáčení (opraveno)";
+"compass_click_desc" = "Klepnutím na kompas přepnete režim orientace mapy.";

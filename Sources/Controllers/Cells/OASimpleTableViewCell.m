@@ -34,6 +34,12 @@
     self.separatorInset = UIEdgeInsetsMake(0., leftInset, 0., 0.);
 }
 
+- (void)leftEditButtonVisibility:(BOOL)show
+{
+    self.leftEditButton.hidden = !show;
+    [self updateMargins];
+}
+
 - (void)leftIconVisibility:(BOOL)show
 {
     self.leftIconView.hidden = !show;
@@ -60,7 +66,7 @@
 
 - (void)updateMargins
 {
-    BOOL hidden = (self.descriptionLabel.hidden || self.titleLabel.hidden) && [self checkSubviewsToUpdateMargins];
+    BOOL hidden = (self.descriptionLabel.hidden || self.titleLabel.hidden) && (!self.leftEditButton.hidden || !self.leftIconView.hidden || [self checkSubviewsToUpdateMargins]);
     self.topContentSpaceView.hidden = hidden;
     self.bottomContentSpaceView.hidden = hidden;
     self.contentOutsideStackViewVertical.spacing = hidden ? 3 : 4;

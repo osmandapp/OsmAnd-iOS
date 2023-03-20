@@ -7,7 +7,7 @@
 //
 
 #import "OARearrangeProfilesViewController.h"
-#import "OADeleteButtonTableViewCell.h"
+#import "OASimpleTableViewCell.h"
 #import "OAApplicationMode.h"
 
 #import "Localization.h"
@@ -193,35 +193,28 @@
 {
     BOOL isAllProfiles = indexPath.section == kAllApplicationProfilesSection;
     OAApplicationMode *mode = isAllProfiles ? _appProfiles[indexPath.row].appMode : _deletedProfiles[indexPath.row].appMode;
-    
-    OADeleteButtonTableViewCell* cell = nil;
-    cell = [tableView dequeueReusableCellWithIdentifier:[OADeleteButtonTableViewCell getCellIdentifier]];
+    OASimpleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADeleteButtonTableViewCell getCellIdentifier] owner:self options:nil];
-        cell = (OADeleteButtonTableViewCell *)[nib objectAtIndex:0];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+        cell = (OASimpleTableViewCell *) nib[0];
+        [cell leftEditButtonVisibility:YES];
+        [cell descriptionVisibility:NO];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.separatorInset = UIEdgeInsetsMake(0.0, 58.0, 0.0, 0.0);
-        [cell showIcon:YES];
     }
     if (cell)
     {
         cell.titleLabel.text = mode.toHumanString;
-        NSString *imageName = @"";
-        if (isAllProfiles)
-            imageName = mode.isCustomProfile ? @"ic_custom_delete" : @"ic_custom_delete_disable";
-        else
-            imageName = @"ic_custom_undo_button";
-        
-        cell.iconImageView.image = [mode.getIcon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
-        cell.iconImageView.tintColor = UIColorFromRGB(mode.getIconColor);
-        [cell.deleteButton setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
-        [cell.deleteButton setUserInteractionEnabled:mode.isCustomProfile];
-        cell.deleteButton.tag = indexPath.section << 10 | indexPath.row;
-        [cell.deleteButton addTarget:self action:@selector(actionButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        cell.leftIconView.image = [UIImage templateImageNamed:[mode getIconName]];
+        cell.leftIconView.tintColor = UIColorFromRGB([mode getIconColor]);
+
+        NSString *imageName = !isAllProfiles ? @"ic_custom_undo_button" : [mode isCustomProfile] ? @"ic_custom_delete" : @"ic_custom_delete_disable";
+        [cell.leftEditButton setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
+        cell.leftEditButton.enabled = mode.isCustomProfile;
+        cell.leftEditButton.tag = indexPath.section << 10 | indexPath.row;
+        [cell.leftEditButton removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+        [cell.leftEditButton addTarget:self action:@selector(actionButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     }
-    if (cell.needsUpdateConstraints)
-        [cell updateConstraints];
     return cell;
 }
 

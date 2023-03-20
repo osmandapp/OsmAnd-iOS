@@ -22,7 +22,7 @@
 #import "OAButtonTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OAIconTitleValueCell.h"
-#import "OATimeTableViewCell.h"
+#import "OAValueTableViewCell.h"
 #import "OADateTimePickerTableViewCell.h"
 #import "OAColors.h"
 #import "OAMapLayers.h"
@@ -147,13 +147,13 @@ static const NSInteger panoImageFilterSection = 2;
     [dataArr addObject:@[
                          @{ @"type" : [OADividerCell getCellIdentifier]},
                          @{
-                             @"type" : [OATimeTableViewCell getCellIdentifier],
+                             @"type" : [OAValueTableViewCell getCellIdentifier],
                              @"title" : OALocalizedString(@"shared_string_start_date"),
                              @"key" : @"start_date_filter",
                              @"img" : @"ic_custom_date.png"
                              },
                          @{
-                             @"type" : [OATimeTableViewCell getCellIdentifier],
+                             @"type" : [OAValueTableViewCell getCellIdentifier],
                              @"title" : OALocalizedString(@"shared_string_end_date"),
                              @"key" : @"end_date_filter",
                              @"img" : @"ic_custom_date.png"
@@ -417,36 +417,31 @@ static const NSInteger panoImageFilterSection = 2;
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:[OATimeTableViewCell getCellIdentifier]])
+    else if ([item[@"type"] isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
-        OATimeTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OATimeTableViewCell getCellIdentifier]];
+        OAValueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATimeTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OATimeTableViewCell *)[nib objectAtIndex:0];
-            [cell showLeftImageView:YES];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAValueTableViewCell *) nib[0];
+            [cell descriptionVisibility:NO];
         }
         if (cell)
         {
             double dateVal = [item[@"key"] isEqualToString:@"start_date_filter"] ? _startDate : _endDate;
             BOOL isNotSet = dateVal == 0;
-            cell.lbTitle.text = item[@"title"];
-            UIImage *img = [UIImage templateImageNamed:item[@"img"]];
-            if (img)
-            {
-                [cell showLeftImageView:YES];
-                cell.leftImageView.image = img;
-                cell.leftImageView.tintColor = isNotSet ? UIColorFromRGB(color_tint_gray) : UIColorFromRGB(color_dialog_buttons_dark);
-            }
-            
+            cell.titleLabel.text = item[@"title"];
+            cell.leftIconView.image = [UIImage templateImageNamed:item[@"img"]];
+            cell.leftIconView.tintColor = isNotSet ? UIColorFromRGB(color_tint_gray) : UIColorFromRGB(color_dialog_buttons_dark);
+
             NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
             [formatter setFormatterBehavior:NSDateFormatterBehavior10_4];
             [formatter setDateStyle:NSDateFormatterShortStyle];
             [formatter setTimeStyle:NSDateFormatterNoStyle];
             NSDate *date = [NSDate dateWithTimeIntervalSince1970:dateVal];
             NSString *dateStr = isNotSet ? OALocalizedString(@"shared_string_not_set") : [formatter stringFromDate:date];
-            cell.lbTime.text = dateStr;
-            [cell.lbTime setTextColor:isNotSet ? UIColorFromRGB(color_text_footer) : UIColorFromRGB(color_menu_button)];
+            cell.valueLabel.text = dateStr;
+            cell.valueLabel.textColor = isNotSet ? UIColorFromRGB(color_text_footer) : UIColorFromRGB(color_menu_button);
         }
         outCell = cell;
     }
@@ -612,7 +607,7 @@ static const NSInteger panoImageFilterSection = 2;
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = [self getItem:indexPath];
-    if ([item[@"type"] isEqualToString:@"OATimeTableViewCell"])
+    if ([item[@"type"] isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
         [self.tblView beginUpdates];
         

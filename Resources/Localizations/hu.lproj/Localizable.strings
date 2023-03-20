@@ -1419,12 +1419,13 @@
 "save_current_track_descr" = "Jelenlegi nyomvonal mentése GPX fájlba most.";
 "shared_string_icon" = "Ikon";
 "icon_group_special" = "Különleges";
-"amenity_type_emergency" = "Vészhelyzet";
+"icon_group_emergency" = "Vészhelyzet";
 "extra_maps_menu_group" = "Egyéb térképek";
 "add_custom_category" = "Egyéni kategória hozzáadása";
 "shared_string_disable" = "Letiltás";
 "plan_route_split_before" = "Elvágás ez előtt:";
 "shared_string_import" = "Importálás";
+"icon_group_transport" = "Tömegközlekedés";
 "transport" = "Tömegközlekedés";
 "coordinates_widget_current_location" = "Koordináta-widget";
 "shared_string_others" = "Egyéb";
@@ -1655,7 +1656,7 @@
 "lang_als" = "albán (toszk)";
 "lang_iw" = "héber";
 "cloud_email_not_registered" = "Ez az e-mail-címe nincs regisztrálva az OsmAnd Cloud szolgáltatásban";
-"amenity_type_education" = "Oktatás";
+"icon_group_education" = "Oktatás";
 "register_opr_have_account" = "Már van fiókom";
 "upload_to_openstreetmap" = "Feltöltés az OpenStreetMapre";
 "lang_nn" = "norvég nynorsk";
@@ -2173,7 +2174,6 @@
 "parked_at" = "leparkolva ekkor:";
 "activity_type_mountainbike_name" = "Hegyi kerékpározás";
 "pro_features" = "Pro funkciók";
-"worldwide_maps" = "Térképek világszerte";
 "contributions_may_calculate_with_delay" = "A szerkesztések kiszámítása több órát is igénybe vehet.";
 "quick_action_current_location_widget_descr" = "A koordináta-widgetet a térképen megjelenítő vagy elrejtő kapcsoló.";
 "quick_action_hillshade_descr" = "Gomb, amely a térképen megjeleníti vagy elrejti a domborzatárnyékolást.";
@@ -2358,3 +2358,4 @@
 "shared_string_keep_active" = "Maradjanak";
 "speed_camera_pois" = "Traffipax POI-k";
 "uninstall_speed_cameras" = "Traffipaxok eltávolítása";
+"icon_group_service" = "Szolgáltatás";

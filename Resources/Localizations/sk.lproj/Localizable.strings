@@ -1667,7 +1667,7 @@
 "shared_string_import" = "Import";
 "icon_group_symbols" = "Symboly";
 "add_custom_category" = "Pridať vlastnú kategóriu";
-"amenity_type_emergency" = "Pomoc v núdzi";
+"icon_group_emergency" = "Pomoc v núdzi";
 "icon_group_sport" = "Šport";
 "select_group" = "Zvoľte skupinu";
 "favorite_friends_category" = "Priatelia";
@@ -1678,6 +1678,7 @@
 "shared_string_resources" = "Zdroje";
 "sort_last_modified" = "Naposledy zmenené";
 "fav_point_dublicate" = "Zadaný duplicitný názov obľúbeného bodu";
+"icon_group_transport" = "Hromadná doprava";
 "transport" = "Hromadná doprava";
 "segments_count" = "Úsek %d";
 "icon_group_special" = "Špeciálne";
@@ -1876,7 +1877,7 @@
 "any_poi" = "Akékoľvek";
 "lang_kn" = "Kannada";
 "shared_string_overview" = "Prehľad";
-"amenity_type_education" = "Školstvo";
+"icon_group_education" = "Školstvo";
 "lang_br" = "Bretónsky";
 "backup_error_file_not_available" = "Súbor nie je dostupný";
 "delete_waypoints" = "Odstrániť body trasy";
@@ -2148,7 +2149,6 @@
 "shared_string_status" = "Stav";
 "shared_string_progress" = "Postup";
 "benefits_for_contributors" = "Výhody pre aktívnych prispievateľov do OSM";
-"worldwide_maps" = "Celosvetové mapy";
 "login_open_street_map_org" = "Prihlásiť sa do OpenStreetMap.org";
 "routing_attr_motor_type_lpg_name" = "LPG";
 "shared_string_added" = "Pridané";
@@ -2336,3 +2336,4 @@
 "track_multiple_segments_select" = "%@ obsahuje viac ako jeden úsek. Prosím zvoľte časť trasy, ktorú chcete použiť na navigáciu.";
 "select_segment" = "Zvoľte úsek";
 "add_folder" = "Pridať priečinok";
+"icon_group_service" = "Služby";

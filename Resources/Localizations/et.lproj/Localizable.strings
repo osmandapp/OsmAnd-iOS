@@ -1958,7 +1958,7 @@
 "shared_string_gpx_points" = "Punktid";
 "shared_string_disable" = "Keela";
 "icon_group_special" = "Eriteenused";
-"amenity_type_emergency" = "Esmaabi";
+"icon_group_emergency" = "Esmaabi";
 "shared_string_square" = "Ruut";
 "icon_group_symbols" = "Sümbolid";
 "icon_group_sport" = "Sport";
@@ -1966,6 +1966,7 @@
 "icon_group_travel" = "Reisimine";
 "download_regular_maps" = "Tavaline kaart";
 "access_default_color" = "Vaikevärv";
+"icon_group_transport" = "Transport";
 "transport" = "Transport";
 "custom_osmand_plugin" = "Kohandatud OsmAnd pistik";
 "coordinates" = "Koordinaadid";
@@ -2242,7 +2243,7 @@
 "connect_rp" = "Ühenda teekonnapunktid";
 "route_points" = "Teekonnapunktid";
 "icon_group_industrial" = "Tööstuslik";
-"amenity_type_education" = "Haridus";
+"icon_group_education" = "Haridus";
 "map_settings_clear_geo_cache" = "Tühjenda geopaanid";
 "shared_string_weather" = "Ilm";
 "backup_and_restore" = "Varunda ja taasta";
@@ -2532,3 +2533,4 @@
 \n
 \nValides %@ kustutatakse kõik kiiruskaameratega seotud andmed, nagu hoiatused, teated ja huvipunktid seniks, kuni sa OsmAnd\'ile ei tee täiesti uut paigaldust.";
 "speed_cameras_alert" = "Kiiruskaamerate hoiatused on mõnedes riikides seadusega keelatud.";
+"icon_group_service" = "Teenused";

@@ -18,7 +18,7 @@
 
 - (BOOL)checkSubviewsToUpdateMargins
 {
-    return !self.leftIconView.hidden || !self.rightIconView.hidden;
+    return !self.rightIconView.hidden;
 }
 
 @end

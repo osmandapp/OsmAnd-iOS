@@ -2190,15 +2190,16 @@
 
 //Icon categories
 "icon_group_amenity" = "Prestazioa";
-"amenity_type_emergency" = "Larrialdiak";
+"icon_group_emergency" = "Larrialdiak";
 "icon_group_special" = "Berezia";
 "icon_group_sport" = "Kirola";
 "icon_group_symbols" = "Sinboloak";
-"transport" = "Garraioa";
+"icon_group_transport" = "Garraioa";
 "icon_group_travel" = "Bidaia";
 "icon_group_nautical" = "Itsasokoa";
 "icon_group_industrial" = "Industria";
-"amenity_type_education" = "Hezkuntza";
+"icon_group_education" = "Hezkuntza";
+"transport" = "Garraioa";
 "settings_item_read_error" = "Ezin izan da %@-tik irakurri.";
 "app_mode_default" = "Arakatu mapa";
 "app_mode_car" = "Gidatzea";
@@ -2510,7 +2511,6 @@
 "show_borders_of_downloaded_maps" = "Erakutsi deskargatutako mapen mugak";
 "depth_contours" = "Sakonera-sestrak";
 "nautical_depth_points" = "Ur sakonerako puntuak";
-"worldwide_maps" = "Mundu osoko mapak";
 "cloud_recent_changes" = "Aldaketak";
 "cloud_all_changes_uploaded" = "Aldaketa guztiak kargatu dira";
 "weather_pressure_inches_of_mercury" = "Hazbete merkurio";
@@ -2545,3 +2545,4 @@
 "speed_camera_pois" = "Abiadura-kameren interesguneak";
 "speed_cameras_legal_descr" = "Herrialde edo eskualde batzuetan, abiadura-kamerak abisatzeko aplikazioak erabiltzea legez debekatuta dago.\n\nAukeraketa bat egin behar duzu zure herrialdeko legediaren arabera.\n\nAukeratu %@ eta abiadura-kamerei buruzko alertak eta abisuak jasoko dituzu.\n\nAukeratu %@ eta abiadura-kameraen inguruko datu guztiak, alertak, jakinarazpenak, interesguneak ezabatuko dira OsmAnd erabat berriro instalatu arte.";
 "speed_cameras_alert" = "Abiadura-kameren alertak herrialde batzuetan legeak debekatuta daude.";
+"icon_group_service" = "Zerbitzua";

@@ -1832,7 +1832,7 @@
 "street_level_imagery" = "Выявы на ўзроўні вуліц";
 "plan_route_split_after" = "Падзяліць пасля";
 "sort_last_modified" = "Апошняя змена";
-"amenity_type_emergency" = "Экстранныя службы";
+"icon_group_emergency" = "Экстранныя службы";
 "address_search_desc" = "Пошук па адрасе";
 "favorite_friends_category" = "Сябры";
 "start_of_the_track" = "Пачатак следу";
@@ -1861,6 +1861,7 @@
 "change_folder" = "Змяніць каталог";
 "plan_route_split_before" = "Падзяліць да";
 "coordinates" = "Каардынаты";
+"icon_group_transport" = "Транспарт";
 "transport" = "Транспарт";
 "copied_to_clipboard" = "Скапіявана ў буфер абмену";
 "fav_point_dublicate" = "Дубляванне назвы ўлюбёнай мясціны";
@@ -2014,7 +2015,7 @@
 "lang_sc" = "Сардынская";
 "lang_hu_formal" = "Венгерская (афіцыйная)";
 "lang_sr_latn" = "Сербская (лацінка)";
-"amenity_type_education" = "Адукацыя";
+"icon_group_education" = "Адукацыя";
 "lang_ne" = "Непальская";
 "lang_zh_cn" = "Кітайская (Спрошчаная)";
 "regions" = "Рэгіёны";
@@ -2517,7 +2518,7 @@
 "auth_failed" = "Не атрымалася выканаць аўтарызацыю";
 "download_wikipedia_data" = "Спампаваць даныя Вікіпедыі";
 "kg" = "кг";
-"weather_plugin_description" = "Змяшчае:\n\n- 5-слаёвы прагноз на 24 гадзіны і 7 дзён\n\n- віджэты на аснове месцазнаходжання\n\n- ізалініі тэмпературы / ціску\n\n\nДаныя бяруцца з GFS (https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast).";
+"weather_plugin_description" = "Змяшчае:\n- 5-слаёвы прагноз на 24 гадзіны і 7 дзён\n- віджэты на аснове месцазнаходжання\n- ізатэрмы / ізабары\n\nДаныя бяруцца з Global Forecast System (https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast).";
 "km" = "км";
 "open_place_reviews_plugin_description" = "Рабіце ўнёскі у праект OpenPlaceReviews, напрыклад фатаграфіі, агляды або спасылкі на грамадскія месцы (рэстараны, гасцініцы або музеі).\n\nЗнайсці інструкцыі можна на нашым сайце https://osmand.net/docs/user/plugins/openplacereviews .";
 "m" = "м";
@@ -2531,3 +2532,4 @@
 "privacy_and_security" = "Прыватнасць і бяспека";
 "speed_camera_pois" = "POIкамер кантролю хуткасці";
 "uninstall_speed_cameras" = "Выдаліць камеры кантролю хуткасці";
+"icon_group_service" = "Паслугі";

@@ -932,7 +932,7 @@
 "profile_settings" = "Profilspecifika inställningar";
 "profile_appearance" = "Profilutseende";
 "profile_appearance_descr" = "Icon, color, and name";
-"ui_customization" = "UI customization";
+"ui_customization" = "Anpassning av användargränssnittet";
 "ui_customization_short_descr" = "Drawer items, context menu";
 "reorder_profiles" = "Redigera profillista";
 "profile_alert_need_profile_name_title" = "Ange profilnamn";
@@ -2186,15 +2186,16 @@
 
 //Icon categories
 "icon_group_amenity" = "bekvämligheter";
-"amenity_type_emergency" = "Nödsituationer";
+"icon_group_emergency" = "Nödsituationer";
 "icon_group_special" = "Speciell";
 "icon_group_sport" = "Idrott";
 "icon_group_symbols" = "Symboler";
-"transport" = "Transporter";
+"icon_group_transport" = "Transporter";
 "icon_group_travel" = "Resa";
 "icon_group_nautical" = "Nautiska";
 "icon_group_industrial" = "Industriell";
-"amenity_type_education" = "Utbildning";
+"icon_group_education" = "Utbildning";
+"transport" = "Transporter";
 "settings_item_read_error" = "Kunde inte läsa från %@.";
 "app_mode_default" = "Titta på kartan";
 "app_mode_car" = "Fordonskörning";
@@ -2420,7 +2421,6 @@
 "tts_title" = "Text-till-tal (TTS)";
 "shared_string_recorded" = "Inspelat";
 "map_widget_rendering_fps" = "Kartrenderingens FPS";
-"worldwide_maps" = "Världskartor";
 "nautical_depth_points" = "Nautiska djuppunkter";
 "depth_contours" = "Djupkurvor";
 "mtb_segment_classification" = "Segmentklassificering";
@@ -2579,3 +2579,4 @@
 "privacy_and_security" = "Sekretess och säkerhet";
 "shared_string_height" = "Höjd";
 "lang_zh-Hant" = "Kinesiska (traditionell)";
+"icon_group_service" = "Service";

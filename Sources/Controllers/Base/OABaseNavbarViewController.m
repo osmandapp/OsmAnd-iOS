@@ -70,6 +70,15 @@
     self.tableView.dataSource = self;
     self.tableView.backgroundColor = UIColorFromRGB(color_primary_table_background);
     self.tableView.tintColor = UIColorFromRGB(color_primary_purple);
+    NSString *tableFooterText = [self getTableFooterText];
+    if (tableFooterText && tableFooterText.length > 0)
+    {
+        self.tableView.tableFooterView = [OAUtilities setupTableHeaderViewWithText:tableFooterText
+                                                                              font:[UIFont preferredFontForTextStyle:UIFontTextStyleFootnote]
+                                                                         textColor:UIColorFromRGB(color_text_footer)
+                                                                        isBigTitle:NO
+                                                                   parentViewWidth:self.view.frame.size.width];
+    }
 
     [self updateNavbar];
 }
@@ -327,6 +336,7 @@
     freeSpaceForNavbarButton -= 12.;
     BOOL isLongTitle = freeSpaceForNavbarButton < 50.;
 
+    _leftNavbarButton = nil;
     if (leftButtonTitle || leftNavbarButtonCustomIcon)
     {
         UIButton *leftButton = [[UIButton alloc] initWithFrame:CGRectMake(0., 0., freeSpaceForNavbarButton, 30.)];
@@ -356,9 +366,12 @@
         _leftNavbarButton.accessibilityLabel = leftButtonTitle ? leftButtonTitle : OALocalizedString(@"shared_string_back");
         [self.navigationItem setLeftBarButtonItem:_leftNavbarButton animated:YES];
     }
+    else
+    {
+        [self.navigationItem setLeftBarButtonItem:nil animated:YES];
+    }
 
     NSArray<UIBarButtonItem *> *rightNavbarButtons = [self getRightNavbarButtons];
-
     if (rightNavbarButtons && rightNavbarButtons.count > 0)
     {
         NSMutableArray<UIBarButtonItem *> *rightNavbarButtonsWithSpaces = [NSMutableArray array];
@@ -381,6 +394,10 @@
             }
         }
         [self.navigationItem setRightBarButtonItems:rightNavbarButtonsWithSpaces animated:YES];
+    }
+    else
+    {
+        [self.navigationItem setRightBarButtonItems:nil animated:YES];
     }
 }
 
@@ -526,6 +543,11 @@
                                                     parentViewWidth:self.view.frame.size.width];
     }
     self.tableView.tableHeaderView = tableHeaderView;
+}
+
+- (NSString *)getTableFooterText
+{
+    return @"";
 }
 
 #pragma mark - Table data
@@ -714,6 +736,12 @@
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
     return [self getCustomViewForFooter:section];
+}
+
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    return cell.selectionStyle == UITableViewCellSelectionStyleNone ? nil : indexPath;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

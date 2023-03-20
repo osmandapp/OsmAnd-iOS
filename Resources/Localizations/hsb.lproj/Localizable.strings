@@ -1352,7 +1352,7 @@
 "select_icon_profile_dialog_title" = "Wubjer symbol";
 "shared_string_deselect_all" = "Wšě wotwolić";
 "application_profiles" = "Profile aplikacije";
-"amenity_type_emergency" = "Nuzowy pad";
+"icon_group_emergency" = "Nuzowy pad";
 "icon_group_sport" = "Sport";
 "new_plugin_added" = "Nowy plugin přidaty";
 "address_search_desc" = "Pytanje za adresu";
@@ -1366,6 +1366,7 @@
 "fav_points_not_exist" = "Njejsužane faworitowe dypki";
 "shared_string_icon" = "Symbol";
 "favorite_places_category" = "Městna";
+"icon_group_transport" = "Zjawny transport";
 "transport" = "Zjawny transport";
 "searching" = "Pytam…";
 "none_point_error" = "Prošu dodaj znajmjeńša jedyn dypk.";
@@ -1401,7 +1402,7 @@
 "lang_sr" = "serbišćina";
 "shared_string_end_time" = "čas přichada";
 "lang_hu" = "madźaršćina";
-"amenity_type_education" = "Kubłanje";
+"icon_group_education" = "Kubłanje";
 "lang_cy" = "walizišćina";
 "lang_tl" = "tagalogšćina";
 "lang_de" = "němčina";
@@ -1519,7 +1520,6 @@
 "move_point" = "Dypk přesunyć";
 "plan_route" = "Čaru planować";
 "shared_string_circle" = "kruh";
-"worldwide_maps" = "Karty wšeho swěta";
 "shared_string_refresh" = "Ponowić";
 "icon_group_special" = "Specialne";
 "empty_filename" = "Datajowe mjeno je prózdne";
@@ -1550,3 +1550,4 @@
 "m" = "m";
 "km" = "km";
 "lang_zh-Hant" = "chinšćina (tradicionelna)";
+"icon_group_service" = "Posłužby";

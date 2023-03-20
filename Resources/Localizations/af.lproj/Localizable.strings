@@ -2564,15 +2564,16 @@
 
 //Icon categories
 "icon_group_amenity" = "Amenity";
-"amenity_type_emergency" = "Noodgeval";
+"icon_group_emergency" = "Noodgeval";
 "icon_group_special" = "Special";
 "icon_group_sport" = "Sport";
 "icon_group_symbols" = "Symbols";
-"transport" = "Vervoer";
+"icon_group_transport" = "Vervoer";
 "icon_group_travel" = "Travel";
 "icon_group_nautical" = "Nautical";
 "icon_group_industrial" = "Industrial";
-"amenity_type_education" = "Opvoeding";
+"icon_group_education" = "Opvoeding";
+"transport" = "Vervoer";
 
 "settings_item_read_error" = "Could not read %@.";
 "app_mode_default" = "Verstek";

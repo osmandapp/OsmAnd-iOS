@@ -325,6 +325,7 @@
                @"ic_action_horse",
                @"ic_action_pedestrian_dark",
                @"ic_action_trekking_dark",
+               @"ic_action_hill_climbing",
                @"ic_action_ski_touring",
                @"ic_action_skiing",
                @"ic_action_monowheel",

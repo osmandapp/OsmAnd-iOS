@@ -1324,7 +1324,8 @@
 "shared_string_enable" = "Omogoči";
 "plan_route_split_before" = "Razdeli pred";
 "replace_favorite_confirmation" = "Zamenjati priljubljeno točko »%@«\?";
-"amenity_type_emergency" = "Nujna medicinska pomoč";
+"icon_group_emergency" = "Nujna medicinska pomoč";
+"icon_group_transport" = "Prevoz";
 "transport" = "Prevoz";
 "context_menu_item_edit_waypoint" = "Uredi vmesno točko GPX";
 "no_waypoints_found" = "Ni vmesnih točk";
@@ -1355,7 +1356,7 @@
 "lang_lo" = "Laoščina";
 "lang_el" = "Grščina";
 "lang_als" = "Toskovska albanščina";
-"amenity_type_education" = "Izobraževalna ustanova";
+"icon_group_education" = "Izobraževalna ustanova";
 "lang_pt" = "Portugalščina";
 "lang_ast" = "Asturijski";
 "lang_vi" = "Vietnamščina";
@@ -1901,7 +1902,6 @@
 "depth_contours" = "Izobate";
 "turn_arrows_descr" = "Izberi, ali so načrti poti prikazane puščice za obračanje.";
 "backup_into_file" = "Varnostno kopiraj kot datoteko";
-"worldwide_maps" = "Zemljevidi sveta";
 "weather_precip_inches" = "Palcev";
 "copy_poi_name" = "Kopiraj ime točke POI";
 "shared_string_added" = "Dodano";
@@ -2069,3 +2069,4 @@
 "lang_zh-Hant" = "Kitajščina (tradicionalna)";
 "lang_sat" = "Santalščina";
 "shared_string_keep_active" = "Obdrži aktivno";
+"icon_group_service" = "Storitev";

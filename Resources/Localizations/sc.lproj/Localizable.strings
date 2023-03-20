@@ -1950,13 +1950,14 @@
 "route_parameters" = "Paràmetros de s\'àndala";
 "map_widget_distance_by_tap" = "Distàntzia pro tocu";
 "icon_group_travel" = "Biàgiu";
-"transport" = "Trasportos pùblicos";
+"icon_group_transport" = "Trasportos pùblicos";
 "icon_group_symbols" = "Sìmbulos";
 "icon_group_sport" = "Isport";
 "icon_group_special" = "Ispetziales";
-"amenity_type_emergency" = "Emergèntzia";
+"icon_group_emergency" = "Emergèntzia";
 "shared_string_square" = "Cuadradu";
 "shared_string_octagon" = "Otàgonu";
+"transport" = "Trasportos pùblicos";
 
 // Shapes
 "shared_string_circle" = "Tzìrculu";
@@ -2130,7 +2131,7 @@
 "shared_string_time_moving" = "Tempus in movimentu";
 "distance_moving" = "Distàntzia curreta";
 "icon_group_industrial" = "Industriale";
-"amenity_type_education" = "Istrutzione";
+"icon_group_education" = "Istrutzione";
 "lang_tl" = "Tagalog";
 "lang_bs" = "Bosniacu";
 "lang_pms" = "Piemontesu";
@@ -2711,7 +2712,6 @@
 "cloud_version_will_be_removed" = "Sa versione de sa nue s'at a iscantzellare";
 "cloud_changes_will_be_dismissed" = "Sas modìficas in sa nue s'ant a iscartare";
 "local_file_will_be_restored" = "Su documentu locale s'at a ripristinare";
-"worldwide_maps" = "Mapas mundiales";
 "routing_attr_motor_type_diesel_name" = "Gasòliu";
 "routing_attr_motor_type_petrol_name" = "Benzina";
 "routing_attr_motor_type_lpg_name" = "GPL";
@@ -2838,3 +2838,4 @@
 "osm_upload_gpx_description_footer" = "S'at a impreare su nùmene de sa rasta in càmbiu de una descritzione bòida. Sa descritzione insertada s'at a aplicare pro cada rasta.";
 "visibility" = "Visibilidade";
 "osm_upload_gpx_tags_footer" = "Inserta etichetas separadas dae vìrgulas.";
+"icon_group_service" = "Servìtziu";

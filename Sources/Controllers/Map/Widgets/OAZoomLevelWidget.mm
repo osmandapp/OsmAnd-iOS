@@ -10,6 +10,7 @@
 #import "OARootViewController.h"
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
+#import "Localization.h"
 
 @implementation OAZoomLevelWidget
 {
@@ -41,10 +42,23 @@
     if (self.isUpdateNeeded || newZoom != _cachedZoom)
     {
         _cachedZoom = newZoom;
-        [self setText:[NSString stringWithFormat:@"%d", _cachedZoom] subtext:@""];
+        NSString *cachedZoomText = [NSString stringWithFormat:@"%d", _cachedZoom];
+        [self setText:cachedZoomText subtext:@""];
         [self setIcons:@"widget_developer_map_zoom_day" widgetNightIcon:@"widget_developer_map_zoom_night"];
+        [self addAccessibilityLabelsWithValue:cachedZoomText];
     }
     return YES;
+}
+
+- (void) addAccessibilityLabelsWithValue:(NSString *)value
+{
+    self.accessibilityLabel = OALocalizedString(@"map_widget_zoom_level");
+    self.accessibilityValue = value;
+}
+
+- (void) setImage:(UIImage *)image
+{
+    [self.imageView setImage:image.imageFlippedForRightToLeftLayoutDirection];
 }
 
 @end

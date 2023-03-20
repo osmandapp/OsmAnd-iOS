@@ -1627,6 +1627,11 @@
     [_intermediates removeAllObjects];
 }
 
+- (void) clearMyLocationToStart
+{
+    _myLocationToStart = nil;
+}
+
 - (void) clearPointToStartBackup
 {
     _pointToStartBackup = nil;

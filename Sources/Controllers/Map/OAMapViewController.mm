@@ -122,6 +122,13 @@
 #define deinit _(deinit)
 #define kGestureZoomCoef 10.0f
 
+typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
+    EOAMapPanDirectionUp = 0,
+    EOAMapPanDirectionDown,
+    EOAMapPanDirectionLeft,
+    EOAMapPanDirectionRight
+};
+
 @interface OAMapViewController () <OAMapRendererDelegate, OARouteInformationListener>
 
 @property (atomic) BOOL mapViewLoaded;
@@ -1156,6 +1163,7 @@
         //                                     kUserInteractionAnimationKey);
         
         _mapView.mapAnimator->resume();
+        [OAMapViewTrackingUtilities.instance setRotationNoneToManual];
     }
     [recognizer setRotation:0];
 }
@@ -1475,6 +1483,80 @@
 
     _mapView.mapAnimator->resume();
 
+}
+
+- (void) animatedPanUp
+{
+    [self animatedMapPan:EOAMapPanDirectionUp];
+}
+
+- (void) animatedPanDown
+{
+    [self animatedMapPan:EOAMapPanDirectionDown];
+}
+
+- (void) animatedPanLeft
+{
+    [self animatedMapPan:EOAMapPanDirectionLeft];
+}
+
+- (void) animatedPanRight
+{
+    [self animatedMapPan:EOAMapPanDirectionRight];
+}
+
+- (void) animatedMapPan:(EOAMapPanDirection)panDirection
+{
+    // Get movement delta in points (not pixels, that is for retina and non-retina devices value is the same)
+    CGPoint translation;
+    CGFloat moveStep = 0.5;
+    switch (panDirection) {
+        case EOAMapPanDirectionUp:
+        {
+            translation = CGPointMake(0., self.view.center.y * moveStep);
+            break;
+        }
+        case EOAMapPanDirectionDown:
+        {
+            translation = CGPointMake(0., -self.view.center.y * moveStep);
+            break;
+        }
+        case EOAMapPanDirectionLeft:
+        {
+            translation = CGPointMake(self.view.center.x * moveStep, 0.);
+            break;
+        }
+        case EOAMapPanDirectionRight:
+        {
+            translation = CGPointMake(-self.view.center.x * moveStep, 0.);
+            break;
+        }
+        default:
+        {
+            return;
+        }
+    }
+    
+    translation.x *= self.mapView.contentScaleFactor;
+    translation.y *= self.mapView.contentScaleFactor;
+    
+    const float angle = qDegreesToRadians(self.mapView.azimuth);
+    const float cosAngle = cosf(angle);
+    const float sinAngle = sinf(angle);
+    CGPoint translationInMapSpace;
+    translationInMapSpace.x = translation.x * cosAngle - translation.y * sinAngle;
+    translationInMapSpace.y = translation.x * sinAngle + translation.y * cosAngle;
+    
+    // Taking into account current zoom, get how many 31-coordinates there are in 1 point
+    const uint32_t tileSize31 = (1u << (31 - self.mapView.zoomLevel));
+    const double scale31 = static_cast<double>(tileSize31) / self.mapView.tileSizeOnScreenInPixels;
+    
+    // Rescale movement to 31 coordinates
+    OsmAnd::PointI target31 = self.mapView.target31;
+    target31.x -= static_cast<int32_t>(round(translationInMapSpace.x * scale31));
+    target31.y -= static_cast<int32_t>(round(translationInMapSpace.y * scale31));
+    
+    [self goToPosition:[OANativeUtilities convertFromPointI:target31] animated:YES];
 }
 
 

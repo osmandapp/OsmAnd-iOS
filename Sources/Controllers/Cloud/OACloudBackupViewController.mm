@@ -715,7 +715,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     }
     else if ([item.cellType isEqualToString:[OARightIconTableViewCell getCellIdentifier]])
     {
-        if (![self isActionButtonDisabled:item])
+        if (![self isActionButtonDisabled:item] && [self respondsToSelector:NSSelectorFromString(item.key)])
             [self performSelector:NSSelectorFromString(item.key) withObject:nil afterDelay:0.];
     }
     if (statusBackupViewController)

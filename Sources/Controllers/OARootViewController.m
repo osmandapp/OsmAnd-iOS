@@ -843,13 +843,56 @@ typedef enum : NSUInteger {
 
 - (NSArray *) keyCommands
 {
-    return @[[UIKeyCommand keyCommandWithInput:UIKeyInputDownArrow modifierFlags:0 action:@selector(zoomOut)],
-             [UIKeyCommand keyCommandWithInput:@"-" modifierFlags:UIKeyModifierCommand action:@selector(zoomOut) discoverabilityTitle:OALocalizedString(@"key_hint_zoom_out")],
-             [UIKeyCommand keyCommandWithInput:UIKeyInputUpArrow modifierFlags:0 action:@selector(zoomIn)],
-             [UIKeyCommand keyCommandWithInput:@"+" modifierFlags:UIKeyModifierCommand action:@selector(zoomIn) discoverabilityTitle:OALocalizedString(@"key_hint_zoom_in")],
+    return @[[UIKeyCommand keyCommandWithInput:UIKeyInputDownArrow modifierFlags:0 action:@selector(panDown)],
+             [UIKeyCommand keyCommandWithInput:UIKeyInputUpArrow modifierFlags:0 action:@selector(panUp)],
+             [UIKeyCommand keyCommandWithInput:UIKeyInputLeftArrow modifierFlags:0 action:@selector(panLeft)],
+             [UIKeyCommand keyCommandWithInput:UIKeyInputRightArrow modifierFlags:0 action:@selector(panRight)],
+             [UIKeyCommand keyCommandWithInput:@"-" modifierFlags:0 action:@selector(zoomOut)],
+             [UIKeyCommand keyCommandWithInput:@"+" modifierFlags:0 action:@selector(zoomIn)],
+             [UIKeyCommand keyCommandWithInput:@"-" modifierFlags:UIKeyModifierCommand action:@selector(zoomOut)],
+             [UIKeyCommand keyCommandWithInput:@"+" modifierFlags:UIKeyModifierCommand action:@selector(zoomIn)],
              [UIKeyCommand keyCommandWithInput:@"=" modifierFlags:UIKeyModifierCommand action:@selector(zoomIn)],
-             [UIKeyCommand keyCommandWithInput:UIKeyInputEscape modifierFlags:0 action:@selector(goBack) discoverabilityTitle:OALocalizedString(@"key_hint_goback")],
-             [UIKeyCommand keyCommandWithInput:@"0" modifierFlags:UIKeyModifierCommand action:@selector(recenterMap) discoverabilityTitle:OALocalizedString(@"key_hint_recenter_map")]];
+             [UIKeyCommand keyCommandWithInput:UIKeyInputEscape modifierFlags:0 action:@selector(goBack)],
+             [UIKeyCommand keyCommandWithInput:@"0" modifierFlags:UIKeyModifierCommand action:@selector(recenterMap)],
+             [UIKeyCommand keyCommandWithInput:@"c" modifierFlags:0 action:@selector(recenterMap)],
+             [UIKeyCommand keyCommandWithInput:@"d" modifierFlags:0 action:@selector(changeMapOrienation)]];
+}
+
+- (void) changeMapOrienation
+{
+    [[OAMapViewTrackingUtilities instance] switchRotateMapMode];
+}
+
+- (void) panUp
+{
+    if ([[OAAppSettings sharedManager].settingExternalInputDevice get] != NO_EXTERNAL_DEVICE)
+    {
+        [self.mapPanel.mapViewController animatedPanUp];
+    }
+}
+
+- (void) panDown
+{
+    if ([[OAAppSettings sharedManager].settingExternalInputDevice get] != NO_EXTERNAL_DEVICE)
+    {
+        [self.mapPanel.mapViewController animatedPanDown];
+    }
+}
+
+- (void) panLeft
+{
+    if ([[OAAppSettings sharedManager].settingExternalInputDevice get] != NO_EXTERNAL_DEVICE)
+    {
+        [self.mapPanel.mapViewController animatedPanLeft];
+    }
+}
+
+- (void) panRight
+{
+    if ([[OAAppSettings sharedManager].settingExternalInputDevice get] != NO_EXTERNAL_DEVICE)
+    {
+        [self.mapPanel.mapViewController animatedPanRight];
+    }
 }
 
 - (void) zoomOut

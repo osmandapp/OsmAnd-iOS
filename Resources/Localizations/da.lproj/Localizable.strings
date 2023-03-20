@@ -365,7 +365,7 @@
 "plugin_ski_descr" = "Designet til at navigere i vintersportsområder: Se skipister, skilifter og langrendsspor med farvede linjer, der angiver sværhedsgraden. Hvis du vil gøre brug af dette, skal du aktivere denne udvidelse og også gå til \"Konfigurer kort\" og vælge kortstilen \"Vinter og ski\".";
 "record_plugin_description" = "Registrer dine ture eller træninger, og analysér dataene med hensyn til hastighed, akkumulerede stigninger og nedstigninger, højdeprofil osv. Optagede spor kan arkiveres, deles med venner, redigeres og efterbehandles.\n\nYderligere information på https://osmand.net/docs/user/plugins/trip-recording .";
 "purchases_feature_desc_wikipedia" = "Giver dig alle stedrelaterede Wikipedia-artikler offline, så du kan lære mere om de steder, du besøger på din rejse, ved blot at trykke på kortet. Glem ikke at downloade Wikipedia-kortfilerne for de respektive regioner.";
-"srtm_plugin_description" = "Terrænoplysninger som f.eks. konturlinjer, terrænskygger og skråninger hjælper dig med at vurdere terrænets beskaffenhed og relief, navigationsmuligheder og meget mere. De topografiske oplysninger kan på kortet repræsenteres ved hjælp af skravering af hældninger, konturlinjer og/eller farvelægning af stejlhed.\n\nDe underliggende data stammer fra SRTM og ASTER.\n\nYderligere oplysninger findes på http://osmand.net/docs/user/plugins/contour-lines .";
+"srtm_plugin_description" = "Terrænoplysninger som f.eks. konturlinjer, terrænskygger og hældninger hjælper dig med at vurdere terrænets beskaffenhed og relief, navigationsmuligheder og meget mere. De topografiske oplysninger kan på kortet repræsenteres ved hjælp af skravering af hældninger, konturlinjer og/eller farvelægning af stejlhed.\n\nDe underliggende data stammer fra SRTM og ASTER.\n\nYderligere oplysninger findes på http://osmand.net/docs/user/plugins/contour-lines .";
 "plugin_popup_wiki_ask" = "For at hente Wikipedia data, aktiver udvidelsen: <b>Wikipedia</b>";
 "plugin_popup_srtm_ask" = "For at hente højdekurver skal du aktivere udvidelsen: <b>Højdekurver</b>";
 "turn_on_plugin" = "Aktiver udvidelse";
@@ -1936,7 +1936,7 @@
 "open_place_reviews" = "OpenPlaceReviews";
 "wiki_menu_download_descr" = "Yderligere kort er nødvendige for at se Wikipedia Interessepunkter på kortet.";
 "navigate_point_olc" = "Open Location Code (OLC)";
-"contour_lines_hillshades_slope" = "Højdekurver, terrænskygger, skråning";
+"contour_lines_hillshades_slope" = "Højdekurver, terrænskygger, hældning";
 "explore_wikipedia_offline" = "Udforsk Wikipedia offline.";
 "shared_string_turn_off" = "Sluk";
 "context_menu_item_edit_waypoint" = "Rediger GPX-rutepunkt";

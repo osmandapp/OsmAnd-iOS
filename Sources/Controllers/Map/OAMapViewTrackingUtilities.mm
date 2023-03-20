@@ -25,6 +25,8 @@
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/QKeyValueIterator.h>
 
+#define COMPASS_REQUEST_TIME_INTERVAL 5
+
 @interface OAMapViewTrackingUtilities ()
 
 @end
@@ -58,6 +60,7 @@
     BOOL _needsLocationUpdate;
     
     NSTimeInterval _startChangingMapModeTime;
+    NSTimeInterval _compassRequest;
 }
 
 + (OAMapViewTrackingUtilities *)instance
@@ -697,37 +700,66 @@
         [self backToLocationImpl];
 }
 
-- (void) switchRotateMapMode
+- (void) switchRotateMapModeImpl
+{
+    int vl = ([_settings.rotateMap get] + 1) % 4;
+    [_settings.rotateMap set:vl];
+    _lastPositionTrackStateCaptured = false;
+    [self onRotateMapModeChanged];
+}
+
+- (void) onRotateMapModeChanged
 {
     NSString *rotMode = OALocalizedString(@"rotate_map_none_fixed_ios");
-    if ([_settings.rotateMap get] == ROTATE_MAP_NONE)
-    {
-        // reset manual rotation
-        [_settings.rotateMap set: ROTATE_MAP_MANUAL];
-    }
-    else
-    {
-        int vl = ([_settings.rotateMap get] + 1) % 4;
-        [_settings.rotateMap set:vl];
-        _lastPositionTrackStateCaptured = false;
-        
-        if ([_settings.rotateMap get] == ROTATE_MAP_BEARING)
-            rotMode = OALocalizedString(@"rotate_map_bearing_opt_ios");
-        else if ([_settings.rotateMap get] == ROTATE_MAP_COMPASS)
-            rotMode = OALocalizedString(@"rotate_map_compass_opt_ios");
-    }
-    rotMode = [NSString stringWithFormat:@"%@:\n%@", OALocalizedString(@"rotate_map_to"), rotMode];
-    [_app showShortToastMessage:rotMode];
+    if ([_settings.rotateMap get] == ROTATE_MAP_MANUAL)
+        rotMode = OALocalizedString(@"rotate_map_none_manually_ios");
+    else if ([_settings.rotateMap get] == ROTATE_MAP_BEARING)
+        rotMode = OALocalizedString(@"rotate_map_bearing_opt_ios");
+    else if ([_settings.rotateMap get] == ROTATE_MAP_COMPASS)
+        rotMode = OALocalizedString(@"rotate_map_compass_opt_ios");
+    
+    rotMode = [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"rotate_map_to"), rotMode];
+    [OAUtilities showToast:nil details:rotMode duration:4 inView:OARootViewController.instance.view];
+
     [self updateSettings];
     if (_mapViewController)
         [_mapViewController refreshMap];
+}
+
+- (void) switchRotateMapMode
+{
+    if ([OARoutingHelper.sharedInstance isFollowingMode])
+    {
+        if (_compassRequest + COMPASS_REQUEST_TIME_INTERVAL > [NSDate.date timeIntervalSince1970])
+        {
+            _compassRequest = 0;
+            [self switchRotateMapModeImpl];
+        }
+        else {
+            _compassRequest = [NSDate.date timeIntervalSince1970];
+            [OAUtilities showToast:nil details:OALocalizedString(@"press_again_to_change_the_map_orientation") duration:4 inView:OARootViewController.instance.view];
+        }
+    }
+    else {
+        _compassRequest = 0;
+        [self switchRotateMapModeImpl];
+    }
+}
+
+- (void) setRotationNoneToManual
+{
+    if ([_settings.rotateMap get] == ROTATE_MAP_NONE)
+    {
+        [_settings.rotateMap set:ROTATE_MAP_MANUAL];
+        [OAUtilities showToast:nil details:[NSString stringWithFormat:@"%@: %@", OALocalizedString(@"rotate_map_to"), OALocalizedString(@"rotate_map_none_manually")] duration:4 inView:OARootViewController.instance.view];
+    }
 }
 
 - (void) updateSettings
 {
     if (_mapViewController)
     {
-        if ([_settings.rotateMap get] == ROTATE_MAP_NONE || _routePlanningMode)
+        if ([_settings.rotateMap get] == ROTATE_MAP_NONE)
             [self animatedAlignAzimuthToNorth];
         else if ([_settings.rotateMap get] == ROTATE_MAP_MANUAL)
             [self animatedAlignAzimuth:[[OAAppSettings sharedManager].mapManuallyRotatingAngle get]];

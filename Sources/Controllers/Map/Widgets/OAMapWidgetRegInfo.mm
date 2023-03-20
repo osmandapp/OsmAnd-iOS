@@ -150,7 +150,7 @@
     if (_message)
         return [_message hash];
     
-    return [[self getItemId] hash];
+    return [[self getItemId] hash] + _key.hash;
 }
 
 - (BOOL) isEqual:(id)obj
@@ -163,12 +163,12 @@
         return NO;
 
     OAMapWidgetRegInfo *other = (OAMapWidgetRegInfo *) obj;
-    return [[self getItemId] isEqual:[other getItemId]];
+    return [[self getItemId] isEqual:[other getItemId]] && [_key isEqualToString:other.key];
 }
 
 - (NSComparisonResult) compare:(OAMapWidgetRegInfo *)another
 {
-    if ([[self getItemId] isEqual:[another getItemId]])
+    if ([[self getItemId] isEqual:[another getItemId]] && [_key isEqualToString:another.key])
         return NSOrderedSame;
 
     if (_priorityOrder == another.priorityOrder)

@@ -194,6 +194,13 @@
 "map_widget_battery" = "Battery level";
 "map_widget_plain_time" = "Current time";
 "map_widget_max_speed" = "Speed limit";
+"map_widget_sunrise" = "Sunrise";
+"map_widget_sunset" = "Sunset";
+"map_widget_sunrise_desc" = "Shows time of the next sunrise or time left to sunrise.";
+"map_widget_sunset_desc" = "Shows time of the next sunset or time left to sunset.";
+"map_widget_sunrise_sunset_time_left" = "Time left";
+"map_widget_next_sunrise" = "Next sunrise";
+"map_widget_next_sunset" = "Next sunset";
 "access_arrival_time" = "Arrival time";
 "map_widget_time" = "Time to go";
 "map_widget_ruler_control" = "Radius ruler";
@@ -202,9 +209,9 @@
 "map_widget_distance_by_tap" = "Distance by tap";
 "map_widget_rendering_fps" = "Map rendering FPS";
 "map_widget_camera_tilt" = "Camera Tilt";
-"map_widget_camera_distance" = "Camera Distance";
+"map_widget_camera_distance" = "Camera elevation";
 "map_widget_zoom_level" = "Zoom level";
-"map_widget_target_distance" = "Target Distance";
+"map_widget_target_distance" = "Distance from camera to target";
 
 "shared_string_collapse" = "Collapse";
 "shared_string_topbar" = "Top bar";
@@ -840,6 +847,7 @@
 "shared_string_appearance" = "Appearance";
 "map_settings_line_density_slowdown_warning" = "High line density may slowdown map rendering";
 "map_settings_available_srtm_maps_descr" = "Additional maps are needed to view Hillshade on the map";
+"press_again_to_change_the_map_orientation" = "Tap again to change map orientation";
 
 "shared_string_weather" = "Weather";
 "map_settings_weather_temp" = "Temperature";
